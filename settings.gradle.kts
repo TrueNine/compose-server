@@ -26,7 +26,7 @@ pluginManagement {
   }
 }
 
-rootProject.name = "center"
+rootProject.name = "component"
 
 include("oss")
 findProject(":oss")?.name = "oss"

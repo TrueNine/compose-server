@@ -119,14 +119,13 @@ subprojects {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
 
-    testApi("org.springframework.boot:spring-boot-starter-test") {
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
       exclude("org.junit.jupiter", "junit-jupiter")
     }
 
-    testApi("io.projectreactor:reactor-test")
-    testApi("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
-    testApi("org.testng:testng:${V.Test.testNG}")
-    testApi("org.springframework.security:spring-security-test")
+    testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
+    testImplementation("org.testng:testng:${V.Test.testNG}")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
