@@ -2,9 +2,9 @@ package com.truenine.component.webapidoc.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.truenine.component.webapidoc.vo.OpenApiDocVo;
+import com.truenine.component.webapidoc.vo.OpenApiUrlsVo;
 import io.swagger.v3.oas.annotations.Operation;
-import io.tn.webapidoc.vo.OpenApiDocVo;
-import io.tn.webapidoc.vo.OpenApiUrlsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,10 +40,10 @@ public class OpenApiConfigController {
     log.info("请求 api 文档 swagger-config");
     log.info("apis = {}", this.apis);
     result.setConfigUrl("/v3/swagger-config")
-        .setOauth2RedirectUrl("此自定义接口暂时不支持 oauth2");
+      .setOauth2RedirectUrl("此自定义接口暂时不支持 oauth2");
     var urls = apis.stream().map(api -> new OpenApiUrlsVo()
-        .setUrl("/v3/api-docs/" + api.getDisplayName())
-        .setName(api.getDisplayName())).toList();
+      .setUrl("/v3/api-docs/" + api.getDisplayName())
+      .setName(api.getDisplayName())).toList();
     result.setUrls(urls);
     log.info("urls = {}", result);
     return mapper.writeValueAsString(result);

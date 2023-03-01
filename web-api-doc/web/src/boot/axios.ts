@@ -1,5 +1,5 @@
-import { boot } from "quasar/wrappers";
-import axios, { AxiosInstance } from "axios";
+import {boot} from "quasar/wrappers";
+import axios, {AxiosInstance} from "axios";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -18,7 +18,7 @@ const api = axios.create({
     process.env.NODE_ENV === "production" ? "/" : "http://localhost:8080",
 });
 
-export default boot(({ app }) => {
+export default boot(({app}) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   app.config.globalProperties.$axios = axios;
@@ -30,4 +30,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api };
+export {api};

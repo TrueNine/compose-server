@@ -8,10 +8,12 @@
 ## 环境准备
 
 - 添加阿里云云效 相关的环境变量
+
 ```text
 YUNXIAO_USER 用户账号
 YUNXIAO_PWD 用户密码
 ```
+
 - 使用本地 gradle 执行 wrapper 拉起 gradlew
 - 使用 gradlew check 检查项目
 

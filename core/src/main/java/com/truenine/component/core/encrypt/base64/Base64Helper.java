@@ -1,7 +1,5 @@
 package com.truenine.component.core.encrypt.base64;
 
-import io.tn.core.encrypt.base64.SimpleUtf8Base64;
-
 import java.nio.charset.Charset;
 import java.util.Base64;
 

@@ -1,6 +1,5 @@
 package com.truenine.component.core.encrypt.base64
 
-import com.truenine.component.core.encrypt.base64.Base64Helper
 import org.testng.annotations.Test
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull

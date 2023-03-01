@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler.selenium;
 
-import io.tn.core.lang.ResourcesLocator;
+import com.truenine.component.core.lang.ResourcesLocator;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

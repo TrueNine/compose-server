@@ -6,6 +6,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class OpenApiUrlsVo {
-    String name;
-    String url;
+  String name;
+  String url;
 }

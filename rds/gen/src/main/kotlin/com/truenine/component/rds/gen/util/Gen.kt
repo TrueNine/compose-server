@@ -32,9 +32,9 @@ class Gen {
   }
 
   private fun templateGenerate(
-      c: DefCtx,
-      it: DataBaseTable,
-      mysqlConverter: AbstractTypeConverter
+    c: DefCtx,
+    it: DataBaseTable,
+    mysqlConverter: AbstractTypeConverter
   ) {
     val table = converterTable(it, mysqlConverter)
     t.scoped(
@@ -71,8 +71,8 @@ class Gen {
   }
 
   private fun converterTable(
-      table: DataBaseTable,
-      cor: AbstractTypeConverter
+    table: DataBaseTable,
+    cor: AbstractTypeConverter
   ): JavaTable {
     val cols = h.queryTable(table.name!!).map {
       JavaColumnDto().apply {

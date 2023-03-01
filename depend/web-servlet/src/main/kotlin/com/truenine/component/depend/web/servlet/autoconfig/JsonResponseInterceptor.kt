@@ -1,11 +1,11 @@
 package com.truenine.component.depend.web.servlet.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.truenine.component.core.api.http.R
+import com.truenine.component.core.dev.BetaTest
+import com.truenine.component.core.lang.KtLogBridge
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Schema
-import io.tn.core.api.http.R
-import io.tn.core.dev.BetaTest
-import io.tn.core.lang.KtLogBridge
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired

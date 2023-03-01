@@ -1,12 +1,13 @@
 package com.truenine.component.data.common.crawler.autoconfig
 
+import com.truenine.component.core.lang.KtLogBridge
 import com.truenine.component.data.common.crawler.CrawlerLauncher
 import com.truenine.component.data.common.crawler.CrawlerPageProcessor
 import com.truenine.component.data.common.crawler.downloader.CrawlerDynamicDownloader
 import com.truenine.component.data.common.crawler.downloader.CrawlerStaticDownloader
 import com.truenine.component.data.common.crawler.pipelines.CrawlerPipeline
 import com.truenine.component.data.common.crawler.schedulers.CrawlerContentScheduler
-import io.tn.core.lang.KtLogBridge
+
 import org.slf4j.Logger
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,12 +18,12 @@ open class CrawlerLauncherAutoConfig {
 
   @Bean
   open fun crawlerLauncher(
-      crawlerProperties: CrawlerProperties,
-      processors: List<CrawlerPageProcessor>?,
-      staticDownloads: List<CrawlerStaticDownloader>?,
-      dynamicDownloads: List<CrawlerDynamicDownloader>?,
-      contentSchedulers: List<CrawlerContentScheduler>?,
-      pipelines: List<CrawlerPipeline>?
+    crawlerProperties: CrawlerProperties,
+    processors: List<CrawlerPageProcessor>?,
+    staticDownloads: List<CrawlerStaticDownloader>?,
+    dynamicDownloads: List<CrawlerDynamicDownloader>?,
+    contentSchedulers: List<CrawlerContentScheduler>?,
+    pipelines: List<CrawlerPipeline>?
   ): CrawlerLauncher {
     log.info("创建 爬虫启动器")
     val launcher = CrawlerLauncher.create()

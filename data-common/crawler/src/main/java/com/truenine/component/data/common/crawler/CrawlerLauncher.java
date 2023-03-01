@@ -1,15 +1,15 @@
 package com.truenine.component.data.common.crawler;
 
+import com.truenine.component.core.api.http.Methods;
 import com.truenine.component.data.common.crawler.bus.DispatchBus;
-import com.truenine.component.data.common.crawler.schedulers.CrawlerContentScheduler;
-import com.truenine.component.data.common.crawler.selenium.ChromiumDriverOps;
-import com.truenine.component.data.common.crawler.util.BusChecks;
 import com.truenine.component.data.common.crawler.downloader.CrawlerDynamicDownloader;
 import com.truenine.component.data.common.crawler.downloader.CrawlerStaticDownloader;
 import com.truenine.component.data.common.crawler.downloader.TargetRequest;
 import com.truenine.component.data.common.crawler.downloader.TaskInfo;
 import com.truenine.component.data.common.crawler.pipelines.CrawlerPipeline;
-import io.tn.core.api.http.Methods;
+import com.truenine.component.data.common.crawler.schedulers.CrawlerContentScheduler;
+import com.truenine.component.data.common.crawler.selenium.ChromiumDriverOps;
+import com.truenine.component.data.common.crawler.util.BusChecks;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -121,6 +121,7 @@ public class CrawlerLauncher {
   }
 
   public void runAsync() {
+    // TODO 解决线程创建问题
     new Thread(this::run).start();
   }
 

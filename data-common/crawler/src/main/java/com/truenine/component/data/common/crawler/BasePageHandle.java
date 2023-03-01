@@ -1,8 +1,8 @@
 package com.truenine.component.data.common.crawler;
 
-import com.truenine.component.data.common.crawler.jsoup.WrappedDocument;
 import com.truenine.component.data.common.crawler.downloader.PageContent;
 import com.truenine.component.data.common.crawler.downloader.TaskInfo;
+import com.truenine.component.data.common.crawler.jsoup.WrappedDocument;
 import com.truenine.component.data.common.crawler.selenium.NamedWrapperDriver;
 import com.truenine.component.data.common.crawler.selenium.WrappedDriver;
 

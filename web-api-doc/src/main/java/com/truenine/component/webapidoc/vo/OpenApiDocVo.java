@@ -16,7 +16,6 @@ package com.truenine.component.webapidoc.vo;
     "validatorUrl": ""
 }*/
 
-import io.tn.webapidoc.vo.OpenApiUrlsVo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -2,7 +2,6 @@ package com.truenine.component.core.lang;
 
 import com.truenine.component.core.consts.FileDescriptions;
 import com.truenine.component.core.consts.JavaEnvs;
-import io.tn.core.lang.Str;
 
 import javax.annotation.Nullable;
 import java.io.*;

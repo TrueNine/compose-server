@@ -1,9 +1,9 @@
 package com.truenine.component.depend.web.servlet.autoconfig
 
-import io.tn.core.api.http.R
-import io.tn.core.api.http.Status
-import io.tn.core.lang.KtLogBridge
-import io.tn.core.spring.properties.ServletWebApplicationProperties
+import com.truenine.component.core.api.http.R
+import com.truenine.component.core.api.http.Status
+import com.truenine.component.core.lang.KtLogBridge
+import com.truenine.component.core.spring.properties.ServletWebApplicationProperties
 import org.springframework.core.MethodParameter
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order

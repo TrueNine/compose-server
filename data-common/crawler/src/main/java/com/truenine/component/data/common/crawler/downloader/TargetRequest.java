@@ -1,8 +1,9 @@
 package com.truenine.component.data.common.crawler.downloader;
 
-import io.tn.core.api.http.Headers;
-import io.tn.core.api.http.Methods;
-import io.tn.core.api.http.mock.UserAgents;
+
+import com.truenine.component.core.api.http.Headers;
+import com.truenine.component.core.api.http.Methods;
+import com.truenine.component.core.api.http.mock.UserAgents;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,6 +19,7 @@ public class TargetRequest {
   private String method = Methods.GET;
   private Map<String, String> headers = new ConcurrentHashMap<>();
   private String url;
+
   public TargetRequest(String url) {
     this.url = url;
   }

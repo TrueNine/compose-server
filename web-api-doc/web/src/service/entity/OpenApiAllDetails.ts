@@ -1,4 +1,11 @@
-export type OpenApiMethod = "get" | "post" | "delete" | "put" | "options" | "head" | "patch";
+export type OpenApiMethod =
+  "get"
+  | "post"
+  | "delete"
+  | "put"
+  | "options"
+  | "head"
+  | "patch";
 export type OpenApiParameterSchema = {
   type?: string;
   format?: string;

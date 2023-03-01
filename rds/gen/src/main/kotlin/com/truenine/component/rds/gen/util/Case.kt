@@ -1,6 +1,6 @@
 package com.truenine.component.rds.gen.util
 
-import io.tn.core.lang.Str
+import com.truenine.component.core.lang.Str
 
 object Case {
   @JvmStatic

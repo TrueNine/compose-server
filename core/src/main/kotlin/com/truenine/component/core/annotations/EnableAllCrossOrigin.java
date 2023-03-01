@@ -17,7 +17,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import({
-    CorsConfiguration.class
+  CorsConfiguration.class
 })
 @ConditionalOnWebApplication
 public @interface EnableAllCrossOrigin {

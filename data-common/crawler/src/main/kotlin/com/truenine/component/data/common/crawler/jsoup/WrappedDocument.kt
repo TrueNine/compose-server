@@ -1,8 +1,8 @@
 package com.truenine.component.data.common.crawler.jsoup
 
+import com.truenine.component.core.lang.KtLogBridge
+import com.truenine.component.core.lang.Str
 import com.truenine.component.data.common.crawler.selenium.WrappedDriver
-import io.tn.core.lang.KtLogBridge
-import io.tn.core.lang.Str
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -11,26 +11,26 @@ import org.slf4j.Logger
 
 class WrappedDocument
 private constructor(
-  private val DOCUMENT: Document
+  private val document: Document
 ) {
   fun findCss(cssQuery: String): Element? {
-    return DOCUMENT.select(cssQuery).first()
+    return document.select(cssQuery).first()
   }
 
   fun findsCss(cssQuery: String): Elements {
-    return DOCUMENT.select(cssQuery)
+    return document.select(cssQuery)
   }
 
   fun findXpath(xpath: String): Element? {
-    return DOCUMENT.selectXpath(xpath).first()
+    return document.selectXpath(xpath).first()
   }
 
   fun findsXpath(xpath: String): Elements {
-    return DOCUMENT.selectXpath(xpath)
+    return document.selectXpath(xpath)
   }
 
   override fun toString(): String {
-    return DOCUMENT.toString()
+    return document.toString()
   }
 
   companion object {

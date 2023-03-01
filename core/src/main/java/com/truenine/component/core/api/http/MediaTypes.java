@@ -1,6 +1,6 @@
 package com.truenine.component.core.api.http;
 
-import io.tn.core.lang.Str;
+import com.truenine.component.core.lang.Str;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;

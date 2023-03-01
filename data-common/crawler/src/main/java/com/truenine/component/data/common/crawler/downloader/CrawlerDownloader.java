@@ -1,8 +1,8 @@
 package com.truenine.component.data.common.crawler.downloader;
 
+import com.truenine.component.core.dev.UnImplemented;
 import com.truenine.component.data.common.crawler.BasePageHandle;
 import com.truenine.component.data.common.crawler.selenium.NamedWrapperDriver;
-import io.tn.core.dev.UnImplemented;
 
 public sealed interface CrawlerDownloader
   permits CrawlerDynamicDownloader, CrawlerStaticDownloader {

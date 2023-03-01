@@ -1,12 +1,13 @@
 package com.truenine.component.rds.gen.ctx
 
-import io.tn.core.db.Bf
-import io.tn.core.lang.DTimer
-import io.tn.core.lang.Str
+import com.truenine.component.core.db.Bf
+import com.truenine.component.core.lang.DTimer
+import com.truenine.component.core.lang.Str
 import com.truenine.component.rds.gen.util.Case
 import lombok.extern.slf4j.Slf4j
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+
 @Slf4j
 class DefCtx {
   private var genLang: String = "java"

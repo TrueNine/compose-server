@@ -1,10 +1,10 @@
 <template>
-  <router-view />
+  <router-view/>
 </template>
 
-<script setup lang="ts">
-  import { useQuasar } from "quasar";
+<script lang="ts" setup>
+import {useQuasar} from "quasar";
 
-  let darMode = useQuasar();
-  darMode.dark.mode = "auto";
+let darMode = useQuasar();
+darMode.dark.mode = "auto";
 </script>

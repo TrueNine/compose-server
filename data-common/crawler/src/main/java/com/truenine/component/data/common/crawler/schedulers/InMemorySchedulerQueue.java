@@ -1,10 +1,10 @@
 package com.truenine.component.data.common.crawler.schedulers;
 
+import com.truenine.component.core.lang.Str;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
 import com.truenine.component.data.common.crawler.downloader.PageContent;
 import com.truenine.component.data.common.crawler.downloader.ThisTaskDetails;
 import com.truenine.component.data.common.crawler.util.WordBreaker;
-import io.tn.core.lang.Str;
 import smile.hash.SimHash;
 import smile.math.distance.HammingDistance;
 
@@ -64,6 +64,7 @@ public class InMemorySchedulerQueue implements CrawlerContentScheduler {
           repeat.set(false);
         }
         var hammingDistance = HammingDistance.d(simHash, thatSimHash);
+        // TODO 解决魔法值
         if (hammingDistance < (simHash / 30)) {
           repeat.set(true);
         }

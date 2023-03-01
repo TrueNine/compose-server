@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler.selenium;
 
-import io.tn.core.id.UUIDGenerator;
+import com.truenine.component.core.id.UUIDGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.remote.RemoteWebDriver;
 

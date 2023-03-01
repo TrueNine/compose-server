@@ -1,7 +1,5 @@
 package com.truenine.component.core.id;
 
-import io.tn.core.id.Snowflake;
-
 /**
  * 简单雪花
  *

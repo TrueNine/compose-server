@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler.util;
 
-import io.tn.core.lang.Str;
+import com.truenine.component.core.lang.Str;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.wltea.analyzer.lucene.IKAnalyzer;
@@ -18,9 +18,9 @@ public class WordBreaker {
     } else {
       List<String> words = new ArrayList<>(100);
       text = text.replaceAll("\r", "")
-          .replaceAll("\n", "")
-          .replaceAll("\r\n", "")
-          .replaceAll(" ", "");
+        .replaceAll("\n", "")
+        .replaceAll("\r\n", "")
+        .replaceAll(" ", "");
       try (Analyzer analyzer = new IKAnalyzer(true)) {
         StringReader r = new StringReader(text);
         var ts = analyzer.tokenStream("", r);

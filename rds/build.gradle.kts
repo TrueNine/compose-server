@@ -6,4 +6,6 @@ dependencies {
   api("org.springframework.boot:spring-boot-starter-data-jpa")
   api("org.hibernate:hibernate-spatial:${V.Jpa.hibernate}")
   implementation("org.springframework.boot:spring-boot-starter-web")
+
+  runtimeOnly("com.mysql:mysql-connector-j:${V.Driver.mysql}")
 }

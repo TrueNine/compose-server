@@ -1,11 +1,11 @@
 package com.truenine.component.data.common.crawler.selenium;
 
 
+import com.truenine.component.core.api.http.mock.UserAgents;
+import com.truenine.component.core.dev.BetaTest;
+import com.truenine.component.core.lang.ResourcesLocator;
+import com.truenine.component.core.lang.Str;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.tn.core.api.http.mock.UserAgents;
-import io.tn.core.dev.BetaTest;
-import io.tn.core.lang.ResourcesLocator;
-import io.tn.core.lang.Str;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverLogLevel;

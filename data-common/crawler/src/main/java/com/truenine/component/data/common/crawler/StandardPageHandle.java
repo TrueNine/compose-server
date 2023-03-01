@@ -1,13 +1,13 @@
 package com.truenine.component.data.common.crawler;
 
+import com.truenine.component.core.api.http.Methods;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
+import com.truenine.component.data.common.crawler.downloader.PageContent;
+import com.truenine.component.data.common.crawler.downloader.TaskInfo;
 import com.truenine.component.data.common.crawler.jsoup.WrappedDocument;
 import com.truenine.component.data.common.crawler.selenium.NamedWrapperDriver;
 import com.truenine.component.data.common.crawler.selenium.WrappedDriver;
 import com.truenine.component.data.common.crawler.util.BusChecks;
-import com.truenine.component.data.common.crawler.downloader.PageContent;
-import com.truenine.component.data.common.crawler.downloader.TaskInfo;
-import io.tn.core.api.http.Methods;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;

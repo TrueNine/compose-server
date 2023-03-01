@@ -1,8 +1,8 @@
 package com.truenine.component.rds.gen.template
 
-import freemarker.template.Configuration
-import io.tn.core.lang.ResourcesLocator
+import com.truenine.component.core.lang.ResourcesLocator
 import com.truenine.component.rds.gen.ctx.DefCtx
+import freemarker.template.Configuration
 import java.io.File
 import java.io.FileWriter
 
@@ -19,11 +19,11 @@ object TemplateScope {
   }
 
   fun scoped(
-      pkgPath: String,
-      genFileName: String,
-      ftlName: String,
-      ctx: DefCtx,
-      tab: Any
+    pkgPath: String,
+    genFileName: String,
+    ftlName: String,
+    ctx: DefCtx,
+    tab: Any
   ) {
     val genBasePath =
       "${ResourcesLocator.getGenerateDirPath()}/${ctx.getLang()}/$pkgPath"

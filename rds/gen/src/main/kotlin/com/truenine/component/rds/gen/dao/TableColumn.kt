@@ -7,8 +7,8 @@ data class TableColumn(
   var key: String? = null,
   var defaultValue: String? = null,
   var comment: String? = null,
-){
+) {
   fun getEscapeComment(): String? {
-    return this.comment?.replace("\"","\\\"")
+    return this.comment?.replace("\"", "\\\"")
   }
 }

@@ -1,5 +1,8 @@
-import { api } from "boot/axios";
-import { OpenApiMethod, OpenApiResponse } from "src/service/entity/OpenApiAllDetails";
+import {api} from "boot/axios";
+import {
+  OpenApiMethod,
+  OpenApiResponse
+} from "src/service/entity/OpenApiAllDetails";
 
 export async function req(r: {
   method: OpenApiMethod;
@@ -35,7 +38,7 @@ export async function req(r: {
             code: e.response.status,
           });
         } else {
-          console.log({ e });
+          console.log({e});
           reject({
             data: null,
             headers: {},

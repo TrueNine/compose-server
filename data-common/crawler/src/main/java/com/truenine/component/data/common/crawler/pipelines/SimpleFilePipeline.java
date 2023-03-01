@@ -1,9 +1,9 @@
 package com.truenine.component.data.common.crawler.pipelines;
 
 import com.google.common.io.Files;
+import com.truenine.component.core.id.UUIDGenerator;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
 import com.truenine.component.data.common.crawler.downloader.ThisTaskDetails;
-import io.tn.core.id.UUIDGenerator;
 
 import java.io.File;
 import java.io.IOException;

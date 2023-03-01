@@ -1,10 +1,10 @@
 package com.truenine.component.data.common.crawler.selenium;
 
 import com.google.common.annotations.Beta;
-import io.tn.core.dev.BetaTest;
-import io.tn.core.encrypt.base64.Base64Helper;
-import io.tn.core.lang.DTimer;
-import io.tn.core.lang.Str;
+import com.truenine.component.core.dev.BetaTest;
+import com.truenine.component.core.encrypt.base64.Base64Helper;
+import com.truenine.component.core.lang.DTimer;
+import com.truenine.component.core.lang.Str;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.truenine.component.cacheable.Cf
-import io.tn.core.lang.LogKt
+import com.truenine.component.core.lang.LogKt
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

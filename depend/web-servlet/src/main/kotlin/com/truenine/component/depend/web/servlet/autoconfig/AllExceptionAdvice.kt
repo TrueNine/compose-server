@@ -1,9 +1,9 @@
 package com.truenine.component.depend.web.servlet.autoconfig
 
-import io.tn.core.api.http.R
-import io.tn.core.api.http.Status
-import io.tn.core.exceptions.BasicBizException
-import io.tn.core.lang.KtLogBridge
+import com.truenine.component.core.api.http.R
+import com.truenine.component.core.api.http.Status
+import com.truenine.component.core.exceptions.BasicBizException
+import com.truenine.component.core.lang.KtLogBridge
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler

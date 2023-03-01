@@ -1,11 +1,11 @@
 package com.truenine.component.data.common.crawler.downloader;
 
+import com.truenine.component.core.api.http.MediaTypes;
+import com.truenine.component.core.api.http.Methods;
+import com.truenine.component.core.lang.Str;
 import com.truenine.component.data.common.crawler.StandardPageHandle;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
 import com.truenine.component.data.common.crawler.selenium.NamedWrapperDriver;
-import io.tn.core.api.http.Methods;
-import io.tn.core.api.http.MediaTypes;
-import io.tn.core.lang.Str;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

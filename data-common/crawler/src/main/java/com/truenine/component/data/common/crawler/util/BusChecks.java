@@ -1,12 +1,12 @@
 package com.truenine.component.data.common.crawler.util;
 
+import com.truenine.component.core.lang.ContainerUtil;
+import com.truenine.component.core.lang.Reflects;
+import com.truenine.component.core.lang.Str;
+import com.truenine.component.data.common.crawler.CrawlerPageProcessor;
 import com.truenine.component.data.common.crawler.annotation.EnableDynamicCrawler;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
-import com.truenine.component.data.common.crawler.CrawlerPageProcessor;
 import com.truenine.component.data.common.crawler.downloader.StandardStaticDownloader;
-import io.tn.core.lang.ContainerUtil;
-import io.tn.core.lang.Reflects;
-import io.tn.core.lang.Str;
 
 import java.util.Collection;
 import java.util.Optional;

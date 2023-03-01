@@ -1,7 +1,5 @@
 package com.truenine.component.core.consts;
 
-import io.tn.core.consts.JavaEnvs;
-
 import java.util.Locale;
 
 /**

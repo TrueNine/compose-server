@@ -10,6 +10,6 @@ data class ColumnIndex(
   var keyName: String? = null
 ) {
   fun getEscapeComment(): String? {
-    return this.comment?.replace("\"","\\\"")
+    return this.comment?.replace("\"", "\\\"")
   }
 }

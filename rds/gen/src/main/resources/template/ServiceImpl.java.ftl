@@ -9,23 +9,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * ${tab.getComment()!tab.getClassName()} 服务实现
- *
- * @author ${ctx.getAuthor()}
- * @since ${ctx.nowDay()}
- */
+* ${tab.getComment()!tab.getClassName()} 服务实现
+*
+* @author ${ctx.getAuthor()}
+* @since ${ctx.nowDay()}
+*/
 @Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}
-  implements ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
+implements ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
 
-  private final ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo;
+private final ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo;
 
-  public ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}(
-    ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo
-  ) {
-    this.repo = repo;
-  }
+public ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}(
+${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo
+) {
+this.repo = repo;
+}
 
 }

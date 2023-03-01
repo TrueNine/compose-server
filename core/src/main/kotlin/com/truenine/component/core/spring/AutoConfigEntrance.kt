@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan
 
 @EnableConfigurationProperties(ServletWebApplicationProperties::class)
 @ComponentScan(
-  "com.truenine.component.spring"
+  "com.truenine.component.core.spring"
 )
 class AutoConfigEntrance {
 }

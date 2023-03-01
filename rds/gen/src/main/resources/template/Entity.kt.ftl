@@ -73,19 +73,19 @@ public static final String THIS_TABLE_NAME = "${tab.getName()}";
   private ${col.getJavaType()} ${col.getFieldName()};
 
 </#list>
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    val that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
-    return id != null && Objects.equals(id, that.id);
-  }
+@Override
+public boolean equals(Object o) {
+if (this == o) {
+return true;
+}
+if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+return false;
+}
+val that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
+return id != null && Objects.equals(id, that.id);
+}
 
-  @Override
-  open fun hashCode() : Int =this::class.hashCode;
+@Override
+open fun hashCode() : Int =this::class.hashCode;
 
 }

@@ -1,8 +1,8 @@
 package com.truenine.component.depend.web.servlet.autoconfig
 
-import io.tn.core.api.http.ParameterNames
-import io.tn.core.dev.BetaTest
-import io.tn.core.lang.LogKt
+import com.truenine.component.core.api.http.ParameterNames
+import com.truenine.component.core.dev.BetaTest
+import com.truenine.component.core.lang.LogKt
 import com.truenine.component.depend.web.servlet.annotations.CurrentTenant
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
