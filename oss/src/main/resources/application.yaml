@@ -1,0 +1,7 @@
+spring:
+  freemarker:
+    cache: false
+    suffix: .ftlh
+    charset: UTF-8
+    template-loader-path: classpath:/templates/
+
