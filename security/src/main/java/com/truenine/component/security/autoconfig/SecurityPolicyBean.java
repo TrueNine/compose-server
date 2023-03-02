@@ -5,6 +5,7 @@ import com.truenine.component.security.properties.PolicyDesc;
 import com.truenine.component.security.spring.security.BaseSecurityExceptionAdware;
 import com.truenine.component.security.spring.security.BaseSecurityUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,17 +39,20 @@ public class SecurityPolicyBean {
 
   @Bean
   @Primary
+  @ConditionalOnBean(PolicyDesc.class)
   BaseSecurityUserDetailsService securityDetailsService(PolicyDesc desc) {
     return desc.getService();
   }
 
   @Bean
   @Primary
+  @ConditionalOnBean(PolicyDesc.class)
   BaseSecurityExceptionAdware securityExceptionAdware(PolicyDesc desc) {
     return desc.getExceptionAdware();
   }
 
   @Bean
+  @ConditionalOnBean(PolicyDesc.class)
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
                                           PolicyDesc desc,
                                           ApplicationContext ctx) throws Exception {
@@ -94,10 +98,11 @@ public class SecurityPolicyBean {
   }
 
   @Bean
+  @ConditionalOnBean(AuthenticationConfiguration.class)
   AuthenticationManager authenticationManager(AuthenticationConfiguration ac) throws Exception {
     log.info("注册 AuthenticationManager config = {}", ac);
     var manager = ac.getAuthenticationManager();
-    log.info("获取到 AuthManager = {}", manager);
+    log.info("获取到 AuthManager = {}", manager != null);
     return manager;
   }
 }

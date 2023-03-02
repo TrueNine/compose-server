@@ -1,3 +1,5 @@
+project.version = V.Project.core
+
 dependencies {
   api("org.springframework.security:spring-security-crypto")
   api("org.springframework.boot:spring-boot-starter-json")

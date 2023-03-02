@@ -23,7 +23,7 @@ public abstract class BaseSecurityUserDetailsService implements UserDetailsServi
   }
 
   /**
-   * 加载用户详细信息帐户
+   * 加载用户详细信息账户
    *
    * @param account 账户
    * @return {@link Usr}

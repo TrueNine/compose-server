@@ -36,6 +36,7 @@ public class AnyDict {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public <V> V getOrElse(String key, V defaultVal) {
     return Optional.ofNullable((V) DICT.get(key)).orElse(defaultVal);
   }

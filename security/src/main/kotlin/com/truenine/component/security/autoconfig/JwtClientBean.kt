@@ -1,7 +1,8 @@
-package com.truenine.component.security.jwt
+package com.truenine.component.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.truenine.component.core.encrypt.Keys
+import com.truenine.component.security.jwt.JwtClient
 import com.truenine.component.security.properties.JwtProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean

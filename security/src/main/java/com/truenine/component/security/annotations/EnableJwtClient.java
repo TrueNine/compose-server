@@ -1,6 +1,6 @@
 package com.truenine.component.security.annotations;
 
-import com.truenine.component.security.jwt.JwtClientBean;
+import com.truenine.component.security.autoconfig.JwtClientBean;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

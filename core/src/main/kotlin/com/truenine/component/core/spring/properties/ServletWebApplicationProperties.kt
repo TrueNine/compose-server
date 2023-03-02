@@ -9,7 +9,7 @@ import org.springframework.http.converter.StringHttpMessageConverter
  * @author TrueNine
  * @since 2023-02-20
  */
-@ConfigurationProperties(prefix = "center.web-servlet")
+@ConfigurationProperties(prefix = "component.web-servlet")
 data class ServletWebApplicationProperties(
   var allowConverters: Array<String> = arrayOf(
     "getDocumentation",

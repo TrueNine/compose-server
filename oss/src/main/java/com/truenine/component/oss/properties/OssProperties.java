@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2022-10-28
  */
 @Data
-@ConfigurationProperties(prefix = "center.oss")
+@ConfigurationProperties(prefix = "component.oss")
 public class OssProperties {
   private Type type = Type.FILE;
 

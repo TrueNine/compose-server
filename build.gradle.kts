@@ -1,3 +1,6 @@
+import org.springframework.boot.gradle.tasks.aot.ProcessAot
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
   id("java")
   id("java-library")
@@ -49,6 +52,14 @@ allprojects {
     google()
   }
 
+  tasks.withType<ProcessAot> {
+    enabled = false
+  }
+
+  tasks.withType<BootJar> {
+    this.enabled = false
+  }
+
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
       freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
@@ -63,7 +74,6 @@ allprojects {
   tasks.withType<Test> {
     useTestNG()
   }
-
   group = ProjectManager.group
   version = ProjectManager.version
 }
@@ -134,19 +144,16 @@ subprojects {
   }
 
   dependencyManagement {
-    val pkgV = { name: String ->
-      V.Component.pkgV(name)
-    }
-
     dependencies {
       // 自身版本管理
-      dependency(pkgV("core"))
-      dependency(pkgV("oss"))
-      dependency(pkgV("security"))
-      dependency(pkgV("rds"))
-      dependency(pkgV("web-api-doc"))
-      dependency(pkgV("web-servlet"))
-      dependency(pkgV("crawler"))
+      dependency("${group}:core:${V.Project.core}")
+      dependency("${group}:oss:${V.Project.oss}")
+      dependency("${group}:security:${V.Project.security}")
+      dependency("${group}:rds:${V.Project.rds}")
+      dependency("${group}:web-api-doc:${V.Project.webApiDoc}")
+      dependency("${group}:web-servlet:${V.Project.webServlet}")
+      dependency("${group}:crawler:${V.Project.crawler}")
+      dependency("${group}:cacheable:${V.Project.cacheable}")
 
       // api
       dependency("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")

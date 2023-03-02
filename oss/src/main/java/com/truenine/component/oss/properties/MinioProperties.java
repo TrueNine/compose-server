@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2023-02-21
  */
 @Data
-@ConfigurationProperties(prefix = "center.oss.minio")
+@ConfigurationProperties(prefix = "component.oss.minio")
 public class MinioProperties {
   Boolean enabled;
   String endpointHost = "localhost";

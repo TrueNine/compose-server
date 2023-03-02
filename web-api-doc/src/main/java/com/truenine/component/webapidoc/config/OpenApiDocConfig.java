@@ -2,6 +2,7 @@ package com.truenine.component.webapidoc.config;
 
 
 import com.truenine.component.core.api.http.Headers;
+import com.truenine.component.webapidoc.properties.SwaggerProperties;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -18,25 +19,14 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiDocConfig {
   @Bean
   @ConditionalOnWebApplication
-  public GroupedOpenApi userApi() {
+  public GroupedOpenApi userApi(SwaggerProperties p) {
     log.info("注册 OpenApi3 文档组件");
     String[] paths = {"/**"};
-    String[] packagedToMatch = {"io.tn"};
+    String[] packagedToMatch = {p.getPackages()};
     return GroupedOpenApi.builder()
-      .group("default")
+      .group(p.getGroup())
       .pathsToMatch(paths)
-      .packagesToScan(packagedToMatch).build();
-  }
-
-  @Bean
-  @ConditionalOnWebApplication
-  public GroupedOpenApi info() {
-    log.info("注册 OpenApi3 信息");
-    String[] paths = {"/**"};
-    String[] packagedToMatch = {"io.tn"};
-    return GroupedOpenApi.builder()
-      .group("swagger")
-      .pathsToMatch(paths)
+      .packagesToScan(packagedToMatch)
       .addOperationCustomizer(
         (operation, handlerMethod) ->
           operation
@@ -59,18 +49,19 @@ public class OpenApiDocConfig {
                   .description("jwt 刷新 token")
                 )
             ))
-      .packagesToScan(packagedToMatch).build();
+      .build();
   }
 
   @Bean
-  public OpenAPI customOpenApi() {
+  public OpenAPI customOpenApi(SwaggerProperties p) {
+    var authorInfo = p.getAuthorInfoProperties();
     return new OpenAPI()
       .info(new Info()
-        .title("tserver")
-        .version("1.0")
-        .description("openAPI3 文档")
-        .termsOfService("https://www.github.com/TrueNine")
-        .license(new License().name("MIT License")
-          .url("https://mit-license.org/")));
+        .title(authorInfo.getTitle())
+        .version(authorInfo.getVersion())
+        .description(authorInfo.getDescription())
+        .termsOfService(authorInfo.getGitLocation())
+        .license(new License().name(authorInfo.getLicense())
+          .url(authorInfo.getLicenseUrl())));
   }
 }

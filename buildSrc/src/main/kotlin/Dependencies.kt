@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.1.22.3-SNAPSHOT"
+  const val version = "0.2.2"
   const val encoding = "UTF-8"
 }
 
@@ -11,18 +11,11 @@ object ProjectManager {
  * 版本管理
  */
 object V {
-  object Component {
-    fun pkgV(name: String?): String {
-      return "${pkg(name)}:${ProjectManager.version}"
-    }
-
-    fun pkg(name: String?): String {
-      return "${ProjectManager.group}:${name ?: ""}"
-    }
-
-    private const val allV = "0.1.2-RC"
+  object Project {
+    private const val allV = ProjectManager.version
     const val core = allV
     const val rds = allV
+    const val gen = allV
     const val webApiDoc = allV
     const val security = allV
     const val webServlet = allV

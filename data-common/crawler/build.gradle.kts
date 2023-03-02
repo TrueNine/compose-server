@@ -1,3 +1,5 @@
+project.version = V.Project.crawler
+
 dependencies {
   api("org.jsoup:jsoup:${V.Util.jsoup}")
   api("org.seleniumhq.selenium:selenium-java:${V.Driver.selenium}")
@@ -6,5 +8,5 @@ dependencies {
   api("com.squareup.okhttp3:okhttp:${V.Http.okhttp3}")
   api("com.alibaba:easyexcel:${V.Office.easyExcel}")
   api("io.github.bonigarcia:webdrivermanager:${V.Driver.webDriverManager}")
-  api(V.Component.pkgV("core"))
+  implementation("${group}:core:${V.Project.core}")
 }
