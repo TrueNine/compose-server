@@ -1,4 +1,4 @@
-package com.truenine.component.cacheable;
+package com.truenine.component.core.cache;
 
 /**
  * 缓存 key 命名空间

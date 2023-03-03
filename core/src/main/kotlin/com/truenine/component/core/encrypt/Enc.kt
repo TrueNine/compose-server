@@ -8,7 +8,9 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
+import java.util.Base64.getDecoder
 import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
 /**
  * 加解密工具类
@@ -17,11 +19,15 @@ import javax.crypto.Cipher
  * @since 2023-02-28
  */
 object Enc {
+  @JvmStatic
   private val H = Base64Helper.defaultHelper()
+
+
 
   /**
    * 分片 base64 分隔符
    */
+
   private const val SHARDING_SEP = "."
 
   /**
@@ -199,6 +205,7 @@ object Enc {
    * @param data 解密数据
    * @param charset 字符集
    */
+  @Deprecated
   @JvmStatic
   fun decRsaBy(
     pubKey: RSAPublicKey,
@@ -206,5 +213,36 @@ object Enc {
     charset: Charset = this.charset
   ): String {
     return dec(pubKey, data, Algorithm.RSA_PADDING, charset)
+  }
+
+  @JvmStatic
+  fun encAes(
+    secretKey: String,
+    cipherText: String,
+    charset: Charset = StandardCharsets.UTF_8
+  ): String {
+    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+    cipher.init(
+      ENC_MODE,
+      SecretKeySpec(secretKey.toByteArray(), "AES")
+    )
+    val encryptedBytes = cipher.doFinal(cipherText.toByteArray(charset))
+    return this.H.encode(encryptedBytes.contentToString())
+  }
+
+  @JvmStatic
+  fun decAes(
+    secretKey: String,
+    encryptedText: String,
+    charset: Charset = StandardCharsets.UTF_8
+  ): String {
+    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+    cipher.init(
+      DEC_MODE,
+      SecretKeySpec(secretKey.toByteArray(), "AES")
+    )
+    val decodedBytes = H.decodeToByte(encryptedText)
+    val decryptedBytes = cipher.doFinal(decodedBytes)
+    return decryptedBytes.toString(charset)
   }
 }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.truenine.component.cacheable.Cf
 import com.truenine.component.core.lang.LogKt
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Bean
@@ -21,6 +20,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
+import com.truenine.component.core.cache.Cf
 
 /**
  * redis 缓存组件配置

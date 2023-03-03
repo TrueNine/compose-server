@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.2.2"
+  const val version = "0.2.3"
   const val encoding = "UTF-8"
 }
 
@@ -28,17 +28,17 @@ object V {
     const val gradleWrapper = "8.0"
     const val javaStr = "17"
     val javaEnum = org.gradle.api.JavaVersion.VERSION_17
-    const val kotlin = "1.7.22"
+    const val kotlin = "1.8.0"
   }
 
   object Driver {
-    const val hibernateCore = "6.1.5.Final"
+    const val hibernateCore = Jpa.hibernate
     const val hibernateEntityManager = "6.0.0.Alpha7"
-    const val mysql = "8.0.31"
-    const val sqlite = "3.36.0.3"
-    const val minio = "8.4.5"
-    const val selenium = "4.6.0"
-    const val webDriverManager = "5.3.1"
+    const val mysql = "8.0.32"
+    const val sqlite = "3.40.1.0"
+    const val minio = "8.5.2"
+    const val selenium = "4.8.0"
+    const val webDriverManager = "5.3.2"
   }
 
   object Sdk {
@@ -47,20 +47,20 @@ object V {
 
   object Jpa {
     const val vladmihalceaHibernateTypes = "2.20.0"
-    const val hibernate = "6.1.6.Final"
+    const val hibernate = "6.1.7.Final"
   }
 
   object Office {
-    const val flowable = "6.7.2"
-    const val easyExcel = "3.1.1"
+    const val flowable = "7.0.0.M1"
+    const val easyExcel = "3.2.1"
   }
 
   object Util {
     const val jsoup = "1.15.3"
     const val ognl = "3.3.4"
-    const val gson = "2.9.0"
-    const val dozer = "5.5.1"
-    const val huTool = "5.8.10"
+    const val gson = "2.10.1"
+    const val dozer = "6.5.2"
+    const val huTool = "5.8.12"
     const val guava = "31.1-jre"
     const val ip2Region = "2.7.0"
     const val smileMath = "2.6.0"
@@ -107,7 +107,7 @@ object V {
   }
 
   object Jwt {
-    const val auth0Jwt = "4.0.0"
+    const val auth0Jwt = "4.2.2"
     const val jJwt = "0.9.1"
   }
 }
