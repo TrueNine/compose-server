@@ -179,11 +179,6 @@ subprojects {
       dependency("org.junit.jupiter:junit-jupiter-api:${V.Test.junit5}")
       dependency("org.junit.jupiter:junit-jupiter-engine:${V.Test.junit5}")
 
-      // util
-      dependency("ognl:ognl:${V.Util.ognl}")
-      dependency("net.sf.dozer:dozer:${V.Util.dozer}")
-      dependency("com.google.code.gson:gson:${V.Util.gson}")
-
       // open api 文档
       dependency("org.springdoc:springdoc-openapi-ui:${V.OpenApi.springDoc1}")
       dependency("org.springdoc:springdoc-openapi-ui:${V.OpenApi.springDoc1}")
@@ -200,16 +195,19 @@ subprojects {
       dependency("org.jsoup:jsoup:${V.Util.jsoup}")
       dependency("com.github.haifengl:smile-math:${V.Util.smileMath}")
       dependency("com.github.magese:ik-analyzer:${V.Util.ikAnalyzer}")
-
       // hutool
       dependency("cn.hutool:hutool-all:${V.Util.huTool}")
       dependency("cn.hutool:hutool-captcha:${V.Util.huTool}")
       dependency("cn.hutool:hutool-crypto:${V.Util.huTool}")
       dependency("cn.hutool:hutool-db:${V.Util.huTool}")
+      // util
+      dependency("ognl:ognl:${V.Util.ognl}")
+      dependency("net.sf.dozer:dozer:${V.Util.dozer}")
+      dependency("com.google.code.gson:gson:${V.Util.gson}")
 
       // 安全
       dependency("org.owasp.antisamy:antisamy:${V.Security.antisamy}")
-
+      dependency("org.bouncycastle:bcprov-jdk15to18:${V.Security.bouncyCastle15to18}")
       // jwt
       dependency("io.jsonwebtoken:jjwt:${V.Jwt.jJwt}")
       dependency("com.auth0:java-jwt:${V.Jwt.auth0Jwt}")

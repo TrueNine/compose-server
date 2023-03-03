@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.2.3"
+  const val version = "0.2.4-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -28,7 +28,7 @@ object V {
     const val gradleWrapper = "8.0"
     const val javaStr = "17"
     val javaEnum = org.gradle.api.JavaVersion.VERSION_17
-    const val kotlin = "1.8.0"
+    const val kotlin = "1.7.22"
   }
 
   object Driver {
@@ -104,6 +104,7 @@ object V {
 
   object Security {
     const val antisamy = "1.7.2"
+    const val bouncyCastle15to18 = "1.72"
   }
 
   object Jwt {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepo : BaseRepo<UserDao, String> {
-  fun findByAccount(account: String): com.truenine.component.rds.dao.UserDao?
+  fun findByAccount(account: String): UserDao?
 
   @Query(
     """
@@ -19,7 +19,7 @@ interface UserRepo : BaseRepo<UserDao, String> {
   )
   fun findPwdEncByAccount(account: String): String?
 
-  fun findAllByNickName(nickName: String): List<com.truenine.component.rds.dao.UserDao>
+  fun findAllByNickName(nickName: String): List<UserDao>
 
   fun existsAllByAccount(account: String): Boolean
 }

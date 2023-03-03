@@ -18,30 +18,22 @@ import java.security.interfaces.RSAPublicKey;
 @Accessors(chain = true)
 public class RsaKeyPair {
   private static final Base64Helper H = new SimpleUtf8Base64();
-  RSAPublicKey pubKey;
-  RSAPrivateKey priKey;
+  RSAPublicKey rsaPublicKey;
+  RSAPrivateKey rsaPrivateKey;
 
-  public RSAPrivateKey getPri() {
-    return this.priKey;
+  public String getRsaPublicKeyBase64() {
+    return H.encode(rsaPublicKey.getEncoded());
   }
 
-  public RSAPublicKey getPub() {
-    return this.pubKey;
+  public String getRsaPrivateKeyBase64() {
+    return H.encode(rsaPrivateKey.getEncoded());
   }
 
-  public String getPubKey() {
-    return H.encode(pubKey.getEncoded());
+  public byte[] getRsaPublicKeyBase64Byte() {
+    return H.encodeToByte(rsaPublicKey.getEncoded());
   }
 
-  public String getPriKey() {
-    return H.encode(priKey.getEncoded());
-  }
-
-  public byte[] getPubKeyByte() {
-    return H.encodeToByte(pubKey.getEncoded());
-  }
-
-  public byte[] getPriKeyByte() {
-    return H.encodeToByte(priKey.getEncoded());
+  public byte[] getRsaPrivateKeyBase64Byte() {
+    return H.encodeToByte(rsaPrivateKey.getEncoded());
   }
 }

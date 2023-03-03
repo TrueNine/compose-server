@@ -10,7 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
 import com.truenine.component.core.lang.DTimer
-import com.truenine.component.core.lang.KtLogBridge
+import com.truenine.component.core.lang.LogKt
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -28,8 +28,7 @@ import java.util.*
  * @since 2023-02-23
  */
 @Configuration
-open class JacksonAutoConfig {
-
+open class JacksonSerializationAutoConfig {
 
   @Bean
   @Lazy
@@ -67,6 +66,7 @@ open class JacksonAutoConfig {
 
   companion object {
     @JvmStatic
-    private val log = KtLogBridge.getLog(JacksonAutoConfig::class.java)
+    private val log =
+      LogKt.getLog(JacksonSerializationAutoConfig::class)
   }
 }
