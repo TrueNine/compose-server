@@ -47,7 +47,7 @@ public class DTimer {
     return Duration.of(millis, ChronoUnit.MILLIS);
   }
 
-  public static Date plusDate(long plusMillis) {
+  public static Date plusMillisFromCurrent(long plusMillis) {
     return plusMillis(System.currentTimeMillis(), plusMillis);
   }
 

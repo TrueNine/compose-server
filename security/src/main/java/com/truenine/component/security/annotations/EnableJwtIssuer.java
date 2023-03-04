@@ -1,6 +1,6 @@
 package com.truenine.component.security.annotations;
 
-import com.truenine.component.security.autoconfig.JwtClientBean;
+import com.truenine.component.security.autoconfig.JwtIssuerAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -11,10 +11,10 @@ import java.lang.annotation.*;
  * @author TrueNine
  * @since 2022-12-14
  */
-@Import(JwtClientBean.class)
+@Import(JwtIssuerAutoConfiguration.class)
 @Inherited
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EnableJwtClient {
+public @interface EnableJwtIssuer {
 }

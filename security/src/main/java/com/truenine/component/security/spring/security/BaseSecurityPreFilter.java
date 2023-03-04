@@ -3,7 +3,6 @@ package com.truenine.component.security.spring.security;
 import com.truenine.component.core.api.http.Headers;
 import com.truenine.component.core.api.http.ParameterNames;
 import com.truenine.component.core.lang.Str;
-import com.truenine.component.security.jwt.exception.*;
 import com.truenine.component.security.spring.security.wrappers.AuthUserDetails;
 import com.truenine.component.security.spring.security.wrappers.Usr;
 import jakarta.servlet.FilterChain;
@@ -86,17 +85,10 @@ public abstract class BaseSecurityPreFilter extends OncePerRequestFilter {
    * @param request  请求
    * @param response 响应
    * @return {@link Usr}
-   * @throws JwtExpTokenExpiredException      exp令牌过期异常
-   * @throws JwtTokenExpiredException         jwt令牌过期异常
-   * @throws JwtTokenPairCrossDeviceException 令牌交叉设备异常
-   * @throws JwtTokenTamperedException        令牌被篡改异常
    */
   protected abstract Usr converterUsr(String jwt,
                                       String exp,
                                       HttpServletRequest request,
-                                      HttpServletResponse response)
-    throws JwtExpTokenExpiredException,
-    JwtTokenExpiredException,
-    JwtTokenPairCrossDeviceException,
-    JwtTokenTamperedException, JwtUnknownException;
+                                      HttpServletResponse response);
+
 }

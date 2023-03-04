@@ -1,27 +1,25 @@
 package com.truenine.component.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.truenine.component.core.encrypt.Keys
-import com.truenine.component.security.jwt.JwtServer
+import com.truenine.component.security.jwt.JwtIssuer
 import com.truenine.component.security.properties.JwtProperties
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import java.nio.file.Files
+import java.nio.file.Paths
 
 @Configuration
 @EnableConfigurationProperties(JwtProperties::class)
-open class JwtServerBean(
+open class JwtIssuerAutoConfiguration(
   private val jp: JwtProperties
 ) {
   @Bean
   @Primary
-  open fun jwtServer(mapper: ObjectMapper): JwtServer {
-    return JwtServer.creator(
-      Keys.fromRsa(jp.privateKeyClassPath, jp.publicKeyClassPath),
-      jp.expiredDuration,
-      jp.issuer
-    ).setMapper(mapper)
+  open fun jwtServer(mapper: ObjectMapper): JwtIssuer {
+    val pubKey = Files.readString(Paths.get(jp.publicKeyClassPath))
+    val priKey = Files.readString(Paths.get(jp.privateKeyClassPath))
+    return JwtIssuer.createIssuer().build()
   }
 }
