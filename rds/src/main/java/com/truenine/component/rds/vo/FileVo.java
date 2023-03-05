@@ -2,6 +2,7 @@ package com.truenine.component.rds.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
+import com.truenine.component.rds.converters.AesEncryptConverter;
 import com.truenine.component.rds.dao.FileDao;
 import com.truenine.component.rds.dao.FileLocationDao;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,6 +40,7 @@ public class FileVo {
 
   @Schema(title = "文件名")
   @Column(name = FileDao.META_NAME)
+  @Convert(converter = AesEncryptConverter.class)
   private String name;
 
   @Schema(

@@ -1,23 +1,24 @@
-package com.truenine.component.security.jwt
+package com.truenine.component.security.jwt.consts
 
 import com.truenine.component.core.encrypt.Keys
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
 import java.time.Duration
 
 
-data class IssuerParams<S : Any, E : Any>(
+data class IssuerParams<S : Any?, E : Any?>(
   var encryptedDataObj: E? = null,
   var id: String? = null,
   var issuer: String? = null,
   var duration: Duration? = null,
-  var signatureKey: RSAPrivateKey,
-  var contentEncryptEccKey: PublicKey? = null
-) {
-  @Suppress("UNCHECKED_CAST")
+  var signatureKey: RSAPrivateKey? = null,
+  var contentEncryptEccKey: PublicKey? = null,
   var subjectObj: S? = null
-    get() = if (null == field) "none" as S else field
+) {
+  fun containSubject(): Boolean =
+    this.subjectObj != null
+
+  fun containEncryptContent(): Boolean = null != this.encryptedDataObj
 
   fun contentEncryptEccKeyFromBase64(base64Key: String) {
     this.contentEncryptEccKey = Keys.readRsaPublicKeyByBase64(base64Key)

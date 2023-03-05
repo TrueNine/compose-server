@@ -1,12 +1,10 @@
 package com.truenine.component.rds.dao;
 
 import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.converters.AesEncryptConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

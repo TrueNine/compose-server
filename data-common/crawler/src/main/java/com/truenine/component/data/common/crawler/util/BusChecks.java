@@ -1,7 +1,7 @@
 package com.truenine.component.data.common.crawler.util;
 
 import com.truenine.component.core.lang.ContainerUtil;
-import com.truenine.component.core.lang.Reflects;
+import com.truenine.component.core.lang.JavaReflects;
 import com.truenine.component.core.lang.Str;
 import com.truenine.component.data.common.crawler.CrawlerPageProcessor;
 import com.truenine.component.data.common.crawler.annotation.EnableDynamicCrawler;
@@ -38,7 +38,7 @@ public class BusChecks {
   }
 
   public static PagePath getPagePath(CrawlerPageProcessor processor) {
-    var pagePath = Reflects.getAnnotationFromClass(processor.getClass(), PagePath.class);
+    var pagePath = JavaReflects.getAnnotationFromClass(processor.getClass(), PagePath.class);
     if (null == pagePath) {
       return StandardStaticDownloader.class.getAnnotation(PagePath.class);
     }
@@ -46,7 +46,7 @@ public class BusChecks {
   }
 
   public static boolean checkAllClassAnnotationDynamic() {
-    return Reflects.getAnnotatedAllClass(EnableDynamicCrawler.class).size() > 0;
+    return JavaReflects.getAnnotatedAllClass(EnableDynamicCrawler.class).size() > 0;
   }
 
   public static boolean checkAllProcessorContainsDynamic(Collection<CrawlerPageProcessor> pageProcessors) {

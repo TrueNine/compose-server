@@ -17,9 +17,7 @@ open class JwtIssuerAutoConfiguration(
 ) {
   @Bean
   @Primary
-  open fun jwtServer(mapper: ObjectMapper): JwtIssuer {
-    val pubKey = Files.readString(Paths.get(jp.publicKeyClassPath))
-    val priKey = Files.readString(Paths.get(jp.privateKeyClassPath))
+  open fun jwtIssuer(mapper: ObjectMapper): JwtIssuer {
     return JwtIssuer.createIssuer().build()
   }
 }

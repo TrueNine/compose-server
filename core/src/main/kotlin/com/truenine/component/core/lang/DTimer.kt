@@ -1,8 +1,8 @@
-package com.truenine.component.core.lang;
+package com.truenine.component.core.lang
 
-import java.time.*;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.time.*
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 /**
  * 时间工具类
@@ -10,71 +10,94 @@ import java.util.Date;
  * @author TrueNine
  * @since 2022-12-16
  */
-public class DTimer {
-  public static final String MILLIS = "SSS";
-  public static final String DATE = "yyyy-MM-dd";
-  public static final String TIME = "HH:mm:ss";
-  public static final String DATETIME = DATE + " " + TIME;
-  public static final String DATETIME_M = DATETIME + " " + MILLIS;
-  public static final String TIME_M = TIME + " " + MILLIS;
-  public static final String DATE_S = "yyyy/MM/dd";
-  public static final String DATETIME_S = DATE_S + " " + TIME;
-  public static final String DATETIME_M_S = DATETIME_S + " " + MILLIS;
+object DTimer {
+  const val MILLIS = "SSS"
+  const val DATE = "yyyy-MM-dd"
+  const val TIME = "HH:mm:ss"
+  const val DATETIME = DATE + " " + TIME
+  const val DATETIME_M = DATETIME + " " + MILLIS
+  const val TIME_M = TIME + " " + MILLIS
+  const val DATE_S = "yyyy/MM/dd"
+  const val DATETIME_S = DATE_S + " " + TIME
+  const val DATETIME_M_S = DATETIME_S + " " + MILLIS
 
-
-  public static void sleepMillis(long millis) {
+  @JvmStatic
+  fun sleepMillis(millis: Long) {
     try {
-      Thread.sleep(millis);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      Thread.sleep(millis)
+    } catch (e: InterruptedException) {
+      throw RuntimeException(e)
     }
   }
 
-
-  public static void sleep(long second) {
-    sleepMillis(second * 1000);
+  @JvmStatic
+  fun sleep(second: Long) {
+    sleepMillis(second * 1000)
   }
 
-  public static void sleepOne() {
-    sleep(1);
+  @JvmStatic
+  fun sleepOne() {
+    sleep(1)
   }
 
-  public static Duration ofSecondDuration(long second) {
-    return Duration.of(second, ChronoUnit.SECONDS);
+  @JvmStatic
+  fun ofSecondDuration(second: Long): Duration {
+    return Duration.of(second, ChronoUnit.SECONDS)
   }
 
-  public static Duration ofMillisDuration(long millis) {
-    return Duration.of(millis, ChronoUnit.MILLIS);
+  @JvmStatic
+  fun ofMillisDuration(millis: Long): Duration {
+    return Duration.of(millis, ChronoUnit.MILLIS)
   }
 
-  public static Date plusMillisFromCurrent(long plusMillis) {
-    return plusMillis(System.currentTimeMillis(), plusMillis);
+  @JvmStatic
+  fun plusMillisFromCurrent(plusMillis: Long): Date {
+    return plusMillis(System.currentTimeMillis(), plusMillis)
   }
 
-  public static Date plusMillis(long current, long plusMillis) {
-    return new Date(current + plusMillis);
+  @JvmStatic
+  fun plusMillis(current: Long, plusMillis: Long): Date {
+    return Date(current + plusMillis)
   }
 
-  public static Date localTimeToDate(LocalTime lt) {
-    var meta = LocalDate.of(1970, 1, 1);
-    var ldt = lt.atDate(meta);
+  @JvmStatic
+  fun localTimeToDate(lt: LocalTime): Date {
+    val meta = LocalDate.of(1970, 1, 1)
+    val ldt = lt.atDate(meta)
     return Date.from(
       ldt.atZone(ZoneId.of("GMT"))
         .toInstant()
-    );
+    )
   }
 
-  public static Date localDateToDate(LocalDate ld) {
+  @JvmStatic
+  fun localDateToDate(ld: LocalDate): Date {
     return Date.from(
       ld.atStartOfDay().atZone(ZoneId.systemDefault())
         .toInstant()
-    );
+    )
   }
 
-  public static Date localDatetimeToDate(LocalDateTime ldt) {
+  @JvmStatic
+  fun localDatetimeToDate(ldt: LocalDateTime): Date {
     return Date.from(
       ldt.atZone(ZoneId.systemDefault())
         .toInstant()
-    );
+    )
   }
+
+  @JvmStatic
+  fun dateToLocalDatetime(date: Date): LocalDateTime = date.toInstant()
+    .atZone(ZoneId.systemDefault())
+    .toLocalDateTime()
+
+  @JvmStatic
+  fun dateToLocalDate(date: Date) =
+    date.toInstant().atZone(ZoneId.systemDefault())
+      .toLocalDate()
+
+  @JvmStatic
+  fun dateToLocalTime(date: Date): LocalTime =
+    date.toInstant().atZone(ZoneId.of("GMT"))
+      .toLocalTime()
 }

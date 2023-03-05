@@ -1,4 +1,4 @@
-package com.truenine.component.core.spring.autoconfig
+package com.truenine.component.core.autoconfig
 
 import com.truenine.component.core.api.http.Methods
 import com.truenine.component.core.lang.KtLogBridge

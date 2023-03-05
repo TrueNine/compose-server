@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.truenine.component.core.encrypt.Encryptors
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.LogKt
+import com.truenine.component.security.jwt.consts.IssuerParams
 import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -18,50 +19,43 @@ import java.time.Duration
 class JwtIssuer private constructor() : JwtVerifier() {
   var expireMillis: Long = Duration.ofMinutes(30).toMillis()
   var signatureIssuerKey: RSAPrivateKey? = null
+  var contentEccPublicKey: PublicKey? = null
 
-  fun <S : Any, E : Any> issued(params: IssuerParams<S, E>): String =
-    basicCreator(
-      subject = createContent(params.subjectObj!!),
-      signatureKey = params.signatureKey,
-      encryptData = if (isEncrypt(params)) encryptData(
-        createContent(params.encryptedDataObj!!),
-        params.contentEncryptEccKey!!
-      ) else null,
-      issuer = params.issuer ?: this.issuer,
-      id = params.id ?: this.id,
-      encKeyName = this.encryptDataKeyName
-    )
-
-  private fun <S : Any, E : Any> isEncrypt(p: IssuerParams<S, E>): Boolean {
-    return null != p.encryptedDataObj
-      && null != p.contentEncryptEccKey
-  }
-
-  @VisibleForTesting
-  internal fun basicCreator(
-    subject: String,
-    signatureKey: RSAPrivateKey,
-    encryptData: String? = null,
-    issuer: String? = this.issuer,
-    id: String? = this.id,
-    encKeyName: String? = this.encryptDataKeyName
-  ): String {
+  fun <S : Any, E : Any> issued(params: IssuerParams<S, E>): String {
     return JWT.create()
       .withIssuer(issuer)
       .withJWTId(id)
-      .withSubject(subject ?: "none")
-      .withClaim(encKeyName, encryptData ?: "none")
-      .withExpiresAt(DTimer.plusMillisFromCurrent(expireMillis))
-      .sign(Algorithm.RSA256(signatureKey))
+      .apply {
+        if (params.containSubject()) {
+          withSubject(createContent(params.subjectObj!!))
+        }
+        if (params.containEncryptContent()) {
+          withClaim(
+            this@JwtIssuer.encryptDataKeyName,
+            encryptData(
+              createContent(params.encryptedDataObj!!),
+              params.contentEncryptEccKey
+                ?: this@JwtIssuer.contentEccPublicKey!!
+            )
+          )
+        }
+        withExpiresAt(
+          DTimer.plusMillisFromCurrent(
+            params.duration?.toMillis()
+              ?: this@JwtIssuer.expireMillis
+          )
+        )
+      }.sign(Algorithm.RSA256(params.signatureKey ?: this.signatureIssuerKey))
   }
+
 
   @VisibleForTesting
   internal fun createContent(
     content: Any
-  ): String = kotlin.runCatching {
+  ): String = runCatching {
     objectMapper?.writeValueAsString(content)
       ?: gson?.toJson(content)!!
-  }.onFailure { log.warn("jwt json 解析异常，或许没有配置序列化器", it) }
+  }.onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }
     .getOrElse {
       "{}"
     }
@@ -83,7 +77,6 @@ class JwtIssuer private constructor() : JwtVerifier() {
       this@JwtIssuer.expireMillis = expireMillis
       return this
     }
-
 
     fun serializer(
       mapper: ObjectMapper? = null,
@@ -110,6 +103,12 @@ class JwtIssuer private constructor() : JwtVerifier() {
       this@JwtIssuer.contentEccPrivateKey = contentDecryptKey
       return this
     }
+
+    fun contentEncryptKey(contentEncryptKey: PublicKey): Builder {
+      this@JwtIssuer.contentEccPublicKey = contentEncryptKey
+      return this
+    }
+
     fun signatureVerifyKey(signatureDecryptKey: RSAPublicKey): Builder {
       this@JwtIssuer.signatureVerifyKey = signatureDecryptKey
       return this

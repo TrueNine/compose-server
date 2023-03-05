@@ -1,3 +1,7 @@
+import Repos.Credentials.yunXiaoPassword
+import Repos.Credentials.yunXiaoUsername
+import Repos.release
+import Repos.snapshot
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
@@ -15,22 +19,17 @@ plugins {
   id("maven-publish")
 }
 
-val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")!!
-val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")!!
-val release =
-  "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-val snapshot =
-  "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
+
 allprojects {
   repositories {
-    maven(release) {
+    maven(Repos.release) {
       this.isAllowInsecureProtocol = true
       credentials {
         this.username = yunXiaoUsername
         this.password = yunXiaoPassword
       }
     }
-    maven(snapshot) {
+    maven(Repos.snapshot) {
       this.isAllowInsecureProtocol = true
       credentials {
         this.username = yunXiaoUsername

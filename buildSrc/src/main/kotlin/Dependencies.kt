@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.2.7-SNAPSHOT"
+  const val version = "0.2.15-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -117,6 +117,15 @@ object V {
  * maven 仓库管理
  */
 object Repos {
+  object Credentials {
+    val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")!!
+    val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")!!
+  }
+
+  val release =
+    "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
+  val snapshot =
+    "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
   private const val repoAli = "https://maven.aliyun.com/"
   const val aliCentral = "${repoAli}repository/central"
   const val aliJCenter = "${repoAli}repository/jcenter"

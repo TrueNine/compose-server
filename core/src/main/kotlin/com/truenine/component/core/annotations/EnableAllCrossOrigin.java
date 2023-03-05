@@ -1,6 +1,6 @@
 package com.truenine.component.core.annotations;
 
-import com.truenine.component.core.spring.autoconfig.CorsConfiguration;
+import com.truenine.component.core.autoconfig.CorsConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Import;
 

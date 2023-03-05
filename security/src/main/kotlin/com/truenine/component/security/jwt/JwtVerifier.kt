@@ -6,7 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.annotations.VisibleForTesting
 import com.google.gson.Gson
 import com.truenine.component.core.encrypt.Encryptors
+import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.LogKt
+import com.truenine.component.security.exceptions.JwtException
+import com.truenine.component.security.jwt.consts.TokenResult
+import com.truenine.component.security.jwt.consts.VerifierParams
 import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -21,56 +25,47 @@ open class JwtVerifier internal constructor() {
   protected var objectMapper: ObjectMapper? = null
   protected var gson: Gson? = null
 
+  @Throws(JwtException::class)
   fun <S : Any, E : Any> verify(
     params: VerifierParams<S, E>
-  ): JwtContent<S, E>? = basicParser(
-    token = params.token,
-    subjectTargetType = params.subjectTargetType,
-    encKeyName = this.encryptDataKeyName,
-    contentEncryptTargetType = params.encryptDataTargetType,
-    signatureKey = params.signatureKey,
-    contentEccPrivateKey = params.contentEncryptEccKey ?: contentEccPrivateKey,
-    id = params.id ?: id,
-    issuer = params.issuer ?: this.issuer
-  )
-
-  @VisibleForTesting
-  internal fun <S : Any, E : Any> basicParser(
-    token: String,
-    subjectTargetType: KClass<S>,
-    encKeyName: String = this.encryptDataKeyName,
-    contentEncryptTargetType: KClass<E>? = null,
-    signatureKey: RSAPublicKey,
-    contentEccPrivateKey: PrivateKey? = null,
-    id: String? = this.id,
-    issuer: String? = this.issuer,
-  ): JwtContent<S, E>? = runCatching {
-    JWT.require(Algorithm.RSA256(signatureKey))
-      .withIssuer(issuer)
-      .withJWTId(id)
+  ): TokenResult<S, E>? = runCatching {
+    JWT.require(
+      Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey)
+    )
+      .withIssuer(params.issuer ?: this.issuer)
+      .withJWTId(params.id ?: this.id)
       .acceptLeeway(0)
       .build().let { verifier ->
-        JWT.decode(token).let { decodedJwt ->
-          verifier.verify(token) // TODO 处理验证异常
-          JwtContent<S, E>(
-            subject = parseContent(
-              decodedJwt.subject,
-              subjectTargetType
-            )!!
-          ).apply {
-            if (null != contentEncryptTargetType
-              && null != contentEccPrivateKey
-              && decodedJwt.claims.containsKey(encKeyName)
+        try {
+          verifier.verify(params.token) // TODO 处理验证异常
+        } catch (e: Exception) {
+          throw parseExceptionHandle(e)
+        }
+        JWT.decode(params.token).let { decodedJwt ->
+          TokenResult<S, E>().apply {
+            if (
+              decodedJwt.claims
+                .containsKey(this@JwtVerifier.encryptDataKeyName)
             ) {
-              this.encryptedData = decryptData(
-                decodedJwt.claims[encKeyName]!!.asString(),
-                contentEncryptTargetType
+              this.decryptedData = decryptData(
+                encData = decodedJwt.claims[this@JwtVerifier.encryptDataKeyName]
+                !!.asString(),
+                targetType = params.encryptDataTargetType!!,
+                eccPrivateKey = params.contentEncryptEccKey
+                  ?: this@JwtVerifier.contentEccPrivateKey
               )
             }
+            if (decodedJwt.claims.containsKey("sub")) {
+              this.subject =
+                parseContent(decodedJwt.subject, params.subjectTargetType!!)
+            }
+            expireDateTime = DTimer.dateToLocalDatetime(decodedJwt.expiresAt)
+            id = decodedJwt.id
+            signatureAlgName = decodedJwt.algorithm
           }
         }
       }
-  }.onFailure { log.warn("jwt 解析异常", it) }.getOrNull()
+  }.onFailure { log.warn("jwt 解析异常", it) }.getOrThrow()
 
 
   @VisibleForTesting
@@ -92,10 +87,9 @@ open class JwtVerifier internal constructor() {
         ?: gson?.fromJson(json, classType.java)
     }.onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }.getOrNull()
 
-
   @VisibleForTesting
-  internal fun parseExceptionHandle(e: Exception) {
-    // TODO 处理 jwt 抛出的异常
+  internal fun parseExceptionHandle(e: Exception): JwtException {
+    TODO("jwt方法等待处理异常")
   }
 
   inner class Builder {

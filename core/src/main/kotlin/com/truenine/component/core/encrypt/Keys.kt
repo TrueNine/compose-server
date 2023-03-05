@@ -58,13 +58,21 @@ object Keys {
   }.onFailure { log.error(::readAesKeyByBase64.name, it) }.getOrNull()
 
   /**
+   * @param key 密钥
+   * @return base64
+   */
+  @JvmStatic
+  fun writeKeyToBase64(key: Key): String? = runCatching {
+    h.encode(key.encoded)
+  }.onFailure { log.error(::writeKeyToBase64.name, it) }.getOrNull()
+
+  /**
    * @param secret 密钥
    * @return base64密钥
    */
   @JvmStatic
-  fun writeAesKeyByBase64(secret: SecretKeySpec): String? = runCatching {
-    h.encode(secret.encoded)
-  }.onFailure { log.error(::writeAesKeyByBase64.name, it) }.getOrNull()
+  fun writeAesKeyToBase64(secret: SecretKeySpec): String? =
+    writeKeyToBase64(secret)
 
 
   /**

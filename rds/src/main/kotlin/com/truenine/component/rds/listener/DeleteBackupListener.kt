@@ -1,11 +1,12 @@
-package com.truenine.component.rds.listener;
+package com.truenine.component.rds.listener
 
-import com.truenine.component.rds.event.DelEvent;
-import jakarta.persistence.PreRemove;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
+import com.truenine.component.core.lang.LogKt
+import com.truenine.component.rds.event.DelEvent
+import jakarta.persistence.PreRemove
+import lombok.extern.slf4j.Slf4j
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.stereotype.Component
 
 /**
  * 备份删除监听器
@@ -15,23 +16,26 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class DeleteBackupListener {
+class DeleteBackupListener {
+  private var pub: ApplicationEventPublisher? = null
 
-  private ApplicationEventPublisher pub;
-
-  public DeleteBackupListener() {
-    log.info("注册数据删除监听器 = {}", this.getClass());
+  init {
+    log.info("注册数据删除监听器 = {}", this.javaClass)
   }
 
   @Autowired
-  public void setPub(ApplicationEventPublisher pub) {
-    this.pub = pub;
+  fun setPub(pub: ApplicationEventPublisher?) {
+    this.pub = pub
   }
 
   @PreRemove
-  void a(Object obj) {
+  fun a(obj: Any?) {
     if (null != obj) {
-      pub.publishEvent(new DelEvent(obj));
+      pub!!.publishEvent(DelEvent(obj))
     }
+  }
+
+  companion object {
+    private val log = LogKt.getLog(DeleteBackupListener::class)
   }
 }

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
  */
 @Import({
   DisableSecurityPolicyBean.class,
-  CaptchaBean.class
+  CaptchaAutoConfiguration.class
 })
 public class AutoConfigEntrance {
 }

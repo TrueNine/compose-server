@@ -3,7 +3,7 @@ package com.truenine.component.depend.web.servlet.autoconfig
 import com.truenine.component.core.api.http.R
 import com.truenine.component.core.api.http.Status
 import com.truenine.component.core.lang.KtLogBridge
-import com.truenine.component.core.spring.properties.ServletWebApplicationProperties
+import com.truenine.component.core.properties.ServletWebApplicationProperties
 import org.springframework.core.MethodParameter
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order

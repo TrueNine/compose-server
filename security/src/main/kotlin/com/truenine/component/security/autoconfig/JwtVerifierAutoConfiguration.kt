@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.nio.file.Files
-import java.nio.file.Paths
 
 @Configuration
 @EnableConfigurationProperties(JwtProperties::class)
@@ -18,9 +16,7 @@ open class JwtVerifierAutoConfiguration(
 ) {
   @Bean
   @ConditionalOnMissingBean(value = [JwtVerifier::class, JwtIssuer::class])
-  open fun authJwtClient(mapper: ObjectMapper): JwtVerifier {
-    val pubKey = Files.readString(Paths.get(jp.publicKeyClassPath))
-    val priKey = Files.readString(Paths.get(jp.privateKeyClassPath))
+  open fun jwtVerifier(mapper: ObjectMapper): JwtVerifier {
     return JwtVerifier.createVerifier()
       .build()
   }

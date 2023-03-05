@@ -1,4 +1,4 @@
-package com.truenine.component.core.spring
+package com.truenine.component.core.autoconfig
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.SerializationFeature

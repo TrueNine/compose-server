@@ -2,12 +2,13 @@ package com.truenine.component.core.encrypt
 
 import org.testng.annotations.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class EncryptAndDecryptTest {
   @Test
   fun testAesEncryptAndDecrypt() {
     val key = Keys.generateAesKey()!!
-    val bKey = Keys.writeAesKeyByBase64(key)!!
+    val bKey = Keys.writeAesKeyToBase64(key)!!
     val base64Key = Keys.readAesKeyByBase64(bKey)!!
     println(base64Key)
     val text = "我日你妈"
@@ -42,8 +43,20 @@ class EncryptAndDecryptTest {
     val cipher =
       Encryptors.encryptByRsaPublicKey(pair!!.rsaPublicKey, text)
     val plain =
-      Encryptors.decryptByRsaPrivateKey(pair!!.rsaPrivateKey, cipher!!)
+      Encryptors.decryptByRsaPrivateKey(pair.rsaPrivateKey, cipher!!)
 
     assertEquals(text, plain)
+  }
+
+  @Test
+  fun testAes() {
+    val key = Keys.generateAesKey()!!
+    val data = "我是你爹"
+    val enc = Encryptors.encryptByAesKey(key, data)!!
+    val dec = Encryptors.decryptByAesKey(key, enc)
+    println(enc)
+    println(dec)
+    assertNotEquals(data, enc)
+    assertEquals(data, dec)
   }
 }

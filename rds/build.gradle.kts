@@ -3,7 +3,7 @@ project.version = V.Project.rds
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-validation")
-implementation("${group}:core:${V.Project.core}")
+  implementation("${group}:core:${V.Project.core}")
   api("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")
   api("jakarta.persistence:jakarta.persistence-api")
   api("org.springframework.boot:spring-boot-starter-data-jpa")

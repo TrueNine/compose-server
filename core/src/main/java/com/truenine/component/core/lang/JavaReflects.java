@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * @author TrueNine
  * @since 2022-06-11
  */
-public class Reflects {
+public class JavaReflects {
 
   private static final List<Class<?>> CLASS_POOL = new CopyOnWriteArrayList<>();
 

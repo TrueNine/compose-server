@@ -1,12 +1,12 @@
-package com.truenine.component.core.spring
+package com.truenine.component.core.autoconfig
 
-import com.truenine.component.core.spring.properties.ServletWebApplicationProperties
+import com.truenine.component.core.properties.ServletWebApplicationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 
 @EnableConfigurationProperties(ServletWebApplicationProperties::class)
 @ComponentScan(
-  "com.truenine.component.core.spring"
+  "com.truenine.component.core.autoconfig"
 )
 class AutoConfigEntrance {
 }

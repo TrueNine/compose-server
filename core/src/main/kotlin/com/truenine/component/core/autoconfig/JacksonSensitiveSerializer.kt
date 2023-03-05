@@ -1,4 +1,4 @@
-package com.truenine.component.core.spring
+package com.truenine.component.core.autoconfig
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.BeanProperty

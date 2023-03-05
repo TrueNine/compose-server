@@ -1,7 +1,8 @@
 project.version = V.Project.core
 
 dependencies {
-  implementation("org.bouncycastle:bcprov-jdk15to18:${V.Security.bouncyCastle15to18}")
+  api("org.springframework.security:spring-security-crypto")
+  api("org.bouncycastle:bcprov-jdk15to18:${V.Security.bouncyCastle15to18}")
   api("org.springframework.boot:spring-boot-starter-json")
   api("com.fasterxml.jackson.module:jackson-module-kotlin")
   api("jakarta.servlet:jakarta.servlet-api:${V.Api.jakartaServlet}")

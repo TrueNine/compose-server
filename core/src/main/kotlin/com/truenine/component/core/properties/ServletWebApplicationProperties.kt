@@ -1,4 +1,4 @@
-package com.truenine.component.core.spring.properties
+package com.truenine.component.core.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.http.converter.StringHttpMessageConverter

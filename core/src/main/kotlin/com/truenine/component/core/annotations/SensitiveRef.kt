@@ -3,7 +3,7 @@ package com.truenine.component.core.annotations
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.truenine.component.core.spring.JacksonSensitiveSerializer
+import com.truenine.component.core.autoconfig.JacksonSensitiveSerializer
 import java.lang.annotation.Inherited
 
 /**
