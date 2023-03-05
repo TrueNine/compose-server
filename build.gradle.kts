@@ -120,10 +120,11 @@ subprojects {
   }
 
   dependencies {
-    api("io.projectreactor.kotlin:reactor-kotlin-extensions")
-    api("org.jetbrains.kotlin:kotlin-reflect")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    api("org.jetbrains.kotlin:kotlin-reflect")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+    api("io.projectreactor.kotlin:reactor-kotlin-extensions")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")

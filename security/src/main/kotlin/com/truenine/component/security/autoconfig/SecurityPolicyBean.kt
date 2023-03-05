@@ -1,108 +1,129 @@
-package com.truenine.component.security.autoconfig;
+package com.truenine.component.security.autoconfig
 
-import com.truenine.component.security.annotations.EnableRestSecurity;
-import com.truenine.component.security.properties.PolicyDesc;
-import com.truenine.component.security.spring.security.BaseSecurityExceptionAdware;
-import com.truenine.component.security.spring.security.BaseSecurityUserDetailsService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import com.truenine.component.core.lang.LogKt
+import com.truenine.component.security.annotations.EnableRestSecurity
+import com.truenine.component.security.properties.PolicyDesc
+import com.truenine.component.security.spring.security.SecurityExceptionAdware
+import com.truenine.component.security.spring.security.SecurityUserDetailsService
+import lombok.extern.slf4j.Slf4j
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
+import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import java.util.*
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 @Slf4j
 @Configuration
 @EnableWebSecurity
-public class SecurityPolicyBean {
-
-  private static EnableRestSecurity getAnno(ApplicationContext ctx) {
-    var a = ctx.getBeansWithAnnotation(EnableRestSecurity.class);
-    var s = new AtomicReference<EnableRestSecurity>();
-    a.forEach((k, v) -> {
-      s.set(v.getClass().getAnnotation(EnableRestSecurity.class));
-      log.debug("采取的最后一个注解：{}，注解于：{}", s.get(), v.getClass().getName());
-    });
-    return s.get();
+open class SecurityPolicyBean {
+  @Bean
+  @Primary
+  @ConditionalOnBean(PolicyDesc::class)
+  open fun securityDetailsService(desc: PolicyDesc): SecurityUserDetailsService {
+    return desc.service
   }
 
   @Bean
   @Primary
-  @ConditionalOnBean(PolicyDesc.class)
-  BaseSecurityUserDetailsService securityDetailsService(PolicyDesc desc) {
-    return desc.getService();
+  @ConditionalOnBean(PolicyDesc::class)
+  open fun securityExceptionAdware(desc: PolicyDesc): SecurityExceptionAdware {
+    return desc.exceptionAdware
   }
 
   @Bean
-  @Primary
-  @ConditionalOnBean(PolicyDesc.class)
-  BaseSecurityExceptionAdware securityExceptionAdware(PolicyDesc desc) {
-    return desc.getExceptionAdware();
-  }
+  @ConditionalOnBean(PolicyDesc::class)
+  @Throws(Exception::class)
+  open fun securityFilterChain(
+    httpSecurity: HttpSecurity,
+    desc: PolicyDesc,
+    ctx: ApplicationContext
+  ): SecurityFilterChain {
+    val anonymous = desc.anonymousPatterns
+    val anno = getAnno(ctx)
 
-  @Bean
-  @ConditionalOnBean(PolicyDesc.class)
-  SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
-                                          PolicyDesc desc,
-                                          ApplicationContext ctx) throws Exception {
-    var anonymous = desc.getAnonymousPatterns();
-    var anno = getAnno(ctx);
+    anonymous += listOf(*anno.loginUrl)
 
-    anonymous.addAll(List.of(anno.loginUrl()));
-    anonymous.addAll(List.of(anno.logoutUrl()));
-
-    if (anno.allowSwagger()) {
-      anonymous.addAll(Arrays.stream(new String[]{
+    if (anno.allowSwagger) {
+      anonymous += arrayOf(
         "/v3/api-docs/**",
         "/v3/api-docs.yaml",
         "/doc.html**",
         "/swagger-ui/**"
-      }).toList());
+      )
     }
-    if (anno.allowWebJars()) {
-      anonymous.addAll(Arrays.stream(new String[]{
-        "/webjars/**",
-        "/errors/**",
-        "/error/**",
-        "/favicon.ico"
-      }).toList());
+    if (anno.allowWebJars) {
+      anonymous +=
+        arrayOf(
+          "/webjars/**",
+          "/errors/**",
+          "/error/**",
+          "/favicon.ico"
+        )
     }
-
-    httpSecurity.addFilterBefore(desc.getJwtPreFilter(), UsernamePasswordAuthenticationFilter.class);
+    httpSecurity.addFilterBefore(
+      desc.preValidFilter,
+      UsernamePasswordAuthenticationFilter::class.java
+    )
     httpSecurity
       .csrf().disable()
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       .and()
       .authorizeHttpRequests()
-      .requestMatchers(anonymous.toArray(String[]::new))
+      .requestMatchers(*anonymous.toTypedArray())
       .anonymous()
       .anyRequest().authenticated()
       .and()
-      .userDetailsService(desc.getService());
+      .userDetailsService(desc.service)
     httpSecurity.exceptionHandling()
-      .authenticationEntryPoint(desc.getExceptionAdware())
-      .accessDeniedHandler(desc.getExceptionAdware());
-    log.info("注册 Security 过滤器链 httpSecurity = {}", httpSecurity);
-    return httpSecurity.build();
+      .authenticationEntryPoint(desc.exceptionAdware)
+      .accessDeniedHandler(desc.exceptionAdware)
+    log.info("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
+    return httpSecurity.build()
   }
 
   @Bean
-  @ConditionalOnBean(AuthenticationConfiguration.class)
-  AuthenticationManager authenticationManager(AuthenticationConfiguration ac) throws Exception {
-    log.info("注册 AuthenticationManager config = {}", ac);
-    var manager = ac.getAuthenticationManager();
-    log.info("获取到 AuthManager = {}", manager != null);
-    return manager;
+  @ConditionalOnBean(AuthenticationConfiguration::class)
+  @Throws(Exception::class)
+  open fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
+    log.info("注册 AuthenticationManager config = {}", ac)
+    val manager = ac.authenticationManager
+    log.info("获取到 AuthManager = {}", manager != null)
+    return manager
+  }
+
+  companion object {
+    @JvmStatic
+    private val log = LogKt.getLog(SecurityPolicyBean::class)
+
+    @JvmStatic
+    private fun getAnno(ctx: ApplicationContext): EnableRestSecurity {
+      val a = ctx.getBeansWithAnnotation(EnableRestSecurity::class.java)
+      val s = AtomicReference<EnableRestSecurity>()
+      a.forEach { (k: String?, v: Any) ->
+        s.set(
+          v.javaClass.getAnnotation(
+            EnableRestSecurity::class.java
+          )
+        )
+        log.debug(
+          "获取到：{}，注解于：{}",
+          s.get(),
+          v.javaClass.name
+        )
+      }
+      return s.get()
+    }
   }
 }

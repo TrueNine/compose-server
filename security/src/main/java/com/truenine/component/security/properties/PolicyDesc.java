@@ -1,8 +1,8 @@
 package com.truenine.component.security.properties;
 
-import com.truenine.component.security.spring.security.BaseSecurityExceptionAdware;
-import com.truenine.component.security.spring.security.BaseSecurityPreFilter;
-import com.truenine.component.security.spring.security.BaseSecurityUserDetailsService;
+import com.truenine.component.security.spring.security.SecurityExceptionAdware;
+import com.truenine.component.security.spring.security.SecurityPreValidFilter;
+import com.truenine.component.security.spring.security.SecurityUserDetailsService;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,8 +18,8 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class PolicyDesc {
-  BaseSecurityPreFilter jwtPreFilter;
-  BaseSecurityUserDetailsService service;
-  BaseSecurityExceptionAdware exceptionAdware;
+  SecurityPreValidFilter preValidFilter;
+  SecurityUserDetailsService service;
+  SecurityExceptionAdware exceptionAdware;
   List<String> anonymousPatterns = new ArrayList<>();
 }

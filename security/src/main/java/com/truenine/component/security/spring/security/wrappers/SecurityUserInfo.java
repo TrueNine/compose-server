@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @ToString
 @EqualsAndHashCode
 @Accessors(chain = true)
-public final class Usr {
+public final class SecurityUserInfo {
   private @Nullable String id;
   private @Nullable String account;
   private @Nullable String pwd;

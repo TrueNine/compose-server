@@ -15,16 +15,16 @@ import java.util.Collection;
  * @since 2022-12-10
  */
 @Slf4j
-public record AuthUserDetails(Usr usr) implements UserDetails {
+public record SecurityUserDetails(SecurityUserInfo securityUserInfo) implements UserDetails {
 
-  public AuthUserDetails {
-    log.info("构建 UserDetails = {}", usr);
+  public SecurityUserDetails {
+    log.info("构建 SecurityUserDetails = {}", securityUserInfo);
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    var roles = this.usr.getRoles();
-    var permissions = this.usr.getPermissions();
+    var roles = this.securityUserInfo.getRoles();
+    var permissions = this.securityUserInfo.getPermissions();
     var auths = new ArrayList<GrantedAuthority>();
     roles.forEach(r -> auths.add(new SimpleGrantedAuthority("ROLE_" + r)));
     permissions.forEach(p -> auths.add(new SimpleGrantedAuthority(p)));
@@ -33,31 +33,31 @@ public record AuthUserDetails(Usr usr) implements UserDetails {
 
   @Override
   public String getPassword() {
-    return usr.getPwd();
+    return securityUserInfo.getPwd();
   }
 
   @Override
   public String getUsername() {
-    return usr.getAccount();
+    return securityUserInfo.getAccount();
   }
 
   @Override
   public boolean isAccountNonExpired() {
-    return this.usr.getNonExpired();
+    return this.securityUserInfo.getNonExpired();
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return this.usr.getNonLocked();
+    return this.securityUserInfo.getNonLocked();
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return this.usr.getNonExpired();
+    return this.securityUserInfo.getNonExpired();
   }
 
   @Override
   public boolean isEnabled() {
-    return this.usr.getEnabled();
+    return this.securityUserInfo.getEnabled();
   }
 }

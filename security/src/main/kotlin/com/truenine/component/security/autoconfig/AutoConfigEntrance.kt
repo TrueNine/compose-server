@@ -1,6 +1,6 @@
-package com.truenine.component.security.autoconfig;
+package com.truenine.component.security.autoconfig
 
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Import
 
 /**
  * 自动配置入口
@@ -8,9 +8,6 @@ import org.springframework.context.annotation.Import;
  * @author TrueNine
  * @since 2022-10-28
  */
-@Import({
-  DisableSecurityPolicyBean.class,
-  CaptchaAutoConfiguration.class
-})
-public class AutoConfigEntrance {
-}
+@Import(DisableSecurityPolicyBean::class, CaptchaAutoConfiguration::class)
+class AutoConfigEntrance
+
