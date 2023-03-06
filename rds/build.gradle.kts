@@ -2,6 +2,8 @@ project.version = V.Project.rds
 
 
 dependencies {
+  api("org.flywaydb:flyway-core")
+  api("org.flywaydb:flyway-mysql")
   api("org.springframework.boot:spring-boot-starter-validation")
   implementation("${group}:core:${V.Project.core}")
   api("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")

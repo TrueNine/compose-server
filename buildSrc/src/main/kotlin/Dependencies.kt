@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.2.15-SNAPSHOT"
+  const val version = "0.2.17"
   const val encoding = "UTF-8"
 }
 
@@ -96,7 +96,7 @@ object V {
 
   object Spring {
     const val graalVmPlugin = "0.9.18"
-    const val boot = "3.0.3"
+    const val boot = "3.0.4"
     const val cloud = "2022.0.0-RC2"
     const val cloudAlibaba = "2021.0.4.0"
     const val managementPlugin = "1.1.0"
