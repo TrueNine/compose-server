@@ -38,7 +38,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
 
   public static final String $T_NAME = "api_call_record";
   public static final String API_ID = "api_id";
-  public static final String DEVICE_ID = "device_id";
+  public static final String DEVICE_CODE = "device_code";
   public static final String REQ_IP = "req_ip";
   public static final String RESP_CODE = "resp_code";
   public static final String RESP_RESULT_ENC = "resp_result_enc";
@@ -60,13 +60,13 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
    * 设备 id, 浏览器为 agent
    */
   @Schema(
-    name = DEVICE_ID,
+    name = DEVICE_CODE,
     description = "设备 id, 浏览器为 agent"
   )
   @Column(table = $T_NAME,
-    name = DEVICE_ID)
+    name = DEVICE_CODE)
   @Nullable
-  private String deviceId;
+  private String deviceCode;
 
   /**
    * 请求 ip

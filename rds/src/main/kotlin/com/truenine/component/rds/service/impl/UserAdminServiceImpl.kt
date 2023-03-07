@@ -131,6 +131,7 @@ open class UserAdminServiceImpl
     }
   }
 
+  @Transactional(rollbackFor = [Exception::class])
   override fun verifyPassword(account: String?, pwd: String?): Boolean {
     return account?.takeIf {
       pwd != null

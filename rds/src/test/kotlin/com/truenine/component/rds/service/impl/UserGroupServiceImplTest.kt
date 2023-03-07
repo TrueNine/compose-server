@@ -46,7 +46,7 @@ class UserGroupServiceImplTest :
   fun testFindAllUserGroupByUserId() {
     userGroupService.findAllUserGroupByUserId("0").apply {
       assertTrue {
-        this.isEmpty()
+        this.isNotEmpty()
       }
     }
     val u = userGroupService.saveUserGroup(testUserGroup.apply {

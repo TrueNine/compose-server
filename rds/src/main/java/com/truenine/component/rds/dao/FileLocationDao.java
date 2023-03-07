@@ -37,7 +37,7 @@ public class FileLocationDao extends BaseDao implements Serializable {
   public static final String URL = "url";
   public static final String NAME = "name";
   public static final String DOC = "doc";
-  public static final String STORAGE_RN_TYPE = "storage_rn_type";
+  public static final String TYPE = "type";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
@@ -80,21 +80,21 @@ public class FileLocationDao extends BaseDao implements Serializable {
    * 存储类别
    */
   @Schema(
-    name = STORAGE_RN_TYPE,
+    name = TYPE,
     description = "存储类别"
   )
   @Column(table = $T_NAME,
-    name = STORAGE_RN_TYPE,
+    name = TYPE,
     nullable = false)
-  private String storageRnType;
+  private String type;
 
   public void rn(Boolean storageRnType) {
-    this.storageRnType = storageRnType ? "R" : "N";
+    this.type = storageRnType ? "R" : "N";
   }
 
   @Nullable
   public Boolean rn() {
-    return "R".equals(storageRnType);
+    return "R".equals(type);
   }
 
   @Override
