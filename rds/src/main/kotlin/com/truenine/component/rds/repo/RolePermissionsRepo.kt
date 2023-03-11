@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RolePermissionsRepo : BaseRepo<RolePermissionsDao, String> {
-  fun findAllByRoleId(role: String): List<com.truenine.component.rds.dao.RolePermissionsDao>
+  fun findAllByRoleId(role: String): List<RolePermissionsDao>
   fun existsByRoleIdAndPermissionsId(
     roleId: String,
     permissionsId: String

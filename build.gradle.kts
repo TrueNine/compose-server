@@ -22,14 +22,14 @@ plugins {
 
 allprojects {
   repositories {
-    maven(Repos.release) {
+    maven(release) {
       this.isAllowInsecureProtocol = true
       credentials {
         this.username = yunXiaoUsername
         this.password = yunXiaoPassword
       }
     }
-    maven(Repos.snapshot) {
+    maven(snapshot) {
       this.isAllowInsecureProtocol = true
       credentials {
         this.username = yunXiaoUsername
@@ -53,6 +53,14 @@ allprojects {
 
   tasks.withType<ProcessAot> {
     enabled = false
+  }
+
+  tasks.withType<Javadoc> {
+    enabled = true
+    options {
+      this.encoding = "UTF-8"
+      this.locale = "zh-CN"
+    }
   }
 
   tasks.withType<BootJar> {

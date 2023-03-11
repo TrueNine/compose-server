@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface FileVoRepo :
-  JpaRepository<com.truenine.component.rds.vo.FileVo, String> {
-}
+  JpaRepository<com.truenine.component.rds.vo.FileVo, String>

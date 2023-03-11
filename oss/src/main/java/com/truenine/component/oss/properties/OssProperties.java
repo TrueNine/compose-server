@@ -37,6 +37,6 @@ public class OssProperties {
     /**
      * 阿里云
      */
-    ALI_CLOUD_OSS;
+    ALI_CLOUD_OSS
   }
 }

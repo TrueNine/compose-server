@@ -6,5 +6,4 @@ import java.lang.annotation.Inherited
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-annotation class EnableXssRequestFilter {
-}
+annotation class EnableXssRequestFilter

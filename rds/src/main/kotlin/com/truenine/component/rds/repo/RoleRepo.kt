@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RoleRepo : BaseRepo<RoleDao, String> {
-  fun findAllByName(name: String): List<com.truenine.component.rds.dao.RoleDao>
+  fun findAllByName(name: String): List<RoleDao>
 
   @Query(
     """
@@ -17,5 +17,5 @@ interface RoleRepo : BaseRepo<RoleDao, String> {
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): List<com.truenine.component.rds.dao.RoleDao>
+  fun findAllByUserId(userId: String): List<RoleDao>
 }

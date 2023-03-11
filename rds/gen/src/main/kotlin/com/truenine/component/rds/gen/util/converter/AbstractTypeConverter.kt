@@ -28,7 +28,7 @@ abstract class AbstractTypeConverter {
   }
 
   fun getConverters(): Map<String, CType> {
-    return this.converterRule;
+    return this.converterRule
   }
 
   fun findImports(types: List<String>): List<String> {

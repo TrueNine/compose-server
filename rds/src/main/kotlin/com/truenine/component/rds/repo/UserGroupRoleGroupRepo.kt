@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserGroupRoleGroupRepo : BaseRepo<UserGroupRoleGroupDao, String> {
-  fun findAllByUserGroupId(userGroupId: String): List<com.truenine.component.rds.dao.UserGroupRoleGroupDao>
+  fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroupDao>
   fun existsByUserGroupIdAndRoleGroupId(
     userGroupId: String,
     roleGroupId: String

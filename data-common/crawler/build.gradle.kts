@@ -8,5 +8,5 @@ dependencies {
   api("com.squareup.okhttp3:okhttp:${V.Http.okhttp3}")
   api("com.alibaba:easyexcel:${V.Office.easyExcel}")
   api("io.github.bonigarcia:webdrivermanager:${V.Driver.webDriverManager}")
-  implementation("${group}:core:${V.Project.core}")
+  implementation(project(":core"))
 }

@@ -28,7 +28,7 @@ open class JwtVerifier internal constructor() {
   @Throws(JwtException::class)
   fun <S : Any, E : Any> verify(
     params: VerifierParams<S, E>
-  ): TokenResult<S, E>? = runCatching {
+  ): TokenResult<S, E> = runCatching {
     JWT.require(
       Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey)
     )

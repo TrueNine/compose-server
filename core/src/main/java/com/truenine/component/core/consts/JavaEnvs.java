@@ -19,9 +19,7 @@ public sealed abstract class JavaEnvs permits Java17PropertyKeys {
    * @return {@link JavaEnvs}
    */
   public static JavaEnvs o() {
-    return switch (f().get(J17Keys.VERSION).toString()) {
-      default -> new Java17PropertyKeys();
-    };
+    return new Java17PropertyKeys();
   }
 
   protected static Properties f() {

@@ -8,5 +8,4 @@ import org.springframework.context.annotation.ComponentScan
 @ComponentScan(
   "com.truenine.component.core.autoconfig"
 )
-class AutoConfigEntrance {
-}
+class AutoConfigEntrance

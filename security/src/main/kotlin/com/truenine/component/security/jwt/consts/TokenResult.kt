@@ -8,6 +8,4 @@ data class TokenResult<S : Any, E : Any>(
   var expireDateTime: LocalDateTime? = null,
   var id: String? = null,
   var signatureAlgName: String? = null
-) {
-
-}
+)

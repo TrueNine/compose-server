@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.2.19-SNAPSHOT"
+  const val version = "0.2.35-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -28,7 +28,7 @@ object V {
     const val gradleWrapper = "8.0"
     const val javaStr = "17"
     val javaEnum = org.gradle.api.JavaVersion.VERSION_17
-    const val kotlin = "1.7.22"
+    const val kotlin = "1.8.10"
   }
 
   object Driver {
@@ -88,10 +88,10 @@ object V {
   }
 
   object OpenApi {
-    const val springDoc2 = "2.0.0"
+    const val springDoc2 = "2.0.2"
     const val springDoc1 = "1.6.13"
     const val knife4j = "3.0.3"
-    const val swaggerAnnotation = "2.2.7"
+    const val swaggerAnnotation = "2.2.8"
   }
 
   object Spring {

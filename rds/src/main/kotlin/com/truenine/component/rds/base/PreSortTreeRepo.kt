@@ -1,128 +1,164 @@
 package com.truenine.component.rds.base
 
-import com.truenine.component.core.lang.ContainerUtil
+import com.truenine.component.core.dev.BetaTest
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.NoRepositoryBean
-import org.springframework.data.repository.query.Param
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.io.Serializable
 
 @NoRepositoryBean
 @JvmDefaultWithCompatibility
-interface PreSortTreeRepo<T : com.truenine.component.rds.base.PreSortTreeDao, ID : Serializable> :
+interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
   BaseRepo<T, ID> {
-  @Query(
-    """
-    from #{#entityName} c
-    where c.id = :#{#t.cpi}
-    and c.cgu = :#{#t.cgu}
-  """
-  )
-  fun findParentNode(t: T): T
 
-
-  fun childrenCount(t: T): Long = ((t.crn - t.cln) - 1) / 2
-
-  @Query(
-    """
-    from #{#entityName} c
-    where c.cgu = :#{#ent.cgu}
-    and c.cln between :#{#ent.cln} and :#{#ent.crn}
-  """
-  )
-  fun findChildrenNode(@Param("ent") t: T): List<T>
-
-  fun findAllChildrenNodeById(ids: List<ID>): List<T> {
-    return ContainerUtil.unfoldNestedListBy {
-      findAllById(ids)
-        .map { if (!it.isLeafNode) findChildrenNode(it) else mutableListOf() }
-    }
+  fun findTreeMetaChildCountById(id: ID): Long {
+    val entity = findById(id).orElseGet { null }
+    return if (null != entity) {
+      (entity.crn - entity.cln - 1) / 2
+    } else 0
   }
+
+  @Query(
+    """
+    from #{#entityName} e
+    where e.cln between :#{#parent.cln} and :#{#parent.crn}
+  """
+  )
+  fun findChild(parent: T): List<T>
+
+
+  @Query(
+    """
+    from #{#entityName} e
+    where e.cln < :#{#t.cln}
+    and e.crn > :#{#t.crn}
+  """
+  )
+  fun findParentPath(t: T): List<T>
+
 
   @Query(
     """
     select count(1) + 1
-    from #{#entityName} c
-    where c.cln < :#{#t.cln}
-    and c.crn > :#{#t.crn}
+    from #{#entityName} e
+    where e.cln < :#{#t.cln}
+    and e.crn > :#{#t.crn}
   """
   )
-  fun findLevel(t: T): Int
+  fun findTreeMetaLevel(t: T)
 
-  fun findIsLeaf(t: T): Boolean {
-    return t.crn - 1 == t.cln
+  @Query(
+    """
+    update #{#entityName} e
+    set e.cln = e.cln + :clnOffset
+    where e.cln > :parentCln
+  """
+  )
+  @Modifying
+  fun updateAllPreCln(clnOffset: Long, parentCln: Long)
+
+  @Query(
+    """
+    update #{#entityName} e
+    set e.crn = e.crn + :crnOffset
+    where e.crn >= :parentCln
+  """
+  )
+  @Modifying
+  fun updateAllPreCrn(crnOffset: Long, parentCln: Long)
+
+  @Query(
+    """
+    update #{#entityName} c
+    set c.cln = c.cln - :clnOffset
+    where c.cln > :parentCln
+  """
+  )
+  @Modifying
+  fun deleteAllPreCln(clnOffset: Long, parentCln: Long)
+
+
+  @Query(
+    """
+    update #{#entityName} c
+    set c.crn = c.crn - :crnOffset
+    where c.crn >= :parentCln
+  """
+  )
+  @Modifying
+  fun deleteAllPreCrn(crnOffset: Long, parentCln: Long): Int
+
+
+  @Suppress("UNCHECKED_CAST")
+  @Transactional(
+    rollbackFor = [Exception::class],
+    propagation = Propagation.REQUIRES_NEW
+  )
+  fun saveAllChildrenByParentId(
+    pid: ID,
+    children: List<T>
+  ): List<T> {
+    val parent = findByIdOrNull(pid)
+      ?: error { "$pid 没有查询到父节点" }
+    require(parent.cln != null && parent.crn != null)
+    { "查询出来的父节点不符合规范" }
+    require(children.isNotEmpty())
+    { "查询出来的父节点不符合规范" }
+
+    val leftStep = parent.cln + 1
+    val offset = children.size * 2
+    updateAllPreCln(offset.toLong(), parent.cln)
+    updateAllPreCrn(offset.toLong(), parent.cln)
+    for (i in leftStep until (offset + 2) step 2) {
+      val idx = (i / 2).toInt() - 1
+      children[idx].cln = leftStep + i
+      children[idx].crn = leftStep + i + 1
+    }
+    return saveAllAndFlush(children)
   }
 
-  @Query(
-    """
-    update #{#entityName} c
-    set c.cln = c.cln + 2
-    where c.cln > :p
-    and c.cgu = :c
-  """
+  @Suppress("UNCHECKED_CAST")
+  @Transactional(
+    rollbackFor = [Exception::class],
+    propagation = Propagation.REQUIRES_NEW
   )
-  @Modifying
-  fun updatePreCln(p: Long, c: String): Int
-
-  @Query(
-    """
-    update #{#entityName} c
-    set c.crn = c.crn + 2
-    where c.crn >= :p
-    and c.cgu = :c
-  """
-  )
-  @Modifying
-  fun updatePreCrn(p: Long, c: String): Int
-
-  @Query(
-    """
-    update #{#entityName} c
-    set c.cln = c.cln - 2
-    where c.cln > :p
-    and c.cgu = :c
-  """
-  )
-  @Modifying
-  fun deletePreCln(p: Long, c: String): Int
-
-  @Query(
-    """
-    update #{#entityName} c
-    set c.crn = c.crn - 2
-    where c.crn >= :p
-    and c.cgu = :c
-  """
-  )
-  @Modifying
-  fun deletePreCrn(p: Long, c: String): Int
-
-
-  @Transactional(rollbackFor = [Exception::class])
-  fun <P : com.truenine.component.rds.base.PreSortTreeDao> saveChildren(
-    t: T,
-    p: P
-  ): T? = run {
-    t.cgu = if (t.cgu != null) t.cgu else p.cgu
-    t.cpi = p.id
-    t.cln = p.cln + 1
-    t.crn = p.crn - 1
-    updatePreCln(p.cln, t.cgu)
-    updatePreCrn(p.cln, t.cgu)
-    save(t)
+  fun saveChild(
+    pid: ID?,
+    child: T
+  ): T? {
+    val parent = pid?.let { findByIdOrNull(it) }
+    return if (parent == null) {
+      child.cln = 1
+      child.crn = 2
+      child.cpi = null
+      saveAndFlush(child)
+    } else {
+      updateAllPreCln(2, parent.cln)
+      updateAllPreCrn(2, parent.cln)
+      child.cpi = parent.id
+      child.cln = parent.cln + 1
+      child.crn = child.cln + 1
+      saveAndFlush(child)
+    }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  fun deleteNode(t: T) = run {
-    t.takeIf {
-      it.cgu != null
-        && it.crn != null
-        && it.cgu != null
-    }?.apply {
+  @Transactional(
+    rollbackFor = [Exception::class],
+    propagation = Propagation.REQUIRES_NEW
+  )
+  @BetaTest
+  // TODO 完善此方法
+  fun deleteChild(child: T) = run {
+    child.takeIf {
+      (it.crn != null
+        && it.cln != null)
+    }?.run {
       delete(this)
-      deletePreCln(cln, cgu)
-      deletePreCrn(cln, cgu)
+      deleteAllPreCln(2, cln)
+      deleteAllPreCrn(2, cln)
     }
   }
 }

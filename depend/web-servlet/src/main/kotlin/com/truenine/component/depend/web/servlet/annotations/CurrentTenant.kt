@@ -7,5 +7,4 @@ import java.lang.annotation.Inherited
 @Inherited
 @Target(AnnotationTarget.TYPE)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CurrentTenant {
-}
+annotation class CurrentTenant

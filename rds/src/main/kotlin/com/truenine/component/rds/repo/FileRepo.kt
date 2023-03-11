@@ -5,5 +5,4 @@ import com.truenine.component.rds.dao.FileDao
 import org.springframework.stereotype.Repository
 
 @Repository
-interface FileRepo : BaseRepo<FileDao, String> {
-}
+interface FileRepo : BaseRepo<FileDao, String>

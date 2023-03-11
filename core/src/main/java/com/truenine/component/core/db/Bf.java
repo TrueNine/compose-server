@@ -23,7 +23,6 @@ public class Bf {
   public static final String PARENT_ID = "cpi";
   public static final String ANY_REFERENCE_ID = "ari";
   public static final String ANY_REFERENCE_TYPE = "typ";
-  public static final String TREE_GROUP_UID = "cgu";
   public static final String TENANT_ID = "cti";
 
   public static List<String> defaultAll() {
@@ -51,7 +50,6 @@ public class Bf {
       LEFT_NODE,
       RIGHT_NODE,
       PARENT_ID,
-      TREE_GROUP_UID,
       ANY_REFERENCE_ID,
       ANY_REFERENCE_TYPE,
       TENANT_ID

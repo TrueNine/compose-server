@@ -5,5 +5,4 @@ import org.springframework.context.annotation.ComponentScan
 @ComponentScan(
   "io.tn.depend.web.servlet.autoconfig"
 )
-class AutoConfigEntrance {
-}
+class AutoConfigEntrance

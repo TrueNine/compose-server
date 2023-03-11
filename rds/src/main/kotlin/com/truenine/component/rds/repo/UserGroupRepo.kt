@@ -16,7 +16,7 @@ interface UserGroupRepo : BaseRepo<UserGroupDao, String> {
     or ugu.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): Set<com.truenine.component.rds.dao.UserGroupDao>
+  fun findAllByUserId(userId: String): Set<UserGroupDao>
 
   fun existsByIdAndUserId(id: String, userId: String): Boolean
 }

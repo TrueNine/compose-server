@@ -8,6 +8,4 @@ data class AliCloudOssProperties(
   var endpoint: String?,
   var accessKeySecret: String?,
   var bucketName: String?
-) {
-
-}
+)

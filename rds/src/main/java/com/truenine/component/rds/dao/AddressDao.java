@@ -1,6 +1,6 @@
 package com.truenine.component.rds.dao;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.PreSortTreeDao;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -32,7 +32,7 @@ import java.util.Objects;
 @Entity
 @Schema(title = "行政区代码")
 @Table(name = AddressDao.$T_NAME)
-public class AddressDao extends BaseDao implements Serializable {
+public class AddressDao extends PreSortTreeDao implements Serializable {
 
   public static final String $T_NAME = "address";
   public static final String CODE = "code";

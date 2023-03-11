@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import javax.annotation.Nullable;
 
 /**
- * 头
+ * http Header Info
  *
  * @author TrueNine
  * @since 2022-10-28

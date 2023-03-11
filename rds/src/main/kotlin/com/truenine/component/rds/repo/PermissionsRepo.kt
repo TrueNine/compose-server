@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PermissionsRepo : BaseRepo<PermissionsDao, String> {
-  fun findAllByName(name: String): List<com.truenine.component.rds.dao.PermissionsDao>
+  fun findAllByName(name: String): List<PermissionsDao>
 
   @Query(
     """
@@ -18,5 +18,5 @@ interface PermissionsRepo : BaseRepo<PermissionsDao, String> {
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): List<com.truenine.component.rds.dao.PermissionsDao>
+  fun findAllByUserId(userId: String): List<PermissionsDao>
 }

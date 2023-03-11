@@ -10,7 +10,7 @@ import java.lang.annotation.*;
  * 或者目前也没有找到好的解决方式
  *
  * @author TrueNine
- * @date 2022-10-26
+ * @since 2022-10-26
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

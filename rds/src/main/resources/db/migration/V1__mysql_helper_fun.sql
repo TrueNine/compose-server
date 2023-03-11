@@ -46,7 +46,6 @@ BEGIN
     `tab_name`,
     '` ',
     'ADD `cpi` BIGINT UNSIGNED DEFAULT NULL COMMENT \'父节点id column parent id\',',
-    'ADD `cgu` BIGINT UNSIGNED NOT NULL COMMENT \'树组织id column group uni id\',',
     'ADD `cln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 column left node\',',
     'ADD `crn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 column right node\';'
     );

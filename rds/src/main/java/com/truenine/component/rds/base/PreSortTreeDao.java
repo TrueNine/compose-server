@@ -38,11 +38,6 @@ public class PreSortTreeDao extends BaseDao {
   public static final String CPI = Bf.PARENT_ID;
 
   /**
-   * 树组织 id
-   */
-  public static final String CGU = Bf.TREE_GROUP_UID;
-
-  /**
    * 左节点
    */
   public static final String CLN = Bf.LEFT_NODE;
@@ -60,21 +55,15 @@ public class PreSortTreeDao extends BaseDao {
 
   @JsonIgnore
   @Expose(deserialize = false)
-  @Column(name = Bf.TREE_GROUP_UID)
-  @Schema(title = "组织id，通常与租户id 进行绑定，或者生成，以区别不同的树")
-  protected String cgu = "0";
-
-  @JsonIgnore
-  @Expose(deserialize = false)
   @Column(name = Bf.LEFT_NODE)
   @Schema(title = "左节点")
-  protected Long cln = 1L;
+  protected Long cln;
 
   @JsonIgnore
   @Expose(deserialize = false)
   @Column(name = Bf.RIGHT_NODE)
   @Schema(title = "右节点")
-  protected Long crn = 2L;
+  protected Long crn;
 
   @JsonIgnore
   public boolean isLeafNode() {

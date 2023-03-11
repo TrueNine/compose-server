@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Converter
 @Component
-class AesEncryptConverter() : AttributeConverter<String, String> {
+class AesEncryptConverter : AttributeConverter<String, String> {
   init {
     log.info("注册 aes 加密自动转换器 = {}", this)
   }
