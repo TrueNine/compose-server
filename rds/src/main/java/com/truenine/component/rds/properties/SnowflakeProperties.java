@@ -1,13 +1,13 @@
-package com.truenine.component.rds.properties
+package com.truenine.component.rds.properties;
 
-import lombok.Data
-import org.springframework.boot.context.properties.ConfigurationProperties
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 @ConfigurationProperties(prefix = "component.rds.snowflake")
 public class SnowflakeProperties {
-  Long workId = 1;
-  Long dataCenterId = 2;
-  Long sequence = 3;
-  Long startTimeStamp= 100000;
+  Long workId = (long) 1;
+  Long dataCenterId = (long) 2;
+  Long sequence = (long) 3;
+  Long startTimeStamp = (long) 100000;
 }
