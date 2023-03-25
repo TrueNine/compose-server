@@ -36,9 +36,9 @@ open class PreSortTreeTest : AbstractTestNGSpringContextTests() {
     }
 
     val af = addressRepo.saveChild(null, addr)
-    val bf = addressRepo.saveChild(addr.id, addr2)
+    val bf = addressRepo.saveChild(addr, addr2)
 
-    val cf = addressRepo.saveChild(addr.id, addr3)
+    val cf = addressRepo.saveChild(addr, addr3)
 
     val a = addressRepo.findByIdOrNull(af.id)
     val b = addressRepo.findByIdOrNull(bf.id)
@@ -68,8 +68,8 @@ open class PreSortTreeTest : AbstractTestNGSpringContextTests() {
       this.code = "3"
     }
     val a1 = addressRepo.saveChild(null, addr1)
-    val a2 = addressRepo.saveChild(a1.id, addr2)
-    val a3 = addressRepo.saveChild(a2.id, addr3)
+    val a2 = addressRepo.saveChild(a1, addr2)
+    val a3 = addressRepo.saveChild(a2, addr3)
 
     val addr4 = AddressDao().apply {
       this.name = "批量子节点1"
@@ -84,6 +84,6 @@ open class PreSortTreeTest : AbstractTestNGSpringContextTests() {
       this.code = "6"
     }
     val data = listOf(addr4, addr5, addr6)
-    addressRepo.saveAllChildrenByParentId(a3.id, data)
+    addressRepo.saveAllChildrenByParentId(a3, data)
   }
 }
