@@ -147,14 +147,14 @@ class UserAdminServiceImplTest :
   @Test
   fun testFindUsrVoByAccount() {
     val c = adminService.findUsrVoByAccount(testPlainUser.account)
-    log.info("usrVo = {}", c)
+    log.debug("usrVo = {}", c)
     assertNotNull(c?.user, "没有此用户的信息")
   }
 
   @Test
   fun testFindAllRoleGroupByAccount() {
     val c = adminService.findAllRoleByAccount(testPlainUser.account)
-    log.info("usrVo = {}", c)
+    log.debug("usrVo = {}", c)
     assertNotNull(
       c.find { it.id == Bf.Rbac.USER_ID },
       "没有此用户的信息"

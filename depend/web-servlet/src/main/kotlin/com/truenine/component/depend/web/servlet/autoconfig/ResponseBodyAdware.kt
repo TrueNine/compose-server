@@ -31,14 +31,14 @@ open class ResponseBodyAdware(
 ) : ResponseBodyAdvice<Any?> {
 
   init {
-    log.info("注册 统一 json 返回处理器 = {}", this.javaClass.name)
+    log.debug("注册 统一 json 返回处理器 = {}", this.javaClass.name)
   }
 
   override fun supports(
     returnType: MethodParameter,
     converterType: Class<out HttpMessageConverter<*>>
   ): Boolean {
-    log.info("返回 = {} , {}", returnType, converterType)
+    log.debug("返回 = {} , {}", returnType, converterType)
     return !(pps.allowConverterClasses.contains(returnType.containingClass)
       || pps.allowConverters.contains(returnType.method?.name))
   }
@@ -51,7 +51,7 @@ open class ResponseBodyAdware(
     request: ServerHttpRequest,
     response: ServerHttpResponse
   ): Any? {
-    log.info("返回类型 = {}", body?.javaClass)
+    log.debug("返回类型 = {}", body?.javaClass)
     if (selectedContentType.equalsTypeAndSubtype(MediaType.APPLICATION_JSON)) {
       if (body is R<*>) {
         response.setStatusCode(HttpStatus.valueOf(body.code))

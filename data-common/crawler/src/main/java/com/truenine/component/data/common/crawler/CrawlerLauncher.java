@@ -155,7 +155,7 @@ public class CrawlerLauncher {
     var route = BusChecks.checkAndReturnDefaultRoute(pageProcessor.getClass());
     taskInfo.setRouteTo(route);
 
-    log.info("执行任务 {}", taskInfo);
+    log.debug("执行任务 {}", taskInfo);
     var tasks = bus.runTask(pageProcessor, taskInfo);
     for (TaskInfo task : tasks) {
       run(task);

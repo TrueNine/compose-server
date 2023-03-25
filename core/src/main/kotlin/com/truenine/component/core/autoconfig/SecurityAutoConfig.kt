@@ -40,7 +40,7 @@ open class SecurityAutoConfig {
         .BCryptVersion.`$2A`,
       14
     )
-    log.info("注册 bCryptPasswordEncoder = {}", bCryptPasswordEncoder)
+    log.debug("注册 bCryptPasswordEncoder = {}", bCryptPasswordEncoder)
     return bCryptPasswordEncoder
   }
 

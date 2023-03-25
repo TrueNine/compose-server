@@ -163,7 +163,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testDeleteUser() {
-    log.info("destroy 已执行删除")
+    log.debug("destroy 已执行删除")
   }
 
   @Test

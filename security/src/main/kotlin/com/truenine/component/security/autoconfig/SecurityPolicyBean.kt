@@ -89,7 +89,7 @@ open class SecurityPolicyBean {
     httpSecurity.exceptionHandling()
       .authenticationEntryPoint(desc.exceptionAdware)
       .accessDeniedHandler(desc.exceptionAdware)
-    log.info("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
+    log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
     return httpSecurity.build()
   }
 
@@ -97,9 +97,9 @@ open class SecurityPolicyBean {
   @ConditionalOnBean(AuthenticationConfiguration::class)
   @Throws(Exception::class)
   open fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
-    log.info("注册 AuthenticationManager config = {}", ac)
+    log.debug("注册 AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager
-    log.info("获取到 AuthManager = {}", manager != null)
+    log.debug("获取到 AuthManager = {}", manager != null)
     return manager
   }
 

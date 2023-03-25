@@ -24,7 +24,7 @@ public class OssAutoConfiguration {
   @Bean(name = "minioClient")
   @ConditionalOnProperty(value = "oss.minio.enabled", havingValue = "true")
   MinioClient minioClient(MinioProperties p) {
-    log.info("注册 minio = {}", p);
+    log.debug("注册 minio = {}", p);
     return MinioClient.builder()
       .endpoint(p.getEndpointHost(), p.getEndpointPort(), false)
       .credentials(p.getAccessKey(), p.getSecretKey())

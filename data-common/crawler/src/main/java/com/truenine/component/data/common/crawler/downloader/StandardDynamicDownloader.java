@@ -34,7 +34,7 @@ public class StandardDynamicDownloader implements CrawlerDynamicDownloader {
     if (Str.hasText(request.getUrl())) {
       driver.getDriver().nativeDriver().get(request.getUrl());
     } else {
-      log.info("执行了一个委派任务 request = {}, namedDriver = {}", request, driver);
+      log.debug("执行了一个委派任务 request = {}, namedDriver = {}", request, driver);
     }
 
     var rawText = driver.driver().elementHtml(By.xpath("//html[1]"));

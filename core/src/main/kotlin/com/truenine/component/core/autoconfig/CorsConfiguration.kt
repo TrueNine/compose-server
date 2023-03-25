@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 open class CorsConfiguration : WebMvcConfigurer {
   override fun addCorsMappings(registry: CorsRegistry) {
-    log.info("注册跨域组件为允许全部跨域通行")
+    log.debug("注册跨域组件为允许全部跨域通行")
     registry
       .addMapping("/**")
       .allowedOriginPatterns("*")

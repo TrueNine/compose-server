@@ -46,7 +46,7 @@ open class JsonResponseInterceptor(
   private var thatInterceptor: JsonResponseInterceptor = this
 
   init {
-    log.info(
+    log.debug(
       "注册 json 返回类型转发器 = {}, mapper = {}",
       this::class.java,
       objectMapper

@@ -63,7 +63,7 @@ open class RedisJsonConfig(
   @Bean(name = [Cf.RedisTemplate.STRING_TEMPLATE])
   open fun customRedisJsonSerializable(factory: RedisConnectionFactory)
     : RedisTemplate<String, *> {
-    log.info("配置 ${Cf.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
+    log.debug("配置 ${Cf.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
     val rt = RedisTemplate<String, Any>()
 
     rt.setDefaultSerializer(jsr)
@@ -81,25 +81,25 @@ open class RedisJsonConfig(
   @Primary
   @Bean(name = [Cf.CacheManager.H2])
   open fun cacheManager2h(factory: RedisConnectionFactory?): CacheManager? {
-    log.info("配置 ${Cf.CacheManager.H2} factory = {}", factory)
+    log.debug("配置 ${Cf.CacheManager.H2} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofHours(2))
   }
 
   @Bean(name = [Cf.CacheManager.D3])
   open fun cacheManager30day(factory: RedisConnectionFactory?): CacheManager? {
-    log.info("配置 ${Cf.CacheManager.D3} factory = {}", factory)
+    log.debug("配置 ${Cf.CacheManager.D3} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofDays(30))
   }
 
   @Bean(name = [Cf.CacheManager.M30])
   open fun cacheManager30m(factory: RedisConnectionFactory?): CacheManager? {
-    log.info("配置 ${Cf.CacheManager.M30} factory = {}", factory)
+    log.debug("配置 ${Cf.CacheManager.M30} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofMinutes(30))
   }
 
   @Bean(name = [Cf.CacheManager.FOREVER])
   open fun cacheManagerForever(factory: RedisConnectionFactory?): CacheManager? {
-    log.info("配置 ${Cf.CacheManager.FOREVER} factory = {}", factory)
+    log.debug("配置 ${Cf.CacheManager.FOREVER} factory = {}", factory)
     return asCacheConfig(factory, Duration.ZERO)
   }
 

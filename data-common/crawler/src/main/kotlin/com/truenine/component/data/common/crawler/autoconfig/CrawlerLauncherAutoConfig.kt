@@ -25,7 +25,7 @@ open class CrawlerLauncherAutoConfig {
     contentSchedulers: List<CrawlerContentScheduler>?,
     pipelines: List<CrawlerPipeline>?
   ): CrawlerLauncher {
-    log.info("创建 爬虫启动器")
+    log.debug("创建 爬虫启动器")
     val launcher = CrawlerLauncher.create()
     crawlerProperties.also {
       launcher.browserCount(it.maxDriverCount)
@@ -40,7 +40,7 @@ open class CrawlerLauncherAutoConfig {
     contentSchedulers?.forEach { launcher.addScheduler(it) }
     pipelines?.forEach { launcher.addPipeline(it) }
     launcher.submit()
-    log.info("创建 爬虫 完毕，配置已提交 {}", launcher)
+    log.debug("创建 爬虫 完毕，配置已提交 {}", launcher)
     return launcher
   }
 

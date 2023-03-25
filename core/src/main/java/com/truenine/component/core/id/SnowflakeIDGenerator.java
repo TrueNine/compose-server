@@ -17,7 +17,7 @@ public final class SnowflakeIDGenerator {
     if (null != snowflake && !isReset) {
       throw new IllegalArgumentException("不能重复设置静态参数的值，已经被初始化，可以设置 reset 的值为 true，但不建议。");
     }
-    log.info("snowflake 的实例已被重置 = {}", idGen);
+    log.debug("snowflake 的实例已被重置 = {}", idGen);
     snowflake = idGen;
   }
 

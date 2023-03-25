@@ -20,7 +20,7 @@ public class OpenApiDocConfig {
   @Bean
   @ConditionalOnWebApplication
   public GroupedOpenApi userApi(SwaggerProperties p) {
-    log.info("注册 OpenApi3 文档组件");
+    log.debug("注册 OpenApi3 文档组件");
     String[] paths = {"/**"};
     String[] packagedToMatch = {p.getPackages()};
     return GroupedOpenApi.builder()

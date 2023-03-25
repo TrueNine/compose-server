@@ -4,7 +4,6 @@ import com.truenine.component.core.dev.BetaTest
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.NoRepositoryBean
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.io.Serializable
@@ -98,26 +97,27 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
     propagation = Propagation.REQUIRES_NEW
   )
   fun saveAllChildrenByParentId(
-    pid: ID,
+    parent: T,
     children: List<T>
   ): List<T> {
-    val parent = findByIdOrNull(pid)
-      ?: error { "$pid 没有查询到父节点" }
-    require(parent.cln != null && parent.crn != null)
-    { "查询出来的父节点不符合规范" }
-    require(children.isNotEmpty())
-    { "查询出来的父节点不符合规范" }
-
+    if (children.isEmpty()) return listOf()
+    require(
+      parent.cln != null
+        && parent.crn != null
+        && parent.id != null
+    )
+    { "父节点没有必要的值 = $parent" }
     val leftStep = parent.cln + 1
-    val offset = children.size * 2
+    val offset = (children.size * 2)
     updateAllPreCln(offset.toLong(), parent.cln)
     updateAllPreCrn(offset.toLong(), parent.cln)
-    for (i in leftStep until (offset + 2) step 2) {
-      val idx = (i / 2).toInt() - 1
+    for (i in 0 until (offset) step 2) {
+      val idx = (i / 2)
+      children[idx].cpi = parent.id
       children[idx].cln = leftStep + i
       children[idx].crn = leftStep + i + 1
     }
-    return saveAllAndFlush(children)
+    return saveAll(children)
   }
 
   @Suppress("UNCHECKED_CAST")
@@ -126,22 +126,21 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
     propagation = Propagation.REQUIRES_NEW
   )
   fun saveChild(
-    pid: ID?,
+    parent: T?,
     child: T
-  ): T? {
-    val parent = pid?.let { findByIdOrNull(it) }
+  ): T {
     return if (parent == null) {
       child.cln = 1
       child.crn = 2
       child.cpi = null
-      saveAndFlush(child)
+      save(child)
     } else {
       updateAllPreCln(2, parent.cln)
       updateAllPreCrn(2, parent.cln)
       child.cpi = parent.id
       child.cln = parent.cln + 1
       child.crn = child.cln + 1
-      saveAndFlush(child)
+      save(child)
     }
   }
 

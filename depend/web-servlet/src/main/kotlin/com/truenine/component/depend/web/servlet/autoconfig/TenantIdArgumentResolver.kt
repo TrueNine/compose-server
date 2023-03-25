@@ -23,7 +23,7 @@ import org.springframework.web.method.support.ModelAndViewContainer
 @ControllerAdvice
 class TenantIdArgumentResolver : HandlerMethodArgumentResolver {
   init {
-    log.info("注册租户id参数注入器")
+    log.debug("注册租户id参数注入器")
   }
 
   override fun supportsParameter(parameter: MethodParameter): Boolean {

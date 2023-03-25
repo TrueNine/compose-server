@@ -20,7 +20,7 @@ class DeleteBackupListener {
   private var pub: ApplicationEventPublisher? = null
 
   init {
-    log.info("注册数据删除监听器 = {}", this.javaClass)
+    log.debug("注册数据删除监听器 = {}", this.javaClass)
   }
 
   @Autowired

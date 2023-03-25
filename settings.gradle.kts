@@ -15,7 +15,7 @@ pluginManagement {
     eachPlugin {
       when (requested.id.id) {
         "org.springframework.boot" -> {
-          useVersion("3.0.0")
+          useVersion("3.0.5")
         }
 
         "io.spring.dependency-management" -> {
@@ -66,3 +66,6 @@ findProject("multi-test")?.name = "multi-test"
 
 include("multi-test:security")
 findProject("multi-test:security")?.name = "multi-test-security"
+
+include("schedule")
+findProject("schedule")?.name = "schedule"

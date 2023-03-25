@@ -40,7 +40,7 @@ class JwtTest {
     )
     val parsed = verifier.verify(outputs)
     println(token)
-    println(parsed!!.decryptedData)
+    println(parsed.decryptedData)
     println(parsed.subject)
   }
 }

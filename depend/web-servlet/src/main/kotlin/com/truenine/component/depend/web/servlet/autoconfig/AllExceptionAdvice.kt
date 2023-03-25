@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 @ResponseBody
 class AllExceptionAdvice {
   init {
-    log.info("注册 全局异常处理器 = {}", AllExceptionAdvice::class)
+    log.debug("注册 全局异常处理器 = {}", AllExceptionAdvice::class)
   }
 
   companion object {

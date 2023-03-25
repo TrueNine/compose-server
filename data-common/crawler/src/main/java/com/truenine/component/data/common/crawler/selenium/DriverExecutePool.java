@@ -90,7 +90,7 @@ public class DriverExecutePool implements Closeable {
     node.setUsing(false);
     var handles = node.driver().nativeDriver().getWindowHandles();
     for (String h : handles) {
-      log.info("driver 链接 {} 归池", h);
+      log.debug("driver 链接 {} 归池", h);
       node.driver().closeTab();
     }
     driverQueue.add(node);

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS durations
 (
-  `name`     VARCHAR(255) COMMENT '名称',
+  name       VARCHAR(255) COMMENT '名称',
   years      INT UNSIGNED DEFAULT 0 COMMENT '年',
   months     INT UNSIGNED DEFAULT 0 COMMENT '月',
   month_days INT UNSIGNED DEFAULT 30 COMMENT '月计算天数',
@@ -28,7 +28,7 @@ SET id=1,
 
 CREATE TABLE IF NOT EXISTS tab_order
 (
-  `name`  VARCHAR(255)     NOT NULL COMMENT '名称',
+  name    VARCHAR(255)     NOT NULL COMMENT '名称',
   doc     TEXT COMMENT '描述',
   ordered BIGINT DEFAULT 0 NOT NULL COMMENT '排序值',
   INDEX (ordered)
@@ -38,5 +38,5 @@ CALL base_tab('tab_order');
 INSERT INTO tab_order
 SET id=0,
     ordered=0,
-    `name`='默认',
+    name='默认',
     doc='默认排序，务必不要删除';

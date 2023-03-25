@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AddressRepo : PreSortTreeRepo<AddressDao, String> {
 
+  fun findAllByCode(code: String): List<AddressDao>
+
+  fun findByCode(code: String): AddressDao?
+
   fun findByCodeAndName(
     code: String,
     name: String,

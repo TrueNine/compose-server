@@ -1,6 +1,7 @@
 <template>
   <!-- 复制代码 -->
-  <q-btn v-if="code !== `` && code !== `{}`" icon="save" style="margin-block: 1rem"
+  <q-btn v-if="code !== `` && code !== `{}`" icon="save"
+         style="margin-block: 1rem"
          @click="copyCode">复制响应内容
   </q-btn>
   <!-- 响应结果 -->

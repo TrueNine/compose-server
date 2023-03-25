@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.2.35-SNAPSHOT"
+  const val version = "0.2.42-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -81,6 +81,10 @@ object V {
     const val freemarker = "2.3.31"
   }
 
+  object Schedule {
+    const val xxlJob = "2.3.1"
+  }
+
   object Test {
     const val junit5 = "5.9.1"
     const val testNG = "7.7.0"
@@ -96,8 +100,8 @@ object V {
 
   object Spring {
     const val graalVmPlugin = "0.9.18"
-    const val boot = "3.0.4"
-    const val cloud = "2022.0.0-RC2"
+    const val boot = "3.0.5"
+    const val cloud = "2022.0.1"
     const val cloudAlibaba = "2021.0.4.0"
     const val managementPlugin = "1.1.0"
   }

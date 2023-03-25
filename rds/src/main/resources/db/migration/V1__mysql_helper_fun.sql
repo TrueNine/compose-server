@@ -7,14 +7,14 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 # 基础表字段
-DROP PROCEDURE IF EXISTS `base_tab`;
+DROP PROCEDURE IF EXISTS base_tab;
 DELIMITER $$
-CREATE PROCEDURE `base_tab`(IN tab_name VARCHAR(128))
+CREATE PROCEDURE base_tab(IN tab_name VARCHAR(128))
 BEGIN
   SET @after = CONCAT(
     'ALTER TABLE',
     ' `',
-    `tab_name`,
+    tab_name,
     '` ',
     'ADD `id` BIGINT UNSIGNED PRIMARY KEY COMMENT \'主键\',',
     'ADD `cct` DATETIME DEFAULT NOW() COMMENT \'字段创建时间 column create time\',',
@@ -36,14 +36,14 @@ END $$
 DELIMITER ;
 
 # 预排序树结构
-DROP PROCEDURE IF EXISTS `presort_tree_tab`;
+DROP PROCEDURE IF EXISTS presort_tree_tab;
 DELIMITER $$
-CREATE PROCEDURE `presort_tree_tab`(IN tab_name VARCHAR(128))
+CREATE PROCEDURE presort_tree_tab(IN tab_name VARCHAR(128))
 BEGIN
   SET @after = CONCAT(
     'ALTER TABLE',
     ' `',
-    `tab_name`,
+    tab_name,
     '` ',
     'ADD `cpi` BIGINT UNSIGNED DEFAULT NULL COMMENT \'父节点id column parent id\',',
     'ADD `cln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 column left node\',',
@@ -57,9 +57,9 @@ END $$
 DELIMITER ;
 
 # 预排序树结构
-DROP PROCEDURE IF EXISTS `reference_type`;
+DROP PROCEDURE IF EXISTS reference_type;
 DELIMITER $$
-CREATE PROCEDURE `reference_type`(
+CREATE PROCEDURE reference_type(
   IN tab_name VARCHAR(128),
   IN typ_comm VARCHAR(100)
 )
@@ -67,10 +67,10 @@ BEGIN
   SET @after = CONCAT(
     'ALTER TABLE',
     ' `',
-    `tab_name`,
+    tab_name,
     '` ',
     'ADD `typ` BIGINT UNSIGNED DEFAULT 0 COMMENT \'外键类型描述符 type, 用于描述: ',
-    `typ_comm`,
+    typ_comm,
     '\',',
     'ADD INDEX(`typ`),',
     'ADD `ari` BIGINT UNSIGNED COMMENT \'任意外键 any reference id\',',

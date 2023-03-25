@@ -15,10 +15,11 @@ import java.util.Collection;
  * @since 2022-12-10
  */
 @Slf4j
-public record SecurityUserDetails(SecurityUserInfo securityUserInfo) implements UserDetails {
+public record SecurityUserDetails(
+  SecurityUserInfo securityUserInfo) implements UserDetails {
 
   public SecurityUserDetails {
-    log.info("构建 SecurityUserDetails = {}", securityUserInfo);
+    log.debug("构建 SecurityUserDetails = {}", securityUserInfo);
   }
 
   @Override

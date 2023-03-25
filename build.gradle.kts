@@ -216,6 +216,7 @@ subprojects {
       // 安全
       dependency("org.owasp.antisamy:antisamy:${V.Security.antisamy}")
       dependency("org.bouncycastle:bcprov-jdk15to18:${V.Security.bouncyCastle15to18}")
+
       // jwt
       dependency("io.jsonwebtoken:jjwt:${V.Jwt.jJwt}")
       dependency("com.auth0:java-jwt:${V.Jwt.auth0Jwt}")
@@ -225,6 +226,9 @@ subprojects {
       dependency("com.alibaba:easyexcel:${V.Office.easyExcel}")
       dependency("org.flowable:flowable-spring-boot-starter:${V.Office.flowable}")
       dependency("org.flowable:flowable-spring-boot-starter-ui-modeler:${V.Office.flowable}")
+
+      // xxl
+      dependency("com.xuxueli:xxl-job-core:${V.Schedule.xxlJob}")
     }
 
     imports {

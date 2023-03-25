@@ -49,7 +49,7 @@ open class JacksonSerializationAutoConfig {
     module.addDeserializer(LocalTime::class.java, ltd)
     module.addSerializer(LocalDate::class.java, lds)
     module.addDeserializer(LocalDate::class.java, ldd)
-    log.info("配置jackson序列化规则")
+    log.debug("配置jackson序列化规则")
     return Jackson2ObjectMapperBuilderCustomizer { b ->
       b.modules(module)
       b.timeZone("GMT+8")

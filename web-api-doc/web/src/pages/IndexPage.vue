@@ -6,7 +6,8 @@
         <q-btn aria-label="Menu" dense flat icon="menu" round
                @click="toggleLeftDrawer"/>
         <q-toolbar-title>OPENAPI-UI</q-toolbar-title>
-        <q-btn :icon="themeTag ? `bi-moon` : `bi-brightness-high`" color="secondary" round
+        <q-btn :icon="themeTag ? `bi-moon` : `bi-brightness-high`"
+               color="secondary" round
                @click="dartSwitch"/>
       </q-toolbar>
     </q-header>
@@ -77,7 +78,8 @@
 
           <!-- api 分组列表 -->
           <q-item v-for="k in openApiGroupKeys" :key="k"
-                  v-ripple :active="activeGroupKey === k" clickable @click="activeGroupKey = k">
+                  v-ripple :active="activeGroupKey === k" clickable
+                  @click="activeGroupKey = k">
             <q-item-section avatar>
               <q-avatar color="primary" icon="details" rounded
                         text-color="white"/>
