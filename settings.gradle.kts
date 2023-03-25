@@ -59,13 +59,13 @@ include("depend:web-servlet")
 findProject("depend:web-servlet")?.name = "depend-web-servlet"
 
 include("cacheable")
-findProject("cacheable")?.name = "cacheable"
+findProject(":cacheable")?.name = "cacheable"
 
 include("multi-test")
-findProject("multi-test")?.name = "multi-test"
+findProject(":multi-test")?.name = "multi-test"
 
 include("multi-test:security")
 findProject("multi-test:security")?.name = "multi-test-security"
 
 include("schedule")
-findProject("schedule")?.name = "schedule"
+findProject(":schedule")?.name = "schedule"

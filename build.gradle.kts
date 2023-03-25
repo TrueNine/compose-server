@@ -162,6 +162,7 @@ subprojects {
       dependency("${group}:web-servlet:${V.Project.webServlet}")
       dependency("${group}:crawler:${V.Project.crawler}")
       dependency("${group}:cacheable:${V.Project.cacheable}")
+      dependency("${group}:schedule:${V.Project.schedule}")
 
       // api
       dependency("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")

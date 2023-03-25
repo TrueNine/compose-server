@@ -15,6 +15,7 @@ object V {
     private const val allV = ProjectManager.version
     const val core = allV
     const val rds = allV
+    const val schedule = allV
     const val gen = allV
     const val webApiDoc = allV
     const val security = allV
@@ -25,7 +26,7 @@ object V {
   }
 
   object Lang {
-    const val gradleWrapper = "8.0"
+    const val gradleWrapper = "8.0.1"
     const val javaStr = "17"
     val javaEnum = org.gradle.api.JavaVersion.VERSION_17
     const val kotlin = "1.8.10"
@@ -37,7 +38,7 @@ object V {
     const val mysql = "8.0.32"
     const val sqlite = "3.40.1.0"
     const val minio = "8.5.2"
-    const val selenium = "4.8.0"
+    const val selenium = "4.8.1"
     const val webDriverManager = "5.3.2"
   }
 
