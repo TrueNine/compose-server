@@ -31,7 +31,19 @@ BEGIN
   SET @statement = CONCAT(@after);
   PREPARE state
     FROM @statement;
-  EXECUTE state;
+
+  SET @tbl_exist = (SELECT COUNT(1)
+                    FROM information_schema.tables
+                    WHERE table_schema = (SELECT DATABASE())
+                      AND table_name = tab_name);
+  SET @col_exists = (SELECT COUNT(1)
+                     FROM information_schema.columns
+                     WHERE table_schema = (SELECT DATABASE())
+                       AND table_name = tab_name
+                       AND column_name IN ('id', 'cct', 'ccb'));
+  IF ((@tbl_exist + @col_exists) <= 0) THEN
+    EXECUTE state;
+  END IF;
 END $$
 DELIMITER ;
 
@@ -52,7 +64,19 @@ BEGIN
   SET @statement = CONCAT(@after);
   PREPARE state
     FROM @statement;
-  EXECUTE state;
+
+  SET @tbl_exist = (SELECT COUNT(1)
+                    FROM information_schema.tables
+                    WHERE table_schema = (SELECT DATABASE())
+                      AND table_name = tab_name);
+  SET @col_exists = (SELECT COUNT(1)
+                     FROM information_schema.columns
+                     WHERE table_schema = (SELECT DATABASE())
+                       AND table_name = tab_name
+                       AND column_name IN ('cpi', 'cln', 'crn'));
+  IF ((@tbl_exist + @col_exists) <= 0) THEN
+    EXECUTE state;
+  END IF;
 END $$
 DELIMITER ;
 
@@ -80,6 +104,18 @@ BEGIN
   SET @statement = CONCAT(@after);
   PREPARE state
     FROM @statement;
-  EXECUTE state;
+
+  SET @tbl_exist = (SELECT COUNT(1)
+                    FROM information_schema.tables
+                    WHERE table_schema = (SELECT DATABASE())
+                      AND table_name = tab_name);
+  SET @col_exists = (SELECT COUNT(1)
+                     FROM information_schema.columns
+                     WHERE table_schema = (SELECT DATABASE())
+                       AND table_name = tab_name
+                       AND column_name IN ('ari', 'typ'));
+  IF ((@tbl_exist + @col_exists) <= 0) THEN
+    EXECUTE state;
+  END IF;
 END $$
 DELIMITER ;

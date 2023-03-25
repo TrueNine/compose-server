@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS user
 ) DEFAULT CHARSET = utf8mb4,COMMENT '用户';
 CALL base_tab('user');
 
-
 INSERT INTO user
 SET id=0,
     account='root',
