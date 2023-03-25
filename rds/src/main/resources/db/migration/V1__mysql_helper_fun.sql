@@ -41,7 +41,7 @@ BEGIN
                      WHERE table_schema = (SELECT DATABASE())
                        AND table_name = tab_name
                        AND column_name IN ('id', 'cct', 'ccb'));
-  IF ((@tbl_exist + @col_exists) <= 0) THEN
+  IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
     EXECUTE state;
   END IF;
 END $$
@@ -74,7 +74,7 @@ BEGIN
                      WHERE table_schema = (SELECT DATABASE())
                        AND table_name = tab_name
                        AND column_name IN ('cpi', 'cln', 'crn'));
-  IF ((@tbl_exist + @col_exists) <= 0) THEN
+  IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
     EXECUTE state;
   END IF;
 END $$
@@ -114,7 +114,7 @@ BEGIN
                      WHERE table_schema = (SELECT DATABASE())
                        AND table_name = tab_name
                        AND column_name IN ('ari', 'typ'));
-  IF ((@tbl_exist + @col_exists) <= 0) THEN
+  IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
     EXECUTE state;
   END IF;
 END $$
