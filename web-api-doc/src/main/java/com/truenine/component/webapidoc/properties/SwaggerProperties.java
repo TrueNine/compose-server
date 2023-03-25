@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "component.open-api")
+@ConfigurationProperties(prefix = "component.web-api-doc.open-api")
 public class SwaggerProperties {
   private String packages = "com";
   private String group = "default";
