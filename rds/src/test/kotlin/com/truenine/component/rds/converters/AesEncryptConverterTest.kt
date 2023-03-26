@@ -24,7 +24,7 @@ class AesEncryptConverterTest : AbstractTestNGSpringContextTests() {
         this.email = "truenine@qq.com"
         this.firstName = "赵"
         this.lastName = "日天"
-        this.sex = 1
+        this.gender = 1
         this.idCard = "000101199312123349"
         this.phone = phone
         this.userId = "0"

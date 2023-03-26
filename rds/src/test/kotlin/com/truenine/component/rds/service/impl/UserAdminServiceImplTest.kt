@@ -100,7 +100,7 @@ class UserAdminServiceImplTest :
         this.birthday = LocalDate.of(1997, 11, 4)
         this.phone = "15675292005"
         this.email = "truenine@qq.com"
-        this.sex = 1
+        this.gender = 1
         this.firstName = "彭"
         this.lastName = "继工"
       }
@@ -121,7 +121,7 @@ class UserAdminServiceImplTest :
             this.birthday = LocalDate.of(1997, 11, 4)
             this.phone = "15675292005"
             this.email = "truenine@qq.com"
-            this.sex = 1
+            this.gender = 1
             this.firstName = "彭"
             this.lastName = "继工"
           })

@@ -40,7 +40,6 @@ public class FileVo {
 
   @Schema(title = "文件名")
   @Column(name = FileDao.META_NAME)
-  @Convert(converter = AesEncryptConverter.class)
   private String name;
 
   @Schema(

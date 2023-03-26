@@ -51,7 +51,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
   public static final String ADDRESS_DETAILS_ID = "address_details_id";
   public static final String PHONE = "phone";
   public static final String ID_CARD = "id_card";
-  public static final String SEX = "sex";
+  public static final String GENDER = "gender";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
@@ -174,13 +174,13 @@ public class UserInfoDao extends BaseDao implements Serializable {
    * 性别：0女，1难，2未知
    */
   @Schema(
-    name = SEX,
+    name = GENDER,
     description = " 性别：0女，1难，2未知"
   )
   @Column(table = $T_NAME,
-    name = SEX)
+    name = GENDER)
   @Nullable
-  private Byte sex;
+  private Byte gender;
 
   @Override
   public boolean equals(Object o) {

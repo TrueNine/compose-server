@@ -56,7 +56,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
       this.email = "truenine@qq.com"
       this.idCard = "442331199503012231"
       this.phone = "13323412345"
-      this.sex = 1
+      this.gender = 1
     }.apply {
       testUserInfo = userService.saveUserInfo(this)!!
     }
