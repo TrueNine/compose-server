@@ -4,7 +4,7 @@ package ${ctx.getEntityPkg()}
 
 import ${ctx.getBaseEntityClassType()}
 <#if tab.getIdx()?? && (tab.getIdx()?size>0)>
-  import jakarta.persistence.Index
+import jakarta.persistence.Index
 </#if>
 import org.hibernate.Hibernate;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,15 +17,15 @@ import java.util.Objects;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 <#list tab.getImports() as t>
-  import ${t}
+import ${t}
 </#list>
 
 /**
-* ${tab.getComment()!tab.getClassName()}
-*
-* @author ${ctx.getAuthor()}
-* @since ${ctx.nowDay()}
-*/
+ * ${tab.getComment()!tab.getClassName()}
+ *
+ * @author ${ctx.getAuthor()}
+ * @since ${ctx.nowDay()}
+ */
 @DynamicInsert
 @DynamicUpdate
 @Entity

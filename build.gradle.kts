@@ -9,7 +9,6 @@ plugins {
   id("java")
   id("java-library")
   id("org.springframework.boot") version V.Spring.boot
-  id("org.graalvm.buildtools.native") version V.Spring.graalVmPlugin
   id("io.spring.dependency-management") version V.Spring.managementPlugin
   kotlin("jvm") version V.Lang.kotlin
   kotlin("kapt") version V.Lang.kotlin
@@ -23,7 +22,7 @@ plugins {
 allprojects {
   repositories {
     maven(release) {
-      this.isAllowInsecureProtocol = true
+  this.isAllowInsecureProtocol = true
       credentials {
         this.username = yunXiaoUsername
         this.password = yunXiaoPassword
@@ -55,16 +54,16 @@ allprojects {
     enabled = false
   }
 
-  tasks.withType<Javadoc> {
-    enabled = true
-    options {
-      this.encoding = "UTF-8"
-      this.locale = "zh-CN"
-    }
-  }
+//  tasks.withType<Javadoc> {
+//    enabled = true
+//    options {
+//      this.encoding = "UTF-8"
+//      this.locale = "zh-CN"
+//    }
+//  }
 
   tasks.withType<BootJar> {
-    this.enabled = false
+    enabled = false
   }
 
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

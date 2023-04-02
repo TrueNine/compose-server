@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS user_info
   gender             TINYINT(1) DEFAULT 2 COMMENT ' 性别：0女，1难，2未知',
   UNIQUE (phone) COMMENT '电话唯一',
   UNIQUE (id_card) COMMENT '身份证唯一',
-  INDEX (user_id) COMMENT '外联 user id',
-  INDEX (address_details_id) COMMENT '外联 address id',
-  INDEX (avatar_img_id) COMMENT '外联 file id'
+  INDEX (user_id) COMMENT '外联 用户',
+  INDEX (address_details_id) COMMENT '外联 地址详情',
+  INDEX (avatar_img_id) COMMENT '外联 文件'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户信息';
 CALL base_tab('user_info');
 
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS user_group
   user_id BIGINT UNSIGNED COMMENT '创建人',
   name    VARCHAR(255) COMMENT '名称',
   doc     VARCHAR(2047) COMMENT '描述',
-  INDEX (user_id) COMMENT '外联 user id'
+  INDEX (user_id) COMMENT '外联 用户'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户组';
 CALL base_tab('user_group');
 
@@ -121,8 +121,8 @@ CREATE TABLE IF NOT EXISTS role_permissions
 (
   role_id        BIGINT UNSIGNED COMMENT '角色',
   permissions_id BIGINT UNSIGNED COMMENT '权限',
-  INDEX (role_id) COMMENT '外联 role id',
-  INDEX (permissions_id) COMMENT '外联 permission id'
+  INDEX (role_id) COMMENT '外联 角色',
+  INDEX (permissions_id) COMMENT '外联 权限'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '角色  权限';
 CALL base_tab('role_permissions');
 
@@ -146,8 +146,8 @@ CREATE TABLE IF NOT EXISTS role_group_role
 (
   role_group_id BIGINT UNSIGNED COMMENT '用户组',
   role_id       BIGINT UNSIGNED COMMENT '角色',
-  INDEX (role_group_id) COMMENT '外联 role_group id',
-  INDEX (role_id) COMMENT '外联 role id'
+  INDEX (role_group_id) COMMENT '外联 角色组',
+  INDEX (role_id) COMMENT '外联 角色'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '角色组  角色';
 CALL base_tab('role_group_role');
 
@@ -171,8 +171,8 @@ CREATE TABLE IF NOT EXISTS user_role_group
 (
   user_id       BIGINT UNSIGNED COMMENT '用户',
   role_group_id BIGINT UNSIGNED COMMENT '权限组',
-  INDEX (user_id) COMMENT '外联 user id',
-  INDEX (role_group_id) COMMENT '外联 role_group id'
+  INDEX (user_id) COMMENT '外联 用户',
+  INDEX (role_group_id) COMMENT '外联 角色组'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户  角色组';
 CALL base_tab('user_role_group');
 
@@ -187,8 +187,8 @@ CREATE TABLE IF NOT EXISTS user_group_role_group
 (
   role_group_id BIGINT UNSIGNED COMMENT '角色组',
   user_group_id BIGINT UNSIGNED COMMENT '用户组',
-  INDEX (role_group_id) COMMENT '外联 role_group id',
-  INDEX (user_group_id) COMMENT '外联 user_group id'
+  INDEX (role_group_id) COMMENT '外联 角色组',
+  INDEX (user_group_id) COMMENT '外联 用户组'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户组  角色组';
 CALL base_tab('user_group_role_group');
 
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS user_group_user
 (
   user_group_id BIGINT UNSIGNED NOT NULL COMMENT '用户组',
   user_id       BIGINT UNSIGNED NOT NULL COMMENT '用户',
-  INDEX (user_group_id) COMMENT '外联 user_group id',
-  INDEX (user_id) COMMENT '外联 user id'
+  INDEX (user_group_id) COMMENT '外联 用户组',
+  INDEX (user_id) COMMENT '外联 用户'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '用户组 用户';
 CALL base_tab('user_group_user');

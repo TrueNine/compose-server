@@ -4,7 +4,7 @@ package ${ctx.getEntityPkg()};
 
 import ${ctx.getBaseEntityClassType()};
 <#if tab.getIdx()?? && (tab.getIdx()?size>0)>
-  import jakarta.persistence.Index;
+import jakarta.persistence.Index;
 </#if>
 import org.hibernate.Hibernate;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,15 +21,15 @@ import java.util.Objects;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 <#list tab.getImports() as t>
-  import ${t};
+import ${t};
 </#list>
 
 /**
-* ${tab.getComment()!tab.getClassName()}
-*
-* @author ${ctx.getAuthor()}
-* @since ${ctx.nowDay()}
-*/
+ * ${tab.getComment()!tab.getClassName()}
+ *
+ * @author ${ctx.getAuthor()}
+ * @since ${ctx.nowDay()}
+ */
 @Getter
 @Setter
 @ToString
@@ -39,21 +39,20 @@ import org.hibernate.annotations.DynamicUpdate;
 @Schema(title = "${tab.getEscapeComment()!tab.getClassName()}")
 @Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.$T_NAME<#if tab.getIdx()?? && (tab.getIdx()?size > 0)>, indexes = {
     <#list tab.getIdx() as idx>
-      @Index(name = "${idx.getKeyName()!idx.getColumnName()}_idx", columnList = "${idx.getColumnName()}"),
+      @Index(name = "${idx.getKeyName()!idx.getColumnName()}", columnList = "${idx.getColumnName()}"),
     </#list>
   }</#if>)
 public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getBaseEntityClassName()} implements Serializable {
 
-@Serial
-private static final long serialVersionUID = 1L;
 
-public static final String $T_NAME = "${tab.getName()}";
 
+  public static final String $T_NAME = "${tab.getName()}";
 <#-- 静态表字段名 -->
 <#list tab.getColumns() as col>
   public static final String ${col.getUpperName()} = "${col.getColName()}";
-
 </#list>
+  @Serial
+  private static final long serialVersionUID = 1L;
 <#-- 表字段 -->
 <#list tab.getColumns() as col>
   /**

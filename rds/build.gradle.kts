@@ -1,6 +1,5 @@
 project.version = V.Project.rds
 
-
 dependencies {
   api("org.flywaydb:flyway-core")
   api("org.flywaydb:flyway-mysql")

@@ -59,7 +59,10 @@ BEGIN
     '` ',
     'ADD `cpi` BIGINT UNSIGNED DEFAULT NULL COMMENT \'父节点id column parent id\',',
     'ADD `cln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 column left node\',',
-    'ADD `crn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 column right node\';'
+    'ADD `crn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 column right node\',',
+    'ADD INDEX(`cln`),',
+    'ADD INDEX(`crn`),',
+    'ADD INDEX(`cpi`);'
     );
   SET @statement = CONCAT(@after);
   PREPARE state

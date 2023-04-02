@@ -1,6 +1,7 @@
 package com.truenine.component.rds
 
 import com.truenine.component.rds.autoconfig.AutoConfigEntrance
+import kotlinx.coroutines.reactor.mono
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import

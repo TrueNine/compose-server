@@ -20,7 +20,6 @@ open class PreSortTreeTest : AbstractTestNGSpringContextTests() {
   lateinit var addressRepo: AddressRepo
 
   @Test
-  @Transactional
   open fun testSaveChildren() {
     val addr = AddressDao().apply {
       this.name = "测试1"
@@ -28,16 +27,15 @@ open class PreSortTreeTest : AbstractTestNGSpringContextTests() {
     }
     val addr2 = AddressDao().apply {
       this.name = "测试2"
-      this.code = "123"
+      this.code = "124"
     }
     val addr3 = AddressDao().apply {
       this.name = "测试3"
-      this.code = "123"
+      this.code = "125"
     }
 
     val af = addressRepo.saveChild(null, addr)
     val bf = addressRepo.saveChild(addr, addr2)
-
     val cf = addressRepo.saveChild(addr, addr3)
 
     val a = addressRepo.findByIdOrNull(af.id)
@@ -51,6 +49,7 @@ open class PreSortTreeTest : AbstractTestNGSpringContextTests() {
     assertEquals(bi.size, test.size)
 
     val d = addressRepo.deleteChild(c!!)
+    addressRepo.deleteAll()
   }
 
   @Test

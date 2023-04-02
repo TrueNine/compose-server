@@ -52,6 +52,7 @@ public class Bf {
       PARENT_ID,
       ANY_REFERENCE_ID,
       ANY_REFERENCE_TYPE,
+      DEL_STATE,
       TENANT_ID
     };
     return Arrays.asList(al);
