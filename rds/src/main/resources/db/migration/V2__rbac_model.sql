@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS user_info
   address_details_id BIGINT UNSIGNED COMMENT '地址',
   phone              CHAR(128) COMMENT '电话号码',
   id_card            VARCHAR(255) COMMENT '身份证',
-  gender             TINYINT(1) DEFAULT 2 COMMENT ' 性别：0女，1难，2未知',
+  gender             TINYINT DEFAULT 2 COMMENT ' 性别：0女，1难，2未知',
   UNIQUE (phone) COMMENT '电话唯一',
   UNIQUE (id_card) COMMENT '身份证唯一',
   INDEX (user_id) COMMENT '外联 用户',
