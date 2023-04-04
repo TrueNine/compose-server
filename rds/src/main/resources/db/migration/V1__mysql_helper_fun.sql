@@ -40,7 +40,7 @@ BEGIN
                      FROM information_schema.columns
                      WHERE table_schema = (SELECT DATABASE())
                        AND table_name = tab_name
-                       AND column_name IN ('id', 'cct', 'ccb'));
+                       AND column_name IN ('id', 'rct', 'rcb'));
   IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
     EXECUTE state;
   END IF;
@@ -76,14 +76,14 @@ BEGIN
                      FROM information_schema.columns
                      WHERE table_schema = (SELECT DATABASE())
                        AND table_name = tab_name
-                       AND column_name IN ('cpi', 'cln', 'crn'));
+                       AND column_name IN ('rpi', 'rln', 'rrn'));
   IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
     EXECUTE state;
   END IF;
 END $$
 DELIMITER ;
 
-# 预排序树结构
+# 任意外键类型结构
 DROP PROCEDURE IF EXISTS add_reference_any_type_struct;
 DELIMITER $$
 CREATE PROCEDURE add_reference_any_type_struct(
