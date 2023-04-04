@@ -5,7 +5,9 @@ import com.google.gson.annotations.Expose;
 import com.truenine.component.core.db.Bf;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Index;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -29,6 +31,12 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
+@Table(indexes = {
+  @Index(name = PreSortTreeDao.RLN, columnList = PreSortTreeDao.RLN),
+  @Index(name = PreSortTreeDao.RRN, columnList = PreSortTreeDao.RRN),
+  @Index(name = PreSortTreeDao.RPI, columnList = PreSortTreeDao.RPI),
+  @Index(name = RefAnyDao.ARI, columnList = RefAnyDao.ARI)
+})
 @RequiredArgsConstructor
 @Schema(title = "预排序树和任意外键的结合体")
 public class TreeAnyRefDao extends PreSortTreeDao {

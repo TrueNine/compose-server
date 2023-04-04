@@ -36,6 +36,11 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
+@Table(indexes = {
+  @Index(name = BaseDao.RCB, columnList = BaseDao.RCB),
+  @Index(name = BaseDao.RMB, columnList = BaseDao.RMB),
+  @Index(name = BaseDao.RTI, columnList = BaseDao.RTI)
+})
 @RequiredArgsConstructor
 @Schema(title = "顶级抽象类")
 @EntityListeners(DeleteBackupListener.class)
@@ -49,27 +54,27 @@ public class BaseDao {
   /**
    * 创建时间
    */
-  public static final String CCT = Bf.CREATE_TIME;
+  public static final String RCT = Bf.CREATE_TIME;
 
   /**
    * 修改时间
    */
-  public static final String CMT = Bf.MODIFY_TIME;
+  public static final String RMT = Bf.MODIFY_TIME;
 
   /**
    * 修改人
    */
-  public static final String CMB = Bf.MODIFY_BY;
+  public static final String RMB = Bf.MODIFY_BY;
 
   /**
    * 创建人
    */
-  public static final String CCB = Bf.CREATE_BY;
+  public static final String RCB = Bf.CREATE_BY;
 
   /**
    * 乐观锁版本
    */
-  public static final String CLV = Bf.LOCK_VERSION;
+  public static final String RLV = Bf.LOCK_VERSION;
 
   /**
    * 逻辑删除标志
@@ -79,7 +84,7 @@ public class BaseDao {
   /**
    * 租户 id
    */
-  public static final String CTI = Bf.TENANT_ID;
+  public static final String RTI = Bf.TENANT_ID;
 
   @Id
   @JsonIgnore
@@ -102,14 +107,14 @@ public class BaseDao {
     updatable = false)
   @Expose(deserialize = false)
   @Schema(title = "创建时间")
-  protected LocalDateTime cct;
+  protected LocalDateTime rct;
 
   @JsonIgnore
   @LastModifiedDate
   @Column(name = Bf.MODIFY_TIME)
   @Expose(deserialize = false)
   @Schema(title = "修改时间")
-  protected LocalDateTime cmt;
+  protected LocalDateTime rmt;
 
   @JsonIgnore
   @Column(name = Bf.CREATE_BY,
@@ -117,14 +122,14 @@ public class BaseDao {
     updatable = false)
   @Expose(deserialize = false)
   @Schema(title = "创建人id")
-  protected String ccb = Bf.Rbac.ROOT_ID;
+  protected String rcb = Bf.Rbac.ROOT_ID;
 
   @JsonIgnore
   @Column(name = Bf.MODIFY_BY,
     insertable = false)
   @Expose(deserialize = false)
   @Schema(title = "修改人id")
-  protected String cmb = Bf.Rbac.ROOT_ID;
+  protected String rmb = Bf.Rbac.ROOT_ID;
 
   @Version
   @JsonIgnore
@@ -132,7 +137,7 @@ public class BaseDao {
     nullable = false)
   @Expose(deserialize = false)
   @Schema(title = "乐观锁版本")
-  protected Long clv;
+  protected Long rlv;
 
   @JsonIgnore
   @Expose(deserialize = false)
@@ -140,7 +145,7 @@ public class BaseDao {
     nullable = false
   )
   @Schema(title = "逻辑删除标志")
-  protected Boolean ldf;
+  protected Boolean ldf = false;
 
   @JsonIgnore
   @TenantId
@@ -149,7 +154,7 @@ public class BaseDao {
     updatable = false)
   @Expose(deserialize = false)
   @Schema(title = "租户id", defaultValue = "0", example = "700124255456")
-  protected String cti;
+  protected String rti;
 
   @Override
   public boolean equals(Object o) {

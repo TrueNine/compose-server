@@ -5,7 +5,9 @@ import com.google.gson.annotations.Expose;
 import com.truenine.component.core.db.Bf;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Index;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -28,6 +30,9 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
+@Table(indexes = {
+  @Index(name = RefAnyDao.ARI, columnList = RefAnyDao.ARI)
+})
 @RequiredArgsConstructor
 @Schema(title = "任意外键类型，通常与策略模式一起使用")
 public class RefAnyDao extends BaseDao {

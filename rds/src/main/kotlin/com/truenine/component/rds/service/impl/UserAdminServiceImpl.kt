@@ -157,7 +157,7 @@ open class UserAdminServiceImpl
         val c = async {
           findAllPermissionsByUser(it.user!!)
         }
-        it.tenant = it.user!!.cti
+        it.tenant = it.user!!.rti
         it.info = a.await()
         it.roles = b.await()
         it.permissions = c.await()

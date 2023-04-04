@@ -5,7 +5,9 @@ import com.google.gson.annotations.Expose;
 import com.truenine.component.core.db.Bf;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Index;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -28,6 +30,11 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
+@Table(indexes = {
+  @Index(name = PreSortTreeDao.RLN, columnList = PreSortTreeDao.RLN),
+  @Index(name = PreSortTreeDao.RRN, columnList = PreSortTreeDao.RRN),
+  @Index(name = PreSortTreeDao.RPI, columnList = PreSortTreeDao.RPI)
+})
 @RequiredArgsConstructor
 @Schema(title = "预排序树")
 public class PreSortTreeDao extends BaseDao {
@@ -35,17 +42,17 @@ public class PreSortTreeDao extends BaseDao {
   /**
    * 父id
    */
-  public static final String CPI = Bf.PARENT_ID;
+  public static final String RPI = Bf.PARENT_ID;
 
   /**
    * 左节点
    */
-  public static final String CLN = Bf.LEFT_NODE;
+  public static final String RLN = Bf.LEFT_NODE;
 
   /**
    * 右节点
    */
-  public static final String CRN = Bf.RIGHT_NODE;
+  public static final String RRN = Bf.RIGHT_NODE;
 
   @JsonIgnore
   @Expose(deserialize = false)
