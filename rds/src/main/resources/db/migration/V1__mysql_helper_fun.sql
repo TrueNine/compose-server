@@ -7,9 +7,9 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 # 基础表字段
-DROP PROCEDURE IF EXISTS base_tab;
+DROP PROCEDURE IF EXISTS add_base_struct;
 DELIMITER $$
-CREATE PROCEDURE base_tab(IN tab_name VARCHAR(128))
+CREATE PROCEDURE add_base_struct(IN tab_name VARCHAR(128))
 BEGIN
   SET @after = CONCAT(
     'ALTER TABLE',
@@ -17,13 +17,13 @@ BEGIN
     tab_name,
     '` ',
     'ADD `id` BIGINT UNSIGNED PRIMARY KEY COMMENT \'主键\',',
-    'ADD `cct` DATETIME DEFAULT NOW() COMMENT \'字段创建时间 column create time\',',
-    'ADD `ccb` BIGINT UNSIGNED DEFAULT 0 NOT NULL COMMENT \'创建用户 column create by\',',
-    'ADD `cmt` DATETIME DEFAULT NOW() COMMENT \'字段修改时间 column modify time\',',
-    'ADD `cmb` BIGINT UNSIGNED DEFAULT 0 COMMENT \'修改用户 column modify by\',',
-    'ADD `clv` BIGINT UNSIGNED DEFAULT 0 COMMENT \'乐观锁版本号 column lock version\', ',
+    'ADD `rct` DATETIME DEFAULT NOW() COMMENT \'字段创建时间 row create time\',',
+    'ADD `rcb` BIGINT UNSIGNED DEFAULT 0 NOT NULL COMMENT \'创建用户 row create by\',',
+    'ADD `rmt` DATETIME DEFAULT NOW() COMMENT \'字段修改时间 row modify time\',',
+    'ADD `rmb` BIGINT UNSIGNED DEFAULT 0 COMMENT \'修改用户 row modify by\',',
+    'ADD `rlv` BIGINT UNSIGNED DEFAULT 0 COMMENT \'乐观锁版本号 row lock version\', ',
     'ADD `ldf` BOOLEAN DEFAULT FALSE COMMENT \'逻辑删除标志 logic delete flag\',',
-    'ADD `cti` BIGINT UNSIGNED DEFAULT 0 COMMENT \'多租户id column tenant id\', ',
+    'ADD `rti` BIGINT UNSIGNED DEFAULT 0 COMMENT \'多租户id row tenant id\', ',
     'ENGINE = InnoDB,',
     'DEFAULT CHARSET = utf8mb4,',
     'AUTO_INCREMENT = 100;'
@@ -48,21 +48,21 @@ END $$
 DELIMITER ;
 
 # 预排序树结构
-DROP PROCEDURE IF EXISTS presort_tree_tab;
+DROP PROCEDURE IF EXISTS add_presort_tree_struct;
 DELIMITER $$
-CREATE PROCEDURE presort_tree_tab(IN tab_name VARCHAR(128))
+CREATE PROCEDURE add_presort_tree_struct(IN tab_name VARCHAR(128))
 BEGIN
   SET @after = CONCAT(
     'ALTER TABLE',
     ' `',
     tab_name,
     '` ',
-    'ADD `cpi` BIGINT UNSIGNED DEFAULT NULL COMMENT \'父节点id column parent id\',',
-    'ADD `cln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 column left node\',',
-    'ADD `crn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 column right node\',',
-    'ADD INDEX(`cln`),',
-    'ADD INDEX(`crn`),',
-    'ADD INDEX(`cpi`);'
+    'ADD `rpi` BIGINT UNSIGNED DEFAULT NULL COMMENT \'父节点id parent id\',',
+    'ADD `rln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 row left node\',',
+    'ADD `rrn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 row right node\',',
+    'ADD INDEX(`rln`),',
+    'ADD INDEX(`rrn`),',
+    'ADD INDEX(`rpi`);'
     );
   SET @statement = CONCAT(@after);
   PREPARE state
@@ -84,9 +84,9 @@ END $$
 DELIMITER ;
 
 # 预排序树结构
-DROP PROCEDURE IF EXISTS reference_type;
+DROP PROCEDURE IF EXISTS add_reference_any_type_struct;
 DELIMITER $$
-CREATE PROCEDURE reference_type(
+CREATE PROCEDURE add_reference_any_type_struct(
   IN tab_name VARCHAR(128),
   IN typ_comm VARCHAR(100)
 )

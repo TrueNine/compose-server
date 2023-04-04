@@ -51,23 +51,23 @@ public class PreSortTreeDao extends BaseDao {
   @Expose(deserialize = false)
   @Column(name = Bf.PARENT_ID)
   @Schema(title = "父id")
-  protected String cpi = null;
+  protected String rpi = null;
 
   @JsonIgnore
   @Expose(deserialize = false)
   @Column(name = Bf.LEFT_NODE)
   @Schema(title = "左节点")
-  protected Long cln;
+  protected Long rln;
 
   @JsonIgnore
   @Expose(deserialize = false)
   @Column(name = Bf.RIGHT_NODE)
   @Schema(title = "右节点")
-  protected Long crn;
+  protected Long rrn;
 
   @JsonIgnore
   public boolean isLeafNode() {
-    return crn - 1 == cln;
+    return rrn - 1 == rln;
   }
 
   @JsonIgnore

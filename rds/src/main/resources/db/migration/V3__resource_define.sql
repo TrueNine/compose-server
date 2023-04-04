@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS api
   INDEX (permissions_id) COMMENT '外联 权限'
 ) DEFAULT CHARSET = utf8mb4,
   COMMENT 'api';
-CALL base_tab('api');
+CALL add_base_struct('api');
 
 
 CREATE TABLE IF NOT EXISTS api_call_record
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS api_call_record
   resp_result_enc TEXT COMMENT '请求结果',
   INDEX (api_id) COMMENT '外联 api'
 ) DEFAULT CHARSET = utf8mb4, COMMENT 'API请求记录';
-CALL base_tab('api_call_record');
+CALL add_base_struct('api_call_record');
 
 
 CREATE TABLE IF NOT EXISTS file_location
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS file_location
   doc  VARCHAR(1023) DEFAULT '' COMMENT '资源路径描述',
   type CHAR          NOT NULL COMMENT '存储类别'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '文件地址';
-CALL base_tab('file_location');
+CALL add_base_struct('file_location');
 
 
 CREATE TABLE IF NOT EXISTS file
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS file
   DESCRIPTOR       VARCHAR(255) COMMENT '文件描述符',
   mime_type        VARCHAR(1023) COMMENT 'MIME TYPE'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '文件';
-CALL base_tab('file');
+CALL add_base_struct('file');
 
 
 CREATE TABLE IF NOT EXISTS address
@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS address
   center POINT NULL COMMENT '定位',
   UNIQUE (code) COMMENT '行政区代码唯一'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '行政区代码';
-CALL base_tab('address');
-CALL presort_tree_tab('address');
+CALL add_base_struct('address');
+CALL add_presort_tree_struct('address');
 
 
 CREATE TABLE IF NOT EXISTS address_details
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS address_details
   location        POINT COMMENT '定位',
   INDEX (address_id)
 ) DEFAULT CHARSET = utf8mb4,COMMENT '详细地址';
-CALL base_tab('address_details');
+CALL add_base_struct('address_details');
 
 
 CREATE TABLE IF NOT EXISTS delete_backup
@@ -75,4 +75,4 @@ CREATE TABLE IF NOT EXISTS delete_backup
   del_ser_obj     JSON COMMENT '删除数据',
   del_sys_version VARCHAR(1000) DEFAULT '0' COMMENT '系统版本'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '数据删除备份表';
-CALL base_tab('delete_backup');
+CALL add_base_struct('delete_backup');

@@ -12,18 +12,18 @@ import java.util.List;
 public class Bf {
   public static final String DEL_STATE = "cds";
   public static final String ID = "id";
-  public static final String CREATE_BY = "ccb";
+  public static final String CREATE_BY = "rcb";
   public static final String LOGIC_DELETE_FLAG = "ldf";
-  public static final String CREATE_TIME = "cct";
-  public static final String MODIFY_BY = "cmb";
-  public static final String MODIFY_TIME = "cmt";
-  public static final String LEFT_NODE = "cln";
-  public static final String RIGHT_NODE = "crn";
-  public static final String LOCK_VERSION = "clv";
-  public static final String PARENT_ID = "cpi";
+  public static final String CREATE_TIME = "rct";
+  public static final String MODIFY_BY = "rmb";
+  public static final String MODIFY_TIME = "rmt";
+  public static final String LEFT_NODE = "rln";
+  public static final String RIGHT_NODE = "rrn";
+  public static final String LOCK_VERSION = "rlv";
+  public static final String PARENT_ID = "rpi";
   public static final String ANY_REFERENCE_ID = "ari";
   public static final String ANY_REFERENCE_TYPE = "typ";
-  public static final String TENANT_ID = "cti";
+  public static final String TENANT_ID = "rti";
 
   public static List<String> defaultAll() {
     return List.of(

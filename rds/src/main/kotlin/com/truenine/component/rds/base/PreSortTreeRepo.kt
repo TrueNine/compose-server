@@ -16,14 +16,14 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
   fun findTreeMetaChildCountById(id: ID): Long {
     val entity = findById(id).orElseGet { null }
     return if (null != entity) {
-      (entity.crn - entity.cln - 1) / 2
+      (entity.rrn - entity.rln - 1) / 2
     } else 0
   }
 
   @Query(
     """
     from #{#entityName} e
-    where e.cln between :#{#parent.cln} and :#{#parent.crn}
+    where e.rln between :#{#parent.rln} and :#{#parent.rrn}
   """
   )
   fun findChild(parent: T): List<T>
@@ -32,8 +32,8 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
   @Query(
     """
     from #{#entityName} e
-    where e.cln < :#{#t.cln}
-    and e.crn > :#{#t.crn}
+    where e.rln < :#{#t.rln}
+    and e.rrn > :#{#t.rrn}
   """
   )
   fun findParentPath(t: T): List<T>
@@ -43,8 +43,8 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
     """
     select count(1) + 1
     from #{#entityName} e
-    where e.cln < :#{#t.cln}
-    and e.crn > :#{#t.crn}
+    where e.rln < :#{#t.rln}
+    and e.rrn > :#{#t.rrn}
   """
   )
   fun findTreeMetaLevel(t: T)
@@ -52,46 +52,45 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
   @Query(
     """
     update #{#entityName} e
-    set e.cln = e.cln + :clnOffset
-    where e.cln > :parentCln
+    set e.rln = e.rln + :rlnOffset
+    where e.rln > :parentRln
   """
   )
   @Modifying
-  fun updateAllPreCln(clnOffset: Long, parentCln: Long)
+  fun updateAllPreCln(rlnOffset: Long, parentRln: Long)
 
   @Query(
     """
     update #{#entityName} e
-    set e.crn = e.crn + :crnOffset
-    where e.crn >= :parentCln
+    set e.rrn = e.rrn + :rrnOffset
+    where e.rrn >= :parentRln
   """
   )
   @Modifying
-  fun updateAllPreCrn(crnOffset: Long, parentCln: Long)
+  fun updateAllPreCrn(rrnOffset: Long, parentRln: Long)
 
   @Query(
     """
     update #{#entityName} c
-    set c.cln = c.cln - :clnOffset
-    where c.cln > :parentCln
+    set c.rln = c.rln - :rlnOffset
+    where c.rln > :parentRln
   """
   )
   @Modifying
-  fun deleteAllPreCln(clnOffset: Long, parentCln: Long)
+  fun deleteAllPreRln(rlnOffset: Long, parentRln: Long)
 
 
   @Query(
     """
     update #{#entityName} c
-    set c.crn = c.crn - :crnOffset
-    where c.crn >= :parentCln
+    set c.rrn = c.rrn - :rrnOffset
+    where c.rrn >= :parentRln
   """
   )
   @Modifying
-  fun deleteAllPreCrn(crnOffset: Long, parentCln: Long): Int
+  fun deleteAllPreCrn(rrnOffset: Long, parentRln: Long): Int
 
 
-  @Suppress("UNCHECKED_CAST")
   @Transactional(
     rollbackFor = [Exception::class],
     propagation = Propagation.REQUIRES_NEW
@@ -102,25 +101,24 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
   ): List<T> {
     if (children.isEmpty()) return listOf()
     require(
-      parent.cln != null
-        && parent.crn != null
+      parent.rln != null
+        && parent.rrn != null
         && parent.id != null
     )
     { "父节点没有必要的值 = $parent" }
-    val leftStep = parent.cln + 1
+    val leftStep = parent.rln + 1
     val offset = (children.size * 2)
-    updateAllPreCln(offset.toLong(), parent.cln)
-    updateAllPreCrn(offset.toLong(), parent.cln)
+    updateAllPreCln(offset.toLong(), parent.rln)
+    updateAllPreCrn(offset.toLong(), parent.rln)
     for (i in 0 until (offset) step 2) {
       val idx = (i / 2)
-      children[idx].cpi = parent.id
-      children[idx].cln = leftStep + i
-      children[idx].crn = leftStep + i + 1
+      children[idx].rpi = parent.id
+      children[idx].rln = leftStep + i
+      children[idx].rrn = leftStep + i + 1
     }
     return saveAll(children)
   }
 
-  @Suppress("UNCHECKED_CAST")
   @Transactional(
     rollbackFor = [Exception::class],
     propagation = Propagation.REQUIRES_NEW
@@ -130,16 +128,16 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
     child: T
   ): T {
     return if (parent == null) {
-      child.cln = 1
-      child.crn = 2
-      child.cpi = null
+      child.rln = 1
+      child.rrn = 2
+      child.rpi = null
       save(child)
     } else {
-      updateAllPreCln(2, parent.cln)
-      updateAllPreCrn(2, parent.cln)
-      child.cpi = parent.id
-      child.cln = parent.cln + 1
-      child.crn = child.cln + 1
+      updateAllPreCln(2, parent.rln)
+      updateAllPreCrn(2, parent.rln)
+      child.rpi = parent.id
+      child.rln = parent.rln + 1
+      child.rrn = child.rln + 1
       save(child)
     }
   }
@@ -152,12 +150,12 @@ interface PreSortTreeRepo<T : PreSortTreeDao, ID : Serializable> :
   // TODO 完善此方法
   fun deleteChild(child: T) = run {
     child.takeIf {
-      (it.crn != null
-        && it.cln != null)
+      (it.rrn != null
+        && it.rln != null)
     }?.run {
       delete(this)
-      deleteAllPreCln(2, cln)
-      deleteAllPreCrn(2, cln)
+      deleteAllPreRln(2, rln)
+      deleteAllPreCrn(2, rln)
     }
   }
 }

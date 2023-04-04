@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.springframework.transaction.annotation.Transactional
 import org.testng.annotations.Test
 import kotlin.test.assertEquals
 
@@ -43,7 +42,7 @@ open class PreSortTreeTest : AbstractTestNGSpringContextTests() {
     val c = addressRepo.findByIdOrNull(cf.id)
 
     val test = listOf(a, c, b).map {
-      listOf(it!!.cln, it.crn)
+      listOf(it!!.rln, it.rrn)
     }.flatten()
     val bi = test.toSet()
     assertEquals(bi.size, test.size)

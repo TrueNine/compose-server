@@ -8,15 +8,14 @@ CREATE TABLE IF NOT EXISTS user
   last_login_time DATETIME      DEFAULT NOW() COMMENT '最后请求时间',
   UNIQUE (account) COMMENT '账号唯一'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '用户';
-CALL base_tab('user');
+CALL add_base_struct('user');
 
 INSERT INTO user
 SET id=0,
     account='root',
     nick_name='ROOT',
     pwd_enc='$2a$14$EZlcGzhoLyqi4FNrKqgiO.mZauWIkWlSOdywJB.CXY3uEkC9ratju',
-    last_login_time=NOW(),
-    cti=0;
+    last_login_time=NOW();
 
 
 CREATE TABLE IF NOT EXISTS user_info
@@ -37,7 +36,7 @@ CREATE TABLE IF NOT EXISTS user_info
   INDEX (address_details_id) COMMENT '外联 地址详情',
   INDEX (avatar_img_id) COMMENT '外联 文件'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户信息';
-CALL base_tab('user_info');
+CALL add_base_struct('user_info');
 
 
 CREATE TABLE IF NOT EXISTS role
@@ -45,19 +44,17 @@ CREATE TABLE IF NOT EXISTS role
   name VARCHAR(255) COMMENT '角色名称',
   doc  VARCHAR(2047) COMMENT '角色描述'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '角色';
-CALL base_tab('role');
+CALL add_base_struct('role');
 
 
 INSERT INTO role
 SET id=0,
     name='ROOT',
-    doc='默认超级管理员角色，务必不要删除',
-    cti=0;
+    doc='默认超级管理员角色，务必不要删除';
 INSERT INTO role
 SET id=1,
     name='USER',
-    doc='默认USER角色，务必不要删除',
-    cti=0;
+    doc='默认USER角色，务必不要删除';
 
 
 CREATE TABLE IF NOT EXISTS permissions
@@ -65,19 +62,17 @@ CREATE TABLE IF NOT EXISTS permissions
   name VARCHAR(255) COMMENT '权限名',
   doc  VARCHAR(2047) COMMENT '权限描述'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '权限';
-CALL base_tab('permissions');
+CALL add_base_struct('permissions');
 
 
 INSERT INTO permissions
 SET id=0,
     name='ROOT',
-    doc='默认ROOT权限，务必不要删除',
-    cti=0;
+    doc='默认ROOT权限，务必不要删除';
 INSERT INTO permissions
 SET id=1,
     name='USER',
-    doc='默认USER权限，务必不要删除',
-    cti=0;
+    doc='默认USER权限，务必不要删除';
 
 
 CREATE TABLE IF NOT EXISTS role_group
@@ -85,19 +80,17 @@ CREATE TABLE IF NOT EXISTS role_group
   name VARCHAR(255) COMMENT '名称',
   doc  VARCHAR(2047) COMMENT '描述'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '角色组';
-CALL base_tab('role_group');
+CALL add_base_struct('role_group');
 
 
 INSERT INTO role_group
 SET id=0,
     name='ROOT',
-    doc='默认ROOT角色组，务必不要删除',
-    cti=0;
+    doc='默认ROOT角色组，务必不要删除';
 INSERT INTO role_group
 SET id=1,
     name='USER',
-    doc='默认USER角色组，务必不要删除',
-    cti=0;
+    doc='默认USER角色组，务必不要删除';
 
 
 CREATE TABLE IF NOT EXISTS user_group
@@ -107,7 +100,7 @@ CREATE TABLE IF NOT EXISTS user_group
   doc     VARCHAR(2047) COMMENT '描述',
   INDEX (user_id) COMMENT '外联 用户'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户组';
-CALL base_tab('user_group');
+CALL add_base_struct('user_group');
 
 
 INSERT INTO user_group
@@ -124,7 +117,7 @@ CREATE TABLE IF NOT EXISTS role_permissions
   INDEX (role_id) COMMENT '外联 角色',
   INDEX (permissions_id) COMMENT '外联 权限'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '角色  权限';
-CALL base_tab('role_permissions');
+CALL add_base_struct('role_permissions');
 
 
 INSERT INTO role_permissions
@@ -138,8 +131,7 @@ SET id=1,
 INSERT INTO role_permissions
 SET id=2,
     role_id=1,
-    permissions_id=1,
-    cti=0;
+    permissions_id=1;
 
 
 CREATE TABLE IF NOT EXISTS role_group_role
@@ -149,7 +141,7 @@ CREATE TABLE IF NOT EXISTS role_group_role
   INDEX (role_group_id) COMMENT '外联 角色组',
   INDEX (role_id) COMMENT '外联 角色'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '角色组  角色';
-CALL base_tab('role_group_role');
+CALL add_base_struct('role_group_role');
 
 
 INSERT INTO role_group_role
@@ -163,8 +155,7 @@ SET id=1,
 INSERT INTO role_group_role
 SET id=2,
     role_id=1,
-    role_group_id=1,
-    cti=0;
+    role_group_id=1;
 
 
 CREATE TABLE IF NOT EXISTS user_role_group
@@ -174,7 +165,7 @@ CREATE TABLE IF NOT EXISTS user_role_group
   INDEX (user_id) COMMENT '外联 用户',
   INDEX (role_group_id) COMMENT '外联 角色组'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户  角色组';
-CALL base_tab('user_role_group');
+CALL add_base_struct('user_role_group');
 
 
 INSERT INTO user_role_group
@@ -190,7 +181,7 @@ CREATE TABLE IF NOT EXISTS user_group_role_group
   INDEX (role_group_id) COMMENT '外联 角色组',
   INDEX (user_group_id) COMMENT '外联 用户组'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户组  角色组';
-CALL base_tab('user_group_role_group');
+CALL add_base_struct('user_group_role_group');
 
 
 CREATE TABLE IF NOT EXISTS user_group_user
@@ -200,4 +191,4 @@ CREATE TABLE IF NOT EXISTS user_group_user
   INDEX (user_group_id) COMMENT '外联 用户组',
   INDEX (user_id) COMMENT '外联 用户'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '用户组 用户';
-CALL base_tab('user_group_user');
+CALL add_base_struct('user_group_user');

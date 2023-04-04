@@ -30,7 +30,6 @@ interface BaseRepo<T : BaseDao, ID : Serializable> :
     return logicDeleteById(t.id as ID)
   }
 
-  @Suppress("UNCHECKED_CAST")
   @Transactional(rollbackFor = [Exception::class])
   fun logicDeleteById(id: ID?): Int {
     return if (id != null) {
