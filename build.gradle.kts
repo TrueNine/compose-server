@@ -162,6 +162,7 @@ subprojects {
       dependency("${group}:crawler:${V.Project.crawler}")
       dependency("${group}:cacheable:${V.Project.cacheable}")
       dependency("${group}:schedule:${V.Project.schedule}")
+      dependency("${group}:flyway:${V.Project.flyway}")
 
       // api
       dependency("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")
@@ -215,6 +216,7 @@ subprojects {
 
       // 安全
       dependency("org.owasp.antisamy:antisamy:${V.Security.antisamy}")
+      dependency("net.sourceforge.nekohtml:nekohtml:${V.Security.nekohtml}")
       dependency("org.bouncycastle:bcprov-jdk15to18:${V.Security.bouncyCastle15to18}")
 
       // jwt
@@ -226,7 +228,7 @@ subprojects {
       dependency("com.alibaba:easyexcel:${V.Office.easyExcel}")
       dependency("org.flowable:flowable-spring-boot-starter:${V.Office.flowable}")
       dependency("org.flowable:flowable-spring-boot-starter-ui-modeler:${V.Office.flowable}")
-
+      dependency("org.apache.commons:org.apache.commons:${V.Office.commonsCsv}")
       // xxl
       dependency("com.xuxueli:xxl-job-core:${V.Schedule.xxlJob}")
     }

@@ -58,6 +58,9 @@ findProject(":depend")?.name = "depend"
 include("depend:web-servlet")
 findProject("depend:web-servlet")?.name = "depend-web-servlet"
 
+include("depend:flyway")
+findProject("depend:flyway")?.name = "depend-flyway"
+
 include("cacheable")
 findProject(":cacheable")?.name = "cacheable"
 

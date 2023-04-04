@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.2.56-SNAPSHOT"
+  const val version = "0.2.58-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -13,6 +13,7 @@ object ProjectManager {
 object V {
   object Project {
     private const val allV = ProjectManager.version
+    const val flyway = allV
     const val core = allV
     const val rds = allV
     const val schedule = allV
@@ -54,6 +55,7 @@ object V {
   object Office {
     const val flowable = "7.0.0.M1"
     const val easyExcel = "3.2.1"
+    const val commonsCsv = "1.10.0"
   }
 
   object Util {
@@ -109,6 +111,7 @@ object V {
 
   object Security {
     const val antisamy = "1.7.2"
+    const val nekohtml ="1.9.22"
     const val bouncyCastle15to18 = "1.72"
   }
 
