@@ -44,6 +44,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
   public static final String RESP_RESULT_ENC = "resp_result_enc";
   @Serial
   private static final long serialVersionUID = 1L;
+  private static final String LOGIN_IP = "login_ip";
   /**
    * api
    */
@@ -79,6 +80,18 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     name = REQ_IP)
   @Nullable
   private String reqIp;
+
+  /**
+   * 登录 ip
+   */
+  @Schema(
+    name = LOGIN_IP,
+    description = "登录 ip"
+  )
+  @Column(table = $T_NAME,
+    name = LOGIN_IP)
+  @Nullable
+  private String loginIp;
 
   /**
    * 响应码

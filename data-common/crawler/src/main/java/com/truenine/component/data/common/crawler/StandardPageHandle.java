@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler;
 
-import com.truenine.component.core.api.http.Methods;
+import com.truenine.component.core.http.Methods;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
 import com.truenine.component.data.common.crawler.downloader.PageContent;
 import com.truenine.component.data.common.crawler.downloader.TaskInfo;

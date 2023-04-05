@@ -2,7 +2,7 @@ package com.truenine.component.rds.autoconfig
 
 import com.truenine.component.core.id.SimpleSnowflake
 import com.truenine.component.core.id.Snowflake
-import com.truenine.component.rds.properties.SnowflakeProperties
+import com.truenine.component.core.properties.SnowflakeProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

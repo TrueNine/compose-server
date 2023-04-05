@@ -1,8 +1,8 @@
 package com.truenine.component.data.common.crawler.selenium;
 
 import com.google.common.annotations.Beta;
-import com.truenine.component.core.dev.BetaTest;
-import com.truenine.component.core.encrypt.base64.Base64Helper;
+import com.truenine.component.core.annotations.BetaTest;
+import com.truenine.component.core.encrypt.Base64Helper;
 import com.truenine.component.core.lang.DTimer;
 import com.truenine.component.core.lang.Str;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler.downloader;
 
-import com.truenine.component.core.dev.UnImplemented;
+import com.truenine.component.core.annotations.UnImplemented;
 import com.truenine.component.data.common.crawler.BasePageHandle;
 import com.truenine.component.data.common.crawler.selenium.NamedWrapperDriver;
 

@@ -1,13 +1,13 @@
 package com.truenine.component.rds.service
 
 import com.truenine.component.rds.dao.*
-import com.truenine.component.rds.dto.UserGroupRegisterDto
-import com.truenine.component.rds.dto.UserRegisterDto
-import com.truenine.component.rds.vo.UsrVo
+import com.truenine.component.rds.models.req.PutUserGroupRequestParam
+import com.truenine.component.rds.models.req.PutUserRequestParam
+import com.truenine.component.rds.models.UserAuthorizationModel
 
 interface UserAdminService {
-  fun registerPlainUser(userRegisterDto: UserRegisterDto?): UserDao?
-  fun registerRootUser(rootUserRegisterDto: UserRegisterDto): UserDao?
+  fun registerPlainUser(putUserRequestParam: PutUserRequestParam?): UserDao?
+  fun registerRootUser(rootPutUserRequestParam: PutUserRequestParam): UserDao?
   fun completionUserInfo(userInfo: UserInfoDao): UserInfoDao?
   fun completionUserInfoByAccount(
     account: String?,
@@ -18,11 +18,11 @@ interface UserAdminService {
     account: String?,
     oldPwd: String?,
     newPwd: String?
-  ): UsrVo?
+  ): UserAuthorizationModel?
 
   fun verifyPassword(account: String?, pwd: String?): Boolean
 
-  fun findUsrVoByAccount(account: String): UsrVo?
+  fun findUserAuthorizationModelByAccount(account: String): UserAuthorizationModel?
   fun findUserById(id: String?): UserDao?
   fun findUserByAccount(account: String): UserDao?
 
@@ -38,7 +38,7 @@ interface UserAdminService {
     roleGroup: RoleGroupDao
   )
 
-  fun registerUserGroup(dto: UserGroupRegisterDto): UserGroupDao?
+  fun registerUserGroup(dto: PutUserGroupRequestParam): UserGroupDao?
   fun findAllUserGroupByUser(user: UserDao): Set<UserGroupDao>
   fun deleteUserByAccount(account: String?)
   fun assignUserToUserGroupById(userId: String, userGroupId: String)

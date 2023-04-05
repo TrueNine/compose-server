@@ -1,6 +1,6 @@
 package com.truenine.component.rds.gen.ctx
 
-import com.truenine.component.core.db.Bf
+import com.truenine.component.core.consts.Bf
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.Str
 import com.truenine.component.rds.gen.util.Case

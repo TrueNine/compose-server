@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler.downloader;
 
-import com.truenine.component.core.api.http.MediaTypes;
+import com.truenine.component.core.http.MediaTypes;
 import com.truenine.component.data.common.crawler.jsoup.WrappedDocument;
 import lombok.Data;
 import lombok.experimental.Accessors;

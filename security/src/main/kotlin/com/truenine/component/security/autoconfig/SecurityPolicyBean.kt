@@ -2,7 +2,7 @@ package com.truenine.component.security.autoconfig
 
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.security.annotations.EnableRestSecurity
-import com.truenine.component.security.properties.PolicyDesc
+import com.truenine.component.security.models.SecurityPolicyDefineModel
 import com.truenine.component.security.spring.security.SecurityExceptionAdware
 import com.truenine.component.security.spring.security.SecurityUserDetailsService
 import lombok.extern.slf4j.Slf4j
@@ -29,24 +29,24 @@ import kotlin.collections.component2
 open class SecurityPolicyBean {
   @Bean
   @Primary
-  @ConditionalOnBean(PolicyDesc::class)
-  open fun securityDetailsService(desc: PolicyDesc): SecurityUserDetailsService {
+  @ConditionalOnBean(SecurityPolicyDefineModel::class)
+  open fun securityDetailsService(desc: SecurityPolicyDefineModel): SecurityUserDetailsService {
     return desc.service
   }
 
   @Bean
   @Primary
-  @ConditionalOnBean(PolicyDesc::class)
-  open fun securityExceptionAdware(desc: PolicyDesc): SecurityExceptionAdware {
+  @ConditionalOnBean(SecurityPolicyDefineModel::class)
+  open fun securityExceptionAdware(desc: SecurityPolicyDefineModel): SecurityExceptionAdware {
     return desc.exceptionAdware
   }
 
   @Bean
-  @ConditionalOnBean(PolicyDesc::class)
+  @ConditionalOnBean(SecurityPolicyDefineModel::class)
   @Throws(Exception::class)
   open fun securityFilterChain(
     httpSecurity: HttpSecurity,
-    desc: PolicyDesc,
+    desc: SecurityPolicyDefineModel,
     ctx: ApplicationContext
   ): SecurityFilterChain {
     val anonymous = desc.anonymousPatterns

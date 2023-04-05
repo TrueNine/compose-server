@@ -1,8 +1,8 @@
 package com.truenine.component.security.spring.security
 
 import com.truenine.component.core.lang.LogKt
-import com.truenine.component.security.spring.security.wrappers.SecurityUserDetails
-import com.truenine.component.security.spring.security.wrappers.SecurityUserInfo
+import com.truenine.component.security.SecurityUserDetails
+import com.truenine.component.core.models.UserAuthorizationInfoModel
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -30,9 +30,9 @@ abstract class SecurityUserDetailsService : UserDetailsService {
    * 加载用户详细信息账户
    *
    * @param account 账户
-   * @return [SecurityUserInfo]
+   * @return [UserAuthorizationInfoModel]
    */
-  abstract fun loadUserDetailsByAccount(account: String?): SecurityUserInfo?
+  abstract fun loadUserDetailsByAccount(account: String?): UserAuthorizationInfoModel?
 
   companion object {
     @JvmStatic

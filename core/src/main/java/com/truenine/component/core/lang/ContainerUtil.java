@@ -1,12 +1,12 @@
 package com.truenine.component.core.lang;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Supplier;
-
-import static com.truenine.component.core.lang.exceptions.RuntimeExceptionThrow.runtimeErr;
 
 /**
  * 数组跑龙套
@@ -14,6 +14,7 @@ import static com.truenine.component.core.lang.exceptions.RuntimeExceptionThrow.
  * @author TrueNine
  * @since 2022-10-28
  */
+@Slf4j
 public class ContainerUtil {
 
   public static <T, C extends Collection<Set<T>>> Set<T> unfoldNestedSetBy(Supplier<C> nestedSet) {
@@ -44,15 +45,15 @@ public class ContainerUtil {
   }
 
 
-  public static byte[] unpackByteArray(Byte[] byteArray) {
+  public static @Nullable byte[] unpackByteArray(Byte[] byteArray) {
     var out = new ByteArrayOutputStream();
     try (out) {
       Arrays.stream(byteArray).forEach(out::write);
       return out.toByteArray();
     } catch (IOException e) {
-      runtimeErr(e);
+      log.warn("数组拷贝出现io异常", e);
+      return null;
     }
-    return null;
   }
 
   public static byte[] unpackByteArray(Collection<Byte> byteCollection) {

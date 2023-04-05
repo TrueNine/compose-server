@@ -2,8 +2,8 @@ package com.truenine.component.webapidoc.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.truenine.component.webapidoc.vo.OpenApiDocVo;
-import com.truenine.component.webapidoc.vo.OpenApiUrlsVo;
+import com.truenine.component.webapidoc.models.resp.OpenApiDocResponseResult;
+import com.truenine.component.webapidoc.models.resp.OpenApiUrlsResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -36,12 +36,12 @@ public class OpenApiConfigController {
   @Operation(ignoreJsonView = true, hidden = true)
   @GetMapping(value = "swagger-config", produces = "application/json")
   String config() throws JsonProcessingException {
-    var result = new OpenApiDocVo();
+    var result = new OpenApiDocResponseResult();
     log.debug("请求 api 文档 swagger-config");
     log.debug("apis = {}", this.apis);
     result.setConfigUrl("/v3/swagger-config")
       .setOauth2RedirectUrl("此自定义接口暂时不支持 oauth2");
-    var urls = apis.stream().map(api -> new OpenApiUrlsVo()
+    var urls = apis.stream().map(api -> new OpenApiUrlsResponseResult()
       .setUrl("/v3/api-docs/" + api.getDisplayName())
       .setName(api.getDisplayName())).toList();
     result.setUrls(urls);

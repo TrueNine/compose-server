@@ -1,8 +1,6 @@
 package com.truenine.component.core.encrypt
 
 import com.google.common.annotations.VisibleForTesting
-import com.truenine.component.core.consts.Algorithm
-import com.truenine.component.core.encrypt.base64.Base64Helper
 import com.truenine.component.core.lang.LogKt
 import org.slf4j.Logger
 import java.nio.charset.Charset
@@ -67,7 +65,7 @@ object Encryptors {
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = this.charset,
-    alg: Algorithm = Algorithm.RSA_PADDING
+    alg: EncryptAlgorithm = EncryptAlgorithm.RSA_PADDING
   ): String? = runCatching {
     Cipher.getInstance(alg.str()).run {
       init(ENC_MODE, publicKey)
@@ -87,7 +85,7 @@ object Encryptors {
   private fun basicDecrypt(
     privateKey: PrivateKey,
     data: String,
-    alg: Algorithm = Algorithm.RSA_PADDING,
+    alg: EncryptAlgorithm = EncryptAlgorithm.RSA_PADDING,
     charset: Charset = this.charset,
   ): String? = runCatching {
     Cipher.getInstance(alg.str()).run {
@@ -137,7 +135,7 @@ object Encryptors {
     data,
     shardingSize,
     charset,
-    Algorithm.RSA_PADDING
+    EncryptAlgorithm.RSA_PADDING
   )
 
 
@@ -208,7 +206,7 @@ object Encryptors {
     rsaPrivateKey: RSAPrivateKey,
     data: String,
     charset: Charset = this.charset
-  ): String? = basicDecrypt(rsaPrivateKey, data, Algorithm.RSA_PADDING, charset)
+  ): String? = basicDecrypt(rsaPrivateKey, data, EncryptAlgorithm.RSA_PADDING, charset)
 
   /**
    * @param aesKey 密钥

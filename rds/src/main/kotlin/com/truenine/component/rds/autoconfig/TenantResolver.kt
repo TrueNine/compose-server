@@ -1,9 +1,9 @@
 package com.truenine.component.rds.autoconfig
 
-import com.truenine.component.core.db.Bf
+import com.truenine.component.core.consts.Bf
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.core.lang.Str
-import com.truenine.component.rds.util.TenantContextHolder
+import com.truenine.component.core.ctx.TenantContextHolder
 import org.hibernate.cfg.AvailableSettings
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer

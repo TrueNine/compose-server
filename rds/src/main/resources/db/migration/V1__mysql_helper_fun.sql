@@ -17,13 +17,8 @@ BEGIN
     tab_name,
     '` ',
     'ADD `id` BIGINT UNSIGNED PRIMARY KEY COMMENT \'主键\',',
-    'ADD `rct` DATETIME DEFAULT NOW() COMMENT \'字段创建时间 row create time\',',
-    'ADD `rcb` BIGINT UNSIGNED DEFAULT 0 NOT NULL COMMENT \'创建用户 row create by\',',
-    'ADD `rmt` DATETIME DEFAULT NOW() COMMENT \'字段修改时间 row modify time\',',
-    'ADD `rmb` BIGINT UNSIGNED DEFAULT 0 COMMENT \'修改用户 row modify by\',',
-    'ADD `rlv` BIGINT UNSIGNED DEFAULT 0 COMMENT \'乐观锁版本号 row lock version\', ',
+    'ADD `rlv` BIGINT UNSIGNED DEFAULT 0 COMMENT \'乐观锁版本号 row lock version\',',
     'ADD `ldf` BOOLEAN DEFAULT FALSE COMMENT \'逻辑删除标志 logic delete flag\',',
-    'ADD `rti` BIGINT UNSIGNED DEFAULT 0 COMMENT \'多租户id row tenant id\', ',
     'ENGINE = InnoDB,',
     'DEFAULT CHARSET = utf8mb4,',
     'AUTO_INCREMENT = 100;'
@@ -60,9 +55,9 @@ BEGIN
     'ADD `rpi` BIGINT UNSIGNED DEFAULT NULL COMMENT \'父节点id parent id\',',
     'ADD `rln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 row left node\',',
     'ADD `rrn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 row right node\',',
-    'ADD INDEX(`rln`),',
-    'ADD INDEX(`rrn`),',
-    'ADD INDEX(`rpi`);'
+    'ADD INDEX(`rln`) COMMENT \'索引左节点\',',
+    'ADD INDEX(`rrn`) COMMENT \'索引右节点\',',
+    'ADD INDEX(`rpi`) COMMENT \'自联 父节点\';'
     );
   SET @statement = CONCAT(@after);
   PREPARE state
@@ -96,9 +91,8 @@ BEGIN
     ' `',
     tab_name,
     '` ',
-    'ADD `typ` BIGINT UNSIGNED DEFAULT 0 COMMENT \'外键类型描述符 type, 用于描述: ',
-    typ_comm,
-    '\',',
+    'ADD `typ` INT DEFAULT 0 COMMENT \'外键类型描述符 type, 用于描述: ',
+    typ_comm, '\',',
     'ADD INDEX(`typ`),',
     'ADD `ari` BIGINT UNSIGNED COMMENT \'任意外键 any reference id\',',
     'ADD INDEX(`ari`)',

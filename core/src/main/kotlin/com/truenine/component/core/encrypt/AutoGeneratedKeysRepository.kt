@@ -1,7 +1,5 @@
 package com.truenine.component.core.encrypt
 
-import com.truenine.component.core.encrypt.consts.EccKeyPair
-import com.truenine.component.core.encrypt.consts.RsaKeyPair
 import com.truenine.component.core.lang.LogKt
 import javax.crypto.spec.SecretKeySpec
 

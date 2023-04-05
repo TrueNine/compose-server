@@ -1,12 +1,10 @@
 package com.truenine.component.depend.web.servlet.autoconfig
 
-import com.truenine.component.core.api.http.ParameterNames
-import com.truenine.component.core.dev.BetaTest
+import com.truenine.component.core.http.ParameterNames
+import com.truenine.component.core.annotations.BetaTest
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.depend.web.servlet.annotations.CurrentTenant
 import org.springframework.core.MethodParameter
-import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
@@ -19,8 +17,9 @@ import org.springframework.web.method.support.ModelAndViewContainer
  * @since 2023-02-20
  */
 @BetaTest
-@Component
-@ControllerAdvice
+@Deprecated(message = "暂时不考虑租户设计", level = DeprecationLevel.WARNING)
+//@Component
+//@ControllerAdvice
 class TenantIdArgumentResolver : HandlerMethodArgumentResolver {
   init {
     log.debug("注册租户id参数注入器")

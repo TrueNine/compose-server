@@ -1,6 +1,6 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.db.Bf
+import com.truenine.component.core.consts.Bf
 import com.truenine.component.rds.dao.*
 import com.truenine.component.rds.repo.*
 import com.truenine.component.rds.service.RbacService

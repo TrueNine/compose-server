@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler.downloader;
 
-import com.truenine.component.core.api.http.MediaTypes;
+import com.truenine.component.core.http.MediaTypes;
 import com.truenine.component.core.lang.Str;
 import com.truenine.component.data.common.crawler.BasePageHandle;
 import com.truenine.component.data.common.crawler.StandardPageHandle;

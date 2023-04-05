@@ -1,7 +1,7 @@
 package com.truenine.component.security.spring.security
 
-import com.truenine.component.core.api.http.R
-import com.truenine.component.core.api.http.Status
+import com.truenine.component.core.http.ErrorMessage
+import com.truenine.component.core.http.ErrMsg
 import com.truenine.component.core.lang.LogKt
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -23,8 +23,8 @@ abstract class SecurityExceptionAdware : AccessDeniedHandler,
     response: HttpServletResponse,
     ex: AuthenticationException
   ) {
-    log.debug("授权异常", ex)
-    R.failed(ex, Status._401).writeJson(response)
+    log.warn("授权校验异常", ex)
+    ErrorMessage.failedByMessages(ErrMsg._401)
   }
 
   override fun handle(
@@ -32,8 +32,7 @@ abstract class SecurityExceptionAdware : AccessDeniedHandler,
     response: HttpServletResponse,
     ex: AccessDeniedException
   ) {
-    log.debug("无权限异常", ex)
-    R.failed(ex, 403).writeJson(response)
+    log.warn("无权限异常", ex)
   }
 
   companion object {

@@ -1,10 +1,5 @@
 package com.truenine.component.core.encrypt
 
-import com.truenine.component.core.consts.Algorithm
-import com.truenine.component.core.encrypt.base64.Base64Helper
-import com.truenine.component.core.encrypt.base64.SimpleUtf8Base64
-import com.truenine.component.core.encrypt.consts.EccKeyPair
-import com.truenine.component.core.encrypt.consts.RsaKeyPair
 import com.truenine.component.core.lang.LogKt
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
@@ -30,10 +25,11 @@ object Keys {
   private const val AES_KEY_SIZE = 256
 
   @JvmStatic
-  private val rsaAlg = Algorithm.RSA.str()
+  private val rsaAlg = EncryptAlgorithm.RSA.str()
 
   @JvmStatic
-  private val h: Base64Helper = SimpleUtf8Base64()
+  private val h: Base64Helper =
+    SimpleUtf8Base64()
   private const val DEFAULT_SEED = "T-DECRYPT-AND-ENCRYPT"
 
   @JvmStatic
@@ -45,7 +41,7 @@ object Keys {
    */
   @JvmStatic
   fun readRsaPublicKeyByBase64(base64: String): RSAPublicKey? =
-    readPublicKeyByBase64AndAlg(base64, Algorithm.RSA) as? RSAPublicKey
+    readPublicKeyByBase64AndAlg(base64, EncryptAlgorithm.RSA) as? RSAPublicKey
 
 
   /**
@@ -81,7 +77,7 @@ object Keys {
    */
   @JvmStatic
   fun readEccPublicKeyByBase64(base64: String): PublicKey? =
-    readPublicKeyByBase64AndAlg(base64, Algorithm.ECC)
+    readPublicKeyByBase64AndAlg(base64, EncryptAlgorithm.ECC)
 
 
   /**
@@ -92,7 +88,7 @@ object Keys {
   fun readRsaPrivateKeyByBase64(privateKeyBase64: String): RSAPrivateKey? =
     readPrivateKeyByBase64AndAlg(
       privateKeyBase64,
-      Algorithm.RSA
+      EncryptAlgorithm.RSA
     ) as? RSAPrivateKey
 
 
@@ -102,7 +98,7 @@ object Keys {
    */
   @JvmStatic
   fun readEccPrivateKeyByBase64(base64: String): PrivateKey? =
-    readPrivateKeyByBase64AndAlg(base64, Algorithm.ECC)
+    readPrivateKeyByBase64AndAlg(base64, EncryptAlgorithm.ECC)
 
 
   /**
@@ -113,7 +109,7 @@ object Keys {
   @JvmStatic
   private fun readPublicKeyByBase64AndAlg(
     base64: String,
-    alg: Algorithm
+    alg: EncryptAlgorithm
   ): PublicKey? = runCatching {
     X509EncodedKeySpec(
       h.decodeToByte(base64)
@@ -131,7 +127,7 @@ object Keys {
   @JvmStatic
   private fun readPrivateKeyByBase64AndAlg(
     base64: String,
-    alg: Algorithm
+    alg: EncryptAlgorithm
   ): PrivateKey? = runCatching {
     PKCS8EncodedKeySpec(h.decodeToByte(base64)).run {
       KeyFactory.getInstance(alg.str()).generatePrivate(this)
@@ -175,7 +171,7 @@ object Keys {
   ): RsaKeyPair? = generateKeyPair(
     seed,
     keySize,
-    Algorithm.RSA.str(),
+    EncryptAlgorithm.RSA.str(),
     "SunRsaSign"
   )?.let { that ->
     RsaKeyPair().takeIf {
@@ -230,7 +226,8 @@ object Keys {
   fun readEccKeyPair(
     eccPublicKeyBase64: String,
     eccPrivateKeyBase64: String,
-  ): EccKeyPair? = EccKeyPair().apply {
+  ): EccKeyPair? = EccKeyPair()
+    .apply {
     eccPublicKey = readEccPublicKeyByBase64(eccPublicKeyBase64)
     eccPrivateKey = readEccPrivateKeyByBase64(eccPrivateKeyBase64)
   }.takeIf { null != it.eccPublicKey && null != it.eccPrivateKey }
@@ -245,7 +242,8 @@ object Keys {
   fun readRsaKeyPair(
     rsaPublicKeyBase64: String,
     rsaPrivateKeyBase64: String,
-  ): RsaKeyPair? = RsaKeyPair().apply {
+  ): RsaKeyPair? = RsaKeyPair()
+    .apply {
     rsaPublicKey = readRsaPublicKeyByBase64(rsaPublicKeyBase64)
     rsaPrivateKey = readRsaPrivateKeyByBase64(rsaPrivateKeyBase64)
   }.takeIf { null != it.rsaPublicKey && null != it.rsaPrivateKeyBase64 }
@@ -260,7 +258,7 @@ object Keys {
   fun readKeyPair(
     publicKeyBase64: String,
     privateKeyBase64: String,
-    alg: Algorithm
+    alg: EncryptAlgorithm
   ): KeyPair? = KeyPair(
     readPublicKeyByBase64AndAlg(publicKeyBase64, alg),
     readPrivateKeyByBase64AndAlg(privateKeyBase64, alg)

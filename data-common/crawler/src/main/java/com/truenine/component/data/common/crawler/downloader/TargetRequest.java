@@ -1,9 +1,9 @@
 package com.truenine.component.data.common.crawler.downloader;
 
 
-import com.truenine.component.core.api.http.Headers;
-import com.truenine.component.core.api.http.Methods;
-import com.truenine.component.core.api.http.mock.UserAgents;
+import com.truenine.component.core.http.Headers;
+import com.truenine.component.core.http.Methods;
+import com.truenine.component.core.http.UserAgents;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -3,13 +3,13 @@ package com.truenine.component.rds.service.impl
 import com.truenine.component.core.id.Snowflake
 import com.truenine.component.core.lang.Str
 import com.truenine.component.rds.dao.*
-import com.truenine.component.rds.dto.UserGroupRegisterDto
-import com.truenine.component.rds.dto.UserRegisterDto
+import com.truenine.component.rds.models.req.PutUserGroupRequestParam
+import com.truenine.component.rds.models.req.PutUserRequestParam
 import com.truenine.component.rds.service.RbacService
 import com.truenine.component.rds.service.UserAdminService
 import com.truenine.component.rds.service.UserGroupService
 import com.truenine.component.rds.service.UserService
-import com.truenine.component.rds.vo.UsrVo
+import com.truenine.component.rds.models.UserAuthorizationModel
 import jakarta.validation.Valid
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -59,8 +59,8 @@ open class UserAdminServiceImpl
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerPlainUser(userRegisterDto: UserRegisterDto?): UserDao? {
-    return userRegisterDto?.takeIf {
+  override fun registerPlainUser(putUserRequestParam: PutUserRequestParam?): UserDao? {
+    return putUserRequestParam?.takeIf {
       Str.hasText(it.account)
         && Str.hasText(it.pwd)
         && Str.hasText(it.againPwd)
@@ -84,9 +84,9 @@ open class UserAdminServiceImpl
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerRootUser(rootUserRegisterDto: UserRegisterDto): UserDao? {
-    return (registerPlainUser(rootUserRegisterDto)
-      ?: findUserByAccount(rootUserRegisterDto.account))
+  override fun registerRootUser(rootPutUserRequestParam: PutUserRequestParam): UserDao? {
+    return (registerPlainUser(rootPutUserRequestParam)
+      ?: findUserByAccount(rootPutUserRequestParam.account))
       ?.apply {
         rbacService.assignRoleGroupToUser(
           rbacService.findRootRoleGroup(),
@@ -115,14 +115,14 @@ open class UserAdminServiceImpl
     account: String?,
     oldPwd: String?,
     newPwd: String?
-  ): UsrVo? {
+  ): UserAuthorizationModel? {
     return takeIf {
       Str.hasText(account)
         && Str.hasText(oldPwd)
         && Str.hasText(newPwd)
     }?.run {
       // 账号不为空
-      findUsrVoByAccount(account!!)?.apply {
+      findUserAuthorizationModelByAccount(account!!)?.apply {
         if (!passwordEncoder.matches(newPwd, user.pwdEnc)) {
           this.user.pwdEnc = passwordEncoder.encode(newPwd)
           userService.saveUser(this.user)
@@ -141,8 +141,9 @@ open class UserAdminServiceImpl
   }
 
 
-  override fun findUsrVoByAccount(account: String): UsrVo? {
-    return UsrVo().apply {
+  override fun findUserAuthorizationModelByAccount(account: String): UserAuthorizationModel? {
+    return UserAuthorizationModel()
+      .apply {
       user = userService.findUserByAccount(account)
     }.takeIf {
       it.user != null
@@ -157,7 +158,6 @@ open class UserAdminServiceImpl
         val c = async {
           findAllPermissionsByUser(it.user!!)
         }
-        it.tenant = it.user!!.rti
         it.info = a.await()
         it.roles = b.await()
         it.permissions = c.await()
@@ -216,7 +216,7 @@ open class UserAdminServiceImpl
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerUserGroup(@Valid dto: UserGroupRegisterDto): UserGroupDao? {
+  override fun registerUserGroup(@Valid dto: PutUserGroupRequestParam): UserGroupDao? {
     return userService.findUserByAccount(dto.leaderUserAccount)?.let {
       UserGroupDao().apply {
         this.userId = it.id

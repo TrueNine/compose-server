@@ -1,7 +1,7 @@
 package com.truenine.component.oss;
 
 
-import com.truenine.component.core.dev.BetaTest;
+import com.truenine.component.core.annotations.BetaTest;
 
 /**
  * 存储类型

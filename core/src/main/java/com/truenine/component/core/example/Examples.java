@@ -1,7 +1,7 @@
 package com.truenine.component.core.example;
 
 
-import com.truenine.component.core.dev.BetaTest;
+import com.truenine.component.core.annotations.BetaTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

@@ -1,6 +1,6 @@
 package com.truenine.component.oss.minio;
 
-import com.truenine.component.core.api.http.Headers;
+import com.truenine.component.core.http.Headers;
 import com.truenine.component.oss.FileArgs;
 import com.truenine.component.oss.amazon.S3PolicyCreator;
 import io.minio.*;

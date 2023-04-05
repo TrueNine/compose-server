@@ -14,12 +14,13 @@ import org.slf4j.Logger
  * @author TrueNine
  * @param request 被包装请求
  */
+// TODO 加入此类
 class AntisamyRequestWrapper(request: HttpServletRequest?) :
   HttpServletRequestWrapper(request) {
 
   override fun getParameterValues(name: String?): Array<String?>? {
     val params = super.getParameterValues(name) ?: return null
-    log.debug("antisamy 过滤参数 = {} === {}", name, params)
+    log.debug("antisamy 过滤参数 = {} >-> {}", name, params)
     return params.mapNotNull { filterParams(it) }.toTypedArray()
   }
 

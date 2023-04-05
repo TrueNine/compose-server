@@ -1,6 +1,6 @@
 package com.truenine.component.core.autoconfig
 
-import com.truenine.component.core.api.http.Methods
+import com.truenine.component.core.http.Methods
 import com.truenine.component.core.lang.KtLogBridge
 import lombok.extern.slf4j.Slf4j
 import org.springframework.context.annotation.Configuration

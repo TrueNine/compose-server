@@ -4,6 +4,7 @@ import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.dao.UserGroupDao
 import jakarta.annotation.Resource
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
 import org.testng.annotations.BeforeMethod
@@ -13,6 +14,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserGroupServiceImplTest :

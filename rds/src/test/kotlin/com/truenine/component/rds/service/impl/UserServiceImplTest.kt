@@ -7,6 +7,7 @@ import com.truenine.component.rds.dao.UserInfoDao
 import jakarta.annotation.Resource
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
 import org.testng.annotations.AfterMethod
@@ -19,10 +20,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-/**
- * @author TrueNine
- * @since 2023-01-04
- */
+
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {

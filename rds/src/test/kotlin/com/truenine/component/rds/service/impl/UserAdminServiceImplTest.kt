@@ -1,14 +1,15 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.db.Bf
+import com.truenine.component.core.consts.Bf
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.dao.RoleGroupDao
 import com.truenine.component.rds.dao.UserInfoDao
-import com.truenine.component.rds.dto.UserGroupRegisterDto
-import com.truenine.component.rds.dto.UserRegisterDto
+import com.truenine.component.rds.models.req.PutUserGroupRequestParam
+import com.truenine.component.rds.models.req.PutUserRequestParam
 import jakarta.annotation.Resource
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
 import org.testng.annotations.AfterMethod
@@ -17,6 +18,7 @@ import org.testng.annotations.Test
 import java.time.LocalDate
 import kotlin.test.*
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserAdminServiceImplTest :
@@ -29,7 +31,7 @@ class UserAdminServiceImplTest :
   private lateinit var rbacService: RbacServiceImpl
 
   private val regDto =
-    UserRegisterDto(
+    PutUserRequestParam(
       "001",
       "zliq",
       "qwer1234",
@@ -37,7 +39,7 @@ class UserAdminServiceImplTest :
       null
     )
   private val testPlainUser =
-    UserRegisterDto(
+    PutUserRequestParam(
       "303",
       "truenine",
       "qwer1234",
@@ -146,7 +148,8 @@ class UserAdminServiceImplTest :
 
   @Test
   fun testFindUsrVoByAccount() {
-    val c = adminService.findUsrVoByAccount(testPlainUser.account)
+    val c =
+      adminService.findUserAuthorizationModelByAccount(testPlainUser.account)
     log.debug("usrVo = {}", c)
     assertNotNull(c?.user, "没有此用户的信息")
   }
@@ -229,7 +232,7 @@ class UserAdminServiceImplTest :
   fun testFindAllUserGroupByUser() {
     val user = adminService.registerPlainUser(regDto)!!
     val g = adminService.registerUserGroup(
-      UserGroupRegisterDto()
+      PutUserGroupRequestParam()
         .apply {
           this.leaderUserAccount = "root"
           this.name = "234"
@@ -247,7 +250,7 @@ class UserAdminServiceImplTest :
   @Test
   fun testAssignUserToUserGroupById() {
     val regDto =
-      UserRegisterDto()
+      PutUserRequestParam()
         .apply {
           this.account = "wym"
           this.pwd = "qwer1234"
@@ -309,7 +312,7 @@ class UserAdminServiceImplTest :
 
   @Test
   fun testRegisterUserGroup() {
-    UserGroupRegisterDto()
+    PutUserGroupRequestParam()
       .apply {
         this.leaderUserAccount = "root"
         this.desc = "略"

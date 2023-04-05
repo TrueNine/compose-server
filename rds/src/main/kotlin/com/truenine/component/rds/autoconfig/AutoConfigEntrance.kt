@@ -1,7 +1,7 @@
 package com.truenine.component.rds.autoconfig
 
-import com.truenine.component.rds.event.DelListener
-import com.truenine.component.rds.properties.SnowflakeProperties
+import com.truenine.component.rds.listener.TableRowDeleteApplicationListener
+import com.truenine.component.core.properties.SnowflakeProperties
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
@@ -20,11 +20,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @EntityScan(
   basePackages = [
     "com.truenine.component.rds.dao",
-    "com.truenine.component.rds.dto",
-    "com.truenine.component.rds.vo",
+    "com.truenine.component.rds.models",
     "com.truenine.component.rds.base"
   ]
 )
 @EnableConfigurationProperties(SnowflakeProperties::class)
-@Import(DelListener::class)
+@Import(TableRowDeleteApplicationListener::class)
 class AutoConfigEntrance

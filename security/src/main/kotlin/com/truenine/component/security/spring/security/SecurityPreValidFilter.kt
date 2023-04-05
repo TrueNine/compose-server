@@ -1,11 +1,10 @@
 package com.truenine.component.security.spring.security
 
-import com.truenine.component.core.api.http.Headers
-import com.truenine.component.core.api.http.ParameterNames
-import com.truenine.component.core.db.Bf
+import com.truenine.component.core.ctx.UserInfoContextHolder
+import com.truenine.component.core.http.Headers
 import com.truenine.component.core.lang.Str
-import com.truenine.component.security.spring.security.wrappers.SecurityUserDetails
-import com.truenine.component.security.spring.security.wrappers.SecurityUserInfo
+import com.truenine.component.core.models.UserAuthorizationInfoModel
+import com.truenine.component.security.SecurityUserDetails
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
@@ -28,26 +27,20 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
     response: HttpServletResponse,
     filterChain: FilterChain
   ) {
-    // 从请求参数拿取用户租户 id
-    val tenantRequestId =
-      request.getParameter(ParameterNames.X_TENANT_ID)
-        ?: Bf.Tenant.DEFAULT_TENANT
 
-    val securityUserInfo = if (containsTokenPair(request)) {
+    val authInfo = if (containsTokenPair(request)) {
       val token = getTokenMapping(request)
       val ref = getReFlashTokenMapping(request)
       converterSecurityUserInfo(token, ref, request, response)
     } else {
-      request.setAttribute(ParameterNames.X_TENANT_ID, tenantRequestId)
       filterChain.doFilter(request, response)
       return
     }
-    // 传出 tenant id 到请求参数
-    request.setAttribute(Headers.X_INTERNAL_TENANT_ID, securityUserInfo.tenant)
 
-    val details = SecurityUserDetails(
-      securityUserInfo
-    )
+    val details =
+      SecurityUserDetails(
+        authInfo
+      )
 
     val usernamePasswordAuthenticationToken =
       UsernamePasswordAuthenticationToken(
@@ -56,9 +49,10 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
         details.authorities
       )
 
-    // 过滤器放行
+    // 设置验证信息过滤器放行
     SecurityContextHolder.getContext().authentication =
       usernamePasswordAuthenticationToken
+    UserInfoContextHolder.set(authInfo)
     filterChain.doFilter(request, response)
   }
 
@@ -93,12 +87,12 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
    * @param reFlash re-flash
    * @param request  请求
    * @param response 响应
-   * @return [SecurityUserInfo]
+   * @return [UserAuthorizationInfoModel]
    */
   protected abstract fun converterSecurityUserInfo(
     token: String?,
     reFlash: String?,
     request: HttpServletRequest,
     response: HttpServletResponse
-  ): SecurityUserInfo
+  ): UserAuthorizationInfoModel
 }

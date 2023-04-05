@@ -1,7 +1,7 @@
 package com.truenine.component.data.common.crawler.downloader;
 
-import com.truenine.component.core.api.http.MediaTypes;
-import com.truenine.component.core.api.http.Methods;
+import com.truenine.component.core.http.MediaTypes;
+import com.truenine.component.core.http.Methods;
 import com.truenine.component.core.lang.Str;
 import com.truenine.component.data.common.crawler.StandardPageHandle;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
@@ -58,7 +58,7 @@ public class StandardStaticDownloader implements CrawlerStaticDownloader {
       var content = new PageContent()
         .setMimeType(
           MediaTypes.of(
-            response.header(com.truenine.component.core.api.http.Headers.CONTENT_TYPE
+            response.header(com.truenine.component.core.http.Headers.CONTENT_TYPE
             )))
         .setUrl(request.getUrl())
         .setRawText(rawText);

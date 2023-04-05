@@ -1,8 +1,8 @@
 package com.truenine.component.data.common.crawler.selenium;
 
 
-import com.truenine.component.core.api.http.mock.UserAgents;
-import com.truenine.component.core.dev.BetaTest;
+import com.truenine.component.core.http.UserAgents;
+import com.truenine.component.core.annotations.BetaTest;
 import com.truenine.component.core.lang.ResourcesLocator;
 import com.truenine.component.core.lang.Str;
 import io.github.bonigarcia.wdm.WebDriverManager;

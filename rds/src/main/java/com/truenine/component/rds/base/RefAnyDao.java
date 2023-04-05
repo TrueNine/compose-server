@@ -2,7 +2,7 @@ package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
-import com.truenine.component.core.db.Bf;
+import com.truenine.component.core.consts.Bf;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Index;
