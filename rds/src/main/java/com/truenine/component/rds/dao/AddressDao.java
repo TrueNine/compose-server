@@ -1,9 +1,12 @@
 package com.truenine.component.rds.dao;
 
-import com.truenine.component.rds.base.PreSortTreeDao;
+import com.truenine.component.rds.base.PresortTreeDao;
+import com.truenine.component.rds.converters.PointModelConverter;
+import com.truenine.component.rds.models.PointModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -12,7 +15,6 @@ import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.geo.Point;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -32,7 +34,7 @@ import java.util.Objects;
 @Entity
 @Schema(title = "行政区代码")
 @Table(name = AddressDao.$T_NAME)
-public class AddressDao extends PreSortTreeDao implements Serializable {
+public class AddressDao extends PresortTreeDao implements Serializable {
 
   public static final String $T_NAME = "address";
   public static final String CODE = "code";
@@ -87,7 +89,8 @@ public class AddressDao extends PreSortTreeDao implements Serializable {
   @Column(table = $T_NAME,
     name = CENTER)
   @Nullable
-  private Point center;
+  @Convert(converter = PointModelConverter.class)
+  private PointModel center;
 
   @Override
   public boolean equals(Object o) {

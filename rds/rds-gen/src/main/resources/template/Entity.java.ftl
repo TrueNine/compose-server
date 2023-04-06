@@ -39,13 +39,10 @@ import ${t};
 @Schema(title = "${tab.getEscapeComment()!tab.getClassName()}")
 @Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.$T_NAME<#if tab.getIdx()?? && (tab.getIdx()?size > 0)>, indexes = {
     <#list tab.getIdx() as idx>
-      @Index(name = "${idx.getKeyName()!idx.getColumnName()}", columnList = "${idx.getColumnName()}"),
+						@Index(name = "${idx.getKeyName()!idx.getColumnName()}", columnList = "${idx.getColumnName()}"),
     </#list>
   }</#if>)
 public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getBaseEntityClassName()} implements Serializable {
-
-
-
   public static final String $T_NAME = "${tab.getName()}";
 <#-- 静态表字段名 -->
 <#list tab.getColumns() as col>
@@ -56,11 +53,11 @@ public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getB
 <#-- 表字段 -->
 <#list tab.getColumns() as col>
   /**
-  * ${col.getComment()!col.getFieldName()}
-  */
+   * ${col.getComment()!col.getFieldName()}
+   */
   @Schema(
-  name = ${col.getUpperName()},
-  description = "${col.getEscapeComment()}"
+    title = ${col.getUpperName()},
+    description = "${col.getEscapeComment()}"
   )
   @Column(table = $T_NAME,
   name = ${col.getUpperName()}<#if !col.getNullable()>,
@@ -68,22 +65,21 @@ public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getB
   unique = true</#if>)<#if col.getNullable()>
   @Nullable</#if>
   private ${col.getJavaType()} ${col.getFieldName()};
-
 </#list>
-@Override
-public boolean equals(Object o) {
-if (this == o) {
-return true;
-}
-if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-return false;
-}
-var that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
-return id != null && Objects.equals(id, that.id);
-}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+      return false;
+    }
+    var that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
+      return id != null && Objects.equals(id, that.id);
+    }
 
-@Override
-public int hashCode() {
-return getClass().hashCode();
-}
+    @Override
+    public int hashCode() {
+    return getClass().hashCode();
+  }
 }

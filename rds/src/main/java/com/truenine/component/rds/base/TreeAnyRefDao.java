@@ -32,14 +32,14 @@ import java.util.Objects;
 @DynamicUpdate
 @MappedSuperclass
 @Table(indexes = {
-  @Index(name = PreSortTreeDao.RLN, columnList = PreSortTreeDao.RLN),
-  @Index(name = PreSortTreeDao.RRN, columnList = PreSortTreeDao.RRN),
-  @Index(name = PreSortTreeDao.RPI, columnList = PreSortTreeDao.RPI),
+  @Index(name = PresortTreeDao.RLN, columnList = PresortTreeDao.RLN),
+  @Index(name = PresortTreeDao.RRN, columnList = PresortTreeDao.RRN),
+  @Index(name = PresortTreeDao.RPI, columnList = PresortTreeDao.RPI),
   @Index(name = RefAnyDao.ARI, columnList = RefAnyDao.ARI)
 })
 @RequiredArgsConstructor
 @Schema(title = "预排序树和任意外键的结合体")
-public class TreeAnyRefDao extends PreSortTreeDao {
+public class TreeAnyRefDao extends PresortTreeDao {
 
   /**
    * 任意外键

@@ -31,13 +31,13 @@ import java.util.Objects;
 @DynamicUpdate
 @MappedSuperclass
 @Table(indexes = {
-  @Index(name = PreSortTreeDao.RLN, columnList = PreSortTreeDao.RLN),
-  @Index(name = PreSortTreeDao.RRN, columnList = PreSortTreeDao.RRN),
-  @Index(name = PreSortTreeDao.RPI, columnList = PreSortTreeDao.RPI)
+  @Index(name = PresortTreeDao.RLN, columnList = PresortTreeDao.RLN),
+  @Index(name = PresortTreeDao.RRN, columnList = PresortTreeDao.RRN),
+  @Index(name = PresortTreeDao.RPI, columnList = PresortTreeDao.RPI)
 })
 @RequiredArgsConstructor
 @Schema(title = "预排序树")
-public class PreSortTreeDao extends BaseDao {
+public class PresortTreeDao extends BaseDao {
 
   /**
    * 父id
@@ -90,7 +90,7 @@ public class PreSortTreeDao extends BaseDao {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    PreSortTreeDao that = (PreSortTreeDao) o;
+    PresortTreeDao that = (PresortTreeDao) o;
     return id != null && Objects.equals(id, that.id);
   }
 

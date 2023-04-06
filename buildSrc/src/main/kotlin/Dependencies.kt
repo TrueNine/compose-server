@@ -13,11 +13,12 @@ object ProjectManager {
 object V {
   object Project {
     private const val allV = ProjectManager.version
+    const val dataExtract = allV
     const val flyway = allV
     const val core = allV
     const val rds = allV
     const val schedule = allV
-    const val gen = allV
+    const val rdsGen = allV
     const val webApiDoc = allV
     const val security = allV
     const val webServlet = allV
@@ -34,6 +35,7 @@ object V {
   }
 
   object Driver {
+    const val p6spy = "3.9.1"
     const val hibernateCore = Jpa.hibernate
     const val hibernateEntityManager = "6.0.0.Alpha7"
     const val mysql = "8.0.32"

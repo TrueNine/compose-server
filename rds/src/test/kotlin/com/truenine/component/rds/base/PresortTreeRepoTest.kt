@@ -12,9 +12,10 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.support.TransactionTemplate
 import org.testng.annotations.Test
+import kotlin.test.assertContains
+import kotlin.test.assertTrue
 
-
-
+@Rollback
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(classes = [RdsEntrance::class])
 open class PresortTreeRepoTest : AbstractTestNGSpringContextTests() {
@@ -26,14 +27,34 @@ open class PresortTreeRepoTest : AbstractTestNGSpringContextTests() {
   @Autowired
   lateinit var tt: TransactionTemplate
 
-
   @Test
+  @Transactional
   open fun testSaveChild() {
-    val root = DbTestPresortTreeDao()
-    val a = DbTestPresortTreeDao()
-    val savedRoot = treeRepo.saveChild(null, root)
-    treeRepo.saveChild(savedRoot, a)
-    log.debug("savedRoot = {}", savedRoot)
-    treeRepo.deleteAll()
+    val b = DbTestPresortTreeDao()
+    val c = DbTestPresortTreeDao()
+    val d = DbTestPresortTreeDao()
+    val savedRoot = treeRepo.saveChild(null, DbTestPresortTreeDao())
+    val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
+    print(savedChildren)
+    val nodeIndexes = savedChildren.map {
+      listOf(it.rln, it.rrn)
+    }.flatten()
+
+    // 节点的值必须固定
+    assertTrue("保存的根节点索引不对") {
+      savedRoot.rln == 1L
+        && savedRoot.rrn == 2L
+    }
+
+    // 添加后集合内不可有重复数据
+    assertTrue("添加后出现重复数据") {
+      nodeIndexes.distinct().size == nodeIndexes.size
+    }
+
+    // 集合内必须包含固定的值
+    listOf(2, 3, 4, 5, 6, 7).map { it.toLong() }
+      .forEach {
+        assertContains(nodeIndexes, it, "没有包含固定的值")
+      }
   }
 }

@@ -22,7 +22,7 @@ plugins {
 allprojects {
   repositories {
     maven(release) {
-  this.isAllowInsecureProtocol = true
+      this.isAllowInsecureProtocol = true
       credentials {
         this.username = yunXiaoUsername
         this.password = yunXiaoPassword
@@ -157,12 +157,14 @@ subprojects {
       dependency("${group}:oss:${V.Project.oss}")
       dependency("${group}:security:${V.Project.security}")
       dependency("${group}:rds:${V.Project.rds}")
+      dependency("${group}:rds-gen:${V.Project.rdsGen}")
       dependency("${group}:web-api-doc:${V.Project.webApiDoc}")
       dependency("${group}:web-servlet:${V.Project.webServlet}")
       dependency("${group}:crawler:${V.Project.crawler}")
       dependency("${group}:cacheable:${V.Project.cacheable}")
       dependency("${group}:schedule:${V.Project.schedule}")
       dependency("${group}:flyway:${V.Project.flyway}")
+      dependency("${group}:data-extract:${V.Project.dataExtract}")
 
       // api
       dependency("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")
@@ -176,6 +178,7 @@ subprojects {
       dependency("io.github.bonigarcia:webdrivermanager:${V.Driver.webDriverManager}")
       dependency("org.hibernate:hibernate-entitymanager:${V.Driver.hibernateEntityManager}")
       dependency("org.hibernate.orm:hibernate-core:${V.Driver.hibernateCore}")
+      dependency("p6spy:p6spy:${V.Driver.p6spy}")
 
       // sdk
       dependency("com.aliyun.oss:aliyun-sdk-oss:${V.Sdk.aliYunOss}")

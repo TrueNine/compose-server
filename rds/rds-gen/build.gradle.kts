@@ -1,4 +1,4 @@
-project.version = V.Project.gen
+project.version = V.Project.rdsGen
 dependencies {
   implementation(project(":core"))
   api("org.freemarker:freemarker:${V.Template.freemarker}")

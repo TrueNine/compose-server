@@ -34,58 +34,56 @@ import ${t}
     <#list tab.getIdx() as idx>
       @Index(name = "${idx.getKeyName()!idx.getColumnName()}", columnList = "${idx.getColumnName()}"),
     </#list>
-  }</#if>)
+   }</#if>)
 data class ${tab.getClassName()}${ctx.getEntitySuffix()!""} : ${ctx.getBaseEntityClassName()}(), Serializable {
 
 <#-- 静态表字段名 -->
 <#list tab.getColumns() as col>
   /**
-  * ${col.getComment()!col.getFieldName()} 列
-  */
+   * ${col.getComment()!col.getFieldName()} 列
+   */
   public static final String ${col.getUpperName()} = "${col.getColName()}";
 
 </#list>
-/**
-* serialVersionUID
-*/
-@Serial
-private static final long serialVersionUID = 1L;
+  /**
+   * serialVersionUID
+   */
+  @Serial
+  private static final long serialVersionUID = 1L;
 
-/**
-* ${tab.getName()} 表名
-*/
-public static final String THIS_TABLE_NAME = "${tab.getName()}";
+  /**
+   * ${tab.getName()} 表名
+   */
+  public static final String THIS_TABLE_NAME = "${tab.getName()}";
 
 <#-- 表字段 -->
 <#list tab.getColumns() as col>
   /**
-  * ${col.getComment()!col.getFieldName()}
-  */
+   * ${col.getComment()!col.getFieldName()}
+   */
   @Schema(
-  name = "${col.getFieldName()}",
-  title="${col.getEscapeComment()}",
-  description="${col.getEscapeComment()}"
+    title="${col.getEscapeComment()}",
+    description="${col.getEscapeComment()}"
   )
   @Column(table = THIS_TABLE_NAME,
-  name = ${col.getUpperName()}<#if !col.getNullable()>,
-  nullable = false</#if><#if col.getUnique()>,
-  unique = true</#if>)
+    name = ${col.getUpperName()}<#if !col.getNullable()>,
+    nullable = false</#if><#if col.getUnique()>,
+    unique = true</#if>)
   private ${col.getJavaType()} ${col.getFieldName()};
 
 </#list>
-@Override
-public boolean equals(Object o) {
-if (this == o) {
-return true;
-}
-if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-return false;
-}
-val that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
-return id != null && Objects.equals(id, that.id);
-}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+      return false;
+    }
+    val that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
+    return id != null && Objects.equals(id, that.id);
+  }
 
-@Override
-open fun hashCode() : Int =this::class.hashCode;
-
+  @Override
+  open fun hashCode() : Int = this::class.hashCode;
 }

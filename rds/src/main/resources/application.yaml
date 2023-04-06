@@ -12,3 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: none
+logging:
+  level:
+    com.truenine.component.rds: debug
+    org.hibernate.SQL: debug

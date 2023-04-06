@@ -24,28 +24,33 @@ open class TableRowDeleteRecordServiceImpl(
   private val log = LogKt.getLog(this::class)
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun save(data: Any?) = data?.run {
-    val delRow = TableRowDeleteRecordDao()
-    val userInfo = UserInfoContextHolder.get()
-    delRow.apply {
-      tableName = data::class.findAnnotation<Table>()?.name
-      userId = userInfo?.userId
-      userAccount = userInfo?.account
-      deleteDatetime = LocalDateTime.now()
-      entity = extractTableRow(data)
+  override fun save(data: BaseDao?):TableRowDeleteRecordDao?  {
+    return if (null == data) {
+      log.debug("未对对象进行保存")
+      null
+    } else {
+      val delRow = TableRowDeleteRecordDao()
+      val userInfo = UserInfoContextHolder.get()
+      delRow.apply {
+        tableName = data::class.findAnnotation<Table>()?.name
+        userId = userInfo?.userId
+        userAccount = userInfo?.account
+        deleteDatetime = LocalDateTime.now()
+        entity = extractTableRow(data)
+      }
+      log.trace("保存删除的数据 = {}", delRow)
+      delRepo.save(delRow)
     }
-    log.debug("保存删除的数据 = {}", delRow)
-    delRepo.save(delRow)
   }
 
-  private fun extractTableRow(data: Any?): TableRowChangeSerializableObjectModel? {
-    return if (null != data && data is BaseDao) {
+  private fun extractTableRow(data: BaseDao?): TableRowChangeSerializableObjectModel? {
+    return if (null != data) {
       TableRowChangeSerializableObjectModel().apply {
         id = data.id
         lang = "java"
         modelHash = Objects.hash(data::class)
         entityJson = mapper.writeValueAsString(data)
-        namespace = data::class.simpleName
+        namespace = data::class.java.name
       }
     } else {
       log.warn("删除了空对象 = {}", data)

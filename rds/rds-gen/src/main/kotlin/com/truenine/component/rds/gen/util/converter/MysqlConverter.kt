@@ -4,7 +4,7 @@ class MysqlConverter : AbstractTypeConverter() {
   private val rule = mutableMapOf<String, CType>()
 
   init {
-    rule["point"] = CType("Point", "org.springframework.data.geo.Point")
+    rule["point"] = CType("PointModel", "com.truenine.component.rds.models.PointModel")
     rule["double"] = CType("Double")
     rule["decimal"] = CType("BigDecimal", "java.math.BigDecimal")
     rule["bigint"] = CType("Long")
@@ -16,7 +16,6 @@ class MysqlConverter : AbstractTypeConverter() {
     rule["date"] = CType("LocalDate", "java.time.LocalDate")
     rule["time"] = CType("LocalTime", "java.time.LocalTime")
     rule["blob"] = CType("Byte[]")
-
     super.putAll(rule)
   }
 }

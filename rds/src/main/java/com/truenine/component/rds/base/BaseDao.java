@@ -84,6 +84,7 @@ public class BaseDao {
   @Schema(title = "逻辑删除标志")
   protected Boolean ldf = false;
 
+  // TODO 改写 equals
   @Override
   public boolean equals(Object o) {
     if (this == o) {

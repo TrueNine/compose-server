@@ -20,7 +20,7 @@ class TableRowChangeRecordConverter :
   private lateinit var mapper: ObjectMapper;
 
   override fun convertToDatabaseColumn(attribute: TableRowChangeSerializableObjectModel?): String? {
-    log.debug("对对象 {} 进行转换", attribute)
+    log.trace("转换删除对象 = {}", attribute)
     return if (null != attribute)
       mapper.writeValueAsString(attribute)
     else null
