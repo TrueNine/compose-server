@@ -25,10 +25,10 @@ YUNXIAO_PWD 用户密码
 - **buildSrc** gradle 构建模块
 - **cacheable** 缓存模块
 - **core** 核心工具包
-- **data-common** 爬虫模块
-- **depend** 场景依赖模块
-- **oss** 文件系统，对象存储模块
-- **rds** 关系型数据库抽象模块
+- **data-common** 数据工具模块
+- **depend** 场景模块
+- **oss** 对象存储模块
+- **rds** 数据库模块
 - **security** 鉴权模块
 - **multi-test** 联合测试模块
 - **web-api-doc** WEBAPI 文档模块
@@ -92,8 +92,8 @@ public class BrandVo {
 
 ## 提交前提
 
-- 每个人一条分支，取名规则是：id_分支，例如：alis_dev bob_test t_na_t_dev
-- 尽量以小单位进行提交，尽量频繁提交，防止代码丢失
+- 每人一条分支，取名规则是：id_分支，例如：alis_dev bob_test t_na_t_dev
+- 尽量以小单位进行提交
 
 ## 提交格式
 
