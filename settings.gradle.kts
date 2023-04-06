@@ -37,7 +37,7 @@ findProject(":core")?.name = "core"
 include("rds")
 findProject(":rds")?.name = "rds"
 
-include("rds:gen")
+include("rds:rds-gen")
 findProject("rds:rds-gen")?.name = "rds-gen"
 
 include("data-common")
