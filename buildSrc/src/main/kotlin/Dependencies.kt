@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.3.2-SNAPSHOT"
+  const val version = "0.3.3-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -43,6 +43,7 @@ object V {
     const val minio = "8.5.2"
     const val selenium = "4.8.1"
     const val webDriverManager = "5.3.2"
+    const val flyway = "9.16.0"
   }
 
   object Sdk {
@@ -57,7 +58,7 @@ object V {
   object Office {
     const val flowable = "7.0.0.M1"
     const val easyExcel = "3.2.1"
-    const val commonsCsv = "1.10.0"
+    const val superCsv = "2.4.0"
   }
 
   object Util {
@@ -65,7 +66,7 @@ object V {
     const val ognl = "3.3.4"
     const val gson = "2.10.1"
     const val dozer = "6.5.2"
-    const val huTool = "5.8.12"
+    const val huTool = "5.8.16"
     const val guava = "31.1-jre"
     const val ip2Region = "2.7.0"
     const val smileMath = "2.6.0"

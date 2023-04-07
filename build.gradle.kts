@@ -206,7 +206,9 @@ subprojects {
       dependency("org.jsoup:jsoup:${V.Util.jsoup}")
       dependency("com.github.haifengl:smile-math:${V.Util.smileMath}")
       dependency("com.github.magese:ik-analyzer:${V.Util.ikAnalyzer}")
+
       // hutool
+      // https://mvnrepository.com/artifact/cn.hutool/hutool-all
       dependency("cn.hutool:hutool-all:${V.Util.huTool}")
       dependency("cn.hutool:hutool-captcha:${V.Util.huTool}")
       dependency("cn.hutool:hutool-crypto:${V.Util.huTool}")
@@ -230,7 +232,7 @@ subprojects {
       dependency("com.alibaba:easyexcel:${V.Office.easyExcel}")
       dependency("org.flowable:flowable-spring-boot-starter:${V.Office.flowable}")
       dependency("org.flowable:flowable-spring-boot-starter-ui-modeler:${V.Office.flowable}")
-      dependency("org.apache.commons:org.apache.commons:${V.Office.commonsCsv}")
+      dependency("org.apache.commons:org.apache.commons:${V.Office.superCsv}")
       // xxl
       dependency("com.xuxueli:xxl-job-core:${V.Schedule.xxlJob}")
     }
