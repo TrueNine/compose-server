@@ -168,6 +168,8 @@ subprojects {
       // api
       dependency("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")
       dependency("jakarta.servlet:jakarta.servlet-api:${V.Api.jakartaServlet}")
+
+
       // driver
       dependency("com.mysql:mysql-connector-j:${V.Driver.mysql}")
       dependency("mysql:mysql-connector-java:${V.Driver.mysql}")
@@ -178,6 +180,10 @@ subprojects {
       dependency("org.hibernate:hibernate-entitymanager:${V.Driver.hibernateEntityManager}")
       dependency("org.hibernate.orm:hibernate-core:${V.Driver.hibernateCore}")
       dependency("p6spy:p6spy:${V.Driver.p6spy}")
+      // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+      dependency("org.flywaydb:flyway-core:${V.Driver.flyway}")
+      // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
+      dependency("org.flywaydb:flyway-mysql:${V.Driver.flyway}")
 
       // sdk
       dependency("com.aliyun.oss:aliyun-sdk-oss:${V.Sdk.aliYunOss}")
@@ -232,9 +238,9 @@ subprojects {
       dependency("com.alibaba:easyexcel:${V.Office.easyExcel}")
       dependency("org.flowable:flowable-spring-boot-starter:${V.Office.flowable}")
       dependency("org.flowable:flowable-spring-boot-starter-ui-modeler:${V.Office.flowable}")
-      dependency("org.apache.commons:org.apache.commons:${V.Office.superCsv}")
-      // xxl
-      dependency("com.xuxueli:xxl-job-core:${V.Schedule.xxlJob}")
+
+      // https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
+      dependency("net.sf.supercsv:super-csv:${V.Office.superCsv}")
     }
 
     imports {
