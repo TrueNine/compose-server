@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.3.4-SNAPSHOT"
+  const val version = "0.3.5-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -58,11 +58,13 @@ object V {
   object Office {
     const val flowable = "7.0.0.M1"
     const val easyExcel = "3.2.1"
+    // https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
     const val superCsv = "2.4.0"
   }
 
   object Util {
-    const val jsoup = "1.15.3"
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    const val jsoup = "1.15.4"
     const val ognl = "3.3.4"
     const val gson = "2.10.1"
     const val dozer = "6.5.2"
@@ -71,6 +73,7 @@ object V {
     const val ip2Region = "2.7.0"
     const val smileMath = "2.6.0"
     const val ikAnalyzer = "8.5.0"
+    const val commonsCompress = "1.23.0"
   }
 
   object Http {
