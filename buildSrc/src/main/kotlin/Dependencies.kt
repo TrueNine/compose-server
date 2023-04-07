@@ -13,16 +13,16 @@ object ProjectManager {
 object V {
   object Project {
     private const val allV = ProjectManager.version
-    const val dataExtract = allV
-    const val flyway = allV
+    const val dataCommonDataExtract = allV
+    const val dependFlyway = allV
     const val core = allV
     const val rds = allV
     const val schedule = allV
     const val rdsGen = allV
     const val webApiDoc = allV
     const val security = allV
-    const val webServlet = allV
-    const val crawler = allV
+    const val dependWebServlet = allV
+    const val dataCommonCrawler = allV
     const val cacheable = allV
     const val oss = allV
   }

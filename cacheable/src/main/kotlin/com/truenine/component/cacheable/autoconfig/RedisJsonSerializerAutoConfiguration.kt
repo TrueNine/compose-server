@@ -29,7 +29,7 @@ import java.time.Duration
  * @since 2023-02-20
  */
 @Configuration
-open class RedisJsonConfig(
+open class RedisJsonSerializerAutoConfiguration(
   objectMapper: ObjectMapper,
 ) {
   private val jsr = Jackson2JsonRedisSerializer(objectMapper.copy().run {
@@ -114,6 +114,6 @@ open class RedisJsonConfig(
 
   companion object {
     @JvmStatic
-    private val log = LogKt.getLog(RedisJsonConfig::class)
+    private val log = LogKt.getLog(RedisJsonSerializerAutoConfiguration::class)
   }
 }

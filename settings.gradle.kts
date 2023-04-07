@@ -43,11 +43,11 @@ findProject("rds:rds-gen")?.name = "rds-gen"
 include("data-common")
 findProject(":data-common")?.name = "data-common"
 
-include("data-common:crawler")
-findProject("data-common:crawler")?.name = "crawler"
+include("data-common:data-common-crawler")
+findProject("data-common:data-common-crawler")?.name = "data-common-crawler"
 
-include("data-common:data-extract")
-findProject("data-common:data-extract")?.name = "data-extract"
+include("data-common:data-common-data-extract")
+findProject("data-common:data-common-data-extract")?.name = "data-common-data-extract"
 
 include("security")
 findProject(":security")?.name = "security"
@@ -58,22 +58,20 @@ findProject(":web-api-doc")?.name = "web-api-doc"
 include("depend")
 findProject(":depend")?.name = "depend"
 
-include("depend:web-servlet")
-findProject("depend:web-servlet")?.name = "web-servlet"
+include("depend:depend-web-servlet")
+findProject("depend:depend-web-servlet")?.name = "depend-web-servlet"
 
-include("depend:flyway")
-findProject("depend:flyway")?.name = "flyway"
+include("depend:depend-flyway")
+findProject("depend:depend-flyway")?.name = "depend-flyway"
 
 include("cacheable")
 findProject(":cacheable")?.name = "cacheable"
 
-
-
 include("schedule")
 findProject(":schedule")?.name = "schedule"
 
-// 多环境测试包命名例外
 include("multi-test")
 findProject(":multi-test")?.name = "multi-test"
-include("multi-test:security")
-findProject("multi-test:security")?.name = "multi-test-security"
+
+include("multi-test:multi-test-security")
+findProject("multi-test:multi-test-security")?.name = "multi-test-security"

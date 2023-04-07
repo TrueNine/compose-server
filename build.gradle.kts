@@ -127,14 +127,12 @@ subprojects {
   }
 
   dependencies {
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    api("org.jetbrains.kotlin:kotlin-reflect")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
-    api("io.projectreactor.kotlin:reactor-kotlin-extensions")
-
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
       exclude("org.junit.jupiter", "junit-jupiter")
@@ -159,12 +157,13 @@ subprojects {
       dependency("${group}:rds:${V.Project.rds}")
       dependency("${group}:rds-gen:${V.Project.rdsGen}")
       dependency("${group}:web-api-doc:${V.Project.webApiDoc}")
-      dependency("${group}:web-servlet:${V.Project.webServlet}")
-      dependency("${group}:crawler:${V.Project.crawler}")
+      dependency("${group}:data-common-crawler:${V.Project.dataCommonCrawler}")
+      dependency("${group}:data-common-data-extract:${V.Project.dataCommonDataExtract}")
       dependency("${group}:cacheable:${V.Project.cacheable}")
       dependency("${group}:schedule:${V.Project.schedule}")
-      dependency("${group}:flyway:${V.Project.flyway}")
-      dependency("${group}:data-extract:${V.Project.dataExtract}")
+      dependency("${group}:depend-flyway:${V.Project.dependFlyway}")
+      dependency("${group}:depend-web-servlet:${V.Project.dependWebServlet}")
+
 
       // api
       dependency("jakarta.validation:jakarta.validation-api:${V.Api.jakartaValidation}")

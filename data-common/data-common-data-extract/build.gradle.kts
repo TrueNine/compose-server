@@ -1,4 +1,4 @@
-project.version = V.Project.dataExtract
+project.version = V.Project.dataCommonDataExtract
 
 dependencies {
   api("org.jsoup:jsoup:${V.Util.jsoup}")
