@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.3.9-SNAPSHOT"
+  const val version = "0.3.12-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -139,6 +139,13 @@ object V {
 
     // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
     const val knife4j = "3.0.3"
+
+    // auth0 JWT
+    // https://mvnrepository.com/artifact/com.auth0/java-jwt
+    const val auth0JavaJwt = "4.4.0"
+
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    const val jJwt = "0.9.1"
   }
 
   object StandardEdition {
@@ -196,15 +203,6 @@ object V {
 
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15to18
     const val bcprovJdk15to18 = "1.72"
-  }
-
-  object Jwt {
-    // auth0 JWT
-    // https://mvnrepository.com/artifact/com.auth0/java-jwt
-    const val auth0JavaJwt = "4.4.0"
-
-    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-    const val jJwt = "0.9.1"
   }
 }
 
