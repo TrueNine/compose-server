@@ -1,12 +1,11 @@
 project.version = V.Component.dataCommonDataExtract
 
 dependencies {
-  api("org.jsoup:jsoup:${V.Util.jsoup}")
-  api("com.alibaba:easyexcel:${V.Util.easyExcel}") {
+  api("org.jsoup:jsoup")
+  api("com.alibaba:easyexcel") {
     exclude("org.apache.commons", "commons-compress")
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-    implementation("org.apache.commons:commons-compress:${V.Util.commonsCompress}")
+    implementation("org.apache.commons:commons-compress")
   }
-  api("net.sf.supercsv:super-csv:${V.Util.superCsv}")
+  api("net.sf.supercsv:super-csv")
   implementation(project(":core"))
 }

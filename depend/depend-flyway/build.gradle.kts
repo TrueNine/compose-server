@@ -1,9 +1,7 @@
 project.version = V.Component.dependFlyway
 
 dependencies {
-  // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
-  api("org.flywaydb:flyway-core:${V.Driver.flyway}")
-  // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
-  api("org.flywaydb:flyway-mysql:${V.Driver.flyway}")
+  api("org.flywaydb:flyway-core")
+  api("org.flywaydb:flyway-mysql")
   implementation(project(":core"))
 }

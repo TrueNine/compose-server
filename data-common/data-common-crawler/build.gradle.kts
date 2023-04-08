@@ -1,11 +1,11 @@
 project.version = V.Component.dataCommonCrawler
 
 dependencies {
-  api("org.seleniumhq.selenium:selenium-java:${V.Driver.seleniumJava}")
-  implementation("com.github.magese:ik-analyzer:${V.Util.ikAnalyzer}")
-  implementation("com.github.haifengl:smile-math:${V.Util.smileMath}")
-  api("com.squareup.okhttp3:okhttp:${V.Web.okhttp3}")
-  api("io.github.bonigarcia:webdrivermanager:${V.Driver.webDriverManager}")
+  api("org.seleniumhq.selenium:selenium-java")
+  implementation("com.github.magese:ik-analyzer")
+  implementation("com.github.haifengl:smile-math")
+  api("com.squareup.okhttp3:okhttp")
+  api("io.github.bonigarcia:webdrivermanager")
   api(project(":data-common:data-common-data-extract"))
   implementation(project(":core"))
 }

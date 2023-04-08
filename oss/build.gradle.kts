@@ -1,8 +1,8 @@
 project.version = V.Component.oss
 
 dependencies {
-  api("io.minio:minio:${V.PlatformSdk.minio}")
+  api("io.minio:minio")
   implementation(project(":core"))
   implementation("org.springframework.boot:spring-boot-starter-web")
-  api("com.aliyun.oss:aliyun-sdk-oss:${V.PlatformSdk.aliYunOss}")
+  api("com.aliyun.oss:aliyun-sdk-oss")
 }

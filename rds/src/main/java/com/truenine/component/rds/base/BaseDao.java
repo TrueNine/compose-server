@@ -15,7 +15,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import java.util.Objects;
 
@@ -61,12 +60,7 @@ public class BaseDao {
   @Expose(deserialize = false)
   @GenericGenerator(
     name = SnowflakeIdGeneratorBean.NAME,
-    type = SnowflakeIdGeneratorBean.class,
-    parameters = {
-      @Parameter(name = "workId", value = "1"),
-      @Parameter(name = "datacenterId", value = "1"),
-      @Parameter(name = "timeStamp", value = "1")
-    }
+    strategy = SnowflakeIdGeneratorBean.CLASS_NAME
   )
   @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
   @Schema(name = ID,

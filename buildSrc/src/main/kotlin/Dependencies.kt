@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.3.8-SNAPSHOT"
+  const val version = "0.3.9-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -44,6 +44,9 @@ object V {
     // https://mvnrepository.com/artifact/p6spy/p6spy
     const val p6spy = "3.9.1"
 
+    // https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
+    const val p6spySpringBootStarter = "1.9.0"
+
     // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
     const val mysqlConnectorJ = "8.0.32"
 
@@ -57,6 +60,7 @@ object V {
     const val webDriverManager = "5.3.2"
 
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+    // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
     const val flyway = "9.16.0"
 
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
@@ -144,7 +148,7 @@ object V {
     // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     const val jakartaValidationApi = "3.0.2"
 
-    const val jakartPersistenceApi ="3.1.0"
+    const val jakartPersistenceApi = "3.1.0"
 
     // https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
     const val jakartaServletApi = "6.0.0"
