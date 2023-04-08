@@ -31,12 +31,12 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "排序")
-@Table(name = TabOrderDao.$T_NAME, indexes = {
+@Table(name = TabOrderDao.TABLE_NAME, indexes = {
   @Index(name = "ordered_idx", columnList = "ordered"),
 })
 public class TabOrderDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "tab_order";
+  public static final String TABLE_NAME = "tab_order";
   public static final String NAME = "name";
   public static final String DOC = "doc";
   public static final String ORDERED = "ordered";
@@ -49,7 +49,7 @@ public class TabOrderDao extends BaseDao implements Serializable {
     name = NAME,
     description = "名称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = NAME,
     nullable = false)
   private String name;
@@ -61,7 +61,7 @@ public class TabOrderDao extends BaseDao implements Serializable {
     name = DOC,
     description = "描述"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = DOC)
   @Nullable
   private String doc;
@@ -73,7 +73,7 @@ public class TabOrderDao extends BaseDao implements Serializable {
     name = ORDERED,
     description = "排序值"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ORDERED,
     nullable = false)
   private Long ordered;

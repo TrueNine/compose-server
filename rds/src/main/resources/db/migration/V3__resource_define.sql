@@ -70,12 +70,12 @@ CALL add_base_struct('address_details');
 
 CREATE TABLE IF NOT EXISTS table_row_delete_record
 (
-  table_name      VARCHAR(127)    NULL COMMENT '表名',
+  table_names     VARCHAR(127)    NULL COMMENT '表名',
   user_id         BIGINT UNSIGNED NULL COMMENT '删除用户id',
   user_account    CHAR(255)       NULL COMMENT '删除用户账户',
   delete_datetime DATETIME DEFAULT NOW() COMMENT '删除时间',
   entity          JSON            NOT NULL COMMENT '删除实体',
-  INDEX (table_name) COMMENT '表名经常查询',
+  INDEX (table_names) COMMENT '表名经常查询',
   INDEX (user_account) COMMENT '用户账户经常查询',
   INDEX (user_id) COMMENT '外联 用户'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '数据删除记录';
@@ -85,7 +85,7 @@ CALL add_base_struct('table_row_delete_record');
 CREATE TABLE IF NOT EXISTS table_row_change_record
 (
   type                     BOOLEAN         NOT NULL COMMENT '变更类型：插入：true，修改：false',
-  table_name               VARCHAR(127)    NULL COMMENT '表名',
+  table_names              VARCHAR(127)    NULL COMMENT '表名',
   create_user_id           BIGINT UNSIGNED NULL COMMENT '创建用户id',
   create_user_account      CHAR(255)       NULL COMMENT '创建用户账户',
   create_datetime          DATETIME        NULL COMMENT '创建时间',
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS table_row_change_record
   last_modify_user_account CHAR(255)       NULL COMMENT '最后修改用户账户',
   last_modify_datetime     DATETIME        NULL COMMENT '最后修改时间',
   last_modify_entity       JSON            NOT NULL COMMENT '最后修改实体',
-  INDEX (table_name) COMMENT '表名经常查询',
+  INDEX (table_names) COMMENT '表名经常查询',
   INDEX (create_user_account) COMMENT '创建账户经常查询',
   INDEX (last_modify_user_account) COMMENT '最后修改用户账户经常查询',
   INDEX (create_user_id) COMMENT '外联 用户',

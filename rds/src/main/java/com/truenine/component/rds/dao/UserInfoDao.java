@@ -32,7 +32,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户信息")
-@Table(name = UserInfoDao.$T_NAME, indexes = {
+@Table(name = UserInfoDao.TABLE_NAME, indexes = {
   @Index(name = "phone_idx", columnList = "phone"),
   @Index(name = "id_card_idx", columnList = "id_card"),
   @Index(name = "user_id_idx", columnList = "user_id"),
@@ -41,7 +41,7 @@ import java.util.Objects;
 })
 public class UserInfoDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "user_info";
+  public static final String TABLE_NAME = "user_info";
   public static final String USER_ID = "user_id";
   public static final String AVATAR_IMG_ID = "avatar_img_id";
   public static final String FIRST_NAME = "first_name";
@@ -62,7 +62,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     description = "用户"
   )
   @NotBlank
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = USER_ID,
     nullable = false)
   private String userId;
@@ -74,7 +74,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = AVATAR_IMG_ID,
     description = "用户头像"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = AVATAR_IMG_ID)
   @Nullable
   private Long avatarImgId;
@@ -87,7 +87,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = FIRST_NAME,
     description = "姓"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = FIRST_NAME)
   @Nullable
   @Convert(converter = AesEncryptConverter.class)
@@ -101,7 +101,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = LAST_NAME,
     description = "名"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = LAST_NAME)
   @Nullable
   private String lastName;
@@ -115,7 +115,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = EMAIL,
     description = "邮箱"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = EMAIL)
   @Nullable
   private String email;
@@ -127,7 +127,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = BIRTHDAY,
     description = "生日"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = BIRTHDAY)
   @Nullable
   private LocalDate birthday;
@@ -139,7 +139,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = ADDRESS_DETAILS_ID,
     description = "地址"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ADDRESS_DETAILS_ID)
   @Nullable
   private Long addressDetailsId;
@@ -151,7 +151,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = PHONE,
     description = "电话号码"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = PHONE,
     unique = true)
   @Nullable
@@ -164,7 +164,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = ID_CARD,
     description = "身份证"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ID_CARD,
     unique = true)
   @Nullable
@@ -177,7 +177,7 @@ public class UserInfoDao extends BaseDao implements Serializable {
     name = GENDER,
     description = " 性别：0女，1难，2未知"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = GENDER)
   @Nullable
   private Byte gender;

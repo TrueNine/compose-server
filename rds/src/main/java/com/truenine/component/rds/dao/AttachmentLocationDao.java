@@ -30,10 +30,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "附件地址")
-@Table(name = AttachmentLocationDao.$T_NAME)
+@Table(name = AttachmentLocationDao.TABLE_NAME)
 public class AttachmentLocationDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "attachment_location";
+  public static final String TABLE_NAME = "attachment_location";
   public static final String BASE_URL = "base_url";
   public static final String NAME = "name";
   public static final String DOC = "doc";
@@ -47,7 +47,7 @@ public class AttachmentLocationDao extends BaseDao implements Serializable {
     name = BASE_URL,
     description = "基本url"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = BASE_URL,
     nullable = false)
   private String baseUrl;
@@ -59,7 +59,7 @@ public class AttachmentLocationDao extends BaseDao implements Serializable {
     name = NAME,
     description = "资源路径名称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = NAME,
     nullable = false)
   private String name;
@@ -71,7 +71,7 @@ public class AttachmentLocationDao extends BaseDao implements Serializable {
     name = DOC,
     description = "资源路径描述"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = DOC)
   @Nullable
   private String doc;
@@ -83,7 +83,7 @@ public class AttachmentLocationDao extends BaseDao implements Serializable {
     name = TYPE,
     description = "存储类别"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = TYPE,
     nullable = false)
   private String type;

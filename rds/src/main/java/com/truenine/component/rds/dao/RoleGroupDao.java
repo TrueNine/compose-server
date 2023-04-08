@@ -30,10 +30,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "角色组")
-@Table(name = RoleGroupDao.$T_NAME)
+@Table(name = RoleGroupDao.TABLE_NAME)
 public class RoleGroupDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "role_group";
+  public static final String TABLE_NAME = "role_group";
   public static final String NAME = "name";
   public static final String DOC = "doc";
   @Serial
@@ -45,7 +45,7 @@ public class RoleGroupDao extends BaseDao implements Serializable {
     name = NAME,
     description = "名称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = NAME)
   @Nullable
   private String name;
@@ -57,7 +57,7 @@ public class RoleGroupDao extends BaseDao implements Serializable {
     name = DOC,
     description = "描述"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = DOC)
   @Nullable
   private String doc;

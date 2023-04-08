@@ -33,10 +33,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "行政区代码")
-@Table(name = AddressDao.$T_NAME)
+@Table(name = AddressDao.TABLE_NAME)
 public class AddressDao extends PresortTreeDao implements Serializable {
 
-  public static final String $T_NAME = "address";
+  public static final String TABLE_NAME = "address";
   public static final String CODE = "code";
   public static final String NAME = "name";
   public static final String LEVEL = "level";
@@ -47,10 +47,10 @@ public class AddressDao extends PresortTreeDao implements Serializable {
    * 代码
    */
   @Schema(
-    name = CODE,
+    title = CODE,
     description = "代码"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = CODE)
   @Nullable
   private String code;
@@ -59,10 +59,10 @@ public class AddressDao extends PresortTreeDao implements Serializable {
    * 名称
    */
   @Schema(
-    name = NAME,
+    title = NAME,
     description = "名称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = NAME)
   @Nullable
   private String name;
@@ -71,10 +71,10 @@ public class AddressDao extends PresortTreeDao implements Serializable {
    * 级别 0 为国家
    */
   @Schema(
-    name = LEVEL,
+    title = LEVEL,
     description = "级别 0 为国家"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = LEVEL)
   @Nullable
   private Integer level;
@@ -83,10 +83,10 @@ public class AddressDao extends PresortTreeDao implements Serializable {
    * 定位
    */
   @Schema(
-    name = CENTER,
+    title = CENTER,
     description = "定位"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = CENTER)
   @Nullable
   @Convert(converter = PointModelConverter.class)

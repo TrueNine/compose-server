@@ -31,12 +31,12 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "api")
-@Table(name = ApiDao.$T_NAME, indexes = {
+@Table(name = ApiDao.TABLE_NAME, indexes = {
   @Index(name = "permissions_id_idx", columnList = "permissions_id"),
 })
 public class ApiDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "api";
+  public static final String TABLE_NAME = "api";
   public static final String NAME = "name";
   public static final String DOC = "doc";
   public static final String PERMISSIONS_ID = "permissions_id";
@@ -52,7 +52,7 @@ public class ApiDao extends BaseDao implements Serializable {
     name = NAME,
     description = "名称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = NAME)
   @Nullable
   private String name;
@@ -64,7 +64,7 @@ public class ApiDao extends BaseDao implements Serializable {
     name = DOC,
     description = "描述"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = DOC)
   @Nullable
   private String doc;
@@ -76,7 +76,7 @@ public class ApiDao extends BaseDao implements Serializable {
     name = PERMISSIONS_ID,
     description = "访问需要权限"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = PERMISSIONS_ID)
   @Nullable
   private Long permissionsId;
@@ -88,7 +88,7 @@ public class ApiDao extends BaseDao implements Serializable {
     name = API_PATH,
     description = "路径"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = API_PATH)
   @Nullable
   private String apiPath;
@@ -100,7 +100,7 @@ public class ApiDao extends BaseDao implements Serializable {
     name = API_METHOD,
     description = "请求方式"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = API_METHOD)
   @Nullable
   private String apiMethod;
@@ -112,7 +112,7 @@ public class ApiDao extends BaseDao implements Serializable {
     name = API_PROTOCOL,
     description = "请求协议"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = API_PROTOCOL)
   @Nullable
   private String apiProtocol;

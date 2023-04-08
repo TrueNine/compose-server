@@ -24,7 +24,7 @@ open class TableRowDeleteRecordServiceImpl(
   private val log = LogKt.getLog(this::class)
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun save(data: BaseDao?):TableRowDeleteRecordDao?  {
+  override fun save(data: BaseDao?): TableRowDeleteRecordDao? {
     return if (null == data) {
       log.debug("未对对象进行保存")
       null
@@ -32,7 +32,7 @@ open class TableRowDeleteRecordServiceImpl(
       val delRow = TableRowDeleteRecordDao()
       val userInfo = UserInfoContextHolder.get()
       delRow.apply {
-        tableName = data::class.findAnnotation<Table>()?.name
+        tableNames = data::class.findAnnotation<Table>()?.name
         userId = userInfo?.userId
         userAccount = userInfo?.account
         deleteDatetime = LocalDateTime.now()
@@ -53,7 +53,7 @@ open class TableRowDeleteRecordServiceImpl(
         namespace = data::class.java.name
       }
     } else {
-      log.warn("删除了空对象 = {}", data)
+      log.trace("删除了空对象")
       null
     }
   }

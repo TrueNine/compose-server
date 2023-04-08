@@ -32,12 +32,12 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户")
-@Table(name = UserDao.$T_NAME, indexes = {
+@Table(name = UserDao.TABLE_NAME, indexes = {
   @Index(name = "account_idx", columnList = "account"),
 })
 public class UserDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "user";
+  public static final String TABLE_NAME = "user";
   public static final String ACCOUNT = "account";
   public static final String NICK_NAME = "nick_name";
   public static final String DOC = "doc";
@@ -53,7 +53,7 @@ public class UserDao extends BaseDao implements Serializable {
     name = ACCOUNT,
     description = "账号"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ACCOUNT,
     nullable = false,
     unique = true)
@@ -66,7 +66,7 @@ public class UserDao extends BaseDao implements Serializable {
     name = NICK_NAME,
     description = "呢称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = NICK_NAME)
   @Nullable
   private String nickName;
@@ -78,7 +78,7 @@ public class UserDao extends BaseDao implements Serializable {
     name = DOC,
     description = "描述"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = DOC)
   @Nullable
   private String doc;
@@ -90,7 +90,7 @@ public class UserDao extends BaseDao implements Serializable {
     name = PWD_ENC,
     description = "密码"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = PWD_ENC)
   @Nullable
   private String pwdEnc;
@@ -102,7 +102,7 @@ public class UserDao extends BaseDao implements Serializable {
     name = BAN_TIME,
     description = "被封禁结束时间"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = BAN_TIME)
   @Nullable
   private LocalDateTime banTime;
@@ -114,7 +114,7 @@ public class UserDao extends BaseDao implements Serializable {
     name = LAST_LOGIN_TIME,
     description = "最后请求时间"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = LAST_LOGIN_TIME)
   @Nullable
   private LocalDateTime lastLoginTime;

@@ -31,13 +31,13 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户  角色组")
-@Table(name = UserRoleGroupDao.$T_NAME, indexes = {
+@Table(name = UserRoleGroupDao.TABLE_NAME, indexes = {
   @Index(name = "user_id_idx", columnList = "user_id"),
   @Index(name = "role_group_id_idx", columnList = "role_group_id"),
 })
 public class UserRoleGroupDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "user_role_group";
+  public static final String TABLE_NAME = "user_role_group";
   public static final String USER_ID = "user_id";
   public static final String ROLE_GROUP_ID = "role_group_id";
   @Serial
@@ -49,7 +49,7 @@ public class UserRoleGroupDao extends BaseDao implements Serializable {
     name = USER_ID,
     description = "用户"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = USER_ID)
   @Nullable
   private String userId;
@@ -61,7 +61,7 @@ public class UserRoleGroupDao extends BaseDao implements Serializable {
     name = ROLE_GROUP_ID,
     description = "权限组"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ROLE_GROUP_ID)
   @Nullable
   private String roleGroupId;

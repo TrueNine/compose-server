@@ -31,10 +31,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "数据删除记录")
-@Table(name = TableRowDeleteRecordDao.$T_NAME, indexes = {
+@Table(name = TableRowDeleteRecordDao.TABLE_NAME, indexes = {
   @Index(
-    name = TableRowDeleteRecordDao.TABLE_NAME,
-    columnList = TableRowDeleteRecordDao.TABLE_NAME
+    name = TableRowDeleteRecordDao.TABLE_NAMES,
+    columnList = TableRowDeleteRecordDao.TABLE_NAMES
   ),
   @Index(
     name = TableRowDeleteRecordDao.USER_ID,
@@ -47,8 +47,8 @@ import java.util.Objects;
 })
 public class TableRowDeleteRecordDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "table_row_delete_record";
-  public static final String TABLE_NAME = "table_name";
+  public static final String TABLE_NAME = "table_row_delete_record";
+  public static final String TABLE_NAMES = "table_names";
   public static final String USER_ID = "user_id";
   public static final String USER_ACCOUNT = "user_account";
   public static final String DELETE_DATETIME = "delete_datetime";
@@ -56,26 +56,26 @@ public class TableRowDeleteRecordDao extends BaseDao implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Schema(title = TABLE_NAME, description = "表名")
-  @Column(table = $T_NAME, name = TABLE_NAME, nullable = false)
-  private String tableName;
+  @Schema(title = TABLE_NAMES, description = "表名")
+  @Column(table = TABLE_NAME, name = TABLE_NAMES, nullable = false)
+  private String tableNames;
 
   @Schema(title = USER_ID, description = "删除用户id")
-  @Column(table = $T_NAME, name = USER_ID, nullable = false)
+  @Column(table = TABLE_NAME, name = USER_ID, nullable = false)
   private String userId;
 
   @Schema(title = USER_ACCOUNT, description = "删除用户账户")
-  @Column(table = $T_NAME, name = USER_ACCOUNT, nullable = false)
+  @Column(table = TABLE_NAME, name = USER_ACCOUNT, nullable = false)
   private String userAccount;
 
   @Schema(title = DELETE_DATETIME, description = "删除时间")
-  @Column(table = $T_NAME, name = DELETE_DATETIME, nullable = false)
+  @Column(table = TABLE_NAME, name = DELETE_DATETIME, nullable = false)
   private LocalDateTime deleteDatetime;
 
   @Nullable
   @Convert(converter = TableRowChangeRecordConverter.class)
   @Schema(title = ENTITY, description = "删除实体")
-  @Column(table = $T_NAME, name = ENTITY)
+  @Column(table = TABLE_NAME, name = ENTITY)
   private TableRowChangeSerializableObjectModel entity;
 
   @Override
@@ -92,6 +92,6 @@ public class TableRowDeleteRecordDao extends BaseDao implements Serializable {
 
   @Override
   public int hashCode() {
-    return getClass().hashCode();
+    return super.hashCode();
   }
 }

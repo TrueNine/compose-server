@@ -1,11 +1,12 @@
 spring:
   flyway:
-    enabled: false
+    baseline-on-migrate: false
+    baseline-version: 99
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: "#Pengjigong1997"
-    url: "jdbc:mysql://116.205.171.51:3306/acin_db_v1"
+    url: "jdbc:mysql://116.205.171.51:3306/component"
   jpa:
     open-in-view: false
     show-sql: true
@@ -16,3 +17,7 @@ logging:
   level:
     com.truenine.component.rds: debug
     org.hibernate.SQL: debug
+
+
+
+

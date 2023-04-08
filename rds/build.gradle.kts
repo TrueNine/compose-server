@@ -7,6 +7,7 @@ dependencies {
   api("org.springframework.boot:spring-boot-starter-data-jpa")
   api("org.hibernate:hibernate-spatial:${V.Jpa.hibernate}")
   implementation(project(":core"))
+  testImplementation(project(":depend:depend-flyway"))
   implementation("org.springframework.boot:spring-boot-starter-web")
   testRuntimeOnly("com.mysql:mysql-connector-j:${V.Driver.mysql}")
   testImplementation("p6spy:p6spy:${V.Driver.p6spy}")

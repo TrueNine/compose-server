@@ -22,9 +22,9 @@ import org.hibernate.annotations.NotFoundAction;
 @Setter
 @ToString
 @Entity
-@Table(name = AttachmentDao.$T_NAME)
+@Table(name = AttachmentDao.TABLE_NAME)
 @SecondaryTable(
-  name = AttachmentLocationDao.$T_NAME,
+  name = AttachmentLocationDao.TABLE_NAME,
   foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
 )
 @Schema(title = "附件")
@@ -62,11 +62,11 @@ public class AttachmentModel {
   private String mimeType;
 
   @Column(
-    table = AttachmentLocationDao.$T_NAME,
+    table = AttachmentLocationDao.TABLE_NAME,
     name = AttachmentLocationDao.BASE_URL
   )
   @JoinTable(
-    name = AttachmentLocationDao.$T_NAME,
+    name = AttachmentLocationDao.TABLE_NAME,
     foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT),
     joinColumns = {@JoinColumn(
       name = AttachmentLocationDao.ID,

@@ -31,10 +31,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "详细地址")
-@Table(name = AddressDetailsDao.$T_NAME)
+@Table(name = AddressDetailsDao.TABLE_NAME)
 public class AddressDetailsDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "address_details";
+  public static final String TABLE_NAME = "address_details";
   public static final String ADDRESS_ID = "address_id";
   public static final String ADDRESS_DETAILS = "address_details";
   public static final String LOCATION = "location";
@@ -47,7 +47,7 @@ public class AddressDetailsDao extends BaseDao implements Serializable {
     name = ADDRESS_ID,
     description = "地址"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ADDRESS_ID,
     nullable = false)
   private Long addressId;
@@ -59,7 +59,7 @@ public class AddressDetailsDao extends BaseDao implements Serializable {
     name = ADDRESS_DETAILS,
     description = "地址详情"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ADDRESS_DETAILS,
     nullable = false)
   private Long addressDetails;
@@ -71,7 +71,7 @@ public class AddressDetailsDao extends BaseDao implements Serializable {
     name = LOCATION,
     description = "定位"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = LOCATION)
   @Nullable
   private Point location;

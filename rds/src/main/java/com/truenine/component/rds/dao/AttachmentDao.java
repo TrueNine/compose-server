@@ -30,10 +30,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "附件")
-@Table(name = AttachmentDao.$T_NAME)
+@Table(name = AttachmentDao.TABLE_NAME)
 public class AttachmentDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "attachment";
+  public static final String TABLE_NAME = "attachment";
   public static final String ATTACHMENT_LOCATION_ID = "attachment_location_id";
   public static final String META_NAME = "meta_name";
   public static final String SAVE_NAME = "save_name";
@@ -48,7 +48,7 @@ public class AttachmentDao extends BaseDao implements Serializable {
     name = ATTACHMENT_LOCATION_ID,
     description = "存储base路径"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = ATTACHMENT_LOCATION_ID,
     nullable = false)
   private String attachmentLocationId;
@@ -60,7 +60,7 @@ public class AttachmentDao extends BaseDao implements Serializable {
     name = META_NAME,
     description = "原始名称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = META_NAME,
     nullable = false)
   private String metaName;
@@ -72,7 +72,7 @@ public class AttachmentDao extends BaseDao implements Serializable {
     name = SAVE_NAME,
     description = "存储后名称"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = SAVE_NAME)
   @Nullable
   private String saveName;
@@ -84,7 +84,7 @@ public class AttachmentDao extends BaseDao implements Serializable {
     name = SIZE,
     description = "文件大小"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = SIZE)
   @Nullable
   private Long size;
@@ -96,7 +96,7 @@ public class AttachmentDao extends BaseDao implements Serializable {
     name = MIME_TYPE,
     description = "MIME TYPE"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = MIME_TYPE)
   @Nullable
   private String mimeType;

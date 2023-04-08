@@ -31,12 +31,12 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "API请求记录")
-@Table(name = ApiCallRecordDao.$T_NAME, indexes = {
+@Table(name = ApiCallRecordDao.TABLE_NAME, indexes = {
   @Index(name = "api_id_idx", columnList = "api_id"),
 })
 public class ApiCallRecordDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "api_call_record";
+  public static final String TABLE_NAME = "api_call_record";
   public static final String API_ID = "api_id";
   public static final String DEVICE_CODE = "device_code";
   public static final String REQ_IP = "req_ip";
@@ -52,7 +52,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     name = API_ID,
     description = "api"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = API_ID,
     nullable = false)
   private Long apiId;
@@ -64,7 +64,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     name = DEVICE_CODE,
     description = "设备 id, 浏览器为 agent"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = DEVICE_CODE)
   @Nullable
   private String deviceCode;
@@ -76,7 +76,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     name = REQ_IP,
     description = "请求 ip"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = REQ_IP)
   @Nullable
   private String reqIp;
@@ -88,7 +88,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     name = LOGIN_IP,
     description = "登录 ip"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = LOGIN_IP)
   @Nullable
   private String loginIp;
@@ -100,7 +100,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     name = RESP_CODE,
     description = "响应码"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = RESP_CODE)
   @Nullable
   private String respCode;
@@ -112,7 +112,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     name = RESP_RESULT_ENC,
     description = "请求结果"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = RESP_RESULT_ENC)
   @Nullable
   private String respResultEnc;

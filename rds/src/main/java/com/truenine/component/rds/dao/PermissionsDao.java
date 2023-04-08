@@ -30,10 +30,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "权限")
-@Table(name = PermissionsDao.$T_NAME)
+@Table(name = PermissionsDao.TABLE_NAME)
 public class PermissionsDao extends BaseDao implements Serializable {
 
-  public static final String $T_NAME = "permissions";
+  public static final String TABLE_NAME = "permissions";
   public static final String NAME = "name";
   public static final String DOC = "doc";
   @Serial
@@ -45,7 +45,7 @@ public class PermissionsDao extends BaseDao implements Serializable {
     name = NAME,
     description = "权限名"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = NAME)
   @Nullable
   private String name;
@@ -57,7 +57,7 @@ public class PermissionsDao extends BaseDao implements Serializable {
     name = DOC,
     description = "权限描述"
   )
-  @Column(table = $T_NAME,
+  @Column(table = TABLE_NAME,
     name = DOC)
   @Nullable
   private String doc;
