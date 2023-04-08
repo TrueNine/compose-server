@@ -111,7 +111,7 @@ open class SecurityPolicyBean {
     private fun getAnno(ctx: ApplicationContext): EnableRestSecurity {
       val a = ctx.getBeansWithAnnotation(EnableRestSecurity::class.java)
       val s = AtomicReference<EnableRestSecurity>()
-      a.forEach { (k: String?, v: Any) ->
+      a.forEach { (_: String?, v: Any) ->
         s.set(
           v.javaClass.getAnnotation(
             EnableRestSecurity::class.java

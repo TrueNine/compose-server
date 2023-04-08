@@ -1,15 +1,14 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.id.Snowflake
 import com.truenine.component.core.lang.Str
 import com.truenine.component.rds.dao.*
+import com.truenine.component.rds.models.UserAuthorizationModel
 import com.truenine.component.rds.models.req.PutUserGroupRequestParam
 import com.truenine.component.rds.models.req.PutUserRequestParam
 import com.truenine.component.rds.service.RbacService
 import com.truenine.component.rds.service.UserAdminService
 import com.truenine.component.rds.service.UserGroupService
 import com.truenine.component.rds.service.UserService
-import com.truenine.component.rds.models.UserAuthorizationModel
 import jakarta.validation.Valid
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -41,13 +40,6 @@ open class UserAdminServiceImpl
   @Autowired
   fun setPasswordEncoder(passwordEncoder: PasswordEncoder) {
     this.passwordEncoder = passwordEncoder
-  }
-
-  private lateinit var snowflake: Snowflake
-
-  @Autowired
-  fun setSnowflake(snowflake: Snowflake) {
-    this.snowflake = snowflake
   }
 
   private lateinit var userGroupService: UserGroupService
@@ -144,26 +136,26 @@ open class UserAdminServiceImpl
   override fun findUserAuthorizationModelByAccount(account: String): UserAuthorizationModel? {
     return UserAuthorizationModel()
       .apply {
-      user = userService.findUserByAccount(account)
-    }.takeIf {
-      it.user != null
-    }?.let {
-      runBlocking {
-        val a = async {
-          userService.findUserInfoById(it.user!!.id)
+        user = userService.findUserByAccount(account)
+      }.takeIf {
+        it.user != null
+      }?.let {
+        runBlocking {
+          val a = async {
+            userService.findUserInfoById(it.user!!.id)
+          }
+          val b = async {
+            findAllRoleByUser(it.user!!)
+          }
+          val c = async {
+            findAllPermissionsByUser(it.user!!)
+          }
+          it.info = a.await()
+          it.roles = b.await()
+          it.permissions = c.await()
+          it
         }
-        val b = async {
-          findAllRoleByUser(it.user!!)
-        }
-        val c = async {
-          findAllPermissionsByUser(it.user!!)
-        }
-        it.info = a.await()
-        it.roles = b.await()
-        it.permissions = c.await()
-        it
       }
-    }
   }
 
   override fun findUserById(id: String?): UserDao? {

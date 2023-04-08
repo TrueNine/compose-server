@@ -1,6 +1,6 @@
 package com.truenine.component.data.common.crawler.selenium;
 
-import com.truenine.component.core.id.UUIDGenerator;
+
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,7 +52,7 @@ public class DriverExecutePool implements Closeable {
   public static DriverExecutePool createPool(RemoteWebDriver... drivers) {
     var pool = new DriverExecutePool(drivers.length);
     for (RemoteWebDriver driver : drivers) {
-      pool.driverQueue.add(new NamedWrapperDriver(WrappedDriver.wrapper(driver), UUIDGenerator.str(), false));
+      pool.driverQueue.add(new NamedWrapperDriver(WrappedDriver.wrapper(driver), UUID.randomUUID().toString(), false));
     }
     pool.changeAvailSize(drivers.length);
     return pool;

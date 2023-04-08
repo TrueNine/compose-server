@@ -9,7 +9,6 @@ spring:
     url: "jdbc:mysql://116.205.171.51:3306/component"
   jpa:
     open-in-view: false
-    show-sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: none

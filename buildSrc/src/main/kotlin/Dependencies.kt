@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.3.6-SNAPSHOT"
+  const val version = "0.3.8-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -11,7 +11,7 @@ object ProjectManager {
  * 版本管理
  */
 object V {
-  object Project {
+  object Component {
     private const val allV = ProjectManager.version
     const val dataCommonDataExtract = allV
     const val dependFlyway = allV
@@ -30,99 +30,176 @@ object V {
   object Lang {
     const val gradleWrapper = "8.0.1"
     const val javaStr = "17"
-    val javaEnum = org.gradle.api.JavaVersion.VERSION_17
-    const val kotlin = "1.8.10"
+    val javaPlatform = org.gradle.api.JavaVersion.VERSION_17
+    const val kotlin = "1.8.20"
+
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
+    const val kotlinxCoroutine = "1.6.4"
+
+    // https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
+    const val reactorKotlinExtension = "1.2.2"
   }
 
   object Driver {
+    // https://mvnrepository.com/artifact/p6spy/p6spy
     const val p6spy = "3.9.1"
-    const val hibernateCore = Jpa.hibernate
-    const val hibernateEntityManager = "6.0.0.Alpha7"
-    const val mysql = "8.0.32"
-    const val sqlite = "3.40.1.0"
-    const val minio = "8.5.2"
-    const val selenium = "4.8.1"
+
+    // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+    const val mysqlConnectorJ = "8.0.32"
+
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    const val sqlite = "3.41.2.0"
+
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    const val seleniumJava = "4.8.1"
+
+    // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
     const val webDriverManager = "5.3.2"
+
+    // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
     const val flyway = "9.16.0"
+
+    // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+    const val hibernateCore = "6.2.0.Final"
   }
 
-  object Sdk {
-    const val aliYunOss = "3.16.0"
-  }
+  object PlatformSdk {
+    // https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss
+    const val aliYunOss = "3.16.2"
 
-  object Jpa {
-    const val vladmihalceaHibernateTypes = "2.20.0"
-    const val hibernate = "6.1.7.Final"
-  }
+    // https://mvnrepository.com/artifact/io.minio/minio
+    const val minio = "8.5.2"
 
-  object Office {
+    // 工作流引擎
+    // https://mvnrepository.com/artifact/org.flowable/flowable-spring-boot-starter
     const val flowable = "7.0.0.M1"
-    const val easyExcel = "3.2.1"
-    // https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
-    const val superCsv = "2.4.0"
   }
 
   object Util {
+    // https://mvnrepository.com/artifact/com.alibaba/easyexcel
+    const val easyExcel = "3.2.1"
+
+    // csv 提取工具
+    // https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
+    const val superCsv = "2.4.0"
+
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     const val jsoup = "1.15.4"
+
+    // https://mvnrepository.com/artifact/ognl/ognl
     const val ognl = "3.3.4"
+
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
     const val gson = "2.10.1"
-    const val dozer = "6.5.2"
+
+    // https://mvnrepository.com/artifact/net.sf.dozer/dozer
+    const val dozer = "5.5.1"
+
+    // https://mvnrepository.com/artifact/cn.hutool/hutool-all
     const val huTool = "5.8.16"
+
+    // https://mvnrepository.com/artifact/com.google.guava/guava
     const val guava = "31.1-jre"
+
+    // 离线ip包
+    // https://mvnrepository.com/artifact/org.lionsoul/ip2region
     const val ip2Region = "2.7.0"
+
+    // 用于计算海明距离
+    // https://mvnrepository.com/artifact/com.github.haifengl/smile-math
     const val smileMath = "2.6.0"
+
+    // 分词器，用于爬虫框架
+    // https://mvnrepository.com/artifact/com.github.magese/ik-analyzer
     const val ikAnalyzer = "8.5.0"
+
+    // 用于顶替 easyexcel
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
     const val commonsCompress = "1.23.0"
+
+    // 用于代码生成器
+    // https://mvnrepository.com/artifact/org.freemarker/freemarker
+    const val freemarker = "2.3.32"
   }
 
-  object Http {
-    const val okhttp3 = "5.0.0-alpha.10"
+  object Web {
+    // 用于发送网络请求
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    const val okhttp3 = "5.0.0-alpha.11"
+
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+    const val springdocOpenapiWebmvcUi = "2.0.2"
+
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+    const val springdocOpenapiUi = "1.7.0"
+
+    // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
+    const val knife4j = "3.0.3"
   }
 
-  object Api {
-    const val javaxServlet = "4.0.1"
-    const val jakartaValidation = "3.0.2"
-    const val jakartaServlet = "6.0.0"
-  }
+  object StandardEdition {
+    // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
+    const val swaggerAnnotationJakarta = "2.2.8"
 
-  object Template {
-    const val freemarker = "2.3.31"
+    // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
+    const val jakartaValidationApi = "3.0.2"
+
+    const val jakartPersistenceApi ="3.1.0"
+
+    // https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+    const val jakartaServletApi = "6.0.0"
   }
 
   object Schedule {
-    const val xxlJob = "2.3.1"
+    // https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core
+    const val xxlJobCore = "2.3.1"
   }
 
   object Test {
-    const val junit5 = "5.9.1"
-    const val testNG = "7.7.0"
-    const val kotlinTestNG = "1.6.21"
-  }
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+    const val junitJupiter = "5.9.2"
 
-  object OpenApi {
-    const val springDoc2 = "2.0.2"
-    const val springDoc1 = "1.6.13"
-    const val knife4j = "3.0.3"
-    const val swaggerAnnotation = "2.2.8"
+    const val kotlinTestNG = "1.6.21"
+
+    // https://mvnrepository.com/artifact/org.testng/testng
+    const val testNG = "7.7.1"
   }
 
   object Spring {
-    const val graalVmPlugin = "0.9.18"
-    const val boot = "3.0.5"
-    const val cloud = "2022.0.1"
+    // https://spring.io/projects/spring-boot#learn
+    const val springBoot = "3.0.5"
+
+    // https://spring.io/projects/spring-cloud#learn
+    const val springCloud = "2022.0.2"
+
+    // https://spring.io/projects/spring-cloud-alibaba#learn
     const val cloudAlibaba = "2021.0.4.0"
-    const val managementPlugin = "1.1.0"
+  }
+
+  object Plugin {
+    // https://mvnrepository.com/artifact/io.spring.gradle/dependency-management-plugin
+    const val dependencyManagementPlugin = "1.1.0"
   }
 
   object Security {
+    // https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
     const val antisamy = "1.7.2"
-    const val nekohtml ="1.9.22"
-    const val bouncyCastle15to18 = "1.72"
+
+    // 顶替 antisamy
+    // https://mvnrepository.com/artifact/net.sourceforge.nekohtml/nekohtml
+    const val nekohtml = "1.9.22"
+
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15to18
+    const val bcprovJdk15to18 = "1.72"
   }
 
   object Jwt {
-    const val auth0Jwt = "4.2.2"
+    // auth0 JWT
+    // https://mvnrepository.com/artifact/com.auth0/java-jwt
+    const val auth0JavaJwt = "4.4.0"
+
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
     const val jJwt = "0.9.1"
   }
 }

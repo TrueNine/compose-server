@@ -1,12 +1,12 @@
 package com.truenine.component.data.common.crawler.pipelines;
 
 import com.google.common.io.Files;
-import com.truenine.component.core.id.UUIDGenerator;
 import com.truenine.component.data.common.crawler.annotations.PagePath;
 import com.truenine.component.data.common.crawler.downloader.ThisTaskDetails;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * 文件保存的 pipeline
@@ -27,7 +27,7 @@ public class SimpleFilePipeline implements CrawlerPipeline {
 
   @Override
   public void saveTo(ResultData data, ThisTaskDetails details) {
-    var uid = UUIDGenerator.str();
+    var uid = UUID.randomUUID().toString();
     var htmlFile = new File(directory.getAbsoluteFile(), uid + this.suffix);
     try {
       Files.write(data.getRawText().getBytes(), htmlFile);

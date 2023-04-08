@@ -1,4 +1,4 @@
-project.version = V.Project.dependFlyway
+project.version = V.Component.dependFlyway
 
 dependencies {
   // https://mvnrepository.com/artifact/org.flywaydb/flyway-core

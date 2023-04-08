@@ -1,4 +1,4 @@
-project.version = V.Project.security
+project.version = V.Component.security
 
 
 dependencies {
@@ -10,7 +10,7 @@ dependencies {
   implementation(project(":core"))
   api("org.springframework.boot:spring-boot-starter-security")
   api("cn.hutool:hutool-captcha:${V.Util.huTool}")
-  api("com.auth0:java-jwt:${V.Jwt.auth0Jwt}")
+  api("com.auth0:java-jwt:${V.Jwt.auth0JavaJwt}")
 
   testImplementation("org.springframework.security:spring-security-test")
 }

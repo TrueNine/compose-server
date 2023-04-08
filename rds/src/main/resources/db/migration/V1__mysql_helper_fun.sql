@@ -7,7 +7,6 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 # 基础表字段
-DROP PROCEDURE IF EXISTS add_base_struct;
 DELIMITER $$
 CREATE PROCEDURE add_base_struct(IN tab_name VARCHAR(128))
 BEGIN
@@ -43,7 +42,6 @@ END $$
 DELIMITER ;
 
 # 预排序树结构
-DROP PROCEDURE IF EXISTS add_presort_tree_struct;
 DELIMITER $$
 CREATE PROCEDURE add_presort_tree_struct(IN tab_name VARCHAR(128))
 BEGIN
@@ -79,7 +77,6 @@ END $$
 DELIMITER ;
 
 # 任意外键类型结构
-DROP PROCEDURE IF EXISTS add_reference_any_type_struct;
 DELIMITER $$
 CREATE PROCEDURE add_reference_any_type_struct(
   IN tab_name VARCHAR(128),

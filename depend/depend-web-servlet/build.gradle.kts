@@ -1,4 +1,4 @@
-project.version = V.Project.dependWebServlet
+project.version = V.Component.dependWebServlet
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-validation")

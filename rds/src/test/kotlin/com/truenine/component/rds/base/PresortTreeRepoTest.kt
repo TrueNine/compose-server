@@ -35,7 +35,7 @@ open class PresortTreeRepoTest : AbstractTestNGSpringContextTests() {
     val d = DbTestPresortTreeDao()
     val savedRoot = treeRepo.saveChild(null, DbTestPresortTreeDao())
     val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
-    print(savedChildren)
+
     val nodeIndexes = savedChildren.map {
       listOf(it.rln, it.rrn)
     }.flatten()
