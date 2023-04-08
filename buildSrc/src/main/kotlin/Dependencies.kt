@@ -211,13 +211,13 @@ object V {
  */
 object Repos {
   object Credentials {
-    val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")!!
-    val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")!!
+    val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
+    val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
   }
 
-  val release =
+  const val release =
     "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-  val snapshot =
+  const val snapshot =
     "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
   private const val repoAli = "https://maven.aliyun.com/"
   const val aliCentral = "${repoAli}repository/central"
@@ -229,7 +229,7 @@ object Repos {
   const val aliSpringPlugin = "${repoAli}repository/spring-plugin"
   const val aliGrailsCore = "${repoAli}repository/grails-core"
   const val aliApacheSnapshots = "${repoAli}repository/apache-snapshots"
-  const val spring1 = "https://repo.spring.io/milestone"
-  const val spring2 = "https://repo.spring.io/libs-milestone"
-  const val spring3 = "https://repo.spring.io/snapshot"
+  const val springMilestone = "https://repo.spring.io/milestone"
+  const val springLibMilestone = "https://repo.spring.io/libs-milestone"
+  const val springSnapshot = "https://repo.spring.io/snapshot"
 }

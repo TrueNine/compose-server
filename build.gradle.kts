@@ -21,6 +21,7 @@ plugins {
 
 allprojects {
   repositories {
+    mavenLocal()
     maven(release) {
       this.isAllowInsecureProtocol = true
       credentials {
@@ -42,9 +43,9 @@ allprojects {
     maven(Repos.aliGradlePlugin)
     maven(Repos.aliSpring)
     maven(Repos.aliApacheSnapshots)
-    maven(Repos.spring1)
-    maven(Repos.spring2)
-    maven(Repos.spring3)
+    maven(Repos.springMilestone)
+    maven(Repos.springLibMilestone)
+    maven(Repos.springSnapshot)
     mavenCentral()
     gradlePluginPortal()
     google()
