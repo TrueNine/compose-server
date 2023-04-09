@@ -31,7 +31,7 @@ object V {
     const val gradleWrapper = "8.0.1"
     const val javaStr = "17"
     val javaPlatform = org.gradle.api.JavaVersion.VERSION_17
-    const val kotlin = "1.8.20"
+    const val kotlin = "1.8.10"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
     const val kotlinxCoroutine = "1.6.4"
