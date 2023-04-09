@@ -1,7 +1,8 @@
 package com.truenine.component.rds.service.impl
 
+import com.truenine.component.core.consts.CacheFieldNames
 import com.truenine.component.core.lang.Str
-import com.truenine.component.rds.dao.*
+import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.models.UserAuthorizationModel
 import com.truenine.component.rds.models.req.PutUserGroupRequestParam
 import com.truenine.component.rds.models.req.PutUserRequestParam
@@ -13,6 +14,8 @@ import jakarta.validation.Valid
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -51,7 +54,7 @@ open class UserAdminServiceImpl
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerPlainUser(putUserRequestParam: PutUserRequestParam?): UserDao? {
+  override fun registerPlainUser(putUserRequestParam: PutUserRequestParam?): UserEntity? {
     return putUserRequestParam?.takeIf {
       Str.hasText(it.account)
         && Str.hasText(it.pwd)
@@ -60,7 +63,7 @@ open class UserAdminServiceImpl
         && !(userService.existsByAccount(it.account!!))
     }?.let {
       val u =
-        UserDao().apply {
+        UserEntity().apply {
           account = it.account
           nickName = it.nickName
           doc = it.doc
@@ -76,7 +79,7 @@ open class UserAdminServiceImpl
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerRootUser(rootPutUserRequestParam: PutUserRequestParam): UserDao? {
+  override fun registerRootUser(rootPutUserRequestParam: PutUserRequestParam): UserEntity? {
     return (registerPlainUser(rootPutUserRequestParam)
       ?: findUserByAccount(rootPutUserRequestParam.account))
       ?.apply {
@@ -88,14 +91,14 @@ open class UserAdminServiceImpl
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun completionUserInfo(userInfo: UserInfoDao): UserInfoDao? =
+  override fun completionUserInfo(userInfo: UserInfoEntity): UserInfoEntity? =
     userService.saveUserInfo(userInfo)
 
   @Transactional(rollbackFor = [Exception::class])
   override fun completionUserInfoByAccount(
     account: String?,
-    userInfo: UserInfoDao
-  ): UserInfoDao? = account?.run {
+    userInfo: UserInfoEntity
+  ): UserInfoEntity? = account?.run {
     userService.findUserByAccount(this)?.run {
       userInfo.userId = this.id
       completionUserInfo(userInfo)
@@ -132,7 +135,13 @@ open class UserAdminServiceImpl
     } ?: false
   }
 
-
+  @Suppress("SpringElInspection")
+  @Cacheable(
+    cacheNames = [CacheFieldNames.User.DETAILS],
+    key = "#account",
+    unless = "#result == null",
+    cacheManager = CacheFieldNames.CacheManagerNames.H2
+  )
   override fun findUserAuthorizationModelByAccount(account: String): UserAuthorizationModel? {
     return UserAuthorizationModel()
       .apply {
@@ -158,59 +167,66 @@ open class UserAdminServiceImpl
       }
   }
 
-  override fun findUserById(id: String?): UserDao? {
+  override fun findUserById(id: String?): UserEntity? {
     return id?.run { userService.findUserById(id) }
   }
 
-  override fun findUserByAccount(account: String): UserDao? =
+  override fun findUserByAccount(account: String): UserEntity? =
     userService.findUserByAccount(account)
 
 
-  override fun findAllRoleGroupByAccount(account: String): Set<RoleGroupDao> {
+  override fun findAllRoleGroupByAccount(account: String): Set<RoleGroupEntity> {
     return userService.findUserByAccount(account)
       ?.let {
         findAllRoleGroupByUser(it)
       } ?: setOf()
   }
 
-  override fun findAllRoleGroupByUser(user: UserDao): Set<RoleGroupDao> {
+  override fun findAllRoleGroupByUser(user: UserEntity): Set<RoleGroupEntity> {
     return rbacService.findAllRoleGroupByUser(user)
   }
 
-  override fun findAllRoleByAccount(account: String): Set<RoleDao> {
+  override fun findAllRoleByAccount(account: String): Set<RoleEntity> {
     return userService.findUserByAccount(account)
       ?.let {
         findAllRoleByUser(it)
       } ?: setOf()
   }
 
-  override fun findAllRoleByUser(user: UserDao): Set<RoleDao> {
+  override fun findAllRoleByUser(user: UserEntity): Set<RoleEntity> {
     return rbacService.findAllRoleByUser(user)
   }
 
-  override fun findAllPermissionsByAccount(account: String): Set<PermissionsDao> {
+  override fun findAllPermissionsByAccount(account: String): Set<PermissionsEntity> {
     return userService.findUserByAccount(account)
       ?.let {
         findAllPermissionsByUser(it)
       } ?: setOf()
   }
 
-  override fun findAllPermissionsByUser(user: UserDao): Set<PermissionsDao> {
+  override fun findAllPermissionsByUser(user: UserEntity): Set<PermissionsEntity> {
     return rbacService.findAllPermissionsByUser(user)
   }
 
+  @Suppress("SpringElInspection")
+  @CacheEvict(
+    condition = "#user.account != null",
+    cacheNames = [CacheFieldNames.User.DETAILS],
+    key = "#user.account",
+    cacheManager = CacheFieldNames.CacheManagerNames.H2
+  )
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleGroupByUser(
-    user: UserDao,
-    roleGroup: RoleGroupDao
+    user: UserEntity,
+    roleGroup: RoleGroupEntity
   ) {
     rbacService.revokeRoleGroupByUser(roleGroup, user)
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerUserGroup(@Valid dto: PutUserGroupRequestParam): UserGroupDao? {
+  override fun registerUserGroup(@Valid dto: PutUserGroupRequestParam): UserGroupEntity? {
     return userService.findUserByAccount(dto.leaderUserAccount)?.let {
-      UserGroupDao().apply {
+      UserGroupEntity().apply {
         this.userId = it.id
         this.name = dto.name
         this.doc = dto.desc
@@ -220,7 +236,7 @@ open class UserAdminServiceImpl
     }
   }
 
-  override fun findAllUserGroupByUser(user: UserDao): Set<UserGroupDao> {
+  override fun findAllUserGroupByUser(user: UserEntity): Set<UserGroupEntity> {
     return userGroupService.findAllUserGroupByUserId(user.id)
   }
 

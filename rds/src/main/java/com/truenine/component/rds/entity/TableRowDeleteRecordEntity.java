@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.converters.TableRowChangeRecordConverter;
 import com.truenine.component.rds.models.TableRowChangeSerializableObjectModel;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,21 +31,21 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "数据删除记录")
-@Table(name = TableRowDeleteRecordDao.TABLE_NAME, indexes = {
+@Table(name = TableRowDeleteRecordEntity.TABLE_NAME, indexes = {
   @Index(
-    name = TableRowDeleteRecordDao.TABLE_NAMES,
-    columnList = TableRowDeleteRecordDao.TABLE_NAMES
+    name = TableRowDeleteRecordEntity.TABLE_NAMES,
+    columnList = TableRowDeleteRecordEntity.TABLE_NAMES
   ),
   @Index(
-    name = TableRowDeleteRecordDao.USER_ID,
-    columnList = TableRowDeleteRecordDao.USER_ID
+    name = TableRowDeleteRecordEntity.USER_ID,
+    columnList = TableRowDeleteRecordEntity.USER_ID
   ),
   @Index(
-    name = TableRowDeleteRecordDao.USER_ACCOUNT,
-    columnList = TableRowDeleteRecordDao.USER_ACCOUNT
+    name = TableRowDeleteRecordEntity.USER_ACCOUNT,
+    columnList = TableRowDeleteRecordEntity.USER_ACCOUNT
   )
 })
-public class TableRowDeleteRecordDao extends BaseDao implements Serializable {
+public class TableRowDeleteRecordEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "table_row_delete_record";
   public static final String TABLE_NAMES = "table_names";
@@ -86,7 +86,7 @@ public class TableRowDeleteRecordDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (TableRowDeleteRecordDao) o;
+    var that = (TableRowDeleteRecordEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

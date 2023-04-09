@@ -2,8 +2,8 @@ package com.truenine.component.rds.service.impl
 
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
-import com.truenine.component.rds.dao.UserDao
-import com.truenine.component.rds.dao.UserInfoDao
+import com.truenine.component.rds.entity.UserEntity
+import com.truenine.component.rds.entity.UserInfoEntity
 import jakarta.annotation.Resource
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -32,12 +32,12 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Resource
   lateinit var passwordEncoder: PasswordEncoder
 
-  private lateinit var testUser: UserDao
-  private lateinit var testUserInfo: UserInfoDao
+  private lateinit var testUser: UserEntity
+  private lateinit var testUserInfo: UserInfoEntity
 
   @BeforeMethod
   fun init() {
-    UserDao().apply {
+    UserEntity().apply {
       this.account = "testUser"
       this.doc = "233"
       this.pwdEnc = passwordEncoder.encode("qwer1234")
@@ -47,7 +47,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
       testUser = userService.saveUser(this)
     }
 
-    UserInfoDao().apply {
+    UserInfoEntity().apply {
       this.userId = testUser.id
       this.birthday = LocalDate.of(2021, 3, 4)
       this.firstName = "阿日"
@@ -114,7 +114,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testSaveUser() {
-    val a = UserDao().apply {
+    val a = UserEntity().apply {
       this.account = "qwer1234"
       this.nickName = "卧槽"
       this.pwdEnc = passwordEncoder.encode("qwerty1234")
@@ -126,7 +126,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Test
   fun testSaveUserInfo() {
     userService.deleteUserInfo(testUserInfo)
-    UserInfoDao().apply {
+    UserInfoEntity().apply {
       userId = testUser.id
       phone = "123324240102"
       idCard = "123124010123232233"
@@ -138,14 +138,14 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Test
   fun testSaveUserInfoByAccount() {
     val newUser =
-      UserDao().apply {
+      UserEntity().apply {
         account = "abtest"
         nickName = "我日了狗"
         pwdEnc = passwordEncoder.encode("abc123")
       }
 
     val newUserInfo =
-      UserInfoDao().apply {
+      UserInfoEntity().apply {
         userId = newUser.id
         phone = "123324240102"
         idCard = "123124010123232233"

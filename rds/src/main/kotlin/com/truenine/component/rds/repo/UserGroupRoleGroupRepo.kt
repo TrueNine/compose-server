@@ -1,12 +1,12 @@
 package com.truenine.component.rds.repo
 
 import com.truenine.component.rds.base.BaseRepo
-import com.truenine.component.rds.dao.UserGroupRoleGroupDao
+import com.truenine.component.rds.entity.UserGroupRoleGroupEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserGroupRoleGroupRepo : BaseRepo<UserGroupRoleGroupDao, String> {
-  fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroupDao>
+interface UserGroupRoleGroupRepo : BaseRepo<UserGroupRoleGroupEntity, String> {
+  fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroupEntity>
   fun existsByUserGroupIdAndRoleGroupId(
     userGroupId: String,
     roleGroupId: String

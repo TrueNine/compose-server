@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * 角色组  角色
+ * 用户组
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -30,41 +30,53 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Schema(title = "角色组  角色")
-@Table(name = RoleGroupRoleDao.TABLE_NAME, indexes = {
-  @Index(name = "role_group_id_idx", columnList = "role_group_id"),
-  @Index(name = "role_id_idx", columnList = "role_id"),
+@Schema(title = "用户组")
+@Table(name = UserGroupEntity.TABLE_NAME, indexes = {
+  @Index(name = "user_id_idx", columnList = "user_id"),
 })
-public class RoleGroupRoleDao extends BaseDao implements Serializable {
+public class UserGroupEntity extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "role_group_role";
-  public static final String ROLE_GROUP_ID = "role_group_id";
-  public static final String ROLE_ID = "role_id";
+  public static final String TABLE_NAME = "user_group";
+  public static final String USER_ID = "user_id";
+  public static final String NAME = "name";
+  public static final String DOC = "doc";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
-   * 用户组
+   * 创建人
    */
   @Schema(
-    name = ROLE_GROUP_ID,
-    description = "用户组"
+    name = USER_ID,
+    description = "创建人"
   )
   @Column(table = TABLE_NAME,
-    name = ROLE_GROUP_ID)
+    name = USER_ID)
   @Nullable
-  private String roleGroupId;
+  private String userId;
 
   /**
-   * 角色
+   * 名称
    */
   @Schema(
-    name = ROLE_ID,
-    description = "角色"
+    name = NAME,
+    description = "名称"
   )
   @Column(table = TABLE_NAME,
-    name = ROLE_ID)
+    name = NAME)
   @Nullable
-  private String roleId;
+  private String name;
+
+  /**
+   * 描述
+   */
+  @Schema(
+    name = DOC,
+    description = "描述"
+  )
+  @Column(table = TABLE_NAME,
+    name = DOC)
+  @Nullable
+  private String doc;
 
   @Override
   public boolean equals(Object o) {
@@ -74,7 +86,7 @@ public class RoleGroupRoleDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (RoleGroupRoleDao) o;
+    var that = (UserGroupEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

@@ -1,6 +1,6 @@
 package com.truenine.component.core.ctx
 
-import com.truenine.component.core.consts.Bf
+import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.Str
 import org.springframework.core.NamedInheritableThreadLocal
 
@@ -15,7 +15,7 @@ object TenantContextHolder {
     if (Str.hasText(tenantId)) {
       TENANT_ID.set(tenantId)
     } else {
-      TENANT_ID.set(Bf.Tenant.DEFAULT_TENANT)
+      TENANT_ID.set(DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT)
     }
   }
 

@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.PresortTreeDao;
+import com.truenine.component.rds.base.PresortTreeEntity;
 import com.truenine.component.rds.converters.PointModelConverter;
 import com.truenine.component.rds.models.PointModel;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,8 +33,8 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "行政区代码")
-@Table(name = AddressDao.TABLE_NAME)
-public class AddressDao extends PresortTreeDao implements Serializable {
+@Table(name = AddressEntity.TABLE_NAME)
+public class AddressEntity extends PresortTreeEntity implements Serializable {
 
   public static final String TABLE_NAME = "address";
   public static final String CODE = "code";
@@ -100,7 +100,7 @@ public class AddressDao extends PresortTreeDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (AddressDao) o;
+    var that = (AddressEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

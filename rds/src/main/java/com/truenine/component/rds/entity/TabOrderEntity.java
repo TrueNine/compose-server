@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * 用户组  角色组
+ * 排序
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -30,41 +30,53 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Schema(title = "用户组  角色组")
-@Table(name = UserGroupRoleGroupDao.TABLE_NAME, indexes = {
-  @Index(name = "role_group_id_idx", columnList = "role_group_id"),
-  @Index(name = "user_group_id_idx", columnList = "user_group_id"),
+@Schema(title = "排序")
+@Table(name = TabOrderEntity.TABLE_NAME, indexes = {
+  @Index(name = "ordered_idx", columnList = "ordered"),
 })
-public class UserGroupRoleGroupDao extends BaseDao implements Serializable {
+public class TabOrderEntity extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "user_group_role_group";
-  public static final String ROLE_GROUP_ID = "role_group_id";
-  public static final String USER_GROUP_ID = "user_group_id";
+  public static final String TABLE_NAME = "tab_order";
+  public static final String NAME = "name";
+  public static final String DOC = "doc";
+  public static final String ORDERED = "ordered";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
-   * 角色组
+   * 名称
    */
   @Schema(
-    name = ROLE_GROUP_ID,
-    description = "角色组"
+    name = NAME,
+    description = "名称"
   )
   @Column(table = TABLE_NAME,
-    name = ROLE_GROUP_ID)
-  @Nullable
-  private String roleGroupId;
+    name = NAME,
+    nullable = false)
+  private String name;
 
   /**
-   * 用户组
+   * 描述
    */
   @Schema(
-    name = USER_GROUP_ID,
-    description = "用户组"
+    name = DOC,
+    description = "描述"
   )
   @Column(table = TABLE_NAME,
-    name = USER_GROUP_ID)
+    name = DOC)
   @Nullable
-  private String userGroupId;
+  private String doc;
+
+  /**
+   * 排序值
+   */
+  @Schema(
+    name = ORDERED,
+    description = "排序值"
+  )
+  @Column(table = TABLE_NAME,
+    name = ORDERED,
+    nullable = false)
+  private Long ordered;
 
   @Override
   public boolean equals(Object o) {
@@ -74,7 +86,7 @@ public class UserGroupRoleGroupDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (UserGroupRoleGroupDao) o;
+    var that = (TabOrderEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

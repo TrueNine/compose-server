@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -32,10 +32,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户")
-@Table(name = UserDao.TABLE_NAME, indexes = {
+@Table(name = UserEntity.TABLE_NAME, indexes = {
   @Index(name = "account_idx", columnList = "account"),
 })
-public class UserDao extends BaseDao implements Serializable {
+public class UserEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "user";
   public static final String ACCOUNT = "account";
@@ -127,7 +127,7 @@ public class UserDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (UserDao) o;
+    var that = (UserEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

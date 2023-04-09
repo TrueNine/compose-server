@@ -1,75 +1,75 @@
 package com.truenine.component.rds.service
 
-import com.truenine.component.rds.dao.*
+import com.truenine.component.rds.entity.*
 
 
 interface RbacService {
-  fun findAllRoleGroupByUserGroup(userGroup: UserGroupDao): Set<RoleGroupDao>
-  fun findAllRoleByRoleGroup(roleGroup: RoleGroupDao): Set<RoleDao>
-  fun findRoleById(id: String): RoleDao?
-  fun findAllRoleGroupByName(name: String): Set<RoleGroupDao>
-  fun findAllRoleByName(name: String): Set<RoleDao>
-  fun findAllPermissionsByName(name: String): Set<PermissionsDao>
+  fun findAllRoleGroupByUserGroup(userGroup: UserGroupEntity): Set<RoleGroupEntity>
+  fun findAllRoleByRoleGroup(roleGroup: RoleGroupEntity): Set<RoleEntity>
+  fun findRoleById(id: String): RoleEntity?
+  fun findAllRoleGroupByName(name: String): Set<RoleGroupEntity>
+  fun findAllRoleByName(name: String): Set<RoleEntity>
+  fun findAllPermissionsByName(name: String): Set<PermissionsEntity>
 
-  fun findPlainRoleGroup(): RoleGroupDao
-  fun findRootRoleGroup(): RoleGroupDao
+  fun findPlainRoleGroup(): RoleGroupEntity
+  fun findRootRoleGroup(): RoleGroupEntity
 
-  fun findAllRoleGroupByUser(user: UserDao): Set<RoleGroupDao>
+  fun findAllRoleGroupByUser(user: UserEntity): Set<RoleGroupEntity>
 
-  fun findAllRoleByUser(user: UserDao): Set<RoleDao>
-  fun findAllPermissionsByUser(user: UserDao): Set<PermissionsDao>
+  fun findAllRoleByUser(user: UserEntity): Set<RoleEntity>
+  fun findAllPermissionsByUser(user: UserEntity): Set<PermissionsEntity>
 
-  fun findAllPermissionsByRole(role: RoleDao): Set<PermissionsDao>
+  fun findAllPermissionsByRole(role: RoleEntity): Set<PermissionsEntity>
 
   fun assignRoleGroupToUser(
-    roleGroup: RoleGroupDao,
-    user: UserDao
+    roleGroup: RoleGroupEntity,
+    user: UserEntity
   )
 
   fun revokeRoleGroupByUser(
-    roleGroup: RoleGroupDao,
-    user: UserDao
+    roleGroup: RoleGroupEntity,
+    user: UserEntity
   )
 
-  fun revokeAllRoleGroupByUser(user: UserDao)
-  fun revokeAllRoleGroupByUserGroup(userGroup: UserGroupDao)
+  fun revokeAllRoleGroupByUser(user: UserEntity)
+  fun revokeAllRoleGroupByUserGroup(userGroup: UserGroupEntity)
   fun assignRoleGroupToUserGroup(
-    roleGroup: RoleGroupDao,
-    userGroup: UserGroupDao
+    roleGroup: RoleGroupEntity,
+    userGroup: UserGroupEntity
   )
 
   fun revokeRoleGroupForUserGroup(
-    roleGroup: RoleGroupDao,
-    userGroup: UserGroupDao
+    roleGroup: RoleGroupEntity,
+    userGroup: UserGroupEntity
   )
 
-  fun saveRoleGroup(roleGroup: RoleGroupDao): RoleGroupDao
+  fun saveRoleGroup(roleGroup: RoleGroupEntity): RoleGroupEntity
   fun assignRoleToRoleGroup(
-    roleGroup: RoleGroupDao,
-    role: RoleDao
+    roleGroup: RoleGroupEntity,
+    role: RoleEntity
   )
 
   fun revokeRoleForRoleGroup(
-    roleGroup: RoleGroupDao,
-    role: RoleDao
+    roleGroup: RoleGroupEntity,
+    role: RoleEntity
   )
 
-  fun saveRole(role: RoleDao): RoleDao
+  fun saveRole(role: RoleEntity): RoleEntity
   fun assignPermissionsToRole(
-    role: RoleDao,
-    permissions: PermissionsDao
+    role: RoleEntity,
+    permissions: PermissionsEntity
   )
 
   fun revokePermissionsForRole(
-    role: RoleDao,
-    permissions: PermissionsDao
+    role: RoleEntity,
+    permissions: PermissionsEntity
   )
 
-  fun savePermissions(permissions: PermissionsDao): PermissionsDao
+  fun savePermissions(permissions: PermissionsEntity): PermissionsEntity
 
-  fun deleteRoleGroup(roleGroup: RoleGroupDao)
-  fun deleteRole(role: RoleDao)
-  fun deletePermissions(permissions: PermissionsDao)
-  fun findRoleGroupById(id: String): RoleGroupDao?
-  fun findPermissionsById(id: String): PermissionsDao?
+  fun deleteRoleGroup(roleGroup: RoleGroupEntity)
+  fun deleteRole(role: RoleEntity)
+  fun deletePermissions(permissions: PermissionsEntity)
+  fun findRoleGroupById(id: String): RoleGroupEntity?
+  fun findPermissionsById(id: String): PermissionsEntity?
 }

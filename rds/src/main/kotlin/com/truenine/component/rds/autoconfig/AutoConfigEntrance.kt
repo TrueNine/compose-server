@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @EnableJpaAuditing
 @EntityScan(
   basePackages = [
-    "com.truenine.component.rds.dao",
+    "com.truenine.component.rds.entity",
     "com.truenine.component.rds.models",
     "com.truenine.component.rds.base"
   ]

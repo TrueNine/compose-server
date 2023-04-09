@@ -1,22 +1,22 @@
 package com.truenine.component.rds.repo
 
 import com.truenine.component.rds.base.BaseRepo
-import com.truenine.component.rds.dao.PermissionsDao
+import com.truenine.component.rds.entity.PermissionsEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PermissionsRepo : BaseRepo<PermissionsDao, String> {
-  fun findAllByName(name: String): List<PermissionsDao>
+interface PermissionsRepo : BaseRepo<PermissionsEntity, String> {
+  fun findAllByName(name: String): List<PermissionsEntity>
 
   @Query(
     """
-    from PermissionsDao p
-    left join RolePermissionsDao rp on p.id = rp.permissionsId
-    left join RoleGroupRoleDao rgr on rp.roleId = rgr.roleId
-    left join UserRoleGroupDao urg on rgr.roleGroupId = urg.roleGroupId
+    from PermissionsEntity p
+    left join RolePermissionsEntity rp on p.id = rp.permissionsId
+    left join RoleGroupRoleEntity rgr on rp.roleId = rgr.roleId
+    left join UserRoleGroupEntity urg on rgr.roleGroupId = urg.roleGroupId
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): List<PermissionsDao>
+  fun findAllByUserId(userId: String): List<PermissionsEntity>
 }

@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -30,8 +30,8 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "角色")
-@Table(name = RoleDao.TABLE_NAME)
-public class RoleDao extends BaseDao implements Serializable {
+@Table(name = RoleEntity.TABLE_NAME)
+public class RoleEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "role";
   public static final String NAME = "name";
@@ -41,41 +41,25 @@ public class RoleDao extends BaseDao implements Serializable {
   /**
    * 角色名称
    */
-  @Schema(
-    name = NAME,
-    description = "角色名称"
-  )
-  @Column(table = TABLE_NAME,
-    name = NAME)
   @Nullable
+  @Schema(name = NAME, description = "角色名称")
+  @Column(table = TABLE_NAME, name = NAME)
   private String name;
 
   /**
    * 角色描述
    */
-  @Schema(
-    name = DOC,
-    description = "角色描述"
-  )
-  @Column(table = TABLE_NAME,
-    name = DOC)
   @Nullable
+  @Column(table = TABLE_NAME, name = DOC)
+  @Schema(name = DOC, description = "角色描述")
   private String doc;
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
       return false;
-    }
-    var that = (RoleDao) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
+    RoleEntity roleDao = (RoleEntity) o;
+    return getId() != null && Objects.equals(getId(), roleDao.getId());
   }
 }

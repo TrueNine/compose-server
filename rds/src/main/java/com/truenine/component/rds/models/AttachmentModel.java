@@ -2,8 +2,8 @@ package com.truenine.component.rds.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
-import com.truenine.component.rds.dao.AttachmentDao;
-import com.truenine.component.rds.dao.AttachmentLocationDao;
+import com.truenine.component.rds.entity.AttachmentEntity;
+import com.truenine.component.rds.entity.AttachmentLocationEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,9 +22,9 @@ import org.hibernate.annotations.NotFoundAction;
 @Setter
 @ToString
 @Entity
-@Table(name = AttachmentDao.TABLE_NAME)
+@Table(name = AttachmentEntity.TABLE_NAME)
 @SecondaryTable(
-  name = AttachmentLocationDao.TABLE_NAME,
+  name = AttachmentLocationEntity.TABLE_NAME,
   foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
 )
 @Schema(title = "附件")
@@ -34,11 +34,11 @@ public class AttachmentModel {
   @Schema(hidden = true)
   @JsonIgnore
   @Expose(deserialize = false)
-  @Column(name = AttachmentDao.ID)
+  @Column(name = AttachmentEntity.ID)
   private String id;
 
   @Schema(title = "文件名")
-  @Column(name = AttachmentDao.META_NAME)
+  @Column(name = AttachmentEntity.META_NAME)
   private String name;
 
   @Schema(
@@ -47,7 +47,7 @@ public class AttachmentModel {
     defaultValue = "0",
     description = "文件大小 byte"
   )
-  @Column(name = AttachmentDao.SIZE)
+  @Column(name = AttachmentEntity.SIZE)
   private Long size;
 
   @Schema(
@@ -58,19 +58,19 @@ public class AttachmentModel {
     defaultValue = "application/octet-stream",
     description = "mime-type 类型"
   )
-  @Column(name = AttachmentDao.MIME_TYPE)
+  @Column(name = AttachmentEntity.MIME_TYPE)
   private String mimeType;
 
   @Column(
-    table = AttachmentLocationDao.TABLE_NAME,
-    name = AttachmentLocationDao.BASE_URL
+    table = AttachmentLocationEntity.TABLE_NAME,
+    name = AttachmentLocationEntity.BASE_URL
   )
   @JoinTable(
-    name = AttachmentLocationDao.TABLE_NAME,
+    name = AttachmentLocationEntity.TABLE_NAME,
     foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT),
     joinColumns = {@JoinColumn(
-      name = AttachmentLocationDao.ID,
-      referencedColumnName = AttachmentDao.ATTACHMENT_LOCATION_ID
+      name = AttachmentLocationEntity.ID,
+      referencedColumnName = AttachmentEntity.ATTACHMENT_LOCATION_ID
     )}
   )
   @Schema(hidden = true)
@@ -79,7 +79,7 @@ public class AttachmentModel {
   @NotFound(action = NotFoundAction.IGNORE)
   private String baseUrl;
 
-  @Column(name = AttachmentDao.SAVE_NAME)
+  @Column(name = AttachmentEntity.SAVE_NAME)
   @NotFound(action = NotFoundAction.IGNORE)
   @JsonIgnore
   @Expose(deserialize = false)

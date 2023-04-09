@@ -2,7 +2,7 @@ package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
-import com.truenine.component.core.consts.Bf;
+import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Index;
@@ -18,11 +18,12 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Objects;
 
+
 /**
- * 任意外键dao
+ * 带外键的 预排序树
  *
  * @author TrueNine
- * @since 2022-12-12
+ * @since 2022-12-15
  */
 @Setter
 @Getter
@@ -31,31 +32,34 @@ import java.util.Objects;
 @DynamicUpdate
 @MappedSuperclass
 @Table(indexes = {
-  @Index(name = RefAnyDao.ARI, columnList = RefAnyDao.ARI)
+  @Index(name = PresortTreeEntity.RLN, columnList = PresortTreeEntity.RLN),
+  @Index(name = PresortTreeEntity.RRN, columnList = PresortTreeEntity.RRN),
+  @Index(name = PresortTreeEntity.RPI, columnList = PresortTreeEntity.RPI),
+  @Index(name = RefAnyEntity.ARI, columnList = RefAnyEntity.ARI)
 })
 @RequiredArgsConstructor
-@Schema(title = "任意外键类型，通常与策略模式一起使用")
-public class RefAnyDao extends BaseDao {
+@Schema(title = "预排序树和任意外键的结合体")
+public class TreeAnyRefEntity extends PresortTreeEntity {
 
   /**
    * 任意外键
    */
-  public static final String ARI = Bf.ANY_REFERENCE_ID;
+  public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
 
   /**
    * 任意类型
    */
-  public static final String TYP = Bf.ANY_REFERENCE_TYPE;
+  public static final String TYP = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE;
 
   @JsonIgnore
   @Expose(deserialize = false)
-  @Column(name = Bf.ANY_REFERENCE_ID)
+  @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
   @Schema(title = "任意外键id")
   protected String ari;
 
   @JsonIgnore
   @Expose(deserialize = false)
-  @Column(name = Bf.ANY_REFERENCE_TYPE)
+  @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE)
   @Schema(title = "外键类别")
   protected String typ;
 
@@ -67,8 +71,8 @@ public class RefAnyDao extends BaseDao {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    RefAnyDao anyRefDao = (RefAnyDao) o;
-    return id != null && Objects.equals(id, anyRefDao.id);
+    TreeAnyRefEntity that = (TreeAnyRefEntity) o;
+    return id != null && Objects.equals(id, that.id);
   }
 
   @Override

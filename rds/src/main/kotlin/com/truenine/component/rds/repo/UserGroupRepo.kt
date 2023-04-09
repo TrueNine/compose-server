@@ -1,22 +1,22 @@
 package com.truenine.component.rds.repo
 
 import com.truenine.component.rds.base.BaseRepo
-import com.truenine.component.rds.dao.UserGroupDao
+import com.truenine.component.rds.entity.UserGroupEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserGroupRepo : BaseRepo<UserGroupDao, String> {
+interface UserGroupRepo : BaseRepo<UserGroupEntity, String> {
   @Query(
-    """
-    from UserGroupDao ug
-    left join UserGroupUserDao ugu
+      """
+    from UserGroupEntity ug
+    left join UserGroupUserEntity ugu
     on ug.id = ugu.userGroupId
     where ug.userId = :userId
     or ugu.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): Set<UserGroupDao>
+  fun findAllByUserId(userId: String): Set<UserGroupEntity>
 
   fun existsByIdAndUserId(id: String, userId: String): Boolean
 }

@@ -1,7 +1,7 @@
 package com.truenine.component.rds.service.impl
 
 import com.truenine.component.rds.RdsEntrance
-import com.truenine.component.rds.dao.UserGroupDao
+import com.truenine.component.rds.entity.UserGroupEntity
 import jakarta.annotation.Resource
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
@@ -23,11 +23,12 @@ class UserGroupServiceImplTest :
   @Resource
   lateinit var userGroupService: UserGroupServiceImpl
 
-  private lateinit var testUserGroup: UserGroupDao
+  private lateinit var testUserGroup: UserGroupEntity
 
   @BeforeMethod
   fun init() {
-    val u = UserGroupDao()
+    val u =
+      UserGroupEntity()
     u.name = "来宾"
     u.doc = "略"
     testUserGroup = userGroupService.saveUserGroup(u)!!
@@ -35,7 +36,7 @@ class UserGroupServiceImplTest :
 
   @Test
   fun testSaveUserGroup() {
-    UserGroupDao().apply {
+    UserGroupEntity().apply {
       this.userId = "0"
       this.name = "二狗子"
       this.doc = "我日你娘"

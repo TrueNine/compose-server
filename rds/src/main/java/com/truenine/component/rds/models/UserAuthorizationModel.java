@@ -1,9 +1,9 @@
 package com.truenine.component.rds.models;
 
-import com.truenine.component.rds.dao.PermissionsDao;
-import com.truenine.component.rds.dao.RoleDao;
-import com.truenine.component.rds.dao.UserDao;
-import com.truenine.component.rds.dao.UserInfoDao;
+import com.truenine.component.rds.entity.PermissionsEntity;
+import com.truenine.component.rds.entity.RoleEntity;
+import com.truenine.component.rds.entity.UserEntity;
+import com.truenine.component.rds.entity.UserInfoEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,11 +24,11 @@ import java.util.Set;
 @Schema(title = "用户认证授权信息")
 public class UserAuthorizationModel {
   @Schema(title = "角色")
-  private Set<RoleDao> roles = new HashSet<>();
+  private Set<RoleEntity> roles = new HashSet<>();
   @Schema(title = "权限")
-  private Set<PermissionsDao> permissions = new HashSet<>();
+  private Set<PermissionsEntity> permissions = new HashSet<>();
   @Schema(title = "用户")
-  private UserDao user;
+  private UserEntity user;
   @Schema(title = "用户信息")
-  private UserInfoDao info;
+  private UserInfoEntity info;
 }

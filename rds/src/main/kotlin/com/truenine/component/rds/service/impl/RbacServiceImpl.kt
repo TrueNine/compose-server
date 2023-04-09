@@ -1,7 +1,7 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.consts.Bf
-import com.truenine.component.rds.dao.*
+import com.truenine.component.core.consts.DataBaseBasicFieldNames
+import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.repo.*
 import com.truenine.component.rds.service.RbacService
 import org.springframework.stereotype.Service
@@ -17,58 +17,58 @@ open class RbacServiceImpl(
   private val userRoleGroupRepo: UserRoleGroupRepo,
   private val userGroupRoleGroupRepo: UserGroupRoleGroupRepo
 ) : RbacService {
-  override fun findAllRoleGroupByUserGroup(userGroup: UserGroupDao): Set<RoleGroupDao> {
+  override fun findAllRoleGroupByUserGroup(userGroup: UserGroupEntity): Set<RoleGroupEntity> {
     return userGroupRoleGroupRepo
       .findAllByUserGroupId(userGroup.id)
       .map { it.roleGroupId }
       .run { roleGroupRepo.findAllById(this).toSet() }
   }
 
-  override fun findAllRoleByRoleGroup(roleGroup: RoleGroupDao): Set<RoleDao> {
+  override fun findAllRoleByRoleGroup(roleGroup: RoleGroupEntity): Set<RoleEntity> {
     return roleGroupRoleRepo
       .findAllByRoleGroupId(roleGroup.id)
       .map { it.roleId }
       .run { roleRepo.findAllById(this).toSet() }
   }
 
-  override fun findRoleById(id: String): RoleDao? {
+  override fun findRoleById(id: String): RoleEntity? {
     return roleRepo.findById(id).orElse(null)
   }
 
-  override fun findAllRoleGroupByName(name: String): Set<RoleGroupDao> {
+  override fun findAllRoleGroupByName(name: String): Set<RoleGroupEntity> {
     return roleGroupRepo.findAllByName(name).toSet()
   }
 
 
-  override fun findPlainRoleGroup(): RoleGroupDao {
-    return roleGroupRepo.findById(Bf.Rbac.USER_ID).orElse(null)
+  override fun findPlainRoleGroup(): RoleGroupEntity {
+    return roleGroupRepo.findById(DataBaseBasicFieldNames.Rbac.USER_ID).orElse(null)
   }
 
-  override fun findRootRoleGroup(): RoleGroupDao {
-    return roleGroupRepo.findById(Bf.Rbac.ROOT_ID).orElse(null)
+  override fun findRootRoleGroup(): RoleGroupEntity {
+    return roleGroupRepo.findById(DataBaseBasicFieldNames.Rbac.ROOT_ID).orElse(null)
   }
 
-  override fun findAllRoleByName(name: String): Set<RoleDao> {
+  override fun findAllRoleByName(name: String): Set<RoleEntity> {
     return roleRepo.findAllByName(name).toSet()
   }
 
-  override fun findAllPermissionsByName(name: String): Set<PermissionsDao> {
+  override fun findAllPermissionsByName(name: String): Set<PermissionsEntity> {
     return permissionsRepo.findAllByName(name).toSet()
   }
 
-  override fun findAllRoleGroupByUser(user: UserDao): Set<RoleGroupDao> {
+  override fun findAllRoleGroupByUser(user: UserEntity): Set<RoleGroupEntity> {
     return roleGroupRepo.findAllByUserId(user.id).toSet()
   }
 
-  override fun findAllRoleByUser(user: UserDao): Set<RoleDao> {
+  override fun findAllRoleByUser(user: UserEntity): Set<RoleEntity> {
     return roleRepo.findAllByUserId(user.id).toSet()
   }
 
-  override fun findAllPermissionsByUser(user: UserDao): Set<PermissionsDao> {
+  override fun findAllPermissionsByUser(user: UserEntity): Set<PermissionsEntity> {
     return permissionsRepo.findAllByUserId(user.id).toSet()
   }
 
-  override fun findAllPermissionsByRole(role: RoleDao): Set<PermissionsDao> {
+  override fun findAllPermissionsByRole(role: RoleEntity): Set<PermissionsEntity> {
     return rolePermissionsRepo.findAllByRoleId(role.id)
       .map { it.permissionsId }
       .run { permissionsRepo.findAllById(this).toSet() }
@@ -76,10 +76,10 @@ open class RbacServiceImpl(
 
   @Transactional(rollbackFor = [Exception::class])
   override fun assignRoleGroupToUser(
-    roleGroup: RoleGroupDao,
-    user: UserDao
+    roleGroup: RoleGroupEntity,
+    user: UserEntity
   ) {
-    UserRoleGroupDao().apply {
+    UserRoleGroupEntity().apply {
       userId = user.id
       roleGroupId = roleGroup.id
     }.run {
@@ -95,10 +95,10 @@ open class RbacServiceImpl(
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleGroupByUser(
-    roleGroup: RoleGroupDao,
-    user: UserDao
+    roleGroup: RoleGroupEntity,
+    user: UserEntity
   ) {
-    UserRoleGroupDao().apply {
+    UserRoleGroupEntity().apply {
       this.roleGroupId = roleGroup.id
       this.userId = user.id
     }.run {
@@ -110,21 +110,21 @@ open class RbacServiceImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupByUser(user: UserDao) {
+  override fun revokeAllRoleGroupByUser(user: UserEntity) {
     userRoleGroupRepo.deleteAllByUserId(user.id)
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupByUserGroup(userGroup: UserGroupDao) {
+  override fun revokeAllRoleGroupByUserGroup(userGroup: UserGroupEntity) {
     userGroupRoleGroupRepo.deleteAllByUserGroupId(userGroupId = userGroup.id)
   }
 
   @Transactional(rollbackFor = [Exception::class])
   override fun assignRoleGroupToUserGroup(
-    roleGroup: RoleGroupDao,
-    userGroup: UserGroupDao
+    roleGroup: RoleGroupEntity,
+    userGroup: UserGroupEntity
   ) {
-    UserGroupRoleGroupDao()
+    UserGroupRoleGroupEntity()
       .apply {
         this.roleGroupId = roleGroup.id
         this.userGroupId = userGroup.id
@@ -141,10 +141,10 @@ open class RbacServiceImpl(
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleGroupForUserGroup(
-    roleGroup: RoleGroupDao,
-    userGroup: UserGroupDao
+    roleGroup: RoleGroupEntity,
+    userGroup: UserGroupEntity
   ) {
-    UserGroupRoleGroupDao()
+    UserGroupRoleGroupEntity()
       .apply {
         this.userGroupId = userGroup.id
         this.roleGroupId = roleGroup.id
@@ -157,16 +157,16 @@ open class RbacServiceImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun saveRoleGroup(roleGroup: RoleGroupDao): RoleGroupDao {
+  override fun saveRoleGroup(roleGroup: RoleGroupEntity): RoleGroupEntity {
     return roleGroupRepo.save(roleGroup)
   }
 
   @Transactional(rollbackFor = [Exception::class])
   override fun assignRoleToRoleGroup(
-    roleGroup: RoleGroupDao,
-    role: RoleDao
+    roleGroup: RoleGroupEntity,
+    role: RoleEntity
   ) {
-    RoleGroupRoleDao().apply {
+    RoleGroupRoleEntity().apply {
       this.roleGroupId = roleGroup.id
       this.roleId = role.id
     }.run {
@@ -182,10 +182,10 @@ open class RbacServiceImpl(
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleForRoleGroup(
-    roleGroup: RoleGroupDao,
-    role: RoleDao
+    roleGroup: RoleGroupEntity,
+    role: RoleEntity
   ) {
-    RoleGroupRoleDao().apply {
+    RoleGroupRoleEntity().apply {
       this.roleGroupId = roleGroup.id
       this.roleId = role.id
     }.run {
@@ -197,16 +197,16 @@ open class RbacServiceImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun saveRole(role: RoleDao): RoleDao {
+  override fun saveRole(role: RoleEntity): RoleEntity {
     return roleRepo.save(role)
   }
 
   @Transactional(rollbackFor = [Exception::class])
   override fun assignPermissionsToRole(
-    role: RoleDao,
-    permissions: PermissionsDao
+    role: RoleEntity,
+    permissions: PermissionsEntity
   ) {
-    RolePermissionsDao()
+    RolePermissionsEntity()
       .apply {
         this.permissionsId = permissions.id
         this.roleId = role.id
@@ -223,37 +223,37 @@ open class RbacServiceImpl(
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokePermissionsForRole(
-    role: RoleDao,
-    permissions: PermissionsDao
+    role: RoleEntity,
+    permissions: PermissionsEntity
   ) {
     rolePermissionsRepo.deleteByRoleIdAndPermissionsId(role.id, permissions.id)
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun savePermissions(permissions: PermissionsDao): PermissionsDao {
+  override fun savePermissions(permissions: PermissionsEntity): PermissionsEntity {
     return permissionsRepo.save(permissions)
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun deleteRoleGroup(roleGroup: RoleGroupDao) {
+  override fun deleteRoleGroup(roleGroup: RoleGroupEntity) {
     roleGroupRepo.deleteById(roleGroup.id)
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun deleteRole(role: RoleDao) {
+  override fun deleteRole(role: RoleEntity) {
     roleRepo.deleteById(role.id)
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun deletePermissions(permissions: PermissionsDao) {
+  override fun deletePermissions(permissions: PermissionsEntity) {
     permissionsRepo.deleteById(permissions.id)
   }
 
-  override fun findRoleGroupById(id: String): RoleGroupDao? {
+  override fun findRoleGroupById(id: String): RoleGroupEntity? {
     return roleGroupRepo.findById(id).orElse(null)
   }
 
-  override fun findPermissionsById(id: String): PermissionsDao? {
+  override fun findPermissionsById(id: String): PermissionsEntity? {
     return permissionsRepo.findById(id).orElse(null)
   }
 }

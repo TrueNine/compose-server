@@ -1,6 +1,6 @@
 package com.truenine.component.rds.gen.ctx
 
-import com.truenine.component.core.consts.Bf
+import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.Str
 import com.truenine.component.rds.gen.util.Case
@@ -30,7 +30,7 @@ class DefCtx {
   private var serviceImpl: String = "${service}.impl"
 
   init {
-    this.ignoreCols += Bf.getAll()
+    this.ignoreCols += DataBaseBasicFieldNames.getAll()
   }
 
   fun lang(mode: String): DefCtx {
@@ -92,7 +92,7 @@ class DefCtx {
   }
 
   fun ignoreColumns(ignore: (MutableSet<String>) -> MutableSet<String>): DefCtx {
-    this.ignoreCols = ignore.invoke(Bf.getAll().toMutableSet())
+    this.ignoreCols = ignore.invoke(DataBaseBasicFieldNames.getAll().toMutableSet())
     return this
   }
 

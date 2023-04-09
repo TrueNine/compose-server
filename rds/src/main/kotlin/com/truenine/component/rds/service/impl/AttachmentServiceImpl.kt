@@ -1,7 +1,7 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.rds.dao.AttachmentDao
-import com.truenine.component.rds.dao.AttachmentLocationDao
+import com.truenine.component.rds.entity.AttachmentEntity
+import com.truenine.component.rds.entity.AttachmentLocationEntity
 import com.truenine.component.rds.models.req.PutAttachmentRequestParam
 import com.truenine.component.rds.base.PageModelRequestParam
 import com.truenine.component.rds.base.PagedResponseResult
@@ -26,7 +26,8 @@ open class AttachmentServiceImpl(
   override fun saveFile(
     @Valid f: PutAttachmentRequestParam?
   ): AttachmentModel? = f?.let {
-    AttachmentLocationDao().apply {
+    AttachmentLocationEntity()
+      .apply {
       doc = it.doc
       name = it.dir
       baseUrl = "${it.url}/${it.dir}"
@@ -36,7 +37,8 @@ open class AttachmentServiceImpl(
       locationRepo.findByBaseUrl(baseUrl)
         ?: locationRepo.save(this)
     }.let { location ->
-      val file = AttachmentDao().apply {
+      val file = AttachmentEntity()
+        .apply {
         attachmentLocationId = location.id
         this.size = f.size
         this.metaName = f.fullName

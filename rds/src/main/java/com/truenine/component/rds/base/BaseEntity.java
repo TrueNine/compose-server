@@ -2,7 +2,7 @@ package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
-import com.truenine.component.core.consts.Bf;
+import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import com.truenine.component.rds.autoconfig.SnowflakeIdGeneratorBean;
 import com.truenine.component.rds.listener.TableRowDeletePersistenceListener;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,27 +36,27 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Schema(title = "顶级抽象类")
 @EntityListeners(TableRowDeletePersistenceListener.class)
-public class BaseDao {
+public class BaseEntity {
 
 
   /**
    * 主键
    */
-  public static final String ID = Bf.ID;
+  public static final String ID = DataBaseBasicFieldNames.ID;
 
   /**
    * 乐观锁版本
    */
-  public static final String RLV = Bf.LOCK_VERSION;
+  public static final String RLV = DataBaseBasicFieldNames.LOCK_VERSION;
 
   /**
    * 逻辑删除标志
    */
-  public static final String LDF = Bf.LOGIC_DELETE_FLAG;
+  public static final String LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG;
 
   @Id
   @JsonIgnore
-  @Column(name = Bf.ID, columnDefinition = "BIGINT UNSIGNED")
+  @Column(name = DataBaseBasicFieldNames.ID, columnDefinition = "BIGINT UNSIGNED")
   @Expose(deserialize = false)
   @GenericGenerator(
     name = SnowflakeIdGeneratorBean.NAME,
@@ -86,16 +86,14 @@ public class BaseDao {
   protected Boolean ldf = false;
 
   // TODO 改写 equals
+
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
       return false;
-    }
-    var that = (BaseDao) o;
-    return id != null && Objects.equals(id, that.id);
+    BaseEntity that = (BaseEntity) o;
+    return getId() != null && Objects.equals(getId(), that.getId());
   }
 
   @Override

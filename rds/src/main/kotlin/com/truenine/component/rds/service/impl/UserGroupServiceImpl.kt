@@ -1,7 +1,7 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.rds.dao.UserGroupDao
-import com.truenine.component.rds.dao.UserGroupUserDao
+import com.truenine.component.rds.entity.UserGroupEntity
+import com.truenine.component.rds.entity.UserGroupUserEntity
 import com.truenine.component.rds.repo.UserGroupRepo
 import com.truenine.component.rds.repo.UserGroupUserRepo
 import com.truenine.component.rds.service.UserGroupService
@@ -15,7 +15,7 @@ open class UserGroupServiceImpl(
 ) : UserGroupService {
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun saveUserGroup(userGroup: UserGroupDao): UserGroupDao? {
+  override fun saveUserGroup(userGroup: UserGroupEntity): UserGroupEntity? {
     return userGroupRepo.save(userGroup)
   }
 
@@ -25,7 +25,7 @@ open class UserGroupServiceImpl(
       && !userGroupRepo.existsByIdAndUserId(userGroupId, userId)
     ) {
       userGroupUserRepo.save(
-        UserGroupUserDao()
+        UserGroupUserEntity()
           .apply {
             this.userGroupId = userGroupId
             this.userId = userId
@@ -38,11 +38,11 @@ open class UserGroupServiceImpl(
     userGroupRepo.deleteById(id)
   }
 
-  override fun findUserGroupById(id: String): UserGroupDao? {
+  override fun findUserGroupById(id: String): UserGroupEntity? {
     return userGroupRepo.findById(id).orElse(null)
   }
 
-  override fun findAllUserGroupByUserId(userId: String): Set<UserGroupDao> {
+  override fun findAllUserGroupByUserId(userId: String): Set<UserGroupEntity> {
     return userGroupRepo.findAllByUserId(userId)
   }
 

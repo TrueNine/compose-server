@@ -2,7 +2,7 @@ package com.truenine.component.rds.base
 
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
-import com.truenine.component.rds.dao.DbTestPresortTreeDao
+import com.truenine.component.rds.entity.DbTestPresortTreeEntity
 import com.truenine.component.rds.repo.DbTestPresortTreeRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,10 +30,10 @@ open class PresortTreeRepoTest : AbstractTestNGSpringContextTests() {
   @Test
   @Transactional
   open fun testSaveChild() {
-    val b = DbTestPresortTreeDao()
-    val c = DbTestPresortTreeDao()
-    val d = DbTestPresortTreeDao()
-    val savedRoot = treeRepo.saveChild(null, DbTestPresortTreeDao())
+    val b = DbTestPresortTreeEntity()
+    val c = DbTestPresortTreeEntity()
+    val d = DbTestPresortTreeEntity()
+    val savedRoot = treeRepo.saveChild(null, DbTestPresortTreeEntity())
     val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
 
     val nodeIndexes = savedChildren.map {

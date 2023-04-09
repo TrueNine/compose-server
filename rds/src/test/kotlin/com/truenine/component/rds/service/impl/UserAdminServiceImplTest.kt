@@ -1,10 +1,10 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.consts.Bf
+import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
-import com.truenine.component.rds.dao.RoleGroupDao
-import com.truenine.component.rds.dao.UserInfoDao
+import com.truenine.component.rds.entity.RoleGroupEntity
+import com.truenine.component.rds.entity.UserInfoEntity
 import com.truenine.component.rds.models.req.PutUserGroupRequestParam
 import com.truenine.component.rds.models.req.PutUserRequestParam
 import jakarta.annotation.Resource
@@ -47,8 +47,8 @@ class UserAdminServiceImplTest :
       null
     )
 
-  private lateinit var userRoleGroup: RoleGroupDao
-  private lateinit var rootUserGroup: RoleGroupDao
+  private lateinit var userRoleGroup: RoleGroupEntity
+  private lateinit var rootUserGroup: RoleGroupEntity
 
   /**
    * 注册一个普通用户，
@@ -97,7 +97,7 @@ class UserAdminServiceImplTest :
   @Test
   fun testCompletionUserInfo() {
     val saveInfo = adminService.completionUserInfo(
-      UserInfoDao().apply {
+      UserInfoEntity().apply {
         userId = "0"
         this.birthday = LocalDate.of(1997, 11, 4)
         this.phone = "15675292005"
@@ -117,7 +117,7 @@ class UserAdminServiceImplTest :
   fun testCompletionUserInfoByAccount() {
     val saveInfo = adminService
       .completionUserInfoByAccount("root",
-        UserInfoDao()
+        UserInfoEntity()
           .apply {
             userId = "0"
             this.birthday = LocalDate.of(1997, 11, 4)
@@ -159,7 +159,7 @@ class UserAdminServiceImplTest :
     val c = adminService.findAllRoleByAccount(testPlainUser.account)
     log.debug("usrVo = {}", c)
     assertNotNull(
-      c.find { it.id == Bf.Rbac.USER_ID },
+      c.find { it.id == DataBaseBasicFieldNames.Rbac.USER_ID },
       "没有此用户的信息"
     )
   }
@@ -261,10 +261,10 @@ class UserAdminServiceImplTest :
     val plain = adminService.registerPlainUser(regDto)
     val regUser = assertNotNull(plain, "没有注册用户")
 
-    adminService.assignUserToUserGroupById(regUser.id, Bf.Rbac.ROOT_ID)
+    adminService.assignUserToUserGroupById(regUser.id, DataBaseBasicFieldNames.Rbac.ROOT_ID)
 
     val checkList = adminService.findAllUserGroupByUser(regUser)
-    val rootUserGroup = checkList.find { it.id == Bf.Rbac.ROOT_ID }
+    val rootUserGroup = checkList.find { it.id == DataBaseBasicFieldNames.Rbac.ROOT_ID }
     assertNotNull(rootUserGroup, "没有分配用户组")
   }
 

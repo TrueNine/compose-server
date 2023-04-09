@@ -3,8 +3,8 @@ package com.truenine.component.rds.service.impl
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.truenine.component.core.ctx.UserInfoContextHolder
 import com.truenine.component.core.lang.LogKt
-import com.truenine.component.rds.base.BaseDao
-import com.truenine.component.rds.dao.TableRowDeleteRecordDao
+import com.truenine.component.rds.base.BaseEntity
+import com.truenine.component.rds.entity.TableRowDeleteRecordEntity
 import com.truenine.component.rds.models.TableRowChangeSerializableObjectModel
 import com.truenine.component.rds.repo.TableRowDeleteRecordRepo
 import com.truenine.component.rds.service.TableRowDeleteRecordService
@@ -24,12 +24,13 @@ open class TableRowDeleteRecordServiceImpl(
   private val log = LogKt.getLog(this::class)
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun save(data: BaseDao?): TableRowDeleteRecordDao? {
+  override fun save(data: BaseEntity?): TableRowDeleteRecordEntity? {
     return if (null == data) {
       log.debug("未对对象进行保存")
       null
     } else {
-      val delRow = TableRowDeleteRecordDao()
+      val delRow =
+        TableRowDeleteRecordEntity()
       val userInfo = UserInfoContextHolder.get()
       delRow.apply {
         tableNames = data::class.findAnnotation<Table>()?.name
@@ -43,7 +44,7 @@ open class TableRowDeleteRecordServiceImpl(
     }
   }
 
-  private fun extractTableRow(data: BaseDao?): TableRowChangeSerializableObjectModel? {
+  private fun extractTableRow(data: BaseEntity?): TableRowChangeSerializableObjectModel? {
     return if (null != data) {
       TableRowChangeSerializableObjectModel().apply {
         id = data.id

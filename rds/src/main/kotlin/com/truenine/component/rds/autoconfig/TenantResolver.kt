@@ -1,6 +1,6 @@
 package com.truenine.component.rds.autoconfig
 
-import com.truenine.component.core.consts.Bf
+import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.core.lang.Str
 import com.truenine.component.core.ctx.TenantContextHolder
@@ -19,7 +19,7 @@ open class TenantResolver :
     return if (null != id && Str.hasText(id)) {
       id
     } else {
-      Bf.Tenant.DEFAULT_TENANT
+      DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT
     }
   }
 
@@ -33,7 +33,7 @@ open class TenantResolver :
   }
 
   override fun isRoot(tenantId: String): Boolean {
-    return tenantId == Bf.Tenant.ROOT_TENANT
+    return tenantId == DataBaseBasicFieldNames.Tenant.ROOT_TENANT
   }
 
   companion object {

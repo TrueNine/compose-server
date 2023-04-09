@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * 文件地址
+ * 权限
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -29,73 +29,38 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Schema(title = "附件地址")
-@Table(name = AttachmentLocationDao.TABLE_NAME)
-public class AttachmentLocationDao extends BaseDao implements Serializable {
+@Schema(title = "权限")
+@Table(name = PermissionsEntity.TABLE_NAME)
+public class PermissionsEntity extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "attachment_location";
-  public static final String BASE_URL = "base_url";
+  public static final String TABLE_NAME = "permissions";
   public static final String NAME = "name";
   public static final String DOC = "doc";
-  public static final String TYPE = "type";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
-   * 基本url
-   */
-  @Schema(
-    name = BASE_URL,
-    description = "基本url"
-  )
-  @Column(table = TABLE_NAME,
-    name = BASE_URL,
-    nullable = false)
-  private String baseUrl;
-
-  /**
-   * 资源路径名称
+   * 权限名
    */
   @Schema(
     name = NAME,
-    description = "资源路径名称"
+    description = "权限名"
   )
   @Column(table = TABLE_NAME,
-    name = NAME,
-    nullable = false)
+    name = NAME)
+  @Nullable
   private String name;
 
   /**
-   * 资源路径描述
+   * 权限描述
    */
   @Schema(
     name = DOC,
-    description = "资源路径描述"
+    description = "权限描述"
   )
   @Column(table = TABLE_NAME,
     name = DOC)
   @Nullable
   private String doc;
-
-  /**
-   * 存储类别
-   */
-  @Schema(
-    name = TYPE,
-    description = "存储类别"
-  )
-  @Column(table = TABLE_NAME,
-    name = TYPE,
-    nullable = false)
-  private String type;
-
-  public void rn(Boolean storageRnType) {
-    this.type = storageRnType ? "R" : "N";
-  }
-
-  @Nullable
-  public Boolean rn() {
-    return "R".equals(type);
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -105,7 +70,7 @@ public class AttachmentLocationDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (AttachmentLocationDao) o;
+    var that = (PermissionsEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

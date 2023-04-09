@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.io.Serializable
 
 @NoRepositoryBean
-interface BaseRepo<T : BaseDao, ID : Serializable> :
+interface BaseRepo<T : BaseEntity, ID : Serializable> :
   JpaRepository<T, ID>,
   CrudRepository<T, ID>,
   JpaSpecificationExecutor<T> {

@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -31,10 +31,10 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "API请求记录")
-@Table(name = ApiCallRecordDao.TABLE_NAME, indexes = {
+@Table(name = ApiCallRecordEntity.TABLE_NAME, indexes = {
   @Index(name = "api_id_idx", columnList = "api_id"),
 })
-public class ApiCallRecordDao extends BaseDao implements Serializable {
+public class ApiCallRecordEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "api_call_record";
   public static final String API_ID = "api_id";
@@ -125,7 +125,7 @@ public class ApiCallRecordDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (ApiCallRecordDao) o;
+    var that = (ApiCallRecordEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

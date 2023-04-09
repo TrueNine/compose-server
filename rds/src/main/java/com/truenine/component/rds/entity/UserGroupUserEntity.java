@@ -1,10 +1,10 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,14 +12,13 @@ import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.geo.Point;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * 详细地址
+ * 用户组 用户
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -30,51 +29,41 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Schema(title = "详细地址")
-@Table(name = AddressDetailsDao.TABLE_NAME)
-public class AddressDetailsDao extends BaseDao implements Serializable {
+@Schema(title = "用户组 用户")
+@Table(name = UserGroupUserEntity.TABLE_NAME, indexes = {
+  @Index(name = "user_group_id_idx", columnList = "user_group_id"),
+  @Index(name = "user_id_idx", columnList = "user_id"),
+})
+public class UserGroupUserEntity extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "address_details";
-  public static final String ADDRESS_ID = "address_id";
-  public static final String ADDRESS_DETAILS = "address_details";
-  public static final String LOCATION = "location";
+  public static final String TABLE_NAME = "user_group_user";
+  public static final String USER_GROUP_ID = "user_group_id";
+  public static final String USER_ID = "user_id";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
-   * 地址
+   * 用户组
    */
   @Schema(
-    name = ADDRESS_ID,
-    description = "地址"
+    name = USER_GROUP_ID,
+    description = "用户组"
   )
   @Column(table = TABLE_NAME,
-    name = ADDRESS_ID,
+    name = USER_GROUP_ID,
     nullable = false)
-  private Long addressId;
+  private String userGroupId;
 
   /**
-   * 地址详情
+   * 用户
    */
   @Schema(
-    name = ADDRESS_DETAILS,
-    description = "地址详情"
+    name = USER_ID,
+    description = "用户"
   )
   @Column(table = TABLE_NAME,
-    name = ADDRESS_DETAILS,
+    name = USER_ID,
     nullable = false)
-  private Long addressDetails;
-
-  /**
-   * 定位
-   */
-  @Schema(
-    name = LOCATION,
-    description = "定位"
-  )
-  @Column(table = TABLE_NAME,
-    name = LOCATION)
-  @Nullable
-  private Point location;
+  private String userId;
 
   @Override
   public boolean equals(Object o) {
@@ -84,7 +73,7 @@ public class AddressDetailsDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (AddressDetailsDao) o;
+    var that = (UserGroupUserEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

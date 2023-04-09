@@ -8,7 +8,7 @@ import java.io.Serializable
 
 @NoRepositoryBean
 @JvmDefaultWithCompatibility
-interface PresortTreeRepo<T : PresortTreeDao, ID : Serializable> :
+interface PresortTreeRepo<T : PresortTreeEntity, ID : Serializable> :
   BaseRepo<T, ID> {
 
   fun findChildrenCount(parent: T): Long {

@@ -1,9 +1,9 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.consts.Bf
+import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
-import com.truenine.component.rds.dao.*
+import com.truenine.component.rds.entity.*
 import jakarta.annotation.Resource
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
@@ -28,21 +28,21 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Resource
   lateinit var userService: UserServiceImpl
 
-  private lateinit var testUserGroup: UserGroupDao
-  private lateinit var testPlainRoleGroup: RoleGroupDao
-  private lateinit var testRole: RoleDao
-  private lateinit var testUser: UserDao
+  private lateinit var testUserGroup: UserGroupEntity
+  private lateinit var testPlainRoleGroup: RoleGroupEntity
+  private lateinit var testRole: RoleEntity
+  private lateinit var testUser: UserEntity
 
   @BeforeMethod
   fun init() {
-    UserGroupDao().apply {
+    UserGroupEntity().apply {
       this.userId = "0"
       this.name = "fff团"
       testUserGroup = userGroupService.saveUserGroup(this)!!
     }
-    testUser = userService.findUserById(Bf.Rbac.ROOT_ID)!!
+    testUser = userService.findUserById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
     testPlainRoleGroup = rbacService.findPlainRoleGroup()
-    testRole = rbacService.findRoleById(Bf.Rbac.USER_ID)!!
+    testRole = rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.USER_ID)!!
     rbacService.assignRoleGroupToUserGroup(testPlainRoleGroup, testUserGroup)
   }
 
@@ -170,7 +170,7 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Test
   fun testAssignRoleGroupToUser() {
     rbacService.saveRoleGroup(
-      RoleGroupDao().apply {
+      RoleGroupEntity().apply {
         this.name = "傻逼组"
         this.doc = "没有描述"
       }).apply {
@@ -225,7 +225,7 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testSaveRoleGroup() {
-    RoleGroupDao().apply {
+    RoleGroupEntity().apply {
       this.name = "二狗子权限组"
       this.doc = "233"
       val saved = rbacService.saveRoleGroup(this)
@@ -235,10 +235,10 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testAssignRoleToRoleGroup() {
-    RoleGroupDao().apply {
+    RoleGroupEntity().apply {
       this.name = "二狗子"
       val that = rbacService.saveRoleGroup(this)
-      RoleDao().apply {
+      RoleEntity().apply {
         this.name = "四狗子"
         val thatRole = rbacService.saveRole(this)
         rbacService.assignRoleToRoleGroup(that, thatRole)
@@ -253,14 +253,14 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   fun testRevokeRoleForRoleGroup() {
     rbacService.revokeRoleForRoleGroup(
       rbacService.findPlainRoleGroup(),
-      rbacService.findRoleById(Bf.Rbac.USER_ID)!!
+      rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.USER_ID)!!
     )
     rbacService.findAllRoleByRoleGroup(rbacService.findPlainRoleGroup())
       .apply {
         assertFails {
           assertContains(
             this,
-            rbacService.findRoleById(Bf.Rbac.USER_ID)!!
+            rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.USER_ID)!!
           )
         }
       }
@@ -268,7 +268,7 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testSaveRole() {
-    RoleDao().apply {
+    RoleEntity().apply {
       this.name = "二狗子"
       val t = rbacService.saveRole(this)
       assertEquals(t.name, this.name)
@@ -278,9 +278,9 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testAssignPermissionsToRole() {
-    PermissionsDao().apply {
+    PermissionsEntity().apply {
       this.name = "二狗子"
-      val role = rbacService.findRoleById(Bf.Rbac.ROOT_ID)!!
+      val role = rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
       val per = rbacService.savePermissions(this)
       rbacService.assignPermissionsToRole(
         role,
@@ -295,9 +295,9 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testRevokePermissionsForRole() {
-    rbacService.findRoleById(Bf.Rbac.ROOT_ID)!!
+    rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
       .apply {
-        val per = rbacService.findPermissionsById(Bf.Rbac.ROOT_ID)!!
+        val per = rbacService.findPermissionsById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
         rbacService.revokePermissionsForRole(this, per)
         rbacService.findAllPermissionsByRole(this).apply {
           assertFails("仍然包含分配权限") {
@@ -309,7 +309,7 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testSavePermissions() {
-    PermissionsDao().apply {
+    PermissionsEntity().apply {
       this.name = "二狗子"
       val t = rbacService.savePermissions(this)
       assertEquals(t.name, this.name)
@@ -319,29 +319,29 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testDeleteRoleGroup() {
-    val roleGroup = rbacService.findRoleGroupById(Bf.Rbac.ROOT_ID)!!
+    val roleGroup = rbacService.findRoleGroupById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
     rbacService.deleteRoleGroup(
       roleGroup
     )
-    assertNull(rbacService.findRoleGroupById(Bf.Rbac.ROOT_ID))
+    assertNull(rbacService.findRoleGroupById(DataBaseBasicFieldNames.Rbac.ROOT_ID))
   }
 
   @Test
   fun testDeleteRole() {
-    val role = rbacService.findRoleById(Bf.Rbac.ROOT_ID)!!
+    val role = rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
     rbacService.deleteRole(
       role
     )
-    assertNull(rbacService.findRoleById(Bf.Rbac.ROOT_ID))
+    assertNull(rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.ROOT_ID))
   }
 
   @Test
   fun testDeletePermissions() {
-    val per = rbacService.findPermissionsById(Bf.Rbac.ROOT_ID)!!
+    val per = rbacService.findPermissionsById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
     rbacService.deletePermissions(
       per
     )
-    assertNull(rbacService.findPermissionsById(Bf.Rbac.ROOT_ID))
+    assertNull(rbacService.findPermissionsById(DataBaseBasicFieldNames.Rbac.ROOT_ID))
   }
 
   @Test
@@ -356,17 +356,17 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
   @Test
   fun testFindRoleById() {
-    assertNotNull(rbacService.findRoleById(Bf.Rbac.ROOT_ID))
+    assertNotNull(rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.ROOT_ID))
   }
 
   @Test
   fun testFindPermissionsById() {
-    assertNotNull(rbacService.findPermissionsById(Bf.Rbac.ROOT_ID))
+    assertNotNull(rbacService.findPermissionsById(DataBaseBasicFieldNames.Rbac.ROOT_ID))
   }
 
   @Test
   fun testFindRoleGroupById() {
-    assertNotNull(rbacService.findRoleGroupById(Bf.Rbac.ROOT_ID))
+    assertNotNull(rbacService.findRoleGroupById(DataBaseBasicFieldNames.Rbac.ROOT_ID))
   }
 
   companion object {

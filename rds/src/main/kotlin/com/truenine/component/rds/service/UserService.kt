@@ -1,24 +1,24 @@
 package com.truenine.component.rds.service
 
-import com.truenine.component.rds.dao.UserDao
-import com.truenine.component.rds.dao.UserInfoDao
+import com.truenine.component.rds.entity.UserEntity
+import com.truenine.component.rds.entity.UserInfoEntity
 
 interface UserService {
-  fun findUserById(id: String): UserDao?
-  fun findUserByAccount(account: String): UserDao?
+  fun findUserById(id: String): UserEntity?
+  fun findUserByAccount(account: String): UserEntity?
   fun findPwdEncByAccount(account: String): String?
   fun existsByAccount(account: String): Boolean
 
-  fun findUserInfoById(id: String): UserInfoDao?
-  fun findUserInfoByAccount(account: String): UserInfoDao?
+  fun findUserInfoById(id: String): UserInfoEntity?
+  fun findUserInfoByAccount(account: String): UserInfoEntity?
 
-  fun saveUser(user: UserDao): UserDao?
-  fun saveUserInfo(userInfo: UserInfoDao): UserInfoDao?
+  fun saveUser(user: UserEntity): UserEntity?
+  fun saveUserInfo(userInfo: UserInfoEntity): UserInfoEntity?
   fun saveUserInfoByAccount(
     account: String,
-    userInfo: UserInfoDao
-  ): UserInfoDao?
+    userInfo: UserInfoEntity
+  ): UserInfoEntity?
 
-  fun deleteUser(user: UserDao)
-  fun deleteUserInfo(userInfo: UserInfoDao)
+  fun deleteUser(user: UserEntity)
+  fun deleteUserInfo(userInfo: UserInfoEntity)
 }

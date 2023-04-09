@@ -1,21 +1,21 @@
 package com.truenine.component.rds.repo
 
 import com.truenine.component.rds.base.PresortTreeRepo
-import com.truenine.component.rds.dao.AddressDao
+import com.truenine.component.rds.entity.AddressEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AddressRepo : PresortTreeRepo<AddressDao, String> {
+interface AddressRepo : PresortTreeRepo<AddressEntity, String> {
 
-  fun findAllByCode(code: String): List<AddressDao>
+  fun findAllByCode(code: String): List<AddressEntity>
 
-  fun findByCode(code: String): AddressDao?
+  fun findByCode(code: String): AddressEntity?
 
   fun findByCodeAndName(
     code: String,
     name: String,
     p: Pageable
-  ): Page<AddressDao>
+  ): Page<AddressEntity>
 }

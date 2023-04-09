@@ -1,8 +1,8 @@
 package com.truenine.component.rds.service
 
-import com.truenine.component.rds.base.BaseDao
-import com.truenine.component.rds.dao.TableRowDeleteRecordDao
+import com.truenine.component.rds.base.BaseEntity
+import com.truenine.component.rds.entity.TableRowDeleteRecordEntity
 
 interface TableRowDeleteRecordService {
-  fun save(data: BaseDao?): TableRowDeleteRecordDao?
+  fun save(data: BaseEntity?): TableRowDeleteRecordEntity?
 }

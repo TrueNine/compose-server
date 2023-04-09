@@ -2,7 +2,7 @@ package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
-import com.truenine.component.core.consts.Bf;
+import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Index;
@@ -31,44 +31,44 @@ import java.util.Objects;
 @DynamicUpdate
 @MappedSuperclass
 @Table(indexes = {
-  @Index(name = PresortTreeDao.RLN, columnList = PresortTreeDao.RLN),
-  @Index(name = PresortTreeDao.RRN, columnList = PresortTreeDao.RRN),
-  @Index(name = PresortTreeDao.RPI, columnList = PresortTreeDao.RPI)
+  @Index(name = PresortTreeEntity.RLN, columnList = PresortTreeEntity.RLN),
+  @Index(name = PresortTreeEntity.RRN, columnList = PresortTreeEntity.RRN),
+  @Index(name = PresortTreeEntity.RPI, columnList = PresortTreeEntity.RPI)
 })
 @RequiredArgsConstructor
 @Schema(title = "预排序树")
-public class PresortTreeDao extends BaseDao {
+public class PresortTreeEntity extends BaseEntity {
 
   /**
    * 父id
    */
-  public static final String RPI = Bf.PARENT_ID;
+  public static final String RPI = DataBaseBasicFieldNames.PARENT_ID;
 
   /**
    * 左节点
    */
-  public static final String RLN = Bf.LEFT_NODE;
+  public static final String RLN = DataBaseBasicFieldNames.LEFT_NODE;
 
   /**
    * 右节点
    */
-  public static final String RRN = Bf.RIGHT_NODE;
+  public static final String RRN = DataBaseBasicFieldNames.RIGHT_NODE;
 
   @JsonIgnore
   @Expose(deserialize = false)
-  @Column(name = Bf.PARENT_ID)
+  @Column(name = DataBaseBasicFieldNames.PARENT_ID)
   @Schema(title = "父id")
   protected String rpi = null;
 
   @JsonIgnore
   @Expose(deserialize = false)
-  @Column(name = Bf.LEFT_NODE)
+  @Column(name = DataBaseBasicFieldNames.LEFT_NODE)
   @Schema(title = "左节点")
   protected Long rln;
 
   @JsonIgnore
   @Expose(deserialize = false)
-  @Column(name = Bf.RIGHT_NODE)
+  @Column(name = DataBaseBasicFieldNames.RIGHT_NODE)
   @Schema(title = "右节点")
   protected Long rrn;
 
@@ -90,7 +90,7 @@ public class PresortTreeDao extends BaseDao {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    PresortTreeDao that = (PresortTreeDao) o;
+    PresortTreeEntity that = (PresortTreeEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

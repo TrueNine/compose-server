@@ -2,24 +2,24 @@ package com.truenine.component.rds.repo
 
 
 import com.truenine.component.rds.base.BaseRepo
-import com.truenine.component.rds.dao.UserDao
+import com.truenine.component.rds.entity.UserEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepo : BaseRepo<UserDao, String> {
-  fun findByAccount(account: String): UserDao?
+interface UserRepo : BaseRepo<UserEntity, String> {
+  fun findByAccount(account: String): UserEntity?
 
   @Query(
-    """
+      """
     select pwdEnc
-    from UserDao
+    from UserEntity
     where account = :account
   """
   )
   fun findPwdEncByAccount(account: String): String?
 
-  fun findAllByNickName(nickName: String): List<UserDao>
+  fun findAllByNickName(nickName: String): List<UserEntity>
 
   fun existsAllByAccount(account: String): Boolean
 }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.truenine.component.core.consts.Cf
+import com.truenine.component.core.consts.CacheFieldNames
 import com.truenine.component.core.lang.LogKt
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Bean
@@ -60,10 +60,10 @@ open class RedisJsonSerializerAutoConfiguration(
 
 
   @Primary
-  @Bean(name = [Cf.RedisTemplate.STRING_TEMPLATE])
+  @Bean(name = [CacheFieldNames.RedisTemplate.STRING_TEMPLATE])
   open fun customRedisJsonSerializable(factory: RedisConnectionFactory)
     : RedisTemplate<String, *> {
-    log.debug("配置 ${Cf.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
     val rt = RedisTemplate<String, Any>()
 
     rt.setDefaultSerializer(jsr)
@@ -79,27 +79,27 @@ open class RedisJsonSerializerAutoConfiguration(
   }
 
   @Primary
-  @Bean(name = [Cf.CacheManager.H2])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.H2])
   open fun cacheManager2h(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${Cf.CacheManager.H2} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.H2} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofHours(2))
   }
 
-  @Bean(name = [Cf.CacheManager.D3])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.D3])
   open fun cacheManager30day(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${Cf.CacheManager.D3} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.D3} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofDays(30))
   }
 
-  @Bean(name = [Cf.CacheManager.M30])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.M30])
   open fun cacheManager30m(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${Cf.CacheManager.M30} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.M30} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofMinutes(30))
   }
 
-  @Bean(name = [Cf.CacheManager.FOREVER])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.FOREVER])
   open fun cacheManagerForever(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${Cf.CacheManager.FOREVER} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.FOREVER} factory = {}", factory)
     return asCacheConfig(factory, Duration.ZERO)
   }
 

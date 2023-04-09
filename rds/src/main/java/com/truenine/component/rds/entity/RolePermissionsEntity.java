@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * 用户  角色组
+ * 角色  权限
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -30,41 +30,41 @@ import java.util.Objects;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Schema(title = "用户  角色组")
-@Table(name = UserRoleGroupDao.TABLE_NAME, indexes = {
-  @Index(name = "user_id_idx", columnList = "user_id"),
-  @Index(name = "role_group_id_idx", columnList = "role_group_id"),
+@Schema(title = "角色  权限")
+@Table(name = RolePermissionsEntity.TABLE_NAME, indexes = {
+  @Index(name = "role_id_idx", columnList = "role_id"),
+  @Index(name = "permissions_id_idx", columnList = "permissions_id"),
 })
-public class UserRoleGroupDao extends BaseDao implements Serializable {
+public class RolePermissionsEntity extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "user_role_group";
-  public static final String USER_ID = "user_id";
-  public static final String ROLE_GROUP_ID = "role_group_id";
+  public static final String TABLE_NAME = "role_permissions";
+  public static final String ROLE_ID = "role_id";
+  public static final String PERMISSIONS_ID = "permissions_id";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
-   * 用户
+   * 角色
    */
   @Schema(
-    name = USER_ID,
-    description = "用户"
+    name = ROLE_ID,
+    description = "角色"
   )
   @Column(table = TABLE_NAME,
-    name = USER_ID)
+    name = ROLE_ID)
   @Nullable
-  private String userId;
+  private String roleId;
 
   /**
-   * 权限组
+   * 权限
    */
   @Schema(
-    name = ROLE_GROUP_ID,
-    description = "权限组"
+    name = PERMISSIONS_ID,
+    description = "权限"
   )
   @Column(table = TABLE_NAME,
-    name = ROLE_GROUP_ID)
+    name = PERMISSIONS_ID)
   @Nullable
-  private String roleGroupId;
+  private String permissionsId;
 
   @Override
   public boolean equals(Object o) {
@@ -74,7 +74,7 @@ public class UserRoleGroupDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (UserRoleGroupDao) o;
+    var that = (RolePermissionsEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 

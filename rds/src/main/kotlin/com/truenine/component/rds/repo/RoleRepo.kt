@@ -1,21 +1,21 @@
 package com.truenine.component.rds.repo
 
 import com.truenine.component.rds.base.BaseRepo
-import com.truenine.component.rds.dao.RoleDao
+import com.truenine.component.rds.entity.RoleEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RoleRepo : BaseRepo<RoleDao, String> {
-  fun findAllByName(name: String): List<RoleDao>
+interface RoleRepo : BaseRepo<RoleEntity, String> {
+  fun findAllByName(name: String): List<RoleEntity>
 
   @Query(
-    """
-    from RoleDao r
-    left join RoleGroupRoleDao rgr on r.id = rgr.roleId
-    left join UserRoleGroupDao urg on rgr.roleGroupId = urg.roleGroupId
+      """
+    from RoleEntity r
+    left join RoleGroupRoleEntity rgr on r.id = rgr.roleId
+    left join UserRoleGroupEntity urg on rgr.roleGroupId = urg.roleGroupId
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): List<RoleDao>
+  fun findAllByUserId(userId: String): List<RoleEntity>
 }

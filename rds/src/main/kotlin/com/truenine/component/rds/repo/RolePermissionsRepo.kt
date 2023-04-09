@@ -1,12 +1,12 @@
 package com.truenine.component.rds.repo
 
 import com.truenine.component.rds.base.BaseRepo
-import com.truenine.component.rds.dao.RolePermissionsDao
+import com.truenine.component.rds.entity.RolePermissionsEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RolePermissionsRepo : BaseRepo<RolePermissionsDao, String> {
-  fun findAllByRoleId(role: String): List<RolePermissionsDao>
+interface RolePermissionsRepo : BaseRepo<RolePermissionsEntity, String> {
+  fun findAllByRoleId(role: String): List<RolePermissionsEntity>
   fun existsByRoleIdAndPermissionsId(
     roleId: String,
     permissionsId: String

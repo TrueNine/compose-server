@@ -1,6 +1,6 @@
-package com.truenine.component.rds.dao;
+package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.BaseDao;
+import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -30,8 +30,8 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "附件")
-@Table(name = AttachmentDao.TABLE_NAME)
-public class AttachmentDao extends BaseDao implements Serializable {
+@Table(name = AttachmentEntity.TABLE_NAME)
+public class AttachmentEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "attachment";
   public static final String ATTACHMENT_LOCATION_ID = "attachment_location_id";
@@ -109,7 +109,7 @@ public class AttachmentDao extends BaseDao implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    var that = (AttachmentDao) o;
+    var that = (AttachmentEntity) o;
     return id != null && Objects.equals(id, that.id);
   }
 
