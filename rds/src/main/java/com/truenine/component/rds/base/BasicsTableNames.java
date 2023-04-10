@@ -24,6 +24,7 @@ public interface BasicsTableNames {
   String USER_ROLE_GROUP = "user_role_group";
   String ADDRESS = "address";
   String ADDRESS_DETAILS = "address_details";
+  String FLYWAY_SCHEMA_HISTORY = "flyway_schema_history";
 
   static List<String> getAll() {
     return new ArrayList<>(
@@ -46,7 +47,8 @@ public interface BasicsTableNames {
         USER_GROUP,
         USER_GROUP_ROLE_GROUP,
         USER_GROUP_USER,
-        USER_ROLE_GROUP
+        USER_ROLE_GROUP,
+        FLYWAY_SCHEMA_HISTORY
       )
     );
   }
