@@ -38,16 +38,16 @@ include("rds")
 findProject(":rds")?.name = "rds"
 
 include("rds:rds-gen")
-findProject("rds:rds-gen")?.name = "rds-gen"
+findProject(":rds:rds-gen")?.name = "rds-gen"
 
 include("data-common")
 findProject(":data-common")?.name = "data-common"
 
 include("data-common:data-common-crawler")
-findProject("data-common:data-common-crawler")?.name = "data-common-crawler"
+findProject(":data-common:data-common-crawler")?.name = "data-common-crawler"
 
 include("data-common:data-common-data-extract")
-findProject("data-common:data-common-data-extract")?.name = "data-common-data-extract"
+findProject(":data-common:data-common-data-extract")?.name = "data-common-data-extract"
 
 include("security")
 findProject(":security")?.name = "security"
@@ -59,10 +59,10 @@ include("depend")
 findProject(":depend")?.name = "depend"
 
 include("depend:depend-web-servlet")
-findProject("depend:depend-web-servlet")?.name = "depend-web-servlet"
+findProject(":depend:depend-web-servlet")?.name = "depend-web-servlet"
 
 include("depend:depend-flyway")
-findProject("depend:depend-flyway")?.name = "depend-flyway"
+findProject(":depend:depend-flyway")?.name = "depend-flyway"
 
 include("cacheable")
 findProject(":cacheable")?.name = "cacheable"
@@ -74,4 +74,7 @@ include("multi-test")
 findProject(":multi-test")?.name = "multi-test"
 
 include("multi-test:multi-test-security")
-findProject("multi-test:multi-test-security")?.name = "multi-test-security"
+findProject(":multi-test:multi-test-security")?.name = "multi-test-security"
+
+include("pay")
+findProject(":pay")?.name = "pay"

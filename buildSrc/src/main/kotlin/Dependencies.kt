@@ -25,6 +25,7 @@ object V {
     const val dataCommonCrawler = allV
     const val cacheable = allV
     const val oss = allV
+    const val pay = allV
   }
 
   object Lang {
