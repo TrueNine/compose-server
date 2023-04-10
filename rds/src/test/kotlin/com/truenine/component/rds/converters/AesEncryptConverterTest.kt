@@ -11,7 +11,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.springframework.transaction.annotation.Transactional
 import org.testng.annotations.Test
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Rollback
 @SpringBootTest
 open class AesEncryptConverterTest : AbstractTestNGSpringContextTests() {

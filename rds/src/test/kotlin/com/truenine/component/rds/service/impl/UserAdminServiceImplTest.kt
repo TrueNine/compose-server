@@ -18,7 +18,6 @@ import org.testng.annotations.Test
 import java.time.LocalDate
 import kotlin.test.*
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserAdminServiceImplTest :
