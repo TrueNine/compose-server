@@ -1,7 +1,7 @@
-package com.truenine.component.rds.gen.dao
+package com.truenine.component.rds.gen.entity
 
 
-data class DataBaseTable(
+data class TableEntity(
   var schema: String? = null,
   var name: String? = null,
   var comment: String? = null

@@ -1,6 +1,6 @@
-package com.truenine.component.rds.gen.dao
+package com.truenine.component.rds.gen.entity
 
-data class TableColumn(
+data class ColumnEntity(
   var field: String? = null,
   var type: String? = null,
   var nullable: Boolean = false,

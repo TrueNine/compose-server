@@ -1,6 +1,6 @@
-package com.truenine.component.rds.gen.dto
+package com.truenine.component.rds.gen.models
 
-data class JavaColumnDto(
+data class ColumnModel(
   var colName: String? = null,
   var upperName: String? = null,
   var fieldName: String? = null,

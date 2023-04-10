@@ -1,13 +1,18 @@
-package com.truenine.component.rds.gen.db
+package com.truenine.component.rds.gen.util
 
 import cn.hutool.db.Db
-import com.truenine.component.rds.gen.dao.ColumnIndex
-import com.truenine.component.rds.gen.dao.DataBaseTable
-import com.truenine.component.rds.gen.dao.TableColumn
+import com.truenine.component.rds.gen.entity.ColumnEntity
+import com.truenine.component.rds.gen.entity.ColumnIndexEntity
+import com.truenine.component.rds.gen.entity.TableEntity
 
-object Dbc {
+object HutoolDbConnector {
   private val db: Db = Db.use()
-  fun queryDb(dbName: String): List<DataBaseTable> {
+
+  fun queryCurrentDbName(): String? {
+    return db.queryString("SELECT DATABASE();")
+  }
+
+  fun queryDb(dbName: String): List<TableEntity> {
     return db.query(
       """
       SELECT 
@@ -20,7 +25,7 @@ object Dbc {
         table_schema = ?;""".trimIndent(), dbName
     ).filterNotNull()
       .map {
-        val table = DataBaseTable()
+        val table = TableEntity()
         table.schema = it.getStr("schema")
         table.name = it.getStr("name")
         table.comment = it.getStr("comment")
@@ -28,11 +33,11 @@ object Dbc {
       }
   }
 
-  fun queryTable(tableName: String): List<TableColumn> {
+  fun queryColumnModel(tableName: String): List<ColumnEntity> {
     return db.query("SHOW FULL COLUMNS FROM `${tableName}`;")
       .filterNotNull()
       .map {
-        val col = TableColumn()
+        val col = ColumnEntity()
         col.type = it.getStr("type")
         col.key = it.getStr("key")
         col.comment = it.getStr("comment")
@@ -43,10 +48,10 @@ object Dbc {
       }
   }
 
-  fun queryIndex(tableName: String): List<ColumnIndex> {
+  fun queryIndex(tableName: String): List<ColumnIndexEntity> {
     return db.query("SHOW INDEX FROM `${tableName}`;").filterNotNull()
       .map {
-        val idx = ColumnIndex()
+        val idx = ColumnIndexEntity()
         idx.table = it.getStr("table")
         idx.nonUnique = it.getInt("non_unique")
         idx.columnName = it.getStr("column_name")

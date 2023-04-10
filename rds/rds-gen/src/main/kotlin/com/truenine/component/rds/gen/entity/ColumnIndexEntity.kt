@@ -1,6 +1,6 @@
-package com.truenine.component.rds.gen.dao
+package com.truenine.component.rds.gen.entity
 
-data class ColumnIndex(
+data class ColumnIndexEntity(
   var table: String? = null,
   var columnName: String? = null,
   var comment: String? = null,

@@ -27,6 +27,7 @@ public interface DataBaseBasicFieldNames {
       LEFT_NODE,
       RIGHT_NODE,
       PARENT_ID,
+      LOGIC_DELETE_FLAG,
       ANY_REFERENCE_ID,
       ANY_REFERENCE_TYPE,
       TENANT_ID

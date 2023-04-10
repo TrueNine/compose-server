@@ -1,22 +1,24 @@
-package com.truenine.component.rds.gen.util.converter
+package com.truenine.component.rds.gen.converter
+
+import com.truenine.component.rds.gen.models.ConvertTypeModel
 
 abstract class AbstractTypeConverter {
-  private val converterRule: MutableMap<String, CType> = mutableMapOf()
+  private val converterRule: MutableMap<String, ConvertTypeModel> = mutableMapOf()
   private val defaultKey = "DATABASE_DEFAULT_CONVERTER_TYPE_NAMESPACE"
 
   init {
-    converterRule[defaultKey] = CType("String", null)
+    converterRule[defaultKey] = ConvertTypeModel("String")
   }
 
-  protected fun putAll(converters: Map<String, CType>) {
-    val b = mutableMapOf<String, CType>()
+  protected fun putAll(converters: Map<String, ConvertTypeModel>) {
+    val b = mutableMapOf<String, ConvertTypeModel>()
     converters.forEach {
       b[it.key.uppercase()] = it.value
     }
     this.converterRule.putAll(b)
   }
 
-  fun getConverter(dbType: String): CType {
+  fun getConverterTypeModel(dbType: String): ConvertTypeModel {
     val getC = converterRule.filter {
       dbType.uppercase().contains(it.key)
     }.map { it.value }
@@ -27,14 +29,13 @@ abstract class AbstractTypeConverter {
     }
   }
 
-  fun getConverters(): Map<String, CType> {
+  fun getConverters(): Map<String, ConvertTypeModel> {
     return this.converterRule
   }
 
   fun findImports(types: List<String>): List<String> {
     return types.map {
-      getConverter(it)
-    }.map { it.importPkg }
-      .filterNotNull()
+      getConverterTypeModel(it)
+    }.mapNotNull { it.importPkg }
   }
 }

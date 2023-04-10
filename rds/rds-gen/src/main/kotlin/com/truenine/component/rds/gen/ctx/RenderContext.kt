@@ -3,20 +3,21 @@ package com.truenine.component.rds.gen.ctx
 import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.Str
-import com.truenine.component.rds.gen.util.Case
+import com.truenine.component.rds.base.BaseEntity
+import com.truenine.component.rds.base.BaseRepo
+import com.truenine.component.rds.gen.util.DbCaseConverter
 import lombok.extern.slf4j.Slf4j
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Slf4j
-class DefCtx {
+class RenderContext {
   private var genLang: String = "java"
   private var dbName: String = ""
   private var pkgName: String = ""
-  private var ignoreCols: MutableSet<String> = mutableSetOf()
-  private var baseEntityClass: String = "io.tn.rds.base.BaseDao"
-  private var baseRepositoryClass: String =
-    "io.tn.rds.base.BaseRepo"
+  private var ignoreColumns: MutableSet<String> = mutableSetOf()
+  private var baseEntityClass: String = BaseEntity::class.java.canonicalName
+  private var baseRepositoryClass: String = BaseRepo::class.java.canonicalName
   private var baseServiceClass: String = ""
   private var baseServiceImplClass: String = ""
   private var author: String = "Generator Author"
@@ -30,10 +31,10 @@ class DefCtx {
   private var serviceImpl: String = "${service}.impl"
 
   init {
-    this.ignoreCols += DataBaseBasicFieldNames.getAll()
+    this.ignoreColumns += DataBaseBasicFieldNames.getAll()
   }
 
-  fun lang(mode: String): DefCtx {
+  fun lang(mode: String): RenderContext {
     this.genLang = mode
     return this
   }
@@ -46,7 +47,7 @@ class DefCtx {
     return this.baseEntityClass.split(".").last()
   }
 
-  fun author(author: String): DefCtx {
+  fun author(author: String): RenderContext {
     this.author = author
     return this
   }
@@ -55,22 +56,22 @@ class DefCtx {
     return this.author
   }
 
-  fun entityBaseClassName(typeName: String): DefCtx {
+  fun entityBaseClassName(typeName: String): RenderContext {
     this.baseEntityClass = typeName
     return this
   }
 
-  fun repositoryBaseClassName(typeName: String): DefCtx {
+  fun repositoryBaseClassName(typeName: String): RenderContext {
     this.baseRepositoryClass = typeName
     return this
   }
 
-  fun serviceBaseClassName(typeName: String): DefCtx {
+  fun serviceBaseClassName(typeName: String): RenderContext {
     this.baseServiceClass = typeName
     return this
   }
 
-  fun serviceImplBaseClassName(typeName: String): DefCtx {
+  fun serviceImplBaseClassName(typeName: String): RenderContext {
     this.baseServiceImplClass = typeName
     return this
   }
@@ -91,40 +92,40 @@ class DefCtx {
     return baseServiceImplClass
   }
 
-  fun ignoreColumns(ignore: (MutableSet<String>) -> MutableSet<String>): DefCtx {
-    this.ignoreCols = ignore.invoke(DataBaseBasicFieldNames.getAll().toMutableSet())
+  fun ignoreColumns(ignore: (MutableSet<String>) -> MutableSet<String>): RenderContext {
+    this.ignoreColumns = ignore.invoke(DataBaseBasicFieldNames.getAll().toMutableSet())
     return this
   }
 
   fun getIgnoreColumns(): Set<String> {
-    return this.ignoreCols
+    return this.ignoreColumns
   }
 
-  fun genPkg(pkg: String): DefCtx {
+  fun packageName(pkg: String): RenderContext {
     this.pkgName = pkg
     return this
   }
 
-  fun repo(pkg: String, suffix: String): DefCtx {
+  fun repo(pkg: String, suffix: String): RenderContext {
     this.repo = pkg
     this.repoSuffix = suffix
     return this
   }
 
-  fun service(pkg: String, suffix: String): DefCtx {
+  fun service(pkg: String, suffix: String): RenderContext {
     this.service = pkg
     this.serviceSuffix = suffix
     return this
   }
 
-  fun serviceImpl(pkg: String, suffix: String): DefCtx {
+  fun serviceImpl(pkg: String, suffix: String): RenderContext {
     this.serviceImpl = pkg
     this.serviceImplSuffix = suffix
     return this
   }
 
-  fun dao(pkg: String, suffix: String): DefCtx {
-    this.entity = pkg
+  fun entity(packageName: String = "entity", suffix: String = "Entity"): RenderContext {
+    this.entity = packageName
     this.entitySuffix = suffix
     return this
   }
@@ -181,7 +182,7 @@ class DefCtx {
     return this.pkgName.replace(".", "/")
   }
 
-  fun getPkg(): String {
+  private fun getPkg(): String {
     return this.pkgName
   }
 
@@ -189,7 +190,7 @@ class DefCtx {
     return this.dbName
   }
 
-  fun db(name: String): DefCtx {
+  fun db(name: String): RenderContext {
     this.dbName = name
     return this
   }
@@ -199,11 +200,11 @@ class DefCtx {
   }
 
   fun lover(f: String): String {
-    return Case.firstLover(f)
+    return DbCaseConverter.firstLover(f)
   }
 
   fun upper(f: String): String {
-    return Case.firstUpper(f)
+    return DbCaseConverter.firstUpper(f)
   }
 
   fun getBaseEntityClassName(): String {

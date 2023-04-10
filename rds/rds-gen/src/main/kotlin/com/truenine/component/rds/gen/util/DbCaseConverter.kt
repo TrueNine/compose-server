@@ -1,11 +1,12 @@
 package com.truenine.component.rds.gen.util
 
-import com.truenine.component.core.lang.Str
+import com.truenine.component.core.lang.hasText
 
-object Case {
+object DbCaseConverter {
+
   @JvmStatic
   fun firstUpper(dbName: String): String {
-    return if (Str.hasText(dbName)) {
+    return if (hasText(dbName)) {
       dbName.split("_").map {
         val b = it.toCharArray()
         b[0] = b[0].uppercaseChar()

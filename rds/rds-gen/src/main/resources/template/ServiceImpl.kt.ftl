@@ -2,7 +2,7 @@
 <#assign tab = tab />
 package ${ctx.getServiceImplPkg()}
 
-import io.tn.core.lang.LogKt
+import com.truenine.component.core.lang.LogKt
 import ${ctx.getServicePkg()}.${tab.getClassName()}${ctx.getServiceSuffix()!""}
 import ${ctx.getRepositoryPkg()}.${tab.getClassName()}${ctx.getRepositorySuffix()!""}
 import org.springframework.stereotype.Service
@@ -19,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional
 open class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""} (
 private val repo: ${tab.getClassName()}${ctx.getRepositorySuffix()!""}
 ) : ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
+    private val log = LogKt.getLog(this::class)
 
-companion object {
-@JvmStatic
-private val log = LogKt.getLog(${tab.getClassName()}${ctx.getServiceImplSuffix()!""}::class)
-}
 }

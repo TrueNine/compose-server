@@ -30,9 +30,9 @@ import ${t}
 @DynamicUpdate
 @Entity
 @Schema(title = "${tab.getEscapeComment()!tab.getClassName()}")
-@Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.THIS_TABLE_NAME<#if tab.getIdx()?? && (tab.getIdx()?size > 0)>, indexes = {
+@Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.TABLE_NAME<#if tab.getIdx()?? && (tab.getIdx()?size > 0)>, indexes = {
     <#list tab.getIdx() as idx>
-      @Index(name = "${idx.getKeyName()!idx.getColumnName()}", columnList = "${idx.getColumnName()}"),
+    @Index(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.${idx.getKeyName()!idx.getColumnName()}, columnList = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.${idx.getColumnName()}),
     </#list>
    }</#if>)
 data class ${tab.getClassName()}${ctx.getEntitySuffix()!""} : ${ctx.getBaseEntityClassName()}(), Serializable {
@@ -54,7 +54,7 @@ data class ${tab.getClassName()}${ctx.getEntitySuffix()!""} : ${ctx.getBaseEntit
   /**
    * ${tab.getName()} 表名
    */
-  public static final String THIS_TABLE_NAME = "${tab.getName()}";
+  public static final String TABLE_NAME = "${tab.getName()}";
 
 <#-- 表字段 -->
 <#list tab.getColumns() as col>
