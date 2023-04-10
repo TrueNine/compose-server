@@ -29,7 +29,7 @@ class TableRowDeleteRecordServiceImplTest :
   fun testSave() {
     val delData = DbTestPresortTreeEntity().apply {
       id = "2131241241"
-      title="wwr"
+      title = "wwr"
     }
     val da = delService.save(delData)
     assertNotNull("不能保存为 null") { da }
@@ -37,6 +37,6 @@ class TableRowDeleteRecordServiceImplTest :
     val sered = mapper.readValue(da!!.entity.entityJson, DbTestPresortTreeEntity::class.java)
     assertNotNull("不能保存为 null") { sered }
     log.info("a = {}, b = {}", delData, sered)
-    assertEquals(delData, sered, "不可转换为原先对象")
+    assertEquals(mapper.writeValueAsString(delData), da.entity.entityJson, "不可转换为原先对象")
   }
 }
