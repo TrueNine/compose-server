@@ -29,17 +29,12 @@ public class Headers {
   /**
    * 自定义刷新头
    */
-  public static final String X_RE_FLUSH_TOKEN = "X-ReFlushTokenModel-Token";
+  public static final String X_RE_FLUSH_TOKEN = "X-ReFlush";
 
   public static final String CONTENT_LENGTH = "Content-Length";
   public static final String CONTENT_TYPE = "Content-Type";
   public static final String CONTENT_DISPOSITION = "Content-Disposition";
   public static final String KEEP_ALIVE = "Keep-Alive";
-
-  /**
-   * 内部租户路由 id
-   */
-  public static final String X_INTERNAL_TENANT_ID = "X-Internal-Tenant-Id";
 
   /**
    * 设置 Content-Disposition 的下载名称

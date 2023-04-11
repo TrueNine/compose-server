@@ -2,6 +2,7 @@ package com.truenine.component.security.spring.security
 
 import com.truenine.component.core.ctx.UserInfoContextHolder
 import com.truenine.component.core.http.Headers
+import com.truenine.component.core.lang.LogKt
 import com.truenine.component.core.lang.Str
 import com.truenine.component.core.models.UserAuthorizationInfoModel
 import com.truenine.component.security.SecurityUserDetails
@@ -21,26 +22,31 @@ import java.io.IOException
  * @since 2022-10-28
  */
 abstract class SecurityPreValidFilter : OncePerRequestFilter() {
+
+  private val log = LogKt.getLog(this::class)
+
   @Throws(ServletException::class, IOException::class)
   override fun doFilterInternal(
     request: HttpServletRequest,
     response: HttpServletResponse,
     filterChain: FilterChain
   ) {
-
     val authInfo = if (containsTokenPair(request)) {
       val token = getTokenMapping(request)
       val ref = getReFlashTokenMapping(request)
-      converterSecurityUserInfo(token, ref, request, response)
+      getUserAuthorizationInfo(token, ref, request, response)
     } else {
+      log.trace("没有发现用户信息，直接放行")
       filterChain.doFilter(request, response)
       return
     }
+    log.trace("获取到用户信息 = {}", authInfo)
 
     val details =
       SecurityUserDetails(
         authInfo
       )
+    log.trace("获取到 details = {}", details)
 
     val usernamePasswordAuthenticationToken =
       UsernamePasswordAuthenticationToken(
@@ -48,11 +54,13 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
         details.password,
         details.authorities
       )
-
+    log.trace("upa = {}", usernamePasswordAuthenticationToken)
     // 设置验证信息过滤器放行
     SecurityContextHolder.getContext().authentication =
       usernamePasswordAuthenticationToken
+    // 向用户信息内设置信息
     UserInfoContextHolder.set(authInfo)
+    log.trace("过滤器放行")
     filterChain.doFilter(request, response)
   }
 
@@ -81,7 +89,7 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
     request?.getHeader(Headers.X_RE_FLUSH_TOKEN)
 
   /**
-   * jwt合法性检查
+   * 合法性检查
    *
    * @param token token
    * @param reFlash re-flash
@@ -89,7 +97,7 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
    * @param response 响应
    * @return [UserAuthorizationInfoModel]
    */
-  protected abstract fun converterSecurityUserInfo(
+  protected abstract fun getUserAuthorizationInfo(
     token: String?,
     reFlash: String?,
     request: HttpServletRequest,

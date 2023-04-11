@@ -17,7 +17,7 @@ abstract class SecurityUserDetailsService : UserDetailsService {
    */
   @Throws(UsernameNotFoundException::class)
   override fun loadUserByUsername(username: String): UserDetails {
-    log.debug(
+    log.trace(
       "加载 loadUserByUsername account = {}",
       username
     )

@@ -31,6 +31,9 @@ open class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefineModel::class)
   open fun securityDetailsService(desc: SecurityPolicyDefineModel): SecurityUserDetailsService {
+    require(null != desc.service) {
+      "注册的模型 desc 为空 $desc"
+    }
     return desc.service
   }
 
@@ -38,18 +41,21 @@ open class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefineModel::class)
   open fun securityExceptionAdware(desc: SecurityPolicyDefineModel): SecurityExceptionAdware {
+    require(desc.exceptionAdware != null) {
+      "注册的模型 异常过滤器为空 $desc"
+    }
     return desc.exceptionAdware
   }
 
   @Bean
+  @Primary
   open fun securityFilterChain(
     httpSecurity: HttpSecurity,
     desc: SecurityPolicyDefineModel,
     ctx: ApplicationContext
   ): SecurityFilterChain {
-    val anonymous = desc.anonymousPatterns
     val anno = getAnno(ctx)
-
+    val anonymous = desc.anonymousPatterns
     anonymous += listOf(*anno.loginUrl)
 
     if (anno.allowSwagger) {
@@ -87,11 +93,12 @@ open class SecurityPolicyBean {
     httpSecurity.exceptionHandling()
       .authenticationEntryPoint(desc.exceptionAdware)
       .accessDeniedHandler(desc.exceptionAdware)
-    log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
+    log.trace("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
     return httpSecurity.build()
   }
 
   @Bean
+  @Primary
   open fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
     log.debug("注册 AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager
@@ -113,7 +120,7 @@ open class SecurityPolicyBean {
             EnableRestSecurity::class.java
           )
         )
-        log.debug(
+        log.trace(
           "获取到：{}，注解于：{}",
           s.get(),
           v.javaClass.name
