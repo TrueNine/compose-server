@@ -55,14 +55,6 @@ allprojects {
     enabled = false
   }
 
-//  tasks.withType<Javadoc> {
-//    enabled = true
-//    options {
-//      this.encoding = "UTF-8"
-//      this.locale = "zh-CN"
-//    }
-//  }
-
   tasks.withType<BootJar> {
     enabled = false
   }

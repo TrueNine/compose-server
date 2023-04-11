@@ -7,7 +7,7 @@ import jakarta.persistence.Converter
 import org.springframework.stereotype.Component
 
 @Component
-@Converter
+@Converter(autoApply = true)
 class PointModelConverter : AttributeConverter<PointModel, String> {
 
   init {
