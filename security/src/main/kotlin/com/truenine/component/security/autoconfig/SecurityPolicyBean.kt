@@ -42,8 +42,6 @@ open class SecurityPolicyBean {
   }
 
   @Bean
-  @ConditionalOnBean(SecurityPolicyDefineModel::class)
-  @Throws(Exception::class)
   open fun securityFilterChain(
     httpSecurity: HttpSecurity,
     desc: SecurityPolicyDefineModel,
@@ -94,8 +92,6 @@ open class SecurityPolicyBean {
   }
 
   @Bean
-  @ConditionalOnBean(AuthenticationConfiguration::class)
-  @Throws(Exception::class)
   open fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
     log.debug("注册 AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager
@@ -105,7 +101,7 @@ open class SecurityPolicyBean {
 
   companion object {
     @JvmStatic
-    private val log = LogKt.getLog(SecurityPolicyBean::class)
+    private val log = LogKt.getLog(this::class)
 
     @JvmStatic
     private fun getAnno(ctx: ApplicationContext): EnableRestSecurity {
