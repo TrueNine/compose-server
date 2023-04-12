@@ -88,6 +88,14 @@ interface PresortTreeRepo<T : PresortTreeEntity, ID : Serializable> :
   @Modifying
   fun popRrnByOffset(rrnOffset: Long, parentRln: Long): Int
 
+  /**
+   * 保存一组 树结构，此操作为原子性的，一次事务
+   * 只能进行一次操作
+   *
+   * @param parent 父节点
+   * @param children 直属子节点列表
+   * @return 保存后的子节点
+   */
   @Transactional(rollbackFor = [Exception::class])
   fun saveChildren(
     parent: T,
@@ -101,8 +109,10 @@ interface PresortTreeRepo<T : PresortTreeEntity, ID : Serializable> :
     ) { "父节点缺少必要的值 = $parent" }
     val leftStep = parent.rln + 1
     val offset = (children.size * 2)
+    // 更新所有的左节点和右节点
     pushRlnByOffset(offset.toLong(), parent.rln)
     pushRrnByOffset(offset.toLong(), parent.rln)
+    // 编排并列的子节点
     for (i in 0 until (offset) step 2) {
       val idx = (i / 2)
       children[idx].rpi = parent.id
