@@ -1,6 +1,6 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.rds.base.PageModelRequestParam
+import com.truenine.component.rds.base.PagedRequestParam
 import com.truenine.component.rds.base.PagedResponseResult
 import com.truenine.component.rds.entity.AttachmentEntity
 import com.truenine.component.rds.entity.AttachmentLocationEntity
@@ -10,7 +10,7 @@ import com.truenine.component.rds.repo.AttachmentLocationRepo
 import com.truenine.component.rds.repo.AttachmentModelRepo
 import com.truenine.component.rds.repo.AttachmentRepo
 import com.truenine.component.rds.service.AttachmentService
-import com.truenine.component.rds.util.PagedResponseResultWrapper
+import com.truenine.component.rds.util.PagedWrapper
 import jakarta.validation.Valid
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -58,8 +58,8 @@ open class AttachmentServiceImpl(
       }
   }
 
-  override fun listFiles(@Valid pageModelRequestParam: PageModelRequestParam): PagedResponseResult<AttachmentModel> = PagedResponseResultWrapper.data(
-    attachmentModelRepo.findAll(PagedResponseResultWrapper.param(pageModelRequestParam))
+  override fun listFiles(@Valid pagedRequestParam: PagedRequestParam): PagedResponseResult<AttachmentModel> = PagedWrapper.result(
+    attachmentModelRepo.findAll(PagedWrapper.param(pagedRequestParam))
   )
 
 }
