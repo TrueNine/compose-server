@@ -18,6 +18,9 @@ public class WeChatProperties {
    * appId 小程序 Id
    */
   private String appId;
+
+  // api 密钥
+  private String apiKey;
   /**
    * 异步通知 Id
    */

@@ -1,0 +1,10 @@
+component:
+  pay:
+    wechat:
+      app-id: 1630066782
+      private-key-path: cert/apiclient_key.pem
+      cert-paths: cert/apiclient_cert.pem
+      merchant-id: 1630066782
+      merchant-serial-number: 392240142768414572992532655247263708476860054159
+      notify-url: https://www.baidu.com
+      api-key: guangdiandaojia88888888888888888

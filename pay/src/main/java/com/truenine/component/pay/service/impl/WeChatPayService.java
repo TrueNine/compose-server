@@ -6,21 +6,26 @@ import com.truenine.component.pay.properties.WeChatProperties;
 import com.truenine.component.pay.service.PayService;
 import com.wechat.pay.java.service.payments.jsapi.JsapiService;
 import com.wechat.pay.java.service.payments.jsapi.model.Amount;
+import com.wechat.pay.java.service.payments.jsapi.model.Payer;
 import com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest;
 import com.wechat.pay.java.service.payments.jsapi.model.PrepayResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+@Service
 public class WeChatPayService implements PayService {
 
-  @Autowired
-  private JsapiService jsapiService;
+  private final JsapiService jsapiService;
 
-  @Autowired
-  private WeChatProperties weChatProperties;
+  private final WeChatProperties weChatProperties;
 
   private static final BigDecimal HUNDRED = new BigDecimal("100");
+
+  public WeChatPayService(JsapiService jsapiService, WeChatProperties weChatProperties) {
+    this.jsapiService = jsapiService;
+    this.weChatProperties = weChatProperties;
+  }
 
   @Override
   public CreateOrderResponseResult createOrder(CreateOrderRequestParam createOrderRequestParam) {
@@ -34,6 +39,10 @@ public class WeChatPayService implements PayService {
     request.setDescription(createOrderRequestParam.getTitle());
     request.setNotifyUrl(weChatProperties.getNotifyUrl());
     request.setOutTradeNo(createOrderRequestParam.getOrderId());
+
+    Payer payer = new Payer();
+    payer.setOpenid(createOrderRequestParam.getOpenId());
+    request.setPayer(payer);
 
     PrepayResponse response = jsapiService.prepay(request);
     CreateOrderResponseResult createOrderResponseResult = new CreateOrderResponseResult();
