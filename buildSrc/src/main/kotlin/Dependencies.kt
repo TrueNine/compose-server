@@ -78,6 +78,9 @@ object V {
     // https://mvnrepository.com/artifact/io.minio/minio
     const val minio = "8.5.2"
 
+    // https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
+    const val wechatpayJava = "0.2.7"
+
     // 工作流引擎
     // https://mvnrepository.com/artifact/org.flowable/flowable-spring-boot-starter
     const val flowable = "7.0.0.M1"

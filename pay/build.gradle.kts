@@ -1,9 +1,9 @@
 project.version = V.Component.pay
 
 dependencies {
-  implementation(project(":core"))
   implementation(("cn.hutool:hutool-core:${V.Util.huTool}"))
-  implementation("com.github.wechatpay-apiv3:wechatpay-java:0.2.7")
+  implementation("com.github.wechatpay-apiv3:wechatpay-java:${V.PlatformSdk.wechatpayJava}")
+  implementation(project(":core"))
 }
 
 tasks.withType<Test> {
