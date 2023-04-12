@@ -6,8 +6,12 @@ import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-  id("java")
-  id("java-library")
+  `kotlin-dsl`
+  java
+  `java-library`
+  idea
+  eclipse
+  `visual-studio`
   id("org.springframework.boot") version V.Spring.springBoot
   id("io.spring.dependency-management") version V.Plugin.dependencyManagementPlugin
   kotlin("jvm") version V.Lang.kotlin
@@ -74,13 +78,19 @@ allprojects {
 }
 
 subprojects {
+  apply(plugin = "idea")
+  apply(plugin = "eclipse")
+  apply(plugin = "visual-studio")
   apply(plugin = "java")
   apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
+  apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+  apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
   apply(plugin = "kotlin")
   apply(plugin = "org.springframework.boot")
   apply(plugin = "io.spring.dependency-management")
   apply(plugin = "java-library")
   apply(plugin = "maven-publish")
+
   java.sourceCompatibility = V.Lang.javaPlatform
 
   java {
