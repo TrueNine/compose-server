@@ -87,6 +87,8 @@ subprojects {
     withSourcesJar()
   }
 
+
+
   tasks.named("compileKotlin") {
     dependsOn("clean")
   }
@@ -124,6 +126,8 @@ subprojects {
     api("org.jetbrains.kotlin:kotlin-reflect:${V.Lang.kotlin}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${V.Lang.kotlinxCoroutine}")
     api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
+    api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
+
 
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

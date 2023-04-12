@@ -2,9 +2,13 @@ plugins {
   `kotlin-dsl`
 }
 
+val repoAli = "https://maven.aliyun.com/"
 repositories {
-  maven("https://maven.aliyun.com/repository/public")
-  maven("https://maven.aliyun.com/repository/gradle-plugin")
+  maven("${repoAli}repository/central")
+  maven("${repoAli}repository/jcenter")
+  maven("${repoAli}repository/public")
+  maven("${repoAli}repository/gradle-plugin")
+  maven("${repoAli}repository/spring")
   mavenCentral()
   gradlePluginPortal()
   google()

@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.3.25-SNAPSHOT"
+  const val version = "0.3.26-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -28,7 +28,6 @@ object V {
     const val pay = allV
   }
 
-
   object Lang {
     const val gradleWrapper = "8.0.1"
     const val javaStr = "17"
@@ -40,6 +39,9 @@ object V {
 
     // https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
     const val reactorKotlinExtension = "1.2.2"
+
+    // https://mvnrepository.com/artifact/org.jetbrains/annotations
+    const val jetbrainsAnnotations = "24.0.1"
   }
 
   object Driver {
@@ -222,7 +224,7 @@ object Repos {
   const val snapshot =
     "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
   private const val repoAli = "https://maven.aliyun.com/"
-  const val aliCentral = "${repoAli}repository/central"
+  const val aliCentral = """${repoAli}repository/central"""
   const val aliJCenter = "${repoAli}repository/jcenter"
   const val aliPublic = "${repoAli}repository/public"
   const val aliGoogle = "${repoAli}repository/google"
