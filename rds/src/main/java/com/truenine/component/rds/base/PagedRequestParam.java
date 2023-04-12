@@ -1,6 +1,6 @@
 package com.truenine.component.rds.base;
 
-import com.truenine.component.rds.util.PagedResponseResultWrapper;
+import com.truenine.component.rds.util.PagedWrapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(title = "分页请求入参")
-public class PageModelRequestParam {
+public class PagedRequestParam {
   @NotNull
   @Min(0)
   @Schema(title = "页码 最小为 0", defaultValue = "0")
@@ -27,7 +27,7 @@ public class PageModelRequestParam {
 
   @NotNull
   @Min(1)
-  @Max(PagedResponseResultWrapper.MAX_PAGE_SIZE)
+  @Max(PagedWrapper.MAX_PAGE_SIZE)
   @Schema(title = "页面大小，最大 42，最小 1", defaultValue = "42")
   private Integer pageSize;
 }

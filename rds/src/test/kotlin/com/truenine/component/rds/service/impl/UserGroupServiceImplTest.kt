@@ -2,7 +2,7 @@ package com.truenine.component.rds.service.impl
 
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.UserGroupEntity
-import jakarta.annotation.Resource
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
@@ -18,12 +18,13 @@ import kotlin.test.assertTrue
 class UserGroupServiceImplTest :
   AbstractTransactionalTestNGSpringContextTests() {
 
-  @Resource
+  @Autowired
   lateinit var userGroupService: UserGroupServiceImpl
 
   private lateinit var testUserGroup: UserGroupEntity
 
   @BeforeMethod
+  @Rollback
   fun init() {
     val u =
       UserGroupEntity()
@@ -33,6 +34,7 @@ class UserGroupServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testSaveUserGroup() {
     UserGroupEntity().apply {
       this.userId = "0"
@@ -44,6 +46,7 @@ class UserGroupServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllUserGroupByUserId() {
     userGroupService.findAllUserGroupByUserId("0").apply {
       assertTrue {
@@ -68,6 +71,7 @@ class UserGroupServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testAssignUserToUserGroup() {
     userGroupService.assignUserToUserGroup("1", testUserGroup.id)
     userGroupService.findAllUserGroupByUserId("1").apply {
@@ -76,6 +80,7 @@ class UserGroupServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testDeleteUserGroupById() {
     userGroupService.deleteUserGroupById(testUserGroup.id)
     val f = userGroupService.findUserGroupById(testUserGroup.id)
@@ -83,6 +88,7 @@ class UserGroupServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindUserGroupById() {
     userGroupService.findUserGroupById(testUserGroup.id).apply {
       assertNotNull(this)

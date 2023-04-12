@@ -5,10 +5,8 @@ import com.truenine.component.rds.entity.UserInfoEntity
 import com.truenine.component.rds.repo.UserInfoRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.springframework.transaction.annotation.Transactional
 import org.testng.annotations.Test
 
 @Rollback
@@ -20,7 +18,7 @@ open class AesEncryptConverterTest : AbstractTestNGSpringContextTests() {
   private val log = LogKt.getLog(this::class)
 
   @Test
-  @Transactional
+  @Rollback
   open fun bootConverter() {
     log.warn("从方法没有实现")
     val phone = "000101199312123349"

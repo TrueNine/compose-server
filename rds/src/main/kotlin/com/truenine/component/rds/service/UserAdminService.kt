@@ -1,24 +1,24 @@
 package com.truenine.component.rds.service
 
 import com.truenine.component.rds.entity.*
-import com.truenine.component.rds.models.req.PutUserGroupRequestParam
-import com.truenine.component.rds.models.req.PutUserRequestParam
 import com.truenine.component.rds.models.UserAuthorizationModel
+import com.truenine.component.rds.models.req.PostUserGroupRequestParam
+import com.truenine.component.rds.models.req.PostUserRequestParam
 
 interface UserAdminService {
-  fun registerPlainUser(putUserRequestParam: PutUserRequestParam?): UserEntity?
-  fun registerRootUser(rootPutUserRequestParam: PutUserRequestParam): UserEntity?
+  fun registerPlainUser(userReq: PostUserRequestParam): UserEntity?
+  fun registerRootUser(rootPostUserRequestParam: PostUserRequestParam): UserEntity?
   fun completionUserInfo(userInfo: UserInfoEntity): UserInfoEntity?
   fun completionUserInfoByAccount(
-    account: String?,
+    account: String,
     userInfo: UserInfoEntity
   ): UserInfoEntity?
 
   fun updatePasswordByAccountAndOldPassword(
-    account: String?,
-    oldPwd: String?,
-    newPwd: String?
-  ): UserAuthorizationModel?
+    account: String,
+    oldPwd: String,
+    newPwd: String
+  ): UserEntity?
 
   fun verifyPassword(account: String?, pwd: String?): Boolean
 
@@ -38,8 +38,8 @@ interface UserAdminService {
     roleGroup: RoleGroupEntity
   )
 
-  fun registerUserGroup(dto: PutUserGroupRequestParam): UserGroupEntity?
+  fun registerUserGroup(req: PostUserGroupRequestParam): UserGroupEntity?
   fun findAllUserGroupByUser(user: UserEntity): Set<UserGroupEntity>
-  fun deleteUserByAccount(account: String?)
+  fun deleteUserByAccount(account: String)
   fun assignUserToUserGroupById(userId: String, userGroupId: String)
 }

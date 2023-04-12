@@ -15,3 +15,9 @@ dependencies {
   api("com.google.guava:guava:${V.Util.guava}")
   api("jakarta.validation:jakarta.validation-api")
 }
+
+tasks.withType<Test> {
+  useTestNG {
+    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+  }
+}

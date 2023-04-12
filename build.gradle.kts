@@ -6,8 +6,12 @@ import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-  id("java")
-  id("java-library")
+  `kotlin-dsl`
+  java
+  `java-library`
+  idea
+  eclipse
+  `visual-studio`
   id("org.springframework.boot") version V.Spring.springBoot
   id("io.spring.dependency-management") version V.Plugin.dependencyManagementPlugin
   kotlin("jvm") version V.Lang.kotlin
@@ -21,7 +25,6 @@ plugins {
 
 allprojects {
   repositories {
-    mavenLocal()
     maven(release) {
       this.isAllowInsecureProtocol = true
       credentials {
@@ -55,14 +58,6 @@ allprojects {
     enabled = false
   }
 
-//  tasks.withType<Javadoc> {
-//    enabled = true
-//    options {
-//      this.encoding = "UTF-8"
-//      this.locale = "zh-CN"
-//    }
-//  }
-
   tasks.withType<BootJar> {
     enabled = false
   }
@@ -78,25 +73,34 @@ allprojects {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
   }
 
-  tasks.withType<Test> {
-    useTestNG()
-  }
   group = ProjectManager.group
   version = ProjectManager.version
 }
 
 subprojects {
+  apply(plugin = "idea")
+  apply(plugin = "eclipse")
+  apply(plugin = "visual-studio")
   apply(plugin = "java")
   apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
+  apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+  apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
   apply(plugin = "kotlin")
   apply(plugin = "org.springframework.boot")
   apply(plugin = "io.spring.dependency-management")
   apply(plugin = "java-library")
   apply(plugin = "maven-publish")
+
   java.sourceCompatibility = V.Lang.javaPlatform
 
   java {
     withSourcesJar()
+  }
+
+
+
+  tasks.named("compileKotlin") {
+    dependsOn("clean")
   }
 
   tasks.javadoc {
@@ -132,6 +136,7 @@ subprojects {
     api("org.jetbrains.kotlin:kotlin-reflect:${V.Lang.kotlin}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${V.Lang.kotlinxCoroutine}")
     api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
+    api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
 
 
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
@@ -180,6 +185,10 @@ subprojects {
   }
 }
 
+
+
 tasks.wrapper {
   gradleVersion = V.Lang.gradleWrapper
 }
+
+

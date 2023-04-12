@@ -6,17 +6,14 @@ import com.truenine.component.rds.entity.DbTestPresortTreeEntity
 import com.truenine.component.rds.repo.DbTestPresortTreeRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.support.TransactionTemplate
 import org.testng.annotations.Test
 import kotlin.test.assertContains
 import kotlin.test.assertTrue
 
 @Rollback
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(classes = [RdsEntrance::class])
 open class PresortTreeRepoTest : AbstractTestNGSpringContextTests() {
   private val log = LogKt.getLog(this::class)
@@ -28,7 +25,7 @@ open class PresortTreeRepoTest : AbstractTestNGSpringContextTests() {
   lateinit var tt: TransactionTemplate
 
   @Test
-  @Transactional
+  @Rollback
   open fun testSaveChild() {
     val b = DbTestPresortTreeEntity()
     val c = DbTestPresortTreeEntity()

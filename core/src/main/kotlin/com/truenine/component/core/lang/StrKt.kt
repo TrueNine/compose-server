@@ -6,7 +6,7 @@ package com.truenine.component.core.lang
  * @param str 需判断字符串
  * @return boolean
  */
-fun hasText(str: String): Boolean {
+fun hasText(str: String?): Boolean {
   return Str.hasText(str)
 }
 
@@ -16,4 +16,4 @@ fun hasText(str: String): Boolean {
  * @param str 字符串
  * @return boolean
  */
-fun nonText(str: String): Boolean = !hasText(str)
+fun nonText(str: String?): Boolean = !hasText(str)

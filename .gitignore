@@ -1,7 +1,7 @@
 .gradle
-gradle
 gradlew
 gradlew.bat
+gradle
 
 .generated/
 .jpb/
@@ -45,6 +45,9 @@ src/test/**/out/
 
 ### VS Code ###
 .vscode/
+
+### visual studio ###
+*.sln
 
 *resources/static/
 

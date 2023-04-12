@@ -10,7 +10,7 @@ enum class ErrMsg(val code: Int, var message: String, var alert: String) {
   /**
    * 400
    */
-  _400(400, "Request Error", "用户错误"),
+  _400(400, "Bad Request", "用户错误"),
 
   /**
    * 401
@@ -139,7 +139,7 @@ enum class ErrMsg(val code: Int, var message: String, var alert: String) {
    * -1
    */
   UNKNOWN_ERROR(
-    -1,
+    998,
     "Server Unknown Error",
     "发生了重大未知错误！目前错误原因未知，请尽快联系管理员或技术人员"
   );

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserGroupRoleGroupRepo : BaseRepo<UserGroupRoleGroupEntity, String> {
+  fun findByUserGroupIdAndRoleGroupId(userGroupId: String, roleGroupId: String): UserGroupRoleGroupEntity?
   fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroupEntity>
   fun existsByUserGroupIdAndRoleGroupId(
     userGroupId: String,

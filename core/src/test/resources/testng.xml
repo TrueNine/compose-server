@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="核心包测试" parallel="classes">
+  <test name="编解码测试" parallel="classes">
+    <packages>
+      <package name="com.truenine.component.core.encrypt"/>
+      <package name="com.truenine.component.core.encrypt.base64"/>
+    </packages>
+  </test>
+</suite>
