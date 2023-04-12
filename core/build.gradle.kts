@@ -13,4 +13,5 @@ dependencies {
   api("org.slf4j:slf4j-api")
   api("org.springframework:spring-webmvc")
   api("com.google.guava:guava:${V.Util.guava}")
+  api("jakarta.validation:jakarta.validation-api")
 }
