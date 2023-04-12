@@ -21,7 +21,6 @@ plugins {
 
 allprojects {
   repositories {
-    mavenLocal()
     maven(release) {
       this.isAllowInsecureProtocol = true
       credentials {
@@ -70,9 +69,6 @@ allprojects {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
   }
 
-  tasks.withType<Test> {
-    useTestNG()
-  }
   group = ProjectManager.group
   version = ProjectManager.version
 }
@@ -89,6 +85,10 @@ subprojects {
 
   java {
     withSourcesJar()
+  }
+
+  tasks.named("compileKotlin") {
+    dependsOn("clean")
   }
 
   tasks.javadoc {
@@ -124,7 +124,6 @@ subprojects {
     api("org.jetbrains.kotlin:kotlin-reflect:${V.Lang.kotlin}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${V.Lang.kotlinxCoroutine}")
     api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
-
 
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -172,6 +171,10 @@ subprojects {
   }
 }
 
+
+
 tasks.wrapper {
   gradleVersion = V.Lang.gradleWrapper
 }
+
+

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(title = "用户注册信息")
-public class PutUserRequestParam {
+public class PostUserRequestParam {
   @NotBlank
   @Schema(name = "account", description = "账号")
   private String account;

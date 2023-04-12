@@ -12,3 +12,12 @@ dependencies {
   implementation(project(":core"))
   testImplementation("org.springframework.security:spring-security-test")
 }
+
+
+
+tasks.withType<Test> {
+  useTestNG {
+    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+  }
+}
+

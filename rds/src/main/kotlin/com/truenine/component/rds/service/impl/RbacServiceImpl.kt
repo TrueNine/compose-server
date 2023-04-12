@@ -5,7 +5,6 @@ import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.repo.*
 import com.truenine.component.rds.service.RbacService
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 open class RbacServiceImpl(
@@ -21,14 +20,14 @@ open class RbacServiceImpl(
     return userGroupRoleGroupRepo
       .findAllByUserGroupId(userGroup.id)
       .map { it.roleGroupId }
-      .run { roleGroupRepo.findAllById(this).toSet() }
+      .let { roleGroupRepo.findAllById(it).toSet() }
   }
 
   override fun findAllRoleByRoleGroup(roleGroup: RoleGroupEntity): Set<RoleEntity> {
     return roleGroupRoleRepo
       .findAllByRoleGroupId(roleGroup.id)
       .map { it.roleId }
-      .run { roleRepo.findAllById(this).toSet() }
+      .let { roleRepo.findAllById(it).toSet() }
   }
 
   override fun findRoleById(id: String): RoleEntity? {
@@ -71,189 +70,104 @@ open class RbacServiceImpl(
   override fun findAllPermissionsByRole(role: RoleEntity): Set<PermissionsEntity> {
     return rolePermissionsRepo.findAllByRoleId(role.id)
       .map { it.permissionsId }
-      .run { permissionsRepo.findAllById(this).toSet() }
+      .let { permissionsRepo.findAllById(it).toSet() }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun assignRoleGroupToUser(
-    roleGroup: RoleGroupEntity,
-    user: UserEntity
-  ) {
-    UserRoleGroupEntity().apply {
-      userId = user.id
-      roleGroupId = roleGroup.id
-    }.run {
-      if (!userRoleGroupRepo.existsByUserIdAndRoleGroupId(
-          this.userId,
-          this.roleGroupId
-        )
-      ) {
-        userRoleGroupRepo.save(this)
+
+  override fun assignRoleGroupToUser(roleGroup: RoleGroupEntity, user: UserEntity): UserRoleGroupEntity? {
+    val saved = userRoleGroupRepo.findByUserIdAndRoleGroupId(user.id, roleGroup.id)
+    return if (null != saved) {
+      saved
+    } else {
+      val a = UserRoleGroupEntity().apply {
+        userId = user.id
+        roleGroupId = roleGroup.id
       }
+      userRoleGroupRepo.save(a)
     }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleGroupByUser(
-    roleGroup: RoleGroupEntity,
-    user: UserEntity
-  ) {
-    UserRoleGroupEntity().apply {
-      this.roleGroupId = roleGroup.id
-      this.userId = user.id
-    }.run {
-      userRoleGroupRepo.deleteByUserIdAndRoleGroupId(
-        userId,
-        roleGroupId
-      )
-    }
-  }
+  override fun revokeRoleGroupByUser(roleGroup: RoleGroupEntity, user: UserEntity) = userRoleGroupRepo.deleteByUserIdAndRoleGroupId(user.id, roleGroup.id)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupByUser(user: UserEntity) {
-    userRoleGroupRepo.deleteAllByUserId(user.id)
-  }
+  override fun revokeAllRoleGroupByUser(user: UserEntity) = userRoleGroupRepo.deleteAllByUserId(user.id)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupByUserGroup(userGroup: UserGroupEntity) {
-    userGroupRoleGroupRepo.deleteAllByUserGroupId(userGroupId = userGroup.id)
-  }
 
-  @Transactional(rollbackFor = [Exception::class])
+  override fun revokeAllRoleGroupByUserGroup(userGroup: UserGroupEntity) = userGroupRoleGroupRepo.deleteAllByUserGroupId(userGroupId = userGroup.id)
+
+
   override fun assignRoleGroupToUserGroup(
     roleGroup: RoleGroupEntity,
     userGroup: UserGroupEntity
-  ) {
-    UserGroupRoleGroupEntity()
-      .apply {
-        this.roleGroupId = roleGroup.id
-        this.userGroupId = userGroup.id
-      }.run {
-        if (!userGroupRoleGroupRepo.existsByUserGroupIdAndRoleGroupId(
-            userGroupId,
-            roleGroupId
-          )
-        ) {
-          userGroupRoleGroupRepo.save(this)
-        }
+  ): UserGroupRoleGroupEntity? {
+    val saved = userGroupRoleGroupRepo.findByUserGroupIdAndRoleGroupId(userGroup.id, roleGroup.id)
+    return if (saved != null) {
+      saved
+    } else {
+      val ugrg = UserGroupRoleGroupEntity().apply {
+        roleGroupId = roleGroup.id
+        userGroupId = userGroup.id
       }
+      userGroupRoleGroupRepo.save(ugrg)
+    }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleGroupForUserGroup(
-    roleGroup: RoleGroupEntity,
-    userGroup: UserGroupEntity
-  ) {
-    UserGroupRoleGroupEntity()
-      .apply {
-        this.userGroupId = userGroup.id
-        this.roleGroupId = roleGroup.id
-      }.run {
-        userGroupRoleGroupRepo.deleteByUserGroupIdAndRoleGroupId(
-          userGroupId,
-          roleGroupId
-        )
-      }
-  }
+  override fun revokeRoleGroupForUserGroup(roleGroup: RoleGroupEntity, userGroup: UserGroupEntity) =
+    userGroupRoleGroupRepo.deleteByUserGroupIdAndRoleGroupId(userGroup.id, roleGroup.id)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun saveRoleGroup(roleGroup: RoleGroupEntity): RoleGroupEntity {
-    return roleGroupRepo.save(roleGroup)
-  }
+  override fun saveRoleGroup(roleGroup: RoleGroupEntity) = roleGroupRepo.save(roleGroup)
 
-  @Transactional(rollbackFor = [Exception::class])
   override fun assignRoleToRoleGroup(
     roleGroup: RoleGroupEntity,
     role: RoleEntity
-  ) {
-    RoleGroupRoleEntity().apply {
-      this.roleGroupId = roleGroup.id
-      this.roleId = role.id
-    }.run {
-      if (!roleGroupRoleRepo.existsByRoleGroupIdAndRoleId(
-          roleGroupId,
-          roleId
-        )
-      ) {
-        roleGroupRoleRepo.save(this)
-      }
+  ): RoleGroupRoleEntity {
+    val saved = roleGroupRoleRepo.findByRoleGroupIdAndRoleId(roleGroup.id, role.id)
+    if (saved != null) {
+      return saved
     }
+    val rg = RoleGroupRoleEntity().apply {
+      roleId = role.id
+      roleGroupId = roleGroup.id
+    }
+    return roleGroupRoleRepo.save(rg)
   }
 
-  @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleForRoleGroup(
     roleGroup: RoleGroupEntity,
     role: RoleEntity
-  ) {
-    RoleGroupRoleEntity().apply {
-      this.roleGroupId = roleGroup.id
-      this.roleId = role.id
-    }.run {
-      roleGroupRoleRepo.deleteByRoleGroupIdAndRoleId(
-        roleGroupId,
-        roleId
-      )
-    }
-  }
+  ) = roleGroupRoleRepo.deleteByRoleGroupIdAndRoleId(roleGroup.id, role.id)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun saveRole(role: RoleEntity): RoleEntity {
-    return roleRepo.save(role)
-  }
+  override fun saveRole(role: RoleEntity): RoleEntity = roleRepo.save(role)
 
-  @Transactional(rollbackFor = [Exception::class])
   override fun assignPermissionsToRole(
     role: RoleEntity,
     permissions: PermissionsEntity
-  ) {
-    RolePermissionsEntity()
-      .apply {
-        this.permissionsId = permissions.id
-        this.roleId = role.id
-      }.run {
-        if (!rolePermissionsRepo.existsByRoleIdAndPermissionsId(
-            roleId,
-            permissionsId
-          )
-        ) {
-          rolePermissionsRepo.save(this)
-        }
-      }
+  ): RolePermissionsEntity? {
+    val saved = rolePermissionsRepo.findByRoleIdAndPermissionsId(role.id, permissions.id)
+    if (saved != null) {
+      return saved
+    }
+    val rolePermissions = RolePermissionsEntity().apply {
+      permissionsId = permissions.id
+      roleId = role.id
+    }
+    return rolePermissionsRepo.save(rolePermissions)
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+
   override fun revokePermissionsForRole(
     role: RoleEntity,
     permissions: PermissionsEntity
-  ) {
-    rolePermissionsRepo.deleteByRoleIdAndPermissionsId(role.id, permissions.id)
-  }
+  ) = rolePermissionsRepo.deleteByRoleIdAndPermissionsId(role.id, permissions.id)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun savePermissions(permissions: PermissionsEntity): PermissionsEntity {
-    return permissionsRepo.save(permissions)
-  }
+  override fun savePermissions(permissions: PermissionsEntity): PermissionsEntity = permissionsRepo.save(permissions)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun deleteRoleGroup(roleGroup: RoleGroupEntity) {
-    roleGroupRepo.deleteById(roleGroup.id)
-  }
+  override fun deleteRoleGroup(roleGroup: RoleGroupEntity) = roleGroupRepo.deleteById(roleGroup.id)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun deleteRole(role: RoleEntity) {
-    roleRepo.deleteById(role.id)
-  }
+  override fun deleteRole(role: RoleEntity) = roleRepo.deleteById(role.id)
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun deletePermissions(permissions: PermissionsEntity) {
-    permissionsRepo.deleteById(permissions.id)
-  }
+  override fun deletePermissions(permissions: PermissionsEntity) = permissionsRepo.deleteById(permissions.id)
 
-  override fun findRoleGroupById(id: String): RoleGroupEntity? {
-    return roleGroupRepo.findById(id).orElse(null)
-  }
+  override fun findRoleGroupById(id: String): RoleGroupEntity? = roleGroupRepo.findById(id).orElse(null)
 
-  override fun findPermissionsById(id: String): PermissionsEntity? {
-    return permissionsRepo.findById(id).orElse(null)
-  }
+  override fun findPermissionsById(id: String): PermissionsEntity? = permissionsRepo.findById(id).orElse(null)
 }

@@ -10,3 +10,9 @@ dependencies {
   testImplementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
   testRuntimeOnly("com.mysql:mysql-connector-j")
 }
+
+tasks.withType<Test> {
+  useTestNG {
+    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+  }
+}

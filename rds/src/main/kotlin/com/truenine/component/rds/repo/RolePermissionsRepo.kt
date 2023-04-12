@@ -6,11 +6,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RolePermissionsRepo : BaseRepo<RolePermissionsEntity, String> {
+  fun findByRoleIdAndPermissionsId(roleId: String, permissionsId: String): RolePermissionsEntity?
   fun findAllByRoleId(role: String): List<RolePermissionsEntity>
-  fun existsByRoleIdAndPermissionsId(
-    roleId: String,
-    permissionsId: String
-  ): Boolean
-
+  fun existsByRoleIdAndPermissionsId(roleId: String, permissionsId: String): Boolean
   fun deleteByRoleIdAndPermissionsId(roleId: String, permissionsId: String)
 }

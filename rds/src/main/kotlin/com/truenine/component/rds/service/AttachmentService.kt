@@ -8,7 +8,7 @@ import com.truenine.component.rds.models.AttachmentModel
 import jakarta.validation.Valid
 
 interface AttachmentService {
-  fun saveFile(
+  fun saveAttachment(
     @Valid f: PutAttachmentRequestParam?
   ): AttachmentModel?
 

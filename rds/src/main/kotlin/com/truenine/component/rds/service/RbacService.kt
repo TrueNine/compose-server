@@ -21,10 +21,7 @@ interface RbacService {
 
   fun findAllPermissionsByRole(role: RoleEntity): Set<PermissionsEntity>
 
-  fun assignRoleGroupToUser(
-    roleGroup: RoleGroupEntity,
-    user: UserEntity
-  )
+  fun assignRoleGroupToUser(roleGroup: RoleGroupEntity, user: UserEntity):UserRoleGroupEntity?
 
   fun revokeRoleGroupByUser(
     roleGroup: RoleGroupEntity,
@@ -33,10 +30,7 @@ interface RbacService {
 
   fun revokeAllRoleGroupByUser(user: UserEntity)
   fun revokeAllRoleGroupByUserGroup(userGroup: UserGroupEntity)
-  fun assignRoleGroupToUserGroup(
-    roleGroup: RoleGroupEntity,
-    userGroup: UserGroupEntity
-  )
+  fun assignRoleGroupToUserGroup(roleGroup: RoleGroupEntity, userGroup: UserGroupEntity): UserGroupRoleGroupEntity?
 
   fun revokeRoleGroupForUserGroup(
     roleGroup: RoleGroupEntity,
@@ -44,10 +38,7 @@ interface RbacService {
   )
 
   fun saveRoleGroup(roleGroup: RoleGroupEntity): RoleGroupEntity
-  fun assignRoleToRoleGroup(
-    roleGroup: RoleGroupEntity,
-    role: RoleEntity
-  )
+  fun assignRoleToRoleGroup(roleGroup: RoleGroupEntity, role: RoleEntity): RoleGroupRoleEntity
 
   fun revokeRoleForRoleGroup(
     roleGroup: RoleGroupEntity,
@@ -58,7 +49,7 @@ interface RbacService {
   fun assignPermissionsToRole(
     role: RoleEntity,
     permissions: PermissionsEntity
-  )
+  ): RolePermissionsEntity?
 
   fun revokePermissionsForRole(
     role: RoleEntity,

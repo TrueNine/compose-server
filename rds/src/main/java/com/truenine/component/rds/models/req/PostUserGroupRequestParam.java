@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(title = "用户组注册参数")
-public class PutUserGroupRequestParam {
+public class PostUserGroupRequestParam {
   @NotBlank
   @NotNull
   @Schema(description = "用户组名称")

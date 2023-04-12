@@ -5,14 +5,12 @@ import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.RoleGroupEntity
 import com.truenine.component.rds.entity.UserInfoEntity
-import com.truenine.component.rds.models.req.PutUserGroupRequestParam
-import com.truenine.component.rds.models.req.PutUserRequestParam
-import jakarta.annotation.Resource
+import com.truenine.component.rds.models.req.PostUserGroupRequestParam
+import com.truenine.component.rds.models.req.PostUserRequestParam
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
-import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import java.time.LocalDate
@@ -23,14 +21,14 @@ import kotlin.test.*
 class UserAdminServiceImplTest :
   AbstractTransactionalTestNGSpringContextTests() {
 
-  @Resource
+  @Autowired
   lateinit var adminService: UserAdminServiceImpl
 
-  @Resource
+  @Autowired
   private lateinit var rbacService: RbacServiceImpl
 
-  private val regDto =
-    PutUserRequestParam(
+  private val regReq =
+    PostUserRequestParam(
       "001",
       "zliq",
       "qwer1234",
@@ -38,7 +36,7 @@ class UserAdminServiceImplTest :
       null
     )
   private val testPlainUser =
-    PutUserRequestParam(
+    PostUserRequestParam(
       "303",
       "truenine",
       "qwer1234",
@@ -54,20 +52,17 @@ class UserAdminServiceImplTest :
    * 以及获取普通权限
    */
   @BeforeMethod
+  @Rollback
   fun init() {
     userRoleGroup = rbacService.findPlainRoleGroup()
     rootUserGroup = rbacService.findRootRoleGroup()
     adminService.registerPlainUser(testPlainUser)
   }
 
-  @AfterMethod
-  fun destroy() {
-    adminService.deleteUserByAccount(testPlainUser.account)
-  }
-
   @Test
+  @Rollback
   fun testRegisterPlainUser() {
-    val regUsr = adminService.registerPlainUser(regDto)
+    val regUsr = adminService.registerPlainUser(regReq)
     assertNotNull(
       regUsr,
       "没有注册用户"
@@ -75,25 +70,36 @@ class UserAdminServiceImplTest :
     val allRoleGroup = adminService.findAllRoleGroupByUser(regUsr)
     assertContains(allRoleGroup, userRoleGroup, "没有分配权限")
 
-    val a = regDto
-    a.account = ""
-    a.pwd = ""
+    val illegalParameters = PostUserRequestParam().apply {
+      account = ""
+      pwd = ""
+    }
 
-    val failUser = adminService.registerPlainUser(a)
-    assertNull(failUser, "注册了成功了空普通用户")
+    assertFailsWith<IllegalArgumentException>("保存了不该保存的参数") {
+      adminService.registerPlainUser(illegalParameters)
+    }
 
-    val repeatUser = adminService.registerPlainUser(regDto)
-    assertNull(repeatUser, "注册了重复的用户")
+    assertFailsWith<IllegalArgumentException>("参数校验不通过，保存了同一个用户") {
+      adminService.registerPlainUser(regReq)
+    }
   }
 
   @Test
+  @Rollback
   fun testRegisterRootUser() {
-    val rootUser = adminService.registerRootUser(testPlainUser)!!
+    val newUser = PostUserRequestParam().apply {
+      this.account = "1qweqwe"
+      this.pwd = "qwer1234"
+      this.againPwd = "qwer1234"
+      this.nickName = "王麻子"
+    }
+    val rootUser = adminService.registerRootUser(newUser)!!
     val allRoleGroup = adminService.findAllRoleGroupByUser(rootUser)
     assertContains(allRoleGroup, rootUserGroup, "没有分配权限")
   }
 
   @Test
+  @Rollback
   fun testCompletionUserInfo() {
     val saveInfo = adminService.completionUserInfo(
       UserInfoEntity().apply {
@@ -113,6 +119,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testCompletionUserInfoByAccount() {
     val saveInfo = adminService
       .completionUserInfoByAccount("root",
@@ -123,16 +130,17 @@ class UserAdminServiceImplTest :
             this.phone = "15675292005"
             this.email = "truenine@qq.com"
             this.gender = 1
-            this.firstName = "彭"
-            this.lastName = "继工"
+            this.firstName = "c"
+            this.lastName = "bb"
           })
     assertNotNull(
       saveInfo,
-      "没有添加信息成功"
+      "添加信息没有成功"
     )
   }
 
   @Test
+  @Rollback
   fun testUpdatePasswordByAccountAndOldPassword() {
     adminService.updatePasswordByAccountAndOldPassword(
       "root",
@@ -146,6 +154,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindUsrVoByAccount() {
     val c =
       adminService.findUserAuthorizationModelByAccount(testPlainUser.account)
@@ -154,6 +163,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllRoleGroupByAccount() {
     val c = adminService.findAllRoleByAccount(testPlainUser.account)
     log.debug("usrVo = {}", c)
@@ -164,6 +174,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllRoleGroupByUser() {
     val testUser = adminService.findUserByAccount(testPlainUser.account)
     val roleGroups = adminService.findAllRoleGroupByUser(testUser!!)
@@ -173,6 +184,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllRoleByAccount() {
     val testUser = adminService.findUserByAccount(testPlainUser.account)
     val roleGroups = adminService.findAllRoleByAccount(testUser!!.account)
@@ -182,6 +194,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllRoleByUser() {
     val testUser = adminService.findUserByAccount(testPlainUser.account)
     val roleGroups = adminService.findAllRoleByUser(testUser!!)
@@ -191,6 +204,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllPermissionsByAccount() {
     val testUser = adminService.findUserByAccount(testPlainUser.account)
     val roleGroups =
@@ -201,6 +215,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllPermissionsByUser() {
     val testUser = adminService.findUserByAccount(testPlainUser.account)
     val roleGroups = adminService.findAllPermissionsByUser(testUser!!)
@@ -210,6 +225,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testRevokeRoleGroupByUser() {
     val testUser = adminService.findUserByAccount(testPlainUser.account)
 
@@ -228,10 +244,11 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindAllUserGroupByUser() {
-    val user = adminService.registerPlainUser(regDto)!!
+    val user = adminService.registerPlainUser(regReq)!!
     val g = adminService.registerUserGroup(
-      PutUserGroupRequestParam()
+      PostUserGroupRequestParam()
         .apply {
           this.leaderUserAccount = "root"
           this.name = "234"
@@ -247,9 +264,10 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testAssignUserToUserGroupById() {
     val regDto =
-      PutUserRequestParam()
+      PostUserRequestParam()
         .apply {
           this.account = "wym"
           this.pwd = "qwer1234"
@@ -268,6 +286,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun findUserById() {
     val testUser = adminService.findUserByAccount(testPlainUser.account)
     assertNotNull(
@@ -277,6 +296,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testVerifyPassword() {
     assertTrue("校验密码失败") {
       adminService.verifyPassword(testPlainUser.account, testPlainUser.pwd)
@@ -284,6 +304,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindUserById() {
     assertNotNull(
       adminService.findUserById(
@@ -293,6 +314,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testFindUserByAccount() {
     assertNotNull(
       adminService.findUserByAccount(testPlainUser.account),
@@ -301,6 +323,7 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testDeleteUserByAccount() {
     adminService.deleteUserByAccount(testPlainUser.account)
     assertNull(
@@ -310,8 +333,9 @@ class UserAdminServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testRegisterUserGroup() {
-    PutUserGroupRequestParam()
+    PostUserGroupRequestParam()
       .apply {
         this.leaderUserAccount = "root"
         this.desc = "略"

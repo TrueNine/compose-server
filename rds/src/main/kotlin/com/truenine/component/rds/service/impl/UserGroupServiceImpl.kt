@@ -5,6 +5,7 @@ import com.truenine.component.rds.entity.UserGroupUserEntity
 import com.truenine.component.rds.repo.UserGroupRepo
 import com.truenine.component.rds.repo.UserGroupUserRepo
 import com.truenine.component.rds.service.UserGroupService
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,7 +15,7 @@ open class UserGroupServiceImpl(
   private val userGroupUserRepo: UserGroupUserRepo
 ) : UserGroupService {
 
-  @Transactional(rollbackFor = [Exception::class])
+
   override fun saveUserGroup(userGroup: UserGroupEntity): UserGroupEntity? {
     return userGroupRepo.save(userGroup)
   }
@@ -33,17 +34,16 @@ open class UserGroupServiceImpl(
     }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+
   override fun deleteUserGroupById(id: String) {
     userGroupRepo.deleteById(id)
   }
 
   override fun findUserGroupById(id: String): UserGroupEntity? {
-    return userGroupRepo.findById(id).orElse(null)
+    return userGroupRepo.findByIdOrNull(id)
   }
 
   override fun findAllUserGroupByUserId(userId: String): Set<UserGroupEntity> {
     return userGroupRepo.findAllByUserId(userId)
   }
-
 }

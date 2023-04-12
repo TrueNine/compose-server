@@ -4,7 +4,7 @@ import com.truenine.component.core.http.MediaTypes
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.models.req.PutAttachmentRequestParam
-import jakarta.annotation.Resource
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
@@ -20,11 +20,12 @@ import kotlin.test.assertTrue
 class AttachmentServiceImplTest :
   AbstractTransactionalTestNGSpringContextTests() {
 
-  @Resource
+  @Autowired
   lateinit var fileService: AttachmentServiceImpl
   private lateinit var testPutAttachmentRequestParam: PutAttachmentRequestParam
 
   @BeforeMethod
+  @Rollback
   fun init() {
     testPutAttachmentRequestParam =
       PutAttachmentRequestParam()
@@ -39,15 +40,17 @@ class AttachmentServiceImplTest :
   }
 
   @Test
+  @Rollback
   fun testSaveFile() {
-    val f = fileService.saveFile(testPutAttachmentRequestParam)
+    val f = fileService.saveAttachment(testPutAttachmentRequestParam)
     assertNotNull(f, "没有保存文件")
   }
 
 
   @Test
+  @Rollback
   fun testListFiles() {
-    fileService.saveFile(testPutAttachmentRequestParam)
+    fileService.saveAttachment(testPutAttachmentRequestParam)
     assertTrue("没有保存好file") {
       fileService.listFiles().dataList.isNotEmpty()
     }

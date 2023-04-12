@@ -18,6 +18,7 @@ class DbTestDurationConverterRepoTest : AbstractTestNGSpringContextTests() {
   private lateinit var repo: DbTestDurationConverterRepo
 
   @Test
+  @Rollback
   fun testSaveAndFind() {
     val entity = DbTestDurationConverterEntity().apply {
       durations = Duration.parse("PT24H")

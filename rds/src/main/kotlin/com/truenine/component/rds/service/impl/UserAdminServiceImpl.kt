@@ -1,11 +1,12 @@
 package com.truenine.component.rds.service.impl
 
 import com.truenine.component.core.consts.CacheFieldNames
-import com.truenine.component.core.lang.Str
+import com.truenine.component.core.lang.hasText
+import com.truenine.component.core.lang.requireAll
 import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.models.UserAuthorizationModel
-import com.truenine.component.rds.models.req.PutUserGroupRequestParam
-import com.truenine.component.rds.models.req.PutUserRequestParam
+import com.truenine.component.rds.models.req.PostUserGroupRequestParam
+import com.truenine.component.rds.models.req.PostUserRequestParam
 import com.truenine.component.rds.service.RbacService
 import com.truenine.component.rds.service.UserAdminService
 import com.truenine.component.rds.service.UserGroupService
@@ -21,8 +22,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class UserAdminServiceImpl
-  : UserAdminService {
+open class UserAdminServiceImpl : UserAdminService {
 
   private lateinit var userService: UserService
 
@@ -54,85 +54,85 @@ open class UserAdminServiceImpl
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerPlainUser(putUserRequestParam: PutUserRequestParam?): UserEntity? {
-    return putUserRequestParam?.takeIf {
-      Str.hasText(it.account)
-        && Str.hasText(it.pwd)
-        && Str.hasText(it.againPwd)
-        && Str.hasText(it.nickName)
-        && !(userService.existsByAccount(it.account!!))
-    }?.let {
-      val u =
-        UserEntity().apply {
-          account = it.account
-          nickName = it.nickName
-          doc = it.doc
-          pwdEnc = passwordEncoder.encode(it.pwd)
-        }
-      val savedUser = userService.saveUser(u)!!
-      rbacService.assignRoleGroupToUser(
-        rbacService.findPlainRoleGroup(),
-        savedUser
-      )
-      savedUser
+  override fun registerPlainUser(userReq: PostUserRequestParam): UserEntity? {
+    requireAll(
+      hasText(userReq.account),
+      hasText(userReq.pwd),
+      hasText(userReq.againPwd),
+      hasText(userReq.nickName)
+    ) {
+      "参数不合法 $userReq"
     }
+    require(userService.notExistsByAccount(userReq.account))
+    { "账户已经存在" }
+
+    val newUser = UserEntity().apply {
+      account = userReq.account
+      nickName = userReq.nickName
+      doc = userReq.doc
+      pwdEnc = passwordEncoder.encode(userReq.pwd)
+    }
+    val plainRoleGroup = rbacService.findPlainRoleGroup()
+    val savedUser = userService.saveUser(newUser)
+    checkNotNull(savedUser) { "没有注册新用户" }
+    rbacService.assignRoleGroupToUser(plainRoleGroup, savedUser)
+    return savedUser
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerRootUser(rootPutUserRequestParam: PutUserRequestParam): UserEntity? {
-    return (registerPlainUser(rootPutUserRequestParam)
-      ?: findUserByAccount(rootPutUserRequestParam.account))
-      ?.apply {
-        rbacService.assignRoleGroupToUser(
-          rbacService.findRootRoleGroup(),
-          this
-        )
-      }
+  override fun registerRootUser(rootPostUserRequestParam: PostUserRequestParam): UserEntity? {
+    val plain = registerPlainUser(rootPostUserRequestParam)
+    checkNotNull(plain)
+    val rootRoleGroup = rbacService.findRootRoleGroup()
+    rbacService.assignRoleGroupToUser(rootRoleGroup, plain)
+    return plain
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun completionUserInfo(userInfo: UserInfoEntity): UserInfoEntity? =
-    userService.saveUserInfo(userInfo)
+  override fun completionUserInfo(userInfo: UserInfoEntity): UserInfoEntity? = userService.saveUserInfo(userInfo)
 
-  @Transactional(rollbackFor = [Exception::class])
   override fun completionUserInfoByAccount(
-    account: String?,
+    account: String,
     userInfo: UserInfoEntity
-  ): UserInfoEntity? = account?.run {
+  ): UserInfoEntity? = account.run {
     userService.findUserByAccount(this)?.run {
       userInfo.userId = this.id
       completionUserInfo(userInfo)
     }
   }
 
+  @Suppress("SpringElInspection")
+  @CacheEvict(
+    cacheNames = [CacheFieldNames.User.DETAILS],
+    key = "#account",
+    cacheManager = CacheFieldNames.CacheManagerNames.H2
+  )
   @Transactional(rollbackFor = [Exception::class])
   override fun updatePasswordByAccountAndOldPassword(
-    account: String?,
-    oldPwd: String?,
-    newPwd: String?
-  ): UserAuthorizationModel? {
-    return takeIf {
-      Str.hasText(account)
-        && Str.hasText(oldPwd)
-        && Str.hasText(newPwd)
-    }?.run {
-      // 账号不为空
-      findUserAuthorizationModelByAccount(account!!)?.apply {
-        if (!passwordEncoder.matches(newPwd, user.pwdEnc)) {
-          this.user.pwdEnc = passwordEncoder.encode(newPwd)
-          userService.saveUser(this.user)
-        }
-      }
+    account: String,
+    oldPwd: String,
+    newPwd: String
+  ): UserEntity? {
+    // 账号不为空
+    requireAll(
+      hasText(account),
+      hasText(oldPwd),
+      hasText(newPwd)
+    )
+    val user = userService.findUserByAccount(account)
+    checkNotNull(user)
+    if (passwordEncoder.matches(oldPwd, user.pwdEnc)) {
+      return userService.saveUser(user.apply { pwdEnc = passwordEncoder.encode(newPwd) })
     }
+    return null
   }
 
-  @Transactional(rollbackFor = [Exception::class])
   override fun verifyPassword(account: String?, pwd: String?): Boolean {
-    return account?.takeIf {
-      pwd != null
-    }?.run {
-      passwordEncoder.matches(pwd, userService.findPwdEncByAccount(account))
-    } ?: false
+    requireAll(
+      hasText(account),
+      hasText(pwd)
+    )
+    val pwdEnc = userService.findPwdEncByAccount(account!!)
+    return passwordEncoder.matches(pwd, pwdEnc)
   }
 
   @Suppress("SpringElInspection")
@@ -143,28 +143,25 @@ open class UserAdminServiceImpl
     cacheManager = CacheFieldNames.CacheManagerNames.H2
   )
   override fun findUserAuthorizationModelByAccount(account: String): UserAuthorizationModel? {
-    return UserAuthorizationModel()
-      .apply {
-        user = userService.findUserByAccount(account)
-      }.takeIf {
-        it.user != null
-      }?.let {
-        runBlocking {
-          val a = async {
-            userService.findUserInfoById(it.user!!.id)
-          }
-          val b = async {
-            findAllRoleByUser(it.user!!)
-          }
-          val c = async {
-            findAllPermissionsByUser(it.user!!)
-          }
-          it.info = a.await()
-          it.roles = b.await()
-          it.permissions = c.await()
-          it
-        }
+    val u = userService.findUserByAccount(account)
+    checkNotNull(u)
+    val authInfo = UserAuthorizationModel()
+    authInfo.user = u
+    return runBlocking {
+      val info = async {
+        userService.findUserInfoById(u.id)
       }
+      val roles = async {
+        findAllRoleByUser(u)
+      }
+      val permissions = async {
+        findAllPermissionsByUser(u)
+      }
+      authInfo.info = info.await()
+      authInfo.roles = roles.await()
+      authInfo.permissions = permissions.await()
+      authInfo
+    }
   }
 
   override fun findUserById(id: String?): UserEntity? {
@@ -177,36 +174,24 @@ open class UserAdminServiceImpl
 
   override fun findAllRoleGroupByAccount(account: String): Set<RoleGroupEntity> {
     return userService.findUserByAccount(account)
-      ?.let {
-        findAllRoleGroupByUser(it)
-      } ?: setOf()
+      ?.run { findAllRoleGroupByUser(this) } ?: setOf()
   }
 
-  override fun findAllRoleGroupByUser(user: UserEntity): Set<RoleGroupEntity> {
-    return rbacService.findAllRoleGroupByUser(user)
-  }
+  override fun findAllRoleGroupByUser(user: UserEntity): Set<RoleGroupEntity> = rbacService.findAllRoleGroupByUser(user)
 
-  override fun findAllRoleByAccount(account: String): Set<RoleEntity> {
-    return userService.findUserByAccount(account)
-      ?.let {
-        findAllRoleByUser(it)
-      } ?: setOf()
-  }
 
-  override fun findAllRoleByUser(user: UserEntity): Set<RoleEntity> {
-    return rbacService.findAllRoleByUser(user)
-  }
+  override fun findAllRoleByAccount(account: String): Set<RoleEntity> = userService.findUserByAccount(account)?.run { findAllRoleByUser(this) } ?: setOf()
 
-  override fun findAllPermissionsByAccount(account: String): Set<PermissionsEntity> {
-    return userService.findUserByAccount(account)
-      ?.let {
-        findAllPermissionsByUser(it)
-      } ?: setOf()
-  }
 
-  override fun findAllPermissionsByUser(user: UserEntity): Set<PermissionsEntity> {
-    return rbacService.findAllPermissionsByUser(user)
-  }
+  override fun findAllRoleByUser(user: UserEntity): Set<RoleEntity> = rbacService.findAllRoleByUser(user)
+
+
+  override fun findAllPermissionsByAccount(account: String): Set<PermissionsEntity> =
+    userService.findUserByAccount(account)?.run { findAllPermissionsByUser(this) } ?: setOf()
+
+
+  override fun findAllPermissionsByUser(user: UserEntity): Set<PermissionsEntity> = rbacService.findAllPermissionsByUser(user)
+
 
   @Suppress("SpringElInspection")
   @CacheEvict(
@@ -223,37 +208,31 @@ open class UserAdminServiceImpl
     rbacService.revokeRoleGroupByUser(roleGroup, user)
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun registerUserGroup(@Valid dto: PutUserGroupRequestParam): UserGroupEntity? {
-    return userService.findUserByAccount(dto.leaderUserAccount)?.let {
+  override fun registerUserGroup(@Valid req: PostUserGroupRequestParam): UserGroupEntity? {
+    return userService.findUserByAccount(req.leaderUserAccount)?.let { leaderUser ->
       UserGroupEntity().apply {
-        this.userId = it.id
-        this.name = dto.name
-        this.doc = dto.desc
+        userId = leaderUser.id
+        name = req.name
+        doc = req.desc
       }.apply {
         userGroupService.saveUserGroup(this)
       }
     }
   }
 
-  override fun findAllUserGroupByUser(user: UserEntity): Set<UserGroupEntity> {
-    return userGroupService.findAllUserGroupByUserId(user.id)
-  }
+  override fun findAllUserGroupByUser(user: UserEntity): Set<UserGroupEntity> = userGroupService.findAllUserGroupByUserId(user.id)
 
-  override fun deleteUserByAccount(account: String?) {
-    account?.apply {
-      userService.findUserByAccount(account)?.apply {
-        userService.deleteUser(this)
-        userService.findUserInfoByAccount(account)?.apply {
-          userService.deleteUserInfo(this)
-        }
-        rbacService.revokeAllRoleGroupByUser(this)
+  @Transactional(rollbackFor = [Exception::class])
+  override fun deleteUserByAccount(account: String) {
+    userService.findUserByAccount(account)?.apply {
+      userService.deleteUser(this)
+      userService.findUserInfoByAccount(account)?.apply {
+        userService.deleteUserInfo(this)
       }
+      rbacService.revokeAllRoleGroupByUser(this)
     }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun assignUserToUserGroupById(userId: String, userGroupId: String) {
-    userGroupService.assignUserToUserGroup(userId, userGroupId)
-  }
+  override fun assignUserToUserGroupById(userId: String, userGroupId: String) = userGroupService.assignUserToUserGroup(userId, userGroupId)
+
 }

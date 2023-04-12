@@ -4,12 +4,11 @@ import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.UserEntity
 import com.truenine.component.rds.entity.UserInfoEntity
-import jakarta.annotation.Resource
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
-import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import java.time.LocalDate
@@ -24,16 +23,17 @@ import kotlin.test.assertTrue
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
 
-  @Resource
+  @Autowired
   lateinit var userService: UserServiceImpl
 
-  @Resource
+  @Autowired
   lateinit var passwordEncoder: PasswordEncoder
 
   private lateinit var testUser: UserEntity
   private lateinit var testUserInfo: UserInfoEntity
 
   @BeforeMethod
+  @Rollback
   fun init() {
     UserEntity().apply {
       this.account = "testUser"
@@ -59,31 +59,30 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
     }
   }
 
-  @AfterMethod
-  fun destroy() {
-    userService.deleteUser(this.testUser)
-    userService.deleteUserInfo(this.testUserInfo)
-  }
 
   @Test
+  @Rollback
   fun testFindUserById() {
     val u = userService.findUserById(testUser.id)
     assertEquals(testUser, u, "查询出来的数据不对")
   }
 
   @Test
+  @Rollback
   fun testFindUserByAccount() {
     val u = userService.findUserByAccount(testUser.account)
     assertEquals(testUser, u, "查询出来的数据不对")
   }
 
   @Test
+  @Rollback
   fun testFindPwdEncByAccount() {
     val u = userService.findPwdEncByAccount(testUser.account)
     assertEquals(testUser.pwdEnc, u, "查询出来的数据不对")
   }
 
   @Test
+  @Rollback
   fun testExistsByAccount() {
     assertTrue("没有查询到账户的用户") {
       userService.existsByAccount(testUser.account)
@@ -94,6 +93,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   }
 
   @Test
+  @Rollback
   fun testFindUserInfoById() {
     val findInfo = userService.findUserInfoById(testUserInfo.userId)
     assertEquals(
@@ -104,6 +104,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   }
 
   @Test
+  @Rollback
   fun testFindUserInfoByAccount() {
     val info = userService.findUserInfoByAccount(testUser.account)
     assertEquals(testUserInfo, info, "用户信息不符")
@@ -111,6 +112,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   }
 
   @Test
+  @Rollback
   fun testSaveUser() {
     val a = UserEntity().apply {
       this.account = "qwer1234"
@@ -122,10 +124,12 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   }
 
   @Test
+  @Rollback
   fun testSaveUserInfo() {
     userService.deleteUserInfo(testUserInfo)
     UserInfoEntity().apply {
       userId = testUser.id
+      birthday = LocalDate.of(2021, 3, 4)
       phone = "123324240102"
       idCard = "123124010123232233"
       email = "truenine@163.com"
@@ -134,10 +138,12 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   }
 
   @Test
+  @Rollback
   fun testSaveUserInfoByAccount() {
     val newUser =
       UserEntity().apply {
         account = "abtest"
+
         nickName = "我日了狗"
         pwdEnc = passwordEncoder.encode("abc123")
       }
@@ -145,6 +151,7 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
     val newUserInfo =
       UserInfoEntity().apply {
         userId = newUser.id
+        birthday = LocalDate.of(2021, 3, 3)
         phone = "123324240102"
         idCard = "123124010123232233"
         email = "truenine@163.com"
@@ -159,11 +166,13 @@ class UserServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   }
 
   @Test
+  @Rollback
   fun testDeleteUser() {
     log.debug("destroy 已执行删除")
   }
 
   @Test
+  @Rollback
   fun testDeleteUserInfo() {
     log.warn("destroy 已执行删除")
   }

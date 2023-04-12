@@ -1,6 +1,7 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.lang.Str
+import com.truenine.component.core.lang.hasText
+import com.truenine.component.core.lang.requireAll
 import com.truenine.component.rds.entity.UserEntity
 import com.truenine.component.rds.entity.UserInfoEntity
 import com.truenine.component.rds.repo.UserInfoRepo
@@ -8,7 +9,6 @@ import com.truenine.component.rds.repo.UserRepo
 import com.truenine.component.rds.service.UserService
 import jakarta.validation.Valid
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
@@ -42,20 +42,20 @@ open class UserServiceImpl(
     }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+
   override fun saveUser(user: UserEntity): UserEntity {
     return userRepo.save(user)
   }
 
   override fun saveUserInfo(@Valid userInfo: UserInfoEntity): UserInfoEntity? {
-    return userInfo.takeIf {
-      Str.hasText(it.userId)
-        && it.birthday?.run {
-        LocalDate.now().isAfter(this)
-      } ?: true
-    }?.run {
-      userInfoRepo.save(userInfo)
+    require(userInfo.birthday != null) {
+      "传入的出生日期为 null $userInfo"
     }
+    requireAll(
+      hasText(userInfo.userId),
+      LocalDate.now().isAfter(userInfo.birthday),
+    ) { "用户不合法 $userInfo" }
+    return userInfoRepo.save(userInfo)
   }
 
   override fun saveUserInfoByAccount(
