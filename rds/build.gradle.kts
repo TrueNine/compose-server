@@ -7,7 +7,7 @@ dependencies {
   implementation("cn.hutool:hutool-core:${V.Util.huTool}")
   implementation(project(":core"))
   testImplementation(project(":depend:depend-flyway"))
-  testImplementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
+  testApi("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
   testRuntimeOnly("com.mysql:mysql-connector-j")
 }
 

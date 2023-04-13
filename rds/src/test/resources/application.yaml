@@ -15,8 +15,3 @@ spring:
 logging:
   level:
     com.truenine.component.rds: debug
-    org.hibernate.SQL: debug
-
-
-
-
