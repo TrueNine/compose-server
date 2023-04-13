@@ -190,7 +190,7 @@ object V {
 
     // kotlin mock k
     // https://mvnrepository.com/artifact/io.mockk/mockk
-    const val mockk = "1.34.5"
+    const val mockk = "1.13.4"
   }
 
   object Spring {
