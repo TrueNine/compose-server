@@ -4,10 +4,10 @@ dependencies {
   api("jakarta.validation:jakarta.validation-api")
   api("org.springframework.boot:spring-boot-starter-validation")
   api("org.springframework.boot:spring-boot-starter-data-jpa")
+  testApi("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
   implementation("cn.hutool:hutool-core:${V.Util.huTool}")
   implementation(project(":core"))
   testImplementation(project(":depend:depend-flyway"))
-  testApi("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
   testRuntimeOnly("com.mysql:mysql-connector-j")
 }
 

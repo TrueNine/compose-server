@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.1-SNAPSHOT"
+  const val version = "0.4.2-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -187,6 +187,10 @@ object V {
 
     // https://mvnrepository.com/artifact/org.testng/testng
     const val testNG = "7.7.1"
+
+    // kotlin mock k
+    // https://mvnrepository.com/artifact/io.mockk/mockk
+    const val mockk = "1.34.5"
   }
 
   object Spring {

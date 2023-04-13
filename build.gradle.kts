@@ -68,9 +68,9 @@ allprojects {
         "-Xjsr305=strict",
         "-Xjvm-default=all",
         "-verbose",
-        "-Xjdk-release=17"
+        "-Xjdk-release=${V.Lang.javaStr}"
       )
-      jvmTarget = "17"
+      jvmTarget = V.Lang.javaStr
     }
   }
 
@@ -153,6 +153,8 @@ subprojects {
     testApi("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
     testApi("org.testng:testng:${V.Test.testNG}")
 
+    testApi("io.mockk:mockk:${V.Test.mockk}")
+
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
@@ -188,7 +190,6 @@ subprojects {
     }
   }
 }
-
 
 
 tasks.wrapper {
