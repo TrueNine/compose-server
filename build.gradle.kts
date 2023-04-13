@@ -12,13 +12,13 @@ plugins {
   idea
   eclipse
   `visual-studio`
-  id("org.springframework.boot") version V.Spring.springBoot
-  id("io.spring.dependency-management") version V.Plugin.dependencyManagementPlugin
-  kotlin("jvm") version V.Lang.kotlin
-  kotlin("kapt") version V.Lang.kotlin
-  kotlin("plugin.spring") version V.Lang.kotlin
-  kotlin("plugin.jpa") version V.Lang.kotlin
-  kotlin("plugin.lombok") version V.Lang.kotlin
+  id("org.springframework.boot") version V.Plugin.spring
+  id("io.spring.dependency-management") version V.Plugin.springDependencyManagement
+  kotlin("jvm") version V.Plugin.kotlinJvmPlugin
+  kotlin("kapt") version V.Plugin.kotlinKapt
+  kotlin("plugin.spring") version V.Plugin.kotlinSpring
+  kotlin("plugin.jpa") version V.Plugin.kotlinJpa
+  kotlin("plugin.lombok") version V.Plugin.kotlinLombok
   id("maven-publish")
 }
 
@@ -64,8 +64,13 @@ allprojects {
 
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-      freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-      jvmTarget = V.Lang.javaStr
+      freeCompilerArgs = listOf(
+        "-Xjsr305=strict",
+        "-Xjvm-default=all",
+        "-verbose",
+        "-Xjdk-release=17"
+      )
+      jvmTarget = "17"
     }
   }
 
@@ -137,7 +142,6 @@ subprojects {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${V.Lang.kotlinxCoroutine}")
     api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
     api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
-
 
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

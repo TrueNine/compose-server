@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.3.26-SNAPSHOT"
+  const val version = "0.4-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -29,10 +29,10 @@ object V {
   }
 
   object Lang {
+    const val kotlin = "1.8.20"
     const val gradleWrapper = "8.0.2"
     const val javaStr = "17"
     val javaPlatform = org.gradle.api.JavaVersion.VERSION_17
-    const val kotlin = "1.8.10"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
     const val kotlinxCoroutine = "1.6.4"
@@ -69,21 +69,24 @@ object V {
 
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
     const val hibernateCore = "6.2.0.Final"
+
+    // flowable 工作流引擎
+    // https://mvnrepository.com/artifact/org.flowable/flowable-spring-boot-starter
+    const val flowable = "7.0.0.M1"
   }
 
   object PlatformSdk {
+    // 阿里云 oss sdk
     // https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss
     const val aliYunOss = "3.16.2"
 
+    // minio
     // https://mvnrepository.com/artifact/io.minio/minio
     const val minio = "8.5.2"
 
+    // 微信支付 sdk
     // https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
     const val wechatpayJava = "0.2.7"
-
-    // 工作流引擎
-    // https://mvnrepository.com/artifact/org.flowable/flowable-spring-boot-starter
-    const val flowable = "7.0.0.M1"
   }
 
   object Util {
@@ -139,7 +142,7 @@ object V {
     const val okhttp3 = "5.0.0-alpha.11"
 
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
-    const val springdocOpenapiWebmvcUi = "2.0.2"
+    const val springdocOpenapiWebmvcUi = "2.1.0"
 
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     const val springdocOpenapiUi = "1.7.0"
@@ -162,6 +165,7 @@ object V {
     // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     const val jakartaValidationApi = "3.0.2"
 
+    // https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
     const val jakartPersistenceApi = "3.1.0"
 
     // https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
@@ -178,7 +182,8 @@ object V {
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
     const val junitJupiter = "5.9.2"
 
-    const val kotlinTestNG = "1.6.21"
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test-testng
+    const val kotlinTestNG = "1.8.20"
 
     // https://mvnrepository.com/artifact/org.testng/testng
     const val testNG = "7.7.1"
@@ -196,8 +201,28 @@ object V {
   }
 
   object Plugin {
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-gradle-plugin/3.0.5
+    const val spring = Spring.springBoot
+
     // https://mvnrepository.com/artifact/io.spring.gradle/dependency-management-plugin
-    const val dependencyManagementPlugin = "1.1.0"
+    const val springDependencyManagement = "1.1.0"
+
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin.plugin.spring/org.jetbrains.kotlin.plugin.spring.gradle.plugin
+    const val kotlinSpring = Lang.kotlin
+
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin.plugin.jpa/org.jetbrains.kotlin.plugin.jpa.gradle.plugin
+    const val kotlinJpa = Lang.kotlin
+
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin.plugin.lombok/org.jetbrains.kotlin.plugin.lombok.gradle.plugin
+    const val kotlinLombok = Lang.kotlin
+
+    // kotlin 注解处理器
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin.kapt/org.jetbrains.kotlin.kapt.gradle.plugin
+    const val kotlinKapt = V.Lang.kotlin
+
+    // kotlin jvm 插件
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin.jvm/org.jetbrains.kotlin.jvm.gradle.plugin
+    const val kotlinJvmPlugin = Lang.kotlin
   }
 
   object Security {
@@ -208,6 +233,7 @@ object V {
     // https://mvnrepository.com/artifact/net.sourceforge.nekohtml/nekohtml
     const val nekohtml = "1.9.22"
 
+    // 加密工具包
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15to18
     const val bcprovJdk15to18 = "1.72"
   }
