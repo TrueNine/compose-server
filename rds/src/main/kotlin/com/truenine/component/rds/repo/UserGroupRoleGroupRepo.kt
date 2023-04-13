@@ -5,18 +5,18 @@ import com.truenine.component.rds.entity.UserGroupRoleGroupEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserGroupRoleGroupRepo : BaseRepo<UserGroupRoleGroupEntity, String> {
-  fun findByUserGroupIdAndRoleGroupId(userGroupId: String, roleGroupId: String): UserGroupRoleGroupEntity?
-  fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroupEntity>
+interface UserGroupRoleGroupRepo : BaseRepo<UserGroupRoleGroupEntity> {
+  fun findByUserGroupIdAndRoleGroupId(userGroupId: Long, roleGroupId: Long): UserGroupRoleGroupEntity?
+  fun findAllByUserGroupId(userGroupId: Long): List<UserGroupRoleGroupEntity>
   fun existsByUserGroupIdAndRoleGroupId(
-    userGroupId: String,
-    roleGroupId: String
+    userGroupId: Long,
+    roleGroupId: Long
   ): Boolean
 
   fun deleteByUserGroupIdAndRoleGroupId(
-    userGroupId: String,
-    roleGroupId: String
+    userGroupId: Long,
+    roleGroupId: Long
   )
 
-  fun deleteAllByUserGroupId(userGroupId: String)
+  fun deleteAllByUserGroupId(userGroupId: Long)
 }

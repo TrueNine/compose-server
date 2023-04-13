@@ -1,4 +1,4 @@
-package com.truenine.component.rds.service.impl
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.http.MediaTypes
 import com.truenine.component.core.lang.LogKt
@@ -17,11 +17,11 @@ import kotlin.test.assertTrue
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class AttachmentServiceImplTest :
+class AttachmentModelServiceImplTest :
   AbstractTransactionalTestNGSpringContextTests() {
 
   @Autowired
-  lateinit var fileService: AttachmentServiceImpl
+  lateinit var fileService: AttachmentModelServiceImpl
   private lateinit var testPutAttachmentRequestParam: PutAttachmentRequestParam
 
   @BeforeMethod
@@ -57,6 +57,6 @@ class AttachmentServiceImplTest :
   }
 
   companion object {
-    private val log = LogKt.getLog(AttachmentServiceImplTest::class)
+    private val log = LogKt.getLog(AttachmentModelServiceImplTest::class)
   }
 }

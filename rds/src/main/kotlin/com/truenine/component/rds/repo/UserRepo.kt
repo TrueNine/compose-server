@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepo : BaseRepo<UserEntity, String> {
+interface UserRepo : BaseRepo<UserEntity> {
   fun findByAccount(account: String): UserEntity?
 
   @Query(

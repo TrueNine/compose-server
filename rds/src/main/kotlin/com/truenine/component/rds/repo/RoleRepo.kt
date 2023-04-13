@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RoleRepo : BaseRepo<RoleEntity, String> {
+interface RoleRepo : BaseRepo<RoleEntity> {
   fun findAllByName(name: String): List<RoleEntity>
 
   @Query(
@@ -17,5 +17,5 @@ interface RoleRepo : BaseRepo<RoleEntity, String> {
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): List<RoleEntity>
+  fun findAllByUserId(userId: Long): List<RoleEntity>
 }

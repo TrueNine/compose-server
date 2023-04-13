@@ -8,6 +8,7 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.testng.annotations.Test
 import java.time.Duration
+import kotlin.test.assertNotNull
 
 @Rollback
 @SpringBootTest
@@ -24,7 +25,7 @@ class DbTestDurationConverterRepoTest : AbstractTestNGSpringContextTests() {
       durations = Duration.parse("PT24H")
     }
     val saved = repo.save(entity)
-
+    assertNotNull(saved)
     log.info("saved = {}", saved)
   }
 }

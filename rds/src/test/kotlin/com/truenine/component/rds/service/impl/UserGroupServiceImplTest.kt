@@ -26,46 +26,35 @@ class UserGroupServiceImplTest :
   @BeforeMethod
   @Rollback
   fun init() {
-    val u =
-      UserGroupEntity()
-    u.name = "来宾"
-    u.doc = "略"
-    testUserGroup = userGroupService.saveUserGroup(u)!!
+    val u = UserGroupEntity().apply {
+      name = "来宾"
+      doc = "略"
+    }
+    testUserGroup = userGroupService.save(u)!!
   }
 
-  @Test
-  @Rollback
-  fun testSaveUserGroup() {
-    UserGroupEntity().apply {
-      this.userId = "0"
-      this.name = "二狗子"
-      this.doc = "我日你娘"
-      val s = userGroupService.saveUserGroup(this)
-      assertEquals(s, this, "未保存成功")
-    }
-  }
 
   @Test
   @Rollback
   fun testFindAllUserGroupByUserId() {
-    userGroupService.findAllUserGroupByUserId("0").apply {
+    userGroupService.findAllUserGroupByUserId(0L).apply {
       assertTrue {
         this.isNotEmpty()
       }
     }
-    val u = userGroupService.saveUserGroup(testUserGroup.apply {
-      userId = "0"
+    val u = userGroupService.save(testUserGroup.apply {
+      userId = 0L
       name = "二狗子组"
       doc = "略"
     })
     assertNotNull(u)
-    userGroupService.findAllUserGroupByUserId("0").apply {
+    userGroupService.findAllUserGroupByUserId(0L).apply {
       assertTrue {
         this.isNotEmpty()
       }
     }
-    userGroupService.assignUserToUserGroup("1", u.id)
-    userGroupService.findAllUserGroupByUserId("1").apply {
+    userGroupService.assignUserToUserGroup(1L, u.id)
+    userGroupService.findAllUserGroupByUserId(1L).apply {
       assertTrue { this.isNotEmpty() }
     }
   }
@@ -73,25 +62,9 @@ class UserGroupServiceImplTest :
   @Test
   @Rollback
   fun testAssignUserToUserGroup() {
-    userGroupService.assignUserToUserGroup("1", testUserGroup.id)
-    userGroupService.findAllUserGroupByUserId("1").apply {
+    userGroupService.assignUserToUserGroup(1L, testUserGroup.id)
+    userGroupService.findAllUserGroupByUserId(1L).apply {
       assertTrue { this.isNotEmpty() }
-    }
-  }
-
-  @Test
-  @Rollback
-  fun testDeleteUserGroupById() {
-    userGroupService.deleteUserGroupById(testUserGroup.id)
-    val f = userGroupService.findUserGroupById(testUserGroup.id)
-    assertNull(f, "未删除")
-  }
-
-  @Test
-  @Rollback
-  fun testFindUserGroupById() {
-    userGroupService.findUserGroupById(testUserGroup.id).apply {
-      assertNotNull(this)
     }
   }
 }

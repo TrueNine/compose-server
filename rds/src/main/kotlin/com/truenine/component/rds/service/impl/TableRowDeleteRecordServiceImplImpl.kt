@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.truenine.component.core.ctx.UserInfoContextHolder
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.base.BaseEntity
+import com.truenine.component.rds.base.BaseServiceImpl
+import com.truenine.component.rds.base.BaseService
 import com.truenine.component.rds.entity.TableRowDeleteRecordEntity
 import com.truenine.component.rds.models.TableRowChangeSerializableObjectModel
 import com.truenine.component.rds.repo.TableRowDeleteRecordRepo
@@ -16,10 +18,12 @@ import java.util.*
 import kotlin.reflect.full.findAnnotation
 
 @Service
-open class TableRowDeleteRecordServiceImpl(
+class TableRowDeleteRecordServiceImplImpl(
   private val delRepo: TableRowDeleteRecordRepo,
   private val mapper: ObjectMapper
-) : TableRowDeleteRecordService {
+) : TableRowDeleteRecordService,
+  BaseService<TableRowDeleteRecordEntity>,
+  BaseServiceImpl<TableRowDeleteRecordEntity>(delRepo) {
 
   private val log = LogKt.getLog(this::class)
 

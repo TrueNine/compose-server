@@ -1,4 +1,4 @@
-package com.truenine.component.rds.service
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.rds.entity.*
 
@@ -6,13 +6,13 @@ import com.truenine.component.rds.entity.*
 interface RbacService {
   fun findAllRoleGroupByUserGroup(userGroup: UserGroupEntity): Set<RoleGroupEntity>
   fun findAllRoleByRoleGroup(roleGroup: RoleGroupEntity): Set<RoleEntity>
-  fun findRoleById(id: String): RoleEntity?
+  fun findRoleById(id: Long): RoleEntity?
   fun findAllRoleGroupByName(name: String): Set<RoleGroupEntity>
   fun findAllRoleByName(name: String): Set<RoleEntity>
   fun findAllPermissionsByName(name: String): Set<PermissionsEntity>
 
-  fun findPlainRoleGroup(): RoleGroupEntity
-  fun findRootRoleGroup(): RoleGroupEntity
+  fun findPlainRoleGroup(): RoleGroupEntity?
+  fun findRootRoleGroup(): RoleGroupEntity?
 
   fun findAllRoleGroupByUser(user: UserEntity): Set<RoleGroupEntity>
 
@@ -61,6 +61,6 @@ interface RbacService {
   fun deleteRoleGroup(roleGroup: RoleGroupEntity)
   fun deleteRole(role: RoleEntity)
   fun deletePermissions(permissions: PermissionsEntity)
-  fun findRoleGroupById(id: String): RoleGroupEntity?
-  fun findPermissionsById(id: String): PermissionsEntity?
+  fun findRoleGroupById(id: Long): RoleGroupEntity?
+  fun findPermissionsById(id: Long): PermissionsEntity?
 }

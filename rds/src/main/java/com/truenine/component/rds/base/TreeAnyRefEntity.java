@@ -16,6 +16,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 
@@ -39,23 +41,23 @@ import java.util.Objects;
 })
 @RequiredArgsConstructor
 @Schema(title = "预排序树和任意外键的结合体")
-public class TreeAnyRefEntity extends PresortTreeEntity {
+public class TreeAnyRefEntity extends PresortTreeEntity implements Serializable {
 
   /**
    * 任意外键
    */
   public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
-
   /**
    * 任意类型
    */
   public static final String TYP = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE;
-
+  @Serial
+  private static final long serialVersionUID = 1L;
   @JsonIgnore
   @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
   @Schema(title = "任意外键id")
-  protected String ari;
+  protected Long ari;
 
   @JsonIgnore
   @Expose(deserialize = false)
@@ -65,18 +67,9 @@ public class TreeAnyRefEntity extends PresortTreeEntity {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     TreeAnyRefEntity that = (TreeAnyRefEntity) o;
     return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
   }
 }

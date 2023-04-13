@@ -5,6 +5,6 @@ import com.truenine.component.rds.entity.UserGroupUserEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserGroupUserRepo : BaseRepo<UserGroupUserEntity, String> {
-  fun existsByUserIdAndUserGroupId(userId: String, userGroupId: String): Boolean
+interface UserGroupUserRepo : BaseRepo<UserGroupUserEntity> {
+  fun existsByUserIdAndUserGroupId(userId: Long, userGroupId: Long): Boolean
 }

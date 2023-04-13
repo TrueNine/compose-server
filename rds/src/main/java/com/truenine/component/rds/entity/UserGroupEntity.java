@@ -52,7 +52,7 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = USER_ID)
   @Nullable
-  private String userId;
+  private Long userId;
 
   /**
    * 名称
@@ -88,10 +88,5 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
     }
     var that = (UserGroupEntity) o;
     return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
   }
 }

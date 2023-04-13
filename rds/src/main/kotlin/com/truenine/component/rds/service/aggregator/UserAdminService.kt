@@ -1,4 +1,4 @@
-package com.truenine.component.rds.service
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.models.UserAuthorizationModel
@@ -23,7 +23,7 @@ interface UserAdminService {
   fun verifyPassword(account: String?, pwd: String?): Boolean
 
   fun findUserAuthorizationModelByAccount(account: String): UserAuthorizationModel?
-  fun findUserById(id: String?): UserEntity?
+  fun findUserById(id: Long): UserEntity?
   fun findUserByAccount(account: String): UserEntity?
 
   fun findAllRoleGroupByAccount(account: String): Set<RoleGroupEntity>
@@ -41,5 +41,5 @@ interface UserAdminService {
   fun registerUserGroup(req: PostUserGroupRequestParam): UserGroupEntity?
   fun findAllUserGroupByUser(user: UserEntity): Set<UserGroupEntity>
   fun deleteUserByAccount(account: String)
-  fun assignUserToUserGroupById(userId: String, userGroupId: String)
+  fun assignUserToUserGroupById(userId: Long, userGroupId: Long)
 }

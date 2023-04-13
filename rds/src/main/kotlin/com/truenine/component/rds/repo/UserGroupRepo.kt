@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserGroupRepo : BaseRepo<UserGroupEntity, String> {
+interface UserGroupRepo : BaseRepo<UserGroupEntity> {
   @Query(
       """
     from UserGroupEntity ug
@@ -16,7 +16,7 @@ interface UserGroupRepo : BaseRepo<UserGroupEntity, String> {
     or ugu.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): Set<UserGroupEntity>
+  fun findAllByUserId(userId: Long): Set<UserGroupEntity>
 
-  fun existsByIdAndUserId(id: String, userId: String): Boolean
+  fun existsByIdAndUserId(id: Long, userId: Long): Boolean
 }

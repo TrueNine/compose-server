@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public interface BasicsTableNames {
+
+
   String USER = "user";
   String USER_INFO = "user_info";
   String ROLE = "role";

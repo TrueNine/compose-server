@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
 
 @Component
-open class TableRowDeleteApplicationListener(
+open class TableRowDeleteSpringListener(
   private val tableRowDeleteRecordService: TableRowDeleteRecordService
 ) : ApplicationListener<TableRowDeleteSpringEvent> {
   override fun onApplicationEvent(event: TableRowDeleteSpringEvent) {

@@ -1,13 +1,13 @@
-package com.truenine.component.rds.service.impl
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.repo.*
-import com.truenine.component.rds.service.RbacService
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-open class RbacServiceImpl(
+class RbacServiceImpl(
   private val roleGroupRoleRepo: RoleGroupRoleRepo,
   private val roleRepo: RoleRepo,
   private val roleGroupRepo: RoleGroupRepo,
@@ -30,7 +30,7 @@ open class RbacServiceImpl(
       .let { roleRepo.findAllById(it).toSet() }
   }
 
-  override fun findRoleById(id: String): RoleEntity? {
+  override fun findRoleById(id: Long): RoleEntity? {
     return roleRepo.findById(id).orElse(null)
   }
 
@@ -39,12 +39,12 @@ open class RbacServiceImpl(
   }
 
 
-  override fun findPlainRoleGroup(): RoleGroupEntity {
-    return roleGroupRepo.findById(DataBaseBasicFieldNames.Rbac.USER_ID).orElse(null)
+  override fun findPlainRoleGroup(): RoleGroupEntity? {
+    return roleGroupRepo.findByIdOrNull(DataBaseBasicFieldNames.Rbac.USER_ID.toLong())
   }
 
-  override fun findRootRoleGroup(): RoleGroupEntity {
-    return roleGroupRepo.findById(DataBaseBasicFieldNames.Rbac.ROOT_ID).orElse(null)
+  override fun findRootRoleGroup(): RoleGroupEntity? {
+    return roleGroupRepo.findByIdOrNull(DataBaseBasicFieldNames.Rbac.ROOT_ID)
   }
 
   override fun findAllRoleByName(name: String): Set<RoleEntity> {
@@ -167,7 +167,7 @@ open class RbacServiceImpl(
 
   override fun deletePermissions(permissions: PermissionsEntity) = permissionsRepo.deleteById(permissions.id)
 
-  override fun findRoleGroupById(id: String): RoleGroupEntity? = roleGroupRepo.findById(id).orElse(null)
+  override fun findRoleGroupById(id: Long): RoleGroupEntity? = roleGroupRepo.findByIdOrNull(id)
 
-  override fun findPermissionsById(id: String): PermissionsEntity? = permissionsRepo.findById(id).orElse(null)
+  override fun findPermissionsById(id: Long): PermissionsEntity? = permissionsRepo.findByIdOrNull(id)
 }

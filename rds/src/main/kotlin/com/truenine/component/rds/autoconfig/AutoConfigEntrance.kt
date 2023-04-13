@@ -3,7 +3,7 @@ package com.truenine.component.rds.autoconfig
 import com.truenine.component.core.properties.SnowflakeProperties
 import com.truenine.component.rds.converters.AesEncryptConverter
 import com.truenine.component.rds.converters.PointModelConverter
-import com.truenine.component.rds.listener.TableRowDeleteApplicationListener
+import com.truenine.component.rds.listener.TableRowDeleteSpringListener
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
@@ -31,7 +31,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 )
 @Import(
   value = [
-    TableRowDeleteApplicationListener::class,
+    TableRowDeleteSpringListener::class,
     AesEncryptConverter::class,
     PointModelConverter::class,
   ]

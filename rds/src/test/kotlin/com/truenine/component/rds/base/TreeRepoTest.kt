@@ -3,7 +3,7 @@ package com.truenine.component.rds.base
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.DbTestPresortTreeEntity
-import com.truenine.component.rds.repo.DbTestPresortTreeRepo
+import com.truenine.component.rds.repo.DbTestTreeRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
@@ -15,11 +15,11 @@ import kotlin.test.assertTrue
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-open class PresortTreeRepoTest : AbstractTestNGSpringContextTests() {
+class TreeRepoTest : AbstractTestNGSpringContextTests() {
   private val log = LogKt.getLog(this::class)
 
   @Autowired
-  lateinit var treeRepo: DbTestPresortTreeRepo
+  lateinit var treeRepo: DbTestTreeRepo
 
   @Autowired
   lateinit var tt: TransactionTemplate

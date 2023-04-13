@@ -1,4 +1,4 @@
-package com.truenine.component.rds.service.impl
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.consts.CacheFieldNames
 import com.truenine.component.core.lang.hasText
@@ -7,8 +7,6 @@ import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.models.UserAuthorizationModel
 import com.truenine.component.rds.models.req.PostUserGroupRequestParam
 import com.truenine.component.rds.models.req.PostUserRequestParam
-import com.truenine.component.rds.service.RbacService
-import com.truenine.component.rds.service.UserAdminService
 import com.truenine.component.rds.service.UserGroupService
 import com.truenine.component.rds.service.UserService
 import jakarta.validation.Valid
@@ -22,7 +20,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class UserAdminServiceImpl : UserAdminService {
+class UserAdminServiceImpl : UserAdminService {
 
   private lateinit var userService: UserService
 
@@ -72,7 +70,7 @@ open class UserAdminServiceImpl : UserAdminService {
       doc = userReq.doc
       pwdEnc = passwordEncoder.encode(userReq.pwd)
     }
-    val plainRoleGroup = rbacService.findPlainRoleGroup()
+    val plainRoleGroup = rbacService.findPlainRoleGroup()!!
     val savedUser = userService.saveUser(newUser)
     checkNotNull(savedUser) { "没有注册新用户" }
     rbacService.assignRoleGroupToUser(plainRoleGroup, savedUser)
@@ -83,7 +81,7 @@ open class UserAdminServiceImpl : UserAdminService {
   override fun registerRootUser(rootPostUserRequestParam: PostUserRequestParam): UserEntity? {
     val plain = registerPlainUser(rootPostUserRequestParam)
     checkNotNull(plain)
-    val rootRoleGroup = rbacService.findRootRoleGroup()
+    val rootRoleGroup = rbacService.findRootRoleGroup()!!
     rbacService.assignRoleGroupToUser(rootRoleGroup, plain)
     return plain
   }
@@ -164,8 +162,8 @@ open class UserAdminServiceImpl : UserAdminService {
     }
   }
 
-  override fun findUserById(id: String?): UserEntity? {
-    return id?.run { userService.findUserById(id) }
+  override fun findUserById(id: Long): UserEntity? {
+    return userService.findUserById(id)
   }
 
   override fun findUserByAccount(account: String): UserEntity? =
@@ -215,7 +213,7 @@ open class UserAdminServiceImpl : UserAdminService {
         name = req.name
         doc = req.desc
       }.apply {
-        userGroupService.saveUserGroup(this)
+        userGroupService.save(this)
       }
     }
   }
@@ -233,6 +231,6 @@ open class UserAdminServiceImpl : UserAdminService {
     }
   }
 
-  override fun assignUserToUserGroupById(userId: String, userGroupId: String) = userGroupService.assignUserToUserGroup(userId, userGroupId)
+  override fun assignUserToUserGroupById(userId: Long, userGroupId: Long) = userGroupService.assignUserToUserGroup(userId, userGroupId)
 
 }

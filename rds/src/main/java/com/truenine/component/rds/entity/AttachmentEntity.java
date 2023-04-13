@@ -51,7 +51,7 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = ATTACHMENT_LOCATION_ID,
     nullable = false)
-  private String attachmentLocationId;
+  private Long attachmentLocationId;
 
   /**
    * 原始名称

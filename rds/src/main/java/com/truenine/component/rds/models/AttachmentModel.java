@@ -35,7 +35,7 @@ public class AttachmentModel {
   @JsonIgnore
   @Expose(deserialize = false)
   @Column(name = AttachmentEntity.ID)
-  private String id;
+  private Long id;
 
   @Schema(title = "文件名")
   @Column(name = AttachmentEntity.META_NAME)

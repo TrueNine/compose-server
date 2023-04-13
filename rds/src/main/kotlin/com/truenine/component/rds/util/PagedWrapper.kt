@@ -15,14 +15,12 @@ import java.io.Serializable
  * @since 2022-12-27
  */
 object PagedWrapper {
-  const val MAX_PAGE_SIZE = 42
 
   @JvmField
-  val ZERO: PagedRequestParam =
-    PagedRequestParam(
-      0,
-      DEFAULT_BUFFER_SIZE
-    )
+  val DEFAULT_MAX: PagedRequestParam = PagedRequestParam(
+    PagedRequestParam.MIN_OFFSET,
+    PagedRequestParam.MAX_PAGE_SIZE
+  )
 
 
   @JvmStatic
@@ -37,10 +35,10 @@ object PagedWrapper {
       }
 
   @JvmStatic
-  fun param(paramSetting: PagedRequestParam? = ZERO): Pageable {
+  fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
     return PageRequest.of(
       paramSetting?.offset ?: 0,
-      paramSetting?.pageSize ?: MAX_PAGE_SIZE
+      paramSetting?.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
     )
   }
 

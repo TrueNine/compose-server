@@ -52,7 +52,7 @@ public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable
   @Column(table = TABLE_NAME,
     name = ROLE_GROUP_ID)
   @Nullable
-  private String roleGroupId;
+  private Long roleGroupId;
 
   /**
    * 用户组
@@ -64,7 +64,7 @@ public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable
   @Column(table = TABLE_NAME,
     name = USER_GROUP_ID)
   @Nullable
-  private String userGroupId;
+  private Long userGroupId;
 
   @Override
   public boolean equals(Object o) {
@@ -76,10 +76,5 @@ public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable
     }
     var that = (UserGroupRoleGroupEntity) o;
     return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
   }
 }

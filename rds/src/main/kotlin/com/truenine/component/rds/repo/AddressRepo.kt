@@ -1,13 +1,13 @@
 package com.truenine.component.rds.repo
 
-import com.truenine.component.rds.base.PresortTreeRepo
+import com.truenine.component.rds.base.TreeRepo
 import com.truenine.component.rds.entity.AddressEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AddressRepo : PresortTreeRepo<AddressEntity, String> {
+interface AddressRepo : TreeRepo<AddressEntity> {
 
   fun findAllByCode(code: String): List<AddressEntity>
 

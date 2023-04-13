@@ -5,5 +5,5 @@ import com.truenine.component.rds.entity.TableRowDeleteRecordEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TableRowDeleteRecordRepo : BaseRepo<TableRowDeleteRecordEntity, String> {
+interface TableRowDeleteRecordRepo : BaseRepo<TableRowDeleteRecordEntity> {
 }

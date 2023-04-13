@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -61,11 +62,11 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
     name = USER_ID,
     description = "用户"
   )
-  @NotBlank
+  @NotNull
   @Column(table = TABLE_NAME,
     name = USER_ID,
     nullable = false)
-  private String userId;
+  private Long userId;
 
   /**
    * 用户头像

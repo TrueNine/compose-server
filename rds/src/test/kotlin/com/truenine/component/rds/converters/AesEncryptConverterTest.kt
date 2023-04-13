@@ -11,7 +11,7 @@ import org.testng.annotations.Test
 
 @Rollback
 @SpringBootTest
-open class AesEncryptConverterTest : AbstractTestNGSpringContextTests() {
+class AesEncryptConverterTest : AbstractTestNGSpringContextTests() {
 
   @Autowired
   private lateinit var userInfoRepo: UserInfoRepo
@@ -32,7 +32,7 @@ open class AesEncryptConverterTest : AbstractTestNGSpringContextTests() {
         this.gender = 1
         this.idCard = "000101199312123349"
         this.phone = phone
-        this.userId = "0"
+        this.userId = 0L
       }
     )
     println(userInfoRepo.findAll())

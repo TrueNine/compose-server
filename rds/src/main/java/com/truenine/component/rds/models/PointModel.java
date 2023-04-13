@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 地址定位模型
@@ -24,8 +25,10 @@ import java.io.Serializable;
 public class PointModel implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
+
   @Nullable
-  private Double x;
+  private BigDecimal x;
+
   @Nullable
-  private Double y;
+  private BigDecimal y;
 }

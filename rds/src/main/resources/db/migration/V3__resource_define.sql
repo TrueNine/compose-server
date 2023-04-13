@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS address
   code   VARCHAR(255) COMMENT '代码',
   name   VARCHAR(2047) COMMENT '名称',
   level  INT DEFAULT 0 COMMENT '级别 0 为国家',
-  center POINT NULL COMMENT '定位',
+  center VARCHAR(255) NULL COMMENT '定位',
   UNIQUE (code) COMMENT '行政区代码唯一'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '行政区代码';
 CALL add_base_struct('address');
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS address_details
 (
   address_id      BIGINT UNSIGNED NOT NULL COMMENT '地址',
   address_details BIGINT UNSIGNED NOT NULL COMMENT '地址详情',
-  location        POINT COMMENT '定位',
+  center          POINT COMMENT '定位',
   INDEX (address_id) COMMENT '外联 地址'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '地址详情';
 CALL add_base_struct('address_details');

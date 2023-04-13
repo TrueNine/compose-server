@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.DbTestPresortTreeEntity
-import jakarta.annotation.Resource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
@@ -21,7 +20,7 @@ class TableRowDeleteRecordServiceImplTest :
   private val log = LogKt.getLog(this::class)
 
   @Autowired
-  lateinit var delService: TableRowDeleteRecordServiceImpl
+  lateinit var delService: TableRowDeleteRecordServiceImplImpl
 
   @Autowired
   lateinit var mapper: ObjectMapper
@@ -30,7 +29,7 @@ class TableRowDeleteRecordServiceImplTest :
   @Rollback
   fun testSave() {
     val delData = DbTestPresortTreeEntity().apply {
-      id = "2131241241"
+      id = 2131241241
       title = "wwr"
     }
     val da = delService.save(delData)

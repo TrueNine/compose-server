@@ -1,4 +1,4 @@
-package com.truenine.component.rds.service.impl
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.rds.base.PagedRequestParam
 import com.truenine.component.rds.base.PagedResponseResult
@@ -7,20 +7,19 @@ import com.truenine.component.rds.entity.AttachmentLocationEntity
 import com.truenine.component.rds.models.AttachmentModel
 import com.truenine.component.rds.models.req.PutAttachmentRequestParam
 import com.truenine.component.rds.repo.AttachmentLocationRepo
-import com.truenine.component.rds.repo.AttachmentModelRepo
+import com.truenine.component.rds.repo.uni.AttachmentModelRepo
 import com.truenine.component.rds.repo.AttachmentRepo
-import com.truenine.component.rds.service.AttachmentService
 import com.truenine.component.rds.util.PagedWrapper
 import jakarta.validation.Valid
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class AttachmentServiceImpl(
+open class AttachmentModelServiceImpl(
   private val attachmentRepo: AttachmentRepo,
   private val locationRepo: AttachmentLocationRepo,
   private val attachmentModelRepo: AttachmentModelRepo
-) : AttachmentService {
+) : AttachmentModelService {
 
   @Transactional(rollbackFor = [Exception::class])
   override fun saveAttachment(

@@ -4,12 +4,10 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.transaction.annotation.Transactional
-import java.io.Serializable
 
 @NoRepositoryBean
 @JvmDefaultWithCompatibility
-interface PresortTreeRepo<T : PresortTreeEntity, ID : Serializable> :
-  BaseRepo<T, ID> {
+interface TreeRepo<T : PresortTreeEntity> : BaseRepo<T> {
 
   fun findChildrenCount(parent: T): Long {
     require(parent.rln == null || parent.rrn == null) {

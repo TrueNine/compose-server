@@ -1,6 +1,5 @@
 package com.truenine.component.rds.service.impl
 
-import com.truenine.component.core.lang.hasText
 import com.truenine.component.core.lang.requireAll
 import com.truenine.component.rds.entity.UserEntity
 import com.truenine.component.rds.entity.UserInfoEntity
@@ -8,17 +7,16 @@ import com.truenine.component.rds.repo.UserInfoRepo
 import com.truenine.component.rds.repo.UserRepo
 import com.truenine.component.rds.service.UserService
 import jakarta.validation.Valid
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
-open class UserServiceImpl(
+class UserServiceImpl(
   private val userRepo: UserRepo,
   private val userInfoRepo: UserInfoRepo
 ) : UserService {
-  override fun findUserById(id: String): UserEntity? {
-    return userRepo.findById(id).orElse(null)
-  }
+  override fun findUserById(id: Long): UserEntity? = userRepo.findByIdOrNull(id)
 
   override fun findUserByAccount(account: String): UserEntity? {
     return userRepo.findByAccount(account)
@@ -32,9 +30,8 @@ open class UserServiceImpl(
     return userRepo.existsAllByAccount(account)
   }
 
-  override fun findUserInfoById(id: String): UserInfoEntity? {
-    return userInfoRepo.findByUserId(id)
-  }
+  override fun findUserInfoById(id: Long): UserInfoEntity? = userInfoRepo.findByUserId(id)
+
 
   override fun findUserInfoByAccount(account: String): UserInfoEntity? {
     return findUserByAccount(account)?.let {
@@ -52,7 +49,7 @@ open class UserServiceImpl(
       "传入的出生日期为 null $userInfo"
     }
     requireAll(
-      hasText(userInfo.userId),
+      userInfo.userId != null,
       LocalDate.now().isAfter(userInfo.birthday),
     ) { "用户不合法 $userInfo" }
     return userInfoRepo.save(userInfo)

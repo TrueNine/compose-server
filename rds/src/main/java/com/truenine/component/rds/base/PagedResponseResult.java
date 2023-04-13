@@ -3,6 +3,8 @@ package com.truenine.component.rds.base;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +16,10 @@ import java.util.List;
  */
 @Data
 @Schema(title = "分页列表信息")
-public class PagedResponseResult<T> {
+public class PagedResponseResult<T> implements Serializable {
+  @Serial
+  private static final long serialVersionUID = 1L;
+
   @Schema(title = "数据列表")
   private List<T> dataList;
 

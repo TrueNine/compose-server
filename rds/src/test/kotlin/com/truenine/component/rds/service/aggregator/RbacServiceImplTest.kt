@@ -1,9 +1,11 @@
-package com.truenine.component.rds.service.impl
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.*
+import com.truenine.component.rds.service.impl.UserGroupServiceImpl
+import com.truenine.component.rds.service.impl.UserServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
@@ -35,12 +37,12 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Rollback
   fun init() {
     UserGroupEntity().apply {
-      this.userId = "0"
+      this.userId = 0
       this.name = "fff团"
-      testUserGroup = userGroupService.saveUserGroup(this)!!
+      testUserGroup = userGroupService.save(this)!!
     }
     testUser = userService.findUserById(DataBaseBasicFieldNames.Rbac.ROOT_ID)!!
-    testPlainRoleGroup = rbacService.findPlainRoleGroup()
+    testPlainRoleGroup = rbacService.findPlainRoleGroup()!!
     testRole = rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.USER_ID)!!
     rbacService.assignRoleGroupToUserGroup(testPlainRoleGroup, testUserGroup)
   }
@@ -59,7 +61,7 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Test
   @Rollback
   fun testFindAllRoleByRoleGroup() {
-    rbacService.findRootRoleGroup()
+    rbacService.findRootRoleGroup()!!
       .apply {
         val a = rbacService.findAllRoleByRoleGroup(this)
         assertTrue {
@@ -93,10 +95,10 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Test
   @Rollback
   fun testFindPlainRoleGroup() {
-    rbacService.findPlainRoleGroup()
+    rbacService.findPlainRoleGroup()!!
       .apply {
         assertTrue {
-          this.id == "1"
+          this.id == 1L
         }
       }
   }
@@ -107,7 +109,7 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
     rbacService.findRootRoleGroup()
       .apply {
         assertTrue {
-          this.id == "0"
+          this!!.id == 0L
         }
       }
   }
@@ -264,10 +266,10 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
   @Rollback
   fun testRevokeRoleForRoleGroup() {
     rbacService.revokeRoleForRoleGroup(
-      rbacService.findPlainRoleGroup(),
+      rbacService.findPlainRoleGroup()!!,
       rbacService.findRoleById(DataBaseBasicFieldNames.Rbac.USER_ID)!!
     )
-    rbacService.findAllRoleByRoleGroup(rbacService.findPlainRoleGroup())
+    rbacService.findAllRoleByRoleGroup(rbacService.findPlainRoleGroup()!!)
       .apply {
         assertFails {
           assertContains(
@@ -392,7 +394,5 @@ class RbacServiceImplTest : AbstractTransactionalTestNGSpringContextTests() {
     assertNotNull(rbacService.findRoleGroupById(DataBaseBasicFieldNames.Rbac.ROOT_ID))
   }
 
-  companion object {
-    private val log = LogKt.getLog(RbacServiceImplTest::class)
-  }
+  private val log = LogKt.getLog(this::class)
 }

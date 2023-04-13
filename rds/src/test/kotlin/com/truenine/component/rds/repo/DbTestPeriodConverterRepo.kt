@@ -5,5 +5,5 @@ import com.truenine.component.rds.entity.DbTestPeriodConverterEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DbTestPeriodConverterRepo : BaseRepo<DbTestPeriodConverterEntity, String> {
+interface DbTestPeriodConverterRepo : BaseRepo<DbTestPeriodConverterEntity> {
 }

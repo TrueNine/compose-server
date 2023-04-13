@@ -16,6 +16,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -37,28 +39,26 @@ import java.util.Objects;
 })
 @RequiredArgsConstructor
 @Schema(title = "预排序树")
-public class PresortTreeEntity extends BaseEntity {
-
+public class PresortTreeEntity extends BaseEntity implements Serializable {
   /**
    * 父id
    */
   public static final String RPI = DataBaseBasicFieldNames.PARENT_ID;
-
   /**
    * 左节点
    */
   public static final String RLN = DataBaseBasicFieldNames.LEFT_NODE;
-
   /**
    * 右节点
    */
   public static final String RRN = DataBaseBasicFieldNames.RIGHT_NODE;
-
+  @Serial
+  private static final long serialVersionUID = 1L;
   @JsonIgnore
   @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.PARENT_ID)
   @Schema(title = "父id")
-  protected String rpi = null;
+  protected Long rpi = null;
 
   @JsonIgnore
   @Expose(deserialize = false)
@@ -81,21 +81,11 @@ public class PresortTreeEntity extends BaseEntity {
   public void setLeafNode(boolean leafNode) {
   }
 
-
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     PresortTreeEntity that = (PresortTreeEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return hashCode();
+    return getId() != null && Objects.equals(getId(), that.getId());
   }
 }

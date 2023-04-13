@@ -1,4 +1,4 @@
-package com.truenine.component.rds.service.impl
+package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.LogKt
@@ -54,8 +54,8 @@ class UserAdminServiceImplTest :
   @BeforeMethod
   @Rollback
   fun init() {
-    userRoleGroup = rbacService.findPlainRoleGroup()
-    rootUserGroup = rbacService.findRootRoleGroup()
+    userRoleGroup = rbacService.findPlainRoleGroup()!!
+    rootUserGroup = rbacService.findRootRoleGroup()!!
     adminService.registerPlainUser(testPlainUser)
   }
 
@@ -103,7 +103,7 @@ class UserAdminServiceImplTest :
   fun testCompletionUserInfo() {
     val saveInfo = adminService.completionUserInfo(
       UserInfoEntity().apply {
-        userId = "0"
+        userId = 0L
         this.birthday = LocalDate.of(1997, 11, 4)
         this.phone = "15675292005"
         this.email = "truenine@qq.com"
@@ -125,7 +125,7 @@ class UserAdminServiceImplTest :
       .completionUserInfoByAccount("root",
         UserInfoEntity()
           .apply {
-            userId = "0"
+            userId = 0L
             this.birthday = LocalDate.of(1997, 11, 4)
             this.phone = "15675292005"
             this.email = "truenine@qq.com"

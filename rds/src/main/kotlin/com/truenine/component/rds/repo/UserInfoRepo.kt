@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-interface UserInfoRepo : BaseRepo<UserInfoEntity, String> {
-  fun findByUserId(userId: String): UserInfoEntity?
+interface UserInfoRepo : BaseRepo<UserInfoEntity> {
+  fun findByUserId(userId: Long): UserInfoEntity?
 
   @Transactional(rollbackFor = [Exception::class])
   fun deleteByPhone(phone: String): Int

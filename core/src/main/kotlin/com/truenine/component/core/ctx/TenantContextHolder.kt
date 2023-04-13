@@ -15,7 +15,7 @@ object TenantContextHolder {
     if (Str.hasText(tenantId)) {
       TENANT_ID.set(tenantId)
     } else {
-      TENANT_ID.set(DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT)
+      TENANT_ID.set(DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT_STR)
     }
   }
 
