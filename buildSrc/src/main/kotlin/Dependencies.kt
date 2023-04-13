@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.2-SNAPSHOT"
+  const val version = "0.4.3-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
