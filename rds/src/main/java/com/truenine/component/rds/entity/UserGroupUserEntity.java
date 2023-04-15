@@ -30,10 +30,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户组 用户")
-@Table(name = UserGroupUserEntity.TABLE_NAME, indexes = {
-  @Index(name = "user_group_id_idx", columnList = "user_group_id"),
-  @Index(name = "user_id_idx", columnList = "user_id"),
-})
+@Table(name = UserGroupUserEntity.TABLE_NAME)
 public class UserGroupUserEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "user_group_user";

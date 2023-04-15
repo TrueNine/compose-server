@@ -8,7 +8,9 @@ dependencies {
   implementation("cn.hutool:hutool-core:${V.Util.huTool}")
   implementation(project(":core"))
   testImplementation(project(":depend:depend-flyway"))
-  testRuntimeOnly("com.mysql:mysql-connector-j")
+
+  testImplementation("org.hsqldb:hsqldb:${V.Driver.hsqldb}")
+  testImplementation("com.h2database:h2:${V.Driver.h2}")
 }
 
 tasks.withType<Test> {

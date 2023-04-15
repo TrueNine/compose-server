@@ -1,7 +1,7 @@
 package com.truenine.component.rds.converters
 
 import com.truenine.component.core.lang.LogKt
-import com.truenine.component.rds.models.PointModel
+import com.truenine.component.rds.base.PointModel
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
 import org.springframework.stereotype.Component

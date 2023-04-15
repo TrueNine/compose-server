@@ -3,20 +3,20 @@ package com.truenine.component.rds.entity;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+
+import static com.truenine.component.rds.entity.ApiCallRecordEntity.API_ID;
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
  * API请求记录
@@ -31,9 +31,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "API请求记录")
-@Table(name = ApiCallRecordEntity.TABLE_NAME, indexes = {
-  @Index(name = "api_id_idx", columnList = "api_id"),
-})
+@Table(name = ApiCallRecordEntity.TABLE_NAME)
 public class ApiCallRecordEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "api_call_record";
@@ -45,17 +43,15 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
   private static final String LOGIN_IP = "login_ip";
+
   /**
-   * api
+   * 从属 API
    */
-  @Schema(
-    name = API_ID,
-    description = "api"
-  )
-  @Column(table = TABLE_NAME,
-    name = API_ID,
-    nullable = false)
-  private Long apiId;
+  @Schema(title = "API")
+  @ManyToOne
+  @JoinColumn(name = API_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
+  @NotFound(action = IGNORE)
+  private ApiEntity api;
 
   /**
    * 设备 id, 浏览器为 agent
@@ -116,21 +112,4 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
     name = RESP_RESULT_ENC)
   @Nullable
   private String respResultEnc;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (ApiCallRecordEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

@@ -3,20 +3,20 @@ package com.truenine.component.rds.entity;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+
+import static com.truenine.component.rds.entity.ApiEntity.PERMISSIONS_ID;
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
  * api
@@ -31,9 +31,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "api")
-@Table(name = ApiEntity.TABLE_NAME, indexes = {
-  @Index(name = "permissions_id_idx", columnList = "permissions_id"),
-})
+@Table(name = ApiEntity.TABLE_NAME)
 public class ApiEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "api";
@@ -70,16 +68,14 @@ public class ApiEntity extends BaseEntity implements Serializable {
   private String doc;
 
   /**
-   * 访问需要权限
+   * 权限
    */
-  @Schema(
-    name = PERMISSIONS_ID,
-    description = "访问需要权限"
-  )
-  @Column(table = TABLE_NAME,
-    name = PERMISSIONS_ID)
-  @Nullable
-  private Long permissionsId;
+  @Schema(title = "权限")
+  @ManyToOne
+  @JoinColumn(name = PERMISSIONS_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
+  @NotFound(action = IGNORE)
+  private PermissionsEntity permissions;
+
 
   /**
    * 路径
@@ -116,21 +112,4 @@ public class ApiEntity extends BaseEntity implements Serializable {
     name = API_PROTOCOL)
   @Nullable
   private String apiProtocol;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (ApiEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

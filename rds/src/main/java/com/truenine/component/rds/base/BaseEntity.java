@@ -36,7 +36,7 @@ import java.util.Objects;
 @MappedSuperclass
 @RequiredArgsConstructor
 @Schema(title = "顶级抽象类")
-public class BaseEntity extends DbAnyModel implements Serializable {
+public class BaseEntity extends AnyEntity implements Serializable {
 
 
   /**

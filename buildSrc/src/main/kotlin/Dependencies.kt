@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.7-SNAPSHOT"
+  const val version = "0.4.8-SNAPSHOT"
   const val encoding = "UTF-8"
 }
 
@@ -66,6 +66,14 @@ object V {
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
     const val flyway = "9.16.0"
+
+    // 测试用内存数据库
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    const val h2 = "2.1.214"
+
+    // https://mvnrepository.com/artifact/org.hsqldb/hsqldb
+    const val hsqldb = "2.7.1"
+
 
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
     const val hibernateCore = "6.2.0.Final"

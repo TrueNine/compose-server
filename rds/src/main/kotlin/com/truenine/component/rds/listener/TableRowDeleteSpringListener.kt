@@ -11,6 +11,6 @@ open class TableRowDeleteSpringListener(
   private val tableRowDeleteRecordService: TableRowDeleteRecordService
 ) : ApplicationListener<TableRowDeleteSpringEvent> {
   override fun onApplicationEvent(event: TableRowDeleteSpringEvent) {
-    tableRowDeleteRecordService.save(event.source as BaseEntity)
+    tableRowDeleteRecordService.saveAnyEntity(event.source as BaseEntity)
   }
 }

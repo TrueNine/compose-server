@@ -2,16 +2,17 @@ spring:
   flyway:
     baseline-on-migrate: false
     baseline-version: 99
+    enabled: false
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: "#Pengjigong1997"
-    url: "jdbc:mysql://116.205.171.51:3306/component"
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    username: sa
+    password:
+    url: jdbc:hsqldb:mem:testdb?useUnicode=true&characterEncoding=utf8
   jpa:
     open-in-view: false
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.HSQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
 logging:
   level:
     com.truenine.component.rds: debug

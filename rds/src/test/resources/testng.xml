@@ -15,7 +15,7 @@
   </test>
   <test name="仓库测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.rds.repo"/>
+      <package name="com.truenine.component.rds.repository"/>
     </packages>
   </test>
   <test name="转换器测试" parallel="methods">

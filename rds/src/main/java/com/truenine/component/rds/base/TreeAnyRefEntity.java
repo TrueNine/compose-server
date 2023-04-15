@@ -34,14 +34,14 @@ import java.util.Objects;
 @DynamicUpdate
 @MappedSuperclass
 @Table(indexes = {
-  @Index(name = PresortTreeEntity.RLN, columnList = PresortTreeEntity.RLN),
-  @Index(name = PresortTreeEntity.RRN, columnList = PresortTreeEntity.RRN),
-  @Index(name = PresortTreeEntity.RPI, columnList = PresortTreeEntity.RPI),
+  @Index(name = TreeEntity.RLN, columnList = TreeEntity.RLN),
+  @Index(name = TreeEntity.RRN, columnList = TreeEntity.RRN),
+  @Index(name = TreeEntity.RPI, columnList = TreeEntity.RPI),
   @Index(name = RefAnyEntity.ARI, columnList = RefAnyEntity.ARI)
 })
 @RequiredArgsConstructor
 @Schema(title = "预排序树和任意外键的结合体")
-public class TreeAnyRefEntity extends PresortTreeEntity implements Serializable {
+public class TreeAnyRefEntity extends TreeEntity implements Serializable {
 
   /**
    * 任意外键

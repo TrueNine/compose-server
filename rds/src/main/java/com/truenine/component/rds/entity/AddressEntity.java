@@ -1,8 +1,8 @@
 package com.truenine.component.rds.entity;
 
-import com.truenine.component.rds.base.PresortTreeEntity;
+import com.truenine.component.rds.base.PointModel;
+import com.truenine.component.rds.base.TreeEntity;
 import com.truenine.component.rds.converters.PointModelConverter;
-import com.truenine.component.rds.models.PointModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -12,13 +12,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 行政区代码
@@ -34,7 +32,7 @@ import java.util.Objects;
 @Entity
 @Schema(title = "行政区代码")
 @Table(name = AddressEntity.TABLE_NAME)
-public class AddressEntity extends PresortTreeEntity implements Serializable {
+public class AddressEntity extends TreeEntity implements Serializable {
 
   public static final String TABLE_NAME = "address";
   public static final String CODE = "code";
@@ -91,21 +89,4 @@ public class AddressEntity extends PresortTreeEntity implements Serializable {
   @Nullable
   @Convert(converter = PointModelConverter.class)
   private PointModel center;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (AddressEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

@@ -3,7 +3,6 @@ package com.truenine.component.rds.base
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.DbTestBaseServiceEntity
-import com.truenine.component.rds.models.PointModel
 import com.truenine.component.rds.service.BaseServiceTester
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -24,12 +23,10 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   @Rollback
   fun testFindAll() {
-    val saved = service.save(DbTestBaseServiceEntity().apply {
+    service.save(DbTestBaseServiceEntity().apply {
       title = "wad"
       center = PointModel(BigDecimal("1.3"), BigDecimal("2.44"))
     })
-    println(saved)
-    val all = service.findAll()
-    println(all)
+    service.findAll()
   }
 }

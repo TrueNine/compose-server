@@ -11,14 +11,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
+
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 
 /**
  * 用户信息
@@ -33,13 +35,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户信息")
-@Table(name = UserInfoEntity.TABLE_NAME, indexes = {
-  @Index(name = "phone_idx", columnList = "phone"),
-  @Index(name = "id_card_idx", columnList = "id_card"),
-  @Index(name = "user_id_idx", columnList = "user_id"),
-  @Index(name = "address_details_id_idx", columnList = "address_details_id"),
-  @Index(name = "avatar_img_id_idx", columnList = "avatar_img_id"),
-})
+@Table(name = UserInfoEntity.TABLE_NAME)
 public class UserInfoEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "user_info";
@@ -79,6 +75,19 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
     name = AVATAR_IMG_ID)
   @Nullable
   private Long avatarImgId;
+
+
+  @Schema(title = "头像")
+  @ManyToOne
+  @JoinColumn(
+    name = AVATAR_IMG_ID,
+    referencedColumnName = ID,
+    foreignKey = @ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
+  @NotFound(action = NotFoundAction.IGNORE)
+  private AttachmentEntity avatarImage;
 
   /**
    * 姓
@@ -182,21 +191,4 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
     name = GENDER)
   @Nullable
   private Byte gender;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (UserInfoEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

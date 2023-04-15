@@ -4,7 +4,7 @@ import com.truenine.component.core.consts.DataBaseBasicFieldNames
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.Str
 import com.truenine.component.rds.base.BaseEntity
-import com.truenine.component.rds.base.BaseRepo
+import com.truenine.component.rds.base.BaseRepository
 import com.truenine.component.rds.gen.util.DbCaseConverter
 import lombok.extern.slf4j.Slf4j
 import java.time.LocalDate
@@ -17,7 +17,7 @@ class RenderContext {
   private var pkgName: String = ""
   private var ignoreColumns: MutableSet<String> = mutableSetOf()
   private var baseEntityClass: String = BaseEntity::class.java.canonicalName
-  private var baseRepositoryClass: String = BaseRepo::class.java.canonicalName
+  private var baseRepositoryClass: String = BaseRepository::class.java.canonicalName
   private var baseServiceClass: String = ""
   private var baseServiceImplClass: String = ""
   private var author: String = "Generator Author"

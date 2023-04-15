@@ -5,5 +5,5 @@ import com.truenine.component.rds.base.BaseService
 import com.truenine.component.rds.entity.TableRowDeleteRecordEntity
 
 interface TableRowDeleteRecordService : BaseService<TableRowDeleteRecordEntity> {
-  fun save(data: BaseEntity?): TableRowDeleteRecordEntity?
+  fun saveAnyEntity(data: BaseEntity?): TableRowDeleteRecordEntity?
 }

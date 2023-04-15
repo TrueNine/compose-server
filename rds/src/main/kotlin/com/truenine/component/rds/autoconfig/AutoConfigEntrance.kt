@@ -1,5 +1,7 @@
 package com.truenine.component.rds.autoconfig
 
+import cn.hutool.core.convert.impl.DurationConverter
+import cn.hutool.core.convert.impl.PeriodConverter
 import com.truenine.component.core.properties.SnowflakeProperties
 import com.truenine.component.rds.converters.AesEncryptConverter
 import com.truenine.component.rds.converters.PointModelConverter
@@ -23,16 +25,18 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @ComponentScan(
   "com.truenine.component.rds.autoconfig",
   "com.truenine.component.rds.service",
-  "com.truenine.component.rds.repo",
+  "com.truenine.component.rds.repository",
   "com.truenine.component.rds.base"
 )
 @EnableJpaRepositories(
-  "com.truenine.component.rds.repo",
+  "com.truenine.component.rds.repository",
 )
 @Import(
   value = [
     TableRowDeleteSpringListener::class,
     AesEncryptConverter::class,
+    DurationConverter::class,
+    PeriodConverter::class,
     PointModelConverter::class,
   ]
 )

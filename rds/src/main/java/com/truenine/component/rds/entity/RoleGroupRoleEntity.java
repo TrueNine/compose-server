@@ -18,6 +18,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static com.truenine.component.rds.entity.RoleGroupRoleEntity.ROLE_GROUP_ID;
+
 /**
  * 角色组  角色
  *
@@ -31,10 +33,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "角色组  角色")
-@Table(name = RoleGroupRoleEntity.TABLE_NAME, indexes = {
-  @Index(name = "role_group_id_idx", columnList = "role_group_id"),
-  @Index(name = "role_id_idx", columnList = "role_id"),
-})
+@Table(name = RoleGroupRoleEntity.TABLE_NAME)
 public class RoleGroupRoleEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "role_group_role";

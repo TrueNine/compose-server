@@ -2,14 +2,19 @@ package com.truenine.component.rds.base
 
 import com.truenine.component.rds.util.PagedWrapper
 
-interface BaseService<T : DbAnyModel> {
+interface BaseService<T : AnyEntity> {
   fun findAll(page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
+  fun findAllByNotLogicDeleted(page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
+
   fun findById(id: Long): T?
   fun findAllById(ids: List<Long>): MutableList<T>
-  fun findByIdNotLogicDelete(id: Long): T?
+  fun findByIdAndNotLogicDelete(id: Long): T?
+  fun findAllByIdAndNotLogicDeleted(ids: List<Long>, page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
 
   fun countAll(): Long
+  fun countAllByNotLogicDeleted(): Long
   fun existsById(id: Long): Boolean
+
   fun findLdfById(id: Long): Boolean?
 
   fun save(e: T): T?
