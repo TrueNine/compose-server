@@ -14,11 +14,11 @@ class UserGroupRoleGroupAggregatorImpl(
   private val ugrgr: UserGroupRoleGroupRepository
 ) : UserGroupRoleGroupAggregator {
 
-  override fun assignRoleGroupToUserGroup(roleGroupId: Long, userGroupId: Long) = ugrgr.save(UserGroupRoleGroupEntity().apply {
+  override fun saveRoleGroupToUserGroup(roleGroupId: Long, userGroupId: Long) = ugrgr.save(UserGroupRoleGroupEntity().apply {
     this.userGroupId = userGroupId
     this.roleGroupId = roleGroupId
   })
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleGroupToUserGroup(roleGroupId: Long, userGroupId: Long) = ugrgr.deleteAllByUserGroupIdAndRoleGroupId(userGroupId, roleGroupId)
+  override fun revokeRoleGroupFromUserGroup(roleGroupId: Long, userGroupId: Long) = ugrgr.deleteAllByUserGroupIdAndRoleGroupId(userGroupId, roleGroupId)
 }

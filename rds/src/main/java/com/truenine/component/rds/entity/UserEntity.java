@@ -154,5 +154,5 @@ public class UserEntity extends BaseEntity implements Serializable {
     foreignKey = @ForeignKey(NO_CONSTRAINT)
   )
   @NotFound(action = IGNORE)
-  private List<RoleGroupEntity> roeGroups;
+  private List<RoleGroupEntity> roleGroups;
 }

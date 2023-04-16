@@ -65,6 +65,6 @@ public class TableRowDeleteRecordEntity extends BaseEntity implements Serializab
   @Nullable
   @Convert(converter = RecordModelConverter.class)
   @Schema(title = ENTITY, description = "删除实体")
-  @Column(table = TABLE_NAME, name = ENTITY)
+  @Column(table = TABLE_NAME, name = ENTITY,columnDefinition = "VARCHAR(10240)")
   private RecordModel entity;
 }

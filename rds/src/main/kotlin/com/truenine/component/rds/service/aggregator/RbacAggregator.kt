@@ -1,6 +1,9 @@
 package com.truenine.component.rds.service.aggregator
 
-import com.truenine.component.rds.entity.*
+import com.truenine.component.rds.entity.RoleGroupRoleEntity
+import com.truenine.component.rds.entity.RolePermissionsEntity
+import com.truenine.component.rds.entity.UserGroupRoleGroupEntity
+import com.truenine.component.rds.entity.UserRoleGroupEntity
 
 /**
  * 角色权限管理器
@@ -16,7 +19,7 @@ interface RbacAggregator {
   fun revokeRoleGroupFromUserGroup(roleGroupId: Long, userGroupId: Long)
   fun revokeAllRoleGroupFromUserGroup(roleGroupIds: List<Long>, userGroupId: Long)
 
-  fun saveRoleToRoleGroup(role: RoleEntity, roleGroup: RoleGroupEntity): RoleGroupRoleEntity?
+  fun saveRoleToRoleGroup(roleId: Long, roleGroupId: Long): RoleGroupRoleEntity?
   fun saveAllRoleToRoleGroup(roleIds: List<Long>, roleGroupId: Long): List<RoleGroupRoleEntity>
   fun revokeRoleFromRoleGroup(roleId: Long, roleGroupId: Long)
   fun revokeAllRoleFromRoleGroup(roleIds: List<Long>, roleGroupId: Long)
