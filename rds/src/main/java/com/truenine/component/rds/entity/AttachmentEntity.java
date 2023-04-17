@@ -1,5 +1,6 @@
 package com.truenine.component.rds.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
@@ -104,4 +105,25 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   @Nullable
   private String mimeType;
 
+  /**
+   * @return 全路径
+   */
+  @Transient
+  public String getFullPath() {
+    if (this.location != null) {
+      // 切除尾部斜杠
+      var link = this.location.getBaseUrl();
+      if (!link.endsWith("/")) {
+        link += "/";
+      }
+      return link + this.saveName;
+    } else {
+      return "/" + this.saveName;
+    }
+  }
+
+  @Transient
+  @JsonIgnore
+  public void setFullPath(String fullPath) {
+  }
 }
