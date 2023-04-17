@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 abstract class BaseController<T : BaseEntity>(
   protected val service: BaseService<T>
 ) {
-  @Operation(summary = "分页查询所有数据")
+  @Operation(summary = "分页查询所有数据",)
   @GetMapping("all")
   @ResponseBody
   fun findAll(@Valid @RequestBody page: PagedRequestParam?): PagedResponseResult<T> = service.findAllByNotLogicDeleted(page ?: PagedWrapper.DEFAULT_MAX)
