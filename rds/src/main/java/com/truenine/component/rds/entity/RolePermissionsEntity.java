@@ -31,10 +31,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "角色  权限")
-@Table(name = RolePermissionsEntity.TABLE_NAME, indexes = {
-  @Index(name = "role_id_idx", columnList = "role_id"),
-  @Index(name = "permissions_id_idx", columnList = "permissions_id"),
-})
+@Table(name = RolePermissionsEntity.TABLE_NAME)
 public class RolePermissionsEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "role_permissions";
@@ -52,7 +49,7 @@ public class RolePermissionsEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = ROLE_ID)
   @Nullable
-  private String roleId;
+  private Long roleId;
 
   /**
    * 权限
@@ -64,7 +61,7 @@ public class RolePermissionsEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = PERMISSIONS_ID)
   @Nullable
-  private String permissionsId;
+  private Long permissionsId;
 
   @Override
   public boolean equals(Object o) {

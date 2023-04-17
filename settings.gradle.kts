@@ -1,28 +1,10 @@
-dependencyResolutionManagement {
-  repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
-}
-
 pluginManagement {
   repositories {
-    mavenLocal()
-    maven("https://maven.aliyun.com/repository/gradle-plugin")
+    maven("https://maven.aliyun.com/repository/public")
     mavenCentral()
+    maven("https://maven.aliyun.com/repository/gradle-plugin")
     gradlePluginPortal()
     google()
-  }
-
-  resolutionStrategy {
-    eachPlugin {
-      when (requested.id.id) {
-        "org.springframework.boot" -> {
-          useVersion("3.0.5")
-        }
-
-        "io.spring.dependency-management" -> {
-          useVersion("1.1.0")
-        }
-      }
-    }
   }
 }
 

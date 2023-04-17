@@ -3,21 +3,21 @@ package com.truenine.component.rds.entity;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.List;
+
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
  * 用户
@@ -32,9 +32,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户")
-@Table(name = UserEntity.TABLE_NAME, indexes = {
-  @Index(name = "account_idx", columnList = "account"),
-})
+@Table(name = UserEntity.TABLE_NAME)
 public class UserEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "user";
@@ -119,20 +117,42 @@ public class UserEntity extends BaseEntity implements Serializable {
   @Nullable
   private LocalDateTime lastLoginTime;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (UserEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
+  /**
+   * 用户信息
+   */
+  @Schema(title = "用户信息")
+  @OneToOne
+  @JoinColumn(
+    name = ID,
+    referencedColumnName = UserInfoEntity.USER_ID,
+    foreignKey = @ForeignKey(NO_CONSTRAINT)
+  )
+  @NotFound(action = IGNORE)
+  private UserInfoEntity info;
 
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
+  /**
+   * 角色组
+   */
+  @Schema(title = "角色组")
+  @ManyToMany(targetEntity = RoleGroupEntity.class)
+  @JoinTable(
+    name = UserRoleGroupEntity.TABLE_NAME,
+    joinColumns = @JoinColumn(
+      name = UserRoleGroupEntity.USER_ID,
+      referencedColumnName = ID,
+      foreignKey = @ForeignKey(NO_CONSTRAINT),
+      insertable = false,
+      updatable = false
+    ),
+    inverseJoinColumns = @JoinColumn(
+      name = UserGroupRoleGroupEntity.ROLE_GROUP_ID,
+      referencedColumnName = ID,
+      foreignKey = @ForeignKey(NO_CONSTRAINT),
+      insertable = false,
+      updatable = false
+    ),
+    foreignKey = @ForeignKey(NO_CONSTRAINT)
+  )
+  @NotFound(action = IGNORE)
+  private List<RoleGroupEntity> roleGroups;
 }

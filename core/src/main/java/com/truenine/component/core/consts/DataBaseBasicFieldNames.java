@@ -36,14 +36,20 @@ public interface DataBaseBasicFieldNames {
   }
 
   interface Tenant {
-    String ROOT_TENANT = Rbac.ROOT_ID;
-    String DEFAULT_TENANT = Rbac.ROOT_ID;
+    Long ROOT_TENANT = Rbac.ROOT_ID;
+    String ROOT_TENANT_STR = ROOT_TENANT.toString();
+    Long DEFAULT_TENANT = Rbac.ROOT_ID;
+    String DEFAULT_TENANT_STR = DEFAULT_TENANT.toString();
   }
 
   interface Rbac {
-    String ROOT_ID = "0";
-    String USER_ID = "1";
-    String ADMIN_ID = "2";
-    String VIP_ID = "3";
+    Long ROOT_ID = 0L;
+    String ROOT_ID_STR = ROOT_ID.toString();
+    Long USER_ID = 1L;
+    String USER_ID_STR = USER_ID.toString();
+    Long ADMIN_ID = 2L;
+    String ADMIN_ID_STR = ADMIN_ID.toString();
+    Long VIP_ID = 3L;
+    String VIP_ID_STR = VIP_ID.toString();
   }
 }

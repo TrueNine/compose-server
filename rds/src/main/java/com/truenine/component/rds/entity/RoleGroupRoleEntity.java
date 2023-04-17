@@ -18,6 +18,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static com.truenine.component.rds.entity.RoleGroupRoleEntity.ROLE_GROUP_ID;
+
 /**
  * 角色组  角色
  *
@@ -31,10 +33,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "角色组  角色")
-@Table(name = RoleGroupRoleEntity.TABLE_NAME, indexes = {
-  @Index(name = "role_group_id_idx", columnList = "role_group_id"),
-  @Index(name = "role_id_idx", columnList = "role_id"),
-})
+@Table(name = RoleGroupRoleEntity.TABLE_NAME)
 public class RoleGroupRoleEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "role_group_role";
@@ -52,7 +51,7 @@ public class RoleGroupRoleEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = ROLE_GROUP_ID)
   @Nullable
-  private String roleGroupId;
+  private Long roleGroupId;
 
   /**
    * 角色
@@ -64,7 +63,7 @@ public class RoleGroupRoleEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = ROLE_ID)
   @Nullable
-  private String roleId;
+  private Long roleId;
 
   @Override
   public boolean equals(Object o) {
@@ -76,10 +75,5 @@ public class RoleGroupRoleEntity extends BaseEntity implements Serializable {
     }
     var that = (RoleGroupRoleEntity) o;
     return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
   }
 }

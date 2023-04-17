@@ -30,10 +30,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户组 用户")
-@Table(name = UserGroupUserEntity.TABLE_NAME, indexes = {
-  @Index(name = "user_group_id_idx", columnList = "user_group_id"),
-  @Index(name = "user_id_idx", columnList = "user_id"),
-})
+@Table(name = UserGroupUserEntity.TABLE_NAME)
 public class UserGroupUserEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "user_group_user";
@@ -51,7 +48,7 @@ public class UserGroupUserEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = USER_GROUP_ID,
     nullable = false)
-  private String userGroupId;
+  private Long userGroupId;
 
   /**
    * 用户
@@ -63,7 +60,7 @@ public class UserGroupUserEntity extends BaseEntity implements Serializable {
   @Column(table = TABLE_NAME,
     name = USER_ID,
     nullable = false)
-  private String userId;
+  private Long userId;
 
   @Override
   public boolean equals(Object o) {
@@ -75,10 +72,5 @@ public class UserGroupUserEntity extends BaseEntity implements Serializable {
     }
     var that = (UserGroupUserEntity) o;
     return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
   }
 }

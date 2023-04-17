@@ -5,18 +5,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 用户组  角色组
@@ -31,10 +28,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户组  角色组")
-@Table(name = UserGroupRoleGroupEntity.TABLE_NAME, indexes = {
-  @Index(name = "role_group_id_idx", columnList = "role_group_id"),
-  @Index(name = "user_group_id_idx", columnList = "user_group_id"),
-})
+@Table(name = UserGroupRoleGroupEntity.TABLE_NAME)
 public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "user_group_role_group";
@@ -52,7 +46,7 @@ public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable
   @Column(table = TABLE_NAME,
     name = ROLE_GROUP_ID)
   @Nullable
-  private String roleGroupId;
+  private Long roleGroupId;
 
   /**
    * 用户组
@@ -64,22 +58,5 @@ public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable
   @Column(table = TABLE_NAME,
     name = USER_GROUP_ID)
   @Nullable
-  private String userGroupId;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (UserGroupRoleGroupEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
+  private Long userGroupId;
 }

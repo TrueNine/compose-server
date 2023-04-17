@@ -3,19 +3,19 @@ package com.truenine.component.rds.entity;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
  * 文件
@@ -41,17 +41,20 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   public static final String MIME_TYPE = "mime_type";
   @Serial
   private static final long serialVersionUID = 1L;
+
+
+  @Column(name = ATTACHMENT_LOCATION_ID, nullable = false)
+  private Long attachmentLocationId;
+
   /**
-   * 存储base路径
+   * URL
    */
-  @Schema(
-    name = ATTACHMENT_LOCATION_ID,
-    description = "存储base路径"
-  )
-  @Column(table = TABLE_NAME,
-    name = ATTACHMENT_LOCATION_ID,
-    nullable = false)
-  private String attachmentLocationId;
+  @Nullable
+  @Schema(title = "URL")
+  @ManyToOne
+  @JoinColumn(insertable = false, updatable = false, name = ATTACHMENT_LOCATION_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
+  @NotFound(action = IGNORE)
+  private AttachmentLocationEntity location;
 
   /**
    * 原始名称
@@ -101,20 +104,4 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   @Nullable
   private String mimeType;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (AttachmentEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

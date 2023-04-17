@@ -1,22 +1,23 @@
 package com.truenine.component.rds.entity;
 
 import com.truenine.component.rds.base.BaseEntity;
-import com.truenine.component.rds.converters.TableRowChangeRecordConverter;
-import com.truenine.component.rds.models.TableRowChangeSerializableObjectModel;
+import com.truenine.component.rds.base.RecordModel;
+import com.truenine.component.rds.converters.RecordModelConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 数据删除备份表
@@ -31,20 +32,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Entity
 @Schema(title = "数据删除记录")
-@Table(name = TableRowDeleteRecordEntity.TABLE_NAME, indexes = {
-  @Index(
-    name = TableRowDeleteRecordEntity.TABLE_NAMES,
-    columnList = TableRowDeleteRecordEntity.TABLE_NAMES
-  ),
-  @Index(
-    name = TableRowDeleteRecordEntity.USER_ID,
-    columnList = TableRowDeleteRecordEntity.USER_ID
-  ),
-  @Index(
-    name = TableRowDeleteRecordEntity.USER_ACCOUNT,
-    columnList = TableRowDeleteRecordEntity.USER_ACCOUNT
-  )
-})
+@Table(name = TableRowDeleteRecordEntity.TABLE_NAME)
 public class TableRowDeleteRecordEntity extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "table_row_delete_record";
@@ -60,12 +48,14 @@ public class TableRowDeleteRecordEntity extends BaseEntity implements Serializab
   @Column(table = TABLE_NAME, name = TABLE_NAMES, nullable = false)
   private String tableNames;
 
+  @Nullable
   @Schema(title = USER_ID, description = "删除用户id")
-  @Column(table = TABLE_NAME, name = USER_ID, nullable = false)
+  @Column(table = TABLE_NAME, name = USER_ID)
   private String userId;
 
+  @Nullable
   @Schema(title = USER_ACCOUNT, description = "删除用户账户")
-  @Column(table = TABLE_NAME, name = USER_ACCOUNT, nullable = false)
+  @Column(table = TABLE_NAME, name = USER_ACCOUNT)
   private String userAccount;
 
   @Schema(title = DELETE_DATETIME, description = "删除时间")
@@ -73,25 +63,8 @@ public class TableRowDeleteRecordEntity extends BaseEntity implements Serializab
   private LocalDateTime deleteDatetime;
 
   @Nullable
-  @Convert(converter = TableRowChangeRecordConverter.class)
+  @Convert(converter = RecordModelConverter.class)
   @Schema(title = ENTITY, description = "删除实体")
-  @Column(table = TABLE_NAME, name = ENTITY)
-  private TableRowChangeSerializableObjectModel entity;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (TableRowDeleteRecordEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
-  }
+  @Column(table = TABLE_NAME, name = ENTITY,columnDefinition = "VARCHAR(10240)")
+  private RecordModel entity;
 }

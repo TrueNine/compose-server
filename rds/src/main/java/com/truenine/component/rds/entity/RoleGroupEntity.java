@@ -3,19 +3,20 @@ package com.truenine.component.rds.entity;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.List;
+
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
  * 角色组
@@ -25,7 +26,6 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -62,20 +62,27 @@ public class RoleGroupEntity extends BaseEntity implements Serializable {
   @Nullable
   private String doc;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (RoleGroupEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
+  /**
+   * 角色
+   */
+  @Schema(title = "角色")
+  @ManyToMany(targetEntity = RoleEntity.class)
+  @JoinTable(
+    name = RoleGroupRoleEntity.TABLE_NAME,
+    joinColumns = @JoinColumn(
+      table = RoleGroupRoleEntity.TABLE_NAME,
+      name = RoleGroupRoleEntity.ROLE_GROUP_ID,
+      referencedColumnName = ID,
+      foreignKey = @ForeignKey(NO_CONSTRAINT)
+    ),
+    inverseJoinColumns = @JoinColumn(
+      table = RoleGroupRoleEntity.TABLE_NAME,
+      name = RoleGroupRoleEntity.ROLE_ID,
+      referencedColumnName = ID,
+      foreignKey = @ForeignKey(NO_CONSTRAINT)
+    ),
+    foreignKey = @ForeignKey(NO_CONSTRAINT)
+  )
+  @NotFound(action = IGNORE)
+  private List<RoleEntity> roles;
 }

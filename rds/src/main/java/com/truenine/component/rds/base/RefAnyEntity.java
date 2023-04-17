@@ -16,6 +16,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -35,23 +37,22 @@ import java.util.Objects;
 })
 @RequiredArgsConstructor
 @Schema(title = "任意外键类型，通常与策略模式一起使用")
-public class RefAnyEntity extends BaseEntity {
-
+public class RefAnyEntity extends BaseEntity implements Serializable {
   /**
    * 任意外键
    */
   public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
-
   /**
    * 任意类型
    */
   public static final String TYP = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE;
-
+  @Serial
+  private static final long serialVersionUID = 1L;
   @JsonIgnore
   @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
   @Schema(title = "任意外键id")
-  protected String ari;
+  protected Long ari;
 
   @JsonIgnore
   @Expose(deserialize = false)
@@ -69,10 +70,5 @@ public class RefAnyEntity extends BaseEntity {
     }
     RefAnyEntity anyRefDao = (RefAnyEntity) o;
     return id != null && Objects.equals(id, anyRefDao.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
   }
 }

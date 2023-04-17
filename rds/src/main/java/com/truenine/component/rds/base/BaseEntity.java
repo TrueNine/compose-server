@@ -3,10 +3,10 @@ package com.truenine.component.rds.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
-import com.truenine.component.rds.autoconfig.SnowflakeIdGeneratorBean;
-import com.truenine.component.rds.listener.TableRowDeletePersistenceListener;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,8 +14,9 @@ import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -35,39 +36,19 @@ import java.util.Objects;
 @MappedSuperclass
 @RequiredArgsConstructor
 @Schema(title = "顶级抽象类")
-@EntityListeners(TableRowDeletePersistenceListener.class)
-public class BaseEntity {
+public class BaseEntity extends AnyEntity implements Serializable {
 
-
-  /**
-   * 主键
-   */
-  public static final String ID = DataBaseBasicFieldNames.ID;
 
   /**
    * 乐观锁版本
    */
   public static final String RLV = DataBaseBasicFieldNames.LOCK_VERSION;
-
   /**
    * 逻辑删除标志
    */
   public static final String LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG;
-
-  @Id
-  @JsonIgnore
-  @Column(name = DataBaseBasicFieldNames.ID, columnDefinition = "BIGINT UNSIGNED")
-  @Expose(deserialize = false)
-  @GenericGenerator(
-    name = SnowflakeIdGeneratorBean.NAME,
-    strategy = SnowflakeIdGeneratorBean.CLASS_NAME
-  )
-  @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
-  @Schema(name = ID,
-    description = "主键id",
-    defaultValue = "主键自动生成",
-    example = "7001234523405")
-  protected String id;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Version
   @JsonIgnore
@@ -85,13 +66,10 @@ public class BaseEntity {
   @Schema(title = "逻辑删除标志")
   protected Boolean ldf = false;
 
-  // TODO 改写 equals
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
-      return false;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     BaseEntity that = (BaseEntity) o;
     return getId() != null && Objects.equals(getId(), that.getId());
   }

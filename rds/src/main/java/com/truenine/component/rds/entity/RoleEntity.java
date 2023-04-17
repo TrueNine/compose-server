@@ -3,19 +3,20 @@ package com.truenine.component.rds.entity;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.List;
+
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
  * 角色
@@ -25,7 +26,6 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -54,12 +54,27 @@ public class RoleEntity extends BaseEntity implements Serializable {
   @Schema(name = DOC, description = "角色描述")
   private String doc;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
-      return false;
-    RoleEntity roleDao = (RoleEntity) o;
-    return getId() != null && Objects.equals(getId(), roleDao.getId());
-  }
+  /**
+   * 权限
+   */
+  @Schema(title = "权限")
+  @ManyToMany(targetEntity = PermissionsEntity.class)
+  @JoinTable(
+    name = RolePermissionsEntity.TABLE_NAME,
+    joinColumns = @JoinColumn(
+      table = RolePermissionsEntity.TABLE_NAME,
+      name = RolePermissionsEntity.ROLE_ID,
+      referencedColumnName = ID,
+      foreignKey = @ForeignKey(NO_CONSTRAINT)
+    ),
+    inverseJoinColumns = @JoinColumn(
+      table = RolePermissionsEntity.TABLE_NAME,
+      name = RolePermissionsEntity.PERMISSIONS_ID,
+      referencedColumnName = ID,
+      foreignKey = @ForeignKey(NO_CONSTRAINT)
+    ),
+    foreignKey = @ForeignKey(NO_CONSTRAINT)
+  )
+  @NotFound(action = IGNORE)
+  private List<PermissionsEntity> permissions;
 }

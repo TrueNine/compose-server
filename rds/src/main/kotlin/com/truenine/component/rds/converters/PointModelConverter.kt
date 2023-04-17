@@ -1,7 +1,7 @@
 package com.truenine.component.rds.converters
 
 import com.truenine.component.core.lang.LogKt
-import com.truenine.component.rds.models.PointModel
+import com.truenine.component.rds.base.PointModel
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
 import org.springframework.stereotype.Component
@@ -20,11 +20,14 @@ class PointModelConverter : AttributeConverter<PointModel, String> {
   }
 
   override fun convertToDatabaseColumn(attribute: PointModel?): String? {
-    return if (null != attribute) "" else null
+    return if (null != attribute) "P(${attribute.x},${attribute.y})" else null
   }
 
   override fun convertToEntityAttribute(dbData: String?): PointModel? {
-    log.debug("地址 = {} 类型 = {}", dbData, dbData?.javaClass)
-    return null
+    log.trace("地址 = {} 类型 = {}", dbData, dbData?.javaClass)
+    return dbData?.let { exp ->
+      val group = exp.replace(Regex("""(?i)P\(|\)"""), "").split(",").map { it.trim().toBigDecimalOrNull() }
+      PointModel(group[0], group[1])
+    }
   }
 }

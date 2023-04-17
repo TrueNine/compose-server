@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @Order(Ordered.LOWEST_PRECEDENCE)
-open class BasicUserInfoInterceptor : WebMvcConfigurer, HandlerInterceptor {
+class BasicUserInfoInterceptor : WebMvcConfigurer, HandlerInterceptor {
   override fun addInterceptors(registry: InterceptorRegistry) {
     registry.addInterceptor(this)
   }
@@ -38,6 +38,7 @@ open class BasicUserInfoInterceptor : WebMvcConfigurer, HandlerInterceptor {
     modelAndView: ModelAndView?
   ) {
     val userInfo = UserInfoContextHolder.get()
+    log.debug("请求 URL = {}", request.requestURI)
     log.debug("当前拥有用户信息 = {}", userInfo)
     if (null == userInfo) {
       log.debug("当前用户信息为空，设置一个默认的用户信息")

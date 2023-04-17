@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import
 
 @Import(AutoConfigEntrance::class)
 @SpringBootApplication
-open class RdsEntrance
+class RdsEntrance
 
 fun main(args: Array<String>) {
   runApplication<RdsEntrance>(*args)

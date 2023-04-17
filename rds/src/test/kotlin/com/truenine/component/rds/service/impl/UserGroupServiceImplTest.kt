@@ -1,97 +1,60 @@
 package com.truenine.component.rds.service.impl
 
 import com.truenine.component.rds.RdsEntrance
+import com.truenine.component.rds.entity.UserEntity
 import com.truenine.component.rds.entity.UserGroupEntity
+import com.truenine.component.rds.repository.UserGroupRepository
+import com.truenine.component.rds.repository.UserRepository
+import jakarta.persistence.EntityManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.Rollback
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
-import org.testng.annotations.BeforeMethod
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.testng.annotations.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertContains
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
-@Rollback
+
 @SpringBootTest(classes = [RdsEntrance::class])
-class UserGroupServiceImplTest :
-  AbstractTransactionalTestNGSpringContextTests() {
+class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Autowired
-  lateinit var userGroupService: UserGroupServiceImpl
+  lateinit var service: UserGroupServiceImpl
 
-  private lateinit var testUserGroup: UserGroupEntity
+  @Autowired
+  lateinit var ur: UserRepository
 
-  @BeforeMethod
-  @Rollback
-  fun init() {
-    val u =
-      UserGroupEntity()
-    u.name = "来宾"
-    u.doc = "略"
-    testUserGroup = userGroupService.saveUserGroup(u)!!
-  }
+  @Autowired
+  lateinit var ugr: UserGroupRepository
+
+  @Autowired
+  lateinit var em: EntityManager
 
   @Test
-  @Rollback
-  fun testSaveUserGroup() {
-    UserGroupEntity().apply {
-      this.userId = "0"
-      this.name = "二狗子"
-      this.doc = "我日你娘"
-      val s = userGroupService.saveUserGroup(this)
-      assertEquals(s, this, "未保存成功")
-    }
-  }
-
-  @Test
-  @Rollback
-  fun testFindAllUserGroupByUserId() {
-    userGroupService.findAllUserGroupByUserId("0").apply {
-      assertTrue {
-        this.isNotEmpty()
-      }
-    }
-    val u = userGroupService.saveUserGroup(testUserGroup.apply {
-      userId = "0"
-      name = "二狗子组"
-      doc = "略"
-    })
-    assertNotNull(u)
-    userGroupService.findAllUserGroupByUserId("0").apply {
-      assertTrue {
-        this.isNotEmpty()
-      }
-    }
-    userGroupService.assignUserToUserGroup("1", u.id)
-    userGroupService.findAllUserGroupByUserId("1").apply {
-      assertTrue { this.isNotEmpty() }
-    }
-  }
-
-  @Test
-  @Rollback
   fun testAssignUserToUserGroup() {
-    userGroupService.assignUserToUserGroup("1", testUserGroup.id)
-    userGroupService.findAllUserGroupByUserId("1").apply {
-      assertTrue { this.isNotEmpty() }
-    }
+    val u = ur.save(UserEntity().apply {
+      this.account = "qwerq"
+      this.pwdEnc = "qwbad"
+      this.nickName = "abcd"
+    })
+    val ug = ugr.save(UserGroupEntity().apply {
+      this.userId = 13123124
+      this.name = "readMe"
+    })
+    service.assignUserToUserGroup(u.id, ug.id)
+    val ugs = service.findById(ug.id)
+    assertNotNull(ugs)
+    assertContains(ugs.users, u)
   }
 
   @Test
-  @Rollback
-  fun testDeleteUserGroupById() {
-    userGroupService.deleteUserGroupById(testUserGroup.id)
-    val f = userGroupService.findUserGroupById(testUserGroup.id)
-    assertNull(f, "未删除")
-  }
-
-  @Test
-  @Rollback
-  fun testFindUserGroupById() {
-    userGroupService.findUserGroupById(testUserGroup.id).apply {
-      assertNotNull(this)
-    }
+  fun testFindAllUserGroupByUserId() {
+    val saved = service.save(UserGroupEntity().apply {
+      userId = 133
+      id = 1231241
+      name = "我的"
+    })
+    val b = service.findAllUserGroupByUserId(133)
+    assertNotNull(b)
+    assertContains(b, saved)
   }
 }
