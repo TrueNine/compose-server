@@ -42,13 +42,17 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
+
+  @Column(name = ATTACHMENT_LOCATION_ID, nullable = false)
+  private Long attachmentLocationId;
+
   /**
    * URL
    */
   @Nullable
   @Schema(title = "URL")
   @ManyToOne
-  @JoinColumn(name = ATTACHMENT_LOCATION_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
+  @JoinColumn(insertable = false, updatable = false, name = ATTACHMENT_LOCATION_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
   @NotFound(action = IGNORE)
   private AttachmentLocationEntity location;
 
