@@ -1,27 +1,46 @@
 # 环境要求
 
 - IntelliJ IDEA latest
-- gradle 7.6
+- gradle 8.1.0
 - openJDK 17.0.2
-- kotlin 1.7.21
+- kotlin 1.8.20
   注：开发机请准备 16GB 内存或以上，磁盘空出 10G 以上（windows 请在 C盘 留下 10G
   空间）
 
 ## 环境准备
 
+- 安装 gradle
+- 确保系统的 JAVA_HOME 至少为 JDK17
 - 添加阿里云云效 相关的环境变量
+- 配置云效仓库地址
 
 ```text
 YUNXIAO_USER 用户账号
 YUNXIAO_PWD 用户密码
 ```
 
+- 使用 gradle init 执行项目
+
+```shell
+gradle init
+```
+
 - 使用本地 gradle 执行 wrapper 拉起 gradlew
-- 使用 gradlew check 检查项目
+
+```shell
+gradle wrapper
+```
+
+- 使用 gradlew 进行初始化和检查
+
+```shell
+./gradlew init
+```
+
+> 注：如果执行如上步骤错误，请反复检查。
 
 # 模块划分
 
-- **biz** 业务模块
 - **buildSrc** gradle 构建模块
 - **cacheable** 缓存模块
 - **core** 核心工具包

@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service
 @Service
 class AttachmentLocationServiceImpl(
   private val alRepo: AttachmentLocationRepository
-) :
-  BaseServiceImpl<AttachmentLocationEntity>(alRepo),
-  AttachmentLocationService {
-
+) : BaseServiceImpl<AttachmentLocationEntity>(alRepo), AttachmentLocationService {
   override fun findByBaseUrl(baseUrl: String): AttachmentLocationEntity? = alRepo.findByBaseUrl(baseUrl)
-
 }

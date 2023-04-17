@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -27,7 +26,6 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -125,7 +123,9 @@ public class UserEntity extends BaseEntity implements Serializable {
   @JoinColumn(
     name = ID,
     referencedColumnName = UserInfoEntity.USER_ID,
-    foreignKey = @ForeignKey(NO_CONSTRAINT)
+    foreignKey = @ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
   )
   @NotFound(action = IGNORE)
   private UserInfoEntity info;

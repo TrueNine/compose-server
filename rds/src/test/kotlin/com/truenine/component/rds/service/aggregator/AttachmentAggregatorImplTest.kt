@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.testng.annotations.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
@@ -34,5 +35,23 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testGetFullUrl() {
+    val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
+    ass.uploadAttachment(mockFile) {
+      SaveAttachmentModel().apply {
+        baseUrl = "https://oss.aliyun.com/static"
+        saveName = "adwd0juihjrthjrthrhrhrth"
+      }
+    }!!.apply {
+      assertNotNull(this)
+      val full = this.fullPath
+      assertNotNull(full)
+      assertEquals(
+        "https://oss.aliyun.com/static/" + "adwd0juihjrthjrthrhrhrth",
+        full
+      )
+      val a = ass.getFullUrl(this)
+      assertEquals(a, full)
+      println(full)
+    }
   }
 }

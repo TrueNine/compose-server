@@ -1,6 +1,7 @@
 project.version = V.Component.dataCommonDataExtract
 
 dependencies {
+  api("com.squareup.okhttp3:okhttp:${V.Web.okhttp3}")
   api("org.jsoup:jsoup:${V.Util.jsoup}")
   api("com.alibaba:easyexcel:${V.Util.easyExcel}") {
     exclude("org.apache.commons", "commons-compress")

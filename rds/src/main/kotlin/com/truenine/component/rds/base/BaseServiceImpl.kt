@@ -17,7 +17,7 @@ abstract class BaseServiceImpl<T : BaseEntity>(
   override fun findAllById(ids: List<Long>): MutableList<T> = repo.findAllById(ids)
   override fun findByIdAndNotLogicDelete(id: Long): T? = repo.findByIdAndNotLogicDelete(id)
 
-  override fun findLdfById(id: Long): Boolean? = repo.findLdfById(id)
+  override fun findLdfById(id: Long): Boolean = repo.findLdfById(id) ?: true
   override fun countAll(): Long = repo.count()
   override fun countAllByNotLogicDeleted(): Long =repo.countByNotLogicDeleted()
   override fun existsById(id: Long): Boolean = repo.existsById(id)

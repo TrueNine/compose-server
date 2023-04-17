@@ -5,4 +5,5 @@ import com.truenine.component.rds.entity.AttachmentEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AttachmentRepository : BaseRepository<AttachmentEntity>
+interface AttachmentRepository : BaseRepository<AttachmentEntity> {
+}

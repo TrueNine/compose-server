@@ -23,11 +23,9 @@ class AttachmentAggregatorImpl(
 
   override fun uploadAttachment(file: MultipartFile, saveFileCallback: () -> SaveAttachmentModel): AttachmentEntity? {
     val saveFile = saveFileCallback()
-
     // 如果 此条url 不存在，则保存一个新的 url
     val location = alService.findByBaseUrl(saveFile.baseUrl)
       ?: alService.save(AttachmentLocationEntity().apply {
-        rn(true)
         baseUrl = saveFile.baseUrl
         name = "URL:\$${LocalDateTime.now()}"
         log.debug("保存一个新的 附件地址 = {}", this)
@@ -46,7 +44,7 @@ class AttachmentAggregatorImpl(
     return aService.save(att)
   }
 
-  override fun getFullUrl(attachment: AttachmentEntity): String? = attachment.location.baseUrl + attachment.saveName
+  override fun getFullUrl(attachment: AttachmentEntity): String? = attachment.fullPath
 
   companion object {
     @JvmStatic

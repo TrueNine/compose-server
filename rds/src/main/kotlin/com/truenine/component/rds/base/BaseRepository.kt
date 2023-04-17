@@ -21,8 +21,8 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
   @Query("from #{#entityName} e where e.id in :ids and e.ldf = false")
   fun findAllByIdAndNotLogicDeleted(ids: List<Long>, page: Pageable): Page<T>
 
-  @Query("from #{#entityName} e where e.id = :id and e.ldf = true")
-  fun findLdfById(id: Long): Boolean
+  @Query("select e.ldf from #{#entityName} e where e.id = :id and e.ldf = false")
+  fun findLdfById(id: Long): Boolean?
 
   @Transactional(rollbackFor = [Exception::class])
   fun logicDeleteById(id: Long): T? = findByIdOrNull(id)?.let { it.ldf = true;save(it) }

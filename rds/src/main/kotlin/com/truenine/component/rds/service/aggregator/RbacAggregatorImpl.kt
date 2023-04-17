@@ -27,7 +27,7 @@ class RbacAggregatorImpl(
   override fun saveAllRoleGroupToUser(roleGroupIds: List<Long>, userId: Long): List<UserRoleGroupEntity> =
     urg.saveAll(roleGroupIds.map {
       UserRoleGroupEntity().apply {
-        this.roleGroupId = it
+        roleGroupId = it
         this.userId = userId
       }
     })

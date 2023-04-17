@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.13-SNAPSHOT"
+  const val version = "0.4.13-SNAPSHOT-T"
   const val encoding = "UTF-8"
 }
 
@@ -33,6 +33,9 @@ object V {
     const val gradleWrapper = "8.0.2"
     const val javaStr = "17"
     val javaPlatform = org.gradle.api.JavaVersion.VERSION_17
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    const val lombok = "1.18.26"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
     const val kotlinxCoroutine = "1.6.4"
@@ -191,7 +194,7 @@ object V {
     const val junitJupiter = "5.9.2"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test-testng
-    const val kotlinTestNG = "1.8.20"
+    const val kotlinTestNG = Lang.kotlin
 
     // https://mvnrepository.com/artifact/org.testng/testng
     const val testNG = "7.7.1"
@@ -230,7 +233,7 @@ object V {
 
     // kotlin 注解处理器
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin.kapt/org.jetbrains.kotlin.kapt.gradle.plugin
-    const val kotlinKapt = V.Lang.kotlin
+    const val kotlinKapt = Lang.kotlin
 
     // kotlin jvm 插件
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin.jvm/org.jetbrains.kotlin.jvm.gradle.plugin

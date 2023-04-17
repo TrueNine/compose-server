@@ -2,15 +2,13 @@ package com.truenine.component.rds.service.impl
 
 import com.truenine.component.rds.base.BaseServiceImpl
 import com.truenine.component.rds.entity.UserEntity
-import com.truenine.component.rds.repository.UserInfoRepository
 import com.truenine.component.rds.repository.UserRepository
 import com.truenine.component.rds.service.UserService
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-  private val userRepo: UserRepository,
-  private val userInfoRepo: UserInfoRepository
+  private val userRepo: UserRepository
 ) : UserService, BaseServiceImpl<UserEntity>(userRepo) {
   override fun findUserByAccount(account: String): UserEntity? = userRepo.findByAccount(account)
 
