@@ -19,11 +19,11 @@ public class WeChatProperties {
    */
   private String appId;
 
-  // api 密钥
-  private String apiKey;
   /**
    * 异步通知 Id
    */
   private String notifyUrl;
 
+  // api 密钥
+  private String appSecret;
 }

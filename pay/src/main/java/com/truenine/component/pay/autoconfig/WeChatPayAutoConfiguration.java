@@ -24,22 +24,22 @@ public class WeChatPayAutoConfiguration {
     // TODO hutool
     String privateKey = FileUtil.readString(weChatProperties.getPrivateKeyPath(), StandardCharsets.UTF_8);
     String cert = FileUtil.readString(weChatProperties.getCertPaths(), StandardCharsets.UTF_8);
-//    return new RSAConfig.Builder()
-//      .merchantId(weChatProperties.getMerchantId())
-//      // 使用 com.wechat.pay.java.core.util 中的函数从本地文件中加载商户私钥，商户私钥会用来生成请求的签名
-////      .privateKeyFromPath(ResourcesLocator.classpathUrl(weChatProperties.getPrivateKeyPath()).toString())
-//      .privateKey(privateKey)
-//      .merchantSerialNumber(weChatProperties.getMerchantSerialNumber())
-//      .wechatPayCertificates(cert)
-//
-////      .wechatPayCertificatesFromPath(weChatProperties.getCertPaths())
-//      .build();
-    return new RSAAutoCertificateConfig.Builder()
+    return new RSAConfig.Builder()
       .merchantId(weChatProperties.getMerchantId())
+      // 使用 com.wechat.pay.java.core.util 中的函数从本地文件中加载商户私钥，商户私钥会用来生成请求的签名
+//      .privateKeyFromPath(ResourcesLocator.classpathUrl(weChatProperties.getPrivateKeyPath()).toString())
       .privateKey(privateKey)
       .merchantSerialNumber(weChatProperties.getMerchantSerialNumber())
-      .apiV3Key(weChatProperties.getApiKey())
+      .wechatPayCertificates(cert)
+
+//      .wechatPayCertificatesFromPath(weChatProperties.getCertPaths())
       .build();
+//    return new RSAAutoCertificateConfig.Builder()
+//      .merchantId(weChatProperties.getMerchantId())
+//      .privateKey(privateKey)
+//      .merchantSerialNumber(weChatProperties.getMerchantSerialNumber())
+//      .apiV3Key(weChatProperties.getApiKey())
+//      .build();
   }
 
   @Bean

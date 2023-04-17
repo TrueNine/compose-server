@@ -2,6 +2,7 @@ project.version = V.Component.pay
 
 dependencies {
   implementation(("cn.hutool:hutool-core:${V.Util.huTool}"))
+  implementation(("org.springframework.boot:spring-boot-starter-webflux"))
   implementation("com.github.wechatpay-apiv3:wechatpay-java:${V.PlatformSdk.wechatpayJava}")
   implementation(project(":core"))
 }

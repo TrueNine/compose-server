@@ -1,0 +1,14 @@
+server:
+  port: 9080
+
+component:
+  pay:
+    wechat:
+      app-id: wx20f323c7eaa61533
+      private-key-path: cert/apiclient_key.pem
+      cert-paths: cert/apiclient_cert.pem
+      merchant-id: 1630066782
+      merchant-serial-number: 44B4A803F99969B9303F88F2C4824C7A185CBA8F
+      notify-url: https://www.baidu.com
+      api-key: wx20f323c7eaa61533
+      app-secret: ""
