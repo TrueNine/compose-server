@@ -4,6 +4,7 @@ import com.truenine.component.rds.util.PagedWrapper
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseBody
 
 abstract class BaseController<T : BaseEntity>(
@@ -12,7 +13,7 @@ abstract class BaseController<T : BaseEntity>(
   @Operation(summary = "分页查询所有数据")
   @GetMapping("all")
   @ResponseBody
-  fun findAll(@Valid page: PagedRequestParam?): PagedResponseResult<T> = service.findAllByNotLogicDeleted(page ?: PagedWrapper.DEFAULT_MAX)
+  fun findAll(@Valid @RequestBody page: PagedRequestParam?): PagedResponseResult<T> = service.findAllByNotLogicDeleted(page ?: PagedWrapper.DEFAULT_MAX)
 
   @Operation(summary = "查询当前总数")
   @GetMapping("count")
