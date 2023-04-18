@@ -1,5 +1,6 @@
 package com.truenine.component.rds.entity;
 
+import com.truenine.component.core.annotations.SensitiveRef;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.converters.AesEncryptConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -165,6 +166,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
     name = PHONE,
     unique = true)
   @Nullable
+  @SensitiveRef(SensitiveRef.Strategy.PHONE)
   private String phone;
 
   /**
@@ -178,6 +180,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
     name = ID_CARD,
     unique = true)
   @Nullable
+  @SensitiveRef(SensitiveRef.Strategy.IDCARD)
   private String idCard;
 
   /**

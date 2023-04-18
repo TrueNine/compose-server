@@ -9,4 +9,11 @@ dependencies {
   }
   api("net.sf.supercsv:super-csv:${V.Util.superCsv}")
   implementation(project(":core"))
+  implementation(project(":depend:depend-web-client"))
+}
+
+tasks.withType<Test> {
+  useTestNG {
+    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+  }
 }

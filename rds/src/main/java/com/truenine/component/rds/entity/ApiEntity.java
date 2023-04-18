@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -14,7 +13,6 @@ import org.hibernate.annotations.NotFound;
 import java.io.Serial;
 import java.io.Serializable;
 
-import static com.truenine.component.rds.entity.ApiEntity.PERMISSIONS_ID;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -26,7 +24,6 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -108,8 +105,7 @@ public class ApiEntity extends BaseEntity implements Serializable {
     name = API_PROTOCOL,
     description = "请求协议"
   )
-  @Column(table = TABLE_NAME,
-    name = API_PROTOCOL)
+  @Column(table = TABLE_NAME, name = API_PROTOCOL)
   @Nullable
   private String apiProtocol;
 }

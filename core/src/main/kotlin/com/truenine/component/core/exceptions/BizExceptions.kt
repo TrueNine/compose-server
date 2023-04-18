@@ -8,4 +8,5 @@ package com.truenine.component.core.exceptions
  * @since 2022-12-25
  */
 open class AccountOrPasswordErrorException(msg: String? = "账号或密码未找到") :
-  BasicBizException(msg)
+  KnownException(msg)
+

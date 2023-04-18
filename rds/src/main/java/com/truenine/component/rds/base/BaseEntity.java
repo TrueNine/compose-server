@@ -11,13 +11,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * jpa顶级抽象类
@@ -65,17 +63,4 @@ public class BaseEntity extends AnyEntity implements Serializable {
   )
   @Schema(title = "逻辑删除标志")
   protected Boolean ldf = false;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-    BaseEntity that = (BaseEntity) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

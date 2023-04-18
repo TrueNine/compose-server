@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
  * @since ${ctx.nowDay()}
  */
 @Repository
-public interface ${tab.getClassName()}${ctx.getRepositorySuffix()!""} extends ${ctx.getBaseRepositoryClassName()}<${tab.getClassName()}${ctx.getEntitySuffix()!""}, String> {
+public interface ${tab.getClassName()}${ctx.getRepositorySuffix()!""} extends ${ctx.getBaseRepositoryClassName()}<${tab.getClassName()}${ctx.getEntitySuffix()!""}> {
 
 }

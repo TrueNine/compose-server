@@ -7,6 +7,7 @@ dependencies {
   testApi("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
   implementation("cn.hutool:hutool-core:${V.Util.huTool}")
   implementation(project(":core"))
+  implementation(project(":data-common:data-common-data-extract"))
   testImplementation(project(":depend:depend-flyway"))
 
   testImplementation("org.hsqldb:hsqldb:${V.Driver.hsqldb}")

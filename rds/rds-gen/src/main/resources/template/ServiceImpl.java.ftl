@@ -16,16 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 */
 @Slf4j
 @Service
-@Transactional(rollbackFor = Exception.class)
-public class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}
-implements ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
+public class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""} implements ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
 
-private final ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo;
+  private final ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo;
 
-public ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}(
-${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo
-) {
-this.repo = repo;
-}
-
+  public ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}(
+  ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo) {
+    this.repo = repo;
+  }
 }

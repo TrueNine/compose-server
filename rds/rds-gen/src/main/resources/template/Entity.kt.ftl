@@ -21,69 +21,43 @@ import ${t}
 </#list>
 
 /**
- * ${tab.getComment()!tab.getClassName()}
- *
- * @author ${ctx.getAuthor()}
- * @since ${ctx.nowDay()}
- */
+* ${tab.getComment()!tab.getClassName()}
+*
+* @author ${ctx.getAuthor()}
+* @since ${ctx.nowDay()}
+*/
 @DynamicInsert
 @DynamicUpdate
 @Entity
 @Schema(title = "${tab.getEscapeComment()!tab.getClassName()}")
-@Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.TABLE_NAME<#if tab.getIdx()?? && (tab.getIdx()?size > 0)>, indexes = {
-    <#list tab.getIdx() as idx>
-    @Index(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.${idx.getKeyName()!idx.getColumnName()}, columnList = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.${idx.getColumnName()}),
-    </#list>
-   }</#if>)
-data class ${tab.getClassName()}${ctx.getEntitySuffix()!""} : ${ctx.getBaseEntityClassName()}(), Serializable {
-
-<#-- 静态表字段名 -->
-<#list tab.getColumns() as col>
-  /**
-   * ${col.getComment()!col.getFieldName()} 列
-   */
-  public static final String ${col.getUpperName()} = "${col.getColName()}";
-
-</#list>
-  /**
-   * serialVersionUID
-   */
-  @Serial
-  private static final long serialVersionUID = 1L;
-
-  /**
-   * ${tab.getName()} 表名
-   */
-  public static final String TABLE_NAME = "${tab.getName()}";
-
+@Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.TABLE_NAME)
+data class ${tab.getClassName()}${ctx.getEntitySuffix()!""} (
 <#-- 表字段 -->
 <#list tab.getColumns() as col>
   /**
    * ${col.getComment()!col.getFieldName()}
    */
-  @Schema(
-    title="${col.getEscapeComment()}",
-    description="${col.getEscapeComment()}"
-  )
-  @Column(table = THIS_TABLE_NAME,
-    name = ${col.getUpperName()}<#if !col.getNullable()>,
-    nullable = false</#if><#if col.getUnique()>,
-    unique = true</#if>)
-  private ${col.getJavaType()} ${col.getFieldName()};
-
+  @Schema(title="${col.getEscapeComment()}")
+  @Column(name = ${col.getUpperName()}<#if !col.getNullable()>,nullable = false</#if><#if col.getUnique()>,unique = true</#if>)
+  var ${col.getFieldName()}: ${col.getJavaType()}? = null
 </#list>
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    val that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
-    return id != null && Objects.equals(id, that.id);
+) : ${ctx.getBaseEntityClassName()}(), Serializable {
+  companion object {
+    /**
+     * serialVersionUID
+     */
+    @Serial
+    const val serialVersionUID = 1L;
+    /**
+     * ${tab.getName()} 表名
+     */
+    const val TABLE_NAME = "${tab.getName()}"
+<#-- 静态表字段名 -->
+<#list tab.getColumns() as col>
+    /**
+     * ${col.getComment()!col.getFieldName()} 列
+     */
+    const val ${col.getUpperName()} = "${col.getColName()}"
+</#list>
   }
-
-  @Override
-  open fun hashCode() : Int = this::class.hashCode;
 }
