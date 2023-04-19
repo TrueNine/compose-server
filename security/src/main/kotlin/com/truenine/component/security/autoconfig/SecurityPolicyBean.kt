@@ -1,5 +1,6 @@
 package com.truenine.component.security.autoconfig
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.security.annotations.EnableRestSecurity
 import com.truenine.component.security.defaults.EmptySecurityDetailsService
@@ -35,8 +36,8 @@ class SecurityPolicyBean {
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefineModel::class)
-  fun securityExceptionAdware(policyDefine: SecurityPolicyDefineModel): SecurityExceptionAdware {
-    return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware()
+  fun securityExceptionAdware(policyDefine: SecurityPolicyDefineModel, manager: ObjectMapper): SecurityExceptionAdware {
+    return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
   }
 
   @Bean
