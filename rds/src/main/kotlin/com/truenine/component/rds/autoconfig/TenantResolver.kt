@@ -35,4 +35,7 @@ class TenantResolver :
 
   private val log = LogKt.getLog(this::class)
 
+  init {
+    log.debug("注册 hibernate 租户管理器")
+  }
 }

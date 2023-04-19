@@ -27,14 +27,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Schema(title = "顶级任意抽象类")
 @EntityListeners(TableRowDeletePersistenceListener.class)
-@GenericGenerator(
-  name = SnowflakeIdGeneratorBean.NAME,
-  strategy = SnowflakeIdGeneratorBean.CLASS_NAME
-)
-@GenericGenerator(
-  name = BizCodeGeneratorBean.NAME,
-  strategy = BizCodeGeneratorBean.CLASS_NAME
-)
 public class AnyEntity implements Serializable {
   /**
    * 主键
@@ -45,6 +37,10 @@ public class AnyEntity implements Serializable {
 
   @Id
   @Column(name = DataBaseBasicFieldNames.ID)
+  @GenericGenerator(
+    name = SnowflakeIdGeneratorBean.NAME,
+    strategy = SnowflakeIdGeneratorBean.CLASS_NAME
+  )
   @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
   @Schema(title = ID, example = "7001234523405")
   protected Long id;
