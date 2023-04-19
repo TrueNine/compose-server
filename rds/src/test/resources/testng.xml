@@ -28,4 +28,9 @@
       <package name="com.truenine.component.rds.base"/>
     </packages>
   </test>
+  <test name="自动装配测试" parallel="methods">
+    <packages>
+      <package name="com.truenine.component.rds.autoconfig"/>
+    </packages>
+  </test>
 </suite>

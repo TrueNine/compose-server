@@ -1,6 +1,7 @@
 package com.truenine.component.rds.base;
 
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
+import com.truenine.component.rds.autoconfig.BizCodeGeneratorBean;
 import com.truenine.component.rds.autoconfig.SnowflakeIdGeneratorBean;
 import com.truenine.component.rds.listener.TableRowDeletePersistenceListener;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,13 +21,20 @@ import java.util.Objects;
 
 @Setter
 @Getter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
 @RequiredArgsConstructor
 @Schema(title = "顶级任意抽象类")
 @EntityListeners(TableRowDeletePersistenceListener.class)
+@GenericGenerator(
+  name = SnowflakeIdGeneratorBean.NAME,
+  strategy = SnowflakeIdGeneratorBean.CLASS_NAME
+)
+@GenericGenerator(
+  name = BizCodeGeneratorBean.NAME,
+  strategy = BizCodeGeneratorBean.CLASS_NAME
+)
 public class AnyEntity implements Serializable {
   /**
    * 主键
@@ -37,10 +45,6 @@ public class AnyEntity implements Serializable {
 
   @Id
   @Column(name = DataBaseBasicFieldNames.ID)
-  @GenericGenerator(
-    name = SnowflakeIdGeneratorBean.NAME,
-    strategy = SnowflakeIdGeneratorBean.CLASS_NAME
-  )
   @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
   @Schema(title = ID, example = "7001234523405")
   protected Long id;

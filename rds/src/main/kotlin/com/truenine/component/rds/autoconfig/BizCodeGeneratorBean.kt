@@ -23,7 +23,7 @@ class BizCodeGeneratorBean(
   }
 
   override fun generate(session: SharedSessionContractImplementor?, `object`: Any?): String {
-    val dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYYMMDDHHmmssSSS"))
+    val dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
     val st = snowflake.nextStr()
     val code = "$dt${st.substring(st.length - 4)}"
     log.trace("生成的单号为 {}", code)
