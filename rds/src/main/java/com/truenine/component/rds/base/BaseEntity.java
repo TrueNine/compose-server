@@ -1,7 +1,6 @@
 package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gson.annotations.Expose;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -50,17 +49,12 @@ public class BaseEntity extends AnyEntity implements Serializable {
 
   @Version
   @JsonIgnore
-  @Column(name = RLV,
-    nullable = false)
-  @Expose(deserialize = false)
+  @Column(name = RLV, nullable = false)
   @Schema(title = "乐观锁版本")
   protected Long rlv;
 
   @JsonIgnore
-  @Expose(deserialize = false)
-  @Column(name = LDF,
-    nullable = false
-  )
+  @Column(name = LDF, nullable = false)
   @Schema(title = "逻辑删除标志")
   protected Boolean ldf = false;
 }

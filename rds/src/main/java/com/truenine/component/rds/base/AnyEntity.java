@@ -1,6 +1,5 @@
 package com.truenine.component.rds.base;
 
-import com.google.gson.annotations.Expose;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import com.truenine.component.rds.autoconfig.SnowflakeIdGeneratorBean;
 import com.truenine.component.rds.listener.TableRowDeletePersistenceListener;
@@ -38,7 +37,6 @@ public class AnyEntity implements Serializable {
 
   @Id
   @Column(name = DataBaseBasicFieldNames.ID)
-  @Expose(deserialize = false)
   @GenericGenerator(
     name = SnowflakeIdGeneratorBean.NAME,
     strategy = SnowflakeIdGeneratorBean.CLASS_NAME
