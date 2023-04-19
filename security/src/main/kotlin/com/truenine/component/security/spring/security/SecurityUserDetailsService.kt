@@ -1,8 +1,8 @@
 package com.truenine.component.security.spring.security
 
 import com.truenine.component.core.lang.LogKt
-import com.truenine.component.security.SecurityUserDetails
 import com.truenine.component.core.models.UserAuthorizationInfoModel
+import com.truenine.component.security.SecurityUserDetails
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -17,13 +17,10 @@ abstract class SecurityUserDetailsService : UserDetailsService {
    */
   @Throws(UsernameNotFoundException::class)
   override fun loadUserByUsername(username: String): UserDetails {
-    log.trace(
-      "加载 loadUserByUsername account = {}",
-      username
-    )
-    return SecurityUserDetails(
-      loadUserDetailsByAccount(username)
-    )
+    log.debug("加载 loadUserByUsername account = {}", username)
+    val details = SecurityUserDetails(loadUserDetailsByAccount(username))
+    log.debug("加载到 details = {}", details)
+    return details
   }
 
   /**
@@ -36,6 +33,6 @@ abstract class SecurityUserDetailsService : UserDetailsService {
 
   companion object {
     @JvmStatic
-    private val log = LogKt.getLog(SecurityUserDetailsService::class)
+    private val log = LogKt.getLog(this::class)
   }
 }

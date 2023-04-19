@@ -5,10 +5,10 @@ import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
 import kotlin.reflect.KClass
 
-data class VerifierParams<S : Any, E : Any>(
+data class VerifierParamModel<S : Any, E : Any>(
   val token: String,
-  val subjectTargetType: KClass<S>? = null,
-  var encryptDataTargetType: KClass<E>? = null,
+  val subjectTargetType: Class<S>? = null,
+  var encryptDataTargetType: Class<E>? = null,
   var signatureKey: RSAPublicKey? = null,
   var contentEncryptEccKey: PrivateKey? = null,
   var id: String? = null,

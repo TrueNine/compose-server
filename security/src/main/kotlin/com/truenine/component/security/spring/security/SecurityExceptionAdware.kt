@@ -1,7 +1,7 @@
 package com.truenine.component.security.spring.security
 
-import com.truenine.component.core.http.ErrorMessage
 import com.truenine.component.core.http.ErrMsg
+import com.truenine.component.core.http.ErrorMessage
 import com.truenine.component.core.lang.LogKt
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -33,10 +33,11 @@ abstract class SecurityExceptionAdware : AccessDeniedHandler,
     ex: AccessDeniedException
   ) {
     log.warn("无权限异常", ex)
+    ErrorMessage.failedByMessages(ErrMsg._403)
   }
 
   companion object {
     @JvmStatic
-    private val log = LogKt.getLog(SecurityExceptionAdware::class)
+    private val log = LogKt.getLog(this::class)
   }
 }

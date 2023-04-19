@@ -1,7 +1,7 @@
 package com.truenine.component.security.autoconfig
 
 import com.truenine.component.core.lang.LogKt
-import com.truenine.component.security.defaults.EmptyPreValidFilter
+import com.truenine.component.security.defaults.EmptyPreflightValidFilter
 import com.truenine.component.security.defaults.EmptySecurityDetailsService
 import com.truenine.component.security.defaults.EmptySecurityExceptionAdware
 import com.truenine.component.security.models.SecurityPolicyDefineModel
@@ -33,7 +33,7 @@ open class SecurityDefineAutoConfiguration {
     }
     if (desc.preValidFilter == null) {
       log.debug("正在使用空体 安全过滤器")
-      desc.preValidFilter = EmptyPreValidFilter()
+      desc.preValidFilter = EmptyPreflightValidFilter()
     }
     return desc
   }

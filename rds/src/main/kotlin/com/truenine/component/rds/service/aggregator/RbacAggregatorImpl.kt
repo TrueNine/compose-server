@@ -1,9 +1,6 @@
 package com.truenine.component.rds.service.aggregator
 
-import com.truenine.component.rds.entity.RoleGroupRoleEntity
-import com.truenine.component.rds.entity.RolePermissionsEntity
-import com.truenine.component.rds.entity.UserGroupRoleGroupEntity
-import com.truenine.component.rds.entity.UserRoleGroupEntity
+import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.repository.RoleGroupRoleRepository
 import com.truenine.component.rds.repository.RolePermissionsRepository
 import com.truenine.component.rds.repository.UserGroupRoleGroupRepository
@@ -18,7 +15,6 @@ class RbacAggregatorImpl(
   private val rgr: RoleGroupRoleRepository,
   private val rp: RolePermissionsRepository
 ) : RbacAggregator {
-
   override fun saveRoleGroupToUser(roleGroupId: Long, userId: Long): UserRoleGroupEntity? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)
       ?: urg.save(UserRoleGroupEntity().apply {

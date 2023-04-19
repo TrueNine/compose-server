@@ -7,7 +7,7 @@ import com.google.common.annotations.VisibleForTesting
 import com.truenine.component.core.encrypt.Encryptors
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.LogKt
-import com.truenine.component.security.jwt.consts.IssuerParams
+import com.truenine.component.security.jwt.consts.IssuerParamModel
 import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -20,14 +20,16 @@ class JwtIssuer private constructor() : JwtVerifier() {
   var signatureIssuerKey: RSAPrivateKey? = null
   var contentEccPublicKey: PublicKey? = null
 
-  fun <S : Any, E : Any> issued(params: IssuerParams<S, E>): String {
+  fun <S : Any, E : Any> issued(params: IssuerParamModel<S, E>): String {
     return JWT.create()
       .withIssuer(issuer)
       .withJWTId(id)
       .apply {
+        // 是否包含明文主题，有则进行转换
         if (params.containSubject()) {
           withSubject(createContent(params.subjectObj!!))
         }
+        // 包含加密块则加密
         if (params.containEncryptContent()) {
           withClaim(
             this@JwtIssuer.encryptDataKeyName,
@@ -53,10 +55,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
     content: Any
   ): String = runCatching {
     objectMapper.writeValueAsString(content)
-  }.onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }
-    .getOrElse {
-      "{}"
-    }
+  }.onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }.getOrElse { "{}" }
 
   @VisibleForTesting
   internal fun encryptData(

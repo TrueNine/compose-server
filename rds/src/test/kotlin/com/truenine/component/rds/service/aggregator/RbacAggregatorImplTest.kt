@@ -330,4 +330,11 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
       }
     }
   }
+
+  @Test
+  fun testFindAllRoleGroupByAccount() {
+    userService.save(getUser())!!.let { u ->
+      val roles = aggregator.findAllRoleGroupByAccount(u.account)!!
+    }
+  }
 }

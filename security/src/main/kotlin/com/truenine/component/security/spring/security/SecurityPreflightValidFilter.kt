@@ -21,7 +21,7 @@ import java.io.IOException
  * @author TrueNine
  * @since 2022-10-28
  */
-abstract class SecurityPreValidFilter : OncePerRequestFilter() {
+abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
 
   private val log = LogKt.getLog(this::class)
 
@@ -32,8 +32,8 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
     filterChain: FilterChain
   ) {
     val authInfo = if (containsTokenPair(request)) {
-      val token = getTokenMapping(request)
-      val ref = getReFlashTokenMapping(request)
+      val token = getToken(request)
+      val ref = getReFlashToken(request)
       getUserAuthorizationInfo(token, ref, request, response)
     } else {
       log.trace("没有发现用户信息，直接放行")
@@ -41,11 +41,8 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
       return
     }
     log.trace("获取到用户信息 = {}", authInfo)
+    val details = SecurityUserDetails(authInfo)
 
-    val details =
-      SecurityUserDetails(
-        authInfo
-      )
     log.trace("获取到 details = {}", details)
 
     val usernamePasswordAuthenticationToken =
@@ -64,6 +61,11 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
     filterChain.doFilter(request, response)
   }
 
+  /**
+   * 校验其是否包含验证令牌
+   * @param request 请求
+   * @return [Boolean]
+   */
   private fun containsTokenPair(request: HttpServletRequest): Boolean =
     Str.hasText(request.getHeader(Headers.AUTHORIZATION))
       && Str.hasText(request.getHeader(Headers.X_RE_FLUSH_TOKEN))
@@ -75,7 +77,7 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getTokenMapping(request: HttpServletRequest?): String? =
+  private fun getToken(request: HttpServletRequest?): String? =
     request?.getHeader(Headers.AUTHORIZATION)
 
 
@@ -85,21 +87,21 @@ abstract class SecurityPreValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getReFlashTokenMapping(request: HttpServletRequest?): String? =
+  private fun getReFlashToken(request: HttpServletRequest?): String? =
     request?.getHeader(Headers.X_RE_FLUSH_TOKEN)
 
   /**
    * 合法性检查
    *
    * @param token token
-   * @param reFlash re-flash
+   * @param reFlashToken re-flash
    * @param request  请求
    * @param response 响应
    * @return [UserAuthorizationInfoModel]
    */
   protected abstract fun getUserAuthorizationInfo(
     token: String?,
-    reFlash: String?,
+    reFlashToken: String?,
     request: HttpServletRequest,
     response: HttpServletResponse
   ): UserAuthorizationInfoModel

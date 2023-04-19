@@ -3,11 +3,11 @@ package com.truenine.component.security.defaults
 import com.truenine.component.core.lang.EmptyDefaultModel
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.core.models.UserAuthorizationInfoModel
-import com.truenine.component.security.spring.security.SecurityPreValidFilter
+import com.truenine.component.security.spring.security.SecurityPreflightValidFilter
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 
-class EmptyPreValidFilter : EmptyDefaultModel, SecurityPreValidFilter() {
+class EmptyPreflightValidFilter : EmptyDefaultModel, SecurityPreflightValidFilter() {
 
   private val log = LogKt.getLog(this::class)
 
@@ -17,7 +17,7 @@ class EmptyPreValidFilter : EmptyDefaultModel, SecurityPreValidFilter() {
 
   override fun getUserAuthorizationInfo(
     token: String?,
-    reFlash: String?,
+    reFlashToken: String?,
     request: HttpServletRequest,
     response: HttpServletResponse
   ): UserAuthorizationInfoModel {

@@ -19,28 +19,29 @@ import java.lang.annotation.*;
   SecurityPolicyBean.class
 })
 public @interface EnableRestSecurity {
-
   /**
-   * 用户登录 url
-   *
-   * @return {@link String[]}
+   * @return 需要放行的匹配规则
    */
-  String[] loginUrl();
+  String[] allowPatterns() default {};
 
-  String[] logoutUrl();
 
   /**
-   * 允许 swagger api 放行
-   *
-   * @return boolean
+   * @return 用户登录 url
+   */
+  String[] loginUrl() default {};
+
+  /**
+   * @return 退出登录 url
+   */
+  String[] logoutUrl() default {};
+
+  /**
+   * @return 允许 swagger api 放行
    */
   boolean allowSwagger() default false;
 
-
   /**
-   * 允许 放行webjars
-   *
-   * @return boolean
+   * @return 允许 放行webjars
    */
-  boolean allowWebJars() default false;
+  boolean allowWebJars() default true;
 }

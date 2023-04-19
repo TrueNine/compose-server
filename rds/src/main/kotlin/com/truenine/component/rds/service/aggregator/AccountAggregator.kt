@@ -7,6 +7,7 @@ import com.truenine.component.rds.models.request.RegisterAccountRequestParam
 import java.time.LocalDateTime
 
 interface AccountAggregator {
+
   /**
    * 注册账号
    */

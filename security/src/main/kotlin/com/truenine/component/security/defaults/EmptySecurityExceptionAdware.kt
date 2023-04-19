@@ -9,6 +9,6 @@ class EmptySecurityExceptionAdware : EmptyDefaultModel, SecurityExceptionAdware(
   private val log = LogKt.getLog(this::class)
 
   init {
-    log.trace("正在使用默认安全异常处理器，生产环请自行重写")
+    log.trace("正在使用默认安全异常处理器，生产环请自行覆写")
   }
 }

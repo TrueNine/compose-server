@@ -23,7 +23,7 @@ public class DisableSecurityPolicyBean {
 
   @Bean
   SecurityFilterChain disableSecurityFilterChain(HttpSecurity security) throws Exception {
-    log.warn("警告：生产环境请启用 webSecurity, 使用 {} 来启用并配置 {}",
+    log.warn("生产环境请启用 WebSecurity, 使用 {} 来启用并配置完成 {}",
       EnableRestSecurity.class.getName(),
       SecurityPolicyBean.class.getName());
     return
@@ -41,6 +41,7 @@ public class DisableSecurityPolicyBean {
 
   @Bean
   UserDetailsService ssr() {
+    log.warn("当前注册了一个临时的 InMemoryUserDetailsManager");
     return new InMemoryUserDetailsManager();
   }
 }
