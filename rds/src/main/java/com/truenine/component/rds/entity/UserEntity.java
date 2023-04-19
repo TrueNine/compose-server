@@ -45,74 +45,48 @@ public class UserEntity extends BaseEntity implements Serializable {
   /**
    * 账号
    */
-  @Schema(
-    name = ACCOUNT,
-    description = "账号"
-  )
-  @Column(table = TABLE_NAME,
-    name = ACCOUNT,
-    nullable = false,
-    unique = true)
+  @Schema(title = "账号")
+  @Column(name = ACCOUNT, nullable = false, unique = true)
   private String account;
 
   /**
    * 呢称
    */
-  @Schema(
-    name = NICK_NAME,
-    description = "呢称"
-  )
-  @Column(table = TABLE_NAME,
-    name = NICK_NAME)
   @Nullable
+  @Schema(title = "呢称")
+  @Column(name = NICK_NAME)
   private String nickName;
 
   /**
    * 描述
    */
-  @Schema(
-    name = DOC,
-    description = "描述"
-  )
-  @Column(table = TABLE_NAME,
-    name = DOC)
   @Nullable
+  @Schema(title = "描述")
+  @Column(name = DOC)
   private String doc;
 
   /**
    * 密码
    */
-  @Schema(
-    name = PWD_ENC,
-    description = "密码"
-  )
-  @Column(table = TABLE_NAME,
-    name = PWD_ENC)
   @Nullable
+  @Schema(title = "密码")
+  @Column(name = PWD_ENC)
   private String pwdEnc;
 
   /**
    * 被封禁结束时间
    */
-  @Schema(
-    name = BAN_TIME,
-    description = "被封禁结束时间"
-  )
-  @Column(table = TABLE_NAME,
-    name = BAN_TIME)
   @Nullable
+  @Schema(title = "被封禁结束时间")
+  @Column(name = BAN_TIME)
   private LocalDateTime banTime;
 
   /**
    * 最后请求时间
    */
-  @Schema(
-    name = LAST_LOGIN_TIME,
-    description = "最后请求时间"
-  )
-  @Column(table = TABLE_NAME,
-    name = LAST_LOGIN_TIME)
   @Nullable
+  @Schema(title = "最后请求时间")
+  @Column(name = LAST_LOGIN_TIME)
   private LocalDateTime lastLoginTime;
 
   /**
@@ -155,4 +129,13 @@ public class UserEntity extends BaseEntity implements Serializable {
   )
   @NotFound(action = IGNORE)
   private List<RoleGroupEntity> roleGroups;
+
+  /**
+   * @return 当前用户是否被封禁
+   */
+  @Transient
+  public boolean isBand() {
+    return null != banTime
+      && LocalDateTime.now().isBefore(banTime);
+  }
 }

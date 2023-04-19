@@ -62,8 +62,11 @@ allprojects {
     enabled = false
   }
 
+
+
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
+      incremental = true
       freeCompilerArgs = listOf(
         "-Xjsr305=strict",
         "-Xjvm-default=all",
@@ -102,9 +105,15 @@ subprojects {
     withSourcesJar()
   }
 
-  tasks.named("compileKotlin") {
-    dependsOn("clean")
+  tasks {
+    compileJava {
+      options.isFork=true
+      options.forkOptions.memoryMaximumSize = "2G"
+      options.forkOptions.memoryInitialSize = "1G"
+    }
   }
+
+
 
   tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
