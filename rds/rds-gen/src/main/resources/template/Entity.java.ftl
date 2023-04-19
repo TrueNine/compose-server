@@ -51,7 +51,7 @@ public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getB
    * ${col.getComment()!col.getFieldName()}
    */<#if col.getNullable()>
   @Nullable</#if>
-  @Schema(title = ${col.getUpperName()})
+  @Schema(title = "${col.getComment()!col.getFieldName()}")
   @Column(name = ${col.getUpperName()}<#if !col.getNullable()>,nullable = false</#if><#if col.getUnique()>,unique = true</#if>)
   private ${col.getJavaType()} ${col.getFieldName()};
 </#list>
