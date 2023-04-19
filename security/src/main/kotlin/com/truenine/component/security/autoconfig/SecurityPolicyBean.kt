@@ -29,8 +29,7 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefineModel::class)
   fun securityDetailsService(desc: SecurityPolicyDefineModel): SecurityUserDetailsService {
-    require(null != desc.service) { "注册的模型 desc 为空 $desc" }
-    return desc.service
+    return desc.service ?: EmptySecurityDetailsService()
   }
 
   @Bean
