@@ -26,10 +26,9 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
-@ToString
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "API请求记录")
 @Table(name = ApiCallRecordEntity.TABLE_NAME)
 public class ApiCallRecordEntity extends BaseEntity implements Serializable {

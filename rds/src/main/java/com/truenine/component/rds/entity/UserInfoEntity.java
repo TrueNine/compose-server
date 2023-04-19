@@ -31,7 +31,6 @@ import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -50,6 +49,8 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   public static final String PHONE = "phone";
   public static final String ID_CARD = "id_card";
   public static final String GENDER = "gender";
+  public static final String WECHAT_OPEN_ID = "wechat_open_id";
+
   @Serial
   private static final long serialVersionUID = 1L;
   /**
@@ -129,11 +130,9 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   /**
    * 电话号码
    */
-  @Schema(
-    title = "电话号码"
-  )
-  @Column(name = PHONE, unique = true)
   @Nullable
+  @Schema(title = "电话号码")
+  @Column(name = PHONE, unique = true)
   @SensitiveRef(SensitiveRef.Strategy.PHONE)
   private String phone;
 
@@ -149,8 +148,16 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   /**
    * 性别：0女，1难，2未知
    */
+  @Nullable
   @Schema(title = " 性别：0女，1难，2未知")
   @Column(name = GENDER)
-  @Nullable
   private Byte gender;
+
+  /**
+   * 微信个人 openId
+   */
+  @Nullable
+  @Schema(title = "微信个人 openId")
+  @Column(name = WECHAT_OPEN_ID)
+  private String wechatOpenId;
 }

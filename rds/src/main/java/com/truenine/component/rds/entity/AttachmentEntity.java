@@ -1,6 +1,5 @@
 package com.truenine.component.rds.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
@@ -26,7 +25,6 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -42,7 +40,6 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   public static final String MIME_TYPE = "mime_type";
   @Serial
   private static final long serialVersionUID = 1L;
-
 
   @Column(name = ATTACHMENT_LOCATION_ID, nullable = false)
   private Long attachmentLocationId;
@@ -75,7 +72,7 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   /**
    * 文件大小
    */
-  @Schema(title  = "文件大小")
+  @Schema(title = "文件大小")
   @Column(name = SIZE)
   @Nullable
   private Long size;
@@ -88,9 +85,16 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   @Nullable
   private String mimeType;
 
+
+  @Nullable
+  @Transient
+  @Schema(title = "全路径")
+  private String fullPath;
+
   /**
    * @return 全路径
    */
+  @Nullable
   @Transient
   public String getFullPath() {
     if (this.location != null) {
@@ -106,7 +110,6 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   }
 
   @Transient
-  @JsonIgnore
   public void setFullPath(String fullPath) {
   }
 }

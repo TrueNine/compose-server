@@ -9,13 +9,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 用户  角色组
@@ -25,14 +23,12 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
 @Schema(title = "用户  角色组")
 @Table(name = UserRoleGroupEntity.TABLE_NAME)
 public class UserRoleGroupEntity extends BaseEntity implements Serializable {
-
   public static final String TABLE_NAME = "user_role_group";
   public static final String USER_ID = "user_id";
   public static final String ROLE_GROUP_ID = "role_group_id";
@@ -41,16 +37,16 @@ public class UserRoleGroupEntity extends BaseEntity implements Serializable {
   /**
    * 用户
    */
-  @Schema(title= "用户")
-  @Column( name = USER_ID)
   @Nullable
+  @Schema(title = "用户")
+  @Column(name = USER_ID)
   private Long userId;
 
   /**
    * 权限组
    */
+  @Nullable
   @Schema(title = "权限组")
   @Column(name = ROLE_GROUP_ID)
-  @Nullable
   private Long roleGroupId;
 }

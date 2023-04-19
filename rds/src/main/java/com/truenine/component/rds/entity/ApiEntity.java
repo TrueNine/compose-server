@@ -24,9 +24,9 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "api")
 @Table(name = ApiEntity.TABLE_NAME)
 public class ApiEntity extends BaseEntity implements Serializable {

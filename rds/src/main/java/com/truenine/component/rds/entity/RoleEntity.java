@@ -64,13 +64,17 @@ public class RoleEntity extends BaseEntity implements Serializable {
       table = RolePermissionsEntity.TABLE_NAME,
       name = RolePermissionsEntity.ROLE_ID,
       referencedColumnName = ID,
-      foreignKey = @ForeignKey(NO_CONSTRAINT)
+      foreignKey = @ForeignKey(NO_CONSTRAINT),
+      insertable = false,
+      updatable = false
     ),
     inverseJoinColumns = @JoinColumn(
       table = RolePermissionsEntity.TABLE_NAME,
       name = RolePermissionsEntity.PERMISSIONS_ID,
       referencedColumnName = ID,
-      foreignKey = @ForeignKey(NO_CONSTRAINT)
+      foreignKey = @ForeignKey(NO_CONSTRAINT),
+      insertable = false,
+      updatable = false
     ),
     foreignKey = @ForeignKey(NO_CONSTRAINT)
   )

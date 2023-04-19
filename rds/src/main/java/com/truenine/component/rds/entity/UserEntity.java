@@ -130,11 +130,19 @@ public class UserEntity extends BaseEntity implements Serializable {
   @NotFound(action = IGNORE)
   private List<RoleGroupEntity> roleGroups;
 
+  @Transient
+  @Schema(title = "是否被 ban")
+  private Boolean band;
+
+  @Transient
+  public void setBand(Boolean band) {
+  }
+
   /**
    * @return 当前用户是否被封禁
    */
   @Transient
-  public boolean isBand() {
+  public Boolean isBand() {
     return null != banTime
       && LocalDateTime.now().isBefore(banTime);
   }

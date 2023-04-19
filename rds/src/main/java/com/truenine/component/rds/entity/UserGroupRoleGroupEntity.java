@@ -23,7 +23,6 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -39,16 +38,16 @@ public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable
   /**
    * 角色组
    */
+  @Nullable
   @Schema(title = "角色组")
   @Column(name = ROLE_GROUP_ID)
-  @Nullable
   private Long roleGroupId;
 
   /**
    * 用户组
    */
+  @Nullable
   @Schema(title = "用户组")
   @Column(name = USER_GROUP_ID)
-  @Nullable
   private Long userGroupId;
 }

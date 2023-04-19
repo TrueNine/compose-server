@@ -25,7 +25,6 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity

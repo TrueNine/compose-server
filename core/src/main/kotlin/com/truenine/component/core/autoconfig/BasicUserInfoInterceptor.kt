@@ -41,7 +41,7 @@ class BasicUserInfoInterceptor : WebMvcConfigurer, HandlerInterceptor {
     log.debug("请求 URL = {}", request.requestURI)
     log.debug("当前拥有用户信息 = {}", userInfo)
     if (null == userInfo) {
-      log.debug("当前用户信息为空，设置一个默认的用户信息")
+      log.trace("当前用户信息为空，设置一个默认的用户信息")
       val newInfo = BasicUserInfoModel().apply {
         currentIpAddr = InterAddressUtil.getRequestIpAddress(request)
         userId = null

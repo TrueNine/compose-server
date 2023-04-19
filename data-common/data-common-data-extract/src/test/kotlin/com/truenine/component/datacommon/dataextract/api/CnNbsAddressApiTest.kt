@@ -1,4 +1,4 @@
-package com.truenine.component.datacommon.dataextract.interfaces
+package com.truenine.component.datacommon.dataextract.api
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -7,10 +7,10 @@ import org.testng.annotations.Test
 import kotlin.test.assertNotNull
 
 @SpringBootTest
-class CnNbsAddressRemoteCallTest : AbstractTestNGSpringContextTests() {
+class CnNbsAddressApiTest : AbstractTestNGSpringContextTests() {
 
   @Autowired
-  lateinit var remoteCall: CnNbsAddressRemoteCall
+  lateinit var remoteCall: CnNbsAddressApi
 
   @Test
   fun testGetHomePage() {

@@ -27,9 +27,9 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "用户组")
 @Table(name = UserGroupEntity.TABLE_NAME)
 public class UserGroupEntity extends BaseEntity implements Serializable {

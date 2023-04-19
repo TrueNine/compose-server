@@ -23,7 +23,6 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -39,16 +38,16 @@ public class PermissionsEntity extends BaseEntity implements Serializable {
   /**
    * 权限名
    */
+  @Nullable
   @Schema(title = "权限名")
   @Column(name = NAME)
-  @Nullable
   private String name;
 
   /**
    * 权限描述
    */
+  @Nullable
   @Schema(title = "权限描述")
   @Column(name = DOC)
-  @Nullable
   private String doc;
 }

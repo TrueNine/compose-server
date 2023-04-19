@@ -26,7 +26,6 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -42,16 +41,16 @@ public class RolePermissionsEntity extends BaseEntity implements Serializable {
   /**
    * 角色
    */
+  @Nullable
   @Schema(title = "角色")
   @Column(name = ROLE_ID)
-  @Nullable
   private Long roleId;
 
   /**
    * 权限
    */
+  @Nullable
   @Schema(title = "权限")
   @Column(name = PERMISSIONS_ID)
-  @Nullable
   private Long permissionsId;
 }

@@ -6,6 +6,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,7 +24,6 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -50,7 +50,7 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
    * 资源路径名称
    */
   @Schema(title = "资源路径名称")
-  @Column( name = NAME, nullable = false)
+  @Column(name = NAME, nullable = false)
   private String name;
 
   /**
@@ -65,15 +65,22 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
    * 存储类别
    */
   @Schema(title = "存储类别")
-  @Column( name = TYPE, nullable = false)
+  @Column(name = TYPE, nullable = false)
   private String type = "R";
 
-  public void rn(Boolean storageRnType) {
+  @Transient
+  @Schema(title = "是否为远程存储")
+  private Boolean rn;
+
+  @Transient
+  public void serRn(Boolean storageRnType) {
     this.type = storageRnType ? "R" : "N";
   }
 
+
   @Nullable
-  public Boolean rn() {
+  @Transient
+  public Boolean isRn() {
     return "R".equals(type);
   }
 }

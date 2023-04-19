@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -49,9 +48,9 @@ public class RoleGroupEntity extends BaseEntity implements Serializable {
   /**
    * 描述
    */
+  @Nullable
   @Schema(title = "描述")
   @Column(name = DOC)
-  @Nullable
   private String doc;
 
   /**
@@ -65,13 +64,17 @@ public class RoleGroupEntity extends BaseEntity implements Serializable {
       table = RoleGroupRoleEntity.TABLE_NAME,
       name = RoleGroupRoleEntity.ROLE_GROUP_ID,
       referencedColumnName = ID,
-      foreignKey = @ForeignKey(NO_CONSTRAINT)
+      foreignKey = @ForeignKey(NO_CONSTRAINT),
+      insertable = false,
+      updatable = false
     ),
     inverseJoinColumns = @JoinColumn(
       table = RoleGroupRoleEntity.TABLE_NAME,
       name = RoleGroupRoleEntity.ROLE_ID,
       referencedColumnName = ID,
-      foreignKey = @ForeignKey(NO_CONSTRAINT)
+      foreignKey = @ForeignKey(NO_CONSTRAINT),
+      insertable = false,
+      updatable = false
     ),
     foreignKey = @ForeignKey(NO_CONSTRAINT)
   )

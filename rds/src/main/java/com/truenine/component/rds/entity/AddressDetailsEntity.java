@@ -26,9 +26,9 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "详细地址")
 @Table(name = AddressDetailsEntity.TABLE_NAME)
 public class AddressDetailsEntity extends BaseEntity implements Serializable {
@@ -43,8 +43,8 @@ public class AddressDetailsEntity extends BaseEntity implements Serializable {
   /**
    * 地址
    */
-  @Schema(title = "地址")
   @ManyToOne
+  @Schema(title = "地址")
   @JoinColumn(name = ADDRESS_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
   @NotFound(action = IGNORE)
   private AddressEntity address;

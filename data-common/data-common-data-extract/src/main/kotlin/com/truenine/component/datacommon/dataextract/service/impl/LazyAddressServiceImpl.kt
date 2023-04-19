@@ -1,6 +1,6 @@
 package com.truenine.component.datacommon.dataextract.service.impl
 
-import com.truenine.component.datacommon.dataextract.interfaces.CnNbsAddressRemoteCall
+import com.truenine.component.datacommon.dataextract.api.CnNbsAddressApi
 import com.truenine.component.datacommon.dataextract.models.CnDistrictCodeModel
 import com.truenine.component.datacommon.dataextract.models.CnDistrictModel
 import com.truenine.component.datacommon.dataextract.service.LazyAddressService
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class LazyAddressServiceImpl(
-  private val call: CnNbsAddressRemoteCall
+  private val call: CnNbsAddressApi
 ) : LazyAddressService {
   override fun findAllProvinces(): List<CnDistrictModel>? {
-    return extractProvinces(call.homePage().block()?.body)
+    return extractProvinces(call.homePage().body)
   }
 
   private fun wrapperModel(code: Long, name: String) = CnDistrictModel().apply {

@@ -26,10 +26,9 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "行政区代码")
 @Table(name = AddressEntity.TABLE_NAME)
 public class AddressEntity extends TreeEntity implements Serializable {

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import
   "com.truenine.component.datacommon.dataextract.service"
 )
 @Import(
-  RemoteCallsAutoConfiguration::class
+  ApiExchangesAutoConfiguration::class
 )
 class AutoConfigEntrance {
 }

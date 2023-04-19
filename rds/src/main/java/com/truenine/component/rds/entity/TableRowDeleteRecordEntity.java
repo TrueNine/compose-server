@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
