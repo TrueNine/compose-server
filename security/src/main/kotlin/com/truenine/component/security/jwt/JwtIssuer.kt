@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.annotations.VisibleForTesting
-import com.google.gson.Gson
 import com.truenine.component.core.encrypt.Encryptors
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.LogKt
@@ -53,8 +52,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
   internal fun createContent(
     content: Any
   ): String = runCatching {
-    objectMapper?.writeValueAsString(content)
-      ?: gson?.toJson(content)!!
+    objectMapper.writeValueAsString(content)
   }.onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }
     .getOrElse {
       "{}"
@@ -80,17 +78,8 @@ class JwtIssuer private constructor() : JwtVerifier() {
 
     fun serializer(
       mapper: ObjectMapper? = null,
-      gson: Gson? = null
     ): Builder {
       mapper?.let { objectMapper = it }
-        ?: gson?.let { this@JwtIssuer.gson = it }
-        ?: run {
-          this@JwtIssuer.gson = Gson()
-          log.warn(
-            "没有内容序列化器，将使用一个默认序列化器 = {}",
-            this@JwtIssuer.gson
-          )
-        }
       return this
     }
 

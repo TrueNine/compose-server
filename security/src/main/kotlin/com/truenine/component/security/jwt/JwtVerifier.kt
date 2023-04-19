@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.annotations.VisibleForTesting
-import com.google.gson.Gson
 import com.truenine.component.core.encrypt.Encryptors
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.LogKt
@@ -22,8 +21,7 @@ open class JwtVerifier internal constructor() {
   protected var encryptDataKeyName: String = "edt"
   protected var signatureVerifyKey: RSAPublicKey? = null
   protected var contentEccPrivateKey: PrivateKey? = null
-  protected var objectMapper: ObjectMapper? = null
-  protected var gson: Gson? = null
+  protected lateinit var objectMapper: ObjectMapper
 
   @Throws(JwtException::class)
   fun <S : Any, E : Any> verify(
@@ -83,8 +81,7 @@ open class JwtVerifier internal constructor() {
   @VisibleForTesting
   internal fun <T : Any> parseContent(json: String, classType: KClass<T>) =
     runCatching {
-      objectMapper?.readValue(json, classType.java)
-        ?: gson?.fromJson(json, classType.java)
+      objectMapper.readValue(json, classType.java)
     }.onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }.getOrNull()
 
   @VisibleForTesting
@@ -94,17 +91,8 @@ open class JwtVerifier internal constructor() {
 
   inner class Builder {
     fun build() = this@JwtVerifier
-
-    fun serializer(mapper: ObjectMapper? = null, gson: Gson? = null): Builder {
+    fun serializer(mapper: ObjectMapper? = null): Builder {
       mapper?.let { objectMapper = it }
-        ?: gson?.let { this@JwtVerifier.gson = it }
-        ?: run {
-          this@JwtVerifier.gson = Gson()
-          log.warn(
-            "没有内容序列化器，将使用一个默认序列化器 = {}",
-            this@JwtVerifier.gson
-          )
-        }
       return this
     }
 
