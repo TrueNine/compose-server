@@ -39,24 +39,16 @@ public class PermissionsEntity extends BaseEntity implements Serializable {
   /**
    * 权限名
    */
-  @Schema(
-    name = NAME,
-    description = "权限名"
-  )
-  @Column(table = TABLE_NAME,
-    name = NAME)
+  @Schema(title = "权限名")
+  @Column(name = NAME)
   @Nullable
   private String name;
 
   /**
    * 权限描述
    */
-  @Schema(
-    name = DOC,
-    description = "权限描述"
-  )
-  @Column(table = TABLE_NAME,
-    name = DOC)
+  @Schema(title = "权限描述")
+  @Column(name = DOC)
   @Nullable
   private String doc;
 }

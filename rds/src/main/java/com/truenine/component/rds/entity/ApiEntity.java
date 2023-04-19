@@ -43,24 +43,16 @@ public class ApiEntity extends BaseEntity implements Serializable {
   /**
    * 名称
    */
-  @Schema(
-    name = NAME,
-    description = "名称"
-  )
-  @Column(table = TABLE_NAME,
-    name = NAME)
+  @Schema(title = "名称")
+  @Column(name = NAME)
   @Nullable
   private String name;
 
   /**
    * 描述
    */
-  @Schema(
-    name = DOC,
-    description = "描述"
-  )
-  @Column(table = TABLE_NAME,
-    name = DOC)
+  @Schema(title = "描述")
+  @Column(name = DOC)
   @Nullable
   private String doc;
 
@@ -77,35 +69,24 @@ public class ApiEntity extends BaseEntity implements Serializable {
   /**
    * 路径
    */
-  @Schema(
-    name = API_PATH,
-    description = "路径"
-  )
-  @Column(table = TABLE_NAME,
-    name = API_PATH)
+  @Schema(title = "路径")
+  @Column(name = API_PATH)
   @Nullable
   private String apiPath;
 
   /**
    * 请求方式
    */
-  @Schema(
-    name = API_METHOD,
-    description = "请求方式"
-  )
-  @Column(table = TABLE_NAME,
-    name = API_METHOD)
+  @Schema(title = "请求方式")
+  @Column(name = API_METHOD)
   @Nullable
   private String apiMethod;
 
   /**
    * 请求协议
    */
-  @Schema(
-    name = API_PROTOCOL,
-    description = "请求协议"
-  )
-  @Column(table = TABLE_NAME, name = API_PROTOCOL)
+  @Schema(title = "请求协议")
+  @Column(name = API_PROTOCOL)
   @Nullable
   private String apiProtocol;
 }

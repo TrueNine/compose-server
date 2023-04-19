@@ -41,24 +41,16 @@ public class UserRoleGroupEntity extends BaseEntity implements Serializable {
   /**
    * 用户
    */
-  @Schema(
-    name = USER_ID,
-    description = "用户"
-  )
-  @Column(table = TABLE_NAME,
-    name = USER_ID)
+  @Schema(title= "用户")
+  @Column( name = USER_ID)
   @Nullable
   private Long userId;
 
   /**
    * 权限组
    */
-  @Schema(
-    name = ROLE_GROUP_ID,
-    description = "权限组"
-  )
-  @Column(table = TABLE_NAME,
-    name = ROLE_GROUP_ID)
+  @Schema(title = "权限组")
+  @Column(name = ROLE_GROUP_ID)
   @Nullable
   private Long roleGroupId;
 }

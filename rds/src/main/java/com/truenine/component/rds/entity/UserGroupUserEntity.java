@@ -41,36 +41,14 @@ public class UserGroupUserEntity extends BaseEntity implements Serializable {
   /**
    * 用户组
    */
-  @Schema(
-    name = USER_GROUP_ID,
-    description = "用户组"
-  )
-  @Column(table = TABLE_NAME,
-    name = USER_GROUP_ID,
-    nullable = false)
+  @Schema(title = "用户组")
+  @Column(name = USER_GROUP_ID, nullable = false)
   private Long userGroupId;
 
   /**
    * 用户
    */
-  @Schema(
-    name = USER_ID,
-    description = "用户"
-  )
-  @Column(table = TABLE_NAME,
-    name = USER_ID,
-    nullable = false)
+  @Schema(title= "用户")
+  @Column(name = USER_ID, nullable = false)
   private Long userId;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (UserGroupUserEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
 }

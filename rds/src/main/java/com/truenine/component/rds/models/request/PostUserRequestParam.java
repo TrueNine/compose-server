@@ -21,28 +21,28 @@ import lombok.NoArgsConstructor;
 @Schema(title = "用户注册信息")
 public class PostUserRequestParam {
   @NotBlank
-  @Schema(name = "account", description = "账号")
+  @Schema(title = "账号")
   private String account;
 
   @NotBlank
   @NotEmpty
-  @Schema(name = "nickName", description = "昵称")
+  @Schema(title = "昵称")
   @NotNull
   private String nickName;
 
   @NotBlank
   @NotEmpty
-  @Schema(name = "pwd", description = "密码")
+  @Schema(title = "密码")
   @NotNull
   private String pwd;
 
   @NotBlank
   @NotEmpty
-  @Schema(name = "againPwd", description = "再次输入密码")
+  @Schema(title = "再次输入密码")
   @NotNull
   private String againPwd;
 
   @Nullable
-  @Schema(name = "doc", description = "描述")
+  @Schema(title = "描述")
   private String doc;
 }

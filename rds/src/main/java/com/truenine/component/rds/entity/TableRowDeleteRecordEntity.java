@@ -44,27 +44,27 @@ public class TableRowDeleteRecordEntity extends BaseEntity implements Serializab
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Schema(title = TABLE_NAMES, description = "表名")
-  @Column(table = TABLE_NAME, name = TABLE_NAMES, nullable = false)
+  @Schema(title  = "表名")
+  @Column(name = TABLE_NAMES, nullable = false)
   private String tableNames;
 
   @Nullable
-  @Schema(title = USER_ID, description = "删除用户id")
-  @Column(table = TABLE_NAME, name = USER_ID)
+  @Schema(title  = "删除用户id")
+  @Column( name = USER_ID)
   private String userId;
 
   @Nullable
-  @Schema(title = USER_ACCOUNT, description = "删除用户账户")
-  @Column(table = TABLE_NAME, name = USER_ACCOUNT)
+  @Schema(title  = "删除用户账户")
+  @Column( name = USER_ACCOUNT)
   private String userAccount;
 
-  @Schema(title = DELETE_DATETIME, description = "删除时间")
-  @Column(table = TABLE_NAME, name = DELETE_DATETIME, nullable = false)
+  @Schema(title  = "删除时间")
+  @Column( name = DELETE_DATETIME, nullable = false)
   private LocalDateTime deleteDatetime;
 
   @Nullable
   @Convert(converter = RecordModelConverter.class)
-  @Schema(title = ENTITY, description = "删除实体")
-  @Column(table = TABLE_NAME, name = ENTITY,columnDefinition = "VARCHAR(10240)")
+  @Schema(title = "删除实体")
+  @Column(name = ENTITY,columnDefinition = "VARCHAR(10240)")
   private RecordModel entity;
 }

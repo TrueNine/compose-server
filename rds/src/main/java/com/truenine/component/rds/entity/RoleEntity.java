@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -42,16 +41,16 @@ public class RoleEntity extends BaseEntity implements Serializable {
    * 角色名称
    */
   @Nullable
-  @Schema(name = NAME, description = "角色名称")
-  @Column(table = TABLE_NAME, name = NAME)
+  @Schema(title = "角色名称")
+  @Column(name = NAME)
   private String name;
 
   /**
    * 角色描述
    */
   @Nullable
-  @Column(table = TABLE_NAME, name = DOC)
-  @Schema(name = DOC, description = "角色描述")
+  @Column(name = DOC)
+  @Schema(title = "角色描述")
   private String doc;
 
   /**

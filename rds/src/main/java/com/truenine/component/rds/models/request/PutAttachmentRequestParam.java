@@ -19,37 +19,34 @@ public class PutAttachmentRequestParam {
 
   @NotNull
   @NotBlank
-  @Schema(name = "fullName", description = "文件全名")
+  @Schema(title = "文件全名")
   private String fullName;
 
   @NotNull
   @NotBlank
-  @Schema(name = "mimeType", description = "文件 MIME")
+  @Schema(title = "文件 MIME")
   private String mimeType = MediaTypes.BINARY.media();
 
-  @NotNull
   @NotBlank
-  @Schema(name = "saveName", description = "保存文件名称")
+  @Schema(title = "保存文件名称")
   private String saveName = fullName;
 
-  @Schema(name = "doc", description = "文件描述")
+  @Schema(title = "文件描述")
   private String doc;
 
-  @NotNull
   @NotBlank
-  @Schema(name = "url", description = "url")
+  @Schema(title = "url")
   private String url;
 
-  @NotNull
+
   @NotBlank
-  @Schema(name = "dir", description = "文件夹", defaultValue = "/")
+  @Schema(title = "文件夹", defaultValue = "/")
   private String dir = "/";
 
-  @Schema(name = "rnType", description = "是否为远程存储")
+  @Schema(title = "是否为远程存储")
   private Boolean rnType = true;
 
   @Min(1)
-  @NotNull
-  @Schema(name = "size", description = "文件大小", defaultValue = "0L")
+  @Schema(title = "文件大小", defaultValue = "0")
   private Long size = 0L;
 }

@@ -42,41 +42,16 @@ public class RolePermissionsEntity extends BaseEntity implements Serializable {
   /**
    * 角色
    */
-  @Schema(
-    name = ROLE_ID,
-    description = "角色"
-  )
-  @Column(table = TABLE_NAME,
-    name = ROLE_ID)
+  @Schema(title = "角色")
+  @Column(name = ROLE_ID)
   @Nullable
   private Long roleId;
 
   /**
    * 权限
    */
-  @Schema(
-    name = PERMISSIONS_ID,
-    description = "权限"
-  )
-  @Column(table = TABLE_NAME,
-    name = PERMISSIONS_ID)
+  @Schema(title = "权限")
+  @Column(name = PERMISSIONS_ID)
   @Nullable
   private Long permissionsId;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    var that = (RolePermissionsEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

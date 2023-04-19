@@ -41,24 +41,16 @@ public class RoleGroupEntity extends BaseEntity implements Serializable {
   /**
    * 名称
    */
-  @Schema(
-    name = NAME,
-    description = "名称"
-  )
-  @Column(table = TABLE_NAME,
-    name = NAME)
+  @Schema(title = "名称")
+  @Column(name = NAME)
   @Nullable
   private String name;
 
   /**
    * 描述
    */
-  @Schema(
-    name = DOC,
-    description = "描述"
-  )
-  @Column(table = TABLE_NAME,
-    name = DOC)
+  @Schema(title = "描述")
+  @Column(name = DOC)
   @Nullable
   private String doc;
 

@@ -13,7 +13,7 @@ class SnowflakeIdGeneratorBean(
   private val log = LogKt.getLog(this::class)
 
   init {
-    log.debug("注册 id 生成器 workId = {}", snowflake)
+    log.trace("注册 id 生成器 workId = {}", snowflake)
   }
 
   companion object {

@@ -52,15 +52,15 @@ public class AddressDetailsEntity extends BaseEntity implements Serializable {
   /**
    * 地址详情
    */
-  @Schema(name = ADDRESS_DETAILS, description = "地址详情")
-  @Column(table = TABLE_NAME, name = ADDRESS_DETAILS, nullable = false)
+  @Schema(title = "地址详情")
+  @Column(name = ADDRESS_DETAILS, nullable = false)
   private Long addressDetails;
 
   /**
    * 定位
    */
-  @Schema(name = CENTER, description = "定位")
-  @Column(table = TABLE_NAME, name = CENTER)
+  @Schema(title = "定位")
+  @Column(name = CENTER)
   @Nullable
   @Convert(converter = PointModelConverter.class)
   private PointModel center;
