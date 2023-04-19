@@ -7,7 +7,7 @@ import org.hibernate.id.IdentifierGenerator
 import org.springframework.stereotype.Component
 
 @Component
-open class SnowflakeIdGeneratorBean(
+class SnowflakeIdGeneratorBean(
   private val snowflake: Snowflake
 ) : IdentifierGenerator {
   private val log = LogKt.getLog(this::class)

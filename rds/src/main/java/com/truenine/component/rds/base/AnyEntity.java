@@ -42,10 +42,7 @@ public class AnyEntity implements Serializable {
     strategy = SnowflakeIdGeneratorBean.CLASS_NAME
   )
   @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
-  @Schema(
-    name = ID,
-    description = ID,
-    example = "7001234523405")
+  @Schema(title = ID, example = "7001234523405")
   protected Long id;
 
   @Override
