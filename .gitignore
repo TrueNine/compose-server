@@ -47,6 +47,7 @@ src/test/**/out/
 .vscode/
 
 ### visual studio ###
+.vs
 *.sln
 
 *resources/static/
