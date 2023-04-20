@@ -2,7 +2,7 @@ package com.truenine.component.webapidoc.autoconfig;
 
 
 import com.truenine.component.core.http.Headers;
-import com.truenine.component.core.properties.SwaggerProperties;
+import com.truenine.component.webapidoc.properties.SwaggerProperties;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;

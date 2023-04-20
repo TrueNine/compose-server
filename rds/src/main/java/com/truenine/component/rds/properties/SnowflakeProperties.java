@@ -1,4 +1,4 @@
-package com.truenine.component.core.properties;
+package com.truenine.component.rds.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

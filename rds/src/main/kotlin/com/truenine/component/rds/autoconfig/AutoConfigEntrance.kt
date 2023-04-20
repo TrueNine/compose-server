@@ -2,10 +2,10 @@ package com.truenine.component.rds.autoconfig
 
 import cn.hutool.core.convert.impl.DurationConverter
 import cn.hutool.core.convert.impl.PeriodConverter
-import com.truenine.component.core.properties.SnowflakeProperties
 import com.truenine.component.rds.converters.AesEncryptConverter
 import com.truenine.component.rds.converters.PointModelConverter
 import com.truenine.component.rds.listener.TableRowDeleteSpringListener
+import com.truenine.component.rds.properties.SnowflakeProperties
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
