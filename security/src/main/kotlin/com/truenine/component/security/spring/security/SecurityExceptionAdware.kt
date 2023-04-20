@@ -45,7 +45,9 @@ abstract class SecurityExceptionAdware(
     response.characterEncoding = "UTF-8"
     response.contentType = MediaTypes.JSON.media()
     response.locale = Locale("zh-CN", "CN")
-    response.writer.print(mapper?.writeValueAsString(msg))
+    val write = response.writer
+    write.print(mapper?.writeValueAsString(msg))
+    write.flush()
   }
 
   companion object {

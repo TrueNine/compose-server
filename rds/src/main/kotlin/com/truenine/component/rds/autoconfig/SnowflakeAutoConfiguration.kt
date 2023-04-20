@@ -2,17 +2,17 @@ package com.truenine.component.rds.autoconfig
 
 import com.truenine.component.core.id.Snowflake
 import com.truenine.component.core.id.SynchronizedSimpleSnowflake
-import com.truenine.component.depend.webclient.properties.SnowflakeProperties
+import com.truenine.component.rds.properties.SnowflakeProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@EnableConfigurationProperties(com.truenine.component.depend.webclient.properties.SnowflakeProperties::class)
-open class SnowflakeAutoConfiguration {
+@EnableConfigurationProperties(SnowflakeProperties::class)
+class SnowflakeAutoConfiguration {
 
   @Bean
-  open fun snowflake(p: com.truenine.component.depend.webclient.properties.SnowflakeProperties): Snowflake {
+  fun snowflake(p: SnowflakeProperties): Snowflake {
     return SynchronizedSimpleSnowflake(
       p.workId,
       p.dataCenterId,

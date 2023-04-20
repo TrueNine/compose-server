@@ -72,6 +72,11 @@ class SecurityPolicyBean {
       log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
     }
 
+    // 打印错误日志
+    if (anonymousPatterns.contains("/**")) {
+      log.error("配置上下文内包含 /** ，将会放行所有域")
+    }
+
     httpSecurity
       // 关闭 csrf
       .csrf().disable()
