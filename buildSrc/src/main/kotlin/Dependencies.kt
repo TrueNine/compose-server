@@ -3,8 +3,9 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.28-SNAPSHOT-T"
+  const val version = "0.4.29-SNAPSHOT-T"
   const val encoding = "UTF-8"
+  const val gradleVersion = "8.1"
 }
 
 /**
@@ -12,28 +13,28 @@ object ProjectManager {
  */
 object V {
   object Component {
-    private const val allV = ProjectManager.version
-    const val dataCommonDataExtract = allV
-    const val dependFlyway = allV
-    const val core = allV
-    const val rds = allV
-    const val schedule = allV
-    const val rdsGen = allV
-    const val webApiDoc = allV
-    const val security = allV
-    const val dependWebServlet = allV
-    const val dependWebClient = allV
-    const val dataCommonCrawler = allV
-    const val cacheable = allV
-    const val oss = allV
-    const val pay = allV
+    const val dataCommonDataExtract = ProjectManager.version
+    const val dependFlyway = ProjectManager.version
+    const val core = ProjectManager.version
+    const val rds = ProjectManager.version
+    const val schedule = ProjectManager.version
+    const val rdsGen = ProjectManager.version
+    const val webApiDoc = ProjectManager.version
+    const val security = ProjectManager.version
+    const val dependWebServlet = ProjectManager.version
+    const val dependWebClient = ProjectManager.version
+    const val dataCommonCrawler = ProjectManager.version
+    const val cacheable = ProjectManager.version
+    const val oss = ProjectManager.version
+    const val pay = ProjectManager.version
   }
 
   object Lang {
-    const val kotlin = "1.8.20"
-    const val gradleWrapper = "8.0.2"
-    const val javaStr = "17"
     val javaPlatform = org.gradle.api.JavaVersion.VERSION_17
+    const val java = "17"
+
+    // https://github.com/JetBrains/kotlin/releases
+    const val kotlin = "1.8.20"
 
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     const val lombok = "1.18.26"

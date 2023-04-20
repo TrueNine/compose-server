@@ -71,9 +71,9 @@ allprojects {
         "-Xjsr305=strict",
         "-Xjvm-default=all",
         "-verbose",
-        "-Xjdk-release=${V.Lang.javaStr}"
+        "-Xjdk-release=${V.Lang.java}"
       )
-      jvmTarget = V.Lang.javaStr
+      jvmTarget = V.Lang.java
     }
   }
 
@@ -181,5 +181,7 @@ subprojects {
 }
 
 tasks.wrapper {
-  gradleVersion = V.Lang.gradleWrapper
+  distributionType = Wrapper.DistributionType.ALL
+  this.gradleVersion = ProjectManager.gradleVersion
 }
+
