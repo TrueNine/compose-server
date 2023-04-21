@@ -13,7 +13,7 @@ class ErrorMessage private constructor() : Serializable {
   var msg: String? = null
     private set
 
-  var code: Int? = -1
+  var code: Int = -1
     private set
 
   companion object {

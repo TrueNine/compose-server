@@ -7,7 +7,6 @@ public class S3PolicyCreator {
   private S3PolicyCreator() {
   }
 
-
   public static S3BuilderChain builder() {
     return new S3BuilderChain();
   }

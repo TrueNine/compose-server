@@ -1,0 +1,32 @@
+package com.truenine.component.core.lang
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import kotlin.reflect.KClass
+
+/**
+ * slf4j 日志 log 对象桥接器，针对 kotlin
+ *
+ * @author TrueNine
+ * @since 2023-02-19
+ */
+@Deprecated(message = "使用顶级函数的简写形式")
+object LogKt {
+  /**
+   * 获取日志对象
+   *
+   * @param kclazz 当前日志记录的 kt 类对象
+   * @return [Logger] log 对象
+   */
+  fun getLog(kclazz: KClass<*>): Logger = LoggerFactory.getLogger(kclazz.java)
+
+  /**
+   * 获取日志对象
+   *
+   * @param kclazz 当前日志记录的 kt 类对象
+   * @return [Logger] log 对象
+   */
+  fun getLog(anyWay: Any): Logger = getLog(anyWay::class)
+}
+
+fun slf4j(kclazz: KClass<*>) = LogKt.getLog(kclazz)

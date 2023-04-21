@@ -26,10 +26,9 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
-@ToString
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "API请求记录")
 @Table(name = ApiCallRecordEntity.TABLE_NAME)
 public class ApiCallRecordEntity extends BaseEntity implements Serializable {
@@ -56,60 +55,40 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
   /**
    * 设备 id, 浏览器为 agent
    */
-  @Schema(
-    name = DEVICE_CODE,
-    description = "设备 id, 浏览器为 agent"
-  )
-  @Column(table = TABLE_NAME,
-    name = DEVICE_CODE)
+  @Schema(title = "设备 id, 浏览器为 agent")
+  @Column(name = DEVICE_CODE)
   @Nullable
   private String deviceCode;
 
   /**
    * 请求 ip
    */
-  @Schema(
-    name = REQ_IP,
-    description = "请求 ip"
-  )
-  @Column(table = TABLE_NAME,
-    name = REQ_IP)
+  @Schema(title = "请求 ip")
+  @Column(name = REQ_IP)
   @Nullable
   private String reqIp;
 
   /**
    * 登录 ip
    */
-  @Schema(
-    name = LOGIN_IP,
-    description = "登录 ip"
-  )
-  @Column(table = TABLE_NAME,
-    name = LOGIN_IP)
+  @Schema(title= "登录 ip")
+  @Column(name = LOGIN_IP)
   @Nullable
   private String loginIp;
 
   /**
    * 响应码
    */
-  @Schema(
-    name = RESP_CODE,
-    description = "响应码"
-  )
-  @Column(table = TABLE_NAME,
-    name = RESP_CODE)
+  @Schema(title = "响应码")
+  @Column(name = RESP_CODE)
   @Nullable
   private String respCode;
 
   /**
    * 请求结果
    */
-  @Schema(
-    name = RESP_RESULT_ENC,
-    description = "请求结果"
-  )
-  @Column(table = TABLE_NAME,
-    name = RESP_RESULT_ENC)
+  @Schema(title = "请求结果")
+  @Column(name = RESP_RESULT_ENC)
   @Nullable
   private String respResultEnc;
 }

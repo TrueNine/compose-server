@@ -19,7 +19,7 @@ public class OssProperties {
    * 类型
    *
    * @author TrueNine
-   * @date 2022-10-28
+   * @since  2022-10-28
    */
   public enum Type {
     /**

@@ -1,6 +1,6 @@
 package com.truenine.component.webapidoc.autoconfig;
 
-import com.truenine.component.core.properties.SwaggerProperties;
+import com.truenine.component.webapidoc.properties.SwaggerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
 

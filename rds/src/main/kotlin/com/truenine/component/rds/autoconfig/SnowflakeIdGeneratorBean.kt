@@ -7,13 +7,13 @@ import org.hibernate.id.IdentifierGenerator
 import org.springframework.stereotype.Component
 
 @Component
-open class SnowflakeIdGeneratorBean(
+class SnowflakeIdGeneratorBean(
   private val snowflake: Snowflake
 ) : IdentifierGenerator {
   private val log = LogKt.getLog(this::class)
 
   init {
-    log.debug("注册 id 生成器 workId = {}", snowflake)
+    log.trace("注册 id 生成器 workId = {}", snowflake)
   }
 
   companion object {

@@ -1,7 +1,6 @@
 package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gson.annotations.Expose;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -12,13 +11,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 预排序树
@@ -55,19 +52,16 @@ public class TreeEntity extends BaseEntity implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
   @JsonIgnore
-  @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.PARENT_ID)
   @Schema(title = "父id")
   protected Long rpi = null;
 
   @JsonIgnore
-  @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.LEFT_NODE)
   @Schema(title = "左节点")
   protected Long rln;
 
   @JsonIgnore
-  @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.RIGHT_NODE)
   @Schema(title = "右节点")
   protected Long rrn;
@@ -79,13 +73,5 @@ public class TreeEntity extends BaseEntity implements Serializable {
 
   @JsonIgnore
   public void setLeafNode(boolean leafNode) {
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-    TreeEntity that = (TreeEntity) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
   }
 }

@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public final class UserAuthorizationInfoModel extends BasicUserInfoModel {
-  private @Nullable String pwd;
+  private @Nullable String encryptedPassword;
   private Boolean nonLocked = true;
   private Boolean nonExpired = false;
   private Boolean enabled = false;

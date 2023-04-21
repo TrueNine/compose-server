@@ -1,8 +1,9 @@
 pluginManagement {
   repositories {
-    maven("https://maven.aliyun.com/repository/public")
     mavenCentral()
     maven("https://maven.aliyun.com/repository/gradle-plugin")
+    maven("https://maven.aliyun.com/repository/public")
+    maven("https://maven.aliyun.com/repository/jcenter")
     gradlePluginPortal()
     google()
   }
@@ -34,6 +35,9 @@ findProject(":data-common:data-common-data-extract")?.name = "data-common-data-e
 include("security")
 findProject(":security")?.name = "security"
 
+include("security:security-oauth2")
+findProject(":security:security-oauth2")?.name = "security-oauth2"
+
 include("web-api-doc")
 findProject(":web-api-doc")?.name = "web-api-doc"
 
@@ -45,6 +49,10 @@ findProject(":depend:depend-web-servlet")?.name = "depend-web-servlet"
 
 include("depend:depend-flyway")
 findProject(":depend:depend-flyway")?.name = "depend-flyway"
+
+include("depend:depend-web-client")
+findProject(":depend:depend-web-client")?.name = "depend-web-client"
+
 
 include("cacheable")
 findProject(":cacheable")?.name = "cacheable"

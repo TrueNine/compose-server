@@ -12,6 +12,7 @@ public class S3Args {
   @JsonProperty("Version")
   @SerializedName("Version")
   String version;
+
   @JsonProperty("Statement")
   @SerializedName("Statement")
   List<S3StatementArgs> statement = new ArrayList<>();

@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository
  * @since ${ctx.nowDay()}
  */
 @Repository
-interface ${tab.getClassName()}${ctx.getRepositorySuffix()!""} : ${ctx.getBaseRepositoryClassName()}<${tab.getClassName()}${ctx.getEntitySuffix()!""}, String> {
+interface ${tab.getClassName()}${ctx.getRepositorySuffix()!""} : ${ctx.getBaseRepositoryClassName()}<${tab.getClassName()}${ctx.getEntitySuffix()!""}> {
 
 }

@@ -9,12 +9,15 @@ import java.util.List;
 
 @Data
 public class S3StatementArgs {
+
   @JsonProperty("Effect")
   @SerializedName("Effect")
   private String effect;
+
   @JsonProperty("Action")
   @SerializedName("Action")
   private List<String> action = new ArrayList<>();
+
   @JsonProperty("Principal")
   @SerializedName("Principal")
   private S3PrincipalArgs principal;

@@ -12,6 +12,7 @@ plugins {
   idea
   eclipse
   `visual-studio`
+  `maven-publish`
   id("org.springframework.boot") version V.Plugin.spring
   id("io.spring.dependency-management") version V.Plugin.springDependencyManagement
   kotlin("jvm") version V.Plugin.kotlinJvmPlugin
@@ -19,7 +20,6 @@ plugins {
   kotlin("plugin.spring") version V.Plugin.kotlinSpring
   kotlin("plugin.jpa") version V.Plugin.kotlinJpa
   kotlin("plugin.lombok") version V.Plugin.kotlinLombok
-  id("maven-publish")
 }
 
 
@@ -62,15 +62,18 @@ allprojects {
     enabled = false
   }
 
+
+
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
+      incremental = true
       freeCompilerArgs = listOf(
         "-Xjsr305=strict",
         "-Xjvm-default=all",
         "-verbose",
-        "-Xjdk-release=${V.Lang.javaStr}"
+        "-Xjdk-release=${V.Lang.java}"
       )
-      jvmTarget = V.Lang.javaStr
+      jvmTarget = V.Lang.java
     }
   }
 
@@ -102,10 +105,12 @@ subprojects {
     withSourcesJar()
   }
 
-
-
-  tasks.named("compileKotlin") {
-    dependsOn("clean")
+  tasks {
+    compileJava {
+      options.isFork=true
+      options.forkOptions.memoryMaximumSize = "2G"
+      options.forkOptions.memoryInitialSize = "1G"
+    }
   }
 
   tasks.javadoc {
@@ -143,7 +148,9 @@ subprojects {
     api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
     api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
 
-    compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
+    compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
+      exclude("org.apache.logging.log4j")
+    }
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
       exclude("org.junit.jupiter", "junit-jupiter")
@@ -152,31 +159,15 @@ subprojects {
     testApi("io.projectreactor:reactor-test")
     testApi("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
     testApi("org.testng:testng:${V.Test.testNG}")
-
     testApi("io.mockk:mockk:${V.Test.mockk}")
 
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
-    testCompileOnly("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
+    annotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
+    testAnnotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
+    testCompileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
   }
 
   dependencyManagement {
-    dependencies {
-      dependency("${group}:core:${V.Component.core}")
-      dependency("${group}:oss:${V.Component.oss}")
-      dependency("${group}:security:${V.Component.security}")
-      dependency("${group}:rds:${V.Component.rds}")
-      dependency("${group}:rds-gen:${V.Component.rdsGen}")
-      dependency("${group}:web-api-doc:${V.Component.webApiDoc}")
-      dependency("${group}:data-common-crawler:${V.Component.dataCommonCrawler}")
-      dependency("${group}:data-common-data-extract:${V.Component.dataCommonDataExtract}")
-      dependency("${group}:cacheable:${V.Component.cacheable}")
-      dependency("${group}:schedule:${V.Component.schedule}")
-      dependency("${group}:depend-flyway:${V.Component.dependFlyway}")
-      dependency("${group}:depend-web-servlet:${V.Component.dependWebServlet}")
-    }
-
     imports {
       mavenBom("org.springframework.boot:spring-boot-dependencies:${V.Spring.springBoot}")
       mavenBom("org.springframework.cloud:spring-cloud-dependencies:${V.Spring.springCloud}")
@@ -191,9 +182,8 @@ subprojects {
   }
 }
 
-
 tasks.wrapper {
-  gradleVersion = V.Lang.gradleWrapper
+  distributionType = Wrapper.DistributionType.ALL
+  this.gradleVersion = ProjectManager.gradleVersion
 }
-
 

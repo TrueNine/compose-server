@@ -1,7 +1,7 @@
 package com.truenine.component.core.autoconfig
 
 import com.truenine.component.core.http.Methods
-import com.truenine.component.core.lang.KtLogBridge
+import com.truenine.component.core.lang.LogKt
 import lombok.extern.slf4j.Slf4j
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  */
 @Slf4j
 @Configuration
-open class CorsConfiguration : WebMvcConfigurer {
+class CorsConfiguration : WebMvcConfigurer {
   override fun addCorsMappings(registry: CorsRegistry) {
     log.debug("注册跨域组件为允许全部跨域通行")
     registry
@@ -29,6 +29,6 @@ open class CorsConfiguration : WebMvcConfigurer {
   }
 
   companion object {
-    private val log = KtLogBridge.getLog(CorsConfiguration::class.java)
+    private val log = LogKt.getLog(this::class)
   }
 }

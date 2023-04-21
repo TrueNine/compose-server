@@ -6,7 +6,7 @@ package com.truenine.component.core.http;
  * @author TrueNine
  * @since 2022-12-26
  */
-public class ParameterNames {
-  public static final String X_TENANT_ID = "x_group_code";
-  public static final String X_INTERNAL_TENANT_ID = "x_internal_tenant_id";
+public interface ParameterNames {
+  String X_TENANT_ID = "x_group_code";
+  String X_INTERNAL_TENANT_ID = "x_internal_tenant_id";
 }

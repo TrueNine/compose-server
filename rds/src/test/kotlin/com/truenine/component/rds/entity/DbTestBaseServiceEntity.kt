@@ -15,6 +15,11 @@ data class DbTestBaseServiceEntity(
   @Convert(converter = PointModelConverter::class)
   var center: PointModel? = null
 ) : BaseEntity() {
+
+  companion object {
+    const val TABLE_NAME = "abc"
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false

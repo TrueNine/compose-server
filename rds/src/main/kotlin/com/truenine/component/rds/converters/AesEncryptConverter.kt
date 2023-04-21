@@ -34,6 +34,7 @@ class AesEncryptConverter : AttributeConverter<String, String> {
       ) else dbData
 
   companion object {
+    @JvmStatic
     private val log = LogKt.getLog(AesEncryptConverter::class)
   }
 }

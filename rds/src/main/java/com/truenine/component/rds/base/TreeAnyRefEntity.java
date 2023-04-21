@@ -1,7 +1,6 @@
 package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gson.annotations.Expose;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -54,13 +53,11 @@ public class TreeAnyRefEntity extends TreeEntity implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
   @JsonIgnore
-  @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
   @Schema(title = "任意外键id")
   protected Long ari;
 
   @JsonIgnore
-  @Expose(deserialize = false)
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE)
   @Schema(title = "外键类别")
   protected String typ;

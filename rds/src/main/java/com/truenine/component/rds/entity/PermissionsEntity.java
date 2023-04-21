@@ -5,15 +5,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 权限
@@ -23,7 +24,6 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -39,24 +39,16 @@ public class PermissionsEntity extends BaseEntity implements Serializable {
   /**
    * 权限名
    */
-  @Schema(
-    name = NAME,
-    description = "权限名"
-  )
-  @Column(table = TABLE_NAME,
-    name = NAME)
   @Nullable
+  @Schema(title = "权限名")
+  @Column(name = NAME)
   private String name;
 
   /**
    * 权限描述
    */
-  @Schema(
-    name = DOC,
-    description = "权限描述"
-  )
-  @Column(table = TABLE_NAME,
-    name = DOC)
   @Nullable
+  @Schema(title = "权限描述")
+  @Column(name = DOC)
   private String doc;
 }

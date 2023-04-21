@@ -6,9 +6,9 @@ package com.truenine.component.core.consts;
  * @author t_teng
  * @since 2023-03-25
  */
-public class Profiles {
-  public static final String DEV = "dev";
-  public static final String PRODUCT = "prod";
-  public static final String TEST = "test";
-  public static final String SNAPSHOT = "snapshot";
+public interface Profiles {
+  String DEV = "dev";
+  String PRODUCT = "prod";
+  String TEST = "test";
+  String SNAPSHOT = "snapshot";
 }

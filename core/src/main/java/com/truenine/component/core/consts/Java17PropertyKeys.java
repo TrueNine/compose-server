@@ -7,7 +7,9 @@ import java.util.Locale;
  *
  * @author TrueNine
  * @since 2022-10-28
+ * @deprecated 有更好的替代方式
  */
+@Deprecated
 public final class Java17PropertyKeys extends JavaEnvs {
   Java17PropertyKeys() {
   }

@@ -3,11 +3,11 @@
 package ${ctx.getServicePkg()};
 
 /**
-* ${tab.getComment()!tab.getClassName()} 服务接口
-*
-* @author ${ctx.getAuthor()}
-* @since ${ctx.nowDay()}
-*/
+ * ${tab.getComment()!tab.getClassName()} 服务接口
+ *
+ * @author ${ctx.getAuthor()}
+ * @since ${ctx.nowDay()}
+ */
 public interface ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
 
 }

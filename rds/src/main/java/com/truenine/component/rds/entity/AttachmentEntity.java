@@ -25,7 +25,6 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -41,7 +40,6 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   public static final String MIME_TYPE = "mime_type";
   @Serial
   private static final long serialVersionUID = 1L;
-
 
   @Column(name = ATTACHMENT_LOCATION_ID, nullable = false)
   private Long attachmentLocationId;
@@ -59,49 +57,59 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   /**
    * 原始名称
    */
-  @Schema(
-    name = META_NAME,
-    description = "原始名称"
-  )
-  @Column(table = TABLE_NAME,
-    name = META_NAME,
-    nullable = false)
+  @Schema(title = "原始名称")
+  @Column(name = META_NAME, nullable = false)
   private String metaName;
 
   /**
    * 存储后名称
    */
-  @Schema(
-    name = SAVE_NAME,
-    description = "存储后名称"
-  )
-  @Column(table = TABLE_NAME,
-    name = SAVE_NAME)
+  @Schema(title = "存储后名称")
+  @Column(name = SAVE_NAME)
   @Nullable
   private String saveName;
 
   /**
    * 文件大小
    */
-  @Schema(
-    name = SIZE,
-    description = "文件大小"
-  )
-  @Column(table = TABLE_NAME,
-    name = SIZE)
+  @Schema(title = "文件大小")
+  @Column(name = SIZE)
   @Nullable
   private Long size;
 
   /**
    * MIME TYPE
    */
-  @Schema(
-    name = MIME_TYPE,
-    description = "MIME TYPE"
-  )
-  @Column(table = TABLE_NAME,
-    name = MIME_TYPE)
+  @Schema(title = "MIME TYPE")
+  @Column(name = MIME_TYPE)
   @Nullable
   private String mimeType;
 
+
+  @Nullable
+  @Transient
+  @Schema(title = "全路径")
+  private String fullPath;
+
+  /**
+   * @return 全路径
+   */
+  @Nullable
+  @Transient
+  public String getFullPath() {
+    if (this.location != null) {
+      // 切除尾部斜杠
+      var link = this.location.getBaseUrl();
+      if (!link.endsWith("/")) {
+        link += "/";
+      }
+      return link + this.saveName;
+    } else {
+      return "/" + this.saveName;
+    }
+  }
+
+  @Transient
+  public void setFullPath(String fullPath) {
+  }
 }

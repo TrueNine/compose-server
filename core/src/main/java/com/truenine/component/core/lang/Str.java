@@ -6,26 +6,25 @@ package com.truenine.component.core.lang;
  * @author TrueNine
  * @since 2022-10-28
  */
-public class Str {
-  public static final String EMPTY = "";
+public interface Str {
+  String EMPTY = "";
 
-  public static boolean nonText(String text) {
+  static boolean nonText(String text) {
     return !hasText(text);
   }
 
-  public static String inLine(String str) {
+  static String inLine(String str) {
     if (hasText(str)) {
       return str.replace("\r", "")
         .replace("\n", "")
         .replace("\r\n", "")
         .replace("\t", "");
-
     } else {
       return str;
     }
   }
 
-  public static boolean hasText(String text) {
+  static boolean hasText(String text) {
     return (text != null) && !text.isEmpty() && containsText(text);
   }
 
@@ -39,7 +38,7 @@ public class Str {
     return false;
   }
 
-  public static String omit(String s) {
+  static String omit(String s) {
     return omit(s.trim(), 100);
   }
 
@@ -50,7 +49,7 @@ public class Str {
    * @param maxLen 最大长度
    * @return {@link String}
    */
-  public static String omit(String s, int maxLen) {
+  static String omit(String s, int maxLen) {
     if (nonText(s)) {
       return s;
     } else {

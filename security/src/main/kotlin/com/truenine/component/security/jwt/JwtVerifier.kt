@@ -4,13 +4,12 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.annotations.VisibleForTesting
-import com.google.gson.Gson
 import com.truenine.component.core.encrypt.Encryptors
 import com.truenine.component.core.lang.DTimer
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.security.exceptions.JwtException
-import com.truenine.component.security.jwt.consts.TokenResult
-import com.truenine.component.security.jwt.consts.VerifierParams
+import com.truenine.component.security.jwt.consts.JwtTokenModel
+import com.truenine.component.security.jwt.consts.VerifierParamModel
 import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -22,46 +21,41 @@ open class JwtVerifier internal constructor() {
   protected var encryptDataKeyName: String = "edt"
   protected var signatureVerifyKey: RSAPublicKey? = null
   protected var contentEccPrivateKey: PrivateKey? = null
-  protected var objectMapper: ObjectMapper? = null
-  protected var gson: Gson? = null
+  protected lateinit var objectMapper: ObjectMapper
 
   @Throws(JwtException::class)
   fun <S : Any, E : Any> verify(
-    params: VerifierParams<S, E>
-  ): TokenResult<S, E> = runCatching {
-    JWT.require(
-      Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey)
-    )
+    params: VerifierParamModel<S, E>
+  ): JwtTokenModel<S, E> = runCatching {
+    JWT.require(Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey))
       .withIssuer(params.issuer ?: this.issuer)
       .withJWTId(params.id ?: this.id)
       .acceptLeeway(0)
       .build().let { verifier ->
         try {
-          verifier.verify(params.token) // TODO 处理验证异常
+          verifier.verify(params.token)
         } catch (e: Exception) {
+          // TODO 处理验证异常并抛出
           throw parseExceptionHandle(e)
         }
+        // 对 token 进行解包
         JWT.decode(params.token).let { decodedJwt ->
-          TokenResult<S, E>().apply {
-            if (
-              decodedJwt.claims
-                .containsKey(this@JwtVerifier.encryptDataKeyName)
-            ) {
-              this.decryptedData = decryptData(
-                encData = decodedJwt.claims[this@JwtVerifier.encryptDataKeyName]
-                !!.asString(),
-                targetType = params.encryptDataTargetType!!,
-                eccPrivateKey = params.contentEncryptEccKey
-                  ?: this@JwtVerifier.contentEccPrivateKey
+          JwtTokenModel<S, E>().also { token ->
+            // 解包加密段
+            if (decodedJwt.claims.containsKey(this@JwtVerifier.encryptDataKeyName)) {
+              token.decryptedData = decryptData(
+                encData = decodedJwt.claims[this@JwtVerifier.encryptDataKeyName]!!.asString(),
+                eccPrivateKey = params.contentEncryptEccKey ?: this@JwtVerifier.contentEccPrivateKey,
+                targetType = params.encryptDataTargetType!!.kotlin
               )
             }
+            // 解包 subject
             if (decodedJwt.claims.containsKey("sub")) {
-              this.subject =
-                parseContent(decodedJwt.subject, params.subjectTargetType!!)
+              token.subject = parseContent(decodedJwt.subject, params.subjectTargetType!!.kotlin)
             }
-            expireDateTime = DTimer.dateToLocalDatetime(decodedJwt.expiresAt)
-            id = decodedJwt.id
-            signatureAlgName = decodedJwt.algorithm
+            token.expireDateTime = DTimer.dateToLocalDatetime(decodedJwt.expiresAt)
+            token.id = decodedJwt.id
+            token.signatureAlgName = decodedJwt.algorithm
           }
         }
       }
@@ -83,8 +77,7 @@ open class JwtVerifier internal constructor() {
   @VisibleForTesting
   internal fun <T : Any> parseContent(json: String, classType: KClass<T>) =
     runCatching {
-      objectMapper?.readValue(json, classType.java)
-        ?: gson?.fromJson(json, classType.java)
+      objectMapper.readValue(json, classType.java)
     }.onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }.getOrNull()
 
   @VisibleForTesting
@@ -94,17 +87,8 @@ open class JwtVerifier internal constructor() {
 
   inner class Builder {
     fun build() = this@JwtVerifier
-
-    fun serializer(mapper: ObjectMapper? = null, gson: Gson? = null): Builder {
+    fun serializer(mapper: ObjectMapper? = null): Builder {
       mapper?.let { objectMapper = it }
-        ?: gson?.let { this@JwtVerifier.gson = it }
-        ?: run {
-          this@JwtVerifier.gson = Gson()
-          log.warn(
-            "没有内容序列化器，将使用一个默认序列化器 = {}",
-            this@JwtVerifier.gson
-          )
-        }
       return this
     }
 

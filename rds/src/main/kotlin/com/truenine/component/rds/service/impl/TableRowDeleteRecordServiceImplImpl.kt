@@ -44,18 +44,13 @@ class TableRowDeleteRecordServiceImplImpl(
     }
   }
 
-  private fun extractTableRow(anyData: AnyEntity?): RecordModel? {
-    return if (null != anyData) {
-      RecordModel().apply {
-        id = anyData.id
-        lang = "java"
-        modelHash = Objects.hash(anyData::class)
-        entityJson = mapper.copy().setAnnotationIntrospector(AnnotationIntrospector.nopInstance()).writeValueAsString(anyData)
-        namespace = anyData::class.java.name
-      }
-    } else {
-      log.trace("删除了空对象")
-      null
+  private fun extractTableRow(anyData: AnyEntity): RecordModel? {
+    return RecordModel().apply {
+      id = anyData.id
+      lang = "java"
+      modelHash = Objects.hash(anyData::class)
+      entityJson = mapper.copy().setAnnotationIntrospector(AnnotationIntrospector.nopInstance()).writeValueAsString(anyData)
+      namespace = anyData::class.java.name
     }
   }
 }

@@ -1,11 +1,14 @@
 package com.truenine.component.security.autoconfig
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.security.annotations.EnableRestSecurity
+import com.truenine.component.security.defaults.EmptySecurityDetailsService
+import com.truenine.component.security.defaults.EmptySecurityExceptionAdware
 import com.truenine.component.security.models.SecurityPolicyDefineModel
 import com.truenine.component.security.spring.security.SecurityExceptionAdware
+import com.truenine.component.security.spring.security.SecurityPreflightValidFilter
 import com.truenine.component.security.spring.security.SecurityUserDetailsService
-import lombok.extern.slf4j.Slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -19,87 +22,88 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import java.util.*
-import java.util.concurrent.atomic.AtomicReference
-import kotlin.collections.component1
-import kotlin.collections.component2
 
-@Slf4j
 @Configuration
 @EnableWebSecurity
-open class SecurityPolicyBean {
+class SecurityPolicyBean {
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefineModel::class)
-  open fun securityDetailsService(desc: SecurityPolicyDefineModel): SecurityUserDetailsService {
-    require(null != desc.service) {
-      "注册的模型 desc 为空 $desc"
-    }
-    return desc.service
+  fun securityDetailsService(desc: SecurityPolicyDefineModel): SecurityUserDetailsService {
+    return desc.service ?: EmptySecurityDetailsService()
   }
 
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefineModel::class)
-  open fun securityExceptionAdware(desc: SecurityPolicyDefineModel): SecurityExceptionAdware {
-    require(desc.exceptionAdware != null) {
-      "注册的模型 异常过滤器为空 $desc"
-    }
-    return desc.exceptionAdware
+  fun securityExceptionAdware(policyDefine: SecurityPolicyDefineModel, manager: ObjectMapper): SecurityExceptionAdware {
+    return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
   }
 
   @Bean
   @Primary
-  open fun securityFilterChain(
+  fun securityFilterChain(
     httpSecurity: HttpSecurity,
-    desc: SecurityPolicyDefineModel,
-    ctx: ApplicationContext
+    policyDefine: SecurityPolicyDefineModel,
+    applicationContext: ApplicationContext
   ): SecurityFilterChain {
-    val anno = getAnno(ctx)
-    val anonymous = desc.anonymousPatterns
-    anonymous += listOf(*anno.loginUrl)
+    val enableAnnotation = getAnno(applicationContext)
+    require(enableAnnotation != null) { "无法正常获取到注解 ${EnableRestSecurity::class}" }
+    val anonymousPatterns = policyDefine.anonymousPatterns
 
-    if (anno.allowSwagger) {
-      anonymous += arrayOf(
-        "/v3/api-docs/**",
-        "/v3/api-docs.yaml",
-        "/doc.html**",
-        "/swagger-ui/**"
+    anonymousPatterns += listOf(*enableAnnotation.loginUrl)
+    anonymousPatterns += listOf(*enableAnnotation.allowPatterns)
+
+    // 是否放行swagger
+    if (enableAnnotation.allowSwagger) {
+      anonymousPatterns += policyDefine.swaggerPatterns
+    }
+
+    if (enableAnnotation.allowWebJars) {
+      anonymousPatterns += "/webjars/**"
+    }
+
+    if (policyDefine.preValidFilter != null) {
+      httpSecurity.addFilterBefore(
+        policyDefine.preValidFilter,
+        UsernamePasswordAuthenticationFilter::class.java
       )
+    } else {
+      log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
     }
-    if (anno.allowWebJars) {
-      anonymous +=
-        arrayOf(
-          "/webjars/**",
-          "/errors/**",
-          "/error/**",
-          "/favicon.ico"
-        )
+
+    // 打印错误日志
+    if (anonymousPatterns.contains("/**")) {
+      log.error("配置上下文内包含 /** ，将会放行所有域")
     }
-    httpSecurity.addFilterBefore(
-      desc.preValidFilter,
-      UsernamePasswordAuthenticationFilter::class.java
-    )
+
     httpSecurity
+      // 关闭 csrf
       .csrf().disable()
-      .sessionManagement()
-      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
+      // 关闭 session
+      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
       .authorizeHttpRequests()
-      .requestMatchers(*anonymous.toTypedArray())
-      .anonymous()
-      .anyRequest().authenticated()
-      .and()
-      .userDetailsService(desc.service)
-    httpSecurity.exceptionHandling()
-      .authenticationEntryPoint(desc.exceptionAdware)
-      .accessDeniedHandler(desc.exceptionAdware)
-    log.trace("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
+      // 放行链接
+      .requestMatchers(*anonymousPatterns.toTypedArray())
+      // 其他链接一律放行
+      .anonymous().anyRequest().authenticated().and()
+      .userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
+
+    // 配置异常处理器
+    if (policyDefine.exceptionAdware != null) {
+      httpSecurity.exceptionHandling()
+        .authenticationEntryPoint(policyDefine.exceptionAdware)
+        .accessDeniedHandler(policyDefine.exceptionAdware)
+    } else {
+      log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
+    }
+    log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
     return httpSecurity.build()
   }
 
   @Bean
   @Primary
-  open fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
+  fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
     log.debug("注册 AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager
     log.debug("获取到 AuthManager = {}", manager != null)
@@ -111,22 +115,12 @@ open class SecurityPolicyBean {
     private val log = LogKt.getLog(this::class)
 
     @JvmStatic
-    private fun getAnno(ctx: ApplicationContext): EnableRestSecurity {
-      val a = ctx.getBeansWithAnnotation(EnableRestSecurity::class.java)
-      val s = AtomicReference<EnableRestSecurity>()
-      a.forEach { (_: String?, v: Any) ->
-        s.set(
-          v.javaClass.getAnnotation(
-            EnableRestSecurity::class.java
-          )
-        )
-        log.trace(
-          "获取到：{}，注解于：{}",
-          s.get(),
-          v.javaClass.name
-        )
-      }
-      return s.get()
+    private fun getAnno(ctx: ApplicationContext): EnableRestSecurity? {
+      return ctx
+        .getBeansWithAnnotation(EnableRestSecurity::class.java)
+        .map { it.value }
+        .map { it.javaClass.getAnnotation(EnableRestSecurity::class.java) }
+        .first()
     }
   }
 }

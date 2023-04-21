@@ -1,8 +1,8 @@
 project.version = V.Component.webApiDoc
 
 dependencies {
-  api("com.github.xiaoymin:knife4j-springdoc-ui:${V.Web.knife4j}")
-  api("org.springdoc:springdoc-openapi-starter-webmvc-ui:${V.Web.springdocOpenapiWebmvcUi}")
+  implementation("com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${V.Web.knife4jJakarta}")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${V.Web.springdocOpenapiWebmvcUi}")
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation(project(":core"))
 }

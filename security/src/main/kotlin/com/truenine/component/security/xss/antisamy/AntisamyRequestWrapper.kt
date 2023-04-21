@@ -13,6 +13,7 @@ import org.slf4j.Logger
  * antisamy 包装器
  * @author TrueNine
  * @param request 被包装请求
+ * @since 2023-04-20
  */
 // TODO 加入此类
 class AntisamyRequestWrapper(request: HttpServletRequest?) :
@@ -20,7 +21,7 @@ class AntisamyRequestWrapper(request: HttpServletRequest?) :
 
   override fun getParameterValues(name: String?): Array<String?>? {
     val params = super.getParameterValues(name) ?: return null
-    log.debug("antisamy 过滤参数 = {} >-> {}", name, params)
+    log.trace("antisamy 过滤参数 = {} >-> {}", name, params)
     return params.mapNotNull { filterParams(it) }.toTypedArray()
   }
 
@@ -36,6 +37,6 @@ class AntisamyRequestWrapper(request: HttpServletRequest?) :
     private val ANTI_SAMY = AntiSamy()
 
     @JvmStatic
-    private val log: Logger = LogKt.getLog(AntisamyRequestWrapper::class)
+    private val log: Logger = LogKt.getLog(this::class)
   }
 }

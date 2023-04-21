@@ -9,16 +9,15 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 /**
-* ${tab.getComment()!tab.getClassName()} 服务实现
-*
-* @author ${ctx.getAuthor()}
-* @since ${ctx.nowDay()}
-*/
+ * ${tab.getComment()!tab.getClassName()} 服务实现
+ *
+ * @author ${ctx.getAuthor()}
+ * @since ${ctx.nowDay()}
+ */
 @Service
-@Transactional(rollbackFor = [Exception::class])
-open class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""} (
-private val repo: ${tab.getClassName()}${ctx.getRepositorySuffix()!""}
+class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""} (
+  private val repo: ${tab.getClassName()}${ctx.getRepositorySuffix()!""}
 ) : ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
-    private val log = LogKt.getLog(this::class)
+  private val log = LogKt.getLog(this::class)
 
 }

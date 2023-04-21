@@ -6,7 +6,7 @@ object DbCaseConverter {
 
   @JvmStatic
   fun firstUpper(dbName: String): String {
-    return if (hasText(dbName)) {
+    return if (dbName.hasText()) {
       dbName.split("_").map {
         val b = it.toCharArray()
         b[0] = b[0].uppercaseChar()

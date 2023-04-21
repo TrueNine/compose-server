@@ -15,7 +15,7 @@ interface BaseService<T : AnyEntity> {
   fun countAllByNotLogicDeleted(): Long
   fun existsById(id: Long): Boolean
 
-  fun findLdfById(id: Long): Boolean?
+  fun findLdfById(id: Long): Boolean
 
   fun save(e: T): T?
   fun saveAll(es: List<T>): List<T>

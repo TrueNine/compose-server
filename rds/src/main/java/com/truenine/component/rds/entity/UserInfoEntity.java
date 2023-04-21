@@ -1,5 +1,6 @@
 package com.truenine.component.rds.entity;
 
+import com.truenine.component.core.annotations.SensitiveRef;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.converters.AesEncryptConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,7 +31,6 @@ import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
  */
 @Getter
 @Setter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -49,30 +49,23 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   public static final String PHONE = "phone";
   public static final String ID_CARD = "id_card";
   public static final String GENDER = "gender";
+  public static final String WECHAT_OPEN_ID = "wechat_open_id";
+
   @Serial
   private static final long serialVersionUID = 1L;
   /**
    * 用户
    */
-  @Schema(
-    name = USER_ID,
-    description = "用户"
-  )
+  @Schema(title = "用户")
   @NotNull
-  @Column(table = TABLE_NAME,
-    name = USER_ID,
-    nullable = false)
+  @Column(name = USER_ID, nullable = false)
   private Long userId;
 
   /**
    * 用户头像
    */
-  @Schema(
-    name = AVATAR_IMG_ID,
-    description = "用户头像"
-  )
-  @Column(table = TABLE_NAME,
-    name = AVATAR_IMG_ID)
+  @Schema(title = "用户头像")
+  @Column(name = AVATAR_IMG_ID)
   @Nullable
   private Long avatarImgId;
 
@@ -93,12 +86,8 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
    * 姓
    */
   @NotBlank
-  @Schema(
-    name = FIRST_NAME,
-    description = "姓"
-  )
-  @Column(table = TABLE_NAME,
-    name = FIRST_NAME)
+  @Schema(title = "姓")
+  @Column(name = FIRST_NAME)
   @Nullable
   @Convert(converter = AesEncryptConverter.class)
   private String firstName;
@@ -107,12 +96,8 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
    * 名
    */
   @NotBlank
-  @Schema(
-    name = LAST_NAME,
-    description = "名"
-  )
-  @Column(table = TABLE_NAME,
-    name = LAST_NAME)
+  @Schema(title = "名")
+  @Column(name = LAST_NAME)
   @Nullable
   private String lastName;
 
@@ -121,74 +106,58 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
    */
   @Email
   @NotBlank
-  @Schema(
-    name = EMAIL,
-    description = "邮箱"
-  )
-  @Column(table = TABLE_NAME,
-    name = EMAIL)
+  @Schema(title = "邮箱")
+  @Column(name = EMAIL)
   @Nullable
   private String email;
 
   /**
    * 生日
    */
-  @Schema(
-    name = BIRTHDAY,
-    description = "生日"
-  )
-  @Column(table = TABLE_NAME,
-    name = BIRTHDAY)
+  @Schema(title = "生日")
+  @Column(name = BIRTHDAY)
   @Nullable
   private LocalDate birthday;
 
   /**
    * 地址
    */
-  @Schema(
-    name = ADDRESS_DETAILS_ID,
-    description = "地址"
-  )
-  @Column(table = TABLE_NAME,
-    name = ADDRESS_DETAILS_ID)
+  @Schema(title = "地址")
+  @Column(name = ADDRESS_DETAILS_ID)
   @Nullable
   private Long addressDetailsId;
 
   /**
    * 电话号码
    */
-  @Schema(
-    name = PHONE,
-    description = "电话号码"
-  )
-  @Column(table = TABLE_NAME,
-    name = PHONE,
-    unique = true)
   @Nullable
+  @Schema(title = "电话号码")
+  @Column(name = PHONE, unique = true)
+  @SensitiveRef(SensitiveRef.Strategy.PHONE)
   private String phone;
 
   /**
    * 身份证
    */
-  @Schema(
-    name = ID_CARD,
-    description = "身份证"
-  )
-  @Column(table = TABLE_NAME,
-    name = ID_CARD,
-    unique = true)
+  @Schema(title = "身份证")
+  @Column(name = ID_CARD, unique = true)
   @Nullable
+  @SensitiveRef(SensitiveRef.Strategy.IDCARD)
   private String idCard;
 
   /**
    * 性别：0女，1难，2未知
    */
-  @Schema(
-    name = GENDER,
-    description = " 性别：0女，1难，2未知"
-  )
-  @Column(table = TABLE_NAME,
-    name = GENDER)
   @Nullable
+  @Schema(title = " 性别：0女，1难，2未知")
+  @Column(name = GENDER)
   private Byte gender;
+
+  /**
+   * 微信个人 openId
+   */
+  @Nullable
+  @Schema(title = "微信个人 openId")
+  @Column(name = WECHAT_OPEN_ID)
+  private String wechatOpenId;
 }

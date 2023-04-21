@@ -14,7 +14,9 @@ import java.util.function.Consumer;
  *
  * @author TrueNine
  * @since 2022-06-11
+ * @deprecated 有更好的反射替代方案
  */
+@Deprecated
 public class JavaReflects {
 
   private static final List<Class<?>> CLASS_POOL = new CopyOnWriteArrayList<>();

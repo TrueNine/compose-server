@@ -27,9 +27,9 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
  */
 @Getter
 @Setter
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "用户组")
 @Table(name = UserGroupEntity.TABLE_NAME)
 public class UserGroupEntity extends BaseEntity implements Serializable {
@@ -44,37 +44,25 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
   /**
    * 名称
    */
-  @Schema(
-    name = NAME,
-    description = "名称"
-  )
-  @Column(table = TABLE_NAME,
-    name = NAME)
   @Nullable
+  @Schema(title = "名称")
+  @Column(name = NAME)
   private String name;
 
   /**
    * 描述
    */
-  @Schema(
-    name = DOC,
-    description = "描述"
-  )
-  @Column(table = TABLE_NAME,
-    name = DOC)
   @Nullable
+  @Schema(title = "描述")
+  @Column(name = DOC)
   private String doc;
 
   /**
    * 创建人
    */
-  @Schema(
-    name = USER_ID,
-    description = "创建人"
-  )
-  @Column(table = TABLE_NAME,
-    name = USER_ID)
   @Nullable
+  @Schema(title = "创建人")
+  @Column(name = USER_ID)
   private Long userId;
 
   /**

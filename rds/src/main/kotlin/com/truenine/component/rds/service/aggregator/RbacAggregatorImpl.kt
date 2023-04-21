@@ -1,9 +1,6 @@
 package com.truenine.component.rds.service.aggregator
 
-import com.truenine.component.rds.entity.RoleGroupRoleEntity
-import com.truenine.component.rds.entity.RolePermissionsEntity
-import com.truenine.component.rds.entity.UserGroupRoleGroupEntity
-import com.truenine.component.rds.entity.UserRoleGroupEntity
+import com.truenine.component.rds.entity.*
 import com.truenine.component.rds.repository.RoleGroupRoleRepository
 import com.truenine.component.rds.repository.RolePermissionsRepository
 import com.truenine.component.rds.repository.UserGroupRoleGroupRepository
@@ -19,18 +16,22 @@ class RbacAggregatorImpl(
   private val rp: RolePermissionsRepository
 ) : RbacAggregator {
   override fun saveRoleGroupToUser(roleGroupId: Long, userId: Long): UserRoleGroupEntity? =
-    urg.save(UserRoleGroupEntity().apply {
-      this.userId = userId
-      this.roleGroupId = roleGroupId
-    })
+    urg.findByUserIdAndRoleGroupId(userId, roleGroupId)
+      ?: urg.save(UserRoleGroupEntity().apply {
+        this.userId = userId
+        this.roleGroupId = roleGroupId
+      })
 
-  override fun saveAllRoleGroupToUser(roleGroupIds: List<Long>, userId: Long): List<UserRoleGroupEntity> =
-    urg.saveAll(roleGroupIds.map {
+  override fun saveAllRoleGroupToUser(roleGroupIds: List<Long>, userId: Long): List<UserRoleGroupEntity> {
+    val existingRoleGroups = urg.findAllRoleGroupIdByUserId(userId)
+    val mewRoleGroups = roleGroupIds.filterNot { existingRoleGroups.contains(it) }.map {
       UserRoleGroupEntity().apply {
-        this.roleGroupId = it
+        roleGroupId = it
         this.userId = userId
       }
-    })
+    }
+    return urg.saveAll(mewRoleGroups)
+  }
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleGroupFromUser(roleGroupId: Long, userId: Long) = urg.deleteAllByRoleGroupIdAndUserId(roleGroupId, userId)
@@ -40,18 +41,23 @@ class RbacAggregatorImpl(
     urg.deleteAllByRoleGroupIdInAndUserId(roleGroupIds, userId)
 
   override fun saveRoleGroupToUserGroup(roleGroupId: Long, userGroupId: Long): UserGroupRoleGroupEntity? =
-    ugrg.save(UserGroupRoleGroupEntity().apply {
-      this.roleGroupId = roleGroupId
-      this.userGroupId = userGroupId
-    })
-
-  override fun saveAllRoleGroupToUserGroup(roleGroupIds: List<Long>, userGroupId: Long): List<UserGroupRoleGroupEntity> =
-    ugrg.saveAll(roleGroupIds.map {
-      UserGroupRoleGroupEntity().apply {
-        this.roleGroupId = it
+    ugrg.findByUserGroupIdAndRoleGroupId(userGroupId, roleGroupId)
+      ?: ugrg.save(UserGroupRoleGroupEntity().apply {
+        this.roleGroupId = roleGroupId
         this.userGroupId = userGroupId
+      })
+
+  override fun saveAllRoleGroupToUserGroup(roleGroupIds: List<Long>, userGroupId: Long): List<UserGroupRoleGroupEntity> {
+    val existingRoleGroups = ugrg.findAllRoleGroupIdByUserGroupId(userGroupId)
+    val newRoleGroups = roleGroupIds.filterNot { existingRoleGroups.contains(it) }.map {
+      UserGroupRoleGroupEntity().apply {
+        this.userGroupId = userGroupId
+        roleGroupId = it
       }
-    })
+    }
+    return ugrg.saveAll(newRoleGroups)
+  }
+
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleGroupFromUserGroup(roleGroupId: Long, userGroupId: Long) =
@@ -62,18 +68,23 @@ class RbacAggregatorImpl(
     ugrg.deleteAllByRoleGroupIdInAndUserGroupId(roleGroupIds, userGroupId)
 
   override fun saveRoleToRoleGroup(roleId: Long, roleGroupId: Long): RoleGroupRoleEntity? =
-    rgr.save(RoleGroupRoleEntity().apply {
-      this.roleGroupId = roleGroupId
-      this.roleId = roleId
-    })
-
-  override fun saveAllRoleToRoleGroup(roleIds: List<Long>, roleGroupId: Long): List<RoleGroupRoleEntity> =
-    rgr.saveAll(roleIds.map {
-      RoleGroupRoleEntity().apply {
-        this.roleId = it
+    rgr.findByRoleGroupIdAndRoleId(roleGroupId, roleId)
+      ?: rgr.save(RoleGroupRoleEntity().apply {
         this.roleGroupId = roleGroupId
+        this.roleId = roleId
+      })
+
+  override fun saveAllRoleToRoleGroup(roleIds: List<Long>, roleGroupId: Long): List<RoleGroupRoleEntity> {
+    val existingRoles = rgr.findAllRoleIdByRoleGroupId(roleGroupId)
+    val newRoles = roleIds.filterNot { existingRoles.contains(it) }.map {
+      RoleGroupRoleEntity().apply {
+        this.roleGroupId = roleGroupId
+        roleId = it
       }
-    })
+    }
+    return rgr.saveAll(newRoles)
+  }
+
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeRoleFromRoleGroup(roleId: Long, roleGroupId: Long) =
@@ -82,18 +93,24 @@ class RbacAggregatorImpl(
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeAllRoleFromRoleGroup(roleIds: List<Long>, roleGroupId: Long) = rgr.deleteAllByRoleIdInAndRoleGroupId(roleIds, roleGroupId)
 
-  override fun savePermissionsToRole(permissionsId: Long, roleId: Long): RolePermissionsEntity? = rp.save(RolePermissionsEntity().apply {
-    this.roleId = roleId
-    this.permissionsId = permissionsId
-  })
+  override fun savePermissionsToRole(permissionsId: Long, roleId: Long): RolePermissionsEntity? =
+    rp.findByRoleIdAndPermissionsId(roleId, permissionsId)
+      ?: rp.save(RolePermissionsEntity().apply {
+        this.roleId = roleId
+        this.permissionsId = permissionsId
+      })
 
-  override fun saveAllPermissionsToRole(permissionsIds: List<Long>, roleId: Long): List<RolePermissionsEntity> =
-    rp.saveAll(permissionsIds.map {
+  override fun saveAllPermissionsToRole(permissionsIds: List<Long>, roleId: Long): List<RolePermissionsEntity> {
+    val existingPermissions = rp.findAllPermissionsIdByRoleId(roleId)
+    val newPermissions = permissionsIds.filterNot { existingPermissions.contains(it) }.map {
       RolePermissionsEntity().apply {
-        this.permissionsId = it
+        permissionsId = it
         this.roleId = roleId
       }
-    })
+    }
+    return rp.saveAll(newPermissions)
+  }
+
 
   @Transactional(rollbackFor = [Exception::class])
   override fun revokePermissionsFromRole(permissionsId: Long, roleId: Long) =

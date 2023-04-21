@@ -3,8 +3,9 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.11-SNAPSHOT"
+  const val version = "0.4.30-SNAPSHOT-T"
   const val encoding = "UTF-8"
+  const val gradleVersion = "8.1"
 }
 
 /**
@@ -12,27 +13,32 @@ object ProjectManager {
  */
 object V {
   object Component {
-    private const val allV = ProjectManager.version
-    const val dataCommonDataExtract = allV
-    const val dependFlyway = allV
-    const val core = allV
-    const val rds = allV
-    const val schedule = allV
-    const val rdsGen = allV
-    const val webApiDoc = allV
-    const val security = allV
-    const val dependWebServlet = allV
-    const val dataCommonCrawler = allV
-    const val cacheable = allV
-    const val oss = allV
-    const val pay = allV
+    const val dataCommonDataExtract = ProjectManager.version
+    const val dependFlyway = ProjectManager.version
+    const val core = ProjectManager.version
+    const val rds = ProjectManager.version
+    const val schedule = ProjectManager.version
+    const val rdsGen = ProjectManager.version
+    const val webApiDoc = ProjectManager.version
+    const val security = ProjectManager.version
+    const val securityOauth2 = ProjectManager.version
+    const val dependWebServlet = ProjectManager.version
+    const val dependWebClient = ProjectManager.version
+    const val dataCommonCrawler = ProjectManager.version
+    const val cacheable = ProjectManager.version
+    const val oss = ProjectManager.version
+    const val pay = ProjectManager.version
   }
 
   object Lang {
-    const val kotlin = "1.8.20"
-    const val gradleWrapper = "8.0.2"
-    const val javaStr = "17"
     val javaPlatform = org.gradle.api.JavaVersion.VERSION_17
+    const val java = "17"
+
+    // https://github.com/JetBrains/kotlin/releases
+    const val kotlin = "1.8.20"
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    const val lombok = "1.18.26"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
     const val kotlinxCoroutine = "1.6.4"
@@ -95,6 +101,9 @@ object V {
     // 微信支付 sdk
     // https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
     const val wechatpayJava = "0.2.7"
+
+    // https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java
+    const val huaweiObsJava = "3.22.12"
   }
 
   object Util {
@@ -155,8 +164,11 @@ object V {
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     const val springdocOpenapiUi = "1.7.0"
 
+    // https://doc.xiaominfo.com/
     // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
+    // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter
     const val knife4j = "3.0.3"
+    const val knife4jJakarta = "4.1.0"
 
     // auth0 JWT
     // https://mvnrepository.com/artifact/com.auth0/java-jwt
@@ -191,7 +203,7 @@ object V {
     const val junitJupiter = "5.9.2"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test-testng
-    const val kotlinTestNG = "1.8.20"
+    const val kotlinTestNG = Lang.kotlin
 
     // https://mvnrepository.com/artifact/org.testng/testng
     const val testNG = "7.7.1"
@@ -230,7 +242,7 @@ object V {
 
     // kotlin 注解处理器
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin.kapt/org.jetbrains.kotlin.kapt.gradle.plugin
-    const val kotlinKapt = V.Lang.kotlin
+    const val kotlinKapt = Lang.kotlin
 
     // kotlin jvm 插件
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin.jvm/org.jetbrains.kotlin.jvm.gradle.plugin

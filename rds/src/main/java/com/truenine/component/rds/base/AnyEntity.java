@@ -1,8 +1,7 @@
 package com.truenine.component.rds.base;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gson.annotations.Expose;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
+import com.truenine.component.rds.autoconfig.BizCodeGeneratorBean;
 import com.truenine.component.rds.autoconfig.SnowflakeIdGeneratorBean;
 import com.truenine.component.rds.listener.TableRowDeletePersistenceListener;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,16 +10,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Setter
 @Getter
-@ToString
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
@@ -34,19 +34,27 @@ public class AnyEntity implements Serializable {
   public static final String ID = DataBaseBasicFieldNames.ID;
   @Serial
   private static final long serialVersionUID = 1L;
+
   @Id
-  @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.ID)
-  @Expose(deserialize = false)
   @GenericGenerator(
     name = SnowflakeIdGeneratorBean.NAME,
     strategy = SnowflakeIdGeneratorBean.CLASS_NAME
   )
-  @Basic
   @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
-  @Schema(name = ID,
-    description = "主键id",
-    defaultValue = "主键自动生成",
-    example = "7001234523405")
+  @Schema(title = ID, example = "7001234523405")
   protected Long id;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+    AnyEntity that = (AnyEntity) o;
+    return getId() != null && Objects.equals(getId(), that.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

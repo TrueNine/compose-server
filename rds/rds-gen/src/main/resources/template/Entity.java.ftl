@@ -32,16 +32,11 @@ import ${t};
  */
 @Getter
 @Setter
-@ToString
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "${tab.getEscapeComment()!tab.getClassName()}")
-@Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.TABLE_NAME<#if tab.getIdx()?? && (tab.getIdx()?size > 0)>, indexes = {
-    <#list tab.getIdxUpper() as idx>
-      @Index(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.${idx.getKeyName()!idx.getColumnName()}, columnList = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.${idx.getColumnName()}),
-    </#list>
-  }</#if>)
+@Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.TABLE_NAME)
 public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getBaseEntityClassName()} implements Serializable {
   public static final String TABLE_NAME = "${tab.getName()}";
 <#-- 静态表字段名 -->
@@ -54,28 +49,10 @@ public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getB
 <#list tab.getColumns() as col>
   /**
    * ${col.getComment()!col.getFieldName()}
-   */
-  @Schema(
-    title = ${col.getUpperName()},
-    description = "${col.getEscapeComment()}"
-  )
-  @Column(table = TABLE_NAME,
-  name = ${col.getUpperName()}<#if !col.getNullable()>,
-  nullable = false</#if><#if col.getUnique()>,
-  unique = true</#if>)<#if col.getNullable()>
+   */<#if col.getNullable()>
   @Nullable</#if>
+  @Schema(title = "${col.getComment()!col.getFieldName()}")
+  @Column(name = ${col.getUpperName()}<#if !col.getNullable()>,nullable = false</#if><#if col.getUnique()>,unique = true</#if>)
   private ${col.getJavaType()} ${col.getFieldName()};
 </#list>
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-    var that = (${tab.getClassName()}${ctx.getEntitySuffix()}) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }

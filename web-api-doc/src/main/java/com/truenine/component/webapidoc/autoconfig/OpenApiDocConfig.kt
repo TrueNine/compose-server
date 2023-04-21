@@ -1,0 +1,81 @@
+package com.truenine.component.webapidoc.autoconfig
+
+import com.truenine.component.core.http.Headers
+import com.truenine.component.core.lang.LogKt
+import com.truenine.component.webapidoc.properties.SwaggerProperties
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.Operation
+import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.info.License
+import io.swagger.v3.oas.models.media.StringSchema
+import io.swagger.v3.oas.models.parameters.HeaderParameter
+import org.springdoc.core.models.GroupedOpenApi
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.method.HandlerMethod
+
+
+@Configuration
+class OpenApiDocConfig {
+  companion object {
+    private val log = LogKt.getLog(this::class)
+  }
+
+  @Bean
+  @ConditionalOnWebApplication
+  fun userApi(p: SwaggerProperties): GroupedOpenApi {
+    OpenApiDocConfig.log.debug("注册 OpenApi3 文档")
+    val paths = arrayOf("/**")
+    val packagedToMatch = arrayOf(p.packages)
+    return GroupedOpenApi.builder()
+      .group(p.group)
+      .pathsToMatch(*paths)
+      .packagesToScan(*packagedToMatch)
+      .addOperationCustomizer { operation: Operation, handlerMethod: HandlerMethod? ->
+        operation
+          .addParametersItem(
+            HeaderParameter()
+              .name(Headers.AUTHORIZATION)
+              .example("eyJ0eXAiOiJ")
+              .description("jwt校验头")
+              .schema(
+                StringSchema()._default("")
+                  .name(Headers.AUTHORIZATION)
+                  .description("jwt校验头")
+              )
+          )
+          .addParametersItem(
+            HeaderParameter()
+              .name(Headers.X_RE_FLUSH_TOKEN)
+              .example("eyJ0eXAiOiJ")
+              .description("jwt 刷新 token")
+              .schema(
+                StringSchema()
+                  ._default("")
+                  .name(Headers.X_RE_FLUSH_TOKEN)
+                  .example("eyJ0eXAiOiJ")
+                  .description("jwt 刷新 token")
+              )
+          )
+      }
+      .build()
+  }
+
+  @Bean
+  fun customOpenApi(p: SwaggerProperties): OpenAPI {
+    val authorInfo = p.authorInfoProperties
+    return OpenAPI()
+      .info(
+        Info()
+          .title(authorInfo.title)
+          .version(authorInfo.version)
+          .description(authorInfo.description)
+          .termsOfService(authorInfo.gitLocation)
+          .license(
+            License().name(authorInfo.license)
+              .url(authorInfo.licenseUrl)
+          )
+      )
+  }
+}

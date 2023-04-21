@@ -1,7 +1,7 @@
 package com.truenine.component.schedule.autoconfig
 
-import com.truenine.component.core.properties.XxlJobAutoConfigurationProperties
-import com.truenine.component.core.properties.XxlJobExecutorAutoConfigurationProperties
+import com.truenine.component.schedule.properties.XxlJobAutoConfigurationProperties
+import com.truenine.component.schedule.properties.XxlJobExecutorAutoConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableConfigurationProperties(

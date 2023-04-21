@@ -9,7 +9,9 @@ import java.util.Properties;
  *
  * @author TrueNine
  * @since 2022-09-24
+ * @deprecated 有更好的替代方式
  */
+@Deprecated
 public sealed abstract class JavaEnvs permits Java17PropertyKeys {
 
 

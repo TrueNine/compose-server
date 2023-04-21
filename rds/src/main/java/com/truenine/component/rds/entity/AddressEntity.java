@@ -26,14 +26,12 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
 @Schema(title = "行政区代码")
 @Table(name = AddressEntity.TABLE_NAME)
 public class AddressEntity extends TreeEntity implements Serializable {
-
   public static final String TABLE_NAME = "address";
   public static final String CODE = "code";
   public static final String NAME = "name";
@@ -44,48 +42,32 @@ public class AddressEntity extends TreeEntity implements Serializable {
   /**
    * 代码
    */
-  @Schema(
-    title = CODE,
-    description = "代码"
-  )
-  @Column(table = TABLE_NAME,
-    name = CODE)
+  @Schema(title = "代码")
+  @Column(name = CODE)
   @Nullable
   private String code;
 
   /**
    * 名称
    */
-  @Schema(
-    title = NAME,
-    description = "名称"
-  )
-  @Column(table = TABLE_NAME,
-    name = NAME)
+  @Schema(title = "名称")
+  @Column(name = NAME)
   @Nullable
   private String name;
 
   /**
    * 级别 0 为国家
    */
-  @Schema(
-    title = LEVEL,
-    description = "级别 0 为国家"
-  )
-  @Column(table = TABLE_NAME,
-    name = LEVEL)
+  @Schema(title = "级别 0 为国家")
+  @Column(name = LEVEL)
   @Nullable
   private Integer level;
 
   /**
    * 定位
    */
-  @Schema(
-    title = CENTER,
-    description = "定位"
-  )
-  @Column(table = TABLE_NAME,
-    name = CENTER)
+  @Schema(title = "定位")
+  @Column(name = CENTER)
   @Nullable
   @Convert(converter = PointModelConverter.class)
   private PointModel center;

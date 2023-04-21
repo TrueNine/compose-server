@@ -9,6 +9,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.testng.annotations.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class TableRowDeleteRecordServiceImplImplTest : AbstractTestNGSpringContextTests() {
@@ -32,5 +33,8 @@ class TableRowDeleteRecordServiceImplImplTest : AbstractTestNGSpringContextTests
 
     val a = mapper.readValue(saved.entity.entityJson, DbTestBaseServiceEntity::class.java)
     assertEquals(a.title, e.title)
+
+    val abc = service.saveAnyEntity(null)
+    assertNull(abc)
   }
 }

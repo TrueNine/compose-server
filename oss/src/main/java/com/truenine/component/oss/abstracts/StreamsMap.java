@@ -45,7 +45,7 @@ public interface StreamsMap {
   long size();
 
   /**
-   * 年代大小
+   * 字符串表示的 size
    *
    * @return {@link String}
    */
