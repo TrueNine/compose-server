@@ -35,6 +35,9 @@ findProject(":data-common:data-common-data-extract")?.name = "data-common-data-e
 include("security")
 findProject(":security")?.name = "security"
 
+include("security:security-oauth2")
+findProject(":security:security-oauth2")?.name = "security-oauth2"
+
 include("web-api-doc")
 findProject(":web-api-doc")?.name = "web-api-doc"
 

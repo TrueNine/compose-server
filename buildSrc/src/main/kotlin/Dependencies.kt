@@ -21,6 +21,7 @@ object V {
     const val rdsGen = ProjectManager.version
     const val webApiDoc = ProjectManager.version
     const val security = ProjectManager.version
+    const val securityOauth2 = ProjectManager.version
     const val dependWebServlet = ProjectManager.version
     const val dependWebClient = ProjectManager.version
     const val dataCommonCrawler = ProjectManager.version
