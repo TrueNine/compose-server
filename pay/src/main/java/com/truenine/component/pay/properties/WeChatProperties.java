@@ -26,4 +26,6 @@ public class WeChatProperties {
 
   // api 密钥
   private String appSecret;
+  private String appKey;
+
 }

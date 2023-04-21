@@ -1,6 +1,7 @@
 package com.truenine.component.pay.api.model.request;
 
 import lombok.Data;
+import org.springframework.core.convert.converter.Converter;
 
 @Data
 public class GetSessionRequest {
