@@ -1,7 +1,13 @@
 package com.truenine.component.rds.service.impl
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.truenine.component.core.id.Snowflake
+import com.truenine.component.rds.entity.RoleGroupEntity
 import com.truenine.component.rds.entity.UserEntity
+import com.truenine.component.rds.entity.UserInfoEntity
+import com.truenine.component.rds.service.RoleGroupService
+import com.truenine.component.rds.service.UserInfoService
+import com.truenine.component.rds.service.aggregator.RbacAggregator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
@@ -9,6 +15,7 @@ import org.testng.annotations.Test
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
@@ -26,11 +33,36 @@ class UserServiceImplTest : AbstractTestNGSpringContextTests() {
     this.pwdEnc = "qwer1234"
   }
 
+  @Autowired
+  lateinit var infoService: UserInfoService
+
+  @Autowired
+  lateinit var roleGroupService: RoleGroupService
+
+  @Autowired
+  lateinit var agg: RbacAggregator
+
+  @Autowired
+  lateinit var mapper: ObjectMapper
+
   @Test
   fun testFindUserByAccount() {
     val saved = service.save(getUser())!!
+    val info = infoService.save(UserInfoEntity().apply {
+      userId = saved.id
+    })!!
+    val rg = roleGroupService.save(RoleGroupEntity().apply {
+      name = "权限1"
+    })!!
+    agg.saveRoleGroupToUser(rg.id, saved.id)!!
+
+    assertEquals(saved.id, info.userId)
     val acc = service.findUserByAccount(saved.account)!!
+    assertEquals(acc.id, info.userId)
+    assertNotNull(acc.info?.wechatOauth2Id)
+    assertEquals(acc.info.wechatOauth2Id, acc.info.id)
     assertEquals(saved, acc)
+    println(mapper.writeValueAsString(acc))
   }
 
   @Test

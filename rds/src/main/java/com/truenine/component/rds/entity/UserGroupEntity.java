@@ -1,6 +1,8 @@
 package com.truenine.component.rds.entity;
 
 import com.truenine.component.rds.base.BaseEntity;
+import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity;
+import com.truenine.component.rds.entity.relationship.UserGroupUserEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -14,8 +16,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-import static com.truenine.component.rds.entity.UserGroupRoleGroupEntity.ROLE_GROUP_ID;
-import static com.truenine.component.rds.entity.UserGroupRoleGroupEntity.USER_GROUP_ID;
+import static com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity.ROLE_GROUP_ID;
+import static com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity.USER_GROUP_ID;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 

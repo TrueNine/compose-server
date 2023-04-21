@@ -2,7 +2,7 @@ package com.truenine.component.rds.service.impl
 
 import com.truenine.component.rds.base.BaseServiceImpl
 import com.truenine.component.rds.entity.UserGroupEntity
-import com.truenine.component.rds.entity.UserGroupUserEntity
+import com.truenine.component.rds.entity.relationship.UserGroupUserEntity
 import com.truenine.component.rds.repository.UserGroupRepository
 import com.truenine.component.rds.repository.UserGroupUserRepository
 import com.truenine.component.rds.service.UserGroupService

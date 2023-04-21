@@ -1,5 +1,6 @@
 package com.truenine.component.rds.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.truenine.component.core.annotations.SensitiveRef;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.converters.AesEncryptConverter;
@@ -7,21 +8,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
  * 用户信息
@@ -50,9 +49,10 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   public static final String ID_CARD = "id_card";
   public static final String GENDER = "gender";
   public static final String WECHAT_OPEN_ID = "wechat_open_id";
-
+  public static final String MAPPED_BY_USER = "user";
   @Serial
   private static final long serialVersionUID = 1L;
+
   /**
    * 用户
    */
@@ -60,13 +60,24 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @NotNull
   @Column(name = USER_ID, nullable = false)
   private Long userId;
+  @OneToOne
+  @JoinColumn(
+    name = USER_ID,
+    referencedColumnName = ID,
+    foreignKey = @ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
+  @JsonBackReference
+  @NotFound(action = IGNORE)
+  private UserEntity user;
 
   /**
    * 用户头像
    */
+  @Nullable
   @Schema(title = "用户头像")
   @Column(name = AVATAR_IMG_ID)
-  @Nullable
   private Long avatarImgId;
 
 
@@ -79,38 +90,38 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
     insertable = false,
     updatable = false
   )
-  @NotFound(action = NotFoundAction.IGNORE)
+  @NotFound(action = IGNORE)
   private AttachmentEntity avatarImage;
 
   /**
    * 姓
    */
-  @NotBlank
+  @Nullable
   @Schema(title = "姓")
   @Column(name = FIRST_NAME)
-  @Nullable
   @Convert(converter = AesEncryptConverter.class)
   private String firstName;
 
   /**
    * 名
    */
-  @NotBlank
+  @Nullable
   @Schema(title = "名")
   @Column(name = LAST_NAME)
-  @Nullable
   private String lastName;
+
+  @Schema(title = "全名")
+  @Transient
+  private String fullName;
 
   /**
    * 邮箱
    */
   @Email
-  @NotBlank
+  @Nullable
   @Schema(title = "邮箱")
   @Column(name = EMAIL)
-  @Nullable
   private String email;
-
   /**
    * 生日
    */
@@ -126,7 +137,16 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Column(name = ADDRESS_DETAILS_ID)
   @Nullable
   private Long addressDetailsId;
-
+  @ManyToOne
+  @JoinColumn(
+    name = ADDRESS_DETAILS_ID,
+    referencedColumnName = ID,
+    foreignKey = @ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
+  @NotFound(action = IGNORE)
+  private AddressDetailsEntity addressDetails;
   /**
    * 电话号码
    */
@@ -135,7 +155,6 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Column(name = PHONE, unique = true)
   @SensitiveRef(SensitiveRef.Strategy.PHONE)
   private String phone;
-
   /**
    * 身份证
    */
@@ -144,7 +163,6 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Nullable
   @SensitiveRef(SensitiveRef.Strategy.IDCARD)
   private String idCard;
-
   /**
    * 性别：0女，1难，2未知
    */
@@ -152,7 +170,6 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Schema(title = " 性别：0女，1难，2未知")
   @Column(name = GENDER)
   private Byte gender;
-
   /**
    * 微信个人 openId
    */
@@ -160,4 +177,15 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Schema(title = "微信个人 openId")
   @Column(name = WECHAT_OPEN_ID)
   private String wechatOpenId;
+  @Column(name = ID, insertable = false, updatable = false)
+  private Long wechatOauth2Id;
+
+  @Transient
+  public String getFullName() {
+    return firstName + lastName;
+  }
+
+  @Transient
+  public void setFullName(String fullName) {
+  }
 }

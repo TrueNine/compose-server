@@ -1,6 +1,7 @@
 package com.truenine.component.rds.entity;
 
 import com.truenine.component.rds.base.BaseEntity;
+import com.truenine.component.rds.entity.relationship.RolePermissionsEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;

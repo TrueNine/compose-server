@@ -1,6 +1,9 @@
 package com.truenine.component.rds.service.aggregator
 
-import com.truenine.component.rds.entity.*
+import com.truenine.component.rds.entity.relationship.RoleGroupRoleEntity
+import com.truenine.component.rds.entity.relationship.RolePermissionsEntity
+import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity
+import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity
 import com.truenine.component.rds.repository.RoleGroupRoleRepository
 import com.truenine.component.rds.repository.RolePermissionsRepository
 import com.truenine.component.rds.repository.UserGroupRoleGroupRepository

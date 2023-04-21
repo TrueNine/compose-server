@@ -1,22 +1,20 @@
 package com.truenine.component.rds.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.truenine.component.rds.base.PointModel;
 import com.truenine.component.rds.base.TreeEntity;
 import com.truenine.component.rds.converters.PointModelConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 行政区代码
@@ -58,17 +56,25 @@ public class AddressEntity extends TreeEntity implements Serializable {
   /**
    * 级别 0 为国家
    */
+  @Nullable
   @Schema(title = "级别 0 为国家")
   @Column(name = LEVEL)
-  @Nullable
   private Integer level;
 
   /**
    * 定位
    */
+  @Nullable
   @Schema(title = "定位")
   @Column(name = CENTER)
-  @Nullable
   @Convert(converter = PointModelConverter.class)
   private PointModel center;
+
+  /**
+   * 当前地址包含的地址详情
+   */
+  @Schema(title = "包含的地址详情")
+  @OneToMany(mappedBy = AddressDetailsEntity.MAPPED_BY_ADDRESS, targetEntity = AddressDetailsEntity.class)
+  @JsonManagedReference
+  private List<AddressDetailsEntity> details;
 }

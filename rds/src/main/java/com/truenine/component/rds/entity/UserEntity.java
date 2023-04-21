@@ -1,6 +1,9 @@
 package com.truenine.component.rds.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.truenine.component.rds.base.BaseEntity;
+import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity;
+import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -94,14 +97,8 @@ public class UserEntity extends BaseEntity implements Serializable {
    * 用户信息
    */
   @Schema(title = "用户信息")
-  @OneToOne
-  @JoinColumn(
-    name = ID,
-    referencedColumnName = UserInfoEntity.USER_ID,
-    foreignKey = @ForeignKey(NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
-  )
+  @JsonManagedReference
+  @OneToOne(mappedBy = UserInfoEntity.MAPPED_BY_USER)
   @NotFound(action = IGNORE)
   private UserInfoEntity info;
 

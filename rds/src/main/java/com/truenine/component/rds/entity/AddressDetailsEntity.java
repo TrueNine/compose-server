@@ -1,5 +1,6 @@
 package com.truenine.component.rds.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.base.PointModel;
 import com.truenine.component.rds.converters.PointModelConverter;
@@ -37,16 +38,29 @@ public class AddressDetailsEntity extends BaseEntity implements Serializable {
   public static final String ADDRESS_ID = "address_id";
   public static final String ADDRESS_DETAILS = "address_details";
   public static final String CENTER = "center";
+  public static final String MAPPED_BY_ADDRESS = "address";
   @Serial
   private static final long serialVersionUID = 1L;
-
+  /**
+   * 地址 id
+   */
+  @Schema(title = "地址 id")
+  @Column(name = ADDRESS_ID, nullable = false)
+  private String addressId;
   /**
    * 地址
    */
   @ManyToOne
   @Schema(title = "地址")
-  @JoinColumn(name = ADDRESS_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
+  @JoinColumn(
+    name = ADDRESS_ID,
+    referencedColumnName = ID,
+    foreignKey = @ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
   @NotFound(action = IGNORE)
+  @JsonBackReference
   private AddressEntity address;
 
   /**
@@ -54,14 +68,14 @@ public class AddressDetailsEntity extends BaseEntity implements Serializable {
    */
   @Schema(title = "地址详情")
   @Column(name = ADDRESS_DETAILS, nullable = false)
-  private Long addressDetails;
+  private String addressDetails;
 
   /**
    * 定位
    */
+  @Nullable
   @Schema(title = "定位")
   @Column(name = CENTER)
-  @Nullable
   @Convert(converter = PointModelConverter.class)
   private PointModel center;
 }

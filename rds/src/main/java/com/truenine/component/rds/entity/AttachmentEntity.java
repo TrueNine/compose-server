@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -50,7 +49,13 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "URL")
   @ManyToOne
-  @JoinColumn(insertable = false, updatable = false, name = ATTACHMENT_LOCATION_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
+  @JoinColumn(
+    name = ATTACHMENT_LOCATION_ID,
+    referencedColumnName = ID,
+    foreignKey = @ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
   @NotFound(action = IGNORE)
   private AttachmentLocationEntity location;
 

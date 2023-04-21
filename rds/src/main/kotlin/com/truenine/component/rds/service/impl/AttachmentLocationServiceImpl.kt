@@ -10,5 +10,9 @@ import org.springframework.stereotype.Service
 class AttachmentLocationServiceImpl(
   private val alRepo: AttachmentLocationRepository
 ) : BaseServiceImpl<AttachmentLocationEntity>(alRepo), AttachmentLocationService {
-  override fun findByBaseUrl(baseUrl: String): AttachmentLocationEntity? = alRepo.findByBaseUrl(baseUrl)
+  override fun findByBaseUrl(baseUrl: String): AttachmentLocationEntity? =
+    alRepo.findByBaseUrl(
+      baseUrl
+        .replace("http://", "")
+        .replace("https://", ""))
 }

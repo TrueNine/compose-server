@@ -31,6 +31,11 @@ public interface Headers {
    */
   String X_RE_FLUSH_TOKEN = "X-ReFlush";
 
+  /**
+   * 微信 open id 授权 自定义id
+   */
+  String X_WECHAT_AUTHORIZATION_ID = "X-Wechat-Authorization-Id";
+
   String CONTENT_LENGTH = "Content-Length";
   String CONTENT_TYPE = "Content-Type";
   String CONTENT_DISPOSITION = "Content-Disposition";

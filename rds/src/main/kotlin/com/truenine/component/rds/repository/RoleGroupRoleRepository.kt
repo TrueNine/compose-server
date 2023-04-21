@@ -1,7 +1,7 @@
 package com.truenine.component.rds.repository
 
 import com.truenine.component.rds.base.BaseRepository
-import com.truenine.component.rds.entity.RoleGroupRoleEntity
+import com.truenine.component.rds.entity.relationship.RoleGroupRoleEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
