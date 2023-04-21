@@ -12,12 +12,14 @@ import java.time.LocalDateTime
 interface UserRepository : BaseRepository<UserEntity> {
   fun findByAccount(account: String): UserEntity?
 
-  @Query("""
+  @Query(
+    """
     select u.id
     from UserEntity u
     where u.account = :account
-  """)
-  fun findIdByAccount(account: String):Long
+  """
+  )
+  fun findIdByAccount(account: String): Long
 
   @Query(
     """
@@ -29,6 +31,33 @@ interface UserRepository : BaseRepository<UserEntity> {
   fun findPwdEncByAccount(account: String): String?
 
   fun findAllByNickName(nickName: String): List<UserEntity>
+
+  @Query(
+    """
+    select r.name
+    from UserEntity u
+    left join UserRoleGroupEntity urg on urg.userId = u.id
+    left join RoleGroupEntity rg on rg.id = urg.roleGroupId
+    left join RoleGroupRoleEntity rgr on rgr.roleGroupId = rg.id
+    left join RoleEntity r on r.id = rgr.roleId
+    where u.account = :account
+  """
+  )
+  fun findAllRoleNameByAccount(account: String): Set<String>
+
+  @Query(
+    """
+    select p.name
+    from UserEntity u
+    left join UserRoleGroupEntity urg on urg.userId = u.id
+    left join RoleGroupEntity rg on rg.id = urg.roleGroupId
+    left join RoleGroupRoleEntity rgr on rgr.roleGroupId = rg.id
+    left join RoleEntity r on r.id = rgr.roleId
+    left join RolePermissionsEntity rp on rp.roleId = r.id
+    left join PermissionsEntity p on p.id = rp.permissionsId
+    where u.account = :account
+  """)
+  fun findAllPermissionsNameByAccount(account: String): Set<String>
 
   fun existsAllByAccount(account: String): Boolean
 

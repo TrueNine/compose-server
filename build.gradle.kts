@@ -142,11 +142,11 @@ subprojects {
   }
 
   dependencies {
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
       exclude("org.apache.logging.log4j")
       exclude("org.springframework.boot","spring-boot-starter-logging")
       exclude("org.springframework.boot","spring-boot")
-      exclude("org.springframework.boot","spring-boot-autoconfigure")
     }
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")

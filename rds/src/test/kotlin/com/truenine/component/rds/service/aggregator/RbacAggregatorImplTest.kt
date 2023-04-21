@@ -385,4 +385,20 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     val all = aggregator.findAllSecurityNameByAccount(user.account)
     assertTrue { all.isNotEmpty() }
   }
+
+  @Test
+  fun testFindAllRoleNameByUserAccount() {
+    val user = namePre()
+    val acl = aggregator.findAllRoleNameByUserAccount(user.account)
+    assertTrue("查询不到权限 $acl") { acl.isNotEmpty() }
+    assertTrue("权限数值不对 $acl") { acl.size == 1 }
+  }
+
+  @Test
+  fun testFindAllPermissionsNameByUserAccount() {
+    val user = namePre()
+    val acl = aggregator.findAllPermissionsNameByUserAccount(user.account)
+    assertTrue("查询不到权限 $acl") { acl.isNotEmpty() }
+    assertTrue("权限数值不对 $acl") { acl.size == 1 }
+  }
 }

@@ -25,6 +25,13 @@ class RbacAggregatorImpl(
   private val rg: RoleGroupRepository
 ) : RbacAggregator {
 
+  override fun findAllRoleNameByUserAccount(account: String): Set<String> =
+    userRepository.findAllRoleNameByAccount(account)
+
+  override fun findAllPermissionsNameByUserAccount(account: String): Set<String> =
+    userRepository.findAllPermissionsNameByAccount(account)
+
+
   override fun findAllSecurityNameByUserId(userId: Long): Set<String> {
     // FIXME 待优化
     // 查询所有用户组的角色组id

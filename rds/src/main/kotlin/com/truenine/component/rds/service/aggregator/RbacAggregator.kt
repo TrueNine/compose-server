@@ -9,6 +9,9 @@ import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity
  * # 角色权限管理器
  */
 interface RbacAggregator {
+  fun findAllRoleNameByUserAccount(account: String): Set<String>
+  fun findAllPermissionsNameByUserAccount(account: String): Set<String>
+
   /**
    * # 查询所有的权限角色
    * 根据 **spring security** 的标准
