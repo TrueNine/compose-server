@@ -8,7 +8,9 @@ import java.util.function.Supplier;
  *
  * @author TrueNine
  * @since 2023-02-20
+ * @deprecated 不需要
  */
+@Deprecated
 public class RuntimeExceptionThrow {
 
 

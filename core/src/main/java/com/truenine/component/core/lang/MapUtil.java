@@ -10,6 +10,7 @@ import java.util.Map;
  * @author TrueNine
  * @since 2022-11-15
  */
+@Deprecated
 public class MapUtil {
 
   public static <K, V> void batchKeyAppendChain(Map<K, List<V>> map,

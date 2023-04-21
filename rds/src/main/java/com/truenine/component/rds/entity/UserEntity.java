@@ -6,6 +6,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -134,8 +135,10 @@ public class UserEntity extends BaseEntity implements Serializable {
   @Schema(title = "是否被 ban")
   private Boolean band;
 
+  @SneakyThrows
   @Transient
   public void setBand(Boolean band) {
+    throw new IllegalAccessException("属性为不可调用");
   }
 
   /**

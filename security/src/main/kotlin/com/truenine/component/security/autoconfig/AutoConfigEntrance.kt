@@ -1,6 +1,6 @@
 package com.truenine.component.security.autoconfig
 
-import com.truenine.component.core.properties.JwtProperties
+import com.truenine.component.security.properties.JwtProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Import
 

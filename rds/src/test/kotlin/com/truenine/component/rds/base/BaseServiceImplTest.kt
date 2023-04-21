@@ -1,7 +1,7 @@
 package com.truenine.component.rds.base
 
 import com.truenine.component.core.id.Snowflake
-import com.truenine.component.core.lang.LogKt
+import com.truenine.component.core.lang.slf4j
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.DbTestBaseServiceEntity
 import com.truenine.component.rds.service.BaseServiceTester
@@ -16,7 +16,7 @@ import kotlin.test.*
 @SpringBootTest(classes = [RdsEntrance::class])
 class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
-  private val log = LogKt.getLog(this::class)
+  private val log = slf4j(this::class)
 
   @Autowired
   private lateinit var service: BaseServiceTester
@@ -97,7 +97,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindLdfById() {
     val a = service.save(getEntity())!!
-    val ab = service.findLdfById(a.id)!!
+    val ab = service.findLdfById(a.id)
     assertFalse { ab }
   }
 

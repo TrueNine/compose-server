@@ -8,7 +8,9 @@ import java.nio.charset.StandardCharsets;
  *
  * @author TrueNine
  * @since 2022-10-28
+ * @deprecated 有更好地替代方案
  */
+@Deprecated
 public class SimpleUtf8Base64 implements Base64Helper {
   Charset utf8 = StandardCharsets.UTF_8;
 

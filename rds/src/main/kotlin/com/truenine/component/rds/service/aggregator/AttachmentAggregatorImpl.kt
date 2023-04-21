@@ -34,7 +34,7 @@ class AttachmentAggregatorImpl(
     // 构建一个新附件对象保存并返回
     val att = AttachmentEntity().apply {
       saveName = saveFile.saveName
-      metaName = if (hasText(file.originalFilename)) file.originalFilename else file.name
+      metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
       size = file.size
       mimeType = file.contentType ?: MediaTypes.BINARY.media()
       attachmentLocationId = location.id!!

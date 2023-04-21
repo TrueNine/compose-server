@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -73,7 +72,7 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
   private Boolean rn;
 
   @Transient
-  public void serRn(Boolean storageRnType) {
+  public void setRn(Boolean storageRnType) {
     this.type = storageRnType ? "R" : "N";
   }
 

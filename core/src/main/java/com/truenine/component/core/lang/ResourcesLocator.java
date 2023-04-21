@@ -20,6 +20,7 @@ import java.util.jar.JarFile;
  * @author TrueNine
  * @since 2022-10-29
  */
+@Deprecated
 public class ResourcesLocator {
   private static final String JAR_PROTOCOL = "jar";
   private static final String FILE_PROTOCOL = "file";

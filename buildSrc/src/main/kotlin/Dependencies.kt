@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.29-SNAPSHOT-T"
+  const val version = "0.4.30-SNAPSHOT-T"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1"
 }
@@ -100,6 +100,9 @@ object V {
     // 微信支付 sdk
     // https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
     const val wechatpayJava = "0.2.7"
+
+    // https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java
+    const val huaweiObsJava = "3.22.12"
   }
 
   object Util {
@@ -160,8 +163,11 @@ object V {
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     const val springdocOpenapiUi = "1.7.0"
 
+    // https://doc.xiaominfo.com/
     // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
+    // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter
     const val knife4j = "3.0.3"
+    const val knife4jJakarta = "4.1.0"
 
     // auth0 JWT
     // https://mvnrepository.com/artifact/com.auth0/java-jwt

@@ -1,6 +1,6 @@
 package com.truenine.component.rds.base
 
-import com.truenine.component.core.lang.LogKt
+import com.truenine.component.core.lang.slf4j
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.DbTestTreeEntity
 import com.truenine.component.rds.repository.DbTestTreeRepository
@@ -16,7 +16,7 @@ import kotlin.test.assertTrue
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class TreeRepositoryTest : AbstractTestNGSpringContextTests() {
-  private val log = LogKt.getLog(this::class)
+  private val log = slf4j(this::class)
 
   @Autowired
   lateinit var treeRepo: DbTestTreeRepository

@@ -8,7 +8,9 @@ import java.util.Base64;
  *
  * @author TrueNine
  * @since 2023-02-20
+ * @deprecated 有更好地替代方案
  */
+@Deprecated
 public interface Base64Helper {
   Base64.Encoder JAVA_INTERNAL_ENCODER = Base64.getEncoder();
   Base64.Decoder JAVA_INTERNAL_DECODER = Base64.getDecoder();

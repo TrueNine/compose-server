@@ -11,30 +11,30 @@ import javax.annotation.Nullable;
  * @author TrueNine
  * @since 2022-10-28
  */
-public class Headers {
-  public static final String SERVER = "Server";
-  public static final String ACCEPT = "Accept";
-  public static final String ACCEPT_ENCODING = "Accept-Encoding";
-  public static final String ACCEPT_LANGUAGE = "Accept-Language";
-  public static final String COOKIE = "Cookie";
-  public static final String HOST = "Host";
-  public static final String REFERER = "Referer";
-  public static final String USER_AGENT = "User-Agent";
+public interface Headers {
+  String SERVER = "Server";
+  String ACCEPT = "Accept";
+  String ACCEPT_ENCODING = "Accept-Encoding";
+  String ACCEPT_LANGUAGE = "Accept-Language";
+  String COOKIE = "Cookie";
+  String HOST = "Host";
+  String REFERER = "Referer";
+  String USER_AGENT = "User-Agent";
   /**
    * 设备 id
    */
-  public static final String X_DEVICE_ID = "X-Device-Id";
-  public static final String AUTHORIZATION = "Authorization";
+  String X_DEVICE_ID = "X-Device-Id";
+  String AUTHORIZATION = "Authorization";
 
   /**
    * 自定义刷新头
    */
-  public static final String X_RE_FLUSH_TOKEN = "X-ReFlush";
+  String X_RE_FLUSH_TOKEN = "X-ReFlush";
 
-  public static final String CONTENT_LENGTH = "Content-Length";
-  public static final String CONTENT_TYPE = "Content-Type";
-  public static final String CONTENT_DISPOSITION = "Content-Disposition";
-  public static final String KEEP_ALIVE = "Keep-Alive";
+  String CONTENT_LENGTH = "Content-Length";
+  String CONTENT_TYPE = "Content-Type";
+  String CONTENT_DISPOSITION = "Content-Disposition";
+  String KEEP_ALIVE = "Keep-Alive";
 
   /**
    * 设置 Content-Disposition 的下载名称
@@ -45,7 +45,7 @@ public class Headers {
    * @param fileName 文件名
    * @return attachment; filename="fileName"
    */
-  public static String downloadDisposition(String fileName) {
+  static String downloadDisposition(String fileName) {
     return "attachment; filename=\"" + fileName + "\"";
   }
 
@@ -55,7 +55,7 @@ public class Headers {
    * @param request 请求 id
    * @return 设备 id
    */
-  public static @Nullable String getDeviceId(final HttpServletRequest request) {
+  static @Nullable String getDeviceId(final HttpServletRequest request) {
     var deviceId = request.getHeader(X_DEVICE_ID);
     return Str.hasText(deviceId) ? deviceId : request.getHeader(USER_AGENT);
   }

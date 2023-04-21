@@ -53,6 +53,7 @@ public class RoleGroupEntity extends BaseEntity implements Serializable {
   @Column(name = DOC)
   private String doc;
 
+
   /**
    * 角色
    */

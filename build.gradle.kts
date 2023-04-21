@@ -148,7 +148,9 @@ subprojects {
     api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
     api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
 
-    compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap")
+    compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
+      exclude("org.apache.logging.log4j")
+    }
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
       exclude("org.junit.jupiter", "junit-jupiter")

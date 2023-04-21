@@ -16,7 +16,7 @@ class AttachmentLocationServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindByBaseUrl() {
     service.save(AttachmentLocationEntity().apply {
-      rn(true)
+      rn = true
       name = "测试API"
       baseUrl = "https://www.baidu.com/"
     })
