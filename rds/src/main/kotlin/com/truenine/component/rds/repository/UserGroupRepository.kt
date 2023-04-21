@@ -18,5 +18,14 @@ interface UserGroupRepository : BaseRepository<UserGroupEntity> {
   )
   fun findAllByUserId(userId: Long): MutableList<UserGroupEntity>
 
+  @Query("""
+    from UserGroupEntity ug
+    left join UserGroupUserEntity ugu on ug.id = ugu.userGroupId
+    left join UserEntity u on u.id = ugu.userId
+    where u.account = :account
+  """)
+  fun findAllByUserAccount(account:String):MutableList<UserGroupEntity>
+
+
   fun existsByIdAndUserId(id: Long, userId: Long): Boolean
 }

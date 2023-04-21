@@ -11,7 +11,7 @@ class AttachmentLocationServiceImpl(
   private val alRepo: AttachmentLocationRepository
 ) : BaseServiceImpl<AttachmentLocationEntity>(alRepo), AttachmentLocationService {
   override fun findByBaseUrl(baseUrl: String): AttachmentLocationEntity? =
-    alRepo.findByBaseUrl(
+    alRepo.findByBaseUrlContaining(
       baseUrl
         .replace("http://", "")
         .replace("https://", ""))

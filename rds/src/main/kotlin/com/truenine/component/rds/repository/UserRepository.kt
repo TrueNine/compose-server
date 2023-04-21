@@ -12,6 +12,13 @@ import java.time.LocalDateTime
 interface UserRepository : BaseRepository<UserEntity> {
   fun findByAccount(account: String): UserEntity?
 
+  @Query("""
+    select u.id
+    from UserEntity u
+    where u.account = :account
+  """)
+  fun findIdByAccount(account: String):Long
+
   @Query(
     """
     select pwdEnc

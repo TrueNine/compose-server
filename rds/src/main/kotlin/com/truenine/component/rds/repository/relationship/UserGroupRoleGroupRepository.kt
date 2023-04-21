@@ -1,4 +1,4 @@
-package com.truenine.component.rds.repository
+package com.truenine.component.rds.repository.relationship
 
 import com.truenine.component.rds.base.BaseRepository
 import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity

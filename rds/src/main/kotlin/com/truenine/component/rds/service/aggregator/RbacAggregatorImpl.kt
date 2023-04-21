@@ -4,20 +4,54 @@ import com.truenine.component.rds.entity.relationship.RoleGroupRoleEntity
 import com.truenine.component.rds.entity.relationship.RolePermissionsEntity
 import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity
 import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity
-import com.truenine.component.rds.repository.RoleGroupRoleRepository
-import com.truenine.component.rds.repository.RolePermissionsRepository
-import com.truenine.component.rds.repository.UserGroupRoleGroupRepository
-import com.truenine.component.rds.repository.UserRoleGroupRepository
+import com.truenine.component.rds.repository.RoleGroupRepository
+import com.truenine.component.rds.repository.UserGroupRepository
+import com.truenine.component.rds.repository.UserRepository
+import com.truenine.component.rds.repository.relationship.RoleGroupRoleRepository
+import com.truenine.component.rds.repository.relationship.RolePermissionsRepository
+import com.truenine.component.rds.repository.relationship.UserGroupRoleGroupRepository
+import com.truenine.component.rds.repository.relationship.UserRoleGroupRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RbacAggregatorImpl(
   private val urg: UserRoleGroupRepository,
+  private val ug: UserGroupRepository,
+  private val userRepository: UserRepository,
   private val ugrg: UserGroupRoleGroupRepository,
   private val rgr: RoleGroupRoleRepository,
-  private val rp: RolePermissionsRepository
+  private val rp: RolePermissionsRepository,
+  private val rg: RoleGroupRepository
 ) : RbacAggregator {
+
+  override fun findAllSecurityNameByUserId(userId: Long): Set<String> {
+    // FIXME 待优化
+    // 查询所有用户组的角色组id
+    val leaderUserUserGroupRoleGroupIds = ug.findAllByUserId(userId).map { it.roleGroups }.flatten().map { it.id }
+    val userGroupRoleGroupIds = ug.findAllByUserId(userId).map { it.roleGroups }.flatten().map { it.id }
+    // 查询所有用户的角色组id
+    val userRoleGroupIds = urg.findAllRoleGroupIdByUserId(userId)
+
+    // 将之解包
+    val allNames = with(
+      leaderUserUserGroupRoleGroupIds
+        + userGroupRoleGroupIds
+        + userRoleGroupIds
+    ) {
+      val roleGroups = rg.findAllById(this)
+      val roleNames = roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
+      val permissionNames = roleGroups.map { it.roles }
+        .flatten().map { it.permissions }
+        .flatten().map { it.name }
+      roleNames + permissionNames
+    }
+    return allNames.toSet()
+  }
+
+  override fun findAllSecurityNameByAccount(account: String): Set<String> =
+    findAllSecurityNameByUserId(userRepository.findIdByAccount(account))
+
   override fun saveRoleGroupToUser(roleGroupId: Long, userId: Long): UserRoleGroupEntity? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)
       ?: urg.save(UserRoleGroupEntity().apply {

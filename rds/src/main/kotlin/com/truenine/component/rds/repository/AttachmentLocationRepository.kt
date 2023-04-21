@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface AttachmentLocationRepository : BaseRepository<AttachmentLocationEntity> {
-  fun findByBaseUrl(baseUrl: String): AttachmentLocationEntity?
+  fun findByBaseUrlContaining(baseUrl: String): AttachmentLocationEntity?
   fun findByBaseUrlStartingWith(baseUrl: String): AttachmentLocationEntity?
 }

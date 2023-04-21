@@ -1,4 +1,4 @@
-package com.truenine.component.rds.repository
+package com.truenine.component.rds.repository.relationship
 
 import com.truenine.component.rds.base.BaseRepository
 import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity
@@ -11,6 +11,7 @@ interface UserRoleGroupRepository : BaseRepository<UserRoleGroupEntity> {
   fun findAllByUserId(userId: Long): List<UserRoleGroupEntity>
   @Query("select ur.roleGroupId from UserRoleGroupEntity ur")
   fun findAllRoleGroupIdByUserId(userID: Long): Set<Long>
+
   fun existsByUserIdAndRoleGroupId(userId: Long, roleId: Long): Boolean
   fun deleteAllByRoleGroupIdAndUserId(roleGroupId: Long, userId: Long)
 

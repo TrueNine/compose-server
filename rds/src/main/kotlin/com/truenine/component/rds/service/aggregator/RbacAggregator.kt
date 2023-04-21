@@ -6,9 +6,20 @@ import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity
 import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity
 
 /**
- * 角色权限管理器
+ * # 角色权限管理器
  */
 interface RbacAggregator {
+  /**
+   * # 查询所有的权限角色
+   * 根据 **spring security** 的标准
+   * 1. 查询所有管理的用户组
+   * 2. 查询所有所处的用户组
+   * 3. 查询本身挂载的角色组
+   * @return [Set]<[String]> spring security 规范的字符串
+   */
+  fun findAllSecurityNameByUserId(userId: Long): Set<String>
+
+  fun findAllSecurityNameByAccount(account: String): Set<String>
 
   fun saveRoleGroupToUser(roleGroupId: Long, userId: Long): UserRoleGroupEntity?
   fun saveAllRoleGroupToUser(roleGroupIds: List<Long>, userId: Long): List<UserRoleGroupEntity>

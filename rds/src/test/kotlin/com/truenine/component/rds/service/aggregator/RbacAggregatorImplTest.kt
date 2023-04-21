@@ -330,4 +330,59 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
       }
     }
   }
+
+  fun namePre(): UserEntity {
+    val user = userService.save(getUser())!!
+    val leaderUserGroup = ugService.save(UserGroupEntity().apply { name = "柱";userId = user.id })!!
+    val subUserGroup = ugService.save(getUserGroup())!!
+    ugService.saveUserToUserGroup(user.id, subUserGroup.id)
+
+    // 权限
+    val userRoleGroups = rgService.saveAll(getRoleGroups())
+    val ugRoleGroups = rgService.saveAll(getRoleGroups())
+    val aRole = roleService.save(getRole())!!
+    val bRole = roleService.save(getRole())!!
+    val aPer = permissionsService.save(getPermissions())!!
+    val bPer = permissionsService.save(getPermissions())!!
+
+    // 链接
+    val ar = aggregator.savePermissionsToRole(aPer.id, aRole.id)!!
+    val br = aggregator.savePermissionsToRole(bPer.id, bRole.id)!!
+
+    // 分别挂载
+    userRoleGroups.map { it.id }.let {
+      it.forEach { rid ->
+        aggregator.saveRoleToRoleGroup(aRole.id, rid)
+      }
+      aggregator.saveAllRoleGroupToUser(it, user.id)
+    }
+    ugRoleGroups.map { it.id }.let {
+      it.forEach { rid ->
+        aggregator.saveRoleToRoleGroup(bRole.id, rid)
+      }
+      aggregator.saveAllRoleGroupToUserGroup(it, subUserGroup.id)
+    }
+
+    // 校验挂载是否通过
+    val newUser = userService.findById(user.id)!!
+    val newUserGroup = ugService.findById(subUserGroup.id)!!
+    assertTrue { newUser.roleGroups.containsAll(userRoleGroups) }
+    assertTrue { newUserGroup.roleGroups.containsAll(ugRoleGroups) }
+    return user
+  }
+
+  @Test
+  fun testFindAllSecurityNameByUserId() {
+    val user = namePre()
+    // 查询用户
+    val all = aggregator.findAllSecurityNameByUserId(user.id)
+    assertTrue { all.isNotEmpty() }
+  }
+
+  @Test
+  fun testFindAllSecurityNameByAccount() {
+    val user = namePre()
+    val all = aggregator.findAllSecurityNameByAccount(user.account)
+    assertTrue { all.isNotEmpty() }
+  }
 }
