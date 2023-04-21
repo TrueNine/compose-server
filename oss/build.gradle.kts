@@ -12,6 +12,10 @@ dependencies {
   implementation(project(":core"))
   implementation("org.springframework.boot:spring-boot-starter-web")
 }
+configurations.all {
+  exclude("org.apache.logging.log4j","log4j-core")
+  exclude("org.apache.logging.log4j","log4j-api")
+}
 
 tasks.withType<Test> {
   useTestNG {

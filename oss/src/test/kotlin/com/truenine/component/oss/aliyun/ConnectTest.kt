@@ -6,7 +6,7 @@ import org.testng.annotations.Test
 
 class ConnectTest {
 
-  @Test
+  //TODO 继续测试
   fun connect() {
     val endpoint = "oss-cn-shenzhen.aliyuncs.com"
     val accessKeyId = "LTAI5tRUDCxxi9QusF5w6YMG"

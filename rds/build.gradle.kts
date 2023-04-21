@@ -1,17 +1,17 @@
 project.version = V.Component.rds
 
 dependencies {
-  api("jakarta.validation:jakarta.validation-api")
-  api("org.springframework.boot:spring-boot-starter-validation")
   api("org.springframework.boot:spring-boot-starter-data-jpa")
-  testApi("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
+  implementation("jakarta.validation:jakarta.validation-api")
+  implementation("org.springframework:spring-web")
   implementation("cn.hutool:hutool-core:${V.Util.huTool}")
   implementation(project(":core"))
   implementation(project(":data-common:data-common-data-extract"))
-  testImplementation(project(":depend:depend-flyway"))
 
+  testImplementation("org.springframework.boot:spring-boot-starter-validation")
+  testImplementation(project(":depend:depend-flyway"))
+  testImplementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
   testImplementation("org.hsqldb:hsqldb:${V.Driver.hsqldb}")
-  testImplementation("com.h2database:h2:${V.Driver.h2}")
 }
 
 tasks.withType<Test> {

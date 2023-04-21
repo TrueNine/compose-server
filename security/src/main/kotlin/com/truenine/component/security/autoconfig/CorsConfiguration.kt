@@ -1,4 +1,4 @@
-package com.truenine.component.core.autoconfig
+package com.truenine.component.security.autoconfig
 
 import com.truenine.component.core.http.Methods
 import com.truenine.component.core.lang.LogKt

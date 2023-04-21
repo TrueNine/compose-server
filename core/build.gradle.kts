@@ -1,3 +1,5 @@
+import V.Plugin.spring
+
 project.version = V.Component.core
 
 dependencies {
@@ -9,12 +11,16 @@ dependencies {
   api("io.swagger.core.v3:swagger-annotations-jakarta:${V.StandardEdition.swaggerAnnotationJakarta}")
   api("org.slf4j:slf4j-api")
   api("jakarta.validation:jakarta.validation-api")
-  api("org.springframework:spring-webmvc")
-  implementation("com.google.code.gson:gson:${V.Util.gson}")
   implementation("org.springframework.boot:spring-boot-starter-json")
   implementation("org.springframework.security:spring-security-crypto")
   implementation("org.bouncycastle:bcprov-jdk15to18:${V.Security.bcprovJdk15to18}")
   implementation("org.springframework:spring-webmvc")
+  // kotlin
+  api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${V.Lang.kotlin}")
+  api("org.jetbrains.kotlin:kotlin-reflect:${V.Lang.kotlin}")
+  api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${V.Lang.kotlinxCoroutine}")
+  api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
+  api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
 }
 
 tasks.withType<Test> {

@@ -78,6 +78,13 @@ class SecurityPolicyBean {
     }
 
     httpSecurity
+      .formLogin()
+      .also {
+        it.and().authorizeHttpRequests()
+          .requestMatchers("/doc.html**")
+          .authenticated()
+      }
+      .and()
       // 关闭 csrf
       .csrf().disable()
       // 关闭 session

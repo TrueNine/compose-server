@@ -122,7 +122,7 @@ subprojects {
   publishing {
     repositories {
       maven(
-        if (version.toString().endsWith("SNAPSHOT")) snapshot else release
+        if (version.toString().uppercase().contains("SNAPSHOT")) snapshot else release
       ) {
         credentials {
           this.username = yunXiaoUsername
@@ -142,29 +142,22 @@ subprojects {
   }
 
   dependencies {
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${V.Lang.kotlin}")
-    api("org.jetbrains.kotlin:kotlin-reflect:${V.Lang.kotlin}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${V.Lang.kotlinxCoroutine}")
-    api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
-    api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
-
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
       exclude("org.apache.logging.log4j")
     }
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-      exclude("org.junit.jupiter", "junit-jupiter")
-    }
-
-    testApi("io.projectreactor:reactor-test")
-    testApi("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
-    testApi("org.testng:testng:${V.Test.testNG}")
-    testApi("io.mockk:mockk:${V.Test.mockk}")
-
     compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
     annotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
     testAnnotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
     testCompileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+      exclude("org.junit.jupiter", "junit-jupiter")
+    }
+    testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
+    testImplementation("org.testng:testng:${V.Test.testNG}")
+    testImplementation("io.mockk:mockk:${V.Test.mockk}")
   }
 
   dependencyManagement {

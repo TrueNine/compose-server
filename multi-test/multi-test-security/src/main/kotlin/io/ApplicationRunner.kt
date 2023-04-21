@@ -1,11 +1,11 @@
-package com.truenine.component.security
+package io
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class SecurityEntrance
+class ApplicationRunner
 
 fun main(args: Array<String>) {
-  runApplication<SecurityEntrance>(*args)
+  runApplication<ApplicationRunner>(*args)
 }
