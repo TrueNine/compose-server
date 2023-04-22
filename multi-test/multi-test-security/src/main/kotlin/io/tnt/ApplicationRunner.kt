@@ -1,4 +1,4 @@
-package io
+package io.tnt
 
 import com.truenine.component.security.annotations.EnableJwtIssuer
 import com.truenine.component.security.annotations.EnableRestSecurity

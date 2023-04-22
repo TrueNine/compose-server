@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://116.205.171.51:3306/center
+    username: root
+    password: "#Pengjigong1997"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+logging:
+  level:
+    root: info
+    bug: trace
+  group:
+    bug:
+      - com.truenine.component
+      - io.tnt

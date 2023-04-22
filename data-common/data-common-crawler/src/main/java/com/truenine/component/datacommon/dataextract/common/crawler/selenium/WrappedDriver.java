@@ -39,7 +39,6 @@ import java.util.function.Supplier;
  */
 @Slf4j
 public class WrappedDriver {
-  private static final Base64Helper BASE64HELPER = Base64Helper.defaultHelper();
   private static final By ROOT_BODY_BY = By.xpath("//body[1]");
   private final By ROOT_HTML_BY = By.xpath("//html[1]");
   private final RemoteWebDriver driver;
@@ -210,7 +209,7 @@ public class WrappedDriver {
       Map.of("fromSurface", true)
     ).get("data");
     resetWindowSize();
-    return BASE64HELPER.decodeToByte(base64Screenshot);
+    return Base64Helper.decodeToByte(base64Screenshot);
   }
 
   @BetaTest

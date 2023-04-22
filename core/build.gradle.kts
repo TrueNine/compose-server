@@ -1,5 +1,3 @@
-import V.Plugin.spring
-
 project.version = V.Component.core
 
 dependencies {
@@ -21,6 +19,13 @@ dependencies {
   api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${V.Lang.kotlinxCoroutine}")
   api("io.projectreactor.kotlin:reactor-kotlin-extensions:${V.Lang.reactorKotlinExtension}")
   api("org.jetbrains:annotations:${V.Lang.jetbrainsAnnotations}")
+
+  // TODO 日志
+  implementation("org.springframework.boot:spring-boot-starter-logging")
+
+  // hutool
+  implementation("cn.hutool:hutool-core:${V.Util.huTool}")
+  implementation("cn.hutool:hutool-crypto:${V.Util.huTool}")
 }
 
 tasks.withType<Test> {

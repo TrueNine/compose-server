@@ -19,7 +19,7 @@ class FileKeysRepositoryAutoConfiguration(
     val fp = FileKeysRepository(
       keyDest = kp.dir,
       eccKeyPairPaths = kp.eccPublicKeyPath to kp.eccPrivateKeyPath,
-      rsaKeyPairPaths = kp.rsaPublicKeyPath to kp.eccPrivateKeyPath,
+      rsaKeyPairPaths = kp.rsaPublicKeyPath to kp.rsaPrivateKeyPath,
       aesPaths = kp.aesKeyPath
     )
     log.trace("已注册成功 = {}", kp)

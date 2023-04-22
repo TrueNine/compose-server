@@ -1,8 +1,10 @@
 package com.truenine.component.core.encrypt
 
+import io.mockk.InternalPlatformDsl.toStr
 import org.testng.annotations.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class EncryptAndDecryptTest {
   @Test
@@ -58,5 +60,29 @@ class EncryptAndDecryptTest {
     println(dec)
     assertNotEquals(data, enc)
     assertEquals(data, dec)
+  }
+
+  @Test(suiteName = "测试base64加密后的key还原")
+  fun testGenerateKeyBase64() {
+    val ab = Keys.generateRsaKeyPair()!!
+    val metaCode = ab.rsaPublicKey.encoded
+    val base64Byte = Base64Helper.decodeToByte(String(ab.rsaPublicKeyBase64Byte))
+    val strBase64 = Base64Helper.decodeToByte(ab.rsaPublicKeyBase64)
+    assertTrue(
+      """
+      metaCode = ${metaCode.toStr()}
+      base64de = ${base64Byte.toStr()}
+      strBas64 = ${strBase64.toStr()}
+    """.trimIndent()
+    ) {
+      metaCode.contentEquals(base64Byte)
+      base64Byte.contentEquals(strBase64)
+    }
+
+    val cd = Keys.readRsaKeyPair(
+      ab.rsaPublicKeyBase64,
+      ab.rsaPrivateKeyBase64
+    )
+    assertEquals(ab, cd)
   }
 }

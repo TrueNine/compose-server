@@ -1,6 +1,6 @@
 package com.truenine.component.core.encrypt
 
-import com.truenine.component.core.lang.LogKt
+import com.truenine.component.core.lang.slf4j
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.slf4j.Logger
@@ -26,13 +26,10 @@ object Keys {
   @JvmStatic
   private val rsaAlg = EncryptAlgorithm.RSA.str()
 
-  @JvmStatic
-  private val h: Base64Helper =
-    SimpleUtf8Base64()
   private const val DEFAULT_SEED = "T-DECRYPT-AND-ENCRYPT"
 
   @JvmStatic
-  private val log: Logger = LogKt.getLog(Keys::class)
+  private val log: Logger = slf4j(Keys::class)
 
   /**
    * @param base64 rsa 公钥 base64 字符串
@@ -49,7 +46,7 @@ object Keys {
    */
   @JvmStatic
   fun readAesKeyByBase64(base64: String): SecretKeySpec? = runCatching {
-    SecretKeySpec(h.decodeToByte(base64), "AES")
+    SecretKeySpec(Base64Helper.decodeToByte(base64), "AES")
   }.onFailure { log.error(::readAesKeyByBase64.name, it) }.getOrNull()
 
   /**
@@ -58,7 +55,7 @@ object Keys {
    */
   @JvmStatic
   fun writeKeyToBase64(key: Key): String? = runCatching {
-    h.encode(key.encoded)
+    Base64Helper.encode(key.encoded)
   }.onFailure { log.error(::writeKeyToBase64.name, it) }.getOrNull()
 
   /**
@@ -111,7 +108,7 @@ object Keys {
     alg: EncryptAlgorithm
   ): PublicKey? = runCatching {
     X509EncodedKeySpec(
-      h.decodeToByte(base64)
+      Base64Helper.decodeToByte(base64)
     ).run {
       KeyFactory.getInstance(alg.str()).generatePublic(this)
     }
@@ -128,7 +125,7 @@ object Keys {
     base64: String,
     alg: EncryptAlgorithm
   ): PrivateKey? = runCatching {
-    PKCS8EncodedKeySpec(h.decodeToByte(base64)).run {
+    PKCS8EncodedKeySpec(Base64Helper.decodeToByte(base64)).run {
       KeyFactory.getInstance(alg.str()).generatePrivate(this)
     }
   }.onFailure {
@@ -225,7 +222,7 @@ object Keys {
     seed: String = DEFAULT_SEED,
     keySize: Int = AES_KEY_SIZE
   ) = generateAesKey(seed, keySize)?.let {
-    h.encode(it.encoded)
+    Base64Helper.encode(it.encoded)
   }
 
   /**

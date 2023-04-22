@@ -1,5 +1,6 @@
 package com.truenine.component.core.lang
 
+import com.truenine.component.core.encrypt.Base64Helper
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
@@ -57,11 +58,11 @@ fun String?.urlEncoded(charset: Charset = StandardCharsets.UTF_8): String = java
  *
  * @return 加密后的 base64
  */
-fun String.base64(charset: Charset = StandardCharsets.UTF_8): String = java.util.Base64.getEncoder().encode(this.toByteArray(charset)).toString(charset)
+fun String.base64(charset: Charset = StandardCharsets.UTF_8): String = Base64Helper.encode(this.toByteArray(charset))
 
 /**
  * ## 对 base64 字符串进行解密
  * @return [String]
  */
-fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = java.util.Base64.getDecoder().decode(this.toByteArray(charset)).toString(charset)
+fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = Base64Helper.decode(this, charset)
 

@@ -1,5 +1,6 @@
 package com.truenine.component.core.encrypt
 
+import com.truenine.component.core.lang.slf4j
 import javax.crypto.spec.SecretKeySpec
 
 class FileKeysRepository(
@@ -8,6 +9,7 @@ class FileKeysRepository(
   rsaKeyPairPaths: Pair<String, String> = "rsa_public.key" to "rsa_private.key",
   aesPaths: String = "aes.key"
 ) : KeysRepository {
+  private val log = slf4j(this::class)
   private var rsaKeyPair: RsaKeyPair? = null
   private var eccKeyPair: EccKeyPair? = null
   private var aesKey: SecretKeySpec? = null
@@ -30,6 +32,11 @@ class FileKeysRepository(
     return this.aesKey
   }
 
-  private fun read(name: String): String = javaClass.getResource("${this.keyDest}/$name")!!.readText()
+
+  private fun read(name: String): String {
+    val text = javaClass.classLoader.getResource("${this.keyDest}/$name")!!.readText()
+    log.trace("text = {}", text)
+    return text
+  }
 
 }

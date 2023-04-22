@@ -1,7 +1,7 @@
 package com.truenine.component.core.encrypt
 
 import com.google.common.annotations.VisibleForTesting
-import com.truenine.component.core.lang.LogKt
+import com.truenine.component.core.lang.slf4j
 import org.slf4j.Logger
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -20,10 +20,7 @@ import javax.crypto.spec.SecretKeySpec
  */
 object Encryptors {
   @JvmStatic
-  private val h = Base64Helper.defaultHelper()
-
-  @JvmStatic
-  private val log: Logger = LogKt.getLog(Encryptors::class)
+  private val log: Logger = slf4j(Encryptors::class)
 
   /**
    * 分片 base64 分隔符
@@ -70,7 +67,7 @@ object Encryptors {
     Cipher.getInstance(alg.str()).run {
       init(ENC_MODE, publicKey)
       sharding(data.toByteArray(charset), shardingSize)
-        .joinToString(SHARDING_SEP) { h.encode(doFinal(it)) }
+        .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
     }
   }.onFailure { log.error(::basicEncrypt.name, it) }.getOrNull()
 
@@ -86,7 +83,7 @@ object Encryptors {
     Cipher.getInstance(alg.str()).run {
       init(ENC_MODE, privateKey)
       sharding(data.toByteArray(charset), shardingSize)
-        .joinToString(SHARDING_SEP) { h.encode(doFinal(it)) }
+        .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
     }
   }.onFailure { log.error(::basicEncrypt.name, it) }.getOrNull()
 
@@ -107,7 +104,7 @@ object Encryptors {
   ): String? = runCatching {
     Cipher.getInstance(alg.str()).run {
       init(DEC_MODE, privateKey)
-      data.split(SHARDING_SEP).map { h.decodeToByte(it) }
+      data.split(SHARDING_SEP).map { Base64Helper.decodeToByte(it) }
         .map { doFinal(it) }
         .reduce { acc, byt -> acc + byt }
         .let { String(it, charset) }
@@ -194,7 +191,7 @@ object Encryptors {
   ): String? = runCatching {
     Cipher.getInstance("ECIES", "BC").run {
       init(ENC_MODE, eccPublicKey)
-      doFinal(data.toByteArray(charset)).let(h::encode)
+      doFinal(data.toByteArray(charset)).let(Base64Helper::encode)
     }
   }.onFailure { log.error(::encryptByEccPublicKey.name, it) }.getOrNull()
 
@@ -212,7 +209,7 @@ object Encryptors {
   ): String? = runCatching {
     Cipher.getInstance("ECIES", "BC").run {
       init(DEC_MODE, eccPrivateKey)
-      String(doFinal(h.decodeToByte(data)), charset)
+      String(doFinal(Base64Helper.decodeToByte(data)), charset)
     }
   }.onFailure {
     log.error(::decryptByEccPrivateKey.name, it)
@@ -261,7 +258,7 @@ object Encryptors {
     data: String,
     charset: Charset = StandardCharsets.UTF_8
   ): String? = encryptByAesKey(
-    SecretKeySpec(h.decodeToByte(aesKey), "AES"),
+    SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"),
     data,
     charset
   )
@@ -280,7 +277,7 @@ object Encryptors {
   ): String? = runCatching {
     Cipher.getInstance("AES/ECB/PKCS5Padding").run {
       init(ENC_MODE, secret)
-      h.encode(doFinal(data.toByteArray(charset)))
+      Base64Helper.encode(doFinal(data.toByteArray(charset)))
     }
   }.onFailure { log.error(::encryptByAesKey.name, it) }.getOrNull()
 
@@ -296,7 +293,7 @@ object Encryptors {
     data: String,
     charset: Charset = StandardCharsets.UTF_8
   ): String? = decryptByAesKey(
-    SecretKeySpec(h.decodeToByte(aesKey), "AES"),
+    SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"),
     data,
     charset
   )
@@ -315,7 +312,7 @@ object Encryptors {
   ): String? = kotlin.runCatching {
     Cipher.getInstance("AES/ECB/PKCS5Padding").run {
       init(DEC_MODE, secret)
-      String(doFinal(h.decodeToByte(data)), charset)
+      String(doFinal(Base64Helper.decodeToByte(data)), charset)
     }
   }.onFailure { log.error(::decryptByAesKey.name, it) }.getOrNull()
 

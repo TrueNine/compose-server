@@ -14,7 +14,6 @@ import java.security.interfaces.RSAPublicKey;
  */
 @Data
 public class RsaKeyPair {
-  private static final Base64Helper H = new SimpleUtf8Base64();
   @JsonIgnore
   RSAPublicKey rsaPublicKey;
 
@@ -22,20 +21,20 @@ public class RsaKeyPair {
   RSAPrivateKey rsaPrivateKey;
 
   public String getRsaPublicKeyBase64() {
-    return H.encode(rsaPublicKey.getEncoded());
+    return Base64Helper.encode(rsaPublicKey.getEncoded());
   }
 
   public String getRsaPrivateKeyBase64() {
-    return H.encode(rsaPrivateKey.getEncoded());
+    return Base64Helper.encode(rsaPrivateKey.getEncoded());
   }
 
   @JsonIgnore
   public byte[] getRsaPublicKeyBase64Byte() {
-    return H.encodeToByte(rsaPublicKey.getEncoded());
+    return Base64Helper.encodeToByte(rsaPublicKey.getEncoded());
   }
 
   @JsonIgnore
   public byte[] getRsaPrivateKeyBase64Byte() {
-    return H.encodeToByte(rsaPrivateKey.getEncoded());
+    return Base64Helper.encodeToByte(rsaPrivateKey.getEncoded());
   }
 }

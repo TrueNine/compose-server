@@ -14,27 +14,26 @@ import java.security.PublicKey;
  */
 @Data
 public class EccKeyPair {
-  private static final Base64Helper h = Base64Helper.defaultHelper();
   @JsonIgnore
   PublicKey eccPublicKey;
   @JsonIgnore
   PrivateKey eccPrivateKey;
 
   public String getEccPublicKeyBase64() {
-    return h.encode(eccPublicKey.getEncoded());
+    return Base64Helper.encode(eccPublicKey.getEncoded());
   }
 
   public String getEccPrivateKeyBase64() {
-    return h.encode(eccPrivateKey.getEncoded());
+    return Base64Helper.encode(eccPrivateKey.getEncoded());
   }
 
   @JsonIgnore
   public byte[] getEccPublicKeyBase64Byte() {
-    return h.encodeToByte(eccPublicKey.getEncoded());
+    return Base64Helper.encodeToByte(eccPublicKey.getEncoded());
   }
 
   @JsonIgnore
   public byte[] getEccPrivateKeyBase64Byte() {
-    return h.encodeToByte(eccPrivateKey.getEncoded());
+    return Base64Helper.encodeToByte(eccPrivateKey.getEncoded());
   }
 }
