@@ -11,6 +11,10 @@ import org.springframework.context.annotation.Import
  * @since 2022-10-28
  */
 @EnableConfigurationProperties(JwtProperties::class)
-@Import(DisableSecurityPolicyBean::class, CaptchaAutoConfiguration::class, CorsConfiguration::class)
+@Import(
+  DisableSecurityPolicyBean::class,
+  CaptchaAutoConfiguration::class,
+  CorsConfiguration::class
+)
 class AutoConfigEntrance
 

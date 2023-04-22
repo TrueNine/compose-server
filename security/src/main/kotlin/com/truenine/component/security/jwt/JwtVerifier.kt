@@ -43,6 +43,7 @@ open class JwtVerifier internal constructor() {
           JwtTokenModel<S, E>().also { token ->
             // 解包加密段
             if (decodedJwt.claims.containsKey(this@JwtVerifier.encryptDataKeyName)) {
+              log.trace("jwt 发现加密段 {}", this@JwtVerifier.encryptDataKeyName)
               token.decryptedData = decryptData(
                 encData = decodedJwt.claims[this@JwtVerifier.encryptDataKeyName]!!.asString(),
                 eccPrivateKey = params.contentEncryptEccKey ?: this@JwtVerifier.contentEccPrivateKey,
@@ -51,6 +52,7 @@ open class JwtVerifier internal constructor() {
             }
             // 解包 subject
             if (decodedJwt.claims.containsKey("sub")) {
+              log.trace("发现sub加密段")
               token.subject = parseContent(decodedJwt.subject, params.subjectTargetType!!.kotlin)
             }
             token.expireDateTime = DTimer.dateToLocalDatetime(decodedJwt.expiresAt)
@@ -82,7 +84,7 @@ open class JwtVerifier internal constructor() {
 
   @VisibleForTesting
   internal fun parseExceptionHandle(e: Exception): JwtException {
-    TODO("jwt方法等待处理异常")
+    return JwtException(meta = e)
   }
 
   inner class Builder {

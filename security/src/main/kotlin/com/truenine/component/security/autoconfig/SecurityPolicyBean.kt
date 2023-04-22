@@ -97,6 +97,7 @@ class SecurityPolicyBean {
     } else {
       log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
     }
+
     log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
     return httpSecurity.build()
   }

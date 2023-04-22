@@ -1,5 +1,6 @@
 package com.truenine.component.security.annotations;
 
+import com.truenine.component.security.autoconfig.FileKeysRepositoryAutoConfiguration;
 import com.truenine.component.security.autoconfig.SecurityPolicyBean;
 import org.springframework.context.annotation.Import;
 
@@ -16,7 +17,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import({
-  SecurityPolicyBean.class
+  SecurityPolicyBean.class,
+  FileKeysRepositoryAutoConfiguration.class
 })
 public @interface EnableRestSecurity {
   /**

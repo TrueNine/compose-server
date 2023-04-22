@@ -1,16 +1,16 @@
 package com.truenine.component.rds.autoconfig
 
+import com.truenine.component.core.id.BizCode
 import com.truenine.component.core.id.Snowflake
 import com.truenine.component.core.lang.LogKt
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Component
 class BizCodeGeneratorBean(
-  private val snowflake: Snowflake
+  private val snowflake: Snowflake,
+  private val bizCode: BizCode
 ) : IdentifierGenerator {
   init {
     log.debug("注册业务单号生成器")
@@ -23,10 +23,8 @@ class BizCodeGeneratorBean(
   }
 
   override fun generate(session: SharedSessionContractImplementor?, `object`: Any?): String {
-    val dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
-    val st = snowflake.nextStr()
-    val code = "$dt${st.substring(st.length - 4)}"
-    log.trace("生成的单号为 {}", code)
-    return code
+    val c = bizCode.nextCodeStr()
+    log.trace("生成的业务单号 = {}", c)
+    return c
   }
 }

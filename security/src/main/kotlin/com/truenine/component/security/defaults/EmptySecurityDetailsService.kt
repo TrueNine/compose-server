@@ -10,11 +10,11 @@ class EmptySecurityDetailsService : EmptyDefaultModel, SecurityUserDetailsServic
   private val log = LogKt.getLog(this::class)
 
   init {
-    log.trace("正在使用默认安全服务，生产环请自行重写")
+    log.warn("正在使用默认安全服务，生产环请自行重写")
   }
 
   override fun loadUserDetailsByAccount(account: String?): UserAuthorizationInfoModel? {
-    log.trace("account {} 正在获取空体", account)
+    log.warn("account {} 正在获取空体", account)
     return null
   }
 }

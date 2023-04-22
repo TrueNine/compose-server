@@ -21,7 +21,7 @@ class EmptyPreflightValidFilter : EmptyDefaultModel, SecurityPreflightValidFilte
     request: HttpServletRequest,
     response: HttpServletResponse
   ): UserAuthorizationInfoModel {
-    log.trace("正在使用空体")
+    log.warn("生成了一个空的 {}", ::UserAuthorizationInfoModel.name)
     return UserAuthorizationInfoModel()
   }
 }

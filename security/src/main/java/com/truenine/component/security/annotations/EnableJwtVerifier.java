@@ -1,5 +1,6 @@
 package com.truenine.component.security.annotations;
 
+import com.truenine.component.security.autoconfig.FileKeysRepositoryAutoConfiguration;
 import com.truenine.component.security.autoconfig.JwtVerifierAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
@@ -11,7 +12,10 @@ import java.lang.annotation.*;
  * @author TrueNine
  * @since 2022-12-14
  */
-@Import(JwtVerifierAutoConfiguration.class)
+@Import({
+  JwtVerifierAutoConfiguration.class,
+  FileKeysRepositoryAutoConfiguration.class
+})
 @Inherited
 @Documented
 @Target(ElementType.TYPE)
