@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Accessors(chain = true)
 public class ReFlushTokenModel {
   private String userId;
   private String deviceId;

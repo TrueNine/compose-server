@@ -5,11 +5,14 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * http
+ *
  *
  * @author TrueNine
  * @since 2022-10-28
+ * @deprecated 该类等待修缮
+ *
  */
+@Deprecated
 public interface InterAddressUtil {
   String LOCAL_HOST_IP = "127.0.0.1";
   String LOCAL_HOST_V6 = "0:0:0:0:0:0:0:1";
