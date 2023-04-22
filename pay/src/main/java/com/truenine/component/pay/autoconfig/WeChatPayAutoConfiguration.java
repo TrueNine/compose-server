@@ -9,6 +9,7 @@ import com.wechat.pay.java.core.RSAAutoCertificateConfig;
 import com.wechat.pay.java.core.RSAConfig;
 import com.wechat.pay.java.core.util.PemUtil;
 import com.wechat.pay.java.service.payments.jsapi.JsapiService;
+import com.wechat.pay.java.service.refund.RefundService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -43,8 +44,14 @@ public class WeChatPayAutoConfiguration {
 
   @Bean
   @DependsOn(value = "createConfig")
-  public JsapiService createNativePayService(RSAAutoCertificateConfig config) {
+  public JsapiService createJsapiServicePayService(RSAAutoCertificateConfig config) {
     return new JsapiService.Builder().config(config).build();
+  }
+
+  @Bean
+  @DependsOn(value = "createConfig")
+  public RefundService createJsapiServicePayRefundService(RSAAutoCertificateConfig config) {
+    return new RefundService.Builder().config(config).build();
   }
 
 }

@@ -1,11 +1,11 @@
-package com.truenine.component.pay.models.response;
+package com.truenine.component.pay.api.model.response;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CreateOrderResponseResult {
+public class CreateOrderApiResponseResult {
 
 
   @NotNull(message = "预支付交易会话标识不能为空")

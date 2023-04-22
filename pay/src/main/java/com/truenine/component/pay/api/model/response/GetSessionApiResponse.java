@@ -3,7 +3,7 @@ package com.truenine.component.pay.api.model.response;
 import lombok.Data;
 
 @Data
-public class GetSessionResponse {
+public class GetSessionApiResponse {
 
   private String openid;
   private String session_key;

@@ -28,4 +28,5 @@ public class WeChatProperties {
   private String appSecret;
   private String appKey;
 
+
 }

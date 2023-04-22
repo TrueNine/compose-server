@@ -1,19 +1,11 @@
 component:
   pay:
     wechat:
-#      app-id: wx20f323c7eaa61533
-#      private-key-path: cert/apiclient_key.pem
-#      cert-paths: cert/apiclient_cert.pem
-#      merchant-id: 1630066782
-#      merchant-serial-number: 44B4A803F99969B9303F88F2C4824C7A185CBA8F
-#      notify-url: https://www.baidu.com
-#      app-secret: d1007f2bdb50a5a6422e14f545cbc837
-#      app-key: guangdiandaojia88888888888888888
       app-id: wx555a67d97f0cfa4e
       private-key-path: cert/apiclient_key.pem
       cert-paths: cert/apiclient_cert.pem
-      merchant-id: 1637872087
-      merchant-serial-number: 3B0CE319080BF27E06AB6F87DE71BD66FE89A5DD
+      merchant-id: 1642798294
+      merchant-serial-number: 7DAE3FC82EC4A83F5627B56816EC80F628A28CA4
       notify-url: https://www.baidu.com
-      app-secret: 8ac17574bf033be4abcb26c61e99da31
+      app-secret: cabea5859a643b41762e6c7dfba001d0
       app-key: yingyuechuanmei88888888888888888
