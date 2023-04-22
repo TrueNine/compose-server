@@ -142,7 +142,7 @@ public class UserEntity extends BaseEntity implements Serializable {
    * @return 当前用户是否被封禁
    */
   @Transient
-  public Boolean isBand() {
+  public Boolean getBand() {
     return null != banTime
       && LocalDateTime.now().isBefore(banTime);
   }

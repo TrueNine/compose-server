@@ -104,6 +104,6 @@ class AccountAggregatorImplTest : AbstractTestNGSpringContextTests() {
     val param = regUser()
     agg.bannedAccountTo(param.account, LocalDateTime.parse("2100-12-01T01:01:01"))
     val bandUser = us.findUserByAccount(param.account)!!
-    assertTrue("用户没有被封禁") { bandUser.isBand }
+    assertTrue("用户没有被封禁") { bandUser.band }
   }
 }

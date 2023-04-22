@@ -84,16 +84,16 @@ class UserServiceImplTest : AbstractTestNGSpringContextTests() {
     service.modifyUserBandTimeTo(saved.account, LocalDateTime.parse("2025-01-01T00:00:00"))
 
     val succ = service.findById(saved.id)!!
-    assertTrue("用户没有被封禁") { succ.isBand }
+    assertTrue("用户没有被封禁") { succ.band }
 
     service.modifyUserBandTimeTo(saved.account, null)
     val unblock = service.findUserByAccount(saved.account)!!
-    assertFalse { unblock.isBand }
+    assertFalse { unblock.band }
 
     service.modifyUserBandTimeTo(saved.account, LocalDateTime.parse("2021-01-01T00:00:00"))
 
     assertFalse("用户被封禁到了之前的日期") {
-      service.findUserByAccount(saved.account)!!.isBand
+      service.findUserByAccount(saved.account)!!.band
     }
   }
 }
