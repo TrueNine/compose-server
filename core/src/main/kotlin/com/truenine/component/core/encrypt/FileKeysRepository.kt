@@ -5,26 +5,28 @@ import java.nio.file.Path
 import javax.crypto.spec.SecretKeySpec
 
 class FileKeysRepository(
-  private val keyDest: String
+  private val keyDest: String = "security"
 ) : KeysRepository {
   private var rsaKeyPair: RsaKeyPair? = null
   private var eccKeyPair: EccKeyPair? = null
   private var aesKey: SecretKeySpec? = null
 
-  override fun basicAesKey(): SecretKeySpec? {
+  init {
     aesKey = Keys.readAesKeyByBase64(read("aes.key"))
-    this.rsaKeyPair =
-      Keys.readRsaKeyPair(read("rsa_pub.key"), read("rsa_pri.key"))!!
-    val rsaPri = rsaKeyPair!!.rsaPrivateKey
-    val rsaPub = rsaKeyPair!!.rsaPrivateKey
-    this.eccKeyPair = Keys.readEccKeyPair(
-      read("ecc_pub.key"),
-      read("ecc_pri.key")
-    )!!
-    val eccPri = eccKeyPair!!.eccPrivateKey
-    val eccPub = eccKeyPair!!.eccPrivateKey
+    rsaKeyPair = Keys.readRsaKeyPair(read("rsa_public.key"), read("rsa_private.key"))!!
+    eccKeyPair = Keys.readEccKeyPair(read("ecc_public.key"), read("ecc_private.key"))!!
+  }
 
-    return super.basicAesKey()
+  override fun basicEccKeyPair(): EccKeyPair? {
+    return eccKeyPair
+  }
+
+  override fun basicRsaKeyPair(): RsaKeyPair? {
+    return rsaKeyPair
+  }
+
+  override fun basicAesKey(): SecretKeySpec? {
+    return this.aesKey
   }
 
   private fun read(name: String) =

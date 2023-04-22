@@ -50,3 +50,18 @@ fun String?.nonNullStr(): String = this ?: ""
  * @return 编码完成的字符串，使用 [java.net.URLEncoder]
  */
 fun String?.urlEncoded(charset: Charset = StandardCharsets.UTF_8): String = java.net.URLEncoder.encode(this.nonNullStr(), charset)
+
+/**
+ * ## base64 加密
+ * - 调用 [java.util.Base64]
+ *
+ * @return 加密后的 base64
+ */
+fun String.base64(charset: Charset = StandardCharsets.UTF_8): String = java.util.Base64.getEncoder().encode(this.toByteArray(charset)).toString(charset)
+
+/**
+ * ## 对 base64 字符串进行解密
+ * @return [String]
+ */
+fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = java.util.Base64.getDecoder().decode(this.toByteArray(charset)).toString(charset)
+

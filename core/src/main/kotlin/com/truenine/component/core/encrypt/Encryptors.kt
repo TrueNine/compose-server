@@ -74,6 +74,23 @@ object Encryptors {
     }
   }.onFailure { log.error(::basicEncrypt.name, it) }.getOrNull()
 
+
+  @JvmStatic
+  private fun basicEncryptByPrivateKey(
+    privateKey: PrivateKey,
+    data: String,
+    shardingSize: Int = SHARDING_SIZE,
+    charset: Charset = this.charset,
+    alg: EncryptAlgorithm = EncryptAlgorithm.RSA_PADDING
+  ): String? = runCatching {
+    Cipher.getInstance(alg.str()).run {
+      init(ENC_MODE, privateKey)
+      sharding(data.toByteArray(charset), shardingSize)
+        .joinToString(SHARDING_SEP) { h.encode(doFinal(it)) }
+    }
+  }.onFailure { log.error(::basicEncrypt.name, it) }.getOrNull()
+
+
   /**
    * @param privateKey 私钥
    * @param data 解密数据
@@ -97,6 +114,7 @@ object Encryptors {
     }
   }.onFailure { log.error(::basicDecrypt.name, it) }.getOrNull()
 
+
   /**
    * @param rsaPublicKey 公钥
    * @param data 加密数据
@@ -118,7 +136,7 @@ object Encryptors {
   )
 
   /**
-   * @param privateKey 私钥
+   * @param publicKey 公钥
    * @param data 加密数据
    * @param shardingSize 分片大小
    * @param charset 字符集
@@ -126,11 +144,34 @@ object Encryptors {
    */
   @JvmStatic
   fun encryptByRsaPublicKey(
-    privateKey: RSAPublicKey,
+    publicKey: RSAPublicKey,
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = this.charset
   ): String? = basicEncrypt(
+    publicKey,
+    data,
+    shardingSize,
+    charset,
+    EncryptAlgorithm.RSA_PADDING
+  )
+
+  /**
+   * ## rsa 私钥加密
+   *
+   * @param privateKey rsa 私钥
+   * @param data 加密数据
+   * @param shardingSize 分片大小
+   * @param charset 字符集
+   * @return [String]? 加密后的 base64字符串
+   */
+  @JvmStatic
+  fun encryptByRsaPrivateKey(
+    privateKey: RSAPrivateKey,
+    data: String,
+    shardingSize: Int = SHARDING_SIZE,
+    charset: Charset = this.charset
+  ): String? = basicEncryptByPrivateKey(
     privateKey,
     data,
     shardingSize,

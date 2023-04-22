@@ -1,5 +1,6 @@
 package com.truenine.component.core.encrypt;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.security.PrivateKey;
@@ -14,7 +15,9 @@ import java.security.PublicKey;
 @Data
 public class EccKeyPair {
   private static final Base64Helper h = Base64Helper.defaultHelper();
+  @JsonIgnore
   PublicKey eccPublicKey;
+  @JsonIgnore
   PrivateKey eccPrivateKey;
 
   public String getEccPublicKeyBase64() {
@@ -25,10 +28,12 @@ public class EccKeyPair {
     return h.encode(eccPrivateKey.getEncoded());
   }
 
+  @JsonIgnore
   public byte[] getEccPublicKeyBase64Byte() {
     return h.encodeToByte(eccPublicKey.getEncoded());
   }
 
+  @JsonIgnore
   public byte[] getEccPrivateKeyBase64Byte() {
     return h.encodeToByte(eccPrivateKey.getEncoded());
   }

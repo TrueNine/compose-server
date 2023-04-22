@@ -217,6 +217,18 @@ object Keys {
   }.onFailure { log.error(::generateAesKey.name, it) }.getOrNull()
 
   /**
+   * ## 获取一个 base64 的 aesKey
+   * @param seed [Keys.DEFAULT_SEED]
+   * @param keySize [Keys.AES_KEY_SIZE]
+   */
+  fun generateAesKeyToBase64(
+    seed: String = DEFAULT_SEED,
+    keySize: Int = AES_KEY_SIZE
+  ) = generateAesKey(seed, keySize)?.let {
+    h.encode(it.encoded)
+  }
+
+  /**
    * @param eccPublicKeyBase64 公钥
    * @param eccPrivateKeyBase64 私钥
    * @return eccKeyPair
@@ -227,9 +239,9 @@ object Keys {
     eccPrivateKeyBase64: String,
   ): EccKeyPair? = EccKeyPair()
     .apply {
-    eccPublicKey = readEccPublicKeyByBase64(eccPublicKeyBase64)
-    eccPrivateKey = readEccPrivateKeyByBase64(eccPrivateKeyBase64)
-  }.takeIf { null != it.eccPublicKey && null != it.eccPrivateKey }
+      eccPublicKey = readEccPublicKeyByBase64(eccPublicKeyBase64)
+      eccPrivateKey = readEccPrivateKeyByBase64(eccPrivateKeyBase64)
+    }.takeIf { null != it.eccPublicKey && null != it.eccPrivateKey }
 
 
   /**
@@ -243,9 +255,9 @@ object Keys {
     rsaPrivateKeyBase64: String,
   ): RsaKeyPair? = RsaKeyPair()
     .apply {
-    rsaPublicKey = readRsaPublicKeyByBase64(rsaPublicKeyBase64)
-    rsaPrivateKey = readRsaPrivateKeyByBase64(rsaPrivateKeyBase64)
-  }.takeIf { null != it.rsaPublicKey && null != it.rsaPrivateKeyBase64 }
+      rsaPublicKey = readRsaPublicKeyByBase64(rsaPublicKeyBase64)
+      rsaPrivateKey = readRsaPrivateKeyByBase64(rsaPrivateKeyBase64)
+    }.takeIf { null != it.rsaPublicKey && null != it.rsaPrivateKeyBase64 }
 
   /**
    * @param publicKeyBase64 公钥

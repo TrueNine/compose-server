@@ -1,7 +1,7 @@
 package com.truenine.component.core.encrypt;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -13,10 +13,12 @@ import java.security.interfaces.RSAPublicKey;
  * @since 2022-12-09
  */
 @Data
-@Accessors(chain = true)
 public class RsaKeyPair {
   private static final Base64Helper H = new SimpleUtf8Base64();
+  @JsonIgnore
   RSAPublicKey rsaPublicKey;
+
+  @JsonIgnore
   RSAPrivateKey rsaPrivateKey;
 
   public String getRsaPublicKeyBase64() {
@@ -27,10 +29,12 @@ public class RsaKeyPair {
     return H.encode(rsaPrivateKey.getEncoded());
   }
 
+  @JsonIgnore
   public byte[] getRsaPublicKeyBase64Byte() {
     return H.encodeToByte(rsaPublicKey.getEncoded());
   }
 
+  @JsonIgnore
   public byte[] getRsaPrivateKeyBase64Byte() {
     return H.encodeToByte(rsaPrivateKey.getEncoded());
   }

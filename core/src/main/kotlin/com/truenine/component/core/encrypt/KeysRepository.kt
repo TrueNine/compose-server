@@ -13,17 +13,13 @@ interface KeysRepository {
 
   fun jwtSignatureIssuerRsaKeyPair(): RsaKeyPair? = basicRsaKeyPair()
 
-  fun jwtSignatureVerifierRsaPublicKey(): RSAPublicKey? =
-    basicRsaKeyPair()?.rsaPublicKey
+  fun jwtSignatureVerifierRsaPublicKey(): RSAPublicKey? = basicRsaKeyPair()?.rsaPublicKey
 
-  fun jwtEncryptDataIssuerEccKeyPair(): EccKeyPair? =
-    basicEccKeyPair()
+  fun jwtEncryptDataIssuerEccKeyPair(): EccKeyPair? = basicEccKeyPair()
 
-  fun jwtEncryptDataIssuedKey(): PublicKey? =
-    basicEccKeyPair()?.eccPublicKey
+  fun jwtEncryptDataIssuedKey(): PublicKey? = basicEccKeyPair()?.eccPublicKey
 
-  fun jwtEncryptDataVerifierKey(): PrivateKey? =
-    basicEccKeyPair()?.eccPrivateKey
+  fun jwtEncryptDataVerifierKey(): PrivateKey? = basicEccKeyPair()?.eccPrivateKey
 
   fun databaseEncryptAesSecret(): SecretKeySpec? = basicAesKey()
 }
