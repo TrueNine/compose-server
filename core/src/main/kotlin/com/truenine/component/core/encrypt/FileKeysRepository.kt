@@ -1,7 +1,5 @@
 package com.truenine.component.core.encrypt
 
-import java.nio.file.Files
-import java.nio.file.Path
 import javax.crypto.spec.SecretKeySpec
 
 class FileKeysRepository(
@@ -32,6 +30,6 @@ class FileKeysRepository(
     return this.aesKey
   }
 
-  private fun read(name: String) =
-    Files.readString(Path.of(keyDest, name))
+  private fun read(name: String): String = javaClass.getResource("${this.keyDest}/$name")!!.readText()
+
 }
