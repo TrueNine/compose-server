@@ -1,7 +1,6 @@
 package com.truenine.component.core.encrypt
 
 import java.security.PrivateKey
-import java.security.PublicKey
 import java.security.interfaces.RSAPublicKey
 import javax.crypto.spec.SecretKeySpec
 
@@ -16,8 +15,6 @@ interface KeysRepository {
   fun jwtSignatureVerifierRsaPublicKey(): RSAPublicKey? = basicRsaKeyPair()?.rsaPublicKey
 
   fun jwtEncryptDataIssuerEccKeyPair(): EccKeyPair? = basicEccKeyPair()
-
-  fun jwtEncryptDataIssuedKey(): PublicKey? = basicEccKeyPair()?.eccPublicKey
 
   fun jwtEncryptDataVerifierKey(): PrivateKey? = basicEccKeyPair()?.eccPrivateKey
 
