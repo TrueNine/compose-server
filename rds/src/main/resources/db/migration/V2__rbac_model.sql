@@ -38,6 +38,16 @@ CREATE TABLE IF NOT EXISTS user_info
 ) DEFAULT CHARSET = utf8mb4, COMMENT '用户信息';
 CALL add_base_struct('user_info');
 
+INSERT INTO user_info
+SET id=0,
+    user_id=0,
+    first_name='赵',
+    last_name='日天',
+    email='truenine@163.com',
+    birthday='1997-11-04',
+    phone='186977192235',
+    gender=0;
+
 
 CREATE TABLE IF NOT EXISTS role
 (
