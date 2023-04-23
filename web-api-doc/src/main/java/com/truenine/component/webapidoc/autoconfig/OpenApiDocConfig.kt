@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.parameters.HeaderParameter
+import io.swagger.v3.oas.models.responses.ApiResponse
 import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.context.annotation.Bean
@@ -25,14 +26,16 @@ class OpenApiDocConfig {
   @Bean
   @ConditionalOnWebApplication
   fun userApi(p: SwaggerProperties): GroupedOpenApi {
-    OpenApiDocConfig.log.debug("注册 OpenApi3 文档")
+    log.debug("注册 OpenApi3 文档")
     val paths = arrayOf("/**")
     val packagedToMatch = arrayOf(p.packages)
     return GroupedOpenApi.builder()
       .group(p.group)
       .pathsToMatch(*paths)
       .packagesToScan(*packagedToMatch)
-      .addOperationCustomizer { operation: Operation, handlerMethod: HandlerMethod? ->
+
+      .addOperationCustomizer { operation: Operation, _: HandlerMethod? ->
+
         operation
           .addParametersItem(
             HeaderParameter()
@@ -71,7 +74,7 @@ class OpenApiDocConfig {
           .title(authorInfo.title)
           .version(authorInfo.version)
           .description(authorInfo.description)
-          .termsOfService(authorInfo.gitLocation)
+          .termsOfService(authorInfo.location)
           .license(
             License().name(authorInfo.license)
               .url(authorInfo.licenseUrl)
