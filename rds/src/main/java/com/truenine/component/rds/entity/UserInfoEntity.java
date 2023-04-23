@@ -2,6 +2,7 @@ package com.truenine.component.rds.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.truenine.component.core.annotations.SensitiveRef;
+import com.truenine.component.core.exceptions.KnownException;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.converters.AesEncryptConverter;
 import com.truenine.component.rds.converters.typing.GenderTypingConverter;
@@ -21,6 +22,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.AUTO;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -135,7 +138,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   /**
    * 地址
    */
-  @Schema(title = "地址")
+  @Schema(title = "地址", requiredMode = AUTO)
   @Column(name = ADDRESS_DETAILS_ID)
   @Nullable
   private Long addressDetailsId;
@@ -149,6 +152,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   )
   @NotFound(action = IGNORE)
   private AddressDetailsEntity addressDetails;
+
   /**
    * 电话号码
    */
@@ -181,15 +185,19 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Schema(title = "微信个人 openId")
   @Column(name = WECHAT_OPEN_ID)
   private String wechatOpenId;
+
   @Column(name = ID, insertable = false, updatable = false)
   private Long wechatOauth2Id;
 
   @Transient
+  @Schema(requiredMode = NOT_REQUIRED)
   public String getFullName() {
     return firstName + lastName;
   }
 
   @Transient
+  @Schema(requiredMode = NOT_REQUIRED)
   public void setFullName(String fullName) {
+    throw new KnownException("不需要设置参数 fullPath", new IllegalAccessException(), 400);
   }
 }

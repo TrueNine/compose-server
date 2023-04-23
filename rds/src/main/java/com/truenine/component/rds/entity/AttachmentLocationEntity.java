@@ -14,6 +14,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
+
 /**
  * 文件地址
  *
@@ -62,7 +64,7 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
   /**
    * 存储类别
    */
-  @Schema(title = "存储类别")
+  @Schema(title = "存储类别", requiredMode = NOT_REQUIRED)
   @Column(name = TYPE, nullable = false)
   @Convert(converter = AttachmentStorageTypingConverter.class)
   private AttachmentStorageTyping type = AttachmentStorageTyping.LOCAL;
@@ -73,11 +75,13 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
 
   @Nullable
   @Transient
+  @Schema(requiredMode = NOT_REQUIRED)
   public Boolean getRn() {
     return AttachmentStorageTyping.REMOTE.equals(type);
   }
 
   @Transient
+  @Schema(requiredMode = NOT_REQUIRED)
   public void setRn(Boolean storageRnType) {
     this.type = storageRnType ? AttachmentStorageTyping.REMOTE : AttachmentStorageTyping.LOCAL;
   }

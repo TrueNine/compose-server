@@ -15,6 +15,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -57,7 +58,7 @@ public class RoleEntity extends BaseEntity implements Serializable {
   /**
    * 权限
    */
-  @Schema(title = "权限")
+  @Schema(title = "权限",requiredMode = NOT_REQUIRED)
   @ManyToMany(targetEntity = PermissionsEntity.class)
   @JoinTable(
     name = RolePermissionsEntity.TABLE_NAME,

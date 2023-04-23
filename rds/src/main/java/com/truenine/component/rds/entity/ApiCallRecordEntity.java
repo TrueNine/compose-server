@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -14,7 +13,7 @@ import org.hibernate.annotations.NotFound;
 import java.io.Serial;
 import java.io.Serializable;
 
-import static com.truenine.component.rds.entity.ApiCallRecordEntity.API_ID;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -46,7 +45,7 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
   /**
    * 从属 API
    */
-  @Schema(title = "API")
+  @Schema(title = "API",requiredMode = NOT_REQUIRED)
   @ManyToOne
   @JoinColumn(name = API_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
   @NotFound(action = IGNORE)
@@ -55,40 +54,40 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
   /**
    * 设备 id, 浏览器为 agent
    */
+  @Nullable
   @Schema(title = "设备 id, 浏览器为 agent")
   @Column(name = DEVICE_CODE)
-  @Nullable
   private String deviceCode;
 
   /**
    * 请求 ip
    */
+  @Nullable
   @Schema(title = "请求 ip")
   @Column(name = REQ_IP)
-  @Nullable
   private String reqIp;
 
   /**
    * 登录 ip
    */
-  @Schema(title= "登录 ip")
-  @Column(name = LOGIN_IP)
   @Nullable
+  @Schema(title = "登录 ip")
+  @Column(name = LOGIN_IP)
   private String loginIp;
 
   /**
    * 响应码
    */
+  @Nullable
   @Schema(title = "响应码")
   @Column(name = RESP_CODE)
-  @Nullable
   private String respCode;
 
   /**
    * 请求结果
    */
+  @Nullable
   @Schema(title = "请求结果")
   @Column(name = RESP_RESULT_ENC)
-  @Nullable
   private String respResultEnc;
 }

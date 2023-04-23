@@ -19,6 +19,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
+
 /**
  * 数据删除备份表
  *
@@ -43,7 +45,7 @@ public class TableRowDeleteRecordEntity extends BaseEntity implements Serializab
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Schema(title  = "表名")
+  @Schema(title  = "表名",requiredMode = NOT_REQUIRED)
   @Column(name = TABLE_NAMES, nullable = false)
   private String tableNames;
 

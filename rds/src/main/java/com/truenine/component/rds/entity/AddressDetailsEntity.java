@@ -1,6 +1,7 @@
 package com.truenine.component.rds.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.base.PointModel;
 import com.truenine.component.rds.converters.PointModelConverter;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.NotFound;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -51,7 +53,7 @@ public class AddressDetailsEntity extends BaseEntity implements Serializable {
    * 地址
    */
   @ManyToOne
-  @Schema(title = "地址")
+  @Schema(title = "地址",requiredMode = NOT_REQUIRED)
   @JoinColumn(
     name = ADDRESS_ID,
     referencedColumnName = ID,

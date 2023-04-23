@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.47-SNAPSHOT-T"
+  const val version = "0.4.49-SNAPSHOT-T"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1"
 }
@@ -12,22 +12,23 @@ object ProjectManager {
  * 版本管理
  */
 object V {
+  const val component = ProjectManager.version
   object Component {
-    const val dataCommonDataExtract = ProjectManager.version
-    const val dependFlyway = ProjectManager.version
-    const val core = ProjectManager.version
-    const val rds = ProjectManager.version
-    const val schedule = ProjectManager.version
-    const val rdsGen = ProjectManager.version
-    const val webApiDoc = ProjectManager.version
-    const val security = ProjectManager.version
-    const val securityOauth2 = ProjectManager.version
-    const val dependWebServlet = ProjectManager.version
-    const val dependWebClient = ProjectManager.version
-    const val dataCommonCrawler = ProjectManager.version
-    const val cacheable = ProjectManager.version
-    const val oss = ProjectManager.version
-    const val pay = ProjectManager.version
+    const val dataCommonDataExtract = component
+    const val dependFlyway = component
+    const val core = component
+    const val rds = component
+    const val schedule = component
+    const val rdsGen = component
+    const val webApiDoc = component
+    const val security = component
+    const val securityOauth2 = component
+    const val dependWebServlet = component
+    const val dependWebClient = component
+    const val dataCommonCrawler = component
+    const val cacheable = component
+    const val oss = component
+    const val pay = component
   }
 
   object Lang {

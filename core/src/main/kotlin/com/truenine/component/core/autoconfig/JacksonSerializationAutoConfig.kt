@@ -10,7 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
 import com.truenine.component.core.lang.DTimer
-import com.truenine.component.core.lang.LogKt
+import com.truenine.component.core.lang.slf4j
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -34,10 +34,8 @@ open class JacksonSerializationAutoConfig {
   @Lazy
   open fun jacksonF(): Jackson2ObjectMapperBuilderCustomizer {
     val module = JavaTimeModule()
-    val ldts =
-      LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
-    val ldtd =
-      LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
+    val ldts = LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
+    val ldtd = LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
     val lts = LocalTimeSerializer(DateTimeFormatter.ofPattern(DTimer.TIME))
     val ltd = LocalTimeDeserializer(DateTimeFormatter.ofPattern(DTimer.TIME))
     val lds = LocalDateSerializer(DateTimeFormatter.ofPattern(DTimer.DATE))
@@ -49,6 +47,7 @@ open class JacksonSerializationAutoConfig {
     module.addDeserializer(LocalTime::class.java, ltd)
     module.addSerializer(LocalDate::class.java, lds)
     module.addDeserializer(LocalDate::class.java, ldd)
+
     log.debug("配置jackson序列化规则")
     return Jackson2ObjectMapperBuilderCustomizer { b ->
       b.modules(module)
@@ -58,6 +57,7 @@ open class JacksonSerializationAutoConfig {
       b.defaultViewInclusion(true)
       b.featuresToDisable(
         SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
+        SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS
       )
       b.serializationInclusion(JsonInclude.Include.NON_NULL)
       b.serializationInclusion(JsonInclude.Include.NON_ABSENT)
@@ -66,7 +66,6 @@ open class JacksonSerializationAutoConfig {
 
   companion object {
     @JvmStatic
-    private val log =
-      LogKt.getLog(JacksonSerializationAutoConfig::class)
+    private val log = slf4j(JacksonSerializationAutoConfig::class)
   }
 }

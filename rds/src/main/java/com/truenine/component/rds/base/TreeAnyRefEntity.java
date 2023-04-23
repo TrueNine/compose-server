@@ -46,6 +46,7 @@ public class TreeAnyRefEntity extends TreeEntity implements Serializable {
    * 任意外键
    */
   public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
+
   /**
    * 任意类型
    */
@@ -61,12 +62,4 @@ public class TreeAnyRefEntity extends TreeEntity implements Serializable {
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE)
   @Schema(title = "外键类别")
   protected String typ;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-    TreeAnyRefEntity that = (TreeAnyRefEntity) o;
-    return id != null && Objects.equals(id, that.id);
-  }
 }

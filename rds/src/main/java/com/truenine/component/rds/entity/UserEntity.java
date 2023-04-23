@@ -1,6 +1,7 @@
 package com.truenine.component.rds.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.truenine.component.core.exceptions.KnownException;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity;
 import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity;
@@ -19,6 +20,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -96,7 +98,7 @@ public class UserEntity extends BaseEntity implements Serializable {
   /**
    * 用户信息
    */
-  @Schema(title = "用户信息")
+  @Schema(title = "用户信息", requiredMode = NOT_REQUIRED)
   @JsonManagedReference
   @OneToOne(mappedBy = UserInfoEntity.MAPPED_BY_USER)
   @NotFound(action = IGNORE)
@@ -105,7 +107,7 @@ public class UserEntity extends BaseEntity implements Serializable {
   /**
    * 角色组
    */
-  @Schema(title = "角色组")
+  @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
   @ManyToMany(targetEntity = RoleGroupEntity.class)
   @JoinTable(
     name = UserRoleGroupEntity.TABLE_NAME,
@@ -132,18 +134,20 @@ public class UserEntity extends BaseEntity implements Serializable {
   @Schema(title = "是否被 ban")
   private Boolean band;
 
-  @SneakyThrows
-  @Transient
-  public void setBand(Boolean band) {
-    throw new IllegalAccessException("属性为不可调用");
-  }
-
   /**
    * @return 当前用户是否被封禁
    */
   @Transient
+  @Schema(requiredMode = NOT_REQUIRED)
   public Boolean getBand() {
     return null != banTime
       && LocalDateTime.now().isBefore(banTime);
+  }
+
+  @SneakyThrows
+  @Transient
+  @Schema(requiredMode = NOT_REQUIRED)
+  public void setBand(Boolean band) {
+    throw new KnownException("属性为不可调用", new IllegalAccessException(), 400);
   }
 }

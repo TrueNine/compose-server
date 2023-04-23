@@ -1,5 +1,6 @@
 package com.truenine.component.rds.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.NotFound;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -40,6 +42,7 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
+  @Schema(title = "附件地址 id")
   @Column(name = ATTACHMENT_LOCATION_ID, nullable = false)
   private Long attachmentLocationId;
 
@@ -47,7 +50,7 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
    * URL
    */
   @Nullable
-  @Schema(title = "URL")
+  @Schema(title = "URL", requiredMode = NOT_REQUIRED)
   @ManyToOne
   @JoinColumn(
     name = ATTACHMENT_LOCATION_ID,
@@ -69,27 +72,27 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
   /**
    * 存储后名称
    */
-  @Schema(title = "存储后名称")
-  @Column(name = SAVE_NAME)
   @Nullable
+  @JsonIgnore
+  @Schema(title = "存储后名称", hidden = true)
+  @Column(name = SAVE_NAME)
   private String saveName;
 
   /**
    * 文件大小
    */
+  @Nullable
   @Schema(title = "文件大小")
   @Column(name = SIZE)
-  @Nullable
   private Long size;
 
   /**
    * MIME TYPE
    */
+  @Nullable
   @Schema(title = "MIME TYPE")
   @Column(name = MIME_TYPE)
-  @Nullable
   private String mimeType;
-
 
   @Nullable
   @Transient

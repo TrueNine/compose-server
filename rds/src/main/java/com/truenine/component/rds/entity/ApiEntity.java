@@ -4,6 +4,7 @@ import com.truenine.component.rds.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.NotFound;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -59,7 +61,8 @@ public class ApiEntity extends BaseEntity implements Serializable {
   /**
    * 权限
    */
-  @Schema(title = "权限")
+  @Nullable
+  @Schema(title = "权限",requiredMode = NOT_REQUIRED)
   @ManyToOne
   @JoinColumn(name = PERMISSIONS_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
   @NotFound(action = IGNORE)

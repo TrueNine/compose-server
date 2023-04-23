@@ -29,11 +29,7 @@ import java.io.Serializable;
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
-@Table(indexes = {
-  @Index(name = TreeEntity.RLN, columnList = TreeEntity.RLN),
-  @Index(name = TreeEntity.RRN, columnList = TreeEntity.RRN),
-  @Index(name = TreeEntity.RPI, columnList = TreeEntity.RPI)
-})
+@Table
 @RequiredArgsConstructor
 @Schema(title = "预排序树")
 public class TreeEntity extends BaseEntity implements Serializable {
@@ -51,27 +47,28 @@ public class TreeEntity extends BaseEntity implements Serializable {
   public static final String RRN = DataBaseBasicFieldNames.RIGHT_NODE;
   @Serial
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 父id
+   */
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.PARENT_ID)
   @Schema(title = "父id")
-  protected Long rpi = null;
+  private Long rpi;
 
+  /**
+   * 左节点
+   */
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.LEFT_NODE)
-  @Schema(title = "左节点")
-  protected Long rln;
+  @Schema(title = "左节点", hidden = true)
+  private Long rln;
 
+  /**
+   * 右节点
+   */
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.RIGHT_NODE)
-  @Schema(title = "右节点")
-  protected Long rrn;
-
-  @JsonIgnore
-  public boolean isLeafNode() {
-    return rrn - 1 == rln;
-  }
-
-  @JsonIgnore
-  public void setLeafNode(boolean leafNode) {
-  }
+  @Schema(title = "右节点", hidden = true)
+  private Long rrn;
 }

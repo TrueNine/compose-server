@@ -18,6 +18,7 @@ import java.util.List;
 
 import static com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity.ROLE_GROUP_ID;
 import static com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity.USER_GROUP_ID;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -70,7 +71,7 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
   /**
    * leaderUser
    */
-  @Schema(title = "用户组创建人")
+  @Schema(title = "用户组创建人",requiredMode = NOT_REQUIRED)
   @ManyToOne
   @JoinColumn(
     name = USER_ID,
@@ -85,7 +86,7 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
   /**
    * 用户组内的用户
    */
-  @Schema(title = "用户组内的用户")
+  @Schema(title = "用户组内的用户",requiredMode = NOT_REQUIRED)
   @ManyToMany(targetEntity = UserEntity.class)
   @JoinTable(
     name = UserGroupUserEntity.TABLE_NAME,
@@ -111,7 +112,7 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
   /**
    * 角色组
    */
-  @Schema(title = "角色组")
+  @Schema(title = "角色组",requiredMode = NOT_REQUIRED)
   @ManyToMany(targetEntity = RoleGroupEntity.class)
   @JoinTable(
     name = UserGroupRoleGroupEntity.TABLE_NAME,
