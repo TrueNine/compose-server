@@ -13,8 +13,10 @@ import com.truenine.component.rds.repository.relationship.UserGroupRoleGroupRepo
 import com.truenine.component.rds.repository.relationship.UserRoleGroupRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.validation.annotation.Validated
 
 @Service
+@Validated
 class RbacAggregatorImpl(
   private val urg: UserRoleGroupRepository,
   private val ug: UserGroupRepository,

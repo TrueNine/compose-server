@@ -2,6 +2,7 @@ package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.models.SaveAttachmentModel
+import com.truenine.component.rds.typing.AttachmentStorageTyping
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
@@ -40,6 +41,7 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
       SaveAttachmentModel().apply {
         baseUrl = "https://oss.aliyun.com/static"
         saveName = "adwd0juihjrthjrthrhrhrth"
+        storageType = AttachmentStorageTyping.REMOTE
       }
     }!!.apply {
       assertNotNull(this)

@@ -1,13 +1,14 @@
 package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.http.MediaTypes
-import com.truenine.component.core.lang.LogKt
 import com.truenine.component.core.lang.hasText
+import com.truenine.component.core.lang.slf4j
 import com.truenine.component.rds.entity.AttachmentEntity
 import com.truenine.component.rds.entity.AttachmentLocationEntity
 import com.truenine.component.rds.models.SaveAttachmentModel
 import com.truenine.component.rds.service.AttachmentLocationService
 import com.truenine.component.rds.service.AttachmentService
+import jakarta.validation.Valid
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
@@ -21,12 +22,13 @@ class AttachmentAggregatorImpl(
   private val alService: AttachmentLocationService
 ) : AttachmentAggregator {
 
-  override fun uploadAttachment(file: MultipartFile, saveFileCallback: () -> SaveAttachmentModel): AttachmentEntity? {
+  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> SaveAttachmentModel): AttachmentEntity? {
     val saveFile = saveFileCallback()
     // 如果 此条url 不存在，则保存一个新的 url
     val location = alService.findByBaseUrl(saveFile.baseUrl)
       ?: alService.save(AttachmentLocationEntity().apply {
         baseUrl = saveFile.baseUrl
+        type = saveFile.storageType
         name = "URL:\$${LocalDateTime.now()}"
         log.debug("保存一个新的 附件地址 = {}", this)
       })!!
@@ -48,6 +50,6 @@ class AttachmentAggregatorImpl(
 
   companion object {
     @JvmStatic
-    private val log = LogKt.getLog(this::class)
+    private val log = slf4j(this::class)
   }
 }

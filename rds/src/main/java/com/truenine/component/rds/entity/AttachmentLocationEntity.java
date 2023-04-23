@@ -1,12 +1,11 @@
 package com.truenine.component.rds.entity;
 
 import com.truenine.component.rds.base.BaseEntity;
+import com.truenine.component.rds.converters.typing.AttachmentStorageTypingConverter;
+import com.truenine.component.rds.typing.AttachmentStorageTyping;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -65,21 +64,21 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
    */
   @Schema(title = "存储类别")
   @Column(name = TYPE, nullable = false)
-  private String type = "R";
+  @Convert(converter = AttachmentStorageTypingConverter.class)
+  private AttachmentStorageTyping type = AttachmentStorageTyping.LOCAL;
 
   @Transient
   @Schema(title = "是否为远程存储")
   private Boolean rn;
 
-  @Transient
-  public void setRn(Boolean storageRnType) {
-    this.type = storageRnType ? "R" : "N";
-  }
-
-
   @Nullable
   @Transient
-  public Boolean isRn() {
-    return "R".equals(type);
+  public Boolean getRn() {
+    return AttachmentStorageTyping.REMOTE.equals(type);
+  }
+
+  @Transient
+  public void setRn(Boolean storageRnType) {
+    this.type = storageRnType ? AttachmentStorageTyping.REMOTE : AttachmentStorageTyping.LOCAL;
   }
 }

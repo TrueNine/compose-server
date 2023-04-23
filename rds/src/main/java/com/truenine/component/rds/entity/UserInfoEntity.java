@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.truenine.component.core.annotations.SensitiveRef;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.converters.AesEncryptConverter;
+import com.truenine.component.rds.converters.typing.GenderTypingConverter;
+import com.truenine.component.rds.typing.GenderTyping;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -169,7 +171,9 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = " 性别：0女，1难，2未知")
   @Column(name = GENDER)
-  private Byte gender;
+  @Convert(converter = GenderTypingConverter.class)
+  private GenderTyping gender;
+
   /**
    * 微信个人 openId
    */

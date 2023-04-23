@@ -1,10 +1,9 @@
-package com.truenine.component.webapidoc.models.resp;
+package com.truenine.component.webapidoc.models.response;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
-@Accessors(chain = true)
 public class OpenApiUrlsResponseResult {
   String name;
   String url;

@@ -9,9 +9,11 @@ import com.truenine.component.rds.service.UserService
 import jakarta.validation.Valid
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
 
 @Service
+@Validated
 class AccountAggregatorImpl(
   private val userService: UserService,
   private val userInfoService: UserInfoService,

@@ -1,4 +1,4 @@
-package com.truenine.component.webapidoc.models.resp;
+package com.truenine.component.webapidoc.models.response;
 
 /*{
     "configUrl": "/v3/api-docs/swagger-config",
@@ -28,7 +28,6 @@ import java.util.List;
  * @since 2022-10-03
  */
 @Data
-@Accessors(chain = true)
 public class OpenApiDocResponseResult {
   String configUrl;
   String oauth2RedirectUrl;

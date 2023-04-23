@@ -3,11 +3,11 @@ package com.truenine.component.rds.base
 import com.truenine.component.rds.util.PagedWrapper
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseBody
+
 
 abstract class BaseController<T : BaseEntity>(
   protected val service: BaseService<T>
