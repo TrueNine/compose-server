@@ -1,7 +1,6 @@
 package com.truenine.component.rds.autoconfig
 
 import com.truenine.component.core.id.BizCode
-import com.truenine.component.core.id.Snowflake
 import com.truenine.component.core.lang.LogKt
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class BizCodeGeneratorBean(
-  private val snowflake: Snowflake,
   private val bizCode: BizCode
 ) : IdentifierGenerator {
   init {

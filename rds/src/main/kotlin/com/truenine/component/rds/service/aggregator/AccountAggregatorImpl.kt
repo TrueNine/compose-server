@@ -13,7 +13,6 @@ import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
 
 @Service
-@Validated
 class AccountAggregatorImpl(
   private val userService: UserService,
   private val userInfoService: UserInfoService,

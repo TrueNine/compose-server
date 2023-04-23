@@ -16,6 +16,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
+
 /**
  * jpa顶级抽象类
  * <p>
@@ -34,8 +36,6 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 @Schema(title = "顶级抽象类")
 public class BaseEntity extends AnyEntity implements Serializable {
-
-
   /**
    * 乐观锁版本
    */
@@ -47,14 +47,20 @@ public class BaseEntity extends AnyEntity implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
+  /**
+   * 乐观锁版本
+   */
   @Version
   @JsonIgnore
   @Column(name = RLV, nullable = false)
-  @Schema(title = "乐观锁版本")
+  @Schema(hidden = true, title = "乐观锁版本", requiredMode = NOT_REQUIRED)
   protected Long rlv;
 
+  /**
+   * 逻辑删除标志
+   */
   @JsonIgnore
   @Column(name = LDF, nullable = false)
-  @Schema(title = "逻辑删除标志")
+  @Schema(hidden = true, title = "逻辑删除标志", requiredMode = NOT_REQUIRED)
   protected Boolean ldf = false;
 }

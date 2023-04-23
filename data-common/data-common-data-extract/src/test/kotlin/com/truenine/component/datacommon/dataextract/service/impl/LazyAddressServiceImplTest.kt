@@ -11,11 +11,13 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@Test()
+
 @SpringBootTest(classes = [DataExtractEntrance::class])
 class LazyAddressServiceImplTest : AbstractTestNGSpringContextTests() {
+
   @Autowired
   lateinit var lazys: LazyAddressServiceImpl
+
 
   private val testCode: Long = 433_127_103_101L
 
@@ -48,7 +50,7 @@ class LazyAddressServiceImplTest : AbstractTestNGSpringContextTests() {
   }
 
   // TODO 村镇接口不可以
-  @Test(testName = "此接口暂时不可用", expectedExceptions = [AssertionError::class])
+  @Test
   fun testFindAllVillageByCode() {
     val all = lazys.findAllVillageByCode(testCode)
     assertNotNull(all)
