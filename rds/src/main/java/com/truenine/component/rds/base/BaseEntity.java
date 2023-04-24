@@ -16,6 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.*;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 
 /**
@@ -61,6 +62,6 @@ public class BaseEntity extends AnyEntity implements Serializable {
    */
   @JsonIgnore
   @Column(name = LDF, nullable = false)
-  @Schema(hidden = true, title = "逻辑删除标志", requiredMode = NOT_REQUIRED)
+  @Schema(hidden = true, title = "逻辑删除标志", requiredMode = NOT_REQUIRED,accessMode = READ_ONLY)
   protected Boolean ldf = false;
 }

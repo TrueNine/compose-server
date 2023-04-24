@@ -1,0 +1,13 @@
+dist/**/**
+node_modules/**/**
+
+
+tsconfig.json
+src/**/*.svg
+src/**/*.d.ts
+
+vue.config.js
+vue.config.ts
+vite.config.ts
+vite.config.js
+mock/**/**

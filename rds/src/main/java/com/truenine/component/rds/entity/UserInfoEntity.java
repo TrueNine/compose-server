@@ -22,6 +22,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.AUTO;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
@@ -65,6 +66,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @NotNull
   @Column(name = USER_ID, nullable = false)
   private Long userId;
+
   @OneToOne
   @JoinColumn(
     name = USER_ID,
@@ -142,6 +144,11 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Column(name = ADDRESS_DETAILS_ID)
   @Nullable
   private Long addressDetailsId;
+
+  /**
+   * 地址
+   */
+  @Schema(title = "地址", requiredMode = NOT_REQUIRED, accessMode = READ_ONLY)
   @ManyToOne
   @JoinColumn(
     name = ADDRESS_DETAILS_ID,
@@ -169,6 +176,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Nullable
   @SensitiveRef(SensitiveRef.Strategy.IDCARD)
   private String idCard;
+
   /**
    * 性别：0女，1难，2未知
    */

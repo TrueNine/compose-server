@@ -67,7 +67,7 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
   @Schema(title = "存储类别", requiredMode = NOT_REQUIRED)
   @Column(name = TYPE, nullable = false)
   @Convert(converter = AttachmentStorageTypingConverter.class)
-  private AttachmentStorageTyping type = AttachmentStorageTyping.LOCAL;
+  private AttachmentStorageTyping type = AttachmentStorageTyping.NATIVE;
 
   @Transient
   @Schema(title = "是否为远程存储")
@@ -83,6 +83,6 @@ public class AttachmentLocationEntity extends BaseEntity implements Serializable
   @Transient
   @Schema(requiredMode = NOT_REQUIRED)
   public void setRn(Boolean storageRnType) {
-    this.type = storageRnType ? AttachmentStorageTyping.REMOTE : AttachmentStorageTyping.LOCAL;
+    this.type = storageRnType ? AttachmentStorageTyping.REMOTE : AttachmentStorageTyping.NATIVE;
   }
 }

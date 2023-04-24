@@ -18,5 +18,5 @@ public class SaveAttachmentModel {
 
   @NotNull(message = "请设置存储级别")
   @Schema(title = "存储类别")
-  private AttachmentStorageTyping storageType = AttachmentStorageTyping.LOCAL;
+  private AttachmentStorageTyping storageType = AttachmentStorageTyping.NATIVE;
 }
