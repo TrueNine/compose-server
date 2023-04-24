@@ -1,8 +1,9 @@
 {
   "name": "@truenine-component/api-models",
-  "version": "0.0.3-SNAPSHOT",
+  "version": "0.0.4-SNAPSHOT",
   "description": "api model and entities",
   "main": "dist/index.js",
+  "type": "module",
   "keywords": [
     "api",
     "entity",
@@ -14,7 +15,12 @@
   "devDependencies": {
     "@vueuse/core": "^9.13.0",
     "@vueuse/integrations": "^9.13.0",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.1"
+    "rollup": "^3.21.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4"
   }
 }
