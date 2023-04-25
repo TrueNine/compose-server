@@ -1,6 +1,6 @@
 {
   "name": "@truenine-component/api-models",
-  "version": "0.0.10-SNAPSHOT",
+  "version": "0.0.12-SNAPSHOT",
   "description": "api model and entities",
   "main": "index.js",
   "dists": "dist/index.js",
@@ -14,7 +14,6 @@
   "author": "TrueNine",
   "license": "MIT",
   "scripts": {
-    "prepublishOnly": "cd dist",
     "build": "rollup -c"
   },
   "devDependencies": {

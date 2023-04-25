@@ -1,6 +1,7 @@
-import { BrandEntityRequestParam, BrandEntityResponseResult, CategoryEntityRequestParam } from "./SiftEntities";
-import { AnyEntity, AttachmentEntityRequestParam, UserEntityResponseResult } from "./BaiscEntities";
-import { GoodsChangeRecordTyping, GoodsTyping } from "../enums/GoodsEnums";
+import {BrandEntityRequestParam, BrandEntityResponseResult, CategoryEntityRequestParam} from "./SiftEntities";
+import {AnyEntity, AttachmentEntityRequestParam, UserEntityResponseResult} from "./BaiscEntities";
+import {GoodsChangeRecordTyping, GoodsTyping} from "../enums";
+import {Duration} from "moment";
 
 export default {};
 
@@ -20,7 +21,7 @@ export interface GoodsInfoEntityRequestParam {
   sellingPrice: number;
   limitSelling: number;
   miniSelling: number;
-  serviceDurationTime: string;
+  serviceDurationTime: Duration;
   providerPayloadItems: string[];
   customerReadyItems: string[];
 }
@@ -98,7 +99,8 @@ export interface GoodsSellingInfoEntityRequestParam {
   maxSellingPoints: number;
 }
 
-export interface GoodsSellingInfoEntityResponseResult extends GoodsSellingInfoEntityRequestParam, AnyEntity {}
+export interface GoodsSellingInfoEntityResponseResult extends GoodsSellingInfoEntityRequestParam, AnyEntity {
+}
 
 export interface GoodsGroupEntityRequestParam {
   goodsInfoId: number;
