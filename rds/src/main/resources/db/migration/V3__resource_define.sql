@@ -61,7 +61,7 @@ CALL add_presort_tree_struct('address');
 CREATE TABLE IF NOT EXISTS address_details
 (
   address_id      BIGINT UNSIGNED NOT NULL COMMENT '地址',
-  address_details BIGINT UNSIGNED NOT NULL COMMENT '地址详情',
+  address_details VARCHAR(255)    NOT NULL COMMENT '地址详情',
   center          POINT COMMENT '定位',
   INDEX (address_id) COMMENT '外联 地址'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '地址详情';
