@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS user
 (
-  account         CHAR(255) NOT NULL COMMENT '账号',
+  account         VARCHAR(255) NOT NULL COMMENT '账号',
   nick_name       VARCHAR(2047) COMMENT '呢称',
-  doc             VARCHAR(2047) COMMENT '描述',
-  pwd_enc         VARCHAR(8000) DEFAULT NULL COMMENT '密码',
+  doc             TEXT COMMENT '描述',
+  pwd_enc         VARCHAR(2047) DEFAULT NULL COMMENT '密码',
   ban_time        DATETIME      DEFAULT NULL COMMENT '被封禁结束时间',
   last_login_time DATETIME      DEFAULT NOW() COMMENT '最后请求时间',
   UNIQUE (account) COMMENT '账号唯一'
@@ -23,11 +23,11 @@ CREATE TABLE IF NOT EXISTS user_info
   user_id            BIGINT UNSIGNED NOT NULL COMMENT '用户',
   avatar_img_id      BIGINT UNSIGNED COMMENT '用户头像',
   first_name         VARCHAR(4095) COMMENT '姓',
-  last_name          VARCHAR(1023) COMMENT '名',
+  last_name          VARCHAR(4095) COMMENT '名',
   email              VARCHAR(255) COMMENT '邮箱',
   birthday           DATETIME COMMENT '生日',
   address_details_id BIGINT UNSIGNED COMMENT '地址',
-  phone              CHAR(128) COMMENT '电话号码',
+  phone              VARCHAR(255) COMMENT '电话号码',
   id_card            VARCHAR(255) COMMENT '身份证',
   gender             TINYINT DEFAULT 2 COMMENT ' 性别：0女，1难，2未知',
   UNIQUE (phone) COMMENT '电话唯一',

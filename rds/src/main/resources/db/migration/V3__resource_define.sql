@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS address_details
 (
   address_id      BIGINT UNSIGNED NOT NULL COMMENT '地址',
   address_details VARCHAR(255)    NOT NULL COMMENT '地址详情',
-  center          POINT COMMENT '定位',
+  center          VARCHAR(255) COMMENT '定位',
   INDEX (address_id) COMMENT '外联 地址'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '地址详情';
 CALL add_base_struct('address_details');
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS table_row_delete_record
 (
   table_names     VARCHAR(127)    NULL COMMENT '表名',
   user_id         BIGINT UNSIGNED NULL COMMENT '删除用户id',
-  user_account    CHAR(255)       NULL COMMENT '删除用户账户',
+  user_account    VARCHAR(255)    NULL COMMENT '删除用户账户',
   delete_datetime DATETIME DEFAULT NOW() COMMENT '删除时间',
   entity          JSON            NOT NULL COMMENT '删除实体',
   INDEX (table_names) COMMENT '表名经常查询',

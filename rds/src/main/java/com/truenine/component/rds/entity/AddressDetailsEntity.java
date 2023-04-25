@@ -48,7 +48,7 @@ public class AddressDetailsEntity extends BaseEntity implements Serializable {
    */
   @Schema(title = "地址 id")
   @Column(name = ADDRESS_ID, nullable = false)
-  private String addressId;
+  private Long addressId;
   /**
    * 地址
    */
