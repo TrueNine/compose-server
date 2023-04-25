@@ -31,3 +31,23 @@ export enum GoodsChangeRecordTyping {
    */
   CHANGE_TITLE = 1,
 }
+
+/**
+ * 商品信息分类
+ */
+export enum GoodsInfoTyping {
+  /**
+   * 检索类型
+   */
+  RETRIEVAL = 0,
+
+  /**
+   * 商品单位信息
+   */
+  GOODS_UNIT_INFO = 1,
+
+  /**
+   * 商品单位继承信息
+   */
+  GOODS_UNIT_EXTEND_INFO = 2,
+}

@@ -1,20 +1,19 @@
-import {BrandEntityRequestParam, BrandEntityResponseResult, CategoryEntityRequestParam} from "./SiftEntities";
+import {BrandEntityRequestParam, BrandEntityResponseResult, CategoryEntityRequestParam, CategoryEntityResponseResult} from "./SiftEntities";
 import {AnyEntity, AttachmentEntityRequestParam, UserEntityResponseResult} from "./BaiscEntities";
-import {GoodsChangeRecordTyping, GoodsTyping} from "../enums";
+import {GoodsChangeRecordTyping, GoodsInfoTyping, GoodsTyping} from "../enums";
 import {Duration} from "moment";
 
 export default {};
 
+/**
+ * 商品信息
+ */
 export interface GoodsInfoEntityRequestParam {
   goodsSellingInfoId: number;
-  sellingInfo?: GoodsSellingInfoEntityRequestParam;
-  type: GoodsTyping;
   title: string;
   secondaryTitle?: string;
   brandId?: number;
-  brand?: BrandEntityRequestParam;
   categoryId?: bigint;
-  category?: CategoryEntityRequestParam;
   weightG: number;
   unit: string;
   costPrice: number;
@@ -24,30 +23,56 @@ export interface GoodsInfoEntityRequestParam {
   serviceDurationTime: Duration;
   providerPayloadItems: string[];
   customerReadyItems: string[];
-}
-
-export interface GoodsInfoEntityResponseResult extends GoodsInfoEntityRequestParam, AnyEntity {
-  sellingInfo: GoodsSellingInfoEntityResponseResult;
-  goodsInfoCode: string;
-  brand?: BrandEntityResponseResult;
+  /**
+   * 商品类型
+   */
+  type: GoodsTyping;
+  /**
+   * 商品信息类型
+   */
+  infoType: GoodsInfoTyping;
+  sellingInfo?: GoodsSellingInfoEntityRequestParam;
   category?: CategoryEntityRequestParam;
-  goodsParams: GoodsParamsEntityRequestParam[];
-  detailsImages?: GoodsInfoDetailsImagesEntityResponseResult[];
+  brand?: BrandEntityRequestParam;
+  goodsParams?: GoodsParamsEntityRequestParam[];
+  detailsImages?: GoodsInfoDetailsImagesEntityRequestParam[];
+  goodsUnits?: GoodsUnitEntityRequestParam[];
 }
 
+/**
+ * 商品信息
+ */
+export interface GoodsInfoEntityResponseResult extends GoodsInfoEntityRequestParam, AnyEntity {
+  goodsInfoCode: string;
+  sellingInfo: GoodsSellingInfoEntityResponseResult;
+  category?: CategoryEntityResponseResult;
+  brand?: BrandEntityResponseResult;
+  goodsParams?: GoodsParamsEntityResponseResult[];
+  detailsImages?: GoodsInfoDetailsImagesEntityResponseResult[];
+  goodsUnits?: GoodsUnitEntityResponseResult[];
+}
+
+/**
+ * 商品单位
+ */
 export interface GoodsUnitEntityRequestParam {
   extendsGoodsInfoId: number;
   goodsInfoId: number;
   forever: boolean;
   quantity: number;
   activated: boolean;
+  extendsGoodsInfo?: GoodsInfoEntityRequestParam;
   specifications?: GoodsUnitSpecificationEntityRequestParam[];
+  info?: GoodsInfoEntityRequestParam;
 }
 
+/**
+ * 商品单位
+ */
 export interface GoodsUnitEntityResponseResult extends GoodsUnitEntityRequestParam, AnyEntity {
+  goodsCode: string;
   extendsGoodsInfo: GoodsInfoEntityResponseResult;
   info: GoodsInfoEntityResponseResult;
-  goodsCode: string;
   specifications: GoodsUnitSpecificationEntityResponseResult[];
   changeRecords?: GoodsUnitChangeRecordEntityResponseResult[];
 }
@@ -66,11 +91,17 @@ export interface GoodsParamsEntityRequestParam {
   paramValue: string;
 }
 
+/**
+ * 商品参数返回值
+ */
+export interface GoodsParamsEntityResponseResult extends GoodsParamsEntityRequestParam, AnyEntity {
+}
+
 export interface GoodsInfoDetailsImagesEntityRequestParam {
   imgId: number;
-  image: AttachmentEntityRequestParam;
-  goodsInfoId: number;
   ordered: number;
+  goodsInfoId: number;
+  image: AttachmentEntityRequestParam;
 }
 
 export interface GoodsInfoDetailsImagesEntityResponseResult extends GoodsInfoDetailsImagesEntityRequestParam, AnyEntity {
@@ -78,11 +109,11 @@ export interface GoodsInfoDetailsImagesEntityResponseResult extends GoodsInfoDet
 }
 
 export interface GoodsUnitChangeRecordEntityRequestParam {
-  changeType: GoodsChangeRecordTyping;
   goodsUnitId: number;
   modifierUserId: number;
   newPrice?: number;
   newTitle?: string;
+  changeType: GoodsChangeRecordTyping;
 }
 
 export interface GoodsUnitChangeRecordEntityResponseResult extends GoodsUnitChangeRecordEntityRequestParam, AnyEntity {
