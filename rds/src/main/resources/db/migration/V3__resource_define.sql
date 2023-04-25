@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS api
   permissions_id BIGINT UNSIGNED DEFAULT 3 COMMENT '访问需要权限',
   api_path       TEXT COMMENT '路径',
   api_method     VARCHAR(1023) COMMENT '请求方式',
-  api_protocol   CHAR(63)        DEFAULT NULL COMMENT '请求协议',
+  api_protocol   VARCHAR(63)     DEFAULT NULL COMMENT '请求协议',
   INDEX (permissions_id) COMMENT '外联 权限'
 ) DEFAULT CHARSET = utf8mb4,
   COMMENT 'api';
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS api_call_record
   device_code     TEXT            NULL COMMENT '设备 id, 浏览器为 agent',
   req_ip          VARCHAR(63)     NULL COMMENT '请求 ip',
   login_ip        VARCHAR(63)     NULL COMMENT '登录 ip',
-  resp_code       CHAR(63)        NULL COMMENT '响应码',
+  resp_code       INT             NULL COMMENT '响应码',
   resp_result_enc TEXT COMMENT '请求结果',
   INDEX (api_id) COMMENT '外联 api'
 ) DEFAULT CHARSET = utf8mb4, COMMENT 'API请求记录';
@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS attachment_location
 (
   base_url TEXT          NOT NULL COMMENT '基本url',
   name     VARCHAR(1023) NOT NULL COMMENT '资源路径名称',
-  doc      VARCHAR(1023) DEFAULT '' COMMENT '资源路径描述',
-  type     CHAR          NOT NULL COMMENT '存储类别'
+  doc      TEXT COMMENT '资源路径描述',
+  type     VARCHAR(3)    NOT NULL COMMENT '存储类别'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '文件地址';
 CALL add_base_struct('attachment_location');
 

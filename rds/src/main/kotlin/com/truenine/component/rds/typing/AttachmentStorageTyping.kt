@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema
  */
 @Schema(title = "附件存储类别")
 enum class AttachmentStorageTyping(
-  private val v: String
+  private val value: String
 ) {
   /**
    * 远程存储
@@ -26,10 +26,10 @@ enum class AttachmentStorageTyping(
   NATIVE("N");
 
   @JsonValue
-  fun getValue() = v
+  fun getValue() = value
 
   companion object {
     @JvmStatic
-    fun findVal(value: String?) = AttachmentStorageTyping.values().find { it.v == value }
+    fun findVal(v: String?) = AttachmentStorageTyping.values().find { it.value == v }
   }
 }

@@ -13,7 +13,7 @@ import org.hibernate.annotations.NotFound;
 import java.io.Serial;
 import java.io.Serializable;
 
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
@@ -45,7 +45,7 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
   /**
    * 从属 API
    */
-  @Schema(title = "API",requiredMode = NOT_REQUIRED)
+  @Schema(title = "API", requiredMode = NOT_REQUIRED)
   @ManyToOne
   @JoinColumn(name = API_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
   @NotFound(action = IGNORE)
@@ -81,7 +81,7 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "响应码")
   @Column(name = RESP_CODE)
-  private String respCode;
+  private Integer respCode;
 
   /**
    * 请求结果
