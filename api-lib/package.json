@@ -1,6 +1,6 @@
 {
   "name": "@truenine-component/api-models",
-  "version": "0.0.14-SNAPSHOT",
+  "version": "0.0.15-SNAPSHOT",
   "description": "api model and entities",
   "main": "index.js",
   "dists": "dist/index.js",
