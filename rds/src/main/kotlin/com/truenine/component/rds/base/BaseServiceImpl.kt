@@ -3,7 +3,6 @@ package com.truenine.component.rds.base
 import com.truenine.component.rds.util.PagedWrapper
 import jakarta.validation.Valid
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.validation.annotation.Validated
 
 
 abstract class BaseServiceImpl<T : BaseEntity>(
@@ -18,17 +17,19 @@ abstract class BaseServiceImpl<T : BaseEntity>(
   override fun findAll(@Valid page: PagedRequestParam?): PagedResponseResult<T> = repo.findAll(PagedWrapper.param(page)).run { PagedWrapper.result(this) }
   override fun findById(id: Long): T? = repo.findByIdOrNull(id)
   override fun findAllById(ids: List<Long>): MutableList<T> = repo.findAllById(ids)
-  override fun findByIdAndNotLogicDelete(id: Long): T? = repo.findByIdAndNotLogicDelete(id)
+  override fun findByIdAndNotLogicDelete(id: Long): T = repo.findByIdAndNotLogicDelete(id)
 
   override fun findLdfById(id: Long): Boolean = repo.findLdfById(id) ?: true
   override fun countAll(): Long = repo.count()
   override fun countAllByNotLogicDeleted(): Long = repo.countByNotLogicDeleted()
   override fun existsById(id: Long): Boolean = repo.existsById(id)
 
-  override fun save(e: T): T? = repo.save(e)
+  override fun save(e: T): T = repo.save(e)
   override fun saveAll(es: List<T>): List<T> = repo.saveAll(es)
 
   override fun deleteById(id: Long) = repo.deleteById(id)
   override fun deleteAllById(ids: List<Long>) = repo.deleteAllById(ids)
   override fun logicDeleteById(id: Long): T? = repo.logicDeleteById(id)
+
+  override fun logicDeleteAllById(ids: List<Long>): List<T> = repo.logicDeleteAllById(ids)
 }

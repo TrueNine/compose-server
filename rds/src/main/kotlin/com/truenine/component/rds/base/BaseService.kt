@@ -8,7 +8,7 @@ interface BaseService<T : AnyEntity> {
 
   fun findById(id: Long): T?
   fun findAllById(ids: List<Long>): MutableList<T>
-  fun findByIdAndNotLogicDelete(id: Long): T?
+  fun findByIdAndNotLogicDelete(id: Long): T
   fun findAllByIdAndNotLogicDeleted(ids: List<Long>, page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
 
   fun countAll(): Long
@@ -17,11 +17,12 @@ interface BaseService<T : AnyEntity> {
 
   fun findLdfById(id: Long): Boolean
 
-  fun save(e: T): T?
+  fun save(e: T): T
   fun saveAll(es: List<T>): List<T>
 
   fun deleteById(id: Long)
   fun deleteAllById(ids: List<Long>)
 
   fun logicDeleteById(id: Long): T?
+  fun logicDeleteAllById(ids: List<Long>): List<T>
 }
