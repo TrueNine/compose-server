@@ -3,6 +3,8 @@ package com.truenine.component.rds.base;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import com.truenine.component.rds.autoconfig.BizCodeGeneratorBean;
 import com.truenine.component.rds.autoconfig.SnowflakeIdGeneratorBean;
+import com.truenine.component.rds.listener.BizCodeInsertListener;
+import com.truenine.component.rds.listener.PreSaveDeleteReferenceListener;
 import com.truenine.component.rds.listener.TableRowDeletePersistenceListener;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -39,7 +41,11 @@ import java.util.Objects;
 @MappedSuperclass
 @RequiredArgsConstructor
 @Schema(title = "顶级任意抽象类")
-@EntityListeners(TableRowDeletePersistenceListener.class)
+@EntityListeners({
+  TableRowDeletePersistenceListener.class,
+  BizCodeInsertListener.class,
+  PreSaveDeleteReferenceListener.class
+})
 public class AnyEntity implements Serializable {
   /**
    * 主键

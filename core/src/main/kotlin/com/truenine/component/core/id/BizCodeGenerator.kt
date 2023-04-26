@@ -1,6 +1,5 @@
 package com.truenine.component.core.id
 
-interface BizCode {
-  fun nextCode(): Long
+interface BizCodeGenerator {
   fun nextCodeStr(): String
 }

@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
-class BizCodeGeneratorBeanTest : AbstractTestNGSpringContextTests() {
+class BizCodeGeneratorGeneratorBeanTest : AbstractTestNGSpringContextTests() {
   @Autowired
   lateinit var bizId: BizCodeGeneratorBean
 
@@ -18,7 +18,7 @@ class BizCodeGeneratorBeanTest : AbstractTestNGSpringContextTests() {
     assertNotNull(id)
     println(id)
     assertTrue("生成的订单号不满足位数") {
-      id.length == 21
+      (id as? String)?.length == 21
     }
 
     val batchIds = List(100) {

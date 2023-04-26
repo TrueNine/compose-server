@@ -3,12 +3,9 @@ package com.truenine.component.core.id
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class SynchronizedSimpleBizCode(
+class SynchronizedSimpleBizCodeGenerator(
   private val snowflake: Snowflake
-) : BizCode {
-
-  override fun nextCode(): Long = nextCodeStr().toLong()
-
+) : BizCodeGenerator {
   override fun nextCodeStr(): String {
     val dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
     val st = snowflake.nextStr()

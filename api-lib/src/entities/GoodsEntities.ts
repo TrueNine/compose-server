@@ -1,7 +1,7 @@
-import {BrandEntityRequestParam, BrandEntityResponseResult, CategoryEntityRequestParam, CategoryEntityResponseResult} from "./SiftEntities";
-import {AnyEntity, AttachmentEntityRequestParam, UserEntityResponseResult} from "./BaiscEntities";
-import {GoodsChangeRecordTyping, GoodsInfoTyping, GoodsTyping} from "../enums";
-import {Duration} from "moment";
+import { BrandEntityRequestParam, BrandEntityResponseResult, CategoryEntityRequestParam, CategoryEntityResponseResult } from "./SiftEntities";
+import { AnyEntity, AttachmentEntityRequestParam, UserEntityResponseResult } from "./BaiscEntities";
+import { GoodsChangeRecordTyping, GoodsInfoTyping, GoodsTyping } from "../enums";
+import { Duration } from "moment";
 
 export default {};
 
@@ -94,8 +94,7 @@ export interface GoodsParamsEntityRequestParam {
 /**
  * 商品参数返回值
  */
-export interface GoodsParamsEntityResponseResult extends GoodsParamsEntityRequestParam, AnyEntity {
-}
+export interface GoodsParamsEntityResponseResult extends GoodsParamsEntityRequestParam, AnyEntity {}
 
 export interface GoodsInfoDetailsImagesEntityRequestParam {
   imgId: number;
@@ -130,8 +129,7 @@ export interface GoodsSellingInfoEntityRequestParam {
   maxSellingPoints: number;
 }
 
-export interface GoodsSellingInfoEntityResponseResult extends GoodsSellingInfoEntityRequestParam, AnyEntity {
-}
+export interface GoodsSellingInfoEntityResponseResult extends GoodsSellingInfoEntityRequestParam, AnyEntity {}
 
 export interface GoodsGroupEntityRequestParam {
   goodsInfoId: number;

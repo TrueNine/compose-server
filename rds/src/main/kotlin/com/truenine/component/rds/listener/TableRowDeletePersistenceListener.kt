@@ -3,7 +3,6 @@ package com.truenine.component.rds.listener
 import com.truenine.component.core.lang.LogKt
 import com.truenine.component.rds.event.TableRowDeleteSpringEvent
 import jakarta.persistence.PreRemove
-import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component
  * @author TrueNine
  * @since 2022-12-13
  */
-@Slf4j
 @Component
 class TableRowDeletePersistenceListener {
   private lateinit var pub: ApplicationEventPublisher
