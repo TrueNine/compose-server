@@ -23,17 +23,14 @@ export interface GoodsInfoEntityRequestParam {
   serviceDurationTime: Duration;
   providerPayloadItems: string[];
   customerReadyItems: string[];
+  lostPrice: number;
+  distributionPercent: number;
+  givePoints: number;
+  maxSellingPoints: number;
   /**
    * 商品类型
    */
   type: GoodsTyping;
-  /**
-   * 商品信息类型
-   */
-  infoType: GoodsInfoTyping;
-  sellingInfo?: GoodsSellingInfoEntityRequestParam;
-  category?: CategoryEntityRequestParam;
-  brand?: BrandEntityRequestParam;
   goodsParams?: GoodsParamsEntityRequestParam[];
   detailsImages?: GoodsInfoDetailsImagesEntityRequestParam[];
   goodsUnits?: GoodsUnitEntityRequestParam[];
@@ -44,12 +41,15 @@ export interface GoodsInfoEntityRequestParam {
  */
 export interface GoodsInfoEntityResponseResult extends GoodsInfoEntityRequestParam, AnyEntity {
   goodsInfoCode: string;
-  sellingInfo: GoodsSellingInfoEntityResponseResult;
   category?: CategoryEntityResponseResult;
   brand?: BrandEntityResponseResult;
   goodsParams?: GoodsParamsEntityResponseResult[];
   detailsImages?: GoodsInfoDetailsImagesEntityResponseResult[];
   goodsUnits?: GoodsUnitEntityResponseResult[];
+  /**
+   * 商品信息类型
+   */
+  infoType: GoodsInfoTyping;
 }
 
 /**
@@ -121,15 +121,6 @@ export interface GoodsUnitChangeRecordEntityResponseResult extends GoodsUnitChan
   modifierUser: UserEntityResponseResult;
   goodsUnit: GoodsUnitEntityResponseResult;
 }
-
-export interface GoodsSellingInfoEntityRequestParam {
-  lostPrice: number;
-  distributionPercent: number;
-  givePoints: number;
-  maxSellingPoints: number;
-}
-
-export interface GoodsSellingInfoEntityResponseResult extends GoodsSellingInfoEntityRequestParam, AnyEntity {}
 
 export interface GoodsGroupEntityRequestParam {
   goodsInfoId: number;

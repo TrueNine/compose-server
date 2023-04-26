@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional
 @JvmDefaultWithCompatibility
 @NoRepositoryBean
 interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
-
-
   @Query("from #{#entityName} e where e.id = :id and e.ldf = false")
   fun findByIdAndNotLogicDelete(id: Long): T?
 

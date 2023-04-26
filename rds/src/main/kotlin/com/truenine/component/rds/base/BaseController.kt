@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseBody
 
 
@@ -15,7 +14,7 @@ abstract class BaseController<T : BaseEntity>(
   @ResponseBody
   @GetMapping("items/all")
   @Operation(summary = "分页查询所有数据")
-  fun findAll(@Valid @RequestBody page: PagedRequestParam?): PagedResponseResult<T> = service.findAllByNotLogicDeleted(page ?: PagedWrapper.DEFAULT_MAX)
+  fun findAll(@Valid page: PagedRequestParam?): PagedResponseResult<T> = service.findAllByNotLogicDeleted(page ?: PagedWrapper.DEFAULT_MAX)
 
   @ResponseBody
   @GetMapping("items/{id}")
@@ -23,7 +22,7 @@ abstract class BaseController<T : BaseEntity>(
   fun findById(@PathVariable id: Long): T? = service.findById(id)
 
   @ResponseBody
-  @GetMapping("items/count")
+  @GetMapping("items/countAll")
   @Operation(summary = "当前数据总数")
   fun countAll(): Long = service.countAllByNotLogicDeleted()
 
