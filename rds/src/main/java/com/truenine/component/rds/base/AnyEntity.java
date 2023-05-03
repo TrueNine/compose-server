@@ -26,10 +26,7 @@ import java.util.Objects;
  * @author TrueNine
  * @since 2023-04-23
  */
-@GenericGenerator(
-  name = SnowflakeIdGeneratorBean.NAME,
-  strategy = SnowflakeIdGeneratorBean.CLASS_NAME
-)// 雪花算法生成器
+
 @GenericGenerator(
   name = BizCodeGeneratorBean.NAME,
   strategy = BizCodeGeneratorBean.CLASS_NAME
@@ -59,6 +56,10 @@ public class AnyEntity implements Serializable {
    * id
    */
   @Id
+  @GenericGenerator(
+    name = SnowflakeIdGeneratorBean.NAME,
+    strategy = SnowflakeIdGeneratorBean.CLASS_NAME
+  )// 雪花算法生成器
   @Column(name = DataBaseBasicFieldNames.ID)
   @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
   @Schema(title = ID, example = "7001234523405")
