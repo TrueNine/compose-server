@@ -7,10 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Index;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -25,12 +22,9 @@ import java.io.Serializable;
  */
 @Setter
 @Getter
-@ToString
-@DynamicInsert
-@DynamicUpdate
 @MappedSuperclass
-@Table
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(title = "预排序树")
 public class TreeEntity extends BaseEntity implements Serializable {
   /**

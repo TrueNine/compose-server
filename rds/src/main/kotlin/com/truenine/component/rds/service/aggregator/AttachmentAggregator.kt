@@ -8,6 +8,5 @@ import org.springframework.web.multipart.MultipartFile
  * 附件服务接口聚合器
  */
 interface AttachmentAggregator {
-  fun getFullUrl(attachment: AttachmentEntity): String?
   fun uploadAttachment(file: MultipartFile, saveFileCallback: () -> SaveAttachmentModel): AttachmentEntity?
 }

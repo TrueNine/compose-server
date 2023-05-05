@@ -68,7 +68,7 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
     val u = userService.save(UserEntity().apply {
       account = "abcd"
       pwdEnc = "abcd1234"
-    })!!
+    })
     val ug = service.save(UserGroupEntity().apply {
       userId = 123124125
       name = "我的大海"

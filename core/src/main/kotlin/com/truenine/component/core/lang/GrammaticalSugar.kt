@@ -1,8 +1,10 @@
 package com.truenine.component.core.lang
 
 import com.truenine.component.core.encrypt.Base64Helper
+import java.lang.reflect.Field
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import kotlin.reflect.KClass
 
 open class GrammaticalSugar
 
@@ -66,3 +68,20 @@ fun String.base64(charset: Charset = StandardCharsets.UTF_8): String = Base64Hel
  */
 fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = Base64Helper.decode(this, charset)
 
+
+/**
+ * # 递归获取一个类的所有属性
+ * @param endType 结束的类型
+ * @return 当前类以及所有到结束标记为止的 fields
+ */
+fun KClass<*>.recursionFields(endType: KClass<*> = Any::class): Array<out Field> {
+  val selfFields = mutableListOf<Field>()
+  var superClass: Class<*>? = this.java
+  val endsWith = endType.java
+  while (superClass != null) {
+    selfFields += superClass.declaredFields
+    superClass = superClass.superclass
+    if (superClass == endsWith) break
+  }
+  return selfFields.toTypedArray()
+}

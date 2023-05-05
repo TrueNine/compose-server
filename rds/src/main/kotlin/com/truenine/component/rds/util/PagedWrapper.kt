@@ -48,3 +48,16 @@ object PagedWrapper {
     return result(repository.findAll(a))
   }
 }
+
+/**
+ * # 对分页结果的封装，使得其返回包装对象
+ */
+val <T> Page<T>.result: PagedResponseResult<T>
+  get() = PagedWrapper.result(this)
+
+
+/**
+ * # 对分页参数的封装，返回一个包装的对象
+ */
+val PagedRequestParam?.page: Pageable
+  get() = PagedWrapper.param(this)

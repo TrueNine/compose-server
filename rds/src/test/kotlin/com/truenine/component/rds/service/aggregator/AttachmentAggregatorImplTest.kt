@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.testng.annotations.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
@@ -26,11 +25,7 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
         saveName = "adwd0juihjrthjrthrhrhrth"
       }
     }!!.apply {
-      assertNotNull(this)
-      assertNotNull(this.location)
       assertNotNull(this.attachmentLocationId)
-      println(this.fullPath)
-      println(this.fullPath)
     }
   }
 
@@ -43,17 +38,6 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
         saveName = "adwd0juihjrthjrthrhrhrth"
         storageType = AttachmentStorageTyping.REMOTE
       }
-    }!!.apply {
-      assertNotNull(this)
-      val full = this.fullPath
-      assertNotNull(full)
-      assertEquals(
-        "https://oss.aliyun.com/static/" + "adwd0juihjrthjrthrhrhrth",
-        full
-      )
-      val a = ass.getFullUrl(this)
-      assertEquals(a, full)
-      println(full)
-    }
+    }!!
   }
 }

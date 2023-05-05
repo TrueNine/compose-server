@@ -1,7 +1,6 @@
 package com.truenine.component.rds.base
 
 import com.truenine.component.core.id.Snowflake
-import com.truenine.component.core.lang.slf4j
 import com.truenine.component.rds.RdsEntrance
 import com.truenine.component.rds.entity.DbTestBaseServiceEntity
 import com.truenine.component.rds.service.BaseServiceTester
@@ -16,8 +15,6 @@ import kotlin.test.*
 @SpringBootTest(classes = [RdsEntrance::class])
 class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
-  private val log = slf4j(this::class)
-
   @Autowired
   private lateinit var service: BaseServiceTester
 
@@ -26,7 +23,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
     val a = service.save(DbTestBaseServiceEntity().apply {
       title = "wad"
       center = PointModel(BigDecimal("1.3"), BigDecimal("2.44"))
-    })!!
+    })
     val all = service.findAll()
     assertContains(all.dataList, a, "a$a dataList${all.dataList}")
   }
@@ -87,10 +84,19 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   }
 
   @Test
-  fun testFindByIdAndNotLogicDelete() {
-    val ess = service.save(getEntity())!!
-    val t2 = service.save(ess.apply { ldf = true })!!
-    val t3 = service.findByIdAndNotLogicDelete(t2.id)
+  fun testFindByIdAndNotLogicDeleted() {
+    val ess = service.save(getEntity())
+    val t2 = service.logicDeleteById(ess.id)!!
+    assertFailsWith<NullPointerException> {
+      service.findByIdAndNotLogicDeleted(t2.id)
+    }
+  }
+
+  @Test
+  fun testFindByIdAndNotLogicDeletedOrNull() {
+    val ess = service.save(getEntity())
+    val t2 = service.logicDeleteById(ess.id)!!
+    val t3 = service.findByIdAndNotLogicDeletedOrNull(t2.id)
     assertNull(t3)
   }
 
@@ -157,10 +163,10 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testLogicDeleteById() {
-    val ser = service.save(getEntity())!!
+    val ser = service.save(getEntity())
     val cc = service.logicDeleteById(ser.id)!!
     assertTrue { cc.ldf }
-    val abc = service.findByIdAndNotLogicDelete(ser.id)
+    val abc = service.findByIdAndNotLogicDeletedOrNull(ser.id)
     assertNull(abc)
   }
 }

@@ -8,12 +8,11 @@ import com.truenine.component.rds.listener.PreSaveDeleteReferenceListener;
 import com.truenine.component.rds.listener.TableRowDeletePersistenceListener;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serial;
@@ -33,10 +32,9 @@ import java.util.Objects;
 )// 业务单号生成器具
 @Setter
 @Getter
-@DynamicInsert
-@DynamicUpdate
 @MappedSuperclass
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(title = "顶级任意抽象类")
 @EntityListeners({
   TableRowDeletePersistenceListener.class,
@@ -76,5 +74,10 @@ public class AnyEntity implements Serializable {
   @Override
   public int hashCode() {
     return getClass().hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(this.getId());
   }
 }

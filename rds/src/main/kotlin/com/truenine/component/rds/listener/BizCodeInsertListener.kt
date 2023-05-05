@@ -1,8 +1,10 @@
 package com.truenine.component.rds.listener
 
 import com.truenine.component.core.id.BizCodeGenerator
+import com.truenine.component.core.lang.recursionFields
 import com.truenine.component.core.lang.slf4j
 import com.truenine.component.rds.annotations.BizCode
+import com.truenine.component.rds.base.BaseEntity
 import jakarta.persistence.PrePersist
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -25,7 +27,7 @@ class BizCodeInsertListener {
   @PrePersist
   fun insert(data: Any?) {
     data?.let { d ->
-      val ab = d.javaClass.declaredFields.filter {
+      d::class.recursionFields(BaseEntity::class).filter {
         it.isAnnotationPresent(BizCode::class.java)
       }.map {
         it.trySetAccessible()

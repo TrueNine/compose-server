@@ -31,8 +31,7 @@ class AttachmentAggregatorImpl(
         type = saveFile.storageType
         name = "URL:\$${LocalDateTime.now()}"
         log.debug("保存一个新的 附件地址 = {}", this)
-      })!!
-
+      })
     // 构建一个新附件对象保存并返回
     val att = AttachmentEntity().apply {
       saveName = saveFile.saveName
@@ -40,13 +39,10 @@ class AttachmentAggregatorImpl(
       size = file.size
       mimeType = file.contentType ?: MediaTypes.BINARY.media()
       attachmentLocationId = location.id!!
-      this.location = location
     }
     // 重新进行赋值
     return aService.save(att)
   }
-
-  override fun getFullUrl(attachment: AttachmentEntity): String? = attachment.fullPath
 
   companion object {
     @JvmStatic

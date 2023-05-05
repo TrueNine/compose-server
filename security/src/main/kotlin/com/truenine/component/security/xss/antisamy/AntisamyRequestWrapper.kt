@@ -1,6 +1,8 @@
 package com.truenine.component.security.xss.antisamy
 
+
 import com.truenine.component.core.lang.LogKt
+import com.truenine.component.core.lang.slf4j
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
 import org.owasp.validator.html.AntiSamy
@@ -37,6 +39,6 @@ class AntisamyRequestWrapper(request: HttpServletRequest?) :
     private val ANTI_SAMY = AntiSamy()
 
     @JvmStatic
-    private val log: Logger = LogKt.getLog(this::class)
+    private val log: Logger = slf4j(this::class)
   }
 }

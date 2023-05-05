@@ -4,20 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
-import jakarta.persistence.Index;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 
 /**
@@ -28,17 +22,9 @@ import java.util.Objects;
  */
 @Setter
 @Getter
-@ToString
-@DynamicInsert
-@DynamicUpdate
 @MappedSuperclass
-@Table(indexes = {
-  @Index(name = TreeEntity.RLN, columnList = TreeEntity.RLN),
-  @Index(name = TreeEntity.RRN, columnList = TreeEntity.RRN),
-  @Index(name = TreeEntity.RPI, columnList = TreeEntity.RPI),
-  @Index(name = RefAnyEntity.ARI, columnList = RefAnyEntity.ARI)
-})
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(title = "预排序树和任意外键的结合体")
 public class TreeAnyRefEntity extends TreeEntity implements Serializable {
 
@@ -53,6 +39,7 @@ public class TreeAnyRefEntity extends TreeEntity implements Serializable {
   public static final String TYP = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE;
   @Serial
   private static final long serialVersionUID = 1L;
+
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
   @Schema(title = "任意外键id")

@@ -6,17 +6,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.*;
+import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 
 /**
@@ -30,11 +28,9 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIR
  */
 @Setter
 @Getter
-@ToString
-@DynamicInsert
-@DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
-@RequiredArgsConstructor
 @Schema(title = "顶级抽象类")
 public class BaseEntity extends AnyEntity implements Serializable {
   /**
@@ -62,6 +58,6 @@ public class BaseEntity extends AnyEntity implements Serializable {
    */
   @JsonIgnore
   @Column(name = LDF, nullable = false)
-  @Schema(hidden = true, title = "逻辑删除标志", requiredMode = NOT_REQUIRED,accessMode = READ_ONLY)
+  @Schema(hidden = true, title = "逻辑删除标志", requiredMode = NOT_REQUIRED, accessMode = READ_ONLY)
   protected Boolean ldf = false;
 }

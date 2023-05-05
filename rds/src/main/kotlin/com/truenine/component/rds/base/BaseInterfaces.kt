@@ -1,10 +1,63 @@
 package com.truenine.component.rds.base
 
+import com.truenine.component.rds.util.PagedWrapper
+import org.apache.poi.ss.formula.functions.T
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.NoRepositoryBean
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 
+/**
+ * # 任意实体通用 CRUD 接口
+ * @author TrueNine
+ * @since 2023-05-05
+ */
+@NoRepositoryBean
+interface AnyRepository<T : AnyEntity> :
+  JpaRepository<T, Long>,
+  CrudRepository<T, Long>,
+  JpaSpecificationExecutor<T> {
+}
+
+@NoRepositoryBean
+@JvmDefaultWithCompatibility
+interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
+
+  fun findByIdAndNotLogicDelete(id: Long): T = findByIdAndNotLogicDeleteOrNull(id)!!
+
+  @Query("from #{#entityName} e where e.id = :id and e.ldf = false")
+  fun findByIdAndNotLogicDeleteOrNull(id: Long): T?
+
+  @Query("from #{#entityName} e where e.ldf = false")
+  fun findAllByNotLogicDeleted(page: Pageable): Page<T>
+
+  @Query("from #{#entityName} e where e.id in :ids and e.ldf = false")
+  fun findAllByIdAndNotLogicDeleted(ids: List<Long>, page: Pageable): Page<T>
+
+  @Query("select e.ldf from #{#entityName} e where e.id = :id and e.ldf = false")
+  fun findLdfById(id: Long): Boolean?
+
+  @Transactional(rollbackFor = [Exception::class])
+  fun logicDeleteById(id: Long): T? = findByIdOrNull(id)?.let { it.ldf = true;save(it) }
+
+  @Transactional(rollbackFor = [Exception::class])
+  fun logicDeleteAllById(ids: List<Long>): List<T> = findAllById(ids).filter { !it.ldf }.apply { saveAll(this) }
+
+  @Query("select count(e.id) from #{#entityName} e where e.ldf = false")
+  fun countByNotLogicDeleted(): Long
+}
+
+/**
+ * # 线索树 CRUD 接口
+ * @author TrueNine
+ * @since 2023-05-05
+ */
 @NoRepositoryBean
 @JvmDefaultWithCompatibility
 interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
@@ -155,3 +208,38 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
     popRrnByOffset(2, child.rln)
   }
 }
+
+
+/**
+ * # 单一 CRUD 接口
+ * @author TrueNine
+ * @since 2023-05-05
+ */
+interface BaseService<T : AnyEntity> {
+  fun findAll(page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
+  fun findAllByNotLogicDeleted(page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
+
+  fun findById(id: Long): T?
+  fun findAllById(ids: List<Long>): MutableList<T>
+  fun findByIdAndNotLogicDeleted(id: Long): T
+  fun findByIdAndNotLogicDeletedOrNull(id: Long): T?
+
+  fun findAllByIdAndNotLogicDeleted(ids: List<Long>, page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
+
+  fun countAll(): Long
+  fun countAllByNotLogicDeleted(): Long
+  fun existsById(id: Long): Boolean
+
+  fun findLdfById(id: Long): Boolean
+
+  fun save(e: T): T
+  fun saveAll(es: List<T>): List<T>
+
+  fun deleteById(id: Long)
+  fun deleteAllById(ids: List<Long>)
+
+  fun logicDeleteById(id: Long): T?
+  fun logicDeleteAllById(ids: List<Long>): List<T>
+}
+
+
