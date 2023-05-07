@@ -23,8 +23,10 @@ import java.io.Serializable;
 public class PagedRequestParam implements Serializable {
   public static final int MIN_OFFSET = 0;
   public static final int MAX_PAGE_SIZE = 42;
+
   @Serial
   private static final long serialVersionUID = 1L;
+
   @Min(value = MIN_OFFSET, message = "分页页码最小为0")
   @Schema(title = "页码 最小为 0", defaultValue = "0")
   private Integer offset = MIN_OFFSET;

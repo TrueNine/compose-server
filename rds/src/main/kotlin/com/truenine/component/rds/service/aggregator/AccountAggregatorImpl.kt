@@ -4,33 +4,27 @@ import com.truenine.component.rds.entity.UserEntity
 import com.truenine.component.rds.models.request.LoginAccountRequestParam
 import com.truenine.component.rds.models.request.ModifyAccountPasswordRequestParam
 import com.truenine.component.rds.models.request.RegisterAccountRequestParam
-import com.truenine.component.rds.service.UserInfoService
 import com.truenine.component.rds.service.UserService
 import jakarta.validation.Valid
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
 
 @Service
 class AccountAggregatorImpl(
   private val userService: UserService,
-  private val userInfoService: UserInfoService,
   private val passwordEncoder: PasswordEncoder
 ) : AccountAggregator {
 
   override fun registerAccount(@Valid param: RegisterAccountRequestParam): Boolean =
-    if (userService.existsByAccount(param.account)) {
-      false
-    } else {
-      val un = userService.save(UserEntity().apply {
+    if (!userService.existsByAccount(param.account)) {
+      userService.save(UserEntity().apply {
         account = param.account
         pwdEnc = passwordEncoder.encode(param.password)
         nickName = param.nickName
         doc = param.description
-      })
-      un != null
-    }
+      }); true
+    } else false
 
   override fun login(@Valid param: LoginAccountRequestParam): UserEntity? =
     if (verifyPassword(param.account, param.password)) {

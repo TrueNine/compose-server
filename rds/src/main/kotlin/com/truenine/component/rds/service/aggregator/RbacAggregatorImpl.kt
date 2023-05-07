@@ -4,7 +4,7 @@ import com.truenine.component.rds.entity.relationship.RoleGroupRoleEntity
 import com.truenine.component.rds.entity.relationship.RolePermissionsEntity
 import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity
 import com.truenine.component.rds.entity.relationship.UserRoleGroupEntity
-import com.truenine.component.rds.repository.RoleGroupRepository
+import com.truenine.component.rds.repository.AllRoleGroupEntityRepository
 import com.truenine.component.rds.repository.UserGroupRepository
 import com.truenine.component.rds.repository.UserRepository
 import com.truenine.component.rds.repository.relationship.RoleGroupRoleRepository
@@ -13,10 +13,8 @@ import com.truenine.component.rds.repository.relationship.UserGroupRoleGroupRepo
 import com.truenine.component.rds.repository.relationship.UserRoleGroupRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.validation.annotation.Validated
 
 @Service
-@Validated
 class RbacAggregatorImpl(
   private val urg: UserRoleGroupRepository,
   private val ug: UserGroupRepository,
@@ -24,7 +22,7 @@ class RbacAggregatorImpl(
   private val ugrg: UserGroupRoleGroupRepository,
   private val rgr: RoleGroupRoleRepository,
   private val rp: RolePermissionsRepository,
-  private val rg: RoleGroupRepository
+  private val rg: AllRoleGroupEntityRepository
 ) : RbacAggregator {
 
   override fun findAllRoleNameByUserAccount(account: String): Set<String> =
@@ -50,12 +48,13 @@ class RbacAggregatorImpl(
     ) {
       val roleGroups = rg.findAllById(this)
       val roleNames = roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
-      val permissionNames = roleGroups.map { it.roles }
+      val permissionNames = roleGroups
+        .asSequence().map { it.roles }
         .flatten().map { it.permissions }
-        .flatten().map { it.name }
+        .flatten().map { it.name }.toList()
       roleNames + permissionNames
     }
-    return allNames.toSet()
+    return allNames.filterNotNull().toSet()
   }
 
   override fun findAllSecurityNameByAccount(account: String): Set<String> =

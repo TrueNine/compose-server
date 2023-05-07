@@ -107,7 +107,7 @@ subprojects {
 
   tasks {
     compileJava {
-      options.isFork=true
+      options.isFork = true
       options.forkOptions.memoryMaximumSize = "2G"
       options.forkOptions.memoryInitialSize = "1G"
     }
@@ -145,8 +145,8 @@ subprojects {
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
       exclude("org.apache.logging.log4j")
-      exclude("org.springframework.boot","spring-boot-starter-logging")
-      exclude("org.springframework.boot","spring-boot")
+      exclude("org.springframework.boot", "spring-boot-starter-logging")
+      exclude("org.springframework.boot", "spring-boot")
     }
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")

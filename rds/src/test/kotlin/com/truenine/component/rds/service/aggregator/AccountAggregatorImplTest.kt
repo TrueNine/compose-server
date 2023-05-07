@@ -25,11 +25,11 @@ class AccountAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Autowired
   lateinit var us: UserService
 
-  fun getRegisterParam() = RegisterAccountRequestParam().apply {
-    account = "abcd${snowflake.nextStr()}"
-    password = "qwer1234"
-    nickName = "我艹${snowflake.nextStr()}"
-    description = "我命由我不白天"
+  fun getRegisterParam() = object : RegisterAccountRequestParam {
+    override var account = "abcd${snowflake.nextStr()}"
+    override var password = "qwer1234"
+    override var nickName = "我艹${snowflake.nextStr()}"
+    override var description: String? = "我命由我不白天"
   }
 
   @Test
@@ -56,15 +56,15 @@ class AccountAggregatorImplTest : AbstractTestNGSpringContextTests() {
   fun testLogin() {
     val regParam = regUser()
 
-    val loginUser = agg.login(LoginAccountRequestParam().apply {
-      this.account = regParam.account
-      this.password = regParam.password
+    val loginUser = agg.login(object : LoginAccountRequestParam {
+      override val account = regParam.account
+      override val password = regParam.password
     })!!
     assertNotEquals(loginUser.pwdEnc, regParam.password, "密码必须加密保存")
 
-    val errLoginUser = agg.login(LoginAccountRequestParam().apply {
-      this.account = regParam.account
-      this.password = "abcdefg"
+    val errLoginUser = agg.login(object : LoginAccountRequestParam {
+      override val account = regParam.account
+      override val password = "abcdefg"
     })
     assertNull(errLoginUser)
   }
@@ -72,18 +72,18 @@ class AccountAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testModifyPassword() {
     val regParam = regUser()
-    val m = agg.modifyPassword(ModifyAccountPasswordRequestParam().apply {
-      account = regParam.account
-      oldPassword = regParam.password
-      newPassword = "aaccee3313"
+    val m = agg.modifyPassword(object : ModifyAccountPasswordRequestParam {
+      override val account = regParam.account
+      override var oldPassword = regParam.password
+      override var newPassword = "aaccee3313"
     })
     assertTrue("不能正常修改密码") { m }
 
     // 不可与之前密码相同
-    val n =agg.modifyPassword(ModifyAccountPasswordRequestParam().apply {
-      account = regParam.account
-      oldPassword = regParam.password
-      newPassword = "aaccee3313"
+    val n = agg.modifyPassword(object : ModifyAccountPasswordRequestParam {
+      override val account = regParam.account
+      override var oldPassword = regParam.password
+      override var newPassword = "aaccee3313"
     })
     assertFalse("能修改与以前相同的密码") { n }
   }

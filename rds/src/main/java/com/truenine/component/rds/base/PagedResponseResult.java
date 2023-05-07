@@ -1,7 +1,9 @@
 package com.truenine.component.rds.base;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,6 +17,8 @@ import java.util.List;
  * @since 2022-12-31
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(title = "分页列表信息")
 public class PagedResponseResult<T> implements Serializable {
   @Serial

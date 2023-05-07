@@ -1,7 +1,7 @@
 package com.truenine.component.core.autoconfig
 
 import com.truenine.component.core.ctx.UserInfoContextHolder
-import com.truenine.component.core.lang.LogKt
+import com.truenine.component.core.lang.slf4j
 import com.truenine.component.core.models.BasicUserInfoModel
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.MethodParameter
@@ -13,7 +13,7 @@ import org.springframework.web.method.support.ModelAndViewContainer
 
 @Configuration
 class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver {
-  private val log = LogKt.getLog(BasicUserInfoArgumentResolver::class)
+  private val log = slf4j(BasicUserInfoArgumentResolver::class)
   override fun supportsParameter(parameter: MethodParameter): Boolean {
     return parameter.parameter.type == BasicUserInfoModel::class.java
   }

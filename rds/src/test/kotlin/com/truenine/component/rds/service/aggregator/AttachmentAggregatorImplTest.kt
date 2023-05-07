@@ -1,7 +1,7 @@
 package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.rds.RdsEntrance
-import com.truenine.component.rds.models.SaveAttachmentModel
+import com.truenine.component.rds.models.request.PostAttachmentRequestParam
 import com.truenine.component.rds.typing.AttachmentStorageTyping
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,9 +20,10 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
   fun testUploadAttachment() {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass.uploadAttachment(mockFile) {
-      SaveAttachmentModel().apply {
-        baseUrl = "https://oss.aliyun.com/static"
-        saveName = "adwd0juihjrthjrthrhrhrth"
+      object : PostAttachmentRequestParam {
+        override var baseUrl = "https://oss.aliyun.com/static"
+        override var saveName = "adwd0juihjrthjrthrhrhrth"
+        override var storageType = AttachmentStorageTyping.REMOTE
       }
     }!!.apply {
       assertNotNull(this.attachmentLocationId)
@@ -33,10 +34,10 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
   fun testGetFullUrl() {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass.uploadAttachment(mockFile) {
-      SaveAttachmentModel().apply {
-        baseUrl = "https://oss.aliyun.com/static"
-        saveName = "adwd0juihjrthjrthrhrhrth"
-        storageType = AttachmentStorageTyping.REMOTE
+      object : PostAttachmentRequestParam {
+        override var baseUrl = "https://oss.aliyun.com/static"
+        override var saveName = "adwd0juihjrthjrthrhrhrth"
+        override var storageType = AttachmentStorageTyping.REMOTE
       }
     }!!
   }

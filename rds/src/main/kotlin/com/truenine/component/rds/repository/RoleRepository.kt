@@ -1,6 +1,7 @@
 package com.truenine.component.rds.repository
 
 import com.truenine.component.rds.base.BaseRepository
+import com.truenine.component.rds.entity.AllRoleEntity
 import com.truenine.component.rds.entity.RoleEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -18,4 +19,19 @@ interface RoleRepository : BaseRepository<RoleEntity> {
   """
   )
   fun findAllByUserId(userId: Long): List<RoleEntity>
+}
+
+@Repository
+interface AllRoleEntityRepository : BaseRepository<AllRoleEntity> {
+  fun findAllByName(name: String): List<AllRoleEntity>
+
+  @Query(
+    """
+    from AllRoleEntity r
+    left join RoleGroupRoleEntity rgr on r.id = rgr.roleId
+    left join UserRoleGroupEntity urg on rgr.roleGroupId = urg.roleGroupId
+    where urg.userId = :userId
+  """
+  )
+  fun findAllByUserId(userId: Long): List<AllRoleEntity>
 }

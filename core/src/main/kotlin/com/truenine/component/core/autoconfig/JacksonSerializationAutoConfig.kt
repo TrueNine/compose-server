@@ -28,11 +28,12 @@ import java.util.*
  * @since 2023-02-23
  */
 @Configuration
-open class JacksonSerializationAutoConfig {
+class JacksonSerializationAutoConfig {
+  private val log = slf4j(this::class)
 
   @Bean
   @Lazy
-  open fun jacksonF(): Jackson2ObjectMapperBuilderCustomizer {
+  fun jacksonF(): Jackson2ObjectMapperBuilderCustomizer {
     val module = JavaTimeModule()
     val ldts = LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
     val ldtd = LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
@@ -64,8 +65,4 @@ open class JacksonSerializationAutoConfig {
     }
   }
 
-  companion object {
-    @JvmStatic
-    private val log = slf4j(JacksonSerializationAutoConfig::class)
-  }
 }

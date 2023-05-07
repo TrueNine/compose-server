@@ -5,7 +5,7 @@ import com.truenine.component.core.lang.hasText
 import com.truenine.component.core.lang.slf4j
 import com.truenine.component.rds.entity.AttachmentEntity
 import com.truenine.component.rds.entity.AttachmentLocationEntity
-import com.truenine.component.rds.models.SaveAttachmentModel
+import com.truenine.component.rds.models.request.PostAttachmentRequestParam
 import com.truenine.component.rds.service.AttachmentLocationService
 import com.truenine.component.rds.service.AttachmentService
 import jakarta.validation.Valid
@@ -22,7 +22,7 @@ class AttachmentAggregatorImpl(
   private val alService: AttachmentLocationService
 ) : AttachmentAggregator {
 
-  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> SaveAttachmentModel): AttachmentEntity? {
+  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> PostAttachmentRequestParam): AttachmentEntity? {
     val saveFile = saveFileCallback()
     // 如果 此条url 不存在，则保存一个新的 url
     val location = alService.findByBaseUrl(saveFile.baseUrl)

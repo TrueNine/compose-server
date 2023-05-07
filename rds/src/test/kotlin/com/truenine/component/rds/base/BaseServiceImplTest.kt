@@ -51,8 +51,15 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   fun testFindAllByIdAndNotLogicDeleted() {
     val allId = service.saveAll(getEs()).map { it.id }
     val nots = service.findAllByIdAndNotLogicDeleted(allId)
-    assertNotNull(nots.dataList)
-    assertTrue { nots.dataList.map { it.id }.containsAll(allId) }
+
+    assertTrue(
+      """
+      allId$allId
+      note${nots.dataList}
+    """.trimIndent()
+    )
+    { nots.dataList.map { it.id }.containsAll(allId) }
+
     val deld = service.saveAll(nots.dataList.map { it.ldf = true;it })
     service.findAllByIdAndNotLogicDeleted(deld.map { it.id }).let {
       assertFalse { it.dataList.map { it.ldf }.contains(true) }

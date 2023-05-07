@@ -2,15 +2,20 @@ package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.id.Snowflake
 import com.truenine.component.rds.entity.*
+import com.truenine.component.rds.repository.AllRoleGroupEntityRepository
+import com.truenine.component.rds.repository.AllRoleEntityRepository
 import com.truenine.component.rds.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.testng.annotations.Test
 import kotlin.test.*
 
 @SpringBootTest
 class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
+  @Autowired
+  lateinit var argRepo: AllRoleGroupEntityRepository
 
   @Autowired
   lateinit var aggregator: RbacAggregator
@@ -117,10 +122,6 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     this.name = "abc" + snowflake.nextId()
   }
 
-  fun getUserGroups() = List(10) {
-    getUserGroup()
-  }
-
   @Test
   fun testSaveRoleGroupToUserGroup() {
     val ug = ugService.save(getUserGroup())
@@ -205,11 +206,11 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testSaveRoleToRoleGroup() {
-    val r = roleService.save(getRole())!!
-    val rg = rgService.save(getRoleGroup())!!
+    val r = roleService.save(getRole())
+    val rg = rgService.save(getRoleGroup())
     aggregator.saveRoleToRoleGroup(r.id, rg.id)!!
-    val srg = rgService.findById(rg.id)!!
-    assertContains(srg.roles, r)
+    val srg = argRepo.findByIdOrNull(rg.id)!!
+    assertContains(srg.roles.map { it.id }, r.id)
   }
 
   fun getRoles() = List(10) {
@@ -222,9 +223,9 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testSaveAllRoleToRoleGroup() {
     roleService.saveAll(getRoles()).let { rs ->
-      rgService.save(getRoleGroup())!!.let { rg ->
+      rgService.save(getRoleGroup()).let { rg ->
         aggregator.saveAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { sru ->
-          rgService.findById(rg.id)!!.let { nr ->
+          argRepo.findByIdOrNull(rg.id)!!.let { nr ->
             assertEquals(nr.roles.size, rs.size)
           }
         }
@@ -234,11 +235,11 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testRevokeRoleFromRoleGroup() {
-    roleService.save(getRole())!!.let { r ->
-      rgService.save(getRoleGroup())!!.let { rg ->
+    roleService.save(getRole()).let { r ->
+      rgService.save(getRoleGroup()).let { rg ->
         aggregator.saveRoleToRoleGroup(r.id, rg.id)!!.let { rgr ->
           aggregator.revokeRoleFromRoleGroup(r.id, rg.id)
-          val srg = rgService.findById(rg.id)!!
+          val srg = argRepo.findByIdOrNull(rg.id)!!
           assertTrue { srg.roles.isEmpty() }
         }
       }
@@ -249,13 +250,12 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testRevokeAllRoleFromRoleGroup() {
     roleService.saveAll(getRoles()).let { rs ->
-      rgService.save(getRoleGroup())!!.let { rg ->
+      rgService.save(getRoleGroup()).let { rg ->
         aggregator.saveAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { rgr ->
           aggregator.revokeAllRoleFromRoleGroup(rs.map { it.id }, rg.id)
-          rgService.findById(rg.id)!!.let {
+          argRepo.findByIdOrNull(rg.id)!!.let {
             assertTrue {
-              it.roles == null
-                || it.roles.isEmpty()
+              it.roles.isEmpty()
             }
           }
         }
@@ -268,12 +268,15 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     doc = "stra ${snowflake.nextId()}"
   }
 
+  @Autowired
+  lateinit var arRepo: AllRoleEntityRepository
+
   @Test
   fun testSavePermissionsToRole() {
-    permissionsService.save(getPermissions())!!.let { p ->
-      roleService.save(getRole())!!.let { r ->
+    permissionsService.save(getPermissions()).let { p ->
+      roleService.save(getRole()).let { r ->
         aggregator.savePermissionsToRole(p.id, r.id)!!
-        val rl = roleService.findById(r.id)!!
+        val rl = arRepo.findByIdOrNull(r.id)!!
         assertContains(rl.permissions, p)
       }
     }
@@ -286,10 +289,10 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testSaveAllPermissionsToRole() {
     permissionsService.saveAll(getAllPermissions()).let { ps ->
-      roleService.save(getRole())!!.let { r ->
+      roleService.save(getRole()).let { r ->
         aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let { all ->
           assertTrue("all$all") { all.isNotEmpty() }
-          roleService.findById(r.id)!!.let { sr ->
+          arRepo.findByIdOrNull(r.id)!!.let { sr ->
             ps.forEach {
               assertContains(sr.permissions, it)
             }
@@ -301,12 +304,12 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testRevokePermissionsFromRole() {
-    permissionsService.save(getPermissions())!!.let { p ->
-      roleService.save(getRole())!!.let { r ->
+    permissionsService.save(getPermissions()).let { p ->
+      roleService.save(getRole()).let { r ->
         aggregator.savePermissionsToRole(p.id, r.id).let {
           aggregator.revokePermissionsFromRole(p.id, r.id)
-          roleService.findById(r.id)!!.let { sr ->
-            sr.permissions.forEach {
+          arRepo.findByIdOrNull(r.id)!!.let { sr ->
+            repeat(sr.permissions.size) {
               assertFalse {
                 sr.permissions.contains(p)
               }
@@ -319,11 +322,11 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testRevokeAllPermissionsFromRole() {
-    roleService.save(getRole())!!.let { r ->
+    roleService.save(getRole()).let { r ->
       permissionsService.saveAll(getAllPermissions()).let { ps ->
         aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let { srp ->
           aggregator.revokeAllPermissionsFromRole(ps.map { it.id }, r.id)
-          roleService.findById(r.id)!!.let {
+          arRepo.findByIdOrNull(r.id)!!.let {
             assertTrue { it.permissions.isEmpty() }
           }
         }
@@ -332,22 +335,22 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   }
 
   fun namePre(): UserEntity {
-    val user = userService.save(getUser())!!
-    val leaderUserGroup = ugService.save(UserGroupEntity().apply { name = "柱";userId = user.id })!!
-    val subUserGroup = ugService.save(getUserGroup())!!
+    val user = userService.save(getUser())
+    ugService.save(UserGroupEntity().apply { name = "柱";userId = user.id })
+    val subUserGroup = ugService.save(getUserGroup())
     ugService.saveUserToUserGroup(user.id, subUserGroup.id)
 
     // 权限
     val userRoleGroups = rgService.saveAll(getRoleGroups())
     val ugRoleGroups = rgService.saveAll(getRoleGroups())
-    val aRole = roleService.save(getRole())!!
-    val bRole = roleService.save(getRole())!!
-    val aPer = permissionsService.save(getPermissions())!!
-    val bPer = permissionsService.save(getPermissions())!!
+    val aRole = roleService.save(getRole())
+    val bRole = roleService.save(getRole())
+    val aPer = permissionsService.save(getPermissions())
+    val bPer = permissionsService.save(getPermissions())
 
     // 链接
-    val ar = aggregator.savePermissionsToRole(aPer.id, aRole.id)!!
-    val br = aggregator.savePermissionsToRole(bPer.id, bRole.id)!!
+    aggregator.savePermissionsToRole(aPer.id, aRole.id)!!
+    aggregator.savePermissionsToRole(bPer.id, bRole.id)!!
 
     // 分别挂载
     userRoleGroups.map { it.id }.let {

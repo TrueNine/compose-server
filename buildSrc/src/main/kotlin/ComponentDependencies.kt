@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "com.truenine.component"
-  const val version = "0.4.71-SNAPSHOT-T"
+  const val version = "0.4.72-SNAPSHOT-T"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1"
 }
@@ -249,6 +249,9 @@ object V {
     // kotlin jvm 插件
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin.jvm/org.jetbrains.kotlin.jvm.gradle.plugin
     const val kotlinJvmPlugin = Lang.kotlin
+
+    // https://mvnrepository.com/artifact/com.github.ben-manes/gradle-versions-plugin
+    const val versionManager = "0.11.1"
   }
 
   object Security {
