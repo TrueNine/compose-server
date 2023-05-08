@@ -36,7 +36,7 @@ abstract class BaseController<T : BaseEntity>(
     调用该接口，传入的实体id会被清除然后保存
   """
   )
-  fun saveMeta(@RequestBody meta: T) = service.save(meta.apply { id = null })
+  fun saveMeta(@RequestBody @Valid meta: T) = service.save(meta.apply { id = null })
 
   @ResponseBody
   @PostMapping("meta/all")
@@ -45,7 +45,7 @@ abstract class BaseController<T : BaseEntity>(
     调用该接口，传入的每个实体id都会被清除
   """
   )
-  fun saveAllMeta(@RequestBody metas: List<T>) = metas.map { it.id = null;it }.apply { service.saveAll(this) }
+  fun saveAllMeta(@RequestBody metas: List<@Valid T>) = metas.map { it.id = null;it }.apply { service.saveAll(this) }
 
   @ResponseBody
   @PutMapping("meta/byId")
@@ -54,7 +54,7 @@ abstract class BaseController<T : BaseEntity>(
     调用该接口，传入的实体必须存在id
   """
   )
-  fun modifyMeta(@RequestBody meta: T) = meta.id?.apply { service.save(meta) }
+  fun modifyMeta(@RequestBody @Valid meta: T) = meta.id?.apply { service.save(meta) }
 
   @ResponseBody
   @PutMapping("meta/byId/all")
@@ -63,7 +63,7 @@ abstract class BaseController<T : BaseEntity>(
     调用该接口，传入的每个实体必须存在id
   """
   )
-  fun modifyAllMeta(@RequestBody metas: List<T>) = metas.filter { it.id != null }.apply { service.saveAll(this) }
+  fun modifyAllMeta(@RequestBody metas: List<@Valid T>) = metas.filter { it.id != null }.apply { service.saveAll(this) }
 
   @ResponseBody
   @DeleteMapping("meta/byId")
