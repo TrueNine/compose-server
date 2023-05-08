@@ -68,9 +68,17 @@ fun String.base64(charset: Charset = StandardCharsets.UTF_8): String = Base64Hel
  */
 fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = Base64Helper.decode(this, charset)
 
+/**
+ * ## 将 foo_bar 类型的字符串转换为 fooBar
+ */
+inline val String.camelCaseFieldName: String
+  get() = this.replace("_([a-z])".toRegex()) {
+    it.groupValues[1].uppercase()
+  }
+
 
 /**
- * # 递归获取一个类的所有属性
+ * ## 递归获取一个类的所有属性
  * @param endType 结束的类型
  * @return 当前类以及所有到结束标记为止的 fields
  */
