@@ -3,9 +3,10 @@ package com.truenine.component.rds.base
 import com.truenine.component.rds.util.PagedWrapper
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
-
+@Validated
 abstract class BaseController<T : BaseEntity>(
   protected val service: BaseService<T>
 ) {
@@ -36,7 +37,10 @@ abstract class BaseController<T : BaseEntity>(
     调用该接口，传入的实体id会被清除然后保存
   """
   )
-  fun saveMeta(@RequestBody @Valid meta: T) = service.save(meta.apply { id = null })
+  fun saveMeta(@RequestBody @Valid meta: T): T {
+
+    return service.save(meta.apply { id = null })
+  }
 
   @ResponseBody
   @PostMapping("meta/all")
