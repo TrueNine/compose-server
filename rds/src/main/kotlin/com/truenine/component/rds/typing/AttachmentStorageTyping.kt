@@ -1,6 +1,7 @@
 package com.truenine.component.rds.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
+import com.truenine.component.core.lang.StringTyping
 import io.swagger.v3.oas.annotations.media.Schema
 
 /**
@@ -12,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(title = "附件存储类别")
 enum class AttachmentStorageTyping(
   private val value: String
-) {
+) : StringTyping {
   /**
    * 远程存储
    */
@@ -26,7 +27,7 @@ enum class AttachmentStorageTyping(
   NATIVE("N");
 
   @JsonValue
-  fun getValue() = value
+  override fun getValue() = value
 
   companion object {
     @JvmStatic

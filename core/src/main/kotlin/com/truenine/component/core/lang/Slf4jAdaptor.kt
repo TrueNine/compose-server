@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
  * @author TrueNine
  * @since 2023-02-19
  */
-@Deprecated(message = "使用顶级函数的简写形式")
+@Deprecated(message = "已弃用，改用 slf4j 顶级函数获取日志实现")
 object LogKt {
   /**
    * 获取日志对象
@@ -29,4 +29,4 @@ object LogKt {
   fun getLog(anyWay: Any): Logger = getLog(anyWay::class)
 }
 
-fun slf4j(kclazz: KClass<*>) = LogKt.getLog(kclazz)
+fun slf4j(kclazz: KClass<*>): Logger = LoggerFactory.getLogger(kclazz.java)

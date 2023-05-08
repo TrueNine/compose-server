@@ -2,8 +2,8 @@ package com.truenine.component.rds.service.aggregator
 
 import com.truenine.component.core.id.Snowflake
 import com.truenine.component.rds.entity.*
-import com.truenine.component.rds.repository.AllRoleGroupEntityRepository
 import com.truenine.component.rds.repository.AllRoleEntityRepository
+import com.truenine.component.rds.repository.AllRoleGroupEntityRepository
 import com.truenine.component.rds.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

@@ -1,6 +1,7 @@
 package com.truenine.component.rds.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
+import com.truenine.component.core.lang.IntTyping
 import io.swagger.v3.oas.annotations.media.Schema
 
 /**
@@ -10,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema
  * @since 2023-04-23
  */
 @Schema(title = "商品类型")
-enum class GoodsTyping(private val value: Int) {
+enum class GoodsTyping(private val value: Int) : IntTyping {
   /**
    * 实体商品
    */
@@ -30,7 +31,7 @@ enum class GoodsTyping(private val value: Int) {
   VIRTUAL_GOODS(2);
 
   @JsonValue
-  fun getValue(): Int = this.value
+  override fun getValue(): Int = this.value
 
   companion object {
     @JvmStatic

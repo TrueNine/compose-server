@@ -1,7 +1,9 @@
 package com.truenine.component.rds.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
+import com.truenine.component.core.lang.IntTyping
 import io.swagger.v3.oas.annotations.media.Schema
+
 /**
  * 性别类型
  *
@@ -10,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema
  */
 enum class GenderTyping(
   private val value: Int
-) {
+) : IntTyping {
   /**
    * 男
    */
@@ -30,7 +32,7 @@ enum class GenderTyping(
   UNKNOWN(2);
 
   @JsonValue
-  fun getValue(): Int = value
+  override fun getValue(): Int = value
 
   companion object {
     @JvmStatic

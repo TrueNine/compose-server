@@ -1,6 +1,7 @@
 package com.truenine.component.rds.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
+import com.truenine.component.core.lang.IntTyping
 import io.swagger.v3.oas.annotations.media.Schema
 
 /**
@@ -12,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(title = "商品改动类型")
 enum class GoodsChangeRecordTyping(
   private val value: Int
-) {
+) : IntTyping {
   /**
    * 改价格
    */
@@ -26,7 +27,7 @@ enum class GoodsChangeRecordTyping(
   CHANGE_TITLE(1);
 
   @JsonValue
-  fun getValue() = value
+  override fun getValue() = value
 
   companion object {
     @JvmStatic

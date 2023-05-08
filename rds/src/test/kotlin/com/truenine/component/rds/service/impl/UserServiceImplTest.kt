@@ -47,13 +47,13 @@ class UserServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindUserByAccount() {
-    val saved = service.save(getUser())!!
+    val saved = service.save(getUser())
     val info = infoService.save(UserInfoEntity().apply {
       userId = saved.id
-    })!!
+    })
     val rg = roleGroupService.save(RoleGroupEntity().apply {
       name = "权限1"
-    })!!
+    })
     agg.saveRoleGroupToUser(rg.id, saved.id)!!
 
     assertEquals(saved.id, info.userId)
@@ -67,20 +67,20 @@ class UserServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindPwdEncByAccount() {
-    val saved = service.save(getUser())!!
+    val saved = service.save(getUser())
     val se = service.findPwdEncByAccount(saved.account)
     assertEquals(saved.pwdEnc, se)
   }
 
   @Test
   fun testExistsByAccount() {
-    val saved = service.save(getUser())!!
+    val saved = service.save(getUser())
     assertTrue { service.existsByAccount(saved.account) }
   }
 
   @Test
   fun testModifyUserBandTimeTo() {
-    val saved = service.save(getUser())!!
+    val saved = service.save(getUser())
     service.modifyUserBandTimeTo(saved.account, LocalDateTime.parse("2025-01-01T00:00:00"))
 
     val succ = service.findById(saved.id)!!

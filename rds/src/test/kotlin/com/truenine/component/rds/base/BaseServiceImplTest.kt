@@ -76,7 +76,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindById() {
-    val ab = service.save(getEntity())!!
+    val ab = service.save(getEntity())
     assertNotNull(ab.id)
     val cd = service.findById(ab.id)
     assertEquals(ab, cd)
@@ -109,7 +109,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindLdfById() {
-    val a = service.save(getEntity())!!
+    val a = service.save(getEntity())
     val ab = service.findLdfById(a.id)
     assertFalse { ab }
   }
@@ -135,7 +135,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testExistsById() {
-    val se = service.save(getEntity())!!
+    val se = service.save(getEntity())
     assertTrue { service.existsById(se.id) }
   }
 
@@ -151,7 +151,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testDeleteById() {
-    val aes = service.save(getEntity())!!
+    val aes = service.save(getEntity())
     service.deleteById(aes.id)
     assertNull(service.findById(aes.id))
   }
