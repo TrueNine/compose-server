@@ -41,15 +41,19 @@ object PagedWrapper {
   }
 }
 
+typealias Pw = PagedWrapper
+typealias Pq = PagedRequestParam
+typealias Pr<T> = PagedResponseResult<T>
+
 /**
  * # 对分页结果的封装，使得其返回包装对象
  */
-val <T> Page<T>.result: PagedResponseResult<T>
-  get() = PagedWrapper.result(this)
+val <T> Page<T>.result: Pr<T>
+  get() = Pw.result(this)
 
 
 /**
  * # 对分页参数的封装，返回一个包装的对象
  */
-val PagedRequestParam?.page: Pageable
-  get() = PagedWrapper.param(this)
+val Pq?.page: Pageable
+  get() = Pw.param(this)

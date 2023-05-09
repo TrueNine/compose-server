@@ -1,6 +1,8 @@
 package com.truenine.component.rds.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.truenine.component.core.annotations.SensitiveRef;
+import com.truenine.component.core.annotations.Strategy;
 import com.truenine.component.core.exceptions.KnownException;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.entity.relationship.UserGroupRoleGroupEntity;
@@ -20,6 +22,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.truenine.component.core.annotations.Strategy.*;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
@@ -77,6 +80,7 @@ public class UserEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "密码")
   @Column(name = PWD_ENC)
+  @SensitiveRef(PASSWORD)
   private String pwdEnc;
 
   /**

@@ -22,7 +22,7 @@ class TableRowDeleteRecordServiceImplImplTest : AbstractTestNGSpringContextTests
   @Test
   fun testSaveAnyEntity() {
     val e = DbTestBaseServiceEntity().apply {
-      id = 131
+      id = 131.toString()
       title = "测试"
     }
     val saved = service.saveAnyEntity(e)

@@ -28,8 +28,8 @@ class UserServiceImplTest : AbstractTestNGSpringContextTests() {
   lateinit var snowflake: Snowflake
 
   fun getUser() = UserEntity().apply {
-    this.account = snowflake.nextStr()
-    this.nickName = "ab + ${snowflake.nextStr()}"
+    this.account = snowflake.nextStringId()
+    this.nickName = "ab + ${snowflake.nextStringId()}"
     this.pwdEnc = "qwer1234"
   }
 

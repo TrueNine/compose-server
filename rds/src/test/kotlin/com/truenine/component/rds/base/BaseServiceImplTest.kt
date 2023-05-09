@@ -32,8 +32,8 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   lateinit var snowflake: Snowflake
 
   fun getEntity() = DbTestBaseServiceEntity().apply {
-    this.title = "dawda ${snowflake.nextStr()}"
-    this.center = PointModel(BigDecimal(snowflake.nextStr()), BigDecimal(snowflake.nextStr()))
+    this.title = "dawda ${snowflake.nextStringId()}"
+    this.center = PointModel(BigDecimal(snowflake.nextStringId()), BigDecimal(snowflake.nextStringId()))
   }
 
   @Test

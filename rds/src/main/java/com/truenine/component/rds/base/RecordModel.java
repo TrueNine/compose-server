@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class RecordModel implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
-  private Long id;
+  private String id;
   private Integer modelHash;
   private String lang;
   private String namespace;

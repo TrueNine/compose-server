@@ -38,12 +38,12 @@ public class UserGroupUserEntity extends BaseEntity implements Serializable {
    */
   @Schema(title = "用户组")
   @Column(name = USER_GROUP_ID, nullable = false)
-  private Long userGroupId;
+  private String userGroupId;
 
   /**
    * 用户
    */
   @Schema(title= "用户")
   @Column(name = USER_ID, nullable = false)
-  private Long userId;
+  private String userId;
 }

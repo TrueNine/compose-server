@@ -16,7 +16,7 @@ class UserGroupServiceImpl(
 ) : UserGroupService, BaseServiceImpl<UserGroupEntity>(userGroupRepo) {
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun saveUserToUserGroup(userId: Long, userGroupId: Long) {
+  override fun saveUserToUserGroup(userId: String, userGroupId: String) {
     val isLeader = userGroupUserRepo.existsByUserGroupIdAndUserId(userGroupId, userId)
     val isMember = userGroupRepo.existsByIdAndUserId(userGroupId, userId)
     if (!(isMember || isLeader)) {
@@ -28,7 +28,7 @@ class UserGroupServiceImpl(
     }
   }
 
-  override fun findAllByLeaderUserId(userId: Long): Set<UserGroupEntity> = userGroupRepo.findAllByUserId(userId).toSet()
+  override fun findAllByLeaderUserId(userId: String): Set<UserGroupEntity> = userGroupRepo.findAllByUserId(userId).toSet()
 
   override fun findAllByUserAccount(account: String): Set<UserGroupEntity> = userGroupRepo.findAllByUserAccount(account).toSet()
 }

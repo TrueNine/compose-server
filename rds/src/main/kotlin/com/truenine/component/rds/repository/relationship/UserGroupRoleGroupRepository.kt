@@ -7,24 +7,24 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserGroupRoleGroupRepository : BaseRepository<UserGroupRoleGroupEntity> {
-  fun findByUserGroupIdAndRoleGroupId(userGroupId: Long, roleGroupId: Long): UserGroupRoleGroupEntity?
+  fun findByUserGroupIdAndRoleGroupId(userGroupId: String, roleGroupId: String): UserGroupRoleGroupEntity?
 
   @Query("select ur.roleGroupId from UserGroupRoleGroupEntity ur")
-  fun findAllRoleGroupIdByUserGroupId(userGroupId: Long): Set<Long>
-  fun findAllByUserGroupId(userGroupId: Long): List<UserGroupRoleGroupEntity>
+  fun findAllRoleGroupIdByUserGroupId(userGroupId: String): Set<String>
+  fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroupEntity>
   fun existsByUserGroupIdAndRoleGroupId(
-    userGroupId: Long,
-    roleGroupId: Long
+    userGroupId: String,
+    roleGroupId: String
   ): Boolean
 
   fun deleteByUserGroupIdAndRoleGroupId(
-    userGroupId: Long,
-    roleGroupId: Long
+    userGroupId: String,
+    roleGroupId: String
   )
 
-  fun deleteAllByUserGroupIdAndRoleGroupId(userGroupId: Long, roleGroupId: Long)
+  fun deleteAllByUserGroupIdAndRoleGroupId(userGroupId: String, roleGroupId: String)
 
-  fun deleteAllByRoleGroupIdInAndUserGroupId(roleGroupIds: List<Long>, userGroupId: Long)
+  fun deleteAllByRoleGroupIdInAndUserGroupId(roleGroupIds: List<String>, userGroupId: String)
 
-  fun deleteAllByUserGroupId(userGroupId: Long)
+  fun deleteAllByUserGroupId(userGroupId: String)
 }

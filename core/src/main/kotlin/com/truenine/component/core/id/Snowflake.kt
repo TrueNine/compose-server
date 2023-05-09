@@ -7,7 +7,7 @@ interface Snowflake {
   }
 
   fun nextId(): Long
-  fun nextStr(): String {
+  fun nextStringId(): String {
     return nextId().toString()
   }
 }

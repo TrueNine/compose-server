@@ -32,7 +32,7 @@ class RbacAggregatorImpl(
     userRepository.findAllPermissionsNameByAccount(account)
 
 
-  override fun findAllSecurityNameByUserId(userId: Long): Set<String> {
+  override fun findAllSecurityNameByUserId(userId: String): Set<String> {
     // FIXME 待优化
     // 查询所有用户组的角色组id
     val leaderUserUserGroupRoleGroupIds = ug.findAllByUserId(userId).map { it.roleGroups }.flatten().map { it.id }
@@ -60,14 +60,14 @@ class RbacAggregatorImpl(
   override fun findAllSecurityNameByAccount(account: String): Set<String> =
     findAllSecurityNameByUserId(userRepository.findIdByAccount(account))
 
-  override fun saveRoleGroupToUser(roleGroupId: Long, userId: Long): UserRoleGroupEntity? =
+  override fun saveRoleGroupToUser(roleGroupId: String, userId: String): UserRoleGroupEntity? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)
       ?: urg.save(UserRoleGroupEntity().apply {
         this.userId = userId
         this.roleGroupId = roleGroupId
       })
 
-  override fun saveAllRoleGroupToUser(roleGroupIds: List<Long>, userId: Long): List<UserRoleGroupEntity> {
+  override fun saveAllRoleGroupToUser(roleGroupIds: List<String>, userId: String): List<UserRoleGroupEntity> {
     val existingRoleGroups = urg.findAllRoleGroupIdByUserId(userId)
     val mewRoleGroups = roleGroupIds.filterNot { existingRoleGroups.contains(it) }.map {
       UserRoleGroupEntity().apply {
@@ -79,20 +79,20 @@ class RbacAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleGroupFromUser(roleGroupId: Long, userId: Long) = urg.deleteAllByRoleGroupIdAndUserId(roleGroupId, userId)
+  override fun revokeRoleGroupFromUser(roleGroupId: String, userId: String) = urg.deleteAllByRoleGroupIdAndUserId(roleGroupId, userId)
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupFromUser(roleGroupIds: List<Long>, userId: Long) =
+  override fun revokeAllRoleGroupFromUser(roleGroupIds: List<String>, userId: String) =
     urg.deleteAllByRoleGroupIdInAndUserId(roleGroupIds, userId)
 
-  override fun saveRoleGroupToUserGroup(roleGroupId: Long, userGroupId: Long): UserGroupRoleGroupEntity? =
+  override fun saveRoleGroupToUserGroup(roleGroupId: String, userGroupId: String): UserGroupRoleGroupEntity? =
     ugrg.findByUserGroupIdAndRoleGroupId(userGroupId, roleGroupId)
       ?: ugrg.save(UserGroupRoleGroupEntity().apply {
         this.roleGroupId = roleGroupId
         this.userGroupId = userGroupId
       })
 
-  override fun saveAllRoleGroupToUserGroup(roleGroupIds: List<Long>, userGroupId: Long): List<UserGroupRoleGroupEntity> {
+  override fun saveAllRoleGroupToUserGroup(roleGroupIds: List<String>, userGroupId: String): List<UserGroupRoleGroupEntity> {
     val existingRoleGroups = ugrg.findAllRoleGroupIdByUserGroupId(userGroupId)
     val newRoleGroups = roleGroupIds.filterNot { existingRoleGroups.contains(it) }.map {
       UserGroupRoleGroupEntity().apply {
@@ -105,21 +105,21 @@ class RbacAggregatorImpl(
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleGroupFromUserGroup(roleGroupId: Long, userGroupId: Long) =
+  override fun revokeRoleGroupFromUserGroup(roleGroupId: String, userGroupId: String) =
     ugrg.deleteByUserGroupIdAndRoleGroupId(userGroupId, roleGroupId)
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupFromUserGroup(roleGroupIds: List<Long>, userGroupId: Long) =
+  override fun revokeAllRoleGroupFromUserGroup(roleGroupIds: List<String>, userGroupId: String) =
     ugrg.deleteAllByRoleGroupIdInAndUserGroupId(roleGroupIds, userGroupId)
 
-  override fun saveRoleToRoleGroup(roleId: Long, roleGroupId: Long): RoleGroupRoleEntity? =
+  override fun saveRoleToRoleGroup(roleId: String, roleGroupId: String): RoleGroupRoleEntity? =
     rgr.findByRoleGroupIdAndRoleId(roleGroupId, roleId)
       ?: rgr.save(RoleGroupRoleEntity().apply {
         this.roleGroupId = roleGroupId
         this.roleId = roleId
       })
 
-  override fun saveAllRoleToRoleGroup(roleIds: List<Long>, roleGroupId: Long): List<RoleGroupRoleEntity> {
+  override fun saveAllRoleToRoleGroup(roleIds: List<String>, roleGroupId: String): List<RoleGroupRoleEntity> {
     val existingRoles = rgr.findAllRoleIdByRoleGroupId(roleGroupId)
     val newRoles = roleIds.filterNot { existingRoles.contains(it) }.map {
       RoleGroupRoleEntity().apply {
@@ -132,20 +132,20 @@ class RbacAggregatorImpl(
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleFromRoleGroup(roleId: Long, roleGroupId: Long) =
+  override fun revokeRoleFromRoleGroup(roleId: String, roleGroupId: String) =
     rgr.deleteByRoleGroupIdAndRoleId(roleGroupId, roleId)
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleFromRoleGroup(roleIds: List<Long>, roleGroupId: Long) = rgr.deleteAllByRoleIdInAndRoleGroupId(roleIds, roleGroupId)
+  override fun revokeAllRoleFromRoleGroup(roleIds: List<String>, roleGroupId: String) = rgr.deleteAllByRoleIdInAndRoleGroupId(roleIds, roleGroupId)
 
-  override fun savePermissionsToRole(permissionsId: Long, roleId: Long): RolePermissionsEntity? =
+  override fun savePermissionsToRole(permissionsId: String, roleId: String): RolePermissionsEntity? =
     rp.findByRoleIdAndPermissionsId(roleId, permissionsId)
       ?: rp.save(RolePermissionsEntity().apply {
         this.roleId = roleId
         this.permissionsId = permissionsId
       })
 
-  override fun saveAllPermissionsToRole(permissionsIds: List<Long>, roleId: Long): List<RolePermissionsEntity> {
+  override fun saveAllPermissionsToRole(permissionsIds: List<String>, roleId: String): List<RolePermissionsEntity> {
     val existingPermissions = rp.findAllPermissionsIdByRoleId(roleId)
     val newPermissions = permissionsIds.filterNot { existingPermissions.contains(it) }.map {
       RolePermissionsEntity().apply {
@@ -158,10 +158,10 @@ class RbacAggregatorImpl(
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokePermissionsFromRole(permissionsId: Long, roleId: Long) =
+  override fun revokePermissionsFromRole(permissionsId: String, roleId: String) =
     rp.deleteByRoleIdAndPermissionsId(roleId, permissionsId)
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllPermissionsFromRole(permissionsIds: List<Long>, roleId: Long) =
+  override fun revokeAllPermissionsFromRole(permissionsIds: List<String>, roleId: String) =
     rp.deleteAllByPermissionsIdInAndRoleId(permissionsIds, roleId)
 }

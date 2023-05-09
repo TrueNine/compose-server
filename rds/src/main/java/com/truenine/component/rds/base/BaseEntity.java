@@ -1,6 +1,7 @@
 package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.truenine.component.core.annotations.BigIntegerAsString;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;

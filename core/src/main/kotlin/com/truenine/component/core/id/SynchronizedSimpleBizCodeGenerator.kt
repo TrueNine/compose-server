@@ -8,7 +8,7 @@ class SynchronizedSimpleBizCodeGenerator(
 ) : BizCodeGenerator {
   override fun nextCodeStr(): String {
     val dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
-    val st = snowflake.nextStr()
+    val st = snowflake.nextStringId()
     return "$dt${st.substring(st.length - 4)}"
   }
 }

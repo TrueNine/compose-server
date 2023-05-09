@@ -1,6 +1,8 @@
 package com.truenine.component.rds.base
 
-import com.truenine.component.rds.util.PagedWrapper
+import com.truenine.component.rds.util.Pq
+import com.truenine.component.rds.util.Pr
+import com.truenine.component.rds.util.Pw
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
@@ -13,12 +15,12 @@ abstract class BaseController<T : BaseEntity>(
   @ResponseBody
   @GetMapping("meta/all")
   @Operation(summary = "【ǃ RDS】分页查询所有数据")
-  fun findAllMeta(@Valid page: PagedRequestParam?): PagedResponseResult<T> = service.findAllByNotLogicDeleted(page ?: PagedWrapper.DEFAULT_MAX)
+  fun findAllMeta(@Valid page: Pq?): Pr<T> = service.findAllByNotLogicDeleted(page ?: Pw.DEFAULT_MAX)
 
   @ResponseBody
   @GetMapping("meta/byId")
   @Operation(summary = "【ǃ RDS】根据id查询数据")
-  fun findMetaById(id: Long): T? = service.findById(id)
+  fun findMetaById(id: String): T? = service.findById(id)
 
   @ResponseBody
   @GetMapping("meta/count/all")
@@ -28,7 +30,7 @@ abstract class BaseController<T : BaseEntity>(
   @ResponseBody
   @GetMapping("meta/exists/byId")
   @Operation(summary = "【ǃ RDS】根据id查询某条数据是否存在")
-  fun existsMetaById(id: Long): Boolean = service.existsById(id)
+  fun existsMetaById(id: String): Boolean = service.existsById(id)
 
   @ResponseBody
   @PostMapping("meta")
@@ -38,7 +40,6 @@ abstract class BaseController<T : BaseEntity>(
   """
   )
   fun saveMeta(@RequestBody @Valid meta: T): T {
-
     return service.save(meta.apply { id = null })
   }
 
@@ -77,15 +78,15 @@ abstract class BaseController<T : BaseEntity>(
   @ResponseBody
   @DeleteMapping("meta/logic/byId")
   @Operation(summary = "【ǃ RDS】根据id逻辑删除数据")
-  fun logicDeleteMetaById(id: Long) = service.logicDeleteById(id)
+  fun logicDeleteMetaById(id: String) = service.logicDeleteById(id)
 
   @ResponseBody
   @DeleteMapping("meta/logic/byId/all")
   @Operation(summary = "【ǃ RDS】根据id逻辑删除全部数据")
-  fun logicDeleteAllMetaById(ids: List<Long>) = service.logicDeleteAllById(ids)
+  fun logicDeleteAllMetaById(ids: List<String>) = service.logicDeleteAllById(ids)
 
   @ResponseBody
   @DeleteMapping("meta/byId/all")
   @Operation(summary = "【ǃ RDS】根据一组id进行删除")
-  fun deleteAllMetaByIds(ids: List<Long>) = Unit
+  fun deleteAllMetaByIds(ids: List<String>) = Unit
 }

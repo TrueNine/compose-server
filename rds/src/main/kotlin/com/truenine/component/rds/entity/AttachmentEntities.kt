@@ -18,7 +18,7 @@ import java.io.Serial
 open class SuperAttachmentEntity : BaseEntity() {
   @Schema(title = "附件地址 id")
   @Column(name = ATTACHMENT_LOCATION_ID, nullable = false)
-  open var attachmentLocationId: Long? = null
+  open var attachmentLocationId: String? = null
 
   /**
    * 原始名称

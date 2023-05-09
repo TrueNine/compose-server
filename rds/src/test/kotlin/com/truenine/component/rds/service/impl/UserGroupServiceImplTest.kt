@@ -6,7 +6,6 @@ import com.truenine.component.rds.entity.UserGroupEntity
 import com.truenine.component.rds.repository.UserGroupRepository
 import com.truenine.component.rds.repository.UserRepository
 import com.truenine.component.rds.service.UserService
-import jakarta.persistence.EntityManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
@@ -28,8 +27,6 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
   @Autowired
   lateinit var ugr: UserGroupRepository
 
-  @Autowired
-  lateinit var em: EntityManager
 
   @Test
   fun testSaveUserToUserGroup() {
@@ -39,7 +36,7 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
       this.nickName = "abcd"
     })
     val ug = ugr.save(UserGroupEntity().apply {
-      this.userId = 13123124
+      this.userId = 13123124.toString()
       this.name = "readMe"
     })
     service.saveUserToUserGroup(u.id, ug.id)
@@ -51,11 +48,11 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindAllByLeaderUserId() {
     val saved = service.save(UserGroupEntity().apply {
-      userId = 133
-      id = 1231241
+      userId = 133.toString()
+      id = 1231241.toString()
       name = "我的"
     })
-    val b = service.findAllByLeaderUserId(133)
+    val b = service.findAllByLeaderUserId(133.toString())
     assertNotNull(b)
     assertContains(b, saved)
   }
@@ -70,7 +67,7 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
       pwdEnc = "abcd1234"
     })
     val ug = service.save(UserGroupEntity().apply {
-      userId = 123124125
+      userId = 123124125.toString()
       name = "我的大海"
     })
     service.saveUserToUserGroup(u.id, ug.id)

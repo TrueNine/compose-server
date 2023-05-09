@@ -1,7 +1,8 @@
 package com.truenine.component.rds.base
 
-import com.truenine.component.rds.util.PagedWrapper
-import org.apache.poi.ss.formula.functions.T
+import com.truenine.component.rds.util.Pq
+import com.truenine.component.rds.util.Pr
+import com.truenine.component.rds.util.Pw
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -20,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional
  */
 @NoRepositoryBean
 interface AnyRepository<T : AnyEntity> :
-  JpaRepository<T, Long>,
-  CrudRepository<T, Long>,
+  JpaRepository<T, String>,
+  CrudRepository<T, String>,
   JpaSpecificationExecutor<T> {
 }
 
@@ -29,25 +30,25 @@ interface AnyRepository<T : AnyEntity> :
 @JvmDefaultWithCompatibility
 interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
 
-  fun findByIdAndNotLogicDelete(id: Long): T = findByIdAndNotLogicDeleteOrNull(id)!!
+  fun findByIdAndNotLogicDelete(id: String): T = findByIdAndNotLogicDeleteOrNull(id)!!
 
   @Query("from #{#entityName} e where e.id = :id and e.ldf = false")
-  fun findByIdAndNotLogicDeleteOrNull(id: Long): T?
+  fun findByIdAndNotLogicDeleteOrNull(id: String): T?
 
   @Query("from #{#entityName} e where e.ldf = false")
   fun findAllByNotLogicDeleted(page: Pageable): Page<T>
 
   @Query("from #{#entityName} e where e.id in :ids and e.ldf = false")
-  fun findAllByIdAndNotLogicDeleted(ids: List<Long>, page: Pageable): Page<T>
+  fun findAllByIdAndNotLogicDeleted(ids: List<String>, page: Pageable): Page<T>
 
   @Query("select e.ldf from #{#entityName} e where e.id = :id and e.ldf = false")
-  fun findLdfById(id: Long): Boolean?
+  fun findLdfById(id: String): Boolean?
 
   @Transactional(rollbackFor = [Exception::class])
-  fun logicDeleteById(id: Long): T? = findByIdOrNull(id)?.let { it.ldf = true;save(it) }
+  fun logicDeleteById(id: String): T? = findByIdOrNull(id)?.let { it.ldf = true;save(it) }
 
   @Transactional(rollbackFor = [Exception::class])
-  fun logicDeleteAllById(ids: List<Long>): List<T> = findAllById(ids).filter { !it.ldf }.apply { saveAll(this) }
+  fun logicDeleteAllById(ids: List<String>): List<T> = findAllById(ids).filter { !it.ldf }.apply { saveAll(this) }
 
   @Query("select count(e.id) from #{#entityName} e where e.ldf = false")
   fun countByNotLogicDeleted(): Long
@@ -216,30 +217,30 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
  * @since 2023-05-05
  */
 interface BaseService<T : AnyEntity> {
-  fun findAll(page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
-  fun findAllByNotLogicDeleted(page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
+  fun findAll(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+  fun findAllByNotLogicDeleted(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
 
-  fun findById(id: Long): T?
-  fun findAllById(ids: List<Long>): MutableList<T>
-  fun findByIdAndNotLogicDeleted(id: Long): T
-  fun findByIdAndNotLogicDeletedOrNull(id: Long): T?
+  fun findById(id: String): T?
+  fun findAllById(ids: List<String>): MutableList<T>
+  fun findByIdAndNotLogicDeleted(id: String): T
+  fun findByIdAndNotLogicDeletedOrNull(id: String): T?
 
-  fun findAllByIdAndNotLogicDeleted(ids: List<Long>, page: PagedRequestParam? = PagedWrapper.DEFAULT_MAX): PagedResponseResult<T>
+  fun findAllByIdAndNotLogicDeleted(ids: List<String>, page: Pq? = Pw.DEFAULT_MAX): Pr<T>
 
   fun countAll(): Long
   fun countAllByNotLogicDeleted(): Long
-  fun existsById(id: Long): Boolean
+  fun existsById(id: String): Boolean
 
-  fun findLdfById(id: Long): Boolean
+  fun findLdfById(id: String): Boolean
 
   fun save(e: T): T
   fun saveAll(es: List<T>): List<T>
 
-  fun deleteById(id: Long)
-  fun deleteAllById(ids: List<Long>)
+  fun deleteById(id: String)
+  fun deleteAllById(ids: List<String>)
 
-  fun logicDeleteById(id: Long): T?
-  fun logicDeleteAllById(ids: List<Long>): List<T>
+  fun logicDeleteById(id: String): T?
+  fun logicDeleteAllById(ids: List<String>): List<T>
 }
 
 

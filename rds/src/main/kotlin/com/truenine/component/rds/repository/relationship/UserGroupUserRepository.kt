@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserGroupUserRepository : BaseRepository<UserGroupUserEntity> {
-  fun existsByUserGroupIdAndUserId(userId: Long, userGroupId: Long): Boolean
+  fun existsByUserGroupIdAndUserId(userId: String, userGroupId: String): Boolean
 }

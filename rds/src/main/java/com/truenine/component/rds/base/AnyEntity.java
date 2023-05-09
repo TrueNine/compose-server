@@ -1,5 +1,6 @@
 package com.truenine.component.rds.base;
 
+import com.truenine.component.core.annotations.BigIntegerAsString;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import com.truenine.component.rds.autoconfig.BizCodeGeneratorBean;
 import com.truenine.component.rds.autoconfig.SnowflakeIdGeneratorBean;
@@ -61,7 +62,7 @@ public class AnyEntity implements Serializable {
   @Column(name = DataBaseBasicFieldNames.ID)
   @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
   @Schema(title = ID, example = "7001234523405")
-  protected Long id;
+  protected String id;
 
   @Override
   public boolean equals(Object o) {

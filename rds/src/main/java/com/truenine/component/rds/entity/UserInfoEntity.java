@@ -2,6 +2,7 @@ package com.truenine.component.rds.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.truenine.component.core.annotations.SensitiveRef;
+import com.truenine.component.core.annotations.Strategy;
 import com.truenine.component.core.exceptions.KnownException;
 import com.truenine.component.rds.base.BaseEntity;
 import com.truenine.component.rds.converters.AesEncryptConverter;
@@ -22,6 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import static com.truenine.component.core.annotations.Strategy.NAME;
 import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.AUTO;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
@@ -65,7 +67,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Schema(title = "用户")
   @NotNull
   @Column(name = USER_ID, nullable = false)
-  private Long userId;
+  private String userId;
 
   @OneToOne
   @JoinColumn(
@@ -85,7 +87,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "用户头像")
   @Column(name = AVATAR_IMG_ID)
-  private Long avatarImgId;
+  private String avatarImgId;
 
 
   @Schema(title = "头像")
@@ -105,6 +107,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
    */
   @Nullable
   @Schema(title = "姓")
+  @SensitiveRef(NAME)
   @Column(name = FIRST_NAME)
   @Convert(converter = AesEncryptConverter.class)
   private String firstName;
@@ -140,10 +143,10 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   /**
    * 地址
    */
+  @Nullable
   @Schema(title = "地址", requiredMode = AUTO)
   @Column(name = ADDRESS_DETAILS_ID)
-  @Nullable
-  private Long addressDetailsId;
+  private String addressDetailsId;
 
   /**
    * 地址
@@ -166,7 +169,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "电话号码")
   @Column(name = PHONE, unique = true)
-  @SensitiveRef(SensitiveRef.Strategy.PHONE)
+  @SensitiveRef(Strategy.PHONE)
   private String phone;
   /**
    * 身份证
@@ -174,7 +177,7 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Schema(title = "身份证")
   @Column(name = ID_CARD, unique = true)
   @Nullable
-  @SensitiveRef(SensitiveRef.Strategy.IDCARD)
+  @SensitiveRef(Strategy.IDCARD)
   private String idCard;
 
   /**
@@ -194,10 +197,15 @@ public class UserInfoEntity extends BaseEntity implements Serializable {
   @Column(name = WECHAT_OPEN_ID)
   private String wechatOpenId;
 
+  /**
+   * 微信 open id
+   */
+  @Schema(title = "微信 open id")
   @Column(name = ID, insertable = false, updatable = false)
-  private Long wechatOauth2Id;
+  private String wechatOauth2Id;
 
   @Transient
+  @SensitiveRef(Strategy.NAME)
   @Schema(requiredMode = NOT_REQUIRED)
   public String getFullName() {
     return firstName + lastName;

@@ -118,7 +118,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   }
 
   fun getUserGroup() = UserGroupEntity().apply {
-    this.userId = snowflake.nextId()
+    this.userId = snowflake.nextStringId()
     this.name = "abc" + snowflake.nextId()
   }
 
@@ -184,8 +184,8 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testRevokeAllRoleGroupFromUserGroup() {
-    val ug = ugService.save(getUserGroup())!!
-    val rgs = rgService.saveAll(getRoleGroups())!!
+    val ug = ugService.save(getUserGroup())
+    val rgs = rgService.saveAll(getRoleGroups())
 
     val saved = aggregator.saveAllRoleGroupToUserGroup(rgs.map { it.id }, ug.id)
     assertEquals(saved.size, rgs.size)

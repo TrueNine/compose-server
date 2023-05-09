@@ -1,6 +1,7 @@
 package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.truenine.component.core.annotations.BigIntegerAsString;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -43,7 +44,7 @@ public class TreeAnyRefEntity extends TreeEntity implements Serializable {
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
   @Schema(title = "任意外键id")
-  protected Long ari;
+  protected String ari;
 
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE)

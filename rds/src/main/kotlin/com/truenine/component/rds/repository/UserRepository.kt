@@ -19,7 +19,7 @@ interface UserRepository : BaseRepository<UserEntity> {
     where u.account = :account
   """
   )
-  fun findIdByAccount(account: String): Long
+  fun findIdByAccount(account: String): String
 
   @Query(
     """
@@ -56,7 +56,8 @@ interface UserRepository : BaseRepository<UserEntity> {
     left join RolePermissionsEntity rp on rp.roleId = r.id
     left join PermissionsEntity p on p.id = rp.permissionsId
     where u.account = :account
-  """)
+  """
+  )
   fun findAllPermissionsNameByAccount(account: String): Set<String>
 
   fun existsAllByAccount(account: String): Boolean

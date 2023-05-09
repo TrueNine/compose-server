@@ -25,7 +25,7 @@ class SnowflakeIdGeneratorBean(
     session: SharedSessionContractImplementor?,
     obj: Any?
   ): Any {
-    val snowflakeId = snowflake.nextId()
+    val snowflakeId = snowflake.nextStringId()
     log.trace("当前生成的 snowflakeId = {}", snowflakeId)
     return snowflakeId
   }

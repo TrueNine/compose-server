@@ -1,15 +1,15 @@
 package com.truenine.component.rds.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.truenine.component.core.annotations.BigIntegerAsString;
 import com.truenine.component.core.consts.DataBaseBasicFieldNames;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
-import jakarta.persistence.Index;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Table;
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -48,12 +48,13 @@ public class TreeEntity extends BaseEntity implements Serializable {
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.PARENT_ID)
   @Schema(title = "父id")
-  private Long rpi;
+  private String rpi;
 
   /**
    * 左节点
    */
   @JsonIgnore
+  @BigIntegerAsString
   @Column(name = DataBaseBasicFieldNames.LEFT_NODE)
   @Schema(title = "左节点", hidden = true)
   private Long rln;
@@ -62,6 +63,7 @@ public class TreeEntity extends BaseEntity implements Serializable {
    * 右节点
    */
   @JsonIgnore
+  @BigIntegerAsString
   @Column(name = DataBaseBasicFieldNames.RIGHT_NODE)
   @Schema(title = "右节点", hidden = true)
   private Long rrn;

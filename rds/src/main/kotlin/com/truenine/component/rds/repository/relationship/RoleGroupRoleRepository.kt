@@ -7,11 +7,12 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RoleGroupRoleRepository : BaseRepository<RoleGroupRoleEntity> {
-  fun findByRoleGroupIdAndRoleId(roleGroupId: Long, roleId: Long): RoleGroupRoleEntity?
+  fun findByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String): RoleGroupRoleEntity?
+
   @Query("select rr.roleId from RoleGroupRoleEntity rr")
-  fun findAllRoleIdByRoleGroupId(roleGroupId: Long): Set<Long>
-  fun findAllByRoleGroupId(roleGroupId: Long): List<RoleGroupRoleEntity>
-  fun existsByRoleGroupIdAndRoleId(roleGroupId: Long, roleId: Long): Boolean
-  fun deleteByRoleGroupIdAndRoleId(roleGroupId: Long, roleId: Long)
-  fun deleteAllByRoleIdInAndRoleGroupId(roleIds: List<Long>, roleGroupId: Long)
+  fun findAllRoleIdByRoleGroupId(roleGroupId: String): Set<String>
+  fun findAllByRoleGroupId(roleGroupId: String): List<RoleGroupRoleEntity>
+  fun existsByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String): Boolean
+  fun deleteByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String)
+  fun deleteAllByRoleIdInAndRoleGroupId(roleIds: List<String>, roleGroupId: String)
 }

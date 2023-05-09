@@ -26,9 +26,9 @@ class AccountAggregatorImplTest : AbstractTestNGSpringContextTests() {
   lateinit var us: UserService
 
   fun getRegisterParam() = object : RegisterAccountRequestParam {
-    override var account = "abcd${snowflake.nextStr()}"
+    override var account = "abcd${snowflake.nextStringId()}"
     override var password = "qwer1234"
-    override var nickName = "我艹${snowflake.nextStr()}"
+    override var nickName = "我艹${snowflake.nextStringId()}"
     override var description: String? = "我命由我不白天"
   }
 

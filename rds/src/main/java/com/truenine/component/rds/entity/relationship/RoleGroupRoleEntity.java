@@ -39,7 +39,7 @@ public class RoleGroupRoleEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "用户组")
   @Column(name = ROLE_GROUP_ID)
-  private Long roleGroupId;
+  private String roleGroupId;
 
   /**
    * 角色
@@ -47,5 +47,5 @@ public class RoleGroupRoleEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "角色")
   @Column(name = ROLE_ID)
-  private Long roleId;
+  private String roleId;
 }

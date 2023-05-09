@@ -40,7 +40,7 @@ public class RolePermissionsEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "角色")
   @Column(name = ROLE_ID)
-  private Long roleId;
+  private String roleId;
 
   /**
    * 权限
@@ -48,5 +48,5 @@ public class RolePermissionsEntity extends BaseEntity implements Serializable {
   @Nullable
   @Schema(title = "权限")
   @Column(name = PERMISSIONS_ID)
-  private Long permissionsId;
+  private String permissionsId;
 }
