@@ -44,7 +44,7 @@ fun String?.nonText(): Boolean = !this.hasText()
  * - 如果该字符串为 null 则转换为 ""
  * - 否则返回本身
  */
-fun String?.nonNullStr(): String = this ?: ""
+val String?.withEmpty: String get() = this ?: ""
 
 /**
  * ## 将字符串进行 url 编码
@@ -52,7 +52,7 @@ fun String?.nonNullStr(): String = this ?: ""
  * @param charset 字符集
  * @return 编码完成的字符串，使用 [java.net.URLEncoder]
  */
-fun String?.urlEncoded(charset: Charset = StandardCharsets.UTF_8): String = java.net.URLEncoder.encode(this.nonNullStr(), charset)
+fun String?.urlEncoded(charset: Charset = StandardCharsets.UTF_8): String = java.net.URLEncoder.encode(this.withEmpty, charset)
 
 /**
  * ## base64 加密
@@ -71,10 +71,15 @@ fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = Bas
 /**
  * ## 将 foo_bar 类型的字符串转换为 fooBar
  */
-inline val String.camelCaseFieldName: String
-  get() = this.replace("_([a-z])".toRegex()) {
+val String.camelLowercaseFieldName: String
+  get() = this.replace("_([a-z0-9])".toRegex()) {
     it.groupValues[1].uppercase()
   }
+
+val String.camelUppercaseFieldName: String
+  get() = if (this.hasText()) {
+    this.split("_").joinToString("") { it.replaceFirstChar { it1 -> it1.uppercaseChar() } }
+  } else this
 
 
 /**
