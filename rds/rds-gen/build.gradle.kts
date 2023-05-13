@@ -1,4 +1,4 @@
-project.version = V.Component.rdsGen
+project.version = V.Compose.rdsGen
 dependencies {
   implementation(project(":core"))
   implementation(project(":rds"))

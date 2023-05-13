@@ -6,9 +6,7 @@ import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-  `kotlin-dsl`
   java
-  `java-library`
   idea
   eclipse
   `visual-studio`
@@ -20,35 +18,23 @@ plugins {
   kotlin("plugin.spring") version V.Plugin.kotlinSpring
   kotlin("plugin.jpa") version V.Plugin.kotlinJpa
   kotlin("plugin.lombok") version V.Plugin.kotlinLombok
+  id("com.github.ben-manes.versions") version "0.46.0"
 }
 
 
 allprojects {
   repositories {
-    maven(release) {
-      this.isAllowInsecureProtocol = true
-      credentials {
-        this.username = yunXiaoUsername
-        this.password = yunXiaoPassword
-      }
-    }
-    maven(snapshot) {
-      this.isAllowInsecureProtocol = true
-      credentials {
-        this.username = yunXiaoUsername
-        this.password = yunXiaoPassword
-      }
-    }
-
-    maven(Repos.aliCentral)
-    maven(Repos.aliJCenter)
-    maven(Repos.aliPublic)
-    maven(Repos.aliGradlePlugin)
-    maven(Repos.aliSpring)
-    maven(Repos.aliApacheSnapshots)
-    maven(Repos.springMilestone)
-    maven(Repos.springLibMilestone)
-    maven(Repos.springSnapshot)
+    maven(url = uri(Repos.aliPublic))
+    maven(url = uri(Repos.aliCentral))
+    maven(url = uri(Repos.aliJCenter))
+    maven(url = uri(Repos.aliGradlePlugin))
+    maven(url = uri(Repos.aliSpring))
+    maven(url = uri(Repos.aliApacheSnapshots))
+    maven(url = uri(Repos.springMilestone))
+    maven(url = uri(Repos.springLibMilestone))
+    maven(url = uri(Repos.springSnapshot))
+    maven(url = uri(Repos.huaweiCloudMaven))
+    mavenLocal()
     mavenCentral()
     gradlePluginPortal()
     google()
@@ -90,13 +76,12 @@ subprojects {
   apply(plugin = "eclipse")
   apply(plugin = "visual-studio")
   apply(plugin = "java")
+  apply(plugin = "kotlin")
   apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
   apply(plugin = "org.jetbrains.kotlin.plugin.spring")
   apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
-  apply(plugin = "kotlin")
-  apply(plugin = "org.springframework.boot")
   apply(plugin = "io.spring.dependency-management")
-  apply(plugin = "java-library")
+  apply(plugin = "org.springframework.boot")
   apply(plugin = "maven-publish")
 
   java.sourceCompatibility = V.Lang.javaPlatform
@@ -121,9 +106,7 @@ subprojects {
 
   publishing {
     repositories {
-      maven(
-        if (version.toString().uppercase().contains("SNAPSHOT")) snapshot else release
-      ) {
+      maven(url = uri(if (version.toString().uppercase().contains("SNAPSHOT")) snapshot else release)) {
         credentials {
           this.username = yunXiaoUsername
           this.password = yunXiaoPassword

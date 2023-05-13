@@ -25,11 +25,11 @@ import ${t};
 </#list>
 
 /**
- * ${tab.getComment()!tab.getClassName()}
- *
- * @author ${ctx.getAuthor()}
- * @since ${ctx.nowDay()}
- */
+* ${tab.getComment()!tab.getClassName()}
+*
+* @author ${ctx.getAuthor()}
+* @since ${ctx.nowDay()}
+*/
 @Getter
 @Setter
 @Entity
@@ -38,21 +38,21 @@ import ${t};
 @Schema(title = "${tab.getEscapeComment()!tab.getClassName()}")
 @Table(name = ${tab.getClassName()}${ctx.getEntitySuffix()!""}.TABLE_NAME)
 public class ${tab.getClassName()}${ctx.getEntitySuffix()!""} extends ${ctx.getBaseEntityClassName()} implements Serializable {
-  public static final String TABLE_NAME = "${tab.getName()}";
+public static final String TABLE_NAME = "${tab.getName()}";
 <#-- 静态表字段名 -->
 <#list tab.getColumns() as col>
-  public static final String ${col.getUpperName()} = "${col.getColName()}";
+public static final String ${col.getUpperName()} = "${col.getColName()}";
 </#list>
-  @Serial
-  private static final long serialVersionUID = 1L;
+@Serial
+private static final long serialVersionUID = 1L;
 <#-- 表字段 -->
 <#list tab.getColumns() as col>
-  /**
-   * ${col.getComment()!col.getFieldName()}
-   */<#if col.getNullable()>
-  @Nullable</#if>
-  @Schema(title = "${col.getComment()!col.getFieldName()}")
-  @Column(name = ${col.getUpperName()}<#if !col.getNullable()>,nullable = false</#if><#if col.getUnique()>,unique = true</#if>)
-  private ${col.getJavaType()} ${col.getFieldName()};
+/**
+* ${col.getComment()!col.getFieldName()}
+*/<#if col.getNullable()>
+@Nullable</#if>
+@Schema(title = "${col.getComment()!col.getFieldName()}")
+@Column(name = ${col.getUpperName()}<#if !col.getNullable()>,nullable = false</#if><#if col.getUnique()>,unique = true</#if>)
+private ${col.getJavaType()} ${col.getFieldName()};
 </#list>
 }

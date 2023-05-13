@@ -1,4 +1,4 @@
-project.version = V.Component.dataCommonCrawler
+project.version = V.Compose.dataCommonCrawler
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:${V.Driver.seleniumJava}")

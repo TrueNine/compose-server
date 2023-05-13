@@ -1,4 +1,4 @@
-project.version = V.Component.dependWebServlet
+project.version = V.Compose.dependWebServlet
 
 dependencies {
   implementation(project(":core"))

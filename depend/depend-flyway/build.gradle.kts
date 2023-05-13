@@ -1,4 +1,4 @@
-project.version = V.Component.dependFlyway
+project.version = V.Compose.dependFlyway
 
 dependencies {
   api("org.flywaydb:flyway-core")

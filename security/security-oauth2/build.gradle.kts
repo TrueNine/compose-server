@@ -1,4 +1,4 @@
-project.version = V.Component.securityOauth2
+project.version = V.Compose.securityOauth2
 
 dependencies {
   implementation(project(":depend:depend-web-client"))

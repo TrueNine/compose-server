@@ -1,4 +1,4 @@
-project.version = V.Component.security
+project.version = V.Compose.security
 
 
 dependencies {

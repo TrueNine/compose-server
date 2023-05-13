@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * ${tab.getComment()!tab.getClassName()} 服务实现
- *
- * @author ${ctx.getAuthor()}
- * @since ${ctx.nowDay()}
- */
+* ${tab.getComment()!tab.getClassName()} 服务实现
+*
+* @author ${ctx.getAuthor()}
+* @since ${ctx.nowDay()}
+*/
 @Service
 class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""} (
-  private val repo: ${tab.getClassName()}${ctx.getRepositorySuffix()!""}
+private val repo: ${tab.getClassName()}${ctx.getRepositorySuffix()!""}
 ) : ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
-  private val log = LogKt.getLog(this::class)
+private val log = slf4j(this::class)
 
 }

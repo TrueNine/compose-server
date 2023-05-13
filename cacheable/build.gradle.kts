@@ -1,4 +1,4 @@
-project.version = V.Component.cacheable
+project.version = V.Compose.cacheable
 
 dependencies {
   api("org.apache.commons:commons-pool2")

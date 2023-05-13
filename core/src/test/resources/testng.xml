@@ -4,8 +4,8 @@
 <suite name="核心包测试" parallel="classes">
   <test name="编解码测试" parallel="classes">
     <packages>
-      <package name="com.truenine.component.core.encrypt"/>
-      <package name="com.truenine.component.core.encrypt.base64"/>
+      <package name="net.yan100.compose.core.encrypt"/>
+      <package name="net.yan100.compose.core.encrypt.base64"/>
     </packages>
   </test>
 </suite>

@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ${tab.getClassName()}${ctx.getServiceImplSuffix()!""} implements ${tab.getClassName()}${ctx.getServiceSuffix()!""} {
 
-  private final ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo;
+private final ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo;
 
-  public ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}(
-  ${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo) {
-    this.repo = repo;
-  }
+public ${tab.getClassName()}${ctx.getServiceImplSuffix()!""}(
+${tab.getClassName()}${ctx.getRepositorySuffix()!""} repo) {
+this.repo = repo;
+}
 }

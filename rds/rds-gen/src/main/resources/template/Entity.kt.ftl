@@ -34,30 +34,30 @@ import ${t}
 data class ${tab.getClassName()}${ctx.getEntitySuffix()!""} (
 <#-- 表字段 -->
 <#list tab.getColumns() as col>
-  /**
-   * ${col.getComment()!col.getFieldName()}
-   */
-  @Schema(title="${col.getEscapeComment()}")
-  @Column(name = ${col.getUpperName()}<#if !col.getNullable()>,nullable = false</#if><#if col.getUnique()>,unique = true</#if>)
-  var ${col.getFieldName()}: ${col.getJavaType()}? = null
+/**
+* ${col.getComment()!col.getFieldName()}
+*/
+@Schema(title="${col.getEscapeComment()}")
+@Column(name = ${col.getUpperName()}<#if !col.getNullable()>,nullable = false</#if><#if col.getUnique()>,unique = true</#if>)
+var ${col.getFieldName()}: ${col.getJavaType()}? = null
 </#list>
 ) : ${ctx.getBaseEntityClassName()}(), Serializable {
-  companion object {
-    /**
-     * serialVersionUID
-     */
-    @Serial
-    const val serialVersionUID = 1L;
-    /**
-     * ${tab.getName()} 表名
-     */
-    const val TABLE_NAME = "${tab.getName()}"
+companion object {
+/**
+* serialVersionUID
+*/
+@Serial
+const val serialVersionUID = 1L;
+/**
+* ${tab.getName()} 表名
+*/
+const val TABLE_NAME = "${tab.getName()}"
 <#-- 静态表字段名 -->
 <#list tab.getColumns() as col>
-    /**
-     * ${col.getComment()!col.getFieldName()} 列
-     */
-    const val ${col.getUpperName()} = "${col.getColName()}"
+/**
+* ${col.getComment()!col.getFieldName()} 列
+*/
+const val ${col.getUpperName()} = "${col.getColName()}"
 </#list>
-  }
+}
 }

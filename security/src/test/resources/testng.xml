@@ -4,7 +4,7 @@
 <suite name="安全包测试" parallel="methods">
   <test name="jwt测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.security.jwt"/>
+      <package name="net.yan100.compose.security.jwt"/>
     </packages>
   </test>
 </suite>

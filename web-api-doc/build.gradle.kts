@@ -1,4 +1,4 @@
-project.version = V.Component.webApiDoc
+project.version = V.Compose.webApiDoc
 
 dependencies {
   implementation("com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${V.Web.knife4jJakarta}")

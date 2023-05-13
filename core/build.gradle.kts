@@ -1,4 +1,4 @@
-project.version = V.Component.core
+project.version = V.Compose.core
 
 dependencies {
   api("com.fasterxml.jackson.core:jackson-annotations")

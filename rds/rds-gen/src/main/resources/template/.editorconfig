@@ -1,5 +1,2 @@
 [*.ftl]
-
-charset = utf-8
 indent_size = 0
-indent_style = space

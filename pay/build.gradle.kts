@@ -1,4 +1,4 @@
-project.version = V.Component.pay
+project.version = V.Compose.pay
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-validation")

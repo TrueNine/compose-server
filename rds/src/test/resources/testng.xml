@@ -5,32 +5,32 @@
   <!-- 服务测试需要初始化数据 -->
   <test name="服务测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.rds.service.impl"/>
+      <package name="net.yan100.compose.rds.service.impl"/>
     </packages>
   </test>
   <test name="聚合服务测试" parallel="classes">
     <packages>
-      <package name="com.truenine.component.rds.service.aggregator"/>
+      <package name="net.yan100.compose.rds.service.aggregator"/>
     </packages>
   </test>
   <test name="仓库测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.rds.repository"/>
+      <package name="net.yan100.compose.rds.repository"/>
     </packages>
   </test>
   <test name="转换器测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.rds.converters"/>
+      <package name="net.yan100.compose.rds.converters"/>
     </packages>
   </test>
   <test name="基础包测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.rds.base"/>
+      <package name="net.yan100.compose.rds.base"/>
     </packages>
   </test>
   <test name="自动装配测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.rds.autoconfig"/>
+      <package name="net.yan100.compose.rds.autoconfig"/>
     </packages>
   </test>
 </suite>

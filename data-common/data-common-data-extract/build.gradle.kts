@@ -1,4 +1,4 @@
-project.version = V.Component.dataCommonDataExtract
+project.version = V.Compose.dataCommonDataExtract
 
 dependencies {
   api("com.squareup.okhttp3:okhttp:${V.Web.okhttp3}")

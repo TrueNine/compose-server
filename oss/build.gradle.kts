@@ -1,4 +1,4 @@
-project.version = V.Component.oss
+project.version = V.Compose.oss
 
 dependencies {
   implementation("io.minio:minio:${V.PlatformSdk.minio}") {
@@ -13,8 +13,8 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
 }
 configurations.all {
-  exclude("org.apache.logging.log4j","log4j-core")
-  exclude("org.apache.logging.log4j","log4j-api")
+  exclude("org.apache.logging.log4j", "log4j-core")
+  exclude("org.apache.logging.log4j", "log4j-api")
 }
 
 tasks.withType<Test> {

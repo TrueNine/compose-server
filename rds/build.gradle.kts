@@ -1,4 +1,4 @@
-project.version = V.Component.rds
+project.version = V.Compose.rds
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-data-jpa")

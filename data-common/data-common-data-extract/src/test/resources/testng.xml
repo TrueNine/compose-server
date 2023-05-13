@@ -4,17 +4,17 @@
 <suite name="数据服务远程调用测试" parallel="classes">
   <test name="远程调用测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.datacommon.dataextract.api"/>
+      <package name="net.yan100.compose.datacommon.dataextract.api"/>
     </packages>
   </test>
   <test name="实体模块测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.datacommon.dataextract.models"/>
+      <package name="net.yan100.compose.datacommon.dataextract.models"/>
     </packages>
   </test>
   <test name="服务测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.datacommon.dataextract.service.impl"/>
+      <package name="net.yan100.compose.datacommon.dataextract.service.impl"/>
     </packages>
   </test>
 </suite>

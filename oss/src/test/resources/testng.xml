@@ -4,8 +4,8 @@
 <suite name="对象存储测试" parallel="methods">
   <test name="链接测试" parallel="methods">
     <packages>
-      <package name="com.truenine.component.oss.huaweicloud"/>
-      <package name="com.truenine.component.oss.aliyun"/>
+      <package name="net.yan100.compose.oss.huaweicloud"/>
+      <package name="net.yan100.compose.oss.aliyun"/>
     </packages>
   </test>
 </suite>
