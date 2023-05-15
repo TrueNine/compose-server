@@ -11,7 +11,7 @@ dependencies {
   api("jakarta.validation:jakarta.validation-api")
   implementation("org.springframework.boot:spring-boot-starter-json")
   implementation("org.springframework.security:spring-security-crypto")
-  implementation("org.bouncycastle:bcprov-jdk15to18:${V.Security.bcprovJdk15to18}")
+  implementation("org.bouncycastle:bcprov-jdk18on:${V.Security.bcprovJdk15to18}")
   implementation("org.springframework:spring-webmvc")
   // kotlin
   api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${V.Lang.kotlin}")

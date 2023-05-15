@@ -2,6 +2,7 @@ package net.yan100.compose.core.encrypt
 
 import com.google.common.annotations.VisibleForTesting
 import net.yan100.compose.core.lang.slf4j
+import org.bouncycastle.jce.spec.IESParameterSpec
 import org.slf4j.Logger
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -190,7 +191,7 @@ object Encryptors {
     charset: Charset = this.charset
   ): String? = runCatching {
     Cipher.getInstance("ECIES", "BC").run {
-      init(ENC_MODE, eccPublicKey)
+      init(ENC_MODE, eccPublicKey, IESParameterSpec(null, null, 256))
       doFinal(data.toByteArray(charset)).let(net.yan100.compose.core.encrypt.Base64Helper::encode)
     }
   }.onFailure { log.error(::encryptByEccPublicKey.name, it) }.getOrNull()
@@ -208,7 +209,7 @@ object Encryptors {
     charset: Charset = this.charset
   ): String? = runCatching {
     Cipher.getInstance("ECIES", "BC").run {
-      init(DEC_MODE, eccPrivateKey)
+      init(DEC_MODE, eccPrivateKey, IESParameterSpec(null, null, 256))
       String(doFinal(Base64Helper.decodeToByte(data)), charset)
     }
   }.onFailure {
