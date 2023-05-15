@@ -67,4 +67,13 @@ public class TreeEntity extends BaseEntity implements Serializable {
   @Column(name = DataBaseBasicFieldNames.RIGHT_NODE)
   @Schema(title = "右节点", hidden = true)
   private Long rrn;
+
+  /**
+   * 节点级别
+   */
+  @JsonIgnore
+  @BigIntegerAsString
+  @Schema(title = "节点级别", defaultValue = "0")
+  @Column(name = DataBaseBasicFieldNames.NODE_LEVEL)
+  private Long nlv = 0L;
 }

@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "net.yan100.compose"
-  const val version = "0.5.1"
+  const val version = "0.5.2"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1.1"
 }
@@ -266,8 +266,8 @@ object V {
     const val nekohtml = "1.9.22"
 
     // 加密工具包
-    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15to18
-    const val bcprovJdk15to18 = "1.73"
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+    const val bcprovJdk18on = "1.73"
   }
 }
 

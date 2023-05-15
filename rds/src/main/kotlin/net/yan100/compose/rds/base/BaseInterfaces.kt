@@ -157,6 +157,7 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
       parent.rln != null
         && parent.rrn != null
         && parent.id != null
+        && parent.nlv != null
     ) { "父节点缺少必要的值 = $parent" }
     val leftStep = parent.rln + 1
     val offset = (children.size * 2)
@@ -170,7 +171,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
       children[idx].rln = leftStep + i
       children[idx].rrn = leftStep + i + 1
     }
-    return saveAll(children)
+    return saveAll(children.map {
+      it.apply { nlv = parent.nlv }
+    })
   }
 
   @Transactional(rollbackFor = [Exception::class])
@@ -196,7 +199,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
       child.rpi = parent.id
       child.rln = parent.rln + 1
       child.rrn = child.rln + 1
-      save(child)
+      save(child.apply {
+        nlv = parent.nlv
+      })
     }
   }
 
