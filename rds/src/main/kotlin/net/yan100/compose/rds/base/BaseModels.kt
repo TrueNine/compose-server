@@ -1,5 +1,11 @@
 package net.yan100.compose.rds.base
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.Column
+import jakarta.persistence.MappedSuperclass
+import net.yan100.compose.core.annotations.BigIntegerAsString
+import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.util.Pq
 import net.yan100.compose.rds.util.Pr
 import net.yan100.compose.rds.util.Pw
@@ -63,10 +69,13 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
 interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
 
   fun findChildrenCount(parent: T): Long {
-    require(parent.rln == null || parent.rrn == null) {
-      "父节点：$parent 节点值为 null"
+    require(parent.rln != null) {
+      "父节点：$parent 左节点为 null"
     }
-    return (parent.rrn - parent.rln - 1) / 2
+    require(parent.rrn != null) {
+      "父节点：$parent 右节点为 null"
+    }
+    return (parent.rrn!! - parent.rln!! - 1) / 2
   }
 
   @Query(
@@ -159,11 +168,11 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
         && parent.id != null
         && parent.nlv != null
     ) { "父节点缺少必要的值 = $parent" }
-    val leftStep = parent.rln + 1
+    val leftStep = parent.rln!! + 1
     val offset = (children.size * 2)
     // 更新所有的左节点和右节点
-    pushRlnByOffset(offset.toLong(), parent.rln)
-    pushRrnByOffset(offset.toLong(), parent.rln)
+    pushRlnByOffset(offset.toLong(), parent.rln!!)
+    pushRrnByOffset(offset.toLong(), parent.rln!!)
     // 编排并列的子节点
     for (i in 0 until (offset) step 2) {
       val idx = (i / 2)
@@ -194,11 +203,11 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
       child.rpi = null
       save(child)
     } else {
-      pushRlnByOffset(2, parent.rln)
-      pushRrnByOffset(2, parent.rln)
+      pushRlnByOffset(2, parent.rln!!)
+      pushRrnByOffset(2, parent.rln!!)
       child.rpi = parent.id
-      child.rln = parent.rln + 1
-      child.rrn = child.rln + 1
+      child.rln = parent.rln!! + 1
+      child.rrn = child.rln!! + 1
       save(child.apply {
         nlv = parent.nlv
       })
@@ -209,8 +218,8 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   @Transactional(rollbackFor = [Exception::class])
   fun deleteChild(child: T) {
     delete(child)
-    popRlnByOffset(2, child.rln)
-    popRrnByOffset(2, child.rln)
+    popRlnByOffset(2, child.rln!!)
+    popRrnByOffset(2, child.rln!!)
   }
 }
 
@@ -248,3 +257,53 @@ interface BaseService<T : AnyEntity> {
 }
 
 
+/**
+ * 预排序树
+ *
+ * @author TrueNine
+ * @since 2022-12-12
+ */
+@MappedSuperclass
+open class TreeEntity : BaseEntity() {
+  /**
+   * 父id
+   */
+  @JsonIgnore
+  @Column(name = RPI)
+  @Schema(title = "父id")
+  open var rpi: String? = null
+
+  /**
+   * 左节点
+   */
+  @JsonIgnore
+  @BigIntegerAsString
+  @Column(name = RLN)
+  @Schema(title = "左节点", hidden = true)
+  open var rln: Long? = null
+
+  /**
+   * 右节点
+   */
+  @JsonIgnore
+  @BigIntegerAsString
+  @Column(name = RRN)
+  @Schema(title = "右节点", hidden = true)
+  open var rrn: Long? = null
+
+  /**
+   * 节点级别
+   */
+  @JsonIgnore
+  @BigIntegerAsString
+  @Schema(title = "节点级别", defaultValue = "0")
+  @Column(name = NLV)
+  open var nlv: Long? = 0L
+
+  companion object {
+    const val RPI = DataBaseBasicFieldNames.PARENT_ID
+    const val RLN = DataBaseBasicFieldNames.LEFT_NODE
+    const val RRN = DataBaseBasicFieldNames.RIGHT_NODE
+    const val NLV = DataBaseBasicFieldNames.NODE_LEVEL
+  }
+}
