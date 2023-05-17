@@ -32,7 +32,10 @@ class BizCodeInsertListener {
         it.trySetAccessible()
         it.getAnnotation(BizCode::class.java) to it
       }.forEach {
-        it.second.set(data, bizCodeGenerator.nextCodeStr())
+        // 当 为 null 时进行设置
+        if (it.second.get(data) == null) {
+          it.second.set(data, bizCodeGenerator.nextCodeStr())
+        }
       }
     }
   }
