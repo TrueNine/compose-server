@@ -54,8 +54,10 @@ BEGIN
     'ADD `rln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 row left node\',',
     'ADD `rrn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 row right node\',',
     'ADD `nlv` BIGINT UNSIGNED DEFAULT 0 COMMENT \'节点级别 node level\',',
+    'ADD `tgi` BIGINT UNSIGNED DEFAULT 0 COMMENT \'树组id tree group id\',',
     'ADD INDEX(`rln`) COMMENT \'索引左节点\',',
     'ADD INDEX(`rrn`) COMMENT \'索引右节点\',',
+    'ADD INDEX(`tgi`) COMMENT \'树组id\','
     'ADD INDEX(`rpi`) COMMENT \'自联 父节点\';'
     );
   SET @statement = CONCAT(@after);
