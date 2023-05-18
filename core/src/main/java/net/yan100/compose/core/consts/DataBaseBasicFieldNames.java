@@ -15,6 +15,7 @@ public interface DataBaseBasicFieldNames {
   String LEFT_NODE = "rln";
   String RIGHT_NODE = "rrn";
   String NODE_LEVEL = "nlv";
+  String TREE_GROUP_ID = "tgi";
   String LOCK_VERSION = "rlv";
   String PARENT_ID = "rpi";
   String ANY_REFERENCE_ID = "ari";
@@ -27,6 +28,7 @@ public interface DataBaseBasicFieldNames {
       LOCK_VERSION,
       LEFT_NODE,
       NODE_LEVEL,
+      TREE_GROUP_ID,
       RIGHT_NODE,
       PARENT_ID,
       LOGIC_DELETE_FLAG,
