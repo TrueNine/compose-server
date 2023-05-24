@@ -76,7 +76,7 @@ object V {
 
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
-    const val flyway = "9.17.0"
+    const val flyway = "9.18.0"
 
     // 测试用内存数据库
     // https://mvnrepository.com/artifact/com.h2database/h2
@@ -185,7 +185,7 @@ object V {
 
   object StandardEdition {
     // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
-    const val swaggerAnnotationJakarta = "2.2.8"
+    const val swaggerAnnotationJakarta = "2.2.10"
 
     // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     const val jakartaValidationApi = "3.0.2"

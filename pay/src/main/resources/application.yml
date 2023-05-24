@@ -1,8 +1,7 @@
 server:
   port: 9081
 
-
-component:
+compose:
   pay:
     wechat:
       app-id: wx555a67d97f0cfa4e
@@ -14,6 +13,3 @@ component:
       app-secret: cabea5859a643b41762e6c7dfba001d0
       app-key: yingyuechuanmei88888888888888888
 
-logging:
-  level:
-    root: debug

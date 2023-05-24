@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
+import net.yan100.compose.core.annotations.BetaTest
 import net.yan100.compose.core.annotations.BigIntegerAsString
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.annotations.BizCode
@@ -78,6 +79,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
     return (parent.rrn!! - parent.rln!! - 1) / 2
   }
 
+  /**
+   * 查询当前节点的所有子节点
+   */
   @Query(
     """
     from #{#entityName} e
@@ -87,7 +91,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   )
   fun findChildren(parent: T): List<T>
 
-
+  /**
+   * 返回当前节点的所有父节点
+   */
   @Query(
     """
     from #{#entityName} e
@@ -98,6 +104,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   )
   fun findParentPath(child: T): List<T>
 
+  /**
+   * 计算当前节点的深度级别
+   */
   @Query(
     """
     select count(1) + 1
@@ -109,6 +118,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   )
   fun findTreeLevel(child: T): Long
 
+  /**
+   * 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来
+   */
   @Query(
     """
     update #{#entityName} e
@@ -120,6 +132,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   @Modifying
   fun pushRlnByOffset(rlnOffset: Long, parentRln: Long, tgi: String?)
 
+  /**
+   * 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来
+   */
   @Query(
     """
     update #{#entityName} e
@@ -131,6 +146,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   @Modifying
   fun pushRrnByOffset(rrnOffset: Long, parentRln: Long, tgi: String?)
 
+  /**
+   * 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来
+   */
   @Query(
     """
     update #{#entityName} c
@@ -142,7 +160,9 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   @Modifying
   fun popRlnByOffset(rlnOffset: Long, parentRln: Long, tgi: String?)
 
-
+  /**
+   * 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来
+   */
   @Query(
     """
     update #{#entityName} c
@@ -155,8 +175,8 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   fun popRrnByOffset(rrnOffset: Long, parentRln: Long, tgi: String?): Int
 
   /**
-   * 保存一组 树结构，此操作为原子性的，一次事务
-   * 只能进行一次操作
+   * 保存一组 树结构，此操作为原子性的
+   * **警告：一次事务只能调用一次**
    *
    * @param parent 父节点
    * @param children 直属子节点列表
@@ -196,12 +216,20 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
     })
   }
 
+  /**
+   * 对 saveChildren 的尾随闭包调用
+   * **警告：一次事务只能调用一次**
+   */
   @Transactional(rollbackFor = [Exception::class])
   fun saveChildren(
     parent: T,
     children: () -> List<T>
   ): List<T> = saveChildren(parent, children())
 
+  /**
+   * 保存单个子节点
+   * **警告：一次事务只能调用一次**
+   */
   @Transactional(rollbackFor = [Exception::class])
   fun saveChild(
     parent: T?,
@@ -225,6 +253,10 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
     }
   }
 
+  /**
+   * **警告：一次事务只能调用一次**
+   */
+  @BetaTest
   @Transactional(rollbackFor = [Exception::class])
   fun deleteChild(child: T) {
     delete(child)

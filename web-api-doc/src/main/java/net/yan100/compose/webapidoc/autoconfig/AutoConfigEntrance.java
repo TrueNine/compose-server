@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @Import({
   OpenApiDocConfig.class,
+  // 暂时不需要了
   //OpenApiConfigController.class
 })
 @EnableConfigurationProperties(SwaggerProperties.class)

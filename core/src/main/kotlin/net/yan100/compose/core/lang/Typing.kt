@@ -4,7 +4,9 @@ import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
 import java.util.concurrent.ConcurrentHashMap
 
-
+/**
+ * 所有类型枚举的抽象接口
+ */
 interface AnyTyping {
   fun getValue(): Any?
 }

@@ -20,6 +20,8 @@ public interface Headers {
   String HOST = "Host";
   String REFERER = "Referer";
   String USER_AGENT = "User-Agent";
+  String X_FORWARDED_FOR = "X-Forwarded-For";
+  String PROXY_CLIENT_IP = "Proxy-Client-IP";
   /**
    * 设备 id
    */
