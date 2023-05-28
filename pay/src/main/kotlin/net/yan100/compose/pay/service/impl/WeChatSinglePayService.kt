@@ -2,7 +2,6 @@ package net.yan100.compose.pay.service.impl
 
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
 import com.wechat.pay.java.service.payments.jsapi.model.*
-import com.wechat.pay.java.service.payments.model.Transaction
 import com.wechat.pay.java.service.refund.RefundService
 import com.wechat.pay.java.service.refund.model.AmountReq
 import com.wechat.pay.java.service.refund.model.CreateRequest
@@ -14,10 +13,9 @@ import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.pay.models.request.CreateOrderApiRequestParam
 import net.yan100.compose.pay.models.request.FindPayOrderRequestParam
 import net.yan100.compose.pay.models.response.CreateOrderApiResponseResult
-import net.yan100.compose.pay.models.response.QueryOrderApiResponseResult
+import net.yan100.compose.pay.models.response.FindPayOrderResponseResult
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -61,34 +59,33 @@ class WeChatSinglePayService(
     }
   }
 
-  override fun findPayOrder(findPayOrderRequestParam: FindPayOrderRequestParam): QueryOrderApiResponseResult? {
+  override fun findPayOrder(findRq: FindPayOrderRequestParam): FindPayOrderResponseResult? {
     requireKnown(
-      !(findPayOrderRequestParam.merchantOrderId.hasText() && findPayOrderRequestParam.bizCode.hasText())
+      !(findRq.merchantOrderId.hasText() && findRq.bizCode.hasText())
     ) { "商户订单号和第三方订单号不能同时为空" }
 
-    val transaction: Transaction? =
-      if (findPayOrderRequestParam.merchantOrderId.hasText()) {
-        val queryOrderByOutTradeNoRequest = QueryOrderByOutTradeNoRequest()
-        queryOrderByOutTradeNoRequest.outTradeNo = findPayOrderRequestParam.merchantOrderId
-        queryOrderByOutTradeNoRequest.mchid = payProperty.merchantId
-        jsApi.queryOrderByOutTradeNo(queryOrderByOutTradeNoRequest)
-      } else if (findPayOrderRequestParam.bizCode.hasText()) {
-        val qor = QueryOrderByIdRequest().apply {
-          transactionId = findPayOrderRequestParam.bizCode
+    val transaction = if (findRq.merchantOrderId.hasText()) {
+        jsApi.queryOrderByOutTradeNo(QueryOrderByOutTradeNoRequest().apply {
+          outTradeNo = findRq.merchantOrderId
           mchid = payProperty.merchantId
-        }
-        jsApi.queryOrderById(qor)
-      } else throw KnownException("订单号为空")
+        })
+      } else if (findRq.bizCode.hasText()) {
+        jsApi.queryOrderById(QueryOrderByIdRequest().apply {
+          transactionId = findRq.bizCode
+          mchid = payProperty.merchantId
+        })
+      } else throw KnownException("订单号或商户订单号为空为空")
 
-    return QueryOrderApiResponseResult().apply {
+    return FindPayOrderResponseResult().apply {
       orderId = transaction!!.outTradeNo
       orderNo = transaction.transactionId
-      money = BigDecimal(transaction.amount.total).setScale(2, RoundingMode.UNNECESSARY).divide(HUNDRED, RoundingMode.UNNECESSARY)
+      // 金额 / 100
+      amount = BigDecimal(transaction.amount.total).setScale(2, RoundingMode.UNNECESSARY).divide(HUNDRED, RoundingMode.UNNECESSARY)
       tradeStatus = transaction.tradeState.toString()
     }
   }
 
-  override fun refundPayOrder(
+  override fun applyRefundPayOrder(
     refundAmount: BigDecimal,
     totalAmount: BigDecimal,
     currency: ISO4217
@@ -98,14 +95,15 @@ class WeChatSinglePayService(
       // 将金额比例乘以 100
       val totalLongBy = (totalAmount * HUNDRED).longValueExact()
       val refundLongBy = (refundAmount * HUNDRED).longValueExact()
-      this.currency = ISO4217.CNY.getValue()
+      this.currency = currency.getValue()
       refund = refundLongBy
       total = totalLongBy
     }
 
     createRequest.apply {
       amount = amountReq
-      outTradeNo = "1649768373464600576"
+      // 商户订单号
+      outTradeNo = bigCodeGenerator.nextCodeStr()
       outRefundNo = bigCodeGenerator.nextCodeStr()
     }
     // TODO 此处空返回
