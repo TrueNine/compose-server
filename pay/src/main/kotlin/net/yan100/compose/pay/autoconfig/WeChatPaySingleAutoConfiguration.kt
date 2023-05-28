@@ -64,7 +64,7 @@ class WeChatPaySingleAutoConfiguration {
       enable = p.enableSingle
       privateKey = privateKeyFile!!
       mpAppId = p.mpAppId!!
-      apiSecret = certKeyFile!!
+      apiSecret = p.apiSecret!!
       merchantId = p.merchantId!!
       asyncNotifyUrl = p.asyncNotifyUrl!!
     }

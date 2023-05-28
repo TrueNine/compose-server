@@ -23,7 +23,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service
-@ConditionalOnBean(value = [JsapiService::class, RefundService::class])
+//@ConditionalOnBean(value = [JsapiService::class, RefundService::class])
 class WeChatSinglePayService(
   private val jsApi: JsapiService,
   private val refundApi: RefundService,

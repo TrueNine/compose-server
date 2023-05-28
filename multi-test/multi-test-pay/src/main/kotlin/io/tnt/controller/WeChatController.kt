@@ -1,7 +1,7 @@
 package io.tnt.controller
 
 
-import cn.hutool.crypto.PemUtil
+import com.wechat.pay.java.core.util.PemUtil
 import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.encodeBase64String
 import net.yan100.compose.pay.api.WechatPayJsApi
@@ -34,7 +34,7 @@ class WeChatController(
 
   @GetMapping("userInfo")
   fun getUserInfo(code: String?): String? {
-    return wechatPayJsApi.token(payProperty.mpAppId, payProperty.apiSecret, code, WechatPayGrantTyping.AUTH_CODE.getValue())!!.body
+    return wechatPayJsApi.token(payProperty.mpAppId, payProperty.apiSecret, code, WechatPayGrantTyping.AUTH_CODE.getValue()).body
   }
 
   @PostMapping("pullUpPayOrder")
