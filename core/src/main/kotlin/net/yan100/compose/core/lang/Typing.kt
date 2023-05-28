@@ -7,6 +7,22 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * # 所有类型枚举的抽象接口
  * 实现此接口，以方便其他序列化程序来读取枚举
+ * 实现此接口后，需要手动添加一个 findVal 静态方法，提供给 jackson等框架自动调用
+ *
+ * 由于无法在接口规定静态方法，此算作规约吧。以下为一个枚举类内部的静态方法示例
+ *
+ * ```kotlin
+ * enum class GenderTyping(private val value: Int) {
+ *   ...;
+ *     @JsonValue
+ *     override fun getValue() = this.value
+ *     companion object {
+ *       @JvmStatic
+ *       fun findVal(v: Int?) = GenderTyping.values().find { it.value == v }
+ *     }
+ * }
+ * ```
+ * @see [AnyTypingConverterFactory] 此类用于 SpringMVC 的返回以及接收时的转换工作
  * @author TrueNine
  * @since 2023-05-28
  */
