@@ -15,9 +15,9 @@ import java.math.BigDecimal
  */
 interface SinglePayService {
   /**
-   * ## 拉起支付订单
+   * ## 小程序拉起支付订单
    */
-  fun pullUpPayOrder(createOrderRequestParam: CreateOrderApiRequestParam): CreateOrderApiResponseResult?
+  fun pullUpMpPayOrder(createOrderRequestParam: CreateOrderApiRequestParam): CreateOrderApiResponseResult?
 
   /**
    * ## 查询支付订单
@@ -25,7 +25,7 @@ interface SinglePayService {
   fun findPayOrder(findPayOrderRequestParam: FindPayOrderRequestParam): QueryOrderApiResponseResult?
 
   /**
-   * 支付订单退款
+   * ## 支付订单退款
    *
    * @param refundAmount 退款金额
    * @param totalAmount 退款单 总金额

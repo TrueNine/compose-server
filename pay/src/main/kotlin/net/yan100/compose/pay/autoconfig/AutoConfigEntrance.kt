@@ -4,7 +4,7 @@ import net.yan100.compose.pay.properties.WeChatProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Import
 
-@Import(WeChatPayAutoConfiguration::class)
+@Import(WeChatPaySingleAutoConfiguration::class)
 @EnableConfigurationProperties(
   WeChatProperties::class
 )

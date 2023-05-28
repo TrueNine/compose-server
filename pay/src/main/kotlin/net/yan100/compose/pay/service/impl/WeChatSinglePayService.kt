@@ -15,24 +15,27 @@ import net.yan100.compose.pay.models.request.CreateOrderApiRequestParam
 import net.yan100.compose.pay.models.request.FindPayOrderRequestParam
 import net.yan100.compose.pay.models.response.CreateOrderApiResponseResult
 import net.yan100.compose.pay.models.response.QueryOrderApiResponseResult
-import net.yan100.compose.pay.properties.WeChatProperties
+import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service
+@ConditionalOnBean(value = [JsapiService::class, RefundService::class])
 class WeChatSinglePayService(
   private val jsApi: JsapiService,
   private val refundApi: RefundService,
-  private val weChatProperties: WeChatProperties,
+  private val payProperty: WeChatPaySingleConfigProperty,
   private val bigCodeGenerator: BizCodeGenerator
 ) : SinglePayService {
   companion object {
     private val HUNDRED = BigDecimal("100")
   }
 
-  override fun pullUpPayOrder(createOrderRequestParam: CreateOrderApiRequestParam): CreateOrderApiResponseResult? {
+  override fun pullUpMpPayOrder(createOrderRequestParam: CreateOrderApiRequestParam): CreateOrderApiResponseResult? {
+    // TODO 此处没有传入 货币单位
     val amount = Amount().apply {
       total = createOrderRequestParam.amount!!.multiply(HUNDRED).toInt()
     }
@@ -44,10 +47,10 @@ class WeChatSinglePayService(
     val request = PrepayRequest().apply {
       this.amount = amount
       this.payer = payer
-      appid = weChatProperties.mpAppId
-      mchid = weChatProperties.merchantId
+      appid = payProperty.mpAppId
+      mchid = payProperty.merchantId
       description = createOrderRequestParam.title
-      notifyUrl = weChatProperties.notifyUrl
+      notifyUrl = payProperty.asyncNotifyUrl
       outTradeNo = createOrderRequestParam.customOrderId
     }
 
@@ -67,12 +70,12 @@ class WeChatSinglePayService(
       if (findPayOrderRequestParam.merchantOrderId.hasText()) {
         val queryOrderByOutTradeNoRequest = QueryOrderByOutTradeNoRequest()
         queryOrderByOutTradeNoRequest.outTradeNo = findPayOrderRequestParam.merchantOrderId
-        queryOrderByOutTradeNoRequest.mchid = weChatProperties.merchantId
+        queryOrderByOutTradeNoRequest.mchid = payProperty.merchantId
         jsApi.queryOrderByOutTradeNo(queryOrderByOutTradeNoRequest)
       } else if (findPayOrderRequestParam.bizCode.hasText()) {
         val qor = QueryOrderByIdRequest().apply {
           transactionId = findPayOrderRequestParam.bizCode
-          mchid = weChatProperties.merchantId
+          mchid = payProperty.merchantId
         }
         jsApi.queryOrderById(qor)
       } else throw KnownException("订单号为空")
@@ -105,6 +108,7 @@ class WeChatSinglePayService(
       outTradeNo = "1649768373464600576"
       outRefundNo = bigCodeGenerator.nextCodeStr()
     }
+    // TODO 此处空返回
     val refundDetails = refundApi.create(createRequest)
   }
 }

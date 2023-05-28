@@ -2,8 +2,6 @@ project.version = V.Compose.pay
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-validation")
-  implementation(("cn.hutool:hutool-core:${V.Util.huTool}"))
-  implementation(("cn.hutool:hutool-crypto:${V.Util.huTool}"))
   implementation(("org.springframework.boot:spring-boot-starter-web"))
   implementation(("org.springframework.boot:spring-boot-starter-webflux"))
   implementation("com.github.wechatpay-apiv3:wechatpay-java:${V.PlatformSdk.wechatpayJava}")

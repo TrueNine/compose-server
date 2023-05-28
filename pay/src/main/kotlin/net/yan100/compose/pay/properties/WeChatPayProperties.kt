@@ -6,6 +6,11 @@ const val wechatKeyDir = "security/wechat/pay/"
 
 @ConfigurationProperties(prefix = "compose.pay.wechat")
 open class WeChatProperties {
+  /**
+   * 开启 单配置支付
+   */
+  open var enableSingle: Boolean = false
+
   open var merchantId: String? = null
   open var merchantSerialNumber: String? = null
 
@@ -20,7 +25,7 @@ open class WeChatProperties {
   /**
    * 异步通知 Id
    */
-  open var notifyUrl: String? = null
+  open var asyncNotifyUrl: String? = null
 
   /**
    * api 密钥

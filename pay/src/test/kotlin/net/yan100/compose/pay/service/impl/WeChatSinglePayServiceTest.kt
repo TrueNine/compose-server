@@ -28,7 +28,7 @@ class WeChatSinglePayServiceTest : AbstractTestNGSpringContextTests() {
       amount = BigDecimal("0.01")
       title = "一斤菠萝"
     }
-    val order = service.pullUpPayOrder(crp)
+    val order = service.pullUpMpPayOrder(crp)
     log.debug(order.toString())
   }
 }

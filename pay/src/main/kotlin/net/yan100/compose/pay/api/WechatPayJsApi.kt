@@ -6,13 +6,12 @@ import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 
 @HttpExchange(url = "https://api.weixin.qq.com/")
-interface WeChatApi {
-
+interface WechatPayJsApi {
   @GetExchange(value = "sns/jscode2session", accept = ["application/json"])
   fun token(
     @RequestParam appid: String?,
     @RequestParam secret: String?,
     @RequestParam(name = "js_code") jsCode: String?,
     @RequestParam(name = "grant_type") grantType: String?
-  ): ResponseEntity<String?>?
+  ): ResponseEntity<String?>
 }
