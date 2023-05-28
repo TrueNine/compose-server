@@ -68,5 +68,9 @@ findProject(":multi-test")?.name = "multi-test"
 include("multi-test:multi-test-security")
 findProject(":multi-test:multi-test-security")?.name = "multi-test-security"
 
+include("multi-test:multi-test-pay")
+findProject(":multi-test:multi-test-pay")?.name = "multi-test-pay"
+
+
 include("pay")
 findProject(":pay")?.name = "pay"
