@@ -8,6 +8,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.security.PrivateKey
 import java.security.PublicKey
+import java.security.Signature
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import javax.crypto.Cipher
@@ -63,9 +64,9 @@ object Encryptors {
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = this.charset,
-    alg: EncryptAlgorithm = EncryptAlgorithm.RSA_PADDING
+    alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING
   ): String? = runCatching {
-    Cipher.getInstance(alg.str()).run {
+    Cipher.getInstance(alg.getValue()).run {
       init(ENC_MODE, publicKey)
       sharding(data.toByteArray(charset), shardingSize)
         .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
@@ -79,9 +80,9 @@ object Encryptors {
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = this.charset,
-    alg: EncryptAlgorithm = EncryptAlgorithm.RSA_PADDING
+    alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING
   ): String? = runCatching {
-    Cipher.getInstance(alg.str()).run {
+    Cipher.getInstance(alg.getValue()).run {
       init(ENC_MODE, privateKey)
       sharding(data.toByteArray(charset), shardingSize)
         .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
@@ -100,10 +101,10 @@ object Encryptors {
   private fun basicDecrypt(
     privateKey: PrivateKey,
     data: String,
-    alg: EncryptAlgorithm = EncryptAlgorithm.RSA_PADDING,
+    alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING,
     charset: Charset = this.charset,
   ): String? = runCatching {
-    Cipher.getInstance(alg.str()).run {
+    Cipher.getInstance(alg.getValue()).run {
       init(DEC_MODE, privateKey)
       data.split(SHARDING_SEP).map { Base64Helper.decodeToByte(it) }
         .map { doFinal(it) }
@@ -151,7 +152,7 @@ object Encryptors {
     data,
     shardingSize,
     charset,
-    EncryptAlgorithm.RSA_PADDING
+    EncryptAlgorithmTyping.RSA_PADDING
   )
 
   /**
@@ -174,7 +175,7 @@ object Encryptors {
     data,
     shardingSize,
     charset,
-    EncryptAlgorithm.RSA_PADDING
+    EncryptAlgorithmTyping.RSA_PADDING
   )
 
 
@@ -245,7 +246,7 @@ object Encryptors {
     rsaPrivateKey: RSAPrivateKey,
     data: String,
     charset: Charset = this.charset
-  ): String? = basicDecrypt(rsaPrivateKey, data, EncryptAlgorithm.RSA_PADDING, charset)
+  ): String? = basicDecrypt(rsaPrivateKey, data, EncryptAlgorithmTyping.RSA_PADDING, charset)
 
   /**
    * @param aesKey 密钥
@@ -317,6 +318,17 @@ object Encryptors {
     }
   }.onFailure { log.error(::decryptByAesKey.name, it) }.getOrNull()
 
+  @JvmStatic
+  fun signWithSha256WithRsaByRsaPrivateKey(
+    signContent: String,
+    rsaPrivateKey: RSAPrivateKey,
+    charset: Charset = StandardCharsets.UTF_8
+  ): Signature {
+    val signature = Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.getValue())
+    signature.initSign(rsaPrivateKey)
+    signature.update(signContent.toByteArray(charset))
+    return signature
+  }
 
   /**
    * @param data 数据字节数组
@@ -336,4 +348,6 @@ object Encryptors {
     }
     return shardingData
   }
+
+
 }

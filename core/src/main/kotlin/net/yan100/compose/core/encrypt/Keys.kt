@@ -3,7 +3,6 @@ package net.yan100.compose.core.encrypt
 import net.yan100.compose.core.lang.slf4j
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.slf4j.Logger
 import java.nio.charset.StandardCharsets
 import java.security.*
 import java.security.interfaces.RSAPrivateKey
@@ -20,16 +19,36 @@ import javax.crypto.spec.SecretKeySpec
  * @since 2023-02-19
  */
 object Keys {
+  private const val CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
   private const val RSA_KEY_SIZE = 1024
   private const val AES_KEY_SIZE = 256
+  private val SECURE_RANDOM = SecureRandom()
 
   @JvmStatic
-  private val rsaAlg = EncryptAlgorithm.RSA.str()
-
+  private val rsaAlg = EncryptAlgorithmTyping.RSA.getValue()!!
   private const val DEFAULT_SEED = "T-DECRYPT-AND-ENCRYPT"
 
   @JvmStatic
-  private val log: Logger = slf4j(Keys::class)
+  private val log = slf4j(Keys::class)
+
+
+  /**
+   * ## 生成随机字符串
+   *
+   * 范围包含
+   *
+   * - 0-9
+   * - a-z
+   * - A-Z
+   */
+  @JvmStatic
+  fun generateRandomAsciiString(length: Int = 32): String {
+    val sb = StringBuilder(length)
+    for (i in 0 until length) {
+      sb.append(CHARACTERS[SECURE_RANDOM.nextInt(CHARACTERS.length)])
+    }
+    return sb.toString()
+  }
 
   /**
    * @param base64 rsa 公钥 base64 字符串
@@ -37,7 +56,7 @@ object Keys {
    */
   @JvmStatic
   fun readRsaPublicKeyByBase64(base64: String): RSAPublicKey? =
-    readPublicKeyByBase64AndAlg(base64, EncryptAlgorithm.RSA) as? RSAPublicKey
+    readPublicKeyByBase64AndAlg(base64, EncryptAlgorithmTyping.RSA) as? RSAPublicKey
 
 
   /**
@@ -73,7 +92,7 @@ object Keys {
    */
   @JvmStatic
   fun readEccPublicKeyByBase64(base64: String): PublicKey? =
-    readPublicKeyByBase64AndAlg(base64, EncryptAlgorithm.ECC)
+    readPublicKeyByBase64AndAlg(base64, EncryptAlgorithmTyping.ECC)
 
 
   /**
@@ -84,8 +103,27 @@ object Keys {
   fun readRsaPrivateKeyByBase64(privateKeyBase64: String): RSAPrivateKey? =
     readPrivateKeyByBase64AndAlg(
       privateKeyBase64,
-      EncryptAlgorithm.RSA
+      EncryptAlgorithmTyping.RSA
     ) as? RSAPrivateKey
+
+  /**
+   * ## 此方法为解密标准 RSA 私钥
+   * 标准的私钥即是：
+   *
+   * - 以 -----BEGIN PRIVATE KEY----- 开头
+   * - 以 -----END PRIVATE KEY----- 结尾
+   * - 中间包含换行的 base64 字符串
+   * @param standardKeyBase64 rsa base64 私钥
+   * @return rsa私钥
+   */
+  @JvmStatic
+  fun readRsaPrivateKeyByBase64AndStandard(
+    standardKeyBase64: String
+  ): RSAPrivateKey? = readRsaPrivateKeyByBase64(
+    standardKeyBase64.replace("-----BEGIN PRIVATE KEY-----", "")
+      .replace("-----END PRIVATE KEY-----", "")
+      .replace(Regex("\\s+"), "")
+  )
 
 
   /**
@@ -94,7 +132,7 @@ object Keys {
    */
   @JvmStatic
   fun readEccPrivateKeyByBase64(base64: String): PrivateKey? =
-    readPrivateKeyByBase64AndAlg(base64, EncryptAlgorithm.ECC)
+    readPrivateKeyByBase64AndAlg(base64, EncryptAlgorithmTyping.ECC)
 
 
   /**
@@ -105,15 +143,14 @@ object Keys {
   @JvmStatic
   private fun readPublicKeyByBase64AndAlg(
     base64: String,
-    alg: EncryptAlgorithm
+    alg: EncryptAlgorithmTyping
   ): PublicKey? = runCatching {
     X509EncodedKeySpec(
       Base64Helper.decodeToByte(base64)
     ).run {
-      KeyFactory.getInstance(alg.str()).generatePublic(this)
+      KeyFactory.getInstance(alg.getValue()).generatePublic(this)
     }
   }.onFailure { log.error(::readPublicKeyByBase64AndAlg.name, it) }.getOrNull()
-
 
   /**
    * @param base64 base64 私钥
@@ -123,10 +160,10 @@ object Keys {
   @JvmStatic
   private fun readPrivateKeyByBase64AndAlg(
     base64: String,
-    alg: EncryptAlgorithm
+    alg: EncryptAlgorithmTyping
   ): PrivateKey? = runCatching {
     PKCS8EncodedKeySpec(Base64Helper.decodeToByte(base64)).run {
-      KeyFactory.getInstance(alg.str()).generatePrivate(this)
+      KeyFactory.getInstance(alg.getValue()).generatePrivate(this)
     }
   }.onFailure {
     log.error(::readPrivateKeyByBase64AndAlg.name, it)
@@ -167,7 +204,7 @@ object Keys {
   ): RsaKeyPair? = generateKeyPair(
     seed,
     keySize,
-    EncryptAlgorithm.RSA.str(),
+    EncryptAlgorithmTyping.RSA.getValue()!!,
     "SunRsaSign"
   )?.let { that ->
     RsaKeyPair().takeIf {
@@ -266,7 +303,7 @@ object Keys {
   fun readKeyPair(
     publicKeyBase64: String,
     privateKeyBase64: String,
-    alg: EncryptAlgorithm
+    alg: EncryptAlgorithmTyping
   ): KeyPair? = KeyPair(
     readPublicKeyByBase64AndAlg(publicKeyBase64, alg),
     readPrivateKeyByBase64AndAlg(privateKeyBase64, alg)
