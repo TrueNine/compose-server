@@ -15,14 +15,16 @@ open class WeChatProperties {
   /**
    * appId 小程序 Id
    */
-  open var appId: String? = null
+  open var mpAppId: String? = null
 
   /**
    * 异步通知 Id
    */
   open var notifyUrl: String? = null
 
-  // api 密钥
-  open var appSecret: String? = null
+  /**
+   * api 密钥
+   */
+  open var apiSecret: String? = null
   open var apiV3Key: String? = null
 }

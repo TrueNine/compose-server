@@ -1,39 +1,46 @@
 package net.yan100.compose.pay.autoconfig
 
-import cn.hutool.core.io.FileUtil
 import com.wechat.pay.java.core.RSAAutoCertificateConfig
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
 import com.wechat.pay.java.service.refund.RefundService
+import net.yan100.compose.core.lang.resourceAsStream
+import net.yan100.compose.core.lang.utf8String
 import net.yan100.compose.pay.properties.WeChatProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.DependsOn
-import java.nio.charset.StandardCharsets
 
 @Configuration
 class WeChatPayAutoConfiguration {
+  companion object {
+    const val CREATE_CONFIG_NAME = "rsaAutoCertificateConfig"
+  }
 
   @Bean
-  fun createConfig(weChatProperties: WeChatProperties): RSAAutoCertificateConfig {
-    val privateKey = FileUtil.readString(weChatProperties.privateKeyPath, StandardCharsets.UTF_8)
-    val cert = FileUtil.readString(weChatProperties.certPath, StandardCharsets.UTF_8)
+  fun rsaAutoCertificateConfig(p: WeChatProperties): RSAAutoCertificateConfig {
+    val privateKey = p.privateKeyPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+    val cert = p.certPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+
+    // TODO 郑重警告，此类不能被创建两次
     return RSAAutoCertificateConfig.Builder()
-      .merchantId(weChatProperties.merchantId)
+      .merchantId(p.merchantId)
       .privateKey(privateKey)
-      .merchantSerialNumber(weChatProperties.merchantSerialNumber)
-      .apiV3Key(weChatProperties.apiV3Key)
+      .merchantSerialNumber(p.merchantSerialNumber)
+      .apiV3Key(p.apiV3Key)
       .build()
   }
 
+
   @Bean
-  @DependsOn(value = ["createConfig"])
-  fun createJsapiServicePayService(config: RSAAutoCertificateConfig?): JsapiService {
+  @DependsOn(CREATE_CONFIG_NAME)
+  fun jsapiService(config: RSAAutoCertificateConfig?): JsapiService {
     return JsapiService.Builder().config(config).build()
   }
 
+
   @Bean
-  @DependsOn(value = ["createConfig"])
-  fun createJsapiServicePayRefundService(config: RSAAutoCertificateConfig?): RefundService {
+  @DependsOn(CREATE_CONFIG_NAME)
+  fun refundService(config: RSAAutoCertificateConfig?): RefundService {
     return RefundService.Builder().config(config).build()
   }
 }

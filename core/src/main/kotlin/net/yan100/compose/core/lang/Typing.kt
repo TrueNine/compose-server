@@ -5,9 +5,15 @@ import org.springframework.core.convert.converter.ConverterFactory
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * 所有类型枚举的抽象接口
+ * # 所有类型枚举的抽象接口
+ * 实现此接口，以方便其他序列化程序来读取枚举
+ * @author TrueNine
+ * @since 2023-05-28
  */
 interface AnyTyping {
+  /**
+   * ## 获取枚举对应的实际值
+   */
   fun getValue(): Any?
 }
 

@@ -1,5 +1,6 @@
 package net.yan100.compose.core.lang
 
+import java.io.InputStream
 import java.lang.reflect.Field
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -81,6 +82,10 @@ val String.camelUppercaseFieldName: String
   } else this
 
 
+fun String.resourceAsStream(cls: KClass<*>): InputStream? {
+  return cls.java.classLoader.getResourceAsStream(this)
+}
+
 /**
  * ## 递归获取一个类的所有属性
  * @param endType 结束的类型
@@ -97,3 +102,7 @@ fun KClass<*>.recursionFields(endType: KClass<*> = Any::class): Array<out Field>
   }
   return selfFields.toTypedArray()
 }
+
+
+val ByteArray.utf8String: String
+  get() = String(this, StandardCharsets.UTF_8)
