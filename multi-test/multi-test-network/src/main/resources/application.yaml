@@ -1,0 +1,4 @@
+compose:
+  web-api-doc:
+    open-api:
+      packages: io.tnt
