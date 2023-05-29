@@ -62,6 +62,9 @@ findProject(":cacheable")?.name = "cacheable"
 include("schedule")
 findProject(":schedule")?.name = "schedule"
 
+include("pay")
+findProject(":pay")?.name = "pay"
+
 include("multi-test")
 findProject(":multi-test")?.name = "multi-test"
 
@@ -71,6 +74,5 @@ findProject(":multi-test:multi-test-security")?.name = "multi-test-security"
 include("multi-test:multi-test-pay")
 findProject(":multi-test:multi-test-pay")?.name = "multi-test-pay"
 
-
-include("pay")
-findProject(":pay")?.name = "pay"
+include("multi-test:multi-test-network")
+findProject(":multi-test:multi-test-network")?.name = "multi-test-network"

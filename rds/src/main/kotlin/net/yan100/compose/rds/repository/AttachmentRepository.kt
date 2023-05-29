@@ -11,9 +11,8 @@ import org.springframework.stereotype.Repository
 interface AttachmentRepository : BaseRepository<AttachmentEntity> {
   @Query(
     """
-    select new kotlin.Pair(al.baseUrl,a.saveName)
+    select new kotlin.Pair(a.baseUrl,a.saveName)
     from AttachmentEntity a
-    left join AttachmentLocationEntity al on a.attachmentLocationId = al.id
     where a.id = :id
   """
   )
@@ -21,9 +20,8 @@ interface AttachmentRepository : BaseRepository<AttachmentEntity> {
 
   @Query(
     """
-    select al.baseUrl||a.saveName
+    select a.baseUrl||a.saveName
     from AttachmentEntity a
-    left join AttachmentLocationEntity al on a.attachmentLocationId = al.id
     where a.id = :id
   """
   )
@@ -31,11 +29,14 @@ interface AttachmentRepository : BaseRepository<AttachmentEntity> {
 
   @Query(
     """
-    select al.baseUrl||a.saveName
+    select a.baseUrl||a.saveName
     from AttachmentEntity a
-    left join AttachmentLocationEntity al on a.attachmentLocationId = al.id
     where a.metaName like concat(:metaName,'%%') 
     """
   )
   fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pageable): Page<String>
+
+  fun existsByBaseUrl(baseUrl: String): Boolean
+
+  fun findByBaseUrlStartingWith(baseUrl: String): AttachmentEntity?
 }

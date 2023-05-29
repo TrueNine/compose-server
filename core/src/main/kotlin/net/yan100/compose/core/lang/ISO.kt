@@ -1,5 +1,7 @@
 package net.yan100.compose.core.lang
 
+import com.fasterxml.jackson.annotation.JsonValue
+
 /**
  * ## ISO 4217 表示各国货币的枚举
  * @author TrueNine
@@ -50,8 +52,14 @@ enum class ISO4217(
    */
   JPY("JPY");
 
+  @JsonValue
   override fun getValue(): String? {
     return this.iso4217Str
+  }
+
+  companion object {
+    @JvmStatic
+    fun findVal(v: String?) = ISO4217.values().find { it.iso4217Str == v }
   }
 
   override fun toString(): String {

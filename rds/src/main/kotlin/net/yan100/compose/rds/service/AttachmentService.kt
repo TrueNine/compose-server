@@ -6,6 +6,8 @@ import net.yan100.compose.rds.util.PagedWrapper
 
 
 interface AttachmentService : BaseService<AttachmentEntity> {
+  fun existsByBaseUrl(baseUrl: String): Boolean
+  fun findByBaseUrl(baseUrl: String): AttachmentEntity?
   fun findFullUrlById(id: Long): String?
   fun findAllFullUrlByMetaNameStartingWith(
     metaName: String,
