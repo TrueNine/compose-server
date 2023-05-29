@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: default
   flyway:
     baseline-on-migrate: false
     baseline-version: 99

@@ -88,7 +88,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     assertNotNull(saved)
 
     aggregator.revokeRoleGroupFromUser(saved.roleGroupId, saved.userId)
-    val nu = userService.findById(u.id)
+    val nu = userService.findFullUserByAccount(u.account!!)
     assertNotNull(nu)
     assertTrue { nu.roleGroups.isEmpty() }
   }
@@ -104,15 +104,15 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     val urs = aggregator.saveAllRoleGroupToUser(rgs.map { it.id }, u.id)
     assertTrue { urs.size == rgs.size }
 
-    val queryUser = userService.findById(u.id)
+    val queryUser = userService.findFullUserByAccount(u.account!!)
     assertNotNull(queryUser)
     assertNotNull(queryUser.roleGroups)
-    assertTrue { queryUser.roleGroups.size > 0 }
+    assertTrue { queryUser.roleGroups.isNotEmpty() }
 
     assertEquals(queryUser.roleGroups.size, rgs.size)
 
     aggregator.revokeAllRoleGroupFromUser(rgs.map { it.id }, u.id)
-    val nu = userService.findById(u.id)
+    val nu = userService.findFullUserByAccount(u.account!!)
     assertNotNull(nu)
     assertTrue {
       nu.roleGroups.isEmpty()
@@ -369,7 +369,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     }
 
     // 校验挂载是否通过
-    val newUser = userService.findById(user.id)!!
+    val newUser = userService.findFullUserByAccount(user.account!!)!!
     val newUserGroup = ugService.findById(subUserGroup.id)!!
     assertTrue { newUser.roleGroups.containsAll(userRoleGroups) }
     assertTrue { newUserGroup.roleGroups.containsAll(ugRoleGroups) }
@@ -387,14 +387,14 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindAllSecurityNameByAccount() {
     val user = namePre()
-    val all = aggregator.findAllSecurityNameByAccount(user.account)
+    val all = aggregator.findAllSecurityNameByAccount(user.account!!)
     assertTrue { all.isNotEmpty() }
   }
 
   @Test
   fun testFindAllRoleNameByUserAccount() {
     val user = namePre()
-    val acl = aggregator.findAllRoleNameByUserAccount(user.account)
+    val acl = aggregator.findAllRoleNameByUserAccount(user.account!!)
     assertTrue("查询不到权限 $acl") { acl.isNotEmpty() }
     assertTrue("权限数值不对 $acl") { acl.size == 1 }
   }
@@ -402,7 +402,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindAllPermissionsNameByUserAccount() {
     val user = namePre()
-    val acl = aggregator.findAllPermissionsNameByUserAccount(user.account)
+    val acl = aggregator.findAllPermissionsNameByUserAccount(user.account!!)
     assertTrue("查询不到权限 $acl") { acl.isNotEmpty() }
     assertTrue("权限数值不对 $acl") { acl.size == 1 }
   }

@@ -70,7 +70,7 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
       name = "我的大海"
     })
     service.saveUserToUserGroup(u.id, ug.id)
-    val foundUg = service.findAllByUserAccount(u.account)
+    val foundUg = service.findAllByUserAccount(u.account!!)
     assertTrue { foundUg.isNotEmpty() }
     assertContains(foundUg, ug)
   }
