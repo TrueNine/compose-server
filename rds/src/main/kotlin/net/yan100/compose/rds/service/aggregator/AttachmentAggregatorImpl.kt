@@ -4,10 +4,9 @@ import jakarta.validation.Valid
 import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.entity.AttachmentEntity
-import net.yan100.compose.rds.entity.AttachmentLocationEntity
 import net.yan100.compose.rds.models.request.PostAttachmentRequestParam
-import net.yan100.compose.rds.service.AttachmentLocationService
 import net.yan100.compose.rds.service.AttachmentService
+import net.yan100.compose.rds.typing.AttachmentTyping
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
@@ -18,26 +17,31 @@ import java.time.LocalDateTime
 @Service
 class AttachmentAggregatorImpl(
   private val aService: AttachmentService,
-  private val alService: AttachmentLocationService
 ) : AttachmentAggregator {
 
-  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> PostAttachmentRequestParam): AttachmentEntity? {
+  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> @Valid PostAttachmentRequestParam): AttachmentEntity? {
     val saveFile = saveFileCallback()
     // 如果 此条url 不存在，则保存一个新的 url
-    val location = alService.findByBaseUrl(saveFile.baseUrl)
-      ?: alService.save(AttachmentLocationEntity().apply {
-        baseUrl = saveFile.baseUrl
-        type = saveFile.storageType
-        name = "URL:\$${LocalDateTime.now()}"
-        log.debug("保存一个新的 附件地址 = {}", this)
+    val location = aService.findByBaseUrl(saveFile.baseUrl)
+      ?: aService.save(AttachmentEntity().apply {
+        // 拼接上尾随斜杠
+        baseUrl = if (saveFile.baseUrl.endsWith("/")) saveFile.baseUrl else "${saveFile.baseUrl}/"
+        attType = AttachmentTyping.BASE_URL
+        urlName = "URL:\$${LocalDateTime.now()}"
+        log.info("保存了新的附件地址 = {}", this)
       })
+
     // 构建一个新附件对象保存并返回
     val att = AttachmentEntity().apply {
+      // 将之于根路径连接
+      urlId = location.id
+
       saveName = saveFile.saveName
       metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
       size = file.size
+
       mimeType = file.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.media()
-      attachmentLocationId = location.id!!
+      attType = AttachmentTyping.ATTACHMENT
     }
     // 重新进行赋值
     return aService.save(att)
@@ -45,6 +49,6 @@ class AttachmentAggregatorImpl(
 
   companion object {
     @JvmStatic
-    private val log = slf4j(this::class)
+    private val log = slf4j(AttachmentAggregatorImpl::class)
   }
 }

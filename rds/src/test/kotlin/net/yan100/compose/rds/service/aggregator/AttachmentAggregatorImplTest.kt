@@ -3,7 +3,7 @@ package net.yan100.compose.rds.service.aggregator
 
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.models.request.PostAttachmentRequestParam
-import net.yan100.compose.rds.typing.AttachmentStorageTyping
+import net.yan100.compose.rds.typing.AttachmentTyping
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
@@ -24,10 +24,9 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
       object : PostAttachmentRequestParam {
         override var baseUrl = "https://oss.aliyun.com/static"
         override var saveName = "adwd0juihjrthjrthrhrhrth"
-        override var storageType = AttachmentStorageTyping.REMOTE
       }
     }!!.apply {
-      assertNotNull(this.attachmentLocationId)
+      assertNotNull(this.urlId)
     }
   }
 
@@ -38,7 +37,6 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
       object : PostAttachmentRequestParam {
         override var baseUrl = "https://oss.aliyun.com/static"
         override var saveName = "adwd0juihjrthjrthrhrhrth"
-        override var storageType = AttachmentStorageTyping.REMOTE
       }
     }!!
   }

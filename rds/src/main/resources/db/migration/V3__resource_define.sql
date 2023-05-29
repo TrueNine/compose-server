@@ -25,23 +25,22 @@ CREATE TABLE IF NOT EXISTS api_call_record
 CALL add_base_struct('api_call_record');
 
 
-CREATE TABLE IF NOT EXISTS attachment_location
-(
-  base_url TEXT          NOT NULL COMMENT '基本url',
-  name     VARCHAR(1023) NOT NULL COMMENT '资源路径名称',
-  doc      TEXT COMMENT '资源路径描述',
-  type     VARCHAR(3)    NOT NULL COMMENT '存储类别'
-) DEFAULT CHARSET = utf8mb4, COMMENT '文件地址';
-CALL add_base_struct('attachment_location');
-
-
 CREATE TABLE IF NOT EXISTS attachment
 (
-  attachment_location_id BIGINT UNSIGNED NOT NULL COMMENT '存储base路径',
-  meta_name              TEXT            NOT NULL COMMENT '原始名称',
-  save_name              TEXT COMMENT '存储后名称',
-  size                   BIGINT UNSIGNED DEFAULT 0 COMMENT '文件大小',
-  mime_type              VARCHAR(1023) COMMENT 'MIME TYPE'
+  meta_name VARCHAR(127)    NULL COMMENT '原始名称',
+  save_name VARCHAR(127) COMMENT '存储后名称',
+  base_url  VARCHAR(255)    NULL COMMENT '基本url',
+  url_name  VARCHAR(127)    NULL COMMENT '资源路径名称',
+  url_doc   VARCHAR(255) COMMENT '资源路径描述',
+  url_id    BIGINT UNSIGNED NULL COMMENT '根路径链接路径自连接id',
+  att_type  INT             NOT NULL COMMENT '附件类别（URL、附件）',
+  size      BIGINT UNSIGNED DEFAULT NULL COMMENT '文件大小',
+  mime_type VARCHAR(63) COMMENT 'MIME TYPE',
+  INDEX (url_id) COMMENT '自连接 id',
+  INDEX (meta_name) COMMENT '原始名称经常搜索',
+  INDEX (base_url) COMMENT '根路径经常检索',
+  INDEX (att_type) COMMENT '附件类型经常检索',
+  INDEX (mime_type) COMMENT '媒体类型经常检索'
 ) DEFAULT CHARSET = utf8mb4, COMMENT '文件';
 CALL add_base_struct('attachment');
 
@@ -52,7 +51,8 @@ CREATE TABLE IF NOT EXISTS address
   name   VARCHAR(2047) COMMENT '名称',
   level  INT DEFAULT 0 COMMENT '级别 0 为国家',
   center VARCHAR(255) NULL COMMENT '定位',
-  UNIQUE (code) COMMENT '行政区代码唯一'
+  UNIQUE (code) COMMENT '行政区代码唯一',
+  INDEX (name) COMMENT '名称经常检索'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '行政区代码';
 CALL add_base_struct('address');
 CALL add_presort_tree_struct('address');

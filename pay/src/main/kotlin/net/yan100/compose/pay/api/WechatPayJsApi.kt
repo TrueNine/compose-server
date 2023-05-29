@@ -8,11 +8,19 @@ import org.springframework.web.service.annotation.HttpExchange
 
 @HttpExchange(url = "https://api.weixin.qq.com/")
 interface WechatPayJsApi {
+
+  /**
+   * # 获取微信用户 id
+   * @param appid appId
+   * @param secret secret
+   * @param jsCode 验证令牌
+   * @param grantType 验证类型
+   */
   @GetExchange(value = "sns/jscode2session", accept = ["application/json"])
   fun findUserToken(
     @RequestParam appid: String?,
     @RequestParam secret: String?,
     @RequestParam(name = "js_code") jsCode: String?,
-    @RequestParam(name = "grant_type") grantType: WechatPayGrantTyping?
+    @RequestParam(name = "grant_type") grantType: WechatPayGrantTyping? = WechatPayGrantTyping.AUTH_CODE
   ): ResponseEntity<String?>
 }

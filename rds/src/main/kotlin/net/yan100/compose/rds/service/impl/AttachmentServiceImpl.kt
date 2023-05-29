@@ -13,6 +13,14 @@ import org.springframework.stereotype.Service
 class AttachmentServiceImpl(
   private val repo: AttachmentRepository
 ) : AttachmentService, BaseServiceImpl<AttachmentEntity>(repo) {
+  override fun existsByBaseUrl(baseUrl: String): Boolean {
+    return repo.existsByBaseUrl(baseUrl)
+  }
+
+  override fun findByBaseUrl(baseUrl: String): AttachmentEntity? {
+    return repo.findByBaseUrlStartingWith(baseUrl)
+  }
+
   override fun findFullUrlById(id: Long): String? =
     repo.findFullPathById(id)
 
