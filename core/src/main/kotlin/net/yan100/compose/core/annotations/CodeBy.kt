@@ -19,7 +19,7 @@ import java.lang.annotation.Inherited
 @Inherited
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FIELD, AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FIELD, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY, AnnotationTarget.PROPERTY_GETTER)
 @JacksonAnnotationsInside
 @JsonInclude
 @JsonSerialize(using = SensitiveSerializer::class)

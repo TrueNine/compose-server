@@ -12,6 +12,7 @@ dependencies {
   testImplementation(project(":depend:depend-flyway"))
   testImplementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
   testImplementation("org.hsqldb:hsqldb:${V.Driver.hsqldb}")
+  testImplementation("com.mysql:mysql-connector-j:${V.Driver.mysqlConnectorJ}")
 }
 
 tasks.withType<Test> {
