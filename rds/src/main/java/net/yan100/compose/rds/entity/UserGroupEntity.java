@@ -18,6 +18,7 @@ import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static jakarta.persistence.FetchType.*;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**
@@ -70,7 +71,7 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
    * leaderUser
    */
   @Schema(title = "用户组创建人", requiredMode = NOT_REQUIRED)
-  @ManyToOne
+  @ManyToOne(fetch = EAGER)
   @JoinColumn(
     name = USER_ID,
     referencedColumnName = ID,
@@ -85,7 +86,7 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
    * 用户组内的用户
    */
   @Schema(title = "用户组内的用户", requiredMode = NOT_REQUIRED)
-  @ManyToMany(targetEntity = UserEntity.class)
+  @ManyToMany(targetEntity = UserEntity.class,fetch = EAGER)
   @JoinTable(
     name = UserGroupUserEntity.TABLE_NAME,
     joinColumns = @JoinColumn(
@@ -111,7 +112,7 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
    * 角色组
    */
   @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
-  @ManyToMany(targetEntity = RoleGroupEntity.class)
+  @ManyToMany(targetEntity = RoleGroupEntity.class,fetch = EAGER)
   @JoinTable(
     name = UserGroupRoleGroupEntity.TABLE_NAME,
     joinColumns = @JoinColumn(

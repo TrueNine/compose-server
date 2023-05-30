@@ -5,6 +5,7 @@ import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.recursionFields
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.annotations.BizCode
+import net.yan100.compose.rds.base.BaseEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -24,9 +25,9 @@ class BizCodeInsertListener {
   }
 
   @PrePersist
-  fun insert(data: Any?) {
+  fun insertBizCode(data: Any?) {
     data?.let { d ->
-      d::class.recursionFields(net.yan100.compose.rds.base.BaseEntity::class).filter {
+      d::class.recursionFields(BaseEntity::class).filter {
         it.isAnnotationPresent(BizCode::class.java)
       }.map {
         it.trySetAccessible()

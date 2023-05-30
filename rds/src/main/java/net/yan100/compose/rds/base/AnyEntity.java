@@ -2,16 +2,19 @@ package net.yan100.compose.rds.base;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
 import net.yan100.compose.rds.autoconfig.BizCodeGeneratorBean;
-import net.yan100.compose.rds.autoconfig.SnowflakeIdGeneratorBean;
 import net.yan100.compose.rds.listener.BizCodeInsertListener;
 import net.yan100.compose.rds.listener.PreSaveDeleteReferenceListener;
+import net.yan100.compose.rds.listener.SnowflakeIdInsertListener;
 import net.yan100.compose.rds.listener.TableRowDeletePersistenceListener;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
@@ -26,11 +29,6 @@ import java.util.Objects;
  * @author TrueNine
  * @since 2023-04-23
  */
-
-@GenericGenerator(
-  name = BizCodeGeneratorBean.NAME,
-  strategy = BizCodeGeneratorBean.CLASS_NAME
-)// 业务单号生成器具
 @Setter
 @Getter
 @MappedSuperclass
@@ -40,6 +38,7 @@ import java.util.Objects;
 @EntityListeners({
   TableRowDeletePersistenceListener.class,
   BizCodeInsertListener.class,
+  SnowflakeIdInsertListener.class,
   PreSaveDeleteReferenceListener.class
 })
 public class AnyEntity implements Serializable {
@@ -55,12 +54,7 @@ public class AnyEntity implements Serializable {
    * id
    */
   @Id
-  @GenericGenerator(
-    name = SnowflakeIdGeneratorBean.NAME,
-    strategy = SnowflakeIdGeneratorBean.CLASS_NAME
-  )// 雪花算法生成器
   @Column(name = DataBaseBasicFieldNames.ID)
-  @GeneratedValue(generator = SnowflakeIdGeneratorBean.NAME)
   @Schema(title = ID, example = "7001234523405")
   protected String id;
 

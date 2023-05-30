@@ -3,6 +3,7 @@ package net.yan100.compose.rds.entity
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
+import jakarta.persistence.FetchType.EAGER
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NotFound
@@ -55,12 +56,12 @@ open class RoleEntity : SuperRoleEntity()
 @DynamicInsert
 @DynamicUpdate
 @Table(name = SuperRoleEntity.TABLE_NAME)
-open class AllRoleEntity : SuperRoleEntity() {
+open class FullRoleEntity : SuperRoleEntity() {
   /**
    * 权限
    */
   @Schema(title = "权限", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @ManyToMany(targetEntity = PermissionsEntity::class)
+  @ManyToMany(fetch = EAGER, targetEntity = PermissionsEntity::class)
   @JoinTable(
     name = net.yan100.compose.rds.entity.relationship.RolePermissionsEntity.TABLE_NAME,
     joinColumns = [JoinColumn(
@@ -137,7 +138,7 @@ open class AllRoleGroupEntity : SuperRoleGroupEntity() {
    * 角色
    */
   @Schema(title = "角色", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @ManyToMany(targetEntity = AllRoleEntity::class)
+  @ManyToMany(fetch = EAGER, targetEntity = FullRoleEntity::class)
   @JoinTable(
     name = net.yan100.compose.rds.entity.relationship.RoleGroupRoleEntity.TABLE_NAME,
     joinColumns = [JoinColumn(
@@ -159,7 +160,7 @@ open class AllRoleGroupEntity : SuperRoleGroupEntity() {
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
   )
   @NotFound(action = NotFoundAction.IGNORE)
-  open var roles: List<AllRoleEntity> = listOf()
+  open var roles: List<FullRoleEntity> = listOf()
 }
 
 /**
