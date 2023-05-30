@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.repository
 
 import net.yan100.compose.rds.base.BaseRepository
-import net.yan100.compose.rds.entity.AllRoleEntity
+import net.yan100.compose.rds.entity.FullRoleEntity
 import net.yan100.compose.rds.entity.RoleEntity
 import net.yan100.compose.rds.entity.UserGroupEntity
 import org.springframework.data.jpa.repository.Query
@@ -23,18 +23,18 @@ interface RoleRepository : BaseRepository<RoleEntity> {
 }
 
 @Repository
-interface AllRoleEntityRepository : BaseRepository<AllRoleEntity> {
-  fun findAllByName(name: String): List<AllRoleEntity>
+interface AllRoleEntityRepository : BaseRepository<FullRoleEntity> {
+  fun findAllByName(name: String): List<FullRoleEntity>
 
   @Query(
-    """
-    from AllRoleEntity r
+      """
+    from FullRoleEntity r
     left join RoleGroupRoleEntity rgr on r.id = rgr.roleId
     left join UserRoleGroupEntity urg on rgr.roleGroupId = urg.roleGroupId
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: Long): List<AllRoleEntity>
+  fun findAllByUserId(userId: Long): List<FullRoleEntity>
 }
 
 @Repository

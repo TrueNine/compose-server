@@ -69,6 +69,8 @@ allprojects {
 
   group = ProjectManager.group
   version = ProjectManager.version
+
+  extra["springCloudVersion"] = V.Spring.springCloud
 }
 
 subprojects {
@@ -132,14 +134,18 @@ subprojects {
       exclude("org.springframework.boot", "spring-boot")
     }
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
+
     annotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
+
+    compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     testAnnotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
     testCompileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
-
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
       exclude("org.junit.jupiter", "junit-jupiter")
     }
+
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
     testImplementation("org.testng:testng:${V.Test.testNG}")

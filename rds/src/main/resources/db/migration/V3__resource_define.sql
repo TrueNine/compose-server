@@ -48,7 +48,7 @@ CALL add_base_struct('attachment');
 CREATE TABLE IF NOT EXISTS address
 (
   code   VARCHAR(255) COMMENT '代码',
-  name   VARCHAR(2047) COMMENT '名称',
+  name   VARCHAR(127) COMMENT '名称', # 中国最长的地名是新疆维吾尔自治区昌吉回族自治州木垒哈萨克自治县大南沟乌孜别克族乡
   level  INT DEFAULT 0 COMMENT '级别 0 为国家',
   center VARCHAR(255) NULL COMMENT '定位',
   UNIQUE (code) COMMENT '行政区代码唯一',

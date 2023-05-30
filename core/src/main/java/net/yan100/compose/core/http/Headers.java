@@ -31,7 +31,7 @@ public interface Headers {
   /**
    * 自定义刷新头
    */
-  String X_RE_FLUSH_TOKEN = "X-ReFlush";
+  String X_RE_FLUSH_TOKEN = "X-Re-Flush";
 
   /**
    * 微信 open id 授权 自定义id

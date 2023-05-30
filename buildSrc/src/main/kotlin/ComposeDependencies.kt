@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "net.yan100.compose"
-  const val version = "0.5.9"
+  const val version = "0.5.13"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1.1"
 }
@@ -220,10 +220,10 @@ object V {
 
   object Spring {
     // https://spring.io/projects/spring-boot#learn
-    const val springBoot = "3.0.6"
+    const val springBoot = "3.1.0"
 
     // https://spring.io/projects/spring-cloud#learn
-    const val springCloud = "2022.0.2"
+    const val springCloud = "2022.0.3"
 
     // https://spring.io/projects/spring-cloud-alibaba#learn
     const val cloudAlibaba = "2021.0.4.0"

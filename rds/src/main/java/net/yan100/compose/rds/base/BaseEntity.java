@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 
@@ -32,7 +29,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIR
 @AllArgsConstructor
 @MappedSuperclass
 @Schema(title = "顶级抽象类")
-public class BaseEntity extends AnyEntity implements Serializable {
+public class BaseEntity extends AnyEntity {
   /**
    * 乐观锁版本
    */
@@ -41,8 +38,7 @@ public class BaseEntity extends AnyEntity implements Serializable {
    * 逻辑删除标志
    */
   public static final String LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG;
-  @Serial
-  private static final long serialVersionUID = 1L;
+
 
   /**
    * 乐观锁版本

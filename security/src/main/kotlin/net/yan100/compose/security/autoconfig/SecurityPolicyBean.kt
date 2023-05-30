@@ -77,21 +77,23 @@ class SecurityPolicyBean {
 
     httpSecurity
       // 关闭 csrf
-      .csrf().disable()
+      .csrf { it.disable() }
       // 关闭 session
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-      .authorizeHttpRequests()
-      // 放行链接
-      .requestMatchers(*anonymousPatterns.toTypedArray())
-      // 其他链接一律放行
-      .anonymous().anyRequest().authenticated().and()
+      .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+      .authorizeHttpRequests {
+        // 放行链接
+        it.requestMatchers(*anonymousPatterns.toTypedArray())
+          // 其他链接一律放行
+          .anonymous().anyRequest().authenticated()
+      }
       .userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
 
     // 配置异常处理器
     if (policyDefine.exceptionAdware != null) {
-      httpSecurity.exceptionHandling()
-        .authenticationEntryPoint(policyDefine.exceptionAdware)
-        .accessDeniedHandler(policyDefine.exceptionAdware)
+      httpSecurity.exceptionHandling {
+        it.authenticationEntryPoint(policyDefine.exceptionAdware)
+          .accessDeniedHandler(policyDefine.exceptionAdware)
+      }
     } else {
       log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
     }

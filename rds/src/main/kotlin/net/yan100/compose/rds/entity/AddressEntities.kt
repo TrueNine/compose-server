@@ -83,7 +83,7 @@ open class AllAddressDetailsEntity : SuperAddressDetailsEntity() {
   )
   @NotFound(action = IGNORE)
   @JsonBackReference
-  open var address: AllAddressEntity? = null
+  open var address: FullAddressEntity? = null
 }
 
 @MappedSuperclass
@@ -148,7 +148,7 @@ open class AddressEntity : SuperAddressEntity()
 @DynamicUpdate
 @Schema(title = "行政区代码")
 @Table(name = SuperAddressEntity.TABLE_NAME)
-open class AllAddressEntity : SuperAddressEntity() {
+open class FullAddressEntity : SuperAddressEntity() {
   /**
    * 当前地址包含的地址详情
    */
@@ -161,6 +161,5 @@ open class AllAddressEntity : SuperAddressEntity() {
     insertable = false,
     updatable = false
   )
-  @NotFound(action = IGNORE)
   open var details: List<AllAddressDetailsEntity> = listOf()
 }

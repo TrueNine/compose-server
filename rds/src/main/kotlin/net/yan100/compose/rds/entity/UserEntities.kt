@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
+import jakarta.persistence.FetchType.EAGER
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull
 import net.yan100.compose.core.annotations.SensitiveRef
@@ -119,7 +120,7 @@ open class FullUserEntity : SuperUserEntity() {
    * 角色组
    */
   @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
-  @ManyToMany(targetEntity = RoleGroupEntity::class)
+  @ManyToMany(fetch = EAGER, targetEntity = RoleGroupEntity::class)
   @JoinTable(
     name = UserRoleGroupEntity.TABLE_NAME,
     joinColumns = [JoinColumn(
