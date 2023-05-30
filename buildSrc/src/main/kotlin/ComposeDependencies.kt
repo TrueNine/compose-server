@@ -21,7 +21,7 @@ object V {
     const val kotlin = "1.8.21"
 
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
-    const val lombok = "1.18.26"
+    const val lombok = "1.18.28"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
     const val kotlinxCoroutine = "1.7.1"
