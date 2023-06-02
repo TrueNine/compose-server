@@ -41,7 +41,7 @@ open class JsCodeToSessionApiResp {
 
   @Schema(title = "用户唯一标识")
   @JsonProperty("openid")
-  var openid: String? = null
+  var openId: String? = null
 
   @Schema(title = "错误信息")
   @JsonProperty("errmeg")
@@ -56,7 +56,7 @@ fun JsCodeToSessionApiResp.toStandard(): JsCodeToSessionResp {
   return JsCodeToSessionResp().also {
     it.sessionKey = sessionKey
     it.unionId = unionId
-    it.openid = openid
+    it.openId = openId
     it.errorMessage = errorMessage
     it.errorCode = errorCode
   }
@@ -76,7 +76,7 @@ open class JsCodeToSessionResp {
   var unionId: String? = null
 
   @Schema(title = "用户唯一标识")
-  var openid: String? = null
+  var openId: String? = null
 
   @Schema(title = "错误信息")
   var errorMessage: String? = null

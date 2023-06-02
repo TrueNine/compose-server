@@ -21,7 +21,7 @@ interface WechatMpAuthApi {
   /**
    * # 小程序登录
    *
-   * @param appid appId
+   * @param appId appId
    * @param secret secret
    * @param jsCode 验证令牌
    * @param grantType 验证类型
@@ -29,7 +29,7 @@ interface WechatMpAuthApi {
   @ResponseBody
   @GetExchange(value = "sns/jscode2session", accept = ["application/json", "text/plain"])
   fun jsCodeToSession(
-    @RequestParam appid: String,
+    @RequestParam appId: String,
     @RequestParam secret: String,
     @RequestParam(name = "js_code") jsCode: String,
     @RequestParam(name = "grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE
@@ -37,7 +37,7 @@ interface WechatMpAuthApi {
 }
 
 fun WechatMpAuthApi.jsCodeToSessionStandard(param: JsCodeToSessionApiReq): JsCodeToSessionResp? = this.jsCodeToSession(
-  appid = param.mpAppId,
+  appId = param.mpAppId,
   secret = param.mpSecret,
   jsCode = param.jsCode,
   grantType = WechatMpGrantTyping.AUTH_CODE
