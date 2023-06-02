@@ -6,14 +6,15 @@ import net.yan100.compose.core.encrypt.Encryptors
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.encodeBase64String
-import net.yan100.compose.pay.api.WechatPayJsApi
+import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.typing.wechat.WechatPayGrantTyping
 import net.yan100.compose.pay.models.request.CreateOrderApiRequestParam
 import net.yan100.compose.pay.models.request.FindPayOrderRequestParam
 import net.yan100.compose.pay.models.response.FindPayOrderResponseResult
 import net.yan100.compose.pay.models.response.PullUpMpPayOrderResponseResult
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
-import net.yan100.compose.pay.typing.WechatPayGrantTyping
+import net.yan100.compose.security.oauth2.api.WechatMpAuthApi
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,15 +25,18 @@ import java.util.*
 @RestController
 @RequestMapping("v1/pay/single/wechat")
 class WeChatController(
-  private val wechatPayJsApi: WechatPayJsApi,
+  private val jsApi: WechatMpAuthApi,
   private val payProperty: WeChatPaySingleConfigProperty,
   private val payService: SinglePayService,
   private val bizCodeGenerator: BizCodeGenerator
 ) {
+  private val log = slf4j(this::class)
 
   @GetMapping("userInfo")
   fun getUserInfo(code: String?): String? {
-    return wechatPayJsApi.findUserToken(payProperty.mpAppId, payProperty.apiSecret, code, WechatPayGrantTyping.AUTH_CODE).body
+    val uInfo = jsApi.jsCodeToSession(payProperty.mpAppId, payProperty.apiSecret, code, WechatPayGrantTyping.AUTH_CODE).body
+    log.info("获取到 uInfo = {}", uInfo)
+    return uInfo
   }
 
   @PostMapping("pullUpPayOrder")
@@ -42,7 +46,7 @@ class WeChatController(
       title = "一斤菠萝"
       amount = BigDecimal("0.01")
       customOrderId = bizCodeGenerator.nextCodeStr()
-      wechatUserOpenId = "oRYYL5H-IKKK0sHs1L0EOjZw1Ne4"
+      wechatUserOpenId = "oRYYL5Bjwp3Qy4B7nEYBxrrP2yno"
     }
 
     return PullUpMpPayOrderResponseResult().apply {

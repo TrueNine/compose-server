@@ -5,6 +5,8 @@ import net.yan100.compose.rds.base.BaseServiceImpl
 import net.yan100.compose.rds.entity.AttachmentEntity
 import net.yan100.compose.rds.repository.AttachmentRepository
 import net.yan100.compose.rds.service.AttachmentService
+import net.yan100.compose.rds.util.Pq
+import net.yan100.compose.rds.util.Pr
 import net.yan100.compose.rds.util.page
 import net.yan100.compose.rds.util.result
 import org.springframework.stereotype.Service
@@ -18,15 +20,14 @@ class AttachmentServiceImpl(
   }
 
   override fun findByBaseUrl(baseUrl: String): AttachmentEntity? {
-    return repo.findByBaseUrlStartingWith(baseUrl)
+    return repo.findFirstByBaseUrlStartingWith(baseUrl)
   }
 
-  override fun findFullUrlById(id: Long): String? =
-    repo.findFullPathById(id)
+  override fun findFullUrlById(id: String): String? {
+    return repo.findFullPathById(id)
+  }
 
-  override fun findAllFullUrlByMetaNameStartingWith(
-    metaName: String,
-    page: net.yan100.compose.rds.base.PagedRequestParam
-  ): net.yan100.compose.rds.base.PagedResponseResult<String> =
-    repo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
+  override fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq): Pr<String> {
+    return repo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
+  }
 }

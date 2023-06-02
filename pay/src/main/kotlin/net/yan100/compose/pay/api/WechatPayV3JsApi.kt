@@ -1,13 +1,19 @@
 package net.yan100.compose.pay.api
 
-import net.yan100.compose.pay.typing.WechatPayGrantTyping
+import net.yan100.compose.core.typing.wechat.WechatPayGrantTyping
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 
+/**
+ * # 微信支付 js API
+ *
+ * @author shanghua
+ * @since 2023-05-31
+ */
 @HttpExchange(url = "https://api.weixin.qq.com/")
-interface WechatPayJsApi {
+interface WechatPayV3JsApi {
 
   /**
    * # 获取微信用户 id

@@ -1,8 +1,13 @@
-package net.yan100.compose.pay.typing
+package net.yan100.compose.core.typing.wechat
 
 import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.lang.StringTyping
 
+/**
+ * # 微信支付验证类型
+ * @author TrueNine
+ * @since 2023-05-31
+ */
 enum class WechatPayGrantTyping(
   private val typingCode: String
 ) : StringTyping {
