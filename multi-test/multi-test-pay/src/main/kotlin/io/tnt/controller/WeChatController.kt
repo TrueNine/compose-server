@@ -7,7 +7,6 @@ import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.encodeBase64String
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.typing.wechat.WechatPayGrantTyping
 import net.yan100.compose.pay.models.request.CreateOrderApiRequestParam
 import net.yan100.compose.pay.models.request.FindPayOrderRequestParam
 import net.yan100.compose.pay.models.response.FindPayOrderResponseResult
@@ -15,6 +14,9 @@ import net.yan100.compose.pay.models.response.PullUpMpPayOrderResponseResult
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
 import net.yan100.compose.security.oauth2.api.WechatMpAuthApi
+import net.yan100.compose.security.oauth2.api.jsCodeToSessionStandard
+import net.yan100.compose.security.oauth2.models.api.JsCodeToSessionApiReq
+import net.yan100.compose.security.oauth2.models.api.JsCodeToSessionResp
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -25,7 +27,7 @@ import java.util.*
 @RestController
 @RequestMapping("v1/pay/single/wechat")
 class WeChatController(
-  private val jsApi: WechatMpAuthApi,
+  private val wechatMpAuthApi: WechatMpAuthApi,
   private val payProperty: WeChatPaySingleConfigProperty,
   private val payService: SinglePayService,
   private val bizCodeGenerator: BizCodeGenerator
@@ -33,14 +35,19 @@ class WeChatController(
   private val log = slf4j(this::class)
 
   @GetMapping("userInfo")
-  fun getUserInfo(code: String?): String? {
-    val uInfo = jsApi.jsCodeToSession(payProperty.mpAppId, payProperty.apiSecret, code, WechatPayGrantTyping.AUTH_CODE).body
+  fun getUserInfo(code: String): JsCodeToSessionResp? {
+    val uInfo = wechatMpAuthApi.jsCodeToSessionStandard(JsCodeToSessionApiReq().apply {
+      mpAppId = payProperty.mpAppId
+      mpSecret = payProperty.apiSecret
+      jsCode = code
+    })
+
     log.info("获取到 uInfo = {}", uInfo)
     return uInfo
   }
 
   @PostMapping("pullUpPayOrder")
-  fun pullUpPayOrder(): PullUpMpPayOrderResponseResult {
+  fun pullUpPayOrder(openId: String): PullUpMpPayOrderResponseResult {
     // TODO 此处已经写死
     val cop = CreateOrderApiRequestParam().apply {
       title = "一斤菠萝"

@@ -8,7 +8,7 @@ import net.yan100.compose.core.lang.StringTyping
  * @author TrueNine
  * @since 2023-05-31
  */
-enum class WechatPayGrantTyping(
+enum class WechatMpGrantTyping(
   private val typingCode: String
 ) : StringTyping {
   AUTH_CODE("authorization_code");
@@ -20,6 +20,6 @@ enum class WechatPayGrantTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: String?) = WechatPayGrantTyping.values().find { it.typingCode == v }
+    fun findVal(v: String?) = WechatMpGrantTyping.values().find { it.typingCode == v }
   }
 }

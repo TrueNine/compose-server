@@ -1,11 +1,13 @@
 package net.yan100.compose.core.http;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.extern.slf4j.Slf4j;
 import net.yan100.compose.core.lang.Str;
+import net.yan100.compose.core.lang.StringTyping;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 /**
  * mime类型
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
  * @since 2022-11-03
  */
 @Slf4j
-public enum MediaTypes {
+public enum MediaTypes implements StringTyping {
   /**
    * 二进制
    */
@@ -23,6 +25,10 @@ public enum MediaTypes {
    * 二进制 exe
    */
   EXE("application/octet-stream"),
+  /**
+   * text
+   */
+  TEXT("text/plain"),
   /**
    * json
    */
@@ -99,11 +105,10 @@ public enum MediaTypes {
    * gzip
    */
   GZIP("application/x-gzip");
+  private final String media;
 
-  private final String[] VALUE;
-
-  MediaTypes(String... value) {
-    this.VALUE = value;
+  MediaTypes(String value) {
+    this.media = value;
   }
 
   /**
@@ -112,6 +117,7 @@ public enum MediaTypes {
    * @param type 类型
    * @return {@link MediaTypes}
    */
+  @Deprecated
   public static MediaTypes of(String type) {
     if (Str.nonText(type)) {
       return MediaTypes.BINARY;
@@ -121,15 +127,24 @@ public enum MediaTypes {
         return value;
       }
     }
-
     return MediaTypes.BINARY;
   }
 
-  public String media() {
-    return this.VALUE[0];
+  @Nullable
+  public static MediaTypes findVal(String media) {
+    return Arrays.stream(MediaTypes.values())
+      .filter(v -> Objects.equals(v.getValue(), media))
+      .findFirst().orElse(null);
   }
 
-  public Set<String> vals() {
-    return Arrays.stream(this.VALUE).collect(Collectors.toSet());
+  @Deprecated
+  public String media() {
+    return this.media;
+  }
+
+  @Override
+  @JsonValue
+  public String getValue() {
+    return this.media();
   }
 }

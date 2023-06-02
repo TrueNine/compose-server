@@ -24,7 +24,9 @@ class ApiExchangesAutoConfiguration {
         RemoteCallException(msg = resp.toString(), code = resp.statusCode().value()).toMono()
       }
       .build()
-    val factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build()
+    val factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client))
+      // TODO 配置专门的转换器
+      .build()
     return factory.createClient<CnNbsAddressApi>()
   }
 

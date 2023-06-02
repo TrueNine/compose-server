@@ -22,6 +22,14 @@ YUNXIAO_USER 用户账号
 YUNXIAO_PWD 用户密码
 ```
 
+对上述代码做出优化，要求如下：
+1. 输出内容：只输出代码
+2. 输出要求：输出的代码尽量简洁
+3. 受众：kotlin 后端开发程序员
+4. 输出语言：kotlin
+5. 可用测试框架：testNG、mockk、kotlin.test
+6. 测试环境：springBoot
+
 - 安装 gradle 并将其配置到环境变量
 
 > 注：windows 将其配置到 path 内

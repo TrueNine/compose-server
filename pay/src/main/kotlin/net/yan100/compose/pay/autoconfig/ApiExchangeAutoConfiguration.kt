@@ -1,11 +1,10 @@
 package net.yan100.compose.pay.autoconfig
 
-import net.yan100.compose.core.exceptions.RemoteCallException
-import net.yan100.compose.depend.webclient.lang.webClientRegister
+import com.fasterxml.jackson.databind.ObjectMapper
+import net.yan100.compose.depend.webclient.lang.jsonWebClientRegister
 import net.yan100.compose.pay.api.WechatPayV3JsApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import reactor.kotlin.core.publisher.toMono
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
@@ -13,14 +12,9 @@ import java.time.temporal.ChronoUnit
 class ApiExchangeAutoConfiguration {
 
   @Bean
-  fun wechatPayJsApi(): WechatPayV3JsApi {
-    return webClientRegister<WechatPayV3JsApi> { a, b ->
-      a.defaultStatusHandler({ httpCode -> httpCode.isError })
-      { resp -> RemoteCallException(msg = resp.toString(), code = resp.statusCode().value()).toMono() }
-        .build() to
-        b.blockTimeout(Duration.of(30, ChronoUnit.SECONDS)).build()
+  fun wechatPayJsApi(objectMapper: ObjectMapper): WechatPayV3JsApi {
+    return jsonWebClientRegister<WechatPayV3JsApi>(objectMapper) { a, b ->
+      a to b.blockTimeout(Duration.of(30, ChronoUnit.SECONDS))
     }
   }
-
-
 }
