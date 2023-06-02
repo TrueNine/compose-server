@@ -23,7 +23,7 @@ import java.math.RoundingMode
 @Service
 //@ConditionalOnBean(value = [JsapiService::class, RefundService::class])
 class WeChatSinglePayService(
-  private val jsApi: JsapiService,
+  private val jsService: JsapiService,
   private val refundApi: RefundService,
   private val payProperty: WeChatPaySingleConfigProperty,
   private val bigCodeGenerator: BizCodeGenerator
@@ -52,7 +52,7 @@ class WeChatSinglePayService(
       outTradeNo = createOrderRequestParam.customOrderId
     }
 
-    return jsApi.prepay(request).let { prePayResponse ->
+    return jsService.prepay(request).let { prePayResponse ->
       CreateOrderApiResponseResult().apply {
         prePayId = prePayResponse.prepayId
       }
@@ -65,16 +65,16 @@ class WeChatSinglePayService(
     ) { "商户订单号和第三方订单号不能同时为空" }
 
     val transaction = if (findRq.merchantOrderId.hasText()) {
-        jsApi.queryOrderByOutTradeNo(QueryOrderByOutTradeNoRequest().apply {
-          outTradeNo = findRq.merchantOrderId
-          mchid = payProperty.merchantId
-        })
-      } else if (findRq.bizCode.hasText()) {
-        jsApi.queryOrderById(QueryOrderByIdRequest().apply {
-          transactionId = findRq.bizCode
-          mchid = payProperty.merchantId
-        })
-      } else throw KnownException("订单号或商户订单号为空为空")
+      jsService.queryOrderByOutTradeNo(QueryOrderByOutTradeNoRequest().apply {
+        outTradeNo = findRq.merchantOrderId
+        mchid = payProperty.merchantId
+      })
+    } else if (findRq.bizCode.hasText()) {
+      jsService.queryOrderById(QueryOrderByIdRequest().apply {
+        transactionId = findRq.bizCode
+        mchid = payProperty.merchantId
+      })
+    } else throw KnownException("订单号或商户订单号为空为空")
 
     return FindPayOrderResponseResult().apply {
       orderId = transaction!!.outTradeNo

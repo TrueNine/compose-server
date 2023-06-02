@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "net.yan100.compose"
-  const val version = "0.5.13"
+  const val version = "0.5.14"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1.1"
 }
@@ -82,9 +82,9 @@ object V {
     // https://mvnrepository.com/artifact/com.h2database/h2
     const val h2 = "2.1.214"
 
+    // 测试用内存数据库
     // https://mvnrepository.com/artifact/org.hsqldb/hsqldb
     const val hsqldb = "2.7.1"
-
 
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
     const val hibernateCore = "6.2.0.Final"

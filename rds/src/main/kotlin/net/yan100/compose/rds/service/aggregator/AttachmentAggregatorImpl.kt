@@ -1,15 +1,14 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
+import net.yan100.compose.core.exceptions.requireKnown
 import net.yan100.compose.core.lang.hasText
-import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.entity.AttachmentEntity
 import net.yan100.compose.rds.models.request.PostAttachmentRequestParam
 import net.yan100.compose.rds.service.AttachmentService
 import net.yan100.compose.rds.typing.AttachmentTyping
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.time.LocalDateTime
 
 /**
  * 附件聚合实现
@@ -24,13 +23,10 @@ class AttachmentAggregatorImpl(
     // 如果 此条url 不存在，则保存一个新的 url
     val location = aService.findByBaseUrl(saveFile.baseUrl)
       ?: aService.save(AttachmentEntity().apply {
-        // 拼接上尾随斜杠
-        baseUrl = if (saveFile.baseUrl.endsWith("/")) saveFile.baseUrl else "${saveFile.baseUrl}/"
-        attType = AttachmentTyping.BASE_URL
-        urlName = "URL:\$${LocalDateTime.now()}"
-        log.info("保存了新的附件地址 = {}", this)
+        this.attType = AttachmentTyping.BASE_URL
+        this.baseUrl = baseUrl
       })
-
+    requireKnown(location.id != null) { "没有保存的url" }
     // 构建一个新附件对象保存并返回
     val att = AttachmentEntity().apply {
       // 将之于根路径连接
@@ -45,10 +41,5 @@ class AttachmentAggregatorImpl(
     }
     // 重新进行赋值
     return aService.save(att)
-  }
-
-  companion object {
-    @JvmStatic
-    private val log = slf4j(AttachmentAggregatorImpl::class)
   }
 }
