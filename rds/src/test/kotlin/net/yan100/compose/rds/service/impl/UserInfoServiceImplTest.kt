@@ -6,6 +6,7 @@ import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.UserEntity
 import net.yan100.compose.rds.entity.UserInfoEntity
 import net.yan100.compose.rds.repository.UserInfoRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.testng.Assert.assertEquals
 import org.testng.annotations.BeforeMethod
@@ -13,7 +14,10 @@ import org.testng.annotations.Test
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserInfoServiceImplTest {
+  @Autowired
   private lateinit var userInfoService: UserInfoServiceImpl
+
+  @Autowired
   private lateinit var infoRepo: UserInfoRepository
 
   @BeforeMethod
