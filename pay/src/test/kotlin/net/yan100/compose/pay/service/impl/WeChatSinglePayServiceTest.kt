@@ -2,7 +2,7 @@ package net.yan100.compose.pay.service.impl
 
 import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.pay.models.request.CreateOrderApiRequestParam
+import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
@@ -22,14 +22,14 @@ class WeChatSinglePayServiceTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testCreateOrder() {
-    val crp = CreateOrderApiRequestParam().apply {
-      customOrderId = bizCodeGenerator.nextCodeStr()
+    val customOrderId = bizCodeGenerator.nextCodeStr()
+    val crp = CreateMpPayOrderReq().apply {
       wechatUserOpenId = "oRYYL5H-IKKK0sHs1L0EOjZw1Ne4"
       amount = BigDecimal("0.01")
+      this.customOrderId = customOrderId
       title = "一斤菠萝"
     }
-    log.info("测试商户订单号 = {}", crp.customOrderId)
-    val order = service.pullUpMpPayOrder(crp)
+    val order = service.createMpPayOrder(crp)
     log.info(order.toString())
   }
 }

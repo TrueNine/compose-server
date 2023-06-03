@@ -1,4 +1,4 @@
-package net.yan100.compose.pay.models.request
+package net.yan100.compose.pay.models.req
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Size
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size
 /**
  * # 查询支付订单参数
  */
-open class FindPayOrderRequestParam {
+open class FindPayOrderReq {
 
   /**
    * ## 商户订单号

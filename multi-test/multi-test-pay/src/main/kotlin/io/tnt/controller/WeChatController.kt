@@ -1,16 +1,13 @@
 package io.tnt.controller
 
 
-import net.yan100.compose.core.encrypt.EncryptAlgorithmTyping
-import net.yan100.compose.core.encrypt.Encryptors
-import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.id.BizCodeGenerator
-import net.yan100.compose.core.lang.encodeBase64String
+import net.yan100.compose.core.lang.ISO4217
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.pay.models.request.CreateOrderApiRequestParam
-import net.yan100.compose.pay.models.request.FindPayOrderRequestParam
-import net.yan100.compose.pay.models.response.FindPayOrderResponseResult
-import net.yan100.compose.pay.models.response.PullUpMpPayOrderResponseResult
+import net.yan100.compose.pay.models.req.FindPayOrderReq
+import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
+import net.yan100.compose.pay.models.resp.FindPayOrderResp
+import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
 import net.yan100.compose.security.oauth2.api.WechatMpAuthApi
@@ -47,34 +44,20 @@ class WeChatController(
   }
 
   @PostMapping("pullUpPayOrder")
-  fun pullUpPayOrder(openId: String): PullUpMpPayOrderResponseResult {
+  fun pullUpPayOrder(openId: String): CreateMpPayOrderResp? {
     // TODO 此处已经写死
-    val cop = CreateOrderApiRequestParam().apply {
+    val cop = CreateMpPayOrderReq().apply {
       title = "一斤菠萝"
       amount = BigDecimal("0.01")
-      customOrderId = bizCodeGenerator.nextCodeStr()
+      currency = ISO4217.CNY
       wechatUserOpenId = "oRYYL5Bjwp3Qy4B7nEYBxrrP2yno"
     }
-
-    return PullUpMpPayOrderResponseResult().apply {
-      nonceStr = Keys.generateRandomAsciiString(32)
-      // 拉起支付
-      packageStr = "prepay_id=" + payService.pullUpMpPayOrder(cop)?.prePayId
-      timeStamp = System.currentTimeMillis() / 1000
-
-      signType = EncryptAlgorithmTyping.RSA.getValue()
-      val signatureStr = "${payProperty.mpAppId}\n${timeStamp}\n${nonceStr}\n${packageStr}\n"
-      val signature = Encryptors.signWithSha256WithRsaByRsaPrivateKey(
-        signatureStr,
-        Keys.readRsaPrivateKeyByBase64AndStandard(payProperty.privateKey)!!
-      )
-      paySign = signature.sign().encodeBase64String
-    }
+    return payService.createMpPayOrder(cop)
   }
 
   @GetMapping("payOrder")
-  fun findPayOrder(findPayOrderRequestParam: FindPayOrderRequestParam): FindPayOrderResponseResult? {
-    return payService.findPayOrder(findPayOrderRequestParam)
+  fun findPayOrder(findPayOrderReq: FindPayOrderReq): FindPayOrderResp? {
+    return payService.findPayOrder(findPayOrderReq)
   }
 
   @PostMapping("refundOrder")

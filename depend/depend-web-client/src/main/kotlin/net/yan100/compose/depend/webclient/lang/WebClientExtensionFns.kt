@@ -3,8 +3,6 @@ package net.yan100.compose.depend.webclient.lang
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.http.Headers
 import net.yan100.compose.core.http.MediaTypes
-import org.springframework.boot.convert.ApplicationConversionService
-import org.springframework.core.convert.TypeDescriptor
 import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.util.MimeType
@@ -12,14 +10,21 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.support.WebClientAdapter
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
 
-
+/**
+ * # 自定义的json编解码器
+ * 使用你自定义的jackson ObjectMapper创建
+ * @param objectMapper mapper
+ * @return WebClient
+ * @see [WebClient]
+ * @see [ObjectMapper]
+ * @see [org.springframework.web.service.annotation.HttpExchange]
+ */
 inline fun <reified T : Any> jsonWebClientRegister(
   objectMapper: ObjectMapper,
   builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>
 ): T {
   val clientBuilder = WebClient.builder()
   val factoryBuilder = HttpServiceProxyFactory.builder()
-  factoryBuilder.conversionService(JsonResultConverter(objectMapper))
   val jsonHandleMimeTypes = arrayOf(
     MimeType.valueOf(MediaTypes.JSON.getValue()!!),
     MimeType.valueOf("application/*+json"),
@@ -47,25 +52,4 @@ inline fun <reified T : Any> jsonWebClientRegister(
   val cf = builder(clientBuilder, factoryBuilder)
   val client = cf.first.build()
   return cf.second.clientAdapter(WebClientAdapter.forClient(client)).build().createClient(T::class.java)
-}
-
-
-class JsonResultConverter(
-  private val mapper: ObjectMapper
-) : ApplicationConversionService() {
-  override fun canConvert(sourceType: Class<*>?, targetType: Class<*>): Boolean {
-    return true
-  }
-
-  override fun canConvert(sourceType: TypeDescriptor?, targetType: TypeDescriptor): Boolean {
-    return true
-  }
-
-  override fun <T : Any?> convert(source: Any?, targetType: Class<T>): T? {
-    return super.convert(source, targetType)
-  }
-
-  override fun convert(source: Any?, sourceType: TypeDescriptor?, targetType: TypeDescriptor): Any? {
-    return super.convert(source, sourceType, targetType)
-  }
 }
