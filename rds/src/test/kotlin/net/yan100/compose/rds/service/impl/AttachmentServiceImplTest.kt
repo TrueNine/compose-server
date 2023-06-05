@@ -3,7 +3,7 @@ package net.yan100.compose.rds.service.impl
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.AttachmentEntity
+import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.util.Pq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,9 +21,9 @@ class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
   @Autowired
   private lateinit var snowflake: Snowflake
 
-  fun getAtt(att: (AttachmentEntity) -> AttachmentEntity): AttachmentEntity {
+  fun getAtt(att: (Attachment) -> Attachment): Attachment {
     return attachmentService
-      .save(AttachmentEntity().run(att))
+      .save(Attachment().run(att))
   }
 
   @Test

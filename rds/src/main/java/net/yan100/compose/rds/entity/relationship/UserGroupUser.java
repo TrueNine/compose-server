@@ -1,7 +1,6 @@
 package net.yan100.compose.rds.entity.relationship;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -15,7 +14,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 角色  权限
+ * 用户组 用户
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -25,28 +24,26 @@ import java.io.Serializable;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Schema(title = "角色  权限")
-@Table(name = RolePermissionsEntity.TABLE_NAME)
-public class RolePermissionsEntity extends BaseEntity implements Serializable {
+@Schema(title = "用户组 用户")
+@Table(name = UserGroupUser.TABLE_NAME)
+public class UserGroupUser extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "role_permissions";
-  public static final String ROLE_ID = "role_id";
-  public static final String PERMISSIONS_ID = "permissions_id";
+  public static final String TABLE_NAME = "user_group_user";
+  public static final String USER_GROUP_ID = "user_group_id";
+  public static final String USER_ID = "user_id";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
-   * 角色
+   * 用户组
    */
-  @Nullable
-  @Schema(title = "角色")
-  @Column(name = ROLE_ID)
-  private String roleId;
+  @Schema(title = "用户组")
+  @Column(name = USER_GROUP_ID, nullable = false)
+  private String userGroupId;
 
   /**
-   * 权限
+   * 用户
    */
-  @Nullable
-  @Schema(title = "权限")
-  @Column(name = PERMISSIONS_ID)
-  private String permissionsId;
+  @Schema(title = "用户")
+  @Column(name = USER_ID, nullable = false)
+  private String userId;
 }

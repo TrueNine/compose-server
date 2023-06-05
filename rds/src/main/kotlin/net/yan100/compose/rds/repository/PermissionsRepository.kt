@@ -1,22 +1,22 @@
 package net.yan100.compose.rds.repository
 
 import net.yan100.compose.rds.base.BaseRepository
-import net.yan100.compose.rds.entity.PermissionsEntity
+import net.yan100.compose.rds.entity.Permissions
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PermissionsRepository : BaseRepository<PermissionsEntity> {
-  fun findAllByName(name: String): List<PermissionsEntity>
+interface PermissionsRepository : BaseRepository<Permissions> {
+  fun findAllByName(name: String): List<Permissions>
 
   @Query(
     """
-    from PermissionsEntity p
-    left join RolePermissionsEntity rp on p.id = rp.permissionsId
-    left join RoleGroupRoleEntity rgr on rp.roleId = rgr.roleId
-    left join UserRoleGroupEntity urg on rgr.roleGroupId = urg.roleGroupId
+    from Permissions p
+    left join RolePermissions rp on p.id = rp.permissionsId
+    left join RoleGroupRole rgr on rp.roleId = rgr.roleId
+    left join UserRoleGroup urg on rgr.roleGroupId = urg.roleGroupId
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: Long): List<PermissionsEntity>
+  fun findAllByUserId(userId: Long): List<Permissions>
 }

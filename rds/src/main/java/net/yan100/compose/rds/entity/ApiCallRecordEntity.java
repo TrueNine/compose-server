@@ -49,7 +49,7 @@ public class ApiCallRecordEntity extends BaseEntity implements Serializable {
   @ManyToOne
   @JoinColumn(name = API_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
   @NotFound(action = IGNORE)
-  private ApiEntity api;
+  private Api api;
 
   /**
    * 设备 id, 浏览器为 agent

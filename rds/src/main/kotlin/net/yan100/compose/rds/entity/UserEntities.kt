@@ -16,8 +16,8 @@ import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.converters.AesEncryptConverter
 import net.yan100.compose.rds.converters.typing.GenderTypingConverter
-import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroupEntity
-import net.yan100.compose.rds.entity.relationship.UserRoleGroupEntity
+import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroup
+import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -27,7 +27,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @MappedSuperclass
-open class SuperUserEntity : BaseEntity() {
+open class SuperUser : BaseEntity() {
   /**
    * 账号
    */
@@ -107,31 +107,31 @@ open class SuperUserEntity : BaseEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "用户")
-@Table(name = SuperUserEntity.TABLE_NAME)
-open class UserEntity : SuperUserEntity()
+@Table(name = SuperUser.TABLE_NAME)
+open class User : SuperUser()
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "全属性用户")
-@Table(name = SuperUserEntity.TABLE_NAME)
-open class FullUserEntity : SuperUserEntity() {
+@Table(name = SuperUser.TABLE_NAME)
+open class FullUser : SuperUser() {
   /**
    * 角色组
    */
   @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
-  @ManyToMany(fetch = EAGER, targetEntity = RoleGroupEntity::class)
+  @ManyToMany(fetch = EAGER, targetEntity = RoleGroup::class)
   @JoinTable(
-    name = UserRoleGroupEntity.TABLE_NAME,
+    name = UserRoleGroup.TABLE_NAME,
     joinColumns = [JoinColumn(
-      name = UserRoleGroupEntity.USER_ID,
+      name = UserRoleGroup.USER_ID,
       referencedColumnName = ID,
       foreignKey = ForeignKey(NO_CONSTRAINT),
       insertable = false,
       updatable = false
     )],
     inverseJoinColumns = [JoinColumn(
-      name = UserGroupRoleGroupEntity.ROLE_GROUP_ID,
+      name = UserGroupRoleGroup.ROLE_GROUP_ID,
       referencedColumnName = ID,
       foreignKey = ForeignKey(NO_CONSTRAINT),
       insertable = false,
@@ -140,20 +140,20 @@ open class FullUserEntity : SuperUserEntity() {
     foreignKey = ForeignKey(NO_CONSTRAINT)
   )
   @NotFound(action = IGNORE)
-  open var roleGroups: List<RoleGroupEntity> = listOf()
+  open var roleGroups: List<RoleGroup> = listOf()
 
   /**
    * 用户信息
    */
   @Schema(title = "用户信息", requiredMode = NOT_REQUIRED)
   @JsonManagedReference
-  @OneToOne(mappedBy = FullUserInfoEntity.MAPPED_BY_USER)
+  @OneToOne(mappedBy = FullUserInfo.MAPPED_BY_USER)
   @NotFound(action = IGNORE)
-  open var info: FullUserInfoEntity? = null
+  open var info: FullUserInfo? = null
 }
 
 @MappedSuperclass
-open class SuperUserInfoEntity : BaseEntity() {
+open class SuperUserInfo : BaseEntity() {
   /**
    * 用户
    */
@@ -259,8 +259,6 @@ open class SuperUserInfoEntity : BaseEntity() {
     const val ID_CARD = "id_card"
     const val GENDER = "gender"
     const val WECHAT_OPEN_ID = "wechat_open_id"
-
-    const val MAPPED_BY_USER = "user"
   }
 }
 
@@ -274,8 +272,8 @@ open class SuperUserInfoEntity : BaseEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "用户信息")
-@Table(name = SuperUserInfoEntity.TABLE_NAME)
-open class UserInfoEntity : SuperUserInfoEntity() {
+@Table(name = SuperUserInfo.TABLE_NAME)
+open class UserInfo : SuperUserInfo() {
   /**
    * 用户全名
    */
@@ -295,12 +293,12 @@ open class UserInfoEntity : SuperUserInfoEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "完全的用户信息")
-@Table(name = SuperUserInfoEntity.TABLE_NAME)
-open class FullUserInfoEntity : SuperUserInfoEntity() {
+@Table(name = SuperUserInfo.TABLE_NAME)
+open class FullUserInfo : SuperUserInfo() {
   /**
    * 连接的用户
    */
-  @OneToOne
+  @OneToOne(fetch = EAGER)
   @JoinColumn(
     name = USER_ID,
     referencedColumnName = ID,
@@ -310,13 +308,13 @@ open class FullUserInfoEntity : SuperUserInfoEntity() {
   )
   @JsonBackReference
   @NotFound(action = IGNORE)
-  private val user: UserEntity? = null
+  private val user: User? = null
 
   /**
    * 用户住址
    */
   @Schema(title = "用户住址", requiredMode = NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
-  @ManyToOne
+  @ManyToOne(fetch = EAGER)
   @JoinColumn(
     name = ADDRESS_DETAILS_ID,
     referencedColumnName = ID,
@@ -325,7 +323,7 @@ open class FullUserInfoEntity : SuperUserInfoEntity() {
     updatable = false
   )
   @NotFound(action = IGNORE)
-  open var addressDetails: AddressDetailsEntity? = null
+  open var addressDetails: AddressDetails? = null
 
   /**
    * 用户头像
@@ -340,7 +338,7 @@ open class FullUserInfoEntity : SuperUserInfoEntity() {
     updatable = false
   )
   @NotFound(action = IGNORE)
-  open var avatarImage: AttachmentEntity? = null
+  open var avatarImage: Attachment? = null
 
   companion object {
     const val MAPPED_BY_USER = "user"

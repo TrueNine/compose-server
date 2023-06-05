@@ -9,5 +9,11 @@ import org.springframework.context.annotation.Import
 @EnableConfigurationProperties(
   WeChatPayProperties::class
 )
-@ComponentScan(value = ["net.yan100.compose.pay.service", "net.yan100.compose.pay.api"])
+@ComponentScan(
+  value = [
+    "net.yan100.compose.pay.autoconfig",
+    "net.yan100.compose.pay.service",
+    "net.yan100.compose.pay.api"
+  ]
+)
 class AutoConfigEntrance

@@ -1,35 +1,35 @@
 package net.yan100.compose.rds.repository
 
 import net.yan100.compose.rds.base.BaseRepository
-import net.yan100.compose.rds.entity.AllRoleGroupEntity
-import net.yan100.compose.rds.entity.RoleGroupEntity
+import net.yan100.compose.rds.entity.FullRoleGroup
+import net.yan100.compose.rds.entity.RoleGroup
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RoleGroupRepository : BaseRepository<RoleGroupEntity> {
-  fun findAllByName(name: String): List<RoleGroupEntity>
+interface RoleGroupRepository : BaseRepository<RoleGroup> {
+  fun findAllByName(name: String): List<RoleGroup>
 
   @Query(
     """
-    from RoleGroupEntity rg
-    left join UserRoleGroupEntity ur on rg.id = ur.roleGroupId
+    from RoleGroup rg
+    left join UserRoleGroup ur on rg.id = ur.roleGroupId
     where ur.userId = :userId
   """
   )
-  fun findAllByUserId(userId: Long): List<RoleGroupEntity>
+  fun findAllByUserId(userId: Long): List<RoleGroup>
 }
 
 @Repository
-interface AllRoleGroupEntityRepository : BaseRepository<AllRoleGroupEntity> {
-  fun findAllByName(name: String): List<AllRoleGroupEntity>
+interface AllRoleGroupEntityRepository : BaseRepository<FullRoleGroup> {
+  fun findAllByName(name: String): List<FullRoleGroup>
 
   @Query(
     """
-    from AllRoleGroupEntity rg
-    left join UserRoleGroupEntity ur on rg.id = ur.roleGroupId
+    from FullRoleGroup rg
+    left join UserRoleGroup ur on rg.id = ur.roleGroupId
     where ur.userId = :userId
   """
   )
-  fun findAllByUserId(userId: Long): List<AllRoleGroupEntity>
+  fun findAllByUserId(userId: Long): List<FullRoleGroup>
 }

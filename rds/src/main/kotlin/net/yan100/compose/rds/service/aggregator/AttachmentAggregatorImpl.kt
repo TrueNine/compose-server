@@ -3,7 +3,7 @@ package net.yan100.compose.rds.service.aggregator
 import jakarta.validation.Valid
 import net.yan100.compose.core.exceptions.requireKnown
 import net.yan100.compose.core.lang.hasText
-import net.yan100.compose.rds.entity.AttachmentEntity
+import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.models.request.PostAttachmentRequestParam
 import net.yan100.compose.rds.service.AttachmentService
 import net.yan100.compose.rds.typing.AttachmentTyping
@@ -18,17 +18,17 @@ class AttachmentAggregatorImpl(
   private val aService: AttachmentService,
 ) : AttachmentAggregator {
 
-  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> @Valid PostAttachmentRequestParam): AttachmentEntity? {
+  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> @Valid PostAttachmentRequestParam): Attachment? {
     val saveFile = saveFileCallback()
     // 如果 此条url 不存在，则保存一个新的 url
     val location = aService.findByBaseUrl(saveFile.baseUrl)
-      ?: aService.save(AttachmentEntity().apply {
+      ?: aService.save(Attachment().apply {
         this.attType = AttachmentTyping.BASE_URL
         this.baseUrl = baseUrl
       })
     requireKnown(location.id != null) { "没有保存的url" }
     // 构建一个新附件对象保存并返回
-    val att = AttachmentEntity().apply {
+    val att = Attachment().apply {
       // 将之于根路径连接
       urlId = location.id
 

@@ -15,38 +15,37 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 用户组  角色组
+ * 角色组  角色
  *
  * @author TrueNine
  * @since 2023-01-02
  */
 @Getter
 @Setter
+@Entity
 @DynamicInsert
 @DynamicUpdate
-@Entity
-@Schema(title = "用户组  角色组")
-@Table(name = UserGroupRoleGroupEntity.TABLE_NAME)
-public class UserGroupRoleGroupEntity extends BaseEntity implements Serializable {
-
-  public static final String TABLE_NAME = "user_group_role_group";
+@Schema(title = "角色组  角色")
+@Table(name = RoleGroupRole.TABLE_NAME)
+public class RoleGroupRole extends BaseEntity implements Serializable {
+  public static final String TABLE_NAME = "role_group_role";
   public static final String ROLE_GROUP_ID = "role_group_id";
-  public static final String USER_GROUP_ID = "user_group_id";
+  public static final String ROLE_ID = "role_id";
   @Serial
   private static final long serialVersionUID = 1L;
-  /**
-   * 角色组
-   */
-  @Nullable
-  @Schema(title = "角色组")
-  @Column(name = ROLE_GROUP_ID)
-  private String roleGroupId;
-
   /**
    * 用户组
    */
   @Nullable
   @Schema(title = "用户组")
-  @Column(name = USER_GROUP_ID)
-  private String userGroupId;
+  @Column(name = ROLE_GROUP_ID)
+  private String roleGroupId;
+
+  /**
+   * 角色
+   */
+  @Nullable
+  @Schema(title = "角色")
+  @Column(name = ROLE_ID)
+  private String roleId;
 }

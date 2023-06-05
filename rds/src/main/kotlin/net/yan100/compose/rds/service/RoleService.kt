@@ -1,6 +1,6 @@
 package net.yan100.compose.rds.service
 
 import net.yan100.compose.rds.base.BaseService
-import net.yan100.compose.rds.entity.RoleEntity
+import net.yan100.compose.rds.entity.Role
 
-interface RoleService : BaseService<RoleEntity>
+interface RoleService : BaseService<Role>

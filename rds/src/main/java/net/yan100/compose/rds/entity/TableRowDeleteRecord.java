@@ -32,8 +32,8 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIR
 @DynamicUpdate
 @Entity
 @Schema(title = "数据删除记录")
-@Table(name = TableRowDeleteRecordEntity.TABLE_NAME)
-public class TableRowDeleteRecordEntity extends BaseEntity implements Serializable {
+@Table(name = TableRowDeleteRecord.TABLE_NAME)
+public class TableRowDeleteRecord extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "table_row_delete_record";
   public static final String TABLE_NAMES = "table_names";

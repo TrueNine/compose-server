@@ -1,5 +1,10 @@
 package net.yan100.compose.rds.service.aggregator
 
+import net.yan100.compose.rds.entity.relationship.RoleGroupRole
+import net.yan100.compose.rds.entity.relationship.RolePermissions
+import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroup
+import net.yan100.compose.rds.entity.relationship.UserRoleGroup
+
 /**
  * # 角色权限管理器
  */
@@ -11,27 +16,27 @@ interface RbacAggregator {
 
   fun findAllSecurityNameByAccount(account: String): Set<String>
 
-  fun saveRoleGroupToUser(roleGroupId: String, userId: String): net.yan100.compose.rds.entity.relationship.UserRoleGroupEntity?
-  fun saveAllRoleGroupToUser(roleGroupIds: List<String>, userId: String): List<net.yan100.compose.rds.entity.relationship.UserRoleGroupEntity>
+  fun saveRoleGroupToUser(roleGroupId: String, userId: String): UserRoleGroup?
+  fun saveAllRoleGroupToUser(roleGroupIds: List<String>, userId: String): List<UserRoleGroup>
   fun revokeRoleGroupFromUser(roleGroupId: String, userId: String)
   fun revokeAllRoleGroupFromUser(roleGroupIds: List<String>, userId: String)
 
-  fun saveRoleGroupToUserGroup(roleGroupId: String, userGroupId: String): net.yan100.compose.rds.entity.relationship.UserGroupRoleGroupEntity?
+  fun saveRoleGroupToUserGroup(roleGroupId: String, userGroupId: String): UserGroupRoleGroup?
   fun saveAllRoleGroupToUserGroup(
     roleGroupIds: List<String>,
     userGroupId: String
-  ): List<net.yan100.compose.rds.entity.relationship.UserGroupRoleGroupEntity>
+  ): List<UserGroupRoleGroup>
 
   fun revokeRoleGroupFromUserGroup(roleGroupId: String, userGroupId: String)
   fun revokeAllRoleGroupFromUserGroup(roleGroupIds: List<String>, userGroupId: String)
 
-  fun saveRoleToRoleGroup(roleId: String, roleGroupId: String): net.yan100.compose.rds.entity.relationship.RoleGroupRoleEntity?
-  fun saveAllRoleToRoleGroup(roleIds: List<String>, roleGroupId: String): List<net.yan100.compose.rds.entity.relationship.RoleGroupRoleEntity>
+  fun saveRoleToRoleGroup(roleId: String, roleGroupId: String): RoleGroupRole?
+  fun saveAllRoleToRoleGroup(roleIds: List<String>, roleGroupId: String): List<RoleGroupRole>
   fun revokeRoleFromRoleGroup(roleId: String, roleGroupId: String)
   fun revokeAllRoleFromRoleGroup(roleIds: List<String>, roleGroupId: String)
 
-  fun savePermissionsToRole(permissionsId: String, roleId: String): net.yan100.compose.rds.entity.relationship.RolePermissionsEntity?
-  fun saveAllPermissionsToRole(permissionsIds: List<String>, roleId: String): List<net.yan100.compose.rds.entity.relationship.RolePermissionsEntity>
+  fun savePermissionsToRole(permissionsId: String, roleId: String): RolePermissions?
+  fun saveAllPermissionsToRole(permissionsIds: List<String>, roleId: String): List<RolePermissions>
   fun revokePermissionsFromRole(permissionsId: String, roleId: String)
   fun revokeAllPermissionsFromRole(permissionsIds: List<String>, roleId: String)
 }

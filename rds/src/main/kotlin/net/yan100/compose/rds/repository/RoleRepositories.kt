@@ -1,64 +1,64 @@
 package net.yan100.compose.rds.repository
 
 import net.yan100.compose.rds.base.BaseRepository
-import net.yan100.compose.rds.entity.FullRoleEntity
-import net.yan100.compose.rds.entity.RoleEntity
-import net.yan100.compose.rds.entity.UserGroupEntity
+import net.yan100.compose.rds.entity.FullRole
+import net.yan100.compose.rds.entity.Role
+import net.yan100.compose.rds.entity.UserGroup
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RoleRepository : BaseRepository<RoleEntity> {
-  fun findAllByName(name: String): List<RoleEntity>
+interface RoleRepository : BaseRepository<Role> {
+  fun findAllByName(name: String): List<Role>
 
   @Query(
     """
-    from RoleEntity r
-    left join RoleGroupRoleEntity rgr on r.id = rgr.roleId
-    left join UserRoleGroupEntity urg on rgr.roleGroupId = urg.roleGroupId
+    from Role r
+    left join RoleGroupRole rgr on r.id = rgr.roleId
+    left join UserRoleGroup urg on rgr.roleGroupId = urg.roleGroupId
     where urg.userId = :userId
   """
   )
-  fun findAllByUserId(userId: Long): List<RoleEntity>
+  fun findAllByUserId(userId: Long): List<Role>
 }
 
 @Repository
-interface AllRoleEntityRepository : BaseRepository<FullRoleEntity> {
-  fun findAllByName(name: String): List<FullRoleEntity>
+interface AllRoleEntityRepository : BaseRepository<FullRole> {
+  fun findAllByName(name: String): List<FullRole>
 
-  @Query(
-      """
-    from FullRoleEntity r
-    left join RoleGroupRoleEntity rgr on r.id = rgr.roleId
-    left join UserRoleGroupEntity urg on rgr.roleGroupId = urg.roleGroupId
-    where urg.userId = :userId
-  """
-  )
-  fun findAllByUserId(userId: Long): List<FullRoleEntity>
-}
-
-@Repository
-interface UserGroupRepository : BaseRepository<UserGroupEntity> {
   @Query(
     """
-    from UserGroupEntity ug
-    left join UserGroupUserEntity ugu
+    from FullRole r
+    left join RoleGroupRole rgr on r.id = rgr.roleId
+    left join UserRoleGroup urg on rgr.roleGroupId = urg.roleGroupId
+    where urg.userId = :userId
+  """
+  )
+  fun findAllByUserId(userId: Long): List<FullRole>
+}
+
+@Repository
+interface UserGroupRepository : BaseRepository<UserGroup> {
+  @Query(
+    """
+    from UserGroup ug
+    left join UserGroupUser ugu
     on ug.id = ugu.userGroupId
     where ug.userId = :userId
     or ugu.userId = :userId
   """
   )
-  fun findAllByUserId(userId: String): MutableList<UserGroupEntity>
+  fun findAllByUserId(userId: String): MutableList<UserGroup>
 
   @Query(
     """
-    from UserGroupEntity ug
-    left join UserGroupUserEntity ugu on ug.id = ugu.userGroupId
-    left join UserEntity u on u.id = ugu.userId
+    from UserGroup ug
+    left join UserGroupUser ugu on ug.id = ugu.userGroupId
+    left join User u on u.id = ugu.userId
     where u.account = :account
   """
   )
-  fun findAllByUserAccount(account: String): MutableList<UserGroupEntity>
+  fun findAllByUserAccount(account: String): MutableList<UserGroup>
 
 
   fun existsByIdAndUserId(id: String, userId: String): Boolean

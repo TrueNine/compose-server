@@ -2,7 +2,8 @@ package net.yan100.compose.rds.service.impl
 
 
 import net.yan100.compose.rds.base.BaseServiceImpl
-import net.yan100.compose.rds.entity.UserGroupEntity
+import net.yan100.compose.rds.entity.UserGroup
+import net.yan100.compose.rds.entity.relationship.UserGroupUser
 import net.yan100.compose.rds.repository.UserGroupRepository
 import net.yan100.compose.rds.repository.relationship.UserGroupUserRepository
 import net.yan100.compose.rds.service.UserGroupService
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserGroupServiceImpl(
   private val userGroupRepo: UserGroupRepository,
   private val userGroupUserRepo: UserGroupUserRepository
-) : UserGroupService, BaseServiceImpl<UserGroupEntity>(userGroupRepo) {
+) : UserGroupService, BaseServiceImpl<UserGroup>(userGroupRepo) {
 
   @Transactional(rollbackFor = [Exception::class])
   override fun saveUserToUserGroup(userId: String, userGroupId: String) {
@@ -21,15 +22,15 @@ class UserGroupServiceImpl(
     val isMember = userGroupRepo.existsByIdAndUserId(userGroupId, userId)
     if (!(isMember || isLeader)) {
       userGroupUserRepo.save(
-        net.yan100.compose.rds.entity.relationship.UserGroupUserEntity().apply {
+        UserGroupUser().apply {
           this.userGroupId = userGroupId
           this.userId = userId
         })
     }
   }
 
-  override fun findAllByLeaderUserId(userId: String): Set<UserGroupEntity> = userGroupRepo.findAllByUserId(userId).toSet()
+  override fun findAllByLeaderUserId(userId: String): Set<UserGroup> = userGroupRepo.findAllByUserId(userId).toSet()
 
-  override fun findAllByUserAccount(account: String): Set<UserGroupEntity> =
+  override fun findAllByUserAccount(account: String): Set<UserGroup> =
     userGroupRepo.findAllByUserAccount(account).toSet()
 }

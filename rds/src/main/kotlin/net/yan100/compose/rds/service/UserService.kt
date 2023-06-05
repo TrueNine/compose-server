@@ -1,13 +1,13 @@
 package net.yan100.compose.rds.service
 
 import net.yan100.compose.rds.base.BaseService
-import net.yan100.compose.rds.entity.FullUserEntity
-import net.yan100.compose.rds.entity.UserEntity
+import net.yan100.compose.rds.entity.FullUser
+import net.yan100.compose.rds.entity.User
 import java.time.LocalDateTime
 
-interface UserService : BaseService<UserEntity> {
-  fun findUserByAccount(account: String): UserEntity?
-  fun findFullUserByAccount(account: String): FullUserEntity?
+interface UserService : BaseService<User> {
+  fun findUserByAccount(account: String): User?
+  fun findFullUserByAccount(account: String): FullUser?
 
   fun findPwdEncByAccount(account: String): String?
 

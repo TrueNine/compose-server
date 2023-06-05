@@ -16,5 +16,6 @@ open class WeChatPaySingleConfigProperty {
   open lateinit var apiSecret: String
   open lateinit var merchantId: String
   open lateinit var mpAppId: String
-  open lateinit var asyncNotifyUrl: String
+  open lateinit var asyncSuccessNotifyUrl: String
+  open lateinit var asyncSuccessRefundNotifyUrl: String
 }

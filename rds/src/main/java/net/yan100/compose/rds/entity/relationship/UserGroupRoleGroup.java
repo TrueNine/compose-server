@@ -1,6 +1,7 @@
 package net.yan100.compose.rds.entity.relationship;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -14,7 +15,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 用户组 用户
+ * 用户组  角色组
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -24,26 +25,28 @@ import java.io.Serializable;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Schema(title = "用户组 用户")
-@Table(name = UserGroupUserEntity.TABLE_NAME)
-public class UserGroupUserEntity extends BaseEntity implements Serializable {
+@Schema(title = "用户组  角色组")
+@Table(name = UserGroupRoleGroup.TABLE_NAME)
+public class UserGroupRoleGroup extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "user_group_user";
+  public static final String TABLE_NAME = "user_group_role_group";
+  public static final String ROLE_GROUP_ID = "role_group_id";
   public static final String USER_GROUP_ID = "user_group_id";
-  public static final String USER_ID = "user_id";
   @Serial
   private static final long serialVersionUID = 1L;
   /**
-   * 用户组
+   * 角色组
    */
-  @Schema(title = "用户组")
-  @Column(name = USER_GROUP_ID, nullable = false)
-  private String userGroupId;
+  @Nullable
+  @Schema(title = "角色组")
+  @Column(name = ROLE_GROUP_ID)
+  private String roleGroupId;
 
   /**
-   * 用户
+   * 用户组
    */
-  @Schema(title = "用户")
-  @Column(name = USER_ID, nullable = false)
-  private String userId;
+  @Nullable
+  @Schema(title = "用户组")
+  @Column(name = USER_GROUP_ID)
+  private String userGroupId;
 }

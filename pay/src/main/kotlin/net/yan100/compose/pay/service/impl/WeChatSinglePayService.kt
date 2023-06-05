@@ -22,7 +22,6 @@ import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
 import net.yan100.compose.pay.models.resp.FindPayOrderResp
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -30,7 +29,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
-@ConditionalOnBean(value = [JsapiService::class, RefundService::class])
 class WeChatSinglePayService(
   private val wechatJsService: JsapiService,
   private val refundApi: RefundService,
@@ -58,17 +56,17 @@ class WeChatSinglePayService(
       description = req.title
       appid = payProperty.mpAppId
       mchid = payProperty.merchantId
-      notifyUrl = payProperty.asyncNotifyUrl
+      notifyUrl = payProperty.asyncSuccessNotifyUrl
     }
 
     val prePay = wechatJsService.prepay(request)
     return CreateMpPayOrderResp().apply {
       random32String = Keys.generateRandomAsciiString(32)
       prePayId = prePay?.prepayId
-      isIso8601Second = LocalDateTime.now().iso8601LongUtc.toString()
+      iso8601Second = LocalDateTime.now().iso8601LongUtc.toString()
       signType = EncryptAlgorithmTyping.RSA.getValue()
       // 签名
-      val signatureStr = "${payProperty.mpAppId}\n${isIso8601Second}\n${random32String}\n${prePayId}\n"
+      val signatureStr = "${payProperty.mpAppId}\n${iso8601Second}\n${random32String}\n${prePayId}\n"
       val signature = Encryptors.signWithSha256WithRsaByRsaPrivateKey(
         signatureStr,
         Keys.readRsaPrivateKeyByBase64AndStandard(payProperty.privateKey)!!
@@ -101,7 +99,7 @@ class WeChatSinglePayService(
       amount = BigDecimal(transaction.amount.total).setScale(2, RoundingMode.UNNECESSARY).divide(HUNDRED, RoundingMode.UNNECESSARY)
       tradeStatus = transaction.tradeState.toString()
       tradeStatusDesc = transaction.tradeStateDesc
-      // TODO 可能会出现转换问题，注意观测
+
       paySuccessDatetime = LocalDateTime.parse(
         transaction.successTime,
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")

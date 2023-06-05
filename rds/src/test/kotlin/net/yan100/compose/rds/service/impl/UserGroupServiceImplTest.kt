@@ -2,6 +2,7 @@ package net.yan100.compose.rds.service.impl
 
 
 import net.yan100.compose.rds.RdsEntrance
+import net.yan100.compose.rds.entity.UserGroup
 import net.yan100.compose.rds.repository.UserGroupRepository
 import net.yan100.compose.rds.repository.UserRepository
 import net.yan100.compose.rds.service.UserService
@@ -29,12 +30,12 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testSaveUserToUserGroup() {
-    val u = ur.save(net.yan100.compose.rds.entity.UserEntity().apply {
+    val u = ur.save(net.yan100.compose.rds.entity.User().apply {
       this.account = "qwerq"
       this.pwdEnc = "qwbad"
       this.nickName = "abcd"
     })
-    val ug = ugr.save(net.yan100.compose.rds.entity.UserGroupEntity().apply {
+    val ug = ugr.save(UserGroup().apply {
       this.userId = 13123124.toString()
       this.name = "readMe"
     })
@@ -46,7 +47,7 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindAllByLeaderUserId() {
-    val saved = service.save(net.yan100.compose.rds.entity.UserGroupEntity().apply {
+    val saved = service.save(UserGroup().apply {
       userId = 133.toString()
       id = 1231241.toString()
       name = "我的"
@@ -61,11 +62,11 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindAllByUserAccount() {
-    val u = userService.save(net.yan100.compose.rds.entity.UserEntity().apply {
+    val u = userService.save(net.yan100.compose.rds.entity.User().apply {
       account = "abcd"
       pwdEnc = "abcd1234"
     })
-    val ug = service.save(net.yan100.compose.rds.entity.UserGroupEntity().apply {
+    val ug = service.save(UserGroup().apply {
       userId = 123124125.toString()
       name = "我的大海"
     })

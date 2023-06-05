@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
+import jakarta.persistence.FetchType.EAGER
+import net.yan100.compose.rds.base.TreeEntity
 import net.yan100.compose.rds.converters.PointModelConverter
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -14,7 +16,7 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
 import java.io.Serial
 
 @MappedSuperclass
-open class SuperAddressDetailsEntity : net.yan100.compose.rds.base.BaseEntity() {
+open class SuperAddressDetails : net.yan100.compose.rds.base.BaseEntity() {
   /**
    * 地址 id
    */
@@ -59,20 +61,20 @@ open class SuperAddressDetailsEntity : net.yan100.compose.rds.base.BaseEntity() 
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "详细地址")
-@Table(name = SuperAddressDetailsEntity.TABLE_NAME)
-open class AddressDetailsEntity : SuperAddressDetailsEntity()
+@Table(name = SuperAddressDetails.TABLE_NAME)
+open class AddressDetails : SuperAddressDetails()
 
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "详细地址")
-@Table(name = SuperAddressDetailsEntity.TABLE_NAME)
-open class AllAddressDetailsEntity : SuperAddressDetailsEntity() {
+@Table(name = SuperAddressDetails.TABLE_NAME)
+open class FullAddressDetails : SuperAddressDetails() {
   /**
    * 地址
    */
-  @ManyToOne
+  @ManyToOne(fetch = EAGER)
   @Schema(title = "地址", requiredMode = NOT_REQUIRED)
   @JoinColumn(
     name = ADDRESS_ID,
@@ -83,11 +85,11 @@ open class AllAddressDetailsEntity : SuperAddressDetailsEntity() {
   )
   @NotFound(action = IGNORE)
   @JsonBackReference
-  open var address: FullAddressEntity? = null
+  open var address: FullAddress? = null
 }
 
 @MappedSuperclass
-open class SuperAddressEntity : net.yan100.compose.rds.base.TreeEntity() {
+open class SuperAddress : TreeEntity() {
   /**
    * 代码
    */
@@ -140,26 +142,26 @@ open class SuperAddressEntity : net.yan100.compose.rds.base.TreeEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "行政区代码")
-@Table(name = SuperAddressEntity.TABLE_NAME)
-open class AddressEntity : SuperAddressEntity()
+@Table(name = SuperAddress.TABLE_NAME)
+open class Address : SuperAddress()
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "行政区代码")
-@Table(name = SuperAddressEntity.TABLE_NAME)
-open class FullAddressEntity : SuperAddressEntity() {
+@Table(name = SuperAddress.TABLE_NAME)
+open class FullAddress : SuperAddress() {
   /**
    * 当前地址包含的地址详情
    */
   @Schema(title = "包含的地址详情", requiredMode = NOT_REQUIRED)
-  @OneToMany(targetEntity = AddressDetailsEntity::class)
+  @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
   @JoinColumn(
-    name = SuperAddressDetailsEntity.ADDRESS_ID,
+    name = SuperAddressDetails.ADDRESS_ID,
     referencedColumnName = ID,
     foreignKey = ForeignKey(NO_CONSTRAINT),
     insertable = false,
     updatable = false
   )
-  open var details: List<AllAddressDetailsEntity> = listOf()
+  open var details: List<FullAddressDetails> = listOf()
 }

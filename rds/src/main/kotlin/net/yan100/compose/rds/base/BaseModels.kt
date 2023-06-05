@@ -59,6 +59,9 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
 
   @Query("select count(e.id) from #{#entityName} e where e.ldf = false")
   fun countByNotLogicDeleted(): Long
+
+  @Query("SELECT count(e.id) > 0 FROM #{#entityName} e WHERE e.id = :id AND e.ldf = false")
+  fun existsByIdAndNotLogicDeleted(id: String)
 }
 
 /**

@@ -26,8 +26,8 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @Schema(title = "用户  角色组")
-@Table(name = UserRoleGroupEntity.TABLE_NAME)
-public class UserRoleGroupEntity extends BaseEntity implements Serializable {
+@Table(name = UserRoleGroup.TABLE_NAME)
+public class UserRoleGroup extends BaseEntity implements Serializable {
   public static final String TABLE_NAME = "user_role_group";
   public static final String USER_ID = "user_id";
   public static final String ROLE_GROUP_ID = "role_group_id";

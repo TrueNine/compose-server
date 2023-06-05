@@ -1,13 +1,13 @@
 package net.yan100.compose.rds.service
 
 import net.yan100.compose.rds.base.BaseService
-import net.yan100.compose.rds.entity.AttachmentEntity
+import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.util.PagedWrapper
 
 
-interface AttachmentService : BaseService<AttachmentEntity> {
+interface AttachmentService : BaseService<Attachment> {
   fun existsByBaseUrl(baseUrl: String): Boolean
-  fun findByBaseUrl(baseUrl: String): AttachmentEntity?
+  fun findByBaseUrl(baseUrl: String): Attachment?
   fun findFullUrlById(id: String): String?
   fun findAllFullUrlByMetaNameStartingWith(
     metaName: String,

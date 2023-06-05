@@ -1,17 +1,17 @@
 package net.yan100.compose.rds.repository.relationship
 
 import net.yan100.compose.rds.base.BaseRepository
-import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroupEntity
+import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroup
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserGroupRoleGroupRepository : BaseRepository<UserGroupRoleGroupEntity> {
-  fun findByUserGroupIdAndRoleGroupId(userGroupId: String, roleGroupId: String): UserGroupRoleGroupEntity?
+interface UserGroupRoleGroupRepository : BaseRepository<UserGroupRoleGroup> {
+  fun findByUserGroupIdAndRoleGroupId(userGroupId: String, roleGroupId: String): UserGroupRoleGroup?
 
-  @Query("select ur.roleGroupId from UserGroupRoleGroupEntity ur")
+  @Query("select ur.roleGroupId from UserGroupRoleGroup ur")
   fun findAllRoleGroupIdByUserGroupId(userGroupId: String): Set<String>
-  fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroupEntity>
+  fun findAllByUserGroupId(userGroupId: String): List<UserGroupRoleGroup>
   fun existsByUserGroupIdAndRoleGroupId(
     userGroupId: String,
     roleGroupId: String

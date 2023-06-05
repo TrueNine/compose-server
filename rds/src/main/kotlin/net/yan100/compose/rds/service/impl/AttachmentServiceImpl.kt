@@ -2,7 +2,7 @@ package net.yan100.compose.rds.service.impl
 
 
 import net.yan100.compose.rds.base.BaseServiceImpl
-import net.yan100.compose.rds.entity.AttachmentEntity
+import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.repository.AttachmentRepository
 import net.yan100.compose.rds.service.AttachmentService
 import net.yan100.compose.rds.util.Pq
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service
 @Service
 class AttachmentServiceImpl(
   private val repo: AttachmentRepository
-) : AttachmentService, BaseServiceImpl<AttachmentEntity>(repo) {
+) : AttachmentService, BaseServiceImpl<Attachment>(repo) {
   override fun existsByBaseUrl(baseUrl: String): Boolean {
     return repo.existsByBaseUrl(baseUrl)
   }
 
-  override fun findByBaseUrl(baseUrl: String): AttachmentEntity? {
+  override fun findByBaseUrl(baseUrl: String): Attachment? {
     return repo.findFirstByBaseUrlStartingWith(baseUrl)
   }
 

@@ -17,7 +17,7 @@ class AccountAggregatorImpl(
 
   override fun registerAccount(@Valid param: RegisterAccountRequestParam): Boolean =
     if (!userService.existsByAccount(param.account)) {
-      userService.save(net.yan100.compose.rds.entity.UserEntity().apply {
+      userService.save(net.yan100.compose.rds.entity.User().apply {
         account = param.account
         pwdEnc = passwordEncoder.encode(param.password)
         nickName = param.nickName
@@ -25,7 +25,7 @@ class AccountAggregatorImpl(
       }); true
     } else false
 
-  override fun login(@Valid param: LoginAccountRequestParam): net.yan100.compose.rds.entity.UserEntity? =
+  override fun login(@Valid param: LoginAccountRequestParam): net.yan100.compose.rds.entity.User? =
     if (verifyPassword(param.account, param.password)) {
       userService.findUserByAccount(param.account)
     } else null

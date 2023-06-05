@@ -9,7 +9,7 @@ import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.base.BaseService
 import net.yan100.compose.rds.base.BaseServiceImpl
-import net.yan100.compose.rds.entity.TableRowDeleteRecordEntity
+import net.yan100.compose.rds.entity.TableRowDeleteRecord
 import net.yan100.compose.rds.repository.TableRowDeleteRecordRepository
 import net.yan100.compose.rds.service.TableRowDeleteRecordService
 import org.springframework.stereotype.Service
@@ -22,17 +22,17 @@ class TableRowDeleteRecordServiceImplImpl(
   private val delRepo: TableRowDeleteRecordRepository,
   private val mapper: ObjectMapper
 ) : TableRowDeleteRecordService,
-  BaseService<TableRowDeleteRecordEntity>,
-  BaseServiceImpl<TableRowDeleteRecordEntity>(delRepo) {
+  BaseService<TableRowDeleteRecord>,
+  BaseServiceImpl<TableRowDeleteRecord>(delRepo) {
 
   private val log = slf4j(this::class)
 
-  override fun saveAnyEntity(anyData: net.yan100.compose.rds.base.BaseEntity?): TableRowDeleteRecordEntity? {
+  override fun saveAnyEntity(anyData: net.yan100.compose.rds.base.BaseEntity?): TableRowDeleteRecord? {
     return if (null == anyData) {
       log.debug("未对对象进行保存")
       null
     } else {
-      val delRow = TableRowDeleteRecordEntity()
+      val delRow = TableRowDeleteRecord()
       val userInfo = UserInfoContextHolder.get()
       delRow.apply {
         tableNames = anyData::class.findAnnotation<Table>()?.name

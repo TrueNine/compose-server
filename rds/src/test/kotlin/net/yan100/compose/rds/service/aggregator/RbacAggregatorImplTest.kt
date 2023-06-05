@@ -1,9 +1,10 @@
 package net.yan100.compose.rds.service.aggregator
 
 import net.yan100.compose.core.id.Snowflake
-import net.yan100.compose.rds.entity.PermissionsEntity
-import net.yan100.compose.rds.entity.RoleEntity
-import net.yan100.compose.rds.entity.RoleGroupEntity
+import net.yan100.compose.rds.entity.Permissions
+import net.yan100.compose.rds.entity.Role
+import net.yan100.compose.rds.entity.RoleGroup
+import net.yan100.compose.rds.entity.UserGroup
 import net.yan100.compose.rds.repository.AllRoleEntityRepository
 import net.yan100.compose.rds.repository.AllRoleGroupEntityRepository
 import net.yan100.compose.rds.service.*
@@ -40,13 +41,13 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Autowired
   lateinit var snowflake: Snowflake
 
-  private fun getUser() = net.yan100.compose.rds.entity.UserEntity().apply {
+  private fun getUser() = net.yan100.compose.rds.entity.User().apply {
     account = "name:${snowflake.nextId()}"
     nickName = "abcd"
     pwdEnc = "aa${snowflake.nextId()}"
   }
 
-  private fun getRoleGroup() = RoleGroupEntity().apply {
+  private fun getRoleGroup() = RoleGroup().apply {
     name = "ab${snowflake.nextId()}"
   }
 
@@ -119,7 +120,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     }
   }
 
-  fun getUserGroup() = net.yan100.compose.rds.entity.UserGroupEntity().apply {
+  fun getUserGroup() = UserGroup().apply {
     this.userId = snowflake.nextStringId()
     this.name = "abc" + snowflake.nextId()
   }
@@ -201,7 +202,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     }
   }
 
-  fun getRole() = RoleEntity().apply {
+  fun getRole() = Role().apply {
     name = "测试权限${snowflake.nextId()}"
     doc = "nul"
   }
@@ -216,7 +217,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   }
 
   fun getRoles() = List(10) {
-    RoleEntity().apply {
+    Role().apply {
       name = "没有${snowflake.nextId()}"
       doc = "md = ${snowflake.nextId()}"
     }
@@ -265,7 +266,7 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     }
   }
 
-  fun getPermissions() = PermissionsEntity().apply {
+  fun getPermissions() = Permissions().apply {
     name = "权限 ${snowflake.nextId()}"
     doc = "stra ${snowflake.nextId()}"
   }
@@ -336,9 +337,9 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
     }
   }
 
-  fun namePre(): net.yan100.compose.rds.entity.UserEntity {
+  fun namePre(): net.yan100.compose.rds.entity.User {
     val user = userService.save(getUser())
-    ugService.save(net.yan100.compose.rds.entity.UserGroupEntity().apply { name = "柱";userId = user.id })
+    ugService.save(UserGroup().apply { name = "柱";userId = user.id })
     val subUserGroup = ugService.save(getUserGroup())
     ugService.saveUserToUserGroup(user.id, subUserGroup.id)
 

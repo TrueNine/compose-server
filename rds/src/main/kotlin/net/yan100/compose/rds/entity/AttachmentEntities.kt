@@ -14,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate
 
 
 @MappedSuperclass
-open class SuperAttachmentEntity : BaseEntity() {
+open class SuperAttachment : BaseEntity() {
 
   /**
    * 保存前的名称
@@ -109,5 +109,5 @@ open class SuperAttachmentEntity : BaseEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "附件")
-@Table(name = SuperAttachmentEntity.TABLE_NAME)
-open class AttachmentEntity : SuperAttachmentEntity()
+@Table(name = SuperAttachment.TABLE_NAME)
+open class Attachment : SuperAttachment()

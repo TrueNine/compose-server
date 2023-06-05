@@ -29,8 +29,8 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "api")
-@Table(name = ApiEntity.TABLE_NAME)
-public class ApiEntity extends BaseEntity implements Serializable {
+@Table(name = Api.TABLE_NAME)
+public class Api extends BaseEntity implements Serializable {
 
   public static final String TABLE_NAME = "api";
   public static final String NAME = "name";
@@ -65,7 +65,7 @@ public class ApiEntity extends BaseEntity implements Serializable {
   @ManyToOne
   @JoinColumn(name = PERMISSIONS_ID, referencedColumnName = ID, foreignKey = @ForeignKey(NO_CONSTRAINT))
   @NotFound(action = IGNORE)
-  private PermissionsEntity permissions;
+  private Permissions permissions;
 
 
   /**
