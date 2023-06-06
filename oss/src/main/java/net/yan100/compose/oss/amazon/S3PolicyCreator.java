@@ -1,6 +1,7 @@
 package net.yan100.compose.oss.amazon;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class S3PolicyCreator {
@@ -24,11 +25,11 @@ public class S3PolicyCreator {
       )
       .addStatement(S3StatementBuilder.builder()
         .principal(p)
-        .addAction(S3Policies.Obj.GET)
-        .addAction(S3Policies.Obj.LIST_MUL_UPLOAD_PARTS)
-        .addAction(S3Policies.Obj.PUT)
-        .addAction(S3Policies.Obj.ABORT_MUL_UPLOAD)
-        .addAction(S3Policies.Obj.DEL)
+        .addAction(S3Policies.Object.GET)
+        .addAction(S3Policies.Object.LIST_MUL_UPLOAD_PARTS)
+        .addAction(S3Policies.Object.PUT)
+        .addAction(S3Policies.Object.ABORT_MUL_UPLOAD)
+        .addAction(S3Policies.Object.DEL)
         .addResource(bucketName + "/*")
       );
   }
@@ -45,7 +46,7 @@ public class S3PolicyCreator {
       )
       .addStatement(S3StatementBuilder.builder()
         .principal(p)
-        .addAction(S3Policies.Obj.GET)
+        .addAction(S3Policies.Object.GET)
         .addResource(bucketName + "/*")
       );
   }
@@ -54,7 +55,7 @@ public class S3PolicyCreator {
 
     private final S3Args RULE;
 
-    private final Gson GSON = new Gson();
+    private final ObjectMapper MAPPER = new ObjectMapper();
 
 
     private S3BuilderChain() {
@@ -74,7 +75,11 @@ public class S3PolicyCreator {
 
 
     public String json() {
-      return GSON.toJson(RULE, S3Args.class);
+      try {
+        return MAPPER.writeValueAsString(RULE);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 

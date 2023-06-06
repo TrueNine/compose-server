@@ -1,11 +1,7 @@
 package net.yan100.compose.oss;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-import net.yan100.compose.oss.abstracts.StreamsMap;
 
 /**
  * 文件参数
@@ -15,14 +11,11 @@ import net.yan100.compose.oss.abstracts.StreamsMap;
  */
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
 public class FileArgs {
   private String dir;
   private String fileName;
   private String mimeType;
-  private long size;
+  private Long size;
 
   public static FileArgs useStreamMap(StreamsMap map) {
     return FileArgs

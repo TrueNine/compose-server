@@ -1,7 +1,6 @@
 package net.yan100.compose.oss.amazon;
 
 public interface S3Policies {
-
   interface Effect {
     String ALLOW = "Allow";
   }
@@ -12,7 +11,7 @@ public interface S3Policies {
     String LIST_MUL_UPLOADS = "ListBucketMultipartUploads";
   }
 
-  interface Obj {
+  interface Object {
     String GET = "GetObject";
     String PUT = "PutObject";
     String DEL = "DeleteObject";

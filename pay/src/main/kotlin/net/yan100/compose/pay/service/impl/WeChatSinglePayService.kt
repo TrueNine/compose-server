@@ -1,5 +1,10 @@
 package net.yan100.compose.pay.service.impl
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.wechat.pay.java.core.RSAAutoCertificateConfig
+import com.wechat.pay.java.core.notification.NotificationParser
+import com.wechat.pay.java.core.notification.RequestParam
+import com.wechat.pay.java.service.partnerpayments.app.model.Transaction
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
 import com.wechat.pay.java.service.payments.jsapi.model.*
 import com.wechat.pay.java.service.refund.RefundService
@@ -20,6 +25,7 @@ import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
 import net.yan100.compose.pay.models.resp.FindPayOrderResp
+import net.yan100.compose.pay.models.resp.PaySuccessNotifyResp
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
 import org.springframework.stereotype.Service
@@ -28,12 +34,15 @@ import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
 @Service
 class WeChatSinglePayService(
   private val wechatJsService: JsapiService,
   private val refundApi: RefundService,
   private val payProperty: WeChatPaySingleConfigProperty,
-  private val bigCodeGenerator: BizCodeGenerator
+  private val bigCodeGenerator: BizCodeGenerator,
+  private val rsaConfig: RSAAutoCertificateConfig,
+  private val mapper: ObjectMapper
 ) : SinglePayService {
   companion object {
     @JvmStatic
@@ -131,5 +140,29 @@ class WeChatSinglePayService(
     }
     // TODO 此处空返回
     val refundDetails = refundApi.create(createRequest)
+  }
+
+  override fun receiveSuccessPayNotify(metaData: String, headersMap: Map<String, String>): PaySuccessNotifyResp? {
+    val requestParam = RequestParam.Builder()
+      .serialNumber(headersMap["Wechatpay-Serial"])
+      .signType(headersMap["Wechatpay-Signature-Type"])
+      .nonce(headersMap["Wechatpay-Nonce"])
+      .signature(headersMap["Wechatpay-Signature"])
+      .timestamp(headersMap["Wechatpay-Timestamp"])
+      .body(metaData)
+      .build()
+
+    val transaction = NotificationParser(rsaConfig).let { parser ->
+      parser.parse(requestParam, Transaction::class.java)
+    }
+
+    return if (transaction.tradeState == Transaction.TradeStateEnum.SUCCESS) {
+      PaySuccessNotifyResp().apply {
+        payCode = transaction.transactionId
+        orderCode = transaction.outTradeNo
+        currency = ISO4217.findVal(transaction.amount.currency)
+        meta = mapper.writeValueAsString(transaction)
+      }
+    } else null
   }
 }

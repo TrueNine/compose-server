@@ -2,6 +2,7 @@ package net.yan100.compose.oss.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * oss属性
@@ -14,6 +15,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class OssProperties {
   private Type type = Type.FILE;
 
+  /**
+   * minio相关配置
+   */
+  @NestedConfigurationProperty
+  private MinioProperties minio;
+
+  /**
+   * 阿里云相关配置
+   */
+  @NestedConfigurationProperty
+  private AliCloudOssProperties aliyun;
 
   /**
    * 类型
@@ -27,7 +39,7 @@ public class OssProperties {
      */
     FILE,
     /**
-     * 存入mysql
+     * mysql 数据库
      */
     MYSQL_DB,
     /**
@@ -37,6 +49,10 @@ public class OssProperties {
     /**
      * 阿里云
      */
-    ALI_CLOUD_OSS
+    ALI_CLOUD_OSS,
+    /**
+     * 华为云
+     */
+    HUAWEI_CLOUD
   }
 }

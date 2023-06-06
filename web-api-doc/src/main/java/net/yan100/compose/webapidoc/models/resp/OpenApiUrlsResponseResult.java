@@ -1,4 +1,4 @@
-package net.yan100.compose.webapidoc.models.response;
+package net.yan100.compose.webapidoc.models.resp;
 
 import lombok.Data;
 

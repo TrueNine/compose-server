@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 public class S3PrincipalArgs {
-
   @JsonProperty("AWS")
   @SerializedName("AWS")
   private List<String> aws = new ArrayList<>();

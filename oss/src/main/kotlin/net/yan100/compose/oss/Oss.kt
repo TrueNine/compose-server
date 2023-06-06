@@ -1,20 +1,16 @@
-package net.yan100.compose.oss.abstracts;
+package net.yan100.compose.oss
 
-import net.yan100.compose.oss.FileArgs;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.function.Consumer;
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.function.Consumer
 
 /**
  * 对文件系统得抽象，使得编程接口统一化
  *
  * @author TrueNine
  */
-public interface Oss {
-
+interface Oss {
   /**
    * 获取一个实现对象，以便于应急使用，调用具体细节。
    * 如：使用 minio 实现，则实例为 MinioClient
@@ -24,32 +20,31 @@ public interface Oss {
    * @param <T>          类型
    * @return 实现对象实例
    * @implSpec MinioClientWrapper
-   */
-  <T> T as(Class<T> instanceType);
+  </T> */
+  fun <T> `as`(instanceType: Class<T>): T
 
   /**
    * 创建新的文件夹
    *
    * @param dirName dir名字
    */
-  void makeDirs(String dirName);
+  fun makeDirs(dirName: String)
 
   /**
    * 创建公共文件夹
    *
    * @param dir dir
    */
-  void publicDir(String dir);
+  fun publicDir(dir: String)
 
   /**
    * 上传
    *
    * @param stream   流
    * @param fileInfo 文件信息
-   * @return {@link InMap}
+   * @return [InMap]
    */
-  InMap upload(InputStream stream, FileArgs fileInfo);
-
+  fun upload(stream: InputStream, fileInfo: FileArgs): InMap
 
   /**
    * 上传
@@ -57,10 +52,9 @@ public interface Oss {
    * @param stream    流
    * @param fileInfo  文件信息
    * @param afterExec 后执行
-   * @return {@link InMap}
+   * @return [InMap]
    */
-  InMap upload(InputStream stream, FileArgs fileInfo, Runnable afterExec);
-
+  fun upload(stream: InputStream, fileInfo: FileArgs, afterExec: Runnable): InMap
 
   /**
    * 上传
@@ -68,21 +62,20 @@ public interface Oss {
    * @param stream    流
    * @param fileArgs  文件参数
    * @param afterExec 后执行
-   * @return {@link InMap}
+   * @return [InMap]
    */
-  InMap upload(InputStream stream, FileArgs fileArgs, Consumer<FileArgs> afterExec);
-
+  fun upload(stream: InputStream, fileArgs: FileArgs, afterExec: Consumer<FileArgs>): InMap
 
   /**
    * 下载
    *
    * @param stream   流
    * @param fileInfo 文件信息
-   * @return {@link OutMap}
+   * @return [OutMap]
    * @throws IOException ioexception
    */
-  OutMap download(OutputStream stream, FileArgs fileInfo) throws IOException;
-
+  @Throws(IOException::class)
+  fun download(stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /**
    * 下载
@@ -90,11 +83,11 @@ public interface Oss {
    * @param beforeExec 在执行之前
    * @param stream     流
    * @param fileInfo   文件信息
-   * @return {@link OutMap}
+   * @return [OutMap]
    * @throws IOException ioexception
    */
-  OutMap download(Runnable beforeExec, OutputStream stream, FileArgs fileInfo) throws IOException;
-
+  @Throws(IOException::class)
+  fun download(beforeExec: Runnable, stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /**
    * 下载
@@ -102,23 +95,24 @@ public interface Oss {
    * @param beforeExec 在执行之前
    * @param stream     流
    * @param fileInfo   文件信息
-   * @return {@link OutMap}
+   * @return [OutMap]
    * @throws IOException ioexception
    */
-  OutMap download(Consumer<FileArgs> beforeExec, OutputStream stream, FileArgs fileInfo) throws IOException;
+  @Throws(IOException::class)
+  fun download(beforeExec: Consumer<FileArgs>, stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /**
    * 列表文件
    *
    * @param dir dir
-   * @return {@link List}<{@link String}>
+   * @return [List]<[String]>
    */
-  List<String> listFiles(String dir);
+  fun listFiles(dir: String): List<String>
 
   /**
    * dir列表
    *
-   * @return {@link List}<{@link String}>
+   * @return [List]<[String]>
    */
-  List<String> listDir();
+  fun listDir(): List<String>
 }

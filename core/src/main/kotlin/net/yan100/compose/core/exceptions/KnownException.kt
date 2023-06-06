@@ -47,7 +47,7 @@ fun requireKnown(expression: Boolean) {
 
 fun requireKnown(expression: Boolean, lazyMsg: () -> Any?) {
   if (expression) return
-  else requireKnown(false, KnownException(), lazyMsg)
+  else requireKnown(false, KnownException(lazyMsg().toString()), lazyMsg)
 }
 
 fun <E : KnownException> requireKnown(expression: Boolean, ex: E, lazyMsg: () -> Any?) {

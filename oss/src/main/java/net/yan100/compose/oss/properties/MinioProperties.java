@@ -1,7 +1,6 @@
 package net.yan100.compose.oss.properties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * minio 配置项
@@ -10,13 +9,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2023-02-21
  */
 @Data
-@ConfigurationProperties(prefix = "compose.oss.minio")
 public class MinioProperties {
-  Boolean enabled;
-  String endpointHost = "localhost";
-  int endpointPort = 9000;
-  boolean secure = false;
-
-  String accessKey;
-  String secretKey;
+  private Boolean enable = false;
+  private Boolean secure = false;
+  private String endpointHost = "localhost";
+  private Integer endpointPort = 9000;
+  private String accessKey;
+  private String secretKey;
 }

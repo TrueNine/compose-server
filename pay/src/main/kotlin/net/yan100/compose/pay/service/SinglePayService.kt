@@ -1,10 +1,11 @@
 package net.yan100.compose.pay.service
 
 import net.yan100.compose.core.lang.ISO4217
-import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
-import net.yan100.compose.pay.models.resp.FindPayOrderResp
+import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
+import net.yan100.compose.pay.models.resp.FindPayOrderResp
+import net.yan100.compose.pay.models.resp.PaySuccessNotifyResp
 import java.math.BigDecimal
 
 /**
@@ -38,4 +39,9 @@ interface SinglePayService {
     totalAmount: BigDecimal,
     currency: ISO4217 = ISO4217.CNY
   )
+
+  /**
+   * ## 接受异步通知回调
+   */
+  fun receiveSuccessPayNotify(metaData: String, headersMap: Map<String, String>): PaySuccessNotifyResp?
 }
