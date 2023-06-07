@@ -49,7 +49,6 @@ class LazyAddressServiceImplTest : AbstractTestNGSpringContextTests() {
     assertTrue("当前 all = $all") { all.isNotEmpty() }
   }
 
-  // TODO 村镇接口不可以
   @Test
   fun testFindAllVillageByCode() {
     val all = lazys.findAllVillageByCode(testCode)

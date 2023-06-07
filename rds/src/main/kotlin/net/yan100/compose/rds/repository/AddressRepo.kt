@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AddressRepository : TreeRepository<Address> {
+interface AddressRepo : TreeRepository<Address> {
 
   fun findAllByCode(code: String): List<Address>
 

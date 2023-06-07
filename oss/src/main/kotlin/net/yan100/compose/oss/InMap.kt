@@ -1,6 +1,5 @@
 package net.yan100.compose.oss
 
-import net.yan100.compose.oss.StreamsMap
 import java.io.InputStream
 
 /**

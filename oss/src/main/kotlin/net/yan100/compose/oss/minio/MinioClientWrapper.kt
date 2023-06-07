@@ -17,7 +17,7 @@ import java.util.function.Consumer
  * @since 2023-02-20
  */
 class MinioClientWrapper(
-  private val minioClient: MinioClient
+  minioClient: MinioClient
 ) : Oss, MinioClientAdaptor(minioClient) {
 
   @Suppress("UNCHECKED_CAST")
@@ -35,7 +35,7 @@ class MinioClientWrapper(
 
   override fun upload(stream: InputStream, fileInfo: FileArgs): InMap {
     val ins = putObject(fileInfo, stream)
-    return ins(ins, stream)
+    return ins(ins!!, stream)
   }
 
   override fun upload(stream: InputStream, fileInfo: FileArgs, afterExec: Runnable): InMap {
@@ -53,22 +53,22 @@ class MinioClientWrapper(
   @Throws(IOException::class)
   override fun download(stream: OutputStream, fileInfo: FileArgs): OutMap {
     val outs = getObject(fileInfo, stream)
-    outs.transferTo(stream)
-    return outs(outs, stream)
+    outs?.transferTo(stream)
+    return outs(outs!!, stream)
   }
 
   @Throws(IOException::class)
   override fun download(beforeExec: Runnable, stream: OutputStream, fileInfo: FileArgs): OutMap {
     val outs = getObject(fileInfo, stream)
     beforeExec.run()
-    outs.transferTo(stream)
+    outs?.transferTo(stream)
     return download(stream, fileInfo)
   }
 
   @Throws(IOException::class)
   override fun download(beforeExec: Consumer<FileArgs>, stream: OutputStream, fileInfo: FileArgs): OutMap {
     val outs = getObject(fileInfo, stream)
-    val wrapper = outs(outs, stream)
+    val wrapper = outs(outs!!, stream)
     beforeExec.accept(FileArgs.useStreamMap(wrapper))
     outs.transferTo(stream)
     return outs(outs, stream)

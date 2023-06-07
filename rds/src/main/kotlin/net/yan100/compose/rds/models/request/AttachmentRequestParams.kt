@@ -1,7 +1,6 @@
 package net.yan100.compose.rds.models.request
 
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.rds.typing.AttachmentTyping
 
 
 @Schema(title = "记录文件")

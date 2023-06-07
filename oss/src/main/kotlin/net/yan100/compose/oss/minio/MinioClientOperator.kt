@@ -20,19 +20,19 @@ open class MinioClientOperator
 protected constructor(
   private val client: MinioClient
 ) {
-  open fun headerContentType(headers: Headers): String {
-    return headers[net.yan100.compose.core.http.Headers.CONTENT_TYPE]!!
+  open fun headerContentType(headers: Headers): String? {
+    return headers[net.yan100.compose.core.http.Headers.CONTENT_TYPE]
   }
 
   open fun headerSizeStr(headers: Headers): String? {
     return headers[net.yan100.compose.core.http.Headers.CONTENT_LENGTH]
   }
 
-  open fun headerSize(headers: Headers): Long {
-    return headerSizeStr(headers)!!.toLong()
+  open fun headerSize(headers: Headers): Long? {
+    return headerSizeStr(headers)?.toLong()
   }
 
-  open fun getObject(fileInfo: FileArgs, stream: OutputStream): GetObjectResponse {
+  open fun getObject(fileInfo: FileArgs, stream: OutputStream): GetObjectResponse? {
     return client.getObject(GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
   }
 
@@ -45,7 +45,16 @@ protected constructor(
     )
   }
 
-  open fun putObject(fileInfo: FileArgs, stream: InputStream): ObjectWriteResponse {
+  open fun putObject(fileInfo: FileArgs, stream: InputStream): ObjectWriteResponse? {
+    val dirExists = client.bucketExists(BucketExistsArgs.builder().bucket(fileInfo.dir).build())
+    if (!dirExists) {
+      client.makeBucket(
+        MakeBucketArgs.builder()
+          .bucket(fileInfo.dir)
+          .build()
+      )
+    }
+
     return client.putObject(
       PutObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).contentType(fileInfo.mimeType)
         .stream(stream, fileInfo.size, -1).build()

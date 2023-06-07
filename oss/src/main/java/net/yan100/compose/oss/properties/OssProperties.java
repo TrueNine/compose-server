@@ -16,19 +16,24 @@ public class OssProperties {
   private Type type = Type.FILE;
 
   /**
-   * minio相关配置
+   * ## 对外暴露的访问路径
+   */
+  private String exposeBaseUrl;
+
+  /**
+   * ## minio相关配置
    */
   @NestedConfigurationProperty
   private MinioProperties minio;
 
   /**
-   * 阿里云相关配置
+   * ## 阿里云相关配置
    */
   @NestedConfigurationProperty
   private AliCloudOssProperties aliyun;
 
   /**
-   * 类型
+   * ## 类型
    *
    * @author TrueNine
    * @since 2022-10-28

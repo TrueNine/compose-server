@@ -24,18 +24,16 @@ class AttachmentAggregatorImpl(
     val location = aService.findByBaseUrl(saveFile.baseUrl)
       ?: aService.save(Attachment().apply {
         this.attType = AttachmentTyping.BASE_URL
-        this.baseUrl = baseUrl
+        this.baseUrl = saveFile.baseUrl
       })
     requireKnown(location.id != null) { "没有保存的url" }
     // 构建一个新附件对象保存并返回
     val att = Attachment().apply {
       // 将之于根路径连接
       urlId = location.id
-
       saveName = saveFile.saveName
       metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
       size = file.size
-
       mimeType = file.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.media()
       attType = AttachmentTyping.ATTACHMENT
     }

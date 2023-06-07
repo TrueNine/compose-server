@@ -2,6 +2,7 @@ package net.yan100.compose.rds.repository
 
 import net.yan100.compose.rds.base.BaseRepository
 import net.yan100.compose.rds.entity.Attachment
+import net.yan100.compose.rds.entity.LinkedAttachment
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
@@ -9,12 +10,12 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AttachmentRepository : BaseRepository<Attachment> {
+interface AttachmentRepo : BaseRepository<Attachment> {
   @Query(
     """
-    select new kotlin.Pair(a.baseUrl,a.saveName)
-    from Attachment a
-    where a.id = :id
+    SELECT new kotlin.Pair(a.baseUrl,a.saveName)
+    FROM Attachment a
+    WHERE a.id = :id
   """
   )
   fun findBaseUrlAndSaveNamePairById(id: Long): Pair<String, String>?
@@ -47,4 +48,10 @@ interface AttachmentRepository : BaseRepository<Attachment> {
    * 根据id，查询 baseUrl符合条件的 baseUrl
    */
   fun findFirstByBaseUrlStartingWith(baseUrl: String): Attachment?
+}
+
+
+@Repository
+interface LinkedAttachmentRepo : BaseRepository<LinkedAttachment> {
+
 }

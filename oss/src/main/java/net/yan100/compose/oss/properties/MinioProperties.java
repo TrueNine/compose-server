@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class MinioProperties {
   private Boolean enable = false;
-  private Boolean secure = false;
+  private Boolean enableHttps = false;
   private String endpointHost = "localhost";
   private Integer endpointPort = 9000;
   private String accessKey;

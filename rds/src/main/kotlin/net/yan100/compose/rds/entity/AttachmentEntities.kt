@@ -3,14 +3,19 @@ package net.yan100.compose.rds.entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Table
+import jakarta.persistence.*
+import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
+import jakarta.persistence.FetchType.EAGER
+import jakarta.persistence.criteria.Predicate
 import net.yan100.compose.rds.base.BaseEntity
+import net.yan100.compose.rds.converters.typing.AttachmentStorageTypingConverter
 import net.yan100.compose.rds.typing.AttachmentTyping
+import org.apache.poi.ss.formula.functions.T
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import org.hibernate.annotations.NotFound
+import org.hibernate.annotations.NotFoundAction.IGNORE
+import org.springframework.data.jpa.domain.Specification
 
 
 @MappedSuperclass
@@ -111,3 +116,64 @@ open class SuperAttachment : BaseEntity() {
 @Schema(title = "附件")
 @Table(name = SuperAttachment.TABLE_NAME)
 open class Attachment : SuperAttachment()
+
+/**
+ * # 附件全路径实体
+ *
+ * - 这是一个特殊实体
+ * - 序列化到前端，只会出现全路径
+ * - 只能用于查询，无法插入
+ */
+@Entity
+@Schema(title = "附件")
+@Table(name = SuperAttachment.TABLE_NAME)
+class LinkedAttachment : BaseEntity() {
+
+  @JsonIgnore
+  @Column(name = SuperAttachment.BASE_URL, insertable = false, updatable = false)
+  var baseUrl: String? = null
+
+  @JsonIgnore
+  @Column(name = SuperAttachment.URL_ID, insertable = false, updatable = false)
+  var urlId: String? = null
+
+  @JsonIgnore
+  @Column(name = SuperAttachment.SAVE_NAME, insertable = false, updatable = false)
+  var saveName: String? = null
+
+  @JsonIgnore
+  @Column(name = SuperAttachment.META_NAME, insertable = false, updatable = false)
+  var metaName: String? = null
+
+  @JsonIgnore
+  @Column(name = SuperAttachment.ATT_TYPE, insertable = false, updatable = false)
+  @Convert(converter = AttachmentStorageTypingConverter::class)
+  var attType: AttachmentTyping? = null
+
+  @JsonIgnore
+  @ManyToOne(fetch = EAGER)
+  @JoinColumn(
+    name = SuperAttachment.URL_ID,
+    referencedColumnName = BaseEntity.ID,
+    foreignKey = ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
+  @NotFound(action = IGNORE)
+  var base: Attachment? = null
+
+  @get:Transient
+  val url: String
+    get() {
+      val based = base?.baseUrl?.let { if (it.endsWith("/")) it else "$it/" } ?: ""
+      val name = metaName ?: ""
+      return "$based$name"
+    }
+}
+
+fun <T> LinkedAttachment.toSpec(): Specification<T> = Specification { root, query, builder ->
+  val p = mutableListOf<Predicate>()
+  attType?.let { p += builder.equal(root.get<AttachmentTyping>(SuperAttachment.ATT_TYPE), attType) }
+
+  builder.and(*p.toTypedArray())
+}

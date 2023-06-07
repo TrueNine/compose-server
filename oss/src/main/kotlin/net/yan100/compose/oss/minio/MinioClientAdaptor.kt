@@ -25,7 +25,7 @@ open class MinioClientAdaptor protected constructor(
       }
 
       override fun mimeType(): String {
-        return headerContentType(resp.headers())
+        return headerContentType(resp.headers())!!
       }
 
       override fun fileName(): String {
@@ -37,7 +37,7 @@ open class MinioClientAdaptor protected constructor(
       }
 
       override fun size(): Long {
-        return headerSize(resp.headers())
+        return headerSize(resp.headers())!!
       }
     }
   }
@@ -49,7 +49,7 @@ open class MinioClientAdaptor protected constructor(
       }
 
       override fun mimeType(): String {
-        return headerContentType(resp.headers())
+        return headerContentType(resp.headers())!!
       }
 
       override fun fileName(): String {
@@ -61,7 +61,7 @@ open class MinioClientAdaptor protected constructor(
       }
 
       override fun size(): Long {
-        return headerSize(resp.headers())
+        return headerSize(resp.headers())!!
       }
     }
   }
