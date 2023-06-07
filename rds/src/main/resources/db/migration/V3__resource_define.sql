@@ -57,6 +57,17 @@ CREATE TABLE IF NOT EXISTS address
 CALL add_base_struct('address');
 CALL add_presort_tree_struct('address');
 
+# 添加地址初始节点
+INSERT INTO address
+SET id=0,
+    level=0,
+    code=NULL,
+    name='中华人民共和国',
+    rln=1,
+    rrn=2,
+    tgi=0,
+    center=NULL;
+
 
 CREATE TABLE IF NOT EXISTS address_details
 (

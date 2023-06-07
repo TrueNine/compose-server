@@ -11,6 +11,7 @@ import net.yan100.compose.rds.annotations.BizCode
 import net.yan100.compose.rds.util.Pq
 import net.yan100.compose.rds.util.Pr
 import net.yan100.compose.rds.util.Pw
+import org.apache.poi.ss.formula.functions.Address
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -266,6 +267,12 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
     popRlnByOffset(2, child.rln!!, child.tgi)
     popRrnByOffset(2, child.rln!!, child.tgi)
   }
+
+  @Query("""
+    FROM #{#entityName} e
+    WHERE e.nlv = :level
+  """)
+  fun findByNodeLevel(level: Long, page: Pageable): Page<Address>
 }
 
 
