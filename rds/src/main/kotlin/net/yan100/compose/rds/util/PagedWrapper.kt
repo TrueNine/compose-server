@@ -13,18 +13,23 @@ import org.springframework.data.domain.Pageable
  * @since 2022-12-27
  */
 object PagedWrapper {
+  /**
+   * ## 构造一个空的参数
+   */
+  @JvmStatic
+  fun <T> empty(): PagedResponseResult<T> = PagedResponseResult.empty<T>()
 
   @JvmField
-  val DEFAULT_MAX: net.yan100.compose.rds.base.PagedRequestParam =
-    net.yan100.compose.rds.base.PagedRequestParam(
-      net.yan100.compose.rds.base.PagedRequestParam.MIN_OFFSET,
-      net.yan100.compose.rds.base.PagedRequestParam.MAX_PAGE_SIZE
+  val DEFAULT_MAX: PagedRequestParam =
+    PagedRequestParam(
+      PagedRequestParam.MIN_OFFSET,
+      PagedRequestParam.MAX_PAGE_SIZE
     )
 
 
   @JvmStatic
-  fun <T> result(jpaPage: Page<T>): net.yan100.compose.rds.base.PagedResponseResult<T> =
-    net.yan100.compose.rds.base.PagedResponseResult<T>()
+  fun <T> result(jpaPage: Page<T>): PagedResponseResult<T> =
+    PagedResponseResult<T>()
       .apply {
         dataList = jpaPage.content
         pageSize = jpaPage.totalPages
@@ -37,7 +42,7 @@ object PagedWrapper {
   fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
     return PageRequest.of(
       paramSetting?.offset ?: 0,
-      paramSetting?.pageSize ?: net.yan100.compose.rds.base.PagedRequestParam.MAX_PAGE_SIZE
+      paramSetting?.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
     )
   }
 
@@ -62,8 +67,8 @@ object PagedWrapper {
 }
 
 typealias Pw = PagedWrapper
-typealias Pq = net.yan100.compose.rds.base.PagedRequestParam
-typealias Pr<T> = net.yan100.compose.rds.base.PagedResponseResult<T>
+typealias Pq = PagedRequestParam
+typealias Pr<T> = PagedResponseResult<T>
 
 /**
  * # 对分页结果的封装，使得其返回包装对象

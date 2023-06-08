@@ -80,7 +80,7 @@ class LazyAddressServiceImpl(
     Jsoup.parse(it).body().selectXpath("//tr[@class='villagetr']").mapNotNull { element ->
       val code = element.child(0).text()
       val name = element.child(2).text()
-      wrapperModel(code, name, false)
+      wrapperModel(code, name, true)
     }
   }
 
@@ -91,7 +91,7 @@ class LazyAddressServiceImpl(
   ) = html?.let {
     Jsoup.parse(it).body().selectXpath("//tr[@class='$className']")
       .mapNotNull { kv ->
-        val leaf = kv.child(1).select("a").size > 0
+        val leaf = kv.child(1).select("a").size <= 0
         val code = kv.child(0).text()
         val name = kv.child(1).text()
         wrapperModel(code, name, leaf)

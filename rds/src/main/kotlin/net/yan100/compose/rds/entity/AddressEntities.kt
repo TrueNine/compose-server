@@ -41,15 +41,7 @@ open class SuperAddressDetails : net.yan100.compose.rds.base.BaseEntity() {
   @Convert(converter = WGS84Converter::class)
   open var center: WGS84? = null
 
-  /**
-   * 是否为终结地址（如市辖区）
-   */
-  @Schema(title = "是否为终结地址（如市辖区）")
-  @Column(name = LEAF)
-  open var leaf: Boolean = false
-
   companion object {
-    const val LEAF = "leaf"
     const val TABLE_NAME = "address_details"
     const val ADDRESS_ID = "address_id"
     const val ADDRESS_DETAILS = "address_details"
@@ -132,7 +124,15 @@ open class SuperAddress : TreeEntity() {
   @Convert(converter = WGS84Converter::class)
   open var center: WGS84? = null
 
+  /**
+   * 是否为终结地址（如市辖区）
+   */
+  @Schema(title = "是否为终结地址（如市辖区）")
+  @Column(name = LEAF)
+  open var leaf: Boolean = false
+
   companion object {
+    const val LEAF = "leaf"
     const val TABLE_NAME = "address"
     const val CODE = "code"
     const val NAME = "name"

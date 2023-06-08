@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,4 +39,14 @@ public class PagedResponseResult<T> implements Serializable {
 
   @Schema(title = "当前页码")
   private Long offset = 0L;
+
+  public static <T> PagedResponseResult<T> empty() {
+    var r = new PagedResponseResult<T>();
+    r.setDataList(new ArrayList<>());
+    r.setOffset(0L);
+    r.setPageSize(0);
+    r.setSize(0);
+    r.setTotal(0L);
+    return r;
+  }
 }
