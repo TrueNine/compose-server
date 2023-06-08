@@ -4,7 +4,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
 
 @ComponentScan(
-  "com.truenine.component.datacommon.dataextract.service"
+  "net.yan100.compose.datacommon.dataextract.service"
 )
 @Import(
   ApiExchangesAutoConfiguration::class

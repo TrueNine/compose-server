@@ -1,5 +1,7 @@
 package net.yan100.compose.rds.util
 
+import net.yan100.compose.rds.base.PagedRequestParam
+import net.yan100.compose.rds.base.PagedResponseResult
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -32,11 +34,30 @@ object PagedWrapper {
       }
 
   @JvmStatic
-  fun param(paramSetting: net.yan100.compose.rds.base.PagedRequestParam? = DEFAULT_MAX): Pageable {
+  fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
     return PageRequest.of(
       paramSetting?.offset ?: 0,
       paramSetting?.pageSize ?: net.yan100.compose.rds.base.PagedRequestParam.MAX_PAGE_SIZE
     )
+  }
+
+  /**
+   * ## 将一个 Sequence 包装为分页数据
+   * @param pageParam 分页数据
+   * @param lazySequence 序列
+   */
+  @JvmStatic
+  fun <T> warpBy(pageParam: PagedRequestParam = DEFAULT_MAX, lazySequence: () -> Sequence<T>): PagedResponseResult<T> {
+    val sequence = lazySequence()
+    val list = sequence.take(pageParam.offset + pageParam.pageSize).toList()
+    val endSize = minOf(pageParam.pageSize, list.size)
+    return PagedResponseResult<T>().apply {
+      this.dataList = list.subList(0, endSize)
+      this.total = sequence.count().toLong()
+      this.offset = (pageParam.offset.toLong()) * pageParam.pageSize
+      this.size = endSize
+      this.pageSize = if (list.isEmpty()) 0 else sequence.count() / pageParam.pageSize
+    }
   }
 }
 

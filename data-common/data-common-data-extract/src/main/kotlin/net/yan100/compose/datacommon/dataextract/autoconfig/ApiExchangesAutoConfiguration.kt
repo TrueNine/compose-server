@@ -16,7 +16,7 @@ class ApiExchangesAutoConfiguration {
 
   @Bean
   fun cnNbsAddressApi(): CnNbsAddressApi {
-    log.debug("创建 国家统计局地址 api")
+    log.debug("创建 中国统计局地址 api")
     val client = WebClient.builder()
       .defaultStatusHandler({ httpCode ->
         httpCode.isError
@@ -25,7 +25,6 @@ class ApiExchangesAutoConfiguration {
       }
       .build()
     val factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client))
-      // TODO 配置专门的转换器
       .build()
     return factory.createClient<CnNbsAddressApi>()
   }

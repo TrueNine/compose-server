@@ -33,4 +33,9 @@
       <package name="net.yan100.compose.rds.autoconfig"/>
     </packages>
   </test>
+  <test name="工具测试" parallel="methods">
+    <packages>
+      <package name="net.yan100.compose.rds.util"/>
+    </packages>
+  </test>
 </suite>

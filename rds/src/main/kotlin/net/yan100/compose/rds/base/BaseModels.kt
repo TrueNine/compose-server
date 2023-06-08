@@ -84,26 +84,66 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   }
 
   /**
-   * 查询当前节点的所有子节点
+   * ## 查询当前节点的所有子节点
    */
   @Query(
     """
-    from #{#entityName} e
-    where e.tgi = :#{#parent.tgi}
-    and e.rln between :#{#parent.rln} and :#{#parent.rrn}
+    FROM #{#entityName} e
+    WHERE e.tgi = :#{#parent.tgi}
+    AND e.rln BETWEEN :#{#parent.rln} AND :#{#parent.rrn}
   """
   )
   fun findChildren(parent: T): List<T>
+
+  /**
+   * ## 分页查询当前节点的所有子节点
+   */
+  @Query(
+    """
+    FROM #{#entityName} e
+    WHERE e.tgi = :#{#parent.tgi}
+    AND e.rln BETWEEN :#{#parent.rln}
+    AND :#{#parent.rrn}
+  """
+  )
+  fun findChildren(parent: T, page: Pageable): Page<T>
+
+  /**
+   * ## 查询当前节点的直接子集
+   */
+  @Query(
+    """
+    FROM #{#entityName} e
+    WHERE e.tgi = :#{#parent.tgi}
+    AND e.nlv = :#{#parent.nlv} + 1
+    AND e.rln BETWEEN :#{#parent.rln} AND :#{#parent.rrn}
+  """
+  )
+  fun findDirectChildren(parent: T): List<T>
+
+  /**
+   * ## 分页查询当前节点的直接子集
+   */
+  @Query(
+    """
+    FROM #{#entityName} e
+    WHERE e.tgi = :#{#parent.tgi}
+    AND e.nlv = :#{#parent.nlv} + 1
+    AND e.rln BETWEEN :#{#parent.rln} AND :#{#parent.rrn}
+  """
+  )
+  fun findDirectChildren(parent: T, page: Pageable): Page<T>
+
 
   /**
    * 返回当前节点的所有父节点
    */
   @Query(
     """
-    from #{#entityName} e
-    where e.tgi = :#{#child.tgi}
-    and e.rln < :#{#child.rln}
-    and e.rrn > :#{#child.rrn}
+    FROM #{#entityName} e
+    WHERE e.tgi = :#{#child.tgi}
+    AND e.rln < :#{#child.rln}
+    AND e.rrn > :#{#child.rrn}
   """
   )
   fun findParentPath(child: T): List<T>
@@ -113,11 +153,11 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
    */
   @Query(
     """
-    select count(1) + 1
-    from #{#entityName} e
-    where e.tgi = :#{#child.tgi} 
-    and e.rln < :#{#child.rln}
-    and e.rrn > :#{#child.rrn}
+    SELECT count(1) + 1
+    FROM #{#entityName} e
+    WHERE e.tgi = :#{#child.tgi} 
+    AND e.rln < :#{#child.rln}
+    AND e.rrn > :#{#child.rrn}
   """
   )
   fun findTreeLevel(child: T): Long
@@ -127,10 +167,10 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
    */
   @Query(
     """
-    update #{#entityName} e
-    set e.rln = e.rln + :rlnOffset
-    where e.tgi = :tgi
-    and e.rln > :parentRln
+    UPDATE #{#entityName} e
+    SET e.rln = e.rln + :rlnOffset
+    WHERE e.tgi = :tgi
+    AND e.rln > :parentRln
   """
   )
   @Modifying
@@ -141,10 +181,10 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
    */
   @Query(
     """
-    update #{#entityName} e
-    set e.rrn = e.rrn + :rrnOffset
-    where e.tgi = :tgi 
-    and e.rrn >= :parentRln
+    UPDATE #{#entityName} e
+    SET e.rrn = e.rrn + :rrnOffset
+    WHERE e.tgi = :tgi 
+    AND e.rrn >= :parentRln
   """
   )
   @Modifying
@@ -155,10 +195,10 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
    */
   @Query(
     """
-    update #{#entityName} c
-    set c.rln = c.rln - :rlnOffset
-    where c.tgi = :tgi
-    and c.rln > :parentRln
+    UPDATE #{#entityName} c
+    SET c.rln = c.rln - :rlnOffset
+    WHERE c.tgi = :tgi
+    AND c.rln > :parentRln
   """
   )
   @Modifying
@@ -169,10 +209,10 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
    */
   @Query(
     """
-    update #{#entityName} c
-    set c.rrn = c.rrn - :rrnOffset
-    where c.tgi = :tgi 
-    and c.rrn >= :parentRln
+    UPDATE #{#entityName} c
+    SET c.rrn = c.rrn - :rrnOffset
+    WHERE c.tgi = :tgi 
+    AND c.rrn >= :parentRln
   """
   )
   @Modifying
@@ -268,10 +308,12 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
     popRrnByOffset(2, child.rln!!, child.tgi)
   }
 
-  @Query("""
+  @Query(
+    """
     FROM #{#entityName} e
     WHERE e.nlv = :level
-  """)
+  """
+  )
   fun findByNodeLevel(level: Long, page: Pageable): Page<Address>
 }
 
