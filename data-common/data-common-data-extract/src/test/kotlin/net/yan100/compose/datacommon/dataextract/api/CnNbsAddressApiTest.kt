@@ -20,25 +20,25 @@ class CnNbsAddressApiTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testGetCityPage() {
-    val cityPage = remoteCall.getCityPage(43)
+    val cityPage = remoteCall.getCityPage("43")
     assertNotNull(cityPage)
   }
 
   @Test
   fun testGetCountyPage() {
-    val countyPage = remoteCall.getCountyPage(43, 31)
+    val countyPage = remoteCall.getCountyPage("43", "31")
     assertNotNull(countyPage)
   }
 
   @Test
   fun testGetTownPage() {
-    val townPage = remoteCall.getTownPage(43, 31, 27)
+    val townPage = remoteCall.getTownPage("43", "31", "27")
     assertNotNull(townPage)
   }
 
   @Test
   fun testGetVillagePage() {
-    val villagePage = remoteCall.getVillagePage(43, 31, 27, 103)
+    val villagePage = remoteCall.getVillagePage("43", "31", "27", "103")
     assertNotNull(villagePage)
   }
 }

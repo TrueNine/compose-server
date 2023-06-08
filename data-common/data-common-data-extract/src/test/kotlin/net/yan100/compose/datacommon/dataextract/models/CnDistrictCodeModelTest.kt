@@ -8,15 +8,15 @@ import kotlin.test.assertNotNull
 class CnDistrictCodeModelTest {
   @Test
   fun testCreate() {
-    val ab = CnDistrictCodeModel(433_127_000_000)
+    val ab = CnDistrictCodeModel("433127000000")
     assertNotNull(ab)
     assertEquals(ab.level, 3)
 
     assertFailsWith<IllegalArgumentException> {
-      CnDistrictCodeModel(433_127_000_00)
+      CnDistrictCodeModel("43312700000")
     }
     assertFailsWith<IllegalArgumentException> {
-      CnDistrictCodeModel(433_127_000_000_1)
+      CnDistrictCodeModel("4331270000001")
     }
     assertFailsWith<NullPointerException> {
       CnDistrictCodeModel(null)

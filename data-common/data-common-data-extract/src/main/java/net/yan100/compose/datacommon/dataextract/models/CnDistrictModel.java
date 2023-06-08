@@ -6,5 +6,6 @@ import lombok.Data;
 public class CnDistrictModel {
   private CnDistrictCodeModel codeModel;
   private String name;
+  private Boolean leaf = false;
   private Integer level;
 }

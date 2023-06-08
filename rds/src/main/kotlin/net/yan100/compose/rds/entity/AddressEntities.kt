@@ -7,8 +7,9 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.base.TreeEntity
-import net.yan100.compose.rds.converters.PointModelConverter
+import net.yan100.compose.rds.converters.WGS84Converter
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NotFound
@@ -37,10 +38,18 @@ open class SuperAddressDetails : net.yan100.compose.rds.base.BaseEntity() {
   @Nullable
   @Schema(title = "定位")
   @Column(name = CENTER)
-  @Convert(converter = PointModelConverter::class)
-  open var center: net.yan100.compose.rds.base.PointModel? = null
+  @Convert(converter = WGS84Converter::class)
+  open var center: WGS84? = null
+
+  /**
+   * 是否为终结地址（如市辖区）
+   */
+  @Schema(title = "是否为终结地址（如市辖区）")
+  @Column(name = LEAF)
+  open var leaf: Boolean = false
 
   companion object {
+    const val LEAF = "leaf"
     const val TABLE_NAME = "address_details"
     const val ADDRESS_ID = "address_id"
     const val ADDRESS_DETAILS = "address_details"
@@ -120,8 +129,8 @@ open class SuperAddress : TreeEntity() {
   @Nullable
   @Schema(title = "定位")
   @Column(name = CENTER)
-  @Convert(converter = PointModelConverter::class)
-  open var center: net.yan100.compose.rds.base.PointModel? = null
+  @Convert(converter = WGS84Converter::class)
+  open var center: WGS84? = null
 
   companion object {
     const val TABLE_NAME = "address"

@@ -2,6 +2,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
+import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.stereotype.Component
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 @Converter(autoApply = true)
-class PointModelConverter : AttributeConverter<net.yan100.compose.rds.base.PointModel, String> {
+class WGS84Converter : AttributeConverter<WGS84, String> {
 
   init {
     log.debug("注册 地理位置模型converter = {}", this)
@@ -21,20 +22,20 @@ class PointModelConverter : AttributeConverter<net.yan100.compose.rds.base.Point
 
   companion object {
     @JvmStatic
-    private val log = slf4j(PointModelConverter::class)
+    private val log = slf4j(WGS84Converter::class)
   }
 
-  override fun convertToDatabaseColumn(attribute: net.yan100.compose.rds.base.PointModel?): String? =
+  override fun convertToDatabaseColumn(attribute: WGS84?): String? =
     attribute?.run {
       "P(${attribute.x},${attribute.y})"
     }
 
-  override fun convertToEntityAttribute(dbData: String?): net.yan100.compose.rds.base.PointModel? {
+  override fun convertToEntityAttribute(dbData: String?): WGS84? {
     log.trace("地址 = {} 类型 = {}", dbData, dbData?.javaClass)
     return dbData?.let { exp ->
       val group = exp.replace(Regex("""(?i)P\(|\)"""), "").split(",")
         .map { it.trim().toBigDecimalOrNull() }
-      net.yan100.compose.rds.base.PointModel(group[0], group[1])
+      WGS84(group[0], group[1])
     }
   }
 }

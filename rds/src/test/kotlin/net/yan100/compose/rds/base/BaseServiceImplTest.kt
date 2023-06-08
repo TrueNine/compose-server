@@ -2,6 +2,7 @@ package net.yan100.compose.rds.base
 
 
 import net.yan100.compose.core.id.Snowflake
+import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.DbTestBaseServiceEntity
 import net.yan100.compose.rds.service.BaseServiceTester
@@ -23,7 +24,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   fun testFindAll() {
     val a = service.save(DbTestBaseServiceEntity().apply {
       title = "wad"
-      center = PointModel(BigDecimal("1.3"), BigDecimal("2.44"))
+      center = WGS84(BigDecimal("1.3"), BigDecimal("2.44"))
     })
     val all = service.findAll()
     assertContains(all.dataList, a, "a$a dataList${all.dataList}")
@@ -34,7 +35,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   fun getEntity() = DbTestBaseServiceEntity().apply {
     this.title = "dawda ${snowflake.nextStringId()}"
-    this.center = PointModel(
+    this.center = WGS84(
       BigDecimal(snowflake.nextStringId()),
       BigDecimal(snowflake.nextStringId())
     )

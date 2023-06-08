@@ -19,7 +19,7 @@ class LazyAddressServiceImplTest : AbstractTestNGSpringContextTests() {
   lateinit var lazys: LazyAddressServiceImpl
 
 
-  private val testCode: Long = 433_127_103_101L
+  private val testCode = "433127103101"
 
   @Test
   fun testFindAllProvinces() {
@@ -43,6 +43,13 @@ class LazyAddressServiceImplTest : AbstractTestNGSpringContextTests() {
   }
 
   @Test
+  fun testFindAllCountyByCodeNotExists() {
+    val all = lazys.findAllCountyByCode("330100000000")
+    assertNotNull(all)
+    assertTrue("当前 all = $all") { all.isNotEmpty() }
+  }
+
+  @Test
   fun testFindAllTownByCode() {
     val all = lazys.findAllTownByCode(testCode)
     assertNotNull(all)
@@ -56,7 +63,7 @@ class LazyAddressServiceImplTest : AbstractTestNGSpringContextTests() {
     assertTrue("all$all") { all.isNotEmpty() }
 
     assertFailsWith<RemoteCallException> {
-      val nullables = lazys.findAllVillageByCode(430_000_000_000)
+      val nullables = lazys.findAllVillageByCode("430000000000")
       assertNull(nullables)
     }
   }

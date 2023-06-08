@@ -8,9 +8,8 @@ import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
 import jakarta.persistence.criteria.Predicate
 import net.yan100.compose.rds.base.BaseEntity
-import net.yan100.compose.rds.converters.typing.AttachmentStorageTypingConverter
+import net.yan100.compose.rds.converters.typing.AttachmentTypingConverter
 import net.yan100.compose.rds.typing.AttachmentTyping
-import org.apache.poi.ss.formula.functions.T
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NotFound
@@ -147,7 +146,7 @@ class LinkedAttachment : BaseEntity() {
 
   @JsonIgnore
   @Column(name = SuperAttachment.ATT_TYPE, insertable = false, updatable = false)
-  @Convert(converter = AttachmentStorageTypingConverter::class)
+  @Convert(converter = AttachmentTypingConverter::class)
   var attType: AttachmentTyping? = null
 
   @JsonIgnore

@@ -6,7 +6,7 @@ class MysqlConverter : AbstractTypeConverter() {
   private val rule = mutableMapOf<String, ConvertTypeModel>()
 
   init {
-    rule["point"] = ConvertTypeModel("PointModel", "com.truenine.component.rds.base.PointModel")
+    rule["point"] = ConvertTypeModel("WGS84", "com.truenine.component.rds.base.WGS84")
     rule["double"] = ConvertTypeModel("Double")
     rule["decimal"] = ConvertTypeModel("BigDecimal", "java.math.BigDecimal")
     rule["bigint"] = ConvertTypeModel("Long")
