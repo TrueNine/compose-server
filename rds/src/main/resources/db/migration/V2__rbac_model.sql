@@ -14,7 +14,7 @@ INSERT INTO user
 SET id=0,
     account='root',
     nick_name='ROOT',
-    pwd_enc='$2a$14$EZlcGzhoLyqi4FNrKqgiO.mZauWIkWlSOdywJB.CXY3uEkC9ratju',
+    pwd_enc='$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi',
     last_login_time=NOW();
 
 

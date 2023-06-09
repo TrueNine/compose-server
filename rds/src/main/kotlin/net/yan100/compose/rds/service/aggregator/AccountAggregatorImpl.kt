@@ -1,9 +1,10 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import net.yan100.compose.rds.models.request.LoginAccountRequestParam
-import net.yan100.compose.rds.models.request.ModifyAccountPasswordRequestParam
-import net.yan100.compose.rds.models.request.RegisterAccountRequestParam
+import net.yan100.compose.rds.entity.User
+import net.yan100.compose.rds.models.req.LoginAccountReq
+import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
+import net.yan100.compose.rds.models.req.RegisterAccountReq
 import net.yan100.compose.rds.service.UserService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -15,30 +16,30 @@ class AccountAggregatorImpl(
   private val passwordEncoder: PasswordEncoder
 ) : AccountAggregator {
 
-  override fun registerAccount(@Valid param: RegisterAccountRequestParam): Boolean =
-    if (!userService.existsByAccount(param.account)) {
-      userService.save(net.yan100.compose.rds.entity.User().apply {
+  override fun registerAccount(@Valid param: RegisterAccountReq): User? =
+    if (!userService.existsByAccount(param.account!!)) {
+      userService.save(User().apply {
         account = param.account
         pwdEnc = passwordEncoder.encode(param.password)
         nickName = param.nickName
         doc = param.description
-      }); true
-    } else false
+      })
+    } else null
 
-  override fun login(@Valid param: LoginAccountRequestParam): net.yan100.compose.rds.entity.User? =
-    if (verifyPassword(param.account, param.password)) {
-      userService.findUserByAccount(param.account)
+  override fun login(@Valid param: LoginAccountReq): net.yan100.compose.rds.entity.User? =
+    if (verifyPassword(param.account!!, param.password!!)) {
+      userService.findUserByAccount(param.account!!)
     } else null
 
 
-  override fun modifyPassword(@Valid param: ModifyAccountPasswordRequestParam): Boolean {
-    if (!verifyPassword(param.account, param.oldPassword)) {
+  override fun modifyPassword(@Valid param: ModifyAccountPasswordReq): Boolean {
+    if (!verifyPassword(param.account!!, param.oldPassword!!)) {
       return false
     }
     if (param.oldPassword == param.newPassword) {
       return false
     }
-    val user = userService.findUserByAccount(param.account) ?: return false
+    val user = userService.findUserByAccount(param.account!!) ?: return false
     user.pwdEnc = passwordEncoder.encode(param.newPassword)
     userService.save(user)
     return true

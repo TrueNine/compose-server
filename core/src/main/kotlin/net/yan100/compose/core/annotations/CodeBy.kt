@@ -17,22 +17,22 @@ import java.lang.annotation.Inherited
  * @since 2023-02-19
  */
 @Inherited
+@JsonInclude
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY, AnnotationTarget.PROPERTY_GETTER)
 @JacksonAnnotationsInside
-@JsonInclude
 @JsonSerialize(using = SensitiveSerializer::class)
 annotation class SensitiveRef(
   val value: Strategy
 )
 
 enum class Strategy(private val desensitizeSerializer: (String) -> String) {
-  PHONE({ it.replace(Regex("(\\d{3})\\d{4}(\\d{4})"), "$1****$2") }),
-  IDCARD({ it.replace(Regex("(\\d{2})[\\w|\\d](\\w{2})"), "$1****$2") }),
+  PHONE({ it.replace(Regex("(\\d{3})\\d{6}(\\d{2})"), "$1****$2") }),
+  ID_CARD({ it.replace(Regex("(\\d{2})[\\w|\\d](\\w{2})"), "$1****$2") }),
   NAME({ it.replace(Regex("(\\S)\\S(\\S*)"), "$1*$2") }),
   ADDRESS({ it.replace(Regex("(\\S{3})\\S{2}(\\S*)\\S{2}"), "$1****$2****") }),
-  PASSWORD({ "****" });
+  PASSWORD({ "********" });
 
   open fun desensitizeSerializer(): (String) -> String {
     return desensitizeSerializer
@@ -47,11 +47,11 @@ enum class Strategy(private val desensitizeSerializer: (String) -> String) {
  * @since 2023-02-19
  */
 @Inherited
-@MustBeDocumented
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FIELD)
-@JacksonAnnotationsInside
 @JsonInclude
+@MustBeDocumented
+@JacksonAnnotationsInside
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
 @JsonSerialize(using = LongAsStringSerializer::class)
 @JsonDeserialize(using = StringAsLongDeserializer::class)
 annotation class BigIntegerAsString

@@ -16,7 +16,7 @@ interface UserRepository : BaseRepository<User> {
   fun findByAccount(account: String): User?
 
   @Query(
-      """
+    """
     select u.id
     from User u
     where u.account = :account
@@ -25,7 +25,7 @@ interface UserRepository : BaseRepository<User> {
   fun findIdByAccount(account: String): String
 
   @Query(
-      """
+    """
     select pwdEnc
     from User
     where account = :account
@@ -103,6 +103,10 @@ interface UserInfoRepository : BaseRepository<UserInfo> {
   """
   )
   fun findUserByPhone(phone: String): User?
+
+  fun existsByPhone(phone: String): Boolean
+
+  fun existsByWechatOpenId(wechatOpenId: String): Boolean
 
   @Transactional(rollbackFor = [Exception::class])
   fun deleteByPhone(phone: String): Int

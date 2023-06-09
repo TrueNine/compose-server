@@ -66,14 +66,10 @@ class SecurityPolicyBean {
         policyDefine.preValidFilter,
         UsernamePasswordAuthenticationFilter::class.java
       )
-    } else {
-      log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
-    }
+    } else log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
 
     // 打印错误日志
-    if (anonymousPatterns.contains("/**")) {
-      log.error("配置上下文内包含 /** ，将会放行所有域")
-    }
+    if (anonymousPatterns.contains("/**")) log.error("配置上下文内包含 /** ，将会放行所有域")
 
     httpSecurity
       // 关闭 csrf
@@ -94,9 +90,7 @@ class SecurityPolicyBean {
         it.authenticationEntryPoint(policyDefine.exceptionAdware)
           .accessDeniedHandler(policyDefine.exceptionAdware)
       }
-    } else {
-      log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
-    }
+    } else log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
 
     log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
     return httpSecurity.build()

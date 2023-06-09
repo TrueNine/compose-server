@@ -2,8 +2,7 @@ package net.yan100.compose.rds.service.aggregator
 
 
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.models.request.PostAttachmentRequestParam
-import net.yan100.compose.rds.typing.AttachmentTyping
+import net.yan100.compose.rds.models.req.PostAttachmentReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
@@ -21,9 +20,9 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
   fun testUploadAttachment() {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass.uploadAttachment(mockFile) {
-      object : PostAttachmentRequestParam {
-        override var baseUrl = "https://oss.aliyun.com/static"
-        override var saveName = "adwd0juihjrthjrthrhrhrth"
+      PostAttachmentReq().apply {
+        baseUrl = "https://oss.aliyun.com/static"
+        saveName = "adwd0juihjrthjrthrhrhrth"
       }
     }!!.apply {
       assertNotNull(this.urlId)
@@ -34,9 +33,9 @@ class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
   fun testGetFullUrl() {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass.uploadAttachment(mockFile) {
-      object : PostAttachmentRequestParam {
-        override var baseUrl = "https://oss.aliyun.com/static"
-        override var saveName = "adwd0juihjrthjrthrhrhrth"
+      PostAttachmentReq().apply {
+        baseUrl = "https://oss.aliyun.com/static"
+        saveName = "adwd0juihjrthjrthrhrhrth"
       }
     }!!
   }

@@ -20,4 +20,12 @@ class UserInfoServiceImpl(private val infoRepo: UserInfoRepository) : UserInfoSe
   override fun findByUserId(userId: String): UserInfo? {
     return infoRepo.findByUserId(userId)
   }
+
+  override fun existsByPhone(phone: String): Boolean {
+    return infoRepo.existsByPhone(phone)
+  }
+
+  override fun existsByWechatOpenId(openId: String): Boolean {
+    return infoRepo.existsByWechatOpenId(openId)
+  }
 }

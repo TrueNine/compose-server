@@ -8,4 +8,6 @@ interface UserInfoService : BaseService<UserInfo> {
   fun findUserByWechatOpenId(openId: String): User?
   fun findUserByPhone(phone: String): User?
   fun findByUserId(userId: String): UserInfo?
+  fun existsByPhone(phone: String): Boolean
+  fun existsByWechatOpenId(openId: String): Boolean
 }

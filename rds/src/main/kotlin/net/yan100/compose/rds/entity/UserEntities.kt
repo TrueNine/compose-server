@@ -1,6 +1,7 @@
 package net.yan100.compose.rds.entity
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED
@@ -57,13 +58,14 @@ open class SuperUser : BaseEntity() {
   @Nullable
   @Schema(title = "密码")
   @Column(name = PWD_ENC)
-  @SensitiveRef(Strategy.PASSWORD)
+  @get:SensitiveRef(Strategy.PASSWORD)
   open var pwdEnc: String? = null
 
   /**
    * 被封禁结束时间
    */
   @Nullable
+  @JsonIgnore
   @Schema(title = "被封禁结束时间")
   @Column(name = BAN_TIME)
   open var banTime: LocalDateTime? = null
@@ -72,6 +74,7 @@ open class SuperUser : BaseEntity() {
    * 最后请求时间
    */
   @Nullable
+  @JsonIgnore
   @Schema(title = "最后请求时间")
   @Column(name = LAST_LOGIN_TIME)
   open var lastLoginTime: LocalDateTime? = null
@@ -226,7 +229,7 @@ open class SuperUserInfo : BaseEntity() {
   @Nullable
   @Schema(title = "身份证")
   @Column(name = ID_CARD, unique = true)
-  @get:SensitiveRef(Strategy.IDCARD)
+  @get:SensitiveRef(Strategy.ID_CARD)
   open var idCard: String? = null
 
   /**
