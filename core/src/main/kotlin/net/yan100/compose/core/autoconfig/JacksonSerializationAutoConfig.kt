@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
+import net.yan100.compose.core.jackson.KPairDeserializer
 import net.yan100.compose.core.lang.DTimer
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
@@ -41,6 +42,9 @@ class JacksonSerializationAutoConfig {
     val ltd = LocalTimeDeserializer(DateTimeFormatter.ofPattern(DTimer.TIME))
     val lds = LocalDateSerializer(DateTimeFormatter.ofPattern(DTimer.DATE))
     val ldd = LocalDateDeserializer(DateTimeFormatter.ofPattern(DTimer.DATE))
+
+    val kotlinKeyPairDeserializer = KPairDeserializer()
+    module.addDeserializer(Pair::class.java, kotlinKeyPairDeserializer)
 
     module.addSerializer(LocalDateTime::class.java, ldts)
     module.addDeserializer(LocalDateTime::class.java, ldtd)

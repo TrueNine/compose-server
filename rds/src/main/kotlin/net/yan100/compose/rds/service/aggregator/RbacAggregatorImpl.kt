@@ -6,19 +6,19 @@ import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroup
 import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 import net.yan100.compose.rds.repository.AllRoleGroupEntityRepository
 import net.yan100.compose.rds.repository.UserGroupRepository
-import net.yan100.compose.rds.repository.UserRepository
+import net.yan100.compose.rds.repository.UserRepo
 import net.yan100.compose.rds.repository.relationship.RoleGroupRoleRepository
 import net.yan100.compose.rds.repository.relationship.RolePermissionsRepository
 import net.yan100.compose.rds.repository.relationship.UserGroupRoleGroupRepository
-import net.yan100.compose.rds.repository.relationship.UserRoleGroupRepository
+import net.yan100.compose.rds.repository.relationship.UserRoleGroupRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RbacAggregatorImpl(
-  private val urg: UserRoleGroupRepository,
+  private val urg: UserRoleGroupRepo,
   private val ug: UserGroupRepository,
-  private val userRepository: UserRepository,
+  private val userRepo: UserRepo,
   private val ugrg: UserGroupRoleGroupRepository,
   private val rgr: RoleGroupRoleRepository,
   private val rp: RolePermissionsRepository,
@@ -26,10 +26,10 @@ class RbacAggregatorImpl(
 ) : RbacAggregator {
 
   override fun findAllRoleNameByUserAccount(account: String): Set<String> =
-    userRepository.findAllRoleNameByAccount(account)
+    userRepo.findAllRoleNameByAccount(account)
 
   override fun findAllPermissionsNameByUserAccount(account: String): Set<String> =
-    userRepository.findAllPermissionsNameByAccount(account)
+    userRepo.findAllPermissionsNameByAccount(account)
 
 
   override fun findAllSecurityNameByUserId(userId: String): Set<String> {
@@ -58,7 +58,7 @@ class RbacAggregatorImpl(
   }
 
   override fun findAllSecurityNameByAccount(account: String): Set<String> =
-    findAllSecurityNameByUserId(userRepository.findIdByAccount(account))
+    findAllSecurityNameByUserId(userRepo.findIdByAccount(account))
 
   override fun saveRoleGroupToUser(roleGroupId: String, userId: String): UserRoleGroup? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)

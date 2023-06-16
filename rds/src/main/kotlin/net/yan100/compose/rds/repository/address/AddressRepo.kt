@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.repository
+package net.yan100.compose.rds.repository.address
 
 import net.yan100.compose.rds.base.TreeRepository
 import net.yan100.compose.rds.entity.Address
@@ -10,15 +10,20 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AddressRepo : TreeRepository<Address> {
 
-  @Query("""
+  fun findFirstByCode(code: String): Address?
+
+  @Query(
+    """
     FROM Address e
     WHERE e.id = '0'
-  """)
+  """
+  )
   fun findRoot(): Address
 
   fun findAllByCode(code: String): List<Address>
 
   fun findByCode(code: String): Address?
+
 
   fun findByCodeAndName(
     code: String,
@@ -26,3 +31,4 @@ interface AddressRepo : TreeRepository<Address> {
     p: Pageable
   ): Page<Address>
 }
+

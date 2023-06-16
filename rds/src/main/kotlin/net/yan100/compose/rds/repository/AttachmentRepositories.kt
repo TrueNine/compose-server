@@ -42,16 +42,39 @@ interface AttachmentRepo : BaseRepository<Attachment> {
   )
   fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pageable): Page<String>
 
+  /**
+   * ## 根据 baseUrl 查询其下的所有 附件
+   */
+  @Query("""
+    FROM Attachment a
+    INNER JOIN Attachment b ON a.urlId = b.id
+    WHERE b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
+    AND b.baseUrl = :baseUrl
+  """)
+  fun findAllByParentBaseUrl(baseUrl: String, page: Pageable): Page<Attachment>
+
   fun existsByBaseUrl(baseUrl: String): Boolean
 
   /**
    * 根据id，查询 baseUrl符合条件的 baseUrl
    */
-  fun findFirstByBaseUrlStartingWith(baseUrl: String): Attachment?
+  fun findFirstByBaseUrl(baseUrl: String): Attachment?
 }
 
 
 @Repository
 interface LinkedAttachmentRepo : BaseRepository<LinkedAttachment> {
-
+  /**
+   * ## 根据 baseUrl 查询其下的所有 附件
+   */
+  @Query(
+    """
+    FROM LinkedAttachment a
+    INNER JOIN LinkedAttachment b 
+    ON a.urlId = b.id
+    WHERE b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
+    AND b.baseUrl = :baseUrl
+  """
+  )
+  fun findAllByParentBaseUrl(baseUrl: String, page: Pageable): Page<LinkedAttachment>
 }

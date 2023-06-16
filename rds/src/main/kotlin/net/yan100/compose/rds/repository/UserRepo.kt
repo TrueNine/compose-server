@@ -12,23 +12,23 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Repository
-interface UserRepository : BaseRepository<User> {
+interface UserRepo : BaseRepository<User> {
   fun findByAccount(account: String): User?
 
   @Query(
     """
-    select u.id
-    from User u
-    where u.account = :account
+    SELECT u.id
+    FROM User u
+    WHERE u.account = :account
   """
   )
   fun findIdByAccount(account: String): String
 
   @Query(
     """
-    select pwdEnc
-    from User
-    where account = :account
+    SELECT pwdEnc
+    FROM User
+    WHERE account = :account
   """
   )
   fun findPwdEncByAccount(account: String): String?
@@ -37,28 +37,28 @@ interface UserRepository : BaseRepository<User> {
 
   @Query(
     """
-    select r.name
-    from User u
-    left join UserRoleGroup urg on urg.userId = u.id
-    left join RoleGroup rg on rg.id = urg.roleGroupId
-    left join RoleGroupRole rgr on rgr.roleGroupId = rg.id
-    left join Role r on r.id = rgr.roleId
-    where u.account = :account
+    SELECT r.name
+    FROM User u
+    LEFT JOIN UserRoleGroup urg ON urg.userId = u.id
+    LEFT JOIN RoleGroup rg ON rg.id = urg.roleGroupId
+    LEFT JOIN RoleGroupRole rgr ON rgr.roleGroupId = rg.id
+    LEFT JOIN Role r ON r.id = rgr.roleId
+    WHERE u.account = :account
   """
   )
   fun findAllRoleNameByAccount(account: String): Set<String>
 
   @Query(
     """
-    select p.name
-    from User u
-    left join UserRoleGroup urg on urg.userId = u.id
-    left join RoleGroup rg on rg.id = urg.roleGroupId
-    left join RoleGroupRole rgr on rgr.roleGroupId = rg.id
-    left join Role r on r.id = rgr.roleId
-    left join RolePermissions rp on rp.roleId = r.id
-    left join Permissions p on p.id = rp.permissionsId
-    where u.account = :account
+    SELECT p.name
+    FROM User u
+    LEFT JOIN UserRoleGroup urg ON urg.userId = u.id
+    LEFT JOIN RoleGroup rg ON rg.id = urg.roleGroupId
+    LEFT JOIN RoleGroupRole rgr ON rgr.roleGroupId = rg.id
+    LEFT JOIN Role r ON r.id = rgr.roleId
+    LEFT JOIN RolePermissions rp ON rp.roleId = r.id
+    LEFT JOIN Permissions p ON p.id = rp.permissionsId
+    WHERE u.account = :account
   """
   )
   fun findAllPermissionsNameByAccount(account: String): Set<String>
@@ -66,7 +66,7 @@ interface UserRepository : BaseRepository<User> {
   fun existsAllByAccount(account: String): Boolean
 
   @Modifying
-  @Query("update User u set u.banTime = :banTime where u.account = :account")
+  @Query("UPDATE User u SET u.banTime = :banTime WHERE u.account = :account")
   fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 }
 
@@ -77,7 +77,7 @@ interface FullUserRepository : BaseRepository<FullUser> {
 
 
 @Repository
-interface UserInfoRepository : BaseRepository<UserInfo> {
+interface UserInfoRepo : BaseRepository<UserInfo> {
   fun findByUserId(userId: String): UserInfo?
 
   /**
@@ -85,9 +85,9 @@ interface UserInfoRepository : BaseRepository<UserInfo> {
    */
   @Query(
     """
-  from UserInfo i
-  left join User u on i.userId = u.id
-  where i.wechatOpenId = :openId
+    FROM User u
+    LEFT JOIN UserInfo i ON u.id = i.userId
+    WHERE i.wechatOpenId = :openId
     """
   )
   fun findUserByWechatOpenId(openId: String): User?
@@ -97,9 +97,9 @@ interface UserInfoRepository : BaseRepository<UserInfo> {
    */
   @Query(
     """
-    from UserInfo i
-    left join User u on i.userId = u.id
-    where i.phone = :phone
+    FROM User u
+    LEFT JOIN UserInfo i ON u.id = i.userId
+    WHERE i.phone = :phone
   """
   )
   fun findUserByPhone(phone: String): User?

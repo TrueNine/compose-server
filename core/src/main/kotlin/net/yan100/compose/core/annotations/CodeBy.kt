@@ -24,10 +24,13 @@ import java.lang.annotation.Inherited
 @JacksonAnnotationsInside
 @JsonSerialize(using = SensitiveSerializer::class)
 annotation class SensitiveRef(
-  val value: Strategy
+  val value: Strategy = Strategy.NONE
 )
 
+typealias NonDesensitizedRef = SensitiveRef
+
 enum class Strategy(private val desensitizeSerializer: (String) -> String) {
+  NONE({ it }),
   PHONE({ it.replace(Regex("(\\d{3})\\d{6}(\\d{2})"), "$1****$2") }),
   ID_CARD({ it.replace(Regex("(\\d{2})[\\w|\\d](\\w{2})"), "$1****$2") }),
   NAME({ it.replace(Regex("(\\S)\\S(\\S*)"), "$1*$2") }),

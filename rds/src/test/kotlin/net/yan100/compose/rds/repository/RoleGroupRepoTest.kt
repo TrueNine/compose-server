@@ -10,9 +10,9 @@ import org.testng.annotations.Test
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class RoleGroupRepositoryTest : AbstractTestNGSpringContextTests() {
+class RoleGroupRepoTest : AbstractTestNGSpringContextTests() {
   @Autowired
-  private lateinit var repo: RoleGroupRepository
+  private lateinit var repo: RoleGroupRepo
   val log = slf4j(this::class)
 
   @Test

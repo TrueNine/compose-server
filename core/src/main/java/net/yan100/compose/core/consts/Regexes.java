@@ -7,5 +7,12 @@ package net.yan100.compose.core.consts;
  * @since 2023-04-19
  */
 public interface Regexes {
+  /**
+   * 密码
+   */
   String PASSWORD = "[a-zA-Z0-9_#@^]";
+  /**
+   * 中国的手机
+   */
+  String CHINA_PHONE = "^1[34578]\\d{9}$";
 }

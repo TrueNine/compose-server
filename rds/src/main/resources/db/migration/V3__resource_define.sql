@@ -63,7 +63,7 @@ INSERT INTO address
 SET id=0,
     level=0,
     code=NULL,
-    name='中华人民共和国',
+    name='',
     rln=1,
     rrn=2,
     tgi=0,
@@ -72,10 +72,16 @@ SET id=0,
 
 CREATE TABLE IF NOT EXISTS address_details
 (
-  address_id      BIGINT UNSIGNED NOT NULL COMMENT '地址',
+  address_id      BIGINT UNSIGNED NOT NULL COMMENT '地址id',
+  user_id         BIGINT UNSIGNED NULL COMMENT '用户 id',
+  phone           VARCHAR(127) COMMENT '联系电话',
+  name            VARCHAR(255) COMMENT '联系人名称',
+  address_code    VARCHAR(31)     NOT NULL COMMENT '地址代码',
   address_details VARCHAR(255)    NOT NULL COMMENT '地址详情',
   center          VARCHAR(255) COMMENT '定位',
-  INDEX (address_id) COMMENT '外联 地址'
+  INDEX (address_id) COMMENT '外联 地址',
+  INDEX (user_id) COMMENT '外联 用户',
+  INDEX (address_code) COMMENT '外联 地址代码'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '地址详情';
 CALL add_base_struct('address_details');
 

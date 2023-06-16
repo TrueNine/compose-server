@@ -17,6 +17,7 @@ public class S3PolicyCreator {
     p.getAws().add("*");
     return new S3BuilderChain()
       .addStatement(S3StatementBuilder.builder()
+        .effect(S3Policies.Effect.ALLOW)
         .principal(p)
         .addAction(S3Policies.Bucket.LIST_MUL_UPLOADS)
         .addAction(S3Policies.Bucket.LIST)
@@ -25,6 +26,7 @@ public class S3PolicyCreator {
       )
       .addStatement(S3StatementBuilder.builder()
         .principal(p)
+        .effect(S3Policies.Effect.ALLOW)
         .addAction(S3Policies.Object.GET)
         .addAction(S3Policies.Object.LIST_MUL_UPLOAD_PARTS)
         .addAction(S3Policies.Object.PUT)
@@ -40,23 +42,22 @@ public class S3PolicyCreator {
     return new S3BuilderChain()
       .addStatement(S3StatementBuilder.builder()
         .principal(p)
+        .effect(S3Policies.Effect.ALLOW)
         .addAction(S3Policies.Bucket.LIST)
         .addAction(S3Policies.Bucket.GET_LOCATION)
         .addResource(bucketName)
       )
       .addStatement(S3StatementBuilder.builder()
         .principal(p)
+        .effect(S3Policies.Effect.ALLOW)
         .addAction(S3Policies.Object.GET)
         .addResource(bucketName + "/*")
       );
   }
 
   public static class S3BuilderChain {
-
     private final S3Args RULE;
-
     private final ObjectMapper MAPPER = new ObjectMapper();
-
 
     private S3BuilderChain() {
       this.RULE = new S3Args();
@@ -84,7 +85,6 @@ public class S3PolicyCreator {
   }
 
   public static class S3StatementBuilder {
-
     private final S3StatementArgs S = new S3StatementArgs();
 
     private S3StatementBuilder() {

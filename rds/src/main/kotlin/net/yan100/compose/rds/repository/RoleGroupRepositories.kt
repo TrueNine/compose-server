@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RoleGroupRepository : BaseRepository<RoleGroup> {
+interface RoleGroupRepo : BaseRepository<RoleGroup> {
   fun findAllByName(name: String): List<RoleGroup>
 
   @Query(

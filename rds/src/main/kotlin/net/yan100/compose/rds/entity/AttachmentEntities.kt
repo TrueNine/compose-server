@@ -140,7 +140,7 @@ class LinkedAttachment : BaseEntity() {
   @Column(name = SuperAttachment.SAVE_NAME, insertable = false, updatable = false)
   var saveName: String? = null
 
-  @JsonIgnore
+  @Schema(title = "原始名称")
   @Column(name = SuperAttachment.META_NAME, insertable = false, updatable = false)
   var metaName: String? = null
 

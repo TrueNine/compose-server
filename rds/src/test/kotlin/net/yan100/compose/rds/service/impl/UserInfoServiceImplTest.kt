@@ -5,7 +5,7 @@ import io.mockk.mockk
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.User
 import net.yan100.compose.rds.entity.UserInfo
-import net.yan100.compose.rds.repository.UserInfoRepository
+import net.yan100.compose.rds.repository.UserInfoRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.testng.Assert.assertEquals
@@ -18,7 +18,7 @@ class UserInfoServiceImplTest {
   private lateinit var userInfoService: UserInfoServiceImpl
 
   @Autowired
-  private lateinit var infoRepo: UserInfoRepository
+  private lateinit var infoRepo: UserInfoRepo
 
   @BeforeMethod
   fun setUp() {

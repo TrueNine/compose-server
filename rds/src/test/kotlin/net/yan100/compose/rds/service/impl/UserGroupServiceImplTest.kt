@@ -4,7 +4,7 @@ package net.yan100.compose.rds.service.impl
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.UserGroup
 import net.yan100.compose.rds.repository.UserGroupRepository
-import net.yan100.compose.rds.repository.UserRepository
+import net.yan100.compose.rds.repository.UserRepo
 import net.yan100.compose.rds.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -22,7 +22,7 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
   lateinit var service: UserGroupServiceImpl
 
   @Autowired
-  lateinit var ur: UserRepository
+  lateinit var ur: UserRepo
 
   @Autowired
   lateinit var ugr: UserGroupRepository

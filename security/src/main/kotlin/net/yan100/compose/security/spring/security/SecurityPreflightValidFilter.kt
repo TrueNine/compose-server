@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.core.models.UserAuthorizationInfoModel
+import net.yan100.compose.security.SecurityUserDetails
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
@@ -38,7 +39,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
       return
     }
     log.trace("获取到用户信息 = {}", authInfo)
-    val details = net.yan100.compose.security.SecurityUserDetails(authInfo)
+    val details = SecurityUserDetails(authInfo)
 
     log.trace("获取到 details = {}", details)
 
