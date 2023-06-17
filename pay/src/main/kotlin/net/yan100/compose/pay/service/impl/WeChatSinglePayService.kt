@@ -142,7 +142,11 @@ class WeChatSinglePayService(
     val refundDetails = refundApi.create(createRequest)
   }
 
-  override fun receiveSuccessPayNotify(metaData: String, headersMap: Map<String, String>): PaySuccessNotifyResp? {
+  override fun receivePayNotify(
+    metaData: String,
+    headersMap: Map<String, String>,
+    lazyCall: (successReq: PaySuccessNotifyResp) -> Unit
+  ): String? {
     val requestParam = RequestParam.Builder()
       .serialNumber(headersMap["Wechatpay-Serial"])
       .signType(headersMap["Wechatpay-Signature-Type"])
@@ -155,8 +159,7 @@ class WeChatSinglePayService(
     val transaction = NotificationParser(rsaConfig).let { parser ->
       parser.parse(requestParam, Transaction::class.java)
     }
-
-    return if (transaction.tradeState == Transaction.TradeStateEnum.SUCCESS) {
+    val r = if (transaction.tradeState == Transaction.TradeStateEnum.SUCCESS) {
       PaySuccessNotifyResp().apply {
         payCode = transaction.transactionId
         orderCode = transaction.outTradeNo
@@ -164,5 +167,16 @@ class WeChatSinglePayService(
         meta = mapper.writeValueAsString(transaction)
       }
     } else null
+    try {
+      lazyCall(r!!)
+    } catch (e: Exception) {
+      return """
+        {  
+          "code": "FAIL",
+          "message": "${e.message}"
+        }
+      """.trimIndent()
+    }
+    return ""
   }
 }

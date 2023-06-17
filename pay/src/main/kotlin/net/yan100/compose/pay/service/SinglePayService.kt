@@ -1,6 +1,7 @@
 package net.yan100.compose.pay.service
 
 import net.yan100.compose.core.lang.ISO4217
+import net.yan100.compose.core.lang.Str
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
@@ -43,5 +44,5 @@ interface SinglePayService {
   /**
    * ## 接受异步通知回调
    */
-  fun receiveSuccessPayNotify(metaData: String, headersMap: Map<String, String>): PaySuccessNotifyResp?
+  fun receivePayNotify(metaData: String, headersMap: Map<String, String>, lazyCall: (successReq: PaySuccessNotifyResp) -> Unit): String?
 }
