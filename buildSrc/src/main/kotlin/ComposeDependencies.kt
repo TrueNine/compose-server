@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "net.yan100.compose"
-  const val version = "0.5.87"
+  const val version = "0.5.88"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1.1"
 }
@@ -18,7 +18,7 @@ object V {
     const val java = "17"
 
     // https://github.com/JetBrains/kotlin/releases
-    const val kotlin = "1.8.22"
+    const val kotlin = "1.8.21"
 
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     const val lombok = "1.18.28"
