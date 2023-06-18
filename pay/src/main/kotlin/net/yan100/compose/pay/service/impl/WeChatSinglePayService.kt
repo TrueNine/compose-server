@@ -10,6 +10,8 @@ import com.wechat.pay.java.service.payments.jsapi.model.*
 import com.wechat.pay.java.service.refund.RefundService
 import com.wechat.pay.java.service.refund.model.AmountReq
 import com.wechat.pay.java.service.refund.model.CreateRequest
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import net.yan100.compose.core.encrypt.EncryptAlgorithmTyping
 import net.yan100.compose.core.encrypt.Encryptors
@@ -17,10 +19,7 @@ import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.core.exceptions.requireKnown
 import net.yan100.compose.core.id.BizCodeGenerator
-import net.yan100.compose.core.lang.ISO4217
-import net.yan100.compose.core.lang.encodeBase64String
-import net.yan100.compose.core.lang.hasText
-import net.yan100.compose.core.lang.iso8601LongUtc
+import net.yan100.compose.core.lang.*
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
@@ -47,6 +46,7 @@ class WeChatSinglePayService(
   companion object {
     @JvmStatic
     private val HUNDRED = BigDecimal("100")
+    private val log = slf4j(WeChatSinglePayService::class)
   }
 
   override fun createMpPayOrder(@Valid req: CreateMpPayOrderReq): CreateMpPayOrderResp {
@@ -144,9 +144,11 @@ class WeChatSinglePayService(
 
   override fun receivePayNotify(
     metaData: String,
-    headersMap: Map<String, String>,
+    request: HttpServletRequest,
+    response: HttpServletResponse,
     lazyCall: (successReq: PaySuccessNotifyResp) -> Unit
   ): String? {
+    val headersMap = request.headerMap
     val requestParam = RequestParam.Builder()
       .serialNumber(headersMap["Wechatpay-Serial"])
       .signType(headersMap["Wechatpay-Signature-Type"])
@@ -170,6 +172,8 @@ class WeChatSinglePayService(
     try {
       lazyCall(r!!)
     } catch (e: Exception) {
+      response.status = 400
+      log.error("发生支付异常，已被捕获并返回微信", e)
       return """
         {  
           "code": "FAIL",

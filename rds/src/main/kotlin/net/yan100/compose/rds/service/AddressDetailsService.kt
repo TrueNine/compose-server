@@ -19,4 +19,5 @@ interface AddressDetailsService : BaseService<AddressDetails> {
   fun findFullAllByUserId(userId: String, page: Pq = Pw.DEFAULT_MAX): Pr<FullAddressDetails>
 
   fun findFullPathById(id: String): String
+  fun findAllFullPathById(ids: List<String>): List<Pair<String, String>>
 }

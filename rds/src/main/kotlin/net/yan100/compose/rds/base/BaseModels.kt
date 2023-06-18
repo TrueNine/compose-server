@@ -40,16 +40,16 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
 
   fun findByIdAndNotLogicDelete(id: String): T = findByIdAndNotLogicDeleteOrNull(id)!!
 
-  @Query("from #{#entityName} e where e.id = :id and e.ldf = false")
+  @Query("FROM #{#entityName} e WHERE e.id = :id AND e.ldf = false")
   fun findByIdAndNotLogicDeleteOrNull(id: String): T?
 
-  @Query("from #{#entityName} e where e.ldf = false")
+  @Query("FROM #{#entityName} e WHERE e.ldf = false")
   fun findAllByNotLogicDeleted(page: Pageable): Page<T>
 
-  @Query("from #{#entityName} e where e.id in :ids and e.ldf = false")
+  @Query("FROM #{#entityName} e WHERE e.id IN :ids AND (e.ldf = false OR e.ldf = null)")
   fun findAllByIdAndNotLogicDeleted(ids: List<String>, page: Pageable): Page<T>
 
-  @Query("select e.ldf from #{#entityName} e where e.id = :id and e.ldf = false")
+  @Query("SELECT (e.ldf = false) FROM #{#entityName} e WHERE e.id = :id")
   fun findLdfById(id: String): Boolean?
 
   @Transactional(rollbackFor = [Exception::class])
@@ -58,11 +58,19 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
   @Transactional(rollbackFor = [Exception::class])
   fun logicDeleteAllById(ids: List<String>): List<T> = findAllById(ids).filter { !it.ldf }.apply { saveAll(this) }
 
-  @Query("select count(e.id) from #{#entityName} e where e.ldf = false")
+  @Query("SELECT count(e.id) FROM #{#entityName} e WHERE e.ldf = false")
   fun countByNotLogicDeleted(): Long
 
-  @Query("SELECT count(e.id) > 0 FROM #{#entityName} e WHERE e.id = :id AND e.ldf = false")
+  @Query("SELECT count(e.id) > 0 FROM #{#entityName} e WHERE e.id = :id AND (e.ldf = false OR e.ldf = null)")
   fun existsByIdAndNotLogicDeleted(id: String)
+
+  @Query("SELECT e.rlv FROM #{#entityName} e WHERE e.id = :id")
+  fun findRlvById(id: String): Long
+
+  fun modifyWrapper(e: T): T {
+    return if (e.id != null) e.also { it.rlv = findRlvById(e.id) }
+    else e
+  }
 }
 
 /**

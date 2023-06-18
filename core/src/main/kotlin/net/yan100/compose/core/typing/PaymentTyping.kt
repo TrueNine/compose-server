@@ -33,6 +33,12 @@ enum class PaymentTyping(
   PRE_REFUND(4001),
 
   /**
+   * 支付成功，但出现业务异常
+   */
+  @Schema(title = "支付成功，但出现业务异常")
+  PAY_SUCCESS_BIZ_FAILED(5002),
+
+  /**
    * 已退款
    */
   @Schema(title = "已退款")

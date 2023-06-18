@@ -33,7 +33,13 @@ enum class OrderStatusTyping(
   COMPLETED(2023),
 
   @Schema(title = "预退款")
-  PRE_REFUND(4001);
+  PRE_REFUND(4001),
+
+  /**
+   * 支付成功，但业务出现异常
+   */
+  @Schema(title = "支付成功，但业务出现异常")
+  PAY_SUCCESS_BIZ_FAILED(5002);
 
   @JsonValue
   override fun getValue(): Int = orderType

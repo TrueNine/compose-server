@@ -45,6 +45,23 @@ class AddressDetailsServiceImpl(
     } ?: ""
   }
 
+  override fun findAllFullPathById(ids: List<String>): List<Pair<String, String>> {
+    return detailsRepo.findAllById(ids).let { ds ->
+      // 地址的路径集合
+      val addresses = aRepo.findAllByCodeIn(ds.map { it.addressCode!! }).map { addr ->
+        addr.id to aRepo.findParentPath(addr)
+          .sortedBy {
+            it.code
+          }
+          .map { it.name }.joinToString(separator = "") + addr.name
+      }
+      ds.map { dss ->
+        val b = addresses.find { it.first == dss.addressId }
+        dss.id to ((b?.second ?: "") + (dss.addressDetails ?: ""))
+      }
+    }
+  }
+
   override fun findAllByPhone(phone: String, page: Pq): Pr<AddressDetails> {
     return detailsRepo.findAllByPhone(phone, page.page).result
   }

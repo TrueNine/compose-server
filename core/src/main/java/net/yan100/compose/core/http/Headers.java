@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import net.yan100.compose.core.lang.Str;
 
 import javax.annotation.Nullable;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 /**
  * http Header Info
@@ -52,8 +54,8 @@ public interface Headers {
    * @param fileName 文件名
    * @return attachment; filename="fileName"
    */
-  static String downloadDisposition(String fileName) {
-    return "attachment; filename=\"" + fileName + "\"";
+  static String downloadDisposition(String fileName, Charset charset) {
+    return "attachment; filename=\"" + URLEncoder.encode(fileName, charset) + "\"";
   }
 
   /**

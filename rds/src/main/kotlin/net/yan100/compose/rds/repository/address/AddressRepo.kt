@@ -12,6 +12,8 @@ interface AddressRepo : TreeRepository<Address> {
 
   fun findFirstByCode(code: String): Address?
 
+  fun findAllByCodeIn(codes: List<String>): List<Address>
+
   @Query(
     """
     FROM Address e

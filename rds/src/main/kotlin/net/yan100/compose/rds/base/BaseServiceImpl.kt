@@ -23,7 +23,7 @@ abstract class BaseServiceImpl<T : BaseEntity>(
   override fun findByIdAndNotLogicDeleted(id: String): T = repo.findByIdAndNotLogicDelete(id)
   override fun findByIdAndNotLogicDeletedOrNull(id: String): T? = repo.findByIdAndNotLogicDeleteOrNull(id)
 
-  override fun findLdfById(id: String): Boolean = repo.findLdfById(id) ?: true
+  override fun findLdfById(id: String): Boolean = repo.findLdfById(id) ?: false
   override fun countAll(): Long = repo.count()
   override fun countAllByNotLogicDeleted(): Long = repo.countByNotLogicDeleted()
   override fun existsById(id: String): Boolean = repo.existsById(id)

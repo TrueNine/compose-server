@@ -36,4 +36,8 @@ public class PagedRequestParam implements Serializable {
   @Max(value = MAX_PAGE_SIZE, message = "分页最大参数为" + MAX_PAGE_SIZE)
   @Schema(title = "页面大小，最大 " + MAX_PAGE_SIZE + "，最小 1", defaultValue = MAX_PAGE_SIZE + "")
   private Integer pageSize = MAX_PAGE_SIZE;
+
+
+  @Schema(title = "取消分页请求",defaultValue = "false")
+  private Boolean unPage = false;
 }

@@ -17,15 +17,23 @@ object PagedWrapper {
    * ## 构造一个空的参数
    */
   @JvmStatic
-  fun <T> empty(): PagedResponseResult<T> = PagedResponseResult.empty<T>()
+  fun <T> empty(): PagedResponseResult<T> = PagedResponseResult.empty()
 
   @JvmField
   val DEFAULT_MAX: PagedRequestParam =
     PagedRequestParam(
       PagedRequestParam.MIN_OFFSET,
-      PagedRequestParam.MAX_PAGE_SIZE
+      PagedRequestParam.MAX_PAGE_SIZE,
+      false
     )
 
+  @JvmField
+  val UN_PAGE: PagedRequestParam =
+    PagedRequestParam(
+      PagedRequestParam.MIN_OFFSET,
+      PagedRequestParam.MAX_PAGE_SIZE,
+      true
+    )
 
   @JvmStatic
   fun <T> result(jpaPage: Page<T>): PagedResponseResult<T> =
@@ -35,15 +43,18 @@ object PagedWrapper {
         pageSize = jpaPage.totalPages
         total = jpaPage.totalElements
         size = jpaPage.content.size
-        offset = jpaPage.pageable.offset
+
+        offset = if (jpaPage.pageable.isPaged) jpaPage.pageable.offset else 0
       }
 
   @JvmStatic
   fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
-    return PageRequest.of(
-      paramSetting?.offset ?: 0,
-      paramSetting?.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
-    )
+    return if (false == paramSetting?.unPage) {
+      PageRequest.of(
+        paramSetting.offset ?: 0,
+        paramSetting.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
+      )
+    } else Pageable.unpaged()
   }
 
   /**

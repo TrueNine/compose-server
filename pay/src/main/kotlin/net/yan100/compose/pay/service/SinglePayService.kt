@@ -1,7 +1,8 @@
 package net.yan100.compose.pay.service
 
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.lang.ISO4217
-import net.yan100.compose.core.lang.Str
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
@@ -44,5 +45,10 @@ interface SinglePayService {
   /**
    * ## 接受异步通知回调
    */
-  fun receivePayNotify(metaData: String, headersMap: Map<String, String>, lazyCall: (successReq: PaySuccessNotifyResp) -> Unit): String?
+  fun receivePayNotify(
+    metaData: String,
+    request: HttpServletRequest,
+    response:HttpServletResponse,
+    lazyCall: (successReq: PaySuccessNotifyResp) -> Unit
+  ): String?
 }

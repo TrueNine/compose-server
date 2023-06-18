@@ -45,7 +45,7 @@ public class BaseEntity extends AnyEntity {
    */
   @Version
   @JsonIgnore
-  @Column(name = RLV, nullable = false)
+  @Column(name = RLV, nullable = false, columnDefinition = "INT DEFAULT 0")
   @Schema(hidden = true, title = "乐观锁版本", requiredMode = NOT_REQUIRED)
   protected Long rlv;
 
@@ -53,7 +53,7 @@ public class BaseEntity extends AnyEntity {
    * 逻辑删除标志
    */
   @JsonIgnore
-  @Column(name = LDF, nullable = false)
+  @Column(name = LDF, columnDefinition = "INT DEFAULT 0")
   @Schema(hidden = true, title = "逻辑删除标志", requiredMode = NOT_REQUIRED, accessMode = READ_ONLY)
-  protected Boolean ldf = false;
+  protected Boolean ldf;
 }
