@@ -14,5 +14,5 @@ public interface Regexes {
   /**
    * 中国的手机
    */
-  String CHINA_PHONE = "^1[34578]\\d{9}$";
+  String CHINA_PHONE = "^1[123456789]\\d{9}$";
 }
