@@ -2,6 +2,7 @@ package net.yan100.compose.core.http
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import java.io.OutputStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
@@ -16,8 +17,18 @@ val HttpServletRequest.remoteRequestIp: String
 /**
  * ## 设置下载时的东西
  */
-fun HttpServletResponse.withDownload(fileName: String, contentType: MediaTypes = MediaTypes.BINARY, charset: Charset = StandardCharsets.UTF_8) {
+fun HttpServletResponse.withDownload(
+  fileName: String,
+  contentType: MediaTypes = MediaTypes.BINARY,
+  charset: Charset = StandardCharsets.UTF_8,
+  closeBlock: ((outputStream: OutputStream) -> Unit)?
+) {
   this.setHeader(Headers.CONTENT_DISPOSITION, Headers.downloadDisposition(fileName, charset))
   this.setHeader(Headers.CONTENT_TYPE, contentType.getValue())
   this.characterEncoding = charset.displayName()
+  closeBlock?.also { blockFn ->
+    this.outputStream.use {
+      blockFn(it)
+    }
+  }
 }
