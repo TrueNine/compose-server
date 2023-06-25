@@ -5,21 +5,21 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
-class CnDistrictCodeModelTest {
+class CnDistrictCodeTest {
   @Test
   fun testCreate() {
-    val ab = CnDistrictCodeModel("433127000000")
+    val ab = CnDistrictCode("433127000000")
     assertNotNull(ab)
     assertEquals(ab.level, 3)
 
     assertFailsWith<IllegalArgumentException> {
-      CnDistrictCodeModel("43312700000")
+      CnDistrictCode("43312700000")
     }
     assertFailsWith<IllegalArgumentException> {
-      CnDistrictCodeModel("4331270000001")
+      CnDistrictCode("4331270000001")
     }
     assertFailsWith<NullPointerException> {
-      CnDistrictCodeModel(null)
+      CnDistrictCode(null)
     }
   }
 }
