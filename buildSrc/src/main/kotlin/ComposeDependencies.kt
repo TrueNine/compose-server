@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "net.yan100.compose"
-  const val version = "0.6.2"
+  const val version = "0.6.3"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1.1"
 }
@@ -69,14 +69,14 @@ object V {
     const val sqlite = "3.41.2.0"
 
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    const val seleniumJava = "4.9.1"
+    const val seleniumJava = "4.10.0"
 
     // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-    const val webDriverManager = "5.3.3"
+    const val webDriverManager = "5.4.0"
 
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
-    const val flyway = "9.18.0"
+    const val flyway = "9.20"
 
     // 测试用内存数据库
     // https://mvnrepository.com/artifact/com.h2database/h2
@@ -84,7 +84,7 @@ object V {
 
     // 测试用内存数据库
     // https://mvnrepository.com/artifact/org.hsqldb/hsqldb
-    const val hsqldb = "2.7.1"
+    const val hsqldb = "2.7.2"
 
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
     const val hibernateCore = "6.2.0.Final"
@@ -97,15 +97,15 @@ object V {
   object PlatformSdk {
     // 阿里云 oss sdk
     // https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss
-    const val aliYunOss = "3.16.3"
+    const val aliYunOss = "3.17.0"
 
     // minio
     // https://mvnrepository.com/artifact/io.minio/minio
-    const val minio = "8.5.2"
+    const val minio = "8.5.4"
 
     // 微信支付 sdk
     // https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
-    const val wechatpayJava = "0.2.7"
+    const val wechatpayJava = "0.2.9"
 
     // https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java
     const val huaweiObsJava = "3.23.3.1"
@@ -113,7 +113,7 @@ object V {
 
   object Util {
     // https://mvnrepository.com/artifact/com.alibaba/easyexcel
-    const val easyExcel = "3.3.1"
+    const val easyExcel = "3.3.2"
 
     // csv 提取工具
     // https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
@@ -132,10 +132,10 @@ object V {
     const val dozer = "5.5.1"
 
     // https://mvnrepository.com/artifact/cn.hutool/hutool-all
-    const val huTool = "5.8.18"
+    const val huTool = "5.8.20"
 
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    const val guava = "31.1-jre"
+    const val guava = "32.0.1-jre"
 
     // 离线ip包
     // https://mvnrepository.com/artifact/org.lionsoul/ip2region
@@ -185,7 +185,7 @@ object V {
 
   object StandardEdition {
     // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
-    const val swaggerAnnotationJakarta = "2.2.10"
+    const val swaggerAnnotationJakarta = "2.2.13"
 
     // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     const val jakartaValidationApi = "3.0.2"
@@ -211,7 +211,7 @@ object V {
     const val kotlinTestNG = Lang.kotlin
 
     // https://mvnrepository.com/artifact/org.testng/testng
-    const val testNG = "7.7.1"
+    const val testNG = "7.8.0"
 
     // kotlin mock k
     // https://mvnrepository.com/artifact/io.mockk/mockk
@@ -267,7 +267,7 @@ object V {
 
     // 加密工具包
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
-    const val bcprovJdk18on = "1.73"
+    const val bcprovJdk18on = "1.75"
   }
 }
 
