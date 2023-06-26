@@ -26,6 +26,9 @@ class UserServiceImpl(
   override fun findPwdEncByAccount(account: String): String? = userRepo.findPwdEncByAccount(account)
 
   override fun existsByAccount(account: String): Boolean = userRepo.existsAllByAccount(account)
+  override fun existsByWechatOpenId(openId: String): Boolean {
+    return userRepo.existsByWechatOpenId(openId)
+  }
 
   @Transactional(rollbackFor = [Exception::class])
   override fun modifyUserBandTimeTo(account: String, dateTime: LocalDateTime?) {

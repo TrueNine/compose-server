@@ -18,7 +18,7 @@ class CnDistrictCodeTest {
     assertFailsWith<IllegalArgumentException> {
       CnDistrictCode("4331270000001")
     }
-    assertFailsWith<NullPointerException> {
+    assertFailsWith<IllegalStateException> {
       CnDistrictCode(null)
     }
   }

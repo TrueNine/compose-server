@@ -360,13 +360,13 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
       it.forEach { rid ->
         aggregator.saveRoleToRoleGroup(aRole.id, rid)
       }
-      aggregator.saveAllRoleGroupToUser(it, user.id)
+      aggregator.saveAllRoleGroupToUser(it.map { ir -> ir }, user.id)
     }
     ugRoleGroups.map { it.id }.let {
       it.forEach { rid ->
         aggregator.saveRoleToRoleGroup(bRole.id, rid)
       }
-      aggregator.saveAllRoleGroupToUserGroup(it, subUserGroup.id)
+      aggregator.saveAllRoleGroupToUserGroup(it.map { ir -> ir }, subUserGroup.id)
     }
 
     // 校验挂载是否通过

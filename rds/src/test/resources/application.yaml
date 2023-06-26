@@ -11,6 +11,13 @@ spring:
     password:
     url: jdbc:hsqldb:mem:testdb?useUnicode=true&characterEncoding=utf8
   jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 20
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 1023
     open-in-view: false
     database-platform: org.hibernate.dialect.HSQLDialect
     database: hsql

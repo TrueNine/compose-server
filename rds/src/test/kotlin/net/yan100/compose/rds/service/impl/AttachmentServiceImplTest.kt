@@ -89,7 +89,7 @@ class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindAllFullUrlByMetaNameStartingWith() {
     val metaName = "test"
-    val page = Pq(1, 10)
+    val page = Pq(1, 10, false)
     val result = attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
     assertNotNull(result)
     assertEquals(0, result.total)
@@ -119,7 +119,7 @@ class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindAllFullUrlByMetaNameStartingWith_EmptyMetaName() {
     val metaName = ""
-    val page = Pq(1, 10)
+    val page = Pq(1, 10,false)
     val result = attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
     assertNotNull(result)
     assertEquals(0, result.total)
@@ -128,7 +128,7 @@ class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindAllFullUrlByMetaNameStartingWith_NegativePage() {
     val metaName = "test"
-    val page = Pq(-1, 10)
+    val page = Pq(-1, 10,false)
     assertFails {
       attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
     }

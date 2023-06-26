@@ -5,14 +5,15 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import jakarta.persistence.ForeignKey
+import jakarta.persistence.Table
 import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole.ROLE_GROUP_ID
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole.ROLE_ID
 import net.yan100.compose.rds.entity.relationship.RolePermissions
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
-import org.hibernate.annotations.NotFound
+import org.hibernate.annotations.*
+import org.hibernate.annotations.FetchMode.*
 import org.hibernate.annotations.NotFoundAction.IGNORE
 
 
@@ -84,6 +85,7 @@ open class FullRole : SuperRole() {
     )],
     foreignKey = ForeignKey(NO_CONSTRAINT)
   )
+  @Fetch(SUBSELECT)
   @NotFound(action = IGNORE)
   open var permissions: List<Permissions> = listOf()
 }
@@ -158,6 +160,7 @@ open class FullRoleGroup : SuperRoleGroup() {
     )],
     foreignKey = ForeignKey(NO_CONSTRAINT)
   )
+  @Fetch(SUBSELECT)
   @NotFound(action = IGNORE)
   open var roles: List<FullRole> = listOf()
 }

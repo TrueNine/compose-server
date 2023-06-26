@@ -11,9 +11,6 @@ import net.yan100.compose.rds.base.BaseEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 /**
  * 角色组  角色
  *
@@ -27,12 +24,10 @@ import java.io.Serializable;
 @DynamicUpdate
 @Schema(title = "角色组  角色")
 @Table(name = RoleGroupRole.TABLE_NAME)
-public class RoleGroupRole extends BaseEntity implements Serializable {
+public class RoleGroupRole extends BaseEntity {
   public static final String TABLE_NAME = "role_group_role";
   public static final String ROLE_GROUP_ID = "role_group_id";
   public static final String ROLE_ID = "role_id";
-  @Serial
-  private static final long serialVersionUID = 1L;
   /**
    * 用户组
    */

@@ -68,6 +68,14 @@ interface UserRepo : BaseRepository<User> {
   @Modifying
   @Query("UPDATE User u SET u.banTime = :banTime WHERE u.account = :account")
   fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
+
+  @Query("""
+    SELECT count(i.id) > 0
+    FROM UserInfo i
+    LEFT JOIN User u ON i.userId = u.id
+    WHERE i.wechatOpenId = :openId
+  """)
+  fun existsByWechatOpenId(openId: String): Boolean
 }
 
 @Repository

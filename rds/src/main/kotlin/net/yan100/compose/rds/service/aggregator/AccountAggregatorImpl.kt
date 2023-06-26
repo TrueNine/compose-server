@@ -28,7 +28,7 @@ class AccountAggregatorImpl(
       }).also { roleGroupService.assignPlainToUser(it.id) }
     } else null
 
-  override fun login(@Valid param: LoginAccountReq): net.yan100.compose.rds.entity.User? =
+  override fun login(@Valid param: LoginAccountReq): User? =
     if (verifyPassword(param.account!!, param.password!!)) {
       userService.findUserByAccount(param.account!!)
     } else null

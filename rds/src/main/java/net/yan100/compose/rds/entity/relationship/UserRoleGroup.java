@@ -27,12 +27,11 @@ import java.io.Serializable;
 @Entity
 @Schema(title = "用户  角色组")
 @Table(name = UserRoleGroup.TABLE_NAME)
-public class UserRoleGroup extends BaseEntity implements Serializable {
+public class UserRoleGroup extends BaseEntity {
   public static final String TABLE_NAME = "user_role_group";
   public static final String USER_ID = "user_id";
   public static final String ROLE_GROUP_ID = "role_group_id";
-  @Serial
-  private static final long serialVersionUID = 1L;
+
   /**
    * 用户
    */

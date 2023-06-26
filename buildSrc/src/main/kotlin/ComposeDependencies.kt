@@ -3,7 +3,7 @@
  */
 object ProjectManager {
   const val group = "net.yan100.compose"
-  const val version = "0.6.4"
+  const val version = "0.6.7"
   const val encoding = "UTF-8"
   const val gradleVersion = "8.1.1"
 }

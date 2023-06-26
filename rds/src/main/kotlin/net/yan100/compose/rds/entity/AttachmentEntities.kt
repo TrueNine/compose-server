@@ -6,13 +6,14 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import jakarta.persistence.ForeignKey
+import jakarta.persistence.Table
 import jakarta.persistence.criteria.Predicate
 import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.converters.typing.AttachmentTypingConverter
 import net.yan100.compose.rds.typing.AttachmentTyping
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
-import org.hibernate.annotations.NotFound
+import org.hibernate.annotations.*
+import org.hibernate.annotations.FetchMode.*
 import org.hibernate.annotations.NotFoundAction.IGNORE
 import org.springframework.data.jpa.domain.Specification
 
@@ -158,6 +159,7 @@ class LinkedAttachment : BaseEntity() {
     insertable = false,
     updatable = false
   )
+  @Fetch(JOIN)
   @NotFound(action = IGNORE)
   var base: Attachment? = null
 

@@ -7,6 +7,8 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import jakarta.persistence.ForeignKey
+import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.annotations.NonDesensitizedRef
@@ -17,9 +19,8 @@ import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.base.TreeEntity
 import net.yan100.compose.rds.converters.WGS84Converter
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
-import org.hibernate.annotations.NotFound
+import org.hibernate.annotations.*
+import org.hibernate.annotations.FetchMode.*
 import org.hibernate.annotations.NotFoundAction.IGNORE
 
 @MappedSuperclass
@@ -177,6 +178,7 @@ class FullAddressDetails : SuperAddressDetails() {
   )
   @NotFound(action = IGNORE)
   @JsonBackReference
+  @Fetch(JOIN)
   var address: Address? = null
 }
 
@@ -263,5 +265,6 @@ open class FullAddress : SuperAddress() {
     insertable = false,
     updatable = false
   )
+  @Fetch(SUBSELECT)
   open var details: List<AddressDetails> = listOf()
 }
