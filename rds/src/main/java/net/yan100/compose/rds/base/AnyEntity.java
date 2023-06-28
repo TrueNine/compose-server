@@ -2,7 +2,10 @@ package net.yan100.compose.rds.base;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -65,7 +68,7 @@ public class AnyEntity implements Serializable, Persistable<String> {
     if (this == o) return true;
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     AnyEntity that = (AnyEntity) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
+    return id != null && (!"".equals(id)) && (!"null".equals(id)) && Objects.equals(getId(), that.getId());
   }
 
   @Override
@@ -73,13 +76,17 @@ public class AnyEntity implements Serializable, Persistable<String> {
     return getClass().hashCode();
   }
 
+  public void asNew() {
+    this.id = "";
+  }
+
   @Override
   public String toString() {
-    return String.valueOf(this.getId());
+    return id == null ? "null" : id;
   }
 
   @Override
   public boolean isNew() {
-    return null == id;
+    return null == id || "".equals(id) || "null".equals(id);
   }
 }

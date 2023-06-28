@@ -18,6 +18,9 @@ interface AttachmentService : BaseService<Attachment> {
     page: net.yan100.compose.rds.base.PagedRequestParam = PagedWrapper.DEFAULT_MAX
   ): Pr<String>
 
+  fun findMetaNameById(id:String):String?
+  fun findSaveNameById(id:String):String?
+
   /**
    * ## 根据 baseurl 查询其下的所有文件地址
    */

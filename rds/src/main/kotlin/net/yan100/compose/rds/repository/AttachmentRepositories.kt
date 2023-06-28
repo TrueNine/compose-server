@@ -20,6 +20,12 @@ interface AttachmentRepo : BaseRepository<Attachment> {
   )
   fun findBaseUrlAndSaveNamePairById(id: Long): Pair<String, String>?
 
+  @Query("""SELECT a.metaName FROM Attachment a WHERE a.id = :id""")
+  fun findMetaNameById(id: String): String?
+
+  @Query("""SELECT a.saveName FROM Attachment a WHERE a.id = :id""")
+  fun findSaveNameById(id:String):String?
+
   /**
    * 根据id查找附件的全路径
    */
@@ -45,12 +51,14 @@ interface AttachmentRepo : BaseRepository<Attachment> {
   /**
    * ## 根据 baseUrl 查询其下的所有 附件
    */
-  @Query("""
+  @Query(
+    """
     FROM Attachment a
     INNER JOIN Attachment b ON a.urlId = b.id
     WHERE b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
     AND b.baseUrl = :baseUrl
-  """)
+  """
+  )
   fun findAllByParentBaseUrl(baseUrl: String, page: Pageable): Page<Attachment>
 
   fun existsByBaseUrl(baseUrl: String): Boolean

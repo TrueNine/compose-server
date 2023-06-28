@@ -47,6 +47,14 @@ class AttachmentServiceImpl(
     return repo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
   }
 
+  override fun findMetaNameById(id: String): String? {
+    return repo.findMetaNameById(id)
+  }
+
+  override fun findSaveNameById(id: String): String? {
+    return repo.findSaveNameById(id)
+  }
+
   override fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq): Pr<LinkedAttachment> {
     return linkedRepo.findAllByParentBaseUrl(baseUrl, page.page).result
   }

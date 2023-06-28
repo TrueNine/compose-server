@@ -418,4 +418,12 @@ open class TreeEntity : BaseEntity() {
     const val NLV = DataBaseBasicFieldNames.NODE_LEVEL
     const val TGI = DataBaseBasicFieldNames.TREE_GROUP_ID
   }
+
+  override fun asNew() {
+    super.asNew()
+    this.rln = 1L
+    this.rrn = 2L
+    this.nlv = 0
+    this.rpi = null
+  }
 }

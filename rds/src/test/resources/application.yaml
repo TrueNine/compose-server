@@ -25,4 +25,4 @@ spring:
       ddl-auto: create
 logging:
   level:
-    root: trace
+    root: info

@@ -56,4 +56,11 @@ public class BaseEntity extends AnyEntity {
   @Column(name = LDF, columnDefinition = "INT DEFAULT 0")
   @Schema(hidden = true, title = "逻辑删除标志", requiredMode = NOT_REQUIRED, accessMode = READ_ONLY)
   protected Boolean ldf;
+
+  @Override
+  public void asNew() {
+    super.asNew();
+    ldf = false;
+    rlv = null;
+  }
 }
