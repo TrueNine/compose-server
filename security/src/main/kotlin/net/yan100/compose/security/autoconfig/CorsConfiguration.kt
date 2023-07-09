@@ -1,8 +1,10 @@
 package net.yan100.compose.security.autoconfig
 
-import lombok.extern.slf4j.Slf4j
+import net.yan100.compose.core.http.Methods
 import net.yan100.compose.core.lang.slf4j
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -12,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  * @author TrueNine
  * @since 2023-02-20
  */
-@Slf4j
 @Configuration
 class CorsConfiguration : WebMvcConfigurer {
   override fun addCorsMappings(registry: CorsRegistry) {
@@ -20,11 +21,26 @@ class CorsConfiguration : WebMvcConfigurer {
     registry
       .addMapping("/**")
       .allowedOriginPatterns("*")
-      .allowedMethods(*net.yan100.compose.core.http.Methods.all())
+      .allowedMethods(*Methods.all())
       .allowedHeaders("*")
       .exposedHeaders("*")
       .allowCredentials(true)
       .maxAge(3600)
+  }
+
+  @Bean
+  fun corsConfigurationSource(): CorsConfiguration {
+    log.debug("注册 spring security 的跨域全局配置")
+    val all = CorsConfiguration.ALL
+    val c = CorsConfiguration()
+    c.addAllowedOriginPattern(all)
+    Methods.all().toList().forEach(c::addAllowedMethod)
+    c.addExposedHeader(all)
+    c.allowCredentials = true
+    c.maxAge = 3600
+    c.addAllowedHeader(all)
+
+    return c
   }
 
   companion object {

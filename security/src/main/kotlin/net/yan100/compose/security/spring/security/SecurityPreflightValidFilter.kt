@@ -5,6 +5,9 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.ctx.UserInfoContextHolder
+import net.yan100.compose.core.http.Headers
+import net.yan100.compose.core.http.Methods
+import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.core.models.UserAuthorizationInfoModel
 import net.yan100.compose.security.SecurityUserDetails
@@ -29,6 +32,12 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
     response: HttpServletResponse,
     filterChain: FilterChain
   ) {
+    // 跨域请求直接放行
+    if (request.method == Methods.OPTIONS) {
+      log.info("直接放行预检请求 uri = {}", request.requestURI)
+      filterChain.doFilter(request, response)
+      return
+    }
     val authInfo = if (containsTokenPair(request)) {
       val token = getToken(request)
       val ref = getReFlashToken(request)
@@ -55,6 +64,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
       usernamePasswordAuthenticationToken
     // 向用户信息内设置信息
     UserInfoContextHolder.set(authInfo)
+    log.info("set user = {}", UserInfoContextHolder.get())
     log.trace("过滤器放行")
     filterChain.doFilter(request, response)
   }
@@ -65,8 +75,8 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @return [Boolean]
    */
   private fun containsTokenPair(request: HttpServletRequest): Boolean =
-    net.yan100.compose.core.lang.Str.hasText(request.getHeader(net.yan100.compose.core.http.Headers.AUTHORIZATION))
-      && net.yan100.compose.core.lang.Str.hasText(request.getHeader(net.yan100.compose.core.http.Headers.X_RE_FLUSH_TOKEN))
+    request.getHeader(Headers.AUTHORIZATION).hasText()
+      && request.getHeader(Headers.X_RE_FLUSH_TOKEN).hasText()
 
 
   /**
@@ -86,7 +96,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @return [String]
    */
   private fun getReFlashToken(request: HttpServletRequest?): String? =
-    request?.getHeader(net.yan100.compose.core.http.Headers.X_RE_FLUSH_TOKEN)
+    request?.getHeader(Headers.X_RE_FLUSH_TOKEN)
 
   /**
    * 合法性检查

@@ -7,6 +7,7 @@ import net.yan100.compose.security.defaults.EmptySecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
 import java.util.*
 
 @Configuration
@@ -42,6 +44,7 @@ class SecurityPolicyBean {
   @Primary
   fun securityFilterChain(
     httpSecurity: HttpSecurity,
+    cors: CorsConfiguration,
     policyDefine: net.yan100.compose.security.models.SecurityPolicyDefineModel,
     applicationContext: ApplicationContext
   ): SecurityFilterChain {
@@ -76,13 +79,16 @@ class SecurityPolicyBean {
       .csrf { it.disable() }
       // 关闭 session
       .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-      .authorizeHttpRequests {
-        // 放行链接
-        it.requestMatchers(*anonymousPatterns.toTypedArray())
-          // 其他链接一律放行
-          .anonymous().anyRequest().authenticated()
+    httpSecurity.cors {
+      it.configurationSource {
+        cors
       }
-      .userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
+    }
+    httpSecurity.authorizeHttpRequests {
+      it.requestMatchers(*anonymousPatterns.toTypedArray()).permitAll()
+      it.anyRequest().authenticated()
+    }
+    httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
 
     // 配置异常处理器
     if (policyDefine.exceptionAdware != null) {

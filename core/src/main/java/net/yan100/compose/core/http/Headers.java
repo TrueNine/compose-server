@@ -45,6 +45,11 @@ public interface Headers {
   String CONTENT_DISPOSITION = "Content-Disposition";
   String KEEP_ALIVE = "Keep-Alive";
 
+  String CORS_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+  String CORS_ALLOW_METHODS = "Access-Control-Allow-Methods";
+  String CORS_ALLOW_HEADERS = "Access-Control-Allow-Headers";
+  String CORS_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
+
   /**
    * 设置 Content-Disposition 的下载名称
    * <code>
