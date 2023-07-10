@@ -5,7 +5,7 @@ object ProjectManager {
   const val group = "net.yan100.compose"
   const val version = "0.6.25"
   const val encoding = "UTF-8"
-  const val gradleVersion = "8.1.1"
+  const val gradleVersion = "8.2"
 }
 
 /**
@@ -18,13 +18,13 @@ object V {
     const val java = "17"
 
     // https://github.com/JetBrains/kotlin/releases
-    const val kotlin = "1.8.21"
+    const val kotlin = "1.9.0"
 
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     const val lombok = "1.18.28"
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
-    const val kotlinxCoroutine = "1.7.1"
+    const val kotlinxCoroutine = "1.7.2"
 
     // https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
     const val reactorKotlinExtension = "1.2.2"
@@ -76,7 +76,7 @@ object V {
 
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
-    const val flyway = "9.20"
+    const val flyway = "9.20.0"
 
     // 测试用内存数据库
     // https://mvnrepository.com/artifact/com.h2database/h2
@@ -135,7 +135,7 @@ object V {
     const val huTool = "5.8.20"
 
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    const val guava = "32.0.1-jre"
+    const val guava = "32.1.1-jre"
 
     // 离线ip包
     // https://mvnrepository.com/artifact/org.lionsoul/ip2region
@@ -185,7 +185,7 @@ object V {
 
   object StandardEdition {
     // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
-    const val swaggerAnnotationJakarta = "2.2.13"
+    const val swaggerAnnotationJakarta = "2.2.15"
 
     // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     const val jakartaValidationApi = "3.0.2"
@@ -220,7 +220,7 @@ object V {
 
   object Spring {
     // https://spring.io/projects/spring-boot#learn
-    const val springBoot = "3.1.0"
+    const val springBoot = "3.1.1"
 
     // https://spring.io/projects/spring-cloud#learn
     const val springCloud = "2022.0.3"

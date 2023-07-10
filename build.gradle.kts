@@ -18,7 +18,7 @@ plugins {
   kotlin("plugin.spring") version V.Plugin.kotlinSpring
   kotlin("plugin.jpa") version V.Plugin.kotlinJpa
   kotlin("plugin.lombok") version V.Plugin.kotlinLombok
-  id("com.github.ben-manes.versions") version "0.46.0"
+  id("com.github.ben-manes.versions") version "0.47.0"
 }
 
 
