@@ -4,25 +4,25 @@ import net.yan100.compose.rds.entity.relationship.RoleGroupRole
 import net.yan100.compose.rds.entity.relationship.RolePermissions
 import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroup
 import net.yan100.compose.rds.entity.relationship.UserRoleGroup
-import net.yan100.compose.rds.repository.AllRoleGroupEntityRepository
-import net.yan100.compose.rds.repository.UserGroupRepository
+import net.yan100.compose.rds.repository.DeptRepo
+import net.yan100.compose.rds.repository.FullRoleGroupEntityRepo
+import net.yan100.compose.rds.repository.UserGroupRepo
 import net.yan100.compose.rds.repository.UserRepo
-import net.yan100.compose.rds.repository.relationship.RoleGroupRoleRepository
-import net.yan100.compose.rds.repository.relationship.RolePermissionsRepository
-import net.yan100.compose.rds.repository.relationship.UserGroupRoleGroupRepository
-import net.yan100.compose.rds.repository.relationship.UserRoleGroupRepo
+import net.yan100.compose.rds.repository.relationship.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RbacAggregatorImpl(
   private val urg: UserRoleGroupRepo,
-  private val ug: UserGroupRepository,
+  private val ug: UserGroupRepo,
   private val userRepo: UserRepo,
-  private val ugrg: UserGroupRoleGroupRepository,
-  private val rgr: RoleGroupRoleRepository,
-  private val rp: RolePermissionsRepository,
-  private val rg: AllRoleGroupEntityRepository
+  private val ugrg: UserGroupRoleGroupRepo,
+  private val rgr: RoleGroupRoleRepo,
+  private val rp: RolePermissionsRepo,
+  private val rg: FullRoleGroupEntityRepo,
+  private val dr: DeptRepo,
+  private val udr: UserDeptRepo,
 ) : RbacAggregator {
 
   override fun findAllRoleNameByUserAccount(account: String): Set<String> =
@@ -37,14 +37,18 @@ class RbacAggregatorImpl(
     // 查询所有用户组的角色组id
     val leaderUserUserGroupRoleGroupIds = ug.findAllByUserId(userId).map { it.roleGroups }.flatten().map { it.id }
     val userGroupRoleGroupIds = ug.findAllByUserId(userId).map { it.roleGroups }.flatten().map { it.id }
+
     // 查询所有用户的角色组id
     val userRoleGroupIds = urg.findAllRoleGroupIdByUserId(userId)
+
+    val userDepts = dr.findAllByUserId(userId).map { "DEPT_${it.name}" }
 
     // 将之解包
     val allNames = with(
       leaderUserUserGroupRoleGroupIds
         + userGroupRoleGroupIds
         + userRoleGroupIds
+        + userDepts
     ) {
       val roleGroups = rg.findAllById(this)
       val roleNames = roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
@@ -52,7 +56,7 @@ class RbacAggregatorImpl(
         .asSequence().map { it.roles }
         .flatten().map { it.permissions }
         .flatten().map { it.name }.toList()
-      roleNames + permissionNames
+      roleNames + permissionNames + userDepts
     }
     return allNames.filterNotNull().toSet()
   }

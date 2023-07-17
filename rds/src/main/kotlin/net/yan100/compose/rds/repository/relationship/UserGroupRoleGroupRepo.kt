@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserGroupRoleGroupRepository : BaseRepository<UserGroupRoleGroup> {
+interface UserGroupRoleGroupRepo : BaseRepository<UserGroupRoleGroup> {
   fun findByUserGroupIdAndRoleGroupId(userGroupId: String, roleGroupId: String): UserGroupRoleGroup?
 
   @Query("select ur.roleGroupId from UserGroupRoleGroup ur")

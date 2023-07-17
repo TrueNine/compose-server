@@ -165,6 +165,32 @@ open class FullRoleGroup : SuperRoleGroup() {
   open var roles: List<FullRole> = listOf()
 }
 
+
+/**
+ * # 部门
+ */
+@Entity
+@DynamicInsert
+@DynamicUpdate
+@Schema(title = "部门")
+@Table(name = SuperRoleGroup.TABLE_NAME)
+class Dept : BaseEntity() {
+  @Column(name = NAME)
+  @Schema(title = "名称")
+  var name: String? = null
+
+  @Column(name = DOC)
+  @Schema(title = "描述")
+  var doc: String? = null
+
+
+  companion object {
+    const val TABLE_NAME = "dept"
+    const val NAME = "name"
+    const val DOC = "doc"
+  }
+}
+
 /**
  * 权限
  *
@@ -197,5 +223,31 @@ open class Permissions : BaseEntity() {
     const val TABLE_NAME = "permissions"
     const val NAME = "name"
     const val DOC = "doc"
+  }
+}
+
+/**
+ * # 用户  部门
+ * @author TureNine
+ * @since 2023-07-16
+ */
+@Entity
+@DynamicInsert
+@DynamicUpdate
+@Schema(title = "用户  部门")
+@Table(name = UserDept.TABLE_NAME)
+class UserDept : BaseEntity() {
+  @Schema(title = "用户id")
+  @Column(name = USER_ID)
+  var userId: String? = null
+
+  @Schema(title = "部门id")
+  @Column(name = DEPT_ID)
+  var deptId: String? = null
+
+  companion object {
+    const val TABLE_NAME = "user_dept"
+    const val USER_ID = "user_id"
+    const val DEPT_ID = "dept_id"
   }
 }

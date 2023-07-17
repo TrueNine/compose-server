@@ -2,11 +2,9 @@ package net.yan100.compose.core.autoconfig
 
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.BasicUserInfoModel
-import org.springframework.context.annotation.Configuration
+import net.yan100.compose.core.models.UserInfo
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
@@ -26,7 +24,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
 
   override fun supportsParameter(parameter: MethodParameter): Boolean {
     log.info("support by parameter = {}", parameter)
-    return BasicUserInfoModel::class.java.isAssignableFrom(parameter.parameterType)
+    return UserInfo::class.java.isAssignableFrom(parameter.parameterType)
   }
 
   override fun resolveArgument(

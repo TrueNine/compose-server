@@ -1,7 +1,8 @@
 package net.yan100.compose.security.spring.security
 
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.UserAuthorizationInfoModel
+import net.yan100.compose.core.models.AuthUserInfo
+import net.yan100.compose.security.UserDetailsWrapper
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -17,7 +18,7 @@ abstract class SecurityUserDetailsService : UserDetailsService {
   @Throws(UsernameNotFoundException::class)
   override fun loadUserByUsername(username: String): UserDetails {
     log.debug("加载 loadUserByUsername account = {}", username)
-    val details = net.yan100.compose.security.SecurityUserDetails(loadUserDetailsByAccount(username))
+    val details = UserDetailsWrapper(loadUserDetailsByAccount(username))
     log.debug("加载到 details = {}", details)
     return details
   }
@@ -26,9 +27,9 @@ abstract class SecurityUserDetailsService : UserDetailsService {
    * 加载用户详细信息账户
    *
    * @param account 账户
-   * @return [UserAuthorizationInfoModel]
+   * @return [AuthUserInfo]
    */
-  abstract fun loadUserDetailsByAccount(account: String?): UserAuthorizationInfoModel?
+  abstract fun loadUserDetailsByAccount(account: String?): AuthUserInfo?
 
   companion object {
     @JvmStatic

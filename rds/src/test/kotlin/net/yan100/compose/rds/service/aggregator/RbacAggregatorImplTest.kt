@@ -6,7 +6,7 @@ import net.yan100.compose.rds.entity.Role
 import net.yan100.compose.rds.entity.RoleGroup
 import net.yan100.compose.rds.entity.UserGroup
 import net.yan100.compose.rds.repository.AllRoleEntityRepository
-import net.yan100.compose.rds.repository.AllRoleGroupEntityRepository
+import net.yan100.compose.rds.repository.FullRoleGroupEntityRepo
 import net.yan100.compose.rds.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,7 +18,7 @@ import kotlin.test.*
 @SpringBootTest
 class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Autowired
-  lateinit var argRepo: AllRoleGroupEntityRepository
+  lateinit var argRepo: FullRoleGroupEntityRepo
 
   @Autowired
   lateinit var aggregator: RbacAggregator

@@ -21,7 +21,7 @@ interface RoleGroupRepo : BaseRepository<RoleGroup> {
 }
 
 @Repository
-interface AllRoleGroupEntityRepository : BaseRepository<FullRoleGroup> {
+interface FullRoleGroupEntityRepo : BaseRepository<FullRoleGroup> {
   fun findAllByName(name: String): List<FullRoleGroup>
 
   @Query(

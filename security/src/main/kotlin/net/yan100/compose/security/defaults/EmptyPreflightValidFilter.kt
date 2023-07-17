@@ -3,7 +3,7 @@ package net.yan100.compose.security.defaults
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.UserAuthorizationInfoModel
+import net.yan100.compose.core.models.AuthUserInfo
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 
 class EmptyPreflightValidFilter : net.yan100.compose.core.lang.EmptyDefaultModel, SecurityPreflightValidFilter() {
@@ -19,8 +19,8 @@ class EmptyPreflightValidFilter : net.yan100.compose.core.lang.EmptyDefaultModel
     reFlashToken: String?,
     request: HttpServletRequest,
     response: HttpServletResponse
-  ): UserAuthorizationInfoModel {
-    log.warn("生成了一个空的 {}", ::UserAuthorizationInfoModel.name)
-    return UserAuthorizationInfoModel()
+  ): AuthUserInfo {
+    log.warn("生成了一个空的 {}", ::AuthUserInfo.name)
+    return AuthUserInfo()
   }
 }

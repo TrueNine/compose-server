@@ -1,16 +1,15 @@
 package net.yan100.compose.rds.base;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
+import net.yan100.compose.core.lang.Str;
 import net.yan100.compose.rds.listener.BizCodeInsertListener;
 import net.yan100.compose.rds.listener.PreSaveDeleteReferenceListener;
 import net.yan100.compose.rds.listener.SnowflakeIdInsertListener;
@@ -86,7 +85,9 @@ public class AnyEntity implements Serializable, Persistable<String> {
   }
 
   @Override
+  @Transient
+  @JsonIgnore
   public boolean isNew() {
-    return null == id || "".equals(id) || "null".equals(id);
+    return Str.nonText(id) || "null".equals(id);
   }
 }

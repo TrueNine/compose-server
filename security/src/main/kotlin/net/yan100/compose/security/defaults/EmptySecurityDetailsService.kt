@@ -11,7 +11,7 @@ class EmptySecurityDetailsService : net.yan100.compose.core.lang.EmptyDefaultMod
     log.warn("正在使用默认安全服务，生产环请自行重写")
   }
 
-  override fun loadUserDetailsByAccount(account: String?): net.yan100.compose.core.models.UserAuthorizationInfoModel? {
+  override fun loadUserDetailsByAccount(account: String?): net.yan100.compose.core.models.AuthUserInfo? {
     log.warn("account {} 正在获取空体", account)
     return null
   }

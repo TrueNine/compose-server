@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RolePermissionsRepository : BaseRepository<RolePermissions> {
+interface RolePermissionsRepo : BaseRepository<RolePermissions> {
   fun findByRoleIdAndPermissionsId(roleId: String, permissionsId: String): RolePermissions?
 
   @Query("select rp.permissionsId from RolePermissions rp")

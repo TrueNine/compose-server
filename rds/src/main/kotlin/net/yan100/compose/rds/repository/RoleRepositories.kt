@@ -38,7 +38,7 @@ interface AllRoleEntityRepository : BaseRepository<FullRole> {
 }
 
 @Repository
-interface UserGroupRepository : BaseRepository<UserGroup> {
+interface UserGroupRepo : BaseRepository<UserGroup> {
   @Query(
     """
     from UserGroup ug

@@ -9,8 +9,8 @@ import net.yan100.compose.core.http.Headers
 import net.yan100.compose.core.http.Methods
 import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.UserAuthorizationInfoModel
-import net.yan100.compose.security.SecurityUserDetails
+import net.yan100.compose.core.models.AuthUserInfo
+import net.yan100.compose.security.UserDetailsWrapper
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
@@ -48,7 +48,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
       return
     }
     log.trace("获取到用户信息 = {}", authInfo)
-    val details = SecurityUserDetails(authInfo)
+    val details = UserDetailsWrapper(authInfo)
 
     log.trace("获取到 details = {}", details)
 
@@ -105,12 +105,12 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param reFlashToken re-flash
    * @param request  请求
    * @param response 响应
-   * @return [UserAuthorizationInfoModel]
+   * @return [AuthUserInfo]
    */
   protected abstract fun getUserAuthorizationInfo(
     token: String?,
     reFlashToken: String?,
     request: HttpServletRequest,
     response: HttpServletResponse
-  ): UserAuthorizationInfoModel
+  ): AuthUserInfo
 }
