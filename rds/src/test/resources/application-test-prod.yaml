@@ -3,6 +3,8 @@ spring:
     baseline-on-migrate: true
     baseline-version: 99
     enabled: false
+    locations:
+      - classpath:db/migration/mysql
   datasource:
     url: jdbc:mysql://116.205.171.51:3306/compose
     username: root
