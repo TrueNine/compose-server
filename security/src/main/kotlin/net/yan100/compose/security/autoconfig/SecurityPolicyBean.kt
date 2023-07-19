@@ -7,7 +7,6 @@ import net.yan100.compose.security.defaults.EmptySecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -15,6 +14,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -25,6 +25,7 @@ import java.util.*
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 class SecurityPolicyBean {
   @Bean
   @Primary
@@ -50,18 +51,18 @@ class SecurityPolicyBean {
   ): SecurityFilterChain {
     val enableAnnotation = getAnno(applicationContext)
     require(enableAnnotation != null) { "无法正常获取到注解 ${net.yan100.compose.security.annotations.EnableRestSecurity::class}" }
-    val anonymousPatterns = policyDefine.anonymousPatterns
+    val allowPatterns = policyDefine.anonymousPatterns
 
-    anonymousPatterns += listOf(*enableAnnotation.loginUrl)
-    anonymousPatterns += listOf(*enableAnnotation.allowPatterns)
+    allowPatterns += listOf(*enableAnnotation.loginUrl)
+    allowPatterns += listOf(*enableAnnotation.allowPatterns)
 
     // 是否放行swagger
     if (enableAnnotation.allowSwagger) {
-      anonymousPatterns += policyDefine.swaggerPatterns
+      allowPatterns += policyDefine.swaggerPatterns
     }
 
     if (enableAnnotation.allowWebJars) {
-      anonymousPatterns += "/webjars/**"
+      allowPatterns += "/webjars/**"
     }
 
     if (policyDefine.preValidFilter != null) {
@@ -72,7 +73,7 @@ class SecurityPolicyBean {
     } else log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
 
     // 打印错误日志
-    if (anonymousPatterns.contains("/**")) log.error("配置上下文内包含 /** ，将会放行所有域")
+    if (allowPatterns.contains("/**")) log.error("配置上下文内包含 /** ，将会放行所有域")
 
     httpSecurity
       // 关闭 csrf
@@ -85,7 +86,7 @@ class SecurityPolicyBean {
       }
     }
     httpSecurity.authorizeHttpRequests {
-      it.requestMatchers(*anonymousPatterns.toTypedArray()).permitAll()
+      it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
       it.anyRequest().authenticated()
     }
     httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
@@ -98,7 +99,9 @@ class SecurityPolicyBean {
       }
     } else log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
 
+
     log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
+    log.debug("allow Patterns = {}", allowPatterns)
     return httpSecurity.build()
   }
 
