@@ -11,7 +11,7 @@ object Percent {
   private val HUNDRED = BigDecimal("100")
 
   /**
-   * ## 将百分比数值转换为小数据
+   * ## 将百分比数值转换为小数
    * ```kotlin
    *     return percent / BigDecimal("100")
    * ```
@@ -19,7 +19,12 @@ object Percent {
    */
   @JvmStatic
   fun mix(percent: BigDecimal): BigDecimal {
-    return percent / HUNDRED
+    return percent.multiply(HUNDRED) / HUNDRED
+  }
+
+  @JvmStatic
+  fun lazyToMix(percent: () -> BigDecimal): BigDecimal {
+    return mix(percent())
   }
 
   /**
@@ -31,5 +36,10 @@ object Percent {
   @JvmStatic
   fun toPercent(mix: BigDecimal): BigDecimal {
     return mix * HUNDRED
+  }
+
+  @JvmStatic
+  fun lazyToPercent(mix: () -> BigDecimal): BigDecimal {
+    return toPercent(mix())
   }
 }
