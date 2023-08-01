@@ -4,7 +4,6 @@
 object ProjectManager {
   const val group = "net.yan100.compose"
   const val version = "0.6.32"
-  const val encoding = "UTF-8"
   const val gradleVersion = "8.2"
 }
 
@@ -294,7 +293,7 @@ object Repos {
   const val aliSpringPlugin = "${repoAli}repository/spring-plugin"
   const val aliGrailsCore = "${repoAli}repository/grails-core"
   const val aliApacheSnapshots = "${repoAli}repository/apache-snapshots"
-  const val huaweiCloudMaven = "https://repo.huaweicloud.com/repository/maven/"
+  const val huaweiCloudMaven = "https://repo.huaweicloud.com/repository/maven"
   const val springMilestone = "https://repo.spring.io/milestone"
   const val springLibMilestone = "https://repo.spring.io/libs-milestone"
   const val springSnapshot = "https://repo.spring.io/snapshot"

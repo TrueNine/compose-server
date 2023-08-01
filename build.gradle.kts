@@ -24,6 +24,7 @@ plugins {
 
 allprojects {
   repositories {
+    maven(url = uri(Repos.huaweiCloudMaven))
     maven(url = uri(Repos.aliPublic))
     maven(url = uri(Repos.aliCentral))
     maven(url = uri(Repos.aliJCenter))
@@ -33,7 +34,6 @@ allprojects {
     maven(url = uri(Repos.springMilestone))
     maven(url = uri(Repos.springLibMilestone))
     maven(url = uri(Repos.springSnapshot))
-    maven(url = uri(Repos.huaweiCloudMaven))
     mavenLocal()
     mavenCentral()
     gradlePluginPortal()
