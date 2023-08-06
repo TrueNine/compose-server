@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.security
+project.version = V.Compose.SECURITY
 
 
 dependencies {

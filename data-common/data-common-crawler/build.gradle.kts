@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.dataCommonCrawler
+project.version = V.Compose.DATA_COMMON_CRAWLER
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:${V.Driver.seleniumJava}")

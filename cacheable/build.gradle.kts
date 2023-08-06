@@ -1,5 +1,5 @@
 import net.yan100.compose.plugin.V
-project.version = V.Compose.cacheable
+project.version = V.Compose.CACHEABLE
 
 dependencies {
   api("org.apache.commons:commons-pool2")

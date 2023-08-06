@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.dependWebServlet
+project.version = V.Compose.DEPEND_WEB_SERVLET
 
 dependencies {
   implementation(project(":core"))

@@ -1,7 +1,6 @@
-plugins {
-  `kotlin-dsl`
-  kotlin("jvm") version "1.8.20"
 
+plugins {
+  kotlin("jvm") version "1.9.0"
   java
   `java-library`
   `java-gradle-plugin`
@@ -14,16 +13,21 @@ repositories {
 
 dependencies {
   implementation(gradleApi())
-  implementation(kotlin("stdlib-jdk8"))
+  implementation("${kotlin("stdlib")}:1.9.0")
 }
 
-tasks.compileKotlin {
-  kotlinOptions.jvmTarget = "17"
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+  kotlinOptions {
+    incremental = true
+    freeCompilerArgs = listOf(
+      "-Xjsr305=strict",
+      "-Xjvm-default=all",
+      "-verbose",
+      "-Xjdk-release=17"
+    )
+    jvmTarget = "17"
+  }
 }
-tasks.compileTestKotlin {
-  kotlinOptions.jvmTarget = "17"
-}
-
 
 gradlePlugin {
   plugins {

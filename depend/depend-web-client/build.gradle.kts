@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.dependWebClient
+project.version = V.Compose.DEPEND_WEB_CLIENT
 
 dependencies {
   implementation(project(":core"))

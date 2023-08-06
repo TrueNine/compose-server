@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.rds
+project.version = V.Compose.RDS
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-data-jpa")

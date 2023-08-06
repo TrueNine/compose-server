@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.oss
+project.version = V.Compose.OSS
 
 dependencies {
   implementation("io.minio:minio:${V.PlatformSdk.minio}") {
