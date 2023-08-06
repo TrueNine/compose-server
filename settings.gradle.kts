@@ -12,6 +12,7 @@ pluginManagement {
 }
 
 rootProject.name = "compose"
+includeBuild("version-control")
 
 include("oss")
 findProject(":oss")?.name = "oss"
@@ -76,3 +77,4 @@ findProject(":multi-test:multi-test-pay")?.name = "multi-test-pay"
 
 include("multi-test:multi-test-network")
 findProject(":multi-test:multi-test-network")?.name = "multi-test-network"
+

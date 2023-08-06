@@ -1,9 +1,12 @@
-import Repos.Credentials.yunXiaoPassword
-import Repos.Credentials.yunXiaoUsername
-import Repos.release
-import Repos.snapshot
+import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
+import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
+import net.yan100.compose.plugin.Repos.release
+import net.yan100.compose.plugin.Repos.snapshot
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import net.yan100.compose.plugin.V
+import net.yan100.compose.plugin.Repos
+import net.yan100.compose.plugin.ProjectManager
 
 plugins {
   java
@@ -11,13 +14,14 @@ plugins {
   eclipse
   `visual-studio`
   `maven-publish`
-  id("org.springframework.boot") version V.Plugin.spring
-  id("io.spring.dependency-management") version V.Plugin.springDependencyManagement
-  kotlin("jvm") version V.Plugin.kotlinJvmPlugin
-  kotlin("kapt") version V.Plugin.kotlinKapt
-  kotlin("plugin.spring") version V.Plugin.kotlinSpring
-  kotlin("plugin.jpa") version V.Plugin.kotlinJpa
-  kotlin("plugin.lombok") version V.Plugin.kotlinLombok
+  id("net.yan100.compose.plugin")
+  id("org.springframework.boot") version "3.1.2"
+  id("io.spring.dependency-management") version "1.1.0"
+  kotlin("jvm") version "1.9.0"
+  kotlin("kapt") version "1.9.0"
+  kotlin("plugin.spring") version "1.9.0"
+  kotlin("plugin.jpa") version "1.9.0"
+  kotlin("plugin.lombok") version "1.9.0"
   id("com.github.ben-manes.versions") version "0.47.0"
 }
 
@@ -47,8 +51,6 @@ allprojects {
   tasks.withType<BootJar> {
     enabled = false
   }
-
-
 
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {

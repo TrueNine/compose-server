@@ -1,3 +1,4 @@
+import net.yan100.compose.plugin.V
 project.version = V.Compose.cacheable
 
 dependencies {

@@ -1,3 +1,5 @@
+import net.yan100.compose.plugin.V
+
 project.version = V.Compose.rdsGen
 dependencies {
   implementation(project(":core"))
