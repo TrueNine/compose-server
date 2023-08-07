@@ -5,6 +5,6 @@ dependencies {
   implementation(project(":rds"))
   implementation(project(":security"))
   implementation(project(":depend:depend-web-servlet"))
-  implementation("com.mysql:mysql-connector-j:${V.Driver.mysqlConnectorJ}")
+  implementation("com.mysql:mysql-connector-j:${V.Db.mysqlConnectorJ}")
 
 }

@@ -1,9 +1,9 @@
-
 plugins {
   kotlin("jvm") version "1.9.0"
   java
   `java-library`
   `java-gradle-plugin`
+  `maven-publish`
 }
 
 repositories {
@@ -29,11 +29,42 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
   }
 }
 
+val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
+val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
+val pluginGroup = "net.yan100.compose"
+val pluginVersion = "1.1.2"
+val yunXiaoUsername = System.getenv("YUNXIAO_USER")
+val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
+
+project.group = pluginGroup
+project.version = pluginVersion
+
 gradlePlugin {
   plugins {
-    register("net.yan100.compose.plugin") {
-      id = "net.yan100.compose.plugin"
-      implementationClass = "net.yan100.compose.plugin.Main"
+    register("${pluginGroup}.${project.name}") {
+      id = "${pluginGroup}.${project.name}"
+      implementationClass = "${pluginGroup}.plugin.Main"
+    }
+  }
+}
+
+
+publishing {
+  repositories {
+    maven(url = uri(if (pluginVersion.uppercase().contains("SNAPSHOT")) snapshot else release)) {
+      credentials {
+        this.username = yunXiaoUsername
+        this.password = yunXiaoPassword
+      }
+    }
+  }
+
+  publications {
+    create<MavenPublication>("maven") {
+      groupId = "${pluginGroup}.${project.name}"
+      artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
+      version = pluginVersion
+      from(components["java"])
     }
   }
 }

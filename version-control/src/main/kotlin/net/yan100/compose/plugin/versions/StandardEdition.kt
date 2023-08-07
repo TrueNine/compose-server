@@ -12,4 +12,7 @@ object StandardEdition {
 
   // https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
   const val jakartaServletApi = "6.0.0"
+
+  // https://mvnrepository.com/artifact/org.jetbrains/annotations
+  const val jetbrainsAnnotations = "24.0.1"
 }

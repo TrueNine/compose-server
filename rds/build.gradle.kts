@@ -12,9 +12,9 @@ dependencies {
 
   testImplementation("org.springframework.boot:spring-boot-starter-validation")
   testImplementation(project(":depend:depend-flyway"))
-  testImplementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Driver.p6spySpringBootStarter}")
-  testImplementation("org.hsqldb:hsqldb:${V.Driver.hsqldb}")
-  testImplementation("com.mysql:mysql-connector-j:${V.Driver.mysqlConnectorJ}")
+  testImplementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Db.p6spySpringBootStarter}")
+  testImplementation("org.hsqldb:hsqldb:${V.Db.hsqldb}")
+  testImplementation("com.mysql:mysql-connector-j:${V.Db.mysqlConnectorJ}")
 }
 
 tasks.withType<Test> {

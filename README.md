@@ -34,12 +34,6 @@ YUNXIAO_PWD 用户密码
 
 > 注：windows 将其配置到 path 内
 
-- 进入项目当前目录 使用 wrapper 拉起 gradlew
-
-```shell
-gradle wrapper
-```
-
 - init 对项目进行初始化
 
 ```shell

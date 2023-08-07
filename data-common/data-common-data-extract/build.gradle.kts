@@ -1,10 +1,9 @@
 import net.yan100.compose.plugin.V
-
 project.version = V.Compose.DATA_COMMON_DATA_EXTRACT
 
 dependencies {
   api("com.squareup.okhttp3:okhttp:${V.Web.okhttp3}")
-  api("org.jsoup:jsoup:${V.Util.jsoup}")
+  api("org.jsoup:jsoup:${V.Crawler.jsoup}")
   api("com.alibaba:easyexcel:${V.Util.easyExcel}") {
     exclude("org.apache.commons", "commons-compress")
     api("org.apache.commons:commons-compress:${V.Util.commonsCompress}")

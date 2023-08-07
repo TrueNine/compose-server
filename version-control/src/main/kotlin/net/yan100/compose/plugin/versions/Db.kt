@@ -1,29 +1,33 @@
 package net.yan100.compose.plugin.versions
 
-object Driver {
+object Db {
   // https://mvnrepository.com/artifact/p6spy/p6spy
   const val p6spy = "3.9.1"
 
-  // https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
+  /**
+   * ## p6spy
+   * [maven](https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter)
+   */
   const val p6spySpringBootStarter = "1.9.0"
 
-  // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+  /**
+   * ## 新的mysql 连接器
+   * [maven](https://mvnrepository.com/artifact/com.mysql/mysql-connector-j)
+   */
   const val mysqlConnectorJ = "8.1.0"
 
   /**
-   * ## 内存数据库
+   * ## 文件数据库 sqlite
    * [maven](https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc)
    */
   const val sqlite = "3.41.2.0"
 
-  // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-  const val seleniumJava = "4.11.0"
 
-  // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-  const val webDriverManager = "5.4.1"
-
-  // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
-  // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
+  /**
+   * ## flyway
+   * [maven core](https://mvnrepository.com/artifact/org.flywaydb/flyway-core)
+   * [maven mysql](https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql)
+   */
   const val flyway = "9.21.1"
 
   // 测试用内存数据库

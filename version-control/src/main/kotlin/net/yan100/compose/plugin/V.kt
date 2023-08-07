@@ -5,7 +5,6 @@ package net.yan100.compose.plugin
  * 版本管理
  */
 object V {
-
   const val COMPOSE_VERSION = ProjectManager.version
 
   object Compose {
@@ -26,8 +25,9 @@ object V {
     const val PAY = COMPOSE_VERSION
   }
 
+  val Crawler = net.yan100.compose.plugin.versions.Crawler
   val Lang = net.yan100.compose.plugin.versions.Lang
-  val Driver = net.yan100.compose.plugin.versions.Driver
+  val Db = net.yan100.compose.plugin.versions.Db
   val PlatformSdk = net.yan100.compose.plugin.versions.PlatformSdk
   val Util = net.yan100.compose.plugin.versions.Util
   val Web = net.yan100.compose.plugin.versions.Web

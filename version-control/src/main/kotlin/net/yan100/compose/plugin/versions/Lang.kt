@@ -17,6 +17,5 @@ object Lang {
   // https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
   const val reactorKotlinExtension = "1.2.2"
 
-  // https://mvnrepository.com/artifact/org.jetbrains/annotations
-  const val jetbrainsAnnotations = "24.0.1"
+
 }
