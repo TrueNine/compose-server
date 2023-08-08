@@ -25,58 +25,31 @@ class OpenApiDocConfig {
   @ConditionalOnWebApplication
   fun userApi(p: SwaggerProperties): GroupedOpenApi {
     log.debug("注册 OpenApi3 文档")
-    val paths = arrayOf("/**")
-    val packagedToMatch = arrayOf(p.packages)
-    return GroupedOpenApi.builder()
-      .group(p.group)
-      .pathsToMatch(*paths)
-      .packagesToScan(*packagedToMatch)
-
+    val paths = p.scanUrlPatterns.toTypedArray()
+    val packagedToMatch = arrayOf(p.scanPackages)
+    return GroupedOpenApi.builder().group(p.group).pathsToMatch(*paths).packagesToScan(*packagedToMatch)
       .addOperationCustomizer { operation: Operation, _: HandlerMethod? ->
-
-        operation
-          .addParametersItem(
-            HeaderParameter()
-              .name(net.yan100.compose.core.http.Headers.AUTHORIZATION)
-              .example("eyJ0eXAiOiJ")
-              .description("jwt校验头")
-              .schema(
-                StringSchema()._default("")
-                  .name(net.yan100.compose.core.http.Headers.AUTHORIZATION)
-                  .description("jwt校验头")
-              )
+        if (p.enableJwtHeader) {
+          operation.addParametersItem(
+            HeaderParameter().name(p.jwtHeaderInfo.authTokenName).example("eyJ0eXAiOiJ").description("jwt校验头").schema(
+              StringSchema().name(p.jwtHeaderInfo.authTokenName).description("jwt校验头")
+            )
+          ).addParametersItem(
+            HeaderParameter().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token").schema(
+              StringSchema().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token")
+            )
           )
-          .addParametersItem(
-            HeaderParameter()
-              .name(net.yan100.compose.core.http.Headers.X_RE_FLUSH_TOKEN)
-              .example("eyJ0eXAiOiJ")
-              .description("jwt 刷新 token")
-              .schema(
-                StringSchema()
-                  ._default("")
-                  .name(net.yan100.compose.core.http.Headers.X_RE_FLUSH_TOKEN)
-                  .example("eyJ0eXAiOiJ")
-                  .description("jwt 刷新 token")
-              )
-          )
-      }
-      .build()
+        } else operation
+      }.build()
   }
 
   @Bean
   fun customOpenApi(p: SwaggerProperties): OpenAPI {
-    val authorInfo = p.authorInfoProperties
-    return OpenAPI()
-      .info(
-        Info()
-          .title(authorInfo.title)
-          .version(authorInfo.version)
-          .description(authorInfo.description)
-          .termsOfService(authorInfo.location)
-          .license(
-            License().name(authorInfo.license)
-              .url(authorInfo.licenseUrl)
-          )
+    val authorInfo = p.authorInfo
+    return OpenAPI().info(
+      Info().title(authorInfo.title).version(authorInfo.version).description(authorInfo.description).termsOfService(authorInfo.location).license(
+        License().name(authorInfo.license).url(authorInfo.licenseUrl)
       )
+    )
   }
 }

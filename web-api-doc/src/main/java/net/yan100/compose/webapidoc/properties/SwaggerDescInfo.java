@@ -19,11 +19,11 @@ public class SwaggerDescInfo {
   /**
    * 网址
    */
-  private String location = "https://github.com/TrueNine";
+  private String location = "https://gitee.com/yan100-net";
   /**
    * 作者
    */
-  private String author = "百研科技";
+  private String author = "YAN100";
   /**
    * 协议名称
    */
@@ -35,5 +35,5 @@ public class SwaggerDescInfo {
   /**
    * 分组名称
    */
-  private String group = "广西映月文化传媒有限公司";
+  private String group = "ABCDEFG";
 }

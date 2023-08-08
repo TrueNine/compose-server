@@ -76,7 +76,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    */
   private fun containsTokenPair(request: HttpServletRequest): Boolean =
     request.getHeader(Headers.AUTHORIZATION).hasText()
-      && request.getHeader(Headers.X_RE_FLUSH_TOKEN).hasText()
+      && request.getHeader(Headers.X_REFRESH).hasText()
 
 
   /**
@@ -96,7 +96,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @return [String]
    */
   private fun getReFlashToken(request: HttpServletRequest?): String? =
-    request?.getHeader(Headers.X_RE_FLUSH_TOKEN)
+    request?.getHeader(Headers.X_REFRESH)
 
   /**
    * 合法性检查
