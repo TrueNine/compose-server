@@ -26,8 +26,9 @@ class OpenApiDocConfig {
   fun userApi(p: SwaggerProperties): GroupedOpenApi {
     log.debug("注册 OpenApi3 文档")
     val paths = p.scanUrlPatterns.toTypedArray()
-    val packagedToMatch = arrayOf(p.scanPackages)
-    return GroupedOpenApi.builder().group(p.group).pathsToMatch(*paths).packagesToScan(*packagedToMatch)
+    return GroupedOpenApi.builder().group(p.group).pathsToMatch(*paths).packagesToScan(*p.scanPackages
+      .apply { this += "net.yan100.compose" }
+      .toTypedArray())
       .addOperationCustomizer { operation: Operation, _: HandlerMethod? ->
         if (p.enableJwtHeader) {
           operation.addParametersItem(

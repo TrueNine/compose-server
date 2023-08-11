@@ -13,7 +13,7 @@ public class SwaggerProperties {
   /**
    * 扫描的包
    */
-  private String scanPackages = "com";
+  private List<String> scanPackages = new ArrayList<>();
   /**
    * 扫描的路径
    */
