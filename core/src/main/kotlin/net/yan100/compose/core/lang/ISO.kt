@@ -59,7 +59,7 @@ enum class ISO4217(
 
   companion object {
     @JvmStatic
-    fun findVal(v: String?) = ISO4217.values().find { it.iso4217Str == v }
+    fun findVal(v: String?) = entries.find { it.iso4217Str == v }
   }
 
   override fun toString(): String {

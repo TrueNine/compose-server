@@ -31,6 +31,6 @@ enum class AttachmentTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = AttachmentTyping.values().find { it.value == v }
+    fun findVal(v: Int?) = entries.find { it.value == v }
   }
 }

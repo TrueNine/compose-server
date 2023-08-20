@@ -10,9 +10,6 @@ import net.yan100.compose.rds.base.BaseEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 /**
  * 用户组 用户
  *

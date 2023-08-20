@@ -47,6 +47,6 @@ enum class EncryptAlgorithmTyping(private val alg: String) : StringTyping {
 
   companion object {
     @JvmStatic
-    fun findVal(v: String?) = EncryptAlgorithmTyping.values().find { it.alg == v }
+    fun findVal(v: String?) = entries.find { it.alg == v }
   }
 }

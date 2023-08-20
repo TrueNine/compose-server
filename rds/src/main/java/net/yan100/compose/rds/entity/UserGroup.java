@@ -18,7 +18,7 @@ import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.EAGER;
 import static org.hibernate.annotations.NotFoundAction.IGNORE;
 
 /**

@@ -86,7 +86,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @return [String]
    */
   private fun getToken(request: HttpServletRequest?): String? =
-    request?.getHeader(net.yan100.compose.core.http.Headers.AUTHORIZATION)
+    request?.getHeader(Headers.AUTHORIZATION)
 
 
   /**

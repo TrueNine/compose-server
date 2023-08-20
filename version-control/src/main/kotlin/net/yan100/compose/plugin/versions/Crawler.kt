@@ -1,7 +1,5 @@
 package net.yan100.compose.plugin.versions
 
-import org.gradle.api.artifacts.Dependency
-
 object Crawler {
   // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
   const val webDriverManager = "5.4.1"

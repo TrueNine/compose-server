@@ -7,8 +7,5 @@ class Main : Plugin<Project> {
   override fun apply(project: Project) {
   }
 
-  companion object {
-
-
-  }
+  companion object
 }

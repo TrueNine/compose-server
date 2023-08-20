@@ -1,3 +1,11 @@
+val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
+val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
+val pluginGroup = "net.yan100.compose"
+val pluginVersion = "1.1.5"
+val yunXiaoUsername = System.getenv("YUNXIAO_USER")
+val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
+
+
 plugins {
   kotlin("jvm") version "1.9.0"
   java
@@ -5,6 +13,9 @@ plugins {
   `java-gradle-plugin`
   `maven-publish`
 }
+
+project.group = pluginGroup
+project.version = pluginVersion
 
 repositories {
   mavenCentral()
@@ -28,16 +39,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     jvmTarget = "17"
   }
 }
-
-val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
-val pluginGroup = "net.yan100.compose"
-val pluginVersion = "1.1.3"
-val yunXiaoUsername = System.getenv("YUNXIAO_USER")
-val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
-
-project.group = pluginGroup
-project.version = pluginVersion
 
 gradlePlugin {
   plugins {

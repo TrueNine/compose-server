@@ -5,7 +5,7 @@ package net.yan100.compose.plugin
  * 版本管理
  */
 object V {
-  const val COMPOSE_VERSION = ProjectManager.version
+  const val COMPOSE_VERSION = ProjectVersion.VERSION
 
   object Compose {
     const val DATA_COMMON_DATA_EXTRACT = COMPOSE_VERSION

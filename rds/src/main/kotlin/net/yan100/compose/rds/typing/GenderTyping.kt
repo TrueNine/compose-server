@@ -36,6 +36,6 @@ enum class GenderTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = GenderTyping.values().find { it.value == v }
+    fun findVal(v: Int?) = entries.find { it.value == v }
   }
 }

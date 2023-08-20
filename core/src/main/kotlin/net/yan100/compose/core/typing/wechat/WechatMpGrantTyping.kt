@@ -20,6 +20,6 @@ enum class WechatMpGrantTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: String?) = WechatMpGrantTyping.values().find { it.typingCode == v }
+    fun findVal(v: String?) = entries.find { it.typingCode == v }
   }
 }

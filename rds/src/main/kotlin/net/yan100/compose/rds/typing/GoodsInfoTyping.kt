@@ -34,6 +34,6 @@ enum class GoodsInfoTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = GoodsInfoTyping.values().find { it.value == v }
+    fun findVal(v: Int?) = entries.find { it.value == v }
   }
 }

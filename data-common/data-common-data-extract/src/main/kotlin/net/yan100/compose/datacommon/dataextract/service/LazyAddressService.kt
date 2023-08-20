@@ -1,6 +1,5 @@
 package net.yan100.compose.datacommon.dataextract.service
 
-import net.yan100.compose.datacommon.dataextract.models.CnDistrictCode
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp
 
 interface LazyAddressService {

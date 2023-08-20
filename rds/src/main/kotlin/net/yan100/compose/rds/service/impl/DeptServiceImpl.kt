@@ -4,7 +4,6 @@ import net.yan100.compose.rds.base.BaseServiceImpl
 import net.yan100.compose.rds.entity.Dept
 import net.yan100.compose.rds.repository.DeptRepo
 import net.yan100.compose.rds.service.DeptService
-import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.stereotype.Service
 
 @Service

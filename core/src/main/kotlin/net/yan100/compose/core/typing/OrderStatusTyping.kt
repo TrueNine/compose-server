@@ -46,6 +46,6 @@ enum class OrderStatusTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = OrderStatusTyping.values().find { it.orderType == v }
+    fun findVal(v: Int?) = entries.find { it.orderType == v }
   }
 }

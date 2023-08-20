@@ -16,7 +16,7 @@ interface AccountAggregator {
   /**
    * 登录指定账号，返回用户信息
    */
-  fun login(param: LoginAccountReq): net.yan100.compose.rds.entity.User?
+  fun login(param: LoginAccountReq): User?
 
   /**
    * 根据账号修改密码

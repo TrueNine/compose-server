@@ -2,10 +2,8 @@ package net.yan100.compose.core.http;
 
 
 import jakarta.annotation.Nullable;
-import net.yan100.compose.core.lang.Str;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

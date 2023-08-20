@@ -55,6 +55,6 @@ enum class PaymentTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = PaymentTyping.values().find { it.channelId == v }
+    fun findVal(v: Int?) = entries.find { it.channelId == v }
   }
 }

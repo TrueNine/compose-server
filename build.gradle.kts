@@ -1,12 +1,12 @@
+import net.yan100.compose.plugin.ProjectVersion
+import net.yan100.compose.plugin.Repos
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
-import net.yan100.compose.plugin.Repos.release
-import net.yan100.compose.plugin.Repos.snapshot
+import net.yan100.compose.plugin.Repos.yunXiaoRelese
+import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
+import net.yan100.compose.plugin.V
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import net.yan100.compose.plugin.V
-import net.yan100.compose.plugin.Repos
-import net.yan100.compose.plugin.ProjectManager
 
 plugins {
   java
@@ -69,8 +69,8 @@ allprojects {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
   }
 
-  group = ProjectManager.group
-  version = ProjectManager.version
+  group = ProjectVersion.GROUP
+  version = ProjectVersion.VERSION
 
   extra["springCloudVersion"] = V.Spring.springCloud
 }
@@ -110,7 +110,7 @@ subprojects {
 
   publishing {
     repositories {
-      maven(url = uri(if (version.toString().uppercase().contains("SNAPSHOT")) snapshot else release)) {
+      maven(url = uri(if (version.toString().uppercase().contains("SNAPSHOT")) yunXiaoSnapshot else yunXiaoRelese)) {
         credentials {
           this.username = yunXiaoUsername
           this.password = yunXiaoPassword
@@ -171,6 +171,6 @@ subprojects {
 
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
-  this.gradleVersion = ProjectManager.gradleVersion
+  this.gradleVersion = ProjectVersion.GRADLE_VERSION
 }
 
