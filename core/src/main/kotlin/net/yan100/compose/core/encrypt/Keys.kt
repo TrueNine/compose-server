@@ -239,6 +239,7 @@ object Keys {
    * @param keySize aesKeySize
    * @return aesKey
    */
+  @JvmStatic
   fun generateAesKey(
     seed: String = DEFAULT_SEED,
     keySize: Int = AES_KEY_SIZE
@@ -255,6 +256,7 @@ object Keys {
    * @param seed [Keys.DEFAULT_SEED]
    * @param keySize [Keys.AES_KEY_SIZE]
    */
+  @JvmStatic
   fun generateAesKeyToBase64(
     seed: String = DEFAULT_SEED,
     keySize: Int = AES_KEY_SIZE
