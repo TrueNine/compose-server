@@ -83,8 +83,9 @@ object Keys {
    * @return base64密钥
    */
   @JvmStatic
-  fun writeAesKeyToBase64(secret: SecretKeySpec): String? =
-    writeKeyToBase64(secret)
+  fun writeAesKeyToBase64(secret: SecretKeySpec): String? {
+    return writeKeyToBase64(secret)
+  }
 
 
   /**
@@ -132,9 +133,9 @@ object Keys {
    * @return ecc私钥
    */
   @JvmStatic
-  fun readEccPrivateKeyByBase64(base64: String): PrivateKey? =
-    readPrivateKeyByBase64AndAlg(base64, EncryptAlgorithmTyping.ECC)
-
+  fun readEccPrivateKeyByBase64(base64: String): PrivateKey? {
+    return readPrivateKeyByBase64AndAlg(base64, EncryptAlgorithmTyping.ECC)
+  }
 
   /**
    * @param base64 base64 公钥
@@ -145,13 +146,15 @@ object Keys {
   private fun readPublicKeyByBase64AndAlg(
     base64: String,
     alg: EncryptAlgorithmTyping
-  ): PublicKey? = runCatching {
-    X509EncodedKeySpec(
-      Base64Helper.decodeToByte(base64)
-    ).run {
-      KeyFactory.getInstance(alg.getValue()).generatePublic(this)
-    }
-  }.onFailure { log.error(::readPublicKeyByBase64AndAlg.name, it) }.getOrNull()
+  ): PublicKey? {
+    return runCatching {
+      X509EncodedKeySpec(
+        Base64Helper.decodeToByte(base64)
+      ).run {
+        KeyFactory.getInstance(alg.getValue()).generatePublic(this)
+      }
+    }.onFailure { log.error(::readPublicKeyByBase64AndAlg.name, it) }.getOrNull()
+  }
 
   /**
    * @param base64 base64 私钥
@@ -162,13 +165,15 @@ object Keys {
   private fun readPrivateKeyByBase64AndAlg(
     base64: String,
     alg: EncryptAlgorithmTyping
-  ): PrivateKey? = runCatching {
-    PKCS8EncodedKeySpec(Base64Helper.decodeToByte(base64)).run {
-      KeyFactory.getInstance(alg.getValue()).generatePrivate(this)
-    }
-  }.onFailure {
-    log.error(::readPrivateKeyByBase64AndAlg.name, it)
-  }.getOrNull()
+  ): PrivateKey? {
+    return runCatching {
+      PKCS8EncodedKeySpec(Base64Helper.decodeToByte(base64)).run {
+        KeyFactory.getInstance(alg.getValue()).generatePrivate(this)
+      }
+    }.onFailure {
+      log.error(::readPrivateKeyByBase64AndAlg.name, it)
+    }.getOrNull()
+  }
 
   /**
    * @param seed 种子
@@ -183,15 +188,17 @@ object Keys {
     keySize: Int = RSA_KEY_SIZE,
     algName: String = rsaAlg,
     provider: String? = "SunJCE"
-  ): KeyPair? = runCatching {
-    KeyPairGenerator.getInstance(algName, provider).run {
-      initialize(
-        keySize,
-        SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
-      )
-      generateKeyPair()
-    }
-  }.onFailure { log.error(::generateKeyPair.name, it) }.getOrNull()
+  ): KeyPair? {
+    return runCatching {
+      KeyPairGenerator.getInstance(algName, provider).run {
+        initialize(
+          keySize,
+          SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
+        )
+        generateKeyPair()
+      }
+    }.onFailure { log.error(::generateKeyPair.name, it) }.getOrNull()
+  }
 
   /**
    * @param seed 种子
@@ -202,17 +209,19 @@ object Keys {
   fun generateRsaKeyPair(
     seed: String = DEFAULT_SEED,
     keySize: Int = RSA_KEY_SIZE
-  ): RsaKeyPair? = generateKeyPair(
-    seed,
-    keySize,
-    EncryptAlgorithmTyping.RSA.getValue()!!,
-    "SunRsaSign"
-  )?.let { that ->
-    RsaKeyPair().takeIf {
-      that.private != null && that.public != null
-    }?.apply {
-      rsaPublicKey = that.public as? RSAPublicKey
-      rsaPrivateKey = that.private as? RSAPrivateKey
+  ): RsaKeyPair? {
+    return generateKeyPair(
+      seed,
+      keySize,
+      EncryptAlgorithmTyping.RSA.getValue()!!,
+      "SunRsaSign"
+    )?.let { that ->
+      RsaKeyPair().takeIf {
+        that.private != null && that.public != null
+      }?.apply {
+        rsaPublicKey = that.public as? RSAPublicKey
+        rsaPrivateKey = that.private as? RSAPrivateKey
+      }
     }
   }
 
@@ -221,8 +230,8 @@ object Keys {
    * @return ecc密钥对
    */
   @JvmStatic
-  fun generateEccKeyPair(seed: String = DEFAULT_SEED): EccKeyPair? =
-    runCatching {
+  fun generateEccKeyPair(seed: String = DEFAULT_SEED): EccKeyPair? {
+    return runCatching {
       val random = SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
       val curve = ECNamedCurveTable.getParameterSpec("P-256")
       KeyPairGenerator.getInstance("EC", "BC").run {
@@ -234,6 +243,7 @@ object Keys {
         }
       }
     }.onFailure { log.error(::generateEccKeyPair.name, it) }.getOrNull()
+  }
 
   /**
    * @param seed 种子
@@ -244,13 +254,15 @@ object Keys {
   fun generateAesKey(
     seed: String = DEFAULT_SEED,
     keySize: Int = AES_KEY_SIZE
-  ): SecretKeySpec? = runCatching {
-    val secureRandom = SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
-    KeyGenerator.getInstance("AES").run {
-      init(keySize, secureRandom)
-      SecretKeySpec(generateKey().encoded, "AES")
-    }
-  }.onFailure { log.error(::generateAesKey.name, it) }.getOrNull()
+  ): SecretKeySpec? {
+    return runCatching {
+      val secureRandom = SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
+      KeyGenerator.getInstance("AES").run {
+        init(keySize, secureRandom)
+        SecretKeySpec(generateKey().encoded, "AES")
+      }
+    }.onFailure { log.error(::generateAesKey.name, it) }.getOrNull()
+  }
 
   /**
    * ## 获取一个 base64 的 aesKey
@@ -261,8 +273,10 @@ object Keys {
   fun generateAesKeyToBase64(
     seed: String = DEFAULT_SEED,
     keySize: Int = AES_KEY_SIZE
-  ) = generateAesKey(seed, keySize)?.let {
-    Base64Helper.encode(it.encoded)
+  ): String? {
+    return generateAesKey(seed, keySize)?.let {
+      Base64Helper.encode(it.encoded)
+    }
   }
 
   /**
@@ -274,11 +288,13 @@ object Keys {
   fun readEccKeyPair(
     eccPublicKeyBase64: String,
     eccPrivateKeyBase64: String,
-  ): EccKeyPair? = EccKeyPair()
-    .apply {
-      eccPublicKey = readEccPublicKeyByBase64(eccPublicKeyBase64)
-      eccPrivateKey = readEccPrivateKeyByBase64(eccPrivateKeyBase64)
-    }.takeIf { null != it.eccPublicKey && null != it.eccPrivateKey }
+  ): EccKeyPair? {
+    return EccKeyPair()
+      .apply {
+        eccPublicKey = readEccPublicKeyByBase64(eccPublicKeyBase64)
+        eccPrivateKey = readEccPrivateKeyByBase64(eccPrivateKeyBase64)
+      }.takeIf { null != it.eccPublicKey && null != it.eccPrivateKey }
+  }
 
 
   /**
@@ -290,11 +306,13 @@ object Keys {
   fun readRsaKeyPair(
     rsaPublicKeyBase64: String,
     rsaPrivateKeyBase64: String,
-  ): RsaKeyPair? = RsaKeyPair()
-    .apply {
-      rsaPublicKey = readRsaPublicKeyByBase64(rsaPublicKeyBase64)
-      rsaPrivateKey = readRsaPrivateKeyByBase64(rsaPrivateKeyBase64)
-    }.takeIf { null != it.rsaPublicKey && null != it.rsaPrivateKeyBase64 }
+  ): RsaKeyPair? {
+    return RsaKeyPair()
+      .apply {
+        rsaPublicKey = readRsaPublicKeyByBase64(rsaPublicKeyBase64)
+        rsaPrivateKey = readRsaPrivateKeyByBase64(rsaPrivateKeyBase64)
+      }.takeIf { null != it.rsaPublicKey && null != it.rsaPrivateKeyBase64 }
+  }
 
   /**
    * @param publicKeyBase64 公钥
@@ -307,11 +325,12 @@ object Keys {
     publicKeyBase64: String,
     privateKeyBase64: String,
     alg: EncryptAlgorithmTyping
-  ): KeyPair? = KeyPair(
-    readPublicKeyByBase64AndAlg(publicKeyBase64, alg),
-    readPrivateKeyByBase64AndAlg(privateKeyBase64, alg)
-  ).takeIf { null != it.public && null != it.private }
-
+  ): KeyPair? {
+    return KeyPair(
+      readPublicKeyByBase64AndAlg(publicKeyBase64, alg),
+      readPrivateKeyByBase64AndAlg(privateKeyBase64, alg)
+    ).takeIf { null != it.public && null != it.private }
+  }
 
   /**
    * 设置生成 ecc 的安全管理器

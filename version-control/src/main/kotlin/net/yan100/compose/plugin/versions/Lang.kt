@@ -16,6 +16,4 @@ object Lang {
 
   // https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
   const val reactorKotlinExtension = "1.2.2"
-
-
 }
