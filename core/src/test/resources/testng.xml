@@ -2,10 +2,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="核心包测试" parallel="classes">
-  <test name="编解码测试" parallel="classes">
+  <test name="编解码测试" parallel="methods">
     <packages>
       <package name="net.yan100.compose.core.encrypt"/>
       <package name="net.yan100.compose.core.encrypt.base64"/>
+    </packages>
+  </test>
+  <test name="语言辅助工具包测试">
+    <packages>
+      <package name="net.yan100.compose.core.lang"/>
     </packages>
   </test>
 </suite>

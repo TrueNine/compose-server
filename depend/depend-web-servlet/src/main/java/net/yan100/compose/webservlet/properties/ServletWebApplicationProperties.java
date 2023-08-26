@@ -1,4 +1,4 @@
-package net.yan100.compose.core.properties;
+package net.yan100.compose.webservlet.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

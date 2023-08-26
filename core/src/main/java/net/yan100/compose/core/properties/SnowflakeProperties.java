@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2023-04-01
  */
 @Data
-@ConfigurationProperties(prefix = "compose.rds.snowflake")
+@ConfigurationProperties(prefix = "compose.core.snowflake")
 public class SnowflakeProperties {
   Long workId = (long) 1;
   Long dataCenterId = (long) 2;

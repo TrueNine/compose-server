@@ -13,7 +13,7 @@ import com.wechat.pay.java.service.refund.model.CreateRequest
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
-import net.yan100.compose.core.encrypt.EncryptAlgorithmTyping
+import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import net.yan100.compose.core.encrypt.Encryptors
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.exceptions.KnownException

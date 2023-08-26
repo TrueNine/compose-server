@@ -7,7 +7,7 @@ object Plugin {
   const val spring = V.Spring.springBoot
 
   // https://mvnrepository.com/artifact/io.spring.gradle/dependency-management-plugin
-  const val springDependencyManagement = "1.1.2"
+  const val springDependencyManagement = "1.1.3"
 
   // https://mvnrepository.com/artifact/org.jetbrains.kotlin.plugin.spring/org.jetbrains.kotlin.plugin.spring.gradle.plugin
   const val kotlinSpring = V.Lang.kotlin

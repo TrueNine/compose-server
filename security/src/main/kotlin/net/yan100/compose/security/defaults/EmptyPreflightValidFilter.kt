@@ -2,11 +2,12 @@ package net.yan100.compose.security.defaults
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import net.yan100.compose.core.lang.EmptyDefault
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.core.models.AuthUserInfo
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 
-class EmptyPreflightValidFilter : net.yan100.compose.core.lang.EmptyDefaultModel, SecurityPreflightValidFilter() {
+class EmptyPreflightValidFilter : EmptyDefault, SecurityPreflightValidFilter() {
 
   private val log = slf4j(this::class)
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime
  * @author TrueNine
  * @since 2022-12-20
  */
-class ReFlushTokenModel {
+class RefreshToken {
   var userId: String? = null
   var deviceId: String? = null
   var loginIpAddr: String? = null

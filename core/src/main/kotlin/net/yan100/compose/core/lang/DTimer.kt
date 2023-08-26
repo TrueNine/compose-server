@@ -36,17 +36,12 @@ object DTimer {
   }
 
   @JvmStatic
-  fun sleepOne() {
-    sleep(1)
-  }
-
-  @JvmStatic
-  fun ofSecondDuration(second: Long): Duration {
+  fun getDurationBySecond(second: Long): Duration {
     return Duration.of(second, ChronoUnit.SECONDS)
   }
 
   @JvmStatic
-  fun ofMillisDuration(millis: Long): Duration {
+  fun getDurationByMillis(millis: Long): Duration {
     return Duration.of(millis, ChronoUnit.MILLIS)
   }
 
@@ -56,7 +51,7 @@ object DTimer {
   }
 
   @JvmStatic
-  fun plusMillis(current: Long, plusMillis: Long): Date {
+  fun plusMillis(current: Long, plusMillis: Long = System.currentTimeMillis()): Date {
     return Date(current + plusMillis)
   }
 
@@ -92,12 +87,14 @@ object DTimer {
     .toLocalDateTime()
 
   @JvmStatic
-  fun dateToLocalDate(date: Date) =
-    date.toInstant().atZone(ZoneId.systemDefault())
+  fun dateToLocalDate(date: Date): LocalDate {
+    return date.toInstant().atZone(ZoneId.systemDefault())
       .toLocalDate()
+  }
 
   @JvmStatic
-  fun dateToLocalTime(date: Date): LocalTime =
-    date.toInstant().atZone(ZoneId.of("GMT"))
+  fun dateToLocalTime(date: Date): LocalTime {
+    return date.toInstant().atZone(ZoneId.of("GMT"))
       .toLocalTime()
+  }
 }

@@ -1,10 +1,11 @@
 package net.yan100.compose.security.defaults
 
+import net.yan100.compose.core.lang.EmptyDefault
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
 
 
-class EmptySecurityDetailsService : net.yan100.compose.core.lang.EmptyDefaultModel, SecurityUserDetailsService() {
+class EmptySecurityDetailsService : EmptyDefault, SecurityUserDetailsService() {
   private val log = slf4j(this::class)
 
   init {

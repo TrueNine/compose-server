@@ -15,7 +15,7 @@ object Web {
   // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
   // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter
   const val knife4j = "3.0.3"
-  const val knife4jJakarta = "4.2.0"
+  const val knife4jJakarta = "4.3.0"
 
   // auth0 JWT
   // https://mvnrepository.com/artifact/com.auth0/java-jwt
@@ -23,4 +23,7 @@ object Web {
 
   // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
   const val jJwt = "0.9.1"
+
+  // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+  const val jwtApi = "0.11.5"
 }

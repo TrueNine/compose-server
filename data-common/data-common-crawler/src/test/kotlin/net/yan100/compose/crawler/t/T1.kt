@@ -48,7 +48,6 @@ class T1 {
     }
   }
 
-
   fun t2() {
     Playwright.create()
     CLI.main(arrayOf("codegen", "bilibili.com"))

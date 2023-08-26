@@ -1,4 +1,4 @@
-package net.yan100.compose.core.encrypt
+package net.yan100.compose.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.lang.StringTyping

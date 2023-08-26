@@ -10,7 +10,7 @@ object Util {
 
 
   // https://mvnrepository.com/artifact/ognl/ognl
-  const val ognl = "3.4.1"
+  const val ognl = "3.4.2"
 
   // https://mvnrepository.com/artifact/com.google.code.gson/gson
   const val gson = "2.10.1"

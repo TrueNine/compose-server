@@ -1,6 +1,7 @@
 package net.yan100.compose.core.encrypt
 
 import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.nio.charset.StandardCharsets

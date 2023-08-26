@@ -20,7 +20,6 @@ import java.util.jar.JarFile;
  * @author TrueNine
  * @since 2022-10-29
  */
-@Deprecated
 public class ResourcesLocator {
   private static final String JAR_PROTOCOL = "jar";
   private static final String FILE_PROTOCOL = "file";
@@ -43,7 +42,6 @@ public class ResourcesLocator {
     // 创建临时文件夹
     var a = TEMP_DIR_FILE.mkdirs();
     var b = GENERATED_DIR_FILE.mkdirs();
-
     initDefinedClasses();
   }
 

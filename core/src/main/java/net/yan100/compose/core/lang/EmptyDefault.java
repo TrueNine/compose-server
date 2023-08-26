@@ -6,8 +6,8 @@ package net.yan100.compose.core.lang;
  * @author TrueNine
  * @since 2023-04-11
  */
-public interface EmptyDefaultModel {
-  static boolean isEmptyDefaultModel(Object anyObject) {
-    return anyObject instanceof EmptyDefaultModel;
+public interface EmptyDefault {
+  static boolean isEmptyDefault(Object anyObject) {
+    return anyObject instanceof EmptyDefault;
   }
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2023-04-22
  */
 @Data
-@ConfigurationProperties(prefix = "compose.key")
+@ConfigurationProperties(prefix = "compose.keys")
 public class KeysProperties {
   /**
    * 密钥存放的 resources 对应目录

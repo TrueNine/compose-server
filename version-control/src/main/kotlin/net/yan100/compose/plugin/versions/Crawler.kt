@@ -2,7 +2,7 @@ package net.yan100.compose.plugin.versions
 
 object Crawler {
   // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-  const val webDriverManager = "5.4.1"
+  val webDriverManager = "5.5.0"
 
   // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
   const val seleniumJava = "4.11.0"
@@ -22,5 +22,5 @@ object Crawler {
    * ## playwright
    * [maven](https://repo1.maven.org/maven2/com/microsoft/playwright/playwright/)
    */
-  const val playwright = "1.36.0"
+  const val playwright = "1.37.0"
 }

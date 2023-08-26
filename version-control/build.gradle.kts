@@ -1,13 +1,13 @@
 val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 val pluginGroup = "net.yan100.compose"
-val pluginVersion = "1.1.5"
+val pluginVersion = "1.1.6"
 val yunXiaoUsername = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
 
 
 plugins {
-  kotlin("jvm") version "1.9.0"
+  kotlin("jvm") version "1.9.10"
   java
   `java-library`
   `java-gradle-plugin`
@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
   implementation(gradleApi())
-  implementation("${kotlin("stdlib")}:1.9.0")
+  implementation("${kotlin("stdlib")}:1.9.10")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

@@ -15,18 +15,18 @@ object LogKt {
   /**
    * 获取日志对象
    *
-   * @param kclazz 当前日志记录的 kt 类对象
+   * @param kClazz 当前日志记录的 kt 类对象
    * @return [Logger] log 对象
    */
-  fun getLog(kclazz: KClass<*>): Logger = LoggerFactory.getLogger(kclazz.java)
+  private fun getLog(kClazz: KClass<*>): Logger = LoggerFactory.getLogger(kClazz.java)
 
   /**
    * 获取日志对象
    *
-   * @param kclazz 当前日志记录的 kt 类对象
+   * @param anyWay 当前日志记录的 kt 类对象
    * @return [Logger] log 对象
    */
   fun getLog(anyWay: Any): Logger = getLog(anyWay::class)
 }
 
-fun slf4j(kclazz: KClass<*>): Logger = LoggerFactory.getLogger(kclazz.java)
+fun slf4j(kClass: KClass<*>): Logger = LoggerFactory.getLogger(kClass.java)

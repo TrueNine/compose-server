@@ -2,6 +2,7 @@ package net.yan100.compose.core.encrypt
 
 import com.google.common.annotations.VisibleForTesting
 import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import org.bouncycastle.jce.spec.IESParameterSpec
 import org.slf4j.Logger
 import java.nio.charset.Charset

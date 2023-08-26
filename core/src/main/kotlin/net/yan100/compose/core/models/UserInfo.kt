@@ -9,10 +9,9 @@ import lombok.EqualsAndHashCode
  * @author T_teng
  * @since 2023-04-06
  */
-@EqualsAndHashCode
 open class UserInfo {
   @Nullable
-   var userId: String? = null
+  var userId: String? = null
 
   @Nullable
   var account: String? = null

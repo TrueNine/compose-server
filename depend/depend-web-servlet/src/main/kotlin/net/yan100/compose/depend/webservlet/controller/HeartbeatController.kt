@@ -1,4 +1,4 @@
-package net.yan100.compose.depend.webclient.controller
+package net.yan100.compose.depend.webservlet.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

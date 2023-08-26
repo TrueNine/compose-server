@@ -11,9 +11,7 @@ object TemplateRender {
 
   init {
     config.setDirectoryForTemplateLoading(
-      File(
-        net.yan100.compose.core.lang.ResourcesLocator.classpathUrl("template").toURI()
-      )
+      File(javaClass.classLoader.getResource("template")!!.toURI())
     )
   }
 
