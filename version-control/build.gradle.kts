@@ -1,7 +1,7 @@
 val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 val pluginGroup = "net.yan100.compose"
-val pluginVersion = "1.1.7"
+val pluginVersion = "1.1.9"
 val yunXiaoUsername = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
 
