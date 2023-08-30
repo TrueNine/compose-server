@@ -4,6 +4,7 @@ project.version = V.Compose.RDS
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-data-jpa")
+  api("org.springframework.modulith:spring-modulith-starter-jpa")
   implementation("jakarta.validation:jakarta.validation-api")
   implementation("org.springframework:spring-web")
   implementation("cn.hutool:hutool-core:${V.Util.huTool}")
@@ -22,3 +23,8 @@ tasks.withType<Test> {
     suiteXmlFiles.add(File("src/test/resources/testng.xml"))
   }
 }
+//hibernate {
+//  enhancement {
+//    enableAssociationManagement.set(true)
+//  }
+//}

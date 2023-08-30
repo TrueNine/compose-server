@@ -10,6 +10,7 @@ dependencies {
   api("io.swagger.core.v3:swagger-annotations-jakarta:${V.StandardEdition.swaggerAnnotationJakarta}")
   api("org.slf4j:slf4j-api")
   api("jakarta.validation:jakarta.validation-api")
+  implementation("org.springframework.modulith:spring-modulith-starter-core")
   implementation("org.springframework.boot:spring-boot-starter-json")
   implementation("org.springframework.security:spring-security-crypto")
   implementation("org.bouncycastle:bcprov-jdk18on:${V.Security.bcprovJdk18on}")

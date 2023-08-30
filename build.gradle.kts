@@ -15,13 +15,14 @@ plugins {
   `visual-studio`
   `maven-publish`
   id("net.yan100.compose.version-control")
-  id("org.springframework.boot") version "3.1.2"
-  id("io.spring.dependency-management") version "1.1.2"
-  kotlin("jvm") version "1.9.0"
-  kotlin("kapt") version "1.9.0"
-  kotlin("plugin.spring") version "1.9.0"
-  kotlin("plugin.jpa") version "1.9.0"
-  kotlin("plugin.lombok") version "1.9.0"
+  id("org.springframework.boot") version "3.1.3"
+  id("io.spring.dependency-management") version "1.1.3"
+  id("org.hibernate.orm") version "6.2.7.Final"
+  kotlin("jvm") version "1.9.10"
+  kotlin("kapt") version "1.9.10"
+  kotlin("plugin.spring") version "1.9.10"
+  kotlin("plugin.jpa") version "1.9.10"
+  kotlin("plugin.lombok") version "1.9.10"
   id("com.github.ben-manes.versions") version "0.47.0"
 }
 
@@ -48,6 +49,7 @@ allprojects {
     enabled = false
   }
 
+
   tasks.withType<BootJar> {
     enabled = false
   }
@@ -73,6 +75,7 @@ allprojects {
   version = ProjectVersion.VERSION
 
   extra["springCloudVersion"] = V.Spring.springCloud
+  extra["snippetsDir"] = file("build/generated-snippets")
 }
 
 subprojects {
@@ -82,6 +85,7 @@ subprojects {
   apply(plugin = "java")
   apply(plugin = "kotlin")
   apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
+  apply(plugin = "org.hibernate.orm")
   apply(plugin = "org.jetbrains.kotlin.plugin.spring")
   apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
   apply(plugin = "io.spring.dependency-management")
@@ -108,6 +112,7 @@ subprojects {
     }
   }
 
+
   publishing {
     repositories {
       maven(url = uri(if (version.toString().uppercase().contains("SNAPSHOT")) yunXiaoSnapshot else yunXiaoRelese)) {
@@ -129,29 +134,33 @@ subprojects {
   }
 
   dependencies {
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
+
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
       exclude("org.apache.logging.log4j")
       exclude("org.springframework.boot", "spring-boot-starter-logging")
       exclude("org.springframework.boot", "spring-boot")
     }
+
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     annotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
-
     compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-
     testAnnotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
     testCompileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
+
+
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    testImplementation("io.projectreactor:reactor-test")
+    testImplementation("io.mockk:mockk:${V.Test.mockk}")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
       exclude("org.junit.jupiter", "junit-jupiter")
+      testImplementation("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
+      testImplementation("org.testng:testng:${V.Test.testNG}")
     }
 
-    testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
-    testImplementation("org.testng:testng:${V.Test.testNG}")
-    testImplementation("io.mockk:mockk:${V.Test.mockk}")
+    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
   }
 
   dependencyManagement {
@@ -159,6 +168,7 @@ subprojects {
       mavenBom("org.springframework.boot:spring-boot-dependencies:${V.Spring.springBoot}")
       mavenBom("org.springframework.cloud:spring-cloud-dependencies:${V.Spring.springCloud}")
       mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${V.Spring.cloudAlibaba}")
+      mavenBom("org.springframework.modulith:spring-modulith-bom:1.0.0")
     }
   }
 

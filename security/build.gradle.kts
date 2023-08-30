@@ -13,7 +13,6 @@ dependencies {
     implementation("net.sourceforge.nekohtml:nekohtml:${V.Security.nekohtml}")
   }
   implementation(project(":core"))
-  testImplementation("org.springframework.security:spring-security-test")
 }
 
 
