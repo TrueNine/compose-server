@@ -1,4 +1,4 @@
-package com.truenine.component.rds.typing
+package net.yan100.compose.rds.converters.typing
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
