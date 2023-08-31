@@ -3,8 +3,8 @@ import net.yan100.compose.plugin.V
 project.version = V.Compose.RDS
 
 dependencies {
+  api("org.springframework.modulith:spring-modulith-starter-jpa:${V.Spring.modulith}")
   api("org.springframework.boot:spring-boot-starter-data-jpa")
-  api("org.springframework.modulith:spring-modulith-starter-jpa")
   implementation("jakarta.validation:jakarta.validation-api")
   implementation("org.springframework:spring-web")
   implementation("cn.hutool:hutool-core:${V.Util.huTool}")

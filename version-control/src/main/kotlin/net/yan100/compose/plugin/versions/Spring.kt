@@ -9,4 +9,10 @@ object Spring {
 
   // https://spring.io/projects/spring-cloud-alibaba#learn
   const val cloudAlibaba = "2021.0.4.0"
+
+  /**
+   * ## spring modulith
+   * [modulith nexus](https://central.sonatype.com/namespace/org.springframework.modulith)
+   */
+  const val modulith = "1.0.0"
 }

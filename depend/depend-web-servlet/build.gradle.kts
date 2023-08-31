@@ -9,4 +9,7 @@ dependencies {
     exclude("org.springframework.boot", "spring-boot-starter-tomcat")
   }
   api("org.springframework.boot:spring-boot-starter-undertow")
+  api("org.springframework.boot:spring-boot-starter-websocket") {
+    exclude(group = "org.springframework.boot",module = "spring-boot-starter-tomcat")
+  }
 }

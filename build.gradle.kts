@@ -168,7 +168,7 @@ subprojects {
       mavenBom("org.springframework.boot:spring-boot-dependencies:${V.Spring.springBoot}")
       mavenBom("org.springframework.cloud:spring-cloud-dependencies:${V.Spring.springCloud}")
       mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${V.Spring.cloudAlibaba}")
-      mavenBom("org.springframework.modulith:spring-modulith-bom:1.0.0")
+      mavenBom("org.springframework.modulith:spring-modulith-bom:${V.Spring.modulith}")
     }
   }
 
