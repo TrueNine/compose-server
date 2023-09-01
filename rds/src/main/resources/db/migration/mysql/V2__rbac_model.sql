@@ -210,3 +210,10 @@ CREATE TABLE IF NOT EXISTS dept
   doc  VARCHAR(2047) NULL COMMENT '描述'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '部门';
 CALL add_base_struct('dept');
+
+CREATE TABLE IF NOT EXISTS user_dept
+(
+  user_id BIGINT UNSIGNED NOT NULL COMMENT '用户 id',
+  dept_id BIGINT UNSIGNED NOT NULL COMMENT '部门 id'
+) DEFAULT CHARSET = utf8mb4,COMMENT '用户  部门';
+CALL add_base_struct('user_dept');
