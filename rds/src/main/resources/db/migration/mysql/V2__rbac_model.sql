@@ -16,7 +16,12 @@ SET id=0,
     nick_name='ROOT',
     pwd_enc='$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi',
     last_login_time=NOW();
-
+INSERT INTO user
+SET id=1,
+    account='usr',
+    nick_name='USR',
+    pwd_enc='$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa',
+    last_login_time=NOW();
 
 CREATE TABLE IF NOT EXISTS user_info
 (
@@ -41,12 +46,21 @@ CALL add_base_struct('user_info');
 INSERT INTO user_info
 SET id=0,
     user_id=0,
-    first_name='赵',
-    last_name='日天',
-    email='truenine@163.com',
+    first_name='R',
+    last_name='OOT',
+    email='truenine304520@gmail.com',
     birthday='1997-11-04',
     phone='186977192235',
-    gender=0;
+    gender=1;
+INSERT INTO user_info
+SET id=1,
+  user_id=1,
+  first_name='U',
+  last_name='SR',
+  email='truenine304520@gmail.com',
+  birthday='2000-01-01',
+  phone='13288086050',
+  gender=1;
 
 
 CREATE TABLE IF NOT EXISTS role
@@ -182,6 +196,10 @@ INSERT INTO user_role_group
 SET id=0,
     user_id=0,
     role_group_id=0;
+INSERT INTO user_role_group
+SET id=0,
+    user_id=0,
+    role_group_id=1;
 
 
 CREATE TABLE IF NOT EXISTS user_group_role_group
