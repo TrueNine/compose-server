@@ -197,7 +197,7 @@ SET id=0,
     user_id=0,
     role_group_id=0;
 INSERT INTO user_role_group
-SET id=0,
+SET id=1,
     user_id=0,
     role_group_id=1;
 
