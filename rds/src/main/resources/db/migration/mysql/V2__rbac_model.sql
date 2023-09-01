@@ -202,3 +202,11 @@ CREATE TABLE IF NOT EXISTS user_group_user
   INDEX (user_id) COMMENT '外联 用户'
 ) DEFAULT CHARSET = utf8mb4,COMMENT '用户组 用户';
 CALL add_base_struct('user_group_user');
+
+
+CREATE TABLE IF NOT EXISTS dept
+(
+  name VARCHAR(255)  NOT NULL COMMENT '名称',
+  doc  VARCHAR(2047) NULL COMMENT '描述'
+) DEFAULT CHARSET = utf8mb4,COMMENT '部门';
+CALL add_base_struct('dept');
