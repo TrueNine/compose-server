@@ -40,7 +40,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
     }
     val authInfo = if (containsTokenPair(request)) {
       val token = getToken(request)
-      val ref = getReFlashToken(request)
+      val ref = getRefreshToken(request)
       getUserAuthorizationInfo(token, ref, request, response)
     } else {
       log.trace("没有发现用户信息，直接放行")
@@ -95,7 +95,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getReFlashToken(request: HttpServletRequest?): String? =
+  private fun getRefreshToken(request: HttpServletRequest?): String? =
     request?.getHeader(Headers.X_REFRESH)
 
   /**

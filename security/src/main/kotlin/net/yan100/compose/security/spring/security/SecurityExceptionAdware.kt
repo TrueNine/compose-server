@@ -42,7 +42,7 @@ abstract class SecurityExceptionAdware(
   private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorMessage) {
     response.status = msg.code
     response.characterEncoding = "UTF-8"
-    response.contentType = net.yan100.compose.core.http.MediaTypes.JSON.media()
+    response.contentType = net.yan100.compose.core.http.MediaTypes.JSON.getValue()
     response.locale = Locale("zh-CN", "CN")
     val write = response.writer
     write.print(mapper?.writeValueAsString(msg))
@@ -51,6 +51,6 @@ abstract class SecurityExceptionAdware(
 
   companion object {
     @JvmStatic
-    private val log = slf4j(this::class)
+    private val log = slf4j(SecurityExceptionAdware::class)
   }
 }

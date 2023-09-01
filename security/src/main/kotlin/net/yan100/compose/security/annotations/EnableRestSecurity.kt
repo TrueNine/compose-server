@@ -1,11 +1,9 @@
-package net.yan100.compose.security.annotations;
+package net.yan100.compose.security.annotations
 
-
-import net.yan100.compose.security.autoconfig.FileKeysRepositoryAutoConfiguration;
-import net.yan100.compose.security.autoconfig.SecurityPolicyBean;
-import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
+import net.yan100.compose.security.autoconfig.FileKeysRepositoryAutoConfiguration
+import net.yan100.compose.security.autoconfig.SecurityPolicyBean
+import org.springframework.context.annotation.Import
+import java.lang.annotation.Inherited
 
 /**
  * 开启安全管理器
@@ -14,37 +12,35 @@ import java.lang.annotation.*;
  * @since 2022-09-29
  */
 @Inherited
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Import({
-  SecurityPolicyBean.class,
-  FileKeysRepositoryAutoConfiguration.class
-})
-public @interface EnableRestSecurity {
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+@Import(
+  SecurityPolicyBean::class, FileKeysRepositoryAutoConfiguration::class
+)
+annotation class EnableRestSecurity(
   /**
    * @return 需要放行的匹配规则
    */
-  String[] allowPatterns() default {};
-
-
+  val allowPatterns: Array<String> = [],
   /**
    * @return 用户登录 url
    */
-  String[] loginUrl() default {};
-
+  val loginUrl: Array<String> = [],
   /**
    * @return 退出登录 url
    */
-  String[] logoutUrl() default {};
-
+  val logoutUrl: Array<String> = [],
   /**
    * @return 允许 swagger api 放行
    */
-  boolean allowSwagger() default false;
-
+  val allowSwagger: Boolean = false,
   /**
    * @return 允许 放行webjars
    */
-  boolean allowWebJars() default true;
-}
+  val allowWebJars: Boolean = true,
+  /**
+   * @return 任意地请求是否需要认证
+   */
+  val anyRequestAuthed: Boolean = false
+)

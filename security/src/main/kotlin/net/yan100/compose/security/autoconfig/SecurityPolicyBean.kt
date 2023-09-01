@@ -86,7 +86,10 @@ class SecurityPolicyBean {
     }
     httpSecurity.authorizeHttpRequests {
       it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
-      it.anyRequest().authenticated()
+
+      log.debug("任意请求是否无需认证 = {}", enableAnnotation.anyRequestAuthed)
+      if (enableAnnotation.anyRequestAuthed) it.anyRequest().authenticated()
+      else it.anyRequest().permitAll()
     }
     httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
 
