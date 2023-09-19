@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.SCHEDULE
+project.version = libs.versions.compose.schedule.get()
 
 dependencies {
   //api("com.xuxueli:xxl-job-core:${V.Schedule.xxlJob}")

@@ -22,7 +22,8 @@ object Util {
   const val huTool = "5.8.21"
 
   // https://mvnrepository.com/artifact/com.google.guava/guava
-  const val guava = "32.1.2-jre"
+  const val guavaJre = "32.1.2-jre"
+  const val guavaAndroid = "32.1.2-android"
 
   // 离线ip包
   // https://mvnrepository.com/artifact/org.lionsoul/ip2region

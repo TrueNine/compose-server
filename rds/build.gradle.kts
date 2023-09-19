@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.RDS
+project.version = libs.versions.compose.rds.asProvider().get()
 
 dependencies {
   api("org.springframework.modulith:spring-modulith-starter-jpa:${V.Spring.modulith}")

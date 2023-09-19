@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.PAY
+project.version = libs.versions.compose.pay.get()
 
 dependencies {
   api("org.springframework.boot:spring-boot-starter-validation")

@@ -34,5 +34,25 @@ object Repos {
   const val springMilestone = "${SPRING_REPO}milestone"
   const val springLibMilestone = "${SPRING_REPO}libs-milestone"
   const val springSnapshot = "${SPRING_REPO}snapshot"
+
+  val publicRepositories = listOf(
+    huaweiCloudMaven,
+
+    aliPublic,
+    aliCentral,
+    aliJCenter,
+    aliGoogle,
+    aliGradlePlugin,
+    aliSpring,
+    aliSpringPlugin,
+    aliGrailsCore,
+    aliApacheSnapshots,
+
+
+
+    springMilestone,
+    springLibMilestone,
+    springSnapshot
+  )
 }
 

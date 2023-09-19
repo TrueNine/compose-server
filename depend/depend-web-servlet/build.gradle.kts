@@ -1,6 +1,5 @@
-import net.yan100.compose.plugin.V
+project.version = libs.versions.compose.depend.web.servlet.get()
 
-project.version = V.Compose.DEPEND_WEB_SERVLET
 
 dependencies {
   implementation(project(":core"))
@@ -10,6 +9,6 @@ dependencies {
   }
   api("org.springframework.boot:spring-boot-starter-undertow")
   api("org.springframework.boot:spring-boot-starter-websocket") {
-    exclude(group = "org.springframework.boot",module = "spring-boot-starter-tomcat")
+    exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
   }
 }

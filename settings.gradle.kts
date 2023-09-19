@@ -1,4 +1,3 @@
-
 pluginManagement {
   repositories {
     mavenLocal()
@@ -9,6 +8,15 @@ pluginManagement {
     mavenCentral()
     gradlePluginPortal()
     google()
+  }
+}
+
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    create("libs") {
+      from(files("version-control/libs.versions.toml"))
+    }
   }
 }
 

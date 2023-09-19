@@ -1,0 +1,89 @@
+[plugins]
+compose-version-control = { id = "net.yan100.compose.version-control", version.ref = "compose-versionControl" }
+kt-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kt-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kt-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kt-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
+kt-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-boot-dependencymanagement = { id = "io.spring.dependency-management", version.ref = "gradle-plugin-spring-boot-dependencymanagement" }
+hibernate-orm = { id = "org.hibernate.orm", version.ref = "hibernate" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-plugin-version-plugin" }
+
+[bundles]
+spring-kotlin-testng = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "test-mockk", "test-testng", "db-hsql", "db-sqlite"]
+kt = ["kt-stdlib-jdk8", "kt-reflact", "ktx-coroutine-reactor", "reactor-kt-extensions", "jbr-annotation"]
+
+[libraries]
+spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
+spring-modulith-test = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
+
+kt-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kt-reflact = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+ktx-coroutine-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "ktx-coroutine" }
+reactor-kt-extensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version.ref = "reactor-kt-extensions" }
+jbr-annotation = { group = "org.jetbrains", name = "annotations", version.ref = "jbr-annotation" }
+
+test-mockk = { group = "io.mockk", name = "mockk", version.ref = "test-mockk" }
+test-testng = { group = "org.testng", name = "testng", version.ref = "test-testng" }
+test-reactor-test = { group = "io.projectreactor", name = "reactor-test" }
+
+db-hsql = { group = "org.hsqldb", name = "hsqldb", version.ref = "db-hsql" }
+db-sqlite = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "db-sqlite" }
+db-mysql-j = { group = "com.mysql", name = "mysql-connector-j", version.ref = "db-mysql-j" }
+kt-testng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", version.ref = "kotlin" }
+
+util-guava-jre = { group = "com.google.guava", name = "guava", version.ref = "util-guava-jre" }
+util-guava-android = { group = "com.google.guava", name = "guava", version.ref = "util-guava-android" }
+
+[versions]
+compose = "0.6.54"
+compose-core = "0.6.54"
+compose-rds = "0.6.54"
+compose-rds-gen = "0.6.54"
+compose-oss = "0.6.54"
+compose-pay = "0.6.54"
+compose-schedule = "0.6.54"
+compose-secuirty = "0.6.54"
+compose-secuirty-oauth2 = "0.6.54"
+compose-web-api-doc = "0.6.54"
+compose-cacheable = "0.6.54"
+compose-datacommon-cralwer = "0.6.54"
+compose-datacommon-dataextract = "0.6.54"
+compose-depend-flyway = "0.6.54"
+compose-depend-web-servlet = "0.6.54"
+compose-depend-web-client = "0.6.54"
+compose-version-control-plugin = "1.1.13"
+
+gradle = "8.3"
+compose-versionControl = "1.1.12"
+
+hibernate = "6.2.7.Final"
+
+
+java = "17"
+kotlin = "1.9.10"
+ktx-coroutine = "1.7.3"
+reactor-kt-extensions = "1.2.2"
+jbr-annotation = "24.0.1"
+spring-boot = "3.1.1"
+
+
+# https://github.com/ben-manes/gradle-versions-plugin
+gradle-plugin-version-plugin = "0.48.0"
+gradle-plugin-spring-boot-dependencymanagement = "1.1.3"
+
+
+test-testng = "7.8.0"
+test-mockk = "1.13.7"
+test-junit = "5.10.0"
+
+
+db-hsql = "2.7.2"
+db-sqlite = "3.43.0.0"
+db-mysql-j = "8.1.0"
+
+util-hutool = "5.8.22"
+util-guava-jre = "32.1.2-jre"
+util-guava-android = "32.1.2-android"

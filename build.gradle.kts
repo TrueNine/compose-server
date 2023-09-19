@@ -1,5 +1,6 @@
-import net.yan100.compose.plugin.ProjectVersion
 import net.yan100.compose.plugin.Repos
+import net.yan100.compose.plugin.ProjectVersion
+
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.Repos.yunXiaoRelese
@@ -14,31 +15,24 @@ plugins {
   eclipse
   `visual-studio`
   `maven-publish`
+  alias(libs.plugins.spring.boot)
+  alias(libs.plugins.hibernate.orm)
+  alias(libs.plugins.spring.boot.dependencymanagement)
+  alias(libs.plugins.kt.jvm)
+  alias(libs.plugins.kt.kapt)
+  alias(libs.plugins.kt.spring)
+  alias(libs.plugins.kt.lombok)
+  alias(libs.plugins.kt.jpa)
+  alias(libs.plugins.versions)
   id("net.yan100.compose.version-control")
-  id("org.springframework.boot") version "3.1.3"
-  id("io.spring.dependency-management") version "1.1.3"
-  id("org.hibernate.orm") version "6.2.7.Final"
-  kotlin("jvm") version "1.9.10"
-  kotlin("kapt") version "1.9.10"
-  kotlin("plugin.spring") version "1.9.10"
-  kotlin("plugin.jpa") version "1.9.10"
-  kotlin("plugin.lombok") version "1.9.10"
-  id("com.github.ben-manes.versions") version "0.47.0"
 }
 
 
 allprojects {
   repositories {
-    maven(url = uri(Repos.huaweiCloudMaven))
-    maven(url = uri(Repos.aliPublic))
-    maven(url = uri(Repos.aliCentral))
-    maven(url = uri(Repos.aliJCenter))
-    maven(url = uri(Repos.aliGradlePlugin))
-    maven(url = uri(Repos.aliSpring))
-    maven(url = uri(Repos.aliApacheSnapshots))
-    maven(url = uri(Repos.springMilestone))
-    maven(url = uri(Repos.springLibMilestone))
-    maven(url = uri(Repos.springSnapshot))
+    Repos.publicRepositories.forEach {
+      maven(url = uri(it))
+    }
     mavenLocal()
     mavenCentral()
     gradlePluginPortal()
@@ -49,10 +43,12 @@ allprojects {
     enabled = false
   }
 
-
   tasks.withType<BootJar> {
     enabled = false
   }
+
+  group = ProjectVersion.GROUP
+  version = ProjectVersion.VERSION
 
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
@@ -61,48 +57,58 @@ allprojects {
         "-Xjsr305=strict",
         "-Xjvm-default=all",
         "-verbose",
-        "-Xjdk-release=${V.Lang.java}"
+        "-Xjdk-release=17"
       )
-      jvmTarget = V.Lang.java
+      jvmTarget = "17"
     }
   }
 
-  tasks.withType<AbstractCopyTask> {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-  }
-
-  group = ProjectVersion.GROUP
-  version = ProjectVersion.VERSION
 
   extra["springCloudVersion"] = V.Spring.springCloud
   extra["snippetsDir"] = file("build/generated-snippets")
 }
 
+val internalLibs = libs
+
+
 subprojects {
-  apply(plugin = "idea")
-  apply(plugin = "eclipse")
-  apply(plugin = "visual-studio")
   apply(plugin = "java")
   apply(plugin = "kotlin")
+
+  apply(plugin = "org.jetbrains.kotlin.jvm")
+  apply(plugin = "org.jetbrains.kotlin.kapt")
   apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
-  apply(plugin = "org.hibernate.orm")
   apply(plugin = "org.jetbrains.kotlin.plugin.spring")
   apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
-  apply(plugin = "io.spring.dependency-management")
+
   apply(plugin = "org.springframework.boot")
+  apply(plugin = "org.hibernate.orm")
+  apply(plugin = "io.spring.dependency-management")
+
   apply(plugin = "maven-publish")
+  apply(plugin = "com.github.ben-manes.versions")
 
   java.sourceCompatibility = V.Lang.javaPlatform
+  java.targetCompatibility = V.Lang.javaPlatform
+
+  tasks.withType<AbstractCopyTask> {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+  }
+
+  kapt {
+    keepJavacAnnotationProcessors = true
+  }
 
   java {
     withSourcesJar()
   }
 
+
   tasks {
     compileJava {
       options.isFork = true
-      options.forkOptions.memoryMaximumSize = "2G"
-      options.forkOptions.memoryInitialSize = "1G"
+      options.forkOptions.memoryMaximumSize = "4G"
+      options.forkOptions.memoryInitialSize = "2G"
     }
   }
 
@@ -111,6 +117,7 @@ subprojects {
       (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
   }
+
 
 
   publishing {
@@ -122,7 +129,6 @@ subprojects {
         }
       }
     }
-
     publications {
       create<MavenPublication>("maven") {
         groupId = project.group.toString()
@@ -133,12 +139,17 @@ subprojects {
     }
   }
 
-  dependencies {
 
+  dependencies {
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
       exclude("org.apache.logging.log4j")
       exclude("org.springframework.boot", "spring-boot-starter-logging")
       exclude("org.springframework.boot", "spring-boot")
+    }
+
+    implementation(internalLibs.bundles.kt)
+    implementation(internalLibs.bundles.spring.kotlin.testng) {
+      exclude("org.junit.jupiter", "junit-jupiter")
     }
 
     implementation("org.springframework.boot:spring-boot-autoconfigure")
@@ -148,19 +159,6 @@ subprojects {
     compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
     testAnnotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
     testCompileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
-
-
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("io.projectreactor:reactor-test")
-    testImplementation("io.mockk:mockk:${V.Test.mockk}")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-      exclude("org.junit.jupiter", "junit-jupiter")
-      testImplementation("org.jetbrains.kotlin:kotlin-test-testng:${V.Test.kotlinTestNG}")
-      testImplementation("org.testng:testng:${V.Test.testNG}")
-    }
-
-    testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
   }
 
   dependencyManagement {

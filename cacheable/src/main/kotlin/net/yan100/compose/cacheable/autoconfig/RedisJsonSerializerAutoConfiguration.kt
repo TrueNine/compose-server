@@ -73,7 +73,7 @@ class RedisJsonSerializerAutoConfiguration(
     rt.valueSerializer = jsr
     rt.isEnableDefaultSerializer = true
 
-      rt.connectionFactory = factory
+    rt.connectionFactory = factory
     return rt
   }
 

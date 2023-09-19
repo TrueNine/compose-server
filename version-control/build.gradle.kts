@@ -1,14 +1,15 @@
 val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 val pluginGroup = "net.yan100.compose"
-val pluginVersion = "1.1.9"
+val pluginVersion = libs.versions.compose.version.control.plugin.get().toString()
 val yunXiaoUsername = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
 
 
 plugins {
-  kotlin("jvm") version "1.9.10"
+  alias(libs.plugins.kt.jvm)
   java
+  `version-catalog`
   `java-library`
   `java-gradle-plugin`
   `maven-publish`
@@ -52,6 +53,7 @@ gradlePlugin {
 
 publishing {
   repositories {
+    mavenLocal()
     maven(url = uri(if (pluginVersion.uppercase().contains("SNAPSHOT")) snapshot else release)) {
       credentials {
         this.username = yunXiaoUsername
@@ -61,11 +63,24 @@ publishing {
   }
 
   publications {
-    create<MavenPublication>("maven") {
+    create<MavenPublication>("gradlePlugin") {
       groupId = "${pluginGroup}.${project.name}"
       artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
       version = pluginVersion
       from(components["java"])
     }
+
+    create<MavenPublication>("versionCatalog") {
+      groupId = pluginGroup
+      artifactId = "${project.name}-catalog"
+      version = pluginVersion
+      from(components["versionCatalog"])
+    }
+  }
+}
+
+catalog {
+  versionCatalog {
+    from(files("libs.versions.toml"))
   }
 }

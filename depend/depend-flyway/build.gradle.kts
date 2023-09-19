@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.DEPEND_FLYWAY
+project.version = libs.versions.compose.depend.flyway.get()
 
 dependencies {
   api("org.flywaydb:flyway-core")

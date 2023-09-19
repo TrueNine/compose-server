@@ -20,7 +20,7 @@ object Db {
    * ## 文件数据库 sqlite
    * [maven](https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc)
    */
-  const val sqlite = "3.42.0.0"
+  const val sqlite = "3.43.0.0"
 
 
   /**

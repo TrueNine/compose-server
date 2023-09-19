@@ -101,6 +101,11 @@ public enum MediaTypes implements StringTyping {
    * css
    */
   CSS("text/css"),
+
+  /**
+   *  server sent event
+   */
+  SSE("text/event-stream"),
   /**
    * gzip
    */

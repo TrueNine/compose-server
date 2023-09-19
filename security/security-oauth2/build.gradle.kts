@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = V.Compose.SECURITY_OAUTH2
+project.version = libs.versions.compose.secuirty.oauth2.get()
 
 dependencies {
   implementation(project(":core"))

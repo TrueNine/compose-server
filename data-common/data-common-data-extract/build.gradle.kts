@@ -1,5 +1,5 @@
 import net.yan100.compose.plugin.V
-project.version = V.Compose.DATA_COMMON_DATA_EXTRACT
+project.version = libs.versions.compose.datacommon.dataextract.get()
 
 dependencies {
   api("com.squareup.okhttp3:okhttp:${V.Web.okhttp3}")
