@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = libs.versions.compose.webapidoc.get()
+version = libs.versions.compose.webapidoc.get()
 
 dependencies {
   implementation("com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${V.Web.knife4jJakarta}")

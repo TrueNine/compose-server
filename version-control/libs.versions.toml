@@ -27,13 +27,13 @@ compose-security = { group = "net.yan100.compose", name = "security", version.re
 compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose-security" }
 compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose-pay" }
 compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose-schedule" }
-compose-webapidoc = { group = "net.yan100.compose", name = "webapidoc", version.ref = "compose-webapidoc" }
+compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", version.ref = "compose-webapidoc" }
 compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose-cacheable" }
-compose-datacommon-cralwer = { group = "net.yan100.compose", name = "datacommon-cralwer", version.ref = "compose-datacommon-cralwer" }
-compose-datacommon-dataextract = { group = "net.yan100.compose", name = "datacommon-dataextract", version.ref = "compose-datacommon-dataextract" }
+compose-datacommon-cralwer = { group = "net.yan100.compose", name = "data-common-cralwer", version.ref = "compose-datacommon-cralwer" }
+compose-datacommon-dataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose-datacommon-dataextract" }
 compose-depend-flyway = { group = "net.yan100.compose", name = "depend-flyway", version.ref = "compose-depend-flyway" }
-compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-webservlet", version.ref = "compose-depend-webservlet" }
-compose-depend-webclient = { group = "net.yan100.compose", name = "depend-webclient", version.ref = "compose-depend-webclient" }
+compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose-depend-webservlet" }
+compose-depend-webclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose-depend-webclient" }
 
 spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
@@ -61,28 +61,31 @@ test-kt-testng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", 
 util-guava-jre = { group = "com.google.guava", name = "guava", version.ref = "util-guava-jre" }
 util-guava-android = { group = "com.google.guava", name = "guava", version.ref = "util-guava-android" }
 
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+
+bom-spring-modulith = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "spring-modulith" }
+bom-spring-boot = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
+bom-spring-cloud = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "spring-cloud" }
+bom-spring-cloudalibaba = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudalibaba" }
 
 [versions]
-compose = "0.6.54"
-compose-core = "0.6.54"
-compose-rds = "0.6.54"
-compose-rds-gen = "0.6.54"
-compose-oss = "0.6.54"
-compose-pay = "0.6.54"
-compose-schedule = "0.6.54"
-compose-security = "0.6.54"
-compose-security-oauth2 = "0.6.54"
-compose-webapidoc = "0.6.54"
-compose-cacheable = "0.6.54"
-compose-datacommon-cralwer = "0.6.54"
-compose-datacommon-dataextract = "0.6.54"
-compose-depend-flyway = "0.6.54"
-compose-depend-webservlet = "0.6.54"
-compose-depend-webclient = "0.6.54"
-compose-version-control-plugin = "1.1.18"
-
-
-hibernate = "6.2.7.Final"
+compose = "0.6.55"
+compose-core = "0.6.55"
+compose-rds = "0.6.55"
+compose-rds-gen = "0.6.55"
+compose-oss = "0.6.55"
+compose-pay = "0.6.55"
+compose-schedule = "0.6.55"
+compose-security = "0.6.55"
+compose-security-oauth2 = "0.6.55"
+compose-webapidoc = "0.6.55"
+compose-cacheable = "0.6.55"
+compose-datacommon-cralwer = "0.6.55"
+compose-datacommon-dataextract = "0.6.55"
+compose-depend-flyway = "0.6.55"
+compose-depend-webservlet = "0.6.55"
+compose-depend-webclient = "0.6.55"
+compose-version-control-plugin = "1.1.24"
 
 
 java = "17"
@@ -90,7 +93,10 @@ kotlin = "1.9.10"
 ktx-coroutine = "1.7.3"
 reactor-kt-extensions = "1.2.2"
 jbr-annotation = "24.0.1"
-spring-boot = "3.1.1"
+spring-boot = "3.1.3"
+spring-cloud = "2022.0.4"
+spring-cloudalibaba = "2021.0.4.0"
+spring-modulith = "1.0.0"
 
 gradle = "8.3"
 # https://github.com/ben-manes/gradle-versions-plugin
@@ -113,3 +119,6 @@ db-p6spy-starter = "1.9.0"
 util-hutool = "5.8.22"
 util-guava-jre = "32.1.2-jre"
 util-guava-android = "32.1.2-android"
+lombok = "1.18.28"
+
+hibernate = "6.2.7.Final"

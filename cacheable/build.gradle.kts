@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.cacheable.get()
+version = libs.versions.compose.cacheable.get()
 
 dependencies {
   api("org.apache.commons:commons-pool2")

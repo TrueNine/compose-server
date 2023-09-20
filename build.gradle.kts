@@ -6,8 +6,10 @@ import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.Repos.yunXiaoRelese
 import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
 import net.yan100.compose.plugin.V
+import net.yan100.compose.plugin.allAnnotationCompileOnly
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import kotlin.script.experimental.api.asSuccess
 
 plugins {
   java
@@ -27,6 +29,9 @@ plugins {
   id("net.yan100.compose.version-control")
 }
 
+val l = libs
+
+version = libs.versions.compose.asProvider().get()
 
 allprojects {
   repositories {
@@ -48,7 +53,7 @@ allprojects {
   }
 
   group = ProjectVersion.GROUP
-  version = ProjectVersion.VERSION
+  version = l.versions.compose.asProvider().get()
 
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
@@ -63,12 +68,10 @@ allprojects {
     }
   }
 
-
-  extra["springCloudVersion"] = V.Spring.springCloud
+  extra["springCloudVersion"] = l.versions.spring.cloud.get()
   extra["snippetsDir"] = file("build/generated-snippets")
 }
 
-val internalLibs = libs
 
 
 subprojects {
@@ -146,19 +149,15 @@ subprojects {
       exclude("org.springframework.boot", "spring-boot-starter-logging")
       exclude("org.springframework.boot", "spring-boot")
     }
-
-    implementation(internalLibs.bundles.kt)
-    implementation(internalLibs.bundles.spring.kotlin.testng) {
-      exclude("org.junit.jupiter", "junit-jupiter")
-    }
-
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    annotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
-    compileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
-    testAnnotationProcessor("org.projectlombok:lombok:${V.Lang.lombok}")
-    testCompileOnly("org.projectlombok:lombok:${V.Lang.lombok}")
+    implementation(l.bundles.kt)
+    implementation(l.bundles.spring.kotlin.testng) {
+      exclude("org.junit.jupiter", "junit-jupiter")
+    }
+
+    allAnnotationCompileOnly(l.lombok)
   }
 
   dependencyManagement {

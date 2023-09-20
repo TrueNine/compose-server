@@ -9,3 +9,10 @@ class Main : Plugin<Project> {
 
   companion object
 }
+
+public fun org.gradle.api.artifacts.dsl.DependencyHandler.allAnnotationCompileOnly(dependencyNotation: Any): org.gradle.api.artifacts.Dependency? {
+  this.add("annotationProcessor", dependencyNotation)
+  this.add("testCompileOnly", dependencyNotation)
+  this.add("testAnnotationProcessor", dependencyNotation)
+  return this.add("compileOnly", dependencyNotation)
+}

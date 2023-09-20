@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = libs.versions.compose.datacommon.cralwer.get()
+version = libs.versions.compose.datacommon.cralwer.get()
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:${V.Crawler.seleniumJava}")

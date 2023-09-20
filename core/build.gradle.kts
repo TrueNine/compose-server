@@ -1,5 +1,6 @@
 import net.yan100.compose.plugin.V
-project.version = libs.versions.compose.core.get()
+
+version = libs.versions.compose.core.get()
 
 dependencies {
   api("com.fasterxml.jackson.core:jackson-annotations")
