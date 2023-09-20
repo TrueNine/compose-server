@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.depend.web.client.get()
+project.version = libs.versions.compose.depend.webclient.get()
 
 dependencies {
   implementation(project(":core"))

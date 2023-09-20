@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.depend.web.servlet.get()
+project.version = libs.versions.compose.depend.webservlet.get()
 
 
 dependencies {

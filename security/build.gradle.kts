@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.V
 
-project.version = libs.versions.compose.secuirty.asProvider().get()
+project.version = libs.versions.compose.security.asProvider().get()
 
 
 dependencies {
