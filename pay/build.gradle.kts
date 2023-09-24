@@ -1,17 +1,17 @@
-import net.yan100.compose.plugin.V
-
 version = libs.versions.compose.pay.get()
 
 dependencies {
-  api("org.springframework.boot:spring-boot-starter-validation")
-  api("com.github.wechatpay-apiv3:wechatpay-java:${V.PlatformSdk.wechatpayJava}")
+  api(libs.sdk.pay.wechatv3)
+  implementation(libs.spring.boot.validation)
   implementation(project(":core"))
   implementation(project(":depend:depend-web-client"))
   implementation(project(":security:security-oauth2"))
 }
 
-tasks.withType<Test> {
-  useTestNG {
-    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+tasks {
+  test {
+    useTestNG {
+      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+    }
   }
 }

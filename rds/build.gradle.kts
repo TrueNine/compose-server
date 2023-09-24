@@ -3,19 +3,18 @@ import net.yan100.compose.plugin.V
 version = libs.versions.compose.rds.asProvider().get()
 
 dependencies {
-  api("org.springframework.modulith:spring-modulith-starter-jpa:${V.Spring.modulith}")
-  api("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("jakarta.validation:jakarta.validation-api")
-  implementation("org.springframework:spring-web")
-  implementation("cn.hutool:hutool-core:${V.Util.huTool}")
-  implementation(project(":core"))
-  implementation(project(":data-common:data-common-data-extract"))
+  api(libs.bundles.spring.boot.data.jpa)
 
-  testImplementation("org.springframework.boot:spring-boot-starter-validation")
+  testImplementation(libs.bundles.p6spystarter)
+
+  implementation(libs.jakarta.validation.api)
+  implementation(libs.spring.webmvc)
+  implementation(libs.util.hutool.core)
+  testImplementation(libs.spring.boot.validation)
+  testImplementation(libs.db.mysql.j)
+
+  implementation(project(":core"))
   testImplementation(project(":depend:depend-flyway"))
-  testImplementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${V.Db.p6spySpringBootStarter}")
-  testImplementation("org.hsqldb:hsqldb:${V.Db.hsqldb}")
-  testImplementation("com.mysql:mysql-connector-j:${V.Db.mysqlConnectorJ}")
 }
 
 tasks.withType<Test> {

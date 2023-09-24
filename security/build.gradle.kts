@@ -1,25 +1,24 @@
-import net.yan100.compose.plugin.V
-
 project.version = libs.versions.compose.security.asProvider().get()
 
-
 dependencies {
-  api("org.springframework.boot:spring-boot-starter-security")
-  api("cn.hutool:hutool-captcha:${V.Util.huTool}")
-  api("com.auth0:java-jwt:${V.Web.auth0JavaJwt}")
-  implementation("org.springframework:spring-webmvc")
-  implementation("org.owasp.antisamy:antisamy:${V.Security.antisamy}") {
+  api(libs.spring.boot.security)
+  api(libs.security.hutool.captcha)
+  api(libs.security.jwt.auth0)
+  implementation(libs.spring.webmvc)
+  implementation(libs.security.antisamy) {
     exclude(group = "net.sourceforge.nekohtml", module = "nekohtml")
-    implementation("net.sourceforge.nekohtml:nekohtml:${V.Security.nekohtml}")
+    implementation(libs.cralwer.nekohtml)
   }
   implementation(project(":core"))
 }
 
 
 
-tasks.withType<Test> {
-  useTestNG {
-    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+tasks {
+  test {
+    useTestNG {
+      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+    }
   }
 }
 

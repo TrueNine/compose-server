@@ -7,6 +7,7 @@ import net.yan100.compose.plugin.Repos.yunXiaoRelese
 import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
 import net.yan100.compose.plugin.V
 import net.yan100.compose.plugin.allAnnotationCompileOnly
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import kotlin.script.experimental.api.asSuccess
@@ -44,35 +45,21 @@ allprojects {
     google()
   }
 
-  tasks.withType<ProcessAot> {
-    enabled = false
-  }
-
-  tasks.withType<BootJar> {
-    enabled = false
+  tasks {
+    withType<ProcessAot> {
+      enabled = false
+    }
+    withType<BootJar> {
+      enabled = false
+    }
   }
 
   group = ProjectVersion.GROUP
   version = l.versions.compose.asProvider().get()
 
-  tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-      incremental = true
-      freeCompilerArgs = listOf(
-        "-Xjsr305=strict",
-        "-Xjvm-default=all",
-        "-verbose",
-        "-Xjdk-release=17"
-      )
-      jvmTarget = "17"
-    }
-  }
-
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
   extra["snippetsDir"] = file("build/generated-snippets")
 }
-
-
 
 subprojects {
   apply(plugin = "java")
@@ -88,40 +75,58 @@ subprojects {
   apply(plugin = "org.hibernate.orm")
   apply(plugin = "io.spring.dependency-management")
 
-  apply(plugin = "maven-publish")
   apply(plugin = "com.github.ben-manes.versions")
+  apply(plugin = "maven-publish")
 
-  java.sourceCompatibility = V.Lang.javaPlatform
-  java.targetCompatibility = V.Lang.javaPlatform
-
-  tasks.withType<AbstractCopyTask> {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-  }
 
   kapt {
     keepJavacAnnotationProcessors = true
+    this.generateStubs = true
   }
 
   java {
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(21))
+    }
     withSourcesJar()
   }
 
+  kotlin {
+    jvmToolchain(21)
+  }
+
+  hibernate {
+    enhancement {
+      enableAssociationManagement.set(false)
+    }
+  }
 
   tasks {
+    withType<AbstractCopyTask> {
+      duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    compileKotlin {
+      this.compilerOptions {
+        freeCompilerArgs = listOf(
+          "-Xjsr305=strict",
+          "-Xjvm-default=all",
+          "-verbose",
+          "-Xjdk-release=21",
+          "-Xextended-compiler-checks"
+        )
+      }
+    }
     compileJava {
       options.isFork = true
       options.forkOptions.memoryMaximumSize = "4G"
       options.forkOptions.memoryInitialSize = "2G"
     }
-  }
-
-  tasks.javadoc {
-    if (JavaVersion.current().isJava9Compatible) {
-      (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    javadoc {
+      if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+      }
     }
   }
-
-
 
   publishing {
     repositories {
@@ -132,6 +137,7 @@ subprojects {
         }
       }
     }
+
     publications {
       create<MavenPublication>("maven") {
         groupId = project.group.toString()
@@ -142,21 +148,20 @@ subprojects {
     }
   }
 
-
   dependencies {
     compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
       exclude("org.apache.logging.log4j")
       exclude("org.springframework.boot", "spring-boot-starter-logging")
       exclude("org.springframework.boot", "spring-boot")
     }
+
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation(l.bundles.kt)
-    implementation(l.bundles.spring.kotlin.testng) {
+    testImplementation(l.bundles.spring.kotlin.testng) {
       exclude("org.junit.jupiter", "junit-jupiter")
     }
-
     allAnnotationCompileOnly(l.lombok)
   }
 
@@ -176,8 +181,9 @@ subprojects {
   }
 }
 
-tasks.wrapper {
-  distributionType = Wrapper.DistributionType.ALL
-  this.gradleVersion = ProjectVersion.GRADLE_VERSION
+tasks {
+  wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    this.gradleVersion = ProjectVersion.GRADLE_VERSION
+  }
 }
-

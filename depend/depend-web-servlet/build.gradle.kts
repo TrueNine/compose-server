@@ -2,13 +2,13 @@ version = libs.versions.compose.depend.webservlet.get()
 
 
 dependencies {
-  implementation(project(":core"))
-  api("org.springframework.boot:spring-boot-starter-validation")
-  api("org.springframework.boot:spring-boot-starter-web") {
+  api(libs.spring.boot.validation)
+  api(libs.spring.boot.web) {
     exclude("org.springframework.boot", "spring-boot-starter-tomcat")
   }
-  api("org.springframework.boot:spring-boot-starter-undertow")
-  api("org.springframework.boot:spring-boot-starter-websocket") {
+  api(libs.spring.boot.undertow)
+  api(libs.spring.boot.websocket) {
     exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
   }
+  implementation(project(":core"))
 }

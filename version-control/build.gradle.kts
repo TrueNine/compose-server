@@ -15,8 +15,8 @@ plugins {
   `maven-publish`
 }
 
-project.group = pluginGroup
-project.version = pluginVersion
+group = pluginGroup
+version = pluginVersion
 
 repositories {
   mavenCentral()
@@ -28,18 +28,19 @@ dependencies {
   implementation("${kotlin("stdlib")}:1.9.10")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-  kotlinOptions {
-    incremental = true
-    freeCompilerArgs = listOf(
-      "-Xjsr305=strict",
-      "-Xjvm-default=all",
-      "-verbose",
-      "-Xjdk-release=17"
-    )
-    jvmTarget = "17"
+tasks {
+  compileKotlin {
+    compilerOptions {
+      freeCompilerArgs = listOf(
+        "-Xjsr305=strict",
+        "-Xjvm-default=all",
+        "-verbose"
+      )
+    }
   }
 }
+
+
 
 gradlePlugin {
   plugins {

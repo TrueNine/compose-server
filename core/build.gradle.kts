@@ -1,34 +1,35 @@
-import net.yan100.compose.plugin.V
-
 version = libs.versions.compose.core.get()
 
 dependencies {
-  api("com.fasterxml.jackson.core:jackson-annotations")
-  api("com.fasterxml.jackson.module:jackson-module-kotlin")
+  api(libs.jackson.core.annotations)
 
-  api("ognl:ognl:${V.Util.ognl}")
+  api(libs.util.ognl)
   api(libs.util.guava.jre)
-  api("jakarta.servlet:jakarta.servlet-api")
-  api("jakarta.validation:jakarta.validation-api")
-  api("io.swagger.core.v3:swagger-annotations-jakarta:${V.StandardEdition.swaggerAnnotationJakarta}")
-  api("org.slf4j:slf4j-api")
-  api("org.springframework.modulith:spring-modulith-starter-core:${V.Spring.modulith}")
 
-  implementation("org.springframework.boot:spring-boot-starter-json")
-  implementation("org.springframework.security:spring-security-crypto")
-  implementation("org.bouncycastle:bcprov-jdk18on:${V.Security.bcprovJdk18on}")
-  implementation("org.springframework:spring-webmvc")
+  api(libs.jakarta.servlet.api)
+  api(libs.jakarta.validation.api)
+
+  api(libs.slf4j.api)
+  api(libs.jakarta.openapi.v3.annotations)
+  api(libs.spring.modulith.core)
+
+  implementation(libs.spring.boot.json)
+  implementation(libs.spring.security.crypto)
+  implementation(libs.security.bcprov.jdk18on)
+  implementation(libs.spring.webmvc)
 
   // TODO 日志
-  implementation("org.springframework.boot:spring-boot-starter-logging")
+  implementation(libs.spring.boot.logging)
 
-  // hutool
-  implementation("cn.hutool:hutool-core:${V.Util.huTool}")
-  implementation("cn.hutool:hutool-crypto:${V.Util.huTool}")
+  // TODO hutool
+  implementation(libs.util.hutool.core)
+  implementation(libs.security.hutool.crypto)
 }
 
-tasks.withType<Test> {
-  useTestNG {
-    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+tasks {
+  test {
+    useTestNG {
+      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+    }
   }
 }

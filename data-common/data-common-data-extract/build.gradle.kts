@@ -1,20 +1,21 @@
-import net.yan100.compose.plugin.V
 version = libs.versions.compose.datacommon.dataextract.get()
 
 dependencies {
-  api("com.squareup.okhttp3:okhttp:${V.Web.okhttp3}")
-  api("org.jsoup:jsoup:${V.Crawler.jsoup}")
-  api("com.alibaba:easyexcel:${V.Util.easyExcel}") {
+  api(libs.net.okhttp3)
+  api(libs.cralwer.jsoup)
+  api(libs.db.supercsv)
+  api(libs.util.easyexcel) {
     exclude("org.apache.commons", "commons-compress")
-    api("org.apache.commons:commons-compress:${V.Util.commonsCompress}")
+    implementation(libs.apache.commons.compress)
   }
-  api("net.sf.supercsv:super-csv:${V.Util.superCsv}")
   implementation(project(":core"))
   implementation(project(":depend:depend-web-client"))
 }
 
-tasks.withType<Test> {
-  useTestNG {
-    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+tasks {
+  test {
+    useTestNG {
+      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
+    }
   }
 }
