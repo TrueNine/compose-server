@@ -8,10 +8,10 @@ import net.yan100.compose.core.annotations.BetaTest
 import net.yan100.compose.core.annotations.BigIntegerAsString
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.annotations.BizCode
+import net.yan100.compose.rds.entity.Address
 import net.yan100.compose.rds.util.Pq
 import net.yan100.compose.rds.util.Pr
 import net.yan100.compose.rds.util.Pw
-import org.apache.poi.ss.formula.functions.Address
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -46,7 +46,7 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
   @Query("FROM #{#entityName} e WHERE e.ldf = false")
   fun findAllByNotLogicDeleted(page: Pageable): Page<T>
 
-  @Query("FROM #{#entityName} e WHERE e.id IN :ids AND (e.ldf = false OR e.ldf = null)")
+  @Query("FROM #{#entityName} e WHERE e.id IN :ids AND (e.ldf = false OR e.ldf IS null)")
   fun findAllByIdAndNotLogicDeleted(ids: List<String>, page: Pageable): Page<T>
 
   @Query("SELECT (e.ldf = false) FROM #{#entityName} e WHERE e.id = :id")
@@ -56,19 +56,19 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
   fun logicDeleteById(id: String): T? = findByIdOrNull(id)?.let { it.ldf = true;save(it) }
 
   @Transactional(rollbackFor = [Exception::class])
-  fun logicDeleteAllById(ids: List<String>): List<T> = findAllById(ids).filter { !it.ldf }.apply { saveAll(this) }
+  fun logicDeleteAllById(ids: List<String>): List<T> = findAllById(ids).filter { !it.ldf!! }.apply { saveAll(this) }
 
-  @Query("SELECT count(e.id) FROM #{#entityName} e WHERE e.ldf = false")
+  @Query("SELECT count(e.id) FROM #{#entityName} e WHERE e.ldf = false OR e.ldf IS null")
   fun countByNotLogicDeleted(): Long
 
-  @Query("SELECT count(e.id) > 0 FROM #{#entityName} e WHERE e.id = :id AND (e.ldf = false OR e.ldf = null)")
+  @Query("SELECT count(e.id) > 0 FROM #{#entityName} e WHERE e.id = :id AND (e.ldf = false OR e.ldf IS null)")
   fun existsByIdAndNotLogicDeleted(id: String)
 
   @Query("SELECT e.rlv FROM #{#entityName} e WHERE e.id = :id")
   fun findRlvById(id: String): Long
 
   fun modifyWrapper(e: T): T {
-    return if (e.id != null) e.also { it.rlv = findRlvById(e.id) }
+    return if (e.id != null) e.also { it.rlv = findRlvById(e.id!!) }
     else e
   }
 }
@@ -80,7 +80,7 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
  */
 @NoRepositoryBean
 @JvmDefaultWithCompatibility
-interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
+interface TreeRepository<T : TreeBaseEntity> : BaseRepository<T> {
   fun findChildrenCount(parent: T): Long {
     require(parent.rln != null) {
       "父节点：$parent 左节点为 null"
@@ -316,12 +316,7 @@ interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
     popRrnByOffset(2, child.rln!!, child.tgi)
   }
 
-  @Query(
-    """
-    FROM #{#entityName} e
-    WHERE e.nlv = :level
-  """
-  )
+  @Query("FROM #{#entityName} e WHERE e.nlv = :level")
   fun findByNodeLevel(level: Long, page: Pageable): Page<Address>
 }
 
@@ -366,7 +361,7 @@ interface BaseService<T : AnyEntity> {
  * @since 2022-12-12
  */
 @MappedSuperclass
-open class TreeEntity : BaseEntity() {
+open class TreeBaseEntity : BaseEntity() {
   /**
    * 父id
    */
