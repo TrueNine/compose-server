@@ -32,9 +32,20 @@ object Util {
 
   // 用于顶替 easyexcel
   // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-  const val commonsCompress = "1.23.0"
+  const val commonsCompress = "1.24.0"
 
   // 用于代码生成器
   // https://mvnrepository.com/artifact/org.freemarker/freemarker
   const val freemarker = "2.3.32"
+
+  // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+  const val jacksonModuleKotlin = "2.15.2"
+
+  // 分词器，用于爬虫框架
+  // https://mvnrepository.com/artifact/com.github.magese/ik-analyzer
+  const val ikAnalyzer = "8.5.0"
+
+  // 用于计算海明距离
+  // https://mvnrepository.com/artifact/com.github.haifengl/smile-math
+  const val smileMath = "2.6.0"
 }

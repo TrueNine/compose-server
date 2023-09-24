@@ -1,7 +1,6 @@
 package net.yan100.compose.core.models
 
 import jakarta.annotation.Nullable
-import lombok.EqualsAndHashCode
 
 /**
  * 基础用户传递信息

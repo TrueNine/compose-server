@@ -15,7 +15,7 @@ import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.base.BaseEntity
-import net.yan100.compose.rds.base.TreeEntity
+import net.yan100.compose.rds.base.TreeBaseEntity
 import net.yan100.compose.rds.converters.WGS84Converter
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -111,7 +111,7 @@ open class SuperAddressDetails : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "详细地址")
 @Table(name = SuperAddressDetails.TABLE_NAME)
-class AddressDetails : SuperAddressDetails()
+open class AddressDetails : SuperAddressDetails()
 
 
 @Entity
@@ -119,7 +119,7 @@ class AddressDetails : SuperAddressDetails()
 @DynamicUpdate
 @Schema(title = "非脱敏详细地址")
 @Table(name = SuperAddressDetails.TABLE_NAME)
-class NonDesensitizedAddressDetails : SuperAddressDetails() {
+open class NonDesensitizedAddressDetails : SuperAddressDetails() {
   /**
    * 联系电话
    */
@@ -165,7 +165,7 @@ class NonDesensitizedAddressDetails : SuperAddressDetails() {
 @DynamicUpdate
 @Schema(title = "详细地址")
 @Table(name = SuperAddressDetails.TABLE_NAME)
-class FullAddressDetails : SuperAddressDetails() {
+open class FullAddressDetails : SuperAddressDetails() {
   /**
    * 地址
    */
@@ -181,11 +181,11 @@ class FullAddressDetails : SuperAddressDetails() {
   @NotFound(action = IGNORE)
   @JsonBackReference
   @Fetch(JOIN)
-  var address: Address? = null
+  open var address: Address? = null
 }
 
 @MappedSuperclass
-open class SuperAddress : TreeEntity() {
+open class SuperAddress : TreeBaseEntity() {
   /**
    * 代码
    */

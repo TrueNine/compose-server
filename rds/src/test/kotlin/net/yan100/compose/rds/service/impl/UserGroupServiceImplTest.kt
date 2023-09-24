@@ -39,8 +39,8 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
       this.userId = 13123124.toString()
       this.name = "readMe"
     })
-    service.saveUserToUserGroup(u.id, ug.id)
-    val ugs = service.findById(ug.id)
+    service.saveUserToUserGroup(u.id!!, ug.id!!)
+    val ugs = service.findById(ug.id!!)
     assertNotNull(ugs)
     assertContains(ugs.users, u)
   }
@@ -70,7 +70,7 @@ class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
       userId = 123124125.toString()
       name = "我的大海"
     })
-    service.saveUserToUserGroup(u.id, ug.id)
+    service.saveUserToUserGroup(u.id!!, ug.id!!)
     val foundUg = service.findAllByUserAccount(u.account!!)
     assertTrue { foundUg.isNotEmpty() }
     assertContains(foundUg, ug)

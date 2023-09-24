@@ -128,28 +128,28 @@ open class Attachment : SuperAttachment()
 @Entity
 @Schema(title = "附件")
 @Table(name = SuperAttachment.TABLE_NAME)
-class LinkedAttachment : BaseEntity() {
+open class LinkedAttachment : BaseEntity() {
 
   @JsonIgnore
   @Column(name = SuperAttachment.BASE_URL, insertable = false, updatable = false)
-  var baseUrl: String? = null
+  open var baseUrl: String? = null
 
   @JsonIgnore
   @Column(name = SuperAttachment.URL_ID, insertable = false, updatable = false)
-  var urlId: String? = null
+  open var urlId: String? = null
 
   @JsonIgnore
   @Column(name = SuperAttachment.SAVE_NAME, insertable = false, updatable = false)
-  var saveName: String? = null
+  open var saveName: String? = null
 
   @Schema(title = "原始名称")
   @Column(name = SuperAttachment.META_NAME, insertable = false, updatable = false)
-  var metaName: String? = null
+  open var metaName: String? = null
 
   @JsonIgnore
   @Column(name = SuperAttachment.ATT_TYPE, insertable = false, updatable = false)
   @Convert(converter = AttachmentTypingConverter::class)
-  var attType: AttachmentTyping? = null
+  open var attType: AttachmentTyping? = null
 
   @JsonIgnore
   @ManyToOne(fetch = EAGER)
@@ -162,10 +162,10 @@ class LinkedAttachment : BaseEntity() {
   )
   @Fetch(JOIN)
   @NotFound(action = IGNORE)
-  var base: Attachment? = null
+  open var base: Attachment? = null
 
   @get:Transient
-  val url: String
+  open val url: String
     get() {
       val based = base?.baseUrl?.let { if (it.endsWith("/")) it else "$it/" } ?: ""
       val name = metaName ?: ""
@@ -173,7 +173,7 @@ class LinkedAttachment : BaseEntity() {
     }
 }
 
-fun <T> LinkedAttachment.toSpec(): Specification<T> = Specification { root, query, builder ->
+fun <T> LinkedAttachment.toSpec(): Specification<T> = Specification { root, _, builder ->
   val p = mutableListOf<Predicate>()
   attType?.let { p += builder.equal(root.get<AttachmentTyping>(SuperAttachment.ATT_TYPE), attType) }
 

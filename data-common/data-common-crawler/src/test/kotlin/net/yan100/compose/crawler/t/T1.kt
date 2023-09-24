@@ -14,6 +14,7 @@ import java.time.LocalDateTime
 
 class T1 {
 
+  //@Test
   fun testOpen() {
     Playwright.create().use { playwright ->
       playwright.launchBy(headless = false).use { browser ->

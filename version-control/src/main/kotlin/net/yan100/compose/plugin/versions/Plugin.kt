@@ -28,4 +28,10 @@ object Plugin {
 
   // https://mvnrepository.com/artifact/com.github.ben-manes/gradle-versions-plugin
   const val versionManager = "0.11.1"
+
+  /**
+   * graalvm 可能需要的
+   * @see [maven](https://mvnrepository.com/artifact/org.asciidoctor.jvm.convert/org.asciidoctor.jvm.convert.gradle.plugin?repo=gradle-plugins)
+   */
+  const val ascijvmConvert = "3.3.2"
 }

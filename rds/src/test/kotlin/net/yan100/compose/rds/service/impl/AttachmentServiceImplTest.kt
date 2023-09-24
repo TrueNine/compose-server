@@ -75,7 +75,7 @@ class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
     }
     val all = attachmentService.findAll()
     println(all)
-    val result = attachmentService.findFullUrlById(e.id)
+    val result = attachmentService.findFullUrlById(e.id!!)
     assertNotNull(result)
   }
 

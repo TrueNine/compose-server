@@ -25,10 +25,12 @@ object Db {
 
   /**
    * ## flyway
-   * [maven core](https://mvnrepository.com/artifact/org.flywaydb/flyway-core)
-   * [maven mysql](https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql)
+   *
+   * [maven_core](https://mvnrepository.com/artifact/org.flywaydb/flyway-core)
+   *
+   * [maven_mysql](https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql)
    */
-  const val flyway = "9.21.2"
+  const val flyway = "9.22.1"
 
 
   /**

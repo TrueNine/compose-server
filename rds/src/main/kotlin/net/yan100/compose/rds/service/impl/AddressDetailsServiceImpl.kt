@@ -57,7 +57,7 @@ class AddressDetailsServiceImpl(
       }
       ds.map { dss ->
         val b = addresses.find { it.first == dss.addressId }
-        dss.id to ((b?.second ?: "") + (dss.addressDetails ?: ""))
+        dss.id!! to ((b?.second ?: "") + (dss.addressDetails ?: ""))
       }
     }
   }

@@ -311,7 +311,7 @@ object Keys {
       .apply {
         rsaPublicKey = readRsaPublicKeyByBase64(rsaPublicKeyBase64)
         rsaPrivateKey = readRsaPrivateKeyByBase64(rsaPrivateKeyBase64)
-      }.takeIf { null != it.rsaPublicKey && null != it.rsaPrivateKeyBase64 }
+      }.takeIf { null != it.rsaPublicKey }
   }
 
   /**

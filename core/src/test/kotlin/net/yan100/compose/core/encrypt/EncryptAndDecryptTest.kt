@@ -43,9 +43,9 @@ class EncryptAndDecryptTest {
     val pair = Keys.generateRsaKeyPair()
     val text = "测试数据测试数据测试数据测试数据"
     val cipher =
-      Encryptors.encryptByRsaPublicKey(pair!!.rsaPublicKey, text)
+      Encryptors.encryptByRsaPublicKey(pair!!.rsaPublicKey!!, text)
     val plain =
-      Encryptors.decryptByRsaPrivateKey(pair.rsaPrivateKey, cipher!!)
+      Encryptors.decryptByRsaPrivateKey(pair.rsaPrivateKey!!, cipher!!)
 
     assertEquals(text, plain)
   }
@@ -65,7 +65,7 @@ class EncryptAndDecryptTest {
   @Test(suiteName = "测试base64加密后的key还原")
   fun testGenerateKeyBase64() {
     val ab = Keys.generateRsaKeyPair()!!
-    val metaCode = ab.rsaPublicKey.encoded
+    val metaCode = ab.rsaPublicKey!!.encoded
     val base64Byte = Base64Helper.decodeToByte(String(ab.rsaPublicKeyBase64Byte))
     val strBase64 = Base64Helper.decodeToByte(ab.rsaPublicKeyBase64)
     assertTrue(

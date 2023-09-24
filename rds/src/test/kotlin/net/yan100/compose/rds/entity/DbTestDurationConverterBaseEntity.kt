@@ -8,7 +8,7 @@ import java.time.Duration
 
 @Entity
 @Table(name = "db_test_duration_converter")
-data class DbTestDurationConverterEntity(
+data class DbTestDurationConverterBaseEntity(
   var durations: Duration?
 ) : net.yan100.compose.rds.base.BaseEntity() {
   constructor() : this(null)
@@ -16,7 +16,7 @@ data class DbTestDurationConverterEntity(
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-    other as DbTestDurationConverterEntity
+    other as DbTestDurationConverterBaseEntity
     return id != null && id == other.id
   }
 

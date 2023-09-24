@@ -7,6 +7,7 @@ import net.yan100.compose.security.jwt.consts.VerifierParamModel
 import org.testng.annotations.Test
 
 class JwtTest {
+
   @Test
   fun testIssuerAndVerifier() {
     val mapper = ObjectMapper()
@@ -15,17 +16,17 @@ class JwtTest {
     val issuer = JwtIssuer.createIssuer()
       .issuer("t")
       .id("1")
-      .signatureIssuerKey(rsaPair.rsaPrivateKey)
-      .signatureVerifyKey(rsaPair.rsaPublicKey)
-      .contentEncryptKey(eccPair.eccPublicKey)
+      .signatureIssuerKey(rsaPair.rsaPrivateKey!!)
+      .signatureVerifyKey(rsaPair.rsaPublicKey!!)
+      .contentEncryptKey(eccPair.eccPublicKey!!)
       .serializer(mapper)
       .build()
 
     val verifier = JwtVerifier.createVerifier()
       .issuer("t")
       .id("1")
-      .contentDecryptKey(eccPair.eccPrivateKey)
-      .signatureVerifyKey(rsaPair.rsaPublicKey)
+      .contentDecryptKey(eccPair.eccPrivateKey!!)
+      .signatureVerifyKey(rsaPair.rsaPublicKey!!)
       .serializer(mapper)
       .build()
 

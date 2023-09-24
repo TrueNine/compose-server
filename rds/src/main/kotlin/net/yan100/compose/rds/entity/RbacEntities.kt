@@ -175,14 +175,14 @@ open class FullRoleGroup : SuperRoleGroup() {
 @DynamicUpdate
 @Schema(title = "部门")
 @Table(name = SuperRoleGroup.TABLE_NAME)
-class Dept : BaseEntity() {
+open class Dept : BaseEntity() {
   @Column(name = NAME)
   @Schema(title = "名称")
-  var name: String? = null
+  open var name: String? = null
 
   @Column(name = DOC)
   @Schema(title = "描述")
-  var doc: String? = null
+  open var doc: String? = null
 
 
   companion object {
@@ -237,14 +237,14 @@ open class Permissions : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "用户  部门")
 @Table(name = UserDept.TABLE_NAME)
-class UserDept : BaseEntity() {
+open class UserDept : BaseEntity() {
   @Schema(title = "用户id")
   @Column(name = USER_ID)
-  var userId: String? = null
+  open var userId: String? = null
 
   @Schema(title = "部门id")
   @Column(name = DEPT_ID)
-  var deptId: String? = null
+  open var deptId: String? = null
 
   companion object {
     const val TABLE_NAME = "user_dept"

@@ -1,7 +1,6 @@
 package net.yan100.compose.core.http;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.extern.slf4j.Slf4j;
 import net.yan100.compose.core.lang.Str;
 import net.yan100.compose.core.lang.StringTyping;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +14,6 @@ import java.util.Objects;
  * @author TrueNine
  * @since 2022-11-03
  */
-@Slf4j
 public enum MediaTypes implements StringTyping {
   /**
    * 二进制

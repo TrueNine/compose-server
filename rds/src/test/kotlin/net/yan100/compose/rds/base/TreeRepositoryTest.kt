@@ -2,7 +2,7 @@ package net.yan100.compose.rds.base
 
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.DbTestTreeEntity
+import net.yan100.compose.rds.entity.DbTestTreeBaseEntity
 import net.yan100.compose.rds.repository.DbTestTreeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -27,10 +27,10 @@ class TreeRepositoryTest : AbstractTestNGSpringContextTests() {
   @Test
   @Rollback
   fun testSaveChild() {
-    val b = DbTestTreeEntity()
-    val c = DbTestTreeEntity()
-    val d = DbTestTreeEntity()
-    val savedRoot = treeRepo.saveChild(null, DbTestTreeEntity())
+    val b = DbTestTreeBaseEntity()
+    val c = DbTestTreeBaseEntity()
+    val d = DbTestTreeBaseEntity()
+    val savedRoot = treeRepo.saveChild(null, DbTestTreeBaseEntity())
     val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
 
     val nodeIndexes = savedChildren.map {

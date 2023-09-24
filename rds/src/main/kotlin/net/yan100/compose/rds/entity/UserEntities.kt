@@ -289,7 +289,7 @@ open class UserInfo : SuperUserInfo() {
   @set:Transient
   open var fullName: String?
     get() = firstName + lastName
-    set(fullName) = throw KnownException("不需要设置参数 fullPath", IllegalAccessException(), 400)
+    set(_) = throw KnownException("不需要设置参数 fullPath", IllegalAccessException(), 400)
 }
 
 /**

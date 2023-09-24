@@ -2,7 +2,7 @@ package net.yan100.compose.rds.service.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.DbTestBaseServiceEntity
+import net.yan100.compose.rds.entity.DbTestServiceEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
@@ -21,7 +21,7 @@ class TableRowDeleteRecordServiceImplImplTest : AbstractTestNGSpringContextTests
 
   @Test
   fun testSaveAnyEntity() {
-    val e = DbTestBaseServiceEntity().apply {
+    val e = DbTestServiceEntity().apply {
       id = 131.toString()
       title = "测试"
     }
@@ -31,7 +31,7 @@ class TableRowDeleteRecordServiceImplImplTest : AbstractTestNGSpringContextTests
     assertNotNull(saved.entity)
     assertNotNull(saved.entity.entityJson)
 
-    val a = mapper.readValue(saved.entity.entityJson, DbTestBaseServiceEntity::class.java)
+    val a = mapper.readValue(saved.entity.entityJson, DbTestServiceEntity::class.java)
     assertEquals(a.title, e.title)
 
     val abc = service.saveAnyEntity(null)

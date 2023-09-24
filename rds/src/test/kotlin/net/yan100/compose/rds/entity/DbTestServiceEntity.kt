@@ -8,8 +8,8 @@ import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.converters.WGS84Converter
 
 @Entity
-@Table(name = DbTestBaseServiceEntity.TABLE_NAME)
-class DbTestBaseServiceEntity : BaseEntity() {
+@Table(name = DbTestServiceEntity.TABLE_NAME)
+class DbTestServiceEntity : BaseEntity() {
   var title: String? = null
 
   @Convert(converter = WGS84Converter::class)

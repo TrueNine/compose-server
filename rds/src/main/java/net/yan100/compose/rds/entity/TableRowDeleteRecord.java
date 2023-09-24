@@ -15,7 +15,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
@@ -33,7 +32,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIR
 @Entity
 @Schema(title = "数据删除记录")
 @Table(name = TableRowDeleteRecord.TABLE_NAME)
-public class TableRowDeleteRecord extends BaseEntity implements Serializable {
+public class TableRowDeleteRecord extends BaseEntity {
 
   public static final String TABLE_NAME = "table_row_delete_record";
   public static final String TABLE_NAMES = "table_names";
@@ -41,6 +40,7 @@ public class TableRowDeleteRecord extends BaseEntity implements Serializable {
   public static final String USER_ACCOUNT = "user_account";
   public static final String DELETE_DATETIME = "delete_datetime";
   public static final String ENTITY = "entity";
+
   @Serial
   private static final long serialVersionUID = 1L;
 

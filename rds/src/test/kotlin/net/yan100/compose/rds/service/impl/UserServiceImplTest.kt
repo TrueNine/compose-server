@@ -51,7 +51,7 @@ class UserServiceImplTest : AbstractTestNGSpringContextTests() {
     val rg = roleGroupService.save(RoleGroup().apply {
       name = "权限1"
     })
-    agg.saveRoleGroupToUser(rg.id, saved.id)!!
+    agg.saveRoleGroupToUser(rg.id!!, saved.id!!)!!
     assertEquals(saved.id, info.userId)
     val acc = service.findFullUserByAccount(saved.account!!)!!
     assertEquals(acc.id, info.userId)
@@ -76,7 +76,7 @@ class UserServiceImplTest : AbstractTestNGSpringContextTests() {
     val saved = service.save(getUser())
     service.modifyUserBandTimeTo(saved.account!!, LocalDateTime.parse("2025-01-01T00:00:00"))
 
-    val succ = service.findById(saved.id)!!
+    val succ = service.findById(saved.id!!)!!
     assertTrue("用户没有被封禁") { succ.band!! }
 
     service.modifyUserBandTimeTo(saved.account!!, null)

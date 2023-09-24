@@ -4,7 +4,7 @@ package net.yan100.compose.rds.base
 import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.DbTestBaseServiceEntity
+import net.yan100.compose.rds.entity.DbTestServiceEntity
 import net.yan100.compose.rds.service.BaseServiceTester
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -22,7 +22,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindAll() {
-    val a = service.save(DbTestBaseServiceEntity().apply {
+    val a = service.save(DbTestServiceEntity().apply {
       title = "wad"
       center = WGS84(BigDecimal("1.3"), BigDecimal("2.44"))
     })
@@ -33,7 +33,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   @Autowired
   lateinit var snowflake: Snowflake
 
-  fun getEntity() = DbTestBaseServiceEntity().apply {
+  fun getEntity() = DbTestServiceEntity().apply {
     this.title = "dawda ${snowflake.nextStringId()}"
     this.center = WGS84(
       BigDecimal(snowflake.nextStringId()),
@@ -54,8 +54,11 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testFindAllByIdAndNotLogicDeleted() {
-    val allId = service.saveAll(getEs()).map { it.id }
+    val allId = service.saveAll(getEs()).map { it.id!! }
     val nots = service.findAllByIdAndNotLogicDeleted(allId)
+    val all = service.findAll()
+    println(all.dataList.map { it.ldf })
+    println(nots)
 
     assertTrue(
       """
@@ -66,7 +69,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
     { nots.dataList.map { it.id }.containsAll(allId) }
 
     val deld = service.saveAll(nots.dataList.map { it.ldf = true;it })
-    service.findAllByIdAndNotLogicDeleted(deld.map { it.id }).let {
+    service.findAllByIdAndNotLogicDeleted(deld.map { it.id!! }).let {
       assertFalse { it.dataList.map { it.ldf }.contains(true) }
     }
   }
@@ -83,14 +86,14 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   fun testFindById() {
     val ab = service.save(getEntity())
     assertNotNull(ab.id)
-    val cd = service.findById(ab.id)
+    val cd = service.findById(ab.id!!)
     assertEquals(ab, cd)
   }
 
   @Test
   fun testFindAllById() {
     val ess = service.saveAll(getEs())
-    val finded = service.findAllById(ess.map { it.id })
+    val finded = service.findAllById(ess.map { it.id!! })
     assertEquals(ess, finded)
     assertEquals(ess.size, finded.size)
   }
@@ -98,24 +101,24 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindByIdAndNotLogicDeleted() {
     val ess = service.save(getEntity())
-    val t2 = service.logicDeleteById(ess.id)!!
+    val t2 = service.logicDeleteById(ess.id!!)!!
     assertFailsWith<NullPointerException> {
-      service.findByIdAndNotLogicDeleted(t2.id)
+      service.findByIdAndNotLogicDeleted(t2.id!!)
     }
   }
 
   @Test
   fun testFindByIdAndNotLogicDeletedOrNull() {
     val ess = service.save(getEntity())
-    val t2 = service.logicDeleteById(ess.id)!!
-    val t3 = service.findByIdAndNotLogicDeletedOrNull(t2.id)
+    val t2 = service.logicDeleteById(ess.id!!)!!
+    val t3 = service.findByIdAndNotLogicDeletedOrNull(t2.id!!)
     assertNull(t3)
   }
 
   @Test
   fun testFindLdfById() {
     val a = service.save(getEntity())
-    val ab = service.findLdfById(a.id)
+    val ab = service.findLdfById(a.id!!)
     assertFalse { ab }
   }
 
@@ -132,7 +135,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
     val ess = service.saveAll(getEs())
     val allSize = service.countAll()
     ess.forEach {
-      service.logicDeleteById(it.id)
+      service.logicDeleteById(it.id!!)
     }
     val delSize = service.countAllByNotLogicDeleted()
     assertTrue("all$allSize del$delSize") { allSize > delSize }
@@ -141,7 +144,7 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testExistsById() {
     val se = service.save(getEntity())
-    assertTrue { service.existsById(se.id) }
+    assertTrue { service.existsById(se.id!!) }
   }
 
   @Test
@@ -157,16 +160,16 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testDeleteById() {
     val aes = service.save(getEntity())
-    service.deleteById(aes.id)
-    assertNull(service.findById(aes.id))
+    service.deleteById(aes.id!!)
+    assertNull(service.findById(aes.id!!))
   }
 
   @Test
   fun testDeleteAllById() {
     val all = service.saveAll(getEs())
-    service.deleteAllById(all.map { it.id })
+    service.deleteAllById(all.map { it.id!! })
 
-    service.findAllById(all.map { it.id }).let {
+    service.findAllById(all.map { it.id!! }).let {
       assertTrue {
         it.isEmpty()
       }
@@ -176,9 +179,9 @@ class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testLogicDeleteById() {
     val ser = service.save(getEntity())
-    val cc = service.logicDeleteById(ser.id)!!
-    assertTrue { cc.ldf }
-    val abc = service.findByIdAndNotLogicDeletedOrNull(ser.id)
+    val cc = service.logicDeleteById(ser.id!!)!!
+    assertTrue { cc.ldf!! }
+    val abc = service.findByIdAndNotLogicDeletedOrNull(ser.id!!)
     assertNull(abc)
   }
 }

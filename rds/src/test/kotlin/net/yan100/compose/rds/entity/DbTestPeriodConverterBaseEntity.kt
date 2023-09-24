@@ -8,7 +8,7 @@ import java.time.Period
 
 @Entity
 @Table(name = "db_test_period_converter")
-data class DbTestPeriodConverterEntity(
+data class DbTestPeriodConverterBaseEntity(
   var periods: Period?
 ) : net.yan100.compose.rds.base.BaseEntity() {
   constructor() : this(null)
@@ -16,7 +16,7 @@ data class DbTestPeriodConverterEntity(
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-    other as DbTestPeriodConverterEntity
+    other as DbTestPeriodConverterBaseEntity
 
     return id != null && id == other.id
   }

@@ -6,7 +6,7 @@ object Web {
   val okhttp3 = "5.0.0-alpha.11"
 
   // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
-  const val springdocOpenapiWebmvcUi = "2.1.0"
+  const val springdocOpenapiWebmvcUi = "2.2.0"
 
   // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
   const val springdocOpenapiUi = "1.7.0"
@@ -25,5 +25,5 @@ object Web {
   const val jJwt = "0.9.1"
 
   // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
-  const val jwtApi = "0.11.5"
+  const val jjwtApi = "0.11.5"
 }

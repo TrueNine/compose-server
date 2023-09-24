@@ -13,26 +13,23 @@ import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
 import java.io.Serial;
 import java.io.Serializable;
 
-
 /**
- * 带外键的 预排序树
+ * 任意外键dao
  *
  * @author TrueNine
- * @since 2022-12-15
+ * @since 2022-12-12
  */
 @Setter
 @Getter
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(title = "预排序树和任意外键的结合体")
-public class TreeAnyRefEntity extends TreeEntity implements Serializable {
-
+@Schema(title = "任意外键类型，通常与策略模式一起使用")
+public class RefAnyBaseEntity extends BaseEntity implements Serializable {
   /**
    * 任意外键
    */
   public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
-
   /**
    * 任意类型
    */
@@ -43,7 +40,7 @@ public class TreeAnyRefEntity extends TreeEntity implements Serializable {
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
   @Schema(title = "任意外键id")
-  protected String ari;
+  protected Long ari;
 
   @JsonIgnore
   @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE)

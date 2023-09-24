@@ -25,7 +25,7 @@ class AccountAggregatorImpl(
         pwdEnc = passwordEncoder.encode(param.password)
         nickName = param.nickName
         doc = param.description
-      }).also { roleGroupService.assignPlainToUser(it.id) }
+      }).also { roleGroupService.assignPlainToUser(it.id!!) }
     } else null
 
   override fun login(@Valid param: LoginAccountReq): User? =

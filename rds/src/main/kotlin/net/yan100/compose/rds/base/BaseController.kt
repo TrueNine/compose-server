@@ -16,7 +16,9 @@ abstract class BaseController<T : BaseEntity>(
   @ResponseBody
   @GetMapping("meta/all")
   @Operation(summary = "【ǃ RDS】分页查询所有数据")
-  fun findAllMeta(@Valid page: Pq?): Pr<T> = service.findAllByNotLogicDeleted(page ?: Pw.DEFAULT_MAX)
+  fun findAllMeta(@Valid page: Pq?): Pr<T> {
+    return service.findAllByNotLogicDeleted(page ?: Pw.DEFAULT_MAX)
+  }
 
   @ResponseBody
   @GetMapping("meta/byId")

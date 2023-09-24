@@ -23,10 +23,10 @@ class JwtIssuerAutoConfiguration(
     val sig = keysRepository.jwtSignatureIssuerRsaKeyPair()!!
     val enc = keysRepository.jwtEncryptDataIssuerEccKeyPair()!!
     return JwtIssuer.createIssuer()
-      .signatureIssuerKey(sig.rsaPrivateKey)
-      .signatureVerifyKey(sig.rsaPublicKey)
-      .contentEncryptKey(enc.eccPublicKey)
-      .contentDecryptKey(enc.eccPrivateKey)
+      .signatureIssuerKey(sig.rsaPrivateKey!!)
+      .signatureVerifyKey(sig.rsaPublicKey!!)
+      .contentEncryptKey(enc.eccPublicKey!!)
+      .contentDecryptKey(enc.eccPrivateKey!!)
       .expireFromDuration(Duration.of(7, ChronoUnit.DAYS))
       .serializer(mapper)
       .encryptDataKeyName(jp.encryptDataKeyName)

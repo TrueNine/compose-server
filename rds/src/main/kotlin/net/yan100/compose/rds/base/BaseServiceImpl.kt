@@ -11,8 +11,9 @@ import org.springframework.data.repository.findByIdOrNull
 abstract class BaseServiceImpl<T : BaseEntity>(
   private val repo: BaseRepository<T>
 ) : BaseService<T> {
-  override fun findAllByIdAndNotLogicDeleted(ids: List<String>, page: Pq?): Pr<T> =
-    repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
+  override fun findAllByIdAndNotLogicDeleted(ids: List<String>, page: Pq?): Pr<T> {
+    return repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
+  }
 
   override fun findAllByNotLogicDeleted(@Valid page: Pq?): Pr<T> =
     repo.findAllByNotLogicDeleted(page.page).result
