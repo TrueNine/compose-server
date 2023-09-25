@@ -80,7 +80,7 @@ interface BaseRepository<T : BaseEntity> : AnyRepository<T> {
  */
 @NoRepositoryBean
 @JvmDefaultWithCompatibility
-interface TreeRepository<T : TreeBaseEntity> : BaseRepository<T> {
+interface TreeRepository<T : TreeEntity> : BaseRepository<T> {
   fun findChildrenCount(parent: T): Long {
     require(parent.rln != null) {
       "父节点：$parent 左节点为 null"
@@ -361,7 +361,7 @@ interface BaseService<T : AnyEntity> {
  * @since 2022-12-12
  */
 @MappedSuperclass
-open class TreeBaseEntity : BaseEntity() {
+open class TreeEntity : BaseEntity() {
   /**
    * 父id
    */

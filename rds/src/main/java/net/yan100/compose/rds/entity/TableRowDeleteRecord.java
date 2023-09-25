@@ -14,7 +14,6 @@ import net.yan100.compose.rds.converters.RecordModelConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.io.Serial;
 import java.time.LocalDateTime;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
@@ -40,9 +39,6 @@ public class TableRowDeleteRecord extends BaseEntity {
   public static final String USER_ACCOUNT = "user_account";
   public static final String DELETE_DATETIME = "delete_datetime";
   public static final String ENTITY = "entity";
-
-  @Serial
-  private static final long serialVersionUID = 1L;
 
   @Schema(title = "表名", requiredMode = NOT_REQUIRED)
   @Column(name = TABLE_NAMES, nullable = false)

@@ -1,6 +1,7 @@
 package net.yan100.compose.rds.gen
 
 
+import net.yan100.compose.rds.base.BaseTableNames
 import net.yan100.compose.rds.gen.converter.AbstractTypeConverter
 import net.yan100.compose.rds.gen.converter.MysqlConverter
 import net.yan100.compose.rds.gen.ctx.RenderContext
@@ -30,7 +31,7 @@ class GeneratorStarter {
     ctx.let { c ->
       val db = connector.queryDb(ctx.getDbName())
       db.filter {
-        !net.yan100.compose.rds.base.BasicsTableNames.getAll().contains(it.name)
+        !BaseTableNames.all().contains(it.name)
       }.forEach {
         templateGenerate(c, it, mysqlConverter)
       }

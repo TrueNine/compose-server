@@ -12,10 +12,12 @@ import java.io.Serializable;
 public class RecordModel implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
+
   private String id;
   private Integer modelHash;
   private String lang;
   private String namespace;
+  
   @Nullable
   private String entityJson;
 }

@@ -12,8 +12,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
@@ -34,14 +32,12 @@ import static org.hibernate.annotations.NotFoundAction.IGNORE;
 @DynamicUpdate
 @Schema(title = "用户组")
 @Table(name = UserGroup.TABLE_NAME)
-public class UserGroup extends BaseEntity implements Serializable {
+public class UserGroup extends BaseEntity {
 
   public static final String TABLE_NAME = "user_group";
   public static final String USER_ID = "user_id";
   public static final String NAME = "name";
   public static final String DOC = "doc";
-  @Serial
-  private static final long serialVersionUID = 1L;
 
   /**
    * 名称
@@ -86,7 +82,7 @@ public class UserGroup extends BaseEntity implements Serializable {
    * 用户组内的用户
    */
   @Schema(title = "用户组内的用户", requiredMode = NOT_REQUIRED)
-  @ManyToMany(targetEntity = User.class,fetch = EAGER)
+  @ManyToMany(targetEntity = User.class, fetch = EAGER)
   @JoinTable(
     name = UserGroupUser.TABLE_NAME,
     joinColumns = @JoinColumn(
@@ -112,7 +108,7 @@ public class UserGroup extends BaseEntity implements Serializable {
    * 角色组
    */
   @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
-  @ManyToMany(targetEntity = RoleGroup.class,fetch = EAGER)
+  @ManyToMany(targetEntity = RoleGroup.class, fetch = EAGER)
   @JoinTable(
     name = UserGroupRoleGroup.TABLE_NAME,
     joinColumns = @JoinColumn(

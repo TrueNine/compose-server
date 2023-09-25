@@ -81,7 +81,6 @@ subprojects {
 
   kapt {
     keepJavacAnnotationProcessors = true
-    this.generateStubs = true
   }
 
   java {

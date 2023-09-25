@@ -15,7 +15,7 @@ import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.base.BaseEntity
-import net.yan100.compose.rds.base.TreeBaseEntity
+import net.yan100.compose.rds.base.TreeEntity
 import net.yan100.compose.rds.converters.WGS84Converter
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -185,7 +185,7 @@ open class FullAddressDetails : SuperAddressDetails() {
 }
 
 @MappedSuperclass
-open class SuperAddress : TreeBaseEntity() {
+open class SuperAddress : TreeEntity() {
   /**
    * 代码
    */

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public interface BasicsTableNames {
-
-
+public interface BaseTableNames {
   String USER = "user";
   String USER_INFO = "user_info";
+  String USER_DEPT = "user_dept";
+  String DEPT = "dept";
   String ROLE = "role";
   String ROLE_GROUP = "role_group";
   String PERMISSIONS = "permissions";
@@ -28,14 +28,16 @@ public interface BasicsTableNames {
   String ADDRESS_DETAILS = "address_details";
   String FLYWAY_SCHEMA_HISTORY = "flyway_schema_history";
 
-  static List<String> getAll() {
+  static List<String> all() {
     return new ArrayList<>(
       Arrays.asList(
         ADDRESS,
         ADDRESS_DETAILS,
         USER,
         USER_INFO,
+        USER_DEPT,
         ROLE_GROUP,
+        DEPT,
         ROLE,
         ROLE_PERMISSIONS,
         PERMISSIONS,
