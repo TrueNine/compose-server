@@ -36,6 +36,7 @@ class JacksonSerializationAutoConfig {
   @Lazy
   fun jacksonF(): Jackson2ObjectMapperBuilderCustomizer {
     val module = JavaTimeModule()
+
     val ldts = LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
     val ldtd = LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DTimer.DATETIME))
     val lts = LocalTimeSerializer(DateTimeFormatter.ofPattern(DTimer.TIME))
@@ -54,6 +55,7 @@ class JacksonSerializationAutoConfig {
     module.addDeserializer(LocalDate::class.java, ldd)
 
     log.debug("配置jackson序列化规则")
+
     return Jackson2ObjectMapperBuilderCustomizer { b ->
       b.modules(module)
       b.timeZone("GMT+8")
@@ -64,6 +66,7 @@ class JacksonSerializationAutoConfig {
         SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
         SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS
       )
+
       b.serializationInclusion(JsonInclude.Include.NON_NULL)
       b.serializationInclusion(JsonInclude.Include.NON_ABSENT)
     }

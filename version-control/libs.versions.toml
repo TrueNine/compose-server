@@ -167,7 +167,7 @@ spring-doc-webmvc-ui3 = "2.2.0"
 apache-commons-pool2 = "2.11.1"
 apache-commons-compress = "1.24.0"
 
-gradle = "8.4-rc-1"
+gradle = "8.4-rc-2"
 gradle-plugin-version-plugin = "0.48.0"
 gradle-plugin-spring-boot-dependencymanagement = "1.1.3"
 gradle-plugin-ascijvm-convert = "3.3.2"
