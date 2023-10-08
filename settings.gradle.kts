@@ -60,6 +60,10 @@ findProject(":depend")?.name = "depend"
 include("depend:depend-web-servlet")
 findProject(":depend:depend-web-servlet")?.name = "depend-web-servlet"
 
+include("depend:depend-mqtt")
+findProject(":depend:depend-mqtt")?.name = "depend-mqtt"
+
+
 include("depend:depend-flyway")
 findProject(":depend:depend-flyway")?.name = "depend-flyway"
 

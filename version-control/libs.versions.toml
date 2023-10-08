@@ -35,6 +35,7 @@ compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", versio
 compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose-cacheable" }
 compose-datacommon-cralwer = { group = "net.yan100.compose", name = "data-common-cralwer", version.ref = "compose-datacommon-cralwer" }
 compose-datacommon-dataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose-datacommon-dataextract" }
+compose-depend-mqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose-depend-mqtt" }
 compose-depend-flyway = { group = "net.yan100.compose", name = "depend-flyway", version.ref = "compose-depend-flyway" }
 compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose-depend-webservlet" }
 compose-depend-webclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose-depend-webclient" }
@@ -43,6 +44,7 @@ spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-sta
 spring-boot-json = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
 spring-boot-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
 spring-boot-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 spring-boot-websocket = { group = "org.springframework.boot", name = "spring-boot-starter-websocket" }
 spring-boot-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 spring-boot-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
@@ -51,12 +53,17 @@ spring-boot-data-redis = { group = "org.springframework.boot", name = "spring-bo
 spring-boot-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-data-redis-reactive = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis-reactive" }
 spring-boot-logging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
+
+spring-integration-mqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt" }
+
 spring-security-crypto = { group = "org.springframework.security", name = "spring-security-crypto" }
 spring-security-core = { group = "org.springframework.security", name = "spring-security-core" }
 spring-webmvc = { group = "org.springframework", name = "spring-webmvc" }
 spring-modulith-jpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 spring-modulith-core = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "spring-modulith" }
 spring-doc-webmvc-ui3 = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "spring-doc-webmvc-ui3" }
+
+
 apache-commons-pool2 = { group = "org.apache.commons", name = "commons-pool2", version.ref = "apache-commons-pool2" }
 apache-commons-compress = { group = "org.apache.commons", name = "commons-compress", version.ref = "apache-commons-compress" }
 
@@ -134,23 +141,24 @@ bom-spring-cloudalibaba = { group = "com.alibaba.cloud", name = "spring-cloud-al
 
 
 [versions]
-compose = "0.6.59"
-compose-core = "0.6.59"
-compose-rds = "0.6.59"
-compose-rds-gen = "0.6.59"
-compose-oss = "0.6.59"
-compose-pay = "0.6.59"
-compose-schedule = "0.6.59"
-compose-security = "0.6.59"
-compose-security-oauth2 = "0.6.59"
-compose-webapidoc = "0.6.59"
-compose-cacheable = "0.6.59"
-compose-datacommon-cralwer = "0.6.59"
-compose-datacommon-dataextract = "0.6.59"
-compose-depend-flyway = "0.6.59"
-compose-depend-webservlet = "0.6.59"
-compose-depend-webclient = "0.6.59"
-compose-version-control-plugin = "1.1.28"
+compose = "0.6.60"
+compose-core = "0.6.60"
+compose-rds = "0.6.60"
+compose-rds-gen = "0.6.60"
+compose-oss = "0.6.60"
+compose-pay = "0.6.60"
+compose-schedule = "0.6.60"
+compose-security = "0.6.60"
+compose-security-oauth2 = "0.6.60"
+compose-webapidoc = "0.6.60"
+compose-cacheable = "0.6.60"
+compose-datacommon-cralwer = "0.6.60"
+compose-datacommon-dataextract = "0.6.60"
+compose-depend-mqtt = "0.6.60"
+compose-depend-flyway = "0.6.60"
+compose-depend-webservlet = "0.6.60"
+compose-depend-webclient = "0.6.60"
+compose-version-control-plugin = "1.1.29"
 
 
 java = "21"
@@ -167,7 +175,7 @@ spring-doc-webmvc-ui3 = "2.2.0"
 apache-commons-pool2 = "2.11.1"
 apache-commons-compress = "1.24.0"
 
-gradle = "8.4-rc-2"
+gradle = "8.4-rc-3"
 gradle-plugin-version-plugin = "0.48.0"
 gradle-plugin-spring-boot-dependencymanagement = "1.1.3"
 gradle-plugin-ascijvm-convert = "3.3.2"

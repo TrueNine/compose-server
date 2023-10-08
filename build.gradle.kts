@@ -31,7 +31,6 @@ plugins {
 }
 
 val l = libs
-
 version = libs.versions.compose.asProvider().get()
 
 allprojects {
