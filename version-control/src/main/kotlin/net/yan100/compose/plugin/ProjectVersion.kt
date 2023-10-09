@@ -5,6 +5,6 @@ package net.yan100.compose.plugin
  */
 object ProjectVersion {
   const val GROUP = "net.yan100.compose"
-  const val VERSION = "0.6.60"
-  const val GRADLE_VERSION = "8.4-rc-3"
+  const val VERSION = "0.6.61"
+  const val GRADLE_VERSION = "8.4"
 }
