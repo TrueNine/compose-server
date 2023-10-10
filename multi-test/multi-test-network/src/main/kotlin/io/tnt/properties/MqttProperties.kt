@@ -1,7 +1,6 @@
 package io.tnt.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import java.net.URL
 
 @ConfigurationProperties(prefix = "compose.mqtt")
 class MqttProperties {

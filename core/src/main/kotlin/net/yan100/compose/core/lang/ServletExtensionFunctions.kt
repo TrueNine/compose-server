@@ -2,9 +2,7 @@ package net.yan100.compose.core.lang
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import net.yan100.compose.core.http.Headers
 import net.yan100.compose.core.http.MediaTypes
-import net.yan100.compose.core.http.Methods
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.*

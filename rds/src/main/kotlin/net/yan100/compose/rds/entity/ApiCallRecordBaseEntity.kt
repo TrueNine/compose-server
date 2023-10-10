@@ -5,13 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import net.yan100.compose.rds.base.BaseEntity
-import net.yan100.compose.rds.entity.ApiCallRecordBaseEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction
 import java.io.Serial
-import java.io.Serializable
 
 /**
  * API请求记录

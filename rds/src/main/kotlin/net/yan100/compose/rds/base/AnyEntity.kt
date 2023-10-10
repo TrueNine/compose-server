@@ -61,7 +61,7 @@ open class AnyEntity : Serializable, Persistable<String> {
   }
 
   override fun getId(): String? {
-    return this.id as String
+    return this.id
   }
 
   @Transient

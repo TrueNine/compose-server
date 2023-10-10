@@ -9,6 +9,8 @@ import org.springframework.util.MimeType
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.support.WebClientAdapter
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 
 /**
  * # 自定义的json编解码器
@@ -21,6 +23,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
  */
 inline fun <reified T : Any> jsonWebClientRegister(
   objectMapper: ObjectMapper,
+  timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
   builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>
 ): T {
   val clientBuilder = WebClient.builder()
@@ -31,7 +34,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
     MimeType.valueOf("application/x-ndjson"),
     MimeType.valueOf(MediaTypes.TEXT.getValue()!!),
   )
-  clientBuilder.codecs { it ->
+  clientBuilder.codecs {
     it.defaultCodecs().jackson2JsonDecoder(
       Jackson2JsonDecoder(
         objectMapper,
@@ -47,9 +50,10 @@ inline fun <reified T : Any> jsonWebClientRegister(
     println()
   }
 
-  clientBuilder.defaultHeader(Headers.ACCEPT, MediaTypes.JSON.media(), MediaTypes.TEXT.media())
+  clientBuilder.defaultHeader(Headers.ACCEPT, MediaTypes.JSON.getValue(), MediaTypes.TEXT.getValue())
 
   val cf = builder(clientBuilder, factoryBuilder)
   val client = cf.first.build()
-  return cf.second.clientAdapter(WebClientAdapter.forClient(client)).build().createClient(T::class.java)
+  return cf.second.exchangeAdapter(WebClientAdapter.create(client).apply { blockTimeout = timeout }).build()
+    .createClient(T::class.java)
 }

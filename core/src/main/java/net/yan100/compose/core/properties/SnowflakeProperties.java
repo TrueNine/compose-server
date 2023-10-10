@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "compose.core.snowflake")
-class SnowflakeProperties {
+public class SnowflakeProperties {
   private Long workId = 1L;
   private Long dataCenterId = 2L;
   private Long sequence = 3L;

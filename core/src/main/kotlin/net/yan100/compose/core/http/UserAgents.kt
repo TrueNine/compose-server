@@ -1,6 +1,5 @@
 package net.yan100.compose.core.http
 
-import net.yan100.compose.core.lang.Str
 import net.yan100.compose.core.lang.StringTyping
 
 /**

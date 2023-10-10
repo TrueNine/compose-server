@@ -1,5 +1,3 @@
-import net.yan100.compose.plugin.V
-
 project.version = libs.versions.compose.schedule.get()
 
 dependencies {

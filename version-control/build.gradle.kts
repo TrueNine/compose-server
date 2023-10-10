@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 val pluginGroup = "net.yan100.compose"
@@ -29,13 +31,17 @@ dependencies {
 }
 
 tasks {
-  compileKotlin {
-    compilerOptions {
-      freeCompilerArgs = listOf(
+  withType<KotlinCompile> {
+    kotlinOptions {
+      freeCompilerArgs += listOf(
         "-Xjsr305=strict",
         "-Xjvm-default=all",
-        "-verbose"
+        "-verbose",
+        "-Xjdk-release=21",
+        "-jvm-target=21",
+        "-Xextended-compiler-checks"
       )
+      jvmTarget = "21"
     }
   }
 }

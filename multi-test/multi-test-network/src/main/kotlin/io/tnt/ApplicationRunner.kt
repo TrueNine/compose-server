@@ -4,7 +4,6 @@ import io.tnt.properties.MqttProperties
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.boot.runApplication
 
 @EnableConfigurationProperties(MqttProperties::class)
 @SpringBootApplication

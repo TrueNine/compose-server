@@ -40,6 +40,8 @@ compose-depend-flyway = { group = "net.yan100.compose", name = "depend-flyway", 
 compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose-depend-webservlet" }
 compose-depend-webclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose-depend-webclient" }
 
+spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
+spring-boot-configureprocessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
 spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 spring-boot-json = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
 spring-boot-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
@@ -53,6 +55,8 @@ spring-boot-data-redis = { group = "org.springframework.boot", name = "spring-bo
 spring-boot-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-data-redis-reactive = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis-reactive" }
 spring-boot-logging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
+
+spring-cloud-bootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap" }
 
 spring-integration-mqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt" }
 
@@ -141,24 +145,24 @@ bom-spring-cloudalibaba = { group = "com.alibaba.cloud", name = "spring-cloud-al
 
 
 [versions]
-compose = "0.6.61"
-compose-core = "0.6.61"
-compose-rds = "0.6.61"
-compose-rds-gen = "0.6.61"
-compose-oss = "0.6.61"
-compose-pay = "0.6.61"
-compose-schedule = "0.6.61"
-compose-security = "0.6.61"
-compose-security-oauth2 = "0.6.61"
-compose-webapidoc = "0.6.61"
-compose-cacheable = "0.6.61"
-compose-datacommon-cralwer = "0.6.61"
-compose-datacommon-dataextract = "0.6.61"
-compose-depend-mqtt = "0.6.61"
-compose-depend-flyway = "0.6.61"
-compose-depend-webservlet = "0.6.61"
-compose-depend-webclient = "0.6.61"
-compose-version-control-plugin = "1.1.30"
+compose = "0.6.62"
+compose-core = "0.6.62"
+compose-rds = "0.6.62"
+compose-rds-gen = "0.6.62"
+compose-oss = "0.6.62"
+compose-pay = "0.6.62"
+compose-schedule = "0.6.62"
+compose-security = "0.6.62"
+compose-security-oauth2 = "0.6.62"
+compose-webapidoc = "0.6.62"
+compose-cacheable = "0.6.62"
+compose-datacommon-cralwer = "0.6.62"
+compose-datacommon-dataextract = "0.6.62"
+compose-depend-mqtt = "0.6.62"
+compose-depend-flyway = "0.6.62"
+compose-depend-webservlet = "0.6.62"
+compose-depend-webclient = "0.6.62"
+compose-version-control-plugin = "1.1.31"
 
 
 java = "21"

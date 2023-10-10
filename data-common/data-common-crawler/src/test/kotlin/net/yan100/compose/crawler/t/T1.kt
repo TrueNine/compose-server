@@ -8,7 +8,6 @@ import com.microsoft.playwright.options.AriaRole
 import com.microsoft.playwright.options.ColorScheme
 import com.microsoft.playwright.options.ScreenshotType
 import net.yan100.compose.crawler.playwright.*
-import org.testng.annotations.Test
 import java.nio.file.Paths
 import java.time.LocalDateTime
 

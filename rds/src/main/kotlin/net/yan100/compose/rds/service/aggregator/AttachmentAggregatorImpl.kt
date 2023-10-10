@@ -1,7 +1,6 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import net.yan100.compose.core.exceptions.requireKnown
 import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.models.req.PostAttachmentReq

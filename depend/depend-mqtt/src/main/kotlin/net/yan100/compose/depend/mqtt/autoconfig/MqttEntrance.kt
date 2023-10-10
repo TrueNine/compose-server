@@ -10,5 +10,4 @@ import org.springframework.context.annotation.ComponentScan
   ]
 )
 @EnableConfigurationProperties(SingleMqttProperties::class)
-class MqttEntrance {
-}
+class MqttEntrance

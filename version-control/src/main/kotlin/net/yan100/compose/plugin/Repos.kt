@@ -48,8 +48,6 @@ object Repos {
     aliGrailsCore,
     aliApacheSnapshots,
 
-
-
     springMilestone,
     springLibMilestone,
     springSnapshot

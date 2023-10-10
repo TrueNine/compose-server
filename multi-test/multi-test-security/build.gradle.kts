@@ -1,5 +1,3 @@
-import net.yan100.compose.plugin.V
-
 dependencies {
   implementation(libs.db.mysql.j)
   implementation(project(":core"))

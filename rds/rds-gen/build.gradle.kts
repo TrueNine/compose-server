@@ -1,5 +1,3 @@
-import net.yan100.compose.plugin.V
-
 version = libs.versions.compose.rds.gen.get()
 
 dependencies {

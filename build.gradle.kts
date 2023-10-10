@@ -1,16 +1,11 @@
-import net.yan100.compose.plugin.Repos
-import net.yan100.compose.plugin.ProjectVersion
-
+import net.yan100.compose.plugin.*
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.Repos.yunXiaoRelese
 import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
-import net.yan100.compose.plugin.V
-import net.yan100.compose.plugin.allAnnotationCompileOnly
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import kotlin.script.experimental.api.asSuccess
 
 plugins {
   java
@@ -35,9 +30,8 @@ version = libs.versions.compose.asProvider().get()
 
 allprojects {
   repositories {
-    Repos.publicRepositories.forEach {
-      maven(url = uri(it))
-    }
+    chinaRegionRepositories()
+    aliYunXiao()
     mavenLocal()
     mavenCentral()
     gradlePluginPortal()
@@ -103,17 +97,20 @@ subprojects {
     withType<AbstractCopyTask> {
       duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
-    compileKotlin {
-      this.compilerOptions {
-        freeCompilerArgs = listOf(
+    withType<KotlinCompile> {
+      kotlinOptions {
+        freeCompilerArgs += listOf(
           "-Xjsr305=strict",
           "-Xjvm-default=all",
           "-verbose",
           "-Xjdk-release=21",
+          "-jvm-target=21",
           "-Xextended-compiler-checks"
         )
+        jvmTarget = "21"
       }
     }
+
     compileJava {
       options.isFork = true
       options.forkOptions.memoryMaximumSize = "4G"
@@ -147,14 +144,14 @@ subprojects {
   }
 
   dependencies {
-    compileOnly("org.springframework.cloud:spring-cloud-starter-bootstrap") {
+    compileOnly(l.spring.cloud.bootstrap) {
       exclude("org.apache.logging.log4j")
       exclude("org.springframework.boot", "spring-boot-starter-logging")
       exclude("org.springframework.boot", "spring-boot")
     }
 
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    implementation(l.spring.boot.autoconfigure)
+    annotationProcessor(l.spring.boot.configureprocessor)
 
     implementation(l.bundles.kt)
     testImplementation(l.bundles.spring.kotlin.testng) {
