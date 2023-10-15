@@ -14,7 +14,7 @@ ascijvm-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "gradle-pl
 
 [bundles]
 spring-kotlin-testng = ["spring-boot-test", "test-spring-security-test", "test-spring-modulith-test", "test-kt-testng", "test-mockk", "test-testng", "db-hsql", "db-sqlite"]
-kt = ["kt-stdlib-jdk8", "kt-reflact", "ktx-coroutine-reactor", "reactor-kt-extensions", "jbr-annotation", "jackson-module-kotlin"]
+kt = ["kt-stdlib", "kt-reflact", "ktx-coroutine-reactor", "reactor-kt-extensions", "jbr-annotation", "jackson-module-kotlin"]
 p6spystarter = ["db-p6spy-starter", "db-p6spy"]
 spring-boot-data-redis = ["spring-boot-data-redis", "spring-boot-data-redis-reactive", "apache-commons-pool2"]
 spring-boot-data-jpa = ["spring-boot-data-jpa", "spring-modulith-jpa"]
@@ -71,6 +71,7 @@ spring-doc-webmvc-ui3 = { group = "org.springdoc", name = "springdoc-openapi-sta
 apache-commons-pool2 = { group = "org.apache.commons", name = "commons-pool2", version.ref = "apache-commons-pool2" }
 apache-commons-compress = { group = "org.apache.commons", name = "commons-compress", version.ref = "apache-commons-compress" }
 
+kt-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kt-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kt-reflact = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 ktx-coroutine-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "ktx-coroutine" }
@@ -145,28 +146,28 @@ bom-spring-cloudalibaba = { group = "com.alibaba.cloud", name = "spring-cloud-al
 
 
 [versions]
-compose = "0.6.62"
-compose-core = "0.6.62"
-compose-rds = "0.6.62"
-compose-rds-gen = "0.6.62"
-compose-oss = "0.6.62"
-compose-pay = "0.6.62"
-compose-schedule = "0.6.62"
-compose-security = "0.6.62"
-compose-security-oauth2 = "0.6.62"
-compose-webapidoc = "0.6.62"
-compose-cacheable = "0.6.62"
-compose-datacommon-cralwer = "0.6.62"
-compose-datacommon-dataextract = "0.6.62"
-compose-depend-mqtt = "0.6.62"
-compose-depend-flyway = "0.6.62"
-compose-depend-webservlet = "0.6.62"
-compose-depend-webclient = "0.6.62"
-compose-version-control-plugin = "1.1.31"
+compose = "0.6.63"
+compose-core = "0.6.63"
+compose-rds = "0.6.63"
+compose-rds-gen = "0.6.63"
+compose-oss = "0.6.63"
+compose-pay = "0.6.63"
+compose-schedule = "0.6.63"
+compose-security = "0.6.63"
+compose-security-oauth2 = "0.6.63"
+compose-webapidoc = "0.6.63"
+compose-cacheable = "0.6.63"
+compose-datacommon-cralwer = "0.6.63"
+compose-datacommon-dataextract = "0.6.63"
+compose-depend-mqtt = "0.6.63"
+compose-depend-flyway = "0.6.63"
+compose-depend-webservlet = "0.6.63"
+compose-depend-webclient = "0.6.63"
+compose-version-control-plugin = "1.1.32"
 
 
 java = "21"
-kotlin = "1.9.20-Beta2"
+kotlin = "1.9.20-RC"
 ktx-coroutine = "1.7.3"
 reactor-kt-extensions = "1.2.2"
 jbr-annotation = "24.0.1"

@@ -6,7 +6,7 @@ object Lang {
   const val java = "21"
 
   // https://github.com/JetBrains/kotlin/releases
-  const val kotlin = "1.9.20-Beta2"
+  const val kotlin = "1.9.20-RC"
 
   // https://mvnrepository.com/artifact/org.projectlombok/lombok
   const val lombok = "1.18.30"

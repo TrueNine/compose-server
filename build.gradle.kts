@@ -83,15 +83,16 @@ subprojects {
     withSourcesJar()
   }
 
+
   kotlin {
     jvmToolchain(21)
   }
 
-  hibernate {
-    enhancement {
-      enableAssociationManagement.set(false)
-    }
-  }
+//  hibernate {
+//    enhancement {
+//      enableAssociationManagement.set(false)
+//    }
+//  }
 
   tasks {
     withType<AbstractCopyTask> {

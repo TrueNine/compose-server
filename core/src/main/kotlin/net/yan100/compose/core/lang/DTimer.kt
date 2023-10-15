@@ -1,5 +1,6 @@
 package net.yan100.compose.core.lang
 
+import net.yan100.compose.core.lang.DTimer.ZONE_GMT
 import java.time.*
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -11,6 +12,8 @@ import java.util.*
  * @since 2022-12-16
  */
 object DTimer {
+  const val ZONE_UTC = "UTC"
+  const val ZONE_GMT = "Etc/GMT"
   const val MILLIS = "SSS"
   const val DATE = "yyyy-MM-dd"
   const val TIME = "HH:mm:ss"
@@ -56,45 +59,79 @@ object DTimer {
   }
 
   @JvmStatic
-  fun localTimeToDate(lt: LocalTime): Date {
+  fun localTimeToDate(lt: LocalTime, zoneId: ZoneId = ZoneId.of("GMT")): Date {
     val meta = LocalDate.of(1970, 1, 1)
     val ldt = lt.atDate(meta)
     return Date.from(
-      ldt.atZone(ZoneId.of("GMT"))
+      ldt.atZone(zoneId)
         .toInstant()
     )
   }
 
   @JvmStatic
-  fun localDateToDate(ld: LocalDate): Date {
+  fun localDateToDate(ld: LocalDate, zoneId: ZoneId = ZoneId.systemDefault()): Date {
     return Date.from(
-      ld.atStartOfDay().atZone(ZoneId.systemDefault())
+      ld.atStartOfDay().atZone(zoneId)
         .toInstant()
     )
   }
 
   @JvmStatic
-  fun localDatetimeToDate(ldt: LocalDateTime): Date {
+  fun localDatetimeToDate(ldt: LocalDateTime, zoneId: ZoneId = ZoneId.systemDefault()): Date {
     return Date.from(
-      ldt.atZone(ZoneId.systemDefault())
+      ldt.atZone(zoneId)
         .toInstant()
     )
   }
 
   @JvmStatic
-  fun dateToLocalDatetime(date: Date): LocalDateTime = date.toInstant()
-    .atZone(ZoneId.systemDefault())
-    .toLocalDateTime()
+  fun dateToLocalDatetime(date: Date, zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+    return date.toInstant()
+      .atZone(zoneId)
+      .toLocalDateTime()
+  }
 
   @JvmStatic
-  fun dateToLocalDate(date: Date): LocalDate {
-    return date.toInstant().atZone(ZoneId.systemDefault())
+  fun dateToLocalDate(date: Date, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
+    return date.toInstant().atZone(zoneId)
       .toLocalDate()
   }
 
   @JvmStatic
-  fun dateToLocalTime(date: Date): LocalTime {
-    return date.toInstant().atZone(ZoneId.of("GMT"))
+  fun dateToLocalTime(date: Date, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime {
+    return date.toInstant().atZone(zoneId)
       .toLocalTime()
   }
+}
+
+fun Long.toDateOrNull(): Date? {
+  return Date(this)
+}
+
+fun Date.toLong(): Long {
+  return this.time
+}
+
+fun Date.toLocalDatetime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+  return DTimer.dateToLocalDatetime(this, zoneId)
+}
+
+fun Date.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
+  return DTimer.dateToLocalDate(this, zoneId)
+}
+
+fun Date.toLocalTime(zoneId: ZoneId =  ZoneId.of(ZONE_GMT)): LocalTime {
+  return DTimer.dateToLocalTime(this, zoneId)
+}
+
+fun LocalTime.toDate(zoneId: ZoneId =  ZoneId.of(ZONE_GMT)): Date {
+  return DTimer.localTimeToDate(this, zoneId)
+}
+
+fun LocalDate.toDate(zoneId: ZoneId = ZoneId.systemDefault()): Date {
+  return DTimer.localDateToDate(this, zoneId)
+}
+
+fun LocalDateTime.toDate(zoneId: ZoneId = ZoneId.systemDefault()): Date {
+  return DTimer.localDatetimeToDate(this, zoneId)
 }

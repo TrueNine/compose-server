@@ -21,13 +21,17 @@ group = pluginGroup
 version = pluginVersion
 
 repositories {
+  mavenLocal()
+  maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
+  maven(url = uri("https://maven.aliyun.com/repository/gradle-plugin"))
+  maven(url = uri("https://maven.aliyun.com/repository/public"))
   mavenCentral()
   gradlePluginPortal()
 }
 
 dependencies {
   implementation(gradleApi())
-  implementation("${kotlin("stdlib")}:1.9.10")
+  implementation(libs.bundles.kt)
 }
 
 tasks {

@@ -66,3 +66,8 @@ fun String.base64(charset: Charset = StandardCharsets.UTF_8): String = net.yan10
  * @return [String]
  */
 fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = net.yan100.compose.core.encrypt.Base64Helper.decode(this, charset)
+
+fun String.replaceFirstX(char: String, replacement: String): String {
+  return if (indexOf(char) == 0) replaceFirst(char, replacement)
+  else replacement
+}
