@@ -1,4 +1,4 @@
-version = libs.versions.compose.depend.webclient.get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.spring.boot.webflux)

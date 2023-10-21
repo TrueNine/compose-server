@@ -1,4 +1,4 @@
-version = libs.versions.compose.webapidoc.get()
+version = libs.versions.compose.get()
 
 dependencies {
   implementation(libs.bundles.knife4j)

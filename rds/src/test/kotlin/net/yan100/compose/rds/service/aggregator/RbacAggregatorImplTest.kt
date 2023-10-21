@@ -380,6 +380,9 @@ class RbacAggregatorImplTest : AbstractTestNGSpringContextTests() {
   @Test
   fun testFindAllSecurityNameByUserId() {
     val user = namePre()
+    val pUser = userService.findUserByAccount("usr")
+    
+
     // 查询用户
     val all = aggregator.findAllSecurityNameByUserId(user.id!!)
     assertTrue { all.isNotEmpty() }

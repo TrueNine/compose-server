@@ -1,5 +1,5 @@
 [plugins]
-compose-version-control = { id = "net.yan100.compose.version-control", version.ref = "compose-version-control-plugin" }
+compose-versioncontrol = { id = "net.yan100.compose.version-control", version.ref = "compose" }
 kt-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kt-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kt-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
@@ -23,22 +23,22 @@ flyway = ["db-flyway-mysql", "db-flyway-core"]
 knife4j = ["sdk-openapi-knife4jjakarta", "spring-doc-webmvc-ui3"]
 
 [libraries]
-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose-core" }
-compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose-rds" }
-compose-rds-gen = { group = "net.yan100.compose", name = "rds-gen", version.ref = "compose-rds-gen" }
-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose-oss" }
-compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose-security-oauth2" }
-compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose-security" }
-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose-pay" }
-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose-schedule" }
-compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", version.ref = "compose-webapidoc" }
-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose-cacheable" }
-compose-datacommon-cralwer = { group = "net.yan100.compose", name = "data-common-cralwer", version.ref = "compose-datacommon-cralwer" }
-compose-datacommon-dataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose-datacommon-dataextract" }
-compose-depend-mqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose-depend-mqtt" }
-compose-depend-flyway = { group = "net.yan100.compose", name = "depend-flyway", version.ref = "compose-depend-flyway" }
-compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose-depend-webservlet" }
-compose-depend-webclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose-depend-webclient" }
+compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose" }
+compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose" }
+compose-rds-gen = { group = "net.yan100.compose", name = "rds-gen", version.ref = "compose" }
+compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose" }
+compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose" }
+compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose" }
+compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose" }
+compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose" }
+compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", version.ref = "compose" }
+compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose" }
+compose-datacommon-cralwer = { group = "net.yan100.compose", name = "data-common-cralwer", version.ref = "compose" }
+compose-datacommon-dataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose" }
+compose-depend-mqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose" }
+compose-depend-flyway = { group = "net.yan100.compose", name = "depend-flyway", version.ref = "compose" }
+compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose" }
+compose-depend-webclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose" }
 
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-boot-configureprocessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
@@ -146,25 +146,7 @@ bom-spring-cloudalibaba = { group = "com.alibaba.cloud", name = "spring-cloud-al
 
 
 [versions]
-compose = "0.6.63"
-compose-core = "0.6.63"
-compose-rds = "0.6.63"
-compose-rds-gen = "0.6.63"
-compose-oss = "0.6.63"
-compose-pay = "0.6.63"
-compose-schedule = "0.6.63"
-compose-security = "0.6.63"
-compose-security-oauth2 = "0.6.63"
-compose-webapidoc = "0.6.63"
-compose-cacheable = "0.6.63"
-compose-datacommon-cralwer = "0.6.63"
-compose-datacommon-dataextract = "0.6.63"
-compose-depend-mqtt = "0.6.63"
-compose-depend-flyway = "0.6.63"
-compose-depend-webservlet = "0.6.63"
-compose-depend-webclient = "0.6.63"
-compose-version-control-plugin = "1.1.32"
-
+compose = "1.6.83"
 
 java = "21"
 kotlin = "1.9.20-RC"

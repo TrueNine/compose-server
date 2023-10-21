@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 val pluginGroup = "net.yan100.compose"
-val pluginVersion = libs.versions.compose.version.control.plugin.get().toString()
+val pluginVersion = libs.versions.compose.get().toString()
 val yunXiaoUsername = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
 

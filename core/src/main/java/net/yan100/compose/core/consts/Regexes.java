@@ -10,7 +10,7 @@ public interface Regexes {
   /**
    * 密码
    */
-  String PASSWORD = "[a-zA-Z0-9_#@^]";
+  String PASSWORD = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^\\da-zA-Z\\s]).{1,9}$";
   /**
    * 中国的手机
    */

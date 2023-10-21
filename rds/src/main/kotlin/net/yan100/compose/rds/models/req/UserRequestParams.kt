@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
+import net.yan100.compose.core.consts.Regexes
 
 
 @Schema(title = "登录账号")
@@ -32,8 +33,8 @@ class ModifyAccountPasswordReq {
 
   @get:NotBlank(message = "新密码不能为空")
   @get:Pattern(
-    regexp = net.yan100.compose.core.consts.Regexes.PASSWORD,
-    message = "密码必须匹配规则为：" + net.yan100.compose.core.consts.Regexes.PASSWORD
+    regexp = Regexes.PASSWORD,
+    message = "密码必须匹配规则为：" + Regexes.PASSWORD
   )
   var newPassword: String? = null
 }

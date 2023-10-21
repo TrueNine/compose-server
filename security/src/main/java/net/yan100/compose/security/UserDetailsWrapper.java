@@ -27,9 +27,9 @@ public record UserDetailsWrapper(AuthUserInfo authUserInfo) implements UserDetai
   public Collection<? extends GrantedAuthority> getAuthorities() {
     var auths = new ArrayList<GrantedAuthority>();
    // 添加角色信息
-    this.authUserInfo.getRoles().forEach(r -> auths.add(new SimpleGrantedAuthority("ROLE_" + r)));
+    this.authUserInfo.getRoles().stream().filter(Str::hasText).forEach(r -> auths.add(new SimpleGrantedAuthority("ROLE_" + r)));
     // 添加权限信息
-    this.authUserInfo.getPermissions().forEach(p -> auths.add(new SimpleGrantedAuthority(p)));
+    this.authUserInfo.getPermissions().stream().filter(Str::hasText).forEach(p -> auths.add(new SimpleGrantedAuthority(p)));
     // 添加 部门信息 到鉴权列表
     this.authUserInfo.getDepts().stream().filter(Str::hasText).map(r -> "DEPT_" + r).forEach(r -> auths.add(new SimpleGrantedAuthority(r)));
 

@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.schedule.get()
+project.version = libs.versions.compose.get()
 
 dependencies {
   //api("com.xuxueli:xxl-job-core:${V.Schedule.xxlJob}")

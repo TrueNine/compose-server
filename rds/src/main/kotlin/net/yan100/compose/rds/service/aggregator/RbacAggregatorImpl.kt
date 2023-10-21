@@ -41,14 +41,11 @@ class RbacAggregatorImpl(
     // 查询所有用户的角色组id
     val userRoleGroupIds = urg.findAllRoleGroupIdByUserId(userId)
 
-    val userDepts = dr.findAllByUserId(userId).map { "DEPT_${it.name}" }
-
     // 将之解包
     val allNames = with(
       leaderUserUserGroupRoleGroupIds
         + userGroupRoleGroupIds
         + userRoleGroupIds
-        + userDepts
     ) {
       val roleGroups = rg.findAllById(this)
       val roleNames = roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
@@ -56,7 +53,7 @@ class RbacAggregatorImpl(
         .asSequence().map { it.roles }
         .flatten().map { it.permissions }
         .flatten().map { it.name }.toList()
-      roleNames + permissionNames + userDepts
+      roleNames + permissionNames
     }
     return allNames.filterNotNull().toSet()
   }

@@ -1,4 +1,4 @@
-version = libs.versions.compose.datacommon.dataextract.get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.net.okhttp3)

@@ -1,4 +1,4 @@
-version = libs.versions.compose.oss.get()
+version = libs.versions.compose.get()
 
 dependencies {
   implementation(libs.sdk.oss.minio) {

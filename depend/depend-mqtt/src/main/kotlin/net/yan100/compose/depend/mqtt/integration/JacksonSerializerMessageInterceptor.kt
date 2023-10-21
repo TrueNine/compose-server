@@ -1,4 +1,4 @@
-package net.yan100.compose.depend.mqtt.autoconfig
+package net.yan100.compose.depend.mqtt.integration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.messaging.Message

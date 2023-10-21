@@ -1,4 +1,4 @@
-version = libs.versions.compose.cacheable.get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.bundles.spring.boot.data.redis)

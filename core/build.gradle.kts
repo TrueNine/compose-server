@@ -1,4 +1,4 @@
-version = libs.versions.compose.core.get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.jackson.core.annotations)

@@ -1,4 +1,4 @@
-version = libs.versions.compose.datacommon.cralwer.get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(project(":data-common:data-common-data-extract"))

@@ -1,4 +1,4 @@
-version = libs.versions.compose.depend.flyway.get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.bundles.flyway)

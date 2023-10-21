@@ -174,8 +174,8 @@ SET id=0,
     role_group_id=0;
 INSERT INTO role_group_role
 SET id=1,
-    role_id=0,
-    role_group_id=1;
+    role_id=1,
+    role_group_id=0;
 INSERT INTO role_group_role
 SET id=2,
     role_id=1,
@@ -199,6 +199,10 @@ SET id=0,
 INSERT INTO user_role_group
 SET id=1,
     user_id=0,
+    role_group_id=1;
+INSERT INTO user_role_group
+SET id=2,
+    user_id=1,
     role_group_id=1;
 
 

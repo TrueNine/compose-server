@@ -1,4 +1,4 @@
-package net.yan100.compose.depend.mqtt.autoconfig
+package net.yan100.compose.depend.mqtt.integration
 
 import net.yan100.compose.core.lang.replaceFirstX
 import org.springframework.integration.mqtt.support.MqttHeaders

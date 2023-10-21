@@ -1,4 +1,4 @@
-version = libs.versions.compose.rds.gen.get()
+version = libs.versions.compose.get()
 
 dependencies {
   implementation(libs.util.freemarker)

@@ -10,7 +10,6 @@ interface UserService : BaseService<User> {
   fun findFullUserByAccount(account: String): FullUser?
 
   fun findPwdEncByAccount(account: String): String?
-
   fun existsByAccount(account: String): Boolean
   fun existsByWechatOpenId(openId: String): Boolean
   fun modifyUserBandTimeTo(account: String, dateTime: LocalDateTime?)

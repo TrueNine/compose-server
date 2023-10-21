@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.security.oauth2.get()
+project.version = libs.versions.compose.get()
 
 dependencies {
   implementation(libs.spring.security.core)

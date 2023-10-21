@@ -10,8 +10,12 @@ interface UserRoleGroupRepo : BaseRepository<UserRoleGroup> {
   fun findByUserIdAndRoleGroupId(userId: String, roleGroupId: String): UserRoleGroup?
   fun findAllByUserId(userId: String): List<UserRoleGroup>
 
-  @Query("select ur.roleGroupId from UserRoleGroup ur")
-  fun findAllRoleGroupIdByUserId(userID: String): Set<String>
+  @Query("""
+    SELECT ur.roleGroupId 
+    FROM UserRoleGroup ur
+    WHERE ur.userId = :userId
+  """)
+  fun findAllRoleGroupIdByUserId(userId: String): Set<String>
 
   fun existsByUserIdAndRoleGroupId(userId: String, roleId: String): Boolean
   fun deleteAllByRoleGroupIdAndUserId(roleGroupId: String, userId: String)

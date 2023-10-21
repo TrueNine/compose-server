@@ -26,7 +26,7 @@ plugins {
 }
 
 val l = libs
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.get()
 
 allprojects {
   repositories {
@@ -48,7 +48,7 @@ allprojects {
   }
 
   group = ProjectVersion.GROUP
-  version = l.versions.compose.asProvider().get()
+  version = l.versions.compose.get()
 
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
   extra["snippetsDir"] = file("build/generated-snippets")
@@ -97,6 +97,11 @@ subprojects {
   tasks {
     withType<AbstractCopyTask> {
       duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    withType<JavaCompile> {
+      options.compilerArgs.addAll(listOf(
+        "--enable-preview"
+      ))
     }
     withType<KotlinCompile> {
       kotlinOptions {
@@ -180,6 +185,6 @@ subprojects {
 tasks {
   wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    this.gradleVersion = ProjectVersion.GRADLE_VERSION
+    this.gradleVersion = ProjectVersion.GRADLE
   }
 }

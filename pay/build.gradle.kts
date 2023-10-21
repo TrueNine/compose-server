@@ -1,4 +1,4 @@
-version = libs.versions.compose.pay.get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.sdk.pay.wechatv3)
