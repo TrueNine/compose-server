@@ -8,13 +8,13 @@ object Crawler {
   const val seleniumJava = "4.12.1"
 
   // https://mvnrepository.com/artifact/org.jsoup/jsoup
-  const val jsoup = "1.16.1"
+  const val jsoup = "1.16.2"
 
   /**
    * ## playwright
    * @see [maven](https://mvnrepository.com/artifact/com.microsoft.playwright/playwright)
    */
-  const val playwright = "1.38.0"
+  const val playwright = "1.39.0"
 
   /**
    * # 顶替 antisamy

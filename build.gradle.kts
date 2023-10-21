@@ -88,12 +88,6 @@ subprojects {
     jvmToolchain(21)
   }
 
-//  hibernate {
-//    enhancement {
-//      enableAssociationManagement.set(false)
-//    }
-//  }
-
   tasks {
     withType<AbstractCopyTask> {
       duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -160,9 +154,7 @@ subprojects {
     annotationProcessor(l.spring.boot.configureprocessor)
 
     implementation(l.bundles.kt)
-    testImplementation(l.bundles.spring.kotlin.testng) {
-      exclude("org.junit.jupiter", "junit-jupiter")
-    }
+    testImplementation(l.bundles.spring.kotlin.testng)
     allAnnotationCompileOnly(l.lombok)
   }
 

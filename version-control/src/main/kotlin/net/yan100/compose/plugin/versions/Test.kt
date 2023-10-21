@@ -15,5 +15,5 @@ object Test {
 
   // kotlin mock k
   // https://mvnrepository.com/artifact/io.mockk/mockk
-  const val mockk = "1.13.7"
+  const val mockk = "1.13.8"
 }

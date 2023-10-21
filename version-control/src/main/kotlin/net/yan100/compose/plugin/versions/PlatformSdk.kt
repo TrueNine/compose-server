@@ -7,12 +7,12 @@ object PlatformSdk {
 
   // minio
   // https://mvnrepository.com/artifact/io.minio/minio
-  const val minio = "8.5.5"
+  const val minio = "8.5.6"
 
   // 微信支付 sdk
   // https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
-  const val wechatpayJava = "0.2.11"
+  const val wechatpayJava = "0.2.12"
 
   // https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java
-  const val huaweiObsJava = "3.23.5"
+  const val huaweiObsJava = "3.23.9"
 }

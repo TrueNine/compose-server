@@ -20,7 +20,7 @@ object Db {
    * ## 文件数据库 sqlite
    * [maven](https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc)
    */
-  const val sqlite = "3.43.0.0"
+  const val sqlite = "3.43.2.1"
 
 
   /**
@@ -30,7 +30,7 @@ object Db {
    *
    * [maven_mysql](https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql)
    */
-  const val flyway = "9.22.1"
+  const val flyway = "9.22.3"
 
 
   /**
@@ -47,7 +47,7 @@ object Db {
   const val hsqldb = "2.7.2"
 
   // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
-  const val hibernateCore = "6.2.7.Final"
+  const val hibernateCore = "6.3.1.Final"
 
   // flowable 工作流引擎
   // https://mvnrepository.com/artifact/org.flowable/flowable-spring-boot-starter

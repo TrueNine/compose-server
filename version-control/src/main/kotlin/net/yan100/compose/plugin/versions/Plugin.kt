@@ -27,7 +27,7 @@ object Plugin {
   const val kotlinJvmPlugin = V.Lang.kotlin
 
   // https://mvnrepository.com/artifact/com.github.ben-manes/gradle-versions-plugin
-  const val versionManager = "0.11.1"
+  const val versionManager = "0.49.0"
 
   /**
    * graalvm 可能需要的

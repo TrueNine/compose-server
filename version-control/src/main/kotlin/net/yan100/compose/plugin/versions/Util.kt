@@ -4,6 +4,12 @@ object Util {
   // https://mvnrepository.com/artifact/com.alibaba/easyexcel
   const val easyExcel = "3.3.2"
 
+  /**
+   * redis 缓存配置的部分配置需要
+   * [maven](https://commons.apache.org/proper/commons-pool/)
+   */
+  const val pool2 = "2.12.0"
+
   // csv 提取工具
   // https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
   const val superCsv = "2.4.0"
@@ -22,7 +28,7 @@ object Util {
   const val huTool = "5.8.21"
 
   // https://mvnrepository.com/artifact/com.google.guava/guava
-  const val guavaJre = "32.1.2-jre"
+  const val guavaJre = "32.1.3-jre"
   const val guavaAndroid = "32.1.2-android"
 
   // 离线ip包

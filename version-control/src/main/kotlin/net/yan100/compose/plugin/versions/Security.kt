@@ -2,7 +2,7 @@ package net.yan100.compose.plugin.versions
 
 object Security {
   // https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
-  const val antisamy = "1.7.3"
+  const val antisamy = "1.7.4"
 
 
   // 加密工具包
