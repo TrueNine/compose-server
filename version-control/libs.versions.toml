@@ -86,6 +86,7 @@ test-spring-security-test = { group = "org.springframework.security", name = "sp
 test-spring-modulith-test = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
 
 db-hsql = { group = "org.hsqldb", name = "hsqldb", version.ref = "db-hsql" }
+db-postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "db-postgresql" }
 db-sqlite = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "db-sqlite" }
 db-mysql-j = { group = "com.mysql", name = "mysql-connector-j", version.ref = "db-mysql-j" }
 db-supercsv = { group = "net.sf.supercsv", name = "super-csv", version.ref = "db-supercsv" }
@@ -146,7 +147,7 @@ bom-spring-cloudalibaba = { group = "com.alibaba.cloud", name = "spring-cloud-al
 
 
 [versions]
-compose = "1.6.84"
+compose = "1.6.86"
 
 java = "21"
 kotlin = "1.9.20-RC"
@@ -176,6 +177,7 @@ test-junit = "5.10.0"
 
 
 db-hsql = "2.7.2"
+db-postgresql = "42.6.0"
 db-sqlite = "3.43.2.1"
 db-mysql-j = "8.1.0"
 db-supercsv = "2.4.0"

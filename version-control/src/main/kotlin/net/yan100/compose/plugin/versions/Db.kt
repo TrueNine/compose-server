@@ -32,6 +32,12 @@ object Db {
    */
   const val flyway = "9.22.3"
 
+  /**
+   * ## postgres
+   *
+   * [postgres](https://mvnrepository.com/artifact/org.postgresql/postgresql)
+   */
+  const val postgresql = "42.6.0"
 
   /**
    * ## 测试用内存数据库
