@@ -1,118 +1,106 @@
 # 设置时区为 +8:00
-SET TIME_ZONE = '+8:00';
-SET CHARSET utf8mb4;
-FLUSH PRIVILEGES;
+set TIME_ZONE = '+8:00';
+set charset utf8mb4;
+flush privileges;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+set names utf8mb4;
+set FOREIGN_KEY_CHECKS = 0;
 
 # 基础表字段
-DELIMITER $$
-CREATE PROCEDURE add_base_struct(IN tab_name VARCHAR(128))
-BEGIN
-  SET @after = CONCAT(
-    'ALTER TABLE',
-    ' `',
-    tab_name,
-    '` ',
-    'ADD `id` BIGINT UNSIGNED PRIMARY KEY COMMENT \'主键\',',
-    'ADD `rlv` BIGINT UNSIGNED DEFAULT 0 COMMENT \'乐观锁版本号 row lock version\',',
-    'ADD `ldf` BOOLEAN DEFAULT FALSE COMMENT \'逻辑删除标志 logic delete flag\',',
-    'ENGINE = InnoDB,',
-    'DEFAULT CHARSET = utf8mb4,',
-    'AUTO_INCREMENT = 100;'
-    );
-  SET @statement = CONCAT(@after);
-  PREPARE state
-    FROM @statement;
+delimiter $$
+create procedure add_base_struct(in tab_name varchar(128))
+begin
+  set @after = concat(
+    'alter table', tab_name,
+    'add `id` bigint unsigned primary key comment \'主键\',',
+    'add `rlv` bigint unsigned default 0 comment \'乐观锁版本号 row lock version\',',
+    'add `ldf` boolean default false comment \'逻辑删除标志 logic delete flag\',',
+    'engine = InnoDB,',
+    'default charset = utf8mb4,',
+    'auto_increment = 100;'
+               );
+  set @statement = concat(@after);
+  prepare state
+    from @statement;
 
-  SET @tbl_exist = (SELECT COUNT(1)
-                    FROM information_schema.tables
-                    WHERE table_schema = (SELECT DATABASE())
-                      AND table_name = tab_name);
-  SET @col_exists = (SELECT COUNT(1)
-                     FROM information_schema.columns
-                     WHERE table_schema = (SELECT DATABASE())
-                       AND table_name = tab_name
-                       AND column_name IN ('id', 'rct', 'rcb'));
-  IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
-    EXECUTE state;
-  END IF;
-END $$
-DELIMITER ;
+  set @tbl_exist = (select count(1)
+                    from information_schema.tables
+                    where table_schema = (select database())
+                      and table_name = tab_name);
+  set @col_exists = (select count(1)
+                     from information_schema.columns
+                     where table_schema = (select database())
+                       and table_name = tab_name
+                       and column_name in ('id', 'rct', 'rcb'));
+  if ((@tbl_exist) > 0 and (@col_exists) <= 0) then
+    execute state;
+  end if;
+end $$
+delimiter ;
 
 # 预排序树结构
-DELIMITER $$
-CREATE PROCEDURE add_presort_tree_struct(IN tab_name VARCHAR(128))
-BEGIN
-  SET @after = CONCAT(
-    'ALTER TABLE',
-    ' `',
-    tab_name,
-    '` ',
-    'ADD `rpi` BIGINT UNSIGNED DEFAULT NULL COMMENT \'父节点id parent id\',',
-    'ADD `rln` BIGINT UNSIGNED DEFAULT 1 COMMENT \'左节点 row left node\',',
-    'ADD `rrn` BIGINT UNSIGNED DEFAULT 2 COMMENT \'右节点 row right node\',',
-    'ADD `nlv` BIGINT UNSIGNED DEFAULT 0 COMMENT \'节点级别 node level\',',
-    'ADD `tgi` VARCHAR(64) DEFAULT \'0\' COMMENT \'树组id tree group id\',',
-    'ADD INDEX(`rln`) COMMENT \'索引左节点\',',
-    'ADD INDEX(`rrn`) COMMENT \'索引右节点\',',
-    'ADD INDEX(`tgi`) COMMENT \'树组id\','
-    'ADD INDEX(`rpi`) COMMENT \'自联 父节点\';'
-    );
-  SET @statement = CONCAT(@after);
-  PREPARE state
-    FROM @statement;
+delimiter $$
+create procedure add_presort_tree_struct(in tab_name varchar(128))
+begin
+  set @after = concat(
+    'alter table', tab_name,
+    'add `rpi` bigint unsigned default null comment \'父节点id parent id\',',
+    'add `rln` bigint unsigned default 1 comment \'左节点 row left node\',',
+    'add `rrn` bigint unsigned default 2 comment \'右节点 row right node\',',
+    'add `nlv` bigint unsigned default 0 comment \'节点级别 node level\',',
+    'add `tgi` varchar(64) default \'0\' comment \'树组id tree group id\',',
+    'add index(`rln`) comment \'索引左节点\',',
+    'add index(`rrn`) comment \'索引右节点\',',
+    'add index(`tgi`) comment \'树组id\',',
+    'add index(`rpi`) comment \'自联 父节点\';');
+  set @statement = concat(@after);
+  prepare state
+    from @statement;
 
-  SET @tbl_exist = (SELECT COUNT(1)
-                    FROM information_schema.tables
-                    WHERE table_schema = (SELECT DATABASE())
-                      AND table_name = tab_name);
-  SET @col_exists = (SELECT COUNT(1)
-                     FROM information_schema.columns
-                     WHERE table_schema = (SELECT DATABASE())
-                       AND table_name = tab_name
-                       AND column_name IN ('rpi', 'rln', 'rrn'));
-  IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
-    EXECUTE state;
-  END IF;
-END $$
-DELIMITER ;
+  set @tbl_exist = (select count(1)
+                    from information_schema.tables
+                    where table_schema = (select database())
+                      and table_name = tab_name);
+  set @col_exists = (select count(1)
+                     from information_schema.columns
+                     where table_schema = (select database())
+                       and table_name = tab_name
+                       and column_name in ('rpi', 'rln', 'rrn'));
+  if ((@tbl_exist) > 0 and (@col_exists) <= 0) then
+    execute state;
+  end if;
+end $$
+delimiter ;
 
 # 任意外键类型结构
-DELIMITER $$
-CREATE PROCEDURE add_reference_any_type_struct(
-  IN tab_name VARCHAR(128),
-  IN typ_comm VARCHAR(100)
+delimiter $$
+create procedure add_reference_any_type_struct(
+  in tab_name varchar(128),
+  in typ_comm varchar(100)
 )
-BEGIN
-  SET @after = CONCAT(
-    'ALTER TABLE',
-    ' `',
-    tab_name,
-    '` ',
-    'ADD `typ` INT DEFAULT 0 COMMENT \'外键类型描述符 type, 用于描述: ',
+begin
+  set @after = concat(
+    'alter table', tab_name,
+    'add `typ` int default 0 comment \'外键类型描述符 type, 用于描述: ',
     typ_comm, '\',',
-    'ADD INDEX(`typ`),',
-    'ADD `ari` BIGINT UNSIGNED COMMENT \'任意外键 any reference id\',',
-    'ADD INDEX(`ari`)',
-    ';'
-    );
-  SET @statement = CONCAT(@after);
-  PREPARE state
-    FROM @statement;
+    'add index(`typ`),',
+    'add `ari` bigint unsigned comment \'任意外键 any reference id\',',
+    'add index(`ari`);');
+  set @statement = concat(@after);
+  prepare state
+    from @statement;
 
-  SET @tbl_exist = (SELECT COUNT(1)
-                    FROM information_schema.tables
-                    WHERE table_schema = (SELECT DATABASE())
-                      AND table_name = tab_name);
-  SET @col_exists = (SELECT COUNT(1)
-                     FROM information_schema.columns
-                     WHERE table_schema = (SELECT DATABASE())
-                       AND table_name = tab_name
-                       AND column_name IN ('ari', 'typ'));
-  IF ((@tbl_exist) > 0 AND (@col_exists) <= 0) THEN
-    EXECUTE state;
-  END IF;
-END $$
-DELIMITER ;
+  set @tbl_exist = (select count(1)
+                    from information_schema.tables
+                    where table_schema = (select database())
+                      and table_name = tab_name);
+  set @col_exists = (select count(1)
+                     from information_schema.columns
+                     where table_schema = (select database())
+                       and table_name = tab_name
+                       and column_name in ('ari', 'typ'));
+  if ((@tbl_exist) > 0 and (@col_exists) <= 0) then
+    execute state;
+  end if;
+end $$
+delimiter ;

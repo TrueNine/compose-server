@@ -6,6 +6,7 @@ import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
 import net.yan100.compose.rds.base.BaseEntity
+import net.yan100.compose.rds.base.TreeEntity
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole.ROLE_GROUP_ID
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole.ROLE_ID
@@ -237,7 +238,7 @@ open class Permissions : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "用户  部门")
 @Table(name = UserDept.TABLE_NAME)
-open class UserDept : BaseEntity() {
+open class UserDept : TreeEntity() {
   @Schema(title = "用户id")
   @Column(name = USER_ID)
   open var userId: String? = null

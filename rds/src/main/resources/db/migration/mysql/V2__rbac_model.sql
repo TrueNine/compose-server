@@ -1,241 +1,161 @@
-CREATE TABLE IF NOT EXISTS user
+create table if not exists user
 (
-  account         VARCHAR(255) NOT NULL COMMENT '账号',
-  nick_name       VARCHAR(2047) COMMENT '呢称',
-  doc             TEXT COMMENT '描述',
-  pwd_enc         VARCHAR(2047) DEFAULT NULL COMMENT '密码',
-  ban_time        DATETIME      DEFAULT NULL COMMENT '被封禁结束时间',
-  last_login_time DATETIME      DEFAULT NOW() COMMENT '最后请求时间',
-  UNIQUE (account) COMMENT '账号唯一'
-) DEFAULT CHARSET = utf8mb4,COMMENT '用户';
-CALL add_base_struct('user');
+  account         varchar(255) not null comment '账号',
+  nick_name       varchar(2047) comment '呢称',
+  doc             text comment '描述',
+  pwd_enc         varchar(2047) default null comment '密码',
+  ban_time        datetime      default null comment '被封禁结束时间',
+  last_login_time datetime      default now() comment '最后请求时间',
+  unique (account) comment '账号唯一'
+) default charset = utf8mb4,comment '用户';
+call add_base_struct('user');
 
-INSERT INTO user
-SET id=0,
-    account='root',
-    nick_name='ROOT',
-    pwd_enc='$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi',
-    last_login_time=NOW();
-INSERT INTO user
-SET id=1,
-    account='usr',
-    nick_name='USR',
-    pwd_enc='$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa',
-    last_login_time=NOW();
+insert into user(id, account, nick_name, pwd_enc, last_login_time)
+values (0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now()),
+       (1, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now());
 
-CREATE TABLE IF NOT EXISTS user_info
+create table if not exists user_info
 (
-  user_id            BIGINT UNSIGNED NOT NULL COMMENT '用户',
-  avatar_img_id      BIGINT UNSIGNED COMMENT '用户头像',
-  first_name         VARCHAR(4095) COMMENT '姓',
-  last_name          VARCHAR(4095) COMMENT '名',
-  email              VARCHAR(255) COMMENT '邮箱',
-  birthday           DATETIME COMMENT '生日',
-  address_details_id BIGINT UNSIGNED COMMENT '地址',
-  phone              VARCHAR(255) COMMENT '电话号码',
-  id_card            VARCHAR(255) COMMENT '身份证',
-  gender             TINYINT DEFAULT 2 COMMENT ' 性别：0女，1难，2未知',
-  UNIQUE (phone) COMMENT '电话唯一',
-  UNIQUE (id_card) COMMENT '身份证唯一',
-  INDEX (user_id) COMMENT '外联 用户',
-  INDEX (address_details_id) COMMENT '外联 地址详情',
-  INDEX (avatar_img_id) COMMENT '外联 文件'
-) DEFAULT CHARSET = utf8mb4, COMMENT '用户信息';
-CALL add_base_struct('user_info');
+  user_id            bigint unsigned not null comment '用户',
+  avatar_img_id      bigint unsigned comment '用户头像',
+  first_name         varchar(4095) comment '姓',
+  last_name          varchar(4095) comment '名',
+  email              varchar(255) comment '邮箱',
+  birthday           datetime comment '生日',
+  address_details_id bigint unsigned comment '地址',
+  phone              varchar(255) comment '电话号码',
+  id_card            varchar(255) comment '身份证',
+  gender             tinyint default 2 comment ' 性别：0女，1难，2未知',
+  unique (phone) comment '电话唯一',
+  unique (id_card) comment '身份证唯一',
+  index (user_id) comment '外联 用户',
+  index (address_details_id) comment '外联 地址详情',
+  index (avatar_img_id) comment '外联 文件'
+) default charset = utf8mb4, comment '用户信息';
+call add_base_struct('user_info');
+insert into user_info(id, user_id, first_name, last_name, email, birthday, phone, gender)
+values (0, 0, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
+       (1, 1, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);
 
-INSERT INTO user_info
-SET id=0,
-    user_id=0,
-    first_name='R',
-    last_name='OOT',
-    email='truenine304520@gmail.com',
-    birthday='1997-11-04',
-    phone='186977192235',
-    gender=1;
-INSERT INTO user_info
-SET id=1,
-  user_id=1,
-  first_name='U',
-  last_name='SR',
-  email='truenine304520@gmail.com',
-  birthday='2000-01-01',
-  phone='13288086050',
-  gender=1;
-
-
-CREATE TABLE IF NOT EXISTS role
+create table if not exists role
 (
-  name VARCHAR(255) COMMENT '角色名称',
-  doc  VARCHAR(2047) COMMENT '角色描述'
-) DEFAULT CHARSET = utf8mb4, COMMENT '角色';
-CALL add_base_struct('role');
+  name varchar(255) comment '角色名称',
+  doc  text comment '角色描述'
+) default charset = utf8mb4, comment '角色';
+call add_base_struct('role');
+insert into role (id, name, doc)
+values (0, 'ROOT', '默认超级管理员角色，务必不要删除'),
+       (1, 'USER', '默认USER角色，务必不要删除');
 
 
-INSERT INTO role
-SET id=0,
-    name='ROOT',
-    doc='默认超级管理员角色，务必不要删除';
-INSERT INTO role
-SET id=1,
-    name='USER',
-    doc='默认USER角色，务必不要删除';
-
-
-CREATE TABLE IF NOT EXISTS permissions
+create table if not exists permissions
 (
-  name VARCHAR(255) COMMENT '权限名',
-  doc  VARCHAR(2047) COMMENT '权限描述'
-) DEFAULT CHARSET = utf8mb4, COMMENT '权限';
-CALL add_base_struct('permissions');
+  name varchar(255) comment '权限名',
+  doc  text comment '权限描述'
+) default charset = utf8mb4, comment '权限';
+call add_base_struct('permissions');
+insert into permissions(id, name, doc)
+values (0, 'ROOT', '默认ROOT权限，务必不要删除'),
+       (1, 'USER', '默认USER权限，务必不要删除');
 
 
-INSERT INTO permissions
-SET id=0,
-    name='ROOT',
-    doc='默认ROOT权限，务必不要删除';
-INSERT INTO permissions
-SET id=1,
-    name='USER',
-    doc='默认USER权限，务必不要删除';
-
-
-CREATE TABLE IF NOT EXISTS role_group
+create table if not exists role_group
 (
-  name VARCHAR(255) COMMENT '名称',
-  doc  VARCHAR(2047) COMMENT '描述'
-) DEFAULT CHARSET = utf8mb4, COMMENT '角色组';
-CALL add_base_struct('role_group');
+  name varchar(255) comment '名称',
+  doc  text comment '描述'
+) default charset = utf8mb4, comment '角色组';
+call add_base_struct('role_group');
+insert into role_group(id, name, doc)
+values (0, 'ROOT', '默认ROOT角色组，务必不要删除'),
+       (1, 'USER', '默认USER角色组，务必不要删除');
 
 
-INSERT INTO role_group
-SET id=0,
-    name='ROOT',
-    doc='默认ROOT角色组，务必不要删除';
-INSERT INTO role_group
-SET id=1,
-    name='USER',
-    doc='默认USER角色组，务必不要删除';
-
-
-CREATE TABLE IF NOT EXISTS user_group
+create table if not exists user_group
 (
-  user_id BIGINT UNSIGNED COMMENT '创建人',
-  name    VARCHAR(255) COMMENT '名称',
-  doc     VARCHAR(2047) COMMENT '描述',
-  INDEX (user_id) COMMENT '外联 用户'
-) DEFAULT CHARSET = utf8mb4, COMMENT '用户组';
-CALL add_base_struct('user_group');
+  user_id bigint unsigned comment '创建人',
+  name    varchar(255) comment '名称',
+  doc     varchar(2047) comment '描述',
+  index (user_id) comment '外联 用户'
+) default charset = utf8mb4, comment '用户组';
+call add_base_struct('user_group');
+insert into user_group(id, user_id, name, doc)
+values (0, 0, 'ROOT', 'ROOT 用户组，务必不要删除');
 
 
-INSERT INTO user_group
-SET id='0',
-    user_id='0',
-    name='ROOT',
-    doc='ROOT 用户组，务必不要删除';
-
-
-CREATE TABLE IF NOT EXISTS role_permissions
+create table if not exists role_permissions
 (
-  role_id        BIGINT UNSIGNED COMMENT '角色',
-  permissions_id BIGINT UNSIGNED COMMENT '权限',
-  INDEX (role_id) COMMENT '外联 角色',
-  INDEX (permissions_id) COMMENT '外联 权限'
-) DEFAULT CHARSET = utf8mb4, COMMENT '角色  权限';
-CALL add_base_struct('role_permissions');
+  role_id        bigint unsigned comment '角色',
+  permissions_id bigint unsigned comment '权限',
+  index (role_id) comment '外联 角色',
+  index (permissions_id) comment '外联 权限'
+) default charset = utf8mb4, comment '角色  权限';
+call add_base_struct('role_permissions');
+insert into role_permissions(id, role_id, permissions_id)
+values (0, 0, 0),
+       (1, 0, 1),
+       (2, 1, 1);
 
 
-INSERT INTO role_permissions
-SET id=0,
-    role_id=0,
-    permissions_id=0;
-INSERT INTO role_permissions
-SET id=1,
-    role_id=0,
-    permissions_id=1;
-INSERT INTO role_permissions
-SET id=2,
-    role_id=1,
-    permissions_id=1;
-
-
-CREATE TABLE IF NOT EXISTS role_group_role
+create table if not exists role_group_role
 (
-  role_group_id BIGINT UNSIGNED COMMENT '用户组',
-  role_id       BIGINT UNSIGNED COMMENT '角色',
-  INDEX (role_group_id) COMMENT '外联 角色组',
-  INDEX (role_id) COMMENT '外联 角色'
-) DEFAULT CHARSET = utf8mb4,COMMENT '角色组  角色';
-CALL add_base_struct('role_group_role');
+  role_group_id bigint unsigned comment '用户组',
+  role_id       bigint unsigned comment '角色',
+  index (role_group_id) comment '外联 角色组',
+  index (role_id) comment '外联 角色'
+) default charset = utf8mb4,comment '角色组  角色';
+call add_base_struct('role_group_role');
+insert into role_group_role(id, role_group_id, role_id)
+values (0, 0, 0),
+       (1, 0, 1),
+       (2, 1, 1);
 
-
-INSERT INTO role_group_role
-SET id=0,
-    role_id=0,
-    role_group_id=0;
-INSERT INTO role_group_role
-SET id=1,
-    role_id=1,
-    role_group_id=0;
-INSERT INTO role_group_role
-SET id=2,
-    role_id=1,
-    role_group_id=1;
-
-
-CREATE TABLE IF NOT EXISTS user_role_group
+create table if not exists user_role_group
 (
-  user_id       BIGINT UNSIGNED COMMENT '用户',
-  role_group_id BIGINT UNSIGNED COMMENT '权限组',
-  INDEX (user_id) COMMENT '外联 用户',
-  INDEX (role_group_id) COMMENT '外联 角色组'
-) DEFAULT CHARSET = utf8mb4, COMMENT '用户  角色组';
-CALL add_base_struct('user_role_group');
+  user_id       bigint unsigned comment '用户',
+  role_group_id bigint unsigned comment '权限组',
+  index (user_id) comment '外联 用户',
+  index (role_group_id) comment '外联 角色组'
+) default charset = utf8mb4, comment '用户  角色组';
+call add_base_struct('user_role_group');
+insert into user_role_group(id, user_id, role_group_id)
+values (0, 0, 0),
+       (1, 0, 1),
+       (2, 1, 1);
 
 
-INSERT INTO user_role_group
-SET id=0,
-    user_id=0,
-    role_group_id=0;
-INSERT INTO user_role_group
-SET id=1,
-    user_id=0,
-    role_group_id=1;
-INSERT INTO user_role_group
-SET id=2,
-    user_id=1,
-    role_group_id=1;
-
-
-CREATE TABLE IF NOT EXISTS user_group_role_group
+create table if not exists user_group_role_group
 (
-  role_group_id BIGINT UNSIGNED COMMENT '角色组',
-  user_group_id BIGINT UNSIGNED COMMENT '用户组',
-  INDEX (role_group_id) COMMENT '外联 角色组',
-  INDEX (user_group_id) COMMENT '外联 用户组'
-) DEFAULT CHARSET = utf8mb4, COMMENT '用户组  角色组';
-CALL add_base_struct('user_group_role_group');
+  role_group_id bigint unsigned comment '角色组',
+  user_group_id bigint unsigned comment '用户组',
+  index (role_group_id) comment '外联 角色组',
+  index (user_group_id) comment '外联 用户组'
+) default charset = utf8mb4, comment '用户组  角色组';
+call add_base_struct('user_group_role_group');
 
 
-CREATE TABLE IF NOT EXISTS user_group_user
+create table if not exists user_group_user
 (
-  user_group_id BIGINT UNSIGNED NOT NULL COMMENT '用户组',
-  user_id       BIGINT UNSIGNED NOT NULL COMMENT '用户',
-  INDEX (user_group_id) COMMENT '外联 用户组',
-  INDEX (user_id) COMMENT '外联 用户'
-) DEFAULT CHARSET = utf8mb4,COMMENT '用户组 用户';
-CALL add_base_struct('user_group_user');
+  user_group_id bigint unsigned not null comment '用户组',
+  user_id       bigint unsigned not null comment '用户',
+  index (user_group_id) comment '外联 用户组',
+  index (user_id) comment '外联 用户'
+) default charset = utf8mb4,comment '用户组 用户';
+call add_base_struct('user_group_user');
+insert into user_group_user(id, user_id, user_group_id)
+values (0, 0, 0);
 
 
-CREATE TABLE IF NOT EXISTS dept
+create table if not exists dept
 (
-  name VARCHAR(255)  NOT NULL COMMENT '名称',
-  doc  VARCHAR(2047) NULL COMMENT '描述'
-) DEFAULT CHARSET = utf8mb4,COMMENT '部门';
-CALL add_base_struct('dept');
+  name varchar(255)  not null comment '名称',
+  doc  text null comment '描述'
+) default charset = utf8mb4,comment '部门';
+call add_base_struct('dept');
 
-CREATE TABLE IF NOT EXISTS user_dept
+create table if not exists user_dept
 (
-  user_id BIGINT UNSIGNED NOT NULL COMMENT '用户 id',
-  dept_id BIGINT UNSIGNED NOT NULL COMMENT '部门 id'
-) DEFAULT CHARSET = utf8mb4,COMMENT '用户  部门';
-CALL add_base_struct('user_dept');
+  user_id bigint unsigned not null comment '用户 id',
+  dept_id bigint unsigned not null comment '部门 id'
+) default charset = utf8mb4,comment '用户  部门';
+call add_base_struct('user_dept');
+call add_presort_tree_struct('user_dept');

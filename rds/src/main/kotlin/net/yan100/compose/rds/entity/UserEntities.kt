@@ -249,8 +249,16 @@ open class SuperUserInfo : BaseEntity() {
    */
   @Nullable
   @Schema(title = "微信个人 openId")
-  @Column(name = WECHAT_OPEN_ID)
+  @Column(name = WECHAT_OPENID)
   open var wechatOpenId: String? = null
+
+  /**
+   * 微信自定义登录id
+   */
+  @Nullable
+  @Schema(title = "微信自定义登录id")
+  @Column(name = WECHAT_AUTHID)
+  open var wechastAuthid: String? = null
 
   companion object {
     const val TABLE_NAME = "user_info"
@@ -264,7 +272,8 @@ open class SuperUserInfo : BaseEntity() {
     const val PHONE = "phone"
     const val ID_CARD = "id_card"
     const val GENDER = "gender"
-    const val WECHAT_OPEN_ID = "wechat_open_id"
+    const val WECHAT_OPENID = "wechat_openid"
+    const val WECHAT_AUTHID = "wechat_authid"
   }
 }
 

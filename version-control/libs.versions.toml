@@ -147,7 +147,7 @@ bom-spring-cloudalibaba = { group = "com.alibaba.cloud", name = "spring-cloud-al
 
 
 [versions]
-compose = "1.6.86"
+compose = "1.6.87"
 
 java = "21"
 kotlin = "1.9.20-RC"
