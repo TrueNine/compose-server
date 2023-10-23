@@ -13,9 +13,5 @@ dependencies {
 }
 
 
-tasks.withType<Test> {
-  useTestNG {
-    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
-  }
-}
+
 

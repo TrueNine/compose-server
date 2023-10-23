@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.util
 
 import net.yan100.compose.rds.util.PagedWrapper.DEFAULT_MAX
-import org.testng.annotations.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class PagedWrapperTest {

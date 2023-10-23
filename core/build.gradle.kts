@@ -28,11 +28,3 @@ dependencies {
   testImplementation(libs.spring.boot.web)
   testImplementation(libs.spring.boot.json)
 }
-
-tasks {
-  test {
-    useTestNG {
-      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
-    }
-  }
-}

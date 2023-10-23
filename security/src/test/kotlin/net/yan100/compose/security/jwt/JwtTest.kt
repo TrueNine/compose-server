@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.security.jwt.consts.IssuerParamModel
 import net.yan100.compose.security.jwt.consts.VerifierParamModel
-import org.testng.annotations.Test
+import org.junit.jupiter.api.Test
+
 
 class JwtTest {
 

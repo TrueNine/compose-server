@@ -5,16 +5,15 @@ import net.yan100.compose.core.CoreEntrance
 import net.yan100.compose.core.lang.toDate
 import net.yan100.compose.core.lang.toLocalDatetime
 import net.yan100.compose.core.lang.toLong
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.test.assertEquals
 
 @SpringBootTest(classes = [CoreEntrance::class])
-class JsonSerializerTest : AbstractTestNGSpringContextTests() {
+class JsonSerializerTest {
 
   @Autowired
   lateinit var mapper: ObjectMapper

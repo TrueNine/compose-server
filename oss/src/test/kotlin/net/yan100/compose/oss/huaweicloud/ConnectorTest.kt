@@ -2,7 +2,7 @@ package net.yan100.compose.oss.huaweicloud
 
 import com.obs.services.ObsClient
 import com.obs.services.model.ListBucketsRequest
-import org.testng.annotations.Test
+import org.junit.jupiter.api.Test
 
 
 class ConnectorTest {

@@ -4,13 +4,12 @@ import net.yan100.compose.depend.mqtt.paho.MqttPahoClientWrapper
 import net.yan100.compose.depend.mqtt.paho.subscribe
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 
 @SpringBootTest(classes = [ApplicationRunner::class])
-class PahoTest : AbstractTestNGSpringContextTests() {
+class PahoTest {
 
   @Autowired
   lateinit var mqttClient: MqttClient
@@ -23,7 +22,7 @@ class PahoTest : AbstractTestNGSpringContextTests() {
 
   @Test
   fun testConnectClient() {
-    val a = wrapper.subscribe<Any>("order/a") { _, a ->
+    wrapper.subscribe<Any>("order/a") { _, a ->
       println(a)
     }
   }

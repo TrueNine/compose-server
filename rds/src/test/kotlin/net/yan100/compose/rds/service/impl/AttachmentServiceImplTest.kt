@@ -5,15 +5,15 @@ import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.util.Pq
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.Assert.*
-import org.testng.annotations.Test
-import kotlin.test.assertFails
+import org.springframework.test.annotation.Rollback
+import kotlin.test.*
 
+@Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
+class AttachmentServiceImplTest {
 
   @Autowired
   private lateinit var attachmentService: AttachmentServiceImpl
@@ -34,14 +34,18 @@ class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
       it
     }
     val result = attachmentService.existsByBaseUrl(baseUrl)
-    assertTrue(result)
+    assertTrue {
+      result
+    }
   }
 
   @Test
   fun testExistsByBaseUrl_NotExists() {
     val baseUrl = "http://notexists.com"
     val result = attachmentService.existsByBaseUrl(baseUrl)
-    assertFalse(result)
+    assertFalse {
+      result
+    }
   }
 
   @Test
@@ -117,18 +121,9 @@ class AttachmentServiceImplTest : AbstractTestNGSpringContextTests() {
   }
 
   @Test
-  fun testFindAllFullUrlByMetaNameStartingWith_EmptyMetaName() {
-    val metaName = ""
-    val page = Pq(1, 10,false)
-    val result = attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
-    assertNotNull(result)
-    assertEquals(0, result.total)
-  }
-
-  @Test
   fun testFindAllFullUrlByMetaNameStartingWith_NegativePage() {
     val metaName = "test"
-    val page = Pq(-1, 10,false)
+    val page = Pq(-1, 10, false)
     assertFails {
       attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
     }

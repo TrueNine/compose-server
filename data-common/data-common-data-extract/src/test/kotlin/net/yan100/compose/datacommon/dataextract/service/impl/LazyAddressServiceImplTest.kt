@@ -2,10 +2,9 @@ package net.yan100.compose.datacommon.dataextract.service.impl
 
 import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.datacommon.dataextract.DataExtractEntrance
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -13,7 +12,7 @@ import kotlin.test.assertTrue
 
 
 @SpringBootTest(classes = [DataExtractEntrance::class])
-class LazyAddressServiceImplTest : AbstractTestNGSpringContextTests() {
+class LazyAddressServiceImplTest {
 
   @Autowired
   lateinit var lazys: LazyAddressServiceImpl

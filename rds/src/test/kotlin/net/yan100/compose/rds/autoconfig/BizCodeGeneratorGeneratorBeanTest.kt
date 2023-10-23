@@ -1,14 +1,13 @@
 package net.yan100.compose.rds.autoconfig
 
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
-class BizCodeGeneratorGeneratorBeanTest : AbstractTestNGSpringContextTests() {
+class BizCodeGeneratorGeneratorBeanTest {
   @Autowired
   lateinit var bizId: BizCodeGeneratorBean
 

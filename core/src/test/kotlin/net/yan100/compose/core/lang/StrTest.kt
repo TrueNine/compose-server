@@ -1,6 +1,7 @@
 package net.yan100.compose.core.lang
 
-import org.testng.annotations.Test
+
+import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 

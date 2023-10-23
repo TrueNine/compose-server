@@ -3,15 +3,14 @@ package net.yan100.compose.rds.service.aggregator
 
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.models.req.PostAttachmentReq
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import kotlin.test.assertNotNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class AttachmentAggregatorImplTest : AbstractTestNGSpringContextTests() {
+class AttachmentAggregatorImplTest {
 
   @Autowired
   lateinit var ass: AttachmentAggregatorImpl

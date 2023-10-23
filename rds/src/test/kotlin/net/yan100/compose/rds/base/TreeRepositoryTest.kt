@@ -4,18 +4,17 @@ import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.DbTestTreeEntity
 import net.yan100.compose.rds.repository.DbTestTreeRepository
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.springframework.transaction.support.TransactionTemplate
-import org.testng.annotations.Test
 import kotlin.test.assertContains
 import kotlin.test.assertTrue
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class TreeRepositoryTest : AbstractTestNGSpringContextTests() {
+class TreeRepositoryTest {
   private val log = slf4j(this::class)
 
   @Autowired

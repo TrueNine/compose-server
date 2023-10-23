@@ -8,10 +8,3 @@ dependencies {
   implementation(project(":security:security-oauth2"))
 }
 
-tasks {
-  test {
-    useTestNG {
-      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
-    }
-  }
-}

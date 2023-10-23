@@ -85,7 +85,6 @@ subprojects {
     withSourcesJar()
   }
 
-
   kotlin {
     jvmToolchain(21)
   }
@@ -113,6 +112,10 @@ subprojects {
         )
         jvmTarget = l.versions.java.get()
       }
+    }
+
+    test {
+      useJUnitPlatform()
     }
 
     compileJava {
@@ -148,17 +151,10 @@ subprojects {
   }
 
   dependencies {
-    compileOnly(l.spring.cloud.bootstrap) {
-      exclude("org.apache.logging.log4j")
-      exclude("org.springframework.boot", "spring-boot-starter-logging")
-      exclude("org.springframework.boot", "spring-boot")
-    }
-
     implementation(l.spring.boot.autoconfigure)
     annotationProcessor(l.spring.boot.configureprocessor)
-
     implementation(l.bundles.kt)
-    testImplementation(l.bundles.spring.kotlin.testng)
+    testImplementation(l.bundles.spring.kotlin.junit5)
     allAnnotationCompileOnly(l.lombok)
   }
 

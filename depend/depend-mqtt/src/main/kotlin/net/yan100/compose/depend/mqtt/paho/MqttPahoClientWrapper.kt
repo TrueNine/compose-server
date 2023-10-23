@@ -27,6 +27,10 @@ class MqttPahoClientWrapper(
     client.unsubscribe(topic)
   }
 
+  fun unsubscribe(topic: String) {
+    if (isConnected) client.unsubscribe(topic)
+  }
+
   fun <T : Any> subscribe(
     topic: String, qos: Int = 0, type: KClass<T>, callback: (callbackTopic: String, message: T) -> Unit
   ) {

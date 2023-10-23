@@ -10,12 +10,11 @@ import net.yan100.compose.rds.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import java.time.LocalDateTime
 import kotlin.test.*
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class AccountAggregatorImplTest : AbstractTestNGSpringContextTests() {
+class AccountAggregatorImplTest  {
 
   @Autowired
   lateinit var snowflake: Snowflake

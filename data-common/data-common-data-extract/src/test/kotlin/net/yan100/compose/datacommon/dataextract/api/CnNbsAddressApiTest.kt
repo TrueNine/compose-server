@@ -1,13 +1,12 @@
 package net.yan100.compose.datacommon.dataextract.api
 
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import kotlin.test.assertNotNull
 
 @SpringBootTest
-class CnNbsAddressApiTest : AbstractTestNGSpringContextTests() {
+class CnNbsAddressApiTest {
 
   @Autowired
   lateinit var remoteCall: CnNbsAddressApi

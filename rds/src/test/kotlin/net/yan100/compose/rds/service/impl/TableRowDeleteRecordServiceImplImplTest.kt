@@ -3,16 +3,15 @@ package net.yan100.compose.rds.service.impl
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.DbTestServiceEntity
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class TableRowDeleteRecordServiceImplImplTest : AbstractTestNGSpringContextTests() {
+class TableRowDeleteRecordServiceImplImplTest {
   @Autowired
   private lateinit var service: TableRowDeleteRecordServiceImplImpl
 

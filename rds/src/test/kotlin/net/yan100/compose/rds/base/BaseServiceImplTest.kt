@@ -8,14 +8,12 @@ import net.yan100.compose.rds.entity.DbTestServiceEntity
 import net.yan100.compose.rds.service.BaseServiceTester
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.springframework.transaction.annotation.Transactional
-import org.testng.annotations.Test
 import java.math.BigDecimal
 import kotlin.test.*
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class BaseServiceImplTest : AbstractTestNGSpringContextTests() {
+class BaseServiceImplTest {
 
   @Autowired
   private lateinit var service: BaseServiceTester

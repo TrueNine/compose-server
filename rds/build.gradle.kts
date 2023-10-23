@@ -5,6 +5,7 @@ dependencies {
 
   testImplementation(libs.bundles.p6spystarter)
 
+  implementation(libs.spring.security.crypto)
   implementation(libs.jakarta.validation.api)
   implementation(libs.spring.webmvc)
   implementation(libs.util.hutool.core)
@@ -15,11 +16,6 @@ dependencies {
   testImplementation(project(":depend:depend-flyway"))
 }
 
-tasks.withType<Test> {
-  useTestNG {
-    suiteXmlFiles.add(File("src/test/resources/testng.xml"))
-  }
-}
 //hibernate {
 //  enhancement {
 //    enableAssociationManagement.set(true)

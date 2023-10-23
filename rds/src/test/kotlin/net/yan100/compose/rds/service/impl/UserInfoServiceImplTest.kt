@@ -6,11 +6,11 @@ import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entity.User
 import net.yan100.compose.rds.entity.UserInfo
 import net.yan100.compose.rds.repository.UserInfoRepo
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.testng.Assert.assertEquals
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserInfoServiceImplTest {
@@ -20,7 +20,7 @@ class UserInfoServiceImplTest {
   @Autowired
   private lateinit var infoRepo: UserInfoRepo
 
-  @BeforeMethod
+  @BeforeEach
   fun setUp() {
     infoRepo = mockk()
     userInfoService = UserInfoServiceImpl(infoRepo)

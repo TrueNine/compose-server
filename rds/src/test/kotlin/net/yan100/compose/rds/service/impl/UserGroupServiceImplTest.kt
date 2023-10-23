@@ -6,17 +6,16 @@ import net.yan100.compose.rds.entity.UserGroup
 import net.yan100.compose.rds.repository.UserGroupRepo
 import net.yan100.compose.rds.repository.UserRepo
 import net.yan100.compose.rds.service.UserService
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.testng.annotations.Test
 import kotlin.test.assertContains
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class UserGroupServiceImplTest : AbstractTestNGSpringContextTests() {
+class UserGroupServiceImplTest {
 
   @Autowired
   lateinit var service: UserGroupServiceImpl
