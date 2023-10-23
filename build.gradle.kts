@@ -37,7 +37,6 @@ allprojects {
     mavenLocal()
     mavenCentral()
     gradlePluginPortal()
-    google()
   }
 
   tasks {
@@ -124,9 +123,7 @@ subprojects {
       options.forkOptions.memoryInitialSize = "2G"
     }
     javadoc {
-      if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-      }
+      if (JavaVersion.current().isJava9Compatible) (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
   }
 
@@ -134,8 +131,8 @@ subprojects {
     repositories {
       maven(url = uri(if (version.toString().uppercase().contains("SNAPSHOT")) yunXiaoSnapshot else yunXiaoRelese)) {
         credentials {
-          this.username = yunXiaoUsername
-          this.password = yunXiaoPassword
+          username = yunXiaoUsername
+          password = yunXiaoPassword
         }
       }
     }
@@ -177,6 +174,6 @@ subprojects {
 tasks {
   wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    this.gradleVersion = l.versions.gradle.asProvider().get()
+    gradleVersion = l.versions.gradle.asProvider().get()
   }
 }

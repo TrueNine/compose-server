@@ -5,8 +5,6 @@ pluginManagement {
     maven(url = uri("https://repo.spring.io/milestone"))
     gradlePluginPortal()
     mavenCentral()
-    maven(url = uri("https://maven.aliyun.com/repository/gradle-plugin"))
-    google()
   }
 }
 
@@ -89,4 +87,3 @@ findProject(":multi-test:multi-test-pay")?.name = "multi-test-pay"
 
 include("multi-test:multi-test-network")
 findProject(":multi-test:multi-test-network")?.name = "multi-test-network"
-

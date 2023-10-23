@@ -5,6 +5,7 @@ val pluginGroup = libs.versions.compose.group.get()
 val pluginVersion = libs.versions.compose.asProvider().get().toString()
 val yunXiaoUsername = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
+
 plugins {
   alias(libs.plugins.kt.jvm)
   java
@@ -13,14 +14,14 @@ plugins {
   `java-gradle-plugin`
   `maven-publish`
 }
+
 group = pluginGroup
 version = pluginVersion
 
 repositories {
   mavenLocal()
   maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
-  maven(url = uri("https://maven.aliyun.com/repository/gradle-plugin"))
-  maven(url = uri("https://maven.aliyun.com/repository/public"))
+  maven(url = uri("https://repo.spring.io/milestone"))
   mavenCentral()
   gradlePluginPortal()
 }
@@ -72,8 +73,8 @@ publishing {
     mavenLocal()
     maven(url = uri(if (pluginVersion.uppercase().contains("SNAPSHOT")) snapshot else release)) {
       credentials {
-        this.username = yunXiaoUsername
-        this.password = yunXiaoPassword
+        username = yunXiaoUsername
+        password = yunXiaoPassword
       }
     }
   }

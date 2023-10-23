@@ -1,19 +1,14 @@
-
-
 pluginManagement {
   repositories {
     mavenLocal()
     maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
-    maven(url = uri("https://maven.aliyun.com/repository/gradle-plugin"))
-    maven(url = uri("https://maven.aliyun.com/repository/public"))
-    maven(url = uri("https://maven.aliyun.com/repository/jcenter"))
+    maven(url = uri("https://repo.spring.io/milestone"))
     gradlePluginPortal()
     mavenCentral()
-    google()
   }
 }
 plugins {
-  id("org.gradle.toolchains.foojay-resolver-convention") version("0.7.0")
+  id("org.gradle.toolchains.foojay-resolver-convention") version ("0.7.0")
 }
 
 
