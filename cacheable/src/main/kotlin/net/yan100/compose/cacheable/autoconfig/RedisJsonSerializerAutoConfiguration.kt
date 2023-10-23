@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import net.yan100.compose.core.consts.CacheFieldNames
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Bean
@@ -31,6 +32,8 @@ import java.time.Duration
 class RedisJsonSerializerAutoConfiguration(
   objectMapper: ObjectMapper,
 ) {
+  private val log = slf4j(RedisJsonSerializerAutoConfiguration::class)
+
   private val jsr = Jackson2JsonRedisSerializer(objectMapper.copy().run {
     this.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
       .setSerializationInclusion(JsonInclude.Include.NON_NULL)
@@ -59,7 +62,7 @@ class RedisJsonSerializerAutoConfiguration(
 
 
   @Primary
-  @Bean(name = [net.yan100.compose.core.consts.CacheFieldNames.RedisTemplate.STRING_TEMPLATE])
+  @Bean(name = [CacheFieldNames.RedisTemplate.STRING_TEMPLATE])
   fun customRedisJsonSerializable(factory: RedisConnectionFactory)
     : RedisTemplate<String, *> {
     log.debug("配置 ${net.yan100.compose.core.consts.CacheFieldNames.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
@@ -78,9 +81,9 @@ class RedisJsonSerializerAutoConfiguration(
   }
 
   @Primary
-  @Bean(name = [net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.H2])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.H2])
   fun cacheManager2h(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.H2} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.H2} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofHours(2))
   }
 
@@ -111,8 +114,5 @@ class RedisJsonSerializerAutoConfiguration(
       .build()
   }
 
-  companion object {
-    @JvmStatic
-    private val log = slf4j(RedisJsonSerializerAutoConfiguration::class)
-  }
+
 }

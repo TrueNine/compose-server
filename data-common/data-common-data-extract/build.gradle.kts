@@ -1,9 +1,9 @@
-version = libs.versions.compose.get()
+version = libs.versions.compose.asProvider().get()
 
 dependencies {
   api(libs.net.okhttp3)
   api(libs.cralwer.jsoup)
-  api(libs.db.supercsv)
+  api(libs.cralwer.supercsv)
   api(libs.util.easyexcel) {
     exclude("org.apache.commons", "commons-compress")
     implementation(libs.apache.commons.compress)

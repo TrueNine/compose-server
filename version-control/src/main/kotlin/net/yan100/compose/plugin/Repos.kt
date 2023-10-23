@@ -16,7 +16,7 @@ object Repos {
   private const val ALI_REPO = "https://maven.aliyun.com/repository/"
 
   const val aliJCenter = "${ALI_REPO}jcenter"
-  const val aliCentral = """${ALI_REPO}central"""
+  const val aliCentral = "${ALI_REPO}central"
   const val aliPublic = "${ALI_REPO}public"
   const val aliGoogle = "${ALI_REPO}google"
   const val aliGradlePlugin = "${ALI_REPO}gradle-plugin"

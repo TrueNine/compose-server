@@ -1,8 +1,10 @@
-import net.yan100.compose.plugin.*
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.Repos.yunXiaoRelese
 import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
+import net.yan100.compose.plugin.aliYunXiao
+import net.yan100.compose.plugin.allAnnotationCompileOnly
+import net.yan100.compose.plugin.chinaRegionRepositories
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
@@ -26,7 +28,7 @@ plugins {
 }
 
 val l = libs
-version = libs.versions.compose.get()
+version = libs.versions.compose.asProvider().get()
 
 allprojects {
   repositories {
@@ -47,8 +49,8 @@ allprojects {
     }
   }
 
-  group = ProjectVersion.GROUP
-  version = l.versions.compose.get()
+  group = l.versions.compose.group.get()
+  version = l.versions.compose.asProvider().get()
 
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
   extra["snippetsDir"] = file("build/generated-snippets")
@@ -93,9 +95,11 @@ subprojects {
       duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
     withType<JavaCompile> {
-      options.compilerArgs.addAll(listOf(
-        "--enable-preview"
-      ))
+      options.compilerArgs.addAll(
+        listOf(
+          "--enable-preview"
+        )
+      )
     }
     withType<KotlinCompile> {
       kotlinOptions {
@@ -103,11 +107,11 @@ subprojects {
           "-Xjsr305=strict",
           "-Xjvm-default=all",
           "-verbose",
-          "-Xjdk-release=21",
-          "-jvm-target=21",
+          "-Xjdk-release=${l.versions.java.get()}",
+          "-jvm-target=${l.versions.java.get()}",
           "-Xextended-compiler-checks"
         )
-        jvmTarget = "21"
+        jvmTarget = l.versions.java.get()
       }
     }
 
@@ -160,10 +164,10 @@ subprojects {
 
   dependencyManagement {
     imports {
-      mavenBom("org.springframework.boot:spring-boot-dependencies:${V.Spring.springBoot}")
-      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${V.Spring.springCloud}")
-      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${V.Spring.cloudAlibaba}")
-      mavenBom("org.springframework.modulith:spring-modulith-bom:${V.Spring.modulith}")
+      mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
+      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
+      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudalibaba.get()}")
+      mavenBom("org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}")
     }
   }
 
@@ -177,6 +181,6 @@ subprojects {
 tasks {
   wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    this.gradleVersion = ProjectVersion.GRADLE
+    this.gradleVersion = l.versions.gradle.asProvider().get()
   }
 }

@@ -1,13 +1,10 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+val l = libs
 val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
-val pluginGroup = "net.yan100.compose"
-val pluginVersion = libs.versions.compose.get().toString()
+val pluginGroup = libs.versions.compose.group.get()
+val pluginVersion = libs.versions.compose.asProvider().get().toString()
 val yunXiaoUsername = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
-
-
 plugins {
   alias(libs.plugins.kt.jvm)
   java
@@ -16,7 +13,6 @@ plugins {
   `java-gradle-plugin`
   `maven-publish`
 }
-
 group = pluginGroup
 version = pluginVersion
 
@@ -34,18 +30,27 @@ dependencies {
   implementation(libs.bundles.kt)
 }
 
+kotlin {
+  jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(l.versions.compose.versioncontrol.javaversion.get().toString().toInt()))
+  }
+}
+
 tasks {
-  withType<KotlinCompile> {
+  withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+    jvmTargetValidationMode.set(org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.ERROR)
+  }
+  withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile> {
     kotlinOptions {
       freeCompilerArgs += listOf(
         "-Xjsr305=strict",
         "-Xjvm-default=all",
         "-verbose",
-        "-Xjdk-release=21",
-        "-jvm-target=21",
+        "-Xjdk-release=${l.versions.compose.versioncontrol.javaversion.get()}",
+        "-jvm-target=${l.versions.compose.versioncontrol.javaversion.get()}",
         "-Xextended-compiler-checks"
       )
-      jvmTarget = "21"
+      jvmTarget = "${l.versions.compose.versioncontrol.javaversion.get()}"
     }
   }
 }
