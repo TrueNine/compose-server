@@ -30,11 +30,39 @@ annotation class SensitiveRef(
 typealias NonDesensitizedRef = SensitiveRef
 
 enum class Strategy(private val desensitizeSerializer: (String) -> String) {
+  /**
+   * 不进行脱敏处理
+   */
   NONE({ it }),
+
+  /**
+   * 手机号
+   */
   PHONE({ it.replace(Regex("(\\d{3})\\d{6}(\\d{2})"), "$1****$2") }),
-  ID_CARD({ it.replace(Regex("(\\d{2})[\\w|\\d](\\w{2})"), "$1****$2") }),
+
+  /**
+   * 身份证号
+   */
+  ID_CARD({ it.replace(Regex("(\\d{2})[\\w|](\\w{2})"), "$1****$2") }),
+
+  /**
+   * 银行卡号
+   */
+  BANK_CARD_CODE({ it.replace(Regex("(\\d{2})[\\w|](\\w{2})"), "$1****$2") }),
+
+  /**
+   * 姓名
+   */
   NAME({ it.replace(Regex("(\\S)\\S(\\S*)"), "$1*$2") }),
+
+  /**
+   * 地址
+   */
   ADDRESS({ it.replace(Regex("(\\S{3})\\S{2}(\\S*)\\S{2}"), "$1****$2****") }),
+
+  /**
+   * 密码
+   */
   PASSWORD({ "********" });
 
   open fun desensitizeSerializer(): (String) -> String {
