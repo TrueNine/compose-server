@@ -5,11 +5,14 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.http.ErrMsg
 import net.yan100.compose.core.http.ErrorMessage
+import net.yan100.compose.core.http.MediaTypes
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.access.AccessDeniedHandler
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 /**
@@ -39,11 +42,11 @@ abstract class SecurityExceptionAdware(
     writeErrorMessage(response, ErrorMessage.failedByMessages(ErrMsg._403))
   }
 
-  private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorMessage) {
+  private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorMessage, charset: Charset = StandardCharsets.UTF_8) {
     response.status = msg.code
-    response.characterEncoding = "UTF-8"
-    response.contentType = net.yan100.compose.core.http.MediaTypes.JSON.getValue()
-    response.locale = Locale("zh-CN", "CN")
+    response.characterEncoding = charset.displayName()
+    response.contentType = MediaTypes.JSON.getValue()
+    response.locale = Locale.CHINA
     val write = response.writer
     write.print(mapper?.writeValueAsString(msg))
     write.flush()

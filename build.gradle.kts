@@ -69,7 +69,6 @@ subprojects {
   apply(plugin = "org.hibernate.orm")
   apply(plugin = "io.spring.dependency-management")
 
-  apply(plugin = "com.github.ben-manes.versions")
   apply(plugin = "maven-publish")
 
 

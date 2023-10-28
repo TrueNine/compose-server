@@ -23,7 +23,7 @@ dependencies {
 
   // TODO hutool
   implementation(libs.util.hutool.core)
-  implementation(libs.security.hutool.crypto)
+  implementation(libs.util.hutool.crypto)
 
   testImplementation(libs.spring.boot.web)
   testImplementation(libs.spring.boot.json)
