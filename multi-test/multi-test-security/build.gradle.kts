@@ -1,5 +1,5 @@
 dependencies {
-  implementation(libs.db.mysql.j)
+  implementation(libs.db.mysqlJ)
   implementation(project(":core"))
   implementation(project(":rds"))
   implementation(project(":security"))

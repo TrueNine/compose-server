@@ -1,16 +1,16 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.bundles.spring.boot.data.jpa)
+  api(libs.bundles.spring.jpa)
 
-  testImplementation(libs.bundles.p6spystarter)
+  testImplementation(libs.bundles.p6spySpring)
 
   implementation(libs.spring.security.crypto)
-  implementation(libs.jakarta.validation.api)
+  implementation(libs.jakarta.validationApi)
   implementation(libs.spring.webmvc)
   implementation(libs.util.hutool.core)
   testImplementation(libs.spring.boot.validation)
-  testImplementation(libs.db.mysql.j)
+  testImplementation(libs.db.mysqlJ)
 
   implementation(project(":core"))
   testImplementation(project(":depend:depend-flyway"))

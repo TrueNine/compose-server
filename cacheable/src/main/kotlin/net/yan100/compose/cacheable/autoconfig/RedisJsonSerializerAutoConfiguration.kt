@@ -65,7 +65,7 @@ class RedisJsonSerializerAutoConfiguration(
   @Bean(name = [CacheFieldNames.RedisTemplate.STRING_TEMPLATE])
   fun customRedisJsonSerializable(factory: RedisConnectionFactory)
     : RedisTemplate<String, *> {
-    log.debug("配置 ${net.yan100.compose.core.consts.CacheFieldNames.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
     val rt = RedisTemplate<String, Any>()
 
     rt.setDefaultSerializer(jsr)
@@ -87,21 +87,21 @@ class RedisJsonSerializerAutoConfiguration(
     return asCacheConfig(factory, Duration.ofHours(2))
   }
 
-  @Bean(name = [net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.D3])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.D3])
   fun cacheManager30day(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.D3} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.D3} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofDays(30))
   }
 
-  @Bean(name = [net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.M30])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.M30])
   fun cacheManager30m(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.M30} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.M30} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofMinutes(30))
   }
 
-  @Bean(name = [net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.FOREVER])
+  @Bean(name = [CacheFieldNames.CacheManagerNames.FOREVER])
   fun cacheManagerForever(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${net.yan100.compose.core.consts.CacheFieldNames.CacheManagerNames.FOREVER} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.CacheManagerNames.FOREVER} factory = {}", factory)
     return asCacheConfig(factory, Duration.ZERO)
   }
 

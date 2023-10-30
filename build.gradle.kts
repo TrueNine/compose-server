@@ -15,14 +15,14 @@ plugins {
   eclipse
   `visual-studio`
   `maven-publish`
-  alias(libs.plugins.spring.boot)
-  alias(libs.plugins.hibernate.orm)
-  alias(libs.plugins.spring.boot.dependencymanagement)
-  alias(libs.plugins.kt.jvm)
-  alias(libs.plugins.kt.kapt)
-  alias(libs.plugins.kt.spring)
-  alias(libs.plugins.kt.lombok)
-  alias(libs.plugins.kt.jpa)
+  alias(libs.plugins.springBoot)
+  alias(libs.plugins.hibernateOrm)
+  alias(libs.plugins.springBootDependencyManagement)
+  alias(libs.plugins.ktJvm)
+  alias(libs.plugins.ktKapt)
+  alias(libs.plugins.ktSpring)
+  alias(libs.plugins.ktLombok)
+  alias(libs.plugins.ktJpa)
   alias(libs.plugins.versions)
   id("net.yan100.compose.version-control")
 }
@@ -150,7 +150,7 @@ subprojects {
     implementation(l.spring.boot.autoconfigure)
     annotationProcessor(l.spring.boot.configureprocessor)
     implementation(l.bundles.kt)
-    testImplementation(l.bundles.spring.kotlin.junit5)
+    testImplementation(l.bundles.test.springKotlinJunit5)
     allAnnotationCompileOnly(l.lombok)
   }
 
@@ -158,7 +158,7 @@ subprojects {
     imports {
       mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
       mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
-      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudalibaba.get()}")
+      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudAlibaba.get()}")
       mavenBom("org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}")
     }
   }
@@ -173,6 +173,6 @@ subprojects {
 tasks {
   wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = l.versions.gradle.asProvider().get()
+    gradleVersion = l.versions.gradle.get()
   }
 }

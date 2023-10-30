@@ -1,6 +1,6 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.bundles.spring.boot.data.redis)
+  api(libs.bundles.spring.redis)
   implementation(project(":core"))
 }

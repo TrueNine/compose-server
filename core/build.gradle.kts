@@ -1,21 +1,21 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.jackson.core.annotations)
+  api(libs.jackson.coreAnnotations)
 
   api(libs.util.ognl)
-  api(libs.util.guava.jre)
+  api(libs.util.guavaJre)
 
-  api(libs.jakarta.servlet.api)
-  api(libs.jakarta.validation.api)
+  api(libs.jakarta.servletApi)
+  api(libs.jakarta.validationApi)
 
   api(libs.slf4j.api)
-  api(libs.jakarta.openapi.v3.annotations)
+  api(libs.jakarta.openapiV3Annotations)
   api(libs.spring.modulith.core)
 
   implementation(libs.spring.boot.json)
   implementation(libs.spring.security.crypto)
-  implementation(libs.security.bcprov.jdk18on)
+  implementation(libs.security.bcprovJdk18on)
   implementation(libs.spring.webmvc)
 
   // TODO 日志

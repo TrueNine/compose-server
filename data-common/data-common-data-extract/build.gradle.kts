@@ -6,7 +6,7 @@ dependencies {
   api(libs.cralwer.supercsv)
   api(libs.util.easyexcel) {
     exclude("org.apache.commons", "commons-compress")
-    implementation(libs.apache.commons.compress)
+    implementation(libs.apache.commonsCompress)
   }
   implementation(project(":core"))
   implementation(project(":depend:depend-web-client"))

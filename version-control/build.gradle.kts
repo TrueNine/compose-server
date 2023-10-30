@@ -7,7 +7,7 @@ val yunXiaoUsername = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
 
 plugins {
-  alias(libs.plugins.kt.jvm)
+  alias(libs.plugins.ktJvm)
   java
   `version-catalog`
   `java-library`
@@ -33,7 +33,7 @@ dependencies {
 
 kotlin {
   jvmToolchain {
-    languageVersion.set(JavaLanguageVersion.of(l.versions.compose.versioncontrol.javaversion.get().toString().toInt()))
+    languageVersion.set(JavaLanguageVersion.of(l.versions.compose.versionControlJavaVersion.get().toString().toInt()))
   }
 }
 
@@ -47,11 +47,11 @@ tasks {
         "-Xjsr305=strict",
         "-Xjvm-default=all",
         "-verbose",
-        "-Xjdk-release=${l.versions.compose.versioncontrol.javaversion.get()}",
-        "-jvm-target=${l.versions.compose.versioncontrol.javaversion.get()}",
+        "-Xjdk-release=${l.versions.compose.versionControlJavaVersion.get()}",
+        "-jvm-target=${l.versions.compose.versionControlJavaVersion.get()}",
         "-Xextended-compiler-checks"
       )
-      jvmTarget = "${l.versions.compose.versioncontrol.javaversion.get()}"
+      jvmTarget = "${l.versions.compose.versionControlJavaVersion.get()}"
     }
   }
 }
