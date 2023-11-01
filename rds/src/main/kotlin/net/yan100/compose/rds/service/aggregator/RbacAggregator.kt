@@ -2,7 +2,6 @@ package net.yan100.compose.rds.service.aggregator
 
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole
 import net.yan100.compose.rds.entity.relationship.RolePermissions
-import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroup
 import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 
 /**
@@ -20,15 +19,6 @@ interface RbacAggregator {
   fun saveAllRoleGroupToUser(roleGroupIds: List<String>, userId: String): List<UserRoleGroup>
   fun revokeRoleGroupFromUser(roleGroupId: String, userId: String)
   fun revokeAllRoleGroupFromUser(roleGroupIds: List<String>, userId: String)
-
-  fun saveRoleGroupToUserGroup(roleGroupId: String, userGroupId: String): UserGroupRoleGroup?
-  fun saveAllRoleGroupToUserGroup(
-    roleGroupIds: List<String>,
-    userGroupId: String
-  ): List<UserGroupRoleGroup>
-
-  fun revokeRoleGroupFromUserGroup(roleGroupId: String, userGroupId: String)
-  fun revokeAllRoleGroupFromUserGroup(roleGroupIds: List<String>, userGroupId: String)
 
   fun saveRoleToRoleGroup(roleId: String, roleGroupId: String): RoleGroupRole?
   fun saveAllRoleToRoleGroup(roleIds: List<String>, roleGroupId: String): List<RoleGroupRole>

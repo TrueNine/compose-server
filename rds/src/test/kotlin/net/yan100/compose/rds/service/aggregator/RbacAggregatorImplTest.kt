@@ -4,10 +4,12 @@ import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.entity.Permissions
 import net.yan100.compose.rds.entity.Role
 import net.yan100.compose.rds.entity.RoleGroup
-import net.yan100.compose.rds.entity.UserGroup
 import net.yan100.compose.rds.repository.AllRoleEntityRepository
 import net.yan100.compose.rds.repository.FullRoleGroupEntityRepo
-import net.yan100.compose.rds.service.*
+import net.yan100.compose.rds.service.PermissionsService
+import net.yan100.compose.rds.service.RoleGroupService
+import net.yan100.compose.rds.service.RoleService
+import net.yan100.compose.rds.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
@@ -24,8 +26,6 @@ class RbacAggregatorImplTest {
   @Autowired
   lateinit var userService: UserService
 
-  @Autowired
-  lateinit var ugService: UserGroupService
 
   @Autowired
   lateinit var roleService: RoleService
@@ -115,88 +115,6 @@ class RbacAggregatorImplTest {
     assertNotNull(nu)
     assertTrue {
       nu.roleGroups.isEmpty()
-    }
-  }
-
-  fun getUserGroup() = UserGroup().apply {
-    this.userId = snowflake.nextStringId()
-    this.name = "abc" + snowflake.nextId()
-  }
-
-  @Test
-  fun testSaveRoleGroupToUserGroup() {
-    val ug = ugService.save(getUserGroup())
-    val rg = rgService.save(getRoleGroup())
-
-    assertNotNull(ug)
-    assertNotNull(rg)
-
-    val saved = aggregator.saveRoleGroupToUserGroup(rg.id!!, ug.id!!)
-    assertNotNull(saved)
-
-    assertEquals(saved.roleGroupId, rg.id)
-    assertEquals(saved.userGroupId, ug.id)
-  }
-
-  @Test
-  fun testSaveAllRoleGroupToUserGroup() {
-    var rgs = rgService.saveAll(getRoleGroups())
-    val ug = ugService.save(getUserGroup())
-    assertNotNull(rgs)
-    assertNotNull(ug)
-
-    val saved = aggregator.saveAllRoleGroupToUserGroup(rgs.map { it.id!! }, ug.id!!)
-    assertNotNull(saved)
-    assertEquals(saved.size, rgs.size, "saved $saved \n rgs$rgs")
-    val su = ugService.findById(ug.id!!)
-    assertNotNull(su)
-    assertNotNull(su.roleGroups)
-    su.roleGroups.sortBy { it.id }
-    rgs = rgs.sortedBy { it.id }
-    su.roleGroups.forEachIndexed { idx, it ->
-      assertEquals(it, rgs[idx])
-    }
-  }
-
-  @Test
-  fun testRevokeRoleGroupFromUserGroup() {
-    val rg = rgService.save(getRoleGroup())
-    val ug = ugService.save(getUserGroup())
-
-    assertNotNull(rg)
-    assertNotNull(ug)
-
-    val urg = aggregator.saveRoleGroupToUserGroup(rg.id!!, ug.id!!)
-    assertNotNull(urg)
-
-    val saved = ugService.findById(ug.id!!)
-    assertNotNull(saved)
-    assertContains(saved.roleGroups, rg)
-
-    aggregator.revokeRoleGroupFromUserGroup(rg.id!!, ug.id!!)
-
-    val cb = ugService.findById(ug.id!!)
-    assertNotNull(cb)
-
-    assertTrue {
-      cb.roleGroups.isEmpty()
-    }
-  }
-
-  @Test
-  fun testRevokeAllRoleGroupFromUserGroup() {
-    val ug = ugService.save(getUserGroup())
-    val rgs = rgService.saveAll(getRoleGroups())
-
-    val saved = aggregator.saveAllRoleGroupToUserGroup(rgs.map { it.id!! }, ug.id!!)
-    assertEquals(saved.size, rgs.size)
-
-    val su = ugService.findById(ug.id!!)
-    assertNotNull(su)
-    aggregator.revokeAllRoleGroupFromUserGroup(saved.map { it.roleGroupId }, ug.id!!)
-    ugService.findById(ug.id!!).let {
-      assertNotNull(it)
-      assertTrue { it.roleGroups.isEmpty() }
     }
   }
 
@@ -335,77 +253,5 @@ class RbacAggregatorImplTest {
     }
   }
 
-  fun namePre(): net.yan100.compose.rds.entity.User {
-    val user = userService.save(getUser())
-    ugService.save(UserGroup().apply { name = "柱";userId = user.id })
-    val subUserGroup = ugService.save(getUserGroup())
-    ugService.saveUserToUserGroup(user.id!!, subUserGroup.id!!)
 
-    // 权限
-    val userRoleGroups = rgService.saveAll(getRoleGroups())
-    val ugRoleGroups = rgService.saveAll(getRoleGroups())
-    val aRole = roleService.save(getRole())
-    val bRole = roleService.save(getRole())
-    val aPer = permissionsService.save(getPermissions())
-    val bPer = permissionsService.save(getPermissions())
-
-    // 链接
-    aggregator.savePermissionsToRole(aPer.id!!, aRole.id!!)!!
-    aggregator.savePermissionsToRole(bPer.id!!, bRole.id!!)!!
-
-    // 分别挂载
-    userRoleGroups.map { it.id }.let {
-      it.forEach { rid ->
-        aggregator.saveRoleToRoleGroup(aRole.id!!, rid!!)
-      }
-      aggregator.saveAllRoleGroupToUser(it.map { ir -> ir!! }, user.id!!)
-    }
-    ugRoleGroups.map { it.id }.let {
-      it.forEach { rid ->
-        aggregator.saveRoleToRoleGroup(bRole.id!!, rid!!)
-      }
-      aggregator.saveAllRoleGroupToUserGroup(it.map { ir -> ir!! }, subUserGroup.id!!)
-    }
-
-    // 校验挂载是否通过
-    val newUser = userService.findFullUserByAccount(user.account!!)!!
-    val newUserGroup = ugService.findById(subUserGroup.id!!)!!
-    assertTrue { newUser.roleGroups.containsAll(userRoleGroups) }
-    assertTrue { newUserGroup.roleGroups.containsAll(ugRoleGroups) }
-    return user
-  }
-
-  @Test
-  fun testFindAllSecurityNameByUserId() {
-    val user = namePre()
-    val pUser = userService.findUserByAccount("usr")
-    
-
-    // 查询用户
-    val all = aggregator.findAllSecurityNameByUserId(user.id!!)
-    assertTrue { all.isNotEmpty() }
-  }
-
-  @Test
-  fun testFindAllSecurityNameByAccount() {
-    val user = namePre()
-    val all = aggregator.findAllSecurityNameByAccount(user.account!!)
-    assertTrue { all.isNotEmpty() }
-  }
-
-  @Test
-  fun testFindAllRoleNameByUserAccount() {
-    val user = namePre()
-    val acl = aggregator.findAllRoleNameByUserAccount(user.account!!)
-    assertTrue("查询不到权限 $acl") { acl.isNotEmpty() }
-    assertTrue("权限数值不对 $acl") { acl.size == 1 }
-  }
-
-  @Test
-  fun testFindAllPermissionsNameByUserAccount() {
-    val user = namePre()
-    val acl = aggregator.findAllPermissionsNameByUserAccount(user.account!!)
-    assertTrue("查询不到权限 $acl") { acl.isNotEmpty() }
-    assertTrue("权限数值不对 $acl") { acl.size == 1 }
-  }
 }

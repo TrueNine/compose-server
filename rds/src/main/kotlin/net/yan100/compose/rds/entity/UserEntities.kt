@@ -17,7 +17,6 @@ import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.converters.AesEncryptConverter
 import net.yan100.compose.rds.converters.typing.GenderTypingConverter
-import net.yan100.compose.rds.entity.relationship.UserGroupRoleGroup
 import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
@@ -136,7 +135,7 @@ open class FullUser : SuperUser() {
       updatable = false
     )],
     inverseJoinColumns = [JoinColumn(
-      name = UserGroupRoleGroup.ROLE_GROUP_ID,
+      name = UserRoleGroup.ROLE_GROUP_ID,
       referencedColumnName = ID,
       foreignKey = ForeignKey(NO_CONSTRAINT),
       insertable = false,

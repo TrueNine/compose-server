@@ -3,7 +3,6 @@ package net.yan100.compose.rds.repository
 import net.yan100.compose.rds.base.BaseRepository
 import net.yan100.compose.rds.entity.FullRole
 import net.yan100.compose.rds.entity.Role
-import net.yan100.compose.rds.entity.UserGroup
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
@@ -35,31 +34,4 @@ interface AllRoleEntityRepository : BaseRepository<FullRole> {
   """
   )
   fun findAllByUserId(userId: Long): List<FullRole>
-}
-
-@Repository
-interface UserGroupRepo : BaseRepository<UserGroup> {
-  @Query(
-    """
-    from UserGroup ug
-    left join UserGroupUser ugu
-    on ug.id = ugu.userGroupId
-    where ug.userId = :userId
-    or ugu.userId = :userId
-  """
-  )
-  fun findAllByUserId(userId: String): MutableList<UserGroup>
-
-  @Query(
-    """
-    from UserGroup ug
-    left join UserGroupUser ugu on ug.id = ugu.userGroupId
-    left join User u on u.id = ugu.userId
-    where u.account = :account
-  """
-  )
-  fun findAllByUserAccount(account: String): MutableList<UserGroup>
-
-
-  fun existsByIdAndUserId(id: String, userId: String): Boolean
 }

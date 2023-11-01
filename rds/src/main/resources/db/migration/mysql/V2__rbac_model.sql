@@ -70,18 +70,6 @@ values (0, 'ROOT', '默认ROOT角色组，务必不要删除'),
        (1, 'USER', '默认USER角色组，务必不要删除');
 
 
-create table if not exists user_group
-(
-  user_id bigint unsigned comment '创建人',
-  name    varchar(255) comment '名称',
-  doc     varchar(2047) comment '描述',
-  index (user_id) comment '外联 用户'
-) default charset = utf8mb4, comment '用户组';
-call add_base_struct('user_group');
-insert into user_group(id, user_id, name, doc)
-values (0, 0, 'ROOT', 'ROOT 用户组，务必不要删除');
-
-
 create table if not exists role_permissions
 (
   role_id        bigint unsigned comment '角色',
@@ -123,34 +111,13 @@ values (0, 0, 0),
        (2, 1, 1);
 
 
-create table if not exists user_group_role_group
-(
-  role_group_id bigint unsigned comment '角色组',
-  user_group_id bigint unsigned comment '用户组',
-  index (role_group_id) comment '外联 角色组',
-  index (user_group_id) comment '外联 用户组'
-) default charset = utf8mb4, comment '用户组  角色组';
-call add_base_struct('user_group_role_group');
-
-
-create table if not exists user_group_user
-(
-  user_group_id bigint unsigned not null comment '用户组',
-  user_id       bigint unsigned not null comment '用户',
-  index (user_group_id) comment '外联 用户组',
-  index (user_id) comment '外联 用户'
-) default charset = utf8mb4,comment '用户组 用户';
-call add_base_struct('user_group_user');
-insert into user_group_user(id, user_id, user_group_id)
-values (0, 0, 0);
-
-
 create table if not exists dept
 (
   name varchar(255)  not null comment '名称',
   doc  text null comment '描述'
 ) default charset = utf8mb4,comment '部门';
 call add_base_struct('dept');
+
 
 create table if not exists user_dept
 (

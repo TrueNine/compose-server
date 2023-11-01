@@ -73,18 +73,6 @@ values (0, 'ROOT', '默认ROOT角色组，务必不要删除'),
        (1, 'USER', '默认USER角色组，务必不要删除');
 
 
-create table if not exists user_group
-(
-  user_id bigint       not null,
-  name    varchar(255) not null,
-  doc     text
-);
-comment on table user_group is '用户组';
-select add_base_struct('user_group');
-insert into user_group(id, user_id, name, doc)
-values (0, 0, 'ROOT', 'ROOT 用户组，务必不要删除');
-
-
 create table if not exists role_permissions
 (
   role_id        bigint not null,
@@ -128,31 +116,6 @@ insert into user_role_group(id, user_id, role_group_id)
 values (0, 0, 0),
        (1, 0, 1),
        (2, 1, 1);
-
-
-create table if not exists user_group_role_group
-(
-  role_group_id bigint not null,
-  user_group_id bigint not null
-);
-comment on table user_group_role_group is '用户组  角色组';
-select add_base_struct('user_group_role_group');
-create index on user_group_role_group (role_group_id);
-create index on user_group_role_group (user_group_id);
-
-
-create table if not exists user_group_user
-(
-  user_group_id bigint not null,
-  user_id       bigint not null
-);
-comment on table user_group_user is '用户组 用户';
-select add_base_struct('user_group_user');
-create index on user_group_user (user_group_id);
-create index on user_group_user (user_id);
-insert into user_group_user(id, user_id, user_group_id)
-values (0, 0, 0);
-
 
 create table if not exists dept
 (
