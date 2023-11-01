@@ -75,18 +75,3 @@ YUNXIAO_PWD 用户密码
 ```
 
 如果执行如上步骤错误，请反复检查。
-
-# 模块划分
-
-- **buildSrc** gradle 构建模块
-- **cacheable** 缓存模块
-- **pay** 支付模块
-- **core** 工具包
-- **data-common** 数据工具模块
-- **depend** 场景模块
-- **oss** 对象存储模块
-- **rds** 数据库模块
-- **security** 鉴权模块
-- **multi-test** 联合测试模块
-- **web-api-doc** WEBAPI 文档模块
-
