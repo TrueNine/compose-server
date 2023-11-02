@@ -44,6 +44,6 @@ class CorsConfiguration : WebMvcConfigurer {
   }
 
   companion object {
-    private val log = slf4j(this::class)
+    private val log = slf4j(CorsConfiguration::class)
   }
 }

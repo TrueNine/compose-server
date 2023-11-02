@@ -68,4 +68,4 @@ create table bank_card
   bank_type             integer      default null,
   issue_address_details text         default null
 ) comment '银行卡';
-call add_base_struct('household_registration_card');
+call add_base_struct('bank_card');

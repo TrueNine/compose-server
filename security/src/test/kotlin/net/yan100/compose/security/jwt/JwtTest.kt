@@ -2,8 +2,8 @@ package net.yan100.compose.security.jwt
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.encrypt.Keys
-import net.yan100.compose.security.jwt.consts.IssuerParamModel
-import net.yan100.compose.security.jwt.consts.VerifierParamModel
+import net.yan100.compose.security.jwt.consts.IssuerParam
+import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test
 
 
@@ -14,6 +14,7 @@ class JwtTest {
     val mapper = ObjectMapper()
     val eccPair = Keys.generateEccKeyPair()!!
     val rsaPair = Keys.generateRsaKeyPair()!!
+
     val issuer = JwtIssuer.createIssuer()
       .issuer("t")
       .id("1")
@@ -31,13 +32,13 @@ class JwtTest {
       .serializer(mapper)
       .build()
 
-    val inputs = IssuerParamModel<Any, Any>(signatureKey = rsaPair.rsaPrivateKey)
+    val inputs = IssuerParam<Any, Any>(signatureKey = rsaPair.rsaPrivateKey)
     inputs.encryptedDataObj = "我日了狗"
     inputs.subjectObj = mutableListOf("123", "444")
     inputs.encryptedDataObj = mutableListOf("123", "444")
 
     val token = issuer.issued(inputs)
-    val outputs = VerifierParamModel(
+    val outputs = VerifierParam(
       token = token,
       subjectTargetType = Any::class.java,
       encryptDataTargetType = Any::class.java

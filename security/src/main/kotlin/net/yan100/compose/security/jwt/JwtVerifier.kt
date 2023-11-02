@@ -8,8 +8,8 @@ import net.yan100.compose.core.encrypt.Encryptors
 import net.yan100.compose.core.lang.DTimer
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.security.exceptions.JwtException
-import net.yan100.compose.security.jwt.consts.JwtTokenModel
-import net.yan100.compose.security.jwt.consts.VerifierParamModel
+import net.yan100.compose.security.jwt.consts.JwtToken
+import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -25,8 +25,8 @@ open class JwtVerifier internal constructor() {
 
   @Throws(JwtException::class)
   fun <S : Any, E : Any> verify(
-    params: VerifierParamModel<S, E>
-  ): JwtTokenModel<S, E> = runCatching {
+    params: VerifierParam<S, E>
+  ): JwtToken<S, E> = runCatching {
     JWT.require(Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey))
       .withIssuer(params.issuer ?: this.issuer)
       .withJWTId(params.id ?: this.id)
@@ -40,7 +40,7 @@ open class JwtVerifier internal constructor() {
         }
         // 对 token 进行解包
         JWT.decode(params.token).let { decodedJwt ->
-          JwtTokenModel<S, E>().also { token ->
+          JwtToken<S, E>().also { token ->
             // 解包加密段
             if (decodedJwt.claims.containsKey(this@JwtVerifier.encryptDataKeyName)) {
               log.trace("jwt 发现加密段 {}", this@JwtVerifier.encryptDataKeyName)

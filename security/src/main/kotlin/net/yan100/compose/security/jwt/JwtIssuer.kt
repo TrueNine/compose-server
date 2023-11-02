@@ -7,7 +7,7 @@ import com.google.common.annotations.VisibleForTesting
 import net.yan100.compose.core.encrypt.Encryptors
 import net.yan100.compose.core.lang.DTimer
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.security.jwt.consts.IssuerParamModel
+import net.yan100.compose.security.jwt.consts.IssuerParam
 import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -20,7 +20,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
   var signatureIssuerKey: RSAPrivateKey? = null
   var contentEccPublicKey: PublicKey? = null
 
-  fun <S : Any, E : Any> issued(params: IssuerParamModel<S, E>): String {
+  fun <S : Any, E : Any> issued(params: IssuerParam<S, E>): String {
     return JWT.create()
       .withIssuer(issuer)
       .withJWTId(id)

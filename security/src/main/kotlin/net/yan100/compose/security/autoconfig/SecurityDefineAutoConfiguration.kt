@@ -5,6 +5,7 @@ import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.security.defaults.EmptyPreflightValidFilter
 import net.yan100.compose.security.defaults.EmptySecurityDetailsService
 import net.yan100.compose.security.defaults.EmptySecurityExceptionAdware
+import net.yan100.compose.security.models.SecurityPolicyDefine
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -14,8 +15,8 @@ class SecurityDefineAutoConfiguration {
   private val log = slf4j(this::class)
 
   @Bean
-  fun securityPolicyDefineModel(mapper: ObjectMapper): net.yan100.compose.security.models.SecurityPolicyDefineModel {
-    var se = net.yan100.compose.security.models.SecurityPolicyDefineModel()
+  fun securityPolicyDefine(mapper: ObjectMapper): SecurityPolicyDefine {
+    var se = SecurityPolicyDefine()
     se = checkPolicy(se, mapper)
     log.warn("警告：正在使用默认的测试安全定义 $se ,生产环境请替换")
     se.anonymousPatterns.add("/**")
@@ -23,9 +24,9 @@ class SecurityDefineAutoConfiguration {
   }
 
   private fun checkPolicy(
-    desc: net.yan100.compose.security.models.SecurityPolicyDefineModel,
-    mapper: ObjectMapper
-  ): net.yan100.compose.security.models.SecurityPolicyDefineModel {
+      desc: SecurityPolicyDefine,
+      mapper: ObjectMapper
+  ): SecurityPolicyDefine {
     if (desc.exceptionAdware == null) {
       log.debug("正在使用空体异常处理器")
       desc.exceptionAdware = EmptySecurityExceptionAdware(mapper)

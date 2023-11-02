@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2022-12-10
  */
 @Data
-public class SecurityPolicyDefineModel {
+public class SecurityPolicyDefine {
   SecurityPreflightValidFilter preValidFilter;
   SecurityUserDetailsService service;
   SecurityExceptionAdware exceptionAdware;

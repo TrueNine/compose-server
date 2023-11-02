@@ -2,8 +2,10 @@ package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.security.annotations.EnableRestSecurity
 import net.yan100.compose.security.defaults.EmptySecurityDetailsService
 import net.yan100.compose.security.defaults.EmptySecurityExceptionAdware
+import net.yan100.compose.security.models.SecurityPolicyDefine
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
@@ -28,41 +30,36 @@ import org.springframework.web.cors.CorsConfiguration
 class SecurityPolicyBean {
   @Bean
   @Primary
-  @ConditionalOnBean(net.yan100.compose.security.models.SecurityPolicyDefineModel::class)
-  fun securityDetailsService(desc: net.yan100.compose.security.models.SecurityPolicyDefineModel): SecurityUserDetailsService {
+  @ConditionalOnBean(SecurityPolicyDefine::class)
+  fun securityDetailsService(desc: SecurityPolicyDefine): SecurityUserDetailsService {
     return desc.service ?: EmptySecurityDetailsService()
   }
 
   @Bean
   @Primary
-  @ConditionalOnBean(net.yan100.compose.security.models.SecurityPolicyDefineModel::class)
-  fun securityExceptionAdware(policyDefine: net.yan100.compose.security.models.SecurityPolicyDefineModel, manager: ObjectMapper): SecurityExceptionAdware {
+  @ConditionalOnBean(SecurityPolicyDefine::class)
+  fun securityExceptionAdware(policyDefine: SecurityPolicyDefine, manager: ObjectMapper): SecurityExceptionAdware {
     return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
   }
 
   @Bean
   @Primary
+  @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityFilterChain(
     httpSecurity: HttpSecurity,
     cors: CorsConfiguration,
-    policyDefine: net.yan100.compose.security.models.SecurityPolicyDefineModel,
+    policyDefine: SecurityPolicyDefine,
     applicationContext: ApplicationContext
   ): SecurityFilterChain {
     val enableAnnotation = getAnno(applicationContext)
-    require(enableAnnotation != null) { "无法正常获取到注解 ${net.yan100.compose.security.annotations.EnableRestSecurity::class}" }
+    require(enableAnnotation != null) { "无法正常获取到注解 ${EnableRestSecurity::class}" }
     val allowPatterns = policyDefine.anonymousPatterns
 
     allowPatterns += listOf(*enableAnnotation.loginUrl)
     allowPatterns += listOf(*enableAnnotation.allowPatterns)
 
-    // 是否放行swagger
-    if (enableAnnotation.allowSwagger) {
-      allowPatterns += policyDefine.swaggerPatterns
-    }
-
-    if (enableAnnotation.allowWebJars) {
-      allowPatterns += "/webjars/**"
-    }
+    if (enableAnnotation.allowSwagger) allowPatterns += policyDefine.swaggerPatterns
+    if (enableAnnotation.allowWebJars) allowPatterns += "/webjars/**"
 
     if (policyDefine.preValidFilter != null) {
       httpSecurity.addFilterBefore(
@@ -79,11 +76,8 @@ class SecurityPolicyBean {
       .csrf { it.disable() }
       // 关闭 session
       .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-    httpSecurity.cors {
-      it.configurationSource {
-        cors
-      }
-    }
+
+    httpSecurity.cors { it.configurationSource { cors } }
     httpSecurity.authorizeHttpRequests {
       it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
 
@@ -121,11 +115,11 @@ class SecurityPolicyBean {
     private val log = slf4j(this::class)
 
     @JvmStatic
-    private fun getAnno(ctx: ApplicationContext): net.yan100.compose.security.annotations.EnableRestSecurity? {
+    private fun getAnno(ctx: ApplicationContext): EnableRestSecurity? {
       return ctx
-        .getBeansWithAnnotation(net.yan100.compose.security.annotations.EnableRestSecurity::class.java)
+        .getBeansWithAnnotation(EnableRestSecurity::class.java)
         .map { it.value }
-        .map { it.javaClass.getAnnotation(net.yan100.compose.security.annotations.EnableRestSecurity::class.java) }
+        .map { it.javaClass.getAnnotation(EnableRestSecurity::class.java) }
         .first()
     }
   }

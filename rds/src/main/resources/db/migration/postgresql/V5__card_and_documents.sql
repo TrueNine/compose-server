@@ -72,4 +72,4 @@ create table bank_card
   issue_address_details text         default null
 );
 comment on table bank_card is '银行卡';
-select add_base_struct('household_registration_card');
+select add_base_struct('bank_card');

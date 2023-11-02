@@ -6,7 +6,7 @@ import java.security.interfaces.RSAPrivateKey
 import java.time.Duration
 
 
-data class IssuerParamModel<S : Any?, E : Any?>(
+data class IssuerParam<S : Any?, E : Any?>(
   var encryptedDataObj: E? = null,
   var id: String? = null,
   var issuer: String? = null,
