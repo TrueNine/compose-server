@@ -11,11 +11,3 @@ dependencies {
   implementation(project(":core"))
   implementation(project(":depend:depend-web-client"))
 }
-
-tasks {
-  test {
-    useTestNG {
-      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
-    }
-  }
-}

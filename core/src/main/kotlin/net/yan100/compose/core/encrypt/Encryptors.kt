@@ -4,7 +4,6 @@ import com.google.common.annotations.VisibleForTesting
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import org.bouncycastle.jce.spec.IESParameterSpec
-import org.slf4j.Logger
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.security.PrivateKey
@@ -23,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec
  */
 object Encryptors {
   @JvmStatic
-  private val log: Logger = slf4j(Encryptors::class)
+  private val log = slf4j(Encryptors::class)
 
   /**
    * 分片 base64 分隔符
@@ -60,7 +59,7 @@ object Encryptors {
    * @return 密文
    */
   @JvmStatic
-  private fun basicEncrypt(
+  private fun encrypt(
     publicKey: PublicKey,
     data: String,
     shardingSize: Int = SHARDING_SIZE,
@@ -72,11 +71,11 @@ object Encryptors {
       sharding(data.toByteArray(charset), shardingSize)
         .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
     }
-  }.onFailure { log.error(::basicEncrypt.name, it) }.getOrNull()
+  }.onFailure { log.error(::encrypt.name, it) }.getOrNull()
 
 
   @JvmStatic
-  private fun basicEncryptByPrivateKey(
+  private fun encryptByPrivateKey(
     privateKey: PrivateKey,
     data: String,
     shardingSize: Int = SHARDING_SIZE,
@@ -88,7 +87,7 @@ object Encryptors {
       sharding(data.toByteArray(charset), shardingSize)
         .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
     }
-  }.onFailure { log.error(::basicEncrypt.name, it) }.getOrNull()
+  }.onFailure { log.error(::encrypt.name, it) }.getOrNull()
 
 
   /**
@@ -148,7 +147,7 @@ object Encryptors {
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = this.charset
-  ): String? = basicEncrypt(
+  ): String? = encrypt(
     publicKey,
     data,
     shardingSize,
@@ -171,7 +170,7 @@ object Encryptors {
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = this.charset
-  ): String? = basicEncryptByPrivateKey(
+  ): String? = encryptByPrivateKey(
     privateKey,
     data,
     shardingSize,
@@ -220,102 +219,102 @@ object Encryptors {
 
   /**
    * @param rsaPrivateKey 私钥
-   * @param data 数据
+   * @param ciphertext 数据
    * @param charset 字符集
    * @return 明文
    */
   @JvmStatic
   fun decryptByRsaPrivateKeyBase64(
     rsaPrivateKey: String,
-    data: String,
+    ciphertext: String,
     charset: Charset = this.charset
   ): String? = decryptByRsaPrivateKey(
     Keys.readRsaPrivateKeyByBase64(rsaPrivateKey)!!,
-    data,
+    ciphertext,
     charset
   )
 
 
   /**
    * @param rsaPrivateKey 私钥
-   * @param data 解密数据
+   * @param ciphertext 解密数据
    * @param charset 字符集
    * @return 解密数据
    */
   @JvmStatic
   fun decryptByRsaPrivateKey(
     rsaPrivateKey: RSAPrivateKey,
-    data: String,
+    ciphertext: String,
     charset: Charset = this.charset
-  ): String? = basicDecrypt(rsaPrivateKey, data, EncryptAlgorithmTyping.RSA_PADDING, charset)
+  ): String? = basicDecrypt(rsaPrivateKey, ciphertext, EncryptAlgorithmTyping.RSA_PADDING, charset)
 
   /**
    * @param aesKey 密钥
-   * @param data 解密数据
+   * @param plaintext 解密数据
    * @param charset 字符集
    * @return 解密数据
    */
   @JvmStatic
   fun encryptByAesKeyBase64(
     aesKey: String,
-    data: String,
+    plaintext: String,
     charset: Charset = StandardCharsets.UTF_8
   ): String? = encryptByAesKey(
     SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"),
-    data,
+    plaintext,
     charset
   )
 
   /**
    * @param secret 密钥
-   * @param data 明文
+   * @param plain 明文
    * @param charset 字符集
    * @return 密文
    */
   @JvmStatic
   fun encryptByAesKey(
     secret: SecretKeySpec,
-    data: String,
+    plain: String,
     charset: Charset = this.charset
   ): String? = runCatching {
     Cipher.getInstance("AES/ECB/PKCS5Padding").run {
       init(ENC_MODE, secret)
-      Base64Helper.encode(doFinal(data.toByteArray(charset)))
+      Base64Helper.encode(doFinal(plain.toByteArray(charset)))
     }
   }.onFailure { log.error(::encryptByAesKey.name, it) }.getOrNull()
 
   /**
    * @param aesKey 密钥
-   * @param data 密文
+   * @param ciphertext 密文
    * @param charset 字符集
    * @return 明文
    */
   @JvmStatic
   fun decryptByAesKeyBase64(
     aesKey: String,
-    data: String,
+    ciphertext: String,
     charset: Charset = StandardCharsets.UTF_8
   ): String? = decryptByAesKey(
     SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"),
-    data,
+    ciphertext,
     charset
   )
 
   /**
    * @param secret 密钥
-   * @param data 密文
+   * @param ciphertext 密文
    * @param charset 字符集
    * @return 明文
    */
   @JvmStatic
   fun decryptByAesKey(
     secret: SecretKeySpec,
-    data: String,
+    ciphertext: String,
     charset: Charset = this.charset
   ): String? = kotlin.runCatching {
     Cipher.getInstance("AES/ECB/PKCS5Padding").run {
       init(DEC_MODE, secret)
-      String(doFinal(Base64Helper.decodeToByte(data)), charset)
+      String(doFinal(Base64Helper.decodeToByte(ciphertext)), charset)
     }
   }.onFailure { log.error(::decryptByAesKey.name, it) }.getOrNull()
 
@@ -349,6 +348,4 @@ object Encryptors {
     }
     return shardingData
   }
-
-
 }

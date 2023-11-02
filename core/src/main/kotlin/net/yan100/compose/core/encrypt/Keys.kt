@@ -1,5 +1,6 @@
 package net.yan100.compose.core.encrypt
 
+import net.yan100.compose.core.lang.encodeBase64String
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import org.bouncycastle.jce.ECNamedCurveTable
@@ -56,8 +57,9 @@ object Keys {
    * @return rsa公钥
    */
   @JvmStatic
-  fun readRsaPublicKeyByBase64(base64: String): RSAPublicKey? =
-    readPublicKeyByBase64AndAlg(base64, EncryptAlgorithmTyping.RSA) as? RSAPublicKey
+  fun readRsaPublicKeyByBase64(base64: String): RSAPublicKey? {
+    return readPublicKeyByBase64AndAlg(base64, EncryptAlgorithmTyping.RSA) as? RSAPublicKey
+  }
 
 
   /**
@@ -75,8 +77,16 @@ object Keys {
    */
   @JvmStatic
   fun writeKeyToBase64(key: Key): String? = runCatching {
-    Base64Helper.encode(key.encoded)
+    key.encoded.encodeBase64String
   }.onFailure { log.error(::writeKeyToBase64.name, it) }.getOrNull()
+
+  @JvmStatic
+  fun writeKeyToPem(key: Key, keyType: String? = null): String? = runCatching {
+    PemFormat.base64ToPem(
+      key.encoded.encodeBase64String, keyType
+        ?: "${key.algorithm} ${key.format ?: ""}"
+    )
+  }.onFailure { log.error(::writeKeyToPem.name, it) }.getOrNull()
 
   /**
    * @param secret 密钥

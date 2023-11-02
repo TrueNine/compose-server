@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
-import net.yan100.compose.core.lang.Str
+import net.yan100.compose.core.lang.nonText
 import net.yan100.compose.rds.listener.BizCodeInsertListener
 import net.yan100.compose.rds.listener.PreSaveDeleteReferenceListener
 import net.yan100.compose.rds.listener.SnowflakeIdInsertListener
@@ -49,7 +49,7 @@ open class AnyEntity : Serializable, Persistable<String> {
   }
 
   open fun asNew() {
-    id = ""
+    id = null
   }
 
   override fun toString(): String {
@@ -67,7 +67,7 @@ open class AnyEntity : Serializable, Persistable<String> {
   @Transient
   @JsonIgnore
   override fun isNew(): Boolean {
-    return Str.nonText(id) || "null" == id
+    return id.nonText() || "" == id || "null" == id
   }
 
   companion object {

@@ -36,6 +36,10 @@ fun String?.nonText(): Boolean = !this.hasText()
  */
 val String?.withEmpty: String get() = this ?: ""
 
+/**
+ * ## 将该字符串转换为单行字符串
+ */
+val String.inline: String get() = Str.inLine(this)
 
 /**
  * ## 将 foo_bar 类型的字符串转换为 fooBar
@@ -47,7 +51,7 @@ val String.camelLowercaseFieldName: String
 
 /**
  * ## 将字符串进行 url 编码
- * 首先调用 [nonNullStr] 进行防空，然后再进行编码
+ * 首先调用 [withEmpty] 进行防空，然后再进行编码
  * @param charset 字符集
  * @return 编码完成的字符串，使用 [java.net.URLEncoder]
  */

@@ -4,8 +4,9 @@ import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
 import javax.crypto.spec.SecretKeySpec
 
+
 @JvmDefaultWithCompatibility
-interface KeysRepository {
+interface IKeysRepository {
   fun basicRsaKeyPair(): RsaKeyPair? = null
   fun basicEccKeyPair(): EccKeyPair? = null
   fun basicAesKey(): SecretKeySpec? = null

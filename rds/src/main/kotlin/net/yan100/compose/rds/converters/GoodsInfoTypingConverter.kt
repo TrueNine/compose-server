@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.converters.typing
+package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter

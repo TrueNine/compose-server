@@ -5,7 +5,7 @@ import jakarta.annotation.Resource
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
 import net.yan100.compose.core.encrypt.Encryptors
-import net.yan100.compose.core.encrypt.KeysRepository
+import net.yan100.compose.core.encrypt.IKeysRepository
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.stereotype.Component
 
@@ -17,7 +17,7 @@ class AesEncryptConverter : AttributeConverter<String, String> {
   }
 
   @Resource
-  private lateinit var keysRepo: KeysRepository
+  private lateinit var keysRepo: IKeysRepository
 
   override fun convertToDatabaseColumn(attribute: String?): String? =
     if (net.yan100.compose.core.lang.Str.hasText(attribute))

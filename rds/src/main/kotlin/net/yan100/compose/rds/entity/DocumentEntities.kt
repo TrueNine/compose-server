@@ -7,8 +7,9 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.annotations.Strategy
+import net.yan100.compose.core.models.IIdcard2
 import net.yan100.compose.rds.base.BaseEntity
-import net.yan100.compose.rds.converters.typing.GenderTypingConverter
+import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -21,7 +22,7 @@ import java.time.LocalDateTime
 @DynamicUpdate
 @Schema(title = "第二代身份证")
 @Table(name = Idcard2.TABLE_NAME)
-open class Idcard2 : BaseEntity() {
+open class Idcard2 : IIdcard2, BaseEntity() {
   companion object {
     const val TABLE_NAME = "idcard_2"
     const val NAME = "name"
@@ -74,6 +75,10 @@ open class Idcard2 : BaseEntity() {
   @Schema(title = "外联 用户（所属用户）")
   @Column(name = USER_ID)
   open var userId: String? = null
+
+  override fun idcardCode(): String {
+    return this.code!!
+  }
 }
 
 

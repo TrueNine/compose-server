@@ -8,7 +8,7 @@ class FileKeysRepository(
   eccKeyPairPaths: Pair<String, String> = "ecc_public.key" to "ecc_private.key",
   rsaKeyPairPaths: Pair<String, String> = "rsa_public.key" to "rsa_private.key",
   aesPaths: String = "aes.key"
-) : KeysRepository {
+) : IKeysRepository {
   private val log = slf4j(this::class)
   private var rsaKeyPair: RsaKeyPair? = null
   private var eccKeyPair: EccKeyPair? = null

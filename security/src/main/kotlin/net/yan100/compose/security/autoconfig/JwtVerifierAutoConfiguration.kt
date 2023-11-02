@@ -1,7 +1,7 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.encrypt.KeysRepository
+import net.yan100.compose.core.encrypt.IKeysRepository
 import net.yan100.compose.security.jwt.JwtIssuer
 import net.yan100.compose.security.jwt.JwtVerifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(net.yan100.compose.security.properties.JwtProperties::class)
 class JwtVerifierAutoConfiguration(
   private val jp: net.yan100.compose.security.properties.JwtProperties,
-  private val kr: KeysRepository
+  private val kr: IKeysRepository
 ) {
   @Bean
   @ConditionalOnMissingBean(value = [JwtVerifier::class, JwtIssuer::class])

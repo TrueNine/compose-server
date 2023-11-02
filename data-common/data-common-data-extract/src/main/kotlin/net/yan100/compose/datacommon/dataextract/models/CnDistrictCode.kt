@@ -1,18 +1,27 @@
 package net.yan100.compose.datacommon.dataextract.models
 
-
-class CnDistrictCode(code: String?) {
+/**
+ * # 中国行政区编码
+ * 12 省
+ * 34 市
+ * 56 区县
+ * 789 乡镇
+ * 10,11,12 村庄
+ */
+class CnDistrictCode(code: String = "") {
   companion object {
     const val zero = "00"
     const val threeZero = "000"
   }
 
-  var code: String? = null
-  var provinceCode: String? = null
-  var cityCode: String? = null
-  var countyCode: String? = null
-  var townCode: String? = null
-  var villageCode: String? = null
+  var code: String
+  var provinceCode: String
+  var cityCode: String
+  var countyCode: String
+  var townCode: String
+  var villageCode: String
+  var empty: Boolean = false
+
 
   val level: Int
     get() {
@@ -27,16 +36,18 @@ class CnDistrictCode(code: String?) {
 
   init {
     checkNotNull(code) { "传入的 code 不能为空" }
-    val internalCode = code.toLongOrNull()
-    if (internalCode in 100000000000L..1000000000000L) {
-      this.code = code
-      provinceCode = code.substring(0, 2)
-      cityCode = code.substring(2, 4)
-      countyCode = code.substring(4, 6)
-      townCode = code.substring(6, 9)
-      villageCode = code.substring(9, 12)
-    } else {
-      throw IllegalArgumentException("行政区编码不满足 12 数值 要求：code = $code")
+    val padCode = code.let {
+      when (it.length) {
+        1, 3, 5, 7, 8, 10, 11 -> throw IllegalArgumentException("行政区编码格式缺失")
+        else -> it.padEnd(12, '0')
+      }
     }
+    this.empty = padCode.startsWith(threeZero)
+    this.code = padCode
+    provinceCode = padCode.substring(0, 2)
+    cityCode = padCode.substring(2, 4)
+    countyCode = padCode.substring(4, 6)
+    townCode = padCode.substring(6, 9)
+    villageCode = padCode.substring(9, 12)
   }
 }

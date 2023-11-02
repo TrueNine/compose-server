@@ -6,4 +6,5 @@ public interface Protocols {
   String WS = "ws";
   String WSS = "wss";
   String FILE = "file";
+  String FTP = "ftp";
 }

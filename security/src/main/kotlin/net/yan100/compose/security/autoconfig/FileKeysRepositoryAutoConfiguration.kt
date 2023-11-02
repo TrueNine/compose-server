@@ -2,7 +2,7 @@ package net.yan100.compose.security.autoconfig
 
 
 import net.yan100.compose.core.encrypt.FileKeysRepository
-import net.yan100.compose.core.encrypt.KeysRepository
+import net.yan100.compose.core.encrypt.IKeysRepository
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,7 +14,7 @@ class FileKeysRepositoryAutoConfiguration(
   private val log = slf4j(this::class)
 
   @Bean
-  fun fileKeysRepository(): KeysRepository {
+  fun fileKeysRepository(): IKeysRepository {
     log.trace("注册文件密钥 = {}", kp)
     val fp = FileKeysRepository(
       keyDest = kp.dir,

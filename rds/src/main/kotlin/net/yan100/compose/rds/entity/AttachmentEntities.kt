@@ -8,7 +8,7 @@ import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
 import jakarta.persistence.criteria.Predicate
 import net.yan100.compose.rds.base.BaseEntity
-import net.yan100.compose.rds.converters.typing.AttachmentTypingConverter
+import net.yan100.compose.rds.converters.AttachmentTypingConverter
 import net.yan100.compose.rds.typing.AttachmentTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * @author TrueNine
  * @since 2022-12-11
  */
-public interface BaseChooseService<T> {
+public interface ChooseService<T> {
   /**
    * 查找第一个符合判断条件的类型
    *
@@ -22,7 +22,7 @@ public interface BaseChooseService<T> {
    * @return 实现
    */
   @SuppressWarnings("unchecked")
-  default @Nullable <R> R findFirst(List<? extends BaseChooseService<T>> chooses, T type) {
+  default @Nullable <R> R findFirst(List<? extends ChooseService<T>> chooses, T type) {
     return (R) chooses.stream().filter(ele -> ele.choose(type)).findFirst().orElse(null);
   }
 
@@ -35,7 +35,7 @@ public interface BaseChooseService<T> {
    * @return 选中的一组服务
    */
   @SuppressWarnings("unchecked")
-  default @Nullable <R> List<R> findAll(List<? extends BaseChooseService<T>> chooses, T type) {
+  default @Nullable <R> List<R> findAll(List<? extends ChooseService<T>> chooses, T type) {
     return chooses.stream().filter(ele -> ele.choose(type)).map(r -> (R) r).collect(Collectors.toList());
   }
 

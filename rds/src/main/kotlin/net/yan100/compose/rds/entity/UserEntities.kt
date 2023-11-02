@@ -16,7 +16,7 @@ import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.converters.AesEncryptConverter
-import net.yan100.compose.rds.converters.typing.GenderTypingConverter
+import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert

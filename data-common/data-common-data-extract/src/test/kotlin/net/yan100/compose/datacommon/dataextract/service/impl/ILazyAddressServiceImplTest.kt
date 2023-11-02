@@ -12,10 +12,10 @@ import kotlin.test.assertTrue
 
 
 @SpringBootTest(classes = [DataExtractEntrance::class])
-class LazyAddressServiceImplTest {
+class ILazyAddressServiceImplTest {
 
   @Autowired
-  lateinit var lazys: LazyAddressServiceImpl
+  lateinit var lazys: ILazyAddressServiceImpl
 
 
   private val testCode = "433127103101"

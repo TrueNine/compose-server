@@ -2,7 +2,6 @@ package net.yan100.compose.datacommon.dataextract.models
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
 class CnDistrictCodeTest {
@@ -11,15 +10,5 @@ class CnDistrictCodeTest {
     val ab = CnDistrictCode("433127000000")
     assertNotNull(ab)
     assertEquals(ab.level, 3)
-
-    assertFailsWith<IllegalArgumentException> {
-      CnDistrictCode("43312700000")
-    }
-    assertFailsWith<IllegalArgumentException> {
-      CnDistrictCode("4331270000001")
-    }
-    assertFailsWith<IllegalStateException> {
-      CnDistrictCode(null)
-    }
   }
 }

@@ -4,14 +4,14 @@ package net.yan100.compose.datacommon.dataextract.service.impl
 import net.yan100.compose.datacommon.dataextract.api.CnNbsAddressApi
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictCode
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp
-import net.yan100.compose.datacommon.dataextract.service.LazyAddressService
+import net.yan100.compose.datacommon.dataextract.service.ILazyAddressService
 import org.jsoup.Jsoup
 import org.springframework.stereotype.Service
 
 @Service
-class LazyAddressServiceImpl(
+class ILazyAddressServiceImpl(
   private val call: CnNbsAddressApi
-) : LazyAddressService {
+) : ILazyAddressService {
   override fun findAllProvinces(): List<CnDistrictResp> {
     return extractProvinces(call.homePage().body)
   }
@@ -19,16 +19,16 @@ class LazyAddressServiceImpl(
   private fun wrapperModel(code: String, name: String, leaf: Boolean) = CnDistrictResp()
     .apply {
       this.leaf = leaf
+      this.name = name
       codeModel = CnDistrictCode(code)
       level = codeModel?.level
-      this.name = name
     }
 
   private fun getModel(code: String): CnDistrictCode =
     CnDistrictCode(code)
 
-  private fun extractProvinces(page: String?): List<CnDistrictResp> =
-    page?.let {
+  private fun extractProvinces(page: String?): List<CnDistrictResp> {
+    return page?.let {
       Jsoup.parse(it).body().selectXpath("//tr[@class='provincetr']/td/a")
         .map { link ->
           val code = link.attr("href").replace(".html", "0000000000")
@@ -36,10 +36,12 @@ class LazyAddressServiceImpl(
           wrapperModel(code, name, false)
         }
     } ?: listOf()
+  }
 
 
-  override fun findAllCityByCode(districtCode: String): List<CnDistrictResp> =
-    extractPlainItem("citytr", call.getCityPage(getModel(districtCode).provinceCode!!).body) ?: listOf()
+  override fun findAllCityByCode(districtCode: String): List<CnDistrictResp> {
+    return extractPlainItem("citytr", call.getCityPage(getModel(districtCode).provinceCode!!).body) ?: listOf()
+  }
 
 
   override fun findAllCountyByCode(districtCode: String): List<CnDistrictResp> {
@@ -57,9 +59,9 @@ class LazyAddressServiceImpl(
     return extractPlainItem(
       "towntr",
       call.getTownPage(
-        model.provinceCode!!,
-        model.cityCode!!,
-        model.countyCode!!
+        model.provinceCode,
+        model.cityCode,
+        model.countyCode
       ).body
     ) ?: listOf()
   }
@@ -97,4 +99,6 @@ class LazyAddressServiceImpl(
         wrapperModel(code, name, leaf)
       }
   }
+
+
 }
