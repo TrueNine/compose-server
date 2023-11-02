@@ -20,12 +20,14 @@ class ILazyAddressServiceImpl(
     .apply {
       this.leaf = leaf
       this.name = name
-      codeModel = CnDistrictCode(code)
-      level = codeModel?.level
+      this.code = CnDistrictCode(code)
+      this.yearVersion = CnNbsAddressApi.DEFAULT_VERSION
+      level = this.code.level
     }
 
-  private fun getModel(code: String): CnDistrictCode =
-    CnDistrictCode(code)
+  private fun getModel(code: String): CnDistrictCode {
+    return CnDistrictCode(code)
+  }
 
   private fun extractProvinces(page: String?): List<CnDistrictResp> {
     return page?.let {
@@ -40,7 +42,7 @@ class ILazyAddressServiceImpl(
 
 
   override fun findAllCityByCode(districtCode: String): List<CnDistrictResp> {
-    return extractPlainItem("citytr", call.getCityPage(getModel(districtCode).provinceCode!!).body) ?: listOf()
+    return extractPlainItem("citytr", call.getCityPage(getModel(districtCode).provinceCode).body) ?: listOf()
   }
 
 
@@ -48,8 +50,8 @@ class ILazyAddressServiceImpl(
     val model = getModel(districtCode)
     return extractPlainItem(
       "countytr", call.getCountyPage(
-        model.provinceCode!!,
-        model.cityCode!!
+        model.provinceCode,
+        model.cityCode
       ).body
     ) ?: listOf()
   }
@@ -70,10 +72,10 @@ class ILazyAddressServiceImpl(
     val model = getModel(districtCode)
     return extractVillages(
       call.getVillagePage(
-        model.provinceCode!!,
-        model.cityCode!!,
-        model.countyCode!!,
-        model.townCode!!
+        model.provinceCode,
+        model.cityCode,
+        model.countyCode,
+        model.townCode
       ).body
     ) ?: listOf()
   }

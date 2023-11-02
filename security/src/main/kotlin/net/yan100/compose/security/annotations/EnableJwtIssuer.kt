@@ -1,11 +1,9 @@
-package net.yan100.compose.security.annotations;
+package net.yan100.compose.security.annotations
 
+import net.yan100.compose.security.autoconfig.JwtIssuerAutoConfiguration
+import org.springframework.context.annotation.Import
+import java.lang.annotation.Inherited
 
-import net.yan100.compose.security.autoconfig.FileKeysRepositoryAutoConfiguration;
-import net.yan100.compose.security.autoconfig.JwtIssuerAutoConfiguration;
-import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
 
 /**
  * 启动 jwt 验证客户端
@@ -13,13 +11,9 @@ import java.lang.annotation.*;
  * @author TrueNine
  * @since 2022-12-14
  */
-@Import({
-  JwtIssuerAutoConfiguration.class,
-  FileKeysRepositoryAutoConfiguration.class
-})
+@Import(JwtIssuerAutoConfiguration::class)
 @Inherited
-@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EnableJwtIssuer {
-}
+@MustBeDocumented
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class EnableJwtIssuer

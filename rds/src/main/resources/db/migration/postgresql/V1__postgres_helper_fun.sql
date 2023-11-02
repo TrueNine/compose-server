@@ -1,6 +1,10 @@
 -- 设置时区为 +8:00
 set time zone interval '+8:00';
 
+-- 创建 bitint 到 string 的隐式转换
+create cast (character varying as bigint) with inout as implicit;
+create cast (bigint as character varying) with inout as implicit;
+
 -- 预排序树结构
 create or replace function add_presort_tree_struct(tab_name varchar(128))
   returns void as

@@ -12,6 +12,31 @@ interface ILazyAddressService {
   fun findAllTownByCode(districtCode: String): List<CnDistrictResp>
   fun findAllVillageByCode(districtCode: String): List<CnDistrictResp>
 
+  fun <T> lookupAllChildrenByCode(
+    code: String,
+    findCondition: (code: String, level: Int) -> Pair<Boolean, List<T>>,
+    sortedSave: (level: Int, parentCode: String, result: List<CnDistrictResp>) -> List<T>
+  ): List<T> {
+    val requirementCodes = mutableListOf(CnDistrictCode(code))
+    val requestQueue = mutableListOf(CnDistrictCode(code))
+    var result = listOf<T>()
+    while (requirementCodes.isNotEmpty()) {
+      val requireRequest = requirementCodes.removeAt(0)
+      val findFn = findCondition(requireRequest.code, requireRequest.level)
+      if (findFn.first) result = findFn.second
+      else {
+        requirementCodes += CnDistrictCode((requireRequest.back() ?: continue).code)
+        requestQueue += CnDistrictCode((requireRequest.back() ?: continue).code)
+      }
+    }
+    requestQueue.reversed().forEach {
+      val responses = findAllChildrenByCode(code = it.code, level = it.level)
+      result = if (responses.isNotEmpty()) sortedSave(it.level + 1, it.code, responses) else listOf()
+    }
+    return result
+  }
+
+
   fun findAllChildrenByCode(code: String, level: Int): List<CnDistrictResp> {
     return if (level in 0..4) {
       try {
@@ -26,7 +51,7 @@ interface ILazyAddressService {
       } catch (e: RemoteCallException) {
         listOf()
       }
-    } else throw IllegalArgumentException("地址参数 必须在 1 到 4 之间")
+    } else listOf()
   }
 
   /**
@@ -43,9 +68,7 @@ interface ILazyAddressService {
    * 否则会调用 postProcessor 函数，入参为预取的地址数据
    */
   fun <T> lazyFindAllChildrenByCode(
-    code: String,
-    preHandle: () -> Pair<Boolean, List<T>>,
-    postProcessor: (List<CnDistrictResp>) -> List<T>
+    code: String, preHandle: () -> Pair<Boolean, List<T>>, postProcessor: (List<CnDistrictResp>) -> List<T>
   ): List<T> {
     val preFindList = preHandle()
     return if (preFindList.first) preFindList.second

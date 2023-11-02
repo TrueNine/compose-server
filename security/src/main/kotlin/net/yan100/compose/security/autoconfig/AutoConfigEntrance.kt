@@ -1,7 +1,8 @@
 package net.yan100.compose.security.autoconfig
 
+import net.yan100.compose.security.properties.JwtProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.ComponentScan
 
 /**
  * 自动配置入口
@@ -9,11 +10,6 @@ import org.springframework.context.annotation.Import
  * @author TrueNine
  * @since 2022-10-28
  */
-@EnableConfigurationProperties(net.yan100.compose.security.properties.JwtProperties::class)
-@Import(
-  net.yan100.compose.security.autoconfig.DisableSecurityPolicyBean::class,
-  CaptchaAutoConfiguration::class,
-  CorsConfiguration::class
-)
+@EnableConfigurationProperties(JwtProperties::class)
+@ComponentScan("net.yan100.compose.security.autoconfig")
 class AutoConfigEntrance
-

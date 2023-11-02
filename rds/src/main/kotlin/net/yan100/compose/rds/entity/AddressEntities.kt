@@ -186,6 +186,16 @@ open class FullAddressDetails : SuperAddressDetails() {
 
 @MappedSuperclass
 open class SuperAddress : TreeEntity() {
+  companion object {
+    const val LEAF = "leaf"
+    const val TABLE_NAME = "address"
+    const val CODE = "code"
+    const val NAME = "name"
+    const val YEAR_VERSION = "year_version"
+    const val LEVEL = "level"
+    const val CENTER = "center"
+  }
+
   /**
    * 代码
    */
@@ -211,6 +221,13 @@ open class SuperAddress : TreeEntity() {
   open var level: Int? = null
 
   /**
+   * 年份版本号
+   */
+  @Schema(name = "年份版本号")
+  @Column(name = YEAR_VERSION)
+  open var yearVersion: Int? = null
+
+  /**
    * 定位
    */
   @Nullable
@@ -226,14 +243,7 @@ open class SuperAddress : TreeEntity() {
   @Column(name = LEAF)
   open var leaf: Boolean = false
 
-  companion object {
-    const val LEAF = "leaf"
-    const val TABLE_NAME = "address"
-    const val CODE = "code"
-    const val NAME = "name"
-    const val LEVEL = "level"
-    const val CENTER = "center"
-  }
+
 }
 
 /**

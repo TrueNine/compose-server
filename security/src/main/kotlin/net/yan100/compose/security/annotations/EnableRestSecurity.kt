@@ -1,6 +1,5 @@
 package net.yan100.compose.security.annotations
 
-import net.yan100.compose.security.autoconfig.FileKeysRepositoryAutoConfiguration
 import net.yan100.compose.security.autoconfig.SecurityPolicyBean
 import org.springframework.context.annotation.Import
 import java.lang.annotation.Inherited
@@ -15,9 +14,7 @@ import java.lang.annotation.Inherited
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-@Import(
-  SecurityPolicyBean::class, FileKeysRepositoryAutoConfiguration::class
-)
+@Import(SecurityPolicyBean::class)
 annotation class EnableRestSecurity(
   /**
    * @return 需要放行的匹配规则

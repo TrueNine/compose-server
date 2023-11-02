@@ -49,11 +49,12 @@ create index on attachment (mime_type);
 
 create table if not exists address
 (
-  code   varchar(255) null,
-  name   varchar(127) null, -- 中国最长的地名是新疆维吾尔自治区昌吉回族自治州木垒哈萨克自治县大南沟乌孜别克族乡
-  level  integer default 0,
-  center varchar(255) null,
-  leaf   boolean default false,
+  code         varchar(255) null,
+  name         varchar(127) null, -- 中国最长的地名是新疆维吾尔自治区昌吉回族自治州木垒哈萨克自治县大南沟乌孜别克族乡
+  year_version varchar(15) null,
+  level        integer default 0,
+  center       varchar(255) null,
+  leaf         boolean default false,
   unique (code)
 );
 comment on table address is '行政区代码';

@@ -1,14 +1,12 @@
-package net.yan100.compose.security;
+package net.yan100.compose.security
 
-import lombok.extern.slf4j.Slf4j;
-import net.yan100.compose.core.lang.Str;
-import net.yan100.compose.core.models.AuthUserInfo;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import lombok.extern.slf4j.Slf4j
+import net.yan100.compose.core.lang.hasText
+import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.models.AuthUserInfo
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 
 /**
  * UserDetailsWrapper 包装类
@@ -17,52 +15,51 @@ import java.util.Collection;
  * @since 2022-12-10
  */
 @Slf4j
-public record UserDetailsWrapper(AuthUserInfo authUserInfo) implements UserDetails {
-
-  public UserDetailsWrapper {
-    log.trace("构建 = {}", authUserInfo);
+@JvmRecord
+data class UserDetailsWrapper(val authUserInfo: AuthUserInfo?) : UserDetails {
+  init {
+    log.trace("构建 = {}", authUserInfo)
   }
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    var auths = new ArrayList<GrantedAuthority>();
-   // 添加角色信息
-    this.authUserInfo.getRoles().stream().filter(Str::hasText).forEach(r -> auths.add(new SimpleGrantedAuthority("ROLE_" + r)));
-    // 添加权限信息
-    this.authUserInfo.getPermissions().stream().filter(Str::hasText).forEach(p -> auths.add(new SimpleGrantedAuthority(p)));
-    // 添加 部门信息 到鉴权列表
-    this.authUserInfo.getDepts().stream().filter(Str::hasText).map(r -> "DEPT_" + r).forEach(r -> auths.add(new SimpleGrantedAuthority(r)));
-
-    return auths;
+  companion object {
+    @JvmStatic
+    private val log = slf4j(UserDetailsWrapper::class)
   }
 
-  @Override
-  public String getPassword() {
-    return authUserInfo.getEncryptedPassword();
+  override fun getAuthorities(): Collection<GrantedAuthority> {
+    return mutableListOf<GrantedAuthority>().also { auths ->
+      // 添加角色信息
+      authUserInfo?.roles?.filter { text -> text.hasText() }?.forEach { r ->
+        auths += SimpleGrantedAuthority("ROLE_$r")
+        // 添加权限信息
+        authUserInfo.permissions.filter { text -> text.hasText() }.forEach { p -> auths += SimpleGrantedAuthority(p) }
+        // 添加 部门信息 到鉴权列表
+        authUserInfo.depts.filter { text -> text.hasText() }.map { mr -> "DEPT_$mr" }.forEach { mr -> auths += SimpleGrantedAuthority(mr) }
+      }
+    }
   }
 
-  @Override
-  public String getUsername() {
-    return authUserInfo.getAccount();
+  override fun getPassword(): String {
+    return authUserInfo?.encryptedPassword!!
   }
 
-  @Override
-  public boolean isAccountNonExpired() {
-    return authUserInfo.getNonExpired();
+  override fun getUsername(): String {
+    return authUserInfo?.account!!
   }
 
-  @Override
-  public boolean isAccountNonLocked() {
-    return authUserInfo.getNonLocked();
+  override fun isAccountNonExpired(): Boolean {
+    return authUserInfo?.nonExpired ?: true
   }
 
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return authUserInfo.getNonExpired();
+  override fun isAccountNonLocked(): Boolean {
+    return authUserInfo?.nonLocked ?: true
   }
 
-  @Override
-  public boolean isEnabled() {
-    return authUserInfo.getEnabled();
+  override fun isCredentialsNonExpired(): Boolean {
+    return authUserInfo?.nonExpired ?: true
+  }
+
+  override fun isEnabled(): Boolean {
+    return authUserInfo?.enabled ?: true
   }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @SpringBootTest(classes = [DataExtractEntrance::class])
 class ILazyAddressServiceTest {
@@ -21,5 +22,13 @@ class ILazyAddressServiceTest {
     assertFailsWith<IllegalArgumentException> { lazys.findAllChildrenByCode("433") }
     val b = lazys.findAllChildrenByCode("")
     println(b)
+  }
+
+  @Test
+  fun `test lookupAllChildrenByCode`() {
+    val a = lazys.lookupAllChildrenByCode("433127103", findCondition = { i, j -> false to listOf() }) { _, _, k -> k }
+    assertTrue(a.isNotEmpty())
+    val b = lazys.lookupAllChildrenByCode("433127103221", findCondition = { i, j -> false to listOf() }) { _, _, k -> k }
+    assertFalse(b.isNotEmpty())
   }
 }

@@ -14,12 +14,9 @@ interface AddressRepo : TreeRepository<Address> {
 
   fun findAllByCodeIn(codes: List<String>): List<Address>
 
-  @Query(
-    """
-    FROM Address e
-    WHERE e.id = '0'
-  """
-  )
+
+
+  @Query("from Address e where e.id = '0'")
   fun findRoot(): Address
 
   fun findAllByCode(code: String): List<Address>

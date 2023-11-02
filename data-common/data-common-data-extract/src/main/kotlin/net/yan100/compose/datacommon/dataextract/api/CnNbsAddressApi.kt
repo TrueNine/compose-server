@@ -8,7 +8,7 @@ import org.springframework.web.service.annotation.HttpExchange
 @HttpExchange("http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm")
 interface CnNbsAddressApi {
   companion object {
-    const val DEFAULT_VERSION = "2022"
+    const val DEFAULT_VERSION = "2023"
   }
 
   @GetExchange(url = "{year}/index.html")

@@ -50,4 +50,16 @@ class CnDistrictCode(code: String = "") {
     townCode = padCode.substring(6, 9)
     villageCode = padCode.substring(9, 12)
   }
+
+  fun back(): CnDistrictCode? {
+    return when (level) {
+      0 -> null
+      1 -> null
+      2 -> CnDistrictCode(provinceCode)
+      3 -> CnDistrictCode(provinceCode + cityCode)
+      4 -> CnDistrictCode(provinceCode + cityCode + countyCode)
+      5 -> CnDistrictCode(provinceCode + cityCode + countyCode + townCode)
+      else -> null
+    }
+  }
 }

@@ -9,7 +9,13 @@ class FileKeysRepository(
   rsaKeyPairPaths: Pair<String, String> = "rsa_public.key" to "rsa_private.key",
   aesPaths: String = "aes.key"
 ) : IKeysRepository {
-  private val log = slf4j(this::class)
+
+  companion object {
+    @JvmStatic
+    private val log = slf4j(FileKeysRepository::class)
+  }
+
+
   private var rsaKeyPair: RsaKeyPair? = null
   private var eccKeyPair: EccKeyPair? = null
   private var aesKey: SecretKeySpec? = null
@@ -32,11 +38,9 @@ class FileKeysRepository(
     return this.aesKey
   }
 
-
   private fun read(name: String): String {
     val text = javaClass.classLoader.getResource("${this.keyDest}/$name")!!.readText()
     log.trace("text = {}", text)
     return text
   }
-
 }

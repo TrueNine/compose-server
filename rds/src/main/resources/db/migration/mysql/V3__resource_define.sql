@@ -47,11 +47,12 @@ call add_base_struct('attachment');
 
 create table if not exists address
 (
-  code   varchar(255) comment '代码',
-  name   varchar(127) comment '名称', # 中国最长的地名是新疆维吾尔自治区昌吉回族自治州木垒哈萨克自治县大南沟乌孜别克族乡
-  level  int     default 0 comment '级别 0 为国家',
-  center varchar(255) null comment '定位',
-  leaf   boolean default false comment '是否为终结地址（如市辖区）',
+  code         varchar(255) comment '代码',
+  name         varchar(127) comment '名称', # 中国最长的地名是新疆维吾尔自治区昌吉回族自治州木垒哈萨克自治县大南沟乌孜别克族乡
+  year_version varchar(15)  null comment '年份版本号',
+  level        int     default 0 comment '级别 0 为国家',
+  center       varchar(255) null comment '定位',
+  leaf         boolean default false comment '是否为终结地址（如市辖区）',
   unique (code) comment '行政区代码唯一',
   index (name) comment '名称经常检索'
 ) default charset = utf8mb4,comment '行政区代码';

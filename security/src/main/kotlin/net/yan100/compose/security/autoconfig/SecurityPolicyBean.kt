@@ -27,7 +27,9 @@ import org.springframework.web.cors.CorsConfiguration
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@ConditionalOnBean(SecurityPolicyDefine::class)
 class SecurityPolicyBean {
+
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
@@ -52,14 +54,15 @@ class SecurityPolicyBean {
     applicationContext: ApplicationContext
   ): SecurityFilterChain {
     val enableAnnotation = getAnno(applicationContext)
-    require(enableAnnotation != null) { "无法正常获取到注解 ${EnableRestSecurity::class}" }
+    if (enableAnnotation == null) log.warn("未配置 安全注解 注解")
+    val mergedConfigAnnotation = enableAnnotation ?: EnableRestSecurity()
+
     val allowPatterns = policyDefine.anonymousPatterns
+    allowPatterns += listOf(*mergedConfigAnnotation.loginUrl)
+    allowPatterns += listOf(*mergedConfigAnnotation.allowPatterns)
 
-    allowPatterns += listOf(*enableAnnotation.loginUrl)
-    allowPatterns += listOf(*enableAnnotation.allowPatterns)
-
-    if (enableAnnotation.allowSwagger) allowPatterns += policyDefine.swaggerPatterns
-    if (enableAnnotation.allowWebJars) allowPatterns += "/webjars/**"
+    if (mergedConfigAnnotation.allowSwagger) allowPatterns += policyDefine.swaggerPatterns
+    if (mergedConfigAnnotation.allowWebJars) allowPatterns += "/webjars/**"
 
     if (policyDefine.preValidFilter != null) {
       httpSecurity.addFilterBefore(
@@ -81,8 +84,8 @@ class SecurityPolicyBean {
     httpSecurity.authorizeHttpRequests {
       it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
 
-      log.debug("任意请求是否无需认证 = {}", enableAnnotation.anyRequestAuthed)
-      if (enableAnnotation.anyRequestAuthed) it.anyRequest().authenticated()
+      log.debug("任意请求是否无需认证 = {}", mergedConfigAnnotation.anyRequestAuthed)
+      if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().authenticated()
       else it.anyRequest().permitAll()
     }
     httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
@@ -120,7 +123,7 @@ class SecurityPolicyBean {
         .getBeansWithAnnotation(EnableRestSecurity::class.java)
         .map { it.value }
         .map { it.javaClass.getAnnotation(EnableRestSecurity::class.java) }
-        .first()
+        .firstOrNull()
     }
   }
 }
