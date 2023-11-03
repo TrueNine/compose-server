@@ -6,32 +6,77 @@ import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp
 
 @JvmDefaultWithCompatibility
 interface ILazyAddressService {
+
+
   fun findAllProvinces(): List<CnDistrictResp>
   fun findAllCityByCode(districtCode: String): List<CnDistrictResp>
   fun findAllCountyByCode(districtCode: String): List<CnDistrictResp>
   fun findAllTownByCode(districtCode: String): List<CnDistrictResp>
   fun findAllVillageByCode(districtCode: String): List<CnDistrictResp>
 
+
+  interface ILookupAllChildrenByCodeFindConditionParam {
+    val code: String
+    val level: Int
+  }
+
+  interface ILookupAllChildrenByCodeSortedSaveParam {
+    val parentCode: String
+    val deepLevel: Int
+    val notInit: Boolean
+    val result: List<CnDistrictResp>
+  }
+
+  /**
+   * ## 预取地址数据
+   * @param code 地址代码
+   * @param firstFind 首次查找函数
+   * @param deepCondition 逐级向上查找，报告条件
+   * @param notFound 在逐级向上到最顶层，以及在调用接口没有数据时，调用此函数
+   * @param sortedSave 当拥有需要的上级数据时，进行调用
+   * @return 自定义返回的列表
+   */
   fun <T> lookupAllChildrenByCode(
     code: String,
-    findCondition: (code: String, level: Int) -> Pair<Boolean, List<T>>,
-    sortedSave: (level: Int, parentCode: String, result: List<CnDistrictResp>) -> List<T>
+    firstFind: (param: ILookupAllChildrenByCodeFindConditionParam) -> List<T>?,
+    deepCondition: (param: ILookupAllChildrenByCodeFindConditionParam) -> Boolean,
+    notFound: () -> Unit = {},
+    sortedSave: (param: ILookupAllChildrenByCodeSortedSaveParam) -> List<T>
   ): List<T> {
-    val requirementCodes = mutableListOf(CnDistrictCode(code))
-    val requestQueue = mutableListOf(CnDistrictCode(code))
+    val firstFindCode = CnDistrictCode(code)
+    val requirementCodes = mutableListOf(firstFindCode)
+    val preFind = firstFind(object : ILookupAllChildrenByCodeFindConditionParam {
+      override val code = firstFindCode.code
+      override val level = firstFindCode.level
+    })
+    if (!preFind.isNullOrEmpty()) return preFind
+    val requestQueue = mutableListOf(firstFindCode)
     var result = listOf<T>()
     while (requirementCodes.isNotEmpty()) {
-      val requireRequest = requirementCodes.removeAt(0)
-      val findFn = findCondition(requireRequest.code, requireRequest.level)
-      if (findFn.first) result = findFn.second
-      else {
-        requirementCodes += CnDistrictCode((requireRequest.back() ?: continue).code)
-        requestQueue += CnDistrictCode((requireRequest.back() ?: continue).code)
+      val requireRequest = requirementCodes.removeLastOrNull() ?: continue
+      val findFnResult = deepCondition(object : ILookupAllChildrenByCodeFindConditionParam {
+        override val code = requireRequest.code
+        override val level = requireRequest.level
+      })
+      if (!findFnResult) {
+        val back = requireRequest.back()
+        if (null != back) {
+          requirementCodes += CnDistrictCode(back.code)
+          requestQueue += CnDistrictCode(back.code)
+        } else notFound()
       }
     }
     requestQueue.reversed().forEach {
-      val responses = findAllChildrenByCode(code = it.code, level = it.level)
-      result = if (responses.isNotEmpty()) sortedSave(it.level + 1, it.code, responses) else listOf()
+      val responses = findAllChildrenByCode(code = it.code)
+      result = if (responses.isNotEmpty()) sortedSave(object : ILookupAllChildrenByCodeSortedSaveParam {
+        override val parentCode = it.code
+        override val deepLevel = it.level
+        override val result = responses
+        override val notInit = it.empty
+      }) else {
+        notFound()
+        listOf()
+      }
     }
     return result
   }

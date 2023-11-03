@@ -8,11 +8,3 @@ dependencies {
   implementation(libs.util.ikanalyzer)
   implementation(libs.util.smilemath)
 }
-
-tasks {
-  test {
-    useTestNG {
-      suiteXmlFiles.add(File("src/test/resources/testng.xml"))
-    }
-  }
-}

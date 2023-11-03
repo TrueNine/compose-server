@@ -35,7 +35,6 @@ class CnDistrictCode(code: String = "") {
     }
 
   init {
-    checkNotNull(code) { "传入的 code 不能为空" }
     val padCode = code.let {
       when (it.length) {
         1, 3, 5, 7, 8, 10, 11 -> throw IllegalArgumentException("行政区编码格式缺失")
@@ -53,8 +52,7 @@ class CnDistrictCode(code: String = "") {
 
   fun back(): CnDistrictCode? {
     return when (level) {
-      0 -> null
-      1 -> null
+      1 -> CnDistrictCode()
       2 -> CnDistrictCode(provinceCode)
       3 -> CnDistrictCode(provinceCode + cityCode)
       4 -> CnDistrictCode(provinceCode + cityCode + countyCode)

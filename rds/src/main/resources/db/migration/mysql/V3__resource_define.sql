@@ -59,7 +59,7 @@ create table if not exists address
 call add_base_struct('address');
 call add_presort_tree_struct('address');
 insert into address(id, level, code, name, rln, rrn, tgi, center)
-values (0, 0, null, '', 1, 2, 0, null);
+values (0, 0, '000000000000', '', 1, 2, 0, null);
 
 
 create table if not exists address_details

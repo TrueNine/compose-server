@@ -2,6 +2,8 @@
 set time zone interval '+8:00';
 
 -- 创建 bitint 到 string 的隐式转换
+drop cast if exists (character varying as bigint);
+drop cast if exists (bigint as character varying);
 create cast (character varying as bigint) with inout as implicit;
 create cast (bigint as character varying) with inout as implicit;
 

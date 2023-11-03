@@ -223,9 +223,10 @@ open class SuperAddress : TreeEntity() {
   /**
    * 年份版本号
    */
+  @Nullable
   @Schema(name = "年份版本号")
   @Column(name = YEAR_VERSION)
-  open var yearVersion: Int? = null
+  open var yearVersion: String? = null
 
   /**
    * 定位

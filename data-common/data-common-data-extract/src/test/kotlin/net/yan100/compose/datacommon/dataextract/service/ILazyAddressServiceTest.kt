@@ -26,9 +26,12 @@ class ILazyAddressServiceTest {
 
   @Test
   fun `test lookupAllChildrenByCode`() {
-    val a = lazys.lookupAllChildrenByCode("433127103", findCondition = { i, j -> false to listOf() }) { _, _, k -> k }
+    val a = lazys.lookupAllChildrenByCode("433127103", firstFind = { null }, deepCondition = { false }) { it.result }
     assertTrue(a.isNotEmpty())
-    val b = lazys.lookupAllChildrenByCode("433127103221", findCondition = { i, j -> false to listOf() }) { _, _, k -> k }
+    val b = lazys.lookupAllChildrenByCode("433127103221", firstFind = { null }, deepCondition = { false })
+    {
+      it.result
+    }
     assertFalse(b.isNotEmpty())
   }
 }
