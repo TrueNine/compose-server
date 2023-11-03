@@ -149,7 +149,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 
 
 [versions]
-compose = "1.6.111"
+compose = "1.6.112"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
