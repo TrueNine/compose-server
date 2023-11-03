@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
-class IIdcard2Test {
+class IIdcard2CodeTest {
 
   @Test
-  fun idcardCode() {
+  fun getIdcard2Code() {
   }
 
   @Test
@@ -32,12 +32,12 @@ class IIdcard2Test {
 
   @Test
   fun of() {
-    IIdcard2.of("110101199001011234").let {
+    IIdcard2Code.of("110101199001011234").let {
       assertEquals("110101", it.idcardDistrictCode)
       assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
       assertEquals(true, it.idcardSex)
     }
-    IIdcard2.of("110101199001011204").let {
+    IIdcard2Code.of("110101199001011204").let {
       assertEquals("110101", it.idcardDistrictCode)
       assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
       assertEquals(false, it.idcardSex)
