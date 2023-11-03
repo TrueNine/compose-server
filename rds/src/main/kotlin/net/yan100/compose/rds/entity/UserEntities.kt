@@ -14,9 +14,9 @@ import jakarta.validation.constraints.NotNull
 import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.exceptions.KnownException
-import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.converters.AesEncryptConverter
 import net.yan100.compose.rds.converters.GenderTypingConverter
+import net.yan100.compose.rds.core.entity.BaseEntity
 import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
@@ -126,22 +126,11 @@ open class FullUser : SuperUser() {
   @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
   @ManyToMany(fetch = EAGER, targetEntity = RoleGroup::class)
   @JoinTable(
-    name = UserRoleGroup.TABLE_NAME,
-    joinColumns = [JoinColumn(
-      name = UserRoleGroup.USER_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )],
-    inverseJoinColumns = [JoinColumn(
-      name = UserRoleGroup.ROLE_GROUP_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )],
-    foreignKey = ForeignKey(NO_CONSTRAINT)
+    name = UserRoleGroup.TABLE_NAME, joinColumns = [JoinColumn(
+      name = UserRoleGroup.USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false
+    )], inverseJoinColumns = [JoinColumn(
+      name = UserRoleGroup.ROLE_GROUP_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false
+    )], foreignKey = ForeignKey(NO_CONSTRAINT)
   )
   @Fetch(SUBSELECT)
   @NotFound(action = IGNORE)
@@ -314,11 +303,7 @@ open class FullUserInfo : SuperUserInfo() {
    */
   @OneToOne(fetch = EAGER)
   @JoinColumn(
-    name = USER_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
+    name = USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false
   )
   @JsonBackReference
   @NotFound(action = IGNORE)
@@ -330,11 +315,7 @@ open class FullUserInfo : SuperUserInfo() {
   @Schema(title = "用户住址", requiredMode = NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
   @ManyToOne(fetch = EAGER)
   @JoinColumn(
-    name = ADDRESS_DETAILS_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
+    name = ADDRESS_DETAILS_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false
   )
   @NotFound(action = IGNORE)
   open var addressDetails: AddressDetails? = null
@@ -345,11 +326,7 @@ open class FullUserInfo : SuperUserInfo() {
   @Schema(title = "头像")
   @ManyToOne
   @JoinColumn(
-    name = AVATAR_IMG_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
+    name = AVATAR_IMG_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false
   )
   @NotFound(action = IGNORE)
   open var avatarImage: Attachment? = null

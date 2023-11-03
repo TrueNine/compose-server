@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.gen
 
 
-import net.yan100.compose.rds.base.BaseTableNames
+import net.yan100.compose.rds.core.consts.BaseTableNames
 import net.yan100.compose.rds.gen.converter.AbstractTypeConverter
 import net.yan100.compose.rds.gen.converter.MysqlConverter
 import net.yan100.compose.rds.gen.ctx.RenderContext

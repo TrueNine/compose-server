@@ -8,9 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import net.yan100.compose.rds.base.BaseEntity;
-import net.yan100.compose.rds.base.RecordModel;
 import net.yan100.compose.rds.converters.RecordModelConverter;
+import net.yan100.compose.rds.core.entity.BaseEntity;
+import net.yan100.compose.rds.core.models.DataRecord;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -62,5 +62,5 @@ public class TableRowDeleteRecord extends BaseEntity {
   @Convert(converter = RecordModelConverter.class)
   @Schema(title = "删除实体")
   @Column(name = ENTITY, columnDefinition = "VARCHAR(10240)")
-  private RecordModel entity;
+  private DataRecord entity;
 }

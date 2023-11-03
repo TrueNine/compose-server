@@ -1,17 +1,17 @@
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.rds.base.BaseServiceImpl
 import net.yan100.compose.rds.entity.AddressDetails
 import net.yan100.compose.rds.entity.FullAddressDetails
 import net.yan100.compose.rds.entity.NonDesensitizedAddressDetails
 import net.yan100.compose.rds.repository.address.AddressDetailsRepo
 import net.yan100.compose.rds.repository.address.AddressRepo
 import net.yan100.compose.rds.repository.address.FullAddressDetailsRepo
-import net.yan100.compose.rds.service.AddressDetailsService
-import net.yan100.compose.rds.util.Pq
-import net.yan100.compose.rds.util.Pr
-import net.yan100.compose.rds.util.page
-import net.yan100.compose.rds.util.result
+import net.yan100.compose.rds.service.IAddressDetailsService
+import net.yan100.compose.rds.service.base.CrudService
+import net.yan100.compose.rds.core.util.Pq
+import net.yan100.compose.rds.core.util.Pr
+import net.yan100.compose.rds.core.util.page
+import net.yan100.compose.rds.core.util.result
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -20,7 +20,7 @@ class AddressDetailsServiceImpl(
   private val aRepo: AddressRepo,
   private val detailsRepo: AddressDetailsRepo,
   private val fRepo: FullAddressDetailsRepo
-) : AddressDetailsService, BaseServiceImpl<AddressDetails>(detailsRepo) {
+) : IAddressDetailsService, CrudService<AddressDetails>(detailsRepo) {
   override fun findAllByUserId(userId: String, page: Pq): Pr<AddressDetails> {
     return detailsRepo.findAllByUserId(userId, page.page).result
   }

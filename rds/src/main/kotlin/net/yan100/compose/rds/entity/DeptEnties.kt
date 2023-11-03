@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import net.yan100.compose.rds.base.TreeEntity
+import net.yan100.compose.rds.core.entity.BaseEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
@@ -18,7 +18,7 @@ import org.hibernate.annotations.DynamicUpdate
 @DynamicUpdate
 @Schema(title = "用户  部门")
 @Table(name = UserDept.TABLE_NAME)
-open class UserDept : TreeEntity() {
+open class UserDept : BaseEntity() {
   @Schema(title = "用户id")
   @Column(name = USER_ID)
   open var userId: String? = null

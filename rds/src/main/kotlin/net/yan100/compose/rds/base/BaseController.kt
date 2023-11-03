@@ -3,15 +3,17 @@ package net.yan100.compose.rds.base
 
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
-import net.yan100.compose.rds.util.Pq
-import net.yan100.compose.rds.util.Pr
-import net.yan100.compose.rds.util.Pw
+import net.yan100.compose.rds.core.entity.BaseEntity
+import net.yan100.compose.rds.core.util.Pq
+import net.yan100.compose.rds.core.util.Pr
+import net.yan100.compose.rds.core.util.Pw
+import net.yan100.compose.rds.service.base.IService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @Validated
 abstract class BaseController<T : BaseEntity>(
-  protected val service: BaseService<T>
+  protected val service: IService<T>
 ) {
   @ResponseBody
   @GetMapping("meta/all")

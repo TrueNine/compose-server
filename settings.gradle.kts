@@ -32,6 +32,10 @@ findProject(":rds")?.name = "rds"
 include("rds:rds-gen")
 findProject(":rds:rds-gen")?.name = "rds-gen"
 
+include("rds:rds-core")
+findProject(":rds:rds-core")?.name = "rds-core"
+
+
 include("data-common")
 findProject(":data-common")?.name = "data-common"
 

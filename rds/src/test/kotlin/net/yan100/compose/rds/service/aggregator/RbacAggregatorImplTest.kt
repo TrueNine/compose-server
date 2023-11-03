@@ -6,10 +6,10 @@ import net.yan100.compose.rds.entity.Role
 import net.yan100.compose.rds.entity.RoleGroup
 import net.yan100.compose.rds.repository.AllRoleEntityRepository
 import net.yan100.compose.rds.repository.FullRoleGroupEntityRepo
-import net.yan100.compose.rds.service.PermissionsService
-import net.yan100.compose.rds.service.RoleGroupService
-import net.yan100.compose.rds.service.RoleService
-import net.yan100.compose.rds.service.UserService
+import net.yan100.compose.rds.service.IPermissionsService
+import net.yan100.compose.rds.service.IRoleGroupService
+import net.yan100.compose.rds.service.IRoleService
+import net.yan100.compose.rds.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
@@ -24,17 +24,17 @@ class RbacAggregatorImplTest {
   lateinit var aggregator: RbacAggregator
 
   @Autowired
-  lateinit var userService: UserService
+  lateinit var userService: IUserService
 
 
   @Autowired
-  lateinit var roleService: RoleService
+  lateinit var roleService: IRoleService
 
   @Autowired
-  lateinit var rgService: RoleGroupService
+  lateinit var rgService: IRoleGroupService
 
   @Autowired
-  lateinit var permissionsService: PermissionsService
+  lateinit var permissionsService: IPermissionsService
 
   @Autowired
   lateinit var snowflake: Snowflake

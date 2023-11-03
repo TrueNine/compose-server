@@ -2,6 +2,7 @@ version = libs.versions.compose.asProvider().get()
 
 dependencies {
   api(libs.bundles.spring.jpa)
+  api(project(":rds:rds-core"))
 
   testImplementation(libs.bundles.p6spySpring)
 

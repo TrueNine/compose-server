@@ -1,13 +1,13 @@
 package net.yan100.compose.rds.repository
 
-import net.yan100.compose.rds.base.BaseRepository
 import net.yan100.compose.rds.entity.FullRole
 import net.yan100.compose.rds.entity.Role
+import net.yan100.compose.rds.repository.base.IRepo
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RoleRepository : BaseRepository<Role> {
+interface RoleRepository : IRepo<Role> {
   fun findAllByName(name: String): List<Role>
 
   @Query(
@@ -22,7 +22,7 @@ interface RoleRepository : BaseRepository<Role> {
 }
 
 @Repository
-interface AllRoleEntityRepository : BaseRepository<FullRole> {
+interface AllRoleEntityRepository : IRepo<FullRole> {
   fun findAllByName(name: String): List<FullRole>
 
   @Query(

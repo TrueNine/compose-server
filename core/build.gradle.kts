@@ -11,6 +11,7 @@ dependencies {
 
   api(libs.slf4j.api)
   api(libs.jakarta.openapiV3Annotations)
+  api(libs.jakarta.annotationApi)
   api(libs.spring.modulith.core)
 
   implementation(libs.spring.boot.json)

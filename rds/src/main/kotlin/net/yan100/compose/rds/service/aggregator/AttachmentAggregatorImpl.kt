@@ -4,7 +4,7 @@ import jakarta.validation.Valid
 import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.models.req.PostAttachmentReq
-import net.yan100.compose.rds.service.AttachmentService
+import net.yan100.compose.rds.service.IAttachmentService
 import net.yan100.compose.rds.typing.AttachmentTyping
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile
  */
 @Service
 class AttachmentAggregatorImpl(
-  private val aService: AttachmentService,
+    private val aService: IAttachmentService,
 ) : AttachmentAggregator {
 
   override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> @Valid PostAttachmentReq): Attachment? {

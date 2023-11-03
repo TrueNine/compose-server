@@ -1,10 +1,10 @@
 package net.yan100.compose.rds.repository
 
 
-import net.yan100.compose.rds.base.BaseRepository
 import net.yan100.compose.rds.entity.FullUser
 import net.yan100.compose.rds.entity.User
 import net.yan100.compose.rds.entity.UserInfo
+import net.yan100.compose.rds.repository.base.IRepo
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Repository
-interface UserRepo : BaseRepository<User> {
+interface UserRepo : IRepo<User> {
   fun findByAccount(account: String): User?
 
   @Query(
@@ -69,23 +69,25 @@ interface UserRepo : BaseRepository<User> {
   @Query("UPDATE User u SET u.banTime = :banTime WHERE u.account = :account")
   fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 
-  @Query("""
+  @Query(
+    """
     SELECT count(i.id) > 0
     FROM UserInfo i
     LEFT JOIN User u ON i.userId = u.id
     WHERE i.wechatOpenId = :openId
-  """)
+  """
+  )
   fun existsByWechatOpenId(openId: String): Boolean
 }
 
 @Repository
-interface FullUserRepository : BaseRepository<FullUser> {
+interface FullUserRepository : IRepo<FullUser> {
   fun findByAccount(account: String): FullUser?
 }
 
 
 @Repository
-interface UserInfoRepo : BaseRepository<UserInfo> {
+interface UserInfoRepo : IRepo<UserInfo> {
   fun findByUserId(userId: String): UserInfo?
 
   /**

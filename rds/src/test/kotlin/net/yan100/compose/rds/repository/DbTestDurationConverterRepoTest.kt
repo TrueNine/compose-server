@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.repository
 
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.rds.entity.DbTestDurationConverterBaseEntity
+import net.yan100.compose.rds.entity.DbTestDurationConverterEntity
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,7 +20,7 @@ class DbTestDurationConverterRepoTest {
   @Test
   @Rollback
   fun testSaveAndFind() {
-    val entity = DbTestDurationConverterBaseEntity().apply {
+    val entity = DbTestDurationConverterEntity().apply {
       durations = Duration.parse("PT24H")
     }
     val saved = repo.save(entity)

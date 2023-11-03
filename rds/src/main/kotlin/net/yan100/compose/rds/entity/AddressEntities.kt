@@ -14,9 +14,8 @@ import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.lang.WGS84
-import net.yan100.compose.rds.base.BaseEntity
-import net.yan100.compose.rds.base.TreeEntity
 import net.yan100.compose.rds.converters.WGS84Converter
+import net.yan100.compose.rds.core.entity.TreeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.Fetch
@@ -26,7 +25,7 @@ import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction.IGNORE
 
 @MappedSuperclass
-open class SuperAddressDetails : BaseEntity() {
+open class SuperAddressDetails : TreeEntity() {
   /**
    * 地址 id
    */

@@ -1,9 +1,9 @@
 package net.yan100.compose.rds.repository.address
 
-import net.yan100.compose.rds.base.BaseRepository
 import net.yan100.compose.rds.entity.AddressDetails
 import net.yan100.compose.rds.entity.FullAddressDetails
 import net.yan100.compose.rds.entity.NonDesensitizedAddressDetails
+import net.yan100.compose.rds.repository.base.IRepo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository
  * @since 2023-06-13
  */
 @Repository
-interface AddressDetailsRepo : BaseRepository<AddressDetails> {
+interface AddressDetailsRepo : IRepo<AddressDetails> {
   /**
    * ## 根据用户ID查询用户地址详情
    */
@@ -25,10 +25,12 @@ interface AddressDetailsRepo : BaseRepository<AddressDetails> {
   /**
    * ## 根据用户ID查询用户地址详情
    */
-  @Query("""
+  @Query(
+    """
     FROM NonDesensitizedAddressDetails n
     WHERE n.userId = :userId
-  """)
+  """
+  )
   fun findNonDesensitizedAllByUserId(userId: String, page: Pageable): Page<NonDesensitizedAddressDetails>
 
   /**
@@ -39,10 +41,12 @@ interface AddressDetailsRepo : BaseRepository<AddressDetails> {
   /**
    * ## 根据电话查询非脱敏地址
    */
-  @Query("""
+  @Query(
+    """
     FROM NonDesensitizedAddressDetails n
     WHERE n.phone = :phone
-  """)
+  """
+  )
   fun findNonDesensitizedAllByPhone(phone: String, page: Pageable): Page<NonDesensitizedAddressDetails>
 }
 
@@ -50,7 +54,7 @@ interface AddressDetailsRepo : BaseRepository<AddressDetails> {
  * # 全路径地址详情
  */
 @Repository
-interface FullAddressDetailsRepo : BaseRepository<FullAddressDetails> {
+interface FullAddressDetailsRepo : IRepo<FullAddressDetails> {
   /**
    * ## 根据用户ID查询用户地址详情
    */

@@ -5,7 +5,8 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
-import net.yan100.compose.rds.base.BaseEntity
+import net.yan100.compose.rds.core.entity.BaseEntity
+import net.yan100.compose.rds.core.entity.TreeEntity
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole.ROLE_GROUP_ID
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole.ROLE_ID
@@ -93,7 +94,7 @@ open class FullRole : SuperRole() {
 
 
 @MappedSuperclass
-open class SuperRoleGroup : BaseEntity() {
+open class SuperRoleGroup : TreeEntity() {
   /**
    * 名称
    */
@@ -175,7 +176,7 @@ open class FullRoleGroup : SuperRoleGroup() {
 @DynamicUpdate
 @Schema(title = "部门")
 @Table(name = SuperRoleGroup.TABLE_NAME)
-open class Dept : BaseEntity() {
+open class Dept : TreeEntity() {
   @Column(name = NAME)
   @Schema(title = "名称")
   open var name: String? = null
@@ -203,7 +204,7 @@ open class Dept : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "权限")
 @Table(name = Permissions.TABLE_NAME)
-open class Permissions : BaseEntity() {
+open class Permissions : TreeEntity() {
   /**
    * 权限名
    */

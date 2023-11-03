@@ -29,7 +29,7 @@ class TreeRepositoryTest {
     val b = DbTestTreeEntity()
     val c = DbTestTreeEntity()
     val d = DbTestTreeEntity()
-    val savedRoot = treeRepo.saveChild(null, DbTestTreeEntity())
+    val savedRoot = treeRepo.saveChild(child =  DbTestTreeEntity())
     val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
 
     val nodeIndexes = savedChildren.map {

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
-import net.yan100.compose.rds.base.BaseEntity
+import net.yan100.compose.rds.core.entity.BaseEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NotFound

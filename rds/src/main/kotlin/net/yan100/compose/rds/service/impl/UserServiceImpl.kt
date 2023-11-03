@@ -1,11 +1,11 @@
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.rds.base.BaseServiceImpl
+import net.yan100.compose.rds.service.base.CrudService
 import net.yan100.compose.rds.entity.FullUser
 import net.yan100.compose.rds.entity.User
 import net.yan100.compose.rds.repository.FullUserRepository
 import net.yan100.compose.rds.repository.UserRepo
-import net.yan100.compose.rds.service.UserService
+import net.yan100.compose.rds.service.IUserService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 class UserServiceImpl(
   private val userRepo: UserRepo,
   private val fullRepo: FullUserRepository
-) : UserService, BaseServiceImpl<User>(userRepo) {
+) : IUserService, CrudService<User>(userRepo) {
   override fun findUserByAccount(account: String): User? {
     return userRepo.findByAccount(account)
   }

@@ -6,10 +6,9 @@ import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.models.req.LoginAccountReq
 import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
 import net.yan100.compose.rds.models.req.RegisterAccountReq
-import net.yan100.compose.rds.service.UserService
+import net.yan100.compose.rds.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import java.time.LocalDateTime
 import kotlin.test.*
 
@@ -23,7 +22,7 @@ class AccountAggregatorImplTest  {
   lateinit var agg: AccountAggregatorImpl
 
   @Autowired
-  lateinit var us: UserService
+  lateinit var us: IUserService
 
   fun getRegisterParam() = RegisterAccountReq().apply {
     account = "abcd${snowflake.nextStringId()}"

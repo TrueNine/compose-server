@@ -1,12 +1,12 @@
 package net.yan100.compose.rds.repository
 
-import net.yan100.compose.rds.base.BaseRepository
 import net.yan100.compose.rds.entity.Permissions
+import net.yan100.compose.rds.repository.base.IRepo
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PermissionsRepo : BaseRepository<Permissions> {
+interface PermissionsRepo : IRepo<Permissions> {
   fun findAllByName(name: String): List<Permissions>
 
   @Query(

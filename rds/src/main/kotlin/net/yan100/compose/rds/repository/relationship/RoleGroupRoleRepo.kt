@@ -1,12 +1,12 @@
 package net.yan100.compose.rds.repository.relationship
 
-import net.yan100.compose.rds.base.BaseRepository
 import net.yan100.compose.rds.entity.relationship.RoleGroupRole
+import net.yan100.compose.rds.repository.base.IRepo
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RoleGroupRoleRepo : BaseRepository<RoleGroupRole> {
+interface RoleGroupRoleRepo : IRepo<RoleGroupRole> {
   fun findByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String): RoleGroupRole?
 
   @Query("select rr.roleId from RoleGroupRole rr")

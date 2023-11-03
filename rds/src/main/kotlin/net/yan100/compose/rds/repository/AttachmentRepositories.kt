@@ -1,8 +1,9 @@
 package net.yan100.compose.rds.repository
 
-import net.yan100.compose.rds.base.BaseRepository
+
 import net.yan100.compose.rds.entity.Attachment
 import net.yan100.compose.rds.entity.LinkedAttachment
+import net.yan100.compose.rds.repository.base.IRepo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
@@ -10,7 +11,7 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AttachmentRepo : BaseRepository<Attachment> {
+interface AttachmentRepo : IRepo<Attachment> {
   @Query(
     """
     SELECT new kotlin.Pair(a.baseUrl,a.saveName)
@@ -24,7 +25,7 @@ interface AttachmentRepo : BaseRepository<Attachment> {
   fun findMetaNameById(id: String): String?
 
   @Query("""SELECT a.saveName FROM Attachment a WHERE a.id = :id""")
-  fun findSaveNameById(id:String):String?
+  fun findSaveNameById(id: String): String?
 
   /**
    * 根据id查找附件的全路径
@@ -71,7 +72,7 @@ interface AttachmentRepo : BaseRepository<Attachment> {
 
 
 @Repository
-interface LinkedAttachmentRepo : BaseRepository<LinkedAttachment> {
+interface LinkedAttachmentRepo : IRepo<LinkedAttachment> {
   /**
    * ## 根据 baseUrl 查询其下的所有 附件
    */

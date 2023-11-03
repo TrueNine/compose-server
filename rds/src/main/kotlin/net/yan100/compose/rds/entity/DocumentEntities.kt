@@ -7,8 +7,9 @@ import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.models.IDisabilityCode2
 import net.yan100.compose.core.models.IIdcard2Code
-import net.yan100.compose.rds.base.BaseEntity
 import net.yan100.compose.rds.converters.GenderTypingConverter
+import net.yan100.compose.rds.core.entity.BaseEntity
+import net.yan100.compose.rds.core.entity.TreeEntity
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -85,7 +86,7 @@ open class Idcard2 : IIdcard2Code, BaseEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Table(name = DisabilityCertificate2.TABLE_NAME)
-open class DisabilityCertificate2 : IDisabilityCode2, BaseEntity() {
+open class DisabilityCertificate2 : IDisabilityCode2, TreeEntity() {
   companion object {
     const val TABLE_NAME = "disability_certificate_2"
 
@@ -164,7 +165,7 @@ open class DisabilityCertificate2 : IDisabilityCode2, BaseEntity() {
 @DynamicUpdate
 @DynamicInsert
 @Table(name = HouseholdRegistrationCard.TABLE_NAME)
-open class HouseholdRegistrationCard : BaseEntity() {
+open class HouseholdRegistrationCard : TreeEntity() {
   companion object {
     const val TABLE_NAME = "household_registration_card"
 
@@ -295,7 +296,7 @@ open class HouseholdRegistrationCard : BaseEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Table(name = BankCard.TABLE_NAME)
-open class BankCard : BaseEntity() {
+open class BankCard : TreeEntity() {
   companion object {
     const val TABLE_NAME = "bank_card"
     const val USER_ID = "user_id"

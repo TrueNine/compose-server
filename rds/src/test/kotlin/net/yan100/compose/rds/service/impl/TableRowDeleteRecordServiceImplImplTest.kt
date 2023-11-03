@@ -13,7 +13,7 @@ import kotlin.test.assertNull
 @SpringBootTest(classes = [RdsEntrance::class])
 class TableRowDeleteRecordServiceImplImplTest {
   @Autowired
-  private lateinit var service: TableRowDeleteRecordServiceImplImpl
+  private lateinit var service: TableRowDeleteRecordServiceImpl
 
   @Autowired
   lateinit var mapper: ObjectMapper

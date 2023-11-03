@@ -5,17 +5,17 @@ import net.yan100.compose.rds.entity.User
 import net.yan100.compose.rds.models.req.LoginAccountReq
 import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
 import net.yan100.compose.rds.models.req.RegisterAccountReq
-import net.yan100.compose.rds.service.RoleGroupService
-import net.yan100.compose.rds.service.UserService
+import net.yan100.compose.rds.service.IRoleGroupService
+import net.yan100.compose.rds.service.IUserService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
 class AccountAggregatorImpl(
-  private val userService: UserService,
+  private val userService: IUserService,
   private val passwordEncoder: PasswordEncoder,
-  private val roleGroupService: RoleGroupService
+  private val roleGroupService: IRoleGroupService
 ) : AccountAggregator {
 
   override fun registerAccount(@Valid param: RegisterAccountReq): User? =

@@ -6,4 +6,5 @@ dependencies {
   runtimeOnly(libs.db.mysqlJ)
   implementation(project(":core"))
   implementation(project(":rds"))
+  implementation(project(":rds:rds-core"))
 }

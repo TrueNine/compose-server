@@ -40,10 +40,11 @@ interface ILazyAddressService {
     code: String,
     firstFind: (param: ILookupAllChildrenByCodeFindConditionParam) -> List<T>?,
     deepCondition: (param: ILookupAllChildrenByCodeFindConditionParam) -> Boolean,
-    notFound: () -> Unit = {},
+    notFound: (emptyCode: Boolean) -> List<T> = { listOf() },
     sortedSave: (param: ILookupAllChildrenByCodeSortedSaveParam) -> List<T>
   ): List<T> {
     val firstFindCode = CnDistrictCode(code)
+    if (firstFindCode.empty) return notFound(true) // code 为空时，返回调用方的数据
     val requirementCodes = mutableListOf(firstFindCode)
     val preFind = firstFind(object : ILookupAllChildrenByCodeFindConditionParam {
       override val code = firstFindCode.code
@@ -63,7 +64,7 @@ interface ILazyAddressService {
         if (null != back) {
           requirementCodes += CnDistrictCode(back.code)
           requestQueue += CnDistrictCode(back.code)
-        } else notFound()
+        } else notFound(false)
       }
     }
     requestQueue.reversed().forEach {
@@ -73,10 +74,7 @@ interface ILazyAddressService {
         override val deepLevel = it.level
         override val result = responses
         override val notInit = it.empty
-      }) else {
-        notFound()
-        listOf()
-      }
+      }) else notFound(false)
     }
     return result
   }

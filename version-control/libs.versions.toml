@@ -27,6 +27,7 @@ knife4j = ["sdk-openapi-knife4jJakarta", "spring-doc-webmvcUi3"]
 compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose" }
 compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose" }
 compose-rdsGen = { group = "net.yan100.compose", name = "rds-gen", version.ref = "compose" }
+compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose" }
 compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose" }
 compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose" }
 compose-securityOauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose" }
@@ -58,9 +59,8 @@ spring-boot-dataRedisReactive = { group = "org.springframework.boot", name = "sp
 spring-boot-logging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
 spring-boot-dockerCompose = { group = "org.springframework.boot", name = "spring-boot-docker-compose" }
 spring-cloud-bootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap" }
-
 spring-integration-mqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt" }
-
+spring-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
 spring-security-crypto = { group = "org.springframework.security", name = "spring-security-crypto" }
 spring-security-core = { group = "org.springframework.security", name = "spring-security-core" }
@@ -107,6 +107,7 @@ sdk-openapi-knife4j = { group = "com.github.xiaoymin", name = "knife4j-spring-bo
 jakarta-servletApi = { group = "jakarta.servlet", name = "jakarta.servlet-api", version.ref = "jakarta-servletApi" }
 jakarta-validationApi = { group = "jakarta.validation", name = "jakarta.validation-api", version.ref = "jakarta-validationApi" }
 jakarta-openapiV3Annotations = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version.ref = "jakarta-openapiV3Annotations" }
+jakarta-annotationApi = { group = "jakarta.annotation", name = "jakarta.annotation-api", version.ref = "jakarta-annotationApi" }
 
 net-okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "net-okhttp3" }
 
@@ -149,7 +150,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 
 
 [versions]
-compose = "1.6.113"
+compose = "1.6.115"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
@@ -227,7 +228,7 @@ jakarta-persistence-api = "3.2.0-B01" ### https://mvnrepository.com/artifact/jak
 jakarta-servletApi = "6.0.0" ### https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
 jakarta-validationApi = "3.0.2" ### https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
 jakarta-openapiV3Annotations = "2.2.17" ### https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
-
+jakarta-annotationApi = "3.0.0-M1" ### https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api
 jackson = "2.16.0-rc1" ### https://mvnrepository.com/artifact/com.fasterxml.jackson.core
 gson = "2.10.1" ### https://mvnrepository.com/artifact/com.google.code.gson/gson
 
