@@ -16,12 +16,12 @@ import org.springframework.data.repository.findByIdOrNull
 import kotlin.test.*
 
 @SpringBootTest
-class RbacAggregatorImplTest {
+class IRbacAggregatorImplTest {
   @Autowired
   lateinit var argRepo: FullRoleGroupEntityRepo
 
   @Autowired
-  lateinit var aggregator: RbacAggregator
+  lateinit var aggregator: IRbacAggregator
 
   @Autowired
   lateinit var userService: IUserService

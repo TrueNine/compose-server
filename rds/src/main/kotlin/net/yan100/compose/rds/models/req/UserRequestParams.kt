@@ -26,8 +26,8 @@ class ModifyAccountPasswordReq {
 
   @get:NotBlank(message = "密码不能为空")
   @get:Pattern(
-    regexp = net.yan100.compose.core.consts.Regexes.PASSWORD,
-    message = "密码必须匹配规则为：" + net.yan100.compose.core.consts.Regexes.PASSWORD
+    regexp = Regexes.PASSWORD,
+    message = "密码必须匹配规则为：" + Regexes.PASSWORD
   )
   var oldPassword: String? = null
 
@@ -54,8 +54,8 @@ class RegisterAccountReq {
   @get:NotBlank(message = "密码不能为空")
   @get:Size(max = 100, min = 8, message = "密码最短8位，最长100")
   @get:Pattern(
-    regexp = net.yan100.compose.core.consts.Regexes.PASSWORD,
-    message = "密码必须匹配规则为：" + net.yan100.compose.core.consts.Regexes.PASSWORD
+    regexp = Regexes.PASSWORD,
+    message = "密码必须匹配规则为：" + Regexes.PASSWORD
   )
   var password: String? = null
 

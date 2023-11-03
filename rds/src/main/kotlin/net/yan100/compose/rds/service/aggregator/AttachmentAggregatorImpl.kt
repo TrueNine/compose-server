@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 class AttachmentAggregatorImpl(
     private val aService: IAttachmentService,
-) : AttachmentAggregator {
+) : IAttachmentAggregator {
 
   override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> @Valid PostAttachmentReq): Attachment? {
     val saveFile = saveFileCallback()

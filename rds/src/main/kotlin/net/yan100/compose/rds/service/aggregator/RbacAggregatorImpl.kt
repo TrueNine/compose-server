@@ -18,7 +18,7 @@ class RbacAggregatorImpl(
   private val rgr: RoleGroupRoleRepo,
   private val rp: RolePermissionsRepo,
   private val rg: FullRoleGroupEntityRepo,
-) : RbacAggregator {
+) : IRbacAggregator {
 
   override fun findAllRoleNameByUserAccount(account: String): Set<String> =
     userRepo.findAllRoleNameByAccount(account)

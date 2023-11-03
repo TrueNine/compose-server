@@ -7,7 +7,7 @@ import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 /**
  * # 角色权限管理器
  */
-interface RbacAggregator {
+interface IRbacAggregator {
   fun findAllRoleNameByUserAccount(account: String): Set<String>
   fun findAllPermissionsNameByUserAccount(account: String): Set<String>
 

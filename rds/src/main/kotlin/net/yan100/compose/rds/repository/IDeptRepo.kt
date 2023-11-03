@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 
 @Repository
-interface DeptRepo : IRepo<Dept> {
+interface IDeptRepo : IRepo<Dept> {
   @Query(
     """
     FROM Dept d

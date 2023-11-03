@@ -6,13 +6,12 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class PermissionsRepoTest {
+class IPermissionsRepoTest {
   @Autowired
-  private lateinit var repo: PermissionsRepo
+  private lateinit var repo: IPermissionsRepo
   private val log = slf4j(this::class)
 
   @Test

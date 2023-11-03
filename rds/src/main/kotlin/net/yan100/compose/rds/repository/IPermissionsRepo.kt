@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PermissionsRepo : IRepo<Permissions> {
+interface IPermissionsRepo : IRepo<Permissions> {
   fun findAllByName(name: String): List<Permissions>
 
   @Query(

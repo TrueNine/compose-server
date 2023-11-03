@@ -16,7 +16,7 @@ class AccountAggregatorImpl(
   private val userService: IUserService,
   private val passwordEncoder: PasswordEncoder,
   private val roleGroupService: IRoleGroupService
-) : AccountAggregator {
+) : IAccountAggregator {
 
   override fun registerAccount(@Valid param: RegisterAccountReq): User? =
     if (!userService.existsByAccount(param.account!!)) {

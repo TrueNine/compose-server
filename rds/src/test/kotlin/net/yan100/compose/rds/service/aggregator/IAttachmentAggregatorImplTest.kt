@@ -10,7 +10,7 @@ import org.springframework.mock.web.MockMultipartFile
 import kotlin.test.assertNotNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class AttachmentAggregatorImplTest {
+class IAttachmentAggregatorImplTest {
 
   @Autowired
   lateinit var ass: AttachmentAggregatorImpl

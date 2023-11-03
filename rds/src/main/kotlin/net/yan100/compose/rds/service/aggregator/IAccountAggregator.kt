@@ -6,7 +6,7 @@ import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
 import net.yan100.compose.rds.models.req.RegisterAccountReq
 import java.time.LocalDateTime
 
-interface AccountAggregator {
+interface IAccountAggregator {
 
   /**
    * 注册账号

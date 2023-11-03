@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 import kotlin.test.*
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class AccountAggregatorImplTest  {
+class IAccountAggregatorImplTest  {
 
   @Autowired
   lateinit var snowflake: Snowflake

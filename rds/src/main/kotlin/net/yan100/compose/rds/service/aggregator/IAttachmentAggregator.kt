@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile
 /**
  * 附件服务接口聚合器
  */
-interface AttachmentAggregator {
+interface IAttachmentAggregator {
   fun uploadAttachment(file: MultipartFile, saveFileCallback: () -> PostAttachmentReq): Attachment?
 }

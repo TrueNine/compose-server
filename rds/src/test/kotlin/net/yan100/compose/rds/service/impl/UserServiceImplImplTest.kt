@@ -5,7 +5,7 @@ import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.entity.RoleGroup
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
-import net.yan100.compose.rds.service.aggregator.RbacAggregator
+import net.yan100.compose.rds.service.aggregator.IRbacAggregator
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -36,7 +36,7 @@ class UserServiceImplImplTest {
   lateinit var roleGroupService: IRoleGroupService
 
   @Autowired
-  lateinit var agg: RbacAggregator
+  lateinit var agg: IRbacAggregator
 
   @Autowired
   lateinit var mapper: ObjectMapper
