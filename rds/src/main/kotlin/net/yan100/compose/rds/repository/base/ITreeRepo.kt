@@ -98,7 +98,7 @@ interface ITreeRepo<T : TreeEntity> : IRepo<T> {
    */
   @Query(
     """
-    select count(1) + 1
+    select count(1)
     from #{#entityName} e
     where e.tgi = :#{#child.tgi} 
     and e.rln < :#{#child.rln}

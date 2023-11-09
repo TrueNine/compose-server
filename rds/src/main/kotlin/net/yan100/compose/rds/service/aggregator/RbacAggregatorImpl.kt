@@ -5,7 +5,7 @@ import net.yan100.compose.rds.entity.relationship.RolePermissions
 import net.yan100.compose.rds.entity.relationship.UserRoleGroup
 import net.yan100.compose.rds.repository.FullRoleGroupEntityRepo
 import net.yan100.compose.rds.repository.UserRepo
-import net.yan100.compose.rds.repository.relationship.RoleGroupRoleRepo
+import net.yan100.compose.rds.repository.relationship.IRoleGroupRoleRepo
 import net.yan100.compose.rds.repository.relationship.RolePermissionsRepo
 import net.yan100.compose.rds.repository.relationship.UserRoleGroupRepo
 import org.springframework.stereotype.Service
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 class RbacAggregatorImpl(
   private val urg: UserRoleGroupRepo,
   private val userRepo: UserRepo,
-  private val rgr: RoleGroupRoleRepo,
+  private val rgr: IRoleGroupRoleRepo,
   private val rp: RolePermissionsRepo,
   private val rg: FullRoleGroupEntityRepo,
 ) : IRbacAggregator {
