@@ -5,7 +5,7 @@ import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.recursionFields
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.core.annotations.BizCode
-import net.yan100.compose.rds.core.entity.TreeEntity
+import net.yan100.compose.rds.core.entities.TreeEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 

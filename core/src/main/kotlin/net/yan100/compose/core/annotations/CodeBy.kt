@@ -81,7 +81,10 @@ enum class Strategy(private val desensitizeSerializer: (String) -> String) {
 @JsonInclude
 @MustBeDocumented
 @JacksonAnnotationsInside
-@Target(AnnotationTarget.FIELD)
+@Target(
+  AnnotationTarget.FIELD,
+  AnnotationTarget.PROPERTY_GETTER
+)
 @Retention(AnnotationRetention.RUNTIME)
 @JsonSerialize(using = LongAsStringSerializer::class)
 @JsonDeserialize(using = StringAsLongDeserializer::class)

@@ -4,7 +4,7 @@ package net.yan100.compose.rds.base
 import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.DbTestServiceEntity
+import net.yan100.compose.rds.entities.DbTestServiceEntity
 import net.yan100.compose.rds.service.CrudServiceTester
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

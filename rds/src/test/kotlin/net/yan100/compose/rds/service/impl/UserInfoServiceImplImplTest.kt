@@ -3,9 +3,9 @@ package net.yan100.compose.rds.service.impl
 import io.mockk.every
 import io.mockk.mockk
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.User
-import net.yan100.compose.rds.entity.UserInfo
-import net.yan100.compose.rds.repository.UserInfoRepo
+import net.yan100.compose.rds.entities.User
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.repositories.UserInfoRepo
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

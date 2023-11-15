@@ -3,7 +3,7 @@ package net.yan100.compose.rds.service.base
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.Pw
-import net.yan100.compose.rds.core.entity.BaseEntity
+import net.yan100.compose.rds.core.entities.BaseEntity
 
 /**
  * # 单一 CRUD 接口

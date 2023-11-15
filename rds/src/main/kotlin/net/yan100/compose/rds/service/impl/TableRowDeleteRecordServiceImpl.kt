@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.persistence.Table
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.rds.core.entity.AnyEntity
-import net.yan100.compose.rds.core.entity.BaseEntity
+import net.yan100.compose.rds.core.entities.AnyEntity
+import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.core.models.DataRecord
-import net.yan100.compose.rds.entity.TableRowDeleteRecord
-import net.yan100.compose.rds.repository.ITableRowDeleteRecordRepository
+import net.yan100.compose.rds.entities.TableRowDeleteRecord
+import net.yan100.compose.rds.repositories.ITableRowDeleteRecordRepository
 import net.yan100.compose.rds.service.ITableRowDeleteRecordService
 import net.yan100.compose.rds.service.base.CrudService
 import net.yan100.compose.rds.service.base.IService
@@ -20,8 +20,8 @@ import kotlin.reflect.full.findAnnotation
 
 @Service
 class TableRowDeleteRecordServiceImpl(
-  private val delRepo: ITableRowDeleteRecordRepository,
-  private val mapper: ObjectMapper
+    private val delRepo: ITableRowDeleteRecordRepository,
+    private val mapper: ObjectMapper
 ) : ITableRowDeleteRecordService,
   IService<TableRowDeleteRecord>,
   CrudService<TableRowDeleteRecord>(delRepo) {

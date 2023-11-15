@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.service.base
 
 import jakarta.validation.Valid
-import net.yan100.compose.rds.core.entity.BaseEntity
-import net.yan100.compose.rds.repository.base.IRepo
+import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.repositories.base.IRepo
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page

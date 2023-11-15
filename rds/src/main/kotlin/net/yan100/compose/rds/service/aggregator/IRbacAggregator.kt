@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.rds.entity.relationship.RoleGroupRole
-import net.yan100.compose.rds.entity.relationship.RolePermissions
-import net.yan100.compose.rds.entity.relationship.UserRoleGroup
+import net.yan100.compose.rds.entities.relationship.RoleGroupRole
+import net.yan100.compose.rds.entities.relationship.RolePermissions
+import net.yan100.compose.rds.entities.relationship.UserRoleGroup
 
 /**
  * # 角色权限管理器

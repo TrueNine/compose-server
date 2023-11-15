@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.rds.entity.User
-import net.yan100.compose.rds.entity.UserInfo
-import net.yan100.compose.rds.repository.UserInfoRepo
+import net.yan100.compose.rds.entities.User
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.repositories.UserInfoRepo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service

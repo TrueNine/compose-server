@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entity.User
-import net.yan100.compose.rds.entity.UserInfo
+import net.yan100.compose.rds.entities.User
+import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.service.base.IService
 
 interface IUserInfoService : IService<UserInfo> {

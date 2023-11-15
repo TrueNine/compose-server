@@ -2,7 +2,7 @@ package net.yan100.compose.rds.core.listener
 
 import jakarta.persistence.PrePersist
 import net.yan100.compose.core.id.Snowflake
-import net.yan100.compose.rds.core.entity.AnyEntity
+import net.yan100.compose.rds.core.entities.AnyEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 

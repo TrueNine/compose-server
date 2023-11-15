@@ -92,21 +92,48 @@ object DTimer {
   }
 
   @JvmStatic
+  fun millisToLocalDateTime(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+    return Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDateTime()
+  }
+
+  @JvmStatic
   fun dateToLocalDate(date: Date, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
     return date.toInstant().atZone(zoneId)
       .toLocalDate()
   }
 
   @JvmStatic
+  fun millisToLocalDate(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
+    return Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDate()
+  }
+
+  @JvmStatic
   fun dateToLocalTime(date: Date, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime {
-    return date.toInstant().atZone(zoneId)
-      .toLocalTime()
+    return date.toInstant().atZone(zoneId).toLocalTime()
+  }
+
+  @JvmStatic
+  fun millisToLocalTime(millis: Long, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime {
+    return Instant.ofEpochMilli(millis).atZone(zoneId).toLocalTime()
   }
 }
 
-fun Long.toDateOrNull(): Date? {
+fun Long.toDate(): Date {
   return Date(this)
 }
+
+fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+  return DTimer.millisToLocalDateTime(this, zoneId)
+}
+
+fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
+  return DTimer.millisToLocalDate(this)
+}
+
+fun Long.toLocalTime(zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime {
+  return DTimer.millisToLocalTime(this)
+}
+
 
 fun Date.toLong(): Long {
   return this.time
@@ -120,11 +147,11 @@ fun Date.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
   return DTimer.dateToLocalDate(this, zoneId)
 }
 
-fun Date.toLocalTime(zoneId: ZoneId =  ZoneId.of(ZONE_GMT)): LocalTime {
+fun Date.toLocalTime(zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime {
   return DTimer.dateToLocalTime(this, zoneId)
 }
 
-fun LocalTime.toDate(zoneId: ZoneId =  ZoneId.of(ZONE_GMT)): Date {
+fun LocalTime.toDate(zoneId: ZoneId = ZoneId.of(ZONE_GMT)): Date {
   return DTimer.localTimeToDate(this, zoneId)
 }
 

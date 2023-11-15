@@ -15,7 +15,7 @@
   </test>
   <test name="仓库测试" parallel="methods">
     <packages>
-      <package name="net.yan100.compose.rds.repository"/>
+      <package name="net.yan100.compose.rds.repositories"/>
     </packages>
   </test>
   <test name="转换器测试" parallel="methods">

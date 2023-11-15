@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entity.FullUser
-import net.yan100.compose.rds.entity.User
+import net.yan100.compose.rds.entities.FullUser
+import net.yan100.compose.rds.entities.User
 import net.yan100.compose.rds.service.base.IService
 import java.time.LocalDateTime
 

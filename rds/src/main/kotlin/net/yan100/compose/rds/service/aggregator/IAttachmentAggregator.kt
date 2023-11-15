@@ -1,6 +1,6 @@
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.rds.entity.Attachment
+import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.models.req.PostAttachmentReq
 import org.springframework.web.multipart.MultipartFile
 

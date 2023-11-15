@@ -7,14 +7,18 @@ import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import net.yan100.compose.core.lang.*
-import java.time.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneOffset
 
+// FIXME 急需修复 date 的 转换消耗
 
 class LocalDateTimeSerializer(
   private val zoneOffset: ZoneOffset
 ) : JsonSerializer<LocalDateTime>() {
   override fun serialize(value: LocalDateTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
-    gen?.writeNumber(value.toInstant(zoneOffset).toEpochMilli())
+    gen?.writeNumber(value.toDate(zoneOffset).toLong())
   }
 }
 
@@ -23,10 +27,7 @@ class LocalDateTimeDeserializer(
 ) : JsonDeserializer<LocalDateTime>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): LocalDateTime? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
-    return timestamp?.let { t ->
-      val instant = Instant.ofEpochMilli(t)
-      LocalDateTime.ofInstant(instant, zoneOffset)
-    }
+    return timestamp?.toLocalDateTime(zoneOffset)
   }
 }
 
@@ -44,9 +45,7 @@ class LocalDateDeserializer(
 ) : JsonDeserializer<LocalDate>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): LocalDate? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
-    return timestamp?.let { t ->
-      t.toDateOrNull()?.toLocalDate(zoneOffset)
-    }
+    return timestamp?.toLocalDate(zoneOffset)
   }
 }
 
@@ -64,8 +63,6 @@ class LocalTimeDeserializer(
 ) : JsonDeserializer<LocalTime>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): LocalTime? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
-    return timestamp?.let { t ->
-      t.toDateOrNull()?.toLocalTime(zoneOffset)
-    }
+    return timestamp?.toLocalTime(zoneOffset)
   }
 }

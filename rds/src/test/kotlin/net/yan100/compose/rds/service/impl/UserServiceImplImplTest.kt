@@ -2,7 +2,7 @@ package net.yan100.compose.rds.service.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.id.Snowflake
-import net.yan100.compose.rds.entity.RoleGroup
+import net.yan100.compose.rds.entities.RoleGroup
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.aggregator.IRbacAggregator
@@ -23,7 +23,7 @@ class UserServiceImplImplTest {
   @Autowired
   lateinit var snowflake: Snowflake
 
-  fun getUser() = net.yan100.compose.rds.entity.User().apply {
+  fun getUser() = net.yan100.compose.rds.entities.User().apply {
     this.account = snowflake.nextStringId()
     this.nickName = "ab + ${snowflake.nextStringId()}"
     this.pwdEnc = "qwer1234"
@@ -44,7 +44,7 @@ class UserServiceImplImplTest {
   @Test
   fun testFindUserByAccount() {
     val saved = service.save(getUser())
-    val info = infoService.save(net.yan100.compose.rds.entity.UserInfo().apply {
+    val info = infoService.save(net.yan100.compose.rds.entities.UserInfo().apply {
       userId = saved.id
     })
     val rg = roleGroupService.save(RoleGroup().apply {

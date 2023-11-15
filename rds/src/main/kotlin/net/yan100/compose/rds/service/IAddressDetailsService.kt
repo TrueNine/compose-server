@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entity.AddressDetails
-import net.yan100.compose.rds.entity.FullAddressDetails
-import net.yan100.compose.rds.entity.NonDesensitizedAddressDetails
+import net.yan100.compose.rds.entities.AddressDetails
+import net.yan100.compose.rds.entities.FullAddressDetails
+import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
 import net.yan100.compose.rds.service.base.IService
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr

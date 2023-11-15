@@ -1,11 +1,12 @@
 package net.yan100.compose.rds.service.aggregator
 
 import net.yan100.compose.core.id.Snowflake
-import net.yan100.compose.rds.entity.Permissions
-import net.yan100.compose.rds.entity.Role
-import net.yan100.compose.rds.entity.RoleGroup
-import net.yan100.compose.rds.repository.AllRoleEntityRepository
-import net.yan100.compose.rds.repository.FullRoleGroupEntityRepo
+import net.yan100.compose.rds.entities.Permissions
+import net.yan100.compose.rds.entities.Role
+import net.yan100.compose.rds.entities.RoleGroup
+import net.yan100.compose.rds.entities.User
+import net.yan100.compose.rds.repositories.AllRoleEntityRepository
+import net.yan100.compose.rds.repositories.FullRoleGroupEntityRepo
 import net.yan100.compose.rds.service.IPermissionsService
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IRoleService
@@ -39,7 +40,7 @@ class IRbacAggregatorImplTest {
   @Autowired
   lateinit var snowflake: Snowflake
 
-  private fun getUser() = net.yan100.compose.rds.entity.User().apply {
+  private fun getUser() = User().apply {
     account = "name:${snowflake.nextId()}"
     nickName = "abcd"
     pwdEnc = "aa${snowflake.nextId()}"

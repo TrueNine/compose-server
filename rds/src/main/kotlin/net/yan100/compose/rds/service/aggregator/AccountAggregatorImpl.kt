@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import net.yan100.compose.rds.entity.User
+import net.yan100.compose.rds.entities.User
 import net.yan100.compose.rds.models.req.LoginAccountReq
 import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
 import net.yan100.compose.rds.models.req.RegisterAccountReq

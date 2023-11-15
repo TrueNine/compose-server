@@ -160,6 +160,7 @@ subprojects {
       mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
       mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudAlibaba.get()}")
       mavenBom("org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}")
+      mavenBom("org.drools:drools-bom:${l.versions.drools.get()}")
     }
   }
 

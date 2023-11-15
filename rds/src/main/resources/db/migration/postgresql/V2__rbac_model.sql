@@ -27,14 +27,20 @@ create table if not exists user_info
   phone              varchar(255),
   id_card            varchar(255),
   gender             int default 2,
+  wechat_openid varchar(255) null,
+  wechat_authid varchar(255),
+  unique (wechat_openid),
   unique (phone),
   unique (id_card)
 );
 comment on table user_info is '用户信息';
 select add_base_struct('user_info');
 create index on user_info (user_id);
+
 create index on user_info (address_details_id);
 create index on user_info (avatar_img_id);
+create index on user_info (wechat_openid);
+create index on user_info (wechat_authid);
 insert into user_info(id, user_id, first_name, last_name, email, birthday, phone, gender)
 values (0, 0, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
        (1, 1, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);

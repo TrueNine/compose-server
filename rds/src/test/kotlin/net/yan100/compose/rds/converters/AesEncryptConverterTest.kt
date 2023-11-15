@@ -3,8 +3,8 @@ package net.yan100.compose.rds.converters
 
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.DbTestPeriodConverterEntity
-import net.yan100.compose.rds.repository.DbTestPeriodConverterRepository
+import net.yan100.compose.rds.entities.DbTestPeriodConverterEntity
+import net.yan100.compose.rds.repositories.DbTestPeriodConverterRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

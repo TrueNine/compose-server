@@ -7,8 +7,8 @@ import jakarta.persistence.Transient
  * 二代残疾证代码
  */
 interface IDisabilityCode2 : IIdcard2Code {
-  private class DefaultDisability2Code(code: String) : IDisabilityCode2 {
-    override val disabilityCode: String = code
+  private class DefaultDisability2Code(dCode: String) : IDisabilityCode2 {
+    override val disabilityCode: String = dCode
   }
 
   companion object {

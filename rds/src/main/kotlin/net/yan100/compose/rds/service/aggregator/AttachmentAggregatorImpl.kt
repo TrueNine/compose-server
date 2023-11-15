@@ -2,7 +2,7 @@ package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
 import net.yan100.compose.core.lang.hasText
-import net.yan100.compose.rds.entity.Attachment
+import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.models.req.PostAttachmentReq
 import net.yan100.compose.rds.service.IAttachmentService
 import net.yan100.compose.rds.typing.AttachmentTyping
@@ -20,7 +20,8 @@ class AttachmentAggregatorImpl(
   override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: () -> @Valid PostAttachmentReq): Attachment? {
     val saveFile = saveFileCallback()
     // 如果 此条url 不存在，则保存一个新的 url
-    val location = aService.findByBaseUrl(saveFile.baseUrl!!) ?: aService.save(Attachment().apply {
+    val location = aService.findByBaseUrl(saveFile.baseUrl!!) ?: aService.save(
+        Attachment().apply {
       this.attType = AttachmentTyping.BASE_URL
       this.baseUrl = saveFile.baseUrl
     })

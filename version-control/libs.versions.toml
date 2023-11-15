@@ -143,14 +143,23 @@ lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" 
 jackson-moduleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
 jackson-coreAnnotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "jackson" }
 
+
+drools-core = { group = "org.drools", name = "drools-core", version.ref = "drools" }
+drools-compiler = { group = "org.drools", name = "drools-compiler", version.ref = "drools" }
+drools-decisiontables = { group = "org.drools", name = "drools-decisiontables", version.ref = "drools" }
+drools-templates = { group = "org.drools", name = "drools-templates", version.ref = "drools" }
+drools-ruleunitsEngine = { group = "org.drools", name = "drools-ruleunits-engine", version.ref = "drools" }
+kie-api = { group = "org.kie", name = "kie-api", version.ref = "kie" }
+
+
 bom-springModulith = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "spring-modulith" }
 bom-springBoot = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
 bom-springCloud = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "spring-cloud" }
 bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
-
+bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.116"
+compose = "1.6.130"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
@@ -165,7 +174,7 @@ spring-cloud = "2023.0.0-M2" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### https://spring.io/projects/spring-cloud-alibaba#learn
 spring-modulith = "1.1.0-RC2" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
 spring-doc-webmvcUi3 = "2.2.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
-spring-doc-opapiUi2 = "1.7.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+spring-doc-openapiUi2 = "1.7.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 apache-commonsPool2 = "2.12.0" ### https://commons.apache.org/proper/commons-pool
 apache-commonsCompress = "1.24.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
 
@@ -237,3 +246,6 @@ gson = "2.10.1" ### https://mvnrepository.com/artifact/com.google.code.gson/gson
 lombok = "1.18.30" ### https://mvnrepository.com/artifact/org.projectlombok/lombok
 
 hibernate = "6.4.0.CR1" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+
+drools = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.drools/drools-core
+kie = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.kie/kie-api

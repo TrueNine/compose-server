@@ -2,9 +2,9 @@ package net.yan100.compose.rds.gen.ctx
 
 import lombok.extern.slf4j.Slf4j
 import net.yan100.compose.core.lang.DTimer
-import net.yan100.compose.rds.core.entity.TreeEntity
+import net.yan100.compose.rds.core.entities.TreeEntity
 import net.yan100.compose.rds.gen.util.DbCaseConverter
-import net.yan100.compose.rds.repository.base.IRepo
+import net.yan100.compose.rds.repositories.base.IRepo
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -15,7 +15,7 @@ class RenderContext {
   private var pkgName: String = ""
   private var ignoreColumns: MutableSet<String> = mutableSetOf()
   private var baseEntityClass: String = TreeEntity::class.java.canonicalName
-  private var baseRepositoryClass: String = IRepo::class.java.canonicalName
+  private var baseRepositoryClass: String = net.yan100.compose.rds.repositories.base.IRepo::class.java.canonicalName
   private var baseServiceClass: String = ""
   private var baseServiceImplClass: String = ""
   private var author: String = "Generator Author"

@@ -1,6 +1,6 @@
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entity.Dept
+import net.yan100.compose.rds.entities.Dept
 import net.yan100.compose.rds.service.base.IService
 
 interface IDeptService : IService<Dept> {

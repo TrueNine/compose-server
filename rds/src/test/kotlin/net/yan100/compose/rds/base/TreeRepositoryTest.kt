@@ -2,8 +2,8 @@ package net.yan100.compose.rds.base
 
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entity.DbTestTreeEntity
-import net.yan100.compose.rds.repository.DbTestTreeRepository
+import net.yan100.compose.rds.entities.DbTestTreeEntity
+import net.yan100.compose.rds.repositories.DbTestTreeRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

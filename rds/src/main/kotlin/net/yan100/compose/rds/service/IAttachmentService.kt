@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entity.Attachment
-import net.yan100.compose.rds.entity.LinkedAttachment
+import net.yan100.compose.rds.entities.Attachment
+import net.yan100.compose.rds.entities.LinkedAttachment
 import net.yan100.compose.rds.service.base.IService
 import net.yan100.compose.rds.core.util.PagedWrapper
 import net.yan100.compose.rds.core.util.Pq
