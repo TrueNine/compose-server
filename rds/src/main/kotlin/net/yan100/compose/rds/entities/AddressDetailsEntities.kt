@@ -8,6 +8,8 @@ import jakarta.persistence.ForeignKey
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.alias.BigText
+import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.NonDesensitizedRef
 import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.annotations.Strategy
@@ -130,7 +132,7 @@ open class NonDesensitizedAddressDetails : SuperAddressDetails() {
   @NotBlank(message = "详细地址不能为空")
   @Schema(title = "地址详情")
   @Column(name = ADDRESS_DETAILS, nullable = false)
-  override var addressDetails: String? = null
+  override var addressDetails: BigText? = null
 
   /**
    * 地址代码
@@ -139,7 +141,7 @@ open class NonDesensitizedAddressDetails : SuperAddressDetails() {
   @NotBlank(message = "地址代码不能为空")
   @Schema(title = "地址代码")
   @Column(name = ADDRESS_CODE)
-  override var addressCode: String? = null
+  override var addressCode: SerialCode? = null
 
 
   /**

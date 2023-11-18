@@ -1,6 +1,7 @@
 package net.yan100.compose.rds.core.util
 
 
+import net.yan100.compose.rds.core.models.PagedRequestParam
 import net.yan100.compose.rds.core.models.PagedResponseResult
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -20,18 +21,18 @@ object PagedWrapper {
   fun <T> empty(): PagedResponseResult<T> = PagedResponseResult.empty()
 
   @JvmField
-  val DEFAULT_MAX: net.yan100.compose.rds.core.models.PagedRequestParam =
-    net.yan100.compose.rds.core.models.PagedRequestParam(
-      net.yan100.compose.rds.core.models.PagedRequestParam.MIN_OFFSET,
-      net.yan100.compose.rds.core.models.PagedRequestParam.MAX_PAGE_SIZE,
+  val DEFAULT_MAX: PagedRequestParam =
+    PagedRequestParam(
+      PagedRequestParam.MIN_OFFSET,
+      PagedRequestParam.MAX_PAGE_SIZE,
       false
     )
 
   @JvmField
-  val UN_PAGE: net.yan100.compose.rds.core.models.PagedRequestParam =
-    net.yan100.compose.rds.core.models.PagedRequestParam(
-      net.yan100.compose.rds.core.models.PagedRequestParam.MIN_OFFSET,
-      net.yan100.compose.rds.core.models.PagedRequestParam.MAX_PAGE_SIZE,
+  val UN_PAGE: PagedRequestParam =
+    PagedRequestParam(
+      PagedRequestParam.MIN_OFFSET,
+      PagedRequestParam.MAX_PAGE_SIZE,
       true
     )
 
@@ -48,11 +49,11 @@ object PagedWrapper {
       }
 
   @JvmStatic
-  fun param(paramSetting: net.yan100.compose.rds.core.models.PagedRequestParam? = DEFAULT_MAX): Pageable {
+  fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
     return if (false == paramSetting?.unPage) {
       PageRequest.of(
         paramSetting.offset ?: 0,
-        paramSetting.pageSize ?: net.yan100.compose.rds.core.models.PagedRequestParam.MAX_PAGE_SIZE
+        paramSetting.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
       )
     } else Pageable.unpaged()
   }
@@ -63,7 +64,7 @@ object PagedWrapper {
    * @param lazySequence 序列
    */
   @JvmStatic
-  fun <T> warpBy(pageParam: net.yan100.compose.rds.core.models.PagedRequestParam = DEFAULT_MAX, lazySequence: () -> Sequence<T>): PagedResponseResult<T> {
+  fun <T> warpBy(pageParam: PagedRequestParam = DEFAULT_MAX, lazySequence: () -> Sequence<T>): PagedResponseResult<T> {
     val sequence = lazySequence()
     val list = sequence.take(pageParam.offset + pageParam.pageSize).toList()
     val endSize = minOf(pageParam.pageSize, list.size)
@@ -78,7 +79,7 @@ object PagedWrapper {
 }
 
 typealias Pw = PagedWrapper
-typealias Pq = net.yan100.compose.rds.core.models.PagedRequestParam
+typealias Pq = PagedRequestParam
 typealias Pr<T> = PagedResponseResult<T>
 
 /**

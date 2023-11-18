@@ -16,7 +16,10 @@ class ErrorMessage private constructor() : Serializable {
   var code: Int = -1
     private set
 
+
   companion object {
+    const val DEFAULT_ERROR_MESSAGE = "发生未知异常，服务器返回错误"
+
     @JvmStatic
     fun failedBy(msg: String, code: Int): ErrorMessage {
       return ErrorMessage().apply {

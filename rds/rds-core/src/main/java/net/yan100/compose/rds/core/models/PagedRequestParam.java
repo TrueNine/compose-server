@@ -4,9 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,15 +16,25 @@ import java.io.Serializable;
  * @since 2022-12-31
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Schema(title = "分页请求入参")
 public class PagedRequestParam implements Serializable {
   public static final int MIN_OFFSET = 0;
   public static final int MAX_PAGE_SIZE = 42;
 
+  public PagedRequestParam(int offset, int pageSize, boolean unPage) {
+    this.offset = offset;
+    this.pageSize = pageSize;
+    this.unPage = unPage;
+  }
+
+  public PagedRequestParam() {
+    this(MIN_OFFSET,MAX_PAGE_SIZE,false);
+  }
+
   @Serial
   private static final long serialVersionUID = 1L;
+
+
 
   @Nullable
   @Min(value = MIN_OFFSET, message = "分页页码最小为0")

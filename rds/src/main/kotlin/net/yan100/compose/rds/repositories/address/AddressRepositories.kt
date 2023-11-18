@@ -2,6 +2,8 @@ package net.yan100.compose.rds.repositories.address
 
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames.Rbac
 import net.yan100.compose.rds.entities.Address
+import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
+import net.yan100.compose.rds.repositories.base.IRepo
 import net.yan100.compose.rds.repositories.base.ITreeRepo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -39,5 +41,4 @@ interface IAddressRepo : ITreeRepo<Address> {
 }
 
 @Repository
-interface INonDesensitizedAddressDetailsRepo :
-    net.yan100.compose.rds.repositories.base.IRepo<net.yan100.compose.rds.entities.NonDesensitizedAddressDetails>
+interface INonDesensitizedAddressDetailsRepo : IRepo<NonDesensitizedAddressDetails>

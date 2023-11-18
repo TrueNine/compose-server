@@ -40,7 +40,7 @@ class TableRowDeleteRecordServiceImpl(
         userId = userInfo?.userId
         userAccount = userInfo?.account
         deleteDatetime = LocalDateTime.now()
-        entity = extractTableRow(anyData)
+        this.entity = extractTableRow(anyData)
       }
       log.trace("保存删除的数据 = {}", delRow)
       delRepo.save(delRow)

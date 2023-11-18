@@ -9,7 +9,7 @@ create table if not exists idcard_2
   ethnic_group       varchar(127)    default null,
   expire_date        date            default null,
   issue_organ        varchar(255)    default null
-) comment '身份证2代';
+) default charset = utf8mb4, comment '身份证2代';
 call add_base_struct('idcard_2');
 
 
@@ -27,7 +27,7 @@ create table if not exists disability_certificate_2
   guardian           varchar(255)    default null,
   guardian_phone     varchar(127)    default null,
   birthday           date            default null
-) comment '残疾证2代';
+) default charset = utf8mb4,comment '残疾证2代';
 call add_base_struct('disability_certificate_2');
 
 
@@ -55,7 +55,7 @@ create table if not exists household_registration_card
   military_service_status        varchar(255)    default null,
   service_address_details_id     bigint unsigned default null,
   issue_date                     date            default null
-) comment '户口登记卡';
+) default charset = utf8mb4, comment '户口登记卡';
 call add_base_struct('household_registration_card');
 
 
@@ -67,5 +67,5 @@ create table bank_card
   bank_group            integer      default null,
   bank_type             integer      default null,
   issue_address_details text         default null
-) comment '银行卡';
+) default charset = utf8mb4, comment '银行卡';
 call add_base_struct('bank_card');
