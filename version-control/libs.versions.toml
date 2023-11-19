@@ -159,7 +159,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.136"
+compose = "1.6.137"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 

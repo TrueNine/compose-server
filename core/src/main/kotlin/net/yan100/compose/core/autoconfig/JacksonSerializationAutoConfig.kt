@@ -50,7 +50,10 @@ class JacksonSerializationAutoConfig {
     val kotlinKeyPairDeserializer = KPairDeserializer()
     module.addDeserializer(Pair::class.java, kotlinKeyPairDeserializer)
 
+    // 将 byteArray 处理为 int 数组
+    val byteArraySerializer = ByteArraySerializer()
     val byteArrayDeserializer = ByteArrayDeserializer()
+    module.addSerializer(ByteArray::class.java, byteArraySerializer)
     module.addDeserializer(ByteArray::class.java, byteArrayDeserializer)
 
     log.debug("配置jackson序列化规则")
