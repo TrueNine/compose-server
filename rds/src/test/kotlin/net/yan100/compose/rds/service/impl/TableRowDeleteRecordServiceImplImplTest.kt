@@ -28,9 +28,9 @@ class TableRowDeleteRecordServiceImplImplTest {
 
     assertNotNull(saved)
     assertNotNull(saved.entity)
-    assertNotNull(saved.entity.entityJson)
+    assertNotNull(saved.entity!!.entityJson)
 
-    val a = mapper.readValue(saved.entity.entityJson, DbTestServiceEntity::class.java)
+    val a = mapper.readValue(saved.entity!!.entityJson, DbTestServiceEntity::class.java)
     assertEquals(a.title, e.title)
 
     val abc = service.saveAnyEntity(null)

@@ -15,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional
 interface IRepo<T : BaseEntity> : IAnyRepo<T> {
   fun findByIdAndNotLogicDelete(id: Id): T = findByIdAndNotLogicDeleteOrNull(id)!!
 
+  @Query("from #{#entityName} e order by e.id desc")
+  fun findAllOrderByIdDesc(): List<T>
+
+  @Query("from #{#entityName} e order by e.id desc")
+  fun findAllOrderByIdDesc(page: Pageable): Page<T>
+
   @Query("from #{#entityName} e where e.id = :id and e.ldf = false")
   fun findByIdAndNotLogicDeleteOrNull(id: Id): T?
 

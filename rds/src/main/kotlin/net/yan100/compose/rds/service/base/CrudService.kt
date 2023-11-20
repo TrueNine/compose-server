@@ -2,14 +2,14 @@ package net.yan100.compose.rds.service.base
 
 import jakarta.validation.Valid
 import net.yan100.compose.rds.core.entities.BaseEntity
-import net.yan100.compose.rds.repositories.base.IRepo
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
 import net.yan100.compose.rds.core.util.result
+import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.repository.findByIdOrNull
 
-abstract class CrudService<T : BaseEntity>(private val repo: IRepo<T>) : IService<T> {
+open class CrudService<T : BaseEntity>(private val repo: IRepo<T>) : IService<T> {
   override fun findAllByIdAndNotLogicDeleted(ids: List<String>, page: Pq?): Pr<T> {
     return repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
   }
@@ -19,6 +19,14 @@ abstract class CrudService<T : BaseEntity>(private val repo: IRepo<T>) : IServic
   }
 
   override fun findAll(@Valid page: Pq?): Pr<T> = repo.findAll(page.page).result
+  override fun findAllOrderByIdDesc(page: Pq?): Pr<T> {
+    return repo.findAllOrderByIdDesc(page.page).result
+  }
+
+  override fun findAllOrderByIdDesc(): List<T> {
+    return repo.findAllOrderByIdDesc()
+  }
+
   override fun findById(id: String): T? = repo.findByIdOrNull(id)
   override fun findAllById(ids: List<String>): MutableList<T> = repo.findAllById(ids)
   override fun findByIdAndNotLogicDeleted(id: String): T = repo.findByIdAndNotLogicDelete(id)

@@ -24,6 +24,10 @@ class AddressServiceImpl(
     return repo.saveChildren(cleanedRoot, lazy())
   }
 
+  override fun findAllByCodeIn(codes: List<String>): List<Address> {
+    return repo.findAllByCodeIn(codes)
+  }
+
   override fun findProvinces(): List<Address> {
     return findDirectChildrenById(repo.findRootId())
   }

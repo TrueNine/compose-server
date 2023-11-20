@@ -11,4 +11,5 @@ interface IAddressService : IService<Address> {
   fun findDirectChildrenById(id: String): List<Address>
   fun findFullPathById(id: String): String
   fun findFullPathByCode(id: String): String
+  fun findAllByCodeIn(codes: List<String>): List<Address>
 }
