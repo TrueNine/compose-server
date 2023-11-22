@@ -12,8 +12,12 @@ import java.io.Serializable
 class ErrorMessage private constructor() : Serializable {
   var msg: String? = null
     private set
+  var alert: String? = null
+    private set
 
   var code: Int = -1
+    private set
+  var errMap: MutableMap<String, String> = mutableMapOf()
     private set
 
 
@@ -21,31 +25,32 @@ class ErrorMessage private constructor() : Serializable {
     const val DEFAULT_ERROR_MESSAGE = "发生未知异常，服务器返回错误"
 
     @JvmStatic
-    fun failedBy(msg: String, code: Int): ErrorMessage {
+    fun failedBy(
+      msg: String = ErrMsg.UNKNOWN_ERROR.message,
+      code: Int = ErrMsg.UNKNOWN_ERROR.code,
+      alert: String = ErrMsg.UNKNOWN_ERROR.alert,
+      errMap: MutableMap<String, String> = mutableMapOf()
+    ): ErrorMessage {
       return ErrorMessage().apply {
         this.code = code
         this.msg = msg
+        this.alert = alert
+        this.errMap = errMap
       }
     }
 
     @JvmStatic
-    fun failByServerError(): ErrorMessage {
-      return failedByMessages(ErrMsg._500)
-    }
+    val SERVER_ERROR: ErrorMessage = failedByErrMsg(ErrMsg._500)
 
     @JvmStatic
-    fun failedByClientError(): ErrorMessage {
-      return failedByMessages(ErrMsg._400)
-    }
+    val BAE_REQUEST: ErrorMessage = failedByErrMsg(ErrMsg._400)
 
     @JvmStatic
-    fun failedByUnknownError(): ErrorMessage {
-      return failedByMessages(ErrMsg.UNKNOWN_ERROR)
-    }
+    val UNKNOWN_ERROR: ErrorMessage = failedByErrMsg(ErrMsg.UNKNOWN_ERROR)
 
     @JvmStatic
-    fun failedByMessages(messages: ErrMsg): ErrorMessage {
-      return failedBy(messages.message, messages.code)
+    fun failedByErrMsg(messages: ErrMsg): ErrorMessage {
+      return failedBy(msg = messages.message, code = messages.code, alert = messages.alert)
     }
 
     @Serial

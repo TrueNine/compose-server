@@ -20,6 +20,11 @@ interface IAddressRepo : ITreeRepo<Address> {
 
   fun findAllByCodeIn(codes: List<String>): List<Address>
 
+  /**
+   * 根据 code 查询当前地址的 id
+   */
+  @Query("select a.id from Address a where a.code = :code")
+  fun findIdByCode(code: String): String
 
   @Query("from Address e where e.id = '0'")
   fun findRoot(): Address

@@ -9,6 +9,8 @@ object Repos {
     val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
   }
 
+  const val tencentCloudMaven = "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"
+
   const val yunXiaoRelese = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
   const val yunXiaoSnapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 
@@ -37,7 +39,6 @@ object Repos {
 
   val publicRepositories = listOf(
     huaweiCloudMaven,
-
     aliPublic,
     aliCentral,
     aliJCenter,
@@ -47,6 +48,8 @@ object Repos {
     aliSpringPlugin,
     aliGrailsCore,
     aliApacheSnapshots,
+
+    tencentCloudMaven,
 
     springMilestone,
     springLibMilestone,

@@ -95,3 +95,13 @@ fun <T : AnyEntity> T.withNew(): T {
   this.asNew()
   return this
 }
+
+fun <T : AnyEntity> T.withNew(after: (T) -> T): T = after(withNew())
+
+
+/**
+ * 将集合内的所有元素置空为新的 Entity 对象
+ */
+fun <T : AnyEntity> List<T>.withNew(): List<T> = map { it.withNew() }
+fun <T : AnyEntity> List<T>.withNew(after: (List<T>) -> List<T>): List<T> = after(map { it.withNew() })
+fun <T : AnyEntity, R : Any> List<T>.withNewMap(after: (List<T>) -> List<R>): List<R> = after(map { it.withNew() })

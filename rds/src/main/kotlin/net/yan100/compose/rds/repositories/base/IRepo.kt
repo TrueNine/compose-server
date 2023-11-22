@@ -1,8 +1,13 @@
 package net.yan100.compose.rds.repositories.base
 
+import jakarta.validation.Valid
 import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.util.Pq
+import net.yan100.compose.rds.core.util.Pr
+import net.yan100.compose.rds.core.util.page
+import net.yan100.compose.rds.core.util.result
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
@@ -48,8 +53,7 @@ interface IRepo<T : BaseEntity> : IAnyRepo<T> {
   @Query("select e.rlv from #{#entityName} e where e.id = :id")
   fun findRlvById(id: Id): BigSerial
 
-  fun modifyWrapper(e: T): T {
-    return if (e.id != null) e.also { it.rlv = findRlvById(e.id!!) }
-    else e
-  }
+
+  fun findAll(@Valid pq: Pq?): Pr<T> = findAll(pq.page).result
+  fun findAllByNotLogicDeleted(@Valid pq: Pq?): Pr<T> = findAllByNotLogicDeleted(pq.page).result
 }

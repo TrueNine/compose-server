@@ -17,7 +17,7 @@ values (0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypb
 
 create table if not exists user_info
 (
-  user_id            bigint not null,
+  user_id            bigint       not null,
   avatar_img_id      bigint,
   first_name         varchar(4095),
   last_name          varchar(4095),
@@ -27,8 +27,8 @@ create table if not exists user_info
   phone              varchar(255),
   id_card            varchar(255),
   gender             int default 2,
-  wechat_openid varchar(255) null,
-  wechat_authid varchar(255),
+  wechat_openid      varchar(255) null,
+  wechat_authid      varchar(255),
   unique (wechat_openid),
   unique (phone),
   unique (id_card)

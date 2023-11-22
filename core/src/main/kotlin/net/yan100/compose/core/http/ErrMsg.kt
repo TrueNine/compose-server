@@ -6,7 +6,11 @@ package net.yan100.compose.core.http
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class ErrMsg(val code: Int, var message: String, var alert: String) {
+enum class ErrMsg(
+  val code: Int,
+  var message: String,
+  var alert: String
+) {
   /**
    * 400
    */
@@ -146,7 +150,7 @@ enum class ErrMsg(val code: Int, var message: String, var alert: String) {
 
   companion object {
     fun valueOf(code: Int): ErrMsg {
-      for (value in values()) {
+      for (value in entries) {
         if (code == value.code) {
           return value
         }

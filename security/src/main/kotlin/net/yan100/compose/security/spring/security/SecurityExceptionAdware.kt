@@ -30,7 +30,7 @@ abstract class SecurityExceptionAdware(
     ex: AuthenticationException
   ) {
     log.warn("授权校验异常", ex)
-    writeErrorMessage(response, ErrorMessage.failedByMessages(ErrMsg._401))
+    writeErrorMessage(response, ErrorMessage.failedByErrMsg(ErrMsg._401))
   }
 
   override fun handle(
@@ -39,7 +39,7 @@ abstract class SecurityExceptionAdware(
     ex: AccessDeniedException
   ) {
     log.warn("无权限异常", ex)
-    writeErrorMessage(response, ErrorMessage.failedByMessages(ErrMsg._403))
+    writeErrorMessage(response, ErrorMessage.failedByErrMsg(ErrMsg._403))
   }
 
   private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorMessage, charset: Charset = StandardCharsets.UTF_8) {
