@@ -3,6 +3,7 @@ package net.yan100.compose.rds.entities
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.rds.converters.AuditTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.typing.AuditTyping
@@ -21,7 +22,17 @@ open class SuperAudit : BaseEntity() {
     const val CREATE_DATETIME = "create_datetime"
     const val REF_ID = "ref_id"
     const val REF_TYPE = "ref_type"
+    const val AUDIT_IP = "audit_ip"
+    const val AUDIT_DEVICE_ID = "audit_device_id"
   }
+
+  @Schema(title = "审核人设备 id")
+  @Column(name = AUDIT_DEVICE_ID)
+  open var auditDeviceId: SerialCode? = null
+
+  @Schema(title = "审核人 ip")
+  @Column(name = AUDIT_IP)
+  open var auditIp: String? = null
 
   @Schema(title = "审核类型")
   @Column(name = REF_TYPE)

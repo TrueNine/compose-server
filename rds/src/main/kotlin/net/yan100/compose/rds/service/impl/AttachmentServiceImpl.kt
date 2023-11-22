@@ -4,8 +4,8 @@ package net.yan100.compose.rds.service.impl
 import net.yan100.compose.rds.service.base.CrudService
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.entities.LinkedAttachment
-import net.yan100.compose.rds.repositories.AttachmentRepo
-import net.yan100.compose.rds.repositories.LinkedAttachmentRepo
+import net.yan100.compose.rds.repositories.IAttachmentRepo
+import net.yan100.compose.rds.repositories.ILinkedAttachmentRepo
 import net.yan100.compose.rds.service.IAttachmentService
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class AttachmentServiceImpl(
-    private val repo: AttachmentRepo,
-    private val linkedRepo: LinkedAttachmentRepo
+    private val repo: IAttachmentRepo,
+    private val linkedRepo: ILinkedAttachmentRepo
 ) : IAttachmentService, CrudService<Attachment>(repo) {
   override fun existsByBaseUrl(baseUrl: String): Boolean {
     return repo.existsByBaseUrl(baseUrl)

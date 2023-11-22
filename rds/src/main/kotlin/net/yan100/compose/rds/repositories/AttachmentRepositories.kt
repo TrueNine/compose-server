@@ -11,20 +11,20 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AttachmentRepo : IRepo<Attachment> {
+interface IAttachmentRepo : IRepo<Attachment> {
   @Query(
     """
-    SELECT new kotlin.Pair(a.baseUrl,a.saveName)
-    FROM Attachment a
-    WHERE a.id = :id
+    select new kotlin.Pair(a.baseUrl,a.saveName)
+    from Attachment a
+    where a.id = :id
   """
   )
   fun findBaseUrlAndSaveNamePairById(id: Long): Pair<String, String>?
 
-  @Query("""SELECT a.metaName FROM Attachment a WHERE a.id = :id""")
+  @Query("""select a.metaName from Attachment a where a.id = :id""")
   fun findMetaNameById(id: String): String?
 
-  @Query("""SELECT a.saveName FROM Attachment a WHERE a.id = :id""")
+  @Query("""select a.saveName from Attachment a where a.id = :id""")
   fun findSaveNameById(id: String): String?
 
   /**
@@ -32,19 +32,19 @@ interface AttachmentRepo : IRepo<Attachment> {
    */
   @Query(
     """
-    SELECT b.baseUrl||a.metaName
-    FROM Attachment a
-    INNER JOIN Attachment b ON a.urlId = b.id
-    WHERE a.id = :id
+    select b.baseUrl||a.metaName
+    from Attachment a
+    inner join Attachment b ON a.urlId = b.id
+    where a.id = :id
 """
   )
   fun findFullPathById(@Param("id") id: String): String?
 
   @Query(
     """
-    SELECT a.baseUrl||a.metaName
-    FROM Attachment a
-    WHERE a.metaName LIKE concat(:metaName,'%%') 
+    select a.baseUrl||a.metaName
+    from Attachment a
+    where a.metaName LIKE concat(:metaName,'%%') 
     """
   )
   fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pageable): Page<String>
@@ -54,10 +54,10 @@ interface AttachmentRepo : IRepo<Attachment> {
    */
   @Query(
     """
-    FROM Attachment a
-    INNER JOIN Attachment b ON a.urlId = b.id
-    WHERE b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
-    AND b.baseUrl = :baseUrl
+    from Attachment a
+    inner join Attachment b ON a.urlId = b.id
+    where b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
+    and b.baseUrl = :baseUrl
   """
   )
   fun findAllByParentBaseUrl(baseUrl: String, page: Pageable): Page<Attachment>
@@ -72,17 +72,17 @@ interface AttachmentRepo : IRepo<Attachment> {
 
 
 @Repository
-interface LinkedAttachmentRepo : IRepo<LinkedAttachment> {
+interface ILinkedAttachmentRepo : IRepo<LinkedAttachment> {
   /**
    * ## 根据 baseUrl 查询其下的所有 附件
    */
   @Query(
     """
-    FROM LinkedAttachment a
-    INNER JOIN LinkedAttachment b 
-    ON a.urlId = b.id
-    WHERE b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
-    AND b.baseUrl = :baseUrl
+    from LinkedAttachment a
+    inner join LinkedAttachment b 
+    on a.urlId = b.id
+    where b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
+    and b.baseUrl = :baseUrl
   """
   )
   fun findAllByParentBaseUrl(baseUrl: String, page: Pageable): Page<LinkedAttachment>
