@@ -33,7 +33,10 @@ enum class DocumentTyping(
   BANK_CARD(7),
 
   @Schema(title = "合同")
-  CONTRACT(8);
+  CONTRACT(8),
+
+  @Schema(title = "营业执照")
+  BIZ_LICENSE(9);
 
   @JsonValue
   override fun getValue(): Int = value

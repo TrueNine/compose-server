@@ -20,7 +20,10 @@ enum class DocumentPointTyping(
   DOUBLE(3),
 
   @Schema(title = "所有")
-  ALL(4);
+  ALL(4),
+
+  @Schema(title = "所有内容")
+  ALL_CONTENT(5);
 
   override fun getValue(): Int? = v
 
