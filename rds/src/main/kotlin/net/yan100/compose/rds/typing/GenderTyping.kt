@@ -10,6 +10,7 @@ import net.yan100.compose.core.lang.IntTyping
  * @author TrueNine
  * @since 2023-04-23
  */
+@Schema(title = "性别")
 enum class GenderTyping(
   private val value: Int
 ) : IntTyping {
