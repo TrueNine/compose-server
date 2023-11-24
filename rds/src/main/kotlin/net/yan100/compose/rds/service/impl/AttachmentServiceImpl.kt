@@ -1,16 +1,16 @@
 package net.yan100.compose.rds.service.impl
 
 
-import net.yan100.compose.rds.service.base.CrudService
+import net.yan100.compose.rds.core.util.Pq
+import net.yan100.compose.rds.core.util.Pr
+import net.yan100.compose.rds.core.util.page
+import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.entities.LinkedAttachment
 import net.yan100.compose.rds.repositories.IAttachmentRepo
 import net.yan100.compose.rds.repositories.ILinkedAttachmentRepo
 import net.yan100.compose.rds.service.IAttachmentService
-import net.yan100.compose.rds.core.util.Pq
-import net.yan100.compose.rds.core.util.Pr
-import net.yan100.compose.rds.core.util.page
-import net.yan100.compose.rds.core.util.result
+import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -25,6 +25,10 @@ class AttachmentServiceImpl(
 
   override fun findByBaseUrl(baseUrl: String): Attachment? {
     return repo.findFirstByBaseUrl(baseUrl)
+  }
+
+  override fun findAllByBaseUrlIn(BaseUrls: List<String>): List<Attachment> {
+    TODO("Not yet implemented")
   }
 
   override fun findFullUrlById(id: String): String? {

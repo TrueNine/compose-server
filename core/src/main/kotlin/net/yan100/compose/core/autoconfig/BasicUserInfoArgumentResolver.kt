@@ -1,6 +1,9 @@
 package net.yan100.compose.core.autoconfig
 
+import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.core.ctx.UserInfoContextHolder
+import net.yan100.compose.core.http.Headers
+import net.yan100.compose.core.http.remoteRequestIp
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.core.models.UserInfo
 import org.springframework.core.MethodParameter
@@ -35,6 +38,14 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
   ): Any? {
     val u = UserInfoContextHolder.get()
     log.info("argument injection for {}", u)
+    if (u == null) {
+      UserInfoContextHolder.set(UserInfo().apply {
+        val req = webRequest.nativeRequest as HttpServletRequest
+        val deviceId = Headers.getDeviceId(req)
+        this.currentIpAddr = req.remoteRequestIp
+        this.deviceId = deviceId
+      })
+    }
     return u
   }
 }

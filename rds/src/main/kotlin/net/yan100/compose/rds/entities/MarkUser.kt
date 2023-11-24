@@ -71,7 +71,6 @@ open class SuperMarkUser : BaseEntity() {
   @Column(name = EMAIL)
   open var email: String? = null
 
-
   @Schema(title = "身份证号")
   @Column(name = IDCARD)
   open var idcard: SerialCode? = null
