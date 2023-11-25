@@ -47,7 +47,6 @@ create table if not exists user_info
 comment on table user_info is '用户信息';
 select add_base_struct('user_info');
 create index on user_info (user_id);
-
 create index on user_info (address_details_id);
 create index on user_info (avatar_img_id);
 create index on user_info (wechat_openid);

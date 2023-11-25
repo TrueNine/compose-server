@@ -45,7 +45,6 @@ create table if not exists user_info
   unique (wechat_account) comment '微信账号',
   index (wechat_openid) comment '微信 openId 经常查询',
   index (wechat_authid) comment '微信自定义登录id经常查询',
-  index (user_id) comment '外联 用户',
   index (address_details_id) comment '外联 地址详情',
   index (avatar_img_id) comment '外联 文件'
 ) default charset = utf8mb4, comment '用户信息';
