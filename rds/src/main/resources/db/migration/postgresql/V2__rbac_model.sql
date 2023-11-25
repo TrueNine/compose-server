@@ -1,4 +1,4 @@
-create table if not exists user
+create table if not exists "user"
 (
   create_user_id  bigint        default null, -- 创建此账号的 user id
   account         varchar(255)  default null,
@@ -11,7 +11,7 @@ create table if not exists user
 );
 comment on table "user" is '用户';
 select add_base_struct('user');
-insert into user(id, create_user_id, account, nick_name, pwd_enc, last_login_time)
+insert into "user"(id, create_user_id, account, nick_name, pwd_enc, last_login_time)
 values (0, 0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now()),
        (1, 0, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now());
 
@@ -52,9 +52,9 @@ create index on user_info (address_details_id);
 create index on user_info (avatar_img_id);
 create index on user_info (wechat_openid);
 create index on user_info (wechat_authid);
-insert into user_info(id,pri, user_id, first_name, last_name, email, birthday, phone, gender)
-values (0, 0,true, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
-       (1, 1,true, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);
+insert into user_info(id, pri, user_id, first_name, last_name, email, birthday, phone, gender)
+values (0, 0, true, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
+       (1, 1, true, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);
 
 create table if not exists role
 (
