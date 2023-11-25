@@ -21,9 +21,11 @@ class AliCloudOss(
 ) : Oss {
 
   @Suppress("UNCHECKED_CAST")
-  override fun <T : Any?> `as`(instanceType: Class<T>): T {
+  override fun <T : Any?> nativeHandle(instanceType: Class<T>): T {
     return this.oss as T
   }
+
+  override val exposedBaseUrl: String get() = TODO("Not yet implemented")
 
   override fun makeDirs(dirName: String) {
     TODO("Not yet implemented")

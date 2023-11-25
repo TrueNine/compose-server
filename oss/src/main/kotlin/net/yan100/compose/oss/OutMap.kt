@@ -12,25 +12,25 @@ interface OutMap : StreamsMap {
   /**
    * @return 使用的输出流
    */
-  override fun usedStream(): OutputStream
+  override val usedStream: OutputStream
 
   /**
    * @return 文件媒体类型
    */
-  override fun mimeType(): String
+  override val mediaType: String
 
   /**
    * @return 文件名
    */
-  override fun fileName(): String
+  override val fName: String
 
   /**
    * @return 目录名
    */
-  override fun directoryName(): String
+  override val dirName: String
 
   /**
    * @return 文件大小
    */
-  override fun size(): Long
+  override val size: Long
 }

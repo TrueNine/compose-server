@@ -17,54 +17,23 @@ import java.io.OutputStream
 open class MinioClientAdaptor protected constructor(
   protected val client: MinioClient
 ) : MinioClientOperator(client) {
-
   open fun ins(resp: ObjectWriteResponse, stream: InputStream): InMap {
     return object : InMap {
-      override fun usedStream(): InputStream {
-        return stream
-      }
-
-      override fun mimeType(): String {
-        return headerContentType(resp.headers())!!
-      }
-
-      override fun fileName(): String {
-        return resp.`object`()
-      }
-
-      override fun directoryName(): String {
-        return resp.bucket()
-      }
-
-      override fun size(): Long {
-        return headerSize(resp.headers())!!
-      }
+      override val usedStream get() = stream
+      override val mediaType get() = headerContentType(resp.headers())!!
+      override val fName get() = resp.`object`()
+      override val dirName get() = resp.bucket()
+      override val size get() = headerSize(resp.headers())!!
     }
   }
 
   open fun outs(resp: GetObjectResponse, stream: OutputStream): OutMap {
     return object : OutMap {
-      override fun usedStream(): OutputStream {
-        return stream
-      }
-
-      override fun mimeType(): String {
-        return headerContentType(resp.headers())!!
-      }
-
-      override fun fileName(): String {
-        return resp.`object`()
-      }
-
-      override fun directoryName(): String {
-        return resp.bucket()
-      }
-
-      override fun size(): Long {
-        return headerSize(resp.headers())!!
-      }
+      override val usedStream get() = stream
+      override val mediaType get() = headerContentType(resp.headers())!!
+      override val fName get() = resp.`object`()
+      override val dirName get() = resp.bucket()
+      override val size get() = headerSize(resp.headers())!!
     }
   }
-
-
 }

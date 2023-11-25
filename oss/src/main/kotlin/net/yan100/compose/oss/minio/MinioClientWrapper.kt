@@ -17,13 +17,16 @@ import java.util.function.Consumer
  * @since 2023-02-20
  */
 class MinioClientWrapper(
-  minioClient: MinioClient
+  private val minioClient: MinioClient,
+  private val exposeUrl: String = "http://localhost:9000"
 ) : Oss, MinioClientAdaptor(minioClient) {
 
   @Suppress("UNCHECKED_CAST")
-  override fun <T> `as`(instanceType: Class<T>): T {
+  override fun <T> nativeHandle(instanceType: Class<T>): T {
     return super.client as T
   }
+
+  override val exposedBaseUrl: String get() = this.exposeUrl
 
   override fun makeDirs(dirName: String) {
     createBucket(dirName)
@@ -73,6 +76,4 @@ class MinioClientWrapper(
     outs.transferTo(stream)
     return outs(outs, stream)
   }
-
-
 }

@@ -87,8 +87,7 @@ protected constructor(
     )
   }
 
-  open val buckets: List<Bucket>
-    get() = client.listBuckets()
+  open val buckets: List<Bucket> get() = client.listBuckets()
 
   open fun getObjects(dir: String): Iterable<Result<Item>> {
     return client.listObjects(

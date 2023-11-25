@@ -20,8 +20,13 @@ interface Oss {
    * @param <T>          类型
    * @return 实现对象实例
    * @implSpec MinioClientWrapper
-  </T> */
-  fun <T> `as`(instanceType: Class<T>): T
+   */
+  fun <T> nativeHandle(instanceType: Class<T>): T
+
+  /**
+   * 对外暴露的 baseUrl
+   */
+  val exposedBaseUrl: String
 
   /**
    * 创建新的文件夹

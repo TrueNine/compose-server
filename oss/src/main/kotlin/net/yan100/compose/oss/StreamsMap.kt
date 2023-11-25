@@ -11,55 +11,52 @@ import java.io.Closeable
 @JvmDefaultWithoutCompatibility
 interface StreamsMap {
   /**
-   * 使用流
+   * 使用过的流
    *
    * @return [Closeable]
    */
-  fun usedStream(): Closeable?
+  val usedStream: Closeable?
 
   /**
    * mime类型
    *
    * @return [String]
    */
-  fun mimeType(): String
+  val mediaType: String
 
   /**
    * 文件名称
    *
    * @return [String]
    */
-  fun fileName(): String
+  val fName: String
 
   /**
    * 目录名称
    *
    * @return [String]
    */
-  fun directoryName(): String
+  val dirName: String
 
   /**
    * 大小
    *
    * @return long
    */
-  fun size(): Long
+  val size: Long
 
   /**
    * 字符串表示的 size
    *
    * @return [String]
    */
-  fun sSize(): String? {
-    return java.lang.Long.toString(size())
-  }
+  val sizeStr: String get() = size.toString()
+
 
   /**
    * 路径
    *
    * @return [String]
    */
-  fun path(): String? {
-    return directoryName() + "/" + fileName()
-  }
+  val path: String get() = "$dirName/$fName"
 }

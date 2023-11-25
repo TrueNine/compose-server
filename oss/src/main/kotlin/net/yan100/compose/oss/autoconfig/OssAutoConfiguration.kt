@@ -58,7 +58,7 @@ class OssAutoConfiguration {
   fun oss(p: OssProperties, ctx: ApplicationContext): Oss? {
     log.debug("注册 oss 客户端，oss 类型为 = {}", p.type)
     return when (p.type) {
-      MINIO -> MinioClientWrapper(ctx.getBean(MinioClient::class.java))
+      MINIO -> MinioClientWrapper(ctx.getBean(MinioClient::class.java), p.exposeBaseUrl)
       FILE -> null
       MYSQL_DB -> null
       HUAWEI_CLOUD -> null

@@ -20,10 +20,10 @@ public class FileArgs {
   public static FileArgs useStreamMap(StreamsMap map) {
     return FileArgs
       .builder()
-      .dir(map.directoryName())
-      .fileName(map.fileName())
-      .mimeType(map.mimeType())
-      .size(map.size())
+      .dir(map.getDirName())
+      .fileName(map.getFName())
+      .mimeType(map.getMediaType())
+      .size(map.getSize())
       .build();
   }
 
