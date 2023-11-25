@@ -52,7 +52,7 @@ create index on user_info (address_details_id);
 create index on user_info (avatar_img_id);
 create index on user_info (wechat_openid);
 create index on user_info (wechat_authid);
-insert into user_info(id, pri, user_id, first_name, last_name, email, birthday, phone, gender)
+insert into user_info(id, user_id, pri, first_name, last_name, email, birthday, phone, gender)
 values (0, 0, true, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
        (1, 1, true, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);
 
