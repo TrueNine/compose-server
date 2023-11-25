@@ -1,11 +1,12 @@
 create table if not exists user
 (
-  account         varchar(255) not null comment '账号',
-  nick_name       varchar(2047) comment '呢称',
-  doc             text comment '描述',
-  pwd_enc         varchar(2047) default null comment '密码',
-  ban_time        datetime      default null comment '被封禁结束时间',
-  last_login_time datetime      default now() comment '最后请求时间',
+  create_user_id  bigint unsigned default null comment '创建此账户的 user id',
+  account         varchar(255)    default null comment '账号',
+  nick_name       varchar(2047)   default null comment '呢称',
+  doc             text            default null comment '描述',
+  pwd_enc         varchar(2047)   default null comment '密码',
+  ban_time        datetime        default null comment '被封禁结束时间',
+  last_login_time datetime        default now() comment '最后请求时间',
   unique (account) comment '账号唯一'
 ) default charset = utf8mb4,comment '用户';
 call add_base_struct('user');
@@ -16,22 +17,31 @@ values (0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypb
 
 create table if not exists user_info
 (
-  user_id            bigint unsigned not null comment '用户',
+  user_id            bigint unsigned default null comment '用户账号id',
   avatar_img_id      bigint unsigned comment '用户头像',
   first_name         varchar(4095) comment '姓',
   last_name          varchar(4095) comment '名',
   email              varchar(255) comment '邮箱',
   birthday           datetime comment '生日',
   address_details_id bigint unsigned comment '地址',
-  phone              varchar(255) comment '电话号码',
-  id_card            varchar(255) comment '身份证',
-  gender             tinyint default 2 comment ' 性别：0女，1难，2未知',
-  wechat_openid varchar(255) null comment '微信个人 openId',
-  wechat_authid varchar(127) comment '微信自定义登录id',
+  phone              varchar(255)    default null comment '电话号码',
+  spare_phone        varchar(255)    default null comment '备用手机',
+  id_card            varchar(255)    default null comment '身份证',
+  gender             tinyint         default null comment ' 性别：0女，1难，2未知',
+  wechat_openid      varchar(255)    default null comment '微信个人 openId',
+  wechat_account     varchar(255)    default null comment '微信个人账号',
+  wechat_authid      varchar(127)    default null comment '微信自定义登录id',
+  qq_openid          varchar(255)    default null,
+  qq_account         varchar(255)    default null,
+  address_code       varchar(127)    default null,
+  address_id         bigint unsigned default null,
+  unique (qq_account),
+  unique (qq_openid),
   unique (phone) comment '电话唯一',
   unique (id_card) comment '身份证唯一',
   unique (wechat_openid) comment '微信 openId唯一',
   unique (wechat_authid) comment '微信自定义登录id 唯一',
+  unique (wechat_account) comment '微信账号',
   index (wechat_openid) comment '微信 openId 经常查询',
   index (wechat_authid) comment '微信自定义登录id经常查询',
   index (user_id) comment '外联 用户',
@@ -119,8 +129,8 @@ values (0, 0, 0),
 
 create table if not exists dept
 (
-  name varchar(255)  not null comment '名称',
-  doc  text null comment '描述'
+  name varchar(255) not null comment '名称',
+  doc  text         null comment '描述'
 ) default charset = utf8mb4,comment '部门';
 call add_base_struct('dept');
 

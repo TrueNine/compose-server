@@ -19,9 +19,9 @@ import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 
 @MappedSuperclass
-open class SuperMuDocument : BaseEntity() {
+open class SuperUserDocument : BaseEntity() {
   companion object {
-    const val TABLE_NAME = "mu_document"
+    const val TABLE_NAME = "user_document"
 
     const val ATT_ID = "att_id"
     const val CREATE_USER_ID = "create_user_id"
@@ -31,7 +31,6 @@ open class SuperMuDocument : BaseEntity() {
     const val REMARK = "remark"
     const val DOC = "doc"
     const val USER_ID = "user_id"
-    const val MARK_USER_ID = "mark_user_id"
     const val NAME = "name"
     const val AUDIT_STATUS = "audit_status"
     const val C_TYPE = "c_type"
@@ -81,10 +80,6 @@ open class SuperMuDocument : BaseEntity() {
   @Column(name = NAME)
   open var name: String? = null
 
-  @Schema(title = "标记用户 id")
-  @Column(name = MARK_USER_ID)
-  open var markUserId: ReferenceId? = null
-
   @Schema(title = "用户 id")
   @Column(name = USER_ID)
   open var userId: ReferenceId? = null
@@ -109,5 +104,5 @@ open class SuperMuDocument : BaseEntity() {
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Table(name = SuperMuDocument.TABLE_NAME)
-open class MuDocument : SuperMuDocument()
+@Table(name = SuperUserDocument.TABLE_NAME)
+open class UserDocument : SuperUserDocument()

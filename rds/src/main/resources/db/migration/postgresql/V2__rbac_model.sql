@@ -1,8 +1,9 @@
 create table if not exists "user"
 (
-  account         varchar(255) not null,
-  nick_name       varchar(2047),
-  doc             text,
+  create_user_id  bigint        default null, -- 创建此账号的 user id
+  account         varchar(255)  default null,
+  nick_name       varchar(2047) default null,
+  doc             text          default null,
   pwd_enc         varchar(2047) default null,
   ban_time        timestamp     default null,
   last_login_time timestamp     default now(),
@@ -10,27 +11,36 @@ create table if not exists "user"
 );
 comment on table "user" is '用户';
 select add_base_struct('user');
-insert into "user"(id, account, nick_name, pwd_enc, last_login_time)
-values (0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now()),
-       (1, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now());
+insert into "user"(id, create_user_id, account, nick_name, pwd_enc, last_login_time)
+values (0, 0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now()),
+       (1, 0, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now());
 
 
 create table if not exists user_info
 (
-  user_id            bigint       not null,
-  avatar_img_id      bigint,
-  first_name         varchar(4095),
-  last_name          varchar(4095),
-  email              varchar(255),
-  birthday           timestamp,
-  address_details_id bigint,
-  phone              varchar(255),
-  id_card            varchar(255),
-  gender             int default 2,
-  wechat_openid      varchar(255) null,
-  wechat_authid      varchar(255),
+  user_id            bigint        default null,
+  avatar_img_id      bigint        default null,
+  first_name         varchar(4095) default null,
+  last_name          varchar(4095) default null,
+  email              varchar(255)  default null,
+  birthday           timestamp     default null,
+  address_details_id bigint        default null,
+  phone              varchar(255)  default null,
+  spare_phone        varchar(255)  default null,
+  id_card            varchar(255)  default null,
+  gender             int           default null,
+  wechat_openid      varchar(255)  default null,
+  wechat_account     varchar(255)  default null,
+  wechat_authid      varchar(255)  default null,
+  qq_openid          varchar(255)  default null,
+  qq_account         varchar(255)  default null,
+  address_code       varchar(127)  default null,
+  address_id         bigint        default null,
   unique (wechat_openid),
+  unique (wechat_account),
   unique (phone),
+  unique (qq_account),
+  unique (qq_openid),
   unique (id_card)
 );
 comment on table user_info is '用户信息';

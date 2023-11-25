@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Version
-import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.core.alias.BigSerial
+import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 
 /**
  * jpa顶级抽象类
@@ -32,7 +32,7 @@ open class BaseEntity : AnyEntity() {
    */
   @Version
   @JsonIgnore
-  @Column(name = RLV, nullable = false, columnDefinition = "INT DEFAULT 0")
+  @Column(name = RLV)
   @Schema(hidden = true, title = "乐观锁版本", requiredMode = RequiredMode.NOT_REQUIRED)
   open var rlv: BigSerial? = null
 
@@ -40,7 +40,7 @@ open class BaseEntity : AnyEntity() {
    * 逻辑删除标志
    */
   @JsonIgnore
-  @Column(name = LDF, columnDefinition = "INT DEFAULT 0")
+  @Column(name = LDF)
   @Schema(
     hidden = true,
     title = "逻辑删除标志",

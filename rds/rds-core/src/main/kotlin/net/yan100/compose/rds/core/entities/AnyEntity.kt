@@ -38,7 +38,7 @@ open class AnyEntity : Serializable, Persistable<Id> {
    */
   @jakarta.persistence.Id
   @Column(name = DataBaseBasicFieldNames.ID)
-  @Schema(title = ID, example = "7001234523405")
+  @Schema(title = ID, examples = ["7001234523405", "7001234523441"])
   private var id: Id? = null
 
   override fun equals(other: Any?): Boolean {

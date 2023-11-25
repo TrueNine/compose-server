@@ -5,7 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.NotNull
+import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.exceptions.KnownException
@@ -21,12 +22,40 @@ import java.time.LocalDate
 
 @MappedSuperclass
 open class SuperUserInfo : BaseEntity() {
+  companion object {
+    const val TABLE_NAME = "user_info"
+
+    const val USER_ID = "user_id"
+    const val AVATAR_IMG_ID = "avatar_img_id"
+    const val FIRST_NAME = "first_name"
+    const val LAST_NAME = "last_name"
+    const val EMAIL = "email"
+    const val BIRTHDAY = "birthday"
+    const val ADDRESS_DETAILS_ID = "address_details_id"
+    const val ADDRESS_CODE = "address_code"
+    const val ADDRESS_ID = "address_id"
+    const val WECHAT_ACCOUNT = "wechat_account"
+    const val PHONE = "phone"
+    const val ID_CARD = "id_card"
+    const val GENDER = "gender"
+    const val WECHAT_OPENID = "wechat_openid"
+    const val WECHAT_AUTHID = "wechat_authid"
+    const val QQ_OPENID = "qq_openid"
+    const val QQ_ACCOUNT = "qq_account"
+    const val SPARE_PHONE = "spare_phone"
+    const val WM_CODE = "wm_code"
+  }
+
+  @Schema(title = "水印码")
+  @Column(name = WM_CODE)
+  open var wmCode: SerialCode? = null
+
   /**
    * 用户
    */
   @Schema(title = "用户")
-  @Column(name = USER_ID, nullable = false)
-  open var userId: @NotNull String? = null
+  @Column(name = USER_ID)
+  open var userId: String? = null
 
   /**
    * 用户头像
@@ -78,6 +107,24 @@ open class SuperUserInfo : BaseEntity() {
   @Column(name = ADDRESS_DETAILS_ID)
   open var addressDetailsId: String? = null
 
+  @Nullable
+  @Schema(title = "地址编码")
+  @Column(name = ADDRESS_CODE)
+  open var addressCode: SerialCode? = null
+
+  @Nullable
+  @Schema(title = "地址id")
+  @Column(name = ADDRESS_ID)
+  open var addressId: ReferenceId? = null
+
+  @Schema(title = "qq openid")
+  @Column(name = QQ_OPENID)
+  open var qqOpenid: ReferenceId? = null
+
+  @Schema(title = "qq号")
+  @Column(name = QQ_ACCOUNT)
+  open var qqAccount: ReferenceId? = null
+
   /**
    * 电话号码
    */
@@ -111,7 +158,11 @@ open class SuperUserInfo : BaseEntity() {
   @Nullable
   @Schema(title = "微信个人 openId")
   @Column(name = WECHAT_OPENID)
-  open var wechatOpenId: String? = null
+  open var wechatOpenid: String? = null
+
+  @Schema(title = "微信号")
+  @Column(name = WECHAT_ACCOUNT)
+  open var wechatAccount: SerialCode? = null
 
   /**
    * 微信自定义登录id
@@ -119,23 +170,11 @@ open class SuperUserInfo : BaseEntity() {
   @Nullable
   @Schema(title = "微信自定义登录id")
   @Column(name = WECHAT_AUTHID)
-  open var wechastAuthid: String? = null
+  open var wechatAuthid: String? = null
 
-  companion object {
-    const val TABLE_NAME = "user_info"
-    const val USER_ID = "user_id"
-    const val AVATAR_IMG_ID = "avatar_img_id"
-    const val FIRST_NAME = "first_name"
-    const val LAST_NAME = "last_name"
-    const val EMAIL = "email"
-    const val BIRTHDAY = "birthday"
-    const val ADDRESS_DETAILS_ID = "address_details_id"
-    const val PHONE = "phone"
-    const val ID_CARD = "id_card"
-    const val GENDER = "gender"
-    const val WECHAT_OPENID = "wechat_openid"
-    const val WECHAT_AUTHID = "wechat_authid"
-  }
+  @Schema(title = "备用手机")
+  @Column(name = SPARE_PHONE)
+  open var sparePhone: SerialCode? = null
 }
 
 /**

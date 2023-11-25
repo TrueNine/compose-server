@@ -26,6 +26,6 @@ class UserInfoServiceImpl(private val infoRepo: UserInfoRepo) : IUserInfoService
   }
 
   override fun existsByWechatOpenId(openId: String): Boolean {
-    return infoRepo.existsByWechatOpenId(openId)
+    return infoRepo.existsByWechatOpenid(openId)
   }
 }

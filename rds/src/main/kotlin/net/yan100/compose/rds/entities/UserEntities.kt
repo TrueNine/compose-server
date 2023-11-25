@@ -8,10 +8,11 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.exceptions.KnownException
-import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.entities.relationship.UserRoleGroup
 import org.hibernate.annotations.DynamicInsert
@@ -20,26 +21,34 @@ import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
 import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction.IGNORE
-import java.io.Serial
 import java.time.LocalDateTime
 
 @MappedSuperclass
 open class SuperUser : BaseEntity() {
   companion object {
     const val TABLE_NAME = "user"
+
     const val ACCOUNT = "account"
     const val NICK_NAME = "nick_name"
     const val DOC = "doc"
     const val PWD_ENC = "pwd_enc"
     const val BAN_TIME = "ban_time"
     const val LAST_LOGIN_TIME = "last_login_time"
+    const val CREATE_USER_ID = "create_user_id"
   }
+
+  /**
+   * 创建此账号的 user id
+   */
+  @Schema(title = "创建此账号的 user id")
+  @Column(name = CREATE_USER_ID)
+  open var createUserId: ReferenceId? = null
 
   /**
    * 账号
    */
   @Schema(title = "账号")
-  @Column(name = ACCOUNT, nullable = false, unique = true)
+  @Column(name = ACCOUNT, unique = true)
   open var account: SerialCode? = null
 
   /**

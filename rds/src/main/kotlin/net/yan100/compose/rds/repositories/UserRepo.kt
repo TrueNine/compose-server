@@ -70,11 +70,11 @@ interface UserRepo : IRepo<User> {
   fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 
   @Query(
-    """
+      """
     SELECT count(i.id) > 0
     FROM UserInfo i
     LEFT JOIN User u ON i.userId = u.id
-    WHERE i.wechatOpenId = :openId
+    WHERE i.wechatOpenid = :openId
   """
   )
   fun existsByWechatOpenId(openId: String): Boolean
@@ -94,13 +94,13 @@ interface UserInfoRepo : IRepo<UserInfo> {
    * 根据 微信 openId 查询对应 User
    */
   @Query(
-    """
+      """
     FROM User u
     LEFT JOIN UserInfo i ON u.id = i.userId
-    WHERE i.wechatOpenId = :openId
+    WHERE i.wechatOpenid = :openid
     """
   )
-  fun findUserByWechatOpenId(openId: String): User?
+  fun findUserByWechatOpenId(openid: String): User?
 
   /**
    * 根据 电话号码查询用户手机号
@@ -116,7 +116,7 @@ interface UserInfoRepo : IRepo<UserInfo> {
 
   fun existsByPhone(phone: String): Boolean
 
-  fun existsByWechatOpenId(wechatOpenId: String): Boolean
+  fun existsByWechatOpenid(wechatOpenId: String): Boolean
 
   @Transactional(rollbackFor = [Exception::class])
   fun deleteByPhone(phone: String): Int
