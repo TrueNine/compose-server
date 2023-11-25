@@ -124,6 +124,9 @@ util-hutool-core = { group = "cn.hutool", name = "hutool-core", version.ref = "u
 util-hutool-captcha = { group = "cn.hutool", name = "hutool-captcha", version.ref = "util-hutool" }
 util-hutool-crypto = { group = "cn.hutool", name = "hutool-crypto", version.ref = "util-hutool" }
 util-hutool-db = { group = "cn.hutool", name = "hutool-db", version.ref = "util-hutool" }
+util-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "util-mapstruct" }
+util-mapstructProcessor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "util-mapstruct" }
+
 
 security-bcprovJdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "security-bcprovJdk18on" }
 security-auth0Jwt = { group = "com.auth0", name = "java-jwt", version.ref = "security-auth0Jwt" }
@@ -159,7 +162,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.162"
+compose = "1.6.163"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
@@ -225,6 +228,7 @@ util-ikanalyzer = "8.5.0" ### https://mvnrepository.com/artifact/com.github.mage
 util-smilemath = "2.6.0" ### https://mvnrepository.com/artifact/com.github.haifengl/smile-math
 util-easyexcel = "3.3.2" ### https://mvnrepository.com/artifact/com.alibaba/easyexcel
 util-freemarker = "2.3.32" ### https://mvnrepository.com/artifact/org.freemarker/freemarker
+util-mapstruct = "1.6.0.Beta1" ### https://mvnrepository.com/artifact/org.mapstruct/mapstruct
 
 slf4j = "2.0.9" ### https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 

@@ -1,6 +1,5 @@
 package net.yan100.compose.security
 
-import lombok.extern.slf4j.Slf4j
 import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.core.models.AuthUserInfo
@@ -14,8 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails
  * @author TrueNine
  * @since 2022-12-10
  */
-@Slf4j
-@JvmRecord
 data class UserDetailsWrapper(val authUserInfo: AuthUserInfo?) : UserDetails {
   init {
     log.trace("构建 = {}", authUserInfo)
