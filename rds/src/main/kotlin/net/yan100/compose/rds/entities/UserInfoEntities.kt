@@ -30,6 +30,7 @@ open class SuperUserInfo : BaseEntity() {
     const val FIRST_NAME = "first_name"
     const val LAST_NAME = "last_name"
     const val EMAIL = "email"
+    const val PRI = "pri"
     const val BIRTHDAY = "birthday"
     const val ADDRESS_DETAILS_ID = "address_details_id"
     const val ADDRESS_CODE = "address_code"
@@ -45,6 +46,10 @@ open class SuperUserInfo : BaseEntity() {
     const val SPARE_PHONE = "spare_phone"
     const val WM_CODE = "wm_code"
   }
+
+  @Schema(title = "首选用户信息")
+  @Column(name = PRI)
+  open var pri: Boolean? = null
 
   @Schema(title = "水印码")
   @Column(name = WM_CODE)

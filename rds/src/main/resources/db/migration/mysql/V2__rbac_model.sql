@@ -18,6 +18,7 @@ values (0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypb
 create table if not exists user_info
 (
   user_id            bigint unsigned default null comment '用户账号id',
+  pri                boolean         default true comment '首选用户信息',
   avatar_img_id      bigint unsigned comment '用户头像',
   first_name         varchar(4095) comment '姓',
   last_name          varchar(4095) comment '名',
@@ -49,9 +50,9 @@ create table if not exists user_info
   index (avatar_img_id) comment '外联 文件'
 ) default charset = utf8mb4, comment '用户信息';
 call add_base_struct('user_info');
-insert into user_info(id, user_id, first_name, last_name, email, birthday, phone, gender)
-values (0, 0, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
-       (1, 1, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);
+insert into user_info(id, user_id, pri, first_name, last_name, email, birthday, phone, gender)
+values (0, 0, true, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
+       (1, 1, true, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);
 
 create table if not exists role
 (
