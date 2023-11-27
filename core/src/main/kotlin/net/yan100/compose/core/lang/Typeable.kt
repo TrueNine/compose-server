@@ -53,7 +53,7 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
     private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
 
     @JvmStatic
-    private val log = slf4j(this::class)
+    private val log = slf4j(AnyTypingConverterFactory::class)
   }
 
   @Suppress("UNCHECKED_CAST")

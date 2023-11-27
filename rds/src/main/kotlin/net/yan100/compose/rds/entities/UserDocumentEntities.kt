@@ -37,7 +37,12 @@ open class SuperUserDocument : BaseEntity() {
     const val D_TYPE = "d_type"
     const val P_TYPE = "p_type"
     const val WM_ATT_ID = "wm_att_id"
+    const val WM_CODE = "wm_code"
   }
+
+  @Schema(title = "水印码")
+  @Column(name = WM_CODE)
+  open var wmCode: SerialCode? = null
 
   @Schema(title = "水印证件 id")
   @Column(name = WM_ATT_ID)

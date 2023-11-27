@@ -13,7 +13,7 @@ import java.util.*
 import kotlin.test.assertEquals
 
 @SpringBootTest(classes = [CoreEntrance::class])
-class JsonSerializerTest {
+class JsonDeserializerTest {
 
   @Autowired
   lateinit var mapper: ObjectMapper

@@ -13,6 +13,7 @@ import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.rds.converters.AesEncryptConverter
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.entities.SuperUserDocument.Companion.WM_CODE
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -44,16 +45,13 @@ open class SuperUserInfo : BaseEntity() {
     const val QQ_OPENID = "qq_openid"
     const val QQ_ACCOUNT = "qq_account"
     const val SPARE_PHONE = "spare_phone"
-    const val WM_CODE = "wm_code"
+
   }
 
   @Schema(title = "首选用户信息")
   @Column(name = PRI)
   open var pri: Boolean? = null
 
-  @Schema(title = "水印码")
-  @Column(name = WM_CODE)
-  open var wmCode: SerialCode? = null
 
   /**
    * 用户
@@ -77,7 +75,6 @@ open class SuperUserInfo : BaseEntity() {
   @Schema(title = "姓")
   @SensitiveRef(Strategy.NAME)
   @Column(name = FIRST_NAME)
-  @Convert(converter = AesEncryptConverter::class)
   open var firstName: String? = null
 
   /**

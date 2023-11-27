@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import net.yan100.compose.core.jackson.*
+import net.yan100.compose.core.lang.AnyTyping
 import net.yan100.compose.core.lang.DTimer
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
@@ -55,6 +56,10 @@ class JacksonSerializationAutoConfig {
     val byteArrayDeserializer = ByteArrayDeserializer()
     module.addSerializer(ByteArray::class.java, byteArraySerializer)
     module.addDeserializer(ByteArray::class.java, byteArrayDeserializer)
+
+    // 处理枚举类型
+    val anyTypingDeserializer = AnyTypingDeserializer()
+    module.addDeserializer(AnyTyping::class.java, anyTypingDeserializer)
 
     log.debug("配置jackson序列化规则")
 

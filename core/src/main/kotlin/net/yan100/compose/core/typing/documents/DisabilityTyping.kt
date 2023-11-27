@@ -1,13 +1,15 @@
 package net.yan100.compose.core.typing.documents
 
+import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.lang.IntTyping
 
 /**
  * # 第二代残疾证残疾类别
  * @author TrueNine
  * @since 2023-11-03
  */
-enum class DisabilityTyping(val typ: Int) {
+enum class DisabilityTyping(private val typ: Int) : IntTyping {
   @Schema(title = "视力残障")
   EYE(1),
 
@@ -28,4 +30,12 @@ enum class DisabilityTyping(val typ: Int) {
 
   @Schema(title = "多重残障")
   MULTIPLE(7);
+
+  @JsonValue
+  override fun getValue() = typ
+
+  companion object {
+    @JvmStatic
+    fun findVal(typ: Int?) = entries.find { it.typ == typ }
+  }
 }
