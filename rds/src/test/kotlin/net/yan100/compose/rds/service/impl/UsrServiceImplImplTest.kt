@@ -15,7 +15,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @SpringBootTest
-class UserServiceImplImplTest {
+class UsrServiceImplImplTest {
 
   @Autowired
   lateinit var service: UserServiceImpl
@@ -23,7 +23,7 @@ class UserServiceImplImplTest {
   @Autowired
   lateinit var snowflake: Snowflake
 
-  fun getUser() = net.yan100.compose.rds.entities.User().apply {
+  fun getUser() = net.yan100.compose.rds.entities.Usr().apply {
     this.account = snowflake.nextStringId()
     this.nickName = "ab + ${snowflake.nextStringId()}"
     this.pwdEnc = "qwer1234"

@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.service.impl
 
+import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
@@ -44,7 +45,7 @@ class AddressDetailsServiceImpl(
   }
 
 
-  override fun findAllFullPathById(ids: List<String>): List<Pair<String, String>> {
+  override fun findAllFullPathById(ids: List<ReferenceId>): List<Pair<ReferenceId, String>> {
     return detailsRepo.findAllById(ids).let { ds ->
       // 地址的路径集合
       val addresses = aRepo.findAllByCodeIn(ds.map { it.addressCode!! }).map { addr ->

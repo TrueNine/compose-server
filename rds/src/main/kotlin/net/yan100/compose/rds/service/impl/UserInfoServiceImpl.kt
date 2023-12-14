@@ -1,19 +1,21 @@
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.rds.entities.User
 import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.repositories.UserInfoRepo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
-class UserInfoServiceImpl(private val infoRepo: UserInfoRepo) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
-  override fun findUserByWechatOpenId(openId: String): User? {
+class UserInfoServiceImpl(
+  private val infoRepo: UserInfoRepo
+) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
+  override fun findUserByWechatOpenId(openId: String): Usr? {
     return infoRepo.findUserByWechatOpenId(openId)
   }
 
-  override fun findUserByPhone(phone: String): User? {
+  override fun findUserByPhone(phone: String): Usr? {
     return infoRepo.findUserByPhone(phone)
   }
 

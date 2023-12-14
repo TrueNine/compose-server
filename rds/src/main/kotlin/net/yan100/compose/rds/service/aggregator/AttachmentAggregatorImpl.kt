@@ -22,10 +22,11 @@ class AttachmentAggregatorImpl(
   override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: (file: MultipartFile) -> @Valid PostAttachmentReq): Attachment? {
     val saveFile = saveFileCallback(file)
     // 如果 此条url 不存在，则保存一个新的 url
-    val location = aService.findByBaseUrl(saveFile.baseUrl!!) ?: aService.save(
+    val location = aService.findByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!) ?: aService.save(
       Attachment().apply {
         this.attType = AttachmentTyping.BASE_URL
         this.baseUrl = saveFile.baseUrl
+        this.baseUri = saveFile.baseUri
       })
     checkNotNull(location.id) { "没有保存的url" }
     // 构建一个新附件对象保存并返回
@@ -47,12 +48,15 @@ class AttachmentAggregatorImpl(
     val saved = files.map {
       saveFileCallback(it) to it
     }
-    val baseUrls = aService.findAllByBaseUrlIn(saved.map { it.first.baseUrl!! }).associateBy { it.baseUrl!! }
+    val baseUrls = aService.findAllByBaseUrlInAndBaseUriIn(saved.map { it.first.baseUrl!! }, saved.map { it.first.baseUri!! }).associateBy {
+      it.baseUrl!! to it.baseUri!!
+    }
 
     return saved.map {
-      val baseUrl = baseUrls[it.first.baseUrl] ?: aService.save(Attachment().apply {
-        this.attType = AttachmentTyping.BASE_URL
-        this.baseUrl = it.first.baseUrl
+      val baseUrl = baseUrls[it.first.baseUrl to it.first.baseUri] ?: aService.save(Attachment().apply {
+        attType = AttachmentTyping.BASE_URL
+        baseUrl = it.first.baseUrl
+        baseUri = it.first.baseUri
       })
       Attachment().apply {
         // 将之于根路径连接

@@ -11,7 +11,7 @@ import org.springframework.test.annotation.Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class RoleGroupRepoTest {
   @Autowired
-  private lateinit var repo: net.yan100.compose.rds.repositories.RoleGroupRepo
+  private lateinit var repo: RoleGroupRepo
   val log = slf4j(this::class)
 
   @Test

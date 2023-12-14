@@ -12,7 +12,9 @@ import net.yan100.compose.rds.service.base.IService
 interface IAttachmentService : IService<Attachment> {
   fun existsByBaseUrl(baseUrl: String): Boolean
   fun findByBaseUrl(baseUrl: String): Attachment?
-  fun findAllByBaseUrlIn(BaseUrls: List<String>): List<Attachment>
+  fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment?
+  fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment>
+  fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment>
   fun findFullUrlById(id: String): String?
   fun findAllFullUrlByMetaNameStartingWith(
     metaName: String,

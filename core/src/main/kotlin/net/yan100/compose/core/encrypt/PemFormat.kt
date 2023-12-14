@@ -1,5 +1,8 @@
 package net.yan100.compose.core.encrypt
 
+import net.yan100.compose.core.lang.encodeBase64String
+import java.security.Key
+
 /**
  * # pem 格式 的字符串解析格式
  * 以 -----BEGIN keyType----- 开头
@@ -7,7 +10,7 @@ package net.yan100.compose.core.encrypt
  * 以 -----END keyType----- 结尾
  */
 class PemFormat(
-  val pem: String
+  private val pem: String
 ) {
   companion object {
     const val SEPARATOR = "-----"
@@ -16,14 +19,19 @@ class PemFormat(
     const val END_START = "${SEPARATOR}END "
 
     @JvmStatic
-    fun base64ToPem(base64: String, keyType: String): String {
+    fun ofKey(key: Key, keyType: String? = null): String {
+      return this.base64ToPem(key.encoded.encodeBase64String, keyType ?: "${key.algorithm} ${key.format ?: ""}")
+    }
+
+    @JvmStatic
+    fun base64ToPem(base64: String, keyType: String? = null): String {
       val trim = base64.trim()
       val a = trim.replace("\r", "\n").windowed(LINE_LENGTH, LINE_LENGTH, true).joinToString(System.lineSeparator())
-      return "${BEGIN_START}${keyType.uppercase().trim()}${SEPARATOR}" +
+      return "${BEGIN_START}${keyType?.uppercase()?.trim() ?: ""}${SEPARATOR}" +
         System.lineSeparator() +
         a +
         System.lineSeparator() +
-        "${END_START}${keyType.uppercase().trim()}${SEPARATOR}"
+        "${END_START}${keyType?.uppercase()?.trim() ?: ""}${SEPARATOR}"
     }
   }
 

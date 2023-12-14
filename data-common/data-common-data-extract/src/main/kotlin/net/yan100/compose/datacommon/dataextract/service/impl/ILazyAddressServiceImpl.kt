@@ -1,6 +1,7 @@
 package net.yan100.compose.datacommon.dataextract.service.impl
 
 
+import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.datacommon.dataextract.api.CnNbsAddressApi
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictCode
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp
@@ -12,8 +13,16 @@ import org.springframework.stereotype.Service
 class ILazyAddressServiceImpl(
   private val call: CnNbsAddressApi
 ) : ILazyAddressService {
+  companion object {
+    private val log = slf4j(ILazyAddressServiceImpl::class)
+  }
+
   override fun findAllProvinces(): List<CnDistrictResp> {
-    return extractProvinces(call.homePage().body)
+    val homeBody = call.homePage().body
+    log.debug("homeBody = {}", homeBody)
+    val result = extractProvinces(call.homePage().body)
+    log.debug("result = {}", result)
+    return result
   }
 
   private fun wrapperModel(code: String, name: String, leaf: Boolean) = CnDistrictResp()
@@ -42,9 +51,10 @@ class ILazyAddressServiceImpl(
 
 
   override fun findAllCityByCode(districtCode: String): List<CnDistrictResp> {
-    return extractPlainItem("citytr", call.getCityPage(getModel(districtCode).provinceCode).body) ?: listOf()
+    val h = call.getCityPage(getModel(districtCode).provinceCode)
+    log.debug("h.headers = {}",h.headers)
+    return extractPlainItem("citytr", h.body) ?: listOf()
   }
-
 
   override fun findAllCountyByCode(districtCode: String): List<CnDistrictResp> {
     val model = getModel(districtCode)

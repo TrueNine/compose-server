@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.typing
 
+import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.lang.IntTyping
 
@@ -25,6 +26,7 @@ enum class DocumentPointTyping(
   @Schema(title = "所有内容")
   ALL_CONTENT(5);
 
+  @JsonValue
   override fun getValue(): Int? = v
 
   companion object {

@@ -5,14 +5,11 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Table
-import net.yan100.compose.core.annotations.SensitiveRef
-import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.rds.core.entities.TreeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
-import java.io.Serial
 
 @MappedSuperclass
 open class SuperBankCard : TreeEntity() {
@@ -44,7 +41,6 @@ open class SuperBankCard : TreeEntity() {
   open var country: Int? = null
 
 
-  @SensitiveRef(Strategy.BANK_CARD_CODE)
   @Schema(title = "银行卡号")
   @Column(name = CODE)
   open var code: SerialCode? = null

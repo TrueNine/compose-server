@@ -36,6 +36,7 @@ object Repos {
   const val springMilestone = "${SPRING_REPO}milestone"
   const val springLibMilestone = "${SPRING_REPO}libs-milestone"
   const val springSnapshot = "${SPRING_REPO}snapshot"
+  const val mybatisPlusSnapshot = "https://oss.sonatype.org/content/repositories/snapshots/"
 
   val publicRepositories = listOf(
     huaweiCloudMaven,
@@ -53,7 +54,8 @@ object Repos {
 
     springMilestone,
     springLibMilestone,
-    springSnapshot
+    springSnapshot,
+    mybatisPlusSnapshot
   )
 }
 

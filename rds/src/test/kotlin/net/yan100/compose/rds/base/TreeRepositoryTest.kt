@@ -3,7 +3,7 @@ package net.yan100.compose.rds.base
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.DbTestTreeEntity
-import net.yan100.compose.rds.repositories.DbTestTreeRepository
+import net.yan100.compose.rds.repositories.DbTestTreeRepo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,7 +18,7 @@ class TreeRepositoryTest {
   private val log = slf4j(this::class)
 
   @Autowired
-  lateinit var treeRepo: DbTestTreeRepository
+  lateinit var treeRepo: DbTestTreeRepo
 
   @Autowired
   lateinit var tt: TransactionTemplate

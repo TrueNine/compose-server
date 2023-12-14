@@ -15,7 +15,7 @@ import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 
-@JvmDefaultWithCompatibility
+
 @NoRepositoryBean
 interface IRepo<T : BaseEntity> : IAnyRepo<T> {
   fun findByIdAndNotLogicDelete(id: Id): T = findByIdAndNotLogicDeleteOrNull(id)!!

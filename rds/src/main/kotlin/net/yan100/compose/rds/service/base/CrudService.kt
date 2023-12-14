@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.service.base
 
+
 import jakarta.validation.Valid
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.core.util.Pq

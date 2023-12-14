@@ -5,12 +5,12 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Table
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.entities.relationship.RoleGroupRole
 import org.hibernate.annotations.*
 
 @MappedSuperclass
-open class SuperRoleGroup : TreeEntity() {
+open class SuperRoleGroup : BaseEntity() {
   /**
    * 名称
    */

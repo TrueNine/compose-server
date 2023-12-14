@@ -20,8 +20,8 @@ import kotlin.reflect.full.findAnnotation
 
 @Service
 class TableRowDeleteRecordServiceImpl(
-    private val delRepo: ITableRowDeleteRecordRepository,
-    private val mapper: ObjectMapper
+  private val delRepo: ITableRowDeleteRecordRepository,
+  private val mapper: ObjectMapper
 ) : ITableRowDeleteRecordService,
   IService<TableRowDeleteRecord>,
   CrudService<TableRowDeleteRecord>(delRepo) {

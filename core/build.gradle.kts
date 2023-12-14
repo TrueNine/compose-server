@@ -1,6 +1,11 @@
+import net.yan100.compose.plugin.annotationProcessorKapt
+
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
+  implementation(libs.util.mapstruct)
+  annotationProcessorKapt(libs.util.mapstructProcessor)
+
   api(libs.jackson.coreAnnotations)
 
   api(libs.util.ognl)

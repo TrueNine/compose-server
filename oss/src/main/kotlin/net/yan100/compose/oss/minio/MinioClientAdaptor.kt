@@ -15,7 +15,8 @@ import java.io.OutputStream
  * @since 2023-02-20
  */
 open class MinioClientAdaptor protected constructor(
-  protected val client: MinioClient
+  protected val client: MinioClient,
+  protected val exBaseUrl: String = "http://localhost:9000"
 ) : MinioClientOperator(client) {
   open fun ins(resp: ObjectWriteResponse, stream: InputStream): InMap {
     return object : InMap {
@@ -24,6 +25,7 @@ open class MinioClientAdaptor protected constructor(
       override val fName get() = resp.`object`()
       override val dirName get() = resp.bucket()
       override val size get() = headerSize(resp.headers())!!
+      override val exposeBaseUrl: String get() = exBaseUrl
     }
   }
 
@@ -34,6 +36,7 @@ open class MinioClientAdaptor protected constructor(
       override val fName get() = resp.`object`()
       override val dirName get() = resp.bucket()
       override val size get() = headerSize(resp.headers())!!
+      override val exposeBaseUrl: String get() = exBaseUrl
     }
   }
 }

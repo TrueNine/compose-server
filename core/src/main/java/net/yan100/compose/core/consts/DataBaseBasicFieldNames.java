@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface DataBaseBasicFieldNames {
   String ID = "id";
+  String CREATE_ROW_DATETIME = "crd";
+  String MODIFY_ROW_DATETIME = "mrd";
   String LOGIC_DELETE_FLAG = "ldf";
   String LEFT_NODE = "rln";
   String RIGHT_NODE = "rrn";
@@ -26,6 +28,8 @@ public interface DataBaseBasicFieldNames {
     var al = new String[]{
       ID,
       LOCK_VERSION,
+      CREATE_ROW_DATETIME,
+      MODIFY_ROW_DATETIME,
       LEFT_NODE,
       NODE_LEVEL,
       TREE_GROUP_ID,

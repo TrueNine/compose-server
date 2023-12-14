@@ -4,6 +4,7 @@ import net.yan100.compose.core.alias.Id
 import net.yan100.compose.rds.core.entities.AnyEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
+import org.springframework.data.querydsl.QuerydslPredicateExecutor
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.NoRepositoryBean
 
@@ -12,10 +13,10 @@ import org.springframework.data.repository.NoRepositoryBean
  * @author TrueNine
  * @since 2023-05-05
  */
-@JvmDefaultWithCompatibility
 @NoRepositoryBean
 interface IAnyRepo<T : AnyEntity> :
   JpaRepository<T, Id>,
   CrudRepository<T, Id>,
+  QuerydslPredicateExecutor<T>,
   JpaSpecificationExecutor<T>
 

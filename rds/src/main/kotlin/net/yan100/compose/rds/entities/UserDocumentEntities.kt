@@ -24,6 +24,7 @@ open class SuperUserDocument : BaseEntity() {
     const val TABLE_NAME = "user_document"
 
     const val ATT_ID = "att_id"
+    const val USER_INFO_ID = "user_info_id"
     const val CREATE_USER_ID = "create_user_id"
     const val CREATE_DEVICE_ID = "create_device_id"
     const val CREATE_IP = "create_ip"
@@ -33,12 +34,16 @@ open class SuperUserDocument : BaseEntity() {
     const val USER_ID = "user_id"
     const val NAME = "name"
     const val AUDIT_STATUS = "audit_status"
-    const val C_TYPE = "c_type"
-    const val D_TYPE = "d_type"
-    const val P_TYPE = "p_type"
+    const val CO_TYPE = "co_type"
+    const val DO_TYPE = "do_type"
+    const val PO_TYPE = "po_type"
     const val WM_ATT_ID = "wm_att_id"
     const val WM_CODE = "wm_code"
   }
+
+  @Schema(title = "用户信息id")
+  @Column(name = USER_INFO_ID)
+  open var userInfoId: ReferenceId? = null
 
   @Schema(title = "水印码")
   @Column(name = WM_CODE)
@@ -90,19 +95,19 @@ open class SuperUserDocument : BaseEntity() {
   open var userId: ReferenceId? = null
 
   @Schema(title = "证件打印类型")
-  @Column(name = P_TYPE)
+  @Column(name = PO_TYPE)
   @Convert(converter = DocumentPointTypingConverter::class)
-  open var pType: DocumentPointTyping? = null
+  open var poType: DocumentPointTyping? = null
 
   @Schema(title = "证件内容类型")
-  @Column(name = C_TYPE)
+  @Column(name = CO_TYPE)
   @Convert(converter = DocumentContentTypingConverter::class)
-  open var cType: DocumentContentTyping? = null
+  open var coType: DocumentContentTyping? = null
 
   @Schema(title = "证件类型")
-  @Column(name = D_TYPE)
+  @Column(name = DO_TYPE)
   @Convert(converter = DocumentTypingConverter::class)
-  open var dType: DocumentTyping? = null
+  open var doType: DocumentTyping? = null
 }
 
 

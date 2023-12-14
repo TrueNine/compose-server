@@ -25,9 +25,21 @@ class AliCloudOss(
     return this.oss as T
   }
 
+  override fun removeObject(fileInfo: FileArgs): Boolean {
+    TODO("Not yet implemented")
+  }
+
   override val exposedBaseUrl: String get() = TODO("Not yet implemented")
 
   override fun makeDirs(dirName: String) {
+    TODO("Not yet implemented")
+  }
+
+  override fun existsDir(dirName: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun removeFile(fileInfo: FileArgs): Boolean {
     TODO("Not yet implemented")
   }
 

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
-import net.yan100.compose.core.annotations.BigIntegerAsString
-import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.annotations.BigIntegerAsString
+import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.core.annotations.BizCode
 
 /**
@@ -83,11 +83,11 @@ open class TreeEntity : BaseEntity() {
   override fun toString(): String {
     return withToString(
       super.toString(),
-      "rpi" to rpi,
-      "rln" to rln,
-      "rrn" to rrn,
-      "nlv" to nlv,
-      "tgi" to tgi
+      RPI to rpi,
+      RLN to rln,
+      RRN to rrn,
+      NLV to nlv,
+      TGI to tgi
     )
   }
 }

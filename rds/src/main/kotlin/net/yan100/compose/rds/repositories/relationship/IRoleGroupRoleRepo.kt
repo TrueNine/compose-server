@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IRoleGroupRoleRepo :
-    IRepo<RoleGroupRole> {
+  IRepo<RoleGroupRole> {
   fun findByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String): RoleGroupRole?
 
   @Query("select rr.roleId from RoleGroupRole rr")

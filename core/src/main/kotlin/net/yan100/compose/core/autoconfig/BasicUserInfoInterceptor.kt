@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.http.InterAddressUtil
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.UserInfo
+import net.yan100.compose.core.models.RequestInfo
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
@@ -41,7 +41,7 @@ class BasicUserInfoInterceptor : WebMvcConfigurer, HandlerInterceptor {
     log.info("userInfo = {}", userInfo)
     if (null == userInfo) {
       log.info("当前用户信息为空，设置一个默认的用户信息")
-      val newInfo = UserInfo().apply {
+      val newInfo = RequestInfo().apply {
         currentIpAddr = InterAddressUtil.getRequestIpAddress(request)
         userId = null
         loginIpAddr = null

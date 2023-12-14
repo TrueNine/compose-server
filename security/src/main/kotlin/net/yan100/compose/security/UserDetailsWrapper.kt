@@ -2,7 +2,7 @@ package net.yan100.compose.security
 
 import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.AuthUserInfo
+import net.yan100.compose.core.models.AuthRequestInfo
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails
  * @author TrueNine
  * @since 2022-12-10
  */
-data class UserDetailsWrapper(val authUserInfo: AuthUserInfo?) : UserDetails {
+data class UserDetailsWrapper(val authUserInfo: AuthRequestInfo?) : UserDetails {
   init {
     log.trace("构建 = {}", authUserInfo)
   }

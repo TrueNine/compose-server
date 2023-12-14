@@ -70,9 +70,15 @@ interface IAttachmentRepo : IRepo<Attachment> {
   fun findFirstByBaseUrl(baseUrl: String): Attachment?
 
   /**
+   * 根据 baseUrl 和 baseUri 查询当前的 base url
+   */
+  fun findFirstByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment?
+
+  /**
    * 根据 baseUrl 查询其下的所有 附件
    */
   fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment>
+  fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment>
 }
 
 

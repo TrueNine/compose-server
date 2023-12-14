@@ -19,7 +19,7 @@ import java.util.function.Consumer
 class MinioClientWrapper(
   private val minioClient: MinioClient,
   private val exposeUrl: String = "http://localhost:9000"
-) : Oss, MinioClientAdaptor(minioClient) {
+) : Oss, MinioClientAdaptor(minioClient,exposeUrl) {
 
   @Suppress("UNCHECKED_CAST")
   override fun <T> nativeHandle(instanceType: Class<T>): T {
@@ -30,6 +30,14 @@ class MinioClientWrapper(
 
   override fun makeDirs(dirName: String) {
     createBucket(dirName)
+  }
+
+  override fun existsDir(dirName: String): Boolean {
+    return bucketExists(dirName)
+  }
+
+  override fun removeFile(fileInfo: FileArgs): Boolean {
+    return removeObject(fileInfo)
   }
 
   override fun publicDir(dir: String) {

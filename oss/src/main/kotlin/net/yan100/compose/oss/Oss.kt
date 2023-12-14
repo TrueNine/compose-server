@@ -6,7 +6,7 @@ import java.io.OutputStream
 import java.util.function.Consumer
 
 /**
- * 对文件系统得抽象，使得编程接口统一化
+ * ## 对文件系统或对象存储系统的抽象，使得编程接口统一化
  *
  * @author TrueNine
  */
@@ -24,6 +24,13 @@ interface Oss {
   fun <T> nativeHandle(instanceType: Class<T>): T
 
   /**
+   * ## 根据文件参数删除对象
+   * @param fileInfo 文件信息
+   * @return 是否删除成功
+   */
+  fun removeObject(fileInfo: FileArgs): Boolean
+
+  /**
    * 对外暴露的 baseUrl
    */
   val exposedBaseUrl: String
@@ -34,6 +41,16 @@ interface Oss {
    * @param dirName dir名字
    */
   fun makeDirs(dirName: String)
+
+  /**
+   * ## 判断文件夹是否存在
+   */
+  fun existsDir(dirName: String): Boolean
+
+  /**
+   * 删除文件
+   */
+  fun removeFile(fileInfo: FileArgs): Boolean
 
   /**
    * 创建公共文件夹
@@ -79,7 +96,6 @@ interface Oss {
    * @return [OutMap]
    * @throws IOException ioexception
    */
-  @Throws(IOException::class)
   fun download(stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /**
@@ -91,7 +107,6 @@ interface Oss {
    * @return [OutMap]
    * @throws IOException ioexception
    */
-  @Throws(IOException::class)
   fun download(beforeExec: Runnable, stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /**
@@ -103,7 +118,6 @@ interface Oss {
    * @return [OutMap]
    * @throws IOException ioexception
    */
-  @Throws(IOException::class)
   fun download(beforeExec: Consumer<FileArgs>, stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /**

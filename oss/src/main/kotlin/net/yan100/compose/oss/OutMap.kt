@@ -33,4 +33,6 @@ interface OutMap : StreamsMap {
    * @return 文件大小
    */
   override val size: Long
+
+  override val exposeBaseUrl: String
 }

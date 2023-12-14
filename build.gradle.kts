@@ -1,4 +1,3 @@
-
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.Repos.yunXiaoRelese
@@ -29,6 +28,7 @@ plugins {
 }
 
 val l = libs
+
 version = libs.versions.compose.asProvider().get()
 
 allprojects {
@@ -62,6 +62,7 @@ subprojects {
 
   apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "org.jetbrains.kotlin.kapt")
+
   apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
   apply(plugin = "org.jetbrains.kotlin.plugin.spring")
   apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
@@ -75,6 +76,9 @@ subprojects {
 
   kapt {
     keepJavacAnnotationProcessors = true
+    //correctErrorTypes =true
+    javacOptions { option("querydsl.entityAccessors", true) }
+    arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
   }
 
   java {
@@ -103,7 +107,7 @@ subprojects {
       kotlinOptions {
         freeCompilerArgs += listOf(
           "-Xjsr305=strict",
-          "-Xjvm-default=all",
+          "-Xjvm-default=all-compatibility",
           "-verbose",
           "-Xjdk-release=${l.versions.java.get()}",
           "-jvm-target=${l.versions.java.get()}",
@@ -174,7 +178,10 @@ subprojects {
 
 tasks {
   wrapper {
+    distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-${libs.versions.gradle.get()}-all.zip"
     distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = l.versions.gradle.get()
+    gradleVersion = libs.versions.gradle.get()
+    networkTimeout = 1000
+    validateDistributionUrl = false
   }
 }

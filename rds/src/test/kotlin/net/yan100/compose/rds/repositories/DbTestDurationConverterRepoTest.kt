@@ -15,7 +15,7 @@ class DbTestDurationConverterRepoTest {
   private val log = slf4j(this::class)
 
   @Autowired
-  private lateinit var repo: DbTestDurationConverterRepository
+  private lateinit var repo: DbTestDurationConverterRepo
 
   @Test
   @Rollback

@@ -1,9 +1,9 @@
 package net.yan100.compose.core.http;
 
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import net.yan100.compose.core.lang.Str;
 
-import javax.annotation.Nullable;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 

@@ -50,10 +50,10 @@ object PagedWrapper {
 
   @JvmStatic
   fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
-    return if (false == paramSetting?.unPage) {
+    return if (true != paramSetting?.unPage || null == paramSetting.unPage) {
       PageRequest.of(
-        paramSetting.offset ?: 0,
-        paramSetting.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
+        paramSetting?.offset ?: 0,
+        paramSetting?.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
       )
     } else Pageable.unpaged()
   }

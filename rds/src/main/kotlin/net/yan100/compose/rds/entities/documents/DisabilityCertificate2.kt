@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
-import net.yan100.compose.core.annotations.SensitiveRef
-import net.yan100.compose.core.annotations.Strategy
-import net.yan100.compose.core.models.IDisabilityCode2
-import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.models.IDisabilityCode2
+import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.core.entities.TreeEntity
 import net.yan100.compose.rds.typing.GenderTyping
@@ -79,7 +77,7 @@ open class SuperDisabilityCertificate2 : IDisabilityCode2, BaseEntity() {
   @Column(name = CODE)
   open var code: SerialCode? = null
 
-  @SensitiveRef(Strategy.NAME)
+
   @Schema(title = "姓名")
   @Column(name = NAME)
   open var name: String? = null

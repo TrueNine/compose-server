@@ -11,17 +11,15 @@ import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.alias.BigText
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.NonDesensitizedRef
-import net.yan100.compose.core.annotations.SensitiveRef
-import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.converters.WGS84Converter
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.BaseEntity
 import org.hibernate.annotations.*
 
 
 @MappedSuperclass
-open class SuperAddressDetails : TreeEntity() {
+open class SuperAddressDetails : BaseEntity() {
   /**
    * 地址 id
    */
@@ -34,7 +32,6 @@ open class SuperAddressDetails : TreeEntity() {
    */
   @NotBlank(message = "手机号不能为空")
   @Pattern(regexp = Regexes.CHINA_PHONE, message = "请输入正确的电话号码")
-  @get:SensitiveRef(Strategy.PHONE)
   @Schema(title = "联系电话")
   @Column(name = PHONE)
   open var phone: String? = null
@@ -51,7 +48,6 @@ open class SuperAddressDetails : TreeEntity() {
    * 联系人名称
    */
   @NotBlank(message = "请留一个姓名")
-  @get:SensitiveRef(Strategy.NAME)
   @Schema(title = "联系人名称")
   @Column(name = NAME)
   open var name: String? = null
@@ -61,7 +57,6 @@ open class SuperAddressDetails : TreeEntity() {
    */
   @NotBlank(message = "地址代码不能为空")
   @Schema(title = "地址代码")
-  @get:SensitiveRef(Strategy.PASSWORD)
   @Column(name = ADDRESS_CODE)
   open var addressCode: String? = null
 
@@ -69,7 +64,6 @@ open class SuperAddressDetails : TreeEntity() {
    * 地址详情
    */
   @NotBlank(message = "详细地址不能为空")
-  @get:SensitiveRef(Strategy.ADDRESS)
   @Schema(title = "地址详情")
   @Column(name = ADDRESS_DETAILS, nullable = false)
   open var addressDetails: String? = null

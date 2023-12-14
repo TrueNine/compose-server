@@ -18,7 +18,7 @@ public class OssProperties {
   /**
    * ## 对外暴露的访问路径
    */
-  private String exposeBaseUrl;
+  private String exposeBaseUrl = "http://localhost:9999/not_set_oss_expose_base_url";
 
   /**
    * ## minio相关配置

@@ -39,6 +39,11 @@ interface StreamsMap {
   val dirName: String
 
   /**
+   * 对外暴露的 url
+   */
+  val exposeBaseUrl: String
+
+  /**
    * 大小
    *
    * @return long
@@ -59,4 +64,6 @@ interface StreamsMap {
    * @return [String]
    */
   val path: String get() = "$dirName/$fName"
+
+
 }

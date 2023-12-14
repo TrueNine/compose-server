@@ -9,10 +9,10 @@ import org.springframework.test.annotation.Rollback
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class UserRepoTest {
+class IUsrRepoTest {
 
   @Autowired
-  private lateinit var repo: net.yan100.compose.rds.repositories.UserRepo
+  private lateinit var repo: IUsrRepo
 
   private val log = slf4j(this::class)
 

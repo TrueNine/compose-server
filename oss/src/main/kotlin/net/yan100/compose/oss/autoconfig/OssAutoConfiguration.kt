@@ -6,7 +6,6 @@ import net.yan100.compose.oss.Oss
 import net.yan100.compose.oss.minio.MinioClientWrapper
 import net.yan100.compose.oss.properties.OssProperties
 import net.yan100.compose.oss.properties.OssProperties.Type.*
-import net.yan100.compose.oss.properties.OssProperty
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext
@@ -26,22 +25,6 @@ class OssAutoConfiguration {
     const val OSS_BEAN_NAME = "objectStorageService"
     const val MINIO_CLIENT_BEAN_NAME = "minioClient"
   }
-
-  @Bean
-  fun ossProperty(p: OssProperties): OssProperty {
-    val property = OssProperty()
-    property.exposeBaseUrl = p.exposeBaseUrl
-    property.baseUrl = when (p.type) {
-      MINIO -> p.minio.endpointHost + p.minio.endpointPort
-      FILE -> null
-      MYSQL_DB -> null
-      ALI_CLOUD_OSS -> p.aliyun.endpoint
-      HUAWEI_CLOUD -> null
-      null -> null
-    }
-    return property
-  }
-
 
   @Bean(name = [MINIO_CLIENT_BEAN_NAME])
   @ConditionalOnProperty(value = ["compose.oss.minio.enable"], havingValue = "true")

@@ -60,7 +60,7 @@ open class AnyEntity : Serializable, Persistable<Id> {
   }
 
   override fun toString(): String {
-    return withToString("", "id" to id)
+    return withToString("", ID to id)
   }
 
   open fun setId(id: String?) {

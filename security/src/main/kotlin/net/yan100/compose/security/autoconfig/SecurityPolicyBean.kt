@@ -26,7 +26,7 @@ import org.springframework.web.cors.CorsConfiguration
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(jsr250Enabled = true)
 @ConditionalOnBean(SecurityPolicyDefine::class)
 class SecurityPolicyBean {
 
@@ -34,6 +34,7 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityDetailsService(desc: SecurityPolicyDefine): SecurityUserDetailsService {
+    log.debug("注册 UserDetailsService")
     return desc.service ?: EmptySecurityDetailsService()
   }
 
@@ -41,6 +42,7 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityExceptionAdware(policyDefine: SecurityPolicyDefine, manager: ObjectMapper): SecurityExceptionAdware {
+    log.debug("注册 ExceptionAdware")
     return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
   }
 
@@ -59,6 +61,7 @@ class SecurityPolicyBean {
 
     val allowPatterns = policyDefine.anonymousPatterns
     allowPatterns += listOf(*mergedConfigAnnotation.loginUrl)
+    allowPatterns += listOf(*mergedConfigAnnotation.logoutUrl)
     allowPatterns += listOf(*mergedConfigAnnotation.allowPatterns)
 
     if (mergedConfigAnnotation.allowSwagger) allowPatterns += policyDefine.swaggerPatterns
@@ -84,8 +87,8 @@ class SecurityPolicyBean {
     httpSecurity.authorizeHttpRequests {
       it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
 
-      log.debug("任意请求是否无需认证 = {}", mergedConfigAnnotation.anyRequestAuthed)
-      if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().authenticated()
+      log.debug("任意请求是否需要认证 = {}", mergedConfigAnnotation.anyRequestAuthed)
+      if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().denyAll()
       else it.anyRequest().permitAll()
     }
     httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
@@ -97,7 +100,6 @@ class SecurityPolicyBean {
           .accessDeniedHandler(policyDefine.exceptionAdware)
       }
     } else log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
-
 
     log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
     log.debug("allow Patterns = {}", allowPatterns)

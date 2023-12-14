@@ -8,6 +8,10 @@ package net.yan100.compose.core.consts;
  */
 public interface Regexes {
   /**
+   * 英文数字账户
+   */
+  String ACCOUNT = "^[a-zA-Z0-9]+$";
+  /**
    * 密码
    */
   String PASSWORD = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^\\da-zA-Z\\s]).{1,9}$";

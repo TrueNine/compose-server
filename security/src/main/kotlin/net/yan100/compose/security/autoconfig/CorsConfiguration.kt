@@ -28,8 +28,8 @@ class CorsConfiguration : WebMvcConfigurer {
       .maxAge(3600)
   }
 
-  @Bean
-  fun corsConfigurationSource(): CorsConfiguration {
+  @Bean(name = ["org.springframework.web.cors.CorsConfiguration"])
+  fun corsConfiguration(): CorsConfiguration {
     log.debug("注册 spring security 的跨域全局配置")
     val all = CorsConfiguration.ALL
     val c = CorsConfiguration()

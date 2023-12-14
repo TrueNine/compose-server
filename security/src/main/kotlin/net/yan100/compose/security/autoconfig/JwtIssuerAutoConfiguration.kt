@@ -1,7 +1,7 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.encrypt.IKeysRepository
+import net.yan100.compose.core.encrypt.IKeysRepo
 import net.yan100.compose.security.jwt.JwtIssuer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit
 @EnableConfigurationProperties(net.yan100.compose.security.properties.JwtProperties::class)
 class JwtIssuerAutoConfiguration(
   private val jp: net.yan100.compose.security.properties.JwtProperties,
-  private val keysRepository: IKeysRepository
+  private val keysRepository: IKeysRepo
 ) {
   @Bean
   @Primary

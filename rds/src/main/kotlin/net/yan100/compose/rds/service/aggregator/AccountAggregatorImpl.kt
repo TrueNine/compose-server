@@ -1,26 +1,68 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import net.yan100.compose.rds.entities.User
+import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.rds.core.entities.withNew
+import net.yan100.compose.rds.entities.QRoleGroup.roleGroup
+import net.yan100.compose.rds.entities.QUsr.usr
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.models.req.LoginAccountReq
 import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
 import net.yan100.compose.rds.models.req.RegisterAccountReq
 import net.yan100.compose.rds.service.IRoleGroupService
+import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
 class AccountAggregatorImpl(
   private val userService: IUserService,
+  private val userInfoService: IUserInfoService,
   private val passwordEncoder: PasswordEncoder,
   private val roleGroupService: IRoleGroupService
 ) : IAccountAggregator {
 
-  override fun registerAccount(@Valid param: RegisterAccountReq): User? =
+  @Transactional(rollbackFor = [Exception::class])
+  override fun assignAccount(
+    @Valid usr: Usr,
+    createUserId: ReferenceId,
+    @Valid userInfo: UserInfo?,
+    roleGroup: Set<String>?,
+    allowAssignRoot: Boolean
+  ): Usr {
+    val savedUsr = usr.withNew().run {
+      checkNotNull(account) { "分配账号不能为空" }
+      check(!userService.existsByAccount(account!!)) { "分配的账号已经存在" }
+      checkNotNull(pwdEnc) { "分配账号的密码不能为空" }
+      pwdEnc = passwordEncoder.encode(this.pwdEnc)
+      this.createUserId = createUserId
+      userService.save(this)
+    }
+
+    userInfo?.withNew()?.also {
+      it.createUserId = createUserId
+      it.pri = true
+      it.userId = savedUsr.id
+      userInfoService.save(it)
+    }
+
+    roleGroup?.also { rg ->
+      roleGroupService.assignPlainToUser(savedUsr.id!!)
+      if (allowAssignRoot) {
+        if (rg.contains("ADMIN")) roleGroupService.assignAdminToUser(savedUsr.id!!)
+        if (rg.contains("ROOT")) roleGroupService.assignRootToUser(savedUsr.id!!)
+      }
+    }
+    return savedUsr
+  }
+
+  override fun registerAccount(@Valid param: RegisterAccountReq): Usr? =
     if (!userService.existsByAccount(param.account!!)) {
-      userService.save(User().apply {
+      userService.save(Usr().withNew().apply {
         account = param.account
         pwdEnc = passwordEncoder.encode(param.password)
         nickName = param.nickName
@@ -28,7 +70,7 @@ class AccountAggregatorImpl(
       }).also { roleGroupService.assignPlainToUser(it.id!!) }
     } else null
 
-  override fun login(@Valid param: LoginAccountReq): User? =
+  override fun login(@Valid param: LoginAccountReq): Usr? =
     if (verifyPassword(param.account!!, param.password!!)) {
       userService.findUserByAccount(param.account!!)
     } else null

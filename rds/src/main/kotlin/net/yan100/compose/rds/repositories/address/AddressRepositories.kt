@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-@JvmDefaultWithCompatibility
 interface IAddressRepo : ITreeRepo<Address> {
 
   @Query("select ((count(a.id) = 1) or (count(a.id) = 1)) from Address a")

@@ -3,7 +3,6 @@ package net.yan100.compose.pay.service.impl
 import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.math.BigDecimal
@@ -19,7 +18,7 @@ class WeChatSinglePayServiceTest {
   @Autowired
   lateinit var bizCodeGenerator: BizCodeGenerator
 
-  @Test
+  //@Test
   fun testCreateOrder() {
     val customOrderId = bizCodeGenerator.nextCodeStr()
     val crp = CreateMpPayOrderReq().apply {

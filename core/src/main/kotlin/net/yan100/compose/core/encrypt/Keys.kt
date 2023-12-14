@@ -82,10 +82,7 @@ object Keys {
 
   @JvmStatic
   fun writeKeyToPem(key: Key, keyType: String? = null): String? = runCatching {
-    PemFormat.base64ToPem(
-      key.encoded.encodeBase64String, keyType
-        ?: "${key.algorithm} ${key.format ?: ""}"
-    )
+    PemFormat.ofKey(key,keyType)
   }.onFailure { log.error(::writeKeyToPem.name, it) }.getOrNull()
 
   /**
@@ -217,7 +214,7 @@ object Keys {
    */
   @JvmStatic
   fun generateRsaKeyPair(
-    seed: String = DEFAULT_SEED,
+    seed: String = this.generateRandomAsciiString(),
     keySize: Int = RSA_KEY_SIZE
   ): RsaKeyPair? {
     return generateKeyPair(
@@ -240,7 +237,7 @@ object Keys {
    * @return ecc密钥对
    */
   @JvmStatic
-  fun generateEccKeyPair(seed: String = DEFAULT_SEED): EccKeyPair? {
+  fun generateEccKeyPair(seed: String = this.generateRandomAsciiString()): EccKeyPair? {
     return runCatching {
       val random = SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
       val curve = ECNamedCurveTable.getParameterSpec("P-256")

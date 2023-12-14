@@ -5,4 +5,4 @@ import net.yan100.compose.rds.repositories.base.ITreeRepo
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DbTestTreeRepository : ITreeRepo<DbTestTreeEntity>
+interface DbTestTreeRepo : ITreeRepo<DbTestTreeEntity>

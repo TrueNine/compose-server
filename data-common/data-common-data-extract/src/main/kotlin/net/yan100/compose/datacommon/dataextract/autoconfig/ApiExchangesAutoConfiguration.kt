@@ -1,22 +1,46 @@
 package net.yan100.compose.datacommon.dataextract.autoconfig
 
+import io.netty.handler.ssl.SslContextBuilder
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory
+import io.netty.resolver.DefaultAddressResolverGroup
 import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.datacommon.dataextract.api.CnNbsAddressApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.support.WebClientAdapter
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
 import reactor.kotlin.core.publisher.toMono
+import reactor.netty.http.client.HttpClient
+
 
 @Configuration
 class ApiExchangesAutoConfiguration {
 
+
   @Bean
   fun cnNbsAddressApi(): CnNbsAddressApi {
     log.debug("创建 中国统计局地址 api")
+
+    val sslCtx = SslContextBuilder
+      .forClient()
+      .trustManager(InsecureTrustManagerFactory.INSTANCE)
+      .build()
+
+    val unsafeConnector = ReactorClientHttpConnector(
+      HttpClient.create()
+        .secure { t -> t.sslContext(sslCtx) }
+        .compress(true)
+        .resolver(DefaultAddressResolverGroup.INSTANCE))
+
+
     val client = WebClient.builder()
+      .clientConnector(unsafeConnector)
+      .defaultHeaders {
+        it.set("Accept-Charset", "utf-8")
+      }
       .defaultStatusHandler({ httpCode ->
         httpCode.isError
       }) { resp ->

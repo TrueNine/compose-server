@@ -2,7 +2,10 @@ package net.yan100.compose.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
+import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
+import org.gradle.api.provider.Provider
 import java.net.URI
 
 class Main : Plugin<Project> {
@@ -50,3 +53,16 @@ fun RepositoryHandler.aliYunXiao(releaseUrl: String = Repos.yunXiaoRelese, snaps
   get(releaseUrl)
   snapshotUrl?.let { get(it) }
 }
+
+/**
+ * 排除指定的 catalog 依赖
+ */
+fun ModuleDependency.exclude(dep: Provider<MinimalExternalModuleDependency>) {
+  this.exclude(
+    mutableMapOf(
+      "group" to dep.get().module.group,
+      "module" to dep.get().module.name
+    )
+  )
+}
+

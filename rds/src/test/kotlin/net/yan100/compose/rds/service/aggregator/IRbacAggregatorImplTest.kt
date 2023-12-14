@@ -4,7 +4,7 @@ import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.entities.Permissions
 import net.yan100.compose.rds.entities.Role
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.entities.User
+import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.repositories.AllRoleEntityRepository
 import net.yan100.compose.rds.repositories.FullRoleGroupEntityRepo
 import net.yan100.compose.rds.service.IPermissionsService
@@ -40,7 +40,7 @@ class IRbacAggregatorImplTest {
   @Autowired
   lateinit var snowflake: Snowflake
 
-  private fun getUser() = User().apply {
+  private fun getUser() = Usr().apply {
     account = "name:${snowflake.nextId()}"
     nickName = "abcd"
     pwdEnc = "aa${snowflake.nextId()}"

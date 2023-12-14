@@ -14,4 +14,5 @@ interface InMap : StreamsMap {
   override val fName: String
   override val dirName: String
   override val size: Long
+  override val exposeBaseUrl: String
 }

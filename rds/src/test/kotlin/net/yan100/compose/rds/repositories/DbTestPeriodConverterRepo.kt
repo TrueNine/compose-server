@@ -5,4 +5,4 @@ import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DbTestPeriodConverterRepository : IRepo<DbTestPeriodConverterEntity>
+interface DbTestPeriodConverterRepo : IRepo<DbTestPeriodConverterEntity>

@@ -2,7 +2,16 @@ version = libs.versions.compose.asProvider().get()
 
 dependencies {
   api(libs.bundles.spring.jpa)
+  api(libs.jakarta.annotationApi)
+
+
+  kapt(variantOf(libs.querydsl.apt) { classifier("jakarta") })
+  api(variantOf(libs.querydsl.jpa) { classifier("jakarta") })
   api(project(":rds:rds-core"))
+  api(libs.jakarta.annotationApi)
+
+  implementation(project(":core"))
+
 
   testImplementation(libs.bundles.p6spySpring)
 
@@ -13,7 +22,6 @@ dependencies {
   testImplementation(libs.spring.boot.validation)
   testImplementation(libs.db.mysqlJ)
 
-  implementation(project(":core"))
   testImplementation(project(":depend:depend-flyway"))
 }
 

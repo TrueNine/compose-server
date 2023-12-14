@@ -15,7 +15,7 @@ class RenderContext {
   private var pkgName: String = ""
   private var ignoreColumns: MutableSet<String> = mutableSetOf()
   private var baseEntityClass: String = TreeEntity::class.java.canonicalName
-  private var baseRepositoryClass: String = net.yan100.compose.rds.repositories.base.IRepo::class.java.canonicalName
+  private var baseRepositoryClass: String = IRepo::class.java.canonicalName
   private var baseServiceClass: String = ""
   private var baseServiceImplClass: String = ""
   private var author: String = "Generator Author"

@@ -8,6 +8,9 @@ import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Version
 import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import java.time.LocalDateTime
 
 /**
  * jpa顶级抽象类
@@ -25,6 +28,8 @@ open class BaseEntity : AnyEntity() {
   companion object {
     const val RLV = DataBaseBasicFieldNames.LOCK_VERSION
     const val LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG
+    const val CRD = DataBaseBasicFieldNames.CREATE_ROW_DATETIME
+    const val MRD = DataBaseBasicFieldNames.MODIFY_ROW_DATETIME
   }
 
   /**
@@ -35,6 +40,18 @@ open class BaseEntity : AnyEntity() {
   @Column(name = RLV)
   @Schema(hidden = true, title = "乐观锁版本", requiredMode = RequiredMode.NOT_REQUIRED)
   open var rlv: BigSerial? = null
+
+  @CreatedDate
+  @JsonIgnore
+  @Schema(title = "表行创建时间")
+  @Column(name = CRD)
+  open var crd: LocalDateTime? = null
+
+  @JsonIgnore
+  @LastModifiedDate
+  @Schema(title = "表行修改时间")
+  @Column(name = MRD)
+  open var mrd: LocalDateTime? = null
 
   /**
    * 逻辑删除标志
@@ -58,8 +75,10 @@ open class BaseEntity : AnyEntity() {
   override fun toString(): String {
     return withToString(
       super.toString(),
-      "ldf" to ldf,
-      "rlv" to rlv
+      LDF to ldf,
+      RLV to rlv,
+      CRD to crd,
+      MRD to mrd
     )
   }
 }

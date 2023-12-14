@@ -1,5 +1,6 @@
 package net.yan100.compose.core.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.annotation.Nullable
 
 /**
@@ -8,7 +9,8 @@ import jakarta.annotation.Nullable
  * @author T_teng
  * @since 2023-04-06
  */
-open class UserInfo {
+open class RequestInfo {
+
   @Nullable
   var userId: String? = null
 
@@ -16,6 +18,7 @@ open class UserInfo {
   var account: String? = null
 
   @Nullable
+  @JsonIgnore
   var deviceId: String? = null
 
   @Nullable

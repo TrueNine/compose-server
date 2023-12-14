@@ -4,7 +4,7 @@ import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictCode
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp
 
-@JvmDefaultWithCompatibility
+
 interface ILazyAddressService {
 
 

@@ -1,18 +1,22 @@
 package net.yan100.compose.rds.service.aggregator
 
 
+import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.rds.entities.relationship.RoleGroupRole
+import net.yan100.compose.rds.entities.relationship.RolePermissions
+import net.yan100.compose.rds.entities.relationship.UserRoleGroup
 import net.yan100.compose.rds.repositories.relationship.IRoleGroupRoleRepo
-import net.yan100.compose.rds.repositories.relationship.RolePermissionsRepo
-import net.yan100.compose.rds.repositories.relationship.UserRoleGroupRepo
+import net.yan100.compose.rds.repositories.relationship.IRolePermissionsRepo
+import net.yan100.compose.rds.repositories.relationship.IUserRoleGroupRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RbacAggregatorImpl(
-  private val urg: UserRoleGroupRepo,
-  private val userRepo: net.yan100.compose.rds.repositories.UserRepo,
+  private val urg: IUserRoleGroupRepo,
+  private val userRepo: net.yan100.compose.rds.repositories.IUsrRepo,
   private val rgr: IRoleGroupRoleRepo,
-  private val rp: RolePermissionsRepo,
+  private val rp: IRolePermissionsRepo,
   private val rg: net.yan100.compose.rds.repositories.FullRoleGroupEntityRepo,
 ) : IRbacAggregator {
 
@@ -23,7 +27,7 @@ class RbacAggregatorImpl(
     userRepo.findAllPermissionsNameByAccount(account)
 
 
-  override fun findAllSecurityNameByUserId(userId: String): Set<String> {
+  override fun findAllSecurityNameByUserId(userId: ReferenceId): Set<String> {
     // FIXME 待优化
     // 查询所有用户的角色组id
     val userRoleGroupIds = urg.findAllRoleGroupIdByUserId(userId)
@@ -46,17 +50,17 @@ class RbacAggregatorImpl(
   override fun findAllSecurityNameByAccount(account: String): Set<String> =
     findAllSecurityNameByUserId(userRepo.findIdByAccount(account))
 
-  override fun saveRoleGroupToUser(roleGroupId: String, userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup? =
+  override fun saveRoleGroupToUser(roleGroupId: ReferenceId, userId: ReferenceId): UserRoleGroup? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)
-      ?: urg.save(net.yan100.compose.rds.entities.relationship.UserRoleGroup().apply {
+      ?: urg.save(UserRoleGroup().apply {
         this.userId = userId
         this.roleGroupId = roleGroupId
       })
 
-  override fun saveAllRoleGroupToUser(roleGroupIds: List<String>, userId: String): List<net.yan100.compose.rds.entities.relationship.UserRoleGroup> {
+  override fun saveAllRoleGroupToUser(roleGroupIds: List<ReferenceId>, userId: ReferenceId): List<UserRoleGroup> {
     val existingRoleGroups = urg.findAllRoleGroupIdByUserId(userId)
     val mewRoleGroups = roleGroupIds.filterNot { existingRoleGroups.contains(it) }.map {
-      net.yan100.compose.rds.entities.relationship.UserRoleGroup().apply {
+      UserRoleGroup().apply {
         roleGroupId = it
         this.userId = userId
       }
@@ -65,24 +69,26 @@ class RbacAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleGroupFromUser(roleGroupId: String, userId: String) = urg.deleteAllByRoleGroupIdAndUserId(roleGroupId, userId)
+  override fun revokeRoleGroupFromUser(roleGroupId: ReferenceId, userId: ReferenceId) {
+    urg.deleteAllByRoleGroupIdAndUserId(roleGroupId, userId)
+  }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupFromUser(roleGroupIds: List<String>, userId: String) {
+  override fun revokeAllRoleGroupFromUser(roleGroupIds: List<ReferenceId>, userId: ReferenceId) {
     urg.deleteAllByRoleGroupIdInAndUserId(roleGroupIds, userId)
   }
 
-  override fun saveRoleToRoleGroup(roleId: String, roleGroupId: String): net.yan100.compose.rds.entities.relationship.RoleGroupRole? =
+  override fun saveRoleToRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId): RoleGroupRole? =
     rgr.findByRoleGroupIdAndRoleId(roleGroupId, roleId)
-      ?: rgr.save(net.yan100.compose.rds.entities.relationship.RoleGroupRole().apply {
+      ?: rgr.save(RoleGroupRole().apply {
         this.roleGroupId = roleGroupId
         this.roleId = roleId
       })
 
-  override fun saveAllRoleToRoleGroup(roleIds: List<String>, roleGroupId: String): List<net.yan100.compose.rds.entities.relationship.RoleGroupRole> {
+  override fun saveAllRoleToRoleGroup(roleIds: List<ReferenceId>, roleGroupId: ReferenceId): List<RoleGroupRole> {
     val existingRoles = rgr.findAllRoleIdByRoleGroupId(roleGroupId)
     val newRoles = roleIds.filterNot { existingRoles.contains(it) }.map {
-      net.yan100.compose.rds.entities.relationship.RoleGroupRole().apply {
+      RoleGroupRole().apply {
         this.roleGroupId = roleGroupId
         roleId = it
       }
@@ -92,26 +98,30 @@ class RbacAggregatorImpl(
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeRoleFromRoleGroup(roleId: String, roleGroupId: String) =
+  override fun revokeRoleFromRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId) {
     rgr.deleteByRoleGroupIdAndRoleId(roleGroupId, roleId)
+  }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleFromRoleGroup(roleIds: List<String>, roleGroupId: String) = rgr.deleteAllByRoleIdInAndRoleGroupId(roleIds, roleGroupId)
+  override fun revokeAllRoleFromRoleGroup(roleIds: List<ReferenceId>, roleGroupId: ReferenceId) {
+    rgr.deleteAllByRoleIdInAndRoleGroupId(roleIds, roleGroupId)
+  }
 
-  override fun savePermissionsToRole(permissionsId: String, roleId: String): net.yan100.compose.rds.entities.relationship.RolePermissions? =
-    rp.findByRoleIdAndPermissionsId(roleId, permissionsId)
-      ?: rp.save(net.yan100.compose.rds.entities.relationship.RolePermissions().apply {
+  override fun savePermissionsToRole(permissionsId: ReferenceId, roleId: ReferenceId): RolePermissions? {
+    return rp.findByRoleIdAndPermissionsId(roleId, permissionsId)
+      ?: rp.save(RolePermissions().apply {
         this.roleId = roleId
         this.permissionsId = permissionsId
       })
+  }
 
   override fun saveAllPermissionsToRole(
-    permissionsIds: List<String>,
-    roleId: String
-  ): List<net.yan100.compose.rds.entities.relationship.RolePermissions> {
+    permissionsIds: List<ReferenceId>,
+    roleId: ReferenceId
+  ): List<RolePermissions> {
     val existingPermissions = rp.findAllPermissionsIdByRoleId(roleId)
     val newPermissions = permissionsIds.filterNot { existingPermissions.contains(it) }.map {
-      net.yan100.compose.rds.entities.relationship.RolePermissions().apply {
+      RolePermissions().apply {
         permissionsId = it
         this.roleId = roleId
       }
@@ -121,10 +131,12 @@ class RbacAggregatorImpl(
 
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokePermissionsFromRole(permissionsId: String, roleId: String) =
+  override fun revokePermissionsFromRole(permissionsId: ReferenceId, roleId: ReferenceId) {
     rp.deleteByRoleIdAndPermissionsId(roleId, permissionsId)
+  }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllPermissionsFromRole(permissionsIds: List<String>, roleId: String) =
+  override fun revokeAllPermissionsFromRole(permissionsIds: List<ReferenceId>, roleId: ReferenceId) {
     rp.deleteAllByPermissionsIdInAndRoleId(permissionsIds, roleId)
+  }
 }

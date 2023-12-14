@@ -3,16 +3,16 @@ package net.yan100.compose.core.encrypt
 import net.yan100.compose.core.lang.slf4j
 import javax.crypto.spec.SecretKeySpec
 
-class FileKeysRepository(
+class FileKeysRepo(
   private val keyDest: String = "security",
   eccKeyPairPaths: Pair<String, String> = "ecc_public.key" to "ecc_private.key",
   rsaKeyPairPaths: Pair<String, String> = "rsa_public.key" to "rsa_private.key",
   aesPaths: String = "aes.key"
-) : IKeysRepository {
+) : IKeysRepo {
 
   companion object {
     @JvmStatic
-    private val log = slf4j(FileKeysRepository::class)
+    private val log = slf4j(FileKeysRepo::class)
   }
 
 

@@ -2,11 +2,9 @@ package net.yan100.compose.rds.entities.documents
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
-import net.yan100.compose.core.annotations.SensitiveRef
-import net.yan100.compose.core.annotations.Strategy
-import net.yan100.compose.rds.converters.DegreeTypingConverter
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.rds.converters.DegreeTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.core.entities.TreeEntity
 import net.yan100.compose.rds.typing.BloodTyping
@@ -109,17 +107,14 @@ open class SuperHouseholdRegistrationCard : BaseEntity() {
   @Column(name = RELATIONSHIP)
   open var relationship: String? = null
 
-  @SensitiveRef(Strategy.NAME)
   @Schema(title = "曾用名")
   @Column(name = OLD_NAME)
   open var oldName: String? = null
 
-  @SensitiveRef(Strategy.NAME)
   @Schema(title = "户口页所属人名称")
   @Column(name = NAME)
   open var name: String? = null
 
-  @SensitiveRef(Strategy.ADDRESS)
   @Schema(title = "签发机关")
   @Column(name = ISSUE_ORGAN)
   open var issueOrgan: String? = null
@@ -132,7 +127,6 @@ open class SuperHouseholdRegistrationCard : BaseEntity() {
   @Column(name = CODE)
   open var code: SerialCode? = null
 
-  @SensitiveRef(Strategy.NAME)
   @Schema(title = "户主名称")
   @Column(name = HOUSEHOLD_PRIMARY_NAME)
   open var householdPrimaryName: String? = null

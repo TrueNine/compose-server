@@ -20,7 +20,8 @@ class IAttachmentAggregatorImplTest {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass.uploadAttachment(mockFile) {
       PostAttachmentReq().apply {
-        baseUrl = "https://oss.aliyun.com/static"
+        baseUrl = "https://oss.aliyun.com"
+        baseUri = "/static"
         saveName = "adwd0juihjrthjrthrhrhrth"
       }
     }!!.apply {
@@ -33,7 +34,8 @@ class IAttachmentAggregatorImplTest {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass.uploadAttachment(mockFile) {
       PostAttachmentReq().apply {
-        baseUrl = "https://oss.aliyun.com/static"
+        baseUrl = "https://oss.aliyun.com"
+        baseUri = "/static"
         saveName = "adwd0juihjrthjrthrhrhrth"
       }
     }!!

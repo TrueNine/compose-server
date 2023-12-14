@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.lang.EmptyDefault
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.AuthUserInfo
+import net.yan100.compose.core.models.AuthRequestInfo
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 
 class EmptyPreflightValidFilter : EmptyDefault, SecurityPreflightValidFilter() {
@@ -20,8 +20,8 @@ class EmptyPreflightValidFilter : EmptyDefault, SecurityPreflightValidFilter() {
     reFlashToken: String?,
     request: HttpServletRequest,
     response: HttpServletResponse
-  ): AuthUserInfo {
-    log.warn("生成了一个空的 {}", ::AuthUserInfo.name)
-    return AuthUserInfo()
+  ): AuthRequestInfo {
+    log.warn("生成了一个空的 {}", ::AuthRequestInfo.name)
+    return AuthRequestInfo()
   }
 }

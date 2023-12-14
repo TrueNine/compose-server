@@ -1,9 +1,9 @@
 package net.yan100.compose.rds.repositories
 
 
-import net.yan100.compose.rds.entities.FullUser
-import net.yan100.compose.rds.entities.User
+import net.yan100.compose.rds.entities.FullUsr
 import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Repository
-interface UserRepo : IRepo<User> {
-  fun findByAccount(account: String): User?
+interface IUsrRepo : IRepo<Usr> {
+  fun findByAccount(account: String): Usr?
 
   @Query(
     """
     SELECT u.id
-    FROM User u
+    FROM Usr u
     WHERE u.account = :account
   """
   )
@@ -27,18 +27,36 @@ interface UserRepo : IRepo<User> {
   @Query(
     """
     SELECT pwdEnc
-    FROM User
+    FROM Usr
     WHERE account = :account
   """
   )
   fun findPwdEncByAccount(account: String): String?
 
-  fun findAllByNickName(nickName: String): List<User>
+  @Query(
+    """
+    from Usr u
+    left join UserInfo i on i.userId = u.id
+    where i.pri = true and i.phone = :phone
+  """
+  )
+  fun findAccountByUserInfoPhone(phone: String): String?
+
+  @Query(
+    """
+    from Usr u
+    left join UserInfo i on i.userId = u.id
+    where i.pri = true and i.wechatOpenid = :openid
+  """
+  )
+  fun findAccountByUserInfoWechatOpenid(openid: String): String?
+
+  fun findAllByNickName(nickName: String): List<Usr>
 
   @Query(
     """
     SELECT r.name
-    FROM User u
+    FROM Usr u
     LEFT JOIN UserRoleGroup urg ON urg.userId = u.id
     LEFT JOIN RoleGroup rg ON rg.id = urg.roleGroupId
     LEFT JOIN RoleGroupRole rgr ON rgr.roleGroupId = rg.id
@@ -51,7 +69,7 @@ interface UserRepo : IRepo<User> {
   @Query(
     """
     SELECT p.name
-    FROM User u
+    FROM Usr u
     LEFT JOIN UserRoleGroup urg ON urg.userId = u.id
     LEFT JOIN RoleGroup rg ON rg.id = urg.roleGroupId
     LEFT JOIN RoleGroupRole rgr ON rgr.roleGroupId = rg.id
@@ -66,14 +84,14 @@ interface UserRepo : IRepo<User> {
   fun existsAllByAccount(account: String): Boolean
 
   @Modifying
-  @Query("UPDATE User u SET u.banTime = :banTime WHERE u.account = :account")
+  @Query("UPDATE Usr u SET u.banTime = :banTime WHERE u.account = :account")
   fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 
   @Query(
-      """
+    """
     SELECT count(i.id) > 0
     FROM UserInfo i
-    LEFT JOIN User u ON i.userId = u.id
+    LEFT JOIN Usr u ON i.userId = u.id
     WHERE i.wechatOpenid = :openId
   """
   )
@@ -81,8 +99,8 @@ interface UserRepo : IRepo<User> {
 }
 
 @Repository
-interface FullUserRepository : IRepo<FullUser> {
-  fun findByAccount(account: String): FullUser?
+interface IFullUserRepo : IRepo<FullUsr> {
+  fun findByAccount(account: String): FullUsr?
 }
 
 
@@ -94,25 +112,25 @@ interface UserInfoRepo : IRepo<UserInfo> {
    * 根据 微信 openId 查询对应 User
    */
   @Query(
-      """
-    FROM User u
+    """
+    FROM Usr u
     LEFT JOIN UserInfo i ON u.id = i.userId
     WHERE i.wechatOpenid = :openid
     """
   )
-  fun findUserByWechatOpenId(openid: String): User?
+  fun findUserByWechatOpenId(openid: String): Usr?
 
   /**
    * 根据 电话号码查询用户手机号
    */
   @Query(
     """
-    FROM User u
+    FROM Usr u
     LEFT JOIN UserInfo i ON u.id = i.userId
     WHERE i.phone = :phone
   """
   )
-  fun findUserByPhone(phone: String): User?
+  fun findUserByPhone(phone: String): Usr?
 
   fun existsByPhone(phone: String): Boolean
 

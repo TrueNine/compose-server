@@ -1,6 +1,6 @@
 package net.yan100.compose.core.id
 
-@JvmDefaultWithCompatibility
+
 interface Snowflake {
   fun currentTimeMillis(): Long {
     return System.currentTimeMillis()

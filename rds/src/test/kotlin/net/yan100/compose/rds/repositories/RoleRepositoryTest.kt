@@ -12,7 +12,7 @@ import org.springframework.test.annotation.Rollback
 class RoleRepositoryTest {
 
   @Autowired
-  private lateinit var repo: net.yan100.compose.rds.repositories.RoleRepository
+  private lateinit var repo: RoleRepository
   val log = slf4j(this::class)
 
   @Test

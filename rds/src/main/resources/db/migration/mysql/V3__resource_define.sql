@@ -30,6 +30,7 @@ create table if not exists attachment
   meta_name varchar(127)    null comment '原始名称',
   save_name varchar(127) comment '存储后名称',
   base_url  varchar(255)    null comment '基本url',
+  base_uri varchar(255)     null comment '基本uri',
   url_name  varchar(127)    null comment '资源路径名称',
   url_doc   varchar(255) comment '资源路径描述',
   url_id    bigint unsigned null comment '根路径链接路径自连接id',
@@ -39,6 +40,7 @@ create table if not exists attachment
   index (url_id) comment '自连接 id',
   index (meta_name) comment '原始名称经常搜索',
   index (base_url) comment '根路径经常检索',
+  index (base_uri) comment '根路径经常检索',
   index (att_type) comment '附件类型经常检索',
   index (mime_type) comment '媒体类型经常检索'
 ) default charset = utf8mb4, comment '文件';

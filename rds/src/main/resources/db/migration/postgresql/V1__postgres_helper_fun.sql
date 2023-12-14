@@ -32,6 +32,8 @@ begin
   execute format('ALTER TABLE %I ADD COLUMN id BIGINT NOT NULL;', tab_name);
   execute format('ALTER TABLE %I ADD PRIMARY KEY (id);', tab_name);
   execute format('ALTER TABLE %I ADD COLUMN rlv BIGINT DEFAULT 0;', tab_name);
+  execute format('alter table %I add column crd timestamp default now();', tab_name);
+  execute format('alter table %I add column mrd timestamp default now();', tab_name);
   execute format('ALTER TABLE %I ADD COLUMN ldf BOOLEAN DEFAULT FALSE;', tab_name);
 end;
 $$ language plpgsql;

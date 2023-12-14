@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class AttachmentServiceImpl(
-    private val repo: IAttachmentRepo,
-    private val linkedRepo: ILinkedAttachmentRepo
+  private val repo: IAttachmentRepo,
+  private val linkedRepo: ILinkedAttachmentRepo
 ) : IAttachmentService, CrudService<Attachment>(repo) {
   override fun existsByBaseUrl(baseUrl: String): Boolean {
     return repo.existsByBaseUrl(baseUrl)
@@ -27,7 +27,15 @@ class AttachmentServiceImpl(
     return repo.findFirstByBaseUrl(baseUrl)
   }
 
-  override fun findAllByBaseUrlIn(BaseUrls: List<String>): List<Attachment> {
+  override fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment? {
+    return repo.findFirstByBaseUrlAndBaseUri(baseUrl, baseUri)
+  }
+
+  override fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment> {
+    return repo.findAllByBaseUrlIn(baseUrls)
+  }
+
+  override fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment> {
     TODO("Not yet implemented")
   }
 

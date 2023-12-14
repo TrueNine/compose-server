@@ -1,4 +1,4 @@
-create table if not exists user
+create table if not exists usr
 (
   create_user_id  bigint unsigned default null comment '创建此账户的 user id',
   account         varchar(255)    default null comment '账号',
@@ -9,15 +9,16 @@ create table if not exists user
   last_login_time datetime        default now() comment '最后请求时间',
   unique (account) comment '账号唯一'
 ) default charset = utf8mb4,comment '用户';
-call add_base_struct('user');
+call add_base_struct('usr');
 
-insert into user(id, account, nick_name, pwd_enc, last_login_time)
-values (0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now()),
-       (1, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now());
+insert into usr(id, account, nick_name, pwd_enc, last_login_time, doc)
+values (0, 0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now(), '超级管理员账号'),
+       (1, 0, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now(), '普通用户账号');
 
 create table if not exists user_info
 (
   user_id            bigint unsigned default null comment '用户账号id',
+  create_user_id     bigint unsigned default null comment '创建此用户信息的 user id',
   pri                boolean         default true comment '首选用户信息',
   avatar_img_id      bigint unsigned comment '用户头像',
   first_name         varchar(4095) comment '姓',
@@ -36,13 +37,11 @@ create table if not exists user_info
   qq_account         varchar(255)    default null,
   address_code       varchar(127)    default null,
   address_id         bigint unsigned default null,
-  unique (qq_account),
-  unique (qq_openid),
-  unique (phone) comment '电话唯一',
-  unique (id_card) comment '身份证唯一',
-  unique (wechat_openid) comment '微信 openId唯一',
-  unique (wechat_authid) comment '微信自定义登录id 唯一',
-  unique (wechat_account) comment '微信账号',
+  index (user_id),
+  index (create_user_id),
+  index (phone),
+  index (email),
+  index (id_card),
   index (wechat_openid) comment '微信 openId 经常查询',
   index (wechat_authid) comment '微信自定义登录id经常查询',
   index (address_details_id) comment '外联 地址详情',
@@ -50,8 +49,8 @@ create table if not exists user_info
 ) default charset = utf8mb4, comment '用户信息';
 call add_base_struct('user_info');
 insert into user_info(id, user_id, pri, first_name, last_name, email, birthday, phone, gender)
-values (0, 0, true, 'R', 'OOT', 'gg@gmail.com', '1997-11-04', '15555555551', 1),
-       (1, 1, true, 'U', 'SR', 'gg@gmail.com', '1997-11-04', '15555555552', 1);
+values (0, 0, true, 'R', 'OOT', 'g@g.com', '1997-11-04', '13711111111', 1),
+       (1, 1, true, 'U', 'SR', 'g@g.com', '1997-11-04', '13722222222', 1);
 
 create table if not exists role
 (
@@ -60,8 +59,9 @@ create table if not exists role
 ) default charset = utf8mb4, comment '角色';
 call add_base_struct('role');
 insert into role (id, name, doc)
-values (0, 'ROOT', '默认超级管理员角色，务必不要删除'),
-       (1, 'USER', '默认USER角色，务必不要删除');
+values (0, 'ROOT', '默认 ROOT 角色，务必不要删除'),
+       (1, 'USER', '默认 USER 角色，务必不要删除'),
+       (2, 'ADMIN', '默认 ADMIN 角色，务必不要删除');
 
 
 create table if not exists permissions
@@ -71,8 +71,9 @@ create table if not exists permissions
 ) default charset = utf8mb4, comment '权限';
 call add_base_struct('permissions');
 insert into permissions(id, name, doc)
-values (0, 'ROOT', '默认ROOT权限，务必不要删除'),
-       (1, 'USER', '默认USER权限，务必不要删除');
+values (0, 'ROOT', '默认 ROOT 权限，务必不要删除'),
+       (1, 'USER', '默认 USER 权限，务必不要删除'),
+       (2, 'ADMIN', '默认 ADMIN 权限，务必不要删除');
 
 
 create table if not exists role_group
@@ -82,8 +83,9 @@ create table if not exists role_group
 ) default charset = utf8mb4, comment '角色组';
 call add_base_struct('role_group');
 insert into role_group(id, name, doc)
-values (0, 'ROOT', '默认ROOT角色组，务必不要删除'),
-       (1, 'USER', '默认USER角色组，务必不要删除');
+values (0, 'ROOT', '默认 ROOT 角色组，务必不要删除'),
+       (1, 'USER', '默认 USER 角色组，务必不要删除'),
+       (2, 'ADMIN', '默认 ADMIN 角色组，务必不要删除');
 
 
 create table if not exists role_permissions
@@ -97,7 +99,10 @@ call add_base_struct('role_permissions');
 insert into role_permissions(id, role_id, permissions_id)
 values (0, 0, 0),
        (1, 0, 1),
-       (2, 1, 1);
+       (2, 0, 2),
+       (3, 1, 1),
+       (4, 2, 1),
+       (5, 2, 2);
 
 
 create table if not exists role_group_role
@@ -111,7 +116,10 @@ call add_base_struct('role_group_role');
 insert into role_group_role(id, role_group_id, role_id)
 values (0, 0, 0),
        (1, 0, 1),
-       (2, 1, 1);
+       (2, 0, 2),
+       (3, 1, 1),
+       (4, 2, 1),
+       (5, 2, 2);
 
 create table if not exists user_role_group
 (
@@ -124,7 +132,8 @@ call add_base_struct('user_role_group');
 insert into user_role_group(id, user_id, role_group_id)
 values (0, 0, 0),
        (1, 0, 1),
-       (2, 1, 1);
+       (2, 0, 2),
+       (3, 1, 1);
 
 
 create table if not exists dept

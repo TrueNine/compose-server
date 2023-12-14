@@ -5,15 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.Past
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.annotations.SensitiveRef
-import net.yan100.compose.core.annotations.Strategy
 import net.yan100.compose.core.exceptions.KnownException
-import net.yan100.compose.rds.converters.AesEncryptConverter
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
-import net.yan100.compose.rds.entities.SuperUserDocument.Companion.WM_CODE
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -26,6 +23,7 @@ open class SuperUserInfo : BaseEntity() {
   companion object {
     const val TABLE_NAME = "user_info"
 
+    const val CREATE_USER_ID = "create_user_id"
     const val USER_ID = "user_id"
     const val AVATAR_IMG_ID = "avatar_img_id"
     const val FIRST_NAME = "first_name"
@@ -47,6 +45,10 @@ open class SuperUserInfo : BaseEntity() {
     const val SPARE_PHONE = "spare_phone"
 
   }
+
+  @Schema(title = "创建此信息的用户")
+  @Column(name = CREATE_USER_ID)
+  open var createUserId: ReferenceId? = null
 
   @Schema(title = "首选用户信息")
   @Column(name = PRI)
@@ -73,7 +75,6 @@ open class SuperUserInfo : BaseEntity() {
    */
   @Nullable
   @Schema(title = "姓")
-  @SensitiveRef(Strategy.NAME)
   @Column(name = FIRST_NAME)
   open var firstName: String? = null
 
@@ -99,6 +100,7 @@ open class SuperUserInfo : BaseEntity() {
   @Nullable
   @Schema(title = "生日")
   @Column(name = BIRTHDAY)
+  @Past
   open var birthday: LocalDate? = null
 
   /**
@@ -133,7 +135,6 @@ open class SuperUserInfo : BaseEntity() {
   @Nullable
   @Schema(title = "电话号码")
   @Column(name = PHONE, unique = true)
-  @get:SensitiveRef(Strategy.PHONE)
   open var phone: String? = null
 
   /**
@@ -142,7 +143,6 @@ open class SuperUserInfo : BaseEntity() {
   @Nullable
   @Schema(title = "身份证")
   @Column(name = ID_CARD, unique = true)
-  @get:SensitiveRef(Strategy.ID_CARD)
   open var idCard: String? = null
 
   /**
@@ -195,7 +195,6 @@ open class UserInfo : SuperUserInfo() {
    * 用户全名
    */
   @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @get:SensitiveRef(Strategy.NAME)
   @get:Transient
   @set:Transient
   open var fullName: String?
@@ -221,7 +220,7 @@ open class FullUserInfo : SuperUserInfo() {
   )
   @JsonBackReference
   @NotFound(action = NotFoundAction.IGNORE)
-  private val user: User? = null
+  private val usr: Usr? = null
 
   /**
    * 用户住址
@@ -246,6 +245,6 @@ open class FullUserInfo : SuperUserInfo() {
   open var avatarImage: Attachment? = null
 
   companion object {
-    const val MAPPED_BY_USER = "user"
+    const val MAPPED_BY_USR = "usr"
   }
 }

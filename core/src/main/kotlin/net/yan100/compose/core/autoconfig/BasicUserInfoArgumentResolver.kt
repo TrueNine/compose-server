@@ -3,9 +3,9 @@ package net.yan100.compose.core.autoconfig
 import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.http.Headers
-import net.yan100.compose.core.http.remoteRequestIp
+import net.yan100.compose.core.lang.remoteRequestIp
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.models.UserInfo
+import net.yan100.compose.core.models.RequestInfo
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -27,7 +27,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
 
   override fun supportsParameter(parameter: MethodParameter): Boolean {
     log.info("support by parameter = {}", parameter)
-    return UserInfo::class.java.isAssignableFrom(parameter.parameterType)
+    return RequestInfo::class.java.isAssignableFrom(parameter.parameterType)
   }
 
   override fun resolveArgument(
@@ -39,7 +39,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
     val u = UserInfoContextHolder.get()
     log.info("argument injection for {}", u)
     if (u == null) {
-      UserInfoContextHolder.set(UserInfo().apply {
+      UserInfoContextHolder.set(RequestInfo().apply {
         val req = webRequest.nativeRequest as HttpServletRequest
         val deviceId = Headers.getDeviceId(req)
         this.currentIpAddr = req.remoteRequestIp

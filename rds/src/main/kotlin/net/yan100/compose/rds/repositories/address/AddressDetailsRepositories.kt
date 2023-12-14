@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface IAddressDetailsRepo :
-    IRepo<AddressDetails> {
+  IRepo<AddressDetails> {
   /**
    * ## 根据用户ID查询用户地址详情
    */
@@ -55,8 +55,7 @@ interface IAddressDetailsRepo :
  * # 全路径地址详情
  */
 @Repository
-interface FullAddressDetailsRepo :
-    IRepo<FullAddressDetails> {
+interface FullAddressDetailsRepo : IRepo<FullAddressDetails> {
   /**
    * ## 根据用户ID查询用户地址详情
    */

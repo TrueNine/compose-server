@@ -8,7 +8,6 @@ import net.yan100.compose.oss.amazon.S3PolicyCreator
 import okhttp3.Headers
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.stream.Collectors
 
 /**
  * minio 基础层
@@ -45,9 +44,33 @@ protected constructor(
     )
   }
 
+
+  open fun bucketExists(bucketName: String): Boolean {
+    return client.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
+  }
+
+  open fun bucketNotExists(bucketName: String): Boolean {
+    return !bucketExists(bucketName)
+  }
+
+  open fun removeObject(fileInfo: FileArgs): Boolean {
+    if (bucketNotExists(fileInfo.dir)) return false
+    try {
+      client.removeObject(
+        RemoveObjectArgs.builder()
+          .bucket(fileInfo.dir)
+          .`object`(fileInfo.fileName)
+          .build()
+      )
+      return true
+    } catch (e: Exception) {
+      e.printStackTrace()
+      return false
+    }
+  }
+
   open fun putObject(fileInfo: FileArgs, stream: InputStream): ObjectWriteResponse? {
-    val dirExists = client.bucketExists(BucketExistsArgs.builder().bucket(fileInfo.dir).build())
-    if (!dirExists) {
+    if (bucketNotExists(fileInfo.dir)) {
       client.makeBucket(
         MakeBucketArgs.builder()
           .bucket(fileInfo.dir)
@@ -62,21 +85,16 @@ protected constructor(
   }
 
   open fun listFiles(dir: String): List<String> {
-    val items = client.listObjects(
+    if (bucketNotExists(dir)) return listOf()
+    return client.listObjects(
       ListObjectsArgs.builder()
         .bucket(dir)
         .build()
-    )
-    val results: MutableList<String> = ArrayList()
-    for (item in items) {
-      results += item.get().objectName()
-    }
-    return results
+    ).map { it.get().objectName() }
   }
 
   open fun listDir(): List<String> {
-    return client.listBuckets().stream().map { obj: Bucket -> obj.name() }
-      .collect(Collectors.toList())
+    return client.listBuckets().map { obj -> obj.name() }
   }
 
   open fun createBucket(dirName: String) {

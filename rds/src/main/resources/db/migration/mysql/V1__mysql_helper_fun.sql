@@ -15,6 +15,8 @@ begin
     'add `id` bigint unsigned primary key comment \'主键\',',
     'add `rlv` bigint unsigned default 0 comment \'乐观锁版本号 row lock version\',',
     'add `ldf` boolean default false comment \'逻辑删除标志 logic delete flag\',',
+    'add `crd` datetime default now() comment \'字段创建时间 create row datetime\',',
+    'add `mrd` datetime default now() comment \'字段修改时间 modify row datetime\',',
     'engine = InnoDB,',
     'default charset = utf8mb4,',
     'auto_increment = 100;'

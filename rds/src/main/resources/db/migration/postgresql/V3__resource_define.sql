@@ -31,6 +31,7 @@ create table if not exists attachment
   meta_name varchar(127) default null,
   save_name varchar(127),
   base_url  varchar(255),
+  base_uri  varchar(255),
   url_name  varchar(127) default null,
   url_doc   varchar(255),
   url_id    bigint null,
@@ -43,6 +44,7 @@ select add_base_struct('attachment');
 create index on attachment (url_id);
 create index on attachment (meta_name);
 create index on attachment (base_url);
+create index on attachment (base_uri);
 create index on attachment (att_type);
 create index on attachment (mime_type);
 

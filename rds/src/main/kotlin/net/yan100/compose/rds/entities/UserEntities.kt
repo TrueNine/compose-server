@@ -1,20 +1,28 @@
 package net.yan100.compose.rds.entities
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import jakarta.validation.constraints.Future
+import jakarta.validation.constraints.FutureOrPresent
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.annotations.SensitiveRef
-import net.yan100.compose.core.annotations.Strategy
+import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.exceptions.KnownException
+import net.yan100.compose.rds.Oto
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.entities.relationship.UserRoleGroup
+import org.checkerframework.checker.units.qual.Length
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.Fetch
@@ -24,9 +32,9 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
 import java.time.LocalDateTime
 
 @MappedSuperclass
-open class SuperUser : BaseEntity() {
+open class SuperUsr : BaseEntity() {
   companion object {
-    const val TABLE_NAME = "user"
+    const val TABLE_NAME = "usr"
 
     const val ACCOUNT = "account"
     const val NICK_NAME = "nick_name"
@@ -47,7 +55,10 @@ open class SuperUser : BaseEntity() {
   /**
    * 账号
    */
+  @NotEmpty
+  @Size(min = 4, max = 256)
   @Schema(title = "账号")
+  @Pattern(regexp = Regexes.ACCOUNT)
   @Column(name = ACCOUNT, unique = true)
   open var account: SerialCode? = null
 
@@ -70,17 +81,18 @@ open class SuperUser : BaseEntity() {
   /**
    * 密码
    */
-  @Nullable
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @Size(min = 8)
   @Schema(title = "密码")
   @Column(name = PWD_ENC)
-  @get:SensitiveRef(Strategy.PASSWORD)
   open var pwdEnc: String? = null
 
   /**
    * 被封禁结束时间
    */
   @Nullable
-  @JsonIgnore
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @FutureOrPresent
   @Schema(title = "被封禁结束时间")
   @Column(name = BAN_TIME)
   open var banTime: LocalDateTime? = null
@@ -89,7 +101,7 @@ open class SuperUser : BaseEntity() {
    * 最后请求时间
    */
   @Nullable
-  @JsonIgnore
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @Schema(title = "最后请求时间")
   @Column(name = LAST_LOGIN_TIME)
   open var lastLoginTime: LocalDateTime? = null
@@ -116,18 +128,19 @@ open class SuperUser : BaseEntity() {
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "用户")
-@Table(name = SuperUser.TABLE_NAME)
-open class User : SuperUser()
+@Table(name = SuperUsr.TABLE_NAME)
+open class Usr : SuperUsr()
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "全属性用户")
-@Table(name = SuperUser.TABLE_NAME)
-open class FullUser : SuperUser() {
+@Table(name = SuperUsr.TABLE_NAME)
+open class FullUsr : SuperUsr() {
   /**
    * 角色组
    */
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
   @ManyToMany(fetch = EAGER, targetEntity = RoleGroup::class)
   @JoinTable(
@@ -154,7 +167,7 @@ open class FullUser : SuperUser() {
    */
   @Schema(title = "用户信息", requiredMode = NOT_REQUIRED)
   @JsonManagedReference
-  @OneToOne(mappedBy = FullUserInfo.MAPPED_BY_USER)
+  @Oto(mappedBy = FullUserInfo.MAPPED_BY_USR)
   @NotFound(action = IGNORE)
   open var info: FullUserInfo? = null
 }
