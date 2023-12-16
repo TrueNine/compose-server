@@ -41,7 +41,7 @@ class IRbacAggregatorImplTest {
   lateinit var snowflake: Snowflake
 
   private fun getUser() = Usr().apply {
-    account = "name:${snowflake.nextId()}"
+    account = "name${snowflake.nextId()}"
     nickName = "abcd"
     pwdEnc = "aa${snowflake.nextId()}"
   }
