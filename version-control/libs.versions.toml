@@ -168,22 +168,22 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.257"
+compose = "1.6.259"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
 java = "21" ### https://bell-sw.com/
-kotlin = "2.0.0-Beta1" ### https://github.com/JetBrains/kotlin/releases
-ktx-coroutine = "1.7.3" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
+kotlin = "2.0.0-Beta2" ### https://github.com/JetBrains/kotlin/releases
+ktx-coroutine = "1.8.0-RC" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
 kt-reactorExtensions = "1.2.2" ### https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
 spring-boot = "3.2.0" ### https://spring.io/projects/spring-boot#learn
-spring-cloud = "2023.0.0-RC1" ### https://spring.io/projects/spring-cloud#learn
+spring-cloud = "2023.0.0" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### https://spring.io/projects/spring-cloud-alibaba#learn
 spring-modulith = "1.1.0-RC2" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
-spring-doc-webmvcUi3 = "2.2.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
-spring-doc-openapiUi2 = "1.7.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+spring-doc-webmvcUi3 = "2.3.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+spring-doc-openapiUi2 = "1.7.0" ### deprecated https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 apache-commonsPool2 = "2.12.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
 apache-commonsCompress = "1.25.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
 
@@ -206,7 +206,7 @@ db-sqlite = "3.44.1.0" ### https://mvnrepository.com/artifact/org.xerial/sqlite-
 db-mysqlJava = "8.0.33" ### deprecated https://mvnrepository.com/artifact/mysql/mysql-connector-java
 db-mysqlJ = "8.2.0" ### https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
 cralwer-supercsv = "2.4.0" ### https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
-db-flyway = "10.2.0" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+db-flyway = "10.3.0" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 db-p6spy = "3.9.1" ### deprecated https://mvnrepository.com/artifact/p6spy/p6spy
 db-p6spySpring = "1.9.0" ### deprecated https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
 
@@ -214,7 +214,7 @@ sdk-oss-minio = "8.5.7" ### https://mvnrepository.com/artifact/io.minio/minio
 sdk-oss-aliyun = "3.17.3" ### https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss
 sdk-oss-huaweicloud = "3.23.9.1" ### https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java
 sdk-pay-wechatv3 = "0.2.12" ### https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
-sdk-openapi-knife4jJakarta = "4.3.0" ### https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter
+sdk-openapi-knife4jJakarta = "4.4.0" ### https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter
 sdk-openapi-knife4j = "3.0.3" ### deprecated https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
 
 security-bcprovJdk18on = "1.77" ### https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on

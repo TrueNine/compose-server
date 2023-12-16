@@ -8,10 +8,18 @@ typealias Id = String
  * 字符串形式的序列号
  */
 typealias SerialCode = String
+
 /**
  * 数据库外键
+ * @see Id
  */
 typealias ReferenceId = Id
+
+/**
+ * @see ReferenceId
+ */
+typealias RefId = ReferenceId
+
 /**
  * 大文本
  */
@@ -29,5 +37,11 @@ typealias TypeInt = Int
 
 /**
  * 字符串类型序列号
+ * @see SerialCode
  */
-typealias TypeSerialCode = SerialCode
+typealias TypeString = SerialCode
+
+/**
+ * @see TypeString
+ */
+typealias TypeStr = TypeString

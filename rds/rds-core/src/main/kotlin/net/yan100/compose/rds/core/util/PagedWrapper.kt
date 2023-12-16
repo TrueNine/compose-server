@@ -37,16 +37,31 @@ object PagedWrapper {
     )
 
   @JvmStatic
-  fun <T> result(jpaPage: Page<T>): PagedResponseResult<T> =
-    PagedResponseResult<T>()
-      .apply {
-        dataList = jpaPage.content
-        pageSize = jpaPage.totalPages
-        total = jpaPage.totalElements
-        size = jpaPage.content.size
+  fun <T> result(jpaPage: Page<T>): PagedResponseResult<T> {
+    return PagedResponseResult<T>().apply {
+      dataList = jpaPage.content
+      pageSize = jpaPage.totalPages
+      total = jpaPage.totalElements
+      size = jpaPage.content.size
+      offset = if (jpaPage.pageable.isPaged) jpaPage.pageable.offset else 0
+    }
+  }
 
-        offset = if (jpaPage.pageable.isPaged) jpaPage.pageable.offset else 0
-      }
+  /**
+   * 根据新的list计算结果集
+   * <br/>
+   * 例如：查询 A 表，但是返回 B 表处理后的结果
+   */
+  @JvmStatic
+  fun <R> resultByNewList(jpaPage: Page<*>, newList: List<R>): PagedResponseResult<R> {
+    return PagedResponseResult<R>().apply {
+      dataList = newList
+      pageSize = jpaPage.totalPages
+      total = jpaPage.totalElements
+      size = newList.size
+      offset = if (jpaPage.pageable.isPaged) jpaPage.pageable.offset else 0
+    }
+  }
 
   @JvmStatic
   fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
@@ -88,6 +103,12 @@ typealias Pr<T> = PagedResponseResult<T>
 val <T> Page<T>.result: Pr<T>
   get() = PagedWrapper.result(this)
 
+/**
+ * # 封装一个新的集合到分页结果
+ */
+fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> {
+  return PagedWrapper.resultByNewList(this, newList)
+}
 
 /**
  * # 对分页参数的封装，返回一个包装的对象
