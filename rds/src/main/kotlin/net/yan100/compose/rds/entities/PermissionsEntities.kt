@@ -5,7 +5,7 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.BaseEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
@@ -21,7 +21,13 @@ import org.hibernate.annotations.DynamicUpdate
 @DynamicUpdate
 @Schema(title = "权限")
 @Table(name = Permissions.TABLE_NAME)
-open class Permissions : TreeEntity() {
+open class Permissions : BaseEntity() {
+  companion object {
+    const val TABLE_NAME = "permissions"
+    const val NAME = "name"
+    const val DOC = "doc"
+  }
+
   /**
    * 权限名
    */
@@ -38,9 +44,5 @@ open class Permissions : TreeEntity() {
   @Column(name = DOC)
   open var doc: String? = null
 
-  companion object {
-    const val TABLE_NAME = "permissions"
-    const val NAME = "name"
-    const val DOC = "doc"
-  }
+
 }

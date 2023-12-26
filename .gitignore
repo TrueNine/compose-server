@@ -1,5 +1,8 @@
 .gradle
 gradle/
+.kotlin
+.kotlin/
+
 gradlew
 gradlew.bat
 

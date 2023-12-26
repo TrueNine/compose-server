@@ -37,10 +37,10 @@ class RbacAggregatorImpl(
       userRoleGroupIds
     ) {
       val roleGroups = rg.findAllById(this)
-      val roleNames = roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
+      val roleNames = roleGroups.map { it.roles!! }.flatten().map { "ROLE_${it.name}" }
       val permissionNames = roleGroups
-        .asSequence().map { it.roles }
-        .flatten().map { it.permissions }
+        .asSequence().map { it.roles!! }
+        .flatten().map { it.permissions!! }
         .flatten().map { it.name }.toList()
       roleNames + permissionNames
     }

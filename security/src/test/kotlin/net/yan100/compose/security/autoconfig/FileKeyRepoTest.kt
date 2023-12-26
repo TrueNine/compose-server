@@ -79,8 +79,8 @@ class FileKeyRepoTest {
       encryptedDataObj = "1" to "2"
       subjectObj = "3" to "4"
     })
-    val res = ver.verify(VerifierParam<Any, Any>(issToken,subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java))
-    res.subject .pnt()
-    res.decryptedData.pnt()
+    val res = ver.verify(VerifierParam(issToken,subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java))
+    res?.subject .pnt()
+    res?.decryptedData.pnt()
   }
 }

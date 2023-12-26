@@ -5,6 +5,7 @@ import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
 import net.yan100.compose.plugin.aliYunXiao
 import net.yan100.compose.plugin.allAnnotationCompileOnly
 import net.yan100.compose.plugin.chinaRegionRepositories
+import net.yan100.compose.plugin.distribute
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
@@ -89,6 +90,12 @@ subprojects {
   }
 
   kotlin {
+//    sourceSets.all {
+//      languageSettings {
+//        version = "2.0"
+//      }
+//    }
+
     jvmToolchain(21)
   }
 
@@ -178,10 +185,6 @@ subprojects {
 
 tasks {
   wrapper {
-    distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-${libs.versions.gradle.get()}-all.zip"
-    distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = libs.versions.gradle.get()
-    networkTimeout = 1000
-    validateDistributionUrl = false
+    distribute(libs.versions.gradle.get(),"https://mirrors.cloud.tencent.com/gradle")
   }
 }

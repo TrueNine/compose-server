@@ -2,6 +2,7 @@ package net.yan100.compose.security.jwt
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.encrypt.Keys
+import net.yan100.compose.core.lang.pnt
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test
@@ -45,7 +46,7 @@ class JwtTest {
     )
     val parsed = verifier.verify(outputs)
     println(token)
-    println(parsed.decryptedData)
-    println(parsed.subject)
+    parsed?.decryptedData.pnt()
+    parsed?.subject.pnt()
   }
 }

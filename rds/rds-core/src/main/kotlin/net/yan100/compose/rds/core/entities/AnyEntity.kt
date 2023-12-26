@@ -5,10 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Transient
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
-import net.yan100.compose.core.lang.nonText
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.PreSaveDeleteReferenceListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
@@ -71,10 +69,10 @@ open class AnyEntity : Serializable, Persistable<Id> {
     return this.id
   }
 
-  @Transient
+
   @JsonIgnore
   override fun isNew(): Boolean {
-    return id.nonText() || "" == id || "null" == id
+    return null == id || "" == id
   }
 
   companion object {

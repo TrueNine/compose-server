@@ -3,8 +3,6 @@ package net.yan100.compose.rds.service.aggregator
 import jakarta.validation.Valid
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.rds.core.entities.withNew
-import net.yan100.compose.rds.entities.QRoleGroup.roleGroup
-import net.yan100.compose.rds.entities.QUsr.usr
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.models.req.LoginAccountReq

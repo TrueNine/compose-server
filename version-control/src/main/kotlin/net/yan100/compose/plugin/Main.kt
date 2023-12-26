@@ -6,6 +6,8 @@ import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.wrapper.Wrapper
 import java.net.URI
 
 class Main : Plugin<Project> {
@@ -66,3 +68,9 @@ fun ModuleDependency.exclude(dep: Provider<MinimalExternalModuleDependency>) {
   )
 }
 
+fun Wrapper.distribute(version: String = "8.5", url: String = "https://mirrors.cloud.tencent.com/gradle"): Wrapper {
+  distributionUrl = "$url/gradle-${version}-all.zip"
+  distributionType = Wrapper.DistributionType.ALL
+  gradleVersion = version
+  return this
+}

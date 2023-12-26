@@ -1,7 +1,5 @@
 package net.yan100.compose.rds.entities
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
@@ -10,7 +8,6 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
-import jakarta.validation.constraints.Future
 import jakarta.validation.constraints.FutureOrPresent
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
@@ -22,7 +19,6 @@ import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.rds.Oto
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.entities.relationship.UserRoleGroup
-import org.checkerframework.checker.units.qual.Length
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.Fetch

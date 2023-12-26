@@ -39,7 +39,7 @@ class CorsConfiguration : WebMvcConfigurer {
     c.allowCredentials = true
     c.maxAge = 3600
     c.addAllowedHeader(all)
-
+    c.exposedHeaders = listOf("*")
     return c
   }
 

@@ -7,5 +7,6 @@ data class JwtToken<S : Any, E : Any>(
   var decryptedData: E? = null,
   var expireDateTime: LocalDateTime? = null,
   var id: String? = null,
-  var signatureAlgName: String? = null
+  var signatureAlgName: String? = null,
+  var isExpired: Boolean = false
 )

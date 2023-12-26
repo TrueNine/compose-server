@@ -80,5 +80,5 @@ open class FullRoleGroup : SuperRoleGroup() {
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)
-  open var roles: List<FullRole> = listOf()
+  open var roles: List<FullRole>? = null
 }
