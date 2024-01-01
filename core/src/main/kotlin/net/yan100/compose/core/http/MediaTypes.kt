@@ -2,9 +2,7 @@ package net.yan100.compose.core.http
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
-import net.yan100.compose.core.lang.Str
 import net.yan100.compose.core.lang.StringTyping
-import java.util.*
 
 /**
  * mime类型

@@ -2,7 +2,6 @@ package net.yan100.compose.core.encrypt
 
 import io.mockk.InternalPlatformDsl.toStr
 import net.yan100.compose.core.lang.pnt
-import org.junit.jupiter.api.DisplayName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

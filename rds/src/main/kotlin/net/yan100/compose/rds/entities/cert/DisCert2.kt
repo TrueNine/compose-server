@@ -10,7 +10,6 @@ import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.models.IDisCode2
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
-import net.yan100.compose.rds.core.entities.TreeEntity
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
