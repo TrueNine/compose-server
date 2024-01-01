@@ -1,12 +1,14 @@
-package net.yan100.compose.rds.entities.documents
+package net.yan100.compose.rds.entities.cert
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.rds.Col
+import net.yan100.compose.rds.converters.BloodTypingConverter
 import net.yan100.compose.rds.converters.DegreeTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
-import net.yan100.compose.rds.core.entities.TreeEntity
 import net.yan100.compose.rds.typing.BloodTyping
 import net.yan100.compose.rds.typing.DegreeTyping
 import net.yan100.compose.rds.typing.GenderTyping
@@ -16,11 +18,12 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 @MappedSuperclass
-open class SuperHouseholdRegistrationCard : BaseEntity() {
+open class SuperHouseholdCert : BaseEntity() {
   companion object {
-    const val TABLE_NAME = "household_registration_card"
+    const val TABLE_NAME = "household_cert"
 
     const val USER_ID = "user_id"
+    const val USER_INFO_ID = "user_info_id"
     const val HOUSEHOLD_TYPE = "household_type"
     const val HOUSEHOLD_PRIMARY_NAME = "household_primary_name"
     const val CODE = "code"
@@ -44,6 +47,9 @@ open class SuperHouseholdRegistrationCard : BaseEntity() {
     const val ISSUE_DATE = "issue_date"
   }
 
+  @Schema(title = "用户信息id")
+  @Col(name = USER_INFO_ID)
+  open var userInfoId: RefId? = null
 
   @Schema(title = "户口签发时间")
   @Column(name = ISSUE_DATE)
@@ -83,7 +89,7 @@ open class SuperHouseholdRegistrationCard : BaseEntity() {
 
   @Schema(title = "血型")
   @Column(name = BLOOD_TYPE)
-  @Convert(converter = BloodTyping::class)
+  @Convert(converter = BloodTypingConverter::class)
   open var bloodType: BloodTyping? = null
 
   @Schema(title = "身高")
@@ -143,6 +149,6 @@ open class SuperHouseholdRegistrationCard : BaseEntity() {
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Table(name = SuperHouseholdRegistrationCard.TABLE_NAME)
-open class HouseholdRegistrationCard : TreeEntity()
+@Table(name = SuperHouseholdCert.TABLE_NAME)
+open class HouseholdCert : SuperHouseholdCert()
 

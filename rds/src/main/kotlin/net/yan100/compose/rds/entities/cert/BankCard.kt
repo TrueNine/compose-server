@@ -1,12 +1,14 @@
-package net.yan100.compose.rds.entities.documents
+package net.yan100.compose.rds.entities.cert
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Table
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.core.entities.TreeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -15,6 +17,8 @@ import org.hibernate.annotations.DynamicUpdate
 open class SuperBankCard : TreeEntity() {
   companion object {
     const val TABLE_NAME = "bank_card"
+
+    const val USER_INFO_ID = "user_info_id"
     const val USER_ID = "user_id"
     const val CODE = "code"
     const val COUNTRY = "country"
@@ -23,8 +27,12 @@ open class SuperBankCard : TreeEntity() {
     const val ISSUE_ADDRESS_DETAILS = "issue_address_details"
   }
 
+  @Schema(title = "用户信息id")
+  @Col(name = USER_INFO_ID)
+  open var userInfoId: RefId? = null
+
   @Schema(title = "开户行")
-  @Column(name = ISSUE_ADDRESS_DETAILS)
+  @Col(name = ISSUE_ADDRESS_DETAILS)
   open var issueAddressDetails: String? = null
 
 

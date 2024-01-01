@@ -1,6 +1,6 @@
-package net.yan100.compose.rds.repositories.documents
+package net.yan100.compose.rds.repositories.cert
 
-import net.yan100.compose.rds.entities.documents.Idcard2
+import net.yan100.compose.rds.entities.cert.Idcard2
 import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.stereotype.Repository
 

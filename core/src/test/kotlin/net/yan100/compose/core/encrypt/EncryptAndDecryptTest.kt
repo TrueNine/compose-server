@@ -1,8 +1,9 @@
 package net.yan100.compose.core.encrypt
 
 import io.mockk.InternalPlatformDsl.toStr
+import net.yan100.compose.core.lang.pnt
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
@@ -38,15 +39,12 @@ class EncryptAndDecryptTest {
     assertEquals(str, text)
   }
 
-
   @Test
   fun testRsaEncAndDec() {
     val pair = Keys.generateRsaKeyPair()
     val text = "测试数据测试数据测试数据测试数据"
-    val cipher =
-      Encryptors.encryptByRsaPublicKey(pair!!.rsaPublicKey!!, text)
-    val plain =
-      Encryptors.decryptByRsaPrivateKey(pair.rsaPrivateKey!!, cipher!!)
+    val cipher = Encryptors.encryptByRsaPublicKey(pair!!.rsaPublicKey!!, text)
+    val plain = Encryptors.decryptByRsaPrivateKey(pair.rsaPrivateKey!!, cipher!!)
 
     assertEquals(text, plain)
   }
@@ -64,7 +62,6 @@ class EncryptAndDecryptTest {
   }
 
   @Test
-  @DisplayName("测试base64加密后的key还原")
   fun testGenerateKeyBase64() {
     val ab = Keys.generateRsaKeyPair()!!
     val metaCode = ab.rsaPublicKey!!.encoded
@@ -82,9 +79,14 @@ class EncryptAndDecryptTest {
     }
 
     val cd = Keys.readRsaKeyPair(
-      ab.rsaPublicKeyBase64,
-      ab.rsaPrivateKeyBase64
+      ab.rsaPublicKeyBase64, ab.rsaPrivateKeyBase64
     )
     assertEquals(ab, cd)
+  }
+
+  @Test
+  fun `test sha1 encrypt`() {
+    val sha1 = Encryptors.signatureBySha1("我的")
+    sha1.sha1.pnt()
   }
 }

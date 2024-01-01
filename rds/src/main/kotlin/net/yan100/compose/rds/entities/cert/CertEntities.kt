@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.cert
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
@@ -6,22 +6,22 @@ import net.yan100.compose.core.alias.BigText
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.rds.converters.AuditTypingConverter
-import net.yan100.compose.rds.converters.DocumentContentTypingConverter
-import net.yan100.compose.rds.converters.DocumentPointTypingConverter
-import net.yan100.compose.rds.converters.DocumentTypingConverter
+import net.yan100.compose.rds.converters.CertContentTypingConverter
+import net.yan100.compose.rds.converters.CertPointTypingConverter
+import net.yan100.compose.rds.converters.CertTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.typing.AuditTyping
-import net.yan100.compose.rds.typing.DocumentContentTyping
-import net.yan100.compose.rds.typing.DocumentPointTyping
-import net.yan100.compose.rds.typing.DocumentTyping
+import net.yan100.compose.rds.typing.CertContentTyping
+import net.yan100.compose.rds.typing.CertPointTyping
+import net.yan100.compose.rds.typing.CertTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 
 @MappedSuperclass
-open class SuperUserDocument : BaseEntity() {
+open class SuperCert : BaseEntity() {
   companion object {
-    const val TABLE_NAME = "user_document"
+    const val TABLE_NAME = "cert"
 
     const val ATT_ID = "att_id"
     const val USER_INFO_ID = "user_info_id"
@@ -96,23 +96,23 @@ open class SuperUserDocument : BaseEntity() {
 
   @Schema(title = "证件打印类型")
   @Column(name = PO_TYPE)
-  @Convert(converter = DocumentPointTypingConverter::class)
-  open var poType: DocumentPointTyping? = null
+  @Convert(converter = CertPointTypingConverter::class)
+  open var poType: CertPointTyping? = null
 
   @Schema(title = "证件内容类型")
   @Column(name = CO_TYPE)
-  @Convert(converter = DocumentContentTypingConverter::class)
-  open var coType: DocumentContentTyping? = null
+  @Convert(converter = CertContentTypingConverter::class)
+  open var coType: CertContentTyping? = null
 
   @Schema(title = "证件类型")
   @Column(name = DO_TYPE)
-  @Convert(converter = DocumentTypingConverter::class)
-  open var doType: DocumentTyping? = null
+  @Convert(converter = CertTypingConverter::class)
+  open var doType: CertTyping? = null
 }
 
 
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Table(name = SuperUserDocument.TABLE_NAME)
-open class UserDocument : SuperUserDocument()
+@Table(name = SuperCert.TABLE_NAME)
+open class Cert : SuperCert()

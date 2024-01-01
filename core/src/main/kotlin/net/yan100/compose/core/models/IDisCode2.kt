@@ -6,15 +6,15 @@ import jakarta.persistence.Transient
 /**
  * 二代残疾证代码
  */
-interface IDisabilityCode2 : IIdcard2Code {
-  private class DefaultDisability2Code(dCode: String) : IDisabilityCode2 {
+interface IDisCode2 : IIdcard2Code {
+  private class DefaultDis2Code(dCode: String) : IDisCode2 {
     override val disabilityCode: String = dCode
   }
 
   companion object {
     @JvmStatic
-    fun of(code: String): IDisabilityCode2 {
-      return DefaultDisability2Code(code)
+    fun of(code: String): IDisCode2 {
+      return DefaultDis2Code(code)
     }
   }
 

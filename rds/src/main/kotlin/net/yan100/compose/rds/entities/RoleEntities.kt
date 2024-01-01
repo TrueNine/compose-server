@@ -80,5 +80,5 @@ open class FullRole : SuperRole() {
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)
-  open var permissions: List<Permissions>? = null
+  open var permissions: List<Permissions> = mutableListOf()
 }

@@ -1,12 +1,13 @@
-package net.yan100.compose.rds.entities.documents
+package net.yan100.compose.rds.entities.cert
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.models.IDisabilityCode2
+import net.yan100.compose.core.models.IDisCode2
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.core.entities.TreeEntity
@@ -16,11 +17,12 @@ import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
 
 @MappedSuperclass
-open class SuperDisabilityCertificate2 : IDisabilityCode2, BaseEntity() {
+open class SuperDisCert2 : IDisCode2, BaseEntity() {
   companion object {
-    const val TABLE_NAME = "disability_certificate_2"
+    const val TABLE_NAME = "dis_cert_2"
 
     const val USER_ID = "user_id"
+    const val USER_INFO_ID = "user_info_id"
     const val NAME = "name"
     const val CODE = "code"
     const val GENDER = "gender"
@@ -33,6 +35,10 @@ open class SuperDisabilityCertificate2 : IDisabilityCode2, BaseEntity() {
     const val GUARDIAN_PHONE = "guardian_phone"
     const val BIRTHDAY = "birthday"
   }
+
+  @Schema(title = "用户信息id")
+  @Column(name = USER_INFO_ID)
+  open var userInfoId: RefId? = null
 
   @Schema(title = "出生日期")
   @Column(name = BIRTHDAY)
@@ -94,5 +100,5 @@ open class SuperDisabilityCertificate2 : IDisabilityCode2, BaseEntity() {
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = SuperDisabilityCertificate2.TABLE_NAME)
-open class DisabilityCertificate2 : TreeEntity()
+@Table(name = SuperDisCert2.TABLE_NAME)
+open class DisCert2 : SuperDisCert2()

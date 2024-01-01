@@ -5,6 +5,7 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Table
+import net.yan100.compose.rds.Fk
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.entities.relationship.RoleGroupRole
 import org.hibernate.annotations.*
@@ -76,9 +77,9 @@ open class FullRoleGroup : SuperRoleGroup() {
       insertable = false,
       updatable = false
     )],
-    foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
+    foreignKey = Fk(ConstraintMode.NO_CONSTRAINT)
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)
-  open var roles: List<FullRole>? = null
+  open var roles: List<FullRole>? = mutableListOf()
 }

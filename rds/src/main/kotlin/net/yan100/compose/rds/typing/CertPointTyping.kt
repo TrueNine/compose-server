@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.lang.IntTyping
 
 @Schema(title = "证件印面类型")
-enum class DocumentPointTyping(
+enum class CertPointTyping(
   private val v: Int
 ) : IntTyping {
   @Schema(title = "无要求")

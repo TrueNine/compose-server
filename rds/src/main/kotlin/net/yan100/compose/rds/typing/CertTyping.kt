@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.lang.IntTyping
 
 @Schema(title = "证件类型")
-enum class DocumentTyping(
+enum class CertTyping(
   private val value: Int
 ) : IntTyping {
   @Schema(title = "无具体类型")
@@ -46,6 +46,6 @@ enum class DocumentTyping(
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = DocumentTyping.entries.find { it.value == v }
+    fun findVal(v: Int?) = CertTyping.entries.find { it.value == v }
   }
 }

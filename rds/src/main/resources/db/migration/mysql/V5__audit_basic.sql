@@ -4,8 +4,8 @@ create table if not exists audit
   create_datetime datetime     default now(), -- 创建时间
   audit_user_id   bigint       default null,  -- 审核人
   remark          text         default null,  -- 审核备注
-  ref_id          bigint unsigned not null,   -- 审核对象id
-  ref_type        integer         not null,-- 审核对象类型
+  ref_id          bigint  not null,           -- 审核对象id
+  ref_type        integer not null,-- 审核对象类型
   audit_ip        varchar(64)  default null,  -- 审核人 ip
   audit_device_id varchar(255) default null,  -- 审核人设备 id
   index (status),

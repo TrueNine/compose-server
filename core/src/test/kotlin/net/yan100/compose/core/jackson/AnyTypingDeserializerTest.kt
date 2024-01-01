@@ -1,14 +1,14 @@
 package net.yan100.compose.core.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.typing.documents.DisabilityTyping
+import net.yan100.compose.core.typing.cert.DisTyping
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 
 open class AB {
-  var typ: DisabilityTyping? = null
+  var typ: DisTyping? = null
 }
 
 @SpringBootTest
@@ -18,7 +18,7 @@ class AnyTypingDeserializerTest {
 
   @Test
   fun `test deserializer`() {
-    val d = DisabilityTyping.EYE
+    val d = DisTyping.EYE
     val dd = AB().apply {
       typ = d
     }

@@ -1,4 +1,4 @@
-create table if not exists user_document
+create table if not exists cert
 (
   wm_code          varchar(255) not null,       -- 水印码
   do_type          integer      not null,       -- 证件类型,身份证，户口本
@@ -17,10 +17,10 @@ create table if not exists user_document
   att_id           bigint       not null,       -- 证件 附件 id
   wm_att_id        bigint       not null        -- 证件水印 附件 id
 );
-comment on table user_document is '用户 标记用户  证件';
-select add_base_struct('user_document');
-create index on user_document (user_id);
-create index on user_document (user_info_id);
-create index on user_document (create_user_id);
-create index on user_document (att_id);
-create index on user_document (wm_att_id);
+comment on table cert is '用户 标记用户  证件';
+select add_base_struct('cert');
+create index on cert (user_id);
+create index on cert (user_info_id);
+create index on cert (create_user_id);
+create index on cert (att_id);
+create index on cert (wm_att_id);

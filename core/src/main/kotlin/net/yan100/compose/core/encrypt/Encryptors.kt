@@ -6,6 +6,7 @@ import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import org.bouncycastle.jce.spec.IESParameterSpec
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.Signature
@@ -23,6 +24,9 @@ import javax.crypto.spec.SecretKeySpec
 object Encryptors {
   @JvmStatic
   private val log = slf4j(Encryptors::class)
+
+  @JvmStatic
+  private val sha1 = MessageDigest.getInstance("SHA-1")
 
   /**
    * 分片 base64 分隔符
@@ -122,11 +126,12 @@ object Encryptors {
    * @return 密文
    */
   @JvmStatic
+  @JvmOverloads
   fun encryptByRsaPublicKeyBase64(
     rsaPublicKey: String,
     data: String,
     shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = StandardCharsets.UTF_8
+    charset: Charset = this.charset
   ): String? = encryptByRsaPublicKey(
     Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!,
     data,
@@ -142,6 +147,7 @@ object Encryptors {
    * @return 密文
    */
   @JvmStatic
+  @JvmOverloads
   fun encryptByRsaPublicKey(
     publicKey: RSAPublicKey,
     data: String,
@@ -165,6 +171,7 @@ object Encryptors {
    * @return [String]? 加密后的 base64字符串
    */
   @JvmStatic
+  @JvmOverloads
   fun encryptByRsaPrivateKey(
     privateKey: RSAPrivateKey,
     data: String,
@@ -186,6 +193,7 @@ object Encryptors {
    * @return 密文
    */
   @JvmStatic
+  @JvmOverloads
   fun encryptByEccPublicKey(
     eccPublicKey: PublicKey,
     data: String,
@@ -204,6 +212,7 @@ object Encryptors {
    * @return 明文
    */
   @JvmStatic
+  @JvmOverloads
   fun decryptByEccPrivateKey(
     eccPrivateKey: PrivateKey,
     data: String,
@@ -224,6 +233,7 @@ object Encryptors {
    * @return 明文
    */
   @JvmStatic
+  @JvmOverloads
   fun decryptByRsaPrivateKeyBase64(
     rsaPrivateKey: String,
     ciphertext: String,
@@ -234,6 +244,23 @@ object Encryptors {
     charset
   )
 
+  /**
+   * 使用 SHA 1 进行签名
+   */
+  @JvmStatic
+  @JvmOverloads
+  fun signatureBySha1(plaintext: String, charset: Charset = this.charset): String {
+    return signatureBySha1ByteArray(plaintext.toByteArray(charset)).joinToString("") { "%02x".format(it) }
+  }
+
+  /**
+   * 使用 SHA 1 进行签名 byte[]
+   */
+  @JvmStatic
+  fun signatureBySha1ByteArray(plaintext: ByteArray): ByteArray {
+    return sha1.digest(plaintext)
+  }
+
 
   /**
    * @param rsaPrivateKey 私钥
@@ -242,6 +269,7 @@ object Encryptors {
    * @return 解密数据
    */
   @JvmStatic
+  @JvmOverloads
   fun decryptByRsaPrivateKey(
     rsaPrivateKey: RSAPrivateKey,
     ciphertext: String,
@@ -255,6 +283,7 @@ object Encryptors {
    * @return 解密数据
    */
   @JvmStatic
+  @JvmOverloads
   fun encryptByAesKeyBase64(
     aesKey: String,
     plaintext: String,
@@ -272,6 +301,7 @@ object Encryptors {
    * @return 密文
    */
   @JvmStatic
+  @JvmOverloads
   fun encryptByAesKey(
     secret: SecretKeySpec,
     plain: String,
@@ -290,10 +320,11 @@ object Encryptors {
    * @return 明文
    */
   @JvmStatic
+  @JvmOverloads
   fun decryptByAesKeyBase64(
     aesKey: String,
     ciphertext: String,
-    charset: Charset = StandardCharsets.UTF_8
+    charset: Charset = this.charset
   ): String? = decryptByAesKey(
     SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"),
     ciphertext,
@@ -307,6 +338,7 @@ object Encryptors {
    * @return 明文
    */
   @JvmStatic
+  @JvmOverloads
   fun decryptByAesKey(
     secret: SecretKeySpec,
     ciphertext: String,
@@ -319,10 +351,11 @@ object Encryptors {
   }.onFailure { log.error(::decryptByAesKey.name, it) }.getOrNull()
 
   @JvmStatic
+  @JvmOverloads
   fun signWithSha256WithRsaByRsaPrivateKey(
     signContent: String,
     rsaPrivateKey: RSAPrivateKey,
-    charset: Charset = StandardCharsets.UTF_8
+    charset: Charset = this.charset
   ): Signature {
     val signature = Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.getValue())
     signature.initSign(rsaPrivateKey)
@@ -336,6 +369,7 @@ object Encryptors {
    * @return 分片数据
    */
   @JvmStatic
+  @JvmOverloads
   @VisibleForTesting
   internal fun sharding(data: ByteArray, size: Int): List<ByteArray> {
     val lastSliceSize = data.size % size
@@ -349,3 +383,8 @@ object Encryptors {
     return shardingData
   }
 }
+
+/**
+ * 将字符串转换为 sha1
+ */
+val String.sha1: String get() = Encryptors.signatureBySha1(this)

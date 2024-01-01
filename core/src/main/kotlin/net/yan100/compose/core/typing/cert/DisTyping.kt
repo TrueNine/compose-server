@@ -1,4 +1,4 @@
-package net.yan100.compose.core.typing.documents
+package net.yan100.compose.core.typing.cert
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
@@ -9,7 +9,7 @@ import net.yan100.compose.core.lang.IntTyping
  * @author TrueNine
  * @since 2023-11-03
  */
-enum class DisabilityTyping(private val typ: Int) : IntTyping {
+enum class DisTyping(private val typ: Int) : IntTyping {
   @Schema(title = "视力残障")
   EYE(1),
 

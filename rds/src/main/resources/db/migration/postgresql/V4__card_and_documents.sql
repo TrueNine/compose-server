@@ -1,6 +1,7 @@
 create table if not exists idcard_2
 (
   user_id            bigint       not null,
+  user_info_id       bigint       not null,
   address_details_id bigint       default null,
   name               varchar(255) not null,
   gender             integer      default null,
@@ -14,9 +15,10 @@ comment on table idcard_2 is '身份证2代';
 select add_base_struct('idcard_2');
 
 
-create table if not exists disability_certificate_2
+create table if not exists dis_cert_2
 (
-  user_id            bigint       not null,
+  user_id            bigint       default null,
+  user_info_id       bigint       default null,
   name               varchar(255) not null,
   gender             integer      default null,
   code               varchar(64)  default null,
@@ -29,13 +31,14 @@ create table if not exists disability_certificate_2
   guardian_phone     varchar(127) default null,
   birthday           date         default null
 );
-comment on table disability_certificate_2 is '残疾证2代';
-select add_base_struct('disability_certificate_2');
+comment on table dis_cert_2 is '残疾证2代';
+select add_base_struct('dis_cert_2');
 
 
-create table if not exists household_registration_card
+create table if not exists household_cert
 (
-  user_id                        bigint       not null,
+  user_id                        bigint        default null,
+  user_info_id                   bigint        default null,
   household_type                 integer       default null,
   household_primary_name         varchar(255)  default null,
   code                           varchar(255)  default null,
@@ -58,13 +61,14 @@ create table if not exists household_registration_card
   service_address_details_id     bigint        default null,
   issue_date                     date          default null
 );
-comment on table household_registration_card is '户口登记卡';
-select add_base_struct('household_registration_card');
+comment on table household_cert is '户口登记卡';
+select add_base_struct('household_cert');
 
 
 create table bank_card
 (
-  user_id               bigint       not null,
+  user_id               bigint       default null,
+  user_info_id          bigint       default null,
   code                  varchar(255) not null,
   country               varchar(255) default null,
   bank_group            integer      default null,

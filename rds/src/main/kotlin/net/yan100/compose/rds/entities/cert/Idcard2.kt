@@ -1,12 +1,14 @@
-package net.yan100.compose.rds.entities.documents
+package net.yan100.compose.rds.entities.cert
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.models.IIdcard2Code
+import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.typing.GenderTyping
@@ -20,6 +22,7 @@ open class SuperIdcard2 : IIdcard2Code, BaseEntity() {
     const val TABLE_NAME = "idcard_2"
     const val NAME = "name"
     const val USER_ID = "user_id"
+    const val USER_INFO_ID = "user_info_id"
     const val ADDRESS_DETAILS_ID = "address_details_id"
     const val GENDER = "gender"
     const val CODE = "code"
@@ -28,6 +31,10 @@ open class SuperIdcard2 : IIdcard2Code, BaseEntity() {
     const val ISSUE_ORGAN = "issue_organ"
     const val ETHNIC_GROUP = "ethnic_group"
   }
+
+  @Schema(title = "用户信息")
+  @Col(name = USER_INFO_ID)
+  open var userInfoId: RefId? = null
 
   @Schema(title = "签发机构")
   @Column(name = ISSUE_ORGAN)
