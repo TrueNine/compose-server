@@ -45,7 +45,7 @@ abstract class SecurityExceptionAdware(
   private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorMessage, charset: Charset = StandardCharsets.UTF_8) {
     response.status = msg.code
     response.characterEncoding = charset.displayName()
-    response.contentType = MediaTypes.JSON.getValue()
+    response.contentType = MediaTypes.JSON.value
     response.locale = Locale.CHINA
     val write = response.writer
     write.print(mapper?.writeValueAsString(msg))

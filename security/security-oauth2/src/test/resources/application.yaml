@@ -1,0 +1,12 @@
+compose:
+  security:
+    oauth2:
+      wechat:
+        wxpa:
+          verify-token: DPlKMdgQG6jvOXbISk1vK2FdpKxd2Ip6
+          app-secret: d1ea9bdbd65b602679db8575dbc8461f
+          app-id: wx3d24564f9a85044d
+logging:
+  level:
+    net.yan100: trace
+    org.springframework.http.codec: trace

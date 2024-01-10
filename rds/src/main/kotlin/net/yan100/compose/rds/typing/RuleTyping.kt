@@ -6,7 +6,7 @@ import net.yan100.compose.core.lang.IntTyping
 
 @Schema(title = "规则状态")
 enum class RuleTyping(
-  private val value: Int
+  private val v: Int
 ) : IntTyping {
   @Schema(title = "排除")
   EXCLUDE(0),
@@ -18,10 +18,10 @@ enum class RuleTyping(
   FIXED(2);
 
   @JsonValue
-  override fun getValue(): Int = value
+  override val value: Int = v
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?): RuleTyping? = RuleTyping.entries.find { it.value == v }
+    fun findVal(e: Int?): RuleTyping? = entries.find { it.value == e }
   }
 }

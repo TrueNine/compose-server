@@ -51,7 +51,7 @@ enum class PaymentTyping(
   CANCEL(2003);
 
   @JsonValue
-  override fun getValue(): Int = channelId
+  override val value: Int = channelId
 
   companion object {
     @JvmStatic

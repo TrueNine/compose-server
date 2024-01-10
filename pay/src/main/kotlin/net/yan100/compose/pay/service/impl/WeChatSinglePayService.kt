@@ -51,7 +51,7 @@ class WeChatSinglePayService(
 
   override fun createMpPayOrder(@Valid req: CreateMpPayOrderReq): CreateMpPayOrderResp {
     val amount = Amount().apply {
-      currency = req.currency.getValue()
+      currency = req.currency.value
       total = req.amount!!.multiply(HUNDRED).toInt()
     }
     val payer = Payer().apply {
@@ -73,7 +73,7 @@ class WeChatSinglePayService(
       random32String = Keys.generateRandomAsciiString(32)
       prePayId = prePay?.prepayId
       iso8601Second = LocalDateTime.now().iso8601LongUtc.toString()
-      signType = EncryptAlgorithmTyping.RSA.getValue()
+      signType = EncryptAlgorithmTyping.RSA.value
       // 签名
       val signatureStr = "${payProperty.mpAppId}\n${iso8601Second}\n${random32String}\n${prePayId}\n"
       val signature = Encryptors.signWithSha256WithRsaByRsaPrivateKey(
@@ -127,7 +127,7 @@ class WeChatSinglePayService(
       // 将金额比例乘以 100
       val totalLongBy = (totalAmount * HUNDRED).longValueExact()
       val refundLongBy = (refundAmount * HUNDRED).longValueExact()
-      this.currency = currency.getValue()
+      this.currency = currency.value
       refund = refundLongBy
       total = totalLongBy
     }

@@ -3,6 +3,7 @@ package net.yan100.compose.core.typing
 import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.lang.StringTyping
 
+
 /**
  * 算法
  *
@@ -41,9 +42,8 @@ enum class EncryptAlgorithmTyping(private val alg: String) : StringTyping {
   AES("AES");
 
   @JsonValue
-  override fun getValue(): String? {
-    return this.alg
-  }
+  override val value: String = this.alg
+
 
   companion object {
     @JvmStatic

@@ -15,7 +15,11 @@ enum class MediaTypes(
   vararg m: String
 ) : StringTyping {
   EXE("exe", "application/ms-download", "application/octet-stream"),
-  BINARY("", "application/octet-stream"),
+
+  /**
+   * 这个比较特殊，他的后缀名 是 binary 注意
+   */
+  BINARY("binary", "application/octet-stream"),
 
 
   PNG("png", "image/png"),
@@ -68,26 +72,23 @@ enum class MediaTypes(
 
   @get:JsonIgnore
   @Suppress("UNCHECKED_CAST")
-  val medias: Array<String> get() = this.mm as Array<String>
+  val medias: Array<String> get() = mm as Array<String>
 
   @get:JsonIgnore
-  val ext: String get() = this.extension
+  val ext: String get() = extension
 
   @Deprecated("请改用标准化接口", ReplaceWith("getValue()"))
   fun media(): String {
-    return this.getValue()
+    return this.value
   }
 
   @JsonValue
-  override fun getValue(): String {
-    return this.mm[0]
-  }
+  override val value: String = this.mm[0]
+
 
   companion object {
     fun findVal(media: String): MediaTypes? {
-      return entries.find { v ->
-        v.medias.contains(media)
-      }
+      return entries.find { v -> v.medias.contains(media) }
     }
   }
 }

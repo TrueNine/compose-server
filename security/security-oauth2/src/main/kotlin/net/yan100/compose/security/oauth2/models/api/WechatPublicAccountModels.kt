@@ -1,5 +1,6 @@
 package net.yan100.compose.security.oauth2.models.api
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 
 /**
@@ -13,7 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema
  *
  * 3）开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
  */
-open class WechatPublicAccountVerifyModel {
+open class WxpaVerifyModel {
   /**
    * 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
    */
@@ -37,4 +38,19 @@ open class WechatPublicAccountVerifyModel {
    */
   @Schema(title = "随机字符串")
   var echostr: String? = null
+}
+
+@Schema(
+  title = "公众号获取 access_token 返回结果"
+)
+open class WxpaGetAccessTokenResp : BaseWxpaResp() {
+  @Schema(title = "公众号 access_token")
+  @JsonProperty("access_token")
+  open var accessToken: String? = null
+}
+
+@Schema(title = "公众号获取 ticket 返回结果")
+open class WxpaGetTicketResp : BaseWxpaResp() {
+  @Schema(title = "票证")
+  open var ticket: String? = null
 }

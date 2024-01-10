@@ -27,7 +27,7 @@ enum class RelationItemTyping(
   OTHER(9999);
 
   @JsonValue
-  override fun getValue(): Int = v
+  override val value: Int = v
 
   companion object {
     fun findVal(v: Int?) = entries.find { it.v == v }

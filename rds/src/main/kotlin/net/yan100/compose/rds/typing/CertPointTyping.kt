@@ -24,10 +24,13 @@ enum class CertPointTyping(
   ALL(4),
 
   @Schema(title = "所有内容")
-  ALL_CONTENT(5);
+  ALL_CONTENT(5),
+
+  @Schema(title = "完整的", description = "针对于视频，音频等等……")
+  INTACT(6);
 
   @JsonValue
-  override fun getValue(): Int? = v
+  override val value: Int = v
 
   companion object {
     @JvmStatic

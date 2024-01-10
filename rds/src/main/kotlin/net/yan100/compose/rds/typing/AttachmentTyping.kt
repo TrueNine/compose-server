@@ -12,7 +12,7 @@ import net.yan100.compose.core.lang.IntTyping
  */
 @Schema(title = "附件类别")
 enum class AttachmentTyping(
-  private val value: Int
+  private val v: Int
 ) : IntTyping {
   /**
    * 文件
@@ -27,7 +27,7 @@ enum class AttachmentTyping(
   BASE_URL(1);
 
   @JsonValue
-  override fun getValue() = value
+  override val value = v
 
   companion object {
     @JvmStatic

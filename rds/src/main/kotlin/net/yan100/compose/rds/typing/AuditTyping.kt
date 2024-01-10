@@ -30,7 +30,7 @@ enum class AuditTyping(
   REJECT(6);
 
   @JsonValue
-  override fun getValue(): Int? = v
+  override val value: Int = v
 
   companion object {
     @JvmStatic

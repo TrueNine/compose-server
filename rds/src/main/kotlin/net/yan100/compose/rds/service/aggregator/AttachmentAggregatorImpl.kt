@@ -36,7 +36,7 @@ class AttachmentAggregatorImpl(
       saveName = saveFile.saveName
       metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
       size = file.size
-      mimeType = file.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.getValue()
+      mimeType = file.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.value
       attType = AttachmentTyping.ATTACHMENT
     }
     // 重新进行赋值
@@ -64,7 +64,7 @@ class AttachmentAggregatorImpl(
         saveName = it.first.saveName
         metaName = if (it.second.originalFilename.hasText()) it.second.originalFilename else it.second.name
         size = it.second.size
-        mimeType = it.second.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.getValue()
+        mimeType = it.second.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.value
         attType = AttachmentTyping.ATTACHMENT
       }
     }.let { aService.saveAll(it) }

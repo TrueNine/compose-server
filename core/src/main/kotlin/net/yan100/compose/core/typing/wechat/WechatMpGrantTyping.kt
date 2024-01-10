@@ -11,12 +11,12 @@ import net.yan100.compose.core.lang.StringTyping
 enum class WechatMpGrantTyping(
   private val typingCode: String
 ) : StringTyping {
+  CLIENT_CREDENTIAL("client_credential"),
   AUTH_CODE("authorization_code");
 
   @JsonValue
-  override fun getValue(): String? {
-    return this.typingCode
-  }
+  override val value: String = typingCode
+
 
   companion object {
     @JvmStatic

@@ -83,6 +83,9 @@ subprojects {
   }
 
   java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+
     toolchain {
       languageVersion.set(JavaLanguageVersion.of(21))
     }
@@ -103,13 +106,12 @@ subprojects {
     withType<AbstractCopyTask> {
       duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
-    withType<JavaCompile> {
-      options.compilerArgs.addAll(
-        listOf(
-          "--enable-preview"
-        )
-      )
+
+    withType<JavaCompile>().configureEach {
+      options.compilerArgs.add("--enable-preview")
     }
+
+
     withType<KotlinCompile> {
       kotlinOptions {
         freeCompilerArgs += listOf(
@@ -185,6 +187,6 @@ subprojects {
 
 tasks {
   wrapper {
-    distribute(libs.versions.gradle.get(),"https://mirrors.cloud.tencent.com/gradle")
+    distribute(libs.versions.gradle.get(), "https://mirrors.cloud.tencent.com/gradle")
   }
 }

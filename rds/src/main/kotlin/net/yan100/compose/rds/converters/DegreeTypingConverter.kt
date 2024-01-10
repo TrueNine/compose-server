@@ -8,11 +8,6 @@ import org.springframework.stereotype.Component
 @Component
 @Converter
 class DegreeTypingConverter : AttributeConverter<DegreeTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: DegreeTyping?): Int? {
-    return attribute?.getValue()
-  }
-
-  override fun convertToEntityAttribute(dbData: Int?): DegreeTyping? {
-    return DegreeTyping.findVal(dbData)
-  }
+  override fun convertToDatabaseColumn(attribute: DegreeTyping?): Int? =attribute?.value
+  override fun convertToEntityAttribute(dbData: Int?): DegreeTyping? = DegreeTyping.findVal(dbData)
 }

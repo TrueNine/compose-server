@@ -42,7 +42,7 @@ enum class OrderStatusTyping(
   PAY_SUCCESS_BIZ_FAILED(5002);
 
   @JsonValue
-  override fun getValue(): Int = orderType
+  override val value: Int = orderType
 
   companion object {
     @JvmStatic

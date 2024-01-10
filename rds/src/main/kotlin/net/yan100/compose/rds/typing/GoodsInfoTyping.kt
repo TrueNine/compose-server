@@ -9,7 +9,7 @@ import net.yan100.compose.core.lang.IntTyping
  */
 @Schema(title = "商品信息分类")
 enum class GoodsInfoTyping(
-  private val value: Int?
+  private val v: Int
 ) : IntTyping {
   /**
    * 检索类型
@@ -30,7 +30,7 @@ enum class GoodsInfoTyping(
   GOODS_UNIT_EXTEND_INFO(2);
 
   @JsonValue
-  override fun getValue() = value
+  override val value = v
 
   companion object {
     @JvmStatic

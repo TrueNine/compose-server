@@ -22,7 +22,7 @@ fun HttpServletResponse.useResponse(
   locale: Locale = Locale.CHINA,
   with: (HttpServletResponse) -> HttpServletResponse
 ): HttpServletResponse {
-  this.contentType = contentType.getValue()
+  this.contentType = contentType.value
   this.characterEncoding = charset.displayName()
   this.locale = locale
   return with(this)
@@ -58,7 +58,7 @@ fun HttpServletResponse.withDownload(
   closeBlock: ((outputStream: OutputStream) -> Unit)?
 ) {
   this.setHeader(Headers.CONTENT_DISPOSITION, Headers.downloadDisposition(fileName, charset))
-  this.setHeader(Headers.CONTENT_TYPE, contentType.getValue())
+  this.setHeader(Headers.CONTENT_TYPE, contentType.value)
   this.characterEncoding = charset.displayName()
   closeBlock?.also { blockFn ->
     this.outputStream.use {

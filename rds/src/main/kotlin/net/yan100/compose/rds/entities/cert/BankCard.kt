@@ -8,6 +8,7 @@ import jakarta.persistence.Table
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.string
 import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.core.entities.TreeEntity
 import org.hibernate.annotations.DynamicInsert
@@ -19,6 +20,7 @@ open class SuperBankCard : TreeEntity() {
     const val TABLE_NAME = "bank_card"
 
     const val USER_INFO_ID = "user_info_id"
+    const val RESERVE_PHONE = "reserve_phone"
     const val USER_ID = "user_id"
     const val CODE = "code"
     const val COUNTRY = "country"
@@ -26,6 +28,10 @@ open class SuperBankCard : TreeEntity() {
     const val BANK_TYPE = "bank_type"
     const val ISSUE_ADDRESS_DETAILS = "issue_address_details"
   }
+
+  @Schema(title = "银行预留手机号")
+  @Col(name = RESERVE_PHONE)
+  open var reservePhone: string? = null
 
   @Schema(title = "用户信息id")
   @Col(name = USER_INFO_ID)

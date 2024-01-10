@@ -6,7 +6,7 @@ import net.yan100.compose.core.lang.IntTyping
 
 @Schema(title = "血型")
 enum class BloodTyping(
-  private val value: Int
+  private val v: Int
 ) : IntTyping {
   @Schema(title = "A型")
   A(1),
@@ -24,9 +24,7 @@ enum class BloodTyping(
   OTHER(9999);
 
   @JsonValue
-  override fun getValue(): Int? {
-    return this.value
-  }
+  override val value: Int = v
 
   companion object {
     @JvmStatic

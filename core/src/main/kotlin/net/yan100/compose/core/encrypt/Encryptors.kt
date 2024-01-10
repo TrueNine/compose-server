@@ -70,7 +70,7 @@ object Encryptors {
     charset: Charset = this.charset,
     alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING
   ): String? = runCatching {
-    Cipher.getInstance(alg.getValue()).run {
+    Cipher.getInstance(alg.value).run {
       init(ENC_MODE, publicKey)
       sharding(data.toByteArray(charset), shardingSize)
         .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
@@ -86,7 +86,7 @@ object Encryptors {
     charset: Charset = this.charset,
     alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING
   ): String? = runCatching {
-    Cipher.getInstance(alg.getValue()).run {
+    Cipher.getInstance(alg.value).run {
       init(ENC_MODE, privateKey)
       sharding(data.toByteArray(charset), shardingSize)
         .joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
@@ -108,7 +108,7 @@ object Encryptors {
     alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING,
     charset: Charset = this.charset,
   ): String? = runCatching {
-    Cipher.getInstance(alg.getValue()).run {
+    Cipher.getInstance(alg.value).run {
       init(DEC_MODE, privateKey)
       data.split(SHARDING_SEP).map { Base64Helper.decodeToByte(it) }
         .map { doFinal(it) }
@@ -357,7 +357,7 @@ object Encryptors {
     rsaPrivateKey: RSAPrivateKey,
     charset: Charset = this.charset
   ): Signature {
-    val signature = Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.getValue())
+    val signature = Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.value)
     signature.initSign(rsaPrivateKey)
     signature.update(signContent.toByteArray(charset))
     return signature
@@ -369,7 +369,6 @@ object Encryptors {
    * @return 分片数据
    */
   @JvmStatic
-  @JvmOverloads
   @VisibleForTesting
   internal fun sharding(data: ByteArray, size: Int): List<ByteArray> {
     val lastSliceSize = data.size % size

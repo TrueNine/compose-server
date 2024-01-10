@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component
 @Component
 @Converter
 class CertTypingConverter : AttributeConverter<CertTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: CertTyping?): Int? = attribute?.getValue()
+  override fun convertToDatabaseColumn(attribute: CertTyping?): Int? = attribute?.value
   override fun convertToEntityAttribute(dbData: Int?): CertTyping? = CertTyping.findVal(dbData)
 }

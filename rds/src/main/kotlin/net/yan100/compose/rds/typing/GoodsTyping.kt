@@ -11,7 +11,7 @@ import net.yan100.compose.core.lang.IntTyping
  * @since 2023-04-23
  */
 @Schema(title = "商品类型")
-enum class GoodsTyping(private val value: Int) : IntTyping {
+enum class GoodsTyping(private val v: Int) : IntTyping {
   /**
    * 实体商品
    */
@@ -31,10 +31,10 @@ enum class GoodsTyping(private val value: Int) : IntTyping {
   VIRTUAL_GOODS(2);
 
   @JsonValue
-  override fun getValue(): Int = this.value
+  override val value: Int = v
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?): GoodsTyping? = entries.find { it.getValue() == v }
+    fun findVal(v: Int?): GoodsTyping? = entries.find { it.value == v }
   }
 }

@@ -6,7 +6,7 @@ import net.yan100.compose.core.lang.IntTyping
 
 @Schema(title = "证件类型")
 enum class CertTyping(
-  private val value: Int
+  private val v: Int
 ) : IntTyping {
   @Schema(title = "无具体类型")
   NONE(0),
@@ -39,10 +39,13 @@ enum class CertTyping(
   BIZ_LICENSE(9),
 
   @Schema(title = "寸照")
-  TITLE_IMAGE(10);
+  TITLE_IMAGE(10),
+
+  @Schema(title = "个人所得税状况录屏")
+  PERSONAL_INCOME_TAX_VIDEO(11);
 
   @JsonValue
-  override fun getValue(): Int = value
+  override val value: Int = v
 
   companion object {
     @JvmStatic

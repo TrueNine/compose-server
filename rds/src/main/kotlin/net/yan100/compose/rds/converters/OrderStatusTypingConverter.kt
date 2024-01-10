@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Converter
 class OrderStatusTypingConverter : AttributeConverter<OrderStatusTyping?, Int?> {
   override fun convertToDatabaseColumn(attribute: OrderStatusTyping?): Int? {
-    return attribute?.getValue()
+    return attribute?.value
   }
 
   override fun convertToEntityAttribute(dbData: Int?): OrderStatusTyping? {

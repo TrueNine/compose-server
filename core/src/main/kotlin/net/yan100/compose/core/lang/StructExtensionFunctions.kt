@@ -24,10 +24,10 @@ fun mapCapacity(expectedSize: Int): Int = when {
 private const val INT_MAX_POWER_OF_TWO: Int = 1 shl (Int.SIZE_BITS - 2)
 
 
-fun <K, v> mutableLockMapOf(vararg pairs: Pair<K, v>): Map<K, v> {
+fun <K, v> mutableLockMapOf(vararg pairs: Pair<K, v>): MutableMap<K, v> {
   return ConcurrentHashMap<K, v>(mapCapacity(pairs.size)).apply { putAll(pairs) }
 }
 
-fun <K, v> mutableLockMapOf(): Map<K, v> {
+fun <K, v> mutableLockMapOf(): MutableMap<K, v> {
   return ConcurrentHashMap<K, v>()
 }

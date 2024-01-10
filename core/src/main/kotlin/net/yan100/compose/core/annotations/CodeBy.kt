@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.yan100.compose.core.autoconfig.LongAsStringSerializer
 import net.yan100.compose.core.autoconfig.SensitiveSerializer
 import net.yan100.compose.core.autoconfig.StringAsLongDeserializer
+import net.yan100.compose.core.lang.hasText
+import net.yan100.compose.core.lang.nonText
 import java.lang.annotation.Inherited
 
 /**
@@ -53,7 +55,13 @@ enum class Strategy(private val desensitizeSerializer: (String) -> String) {
   /**
    * 姓名
    */
-  NAME({ it.replace(Regex("(\\S)\\S(\\S*)"), "$1*$2") }),
+  NAME({
+    var result: String = "*"
+    if (it.nonText()) result = it
+    val lastChar = it.substring(it.length - 1)
+    if (it.length >= 2) result = "**$lastChar"
+    result
+  }),
 
   /**
    * 地址

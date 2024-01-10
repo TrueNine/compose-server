@@ -27,7 +27,7 @@ object Keys {
   private val SECURE_RANDOM = SecureRandom()
 
   @JvmStatic
-  private val rsaAlg = EncryptAlgorithmTyping.RSA.getValue()!!
+  private val rsaAlg = EncryptAlgorithmTyping.RSA.value
   private const val DEFAULT_SEED = "T-DECRYPT-AND-ENCRYPT"
 
   @JvmStatic
@@ -158,7 +158,7 @@ object Keys {
       X509EncodedKeySpec(
         Base64Helper.decodeToByte(base64)
       ).run {
-        KeyFactory.getInstance(alg.getValue()).generatePublic(this)
+        KeyFactory.getInstance(alg.value).generatePublic(this)
       }
     }.onFailure { log.error(::readPublicKeyByBase64AndAlg.name, it) }.getOrNull()
   }
@@ -175,7 +175,7 @@ object Keys {
   ): PrivateKey? {
     return runCatching {
       PKCS8EncodedKeySpec(Base64Helper.decodeToByte(base64)).run {
-        KeyFactory.getInstance(alg.getValue()).generatePrivate(this)
+        KeyFactory.getInstance(alg.value).generatePrivate(this)
       }
     }.onFailure {
       log.error(::readPrivateKeyByBase64AndAlg.name, it)
@@ -220,7 +220,7 @@ object Keys {
     return generateKeyPair(
       seed,
       keySize,
-      EncryptAlgorithmTyping.RSA.getValue()!!,
+      EncryptAlgorithmTyping.RSA.value,
       "SunRsaSign"
     )?.let { that ->
       RsaKeyPair().takeIf {

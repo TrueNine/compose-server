@@ -32,7 +32,7 @@ enum class DisTyping(private val typ: Int) : IntTyping {
   MULTIPLE(7);
 
   @JsonValue
-  override fun getValue() = typ
+  override val value = typ
 
   companion object {
     @JvmStatic

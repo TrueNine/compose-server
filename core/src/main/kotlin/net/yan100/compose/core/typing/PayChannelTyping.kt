@@ -19,10 +19,10 @@ enum class PayChannelTyping(
   ALIPAY(1);
 
   @JsonValue
-  override fun getValue(): Int = channelId
+  override val value: Int = channelId
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = PayChannelTyping.values().find { it.channelId == v }
+    fun findVal(v: Int?) = entries.find { it.channelId == v }
   }
 }

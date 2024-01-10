@@ -53,9 +53,8 @@ enum class ISO4217(
   JPY("JPY");
 
   @JsonValue
-  override fun getValue(): String? {
-    return this.iso4217Str
-  }
+  override val value: String = this.iso4217Str
+
 
   companion object {
     @JvmStatic

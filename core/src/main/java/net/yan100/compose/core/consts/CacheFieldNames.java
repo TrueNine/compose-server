@@ -9,17 +9,26 @@ package net.yan100.compose.core.consts;
 public interface CacheFieldNames {
 
   interface RedisTemplate {
-    String STRING_TEMPLATE = "cacheTemplateForStringKey";
+    String STRING_TEMPLATE = "RedisCacheTemplateForStringKey";
   }
 
-  interface CacheManagerNames {
-    String H2 = "cacheManager2h";
-    String D3 = "cacheManager30d";
-    String M30 = "cacheManager30m";
-    String FOREVER = "cacheManagerForever";
+  interface Redis {
+    String M30 = "RedisCacheManager30m";
+    String H1 = "RedisCacheManager2h";
+    String H2 = "RedisCacheManager2h";
+    String D3 = "RedisCacheManager30d";
+    String FOREVER = "RedisCacheManagerForever";
   }
 
-  interface User {
-    String DETAILS = "user:details";
+  interface Caffeine {
+    String CACHE = "CaffeineCacheManager";
+    String M30 = "CaffeineCacheManager30m";
+    String H1 = "CaffeineCacheManager2h";
+    String H2 = "CaffeineCacheManager2h";
+    String H3 = "CaffeineCacheManager3h";
+    String D1 = "CaffeineCacheManager1d";
+    String D2 = "CaffeineCacheManager2d";
+    String D3 = "CaffeineCacheManager30d";
+    String FOREVER = "CaffeineCacheManagerForever";
   }
 }

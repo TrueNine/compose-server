@@ -30,21 +30,21 @@ interface AnyTyping {
   /**
    * ## 获取枚举对应的实际值
    */
-  fun getValue(): Any?
+  val value: Any
 }
 
 /**
  * # 数值型枚举
  */
 interface IntTyping : AnyTyping {
-  override fun getValue(): Int?
+  override val value: Int
 }
 
 /**
  * # 字符型枚举
  */
 interface StringTyping : AnyTyping {
-  override fun getValue(): String?
+  override val value: String
 }
 
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
@@ -72,7 +72,7 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
       if (targetClass.isEnum) {
         targetClass.enumConstants.filterNotNull()
           .forEach {
-            mapping += it.getValue().toString() to it
+            mapping += it.value.toString() to it
           }
       } else {
         log.error("class: {} 不是枚举类型", targetClass)

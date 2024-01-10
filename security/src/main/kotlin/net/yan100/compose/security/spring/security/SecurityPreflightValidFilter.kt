@@ -49,6 +49,11 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
       filterChain.doFilter(request, response)
       return
     }
+    if (null == authInfo) {
+      log.trace("用户信息错误，直接放行")
+      filterChain.doFilter(request, response)
+      return
+    }
 
     authInfo.currentIpAddr = request.remoteRequestIp
     authInfo.deviceId = request.deviceId
@@ -80,9 +85,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [Boolean]
    */
-  private fun containsTokenPair(request: HttpServletRequest): Boolean =
-    request.getHeader(Headers.AUTHORIZATION).hasText()
-      && request.getHeader(Headers.X_REFRESH).hasText()
+  private fun containsTokenPair(request: HttpServletRequest): Boolean = request.getHeader(Headers.AUTHORIZATION).hasText() && request.getHeader(Headers.X_REFRESH).hasText()
 
 
   /**
@@ -91,8 +94,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getToken(request: HttpServletRequest?): String? =
-    request?.getHeader(Headers.AUTHORIZATION)
+  private fun getToken(request: HttpServletRequest?): String? = request?.getHeader(Headers.AUTHORIZATION)
 
 
   /**
@@ -101,8 +103,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getRefreshToken(request: HttpServletRequest?): String? =
-    request?.getHeader(Headers.X_REFRESH)
+  private fun getRefreshToken(request: HttpServletRequest?): String? = request?.getHeader(Headers.X_REFRESH)
 
   /**
    * 合法性检查
@@ -118,5 +119,5 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
     reFlashToken: String?,
     request: HttpServletRequest,
     response: HttpServletResponse
-  ): AuthRequestInfo
+  ): AuthRequestInfo?
 }

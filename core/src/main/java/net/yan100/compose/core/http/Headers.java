@@ -34,6 +34,10 @@ public interface Headers {
    * 自定义刷新头
    */
   String X_REFRESH = "X-Refresh";
+  /**
+   * 需清理过期令牌
+   */
+  String X_REQUIRE_CLEN_AUTHENTICATION = "X-Require-Clean-Authentication";
 
   /**
    * 微信 open id 授权 自定义id
@@ -60,7 +64,7 @@ public interface Headers {
    * @return attachment; filename="fileName"
    */
   static String downloadDisposition(String fileName, Charset charset) {
-    return "attachment; filename=\"" + URLEncoder.encode(fileName, charset) + "\"";
+    return "attachment; filename=" + URLEncoder.encode(fileName, charset);
   }
 
   /**

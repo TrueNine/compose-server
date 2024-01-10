@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.lang.IntTyping
 
 enum class DegreeTyping(
-  private val value: Int
+  private val v: Int
 ) : IntTyping {
   @Schema(title = "文盲")
   NONE(0),
@@ -35,7 +35,7 @@ enum class DegreeTyping(
   OTHER(9999);
 
   @JsonValue
-  override fun getValue() = value
+  override val value = v
 
   companion object {
     @JvmStatic

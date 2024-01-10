@@ -81,27 +81,34 @@ class RedisJsonSerializerAutoConfiguration(
   }
 
   @Primary
-  @Bean(name = [CacheFieldNames.CacheManagerNames.H2])
+  @Bean(name = [CacheFieldNames.Redis.H2])
   fun cacheManager2h(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.CacheManagerNames.H2} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.Redis.H2} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofHours(2))
   }
 
-  @Bean(name = [CacheFieldNames.CacheManagerNames.D3])
+  @Primary
+  @Bean(name = [CacheFieldNames.Redis.H1])
+  fun cacheManager1h(factory: RedisConnectionFactory?): CacheManager? {
+    log.debug("配置 ${CacheFieldNames.Redis.H2} factory = {}", factory)
+    return asCacheConfig(factory, Duration.ofHours(1))
+  }
+
+  @Bean(name = [CacheFieldNames.Redis.D3])
   fun cacheManager30day(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.CacheManagerNames.D3} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.Redis.D3} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofDays(30))
   }
 
-  @Bean(name = [CacheFieldNames.CacheManagerNames.M30])
+  @Bean(name = [CacheFieldNames.Redis.M30])
   fun cacheManager30m(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.CacheManagerNames.M30} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.Redis.M30} factory = {}", factory)
     return asCacheConfig(factory, Duration.ofMinutes(30))
   }
 
-  @Bean(name = [CacheFieldNames.CacheManagerNames.FOREVER])
+  @Bean(name = [CacheFieldNames.Redis.FOREVER])
   fun cacheManagerForever(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.CacheManagerNames.FOREVER} factory = {}", factory)
+    log.debug("配置 ${CacheFieldNames.Redis.FOREVER} factory = {}", factory)
     return asCacheConfig(factory, Duration.ZERO)
   }
 

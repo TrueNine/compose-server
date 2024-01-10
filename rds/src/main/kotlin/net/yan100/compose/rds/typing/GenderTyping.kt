@@ -12,7 +12,7 @@ import net.yan100.compose.core.lang.IntTyping
  */
 @Schema(title = "性别")
 enum class GenderTyping(
-  private val value: Int
+  private val v: Int
 ) : IntTyping {
   /**
    * 男
@@ -33,7 +33,7 @@ enum class GenderTyping(
   UNKNOWN(2);
 
   @JsonValue
-  override fun getValue(): Int = value
+  override val value: Int = v
 
   companion object {
     @JvmStatic
