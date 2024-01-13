@@ -3,10 +3,12 @@ package net.yan100.compose.core.autoconfig
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import net.yan100.compose.core.jackson.*
 import net.yan100.compose.core.lang.AnyTyping
 import net.yan100.compose.core.lang.DTimer
 import net.yan100.compose.core.lang.slf4j
+import org.hibernate.query.sqm.tree.SqmNode.log
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,9 +29,23 @@ import java.util.*
 class JacksonSerializationAutoConfig {
   private val log = slf4j(JacksonSerializationAutoConfig::class)
 
-  @Bean
+  /**
+   * kotlin module 配置
+   */
+  private fun ktm(): KotlinModule {
+    val kotlinKeyPairDeserializer = KPairDeserializer()
+
+    val k = KotlinModule.Builder().build()
+    k.addDeserializer(Pair::class.java, kotlinKeyPairDeserializer)
+
+    return k
+  }
+
   @Lazy
+  @Bean
   fun jacksonF(): Jackson2ObjectMapperBuilderCustomizer {
+    val km = ktm()
+
     val module = JavaTimeModule()
     val zoneOffset = ZoneOffset.ofHours(8)
 
@@ -48,8 +64,6 @@ class JacksonSerializationAutoConfig {
     module.addSerializer(LocalDate::class.java, lds)
     module.addDeserializer(LocalDate::class.java, ldd)
 
-    val kotlinKeyPairDeserializer = KPairDeserializer()
-    module.addDeserializer(Pair::class.java, kotlinKeyPairDeserializer)
 
     // 将 byteArray 处理为 int 数组
     val byteArraySerializer = ByteArraySerializer()
@@ -64,7 +78,7 @@ class JacksonSerializationAutoConfig {
     log.debug("配置jackson序列化规则")
 
     return Jackson2ObjectMapperBuilderCustomizer { b ->
-      b.modules(module)
+      b.modules(module, km)
       b.timeZone(TimeZone.getTimeZone(zoneOffset))
       b.locale(Locale.CHINA)
       b.simpleDateFormat(DTimer.DATETIME)

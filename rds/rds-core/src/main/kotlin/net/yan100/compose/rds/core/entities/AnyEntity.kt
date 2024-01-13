@@ -11,6 +11,7 @@ import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.PreSaveDeleteReferenceListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
 import net.yan100.compose.rds.core.listener.TableRowDeletePersistenceListener
+import net.yan100.compose.rds.core.models.PagedRequestParam
 import org.hibernate.Hibernate
 import org.springframework.data.domain.Persistable
 import java.io.Serial
@@ -30,7 +31,7 @@ import java.io.Serializable
   SnowflakeIdInsertListener::class,
   PreSaveDeleteReferenceListener::class
 )
-open class AnyEntity : Serializable, Persistable<Id> {
+open class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() {
   /**
    * id
    */

@@ -18,7 +18,7 @@ interface IAttachmentService : IService<Attachment> {
   fun findFullUrlById(id: String): String?
   fun findAllFullUrlByMetaNameStartingWith(
     metaName: String,
-    page: net.yan100.compose.rds.core.models.PagedRequestParam = PagedWrapper.DEFAULT_MAX
+    page: Pq = PagedWrapper.DEFAULT_MAX
   ): Pr<String>
 
   fun findMetaNameById(id: String): String?

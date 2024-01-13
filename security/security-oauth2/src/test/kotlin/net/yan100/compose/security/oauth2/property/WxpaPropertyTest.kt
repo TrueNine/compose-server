@@ -17,7 +17,7 @@ class WxpaPropertyTest {
   @Test
   fun `test get access token`() {
     runBlocking {
-      delay(2000)
+      delay(4000)
       val a = w.accessToken
       val b = w.jsapiTicket
       assertNotNull(a)

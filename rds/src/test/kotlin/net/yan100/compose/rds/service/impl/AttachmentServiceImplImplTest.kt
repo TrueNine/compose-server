@@ -93,7 +93,7 @@ class AttachmentServiceImplImplTest {
   @Test
   fun testFindAllFullUrlByMetaNameStartingWith() {
     val metaName = "test"
-    val page = Pq(1, 10, false)
+    val page = Pq.of(1, 10, false)
     val result = attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
     assertNotNull(result)
     assertEquals(0, result.total)
@@ -123,7 +123,7 @@ class AttachmentServiceImplImplTest {
   @Test
   fun testFindAllFullUrlByMetaNameStartingWith_NegativePage() {
     val metaName = "test"
-    val page = Pq(-1, 10, false)
+    val page = Pq.of(-1, 10, false)
     assertFails {
       attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
     }

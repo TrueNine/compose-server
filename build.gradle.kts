@@ -29,7 +29,6 @@ plugins {
 }
 
 val l = libs
-
 version = libs.versions.compose.asProvider().get()
 
 allprojects {
@@ -41,6 +40,12 @@ allprojects {
     gradlePluginPortal()
   }
 
+  group = l.versions.compose.group.get()
+  version = l.versions.compose.asProvider().get()
+
+  extra["springCloudVersion"] = l.versions.spring.cloud.get()
+  extra["snippetsDir"] = file("build/generated-snippets")
+
   tasks {
     withType<ProcessAot> {
       enabled = false
@@ -49,12 +54,6 @@ allprojects {
       enabled = false
     }
   }
-
-  group = l.versions.compose.group.get()
-  version = l.versions.compose.asProvider().get()
-
-  extra["springCloudVersion"] = l.versions.spring.cloud.get()
-  extra["snippetsDir"] = file("build/generated-snippets")
 }
 
 subprojects {
@@ -74,6 +73,29 @@ subprojects {
 
   apply(plugin = "maven-publish")
 
+  dependencies {
+    implementation(l.spring.boot.autoconfigure)
+    annotationProcessor(l.spring.boot.configureprocessor)
+    implementation(l.bundles.kt)
+    testImplementation(l.bundles.test.springKotlinJunit5)
+    allAnnotationCompileOnly(l.lombok)
+  }
+
+  dependencyManagement {
+    imports {
+      mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
+      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
+      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudAlibaba.get()}")
+      mavenBom("org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}")
+      mavenBom("org.drools:drools-bom:${l.versions.drools.get()}")
+    }
+  }
+
+  configurations {
+    compileOnly {
+      extendsFrom(configurations.annotationProcessor.get())
+    }
+  }
 
   kapt {
     keepJavacAnnotationProcessors = true
@@ -135,6 +157,11 @@ subprojects {
       options.forkOptions.memoryMaximumSize = "4G"
       options.forkOptions.memoryInitialSize = "2G"
     }
+
+    jar {
+      archiveClassifier = null
+    }
+
     javadoc {
       if (JavaVersion.current().isJava9Compatible) (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
@@ -157,30 +184,6 @@ subprojects {
         version = project.version.toString()
         from(components["java"])
       }
-    }
-  }
-
-  dependencies {
-    implementation(l.spring.boot.autoconfigure)
-    annotationProcessor(l.spring.boot.configureprocessor)
-    implementation(l.bundles.kt)
-    testImplementation(l.bundles.test.springKotlinJunit5)
-    allAnnotationCompileOnly(l.lombok)
-  }
-
-  dependencyManagement {
-    imports {
-      mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
-      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
-      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudAlibaba.get()}")
-      mavenBom("org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}")
-      mavenBom("org.drools:drools-bom:${l.versions.drools.get()}")
-    }
-  }
-
-  configurations {
-    compileOnly {
-      extendsFrom(configurations.annotationProcessor.get())
     }
   }
 }

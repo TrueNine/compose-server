@@ -12,8 +12,3 @@ fun Playwright.launchBy(
     BrowserType.LaunchOptions().setHeadless(headless ?: false).setTimeout(launchTimeout)
   )
 }
-
-
-fun a() {
-  Playwright.create().launchBy()
-}

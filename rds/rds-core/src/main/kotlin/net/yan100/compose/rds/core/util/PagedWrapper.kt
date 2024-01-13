@@ -1,6 +1,7 @@
 package net.yan100.compose.rds.core.util
 
 
+import net.yan100.compose.rds.core.entities.PageableEntity
 import net.yan100.compose.rds.core.models.PagedRequestParam
 import net.yan100.compose.rds.core.models.PagedResponseResult
 import org.springframework.data.domain.Page
@@ -23,16 +24,16 @@ object PagedWrapper {
   @JvmField
   val DEFAULT_MAX: PagedRequestParam =
     PagedRequestParam(
-      PagedRequestParam.MIN_OFFSET,
-      PagedRequestParam.MAX_PAGE_SIZE,
+      PageableEntity.MIN_OFFSET,
+      PageableEntity.MAX_PAGE_SIZE,
       false
     )
 
   @JvmField
   val UN_PAGE: PagedRequestParam =
     PagedRequestParam(
-      PagedRequestParam.MIN_OFFSET,
-      PagedRequestParam.MAX_PAGE_SIZE,
+      PageableEntity.MIN_OFFSET,
+      PageableEntity.MAX_PAGE_SIZE,
       true
     )
 
@@ -64,11 +65,11 @@ object PagedWrapper {
   }
 
   @JvmStatic
-  fun param(paramSetting: PagedRequestParam? = DEFAULT_MAX): Pageable {
+  fun param(paramSetting: PageableEntity? = DEFAULT_MAX): Pageable {
     return if (true != paramSetting?.unPage || null == paramSetting.unPage) {
       PageRequest.of(
         paramSetting?.offset ?: 0,
-        paramSetting?.pageSize ?: PagedRequestParam.MAX_PAGE_SIZE
+        paramSetting?.pageSize ?: PageableEntity.MAX_PAGE_SIZE
       )
     } else Pageable.unpaged()
   }
@@ -81,37 +82,35 @@ object PagedWrapper {
   @JvmStatic
   fun <T> warpBy(pageParam: PagedRequestParam = DEFAULT_MAX, lazySequence: () -> Sequence<T>): PagedResponseResult<T> {
     val sequence = lazySequence()
-    val list = sequence.take(pageParam.offset + pageParam.pageSize).toList()
-    val endSize = minOf(pageParam.pageSize, list.size)
+    val list = sequence.take((pageParam.offset ?: 0) + (pageParam.pageSize ?: 0)).toList()
+    val endSize = minOf(pageParam.pageSize ?: 0, list.size)
     return PagedResponseResult<T>().apply {
       this.dataList = list.subList(0, endSize)
       this.total = sequence.count().toLong()
-      this.offset = (pageParam.offset.toLong()) * pageParam.pageSize
+      this.offset = ((pageParam.offset ?: 0).toLong()) * (pageParam.pageSize ?: 0)
       this.size = endSize
-      this.pageSize = if (list.isEmpty()) 0 else sequence.count() / pageParam.pageSize
+      this.pageSize = if (list.isEmpty()) 0 else sequence.count() / (pageParam.pageSize ?: 1)
     }
   }
 }
 
 typealias Pw = PagedWrapper
-typealias Pq = PagedRequestParam
+typealias Pq = PageableEntity
 typealias Pr<T> = PagedResponseResult<T>
 
 /**
  * # 对分页结果的封装，使得其返回包装对象
  */
-val <T> Page<T>.result: Pr<T>
-  get() = PagedWrapper.result(this)
+val <T> Page<T>.result: Pr<T> get() = PagedWrapper.result(this)
 
 /**
- * # 封装一个新的集合到分页结果
+ * # 封装一个新地集合到分页结果
  */
-fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> {
-  return PagedWrapper.resultByNewList(this, newList)
-}
+fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> = PagedWrapper.resultByNewList(this, newList)
+
 
 /**
  * # 对分页参数的封装，返回一个包装的对象
  */
-val Pq?.page: Pageable
-  get() = PagedWrapper.param(this)
+val Pq?.page: Pageable get() = PagedWrapper.param(this)
+
