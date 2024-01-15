@@ -13,5 +13,5 @@ public class WxpaProperties {
   /**
    * 微信固定的 api 过期时间，一般不需要调整
    */
-  private Long fixedExpiredSecond = 720_0L;
+  private Long fixedExpiredSecond = 700_0L;
 }
