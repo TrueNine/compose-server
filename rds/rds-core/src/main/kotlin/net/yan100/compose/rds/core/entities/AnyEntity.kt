@@ -15,7 +15,6 @@ import net.yan100.compose.rds.core.models.PagedRequestParam
 import org.hibernate.Hibernate
 import org.springframework.data.domain.Persistable
 import java.io.Serial
-import java.io.Serializable
 
 /**
  * JPA的最基础基类，包括一个 id

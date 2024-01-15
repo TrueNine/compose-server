@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.yan100.compose.core.autoconfig.LongAsStringSerializer
 import net.yan100.compose.core.autoconfig.SensitiveSerializer
 import net.yan100.compose.core.autoconfig.StringAsLongDeserializer
-import net.yan100.compose.core.lang.hasText
 import net.yan100.compose.core.lang.nonText
 import java.lang.annotation.Inherited
 

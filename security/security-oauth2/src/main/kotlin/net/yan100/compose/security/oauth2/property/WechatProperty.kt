@@ -3,8 +3,6 @@ package net.yan100.compose.security.oauth2.property
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.encrypt.sha1
 import net.yan100.compose.core.lang.iso8601LongUtc
-import net.yan100.compose.core.lang.nonText
-import java.lang.IllegalArgumentException
 import java.time.LocalDateTime
 
 /**

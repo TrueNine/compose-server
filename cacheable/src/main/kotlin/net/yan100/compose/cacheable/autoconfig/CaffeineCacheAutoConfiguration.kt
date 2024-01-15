@@ -3,18 +3,13 @@ package net.yan100.compose.cacheable.autoconfig
 import com.github.benmanes.caffeine.cache.Caffeine
 import net.yan100.compose.core.consts.CacheFieldNames
 import net.yan100.compose.core.lang.slf4j
-import org.checkerframework.checker.units.qual.C
-import org.hibernate.query.sqm.tree.SqmNode.log
 import org.springframework.cache.CacheManager
 import org.springframework.cache.caffeine.CaffeineCache
-import org.springframework.cache.caffeine.CaffeineCacheManager
 import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
-import org.springframework.data.redis.connection.RedisConnectionFactory
 import java.time.Duration
-import java.util.concurrent.ScheduledExecutorService
 
 @Configuration
 class CaffeineCacheAutoConfiguration {
