@@ -28,11 +28,7 @@ dependencies {
   testImplementation(project(":depend:depend-flyway"))
 }
 
-//hibernate {
-//  enhancement {
-//    enableAssociationManagement.set(true)
-//  }
-//}
+
 
 val postgresqlSourceSet: SourceSet by sourceSets.creating {
   resources.srcDir("src/main/resources/postgresql")
@@ -78,5 +74,11 @@ publishing {
         classifier = "mysql"
       }
     }
+  }
+}
+
+hibernate {
+  enhancement {
+    enableAssociationManagement.set(true)
   }
 }

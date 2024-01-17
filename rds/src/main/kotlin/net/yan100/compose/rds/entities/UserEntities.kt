@@ -15,7 +15,6 @@ import jakarta.validation.constraints.Size
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.consts.Regexes
-import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.rds.Oto
 import net.yan100.compose.rds.core.entities.BaseEntity
 import net.yan100.compose.rds.entities.relationship.UserRoleGroup
@@ -107,10 +106,7 @@ open class SuperUsr : BaseEntity() {
    */
   @get:Schema(requiredMode = NOT_REQUIRED)
   @get:Transient
-  @set:Transient
-  var band: Boolean?
-    get() = (null != banTime && LocalDateTime.now().isBefore(banTime))
-    set(_) = throw KnownException("属性为不可调用", IllegalAccessException(), 400)
+  open val band: Boolean get() = (null != banTime && LocalDateTime.now().isBefore(banTime))
 }
 
 

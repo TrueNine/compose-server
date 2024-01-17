@@ -7,3 +7,9 @@ dependencies {
   kapt(variantOf(libs.querydsl.apt) { classifier("jakarta") })
   implementation(variantOf(libs.querydsl.jpa) { classifier("jakarta") })
 }
+
+hibernate {
+  enhancement {
+    enableAssociationManagement.set(true)
+  }
+}

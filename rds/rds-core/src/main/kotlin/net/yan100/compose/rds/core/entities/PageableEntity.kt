@@ -6,16 +6,16 @@ import jakarta.persistence.Transient
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
 import net.yan100.compose.rds.core.models.PagedRequestParam
-import java.io.Serial
 import java.io.Serializable
 
+/**
+ * ## 内嵌分页的实体类型
+ * 可分页实体
+ */
 interface PageableEntity : Serializable {
   companion object {
     const val MIN_OFFSET: Int = 0
     const val MAX_PAGE_SIZE: Int = 42
-
-    @Serial
-    private val serialVersionUID = 1L
 
     @JvmStatic
     @JvmOverloads

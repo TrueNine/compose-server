@@ -18,7 +18,7 @@ import net.yan100.compose.rds.core.annotations.BizCode
  * @since 2022-12-12
  */
 @MappedSuperclass
-open class TreeEntity : BaseEntity() {
+abstract class TreeEntity : BaseEntity() {
   companion object {
     const val RPI = DataBaseBasicFieldNames.PARENT_ID
     const val RLN = DataBaseBasicFieldNames.LEFT_NODE

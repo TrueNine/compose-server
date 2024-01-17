@@ -7,10 +7,10 @@ import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Version
 import net.yan100.compose.core.alias.BigSerial
+import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
-import java.time.LocalDateTime
 
 /**
  * jpa顶级抽象类
@@ -24,7 +24,7 @@ import java.time.LocalDateTime
  */
 @MappedSuperclass
 @Schema(title = "顶级抽象类")
-open class BaseEntity : AnyEntity() {
+abstract class BaseEntity : AnyEntity() {
   companion object {
     const val RLV = DataBaseBasicFieldNames.LOCK_VERSION
     const val LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG
@@ -45,13 +45,13 @@ open class BaseEntity : AnyEntity() {
   @JsonIgnore
   @Schema(title = "表行创建时间")
   @Column(name = CRD)
-  open var crd: LocalDateTime? = null
+  open var crd: datetime? = null
 
   @JsonIgnore
   @LastModifiedDate
   @Schema(title = "表行修改时间")
   @Column(name = MRD)
-  open var mrd: LocalDateTime? = null
+  open var mrd: datetime? = null
 
   /**
    * 逻辑删除标志
