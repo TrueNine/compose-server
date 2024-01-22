@@ -177,17 +177,17 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.314"
+compose = "1.6.315"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
 java = "21" ### https://bell-sw.com/
-kotlin = "2.0.0-Beta2" ### https://github.com/JetBrains/kotlin/releases
+kotlin = "2.0.0-Beta3" ### https://github.com/JetBrains/kotlin/releases
 ktx-coroutine = "1.8.0-RC2" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
 kt-reactorExtensions = "1.2.2" ### https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
-spring-boot = "3.2.1" ### https://spring.io/projects/spring-boot#learn
+spring-boot = "3.2.2" ### https://spring.io/projects/spring-boot#learn
 spring-cloud = "2023.0.0" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### deprecated https://spring.io/projects/spring-cloud-alibaba#learn
 spring-modulith = "1.1.1" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
@@ -196,7 +196,7 @@ spring-doc-openapiUi2 = "1.7.0" ### deprecated https://mvnrepository.com/artifac
 apache-commonsPool2 = "2.12.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
 apache-commonsCompress = "1.25.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
 
-gradle = "8.6-rc-1" ### https://mirrors.cloud.tencent.com/gradle
+gradle = "8.6-rc-2" ### https://mirrors.cloud.tencent.com/gradle
 gradlePlugin-versionPlugin = "0.50.0" ### https://github.com/ben-manes/gradle-versions-plugin
 gradlePlugin-springBootDependencyManagement = "1.1.4" ### https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin
 gradlePlugin-asciJvmConvert = "3.3.2" ### https://mvnrepository.com/artifact/org.asciidoctor.jvm.convert/org.asciidoctor.jvm.convert.gradle.plugin?repo=gradle-plugins
@@ -214,11 +214,11 @@ cache-caffeine = "3.1.8" ### https://mvnrepository.com/artifact/com.github.ben-m
 db-hsql = "2.7.2" ### https://mvnrepository.com/artifact/org.hsqldb/hsqldb
 db-h2 = "2.2.224" ### https://mvnrepository.com/artifact/com.h2database/h2
 db-postgresql = "42.7.1" ### https://mvnrepository.com/artifact/org.postgresql/postgresql
-db-sqlite = "3.44.1.0" ### https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+db-sqlite = "3.45.0.0" ### https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
 db-mysqlJava = "8.0.33" ### deprecated https://mvnrepository.com/artifact/mysql/mysql-connector-java
-db-mysqlJ = "8.2.0" ### https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+db-mysqlJ = "8.3.0" ### https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
 cralwer-supercsv = "2.4.0" ### https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
-db-flyway = "10.4.1" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+db-flyway = "10.6.0" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 db-p6spy = "3.9.1" ### deprecated https://mvnrepository.com/artifact/p6spy/p6spy
 db-p6spySpring = "1.9.1" ### deprecated https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
 
@@ -235,7 +235,7 @@ security-jjwtapi = "0.12.3" ### deprecated https://mvnrepository.com/artifact/io
 security-antisamy = "1.7.4" ### deprecated https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
 
 
-util-hutool = "5.8.24" ### https://mvnrepository.com/artifact/cn.hutool/hutool-all
+util-hutool = "5.8.25" ### https://mvnrepository.com/artifact/cn.hutool/hutool-all
 util-dozer-core = "6.5.2" ### deprecated https://mvnrepository.com/artifact/com.github.dozermapper/dozer-core
 util-dozer = "5.5.1" ### deprecated  https://mvnrepository.com/artifact/net.sf.dozer/dozer
 util-guavaJre = "33.0.0-jre" ### https://mvnrepository.com/artifact/com.google.guava/guava
@@ -252,7 +252,7 @@ slf4j = "2.1.0-alpha1" ### https://mvnrepository.com/artifact/org.slf4j/slf4j-ap
 cralwer-ip2region = "2.7.0" ### https://mvnrepository.com/artifact/org.lionsoul/ip2region
 cralwer-selenium = "4.16.1" ### https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
 cralwer-seleniumWebDriverManager = "5.6.3" ### https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-cralwer-playwrite = "1.40.0" ### https://mvnrepository.com/artifact/com.microsoft.playwright/playwright
+cralwer-playwrite = "1.41.0" ### https://mvnrepository.com/artifact/com.microsoft.playwright/playwright
 cralwer-jsoup = "1.17.2" ### https://mvnrepository.com/artifact/org.jsoup/jsoup
 cralwer-nekohtml = "3.9.0" ### https://mvnrepository.com/artifact/org.htmlunit/neko-htmlunit
 
@@ -270,7 +270,7 @@ gson = "2.10.1" ### https://mvnrepository.com/artifact/com.google.code.gson/gson
 lombok = "1.18.30" ### https://mvnrepository.com/artifact/org.projectlombok/lombok
 
 querydsl = "5.0.0" ### https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
-hibernate = "6.4.1.Final" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+hibernate = "6.4.2.Final" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 
 drools = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.drools/drools-core
 kie = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.kie/kie-api

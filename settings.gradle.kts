@@ -1,14 +1,24 @@
 pluginManagement {
+  val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
+  val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
+  val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
+
   repositories {
-    mavenLocal()
-    maven(url = uri("https://repo.huaweicloud.com/repository/maven"))
-    maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public"))
-    maven(url = uri("https://repo.spring.io/milestone"))
+    maven(url = uri(release)) {
+      isAllowInsecureProtocol = true
+      credentials {
+        username = yunXiaoUsername
+        password = yunXiaoPassword
+      }
+    }
     gradlePluginPortal()
     mavenCentral()
   }
 }
 
+plugins {
+  id("net.yan100.compose.version-control-settings") version "1.6.314"
+}
 
 dependencyResolutionManagement {
   versionCatalogs {
@@ -80,16 +90,3 @@ findProject(":schedule")?.name = "schedule"
 
 include("pay")
 findProject(":pay")?.name = "pay"
-
-include("multi-test")
-findProject(":multi-test")?.name = "multi-test"
-
-include("multi-test:multi-test-security")
-findProject(":multi-test:multi-test-security")?.name = "multi-test-security"
-
-include("multi-test:multi-test-pay")
-findProject(":multi-test:multi-test-pay")?.name = "multi-test-pay"
-
-include("multi-test:multi-test-network")
-findProject(":multi-test:multi-test-network")?.name = "multi-test-network"
-

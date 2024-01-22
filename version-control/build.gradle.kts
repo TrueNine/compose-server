@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
   implementation(gradleApi())
+  implementation(gradleKotlinDsl())
   implementation(libs.bundles.kt)
 }
 
@@ -51,7 +52,7 @@ tasks {
         "-jvm-target=${l.versions.compose.versionControlJavaVersion.get()}",
         "-Xextended-compiler-checks"
       )
-      jvmTarget = "${l.versions.compose.versionControlJavaVersion.get()}"
+      jvmTarget = l.versions.compose.versionControlJavaVersion.get()
     }
   }
 }
@@ -63,6 +64,10 @@ gradlePlugin {
     register("${pluginGroup}.${project.name}") {
       id = "${pluginGroup}.${project.name}"
       implementationClass = "${pluginGroup}.plugin.Main"
+    }
+    register("${pluginGroup}.${project.name}-settings") {
+      id = "${pluginGroup}.${project.name}-settings"
+      implementationClass = "${pluginGroup}.plugin.SettingsMain"
     }
   }
 }
@@ -83,6 +88,13 @@ publishing {
     create<MavenPublication>("gradlePlugin") {
       groupId = "${pluginGroup}.${project.name}"
       artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
+      version = pluginVersion
+      from(components["java"])
+    }
+
+    create<MavenPublication>("gradleSettingsPlugin") {
+      groupId = "${pluginGroup}.${project.name}"
+      artifactId = "${pluginGroup}.${project.name}-settings.gradle.plugin"
       version = pluginVersion
       from(components["java"])
     }
