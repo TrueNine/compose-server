@@ -3,7 +3,7 @@ package net.yan100.compose.rds.repositories.base
 import jakarta.validation.Valid
 import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.Id
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 
 
 @NoRepositoryBean
-interface IRepo<T : BaseEntity> : IAnyRepo<T> {
+interface IRepo<T : IEntity> : IAnyRepo<T> {
   fun findByIdAndNotLogicDelete(id: Id): T = findByIdAndNotLogicDeleteOrNull(id)!!
 
   @Query("from #{#entityName} e order by e.id desc")

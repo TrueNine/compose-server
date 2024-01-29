@@ -6,7 +6,7 @@ import jakarta.persistence.Table
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.rds.core.entities.AnyEntity
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.models.DataRecord
 import net.yan100.compose.rds.entities.TableRowDeleteRecord
 import net.yan100.compose.rds.repositories.ITableRowDeleteRecordRepository
@@ -28,7 +28,7 @@ class TableRowDeleteRecordServiceImpl(
 
   private val log = slf4j(this::class)
 
-  override fun saveAnyEntity(anyData: BaseEntity?): TableRowDeleteRecord? {
+  override fun saveAnyEntity(anyData: IEntity?): TableRowDeleteRecord? {
     return if (null == anyData) {
       log.debug("未对对象进行保存")
       null
@@ -36,7 +36,7 @@ class TableRowDeleteRecordServiceImpl(
       val delRow = TableRowDeleteRecord()
       val userInfo = UserInfoContextHolder.get()
       delRow.apply {
-        tableNames = anyData::class.findAnnotation<Table>()?.name
+        tableNames = anyData::class.findAnnotation<Table>()?.name!!
         userId = userInfo?.userId
         userAccount = userInfo?.account
         deleteDatetime = LocalDateTime.now()

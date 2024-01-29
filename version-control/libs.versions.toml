@@ -3,6 +3,8 @@ composeVersionControl = { id = "net.yan100.compose.version-control", version.ref
 ktJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ktSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+ktNoArg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
+ktAllOpen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 ktLombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
 ktJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -177,7 +179,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.315"
+compose = "1.6.338"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
@@ -187,7 +189,7 @@ ktx-coroutine = "1.8.0-RC2" ### https://mvnrepository.com/artifact/org.jetbrains
 kt-reactorExtensions = "1.2.2" ### https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
-spring-boot = "3.2.2" ### https://spring.io/projects/spring-boot#learn
+spring-boot = "3.3.0-M1" ### https://spring.io/projects/spring-boot#learn
 spring-cloud = "2023.0.0" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### deprecated https://spring.io/projects/spring-cloud-alibaba#learn
 spring-modulith = "1.1.1" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
@@ -196,7 +198,7 @@ spring-doc-openapiUi2 = "1.7.0" ### deprecated https://mvnrepository.com/artifac
 apache-commonsPool2 = "2.12.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
 apache-commonsCompress = "1.25.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
 
-gradle = "8.6-rc-2" ### https://mirrors.cloud.tencent.com/gradle
+gradle = "8.6-rc-3" ### https://mirrors.cloud.tencent.com/gradle
 gradlePlugin-versionPlugin = "0.50.0" ### https://github.com/ben-manes/gradle-versions-plugin
 gradlePlugin-springBootDependencyManagement = "1.1.4" ### https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin
 gradlePlugin-asciJvmConvert = "3.3.2" ### https://mvnrepository.com/artifact/org.asciidoctor.jvm.convert/org.asciidoctor.jvm.convert.gradle.plugin?repo=gradle-plugins

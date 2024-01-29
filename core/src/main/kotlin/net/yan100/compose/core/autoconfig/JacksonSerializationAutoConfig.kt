@@ -84,10 +84,11 @@ class JacksonSerializationAutoConfig {
       b.defaultViewInclusion(true)
       b.featuresToDisable(
         SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
-        SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS
+        SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS,
       )
 
       b.serializationInclusion(JsonInclude.Include.NON_NULL)
+      b.serializationInclusion(JsonInclude.Include.NON_EMPTY)
       b.serializationInclusion(JsonInclude.Include.NON_ABSENT)
     }
   }

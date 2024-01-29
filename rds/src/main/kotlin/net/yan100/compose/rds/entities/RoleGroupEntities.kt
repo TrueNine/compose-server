@@ -6,19 +6,24 @@ import jakarta.persistence.*
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Table
 import net.yan100.compose.rds.Fk
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.entities.relationship.RoleGroupRole
 import org.hibernate.annotations.*
 
 @MappedSuperclass
-open class SuperRoleGroup : BaseEntity() {
+abstract class SuperRoleGroup : IEntity() {
+  companion object {
+    const val TABLE_NAME = "role_group"
+    const val NAME = "name"
+    const val DOC = "doc"
+  }
+
   /**
    * 名称
    */
   @Schema(title = "名称")
   @Column(name = NAME)
-  @Nullable
-  open var name: String? = null
+  lateinit var name: String
 
   /**
    * 描述
@@ -26,13 +31,7 @@ open class SuperRoleGroup : BaseEntity() {
   @Nullable
   @Schema(title = "描述")
   @Column(name = DOC)
-  open var doc: String? = null
-
-  companion object {
-    const val TABLE_NAME = "role_group"
-    const val NAME = "name"
-    const val DOC = "doc"
-  }
+  var doc: String? = null
 }
 
 /**
@@ -46,14 +45,14 @@ open class SuperRoleGroup : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "角色组")
 @Table(name = SuperRoleGroup.TABLE_NAME)
-open class RoleGroup : SuperRoleGroup()
+class RoleGroup : SuperRoleGroup()
 
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = SuperRoleGroup.TABLE_NAME)
-open class FullRoleGroup : SuperRoleGroup() {
+class FullRoleGroup : SuperRoleGroup() {
   /**
    * 角色
    */
@@ -81,5 +80,5 @@ open class FullRoleGroup : SuperRoleGroup() {
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)
-  open var roles: List<FullRole>? = mutableListOf()
+  var roles: List<@JvmSuppressWildcards FullRole> = mutableListOf()
 }

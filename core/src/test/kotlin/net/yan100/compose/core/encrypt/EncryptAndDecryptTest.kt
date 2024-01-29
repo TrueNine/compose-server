@@ -1,7 +1,6 @@
 package net.yan100.compose.core.encrypt
 
 import io.mockk.InternalPlatformDsl.toStr
-import net.yan100.compose.core.lang.pnt
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -86,6 +85,6 @@ class EncryptAndDecryptTest {
   @Test
   fun `test sha1 encrypt`() {
     val sha1 = Encryptors.signatureBySha1("我的")
-    sha1.sha1.pnt()
+    println(sha1.sha1)
   }
 }

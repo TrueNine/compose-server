@@ -7,17 +7,17 @@ import jakarta.validation.constraints.NotNull
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.models.IIdcard2Code
 import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.converters.GenderTypingConverter
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
-import java.time.LocalDate
 
 @MappedSuperclass
-open class SuperIdcard2 : IIdcard2Code, BaseEntity() {
+abstract class SuperIdcard2 : IIdcard2Code, IEntity() {
   companion object {
     const val TABLE_NAME = "idcard_2"
     const val NAME = "name"
@@ -34,50 +34,50 @@ open class SuperIdcard2 : IIdcard2Code, BaseEntity() {
 
   @Schema(title = "用户信息")
   @Col(name = USER_INFO_ID)
-  open var userInfoId: RefId? = null
+  var userInfoId: RefId? = null
 
   @Schema(title = "签发机构")
   @Column(name = ISSUE_ORGAN)
-  open var issueOrgan: String? = null
+  var issueOrgan: String? = null
 
   @Schema(title = "身份证过期时间")
   @Column(name = EXPIRE_DATE)
-  open var expireDate: LocalDate? = null
+  var expireDate: datetime? = null
 
   @Schema(title = "民族")
   @Column(name = ETHNIC_GROUP)
-  open var ethnicGroup: String? = null
+  var ethnicGroup: String? = null
 
   @Schema(title = "生日")
   @Column(name = BIRTHDAY)
-  open var birthday: LocalDate? = null
+  var birthday: datetime? = null
 
   @NotNull
   @Schema(title = "身份证号")
   @Column(name = CODE)
-  open var code: SerialCode? = null
+  lateinit var code: SerialCode
 
   @Schema(title = "性别")
   @Column(name = GENDER)
   @Convert(converter = GenderTypingConverter::class)
-  open var gender: GenderTyping? = null
+  var gender: GenderTyping? = null
 
   @Schema(title = "外联 地址详情id（出生地）")
   @Column(name = ADDRESS_DETAILS_ID)
-  open var addressDetailsId: ReferenceId? = null
+  var addressDetailsId: ReferenceId? = null
 
   @NotNull
   @Schema(title = "名称")
   @Column(name = NAME)
-  open var name: String? = null
+  lateinit var name: String
 
   @Schema(title = "外联 用户（所属用户）")
   @Column(name = USER_ID)
-  open var userId: ReferenceId? = null
+  var userId: ReferenceId? = null
 
   @get:Transient
   @get:JsonIgnore
-  override val idcard2Code: SerialCode get() = this.code!!
+  override val idcard2Code: SerialCode get() = this.code
 }
 
 @Entity
@@ -85,4 +85,4 @@ open class SuperIdcard2 : IIdcard2Code, BaseEntity() {
 @DynamicUpdate
 @Schema(title = "第二代身份证")
 @Table(name = SuperIdcard2.TABLE_NAME)
-open class Idcard2 : SuperIdcard2()
+class Idcard2 : SuperIdcard2()

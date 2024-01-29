@@ -4,6 +4,9 @@ pluginManagement {
   val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
 
   repositories {
+    mavenLocal()
+    maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
+    maven(url = uri("https://repo.spring.io/milestone"))
     maven(url = uri(release)) {
       isAllowInsecureProtocol = true
       credentials {

@@ -1,14 +1,17 @@
 package net.yan100.compose.rds.entities.cert
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotBlank
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.models.IIdcard2Code
 import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.converters.BloodTypingConverter
 import net.yan100.compose.rds.converters.DegreeTypingConverter
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.typing.BloodTyping
 import net.yan100.compose.rds.typing.DegreeTyping
 import net.yan100.compose.rds.typing.GenderTyping
@@ -18,7 +21,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 @MappedSuperclass
-open class SuperHouseholdCert : BaseEntity() {
+abstract class SuperHouseholdCert : IIdcard2Code, IEntity() {
   companion object {
     const val TABLE_NAME = "household_cert"
 
@@ -49,106 +52,110 @@ open class SuperHouseholdCert : BaseEntity() {
 
   @Schema(title = "用户信息id")
   @Col(name = USER_INFO_ID)
-  open var userInfoId: RefId? = null
+  var userInfoId: RefId? = null
 
   @Schema(title = "户口签发时间")
   @Column(name = ISSUE_DATE)
-  open var issueDate: LocalDate? = null
+  var issueDate: LocalDate? = null
 
 
   @Schema(title = "证件签发服务地址")
   @Column(name = SERVICE_ADDRESS_DETAILS_ID)
-  open var serviceAddressDetailsId: String? = null
+  var serviceAddressDetailsId: String? = null
 
   @Schema(title = "兵役状况")
   @Column(name = MILITARY_SERVICE_STATUS)
-  open var militaryServiceStatus: String? = null
+  var militaryServiceStatus: String? = null
 
   @Schema(title = "职业")
   @Column(name = OCCUPATION)
-  open var occupation: String? = null
+  var occupation: String? = null
 
   @Schema(title = "学历")
   @Convert(converter = DegreeTypingConverter::class)
   @Column(name = EDUCATION_LEVEL)
-  open var educationLevel: DegreeTyping? = null
+  var educationLevel: DegreeTyping? = null
 
+  @NotBlank
   @Schema(title = "户口所属身份证号")
   @Column(name = IDCARD_CODE)
-  open var idcardCode: SerialCode? = null
+  lateinit var idcardCode: SerialCode
 
 
   @Schema(title = "户口签发地址详情")
   @Column(name = ORIGIN_ADDRESS_DETAILS_ID)
-  open var originAddressDetailsId: ReferenceId? = null
+  var originAddressDetailsId: ReferenceId? = null
 
   @Schema(title = "出生地址")
   @Column(name = PLACE_BIRTH_ADDRESS_DETAILS_ID)
-  open var placeBirthAddressDetailsId: ReferenceId? = null
+  var placeBirthAddressDetailsId: ReferenceId? = null
 
 
   @Schema(title = "血型")
   @Column(name = BLOOD_TYPE)
   @Convert(converter = BloodTypingConverter::class)
-  open var bloodType: BloodTyping? = null
+  var bloodType: BloodTyping? = null
 
   @Schema(title = "身高")
   @Column(name = HEIGHT)
-  open var height: BigDecimal? = null
+  var height: BigDecimal? = null
 
   @Schema(title = "生日")
   @Column(name = BIRTHDAY)
-  open var birthday: LocalDate? = null
-
+  var birthday: LocalDate? = null
 
   @Schema(title = "民族")
   @Column(name = ETHNIC_GROUP)
-  open var ethnicGroup: String? = null
+  var ethnicGroup: String? = null
 
   @Schema(title = "性别")
   @Column(name = GENDER)
-  open var gender: GenderTyping? = null
+  lateinit var gender: GenderTyping
 
   @Schema(title = "与户主的关系")
   @Column(name = RELATIONSHIP)
-  open var relationship: String? = null
+  var relationship: String? = null
 
   @Schema(title = "曾用名")
   @Column(name = OLD_NAME)
-  open var oldName: String? = null
+  var oldName: String? = null
 
   @Schema(title = "户口页所属人名称")
   @Column(name = NAME)
-  open var name: String? = null
+  var name: String? = null
 
   @Schema(title = "签发机关")
   @Column(name = ISSUE_ORGAN)
-  open var issueOrgan: String? = null
+  var issueOrgan: String? = null
 
   @Schema(title = "户口所在区域")
   @Column(name = ADDRESS_DETAILS_ID)
-  open var addressDetailsId: String? = null
+  var addressDetailsId: RefId? = null
 
   @Schema(title = "户号")
   @Column(name = CODE)
-  open var code: SerialCode? = null
+  var code: SerialCode? = null
 
   @Schema(title = "户主名称")
   @Column(name = HOUSEHOLD_PRIMARY_NAME)
-  open var householdPrimaryName: String? = null
+  var householdPrimaryName: String? = null
 
   @Schema(title = "户口类别")
   @Column(name = HOUSEHOLD_TYPE)
-  open var householdType: Int? = null
+  var householdType: Int? = null
 
   @Schema(title = "外联用户（所属用户）")
   @Column(name = USER_ID)
-  open var userId: ReferenceId? = null
+  var userId: ReferenceId? = null
+
+  @get:Transient
+  @get:JsonIgnore
+  override val idcard2Code: String get() = idcardCode
 }
 
 @Entity
 @DynamicUpdate
 @DynamicInsert
 @Table(name = SuperHouseholdCert.TABLE_NAME)
-open class HouseholdCert : SuperHouseholdCert()
+class HouseholdCert : SuperHouseholdCert()
 

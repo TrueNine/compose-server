@@ -5,19 +5,19 @@ import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Table
-import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.converters.AuditTypingConverter
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.typing.AuditTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
-import java.time.LocalDateTime
 
 
 @MappedSuperclass
-open class SuperAudit : BaseEntity() {
+abstract class SuperAudit : IEntity() {
   companion object {
     const val TABLE_NAME = "audit"
 
@@ -32,32 +32,32 @@ open class SuperAudit : BaseEntity() {
 
   @Schema(title = "审核人设备 id")
   @Col(name = AUDIT_DEVICE_ID)
-  open var auditDeviceId: SerialCode? = null
+  var auditDeviceId: SerialCode? = null
 
   @Schema(title = "审核人 ip")
   @Col(name = AUDIT_IP)
-  open var auditIp: String? = null
+  var auditIp: String? = null
 
   @Schema(title = "审核类型")
   @Col(name = REF_TYPE)
-  open var refType: Int? = null
+  var refType: Int? = null
 
   @Schema(title = "审核外键")
   @Col(name = REF_ID)
-  open var refId: ReferenceId? = null
+  lateinit var refId: RefId
 
   @Schema(title = "审核备注")
   @Col(name = REMARK)
-  open var remark: String? = null
+  var remark: String? = null
 
   @Schema(title = "创建时间")
   @Col(name = CREATE_DATETIME)
-  open var createDatetime: LocalDateTime? = null
+  lateinit var createDatetime: datetime
 
   @Schema(title = "审核状态")
   @Col(name = STATUS)
   @Convert(converter = AuditTypingConverter::class)
-  open var state: AuditTyping? = null
+  lateinit var state: AuditTyping
 }
 
 
@@ -66,4 +66,4 @@ open class SuperAudit : BaseEntity() {
 @DynamicInsert
 @Schema(title = "审核条目")
 @Table(name = SuperAudit.TABLE_NAME)
-open class Audit : SuperAudit()
+class Audit : SuperAudit()

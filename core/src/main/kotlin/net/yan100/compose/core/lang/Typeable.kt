@@ -1,5 +1,6 @@
 package net.yan100.compose.core.lang
 
+import com.fasterxml.jackson.annotation.JsonValue
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
 import java.util.concurrent.ConcurrentHashMap
@@ -26,25 +27,45 @@ import java.util.concurrent.ConcurrentHashMap
  * @author TrueNine
  * @since 2023-05-28
  */
+@JvmDefaultWithoutCompatibility
 interface AnyTyping {
   /**
    * ## 获取枚举对应的实际值
    */
+  @get:JsonValue
   val value: Any
+
+  companion object {
+    @JvmStatic
+    fun findVal(v: Any?): AnyTyping? = null
+  }
 }
 
 /**
  * # 数值型枚举
  */
+@JvmDefaultWithoutCompatibility
 interface IntTyping : AnyTyping {
+  @get:JsonValue
   override val value: Int
+
+  companion object {
+    @JvmStatic
+    fun findVal(v: Int?): IntTyping? = null
+  }
 }
 
 /**
  * # 字符型枚举
  */
 interface StringTyping : AnyTyping {
+  @get:JsonValue
   override val value: String
+
+  companion object {
+    @JvmStatic
+    fun findVal(v: Int?): IntTyping? = null
+  }
 }
 
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {

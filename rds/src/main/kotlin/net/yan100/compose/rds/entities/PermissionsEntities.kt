@@ -5,7 +5,7 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
@@ -21,9 +21,10 @@ import org.hibernate.annotations.DynamicUpdate
 @DynamicUpdate
 @Schema(title = "权限")
 @Table(name = Permissions.TABLE_NAME)
-open class Permissions : BaseEntity() {
+class Permissions : IEntity() {
   companion object {
     const val TABLE_NAME = "permissions"
+
     const val NAME = "name"
     const val DOC = "doc"
   }
@@ -34,7 +35,7 @@ open class Permissions : BaseEntity() {
   @Nullable
   @Schema(title = "权限名")
   @Column(name = NAME)
-  open var name: String? = null
+  lateinit var name: String
 
   /**
    * 权限描述
@@ -42,7 +43,5 @@ open class Permissions : BaseEntity() {
   @Nullable
   @Schema(title = "权限描述")
   @Column(name = DOC)
-  open var doc: String? = null
-
-
+  var doc: String? = null
 }

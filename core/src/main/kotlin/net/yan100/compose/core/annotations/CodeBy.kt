@@ -39,7 +39,8 @@ enum class Strategy(private val desensitizeSerializer: (String) -> String) {
   /**
    * 手机号
    */
-  PHONE({ it.replace(Regex("(\\d{3})\\d{6}(\\d{2})"), "$1****$2") }),
+  PHONE({ it.replace("(\\d{3})\\d+(\\d{2})".toRegex(), "$1****$2") }),
+  EMAIL({ it.replace("(\\w{2})\\w+(@[\\w.-]+)".toRegex(), "$1****$2") }),
 
   /**
    * 身份证号
@@ -49,7 +50,7 @@ enum class Strategy(private val desensitizeSerializer: (String) -> String) {
   /**
    * 银行卡号
    */
-  BANK_CARD_CODE({ it.replace(Regex("(\\d{2})[\\w|](\\w{2})"), "$1****$2") }),
+  BANK_CARD_CODE({ it.replace("(\\d{2})[\\w|](\\w{2})".toRegex(), "$1****$2") }),
 
   /**
    * 姓名
@@ -65,12 +66,12 @@ enum class Strategy(private val desensitizeSerializer: (String) -> String) {
   /**
    * 地址
    */
-  ADDRESS({ it.replace(Regex("(\\S{3})\\S{2}(\\S*)\\S{2}"), "$1****$2****") }),
+  ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "$1****$2****") }),
 
   /**
    * 密码
    */
-  PASSWORD({ "********" });
+  PASSWORD({ "" });
 
   open fun desensitizeSerializer(): (String) -> String {
     return desensitizeSerializer

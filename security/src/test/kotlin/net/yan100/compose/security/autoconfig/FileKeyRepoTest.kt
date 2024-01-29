@@ -4,7 +4,6 @@ package net.yan100.compose.security.autoconfig
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.encrypt.PemFormat
-import net.yan100.compose.core.lang.pnt
 import net.yan100.compose.security.jwt.JwtIssuer
 import net.yan100.compose.security.jwt.JwtVerifier
 import net.yan100.compose.security.jwt.consts.IssuerParam
@@ -21,9 +20,9 @@ class FileKeyRepoTest {
   fun findKeyByName() {
     val e = Keys.generateEccKeyPair()
 
-    Keys.writeKeyToPem(e!!.eccPrivateKey!!).pnt()
-    "=========".pnt()
-    Keys.writeKeyToPem(e.eccPublicKey!!).pnt()
+    println(Keys.writeKeyToPem(e!!.eccPrivateKey!!))
+    println("=========")
+    println(Keys.writeKeyToPem(e.eccPublicKey!!))
 
     val f = FileKeyRepo()
     val b = f.findEccPrivateKeyByName("acv.pem")
@@ -31,21 +30,21 @@ class FileKeyRepoTest {
 
     val eccPair = f.findEccKeyPairByName("acc.pem", "acv.pem")
 
-    b.pnt()
-    c.pnt()
-    eccPair.pnt()
+    println(b)
+    println(c)
+    println(eccPair)
   }
 
   @Test
   fun findRsa() {
     val r = Keys.generateRsaKeyPair()!!
-    PemFormat.ofKey(r.rsaPublicKey!!).pnt()
-    PemFormat.ofKey(r.rsaPrivateKey!!).pnt()
+    println(PemFormat.ofKey(r.rsaPublicKey!!))
+    println(PemFormat.ofKey(r.rsaPrivateKey!!))
 
     val f = FileKeyRepo()
     val k = f.findRsaKeyPairByName("rcc.pem", "rcv.pem")!!
-    k.rsaPublicKey.pnt()
-    k.rsaPrivateKey.pnt()
+    println(k.rsaPublicKey)
+    println(k.rsaPrivateKey)
   }
 
   @Test
@@ -80,7 +79,7 @@ class FileKeyRepoTest {
       subjectObj = "3" to "4"
     })
     val res = ver.verify(VerifierParam(issToken,subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java))
-    res?.subject .pnt()
-    res?.decryptedData.pnt()
+    println(res?.subject)
+    println(res?.decryptedData)
   }
 }

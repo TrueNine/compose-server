@@ -2,7 +2,6 @@ package net.yan100.compose.core.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import net.yan100.compose.core.lang.pnt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
@@ -52,6 +51,6 @@ class DataClassSerializerTest {
     val json = mapper.writeValueAsString(a)
     println(json)
     val obj = mapper.readValue<A>(json)
-    obj.pnt()
+    println(obj)
   }
 }

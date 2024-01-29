@@ -1,6 +1,5 @@
 package net.yan100.compose.rds.core.entities
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.Max
@@ -19,15 +18,13 @@ interface PageableEntity : Serializable {
 
     @JvmStatic
     @JvmOverloads
-    fun of(
+    fun ofPageableEntity(
       pageSize: Int = MIN_OFFSET,
       offset: Int = MAX_PAGE_SIZE,
       unPage: Boolean = false
     ): PageableEntity = PagedRequestParam(offset, pageSize, unPage)
-
   }
 
-  @get:JsonIgnore
   @get:Transient
   @set:Transient
   @get:Schema(title = "页面大小，最大 ${MAX_PAGE_SIZE}，最小 1", defaultValue = MAX_PAGE_SIZE.toString() + "")
@@ -44,7 +41,6 @@ interface PageableEntity : Serializable {
   )
   var pageSize: Int?
 
-  @get:JsonIgnore
   @get:Transient
   @set:Transient
   @get:Schema(title = "页码 最小为 0", defaultValue = "0")
@@ -53,7 +49,6 @@ interface PageableEntity : Serializable {
   @setparam:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
   var offset: Int?
 
-  @get:JsonIgnore
   @get:Transient
   @set:Transient
   @get:Schema(title = "取消分页请求", defaultValue = "false")

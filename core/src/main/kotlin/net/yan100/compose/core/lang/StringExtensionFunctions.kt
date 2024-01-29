@@ -3,14 +3,14 @@ package net.yan100.compose.core.lang
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import java.util.*
 import kotlin.reflect.KClass
 
 
-val String.camelUppercaseFieldName: String
-  get() = if (this.hasText()) {
-    this.split("_").joinToString("") { it.replaceFirstChar { it1 -> it1.uppercaseChar() } }
-  } else this
-
+const val STR_EMPTY = ""
+const val STR_SLASH = "/"
+const val STR_UNDERLINE = "_"
+const val STR_DOT = "."
 
 fun String.resourceAsStream(cls: KClass<*>): InputStream? {
   return cls.java.classLoader.getResourceAsStream(this)
@@ -28,6 +28,9 @@ fun String?.hasText(): Boolean = Str.hasText(this)
  */
 fun String?.nonText(): Boolean = !this.hasText()
 
+fun String?.hasTextAlso(block: (it: String) -> Unit) {
+  if (this.hasText()) block(this!!)
+}
 
 /**
  * ## 防空字符串
@@ -44,10 +47,30 @@ val String.inline: String get() = Str.inLine(this)
 /**
  * ## 将 foo_bar 类型的字符串转换为 fooBar
  */
-val String.camelLowercaseFieldName: String
-  get() = this.replace("_([a-z0-9])".toRegex()) {
-    it.groupValues[1].uppercase()
+val String.snakeCaseToCamelCase: String
+  get() = this.split(STR_UNDERLINE).joinToString(STR_EMPTY) {
+    if (it.isNotEmpty()) it.replaceFirstChar { r ->
+      if (r.isLowerCase()) r.titlecase(Locale.getDefault()) else r.toString()
+    } else STR_EMPTY
+  }.replaceFirstChar {
+    it.lowercase(Locale.getDefault())
   }
+val String.snakeCaseToPascalCase: String
+  get() = if (hasText()) split(STR_UNDERLINE)
+    .joinToString(STR_EMPTY) {
+      it.replaceFirstChar { it1 ->
+        it1.uppercaseChar()
+      }
+    } else this
+val String.camelCaseToSnakeCase: String
+  get() = fold(StringBuilder()) { acc, c ->
+    if (c.isUpperCase()) {
+      if (acc.isNotEmpty()) acc.append(STR_UNDERLINE)
+      acc.append(c.lowercaseChar())
+    } else acc.append(c)
+    acc
+  }.toString()
+val String.pascalCaseToSnakeCase: String get() = camelCaseToSnakeCase.replaceFirst(STR_UNDERLINE, STR_EMPTY)
 
 /**
  * ## 将字符串进行 url 编码
@@ -76,8 +99,4 @@ fun String.base64DecodeToByteArray(): ByteArray = net.yan100.compose.core.encryp
 fun String.replaceFirstX(meta: String, replacement: String): String {
   return if (indexOf(meta) == 0) replaceFirst(meta, replacement)
   else meta
-}
-
-fun Any?.pnt() {
-  println(this)
 }

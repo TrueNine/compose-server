@@ -8,75 +8,18 @@ import jakarta.persistence.ForeignKey
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
-import net.yan100.compose.core.alias.BigText
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.NonDesensitizedRef
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.converters.WGS84Converter
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.*
 
 
 @MappedSuperclass
-open class SuperAddressDetails : BaseEntity() {
-  /**
-   * 地址 id
-   */
-  @Schema(title = "地址 id")
-  @Column(name = ADDRESS_ID, nullable = false)
-  open var addressId: String? = null
-
-  /**
-   * 联系电话
-   */
-  @NotBlank(message = "手机号不能为空")
-  @Pattern(regexp = Regexes.CHINA_PHONE, message = "请输入正确的电话号码")
-  @Schema(title = "联系电话")
-  @Column(name = PHONE)
-  open var phone: String? = null
-
-  /**
-   * ## 用户 id
-   */
-  @NotBlank(message = "用户 id 不能数为空")
-  @Schema(title = "用户 id")
-  @Column(name = USER_ID)
-  open var userId: String? = null
-
-  /**
-   * 联系人名称
-   */
-  @NotBlank(message = "请留一个姓名")
-  @Schema(title = "联系人名称")
-  @Column(name = NAME)
-  open var name: String? = null
-
-  /**
-   * 地址代码
-   */
-  @NotBlank(message = "地址代码不能为空")
-  @Schema(title = "地址代码")
-  @Column(name = ADDRESS_CODE)
-  open var addressCode: String? = null
-
-  /**
-   * 地址详情
-   */
-  @NotBlank(message = "详细地址不能为空")
-  @Schema(title = "地址详情")
-  @Column(name = ADDRESS_DETAILS, nullable = false)
-  open var addressDetails: String? = null
-
-  /**
-   * 定位
-   */
-  @Nullable
-  @Schema(title = "定位")
-  @Column(name = CENTER)
-  @Convert(converter = WGS84Converter::class)
-  open var center: WGS84? = null
-
+abstract class SuperAddressDetails : IEntity() {
   companion object {
     const val PHONE = "phone"
     const val NAME = "name"
@@ -87,6 +30,63 @@ open class SuperAddressDetails : BaseEntity() {
     const val ADDRESS_DETAILS = "address_details"
     const val CENTER = "center"
   }
+
+  /**
+   * 地址 id
+   */
+  @Schema(title = "地址 id")
+  @Column(name = ADDRESS_ID, nullable = false)
+  var addressId: String? = null
+
+  /**
+   * 联系电话
+   */
+  @NotBlank(message = "手机号不能为空")
+  @Pattern(regexp = Regexes.CHINA_PHONE, message = "请输入正确的电话号码")
+  @Schema(title = "联系电话")
+  @Column(name = PHONE)
+  var phone: String? = null
+
+  /**
+   * ## 用户 id
+   */
+  @NotBlank(message = "用户 id 不能数为空")
+  @Schema(title = "用户 id")
+  @Column(name = USER_ID)
+  lateinit var userId: RefId
+
+  /**
+   * 联系人名称
+   */
+  @NotBlank(message = "请留一个姓名")
+  @Schema(title = "联系人名称")
+  @Column(name = NAME)
+  var name: String? = null
+
+  /**
+   * 地址代码
+   */
+  @NotBlank(message = "地址代码不能为空")
+  @Schema(title = "地址代码")
+  @Column(name = ADDRESS_CODE)
+  lateinit var addressCode: SerialCode
+
+  /**
+   * 地址详情
+   */
+  @NotBlank(message = "详细地址不能为空")
+  @Schema(title = "地址详情")
+  @Column(name = ADDRESS_DETAILS, nullable = false)
+  lateinit var addressDetails: String
+
+  /**
+   * 定位
+   */
+  @Nullable
+  @Schema(title = "定位")
+  @Column(name = CENTER)
+  @Convert(converter = WGS84Converter::class)
+  var center: WGS84? = null
 }
 
 /**
@@ -100,7 +100,7 @@ open class SuperAddressDetails : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "详细地址")
 @Table(name = SuperAddressDetails.TABLE_NAME)
-open class AddressDetails : SuperAddressDetails()
+class AddressDetails : SuperAddressDetails()
 
 
 @Entity
@@ -108,7 +108,7 @@ open class AddressDetails : SuperAddressDetails()
 @DynamicUpdate
 @Schema(title = "非脱敏详细地址")
 @Table(name = SuperAddressDetails.TABLE_NAME)
-open class NonDesensitizedAddressDetails : SuperAddressDetails() {
+class NonDesensitizedAddressDetails : SuperAddressDetails() {
   /**
    * 联系电话
    */
@@ -126,7 +126,7 @@ open class NonDesensitizedAddressDetails : SuperAddressDetails() {
   @NotBlank(message = "详细地址不能为空")
   @Schema(title = "地址详情")
   @Column(name = ADDRESS_DETAILS, nullable = false)
-  override var addressDetails: BigText? = null
+  override lateinit var addressDetails: String
 
   /**
    * 地址代码
@@ -135,8 +135,7 @@ open class NonDesensitizedAddressDetails : SuperAddressDetails() {
   @NotBlank(message = "地址代码不能为空")
   @Schema(title = "地址代码")
   @Column(name = ADDRESS_CODE)
-  override var addressCode: SerialCode? = null
-
+  override lateinit var addressCode: SerialCode
 
   /**
    * 联系人名称
@@ -154,7 +153,7 @@ open class NonDesensitizedAddressDetails : SuperAddressDetails() {
 @DynamicUpdate
 @Schema(title = "详细地址")
 @Table(name = SuperAddressDetails.TABLE_NAME)
-open class FullAddressDetails : SuperAddressDetails() {
+class FullAddressDetails : SuperAddressDetails() {
   /**
    * 地址
    */
@@ -170,5 +169,5 @@ open class FullAddressDetails : SuperAddressDetails() {
   @NotFound(action = NotFoundAction.IGNORE)
   @JsonBackReference
   @Fetch(FetchMode.JOIN)
-  open var address: Address? = null
+  var address: Address? = null
 }

@@ -22,6 +22,8 @@ plugins {
   alias(libs.plugins.ktJvm)
   alias(libs.plugins.ktKapt)
   alias(libs.plugins.ktSpring)
+  alias(libs.plugins.ktNoArg)
+  alias(libs.plugins.ktAllOpen)
   alias(libs.plugins.ktLombok)
   alias(libs.plugins.ktJpa)
   alias(libs.plugins.versions)
@@ -64,6 +66,8 @@ subprojects {
   apply(plugin = "org.jetbrains.kotlin.kapt")
 
   apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
+  apply(plugin = "org.jetbrains.kotlin.plugin.noarg")
+  apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
   apply(plugin = "org.jetbrains.kotlin.plugin.spring")
   apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
 
@@ -102,6 +106,21 @@ subprojects {
     //correctErrorTypes =true
     javacOptions { option("querydsl.entityAccessors", true) }
     arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
+  }
+
+  noArg {
+    annotations(
+      "jakarta.persistence.MappedSuperclass",
+      "jakarta.persistence.Entity",
+      "net.yan100.compose.core.annotations.OpenArg"
+    )
+  }
+  allOpen {
+    annotations(
+      "jakarta.persistence.MappedSuperclass",
+      "jakarta.persistence.Entity",
+      "net.yan100.compose.core.annotations.OpenArg"
+    )
   }
 
   java {

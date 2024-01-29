@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import net.yan100.compose.rds.core.entities.BaseEntity;
+import net.yan100.compose.rds.core.entities.IEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -24,7 +24,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Schema(title = "用户  角色组")
 @Table(name = UserRoleGroup.TABLE_NAME)
-public class UserRoleGroup extends BaseEntity {
+public class UserRoleGroup extends IEntity {
   public static final String TABLE_NAME = "user_role_group";
   public static final String USER_ID = "user_id";
   public static final String ROLE_GROUP_ID = "role_group_id";

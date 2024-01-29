@@ -5,11 +5,11 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import net.yan100.compose.core.lang.WGS84
 import net.yan100.compose.rds.converters.WGS84Converter
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 
 @Entity
 @Table(name = DbTestServiceEntity.TABLE_NAME)
-class DbTestServiceEntity : BaseEntity() {
+class DbTestServiceEntity : IEntity() {
   var title: String? = null
 
   @Convert(converter = WGS84Converter::class)

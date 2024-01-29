@@ -12,11 +12,12 @@ import jakarta.validation.constraints.FutureOrPresent
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.rds.Oto
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.entities.relationship.UserRoleGroup
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -27,7 +28,7 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
 import java.time.LocalDateTime
 
 @MappedSuperclass
-open class SuperUsr : BaseEntity() {
+abstract class SuperUsr : IEntity() {
   companion object {
     const val TABLE_NAME = "usr"
 
@@ -45,7 +46,7 @@ open class SuperUsr : BaseEntity() {
    */
   @Schema(title = "创建此账号的 user id")
   @Column(name = CREATE_USER_ID)
-  open var createUserId: ReferenceId? = null
+  lateinit var createUserId: RefId
 
   /**
    * 账号
@@ -55,7 +56,7 @@ open class SuperUsr : BaseEntity() {
   @Schema(title = "账号")
   @Pattern(regexp = Regexes.ACCOUNT)
   @Column(name = ACCOUNT, unique = true)
-  open var account: SerialCode? = null
+  lateinit var account: SerialCode
 
   /**
    * 呢称
@@ -63,7 +64,7 @@ open class SuperUsr : BaseEntity() {
   @Nullable
   @Schema(title = "呢称")
   @Column(name = NICK_NAME)
-  open var nickName: String? = null
+  var nickName: String? = null
 
   /**
    * 描述
@@ -71,7 +72,7 @@ open class SuperUsr : BaseEntity() {
   @Nullable
   @Schema(title = "描述")
   @Column(name = DOC)
-  open var doc: String? = null
+  var doc: String? = null
 
   /**
    * 密码
@@ -80,7 +81,7 @@ open class SuperUsr : BaseEntity() {
   @Size(min = 8)
   @Schema(title = "密码")
   @Column(name = PWD_ENC)
-  open var pwdEnc: String? = null
+  lateinit var pwdEnc: String
 
   /**
    * 被封禁结束时间
@@ -90,7 +91,7 @@ open class SuperUsr : BaseEntity() {
   @FutureOrPresent
   @Schema(title = "被封禁结束时间")
   @Column(name = BAN_TIME)
-  open var banTime: LocalDateTime? = null
+  var banTime: datetime? = null
 
   /**
    * 最后请求时间
@@ -99,14 +100,14 @@ open class SuperUsr : BaseEntity() {
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @Schema(title = "最后请求时间")
   @Column(name = LAST_LOGIN_TIME)
-  open var lastLoginTime: LocalDateTime? = null
+  var lastLoginTime: datetime? = null
 
   /**
    * @return 当前用户是否被封禁
    */
   @get:Schema(requiredMode = NOT_REQUIRED)
   @get:Transient
-  open val band: Boolean get() = (null != banTime && LocalDateTime.now().isBefore(banTime))
+  val band: Boolean get() = (null != banTime && LocalDateTime.now().isBefore(banTime))
 }
 
 
@@ -121,14 +122,14 @@ open class SuperUsr : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "用户")
 @Table(name = SuperUsr.TABLE_NAME)
-open class Usr : SuperUsr()
+class Usr : SuperUsr()
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Schema(title = "全属性用户")
 @Table(name = SuperUsr.TABLE_NAME)
-open class FullUsr : SuperUsr() {
+class FullUsr : SuperUsr() {
   /**
    * 角色组
    */
@@ -152,7 +153,7 @@ open class FullUsr : SuperUsr() {
   )
   @Fetch(SUBSELECT)
   @NotFound(action = IGNORE)
-  open var roleGroups: List<RoleGroup> = listOf()
+  var roleGroups: List<RoleGroup> = mutableListOf()
 
   /**
    * 用户信息
@@ -161,5 +162,5 @@ open class FullUsr : SuperUsr() {
   @JsonManagedReference
   @Oto(mappedBy = FullUserInfo.MAPPED_BY_USR)
   @NotFound(action = IGNORE)
-  open var info: FullUserInfo? = null
+  var info: FullUserInfo? = null
 }

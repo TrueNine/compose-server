@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 interface RequestInfoMap {
   companion object {
-    val INSTANCE = Mappers.getMapper(RequestInfoMap::class.java)
+    val INSTANCE: RequestInfoMap = Mappers.getMapper(RequestInfoMap::class.java)
   }
   @Mapping(target = "enabled", ignore = true)
   @Mapping(target = "nonLocked", ignore = true)

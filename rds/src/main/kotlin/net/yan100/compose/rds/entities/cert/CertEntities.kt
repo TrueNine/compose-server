@@ -2,24 +2,21 @@ package net.yan100.compose.rds.entities.cert
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
-import net.yan100.compose.core.alias.BigText
-import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.*
 import net.yan100.compose.rds.converters.AuditTypingConverter
 import net.yan100.compose.rds.converters.CertContentTypingConverter
 import net.yan100.compose.rds.converters.CertPointTypingConverter
 import net.yan100.compose.rds.converters.CertTypingConverter
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.typing.AuditTyping
 import net.yan100.compose.rds.typing.CertContentTyping
 import net.yan100.compose.rds.typing.CertPointTyping
 import net.yan100.compose.rds.typing.CertTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
-import java.time.LocalDateTime
 
 @MappedSuperclass
-open class SuperCert : BaseEntity() {
+abstract class SuperCert : IEntity() {
   companion object {
     const val TABLE_NAME = "cert"
 
@@ -43,71 +40,71 @@ open class SuperCert : BaseEntity() {
 
   @Schema(title = "用户信息id")
   @Column(name = USER_INFO_ID)
-  open var userInfoId: ReferenceId? = null
+  var userInfoId: ReferenceId? = null
 
   @Schema(title = "水印码")
   @Column(name = WM_CODE)
-  open var wmCode: SerialCode? = null
+  var wmCode: SerialCode? = null
 
   @Schema(title = "水印证件 id")
   @Column(name = WM_ATT_ID)
-  open var wmAttId: ReferenceId? = null
+  var wmAttId: RefId? = null
 
-  @Schema(title = "外联附件 id")
+  @Schema(title = "原始附件 id")
   @Column(name = ATT_ID)
-  open var attId: ReferenceId? = null
+  lateinit var attId: RefId
 
   @Schema(title = "创建人 id")
   @Column(name = CREATE_USER_ID)
-  open var createUserId: ReferenceId? = null
+  var createUserId: RefId? = null
 
   @Schema(title = "创建人设备 id")
   @Column(name = CREATE_DEVICE_ID)
-  open var createDeviceId: SerialCode? = null
+  var createDeviceId: SerialCode? = null
 
   @Schema(title = "创建 ip")
   @Column(name = CREATE_IP)
-  open var createIp: String? = null
+  var createIp: String? = null
 
   @Schema(title = "创建时间")
   @Column(name = CREATE_DATETIME)
-  open var createDatetime: LocalDateTime? = null
+  var createDatetime: datetime? = null
 
   @Schema(title = "证件备注")
   @Column(name = REMARK)
-  open var remark: SerialCode? = null
+  var remark: SerialCode? = null
 
   @Schema(title = "审核状态")
   @Column(name = AUDIT_STATUS)
   @Convert(converter = AuditTypingConverter::class)
-  open var auditStatus: AuditTyping? = null
+  lateinit var auditStatus: AuditTyping
 
   @Schema(title = "证件描述")
   @Column(name = DOC)
-  open var doc: BigText? = null
+  var doc: BigText? = null
 
   @Schema(title = "证件名称")
   @Column(name = NAME)
-  open var name: String? = null
+  var name: String? = null
 
   @Schema(title = "用户 id")
   @Column(name = USER_ID)
-  open var userId: ReferenceId? = null
+  var userId: ReferenceId? = null
 
   @Schema(title = "证件打印类型")
   @Column(name = PO_TYPE)
   @Convert(converter = CertPointTypingConverter::class)
-  open var poType: CertPointTyping? = null
+  var poType: CertPointTyping? = null
 
   @Schema(title = "证件内容类型")
   @Column(name = CO_TYPE)
   @Convert(converter = CertContentTypingConverter::class)
-  open var coType: CertContentTyping? = null
+  var coType: CertContentTyping? = null
 
   @Schema(title = "证件类型")
   @Column(name = DO_TYPE)
   @Convert(converter = CertTypingConverter::class)
-  open var doType: CertTyping? = null
+  var doType: CertTyping? = null
 }
 
 
@@ -115,4 +112,4 @@ open class SuperCert : BaseEntity() {
 @DynamicUpdate
 @DynamicInsert
 @Table(name = SuperCert.TABLE_NAME)
-open class Cert : SuperCert()
+class Cert : SuperCert()

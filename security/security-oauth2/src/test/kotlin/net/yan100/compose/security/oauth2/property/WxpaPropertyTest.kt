@@ -2,7 +2,6 @@ package net.yan100.compose.security.oauth2.property
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import net.yan100.compose.core.lang.pnt
 import net.yan100.compose.security.oauth2.Oauth2TestEntrance
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,8 +21,8 @@ class WxpaPropertyTest {
       val b = w.jsapiTicket
       assertNotNull(a)
       assertNotNull(b)
-      a.pnt()
-      b.pnt()
+      println(a)
+      println(b)
     }
   }
 }

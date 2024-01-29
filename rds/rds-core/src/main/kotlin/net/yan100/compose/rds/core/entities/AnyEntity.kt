@@ -52,9 +52,7 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
     @Transient
     @JsonIgnore
     @JvmName("setInternalId")
-    set(f) {
-      field = f
-    }
+    set
     @Transient
     @JsonIgnore
     @JvmName("getInternalId")
@@ -70,15 +68,15 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
     return javaClass.hashCode()
   }
 
-  open fun asNew() {
+  fun asNew() {
     this.id = null
   }
 
-  open fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
+  fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
     return superString + "[" + properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } + "]"
   }
 
-  open fun setId(id: String) {
+  fun setId(id: String) {
     this.id = id
   }
 

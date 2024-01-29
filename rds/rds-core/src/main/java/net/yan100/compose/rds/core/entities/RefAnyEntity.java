@@ -25,7 +25,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(title = "任意外键类型，通常与策略模式一起使用")
-public class RefAnyEntity extends BaseEntity implements Serializable {
+public class RefAnyEntity extends IEntity implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;

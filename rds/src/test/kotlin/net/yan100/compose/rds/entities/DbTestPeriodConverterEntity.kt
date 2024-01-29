@@ -2,7 +2,7 @@ package net.yan100.compose.rds.entities
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.Hibernate
 import java.time.Period
 
@@ -11,7 +11,7 @@ import java.time.Period
 @Table(name = "db_test_period_converter")
 data class DbTestPeriodConverterEntity(
   var periods: Period?
-) : BaseEntity() {
+) : IEntity() {
   constructor() : this(null)
 
   override fun equals(o: Any?): Boolean {

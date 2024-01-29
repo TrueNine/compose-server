@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.spring.listener
 
 
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.event.TableRowDeleteSpringEvent
 import net.yan100.compose.rds.service.ITableRowDeleteRecordService
 import org.springframework.context.ApplicationListener
@@ -12,6 +12,6 @@ class TableRowDeleteSpringListener(
   private val tableRowDeleteRecordService: ITableRowDeleteRecordService
 ) : ApplicationListener<TableRowDeleteSpringEvent> {
   override fun onApplicationEvent(event: TableRowDeleteSpringEvent) {
-    tableRowDeleteRecordService.saveAnyEntity(event.source as BaseEntity)
+    tableRowDeleteRecordService.saveAnyEntity(event.source as IEntity)
   }
 }

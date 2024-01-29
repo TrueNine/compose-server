@@ -3,7 +3,7 @@ package net.yan100.compose.rds.base
 
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.entities.withNew
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseBody
 
 @Validated
-abstract class BaseController<T : BaseEntity>(
+abstract class BaseController<T : IEntity>(
   protected val service: IService<T>
 ) {
   @ResponseBody
@@ -66,7 +66,7 @@ abstract class BaseController<T : BaseEntity>(
     调用该接口，传入的实体必须存在id
   """
   )
-  fun modifyMeta(@RequestBody @Valid meta: T) = meta.id?.apply { service.save(meta) }
+  fun modifyMeta(@RequestBody @Valid meta: T) = meta.id.apply { service.save(meta) }
 
   @ResponseBody
   //@PutMapping("meta/byId/all")

@@ -7,16 +7,19 @@ import jakarta.validation.constraints.NotNull
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.date
 import net.yan100.compose.core.models.IDisCode2
+import net.yan100.compose.core.typing.cert.DisTyping
+import net.yan100.compose.rds.converters.DisTypingConverter
 import net.yan100.compose.rds.converters.GenderTypingConverter
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.typing.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
 
 @MappedSuperclass
-open class SuperDisCert2 : IDisCode2, BaseEntity() {
+abstract class SuperDisCert2 : IDisCode2, IEntity() {
   companion object {
     const val TABLE_NAME = "dis_cert_2"
 
@@ -37,67 +40,68 @@ open class SuperDisCert2 : IDisCode2, BaseEntity() {
 
   @Schema(title = "用户信息id")
   @Column(name = USER_INFO_ID)
-  open var userInfoId: RefId? = null
+  var userInfoId: RefId? = null
 
   @Schema(title = "出生日期")
   @Column(name = BIRTHDAY)
-  open var birthday: LocalDate? = null
+  var birthday: LocalDate? = null
 
   @Schema(title = "监护人联系电话")
   @Column(name = GUARDIAN_PHONE)
-  open var guardianPhone: String? = null
+  var guardianPhone: String? = null
 
 
   @Schema(title = "监护人姓名")
   @Column(name = GUARDIAN)
-  open var guardian: String? = null
+  var guardian: String? = null
 
   @Schema(title = "家庭住址")
   @Column(name = ADDRESS_DETAILS_ID)
-  open var addressDetailsId: String? = null
+  var addressDetailsId: String? = null
 
   @Schema(title = "证件过期时间")
   @Column(name = EXPIRE_DATE)
-  open var expireDate: LocalDate? = null
+  var expireDate: date? = null
 
   @Schema(title = "签发时间")
   @Column(name = ISSUE_DATE)
-  open var issueDate: LocalDate? = null
+  var issueDate: LocalDate? = null
 
   @Schema(title = "残疾级别")
   @Column(name = LEVEL)
-  open var level: Int? = null
+  var level: Int? = null
 
   @Schema(title = "残疾类别")
   @Column(name = TYPE)
-  open var type: Int? = null
+  @Convert(converter = DisTypingConverter::class)
+  lateinit var type: DisTyping
 
-  @Convert(converter = GenderTypingConverter::class)
   @Schema(title = "性别")
   @Column(name = GENDER)
-  open var gender: GenderTyping? = null
+  @Convert(converter = GenderTypingConverter::class)
+  lateinit var gender: GenderTyping
 
   @NotNull
   @Schema(title = "残疾证编号")
   @Column(name = CODE)
-  open var code: SerialCode? = null
+  lateinit var code: SerialCode
 
 
   @Schema(title = "姓名")
   @Column(name = NAME)
-  open var name: String? = null
+  lateinit var name: String
 
   @Schema(title = "外联用户（所属用户）")
   @Column(name = USER_ID)
-  open var userId: ReferenceId? = null
+  var userId: ReferenceId? = null
 
   @get:Transient
   @get:JsonIgnore
-  override val disabilityCode: String get() = this.code!!
+  override val disabilityCode: String get() = this.code
 }
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = SuperDisCert2.TABLE_NAME)
-open class DisCert2 : SuperDisCert2()
+class DisCert2 : SuperDisCert2()

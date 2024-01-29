@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
+private val log = slf4j(BasicUserInfoInterceptor::class)
 
 @Configuration
 @Order(Ordered.LOWEST_PRECEDENCE)
@@ -37,10 +38,11 @@ class BasicUserInfoInterceptor : WebMvcConfigurer, HandlerInterceptor {
     modelAndView: ModelAndView?
   ) {
     val userInfo = UserInfoContextHolder.get()
-    log.info("request URL = {}", request.requestURI)
-    log.info("userInfo = {}", userInfo)
+
+    log.trace("request URL = {}", request.requestURI)
+    log.trace("userInfo = {}", userInfo)
     if (null == userInfo) {
-      log.info("当前用户信息为空，设置一个默认的用户信息")
+      log.trace("当前用户信息为空，设置一个默认的用户信息")
       val newInfo = RequestInfo().apply {
         currentIpAddr = InterAddressUtil.getRequestIpAddress(request)
         userId = null
@@ -57,9 +59,7 @@ class BasicUserInfoInterceptor : WebMvcConfigurer, HandlerInterceptor {
     handler: Any,
     ex: Exception?
   ) {
-    log.debug("清除当前用户信息 = {}", UserInfoContextHolder.get())
+    log.trace("清除当前用户信息 = {}", UserInfoContextHolder.get())
     UserInfoContextHolder.clean()
   }
-
-  private val log = slf4j(BasicUserInfoInterceptor::class)
 }

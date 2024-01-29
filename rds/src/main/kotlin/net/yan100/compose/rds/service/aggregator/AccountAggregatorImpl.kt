@@ -34,7 +34,7 @@ class AccountAggregatorImpl(
   ): Usr {
     val savedUsr = usr.withNew().run {
       checkNotNull(account) { "分配账号不能为空" }
-      check(!userService.existsByAccount(account!!)) { "分配的账号已经存在" }
+      check(!userService.existsByAccount(account)) { "分配的账号已经存在" }
       checkNotNull(pwdEnc) { "分配账号的密码不能为空" }
       pwdEnc = passwordEncoder.encode(this.pwdEnc)
       this.createUserId = createUserId
@@ -49,10 +49,10 @@ class AccountAggregatorImpl(
     }
 
     roleGroup?.also { rg ->
-      roleGroupService.assignPlainToUser(savedUsr.id!!)
+      roleGroupService.assignPlainToUser(savedUsr.id)
       if (allowAssignRoot) {
-        if (rg.contains("ADMIN")) roleGroupService.assignAdminToUser(savedUsr.id!!)
-        if (rg.contains("ROOT")) roleGroupService.assignRootToUser(savedUsr.id!!)
+        if (rg.contains("ADMIN")) roleGroupService.assignAdminToUser(savedUsr.id)
+        if (rg.contains("ROOT")) roleGroupService.assignRootToUser(savedUsr.id)
       }
     }
     return savedUsr
@@ -61,11 +61,11 @@ class AccountAggregatorImpl(
   override fun registerAccount(@Valid param: RegisterAccountReq): Usr? =
     if (!userService.existsByAccount(param.account!!)) {
       userService.save(Usr().withNew().apply {
-        account = param.account
+        account = param.account!!
         pwdEnc = passwordEncoder.encode(param.password)
         nickName = param.nickName
         doc = param.description
-      }).also { roleGroupService.assignPlainToUser(it.id!!) }
+      }).also { roleGroupService.assignPlainToUser(it.id) }
     } else null
 
   override fun login(@Valid param: LoginAccountReq): Usr? =

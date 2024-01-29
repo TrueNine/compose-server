@@ -1,17 +1,16 @@
 package net.yan100.compose.rds.entities
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Table
-import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.rds.core.entities.BaseEntity
+import jakarta.persistence.*
+import net.yan100.compose.core.alias.RefId
+import net.yan100.compose.rds.converters.AuditTypingConverter
+import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.typing.AuditTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
 @MappedSuperclass
-open class SuperAuditAttachment : BaseEntity() {
+abstract class SuperAuditAttachment : IEntity() {
   companion object {
     const val TABLE_NAME = "audit_attachment"
 
@@ -22,15 +21,16 @@ open class SuperAuditAttachment : BaseEntity() {
 
   @Schema(title = "审核文件状态")
   @Column(name = STATUS)
-  open var status: Int? = null
+  @Convert(converter = AuditTypingConverter::class)
+  lateinit var status: AuditTyping
 
   @Schema(title = "审核条目 id")
   @Column(name = AUDIT_ID)
-  open var auditId: ReferenceId? = null
+  lateinit var auditId: RefId
 
   @Schema(title = "附件 id")
   @Column(name = ATT_ID)
-  open var attId: ReferenceId? = null
+  lateinit var attId: RefId
 }
 
 @Entity
@@ -38,4 +38,4 @@ open class SuperAuditAttachment : BaseEntity() {
 @DynamicInsert
 @Schema(title = "审核附带的附件")
 @Table(name = SuperAuditAttachment.TABLE_NAME)
-open class AuditAttachment : SuperAuditAttachment()
+class AuditAttachment : SuperAuditAttachment()

@@ -10,9 +10,9 @@ import jakarta.annotation.Nullable
  * @since 2023-04-06
  */
 open class RequestInfo {
-
   @Nullable
   var userId: String? = null
+
 
   @Nullable
   var account: String? = null
@@ -26,4 +26,14 @@ open class RequestInfo {
 
   @Nullable
   var currentIpAddr: String? = null
+
+  override fun toString(): String {
+    return mapOf(
+      "userId" to userId,
+      "account" to account,
+      "currentIpAddr" to currentIpAddr,
+      "loginIpAddr" to loginIpAddr,
+      "deviceId" to deviceId
+    ).toString()
+  }
 }

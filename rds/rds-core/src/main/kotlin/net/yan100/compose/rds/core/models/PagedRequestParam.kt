@@ -20,6 +20,7 @@ import net.yan100.compose.rds.core.entities.PageableEntity.Companion.MIN_OFFSET
 open class PagedRequestParam @JvmOverloads constructor(
   offset: Int? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false
 ) : PageableEntity {
+
   @get:JsonIgnore
   @get:Transient
   @set:Transient
@@ -28,6 +29,7 @@ open class PagedRequestParam @JvmOverloads constructor(
   @setparam:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
   override var offset: Int? = MIN_OFFSET
 
+  @get:JsonIgnore
   @get:Min(value = 1, message = "页面大小最小为1")
   @setparam:Min(value = 1, message = "页面大小最小为1")
   @get:Max(
@@ -38,7 +40,6 @@ open class PagedRequestParam @JvmOverloads constructor(
     value = MAX_PAGE_SIZE.toLong(),
     message = "分页最大参数为${MAX_PAGE_SIZE}"
   )
-  @get:JsonIgnore
   @get:Transient
   @set:Transient
   @Transient

@@ -5,19 +5,25 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Table
-import net.yan100.compose.rds.core.entities.BaseEntity
+import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.entities.relationship.RolePermissions
 import org.hibernate.annotations.*
 
 @MappedSuperclass
-open class SuperRole : BaseEntity() {
+abstract class SuperRole : IEntity() {
+  companion object {
+    const val TABLE_NAME = "role"
+    const val NAME = "name"
+    const val DOC = "doc"
+  }
+
   /**
    * 角色名称
    */
   @Nullable
   @Schema(title = "角色名称")
   @Column(name = NAME)
-  open var name: String? = null
+  lateinit var name: String
 
   /**
    * 角色描述
@@ -25,13 +31,7 @@ open class SuperRole : BaseEntity() {
   @Nullable
   @Column(name = DOC)
   @Schema(title = "角色描述")
-  open var doc: String? = null
-
-  companion object {
-    const val TABLE_NAME = "role"
-    const val NAME = "name"
-    const val DOC = "doc"
-  }
+  var doc: String? = null
 }
 
 /**
@@ -45,14 +45,15 @@ open class SuperRole : BaseEntity() {
 @DynamicUpdate
 @Schema(title = "角色")
 @Table(name = SuperRole.TABLE_NAME)
-open class Role : SuperRole()
+class Role : SuperRole()
 
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = SuperRole.TABLE_NAME)
-open class FullRole : SuperRole() {
+class FullRole : SuperRole() {
+
   /**
    * 权限
    */
@@ -80,5 +81,5 @@ open class FullRole : SuperRole() {
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)
-  open var permissions: List<@JvmSuppressWildcards Permissions> = mutableListOf()
+  var permissions: List<@JvmSuppressWildcards Permissions> = mutableListOf()
 }
