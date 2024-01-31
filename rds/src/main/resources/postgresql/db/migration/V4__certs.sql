@@ -65,7 +65,7 @@ comment on table household_cert is '户口登记卡';
 select add_base_struct('household_cert');
 
 
-create table bank_card
+create table if not exists bank_card
 (
   user_id               bigint       default null,
   user_info_id          bigint       default null,

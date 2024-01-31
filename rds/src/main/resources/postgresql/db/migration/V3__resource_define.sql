@@ -53,7 +53,7 @@ create table if not exists address
 (
   code         varchar(255) null,
   name         varchar(127) null, -- 中国最长的地名是新疆维吾尔自治区昌吉回族自治州木垒哈萨克自治县大南沟乌孜别克族乡
-  year_version varchar(15) null,
+  year_version varchar(15)  null,
   level        integer default 0,
   center       varchar(255) null,
   leaf         boolean default false,
@@ -63,8 +63,14 @@ comment on table address is '行政区代码';
 select add_base_struct('address');
 select add_presort_tree_struct('address');
 create index on address (name);
+
 insert into address(id, level, code, name, rln, rrn, tgi, center)
-values (0, 0, '000000000000', '', 1, 2, 0, null);
+select *
+from (values (0, 0, '000000000000', '', 1, 2, 0, null))
+       as tmp(id, level, code, name, rln, rrn, tgi, center)
+where not exists(select 1
+                 from address a
+                 where a.id = tmp.id);
 
 
 create table if not exists address_details

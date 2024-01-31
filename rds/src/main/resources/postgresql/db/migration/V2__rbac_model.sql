@@ -11,10 +11,17 @@ create table if not exists usr
 );
 comment on table usr is '用户';
 select add_base_struct('usr');
-insert into usr(id, create_user_id, account, nick_name, pwd_enc, last_login_time, doc)
-values (0, 0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now(), '超级管理员账号'),
-       (1, 0, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now(), '普通用户账号');
 
+
+insert into usr (id, create_user_id, account, nick_name, pwd_enc, last_login_time, doc)
+select *
+from (values (0, 0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now(), '超级管理员账号'),
+             (1, 0, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now(), '普通用户账号'))
+       as tmp (id, create_user_id, account, nick_name, pwd_enc, last_login_time, doc)
+where not exists(select 1
+                 from usr u
+                 where u.account = tmp.account
+                   and u.pwd_enc = tmp.pwd_enc);
 
 create table if not exists user_info
 (
@@ -50,9 +57,18 @@ create index on user_info (address_details_id);
 create index on user_info (avatar_img_id);
 create index on user_info (wechat_openid);
 create index on user_info (wechat_authid);
+
+
 insert into user_info(id, user_id, pri, first_name, last_name, email, birthday, phone, gender)
-values (0, 0, true, 'R', 'OOT', 'g@g.com', '1997-11-04', '13711111111', 1),
-       (1, 1, true, 'U', 'SR', 'g@g.com', '1997-11-04', '13722222222', 1);
+select *
+from (values (0, 0, true, 'R', 'OOT', 'g@g.com', to_timestamp('1997-11-04', 'YYYY-MM-DD'), '13711111111', 1),
+             (1, 1, true, 'U', 'SR', 'g@g.com', to_timestamp('1997-11-04', 'YYYY-MM-DD'), '13722222222', 1))
+       as tmp(id, user_id, pri, first_name, last_name, email, birthday, phone, gender)
+where not exists(select 1
+                 from user_info i
+                 where i.user_id = tmp.user_id
+                   and i.pri = tmp.pri);
+
 
 create table if not exists role
 (
@@ -61,10 +77,15 @@ create table if not exists role
 );
 comment on table role is '角色';
 select add_base_struct('role');
+
 insert into role (id, name, doc)
-values (0, 'ROOT', '默认 ROOT 角色，务必不要删除'),
-       (1, 'USER', '默认 USER 角色，务必不要删除'),
-       (2, 'ADMIN', '默认 ADMIN 角色，务必不要删除');
+select *
+from (values (0, 'ROOT', '默认 ROOT 角色，务必不要删除'),
+             (1, 'USER', '默认 USER 角色，务必不要删除'),
+             (2, 'ADMIN', '默认 ADMIN 角色，务必不要删除')) as tmp(id, name, doc)
+where not exists(select 1
+                 from role r
+                 where r.id = tmp.id);
 
 
 create table if not exists permissions
@@ -74,10 +95,15 @@ create table if not exists permissions
 );
 comment on table permissions is '权限';
 select add_base_struct('permissions');
+
 insert into permissions(id, name, doc)
-values (0, 'ROOT', '默认 ROOT 权限，务必不要删除'),
-       (1, 'USER', '默认 USER 权限，务必不要删除'),
-       (2, 'ADMIN', '默认 ADMIN 权限，务必不要删除');
+select *
+from (values (0, 'ROOT', '默认 ROOT 权限，务必不要删除'),
+             (1, 'USER', '默认 USER 权限，务必不要删除'),
+             (2, 'ADMIN', '默认 ADMIN 权限，务必不要删除')) as tmp(id, name, doc)
+where not exists(select 1
+                 from permissions p
+                 where p.id = tmp.id);
 
 create table if not exists role_group
 (
@@ -86,10 +112,15 @@ create table if not exists role_group
 );
 comment on table role_group is '角色组';
 select add_base_struct('role_group');
+
 insert into role_group(id, name, doc)
-values (0, 'ROOT', '默认 ROOT 角色组，务必不要删除'),
-       (1, 'USER', '默认 USER 角色组，务必不要删除'),
-       (2, 'ADMIN', '默认 ADMIN 角色组，务必不要删除');
+select *
+from (values (0, 'ROOT', '默认 ROOT 角色组，务必不要删除'),
+             (1, 'USER', '默认 USER 角色组，务必不要删除'),
+             (2, 'ADMIN', '默认 ADMIN 角色组，务必不要删除')) as tmp (id, name, doc)
+where not exists(select 1
+                 from role_group r
+                 where r.id = tmp.id);
 
 
 create table if not exists role_permissions
@@ -101,13 +132,18 @@ comment on table role_permissions is '角色  权限';
 select add_base_struct('role_permissions');
 create index on role_permissions (role_id);
 create index on role_permissions (permissions_id);
+
 insert into role_permissions(id, role_id, permissions_id)
-values (0, 0, 0),
-       (1, 0, 1),
-       (2, 0, 2),
-       (3, 1, 1),
-       (4, 2, 1),
-       (5, 2, 2);
+select *
+from (values (0, 0, 0),
+             (1, 0, 1),
+             (2, 0, 2),
+             (3, 1, 1),
+             (4, 2, 1),
+             (5, 2, 2)) as tmp(id, role_id, permissions_id)
+where not exists(select 1
+                 from role_permissions r
+                 where r.id = tmp.id);
 
 
 create table if not exists role_group_role
@@ -119,13 +155,19 @@ comment on table role_group_role is '角色组  角色';
 select add_base_struct('role_group_role');
 create index on role_group_role (role_group_id);
 create index on role_group_role (role_id);
+
 insert into role_group_role(id, role_group_id, role_id)
-values (0, 0, 0),
-       (1, 0, 1),
-       (2, 0, 2),
-       (3, 1, 1),
-       (4, 2, 1),
-       (5, 2, 2);
+select *
+from (values (0, 0, 0),
+             (1, 0, 1),
+             (2, 0, 2),
+             (3, 1, 1),
+             (4, 2, 1),
+             (5, 2, 2)) as tmp(id, role_group_id, role_id)
+where not exists(select 1
+                 from role_group_role r
+                 where r.id = tmp.id);
+
 
 
 create table if not exists user_role_group
@@ -137,11 +179,16 @@ comment on table user_role_group is '用户  角色组';
 select add_base_struct('user_role_group');
 create index on user_role_group (role_group_id);
 create index on user_role_group (user_id);
+
 insert into user_role_group(id, user_id, role_group_id)
-values (0, 0, 0),
-       (1, 0, 1),
-       (2, 0, 2),
-       (3, 1, 1);
+select *
+from (values (0, 0, 0),
+             (1, 0, 1),
+             (2, 0, 2),
+             (3, 1, 1)) as tmp(id, user_id, role_group_id)
+where not exists(select 1
+                 from user_role_group u
+                 where u.id = tmp.id);
 
 create table if not exists dept
 (
