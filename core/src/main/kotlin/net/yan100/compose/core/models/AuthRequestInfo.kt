@@ -12,22 +12,22 @@ import java.util.concurrent.CopyOnWriteArrayList
  * @since 2022-12-10
  */
 class AuthRequestInfo : RequestInfo() {
-  @Nullable
-  var encryptedPassword: String? = null
+    @Nullable
+    var encryptedPassword: String? = null
 
-  @Nullable
-  var nonLocked = false
+    @Nullable
+    var nonLocked = false
 
-  @Nullable
-  var nonExpired = false
+    @Nullable
+    var nonExpired = false
 
-  @Nullable
-  var enabled = false
-  var roles: List<String> = CopyOnWriteArrayList()
-  var permissions: List<String> = CopyOnWriteArrayList()
-  var depts: List<String> = CopyOnWriteArrayList()
+    @Nullable
+    var enabled = false
+    var roles: List<String> = CopyOnWriteArrayList()
+    var permissions: List<String> = CopyOnWriteArrayList()
+    var depts: List<String> = CopyOnWriteArrayList()
 
-  @get:JsonIgnore
-  val cleaned: AuthRequestInfo
-    get() = RequestInfoMap.INSTANCE.clearAuthedInfo(this)
+    @get:JsonIgnore
+    val cleaned: AuthRequestInfo
+        get() = RequestInfoMap.INSTANCE.clearAuthedInfo(this)
 }

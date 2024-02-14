@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service
 
 @Service
 class HouseholdRegistrationCardServiceImpl(
-  val repo: IHouseholdRegistrationCardRepo
+    val repo: IHouseholdRegistrationCardRepo
 ) : CrudService<HouseholdCert>(repo)

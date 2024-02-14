@@ -11,27 +11,27 @@ import org.hibernate.annotations.*
 
 @MappedSuperclass
 abstract class SuperRole : IEntity() {
-  companion object {
-    const val TABLE_NAME = "role"
-    const val NAME = "name"
-    const val DOC = "doc"
-  }
+    companion object {
+        const val TABLE_NAME = "role"
+        const val NAME = "name"
+        const val DOC = "doc"
+    }
 
-  /**
-   * 角色名称
-   */
-  @Nullable
-  @Schema(title = "角色名称")
-  @Column(name = NAME)
-  lateinit var name: String
+    /**
+     * 角色名称
+     */
+    @Nullable
+    @Schema(title = "角色名称")
+    @Column(name = NAME)
+    lateinit var name: String
 
-  /**
-   * 角色描述
-   */
-  @Nullable
-  @Column(name = DOC)
-  @Schema(title = "角色描述")
-  var doc: String? = null
+    /**
+     * 角色描述
+     */
+    @Nullable
+    @Column(name = DOC)
+    @Schema(title = "角色描述")
+    var doc: String? = null
 }
 
 /**
@@ -54,32 +54,32 @@ class Role : SuperRole()
 @Table(name = SuperRole.TABLE_NAME)
 class FullRole : SuperRole() {
 
-  /**
-   * 权限
-   */
-  @Schema(title = "权限", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @ManyToMany(fetch = FetchType.EAGER, targetEntity = Permissions::class)
-  @JoinTable(
-    name = RolePermissions.TABLE_NAME,
-    joinColumns = [JoinColumn(
-      table = RolePermissions.TABLE_NAME,
-      name = RolePermissions.ROLE_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )],
-    inverseJoinColumns = [JoinColumn(
-      table = RolePermissions.TABLE_NAME,
-      name = RolePermissions.PERMISSIONS_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )],
-    foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
-  )
-  @Fetch(FetchMode.SUBSELECT)
-  @NotFound(action = NotFoundAction.IGNORE)
-  var permissions: List<@JvmSuppressWildcards Permissions> = mutableListOf()
+    /**
+     * 权限
+     */
+    @Schema(title = "权限", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Permissions::class)
+    @JoinTable(
+        name = RolePermissions.TABLE_NAME,
+        joinColumns = [JoinColumn(
+            table = RolePermissions.TABLE_NAME,
+            name = RolePermissions.ROLE_ID,
+            referencedColumnName = ID,
+            foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+            insertable = false,
+            updatable = false
+        )],
+        inverseJoinColumns = [JoinColumn(
+            table = RolePermissions.TABLE_NAME,
+            name = RolePermissions.PERMISSIONS_ID,
+            referencedColumnName = ID,
+            foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+            insertable = false,
+            updatable = false
+        )],
+        foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
+    )
+    @Fetch(FetchMode.SUBSELECT)
+    @NotFound(action = NotFoundAction.IGNORE)
+    var permissions: List<@JvmSuppressWildcards Permissions> = mutableListOf()
 }

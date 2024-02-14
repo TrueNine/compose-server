@@ -22,26 +22,26 @@ import org.hibernate.annotations.DynamicUpdate
 @Schema(title = "权限")
 @Table(name = Permissions.TABLE_NAME)
 class Permissions : IEntity() {
-  companion object {
-    const val TABLE_NAME = "permissions"
+    companion object {
+        const val TABLE_NAME = "permissions"
 
-    const val NAME = "name"
-    const val DOC = "doc"
-  }
+        const val NAME = "name"
+        const val DOC = "doc"
+    }
 
-  /**
-   * 权限名
-   */
-  @Nullable
-  @Schema(title = "权限名")
-  @Column(name = NAME)
-  lateinit var name: String
+    /**
+     * 权限名
+     */
+    @Nullable
+    @Schema(title = "权限名")
+    @Column(name = NAME)
+    lateinit var name: String
 
-  /**
-   * 权限描述
-   */
-  @Nullable
-  @Schema(title = "权限描述")
-  @Column(name = DOC)
-  var doc: String? = null
+    /**
+     * 权限描述
+     */
+    @Nullable
+    @Schema(title = "权限描述")
+    @Column(name = DOC)
+    var doc: String? = null
 }

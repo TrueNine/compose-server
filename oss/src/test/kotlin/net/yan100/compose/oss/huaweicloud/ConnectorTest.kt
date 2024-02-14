@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test
 
 class ConnectorTest {
 
-  @Test
-  fun conn() {
-    val endPoint = "https://obs.cn-south-1.myhuaweicloud.com"
-    val ak = "PZQNQ0AWXIQ4PLEXDCDH"
-    val sk = "LJAoiqOVCTUEm3cxp0KIdngnWBXb00XM9JbFlqNk"
+    @Test
+    fun conn() {
+        val endPoint = "https://obs.cn-south-1.myhuaweicloud.com"
+        val ak = "PZQNQ0AWXIQ4PLEXDCDH"
+        val sk = "LJAoiqOVCTUEm3cxp0KIdngnWBXb00XM9JbFlqNk"
 
-    ObsClient(ak, sk, endPoint).use { obsClient ->
-      // 列举桶
-      obsClient.listBuckets(ListBucketsRequest().apply {
-        isQueryLocation = true
-      }).forEach(::println)
+        ObsClient(ak, sk, endPoint).use { obsClient ->
+            // 列举桶
+            obsClient.listBuckets(ListBucketsRequest().apply {
+                isQueryLocation = true
+            }).forEach(::println)
+        }
     }
-  }
 }

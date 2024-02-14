@@ -11,20 +11,20 @@ import org.springframework.stereotype.Component
  */
 @Component
 class PreSaveDeleteReferenceListener {
-  private val log = slf4j(this::class)
+    private val log = slf4j(this::class)
 
-  @PrePersist
-  fun deleteReference(attribute: Any?) {
-    attribute?.let { attr ->
-      attr.javaClass.declaredFields.filter {
-        it.isAnnotationPresent(OneToOne::class.java)
-          && it.isAnnotationPresent(OneToMany::class.java)
-          && it.isAnnotationPresent(ManyToOne::class.java)
-          && it.isAnnotationPresent(ManyToMany::class.java)
-      }.forEach { fAttr ->
-        log.debug("重置引用参数 = {}", fAttr)
-        fAttr.set(attribute, null)
-      }
+    @PrePersist
+    fun deleteReference(attribute: Any?) {
+        attribute?.let { attr ->
+            attr.javaClass.declaredFields.filter {
+                it.isAnnotationPresent(OneToOne::class.java)
+                    && it.isAnnotationPresent(OneToMany::class.java)
+                    && it.isAnnotationPresent(ManyToOne::class.java)
+                    && it.isAnnotationPresent(ManyToMany::class.java)
+            }.forEach { fAttr ->
+                log.debug("重置引用参数 = {}", fAttr)
+                fAttr.set(attribute, null)
+            }
+        }
     }
-  }
 }

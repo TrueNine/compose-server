@@ -9,15 +9,15 @@ import java.time.Period
 @Component
 @Converter(autoApply = true)
 class PeriodAsStringConverter : AttributeConverter<Period, String> {
-  override fun convertToDatabaseColumn(attribute: Period?): String? {
-    return attribute?.run {
-      this.toString()
+    override fun convertToDatabaseColumn(attribute: Period?): String? {
+        return attribute?.run {
+            this.toString()
+        }
     }
-  }
 
-  override fun convertToEntityAttribute(dbData: String?): Period? {
-    return dbData?.run {
-      Period.parse(this)
+    override fun convertToEntityAttribute(dbData: String?): Period? {
+        return dbData?.run {
+            Period.parse(this)
+        }
     }
-  }
 }

@@ -17,35 +17,35 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Component
 class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfigurer {
-  private val log = slf4j(BasicUserInfoArgumentResolver::class)
+    private val log = slf4j(BasicUserInfoArgumentResolver::class)
 
-  override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
-    super.addArgumentResolvers(resolvers)
-    log.debug("注册用户信息拦ArgumentResolver")
-    resolvers.add(this)
-  }
-
-  override fun supportsParameter(parameter: MethodParameter): Boolean {
-    log.info("support by parameter = {}", parameter)
-    return RequestInfo::class.java.isAssignableFrom(parameter.parameterType)
-  }
-
-  override fun resolveArgument(
-    parameter: MethodParameter,
-    mavContainer: ModelAndViewContainer?,
-    webRequest: NativeWebRequest,
-    binderFactory: WebDataBinderFactory?
-  ): Any? {
-    val u = UserInfoContextHolder.get()
-    log.info("argument injection for {}", u)
-    if (u == null) {
-      UserInfoContextHolder.set(RequestInfo().apply {
-        val req = webRequest.nativeRequest as HttpServletRequest
-        val deviceId = Headers.getDeviceId(req)
-        this.currentIpAddr = req.remoteRequestIp
-        this.deviceId = deviceId
-      })
+    override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
+        super.addArgumentResolvers(resolvers)
+        log.debug("注册用户信息拦ArgumentResolver")
+        resolvers.add(this)
     }
-    return u
-  }
+
+    override fun supportsParameter(parameter: MethodParameter): Boolean {
+        log.info("support by parameter = {}", parameter)
+        return RequestInfo::class.java.isAssignableFrom(parameter.parameterType)
+    }
+
+    override fun resolveArgument(
+        parameter: MethodParameter,
+        mavContainer: ModelAndViewContainer?,
+        webRequest: NativeWebRequest,
+        binderFactory: WebDataBinderFactory?
+    ): Any? {
+        val u = UserInfoContextHolder.get()
+        log.info("argument injection for {}", u)
+        if (u == null) {
+            UserInfoContextHolder.set(RequestInfo().apply {
+                val req = webRequest.nativeRequest as HttpServletRequest
+                val deviceId = Headers.getDeviceId(req)
+                this.currentIpAddr = req.remoteRequestIp
+                this.deviceId = deviceId
+            })
+        }
+        return u
+    }
 }

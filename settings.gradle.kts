@@ -1,34 +1,34 @@
 pluginManagement {
-  val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-  val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
-  val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
+    val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
+    val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
+    val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
 
-  repositories {
-    mavenLocal()
-    maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
-    maven(url = uri("https://repo.spring.io/milestone"))
-    maven(url = uri(release)) {
-      isAllowInsecureProtocol = true
-      credentials {
-        username = yunXiaoUsername
-        password = yunXiaoPassword
-      }
+    repositories {
+        mavenLocal()
+        maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
+        maven(url = uri("https://repo.spring.io/milestone"))
+        maven(url = uri(release)) {
+            isAllowInsecureProtocol = true
+            credentials {
+                username = yunXiaoUsername
+                password = yunXiaoPassword
+            }
+        }
+        gradlePluginPortal()
+        mavenCentral()
     }
-    gradlePluginPortal()
-    mavenCentral()
-  }
 }
 
 plugins {
-  id("net.yan100.compose.version-control-settings") version "1.6.314"
+    id("net.yan100.compose.version-control-settings") version "1.6.314"
 }
 
 dependencyResolutionManagement {
-  versionCatalogs {
-    create("libs") {
-      from(files("version-control/libs.versions.toml"))
+    versionCatalogs {
+        create("libs") {
+            from(files("version-control/libs.versions.toml"))
+        }
     }
-  }
 }
 
 rootProject.name = "compose"

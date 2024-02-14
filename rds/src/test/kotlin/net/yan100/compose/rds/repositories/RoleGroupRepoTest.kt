@@ -10,14 +10,14 @@ import org.springframework.test.annotation.Rollback
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class RoleGroupRepoTest {
-  @Autowired
-  private lateinit var repo: RoleGroupRepo
-  val log = slf4j(this::class)
+    @Autowired
+    private lateinit var repo: RoleGroupRepo
+    val log = slf4j(this::class)
 
-  @Test
-  @Rollback
-  fun testFindAll() {
-    val all = repo.findAll()
-    log.info("roleGroup = {}", all)
-  }
+    @Test
+    @Rollback
+    fun testFindAll() {
+        val all = repo.findAll()
+        log.info("roleGroup = {}", all)
+    }
 }

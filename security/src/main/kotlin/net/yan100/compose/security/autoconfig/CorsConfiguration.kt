@@ -16,34 +16,34 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  */
 @Configuration
 class CorsConfiguration : WebMvcConfigurer {
-  override fun addCorsMappings(registry: CorsRegistry) {
-    log.debug("注册跨域组件为允许全部跨域通行")
-    registry
-      .addMapping("/**")
-      .allowedOriginPatterns("*")
-      .allowedMethods(*Methods.all())
-      .allowedHeaders("*")
-      .exposedHeaders("*")
-      .allowCredentials(true)
-      .maxAge(3600)
-  }
+    override fun addCorsMappings(registry: CorsRegistry) {
+        log.debug("注册跨域组件为允许全部跨域通行")
+        registry
+            .addMapping("/**")
+            .allowedOriginPatterns("*")
+            .allowedMethods(*Methods.all())
+            .allowedHeaders("*")
+            .exposedHeaders("*")
+            .allowCredentials(true)
+            .maxAge(3600)
+    }
 
-  @Bean(name = ["org.springframework.web.cors.CorsConfiguration"])
-  fun corsConfiguration(): CorsConfiguration {
-    log.debug("注册 spring security 的跨域全局配置")
-    val all = CorsConfiguration.ALL
-    val c = CorsConfiguration()
-    c.addAllowedOriginPattern(all)
-    Methods.all().toList().forEach(c::addAllowedMethod)
-    c.addExposedHeader(all)
-    c.allowCredentials = true
-    c.maxAge = 3600
-    c.addAllowedHeader(all)
-    c.exposedHeaders = listOf("*")
-    return c
-  }
+    @Bean(name = ["org.springframework.web.cors.CorsConfiguration"])
+    fun corsConfiguration(): CorsConfiguration {
+        log.debug("注册 spring security 的跨域全局配置")
+        val all = CorsConfiguration.ALL
+        val c = CorsConfiguration()
+        c.addAllowedOriginPattern(all)
+        Methods.all().toList().forEach(c::addAllowedMethod)
+        c.addExposedHeader(all)
+        c.allowCredentials = true
+        c.maxAge = 3600
+        c.addAllowedHeader(all)
+        c.exposedHeaders = listOf("*")
+        return c
+    }
 
-  companion object {
-    private val log = slf4j(CorsConfiguration::class)
-  }
+    companion object {
+        private val log = slf4j(CorsConfiguration::class)
+    }
 }

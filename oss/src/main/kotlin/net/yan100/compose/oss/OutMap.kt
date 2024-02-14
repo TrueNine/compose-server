@@ -9,30 +9,30 @@ import java.io.OutputStream
  * @since 2023-02-20
  */
 interface OutMap : StreamsMap {
-  /**
-   * @return 使用的输出流
-   */
-  override val usedStream: OutputStream
+    /**
+     * @return 使用的输出流
+     */
+    override val usedStream: OutputStream
 
-  /**
-   * @return 文件媒体类型
-   */
-  override val mediaType: String
+    /**
+     * @return 文件媒体类型
+     */
+    override val mediaType: String
 
-  /**
-   * @return 文件名
-   */
-  override val fName: String
+    /**
+     * @return 文件名
+     */
+    override val fName: String
 
-  /**
-   * @return 目录名
-   */
-  override val dirName: String
+    /**
+     * @return 目录名
+     */
+    override val dirName: String
 
-  /**
-   * @return 文件大小
-   */
-  override val size: Long
+    /**
+     * @return 文件大小
+     */
+    override val size: Long
 
-  override val exposeBaseUrl: String
+    override val exposeBaseUrl: String
 }

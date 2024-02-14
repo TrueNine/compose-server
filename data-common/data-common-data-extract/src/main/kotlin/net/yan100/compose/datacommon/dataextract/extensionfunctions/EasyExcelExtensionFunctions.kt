@@ -9,22 +9,22 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 
 inline fun <reified T> MultipartFile.readExcelList(
-  readFn: (readerBuilder: ExcelReaderBuilder) -> Unit = { r -> r.sheet().doRead() }
+    readFn: (readerBuilder: ExcelReaderBuilder) -> Unit = { r -> r.sheet().doRead() }
 ): List<T> {
-  val dataList = CopyOnWriteArrayList<T>()
+    val dataList = CopyOnWriteArrayList<T>()
 
-  val e = try {
-    EasyExcel.read(inputStream, T::class.java, object : ReadListener<T> {
-      override fun invoke(data: T?, context: AnalysisContext?) {
-        data?.let { dataList += it }
-      }
+    val e = try {
+        EasyExcel.read(inputStream, T::class.java, object : ReadListener<T> {
+            override fun invoke(data: T?, context: AnalysisContext?) {
+                data?.let { dataList += it }
+            }
 
-      override fun doAfterAllAnalysed(context: AnalysisContext?) {}
-    })
-  } catch (ex: Throwable) {
-    ex.printStackTrace()
-    null
-  }
-  if (null != e) readFn(e)
-  return dataList
+            override fun doAfterAllAnalysed(context: AnalysisContext?) {}
+        })
+    } catch (ex: Throwable) {
+        ex.printStackTrace()
+        null
+    }
+    if (null != e) readFn(e)
+    return dataList
 }

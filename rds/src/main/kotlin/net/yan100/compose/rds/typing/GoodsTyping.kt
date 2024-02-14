@@ -12,29 +12,29 @@ import net.yan100.compose.core.lang.IntTyping
  */
 @Schema(title = "商品类型")
 enum class GoodsTyping(private val v: Int) : IntTyping {
-  /**
-   * 实体商品
-   */
-  @Schema(title = "实体商品")
-  PHYSICAL_GOODS(0),
+    /**
+     * 实体商品
+     */
+    @Schema(title = "实体商品")
+    PHYSICAL_GOODS(0),
 
-  /**
-   * 服务商品
-   */
-  @Schema(title = "服务商品")
-  SERVICE_GOODS(1),
+    /**
+     * 服务商品
+     */
+    @Schema(title = "服务商品")
+    SERVICE_GOODS(1),
 
-  /**
-   * 虚拟商品
-   */
-  @Schema(title = "虚拟商品")
-  VIRTUAL_GOODS(2);
+    /**
+     * 虚拟商品
+     */
+    @Schema(title = "虚拟商品")
+    VIRTUAL_GOODS(2);
 
-  @JsonValue
-  override val value: Int = v
+    @JsonValue
+    override val value: Int = v
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: Int?): GoodsTyping? = entries.find { it.value == v }
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: Int?): GoodsTyping? = entries.find { it.value == v }
+    }
 }

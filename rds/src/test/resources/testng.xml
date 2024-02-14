@@ -2,40 +2,40 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="数据库测试" parallel="classes">
-  <!-- 服务测试需要初始化数据 -->
-  <test name="服务测试" parallel="methods">
-    <packages>
-      <package name="net.yan100.compose.rds.service.impl"/>
-    </packages>
-  </test>
-  <test name="聚合服务测试" parallel="classes">
-    <packages>
-      <package name="net.yan100.compose.rds.service.aggregator"/>
-    </packages>
-  </test>
-  <test name="仓库测试" parallel="methods">
-    <packages>
-      <package name="net.yan100.compose.rds.repositories"/>
-    </packages>
-  </test>
-  <test name="转换器测试" parallel="methods">
-    <packages>
-      <package name="net.yan100.compose.rds.converters"/>
-    </packages>
-  </test>
-  <test name="基础包测试" parallel="methods">
-    <packages>
-      <package name="net.yan100.compose.rds.base"/>
-    </packages>
-  </test>
-  <test name="自动装配测试" parallel="methods">
-    <packages>
-      <package name="net.yan100.compose.rds.autoconfig"/>
-    </packages>
-  </test>
-  <test name="工具测试" parallel="methods">
-    <packages>
-      <package name="net.yan100.compose.rds.util"/>
-    </packages>
-  </test>
+    <!-- 服务测试需要初始化数据 -->
+    <test name="服务测试" parallel="methods">
+        <packages>
+            <package name="net.yan100.compose.rds.service.impl"/>
+        </packages>
+    </test>
+    <test name="聚合服务测试" parallel="classes">
+        <packages>
+            <package name="net.yan100.compose.rds.service.aggregator"/>
+        </packages>
+    </test>
+    <test name="仓库测试" parallel="methods">
+        <packages>
+            <package name="net.yan100.compose.rds.repositories"/>
+        </packages>
+    </test>
+    <test name="转换器测试" parallel="methods">
+        <packages>
+            <package name="net.yan100.compose.rds.converters"/>
+        </packages>
+    </test>
+    <test name="基础包测试" parallel="methods">
+        <packages>
+            <package name="net.yan100.compose.rds.base"/>
+        </packages>
+    </test>
+    <test name="自动装配测试" parallel="methods">
+        <packages>
+            <package name="net.yan100.compose.rds.autoconfig"/>
+        </packages>
+    </test>
+    <test name="工具测试" parallel="methods">
+        <packages>
+            <package name="net.yan100.compose.rds.util"/>
+        </packages>
+    </test>
 </suite>

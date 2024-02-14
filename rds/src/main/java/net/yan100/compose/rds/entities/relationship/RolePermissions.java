@@ -25,23 +25,23 @@ import org.hibernate.annotations.DynamicUpdate;
 @Schema(title = "角色  权限")
 @Table(name = RolePermissions.TABLE_NAME)
 public class RolePermissions extends IEntity {
-  public static final String TABLE_NAME = "role_permissions";
-  public static final String ROLE_ID = "role_id";
-  public static final String PERMISSIONS_ID = "permissions_id";
+    public static final String TABLE_NAME = "role_permissions";
+    public static final String ROLE_ID = "role_id";
+    public static final String PERMISSIONS_ID = "permissions_id";
 
-  /**
-   * 角色
-   */
-  @Nullable
-  @Schema(title = "角色")
-  @Column(name = ROLE_ID)
-  private String roleId;
+    /**
+     * 角色
+     */
+    @Nullable
+    @Schema(title = "角色")
+    @Column(name = ROLE_ID)
+    private String roleId;
 
-  /**
-   * 权限
-   */
-  @Nullable
-  @Schema(title = "权限")
-  @Column(name = PERMISSIONS_ID)
-  private String permissionsId;
+    /**
+     * 权限
+     */
+    @Nullable
+    @Schema(title = "权限")
+    @Column(name = PERMISSIONS_ID)
+    private String permissionsId;
 }

@@ -21,31 +21,31 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @ConditionalOnMissingBean(SecurityPolicyBean::class)
 class DisableSecurityPolicyBean {
-  companion object {
-    @JvmStatic
-    private val log = slf4j(DisableSecurityPolicyBean::class)
-  }
+    companion object {
+        @JvmStatic
+        private val log = slf4j(DisableSecurityPolicyBean::class)
+    }
 
-  @Bean
-  @Throws(Exception::class)
-  fun disableSecurityFilterChain(security: HttpSecurity): SecurityFilterChain {
-    log.warn(
-      "生产环境请启用 WebSecurity, 使用 {} 来启用并配置完成 {}",
-      EnableRestSecurity::class.java.name,
-      SecurityPolicyBean::class.java.name
-    )
-    return security
-      .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
-      .authorizeHttpRequests { a ->
-        a.anyRequest().permitAll()
-      }
-      .logout { obj: LogoutConfigurer<HttpSecurity?> -> obj.permitAll() }
-      .build()
-  }
+    @Bean
+    @Throws(Exception::class)
+    fun disableSecurityFilterChain(security: HttpSecurity): SecurityFilterChain {
+        log.warn(
+            "生产环境请启用 WebSecurity, 使用 {} 来启用并配置完成 {}",
+            EnableRestSecurity::class.java.name,
+            SecurityPolicyBean::class.java.name
+        )
+        return security
+            .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
+            .authorizeHttpRequests { a ->
+                a.anyRequest().permitAll()
+            }
+            .logout { obj: LogoutConfigurer<HttpSecurity?> -> obj.permitAll() }
+            .build()
+    }
 
-  @Bean
-  fun ssr(): UserDetailsService {
-    log.warn("当前注册了一个临时的 InMemoryUserDetailsManager")
-    return InMemoryUserDetailsManager()
-  }
+    @Bean
+    fun ssr(): UserDetailsService {
+        log.warn("当前注册了一个临时的 InMemoryUserDetailsManager")
+        return InMemoryUserDetailsManager()
+    }
 }

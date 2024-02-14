@@ -11,27 +11,27 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 val HttpServletRequest.headerMap: Map<String, String>
-  get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
+    get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
 
 val HttpServletResponse.headerMap: Map<String, String>
-  get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
+    get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
 
 fun HttpServletResponse.useResponse(
-  contentType: MediaTypes = MediaTypes.BINARY,
-  charset: Charset = StandardCharsets.UTF_8,
-  locale: Locale = Locale.CHINA,
-  with: (HttpServletResponse) -> HttpServletResponse
+    contentType: MediaTypes = MediaTypes.BINARY,
+    charset: Charset = StandardCharsets.UTF_8,
+    locale: Locale = Locale.CHINA,
+    with: (HttpServletResponse) -> HttpServletResponse
 ): HttpServletResponse {
-  this.contentType = contentType.value
-  this.characterEncoding = charset.displayName()
-  this.locale = locale
-  return with(this)
+    this.contentType = contentType.value
+    this.characterEncoding = charset.displayName()
+    this.locale = locale
+    return with(this)
 }
 
 fun HttpServletResponse.useSse(
-  charset: Charset = StandardCharsets.UTF_8, locale: Locale = Locale.CHINA, with: (HttpServletResponse) -> HttpServletResponse
+    charset: Charset = StandardCharsets.UTF_8, locale: Locale = Locale.CHINA, with: (HttpServletResponse) -> HttpServletResponse
 ): HttpServletResponse {
-  return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) { with(it) }
+    return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) { with(it) }
 }
 
 /**
@@ -40,29 +40,29 @@ fun HttpServletResponse.useSse(
  * 尽量获取到真实的ip地址
  */
 val HttpServletRequest.remoteRequestIp: String
-  get() = InterAddressUtil.getRequestIpAddress(this)
+    get() = InterAddressUtil.getRequestIpAddress(this)
 
 /**
  * 获取当前设备的 deviceId
  */
 val HttpServletRequest.deviceId: String
-  get() = Headers.getDeviceId(this)
+    get() = Headers.getDeviceId(this)
 
 /**
  * ## 设置下载时的东西
  */
 fun HttpServletResponse.withDownload(
-  fileName: String,
-  contentType: MediaTypes = MediaTypes.BINARY,
-  charset: Charset = StandardCharsets.UTF_8,
-  closeBlock: ((outputStream: OutputStream) -> Unit)?
+    fileName: String,
+    contentType: MediaTypes = MediaTypes.BINARY,
+    charset: Charset = StandardCharsets.UTF_8,
+    closeBlock: ((outputStream: OutputStream) -> Unit)?
 ) {
-  this.setHeader(Headers.CONTENT_DISPOSITION, Headers.downloadDisposition(fileName, charset))
-  this.setHeader(Headers.CONTENT_TYPE, contentType.value)
-  this.characterEncoding = charset.displayName()
-  closeBlock?.also { blockFn ->
-    this.outputStream.use {
-      blockFn(it)
+    this.setHeader(Headers.CONTENT_DISPOSITION, Headers.downloadDisposition(fileName, charset))
+    this.setHeader(Headers.CONTENT_TYPE, contentType.value)
+    this.characterEncoding = charset.displayName()
+    closeBlock?.also { blockFn ->
+        this.outputStream.use {
+            blockFn(it)
+        }
     }
-  }
 }

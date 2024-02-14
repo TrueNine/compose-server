@@ -14,19 +14,19 @@ import java.math.BigDecimal
  */
 @Schema(title = "位置坐标")
 class WGS84() : Serializable {
-  constructor(x: BigDecimal?, y: BigDecimal?) : this() {
-    this.x = x
-    this.y = y
-  }
+    constructor(x: BigDecimal?, y: BigDecimal?) : this() {
+        this.x = x
+        this.y = y
+    }
 
-  @Nullable
-  var x: BigDecimal? = null
+    @Nullable
+    var x: BigDecimal? = null
 
-  @Nullable
-  var y: BigDecimal? = null
+    @Nullable
+    var y: BigDecimal? = null
 
-  companion object {
-    @Serial
-    private val serialVersionUID = 1L
-  }
+    companion object {
+        @Serial
+        private val serialVersionUID = 1L
+    }
 }

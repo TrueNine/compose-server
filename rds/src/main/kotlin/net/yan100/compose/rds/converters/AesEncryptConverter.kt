@@ -12,29 +12,29 @@ import org.springframework.stereotype.Component
 @Converter
 @Component
 class AesEncryptConverter : AttributeConverter<String, String> {
-  init {
-    log.debug("注册 aes 加密converter = {}", AesEncryptConverter::class.java)
-  }
+    init {
+        log.debug("注册 aes 加密converter = {}", AesEncryptConverter::class.java)
+    }
 
-  @Resource
-  private lateinit var keysRepo: IKeysRepo
+    @Resource
+    private lateinit var keysRepo: IKeysRepo
 
-  override fun convertToDatabaseColumn(attribute: String?): String? =
-    if (net.yan100.compose.core.lang.Str.hasText(attribute))
-      Encryptors.encryptByAesKey(
-        keysRepo.databaseEncryptAesSecret()!!,
-        attribute!!
-      ) else attribute
+    override fun convertToDatabaseColumn(attribute: String?): String? =
+        if (net.yan100.compose.core.lang.Str.hasText(attribute))
+            Encryptors.encryptByAesKey(
+                keysRepo.databaseEncryptAesSecret()!!,
+                attribute!!
+            ) else attribute
 
-  override fun convertToEntityAttribute(dbData: String?): String? =
-    if (net.yan100.compose.core.lang.Str.hasText(dbData))
-      Encryptors.decryptByAesKey(
-        keysRepo.databaseEncryptAesSecret()!!,
-        dbData!!
-      ) else dbData
+    override fun convertToEntityAttribute(dbData: String?): String? =
+        if (net.yan100.compose.core.lang.Str.hasText(dbData))
+            Encryptors.decryptByAesKey(
+                keysRepo.databaseEncryptAesSecret()!!,
+                dbData!!
+            ) else dbData
 
-  companion object {
-    @JvmStatic
-    private val log = slf4j(AesEncryptConverter::class)
-  }
+    companion object {
+        @JvmStatic
+        private val log = slf4j(AesEncryptConverter::class)
+    }
 }

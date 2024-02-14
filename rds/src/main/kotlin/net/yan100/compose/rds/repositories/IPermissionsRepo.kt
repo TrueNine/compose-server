@@ -7,16 +7,16 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IPermissionsRepo : IRepo<Permissions> {
-  fun findAllByName(name: String): List<Permissions>
+    fun findAllByName(name: String): List<Permissions>
 
-  @Query(
-    """
+    @Query(
+        """
     FROM Permissions p
     LEFT JOIN RolePermissions rp on p.id = rp.permissionsId
     LEFT JOIN RoleGroupRole rgr on rp.roleId = rgr.roleId
     LEFT JOIN UserRoleGroup urg on rgr.roleGroupId = urg.roleGroupId
     WHERE urg.userId = :userId
   """
-  )
-  fun findAllByUserId(userId: String): List<Permissions>
+    )
+    fun findAllByUserId(userId: String): List<Permissions>
 }

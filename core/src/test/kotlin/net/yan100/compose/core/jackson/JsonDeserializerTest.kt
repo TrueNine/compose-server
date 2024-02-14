@@ -15,16 +15,16 @@ import kotlin.test.assertEquals
 @SpringBootTest(classes = [CoreEntrance::class])
 class JsonDeserializerTest {
 
-  @Autowired
-  lateinit var mapper: ObjectMapper
+    @Autowired
+    lateinit var mapper: ObjectMapper
 
-  @Test
-  fun testLocalDatetime() {
-    val localDatetime = Date().toLocalDatetime()
-    val json = mapper.writeValueAsString(localDatetime)
-    println(json)
-    val local = mapper.readValue(json, LocalDateTime::class.java)
-    println(local.toDate().toLong())
-    assertEquals(local.toDate().toLong(), localDatetime.toDate().toLong())
-  }
+    @Test
+    fun testLocalDatetime() {
+        val localDatetime = Date().toLocalDatetime()
+        val json = mapper.writeValueAsString(localDatetime)
+        println(json)
+        val local = mapper.readValue(json, LocalDateTime::class.java)
+        println(local.toDate().toLong())
+        assertEquals(local.toDate().toLong(), localDatetime.toDate().toLong())
+    }
 }

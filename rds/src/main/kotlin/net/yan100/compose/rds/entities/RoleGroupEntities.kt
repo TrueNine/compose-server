@@ -12,26 +12,26 @@ import org.hibernate.annotations.*
 
 @MappedSuperclass
 abstract class SuperRoleGroup : IEntity() {
-  companion object {
-    const val TABLE_NAME = "role_group"
-    const val NAME = "name"
-    const val DOC = "doc"
-  }
+    companion object {
+        const val TABLE_NAME = "role_group"
+        const val NAME = "name"
+        const val DOC = "doc"
+    }
 
-  /**
-   * 名称
-   */
-  @Schema(title = "名称")
-  @Column(name = NAME)
-  lateinit var name: String
+    /**
+     * 名称
+     */
+    @Schema(title = "名称")
+    @Column(name = NAME)
+    lateinit var name: String
 
-  /**
-   * 描述
-   */
-  @Nullable
-  @Schema(title = "描述")
-  @Column(name = DOC)
-  var doc: String? = null
+    /**
+     * 描述
+     */
+    @Nullable
+    @Schema(title = "描述")
+    @Column(name = DOC)
+    var doc: String? = null
 }
 
 /**
@@ -53,32 +53,32 @@ class RoleGroup : SuperRoleGroup()
 @DynamicUpdate
 @Table(name = SuperRoleGroup.TABLE_NAME)
 class FullRoleGroup : SuperRoleGroup() {
-  /**
-   * 角色
-   */
-  @Schema(title = "角色", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @ManyToMany(fetch = FetchType.EAGER, targetEntity = FullRole::class)
-  @JoinTable(
-    name = RoleGroupRole.TABLE_NAME,
-    joinColumns = [JoinColumn(
-      table = RoleGroupRole.TABLE_NAME,
-      name = RoleGroupRole.ROLE_GROUP_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )],
-    inverseJoinColumns = [JoinColumn(
-      table = RoleGroupRole.TABLE_NAME,
-      name = RoleGroupRole.ROLE_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )],
-    foreignKey = Fk(ConstraintMode.NO_CONSTRAINT)
-  )
-  @Fetch(FetchMode.SUBSELECT)
-  @NotFound(action = NotFoundAction.IGNORE)
-  var roles: List<@JvmSuppressWildcards FullRole> = mutableListOf()
+    /**
+     * 角色
+     */
+    @Schema(title = "角色", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = FullRole::class)
+    @JoinTable(
+        name = RoleGroupRole.TABLE_NAME,
+        joinColumns = [JoinColumn(
+            table = RoleGroupRole.TABLE_NAME,
+            name = RoleGroupRole.ROLE_GROUP_ID,
+            referencedColumnName = ID,
+            foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+            insertable = false,
+            updatable = false
+        )],
+        inverseJoinColumns = [JoinColumn(
+            table = RoleGroupRole.TABLE_NAME,
+            name = RoleGroupRole.ROLE_ID,
+            referencedColumnName = ID,
+            foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+            insertable = false,
+            updatable = false
+        )],
+        foreignKey = Fk(ConstraintMode.NO_CONSTRAINT)
+    )
+    @Fetch(FetchMode.SUBSELECT)
+    @NotFound(action = NotFoundAction.IGNORE)
+    var roles: List<@JvmSuppressWildcards FullRole> = mutableListOf()
 }

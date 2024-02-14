@@ -3,5 +3,5 @@ package net.yan100.compose.rds.core.event
 import org.springframework.context.ApplicationEvent
 
 class TableRowDeleteSpringEvent(
-  model: Any
+    model: Any
 ) : ApplicationEvent(model)

@@ -29,60 +29,60 @@ import java.time.temporal.ChronoUnit
  * @see [org.springframework.web.service.annotation.HttpExchange]
  */
 inline fun <reified T : Any> jsonWebClientRegister(
-  objectMapper: ObjectMapper,
-  timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
-  builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>
+    objectMapper: ObjectMapper,
+    timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
+    builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>
 ): T {
-  val clientBuilder = WebClient.builder()
-  val factoryBuilder = HttpServiceProxyFactory.builder()
-  val jsonHandleMimeTypes = arrayOf(
-    MimeType.valueOf(MediaTypes.JSON.value),
-    MimeType.valueOf("application/*+json"),
-    MimeType.valueOf("application/x-ndjson"),
-    MimeType.valueOf(MediaTypes.TEXT.value),
-  )
-  clientBuilder.codecs {
-    it.defaultCodecs().enableLoggingRequestDetails(true)
-
-    it.writers.addFirst(EncoderHttpMessageWriter(AnyTypingEncoder()))
-
-    it.defaultCodecs().jackson2JsonDecoder(
-      Jackson2JsonDecoder(
-        objectMapper,
-        *jsonHandleMimeTypes
-      )
+    val clientBuilder = WebClient.builder()
+    val factoryBuilder = HttpServiceProxyFactory.builder()
+    val jsonHandleMimeTypes = arrayOf(
+        MimeType.valueOf(MediaTypes.JSON.value),
+        MimeType.valueOf("application/*+json"),
+        MimeType.valueOf("application/x-ndjson"),
+        MimeType.valueOf(MediaTypes.TEXT.value),
     )
-    it.defaultCodecs().jackson2JsonEncoder(
-      Jackson2JsonEncoder(
-        objectMapper,
-        *jsonHandleMimeTypes
-      )
-    )
-  }
+    clientBuilder.codecs {
+        it.defaultCodecs().enableLoggingRequestDetails(true)
 
-  clientBuilder.defaultHeader(Headers.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
+        it.writers.addFirst(EncoderHttpMessageWriter(AnyTypingEncoder()))
 
-  val cf = builder(clientBuilder, factoryBuilder)
-  val client = cf.first.build()
-  return cf.second
-    .customArgumentResolver(ArgsResolver())
+        it.defaultCodecs().jackson2JsonDecoder(
+            Jackson2JsonDecoder(
+                objectMapper,
+                *jsonHandleMimeTypes
+            )
+        )
+        it.defaultCodecs().jackson2JsonEncoder(
+            Jackson2JsonEncoder(
+                objectMapper,
+                *jsonHandleMimeTypes
+            )
+        )
+    }
 
-    .exchangeAdapter(WebClientAdapter.create(client).apply { blockTimeout = timeout })
-    .build()
-    .createClient(T::class.java)
+    clientBuilder.defaultHeader(Headers.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
+
+    val cf = builder(clientBuilder, factoryBuilder)
+    val client = cf.first.build()
+    return cf.second
+        .customArgumentResolver(ArgsResolver())
+
+        .exchangeAdapter(WebClientAdapter.create(client).apply { blockTimeout = timeout })
+        .build()
+        .createClient(T::class.java)
 }
 
 class ArgsResolver : HttpServiceArgumentResolver {
 
-  override fun resolve(argument: Any?, parameter: MethodParameter, requestValues: HttpRequestValues.Builder): Boolean {
-    if (argument != null && argument is AnyTyping) {
-      val name = parameter.getParameterAnnotation(RequestParam::class.java)?.name ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value
-      ?: parameter.parameterName ?: throw IllegalArgumentException("参数解析异常")
-      requestValues.addRequestParameter(
-        name, argument.value.toString()
-      )
-      return true
+    override fun resolve(argument: Any?, parameter: MethodParameter, requestValues: HttpRequestValues.Builder): Boolean {
+        if (argument != null && argument is AnyTyping) {
+            val name = parameter.getParameterAnnotation(RequestParam::class.java)?.name ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value
+            ?: parameter.parameterName ?: throw IllegalArgumentException("参数解析异常")
+            requestValues.addRequestParameter(
+                name, argument.value.toString()
+            )
+            return true
+        }
+        return false
     }
-    return false
-  }
 }

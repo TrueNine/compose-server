@@ -15,51 +15,51 @@ import org.hibernate.annotations.DynamicUpdate
 
 @MappedSuperclass
 abstract class SuperBankCard : TreeEntity() {
-  companion object {
-    const val TABLE_NAME = "bank_card"
+    companion object {
+        const val TABLE_NAME = "bank_card"
 
-    const val USER_INFO_ID = "user_info_id"
-    const val RESERVE_PHONE = "reserve_phone"
-    const val USER_ID = "user_id"
-    const val CODE = "code"
-    const val COUNTRY = "country"
-    const val BANK_GROUP = "bank_group"
-    const val BANK_TYPE = "bank_type"
-    const val ISSUE_ADDRESS_DETAILS = "issue_address_details"
-  }
+        const val USER_INFO_ID = "user_info_id"
+        const val RESERVE_PHONE = "reserve_phone"
+        const val USER_ID = "user_id"
+        const val CODE = "code"
+        const val COUNTRY = "country"
+        const val BANK_GROUP = "bank_group"
+        const val BANK_TYPE = "bank_type"
+        const val ISSUE_ADDRESS_DETAILS = "issue_address_details"
+    }
 
-  @Schema(title = "银行预留手机号")
-  @Col(name = RESERVE_PHONE)
-  var reservePhone: string? = null
+    @Schema(title = "银行预留手机号")
+    @Col(name = RESERVE_PHONE)
+    var reservePhone: string? = null
 
-  @Schema(title = "用户信息id")
-  @Col(name = USER_INFO_ID)
-  var userInfoId: RefId? = null
+    @Schema(title = "用户信息id")
+    @Col(name = USER_INFO_ID)
+    var userInfoId: RefId? = null
 
-  @Schema(title = "开户行")
-  @Col(name = ISSUE_ADDRESS_DETAILS)
-  var issueAddressDetails: String? = null
-
-
-  @Schema(title = "银行类型", example = "中国银行、建设银行")
-  @Column(name = BANK_TYPE)
-  var bankType: String? = null
-
-  @Schema(title = "银行组织", example = "银联")
-  @Column(name = BANK_GROUP)
-  var bankGroup: Int? = null
-
-  @Schema(title = "所属国家")
-  @Column(name = COUNTRY)
-  var country: Int? = null
+    @Schema(title = "开户行")
+    @Col(name = ISSUE_ADDRESS_DETAILS)
+    var issueAddressDetails: String? = null
 
 
-  @Schema(title = "银行卡号")
-  @Column(name = CODE)
-  lateinit var code: SerialCode
+    @Schema(title = "银行类型", example = "中国银行、建设银行")
+    @Column(name = BANK_TYPE)
+    var bankType: String? = null
 
-  @Column(name = USER_ID)
-  var userId: RefId? = null
+    @Schema(title = "银行组织", example = "银联")
+    @Column(name = BANK_GROUP)
+    var bankGroup: Int? = null
+
+    @Schema(title = "所属国家")
+    @Column(name = COUNTRY)
+    var country: Int? = null
+
+
+    @Schema(title = "银行卡号")
+    @Column(name = CODE)
+    lateinit var code: SerialCode
+
+    @Column(name = USER_ID)
+    var userId: RefId? = null
 }
 
 @Entity

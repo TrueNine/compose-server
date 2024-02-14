@@ -11,15 +11,15 @@ import org.springframework.test.annotation.Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class IUsrRepoTest {
 
-  @Autowired
-  private lateinit var repo: IUsrRepo
+    @Autowired
+    private lateinit var repo: IUsrRepo
 
-  private val log = slf4j(this::class)
+    private val log = slf4j(this::class)
 
-  @Test
-  @Rollback
-  fun testFindAll() {
-    val users = repo.findAll()
-    log.info("users = {}", users)
-  }
+    @Test
+    @Rollback
+    fun testFindAll() {
+        val users = repo.findAll()
+        log.info("users = {}", users)
+    }
 }

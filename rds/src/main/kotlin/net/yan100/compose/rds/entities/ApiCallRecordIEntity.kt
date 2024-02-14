@@ -22,69 +22,69 @@ import org.hibernate.annotations.NotFoundAction
 @Schema(title = "API请求记录")
 @Table(name = ApiCallRecordIEntity.TABLE_NAME)
 class ApiCallRecordIEntity : IEntity() {
-  companion object {
-    const val TABLE_NAME = "api_call_record"
+    companion object {
+        const val TABLE_NAME = "api_call_record"
 
-    const val API_ID = "api_id"
-    const val DEVICE_CODE = "device_code"
-    const val REQ_IP = "req_ip"
-    const val RESP_CODE = "resp_code"
-    const val RESP_RESULT_ENC = "resp_result_enc"
-    const val LOGIN_IP = "login_ip"
-  }
+        const val API_ID = "api_id"
+        const val DEVICE_CODE = "device_code"
+        const val REQ_IP = "req_ip"
+        const val RESP_CODE = "resp_code"
+        const val RESP_RESULT_ENC = "resp_result_enc"
+        const val LOGIN_IP = "login_ip"
+    }
 
-  /**
-   * 从属 API
-   */
-  @Schema(title = "API", requiredMode = RequiredMode.NOT_REQUIRED)
-  @ManyToOne
-  @JoinColumn(
-    name = API_ID, referencedColumnName = ID, foreignKey = ForeignKey(
-      ConstraintMode.NO_CONSTRAINT
+    /**
+     * 从属 API
+     */
+    @Schema(title = "API", requiredMode = RequiredMode.NOT_REQUIRED)
+    @ManyToOne
+    @JoinColumn(
+        name = API_ID, referencedColumnName = ID, foreignKey = ForeignKey(
+            ConstraintMode.NO_CONSTRAINT
+        )
     )
-  )
-  @NotFound(action = NotFoundAction.IGNORE)
-  var api: Api? = null
+    @NotFound(action = NotFoundAction.IGNORE)
+    var api: Api? = null
 
-  /**
-   * 设备 id, 浏览器为 agent
-   */
-  @Nullable
-  @Schema(title = "设备 id, 浏览器为 agent")
-  @Column(name = DEVICE_CODE)
-  var deviceCode: String? = null
+    /**
+     * 设备 id, 浏览器为 agent
+     */
+    @Nullable
+    @Schema(title = "设备 id, 浏览器为 agent")
+    @Column(name = DEVICE_CODE)
+    var deviceCode: String? = null
 
-  /**
-   * 请求 ip
-   */
-  @Nullable
-  @Schema(title = "请求 ip")
-  @Column(name = REQ_IP)
-  var reqIp: String? = null
+    /**
+     * 请求 ip
+     */
+    @Nullable
+    @Schema(title = "请求 ip")
+    @Column(name = REQ_IP)
+    var reqIp: String? = null
 
-  /**
-   * 登录 ip
-   */
-  @Nullable
-  @Schema(title = "登录 ip")
-  @Column(name = LOGIN_IP)
-  var loginIp: String? = null
+    /**
+     * 登录 ip
+     */
+    @Nullable
+    @Schema(title = "登录 ip")
+    @Column(name = LOGIN_IP)
+    var loginIp: String? = null
 
-  /**
-   * 响应码
-   */
-  @Nullable
-  @Schema(title = "响应码")
-  @Column(name = RESP_CODE)
-  var respCode: Int? = null
+    /**
+     * 响应码
+     */
+    @Nullable
+    @Schema(title = "响应码")
+    @Column(name = RESP_CODE)
+    var respCode: Int? = null
 
-  /**
-   * 请求结果
-   */
-  @Nullable
-  @Schema(title = "请求结果")
-  @Column(name = RESP_RESULT_ENC)
-  var respResultEnc: String? = null
+    /**
+     * 请求结果
+     */
+    @Nullable
+    @Schema(title = "请求结果")
+    @Column(name = RESP_RESULT_ENC)
+    var respResultEnc: String? = null
 
 
 }

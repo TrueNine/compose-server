@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service
 
 @Service
 class PermissionsServiceImpl(
-  repo: IPermissionsRepo
+    repo: IPermissionsRepo
 ) : IPermissionsService, CrudService<Permissions>(repo)

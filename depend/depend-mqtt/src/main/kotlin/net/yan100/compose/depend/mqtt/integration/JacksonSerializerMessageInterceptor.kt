@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class JacksonSerializerMessageInterceptor(
-  private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper
 ) : ChannelInterceptor {
-  override fun preSend(message: Message<*>, channel: MessageChannel): Message<*>? {
-    val m = if (message.payload is String || message.payload is ByteArray) message
-    else GenericMessage(objectMapper.writeValueAsString(message.payload), message.headers)
-    return super.preSend(m, channel)
-  }
+    override fun preSend(message: Message<*>, channel: MessageChannel): Message<*>? {
+        val m = if (message.payload is String || message.payload is ByteArray) message
+        else GenericMessage(objectMapper.writeValueAsString(message.payload), message.headers)
+        return super.preSend(m, channel)
+    }
 }

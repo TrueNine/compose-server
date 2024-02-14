@@ -14,23 +14,23 @@ import org.springframework.context.annotation.DependsOn
 @EnableConfigurationProperties(SnowflakeProperties::class)
 class IdGeneratorAutoConfiguration {
 
-  @Bean(SNOWFLAKE_BEAN_NAME)
-  fun snowflake(p: SnowflakeProperties): Snowflake {
-    return SynchronizedSimpleSnowflake(
-      p.workId,
-      p.dataCenterId,
-      p.sequence,
-      p.startTimeStamp
-    )
-  }
+    @Bean(SNOWFLAKE_BEAN_NAME)
+    fun snowflake(p: SnowflakeProperties): Snowflake {
+        return SynchronizedSimpleSnowflake(
+            p.workId,
+            p.dataCenterId,
+            p.sequence,
+            p.startTimeStamp
+        )
+    }
 
-  @Bean
-  @DependsOn(SNOWFLAKE_BEAN_NAME)
-  fun bizCode(snowflake: Snowflake): BizCodeGenerator {
-    return SynchronizedSimpleBizCodeGenerator(snowflake)
-  }
+    @Bean
+    @DependsOn(SNOWFLAKE_BEAN_NAME)
+    fun bizCode(snowflake: Snowflake): BizCodeGenerator {
+        return SynchronizedSimpleBizCodeGenerator(snowflake)
+    }
 
-  companion object {
-    const val SNOWFLAKE_BEAN_NAME = "snowflake_id_Generate"
-  }
+    companion object {
+        const val SNOWFLAKE_BEAN_NAME = "snowflake_id_Generate"
+    }
 }

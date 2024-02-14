@@ -16,26 +16,26 @@ import org.springframework.stereotype.Component
 @Converter(autoApply = true)
 class WGS84Converter : AttributeConverter<WGS84, String> {
 
-  init {
-    log.debug("注册 地理位置模型converter = {}", this)
-  }
-
-  companion object {
-    @JvmStatic
-    private val log = slf4j(WGS84Converter::class)
-  }
-
-  override fun convertToDatabaseColumn(attribute: WGS84?): String? =
-    attribute?.run {
-      "P(${attribute.x},${attribute.y})"
+    init {
+        log.debug("注册 地理位置模型converter = {}", this)
     }
 
-  override fun convertToEntityAttribute(dbData: String?): WGS84? {
-    log.trace("地址 = {} 类型 = {}", dbData, dbData?.javaClass)
-    return dbData?.let { exp ->
-      val group = exp.replace(Regex("""(?i)P\(|\)"""), "").split(",")
-        .map { it.trim().toBigDecimalOrNull() }
-      WGS84(group[0], group[1])
+    companion object {
+        @JvmStatic
+        private val log = slf4j(WGS84Converter::class)
     }
-  }
+
+    override fun convertToDatabaseColumn(attribute: WGS84?): String? =
+        attribute?.run {
+            "P(${attribute.x},${attribute.y})"
+        }
+
+    override fun convertToEntityAttribute(dbData: String?): WGS84? {
+        log.trace("地址 = {} 类型 = {}", dbData, dbData?.javaClass)
+        return dbData?.let { exp ->
+            val group = exp.replace(Regex("""(?i)P\(|\)"""), "").split(",")
+                .map { it.trim().toBigDecimalOrNull() }
+            WGS84(group[0], group[1])
+        }
+    }
 }

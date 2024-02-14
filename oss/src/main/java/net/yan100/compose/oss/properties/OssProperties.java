@@ -13,51 +13,51 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 @ConfigurationProperties(prefix = "compose.oss")
 public class OssProperties {
-  private Type type = Type.FILE;
+    private Type type = Type.FILE;
 
-  /**
-   * ## 对外暴露的访问路径
-   */
-  private String exposeBaseUrl = "http://localhost:9999/not_set_oss_expose_base_url";
+    /**
+     * ## 对外暴露的访问路径
+     */
+    private String exposeBaseUrl = "http://localhost:9999/not_set_oss_expose_base_url";
 
-  /**
-   * ## minio相关配置
-   */
-  @NestedConfigurationProperty
-  private MinioProperties minio;
+    /**
+     * ## minio相关配置
+     */
+    @NestedConfigurationProperty
+    private MinioProperties minio;
 
-  /**
-   * ## 阿里云相关配置
-   */
-  @NestedConfigurationProperty
-  private AliCloudOssProperties aliyun;
+    /**
+     * ## 阿里云相关配置
+     */
+    @NestedConfigurationProperty
+    private AliCloudOssProperties aliyun;
 
-  /**
-   * ## 类型
-   *
-   * @author TrueNine
-   * @since 2022-10-28
-   */
-  public enum Type {
     /**
-     * 内置文件系统
+     * ## 类型
+     *
+     * @author TrueNine
+     * @since 2022-10-28
      */
-    FILE,
-    /**
-     * mysql 数据库
-     */
-    MYSQL_DB,
-    /**
-     * minio
-     */
-    MINIO,
-    /**
-     * 阿里云
-     */
-    ALI_CLOUD_OSS,
-    /**
-     * 华为云
-     */
-    HUAWEI_CLOUD
-  }
+    public enum Type {
+        /**
+         * 内置文件系统
+         */
+        FILE,
+        /**
+         * mysql 数据库
+         */
+        MYSQL_DB,
+        /**
+         * minio
+         */
+        MINIO,
+        /**
+         * 阿里云
+         */
+        ALI_CLOUD_OSS,
+        /**
+         * 华为云
+         */
+        HUAWEI_CLOUD
+    }
 }

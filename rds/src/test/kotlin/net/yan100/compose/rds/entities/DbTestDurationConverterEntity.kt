@@ -9,7 +9,7 @@ import java.time.Duration
 @Entity
 @Table(name = "db_test_duration_converter")
 data class DbTestDurationConverterEntity(
-  var durations: Duration?
+    var durations: Duration?
 ) : IEntity() {
-  constructor() : this(null)
+    constructor() : this(null)
 }

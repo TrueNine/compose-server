@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class DataExtractEntrance
 
 fun main(args: Array<String>) {
-  runApplication<DataExtractEntrance>(*args)
+    runApplication<DataExtractEntrance>(*args)
 }

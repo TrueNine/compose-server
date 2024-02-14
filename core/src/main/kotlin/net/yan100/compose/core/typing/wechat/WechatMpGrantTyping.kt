@@ -9,17 +9,17 @@ import net.yan100.compose.core.lang.StringTyping
  * @since 2023-05-31
  */
 enum class WechatMpGrantTyping(
-  private val typingCode: String
+    private val typingCode: String
 ) : StringTyping {
-  CLIENT_CREDENTIAL("client_credential"),
-  AUTH_CODE("authorization_code");
+    CLIENT_CREDENTIAL("client_credential"),
+    AUTH_CODE("authorization_code");
 
-  @JsonValue
-  override val value: String = typingCode
+    @JsonValue
+    override val value: String = typingCode
 
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: String?) = entries.find { it.typingCode == v }
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: String?) = entries.find { it.typingCode == v }
+    }
 }

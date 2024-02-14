@@ -8,11 +8,11 @@ import org.springframework.context.ApplicationContext
 
 @SpringBootTest(classes = [SecurityEntrance::class])
 class BootLaunchTest {
-  @Autowired
-  lateinit var ctx: ApplicationContext
+    @Autowired
+    lateinit var ctx: ApplicationContext
 
-  @Test
-  fun `test launch`() {
-    println(ctx)
-  }
+    @Test
+    fun `test launch`() {
+        println(ctx)
+    }
 }

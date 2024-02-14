@@ -17,16 +17,16 @@ import org.springframework.data.repository.query.FluentQuery
  */
 @NoRepositoryBean
 interface IAnyRepo<T : AnyEntity> :
-  JpaRepository<T, Id>,
-  CrudRepository<T, Id>,
-  QuerydslPredicateExecutor<T>,
-  JpaSpecificationExecutor<T>
+    JpaRepository<T, Id>,
+    CrudRepository<T, Id>,
+    QuerydslPredicateExecutor<T>,
+    JpaSpecificationExecutor<T>
 
 fun <E : IEntity, R> IAnyRepo<E>.findByQueryDsl(
-  predicate: com.querydsl.core.types.Predicate,
-  optFn: (q: FluentQuery.FetchableFluentQuery<E>) -> R
+    predicate: com.querydsl.core.types.Predicate,
+    optFn: (q: FluentQuery.FetchableFluentQuery<E>) -> R
 ): R {
-  return findBy(predicate) { it: FluentQuery.FetchableFluentQuery<E> ->
-    optFn(it)
-  }
+    return findBy(predicate) { it: FluentQuery.FetchableFluentQuery<E> ->
+        optFn(it)
+    }
 }

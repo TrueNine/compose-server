@@ -7,7 +7,7 @@ package net.yan100.compose.core.lang;
  * @since 2023-04-11
  */
 public interface EmptyDefault {
-  static boolean isEmptyDefault(Object anyObject) {
-    return anyObject instanceof EmptyDefault;
-  }
+    static boolean isEmptyDefault(Object anyObject) {
+        return anyObject instanceof EmptyDefault;
+    }
 }

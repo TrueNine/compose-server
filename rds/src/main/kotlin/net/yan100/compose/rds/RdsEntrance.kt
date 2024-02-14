@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Import
 class RdsEntrance
 
 fun main(args: Array<String>) {
-  SpringApplication.run(RdsEntrance::class.java, *args)
+    SpringApplication.run(RdsEntrance::class.java, *args)
 }

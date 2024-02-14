@@ -1,13 +1,13 @@
 create table if not exists usr
 (
-  create_user_id  bigint        default null, -- 创建此账号的 user id
-  account         varchar(255)  default null,
-  nick_name       varchar(2047) default null,
-  doc             text          default null,
-  pwd_enc         varchar(2047) default null,
-  ban_time        timestamp     default null,
-  last_login_time timestamp     default now(),
-  unique (account)
+    create_user_id  bigint        default null, -- 创建此账号的 user id
+    account         varchar(255)  default null,
+    nick_name       varchar(2047) default null,
+    doc             text          default null,
+    pwd_enc         varchar(2047) default null,
+    ban_time        timestamp     default null,
+    last_login_time timestamp     default now(),
+    unique (account)
 );
 comment on table usr is '用户';
 select add_base_struct('usr');
@@ -17,7 +17,7 @@ insert into usr (id, create_user_id, account, nick_name, pwd_enc, last_login_tim
 select *
 from (values (0, 0, 'root', 'ROOT', '$2a$14$4.QaPjTjIPILS5EnK3q3yu/OoKiuVykyLiDOIVIFy0ypbs9CL7wNi', now(), '超级管理员账号'),
              (1, 0, 'usr', 'USR', '$2a$14$Rfvt1A9RVEgp47pTTiT1KeKSJt14CtSJsv2iSggLTQJcgUHA5o0sa', now(), '普通用户账号'))
-       as tmp (id, create_user_id, account, nick_name, pwd_enc, last_login_time, doc)
+         as tmp (id, create_user_id, account, nick_name, pwd_enc, last_login_time, doc)
 where not exists(select 1
                  from usr u
                  where u.account = tmp.account
@@ -25,26 +25,26 @@ where not exists(select 1
 
 create table if not exists user_info
 (
-  user_id            bigint        default null,
-  create_user_id     bigint        default null,
-  pri                boolean       default true, -- 首选用户信息
-  avatar_img_id      bigint        default null,
-  first_name         varchar(4095) default null,
-  last_name          varchar(4095) default null,
-  email              varchar(255)  default null,
-  birthday           timestamp     default null,
-  address_details_id bigint        default null,
-  phone              varchar(255)  default null,
-  spare_phone        varchar(255)  default null,
-  id_card            varchar(255)  default null,
-  gender             int           default null,
-  wechat_openid      varchar(255)  default null,
-  wechat_account     varchar(255)  default null,
-  wechat_authid      varchar(255)  default null,
-  qq_openid          varchar(255)  default null,
-  qq_account         varchar(255)  default null,
-  address_code       varchar(127)  default null,
-  address_id         bigint        default null
+    user_id            bigint        default null,
+    create_user_id     bigint        default null,
+    pri                boolean       default true, -- 首选用户信息
+    avatar_img_id      bigint        default null,
+    first_name         varchar(4095) default null,
+    last_name          varchar(4095) default null,
+    email              varchar(255)  default null,
+    birthday           timestamp     default null,
+    address_details_id bigint        default null,
+    phone              varchar(255)  default null,
+    spare_phone        varchar(255)  default null,
+    id_card            varchar(255)  default null,
+    gender             int           default null,
+    wechat_openid      varchar(255)  default null,
+    wechat_account     varchar(255)  default null,
+    wechat_authid      varchar(255)  default null,
+    qq_openid          varchar(255)  default null,
+    qq_account         varchar(255)  default null,
+    address_code       varchar(127)  default null,
+    address_id         bigint        default null
 );
 comment on table user_info is '用户信息';
 select add_base_struct('user_info');
@@ -63,7 +63,7 @@ insert into user_info(id, user_id, pri, first_name, last_name, email, birthday, 
 select *
 from (values (0, 0, true, 'R', 'OOT', 'g@g.com', to_timestamp('1997-11-04', 'YYYY-MM-DD'), '13711111111', 1),
              (1, 1, true, 'U', 'SR', 'g@g.com', to_timestamp('1997-11-04', 'YYYY-MM-DD'), '13722222222', 1))
-       as tmp(id, user_id, pri, first_name, last_name, email, birthday, phone, gender)
+         as tmp(id, user_id, pri, first_name, last_name, email, birthday, phone, gender)
 where not exists(select 1
                  from user_info i
                  where i.user_id = tmp.user_id
@@ -72,8 +72,8 @@ where not exists(select 1
 
 create table if not exists role
 (
-  name varchar(255) not null,
-  doc  text
+    name varchar(255) not null,
+    doc  text
 );
 comment on table role is '角色';
 select add_base_struct('role');
@@ -90,8 +90,8 @@ where not exists(select 1
 
 create table if not exists permissions
 (
-  name varchar(255) not null,
-  doc  text
+    name varchar(255) not null,
+    doc  text
 );
 comment on table permissions is '权限';
 select add_base_struct('permissions');
@@ -107,8 +107,8 @@ where not exists(select 1
 
 create table if not exists role_group
 (
-  name varchar(255) not null,
-  doc  text
+    name varchar(255) not null,
+    doc  text
 );
 comment on table role_group is '角色组';
 select add_base_struct('role_group');
@@ -125,8 +125,8 @@ where not exists(select 1
 
 create table if not exists role_permissions
 (
-  role_id        bigint not null,
-  permissions_id bigint not null
+    role_id        bigint not null,
+    permissions_id bigint not null
 );
 comment on table role_permissions is '角色  权限';
 select add_base_struct('role_permissions');
@@ -148,8 +148,8 @@ where not exists(select 1
 
 create table if not exists role_group_role
 (
-  role_group_id bigint not null,
-  role_id       bigint not null
+    role_group_id bigint not null,
+    role_id       bigint not null
 );
 comment on table role_group_role is '角色组  角色';
 select add_base_struct('role_group_role');
@@ -172,8 +172,8 @@ where not exists(select 1
 
 create table if not exists user_role_group
 (
-  user_id       bigint not null,
-  role_group_id bigint not null
+    user_id       bigint not null,
+    role_group_id bigint not null
 );
 comment on table user_role_group is '用户  角色组';
 select add_base_struct('user_role_group');
@@ -192,8 +192,8 @@ where not exists(select 1
 
 create table if not exists dept
 (
-  name varchar(255) not null,
-  doc  text         null
+    name varchar(255) not null,
+    doc  text         null
 );
 comment on table dept is '部门';
 select add_base_struct('dept');
@@ -201,8 +201,8 @@ select add_base_struct('dept');
 
 create table if not exists user_dept
 (
-  user_id bigint not null,
-  dept_id bigint not null
+    user_id bigint not null,
+    dept_id bigint not null
 );
 comment on table user_dept is '用户  部门';
 select add_base_struct('user_dept');

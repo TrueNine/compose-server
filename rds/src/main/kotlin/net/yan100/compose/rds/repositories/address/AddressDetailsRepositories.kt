@@ -17,38 +17,38 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface IAddressDetailsRepo :
-  IRepo<AddressDetails> {
-  /**
-   * ## 根据用户ID查询用户地址详情
-   */
-  fun findAllByUserId(userId: String, page: Pageable): Page<AddressDetails>
+    IRepo<AddressDetails> {
+    /**
+     * ## 根据用户ID查询用户地址详情
+     */
+    fun findAllByUserId(userId: String, page: Pageable): Page<AddressDetails>
 
-  /**
-   * ## 根据用户ID查询用户地址详情
-   */
-  @Query(
-    """
+    /**
+     * ## 根据用户ID查询用户地址详情
+     */
+    @Query(
+        """
     FROM NonDesensitizedAddressDetails n
     WHERE n.userId = :userId
   """
-  )
-  fun findNonDesensitizedAllByUserId(userId: String, page: Pageable): Page<NonDesensitizedAddressDetails>
+    )
+    fun findNonDesensitizedAllByUserId(userId: String, page: Pageable): Page<NonDesensitizedAddressDetails>
 
-  /**
-   * ## 根据电话查询地址
-   */
-  fun findAllByPhone(phone: String, page: Pageable): Page<AddressDetails>
+    /**
+     * ## 根据电话查询地址
+     */
+    fun findAllByPhone(phone: String, page: Pageable): Page<AddressDetails>
 
-  /**
-   * ## 根据电话查询非脱敏地址
-   */
-  @Query(
-    """
+    /**
+     * ## 根据电话查询非脱敏地址
+     */
+    @Query(
+        """
     FROM NonDesensitizedAddressDetails n
     WHERE n.phone = :phone
   """
-  )
-  fun findNonDesensitizedAllByPhone(phone: String, page: Pageable): Page<NonDesensitizedAddressDetails>
+    )
+    fun findNonDesensitizedAllByPhone(phone: String, page: Pageable): Page<NonDesensitizedAddressDetails>
 }
 
 /**
@@ -56,13 +56,13 @@ interface IAddressDetailsRepo :
  */
 @Repository
 interface FullAddressDetailsRepo : IRepo<FullAddressDetails> {
-  /**
-   * ## 根据用户ID查询用户地址详情
-   */
-  fun findAllByUserId(userId: String, page: Pageable): Page<FullAddressDetails>
+    /**
+     * ## 根据用户ID查询用户地址详情
+     */
+    fun findAllByUserId(userId: String, page: Pageable): Page<FullAddressDetails>
 
-  /**
-   * ## 根据电话查询地址
-   */
-  fun findAllByPhone(phone: String, page: Pageable): Page<FullAddressDetails>
+    /**
+     * ## 根据电话查询地址
+     */
+    fun findAllByPhone(phone: String, page: Pageable): Page<FullAddressDetails>
 }

@@ -9,28 +9,28 @@ import kotlin.test.assertEquals
 
 @SpringBootTest
 class ByteArrayDeserializerTest {
-  @Autowired
-  lateinit var mapper: ObjectMapper
+    @Autowired
+    lateinit var mapper: ObjectMapper
 
 
-  class S {
-    var a: String? = null
-    var b: ByteArray? = null
-  }
-
-  @Test
-  fun `test serialize byte array`() {
-    val ab = S().apply {
-      a = "a"
-      b = byteArrayOf(1, 0, 1, 0, 1, 0)
+    class S {
+        var a: String? = null
+        var b: ByteArray? = null
     }
 
-    val json = mapper.writeValueAsString(ab)
-    val ba = mapper.readValue(json, S::class.java)
-    println(ba)
-    println(json)
-    assertEquals("{\"a\":\"a\",\"b\":[1,0,1,0,1,0]}", json)
-    assertEquals(ba.a, ab.a)
-    assertContentEquals(ba.b, ab.b)
-  }
+    @Test
+    fun `test serialize byte array`() {
+        val ab = S().apply {
+            a = "a"
+            b = byteArrayOf(1, 0, 1, 0, 1, 0)
+        }
+
+        val json = mapper.writeValueAsString(ab)
+        val ba = mapper.readValue(json, S::class.java)
+        println(ba)
+        println(json)
+        assertEquals("{\"a\":\"a\",\"b\":[1,0,1,0,1,0]}", json)
+        assertEquals(ba.a, ab.a)
+        assertContentEquals(ba.b, ab.b)
+    }
 }

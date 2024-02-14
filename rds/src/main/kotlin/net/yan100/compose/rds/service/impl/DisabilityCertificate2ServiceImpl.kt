@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service
 
 @Service
 class DisabilityCertificate2ServiceImpl(
-  val repo: IDisCert2Repo
+    val repo: IDisCert2Repo
 ) : CrudService<DisCert2>(repo)

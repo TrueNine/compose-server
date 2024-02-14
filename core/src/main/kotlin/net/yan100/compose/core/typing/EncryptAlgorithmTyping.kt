@@ -11,42 +11,42 @@ import net.yan100.compose.core.lang.StringTyping
  * @since 2022-10-28
  */
 enum class EncryptAlgorithmTyping(private val alg: String) : StringTyping {
-  /**
-   * ecc
-   */
-  ECC("EC"),
+    /**
+     * ecc
+     */
+    ECC("EC"),
 
-  /**
-   * ecc padding
-   */
-  ECC_PADDING("SHA256withECDSA"),
+    /**
+     * ecc padding
+     */
+    ECC_PADDING("SHA256withECDSA"),
 
-  /**
-   * rsa
-   */
-  RSA("RSA"),
+    /**
+     * rsa
+     */
+    RSA("RSA"),
 
-  /**
-   * SHA256withRSA
-   */
-  SHA256_WITH_RSA("SHA256withRSA"),
+    /**
+     * SHA256withRSA
+     */
+    SHA256_WITH_RSA("SHA256withRSA"),
 
-  /**
-   * rsa padding
-   */
-  RSA_PADDING("RSA/ECB/PKCS1Padding"),
+    /**
+     * rsa padding
+     */
+    RSA_PADDING("RSA/ECB/PKCS1Padding"),
 
-  /**
-   * aes
-   */
-  AES("AES");
+    /**
+     * aes
+     */
+    AES("AES");
 
-  @JsonValue
-  override val value: String = this.alg
+    @JsonValue
+    override val value: String = this.alg
 
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: String?) = entries.find { it.alg == v }
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: String?) = entries.find { it.alg == v }
+    }
 }

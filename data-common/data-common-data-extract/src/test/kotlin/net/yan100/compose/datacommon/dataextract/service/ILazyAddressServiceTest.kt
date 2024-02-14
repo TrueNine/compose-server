@@ -10,28 +10,28 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(classes = [DataExtractEntrance::class])
 class ILazyAddressServiceTest {
-  @Autowired
-  lateinit var lazys: ILazyAddressService
+    @Autowired
+    lateinit var lazys: ILazyAddressService
 
-  @Test
-  fun `test find children`() {
-    val a = lazys.findAllChildrenByCode("4331")
-    assertFalse(a.isEmpty())
-    assertFailsWith<IllegalArgumentException> { lazys.findAllChildrenByCode("4") }
+    @Test
+    fun `test find children`() {
+        val a = lazys.findAllChildrenByCode("4331")
+        assertFalse(a.isEmpty())
+        assertFailsWith<IllegalArgumentException> { lazys.findAllChildrenByCode("4") }
 
-    assertFailsWith<IllegalArgumentException> { lazys.findAllChildrenByCode("433") }
-    val b = lazys.findAllChildrenByCode("")
-    println(b)
-  }
-
-  @Test
-  fun `test lookupAllChildrenByCode`() {
-    val a = lazys.lookupAllChildrenByCode("433127103", firstFind = { null }, deepCondition = { false }) { it.result }
-    assertTrue(a.isNotEmpty())
-    val b = lazys.lookupAllChildrenByCode("433127103221", firstFind = { null }, deepCondition = { false })
-    {
-      it.result
+        assertFailsWith<IllegalArgumentException> { lazys.findAllChildrenByCode("433") }
+        val b = lazys.findAllChildrenByCode("")
+        println(b)
     }
-    assertFalse(b.isNotEmpty())
-  }
+
+    @Test
+    fun `test lookupAllChildrenByCode`() {
+        val a = lazys.lookupAllChildrenByCode("433127103", firstFind = { null }, deepCondition = { false }) { it.result }
+        assertTrue(a.isNotEmpty())
+        val b = lazys.lookupAllChildrenByCode("433127103221", firstFind = { null }, deepCondition = { false })
+        {
+            it.result
+        }
+        assertFalse(b.isNotEmpty())
+    }
 }

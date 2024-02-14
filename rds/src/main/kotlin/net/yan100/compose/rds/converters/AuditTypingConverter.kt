@@ -11,6 +11,6 @@ import org.springframework.stereotype.Component
 @Component
 @Converter
 class AuditTypingConverter : AttributeConverter<AuditTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: AuditTyping?): Int? = attribute?.v
-  override fun convertToEntityAttribute(dbData: Int?): AuditTyping? = AuditTyping.findVal(dbData)
+    override fun convertToDatabaseColumn(attribute: AuditTyping?): Int? = attribute?.v
+    override fun convertToEntityAttribute(dbData: Int?): AuditTyping? = AuditTyping.findVal(dbData)
 }

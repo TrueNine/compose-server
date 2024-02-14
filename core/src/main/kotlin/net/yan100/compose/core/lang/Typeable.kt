@@ -29,16 +29,16 @@ import java.util.concurrent.ConcurrentHashMap
  */
 @JvmDefaultWithoutCompatibility
 interface AnyTyping {
-  /**
-   * ## 获取枚举对应的实际值
-   */
-  @get:JsonValue
-  val value: Any
+    /**
+     * ## 获取枚举对应的实际值
+     */
+    @get:JsonValue
+    val value: Any
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: Any?): AnyTyping? = null
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: Any?): AnyTyping? = null
+    }
 }
 
 /**
@@ -46,62 +46,62 @@ interface AnyTyping {
  */
 @JvmDefaultWithoutCompatibility
 interface IntTyping : AnyTyping {
-  @get:JsonValue
-  override val value: Int
+    @get:JsonValue
+    override val value: Int
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: Int?): IntTyping? = null
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: Int?): IntTyping? = null
+    }
 }
 
 /**
  * # 字符型枚举
  */
 interface StringTyping : AnyTyping {
-  @get:JsonValue
-  override val value: String
+    @get:JsonValue
+    override val value: String
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: Int?): IntTyping? = null
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: Int?): IntTyping? = null
+    }
 }
 
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
-  companion object {
-    @JvmStatic
-    private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
+    companion object {
+        @JvmStatic
+        private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
 
-    @JvmStatic
-    private val log = slf4j(AnyTypingConverterFactory::class)
-  }
-
-  @Suppress("UNCHECKED_CAST")
-  override fun <T : AnyTyping?> getConverter(targetType: Class<T>): Converter<String?, T> {
-    if (converters[targetType] == null) {
-      converters[targetType] = AnyTypingConverter(targetType)
-    }
-    return converters[targetType] as Converter<String?, T>
-  }
-
-  private inner class AnyTypingConverter(
-    targetClass: Class<out AnyTyping?>,
-    private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()
-  ) : Converter<String?, AnyTyping?> {
-    init {
-      if (targetClass.isEnum) {
-        targetClass.enumConstants.filterNotNull()
-          .forEach {
-            mapping += it.value.toString() to it
-          }
-      } else {
-        log.error("class: {} 不是枚举类型", targetClass)
-      }
+        @JvmStatic
+        private val log = slf4j(AnyTypingConverterFactory::class)
     }
 
-    override fun convert(source: String): AnyTyping? {
-      return mapping[source]
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : AnyTyping?> getConverter(targetType: Class<T>): Converter<String?, T> {
+        if (converters[targetType] == null) {
+            converters[targetType] = AnyTypingConverter(targetType)
+        }
+        return converters[targetType] as Converter<String?, T>
     }
-  }
+
+    private inner class AnyTypingConverter(
+        targetClass: Class<out AnyTyping?>,
+        private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()
+    ) : Converter<String?, AnyTyping?> {
+        init {
+            if (targetClass.isEnum) {
+                targetClass.enumConstants.filterNotNull()
+                    .forEach {
+                        mapping += it.value.toString() to it
+                    }
+            } else {
+                log.error("class: {} 不是枚举类型", targetClass)
+            }
+        }
+
+        override fun convert(source: String): AnyTyping? {
+            return mapping[source]
+        }
+    }
 }

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service
 
 @Service
 class BankCardServiceImpl(
-  val repo: IBankCardRepo
+    val repo: IBankCardRepo
 ) : IBankCardService, CrudService<BankCard>(repo)

@@ -4,43 +4,43 @@ import net.yan100.compose.core.lang.slf4j
 import javax.crypto.spec.SecretKeySpec
 
 class FileKeysRepo(
-  private val keyDest: String = "security",
-  eccKeyPairPaths: Pair<String, String> = "ecc_public.key" to "ecc_private.key",
-  rsaKeyPairPaths: Pair<String, String> = "rsa_public.key" to "rsa_private.key",
-  aesPaths: String = "aes.key"
+    private val keyDest: String = "security",
+    eccKeyPairPaths: Pair<String, String> = "ecc_public.key" to "ecc_private.key",
+    rsaKeyPairPaths: Pair<String, String> = "rsa_public.key" to "rsa_private.key",
+    aesPaths: String = "aes.key"
 ) : IKeysRepo {
 
-  companion object {
-    @JvmStatic
-    private val log = slf4j(FileKeysRepo::class)
-  }
+    companion object {
+        @JvmStatic
+        private val log = slf4j(FileKeysRepo::class)
+    }
 
 
-  private var rsaKeyPair: RsaKeyPair? = null
-  private var eccKeyPair: EccKeyPair? = null
-  private var aesKey: SecretKeySpec? = null
+    private var rsaKeyPair: RsaKeyPair? = null
+    private var eccKeyPair: EccKeyPair? = null
+    private var aesKey: SecretKeySpec? = null
 
-  init {
-    aesKey = Keys.readAesKeyByBase64(read(aesPaths))
-    rsaKeyPair = Keys.readRsaKeyPair(read(rsaKeyPairPaths.first), read(rsaKeyPairPaths.second))!!
-    eccKeyPair = Keys.readEccKeyPair(read(eccKeyPairPaths.first), read(eccKeyPairPaths.second))!!
-  }
+    init {
+        aesKey = Keys.readAesKeyByBase64(read(aesPaths))
+        rsaKeyPair = Keys.readRsaKeyPair(read(rsaKeyPairPaths.first), read(rsaKeyPairPaths.second))!!
+        eccKeyPair = Keys.readEccKeyPair(read(eccKeyPairPaths.first), read(eccKeyPairPaths.second))!!
+    }
 
-  override fun basicEccKeyPair(): EccKeyPair? {
-    return eccKeyPair
-  }
+    override fun basicEccKeyPair(): EccKeyPair? {
+        return eccKeyPair
+    }
 
-  override fun basicRsaKeyPair(): RsaKeyPair? {
-    return rsaKeyPair
-  }
+    override fun basicRsaKeyPair(): RsaKeyPair? {
+        return rsaKeyPair
+    }
 
-  override fun basicAesKey(): SecretKeySpec? {
-    return this.aesKey
-  }
+    override fun basicAesKey(): SecretKeySpec? {
+        return this.aesKey
+    }
 
-  private fun read(name: String): String {
-    val text = javaClass.classLoader.getResource("${this.keyDest}/$name")!!.readText()
-    log.trace("text = {}", text)
-    return text
-  }
+    private fun read(name: String): String {
+        val text = javaClass.classLoader.getResource("${this.keyDest}/$name")!!.readText()
+        log.trace("text = {}", text)
+        return text
+    }
 }

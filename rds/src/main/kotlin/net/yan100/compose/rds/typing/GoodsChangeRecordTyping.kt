@@ -13,25 +13,25 @@ import net.yan100.compose.core.lang.IntTyping
  */
 @Schema(title = "商品改动类型")
 enum class GoodsChangeRecordTyping(
-  private val v: Int
+    private val v: Int
 ) : IntTyping {
-  /**
-   * 改价格
-   */
-  @Schema(title = "改价格")
-  CHANGE_PRICE(0),
+    /**
+     * 改价格
+     */
+    @Schema(title = "改价格")
+    CHANGE_PRICE(0),
 
-  /**
-   * 改标题
-   */
-  @Schema(title = "改标题")
-  CHANGE_TITLE(1);
+    /**
+     * 改标题
+     */
+    @Schema(title = "改标题")
+    CHANGE_TITLE(1);
 
-  @JsonValue
-  override val value = v
+    @JsonValue
+    override val value = v
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = entries.find { it.value == v }
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: Int?) = entries.find { it.value == v }
+    }
 }

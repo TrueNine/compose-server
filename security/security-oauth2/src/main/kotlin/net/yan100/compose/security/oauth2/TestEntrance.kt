@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class Oauth2TestEntrance
 
 fun main(args: Array<String>) {
-  runApplication<Oauth2TestEntrance>(*args)
+    runApplication<Oauth2TestEntrance>(*args)
 }

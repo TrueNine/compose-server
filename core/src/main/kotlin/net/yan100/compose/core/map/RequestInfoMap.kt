@@ -7,15 +7,15 @@ import org.mapstruct.MappingConstants
 import org.mapstruct.factory.Mappers
 
 
-
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 interface RequestInfoMap {
-  companion object {
-    val INSTANCE: RequestInfoMap = Mappers.getMapper(RequestInfoMap::class.java)
-  }
-  @Mapping(target = "enabled", ignore = true)
-  @Mapping(target = "nonLocked", ignore = true)
-  @Mapping(target = "nonExpired", ignore = true)
-  @Mapping(target = "encryptedPassword", ignore = true)
-  fun clearAuthedInfo(info: AuthRequestInfo): AuthRequestInfo
+    companion object {
+        val INSTANCE: RequestInfoMap = Mappers.getMapper(RequestInfoMap::class.java)
+    }
+
+    @Mapping(target = "enabled", ignore = true)
+    @Mapping(target = "nonLocked", ignore = true)
+    @Mapping(target = "nonExpired", ignore = true)
+    @Mapping(target = "encryptedPassword", ignore = true)
+    fun clearAuthedInfo(info: AuthRequestInfo): AuthRequestInfo
 }

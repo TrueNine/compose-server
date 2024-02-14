@@ -5,9 +5,9 @@ import net.yan100.compose.schedule.properties.XxlJobExecutorAutoConfigurationPro
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableConfigurationProperties(
-  value = [
-    XxlJobAutoConfigurationProperties::class,
-    XxlJobExecutorAutoConfigurationProperties::class
-  ]
+    value = [
+        XxlJobAutoConfigurationProperties::class,
+        XxlJobExecutorAutoConfigurationProperties::class
+    ]
 )
 class AutoConfigEntrance

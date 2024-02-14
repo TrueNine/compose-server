@@ -7,4 +7,4 @@ import org.springframework.stereotype.Service
 
 @Service
 class CrudServiceTester
-  (repo: DbTestBaseServiceRepository) : CrudService<DbTestServiceEntity>(repo)
+    (repo: DbTestBaseServiceRepository) : CrudService<DbTestServiceEntity>(repo)

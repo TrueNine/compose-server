@@ -5,11 +5,11 @@ import com.microsoft.playwright.BrowserContext
 import com.microsoft.playwright.Page
 
 fun Browser.withActions(
-  ctxOptions: Browser.NewContextOptions? = null, pageOptions: Browser.NewPageOptions? = null, action: (BrowserContext, Page) -> Unit
+    ctxOptions: Browser.NewContextOptions? = null, pageOptions: Browser.NewPageOptions? = null, action: (BrowserContext, Page) -> Unit
 ) {
-  this.newContext(ctxOptions).use { ctx ->
-    this.newPage(pageOptions).use { page ->
-      action(ctx, page)
+    this.newContext(ctxOptions).use { ctx ->
+        this.newPage(pageOptions).use { page ->
+            action(ctx, page)
+        }
     }
-  }
 }

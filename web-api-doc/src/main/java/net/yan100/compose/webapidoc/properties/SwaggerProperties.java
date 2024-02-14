@@ -10,31 +10,31 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = "compose.web-api-doc.open-api")
 public class SwaggerProperties {
-  /**
-   * 扫描的包
-   */
-  private List<String> scanPackages = new ArrayList<>();
-  /**
-   * 扫描的路径
-   */
-  private List<String> scanUrlPatterns = new ArrayList<>(List.of("/**"));
-  /**
-   * 分组名称
-   */
-  private String group = "default";
-  /**
-   * 开启 jwt 请求头展示
-   */
-  private Boolean enableJwtHeader = false;
+    /**
+     * 扫描的包
+     */
+    private List<String> scanPackages = new ArrayList<>();
+    /**
+     * 扫描的路径
+     */
+    private List<String> scanUrlPatterns = new ArrayList<>(List.of("/**"));
+    /**
+     * 分组名称
+     */
+    private String group = "default";
+    /**
+     * 开启 jwt 请求头展示
+     */
+    private Boolean enableJwtHeader = false;
 
-  /**
-   * jwt 请求头信息
-   */
-  @NestedConfigurationProperty
-  private JwtHeaderInfoProperties jwtHeaderInfo = new JwtHeaderInfoProperties();
-  /**
-   * 类型定义信息
-   */
-  @NestedConfigurationProperty
-  private SwaggerDescInfo authorInfo = new SwaggerDescInfo();
+    /**
+     * jwt 请求头信息
+     */
+    @NestedConfigurationProperty
+    private JwtHeaderInfoProperties jwtHeaderInfo = new JwtHeaderInfoProperties();
+    /**
+     * 类型定义信息
+     */
+    @NestedConfigurationProperty
+    private SwaggerDescInfo authorInfo = new SwaggerDescInfo();
 }

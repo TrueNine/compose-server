@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Data
 public class OpenApiDocResponseResult {
-  String configUrl;
-  String oauth2RedirectUrl;
-  List<OpenApiUrlsResponseResult> urls;
+    String configUrl;
+    String oauth2RedirectUrl;
+    List<OpenApiUrlsResponseResult> urls;
 }

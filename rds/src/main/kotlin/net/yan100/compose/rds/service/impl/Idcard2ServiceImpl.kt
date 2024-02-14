@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service
 
 @Service
 class Idcard2ServiceImpl(
-  val repo: IIdcard2Repo
+    val repo: IIdcard2Repo
 ) : CrudService<Idcard2>(repo)

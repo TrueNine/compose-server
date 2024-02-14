@@ -7,6 +7,6 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 @ConfigurationProperties(prefix = "compose.security.oauth2.wechat")
 public class WechatProperties {
-  @NestedConfigurationProperty
-  private WxpaProperties wxpa = new WxpaProperties();
+    @NestedConfigurationProperty
+    private WxpaProperties wxpa = new WxpaProperties();
 }

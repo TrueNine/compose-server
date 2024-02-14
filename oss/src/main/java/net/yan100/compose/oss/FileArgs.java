@@ -12,26 +12,26 @@ import lombok.Data;
 @Data
 @Builder
 public class FileArgs {
-  private String dir;
-  private String fileName;
-  private String mimeType;
-  private Long size;
+    private String dir;
+    private String fileName;
+    private String mimeType;
+    private Long size;
 
-  public static FileArgs useStreamMap(StreamsMap map) {
-    return FileArgs
-      .builder()
-      .dir(map.getDirName())
-      .fileName(map.getFName())
-      .mimeType(map.getMediaType())
-      .size(map.getSize())
-      .build();
-  }
+    public static FileArgs useStreamMap(StreamsMap map) {
+        return FileArgs
+            .builder()
+            .dir(map.getDirName())
+            .fileName(map.getFName())
+            .mimeType(map.getMediaType())
+            .size(map.getSize())
+            .build();
+    }
 
-  public String getSizeStr() {
-    return Long.toString(this.size);
-  }
+    public String getSizeStr() {
+        return Long.toString(this.size);
+    }
 
-  public void setSizeStr(String size) {
-    this.setSize(Long.parseLong(size));
-  }
+    public void setSizeStr(String size) {
+        this.setSize(Long.parseLong(size));
+    }
 }

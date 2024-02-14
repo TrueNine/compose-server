@@ -9,25 +9,25 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserInfoServiceImpl(
-  private val infoRepo: UserInfoRepo
+    private val infoRepo: UserInfoRepo
 ) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
-  override fun findUserByWechatOpenId(openId: String): Usr? {
-    return infoRepo.findUserByWechatOpenId(openId)
-  }
+    override fun findUserByWechatOpenId(openId: String): Usr? {
+        return infoRepo.findUserByWechatOpenId(openId)
+    }
 
-  override fun findUserByPhone(phone: String): Usr? {
-    return infoRepo.findUserByPhone(phone)
-  }
+    override fun findUserByPhone(phone: String): Usr? {
+        return infoRepo.findUserByPhone(phone)
+    }
 
-  override fun findByUserId(userId: String): UserInfo? {
-    return infoRepo.findByUserId(userId)
-  }
+    override fun findByUserId(userId: String): UserInfo? {
+        return infoRepo.findByUserId(userId)
+    }
 
-  override fun existsByPhone(phone: String): Boolean {
-    return infoRepo.existsByPhone(phone)
-  }
+    override fun existsByPhone(phone: String): Boolean {
+        return infoRepo.existsByPhone(phone)
+    }
 
-  override fun existsByWechatOpenId(openId: String): Boolean {
-    return infoRepo.existsByWechatOpenid(openId)
-  }
+    override fun existsByWechatOpenId(openId: String): Boolean {
+        return infoRepo.existsByWechatOpenid(openId)
+    }
 }

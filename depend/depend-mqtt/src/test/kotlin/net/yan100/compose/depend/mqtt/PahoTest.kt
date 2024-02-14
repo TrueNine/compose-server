@@ -9,19 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired
 //@SpringBootTest(classes = [ApplicationRunner::class])
 class PahoTest {
 
-  @Autowired
-  lateinit var mqttClient: MqttClient
+    @Autowired
+    lateinit var mqttClient: MqttClient
 
- @Autowired
-  lateinit var options: MqttConnectOptions
+    @Autowired
+    lateinit var options: MqttConnectOptions
 
-  @Autowired
-  lateinit var wrapper: MqttPahoClientWrapper
+    @Autowired
+    lateinit var wrapper: MqttPahoClientWrapper
 
-  //@Test
-  fun testConnectClient() {
-    wrapper.subscribe<Any>("order/a") { _, a ->
-      println(a)
+    //@Test
+    fun testConnectClient() {
+        wrapper.subscribe<Any>("order/a") { _, a ->
+            println(a)
+        }
     }
-  }
 }

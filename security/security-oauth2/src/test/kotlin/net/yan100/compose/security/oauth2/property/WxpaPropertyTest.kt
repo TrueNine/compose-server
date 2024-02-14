@@ -10,19 +10,19 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(classes = [Oauth2TestEntrance::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WxpaPropertyTest {
-  @Autowired
-  lateinit var w: WxpaProperty
+    @Autowired
+    lateinit var w: WxpaProperty
 
-  @Test
-  fun `test get access token`() {
-    runBlocking {
-      delay(4000)
-      val a = w.accessToken
-      val b = w.jsapiTicket
-      assertNotNull(a)
-      assertNotNull(b)
-      println(a)
-      println(b)
+    @Test
+    fun `test get access token`() {
+        runBlocking {
+            delay(4000)
+            val a = w.accessToken
+            val b = w.jsapiTicket
+            assertNotNull(a)
+            assertNotNull(b)
+            println(a)
+            println(b)
+        }
     }
-  }
 }

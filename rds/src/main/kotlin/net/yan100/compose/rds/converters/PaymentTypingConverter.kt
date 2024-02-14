@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 @Converter
 class PaymentTypingConverter : AttributeConverter<PaymentTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: PaymentTyping?): Int? = attribute?.value
+    override fun convertToDatabaseColumn(attribute: PaymentTyping?): Int? = attribute?.value
 
-  override fun convertToEntityAttribute(dbData: Int?): PaymentTyping? = PaymentTyping.findVal(dbData)
+    override fun convertToEntityAttribute(dbData: Int?): PaymentTyping? = PaymentTyping.findVal(dbData)
 }

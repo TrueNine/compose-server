@@ -1,11 +1,11 @@
 compose:
-  mqtt-client:
-    url: tcp://116.205.171.51
-    port: 1883
-    username: usr
-    password: qwer1234
-    client-id: daojiacenter
-    qos: 1
+    mqtt-client:
+        url: tcp://116.205.171.51
+        port: 1883
+        username: usr
+        password: qwer1234
+        client-id: daojiacenter
+        qos: 1
 logging:
-  level:
-    net.yan100: trace
+    level:
+        net.yan100: trace

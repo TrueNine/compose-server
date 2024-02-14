@@ -15,15 +15,15 @@ import org.springframework.stereotype.Component
 @Component
 @Converter
 class JsonArrayConverter(
-  private val mapper: ObjectMapper
+    private val mapper: ObjectMapper
 ) : AttributeConverter<MutableList<String>, String> {
-  override fun convertToDatabaseColumn(attribute: MutableList<String>?): String? =
-    attribute?.run {
-      mapper.writeValueAsString(attribute)
-    }
+    override fun convertToDatabaseColumn(attribute: MutableList<String>?): String? =
+        attribute?.run {
+            mapper.writeValueAsString(attribute)
+        }
 
-  override fun convertToEntityAttribute(dbData: String?): MutableList<String>? =
-    dbData?.run {
-      mapper.readValue(dbData)
-    }
+    override fun convertToEntityAttribute(dbData: String?): MutableList<String>? =
+        dbData?.run {
+            mapper.readValue(dbData)
+        }
 }

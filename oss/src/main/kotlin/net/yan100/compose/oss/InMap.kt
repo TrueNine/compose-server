@@ -9,10 +9,10 @@ import java.io.InputStream
  * @since 2023-02-20
  */
 interface InMap : StreamsMap {
-  override val usedStream: InputStream
-  override val mediaType: String
-  override val fName: String
-  override val dirName: String
-  override val size: Long
-  override val exposeBaseUrl: String
+    override val usedStream: InputStream
+    override val mediaType: String
+    override val fName: String
+    override val dirName: String
+    override val size: Long
+    override val exposeBaseUrl: String
 }

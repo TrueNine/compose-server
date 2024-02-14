@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("v1/heartbeat")
 class HeartbeatController {
 
-  @Operation(summary = "用于检测服务器是否存活")
-  @GetMapping("ping")
-  fun pong(): Int = 1
+    @Operation(summary = "用于检测服务器是否存活")
+    @GetMapping("ping")
+    fun pong(): Int = 1
 
-  @Operation(summary = "获取当前连接用户的 ip 地址")
-  @GetMapping("ip")
-  fun ip(req: HttpServletRequest): String? {
-    val ip = InterAddressUtil.getRequestIpAddress(req)
-    return null
-  }
+    @Operation(summary = "获取当前连接用户的 ip 地址")
+    @GetMapping("ip")
+    fun ip(req: HttpServletRequest): String? {
+        val ip = InterAddressUtil.getRequestIpAddress(req)
+        return null
+    }
 }

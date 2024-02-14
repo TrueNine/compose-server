@@ -2,12 +2,12 @@ package net.yan100.compose.core.id
 
 
 interface Snowflake {
-  fun currentTimeMillis(): Long {
-    return System.currentTimeMillis()
-  }
+    fun currentTimeMillis(): Long {
+        return System.currentTimeMillis()
+    }
 
-  fun nextId(): Long
-  fun nextStringId(): String {
-    return nextId().toString()
-  }
+    fun nextId(): Long
+    fun nextStringId(): String {
+        return nextId().toString()
+    }
 }

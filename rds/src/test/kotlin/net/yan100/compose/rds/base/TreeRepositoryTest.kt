@@ -15,42 +15,42 @@ import kotlin.test.assertTrue
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class TreeRepositoryTest {
-  private val log = slf4j(this::class)
+    private val log = slf4j(this::class)
 
-  @Autowired
-  lateinit var treeRepo: DbTestTreeRepo
+    @Autowired
+    lateinit var treeRepo: DbTestTreeRepo
 
-  @Autowired
-  lateinit var tt: TransactionTemplate
+    @Autowired
+    lateinit var tt: TransactionTemplate
 
-  @Test
-  @Rollback
-  fun testSaveChild() {
-    val b = DbTestTreeEntity()
-    val c = DbTestTreeEntity()
-    val d = DbTestTreeEntity()
-    val savedRoot = treeRepo.saveChild(child =  DbTestTreeEntity())
-    val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
+    @Test
+    @Rollback
+    fun testSaveChild() {
+        val b = DbTestTreeEntity()
+        val c = DbTestTreeEntity()
+        val d = DbTestTreeEntity()
+        val savedRoot = treeRepo.saveChild(child = DbTestTreeEntity())
+        val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
 
-    val nodeIndexes = savedChildren.map {
-      listOf(it.rln, it.rrn)
-    }.flatten()
+        val nodeIndexes = savedChildren.map {
+            listOf(it.rln, it.rrn)
+        }.flatten()
 
-    // 节点的值必须固定
-    assertTrue("保存的根节点索引不对") {
-      savedRoot.rln == 1L
-        && savedRoot.rrn == 2L
+        // 节点的值必须固定
+        assertTrue("保存的根节点索引不对") {
+            savedRoot.rln == 1L
+                && savedRoot.rrn == 2L
+        }
+
+        // 添加后集合内不可有重复数据
+        assertTrue("添加后出现重复数据") {
+            nodeIndexes.distinct().size == nodeIndexes.size
+        }
+
+        // 集合内必须包含固定的值
+        listOf(2, 3, 4, 5, 6, 7).map { it.toLong() }
+            .forEach {
+                assertContains(nodeIndexes, it, "没有包含固定的值")
+            }
     }
-
-    // 添加后集合内不可有重复数据
-    assertTrue("添加后出现重复数据") {
-      nodeIndexes.distinct().size == nodeIndexes.size
-    }
-
-    // 集合内必须包含固定的值
-    listOf(2, 3, 4, 5, 6, 7).map { it.toLong() }
-      .forEach {
-        assertContains(nodeIndexes, it, "没有包含固定的值")
-      }
-  }
 }

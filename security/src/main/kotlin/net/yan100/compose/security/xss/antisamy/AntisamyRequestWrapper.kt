@@ -18,26 +18,26 @@ import org.slf4j.Logger
  */
 // TODO 加入此类
 class AntisamyRequestWrapper(request: HttpServletRequest?) :
-  HttpServletRequestWrapper(request) {
+    HttpServletRequestWrapper(request) {
 
-  override fun getParameterValues(name: String?): Array<String?>? {
-    val params = super.getParameterValues(name) ?: return null
-    log.trace("antisamy 过滤参数 = {} >-> {}", name, params)
-    return params.mapNotNull { filterParams(it) }.toTypedArray()
-  }
+    override fun getParameterValues(name: String?): Array<String?>? {
+        val params = super.getParameterValues(name) ?: return null
+        log.trace("antisamy 过滤参数 = {} >-> {}", name, params)
+        return params.mapNotNull { filterParams(it) }.toTypedArray()
+    }
 
-  private fun filterParams(param: String?): String? {
-    return ANTI_SAMY.scan(param, POLICY).cleanHTML
-  }
+    private fun filterParams(param: String?): String? {
+        return ANTI_SAMY.scan(param, POLICY).cleanHTML
+    }
 
-  companion object {
-    @JvmStatic
-    private val POLICY: Policy = Policy.getInstance("antisamy-ebay.xml")
+    companion object {
+        @JvmStatic
+        private val POLICY: Policy = Policy.getInstance("antisamy-ebay.xml")
 
-    @JvmStatic
-    private val ANTI_SAMY = AntiSamy()
+        @JvmStatic
+        private val ANTI_SAMY = AntiSamy()
 
-    @JvmStatic
-    private val log: Logger = slf4j(this::class)
-  }
+        @JvmStatic
+        private val log: Logger = slf4j(this::class)
+    }
 }

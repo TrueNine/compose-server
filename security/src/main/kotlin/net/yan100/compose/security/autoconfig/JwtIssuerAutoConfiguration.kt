@@ -13,25 +13,25 @@ import java.time.temporal.ChronoUnit
 @Configuration
 @EnableConfigurationProperties(net.yan100.compose.security.properties.JwtProperties::class)
 class JwtIssuerAutoConfiguration(
-  private val jp: net.yan100.compose.security.properties.JwtProperties,
-  private val keysRepository: IKeysRepo
+    private val jp: net.yan100.compose.security.properties.JwtProperties,
+    private val keysRepository: IKeysRepo
 ) {
-  @Bean
-  @Primary
-  fun jwtIssuer(mapper: ObjectMapper): JwtIssuer {
-    // TODO 完成此类
-    val sig = keysRepository.jwtSignatureIssuerRsaKeyPair()!!
-    val enc = keysRepository.jwtEncryptDataIssuerEccKeyPair()!!
-    return JwtIssuer.createIssuer()
-      .signatureIssuerKey(sig.rsaPrivateKey!!)
-      .signatureVerifyKey(sig.rsaPublicKey!!)
-      .contentEncryptKey(enc.eccPublicKey!!)
-      .contentDecryptKey(enc.eccPrivateKey!!)
-      .expireFromDuration(Duration.of(7, ChronoUnit.DAYS))
-      .serializer(mapper)
-      .encryptDataKeyName(jp.encryptDataKeyName)
-      .issuer(jp.issuer)
-      .expire(jp.expiredDuration)
-      .build()
-  }
+    @Bean
+    @Primary
+    fun jwtIssuer(mapper: ObjectMapper): JwtIssuer {
+        // TODO 完成此类
+        val sig = keysRepository.jwtSignatureIssuerRsaKeyPair()!!
+        val enc = keysRepository.jwtEncryptDataIssuerEccKeyPair()!!
+        return JwtIssuer.createIssuer()
+            .signatureIssuerKey(sig.rsaPrivateKey!!)
+            .signatureVerifyKey(sig.rsaPublicKey!!)
+            .contentEncryptKey(enc.eccPublicKey!!)
+            .contentDecryptKey(enc.eccPrivateKey!!)
+            .expireFromDuration(Duration.of(7, ChronoUnit.DAYS))
+            .serializer(mapper)
+            .encryptDataKeyName(jp.encryptDataKeyName)
+            .issuer(jp.issuer)
+            .expire(jp.expiredDuration)
+            .build()
+    }
 }

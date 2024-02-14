@@ -17,8 +17,8 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = "compose.web-servlet")
 public class ServletWebApplicationProperties {
-  List<String> allowConverters = new ArrayList<>(Arrays.asList("getDocumentation",
-    "swaggerResources",
-    "openapiJson"));
-  List<Class<?>> allowConverterClasses = new ArrayList<>(List.of(StringHttpMessageConverter.class));
+    List<String> allowConverters = new ArrayList<>(Arrays.asList("getDocumentation",
+        "swaggerResources",
+        "openapiJson"));
+    List<Class<?>> allowConverterClasses = new ArrayList<>(List.of(StringHttpMessageConverter.class));
 }

@@ -9,36 +9,36 @@ import net.yan100.compose.rds.models.req.RegisterAccountReq
 import java.time.LocalDateTime
 
 interface IAccountAggregator {
-  fun assignAccount(
-    usr: Usr,
-    createUserId: ReferenceId,
-    userInfo: UserInfo?,
-    roleGroup: Set<String>?,
-    allowAssignRoot: Boolean = false
-  ): Usr
+    fun assignAccount(
+        usr: Usr,
+        createUserId: ReferenceId,
+        userInfo: UserInfo?,
+        roleGroup: Set<String>?,
+        allowAssignRoot: Boolean = false
+    ): Usr
 
-  /**
-   * 注册账号
-   */
-  fun registerAccount(param: RegisterAccountReq): Usr?
+    /**
+     * 注册账号
+     */
+    fun registerAccount(param: RegisterAccountReq): Usr?
 
-  /**
-   * 登录指定账号，返回用户信息
-   */
-  fun login(param: LoginAccountReq): Usr?
+    /**
+     * 登录指定账号，返回用户信息
+     */
+    fun login(param: LoginAccountReq): Usr?
 
-  /**
-   * 根据账号修改密码
-   */
-  fun modifyPassword(param: ModifyAccountPasswordReq): Boolean
+    /**
+     * 根据账号修改密码
+     */
+    fun modifyPassword(param: ModifyAccountPasswordReq): Boolean
 
-  /**
-   * 根据账号校验密码正确性
-   */
-  fun verifyPassword(account: String, password: String): Boolean
+    /**
+     * 根据账号校验密码正确性
+     */
+    fun verifyPassword(account: String, password: String): Boolean
 
-  /**
-   * 封禁账号到指定时间
-   */
-  fun bannedAccountTo(account: String, dateTime: LocalDateTime)
+    /**
+     * 封禁账号到指定时间
+     */
+    fun bannedAccountTo(account: String, dateTime: LocalDateTime)
 }

@@ -7,5 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 class WebClientEntrance
 
 fun main(args: Array<String>) {
-  SpringApplication.run(WebClientEntrance::class.java, *args)
+    SpringApplication.run(WebClientEntrance::class.java, *args)
 }

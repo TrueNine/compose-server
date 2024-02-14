@@ -10,13 +10,13 @@ import net.yan100.compose.rds.core.entities.IEntity
 @Entity
 @Table(name = DbTestServiceEntity.TABLE_NAME)
 class DbTestServiceEntity : IEntity() {
-  var title: String? = null
+    var title: String? = null
 
-  @Convert(converter = WGS84Converter::class)
-  var center: WGS84? = null
+    @Convert(converter = WGS84Converter::class)
+    var center: WGS84? = null
 
-  companion object {
+    companion object {
 
-    const val TABLE_NAME = "db_test_service"
-  }
+        const val TABLE_NAME = "db_test_service"
+    }
 }

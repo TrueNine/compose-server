@@ -8,13 +8,13 @@ import java.time.Duration
 @Component
 @Converter(autoApply = true)
 class DurationAsStringConverter : AttributeConverter<Duration, String> {
-  override fun convertToDatabaseColumn(attribute: Duration?): String? {
-    return attribute?.toString()
-  }
-
-  override fun convertToEntityAttribute(dbData: String?): Duration? {
-    return dbData?.run {
-      Duration.parse(this)
+    override fun convertToDatabaseColumn(attribute: Duration?): String? {
+        return attribute?.toString()
     }
-  }
+
+    override fun convertToEntityAttribute(dbData: String?): Duration? {
+        return dbData?.run {
+            Duration.parse(this)
+        }
+    }
 }

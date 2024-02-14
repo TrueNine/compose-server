@@ -10,41 +10,41 @@ import org.springframework.stereotype.Service
 
 @Service
 class AddressServiceImpl(
-  val repo: net.yan100.compose.rds.repositories.address.IAddressRepo
+    val repo: net.yan100.compose.rds.repositories.address.IAddressRepo
 ) : IAddressService, CrudService<Address>(repo) {
-  override fun findRoot(): Address {
-    return repo.findRoot()
-  }
-
-  override fun clearAndInitProvinces(lazy: () -> List<Address>): List<Address> {
-    repo.delete { root, _: CriteriaQuery<*>?, b ->
-      b.notEqual(root.get<String>(AnyEntity.ID), repo.findRootId())
+    override fun findRoot(): Address {
+        return repo.findRoot()
     }
-    val cleanedRoot = repo.save(repo.findRoot().withNew().apply { id = repo.findRootId() })
-    return repo.saveChildren(cleanedRoot, lazy())
-  }
 
-  override fun findAllByCodeIn(codes: List<String>): List<Address> {
-    return repo.findAllByCodeIn(codes)
-  }
+    override fun clearAndInitProvinces(lazy: () -> List<Address>): List<Address> {
+        repo.delete { root, _: CriteriaQuery<*>?, b ->
+            b.notEqual(root.get<String>(AnyEntity.ID), repo.findRootId())
+        }
+        val cleanedRoot = repo.save(repo.findRoot().withNew().apply { id = repo.findRootId() })
+        return repo.saveChildren(cleanedRoot, lazy())
+    }
 
-  override fun findProvinces(): List<Address> {
-    return findDirectChildrenById(repo.findRootId())
-  }
+    override fun findAllByCodeIn(codes: List<String>): List<Address> {
+        return repo.findAllByCodeIn(codes)
+    }
 
-  override fun findDirectChildrenByCode(code: String): List<Address> {
-    TODO("Not yet implemented")
-  }
+    override fun findProvinces(): List<Address> {
+        return findDirectChildrenById(repo.findRootId())
+    }
 
-  override fun findDirectChildrenById(id: String): List<Address> {
-    TODO("Not yet implemented")
-  }
+    override fun findDirectChildrenByCode(code: String): List<Address> {
+        TODO("Not yet implemented")
+    }
 
-  override fun findFullPathById(id: String): String {
-    TODO("Not yet implemented")
-  }
+    override fun findDirectChildrenById(id: String): List<Address> {
+        TODO("Not yet implemented")
+    }
 
-  override fun findFullPathByCode(id: String): String {
-    TODO("Not yet implemented")
-  }
+    override fun findFullPathById(id: String): String {
+        TODO("Not yet implemented")
+    }
+
+    override fun findFullPathByCode(id: String): String {
+        TODO("Not yet implemented")
+    }
 }

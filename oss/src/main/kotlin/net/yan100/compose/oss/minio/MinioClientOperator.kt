@@ -17,101 +17,101 @@ import java.io.OutputStream
  */
 open class MinioClientOperator
 protected constructor(
-  private val client: MinioClient
+    private val client: MinioClient
 ) {
-  open fun headerContentType(headers: Headers): String? {
-    return headers[net.yan100.compose.core.http.Headers.CONTENT_TYPE]
-  }
-
-  open fun headerSizeStr(headers: Headers): String? {
-    return headers[net.yan100.compose.core.http.Headers.CONTENT_LENGTH]
-  }
-
-  open fun headerSize(headers: Headers): Long? {
-    return headerSizeStr(headers)?.toLong()
-  }
-
-  open fun getObject(fileInfo: FileArgs, stream: OutputStream): GetObjectResponse? {
-    return client.getObject(GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
-  }
-
-  open fun publicBucket(bucketName: String) {
-    client.setBucketPolicy(
-      SetBucketPolicyArgs.builder()
-        .bucket(bucketName)
-        .config(S3PolicyCreator.publicBucketAndReadOnly(bucketName).json())
-        .build()
-    )
-  }
-
-
-  open fun bucketExists(bucketName: String): Boolean {
-    return client.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
-  }
-
-  open fun bucketNotExists(bucketName: String): Boolean {
-    return !bucketExists(bucketName)
-  }
-
-  open fun removeObject(fileInfo: FileArgs): Boolean {
-    if (bucketNotExists(fileInfo.dir)) return false
-    try {
-      client.removeObject(
-        RemoveObjectArgs.builder()
-          .bucket(fileInfo.dir)
-          .`object`(fileInfo.fileName)
-          .build()
-      )
-      return true
-    } catch (e: Exception) {
-      e.printStackTrace()
-      return false
-    }
-  }
-
-  open fun putObject(fileInfo: FileArgs, stream: InputStream): ObjectWriteResponse? {
-    if (bucketNotExists(fileInfo.dir)) {
-      client.makeBucket(
-        MakeBucketArgs.builder()
-          .bucket(fileInfo.dir)
-          .build()
-      )
+    open fun headerContentType(headers: Headers): String? {
+        return headers[net.yan100.compose.core.http.Headers.CONTENT_TYPE]
     }
 
-    return client.putObject(
-      PutObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).contentType(fileInfo.mimeType)
-        .stream(stream, fileInfo.size, -1).build()
-    )
-  }
+    open fun headerSizeStr(headers: Headers): String? {
+        return headers[net.yan100.compose.core.http.Headers.CONTENT_LENGTH]
+    }
 
-  open fun listFiles(dir: String): List<String> {
-    if (bucketNotExists(dir)) return listOf()
-    return client.listObjects(
-      ListObjectsArgs.builder()
-        .bucket(dir)
-        .build()
-    ).map { it.get().objectName() }
-  }
+    open fun headerSize(headers: Headers): Long? {
+        return headerSizeStr(headers)?.toLong()
+    }
 
-  open fun listDir(): List<String> {
-    return client.listBuckets().map { obj -> obj.name() }
-  }
+    open fun getObject(fileInfo: FileArgs, stream: OutputStream): GetObjectResponse? {
+        return client.getObject(GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
+    }
 
-  open fun createBucket(dirName: String) {
-    client.makeBucket(
-      MakeBucketArgs.builder()
-        .bucket(dirName)
-        .build()
-    )
-  }
+    open fun publicBucket(bucketName: String) {
+        client.setBucketPolicy(
+            SetBucketPolicyArgs.builder()
+                .bucket(bucketName)
+                .config(S3PolicyCreator.publicBucketAndReadOnly(bucketName).json())
+                .build()
+        )
+    }
 
-  open val buckets: List<Bucket> get() = client.listBuckets()
 
-  open fun getObjects(dir: String): Iterable<Result<Item>> {
-    return client.listObjects(
-      ListObjectsArgs.builder()
-        .bucket(dir)
-        .build()
-    )
-  }
+    open fun bucketExists(bucketName: String): Boolean {
+        return client.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
+    }
+
+    open fun bucketNotExists(bucketName: String): Boolean {
+        return !bucketExists(bucketName)
+    }
+
+    open fun removeObject(fileInfo: FileArgs): Boolean {
+        if (bucketNotExists(fileInfo.dir)) return false
+        try {
+            client.removeObject(
+                RemoveObjectArgs.builder()
+                    .bucket(fileInfo.dir)
+                    .`object`(fileInfo.fileName)
+                    .build()
+            )
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    open fun putObject(fileInfo: FileArgs, stream: InputStream): ObjectWriteResponse? {
+        if (bucketNotExists(fileInfo.dir)) {
+            client.makeBucket(
+                MakeBucketArgs.builder()
+                    .bucket(fileInfo.dir)
+                    .build()
+            )
+        }
+
+        return client.putObject(
+            PutObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).contentType(fileInfo.mimeType)
+                .stream(stream, fileInfo.size, -1).build()
+        )
+    }
+
+    open fun listFiles(dir: String): List<String> {
+        if (bucketNotExists(dir)) return listOf()
+        return client.listObjects(
+            ListObjectsArgs.builder()
+                .bucket(dir)
+                .build()
+        ).map { it.get().objectName() }
+    }
+
+    open fun listDir(): List<String> {
+        return client.listBuckets().map { obj -> obj.name() }
+    }
+
+    open fun createBucket(dirName: String) {
+        client.makeBucket(
+            MakeBucketArgs.builder()
+                .bucket(dirName)
+                .build()
+        )
+    }
+
+    open val buckets: List<Bucket> get() = client.listBuckets()
+
+    open fun getObjects(dir: String): Iterable<Result<Item>> {
+        return client.listObjects(
+            ListObjectsArgs.builder()
+                .bucket(dir)
+                .build()
+        )
+    }
 }

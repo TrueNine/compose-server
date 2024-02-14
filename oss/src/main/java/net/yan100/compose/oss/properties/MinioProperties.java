@@ -10,10 +10,10 @@ import lombok.Data;
  */
 @Data
 public class MinioProperties {
-  private Boolean enable = false;
-  private Boolean enableHttps = false;
-  private String endpointHost = "localhost";
-  private Integer endpointPort = 9000;
-  private String accessKey;
-  private String secretKey;
+    private Boolean enable = false;
+    private Boolean enableHttps = false;
+    private String endpointHost = "localhost";
+    private Integer endpointPort = 9000;
+    private String accessKey;
+    private String secretKey;
 }

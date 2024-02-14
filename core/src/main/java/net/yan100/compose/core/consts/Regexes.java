@@ -7,16 +7,16 @@ package net.yan100.compose.core.consts;
  * @since 2023-04-19
  */
 public interface Regexes {
-  /**
-   * 英文数字账户
-   */
-  String ACCOUNT = "^[a-zA-Z0-9]+$";
-  /**
-   * 密码
-   */
-  String PASSWORD = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^\\da-zA-Z\\s]).{1,9}$";
-  /**
-   * 中国的手机
-   */
-  String CHINA_PHONE = "^1[123456789]\\d{9}$";
+    /**
+     * 英文数字账户
+     */
+    String ACCOUNT = "^[a-zA-Z0-9]+$";
+    /**
+     * 密码
+     */
+    String PASSWORD = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^\\da-zA-Z\\s]).{1,9}$";
+    /**
+     * 中国的手机
+     */
+    String CHINA_PHONE = "^1[123456789]\\d{9}$";
 }

@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 class WebAutoConfiguration : WebMvcConfigurer {
-  override fun addFormatters(registry: FormatterRegistry) {
-    registry.addConverterFactory(AnyTypingConverterFactory())
-  }
+    override fun addFormatters(registry: FormatterRegistry) {
+        registry.addConverterFactory(AnyTypingConverterFactory())
+    }
 }

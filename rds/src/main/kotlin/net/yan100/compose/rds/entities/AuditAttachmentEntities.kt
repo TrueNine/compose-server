@@ -11,26 +11,26 @@ import org.hibernate.annotations.DynamicUpdate
 
 @MappedSuperclass
 abstract class SuperAuditAttachment : IEntity() {
-  companion object {
-    const val TABLE_NAME = "audit_attachment"
+    companion object {
+        const val TABLE_NAME = "audit_attachment"
 
-    const val ATT_ID = "att_id"
-    const val AUDIT_ID = "audit_id"
-    const val STATUS = "status"
-  }
+        const val ATT_ID = "att_id"
+        const val AUDIT_ID = "audit_id"
+        const val STATUS = "status"
+    }
 
-  @Schema(title = "审核文件状态")
-  @Column(name = STATUS)
-  @Convert(converter = AuditTypingConverter::class)
-  lateinit var status: AuditTyping
+    @Schema(title = "审核文件状态")
+    @Column(name = STATUS)
+    @Convert(converter = AuditTypingConverter::class)
+    lateinit var status: AuditTyping
 
-  @Schema(title = "审核条目 id")
-  @Column(name = AUDIT_ID)
-  lateinit var auditId: RefId
+    @Schema(title = "审核条目 id")
+    @Column(name = AUDIT_ID)
+    lateinit var auditId: RefId
 
-  @Schema(title = "附件 id")
-  @Column(name = ATT_ID)
-  lateinit var attId: RefId
+    @Schema(title = "附件 id")
+    @Column(name = ATT_ID)
+    lateinit var attId: RefId
 }
 
 @Entity

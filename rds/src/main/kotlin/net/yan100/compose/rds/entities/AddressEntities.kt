@@ -18,63 +18,63 @@ import org.hibernate.annotations.FetchMode.SUBSELECT
 
 @MappedSuperclass
 abstract class SuperAddress : TreeEntity() {
-  companion object {
-    const val LEAF = "leaf"
-    const val TABLE_NAME = "address"
-    const val CODE = "code"
-    const val NAME = "name"
-    const val YEAR_VERSION = "year_version"
-    const val LEVEL = "level"
-    const val CENTER = "center"
-  }
+    companion object {
+        const val LEAF = "leaf"
+        const val TABLE_NAME = "address"
+        const val CODE = "code"
+        const val NAME = "name"
+        const val YEAR_VERSION = "year_version"
+        const val LEVEL = "level"
+        const val CENTER = "center"
+    }
 
-  /**
-   * 代码
-   */
-  @Nullable
-  @Schema(title = "代码")
-  @Column(name = CODE)
-  lateinit var code: SerialCode
+    /**
+     * 代码
+     */
+    @Nullable
+    @Schema(title = "代码")
+    @Column(name = CODE)
+    lateinit var code: SerialCode
 
-  /**
-   * 名称
-   */
-  @Nullable
-  @Schema(title = "名称")
-  @Column(name = NAME)
-  lateinit var name: String
+    /**
+     * 名称
+     */
+    @Nullable
+    @Schema(title = "名称")
+    @Column(name = NAME)
+    lateinit var name: String
 
-  /**
-   * 级别 0 为国家
-   */
-  @Nullable
-  @Schema(title = "级别 0 为国家")
-  @Column(name = LEVEL)
-  var level: Int? = null
+    /**
+     * 级别 0 为国家
+     */
+    @Nullable
+    @Schema(title = "级别 0 为国家")
+    @Column(name = LEVEL)
+    var level: Int? = null
 
-  /**
-   * 年份版本号
-   */
-  @JsonIgnore
-  @Schema(name = "年份版本号")
-  @Column(name = YEAR_VERSION)
-  lateinit var yearVersion: String
+    /**
+     * 年份版本号
+     */
+    @JsonIgnore
+    @Schema(name = "年份版本号")
+    @Column(name = YEAR_VERSION)
+    lateinit var yearVersion: String
 
-  /**
-   * 定位
-   */
-  @Nullable
-  @Schema(title = "定位")
-  @Column(name = CENTER)
-  @Convert(converter = WGS84Converter::class)
-  var center: WGS84? = null
+    /**
+     * 定位
+     */
+    @Nullable
+    @Schema(title = "定位")
+    @Column(name = CENTER)
+    @Convert(converter = WGS84Converter::class)
+    var center: WGS84? = null
 
-  /**
-   * 是否为终结地址（如市辖区）
-   */
-  @Schema(title = "是否为终结地址（如市辖区）")
-  @Column(name = LEAF)
-  var leaf: Boolean = false
+    /**
+     * 是否为终结地址（如市辖区）
+     */
+    @Schema(title = "是否为终结地址（如市辖区）")
+    @Column(name = LEAF)
+    var leaf: Boolean = false
 }
 
 /**
@@ -96,18 +96,18 @@ class Address : SuperAddress()
 @Schema(title = "行政区代码")
 @Table(name = SuperAddress.TABLE_NAME)
 class FullAddress : SuperAddress() {
-  /**
-   * 当前地址包含的地址详情
-   */
-  @Schema(title = "包含的地址详情", requiredMode = NOT_REQUIRED)
-  @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
-  @JoinColumn(
-    name = SuperAddressDetails.Companion.ADDRESS_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
-  )
-  @Fetch(SUBSELECT)
-  var details: List<AddressDetails> = listOf()
+    /**
+     * 当前地址包含的地址详情
+     */
+    @Schema(title = "包含的地址详情", requiredMode = NOT_REQUIRED)
+    @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
+    @JoinColumn(
+        name = SuperAddressDetails.Companion.ADDRESS_ID,
+        referencedColumnName = ID,
+        foreignKey = ForeignKey(NO_CONSTRAINT),
+        insertable = false,
+        updatable = false
+    )
+    @Fetch(SUBSELECT)
+    var details: List<AddressDetails> = listOf()
 }

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component
 @Component
 @Converter
 class RuleTypingConverter : AttributeConverter<RuleTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: RuleTyping?) = attribute?.value
-  override fun convertToEntityAttribute(dbData: Int?): RuleTyping? = RuleTyping.findVal(dbData)
+    override fun convertToDatabaseColumn(attribute: RuleTyping?) = attribute?.value
+    override fun convertToEntityAttribute(dbData: Int?): RuleTyping? = RuleTyping.findVal(dbData)
 }

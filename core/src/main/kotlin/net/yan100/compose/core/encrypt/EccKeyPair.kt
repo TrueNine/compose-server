@@ -11,21 +11,21 @@ import java.security.PublicKey
  * @since 2022-12-15
  */
 class EccKeyPair {
-  @JsonIgnore
-  var eccPublicKey: PublicKey? = null
+    @JsonIgnore
+    var eccPublicKey: PublicKey? = null
 
-  @JsonIgnore
-  var eccPrivateKey: PrivateKey? = null
-  val eccPublicKeyBase64: String
-    get() = Base64Helper.encode(eccPublicKey!!.encoded)
-  val eccPrivateKeyBase64: String
-    get() = Base64Helper.encode(eccPrivateKey!!.encoded)
+    @JsonIgnore
+    var eccPrivateKey: PrivateKey? = null
+    val eccPublicKeyBase64: String
+        get() = Base64Helper.encode(eccPublicKey!!.encoded)
+    val eccPrivateKeyBase64: String
+        get() = Base64Helper.encode(eccPrivateKey!!.encoded)
 
-  @get:JsonIgnore
-  val eccPublicKeyBase64Byte: ByteArray
-    get() = Base64Helper.encodeToByte(eccPublicKey!!.encoded)
+    @get:JsonIgnore
+    val eccPublicKeyBase64Byte: ByteArray
+        get() = Base64Helper.encodeToByte(eccPublicKey!!.encoded)
 
-  @get:JsonIgnore
-  val eccPrivateKeyBase64Byte: ByteArray
-    get() = Base64Helper.encodeToByte(eccPrivateKey!!.encoded)
+    @get:JsonIgnore
+    val eccPrivateKeyBase64Byte: ByteArray
+        get() = Base64Helper.encodeToByte(eccPrivateKey!!.encoded)
 }

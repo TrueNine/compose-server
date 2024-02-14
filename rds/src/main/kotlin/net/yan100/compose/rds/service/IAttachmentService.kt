@@ -10,33 +10,33 @@ import net.yan100.compose.rds.service.base.IService
 
 
 interface IAttachmentService : IService<Attachment> {
-  fun existsByBaseUrl(baseUrl: String): Boolean
-  fun findByBaseUrl(baseUrl: String): Attachment?
-  fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment?
-  fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment>
-  fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment>
-  fun findFullUrlById(id: String): String?
-  fun findAllFullUrlByMetaNameStartingWith(
-    metaName: String,
-    page: Pq = PagedWrapper.DEFAULT_MAX
-  ): Pr<String>
+    fun existsByBaseUrl(baseUrl: String): Boolean
+    fun findByBaseUrl(baseUrl: String): Attachment?
+    fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment?
+    fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment>
+    fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment>
+    fun findFullUrlById(id: String): String?
+    fun findAllFullUrlByMetaNameStartingWith(
+        metaName: String,
+        page: Pq = PagedWrapper.DEFAULT_MAX
+    ): Pr<String>
 
-  fun findMetaNameById(id: String): String?
-  fun findSaveNameById(id: String): String?
+    fun findMetaNameById(id: String): String?
+    fun findSaveNameById(id: String): String?
 
-  /**
-   * ## 根据 baseurl 查询其下的所有文件地址
-   */
-  fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq = Pw.DEFAULT_MAX): Pr<LinkedAttachment>
+    /**
+     * ## 根据 baseurl 查询其下的所有文件地址
+     */
+    fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq = Pw.DEFAULT_MAX): Pr<LinkedAttachment>
 
-  /**
-   * ## 根据 baseurl 查询其下的所有文件
-   */
-  fun findAllByParentBaseUrl(baseUrl: String, page: Pq = Pw.DEFAULT_MAX): Pr<Attachment>
+    /**
+     * ## 根据 baseurl 查询其下的所有文件
+     */
+    fun findAllByParentBaseUrl(baseUrl: String, page: Pq = Pw.DEFAULT_MAX): Pr<Attachment>
 
-  /**
-   * ## 根据 id 查新附件的url
-   */
-  fun findLinkedById(id: String): LinkedAttachment?
-  fun findAllLinkedById(ids: List<String>): List<LinkedAttachment>
+    /**
+     * ## 根据 id 查新附件的url
+     */
+    fun findLinkedById(id: String): LinkedAttachment?
+    fun findAllLinkedById(ids: List<String>): List<LinkedAttachment>
 }

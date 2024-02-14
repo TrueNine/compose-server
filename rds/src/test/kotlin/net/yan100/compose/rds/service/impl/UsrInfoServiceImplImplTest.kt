@@ -14,42 +14,42 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class UsrInfoServiceImplImplTest {
-  @Autowired
-  private lateinit var userInfoService: UserInfoServiceImpl
+    @Autowired
+    private lateinit var userInfoService: UserInfoServiceImpl
 
-  @Autowired
-  private lateinit var infoRepo: UserInfoRepo
+    @Autowired
+    private lateinit var infoRepo: UserInfoRepo
 
-  @BeforeEach
-  fun setUp() {
-    infoRepo = mockk()
-    userInfoService = UserInfoServiceImpl(infoRepo)
-  }
+    @BeforeEach
+    fun setUp() {
+        infoRepo = mockk()
+        userInfoService = UserInfoServiceImpl(infoRepo)
+    }
 
-  @Test
-  fun testFindUserByWechatOpenId() {
-    val openId = "123456"
-    val usr = Usr()
-    every { infoRepo.findUserByWechatOpenId(openId) } returns usr
-    val result = userInfoService.findUserByWechatOpenId(openId)
-    assertEquals(result, usr)
-  }
+    @Test
+    fun testFindUserByWechatOpenId() {
+        val openId = "123456"
+        val usr = Usr()
+        every { infoRepo.findUserByWechatOpenId(openId) } returns usr
+        val result = userInfoService.findUserByWechatOpenId(openId)
+        assertEquals(result, usr)
+    }
 
-  @Test
-  fun testFindUserByPhone() {
-    val phone = "123456789"
-    val usr = Usr()
-    every { infoRepo.findUserByPhone(phone) } returns usr
-    val result = userInfoService.findUserByPhone(phone)
-    assertEquals(result, usr)
-  }
+    @Test
+    fun testFindUserByPhone() {
+        val phone = "123456789"
+        val usr = Usr()
+        every { infoRepo.findUserByPhone(phone) } returns usr
+        val result = userInfoService.findUserByPhone(phone)
+        assertEquals(result, usr)
+    }
 
-  @Test
-  fun testFindByUserId() {
-    val userId = "123456"
-    val userInfoEntity = UserInfo()
-    every { infoRepo.findByUserId(userId) } returns userInfoEntity
-    val result = userInfoService.findByUserId(userId)
-    assertEquals(result, userInfoEntity)
-  }
+    @Test
+    fun testFindByUserId() {
+        val userId = "123456"
+        val userInfoEntity = UserInfo()
+        every { infoRepo.findByUserId(userId) } returns userInfoEntity
+        val result = userInfoService.findByUserId(userId)
+        assertEquals(result, userInfoEntity)
+    }
 }

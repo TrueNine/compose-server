@@ -27,82 +27,82 @@ import org.springframework.data.annotation.LastModifiedDate
 @MappedSuperclass
 @Schema(title = "顶级抽象类")
 abstract class IEntity : AnyEntity() {
-  companion object {
-    const val RLV = DataBaseBasicFieldNames.LOCK_VERSION
-    const val LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG
-    const val CRD = DataBaseBasicFieldNames.CREATE_ROW_DATETIME
-    const val MRD = DataBaseBasicFieldNames.MODIFY_ROW_DATETIME
-  }
+    companion object {
+        const val RLV = DataBaseBasicFieldNames.LOCK_VERSION
+        const val LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG
+        const val CRD = DataBaseBasicFieldNames.CREATE_ROW_DATETIME
+        const val MRD = DataBaseBasicFieldNames.MODIFY_ROW_DATETIME
+    }
 
-  /**
-   * 乐观锁版本
-   */
-  @Version
-  @JsonIgnore
-  @Column(name = RLV)
-  @Schema(hidden = true, title = "乐观锁版本", requiredMode = RequiredMode.NOT_REQUIRED)
-  var rlv: BigSerial? = null
-  val databaseTableRowFieldLockVersion: BigSerial?
-    @Schema(title = "字段乐观锁版本号")
-    @Transient
+    /**
+     * 乐观锁版本
+     */
+    @Version
     @JsonIgnore
-    get() = rlv
+    @Column(name = RLV)
+    @Schema(hidden = true, title = "乐观锁版本", requiredMode = RequiredMode.NOT_REQUIRED)
+    var rlv: BigSerial? = null
+    val databaseTableRowFieldLockVersion: BigSerial?
+        @Schema(title = "字段乐观锁版本号")
+        @Transient
+        @JsonIgnore
+        get() = rlv
 
-  @CreatedDate
-  @JsonIgnore
-  @Schema(title = "表行创建时间")
-  @Column(name = CRD)
-  var crd: datetime? = null
-  val databaseTableRowFieldCreatedDatetime: datetime?
-    @Schema(title = "字段创建时间")
-    @Transient
+    @CreatedDate
     @JsonIgnore
-    get() = crd
+    @Schema(title = "表行创建时间")
+    @Column(name = CRD)
+    var crd: datetime? = null
+    val databaseTableRowFieldCreatedDatetime: datetime?
+        @Schema(title = "字段创建时间")
+        @Transient
+        @JsonIgnore
+        get() = crd
 
 
-  @JsonIgnore
-  @LastModifiedDate
-  @Schema(title = "表行修改时间")
-  @Column(name = MRD)
-  var mrd: datetime? = null
-  val databaseTableRowFieldLastModifyDatetime: datetime?
-    @Schema(title = "字段的修改时间")
-    @Transient
     @JsonIgnore
-    get() = mrd
+    @LastModifiedDate
+    @Schema(title = "表行修改时间")
+    @Column(name = MRD)
+    var mrd: datetime? = null
+    val databaseTableRowFieldLastModifyDatetime: datetime?
+        @Schema(title = "字段的修改时间")
+        @Transient
+        @JsonIgnore
+        get() = mrd
 
 
-  /**
-   * 逻辑删除标志
-   */
-  @JsonIgnore
-  @Column(name = LDF)
-  @Schema(
-    hidden = true,
-    title = "逻辑删除标志",
-    requiredMode = RequiredMode.NOT_REQUIRED,
-    accessMode = Schema.AccessMode.READ_ONLY
-  )
-  var ldf: Boolean? = null
-  val databaseTableRowFieldLogicDeleteFlag: bool
-    @Schema(title = "是否已经删除")
-    @Transient
+    /**
+     * 逻辑删除标志
+     */
     @JsonIgnore
-    get() = ldf == true
-
-  override fun asNew() {
-    super.asNew()
-    ldf = false
-    rlv = null
-  }
-
-  override fun toString(): String {
-    return withToString(
-      super.toString(),
-      LDF to ldf,
-      RLV to rlv,
-      CRD to crd,
-      MRD to mrd
+    @Column(name = LDF)
+    @Schema(
+        hidden = true,
+        title = "逻辑删除标志",
+        requiredMode = RequiredMode.NOT_REQUIRED,
+        accessMode = Schema.AccessMode.READ_ONLY
     )
-  }
+    var ldf: Boolean? = null
+    val databaseTableRowFieldLogicDeleteFlag: bool
+        @Schema(title = "是否已经删除")
+        @Transient
+        @JsonIgnore
+        get() = ldf == true
+
+    override fun asNew() {
+        super.asNew()
+        ldf = false
+        rlv = null
+    }
+
+    override fun toString(): String {
+        return withToString(
+            super.toString(),
+            LDF to ldf,
+            RLV to rlv,
+            CRD to crd,
+            MRD to mrd
+        )
+    }
 }

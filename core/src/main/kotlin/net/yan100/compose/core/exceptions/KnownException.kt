@@ -11,46 +11,46 @@ import net.yan100.compose.core.http.ErrMsg
  * @since 2023-02-19
  */
 open class KnownException(
-  private var msg: String? = null,
-  private var metaException: Throwable? = null,
-  private var code: Int? = ErrMsg.UNKNOWN_ERROR.code
+    private var msg: String? = null,
+    private var metaException: Throwable? = null,
+    private var code: Int? = ErrMsg.UNKNOWN_ERROR.code
 ) : RuntimeException(msg, metaException) {
 
 
-  open fun getMeta() = this.metaException
-  open fun setMeta(ex: Throwable?) {
-    this.metaException = ex
-  }
+    open fun getMeta() = this.metaException
+    open fun setMeta(ex: Throwable?) {
+        this.metaException = ex
+    }
 
-  open fun setMsg(msg: String?) {
-    this.msg = msg
-  }
+    open fun setMsg(msg: String?) {
+        this.msg = msg
+    }
 
-  open fun getMsg() = this.msg
+    open fun getMsg() = this.msg
 
-  open fun getCode() = this.code
-  open fun setCode(code: Int?) {
-    this.code = code
-  }
+    open fun getCode() = this.code
+    open fun setCode(code: Int?) {
+        this.code = code
+    }
 
-  override fun toString(): String {
-    val s = javaClass.name
-    val message = localizedMessage
-    return if (message != null) "$s: $message" else "$s $msg"
-  }
+    override fun toString(): String {
+        val s = javaClass.name
+        val message = localizedMessage
+        return if (message != null) "$s: $message" else "$s $msg"
+    }
 }
 
 fun requireKnown(expression: Boolean) {
-  if (expression) return
-  else requireKnown(false) { "expression not satisfied" }
+    if (expression) return
+    else requireKnown(false) { "expression not satisfied" }
 }
 
 fun requireKnown(expression: Boolean, lazyMsg: () -> Any?) {
-  if (expression) return
-  else requireKnown(false, KnownException(lazyMsg().toString()), lazyMsg)
+    if (expression) return
+    else requireKnown(false, KnownException(lazyMsg().toString()), lazyMsg)
 }
 
 fun <E : KnownException> requireKnown(expression: Boolean, ex: E, lazyMsg: () -> Any?) {
-  if (expression) return
-  else throw ex.apply { ex.setMsg(lazyMsg().toString()) }
+    if (expression) return
+    else throw ex.apply { ex.setMsg(lazyMsg().toString()) }
 }

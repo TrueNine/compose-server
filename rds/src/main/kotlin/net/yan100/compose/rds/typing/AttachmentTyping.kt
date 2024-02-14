@@ -12,25 +12,25 @@ import net.yan100.compose.core.lang.IntTyping
  */
 @Schema(title = "附件类别")
 enum class AttachmentTyping(
-  private val v: Int
+    private val v: Int
 ) : IntTyping {
-  /**
-   * 文件
-   */
-  @Schema(title = "文件")
-  ATTACHMENT(0),
+    /**
+     * 文件
+     */
+    @Schema(title = "文件")
+    ATTACHMENT(0),
 
-  /**
-   * 根路径
-   */
-  @Schema(title = "根路径")
-  BASE_URL(1);
+    /**
+     * 根路径
+     */
+    @Schema(title = "根路径")
+    BASE_URL(1);
 
-  @JsonValue
-  override val value = v
+    @JsonValue
+    override val value = v
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = entries.find { it.value == v }
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: Int?) = entries.find { it.value == v }
+    }
 }

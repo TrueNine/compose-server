@@ -10,8 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "compose.core.snowflake")
 public class SnowflakeProperties {
-  private Long workId = 1L;
-  private Long dataCenterId = 2L;
-  private Long sequence = 3L;
-  private Long startTimeStamp = 100000L;
+    private Long workId = 1L;
+    private Long dataCenterId = 2L;
+    private Long sequence = 3L;
+    private Long startTimeStamp = 100000L;
 }

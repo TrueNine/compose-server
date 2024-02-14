@@ -7,24 +7,24 @@ import java.time.Duration
 
 
 data class IssuerParam<S : Any?, E : Any?>(
-  var encryptedDataObj: E? = null,
-  var id: String? = null,
-  var issuer: String? = null,
-  var duration: Duration? = null,
-  var signatureKey: RSAPrivateKey? = null,
-  var contentEncryptEccKey: PublicKey? = null,
-  var subjectObj: S? = null
+    var encryptedDataObj: E? = null,
+    var id: String? = null,
+    var issuer: String? = null,
+    var duration: Duration? = null,
+    var signatureKey: RSAPrivateKey? = null,
+    var contentEncryptEccKey: PublicKey? = null,
+    var subjectObj: S? = null
 ) {
-  fun containSubject(): Boolean =
-    this.subjectObj != null
+    fun containSubject(): Boolean =
+        this.subjectObj != null
 
-  fun containEncryptContent(): Boolean = null != this.encryptedDataObj
+    fun containEncryptContent(): Boolean = null != this.encryptedDataObj
 
-  fun contentEncryptEccKeyFromBase64(base64Key: String) {
-    this.contentEncryptEccKey = Keys.readRsaPublicKeyByBase64(base64Key)
-  }
+    fun contentEncryptEccKeyFromBase64(base64Key: String) {
+        this.contentEncryptEccKey = Keys.readRsaPublicKeyByBase64(base64Key)
+    }
 
-  fun signatureKeyFromBase64(base64Key: String) {
-    this.signatureKey = Keys.readRsaPrivateKeyByBase64(base64Key)!!
-  }
+    fun signatureKeyFromBase64(base64Key: String) {
+        this.signatureKey = Keys.readRsaPrivateKeyByBase64(base64Key)!!
+    }
 }

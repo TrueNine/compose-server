@@ -5,5 +5,5 @@ import net.yan100.compose.rds.entities.TableRowDeleteRecord
 import net.yan100.compose.rds.service.base.IService
 
 interface ITableRowDeleteRecordService : IService<TableRowDeleteRecord> {
-  fun saveAnyEntity(anyData: IEntity?): TableRowDeleteRecord?
+    fun saveAnyEntity(anyData: IEntity?): TableRowDeleteRecord?
 }

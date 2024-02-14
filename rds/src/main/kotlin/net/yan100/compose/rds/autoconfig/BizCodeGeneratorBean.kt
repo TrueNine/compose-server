@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component
 
 @Component
 class BizCodeGeneratorBean(
-  private val bizCodeGenerator: BizCodeGenerator
+    private val bizCodeGenerator: BizCodeGenerator
 ) : IdentifierGenerator {
-  init {
-    log.debug("注册业务单号生成器")
-  }
+    init {
+        log.debug("注册业务单号生成器")
+    }
 
-  companion object {
-    private val log = slf4j(this::class)
-    const val CLASS_NAME = "net.yan100.compose.rds.autoconfig.BizCodeGeneratorBean"
-    const val NAME = "BizCodeGeneratorBeanBitCasts"
-  }
+    companion object {
+        private val log = slf4j(this::class)
+        const val CLASS_NAME = "net.yan100.compose.rds.autoconfig.BizCodeGeneratorBean"
+        const val NAME = "BizCodeGeneratorBeanBitCasts"
+    }
 
-  override fun generate(session: SharedSessionContractImplementor?, `object`: Any?): Any {
-    val c = bizCodeGenerator.nextCodeStr()
-    return c
-  }
+    override fun generate(session: SharedSessionContractImplementor?, `object`: Any?): Any {
+        val c = bizCodeGenerator.nextCodeStr()
+        return c
+    }
 }

@@ -20,20 +20,20 @@ import org.hibernate.annotations.DynamicUpdate
 @Schema(title = "部门")
 @Table(name = SuperRoleGroup.TABLE_NAME)
 class Dept : TreeEntity() {
-  companion object {
-    const val TABLE_NAME = "dept"
+    companion object {
+        const val TABLE_NAME = "dept"
 
-    const val NAME = "name"
-    const val DOC = "doc"
-  }
+        const val NAME = "name"
+        const val DOC = "doc"
+    }
 
-  @Column(name = NAME)
-  @Schema(title = "名称")
-  lateinit var name: String
+    @Column(name = NAME)
+    @Schema(title = "名称")
+    lateinit var name: String
 
-  @Column(name = DOC)
-  @Schema(title = "描述")
-  var doc: String? = null
+    @Column(name = DOC)
+    @Schema(title = "描述")
+    var doc: String? = null
 
 
 }
@@ -50,18 +50,18 @@ class Dept : TreeEntity() {
 @Schema(title = "用户  部门")
 @Table(name = UserDept.TABLE_NAME)
 class UserDept : IEntity() {
-  companion object {
-    const val TABLE_NAME = "user_dept"
+    companion object {
+        const val TABLE_NAME = "user_dept"
 
-    const val USER_ID = "user_id"
-    const val DEPT_ID = "dept_id"
-  }
+        const val USER_ID = "user_id"
+        const val DEPT_ID = "dept_id"
+    }
 
-  @Schema(title = "用户id")
-  @Column(name = USER_ID)
-  lateinit var userId: RefId
+    @Schema(title = "用户id")
+    @Column(name = USER_ID)
+    lateinit var userId: RefId
 
-  @Schema(title = "部门id")
-  @Column(name = DEPT_ID)
-  lateinit var deptId: RefId
+    @Schema(title = "部门id")
+    @Column(name = DEPT_ID)
+    lateinit var deptId: RefId
 }

@@ -9,9 +9,9 @@ import net.yan100.compose.rds.service.base.IService
  * @since 2023-05-08
  */
 interface IIAddressService : IService<Address> {
-  fun findRoot(): Address
-  fun initProvince()
-  fun findProvinces(): List<Address>
-  fun findDirectChildrenByCode(code: String): List<Address>
-  fun findFullPathById(id: String): String
+    fun findRoot(): Address
+    fun initProvince()
+    fun findProvinces(): List<Address>
+    fun findDirectChildrenByCode(code: String): List<Address>
+    fun findFullPathById(id: String): String
 }

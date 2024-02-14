@@ -20,36 +20,36 @@ import reactor.netty.http.client.HttpClient
 class ApiExchangesAutoConfiguration {
 
 
-  @Bean
-  fun cnNbsAddressApi(): CnNbsAddressApi {
-    log.debug("创建 中国统计局地址 api")
+    @Bean
+    fun cnNbsAddressApi(): CnNbsAddressApi {
+        log.debug("创建 中国统计局地址 api")
 
-    val sslCtx = SslContextBuilder
-      .forClient()
-      .trustManager(InsecureTrustManagerFactory.INSTANCE)
-      .build()
+        val sslCtx = SslContextBuilder
+            .forClient()
+            .trustManager(InsecureTrustManagerFactory.INSTANCE)
+            .build()
 
-    val unsafeConnector = ReactorClientHttpConnector(
-      HttpClient.create()
-        .secure { t -> t.sslContext(sslCtx) }
-        .compress(true)
-        .resolver(DefaultAddressResolverGroup.INSTANCE))
+        val unsafeConnector = ReactorClientHttpConnector(
+            HttpClient.create()
+                .secure { t -> t.sslContext(sslCtx) }
+                .compress(true)
+                .resolver(DefaultAddressResolverGroup.INSTANCE))
 
 
-    val client = WebClient.builder()
-      .clientConnector(unsafeConnector)
-      .defaultHeaders {
-        it.set("Accept-Charset", "utf-8")
-      }
-      .defaultStatusHandler({ httpCode ->
-        httpCode.isError
-      }) { resp ->
-        RemoteCallException(msg = resp.toString(), code = resp.statusCode().value()).toMono()
-      }
-      .build()
-    val factory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(client)).build()
-    return factory.createClient(CnNbsAddressApi::class.java)
-  }
+        val client = WebClient.builder()
+            .clientConnector(unsafeConnector)
+            .defaultHeaders {
+                it.set("Accept-Charset", "utf-8")
+            }
+            .defaultStatusHandler({ httpCode ->
+                httpCode.isError
+            }) { resp ->
+                RemoteCallException(msg = resp.toString(), code = resp.statusCode().value()).toMono()
+            }
+            .build()
+        val factory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(client)).build()
+        return factory.createClient(CnNbsAddressApi::class.java)
+    }
 
-  private val log = slf4j(this::class)
+    private val log = slf4j(this::class)
 }

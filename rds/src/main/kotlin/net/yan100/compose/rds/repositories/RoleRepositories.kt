@@ -8,30 +8,30 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RoleRepository : IRepo<Role> {
-  fun findAllByName(name: String): List<Role>
+    fun findAllByName(name: String): List<Role>
 
-  @Query(
-    """
+    @Query(
+        """
     from Role r
     left join RoleGroupRole rgr on r.id = rgr.roleId
     left join UserRoleGroup urg on rgr.roleGroupId = urg.roleGroupId
     where urg.userId = :userId
   """
-  )
-  fun findAllByUserId(userId: Long): List<Role>
+    )
+    fun findAllByUserId(userId: Long): List<Role>
 }
 
 @Repository
 interface AllRoleEntityRepository : IRepo<FullRole> {
-  fun findAllByName(name: String): List<FullRole>
+    fun findAllByName(name: String): List<FullRole>
 
-  @Query(
-    """
+    @Query(
+        """
     from FullRole r
     left join RoleGroupRole rgr on r.id = rgr.roleId
     left join UserRoleGroup urg on rgr.roleGroupId = urg.roleGroupId
     where urg.userId = :userId
   """
-  )
-  fun findAllByUserId(userId: Long): List<FullRole>
+    )
+    fun findAllByUserId(userId: Long): List<FullRole>
 }

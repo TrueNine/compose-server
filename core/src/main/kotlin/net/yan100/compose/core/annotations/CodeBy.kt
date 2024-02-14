@@ -25,57 +25,57 @@ import java.lang.annotation.Inherited
 @JacksonAnnotationsInside
 @JsonSerialize(using = SensitiveSerializer::class)
 annotation class SensitiveRef(
-  val value: Strategy = Strategy.NONE
+    val value: Strategy = Strategy.NONE
 )
 
 typealias NonDesensitizedRef = SensitiveRef
 
 enum class Strategy(private val desensitizeSerializer: (String) -> String) {
-  /**
-   * 不进行脱敏处理
-   */
-  NONE({ it }),
+    /**
+     * 不进行脱敏处理
+     */
+    NONE({ it }),
 
-  /**
-   * 手机号
-   */
-  PHONE({ it.replace("(\\d{3})\\d+(\\d{2})".toRegex(), "$1****$2") }),
-  EMAIL({ it.replace("(\\w{2})\\w+(@[\\w.-]+)".toRegex(), "$1****$2") }),
+    /**
+     * 手机号
+     */
+    PHONE({ it.replace("(\\d{3})\\d+(\\d{2})".toRegex(), "$1****$2") }),
+    EMAIL({ it.replace("(\\w{2})\\w+(@[\\w.-]+)".toRegex(), "$1****$2") }),
 
-  /**
-   * 身份证号
-   */
-  ID_CARD({ it.replace(Regex("(\\d{2})[\\w|](\\w{2})"), "$1****$2") }),
+    /**
+     * 身份证号
+     */
+    ID_CARD({ it.replace(Regex("(\\d{2})[\\w|](\\w{2})"), "$1****$2") }),
 
-  /**
-   * 银行卡号
-   */
-  BANK_CARD_CODE({ it.replace("(\\d{2})[\\w|](\\w{2})".toRegex(), "$1****$2") }),
+    /**
+     * 银行卡号
+     */
+    BANK_CARD_CODE({ it.replace("(\\d{2})[\\w|](\\w{2})".toRegex(), "$1****$2") }),
 
-  /**
-   * 姓名
-   */
-  NAME({
-    var result: String = "*"
-    if (it.nonText()) result = it
-    val lastChar = it.substring(it.length - 1)
-    if (it.length >= 2) result = "**$lastChar"
-    result
-  }),
+    /**
+     * 姓名
+     */
+    NAME({
+        var result: String = "*"
+        if (it.nonText()) result = it
+        val lastChar = it.substring(it.length - 1)
+        if (it.length >= 2) result = "**$lastChar"
+        result
+    }),
 
-  /**
-   * 地址
-   */
-  ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "$1****$2****") }),
+    /**
+     * 地址
+     */
+    ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "$1****$2****") }),
 
-  /**
-   * 密码
-   */
-  PASSWORD({ "" });
+    /**
+     * 密码
+     */
+    PASSWORD({ "" });
 
-  open fun desensitizeSerializer(): (String) -> String {
-    return desensitizeSerializer
-  }
+    open fun desensitizeSerializer(): (String) -> String {
+        return desensitizeSerializer
+    }
 }
 
 
@@ -90,8 +90,8 @@ enum class Strategy(private val desensitizeSerializer: (String) -> String) {
 @MustBeDocumented
 @JacksonAnnotationsInside
 @Target(
-  AnnotationTarget.FIELD,
-  AnnotationTarget.PROPERTY_GETTER
+    AnnotationTarget.FIELD,
+    AnnotationTarget.PROPERTY_GETTER
 )
 @Retention(AnnotationRetention.RUNTIME)
 @JsonSerialize(using = LongAsStringSerializer::class)

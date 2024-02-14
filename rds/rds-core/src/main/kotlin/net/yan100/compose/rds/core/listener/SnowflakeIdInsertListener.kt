@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component
 
 @Component
 class SnowflakeIdInsertListener {
-  @set:Autowired
-  lateinit var snowflake: Snowflake
+    @set:Autowired
+    lateinit var snowflake: Snowflake
 
-  @PrePersist
-  fun insertId(data: Any?) {
-    if (data is AnyEntity) {
-      data.id = snowflake.nextStringId()
+    @PrePersist
+    fun insertId(data: Any?) {
+        if (data is AnyEntity) {
+            data.id = snowflake.nextStringId()
+        }
     }
-  }
 }

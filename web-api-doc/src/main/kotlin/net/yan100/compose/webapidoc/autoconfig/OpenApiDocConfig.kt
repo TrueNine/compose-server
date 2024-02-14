@@ -17,40 +17,40 @@ import org.springframework.web.method.HandlerMethod
 
 @Configuration
 class OpenApiDocConfig {
-  companion object {
-    private val log = slf4j(this::class)
-  }
+    companion object {
+        private val log = slf4j(this::class)
+    }
 
-  @Bean
-  @ConditionalOnWebApplication
-  fun userApi(p: SwaggerProperties): GroupedOpenApi {
-    log.debug("注册 OpenApi3 文档")
-    val paths = p.scanUrlPatterns.toTypedArray()
-    return GroupedOpenApi.builder().group(p.group).pathsToMatch(*paths).packagesToScan(*p.scanPackages
-      .apply { this += "net.yan100.compose" }
-      .toTypedArray())
-      .addOperationCustomizer { operation: Operation, _: HandlerMethod? ->
-        if (p.enableJwtHeader) {
-          operation.addParametersItem(
-            HeaderParameter().name(p.jwtHeaderInfo.authTokenName).example("eyJ0eXAiOiJ").description("jwt校验头").schema(
-              StringSchema().name(p.jwtHeaderInfo.authTokenName).description("jwt校验头")
-            )
-          ).addParametersItem(
-            HeaderParameter().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token").schema(
-              StringSchema().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token")
-            )
-          )
-        } else operation
-      }.build()
-  }
+    @Bean
+    @ConditionalOnWebApplication
+    fun userApi(p: SwaggerProperties): GroupedOpenApi {
+        log.debug("注册 OpenApi3 文档")
+        val paths = p.scanUrlPatterns.toTypedArray()
+        return GroupedOpenApi.builder().group(p.group).pathsToMatch(*paths).packagesToScan(*p.scanPackages
+            .apply { this += "net.yan100.compose" }
+            .toTypedArray())
+            .addOperationCustomizer { operation: Operation, _: HandlerMethod? ->
+                if (p.enableJwtHeader) {
+                    operation.addParametersItem(
+                        HeaderParameter().name(p.jwtHeaderInfo.authTokenName).example("eyJ0eXAiOiJ").description("jwt校验头").schema(
+                            StringSchema().name(p.jwtHeaderInfo.authTokenName).description("jwt校验头")
+                        )
+                    ).addParametersItem(
+                        HeaderParameter().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token").schema(
+                            StringSchema().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token")
+                        )
+                    )
+                } else operation
+            }.build()
+    }
 
-  @Bean
-  fun customOpenApi(p: SwaggerProperties): OpenAPI {
-    val authorInfo = p.authorInfo
-    return OpenAPI().info(
-      Info().title(authorInfo.title).version(authorInfo.version).description(authorInfo.description).termsOfService(authorInfo.location).license(
-        License().name(authorInfo.license).url(authorInfo.licenseUrl)
-      )
-    )
-  }
+    @Bean
+    fun customOpenApi(p: SwaggerProperties): OpenAPI {
+        val authorInfo = p.authorInfo
+        return OpenAPI().info(
+            Info().title(authorInfo.title).version(authorInfo.version).description(authorInfo.description).termsOfService(authorInfo.location).license(
+                License().name(authorInfo.license).url(authorInfo.licenseUrl)
+            )
+        )
+    }
 }

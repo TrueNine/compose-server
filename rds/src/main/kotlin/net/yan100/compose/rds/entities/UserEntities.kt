@@ -29,85 +29,85 @@ import java.time.LocalDateTime
 
 @MappedSuperclass
 abstract class SuperUsr : IEntity() {
-  companion object {
-    const val TABLE_NAME = "usr"
+    companion object {
+        const val TABLE_NAME = "usr"
 
-    const val ACCOUNT = "account"
-    const val NICK_NAME = "nick_name"
-    const val DOC = "doc"
-    const val PWD_ENC = "pwd_enc"
-    const val BAN_TIME = "ban_time"
-    const val LAST_LOGIN_TIME = "last_login_time"
-    const val CREATE_USER_ID = "create_user_id"
-  }
+        const val ACCOUNT = "account"
+        const val NICK_NAME = "nick_name"
+        const val DOC = "doc"
+        const val PWD_ENC = "pwd_enc"
+        const val BAN_TIME = "ban_time"
+        const val LAST_LOGIN_TIME = "last_login_time"
+        const val CREATE_USER_ID = "create_user_id"
+    }
 
-  /**
-   * 创建此账号的 user id
-   */
-  @Schema(title = "创建此账号的 user id")
-  @Column(name = CREATE_USER_ID)
-  lateinit var createUserId: RefId
+    /**
+     * 创建此账号的 user id
+     */
+    @Schema(title = "创建此账号的 user id")
+    @Column(name = CREATE_USER_ID)
+    lateinit var createUserId: RefId
 
-  /**
-   * 账号
-   */
-  @NotEmpty
-  @Size(min = 4, max = 256)
-  @Schema(title = "账号")
-  @Pattern(regexp = Regexes.ACCOUNT)
-  @Column(name = ACCOUNT, unique = true)
-  lateinit var account: SerialCode
+    /**
+     * 账号
+     */
+    @NotEmpty
+    @Size(min = 4, max = 256)
+    @Schema(title = "账号")
+    @Pattern(regexp = Regexes.ACCOUNT)
+    @Column(name = ACCOUNT, unique = true)
+    lateinit var account: SerialCode
 
-  /**
-   * 呢称
-   */
-  @Nullable
-  @Schema(title = "呢称")
-  @Column(name = NICK_NAME)
-  var nickName: String? = null
+    /**
+     * 呢称
+     */
+    @Nullable
+    @Schema(title = "呢称")
+    @Column(name = NICK_NAME)
+    var nickName: String? = null
 
-  /**
-   * 描述
-   */
-  @Nullable
-  @Schema(title = "描述")
-  @Column(name = DOC)
-  var doc: String? = null
+    /**
+     * 描述
+     */
+    @Nullable
+    @Schema(title = "描述")
+    @Column(name = DOC)
+    var doc: String? = null
 
-  /**
-   * 密码
-   */
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @Size(min = 8)
-  @Schema(title = "密码")
-  @Column(name = PWD_ENC)
-  lateinit var pwdEnc: String
+    /**
+     * 密码
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Size(min = 8)
+    @Schema(title = "密码")
+    @Column(name = PWD_ENC)
+    lateinit var pwdEnc: String
 
-  /**
-   * 被封禁结束时间
-   */
-  @Nullable
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @FutureOrPresent
-  @Schema(title = "被封禁结束时间")
-  @Column(name = BAN_TIME)
-  var banTime: datetime? = null
+    /**
+     * 被封禁结束时间
+     */
+    @Nullable
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @FutureOrPresent
+    @Schema(title = "被封禁结束时间")
+    @Column(name = BAN_TIME)
+    var banTime: datetime? = null
 
-  /**
-   * 最后请求时间
-   */
-  @Nullable
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @Schema(title = "最后请求时间")
-  @Column(name = LAST_LOGIN_TIME)
-  var lastLoginTime: datetime? = null
+    /**
+     * 最后请求时间
+     */
+    @Nullable
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Schema(title = "最后请求时间")
+    @Column(name = LAST_LOGIN_TIME)
+    var lastLoginTime: datetime? = null
 
-  /**
-   * @return 当前用户是否被封禁
-   */
-  @get:Schema(requiredMode = NOT_REQUIRED)
-  @get:Transient
-  val band: Boolean get() = (null != banTime && LocalDateTime.now().isBefore(banTime))
+    /**
+     * @return 当前用户是否被封禁
+     */
+    @get:Schema(requiredMode = NOT_REQUIRED)
+    @get:Transient
+    val band: Boolean get() = (null != banTime && LocalDateTime.now().isBefore(banTime))
 }
 
 
@@ -130,37 +130,37 @@ class Usr : SuperUsr()
 @Schema(title = "全属性用户")
 @Table(name = SuperUsr.TABLE_NAME)
 class FullUsr : SuperUsr() {
-  /**
-   * 角色组
-   */
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
-  @ManyToMany(fetch = EAGER, targetEntity = RoleGroup::class)
-  @JoinTable(
-    name = UserRoleGroup.TABLE_NAME, joinColumns = [JoinColumn(
-      name = UserRoleGroup.USER_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )], inverseJoinColumns = [JoinColumn(
-      name = UserRoleGroup.ROLE_GROUP_ID,
-      referencedColumnName = ID,
-      foreignKey = ForeignKey(NO_CONSTRAINT),
-      insertable = false,
-      updatable = false
-    )], foreignKey = ForeignKey(NO_CONSTRAINT)
-  )
-  @Fetch(SUBSELECT)
-  @NotFound(action = IGNORE)
-  var roleGroups: List<RoleGroup> = mutableListOf()
+    /**
+     * 角色组
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
+    @ManyToMany(fetch = EAGER, targetEntity = RoleGroup::class)
+    @JoinTable(
+        name = UserRoleGroup.TABLE_NAME, joinColumns = [JoinColumn(
+            name = UserRoleGroup.USER_ID,
+            referencedColumnName = ID,
+            foreignKey = ForeignKey(NO_CONSTRAINT),
+            insertable = false,
+            updatable = false
+        )], inverseJoinColumns = [JoinColumn(
+            name = UserRoleGroup.ROLE_GROUP_ID,
+            referencedColumnName = ID,
+            foreignKey = ForeignKey(NO_CONSTRAINT),
+            insertable = false,
+            updatable = false
+        )], foreignKey = ForeignKey(NO_CONSTRAINT)
+    )
+    @Fetch(SUBSELECT)
+    @NotFound(action = IGNORE)
+    var roleGroups: List<RoleGroup> = mutableListOf()
 
-  /**
-   * 用户信息
-   */
-  @Schema(title = "用户信息", requiredMode = NOT_REQUIRED)
-  @JsonManagedReference
-  @Oto(mappedBy = FullUserInfo.MAPPED_BY_USR)
-  @NotFound(action = IGNORE)
-  var info: FullUserInfo? = null
+    /**
+     * 用户信息
+     */
+    @Schema(title = "用户信息", requiredMode = NOT_REQUIRED)
+    @JsonManagedReference
+    @Oto(mappedBy = FullUserInfo.MAPPED_BY_USR)
+    @NotFound(action = IGNORE)
+    var info: FullUserInfo? = null
 }

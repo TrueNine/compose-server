@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class ApiExchangeAutoConfiguration {
 
-  @Bean
-  fun wechatPayJsApi(objectMapper: ObjectMapper): WechatPayV3JsApi {
-    return jsonWebClientRegister<WechatPayV3JsApi>(objectMapper) { a, b ->
-      a to b
+    @Bean
+    fun wechatPayJsApi(objectMapper: ObjectMapper): WechatPayV3JsApi {
+        return jsonWebClientRegister<WechatPayV3JsApi>(objectMapper) { a, b ->
+            a to b
+        }
     }
-  }
 }

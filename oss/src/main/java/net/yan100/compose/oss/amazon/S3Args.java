@@ -9,11 +9,11 @@ import java.util.List;
 
 @Data
 public class S3Args {
-  @JsonProperty("Version")
-  @SerializedName("Version")
-  String version;
+    @JsonProperty("Version")
+    @SerializedName("Version")
+    String version;
 
-  @JsonProperty("Statement")
-  @SerializedName("Statement")
-  List<S3StatementArgs> statement = new ArrayList<>();
+    @JsonProperty("Statement")
+    @SerializedName("Statement")
+    List<S3StatementArgs> statement = new ArrayList<>();
 }

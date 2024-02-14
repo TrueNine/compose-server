@@ -12,32 +12,32 @@ import kotlin.test.assertNotNull
 @SpringBootTest(classes = [RdsEntrance::class])
 class IAttachmentAggregatorImplTest {
 
-  @Autowired
-  lateinit var ass: AttachmentAggregatorImpl
+    @Autowired
+    lateinit var ass: AttachmentAggregatorImpl
 
-  @Test
-  fun testUploadAttachment() {
-    val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
-    ass.uploadAttachment(mockFile) {
-      PostAttachmentReq().apply {
-        baseUrl = "https://oss.aliyun.com"
-        baseUri = "/static"
-        saveName = "adwd0juihjrthjrthrhrhrth"
-      }
-    }!!.apply {
-      assertNotNull(this.urlId)
+    @Test
+    fun testUploadAttachment() {
+        val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
+        ass.uploadAttachment(mockFile) {
+            PostAttachmentReq().apply {
+                baseUrl = "https://oss.aliyun.com"
+                baseUri = "/static"
+                saveName = "adwd0juihjrthjrthrhrhrth"
+            }
+        }!!.apply {
+            assertNotNull(this.urlId)
+        }
     }
-  }
 
-  @Test
-  fun testGetFullUrl() {
-    val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
-    ass.uploadAttachment(mockFile) {
-      PostAttachmentReq().apply {
-        baseUrl = "https://oss.aliyun.com"
-        baseUri = "/static"
-        saveName = "adwd0juihjrthjrthrhrhrth"
-      }
-    }!!
-  }
+    @Test
+    fun testGetFullUrl() {
+        val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
+        ass.uploadAttachment(mockFile) {
+            PostAttachmentReq().apply {
+                baseUrl = "https://oss.aliyun.com"
+                baseUri = "/static"
+                saveName = "adwd0juihjrthjrthrhrhrth"
+            }
+        }!!
+    }
 }

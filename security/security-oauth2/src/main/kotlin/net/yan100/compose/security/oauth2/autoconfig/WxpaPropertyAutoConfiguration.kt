@@ -8,23 +8,23 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class WxpaPropertyAutoConfiguration {
-  companion object {
-    private val log = slf4j(WxpaPropertyAutoConfiguration::class)
-  }
+    companion object {
+        private val log = slf4j(WxpaPropertyAutoConfiguration::class)
+    }
 
-  @Bean
-  fun wxpaProperty(properties: WechatProperties): WxpaProperty {
-    log.trace("注册 wechat 相关属性配置 = {}", properties)
-    val p = WxpaProperty()
+    @Bean
+    fun wxpaProperty(properties: WechatProperties): WxpaProperty {
+        log.trace("注册 wechat 相关属性配置 = {}", properties)
+        val p = WxpaProperty()
 
-    val pa = properties.wxpa
+        val pa = properties.wxpa
 
-    p.fixedExpiredSecond = pa.fixedExpiredSecond
+        p.fixedExpiredSecond = pa.fixedExpiredSecond
 
-    p.preValidToken = pa.verifyToken
-    p.appId = pa.appId
-    p.appSecret = pa.appSecret
+        p.preValidToken = pa.verifyToken
+        p.appId = pa.appId
+        p.appSecret = pa.appSecret
 
-    return p
-  }
+        return p
+    }
 }

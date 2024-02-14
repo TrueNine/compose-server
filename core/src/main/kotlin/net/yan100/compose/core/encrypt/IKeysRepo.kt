@@ -8,50 +8,50 @@ import javax.crypto.spec.SecretKeySpec
 
 
 interface IKeysRepo {
-  fun basicRsaKeyPair(): RsaKeyPair? = null
-  fun basicEccKeyPair(): EccKeyPair? = null
-  fun basicAesKey(): SecretKeySpec? = null
+    fun basicRsaKeyPair(): RsaKeyPair? = null
+    fun basicEccKeyPair(): EccKeyPair? = null
+    fun basicAesKey(): SecretKeySpec? = null
 
-  fun findRsaKeyPairByName(publicKeyName: String, privateKeyName: String): RsaKeyPair? {
-    return RsaKeyPair().also {
-      it.rsaPublicKey = findRsaPublicKeyByName(publicKeyName)!!
-      it.rsaPrivateKey = findRsaPrivetKeyByName(privateKeyName)!!
+    fun findRsaKeyPairByName(publicKeyName: String, privateKeyName: String): RsaKeyPair? {
+        return RsaKeyPair().also {
+            it.rsaPublicKey = findRsaPublicKeyByName(publicKeyName)!!
+            it.rsaPrivateKey = findRsaPrivetKeyByName(privateKeyName)!!
+        }
     }
-  }
 
 
-  fun findEccKeyPairByName(publicKeyName: String, privateKeyName: String): EccKeyPair? {
-    return EccKeyPair().also {
-      it.eccPublicKey = findEccPublicKeyByName(publicKeyName)!!
-      it.eccPrivateKey = findEccPrivateKeyByName(privateKeyName)!!
+    fun findEccKeyPairByName(publicKeyName: String, privateKeyName: String): EccKeyPair? {
+        return EccKeyPair().also {
+            it.eccPublicKey = findEccPublicKeyByName(publicKeyName)!!
+            it.eccPrivateKey = findEccPrivateKeyByName(privateKeyName)!!
+        }
     }
-  }
 
-  fun findAesSecretByName(name: String): SecretKeySpec? = null
+    fun findAesSecretByName(name: String): SecretKeySpec? = null
 
-  fun findEccPublicKeyByName(name: String): PublicKey? = null
-  fun findRsaPublicKeyByName(name: String): RSAPublicKey? = null
+    fun findEccPublicKeyByName(name: String): PublicKey? = null
+    fun findRsaPublicKeyByName(name: String): RSAPublicKey? = null
 
-  fun findEccPrivateKeyByName(name: String): PrivateKey? = null
-  fun findRsaPrivetKeyByName(name: String): RSAPrivateKey? = null
+    fun findEccPrivateKeyByName(name: String): PrivateKey? = null
+    fun findRsaPrivetKeyByName(name: String): RSAPrivateKey? = null
 
-  fun jwtSignatureIssuerRsaKeyPair(): RsaKeyPair? {
-    return basicRsaKeyPair()
-  }
+    fun jwtSignatureIssuerRsaKeyPair(): RsaKeyPair? {
+        return basicRsaKeyPair()
+    }
 
-  fun jwtSignatureVerifierRsaPublicKey(): RSAPublicKey? {
-    return basicRsaKeyPair()?.rsaPublicKey
-  }
+    fun jwtSignatureVerifierRsaPublicKey(): RSAPublicKey? {
+        return basicRsaKeyPair()?.rsaPublicKey
+    }
 
-  fun jwtEncryptDataIssuerEccKeyPair(): EccKeyPair? {
-    return basicEccKeyPair()
-  }
+    fun jwtEncryptDataIssuerEccKeyPair(): EccKeyPair? {
+        return basicEccKeyPair()
+    }
 
-  fun jwtEncryptDataVerifierKey(): PrivateKey? {
-    return basicEccKeyPair()?.eccPrivateKey
-  }
+    fun jwtEncryptDataVerifierKey(): PrivateKey? {
+        return basicEccKeyPair()?.eccPrivateKey
+    }
 
-  fun databaseEncryptAesSecret(): SecretKeySpec? {
-    return basicAesKey()
-  }
+    fun databaseEncryptAesSecret(): SecretKeySpec? {
+        return basicAesKey()
+    }
 }

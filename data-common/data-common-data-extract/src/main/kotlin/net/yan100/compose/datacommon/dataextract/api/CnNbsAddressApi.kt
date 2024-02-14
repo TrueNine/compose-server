@@ -15,40 +15,40 @@ import org.springframework.web.service.annotation.HttpExchange
  */
 @HttpExchange("https://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm")
 interface CnNbsAddressApi {
-  companion object {
-    const val DEFAULT_VERSION = "2023"
-  }
+    companion object {
+        const val DEFAULT_VERSION = "2023"
+    }
 
-  @GetExchange(url = "{year}/index.html")
-  fun homePage(@PathVariable(required = false) year: String? = DEFAULT_VERSION): ResponseEntity<String>
+    @GetExchange(url = "{year}/index.html")
+    fun homePage(@PathVariable(required = false) year: String? = DEFAULT_VERSION): ResponseEntity<String>
 
-  @GetExchange("{year}/{provinceCode}.html")
-  fun getCityPage(
-    @PathVariable provinceCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
-  ): ResponseEntity<String>
+    @GetExchange("{year}/{provinceCode}.html")
+    fun getCityPage(
+        @PathVariable provinceCode: String,
+        @PathVariable year: String? = DEFAULT_VERSION
+    ): ResponseEntity<String>
 
-  @GetExchange("{year}/{provinceCode}/{provinceCode}{cityCode}.html")
-  fun getCountyPage(
-    @PathVariable provinceCode: String,
-    @PathVariable cityCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
-  ): ResponseEntity<String>
+    @GetExchange("{year}/{provinceCode}/{provinceCode}{cityCode}.html")
+    fun getCountyPage(
+        @PathVariable provinceCode: String,
+        @PathVariable cityCode: String,
+        @PathVariable year: String? = DEFAULT_VERSION
+    ): ResponseEntity<String>
 
-  @GetExchange("{year}/{provinceCode}/{cityCode}/{provinceCode}{cityCode}{countyCode}.html")
-  fun getTownPage(
-    @PathVariable provinceCode: String,
-    @PathVariable cityCode: String,
-    @PathVariable countyCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
-  ): ResponseEntity<String>
+    @GetExchange("{year}/{provinceCode}/{cityCode}/{provinceCode}{cityCode}{countyCode}.html")
+    fun getTownPage(
+        @PathVariable provinceCode: String,
+        @PathVariable cityCode: String,
+        @PathVariable countyCode: String,
+        @PathVariable year: String? = DEFAULT_VERSION
+    ): ResponseEntity<String>
 
-  @GetExchange("{year}/{provinceCode}/{cityCode}/{countyCode}/{provinceCode}{cityCode}{countyCode}{villageCode}.html")
-  fun getVillagePage(
-    @PathVariable provinceCode: String,
-    @PathVariable cityCode: String,
-    @PathVariable countyCode: String,
-    @PathVariable villageCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
-  ): ResponseEntity<String>
+    @GetExchange("{year}/{provinceCode}/{cityCode}/{countyCode}/{provinceCode}{cityCode}{countyCode}{villageCode}.html")
+    fun getVillagePage(
+        @PathVariable provinceCode: String,
+        @PathVariable cityCode: String,
+        @PathVariable countyCode: String,
+        @PathVariable villageCode: String,
+        @PathVariable year: String? = DEFAULT_VERSION
+    ): ResponseEntity<String>
 }

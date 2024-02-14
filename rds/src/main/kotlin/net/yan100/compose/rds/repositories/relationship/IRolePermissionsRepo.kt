@@ -7,12 +7,12 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IRolePermissionsRepo : IRepo<RolePermissions> {
-  fun findByRoleIdAndPermissionsId(roleId: String, permissionsId: String): RolePermissions?
+    fun findByRoleIdAndPermissionsId(roleId: String, permissionsId: String): RolePermissions?
 
-  @Query("select rp.permissionsId from RolePermissions rp")
-  fun findAllPermissionsIdByRoleId(roleId: String): Set<String>
-  fun findAllByRoleId(role: String): List<RolePermissions>
-  fun existsByRoleIdAndPermissionsId(roleId: String, permissionsId: String): Boolean
-  fun deleteByRoleIdAndPermissionsId(roleId: String, permissionsId: String)
-  fun deleteAllByPermissionsIdInAndRoleId(permissionsIds: List<String>, roleId: String)
+    @Query("select rp.permissionsId from RolePermissions rp")
+    fun findAllPermissionsIdByRoleId(roleId: String): Set<String>
+    fun findAllByRoleId(role: String): List<RolePermissions>
+    fun existsByRoleIdAndPermissionsId(roleId: String, permissionsId: String): Boolean
+    fun deleteByRoleIdAndPermissionsId(roleId: String, permissionsId: String)
+    fun deleteAllByPermissionsIdInAndRoleId(permissionsIds: List<String>, roleId: String)
 }

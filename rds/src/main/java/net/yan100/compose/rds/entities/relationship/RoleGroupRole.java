@@ -25,22 +25,22 @@ import org.hibernate.annotations.DynamicUpdate;
 @Schema(title = "角色组  角色")
 @Table(name = RoleGroupRole.TABLE_NAME)
 public class RoleGroupRole extends IEntity {
-  public static final String TABLE_NAME = "role_group_role";
-  public static final String ROLE_GROUP_ID = "role_group_id";
-  public static final String ROLE_ID = "role_id";
-  /**
-   * 用户组
-   */
-  @Nullable
-  @Schema(title = "用户组")
-  @Column(name = ROLE_GROUP_ID)
-  private String roleGroupId;
+    public static final String TABLE_NAME = "role_group_role";
+    public static final String ROLE_GROUP_ID = "role_group_id";
+    public static final String ROLE_ID = "role_id";
+    /**
+     * 用户组
+     */
+    @Nullable
+    @Schema(title = "用户组")
+    @Column(name = ROLE_GROUP_ID)
+    private String roleGroupId;
 
-  /**
-   * 角色
-   */
-  @Nullable
-  @Schema(title = "角色")
-  @Column(name = ROLE_ID)
-  private String roleId;
+    /**
+     * 角色
+     */
+    @Nullable
+    @Schema(title = "角色")
+    @Column(name = ROLE_ID)
+    private String roleId;
 }

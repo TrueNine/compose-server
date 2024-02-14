@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class OpenApiUrlsResponseResult {
-  String name;
-  String url;
+    String name;
+    String url;
 }

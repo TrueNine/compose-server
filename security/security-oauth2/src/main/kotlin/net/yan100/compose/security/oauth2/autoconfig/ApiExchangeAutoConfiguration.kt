@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class ApiExchangeAutoConfiguration {
 
-  companion object {
-    private val log = slf4j(ApiExchangeAutoConfiguration::class)
-  }
-
-  @Bean
-  fun wechatJsApi(objectMapper: ObjectMapper): WechatMpAuthApi {
-    return jsonWebClientRegister<WechatMpAuthApi>(objectMapper) { a, b ->
-      a to b
+    companion object {
+        private val log = slf4j(ApiExchangeAutoConfiguration::class)
     }
-  }
+
+    @Bean
+    fun wechatJsApi(objectMapper: ObjectMapper): WechatMpAuthApi {
+        return jsonWebClientRegister<WechatMpAuthApi>(objectMapper) { a, b ->
+            a to b
+        }
+    }
 }

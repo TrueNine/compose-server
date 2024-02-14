@@ -12,20 +12,20 @@ import kotlin.test.assertNotNull
 @Rollback
 @SpringBootTest
 class DbTestDurationConverterRepoTest {
-  private val log = slf4j(this::class)
+    private val log = slf4j(this::class)
 
-  @Autowired
-  private lateinit var repo: DbTestDurationConverterRepo
+    @Autowired
+    private lateinit var repo: DbTestDurationConverterRepo
 
-  @Test
-  @Rollback
-  fun testSaveAndFind() {
-    val entity = DbTestDurationConverterEntity().apply {
-      durations = Duration.parse("PT24H")
+    @Test
+    @Rollback
+    fun testSaveAndFind() {
+        val entity = DbTestDurationConverterEntity().apply {
+            durations = Duration.parse("PT24H")
+        }
+        entity.durations = Duration.parse("PT24H")
+        val saved = repo.save(entity)
+        assertNotNull(saved)
+        log.info("saved = {}", saved)
     }
-    entity.durations = Duration.parse("PT24H")
-    val saved = repo.save(entity)
-    assertNotNull(saved)
-    log.info("saved = {}", saved)
-  }
 }

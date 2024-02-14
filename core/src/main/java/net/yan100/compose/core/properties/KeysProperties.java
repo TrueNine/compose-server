@@ -12,33 +12,33 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "compose.keys")
 public class KeysProperties {
-  /**
-   * 密钥存放的 resources 对应目录
-   */
-  private String dir = "security";
+    /**
+     * 密钥存放的 resources 对应目录
+     */
+    private String dir = "security";
 
-  /**
-   * ecc 公钥路径
-   */
-  private String eccPublicKeyPath = "ecc_public.key";
+    /**
+     * ecc 公钥路径
+     */
+    private String eccPublicKeyPath = "ecc_public.key";
 
-  /**
-   * ecc 私钥路径
-   */
-  private String eccPrivateKeyPath = "ecc_private.key";
+    /**
+     * ecc 私钥路径
+     */
+    private String eccPrivateKeyPath = "ecc_private.key";
 
-  /**
-   * rsa 公钥路径
-   */
-  private String rsaPublicKeyPath = "rsa_public.key";
+    /**
+     * rsa 公钥路径
+     */
+    private String rsaPublicKeyPath = "rsa_public.key";
 
-  /**
-   * rsa 私钥路径
-   */
-  private String rsaPrivateKeyPath = "rsa_private.key";
+    /**
+     * rsa 私钥路径
+     */
+    private String rsaPrivateKeyPath = "rsa_private.key";
 
-  /**
-   * aes key 路径
-   */
-  private String aesKeyPath = "aes.key";
+    /**
+     * aes key 路径
+     */
+    private String aesKeyPath = "aes.key";
 }

@@ -8,28 +8,28 @@ import kotlin.test.assertTrue
 
 @SpringBootTest
 class BizCodeGeneratorGeneratorBeanTest {
-  @Autowired
-  lateinit var bizId: BizCodeGeneratorBean
+    @Autowired
+    lateinit var bizId: BizCodeGeneratorBean
 
-  @Test
-  fun testGenerate() {
-    val id = bizId.generate(null, null)
-    assertNotNull(id)
-    println(id)
-    assertTrue("生成的订单号不满足位数") {
-      (id as? String)?.length == 21
+    @Test
+    fun testGenerate() {
+        val id = bizId.generate(null, null)
+        assertNotNull(id)
+        println(id)
+        assertTrue("生成的订单号不满足位数") {
+            (id as? String)?.length == 21
+        }
+
+        val batchIds = List(100) {
+            bizId.generate(null, null)
+        }
+
+        println(batchIds.reduce { a, b ->
+            "$a\n$b"
+        })
+
+        assertTrue("生成包含了重复ID") {
+            batchIds.size == batchIds.toSet().size
+        }
     }
-
-    val batchIds = List(100) {
-      bizId.generate(null, null)
-    }
-
-    println(batchIds.reduce { a, b ->
-      "$a\n$b"
-    })
-
-    assertTrue("生成包含了重复ID") {
-      batchIds.size == batchIds.toSet().size
-    }
-  }
 }

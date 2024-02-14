@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IUserDeptRepo : IRepo<UserDept> {
-  fun findAllByUserId(userId: String): List<UserDept>
+    fun findAllByUserId(userId: String): List<UserDept>
 }

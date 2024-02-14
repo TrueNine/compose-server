@@ -17,71 +17,71 @@ import org.springframework.core.io.ClassPathResource
 
 @Configuration
 class WeChatPaySingleAutoConfiguration {
-  companion object {
-    const val CREATE_CONFIG_NAME = "rsaAutoCertificateConfig"
+    companion object {
+        const val CREATE_CONFIG_NAME = "rsaAutoCertificateConfig"
 
-    @JvmStatic
-    private val log = slf4j(WeChatPaySingleAutoConfiguration::class)
-  }
-
-  @Bean
-  @ConditionalOnProperty("compose.pay.wechat.enable-single", havingValue = "true")
-  fun rsaAutoCertificateConfig(p: WeChatPayProperties): RSAAutoCertificateConfig {
-    if (!p.asyncSuccessNotifyUrl.startsWith("https://")) {
-      log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
-    }
-    if (!p.asyncSuccessRefundNotifyUrl.startsWith("https://")) {
-      log.warn("警告：配置的异步退款通知地址不是 https 地址 [{}]", p.asyncSuccessRefundNotifyUrl)
+        @JvmStatic
+        private val log = slf4j(WeChatPaySingleAutoConfiguration::class)
     }
 
-    log.info("注册 微信 单支付属性 p = {}", p)
-    log.info("privateKeyPath = {}", p.privateKeyPath)
-    log.info("certKeyPath = {}", p.certPath)
+    @Bean
+    @ConditionalOnProperty("compose.pay.wechat.enable-single", havingValue = "true")
+    fun rsaAutoCertificateConfig(p: WeChatPayProperties): RSAAutoCertificateConfig {
+        if (!p.asyncSuccessNotifyUrl.startsWith("https://")) {
+            log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
+        }
+        if (!p.asyncSuccessRefundNotifyUrl.startsWith("https://")) {
+            log.warn("警告：配置的异步退款通知地址不是 https 地址 [{}]", p.asyncSuccessRefundNotifyUrl)
+        }
 
-    val privateKey = ClassPathResource(p.privateKeyPath).contentAsByteArray.utf8String
-    val cert = ClassPathResource(p.certPath).contentAsByteArray.utf8String
+        log.info("注册 微信 单支付属性 p = {}", p)
+        log.info("privateKeyPath = {}", p.privateKeyPath)
+        log.info("certKeyPath = {}", p.certPath)
 
-    // TODO 郑重警告，此类不能被创建两次
-    return RSAAutoCertificateConfig.Builder()
-      .merchantId(p.merchantId)
-      .privateKey(privateKey)
-      .merchantSerialNumber(p.merchantSerialNumber)
-      .apiV3Key(p.apiV3Key)
-      .build()
-  }
+        val privateKey = ClassPathResource(p.privateKeyPath).contentAsByteArray.utf8String
+        val cert = ClassPathResource(p.certPath).contentAsByteArray.utf8String
 
-
-  @Bean
-  @DependsOn(CREATE_CONFIG_NAME)
-  @ConditionalOnBean(RSAAutoCertificateConfig::class)
-  fun jsapiService(config: RSAAutoCertificateConfig?): JsapiService {
-    return JsapiService.Builder().config(config).build()
-  }
-
-
-  @Bean
-  @DependsOn(CREATE_CONFIG_NAME)
-  @ConditionalOnBean(RSAAutoCertificateConfig::class)
-  fun refundService(config: RSAAutoCertificateConfig?): RefundService {
-    return RefundService.Builder().config(config).build()
-  }
-
-  @Bean
-  @DependsOn(CREATE_CONFIG_NAME)
-  @ConditionalOnBean(RSAAutoCertificateConfig::class)
-  fun WeChatPaySingleConfigProperty(p: WeChatPayProperties): WeChatPaySingleConfigProperty {
-    val privateKeyFile = p.privateKeyPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
-    val certKeyFile = p.certPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
-
-
-    return WeChatPaySingleConfigProperty().apply {
-      enable = p.enableSingle
-      privateKey = privateKeyFile!!
-      mpAppId = p.mpAppId!!
-      apiSecret = p.apiSecret!!
-      merchantId = p.merchantId!!
-      asyncSuccessNotifyUrl = p.asyncSuccessNotifyUrl!!
-      asyncSuccessRefundNotifyUrl = p.asyncSuccessRefundNotifyUrl!!
+        // TODO 郑重警告，此类不能被创建两次
+        return RSAAutoCertificateConfig.Builder()
+            .merchantId(p.merchantId)
+            .privateKey(privateKey)
+            .merchantSerialNumber(p.merchantSerialNumber)
+            .apiV3Key(p.apiV3Key)
+            .build()
     }
-  }
+
+
+    @Bean
+    @DependsOn(CREATE_CONFIG_NAME)
+    @ConditionalOnBean(RSAAutoCertificateConfig::class)
+    fun jsapiService(config: RSAAutoCertificateConfig?): JsapiService {
+        return JsapiService.Builder().config(config).build()
+    }
+
+
+    @Bean
+    @DependsOn(CREATE_CONFIG_NAME)
+    @ConditionalOnBean(RSAAutoCertificateConfig::class)
+    fun refundService(config: RSAAutoCertificateConfig?): RefundService {
+        return RefundService.Builder().config(config).build()
+    }
+
+    @Bean
+    @DependsOn(CREATE_CONFIG_NAME)
+    @ConditionalOnBean(RSAAutoCertificateConfig::class)
+    fun WeChatPaySingleConfigProperty(p: WeChatPayProperties): WeChatPaySingleConfigProperty {
+        val privateKeyFile = p.privateKeyPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+        val certKeyFile = p.certPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+
+
+        return WeChatPaySingleConfigProperty().apply {
+            enable = p.enableSingle
+            privateKey = privateKeyFile!!
+            mpAppId = p.mpAppId!!
+            apiSecret = p.apiSecret!!
+            merchantId = p.merchantId!!
+            asyncSuccessNotifyUrl = p.asyncSuccessNotifyUrl!!
+            asyncSuccessRefundNotifyUrl = p.asyncSuccessRefundNotifyUrl!!
+        }
+    }
 }

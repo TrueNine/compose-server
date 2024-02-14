@@ -8,25 +8,25 @@ import org.springframework.boot.test.context.SpringBootTest
 
 
 open class AB {
-  var typ: DisTyping? = null
+    var typ: DisTyping? = null
 }
 
 @SpringBootTest
 class AnyTypingDeserializerTest {
-  @Autowired
-  lateinit var mapper: ObjectMapper
+    @Autowired
+    lateinit var mapper: ObjectMapper
 
-  @Test
-  fun `test deserializer`() {
-    val d = DisTyping.EYE
-    val dd = AB().apply {
-      typ = d
+    @Test
+    fun `test deserializer`() {
+        val d = DisTyping.EYE
+        val dd = AB().apply {
+            typ = d
+        }
+        val json = mapper.writeValueAsString(dd)
+        val cc = mapper.readValue(json, AB::class.java)
+        val ff = mapper.readValue("{\"typ\":1}", AB::class.java)
+        val ee = mapper.readValue("{\"typ\":\"1\"}", AB::class.java)
+
+        println(json)
     }
-    val json = mapper.writeValueAsString(dd)
-    val cc = mapper.readValue(json, AB::class.java)
-    val ff = mapper.readValue("{\"typ\":1}", AB::class.java)
-    val ee = mapper.readValue("{\"typ\":\"1\"}", AB::class.java)
-
-    println(json)
-  }
 }

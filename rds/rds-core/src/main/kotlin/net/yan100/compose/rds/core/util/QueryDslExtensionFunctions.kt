@@ -8,26 +8,26 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.repository.query.FluentQuery
 
 fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
-  e: T,
-  fn: (queryHandle: T) -> R
+    e: T,
+    fn: (queryHandle: T) -> R
 ): R {
-  return fn(e)
+    return fn(e)
 }
 
 fun <E : IEntity, T : EntityPathBase<E>, C, R> querydsl(
-  e: T,
-  c: C,
-  fn: (queryHandle: T, companions: C) -> R
+    e: T,
+    c: C,
+    fn: (queryHandle: T, companions: C) -> R
 ): R {
-  return fn(e, c)
+    return fn(e, c)
 }
 
 
 fun <E> FluentQuery.FetchableFluentQuery<E>.sortBy(orders: MutableList<Sort.Order>): FluentQuery.FetchableFluentQuery<E> {
-  return sortBy(orders.asQuerySort())
+    return sortBy(orders.asQuerySort())
 }
 
 fun <E> FluentQuery.FetchableFluentQuery<E>.page(pq: Pq?): Page<E> {
-  return page(pq.page)
+    return page(pq.page)
 }
 

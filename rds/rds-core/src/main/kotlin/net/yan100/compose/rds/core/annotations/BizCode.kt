@@ -7,11 +7,11 @@ package net.yan100.compose.rds.core.annotations
  * @since 2023-05-17
  */
 @Target(
-  AnnotationTarget.FIELD,
-  AnnotationTarget.PROPERTY_GETTER
+    AnnotationTarget.FIELD,
+    AnnotationTarget.PROPERTY_GETTER
 )
 @Retention(
-  AnnotationRetention.RUNTIME
+    AnnotationRetention.RUNTIME
 )
 @MustBeDocumented
 annotation class BizCode

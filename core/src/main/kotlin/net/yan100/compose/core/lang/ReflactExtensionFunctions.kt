@@ -9,13 +9,13 @@ import kotlin.reflect.KClass
  * @return 当前类以及所有到结束标记为止的 fields
  */
 fun KClass<*>.recursionFields(endType: KClass<*> = Any::class): Array<out Field> {
-  val selfFields = mutableListOf<Field>()
-  var superClass: Class<*>? = this.java
-  val endsWith = endType.java
-  while (superClass != null) {
-    selfFields += superClass.declaredFields
-    superClass = superClass.superclass
-    if (superClass == endsWith) break
-  }
-  return selfFields.toTypedArray()
+    val selfFields = mutableListOf<Field>()
+    var superClass: Class<*>? = this.java
+    val endsWith = endType.java
+    while (superClass != null) {
+        selfFields += superClass.declaredFields
+        superClass = superClass.superclass
+        if (superClass == endsWith) break
+    }
+    return selfFields.toTypedArray()
 }

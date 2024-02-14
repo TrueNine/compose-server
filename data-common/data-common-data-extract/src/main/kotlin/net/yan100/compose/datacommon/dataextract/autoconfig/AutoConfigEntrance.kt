@@ -4,9 +4,9 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
 
 @ComponentScan(
-  "net.yan100.compose.datacommon.dataextract.service"
+    "net.yan100.compose.datacommon.dataextract.service"
 )
 @Import(
-  ApiExchangesAutoConfiguration::class
+    ApiExchangesAutoConfiguration::class
 )
 class AutoConfigEntrance

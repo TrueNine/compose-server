@@ -10,30 +10,30 @@ import jakarta.annotation.Nullable
  * @since 2023-04-06
  */
 open class RequestInfo {
-  @Nullable
-  var userId: String? = null
+    @Nullable
+    var userId: String? = null
 
 
-  @Nullable
-  var account: String? = null
+    @Nullable
+    var account: String? = null
 
-  @Nullable
-  @JsonIgnore
-  var deviceId: String? = null
+    @Nullable
+    @JsonIgnore
+    var deviceId: String? = null
 
-  @Nullable
-  var loginIpAddr: String? = null
+    @Nullable
+    var loginIpAddr: String? = null
 
-  @Nullable
-  var currentIpAddr: String? = null
+    @Nullable
+    var currentIpAddr: String? = null
 
-  override fun toString(): String {
-    return mapOf(
-      "userId" to userId,
-      "account" to account,
-      "currentIpAddr" to currentIpAddr,
-      "loginIpAddr" to loginIpAddr,
-      "deviceId" to deviceId
-    ).toString()
-  }
+    override fun toString(): String {
+        return mapOf(
+            "userId" to userId,
+            "account" to account,
+            "currentIpAddr" to currentIpAddr,
+            "loginIpAddr" to loginIpAddr,
+            "deviceId" to deviceId
+        ).toString()
+    }
 }

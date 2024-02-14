@@ -8,5 +8,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 class ApplicationRunner
 
 fun main(args: Array<String>) {
-  SpringApplication.run(CoreEntrance::class.java, *args)
+    SpringApplication.run(CoreEntrance::class.java, *args)
 }

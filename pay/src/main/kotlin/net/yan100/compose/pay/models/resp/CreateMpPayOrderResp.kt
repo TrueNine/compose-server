@@ -7,31 +7,31 @@ import jakarta.validation.constraints.Min
 
 @Schema(title = "拉起小程序支付微信返回")
 class CreateMpPayOrderResp {
-  @Schema(title = "32位随机字符串，32位以下")
-  @Min(value = 5, message = "随机字符串太短")
-  @Max(value = 32, message = "随机字符串不得超过32位")
-  var random32String: String? = null
+    @Schema(title = "32位随机字符串，32位以下")
+    @Min(value = 5, message = "随机字符串太短")
+    @Max(value = 32, message = "随机字符串不得超过32位")
+    var random32String: String? = null
 
 
-  @Schema(
-    title = "统一下单接口返回的 prepay_id", description = """
+    @Schema(
+        title = "统一下单接口返回的 prepay_id", description = """
     prepay_id 参数值，提交格式如：prepay_id=***
   """
-  )
-  var prePayId: String? = null
-    get() = "prepay_id=$field"
-    set(v) {
-      field = v?.replace("prepay_id=", "")
-    }
+    )
+    var prePayId: String? = null
+        get() = "prepay_id=$field"
+        set(v) {
+            field = v?.replace("prepay_id=", "")
+        }
 
 
-  @Min(value = 0)
-  @Schema(title = "时间戳 秒")
-  var iso8601Second: String? = null
+    @Min(value = 0)
+    @Schema(title = "时间戳 秒")
+    var iso8601Second: String? = null
 
-  @Schema(title = "签名方法，SHA256-RSA")
-  var signType: String? = "RSA"
+    @Schema(title = "签名方法，SHA256-RSA")
+    var signType: String? = "RSA"
 
-  @Schema(title = "签名字符串")
-  var paySign: String? = null
+    @Schema(title = "签名字符串")
+    var paySign: String? = null
 }

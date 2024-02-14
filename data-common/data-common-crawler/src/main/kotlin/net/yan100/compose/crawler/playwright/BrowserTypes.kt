@@ -4,15 +4,15 @@ import com.microsoft.playwright.BrowserType
 import com.microsoft.playwright.Playwright
 
 enum class BrowserTypes {
-  CHROMIUM,
-  WEBKIT,
-  FIREFOX;
+    CHROMIUM,
+    WEBKIT,
+    FIREFOX;
 
-  fun getPlaywrightType(playwright: Playwright): BrowserType {
-    return when (this) {
-      CHROMIUM -> playwright.chromium()
-      WEBKIT -> playwright.webkit()
-      FIREFOX -> playwright.firefox()
+    fun getPlaywrightType(playwright: Playwright): BrowserType {
+        return when (this) {
+            CHROMIUM -> playwright.chromium()
+            WEBKIT -> playwright.webkit()
+            FIREFOX -> playwright.firefox()
+        }
     }
-  }
 }

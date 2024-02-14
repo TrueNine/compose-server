@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Primary
 
 @Configuration
 class FileKeyRepoAutoConfiguration {
-  companion object {
-    @JvmStatic
-    private val log = slf4j(FileKeyRepoAutoConfiguration::class)
-  }
+    companion object {
+        @JvmStatic
+        private val log = slf4j(FileKeyRepoAutoConfiguration::class)
+    }
 
-  @Bean
-  @Primary
-  fun fileKeyRepo(): FileKeyRepo {
-    log.debug("注册 以文件形式获取密钥")
-    return FileKeyRepo()
-  }
+    @Bean
+    @Primary
+    fun fileKeyRepo(): FileKeyRepo {
+        log.debug("注册 以文件形式获取密钥")
+        return FileKeyRepo()
+    }
 }

@@ -14,6 +14,6 @@ import org.springframework.stereotype.Component
 @Converter
 @Component
 class GenderTypingConverter : AttributeConverter<GenderTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: GenderTyping?): Int? = attribute?.value
-  override fun convertToEntityAttribute(dbData: Int?): GenderTyping? = dbData?.run { GenderTyping.findVal(dbData) }
+    override fun convertToDatabaseColumn(attribute: GenderTyping?): Int? = attribute?.value
+    override fun convertToEntityAttribute(dbData: Int?): GenderTyping? = dbData?.run { GenderTyping.findVal(dbData) }
 }

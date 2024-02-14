@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 @Converter
 class AttachmentTypingConverter : AttributeConverter<AttachmentTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: AttachmentTyping?): Int? = attribute?.value
-  override fun convertToEntityAttribute(dbData: Int?): AttachmentTyping? = AttachmentTyping.findVal(dbData)
+    override fun convertToDatabaseColumn(attribute: AttachmentTyping?): Int? = attribute?.value
+    override fun convertToEntityAttribute(dbData: Int?): AttachmentTyping? = AttachmentTyping.findVal(dbData)
 }
 

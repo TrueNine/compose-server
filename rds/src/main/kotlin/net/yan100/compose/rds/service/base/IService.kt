@@ -12,30 +12,30 @@ import net.yan100.compose.rds.core.util.Pw
  * @since 2023-05-05
  */
 interface IService<T : IEntity> {
-  fun findAll(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
-  fun findAllOrderByIdDesc(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
-  fun findAllOrderByIdDesc(): List<T>
-  fun findAllByNotLogicDeleted(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+    fun findAll(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+    fun findAllOrderByIdDesc(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+    fun findAllOrderByIdDesc(): List<T>
+    fun findAllByNotLogicDeleted(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
 
-  fun findById(id: Id): T?
-  fun findAllById(ids: List<Id>): MutableList<T>
-  fun findByIdAndNotLogicDeleted(id: Id): T
-  fun findByIdAndNotLogicDeletedOrNull(id: Id): T?
+    fun findById(id: Id): T?
+    fun findAllById(ids: List<Id>): MutableList<T>
+    fun findByIdAndNotLogicDeleted(id: Id): T
+    fun findByIdAndNotLogicDeletedOrNull(id: Id): T?
 
-  fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+    fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq? = Pw.DEFAULT_MAX): Pr<T>
 
-  fun countAll(): Long
-  fun countAllByNotLogicDeleted(): Long
-  fun existsById(id: Id): Boolean
+    fun countAll(): Long
+    fun countAllByNotLogicDeleted(): Long
+    fun existsById(id: Id): Boolean
 
-  fun findLdfById(id: Id): Boolean
+    fun findLdfById(id: Id): Boolean
 
-  fun save(e: T): T
-  fun saveAll(es: List<T>): List<T>
+    fun save(e: T): T
+    fun saveAll(es: List<T>): List<T>
 
-  fun deleteById(id: Id)
-  fun deleteAllById(ids: List<Id>)
+    fun deleteById(id: Id)
+    fun deleteAllById(ids: List<Id>)
 
-  fun logicDeleteById(id: Id): T?
-  fun logicDeleteAllById(ids: List<Id>): List<T>
+    fun logicDeleteById(id: Id): T?
+    fun logicDeleteAllById(ids: List<Id>): List<T>
 }

@@ -16,7 +16,7 @@ import java.lang.annotation.Inherited
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 @Import(
-  CorsConfiguration::class
+    CorsConfiguration::class
 )
 @ConditionalOnWebApplication
 annotation class EnableAllCrossOrigin

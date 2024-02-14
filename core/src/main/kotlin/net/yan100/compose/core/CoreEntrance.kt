@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Import
 class CoreEntrance
 
 fun main(args: Array<String>) {
-  SpringApplication.run(CoreEntrance::class.java, *args)
+    SpringApplication.run(CoreEntrance::class.java, *args)
 }

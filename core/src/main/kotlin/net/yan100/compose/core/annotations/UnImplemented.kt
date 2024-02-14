@@ -11,13 +11,13 @@ import java.lang.annotation.Inherited
 @Inherited
 @Retention(AnnotationRetention.RUNTIME)
 @Target(
-  AnnotationTarget.ANNOTATION_CLASS,
-  AnnotationTarget.CONSTRUCTOR,
-  AnnotationTarget.FIELD,
-  AnnotationTarget.FUNCTION,
-  AnnotationTarget.PROPERTY_GETTER,
-  AnnotationTarget.PROPERTY_SETTER,
-  AnnotationTarget.CLASS
+    AnnotationTarget.ANNOTATION_CLASS,
+    AnnotationTarget.CONSTRUCTOR,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.PROPERTY_SETTER,
+    AnnotationTarget.CLASS
 )
 @MustBeDocumented
 annotation class UnImplemented

@@ -8,4 +8,4 @@ import org.springframework.stereotype.Service
 
 @Service
 class RoleServiceImpl
-  (repo: RoleRepository) : IRoleService, CrudService<Role>(repo)
+    (repo: RoleRepository) : IRoleService, CrudService<Role>(repo)

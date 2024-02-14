@@ -12,28 +12,28 @@ import kotlin.test.assertNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class TableRowDeleteRecordServiceImplImplTest {
-  @Autowired
-  private lateinit var service: TableRowDeleteRecordServiceImpl
+    @Autowired
+    private lateinit var service: TableRowDeleteRecordServiceImpl
 
-  @Autowired
-  lateinit var mapper: ObjectMapper
+    @Autowired
+    lateinit var mapper: ObjectMapper
 
-  @Test
-  fun testSaveAnyEntity() {
-    val e = DbTestServiceEntity().apply {
-      id = 131.toString()
-      title = "测试"
+    @Test
+    fun testSaveAnyEntity() {
+        val e = DbTestServiceEntity().apply {
+            id = 131.toString()
+            title = "测试"
+        }
+        val saved = service.saveAnyEntity(e)
+
+        assertNotNull(saved)
+        assertNotNull(saved.entity)
+        assertNotNull(saved.entity!!.entityJson)
+
+        val a = mapper.readValue(saved.entity!!.entityJson, DbTestServiceEntity::class.java)
+        assertEquals(a.title, e.title)
+
+        val abc = service.saveAnyEntity(null)
+        assertNull(abc)
     }
-    val saved = service.saveAnyEntity(e)
-
-    assertNotNull(saved)
-    assertNotNull(saved.entity)
-    assertNotNull(saved.entity!!.entityJson)
-
-    val a = mapper.readValue(saved.entity!!.entityJson, DbTestServiceEntity::class.java)
-    assertEquals(a.title, e.title)
-
-    val abc = service.saveAnyEntity(null)
-    assertNull(abc)
-  }
 }

@@ -21,163 +21,163 @@ import java.time.LocalDate
 
 @MappedSuperclass
 class SuperUserInfo : IEntity() {
-  companion object {
-    const val TABLE_NAME = "user_info"
+    companion object {
+        const val TABLE_NAME = "user_info"
 
-    const val CREATE_USER_ID = "create_user_id"
-    const val USER_ID = "user_id"
-    const val AVATAR_IMG_ID = "avatar_img_id"
-    const val FIRST_NAME = "first_name"
-    const val LAST_NAME = "last_name"
-    const val EMAIL = "email"
-    const val PRI = "pri"
-    const val BIRTHDAY = "birthday"
-    const val ADDRESS_DETAILS_ID = "address_details_id"
-    const val ADDRESS_CODE = "address_code"
-    const val ADDRESS_ID = "address_id"
-    const val WECHAT_ACCOUNT = "wechat_account"
-    const val PHONE = "phone"
-    const val ID_CARD = "id_card"
-    const val GENDER = "gender"
-    const val WECHAT_OPENID = "wechat_openid"
-    const val WECHAT_AUTHID = "wechat_authid"
-    const val QQ_OPENID = "qq_openid"
-    const val QQ_ACCOUNT = "qq_account"
-    const val SPARE_PHONE = "spare_phone"
+        const val CREATE_USER_ID = "create_user_id"
+        const val USER_ID = "user_id"
+        const val AVATAR_IMG_ID = "avatar_img_id"
+        const val FIRST_NAME = "first_name"
+        const val LAST_NAME = "last_name"
+        const val EMAIL = "email"
+        const val PRI = "pri"
+        const val BIRTHDAY = "birthday"
+        const val ADDRESS_DETAILS_ID = "address_details_id"
+        const val ADDRESS_CODE = "address_code"
+        const val ADDRESS_ID = "address_id"
+        const val WECHAT_ACCOUNT = "wechat_account"
+        const val PHONE = "phone"
+        const val ID_CARD = "id_card"
+        const val GENDER = "gender"
+        const val WECHAT_OPENID = "wechat_openid"
+        const val WECHAT_AUTHID = "wechat_authid"
+        const val QQ_OPENID = "qq_openid"
+        const val QQ_ACCOUNT = "qq_account"
+        const val SPARE_PHONE = "spare_phone"
 
-  }
+    }
 
-  @Schema(title = "创建此信息的用户")
-  @Column(name = CREATE_USER_ID)
-  var createUserId: ReferenceId? = null
+    @Schema(title = "创建此信息的用户")
+    @Column(name = CREATE_USER_ID)
+    var createUserId: ReferenceId? = null
 
-  @Schema(title = "首选用户信息")
-  @Column(name = PRI)
-  var pri: Boolean? = null
+    @Schema(title = "首选用户信息")
+    @Column(name = PRI)
+    var pri: Boolean? = null
 
 
-  /**
-   * 用户
-   */
-  @Schema(title = "用户")
-  @Column(name = USER_ID)
-  var userId: RefId? = null
+    /**
+     * 用户
+     */
+    @Schema(title = "用户")
+    @Column(name = USER_ID)
+    var userId: RefId? = null
 
-  /**
-   * 用户头像
-   */
-  @Nullable
-  @Schema(title = "用户头像")
-  @Column(name = AVATAR_IMG_ID)
-  var avatarImgId: RefId? = null
+    /**
+     * 用户头像
+     */
+    @Nullable
+    @Schema(title = "用户头像")
+    @Column(name = AVATAR_IMG_ID)
+    var avatarImgId: RefId? = null
 
-  /**
-   * 姓
-   */
-  @Nullable
-  @Schema(title = "姓")
-  @Column(name = FIRST_NAME)
-  var firstName: String? = null
+    /**
+     * 姓
+     */
+    @Nullable
+    @Schema(title = "姓")
+    @Column(name = FIRST_NAME)
+    var firstName: String? = null
 
-  /**
-   * 名
-   */
-  @Nullable
-  @Schema(title = "名")
-  @Column(name = LAST_NAME)
-  var lastName: String? = null
+    /**
+     * 名
+     */
+    @Nullable
+    @Schema(title = "名")
+    @Column(name = LAST_NAME)
+    var lastName: String? = null
 
-  /**
-   * 邮箱
-   */
-  @Nullable
-  @Schema(title = "邮箱")
-  @Column(name = EMAIL)
-  var email: @Email String? = null
+    /**
+     * 邮箱
+     */
+    @Nullable
+    @Schema(title = "邮箱")
+    @Column(name = EMAIL)
+    var email: @Email String? = null
 
-  /**
-   * 生日
-   */
-  @Nullable
-  @Schema(title = "生日")
-  @Column(name = BIRTHDAY)
-  @Past
-  var birthday: LocalDate? = null
+    /**
+     * 生日
+     */
+    @Nullable
+    @Schema(title = "生日")
+    @Column(name = BIRTHDAY)
+    @Past
+    var birthday: LocalDate? = null
 
-  /**
-   * 地址 id
-   */
-  @Nullable
-  @Schema(title = "地址 id")
-  @Column(name = ADDRESS_DETAILS_ID)
-  var addressDetailsId: String? = null
+    /**
+     * 地址 id
+     */
+    @Nullable
+    @Schema(title = "地址 id")
+    @Column(name = ADDRESS_DETAILS_ID)
+    var addressDetailsId: String? = null
 
-  @Nullable
-  @Schema(title = "地址编码")
-  @Column(name = ADDRESS_CODE)
-  var addressCode: SerialCode? = null
+    @Nullable
+    @Schema(title = "地址编码")
+    @Column(name = ADDRESS_CODE)
+    var addressCode: SerialCode? = null
 
-  @Nullable
-  @Schema(title = "地址id")
-  @Column(name = ADDRESS_ID)
-  var addressId: ReferenceId? = null
+    @Nullable
+    @Schema(title = "地址id")
+    @Column(name = ADDRESS_ID)
+    var addressId: ReferenceId? = null
 
-  @Schema(title = "qq openid")
-  @Column(name = QQ_OPENID)
-  var qqOpenid: ReferenceId? = null
+    @Schema(title = "qq openid")
+    @Column(name = QQ_OPENID)
+    var qqOpenid: ReferenceId? = null
 
-  @Schema(title = "qq号")
-  @Column(name = QQ_ACCOUNT)
-  var qqAccount: ReferenceId? = null
+    @Schema(title = "qq号")
+    @Column(name = QQ_ACCOUNT)
+    var qqAccount: ReferenceId? = null
 
-  /**
-   * 电话号码
-   */
-  @Nullable
-  @Schema(title = "电话号码")
-  @Column(name = PHONE, unique = true)
-  var phone: String? = null
+    /**
+     * 电话号码
+     */
+    @Nullable
+    @Schema(title = "电话号码")
+    @Column(name = PHONE, unique = true)
+    var phone: String? = null
 
-  /**
-   * 身份证
-   */
-  @Nullable
-  @Schema(title = "身份证")
-  @Column(name = ID_CARD, unique = true)
-  var idCard: String? = null
+    /**
+     * 身份证
+     */
+    @Nullable
+    @Schema(title = "身份证")
+    @Column(name = ID_CARD, unique = true)
+    var idCard: String? = null
 
-  /**
-   * 性别：0女，1难，2未知
-   */
-  @Nullable
-  @Schema(title = " 性别：0女，1难，2未知")
-  @Column(name = GENDER)
-  @Convert(converter = GenderTypingConverter::class)
-  var gender: GenderTyping? = null
+    /**
+     * 性别：0女，1难，2未知
+     */
+    @Nullable
+    @Schema(title = " 性别：0女，1难，2未知")
+    @Column(name = GENDER)
+    @Convert(converter = GenderTypingConverter::class)
+    var gender: GenderTyping? = null
 
-  /**
-   * 微信个人 openId
-   */
-  @Nullable
-  @Schema(title = "微信个人 openId")
-  @Column(name = WECHAT_OPENID)
-  var wechatOpenid: String? = null
+    /**
+     * 微信个人 openId
+     */
+    @Nullable
+    @Schema(title = "微信个人 openId")
+    @Column(name = WECHAT_OPENID)
+    var wechatOpenid: String? = null
 
-  @Schema(title = "微信号")
-  @Column(name = WECHAT_ACCOUNT)
-  var wechatAccount: SerialCode? = null
+    @Schema(title = "微信号")
+    @Column(name = WECHAT_ACCOUNT)
+    var wechatAccount: SerialCode? = null
 
-  /**
-   * 微信自定义登录id
-   */
-  @Nullable
-  @Schema(title = "微信自定义登录id")
-  @Column(name = WECHAT_AUTHID)
-  var wechatAuthid: String? = null
+    /**
+     * 微信自定义登录id
+     */
+    @Nullable
+    @Schema(title = "微信自定义登录id")
+    @Column(name = WECHAT_AUTHID)
+    var wechatAuthid: String? = null
 
-  @Schema(title = "备用手机")
-  @Column(name = SPARE_PHONE)
-  var sparePhone: SerialCode? = null
+    @Schema(title = "备用手机")
+    @Column(name = SPARE_PHONE)
+    var sparePhone: SerialCode? = null
 }
 
 /**
@@ -192,13 +192,13 @@ class SuperUserInfo : IEntity() {
 @Schema(title = "用户信息")
 @Table(name = SuperUserInfo.TABLE_NAME)
 class UserInfo : SuperUserInfo() {
-  /**
-   * 用户全名
-   */
-  @get:Nullable
-  @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @get:Transient
-  val fullName: String get() = (firstName ?: "") + (lastName ?: "")
+    /**
+     * 用户全名
+     */
+    @get:Nullable
+    @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    @get:Transient
+    val fullName: String get() = (firstName ?: "") + (lastName ?: "")
 }
 
 /**
@@ -210,40 +210,40 @@ class UserInfo : SuperUserInfo() {
 @Schema(title = "完全的用户信息")
 @Table(name = SuperUserInfo.TABLE_NAME)
 class FullUserInfo : SuperUserInfo() {
-  companion object {
-    const val MAPPED_BY_USR = "usr"
-  }
+    companion object {
+        const val MAPPED_BY_USR = "usr"
+    }
 
-  /**
-   * 连接的用户
-   */
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(
-    name = USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false
-  )
-  @JsonBackReference
-  @NotFound(action = NotFoundAction.IGNORE)
-  var usr: Usr? = null
+    /**
+     * 连接的用户
+     */
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false
+    )
+    @JsonBackReference
+    @NotFound(action = NotFoundAction.IGNORE)
+    var usr: Usr? = null
 
-  /**
-   * 用户住址
-   */
-  @Schema(title = "用户住址", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(
-    name = ADDRESS_DETAILS_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false
-  )
-  @NotFound(action = NotFoundAction.IGNORE)
-  var addressDetails: AddressDetails? = null
+    /**
+     * 用户住址
+     */
+    @Schema(title = "用户住址", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = ADDRESS_DETAILS_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false
+    )
+    @NotFound(action = NotFoundAction.IGNORE)
+    var addressDetails: AddressDetails? = null
 
-  /**
-   * 用户头像
-   */
-  @Schema(title = "头像")
-  @ManyToOne(targetEntity = LinkedAttachment::class)
-  @JoinColumn(
-    name = AVATAR_IMG_ID, referencedColumnName = ID, foreignKey = Fk(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false
-  )
-  @NotFound(action = NotFoundAction.IGNORE)
-  var avatarImage: LinkedAttachment? = null
+    /**
+     * 用户头像
+     */
+    @Schema(title = "头像")
+    @ManyToOne(targetEntity = LinkedAttachment::class)
+    @JoinColumn(
+        name = AVATAR_IMG_ID, referencedColumnName = ID, foreignKey = Fk(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false
+    )
+    @NotFound(action = NotFoundAction.IGNORE)
+    var avatarImage: LinkedAttachment? = null
 }

@@ -18,46 +18,46 @@ import org.hibernate.annotations.DynamicUpdate
 
 @MappedSuperclass
 abstract class SuperAudit : IEntity() {
-  companion object {
-    const val TABLE_NAME = "audit"
+    companion object {
+        const val TABLE_NAME = "audit"
 
-    const val STATUS = "status"
-    const val REMARK = "remark"
-    const val CREATE_DATETIME = "create_datetime"
-    const val REF_ID = "ref_id"
-    const val REF_TYPE = "ref_type"
-    const val AUDIT_IP = "audit_ip"
-    const val AUDIT_DEVICE_ID = "audit_device_id"
-  }
+        const val STATUS = "status"
+        const val REMARK = "remark"
+        const val CREATE_DATETIME = "create_datetime"
+        const val REF_ID = "ref_id"
+        const val REF_TYPE = "ref_type"
+        const val AUDIT_IP = "audit_ip"
+        const val AUDIT_DEVICE_ID = "audit_device_id"
+    }
 
-  @Schema(title = "审核人设备 id")
-  @Col(name = AUDIT_DEVICE_ID)
-  var auditDeviceId: SerialCode? = null
+    @Schema(title = "审核人设备 id")
+    @Col(name = AUDIT_DEVICE_ID)
+    var auditDeviceId: SerialCode? = null
 
-  @Schema(title = "审核人 ip")
-  @Col(name = AUDIT_IP)
-  var auditIp: String? = null
+    @Schema(title = "审核人 ip")
+    @Col(name = AUDIT_IP)
+    var auditIp: String? = null
 
-  @Schema(title = "审核类型")
-  @Col(name = REF_TYPE)
-  var refType: Int? = null
+    @Schema(title = "审核类型")
+    @Col(name = REF_TYPE)
+    var refType: Int? = null
 
-  @Schema(title = "审核外键")
-  @Col(name = REF_ID)
-  lateinit var refId: RefId
+    @Schema(title = "审核外键")
+    @Col(name = REF_ID)
+    lateinit var refId: RefId
 
-  @Schema(title = "审核备注")
-  @Col(name = REMARK)
-  var remark: String? = null
+    @Schema(title = "审核备注")
+    @Col(name = REMARK)
+    var remark: String? = null
 
-  @Schema(title = "创建时间")
-  @Col(name = CREATE_DATETIME)
-  lateinit var createDatetime: datetime
+    @Schema(title = "创建时间")
+    @Col(name = CREATE_DATETIME)
+    lateinit var createDatetime: datetime
 
-  @Schema(title = "审核状态")
-  @Col(name = STATUS)
-  @Convert(converter = AuditTypingConverter::class)
-  lateinit var state: AuditTyping
+    @Schema(title = "审核状态")
+    @Col(name = STATUS)
+    @Convert(converter = AuditTypingConverter::class)
+    lateinit var state: AuditTyping
 }
 
 

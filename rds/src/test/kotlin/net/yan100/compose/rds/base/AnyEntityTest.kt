@@ -10,30 +10,30 @@ import kotlin.test.assertTrue
 
 @SpringBootTest
 class AnyEntityTest {
-  @Autowired
-  private lateinit var repo: IRolePermissionsRepo
+    @Autowired
+    private lateinit var repo: IRolePermissionsRepo
 
-  @Test
-  fun `test save and update`() {
-    val empty = RolePermissions().also {
-      it.roleId = "33"
-      it.permissionsId = "44"
-    }
-    assertTrue { empty.isNew }
-    assertFalse {
-      empty.let {
-        it.id = "3344"
-        it
-      }.isNew
-    }
-    val b = repo.save(empty)
-    assertFalse { b.isNew }
-    assertTrue { b.id != null }
-    val c = repo.save(b.let {
-      it.roleId = "4455"
-      it
-    })
-    repo.save(c)
+    @Test
+    fun `test save and update`() {
+        val empty = RolePermissions().also {
+            it.roleId = "33"
+            it.permissionsId = "44"
+        }
+        assertTrue { empty.isNew }
+        assertFalse {
+            empty.let {
+                it.id = "3344"
+                it
+            }.isNew
+        }
+        val b = repo.save(empty)
+        assertFalse { b.isNew }
+        assertTrue { b.id != null }
+        val c = repo.save(b.let {
+            it.roleId = "4455"
+            it
+        })
+        repo.save(c)
 
-  }
+    }
 }

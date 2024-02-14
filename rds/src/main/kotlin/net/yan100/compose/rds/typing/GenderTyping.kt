@@ -12,31 +12,31 @@ import net.yan100.compose.core.lang.IntTyping
  */
 @Schema(title = "性别")
 enum class GenderTyping(
-  private val v: Int
+    private val v: Int
 ) : IntTyping {
-  /**
-   * 男
-   */
-  @Schema(title = "男")
-  MAN(1),
+    /**
+     * 男
+     */
+    @Schema(title = "男")
+    MAN(1),
 
-  /**
-   * 女
-   */
-  @Schema(title = "女")
-  WOMAN(0),
+    /**
+     * 女
+     */
+    @Schema(title = "女")
+    WOMAN(0),
 
-  /**
-   * 未知
-   */
-  @Schema(title = "未知")
-  UNKNOWN(2);
+    /**
+     * 未知
+     */
+    @Schema(title = "未知")
+    UNKNOWN(2);
 
-  @JsonValue
-  override val value: Int = v
+    @JsonValue
+    override val value: Int = v
 
-  companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = entries.find { it.value == v }
-  }
+    companion object {
+        @JvmStatic
+        fun findVal(v: Int?) = entries.find { it.value == v }
+    }
 }

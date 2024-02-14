@@ -13,14 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest(classes = [RdsEntrance::class])
 class AesEncryptConverterTest {
 
-  @Autowired
-  private lateinit var repo: DbTestPeriodConverterRepo
-  private val log = slf4j(this::class)
+    @Autowired
+    private lateinit var repo: DbTestPeriodConverterRepo
+    private val log = slf4j(this::class)
 
-  @Test
-  fun bootConverter() {
-    repo.save(
-      DbTestPeriodConverterEntity()
-    )
-  }
+    @Test
+    fun bootConverter() {
+        repo.save(
+            DbTestPeriodConverterEntity()
+        )
+    }
 }

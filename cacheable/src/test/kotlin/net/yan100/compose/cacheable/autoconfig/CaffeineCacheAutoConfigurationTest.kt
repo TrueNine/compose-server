@@ -7,14 +7,14 @@ import kotlin.test.assertNull
 
 class CaffeineCacheAutoConfigurationTest {
 
-  @Test
-  fun `test caffeine cache`() {
-    val ac = Caffeine.newBuilder().build<String, String>()
-    val bc = Caffeine.newBuilder().build<String, String>()
+    @Test
+    fun `test caffeine cache`() {
+        val ac = Caffeine.newBuilder().build<String, String>()
+        val bc = Caffeine.newBuilder().build<String, String>()
 
-    ac.put("acc", "ess")
-    val bResult = bc.getIfPresent("acc")
+        ac.put("acc", "ess")
+        val bResult = bc.getIfPresent("acc")
 
-    assertNull(bResult)
-  }
+        assertNull(bResult)
+    }
 }

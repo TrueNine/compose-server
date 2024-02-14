@@ -10,14 +10,14 @@ import org.springframework.test.annotation.Rollback
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class IPermissionsRepoTest {
-  @Autowired
-  private lateinit var repo: IPermissionsRepo
-  private val log = slf4j(this::class)
+    @Autowired
+    private lateinit var repo: IPermissionsRepo
+    private val log = slf4j(this::class)
 
-  @Test
-  @Rollback
-  fun testFindAll() {
-    val all = repo.findAll()
-    log.info("permissions = {}", all)
-  }
+    @Test
+    @Rollback
+    fun testFindAll() {
+        val all = repo.findAll()
+        log.info("permissions = {}", all)
+    }
 }

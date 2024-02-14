@@ -13,10 +13,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "compose.schedule.xxl-job.executor")
 public class XxlJobExecutorAutoConfigurationProperties {
-  String appName;
-  String address = "127.0.0.1";
-  String ip = "127.0.0.1";
-  Integer port = -1;
-  String logPath = ".logs/xxl-job";
-  Integer logRetentionDays = 30;
+    String appName;
+    String address = "127.0.0.1";
+    String ip = "127.0.0.1";
+    Integer port = -1;
+    String logPath = ".logs/xxl-job";
+    Integer logRetentionDays = 30;
 }

@@ -13,8 +13,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "compose.schedule.xxl-job")
 public class XxlJobAutoConfigurationProperties {
-  String adminAddress = "http://localhost/xxl-job-admin";
-  String accessToken = "default_token";
+    String adminAddress = "http://localhost/xxl-job-admin";
+    String accessToken = "default_token";
 }
 
 

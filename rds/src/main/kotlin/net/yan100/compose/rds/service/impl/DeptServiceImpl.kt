@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class DeptServiceImpl(
-  private val repo: IDeptRepo
+    private val repo: IDeptRepo
 ) : IDeptService, CrudService<Dept>(repo) {
 
-  override fun findAllByUserId(userId: String): List<Dept> {
-    return repo.findAllByUserId(userId)
-  }
+    override fun findAllByUserId(userId: String): List<Dept> {
+        return repo.findAllByUserId(userId)
+    }
 }

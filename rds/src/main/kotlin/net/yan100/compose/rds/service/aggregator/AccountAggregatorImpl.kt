@@ -18,84 +18,84 @@ import java.time.LocalDateTime
 
 @Service
 class AccountAggregatorImpl(
-  private val userService: IUserService,
-  private val userInfoService: IUserInfoService,
-  private val passwordEncoder: PasswordEncoder,
-  private val roleGroupService: IRoleGroupService
+    private val userService: IUserService,
+    private val userInfoService: IUserInfoService,
+    private val passwordEncoder: PasswordEncoder,
+    private val roleGroupService: IRoleGroupService
 ) : IAccountAggregator {
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun assignAccount(
-    @Valid usr: Usr,
-    createUserId: ReferenceId,
-    @Valid userInfo: UserInfo?,
-    roleGroup: Set<String>?,
-    allowAssignRoot: Boolean
-  ): Usr {
-    val savedUsr = usr.withNew().run {
-      checkNotNull(account) { "分配账号不能为空" }
-      check(!userService.existsByAccount(account)) { "分配的账号已经存在" }
-      checkNotNull(pwdEnc) { "分配账号的密码不能为空" }
-      pwdEnc = passwordEncoder.encode(this.pwdEnc)
-      this.createUserId = createUserId
-      userService.save(this)
+    @Transactional(rollbackFor = [Exception::class])
+    override fun assignAccount(
+        @Valid usr: Usr,
+        createUserId: ReferenceId,
+        @Valid userInfo: UserInfo?,
+        roleGroup: Set<String>?,
+        allowAssignRoot: Boolean
+    ): Usr {
+        val savedUsr = usr.withNew().run {
+            checkNotNull(account) { "分配账号不能为空" }
+            check(!userService.existsByAccount(account)) { "分配的账号已经存在" }
+            checkNotNull(pwdEnc) { "分配账号的密码不能为空" }
+            pwdEnc = passwordEncoder.encode(this.pwdEnc)
+            this.createUserId = createUserId
+            userService.save(this)
+        }
+
+        userInfo?.withNew()?.also {
+            it.createUserId = createUserId
+            it.pri = true
+            it.userId = savedUsr.id
+            userInfoService.save(it)
+        }
+
+        roleGroup?.also { rg ->
+            roleGroupService.assignPlainToUser(savedUsr.id)
+            if (allowAssignRoot) {
+                if (rg.contains("ADMIN")) roleGroupService.assignAdminToUser(savedUsr.id)
+                if (rg.contains("ROOT")) roleGroupService.assignRootToUser(savedUsr.id)
+            }
+        }
+        return savedUsr
     }
 
-    userInfo?.withNew()?.also {
-      it.createUserId = createUserId
-      it.pri = true
-      it.userId = savedUsr.id
-      userInfoService.save(it)
+    override fun registerAccount(@Valid param: RegisterAccountReq): Usr? =
+        if (!userService.existsByAccount(param.account!!)) {
+            userService.save(Usr().withNew().apply {
+                account = param.account!!
+                pwdEnc = passwordEncoder.encode(param.password)
+                nickName = param.nickName
+                doc = param.description
+            }).also { roleGroupService.assignPlainToUser(it.id) }
+        } else null
+
+    override fun login(@Valid param: LoginAccountReq): Usr? =
+        if (verifyPassword(param.account!!, param.password!!)) {
+            userService.findUserByAccount(param.account!!)
+        } else null
+
+
+    override fun modifyPassword(@Valid param: ModifyAccountPasswordReq): Boolean {
+        if (!verifyPassword(param.account!!, param.oldPassword!!)) {
+            return false
+        }
+        if (param.oldPassword == param.newPassword) {
+            return false
+        }
+        val user = userService.findUserByAccount(param.account!!) ?: return false
+        user.pwdEnc = passwordEncoder.encode(param.newPassword)
+        userService.save(user)
+        return true
     }
 
-    roleGroup?.also { rg ->
-      roleGroupService.assignPlainToUser(savedUsr.id)
-      if (allowAssignRoot) {
-        if (rg.contains("ADMIN")) roleGroupService.assignAdminToUser(savedUsr.id)
-        if (rg.contains("ROOT")) roleGroupService.assignRootToUser(savedUsr.id)
-      }
+    override fun verifyPassword(account: String, password: String): Boolean {
+        return if (userService.existsByAccount(account)) {
+            val encodedPwd = userService.findPwdEncByAccount(account)
+            return passwordEncoder.matches(
+                password,
+                encodedPwd
+            )
+        } else false
     }
-    return savedUsr
-  }
 
-  override fun registerAccount(@Valid param: RegisterAccountReq): Usr? =
-    if (!userService.existsByAccount(param.account!!)) {
-      userService.save(Usr().withNew().apply {
-        account = param.account!!
-        pwdEnc = passwordEncoder.encode(param.password)
-        nickName = param.nickName
-        doc = param.description
-      }).also { roleGroupService.assignPlainToUser(it.id) }
-    } else null
-
-  override fun login(@Valid param: LoginAccountReq): Usr? =
-    if (verifyPassword(param.account!!, param.password!!)) {
-      userService.findUserByAccount(param.account!!)
-    } else null
-
-
-  override fun modifyPassword(@Valid param: ModifyAccountPasswordReq): Boolean {
-    if (!verifyPassword(param.account!!, param.oldPassword!!)) {
-      return false
-    }
-    if (param.oldPassword == param.newPassword) {
-      return false
-    }
-    val user = userService.findUserByAccount(param.account!!) ?: return false
-    user.pwdEnc = passwordEncoder.encode(param.newPassword)
-    userService.save(user)
-    return true
-  }
-
-  override fun verifyPassword(account: String, password: String): Boolean {
-    return if (userService.existsByAccount(account)) {
-      val encodedPwd = userService.findPwdEncByAccount(account)
-      return passwordEncoder.matches(
-        password,
-        encodedPwd
-      )
-    } else false
-  }
-
-  override fun bannedAccountTo(account: String, dateTime: LocalDateTime) = userService.modifyUserBandTimeTo(account, dateTime)
+    override fun bannedAccountTo(account: String, dateTime: LocalDateTime) = userService.modifyUserBandTimeTo(account, dateTime)
 }

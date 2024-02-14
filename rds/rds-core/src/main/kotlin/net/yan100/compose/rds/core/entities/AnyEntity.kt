@@ -26,76 +26,76 @@ import java.io.Serial
 @MappedSuperclass
 @Schema(title = "顶级任意抽象类")
 @EntityListeners(
-  TableRowDeletePersistenceListener::class,
-  BizCodeInsertListener::class,
-  SnowflakeIdInsertListener::class,
-  PreSaveDeleteReferenceListener::class
+    TableRowDeletePersistenceListener::class,
+    BizCodeInsertListener::class,
+    SnowflakeIdInsertListener::class,
+    PreSaveDeleteReferenceListener::class
 )
 abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() {
-  companion object {
+    companion object {
+        /**
+         * 主键
+         */
+        const val ID = DataBaseBasicFieldNames.ID
+
+        @Serial
+        private val serialVersionUID = 1L
+    }
+
     /**
-     * 主键
+     * id
      */
-    const val ID = DataBaseBasicFieldNames.ID
+    @jakarta.persistence.Id
+    @Column(name = DataBaseBasicFieldNames.ID)
+    @Schema(title = ID, examples = ["7001234523405", "7001234523441"])
+    private var id: Id? = null
+        @Transient
+        @JsonIgnore
+        @JvmName("setInternalId")
+        set
+        @Transient
+        @JsonIgnore
+        @JvmName("getInternalId")
+        get() = field ?: ""
 
-    @Serial
-    private val serialVersionUID = 1L
-  }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        return "" != id && id != null && "null" != id && id == (other as AnyEntity).id
+    }
 
-  /**
-   * id
-   */
-  @jakarta.persistence.Id
-  @Column(name = DataBaseBasicFieldNames.ID)
-  @Schema(title = ID, examples = ["7001234523405", "7001234523441"])
-  private var id: Id? = null
-    @Transient
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
+
+    fun asNew() {
+        this.id = null
+    }
+
+    fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
+        return superString + "[" + properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } + "]"
+    }
+
+    fun setId(id: String) {
+        this.id = id
+    }
+
+    override fun getId(): String {
+        return this.id ?: ""
+    }
+
     @JsonIgnore
-    @JvmName("setInternalId")
-    set
-    @Transient
-    @JsonIgnore
-    @JvmName("getInternalId")
-    get() = field ?: ""
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-    return "" != id && id != null && "null" != id && id == (other as AnyEntity).id
-  }
-
-  override fun hashCode(): Int {
-    return javaClass.hashCode()
-  }
-
-  fun asNew() {
-    this.id = null
-  }
-
-  fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
-    return superString + "[" + properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } + "]"
-  }
-
-  fun setId(id: String) {
-    this.id = id
-  }
-
-  override fun getId(): String {
-    return this.id ?: ""
-  }
-
-  @JsonIgnore
-  override fun isNew(): Boolean {
-    return "" == id || null == id
-  }
+    override fun isNew(): Boolean {
+        return "" == id || null == id
+    }
 }
 
 /**
  * 将自身置空为新的 Entity 对象
  */
 fun <T : AnyEntity> T.withNew(): T {
-  this.asNew()
-  return this
+    this.asNew()
+    return this
 }
 
 fun <T : AnyEntity> T.withNew(after: (T) -> T): T = after(withNew())
