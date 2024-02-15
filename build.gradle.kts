@@ -112,14 +112,16 @@ subprojects {
         annotations(
             "jakarta.persistence.MappedSuperclass",
             "jakarta.persistence.Entity",
-            "net.yan100.compose.core.annotations.OpenArg"
+            "net.yan100.compose.core.annotations.OpenArg",
+            "io.swagger.v3.oas.annotations.media.Schema"
         )
     }
     allOpen {
         annotations(
             "jakarta.persistence.MappedSuperclass",
             "jakarta.persistence.Entity",
-            "net.yan100.compose.core.annotations.OpenArg"
+            "net.yan100.compose.core.annotations.OpenArg",
+            "io.swagger.v3.oas.annotations.media.Schema"
         )
     }
 

@@ -7,8 +7,8 @@ import com.microsoft.playwright.Page
 fun Browser.withActions(
     ctxOptions: Browser.NewContextOptions? = null, pageOptions: Browser.NewPageOptions? = null, action: (BrowserContext, Page) -> Unit
 ) {
-    this.newContext(ctxOptions).use { ctx ->
-        this.newPage(pageOptions).use { page ->
+    newContext(ctxOptions).use { ctx ->
+        newPage(pageOptions).use { page ->
             action(ctx, page)
         }
     }

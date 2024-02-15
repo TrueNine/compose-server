@@ -3,7 +3,7 @@ package net.yan100.compose.security.oauth2.schedule
 
 import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.security.oauth2.api.WechatMpAuthApi
+import net.yan100.compose.security.oauth2.api.IWxpaApi
 import net.yan100.compose.security.oauth2.property.WxpaProperty
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Lazy
@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+
+private val log = slf4j(GetAccessTokenSchedule::class)
 
 /**
  * 微信公众号 access_token 定时调度器
@@ -21,14 +23,8 @@ import org.springframework.stereotype.Component
 @EnableAsync
 @Component
 class GetAccessTokenSchedule(
-    private val ctx: ApplicationContext,
-    @Lazy
-    private val api: WechatMpAuthApi
+    private val ctx: ApplicationContext, @Lazy private val api: IWxpaApi
 ) {
-    companion object {
-        private val log = slf4j(GetAccessTokenSchedule::class)
-    }
-
     init {
         log.debug("注册微信公众号 access_token 调度器")
     }
@@ -38,12 +34,8 @@ class GetAccessTokenSchedule(
         val pp = ctx.getBean(WxpaProperty::class.java)
         log.debug("准备更新 access_token appid = {},secret = {}", pp.appId, pp.appSecret)
         val ae = api.getAccessToken(pp.appId, pp.appSecret)
-        if (ae.isError) {
-            log.error("微信公众号调用发生错误 code = {}, message = {}", ae.errorCode, ae.errorMessage)
-            throw RemoteCallException("微信调用公众号时发生错误")
-        }
         val t = api.getTicket(ae.accessToken!!)
-        if (t.isError) {
+        if (ae.isError || t.isError) {
             log.error("微信公众号调用发生错误 code = {}, message = {}", ae.errorCode, ae.errorMessage)
             throw RemoteCallException("微信调用公众号时发生错误")
         }

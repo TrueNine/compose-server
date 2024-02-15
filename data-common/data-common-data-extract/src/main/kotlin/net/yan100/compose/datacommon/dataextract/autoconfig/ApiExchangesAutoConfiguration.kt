@@ -5,7 +5,7 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import io.netty.resolver.DefaultAddressResolverGroup
 import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.datacommon.dataextract.api.CnNbsAddressApi
+import net.yan100.compose.datacommon.dataextract.api.ICnNbsAddressApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
@@ -21,7 +21,7 @@ class ApiExchangesAutoConfiguration {
 
 
     @Bean
-    fun cnNbsAddressApi(): CnNbsAddressApi {
+    fun cnNbsAddressApi(): ICnNbsAddressApi {
         log.debug("创建 中国统计局地址 api")
 
         val sslCtx = SslContextBuilder
@@ -48,7 +48,7 @@ class ApiExchangesAutoConfiguration {
             }
             .build()
         val factory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(client)).build()
-        return factory.createClient(CnNbsAddressApi::class.java)
+        return factory.createClient(ICnNbsAddressApi::class.java)
     }
 
     private val log = slf4j(this::class)

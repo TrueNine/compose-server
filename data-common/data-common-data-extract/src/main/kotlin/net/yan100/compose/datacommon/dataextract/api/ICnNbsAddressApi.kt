@@ -14,7 +14,7 @@ import org.springframework.web.service.annotation.HttpExchange
  * @version 2023
  */
 @HttpExchange("https://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm")
-interface CnNbsAddressApi {
+interface ICnNbsAddressApi {
     companion object {
         const val DEFAULT_VERSION = "2023"
     }

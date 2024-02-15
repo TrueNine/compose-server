@@ -6,10 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.assertNotNull
 
 @SpringBootTest
-class CnNbsAddressApiTest {
+class ICnNbsAddressApiTest {
 
     @Autowired
-    lateinit var remoteCall: CnNbsAddressApi
+    lateinit var remoteCall: ICnNbsAddressApi
 
     @Test
     fun testGetHomePage() {

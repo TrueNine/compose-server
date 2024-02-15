@@ -1,5 +1,6 @@
 package net.yan100.compose.security.oauth2.api
 
+import net.yan100.compose.core.alias.string
 import net.yan100.compose.core.typing.wechat.WechatMpGrantTyping
 import net.yan100.compose.security.oauth2.models.api.*
 import org.springframework.web.bind.annotation.RequestParam
@@ -13,10 +14,10 @@ import org.springframework.web.service.annotation.HttpExchange
  * @since 2023-05-31
  */
 @HttpExchange(url = "https://api.weixin.qq.com/")
-interface WechatMpAuthApi {
+interface IWxMpApi {
 
     /**
-     * # 小程序登录
+     * ## 小程序登录
      *
      * @param appId appId
      * @param secret secret
@@ -30,11 +31,18 @@ interface WechatMpAuthApi {
         @RequestParam(name = "secret") secret: String,
         @RequestParam(name = "js_code") jsCode: String,
         @RequestParam(name = "grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE
-    ): JsCodeToSessionApiResp?
+    ): WxMpJsCodeToSessionResp
+}
 
-
+/**
+ * # 微信公众号 API
+ * @author TrueNine
+ * @since 2024-02-14
+ */
+@HttpExchange(url = "https://api.weixin.qq.com/")
+interface IWxpaApi {
     /**
-     * 公众号 获取 access_token
+     * ## 公众号 获取 access_token
      * @param appId appId
      * @param secret secret
      * @param grantType 验证类型
@@ -55,12 +63,23 @@ interface WechatMpAuthApi {
         @RequestParam(name = "access_token") accessToken: String,
         @RequestParam(name = "type") type: String = "jsapi"
     ): WxpaGetTicketResp
+
+    /**
+     * ## 公众号每天的调用次数
+     * @param accessToken access_token
+     * @param cgiPath 调用路径
+     */
+    @GetExchange("cgi-bin/openapi/quota/get")
+    fun findApiQuota(
+        @RequestParam("access_token") accessToken: string,
+        @RequestParam("cgi_path") cgiPath: string
+    ): WxpaQuotaResp
 }
 
 
-fun WechatMpAuthApi.jsCodeToSessionStandard(param: JsCodeToSessionApiReq): JsCodeToSessionResp? = this.jsCodeToSession(
+fun IWxMpApi.jsCodeToSessionStandard(param: JsCodeToSessionApiReq): JsCodeToSessionResp = jsCodeToSession(
     appId = param.mpAppId,
     secret = param.mpSecret,
     jsCode = param.jsCode,
     grantType = WechatMpGrantTyping.AUTH_CODE
-)?.toStandard()
+).toStandard()

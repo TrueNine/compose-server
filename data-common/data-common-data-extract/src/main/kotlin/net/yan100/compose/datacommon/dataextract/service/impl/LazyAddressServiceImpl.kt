@@ -2,19 +2,19 @@ package net.yan100.compose.datacommon.dataextract.service.impl
 
 
 import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.datacommon.dataextract.api.CnNbsAddressApi
+import net.yan100.compose.datacommon.dataextract.api.ICnNbsAddressApi
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictCode
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp
 import net.yan100.compose.datacommon.dataextract.service.ILazyAddressService
 import org.jsoup.Jsoup
 import org.springframework.stereotype.Service
 
-@Service
-class ILazyAddressServiceImpl(
-    private val call: CnNbsAddressApi
+@Service("DataExtractLazyAddressServiceImpls")
+class LazyAddressServiceImpl(
+    private val call: ICnNbsAddressApi
 ) : ILazyAddressService {
     companion object {
-        private val log = slf4j(ILazyAddressServiceImpl::class)
+        private val log = slf4j(LazyAddressServiceImpl::class)
     }
 
     override fun findAllProvinces(): List<CnDistrictResp> {
@@ -30,7 +30,7 @@ class ILazyAddressServiceImpl(
             this.leaf = leaf
             this.name = name
             this.code = CnDistrictCode(code)
-            this.yearVersion = CnNbsAddressApi.DEFAULT_VERSION
+            this.yearVersion = ICnNbsAddressApi.DEFAULT_VERSION
             level = this.code.level
         }
 
