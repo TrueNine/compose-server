@@ -22,6 +22,7 @@ typealias int = Int
 
 typealias long = Long
 typealias serial = Long
+typealias bigserial = serial
 
 typealias float = Float
 typealias double = Double
@@ -29,6 +30,8 @@ typealias double = Double
 typealias decimal = BigDecimal
 typealias bigint = BigInteger
 
+typealias Timestamp = Long
+typealias timestamp = Timestamp
 typealias date = LocalDate
 typealias time = LocalTime
 typealias datetime = LocalDateTime

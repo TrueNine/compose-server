@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Entity
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Table
-import net.yan100.compose.core.alias.bool
-import net.yan100.compose.core.alias.datetime
-import net.yan100.compose.core.alias.int
-import net.yan100.compose.core.alias.string
+import net.yan100.compose.core.alias.*
 import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.DynamicInsert
@@ -21,7 +18,7 @@ class SuperFlywaySchemaHistory : IEntity() {
 
     @Schema(title = "执行时间")
     @Col(name = EXECUTION_TIME)
-    var execOn: datetime? = null
+    var execOn: timestamp? = null
 
     @Schema(title = "安装时间")
     @Col(name = INSTALLED_ON)
@@ -35,7 +32,7 @@ class SuperFlywaySchemaHistory : IEntity() {
     @Col(name = CHECKSUM)
     var checksum: int? = null
 
-    @Schema(title = "执行脚本")
+    @Schema(title = "执行脚本文件名")
     @Col(name = SCRIPT)
     lateinit var script: string
 

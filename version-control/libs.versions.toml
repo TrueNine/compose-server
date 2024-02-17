@@ -39,7 +39,7 @@ compose-ruleEngine = { group = "net.yan100.compose", name = "rule-engine", versi
 compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose" }
 compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", version.ref = "compose" }
 compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose" }
-compose-datacommonCralwer = { group = "net.yan100.compose", name = "data-common-cralwer", version.ref = "compose" }
+compose-datacommonCrawler = { group = "net.yan100.compose", name = "data-common-crawler", version.ref = "compose" }
 compose-datacommonDataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose" }
 compose-dependMqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose" }
 compose-dependFlyway = { group = "net.yan100.compose", name = "depend-flyway", version.ref = "compose" }
@@ -179,7 +179,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.350"
+compose = "1.6.352"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
