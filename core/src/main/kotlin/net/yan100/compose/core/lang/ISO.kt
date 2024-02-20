@@ -92,5 +92,6 @@ enum class ISO4217(
         return this.iso4217Str
     }
 }
+
 typealias ISO4217Typing = ISO4217
 typealias Currency = ISO4217

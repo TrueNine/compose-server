@@ -19,15 +19,16 @@ import org.springframework.transaction.annotation.Transactional
  * @author TrueNine
  * @since 2023-05-05
  */
+@JvmDefaultWithoutCompatibility
 @NoRepositoryBean
 interface ITreeRepo<T : TreeEntity> : IRepo<T> {
     fun findChildrenCount(parent: T): BigSerial {
-        require(parent.rln != null) {
+        /*require(parent.rln != null) {
             "父节点：$parent 左节点为 null"
         }
         require(parent.rrn != null) {
             "父节点：$parent 右节点为 null"
-        }
+        }*/
         return (parent.rrn - parent.rln - 1) / 2
     }
 

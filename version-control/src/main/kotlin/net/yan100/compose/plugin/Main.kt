@@ -35,6 +35,9 @@ class SettingsMain : Plugin<Settings> {
 
 }
 
+fun a() {
+
+}
 
 fun org.gradle.api.artifacts.dsl.DependencyHandler.allAnnotationCompileOnly(dependencyNotation: Any): org.gradle.api.artifacts.Dependency? {
     this.add("annotationProcessor", dependencyNotation)

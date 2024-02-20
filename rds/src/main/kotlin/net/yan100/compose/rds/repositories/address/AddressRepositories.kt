@@ -12,6 +12,15 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IAddressRepo : ITreeRepo<Address> {
+    /**
+     * ## 查询所有除了 村行政区以外的满编地址
+     */
+    @Query("""
+        from Address a
+        where a.level < 5
+        and length(a.code) = 12
+    """)
+    fun findAllByPadCode(): Set<Address>
 
     @Query("select ((count(a.id) = 1) or (count(a.id) = 1)) from Address a")
     fun isEmpty(): Boolean

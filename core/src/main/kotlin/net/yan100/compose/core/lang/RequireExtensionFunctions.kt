@@ -5,7 +5,7 @@ package net.yan100.compose.core.lang
  * @param conditions 条件
  * @param lazyMessage 消息
  */
-fun requireAll(vararg conditions: Boolean, lazyMessage: (() -> String)): Boolean {
+inline fun requireAll(vararg conditions: Boolean, crossinline lazyMessage: (() -> String)): Boolean {
     require(!conditions.contains(false), lazyMessage)
     return true
 }
@@ -23,7 +23,7 @@ fun <T> checkAllNotNull(vararg values: T?) {
     checkAllNotNull(values) { "index $it has null value" }
 }
 
-fun <T> checkAllNotNull(vararg values: T?, lazyMessage: (idx: Int) -> Any) {
+inline fun <T> checkAllNotNull(vararg values: T?, crossinline lazyMessage: (idx: Int) -> Any) {
     values.forEachIndexed { idx, it ->
         checkNotNull(it) { lazyMessage(idx) }
     }

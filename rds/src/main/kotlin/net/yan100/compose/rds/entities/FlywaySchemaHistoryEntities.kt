@@ -18,7 +18,7 @@ class SuperFlywaySchemaHistory : IEntity() {
 
     @Schema(title = "执行时间")
     @Col(name = EXECUTION_TIME)
-    var execOn: timestamp? = null
+    var executionTime: timestamp? = null
 
     @Schema(title = "安装时间")
     @Col(name = INSTALLED_ON)
@@ -26,7 +26,7 @@ class SuperFlywaySchemaHistory : IEntity() {
 
     @Schema(title = "执行的数据库账号")
     @Col(name = INSTALLED_BY)
-    lateinit var installedByDatabaseAccount: string
+    lateinit var installedBy: string
 
     @Schema(title = "哈希")
     @Col(name = CHECKSUM)
@@ -42,7 +42,7 @@ class SuperFlywaySchemaHistory : IEntity() {
 
     @Schema(title = "描述")
     @Col(name = DESCRIPTION)
-    var desc: string? = null
+    var description: string? = null
 
     @Schema(title = "版本")
     @Col(name = VERSION)
@@ -50,7 +50,7 @@ class SuperFlywaySchemaHistory : IEntity() {
 
     @Schema(title = "安装等级")
     @Col(name = INSTALLED_RANK)
-    var rank: int? = null
+    var installedRank: int? = null
 
     companion object {
         const val TABLE_NAME = "flyway_schema_history"

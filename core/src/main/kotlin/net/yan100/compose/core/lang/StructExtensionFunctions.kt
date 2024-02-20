@@ -32,6 +32,6 @@ fun <K, v> mutableLockMapOf(): MutableMap<K, v> {
     return ConcurrentHashMap<K, v>()
 }
 
-fun <T, C : Collection<T>> C?.isNotEmptyAlso(block: (it: C) -> Unit) {
+inline fun <T, C : Collection<T>> C?.isNotEmptyAlso(crossinline block: (it: C) -> Unit) {
     if (!this.isNullOrEmpty()) block(this)
 }

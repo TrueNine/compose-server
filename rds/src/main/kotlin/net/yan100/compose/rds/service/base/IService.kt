@@ -11,6 +11,7 @@ import net.yan100.compose.rds.core.util.Pw
  * @author TrueNine
  * @since 2023-05-05
  */
+@JvmDefaultWithoutCompatibility
 interface IService<T : IEntity> {
     fun findAll(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
     fun findAllOrderByIdDesc(page: Pq? = Pw.DEFAULT_MAX): Pr<T>

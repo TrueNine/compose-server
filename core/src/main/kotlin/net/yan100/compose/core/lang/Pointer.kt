@@ -2,6 +2,7 @@ package net.yan100.compose.core.lang
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
+import net.yan100.compose.core.alias.decimal
 import java.io.Serial
 import java.io.Serializable
 import java.math.BigDecimal
@@ -20,10 +21,10 @@ class WGS84() : Serializable {
     }
 
     @Nullable
-    var x: BigDecimal? = null
+    var x: decimal? = null
 
     @Nullable
-    var y: BigDecimal? = null
+    var y: decimal? = null
 
     companion object {
         @Serial

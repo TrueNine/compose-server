@@ -51,11 +51,11 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
     private var id: Id? = null
         @Transient
         @JsonIgnore
-        @JvmName("setInternalId")
+        @JvmName("setKotlinInternalId")
         set
         @Transient
         @JsonIgnore
-        @JvmName("getInternalId")
+        @JvmName("getKotlinInternalId")
         get() = field ?: ""
 
     override fun equals(other: Any?): Boolean {
@@ -68,10 +68,14 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
         return javaClass.hashCode()
     }
 
+    @Transient
+    @JsonIgnore
     fun asNew() {
         this.id = null
     }
 
+    @Transient
+    @JsonIgnore
     fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
         return superString + "[" + properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } + "]"
     }
@@ -84,6 +88,7 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
         return this.id ?: ""
     }
 
+    @Transient
     @JsonIgnore
     override fun isNew(): Boolean {
         return "" == id || null == id
@@ -94,16 +99,16 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
  * 将自身置空为新的 Entity 对象
  */
 fun <T : AnyEntity> T.withNew(): T {
-    this.asNew()
+    asNew()
     return this
 }
 
-fun <T : AnyEntity> T.withNew(after: (T) -> T): T = after(withNew())
+inline fun <T : AnyEntity> T.withNew(crossinline after: (T) -> T): T = after(withNew())
 
 
 /**
  * 将集合内的所有元素置空为新的 Entity 对象
  */
 fun <T : AnyEntity> List<T>.withNew(): List<T> = map { it.withNew() }
-fun <T : AnyEntity> List<T>.withNew(after: (List<T>) -> List<T>): List<T> = after(map { it.withNew() })
-fun <T : AnyEntity, R : Any> List<T>.withNewMap(after: (List<T>) -> List<R>): List<R> = after(map { it.withNew() })
+inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> = after(this.map { it.withNew() })
+inline fun <T : AnyEntity, R : Any> List<T>.withNewMap(crossinline after: (List<T>) -> List<R>): List<R> = after(this.withNew())

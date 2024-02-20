@@ -2,6 +2,7 @@ package net.yan100.compose.rds.core.entities
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.alias.BigSerial
@@ -19,14 +20,6 @@ import net.yan100.compose.rds.core.annotations.BizCode
  */
 @MappedSuperclass
 abstract class TreeEntity : IEntity() {
-    companion object {
-        const val RPI = DataBaseBasicFieldNames.PARENT_ID
-        const val RLN = DataBaseBasicFieldNames.LEFT_NODE
-        const val RRN = DataBaseBasicFieldNames.RIGHT_NODE
-        const val NLV = DataBaseBasicFieldNames.NODE_LEVEL
-        const val TGI = DataBaseBasicFieldNames.TREE_GROUP_ID
-    }
-
     /**
      * 父id
      */
@@ -66,28 +59,38 @@ abstract class TreeEntity : IEntity() {
      * ### 树组 id，在节点插入时必须更上，在插入时随着父id进行更改
      */
     @BizCode
+    @Nullable
     @JsonIgnore
-    @Schema(title = "树 组id", defaultValue = "0")
     @Column(name = TGI)
-    lateinit var tgi: SerialCode
+    @Schema(title = "树 组id", defaultValue = "0")
+    var tgi: SerialCode? = null
+
 
     override fun asNew() {
         super.asNew()
-        this.rln = 1L
-        this.rrn = 2L
-        this.nlv = 0
-        this.tgi = DataBaseBasicFieldNames.Rbac.ROOT_ID_STR
-        this.rpi = null
+        rln = 1L
+        rrn = 2L
+        nlv = 0
+        tgi = DataBaseBasicFieldNames.Rbac.ROOT_ID_STR
+        rpi = null
     }
 
     override fun toString(): String {
         return withToString(
-            super.toString(),
+            toString(),
             RPI to rpi,
             RLN to rln,
             RRN to rrn,
             NLV to nlv,
             TGI to tgi
         )
+    }
+
+    companion object {
+        const val RPI = DataBaseBasicFieldNames.PARENT_ID
+        const val RLN = DataBaseBasicFieldNames.LEFT_NODE
+        const val RRN = DataBaseBasicFieldNames.RIGHT_NODE
+        const val NLV = DataBaseBasicFieldNames.NODE_LEVEL
+        const val TGI = DataBaseBasicFieldNames.TREE_GROUP_ID
     }
 }

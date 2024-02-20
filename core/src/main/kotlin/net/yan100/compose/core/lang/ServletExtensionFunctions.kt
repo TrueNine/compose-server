@@ -16,11 +16,11 @@ val HttpServletRequest.headerMap: Map<String, String>
 val HttpServletResponse.headerMap: Map<String, String>
     get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
 
-fun HttpServletResponse.useResponse(
+inline fun HttpServletResponse.useResponse(
     contentType: MediaTypes = MediaTypes.BINARY,
     charset: Charset = StandardCharsets.UTF_8,
     locale: Locale = Locale.CHINA,
-    with: (HttpServletResponse) -> HttpServletResponse
+    crossinline with: (HttpServletResponse) -> HttpServletResponse
 ): HttpServletResponse {
     this.contentType = contentType.value
     this.characterEncoding = charset.displayName()
@@ -28,8 +28,8 @@ fun HttpServletResponse.useResponse(
     return with(this)
 }
 
-fun HttpServletResponse.useSse(
-    charset: Charset = StandardCharsets.UTF_8, locale: Locale = Locale.CHINA, with: (HttpServletResponse) -> HttpServletResponse
+inline fun HttpServletResponse.useSse(
+    charset: Charset = StandardCharsets.UTF_8, locale: Locale = Locale.CHINA, crossinline with: (HttpServletResponse) -> HttpServletResponse
 ): HttpServletResponse {
     return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) { with(it) }
 }

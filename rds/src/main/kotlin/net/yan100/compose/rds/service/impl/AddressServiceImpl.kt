@@ -4,13 +4,14 @@ import jakarta.persistence.criteria.CriteriaQuery
 import net.yan100.compose.rds.core.entities.AnyEntity
 import net.yan100.compose.rds.core.entities.withNew
 import net.yan100.compose.rds.entities.Address
+import net.yan100.compose.rds.repositories.address.IAddressRepo
 import net.yan100.compose.rds.service.IAddressService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
 class AddressServiceImpl(
-    val repo: net.yan100.compose.rds.repositories.address.IAddressRepo
+    private val repo: IAddressRepo
 ) : IAddressService, CrudService<Address>(repo) {
     override fun findRoot(): Address {
         return repo.findRoot()

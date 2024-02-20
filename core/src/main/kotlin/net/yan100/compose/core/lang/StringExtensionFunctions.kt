@@ -7,10 +7,15 @@ import java.util.*
 import kotlin.reflect.KClass
 
 
+fun uuid(): String {
+    return UUID.randomUUID().toString()
+}
+
 const val STR_EMPTY = ""
 const val STR_SLASH = "/"
 const val STR_UNDERLINE = "_"
 const val STR_DOT = "."
+const val STR_SPACE = " "
 
 fun String.resourceAsStream(cls: KClass<*>): InputStream? {
     return cls.java.classLoader.getResourceAsStream(this)
@@ -28,8 +33,13 @@ fun String?.hasText(): Boolean = Str.hasText(this)
  */
 fun String?.nonText(): Boolean = !this.hasText()
 
-fun String?.hasTextAlso(block: (it: String) -> Unit) {
+inline fun String?.hasTextAlso(crossinline block: (it: String) -> Unit) {
     if (this.hasText()) block(this!!)
+}
+
+inline fun <T> String?.hasTextRun(crossinline block: (it: String) -> T): T? {
+    return if (hasText()) block(this!!)
+    else null
 }
 
 /**
@@ -37,7 +47,7 @@ fun String?.hasTextAlso(block: (it: String) -> Unit) {
  * - 如果该字符串为 null 则转换为 ""
  * - 否则返回本身
  */
-val String?.withEmpty: String get() = this ?: ""
+val String?.withEmpty: String get() = this ?: STR_EMPTY
 
 /**
  * ## 将该字符串转换为单行字符串
@@ -55,6 +65,7 @@ val String.snakeCaseToCamelCase: String
     }.replaceFirstChar {
         it.lowercase(Locale.getDefault())
     }
+
 val String.snakeCaseToPascalCase: String
     get() = if (hasText()) split(STR_UNDERLINE)
         .joinToString(STR_EMPTY) {
@@ -62,6 +73,7 @@ val String.snakeCaseToPascalCase: String
                 it1.uppercaseChar()
             }
         } else this
+
 val String.camelCaseToSnakeCase: String
     get() = fold(StringBuilder()) { acc, c ->
         if (c.isUpperCase()) {
@@ -70,6 +82,7 @@ val String.camelCaseToSnakeCase: String
         } else acc.append(c)
         acc
     }.toString()
+
 val String.pascalCaseToSnakeCase: String get() = camelCaseToSnakeCase.replaceFirst(STR_UNDERLINE, STR_EMPTY)
 
 /**
@@ -99,4 +112,11 @@ fun String.base64DecodeToByteArray(): ByteArray = net.yan100.compose.core.encryp
 fun String.replaceFirstX(meta: String, replacement: String): String {
     return if (indexOf(meta) == 0) replaceFirst(meta, replacement)
     else meta
+}
+
+/**
+ * ## 将所有空串视为 null
+ */
+fun String?.emptyWithNull(): String? {
+    return if (this.hasText()) this else null
 }

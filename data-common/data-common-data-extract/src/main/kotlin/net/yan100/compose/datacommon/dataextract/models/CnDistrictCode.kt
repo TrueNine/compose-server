@@ -10,11 +10,12 @@ package net.yan100.compose.datacommon.dataextract.models
  */
 class CnDistrictCode(code: String = "") {
     companion object {
-        const val zero = "00"
-        const val threeZero = "000"
+        const val ZERO = "00"
+        const val THREE_ZERO = "000"
     }
 
     var code: String
+    var padCode: String
     var provinceCode: String
     var cityCode: String
     var countyCode: String
@@ -26,13 +27,25 @@ class CnDistrictCode(code: String = "") {
     val level: Int
         get() {
             var maxLevel = 5
-            if (villageCode == threeZero) maxLevel -= 1
-            if (townCode == threeZero) maxLevel -= 1
-            if (countyCode == zero) maxLevel -= 1
-            if (cityCode == zero) maxLevel -= 1
-            if (provinceCode == zero) maxLevel -= 1
+            if (villageCode == THREE_ZERO) maxLevel -= 1
+            if (townCode == THREE_ZERO) maxLevel -= 1
+            if (countyCode == ZERO) maxLevel -= 1
+            if (cityCode == ZERO) maxLevel -= 1
+            if (provinceCode == ZERO) maxLevel -= 1
             return maxLevel
         }
+    private val levelSub: Int?
+        get() {
+            return when (level) {
+                1 -> 2
+                2 -> 4
+                3 -> 6
+                4 -> 9
+                5 -> 12
+                else -> null
+            }
+        }
+
 
     init {
         val padCode = code.let {
@@ -41,14 +54,18 @@ class CnDistrictCode(code: String = "") {
                 else -> it.padEnd(12, '0')
             }
         }
-        this.empty = padCode.startsWith(threeZero)
-        this.code = padCode
+        this.empty = padCode.startsWith(THREE_ZERO)
+
         provinceCode = padCode.substring(0, 2)
         cityCode = padCode.substring(2, 4)
         countyCode = padCode.substring(4, 6)
         townCode = padCode.substring(6, 9)
         villageCode = padCode.substring(9, 12)
+
+        this.padCode = padCode
+        this.code = code.substring(0, levelSub ?: 0)
     }
+
 
     fun back(): CnDistrictCode? {
         return when (level) {
