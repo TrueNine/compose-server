@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.rds.entities
 
 import io.swagger.v3.oas.annotations.media.Schema
@@ -8,7 +24,6 @@ import jakarta.persistence.Table
 import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
-
 
 /**
  * 权限
@@ -22,26 +37,16 @@ import org.hibernate.annotations.DynamicUpdate
 @Schema(title = "权限")
 @Table(name = Permissions.TABLE_NAME)
 class Permissions : IEntity() {
-    companion object {
-        const val TABLE_NAME = "permissions"
+  companion object {
+    const val TABLE_NAME = "permissions"
 
-        const val NAME = "name"
-        const val DOC = "doc"
-    }
+    const val NAME = "name"
+    const val DOC = "doc"
+  }
 
-    /**
-     * 权限名
-     */
-    @Nullable
-    @Schema(title = "权限名")
-    @Column(name = NAME)
-    lateinit var name: String
+  /** 权限名 */
+  @Nullable @Schema(title = "权限名") @Column(name = NAME) lateinit var name: String
 
-    /**
-     * 权限描述
-     */
-    @Nullable
-    @Schema(title = "权限描述")
-    @Column(name = DOC)
-    var doc: String? = null
+  /** 权限描述 */
+  @Nullable @Schema(title = "权限描述") @Column(name = DOC) var doc: String? = null
 }

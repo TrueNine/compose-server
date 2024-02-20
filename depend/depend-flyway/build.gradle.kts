@@ -1,6 +1,6 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-    api(libs.bundles.flyway)
-    implementation(project(":core"))
+  api(libs.bundles.flyway)
+  implementation(project(":core"))
 }

@@ -1,5 +1,20 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.rds.service.base
-
 
 import jakarta.validation.Valid
 import net.yan100.compose.core.alias.Id
@@ -12,30 +27,44 @@ import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.repository.findByIdOrNull
 
 abstract class CrudService<T : IEntity>(private val repo: IRepo<T>) : IService<T> {
-    override fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq?): Pr<T> = repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
-    override fun findAllByNotLogicDeleted(@Valid page: Pq?): Pr<T> = repo.findAllByNotLogicDeleted(page.page).result
+  override fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq?): Pr<T> =
+    repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
 
-    override fun findAll(@Valid page: Pq?): Pr<T> = repo.findAll(page.page).result
-    override fun findAllOrderByIdDesc(page: Pq?): Pr<T> = repo.findAllOrderByIdDesc(page.page).result
+  override fun findAllByNotLogicDeleted(@Valid page: Pq?): Pr<T> =
+    repo.findAllByNotLogicDeleted(page.page).result
 
-    override fun findAllOrderByIdDesc(): List<T> = repo.findAllOrderByIdDesc()
+  override fun findAll(@Valid page: Pq?): Pr<T> = repo.findAll(page.page).result
 
-    override fun findById(id: Id): T? = repo.findByIdOrNull(id)
-    override fun findAllById(ids: List<Id>): MutableList<T> = repo.findAllById(ids)
-    override fun findByIdAndNotLogicDeleted(id: Id): T = repo.findByIdAndNotLogicDelete(id)
-    override fun findByIdAndNotLogicDeletedOrNull(id: Id): T? = repo.findByIdAndNotLogicDeleteOrNull(id)
+  override fun findAllOrderByIdDesc(page: Pq?): Pr<T> = repo.findAllOrderByIdDesc(page.page).result
 
-    override fun findLdfById(id: Id): Boolean = repo.findLdfById(id) ?: false
-    override fun countAll(): Long = repo.count()
-    override fun countAllByNotLogicDeleted(): Long = repo.countByNotLogicDeleted()
-    override fun existsById(id: Id): Boolean = repo.existsById(id)
+  override fun findAllOrderByIdDesc(): List<T> = repo.findAllOrderByIdDesc()
 
-    override fun save(e: T): T = repo.save(e)
-    override fun saveAll(es: List<T>): List<T> = repo.saveAll(es)
+  override fun findById(id: Id): T? = repo.findByIdOrNull(id)
 
-    override fun deleteById(id: Id) = repo.deleteById(id)
-    override fun deleteAllById(ids: List<Id>) = repo.deleteAllById(ids)
-    override fun logicDeleteById(id: Id): T? = repo.logicDeleteById(id)
+  override fun findAllById(ids: List<Id>): MutableList<T> = repo.findAllById(ids)
 
-    override fun logicDeleteAllById(ids: List<Id>): List<T> = repo.logicDeleteAllById(ids)
+  override fun findByIdAndNotLogicDeleted(id: Id): T = repo.findByIdAndNotLogicDelete(id)
+
+  override fun findByIdAndNotLogicDeletedOrNull(id: Id): T? =
+    repo.findByIdAndNotLogicDeleteOrNull(id)
+
+  override fun findLdfById(id: Id): Boolean = repo.findLdfById(id) ?: false
+
+  override fun countAll(): Long = repo.count()
+
+  override fun countAllByNotLogicDeleted(): Long = repo.countByNotLogicDeleted()
+
+  override fun existsById(id: Id): Boolean = repo.existsById(id)
+
+  override fun save(e: T): T = repo.save(e)
+
+  override fun saveAll(es: List<T>): List<T> = repo.saveAll(es)
+
+  override fun deleteById(id: Id) = repo.deleteById(id)
+
+  override fun deleteAllById(ids: List<Id>) = repo.deleteAllById(ids)
+
+  override fun logicDeleteById(id: Id): T? = repo.logicDeleteById(id)
+
+  override fun logicDeleteAllById(ids: List<Id>): List<T> = repo.logicDeleteAllById(ids)
 }

@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.core.models
 
 import org.junit.jupiter.api.Test
@@ -6,41 +22,29 @@ import kotlin.test.assertEquals
 
 class IIdcard2CodeTest {
 
-    @Test
-    fun getIdcard2Code() {
-    }
+  @Test fun getIdcard2Code() {}
 
-    @Test
-    fun getIdcardBirthday() {
-    }
+  @Test fun getIdcardBirthday() {}
 
-    @Test
-    fun getIdcardSexCode() {
-    }
+  @Test fun getIdcardSexCode() {}
 
-    @Test
-    fun getIdcardSex() {
-    }
+  @Test fun getIdcardSex() {}
 
-    @Test
-    fun getIdcardDistrictCode() {
-    }
+  @Test fun getIdcardDistrictCode() {}
 
-    @Test
-    fun idcardUpperCase() {
-    }
+  @Test fun idcardUpperCase() {}
 
-    @Test
-    fun of() {
-        IIdcard2Code.of("110101199001011234").let {
-            assertEquals("110101", it.idcardDistrictCode)
-            assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
-            assertEquals(true, it.idcardSex)
-        }
-        IIdcard2Code.of("110101199001011204").let {
-            assertEquals("110101", it.idcardDistrictCode)
-            assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
-            assertEquals(false, it.idcardSex)
-        }
+  @Test
+  fun of() {
+    IIdcard2Code.of("110101199001011234").let {
+      assertEquals("110101", it.idcardDistrictCode)
+      assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
+      assertEquals(true, it.idcardSex)
     }
+    IIdcard2Code.of("110101199001011204").let {
+      assertEquals("110101", it.idcardDistrictCode)
+      assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
+      assertEquals(false, it.idcardSex)
+    }
+  }
 }

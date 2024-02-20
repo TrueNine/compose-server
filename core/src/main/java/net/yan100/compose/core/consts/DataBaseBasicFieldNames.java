@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.core.consts;
 
 import java.util.Arrays;
@@ -25,21 +41,22 @@ public interface DataBaseBasicFieldNames {
     String TENANT_ID = "rti";
 
     static List<String> getAll() {
-        var al = new String[]{
-            ID,
-            LOCK_VERSION,
-            CREATE_ROW_DATETIME,
-            MODIFY_ROW_DATETIME,
-            LEFT_NODE,
-            NODE_LEVEL,
-            TREE_GROUP_ID,
-            RIGHT_NODE,
-            PARENT_ID,
-            LOGIC_DELETE_FLAG,
-            ANY_REFERENCE_ID,
-            ANY_REFERENCE_TYPE,
-            TENANT_ID
-        };
+        var al =
+                new String[] {
+                    ID,
+                    LOCK_VERSION,
+                    CREATE_ROW_DATETIME,
+                    MODIFY_ROW_DATETIME,
+                    LEFT_NODE,
+                    NODE_LEVEL,
+                    TREE_GROUP_ID,
+                    RIGHT_NODE,
+                    PARENT_ID,
+                    LOGIC_DELETE_FLAG,
+                    ANY_REFERENCE_ID,
+                    ANY_REFERENCE_TYPE,
+                    TENANT_ID
+                };
         return Arrays.asList(al);
     }
 

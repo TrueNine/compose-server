@@ -1,14 +1,29 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.core.lang
 
 import com.fasterxml.jackson.annotation.JsonValue
+import java.util.concurrent.ConcurrentHashMap
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * # 所有类型枚举的抽象接口
- * 实现此接口，以方便其他序列化程序来读取枚举
- * 实现此接口后，需要手动添加一个 findVal 静态方法，提供给 jackson等框架自动调用
+ * 实现此接口，以方便其他序列化程序来读取枚举 实现此接口后，需要手动添加一个 findVal 静态方法，提供给 jackson等框架自动调用
  *
  * 由于无法在接口规定静态方法，此算作规约吧。以下为一个枚举类内部的静态方法示例
  *
@@ -23,85 +38,70 @@ import java.util.concurrent.ConcurrentHashMap
  *     }
  * }
  * ```
+ *
  * @see [AnyTypingConverterFactory] 此类用于 SpringMVC 的返回以及接收时的转换工作
  * @author TrueNine
  * @since 2023-05-28
  */
 @JvmDefaultWithoutCompatibility
 interface AnyTyping {
-    /**
-     * ## 获取枚举对应的实际值
-     */
-    @get:JsonValue
-    val value: Any
+  /** ## 获取枚举对应的实际值 */
+  @get:JsonValue val value: Any
 
-    companion object {
-        @JvmStatic
-        fun findVal(v: Any?): AnyTyping? = null
-    }
+  companion object {
+    @JvmStatic fun findVal(v: Any?): AnyTyping? = null
+  }
 }
 
-/**
- * # 数值型枚举
- */
+/** # 数值型枚举 */
 @JvmDefaultWithoutCompatibility
 interface IntTyping : AnyTyping {
-    @get:JsonValue
-    override val value: Int
+  @get:JsonValue override val value: Int
 
-    companion object {
-        @JvmStatic
-        fun findVal(v: Int?): IntTyping? = null
-    }
+  companion object {
+    @JvmStatic fun findVal(v: Int?): IntTyping? = null
+  }
 }
 
-/**
- * # 字符型枚举
- */
+/** # 字符型枚举 */
 interface StringTyping : AnyTyping {
-    @get:JsonValue
-    override val value: String
+  @get:JsonValue override val value: String
 
-    companion object {
-        @JvmStatic
-        fun findVal(v: Int?): IntTyping? = null
-    }
+  companion object {
+    @JvmStatic fun findVal(v: Int?): IntTyping? = null
+  }
 }
 
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
-    companion object {
-        @JvmStatic
-        private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
+  companion object {
+    @JvmStatic
+    private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
 
-        @JvmStatic
-        private val log = slf4j(AnyTypingConverterFactory::class)
+    @JvmStatic private val log = slf4j(AnyTypingConverterFactory::class)
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  override fun <T : AnyTyping?> getConverter(targetType: Class<T>): Converter<String?, T> {
+    if (converters[targetType] == null) {
+      converters[targetType] = AnyTypingConverter(targetType)
+    }
+    return converters[targetType] as Converter<String?, T>
+  }
+
+  private inner class AnyTypingConverter(
+    targetClass: Class<out AnyTyping?>,
+    private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()
+  ) : Converter<String?, AnyTyping?> {
+    init {
+      if (targetClass.isEnum) {
+        targetClass.enumConstants.filterNotNull().forEach { mapping += it.value.toString() to it }
+      } else {
+        log.error("class: {} 不是枚举类型", targetClass)
+      }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : AnyTyping?> getConverter(targetType: Class<T>): Converter<String?, T> {
-        if (converters[targetType] == null) {
-            converters[targetType] = AnyTypingConverter(targetType)
-        }
-        return converters[targetType] as Converter<String?, T>
+    override fun convert(source: String): AnyTyping? {
+      return mapping[source]
     }
-
-    private inner class AnyTypingConverter(
-        targetClass: Class<out AnyTyping?>,
-        private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()
-    ) : Converter<String?, AnyTyping?> {
-        init {
-            if (targetClass.isEnum) {
-                targetClass.enumConstants.filterNotNull()
-                    .forEach {
-                        mapping += it.value.toString() to it
-                    }
-            } else {
-                log.error("class: {} 不是枚举类型", targetClass)
-            }
-        }
-
-        override fun convert(source: String): AnyTyping? {
-            return mapping[source]
-        }
-    }
+  }
 }

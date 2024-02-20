@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.rds.core.entities
 
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -26,89 +42,81 @@ import java.io.Serial
 @MappedSuperclass
 @Schema(title = "顶级任意抽象类")
 @EntityListeners(
-    TableRowDeletePersistenceListener::class,
-    BizCodeInsertListener::class,
-    SnowflakeIdInsertListener::class,
-    PreSaveDeleteReferenceListener::class
+  TableRowDeletePersistenceListener::class,
+  BizCodeInsertListener::class,
+  SnowflakeIdInsertListener::class,
+  PreSaveDeleteReferenceListener::class
 )
 abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() {
-    companion object {
-        /**
-         * 主键
-         */
-        const val ID = DataBaseBasicFieldNames.ID
+  companion object {
+    /** 主键 */
+    const val ID = DataBaseBasicFieldNames.ID
 
-        @Serial
-        private val serialVersionUID = 1L
-    }
+    @Serial private val serialVersionUID = 1L
+  }
 
-    /**
-     * id
-     */
-    @jakarta.persistence.Id
-    @Column(name = DataBaseBasicFieldNames.ID)
-    @Schema(title = ID, examples = ["7001234523405", "7001234523441"])
-    private var id: Id? = null
-        @Transient
-        @JsonIgnore
-        @JvmName("setKotlinInternalId")
-        set
-        @Transient
-        @JsonIgnore
-        @JvmName("getKotlinInternalId")
-        get() = field ?: ""
+  /** id */
+  @jakarta.persistence.Id
+  @Column(name = DataBaseBasicFieldNames.ID)
+  @Schema(title = ID, examples = ["7001234523405", "7001234523441"])
+  private var id: Id? = null
+    @Transient @JsonIgnore @JvmName("setKotlinInternalId") set
+    @Transient @JsonIgnore @JvmName("getKotlinInternalId") get() = field ?: ""
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        return "" != id && id != null && "null" != id && id == (other as AnyEntity).id
-    }
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+    return "" != id && id != null && "null" != id && id == (other as AnyEntity).id
+  }
 
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
+  override fun hashCode(): Int {
+    return javaClass.hashCode()
+  }
 
-    @Transient
-    @JsonIgnore
-    fun asNew() {
-        this.id = null
-    }
+  @Transient
+  @JsonIgnore
+  fun asNew() {
+    this.id = null
+  }
 
-    @Transient
-    @JsonIgnore
-    fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
-        return superString + "[" + properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } + "]"
-    }
+  @Transient
+  @JsonIgnore
+  fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
+    return superString +
+      "[" +
+      properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } +
+      "]"
+  }
 
-    fun setId(id: String) {
-        this.id = id
-    }
+  fun setId(id: String) {
+    this.id = id
+  }
 
-    override fun getId(): String {
-        return this.id ?: ""
-    }
+  override fun getId(): String {
+    return this.id ?: ""
+  }
 
-    @Transient
-    @JsonIgnore
-    override fun isNew(): Boolean {
-        return "" == id || null == id
-    }
+  @Transient
+  @JsonIgnore
+  override fun isNew(): Boolean {
+    return "" == id || null == id
+  }
 }
 
-/**
- * 将自身置空为新的 Entity 对象
- */
+/** 将自身置空为新的 Entity 对象 */
 fun <T : AnyEntity> T.withNew(): T {
-    asNew()
-    return this
+  asNew()
+  return this
 }
 
 inline fun <T : AnyEntity> T.withNew(crossinline after: (T) -> T): T = after(withNew())
 
-
-/**
- * 将集合内的所有元素置空为新的 Entity 对象
- */
+/** 将集合内的所有元素置空为新的 Entity 对象 */
 fun <T : AnyEntity> List<T>.withNew(): List<T> = map { it.withNew() }
-inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> = after(this.map { it.withNew() })
-inline fun <T : AnyEntity, R : Any> List<T>.withNewMap(crossinline after: (List<T>) -> List<R>): List<R> = after(this.withNew())
+
+inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> =
+  after(this.map { it.withNew() })
+
+inline fun <T : AnyEntity, R : Any> List<T>.withNewMap(
+  crossinline after: (List<T>) -> List<R>
+): List<R> = after(this.withNew())

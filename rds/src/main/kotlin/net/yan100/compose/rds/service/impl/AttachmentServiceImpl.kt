@@ -1,5 +1,20 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.rds.service.impl
-
 
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
@@ -16,58 +31,64 @@ import org.springframework.stereotype.Service
 
 @Service
 class AttachmentServiceImpl(
-    private val repo: IAttachmentRepo,
-    private val linkedRepo: ILinkedAttachmentRepo
+  private val repo: IAttachmentRepo,
+  private val linkedRepo: ILinkedAttachmentRepo
 ) : IAttachmentService, CrudService<Attachment>(repo) {
-    override fun existsByBaseUrl(baseUrl: String): Boolean {
-        return repo.existsByBaseUrl(baseUrl)
-    }
+  override fun existsByBaseUrl(baseUrl: String): Boolean {
+    return repo.existsByBaseUrl(baseUrl)
+  }
 
-    override fun findByBaseUrl(baseUrl: String): Attachment? {
-        return repo.findFirstByBaseUrl(baseUrl)
-    }
+  override fun findByBaseUrl(baseUrl: String): Attachment? {
+    return repo.findFirstByBaseUrl(baseUrl)
+  }
 
-    override fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment? {
-        return repo.findFirstByBaseUrlAndBaseUri(baseUrl, baseUri)
-    }
+  override fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment? {
+    return repo.findFirstByBaseUrlAndBaseUri(baseUrl, baseUri)
+  }
 
-    override fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment> {
-        return repo.findAllByBaseUrlIn(baseUrls)
-    }
+  override fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment> {
+    return repo.findAllByBaseUrlIn(baseUrls)
+  }
 
-    override fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment> {
-        TODO("Not yet implemented")
-    }
+  override fun findAllByBaseUrlInAndBaseUriIn(
+    baseUrls: List<String>,
+    baseUris: List<String>
+  ): List<Attachment> {
+    TODO("Not yet implemented")
+  }
 
-    override fun findFullUrlById(id: String): String? {
-        return repo.findFullPathById(id)
-    }
+  override fun findFullUrlById(id: String): String? {
+    return repo.findFullPathById(id)
+  }
 
-    override fun findAllByParentBaseUrl(baseUrl: String, page: Pq): Pr<Attachment> {
-        return repo.findAllByParentBaseUrl(baseUrl, page.page).result
-    }
+  override fun findAllByParentBaseUrl(baseUrl: String, page: Pq): Pr<Attachment> {
+    return repo.findAllByParentBaseUrl(baseUrl, page.page).result
+  }
 
-    override fun findLinkedById(id: String): LinkedAttachment? {
-        return linkedRepo.findByIdOrNull(id)
-    }
+  override fun findLinkedById(id: String): LinkedAttachment? {
+    return linkedRepo.findByIdOrNull(id)
+  }
 
-    override fun findAllLinkedById(ids: List<String>): List<LinkedAttachment> {
-        return linkedRepo.findAllById(ids)
-    }
+  override fun findAllLinkedById(ids: List<String>): List<LinkedAttachment> {
+    return linkedRepo.findAllById(ids)
+  }
 
-    override fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq): Pr<String> {
-        return repo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
-    }
+  override fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq): Pr<String> {
+    return repo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
+  }
 
-    override fun findMetaNameById(id: String): String? {
-        return repo.findMetaNameById(id)
-    }
+  override fun findMetaNameById(id: String): String? {
+    return repo.findMetaNameById(id)
+  }
 
-    override fun findSaveNameById(id: String): String? {
-        return repo.findSaveNameById(id)
-    }
+  override fun findSaveNameById(id: String): String? {
+    return repo.findSaveNameById(id)
+  }
 
-    override fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq): Pr<LinkedAttachment> {
-        return linkedRepo.findAllByParentBaseUrl(baseUrl, page.page).result
-    }
+  override fun findAllLinkedAttachmentByParentBaseUrl(
+    baseUrl: String,
+    page: Pq
+  ): Pr<LinkedAttachment> {
+    return linkedRepo.findAllByParentBaseUrl(baseUrl, page.page).result
+  }
 }

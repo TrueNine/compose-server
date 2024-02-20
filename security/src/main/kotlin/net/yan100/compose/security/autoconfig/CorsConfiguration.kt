@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.security.autoconfig
 
 import net.yan100.compose.core.http.Methods
@@ -16,34 +32,34 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  */
 @Configuration
 class CorsConfiguration : WebMvcConfigurer {
-    override fun addCorsMappings(registry: CorsRegistry) {
-        log.debug("注册跨域组件为允许全部跨域通行")
-        registry
-            .addMapping("/**")
-            .allowedOriginPatterns("*")
-            .allowedMethods(*Methods.all())
-            .allowedHeaders("*")
-            .exposedHeaders("*")
-            .allowCredentials(true)
-            .maxAge(3600)
-    }
+  override fun addCorsMappings(registry: CorsRegistry) {
+    log.debug("注册跨域组件为允许全部跨域通行")
+    registry
+      .addMapping("/**")
+      .allowedOriginPatterns("*")
+      .allowedMethods(*Methods.all())
+      .allowedHeaders("*")
+      .exposedHeaders("*")
+      .allowCredentials(true)
+      .maxAge(3600)
+  }
 
-    @Bean(name = ["org.springframework.web.cors.CorsConfiguration"])
-    fun corsConfiguration(): CorsConfiguration {
-        log.debug("注册 spring security 的跨域全局配置")
-        val all = CorsConfiguration.ALL
-        val c = CorsConfiguration()
-        c.addAllowedOriginPattern(all)
-        Methods.all().toList().forEach(c::addAllowedMethod)
-        c.addExposedHeader(all)
-        c.allowCredentials = true
-        c.maxAge = 3600
-        c.addAllowedHeader(all)
-        c.exposedHeaders = listOf("*")
-        return c
-    }
+  @Bean(name = ["org.springframework.web.cors.CorsConfiguration"])
+  fun corsConfiguration(): CorsConfiguration {
+    log.debug("注册 spring security 的跨域全局配置")
+    val all = CorsConfiguration.ALL
+    val c = CorsConfiguration()
+    c.addAllowedOriginPattern(all)
+    Methods.all().toList().forEach(c::addAllowedMethod)
+    c.addExposedHeader(all)
+    c.allowCredentials = true
+    c.maxAge = 3600
+    c.addAllowedHeader(all)
+    c.exposedHeaders = listOf("*")
+    return c
+  }
 
-    companion object {
-        private val log = slf4j(CorsConfiguration::class)
-    }
+  companion object {
+    private val log = slf4j(CorsConfiguration::class)
+  }
 }

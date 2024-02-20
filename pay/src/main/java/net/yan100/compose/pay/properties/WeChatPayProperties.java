@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.pay.properties;
 
 import lombok.Data;
@@ -15,6 +31,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "compose.pay.wechat")
 public class WeChatPayProperties {
     private static final String WECHAT_KEY_DIR = "security/wechat/pay/";
+
     /**
      * 开启 单配置支付
      */
@@ -24,14 +41,17 @@ public class WeChatPayProperties {
      * 商户号
      */
     private String merchantId = null;
+
     /**
      * 商户序列号
      */
     private String merchantSerialNumber = null;
+
     /**
      * cret文件存放路径
      */
     private String certPath = WECHAT_KEY_DIR + "apiclient_cert.pem";
+
     /**
      * 私钥文件存放路径
      */
@@ -60,6 +80,7 @@ public class WeChatPayProperties {
      * api 密钥
      */
     private String apiSecret = null;
+
     /**
      * 微信支付 jsAPI v3 私钥
      */

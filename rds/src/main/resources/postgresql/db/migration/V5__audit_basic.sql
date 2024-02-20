@@ -1,29 +1,60 @@
-create table if not exists audit
-(
-    status          integer      default 0,     -- 状态
-    create_datetime timestamp    default now(), -- 创建时间
-    audit_user_id   bigint       default null,  -- 审核人
-    ref_id          bigint       default null,  -- 审核对象 id
-    ref_type        integer      default null,  -- 审核对象类型
-    audit_ip        varchar(64)  default null,  -- 审核人 ip
-    audit_device_id varchar(255) default null,  -- 审核人设备 id
-    remark          text         default null   -- 审核备注
-);
-comment on table audit is '审核备注';
-select add_base_struct('audit');
-create index on audit (status);
-create index on audit (audit_user_id);
-create index on audit (ref_id);
-create index on audit (ref_type);
+CREATE
+    TABLE
+        IF NOT EXISTS audit(
+            status INTEGER DEFAULT 0, -- 状态
+            create_datetime TIMESTAMP DEFAULT now(), -- 创建时间
+            audit_user_id BIGINT DEFAULT NULL, -- 审核人
+            ref_id BIGINT DEFAULT NULL, -- 审核对象 id
+            ref_type INTEGER DEFAULT NULL, -- 审核对象类型
+            audit_ip VARCHAR(64) DEFAULT NULL, -- 审核人 ip
+            audit_device_id VARCHAR(255) DEFAULT NULL, -- 审核人设备 id
+            remark text DEFAULT NULL -- 审核备注
 
+        );
 
-create table if not exists audit_attachment
-(
-    att_id   bigint not null, -- 附件 id
-    audit_id bigint not null, -- 审核图片
-    status   int default null -- 审核状态
-);
-select add_base_struct('audit_attachment');
-create index on audit_attachment (status);
-create index on audit_attachment (att_id);
-create index on audit_attachment (audit_id);
+comment ON
+TABLE
+    audit IS '审核备注';
+
+SELECT
+    add_base_struct('audit');
+
+CREATE
+    INDEX ON
+    audit(status);
+
+CREATE
+    INDEX ON
+    audit(audit_user_id);
+
+CREATE
+    INDEX ON
+    audit(ref_id);
+
+CREATE
+    INDEX ON
+    audit(ref_type);
+
+CREATE
+    TABLE
+        IF NOT EXISTS audit_attachment(
+            att_id BIGINT NOT NULL, -- 附件 id
+            audit_id BIGINT NOT NULL, -- 审核图片
+            status INT DEFAULT NULL -- 审核状态
+
+        );
+
+SELECT
+    add_base_struct('audit_attachment');
+
+CREATE
+    INDEX ON
+    audit_attachment(status);
+
+CREATE
+    INDEX ON
+    audit_attachment(att_id);
+
+CREATE
+    INDEX ON
+    audit_attachment(audit_id);

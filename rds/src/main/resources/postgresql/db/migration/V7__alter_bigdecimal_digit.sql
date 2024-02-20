@@ -1,2 +1,5 @@
-alter table biz_cert
-    alter column reg_capital type decimal (20, 2);
+ALTER TABLE
+    biz_cert ALTER COLUMN reg_capital TYPE DECIMAL(
+        20,
+        2
+    );

@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.core.lang;
 
 import net.yan100.compose.core.consts.FileDescriptions;
@@ -45,8 +61,7 @@ public class ResourcesLocator {
         initDefinedClasses();
     }
 
-    private ResourcesLocator() {
-    }
+    private ResourcesLocator() {}
 
     private static String initApplicationProtocol() {
         return Objects.requireNonNull(ResourcesLocator.class.getResource("/")).getProtocol();
@@ -54,14 +69,21 @@ public class ResourcesLocator {
 
     private static void initDefinedClasses() {
         if (FILE_PROTOCOL.equals(APPLICATION_PROTOCOL)) {
-            rootPath = Objects.requireNonNull(CLASS_SELF.getResource("/"))
-                .toString().replace("file:/", Str.EMPTY)
-                .replace("\\", "/");
+            rootPath =
+                    Objects.requireNonNull(CLASS_SELF.getResource("/"))
+                            .toString()
+                            .replace("file:/", Str.EMPTY)
+                            .replace("\\", "/");
             scanFilePackages(new File(rootPath));
         } else if (JAR_PROTOCOL.equals(APPLICATION_PROTOCOL)) {
-            rootPath = CLASS_SELF.getProtectionDomain().getCodeSource().getLocation().getPath()
-                .replace("file:/", Str.EMPTY)
-                .split("!")[0];
+            rootPath =
+                    CLASS_SELF
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .getPath()
+                            .replace("file:/", Str.EMPTY)
+                            .split("!")[0];
             scanJarPackages(new File(rootPath));
         }
     }
@@ -73,11 +95,11 @@ public class ResourcesLocator {
                 var entry = entries.nextElement();
                 var name = entry.getName();
                 if (name.endsWith(FileDescriptions.JAVA_CLASS)) {
-                    var definedClassName = name
-                        .replace("\\", "/")
-                        .replace(rootPath, Str.EMPTY)
-                        .replace(FileDescriptions.JAVA_CLASS, Str.EMPTY)
-                        .replace("/", ".");
+                    var definedClassName =
+                            name.replace("\\", "/")
+                                    .replace(rootPath, Str.EMPTY)
+                                    .replace(FileDescriptions.JAVA_CLASS, Str.EMPTY)
+                                    .replace("/", ".");
                     ALL_CLASS_NAME.add(definedClassName);
                 }
             }
@@ -94,12 +116,12 @@ public class ResourcesLocator {
             } else {
                 if (child.getName().endsWith(FileDescriptions.JAVA_CLASS)) {
                     var defineClassName =
-                        child.getAbsolutePath()
-                            .replace("\\", "/")
-                            .replace(rootPath, Str.EMPTY)
-                            .replace(FileDescriptions.JAVA_CLASS, Str.EMPTY)
-                            .replace("/", ".")
-                            .replace("BOOT-INF.classes.", Str.EMPTY);
+                            child.getAbsolutePath()
+                                    .replace("\\", "/")
+                                    .replace(rootPath, Str.EMPTY)
+                                    .replace(FileDescriptions.JAVA_CLASS, Str.EMPTY)
+                                    .replace("/", ".")
+                                    .replace("BOOT-INF.classes.", Str.EMPTY);
                     ALL_CLASS_NAME.add(defineClassName);
                 }
             }
@@ -114,9 +136,7 @@ public class ResourcesLocator {
         // 初始化根路径
         URI uri;
         try {
-            uri = Objects.requireNonNull(
-                ResourcesLocator.class.getResource("/")
-            ).toURI();
+            uri = Objects.requireNonNull(ResourcesLocator.class.getResource("/")).toURI();
         } catch (URISyntaxException e) {
             throw new RuntimeException("获取文件根路径异常", e);
         }
@@ -147,9 +167,8 @@ public class ResourcesLocator {
     }
 
     public static BufferedReader classpathReader(String internalPath) {
-        return new BufferedReader(new InputStreamReader(Objects.requireNonNull(
-            classpathInputStream(internalPath)
-        )));
+        return new BufferedReader(
+                new InputStreamReader(Objects.requireNonNull(classpathInputStream(internalPath))));
     }
 
     public static byte[] readClasspathByte(String internalPath) {
@@ -160,7 +179,6 @@ public class ResourcesLocator {
             return null;
         }
     }
-
 
     /**
      * 返回执行目录，区别如下：

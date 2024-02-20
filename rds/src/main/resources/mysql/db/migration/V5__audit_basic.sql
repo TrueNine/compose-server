@@ -1,29 +1,26 @@
-create table if not exists audit
-(
-    status          integer      default 0,     -- 状态
-    create_datetime datetime     default now(), -- 创建时间
-    audit_user_id   bigint       default null,  -- 审核人
-    remark          text         default null,  -- 审核备注
-    ref_id          bigint  not null,           -- 审核对象id
-    ref_type        integer not null,-- 审核对象类型
-    audit_ip        varchar(64)  default null,  -- 审核人 ip
-    audit_device_id varchar(255) default null,  -- 审核人设备 id
-    index (status),
-    index (audit_user_id),
-    index (ref_id),
-    index (ref_type)
-) default charset = utf8mb4, comment '审核备注';
-call add_base_struct('audit');
+CREATE
+    TABLE
+        IF NOT EXISTS audit(
+            status INTEGER DEFAULT 0, -- 状态
+            create_datetime datetime DEFAULT now(), -- 创建时间
+            audit_user_id BIGINT DEFAULT NULL, -- 审核人
+            remark text DEFAULT NULL, -- 审核备注
+            ref_id BIGINT NOT NULL, -- 审核对象id
+            ref_type INTEGER NOT NULL, -- 审核对象类型
+            audit_ip VARCHAR(64) DEFAULT NULL, -- 审核人 ip
+            audit_device_id VARCHAR(255) DEFAULT NULL, -- 审核人设备 idINDEX(status),INDEX(audit_user_id),INDEX(ref_id),INDEX(ref_type)
+        ) DEFAULT charset = utf8mb4,
+        comment '审核备注';
 
+CALL add_base_struct('audit');
 
+CREATE
+    TABLE
+        IF NOT EXISTS audit_attachment(
+            att_id BIGINT NOT NULL, -- 附件 id
+            audit_id BIGINT NOT NULL, -- 审核图片
+            status INT DEFAULT NULL, -- 审核状态INDEX(att_id),INDEX(audit_id),INDEX(status)
+        ) DEFAULT charset = utf8mb4,
+        comment '审核附件';
 
-create table if not exists audit_attachment
-(
-    att_id   bigint not null, -- 附件 id
-    audit_id bigint not null, -- 审核图片
-    status   int default null,-- 审核状态
-    index (att_id),
-    index (audit_id),
-    index (status)
-) default charset = utf8mb4, comment '审核附件';
-call add_base_struct('audit_attachment');
+CALL add_base_struct('audit_attachment');

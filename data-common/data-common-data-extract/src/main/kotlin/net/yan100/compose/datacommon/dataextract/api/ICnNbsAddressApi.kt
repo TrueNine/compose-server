@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.datacommon.dataextract.api
 
 import org.springframework.http.ResponseEntity
@@ -6,9 +22,7 @@ import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 
 /**
- *
  * # 中华人民共和国国家统计局 地址数据接口
- *
  * > 地址数据 最早统计到 2009 年
  *
  * @version 2023
@@ -20,19 +34,21 @@ interface ICnNbsAddressApi {
   }
 
   @GetExchange(url = "{year}/index.html")
-  fun homePage(@PathVariable(required = false) year: String? = DEFAULT_VERSION): ResponseEntity<String>
+  fun homePage(
+    @PathVariable(required = false) year: String? = DEFAULT_VERSION,
+  ): ResponseEntity<String>
 
   @GetExchange("{year}/{provinceCode}.html")
   fun getCityPage(
     @PathVariable provinceCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
+    @PathVariable year: String? = DEFAULT_VERSION,
   ): ResponseEntity<String>
 
   @GetExchange("{year}/{provinceCode}/{provinceCode}{cityCode}.html")
   fun getCountyPage(
     @PathVariable provinceCode: String,
     @PathVariable cityCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
+    @PathVariable year: String? = DEFAULT_VERSION,
   ): ResponseEntity<String>
 
   @GetExchange("{year}/{provinceCode}/{cityCode}/{provinceCode}{cityCode}{countyCode}.html")
@@ -40,15 +56,17 @@ interface ICnNbsAddressApi {
     @PathVariable provinceCode: String,
     @PathVariable cityCode: String,
     @PathVariable countyCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
+    @PathVariable year: String? = DEFAULT_VERSION,
   ): ResponseEntity<String>
 
-  @GetExchange("{year}/{provinceCode}/{cityCode}/{countyCode}/{provinceCode}{cityCode}{countyCode}{villageCode}.html")
+  @GetExchange(
+    "{year}/{provinceCode}/{cityCode}/{countyCode}/{provinceCode}{cityCode}{countyCode}{villageCode}.html"
+  )
   fun getVillagePage(
     @PathVariable provinceCode: String,
     @PathVariable cityCode: String,
     @PathVariable countyCode: String,
     @PathVariable villageCode: String,
-    @PathVariable year: String? = DEFAULT_VERSION
+    @PathVariable year: String? = DEFAULT_VERSION,
   ): ResponseEntity<String>
 }

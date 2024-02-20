@@ -1,3 +1,19 @@
+/*
+ * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *
+ * The following source code is owned, developed and copyrighted by TrueNine
+ * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
+ * and resources. This software and its components are not to be used, reproduced,
+ * distributed, or sublicensed in any form without the express written consent of
+ * the copyright owner, except as permitted by law.
+ * Any unauthorized use, distribution, or modification of this source code,
+ * or any portion thereof, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ * For inquiries regarding usage or redistribution, please contact:
+ *     TrueNine
+ *     Email: <truenine304520@gmail.com>
+ *     Website: [gitee.com/TrueNine]
+ */
 package net.yan100.compose.depend.webclient.lang
 
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -22,6 +38,7 @@ import java.time.temporal.ChronoUnit
 /**
  * # 自定义的json编解码器
  * 使用你自定义的jackson ObjectMapper创建
+ *
  * @param objectMapper mapper
  * @return WebClient
  * @see [WebClient]
@@ -29,60 +46,58 @@ import java.time.temporal.ChronoUnit
  * @see [org.springframework.web.service.annotation.HttpExchange]
  */
 inline fun <reified T : Any> jsonWebClientRegister(
-    objectMapper: ObjectMapper,
-    timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
-    builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>
+  objectMapper: ObjectMapper,
+  timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
+  builder:
+    (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<
+        WebClient.Builder, HttpServiceProxyFactory.Builder
+      >
 ): T {
-    val clientBuilder = WebClient.builder()
-    val factoryBuilder = HttpServiceProxyFactory.builder()
-    val jsonHandleMimeTypes = arrayOf(
-        MimeType.valueOf(MediaTypes.JSON.value),
-        MimeType.valueOf("application/*+json"),
-        MimeType.valueOf("application/x-ndjson"),
-        MimeType.valueOf(MediaTypes.TEXT.value),
+  val clientBuilder = WebClient.builder()
+  val factoryBuilder = HttpServiceProxyFactory.builder()
+  val jsonHandleMimeTypes =
+    arrayOf(
+      MimeType.valueOf(MediaTypes.JSON.value),
+      MimeType.valueOf("application/*+json"),
+      MimeType.valueOf("application/x-ndjson"),
+      MimeType.valueOf(MediaTypes.TEXT.value),
     )
-    clientBuilder.codecs {
-        it.defaultCodecs().enableLoggingRequestDetails(true)
+  clientBuilder.codecs {
+    it.defaultCodecs().enableLoggingRequestDetails(true)
 
-        it.writers.addFirst(EncoderHttpMessageWriter(AnyTypingEncoder()))
+    it.writers.addFirst(EncoderHttpMessageWriter(AnyTypingEncoder()))
 
-        it.defaultCodecs().jackson2JsonDecoder(
-            Jackson2JsonDecoder(
-                objectMapper,
-                *jsonHandleMimeTypes
-            )
-        )
-        it.defaultCodecs().jackson2JsonEncoder(
-            Jackson2JsonEncoder(
-                objectMapper,
-                *jsonHandleMimeTypes
-            )
-        )
-    }
+    it.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, *jsonHandleMimeTypes))
+    it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMimeTypes))
+  }
 
-    clientBuilder.defaultHeader(Headers.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
+  clientBuilder.defaultHeader(Headers.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
 
-    val cf = builder(clientBuilder, factoryBuilder)
-    val client = cf.first.build()
-    return cf.second
-        .customArgumentResolver(ArgsResolver())
-
-        .exchangeAdapter(WebClientAdapter.create(client).apply { blockTimeout = timeout })
-        .build()
-        .createClient(T::class.java)
+  val cf = builder(clientBuilder, factoryBuilder)
+  val client = cf.first.build()
+  return cf.second
+    .customArgumentResolver(ArgsResolver())
+    .exchangeAdapter(WebClientAdapter.create(client).apply { blockTimeout = timeout })
+    .build()
+    .createClient(T::class.java)
 }
 
 class ArgsResolver : HttpServiceArgumentResolver {
 
-    override fun resolve(argument: Any?, parameter: MethodParameter, requestValues: HttpRequestValues.Builder): Boolean {
-        if (argument != null && argument is AnyTyping) {
-            val name = parameter.getParameterAnnotation(RequestParam::class.java)?.name ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value
-            ?: parameter.parameterName ?: throw IllegalArgumentException("参数解析异常")
-            requestValues.addRequestParameter(
-                name, argument.value.toString()
-            )
-            return true
-        }
-        return false
+  override fun resolve(
+    argument: Any?,
+    parameter: MethodParameter,
+    requestValues: HttpRequestValues.Builder
+  ): Boolean {
+    if (argument != null && argument is AnyTyping) {
+      val name =
+        parameter.getParameterAnnotation(RequestParam::class.java)?.name
+          ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value
+          ?: parameter.parameterName
+          ?: throw IllegalArgumentException("参数解析异常")
+      requestValues.addRequestParameter(name, argument.value.toString())
+      return true
     }
+    return false
+  }
 }
