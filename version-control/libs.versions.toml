@@ -1,5 +1,6 @@
 [plugins]
 composeVersionControl = { id = "net.yan100.compose.version-control", version.ref = "compose" }
+spotless = { id = "com.diffplug.spotless", version.ref = "gradlePlugin-spotless" }
 ktJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ktSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
@@ -179,7 +180,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.361"
+compose = "1.6.363"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
@@ -199,6 +200,7 @@ apache-commonsPool2 = "2.12.0" ### https://mvnrepository.com/artifact/org.apache
 apache-commonsCompress = "1.25.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
 
 gradle = "8.6" ### https://mirrors.cloud.tencent.com/gradle
+gradlePlugin-spotless = "6.25.0" ### https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
 gradlePlugin-versionPlugin = "0.51.0" ### https://github.com/ben-manes/gradle-versions-plugin
 gradlePlugin-springBootDependencyManagement = "1.1.4" ### https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin
 gradlePlugin-asciJvmConvert = "3.3.2" ### https://mvnrepository.com/artifact/org.asciidoctor.jvm.convert/org.asciidoctor.jvm.convert.gradle.plugin?repo=gradle-plugins
