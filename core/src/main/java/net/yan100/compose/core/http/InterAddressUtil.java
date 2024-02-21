@@ -17,7 +17,6 @@
 package net.yan100.compose.core.http;
 
 import jakarta.annotation.Nullable;
-
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;

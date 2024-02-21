@@ -14,9 +14,9 @@
  *     Email: <truenine304520@gmail.com>
  *     Website: [gitee.com/TrueNine]
  */
+import kotlin.test.DefaultAsserter.assertEquals
 import net.yan100.compose.core.encrypt.PemFormat
 import org.junit.jupiter.api.Test
-import kotlin.test.DefaultAsserter.assertEquals
 
 class PemFormatTest {
 

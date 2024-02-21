@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import java.time.Duration
 import net.yan100.compose.core.consts.CacheFieldNames
 import net.yan100.compose.core.lang.slf4j
 import org.springframework.cache.CacheManager
@@ -36,7 +37,6 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
-import java.time.Duration
 
 /**
  * redis 缓存组件配置

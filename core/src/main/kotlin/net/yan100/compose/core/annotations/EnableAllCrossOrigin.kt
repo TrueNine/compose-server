@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.core.annotations
 
+import java.lang.annotation.Inherited
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.context.annotation.Import
 import org.springframework.web.cors.CorsConfiguration
-import java.lang.annotation.Inherited
 
 /**
  * 开启全部跨域

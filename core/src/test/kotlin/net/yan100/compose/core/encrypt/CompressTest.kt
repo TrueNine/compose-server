@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.core.encrypt
 
-import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -24,6 +23,7 @@ import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.test.Test
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream
 
 /**
  * @author TrueNine

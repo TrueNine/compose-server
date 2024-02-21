@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.datacommon.dataextract.models
 
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import org.junit.jupiter.api.Test
 
 class CnDistrictCodeTest {
   @Test

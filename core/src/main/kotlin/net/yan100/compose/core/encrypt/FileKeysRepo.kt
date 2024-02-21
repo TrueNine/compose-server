@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.core.encrypt
 
-import net.yan100.compose.core.lang.slf4j
 import javax.crypto.spec.SecretKeySpec
+import net.yan100.compose.core.lang.slf4j
 
 class FileKeysRepo(
   private val keyDest: String = "security",

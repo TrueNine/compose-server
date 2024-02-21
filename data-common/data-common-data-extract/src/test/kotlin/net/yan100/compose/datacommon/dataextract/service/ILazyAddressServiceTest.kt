@@ -16,14 +16,14 @@
  */
 package net.yan100.compose.datacommon.dataextract.service
 
-import net.yan100.compose.datacommon.dataextract.DataExtractEntrance
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import net.yan100.compose.datacommon.dataextract.DataExtractEntrance
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(classes = [DataExtractEntrance::class])
 class ILazyAddressServiceTest {

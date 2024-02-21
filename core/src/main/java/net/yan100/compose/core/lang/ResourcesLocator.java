@@ -16,10 +16,6 @@
  */
 package net.yan100.compose.core.lang;
 
-import net.yan100.compose.core.consts.FileDescriptions;
-import net.yan100.compose.core.consts.JavaEnvs;
-
-import javax.annotation.Nullable;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,6 +25,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.jar.JarFile;
+import javax.annotation.Nullable;
+import net.yan100.compose.core.consts.FileDescriptions;
+import net.yan100.compose.core.consts.JavaEnvs;
 
 /**
  * 系统资源定位器

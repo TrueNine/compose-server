@@ -18,10 +18,10 @@ package net.yan100.compose.core.lang
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
-import net.yan100.compose.core.alias.decimal
 import java.io.Serial
 import java.io.Serializable
 import java.math.BigDecimal
+import net.yan100.compose.core.alias.decimal
 
 /**
  * 地址定位模型

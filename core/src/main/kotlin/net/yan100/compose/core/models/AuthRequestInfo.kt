@@ -18,8 +18,8 @@ package net.yan100.compose.core.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.annotation.Nullable
-import net.yan100.compose.core.map.RequestInfoMap
 import java.util.concurrent.CopyOnWriteArrayList
+import net.yan100.compose.core.map.RequestInfoMap
 
 /**
  * security校验所需的用户身份

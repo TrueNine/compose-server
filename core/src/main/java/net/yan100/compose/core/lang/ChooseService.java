@@ -17,7 +17,6 @@
 package net.yan100.compose.core.lang;
 
 import jakarta.annotation.Nullable;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
