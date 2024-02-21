@@ -1,4 +1,5 @@
 project.version = libs.versions.compose.asProvider().get()
+
 plugins {
   alias(libs.plugins.spotless)
   alias(libs.plugins.ktJvm)
@@ -14,7 +15,9 @@ plugins {
   alias(libs.plugins.graalvmNative)
   alias(libs.plugins.asciJvmConvert)
 }
+
 val l = libs
+
 dependencies {
   // bundles
   testApi(l.bundles.test.springKotlinTestNG)
@@ -54,7 +57,7 @@ dependencies {
   api(l.spring.integration.mqtt)
   // data
   api(l.spring.data.springDataCommons)
-  //security
+  // security
   testApi(l.spring.security.test)
   api(l.spring.security.crypto)
   api(l.spring.security.core)
@@ -186,6 +189,4 @@ dependencies {
   // querydsl
   annotationProcessor(l.querydsl.jpa)
   annotationProcessor(l.querydsl.apt)
-
-
 }

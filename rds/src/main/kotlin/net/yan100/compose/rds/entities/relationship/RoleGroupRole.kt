@@ -26,7 +26,7 @@ import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
 /**
- * 角色组  角色
+ * 角色组 角色
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -37,19 +37,11 @@ import org.hibernate.annotations.DynamicUpdate
 @Schema(title = "角色组  角色")
 @Table(name = RoleGroupRole.TABLE_NAME)
 class RoleGroupRole : IEntity() {
-  /**
-   * 用户组
-   */
-  @Schema(title = "用户组")
-  @Column(name = ROLE_GROUP_ID)
-  lateinit var roleGroupId: RefId
+  /** 用户组 */
+  @Schema(title = "用户组") @Column(name = ROLE_GROUP_ID) lateinit var roleGroupId: RefId
 
-  /**
-   * 角色
-   */
-  @Schema(title = "角色")
-  @Column(name = ROLE_ID)
-  lateinit var roleId: RefId
+  /** 角色 */
+  @Schema(title = "角色") @Column(name = ROLE_ID) lateinit var roleId: RefId
 
   companion object {
     const val TABLE_NAME: String = "role_group_role"

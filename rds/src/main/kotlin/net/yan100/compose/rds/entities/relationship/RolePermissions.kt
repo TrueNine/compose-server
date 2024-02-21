@@ -27,7 +27,7 @@ import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
 /**
- * 角色  权限
+ * 角色 权限
  *
  * @author TrueNine
  * @since 2023-01-02
@@ -38,21 +38,11 @@ import org.hibernate.annotations.DynamicUpdate
 @Schema(title = "角色  权限")
 @Table(name = RolePermissions.TABLE_NAME)
 class RolePermissions : IEntity() {
-  /**
-   * 角色
-   */
-  @Nullable
-  @Schema(title = "角色")
-  @Column(name = ROLE_ID)
-  lateinit var roleId: RefId
+  /** 角色 */
+  @Nullable @Schema(title = "角色") @Column(name = ROLE_ID) lateinit var roleId: RefId
 
-  /**
-   * 权限
-   */
-  @Nullable
-  @Schema(title = "权限")
-  @Column(name = PERMISSIONS_ID)
-  lateinit var permissionsId: RefId
+  /** 权限 */
+  @Nullable @Schema(title = "权限") @Column(name = PERMISSIONS_ID) lateinit var permissionsId: RefId
 
   companion object {
     const val TABLE_NAME: String = "role_permissions"
