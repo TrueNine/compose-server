@@ -17,6 +17,9 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+import kotlin.test.assertNotNull
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.encrypt.PemFormat
 import net.yan100.compose.security.jwt.JwtIssuer
@@ -24,9 +27,6 @@ import net.yan100.compose.security.jwt.JwtVerifier
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test
-import java.time.Duration
-import java.time.temporal.ChronoUnit
-import kotlin.test.assertNotNull
 
 class FileKeyRepoTest {
 

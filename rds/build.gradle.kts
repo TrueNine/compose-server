@@ -18,7 +18,7 @@ dependencies {
   implementation(libs.spring.security.crypto)
   implementation(libs.jakarta.validationApi)
   implementation(libs.spring.webmvc)
-  implementation(libs.util.hutool.core)
+  implementation(libs.util.hutoolCore)
   testImplementation(libs.spring.boot.validation)
   testImplementation(libs.db.mysqlJ)
 
@@ -26,21 +26,21 @@ dependencies {
 }
 
 val postgresqlSourceSet: SourceSet by
-  sourceSets.creating { resources.srcDir("src/main/resources/postgresql") }
+sourceSets.creating { resources.srcDir("src/main/resources/postgresql") }
 
 val postgresqlJar by
-  tasks.creating(Jar::class) {
-    archiveClassifier.set("postgresql")
-    from(postgresqlSourceSet.output, sourceSets["main"].output)
-  }
+tasks.creating(Jar::class) {
+  archiveClassifier.set("postgresql")
+  from(postgresqlSourceSet.output, sourceSets["main"].output)
+}
 
 val mysqlSourceSet: SourceSet by
-  sourceSets.creating { resources.srcDir("src/main/resources/mysql") }
+sourceSets.creating { resources.srcDir("src/main/resources/mysql") }
 val mysqlJar by
-  tasks.creating(Jar::class) {
-    archiveClassifier.set("mysql")
-    from(mysqlSourceSet.output, sourceSets["main"].output)
-  }
+tasks.creating(Jar::class) {
+  archiveClassifier.set("mysql")
+  from(mysqlSourceSet.output, sourceSets["main"].output)
+}
 
 artifacts {
   add("archives", postgresqlJar)
@@ -51,10 +51,10 @@ publishing {
   repositories {
     maven(
       url =
-        uri(
-          if (version.toString().uppercase().contains("SNAPSHOT")) Repos.yunXiaoSnapshot
-          else Repos.yunXiaoRelese
-        )
+      uri(
+        if (version.toString().uppercase().contains("SNAPSHOT")) Repos.yunXiaoSnapshot
+        else Repos.yunXiaoRelese
+      )
     ) {
       credentials {
         username = Repos.Credentials.yunXiaoUsername
@@ -75,4 +75,11 @@ publishing {
   }
 }
 
-hibernate { enhancement { enableAssociationManagement.set(true) } }
+hibernate {
+  enhancement {
+    enableAssociationManagement.set(true)
+    enableExtendedEnhancement.set(true)
+    enableDirtyTracking.set(true)
+    enableLazyInitialization.set(true)
+  }
+}

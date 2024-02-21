@@ -22,6 +22,8 @@ import net.yan100.compose.rds.entities.Address
 import net.yan100.compose.rds.service.base.IService
 
 interface IAddressService : IService<Address> {
+  fun findByCode(code: SerialCode): Address?
+
   fun findRoot(): Address
 
   fun clearAndInitProvinces(lazy: () -> List<Address>): List<Address>

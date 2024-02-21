@@ -32,9 +32,8 @@ package net.yan100.compose.webapidoc.models.resp;
     "validatorUrl": ""
 }*/
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 /**
  * 开放api文档签证官

@@ -16,12 +16,12 @@
  */
 package net.yan100.compose.pay.service.impl
 
+import java.math.BigDecimal
 import net.yan100.compose.core.id.BizCodeGenerator
 import net.yan100.compose.core.lang.slf4j
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.math.BigDecimal
 
 @SpringBootTest
 class WeChatSinglePayServiceTest {

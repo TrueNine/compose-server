@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.security.oauth2.property
 
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.security.oauth2.Oauth2TestEntrance
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.assertNotNull
 
 @SpringBootTest(
   classes = [Oauth2TestEntrance::class],

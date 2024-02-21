@@ -17,6 +17,7 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
+import java.time.LocalDateTime
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.rds.core.entities.withNew
 import net.yan100.compose.rds.entities.UserInfo
@@ -30,7 +31,6 @@ import net.yan100.compose.rds.service.IUserService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 class AccountAggregatorImpl(

@@ -8,4 +8,11 @@ dependencies {
   implementation(variantOf(libs.querydsl.jpa) { classifier("jakarta") })
 }
 
-hibernate { enhancement { enableAssociationManagement.set(true) } }
+hibernate {
+  enhancement {
+    enableAssociationManagement.set(true)
+    enableExtendedEnhancement.set(true)
+    enableDirtyTracking.set(true)
+    enableLazyInitialization.set(true)
+  }
+}

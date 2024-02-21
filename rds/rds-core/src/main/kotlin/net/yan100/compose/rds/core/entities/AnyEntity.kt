@@ -22,6 +22,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
+import java.io.Serial
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
@@ -31,7 +32,6 @@ import net.yan100.compose.rds.core.listener.TableRowDeletePersistenceListener
 import net.yan100.compose.rds.core.models.PagedRequestParam
 import org.hibernate.Hibernate
 import org.springframework.data.domain.Persistable
-import java.io.Serial
 
 /**
  * JPA的最基础基类，包括一个 id

@@ -16,13 +16,12 @@
  */
 package net.yan100.compose.webservlet.properties;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.http.converter.StringHttpMessageConverter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.http.converter.StringHttpMessageConverter;
 
 /**
  * spring web mvc http servlet 配置属性

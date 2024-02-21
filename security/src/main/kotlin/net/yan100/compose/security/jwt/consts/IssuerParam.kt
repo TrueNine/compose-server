@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.security.jwt.consts
 
-import net.yan100.compose.core.encrypt.Keys
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.time.Duration
+import net.yan100.compose.core.encrypt.Keys
 
 data class IssuerParam<S : Any?, E : Any?>(
   var encryptedDataObj: E? = null,

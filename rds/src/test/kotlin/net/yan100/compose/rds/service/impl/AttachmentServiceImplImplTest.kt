@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import kotlin.test.*
 import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.RdsEntrance
@@ -25,7 +26,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
-import kotlin.test.*
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])

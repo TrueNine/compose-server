@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(classes = [DataExtractEntrance::class])
@@ -37,6 +38,18 @@ class ILazyAddressServiceTest {
     assertFailsWith<IllegalArgumentException> { lazys.findAllChildrenByCode("433") }
     val b = lazys.findAllChildrenByCode("")
     println(b)
+  }
+
+  @Test
+  fun `test lookupByCode`() {
+    val a =
+      lazys.lookupByCode("433127103", firstFind = { null }, deepCondition = { false }) { it.result }
+    assertNotNull(a)
+    val b =
+      lazys.lookupByCode("433127103221", firstFind = { null }, deepCondition = { false }) {
+        it.result
+      }
+    assertNotNull(b)
   }
 
   @Test

@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.repositories
 
+import java.time.LocalDateTime
 import net.yan100.compose.rds.entities.FullUsr
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
@@ -24,7 +25,6 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Repository
 interface IUsrRepo : IRepo<Usr> {

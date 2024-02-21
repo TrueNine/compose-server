@@ -104,3 +104,11 @@ findProject(":schedule")?.name = "schedule"
 include("pay")
 
 findProject(":pay")?.name = "pay"
+
+include("ksp")
+
+findProject(":ksp")?.name = "ksp"
+
+include("version-check")
+
+findProject(":version-check")?.name = "version-check"

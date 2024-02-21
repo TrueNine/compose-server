@@ -16,12 +16,11 @@
  */
 package net.yan100.compose.depend.mqtt.properties;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 @ConfigurationProperties(prefix = "compose.mqtt-client")

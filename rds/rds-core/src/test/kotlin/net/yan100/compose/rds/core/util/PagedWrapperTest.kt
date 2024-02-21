@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.core.util
 
+import kotlin.test.assertEquals
 import net.yan100.compose.rds.core.util.PagedWrapper.DEFAULT_MAX
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class PagedWrapperTest {
 

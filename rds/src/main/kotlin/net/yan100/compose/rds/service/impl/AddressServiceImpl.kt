@@ -31,6 +31,10 @@ import org.springframework.stereotype.Service
 @Service
 class AddressServiceImpl(private val repo: IAddressRepo) :
   IAddressService, CrudService<Address>(repo) {
+  override fun findByCode(code: SerialCode): Address? {
+    return repo.findByCode(code)
+  }
+
   override fun findRoot(): Address {
     return repo.findRoot()
   }
@@ -63,11 +67,11 @@ class AddressServiceImpl(private val repo: IAddressRepo) :
     return repo.findByIdOrNull(id)?.let { repo.findDirectChildren(it) } ?: listOf()
   }
 
-  override fun findFullPathById(id: String): String {
+  override fun findFullPathById(id: RefId): String {
     TODO("Not yet implemented")
   }
 
-  override fun findFullPathByCode(code: String): String {
+  override fun findFullPathByCode(code: RefId): String {
     TODO("Not yet implemented")
   }
 }

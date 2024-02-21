@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
+import kotlin.test.*
 import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.entities.Permissions
 import net.yan100.compose.rds.entities.Role
@@ -30,7 +31,6 @@ import net.yan100.compose.rds.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
-import kotlin.test.*
 
 @SpringBootTest
 class IRbacAggregatorImplTest {

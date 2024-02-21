@@ -20,8 +20,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
-import net.yan100.compose.rds.core.models.PagedRequestParam
 import java.io.Serializable
+import net.yan100.compose.rds.core.models.PagedRequestParam
 
 /**
  * ## 内嵌分页的实体类型

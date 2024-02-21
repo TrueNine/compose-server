@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.plugin
 
+import java.net.URI
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
@@ -24,7 +25,6 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.initialization.Settings
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.wrapper.Wrapper
-import java.net.URI
 
 class Main : Plugin<Project> {
   override fun apply(project: Project) {}

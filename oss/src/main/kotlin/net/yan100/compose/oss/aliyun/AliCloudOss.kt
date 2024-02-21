@@ -17,13 +17,13 @@
 package net.yan100.compose.oss.aliyun
 
 import com.aliyun.oss.OSS
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.function.Consumer
 import net.yan100.compose.oss.FileArgs
 import net.yan100.compose.oss.InMap
 import net.yan100.compose.oss.Oss
 import net.yan100.compose.oss.OutMap
-import java.io.InputStream
-import java.io.OutputStream
-import java.util.function.Consumer
 
 /**
  * 阿里云 oss 实现

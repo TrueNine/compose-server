@@ -16,6 +16,8 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
+import java.time.LocalDateTime
+import kotlin.test.*
 import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.models.req.LoginAccountReq
@@ -24,8 +26,6 @@ import net.yan100.compose.rds.models.req.RegisterAccountReq
 import net.yan100.compose.rds.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
-import kotlin.test.*
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class IAccountAggregatorImplTest {

@@ -17,14 +17,14 @@
 package net.yan100.compose.oss.minio
 
 import io.minio.MinioClient
-import net.yan100.compose.oss.FileArgs
-import net.yan100.compose.oss.InMap
-import net.yan100.compose.oss.Oss
-import net.yan100.compose.oss.OutMap
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.function.Consumer
+import net.yan100.compose.oss.FileArgs
+import net.yan100.compose.oss.InMap
+import net.yan100.compose.oss.Oss
+import net.yan100.compose.oss.OutMap
 
 /**
  * oss 的 minio 实现

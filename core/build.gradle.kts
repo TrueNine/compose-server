@@ -6,7 +6,7 @@ dependencies {
   implementation(libs.util.mapstruct)
   annotationProcessorKapt(libs.util.mapstructProcessor)
 
-  api(libs.jackson.coreAnnotations)
+  api(libs.json.jacksonCoreAnnotations)
 
   api(libs.util.ognl)
   api(libs.util.guavaJre)
@@ -28,8 +28,8 @@ dependencies {
   implementation(libs.spring.boot.logging)
 
   // TODO hutool
-  implementation(libs.util.hutool.core)
-  implementation(libs.util.hutool.crypto)
+  implementation(libs.util.hutoolCore)
+  implementation(libs.util.hutoolCrypto)
 
   testImplementation(libs.spring.boot.web)
   testImplementation(libs.spring.boot.json)

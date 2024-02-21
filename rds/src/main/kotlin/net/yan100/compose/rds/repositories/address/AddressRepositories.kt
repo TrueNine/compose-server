@@ -29,6 +29,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IAddressRepo : ITreeRepo<Address> {
+  fun existsByCode(code: SerialCode): Boolean
 
   fun findFirstByCodeAndLevel(code: SerialCode, level: Int): Address?
 

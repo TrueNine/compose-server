@@ -1,4 +1,5 @@
 import com.diffplug.spotless.LineEnding
+import java.time.LocalDate
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.Repos.yunXiaoRelese
@@ -10,7 +11,6 @@ import net.yan100.compose.plugin.distribute
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import java.time.LocalDate
 
 plugins {
   java
@@ -28,7 +28,6 @@ plugins {
   alias(libs.plugins.ktAllOpen)
   alias(libs.plugins.ktLombok)
   alias(libs.plugins.ktJpa)
-  alias(libs.plugins.versions)
   alias(libs.plugins.spotless)
   id("net.yan100.compose.version-control")
 }
@@ -39,6 +38,7 @@ version = libs.versions.compose.asProvider().get()
 
 apply(plugin = l.plugins.spotless.get().pluginId)
 
+// https://github.com/diffplug/spotless/tree/main/plugin-gradle#quickstart
 spotless {
   val email = "truenine304520@gmail.com"
   val license =
@@ -129,11 +129,13 @@ subprojects {
   apply(plugin = l.plugins.springBootDependencyManagement.get().pluginId)
 
   dependencies {
-    implementation(l.spring.boot.autoconfigure)
     annotationProcessor(l.spring.boot.configureprocessor)
-    implementation(l.bundles.kt)
-    testImplementation(l.bundles.test.springKotlinJunit5)
     allAnnotationCompileOnly(l.lombok)
+    implementation(l.bundles.kt)
+
+    implementation(l.spring.boot.autoconfigure)
+
+    testImplementation(l.bundles.test.springKotlinJunit5)
   }
 
   dependencyManagement {
@@ -224,7 +226,7 @@ subprojects {
       options.forkOptions.memoryInitialSize = "2G"
     }
 
-    jar { archiveClassifier = null }
+    jar { archiveClassifier.set("") }
 
     javadoc {
       if (JavaVersion.current().isJava9Compatible)

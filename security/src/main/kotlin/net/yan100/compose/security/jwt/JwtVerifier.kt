@@ -20,6 +20,9 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.annotations.VisibleForTesting
+import java.security.PrivateKey
+import java.security.interfaces.RSAPublicKey
+import kotlin.reflect.KClass
 import net.yan100.compose.core.encrypt.Encryptors
 import net.yan100.compose.core.lang.DTimer
 import net.yan100.compose.core.lang.slf4j
@@ -27,9 +30,6 @@ import net.yan100.compose.security.exceptions.JwtException
 import net.yan100.compose.security.jwt.consts.JwtToken
 import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.slf4j.Logger
-import java.security.PrivateKey
-import java.security.interfaces.RSAPublicKey
-import kotlin.reflect.KClass
 
 open class JwtVerifier internal constructor() {
   protected var issuer: String = "issuer with component framework"

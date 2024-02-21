@@ -16,9 +16,6 @@
  */
 package net.yan100.compose.security.autoconfig
 
-import net.yan100.compose.core.encrypt.*
-import net.yan100.compose.core.lang.base64Decode
-import org.springframework.core.io.ClassPathResource
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -26,6 +23,9 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
+import net.yan100.compose.core.encrypt.*
+import net.yan100.compose.core.lang.base64Decode
+import org.springframework.core.io.ClassPathResource
 
 class FileKeyRepo(private val baseDir: String = "keys") : IKeysRepo {
   private fun isPem(content: String): Boolean {

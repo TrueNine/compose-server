@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.rds.base
 
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import net.yan100.compose.rds.entities.relationship.RolePermissions
 import net.yan100.compose.rds.repositories.relationship.IRolePermissionsRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @SpringBootTest
 class AnyEntityTest {

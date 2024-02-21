@@ -34,11 +34,7 @@ dependencies {
 }
 
 kotlin {
-  jvmToolchain {
-    languageVersion.set(
-      JavaLanguageVersion.of(l.versions.compose.versionControlJavaVersion.get().toString().toInt())
-    )
-  }
+  jvmToolchain { languageVersion.set(JavaLanguageVersion.of(l.versions.java.get().toInt())) }
 }
 
 tasks {
@@ -56,7 +52,7 @@ tasks {
           "-jvm-target=${l.versions.compose.versionControlJavaVersion.get()}",
           "-Xextended-compiler-checks"
         )
-      jvmTarget = l.versions.compose.versionControlJavaVersion.get()
+      jvmTarget = l.versions.java.get()
     }
   }
 }

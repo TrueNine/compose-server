@@ -19,10 +19,10 @@ package net.yan100.compose.oss.minio
 import io.minio.GetObjectResponse
 import io.minio.MinioClient
 import io.minio.ObjectWriteResponse
-import net.yan100.compose.oss.InMap
-import net.yan100.compose.oss.OutMap
 import java.io.InputStream
 import java.io.OutputStream
+import net.yan100.compose.oss.InMap
+import net.yan100.compose.oss.OutMap
 
 /**
  * OSS 抽象与 minio 具体实现的隔离继承层

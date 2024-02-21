@@ -32,16 +32,41 @@ interface ILazyAddressService {
 
   fun findAllVillageByCode(districtCode: String): List<CnDistrictResp>
 
-  interface ILookupAllChildrenByCodeFindConditionParam {
-    val code: String
+  interface ILookupFindParam {
+    val code: SerialCode
     val level: Int
   }
 
-  interface ILookupAllChildrenByCodeSortedSaveParam {
+  interface ILookupSortedSaveParam {
     val parentCode: String
     val deepLevel: Int
     val notInit: Boolean
     val result: List<CnDistrictResp>
+  }
+
+  fun findByCode(code: SerialCode): CnDistrictResp? {
+    return CnDistrictCode(code).back()?.let { a ->
+      findAllChildrenByCode(a.code).find { it.code.code == a.code }
+    }
+  }
+
+  fun <T> lookupByCode(
+    code: SerialCode,
+    firstFind: (param: ILookupFindParam) -> T?,
+    deepCondition: (param: ILookupFindParam) -> Boolean,
+    notFound: (emptyCode: Boolean) -> T? = { null },
+    sortedSave: (param: ILookupSortedSaveParam) -> List<T>,
+  ): T? {
+    CnDistrictCode(code).back()?.let { backCode ->
+      lookupAllChildrenByCode(
+        code = backCode.code,
+        notFound = { listOf<T>() },
+        firstFind = { listOf(firstFind(it)) },
+        deepCondition = deepCondition,
+        sortedSave = sortedSave
+      )
+    }
+    return null
   }
 
   /**
@@ -55,18 +80,18 @@ interface ILazyAddressService {
    * @return 自定义返回的列表
    */
   fun <T> lookupAllChildrenByCode(
-    code: String,
-    firstFind: (param: ILookupAllChildrenByCodeFindConditionParam) -> List<T>?,
-    deepCondition: (param: ILookupAllChildrenByCodeFindConditionParam) -> Boolean,
+    code: SerialCode,
+    firstFind: (param: ILookupFindParam) -> List<T>?,
+    deepCondition: (param: ILookupFindParam) -> Boolean,
     notFound: (emptyCode: Boolean) -> List<T> = { listOf() },
-    sortedSave: (param: ILookupAllChildrenByCodeSortedSaveParam) -> List<T>,
+    sortedSave: (param: ILookupSortedSaveParam) -> List<T>,
   ): List<T> {
     val firstFindCode = CnDistrictCode(code)
     if (firstFindCode.empty) return notFound(true) // code 为空时，返回调用方的数据
     val requirementCodes = mutableListOf(firstFindCode)
     val preFind =
       firstFind(
-        object : ILookupAllChildrenByCodeFindConditionParam {
+        object : ILookupFindParam {
           override val code = firstFindCode.code
           override val level = firstFindCode.level
         },
@@ -78,7 +103,7 @@ interface ILazyAddressService {
       val requireRequest = requirementCodes.removeLastOrNull() ?: continue
       val findFnResult =
         deepCondition(
-          object : ILookupAllChildrenByCodeFindConditionParam {
+          object : ILookupFindParam {
             override val code = requireRequest.code
             override val level = requireRequest.level
           },
@@ -98,7 +123,7 @@ interface ILazyAddressService {
       result =
         if (responses.isNotEmpty()) {
           sortedSave(
-            object : ILookupAllChildrenByCodeSortedSaveParam {
+            object : ILookupSortedSaveParam {
               override val parentCode = it.code
               override val deepLevel = it.level
               override val result = responses

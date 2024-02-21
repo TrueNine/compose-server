@@ -20,16 +20,16 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.annotations.VisibleForTesting
-import net.yan100.compose.core.encrypt.Encryptors
-import net.yan100.compose.core.lang.DTimer
-import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.security.jwt.consts.IssuerParam
-import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.Duration
+import net.yan100.compose.core.encrypt.Encryptors
+import net.yan100.compose.core.lang.DTimer
+import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.security.jwt.consts.IssuerParam
+import org.slf4j.Logger
 
 class JwtIssuer private constructor() : JwtVerifier() {
   var expireMillis: Long = Duration.ofMinutes(30).toMillis()

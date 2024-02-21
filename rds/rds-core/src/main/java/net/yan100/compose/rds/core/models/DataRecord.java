@@ -18,10 +18,9 @@ package net.yan100.compose.rds.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import lombok.Data;
-
 import java.io.Serial;
 import java.io.Serializable;
+import lombok.Data;
 
 @Data
 @Schema(title = "表行对象序列化模型")
