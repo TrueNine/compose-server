@@ -20,6 +20,34 @@ import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictCode
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp
+import org.apache.poi.ss.formula.functions.T
+
+private fun <T> createRequestQueue(
+  firstFindCode: CnDistrictCode,
+  deepCondition: (param: ILazyAddressService.ILookupFindParam) -> Boolean,
+  notFound: (emptyCode: Boolean) -> T? = { null }
+): MutableList<CnDistrictCode> {
+  val requirementCodes = mutableListOf(firstFindCode)
+  val requestQueue = mutableListOf(firstFindCode)
+  while (requirementCodes.isNotEmpty()) {
+    val requireRequest = requirementCodes.removeLastOrNull() ?: continue
+    val findFnResult =
+      deepCondition(
+        object : ILazyAddressService.ILookupFindParam {
+          override val code = requireRequest.code
+          override val level = requireRequest.level
+        },
+      )
+    if (!findFnResult) {
+      val back = requireRequest.back()
+      if (null != back) {
+        requirementCodes += back
+        requestQueue += back
+      } else notFound(false)
+    }
+  }
+  return requestQueue
+}
 
 interface ILazyAddressService {
   fun findAllProvinces(): List<CnDistrictResp>
@@ -55,18 +83,36 @@ interface ILazyAddressService {
     firstFind: (param: ILookupFindParam) -> T?,
     deepCondition: (param: ILookupFindParam) -> Boolean,
     notFound: (emptyCode: Boolean) -> T? = { null },
-    sortedSave: (param: ILookupSortedSaveParam) -> List<T>,
+    sortedSave: (param: ILookupSortedSaveParam) -> T?,
   ): T? {
-    CnDistrictCode(code).back()?.let { backCode ->
-      lookupAllChildrenByCode(
-        code = backCode.code,
-        notFound = { listOf<T>() },
-        firstFind = { listOf(firstFind(it)) },
-        deepCondition = deepCondition,
-        sortedSave = sortedSave
-      )
+    return CnDistrictCode(code).back()?.let { firstFindCode ->
+      if (firstFindCode.empty) return notFound(true)
+      val preFind =
+        firstFind(
+          object : ILookupFindParam {
+            override val code = firstFindCode.code
+            override val level = firstFindCode.level
+          },
+        )
+      if (null != preFind) return preFind
+      val requestQueue = createRequestQueue(firstFindCode, deepCondition, notFound)
+      var result: T? = null
+      requestQueue.reversed().forEach {
+        val responses = findAllChildrenByCode(code = it.code)
+        val b =
+          object : ILookupSortedSaveParam {
+            override val parentCode = it.code
+            override val deepLevel = it.level
+            override val result = responses
+            override val notInit = it.empty
+          }
+        result =
+          if (responses.isNotEmpty()) {
+            sortedSave(b)
+          } else notFound(false)
+      }
+      result
     }
-    return null
   }
 
   /**
@@ -83,12 +129,11 @@ interface ILazyAddressService {
     code: SerialCode,
     firstFind: (param: ILookupFindParam) -> List<T>?,
     deepCondition: (param: ILookupFindParam) -> Boolean,
-    notFound: (emptyCode: Boolean) -> List<T> = { listOf() },
+    notFound: (emptyCode: Boolean) -> List<T>? = { null },
     sortedSave: (param: ILookupSortedSaveParam) -> List<T>,
   ): List<T> {
     val firstFindCode = CnDistrictCode(code)
-    if (firstFindCode.empty) return notFound(true) // code 为空时，返回调用方的数据
-    val requirementCodes = mutableListOf(firstFindCode)
+    if (firstFindCode.empty) return notFound(true) ?: listOf() // code 为空时，返回调用方的数据
     val preFind =
       firstFind(
         object : ILookupFindParam {
@@ -97,27 +142,9 @@ interface ILazyAddressService {
         },
       )
     if (!preFind.isNullOrEmpty()) return preFind
-    val requestQueue = mutableListOf(firstFindCode)
     var result = listOf<T>()
-    while (requirementCodes.isNotEmpty()) {
-      val requireRequest = requirementCodes.removeLastOrNull() ?: continue
-      val findFnResult =
-        deepCondition(
-          object : ILookupFindParam {
-            override val code = requireRequest.code
-            override val level = requireRequest.level
-          },
-        )
-      if (!findFnResult) {
-        val back = requireRequest.back()
-        if (null != back) {
-          requirementCodes += CnDistrictCode(back.code)
-          requestQueue += CnDistrictCode(back.code)
-        } else {
-          notFound(false)
-        }
-      }
-    }
+    val requestQueue = createRequestQueue(firstFindCode, deepCondition, notFound)
+
     requestQueue.reversed().forEach {
       val responses = findAllChildrenByCode(code = it.code)
       result =
@@ -130,9 +157,7 @@ interface ILazyAddressService {
               override val notInit = it.empty
             },
           )
-        } else {
-          notFound(false)
-        }
+        } else notFound(false) ?: listOf()
     }
     return result
   }

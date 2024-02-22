@@ -43,8 +43,12 @@ class ILazyAddressServiceTest {
   @Test
   fun `test lookupByCode`() {
     val a =
-      lazys.lookupByCode("433127103", firstFind = { null }, deepCondition = { false }) { it.result }
+      lazys.lookupByCode("433127103", firstFind = { null }, deepCondition = { false }) {
+        println("触发保存 =$it")
+        it.result.find { ir -> ir.code.code == "433127103" }
+      }
     assertNotNull(a)
+
     val b =
       lazys.lookupByCode("433127103221", firstFind = { null }, deepCondition = { false }) {
         it.result
