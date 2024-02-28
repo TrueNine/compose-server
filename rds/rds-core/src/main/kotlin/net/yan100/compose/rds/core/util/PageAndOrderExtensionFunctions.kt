@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.core.util
 
-import net.yan100.compose.core.lang.nonText
-import net.yan100.compose.core.lang.snakeCaseToCamelCase
+import net.yan100.compose.core.extensionfunctions.nonText
+import net.yan100.compose.core.extensionfunctions.snakeCaseToCamelCase
 import org.springframework.data.domain.Sort
 
 fun MutableList<Sort.Order>.querydslOrderBy(

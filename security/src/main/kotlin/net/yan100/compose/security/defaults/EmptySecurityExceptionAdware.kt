@@ -17,8 +17,8 @@
 package net.yan100.compose.security.defaults
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.lang.EmptyDefault
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.util.EmptyDefault
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 
 class EmptySecurityExceptionAdware(mapper: ObjectMapper) :

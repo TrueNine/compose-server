@@ -18,8 +18,8 @@ package net.yan100.compose.rds.base
 
 import java.math.BigDecimal
 import kotlin.test.*
-import net.yan100.compose.core.id.Snowflake
-import net.yan100.compose.core.lang.WGS84
+import net.yan100.compose.core.ISnowflakeGenerator
+import net.yan100.compose.core.models.WGS84
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.DbTestServiceEntity
 import net.yan100.compose.rds.service.CrudServiceTester
@@ -45,13 +45,12 @@ class CrudServiceTest {
     assertContains(all.dataList, a, "a$a dataList${all.dataList}")
   }
 
-  @Autowired lateinit var snowflake: Snowflake
+  @Autowired lateinit var snowflake: ISnowflakeGenerator
 
   fun getEntity() =
     DbTestServiceEntity().apply {
-      this.title = "dawda ${snowflake.nextStringId()}"
-      this.center =
-        WGS84(BigDecimal(snowflake.nextStringId()), BigDecimal(snowflake.nextStringId()))
+      this.title = "dawda ${snowflake.nextString()}"
+      this.center = WGS84(BigDecimal(snowflake.nextString()), BigDecimal(snowflake.nextString()))
     }
 
   @Test

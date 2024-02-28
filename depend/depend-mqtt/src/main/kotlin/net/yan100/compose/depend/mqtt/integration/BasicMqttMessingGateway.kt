@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.depend.mqtt.integration
 
-import net.yan100.compose.core.lang.replaceFirstX
+import net.yan100.compose.core.extensionfunctions.replaceFirstX
 import org.springframework.integration.mqtt.support.MqttHeaders
 import org.springframework.messaging.handler.annotation.Header
 

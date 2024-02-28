@@ -21,9 +21,9 @@ import java.time.LocalDateTime
 import java.util.*
 import kotlin.test.assertEquals
 import net.yan100.compose.core.CoreEntrance
-import net.yan100.compose.core.lang.toDate
-import net.yan100.compose.core.lang.toLocalDatetime
-import net.yan100.compose.core.lang.toLong
+import net.yan100.compose.core.extensionfunctions.toDate
+import net.yan100.compose.core.extensionfunctions.toLocalDatetime
+import net.yan100.compose.core.extensionfunctions.toLong
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

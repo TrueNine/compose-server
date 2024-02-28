@@ -97,7 +97,7 @@ fun Wrapper.distribute(
   version: String = "8.5",
   url: String = "https://mirrors.cloud.tencent.com/gradle"
 ): Wrapper {
-  distributionUrl = "$url/gradle-${version}-all.zip"
+  distributionUrl = "$url/gradle-${version}-bin.zip"
   distributionType = Wrapper.DistributionType.ALL
   gradleVersion = version
   return this

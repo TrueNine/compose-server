@@ -16,16 +16,25 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
-import net.yan100.compose.rds.repositories.UserInfoRepo
+import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
-class UserInfoServiceImpl(private val infoRepo: UserInfoRepo) :
+class UserInfoServiceImpl(private val infoRepo: IUserInfoRepo) :
   IUserInfoService, CrudService<UserInfo>(infoRepo) {
+  override fun findAllIdByUserId(userId: RefId): List<RefId> {
+    return infoRepo.findAllIdByUserId(userId)
+  }
+
+  override fun findUserIdById(id: RefId): RefId? {
+    return infoRepo.findUserIdById(id)
+  }
+
   override fun findUserByWechatOpenId(openId: String): Usr? {
     return infoRepo.findUserByWechatOpenId(openId)
   }

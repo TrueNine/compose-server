@@ -18,7 +18,7 @@ package net.yan100.compose.security.oauth2.models.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.core.typing.wechat.WechatMpGrantTyping
+import net.yan100.compose.security.oauth2.typing.wechat.WechatMpGrantTyping
 
 class JsCodeToSessionApiReq {
   @Schema(title = "小程序 appId") @JsonProperty("appid") lateinit var mpAppId: String

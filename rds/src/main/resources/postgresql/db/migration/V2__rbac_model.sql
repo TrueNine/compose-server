@@ -1,25 +1,25 @@
-CREATE
-    TABLE
-        IF NOT EXISTS usr(
-            create_user_id BIGINT DEFAULT NULL, -- 创建此账号的 user id
-            account VARCHAR(255) DEFAULT NULL,
-            nick_name VARCHAR(2047) DEFAULT NULL,
-            doc text DEFAULT NULL,
-            pwd_enc VARCHAR(2047) DEFAULT NULL,
-            ban_time TIMESTAMP DEFAULT NULL,
-            last_login_time TIMESTAMP DEFAULT now(),
-            UNIQUE(account)
+create
+    table
+        if not exists usr(
+            create_user_id bigint default null,
+            account varchar(255) default null,
+            nick_name varchar(2047) default null,
+            doc text default null,
+            pwd_enc varchar(2047) default null,
+            ban_time timestamp default null,
+            last_login_time timestamp default now(),
+            unique(account)
         );
 
-comment ON
-TABLE
-    usr IS '用户';
+comment on
+table
+    usr is '用户';
 
-SELECT
+select
     add_base_struct('usr');
 
-INSERT
-    INTO
+insert
+    into
         usr(
             id,
             create_user_id,
@@ -28,11 +28,11 @@ INSERT
             pwd_enc,
             last_login_time,
             doc
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 0,
                 'root',
@@ -50,7 +50,7 @@ INSERT
                 now(),
                 '普通用户账号'
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 create_user_id,
                 account,
@@ -59,87 +59,87 @@ INSERT
                 last_login_time,
                 doc
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     usr u
-                WHERE
+                where
                     u.account = tmp.account
-                    AND u.pwd_enc = tmp.pwd_enc
+                    and u.pwd_enc = tmp.pwd_enc
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS user_info(
-            user_id BIGINT DEFAULT NULL,
-            create_user_id BIGINT DEFAULT NULL,
-            pri BOOLEAN DEFAULT TRUE, -- 首选用户信息
-            avatar_img_id BIGINT DEFAULT NULL,
-            first_name VARCHAR(4095) DEFAULT NULL,
-            last_name VARCHAR(4095) DEFAULT NULL,
-            email VARCHAR(255) DEFAULT NULL,
-            birthday TIMESTAMP DEFAULT NULL,
-            address_details_id BIGINT DEFAULT NULL,
-            phone VARCHAR(255) DEFAULT NULL,
-            spare_phone VARCHAR(255) DEFAULT NULL,
-            id_card VARCHAR(255) DEFAULT NULL,
-            gender INT DEFAULT NULL,
-            wechat_openid VARCHAR(255) DEFAULT NULL,
-            wechat_account VARCHAR(255) DEFAULT NULL,
-            wechat_authid VARCHAR(255) DEFAULT NULL,
-            qq_openid VARCHAR(255) DEFAULT NULL,
-            qq_account VARCHAR(255) DEFAULT NULL,
-            address_code VARCHAR(127) DEFAULT NULL,
-            address_id BIGINT DEFAULT NULL
+create
+    table
+        if not exists user_info(
+            user_id bigint default null,
+            create_user_id bigint default null,
+            pri boolean default true,
+            avatar_img_id bigint default null,
+            first_name varchar(4095) default null,
+            last_name varchar(4095) default null,
+            email varchar(255) default null,
+            birthday timestamp default null,
+            address_details_id bigint default null,
+            phone varchar(255) default null,
+            spare_phone varchar(255) default null,
+            id_card varchar(255) default null,
+            gender int default null,
+            wechat_openid varchar(255) default null,
+            wechat_account varchar(255) default null,
+            wechat_authid varchar(255) default null,
+            qq_openid varchar(255) default null,
+            qq_account varchar(255) default null,
+            address_code varchar(127) default null,
+            address_id bigint default null
         );
 
-comment ON
-TABLE
-    user_info IS '用户信息';
+comment on
+table
+    user_info is '用户信息';
 
-SELECT
+select
     add_base_struct('user_info');
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(user_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(create_user_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(phone);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(email);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(id_card);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(address_details_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(avatar_img_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(wechat_openid);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_info(wechat_authid);
 
-INSERT
-    INTO
+insert
+    into
         user_info(
             id,
             user_id,
@@ -150,14 +150,14 @@ INSERT
             birthday,
             phone,
             gender
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 0,
-                TRUE,
+                true,
                 'R',
                 'OOT',
                 'g@g.com',
@@ -171,7 +171,7 @@ INSERT
             (
                 1,
                 1,
-                TRUE,
+                true,
                 'U',
                 'SR',
                 'g@g.com',
@@ -182,7 +182,7 @@ INSERT
                 '13722222222',
                 1
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 user_id,
                 pri,
@@ -193,42 +193,42 @@ INSERT
                 phone,
                 gender
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     user_info i
-                WHERE
+                where
                     i.user_id = tmp.user_id
-                    AND i.pri = tmp.pri
+                    and i.pri = tmp.pri
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS ROLE(
-            name VARCHAR(255) NOT NULL,
+create
+    table
+        if not exists role(
+            name varchar(255) not null,
             doc text
         );
 
-comment ON
-TABLE
-    ROLE IS '角色';
+comment on
+table
+    role is '角色';
 
-SELECT
+select
     add_base_struct('role');
 
-INSERT
-    INTO
-        ROLE(
+insert
+    into
+        role(
             id,
             name,
             doc
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 'ROOT',
                 '默认 ROOT 角色，务必不要删除'
@@ -243,46 +243,46 @@ INSERT
                 'ADMIN',
                 '默认 ADMIN 角色，务必不要删除'
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 name,
                 doc
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
-                    ROLE r
-                WHERE
+                from
+                    role r
+                where
                     r.id = tmp.id
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS permissions(
-            name VARCHAR(255) NOT NULL,
+create
+    table
+        if not exists permissions(
+            name varchar(255) not null,
             doc text
         );
 
-comment ON
-TABLE
-    permissions IS '权限';
+comment on
+table
+    permissions is '权限';
 
-SELECT
+select
     add_base_struct('permissions');
 
-INSERT
-    INTO
+insert
+    into
         permissions(
             id,
             name,
             doc
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 'ROOT',
                 '默认 ROOT 权限，务必不要删除'
@@ -297,46 +297,46 @@ INSERT
                 'ADMIN',
                 '默认 ADMIN 权限，务必不要删除'
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 name,
                 doc
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     permissions p
-                WHERE
+                where
                     p.id = tmp.id
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS role_group(
-            name VARCHAR(255) NOT NULL,
+create
+    table
+        if not exists role_group(
+            name varchar(255) not null,
             doc text
         );
 
-comment ON
-TABLE
-    role_group IS '角色组';
+comment on
+table
+    role_group is '角色组';
 
-SELECT
+select
     add_base_struct('role_group');
 
-INSERT
-    INTO
+insert
+    into
         role_group(
             id,
             name,
             doc
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 'ROOT',
                 '默认 ROOT 角色组，务必不要删除'
@@ -351,54 +351,54 @@ INSERT
                 'ADMIN',
                 '默认 ADMIN 角色组，务必不要删除'
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 name,
                 doc
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     role_group r
-                WHERE
+                where
                     r.id = tmp.id
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS role_permissions(
-            role_id BIGINT NOT NULL,
-            permissions_id BIGINT NOT NULL
+create
+    table
+        if not exists role_permissions(
+            role_id bigint not null,
+            permissions_id bigint not null
         );
 
-comment ON
-TABLE
-    role_permissions IS '角色  权限';
+comment on
+table
+    role_permissions is '角色  权限';
 
-SELECT
+select
     add_base_struct('role_permissions');
 
-CREATE
-    INDEX ON
+create
+    index on
     role_permissions(role_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     role_permissions(permissions_id);
 
-INSERT
-    INTO
+insert
+    into
         role_permissions(
             id,
             role_id,
             permissions_id
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 0,
                 0
@@ -428,54 +428,54 @@ INSERT
                 2,
                 2
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 role_id,
                 permissions_id
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     role_permissions r
-                WHERE
+                where
                     r.id = tmp.id
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS role_group_role(
-            role_group_id BIGINT NOT NULL,
-            role_id BIGINT NOT NULL
+create
+    table
+        if not exists role_group_role(
+            role_group_id bigint not null,
+            role_id bigint not null
         );
 
-comment ON
-TABLE
-    role_group_role IS '角色组  角色';
+comment on
+table
+    role_group_role is '角色组  角色';
 
-SELECT
+select
     add_base_struct('role_group_role');
 
-CREATE
-    INDEX ON
+create
+    index on
     role_group_role(role_group_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     role_group_role(role_id);
 
-INSERT
-    INTO
+insert
+    into
         role_group_role(
             id,
             role_group_id,
             role_id
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 0,
                 0
@@ -505,54 +505,54 @@ INSERT
                 2,
                 2
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 role_group_id,
                 role_id
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     role_group_role r
-                WHERE
+                where
                     r.id = tmp.id
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS user_role_group(
-            user_id BIGINT NOT NULL,
-            role_group_id BIGINT NOT NULL
+create
+    table
+        if not exists user_role_group(
+            user_id bigint not null,
+            role_group_id bigint not null
         );
 
-comment ON
-TABLE
-    user_role_group IS '用户  角色组';
+comment on
+table
+    user_role_group is '用户  角色组';
 
-SELECT
+select
     add_base_struct('user_role_group');
 
-CREATE
-    INDEX ON
+create
+    index on
     user_role_group(role_group_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     user_role_group(user_id);
 
-INSERT
-    INTO
+insert
+    into
         user_role_group(
             id,
             user_id,
             role_group_id
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 0,
                 0
@@ -572,48 +572,48 @@ INSERT
                 1,
                 1
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
                 user_id,
                 role_group_id
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     user_role_group u
-                WHERE
+                where
                     u.id = tmp.id
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS dept(
-            name VARCHAR(255) NOT NULL,
-            doc text NULL
+create
+    table
+        if not exists dept(
+            name varchar(255) not null,
+            doc text null
         );
 
-comment ON
-TABLE
-    dept IS '部门';
+comment on
+table
+    dept is '部门';
 
-SELECT
+select
     add_base_struct('dept');
 
-CREATE
-    TABLE
-        IF NOT EXISTS user_dept(
-            user_id BIGINT NOT NULL,
-            dept_id BIGINT NOT NULL
+create
+    table
+        if not exists user_dept(
+            user_id bigint not null,
+            dept_id bigint not null
         );
 
-comment ON
-TABLE
-    user_dept IS '用户  部门';
+comment on
+table
+    user_dept is '用户  部门';
 
-SELECT
+select
     add_base_struct('user_dept');
 
-SELECT
+select
     add_presort_tree_struct('user_dept');

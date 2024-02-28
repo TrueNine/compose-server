@@ -17,7 +17,7 @@
 package net.yan100.compose.rds.service.aggregator
 
 import kotlin.test.*
-import net.yan100.compose.core.id.Snowflake
+import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.rds.entities.Permissions
 import net.yan100.compose.rds.entities.Role
 import net.yan100.compose.rds.entities.RoleGroup
@@ -46,16 +46,16 @@ class IRbacAggregatorImplTest {
 
   @Autowired lateinit var permissionsService: IPermissionsService
 
-  @Autowired lateinit var snowflake: Snowflake
+  @Autowired lateinit var snowflake: ISnowflakeGenerator
 
   private fun getUser() =
     Usr().apply {
-      account = "name${snowflake.nextId()}"
+      account = "name${snowflake.next()}"
       nickName = "abcd"
-      pwdEnc = "aa${snowflake.nextId()}"
+      pwdEnc = "aa${snowflake.next()}"
     }
 
-  private fun getRoleGroup() = RoleGroup().apply { name = "ab${snowflake.nextId()}" }
+  private fun getRoleGroup() = RoleGroup().apply { name = "ab${snowflake.next()}" }
 
   @Test
   fun testSaveRoleGroupToUser() {
@@ -124,7 +124,7 @@ class IRbacAggregatorImplTest {
 
   fun getRole() =
     Role().apply {
-      name = "测试权限${snowflake.nextId()}"
+      name = "测试权限${snowflake.next()}"
       doc = "nul"
     }
 
@@ -140,8 +140,8 @@ class IRbacAggregatorImplTest {
   fun getRoles() =
     List(10) {
       Role().apply {
-        name = "没有${snowflake.nextId()}"
-        doc = "md = ${snowflake.nextId()}"
+        name = "没有${snowflake.next()}"
+        doc = "md = ${snowflake.next()}"
       }
     }
 
@@ -183,8 +183,8 @@ class IRbacAggregatorImplTest {
 
   fun getPermissions() =
     Permissions().apply {
-      name = "权限 ${snowflake.nextId()}"
-      doc = "stra ${snowflake.nextId()}"
+      name = "权限 ${snowflake.next()}"
+      doc = "stra ${snowflake.next()}"
     }
 
   @Autowired lateinit var arRepo: AllRoleEntityRepository

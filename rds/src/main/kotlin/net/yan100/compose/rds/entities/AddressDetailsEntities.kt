@@ -24,11 +24,11 @@ import jakarta.persistence.ForeignKey
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.alias.NonDesensitizedRef
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.annotations.NonDesensitizedRef
 import net.yan100.compose.core.consts.Regexes
-import net.yan100.compose.core.lang.WGS84
+import net.yan100.compose.core.models.WGS84
 import net.yan100.compose.rds.converters.WGS84Converter
 import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.*

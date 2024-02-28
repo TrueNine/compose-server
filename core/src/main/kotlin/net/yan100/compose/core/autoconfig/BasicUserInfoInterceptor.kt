@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.http.InterAddressUtil
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.RequestInfo
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered

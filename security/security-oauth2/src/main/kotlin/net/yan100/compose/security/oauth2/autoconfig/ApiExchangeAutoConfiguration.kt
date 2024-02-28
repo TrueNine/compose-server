@@ -17,7 +17,7 @@
 package net.yan100.compose.security.oauth2.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.depend.webclient.lang.jsonWebClientRegister
 import net.yan100.compose.security.oauth2.api.IWxMpApi
 import net.yan100.compose.security.oauth2.api.IWxpaApi

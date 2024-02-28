@@ -21,8 +21,8 @@ import java.time.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
-import net.yan100.compose.core.id.Snowflake
 import net.yan100.compose.rds.entities.RoleGroup
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
@@ -38,13 +38,13 @@ class UsrServiceImplImplTest {
 
   @Autowired lateinit var service: UserServiceImpl
 
-  @Autowired lateinit var snowflake: Snowflake
+  @Autowired lateinit var snowflake: ISnowflakeGenerator
 
   fun getUser() =
     Usr().apply {
       createUserId = DataBaseBasicFieldNames.Rbac.ROOT_ID_STR
-      account = snowflake.nextStringId()
-      nickName = "ab + ${snowflake.nextStringId()}"
+      account = snowflake.nextString()
+      nickName = "ab + ${snowflake.nextString()}"
       pwdEnc = "qwer1234"
     }
 

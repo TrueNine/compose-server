@@ -19,7 +19,8 @@ package net.yan100.compose.rds.gen.ctx
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import lombok.extern.slf4j.Slf4j
-import net.yan100.compose.core.lang.DTimer
+import net.yan100.compose.core.util.DTimer
+import net.yan100.compose.core.util.Str
 import net.yan100.compose.rds.core.entities.TreeEntity
 import net.yan100.compose.rds.gen.util.DbCaseConverter
 import net.yan100.compose.rds.repositories.base.IRepo
@@ -146,19 +147,19 @@ class RenderContext {
   }
 
   fun getEntityPkg(): String {
-    return "${getPkg()}${if (net.yan100.compose.core.lang.Str.hasText(entity)) "." else ""}$entity"
+    return "${getPkg()}${if (Str.hasText(entity)) "." else ""}$entity"
   }
 
   fun getRepositoryPkg(): String {
-    return "${getPkg()}${if (net.yan100.compose.core.lang.Str.hasText(repo)) "." else ""}$repo"
+    return "${getPkg()}${if (Str.hasText(repo)) "." else ""}$repo"
   }
 
   fun getServicePkg(): String {
-    return "${getPkg()}${if (net.yan100.compose.core.lang.Str.hasText(service)) "." else ""}$service"
+    return "${getPkg()}${if (Str.hasText(service)) "." else ""}$service"
   }
 
   fun getServiceImplPkg(): String {
-    return "${getPkg()}${if (net.yan100.compose.core.lang.Str.hasText(serviceImpl)) "." else ""}$serviceImpl"
+    return "${getPkg()}${if (Str.hasText(serviceImpl)) "." else ""}$serviceImpl"
   }
 
   fun getEntitySuffix(): String {

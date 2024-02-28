@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 import java.util.*
 import kotlin.reflect.full.findAnnotation
 import net.yan100.compose.core.ctx.UserInfoContextHolder
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.core.entities.AnyEntity
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.models.DataRecord

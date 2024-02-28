@@ -17,7 +17,7 @@
 package net.yan100.compose.rds.core.listener
 
 import jakarta.persistence.*
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import org.springframework.stereotype.Component
 
 /**

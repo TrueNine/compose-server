@@ -17,8 +17,8 @@
 package net.yan100.compose.security.oauth2.api
 
 import net.yan100.compose.core.alias.string
-import net.yan100.compose.core.typing.wechat.WechatMpGrantTyping
 import net.yan100.compose.security.oauth2.models.api.*
+import net.yan100.compose.security.oauth2.typing.wechat.WechatMpGrantTyping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.service.annotation.GetExchange

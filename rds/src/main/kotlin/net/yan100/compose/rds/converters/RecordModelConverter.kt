@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.core.models.DataRecord
 import org.springframework.stereotype.Component
 

@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.exceptions
 
-import net.yan100.compose.core.http.ErrMsg
+import net.yan100.compose.core.typing.http.ErrMsg
 
 /**
  * 已知的异常类型

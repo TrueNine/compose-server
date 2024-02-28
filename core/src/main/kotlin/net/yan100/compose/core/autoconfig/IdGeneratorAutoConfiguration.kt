@@ -16,11 +16,11 @@
  */
 package net.yan100.compose.core.autoconfig
 
-import net.yan100.compose.core.id.BizCodeGenerator
-import net.yan100.compose.core.id.Snowflake
-import net.yan100.compose.core.id.SynchronizedSimpleBizCodeGenerator
-import net.yan100.compose.core.id.SynchronizedSimpleSnowflake
+import net.yan100.compose.core.IBizCodeGenerator
+import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.core.properties.SnowflakeProperties
+import net.yan100.compose.core.util.generator.SynchronizedSimpleBizCodeGenerator
+import net.yan100.compose.core.util.generator.SynchronizedSimpleSnowflake
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -31,13 +31,13 @@ import org.springframework.context.annotation.DependsOn
 class IdGeneratorAutoConfiguration {
 
   @Bean(SNOWFLAKE_BEAN_NAME)
-  fun snowflake(p: SnowflakeProperties): Snowflake {
+  fun snowflake(p: SnowflakeProperties): ISnowflakeGenerator {
     return SynchronizedSimpleSnowflake(p.workId, p.dataCenterId, p.sequence, p.startTimeStamp)
   }
 
   @Bean
   @DependsOn(SNOWFLAKE_BEAN_NAME)
-  fun bizCode(snowflake: Snowflake): BizCodeGenerator {
+  fun bizCode(snowflake: ISnowflakeGenerator): IBizCodeGenerator {
     return SynchronizedSimpleBizCodeGenerator(snowflake)
   }
 

@@ -48,8 +48,8 @@ tasks {
           "-Xjsr305=strict",
           "-Xjvm-default=all",
           "-verbose",
-          "-Xjdk-release=${l.versions.compose.versionControlJavaVersion.get()}",
-          "-jvm-target=${l.versions.compose.versionControlJavaVersion.get()}",
+          "-Xjdk-release=${l.versions.java.get()}",
+          "-jvm-target=${l.versions.java.get()}",
           "-Xextended-compiler-checks"
         )
       jvmTarget = l.versions.java.get()

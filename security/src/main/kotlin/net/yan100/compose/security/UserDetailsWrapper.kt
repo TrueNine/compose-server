@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.security
 
-import net.yan100.compose.core.lang.hasText
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.AuthRequestInfo
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority

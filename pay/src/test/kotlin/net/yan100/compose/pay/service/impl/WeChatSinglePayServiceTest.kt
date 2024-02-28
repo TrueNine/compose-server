@@ -17,8 +17,8 @@
 package net.yan100.compose.pay.service.impl
 
 import java.math.BigDecimal
-import net.yan100.compose.core.id.BizCodeGenerator
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.IBizCodeGenerator
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,11 +29,11 @@ class WeChatSinglePayServiceTest {
 
   @Autowired lateinit var service: WeChatSinglePayService
 
-  @Autowired lateinit var bizCodeGenerator: BizCodeGenerator
+  @Autowired lateinit var bizCodeGenerator: IBizCodeGenerator
 
   // @Test
   fun testCreateOrder() {
-    val customOrderId = bizCodeGenerator.nextCodeStr()
+    val customOrderId = bizCodeGenerator.nextString()
     val crp =
       CreateMpPayOrderReq().apply {
         wechatUserOpenId = "oRYYL5H-IKKK0sHs1L0EOjZw1Ne4"

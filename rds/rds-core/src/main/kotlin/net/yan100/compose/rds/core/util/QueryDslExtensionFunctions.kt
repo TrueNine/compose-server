@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.core.util
 
+import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.EntityPathBase
 import net.yan100.compose.rds.core.entities.IEntity
 import org.springframework.data.domain.Page
@@ -35,6 +36,22 @@ inline fun <E : IEntity, T : EntityPathBase<E>, C, R> querydsl(
   crossinline fn: (queryHandle: T, companions: C) -> R
 ): R {
   return fn(e, c)
+}
+
+/**
+ * ## 多成员函数
+ *
+ * @param e EntityPath
+ * @param c companionObject
+ * @param b Builder
+ */
+inline fun <E : IEntity, T : EntityPathBase<E>, C, B : Predicate, R> querydsl(
+  e: T,
+  c: C,
+  b: B,
+  crossinline fn: (queryHandle: T, companions: C, builder: B) -> R
+): R {
+  return fn(e, c, b)
 }
 
 inline fun querydslOrderBy(

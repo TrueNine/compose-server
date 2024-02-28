@@ -18,7 +18,7 @@ package net.yan100.compose.core.typing.cert
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.core.lang.IntTyping
+import net.yan100.compose.core.typing.IntTyping
 
 /**
  * # 第二代残疾证残疾类别

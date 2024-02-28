@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.core.encrypt
 
+import net.yan100.compose.core.util.encrypt.Keys
 import org.junit.jupiter.api.Test
 
 class KeysTest {

@@ -17,7 +17,7 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.security.annotations.EnableRestSecurity
 import net.yan100.compose.security.defaults.EmptySecurityDetailsService
 import net.yan100.compose.security.defaults.EmptySecurityExceptionAdware

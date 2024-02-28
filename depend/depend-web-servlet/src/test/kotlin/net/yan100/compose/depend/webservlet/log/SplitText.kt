@@ -24,7 +24,7 @@ import java.util.regex.Pattern
 import kotlin.test.Test
 import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.alias.string
-import net.yan100.compose.core.lang.hasText
+import net.yan100.compose.core.extensionfunctions.hasText
 import org.slf4j.event.Level
 
 data class MDCLogData(

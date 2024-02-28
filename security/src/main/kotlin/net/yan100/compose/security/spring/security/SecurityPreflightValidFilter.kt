@@ -22,12 +22,11 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.io.IOException
 import net.yan100.compose.core.ctx.UserInfoContextHolder
+import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.http.Headers
+import net.yan100.compose.core.http.InterAddressUtil
 import net.yan100.compose.core.http.Methods
-import net.yan100.compose.core.lang.deviceId
-import net.yan100.compose.core.lang.hasText
-import net.yan100.compose.core.lang.remoteRequestIp
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.AuthRequestInfo
 import net.yan100.compose.security.UserDetailsWrapper
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -72,8 +71,8 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
       return
     }
 
-    authInfo.currentIpAddr = request.remoteRequestIp
-    authInfo.deviceId = request.deviceId
+    authInfo.currentIpAddr = InterAddressUtil.getRequestIpAddress(request)
+    authInfo.deviceId = Headers.getDeviceId(request)
 
     log.trace("获取到用户信息 = {}", authInfo)
     val details = UserDetailsWrapper(authInfo)

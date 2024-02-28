@@ -1,5 +1,5 @@
-ALTER TABLE
-    biz_cert MODIFY reg_capital DECIMAL(
+alter table
+    biz_cert modify reg_capital decimal(
         20,
         2
     );

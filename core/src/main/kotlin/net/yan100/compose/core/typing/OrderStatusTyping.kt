@@ -18,7 +18,6 @@ package net.yan100.compose.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.core.lang.IntTyping
 
 /**
  * # 订单流转状态

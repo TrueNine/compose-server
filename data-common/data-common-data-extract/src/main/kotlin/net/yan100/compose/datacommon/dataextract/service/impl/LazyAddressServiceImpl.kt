@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.datacommon.dataextract.service.impl
 
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.datacommon.dataextract.api.ICnNbsAddressApi
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictCode
 import net.yan100.compose.datacommon.dataextract.models.CnDistrictResp

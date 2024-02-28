@@ -19,6 +19,7 @@ package net.yan100.compose.rds.gen.util
 import freemarker.template.Configuration
 import java.io.File
 import java.io.FileWriter
+import net.yan100.compose.core.util.ResourcesLocator
 import net.yan100.compose.rds.gen.ctx.RenderContext
 
 object TemplateRender {
@@ -38,7 +39,7 @@ object TemplateRender {
     tableContext: Any
   ) {
     val genBasePath =
-      "${net.yan100.compose.core.lang.ResourcesLocator.getGenerateDirPath()}/${renderContext.getLang()}/$packagePath"
+      "${ResourcesLocator.getGenerateDirPath()}/${renderContext.getLang()}/$packagePath"
     val destGenerateFile = File(genBasePath, generatedFileName)
 
     if (destGenerateFile.exists()) {

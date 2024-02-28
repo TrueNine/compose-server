@@ -19,9 +19,9 @@ package net.yan100.compose.pay.autoconfig
 import com.wechat.pay.java.core.RSAAutoCertificateConfig
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
 import com.wechat.pay.java.service.refund.RefundService
-import net.yan100.compose.core.lang.resourceAsStream
-import net.yan100.compose.core.lang.slf4j
-import net.yan100.compose.core.lang.utf8String
+import net.yan100.compose.core.extensionfunctions.resourceAsStream
+import net.yan100.compose.core.extensionfunctions.utf8String
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.pay.properties.WeChatPayProperties
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean

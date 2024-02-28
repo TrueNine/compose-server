@@ -20,10 +20,10 @@ val l = libs
 
 dependencies {
   // bundles
-  testApi(l.bundles.test.springKotlinTestNG)
-  testApi(l.bundles.test.springKotlinJunit5)
+  api(l.bundles.test.springKotlinTestNG)
+  api(l.bundles.test.springKotlinJunit5)
   api(l.bundles.kt)
-  testApi(l.bundles.p6spySpring)
+  api(l.bundles.p6spySpring)
   api(l.bundles.spring.redis)
   api(l.bundles.spring.jpa)
   api(l.bundles.spring.jpa)
@@ -35,7 +35,7 @@ dependencies {
   // boot
   api(l.spring.boot.autoconfigure)
   annotationProcessor(l.spring.boot.configureprocessor)
-  testApi(l.spring.boot.test)
+  api(l.spring.boot.test)
   api(l.spring.boot.json)
   api(l.spring.boot.webflux)
   api(l.spring.boot.web)
@@ -58,7 +58,7 @@ dependencies {
   // data
   api(l.spring.data.springDataCommons)
   // security
-  testApi(l.spring.security.test)
+  api(l.spring.security.test)
   api(l.spring.security.crypto)
   api(l.spring.security.core)
   // spring
@@ -66,7 +66,7 @@ dependencies {
   // modulith
   api(l.spring.modulith.jpa)
   api(l.spring.modulith.core)
-  testApi(l.spring.modulith.test)
+  api(l.spring.modulith.test)
   // doc
   api(l.spring.doc.webmvcUi3)
 
@@ -79,17 +79,17 @@ dependencies {
   api(l.kt.stdlib)
   api(l.kt.stdlibJdk8)
   api(l.kt.reflact)
-  testApi(l.kt.testng)
-  testApi(l.kt.junit5)
+  api(l.kt.testng)
+  api(l.kt.junit5)
   api(l.kt.reactorExtensions)
   api(l.ktx.coroutineReactor)
   api(l.jetbrains.annotation)
 
   // test
-  testApi(l.test.mockk)
-  testApi(l.test.testng)
-  testApi(l.test.junit5)
-  testApi(l.test.reactorTest)
+  api(l.test.mockk)
+  api(l.test.testng)
+  api(l.test.junit5)
+  api(l.test.reactorTest)
 
   // cache
   api(l.cache.caffeine)

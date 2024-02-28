@@ -15,7 +15,7 @@
  *     Website: [gitee.com/TrueNine]
  */
 import kotlin.test.DefaultAsserter.assertEquals
-import net.yan100.compose.core.encrypt.PemFormat
+import net.yan100.compose.core.models.PemFormat
 import org.junit.jupiter.api.Test
 
 class PemFormatTest {

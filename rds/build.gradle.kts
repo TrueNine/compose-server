@@ -78,7 +78,6 @@ publishing {
 hibernate {
   enhancement {
     enableAssociationManagement.set(true)
-    enableExtendedEnhancement.set(true)
     enableDirtyTracking.set(true)
     enableLazyInitialization.set(true)
   }

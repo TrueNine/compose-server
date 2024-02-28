@@ -21,9 +21,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
-import net.yan100.compose.rds.core.entities.PageableEntity
-import net.yan100.compose.rds.core.entities.PageableEntity.Companion.MAX_PAGE_SIZE
-import net.yan100.compose.rds.core.entities.PageableEntity.Companion.MIN_OFFSET
+import net.yan100.compose.rds.core.entities.IPageableEntity
+import net.yan100.compose.rds.core.entities.IPageableEntity.Companion.MAX_PAGE_SIZE
+import net.yan100.compose.rds.core.entities.IPageableEntity.Companion.MIN_OFFSET
 
 /**
  * 分页入参
@@ -35,7 +35,7 @@ import net.yan100.compose.rds.core.entities.PageableEntity.Companion.MIN_OFFSET
 class PagedRequestParam
 @JvmOverloads
 constructor(offset: Int? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false) :
-  PageableEntity {
+  IPageableEntity {
 
   @get:JsonIgnore
   @get:Transient

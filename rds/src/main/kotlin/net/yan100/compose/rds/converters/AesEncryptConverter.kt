@@ -19,9 +19,10 @@ package net.yan100.compose.rds.converters
 import jakarta.annotation.Resource
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.encrypt.Encryptors
-import net.yan100.compose.core.encrypt.IKeysRepo
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.util.Str
+import net.yan100.compose.core.util.encrypt.Encryptors
+import net.yan100.compose.core.util.encrypt.IKeysRepo
 import org.springframework.stereotype.Component
 
 @Converter
@@ -34,12 +35,12 @@ class AesEncryptConverter : AttributeConverter<String, String> {
   @Resource private lateinit var keysRepo: IKeysRepo
 
   override fun convertToDatabaseColumn(attribute: String?): String? =
-    if (net.yan100.compose.core.lang.Str.hasText(attribute))
+    if (Str.hasText(attribute))
       Encryptors.encryptByAesKey(keysRepo.databaseEncryptAesSecret()!!, attribute!!)
     else attribute
 
   override fun convertToEntityAttribute(dbData: String?): String? =
-    if (net.yan100.compose.core.lang.Str.hasText(dbData))
+    if (Str.hasText(dbData))
       Encryptors.decryptByAesKey(keysRepo.databaseEncryptAesSecret()!!, dbData!!)
     else dbData
 

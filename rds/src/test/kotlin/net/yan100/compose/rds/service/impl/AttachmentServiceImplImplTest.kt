@@ -17,8 +17,8 @@
 package net.yan100.compose.rds.service.impl
 
 import kotlin.test.*
-import net.yan100.compose.core.encrypt.Keys
-import net.yan100.compose.core.id.Snowflake
+import net.yan100.compose.core.ISnowflakeGenerator
+import net.yan100.compose.core.util.encrypt.Keys
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.entities.Attachment
@@ -33,7 +33,7 @@ class AttachmentServiceImplImplTest {
 
   @Autowired private lateinit var attachmentService: AttachmentServiceImpl
 
-  @Autowired private lateinit var snowflake: Snowflake
+  @Autowired private lateinit var snowflake: ISnowflakeGenerator
 
   fun getAtt(att: (Attachment) -> Attachment): Attachment {
     return attachmentService.save(Attachment().run(att))
@@ -94,7 +94,7 @@ class AttachmentServiceImplImplTest {
 
   @Test
   fun testFindFullUrlById_NotExists() {
-    val id = snowflake.nextStringId()
+    val id = snowflake.nextString()
     val result = attachmentService.findFullUrlById(id)
     assertNull(result)
   }
@@ -124,7 +124,7 @@ class AttachmentServiceImplImplTest {
 
   @Test
   fun testFindFullUrlById_NegativeId() {
-    val id = snowflake.nextStringId()
+    val id = snowflake.nextString()
     val result = attachmentService.findFullUrlById(id)
     assertNull(result)
   }

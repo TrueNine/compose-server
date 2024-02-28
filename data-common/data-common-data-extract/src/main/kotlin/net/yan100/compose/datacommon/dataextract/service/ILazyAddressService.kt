@@ -27,24 +27,21 @@ private fun <T> createRequestQueue(
   deepCondition: (param: ILazyAddressService.ILookupFindParam) -> Boolean,
   notFound: (emptyCode: Boolean) -> T? = { null }
 ): MutableList<CnDistrictCode> {
-  val requirementCodes = mutableListOf(firstFindCode)
   val requestQueue = mutableListOf(firstFindCode)
-  while (requirementCodes.isNotEmpty()) {
-    val requireRequest = requirementCodes.removeLastOrNull() ?: continue
-    val findFnResult =
-      deepCondition(
-        object : ILazyAddressService.ILookupFindParam {
-          override val code = requireRequest.code
-          override val level = requireRequest.level
-        },
-      )
+  var lastSize = 0
+  while (requestQueue.size > lastSize) {
+    val requireRequest = requestQueue.last()
+    val r =
+      object : ILazyAddressService.ILookupFindParam {
+        override val code = requireRequest.code
+        override val level = requireRequest.level
+      }
+    val findFnResult = deepCondition(r)
     if (!findFnResult) {
       val back = requireRequest.back()
-      if (null != back) {
-        requirementCodes += back
-        requestQueue += back
-      } else notFound(false)
+      if (null != back) requestQueue += back else notFound(false)
     }
+    lastSize += 1
   }
   return requestQueue
 }

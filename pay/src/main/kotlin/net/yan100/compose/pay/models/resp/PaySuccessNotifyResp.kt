@@ -17,7 +17,7 @@
 package net.yan100.compose.pay.models.resp
 
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.core.lang.ISO4217
+import net.yan100.compose.core.typing.ISO4217
 
 @Schema(title = "支付成功通知回调")
 class PaySuccessNotifyResp {

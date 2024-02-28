@@ -1,200 +1,188 @@
--- 预排序树结构
-CREATE
-    OR replace FUNCTION add_presort_tree_struct(
-        tab_name VARCHAR(128)
-    ) RETURNS void AS $$ DECLARE existing_column_name text;
+create
+    or replace function add_presort_tree_struct(
+        tab_name varchar(128)
+    ) returns void as $$ declare existing_column_name text;
 
-BEGIN -- rpi
-SELECT
-    column_name INTO
+begin select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'rpi';
+        and column_name = 'rpi';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column rpi bigint default null;',
     tab_name
 );
 
-EXECUTE format(
+execute format(
     'create index on %I(rpi);',
     tab_name
 );
-END IF;
+end if;
 
--- rln
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'rln';
+        and column_name = 'rln';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column rln bigint default 1;',
     tab_name
 );
 
-EXECUTE format(
+execute format(
     'create index on %I(rln);',
     tab_name
 );
-END IF;
+end if;
 
--- rrn
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'rrn';
+        and column_name = 'rrn';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column rrn bigint default 2;',
     tab_name
 );
 
-EXECUTE format(
+execute format(
     'create index on %I(rrn);',
     tab_name
 );
-END IF;
+end if;
 
--- nlv
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'nlv';
+        and column_name = 'nlv';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column nlv bigint default 0;',
     tab_name
 );
-END IF;
+end if;
 
--- tgi
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'tgi';
+        and column_name = 'tgi';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column tgi varchar(64) default ''0''::varchar;',
     tab_name
 );
 
-EXECUTE format(
+execute format(
     'create index on %I(tgi);',
     tab_name
 );
-END IF;
-END $$ LANGUAGE plpgsql;
+end if;
+end $$ language plpgsql;
 
--- 基础表结构
-CREATE
-    OR replace FUNCTION add_base_struct(
-        tab_name VARCHAR(128)
-    ) RETURNS void AS $$ DECLARE existing_column_name text;
+create
+    or replace function add_base_struct(
+        tab_name varchar(128)
+    ) returns void as $$ declare existing_column_name text;
 
-BEGIN -- id
-SELECT
-    column_name INTO
+begin select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'id';
+        and column_name = 'id';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column id bigint not null;',
     tab_name
 );
 
-EXECUTE format(
+execute format(
     'alter table %I add primary key (id);',
     tab_name
 );
-END IF;
+end if;
 
--- rlv
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'rlv';
+        and column_name = 'rlv';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column rlv bigint default 0;',
     tab_name
 );
-END IF;
+end if;
 
--- crd
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'crd';
+        and column_name = 'crd';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column crd timestamp default now();',
     tab_name
 );
-END IF;
+end if;
 
--- mrd
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'mrd';
+        and column_name = 'mrd';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column mrd timestamp default now();',
     tab_name
 );
-END IF;
+end if;
 
--- ldf
-SELECT
-    column_name INTO
+select
+    column_name into
         existing_column_name
-    FROM
+    from
         information_schema.columns
-    WHERE
+    where
         table_name = tab_name
-        AND column_name = 'ldf';
+        and column_name = 'ldf';
 
-IF existing_column_name IS NULL THEN EXECUTE format(
+if existing_column_name is null then execute format(
     'alter table %I add column ldf bool default null;',
     tab_name
 );
-END IF;
-END;
+end if;
+end;
 
-$$ LANGUAGE plpgsql;
+$$ language plpgsql;

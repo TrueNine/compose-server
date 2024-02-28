@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import net.yan100.compose.core.http.Headers
-import net.yan100.compose.core.http.MediaTypes
-import net.yan100.compose.core.lang.AnyTyping
+import net.yan100.compose.core.typing.AnyTyping
+import net.yan100.compose.core.typing.http.MediaTypes
 import net.yan100.compose.depend.webclient.encoder.AnyTypingEncoder
 import org.springframework.core.MethodParameter
 import org.springframework.http.codec.EncoderHttpMessageWriter

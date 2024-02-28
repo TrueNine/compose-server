@@ -22,7 +22,7 @@ import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import java.util.*
-import net.yan100.compose.core.lang.remoteRequestIp
+import net.yan100.compose.depend.webservlet.extensionfunctions.remoteRequestIp
 import org.slf4j.MDC
 
 /** ## 抽象 MDC Filter */

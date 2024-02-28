@@ -78,7 +78,7 @@ spotless {
     indentWithSpaces(2)
     lineEndings = LineEnding.UNIX
     target("**/**.sql")
-    dbeaver()
+    dbeaver().configFile("dbeaver.properties")
   }
   java {
     indentWithSpaces(2)

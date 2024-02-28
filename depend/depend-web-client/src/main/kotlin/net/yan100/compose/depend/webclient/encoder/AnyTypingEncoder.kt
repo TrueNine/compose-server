@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.depend.webclient.encoder
 
-import net.yan100.compose.core.lang.AnyTyping
+import net.yan100.compose.core.typing.AnyTyping
 import org.reactivestreams.Publisher
 import org.springframework.core.ResolvableType
 import org.springframework.core.codec.AbstractEncoder

@@ -18,8 +18,8 @@ package net.yan100.compose.rds.autoconfig
 
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.core.ctx.TenantContextHolder
-import net.yan100.compose.core.lang.Str
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.util.Str
 import org.hibernate.cfg.AvailableSettings
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer

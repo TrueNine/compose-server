@@ -18,7 +18,7 @@ package net.yan100.compose.rds.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.core.lang.IntTyping
+import net.yan100.compose.core.typing.IntTyping
 
 @Schema(title = "血型")
 enum class BloodTyping(private val v: Int) : IntTyping {

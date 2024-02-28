@@ -18,8 +18,8 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.lang.WGS84
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.models.WGS84
 import org.springframework.stereotype.Component
 
 /**

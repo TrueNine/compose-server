@@ -124,6 +124,7 @@ jakarta-annotationApi = { group = "jakarta.annotation", name = "jakarta.annotati
 net-okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "net-okhttp3" }
 net-retrofig = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "net-retrofit" }
 
+util-squareupJavapoet = { group = "com.squareup", name = "javapoet", version.ref = "util-squareupJavapoet" }
 util-byteBuddy = { group = "net.bytebuddy", name = "byte-buddy", version.ref = "util-byteBuddy" }
 util-guavaJre = { group = "com.google.guava", name = "guava", version.ref = "util-guavaJre" }
 util-guavaAndroid = { group = "com.google.guava", name = "guava", version.ref = "util-guavaAndroid" }
@@ -188,7 +189,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.371"
+compose = "1.6.394"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
@@ -249,6 +250,7 @@ security-jjwtApi = "0.12.5" ### deprecated https://mvnrepository.com/artifact/io
 security-antisamy = "1.7.5" ### deprecated https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
 
 util-byteBuddy = "1.14.12" ### https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
+util-squareupJavapoet = "1.13.0" ### https://mvnrepository.com/artifact/com.squareup/javapoet
 
 util-hutool = "5.8.26" ### https://mvnrepository.com/artifact/cn.hutool/hutool-all
 util-dozer = "5.5.1" ### deprecated  https://mvnrepository.com/artifact/net.sf.dozer/dozer

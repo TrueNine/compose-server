@@ -33,13 +33,16 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import net.yan100.compose.core.encrypt.Encryptors
-import net.yan100.compose.core.encrypt.Keys
+import net.yan100.compose.core.IBizCodeGenerator
 import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.core.exceptions.requireKnown
-import net.yan100.compose.core.id.BizCodeGenerator
-import net.yan100.compose.core.lang.*
+import net.yan100.compose.core.extensionfunctions.encodeBase64String
+import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.extensionfunctions.iso8601LongUtc
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping
+import net.yan100.compose.core.typing.ISO4217
+import net.yan100.compose.core.util.encrypt.Encryptors
+import net.yan100.compose.core.util.encrypt.Keys
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
@@ -54,13 +57,13 @@ class WeChatSinglePayService(
   private val wechatJsService: JsapiService,
   private val refundApi: RefundService,
   private val payProperty: WeChatPaySingleConfigProperty,
-  private val bigCodeGenerator: BizCodeGenerator,
+  private val bigCodeGenerator: IBizCodeGenerator,
   private val rsaConfig: RSAAutoCertificateConfig,
   private val mapper: ObjectMapper
 ) : SinglePayService {
   companion object {
     @JvmStatic private val HUNDRED = BigDecimal("100")
-    private val log = slf4j(WeChatSinglePayService::class)
+    private val log = net.yan100.compose.core.log.slf4j(WeChatSinglePayService::class)
   }
 
   override fun createMpPayOrder(@Valid req: CreateMpPayOrderReq): CreateMpPayOrderResp {
@@ -161,8 +164,8 @@ class WeChatSinglePayService(
     createRequest.apply {
       amount = amountReq
       // 商户订单号
-      outTradeNo = bigCodeGenerator.nextCodeStr()
-      outRefundNo = bigCodeGenerator.nextCodeStr()
+      outTradeNo = bigCodeGenerator.nextString()
+      outRefundNo = bigCodeGenerator.nextString()
     }
     // TODO 此处空返回
     val refundDetails = refundApi.create(createRequest)
@@ -174,7 +177,7 @@ class WeChatSinglePayService(
     response: HttpServletResponse,
     lazyCall: (successReq: PaySuccessNotifyResp) -> Unit
   ): String? {
-    val headersMap = request.headerMap
+    val headersMap = request.headerNames.asSequence().map { it to request.getHeader(it) }.toMap()
     val requestParam =
       RequestParam.Builder()
         .serialNumber(headersMap["Wechatpay-Serial"])

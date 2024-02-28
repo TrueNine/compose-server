@@ -18,7 +18,7 @@ package net.yan100.compose.rds.service.aggregator
 
 import java.time.LocalDateTime
 import kotlin.test.*
-import net.yan100.compose.core.id.Snowflake
+import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.models.req.LoginAccountReq
 import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
@@ -30,7 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest(classes = [RdsEntrance::class])
 class IAccountAggregatorImplTest {
 
-  @Autowired lateinit var snowflake: Snowflake
+  @Autowired lateinit var snowflake: ISnowflakeGenerator
 
   @Autowired lateinit var agg: AccountAggregatorImpl
 
@@ -38,9 +38,9 @@ class IAccountAggregatorImplTest {
 
   fun getRegisterParam() =
     RegisterAccountReq().apply {
-      account = "abcd${snowflake.nextStringId()}"
+      account = "abcd${snowflake.nextString()}"
       password = "qwer1234"
-      nickName = "我艹${snowflake.nextStringId()}"
+      nickName = "我艹${snowflake.nextString()}"
       description = "我命由我不白天"
     }
 

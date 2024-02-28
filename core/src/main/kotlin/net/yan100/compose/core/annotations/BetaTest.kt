@@ -17,6 +17,8 @@
 package net.yan100.compose.core.annotations
 
 import java.lang.annotation.Inherited
+import jdk.jfr.Experimental
+import org.jetbrains.annotations.ApiStatus
 
 /**
  * 该注解标志这这个类、方法、参数…… <br></br> 可能在未来版本移除或者变更，因为底层依赖不稳定 <br></br> 或者目前也没有找到好的解决方式
@@ -36,4 +38,5 @@ import java.lang.annotation.Inherited
   AnnotationTarget.CLASS
 )
 @MustBeDocumented
+@ApiStatus.Experimental
 annotation class BetaTest

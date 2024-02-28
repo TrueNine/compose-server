@@ -17,7 +17,7 @@
 package net.yan100.compose.security.exceptions
 
 import net.yan100.compose.core.exceptions.KnownException
-import net.yan100.compose.core.http.ErrMsg
+import net.yan100.compose.core.typing.http.ErrMsg
 
 open class SecurityException(
   msg: String? = "程序安全异常",

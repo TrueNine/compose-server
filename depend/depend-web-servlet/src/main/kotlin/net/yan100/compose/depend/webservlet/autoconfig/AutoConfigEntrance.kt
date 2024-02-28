@@ -16,7 +16,10 @@
  */
 package net.yan100.compose.depend.webservlet.autoconfig
 
-import net.yan100.compose.webservlet.properties.ServletWebApplicationProperties
+import net.yan100.compose.depend.webservlet.properties.ServletWebApplicationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.ComponentScan
 
-@EnableConfigurationProperties(ServletWebApplicationProperties::class) class AutoConfigEntrance
+@ComponentScan("net.yan100.compose.depend.webservlet.autoconfig")
+@EnableConfigurationProperties(ServletWebApplicationProperties::class)
+class AutoConfigEntrance

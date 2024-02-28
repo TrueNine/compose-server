@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.security.autoconfig
 
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary

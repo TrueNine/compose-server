@@ -17,7 +17,7 @@
 package net.yan100.compose.oss.autoconfig
 
 import io.minio.MinioClient
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.oss.Oss
 import net.yan100.compose.oss.minio.MinioClientWrapper
 import net.yan100.compose.oss.properties.OssProperties

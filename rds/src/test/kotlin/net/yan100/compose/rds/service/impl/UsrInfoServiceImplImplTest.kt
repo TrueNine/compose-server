@@ -23,7 +23,7 @@ import kotlin.test.assertEquals
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
-import net.yan100.compose.rds.repositories.UserInfoRepo
+import net.yan100.compose.rds.repositories.IUserInfoRepo
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -32,7 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class UsrInfoServiceImplImplTest {
   @Autowired private lateinit var userInfoService: UserInfoServiceImpl
 
-  @Autowired private lateinit var infoRepo: UserInfoRepo
+  @Autowired private lateinit var infoRepo: IUserInfoRepo
 
   @BeforeEach
   fun setUp() {

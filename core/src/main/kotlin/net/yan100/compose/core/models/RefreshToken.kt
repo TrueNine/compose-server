@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.models
 
-import java.time.LocalDateTime
+import net.yan100.compose.core.alias.datetime
 
 /**
  * 过期时间令牌
@@ -28,6 +28,6 @@ class RefreshToken {
   var userId: String? = null
   var deviceId: String? = null
   var loginIpAddr: String? = null
-  var issueAt: LocalDateTime? = null
-  var expireTime: LocalDateTime? = null
+  var issueAt: datetime? = null
+  var expireTime: datetime? = null
 }

@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.core.util
 
-import net.yan100.compose.rds.core.entities.PageableEntity
+import net.yan100.compose.rds.core.entities.IPageableEntity
 import net.yan100.compose.rds.core.models.PagedRequestParam
 import net.yan100.compose.rds.core.models.PagedResponseResult
 import org.springframework.data.domain.Page
@@ -35,11 +35,11 @@ object PagedWrapper {
 
   @JvmField
   val DEFAULT_MAX: PagedRequestParam =
-    PagedRequestParam(PageableEntity.MIN_OFFSET, PageableEntity.MAX_PAGE_SIZE, false)
+    PagedRequestParam(IPageableEntity.MIN_OFFSET, IPageableEntity.MAX_PAGE_SIZE, false)
 
   @JvmField
   val UN_PAGE: PagedRequestParam =
-    PagedRequestParam(PageableEntity.MIN_OFFSET, PageableEntity.MAX_PAGE_SIZE, true)
+    PagedRequestParam(IPageableEntity.MIN_OFFSET, IPageableEntity.MAX_PAGE_SIZE, true)
 
   @JvmStatic
   fun <T> result(jpaPage: Page<T>): PagedResponseResult<T> {
@@ -65,11 +65,11 @@ object PagedWrapper {
   }
 
   @JvmStatic
-  fun param(paramSetting: PageableEntity? = DEFAULT_MAX): Pageable {
+  fun param(paramSetting: IPageableEntity? = DEFAULT_MAX): Pageable {
     return if (true != paramSetting?.unPage || null == paramSetting.unPage) {
       PageRequest.of(
         paramSetting?.offset ?: 0,
-        paramSetting?.pageSize ?: PageableEntity.MAX_PAGE_SIZE
+        paramSetting?.pageSize ?: IPageableEntity.MAX_PAGE_SIZE
       )
     } else Pageable.unpaged()
   }
@@ -100,7 +100,7 @@ object PagedWrapper {
 
 typealias Pw = PagedWrapper
 
-typealias Pq = PageableEntity
+typealias Pq = IPageableEntity
 
 typealias Pr<T> = PagedResponseResult<T>
 

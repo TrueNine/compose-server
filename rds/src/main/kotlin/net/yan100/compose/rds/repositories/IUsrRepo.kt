@@ -17,6 +17,7 @@
 package net.yan100.compose.rds.repositories
 
 import java.time.LocalDateTime
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.rds.entities.FullUsr
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
@@ -115,7 +116,21 @@ interface IFullUserRepo : IRepo<FullUsr> {
 }
 
 @Repository
-interface UserInfoRepo : IRepo<UserInfo> {
+interface IUserInfoRepo : IRepo<UserInfo> {
+  @Query("""
+    select i.id
+    from UserInfo i
+    where i.userId = :userId
+  """)
+  fun findAllIdByUserId(userId: RefId): List<RefId>
+
+  @Query("""
+    select i.userId
+    from UserInfo i
+    where i.id = :id
+  """)
+  fun findUserIdById(id: RefId): RefId?
+
   fun findByUserId(userId: String): UserInfo?
 
   /** 根据 微信 openId 查询对应 User */

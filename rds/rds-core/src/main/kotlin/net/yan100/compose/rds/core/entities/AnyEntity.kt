@@ -47,7 +47,7 @@ import org.springframework.data.domain.Persistable
   SnowflakeIdInsertListener::class,
   PreSaveDeleteReferenceListener::class
 )
-abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() {
+abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, PagedRequestParam() {
   companion object {
     /** 主键 */
     const val ID = DataBaseBasicFieldNames.ID
@@ -58,7 +58,12 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
   /** id */
   @jakarta.persistence.Id
   @Column(name = DataBaseBasicFieldNames.ID)
-  @Schema(title = ID, examples = ["7001234523405", "7001234523441"])
+  @Schema(
+    title = ID,
+    examples = ["7001234523405", "7001234523441"],
+    required = false,
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   private var id: Id? = null
     @Transient @JsonIgnore @JvmName("setKotlinInternalId") set
     @Transient @JsonIgnore @JvmName("getKotlinInternalId") get() = field ?: ""
@@ -75,12 +80,14 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
 
   @Transient
   @JsonIgnore
+  @Schema(hidden = true)
   fun asNew() {
     this.id = null
   }
 
   @Transient
   @JsonIgnore
+  @Schema(hidden = true)
   fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
     return superString +
       "[" +
@@ -88,6 +95,7 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
       "]"
   }
 
+  @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   fun setId(id: String) {
     this.id = id
   }
@@ -98,6 +106,7 @@ abstract class AnyEntity : Persistable<Id>, PageableEntity, PagedRequestParam() 
 
   @Transient
   @JsonIgnore
+  @Schema(hidden = true)
   override fun isNew(): Boolean {
     return "" == id || null == id
   }
@@ -120,3 +129,13 @@ inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<
 inline fun <T : AnyEntity, R : Any> List<T>.withNewMap(
   crossinline after: (List<T>) -> List<R>
 ): List<R> = after(this.withNew())
+
+/** ## 判断当前实体是否为新实体，然后执行 update */
+inline fun <T : AnyEntity> T.takeUpdate(
+  throwException: Boolean = true,
+  crossinline after: (T) -> T?
+): T? {
+  if (!isNew) return after(this)
+  else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")
+  return null
+}

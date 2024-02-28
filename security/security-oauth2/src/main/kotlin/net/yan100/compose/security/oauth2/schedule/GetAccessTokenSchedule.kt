@@ -17,7 +17,7 @@
 package net.yan100.compose.security.oauth2.schedule
 
 import net.yan100.compose.core.exceptions.RemoteCallException
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.security.oauth2.api.IWxpaApi
 import net.yan100.compose.security.oauth2.property.WxpaProperty
 import org.springframework.context.ApplicationContext

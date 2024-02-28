@@ -19,7 +19,7 @@ package net.yan100.compose.core.models
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.annotation.Nullable
 import java.util.concurrent.CopyOnWriteArrayList
-import net.yan100.compose.core.map.RequestInfoMap
+import net.yan100.compose.core.map.RequestInfoStructMap
 
 /**
  * security校验所需的用户身份
@@ -41,5 +41,5 @@ class AuthRequestInfo : RequestInfo() {
 
   @get:JsonIgnore
   val cleaned: AuthRequestInfo
-    get() = RequestInfoMap.INSTANCE.clearAuthedInfo(this)
+    get() = RequestInfoStructMap.INSTANCE.clearAuthedInfo(this)
 }

@@ -19,7 +19,7 @@ package net.yan100.compose.security.jwt.consts
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.time.Duration
-import net.yan100.compose.core.encrypt.Keys
+import net.yan100.compose.core.util.encrypt.Keys
 
 data class IssuerParam<S : Any?, E : Any?>(
   var encryptedDataObj: E? = null,

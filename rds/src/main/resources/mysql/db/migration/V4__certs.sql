@@ -1,108 +1,108 @@
-CREATE
-    TABLE
-        IF NOT EXISTS idcard_2(
-            user_id BIGINT DEFAULT NULL,
-            user_info_id BIGINT DEFAULT NULL,
-            address_details_id BIGINT DEFAULT NULL,
-            name VARCHAR(255) NOT NULL,
-            gender INTEGER DEFAULT NULL,
-            code VARCHAR(64) NOT NULL,
-            birthday DATE DEFAULT NULL,
-            ethnic_group VARCHAR(127) DEFAULT NULL,
-            expire_date DATE DEFAULT NULL,
-            issue_organ VARCHAR(255) DEFAULT NULL
-        ) DEFAULT charset = utf8mb4,
+create
+    table
+        if not exists idcard_2(
+            user_id bigint default null,
+            user_info_id bigint default null,
+            address_details_id bigint default null,
+            name varchar(255) not null,
+            gender integer default null,
+            code varchar(64) not null,
+            birthday date default null,
+            ethnic_group varchar(127) default null,
+            expire_date date default null,
+            issue_organ varchar(255) default null
+        ) default charset = utf8mb4,
         comment '身份证2代';
 
-CALL add_base_struct('idcard_2');
+call add_base_struct('idcard_2');
 
-CREATE
-    TABLE
-        IF NOT EXISTS dis_cert_2(
-            user_id BIGINT DEFAULT NULL,
-            user_info_id BIGINT DEFAULT NULL,
-            name VARCHAR(255) DEFAULT NULL,
-            gender INTEGER DEFAULT NULL,
-            code VARCHAR(64) DEFAULT NULL,
-            TYPE INTEGER NOT NULL,
-            LEVEL INTEGER NOT NULL,
-            issue_date DATE DEFAULT NULL,
-            expire_time DATE DEFAULT NULL,
-            address_details_id BIGINT DEFAULT NULL,
-            guardian VARCHAR(255) DEFAULT NULL,
-            guardian_phone VARCHAR(127) DEFAULT NULL,
-            birthday DATE DEFAULT NULL
-        ) DEFAULT charset = utf8mb4,
+create
+    table
+        if not exists dis_cert_2(
+            user_id bigint default null,
+            user_info_id bigint default null,
+            name varchar(255) default null,
+            gender integer default null,
+            code varchar(64) default null,
+            type integer not null,
+            level integer not null,
+            issue_date date default null,
+            expire_time date default null,
+            address_details_id bigint default null,
+            guardian varchar(255) default null,
+            guardian_phone varchar(127) default null,
+            birthday date default null
+        ) default charset = utf8mb4,
         comment '残疾证2代';
 
-CALL add_base_struct('dis_cert_2');
+call add_base_struct('dis_cert_2');
 
-CREATE
-    TABLE
-        IF NOT EXISTS household_cert(
-            user_id BIGINT DEFAULT NULL,
-            user_info_id BIGINT DEFAULT NULL,
-            household_type INTEGER DEFAULT NULL,
-            household_primary_name VARCHAR(255) DEFAULT NULL,
-            code VARCHAR(255) DEFAULT NULL,
-            address_details_id BIGINT DEFAULT NULL,
-            issue_organ VARCHAR(255) DEFAULT NULL,
-            name VARCHAR(255) NOT NULL,
-            old_name VARCHAR(255) DEFAULT NULL,
-            relationship INTEGER DEFAULT NULL,
-            gender INTEGER DEFAULT NULL,
-            ethnic_group VARCHAR(127) DEFAULT NULL,
-            birthday DATE DEFAULT NULL,
-            height DECIMAL(
+create
+    table
+        if not exists household_cert(
+            user_id bigint default null,
+            user_info_id bigint default null,
+            household_type integer default null,
+            household_primary_name varchar(255) default null,
+            code varchar(255) default null,
+            address_details_id bigint default null,
+            issue_organ varchar(255) default null,
+            name varchar(255) not null,
+            old_name varchar(255) default null,
+            relationship integer default null,
+            gender integer default null,
+            ethnic_group varchar(127) default null,
+            birthday date default null,
+            height decimal(
                 4,
                 2
-            ) DEFAULT NULL,
-            blood_type INTEGER DEFAULT NULL,
-            place_birth_address_details_id BIGINT DEFAULT NULL,
-            origin_address_details_id BIGINT DEFAULT NULL,
-            idcard_code VARCHAR(255) DEFAULT NULL,
-            education_level INTEGER DEFAULT NULL,
-            occupation VARCHAR(255) DEFAULT NULL,
-            military_service_status VARCHAR(255) DEFAULT NULL,
-            service_address_details_id BIGINT DEFAULT NULL,
-            issue_date DATE DEFAULT NULL
-        ) DEFAULT charset = utf8mb4,
+            ) default null,
+            blood_type integer default null,
+            place_birth_address_details_id bigint default null,
+            origin_address_details_id bigint default null,
+            idcard_code varchar(255) default null,
+            education_level integer default null,
+            occupation varchar(255) default null,
+            military_service_status varchar(255) default null,
+            service_address_details_id bigint default null,
+            issue_date date default null
+        ) default charset = utf8mb4,
         comment '户口登记卡';
 
-CALL add_base_struct('household_cert');
+call add_base_struct('household_cert');
 
-CREATE
-    TABLE
+create
+    table
         bank_card(
-            user_id BIGINT NOT NULL,
-            user_info_id BIGINT DEFAULT NULL,
-            code VARCHAR(255) NOT NULL,
-            country VARCHAR(255) DEFAULT NULL,
-            bank_group INTEGER DEFAULT NULL,
-            bank_type INTEGER DEFAULT NULL,
-            reserve_phone VARCHAR(255) DEFAULT NULL,
-            issue_address_details text DEFAULT NULL
-        ) DEFAULT charset = utf8mb4,
+            user_id bigint not null,
+            user_info_id bigint default null,
+            code varchar(255) not null,
+            country varchar(255) default null,
+            bank_group integer default null,
+            bank_type integer default null,
+            reserve_phone varchar(255) default null,
+            issue_address_details text default null
+        ) default charset = utf8mb4,
         comment '银行卡';
 
-CALL add_base_struct('bank_card');
+call add_base_struct('bank_card');
 
-CREATE
-    TABLE
-        IF NOT EXISTS biz_cert(
-            user_id BIGINT NOT NULL, -- 上传人
-            title VARCHAR(255) NOT NULL, -- 公司名称
-            reg_capital DECIMAL(
+create
+    table
+        if not exists biz_cert(
+            user_id bigint not null, -- 上传人
+            title varchar(255) not null, -- 公司名称
+            reg_capital decimal(
                 10,
                 2
-            ) DEFAULT NULL, -- 注册资本
-            create_date DATE DEFAULT NULL, -- 成立日期
-            uni_credit_code VARCHAR(255) DEFAULT NULL, -- 统一社会信用代码TYPE VARCHAR(127) DEFAULT NULL, -- 类型
-            leader_name VARCHAR(255) DEFAULT NULL, -- 法定代表人
-            biz_range text DEFAULT NULL, -- 经营范围
-            address_code VARCHAR(255) DEFAULT NULL, -- 地址编码
-            address_details_id BIGINT DEFAULT NULL, -- 地址详情 id
-            issue_date DATE DEFAULT NULL, -- 签发日期INDEX(user_id),INDEX(address_code),INDEX(address_details_id)
+            ) default null, -- 注册资本
+            create_date date default null, -- 成立日期
+            uni_credit_code varchar(255) default null, -- 统一社会信用代码TYPE VARCHAR(127) DEFAULT NULL, -- 类型
+            leader_name varchar(255) default null, -- 法定代表人
+            biz_range text default null, -- 经营范围
+            address_code varchar(255) default null, -- 地址编码
+            address_details_id bigint default null, -- 地址详情 id
+            issue_date date default null, -- 签发日期INDEX(user_id),INDEX(address_code),INDEX(address_details_id)
         ) comment '营业执照';
 
-CALL add_presort_tree_struct('biz_licence');
+call add_presort_tree_struct('biz_licence');

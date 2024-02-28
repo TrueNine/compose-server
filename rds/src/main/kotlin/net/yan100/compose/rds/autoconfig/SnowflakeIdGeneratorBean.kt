@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.autoconfig
 
-import net.yan100.compose.core.id.Snowflake
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.ISnowflakeGenerator
+import net.yan100.compose.core.log.slf4j
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component
 class SnowflakeIdGeneratorBean : IdentifierGenerator {
   private val log = slf4j(this::class)
 
-  @Autowired private lateinit var snowflake: Snowflake
+  @Autowired private lateinit var snowflake: ISnowflakeGenerator
 
   init {
     log.trace("注册 id 生成器 当前未初始")
@@ -39,7 +39,7 @@ class SnowflakeIdGeneratorBean : IdentifierGenerator {
   }
 
   override fun generate(session: SharedSessionContractImplementor?, obj: Any?): Any {
-    val snowflakeId = snowflake.nextStringId()
+    val snowflakeId = snowflake.nextString()
     log.trace("当前生成的 snowflakeId = {}", snowflakeId)
     return snowflakeId
   }

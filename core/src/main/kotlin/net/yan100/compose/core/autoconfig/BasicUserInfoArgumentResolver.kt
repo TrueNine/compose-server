@@ -19,8 +19,8 @@ package net.yan100.compose.core.autoconfig
 import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.http.Headers
-import net.yan100.compose.core.lang.remoteRequestIp
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.http.InterAddressUtil
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.RequestInfo
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
@@ -58,7 +58,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
         RequestInfo().apply {
           val req = webRequest.nativeRequest as HttpServletRequest
           val deviceId = Headers.getDeviceId(req)
-          this.currentIpAddr = req.remoteRequestIp
+          this.currentIpAddr = InterAddressUtil.getRequestIpAddress(req)
           this.deviceId = deviceId
         }
       )

@@ -18,6 +18,7 @@ dependencies {
   implementation(gradleApi())
   implementation(gradleKotlinDsl())
   implementation(libs.kt.kspGoogleApi)
+  implementation(libs.util.squareupJavapoet)
   implementation(libs.bundles.kt)
 }
 

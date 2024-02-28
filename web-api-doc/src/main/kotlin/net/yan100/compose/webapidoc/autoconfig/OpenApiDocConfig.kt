@@ -22,7 +22,7 @@ import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.parameters.HeaderParameter
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.webapidoc.properties.SwaggerProperties
 import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication

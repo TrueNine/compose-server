@@ -17,7 +17,8 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import net.yan100.compose.core.lang.hasText
+import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.typing.http.MediaTypes
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.models.req.PostAttachmentReq
 import net.yan100.compose.rds.service.IAttachmentService
@@ -57,7 +58,7 @@ class AttachmentAggregatorImpl(
         saveName = saveFile.saveName
         metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
         size = file.size
-        mimeType = file.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.value
+        mimeType = file.contentType ?: MediaTypes.BINARY.value
         attType = AttachmentTyping.ATTACHMENT
       }
     // 重新进行赋值
@@ -96,7 +97,7 @@ class AttachmentAggregatorImpl(
           metaName =
             if (it.second.originalFilename.hasText()) it.second.originalFilename else it.second.name
           size = it.second.size
-          mimeType = it.second.contentType ?: net.yan100.compose.core.http.MediaTypes.BINARY.value
+          mimeType = it.second.contentType ?: MediaTypes.BINARY.value
           attType = AttachmentTyping.ATTACHMENT
         }
       }

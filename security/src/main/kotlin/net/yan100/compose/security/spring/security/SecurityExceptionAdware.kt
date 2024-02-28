@@ -22,10 +22,10 @@ import jakarta.servlet.http.HttpServletResponse
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.*
-import net.yan100.compose.core.http.ErrMsg
-import net.yan100.compose.core.http.ErrorMessage
-import net.yan100.compose.core.http.MediaTypes
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.models.ErrorMessage
+import net.yan100.compose.core.typing.http.ErrMsg
+import net.yan100.compose.core.typing.http.MediaTypes
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint

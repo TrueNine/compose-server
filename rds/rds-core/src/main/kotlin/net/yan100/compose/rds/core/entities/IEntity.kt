@@ -23,9 +23,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.persistence.Version
-import net.yan100.compose.core.alias.BigSerial
-import net.yan100.compose.core.alias.bool
-import net.yan100.compose.core.alias.datetime
+import net.yan100.compose.core.alias.*
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
@@ -91,4 +89,53 @@ abstract class IEntity : AnyEntity() {
   override fun toString(): String {
     return withToString(super.toString(), LDF to ldf, RLV to rlv, CRD to crd, MRD to mrd)
   }
+}
+
+/**
+ * ## 合并从数据库内查询的实体
+ *
+ * @param target 需合并对象
+ * @param findByIdFn 查询函数
+ * @param saveFn 保存函数
+ * @param preMergeFn 合并前处理函数
+ */
+fun <T : IEntity> T.merge(
+  target: T,
+  findByIdFn: (id: Id) -> T?,
+  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }
+): T {
+  return takeUpdate {
+    val queryEntity = findByIdFn(target.id)
+    checkNotNull(queryEntity) { "未找到修改的数据版本" }
+
+    target.rlv = queryEntity.rlv
+    target.mrd = datetime.now()
+
+    preMergeFn(queryEntity, target)
+  } ?: throw IllegalArgumentException("未找到修改的数据")
+}
+
+fun <T : IEntity> Iterable<T>.mergeAll(
+  targets: List<T>,
+  findAllByIdFn: (ids: List<Id>) -> List<T>,
+  checkLength: Boolean = true,
+  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }
+): List<T> {
+  val prepard = targets.filterNot { it.isNew }
+  if (checkLength) check(targets.size == prepard.size) { "需更新的长度不一致" }
+
+  val dbDatas = findAllByIdFn(prepard.map { it.id })
+  if (checkLength) check(dbDatas.size == prepard.size) { "需更新的长度不一致" }
+
+  val pd = dbDatas.associateBy { prepard.find { d -> it.id == d.id }!! }
+  val allSave =
+    pd.map {
+      val p = it.key
+      val d = it.value
+      p.rlv = d.rlv
+      p.mrd = datetime.now()
+      preMergeFn(d, p)
+    }
+  if (checkLength) check(allSave.size == prepard.size) { "需更新的长度不一致" }
+  return allSave
 }

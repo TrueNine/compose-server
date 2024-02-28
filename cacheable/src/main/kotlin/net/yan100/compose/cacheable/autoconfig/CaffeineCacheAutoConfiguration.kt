@@ -19,7 +19,7 @@ package net.yan100.compose.cacheable.autoconfig
 import com.github.benmanes.caffeine.cache.Caffeine
 import java.time.Duration
 import net.yan100.compose.core.consts.CacheFieldNames
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import org.springframework.cache.CacheManager
 import org.springframework.cache.caffeine.CaffeineCache
 import org.springframework.cache.support.SimpleCacheManager

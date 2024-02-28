@@ -1,60 +1,58 @@
-CREATE
-    TABLE
-        IF NOT EXISTS audit(
-            status INTEGER DEFAULT 0, -- 状态
-            create_datetime TIMESTAMP DEFAULT now(), -- 创建时间
-            audit_user_id BIGINT DEFAULT NULL, -- 审核人
-            ref_id BIGINT DEFAULT NULL, -- 审核对象 id
-            ref_type INTEGER DEFAULT NULL, -- 审核对象类型
-            audit_ip VARCHAR(64) DEFAULT NULL, -- 审核人 ip
-            audit_device_id VARCHAR(255) DEFAULT NULL, -- 审核人设备 id
-            remark text DEFAULT NULL -- 审核备注
-
+create
+    table
+        if not exists audit(
+            status integer default 0,
+            create_datetime timestamp default now(),
+            audit_user_id bigint default null,
+            ref_id bigint default null,
+            ref_type integer default null,
+            audit_ip varchar(64) default null,
+            audit_device_id varchar(255) default null,
+            remark text default null
         );
 
-comment ON
-TABLE
-    audit IS '审核备注';
+comment on
+table
+    audit is '审核备注';
 
-SELECT
+select
     add_base_struct('audit');
 
-CREATE
-    INDEX ON
+create
+    index on
     audit(status);
 
-CREATE
-    INDEX ON
+create
+    index on
     audit(audit_user_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     audit(ref_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     audit(ref_type);
 
-CREATE
-    TABLE
-        IF NOT EXISTS audit_attachment(
-            att_id BIGINT NOT NULL, -- 附件 id
-            audit_id BIGINT NOT NULL, -- 审核图片
-            status INT DEFAULT NULL -- 审核状态
-
+create
+    table
+        if not exists audit_attachment(
+            att_id bigint not null,
+            audit_id bigint not null,
+            status int default null
         );
 
-SELECT
+select
     add_base_struct('audit_attachment');
 
-CREATE
-    INDEX ON
+create
+    index on
     audit_attachment(status);
 
-CREATE
-    INDEX ON
+create
+    index on
     audit_attachment(att_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     audit_attachment(audit_id);

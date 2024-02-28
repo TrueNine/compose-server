@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.gen.util
 
-import net.yan100.compose.core.lang.hasText
+import net.yan100.compose.core.extensionfunctions.hasText
 
 object DbCaseConverter {
 

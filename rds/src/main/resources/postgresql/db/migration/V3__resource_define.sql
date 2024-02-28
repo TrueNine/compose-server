@@ -1,135 +1,135 @@
-CREATE
-    TABLE
-        IF NOT EXISTS api(
-            name VARCHAR(128) DEFAULT NULL,
-            doc VARCHAR(128) DEFAULT NULL,
-            permissions_id BIGINT DEFAULT 3,
+create
+    table
+        if not exists api(
+            name varchar(128) default null,
+            doc varchar(128) default null,
+            permissions_id bigint default 3,
             api_path text,
             api_method text,
-            api_protocol VARCHAR(63) DEFAULT NULL
+            api_protocol varchar(63) default null
         );
 
-comment ON
-TABLE
-    api IS 'api';
+comment on
+table
+    api is 'api';
 
-SELECT
+select
     add_base_struct('api');
 
-CREATE
-    INDEX ON
+create
+    index on
     api(permissions_id);
 
-CREATE
-    TABLE
-        IF NOT EXISTS api_call_record(
-            api_id BIGINT NOT NULL,
-            device_code text NULL,
-            req_ip VARCHAR(63) NULL,
-            login_ip VARCHAR(63) NULL,
-            resp_code INT NULL,
+create
+    table
+        if not exists api_call_record(
+            api_id bigint not null,
+            device_code text null,
+            req_ip varchar(63) null,
+            login_ip varchar(63) null,
+            resp_code int null,
             resp_result_enc text
         );
 
-comment ON
-TABLE
-    api_call_record IS 'API请求记录';
+comment on
+table
+    api_call_record is 'API请求记录';
 
-SELECT
+select
     add_base_struct('api_call_record');
 
-CREATE
-    INDEX ON
+create
+    index on
     api_call_record(api_id);
 
-CREATE
-    TABLE
-        IF NOT EXISTS attachment(
-            meta_name VARCHAR(127) DEFAULT NULL,
-            save_name VARCHAR(127),
-            base_url VARCHAR(255),
-            base_uri VARCHAR(255),
-            url_name VARCHAR(127) DEFAULT NULL,
-            url_doc VARCHAR(255),
-            url_id BIGINT NULL,
-            att_type INT NOT NULL,
-            SIZE BIGINT DEFAULT NULL,
-            mime_type VARCHAR(63)
+create
+    table
+        if not exists attachment(
+            meta_name varchar(127) default null,
+            save_name varchar(127),
+            base_url varchar(255),
+            base_uri varchar(255),
+            url_name varchar(127) default null,
+            url_doc varchar(255),
+            url_id bigint null,
+            att_type int not null,
+            size bigint default null,
+            mime_type varchar(63)
         );
 
-comment ON
-TABLE
-    attachment IS '文件';
+comment on
+table
+    attachment is '文件';
 
-SELECT
+select
     add_base_struct('attachment');
 
-CREATE
-    INDEX ON
+create
+    index on
     attachment(url_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     attachment(meta_name);
 
-CREATE
-    INDEX ON
+create
+    index on
     attachment(base_url);
 
-CREATE
-    INDEX ON
+create
+    index on
     attachment(base_uri);
 
-CREATE
-    INDEX ON
+create
+    index on
     attachment(att_type);
 
-CREATE
-    INDEX ON
+create
+    index on
     attachment(mime_type);
 
-CREATE
-    TABLE
-        IF NOT EXISTS address(
-            code VARCHAR(255) NULL,
-            name VARCHAR(127) NULL, -- 中国最长的地名是新疆维吾尔自治区昌吉回族自治州木垒哈萨克自治县大南沟乌孜别克族乡
-            year_version VARCHAR(15) NULL,
-            LEVEL INTEGER DEFAULT 0,
-            center VARCHAR(255) NULL,
-            leaf BOOLEAN DEFAULT FALSE,
-            UNIQUE(code)
+create
+    table
+        if not exists address(
+            code varchar(255) null,
+            name varchar(127) null,
+            year_version varchar(15) null,
+            level integer default 0,
+            center varchar(255) null,
+            leaf boolean default false,
+            unique(code)
         );
 
-comment ON
-TABLE
-    address IS '行政区代码';
+comment on
+table
+    address is '行政区代码';
 
-SELECT
+select
     add_base_struct('address');
 
-SELECT
+select
     add_presort_tree_struct('address');
 
-CREATE
-    INDEX ON
+create
+    index on
     address(name);
 
-INSERT
-    INTO
+insert
+    into
         address(
             id,
-            LEVEL,
+            level,
             code,
             name,
             rln,
             rrn,
             tgi,
             center
-        ) SELECT
+        ) select
             *
-        FROM
+        from
             (
-            VALUES(
+            values(
                 0,
                 0,
                 '000000000000',
@@ -137,11 +137,11 @@ INSERT
                 1,
                 2,
                 0,
-                NULL
+                null
             )
-            ) AS tmp(
+            ) as tmp(
                 id,
-                LEVEL,
+                level,
                 code,
                 name,
                 rln,
@@ -149,114 +149,114 @@ INSERT
                 tgi,
                 center
             )
-        WHERE
-            NOT EXISTS(
-                SELECT
+        where
+            not exists(
+                select
                     1
-                FROM
+                from
                     address a
-                WHERE
+                where
                     a.id = tmp.id
             );
 
-CREATE
-    TABLE
-        IF NOT EXISTS address_details(
-            address_id BIGINT NOT NULL,
-            user_id BIGINT NULL,
-            phone VARCHAR(127),
-            name VARCHAR(255),
-            address_code VARCHAR(31) NOT NULL,
-            address_details text NOT NULL,
-            center VARCHAR(255)
+create
+    table
+        if not exists address_details(
+            address_id bigint not null,
+            user_id bigint null,
+            phone varchar(127),
+            name varchar(255),
+            address_code varchar(31) not null,
+            address_details text not null,
+            center varchar(255)
         );
 
-comment ON
-TABLE
-    address_details IS '地址详情';
+comment on
+table
+    address_details is '地址详情';
 
-SELECT
+select
     add_base_struct('address_details');
 
-CREATE
-    INDEX ON
+create
+    index on
     address_details(address_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     address_details(user_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     address_details(address_code);
 
-CREATE
-    TABLE
-        IF NOT EXISTS table_row_delete_record(
-            table_names VARCHAR(127) NULL,
-            user_id BIGINT NULL,
-            user_account VARCHAR(255) NULL,
-            delete_datetime TIMESTAMP DEFAULT now(),
-            entity json NOT NULL
+create
+    table
+        if not exists table_row_delete_record(
+            table_names varchar(127) null,
+            user_id bigint null,
+            user_account varchar(255) null,
+            delete_datetime timestamp default now(),
+            entity json not null
         );
 
-comment ON
-TABLE
-    table_row_delete_record IS '数据删除记录';
+comment on
+table
+    table_row_delete_record is '数据删除记录';
 
-SELECT
+select
     add_base_struct('table_row_delete_record');
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_delete_record(table_names);
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_delete_record(user_account);
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_delete_record(user_id);
 
-CREATE
-    TABLE
-        IF NOT EXISTS table_row_change_record(
-            TYPE BOOLEAN NOT NULL,
-            table_names VARCHAR(127) NULL,
-            create_user_id BIGINT NULL,
-            create_user_account CHAR(255) NULL,
-            create_datetime TIMESTAMP NULL,
-            create_entity json NULL,
-            last_modify_user_id BIGINT NULL,
-            last_modify_user_account CHAR(255) NULL,
-            last_modify_datetime TIMESTAMP NULL,
-            last_modify_entity json NOT NULL
+create
+    table
+        if not exists table_row_change_record(
+            type boolean not null,
+            table_names varchar(127) null,
+            create_user_id bigint null,
+            create_user_account char(255) null,
+            create_datetime timestamp null,
+            create_entity json null,
+            last_modify_user_id bigint null,
+            last_modify_user_account char(255) null,
+            last_modify_datetime timestamp null,
+            last_modify_entity json not null
         );
 
-comment ON
-TABLE
-    table_row_change_record IS '数据变更记录';
+comment on
+table
+    table_row_change_record is '数据变更记录';
 
-SELECT
+select
     add_base_struct('table_row_change_record');
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_change_record(table_names);
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_change_record(create_user_account);
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_change_record(last_modify_user_account);
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_change_record(create_user_id);
 
-CREATE
-    INDEX ON
+create
+    index on
     table_row_change_record(last_modify_user_id);

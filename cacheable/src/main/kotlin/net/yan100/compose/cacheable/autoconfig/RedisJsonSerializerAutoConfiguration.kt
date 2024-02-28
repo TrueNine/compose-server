@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import java.time.Duration
 import net.yan100.compose.core.consts.CacheFieldNames
-import net.yan100.compose.core.lang.slf4j
+import net.yan100.compose.core.log.slf4j
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

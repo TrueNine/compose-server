@@ -17,9 +17,9 @@
 package net.yan100.compose.security.oauth2.property
 
 import java.time.LocalDateTime
-import net.yan100.compose.core.encrypt.Keys
-import net.yan100.compose.core.encrypt.sha1
-import net.yan100.compose.core.lang.iso8601LongUtc
+import net.yan100.compose.core.extensionfunctions.iso8601LongUtc
+import net.yan100.compose.core.util.encrypt.Keys
+import net.yan100.compose.core.util.encrypt.sha1
 
 /**
  * 微信公众号属性获取器
