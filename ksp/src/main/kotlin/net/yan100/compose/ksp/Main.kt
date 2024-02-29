@@ -19,7 +19,6 @@ package net.yan100.compose.ksp
 /**
  * ## ksp 启动入口
  * - [ksp 示例](https://github.com/google/ksp/tree/main/examples/playground/test-processor/src/main)
- * - [hibernate
- *   增强插件](https://github.com/hibernate/hibernate-orm/tree/main/tooling/hibernate-gradle-plugin)
+ * - [hibernate增强插件](https://github.com/hibernate/hibernate-orm/tree/main/tooling/hibernate-gradle-plugin)
  */
 class Main {}

@@ -46,8 +46,6 @@ class SettingsMain : Plugin<Settings> {
   companion object
 }
 
-fun a() {}
-
 fun org.gradle.api.artifacts.dsl.DependencyHandler.allAnnotationCompileOnly(
   dependencyNotation: Any
 ): org.gradle.api.artifacts.Dependency? {

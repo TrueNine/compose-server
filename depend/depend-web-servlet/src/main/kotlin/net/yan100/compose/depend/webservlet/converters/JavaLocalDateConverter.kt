@@ -24,40 +24,16 @@ import java.time.temporal.Temporal
 import kotlin.reflect.KClass
 import net.yan100.compose.core.extensionfunctions.hasTextRun
 import net.yan100.compose.core.extensionfunctions.mutableLockMapOf
+import net.yan100.compose.core.extensionfunctions.toLocalDate
+import net.yan100.compose.core.log.slf4j
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
 
-open class JavaLocalDateAndTimeConverterFactory : ConverterFactory<String?, Temporal?> {
-  companion object {
-    @JvmStatic private val formatter = DateTimeFormatter.ofPattern("X")
-  }
+private val log = slf4j(JavaLocalDateConverter::class)
 
-  private val converters = mutableLockMapOf<Class<out Temporal>, Converter<String?, Temporal>>()
-
-  init {
-    converters[LocalDateTime::class.java] = TemporalConverter(LocalDateTime::class)
-    converters[LocalDate::class.java] = TemporalConverter(LocalDate::class)
-    converters[LocalTime::class.java] = TemporalConverter(LocalTime::class)
-  }
-
-  override fun <T : Temporal?> getConverter(targetType: Class<T>): Converter<String?, T> {
-    return converters[targetType] as Converter<String?, T>
-  }
-
-  private inner class TemporalConverter<T : Temporal>(private val targetKClass: KClass<out T>) :
-    Converter<String?, T> {
-    override fun convert(source: String): T? {
-      return source.hasTextRun {
-        when (targetKClass) {
-          LocalDate::class -> LocalDate.parse(source, formatter)
-          LocalTime::class -> LocalTime.parse(source, formatter)
-          LocalDateTime::class -> LocalDateTime.parse(source, formatter)
-          else -> {
-            throw IllegalArgumentException("未找到序列化器")
-          }
-        }
-          as T?
-      }
-    }
+open class JavaLocalDateConverter : Converter<String?, LocalDate?> {
+  override fun convert(source: String): LocalDate? {
+    log.trace("转换日期 = {}", source)
+    return source.toLongOrNull()?.toLocalDate()
   }
 }

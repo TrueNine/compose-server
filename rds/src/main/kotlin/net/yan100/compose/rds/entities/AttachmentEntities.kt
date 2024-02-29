@@ -23,6 +23,7 @@ import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
 import jakarta.persistence.criteria.Predicate
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.long
 import net.yan100.compose.rds.Jc
 import net.yan100.compose.rds.Mto
@@ -55,21 +56,38 @@ abstract class SuperAttachment : IEntity() {
   }
 
   /** 保存前的名称 */
-  @Nullable @Schema(title = "保存前的名称") @Column(name = META_NAME) var metaName: String? = null
+  @Nullable
+  @Schema(title = "保存前的名称")
+  @Column(name = META_NAME)
+  var metaName: String? = null
 
   /** 根路径 */
-  @Nullable @Schema(title = "根路径") @Column(name = BASE_URL) var baseUrl: String? = null
+  @Nullable
+  @Schema(title = "根路径")
+  @Column(name = BASE_URL)
+  var baseUrl: String? = null
 
-  @Schema(title = "基础 URI") @Column(name = BASE_URI) var baseUri: String? = null
+  @Schema(title = "基础 URI")
+  @Column(name = BASE_URI)
+  var baseUri: String? = null
 
   /** 保存后的名称 */
-  @Nullable @Column(name = SAVE_NAME) @Schema(title = "保存后的名称") var saveName: String? = null
+  @Nullable
+  @Column(name = SAVE_NAME)
+  @Schema(title = "保存后的名称")
+  var saveName: String? = null
 
   /** 根路径名称 */
-  @Nullable @Column(name = URL_NAME) @Schema(title = "根路径名称") var urlName: String? = null
+  @Nullable
+  @Column(name = URL_NAME)
+  @Schema(title = "根路径名称")
+  var urlName: String? = null
 
   /** 根路径描述 */
-  @Nullable @Column(name = URL_DOC) @Schema(title = "根路径描述") var urlDoc: String? = null
+  @Nullable
+  @Column(name = URL_DOC)
+  @Schema(title = "根路径描述")
+  var urlDoc: String? = null
 
   /** 附件类型 */
   @Nullable
@@ -77,17 +95,24 @@ abstract class SuperAttachment : IEntity() {
   @Schema(title = "附件类型（附件、根路径）")
   lateinit var attType: AttachmentTyping
 
-  @Nullable @Column(name = SIZE) @Schema(title = "附件大小") var size: long? = null
+  @Nullable
+  @Column(name = SIZE)
+  @Schema(title = "附件大小")
+  var size: long? = null
 
   /** 媒体类型 */
-  @Nullable @Column(name = MIME_TYPE) @Schema(title = "媒体类型") var mimeType: String? = null
+  @Nullable
+  @Column(name = MIME_TYPE)
+  @Schema(title = "媒体类型")
+  var mimeType: String? = null
 
   @JsonIgnore
   @Nullable
   @Column(name = URL_ID)
   @Schema(title = "自连接 urlId")
-  var urlId: String? = null
+  var urlId: RefId? = null
 }
+
 
 /**
  * 新附件类型
