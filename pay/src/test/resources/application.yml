@@ -1,14 +1,14 @@
 compose:
-    pay:
-        wechat:
-            enable-single: true
-            mp-app-id: wx555a67d97f0cfa4e
-            merchant-id: 1642798294
-            merchant-serial-number: 7DAE3FC82EC4A83F5627B56816EC80F628A28CA4
-            api-secret: cabea5859a643b41762e6c7dfba001d0
-            api-v3-key: yingyuechuanmei88888888888888888
-            async-success-notify-url: https://www.baidu.com
-            async-success-refund-notify-url: https://www.baidu.com
+  pay:
+    wechat:
+      enable-single: true
+      mp-app-id: wx555a67d97f0cfa4e
+      merchant-id: 1642798294
+      merchant-serial-number: 7DAE3FC82EC4A83F5627B56816EC80F628A28CA4
+      api-secret: cabea5859a643b41762e6c7dfba001d0
+      api-v3-key: yingyuechuanmei88888888888888888
+      async-success-notify-url: https://www.baidu.com
+      async-success-refund-notify-url: https://www.baidu.com
 logging:
-    level:
-        root: debug
+  level:
+    root: debug

@@ -14,28 +14,22 @@
  *     Email: <truenine304520@gmail.com>
  *     Website: [gitee.com/TrueNine]
  */
-package net.yan100.compose.core.annotations
+package net.yan100.compose.rds.core.extensionfunctions
 
-import java.lang.annotation.Inherited
-import org.jetbrains.annotations.ApiStatus
+import net.yan100.compose.core.extensionfunctions.nonText
+import net.yan100.compose.core.extensionfunctions.snakeCaseToCamelCase
+import org.springframework.data.domain.Sort
 
-/**
- * 该注解标志这这个类、方法、参数…… <br></br> 可能在未来版本移除或者变更，因为底层依赖不稳定 <br></br> 或者目前也没有找到好的解决方式
- *
- * @author TrueNine
- * @since 2022-10-26
- */
-@Inherited
-@Retention(AnnotationRetention.RUNTIME)
-@Target(
-  AnnotationTarget.ANNOTATION_CLASS,
-  AnnotationTarget.CONSTRUCTOR,
-  AnnotationTarget.FIELD,
-  AnnotationTarget.FUNCTION,
-  AnnotationTarget.PROPERTY_GETTER,
-  AnnotationTarget.PROPERTY_SETTER,
-  AnnotationTarget.CLASS
-)
-@MustBeDocumented
-@ApiStatus.Experimental
-annotation class BetaTest
+fun MutableList<Sort.Order>.querydslOrderBy(
+  propertyName: String,
+  desc: Boolean? = null
+): MutableList<Sort.Order> {
+  if (propertyName.nonText()) return this
+  val pName = propertyName.snakeCaseToCamelCase
+  if (desc != null) this += if (desc) Sort.Order.desc(pName) else Sort.Order.asc(pName)
+  return this
+}
+
+fun MutableList<Sort.Order>.asQuerySort(): Sort {
+  return Sort.by(this)
+}

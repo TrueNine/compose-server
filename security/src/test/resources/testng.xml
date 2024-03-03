@@ -2,9 +2,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="安全包测试" parallel="methods">
-    <test name="jwt测试" parallel="methods">
-        <packages>
-            <package name="net.yan100.compose.security.jwt"/>
-        </packages>
-    </test>
+  <test name="jwt测试" parallel="methods">
+    <packages>
+      <package name="net.yan100.compose.security.jwt"/>
+    </packages>
+  </test>
 </suite>

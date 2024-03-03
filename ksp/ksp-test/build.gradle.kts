@@ -1,4 +1,1 @@
-plugins {
-  alias(libs.plugins.ktJvm)
-}
-
+plugins { alias(libs.plugins.ktJvm) }

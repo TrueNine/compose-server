@@ -2,10 +2,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="爬虫测试" parallel="methods">
-    <!-- 服务测试需要初始化数据 -->
-    <test name="爬虫测试" parallel="methods">
-        <packages>
-            <package name="net.yan100.compose.crawler.t"/>
-        </packages>
-    </test>
+  <!-- 服务测试需要初始化数据 -->
+  <test name="爬虫测试" parallel="methods">
+    <packages>
+      <package name="net.yan100.compose.crawler.t"/>
+    </packages>
+  </test>
 </suite>

@@ -14,22 +14,34 @@
  *     Email: <truenine304520@gmail.com>
  *     Website: [gitee.com/TrueNine]
  */
-package net.yan100.compose.rds.core.util
+package net.yan100.compose.rds.core.querydsl
 
-import net.yan100.compose.core.extensionfunctions.nonText
-import net.yan100.compose.core.extensionfunctions.snakeCaseToCamelCase
-import org.springframework.data.domain.Sort
+import com.querydsl.core.BooleanBuilder
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import net.yan100.compose.rds.core.entities.QIEntity
 
-fun MutableList<Sort.Order>.querydslOrderBy(
-  propertyName: String,
-  desc: Boolean? = null
-): MutableList<Sort.Order> {
-  if (propertyName.nonText()) return this
-  val pName = propertyName.snakeCaseToCamelCase
-  if (desc != null) this += if (desc) Sort.Order.desc(pName) else Sort.Order.asc(pName)
-  return this
-}
+class QueryDslTest {
+  /**  */
+  @Test
+  fun `test query dsl clone not exception`() {
+    val q = QIEntity.iEntity
 
-fun MutableList<Sort.Order>.asQuerySort(): Sort {
-  return Sort.by(this)
+    val b = BooleanBuilder()
+    val c = b.clone()
+    println(b.hashCode())
+    println(c.hashCode())
+    assertEquals(b, c)
+
+    b.and(q.ldf.eq(true).or(q.isNull))
+
+    val bv = b.value
+    val cv = c.value
+    assertNull(cv)
+    assertEquals(cv.toString(), "null")
+
+    println(bv)
+    println(cv)
+  }
 }

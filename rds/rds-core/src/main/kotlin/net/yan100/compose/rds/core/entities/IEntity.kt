@@ -55,11 +55,7 @@ abstract class IEntity : AnyEntity() {
   val databaseTableRowFieldLockVersion: BigSerial?
     @Schema(title = "字段乐观锁版本号") @Transient @JsonIgnore get() = rlv
 
-  @CreatedDate
-  @JsonIgnore
-  @Schema(title = "表行创建时间")
-  @Column(name = CRD)
-  var crd: datetime? = null
+  @CreatedDate @JsonIgnore @Schema(title = "表行创建时间") @Column(name = CRD) var crd: datetime? = null
   val databaseTableRowFieldCreatedDatetime: datetime?
     @Schema(title = "字段创建时间") @Transient @JsonIgnore get() = crd
 

@@ -2,9 +2,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="MQTT 连接测试" parallel="methods">
-    <test name="mqtt" parallel="methods">
-        <packages>
-            <package name="net.yan100.compose.depend.mqtt"/>
-        </packages>
-    </test>
+  <test name="mqtt" parallel="methods">
+    <packages>
+      <package name="net.yan100.compose.depend.mqtt"/>
+    </packages>
+  </test>
 </suite>

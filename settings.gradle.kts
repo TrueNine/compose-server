@@ -107,13 +107,12 @@ findProject(":pay")?.name = "pay"
 
 include("ksp")
 
-findProject(":ksp")?.name =
-  "ksp"
-
+findProject(":ksp")?.name = "ksp"
 
 include("ksp:ksp-test")
 
 findProject(":ksp:ksp-test")?.name = "ksp-test"
+
 "ksp"
 
 // include("version-check")
