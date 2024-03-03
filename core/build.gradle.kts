@@ -3,14 +3,7 @@ import net.yan100.compose.plugin.annotationProcessorKapt
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  implementation(libs.util.mapstruct)
-  annotationProcessorKapt(libs.util.mapstructProcessor)
-
   api(libs.json.jacksonCoreAnnotations)
-
-  api(libs.util.ognl)
-  api(libs.util.guavaJre)
-
   api(libs.jakarta.servletApi)
   api(libs.jakarta.validationApi)
 
@@ -19,10 +12,13 @@ dependencies {
   api(libs.jakarta.annotationApi)
   api(libs.spring.modulith.core)
 
+  implementation(libs.util.mapstruct)
+  annotationProcessorKapt(libs.util.mapstructProcessor)
+
   implementation(libs.spring.boot.json)
   implementation(libs.spring.security.crypto)
   implementation(libs.security.bcprovJdk18on)
-  implementation(libs.spring.webmvc)
+  // implementation(libs.spring.webmvc)
 
   // TODO 日志
   implementation(libs.spring.boot.logging)
