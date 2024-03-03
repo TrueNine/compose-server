@@ -93,7 +93,15 @@ include("depend:depend-web-client")
 
 findProject(":depend:depend-web-client")?.name = "depend-web-client"
 
+include("depend:depend-jvalid")
+
+findProject(":depend:depend-jvalid")?.name = "depend-jvalid"
+
 include("cacheable")
+
+findProject(":depend:test-toolkit")?.name = "test-toolkit"
+
+include("test-toolkit")
 
 findProject(":cacheable")?.name = "cacheable"
 

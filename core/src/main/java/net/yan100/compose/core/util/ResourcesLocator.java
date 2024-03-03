@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.jar.JarFile;
-import javax.annotation.Nullable;
 import net.yan100.compose.core.consts.FileDescriptions;
 
 /**
@@ -239,7 +238,7 @@ public class ResourcesLocator {
         return f;
     }
 
-    public static @Nullable File createGenerateFile(String path, String name) {
+    public static File createGenerateFile(String path, String name) {
         try {
             var gen = getGenerateDir();
             var parent = new File(gen, path);

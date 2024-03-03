@@ -1,8 +1,6 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.spring.boot.web)
-  api(libs.jakarta.servletApi)
-  implementation(libs.spring.boot.websocket)
+  implementation(libs.spring.boot.validation)
   implementation(project(":core"))
 }

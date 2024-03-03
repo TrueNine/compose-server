@@ -24,7 +24,7 @@ p6spySpring = ["db-p6spySpring", "db-p6spy"]
 spring-redis = ["spring-boot-dataRedis", "spring-boot-dataRedisReactive", "apache-commonsPool2"]
 spring-jpa = ["spring-boot-dataJpa", "spring-modulith-jpa"]
 selenium = ["crawler-selenium", "crawler-seleniumWebDriverManager"]
-flyway = ["db-flywayMysql", "db-flywayCore"]
+flyway = ["db-flywayCore"]
 knife4j = ["sdk-openapi-knife4jJakarta", "spring-doc-webmvcUi3", "jakarta-openapiV3Annotations"]
 
 
@@ -47,6 +47,8 @@ compose-dependMqtt = { group = "net.yan100.compose", name = "depend-mqtt", versi
 compose-dependFlyway = { group = "net.yan100.compose", name = "depend-flyway", version.ref = "compose" }
 compose-dependWebservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose" }
 compose-dependWebclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose" }
+compose-dependJvalid = { group = "net.yan100.compose", name = "depend-jvalid", version.ref = "compose" }
+compose-testToolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "compose" }
 
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-boot-configureprocessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
@@ -189,7 +191,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.400"
+compose = "1.6.401"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 

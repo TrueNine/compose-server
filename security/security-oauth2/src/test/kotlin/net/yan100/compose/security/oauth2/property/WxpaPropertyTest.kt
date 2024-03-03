@@ -16,11 +16,11 @@
  */
 package net.yan100.compose.security.oauth2.property
 
+import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.security.oauth2.Oauth2TestEntrance
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
@@ -31,6 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class WxpaPropertyTest {
   @Autowired lateinit var w: WxpaProperty
 
+  /** 如果测试失败，请暂时关闭梯子， 如果还是不行，请检查你的 DNS 配置 */
   @Test
   fun `test get access token`() {
     runBlocking {

@@ -4,13 +4,15 @@ version = libs.versions.compose.asProvider().get()
 
 dependencies {
   api(libs.json.jacksonCoreAnnotations)
-  api(libs.jakarta.servletApi)
+
   api(libs.jakarta.validationApi)
 
   api(libs.slf4j.api)
   api(libs.jakarta.openapiV3Annotations)
   api(libs.jakarta.annotationApi)
-  api(libs.spring.modulith.core)
+
+  implementation(libs.jakarta.servletApi)
+  implementation(libs.spring.modulith.core)
 
   implementation(libs.util.mapstruct)
   annotationProcessorKapt(libs.util.mapstructProcessor)

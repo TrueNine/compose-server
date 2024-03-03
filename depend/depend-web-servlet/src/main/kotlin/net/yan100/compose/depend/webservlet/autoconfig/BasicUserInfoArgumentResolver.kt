@@ -14,7 +14,7 @@
  *     Email: <truenine304520@gmail.com>
  *     Website: [gitee.com/TrueNine]
  */
-package net.yan100.compose.core.autoconfig
+package net.yan100.compose.depend.webservlet.autoconfig
 
 import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.core.ctx.UserInfoContextHolder

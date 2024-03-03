@@ -19,7 +19,6 @@ package net.yan100.compose.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.annotations.VisibleForTesting
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
@@ -62,13 +61,11 @@ class JwtIssuer private constructor() : JwtVerifier() {
       .sign(Algorithm.RSA256(params.signatureKey ?: this.signatureIssuerKey))
   }
 
-  @VisibleForTesting
   internal fun createContent(content: Any): String =
     runCatching { objectMapper.writeValueAsString(content) }
       .onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }
       .getOrElse { "{}" }
 
-  @VisibleForTesting
   internal fun encryptData(encData: String, eccPublicKey: PublicKey): String? =
     Encryptors.encryptByEccPublicKey(eccPublicKey, encData)
 

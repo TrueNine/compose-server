@@ -19,7 +19,6 @@ package net.yan100.compose.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.annotations.VisibleForTesting
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
 import kotlin.reflect.KClass
@@ -90,7 +89,6 @@ open class JwtVerifier internal constructor() {
       }
   }
 
-  @VisibleForTesting
   internal fun <T : Any> decryptData(
     encData: String,
     targetType: KClass<T>,
@@ -102,13 +100,11 @@ open class JwtVerifier internal constructor() {
     return parseContent(content, targetType)
   }
 
-  @VisibleForTesting
   internal fun <T : Any> parseContent(json: String, classType: KClass<T>) =
     runCatching { objectMapper.readValue(json, classType.java) }
       .onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }
       .getOrNull()
 
-  @VisibleForTesting
   internal fun <S : Any, E : Any> parseExceptionHandle(
     e: Exception,
     d: JwtToken<S, E>?

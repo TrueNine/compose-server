@@ -33,6 +33,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
+private val log = slf4j(SecurityPreflightValidFilter::class)
+
 /**
  * jwt过滤器
  *
@@ -40,8 +42,6 @@ import org.springframework.web.filter.OncePerRequestFilter
  * @since 2022-10-28
  */
 abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
-
-  private val log = slf4j(this::class)
 
   @Throws(ServletException::class, IOException::class)
   override fun doFilterInternal(

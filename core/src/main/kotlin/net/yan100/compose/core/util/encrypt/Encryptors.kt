@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.core.util.encrypt
 
-import com.google.common.annotations.VisibleForTesting
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -371,7 +370,6 @@ object Encryptors {
    * @return 分片数据
    */
   @JvmStatic
-  @VisibleForTesting
   internal fun sharding(data: ByteArray, size: Int): List<ByteArray> {
     val lastSliceSize = data.size % size
     val shardingData = mutableListOf<ByteArray>()
