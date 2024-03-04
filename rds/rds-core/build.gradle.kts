@@ -2,6 +2,7 @@ version = libs.versions.compose.asProvider().get()
 
 dependencies {
   implementation(project(":core"))
+  implementation(project(":depend:depend-jvalid"))
   implementation(libs.spring.data.springDataCommons)
 
   kapt(variantOf(libs.querydsl.apt) { classifier("jakarta") })

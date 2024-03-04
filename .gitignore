@@ -55,6 +55,13 @@ src/test/**/out/
 
 *resources/static/
 
+### xcode ###
+*.xcworkspace
+*.xcodeproj
+*.xcuserstate
+*.mode1v3
+
+
 ### logs ###
 logs
 .logs

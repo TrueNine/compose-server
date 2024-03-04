@@ -72,6 +72,7 @@ gradlePlugin {
 
 publishing {
   repositories {
+    maven(url = layout.buildDirectory.dir("local-maven-repo"))
     mavenLocal()
     maven(url = uri(if (pluginVersion.uppercase().contains("SNAPSHOT")) snapshot else release)) {
       credentials {

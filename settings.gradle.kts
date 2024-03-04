@@ -1,7 +1,5 @@
 pluginManagement {
   val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-  val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
-  val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
 
   repositories {
     mavenLocal()
@@ -10,8 +8,8 @@ pluginManagement {
     maven(url = uri(release)) {
       isAllowInsecureProtocol = true
       credentials {
-        username = yunXiaoUsername
-        password = yunXiaoPassword
+        username = System.getenv("YUNXIAO_USER")
+        password = System.getenv("YUNXIAO_PWD")
       }
     }
     gradlePluginPortal()
@@ -19,13 +17,11 @@ pluginManagement {
   }
 }
 
-plugins { id("net.yan100.compose.version-control-settings") version "1.6.314" }
-
 dependencyResolutionManagement {
   versionCatalogs { create("libs") { from(files("version-control/libs.versions.toml")) } }
 }
 
-rootProject.name = "compose"
+rootProject.name = "compose-server"
 
 includeBuild("version-control")
 

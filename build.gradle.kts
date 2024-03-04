@@ -1,13 +1,10 @@
 import com.diffplug.spotless.LineEnding
 import java.time.LocalDate
+import net.yan100.compose.plugin.*
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.Repos.yunXiaoRelese
 import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
-import net.yan100.compose.plugin.aliYunXiao
-import net.yan100.compose.plugin.allAnnotationCompileOnly
-import net.yan100.compose.plugin.chinaRegionRepositories
-import net.yan100.compose.plugin.distribute
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
@@ -16,6 +13,7 @@ plugins {
   java
   idea
   eclipse
+  xcode
   `visual-studio`
   `maven-publish`
   alias(libs.plugins.springBoot)
@@ -29,7 +27,7 @@ plugins {
   alias(libs.plugins.ktLombok)
   alias(libs.plugins.ktJpa)
   alias(libs.plugins.spotless)
-  id("net.yan100.compose.version-control")
+  id(libs.plugins.composeVersionControl.get().pluginId)
 }
 
 val l = libs
@@ -127,6 +125,7 @@ subprojects {
   apply(plugin = l.plugins.springBoot.get().pluginId)
   apply(plugin = l.plugins.hibernateOrm.get().pluginId)
   apply(plugin = l.plugins.springBootDependencyManagement.get().pluginId)
+  apply(plugin = l.plugins.composeVersionControl.get().pluginId)
 
   dependencies {
     annotationProcessor(l.spring.boot.configureprocessor)

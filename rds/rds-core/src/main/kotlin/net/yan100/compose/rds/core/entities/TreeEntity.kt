@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.Transient
 import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
@@ -68,6 +69,8 @@ abstract class TreeEntity : IEntity() {
   @Schema(title = "树 组id", defaultValue = "0")
   var tgi: SerialCode? = null
 
+  @JsonIgnore
+  @Transient
   override fun asNew() {
     super.asNew()
     rln = 1L

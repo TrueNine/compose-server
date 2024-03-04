@@ -6,6 +6,8 @@ dependencies {
   api(libs.bundles.spring.jpa)
   api(libs.jakarta.annotationApi)
 
+  implementation(project(":depend:depend-jvalid"))
+
   kapt(variantOf(libs.querydsl.apt) { classifier("jakarta") })
   implementation(variantOf(libs.querydsl.jpa) { classifier("jakarta") })
   implementation(project(":rds:rds-core"))

@@ -23,15 +23,17 @@ import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.persistence.Version
+import jakarta.validation.constraints.Null
 import net.yan100.compose.core.alias.*
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
+import net.yan100.compose.depend.jvalid.group.PatchGroup
+import net.yan100.compose.depend.jvalid.group.PostGroup
+import net.yan100.compose.depend.jvalid.group.PutGroup
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 
 /**
  * jpa顶级抽象类
- *
- * \@CreateBy \@LastModifyBy
  *
  * @author TrueNine
  * @since 2022-12-12
@@ -50,12 +52,18 @@ abstract class IEntity : AnyEntity() {
   @Version
   @JsonIgnore
   @Column(name = RLV)
+  @Null(groups = [PostGroup::class, PutGroup::class, PatchGroup::class], message = "禁止手动设置版本号")
   @Schema(hidden = true, title = "乐观锁版本", requiredMode = RequiredMode.NOT_REQUIRED)
   var rlv: BigSerial? = null
   val databaseTableRowFieldLockVersion: BigSerial?
     @Schema(title = "字段乐观锁版本号") @Transient @JsonIgnore get() = rlv
 
-  @CreatedDate @JsonIgnore @Schema(title = "表行创建时间") @Column(name = CRD) var crd: datetime? = null
+  @Null(groups = [PostGroup::class, PutGroup::class, PatchGroup::class], message = "禁止手动设置数据创建时间")
+  @CreatedDate
+  @JsonIgnore
+  @Schema(title = "表行创建时间")
+  @Column(name = CRD)
+  var crd: datetime? = null
   val databaseTableRowFieldCreatedDatetime: datetime?
     @Schema(title = "字段创建时间") @Transient @JsonIgnore get() = crd
 
@@ -63,6 +71,7 @@ abstract class IEntity : AnyEntity() {
   @LastModifiedDate
   @Schema(title = "表行修改时间")
   @Column(name = MRD)
+  @Null(groups = [PostGroup::class, PutGroup::class, PatchGroup::class], message = "禁止手动设置数据修改时间")
   var mrd: datetime? = null
   val databaseTableRowFieldLastModifyDatetime: datetime?
     @Schema(title = "字段的修改时间") @Transient @JsonIgnore get() = mrd
@@ -76,10 +85,13 @@ abstract class IEntity : AnyEntity() {
     requiredMode = RequiredMode.NOT_REQUIRED,
     accessMode = Schema.AccessMode.READ_ONLY
   )
+  @Null(groups = [PostGroup::class, PutGroup::class, PatchGroup::class], message = "不能手动指定删除标志")
   var ldf: Boolean? = null
   val databaseTableRowFieldLogicDeleteFlag: bool
     @Schema(title = "是否已经删除") @Transient @JsonIgnore get() = ldf == true
 
+  @Transient
+  @JsonIgnore
   override fun asNew() {
     super.asNew()
     ldf = false

@@ -22,9 +22,12 @@ import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Null
 import java.io.Serial
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
+import net.yan100.compose.depend.jvalid.group.*
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.PreSaveDeleteReferenceListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
@@ -58,6 +61,11 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   /** id */
   @jakarta.persistence.Id
   @Column(name = DataBaseBasicFieldNames.ID)
+  @Null(groups = [PostGroup::class], message = "在新增数据时不允许携带 id")
+  @NotBlank(
+    groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class],
+    message = "在修改数据时，需携带数据 id"
+  )
   @Schema(
     title = ID,
     examples = ["7001234523405", "7001234523441"],
@@ -95,11 +103,21 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
       "]"
   }
 
+  @Null(groups = [PostGroup::class], message = "在新增数据时不允许携带 id")
+  @NotBlank(
+    groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class],
+    message = "在修改数据时，需携带数据 id"
+  )
   @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   fun setId(id: String) {
     this.id = id
   }
 
+  @Null(groups = [PostGroup::class], message = "在新增数据时不允许携带 id")
+  @NotBlank(
+    groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class],
+    message = "在修改数据时，需携带数据 id"
+  )
   override fun getId(): String {
     return this.id ?: ""
   }
