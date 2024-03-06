@@ -20,8 +20,6 @@ val l = libs
 
 dependencies {
   // bundles
-  api(l.bundles.test.springKotlinTestNG)
-  api(l.bundles.test.springKotlinJunit5)
   api(l.bundles.kt)
   api(l.bundles.p6spySpring)
   api(l.bundles.spring.redis)
@@ -79,8 +77,6 @@ dependencies {
   api(l.kt.stdlib)
   api(l.kt.stdlibJdk8)
   api(l.kt.reflact)
-  api(l.kt.testng)
-  api(l.kt.junit5)
   api(l.kt.reactorExtensions)
   api(l.ktx.coroutineReactor)
   api(l.jetbrains.annotation)

@@ -18,7 +18,6 @@ package net.yan100.compose.rds.core.entities
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
@@ -48,22 +47,16 @@ abstract class TreeEntity : IEntity() {
   var rln: BigSerial = 1L
 
   /** 右节点 */
-  @JsonIgnore
-  @BigIntegerAsString
-  @Column(name = RRN)
-  @Schema(title = "右节点", hidden = true)
-  var rrn: BigSerial = 2L
+  @JsonIgnore @Column(name = RRN) @Schema(title = "右节点", hidden = true) var rrn: BigSerial = 2L
 
   /** 节点级别 */
   @JsonIgnore
-  @BigIntegerAsString
   @Schema(title = "节点级别", defaultValue = "0")
   @Column(name = NLV)
   var nlv: BigSerial? = 0L
 
   /** ### 树组 id，在节点插入时必须更上，在插入时随着父id进行更改 */
   @BizCode
-  @Nullable
   @JsonIgnore
   @Column(name = TGI)
   @Schema(title = "树 组id", defaultValue = "0")

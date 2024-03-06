@@ -16,17 +16,16 @@
  */
 package net.yan100.compose.plugin
 
-import net.yan100.compose.plugin.clean.CleanExtension
 import java.net.URI
+import net.yan100.compose.plugin.clean.CleanExtension
+import net.yan100.compose.plugin.publish.PublishExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.plugins.JvmEcosystemPlugin
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.wrapper.Wrapper
-import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
 class Main : Plugin<Project> {
@@ -35,29 +34,31 @@ class Main : Plugin<Project> {
   }
 
   override fun apply(project: Project) {
-    val jvm = project.plugins.apply(JvmEcosystemPlugin::class)
     val cfg =
       project.extensions.create<VersionControlConfig>(VersionControlConfig.DSL_NAME, project)
-    val log = project.logger
-    println("enhance start ${project.name}")
+    val log = cfg.logger
+    log.info("enhance start = {}", project.name)
 
-    val clean = CleanExtension(project)
-    log.info("注册清理任务 = {}",clean)
+    val clean = CleanExtension(project, cfg.cleanExtensionDsl)
+    log.info("注册清理任务 = {}", clean)
+    val publish = PublishExtension(project, cfg.publishExtensionDsl)
+    log.info("注册发布增强任务 = {}", publish)
 
-    project.gradle.taskGraph.whenReady {
-      val sourceSet = cfg.sourceSet.get()
-      val languageNames = cfg.languages.get()
-      for (langName in languageNames) {
-        val languageCompileTaskName = sourceSet.getCompileTaskName(langName)
-        val languageCompileTask = project.tasks.findByName(languageCompileTaskName) ?: continue
-        languageCompileTask.doLast { task -> log.info("version control") }
-      }
-    }
+    //    project.gradle.taskGraph.whenReady {
+    //      val sourceSet = cfg.sourceSet.get()
+    //      val languageNames = cfg.languages.get()
+    //      for (langName in languageNames) {
+    //        val languageCompileTaskName = sourceSet.getCompileTaskName(langName)
+    //        val languageCompileTask = project.tasks.findByName(languageCompileTaskName) ?:
+    // continue
+    //        languageCompileTask.doLast { task -> log.info("version control") }
+    //      }
+    //    }
 
-    project.tasks.create(HELLO_TASK_NAME) {
-      it.group = "build setup"
-      it.doLast { log.info("versionControl initialized") }
-    }
+    //    project.tasks.create(HELLO_TASK_NAME) {
+    //      it.group = "build setup"
+    //      it.doLast { log.info("versionControl initialized") }
+    //    }
   }
 }
 

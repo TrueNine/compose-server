@@ -17,6 +17,7 @@
 package net.yan100.compose.core.autoconfig
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -95,6 +96,10 @@ class JacksonSerializationAutoConfig {
       b.locale(Locale.CHINA)
       b.simpleDateFormat(DTimer.DATETIME)
       b.defaultViewInclusion(true)
+      b.featuresToEnable(
+        DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
+        DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
+      )
       b.featuresToDisable(
         SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
         SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS,
@@ -102,6 +107,7 @@ class JacksonSerializationAutoConfig {
 
       b.serializationInclusion(JsonInclude.Include.NON_NULL)
       b.serializationInclusion(JsonInclude.Include.NON_EMPTY)
+
       b.serializationInclusion(JsonInclude.Include.NON_ABSENT)
     }
   }

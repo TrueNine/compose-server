@@ -1,9 +1,7 @@
 # 环境要求
 
-- IntelliJ IDEA 最新版本 或者其他 IDE
-- gradle 8.1.1
-- kotlin 1.8.20
-- openJDK 17.0.7
+```versionControlRequired
+```
 
 > 注：开发机请准备 16GB 内存或以上，磁盘空出 10G 以上（windows 请在 C盘 留下 10G
 > 空间）。

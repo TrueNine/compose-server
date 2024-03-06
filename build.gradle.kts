@@ -102,9 +102,6 @@ allprojects {
   group = l.versions.compose.group.get()
   version = l.versions.compose.asProvider().get()
 
-  extra["springCloudVersion"] = l.versions.spring.cloud.get()
-  extra["snippetsDir"] = file("build/generated-snippets")
-
   tasks {
     withType<ProcessAot> { enabled = false }
     withType<BootJar> { enabled = false }
@@ -126,6 +123,9 @@ subprojects {
   apply(plugin = l.plugins.hibernateOrm.get().pluginId)
   apply(plugin = l.plugins.springBootDependencyManagement.get().pluginId)
   apply(plugin = l.plugins.composeVersionControl.get().pluginId)
+
+  extra["springCloudVersion"] = l.versions.spring.cloud.get()
+  extra["snippetsDir"] = file("build/generated-snippets")
 
   dependencies {
     annotationProcessor(l.spring.boot.configureprocessor)

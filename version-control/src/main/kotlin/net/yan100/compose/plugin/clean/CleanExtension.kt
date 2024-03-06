@@ -16,23 +16,37 @@
  */
 package net.yan100.compose.plugin.clean
 
-import com.oracle.svm.core.annotate.Inject
+import javax.inject.Inject
+import net.yan100.compose.plugin.consts.PluginConsts
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.registering
 
-class CleanExtension(@Inject private val project: Project) {
+class CleanExtension(
+  @Inject private val project: Project,
+  @Inject private val dsl: CleanExtensionConfig
+) {
   private val rootPath: String = project.project.rootDir.absolutePath
+  private val deletes: Set<String>
 
   init {
     val clean = project.tasks["clean"]
-
-    val a  = project.tasks.create<Delete>("bd") {
-      delete("${rootPath}/.kotlin")
-      delete("${rootPath}/.logs")
-    }
+    deletes = dsl.others.convention(DEFAULT_CLEANS).get()
+    val a =
+      project.tasks.create<Delete>(TASK_NAME) {
+        group = PluginConsts.TASK_GROUP
+        deletes.forEach {
+          if (!it.isNullOrBlank()) {
+            delete("${rootPath}/${it}")
+          }
+        }
+      }
     clean.dependsOn(a)
+  }
+
+  companion object {
+    const val TASK_NAME = "cleanExtension"
+    val DEFAULT_CLEANS = setOf(".kotlin", ".logs")
   }
 }

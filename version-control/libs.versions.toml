@@ -1,6 +1,7 @@
 [plugins]
 composeVersionControl = { id = "net.yan100.compose.version-control", version.ref = "compose" }
 composeKsp = { id = "net.yan100.compose.ksp", version.ref = "compose" }
+
 spotless = { id = "com.diffplug.spotless", version.ref = "gradlePlugin-spotless" }
 ktJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
@@ -29,6 +30,12 @@ knife4j = ["sdk-openapi-knife4jJakarta", "spring-doc-webmvcUi3", "jakarta-openap
 
 
 [libraries]
+### gradle plugins
+gradlePlugin-springBoot = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "spring-boot" }
+gradlePlugin-spotless = {group = "com.diffplug.spotless",name = "spotless-plugin-gradle",version.ref="gradlePlugin-spotless"}
+gradlePlugin-kt = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+gradlePlugin-springBootDependencyManagement = { group = "io.spring.gradle", name = "dependency-management-plugin", version.ref = "gradlePlugin-springBootDependencyManagement" }
+
 compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose" }
 compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose" }
 compose-rdsGen = { group = "net.yan100.compose", name = "rds-gen", version.ref = "compose" }
@@ -191,7 +198,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.402"
+compose = "1.6.407"
 compose-group = "net.yan100.compose"
 compose-versionControlJavaVersion = "11"
 
@@ -202,7 +209,7 @@ ktx-coroutine = "1.8.0-RC2" ### https://mvnrepository.com/artifact/org.jetbrains
 kt-reactorExtensions = "1.2.2" ### https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
-gradle = "8.6" ### https://mirrors.cloud.tencent.com/gradle
+gradle = "8.7-rc-2" ### https://mirrors.cloud.tencent.com/gradle
 gradlePlugin-spotless = "6.25.0" ### https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
 gradlePlugin-versionPlugin = "0.51.0" ### https://github.com/ben-manes/gradle-versions-plugin
 gradlePlugin-springBootDependencyManagement = "1.1.4" ### https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin

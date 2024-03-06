@@ -17,13 +17,17 @@
 package net.yan100.compose.plugin
 
 import javax.inject.Inject
+import net.yan100.compose.plugin.clean.CleanExtensionConfig
+import net.yan100.compose.plugin.publish.PublishExtensionConfig
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.plugins.JvmEcosystemPlugin
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.SourceSet
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
 interface EnhanceConfig {
@@ -35,14 +39,24 @@ interface EnhanceConfig {
 }
 
 abstract class VersionControlConfig(@Inject val project: Project) {
-  val sourceSet: Property<SourceSet>
-  val enhanceDsl: EnhanceConfig
+
+  val enhanceDsl: EnhanceConfig =
+    project.extensions.create(EnhanceConfig.DSL_NAME, EnhanceConfig::class)
+  val cleanExtensionDsl: CleanExtensionConfig =
+    project.extensions.create(CleanExtensionConfig.DSL_NAME, CleanExtensionConfig::class)
+  val publishExtensionDsl: PublishExtensionConfig =
+    project.extensions.create(PublishExtensionConfig.DSL_NAME, PublishExtensionConfig::class)
+
+  /* === dsl === */
 
   val languages: SetProperty<String>
   val enhanceAccess: Provider<EnhanceConfig>
+  val sourceSet: Property<SourceSet>
+  val logger: org.gradle.api.logging.Logger
+  val jvm = project.plugins.apply(JvmEcosystemPlugin::class)
 
   init {
-    enhanceDsl = project.extensions.create(EnhanceConfig.DSL_NAME, EnhanceConfig::class)
+    logger = project.logger
     languages = project.objects.setProperty(String::class.java).convention(listOf("java", "kotlin"))
     enhanceAccess = project.provider { enhanceDsl }
     sourceSet = project.objects.property(SourceSet::class.java).convention(mainSourceSet(project))
@@ -58,6 +72,11 @@ abstract class VersionControlConfig(@Inject val project: Project) {
   }
 
   fun enhance(action: Action<EnhanceConfig>) = action.execute(this.enhanceDsl)
+
+  fun publishExtension(action: Action<PublishExtensionConfig>) =
+    action.execute(this.publishExtensionDsl)
+
+  fun cleanExtension(action: Action<CleanExtensionConfig>) = action.execute(this.cleanExtensionDsl)
 
   companion object {
     const val DSL_NAME = "versionControl"

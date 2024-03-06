@@ -26,6 +26,9 @@ import java.time.LocalDate
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.extensionfunctions.nonText
+import net.yan100.compose.core.models.IIdcard2Code
 import net.yan100.compose.rds.Fk
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
@@ -126,6 +129,17 @@ class SuperUserInfo : IEntity() {
   var wechatAuthid: String? = null
 
   @Schema(title = "备用手机") @Column(name = SPARE_PHONE) var sparePhone: SerialCode? = null
+
+  override fun asNew() {
+    super.asNew()
+    // 如果存在身份证，则优先采取身份证信息
+    if (idCard.hasText()) {
+      val idCard = IIdcard2Code.of(idCard!!)
+      if (null == birthday) birthday = idCard.idcardBirthday
+      if (addressCode.nonText()) addressCode = idCard.idcardDistrictCode
+      if (null == gender) gender = if (idCard.idcardSex) GenderTyping.MAN else GenderTyping.WOMAN
+    }
+  }
 }
 
 /**

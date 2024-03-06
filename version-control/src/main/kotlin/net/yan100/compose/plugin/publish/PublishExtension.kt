@@ -14,31 +14,29 @@
  *     Email: <truenine304520@gmail.com>
  *     Website: [gitee.com/TrueNine]
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.plugin.publish
 
-import kotlin.jvm.Throws
+import javax.inject.Inject
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.get
 
-private const val DEPRECATED = "该接口或实体的方法不允许调用"
+class PublishExtension(
+  @Inject private val project: Project,
+  @Inject private val dsl: PublishExtensionConfig
+) {
+  init {
+    val publishToMavenLocalTask = project.tasks["publishToMavenLocal"]
+    dsl.localName.convention(PublishExtensionConfig.DEFAULT_LOCAL_NAME)
+    dsl.enable.convention(true)
 
-/**
- * ## 字节码增强实体
- *
- * 该实体用于预留增强过的实体类，该接口的方法无需调用
- */
-@Suppress("ALL")
-@JvmDefaultWithoutCompatibility
-interface IEnhanceEntity {
-  /** 为自身生成 snowflake id */
-  @Throws(NotImplementedError::class)
-  @Deprecated(DEPRECATED, level = DeprecationLevel.ERROR)
-  fun ____compose_rds____self_generate_snowflake_id() {
-    TODO(DEPRECATED)
+    if (dsl.enable.get()) {
+      project.tasks.create(TASK_NAME) {}
+      publishToMavenLocalTask
+    }
   }
 
-  /** 为自身生成 bizCode */
-  @Throws(NotImplementedError::class)
-  @Deprecated(DEPRECATED, level = DeprecationLevel.ERROR)
-  fun ____compose_rds____self_generate_biz_code() {
-    TODO(DEPRECATED)
+  companion object {
+    const val TASK_NAME = "publishExtension"
   }
 }

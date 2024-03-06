@@ -115,9 +115,8 @@ findProject(":ksp")?.name = "ksp"
 
 include("ksp:ksp-test")
 
-findProject(":ksp:ksp-test")?.name = "ksp-test"
-
-"ksp"
+findProject(":ksp:ksp-test")?.name =
+  "ksp-test"
 
 // include("version-check")
 //

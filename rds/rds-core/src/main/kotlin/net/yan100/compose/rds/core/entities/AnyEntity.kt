@@ -23,7 +23,6 @@ import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Null
 import java.io.Serial
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
@@ -61,7 +60,6 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   /** id */
   @jakarta.persistence.Id
   @Column(name = DataBaseBasicFieldNames.ID)
-  @Null(groups = [PostGroup::class], message = "在新增数据时不允许携带 id")
   @NotBlank(
     groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class],
     message = "在修改数据时，需携带数据 id"
@@ -75,6 +73,13 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   private var id: Id? = null
     @Transient @JsonIgnore @JvmName("setKotlinInternalId") set
     @Transient @JsonIgnore @JvmName("getKotlinInternalId") get() = field ?: ""
+
+  @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  fun setId(id: String) {
+    this.id = id
+  }
+
+  override fun getId(): String = this.id ?: ""
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -101,25 +106,6 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
       "[" +
       properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } +
       "]"
-  }
-
-  @Null(groups = [PostGroup::class], message = "在新增数据时不允许携带 id")
-  @NotBlank(
-    groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class],
-    message = "在修改数据时，需携带数据 id"
-  )
-  @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  fun setId(id: String) {
-    this.id = id
-  }
-
-  @Null(groups = [PostGroup::class], message = "在新增数据时不允许携带 id")
-  @NotBlank(
-    groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class],
-    message = "在修改数据时，需携带数据 id"
-  )
-  override fun getId(): String {
-    return this.id ?: ""
   }
 
   @Transient

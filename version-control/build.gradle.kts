@@ -3,8 +3,8 @@ val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFR
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 val pluginGroup = libs.versions.compose.group.get()
 val pluginVersion = libs.versions.compose.asProvider().get().toString()
-val yunXiaoUsername = System.getenv("YUNXIAO_USER")
-val yunXiaoPassword = System.getenv("YUNXIAO_PWD")
+val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
+val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
 
 plugins {
   alias(libs.plugins.ktJvm)
@@ -86,13 +86,6 @@ publishing {
     create<MavenPublication>("gradlePlugin") {
       groupId = "${pluginGroup}.${project.name}"
       artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
-      version = pluginVersion
-      from(components["java"])
-    }
-
-    create<MavenPublication>("gradleSettingsPlugin") {
-      groupId = "${pluginGroup}.${project.name}"
-      artifactId = "${pluginGroup}.${project.name}-settings.gradle.plugin"
       version = pluginVersion
       from(components["java"])
     }
