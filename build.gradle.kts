@@ -29,7 +29,7 @@ plugins {
   alias(libs.plugins.spotless)
   id(libs.plugins.composeVersionControl.get().pluginId)
 }
-apply(plugin = "maven-publish")
+
 val l = libs
 
 version = libs.versions.compose.asProvider().get()
