@@ -18,25 +18,22 @@ package net.yan100.compose.plugin.publish
 
 import javax.inject.Inject
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.get
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.kotlin.dsl.*
 
 class PublishExtension(
-  @Inject private val project: Project,
-  @Inject private val dsl: PublishExtensionConfig
+    @Inject private val project: Project,
+    @Inject private val dsl: PublishExtensionConfig
 ) {
-  init {
-    val publishToMavenLocalTask = project.tasks["publishToMavenLocal"]
-    dsl.localName.convention(PublishExtensionConfig.DEFAULT_LOCAL_NAME)
-    dsl.enable.convention(true)
-
-    if (dsl.enable.get()) {
-      project.tasks.create(TASK_NAME) {}
-      publishToMavenLocalTask
+    init {
+        val hasMavenPlugin = project.plugins.hasPlugin("maven-publish")
+        if (hasMavenPlugin) {
+            val ext = project.extensions.getByType<PublishingExtension>()
+            ext.repositories.maven(url = project.layout.buildDirectory.dir(dsl.localName))
+        }
     }
-  }
 
-  companion object {
-    const val TASK_NAME = "publishExtension"
-  }
+    companion object {
+        const val TASK_NAME = "publishExtension"
+    }
 }

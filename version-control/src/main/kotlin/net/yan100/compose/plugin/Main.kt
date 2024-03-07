@@ -19,6 +19,7 @@ package net.yan100.compose.plugin
 import java.net.URI
 import net.yan100.compose.plugin.clean.CleanExtension
 import net.yan100.compose.plugin.publish.PublishExtension
+import net.yan100.compose.plugin.versioncontrol.VersionControlConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
@@ -39,10 +40,10 @@ class Main : Plugin<Project> {
     val log = cfg.logger
     log.info("enhance start = {}", project.name)
 
-    val clean = CleanExtension(project, cfg.cleanExtensionDsl)
+    val clean = CleanExtension(project, cfg.cleanExtension)
     log.info("注册清理任务 = {}", clean)
-    val publish = PublishExtension(project, cfg.publishExtensionDsl)
-    log.info("注册发布增强任务 = {}", publish)
+    //val publish = PublishExtension(project, cfg.publishExtension)
+    //log.info("注册发布增强任务 = {}", publish)
 
     //    project.gradle.taskGraph.whenReady {
     //      val sourceSet = cfg.sourceSet.get()

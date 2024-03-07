@@ -19,11 +19,11 @@ package net.yan100.compose.plugin.publish
 import org.gradle.api.provider.Property
 
 interface PublishExtensionConfig {
-  val localName: Property<String>
-  val enable: Property<Boolean>
+  var localName: Property<String>
+  var enable: Property<Boolean>
 
   companion object {
     const val DSL_NAME = "publishExtension"
-    const val DEFAULT_LOCAL_NAME = "publish_show_local_maven"
+    const val DEFAULT_LOCAL_NAME = "local-maven-repo"
   }
 }
