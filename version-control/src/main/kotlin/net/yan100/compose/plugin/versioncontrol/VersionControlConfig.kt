@@ -29,42 +29,42 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
 interface EnhanceConfig {
-    var languages: SetProperty<String>
+  var languages: SetProperty<String>
 
-    companion object {
-        const val DSL_NAME = "enhancement"
-    }
+  companion object {
+    const val DSL_NAME = "enhancement"
+  }
 }
 
 abstract class VersionControlConfig(@Inject val project: Project) {
-    val cleanExtension: CleanExtensionConfig =
-        project.extensions.create(CleanExtensionConfig.DSL_NAME, CleanExtensionConfig::class)
-    val publishExtension: PublishExtensionConfig =
-        project.extensions.create(PublishExtensionConfig.DSL_NAME, PublishExtensionConfig::class)
+  val cleanExtension: CleanExtensionConfig =
+    project.extensions.create(CleanExtensionConfig.DSL_NAME, CleanExtensionConfig::class)
+  val publishExtension: PublishExtensionConfig =
+    project.extensions.create(PublishExtensionConfig.DSL_NAME, PublishExtensionConfig::class)
 
-    /* === dsl === */
+  /* === dsl === */
 
-    val languages: SetProperty<String>
-    val sourceSet: Property<SourceSet>
-    val logger: org.gradle.api.logging.Logger
-    val jvm = project.plugins.apply(JvmEcosystemPlugin::class)
+  val languages: SetProperty<String>
+  val sourceSet: Property<SourceSet>
+  val logger: org.gradle.api.logging.Logger
+  val jvm = project.plugins.apply(JvmEcosystemPlugin::class)
 
-    init {
-        logger = project.logger
-        languages = project.objects.setProperty(String::class.java).convention(listOf("java", "kotlin"))
-        sourceSet = project.objects.property(SourceSet::class.java).convention(mainSourceSet(project))
-    }
+  init {
+    logger = project.logger
+    languages = project.objects.setProperty(String::class.java).convention(listOf("java", "kotlin"))
+    sourceSet = project.objects.property(SourceSet::class.java).convention(mainSourceSet(project))
+  }
 
-    private fun mainSourceSet(project: Project): SourceSet {
-        return resolveSourceSet(SourceSet.MAIN_SOURCE_SET_NAME, project)
-    }
+  private fun mainSourceSet(project: Project): SourceSet {
+    return resolveSourceSet(SourceSet.MAIN_SOURCE_SET_NAME, project)
+  }
 
-    private fun resolveSourceSet(name: String, project: Project): SourceSet {
-        val javaPluginExtension = project.extensions.getByType(JavaPluginExtension::class.java)
-        return javaPluginExtension.sourceSets.getByName(name)
-    }
+  private fun resolveSourceSet(name: String, project: Project): SourceSet {
+    val javaPluginExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+    return javaPluginExtension.sourceSets.getByName(name)
+  }
 
-    companion object {
-        const val DSL_NAME = "versionControl"
-    }
+  companion object {
+    const val DSL_NAME = "versionControl"
+  }
 }

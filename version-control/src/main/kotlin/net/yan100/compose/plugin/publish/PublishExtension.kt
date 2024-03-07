@@ -22,18 +22,18 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.kotlin.dsl.*
 
 class PublishExtension(
-    @Inject private val project: Project,
-    @Inject private val dsl: PublishExtensionConfig
+  @Inject private val project: Project,
+  @Inject private val dsl: PublishExtensionConfig
 ) {
-    init {
-        val hasMavenPlugin = project.plugins.hasPlugin("maven-publish")
-        if (hasMavenPlugin) {
-            val ext = project.extensions.getByType<PublishingExtension>()
-            ext.repositories.maven(url = project.layout.buildDirectory.dir(dsl.localName))
-        }
+  init {
+    val hasMavenPlugin = project.plugins.hasPlugin("maven-publish")
+    if (hasMavenPlugin) {
+      val ext = project.extensions.getByType<PublishingExtension>()
+      ext.repositories.maven(url = project.layout.buildDirectory.dir(dsl.localName))
     }
+  }
 
-    companion object {
-        const val TASK_NAME = "publishExtension"
-    }
+  companion object {
+    const val TASK_NAME = "publishExtension"
+  }
 }
