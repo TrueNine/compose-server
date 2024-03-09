@@ -1,4 +1,4 @@
-import net.yan100.compose.plugin.Repos
+import net.yan100.compose.plugin.consts.Repos
 
 val l = libs
 

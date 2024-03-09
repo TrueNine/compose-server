@@ -18,12 +18,12 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-  versionCatalogs { create("libs") { from(files("version-control/libs.versions.toml")) } }
+  versionCatalogs { create("libs") { from(files("gradle-plugin/libs.versions.toml")) } }
 }
 
 rootProject.name = "compose-server"
 
-includeBuild("version-control")
+includeBuild("gradle-plugin")
 
 include("oss")
 

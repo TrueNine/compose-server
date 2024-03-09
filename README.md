@@ -1,6 +1,9 @@
 # 环境要求
 
-```versionControlRequired
+```envRequirement
+java: 21.0.2
+kotlin: 1.9.22
+gradle: 8.7-rc-2
 ```
 
 > 注：开发机请准备 16GB 内存或以上，磁盘空出 10G 以上（windows 请在 C盘 留下 10G
@@ -9,67 +12,25 @@
 
 ## 环境准备
 
-- 确保系统的 JAVA_HOME 环境变量 至少为 JDK17
+- 确保系统的 JAVA_HOME 环境变量 至少为 JDK21+
 
 > 注：windows 在 path 内可以调整变量的优先级
 
-- 添加阿里云云效 相关的环境变量
-
-```text
-YUNXIAO_USER 用户账号
-YUNXIAO_PWD 用户密码
-```
-
-对上述代码做出优化，要求如下：
-
-1. 输出内容：只输出代码
-2. 输出要求：输出的代码尽量简洁
-3. 受众：kotlin 后端开发程序员
-4. 输出语言：kotlin
-5. 可用测试框架：testNG、mockk、kotlin.test
-6. 测试环境：springBoot
-
-- 安装 gradle 并将其配置到环境变量
+- 安装 gradle 并将其配置到环境变量 `GRADLE_HOME`
 
 > 注：windows 将其配置到 path 内
 
 - init 对项目进行初始化
 
 ```shell
-./gradlew init
-```
+# 初始化项目
+gradle init
 
-- 使用 gradlew 添加对各个 IDE 的支持
+# 生成 gradle wrapper
+gradle wrapper
 
-```shell
-# idea 的支持
-./gradlew idea
-
-# eclipse 的支持
-./gradlew eclipse
-
-# visual studio 的支持
-./gradlew visualStudio
-```
-
-- 使用 gradlew 进行初始化和检查
-
-```shell
+# 检查当前项目
 ./gradlew check
 ```
 
 - 如果使用 CLI 构建或其他一切正常，IDEA 可尝试 “修复文件上的 IDE“
-- 可选：如果上一步生成 IDE 配置出错，可以清理这些配置文件
-
-```shell
-# 清理 IDEA
-./gradlew cleanIdea
-
-# 清理 eclipse
-./gradlew cleanEclipse
-
-# 清理 visual Studio
-./gradlew cleanVisualStudio
-```
-
-如果执行如上步骤错误，请反复检查。

@@ -1,10 +1,10 @@
 import com.diffplug.spotless.LineEnding
 import java.time.LocalDate
 import net.yan100.compose.plugin.*
-import net.yan100.compose.plugin.Repos.Credentials.yunXiaoPassword
-import net.yan100.compose.plugin.Repos.Credentials.yunXiaoUsername
-import net.yan100.compose.plugin.Repos.yunXiaoRelese
-import net.yan100.compose.plugin.Repos.yunXiaoSnapshot
+import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoPassword
+import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoUsername
+import net.yan100.compose.plugin.consts.Repos.yunXiaoRelese
+import net.yan100.compose.plugin.consts.Repos.yunXiaoSnapshot
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
@@ -27,14 +27,18 @@ plugins {
   alias(libs.plugins.ktLombok)
   alias(libs.plugins.ktJpa)
   alias(libs.plugins.spotless)
-  id(libs.plugins.composeVersionControl.get().pluginId)
+  id(libs.plugins.composeGradle.get().pluginId)
 }
+
+apply(plugin = libs.plugins.spotless.get().pluginId)
+
+apply(plugin = libs.plugins.composeGradle.get().pluginId)
+
+composeGradle { cleanExtension { delete("abcdefghijklmn") } }
 
 val l = libs
 
 version = libs.versions.compose.asProvider().get()
-
-apply(plugin = l.plugins.spotless.get().pluginId)
 
 // https://github.com/diffplug/spotless/tree/main/plugin-gradle#quickstart
 spotless {
@@ -122,7 +126,7 @@ subprojects {
   apply(plugin = l.plugins.springBoot.get().pluginId)
   apply(plugin = l.plugins.hibernateOrm.get().pluginId)
   apply(plugin = l.plugins.springBootDependencyManagement.get().pluginId)
-  apply(plugin = l.plugins.composeVersionControl.get().pluginId)
+  apply(plugin = l.plugins.composeGradle.get().pluginId)
 
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
   extra["snippetsDir"] = file("build/generated-snippets")
@@ -166,16 +170,14 @@ subprojects {
     annotations(
       "jakarta.persistence.MappedSuperclass",
       "jakarta.persistence.Entity",
-      "net.yan100.compose.core.annotations.OpenArg",
-      "io.swagger.v3.oas.annotations.media.Schema"
+      "net.yan100.compose.core.annotations.OpenArg"
     )
   }
   allOpen {
     annotations(
       "jakarta.persistence.MappedSuperclass",
       "jakarta.persistence.Entity",
-      "net.yan100.compose.core.annotations.OpenArg",
-      "io.swagger.v3.oas.annotations.media.Schema"
+      "net.yan100.compose.core.annotations.OpenArg"
     )
   }
 
@@ -199,8 +201,6 @@ subprojects {
 
   tasks {
     withType<AbstractCopyTask> { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
-
-    withType<JavaCompile>().configureEach { options.compilerArgs.add("--enable-preview") }
 
     withType<KotlinCompile> {
       kotlinOptions {

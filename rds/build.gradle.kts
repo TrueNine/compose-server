@@ -1,5 +1,3 @@
-import net.yan100.compose.plugin.Repos
-
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
@@ -25,44 +23,48 @@ dependencies {
   testImplementation(project(":depend:depend-flyway"))
 }
 
-val postgresqlSourceSet: SourceSet by
-  sourceSets.creating { resources.srcDir("src/main/resources/postgresql") }
+val common: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/common") }
+val licenseSource: SourceSet by
+  sourceSets.creating {
+    resources.srcDir(rootProject.layout.projectDirectory)
+
+    resources.include("LICENSE")
+  }
+
+val commonJar by
+  tasks.creating(Jar::class) {
+    archiveClassifier.set("common")
+    from(common.resources, sourceSets.main.get().output.classesDirs)
+  }
 
 val postgresqlJar by
   tasks.creating(Jar::class) {
+    val postgresqlSourceSet: SourceSet by
+      sourceSets.creating { resources.srcDir("src/main/resources/postgresql") }
     archiveClassifier.set("postgresql")
-    from(postgresqlSourceSet.output, sourceSets["main"].output)
+    from(
+      licenseSource.resources,
+      common.resources,
+      postgresqlSourceSet.resources,
+      sourceSets.main.get().output.classesDirs
+    )
   }
 
-val mysqlSourceSet: SourceSet by
-  sourceSets.creating { resources.srcDir("src/main/resources/mysql") }
 val mysqlJar by
   tasks.creating(Jar::class) {
+    val mysqlSourceSet: SourceSet by
+      sourceSets.creating { resources.srcDir("src/main/resources/mysql") }
     archiveClassifier.set("mysql")
-    from(mysqlSourceSet.output, sourceSets["main"].output)
+    from(mysqlSourceSet.resources, sourceSets.main.get().output.classesDirs)
   }
 
-artifacts {
-  add("archives", postgresqlJar)
-  add("archives", mysqlJar)
-}
+// artifacts {
+//    add("archives", commonJar)
+//    add("archives", postgresqlJar)
+//    add("archives", mysqlJar)
+// }
 
 publishing {
-  repositories {
-    maven(
-      url =
-        uri(
-          if (version.toString().uppercase().contains("SNAPSHOT")) Repos.yunXiaoSnapshot
-          else Repos.yunXiaoRelese
-        )
-    ) {
-      credentials {
-        username = Repos.Credentials.yunXiaoUsername
-        password = Repos.Credentials.yunXiaoPassword
-      }
-    }
-  }
-
   publications {
     create<MavenPublication>("rdsMaven") {
       groupId = project.group.toString()

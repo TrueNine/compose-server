@@ -32,7 +32,7 @@ import net.yan100.compose.rds.core.entities.IPageableEntity.Companion.MIN_OFFSET
  * @since 2022-12-31
  */
 @Schema(title = "分页请求入参")
-class PagedRequestParam
+open class PagedRequestParam
 @JvmOverloads
 constructor(offset: Int? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false) :
   IPageableEntity {
