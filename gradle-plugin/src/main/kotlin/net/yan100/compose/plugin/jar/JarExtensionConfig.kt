@@ -20,12 +20,13 @@ import net.yan100.compose.plugin.emptyVersion
 import org.gradle.api.Project
 
 class JarExtensionConfig(project: Project) {
-    var bootJarDistName: String = "lib"
-    var bootJarConfigName: String = "config"
-    var bootJarName: String = project.name
-    var defaultVersion: String = "1.0"
-    var bootJarVersion: String = if (project.emptyVersion.isEmpty()) project.emptyVersion else defaultVersion
-    var bootJarSeparate: Boolean = false
-    var bootJarClassifier: String = "boot"
-    var copyLicense: Boolean = true
+  var bootJarDistName: String = "lib"
+  var bootJarConfigName: String = "config"
+  var bootJarName: String = project.name
+  var defaultVersion: String = "1.0"
+  var bootJarVersion: String =
+    if (project.emptyVersion.isEmpty()) project.emptyVersion else defaultVersion
+  var bootJarSeparate: Boolean = false
+  var bootJarClassifier: String = "boot"
+  var copyLicense: Boolean = true
 }

@@ -33,84 +33,84 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.apply
 
 abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
-    val cleanExtension = CleanExtensionConfig()
-    val publishExtension = PublishExtensionConfig()
-    val gradlePropertiesGenerator = GradlePropertiesGeneratorConfig()
-    val readmeEnvRequirementFiller = ReadmeEnvRequirementFillerConfig(project)
-    val jarExtension = JarExtensionConfig(project)
+  val cleanExtension = CleanExtensionConfig()
+  val publishExtension = PublishExtensionConfig()
+  val gradlePropertiesGenerator = GradlePropertiesGeneratorConfig()
+  val readmeEnvRequirementFiller = ReadmeEnvRequirementFillerConfig(project)
+  val jarExtension = JarExtensionConfig(project)
 
-    private inner class GradleDelegator(project: Project) : Project by project
+  private inner class GradleDelegator(project: Project) : Project by project
 
-    internal val isRootProject: Boolean
-        get() {
-            val notParent = null == project.parent
-            val isRootProject = project == project.rootProject
-            return notParent && isRootProject
-        }
-
-    /**
-     * ## jar 打包扩展配置
-     *
-     * @param action 打包配置
-     */
-    fun jarExtension(action: Action<JarExtensionConfig>) {
-        action.execute(this.jarExtension)
+  internal val isRootProject: Boolean
+    get() {
+      val notParent = null == project.parent
+      val isRootProject = project == project.rootProject
+      return notParent && isRootProject
     }
 
-    /**
-     * ## 读取环境变量扩展配置
-     *
-     * @param action 读取配置
-     */
-    fun readmeEnvRequirementFiller(action: Action<ReadmeEnvRequirementFillerConfig>) {
-        action.execute(readmeEnvRequirementFiller)
-    }
+  /**
+   * ## jar 打包扩展配置
+   *
+   * @param action 打包配置
+   */
+  fun jarExtension(action: Action<JarExtensionConfig>) {
+    action.execute(this.jarExtension)
+  }
 
-    /**
-     * ## maven or 其他仓库发布扩展配置
-     *
-     * @param action 发布配置
-     */
-    fun publishExtension(action: Action<PublishExtensionConfig>) = action.execute(publishExtension)
+  /**
+   * ## 读取环境变量扩展配置
+   *
+   * @param action 读取配置
+   */
+  fun readmeEnvRequirementFiller(action: Action<ReadmeEnvRequirementFillerConfig>) {
+    action.execute(readmeEnvRequirementFiller)
+  }
 
-    /**
-     * ## gradle properties 生成扩展配置
-     *
-     * @param action 生成配置
-     */
-    fun gradlePropertiesGenerator(action: Action<GradlePropertiesGeneratorConfig>) =
-        action.execute(gradlePropertiesGenerator)
+  /**
+   * ## maven or 其他仓库发布扩展配置
+   *
+   * @param action 发布配置
+   */
+  fun publishExtension(action: Action<PublishExtensionConfig>) = action.execute(publishExtension)
 
-    /**
-     * ## gradle clean 扩展配置
-     *
-     * @param action 清除配置
-     */
-    fun cleanExtension(action: Action<CleanExtensionConfig>) = action.execute(cleanExtension)
+  /**
+   * ## gradle properties 生成扩展配置
+   *
+   * @param action 生成配置
+   */
+  fun gradlePropertiesGenerator(action: Action<GradlePropertiesGeneratorConfig>) =
+    action.execute(gradlePropertiesGenerator)
 
-    /* === dsl === */
+  /**
+   * ## gradle clean 扩展配置
+   *
+   * @param action 清除配置
+   */
+  fun cleanExtension(action: Action<CleanExtensionConfig>) = action.execute(cleanExtension)
 
-    val languages: SetProperty<String>
-    val sourceSet: Property<SourceSet>
-    val logger: org.gradle.api.logging.Logger
-    val jvm = project.plugins.apply(JvmEcosystemPlugin::class)
+  /* === dsl === */
 
-    init {
-        logger = project.logger
-        languages = project.objects.setProperty(String::class.java).convention(listOf("java", "kotlin"))
-        sourceSet = project.objects.property(SourceSet::class.java).convention(mainSourceSet(project))
-    }
+  val languages: SetProperty<String>
+  val sourceSet: Property<SourceSet>
+  val logger: org.gradle.api.logging.Logger
+  val jvm = project.plugins.apply(JvmEcosystemPlugin::class)
 
-    private fun mainSourceSet(project: Project): SourceSet {
-        return resolveSourceSet(SourceSet.MAIN_SOURCE_SET_NAME, project)
-    }
+  init {
+    logger = project.logger
+    languages = project.objects.setProperty(String::class.java).convention(listOf("java", "kotlin"))
+    sourceSet = project.objects.property(SourceSet::class.java).convention(mainSourceSet(project))
+  }
 
-    private fun resolveSourceSet(name: String, project: Project): SourceSet {
-        val javaPluginExtension = project.extensions.getByType(JavaPluginExtension::class.java)
-        return javaPluginExtension.sourceSets.getByName(name)
-    }
+  private fun mainSourceSet(project: Project): SourceSet {
+    return resolveSourceSet(SourceSet.MAIN_SOURCE_SET_NAME, project)
+  }
 
-    companion object {
-        const val DSL_NAME = "composeGradle"
-    }
+  private fun resolveSourceSet(name: String, project: Project): SourceSet {
+    val javaPluginExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+    return javaPluginExtension.sourceSets.getByName(name)
+  }
+
+  companion object {
+    const val DSL_NAME = "composeGradle"
+  }
 }
