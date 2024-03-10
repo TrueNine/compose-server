@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,8 +11,8 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.core.http;
 
@@ -40,26 +40,18 @@ public interface Headers {
     String X_FORWARDED_FOR = "X-Forwarded-For";
     String PROXY_CLIENT_IP = "Proxy-Client-IP";
 
-    /**
-     * 设备 id
-     */
+    /** 设备 id */
     String X_DEVICE_ID = "X-Device-Id";
 
     String AUTHORIZATION = "Authorization";
 
-    /**
-     * 自定义刷新头
-     */
+    /** 自定义刷新头 */
     String X_REFRESH = "X-Refresh";
 
-    /**
-     * 需清理过期令牌
-     */
+    /** 需清理过期令牌 */
     String X_REQUIRE_CLEN_AUTHENTICATION = "X-Require-Clean-Authentication";
 
-    /**
-     * 微信 open id 授权 自定义id
-     */
+    /** 微信 open id 授权 自定义id */
     String X_WECHAT_AUTHORIZATION_ID = "X-Wechat-Authorization-Id";
 
     String CONTENT_LENGTH = "Content-Length";
@@ -73,8 +65,7 @@ public interface Headers {
     String CORS_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
 
     /**
-     * 设置 Content-Disposition 的下载名称
-     * <code>
+     * 设置 Content-Disposition 的下载名称 <code>
      * Content-Disposition: attachment; filename="filename"
      * </code>
      *

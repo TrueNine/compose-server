@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,7 +11,14 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.plugin
+
+import net.yan100.compose.plugin.consts.GradleProjectDelegator
+import org.gradle.api.Project
+
+inline fun <R> Project.wrap(crossinline action: GradleProjectDelegator.() -> R): R {
+  return action(GradleProjectDelegator(this))
+}

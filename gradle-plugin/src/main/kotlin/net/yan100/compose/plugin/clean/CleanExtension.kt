@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,13 +11,13 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.plugin.clean
 
 import javax.inject.Inject
-import net.yan100.compose.plugin.consts.PluginConsts
+import net.yan100.compose.plugin.consts.Constant
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.create
@@ -35,7 +35,7 @@ class CleanExtension(
     deletes = dsl.getAllProperties()
     val a =
       project.tasks.create<Delete>(TASK_NAME) {
-        group = PluginConsts.TASK_GROUP
+        group = Constant.TASK_GROUP
         deletes.forEach { delete("${rootPath}/${it}") }
       }
     clean.dependsOn(a)

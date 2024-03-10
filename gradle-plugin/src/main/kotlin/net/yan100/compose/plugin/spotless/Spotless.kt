@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,18 +11,14 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.plugin.consts
+package net.yan100.compose.plugin.spotless
 
-object PluginConsts {
-  const val TASK_GROUP = "compose gradle"
-  val README_FILE_NAMES = setOf("readme.md", "readme.txt", "readme").map { it.lowercase() }
-  val LICENSE_FILE_NAMES = setOf("license", "license.txt", "license").map { it.lowercase() }
-  const val UNKNOWN_PROJECT_VERSION = "unspecified"
+import org.gradle.api.Project
 
-  object PluginNames {
-    const val MAVEN_PUBLISH = "maven-publish"
-  }
-}
+class Spotless(
+  private val project: Project,
+  private val dsl: SpotlessConfig,
+) {}

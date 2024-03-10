@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,8 +11,8 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.rds.core.entities;
 
@@ -42,14 +42,10 @@ import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
 @Schema(title = "任意外键类型，通常与策略模式一起使用")
 public class RefAnyEntity extends IEntity implements Serializable {
 
-    /**
-     * 任意外键
-     */
+    /** 任意外键 */
     public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
 
-    /**
-     * 任意类型
-     */
+    /** 任意类型 */
     public static final String TYP = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE;
 
     @Serial private static final long serialVersionUID = 1L;

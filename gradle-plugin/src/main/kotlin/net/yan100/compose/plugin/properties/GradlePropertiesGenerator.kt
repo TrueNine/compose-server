@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,15 +11,15 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.plugin.properties
 
 import javax.inject.Inject
-import net.yan100.compose.plugin.consts.PluginConsts
+import net.yan100.compose.plugin.consts.Constant
+import net.yan100.compose.plugin.wrap
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.create
 
 /*
  * org.gradle.daemon=true
@@ -30,22 +30,25 @@ import org.gradle.kotlin.dsl.create
  */
 class GradlePropertiesGenerator(
   @Inject private val project: Project,
-  @Inject private val dsl: GradlePropertiesGeneratorConfig
+  @Inject private val dsl: GradlePropertiesGeneratorConfig,
 ) {
-  private val root = project.rootProject
 
   init {
-    val propertiesFile =
-      root.layout.projectDirectory.file(GradlePropertiesGeneratorConfig.GRADLE_PROPERTIES_NAME)
-    val file = propertiesFile.asFile
-    project.tasks.create(TASK_NAME) {
-      it.group = PluginConsts.TASK_GROUP
-      it.doLast {
-        if (file.exists()) {
-          file.writeText(dsl.toPropertiesString())
-        } else {
-          file.createNewFile()
-          file.writeText(dsl.toPropertiesString())
+    project.wrap {
+      val propertiesFile =
+        rootProject.layout.projectDirectory.file(
+          GradlePropertiesGeneratorConfig.GRADLE_PROPERTIES_NAME
+        )
+      val file = propertiesFile.asFile
+      tasks.create(TASK_NAME) {
+        it.group = Constant.TASK_GROUP
+        it.doLast {
+          if (file.exists()) {
+            file.writeText(dsl.toPropertiesString())
+          } else {
+            file.createNewFile()
+            file.writeText(dsl.toPropertiesString())
+          }
         }
       }
     }

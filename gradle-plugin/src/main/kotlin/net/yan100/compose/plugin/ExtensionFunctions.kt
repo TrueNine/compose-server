@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,13 +11,13 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.plugin
 
 import java.net.URI
-import net.yan100.compose.plugin.consts.PluginConsts
+import net.yan100.compose.plugin.consts.Constant
 import net.yan100.compose.plugin.consts.Repos
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
@@ -81,8 +81,12 @@ fun Wrapper.distribute(
   return this
 }
 
-/** ## 返回此项目的版本号，如果版本号为 [PluginConsts.UNKNOWN_PROJECT_VERSION] 则返回空字符串 */
+/**
+ * ## 返回此项目的版本号，
+ *
+ * @return 如果版本号为 [Constant.Gradle.UNKNOWN_PROJECT_VERSION] 则返回空字符串
+ */
 val Project.emptyVersion: String
   get() =
-    if (this.version.toString() == PluginConsts.UNKNOWN_PROJECT_VERSION) ""
+    if (this.version.toString() == Constant.Gradle.UNKNOWN_PROJECT_VERSION) ""
     else this.version.toString()

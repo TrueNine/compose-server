@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,8 +11,8 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.webapidoc.properties;
 
@@ -20,43 +20,27 @@ import lombok.Data;
 
 @Data
 public class SwaggerDescInfo {
-    /**
-     * 项目名称
-     */
+    /** 项目名称 */
     private String title = "OPEN-API3 接口文档";
 
-    /**
-     * 项目描述
-     */
+    /** 项目描述 */
     private String description = "由 Open-Api 3 提供的项目接口文档";
 
-    /**
-     * 项目版本
-     */
+    /** 项目版本 */
     private String version = "1.0";
 
-    /**
-     * 网址
-     */
+    /** 网址 */
     private String location = "https://gitee.com/yan100-net";
 
-    /**
-     * 作者
-     */
+    /** 作者 */
     private String author = "YAN100";
 
-    /**
-     * 协议名称
-     */
+    /** 协议名称 */
     private String license = "不可商用私有协议";
 
-    /**
-     * 协议地址
-     */
+    /** 协议地址 */
     private String licenseUrl = "https://qq.com";
 
-    /**
-     * 分组名称
-     */
+    /** 分组名称 */
     private String group = "ABCDEFG";
 }

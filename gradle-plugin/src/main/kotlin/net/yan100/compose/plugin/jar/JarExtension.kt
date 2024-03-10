@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,18 +11,21 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.plugin.jar
 
-import net.yan100.compose.plugin.consts.PluginConsts
+import net.yan100.compose.plugin.consts.Constant
+import net.yan100.compose.plugin.wrap
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.withType
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 class JarExtension(
@@ -33,71 +36,93 @@ class JarExtension(
     if (null != project.tasks.findByName("jar") && dsl.copyLicense) {
       jarCopyLicense()
     }
-    if (null != project.tasks.findByName("bootJar") && dsl.bootJarSeparate) {
+
+    if (
+      null != project.tasks.findByName("bootJar") &&
+        null != project.configurations.findByName("runtimeClasspath") &&
+        dsl.bootJarSeparate
+    ) {
       springBootJarSeparate()
     }
   }
 
-  private fun springBootJarSeparate() {
-    val runtimeClasspath =
-      project.configurations.named<org.gradle.api.artifacts.Configuration>("runtimeClasspath")
+  private fun springBootJarSeparate() =
+    project.wrap {
+      extra["snippetsDir"] = file("build/generated-snippets")
 
-    val cleanTask =
-      project.tasks.register<Delete>(BOOT_JAR_CLEAN_TASK_NAME) {
-        group = PluginConsts.TASK_GROUP
-        delete(
-          "${project.layout.buildDirectory.get().asFile.absolutePath}/libs/${dsl.bootJarDistName}"
-        )
-        delete(
-          "${project.layout.buildDirectory.get().asFile.absolutePath}/libs/${dsl.bootJarConfigName}"
-        )
-      }
+      val runtimeClasspath =
+        configurations.named<org.gradle.api.artifacts.Configuration>("runtimeClasspath")
 
-    val copyLibTask =
-      project.tasks.register<Copy>(BOOT_JAR_COPY_LIB_TASK_NAME) {
-        group = PluginConsts.TASK_GROUP
-        into(
-          "${project.layout.buildDirectory.get().asFile.absolutePath}/libs/${dsl.bootJarDistName}"
-        )
-        from(runtimeClasspath)
-      }
-
-    val copyConfigTask =
-      project.tasks.register<Copy>(BOOT_JAR_COPY_CONFIG_TASK_NAME) {
-        group = PluginConsts.TASK_GROUP
-        into(
-          "${project.layout.buildDirectory.get().asFile.absolutePath}/libs/${dsl.bootJarConfigName}"
-        )
-        from(runtimeClasspath)
-      }
-
-    project.tasks.withType(BootJar::class.java).configureEach { bootJar ->
-      bootJar.archiveClassifier.set(dsl.bootJarClassifier)
-      bootJar.archiveVersion.set(dsl.bootJarVersion)
-      bootJar.dependsOn(cleanTask)
-      bootJar.dependsOn(copyLibTask)
-      bootJar.dependsOn(copyConfigTask)
-
-      bootJar.exclude("*.jar")
-      bootJar.manifest {
-        bootJar.archiveBaseName.set(dsl.bootJarName)
-        bootJar.archiveVersion.set(dsl.bootJarVersion)
-
-        it.attributes(
-          mutableMapOf(
-            "Manifest-Version" to "1.0",
-            "Class-Path" to
-              runtimeClasspath.get().files.joinToString(" ") { f -> "${dsl}/${f.name}" }
+      val cleanTask =
+        tasks.register<Delete>(BOOT_JAR_CLEAN_TASK_NAME) {
+          group = Constant.TASK_GROUP
+          delete(
+            "${layout.buildDirectory.get().asFile.absolutePath}/${dsl.jarDistDir}/${dsl.bootJarDistName}"
+              .replace("//", "/")
           )
-        )
+          delete(
+            "${layout.buildDirectory.get().asFile.absolutePath}/${dsl.jarDistDir}/${dsl.bootJarConfigName}"
+              .replace("//", "/")
+          )
+        }
+
+      val copyLibTask =
+        tasks.register<Copy>(BOOT_JAR_COPY_LIB_TASK_NAME) {
+          group = Constant.TASK_GROUP
+          into(
+            listOf(
+              layout.buildDirectory.get().asFile.absolutePath,
+              dsl.jarDistDir,
+              dsl.bootJarDistName
+            )
+              .filter(String::isNotEmpty)
+              .joinToString(separator = "/")
+          )
+          from(runtimeClasspath)
+        }
+
+      val copyConfigTask =
+        tasks.register<Copy>(BOOT_JAR_COPY_CONFIG_TASK_NAME) {
+          group = Constant.TASK_GROUP
+          into(
+            listOf(
+                layout.buildDirectory.get().asFile.absolutePath,
+                dsl.jarDistDir,
+                dsl.bootJarConfigName
+              )
+              .filter(String::isNotEmpty)
+              .joinToString(separator = "/")
+          )
+          from(mainResources)
+        }
+
+      tasks.withType(BootJar::class.java).configureEach { bootJar ->
+        bootJar.archiveClassifier.set(dsl.bootJarClassifier)
+        bootJar.archiveVersion.set(dsl.bootJarVersion)
+        bootJar.dependsOn(cleanTask)
+        bootJar.dependsOn(copyLibTask)
+        bootJar.dependsOn(copyConfigTask)
+
+        bootJar.exclude("*.jar")
+        bootJar.manifest {
+          bootJar.archiveBaseName.set(dsl.bootJarName)
+          bootJar.archiveVersion.set(dsl.bootJarVersion)
+
+          it.attributes(
+            mutableMapOf(
+              "Manifest-Version" to "1.0",
+              "Class-Path" to
+                runtimeClasspath.get().files.joinToString(" ") { f -> "${dsl}/${f.name}" }
+            )
+          )
+        }
       }
     }
-  }
 
   private fun jarCopyLicense() {
     project.rootProject.layout.projectDirectory.asFileTree
       .firstOrNull { file ->
-        PluginConsts.LICENSE_FILE_NAMES.any { dName -> dName.equals(file.name, ignoreCase = true) }
+        Constant.FileNameSet.LICENSE.any { dName -> dName.equals(file.name, ignoreCase = true) }
       }
       ?.also { licenseFile ->
         project.tasks.withType(Jar::class.java).configureEach { jarTask ->

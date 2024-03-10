@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,8 +11,8 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.core.util;
 
@@ -32,8 +32,8 @@ public interface ChooseService<T> {
      * 查找第一个符合判断条件的类型
      *
      * @param chooses 策略组
-     * @param type    类型
-     * @param <R>     实现类
+     * @param type 类型
+     * @param <R> 实现类
      * @return 实现
      */
     @SuppressWarnings("unchecked")
@@ -45,8 +45,8 @@ public interface ChooseService<T> {
      * 获取一组实现了
      *
      * @param chooses 被选择服务
-     * @param type    选择类型
-     * @param <R>     实现类
+     * @param type 选择类型
+     * @param <R> 实现类
      * @return 选中的一组服务
      */
     @SuppressWarnings("unchecked")

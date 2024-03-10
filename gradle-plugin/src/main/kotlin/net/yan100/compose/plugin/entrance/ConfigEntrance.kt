@@ -1,5 +1,5 @@
 /*
- * ## Copyright (c) 2024 TrueNine. All rights reserved.
+ *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
  *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
@@ -11,17 +11,19 @@
  * and will be prosecuted to the maximum extent possible under the law.
  * For inquiries regarding usage or redistribution, please contact:
  *     TrueNine
- *     Email: <truenine304520@gmail.com>
- *     Website: [gitee.com/TrueNine]
+ *     email: <truenine304520@gmail.com>
+ *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.plugin.entrance
 
 import javax.inject.Inject
 import net.yan100.compose.plugin.clean.CleanExtensionConfig
+import net.yan100.compose.plugin.filler.FillerConfig
+import net.yan100.compose.plugin.ide.IdeExtensionConfig
 import net.yan100.compose.plugin.jar.JarExtensionConfig
 import net.yan100.compose.plugin.properties.GradlePropertiesGeneratorConfig
 import net.yan100.compose.plugin.publish.PublishExtensionConfig
-import net.yan100.compose.plugin.readme.ReadmeEnvRequirementFillerConfig
+import net.yan100.compose.plugin.spotless.SpotlessConfig
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -36,35 +38,34 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   val cleanExtension = CleanExtensionConfig()
   val publishExtension = PublishExtensionConfig()
   val gradlePropertiesGenerator = GradlePropertiesGeneratorConfig()
-  val readmeEnvRequirementFiller = ReadmeEnvRequirementFillerConfig(project)
+  val filler = FillerConfig(project)
   val jarExtension = JarExtensionConfig(project)
+  val ideExtension = IdeExtensionConfig()
+  val spotless = SpotlessConfig()
 
-  private inner class GradleDelegator(project: Project) : Project by project
+  /** ## spotless 扩展配置 */
+  fun spotless(action: Action<SpotlessConfig>) = action.execute(spotless)
 
-  internal val isRootProject: Boolean
-    get() {
-      val notParent = null == project.parent
-      val isRootProject = project == project.rootProject
-      return notParent && isRootProject
-    }
+  /**
+   * ## ide 扩展配置
+   *
+   * @param action ide 配置
+   */
+  fun ideExtension(action: Action<IdeExtensionConfig>) = action.execute(ideExtension)
 
   /**
    * ## jar 打包扩展配置
    *
    * @param action 打包配置
    */
-  fun jarExtension(action: Action<JarExtensionConfig>) {
-    action.execute(this.jarExtension)
-  }
+  fun jarExtension(action: Action<JarExtensionConfig>) = action.execute(jarExtension)
 
   /**
-   * ## 读取环境变量扩展配置
+   * ## 配置文件填充器
    *
-   * @param action 读取配置
+   * @param action 配置
    */
-  fun readmeEnvRequirementFiller(action: Action<ReadmeEnvRequirementFillerConfig>) {
-    action.execute(readmeEnvRequirementFiller)
-  }
+  fun filler(action: Action<FillerConfig>) = action.execute(filler)
 
   /**
    * ## maven or 其他仓库发布扩展配置
@@ -87,8 +88,6 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
    * @param action 清除配置
    */
   fun cleanExtension(action: Action<CleanExtensionConfig>) = action.execute(cleanExtension)
-
-  /* === dsl === */
 
   val languages: SetProperty<String>
   val sourceSet: Property<SourceSet>

@@ -1,23 +1,21 @@
+### gradle ###
 .gradle
 gradle/
 gradle.properties
-.kotlin
-.kotlin/
-
 gradlew
 gradlew.bat
-
-.generated/
-.jpb/
+build/
 generated/
 generated_tests/
+.generated/
 .temp/
-build/
-
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-!**/out/
+
+### kotlin ###
+.kotlin
+.kotlin/
 
 ### STS ###
 .apt_generated
@@ -37,8 +35,10 @@ src/test/**/bin/
 *.iml
 *.ipr
 **/out/
+!**/out/
 src/main/**/out/
 src/test/**/out/
+.jpb/
 
 ### NetBeans ###
 /nbproject/private/
@@ -53,7 +53,6 @@ src/test/**/out/
 ### visual studio ###
 .vs
 *.sln
-
 *resources/static/
 
 ### xcode ###
@@ -61,7 +60,6 @@ src/test/**/out/
 *.xcodeproj
 *.xcuserstate
 *.mode1v3
-
 
 ### logs ###
 logs

@@ -1,5 +1,4 @@
 import com.diffplug.spotless.LineEnding
-import java.time.LocalDate
 import net.yan100.compose.plugin.*
 import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoUsername
@@ -13,6 +12,7 @@ plugins {
   java
   idea
   eclipse
+  `eclipse-wtp`
   xcode
   `visual-studio`
   `maven-publish`
@@ -34,35 +34,35 @@ apply(plugin = libs.plugins.spotless.get().pluginId)
 
 apply(plugin = libs.plugins.composeGradle.get().pluginId)
 
-composeGradle { cleanExtension { delete("abcdefghijklmn") } }
+composeGradle {
+  filler {
+    license {
+      author("TrueNine")
+      website("github.com/TrueNine")
+      email("truenine304520@gmail.com")
+    }
+  }
+}
 
 val l = libs
 
-version = libs.versions.compose.asProvider().get()
+project.version = libs.versions.compose.asProvider().get()
 
 // https://github.com/diffplug/spotless/tree/main/plugin-gradle#quickstart
 spotless {
-  val email = "truenine304520@gmail.com"
   val license =
-    """
-/*
- * ## Copyright (c) ${LocalDate.now().year} TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine 
- * (${email}) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of 
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code, 
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law. 
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     Email: <${email}>
- *     Website: [gitee.com/TrueNine]
- */
-"""
-      .trimIndent()
+    rootProject.layout.projectDirectory
+      .file("LICENSE")
+      .asFile
+      .readLines()
+      .map { " * $it" }
+      .toMutableList()
+      .apply {
+        addFirst("/*")
+        addLast("*/")
+      }
+      .joinToString(separator = "\n")
+
   kotlin {
     indentWithSpaces(2)
     lineEndings = LineEnding.UNIX
@@ -89,7 +89,7 @@ spotless {
     target("**/**.java")
     importOrder()
     removeUnusedImports()
-    googleJavaFormat().aosp().reflowLongStrings().skipJavadocFormatting()
+    googleJavaFormat().aosp().reflowLongStrings()
     formatAnnotations()
   }
 }
@@ -103,8 +103,8 @@ allprojects {
     gradlePluginPortal()
   }
 
-  group = l.versions.compose.group.get()
-  version = l.versions.compose.asProvider().get()
+  project.group = l.versions.compose.group.get()
+  project.version = l.versions.compose.asProvider().get()
 
   tasks {
     withType<ProcessAot> { enabled = false }
@@ -129,7 +129,6 @@ subprojects {
   apply(plugin = l.plugins.composeGradle.get().pluginId)
 
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
-  extra["snippetsDir"] = file("build/generated-snippets")
 
   dependencies {
     annotationProcessor(l.spring.boot.configureprocessor)
