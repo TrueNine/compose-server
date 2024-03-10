@@ -36,22 +36,22 @@ class Main : Plugin<Project> {
       p.wrap {
         log.debug("compose gradle plugin project = {}", p.name)
 
-        val clean = CleanExtension(p, cfg.cleanExtension)
+        val clean = CleanExtension(this, cfg.cleanExtension)
         log.debug("注册清理任务 = {}", clean)
 
-        val publish = PublishExtension(p, cfg.publishExtension)
+        val publish = PublishExtension(this, cfg.publishExtension)
         log.debug("注册发布增强任务 = {}", publish)
 
-        val gradlePropertiesGenerator = GradlePropertiesGenerator(p, cfg.gradlePropertiesGenerator)
+        val gradlePropertiesGenerator = GradlePropertiesGenerator(this, cfg.gradlePropertiesGenerator)
         log.debug("注册 properties 生成器 = {}", gradlePropertiesGenerator)
 
-        val readmeFiller = ReadmeFiller(p, cfg.filler)
+        val readmeFiller = ReadmeFiller(this, cfg.filler)
         log.debug("注册 readme 填充器 = {}", readmeFiller)
 
-        val jarExtension = JarExtension(project, cfg.jarExtension)
+        val jarExtension = JarExtension(this, cfg.jarExtension)
         log.debug("注册 jar 扩展 = {}", jarExtension)
 
-        val ideExtension = IdeExtension(project, cfg.ideExtension)
+        val ideExtension = IdeExtension(this, cfg.ideExtension)
         log.debug("注册 ide 扩展 = {}", ideExtension)
 
         val spotless = Spotless(this, cfg.spotless)

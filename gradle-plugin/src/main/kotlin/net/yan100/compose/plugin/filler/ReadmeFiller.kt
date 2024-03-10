@@ -39,7 +39,7 @@ class ReadmeFiller(
       tasks.register(LICENSE_TASK_NAME) { task ->
         task.group = Constant.TASK_GROUP
         val destLicenseFile = layout.projectDirectory.file(Constant.FileName.LICENSE).asFile
-        val configFile = licenseMetaFile.asFile
+        val configFile = projectConfig.licenseMetaFile.asFile
 
         if (configFile.exists()) {
           configFile.readText().trimIndent().let { text ->

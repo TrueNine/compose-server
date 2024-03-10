@@ -16,23 +16,27 @@
  */
 package net.yan100.compose.plugin.consts
 
+import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.tasks.SourceSetContainer
 
-open class GradleProjectDelegator(project: Project) : Project by project {
-  val isRootProject: Boolean
-    get() = null == parent && project == rootProject
+open class GradleProjectDelegator(project: Project) : Project by project, ExtensionAware {
+    val isRootProject: Boolean get() = null == parent && project == rootProject
 
-  val sourceSets
-    get() = extensions.getByType(JavaPluginExtension::class.java).sourceSets
+    val sourceSets get() = extensions.getByName("sourceSets") as SourceSetContainer
 
-  val mainResources
-    get() = sourceSets.findByName("main")?.resources
+    fun sourceSets(configure: Action<SourceSetContainer>) = extensions.configure("sourceSets", configure)
 
-  val testResources
-    get() = sourceSets.findByName("test")?.resources
+    val mainResources get() = sourceSets.findByName("main")?.resources
+    val testResources get() = sourceSets.findByName("test")?.resources
 
-  val log = project.logger
-  val configDir = rootProject.layout.projectDirectory.dir(Constant.Config.CONFIG_DIR)
-  val licenseMetaFile = configDir.file(Constant.Config.LICENSE_META)
+    val log = project.logger
+    val projectConfig = ProjectConfig(this.project)
+
+    inner class ProjectConfig(private val project: Project) : Project by project {
+        val configDir = rootProject.layout.projectDirectory.dir(Constant.Config.CONFIG_DIR)
+        val licenseMetaFile = configDir.file(Constant.Config.LICENSE_META)
+    }
 }

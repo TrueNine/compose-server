@@ -88,5 +88,5 @@ fun Wrapper.distribute(
  */
 val Project.emptyVersion: String
   get() =
-    if (this.version.toString() == Constant.Gradle.UNKNOWN_PROJECT_VERSION) ""
-    else this.version.toString()
+    if (this.project.version.toString() == Constant.Gradle.UNKNOWN_PROJECT_VERSION) ""
+    else this.project.version.toString()
