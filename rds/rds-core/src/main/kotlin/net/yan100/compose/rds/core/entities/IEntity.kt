@@ -96,7 +96,6 @@ abstract class IEntity : AnyEntity() {
  *
  * @param target 需合并对象
  * @param findByIdFn 查询函数
- * @param saveFn 保存函数
  * @param preMergeFn 合并前处理函数
  */
 fun <T : IEntity> T.merge(

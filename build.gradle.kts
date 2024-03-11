@@ -1,4 +1,5 @@
 import com.diffplug.spotless.LineEnding
+import java.nio.charset.StandardCharsets
 import net.yan100.compose.plugin.*
 import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoUsername
@@ -62,7 +63,12 @@ spotless {
         addLast("*/")
       }
       .joinToString(separator = "\n")
-
+  format("xml") {
+    target("**/*.xml")
+    indentWithSpaces(2)
+    lineEndings = LineEnding.UNIX
+    encoding = StandardCharsets.UTF_8
+  }
   kotlin {
     indentWithSpaces(2)
     lineEndings = LineEnding.UNIX

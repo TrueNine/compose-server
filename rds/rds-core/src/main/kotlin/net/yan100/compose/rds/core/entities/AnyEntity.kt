@@ -33,6 +33,7 @@ import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
 import net.yan100.compose.rds.core.listener.TableRowDeletePersistenceListener
 import net.yan100.compose.rds.core.models.PagedRequestParam
 import org.hibernate.Hibernate
+import org.jetbrains.annotations.ApiStatus.Experimental
 import org.springframework.data.domain.Persistable
 
 /**
@@ -50,12 +51,20 @@ import org.springframework.data.domain.Persistable
   PreSaveDeleteReferenceListener::class
 )
 abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, PagedRequestParam() {
+
   companion object {
     /** 主键 */
     const val ID = DataBaseBasicFieldNames.ID
 
     @Serial private val serialVersionUID = 1L
   }
+
+  /** ## 是否需要脱敏处理 */
+  @JsonIgnore
+  @kotlin.jvm.Transient
+  @Transient
+  @Experimental
+  private var ____sensitive: Boolean = false
 
   /** id */
   @jakarta.persistence.Id
@@ -101,12 +110,19 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   @Transient
   @JsonIgnore
   @Schema(hidden = true)
-  fun withToString(superString: String, vararg properties: Pair<String, Any?>): String {
-    return superString +
-      "[" +
-      properties.joinToString(",") { "${it.first}=" + (it.second?.toString() ?: "null") } +
-      "]"
-  }
+  fun withToString(superString: String, vararg properties: Pair<String, Any?>): String =
+    buildString {
+      append(superString)
+      append("[")
+      properties.forEach {
+        append(it.first)
+        append("=")
+        append(it.second)
+        append(",")
+      }
+      removeSuffix(",")
+      append("]")
+    }
 
   @Transient
   @JsonIgnore
@@ -131,13 +147,13 @@ inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<
   after(this.map { it.withNew() })
 
 inline fun <T : AnyEntity, R : Any> List<T>.withNewMap(
-  crossinline after: (List<T>) -> List<R>
+  crossinline after: (List<T>) -> List<R>,
 ): List<R> = after(this.withNew())
 
 /** ## 判断当前实体是否为新实体，然后执行 update */
 inline fun <T : AnyEntity> T.takeUpdate(
   throwException: Boolean = true,
-  crossinline after: (T) -> T?
+  crossinline after: (T) -> T?,
 ): T? {
   if (!isNew) return after(this)
   else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")

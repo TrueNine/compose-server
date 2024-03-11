@@ -1,3 +1,23 @@
+drop
+    cast(
+        bigint as varchar
+    );
+
+create
+    cast(
+        bigint as varchar
+    ) with inout;
+
+drop
+    cast(
+        varchar as bigint
+    );
+
+create
+    cast(
+        varchar as bigint
+    ) with inout;
+
 create
     or replace function add_presort_tree_struct(
         tab_name varchar(128)

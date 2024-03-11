@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.plugin.filler
 
+import java.time.LocalDate
 import net.yan100.compose.plugin.wrap
 import org.gradle.api.Action
 import org.gradle.api.Project
-import java.time.LocalDate
 
 open class FillerConfig(private val project: Project) {
   var readme = ReadmeConfig(project)

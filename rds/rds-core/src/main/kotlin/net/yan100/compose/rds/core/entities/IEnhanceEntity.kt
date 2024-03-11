@@ -35,6 +35,13 @@ interface IEnhanceEntity {
     TODO(DEPRECATED)
   }
 
+  /** ## 为自身生成 toString 的值 */
+  @Throws(NotImplementedError::class)
+  @Deprecated(DEPRECATED, level = DeprecationLevel.ERROR)
+  fun ____compose_rds____all_field_toString(): String {
+    TODO(DEPRECATED)
+  }
+
   /** 为自身生成 bizCode */
   @Throws(NotImplementedError::class)
   @Deprecated(DEPRECATED, level = DeprecationLevel.ERROR)

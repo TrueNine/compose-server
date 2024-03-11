@@ -19,24 +19,29 @@ package net.yan100.compose.plugin.consts
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSetContainer
 
 open class GradleProjectDelegator(project: Project) : Project by project, ExtensionAware {
-    val isRootProject: Boolean get() = null == parent && project == rootProject
+  val isRootProject: Boolean
+    get() = null == parent && project == rootProject
 
-    val sourceSets get() = extensions.getByName("sourceSets") as SourceSetContainer
+  val sourceSets
+    get() = extensions.getByName("sourceSets") as SourceSetContainer
 
-    fun sourceSets(configure: Action<SourceSetContainer>) = extensions.configure("sourceSets", configure)
+  fun sourceSets(configure: Action<SourceSetContainer>) =
+    extensions.configure("sourceSets", configure)
 
-    val mainResources get() = sourceSets.findByName("main")?.resources
-    val testResources get() = sourceSets.findByName("test")?.resources
+  val mainResources
+    get() = sourceSets.findByName("main")?.resources
 
-    val log = project.logger
-    val projectConfig = ProjectConfig(this.project)
+  val testResources
+    get() = sourceSets.findByName("test")?.resources
 
-    inner class ProjectConfig(private val project: Project) : Project by project {
-        val configDir = rootProject.layout.projectDirectory.dir(Constant.Config.CONFIG_DIR)
-        val licenseMetaFile = configDir.file(Constant.Config.LICENSE_META)
-    }
+  val log = project.logger
+  val projectConfig = ProjectConfig(this.project)
+
+  inner class ProjectConfig(private val project: Project) : Project by project {
+    val configDir = rootProject.layout.projectDirectory.dir(Constant.Config.CONFIG_DIR)
+    val licenseMetaFile = configDir.file(Constant.Config.LICENSE_META)
+  }
 }
