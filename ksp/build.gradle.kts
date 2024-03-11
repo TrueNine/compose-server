@@ -2,8 +2,8 @@ import net.yan100.compose.plugin.consts.Repos
 
 val l = libs
 
-val pluginGroup: String = l.versions.compose.group.get()
-val pluginVersion: String = l.versions.compose.asProvider().get()
+val pluginGroup = "net.yan100.compose"
+val pluginVersion: String = l.versions.compose.get()
 
 plugins {
   alias(libs.plugins.ktJvm)
@@ -37,8 +37,8 @@ tasks {
           "-Xjsr305=strict",
           "-Xjvm-default=all",
           "-verbose",
-          "-Xjdk-release=${l.versions.compose.versionControlJavaVersion.get()}",
-          "-jvm-target=${l.versions.compose.versionControlJavaVersion.get()}",
+          "-Xjdk-release=${l.versions.java.get()}",
+          "-jvm-target=${l.versions.java.get()}",
           "-Xextended-compiler-checks"
         )
       jvmTarget = l.versions.java.get()

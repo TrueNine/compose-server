@@ -198,9 +198,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.418"
-compose-group = "net.yan100.compose"
-compose-versionControlJavaVersion = "11"
+compose = "1.6.420"
 
 java = "21" ### https://bell-sw.com/
 kotlin = "2.0.0-Beta4" ### https://github.com/JetBrains/kotlin/releases
@@ -217,14 +215,14 @@ gradlePlugin-asciJvmConvert = "4.0.2" ### https://mvnrepository.com/artifact/org
 gradlePlugin-graalvmNative = "0.10.1" ### https://mvnrepository.com/artifact/org.graalvm.buildtools.native/org.graalvm.buildtools.native.gradle.plugin
 
 
-spring-boot = "3.3.0-M1" ### https://spring.io/projects/spring-boot#learn
+spring-boot = "3.3.0-M2" ### https://spring.io/projects/spring-boot#learn
 spring-cloud = "2023.0.0" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### deprecated https://spring.io/projects/spring-cloud-alibaba#learn
-spring-modulith = "1.2.0-M1" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
+spring-modulith = "1.2.0-M2" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
 spring-doc-webmvcUi3 = "2.3.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+
 apache-commonsPool2 = "2.12.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
 apache-commonsCompress = "1.26.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-
 
 net-okhttp3 = "5.0.0-alpha.12" ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 net-retrofit = "2.9.0" ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
@@ -276,7 +274,7 @@ slf4j = "2.1.0-alpha1" ### https://mvnrepository.com/artifact/org.slf4j/slf4j-ap
 
 crawler-ip2region = "2.7.0" ### https://mvnrepository.com/artifact/org.lionsoul/ip2region
 crawler-selenium = "4.18.1" ### https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-crawler-seleniumWebDriverManager = "5.6.4" ### https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
+crawler-seleniumWebDriverManager = "5.7.0" ### https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
 crawler-playwrite = "1.41.2" ### https://mvnrepository.com/artifact/com.microsoft.playwright/playwright
 crawler-jsoup = "1.17.2" ### https://mvnrepository.com/artifact/org.jsoup/jsoup
 crawler-nekohtml = "3.11.2" ### https://mvnrepository.com/artifact/org.htmlunit/neko-htmlunit

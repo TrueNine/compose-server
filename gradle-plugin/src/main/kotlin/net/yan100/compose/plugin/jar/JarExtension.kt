@@ -100,7 +100,7 @@ class JarExtension(
                 bootJar.archiveVersion.set(dsl.bootJarVersion)
                 bootJar.archiveBaseName.set(dsl.bootJarName)
                 bootJar.excludes.add("*.jar")
-                mainResources?.apply { bootJar.from(this).exclude("**/*") }
+
                 bootJar.dependsOn(cleanTask)
                 bootJar.dependsOn(copyLibTask)
                 bootJar.dependsOn(copyConfigTask)

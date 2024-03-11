@@ -1,4 +1,4 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.bundles.spring.redis)

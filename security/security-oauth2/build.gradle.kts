@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.asProvider().get()
+project.version = libs.versions.compose.get()
 
 dependencies {
   implementation(libs.spring.security.core)

@@ -1,8 +1,8 @@
 val l = libs
 val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
 val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
-val pluginGroup = libs.versions.compose.group.get()
-val pluginVersion = libs.versions.compose.asProvider().get().toString()
+val pluginGroup = "net.yan100.compose"
+val pluginVersion = libs.versions.compose.get().toString()
 val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
 val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
 
@@ -109,4 +109,4 @@ publishing {
   }
 }
 
-catalog { versionCatalog { from(files("libs.versions.toml")) } }
+catalog { versionCatalog { from(files("../libs.versions.toml")) } }

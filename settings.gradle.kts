@@ -18,7 +18,7 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-  versionCatalogs { create("libs") { from(files("gradle-plugin/libs.versions.toml")) } }
+  versionCatalogs { create("libs") { from(files("libs.versions.toml")) } }
 }
 
 rootProject.name = "compose-server"
@@ -118,6 +118,6 @@ include("ksp:ksp-test")
 findProject(":ksp:ksp-test")?.name =
   "ksp-test"
 
-// include("version-check")
-//
-// findProject(":version-check")?.name = "version-check"
+ include("version-check")
+
+ findProject(":version-check")?.name = "version-check"

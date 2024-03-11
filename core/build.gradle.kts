@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.annotationProcessorKapt
 
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.get()
 
 dependencies {
   api(libs.json.jacksonCoreAnnotations)

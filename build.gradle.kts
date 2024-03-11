@@ -46,7 +46,7 @@ composeGradle {
 
 val l = libs
 
-project.version = libs.versions.compose.asProvider().get()
+project.version = libs.versions.compose.get()
 
 // https://github.com/diffplug/spotless/tree/main/plugin-gradle#quickstart
 spotless {
@@ -103,8 +103,8 @@ allprojects {
     gradlePluginPortal()
   }
 
-  project.group = l.versions.compose.group.get()
-  project.version = l.versions.compose.asProvider().get()
+  project.group = "net.yan100.compose"
+  project.version = l.versions.compose.get()
 
   tasks {
     withType<ProcessAot> { enabled = false }
