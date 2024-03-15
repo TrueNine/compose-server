@@ -67,7 +67,7 @@ interface IAttachmentRepo : IRepo<Attachment> {
     """
     from Attachment a
     inner join Attachment b ON a.urlId = b.id
-    where b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
+    where b.attType = net.yan100.compose.rds.core.typing.AttachmentTyping.BASE_URL
     and b.baseUrl = :baseUrl
   """
   )
@@ -98,7 +98,7 @@ interface ILinkedAttachmentRepo : IRepo<LinkedAttachment> {
     from LinkedAttachment a
     inner join LinkedAttachment b 
     on a.urlId = b.id
-    where b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
+    where b.attType = net.yan100.compose.rds.core.typing.AttachmentTyping.BASE_URL
     and b.baseUrl = :baseUrl
   """
   )

@@ -24,10 +24,10 @@ import net.yan100.compose.rds.converters.CertContentTypingConverter
 import net.yan100.compose.rds.converters.CertPointTypingConverter
 import net.yan100.compose.rds.converters.CertTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.typing.AuditTyping
-import net.yan100.compose.rds.typing.CertContentTyping
-import net.yan100.compose.rds.typing.CertPointTyping
-import net.yan100.compose.rds.typing.CertTyping
+import net.yan100.compose.rds.core.typing.AuditTyping
+import net.yan100.compose.rds.core.typing.cert.CertContentTyping
+import net.yan100.compose.rds.core.typing.cert.CertPointTyping
+import net.yan100.compose.rds.core.typing.cert.CertTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 

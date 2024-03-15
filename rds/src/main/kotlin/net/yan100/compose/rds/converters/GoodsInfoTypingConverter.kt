@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.typing.GoodsInfoTyping
+import net.yan100.compose.rds.core.typing.shopping.GoodsInfoTyping
 import org.springframework.stereotype.Component
 
 @Converter

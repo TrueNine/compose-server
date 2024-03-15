@@ -14,25 +14,29 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.typing
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.typing.IntTyping
 
 /**
- * # 支付渠道类型枚举
+ * 附件类别
  *
  * @author TrueNine
- * @since 2023-05-04
+ * @since 2023-04-23
  */
-@Schema(title = "支付渠道类型")
-enum class PayChannelTyping(private val channelId: Int) : IntTyping {
-  @Schema(title = "微信支付") WECHAT(0),
-  @Schema(title = "支付宝") ALIPAY(1);
+@Schema(title = "附件类别")
+enum class AttachmentTyping(private val v: Int) : IntTyping {
+  /** 文件 */
+  @Schema(title = "文件") ATTACHMENT(0),
 
-  @JsonValue override val value: Int = channelId
+  /** 根路径 */
+  @Schema(title = "根路径") BASE_URL(1);
+
+  @JsonValue override val value = v
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = entries.find { it.channelId == v }
+    @JvmStatic fun findVal(v: Int?) = entries.find { it.value == v }
   }
 }

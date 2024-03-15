@@ -26,11 +26,11 @@ import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.alias.date
 import net.yan100.compose.core.models.IDisCode2
-import net.yan100.compose.core.typing.cert.DisTyping
 import net.yan100.compose.rds.converters.DisTypingConverter
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.typing.GenderTyping
+import net.yan100.compose.rds.core.typing.cert.DisTyping
+import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 

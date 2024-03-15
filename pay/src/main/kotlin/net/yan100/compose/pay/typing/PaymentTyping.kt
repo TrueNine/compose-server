@@ -14,25 +14,41 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.typing
+package net.yan100.compose.pay.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "审核状态")
-enum class AuditTyping(val v: Int) : IntTyping {
-  @Schema(title = "未审核") NONE(0),
-  @Schema(title = "分配给审核员") ASSIGNED(1),
-  @Schema(title = "审核通过") PASS(2),
-  @Schema(title = "审核未通过") FAIL(3),
-  @Schema(title = "已撤销") CANCEL(4),
-  @Schema(title = "已过期") EXPIRED(5),
-  @Schema(title = "驳回") REJECT(6);
+/**
+ * # 付款流转类型
+ *
+ * @author TrueNine
+ * @since 2023-05-04
+ */
+@Schema(title = "支付渠道类型")
+enum class PaymentTyping(private val channelId: Int) : IntTyping {
+  /** 预支付 */
+  @Schema(title = "预付款") PRE_PAY(1001),
 
-  @JsonValue override val value: Int = v
+  /** 已付款 */
+  @Schema(title = "已付款") PAID(2001),
+
+  /** 预退款 */
+  @Schema(title = "预退款") PRE_REFUND(4001),
+
+  /** 支付成功，但出现业务异常 */
+  @Schema(title = "支付成功，但出现业务异常") PAY_SUCCESS_BIZ_FAILED(5002),
+
+  /** 已退款 */
+  @Schema(title = "已退款") REFUNDED(2002),
+
+  /** 已取消 */
+  @Schema(title = "已取消") CANCEL(2003);
+
+  @JsonValue override val value: Int = channelId
 
   companion object {
-    @JvmStatic fun findVal(value: Int?) = entries.find { it.v == value }
+    @JvmStatic fun findVal(v: Int?) = entries.find { it.channelId == v }
   }
 }

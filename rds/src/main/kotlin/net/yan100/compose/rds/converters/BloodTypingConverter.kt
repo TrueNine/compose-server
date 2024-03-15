@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.typing.BloodTyping
+import net.yan100.compose.rds.core.typing.userinfo.BloodTyping
 import org.springframework.stereotype.Component
 
 @Component

@@ -27,21 +27,21 @@ select
     add_base_struct('cert');
 
 create
-    index on
+    index if not exists user_id_idx on
     cert(user_id);
 
 create
-    index on
+    index if not exists user_info_id_idx on
     cert(user_info_id);
 
 create
-    index on
+    index if not exists create_user_id_idx on
     cert(create_user_id);
 
 create
-    index on
+    index if not exists att_id_idx on
     cert(att_id);
 
 create
-    index on
+    index if not exists wm_att_id_idx on
     cert(wm_att_id);

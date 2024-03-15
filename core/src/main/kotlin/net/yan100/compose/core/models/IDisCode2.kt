@@ -35,7 +35,7 @@ interface IDisCode2 : IIdcard2Code {
   @get:Transient
   @get:JsonIgnore
   override val idcard2Code: String
-    get() = disabilityCode.substring(0, -2)
+    get() = disabilityCode.substring(0, 18)
 
   @get:Transient @get:JsonIgnore val disabilityCode: String
 }

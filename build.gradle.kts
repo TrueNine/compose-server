@@ -265,6 +265,6 @@ subprojects {
   }
 }
 
-tasks {
+rootProject.tasks {
   wrapper { distribute(libs.versions.gradle.get(), "https://mirrors.cloud.tencent.com/gradle") }
 }

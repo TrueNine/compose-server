@@ -14,32 +14,15 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.typing
+package net.yan100.compose.depend.jvalid.exceptions
 
-import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.core.typing.IntTyping
+import java.lang.IllegalArgumentException
 
-/**
- * 性别类型
- *
- * @author TrueNine
- * @since 2023-04-23
- */
-@Schema(title = "性别")
-enum class GenderTyping(private val v: Int) : IntTyping {
-  /** 男 */
-  @Schema(title = "男") MAN(1),
-
-  /** 女 */
-  @Schema(title = "女") WOMAN(0),
-
-  /** 未知 */
-  @Schema(title = "未知") UNKNOWN(2);
-
-  @JsonValue override val value: Int = v
-
+class ValidException(message: String?) : IllegalArgumentException(message) {
   companion object {
-    @JvmStatic fun findVal(v: Int?) = entries.find { it.value == v }
+    @JvmStatic
+    fun by(e: Throwable): ValidException {
+      return ValidException(e.message)
+    }
   }
 }

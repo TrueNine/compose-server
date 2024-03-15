@@ -23,8 +23,8 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.*
 import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.models.ErrorMessage
-import net.yan100.compose.core.typing.http.ErrMsg
+import net.yan100.compose.core.models.ErrorBody
+import net.yan100.compose.core.typing.http.HttpErrorStatus
 import net.yan100.compose.core.typing.http.MediaTypes
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
@@ -45,7 +45,7 @@ abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null)
     ex: AuthenticationException
   ) {
     log.warn("授权校验异常", ex)
-    writeErrorMessage(response, ErrorMessage.failedByErrMsg(ErrMsg._401))
+    writeErrorMessage(response, ErrorBody.failedByErrMsg(HttpErrorStatus._401))
   }
 
   override fun handle(
@@ -54,15 +54,15 @@ abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null)
     ex: AccessDeniedException
   ) {
     log.warn("无权限异常", ex)
-    writeErrorMessage(response, ErrorMessage.failedByErrMsg(ErrMsg._403))
+    writeErrorMessage(response, ErrorBody.failedByErrMsg(HttpErrorStatus._403))
   }
 
   private fun writeErrorMessage(
     response: HttpServletResponse,
-    msg: ErrorMessage,
+    msg: ErrorBody,
     charset: Charset = StandardCharsets.UTF_8
   ) {
-    response.status = msg.code
+    response.status = msg.code!!
     response.characterEncoding = charset.displayName()
     response.contentType = MediaTypes.JSON.value
     response.locale = Locale.CHINA

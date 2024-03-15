@@ -14,27 +14,24 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.typing
+package net.yan100.compose.rds.core.typing.relation
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-/** 商品信息分类 */
-@Schema(title = "商品信息分类")
-enum class GoodsInfoTyping(private val v: Int) : IntTyping {
-  /** 检索类型 */
-  @Schema(title = "检索类型") RETRIEVAL(0),
+@Schema(title = "关系对象类型")
+enum class RelationItemTyping(private val v: Int) : IntTyping {
+  @Schema(title = "无") NONE(0),
+  @Schema(title = "用户") USER(1),
+  @Schema(title = "客户") CUSTOMER(2),
+  @Schema(title = "企业") ENTERPRISE(3),
+  @Schema(title = "员工") EMPLOYEE(4),
+  @Schema(title = "其他") OTHER(9999);
 
-  /** 商品单位信息 */
-  @Schema(title = "商品单位信息") GOODS_UNIT_INFO(1),
-
-  /** 商品单位继承信息 */
-  @Schema(title = "商品单位继承信息") GOODS_UNIT_EXTEND_INFO(2);
-
-  @JsonValue override val value = v
+  @JsonValue override val value: Int = v
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = entries.find { it.value == v }
+    fun findVal(v: Int?) = entries.find { it.v == v }
   }
 }

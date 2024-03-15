@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.typing.CertPointTyping
+import net.yan100.compose.rds.core.typing.cert.CertPointTyping
 import org.springframework.stereotype.Component
 
 @Component

@@ -14,30 +14,29 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.typing
+package net.yan100.compose.rds.core.typing.shopping
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "证件类型")
-enum class CertTyping(private val v: Int) : IntTyping {
-  @Schema(title = "无具体类型") NONE(0),
-  @Schema(title = "身份证") ID_CARD(1),
-  @Schema(title = "二代身份证") IC_CARD2(2),
-  @Schema(title = "残疾证") DISABILITY_CARD(3),
-  @Schema(title = "二代残疾证") DISABILITY_CARD2(4),
-  @Schema(title = "三代残疾卡") DISABILITY_CARD3(5),
-  @Schema(title = "户口") HOUSEHOLD_CARD(6),
-  @Schema(title = "银行卡") BANK_CARD(7),
-  @Schema(title = "合同") CONTRACT(8),
-  @Schema(title = "营业执照") BIZ_LICENSE(9),
-  @Schema(title = "寸照") TITLE_IMAGE(10),
-  @Schema(title = "个人所得税状况录屏") PERSONAL_INCOME_TAX_VIDEO(11);
+/**
+ * 商品改动类型
+ *
+ * @author TrueNine
+ * @since 2023-04-23
+ */
+@Schema(title = "商品改动类型")
+enum class GoodsChangeRecordTyping(private val v: Int) : IntTyping {
+  /** 改价格 */
+  @Schema(title = "改价格") CHANGE_PRICE(0),
 
-  @JsonValue override val value: Int = v
+  /** 改标题 */
+  @Schema(title = "改标题") CHANGE_TITLE(1);
+
+  @JsonValue override val value = v
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = CertTyping.entries.find { it.value == v }
+    @JvmStatic fun findVal(v: Int?) = entries.find { it.value == v }
   }
 }

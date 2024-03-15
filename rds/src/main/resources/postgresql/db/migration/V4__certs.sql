@@ -131,13 +131,13 @@ select
     add_base_struct('biz_cert');
 
 create
-    index on
+    index if not exists user_id_idx on
     biz_cert(user_id);
 
 create
-    index on
+    index if not exists address_code_idx on
     biz_cert(address_code);
 
 create
-    index on
+    index if not exists address_details_id_idx on
     biz_cert(address_details_id);

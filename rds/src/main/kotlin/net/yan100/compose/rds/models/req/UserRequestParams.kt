@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.consts.Regexes
 
 @Schema(title = "登录账号")
@@ -44,6 +45,13 @@ class ModifyAccountPasswordReq {
 
 @Schema(title = "账号注册")
 class RegisterAccountReq {
+  @Schema(
+    title = "创建此账户的 id （无需指定）",
+    accessMode = Schema.AccessMode.WRITE_ONLY,
+    hidden = true,
+    deprecated = true
+  )
+  var createUserId: RefId? = null
 
   @get:Schema(title = "账号") @get:NotBlank(message = "账号不可为空") var account: String? = null
 

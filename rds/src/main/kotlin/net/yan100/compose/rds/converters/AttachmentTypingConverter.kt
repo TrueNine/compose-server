@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.typing.AttachmentTyping
+import net.yan100.compose.rds.core.typing.AttachmentTyping
 import org.springframework.stereotype.Component
 
 /**

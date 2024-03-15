@@ -26,9 +26,10 @@ import com.fasterxml.jackson.annotation.JsonValue
  *
  * ```kotlin
  * enum class GenderTyping(private val value: Int) {
- *   ...;
- *     @JsonValue
- *     override fun getValue() = this.value
+ *   // ... other enum constants
+ *   ;
+ *     @get:JsonValue
+ *     override val value = this.v
  *     companion object {
  *       @JvmStatic
  *       fun findVal(v: Int?) = GenderTyping.values().find { it.value == v }
@@ -36,7 +37,6 @@ import com.fasterxml.jackson.annotation.JsonValue
  * }
  * ```
  *
- * @see [AnyTypingConverterFactory] 此类用于 SpringMVC 的返回以及接收时的转换工作
  * @author TrueNine
  * @since 2023-05-28
  */

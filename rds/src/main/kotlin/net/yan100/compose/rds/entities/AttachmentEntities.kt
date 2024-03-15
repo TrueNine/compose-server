@@ -29,7 +29,7 @@ import net.yan100.compose.rds.Jc
 import net.yan100.compose.rds.Mto
 import net.yan100.compose.rds.converters.AttachmentTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.typing.AttachmentTyping
+import net.yan100.compose.rds.core.typing.AttachmentTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.Fetch

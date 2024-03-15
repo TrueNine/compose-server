@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.typing.RuleTyping
+import net.yan100.compose.rds.core.typing.RuleTyping
 import org.springframework.stereotype.Component
 
 @Component

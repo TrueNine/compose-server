@@ -19,19 +19,19 @@ select
     add_base_struct('audit');
 
 create
-    index on
+    index if not exists status_idx on
     audit(status);
 
 create
-    index on
+    index if not exists audit_user_id_idx on
     audit(audit_user_id);
 
 create
-    index on
+    index if not exists ref_id_idx on
     audit(ref_id);
 
 create
-    index on
+    index if not exists ref_type_idx on
     audit(ref_type);
 
 create
@@ -46,13 +46,13 @@ select
     add_base_struct('audit_attachment');
 
 create
-    index on
+    index if not exists status_idx on
     audit_attachment(status);
 
 create
-    index on
+    index if not exists att_id_idx on
     audit_attachment(att_id);
 
 create
-    index on
+    index if not exists audit_id_idx on
     audit_attachment(audit_id);

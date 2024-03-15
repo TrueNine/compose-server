@@ -18,7 +18,7 @@ package net.yan100.compose.core.models
 
 import java.io.Serial
 import java.io.Serializable
-import net.yan100.compose.core.typing.http.ErrMsg
+import net.yan100.compose.core.typing.http.HttpErrorStatus
 
 /**
  * 响应错误消息
@@ -26,38 +26,39 @@ import net.yan100.compose.core.typing.http.ErrMsg
  * @author TrueNine
  * @since 2022-09-24
  */
-class ErrorMessage private constructor() : Serializable {
+class ErrorBody private constructor() : Serializable {
   var msg: String? = null
     private set
 
-  var alert: String? = null
+  var alt: String? = null
     private set
 
-  var code: Int = -1
+  var code: Int? = null
     private set
 
-  var errMap: MutableMap<String, String> = mutableMapOf()
+  var errMap: MutableMap<String, String>? = null
     private set
 
   companion object {
     @JvmStatic
+    @JvmOverloads
     fun failedBy(
-      msg: String = ErrMsg.UNKNOWN_ERROR.message,
-      code: Int = ErrMsg.UNKNOWN_ERROR.code,
-      alert: String = ErrMsg.UNKNOWN_ERROR.alert,
-      errMap: MutableMap<String, String> = mutableMapOf()
-    ): ErrorMessage {
-      return ErrorMessage().apply {
+      msg: String? = null,
+      code: Int? = null,
+      alt: String? = null,
+      errMap: MutableMap<String, String>? = null,
+    ): ErrorBody {
+      return ErrorBody().apply {
         this.code = code
         this.msg = msg
-        this.alert = alert
+        this.alt = alt
         this.errMap = errMap
       }
     }
 
     @JvmStatic
-    fun failedByErrMsg(messages: ErrMsg): ErrorMessage {
-      return failedBy(msg = messages.message, code = messages.code, alert = messages.alert)
+    fun failedByErrMsg(messages: HttpErrorStatus): ErrorBody {
+      return failedBy(msg = messages.message, code = messages.code, alt = messages.alt)
     }
 
     @Serial @JvmStatic private val serialVersionUID: Long = 1L

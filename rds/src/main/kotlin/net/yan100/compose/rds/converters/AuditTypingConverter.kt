@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.typing.AuditTyping
+import net.yan100.compose.rds.core.typing.AuditTyping
 import org.springframework.stereotype.Component
 
 /** # 审核状态转换器 */

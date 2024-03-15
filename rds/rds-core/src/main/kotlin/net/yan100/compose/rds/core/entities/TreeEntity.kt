@@ -74,7 +74,14 @@ abstract class TreeEntity : IEntity() {
   }
 
   override fun toString(): String {
-    return withToString(toString(), RPI to rpi, RLN to rln, RRN to rrn, NLV to nlv, TGI to tgi)
+    return withToString(
+      super.toString(),
+      RPI to rpi,
+      RLN to rln,
+      RRN to rrn,
+      NLV to nlv,
+      TGI to tgi
+    )
   }
 
   companion object {

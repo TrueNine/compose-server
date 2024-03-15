@@ -30,9 +30,9 @@ import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.converters.BloodTypingConverter
 import net.yan100.compose.rds.converters.DegreeTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.typing.BloodTyping
-import net.yan100.compose.rds.typing.DegreeTyping
-import net.yan100.compose.rds.typing.GenderTyping
+import net.yan100.compose.rds.core.typing.userinfo.BloodTyping
+import net.yan100.compose.rds.core.typing.userinfo.DegreeTyping
+import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 

@@ -37,7 +37,7 @@ class AccountAggregatorImpl(
   private val userService: IUserService,
   private val userInfoService: IUserInfoService,
   private val passwordEncoder: PasswordEncoder,
-  private val roleGroupService: IRoleGroupService
+  private val roleGroupService: IRoleGroupService,
 ) : IAccountAggregator {
 
   @Transactional(rollbackFor = [Exception::class])
@@ -46,7 +46,7 @@ class AccountAggregatorImpl(
     createUserId: ReferenceId,
     @Valid userInfo: UserInfo?,
     roleGroup: Set<String>?,
-    allowAssignRoot: Boolean
+    allowAssignRoot: Boolean,
   ): Usr {
     val savedUsr =
       usr.withNew().run {
@@ -80,6 +80,7 @@ class AccountAggregatorImpl(
       userService
         .save(
           Usr().withNew().apply {
+            createUserId = param.createUserId!!
             account = param.account!!
             pwdEnc = passwordEncoder.encode(param.password)
             nickName = param.nickName

@@ -14,25 +14,25 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.typing
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "证件印面类型")
-enum class CertPointTyping(private val v: Int) : IntTyping {
-  @Schema(title = "无要求") NONE(0),
-  @Schema(title = "正面") HEADS(1),
-  @Schema(title = "反面") TAILS(2),
-  @Schema(title = "双面") DOUBLE(3),
-  @Schema(title = "所有") ALL(4),
-  @Schema(title = "所有内容") ALL_CONTENT(5),
-  @Schema(title = "完整的", description = "针对于视频，音频等等……") INTACT(6);
+@Schema(title = "审核状态")
+enum class AuditTyping(val v: Int) : IntTyping {
+  @Schema(title = "未审核") NONE(0),
+  @Schema(title = "分配给审核员") ASSIGNED(1),
+  @Schema(title = "审核通过") PASS(2),
+  @Schema(title = "审核未通过") FAIL(3),
+  @Schema(title = "已撤销") CANCEL(4),
+  @Schema(title = "已过期") EXPIRED(5),
+  @Schema(title = "驳回") REJECT(6);
 
   @JsonValue override val value: Int = v
 
   companion object {
-    @JvmStatic fun findVal(value: Int?) = entries.find { value == it.v }
+    @JvmStatic fun findVal(value: Int?) = entries.find { it.v == value }
   }
 }

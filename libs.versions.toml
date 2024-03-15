@@ -184,7 +184,9 @@ kie-api = { group = "org.kie", name = "kie-api", version.ref = "kie" }
 kie-ci = { group = "org.kie", name = "kie-ci", version.ref = "kie" }
 kie-spring = { group = "org.kie", name = "kie-spring", version.ref = "kie-spring" }
 
-mybatis-plus = { group = "com.baomidou", name = "mybatis-plus-boot-starter", version.ref = "mybatis-plus" }
+liteflowSpringBotoStarter = { group = "com.github.litesoftsoftware", name = "liteflow-spring-boot-starter", version.ref = "liteflow" }
+
+mybatisPlusSpringBootStarter = { group = "com.baomidou", name = "mybatis-plus-boot-starter", version.ref = "mybatis-plus" }
 
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa", version.ref = "querydsl" }
@@ -198,7 +200,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.421"
+compose = "1.6.434"
 
 java = "21" ### https://bell-sw.com/
 kotlin = "2.0.0-Beta4" ### https://github.com/JetBrains/kotlin/releases
@@ -296,5 +298,6 @@ querydsl = "5.1.0" ### https://mvnrepository.com/artifact/com.querydsl/querydsl-
 hibernate = "6.4.4.Final" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 
 drools = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.drools/drools-core
+liteflow = "2.11.4.2" ### https://mvnrepository.com/artifact/com.yomahub.liteflow/liteflow-spring-boot-starter
 kie = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.kie/kie-api
 kie-spring = "7.74.1.Final" ### deprecated https://mvnrepository.com/artifact/org.kie/kie-spring

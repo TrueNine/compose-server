@@ -17,7 +17,7 @@ select
     add_base_struct('api');
 
 create
-    index on
+    index if not exists permissions_id_idx on
     api(permissions_id);
 
 create
@@ -39,7 +39,7 @@ select
     add_base_struct('api_call_record');
 
 create
-    index on
+    index if not exists api_id_idx on
     api_call_record(api_id);
 
 create
@@ -65,27 +65,27 @@ select
     add_base_struct('attachment');
 
 create
-    index on
+    index if not exists url_id_idx on
     attachment(url_id);
 
 create
-    index on
+    index if not exists meta_name_idx on
     attachment(meta_name);
 
 create
-    index on
+    index if not exists base_url_idx on
     attachment(base_url);
 
 create
-    index on
+    index if not exists base_uri_idx on
     attachment(base_uri);
 
 create
-    index on
+    index if not exists att_type_idx on
     attachment(att_type);
 
 create
-    index on
+    index if not exists mime_type_idx on
     attachment(mime_type);
 
 create
@@ -111,7 +111,7 @@ select
     add_presort_tree_struct('address');
 
 create
-    index on
+    index if not exists name_idx on
     address(name);
 
 insert
@@ -179,15 +179,15 @@ select
     add_base_struct('address_details');
 
 create
-    index on
+    index if not exists address_id_idx on
     address_details(address_id);
 
 create
-    index on
+    index if not exists user_id_idx on
     address_details(user_id);
 
 create
-    index on
+    index if not exists address_code_idx on
     address_details(address_code);
 
 create
@@ -208,15 +208,15 @@ select
     add_base_struct('table_row_delete_record');
 
 create
-    index on
+    index if not exists table_names_idx on
     table_row_delete_record(table_names);
 
 create
-    index on
+    index if not exists user_account_idx on
     table_row_delete_record(user_account);
 
 create
-    index on
+    index if not exists user_id_idx on
     table_row_delete_record(user_id);
 
 create
@@ -242,21 +242,21 @@ select
     add_base_struct('table_row_change_record');
 
 create
-    index on
+    index if not exists table_names_idx on
     table_row_change_record(table_names);
 
 create
-    index on
+    index if not exists create_user_account_idx on
     table_row_change_record(create_user_account);
 
 create
-    index on
+    index if not exists last_modify_user_account_idx on
     table_row_change_record(last_modify_user_account);
 
 create
-    index on
+    index if not exists create_user_id_idx on
     table_row_change_record(create_user_id);
 
 create
-    index on
+    index if not exists last_modify_user_id_idx on
     table_row_change_record(last_modify_user_id);

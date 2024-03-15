@@ -14,23 +14,32 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.typing
+package net.yan100.compose.rds.core.typing.shopping
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "血型")
-enum class BloodTyping(private val v: Int) : IntTyping {
-  @Schema(title = "A型") A(1),
-  @Schema(title = "B型") B(2),
-  @Schema(title = "AB型") AB(3),
-  @Schema(title = "O型") O(4),
-  @Schema(title = "其他血型") OTHER(9999);
+/**
+ * 商品服务类型
+ *
+ * @author TrueNine
+ * @since 2023-04-23
+ */
+@Schema(title = "商品类型")
+enum class GoodsTyping(private val v: Int) : IntTyping {
+  /** 实体商品 */
+  @Schema(title = "实体商品") PHYSICAL_GOODS(0),
+
+  /** 服务商品 */
+  @Schema(title = "服务商品") SERVICE_GOODS(1),
+
+  /** 虚拟商品 */
+  @Schema(title = "虚拟商品") VIRTUAL_GOODS(2);
 
   @JsonValue override val value: Int = v
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = BloodTyping.entries.find { it.value == v }
+    @JvmStatic fun findVal(v: Int?): GoodsTyping? = entries.find { it.value == v }
   }
 }

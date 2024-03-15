@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.typing.cert.DisTyping
+import net.yan100.compose.rds.core.typing.cert.DisTyping
 import org.springframework.stereotype.Component
 
 @Converter

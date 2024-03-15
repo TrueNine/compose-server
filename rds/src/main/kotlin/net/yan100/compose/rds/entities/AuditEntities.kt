@@ -27,7 +27,7 @@ import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.rds.Col
 import net.yan100.compose.rds.converters.AuditTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.typing.AuditTyping
+import net.yan100.compose.rds.core.typing.AuditTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 

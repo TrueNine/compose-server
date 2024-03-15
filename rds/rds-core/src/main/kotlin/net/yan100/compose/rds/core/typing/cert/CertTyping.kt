@@ -14,33 +14,30 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.typing
+package net.yan100.compose.rds.core.typing.cert
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.typing.IntTyping
 
-/**
- * # 订单流转状态
- *
- * @author TrueNine
- * @since 2023-05-04
- */
-@Schema(title = "订单流转状态")
-enum class OrderStatusTyping(private val orderType: Int) : IntTyping {
-  @Schema(title = "预付款") PRE_PAY(1001),
-  @Schema(title = "取消支付") CANCEL_PAY(1002),
-  @Schema(title = "已付款") PAID(2001),
-  @Schema(title = "订单已取消") CANCEL(2003),
-  @Schema(title = "已退款") REFUNDED(2002),
-  @Schema(title = "订单已完成") COMPLETED(2023),
-  @Schema(title = "预退款") PRE_REFUND(4001),
+@Schema(title = "证件类型")
+enum class CertTyping(private val v: Int) : IntTyping {
+  @Schema(title = "无具体类型") NONE(0),
+  @Schema(title = "身份证") ID_CARD(1),
+  @Schema(title = "二代身份证") IC_CARD2(2),
+  @Schema(title = "残疾证") DISABILITY_CARD(3),
+  @Schema(title = "二代残疾证") DISABILITY_CARD2(4),
+  @Schema(title = "三代残疾卡") DISABILITY_CARD3(5),
+  @Schema(title = "户口") HOUSEHOLD_CARD(6),
+  @Schema(title = "银行卡") BANK_CARD(7),
+  @Schema(title = "合同") CONTRACT(8),
+  @Schema(title = "营业执照") BIZ_LICENSE(9),
+  @Schema(title = "寸照") TITLE_IMAGE(10),
+  @Schema(title = "个人所得税状况录屏") PERSONAL_INCOME_TAX_VIDEO(11);
 
-  /** 支付成功，但业务出现异常 */
-  @Schema(title = "支付成功，但业务出现异常") PAY_SUCCESS_BIZ_FAILED(5002);
-
-  @JsonValue override val value: Int = orderType
+  @JsonValue override val value: Int = v
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = entries.find { it.orderType == v }
+    @JvmStatic fun findVal(v: Int?) = CertTyping.entries.find { it.value == v }
   }
 }

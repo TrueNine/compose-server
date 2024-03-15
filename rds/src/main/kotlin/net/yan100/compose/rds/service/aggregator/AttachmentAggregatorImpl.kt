@@ -19,10 +19,10 @@ package net.yan100.compose.rds.service.aggregator
 import jakarta.validation.Valid
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.typing.http.MediaTypes
+import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.models.req.PostAttachmentReq
 import net.yan100.compose.rds.service.IAttachmentService
-import net.yan100.compose.rds.typing.AttachmentTyping
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile

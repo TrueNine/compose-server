@@ -16,19 +16,14 @@
  */
 package net.yan100.compose.core.extensionfunctions
 
-import net.yan100.compose.core.models.ErrorMessage
-import net.yan100.compose.core.typing.http.ErrMsg
+import net.yan100.compose.core.models.ErrorBody
+import net.yan100.compose.core.typing.http.HttpErrorStatus
 
 fun Throwable.failBy(
-  code: Int? = ErrMsg.UNKNOWN_ERROR.code,
-  msg: String? = ErrMsg.UNKNOWN_ERROR.message,
-  alert: String? = ErrMsg.UNKNOWN_ERROR.alert,
-  errMap: MutableMap<String, String> = mutableMapOf()
-): ErrorMessage {
-  return ErrorMessage.failedBy(
-    msg ?: ErrMsg.UNKNOWN_ERROR.message,
-    code ?: ErrMsg.UNKNOWN_ERROR.code,
-    alert ?: ErrMsg.UNKNOWN_ERROR.alert,
-    errMap
-  )
+  code: Int? = HttpErrorStatus.UNKNOWN_ERROR.code,
+  msg: String? = HttpErrorStatus.UNKNOWN_ERROR.message,
+  alt: String? = HttpErrorStatus.UNKNOWN_ERROR.alt,
+  errMap: MutableMap<String, String>? = null,
+): ErrorBody {
+  return ErrorBody.failedBy(msg, code, alt, errMap)
 }

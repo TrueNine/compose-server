@@ -75,6 +75,9 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   )
   @Schema(
     title = ID,
+    name = ID,
+    description = "仅在更新时需要携带 ID",
+    example = "7173087959242248192",
     examples = ["7001234523405", "7001234523441"],
     required = false,
     requiredMode = Schema.RequiredMode.NOT_REQUIRED

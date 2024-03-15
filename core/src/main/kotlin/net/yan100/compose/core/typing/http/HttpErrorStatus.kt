@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.core.typing.http
 
+import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
 
 /**
@@ -24,7 +25,8 @@ import net.yan100.compose.core.typing.IntTyping
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class ErrMsg(val code: Int, var message: String, var alert: String) : IntTyping {
+// TODO 支持 i18n
+enum class HttpErrorStatus(val code: Int?, var message: String?, var alt: String?) : IntTyping {
 
   _400(400, "Bad Request", "用户错误"),
   _401(401, "Unauthorized", "请进行身份校验"),
@@ -52,14 +54,14 @@ enum class ErrMsg(val code: Int, var message: String, var alert: String) : IntTy
   _505(505, "HTTP Version Not Supported", "服务器不支持或者拒绝 此 HTTP 版本"),
   UNKNOWN_ERROR(998, "Server Unknown Error", "发生了重大未知错误！目前错误原因未知，请尽快联系管理员或技术人员");
 
-  override val value: Int
-    get() = this.code
+  @JsonValue override val value: Int = code!!
 
   companion object {
     @JvmStatic fun findVal(v: Int?) = valueOf(v)
 
+    @Deprecated(message = "请改用 findVal")
     @JvmStatic
-    fun valueOf(code: Int?): ErrMsg {
+    fun valueOf(code: Int?): HttpErrorStatus {
       for (value in entries) {
         if (code == value.code) {
           return value

@@ -1,22 +1,22 @@
 drop
-    cast(
-        bigint as varchar
+    cast if exists(
+        bigint as character varying
     );
 
 create
     cast(
-        bigint as varchar
-    ) with inout;
+        bigint as character varying
+    ) with inout as implicit;
 
 drop
-    cast(
-        varchar as bigint
+    cast if exists(
+        character varying as bigint
     );
 
 create
     cast(
-        varchar as bigint
-    ) with inout;
+        character varying as bigint
+    ) with inout as implicit;
 
 create
     or replace function add_presort_tree_struct(
