@@ -95,7 +95,7 @@ fun <E> FluentQuery.FetchableFluentQuery<E>.page(pq: Pq?): Page<E> {
 /* path or expression extension functions */
 
 fun <T> SimpleExpression<T>.eqOrIsNull(value: T): BooleanExpression {
-  return eq(value).isNull
+  return eq(value).or(isNull)
 }
 
 fun StringPath.eqOrIsNullOrIsEmpty(value: String): BooleanExpression {
