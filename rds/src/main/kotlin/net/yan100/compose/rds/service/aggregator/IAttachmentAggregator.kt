@@ -16,19 +16,31 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.rds.entities.Attachment
-import net.yan100.compose.rds.models.req.PostAttachmentReq
+import net.yan100.compose.rds.entities.attachment.Attachment
+import net.yan100.compose.rds.models.req.PostAttachmentDescriptionDto
+import net.yan100.compose.rds.models.req.PostAttachmentDto
 import org.springframework.web.multipart.MultipartFile
+import java.io.InputStream
 
-/** 附件服务接口聚合器 */
+/**
+ * # 附件服务聚合接口
+ *
+ * @author TrueNine
+ * @since 2024-03-20
+ */
 interface IAttachmentAggregator {
   fun uploadAttachment(
     file: MultipartFile,
-    saveFileCallback: (file: MultipartFile) -> PostAttachmentReq
+    saveFileCallback: (file: MultipartFile) -> PostAttachmentDto,
+  ): Attachment?
+
+  fun uploadAttachment(
+    stream: InputStream,
+    req: (stream: InputStream) -> PostAttachmentDescriptionDto,
   ): Attachment?
 
   fun uploadAttachments(
     files: List<MultipartFile>,
-    saveFileCallback: (file: MultipartFile) -> PostAttachmentReq
+    saveFileCallback: (file: MultipartFile) -> PostAttachmentDto,
   ): List<Attachment>
 }

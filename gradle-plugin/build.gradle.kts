@@ -29,9 +29,9 @@ repositories {
 
 dependencies {
   implementation(gradleApi())
+  implementation(gradleKotlinDsl())
   implementation(libs.gradlePlugin.springBoot)
   implementation(libs.gradlePlugin.springBootDependencyManagement)
-  implementation(gradleKotlinDsl())
   implementation(libs.bundles.kt)
 }
 

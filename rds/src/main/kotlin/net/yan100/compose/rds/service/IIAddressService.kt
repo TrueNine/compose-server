@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entities.Address
+import net.yan100.compose.rds.entities.address.Address
 import net.yan100.compose.rds.service.base.IService
 
 /**

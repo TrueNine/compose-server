@@ -21,9 +21,9 @@ import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.Pw
-import net.yan100.compose.rds.entities.AddressDetails
-import net.yan100.compose.rds.entities.FullAddressDetails
-import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
+import net.yan100.compose.rds.entities.address.AddressDetails
+import net.yan100.compose.rds.entities.address.FullAddressDetails
+import net.yan100.compose.rds.entities.address.NonDesensitizedAddressDetails
 import net.yan100.compose.rds.service.base.IService
 
 interface IAddressDetailsService : IService<AddressDetails> {

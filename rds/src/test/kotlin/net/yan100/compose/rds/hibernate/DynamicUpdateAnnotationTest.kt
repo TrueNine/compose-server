@@ -20,7 +20,7 @@ import jakarta.annotation.Resource
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import net.yan100.compose.rds.entities.Attachment
+import net.yan100.compose.rds.entities.attachment.Attachment
 import net.yan100.compose.rds.repositories.IAttachmentRepo
 import org.springframework.boot.test.context.SpringBootTest
 

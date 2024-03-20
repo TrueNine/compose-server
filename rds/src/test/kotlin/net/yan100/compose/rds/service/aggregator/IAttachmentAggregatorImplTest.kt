@@ -18,7 +18,7 @@ package net.yan100.compose.rds.service.aggregator
 
 import kotlin.test.assertNotNull
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.models.req.PostAttachmentReq
+import net.yan100.compose.rds.models.req.PostAttachmentDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -34,7 +34,7 @@ class IAttachmentAggregatorImplTest {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass
       .uploadAttachment(mockFile) {
-        PostAttachmentReq().apply {
+        PostAttachmentDto().apply {
           baseUrl = "https://oss.aliyun.com"
           baseUri = "/static"
           saveName = "adwd0juihjrthjrthrhrhrth"
@@ -47,7 +47,7 @@ class IAttachmentAggregatorImplTest {
   fun testGetFullUrl() {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass.uploadAttachment(mockFile) {
-      PostAttachmentReq().apply {
+      PostAttachmentDto().apply {
         baseUrl = "https://oss.aliyun.com"
         baseUri = "/static"
         saveName = "adwd0juihjrthjrthrhrhrth"

@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.address
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import io.swagger.v3.oas.annotations.media.Schema

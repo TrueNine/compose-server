@@ -17,8 +17,8 @@
 package net.yan100.compose.rds.service.impl
 
 import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.base.CrudService

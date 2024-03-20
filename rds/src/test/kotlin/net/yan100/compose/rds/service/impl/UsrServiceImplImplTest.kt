@@ -24,8 +24,8 @@ import kotlin.test.assertTrue
 import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.aggregator.IRbacAggregator

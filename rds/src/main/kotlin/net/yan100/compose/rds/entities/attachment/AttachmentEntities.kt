@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.attachment
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
@@ -106,6 +106,8 @@ class Attachment : SuperAttachment()
  * - 只能用于查询，无法插入
  */
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Schema(title = "组合查询附件")
 @Table(name = SuperAttachment.TABLE_NAME)
 class LinkedAttachment : IEntity() {

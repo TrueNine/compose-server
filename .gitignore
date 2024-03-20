@@ -39,6 +39,7 @@ src/test/**/bin/
 src/main/**/out/
 src/test/**/out/
 .jpb/
+*.hprof
 
 ### NetBeans ###
 /nbproject/private/

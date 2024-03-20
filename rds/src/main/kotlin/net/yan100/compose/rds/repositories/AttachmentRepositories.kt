@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.repositories
 
-import net.yan100.compose.rds.entities.Attachment
-import net.yan100.compose.rds.entities.LinkedAttachment
+import net.yan100.compose.rds.entities.attachment.Attachment
+import net.yan100.compose.rds.entities.attachment.LinkedAttachment
 import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

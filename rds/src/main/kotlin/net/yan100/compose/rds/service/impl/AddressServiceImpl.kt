@@ -21,7 +21,7 @@ import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.rds.core.entities.AnyEntity
 import net.yan100.compose.rds.core.entities.withNew
-import net.yan100.compose.rds.entities.Address
+import net.yan100.compose.rds.entities.address.Address
 import net.yan100.compose.rds.repositories.address.IAddressRepo
 import net.yan100.compose.rds.service.IAddressService
 import net.yan100.compose.rds.service.base.CrudService

@@ -18,8 +18,8 @@ package net.yan100.compose.rds.repositories.address
 
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames.Rbac
-import net.yan100.compose.rds.entities.Address
-import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
+import net.yan100.compose.rds.entities.address.Address
+import net.yan100.compose.rds.entities.address.NonDesensitizedAddressDetails
 import net.yan100.compose.rds.repositories.base.IRepo
 import net.yan100.compose.rds.repositories.base.ITreeRepo
 import org.springframework.data.domain.Page

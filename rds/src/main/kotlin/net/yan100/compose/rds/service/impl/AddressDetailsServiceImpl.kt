@@ -21,7 +21,9 @@ import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
 import net.yan100.compose.rds.core.util.result
-import net.yan100.compose.rds.entities.AddressDetails
+import net.yan100.compose.rds.entities.address.AddressDetails
+import net.yan100.compose.rds.entities.address.FullAddressDetails
+import net.yan100.compose.rds.entities.address.NonDesensitizedAddressDetails
 import net.yan100.compose.rds.repositories.address.FullAddressDetailsRepo
 import net.yan100.compose.rds.repositories.address.IAddressDetailsRepo
 import net.yan100.compose.rds.repositories.address.IAddressRepo
@@ -43,14 +45,11 @@ class AddressDetailsServiceImpl(
   override fun findNonDesensitizedAllByUserId(
     userId: String,
     page: Pq
-  ): Pr<net.yan100.compose.rds.entities.NonDesensitizedAddressDetails> {
+  ): Pr<NonDesensitizedAddressDetails> {
     return detailsRepo.findNonDesensitizedAllByUserId(userId, page.page).result
   }
 
-  override fun findFullAllByUserId(
-    userId: String,
-    page: Pq
-  ): Pr<net.yan100.compose.rds.entities.FullAddressDetails> {
+  override fun findFullAllByUserId(userId: String, page: Pq): Pr<FullAddressDetails> {
     return fRepo.findAllByUserId(userId, page.page).result
   }
 
@@ -94,14 +93,11 @@ class AddressDetailsServiceImpl(
   override fun findNonDesensitizedAllByPhone(
     phone: String,
     page: Pq
-  ): Pr<net.yan100.compose.rds.entities.NonDesensitizedAddressDetails> {
+  ): Pr<NonDesensitizedAddressDetails> {
     return detailsRepo.findNonDesensitizedAllByPhone(phone, page.page).result
   }
 
-  override fun findFullAllByPhone(
-    phone: String,
-    page: Pq
-  ): Pr<net.yan100.compose.rds.entities.FullAddressDetails> {
+  override fun findFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails> {
     return fRepo.findAllByPhone(phone, page.page).result
   }
 }

@@ -15,5 +15,3 @@
  *     website: <github.com/TrueNine>
  */
 package net.yan100.compose.depend.jvalid.infixs
-
-infix fun <A, B> A.a(v: B) {}

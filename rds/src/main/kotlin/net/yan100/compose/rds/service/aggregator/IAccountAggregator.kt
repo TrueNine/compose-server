@@ -18,8 +18,8 @@ package net.yan100.compose.rds.service.aggregator
 
 import java.time.LocalDateTime
 import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.models.req.LoginAccountReq
 import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
 import net.yan100.compose.rds.models.req.RegisterAccountReq

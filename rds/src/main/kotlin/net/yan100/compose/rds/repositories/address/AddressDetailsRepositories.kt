@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.repositories.address
 
-import net.yan100.compose.rds.entities.AddressDetails
-import net.yan100.compose.rds.entities.FullAddressDetails
-import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
+import net.yan100.compose.rds.entities.address.AddressDetails
+import net.yan100.compose.rds.entities.address.FullAddressDetails
+import net.yan100.compose.rds.entities.address.NonDesensitizedAddressDetails
 import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.info
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import io.swagger.v3.oas.annotations.media.Schema
@@ -33,6 +33,9 @@ import net.yan100.compose.rds.Fk
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
+import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.address.AddressDetails
+import net.yan100.compose.rds.entities.attachment.LinkedAttachment
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NotFound

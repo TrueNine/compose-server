@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.address
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
@@ -94,7 +94,7 @@ class FullAddress : SuperAddress() {
   @Schema(title = "包含的地址详情", requiredMode = NOT_REQUIRED)
   @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
   @JoinColumn(
-    name = SuperAddressDetails.Companion.ADDRESS_ID,
+    name = SuperAddressDetails.ADDRESS_ID,
     referencedColumnName = ID,
     foreignKey = ForeignKey(NO_CONSTRAINT),
     insertable = false,

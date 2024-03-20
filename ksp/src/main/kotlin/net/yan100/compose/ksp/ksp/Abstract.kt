@@ -14,25 +14,8 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.service
+package net.yan100.compose.ksp.ksp
 
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.rds.entities.Usr
-import net.yan100.compose.rds.entities.info.UserInfo
-import net.yan100.compose.rds.service.base.IService
-
-interface IUserInfoService : IService<UserInfo> {
-  fun findAllIdByUserId(userId: RefId): List<RefId>
-
-  fun findUserIdById(id: RefId): RefId?
-
-  fun findUserByWechatOpenId(openId: String): Usr?
-
-  fun findUserByPhone(phone: String): Usr?
-
-  fun findByUserId(userId: String): UserInfo?
-
-  fun existsByPhone(phone: String): Boolean
-
-  fun existsByWechatOpenId(openId: String): Boolean
-}
+@Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Abstract() {}

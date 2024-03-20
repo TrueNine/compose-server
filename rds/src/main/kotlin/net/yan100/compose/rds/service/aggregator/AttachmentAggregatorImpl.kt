@@ -20,12 +20,14 @@ import jakarta.validation.Valid
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.typing.http.MediaTypes
 import net.yan100.compose.rds.core.typing.AttachmentTyping
-import net.yan100.compose.rds.entities.Attachment
-import net.yan100.compose.rds.models.req.PostAttachmentReq
+import net.yan100.compose.rds.entities.attachment.Attachment
+import net.yan100.compose.rds.models.req.PostAttachmentDescriptionDto
+import net.yan100.compose.rds.models.req.PostAttachmentDto
 import net.yan100.compose.rds.service.IAttachmentService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.io.InputStream
 
 /** 附件聚合实现 */
 @Service
@@ -36,39 +38,49 @@ class AttachmentAggregatorImpl(
   @Transactional(rollbackFor = [Exception::class])
   override fun uploadAttachment(
     file: MultipartFile,
-    @Valid saveFileCallback: (file: MultipartFile) -> @Valid PostAttachmentReq
+    @Valid saveFileCallback: (file: MultipartFile) -> @Valid PostAttachmentDto,
   ): Attachment? {
     val saveFile = saveFileCallback(file)
-    // 如果 此条url 不存在，则保存一个新的 url
     val location =
-      aService.findByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
-        ?: aService.save(
-          Attachment().apply {
-            this.attType = AttachmentTyping.BASE_URL
-            this.baseUrl = saveFile.baseUrl
-            this.baseUri = saveFile.baseUri
-          }
-        )
-    checkNotNull(location.id) { "没有保存的url" }
+      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
     // 构建一个新附件对象保存并返回
-    val att =
-      Attachment().apply {
-        // 将之于根路径连接
-        urlId = location.id
-        saveName = saveFile.saveName
-        metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
-        size = file.size
-        mimeType = file.contentType ?: MediaTypes.BINARY.value
-        attType = AttachmentTyping.ATTACHMENT
-      }
+    val att = Attachment().apply {
+      // 将之于根路径连接
+      urlId = location.id
+      saveName = saveFile.saveName
+      metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
+      size = file.size
+      mimeType = file.contentType ?: MediaTypes.BINARY.value
+      attType = AttachmentTyping.ATTACHMENT
+    }
     // 重新进行赋值
     return aService.save(att)
+  }
+
+  override fun uploadAttachment(
+    stream: InputStream,
+    req: (stream: InputStream) -> PostAttachmentDescriptionDto,
+  ): Attachment? {
+    val saveFile = req(stream)
+    val location =
+      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
+    val allBytes = stream.readAllBytes()
+    return Attachment().apply {
+      urlId = location.id
+      saveName = saveFile.saveName
+      metaName = saveFile.metaName
+      size = allBytes.size.toLong()
+      mimeType = saveFile.mimeType?.value ?: MediaTypes.BINARY.value
+      attType = AttachmentTyping.ATTACHMENT
+    }.let {
+      aService.save(it)
+    }
   }
 
   @Transactional(rollbackFor = [Exception::class])
   override fun uploadAttachments(
     files: List<MultipartFile>,
-    saveFileCallback: (file: MultipartFile) -> PostAttachmentReq
+    saveFileCallback: (file: MultipartFile) -> PostAttachmentDto,
   ): List<Attachment> {
     val saved = files.map { saveFileCallback(it) to it }
     val baseUrls =

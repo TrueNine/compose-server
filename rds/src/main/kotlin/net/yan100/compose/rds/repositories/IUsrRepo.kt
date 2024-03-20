@@ -19,8 +19,8 @@ package net.yan100.compose.rds.repositories
 import java.time.LocalDateTime
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.rds.entities.FullUsr
-import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query

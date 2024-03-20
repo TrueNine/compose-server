@@ -18,7 +18,7 @@ package net.yan100.compose.rds.service
 
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.rds.entities.Address
+import net.yan100.compose.rds.entities.address.Address
 import net.yan100.compose.rds.service.base.IService
 
 interface IAddressService : IService<Address> {

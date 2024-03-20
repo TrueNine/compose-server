@@ -28,18 +28,40 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.NoRepositoryBean
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.transaction.annotation.Transactional
 
 @NoRepositoryBean
-interface IRepo<T : IEntity> : IAnyRepo<T>, ILogicDeleteRepo<T> {
-  @Query("from #{#entityName} e order by e.id desc") fun findAllOrderByIdDesc(): List<T>
+interface ILogicDeleteRepo<T : IEntity> : IAnyRepo<T> {
+  @Query("from #{#entityName} e where e.id in :ids and (e.ldf = false or e.ldf is null)")
+  fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pageable): Page<T>
 
-  @Query("from #{#entityName} e order by e.id desc")
-  fun findAllOrderByIdDesc(page: Pageable): Page<T>
+  @Query(
+    "select count(e.id) > 0 from #{#entityName} e where e.id = :id and (e.ldf = false or e.ldf is null)"
+  )
+  fun existsByIdAndNotLogicDeleted(id: Id)
 
-  @Query("select (e.ldf = false) from #{#entityName} e where e.id = :id")
-  fun findLdfById(id: Id): Boolean?
+  @Query("from #{#entityName} e where e.id = :id and e.ldf = false")
+  fun findByIdAndNotLogicDeleteOrNull(id: Id): T?
 
-  @Query("select e.rlv from #{#entityName} e where e.id = :id") fun findRlvById(id: Id): BigSerial
+  @Query("from #{#entityName} e where e.ldf = false")
+  fun findAllByNotLogicDeleted(page: Pageable): Page<T>
 
-  fun findAll(@Valid pq: Pq?): Pr<T> = findAll(pq.page).result
+  @Transactional(rollbackFor = [Exception::class])
+  fun logicDeleteById(id: Id): T? =
+    findByIdOrNull(id)?.let {
+      it.ldf = true
+      save(it)
+    }
+
+  @Query("select count(e.id) from #{#entityName} e where e.ldf = false or e.ldf is null")
+  fun countByNotLogicDeleted(): BigSerial
+
+  fun findByIdAndNotLogicDelete(id: Id): T = findByIdAndNotLogicDeleteOrNull(id)!!
+
+  @Transactional(rollbackFor = [Exception::class])
+  fun logicDeleteAllById(ids: List<Id>): List<T> =
+    findAllById(ids).filter { !it.ldf!! }.apply { saveAll(this) }
+
+  fun findAllByNotLogicDeleted(@Valid pq: Pq?): Pr<T> = findAllByNotLogicDeleted(pq.page).result
 }

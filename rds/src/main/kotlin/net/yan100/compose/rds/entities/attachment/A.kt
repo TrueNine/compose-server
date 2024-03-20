@@ -14,12 +14,6 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp
+package net.yan100.compose.rds.entities.attachment
 
-/**
- * ## ksp 启动入口
- * - [ksp 示例](https://github.com/google/ksp/tree/main/examples/playground/test-processor/src/main)
- * - [hibernate增强插件](https://github.com/hibernate/hibernate-orm/tree/main/tooling/hibernate-gradle-plugin)
- * - [gradle插件开发](https://docs.gradle.org/current/userguide/custom_plugins.html#sec:packaging_a_plugin)
- */
-class Main {}
+class A {}

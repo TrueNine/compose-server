@@ -20,7 +20,7 @@ import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.BetaTest
 import net.yan100.compose.rds.core.entities.TreeEntity
-import net.yan100.compose.rds.entities.Address
+import net.yan100.compose.rds.entities.address.Address
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Modifying
