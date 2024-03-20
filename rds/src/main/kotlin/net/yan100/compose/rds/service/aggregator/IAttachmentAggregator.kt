@@ -16,11 +16,11 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
+import java.io.InputStream
 import net.yan100.compose.rds.entities.attachment.Attachment
 import net.yan100.compose.rds.models.req.PostAttachmentDescriptionDto
 import net.yan100.compose.rds.models.req.PostAttachmentDto
 import org.springframework.web.multipart.MultipartFile
-import java.io.InputStream
 
 /**
  * # 附件服务聚合接口

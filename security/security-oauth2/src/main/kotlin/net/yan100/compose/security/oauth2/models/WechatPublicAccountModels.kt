@@ -31,79 +31,56 @@ import net.yan100.compose.core.alias.long
  */
 @Schema(title = "公众号验证请求参数")
 class WxpaVerifyModel {
-    /** 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。 */
-    @Schema(
-        title = "微信加密签名",
-        description = "signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数"
-    )
-    var signature: String? = null
+  /** 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。 */
+  @Schema(title = "微信加密签名", description = "signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数")
+  var signature: String? = null
 
-    /** 时间戳 */
-    @Schema(title = "时间戳")
-    var timestamp: Long? = null
+  /** 时间戳 */
+  @Schema(title = "时间戳") var timestamp: Long? = null
 
-    /** 随机数 */
-    @Schema(title = "随机数")
-    var nonce: String? = null
+  /** 随机数 */
+  @Schema(title = "随机数") var nonce: String? = null
 
-    /** 随机字符串 */
-    @Schema(title = "随机字符串")
-    var echostr: String? = null
+  /** 随机字符串 */
+  @Schema(title = "随机字符串") var echostr: String? = null
 }
 
 @Schema(title = "公众号获取 access_token 返回结果")
 class WxpaGetAccessTokenResp : BaseWxpaResp() {
-    @Schema(title = "公众号 access_token")
-    @JsonProperty("access_token")
-    var accessToken: String? = null
+  @Schema(title = "公众号 access_token") @JsonProperty("access_token") var accessToken: String? = null
 }
 
 @Schema(title = "公众号获取 ticket 返回结果")
 class WxpaGetTicketResp : BaseWxpaResp() {
-    @Schema(title = "票证")
-    var ticket: String? = null
+  @Schema(title = "票证") var ticket: String? = null
 }
 
 @Schema(title = "公众号获取 ticket 返回结果")
 class WxpaQuotaResp : BaseWxpaResp() {
-    @Schema(title = "当天该账号可调用该接口的次数")
-    @JsonProperty("daily_limit")
-    var dailyLimit: long? = null
+  @Schema(title = "当天该账号可调用该接口的次数") @JsonProperty("daily_limit") var dailyLimit: long? = null
 
-    @Schema(title = "当天已经调用的次数")
-    var used: long? = null
+  @Schema(title = "当天已经调用的次数") var used: long? = null
 
-    @Schema(title = "当天剩余调用次数")
-    var remain: long? = null
+  @Schema(title = "当天剩余调用次数") var remain: long? = null
 }
 
 @Schema(title = "微信公众号网页授权获取 access_token 响应")
 class WxpaWebsiteAuthGetAccessTokenResp : BaseWxpaResp() {
-    @Schema(title = "token")
-    @JsonProperty("access_token")
-    lateinit var accessToken: String
+  @Schema(title = "token") @JsonProperty("access_token") lateinit var accessToken: String
 
-    @Schema(title = "过期时间")
-    @JsonProperty("expires_in")
-    var expireIn: Long? = null
+  @Schema(title = "过期时间") @JsonProperty("expires_in") var expireIn: Long? = null
 
-    @JsonProperty("refresh_token")
-    lateinit var refreshToken: String
+  @JsonProperty("refresh_token") lateinit var refreshToken: String
 
-    @Schema(title = "获取到的 openId")
-    @JsonProperty("openid")
-    lateinit var openId: String
+  @Schema(title = "获取到的 openId") @JsonProperty("openid") lateinit var openId: String
 
-    @Schema(title = "当前使用的 scope")
-    lateinit var scope: String
+  @Schema(title = "当前使用的 scope") lateinit var scope: String
 
-    @Schema(title = "是否为快照页模式虚拟账号", description = "只有当用户是快照页模式虚拟账号时返回，值为1")
-    @JsonProperty("is_snapshotuser")
-    var isSnapshotUser: Int? = null
+  @Schema(title = "是否为快照页模式虚拟账号", description = "只有当用户是快照页模式虚拟账号时返回，值为1")
+  @JsonProperty("is_snapshotuser")
+  var isSnapshotUser: Int? = null
 
-    @Schema(title = "用户全局 id")
-    @JsonProperty("unionid")
-    var unionId: String? = null
+  @Schema(title = "用户全局 id") @JsonProperty("unionid") var unionId: String? = null
 }
 
 /**
@@ -114,38 +91,21 @@ class WxpaWebsiteAuthGetAccessTokenResp : BaseWxpaResp() {
  */
 @Schema(title = "微信用户信息回调结果")
 class WxpaWebsiteUserInfoResp {
-    @JsonProperty("openid")
-    @Schema(title = "open id")
-    lateinit var openId: RefId
+  @JsonProperty("openid") @Schema(title = "open id") lateinit var openId: RefId
 
-    @JsonProperty("nickname")
-    @Schema(title = "呢称")
-    lateinit var nickName: String
+  @JsonProperty("nickname") @Schema(title = "呢称") lateinit var nickName: String
 
-    @Schema(title = "微信用户特权", description = "为 json 数组形式")
-    var privilege: List<String>? = null
+  @Schema(title = "微信用户特权", description = "为 json 数组形式") var privilege: List<String>? = null
 
-    @Deprecated("过时的接口数据")
-    @Schema(title = "头像链接")
-    var headimgurl: String? = null
+  @Deprecated("过时的接口数据") @Schema(title = "头像链接") var headimgurl: String? = null
 
-    @Deprecated("过时的接口数据")
-    @Schema(title = "城市")
-    var country: String? = null
+  @Deprecated("过时的接口数据") @Schema(title = "城市") var country: String? = null
 
-    @Deprecated("过时的接口数据")
-    @Schema(title = "诚实", deprecated = true)
-    var city: String? = null
+  @Deprecated("过时的接口数据") @Schema(title = "诚实", deprecated = true) var city: String? = null
 
-    @Deprecated("过时的接口数据")
-    @Schema(title = "省份", deprecated = true)
-    var province: String? = null
+  @Deprecated("过时的接口数据") @Schema(title = "省份", deprecated = true) var province: String? = null
 
-    @Deprecated("过时的接口数据")
-    @Schema(title = "性别", deprecated = true)
-    var sex: Int? = null
+  @Deprecated("过时的接口数据") @Schema(title = "性别", deprecated = true) var sex: Int? = null
 
-    @JsonProperty("unionid")
-    @Schema(title = "union id")
-    var unionId: String? = null
+  @JsonProperty("unionid") @Schema(title = "union id") var unionId: String? = null
 }

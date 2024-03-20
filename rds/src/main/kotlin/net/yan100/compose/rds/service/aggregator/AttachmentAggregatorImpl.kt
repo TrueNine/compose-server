@@ -17,6 +17,7 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
+import java.io.InputStream
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.typing.http.MediaTypes
 import net.yan100.compose.rds.core.typing.AttachmentTyping
@@ -27,7 +28,6 @@ import net.yan100.compose.rds.service.IAttachmentService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import java.io.InputStream
 
 /** 附件聚合实现 */
 @Service
@@ -42,17 +42,21 @@ class AttachmentAggregatorImpl(
   ): Attachment? {
     val saveFile = saveFileCallback(file)
     val location =
-      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
+      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(
+        saveFile.baseUrl!!,
+        saveFile.baseUri!!
+      )
     // 构建一个新附件对象保存并返回
-    val att = Attachment().apply {
-      // 将之于根路径连接
-      urlId = location.id
-      saveName = saveFile.saveName
-      metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
-      size = file.size
-      mimeType = file.contentType ?: MediaTypes.BINARY.value
-      attType = AttachmentTyping.ATTACHMENT
-    }
+    val att =
+      Attachment().apply {
+        // 将之于根路径连接
+        urlId = location.id
+        saveName = saveFile.saveName
+        metaName = if (file.originalFilename.hasText()) file.originalFilename else file.name
+        size = file.size
+        mimeType = file.contentType ?: MediaTypes.BINARY.value
+        attType = AttachmentTyping.ATTACHMENT
+      }
     // 重新进行赋值
     return aService.save(att)
   }
@@ -63,18 +67,21 @@ class AttachmentAggregatorImpl(
   ): Attachment? {
     val saveFile = req(stream)
     val location =
-      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
+      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(
+        saveFile.baseUrl!!,
+        saveFile.baseUri!!
+      )
     val allBytes = stream.readAllBytes()
-    return Attachment().apply {
-      urlId = location.id
-      saveName = saveFile.saveName
-      metaName = saveFile.metaName
-      size = allBytes.size.toLong()
-      mimeType = saveFile.mimeType?.value ?: MediaTypes.BINARY.value
-      attType = AttachmentTyping.ATTACHMENT
-    }.let {
-      aService.save(it)
-    }
+    return Attachment()
+      .apply {
+        urlId = location.id
+        saveName = saveFile.saveName
+        metaName = saveFile.metaName
+        size = allBytes.size.toLong()
+        mimeType = saveFile.mimeType?.value ?: MediaTypes.BINARY.value
+        attType = AttachmentTyping.ATTACHMENT
+      }
+      .let { aService.save(it) }
   }
 
   @Transactional(rollbackFor = [Exception::class])
