@@ -18,13 +18,10 @@ package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
 import java.time.LocalDateTime
-import net.yan100.compose.core.alias.ReferenceId
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.rds.core.entities.withNew
 import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
-import net.yan100.compose.rds.models.req.LoginAccountReq
-import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
-import net.yan100.compose.rds.models.req.RegisterAccountReq
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
@@ -40,13 +37,13 @@ class AccountAggregatorImpl(
   private val roleGroupService: IRoleGroupService,
 ) : IAccountAggregator {
 
+  // TODO 硬编码
   @Transactional(rollbackFor = [Exception::class])
   override fun assignAccount(
     @Valid usr: Usr,
-    createUserId: ReferenceId,
+    createUserId: RefId,
     @Valid userInfo: UserInfo?,
     roleGroup: Set<String>?,
-    allowAssignRoot: Boolean,
   ): Usr {
     val savedUsr =
       usr.withNew().run {
@@ -65,41 +62,57 @@ class AccountAggregatorImpl(
 
     roleGroup?.also { rg ->
       roleGroupService.assignPlainToUser(savedUsr.id)
-      if (allowAssignRoot) {
-        if (rg.contains("ADMIN")) roleGroupService.assignAdminToUser(savedUsr.id)
-        if (rg.contains("ROOT")) roleGroupService.assignRootToUser(savedUsr.id)
-      }
+      if (rg.contains("ADMIN")) roleGroupService.assignAdminToUser(savedUsr.id)
     }
     return savedUsr
   }
 
-  override fun registerAccount(@Valid param: RegisterAccountReq): Usr? =
+  @Transactional(rollbackFor = [Exception::class])
+  internal fun saveUsrForRegisterParam(param: IAccountAggregator.RegisterAccountDto): Usr {
+    return userService.save(
+      Usr().withNew().apply {
+        checkNotNull(param.createUserId) { "创建此用户的用户 id 不能为空" }
+        createUserId = param.createUserId!!
+        account = param.account!!
+        pwdEnc = passwordEncoder.encode(param.password)
+        nickName = param.nickName
+        doc = param.description
+      }
+    )
+  }
+
+  @Transactional(rollbackFor = [Exception::class])
+  override fun registerAccount(@Valid param: IAccountAggregator.RegisterAccountDto): Usr? =
     if (!userService.existsByAccount(param.account!!)) {
-      userService
-        .save(
-          Usr().withNew().apply {
-            createUserId = param.createUserId!!
-            account = param.account!!
-            pwdEnc = passwordEncoder.encode(param.password)
-            nickName = param.nickName
-            doc = param.description
-          }
-        )
-        .also { roleGroupService.assignPlainToUser(it.id) }
+      saveUsrForRegisterParam(param).also {
+        userInfoService.savePlainUserInfoByUser(it)
+        roleGroupService.assignPlainToUser(it.id)
+      }
     } else null
 
-  override fun login(@Valid param: LoginAccountReq): Usr? =
+  @Transactional(rollbackFor = [Exception::class])
+  override fun registerAccountForWxpa(
+    param: IAccountAggregator.RegisterAccountDto,
+    openId: String,
+  ): Usr? =
+    if (userInfoService.existsByWechatOpenId(openId)) {
+      saveUsrForRegisterParam(param).also {
+        roleGroupService.assignPlainToUser(it.id)
+        userInfoService.savePlainUserInfoByUser(it).let { u ->
+          u.wechatOpenid = openId
+          userInfoService.save(u)
+        }
+      }
+    } else null
+
+  override fun login(@Valid param: IAccountAggregator.LoginAccountDto): Usr? =
     if (verifyPassword(param.account!!, param.password!!)) {
       userService.findUserByAccount(param.account!!)
     } else null
 
-  override fun modifyPassword(@Valid param: ModifyAccountPasswordReq): Boolean {
-    if (!verifyPassword(param.account!!, param.oldPassword!!)) {
-      return false
-    }
-    if (param.oldPassword == param.newPassword) {
-      return false
-    }
+  override fun modifyPassword(@Valid param: IAccountAggregator.ModifyAccountPasswordDto): Boolean {
+    if (!verifyPassword(param.account!!, param.oldPassword!!)) return false
+    if (param.oldPassword == param.newPassword) return false
     val user = userService.findUserByAccount(param.account!!) ?: return false
     user.pwdEnc = passwordEncoder.encode(param.newPassword)
     userService.save(user)

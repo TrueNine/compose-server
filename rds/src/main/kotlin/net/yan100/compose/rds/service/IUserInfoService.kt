@@ -22,6 +22,24 @@ import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.service.base.IService
 
 interface IUserInfoService : IService<UserInfo> {
+  /**
+   * ## 根据用户，保存一个默认的主要用户信息
+   *
+   * @param createUserId 创建用户的 id
+   * @param usr 用户
+   */
+  fun savePlainUserInfoByUser(createUserId: RefId, usr: Usr): UserInfo
+
+  /**
+   * ## 根据用户，保存一个默认的主要用户信息
+   *
+   * createUserId 根据当前用户的 createUserId 来计算
+   *
+   * @param usr 用户
+   * @see [savePlainUserInfoByUser]
+   */
+  fun savePlainUserInfoByUser(usr: Usr): UserInfo = savePlainUserInfoByUser(usr.createUserId, usr)
+
   fun findAllIdByUserId(userId: RefId): List<RefId>
 
   fun findUserIdById(id: RefId): RefId?

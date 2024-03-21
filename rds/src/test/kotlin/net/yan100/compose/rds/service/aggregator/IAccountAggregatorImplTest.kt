@@ -20,9 +20,6 @@ import java.time.LocalDateTime
 import kotlin.test.*
 import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.models.req.LoginAccountReq
-import net.yan100.compose.rds.models.req.ModifyAccountPasswordReq
-import net.yan100.compose.rds.models.req.RegisterAccountReq
 import net.yan100.compose.rds.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -37,11 +34,12 @@ class IAccountAggregatorImplTest {
   @Autowired lateinit var us: IUserService
 
   fun getRegisterParam() =
-    RegisterAccountReq().apply {
+    IAccountAggregator.RegisterAccountDto().apply {
       account = "abcd${snowflake.nextString()}"
       password = "qwer1234"
       nickName = "我艹${snowflake.nextString()}"
       description = "我命由我不白天"
+      createUserId = "0"
     }
 
   @Test
@@ -58,7 +56,7 @@ class IAccountAggregatorImplTest {
     assertFalse("重复注册了一次账号") { null != nr }
   }
 
-  fun regUser(): RegisterAccountReq {
+  fun regUser(): IAccountAggregator.RegisterAccountDto {
     val regParam = getRegisterParam()
     agg.registerAccount(regParam)
     return regParam
@@ -70,7 +68,7 @@ class IAccountAggregatorImplTest {
 
     val loginUser =
       agg.login(
-        LoginAccountReq().apply {
+        IAccountAggregator.LoginAccountDto().apply {
           account = regParam.account
           password = regParam.password
         }
@@ -79,7 +77,7 @@ class IAccountAggregatorImplTest {
 
     val errLoginUser =
       agg.login(
-        LoginAccountReq().apply {
+        IAccountAggregator.LoginAccountDto().apply {
           account = regParam.account
           password = "abcdefg"
         }
@@ -92,7 +90,7 @@ class IAccountAggregatorImplTest {
     val regParam = regUser()
     val m =
       agg.modifyPassword(
-        ModifyAccountPasswordReq().apply {
+        IAccountAggregator.ModifyAccountPasswordDto().apply {
           account = regParam.account
           oldPassword = regParam.password
           newPassword = "aaccee3313"
@@ -103,7 +101,7 @@ class IAccountAggregatorImplTest {
     // 不可与之前密码相同
     val n =
       agg.modifyPassword(
-        ModifyAccountPasswordReq().apply {
+        IAccountAggregator.ModifyAccountPasswordDto().apply {
           account = regParam.account
           oldPassword = regParam.password
           newPassword = "aaccee3313"

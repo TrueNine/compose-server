@@ -27,6 +27,16 @@ import org.springframework.stereotype.Service
 @Service
 class UserInfoServiceImpl(private val infoRepo: IUserInfoRepo) :
   IUserInfoService, CrudService<UserInfo>(infoRepo) {
+  override fun savePlainUserInfoByUser(createUserId: RefId, usr: Usr): UserInfo {
+    return infoRepo.save(
+      UserInfo().apply {
+        this.createUserId = createUserId
+        this.userId = usr.id
+        this.pri = true
+      }
+    )
+  }
+
   override fun findAllIdByUserId(userId: RefId): List<RefId> {
     return infoRepo.findAllIdByUserId(userId)
   }
