@@ -1,10 +1,13 @@
 import com.diffplug.spotless.LineEnding
 import java.nio.charset.StandardCharsets
-import net.yan100.compose.plugin.*
+import net.yan100.compose.plugin.aliYunXiao
+import net.yan100.compose.plugin.allAnnotationCompileOnly
+import net.yan100.compose.plugin.chinaRegionRepositories
 import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoPassword
 import net.yan100.compose.plugin.consts.Repos.Credentials.yunXiaoUsername
 import net.yan100.compose.plugin.consts.Repos.yunXiaoRelese
 import net.yan100.compose.plugin.consts.Repos.yunXiaoSnapshot
+import net.yan100.compose.plugin.distribute
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
@@ -74,13 +77,23 @@ spotless {
     lineEndings = LineEnding.UNIX
     licenseHeader(license)
     target("**/**.kt")
-    ktfmt().googleStyle()
+    ktfmt().googleStyle().configure {
+      it.setBlockIndent(2)
+      it.setContinuationIndent(2)
+      it.setMaxWidth(160)
+      it.setRemoveUnusedImport(true)
+    }
   }
   kotlinGradle {
     indentWithSpaces(2)
     lineEndings = LineEnding.UNIX
     target("**/**.kts")
-    ktfmt().googleStyle()
+    ktfmt().googleStyle().configure {
+      it.setBlockIndent(2)
+      it.setContinuationIndent(2)
+      it.setMaxWidth(160)
+      it.setRemoveUnusedImport(true)
+    }
   }
   sql {
     indentWithSpaces(2)
@@ -149,15 +162,9 @@ subprojects {
   dependencyManagement {
     imports {
       mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
-      mavenBom(
-        "org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}"
-      )
-      mavenBom(
-        "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudAlibaba.get()}"
-      )
-      mavenBom(
-        "org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}"
-      )
+      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
+      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudAlibaba.get()}")
+      mavenBom("org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}")
       mavenBom("org.drools:drools-bom:${l.versions.drools.get()}")
     }
   }
@@ -171,20 +178,8 @@ subprojects {
     arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
   }
 
-  noArg {
-    annotations(
-      "jakarta.persistence.MappedSuperclass",
-      "jakarta.persistence.Entity",
-      "net.yan100.compose.core.annotations.OpenArg"
-    )
-  }
-  allOpen {
-    annotations(
-      "jakarta.persistence.MappedSuperclass",
-      "jakarta.persistence.Entity",
-      "net.yan100.compose.core.annotations.OpenArg"
-    )
-  }
+  noArg { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity", "net.yan100.compose.core.annotations.OpenArg") }
+  allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity", "net.yan100.compose.core.annotations.OpenArg") }
 
   java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -232,21 +227,12 @@ subprojects {
 
     jar { archiveClassifier.set("") }
 
-    javadoc {
-      if (JavaVersion.current().isJava9Compatible)
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-    }
+    javadoc { if (JavaVersion.current().isJava9Compatible) (options as StandardJavadocDocletOptions).addBooleanOption("html5", true) }
   }
 
   publishing {
     repositories {
-      maven(
-        url =
-          uri(
-            if (version.toString().uppercase().contains("SNAPSHOT")) yunXiaoSnapshot
-            else yunXiaoRelese
-          )
-      ) {
+      maven(url = uri(if (version.toString().uppercase().contains("SNAPSHOT")) yunXiaoSnapshot else yunXiaoRelese)) {
         credentials {
           username = yunXiaoUsername
           password = yunXiaoPassword
@@ -265,6 +251,4 @@ subprojects {
   }
 }
 
-rootProject.tasks {
-  wrapper { distribute(libs.versions.gradle.get(), "https://mirrors.cloud.tencent.com/gradle") }
-}
+rootProject.tasks { wrapper { distribute(libs.versions.gradle.get(), "https://mirrors.cloud.tencent.com/gradle") } }

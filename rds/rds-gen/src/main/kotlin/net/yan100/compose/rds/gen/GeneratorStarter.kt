@@ -43,9 +43,7 @@ class GeneratorStarter {
     ctx.db(connector.queryCurrentDbName()!!)
     ctx.let { c ->
       val db = connector.queryDb(ctx.getDbName())
-      db
-        .filter { !BaseTableNames.all().contains(it.name) }
-        .forEach { templateGenerate(c, it, mysqlConverter) }
+      db.filter { !BaseTableNames.all().contains(it.name) }.forEach { templateGenerate(c, it, mysqlConverter) }
     }
     return this
   }
@@ -53,13 +51,12 @@ class GeneratorStarter {
   private fun templateGenerate(
     renderContext: RenderContext,
     tableEntity: TableEntity,
-    converter: AbstractTypeConverter
+    converter: AbstractTypeConverter,
   ) {
     val table = getTableContext(tableEntity, converter)
     t.render(
       packagePath = renderContext.getEntityPkgPath(),
-      generatedFileName =
-        "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getEntitySuffix()}.${renderContext.getLang()}",
+      generatedFileName = "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getEntitySuffix()}.${renderContext.getLang()}",
       templateFileNamePrefix = "Entity.${renderContext.getLang()}",
       renderContext = renderContext,
       tableContext = table
@@ -67,8 +64,7 @@ class GeneratorStarter {
 
     t.render(
       packagePath = renderContext.getRepositoryPkgPath(),
-      generatedFileName =
-        "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getRepositorySuffix()}.${renderContext.getLang()}",
+      generatedFileName = "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getRepositorySuffix()}.${renderContext.getLang()}",
       templateFileNamePrefix = "Repository.${renderContext.getLang()}",
       renderContext = renderContext,
       tableContext = table
@@ -76,8 +72,7 @@ class GeneratorStarter {
 
     t.render(
       packagePath = renderContext.getServicePkgPath(),
-      generatedFileName =
-        "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getServiceSuffix()}.${renderContext.getLang()}",
+      generatedFileName = "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getServiceSuffix()}.${renderContext.getLang()}",
       templateFileNamePrefix = "Service.${renderContext.getLang()}",
       renderContext = renderContext,
       tableContext = table
@@ -85,8 +80,7 @@ class GeneratorStarter {
 
     t.render(
       packagePath = renderContext.getServiceImplPkgPath(),
-      generatedFileName =
-        "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getServiceImplSuffix()}.${renderContext.getLang()}",
+      generatedFileName = "${DbCaseConverter.firstUpper(tableEntity.name!!)}${ctx.getServiceImplSuffix()}.${renderContext.getLang()}",
       templateFileNamePrefix = "ServiceImpl.${renderContext.getLang()}",
       renderContext = renderContext,
       tableContext = table
@@ -95,7 +89,7 @@ class GeneratorStarter {
 
   private fun getTableContext(
     tableEntity: TableEntity,
-    converter: AbstractTypeConverter
+    converter: AbstractTypeConverter,
   ): TableContext {
     val cols =
       connector
@@ -121,17 +115,11 @@ class GeneratorStarter {
       connector
         .queryIndex(tableEntity.name!!)
         .filter { it.keyName != "PRIMARY" }
-        .filter {
-          !net.yan100.compose.core.consts.DataBaseBasicFieldNames.getAll().contains(it.keyName)
-        }
+        .filter { !net.yan100.compose.core.consts.DataBaseBasicFieldNames.getAll().contains(it.keyName) }
 
     val result = TableContext()
     result.className = DbCaseConverter.firstUpper(tableEntity.name!!)
-    result.imports =
-      cols
-        .filter { it.dbType != null }
-        .mapNotNull { converter.getConverterTypeModel(it.dbType!!).importPkg }
-        .toMutableSet()
+    result.imports = cols.filter { it.dbType != null }.mapNotNull { converter.getConverterTypeModel(it.dbType!!).importPkg }.toMutableSet()
     result.name = tableEntity.name
     result.comment = tableEntity.comment
     result.columns = cols

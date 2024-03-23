@@ -91,10 +91,7 @@ class SuperUserInfo : IEntity() {
   @Nullable @Schema(title = "生日") @Column(name = BIRTHDAY) @Past var birthday: LocalDate? = null
 
   /** 地址 id */
-  @Nullable
-  @Schema(title = "地址 id")
-  @Column(name = ADDRESS_DETAILS_ID)
-  var addressDetailsId: String? = null
+  @Nullable @Schema(title = "地址 id") @Column(name = ADDRESS_DETAILS_ID) var addressDetailsId: String? = null
 
   @Nullable @Schema(title = "地址编码") @Column(name = ADDRESS_CODE) var addressCode: SerialCode? = null
 
@@ -111,25 +108,15 @@ class SuperUserInfo : IEntity() {
   @Nullable @Schema(title = "身份证") @Column(name = ID_CARD, unique = true) var idCard: String? = null
 
   /** 性别：0女，1难，2未知 */
-  @Nullable
-  @Schema(title = " 性别：0女，1难，2未知")
-  @Column(name = GENDER)
-  @Convert(converter = GenderTypingConverter::class)
-  var gender: GenderTyping? = null
+  @Nullable @Schema(title = " 性别：0女，1难，2未知") @Column(name = GENDER) @Convert(converter = GenderTypingConverter::class) var gender: GenderTyping? = null
 
   /** 微信个人 openId */
-  @Nullable
-  @Schema(title = "微信个人 openId")
-  @Column(name = WECHAT_OPENID)
-  var wechatOpenid: String? = null
+  @Nullable @Schema(title = "微信个人 openId") @Column(name = WECHAT_OPENID) var wechatOpenid: String? = null
 
   @Schema(title = "微信号") @Column(name = WECHAT_ACCOUNT) var wechatAccount: SerialCode? = null
 
   /** 微信自定义登录id */
-  @Nullable
-  @Schema(title = "微信自定义登录id")
-  @Column(name = WECHAT_AUTHID)
-  var wechatAuthid: String? = null
+  @Nullable @Schema(title = "微信自定义登录id") @Column(name = WECHAT_AUTHID) var wechatAuthid: String? = null
 
   @Schema(title = "备用手机") @Column(name = SPARE_PHONE) var sparePhone: SerialCode? = null
 
@@ -178,23 +165,13 @@ class FullUserInfo : SuperUserInfo() {
 
   /** 连接的用户 */
   @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(
-    name = USER_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
   @JsonBackReference
   @NotFound(action = NotFoundAction.IGNORE)
   var usr: Usr? = null
 
   /** 用户住址 */
-  @Schema(
-    title = "用户住址",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-    accessMode = Schema.AccessMode.READ_ONLY
-  )
+  @Schema(title = "用户住址", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(
     name = ADDRESS_DETAILS_ID,
@@ -209,13 +186,7 @@ class FullUserInfo : SuperUserInfo() {
   /** 用户头像 */
   @Schema(title = "头像")
   @ManyToOne(targetEntity = LinkedAttachment::class)
-  @JoinColumn(
-    name = AVATAR_IMG_ID,
-    referencedColumnName = ID,
-    foreignKey = Fk(ConstraintMode.NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = AVATAR_IMG_ID, referencedColumnName = ID, foreignKey = Fk(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
   @NotFound(action = NotFoundAction.IGNORE)
   var avatarImage: LinkedAttachment? = null
 }

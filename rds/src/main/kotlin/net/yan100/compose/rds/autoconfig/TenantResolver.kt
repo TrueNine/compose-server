@@ -30,8 +30,7 @@ class TenantResolver : CurrentTenantIdentifierResolver<String>, HibernatePropert
 
   override fun resolveCurrentTenantIdentifier(): String {
     val id = TenantContextHolder.getCurrentTenantId()
-    return if (null != id && Str.hasText(id)) id
-    else DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT_STR
+    return if (null != id && Str.hasText(id)) id else DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT_STR
   }
 
   override fun validateExistingCurrentSessions(): Boolean {

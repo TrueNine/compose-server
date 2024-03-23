@@ -29,7 +29,7 @@ import net.yan100.compose.core.encrypt.Base64Helper
  */
 data class RsaKeyPair(
   @JsonIgnore var rsaPublicKey: RSAPublicKey? = null,
-  @JsonIgnore var rsaPrivateKey: RSAPrivateKey? = null
+  @JsonIgnore var rsaPrivateKey: RSAPrivateKey? = null,
 ) {
   @get:JsonIgnore
   val rsaPublicKeyBase64: String

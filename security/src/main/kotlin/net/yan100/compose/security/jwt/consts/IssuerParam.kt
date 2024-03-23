@@ -28,7 +28,7 @@ data class IssuerParam<S : Any?, E : Any?>(
   var duration: Duration? = null,
   var signatureKey: RSAPrivateKey? = null,
   var contentEncryptEccKey: PublicKey? = null,
-  var subjectObj: S? = null
+  var subjectObj: S? = null,
 ) {
   fun containSubject(): Boolean = this.subjectObj != null
 

@@ -25,5 +25,5 @@ package net.yan100.compose.core.exceptions
 open class RemoteCallException(
   msg: String? = null,
   metaException: Throwable? = null,
-  private val code: Int? = null
+  private val code: Int? = null,
 ) : KnownException(msg, metaException)

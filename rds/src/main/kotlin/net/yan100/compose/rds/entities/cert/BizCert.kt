@@ -50,9 +50,7 @@ abstract class SuperBizCert : IEntity() {
 
   @Schema(title = "签发时间") @Column(name = ISSUE_DATE) var issueDate: LocalDate? = null
 
-  @Schema(title = "地址详情")
-  @Column(name = ADDRESS_DETAILS_ID)
-  var addressDetailsId: ReferenceId? = null
+  @Schema(title = "地址详情") @Column(name = ADDRESS_DETAILS_ID) var addressDetailsId: ReferenceId? = null
 
   @Schema(title = "注册地") @Column(name = ADDRESS_CODE) var addressCode: SerialCode? = null
 
@@ -73,8 +71,4 @@ abstract class SuperBizCert : IEntity() {
   @Schema(title = "所属上传用户") @Column(name = USER_ID) var userId: RefId? = null
 }
 
-@Entity
-@DynamicUpdate
-@DynamicInsert
-@Table(name = SuperBizCert.TABLE_NAME)
-class BizCert : SuperBizCert()
+@Entity @DynamicUpdate @DynamicInsert @Table(name = SuperBizCert.TABLE_NAME) class BizCert : SuperBizCert()

@@ -52,19 +52,12 @@ class ApiCallRecordIEntity : IEntity() {
   /** 从属 API */
   @Schema(title = "API", requiredMode = RequiredMode.NOT_REQUIRED)
   @ManyToOne
-  @JoinColumn(
-    name = API_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
-  )
+  @JoinColumn(name = API_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT))
   @NotFound(action = NotFoundAction.IGNORE)
   var api: Api? = null
 
   /** 设备 id, 浏览器为 agent */
-  @Nullable
-  @Schema(title = "设备 id, 浏览器为 agent")
-  @Column(name = DEVICE_CODE)
-  var deviceCode: String? = null
+  @Nullable @Schema(title = "设备 id, 浏览器为 agent") @Column(name = DEVICE_CODE) var deviceCode: String? = null
 
   /** 请求 ip */
   @Nullable @Schema(title = "请求 ip") @Column(name = REQ_IP) var reqIp: String? = null
@@ -76,8 +69,5 @@ class ApiCallRecordIEntity : IEntity() {
   @Nullable @Schema(title = "响应码") @Column(name = RESP_CODE) var respCode: Int? = null
 
   /** 请求结果 */
-  @Nullable
-  @Schema(title = "请求结果")
-  @Column(name = RESP_RESULT_ENC)
-  var respResultEnc: String? = null
+  @Nullable @Schema(title = "请求结果") @Column(name = RESP_RESULT_ENC) var respResultEnc: String? = null
 }

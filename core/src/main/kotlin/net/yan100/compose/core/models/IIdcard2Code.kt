@@ -38,12 +38,7 @@ interface IIdcard2Code {
   @get:Transient
   @get:JsonIgnore
   val idcardBirthday: LocalDate
-    get() =
-      LocalDate.of(
-        idcard2Code.substring(6, 10).toInt(),
-        idcard2Code.substring(10, 12).toInt(),
-        idcard2Code.substring(12, 14).toInt()
-      )
+    get() = LocalDate.of(idcard2Code.substring(6, 10).toInt(), idcard2Code.substring(10, 12).toInt(), idcard2Code.substring(12, 14).toInt())
 
   @get:Transient
   @get:JsonIgnore

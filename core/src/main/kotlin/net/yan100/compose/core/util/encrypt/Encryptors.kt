@@ -71,14 +71,12 @@ object Encryptors {
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = Encryptors.charset,
-    alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING
+    alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING,
   ): String? =
     runCatching {
         Cipher.getInstance(alg.value).run {
           init(ENC_MODE, publicKey)
-          sharding(data.toByteArray(charset), shardingSize).joinToString(SHARDING_SEP) {
-            Base64Helper.encode(doFinal(it))
-          }
+          sharding(data.toByteArray(charset), shardingSize).joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
         }
       }
       .onFailure { log.error(Encryptors::encrypt.name, it) }
@@ -90,14 +88,12 @@ object Encryptors {
     data: String,
     shardingSize: Int = SHARDING_SIZE,
     charset: Charset = Encryptors.charset,
-    alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING
+    alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA_PADDING,
   ): String? =
     runCatching {
         Cipher.getInstance(alg.value).run {
           init(ENC_MODE, privateKey)
-          sharding(data.toByteArray(charset), shardingSize).joinToString(SHARDING_SEP) {
-            Base64Helper.encode(doFinal(it))
-          }
+          sharding(data.toByteArray(charset), shardingSize).joinToString(SHARDING_SEP) { Base64Helper.encode(doFinal(it)) }
         }
       }
       .onFailure { log.error(Encryptors::encrypt.name, it) }
@@ -120,12 +116,7 @@ object Encryptors {
     runCatching {
         Cipher.getInstance(alg.value).run {
           init(DEC_MODE, privateKey)
-          data
-            .split(SHARDING_SEP)
-            .map { Base64Helper.decodeToByte(it) }
-            .map { doFinal(it) }
-            .reduce { acc, byt -> acc + byt }
-            .let { String(it, charset) }
+          data.split(SHARDING_SEP).map { Base64Helper.decodeToByte(it) }.map { doFinal(it) }.reduce { acc, byt -> acc + byt }.let { String(it, charset) }
         }
       }
       .onFailure { log.error(Encryptors::basicDecrypt.name, it) }
@@ -144,14 +135,8 @@ object Encryptors {
     rsaPublicKey: String,
     data: String,
     shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = Encryptors.charset
-  ): String? =
-    encryptByRsaPublicKey(
-      Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!,
-      data,
-      shardingSize,
-      charset
-    )
+    charset: Charset = Encryptors.charset,
+  ): String? = encryptByRsaPublicKey(Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!, data, shardingSize, charset)
 
   /**
    * @param publicKey 公钥
@@ -166,7 +151,7 @@ object Encryptors {
     publicKey: RSAPublicKey,
     data: String,
     shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = Encryptors.charset
+    charset: Charset = Encryptors.charset,
   ): String? = encrypt(publicKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA_PADDING)
 
   /**
@@ -184,9 +169,8 @@ object Encryptors {
     privateKey: RSAPrivateKey,
     data: String,
     shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = Encryptors.charset
-  ): String? =
-    encryptByPrivateKey(privateKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA_PADDING)
+    charset: Charset = Encryptors.charset,
+  ): String? = encryptByPrivateKey(privateKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA_PADDING)
 
   /**
    * @param eccPublicKey ecc 公钥
@@ -199,7 +183,7 @@ object Encryptors {
   fun encryptByEccPublicKey(
     eccPublicKey: PublicKey,
     data: String,
-    charset: Charset = Encryptors.charset
+    charset: Charset = Encryptors.charset,
   ): String? =
     runCatching {
         Cipher.getInstance("ECIES", "BC").run {
@@ -221,7 +205,7 @@ object Encryptors {
   fun decryptByEccPrivateKey(
     eccPrivateKey: PrivateKey,
     data: String,
-    charset: Charset = Encryptors.charset
+    charset: Charset = Encryptors.charset,
   ): String? =
     runCatching {
         Cipher.getInstance("ECIES", "BC").run {
@@ -243,17 +227,14 @@ object Encryptors {
   fun decryptByRsaPrivateKeyBase64(
     rsaPrivateKey: String,
     ciphertext: String,
-    charset: Charset = Encryptors.charset
-  ): String? =
-    decryptByRsaPrivateKey(Keys.readRsaPrivateKeyByBase64(rsaPrivateKey)!!, ciphertext, charset)
+    charset: Charset = Encryptors.charset,
+  ): String? = decryptByRsaPrivateKey(Keys.readRsaPrivateKeyByBase64(rsaPrivateKey)!!, ciphertext, charset)
 
   /** 使用 SHA 1 进行签名 */
   @JvmStatic
   @JvmOverloads
   fun signatureBySha1(plaintext: String, charset: Charset = Encryptors.charset): String {
-    return signatureBySha1ByteArray(plaintext.toByteArray(charset)).joinToString("") {
-      "%02x".format(it)
-    }
+    return signatureBySha1ByteArray(plaintext.toByteArray(charset)).joinToString("") { "%02x".format(it) }
   }
 
   /** 使用 SHA 1 进行签名 byte[] */
@@ -273,7 +254,7 @@ object Encryptors {
   fun decryptByRsaPrivateKey(
     rsaPrivateKey: RSAPrivateKey,
     ciphertext: String,
-    charset: Charset = Encryptors.charset
+    charset: Charset = Encryptors.charset,
   ): String? = basicDecrypt(rsaPrivateKey, ciphertext, EncryptAlgorithmTyping.RSA_PADDING, charset)
 
   /**
@@ -287,9 +268,8 @@ object Encryptors {
   fun encryptByAesKeyBase64(
     aesKey: String,
     plaintext: String,
-    charset: Charset = StandardCharsets.UTF_8
-  ): String? =
-    encryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), plaintext, charset)
+    charset: Charset = StandardCharsets.UTF_8,
+  ): String? = encryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), plaintext, charset)
 
   /**
    * @param secret 密钥
@@ -302,7 +282,7 @@ object Encryptors {
   fun encryptByAesKey(
     secret: SecretKeySpec,
     plain: String,
-    charset: Charset = Encryptors.charset
+    charset: Charset = Encryptors.charset,
   ): String? =
     runCatching {
         Cipher.getInstance("AES/ECB/PKCS5Padding").run {
@@ -324,9 +304,8 @@ object Encryptors {
   fun decryptByAesKeyBase64(
     aesKey: String,
     ciphertext: String,
-    charset: Charset = Encryptors.charset
-  ): String? =
-    decryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), ciphertext, charset)
+    charset: Charset = Encryptors.charset,
+  ): String? = decryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), ciphertext, charset)
 
   /**
    * @param secret 密钥
@@ -339,7 +318,7 @@ object Encryptors {
   fun decryptByAesKey(
     secret: SecretKeySpec,
     ciphertext: String,
-    charset: Charset = Encryptors.charset
+    charset: Charset = Encryptors.charset,
   ): String? =
     kotlin
       .runCatching {
@@ -356,7 +335,7 @@ object Encryptors {
   fun signWithSha256WithRsaByRsaPrivateKey(
     signContent: String,
     rsaPrivateKey: RSAPrivateKey,
-    charset: Charset = Encryptors.charset
+    charset: Charset = Encryptors.charset,
   ): Signature {
     val signature = Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.value)
     signature.initSign(rsaPrivateKey)

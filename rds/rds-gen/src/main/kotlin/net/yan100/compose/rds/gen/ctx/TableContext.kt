@@ -25,7 +25,7 @@ data class TableContext(
   var comment: String? = null,
   var idx: MutableList<ColumnIndexEntity> = mutableListOf(),
   var columns: MutableList<ColumnModel> = mutableListOf(),
-  var imports: MutableSet<String?> = mutableSetOf()
+  var imports: MutableSet<String?> = mutableSetOf(),
 ) {
   fun getIdxUpper(): MutableList<ColumnIndexEntity> {
     return idx

@@ -8,6 +8,4 @@ pluginManagement {
   }
 }
 
-dependencyResolutionManagement {
-  versionCatalogs { create("libs") { from(files("../libs.versions.toml")) } }
-}
+dependencyResolutionManagement { versionCatalogs { create("libs") { from(files("../libs.versions.toml")) } } }

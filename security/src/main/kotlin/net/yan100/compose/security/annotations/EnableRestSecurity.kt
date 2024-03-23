@@ -43,5 +43,5 @@ annotation class EnableRestSecurity(
   /** @return 允许 放行webjars */
   val allowWebJars: Boolean = true,
   /** @return 任意地请求是否需要认证 */
-  val anyRequestAuthed: Boolean = false
+  val anyRequestAuthed: Boolean = false,
 )

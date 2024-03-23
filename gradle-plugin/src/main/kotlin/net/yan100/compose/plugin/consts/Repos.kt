@@ -26,8 +26,7 @@ object Repos {
   const val tencentCloudMaven = "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"
 
   const val yunXiaoRelese = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-  const val yunXiaoSnapshot =
-    "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
+  const val yunXiaoSnapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
 
   private const val ALI_REPO = "https://maven.aliyun.com/repository/"
 

@@ -34,7 +34,7 @@ import net.yan100.compose.oss.OutMap
  */
 class MinioClientWrapper(
   private val minioClient: MinioClient,
-  private val exposeUrl: String = "http://localhost:9000"
+  private val exposeUrl: String = "http://localhost:9000",
 ) : Oss, MinioClientAdaptor(minioClient, exposeUrl) {
 
   @Suppress("UNCHECKED_CAST")
@@ -75,7 +75,7 @@ class MinioClientWrapper(
   override fun upload(
     stream: InputStream,
     fileArgs: FileArgs,
-    afterExec: Consumer<FileArgs>
+    afterExec: Consumer<FileArgs>,
   ): InMap {
     val ins = upload(stream, fileArgs)
     afterExec.accept(FileArgs.useStreamMap(ins))
@@ -101,7 +101,7 @@ class MinioClientWrapper(
   override fun download(
     beforeExec: Consumer<FileArgs>,
     stream: OutputStream,
-    fileInfo: FileArgs
+    fileInfo: FileArgs,
   ): OutMap {
     val outs = getObject(fileInfo, stream)
     val wrapper = outs(outs!!, stream)

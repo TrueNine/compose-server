@@ -73,10 +73,7 @@ abstract class SuperAttachment : IEntity() {
   @Nullable @Column(name = URL_DOC) @Schema(title = "根路径描述") var urlDoc: String? = null
 
   /** 附件类型 */
-  @Nullable
-  @Column(name = ATT_TYPE)
-  @Schema(title = "附件类型（附件、根路径）")
-  lateinit var attType: AttachmentTyping
+  @Nullable @Column(name = ATT_TYPE) @Schema(title = "附件类型（附件、根路径）") lateinit var attType: AttachmentTyping
 
   @Nullable @Column(name = SIZE) @Schema(title = "附件大小") var size: long? = null
 
@@ -92,12 +89,7 @@ abstract class SuperAttachment : IEntity() {
  * @author TrueNine
  * @since 2023-05-29
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "附件")
-@Table(name = SuperAttachment.TABLE_NAME)
-class Attachment : SuperAttachment()
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "附件") @Table(name = SuperAttachment.TABLE_NAME) class Attachment : SuperAttachment()
 
 /**
  * # 附件全路径实体
@@ -112,29 +104,17 @@ class Attachment : SuperAttachment()
 @Table(name = SuperAttachment.TABLE_NAME)
 class LinkedAttachment : IEntity() {
 
-  @Schema(title = "媒体类型")
-  @Column(name = SuperAttachment.MIME_TYPE, insertable = false, updatable = false)
-  lateinit var mimeType: String
+  @Schema(title = "媒体类型") @Column(name = SuperAttachment.MIME_TYPE, insertable = false, updatable = false) lateinit var mimeType: String
 
-  @JsonIgnore
-  @Column(name = SuperAttachment.BASE_URL, insertable = false, updatable = false)
-  lateinit var baseUrl: String
+  @JsonIgnore @Column(name = SuperAttachment.BASE_URL, insertable = false, updatable = false) lateinit var baseUrl: String
 
-  @JsonIgnore
-  @Column(name = SuperAttachment.BASE_URI, insertable = false, updatable = false)
-  var baseUri: String? = null
+  @JsonIgnore @Column(name = SuperAttachment.BASE_URI, insertable = false, updatable = false) var baseUri: String? = null
 
-  @JsonIgnore
-  @Column(name = SuperAttachment.URL_ID, insertable = false, updatable = false)
-  lateinit var urlId: String
+  @JsonIgnore @Column(name = SuperAttachment.URL_ID, insertable = false, updatable = false) lateinit var urlId: String
 
-  @Schema(title = "保存后的名称")
-  @Column(name = SuperAttachment.SAVE_NAME, insertable = false, updatable = false)
-  lateinit var saveName: String
+  @Schema(title = "保存后的名称") @Column(name = SuperAttachment.SAVE_NAME, insertable = false, updatable = false) lateinit var saveName: String
 
-  @Schema(title = "原始名称")
-  @Column(name = SuperAttachment.META_NAME, insertable = false, updatable = false)
-  lateinit var metaName: String
+  @Schema(title = "原始名称") @Column(name = SuperAttachment.META_NAME, insertable = false, updatable = false) lateinit var metaName: String
 
   @JsonIgnore
   @Column(name = SuperAttachment.ATT_TYPE, insertable = false, updatable = false)
@@ -143,13 +123,7 @@ class LinkedAttachment : IEntity() {
 
   @JsonIgnore
   @Mto(fetch = EAGER)
-  @Jc(
-    name = SuperAttachment.URL_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
-  )
+  @Jc(name = SuperAttachment.URL_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
   @Fetch(JOIN)
   @NotFound(action = IGNORE)
   lateinit var base: Attachment

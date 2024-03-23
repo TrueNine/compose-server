@@ -208,9 +208,7 @@ class IRbacAggregatorImplTest {
       roleService.save(getRole()).let { r ->
         aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let { all ->
           assertTrue("all$all") { all.isNotEmpty() }
-          arRepo.findByIdOrNull(r.id)!!.let { sr ->
-            ps.forEach { assertContains(sr.permissions, it) }
-          }
+          arRepo.findByIdOrNull(r.id)!!.let { sr -> ps.forEach { assertContains(sr.permissions, it) } }
         }
       }
     }
@@ -222,9 +220,7 @@ class IRbacAggregatorImplTest {
       roleService.save(getRole()).let { r ->
         aggregator.savePermissionsToRole(p.id, r.id).let {
           aggregator.revokePermissionsFromRole(p.id, r.id)
-          arRepo.findByIdOrNull(r.id)!!.let { sr ->
-            repeat(sr.permissions.size) { assertFalse { sr.permissions.contains(p) } }
-          }
+          arRepo.findByIdOrNull(r.id)!!.let { sr -> repeat(sr.permissions.size) { assertFalse { sr.permissions.contains(p) } } }
         }
       }
     }

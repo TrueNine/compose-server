@@ -68,7 +68,7 @@ class CnDistrictCode(code: String = "") {
           7,
           8,
           10,
-          11 -> throw IllegalArgumentException("行政区编码格式缺失")
+          11, -> throw IllegalArgumentException("行政区编码格式缺失")
           else -> it.padEnd(12, '0')
         }
       }

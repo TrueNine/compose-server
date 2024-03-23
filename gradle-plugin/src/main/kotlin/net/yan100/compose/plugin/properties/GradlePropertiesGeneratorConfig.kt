@@ -33,9 +33,7 @@ open class GradlePropertiesGeneratorConfig :
     "org.gradle.workers.max" to Runtime.getRuntime().availableProcessors().toString()
   ) {
   fun workers(value: Int) {
-    check(value in 0..1024) {
-      "The number of counties you set up is too large, be careful that the computer is stuck"
-    }
+    check(value in 0..1024) { "The number of counties you set up is too large, be careful that the computer is stuck" }
     this["org.gradle.workers.max"] = value.toString()
   }
 

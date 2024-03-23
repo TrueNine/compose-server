@@ -22,7 +22,7 @@ class SynchronizedSimpleSnowflake(
   private val workId: Long,
   private val datacenterId: Long,
   private var sequence: Long,
-  private val startTimeStamp: Long
+  private val startTimeStamp: Long,
 ) : ISnowflakeGenerator {
   // 长度为5位
   private val workerIdBits = 5L
@@ -37,9 +37,7 @@ class SynchronizedSimpleSnowflake(
 
   init {
     require(!(workId <= 0 || workId >= maxWorkerId)) { "workId 大于$maxDatacenterId 或者小于0" }
-    require(!(datacenterId <= 0 || datacenterId >= maxDatacenterId)) {
-      "datacenterId 大于 $maxDatacenterId 或者小于0"
-    }
+    require(!(datacenterId <= 0 || datacenterId >= maxDatacenterId)) { "datacenterId 大于 $maxDatacenterId 或者小于0" }
     lastTimestamp = currentTimeMillis()
   }
 

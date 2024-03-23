@@ -70,8 +70,4 @@ class SuperFlywaySchemaHistory : IEntity() {
   }
 }
 
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Table(name = SuperFlywaySchemaHistory.TABLE_NAME)
-class FlywaySchemaHistory : SuperFlywaySchemaHistory()
+@Entity @DynamicInsert @DynamicUpdate @Table(name = SuperFlywaySchemaHistory.TABLE_NAME) class FlywaySchemaHistory : SuperFlywaySchemaHistory()

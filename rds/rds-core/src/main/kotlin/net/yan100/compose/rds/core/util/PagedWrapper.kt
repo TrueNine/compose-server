@@ -33,13 +33,9 @@ object PagedWrapper {
   /** ## 构造一个空的参数 */
   @JvmStatic fun <T> empty(): PagedResponseResult<T> = PagedResponseResult.empty()
 
-  @JvmField
-  val DEFAULT_MAX: PagedRequestParam =
-    PagedRequestParam(IPageableEntity.MIN_OFFSET, IPageableEntity.MAX_PAGE_SIZE, false)
+  @JvmField val DEFAULT_MAX: PagedRequestParam = PagedRequestParam(IPageableEntity.MIN_OFFSET, IPageableEntity.MAX_PAGE_SIZE, false)
 
-  @JvmField
-  val UN_PAGE: PagedRequestParam =
-    PagedRequestParam(IPageableEntity.MIN_OFFSET, IPageableEntity.MAX_PAGE_SIZE, true)
+  @JvmField val UN_PAGE: PagedRequestParam = PagedRequestParam(IPageableEntity.MIN_OFFSET, IPageableEntity.MAX_PAGE_SIZE, true)
 
   @JvmStatic
   fun <T> result(jpaPage: Page<T>): PagedResponseResult<T> {
@@ -67,10 +63,7 @@ object PagedWrapper {
   @JvmStatic
   fun param(paramSetting: IPageableEntity? = DEFAULT_MAX): Pageable {
     return if (true != paramSetting?.unPage || null == paramSetting.unPage) {
-      PageRequest.of(
-        paramSetting?.offset ?: 0,
-        paramSetting?.pageSize ?: IPageableEntity.MAX_PAGE_SIZE
-      )
+      PageRequest.of(paramSetting?.offset ?: 0, paramSetting?.pageSize ?: IPageableEntity.MAX_PAGE_SIZE)
     } else Pageable.unpaged()
   }
 
@@ -83,7 +76,7 @@ object PagedWrapper {
   @JvmStatic
   fun <T> warpBy(
     pageParam: PagedRequestParam = DEFAULT_MAX,
-    lazySequence: () -> Sequence<T>
+    lazySequence: () -> Sequence<T>,
   ): PagedResponseResult<T> {
     val sequence = lazySequence()
     val list = sequence.take((pageParam.offset ?: 0) + (pageParam.pageSize ?: 0)).toList()
@@ -109,8 +102,7 @@ val <T> Page<T>.result: Pr<T>
   get() = PagedWrapper.result(this)
 
 /** # 封装一个新地集合到分页结果 */
-fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> =
-  PagedWrapper.resultByNewList(this, newList)
+fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> = PagedWrapper.resultByNewList(this, newList)
 
 /** # 对分页参数的封装，返回一个包装的对象 */
 val Pq?.page: Pageable

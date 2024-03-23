@@ -135,8 +135,6 @@ class RedisJsonSerializerAutoConfiguration(
     factory: RedisConnectionFactory?,
     dr: Duration,
   ): RedisCacheManager {
-    return RedisCacheManager.builder(factory!!)
-      .cacheDefaults(cacheManagerConfig.entryTtl(dr))
-      .build()
+    return RedisCacheManager.builder(factory!!).cacheDefaults(cacheManagerConfig.entryTtl(dr)).build()
   }
 }

@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(net.yan100.compose.security.properties.JwtProperties::class)
 class JwtVerifierAutoConfiguration(
   private val jp: net.yan100.compose.security.properties.JwtProperties,
-  private val kr: IKeysRepo
+  private val kr: IKeysRepo,
 ) {
   @Bean
   @ConditionalOnMissingBean(value = [JwtVerifier::class, JwtIssuer::class])

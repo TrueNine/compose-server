@@ -55,12 +55,7 @@ class JwtTest {
     inputs.encryptedDataObj = mutableListOf("123", "444")
 
     val token = issuer.issued(inputs)
-    val outputs =
-      VerifierParam(
-        token = token,
-        subjectTargetType = Any::class.java,
-        encryptDataTargetType = Any::class.java
-      )
+    val outputs = VerifierParam(token = token, subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java)
     val parsed = verifier.verify(outputs)
     println(token)
     println(parsed?.decryptedData)

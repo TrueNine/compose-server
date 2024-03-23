@@ -24,10 +24,7 @@ import net.yan100.compose.security.oauth2.Oauth2TestEntrance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest(
-  classes = [Oauth2TestEntrance::class],
-  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+@SpringBootTest(classes = [Oauth2TestEntrance::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WxpaPropertyTest {
   @Autowired lateinit var w: WxpaProperty
 

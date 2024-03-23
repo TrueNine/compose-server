@@ -46,12 +46,7 @@ abstract class SuperRole : IEntity() {
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "角色")
-@Table(name = SuperRole.TABLE_NAME)
-class Role : SuperRole()
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "角色") @Table(name = SuperRole.TABLE_NAME) class Role : SuperRole()
 
 @Entity
 @DynamicInsert

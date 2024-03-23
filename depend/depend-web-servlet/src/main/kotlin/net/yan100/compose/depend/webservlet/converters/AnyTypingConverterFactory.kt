@@ -26,8 +26,7 @@ private val log = slf4j(AnyTypingConverterFactory::class)
 
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
   companion object {
-    @JvmStatic
-    private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
+    @JvmStatic private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
   }
 
   @Suppress("UNCHECKED_CAST")
@@ -41,11 +40,10 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
 
   private inner class AnyTypingConverter(
     targetClass: Class<out AnyTyping?>,
-    private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()
+    private val mapping: MutableMap<String, AnyTyping> = mutableMapOf(),
   ) : Converter<String?, AnyTyping?> {
     init {
-      if (targetClass.isEnum)
-        targetClass.enumConstants.filterNotNull().forEach { mapping += it.value.toString() to it }
+      if (targetClass.isEnum) targetClass.enumConstants.filterNotNull().forEach { mapping += it.value.toString() to it }
       else log.error("class: {} 不是枚举类型", targetClass)
     }
 

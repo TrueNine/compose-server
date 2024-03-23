@@ -25,8 +25,7 @@ import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
-class UserInfoServiceImpl(private val infoRepo: IUserInfoRepo) :
-  IUserInfoService, CrudService<UserInfo>(infoRepo) {
+class UserInfoServiceImpl(private val infoRepo: IUserInfoRepo) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
   override fun savePlainUserInfoByUser(createUserId: RefId, usr: Usr): UserInfo {
     return infoRepo.save(
       UserInfo().apply {

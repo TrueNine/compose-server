@@ -30,8 +30,7 @@ class ByteArrayDeserializer : JsonDeserializer<ByteArray?>() {
       val byteArray = ByteArray(str.size())
       for (i in 0 until str.size()) {
         val j = str.get(i)
-        if (j.isNumber) byteArray[i] = j.asInt().toByte()
-        else throw JsonParseException("序列化为 byte 错误")
+        if (j.isNumber) byteArray[i] = j.asInt().toByte() else throw JsonParseException("序列化为 byte 错误")
       }
       byteArray
     }

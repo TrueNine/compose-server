@@ -55,8 +55,6 @@ class TreeRepositoryTest {
     assertTrue("添加后出现重复数据") { nodeIndexes.distinct().size == nodeIndexes.size }
 
     // 集合内必须包含固定的值
-    listOf(2, 3, 4, 5, 6, 7)
-      .map { it.toLong() }
-      .forEach { assertContains(nodeIndexes, it, "没有包含固定的值") }
+    listOf(2, 3, 4, 5, 6, 7).map { it.toLong() }.forEach { assertContains(nodeIndexes, it, "没有包含固定的值") }
   }
 }

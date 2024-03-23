@@ -29,19 +29,17 @@ import java.time.ZoneOffset
 import net.yan100.compose.core.extensionfunctions.*
 
 // FIXME 急需修复 date 的 转换消耗
-class LocalDateTimeSerializer(private val zoneOffset: ZoneOffset) :
-  JsonSerializer<LocalDateTime>() {
+class LocalDateTimeSerializer(private val zoneOffset: ZoneOffset) : JsonSerializer<LocalDateTime>() {
   override fun serialize(
     value: LocalDateTime,
     gen: JsonGenerator?,
-    serializers: SerializerProvider?
+    serializers: SerializerProvider?,
   ) {
     gen?.writeNumber(value.toDate(zoneOffset).toLong())
   }
 }
 
-class LocalDateTimeDeserializer(private val zoneOffset: ZoneOffset) :
-  JsonDeserializer<LocalDateTime>() {
+class LocalDateTimeDeserializer(private val zoneOffset: ZoneOffset) : JsonDeserializer<LocalDateTime>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): LocalDateTime? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
     return timestamp?.toLocalDateTime(zoneOffset)

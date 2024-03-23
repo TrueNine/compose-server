@@ -35,7 +35,7 @@ interface IRbacAggregator {
 
   fun saveAllRoleGroupToUser(
     roleGroupIds: List<ReferenceId>,
-    userId: ReferenceId
+    userId: ReferenceId,
   ): List<UserRoleGroup>
 
   fun revokeRoleGroupFromUser(roleGroupId: ReferenceId, userId: ReferenceId)
@@ -46,7 +46,7 @@ interface IRbacAggregator {
 
   fun saveAllRoleToRoleGroup(
     roleIds: List<ReferenceId>,
-    roleGroupId: ReferenceId
+    roleGroupId: ReferenceId,
   ): List<RoleGroupRole>
 
   fun revokeRoleFromRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId)
@@ -57,7 +57,7 @@ interface IRbacAggregator {
 
   fun saveAllPermissionsToRole(
     permissionsIds: List<ReferenceId>,
-    roleId: ReferenceId
+    roleId: ReferenceId,
   ): List<RolePermissions>
 
   fun revokePermissionsFromRole(permissionsId: ReferenceId, roleId: ReferenceId)

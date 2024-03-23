@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import kotlin.jvm.Throws
-
 private const val DEPRECATED = "该接口或实体的方法不允许调用"
 
 /**

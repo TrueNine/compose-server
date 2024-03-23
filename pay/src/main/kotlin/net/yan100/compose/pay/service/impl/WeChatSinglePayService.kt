@@ -59,7 +59,7 @@ class WeChatSinglePayService(
   private val payProperty: WeChatPaySingleConfigProperty,
   private val bigCodeGenerator: IBizCodeGenerator,
   private val rsaConfig: RSAAutoCertificateConfig,
-  private val mapper: ObjectMapper
+  private val mapper: ObjectMapper,
 ) : SinglePayService {
   companion object {
     @JvmStatic private val HUNDRED = BigDecimal("100")
@@ -92,21 +92,14 @@ class WeChatSinglePayService(
       iso8601Second = LocalDateTime.now().iso8601LongUtc.toString()
       signType = EncryptAlgorithmTyping.RSA.value
       // 签名
-      val signatureStr =
-        "${payProperty.mpAppId}\n${iso8601Second}\n${random32String}\n${prePayId}\n"
-      val signature =
-        Encryptors.signWithSha256WithRsaByRsaPrivateKey(
-          signatureStr,
-          Keys.readRsaPrivateKeyByBase64AndStandard(payProperty.privateKey)!!
-        )
+      val signatureStr = "${payProperty.mpAppId}\n${iso8601Second}\n${random32String}\n${prePayId}\n"
+      val signature = Encryptors.signWithSha256WithRsaByRsaPrivateKey(signatureStr, Keys.readRsaPrivateKeyByBase64AndStandard(payProperty.privateKey)!!)
       paySign = signature.sign().encodeBase64String
     }
   }
 
   override fun findPayOrder(findRq: FindPayOrderReq): FindPayOrderResp? {
-    requireKnown(!(findRq.merchantOrderId.hasText() && findRq.bizCode.hasText())) {
-      "商户订单号和第三方订单号不能同时为空"
-    }
+    requireKnown(!(findRq.merchantOrderId.hasText() && findRq.bizCode.hasText())) { "商户订单号和第三方订单号不能同时为空" }
 
     val transaction =
       if (findRq.merchantOrderId.hasText()) {
@@ -129,18 +122,11 @@ class WeChatSinglePayService(
       meta = transaction
       customOrderId = transaction!!.outTradeNo
       orderNumber = transaction.transactionId
-      amount =
-        BigDecimal(transaction.amount.total)
-          .setScale(2, RoundingMode.UNNECESSARY)
-          .divide(HUNDRED, RoundingMode.UNNECESSARY)
+      amount = BigDecimal(transaction.amount.total).setScale(2, RoundingMode.UNNECESSARY).divide(HUNDRED, RoundingMode.UNNECESSARY)
       tradeStatus = transaction.tradeState.toString()
       tradeStatusDesc = transaction.tradeStateDesc
 
-      paySuccessDatetime =
-        LocalDateTime.parse(
-          transaction.successTime,
-          DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
-        )
+      paySuccessDatetime = LocalDateTime.parse(transaction.successTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"))
     }
   }
 
@@ -148,7 +134,7 @@ class WeChatSinglePayService(
   override fun applyRefundPayOrder(
     refundAmount: BigDecimal,
     totalAmount: BigDecimal,
-    currency: ISO4217
+    currency: ISO4217,
   ) {
     val createRequest = CreateRequest()
     val amountReq =
@@ -175,7 +161,7 @@ class WeChatSinglePayService(
     metaData: String,
     request: HttpServletRequest,
     response: HttpServletResponse,
-    lazyCall: (successReq: PaySuccessNotifyResp) -> Unit
+    lazyCall: (successReq: PaySuccessNotifyResp) -> Unit,
   ): String? {
     val headersMap = request.headerNames.asSequence().map { it to request.getHeader(it) }.toMap()
     val requestParam =
@@ -188,10 +174,7 @@ class WeChatSinglePayService(
         .body(metaData)
         .build()
 
-    val transaction =
-      NotificationParser(rsaConfig).let { parser ->
-        parser.parse(requestParam, Transaction::class.java)
-      }
+    val transaction = NotificationParser(rsaConfig).let { parser -> parser.parse(requestParam, Transaction::class.java) }
     val r =
       if (transaction.tradeState == Transaction.TradeStateEnum.SUCCESS) {
         PaySuccessNotifyResp().apply {

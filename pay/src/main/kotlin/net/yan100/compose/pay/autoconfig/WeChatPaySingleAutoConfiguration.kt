@@ -83,10 +83,8 @@ class WeChatPaySingleAutoConfiguration {
   @DependsOn(CREATE_CONFIG_NAME)
   @ConditionalOnBean(RSAAutoCertificateConfig::class)
   fun WeChatPaySingleConfigProperty(p: WeChatPayProperties): WeChatPaySingleConfigProperty {
-    val privateKeyFile =
-      p.privateKeyPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
-    val certKeyFile =
-      p.certPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+    val privateKeyFile = p.privateKeyPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+    val certKeyFile = p.certPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
 
     return WeChatPaySingleConfigProperty().apply {
       enable = p.enableSingle

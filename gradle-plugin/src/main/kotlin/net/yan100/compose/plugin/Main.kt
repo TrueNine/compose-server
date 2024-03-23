@@ -34,7 +34,7 @@ class Main : Plugin<Project> {
 
     project.afterEvaluate { p ->
       p.wrap {
-        log.debug("compose gradle plugin project = {}", p.name)
+        log.lifecycle("compose gradle plugin project = {}", p.name)
 
         val clean = CleanExtension(this, cfg.cleanExtension)
         log.debug("注册清理任务 = {}", clean)
@@ -42,8 +42,7 @@ class Main : Plugin<Project> {
         val publish = PublishExtension(this, cfg.publishExtension)
         log.debug("注册发布增强任务 = {}", publish)
 
-        val gradlePropertiesGenerator =
-          GradlePropertiesGenerator(this, cfg.gradlePropertiesGenerator)
+        val gradlePropertiesGenerator = GradlePropertiesGenerator(this, cfg.gradlePropertiesGenerator)
         log.debug("注册 properties 生成器 = {}", gradlePropertiesGenerator)
 
         val readmeFiller = ReadmeFiller(this, cfg.filler)

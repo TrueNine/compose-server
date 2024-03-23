@@ -35,9 +35,7 @@ dependencies {
   implementation(libs.bundles.kt)
 }
 
-kotlin {
-  jvmToolchain { languageVersion.set(JavaLanguageVersion.of(l.versions.java.get().toInt())) }
-}
+kotlin { jvmToolchain { languageVersion.set(JavaLanguageVersion.of(l.versions.java.get().toInt())) } }
 
 tasks {
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {

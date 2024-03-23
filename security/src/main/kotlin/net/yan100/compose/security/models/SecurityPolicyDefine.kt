@@ -31,6 +31,5 @@ class SecurityPolicyDefine {
   var service: SecurityUserDetailsService? = null
   var exceptionAdware: SecurityExceptionAdware? = null
   var anonymousPatterns: MutableList<String> = ArrayList()
-  var swaggerPatterns: MutableList<String> =
-    ArrayList(listOf("/v3/api-docs/**", "/v3/api-docs.yaml", "/doc.html**", "/swagger-ui/**"))
+  var swaggerPatterns: MutableList<String> = ArrayList(listOf("/v3/api-docs/**", "/v3/api-docs.yaml", "/doc.html**", "/swagger-ui/**"))
 }

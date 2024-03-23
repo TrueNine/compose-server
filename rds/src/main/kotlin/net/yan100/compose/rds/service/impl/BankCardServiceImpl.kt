@@ -22,5 +22,4 @@ import net.yan100.compose.rds.service.IBankCardService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
-@Service
-class BankCardServiceImpl(val repo: IBankCardRepo) : IBankCardService, CrudService<BankCard>(repo)
+@Service class BankCardServiceImpl(val repo: IBankCardRepo) : IBankCardService, CrudService<BankCard>(repo)

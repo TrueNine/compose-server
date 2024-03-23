@@ -64,9 +64,7 @@ abstract class SuperCert : IEntity() {
 
   @Schema(title = "创建人 id") @Column(name = CREATE_USER_ID) var createUserId: RefId? = null
 
-  @Schema(title = "创建人设备 id")
-  @Column(name = CREATE_DEVICE_ID)
-  var createDeviceId: SerialCode? = null
+  @Schema(title = "创建人设备 id") @Column(name = CREATE_DEVICE_ID) var createDeviceId: SerialCode? = null
 
   @Schema(title = "创建 ip") @Column(name = CREATE_IP) var createIp: String? = null
 
@@ -74,10 +72,7 @@ abstract class SuperCert : IEntity() {
 
   @Schema(title = "证件备注") @Column(name = REMARK) var remark: SerialCode? = null
 
-  @Schema(title = "审核状态")
-  @Column(name = AUDIT_STATUS)
-  @Convert(converter = AuditTypingConverter::class)
-  lateinit var auditStatus: AuditTyping
+  @Schema(title = "审核状态") @Column(name = AUDIT_STATUS) @Convert(converter = AuditTypingConverter::class) lateinit var auditStatus: AuditTyping
 
   @Schema(title = "证件描述") @Column(name = DOC) var doc: BigText? = null
 
@@ -85,20 +80,11 @@ abstract class SuperCert : IEntity() {
 
   @Schema(title = "用户 id") @Column(name = USER_ID) var userId: ReferenceId? = null
 
-  @Schema(title = "证件打印类型")
-  @Column(name = PO_TYPE)
-  @Convert(converter = CertPointTypingConverter::class)
-  var poType: CertPointTyping? = null
+  @Schema(title = "证件打印类型") @Column(name = PO_TYPE) @Convert(converter = CertPointTypingConverter::class) var poType: CertPointTyping? = null
 
-  @Schema(title = "证件内容类型")
-  @Column(name = CO_TYPE)
-  @Convert(converter = CertContentTypingConverter::class)
-  var coType: CertContentTyping? = null
+  @Schema(title = "证件内容类型") @Column(name = CO_TYPE) @Convert(converter = CertContentTypingConverter::class) var coType: CertContentTyping? = null
 
-  @Schema(title = "证件类型")
-  @Column(name = DO_TYPE)
-  @Convert(converter = CertTypingConverter::class)
-  var doType: CertTyping? = null
+  @Schema(title = "证件类型") @Column(name = DO_TYPE) @Convert(converter = CertTypingConverter::class) var doType: CertTyping? = null
 }
 
 @Entity @DynamicUpdate @DynamicInsert @Table(name = SuperCert.TABLE_NAME) class Cert : SuperCert()

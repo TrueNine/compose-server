@@ -76,11 +76,7 @@ abstract class SuperUsr : IEntity() {
   @Nullable @Schema(title = "描述") @Column(name = DOC) var doc: String? = null
 
   /** 密码 */
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @Size(min = 8)
-  @Schema(title = "密码")
-  @Column(name = PWD_ENC)
-  lateinit var pwdEnc: String
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) @Size(min = 8) @Schema(title = "密码") @Column(name = PWD_ENC) lateinit var pwdEnc: String
 
   /** 被封禁结束时间 */
   @Nullable
@@ -91,11 +87,7 @@ abstract class SuperUsr : IEntity() {
   var banTime: datetime? = null
 
   /** 最后请求时间 */
-  @Nullable
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @Schema(title = "最后请求时间")
-  @Column(name = LAST_LOGIN_TIME)
-  var lastLoginTime: datetime? = null
+  @Nullable @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) @Schema(title = "最后请求时间") @Column(name = LAST_LOGIN_TIME) var lastLoginTime: datetime? = null
 
   /** @return 当前用户是否被封禁 */
   @get:Schema(requiredMode = NOT_REQUIRED)
@@ -110,12 +102,7 @@ abstract class SuperUsr : IEntity() {
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "用户")
-@Table(name = SuperUsr.TABLE_NAME)
-class Usr : SuperUsr()
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "用户") @Table(name = SuperUsr.TABLE_NAME) class Usr : SuperUsr()
 
 @Entity
 @DynamicInsert
@@ -130,24 +117,10 @@ class FullUsr : SuperUsr() {
   @JoinTable(
     name = UserRoleGroup.TABLE_NAME,
     joinColumns =
-      [
-        JoinColumn(
-          name = UserRoleGroup.USER_ID,
-          referencedColumnName = ID,
-          foreignKey = ForeignKey(NO_CONSTRAINT),
-          insertable = false,
-          updatable = false
-        )
-      ],
+      [JoinColumn(name = UserRoleGroup.USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)],
     inverseJoinColumns =
       [
-        JoinColumn(
-          name = UserRoleGroup.ROLE_GROUP_ID,
-          referencedColumnName = ID,
-          foreignKey = ForeignKey(NO_CONSTRAINT),
-          insertable = false,
-          updatable = false
-        )
+        JoinColumn(name = UserRoleGroup.ROLE_GROUP_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
       ],
     foreignKey = ForeignKey(NO_CONSTRAINT)
   )

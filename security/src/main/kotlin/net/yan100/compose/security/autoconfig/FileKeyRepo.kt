@@ -37,10 +37,7 @@ class FileKeyRepo(private val baseDir: String = "keys") : IKeysRepo {
   }
 
   private fun load(path: String): String {
-    return BufferedReader(
-        InputStreamReader(BufferedInputStream(ClassPathResource("$baseDir/$path").inputStream))
-      )
-      .use { it.readText() }
+    return BufferedReader(InputStreamReader(BufferedInputStream(ClassPathResource("$baseDir/$path").inputStream))).use { it.readText() }
   }
 
   private fun readBase64(name: String): String {

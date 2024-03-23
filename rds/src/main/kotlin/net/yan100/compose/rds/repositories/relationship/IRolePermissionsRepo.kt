@@ -25,8 +25,7 @@ import org.springframework.stereotype.Repository
 interface IRolePermissionsRepo : IRepo<RolePermissions> {
   fun findByRoleIdAndPermissionsId(roleId: String, permissionsId: String): RolePermissions?
 
-  @Query("select rp.permissionsId from RolePermissions rp")
-  fun findAllPermissionsIdByRoleId(roleId: String): Set<String>
+  @Query("select rp.permissionsId from RolePermissions rp") fun findAllPermissionsIdByRoleId(roleId: String): Set<String>
 
   fun findAllByRoleId(role: String): List<RolePermissions>
 

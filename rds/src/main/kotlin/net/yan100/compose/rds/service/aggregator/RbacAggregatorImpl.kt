@@ -35,11 +35,9 @@ class RbacAggregatorImpl(
   private val rg: net.yan100.compose.rds.repositories.FullRoleGroupEntityRepo,
 ) : IRbacAggregator {
 
-  override fun findAllRoleNameByUserAccount(account: String): Set<String> =
-    userRepo.findAllRoleNameByAccount(account)
+  override fun findAllRoleNameByUserAccount(account: String): Set<String> = userRepo.findAllRoleNameByAccount(account)
 
-  override fun findAllPermissionsNameByUserAccount(account: String): Set<String> =
-    userRepo.findAllPermissionsNameByAccount(account)
+  override fun findAllPermissionsNameByUserAccount(account: String): Set<String> = userRepo.findAllPermissionsNameByAccount(account)
 
   override fun findAllSecurityNameByUserId(userId: ReferenceId): Set<String> {
     // FIXME 待优化
@@ -51,22 +49,13 @@ class RbacAggregatorImpl(
       with(userRoleGroupIds) {
         val roleGroups = rg.findAllById(this)
         val roleNames = roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
-        val permissionNames =
-          roleGroups
-            .asSequence()
-            .map { it.roles }
-            .flatten()
-            .map { it.permissions }
-            .flatten()
-            .map { it.name }
-            .toList()
+        val permissionNames = roleGroups.asSequence().map { it.roles }.flatten().map { it.permissions }.flatten().map { it.name }.toList()
         roleNames + permissionNames
       }
     return allNames.filterNotNull().toSet()
   }
 
-  override fun findAllSecurityNameByAccount(account: String): Set<String> =
-    findAllSecurityNameByUserId(userRepo.findIdByAccount(account))
+  override fun findAllSecurityNameByAccount(account: String): Set<String> = findAllSecurityNameByUserId(userRepo.findIdByAccount(account))
 
   override fun saveRoleGroupToUser(roleGroupId: ReferenceId, userId: ReferenceId): UserRoleGroup? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)
@@ -79,7 +68,7 @@ class RbacAggregatorImpl(
 
   override fun saveAllRoleGroupToUser(
     roleGroupIds: List<ReferenceId>,
-    userId: ReferenceId
+    userId: ReferenceId,
   ): List<UserRoleGroup> {
     val existingRoleGroups = urg.findAllRoleGroupIdByUserId(userId)
     val mewRoleGroups =
@@ -115,7 +104,7 @@ class RbacAggregatorImpl(
 
   override fun saveAllRoleToRoleGroup(
     roleIds: List<ReferenceId>,
-    roleGroupId: ReferenceId
+    roleGroupId: ReferenceId,
   ): List<RoleGroupRole> {
     val existingRoles = rgr.findAllRoleIdByRoleGroupId(roleGroupId)
     val newRoles =
@@ -142,7 +131,7 @@ class RbacAggregatorImpl(
 
   override fun savePermissionsToRole(
     permissionsId: ReferenceId,
-    roleId: ReferenceId
+    roleId: ReferenceId,
   ): RolePermissions? {
     return rp.findByRoleIdAndPermissionsId(roleId, permissionsId)
       ?: rp.save(
@@ -155,7 +144,7 @@ class RbacAggregatorImpl(
 
   override fun saveAllPermissionsToRole(
     permissionsIds: List<ReferenceId>,
-    roleId: ReferenceId
+    roleId: ReferenceId,
   ): List<RolePermissions> {
     val existingPermissions = rp.findAllPermissionsIdByRoleId(roleId)
     val newPermissions =
@@ -178,7 +167,7 @@ class RbacAggregatorImpl(
   @Transactional(rollbackFor = [Exception::class])
   override fun revokeAllPermissionsFromRole(
     permissionsIds: List<ReferenceId>,
-    roleId: ReferenceId
+    roleId: ReferenceId,
   ) {
     rp.deleteAllByPermissionsIdInAndRoleId(permissionsIds, roleId)
   }

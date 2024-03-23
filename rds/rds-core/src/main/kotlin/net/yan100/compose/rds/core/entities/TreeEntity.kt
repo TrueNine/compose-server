@@ -40,27 +40,16 @@ abstract class TreeEntity : IEntity() {
   @JsonIgnore @Column(name = RPI) @Schema(title = "父id") var rpi: RefId? = null
 
   /** 左节点 */
-  @JsonIgnore
-  @BigIntegerAsString
-  @Column(name = RLN)
-  @Schema(title = "左节点", hidden = true)
-  var rln: BigSerial = 1L
+  @JsonIgnore @BigIntegerAsString @Column(name = RLN) @Schema(title = "左节点", hidden = true) var rln: BigSerial = 1L
 
   /** 右节点 */
   @JsonIgnore @Column(name = RRN) @Schema(title = "右节点", hidden = true) var rrn: BigSerial = 2L
 
   /** 节点级别 */
-  @JsonIgnore
-  @Schema(title = "节点级别", defaultValue = "0")
-  @Column(name = NLV)
-  var nlv: BigSerial? = 0L
+  @JsonIgnore @Schema(title = "节点级别", defaultValue = "0") @Column(name = NLV) var nlv: BigSerial? = 0L
 
   /** ### 树组 id，在节点插入时必须更上，在插入时随着父id进行更改 */
-  @BizCode
-  @JsonIgnore
-  @Column(name = TGI)
-  @Schema(title = "树 组id", defaultValue = "0")
-  var tgi: SerialCode? = null
+  @BizCode @JsonIgnore @Column(name = TGI) @Schema(title = "树 组id", defaultValue = "0") var tgi: SerialCode? = null
 
   @JsonIgnore
   @Transient
@@ -74,14 +63,7 @@ abstract class TreeEntity : IEntity() {
   }
 
   override fun toString(): String {
-    return withToString(
-      super.toString(),
-      RPI to rpi,
-      RLN to rln,
-      RRN to rrn,
-      NLV to nlv,
-      TGI to tgi
-    )
+    return withToString(super.toString(), RPI to rpi, RLN to rln, RRN to rrn, NLV to nlv, TGI to tgi)
   }
 
   companion object {

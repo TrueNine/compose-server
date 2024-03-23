@@ -27,5 +27,5 @@ import net.yan100.compose.depend.jvalid.AnyNilValidator
 annotation class EntityLevelValid(
   val message: String = "数据未通过校验",
   val groups: Array<KClass<*>> = [],
-  val payload: Array<KClass<out Payload>> = []
+  val payload: Array<KClass<out Payload>> = [],
 )

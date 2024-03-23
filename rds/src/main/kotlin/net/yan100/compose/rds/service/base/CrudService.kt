@@ -27,11 +27,9 @@ import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.repository.findByIdOrNull
 
 abstract class CrudService<T : IEntity>(private val repo: IRepo<T>) : IService<T> {
-  override fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq?): Pr<T> =
-    repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
+  override fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq?): Pr<T> = repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
 
-  override fun findAllByNotLogicDeleted(@Valid page: Pq?): Pr<T> =
-    repo.findAllByNotLogicDeleted(page.page).result
+  override fun findAllByNotLogicDeleted(@Valid page: Pq?): Pr<T> = repo.findAllByNotLogicDeleted(page.page).result
 
   override fun findAll(@Valid page: Pq?): Pr<T> = repo.findAll(page.page).result
 
@@ -45,8 +43,7 @@ abstract class CrudService<T : IEntity>(private val repo: IRepo<T>) : IService<T
 
   override fun findByIdAndNotLogicDeleted(id: Id): T = repo.findByIdAndNotLogicDelete(id)
 
-  override fun findByIdAndNotLogicDeletedOrNull(id: Id): T? =
-    repo.findByIdAndNotLogicDeleteOrNull(id)
+  override fun findByIdAndNotLogicDeletedOrNull(id: Id): T? = repo.findByIdAndNotLogicDeleteOrNull(id)
 
   override fun findLdfById(id: Id): Boolean = repo.findLdfById(id) ?: false
 

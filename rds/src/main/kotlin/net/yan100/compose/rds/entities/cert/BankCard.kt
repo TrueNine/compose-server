@@ -50,9 +50,7 @@ abstract class SuperBankCard : TreeEntity() {
 
   @Schema(title = "开户行") @Col(name = ISSUE_ADDRESS_DETAILS) var issueAddressDetails: String? = null
 
-  @Schema(title = "银行类型", example = "中国银行、建设银行")
-  @Column(name = BANK_TYPE)
-  var bankType: String? = null
+  @Schema(title = "银行类型", example = "中国银行、建设银行") @Column(name = BANK_TYPE) var bankType: String? = null
 
   @Schema(title = "银行组织", example = "银联") @Column(name = BANK_GROUP) var bankGroup: Int? = null
 
@@ -63,8 +61,4 @@ abstract class SuperBankCard : TreeEntity() {
   @Column(name = USER_ID) var userId: RefId? = null
 }
 
-@Entity
-@DynamicUpdate
-@DynamicInsert
-@Table(name = SuperBankCard.TABLE_NAME)
-class BankCard : SuperBankCard()
+@Entity @DynamicUpdate @DynamicInsert @Table(name = SuperBankCard.TABLE_NAME) class BankCard : SuperBankCard()

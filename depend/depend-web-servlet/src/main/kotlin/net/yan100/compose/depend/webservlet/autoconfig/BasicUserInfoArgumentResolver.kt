@@ -49,7 +49,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
     parameter: MethodParameter,
     mavContainer: ModelAndViewContainer?,
     webRequest: NativeWebRequest,
-    binderFactory: WebDataBinderFactory?
+    binderFactory: WebDataBinderFactory?,
   ): Any? {
     val u = UserInfoContextHolder.get()
     log.info("argument injection for {}", u)

@@ -26,6 +26,5 @@ import org.springframework.stereotype.Component
 class CertContentTypingConverter : AttributeConverter<CertContentTyping?, Int?> {
   override fun convertToDatabaseColumn(attribute: CertContentTyping?): Int? = attribute?.value
 
-  override fun convertToEntityAttribute(dbData: Int?): CertContentTyping? =
-    CertContentTyping.findVal(dbData)
+  override fun convertToEntityAttribute(dbData: Int?): CertContentTyping? = CertContentTyping.findVal(dbData)
 }

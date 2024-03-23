@@ -59,9 +59,7 @@ interface ICnNbsAddressApi {
     @PathVariable year: String? = DEFAULT_VERSION,
   ): ResponseEntity<String>
 
-  @GetExchange(
-    "{year}/{provinceCode}/{cityCode}/{countyCode}/{provinceCode}{cityCode}{countyCode}{villageCode}.html"
-  )
+  @GetExchange("{year}/{provinceCode}/{cityCode}/{countyCode}/{provinceCode}{cityCode}{countyCode}{villageCode}.html")
   fun getVillagePage(
     @PathVariable provinceCode: String,
     @PathVariable cityCode: String,

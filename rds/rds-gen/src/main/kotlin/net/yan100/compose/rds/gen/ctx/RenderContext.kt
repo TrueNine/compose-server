@@ -108,8 +108,7 @@ class RenderContext {
   }
 
   fun ignoreColumns(ignore: (MutableSet<String>) -> MutableSet<String>): RenderContext {
-    this.ignoreColumns =
-      ignore.invoke(net.yan100.compose.core.consts.DataBaseBasicFieldNames.getAll().toMutableSet())
+    this.ignoreColumns = ignore.invoke(net.yan100.compose.core.consts.DataBaseBasicFieldNames.getAll().toMutableSet())
     return this
   }
 

@@ -35,10 +35,7 @@ class GradlePropertiesGenerator(
 
   init {
     project.wrap {
-      val propertiesFile =
-        rootProject.layout.projectDirectory.file(
-          GradlePropertiesGeneratorConfig.GRADLE_PROPERTIES_NAME
-        )
+      val propertiesFile = rootProject.layout.projectDirectory.file(GradlePropertiesGeneratorConfig.GRADLE_PROPERTIES_NAME)
       val file = propertiesFile.asFile
       tasks.create(TASK_NAME) {
         it.group = Constant.TASK_GROUP

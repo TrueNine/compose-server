@@ -24,8 +24,7 @@ import org.springframework.messaging.support.GenericMessage
 import org.springframework.stereotype.Service
 
 @Service
-class JacksonSerializerMessageInterceptor(private val objectMapper: ObjectMapper) :
-  ChannelInterceptor {
+class JacksonSerializerMessageInterceptor(private val objectMapper: ObjectMapper) : ChannelInterceptor {
   override fun preSend(message: Message<*>, channel: MessageChannel): Message<*>? {
     val m =
       if (message.payload is String || message.payload is ByteArray) message

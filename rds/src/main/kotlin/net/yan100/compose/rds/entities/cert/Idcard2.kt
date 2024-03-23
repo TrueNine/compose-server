@@ -60,14 +60,9 @@ abstract class SuperIdcard2 : IIdcard2Code, IEntity() {
 
   @NotNull @Schema(title = "身份证号") @Column(name = CODE) lateinit var code: SerialCode
 
-  @Schema(title = "性别")
-  @Column(name = GENDER)
-  @Convert(converter = GenderTypingConverter::class)
-  var gender: GenderTyping? = null
+  @Schema(title = "性别") @Column(name = GENDER) @Convert(converter = GenderTypingConverter::class) var gender: GenderTyping? = null
 
-  @Schema(title = "外联 地址详情id（出生地）")
-  @Column(name = ADDRESS_DETAILS_ID)
-  var addressDetailsId: ReferenceId? = null
+  @Schema(title = "外联 地址详情id（出生地）") @Column(name = ADDRESS_DETAILS_ID) var addressDetailsId: ReferenceId? = null
 
   @NotNull @Schema(title = "名称") @Column(name = NAME) lateinit var name: String
 
@@ -79,9 +74,4 @@ abstract class SuperIdcard2 : IIdcard2Code, IEntity() {
     get() = this.code
 }
 
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "第二代身份证")
-@Table(name = SuperIdcard2.TABLE_NAME)
-class Idcard2 : SuperIdcard2()
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "第二代身份证") @Table(name = SuperIdcard2.TABLE_NAME) class Idcard2 : SuperIdcard2()

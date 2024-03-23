@@ -47,7 +47,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
   override fun doFilterInternal(
     request: HttpServletRequest,
     response: HttpServletResponse,
-    filterChain: FilterChain
+    filterChain: FilterChain,
   ) {
     // 跨域请求直接放行
     if (request.method == Methods.OPTIONS) {
@@ -79,8 +79,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
 
     log.trace("获取到 details = {}", details)
 
-    val usernamePasswordAuthenticationToken =
-      UsernamePasswordAuthenticationToken(details, details.password, details.authorities)
+    val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(details, details.password, details.authorities)
     log.trace("upa = {}", usernamePasswordAuthenticationToken)
     // 设置验证信息过滤器放行
     SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
@@ -98,8 +97,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @return [Boolean]
    */
   private fun containsTokenPair(request: HttpServletRequest): Boolean =
-    request.getHeader(Headers.AUTHORIZATION).hasText() &&
-      request.getHeader(Headers.X_REFRESH).hasText()
+    request.getHeader(Headers.AUTHORIZATION).hasText() && request.getHeader(Headers.X_REFRESH).hasText()
 
   /**
    * 从请求得到 token
@@ -107,8 +105,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getToken(request: HttpServletRequest?): String? =
-    request?.getHeader(Headers.AUTHORIZATION)
+  private fun getToken(request: HttpServletRequest?): String? = request?.getHeader(Headers.AUTHORIZATION)
 
   /**
    * 从请求获得 re-flash 令牌
@@ -116,8 +113,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getRefreshToken(request: HttpServletRequest?): String? =
-    request?.getHeader(Headers.X_REFRESH)
+  private fun getRefreshToken(request: HttpServletRequest?): String? = request?.getHeader(Headers.X_REFRESH)
 
   /**
    * 合法性检查
@@ -132,6 +128,6 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
     token: String?,
     reFlashToken: String?,
     request: HttpServletRequest,
-    response: HttpServletResponse
+    response: HttpServletResponse,
   ): AuthRequestInfo?
 }

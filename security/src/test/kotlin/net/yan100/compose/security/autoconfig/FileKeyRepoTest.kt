@@ -83,12 +83,7 @@ class FileKeyRepoTest {
         .contentDecryptKey(e.eccPrivateKey!!)
         .build()
 
-    val ver =
-      JwtVerifier.createVerifier()
-        .serializer(ObjectMapper())
-        .contentDecryptKey(e.eccPrivateKey!!)
-        .signatureVerifyKey(s.rsaPublicKey!!)
-        .build()
+    val ver = JwtVerifier.createVerifier().serializer(ObjectMapper()).contentDecryptKey(e.eccPrivateKey!!).signatureVerifyKey(s.rsaPublicKey!!).build()
 
     val issToken =
       iss.issued(
@@ -97,14 +92,7 @@ class FileKeyRepoTest {
           subjectObj = "3" to "4"
         }
       )
-    val res =
-      ver.verify(
-        VerifierParam(
-          issToken,
-          subjectTargetType = Any::class.java,
-          encryptDataTargetType = Any::class.java
-        )
-      )
+    val res = ver.verify(VerifierParam(issToken, subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java))
     println(res?.subject)
     println(res?.decryptedData)
   }

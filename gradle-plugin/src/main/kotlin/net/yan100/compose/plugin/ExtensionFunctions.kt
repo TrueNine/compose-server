@@ -87,6 +87,4 @@ fun Wrapper.distribute(
  * @return 如果版本号为 [Constant.Gradle.UNKNOWN_PROJECT_VERSION] 则返回空字符串
  */
 val Project.emptyVersion: String
-  get() =
-    if (this.project.version.toString() == Constant.Gradle.UNKNOWN_PROJECT_VERSION) ""
-    else this.project.version.toString()
+  get() = if (this.project.version.toString() == Constant.Gradle.UNKNOWN_PROJECT_VERSION) "" else this.project.version.toString()

@@ -22,7 +22,7 @@ import org.springframework.data.domain.Sort
 
 fun MutableList<Sort.Order>.querydslOrderBy(
   propertyName: String,
-  desc: Boolean? = null
+  desc: Boolean? = null,
 ): MutableList<Sort.Order> {
   if (propertyName.nonText()) return this
   val pName = propertyName.snakeCaseToCamelCase

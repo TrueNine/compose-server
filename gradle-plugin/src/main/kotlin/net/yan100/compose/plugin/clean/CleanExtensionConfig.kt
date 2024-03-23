@@ -16,8 +16,7 @@
  */
 package net.yan100.compose.plugin.clean
 
-open class CleanExtensionConfig :
-  MutableSet<String> by mutableSetOf(*DEFAULT_CLEANS.toTypedArray()) {
+open class CleanExtensionConfig : MutableSet<String> by mutableSetOf(*DEFAULT_CLEANS.toTypedArray()) {
   internal fun getAllProperties(): Set<String> = this
 
   fun delete(vararg path: String) {

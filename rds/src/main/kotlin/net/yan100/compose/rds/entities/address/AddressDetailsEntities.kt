@@ -47,9 +47,7 @@ abstract class SuperAddressDetails : IEntity() {
   }
 
   /** 地址 id */
-  @Schema(title = "地址 id")
-  @Column(name = ADDRESS_ID, nullable = false)
-  var addressId: String? = null
+  @Schema(title = "地址 id") @Column(name = ADDRESS_ID, nullable = false) var addressId: String? = null
 
   /** 联系电话 */
   @NotBlank(message = "手机号不能为空")
@@ -59,35 +57,19 @@ abstract class SuperAddressDetails : IEntity() {
   var phone: String? = null
 
   /** ## 用户 id */
-  @NotBlank(message = "用户 id 不能数为空")
-  @Schema(title = "用户 id")
-  @Column(name = USER_ID)
-  lateinit var userId: RefId
+  @NotBlank(message = "用户 id 不能数为空") @Schema(title = "用户 id") @Column(name = USER_ID) lateinit var userId: RefId
 
   /** 联系人名称 */
-  @NotBlank(message = "请留一个姓名")
-  @Schema(title = "联系人名称")
-  @Column(name = NAME)
-  var name: String? = null
+  @NotBlank(message = "请留一个姓名") @Schema(title = "联系人名称") @Column(name = NAME) var name: String? = null
 
   /** 地址代码 */
-  @NotBlank(message = "地址代码不能为空")
-  @Schema(title = "地址代码")
-  @Column(name = ADDRESS_CODE)
-  lateinit var addressCode: SerialCode
+  @NotBlank(message = "地址代码不能为空") @Schema(title = "地址代码") @Column(name = ADDRESS_CODE) lateinit var addressCode: SerialCode
 
   /** 地址详情 */
-  @NotBlank(message = "详细地址不能为空")
-  @Schema(title = "地址详情")
-  @Column(name = ADDRESS_DETAILS, nullable = false)
-  lateinit var addressDetails: String
+  @NotBlank(message = "详细地址不能为空") @Schema(title = "地址详情") @Column(name = ADDRESS_DETAILS, nullable = false) lateinit var addressDetails: String
 
   /** 定位 */
-  @Nullable
-  @Schema(title = "定位")
-  @Column(name = CENTER)
-  @Convert(converter = WGS84Converter::class)
-  var center: WGS84? = null
+  @Nullable @Schema(title = "定位") @Column(name = CENTER) @Convert(converter = WGS84Converter::class) var center: WGS84? = null
 }
 
 /**
@@ -96,12 +78,7 @@ abstract class SuperAddressDetails : IEntity() {
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "详细地址")
-@Table(name = SuperAddressDetails.TABLE_NAME)
-class AddressDetails : SuperAddressDetails()
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "详细地址") @Table(name = SuperAddressDetails.TABLE_NAME) class AddressDetails : SuperAddressDetails()
 
 @Entity
 @DynamicInsert
@@ -125,18 +102,10 @@ class NonDesensitizedAddressDetails : SuperAddressDetails() {
   override lateinit var addressDetails: String
 
   /** 地址代码 */
-  @get:NonDesensitizedRef
-  @NotBlank(message = "地址代码不能为空")
-  @Schema(title = "地址代码")
-  @Column(name = ADDRESS_CODE)
-  override lateinit var addressCode: SerialCode
+  @get:NonDesensitizedRef @NotBlank(message = "地址代码不能为空") @Schema(title = "地址代码") @Column(name = ADDRESS_CODE) override lateinit var addressCode: SerialCode
 
   /** 联系人名称 */
-  @get:NonDesensitizedRef
-  @NotBlank(message = "请留一个姓名")
-  @Schema(title = "联系人名称")
-  @Column(name = NAME)
-  override var name: String? = null
+  @get:NonDesensitizedRef @NotBlank(message = "请留一个姓名") @Schema(title = "联系人名称") @Column(name = NAME) override var name: String? = null
 }
 
 @Entity
@@ -148,13 +117,7 @@ class FullAddressDetails : SuperAddressDetails() {
   /** 地址 */
   @ManyToOne(fetch = FetchType.EAGER)
   @Schema(title = "地址", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JoinColumn(
-    name = ADDRESS_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = ADDRESS_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
   @NotFound(action = NotFoundAction.IGNORE)
   @JsonBackReference
   @Fetch(FetchMode.JOIN)

@@ -27,7 +27,7 @@ data class VerifierParam<S : Any, E : Any>(
   var signatureKey: RSAPublicKey? = null,
   var contentEncryptEccKey: PrivateKey? = null,
   var id: String? = null,
-  var issuer: String? = null
+  var issuer: String? = null,
 ) {
   fun isRequireDecrypted(): Boolean = this.encryptDataTargetType != null
 

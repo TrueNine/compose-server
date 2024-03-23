@@ -43,16 +43,14 @@ val defaultJar by
 
 val postgresqlJar by
   tasks.creating(Jar::class) {
-    val postgresqlSourceSet: SourceSet by
-      sourceSets.creating { resources.srcDir("src/main/resources/postgresql") }
+    val postgresqlSourceSet: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/postgresql") }
     archiveClassifier.set("postgresql")
     from(common.resources, postgresqlSourceSet.resources, sourceSets.main.get().output.classesDirs)
   }
 
 val mysqlJar by
   tasks.creating(Jar::class) {
-    val mysqlSourceSet: SourceSet by
-      sourceSets.creating { resources.srcDir("src/main/resources/mysql") }
+    val mysqlSourceSet: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/mysql") }
     archiveClassifier.set("mysql")
     from(mysqlSourceSet.resources, sourceSets.main.get().output.classesDirs)
   }

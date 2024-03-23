@@ -29,8 +29,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class AddressServiceImpl(private val repo: IAddressRepo) :
-  IAddressService, CrudService<Address>(repo) {
+class AddressServiceImpl(private val repo: IAddressRepo) : IAddressService, CrudService<Address>(repo) {
   override fun findByCode(code: SerialCode): Address? {
     return repo.findByCode(code)
   }
@@ -40,9 +39,7 @@ class AddressServiceImpl(private val repo: IAddressRepo) :
   }
 
   override fun clearAndInitProvinces(lazy: () -> List<Address>): List<Address> {
-    repo.delete { root, _: CriteriaQuery<*>?, b ->
-      b.notEqual(root.get<String>(AnyEntity.ID), repo.findRootId())
-    }
+    repo.delete { root, _: CriteriaQuery<*>?, b -> b.notEqual(root.get<String>(AnyEntity.ID), repo.findRootId()) }
     val cleanedRoot = repo.save(repo.findRoot().withNew().apply { id = repo.findRootId() })
     return repo.saveChildren(cleanedRoot, lazy())
   }

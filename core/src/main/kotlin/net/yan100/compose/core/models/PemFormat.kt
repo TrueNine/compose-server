@@ -32,20 +32,13 @@ class PemFormat(private val pem: String) {
 
     @JvmStatic
     fun ofKey(key: Key, keyType: String? = null): String {
-      return base64ToPem(
-        key.encoded.encodeBase64String,
-        keyType ?: "${key.algorithm} ${key.format ?: ""}"
-      )
+      return base64ToPem(key.encoded.encodeBase64String, keyType ?: "${key.algorithm} ${key.format ?: ""}")
     }
 
     @JvmStatic
     fun base64ToPem(base64: String, keyType: String? = null): String {
       val trim = base64.trim()
-      val a =
-        trim
-          .replace("\r", "\n")
-          .windowed(LINE_LENGTH, LINE_LENGTH, true)
-          .joinToString(System.lineSeparator())
+      val a = trim.replace("\r", "\n").windowed(LINE_LENGTH, LINE_LENGTH, true).joinToString(System.lineSeparator())
       return "$BEGIN_START${keyType?.uppercase()?.trim() ?: ""}$SEPARATOR" +
         System.lineSeparator() +
         a +

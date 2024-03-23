@@ -73,7 +73,7 @@ class AliCloudOss(val oss: OSS) : Oss {
   override fun upload(
     stream: InputStream,
     fileArgs: FileArgs,
-    afterExec: Consumer<FileArgs>
+    afterExec: Consumer<FileArgs>,
   ): InMap {
     TODO("Not yet implemented")
   }
@@ -89,7 +89,7 @@ class AliCloudOss(val oss: OSS) : Oss {
   override fun download(
     beforeExec: Consumer<FileArgs>,
     stream: OutputStream,
-    fileInfo: FileArgs
+    fileInfo: FileArgs,
   ): OutMap {
     TODO("Not yet implemented")
   }

@@ -27,39 +27,31 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IAttachmentRepo : IRepo<Attachment> {
-  @Query(
-    """
+  @Query("""
     select new kotlin.Pair(a.baseUrl,a.saveName)
     from Attachment a
     where a.id = :id
-  """
-  )
+  """)
   fun findBaseUrlAndSaveNamePairById(id: Long): Pair<String, String>?
 
-  @Query("""select a.metaName from Attachment a where a.id = :id""")
-  fun findMetaNameById(id: String): String?
+  @Query("""select a.metaName from Attachment a where a.id = :id""") fun findMetaNameById(id: String): String?
 
-  @Query("""select a.saveName from Attachment a where a.id = :id""")
-  fun findSaveNameById(id: String): String?
+  @Query("""select a.saveName from Attachment a where a.id = :id""") fun findSaveNameById(id: String): String?
 
   /** 根据id查找附件的全路径 */
-  @Query(
-    """
+  @Query("""
     select b.baseUrl||a.metaName
     from Attachment a
     inner join Attachment b ON a.urlId = b.id
     where a.id = :id
-"""
-  )
+""")
   fun findFullPathById(@Param("id") id: String): String?
 
-  @Query(
-    """
+  @Query("""
     select a.baseUrl||a.metaName
     from Attachment a
     where a.metaName LIKE concat(:metaName,'%%') 
-    """
-  )
+    """)
   fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pageable): Page<String>
 
   /** ## 根据 baseUrl 查询其下的所有 附件 */
@@ -86,7 +78,7 @@ interface IAttachmentRepo : IRepo<Attachment> {
 
   fun findAllByBaseUrlInAndBaseUriIn(
     baseUrls: List<String>,
-    baseUris: List<String>
+    baseUris: List<String>,
   ): List<Attachment>
 }
 

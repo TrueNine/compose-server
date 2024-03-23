@@ -21,6 +21,4 @@ import net.yan100.compose.rds.repositories.cert.IHouseholdRegistrationCardRepo
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
-@Service
-class HouseholdRegistrationCardServiceImpl(val repo: IHouseholdRegistrationCardRepo) :
-  CrudService<HouseholdCert>(repo)
+@Service class HouseholdRegistrationCardServiceImpl(val repo: IHouseholdRegistrationCardRepo) : CrudService<HouseholdCert>(repo)

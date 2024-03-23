@@ -41,7 +41,7 @@ private val log = slf4j(FlywaySchemaHistoryServiceImpl::class)
 @Service
 class FlywaySchemaHistoryServiceImpl(
   private val repo: IFlywaySchemaHistoryRepo,
-  private val dbProperty: DataSourceProperties
+  private val dbProperty: DataSourceProperties,
 ) : IFlywaySchemaHistoryService, CrudService<FlywaySchemaHistory>(repo) {
 
   private fun getDbType(): DbType? {

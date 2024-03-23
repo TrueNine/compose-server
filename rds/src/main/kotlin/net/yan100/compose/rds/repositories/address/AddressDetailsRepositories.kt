@@ -43,7 +43,7 @@ interface IAddressDetailsRepo : IRepo<AddressDetails> {
   """)
   fun findNonDesensitizedAllByUserId(
     userId: String,
-    page: Pageable
+    page: Pageable,
   ): Page<NonDesensitizedAddressDetails>
 
   /** ## 根据电话查询地址 */
@@ -56,7 +56,7 @@ interface IAddressDetailsRepo : IRepo<AddressDetails> {
   """)
   fun findNonDesensitizedAllByPhone(
     phone: String,
-    page: Pageable
+    page: Pageable,
   ): Page<NonDesensitizedAddressDetails>
 }
 

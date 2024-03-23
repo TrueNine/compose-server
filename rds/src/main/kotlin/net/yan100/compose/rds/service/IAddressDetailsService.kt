@@ -31,7 +31,7 @@ interface IAddressDetailsService : IService<AddressDetails> {
 
   fun findNonDesensitizedAllByPhone(
     phone: String,
-    page: Pq = Pw.DEFAULT_MAX
+    page: Pq = Pw.DEFAULT_MAX,
   ): Pr<NonDesensitizedAddressDetails>
 
   fun findFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails>
@@ -40,7 +40,7 @@ interface IAddressDetailsService : IService<AddressDetails> {
 
   fun findNonDesensitizedAllByUserId(
     userId: String,
-    page: Pq = Pw.DEFAULT_MAX
+    page: Pq = Pw.DEFAULT_MAX,
   ): Pr<NonDesensitizedAddressDetails>
 
   fun findFullAllByUserId(userId: ReferenceId, page: Pq = Pw.DEFAULT_MAX): Pr<FullAddressDetails>

@@ -34,7 +34,7 @@ open class QueryDslExtensionFUnctionsArg1<E : IEntity, T : EntityPathBase<E>>(
   /** ## 当前使用的表达式 */
   val q: T,
   /** ## BooleanBuilder 用于构建条件 */
-  val bb: BooleanBuilder
+  val bb: BooleanBuilder,
 )
 
 val prototypeBooleanBuilder = BooleanBuilder()
@@ -47,14 +47,14 @@ val prototypeBooleanBuilder = BooleanBuilder()
  */
 inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
   e: T,
-  crossinline fn: QueryDslExtensionFUnctionsArg1<E, T>.() -> R
+  crossinline fn: QueryDslExtensionFUnctionsArg1<E, T>.() -> R,
 ): R = fn(QueryDslExtensionFUnctionsArg1(e, prototypeBooleanBuilder.clone()))
 
 open class QueryDslExtensionFUnctionsArg3<E : IEntity, T : EntityPathBase<E>>(
   q: T,
   bb: BooleanBuilder,
   /** ## JPA Query Factory */
-  val qf: JPAQueryFactory
+  val qf: JPAQueryFactory,
 ) : QueryDslExtensionFUnctionsArg1<E, T>(q, bb)
 
 /**
@@ -69,13 +69,13 @@ open class QueryDslExtensionFUnctionsArg3<E : IEntity, T : EntityPathBase<E>>(
 inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
   e: T,
   entityManager: EntityManager,
-  crossinline fn: QueryDslExtensionFUnctionsArg3<E, T>.() -> R
+  crossinline fn: QueryDslExtensionFUnctionsArg3<E, T>.() -> R,
 ): R = fn(QueryDslExtensionFUnctionsArg3(e, BooleanBuilder(), JPAQueryFactory(entityManager)))
 
 /* order by extension functions */
 
 inline fun querydslOrderBy(
-  crossinline orderFn: MutableList<Sort.Order>.() -> Unit
+  crossinline orderFn: MutableList<Sort.Order>.() -> Unit,
 ): MutableList<Sort.Order> {
   val i = mutableListOf<Sort.Order>()
   orderFn(i)
@@ -83,7 +83,7 @@ inline fun querydslOrderBy(
 }
 
 fun <E> FluentQuery.FetchableFluentQuery<E>.sortBy(
-  orders: MutableList<Sort.Order>
+  orders: MutableList<Sort.Order>,
 ): FluentQuery.FetchableFluentQuery<E> {
   return sortBy(orders.asQuerySort())
 }

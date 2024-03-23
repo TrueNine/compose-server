@@ -41,7 +41,7 @@ class AttachmentServiceImpl(
 
   override fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(
     baseUrl: String,
-    baseUri: String
+    baseUri: String,
   ): Attachment {
     return findByBaseUrlAndBaseUri(baseUrl, baseUri)
       ?: save(

@@ -126,6 +126,5 @@ class AccountAggregatorImpl(
     } else false
   }
 
-  override fun bannedAccountTo(account: String, dateTime: LocalDateTime) =
-    userService.modifyUserBandTimeTo(account, dateTime)
+  override fun bannedAccountTo(account: String, dateTime: LocalDateTime) = userService.modifyUserBandTimeTo(account, dateTime)
 }

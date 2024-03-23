@@ -20,8 +20,7 @@ import org.springframework.core.NamedInheritableThreadLocal
 
 object UserInfoContextHolder {
   @JvmStatic
-  private val CURRENT_USER: ThreadLocal<net.yan100.compose.core.models.RequestInfo> =
-    NamedInheritableThreadLocal("UserInfoContextHolder::current_user")
+  private val CURRENT_USER: ThreadLocal<net.yan100.compose.core.models.RequestInfo> = NamedInheritableThreadLocal("UserInfoContextHolder::current_user")
 
   @JvmStatic
   fun set(info: net.yan100.compose.core.models.RequestInfo) {

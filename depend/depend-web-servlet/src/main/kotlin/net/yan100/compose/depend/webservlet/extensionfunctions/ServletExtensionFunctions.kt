@@ -36,7 +36,7 @@ inline fun HttpServletResponse.useResponse(
   contentType: MediaTypes = MediaTypes.BINARY,
   charset: Charset = StandardCharsets.UTF_8,
   locale: Locale = Locale.CHINA,
-  crossinline with: (HttpServletResponse) -> HttpServletResponse
+  crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
   this.contentType = contentType.value
   this.characterEncoding = charset.displayName()
@@ -47,11 +47,9 @@ inline fun HttpServletResponse.useResponse(
 inline fun HttpServletResponse.useSse(
   charset: Charset = StandardCharsets.UTF_8,
   locale: Locale = Locale.CHINA,
-  crossinline with: (HttpServletResponse) -> HttpServletResponse
+  crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
-  return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) {
-    with(it)
-  }
+  return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) { with(it) }
 }
 
 /**
@@ -71,7 +69,7 @@ fun HttpServletResponse.withDownload(
   fileName: String,
   contentType: MediaTypes = MediaTypes.BINARY,
   charset: Charset = StandardCharsets.UTF_8,
-  closeBlock: ((outputStream: OutputStream) -> Unit)?
+  closeBlock: ((outputStream: OutputStream) -> Unit)?,
 ) {
   this.setHeader(Headers.CONTENT_DISPOSITION, Headers.downloadDisposition(fileName, charset))
   this.setHeader(Headers.CONTENT_TYPE, contentType.value)

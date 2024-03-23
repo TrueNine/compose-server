@@ -103,9 +103,7 @@ interface CheckParamScope<T> {
    *
    * @param lazyMessage message
    */
-  infix fun <A> A?.nilThen(lazyMessage: () -> Any) = toValidException {
-    checkNotNull(this, lazyMessage)
-  }
+  infix fun <A> A?.nilThen(lazyMessage: () -> Any) = toValidException { checkNotNull(this, lazyMessage) }
 
   /**
    * ## 如果参数为 `null` 则抛出异常
@@ -119,9 +117,7 @@ interface CheckParamScope<T> {
    *
    * @param lazyMessage message
    */
-  infix fun String?.nonTextThen(lazyMessage: () -> Any) = toValidException {
-    check(this.hasText(), lazyMessage)
-  }
+  infix fun String?.nonTextThen(lazyMessage: () -> Any) = toValidException { check(this.hasText(), lazyMessage) }
 
   /**
    * ## 如果 `字符串不为空` 则抛出异常

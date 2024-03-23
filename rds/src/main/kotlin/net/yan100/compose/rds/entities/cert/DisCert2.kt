@@ -70,15 +70,9 @@ abstract class SuperDisCert2 : IDisCode2, IEntity() {
 
   @Schema(title = "残疾级别") @Column(name = LEVEL) var level: Int? = null
 
-  @Schema(title = "残疾类别")
-  @Column(name = TYPE)
-  @Convert(converter = DisTypingConverter::class)
-  lateinit var type: DisTyping
+  @Schema(title = "残疾类别") @Column(name = TYPE) @Convert(converter = DisTypingConverter::class) lateinit var type: DisTyping
 
-  @Schema(title = "性别")
-  @Column(name = GENDER)
-  @Convert(converter = GenderTypingConverter::class)
-  lateinit var gender: GenderTyping
+  @Schema(title = "性别") @Column(name = GENDER) @Convert(converter = GenderTypingConverter::class) lateinit var gender: GenderTyping
 
   @NotNull @Schema(title = "残疾证编号") @Column(name = CODE) lateinit var code: SerialCode
 
@@ -92,8 +86,4 @@ abstract class SuperDisCert2 : IDisCode2, IEntity() {
     get() = this.code
 }
 
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Table(name = SuperDisCert2.TABLE_NAME)
-class DisCert2 : SuperDisCert2()
+@Entity @DynamicInsert @DynamicUpdate @Table(name = SuperDisCert2.TABLE_NAME) class DisCert2 : SuperDisCert2()

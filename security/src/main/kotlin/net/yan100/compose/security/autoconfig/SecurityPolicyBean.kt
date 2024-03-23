@@ -59,7 +59,7 @@ class SecurityPolicyBean {
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityExceptionAdware(
     policyDefine: SecurityPolicyDefine,
-    manager: ObjectMapper
+    manager: ObjectMapper,
   ): SecurityExceptionAdware {
     log.debug("注册 ExceptionAdware")
     return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
@@ -72,7 +72,7 @@ class SecurityPolicyBean {
     httpSecurity: HttpSecurity,
     cors: CorsConfiguration,
     policyDefine: SecurityPolicyDefine,
-    applicationContext: ApplicationContext
+    applicationContext: ApplicationContext,
   ): SecurityFilterChain {
     val enableAnnotation = getAnno(applicationContext)
     if (enableAnnotation == null) log.warn("未配置 安全注解 注解")
@@ -87,10 +87,7 @@ class SecurityPolicyBean {
     if (mergedConfigAnnotation.allowWebJars) allowPatterns += "/webjars/**"
 
     if (policyDefine.preValidFilter != null) {
-      httpSecurity.addFilterBefore(
-        policyDefine.preValidFilter,
-        UsernamePasswordAuthenticationFilter::class.java
-      )
+      httpSecurity.addFilterBefore(policyDefine.preValidFilter, UsernamePasswordAuthenticationFilter::class.java)
     } else log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
 
     // 打印错误日志
@@ -107,18 +104,13 @@ class SecurityPolicyBean {
       it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
 
       log.debug("任意请求是否需要认证 = {}", mergedConfigAnnotation.anyRequestAuthed)
-      if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().denyAll()
-      else it.anyRequest().permitAll()
+      if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().denyAll() else it.anyRequest().permitAll()
     }
     httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
 
     // 配置异常处理器
     if (policyDefine.exceptionAdware != null) {
-      httpSecurity.exceptionHandling {
-        it
-          .authenticationEntryPoint(policyDefine.exceptionAdware)
-          .accessDeniedHandler(policyDefine.exceptionAdware)
-      }
+      httpSecurity.exceptionHandling { it.authenticationEntryPoint(policyDefine.exceptionAdware).accessDeniedHandler(policyDefine.exceptionAdware) }
     } else log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
 
     log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)

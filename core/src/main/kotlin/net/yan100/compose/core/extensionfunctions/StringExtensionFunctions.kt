@@ -76,21 +76,12 @@ val String.snakeCaseToCamelCase: String
   get() =
     this.split(STR_UNDERLINE)
       .joinToString(STR_EMPTY) {
-        if (it.isNotEmpty())
-          it.replaceFirstChar { r ->
-            if (r.isLowerCase()) r.titlecase(Locale.getDefault()) else r.toString()
-          }
-        else STR_EMPTY
+        if (it.isNotEmpty()) it.replaceFirstChar { r -> if (r.isLowerCase()) r.titlecase(Locale.getDefault()) else r.toString() } else STR_EMPTY
       }
       .replaceFirstChar { it.lowercase(Locale.getDefault()) }
 
 val String.snakeCaseToPascalCase: String
-  get() =
-    if (hasText())
-      split(STR_UNDERLINE).joinToString(STR_EMPTY) {
-        it.replaceFirstChar { it1 -> it1.uppercaseChar() }
-      }
-    else this
+  get() = if (hasText()) split(STR_UNDERLINE).joinToString(STR_EMPTY) { it.replaceFirstChar { it1 -> it1.uppercaseChar() } } else this
 
 val String.camelCaseToSnakeCase: String
   get() =
@@ -113,8 +104,7 @@ val String.pascalCaseToSnakeCase: String
  * @param charset 字符集
  * @return 编码完成的字符串，使用 [java.net.URLEncoder]
  */
-fun String?.urlEncoded(charset: Charset = StandardCharsets.UTF_8): String =
-  java.net.URLEncoder.encode(this.withEmpty, charset)
+fun String?.urlEncoded(charset: Charset = StandardCharsets.UTF_8): String = java.net.URLEncoder.encode(this.withEmpty, charset)
 
 /**
  * ## base64 加密
@@ -122,19 +112,16 @@ fun String?.urlEncoded(charset: Charset = StandardCharsets.UTF_8): String =
  *
  * @return 加密后的 base64
  */
-fun String.base64(charset: Charset = StandardCharsets.UTF_8): String =
-  net.yan100.compose.core.encrypt.Base64Helper.encode(this.toByteArray(charset))
+fun String.base64(charset: Charset = StandardCharsets.UTF_8): String = net.yan100.compose.core.encrypt.Base64Helper.encode(this.toByteArray(charset))
 
 /**
  * ## 对 base64 字符串进行解密
  *
  * @return [String]
  */
-fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String =
-  net.yan100.compose.core.encrypt.Base64Helper.decode(this, charset)
+fun String.base64Decode(charset: Charset = StandardCharsets.UTF_8): String = net.yan100.compose.core.encrypt.Base64Helper.decode(this, charset)
 
-fun String.base64DecodeToByteArray(): ByteArray =
-  net.yan100.compose.core.encrypt.Base64Helper.decodeToByte(this)
+fun String.base64DecodeToByteArray(): ByteArray = net.yan100.compose.core.encrypt.Base64Helper.decodeToByte(this)
 
 fun String.replaceFirstX(meta: String, replacement: String): String {
   return if (indexOf(meta) == 0) replaceFirst(meta, replacement) else meta

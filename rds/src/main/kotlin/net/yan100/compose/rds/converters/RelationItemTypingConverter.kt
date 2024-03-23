@@ -26,6 +26,5 @@ import org.springframework.stereotype.Component
 class RelationItemTypingConverter : AttributeConverter<RelationItemTyping?, Int?> {
   override fun convertToDatabaseColumn(attribute: RelationItemTyping?): Int? = attribute?.value
 
-  override fun convertToEntityAttribute(dbData: Int?): RelationItemTyping? =
-    RelationItemTyping.findVal(dbData)
+  override fun convertToEntityAttribute(dbData: Int?): RelationItemTyping? = RelationItemTyping.findVal(dbData)
 }

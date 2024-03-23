@@ -16,6 +16,4 @@
  */
 package net.yan100.compose.ksp.ksp
 
-@Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Abstract() {}
+@Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS) @Retention(AnnotationRetention.RUNTIME) annotation class Abstract() {}

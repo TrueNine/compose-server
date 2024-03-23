@@ -58,11 +58,7 @@ abstract class Api : IEntity() {
   @Nullable
   @Schema(title = "权限", requiredMode = RequiredMode.NOT_REQUIRED)
   @ManyToOne
-  @JoinColumn(
-    name = PERMISSIONS_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
-  )
+  @JoinColumn(name = PERMISSIONS_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT))
   @NotFound(action = NotFoundAction.IGNORE)
   var permissions: Permissions? = null
 

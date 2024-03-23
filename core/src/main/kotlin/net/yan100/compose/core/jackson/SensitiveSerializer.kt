@@ -40,7 +40,7 @@ class SensitiveSerializer : JsonSerializer<String>(), ContextualSerializer {
 
   override fun createContextual(
     prov: SerializerProvider?,
-    property: BeanProperty?
+    property: BeanProperty?,
   ): JsonSerializer<*>? {
     val ref = property?.getAnnotation(SensitiveRef::class.java)
     return ref?.value?.let {

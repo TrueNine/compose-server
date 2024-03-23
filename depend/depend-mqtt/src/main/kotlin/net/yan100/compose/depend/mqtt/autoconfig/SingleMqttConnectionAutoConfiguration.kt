@@ -33,7 +33,7 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory
 @Configuration
 class SingleMqttConnectionAutoConfiguration(
   private val p: SingleMqttProperties,
-  private val objectMapper: ObjectMapper
+  private val objectMapper: ObjectMapper,
 ) {
 
   @ConditionalOnMissingBean

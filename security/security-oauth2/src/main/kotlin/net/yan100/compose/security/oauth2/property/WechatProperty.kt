@@ -40,17 +40,12 @@ class WxpaProperty {
   fun signature(
     url: String,
     nonceString: String = Keys.generateRandomAsciiString(),
-    timestamp: Long = LocalDateTime.now().iso8601LongUtc
+    timestamp: Long = LocalDateTime.now().iso8601LongUtc,
   ): WxpaSignatureResp {
     val splitUrl = url.split("#")[0]
 
     val b =
-      mutableMapOf(
-          "noncestr" to nonceString,
-          "jsapi_ticket" to jsapiTicket,
-          "timestamp" to timestamp.toString(),
-          "url" to splitUrl
-        )
+      mutableMapOf("noncestr" to nonceString, "jsapi_ticket" to jsapiTicket, "timestamp" to timestamp.toString(), "url" to splitUrl)
         .map { "${it.key}=${it.value}" }
         .sorted()
         .joinToString("&")

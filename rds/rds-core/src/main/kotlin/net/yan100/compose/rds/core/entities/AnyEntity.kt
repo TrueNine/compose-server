@@ -26,7 +26,9 @@ import jakarta.validation.constraints.NotBlank
 import java.io.Serial
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
-import net.yan100.compose.depend.jvalid.group.*
+import net.yan100.compose.depend.jvalid.group.DeleteGroup
+import net.yan100.compose.depend.jvalid.group.PatchGroup
+import net.yan100.compose.depend.jvalid.group.PutGroup
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.PreSaveDeleteReferenceListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
@@ -37,7 +39,7 @@ import org.jetbrains.annotations.ApiStatus.Experimental
 import org.springframework.data.domain.Persistable
 
 /**
- * JPA的最基础基类，包括一个 id
+ * ## JPA的最基础基类，包括一个 id
  *
  * @author TrueNine
  * @since 2023-04-23
@@ -60,19 +62,12 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   }
 
   /** ## 是否需要脱敏处理 */
-  @JsonIgnore
-  @kotlin.jvm.Transient
-  @Transient
-  @Experimental
-  private var ____sensitive: Boolean = false
+  @JsonIgnore @kotlin.jvm.Transient @Transient @Experimental private var ____sensitive: Boolean = false
 
   /** id */
   @jakarta.persistence.Id
   @Column(name = DataBaseBasicFieldNames.ID)
-  @NotBlank(
-    groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class],
-    message = "在修改数据时，需携带数据 id"
-  )
+  @NotBlank(groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class], message = "在修改数据时，需携带数据 id")
   @Schema(
     title = ID,
     name = ID,
@@ -113,19 +108,18 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   @Transient
   @JsonIgnore
   @Schema(hidden = true)
-  fun withToString(superString: String, vararg properties: Pair<String, Any?>): String =
-    buildString {
-      append(superString)
-      append("[")
-      properties.forEach {
-        append(it.first)
-        append("=")
-        append(it.second)
-        append(",")
-      }
-      removeSuffix(",")
-      append("]")
+  fun withToString(superString: String, vararg properties: Pair<String, Any?>): String = buildString {
+    append(superString)
+    append("[")
+    properties.forEach {
+      append(it.first)
+      append("=")
+      append(it.second)
+      append(",")
     }
+    removeSuffix(",")
+    append("]")
+  }
 
   @Transient
   @JsonIgnore
@@ -146,8 +140,7 @@ inline fun <T : AnyEntity> T.withNew(crossinline after: (T) -> T): T = after(wit
 /** 将集合内的所有元素置空为新的 Entity 对象 */
 fun <T : AnyEntity> List<T>.withNew(): List<T> = map { it.withNew() }
 
-inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> =
-  after(this.map { it.withNew() })
+inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> = after(this.map { it.withNew() })
 
 inline fun <T : AnyEntity, R : Any> List<T>.withNewMap(
   crossinline after: (List<T>) -> List<R>,
@@ -158,7 +151,6 @@ inline fun <T : AnyEntity> T.takeUpdate(
   throwException: Boolean = true,
   crossinline after: (T) -> T?,
 ): T? {
-  if (!isNew) return after(this)
-  else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")
+  if (!isNew) return after(this) else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")
   return null
 }

@@ -48,8 +48,7 @@ interface IWxMpApi {
     @RequestParam(name = "appid") appId: String,
     @RequestParam(name = "secret") secret: String,
     @RequestParam(name = "js_code") jsCode: String,
-    @RequestParam(name = "grant_type")
-    grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE,
+    @RequestParam(name = "grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE,
   ): WxMpJsCodeToSessionResp
 }
 
@@ -103,8 +102,7 @@ interface IWxpaApi {
   fun getAccessToken(
     @RequestParam(name = "appid") appId: String,
     @RequestParam(name = "secret") secret: String,
-    @RequestParam(name = "grant_type")
-    grantType: WechatMpGrantTyping = WechatMpGrantTyping.CLIENT_CREDENTIAL,
+    @RequestParam(name = "grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.CLIENT_CREDENTIAL,
   ): WxpaGetAccessTokenResp
 
   /**
@@ -133,10 +131,4 @@ interface IWxpaApi {
 }
 
 fun IWxMpApi.jsCodeToSessionStandard(param: JsCodeToSessionApiReq): JsCodeToSessionResp =
-  jsCodeToSession(
-      appId = param.mpAppId,
-      secret = param.mpSecret,
-      jsCode = param.jsCode,
-      grantType = WechatMpGrantTyping.AUTH_CODE
-    )
-    .toStandard()
+  jsCodeToSession(appId = param.mpAppId, secret = param.mpSecret, jsCode = param.jsCode, grantType = WechatMpGrantTyping.AUTH_CODE).toStandard()

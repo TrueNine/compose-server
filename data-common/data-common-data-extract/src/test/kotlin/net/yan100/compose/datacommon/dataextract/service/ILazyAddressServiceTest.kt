@@ -49,28 +49,15 @@ class ILazyAddressServiceTest {
       }
     assertNotNull(a)
 
-    val b =
-      lazys.lookupByCode("433127103221", firstFind = { null }, deepCondition = { false }) {
-        it.result
-      }
+    val b = lazys.lookupByCode("433127103221", firstFind = { null }, deepCondition = { false }) { it.result }
     assertNotNull(b)
   }
 
   @Test
   fun `test lookupAllChildrenByCode`() {
-    val a =
-      lazys.lookupAllChildrenByCode("433127103", firstFind = { null }, deepCondition = { false }) {
-        it.result
-      }
+    val a = lazys.lookupAllChildrenByCode("433127103", firstFind = { null }, deepCondition = { false }) { it.result }
     assertTrue(a.isNotEmpty())
-    val b =
-      lazys.lookupAllChildrenByCode(
-        "433127103221",
-        firstFind = { null },
-        deepCondition = { false }
-      ) {
-        it.result
-      }
+    val b = lazys.lookupAllChildrenByCode("433127103221", firstFind = { null }, deepCondition = { false }) { it.result }
     assertFalse(b.isNotEmpty())
   }
 }

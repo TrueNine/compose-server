@@ -57,15 +57,7 @@ abstract class SuperAudit : IEntity() {
 
   @Schema(title = "创建时间") @Col(name = CREATE_DATETIME) lateinit var createDatetime: datetime
 
-  @Schema(title = "审核状态")
-  @Col(name = STATUS)
-  @Convert(converter = AuditTypingConverter::class)
-  lateinit var state: AuditTyping
+  @Schema(title = "审核状态") @Col(name = STATUS) @Convert(converter = AuditTypingConverter::class) lateinit var state: AuditTyping
 }
 
-@Entity
-@DynamicUpdate
-@DynamicInsert
-@Schema(title = "审核条目")
-@Table(name = SuperAudit.TABLE_NAME)
-class Audit : SuperAudit()
+@Entity @DynamicUpdate @DynamicInsert @Schema(title = "审核条目") @Table(name = SuperAudit.TABLE_NAME) class Audit : SuperAudit()

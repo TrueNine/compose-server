@@ -32,8 +32,7 @@ import net.yan100.compose.core.alias.long
 @Schema(title = "公众号验证请求参数")
 class WxpaVerifyModel {
   /** 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。 */
-  @Schema(title = "微信加密签名", description = "signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数")
-  var signature: String? = null
+  @Schema(title = "微信加密签名", description = "signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数") var signature: String? = null
 
   /** 时间戳 */
   @Schema(title = "时间戳") var timestamp: Long? = null
@@ -76,9 +75,7 @@ class WxpaWebsiteAuthGetAccessTokenResp : BaseWxpaResp() {
 
   @Schema(title = "当前使用的 scope") lateinit var scope: String
 
-  @Schema(title = "是否为快照页模式虚拟账号", description = "只有当用户是快照页模式虚拟账号时返回，值为1")
-  @JsonProperty("is_snapshotuser")
-  var isSnapshotUser: Int? = null
+  @Schema(title = "是否为快照页模式虚拟账号", description = "只有当用户是快照页模式虚拟账号时返回，值为1") @JsonProperty("is_snapshotuser") var isSnapshotUser: Int? = null
 
   @Schema(title = "用户全局 id") @JsonProperty("unionid") var unionId: String? = null
 }

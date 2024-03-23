@@ -70,38 +70,21 @@ abstract class SuperHouseholdCert : IIdcard2Code, IEntity() {
 
   @Schema(title = "户口签发时间") @Column(name = ISSUE_DATE) var issueDate: LocalDate? = null
 
-  @Schema(title = "证件签发服务地址")
-  @Column(name = SERVICE_ADDRESS_DETAILS_ID)
-  var serviceAddressDetailsId: String? = null
+  @Schema(title = "证件签发服务地址") @Column(name = SERVICE_ADDRESS_DETAILS_ID) var serviceAddressDetailsId: String? = null
 
-  @Schema(title = "兵役状况")
-  @Column(name = MILITARY_SERVICE_STATUS)
-  var militaryServiceStatus: String? = null
+  @Schema(title = "兵役状况") @Column(name = MILITARY_SERVICE_STATUS) var militaryServiceStatus: String? = null
 
   @Schema(title = "职业") @Column(name = OCCUPATION) var occupation: String? = null
 
-  @Schema(title = "学历")
-  @Convert(converter = DegreeTypingConverter::class)
-  @Column(name = EDUCATION_LEVEL)
-  var educationLevel: DegreeTyping? = null
+  @Schema(title = "学历") @Convert(converter = DegreeTypingConverter::class) @Column(name = EDUCATION_LEVEL) var educationLevel: DegreeTyping? = null
 
-  @NotBlank
-  @Schema(title = "户口所属身份证号")
-  @Column(name = IDCARD_CODE)
-  lateinit var idcardCode: SerialCode
+  @NotBlank @Schema(title = "户口所属身份证号") @Column(name = IDCARD_CODE) lateinit var idcardCode: SerialCode
 
-  @Schema(title = "户口签发地址详情")
-  @Column(name = ORIGIN_ADDRESS_DETAILS_ID)
-  var originAddressDetailsId: ReferenceId? = null
+  @Schema(title = "户口签发地址详情") @Column(name = ORIGIN_ADDRESS_DETAILS_ID) var originAddressDetailsId: ReferenceId? = null
 
-  @Schema(title = "出生地址")
-  @Column(name = PLACE_BIRTH_ADDRESS_DETAILS_ID)
-  var placeBirthAddressDetailsId: ReferenceId? = null
+  @Schema(title = "出生地址") @Column(name = PLACE_BIRTH_ADDRESS_DETAILS_ID) var placeBirthAddressDetailsId: ReferenceId? = null
 
-  @Schema(title = "血型")
-  @Column(name = BLOOD_TYPE)
-  @Convert(converter = BloodTypingConverter::class)
-  var bloodType: BloodTyping? = null
+  @Schema(title = "血型") @Column(name = BLOOD_TYPE) @Convert(converter = BloodTypingConverter::class) var bloodType: BloodTyping? = null
 
   @Schema(title = "身高") @Column(name = HEIGHT) var height: BigDecimal? = null
 
@@ -123,9 +106,7 @@ abstract class SuperHouseholdCert : IIdcard2Code, IEntity() {
 
   @Schema(title = "户号") @Column(name = CODE) var code: SerialCode? = null
 
-  @Schema(title = "户主名称")
-  @Column(name = HOUSEHOLD_PRIMARY_NAME)
-  var householdPrimaryName: String? = null
+  @Schema(title = "户主名称") @Column(name = HOUSEHOLD_PRIMARY_NAME) var householdPrimaryName: String? = null
 
   @Schema(title = "户口类别") @Column(name = HOUSEHOLD_TYPE) var householdType: Int? = null
 
@@ -137,8 +118,4 @@ abstract class SuperHouseholdCert : IIdcard2Code, IEntity() {
     get() = idcardCode
 }
 
-@Entity
-@DynamicUpdate
-@DynamicInsert
-@Table(name = SuperHouseholdCert.TABLE_NAME)
-class HouseholdCert : SuperHouseholdCert()
+@Entity @DynamicUpdate @DynamicInsert @Table(name = SuperHouseholdCert.TABLE_NAME) class HouseholdCert : SuperHouseholdCert()

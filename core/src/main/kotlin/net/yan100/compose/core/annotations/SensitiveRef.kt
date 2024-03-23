@@ -33,12 +33,7 @@ import net.yan100.compose.core.jackson.SensitiveSerializer
 @JsonInclude
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-@Target(
-  AnnotationTarget.FIELD,
-  AnnotationTarget.FUNCTION,
-  AnnotationTarget.PROPERTY,
-  AnnotationTarget.PROPERTY_GETTER
-)
+@Target(AnnotationTarget.FIELD, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY, AnnotationTarget.PROPERTY_GETTER)
 @JacksonAnnotationsInside
 @JsonSerialize(using = SensitiveSerializer::class)
 annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {

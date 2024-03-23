@@ -36,16 +36,11 @@ interface ILogicDeleteRepo<T : IEntity> : IAnyRepo<T> {
   @Query("from #{#entityName} e where e.id in :ids and (e.ldf = false or e.ldf is null)")
   fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pageable): Page<T>
 
-  @Query(
-    "select count(e.id) > 0 from #{#entityName} e where e.id = :id and (e.ldf = false or e.ldf is null)"
-  )
-  fun existsByIdAndNotLogicDeleted(id: Id)
+  @Query("select count(e.id) > 0 from #{#entityName} e where e.id = :id and (e.ldf = false or e.ldf is null)") fun existsByIdAndNotLogicDeleted(id: Id)
 
-  @Query("from #{#entityName} e where e.id = :id and e.ldf = false")
-  fun findByIdAndNotLogicDeleteOrNull(id: Id): T?
+  @Query("from #{#entityName} e where e.id = :id and e.ldf = false") fun findByIdAndNotLogicDeleteOrNull(id: Id): T?
 
-  @Query("from #{#entityName} e where e.ldf = false")
-  fun findAllByNotLogicDeleted(page: Pageable): Page<T>
+  @Query("from #{#entityName} e where e.ldf = false") fun findAllByNotLogicDeleted(page: Pageable): Page<T>
 
   @Transactional(rollbackFor = [Exception::class])
   fun logicDeleteById(id: Id): T? =
@@ -54,14 +49,12 @@ interface ILogicDeleteRepo<T : IEntity> : IAnyRepo<T> {
       save(it)
     }
 
-  @Query("select count(e.id) from #{#entityName} e where e.ldf = false or e.ldf is null")
-  fun countByNotLogicDeleted(): BigSerial
+  @Query("select count(e.id) from #{#entityName} e where e.ldf = false or e.ldf is null") fun countByNotLogicDeleted(): BigSerial
 
   fun findByIdAndNotLogicDelete(id: Id): T = findByIdAndNotLogicDeleteOrNull(id)!!
 
   @Transactional(rollbackFor = [Exception::class])
-  fun logicDeleteAllById(ids: List<Id>): List<T> =
-    findAllById(ids).filter { !it.ldf!! }.apply { saveAll(this) }
+  fun logicDeleteAllById(ids: List<Id>): List<T> = findAllById(ids).filter { !it.ldf!! }.apply { saveAll(this) }
 
   fun findAllByNotLogicDeleted(@Valid pq: Pq?): Pr<T> = findAllByNotLogicDeleted(pq.page).result
 }

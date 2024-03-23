@@ -25,7 +25,7 @@ import org.gradle.kotlin.dsl.get
 
 class CleanExtension(
   @Inject private val project: Project,
-  @Inject private val dsl: CleanExtensionConfig
+  @Inject private val dsl: CleanExtensionConfig,
 ) {
   private val rootPath: String = project.project.rootDir.absolutePath
   private val deletes: Set<String>

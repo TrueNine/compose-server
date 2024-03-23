@@ -23,11 +23,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 fun AuthenticationManager.authenticateByAccount(
   account: String,
   password: String,
-  unauthorized: () -> Unit
+  unauthorized: () -> Unit,
 ): UserDetailsWrapper? {
-  val principal =
-    this.authenticate(UsernamePasswordAuthenticationToken(account, password)).principal
-      as? UserDetailsWrapper
+  val principal = this.authenticate(UsernamePasswordAuthenticationToken(account, password)).principal as? UserDetailsWrapper
   if (null == principal) {
     unauthorized()
     return null

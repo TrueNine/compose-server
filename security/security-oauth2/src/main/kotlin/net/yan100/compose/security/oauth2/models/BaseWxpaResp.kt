@@ -25,9 +25,7 @@ open class BaseWxpaResp {
 
   @JsonProperty("errmsg") open var errorMessage: String? = null
 
-  @Schema(title = "过期时间限制（在多久后过期），使用秒表示")
-  @JsonProperty("expires_in")
-  open var expireInSecond: Long? = null
+  @Schema(title = "过期时间限制（在多久后过期），使用秒表示") @JsonProperty("expires_in") open var expireInSecond: Long? = null
 
   @get:JsonIgnore
   open val isError: Boolean

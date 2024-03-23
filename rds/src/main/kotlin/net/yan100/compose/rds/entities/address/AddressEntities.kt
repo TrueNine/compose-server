@@ -50,11 +50,7 @@ abstract class SuperAddress : TreeEntity() {
   @JsonIgnore @Schema(name = "年份版本号") @Column(name = YEAR_VERSION) var yearVersion: string? = null
 
   /** 定位 */
-  @Nullable
-  @Schema(title = "定位")
-  @Column(name = CENTER)
-  @Convert(converter = WGS84Converter::class)
-  var center: WGS84? = null
+  @Nullable @Schema(title = "定位") @Column(name = CENTER) @Convert(converter = WGS84Converter::class) var center: WGS84? = null
 
   /** 是否为终结地址（如市辖区） */
   @Schema(title = "是否为终结地址（如市辖区）") @Column(name = LEAF) var leaf: Boolean = false
@@ -77,12 +73,7 @@ abstract class SuperAddress : TreeEntity() {
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "行政区代码")
-@Table(name = SuperAddress.TABLE_NAME)
-class Address : SuperAddress()
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "行政区代码") @Table(name = SuperAddress.TABLE_NAME) class Address : SuperAddress()
 
 @Entity
 @DynamicInsert
@@ -93,13 +84,7 @@ class FullAddress : SuperAddress() {
   /** 当前地址包含的地址详情 */
   @Schema(title = "包含的地址详情", requiredMode = NOT_REQUIRED)
   @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
-  @JoinColumn(
-    name = SuperAddressDetails.ADDRESS_ID,
-    referencedColumnName = ID,
-    foreignKey = ForeignKey(NO_CONSTRAINT),
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = SuperAddressDetails.ADDRESS_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
   @Fetch(SUBSELECT)
   var details: List<AddressDetails> = listOf()
 }

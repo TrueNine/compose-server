@@ -25,7 +25,7 @@ class FileKeysRepo(
   private val keyDest: String = "security",
   eccKeyPairPaths: Pair<String, String> = "ecc_public.key" to "ecc_private.key",
   rsaKeyPairPaths: Pair<String, String> = "rsa_public.key" to "rsa_private.key",
-  aesPaths: String = "aes.key"
+  aesPaths: String = "aes.key",
 ) : IKeysRepo {
 
   companion object {

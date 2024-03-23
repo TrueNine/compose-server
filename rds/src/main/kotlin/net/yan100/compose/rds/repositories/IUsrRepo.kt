@@ -35,32 +35,28 @@ interface IUsrRepo : IRepo<Usr> {
     SELECT u.id
     FROM Usr u
     WHERE u.account = :account
-  """)
-  fun findIdByAccount(account: String): String
+  """) fun findIdByAccount(account: String): String
 
   @Query("""
     SELECT pwdEnc
     FROM Usr
     WHERE account = :account
-  """)
-  fun findPwdEncByAccount(account: String): String?
+  """) fun findPwdEncByAccount(account: String): String?
 
-  @Query(
-    """
+  @Query("""
     from Usr u
     left join UserInfo i on i.userId = u.id
     where i.pri = true and i.phone = :phone
-  """
-  )
+  """)
   fun findAccountByUserInfoPhone(phone: String): String?
 
-  @Query(
-    """
+  @Query("""
+    select u.account
     from Usr u
     left join UserInfo i on i.userId = u.id
-    where i.pri = true and i.wechatOpenid = :openid
-  """
-  )
+    where i.pri = true
+    and i.wechatOpenid = :openid
+  """)
   fun findAccountByUserInfoWechatOpenid(openid: String): String?
 
   fun findAllByNickName(nickName: String): List<Usr>
@@ -95,18 +91,14 @@ interface IUsrRepo : IRepo<Usr> {
 
   fun existsAllByAccount(account: String): Boolean
 
-  @Modifying
-  @Query("UPDATE Usr u SET u.banTime = :banTime WHERE u.account = :account")
-  fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
+  @Modifying @Query("UPDATE Usr u SET u.banTime = :banTime WHERE u.account = :account") fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 
-  @Query(
-    """
+  @Query("""
     SELECT count(i.id) > 0
     FROM UserInfo i
     LEFT JOIN Usr u ON i.userId = u.id
     WHERE i.wechatOpenid = :openId
-  """
-  )
+  """)
   fun existsByWechatOpenId(openId: String): Boolean
 }
 
@@ -121,37 +113,30 @@ interface IUserInfoRepo : IRepo<UserInfo> {
     select i.id
     from UserInfo i
     where i.userId = :userId
-  """)
-  fun findAllIdByUserId(userId: RefId): List<RefId>
+  """) fun findAllIdByUserId(userId: RefId): List<RefId>
 
   @Query("""
     select i.userId
     from UserInfo i
     where i.id = :id
-  """)
-  fun findUserIdById(id: RefId): RefId?
+  """) fun findUserIdById(id: RefId): RefId?
 
   fun findByUserId(userId: String): UserInfo?
 
   /** 根据 微信 openId 查询对应 User */
-  @Query(
-    """
+  @Query("""
     FROM Usr u
     LEFT JOIN UserInfo i ON u.id = i.userId
     WHERE i.wechatOpenid = :openid
-    """
-  )
+    """)
   fun findUserByWechatOpenId(openid: String): Usr?
 
   /** 根据 电话号码查询用户手机号 */
-  @Query(
-    """
+  @Query("""
     FROM Usr u
     LEFT JOIN UserInfo i ON u.id = i.userId
     WHERE i.phone = :phone
-  """
-  )
-  fun findUserByPhone(phone: String): Usr?
+  """) fun findUserByPhone(phone: String): Usr?
 
   fun existsByPhone(phone: String): Boolean
 

@@ -54,17 +54,13 @@ class TableRowDeleteRecord : IEntity() {
     const val ENTITY = "entity"
   }
 
-  @Schema(title = "表名", requiredMode = RequiredMode.NOT_REQUIRED)
-  @Column(name = TABLE_NAMES, nullable = false)
-  lateinit var tableNames: String
+  @Schema(title = "表名", requiredMode = RequiredMode.NOT_REQUIRED) @Column(name = TABLE_NAMES, nullable = false) lateinit var tableNames: String
 
   @Nullable @Schema(title = "删除用户id") @Column(name = USER_ID) var userId: RefId? = null
 
   @Nullable @Schema(title = "删除用户账户") @Column(name = USER_ACCOUNT) var userAccount: string? = null
 
-  @Schema(title = "删除时间")
-  @Column(name = DELETE_DATETIME, nullable = false)
-  lateinit var deleteDatetime: datetime
+  @Schema(title = "删除时间") @Column(name = DELETE_DATETIME, nullable = false) lateinit var deleteDatetime: datetime
 
   @Nullable
   @Convert(converter = RecordModelConverter::class)

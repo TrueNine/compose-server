@@ -33,7 +33,7 @@ import net.yan100.compose.oss.OutMap
 open class MinioClientAdaptor
 protected constructor(
   protected val client: MinioClient,
-  protected val exBaseUrl: String = "http://localhost:9000"
+  protected val exBaseUrl: String = "http://localhost:9000",
 ) : MinioClientOperator(client) {
   open fun ins(resp: ObjectWriteResponse, stream: InputStream): InMap {
     return object : InMap {

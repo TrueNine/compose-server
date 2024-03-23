@@ -41,7 +41,7 @@ interface IPageableEntity : Serializable {
     fun ofPageableEntity(
       pageSize: Int = MIN_OFFSET,
       offset: Int = MAX_PAGE_SIZE,
-      unPage: Boolean = false
+      unPage: Boolean = false,
     ): IPageableEntity = PagedRequestParam(offset, pageSize, unPage)
   }
 
@@ -64,13 +64,7 @@ interface IPageableEntity : Serializable {
   @get:Transient
   @set:Transient
   @get:JsonIgnore
-  @get:Schema(
-    name = "offset",
-    type = "int32",
-    title = "页码 最小为 0",
-    defaultValue = "0",
-    accessMode = Schema.AccessMode.WRITE_ONLY
-  )
+  @get:Schema(name = "offset", type = "int32", title = "页码 最小为 0", defaultValue = "0", accessMode = Schema.AccessMode.WRITE_ONLY)
   @get:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
   @setparam:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
   var offset: Int?

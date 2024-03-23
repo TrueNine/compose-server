@@ -23,7 +23,10 @@ import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.persistence.Version
-import net.yan100.compose.core.alias.*
+import net.yan100.compose.core.alias.BigSerial
+import net.yan100.compose.core.alias.Id
+import net.yan100.compose.core.alias.bool
+import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
@@ -45,11 +48,7 @@ abstract class IEntity : AnyEntity() {
   }
 
   /** 乐观锁版本 */
-  @Version
-  @JsonIgnore
-  @Column(name = RLV)
-  @Schema(hidden = true, title = "乐观锁版本", requiredMode = RequiredMode.NOT_REQUIRED)
-  var rlv: BigSerial? = null
+  @Version @JsonIgnore @Column(name = RLV) @Schema(hidden = true, title = "乐观锁版本", requiredMode = RequiredMode.NOT_REQUIRED) var rlv: BigSerial? = null
   val databaseTableRowFieldLockVersion: BigSerial?
     @Schema(title = "字段乐观锁版本号") @Transient @JsonIgnore get() = rlv
 
@@ -57,23 +56,14 @@ abstract class IEntity : AnyEntity() {
   val databaseTableRowFieldCreatedDatetime: datetime?
     @Schema(title = "字段创建时间") @Transient @JsonIgnore get() = crd
 
-  @JsonIgnore
-  @LastModifiedDate
-  @Schema(title = "表行修改时间")
-  @Column(name = MRD)
-  var mrd: datetime? = null
+  @JsonIgnore @LastModifiedDate @Schema(title = "表行修改时间") @Column(name = MRD) var mrd: datetime? = null
   val databaseTableRowFieldLastModifyDatetime: datetime?
     @Schema(title = "字段的修改时间") @Transient @JsonIgnore get() = mrd
 
   /** 逻辑删除标志 */
   @JsonIgnore
   @Column(name = LDF)
-  @Schema(
-    hidden = true,
-    title = "逻辑删除标志",
-    requiredMode = RequiredMode.NOT_REQUIRED,
-    accessMode = Schema.AccessMode.READ_ONLY
-  )
+  @Schema(hidden = true, title = "逻辑删除标志", requiredMode = RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
   var ldf: Boolean? = null
   val databaseTableRowFieldLogicDeleteFlag: bool
     @Schema(title = "是否已经删除") @Transient @JsonIgnore get() = ldf == true
@@ -101,7 +91,7 @@ abstract class IEntity : AnyEntity() {
 fun <T : IEntity> T.merge(
   target: T,
   findByIdFn: (id: Id) -> T?,
-  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }
+  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
 ): T {
   return takeUpdate {
     val queryEntity = findByIdFn(target.id)
@@ -118,7 +108,7 @@ fun <T : IEntity> Iterable<T>.mergeAll(
   targets: List<T>,
   findAllByIdFn: (ids: List<Id>) -> List<T>,
   checkLength: Boolean = true,
-  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }
+  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
 ): List<T> {
   val prepard = targets.filterNot { it.isNew }
   if (checkLength) check(targets.size == prepard.size) { "需更新的长度不一致" }

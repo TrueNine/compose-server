@@ -25,7 +25,7 @@ import org.apache.poi.ss.formula.functions.T
 private fun <T> createRequestQueue(
   firstFindCode: CnDistrictCode,
   deepCondition: (param: ILazyAddressService.ILookupFindParam) -> Boolean,
-  notFound: (emptyCode: Boolean) -> T? = { null }
+  notFound: (emptyCode: Boolean) -> T? = { null },
 ): MutableList<CnDistrictCode> {
   val requestQueue = mutableListOf(firstFindCode)
   var lastSize = 0
@@ -70,9 +70,7 @@ interface ILazyAddressService {
   }
 
   fun findByCode(code: SerialCode): CnDistrictResp? {
-    return CnDistrictCode(code).back()?.let { a ->
-      findAllChildrenByCode(a.code).find { it.code.code == a.code }
-    }
+    return CnDistrictCode(code).back()?.let { a -> findAllChildrenByCode(a.code).find { it.code.code == a.code } }
   }
 
   fun <T> lookupByCode(
@@ -183,9 +181,8 @@ interface ILazyAddressService {
 
   /**
    * ## 预取地址数据
-   * 此函数的作用在于，当拥有某些数据时，则不再需要发送网络请求，减少资源消耗 这个函数应用起来可能有些费解 <br/> 首先传入code <br/> preHandle
-   * 预处理函数，返回两个值，条件以及结果 <br/> 当 preHandle 返回的条件为 true 时，直接返回结果 <br/> 否则会调用 postProcessor
-   * 函数，入参为预取的地址数据
+   * 此函数的作用在于，当拥有某些数据时，则不再需要发送网络请求，减少资源消耗 这个函数应用起来可能有些费解 <br/> 首先传入code <br/> preHandle 预处理函数，返回两个值，条件以及结果 <br/> 当 preHandle 返回的条件为 true 时，直接返回结果 <br/> 否则会调用
+   * postProcessor 函数，入参为预取的地址数据
    */
   fun <T> lazyFindAllChildrenByCode(
     code: String,

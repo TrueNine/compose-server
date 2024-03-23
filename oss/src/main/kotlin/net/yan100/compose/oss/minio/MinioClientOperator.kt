@@ -45,18 +45,11 @@ open class MinioClientOperator protected constructor(private val client: MinioCl
   }
 
   open fun getObject(fileInfo: FileArgs, stream: OutputStream): GetObjectResponse? {
-    return client.getObject(
-      GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build()
-    )
+    return client.getObject(GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
   }
 
   open fun publicBucket(bucketName: String) {
-    client.setBucketPolicy(
-      SetBucketPolicyArgs.builder()
-        .bucket(bucketName)
-        .config(S3PolicyCreator.publicBucketAndReadOnly(bucketName).json())
-        .build()
-    )
+    client.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(bucketName).config(S3PolicyCreator.publicBucketAndReadOnly(bucketName).json()).build())
   }
 
   open fun bucketExists(bucketName: String): Boolean {
@@ -70,9 +63,7 @@ open class MinioClientOperator protected constructor(private val client: MinioCl
   open fun removeObject(fileInfo: FileArgs): Boolean {
     if (bucketNotExists(fileInfo.dir)) return false
     try {
-      client.removeObject(
-        RemoveObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build()
-      )
+      client.removeObject(RemoveObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
       return true
     } catch (e: Exception) {
       e.printStackTrace()
@@ -86,20 +77,13 @@ open class MinioClientOperator protected constructor(private val client: MinioCl
     }
 
     return client.putObject(
-      PutObjectArgs.builder()
-        .bucket(fileInfo.dir)
-        .`object`(fileInfo.fileName)
-        .contentType(fileInfo.mimeType)
-        .stream(stream, fileInfo.size, -1)
-        .build()
+      PutObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).contentType(fileInfo.mimeType).stream(stream, fileInfo.size, -1).build()
     )
   }
 
   open fun listFiles(dir: String): List<String> {
     if (bucketNotExists(dir)) return listOf()
-    return client.listObjects(ListObjectsArgs.builder().bucket(dir).build()).map {
-      it.get().objectName()
-    }
+    return client.listObjects(ListObjectsArgs.builder().bucket(dir).build()).map { it.get().objectName() }
   }
 
   open fun listDir(): List<String> {

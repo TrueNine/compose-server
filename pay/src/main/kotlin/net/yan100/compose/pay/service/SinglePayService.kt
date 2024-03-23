@@ -57,7 +57,7 @@ interface SinglePayService {
   fun applyRefundPayOrder(
     refundAmount: BigDecimal,
     totalAmount: BigDecimal,
-    currency: ISO4217 = ISO4217.CNY
+    currency: ISO4217 = ISO4217.CNY,
   )
 
   /** ## 接受异步通知回调 */
@@ -65,6 +65,6 @@ interface SinglePayService {
     metaData: String,
     request: HttpServletRequest,
     response: HttpServletResponse,
-    lazyCall: (successReq: PaySuccessNotifyResp) -> Unit
+    lazyCall: (successReq: PaySuccessNotifyResp) -> Unit,
   ): String?
 }

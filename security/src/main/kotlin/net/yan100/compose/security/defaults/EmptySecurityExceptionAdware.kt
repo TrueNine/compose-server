@@ -21,8 +21,7 @@ import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.util.EmptyDefault
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 
-class EmptySecurityExceptionAdware(mapper: ObjectMapper) :
-  EmptyDefault, SecurityExceptionAdware(mapper) {
+class EmptySecurityExceptionAdware(mapper: ObjectMapper) : EmptyDefault, SecurityExceptionAdware(mapper) {
   companion object {
     @JvmStatic private val log = slf4j(EmptySecurityExceptionAdware::class)
   }

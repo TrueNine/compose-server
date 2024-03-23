@@ -27,9 +27,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IFlywaySchemaHistoryRepo : IRepo<FlywaySchemaHistory> {
-  @Query("drop table if exists :name", nativeQuery = true)
-  @Modifying
-  fun nativeDropTableForPostgresql(name: string = SuperFlywaySchemaHistory.TABLE_NAME)
+  @Query("drop table if exists :name", nativeQuery = true) @Modifying fun nativeDropTableForPostgresql(name: string = SuperFlywaySchemaHistory.TABLE_NAME)
 
   @ApiStatus.Experimental
   @Query("drop table if exists :name", nativeQuery = true)

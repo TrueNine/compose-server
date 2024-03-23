@@ -41,11 +41,7 @@ class AttachmentAggregatorImpl(
     @Valid saveFileCallback: (file: MultipartFile) -> @Valid PostAttachmentDto,
   ): Attachment? {
     val saveFile = saveFileCallback(file)
-    val location =
-      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(
-        saveFile.baseUrl!!,
-        saveFile.baseUri!!
-      )
+    val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
     // 构建一个新附件对象保存并返回
     val att =
       Attachment().apply {
@@ -66,11 +62,7 @@ class AttachmentAggregatorImpl(
     req: (stream: InputStream) -> PostAttachmentDescriptionDto,
   ): Attachment? {
     val saveFile = req(stream)
-    val location =
-      aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(
-        saveFile.baseUrl!!,
-        saveFile.baseUri!!
-      )
+    val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
     val allBytes = stream.readAllBytes()
     return Attachment()
       .apply {
@@ -91,12 +83,7 @@ class AttachmentAggregatorImpl(
   ): List<Attachment> {
     val saved = files.map { saveFileCallback(it) to it }
     val baseUrls =
-      aService
-        .findAllByBaseUrlInAndBaseUriIn(
-          saved.map { it.first.baseUrl!! },
-          saved.map { it.first.baseUri!! }
-        )
-        .associateBy { it.baseUrl!! to it.baseUri!! }
+      aService.findAllByBaseUrlInAndBaseUriIn(saved.map { it.first.baseUrl!! }, saved.map { it.first.baseUri!! }).associateBy { it.baseUrl!! to it.baseUri!! }
 
     return saved
       .map {
@@ -113,8 +100,7 @@ class AttachmentAggregatorImpl(
           // 将之于根路径连接
           urlId = baseUrl.id
           saveName = it.first.saveName
-          metaName =
-            if (it.second.originalFilename.hasText()) it.second.originalFilename else it.second.name
+          metaName = if (it.second.originalFilename.hasText()) it.second.originalFilename else it.second.name
           size = it.second.size
           mimeType = it.second.contentType ?: MediaTypes.BINARY.value
           attType = AttachmentTyping.ATTACHMENT

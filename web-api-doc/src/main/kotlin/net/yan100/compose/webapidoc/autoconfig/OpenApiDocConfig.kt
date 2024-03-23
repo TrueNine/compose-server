@@ -65,10 +65,7 @@ class OpenApiDocConfig {
                 .example("eyJ0eXAiOiJ")
                 .description("jwt 刷新 token")
                 .schema(
-                  StringSchema()
-                    .name(p.jwtHeaderInfo.refreshTokenName)
-                    .example("eyJ0eXAiOiJ")
-                    .description("jwt 刷新 token"),
+                  StringSchema().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token"),
                 ),
             )
         } else {

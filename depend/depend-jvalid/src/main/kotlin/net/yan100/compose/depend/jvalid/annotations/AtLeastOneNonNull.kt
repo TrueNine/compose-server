@@ -34,7 +34,7 @@ annotation class AtLeastOneNonNull(
   val group: String = DEFAULT_GROUP,
   val message: String = "至少有一个非空字段",
   val groups: Array<KClass<*>> = [],
-  val payload: Array<KClass<out Payload>> = []
+  val payload: Array<KClass<out Payload>> = [],
 ) {
   companion object {
     const val DEFAULT_GROUP = "default"

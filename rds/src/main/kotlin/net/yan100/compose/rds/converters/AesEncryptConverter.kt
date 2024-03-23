@@ -35,14 +35,10 @@ class AesEncryptConverter : AttributeConverter<String, String> {
   @Resource private lateinit var keysRepo: IKeysRepo
 
   override fun convertToDatabaseColumn(attribute: String?): String? =
-    if (Str.hasText(attribute))
-      Encryptors.encryptByAesKey(keysRepo.databaseEncryptAesSecret()!!, attribute!!)
-    else attribute
+    if (Str.hasText(attribute)) Encryptors.encryptByAesKey(keysRepo.databaseEncryptAesSecret()!!, attribute!!) else attribute
 
   override fun convertToEntityAttribute(dbData: String?): String? =
-    if (Str.hasText(dbData))
-      Encryptors.decryptByAesKey(keysRepo.databaseEncryptAesSecret()!!, dbData!!)
-    else dbData
+    if (Str.hasText(dbData)) Encryptors.decryptByAesKey(keysRepo.databaseEncryptAesSecret()!!, dbData!!) else dbData
 
   companion object {
     @JvmStatic private val log = slf4j(AesEncryptConverter::class)

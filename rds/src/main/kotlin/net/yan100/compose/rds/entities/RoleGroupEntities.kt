@@ -47,12 +47,7 @@ abstract class SuperRoleGroup : IEntity() {
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "角色组")
-@Table(name = SuperRoleGroup.TABLE_NAME)
-class RoleGroup : SuperRoleGroup()
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "角色组") @Table(name = SuperRoleGroup.TABLE_NAME) class RoleGroup : SuperRoleGroup()
 
 @Entity
 @DynamicInsert

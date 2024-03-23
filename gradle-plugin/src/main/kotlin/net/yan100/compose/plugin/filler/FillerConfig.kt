@@ -34,14 +34,10 @@ open class FillerConfig(private val project: Project) {
       // TODO 从gradle中获取kotlin版本
       if (false) {
         project.wrap {
-          configurations
-            .findByName("implementation")
-            ?.resolvedConfiguration
-            ?.resolvedArtifacts
-            ?.find {
-              it.moduleVersion.id.version
-              true
-            }
+          configurations.findByName("implementation")?.resolvedConfiguration?.resolvedArtifacts?.find {
+            it.moduleVersion.id.version
+            true
+          }
         }
       }
     }

@@ -87,9 +87,7 @@ class CrudServiceTest {
           it
         }
       )
-    service.findAllByIdAndNotLogicDeleted(deld.map { it.id }).let {
-      assertFalse { it.dataList.map { it.ldf }.contains(true) }
-    }
+    service.findAllByIdAndNotLogicDeleted(deld.map { it.id }).let { assertFalse { it.dataList.map { it.ldf }.contains(true) } }
   }
 
   @Test

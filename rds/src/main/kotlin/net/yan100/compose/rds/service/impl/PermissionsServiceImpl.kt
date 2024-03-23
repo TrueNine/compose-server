@@ -22,6 +22,4 @@ import net.yan100.compose.rds.service.IPermissionsService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
-@Service
-class PermissionsServiceImpl(repo: IPermissionsRepo) :
-  IPermissionsService, CrudService<Permissions>(repo)
+@Service class PermissionsServiceImpl(repo: IPermissionsRepo) : IPermissionsService, CrudService<Permissions>(repo)

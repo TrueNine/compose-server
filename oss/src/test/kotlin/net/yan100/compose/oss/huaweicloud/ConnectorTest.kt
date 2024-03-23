@@ -30,9 +30,7 @@ class ConnectorTest {
 
     ObsClient(ak, sk, endPoint).use { obsClient ->
       // 列举桶
-      obsClient
-        .listBuckets(ListBucketsRequest().apply { isQueryLocation = true })
-        .forEach(::println)
+      obsClient.listBuckets(ListBucketsRequest().apply { isQueryLocation = true }).forEach(::println)
     }
   }
 }

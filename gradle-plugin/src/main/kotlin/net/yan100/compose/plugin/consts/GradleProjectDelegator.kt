@@ -28,8 +28,7 @@ open class GradleProjectDelegator(project: Project) : Project by project, Extens
   val sourceSets
     get() = extensions.getByName("sourceSets") as SourceSetContainer
 
-  fun sourceSets(configure: Action<SourceSetContainer>) =
-    extensions.configure("sourceSets", configure)
+  fun sourceSets(configure: Action<SourceSetContainer>) = extensions.configure("sourceSets", configure)
 
   val mainResources
     get() = sourceSets.findByName("main")?.resources

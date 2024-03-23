@@ -62,7 +62,7 @@ fun Page.waitForPageAllLoaded(): Page {
 fun Page.locatorWaitFor(
   selector: String,
   locatorOptions: Page.LocatorOptions? = null,
-  waitForOptions: WaitForOptions? = WaitForOptions().setState(WaitForSelectorState.ATTACHED)
+  waitForOptions: WaitForOptions? = WaitForOptions().setState(WaitForSelectorState.ATTACHED),
 ): Locator {
   val l = this.locator(selector, locatorOptions)
   l.waitFor(waitForOptions)

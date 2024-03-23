@@ -94,20 +94,16 @@ open class JwtVerifier internal constructor() {
     targetType: KClass<T>,
     eccPrivateKey: PrivateKey? = this.contentEccPrivateKey,
   ): T? {
-    val content =
-      eccPrivateKey.let { priKey -> Encryptors.decryptByEccPrivateKey(priKey!!, encData) }
-        ?: encData
+    val content = eccPrivateKey.let { priKey -> Encryptors.decryptByEccPrivateKey(priKey!!, encData) } ?: encData
     return parseContent(content, targetType)
   }
 
   internal fun <T : Any> parseContent(json: String, classType: KClass<T>) =
-    runCatching { objectMapper.readValue(json, classType.java) }
-      .onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }
-      .getOrNull()
+    runCatching { objectMapper.readValue(json, classType.java) }.onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }.getOrNull()
 
   internal fun <S : Any, E : Any> parseExceptionHandle(
     e: Exception,
-    d: JwtToken<S, E>?
+    d: JwtToken<S, E>?,
   ): JwtToken<S, E>? {
     return when (e) {
       is com.auth0.jwt.exceptions.TokenExpiredException -> d.also { it?.isExpired = true }

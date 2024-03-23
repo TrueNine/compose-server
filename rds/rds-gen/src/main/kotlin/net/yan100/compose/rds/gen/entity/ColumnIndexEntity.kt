@@ -23,7 +23,7 @@ data class ColumnIndexEntity(
   var visible: Boolean = true,
   var nonUnique: Int? = 0,
   var seqInIndex: Long? = 1,
-  var keyName: String? = null
+  var keyName: String? = null,
 ) {
   fun getEscapeComment(): String? {
     return this.comment?.replace("\"", "\\\"")

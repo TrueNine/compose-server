@@ -62,16 +62,10 @@ class GetAccessTokenSchedule(private val ctx: ApplicationContext, @Lazy private 
 
     if (ae.expireInSecond!! >= pp.fixedExpiredSecond) {
       pp.accessToken = ae.accessToken
-    } else
-      throw RemoteCallException(
-        "获取 access_token 时 微信公众号返回了一个大于 ${pp.fixedExpiredSecond} 的时间戳 ${ae.expireInSecond}"
-      )
+    } else throw RemoteCallException("获取 access_token 时 微信公众号返回了一个大于 ${pp.fixedExpiredSecond} 的时间戳 ${ae.expireInSecond}")
 
     if (t.expireInSecond!! >= pp.fixedExpiredSecond) {
       pp.jsapiTicket = t.ticket
-    } else
-      throw RemoteCallException(
-        "获取 ticket 时 微信公众号返回了一个 大于 ${pp.fixedExpiredSecond} 的时间戳 ${t.expireInSecond}"
-      )
+    } else throw RemoteCallException("获取 ticket 时 微信公众号返回了一个 大于 ${pp.fixedExpiredSecond} 的时间戳 ${t.expireInSecond}")
   }
 }

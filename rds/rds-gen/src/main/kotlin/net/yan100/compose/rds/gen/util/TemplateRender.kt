@@ -26,9 +26,7 @@ object TemplateRender {
   private val config = Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS)
 
   init {
-    config.setDirectoryForTemplateLoading(
-      File(javaClass.classLoader.getResource("template")!!.toURI())
-    )
+    config.setDirectoryForTemplateLoading(File(javaClass.classLoader.getResource("template")!!.toURI()))
   }
 
   fun render(
@@ -36,10 +34,9 @@ object TemplateRender {
     generatedFileName: String,
     templateFileNamePrefix: String,
     renderContext: RenderContext,
-    tableContext: Any
+    tableContext: Any,
   ) {
-    val genBasePath =
-      "${ResourcesLocator.getGenerateDirPath()}/${renderContext.getLang()}/$packagePath"
+    val genBasePath = "${ResourcesLocator.getGenerateDirPath()}/${renderContext.getLang()}/$packagePath"
     val destGenerateFile = File(genBasePath, generatedFileName)
 
     if (destGenerateFile.exists()) {

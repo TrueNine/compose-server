@@ -35,19 +35,11 @@ abstract class SuperAuditAttachment : IEntity() {
     const val STATUS = "status"
   }
 
-  @Schema(title = "审核文件状态")
-  @Column(name = STATUS)
-  @Convert(converter = AuditTypingConverter::class)
-  lateinit var status: AuditTyping
+  @Schema(title = "审核文件状态") @Column(name = STATUS) @Convert(converter = AuditTypingConverter::class) lateinit var status: AuditTyping
 
   @Schema(title = "审核条目 id") @Column(name = AUDIT_ID) lateinit var auditId: RefId
 
   @Schema(title = "附件 id") @Column(name = ATT_ID) lateinit var attId: RefId
 }
 
-@Entity
-@DynamicUpdate
-@DynamicInsert
-@Schema(title = "审核附带的附件")
-@Table(name = SuperAuditAttachment.TABLE_NAME)
-class AuditAttachment : SuperAuditAttachment()
+@Entity @DynamicUpdate @DynamicInsert @Schema(title = "审核附带的附件") @Table(name = SuperAuditAttachment.TABLE_NAME) class AuditAttachment : SuperAuditAttachment()

@@ -48,10 +48,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 inline fun <reified T : Any> jsonWebClientRegister(
   objectMapper: ObjectMapper,
   timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
-  builder:
-    (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<
-        WebClient.Builder, HttpServiceProxyFactory.Builder
-      >
+  builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>,
 ): T {
   val clientBuilder = WebClient.builder()
   val factoryBuilder = HttpServiceProxyFactory.builder()
@@ -87,7 +84,7 @@ class ArgsResolver : HttpServiceArgumentResolver {
   override fun resolve(
     argument: Any?,
     parameter: MethodParameter,
-    requestValues: HttpRequestValues.Builder
+    requestValues: HttpRequestValues.Builder,
   ): Boolean {
     if (argument != null && argument is AnyTyping) {
       val name =

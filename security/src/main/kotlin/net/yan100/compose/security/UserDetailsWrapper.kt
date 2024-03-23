@@ -47,14 +47,9 @@ data class UserDetailsWrapper(val authUserInfo: AuthRequestInfo?) : UserDetails 
         ?.forEach { r ->
           auths += SimpleGrantedAuthority("ROLE_$r")
           // 添加权限信息
-          authUserInfo.permissions
-            .filter { text -> text.hasText() }
-            .forEach { p -> auths += SimpleGrantedAuthority(p) }
+          authUserInfo.permissions.filter { text -> text.hasText() }.forEach { p -> auths += SimpleGrantedAuthority(p) }
           // 添加 部门信息 到鉴权列表
-          authUserInfo.depts
-            .filter { text -> text.hasText() }
-            .map { mr -> "DEPT_$mr" }
-            .forEach { mr -> auths += SimpleGrantedAuthority(mr) }
+          authUserInfo.depts.filter { text -> text.hasText() }.map { mr -> "DEPT_$mr" }.forEach { mr -> auths += SimpleGrantedAuthority(mr) }
         }
     }
   }

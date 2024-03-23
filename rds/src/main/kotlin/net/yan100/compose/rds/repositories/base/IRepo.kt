@@ -33,11 +33,9 @@ import org.springframework.data.repository.NoRepositoryBean
 interface IRepo<T : IEntity> : IAnyRepo<T>, ILogicDeleteRepo<T> {
   @Query("from #{#entityName} e order by e.id desc") fun findAllOrderByIdDesc(): List<T>
 
-  @Query("from #{#entityName} e order by e.id desc")
-  fun findAllOrderByIdDesc(page: Pageable): Page<T>
+  @Query("from #{#entityName} e order by e.id desc") fun findAllOrderByIdDesc(page: Pageable): Page<T>
 
-  @Query("select (e.ldf = false) from #{#entityName} e where e.id = :id")
-  fun findLdfById(id: Id): Boolean?
+  @Query("select (e.ldf = false) from #{#entityName} e where e.id = :id") fun findLdfById(id: Id): Boolean?
 
   @Query("select e.rlv from #{#entityName} e where e.id = :id") fun findRlvById(id: Id): BigSerial
 

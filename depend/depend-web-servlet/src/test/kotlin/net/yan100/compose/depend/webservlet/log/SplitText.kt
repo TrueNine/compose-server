@@ -35,7 +35,7 @@ data class MDCLogData(
   var level: Level,
   var abbrClassName: string,
   var logContent: string,
-  var append: string?
+  var append: string?,
 )
 
 class SplitText {
@@ -45,8 +45,7 @@ class SplitText {
     val resource = SplitText::class.java.classLoader.getResourceAsStream("test-split-log.txt")!!
     val reader = BufferedReader(InputStreamReader(resource))
     val datetimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-    val pattern =
-      Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}) \\[(.*?)\\] (\\w+) (.*)")
+    val pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}) \\[(.*?)\\] (\\w+) (.*)")
     val logs = mutableListOf<MDCLogData>()
     var lastData: MDCLogData? = null
 

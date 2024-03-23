@@ -35,7 +35,7 @@ class EmptyPreflightValidFilter : EmptyDefault, SecurityPreflightValidFilter() {
     token: String?,
     reFlashToken: String?,
     request: HttpServletRequest,
-    response: HttpServletResponse
+    response: HttpServletResponse,
   ): AuthRequestInfo {
     log.warn("生成了一个空的 {}", ::AuthRequestInfo.name)
     return AuthRequestInfo()

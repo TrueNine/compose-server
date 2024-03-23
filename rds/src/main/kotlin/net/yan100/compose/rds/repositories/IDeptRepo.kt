@@ -23,12 +23,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IDeptRepo : IRepo<Dept> {
-  @Query(
-    """
+  @Query("""
     FROM Dept d
     LEFT JOIN UserDept u ON u.deptId = d.id
     WHERE u.userId = :userId
-  """
-  )
-  fun findAllByUserId(userId: String): List<Dept>
+  """) fun findAllByUserId(userId: String): List<Dept>
 }

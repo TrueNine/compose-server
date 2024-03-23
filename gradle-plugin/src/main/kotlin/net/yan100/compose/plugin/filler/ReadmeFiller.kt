@@ -47,8 +47,7 @@ class ReadmeFiller(
               val writeText =
                 text.replace(("\\$" + "\\{([^\\}]*)}").toRegex()) { match ->
                   val key = match.groups[0]!!.value.replace("\${", "").replace("}", "")
-                  dsl.license[key]
-                    ?: throw IllegalArgumentException("license meta scope variable $key not found")
+                  dsl.license[key] ?: throw IllegalArgumentException("license meta scope variable $key not found")
                 }
               if (!destLicenseFile.exists()) {
                 destLicenseFile.createNewFile()
@@ -57,10 +56,7 @@ class ReadmeFiller(
               destLicenseFile.writeText(writeText + newLine)
             }
           }
-        } else
-          throw IllegalArgumentException(
-            "license meta file not found in ${configFile.absolutePath}"
-          )
+        } else throw IllegalArgumentException("license meta file not found in ${configFile.absolutePath}")
       }
     }
 
@@ -73,9 +69,7 @@ class ReadmeFiller(
 
         task.doFirst {
           val readmeFile =
-            layout.projectDirectory.asFile.listFiles()?.firstOrNull { file ->
-              Constant.FileNameSet.README.any { file.name.equals(it, ignoreCase = true) }
-            }
+            layout.projectDirectory.asFile.listFiles()?.firstOrNull { file -> Constant.FileNameSet.README.any { file.name.equals(it, ignoreCase = true) } }
           fileExists = null != readmeFile
           file = readmeFile
         }
@@ -83,10 +77,7 @@ class ReadmeFiller(
         task.doLast { _ ->
           if (fileExists) {
             var readmeText = ""
-            file
-              ?.bufferedReader()
-              ?.use { readmeText = it.readText().replace(dsl.readme.regx, dsl.readme.replaced()) }
-              ?.also { file?.writeText(readmeText) }
+            file?.bufferedReader()?.use { readmeText = it.readText().replace(dsl.readme.regx, dsl.readme.replaced()) }?.also { file?.writeText(readmeText) }
           }
         }
       }

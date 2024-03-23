@@ -29,10 +29,7 @@ class FindPayOrderResp {
 
   @Schema(title = "金额") var amount: BigDecimal? = null
 
-  /**
-   * 交易状态，枚举值： SUCCESS：支付成功 REFUND：转入退款 NOTPAY：未支付 CLOSED：已关闭 REVOKED：已撤销（仅付款码支付会返回）
-   * USERPAYING：用户支付中（仅付款码支付会返回） PAYERROR：支付失败（仅付款码支付会返回）
-   */
+  /** 交易状态，枚举值： SUCCESS：支付成功 REFUND：转入退款 NOTPAY：未支付 CLOSED：已关闭 REVOKED：已撤销（仅付款码支付会返回） USERPAYING：用户支付中（仅付款码支付会返回） PAYERROR：支付失败（仅付款码支付会返回） */
   @Schema(title = "交易状态") var tradeStatus: String? = null
 
   @Schema(title = "交易状态描述") var tradeStatusDesc: String? = null

@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.depend.jvalid.exceptions
 
-import java.lang.IllegalArgumentException
-
 class ValidException(message: String?) : IllegalArgumentException(message) {
   companion object {
     @JvmStatic

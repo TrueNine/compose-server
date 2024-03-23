@@ -79,8 +79,7 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
    *
    * @param action 生成配置
    */
-  fun gradlePropertiesGenerator(action: Action<GradlePropertiesGeneratorConfig>) =
-    action.execute(gradlePropertiesGenerator)
+  fun gradlePropertiesGenerator(action: Action<GradlePropertiesGeneratorConfig>) = action.execute(gradlePropertiesGenerator)
 
   /**
    * ## gradle clean 扩展配置

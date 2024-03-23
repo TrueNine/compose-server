@@ -41,32 +41,19 @@ class T1 {
               .loopNext<Any>()
               .init {
                 it.navigate("https://www.bilibili.com/")
-                it
-                  .querySelector("#nav-searchform div.nav-search-content input.nav-search-input")
-                  .fill("我的滑板鞋")
-                val newPage =
-                  it.waitForPopup {
-                    it.locatorWaitFor("#nav-searchform").getByRole(AriaRole.IMG).nth(1).click()
-                  }
-                newPage
-                  .locatorWaitFor("//span[contains(@class,'vui_tabs--nav-text') and text()='视频']")
-                  .click()
+                it.querySelector("#nav-searchform div.nav-search-content input.nav-search-input").fill("我的滑板鞋")
+                val newPage = it.waitForPopup { it.locatorWaitFor("#nav-searchform").getByRole(AriaRole.IMG).nth(1).click() }
+                newPage.locatorWaitFor("//span[contains(@class,'vui_tabs--nav-text') and text()='视频']").click()
                 newPage
               }
               .execute {
                 it.screenshot(
-                  Page.ScreenshotOptions()
-                    .setFullPage(true)
-                    .setType(ScreenshotType.PNG)
-                    .setPath(Paths.get("example-${LocalDateTime.now().nano}.png"))
+                  Page.ScreenshotOptions().setFullPage(true).setType(ScreenshotType.PNG).setPath(Paths.get("example-${LocalDateTime.now().nano}.png"))
                 )
                 it.localStorage()
               }
               .endWith {
-                val btn =
-                  it.locatorWaitFor(
-                    "//button[contains(@class ,'vui_pagenation--btn') and contains(text(),'下一页')]"
-                  )
+                val btn = it.locatorWaitFor("//button[contains(@class ,'vui_pagenation--btn') and contains(text(),'下一页')]")
                 val disabled = btn.getAttribute("disabled")
                 val next = disabled == null
                 if (next) {

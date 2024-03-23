@@ -37,13 +37,6 @@ open class RequestInfo {
   @Nullable var currentIpAddr: String? = null
 
   override fun toString(): String {
-    return mapOf(
-        "userId" to userId,
-        "account" to account,
-        "currentIpAddr" to currentIpAddr,
-        "loginIpAddr" to loginIpAddr,
-        "deviceId" to deviceId
-      )
-      .toString()
+    return mapOf("userId" to userId, "account" to account, "currentIpAddr" to currentIpAddr, "loginIpAddr" to loginIpAddr, "deviceId" to deviceId).toString()
   }
 }

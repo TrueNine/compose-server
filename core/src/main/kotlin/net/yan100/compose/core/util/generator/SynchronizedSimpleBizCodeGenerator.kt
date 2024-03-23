@@ -21,8 +21,7 @@ import java.time.format.DateTimeFormatter
 import net.yan100.compose.core.IBizCodeGenerator
 import net.yan100.compose.core.ISnowflakeGenerator
 
-class SynchronizedSimpleBizCodeGenerator(private val snowflake: ISnowflakeGenerator) :
-  IBizCodeGenerator {
+class SynchronizedSimpleBizCodeGenerator(private val snowflake: ISnowflakeGenerator) : IBizCodeGenerator {
 
   override fun nextString(): String {
     val dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))

@@ -21,7 +21,8 @@ import net.yan100.compose.plugin.consts.Constant
 import net.yan100.compose.plugin.wrap
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
-import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.maven
 
 class PublishExtension(
   @Inject private val project: Project,
@@ -31,9 +32,7 @@ class PublishExtension(
     project.wrap {
       val hasMavenPlugin = plugins.hasPlugin(Constant.PluginId.MAVEN_PUBLISH)
       if (hasMavenPlugin) {
-        extensions.getByType<PublishingExtension>().repositories {
-          it.maven(url = layout.buildDirectory.dir(PublishExtensionConfig.DEFAULT_LOCAL_NAME))
-        }
+        extensions.getByType<PublishingExtension>().repositories { it.maven(url = layout.buildDirectory.dir(PublishExtensionConfig.DEFAULT_LOCAL_NAME)) }
       }
     }
   }

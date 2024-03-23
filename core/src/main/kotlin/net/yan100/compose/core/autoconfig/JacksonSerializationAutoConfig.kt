@@ -96,10 +96,7 @@ class JacksonSerializationAutoConfig {
       b.locale(Locale.CHINA)
       b.simpleDateFormat(DTimer.DATETIME)
       b.defaultViewInclusion(true)
-      b.featuresToEnable(
-        DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
-        DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
-      )
+      b.featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
       b.featuresToDisable(
         SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
         SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS,

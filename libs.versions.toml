@@ -92,7 +92,7 @@ apache-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", ve
 apache-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version.ref = "apache-commonsCompress" }
 
 kt-kspGoogleApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "kt-kspGoogleApi" }
-kt-GradlePlugin = { group = "org.jetbrains.kotlin",name="gradle-plugin" ,version.ref = "kotlin" }
+kt-GradlePlugin = { group = "org.jetbrains.kotlin", name = "gradle-plugin", version.ref = "kotlin" }
 kt-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kt-stdlibJdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kt-reflact = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
@@ -195,7 +195,6 @@ lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" 
 querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa", version.ref = "querydsl" }
 querydsl-apt = { group = "com.querydsl", name = "querydsl-apt", version.ref = "querydsl" }
 
-
 bom-springModulith = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "spring-modulith" }
 bom-springBoot = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
 bom-springCloud = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "spring-cloud" }
@@ -203,7 +202,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.441"
+compose = "1.6.444"
 
 java = "21" ### https://bell-sw.com/
 kotlin = "2.0.0-Beta4" ### https://github.com/JetBrains/kotlin/releases
@@ -212,7 +211,7 @@ ktx-coroutine = "1.8.0-RC2" ### https://mvnrepository.com/artifact/org.jetbrains
 kt-reactorExtensions = "1.2.2" ### https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
-gradle = "8.7-rc-2" ### https://mirrors.cloud.tencent.com/gradle
+gradle = "8.7-rc-4" ### https://mirrors.cloud.tencent.com/gradle
 gradlePlugin-spotless = "6.25.0" ### https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
 gradlePlugin-versionPlugin = "0.51.0" ### https://github.com/ben-manes/gradle-versions-plugin
 gradlePlugin-springBootDependencyManagement = "1.1.4" ### https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin

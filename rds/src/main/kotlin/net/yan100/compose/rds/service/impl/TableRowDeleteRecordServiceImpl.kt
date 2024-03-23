@@ -37,11 +37,8 @@ import org.springframework.stereotype.Service
 @Service
 class TableRowDeleteRecordServiceImpl(
   private val delRepo: ITableRowDeleteRecordRepository,
-  private val mapper: ObjectMapper
-) :
-  ITableRowDeleteRecordService,
-  IService<TableRowDeleteRecord>,
-  CrudService<TableRowDeleteRecord>(delRepo) {
+  private val mapper: ObjectMapper,
+) : ITableRowDeleteRecordService, IService<TableRowDeleteRecord>, CrudService<TableRowDeleteRecord>(delRepo) {
 
   private val log = slf4j(this::class)
 
@@ -69,11 +66,7 @@ class TableRowDeleteRecordServiceImpl(
       id = anyData.id
       lang = "java"
       modelHash = Objects.hash(anyData::class)
-      entityJson =
-        mapper
-          .copy()
-          .setAnnotationIntrospector(AnnotationIntrospector.nopInstance())
-          .writeValueAsString(anyData)
+      entityJson = mapper.copy().setAnnotationIntrospector(AnnotationIntrospector.nopInstance()).writeValueAsString(anyData)
       namespace = anyData::class.java.name
     }
   }
