@@ -36,6 +36,8 @@ class WxpaProperty {
   var accessToken: String? = null
   var jsapiTicket: String? = null
 
+  fun signFn() {}
+
   @JvmOverloads
   fun signature(
     url: String,

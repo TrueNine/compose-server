@@ -17,9 +17,11 @@
 package net.yan100.compose.security.oauth2.property
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import net.yan100.compose.core.util.encrypt.sha1
 import net.yan100.compose.security.oauth2.Oauth2TestEntrance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -39,6 +41,26 @@ class WxpaPropertyTest {
       assertNotNull(b)
       println(a)
       println(b)
+    }
+  }
+
+  @Test
+  fun `test signature`() {
+    val j = "O3SMpm8bG7kJnF36aXbe82tYKil59B0Wt4bWcCHEXGNLaUh3dx5I1dqW_Zzo2uM8-eOYUV6TD3-cDTTyF_IqPQ"
+    val n = "jLFUE4XXOwx11VlfQm535xqU5k1R6g2g"
+    val t = "1711251297"
+    val u = "https://frp.yifajucai.com/wxpa/auth/register/sharecode?shareCode=202403240215504199616"
+    val result = "0096f0f65249ea6059784e51761680aa7d8d8db7"
+    val str =
+      "jsapi_ticket=O3SMpm8bG7kJnF36aXbe82tYKil59B0Wt4bWcCHEXGNLaUh3dx5I1dqW_Zzo2uM8-eOYUV6TD3-cDTTyF_IqPQ&noncestr=jLFUE4XXOwx11VlfQm535xqU5k1R6g2g&timestamp=1711251297&url=https://frp.yifajucai.com/wxpa/auth/register/sharecode?shareCode=202403240215504199616"
+
+    runBlocking {
+      val splitUrl = u.split("#")[0]
+
+      val b = mutableMapOf("noncestr" to n, "jsapi_ticket" to j, "timestamp" to t, "url" to splitUrl).map { "${it.key}=${it.value}" }.sorted().joinToString("&")
+
+      assertEquals(b, str)
+      assertEquals(result, b.sha1)
     }
   }
 }

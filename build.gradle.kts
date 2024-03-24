@@ -99,7 +99,7 @@ spotless {
     indentWithSpaces(2)
     lineEndings = LineEnding.UNIX
     target("**/**.sql")
-    dbeaver().configFile("dbeaver.properties")
+    dbeaver().configFile(".compose-config/.spotless_format_config.properties")
   }
   java {
     indentWithSpaces(2)

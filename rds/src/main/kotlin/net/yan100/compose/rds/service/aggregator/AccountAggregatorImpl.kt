@@ -95,7 +95,7 @@ class AccountAggregatorImpl(
     param: IAccountAggregator.RegisterAccountDto,
     openId: String,
   ): Usr? =
-    if (userInfoService.existsByWechatOpenId(openId)) {
+    if (!userInfoService.existsByWechatOpenId(openId)) {
       saveUsrForRegisterParam(param).also {
         roleGroupService.assignPlainToUser(it.id)
         userInfoService.savePlainUserInfoByUser(it).let { u ->

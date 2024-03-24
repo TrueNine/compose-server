@@ -1,12 +1,10 @@
 val urls = "$$$$$$$$"
 
 val urlMappings =
-  urls
-    .split(",")
-    .associate {
-      val (url, mapping) = it.split("________")
-      url to mapping
-    }
+  urls.split(",").associate {
+    val (url, mapping) = it.split("________")
+    url to mapping
+  }
 
 fun RepositoryHandler.enableMirror() {
   all {
