@@ -202,7 +202,7 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.445"
+compose = "1.6.446"
 
 java = "21" ### https://bell-sw.com/
 kotlin = "2.0.0-Beta4" ### https://github.com/JetBrains/kotlin/releases

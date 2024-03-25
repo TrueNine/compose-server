@@ -31,30 +31,30 @@ import org.gradle.kotlin.dsl.create
 class Main : Plugin<Project> {
   override fun apply(project: Project) {
     val cfg = project.extensions.create<ConfigEntrance>(ConfigEntrance.DSL_NAME, project)
-    val p = project
+    project.afterEvaluate { p ->
+      p.wrap {
+        log.lifecycle("compose gradle plugin project = {}", p.name)
 
-    p.wrap {
-      log.lifecycle("compose gradle plugin project = {}", p.name)
+        val clean = CleanExtension(this, cfg.cleanExtension)
+        log.debug("注册清理任务 = {}", clean)
 
-      val clean = CleanExtension(this, cfg.cleanExtension)
-      log.debug("注册清理任务 = {}", clean)
+        val publish = PublishExtension(this, cfg.publishExtension)
+        log.debug("注册发布增强任务 = {}", publish)
 
-      val publish = PublishExtension(this, cfg.publishExtension)
-      log.debug("注册发布增强任务 = {}", publish)
+        val gradlePropertiesGenerator = GradlePropertiesGenerator(this, cfg.gradlePropertiesGenerator)
+        log.debug("注册 properties 生成器 = {}", gradlePropertiesGenerator)
 
-      val gradlePropertiesGenerator = GradlePropertiesGenerator(this, cfg.gradlePropertiesGenerator)
-      log.debug("注册 properties 生成器 = {}", gradlePropertiesGenerator)
+        val readmeFiller = ReadmeFiller(this, cfg.filler)
+        log.debug("注册 readme 填充器 = {}", readmeFiller)
 
-      val readmeFiller = ReadmeFiller(this, cfg.filler)
-      log.debug("注册 readme 填充器 = {}", readmeFiller)
+        val jarExtension = JarExtension(this, cfg.jarExtension)
+        log.debug("注册 jar 扩展 = {}", jarExtension)
 
-      val jarExtension = JarExtension(this, cfg.jarExtension)
-      log.debug("注册 jar 扩展 = {}", jarExtension)
+        val ideExtension = IdeExtension(this, cfg.ideExtension)
+        log.debug("注册 ide 扩展 = {}", ideExtension)
 
-      val ideExtension = IdeExtension(this, cfg.ideExtension)
-      log.debug("注册 ide 扩展 = {}", ideExtension)
-
-      val spotless = Spotless(this, cfg.spotless)
+        val spotless = Spotless(this, cfg.spotless)
+      }
     }
   }
 }
