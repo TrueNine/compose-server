@@ -14,38 +14,28 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package net.yan100.compose.plugin.generator
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.annotation.Nullable
-import jakarta.validation.constraints.NotNull
+import net.yan100.compose.plugin.consts.Repos
 
-/**
- * 基础用户传递信息
- *
- * @author T_teng
- * @since 2023-04-06
- */
-open class RequestInfo {
-  @NotNull @org.jetbrains.annotations.NotNull lateinit var userId: String
-
-  @NotNull @org.jetbrains.annotations.NotNull lateinit var account: String
-
-  @Nullable @JsonIgnore var deviceId: String? = null
-
-  @Nullable @JsonIgnore var loginIpAddr: String? = null
-
-  @Nullable @JsonIgnore var currentIpAddr: String? = null
-
-  override fun toString(): String {
-    return buildString {
-      append(::userId.name)
-      append("=")
-      append(userId)
-      append(",")
-      append(::account.name)
-      append("=")
-      append(account)
-    }
-  }
+enum class MavenRepoType(
+  val mavenCentralUrl: String? = null,
+  val googlePluginUrl: String? = null,
+  val jCenterUrl: String? = null,
+  val gradlePluginUrl: String? = null,
+  val gradleDistributionUrl: String? = null,
+) {
+  ALIYUN(
+    mavenCentralUrl = Repos.aliCentral,
+    gradlePluginUrl = Repos.aliGradlePlugin,
+    googlePluginUrl = Repos.aliGoogle,
+    jCenterUrl = Repos.aliJCenter,
+  ),
+  TENCENT_CLOUD(
+    mavenCentralUrl = Repos.tencentCloudMavenPublic,
+    googlePluginUrl = Repos.tencentCloudMavenPublic,
+    gradlePluginUrl = Repos.tencentCloudGradlePlugin,
+  ),
+  HUAWEI_CLOUD(mavenCentralUrl = Repos.huaweiCloudMaven),
+  DEFAULT
 }

@@ -21,8 +21,9 @@ import net.yan100.compose.core.models.AuthRequestInfo
 import net.yan100.compose.core.util.EmptyDefault
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
 
+private val log = slf4j(EmptySecurityDetailsService::class)
+
 class EmptySecurityDetailsService : EmptyDefault, SecurityUserDetailsService() {
-  private val log = slf4j(this::class)
 
   init {
     log.warn("正在使用默认安全服务，生产环请自行重写")

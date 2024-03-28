@@ -19,9 +19,9 @@ package net.yan100.compose.plugin
 import net.yan100.compose.plugin.clean.CleanExtension
 import net.yan100.compose.plugin.entrance.ConfigEntrance
 import net.yan100.compose.plugin.filler.ReadmeFiller
+import net.yan100.compose.plugin.generator.GradleGenerator
 import net.yan100.compose.plugin.ide.IdeExtension
 import net.yan100.compose.plugin.jar.JarExtension
-import net.yan100.compose.plugin.properties.GradlePropertiesGenerator
 import net.yan100.compose.plugin.publish.PublishExtension
 import net.yan100.compose.plugin.spotless.Spotless
 import org.gradle.api.Plugin
@@ -31,29 +31,18 @@ import org.gradle.kotlin.dsl.create
 class Main : Plugin<Project> {
   override fun apply(project: Project) {
     val cfg = project.extensions.create<ConfigEntrance>(ConfigEntrance.DSL_NAME, project)
+
+    val gradleGenerator = GradleGenerator(project, cfg.gradleGenerator)
+    val publish = PublishExtension(project, cfg.publishExtension)
+    val readmeFiller = ReadmeFiller(project, cfg.filler)
+    val ideExtension = IdeExtension(project, cfg.ideExtension)
+    val clean = CleanExtension(project, cfg.cleanExtension)
+    val spotless = Spotless(project, cfg.spotless)
+
     project.afterEvaluate { p ->
       p.wrap {
-        log.lifecycle("compose gradle plugin project = {}", p.name)
-
-        val clean = CleanExtension(this, cfg.cleanExtension)
-        log.debug("注册清理任务 = {}", clean)
-
-        val publish = PublishExtension(this, cfg.publishExtension)
-        log.debug("注册发布增强任务 = {}", publish)
-
-        val gradlePropertiesGenerator = GradlePropertiesGenerator(this, cfg.gradlePropertiesGenerator)
-        log.debug("注册 properties 生成器 = {}", gradlePropertiesGenerator)
-
-        val readmeFiller = ReadmeFiller(this, cfg.filler)
-        log.debug("注册 readme 填充器 = {}", readmeFiller)
-
         val jarExtension = JarExtension(this, cfg.jarExtension)
         log.debug("注册 jar 扩展 = {}", jarExtension)
-
-        val ideExtension = IdeExtension(this, cfg.ideExtension)
-        log.debug("注册 ide 扩展 = {}", ideExtension)
-
-        val spotless = Spotless(this, cfg.spotless)
       }
     }
   }

@@ -179,7 +179,7 @@ dependencies {
   api(l.kie.spring)
 
   // mybatis-plus
-  api(l.mybatis.plus)
+  api(l.mybatisPlusSpringBootStarter)
   annotationProcessor(l.lombok)
 
   // querydsl

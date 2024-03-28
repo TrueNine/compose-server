@@ -103,8 +103,8 @@ class JarExtension(
   }
 
   companion object {
-    const val BOOT_JAR_CLEAN_TASK_NAME = "bootJarClearLib"
-    const val BOOT_JAR_COPY_LIB_TASK_NAME = "bootJarCopyLib"
-    const val BOOT_JAR_COPY_CONFIG_TASK_NAME = "bootJarCopyConfig"
+    const val BOOT_JAR_CLEAN_TASK_NAME = "composeBootJarClearLib"
+    const val BOOT_JAR_COPY_LIB_TASK_NAME = "composeBootJarCopyLib"
+    const val BOOT_JAR_COPY_CONFIG_TASK_NAME = "composeBootJarCopyConfig"
   }
 }

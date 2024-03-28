@@ -128,3 +128,17 @@ fun <T : IEntity> Iterable<T>.mergeAll(
   if (checkLength) check(allSave.size == prepard.size) { "需更新的长度不一致" }
   return allSave
 }
+
+inline fun <T : IEntity> T.fromDbData(
+  target: T,
+  crossinline merge: T.(w: T) -> T = { it },
+): T {
+  check(!target.isNew) { "要合并的实体必须为数据库内查询的实体" }
+
+  id = target.id
+  rlv = target.rlv
+  crd = target.crd
+  mrd = datetime.now()
+
+  return merge(target, this)
+}

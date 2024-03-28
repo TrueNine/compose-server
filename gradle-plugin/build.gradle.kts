@@ -1,18 +1,27 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 val l = libs
-val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-val snapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
-val pluginGroup = "net.yan100.compose"
-val pluginVersion = libs.versions.compose.get().toString()
-val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
-val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
+
+val pluginGroup = libs.versions.composeGroup.get()
+val pluginVersion = libs.versions.compose.get()
+val yunxiaoUrl by extra { properties["yunxiaoUrl"] as String }
+val yunxiaoUsername by extra { properties["yunxiaoUsername"] as String }
+val yunxiaoPassword by extra { properties["yunxiaoPassword"] as String }
+val sonatypeUsername by extra { properties["sonatypeUsername"] as String }
+val sonatypePassword by extra { properties["sonatypePassword"] as String }
+
+
 
 plugins {
   alias(libs.plugins.ktJvm)
   java
+  signing
   `version-catalog`
   `java-library`
   `java-gradle-plugin`
   `maven-publish`
+  //id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 group = pluginGroup
@@ -21,10 +30,12 @@ version = pluginVersion
 
 repositories {
   mavenLocal()
-  maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
+  maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"))
+  maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"))
   maven(url = uri("https://repo.spring.io/milestone"))
-  mavenCentral()
   gradlePluginPortal()
+  mavenCentral()
+  google()
 }
 
 dependencies {
@@ -33,27 +44,33 @@ dependencies {
   implementation(libs.gradlePlugin.springBoot)
   implementation(libs.gradlePlugin.springBootDependencyManagement)
   implementation(libs.bundles.kt)
+
+  testImplementation(gradleTestKit())
+  testImplementation(libs.bundles.test.kotlinJunit5)
 }
 
-kotlin { jvmToolchain { languageVersion.set(JavaLanguageVersion.of(l.versions.java.get().toInt())) } }
+kotlin {
+  compilerOptions {
+    apiVersion = KotlinVersion.KOTLIN_2_0
+    jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
+    freeCompilerArgs =
+      listOf(
+        "-Xjsr305=strict",
+        "-Xjvm-default=all-compatibility",
+        "-verbose",
+        "-Xjdk-release=${l.versions.java.get()}",
+        "-jvm-target=${l.versions.java.get()}",
+        "-Xextended-compiler-checks"
+      )
+  }
+
+  jvmToolchain(21)
+}
 
 tasks {
+  test { useJUnitPlatform() }
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     jvmTargetValidationMode.set(org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.ERROR)
-  }
-  withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile> {
-    kotlinOptions {
-      freeCompilerArgs +=
-        listOf(
-          "-Xjsr305=strict",
-          "-Xjvm-default=all",
-          "-verbose",
-          "-Xjdk-release=${l.versions.java.get()}",
-          "-jvm-target=${l.versions.java.get()}",
-          "-Xextended-compiler-checks"
-        )
-      jvmTarget = l.versions.java.get()
-    }
   }
 }
 
@@ -80,12 +97,13 @@ java {
 
 publishing {
   repositories {
-    maven(url = layout.buildDirectory.dir("local-maven-repo"))
     mavenLocal()
-    maven(url = uri(if (pluginVersion.uppercase().contains("SNAPSHOT")) snapshot else release)) {
+    maven(url = layout.buildDirectory.dir("local-maven-repo"))
+    maven(url = uri(yunxiaoUrl)) {
+      isAllowInsecureProtocol = false
       credentials {
-        username = yunXiaoUsername
-        password = yunXiaoPassword
+        username = yunxiaoUsername
+        password = yunxiaoPassword
       }
     }
   }
@@ -98,6 +116,7 @@ publishing {
       from(components["java"])
     }
 
+
     create<MavenPublication>("versionCatalog") {
       groupId = pluginGroup
       artifactId = "${project.name}-catalog"
@@ -105,6 +124,25 @@ publishing {
       from(components["versionCatalog"])
     }
   }
+}
+
+
+//nexusPublishing {
+//  repositories {
+//    sonatype {
+//      nexusUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+//      snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+//      username = sonatypeUsername
+//      password = sonatypePassword
+//    }
+//  }
+//}
+
+// https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signing_publications
+signing {
+  useGpgCmd()
+  sign(publishing.publications["gradlePlugin"])
+  sign(publishing.publications["versionCatalog"])
 }
 
 catalog { versionCatalog { from(files("../libs.versions.toml")) } }

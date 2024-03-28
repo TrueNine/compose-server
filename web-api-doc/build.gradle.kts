@@ -1,9 +1,8 @@
 version = libs.versions.compose.get()
 
 dependencies {
-  api(libs.bundles.knife4j)
   implementation(project(":core"))
-
-  api(libs.spring.doc.webmvcUi3)
-  api(libs.jakarta.openapiV3Annotations)
+  implementation(libs.spring.doc.webmvcUi3)
+  // api(libs.bundles.knife4j)
+  // api(libs.jakarta.openapiV3Annotations)
 }

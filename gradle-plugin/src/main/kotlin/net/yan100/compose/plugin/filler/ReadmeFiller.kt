@@ -62,7 +62,7 @@ class ReadmeFiller(
 
   private fun fillEnvVersion() =
     project.wrap {
-      tasks.register(README_TASK_NAME) { task ->
+      rootProject.tasks.register(README_TASK_NAME) { task ->
         task.group = Constant.TASK_GROUP
         var fileExists = false
         var file: File? = null
@@ -84,7 +84,7 @@ class ReadmeFiller(
     }
 
   companion object {
-    const val README_TASK_NAME = "fillReadmeEnvVersion"
-    const val LICENSE_TASK_NAME = "fillLicense"
+    const val README_TASK_NAME = "composeFillReadmeEnvVersion"
+    const val LICENSE_TASK_NAME = "composeFillLicense"
   }
 }

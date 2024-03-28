@@ -14,38 +14,11 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package net.yan100.compose.plugin.consts
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.annotation.Nullable
-import jakarta.validation.constraints.NotNull
-
-/**
- * 基础用户传递信息
- *
- * @author T_teng
- * @since 2023-04-06
- */
-open class RequestInfo {
-  @NotNull @org.jetbrains.annotations.NotNull lateinit var userId: String
-
-  @NotNull @org.jetbrains.annotations.NotNull lateinit var account: String
-
-  @Nullable @JsonIgnore var deviceId: String? = null
-
-  @Nullable @JsonIgnore var loginIpAddr: String? = null
-
-  @Nullable @JsonIgnore var currentIpAddr: String? = null
-
-  override fun toString(): String {
-    return buildString {
-      append(::userId.name)
-      append("=")
-      append(userId)
-      append(",")
-      append(::account.name)
-      append("=")
-      append(account)
-    }
-  }
+object MavenRepl {
+  const val MAVEN_CENTRAL = "https://repo.maven.apache.org/maven2/"
+  const val JCENTER = "https://jcenter.bintray.com/"
+  const val GRADLE_PLUGIN_PORTAL = "https://plugins.gradle.org/m2/"
+  const val GOOGLE = "https://dl.google.com/dl/android/maven2/"
 }

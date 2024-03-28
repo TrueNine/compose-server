@@ -14,8 +14,19 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.annotations
+package net.yan100.compose.plugin.generator
 
-import java.lang.annotation.Inherited
+import java.io.File
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
-@Inherited @MustBeDocumented @Retention(AnnotationRetention.RUNTIME) @Target(AnnotationTarget.CLASS) annotation class OpenArg
+class GradleGeneratorTest {
+  private lateinit var projectDir: File
+
+  @BeforeTest
+  fun before() {
+    projectDir = this::class.java.classLoader.getResource("tpq")?.file?.let { File(it) }!!
+  }
+
+  @Test fun `test template`() {}
+}

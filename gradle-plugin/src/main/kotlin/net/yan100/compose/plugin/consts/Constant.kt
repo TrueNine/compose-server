@@ -21,6 +21,7 @@ object Constant {
 
   object Internal {
     const val META_INIT_GRADLE_KTS = "meta.init.gradle.kts"
+    const val INIT_GRADLE_KTS = "init.gradle.kts"
   }
 
   object Config {

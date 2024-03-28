@@ -22,6 +22,7 @@ asciJvmConvert = { id = "org.asciidoctor.jvm.convert", version.ref = "gradlePlug
 [bundles]
 test-springKotlinTestNG = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "test-mockk", "test-testng", "db-hsql", "db-sqlite"]
 test-springKotlinJunit5 = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
+test-kotlinJunit5 = ["kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
 kt = ["kt-stdlib", "kt-reflact", "ktx-coroutineReactor", "kt-reactorExtensions", "jetbrains-annotation", "json-jacksonModuleKotlin"]
 p6spySpring = ["db-p6spySpring", "db-p6spy"]
 spring-redis = ["spring-boot-dataRedis", "spring-boot-dataRedisReactive", "apache-commonsPool2"]
@@ -117,6 +118,7 @@ db-mysqlJ = { group = "com.mysql", name = "mysql-connector-j", version.ref = "db
 db-mysqJava = { group = "mysql", name = "mysql-connector-java", version.ref = "db-mysqlJava" }
 db-flywayCore = { group = "org.flywaydb", name = "flyway-core", version.ref = "db-flyway" }
 db-flywayMysql = { group = "org.flywaydb", name = "flyway-mysql", version.ref = "db-flyway" }
+db-flywayPostgresql = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "db-flyway" }
 db-p6spy = { group = "p6spy", name = "p6spy", version.ref = "db-p6spy" }
 db-p6spySpring = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version.ref = "db-p6spySpring" }
 
@@ -202,12 +204,13 @@ bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-ali
 bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 
 [versions]
-compose = "1.6.446"
+compose = "1.6.458"
+composeGroup = "net.yan100.compose"
 
 java = "21" ### https://bell-sw.com/
-kotlin = "2.0.0-Beta4" ### https://github.com/JetBrains/kotlin/releases
-kt-kspGoogleApi = "2.0.0-Beta4-1.0.19" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
-ktx-coroutine = "1.8.0-RC2" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
+kotlin = "2.0.0-Beta5" ### https://github.com/JetBrains/kotlin/releases
+kt-kspGoogleApi = "2.0.0-Beta5-1.0.19" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
+ktx-coroutine = "1.8.1-Beta" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
 kt-reactorExtensions = "1.2.2" ### https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
@@ -219,36 +222,36 @@ gradlePlugin-asciJvmConvert = "4.0.2" ### https://mvnrepository.com/artifact/org
 gradlePlugin-graalvmNative = "0.10.1" ### https://mvnrepository.com/artifact/org.graalvm.buildtools.native/org.graalvm.buildtools.native.gradle.plugin
 
 
-spring-boot = "3.3.0-M2" ### https://spring.io/projects/spring-boot#learn
+spring-boot = "3.3.0-M3" ### https://spring.io/projects/spring-boot#learn
 spring-cloud = "2023.0.0" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### deprecated https://spring.io/projects/spring-cloud-alibaba#learn
-spring-modulith = "1.2.0-M2" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
-spring-doc-webmvcUi3 = "2.3.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+spring-modulith = "1.2.0-M3" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
+spring-doc-webmvcUi3 = "2.4.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 
 apache-commonsPool2 = "2.12.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
-apache-commonsCompress = "1.26.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
+apache-commonsCompress = "1.26.1" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
 
 net-okhttp3 = "5.0.0-alpha.12" ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 net-retrofit = "2.9.0" ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
 
 test-testng = "7.9.0" ### https://mvnrepository.com/artifact/org.testng/testng
-test-mockk = "1.13.9" ### https://mvnrepository.com/artifact/io.mockk/mockk
+test-mockk = "1.13.10" ### https://mvnrepository.com/artifact/io.mockk/mockk
 test-junit5 = "5.10.2" ### https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
 
 cache-caffeine = "3.1.8" ### https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 
 db-hsql = "2.7.2" ### https://mvnrepository.com/artifact/org.hsqldb/hsqldb
 db-h2 = "2.2.224" ### https://mvnrepository.com/artifact/com.h2database/h2
-db-postgresql = "42.7.2" ### https://mvnrepository.com/artifact/org.postgresql/postgresql
-db-sqlite = "3.45.1.0" ### https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+db-postgresql = "42.7.3" ### https://mvnrepository.com/artifact/org.postgresql/postgresql
+db-sqlite = "3.45.2.0" ### https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
 db-mysqlJava = "8.0.33" ### deprecated https://mvnrepository.com/artifact/mysql/mysql-connector-java
 db-mysqlJ = "8.3.0" ### https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
 crawler-supercsv = "2.4.0" ### https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
-db-flyway = "10.8.1" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+db-flyway = "10.10.0" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 db-p6spy = "3.9.1" ### deprecated https://mvnrepository.com/artifact/p6spy/p6spy
 db-p6spySpring = "1.9.1" ### deprecated https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
 
-sdk-oss-minio = "8.5.8" ### https://mvnrepository.com/artifact/io.minio/minio
+sdk-oss-minio = "8.5.9" ### https://mvnrepository.com/artifact/io.minio/minio
 sdk-oss-aliyun = "3.17.4" ### https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss
 sdk-oss-huaweicloud = "3.23.9.1" ### https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java
 sdk-pay-wechatv3 = "0.2.12" ### https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
@@ -270,7 +273,7 @@ util-guavaAndroid = "33.0.0-android" ### https://mvnrepository.com/artifact/com.
 util-ognl = "3.4.2" ### https://mvnrepository.com/artifact/ognl/ognl
 util-ikanalyzer = "8.5.0" ### https://mvnrepository.com/artifact/com.github.magese/ik-analyzer
 util-smilemath = "2.6.0" ### https://mvnrepository.com/artifact/com.github.haifengl/smile-math
-util-easyexcel = "3.3.3" ### https://mvnrepository.com/artifact/com.alibaba/easyexcel
+util-easyexcel = "3.3.4" ### https://mvnrepository.com/artifact/com.alibaba/easyexcel
 util-freemarker = "2.3.32" ### https://mvnrepository.com/artifact/org.freemarker/freemarker
 util-mapstruct = "1.6.0.Beta1" ### https://mvnrepository.com/artifact/org.mapstruct/mapstruct
 
@@ -279,25 +282,25 @@ slf4j = "2.1.0-alpha1" ### https://mvnrepository.com/artifact/org.slf4j/slf4j-ap
 crawler-ip2region = "2.7.0" ### https://mvnrepository.com/artifact/org.lionsoul/ip2region
 crawler-selenium = "4.18.1" ### https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
 crawler-seleniumWebDriverManager = "5.7.0" ### https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-crawler-playwrite = "1.41.2" ### https://mvnrepository.com/artifact/com.microsoft.playwright/playwright
+crawler-playwrite = "1.42.0" ### https://mvnrepository.com/artifact/com.microsoft.playwright/playwright
 crawler-jsoup = "1.17.2" ### https://mvnrepository.com/artifact/org.jsoup/jsoup
-crawler-nekohtml = "3.11.2" ### https://mvnrepository.com/artifact/org.htmlunit/neko-htmlunit
+crawler-nekohtml = "3.11.3" ### https://mvnrepository.com/artifact/org.htmlunit/neko-htmlunit
 
-jakarta-persistenceApi = "3.2.0-M1" ### https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
-jakarta-servletApi = "6.1.0-M1" ### https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
-jakarta-validationApi = "3.1.0-M1" ### https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
-jakarta-openapiV3Annotations = "2.2.20" ### https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
+jakarta-persistenceApi = "3.2.0-M2" ### https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
+jakarta-servletApi = "6.1.0-M2" ### https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+jakarta-validationApi = "3.1.0-M2" ### https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
+jakarta-openapiV3Annotations = "2.2.21" ### https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
 jakarta-annotationApi = "3.0.0-M1" ### https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api
 
 mybatis-plus = "3.5.5" ### https://oss.sonatype.org/content/repositories/snapshots/com/baomidou/mybatis-plus-boot-starter/
 
-json-jackson = "2.16.1" ### https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+json-jackson = "2.17.0" ### https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
 json-gson = "2.10.1" ### https://mvnrepository.com/artifact/com.google.code.gson/gson
 
-lombok = "1.18.30" ### https://mvnrepository.com/artifact/org.projectlombok/lombok
+lombok = "1.18.32" ### https://mvnrepository.com/artifact/org.projectlombok/lombok
 
 querydsl = "5.1.0" ### https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
-hibernate = "6.4.4.Final" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+hibernate = "6.5.0.CR1" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 
 drools = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.drools/drools-core
 liteflow = "2.11.4.2" ### https://mvnrepository.com/artifact/com.yomahub.liteflow/liteflow-spring-boot-starter

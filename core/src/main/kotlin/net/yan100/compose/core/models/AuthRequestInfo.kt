@@ -17,7 +17,6 @@
 package net.yan100.compose.core.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.annotation.Nullable
 import java.util.concurrent.CopyOnWriteArrayList
 import net.yan100.compose.core.map.RequestInfoStructMap
 
@@ -28,13 +27,13 @@ import net.yan100.compose.core.map.RequestInfoStructMap
  * @since 2022-12-10
  */
 class AuthRequestInfo : RequestInfo() {
-  @Nullable var encryptedPassword: String? = null
+  var encryptedPassword: String? = null
 
-  @Nullable var nonLocked = false
+  var nonLocked = false
 
-  @Nullable var nonExpired = false
+  var nonExpired = false
 
-  @Nullable var enabled = false
+  var enabled = false
   var roles: List<String> = CopyOnWriteArrayList()
   var permissions: List<String> = CopyOnWriteArrayList()
   var depts: List<String> = CopyOnWriteArrayList()

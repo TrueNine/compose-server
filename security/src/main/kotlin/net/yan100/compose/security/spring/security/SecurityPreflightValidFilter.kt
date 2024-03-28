@@ -65,6 +65,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
         filterChain.doFilter(request, response)
         return
       }
+
     if (null == authInfo) {
       log.trace("用户信息错误，直接放行")
       filterChain.doFilter(request, response)

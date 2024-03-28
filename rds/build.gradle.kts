@@ -1,7 +1,5 @@
 version = libs.versions.compose.get()
 
-sourceSets
-
 sourceSets {
   main {
     resources { setSrcDirs(listOf("src/main/resources/common")) }
@@ -43,14 +41,28 @@ val defaultJar by
 
 val postgresqlJar by
   tasks.creating(Jar::class) {
-    val postgresqlSourceSet: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/postgresql") }
+    val postgresqlSourceSet: SourceSet by
+      sourceSets.creating {
+        resources.srcDir("src/main/resources/postgresql")
+        dependencies {
+          implementation(libs.db.flywayPostgresql)
+          runtimeOnly(libs.db.postgresql)
+        }
+      }
     archiveClassifier.set("postgresql")
     from(common.resources, postgresqlSourceSet.resources, sourceSets.main.get().output.classesDirs)
   }
 
 val mysqlJar by
   tasks.creating(Jar::class) {
-    val mysqlSourceSet: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/mysql") }
+    val mysqlSourceSet: SourceSet by
+      sourceSets.creating {
+        resources.srcDir("src/main/resources/mysql")
+        dependencies {
+          implementation(libs.db.flywayMysql)
+          runtimeOnly(libs.db.mysqlJ)
+        }
+      }
     archiveClassifier.set("mysql")
     from(mysqlSourceSet.resources, sourceSets.main.get().output.classesDirs)
   }
@@ -68,7 +80,7 @@ publishing {
       artifactId = project.name
       version = project.version.toString()
       from(components["java"])
-      artifact(defaultJar) { classifier = "a" }
+      // artifact(defaultJar) { classifier = "" }
       artifact(postgresqlJar) { classifier = "postgresql" }
       artifact(mysqlJar) { classifier = "mysql" }
     }

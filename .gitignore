@@ -1,3 +1,6 @@
+### android studio ###
+/local.properties
+
 ### gradle ###
 .gradle
 gradle/

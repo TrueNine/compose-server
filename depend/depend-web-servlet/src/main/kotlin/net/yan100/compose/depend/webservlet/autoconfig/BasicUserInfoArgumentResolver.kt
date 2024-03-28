@@ -52,7 +52,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
     binderFactory: WebDataBinderFactory?,
   ): Any? {
     val u = UserInfoContextHolder.get()
-    log.info("argument injection for {}", u)
+    log.trace("argument injection for {}", u)
     if (u == null) {
       UserInfoContextHolder.set(
         RequestInfo().apply {

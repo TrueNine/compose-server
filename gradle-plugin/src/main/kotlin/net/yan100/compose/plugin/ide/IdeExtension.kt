@@ -52,7 +52,7 @@ class IdeExtension(
   }
 
   companion object {
-    const val GEN_TASK_NAME = "ideSupport"
-    const val CLEAN_TASK_NAME = "ideClean"
+    const val GEN_TASK_NAME = "composeIdeAll"
+    const val CLEAN_TASK_NAME = "composeCleanIdeAll"
   }
 }

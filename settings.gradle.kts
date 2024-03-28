@@ -1,19 +1,12 @@
 pluginManagement {
-  val release = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-
   repositories {
-    mavenLocal()
-    maven(url = uri("https://repo.huaweicloud.com/repository/maven/"))
-    maven(url = uri("https://repo.spring.io/milestone"))
-    maven(url = uri(release)) {
+    maven(url = uri(extra["yunxiaoUrl"].toString())) {
       isAllowInsecureProtocol = true
       credentials {
-        username = System.getenv("YUNXIAO_USER")
-        password = System.getenv("YUNXIAO_PWD")
+        username = extra["yunxiaoUsername"].toString()
+        password = extra["yunxiaoPassword"].toString()
       }
     }
-    gradlePluginPortal()
-    mavenCentral()
   }
 }
 
@@ -113,9 +106,8 @@ findProject(":ksp")?.name = "ksp"
 
 include("ksp:ksp-test")
 
-findProject(":ksp:ksp-test")?.name =
-  "ksp-test"
+findProject(":ksp:ksp-test")?.name = "ksp-test"
 
-// include("version-check")
-//
-// findProject(":version-check")?.name = "version-check"
+include("version-check")
+
+findProject(":version-check")?.name = "version-check"

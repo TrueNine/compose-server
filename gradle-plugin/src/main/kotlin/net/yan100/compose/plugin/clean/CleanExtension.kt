@@ -42,7 +42,7 @@ class CleanExtension(
   }
 
   companion object {
-    const val TASK_NAME = "cleanExtension"
+    const val TASK_NAME = "composeCleanOther"
     const val DSL_NAME = TASK_NAME
   }
 }

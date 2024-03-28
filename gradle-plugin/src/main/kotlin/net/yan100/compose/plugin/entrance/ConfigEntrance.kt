@@ -19,9 +19,9 @@ package net.yan100.compose.plugin.entrance
 import javax.inject.Inject
 import net.yan100.compose.plugin.clean.CleanExtensionConfig
 import net.yan100.compose.plugin.filler.FillerConfig
+import net.yan100.compose.plugin.generator.GradleGeneratorConfig
 import net.yan100.compose.plugin.ide.IdeExtensionConfig
 import net.yan100.compose.plugin.jar.JarExtensionConfig
-import net.yan100.compose.plugin.properties.GradlePropertiesGeneratorConfig
 import net.yan100.compose.plugin.publish.PublishExtensionConfig
 import net.yan100.compose.plugin.spotless.SpotlessConfig
 import org.gradle.api.Action
@@ -37,7 +37,7 @@ import org.gradle.kotlin.dsl.apply
 abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   val cleanExtension = CleanExtensionConfig()
   val publishExtension = PublishExtensionConfig()
-  val gradlePropertiesGenerator = GradlePropertiesGeneratorConfig()
+  val gradleGenerator = GradleGeneratorConfig()
   val filler = FillerConfig(project)
   val jarExtension = JarExtensionConfig(project)
   val ideExtension = IdeExtensionConfig()
@@ -79,7 +79,7 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
    *
    * @param action 生成配置
    */
-  fun gradlePropertiesGenerator(action: Action<GradlePropertiesGeneratorConfig>) = action.execute(gradlePropertiesGenerator)
+  fun gradleGenerator(action: Action<GradleGeneratorConfig>) = action.execute(gradleGenerator)
 
   /**
    * ## gradle clean 扩展配置

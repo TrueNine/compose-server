@@ -27,12 +27,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 
+private val log = slf4j(CaffeineCacheAutoConfiguration::class)
+
 @Configuration
 class CaffeineCacheAutoConfiguration {
-  companion object {
-    private val log = slf4j(CaffeineCacheAutoConfiguration::class)
-  }
-
   private fun create(
     name: String,
     d: Duration,
@@ -64,11 +62,7 @@ class CaffeineCacheAutoConfiguration {
     log.debug("配置 CaffeineCache 缓存")
     val s = SimpleCacheManager()
 
-    if (m.isNotEmpty()) {
-      s.setCaches(m)
-    } else {
-      throw IllegalStateException("缓存配置为空")
-    }
+    if (m.isNotEmpty()) s.setCaches(m) else throw IllegalStateException("缓存配置为空")
 
     return s
   }
