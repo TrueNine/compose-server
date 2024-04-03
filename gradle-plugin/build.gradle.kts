@@ -11,8 +11,6 @@ val yunxiaoPassword by extra { properties["yunxiaoPassword"] as String }
 val sonatypeUsername by extra { properties["sonatypeUsername"] as String }
 val sonatypePassword by extra { properties["sonatypePassword"] as String }
 
-
-
 plugins {
   alias(libs.plugins.ktJvm)
   java
@@ -21,7 +19,8 @@ plugins {
   `java-library`
   `java-gradle-plugin`
   `maven-publish`
-  //id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+  // id("com.gradle.plugin-publish") version "1.2.1"
+  // id("io.github.gradle-nexus.publish-plugin") version "2.0.0-rc-2"
 }
 
 group = pluginGroup
@@ -43,10 +42,6 @@ dependencies {
   implementation(gradleKotlinDsl())
   implementation(libs.gradlePlugin.springBoot)
   implementation(libs.gradlePlugin.springBootDependencyManagement)
-  implementation(libs.bundles.kt)
-
-  testImplementation(gradleTestKit())
-  testImplementation(libs.bundles.test.kotlinJunit5)
 }
 
 kotlin {
@@ -68,7 +63,12 @@ kotlin {
 }
 
 tasks {
-  test { useJUnitPlatform() }
+  compileJava {
+    options.isFork = true
+    options.forkOptions.memoryMaximumSize = "4G"
+    options.forkOptions.memoryInitialSize = "2G"
+  }
+
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     jvmTargetValidationMode.set(org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.ERROR)
   }
@@ -116,7 +116,6 @@ publishing {
       from(components["java"])
     }
 
-
     create<MavenPublication>("versionCatalog") {
       groupId = pluginGroup
       artifactId = "${project.name}-catalog"
@@ -126,19 +125,6 @@ publishing {
   }
 }
 
-
-//nexusPublishing {
-//  repositories {
-//    sonatype {
-//      nexusUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-//      snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-//      username = sonatypeUsername
-//      password = sonatypePassword
-//    }
-//  }
-//}
-
-// https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signing_publications
 signing {
   useGpgCmd()
   sign(publishing.publications["gradlePlugin"])

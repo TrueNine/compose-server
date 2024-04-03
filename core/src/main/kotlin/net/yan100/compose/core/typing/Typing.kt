@@ -17,6 +17,7 @@
 package net.yan100.compose.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
+import jakarta.persistence.AttributeConverter
 
 /**
  * # 所有类型枚举的抽象接口
@@ -67,4 +68,34 @@ interface StringTyping : AnyTyping {
   companion object {
     @JvmStatic fun findVal(v: Int?): IntTyping? = null
   }
+}
+
+/** # int 枚举转换器 */
+class IntTypingConverterDelegate<T : IntTyping?>(private val searchValueFn: (b: Int?) -> T?) : AttributeConverter<T, Int?> {
+  override fun convertToDatabaseColumn(attribute: T?): Int? {
+    return attribute?.value
+  }
+
+  override fun convertToEntityAttribute(dbData: Int?): T? {
+    return searchValueFn(dbData)
+  }
+}
+
+/** # string 枚举转换器 */
+class StringTypingConverterDelegate<T : StringTyping?>(private val searchValueFn: (b: String?) -> T?) : AttributeConverter<T, String?> {
+  override fun convertToDatabaseColumn(attribute: T?): String? {
+    return attribute?.value
+  }
+
+  override fun convertToEntityAttribute(dbData: String?): T? {
+    return searchValueFn(dbData)
+  }
+}
+
+fun <T : IntTyping?> intTyping(c: (b: Int?) -> T?): IntTypingConverterDelegate<T> {
+  return IntTypingConverterDelegate(c)
+}
+
+fun <T : StringTyping> stringTyping(c: (b: String?) -> T?): StringTypingConverterDelegate<T> {
+  return StringTypingConverterDelegate(c)
 }

@@ -20,11 +20,18 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
+import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.parameters.HeaderParameter
+import jakarta.annotation.PostConstruct
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.Date
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.webapidoc.properties.SwaggerProperties
 import org.springdoc.core.models.GroupedOpenApi
+import org.springdoc.core.utils.SpringDocUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -89,5 +96,30 @@ class OpenApiDocConfig {
             License().name(authorInfo.license).url(authorInfo.licenseUrl),
           ),
       )
+  }
+
+  @PostConstruct
+  fun postInit() {
+    val cfg = SpringDocUtils.getConfig()
+    val datetimeSchema =
+      Schema<LocalDateTime>().apply {
+        title = "时间戳 millis"
+        name = "datetime"
+        type = "int64"
+        example = "1711971124475"
+      }
+    val byteArraySchema =
+      Schema<ByteArray>().apply {
+        title = "字节数组"
+        name = "byte serial"
+        type = "byte[]"
+        example = "[1, 0, 0, 1]"
+      }
+    cfg.replaceWithSchema(ByteArray::class.java, byteArraySchema)
+
+    cfg.replaceWithSchema(LocalDateTime::class.java, datetimeSchema)
+    cfg.replaceWithSchema(LocalDate::class.java, datetimeSchema)
+    cfg.replaceWithSchema(LocalTime::class.java, datetimeSchema)
+    cfg.replaceWithSchema(Date::class.java, datetimeSchema)
   }
 }

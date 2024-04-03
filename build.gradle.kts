@@ -1,4 +1,5 @@
 import com.diffplug.spotless.LineEnding
+import java.nio.charset.StandardCharsets
 import net.yan100.compose.plugin.aliYunXiao
 import net.yan100.compose.plugin.allAnnotationCompileOnly
 import net.yan100.compose.plugin.distribute
@@ -6,7 +7,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import java.nio.charset.StandardCharsets
 
 plugins {
   java
@@ -56,7 +56,6 @@ val l = libs
 
 project.version = libs.versions.compose.get()
 
-
 allprojects {
   repositories { aliYunXiao() }
 
@@ -90,7 +89,7 @@ subprojects {
 
   dependencies {
     annotationProcessor(l.spring.boot.configureprocessor)
-    allAnnotationCompileOnly(l.lombok)
+    allAnnotationCompileOnly(l.org.projectlombok.lombok)
     implementation(l.bundles.kt)
 
     implementation(l.spring.boot.autoconfigure)
@@ -188,7 +187,6 @@ subprojects {
 }
 
 rootProject.tasks { wrapper { distribute(libs.versions.gradle.get(), "https://mirrors.cloud.tencent.com/gradle") } }
-
 
 // https://github.com/diffplug/spotless/tree/main/plugin-gradle#quickstart
 spotless {

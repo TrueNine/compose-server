@@ -54,7 +54,6 @@ class WeChatPaySingleAutoConfiguration {
     log.info("certKeyPath = {}", p.certPath)
 
     val privateKey = ClassPathResource(p.privateKeyPath).contentAsByteArray.utf8String
-    val cert = ClassPathResource(p.certPath).contentAsByteArray.utf8String
 
     // TODO 郑重警告，此类不能被创建两次
     return RSAAutoCertificateConfig.Builder()

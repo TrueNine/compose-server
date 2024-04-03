@@ -18,6 +18,7 @@ plugins {
 
 val l = libs
 
+
 dependencies {
   // bundles
   api(l.bundles.kt)
@@ -26,7 +27,6 @@ dependencies {
   api(l.bundles.spring.jpa)
   api(l.bundles.spring.jpa)
   api(l.bundles.selenium)
-  api(l.bundles.flyway)
   api(l.bundles.knife4j)
 
   // libraries
@@ -34,7 +34,7 @@ dependencies {
   api(l.spring.boot.autoconfigure)
   annotationProcessor(l.spring.boot.configureprocessor)
   api(l.spring.boot.test)
-  api(l.spring.boot.json)
+  api(l.org.springframework.boot.spring.boot.starter.json)
   api(l.spring.boot.webflux)
   api(l.spring.boot.web)
   api(l.spring.boot.actuator)
@@ -99,6 +99,7 @@ dependencies {
   api(l.db.mysqJava)
   api(l.db.flywayCore)
   api(l.db.flywayMysql)
+  api(l.db.flywayPostgresql)
   api(l.db.p6spy)
   api(l.db.p6spySpring)
 
@@ -150,7 +151,7 @@ dependencies {
   api(l.security.antisamy)
 
   // slf4j
-  api(l.slf4j.api)
+  api(l.org.slf4j.slf4j.api)
 
   // crawler
   api(l.crawler.ip2region)
@@ -164,7 +165,7 @@ dependencies {
   // json
   api(l.json.jacksonModuleKotlin)
   api(l.json.jacksonCoreAnnotations)
-  api(l.json.gson)
+  api(l.com.google.code.gson.gson)
 
   // drools
   api(l.drools.core)
@@ -178,11 +179,13 @@ dependencies {
   api(l.kie.ci)
   api(l.kie.spring)
 
+  api(l.com.yomahub.liteflow.spring.boot.starter)
+
   // mybatis-plus
-  api(l.mybatisPlusSpringBootStarter)
-  annotationProcessor(l.lombok)
+  api(l.com.baomidou.mybatis.plus.boot.starter)
+  annotationProcessor(l.org.projectlombok.lombok)
 
   // querydsl
-  annotationProcessor(l.querydsl.jpa)
-  annotationProcessor(l.querydsl.apt)
+  annotationProcessor(l.com.querydsl.querydsl.jpa)
+  annotationProcessor(l.com.querydsl.querydsl.apt)
 }

@@ -17,8 +17,8 @@
 package net.yan100.compose.security
 
 import net.yan100.compose.core.extensionfunctions.hasText
-import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.AuthRequestInfo
+import net.yan100.compose.core.util.Str
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -30,51 +30,28 @@ import org.springframework.security.core.userdetails.UserDetails
  * @since 2022-12-10
  */
 data class UserDetailsWrapper(val authUserInfo: AuthRequestInfo?) : UserDetails {
+  private val auths: MutableSet<GrantedAuthority> = mutableSetOf()
+
   init {
-    log.trace("构建 = {}", authUserInfo)
+    // 添加角色信息
+    auths += authUserInfo?.roles?.filter(Str::hasText)?.map { SimpleGrantedAuthority("ROLE_$it") } ?: emptyList()
+    // 添加权限信息
+    auths += authUserInfo?.permissions?.filter(Str::hasText)?.map { SimpleGrantedAuthority(it) } ?: emptyList()
+    // 添加 部门信息
+    auths += authUserInfo?.depts?.filter(Str::hasText)?.map { SimpleGrantedAuthority("DEPT_$it") } ?: emptyList()
   }
 
-  companion object {
-    @JvmStatic private val log = slf4j(UserDetailsWrapper::class)
-  }
+  override fun getAuthorities(): Collection<GrantedAuthority> = auths
 
-  override fun getAuthorities(): Collection<GrantedAuthority> {
-    return mutableListOf<GrantedAuthority>().also { auths ->
-      // 添加角色信息
-      authUserInfo
-        ?.roles
-        ?.filter { text -> text.hasText() }
-        ?.forEach { r ->
-          auths += SimpleGrantedAuthority("ROLE_$r")
-          // 添加权限信息
-          authUserInfo.permissions.filter { text -> text.hasText() }.forEach { p -> auths += SimpleGrantedAuthority(p) }
-          // 添加 部门信息 到鉴权列表
-          authUserInfo.depts.filter { text -> text.hasText() }.map { mr -> "DEPT_$mr" }.forEach { mr -> auths += SimpleGrantedAuthority(mr) }
-        }
-    }
-  }
+  override fun getPassword(): String = authUserInfo?.encryptedPassword!!
 
-  override fun getPassword(): String {
-    return authUserInfo?.encryptedPassword!!
-  }
+  override fun getUsername(): String = authUserInfo?.account!!
 
-  override fun getUsername(): String {
-    return authUserInfo?.account!!
-  }
+  override fun isAccountNonExpired(): Boolean = authUserInfo?.nonExpired ?: true
 
-  override fun isAccountNonExpired(): Boolean {
-    return authUserInfo?.nonExpired ?: true
-  }
+  override fun isAccountNonLocked(): Boolean = authUserInfo?.nonLocked ?: true
 
-  override fun isAccountNonLocked(): Boolean {
-    return authUserInfo?.nonLocked ?: true
-  }
+  override fun isCredentialsNonExpired(): Boolean = authUserInfo?.nonExpired ?: true
 
-  override fun isCredentialsNonExpired(): Boolean {
-    return authUserInfo?.nonExpired ?: true
-  }
-
-  override fun isEnabled(): Boolean {
-    return authUserInfo?.enabled ?: true
-  }
+  override fun isEnabled(): Boolean = authUserInfo?.enabled ?: true
 }

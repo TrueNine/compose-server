@@ -5,7 +5,7 @@ version = libs.versions.compose.get()
 dependencies {
   api(libs.json.jacksonCoreAnnotations)
   api(libs.jakarta.validationApi)
-  api(libs.slf4j.api)
+  api(libs.org.slf4j.slf4j.api)
   api(libs.jakarta.openapiV3Annotations)
   api(libs.jakarta.annotationApi)
 
@@ -15,10 +15,9 @@ dependencies {
   implementation(libs.util.mapstruct)
   annotationProcessorKapt(libs.util.mapstructProcessor)
 
-  implementation(libs.spring.boot.json)
+  implementation(libs.org.springframework.boot.spring.boot.starter.json)
   implementation(libs.spring.security.crypto)
   implementation(libs.security.bcprovJdk18on)
-  // implementation(libs.spring.webmvc)
 
   // TODO 日志
   implementation(libs.spring.boot.logging)
@@ -28,5 +27,5 @@ dependencies {
   implementation(libs.util.hutoolCrypto)
 
   testImplementation(libs.spring.boot.web)
-  testImplementation(libs.spring.boot.json)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.json)
 }

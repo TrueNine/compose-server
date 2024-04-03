@@ -88,7 +88,6 @@ class GradleGenerator(
           }
           if (cfg.enableSpring) {
             cfg.otherRepositories += Repos.springMilestone
-            cfg.otherRepositories += Repos.springLibMilestone
             cfg.otherRepositories += Repos.springSnapshot
           }
           if (cfg.enableMybatisPlus) cfg.otherRepositories += Repos.mybatisPlusSnapshot

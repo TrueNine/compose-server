@@ -18,6 +18,7 @@ package net.yan100.compose.rds.base
 
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.entities.withNew
 import net.yan100.compose.rds.core.util.Pq
@@ -80,7 +81,7 @@ abstract class BaseController<T : IEntity>(protected val service: IService<T>) {
   @Operation(summary = "【ǃ RDS】根据实体id修改全部数据", description = """
     调用该接口，传入的每个实体必须存在id
   """)
-  fun modifyAllMeta(@RequestBody metas: List<@Valid T>) = metas.filter { it.id != null }.apply { service.saveAll(this) }
+  fun modifyAllMeta(@RequestBody metas: List<@Valid T>) = metas.filter { it.id.hasText() }.apply { service.saveAll(this) }
 
   @ResponseBody
   // @DeleteMapping("meta/byId")

@@ -23,6 +23,8 @@ import kotlin.test.assertNull
 import net.yan100.compose.rds.core.entities.QIEntity
 
 class QueryDslTest {
+  @Test fun `test a`() {}
+
   /**  */
   @Test
   fun `test query dsl clone not exception`() {

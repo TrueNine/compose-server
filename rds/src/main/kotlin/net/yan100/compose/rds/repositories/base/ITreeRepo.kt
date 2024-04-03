@@ -169,7 +169,7 @@ interface ITreeRepo<T : TreeEntity> : IRepo<T> {
   @Transactional(rollbackFor = [Exception::class])
   fun saveChildren(parent: T, children: List<T>): List<T> {
     if (children.isEmpty()) return listOf()
-    require(parent.rln != null && parent.rrn != null && parent.id != null && parent.nlv != null && parent.tgi != null) { "父节点缺少必要的值 = $parent" }
+    require(parent.nlv != null && parent.tgi != null) { "父节点缺少必要的值 = $parent" }
     val leftStep = parent.rln + 1
     val offset = (children.size * 2)
     // 更新所有的左节点和右节点

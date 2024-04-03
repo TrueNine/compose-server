@@ -72,10 +72,6 @@ include("depend:depend-mqtt")
 
 findProject(":depend:depend-mqtt")?.name = "depend-mqtt"
 
-include("depend:depend-flyway")
-
-findProject(":depend:depend-flyway")?.name = "depend-flyway"
-
 include("depend:depend-web-client")
 
 findProject(":depend:depend-web-client")?.name = "depend-web-client"

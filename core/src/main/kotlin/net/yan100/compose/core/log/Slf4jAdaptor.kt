@@ -46,3 +46,5 @@ object LogKt {
 }
 
 fun slf4j(kClass: KClass<*>): Logger = LoggerFactory.getLogger(kClass.java)
+
+inline fun <reified T> slf4j(): Logger = slf4j(T::class)

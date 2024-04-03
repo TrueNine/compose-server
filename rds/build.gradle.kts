@@ -14,8 +14,8 @@ dependencies {
 
   implementation(project(":depend:depend-jvalid"))
 
-  kapt(variantOf(libs.querydsl.apt) { classifier("jakarta") })
-  implementation(variantOf(libs.querydsl.jpa) { classifier("jakarta") })
+  kapt(variantOf(libs.com.querydsl.querydsl.apt) { classifier("jakarta") })
+  implementation(variantOf(libs.com.querydsl.querydsl.jpa) { classifier("jakarta") })
   implementation(project(":rds:rds-core"))
   implementation(libs.jakarta.annotationApi)
   implementation(project(":core"))
@@ -28,7 +28,6 @@ dependencies {
   testImplementation(libs.bundles.p6spySpring)
   testImplementation(libs.spring.boot.validation)
   testImplementation(libs.db.mysqlJ)
-  testImplementation(project(":depend:depend-flyway"))
 }
 
 val common: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/common") }

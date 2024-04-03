@@ -58,7 +58,7 @@ class MqttPahoClientWrapper(
     callback: (callbackTopic: String, message: T) -> Unit,
   ) {
     connect()
-    return client.subscribe(topic, qos) { t, message ->
+    return client.subscribe(topic, qos) { _, message ->
       val payload = mapper.readValue(message.payload, type.java)
       callback(topic, payload)
     }

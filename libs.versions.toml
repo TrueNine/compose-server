@@ -2,9 +2,8 @@
 composeGradle = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose" }
 composeKsp = { id = "net.yan100.compose.ksp", version.ref = "compose" }
 
-spotless = { id = "com.diffplug.spotless", version.ref = "gradlePlugin-spotless" }
+spotless = { id = "com.diffplug.spotless", version.ref = "gradlePlugin-com-diffplug-spotless" }
 ktJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-
 ktKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ktSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 ktNoArg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
@@ -12,32 +11,19 @@ ktAllOpen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin"
 ktLombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
 ktJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 ktKsp = { id = "com.google.devtools.ksp", version.ref = "kt-kspGoogleApi" }
+
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
-springBootDependencyManagement = { id = "io.spring.dependency-management", version.ref = "gradlePlugin-springBootDependencyManagement" }
+springBootDependencyManagement = { id = "io.spring.dependency-management", version = "1.1.4" }
 hibernateOrm = { id = "org.hibernate.orm", version.ref = "hibernate" }
-versions = { id = "com.github.ben-manes.versions", version.ref = "gradlePlugin-versionPlugin" }
-graalvmNative = { id = "org.graalvm.buildtools.native", version.ref = "gradlePlugin-graalvmNative" }
-asciJvmConvert = { id = "org.asciidoctor.jvm.convert", version.ref = "gradlePlugin-asciJvmConvert" }
-
-[bundles]
-test-springKotlinTestNG = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "test-mockk", "test-testng", "db-hsql", "db-sqlite"]
-test-springKotlinJunit5 = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
-test-kotlinJunit5 = ["kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
-kt = ["kt-stdlib", "kt-reflact", "ktx-coroutineReactor", "kt-reactorExtensions", "jetbrains-annotation", "json-jacksonModuleKotlin"]
-p6spySpring = ["db-p6spySpring", "db-p6spy"]
-spring-redis = ["spring-boot-dataRedis", "spring-boot-dataRedisReactive", "apache-commonsPool2"]
-spring-jpa = ["spring-boot-dataJpa", "spring-modulith-jpa"]
-selenium = ["crawler-selenium", "crawler-seleniumWebDriverManager"]
-flyway = ["db-flywayCore"]
-knife4j = ["sdk-openapi-knife4jJakarta", "spring-doc-webmvcUi3", "jakarta-openapiV3Annotations"]
-
+versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
+graalvmNative = { id = "org.graalvm.buildtools.native", version = "0.10.1" }
+asciJvmConvert = { id = "org.asciidoctor.jvm.convert", version = "4.0.2" }
 
 [libraries]
-### gradle plugins
 gradlePlugin-springBoot = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "spring-boot" }
-gradlePlugin-spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "gradlePlugin-spotless" }
+gradlePlugin-spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "gradlePlugin-com-diffplug-spotless" }
 gradlePlugin-kt = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-gradlePlugin-springBootDependencyManagement = { group = "io.spring.gradle", name = "dependency-management-plugin", version.ref = "gradlePlugin-springBootDependencyManagement" }
+gradlePlugin-springBootDependencyManagement = { group = "io.spring.gradle", name = "dependency-management-plugin", version = "1.1.4" }
 
 compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose" }
 compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose" }
@@ -63,7 +49,7 @@ compose-testToolkit = { group = "net.yan100.compose", name = "test-toolkit", ver
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-boot-configureprocessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
 spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
-spring-boot-json = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
+org-springframework-boot-spring-boot-starter-json = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
 spring-boot-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
 spring-boot-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
 spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
@@ -87,10 +73,10 @@ spring-webmvc = { group = "org.springframework", name = "spring-webmvc" }
 spring-modulith-jpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 spring-modulith-core = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "spring-modulith" }
 spring-modulith-test = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
-spring-doc-webmvcUi3 = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "spring-doc-webmvcUi3" }
+spring-doc-webmvcUi3 = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.4.0" }
 
-apache-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version.ref = "apache-commonsPool2" }
-apache-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version.ref = "apache-commonsCompress" }
+apache-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
+apache-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.26.1" }
 
 kt-kspGoogleApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "kt-kspGoogleApi" }
 kt-GradlePlugin = { group = "org.jetbrains.kotlin", name = "gradle-plugin", version.ref = "kotlin" }
@@ -99,16 +85,16 @@ kt-stdlibJdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", v
 kt-reflact = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 kt-testng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", version.ref = "kotlin" }
 kt-junit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
-kt-reactorExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version.ref = "kt-reactorExtensions" }
+kt-reactorExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.2.2" }
 ktx-coroutineReactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "ktx-coroutine" }
 jetbrains-annotation = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
 
-test-mockk = { group = "io.mockk", name = "mockk", version.ref = "test-mockk" }
+test-mockk = { group = "io.mockk", name = "mockk", version = "1.13.10" }
 test-junit5 = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "test-junit5" }
 test-testng = { group = "org.testng", name = "testng", version.ref = "test-testng" }
 test-reactorTest = { group = "io.projectreactor", name = "reactor-test" }
 
-cache-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "cache-caffeine" }
+cache-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 
 db-hsql = { group = "org.hsqldb", name = "hsqldb", version.ref = "db-hsql" }
 db-h2 = { group = "com.h2database", name = "h2", version.ref = "db-h2" }
@@ -162,21 +148,22 @@ security-auth0Jwt = { group = "com.auth0", name = "java-jwt", version.ref = "sec
 security-jjwtApi = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "security-jjwtApi" }
 security-antisamy = { group = "org.owasp.antisamy", name = "antisamy", version.ref = "security-antisamy" }
 
-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+com-github-ulisesbocchio-jasypt-spring-boot-starter = { group = "com.github.ulisesbocchio", name = "jasypt-spring-boot-starter", version = "3.0.5" }
+
+org-slf4j-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
 crawler-selenium = { group = "org.seleniumhq.selenium", name = "selenium-java", version.ref = "crawler-selenium" }
 crawler-ip2region = { group = "org.lionsoul", name = "ip2region", version.ref = "crawler-ip2region" }
 crawler-seleniumWebDriverManager = { group = "io.github.bonigarcia", name = "webdrivermanager", version.ref = "crawler-seleniumWebDriverManager" }
-crawler-playwright = { group = "com.microsoft.playwright", name = "playwright", version.ref = "crawler-playwrite" }
-crawler-jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "crawler-jsoup" }
+crawler-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.42.0" }
+crawler-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.17.2" }
 crawler-nekohtml = { group = "org.htmlunit", name = "neko-htmlunit", version.ref = "crawler-nekohtml" }
 crawler-supercsv = { group = "net.sf.supercsv", name = "super-csv", version.ref = "crawler-supercsv" }
 
 
-json-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "json-jackson" }
-json-jacksonCoreAnnotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "json-jackson" }
-json-gson = { group = "com.google.code.gson", name = "gson", version.ref = "json-gson" }
-
+json-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
+json-jacksonCoreAnnotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "jackson" }
+com-google-code-gson-gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 
 drools-core = { group = "org.drools", name = "drools-core", version.ref = "drools" }
 drools-compiler = { group = "org.drools", name = "drools-compiler", version.ref = "drools" }
@@ -185,60 +172,50 @@ drools-templates = { group = "org.drools", name = "drools-templates", version.re
 drools-ruleunitsEngine = { group = "org.drools", name = "drools-ruleunits-engine", version.ref = "drools" }
 drools-modelCompiler = { group = "org.drools", name = "drools-model-compiler", version.ref = "drools" }
 drools-engine = { group = "org.drools", name = "drools-engine", version.ref = "drools" }
-kie-api = { group = "org.kie", name = "kie-api", version.ref = "kie" }
-kie-ci = { group = "org.kie", name = "kie-ci", version.ref = "kie" }
+kie-api = { group = "org.kie", name = "kie-api", version.ref = "drools" }
+kie-ci = { group = "org.kie", name = "kie-ci", version.ref = "drools" }
 kie-spring = { group = "org.kie", name = "kie-spring", version.ref = "kie-spring" }
 
-liteflowSpringBotoStarter = { group = "com.github.litesoftsoftware", name = "liteflow-spring-boot-starter", version.ref = "liteflow" }
+com-yomahub-liteflow-spring-boot-starter = { group = "com.yomahub", name = "liteflow-spring-boot-starter", version.ref = "liteflow" }
+com-baomidou-mybatis-plus-boot-starter = { group = "com.baomidou", name = "mybatis-plus-boot-starter", version.ref = "mybatis-plus" }
 
-mybatisPlusSpringBootStarter = { group = "com.baomidou", name = "mybatis-plus-boot-starter", version.ref = "mybatis-plus" }
+org-projectlombok-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.32" }
+com-querydsl-querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa", version.ref = "querydsl" }
+com-querydsl-querydsl-apt = { group = "com.querydsl", name = "querydsl-apt", version.ref = "querydsl" }
 
-lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
-querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa", version.ref = "querydsl" }
-querydsl-apt = { group = "com.querydsl", name = "querydsl-apt", version.ref = "querydsl" }
-
-bom-springModulith = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "spring-modulith" }
-bom-springBoot = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
-bom-springCloud = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "spring-cloud" }
-bom-springCloudAlibaba = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
-bin-drools = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
+bom-org-springframework-modulith-spring-modulith-bom = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "spring-modulith" }
+bom-org-springframework-boot-spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
+bom-org-springframework-cloud-spring-cloud-dependencies = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "spring-cloud" }
+bom-org-droos-drools-bom = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
+bom-com-alibaba-cloud-spring-cloud-alibaba-dependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
 
 [versions]
-compose = "1.6.458"
+compose = "1.6.469"
 composeGroup = "net.yan100.compose"
+
+gradlePlugin-com-diffplug-spotless = "6.25.0"
 
 java = "21" ### https://bell-sw.com/
 kotlin = "2.0.0-Beta5" ### https://github.com/JetBrains/kotlin/releases
 kt-kspGoogleApi = "2.0.0-Beta5-1.0.19" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
 ktx-coroutine = "1.8.1-Beta" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
-kt-reactorExtensions = "1.2.2" ### https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
-gradle = "8.7-rc-4" ### https://mirrors.cloud.tencent.com/gradle
-gradlePlugin-spotless = "6.25.0" ### https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-gradlePlugin-versionPlugin = "0.51.0" ### https://github.com/ben-manes/gradle-versions-plugin
-gradlePlugin-springBootDependencyManagement = "1.1.4" ### https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin
-gradlePlugin-asciJvmConvert = "4.0.2" ### https://mvnrepository.com/artifact/org.asciidoctor.jvm.convert/org.asciidoctor.jvm.convert.gradle.plugin?repo=gradle-plugins
-gradlePlugin-graalvmNative = "0.10.1" ### https://mvnrepository.com/artifact/org.graalvm.buildtools.native/org.graalvm.buildtools.native.gradle.plugin
-
+gradle = "8.7" ### https://mirrors.cloud.tencent.com/gradle
 
 spring-boot = "3.3.0-M3" ### https://spring.io/projects/spring-boot#learn
 spring-cloud = "2023.0.0" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### deprecated https://spring.io/projects/spring-cloud-alibaba#learn
 spring-modulith = "1.2.0-M3" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
-spring-doc-webmvcUi3 = "2.4.0" ### https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 
-apache-commonsPool2 = "2.12.0" ### https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
 apache-commonsCompress = "1.26.1" ### https://mvnrepository.com/artifact/org.apache.commons/commons-compress
 
 net-okhttp3 = "5.0.0-alpha.12" ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 net-retrofit = "2.9.0" ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
 
 test-testng = "7.9.0" ### https://mvnrepository.com/artifact/org.testng/testng
-test-mockk = "1.13.10" ### https://mvnrepository.com/artifact/io.mockk/mockk
 test-junit5 = "5.10.2" ### https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
 
-cache-caffeine = "3.1.8" ### https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 
 db-hsql = "2.7.2" ### https://mvnrepository.com/artifact/org.hsqldb/hsqldb
 db-h2 = "2.2.224" ### https://mvnrepository.com/artifact/com.h2database/h2
@@ -282,8 +259,7 @@ slf4j = "2.1.0-alpha1" ### https://mvnrepository.com/artifact/org.slf4j/slf4j-ap
 crawler-ip2region = "2.7.0" ### https://mvnrepository.com/artifact/org.lionsoul/ip2region
 crawler-selenium = "4.18.1" ### https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
 crawler-seleniumWebDriverManager = "5.7.0" ### https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-crawler-playwrite = "1.42.0" ### https://mvnrepository.com/artifact/com.microsoft.playwright/playwright
-crawler-jsoup = "1.17.2" ### https://mvnrepository.com/artifact/org.jsoup/jsoup
+
 crawler-nekohtml = "3.11.3" ### https://mvnrepository.com/artifact/org.htmlunit/neko-htmlunit
 
 jakarta-persistenceApi = "3.2.0-M2" ### https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
@@ -294,15 +270,22 @@ jakarta-annotationApi = "3.0.0-M1" ### https://mvnrepository.com/artifact/jakart
 
 mybatis-plus = "3.5.5" ### https://oss.sonatype.org/content/repositories/snapshots/com/baomidou/mybatis-plus-boot-starter/
 
-json-jackson = "2.17.0" ### https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-json-gson = "2.10.1" ### https://mvnrepository.com/artifact/com.google.code.gson/gson
-
-lombok = "1.18.32" ### https://mvnrepository.com/artifact/org.projectlombok/lombok
+jackson = "2.17.0" ### https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
 
 querydsl = "5.1.0" ### https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
 hibernate = "6.5.0.CR1" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 
 drools = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.drools/drools-core
 liteflow = "2.11.4.2" ### https://mvnrepository.com/artifact/com.yomahub.liteflow/liteflow-spring-boot-starter
-kie = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.kie/kie-api
 kie-spring = "7.74.1.Final" ### deprecated https://mvnrepository.com/artifact/org.kie/kie-spring
+
+[bundles]
+test-springKotlinTestNG = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "test-mockk", "test-testng", "db-hsql", "db-sqlite"]
+test-springKotlinJunit5 = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
+test-kotlinJunit5 = ["kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
+kt = ["kt-stdlibJdk8", "kt-reflact", "ktx-coroutineReactor", "kt-reactorExtensions", "jetbrains-annotation", "json-jacksonModuleKotlin"]
+p6spySpring = ["db-p6spySpring", "db-p6spy"]
+spring-redis = ["spring-boot-dataRedis", "spring-boot-dataRedisReactive", "apache-commonsPool2"]
+spring-jpa = ["spring-boot-dataJpa", "spring-modulith-jpa"]
+selenium = ["crawler-selenium", "crawler-seleniumWebDriverManager"]
+knife4j = ["sdk-openapi-knife4jJakarta", "spring-doc-webmvcUi3", "jakarta-openapiV3Annotations"]

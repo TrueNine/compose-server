@@ -65,9 +65,9 @@ infix fun <A, B> PairDiffScope<A, B>.message(message: Any) {
   message { message }
 }
 
-private fun toValidException(f: () -> Unit) {
+private fun <T : Any> toValidException(f: () -> T): T {
   try {
-    f()
+    return f()
   } catch (ex: Throwable) {
     throw ValidException(ex.message)
   }
@@ -103,28 +103,31 @@ interface CheckParamScope<T> {
    *
    * @param lazyMessage message
    */
-  infix fun <A> A?.nilThen(lazyMessage: () -> Any) = toValidException { checkNotNull(this, lazyMessage) }
+  infix fun <A> A?.nilThen(lazyMessage: () -> Any): A = toValidException { checkNotNull(this, lazyMessage) }
 
   /**
    * ## 如果参数为 `null` 则抛出异常
    *
    * @param message message
    */
-  infix fun <A> A?.nilThen(message: Any) = nilThen { message }
+  infix fun <A> A?.nilThen(message: Any): A = nilThen { message }
 
   /**
    * ## 如果 `字符串不为空` 则抛出异常
    *
    * @param lazyMessage message
    */
-  infix fun String?.nonTextThen(lazyMessage: () -> Any) = toValidException { check(this.hasText(), lazyMessage) }
+  infix fun String?.nonTextThen(lazyMessage: () -> Any): String = toValidException {
+    check(hasText(), lazyMessage)
+    this!!
+  }
 
   /**
    * ## 如果 `字符串不为空` 则抛出异常
    *
    * @param message message
    */
-  infix fun String?.nonTextThen(message: Any) = nonTextThen { message }
+  infix fun String?.nonTextThen(message: Any): String = nonTextThen { message }
 
   /**
    * ## 如果两个参数 `不相等` 则抛出异常
@@ -149,8 +152,9 @@ interface CheckParamScope<T> {
    *
    * @param lazyMessage message
    */
-  infix fun <E, A : Iterable<E>> A?.notEmptyThen(lazyMessage: () -> Any) {
+  infix fun <E, A : Iterable<E>> A?.notEmptyThen(lazyMessage: () -> Any): A? {
     if (null == this || iterator().hasNext()) throw ValidException(lazyMessage().toString())
+    return this
   }
 
   /**
@@ -158,15 +162,16 @@ interface CheckParamScope<T> {
    *
    * @param message message
    */
-  infix fun <E, A : Iterable<E>> A?.notEmptyThen(message: Any) = notEmptyThen { message }
+  infix fun <E, A : Iterable<E>> A?.notEmptyThen(message: Any): A? = notEmptyThen { message }
 
   /**
    * ## 当 集合 `为空` 时抛出异常
    *
    * @param lazyMessage message
    */
-  infix fun <E, A : Iterable<E>> A?.emptyThen(lazyMessage: () -> Any) {
+  infix fun <E, A : Iterable<E>> A?.emptyThen(lazyMessage: () -> Any): A {
     if (null != this && !iterator().hasNext()) throw ValidException(lazyMessage().toString())
+    return this!!
   }
 
   /**
@@ -174,7 +179,7 @@ interface CheckParamScope<T> {
    *
    * @param message message
    */
-  infix fun <E, A : Iterable<E>> A?.emptyThen(message: Any) = emptyThen { message }
+  infix fun <E, A : Iterable<E>> A?.emptyThen(message: Any): A = emptyThen { message }
 }
 
 /**

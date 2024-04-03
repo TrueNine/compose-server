@@ -5,8 +5,11 @@ dependencies {
   implementation(project(":depend:depend-jvalid"))
   implementation(libs.spring.data.springDataCommons)
 
-  kapt(variantOf(libs.querydsl.apt) { classifier("jakarta") })
-  implementation(variantOf(libs.querydsl.jpa) { classifier("jakarta") })
+  testImplementation(project(":depend:depend-web-servlet"))
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.json)
+
+  kapt(variantOf(libs.com.querydsl.querydsl.apt) { classifier("jakarta") })
+  implementation(variantOf(libs.com.querydsl.querydsl.jpa) { classifier("jakarta") })
 }
 
 hibernate {

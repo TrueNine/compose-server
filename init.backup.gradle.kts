@@ -1,7 +1,6 @@
 val urls =
   "https://repo.maven.apache.org/maven2/__https://mirrors.cloud.tencent.com/nexus/repository/maven-public/,https://dl.google.com/dl/android/maven2/__https://mirrors.cloud.tencent.com/nexus/repository/maven-public/,https://plugins.gradle.org/m2/__https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"
-val repos =
-  "https://repo.spring.io/milestone,https://repo.spring.io/libs-milestone,https://repo.spring.io/snapshot,https://oss.sonatype.org/content/repositories/snapshots/"
+val repos = "https://repo.spring.io/milestone,https://repo.spring.io/snapshot,https://oss.sonatype.org/content/repositories/snapshots/"
 
 val urlMap =
   urls.split(",").associate {
