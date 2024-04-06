@@ -40,7 +40,6 @@ compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.
 compose-datacommonCrawler = { group = "net.yan100.compose", name = "data-common-crawler", version.ref = "compose" }
 compose-datacommonDataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose" }
 compose-dependMqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose" }
-compose-dependFlyway = { group = "net.yan100.compose", name = "depend-flyway", version.ref = "compose" }
 compose-dependWebservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose" }
 compose-dependWebclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose" }
 compose-dependJvalid = { group = "net.yan100.compose", name = "depend-jvalid", version.ref = "compose" }
@@ -73,7 +72,7 @@ spring-webmvc = { group = "org.springframework", name = "spring-webmvc" }
 spring-modulith-jpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 spring-modulith-core = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "spring-modulith" }
 spring-modulith-test = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
-spring-doc-webmvcUi3 = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.4.0" }
+org-springdoc-springdoc-openapi-starter-webmvc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.5.0" }
 
 apache-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
 apache-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.26.1" }
@@ -89,7 +88,7 @@ kt-reactorExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kot
 ktx-coroutineReactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "ktx-coroutine" }
 jetbrains-annotation = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
 
-test-mockk = { group = "io.mockk", name = "mockk", version = "1.13.10" }
+io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.10" }
 test-junit5 = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "test-junit5" }
 test-testng = { group = "org.testng", name = "testng", version.ref = "test-testng" }
 test-reactorTest = { group = "io.projectreactor", name = "reactor-test" }
@@ -102,13 +101,13 @@ db-postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "
 db-sqlite = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "db-sqlite" }
 db-mysqlJ = { group = "com.mysql", name = "mysql-connector-j", version.ref = "db-mysqlJ" }
 db-mysqJava = { group = "mysql", name = "mysql-connector-java", version.ref = "db-mysqlJava" }
-db-flywayCore = { group = "org.flywaydb", name = "flyway-core", version.ref = "db-flyway" }
-db-flywayMysql = { group = "org.flywaydb", name = "flyway-mysql", version.ref = "db-flyway" }
-db-flywayPostgresql = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "db-flyway" }
-db-p6spy = { group = "p6spy", name = "p6spy", version.ref = "db-p6spy" }
-db-p6spySpring = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version.ref = "db-p6spySpring" }
+org-flywaydb-flyway-core = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway" }
+org-flywaydb-flyway-mysql = { group = "org.flywaydb", name = "flyway-mysql", version.ref = "flyway" }
+org-flywaydb-flyway-database-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "flyway" }
+p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
+com-github-gavlyukovskiy-p6spy-spring-boot-starter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.9.1" }
 
-sdk-oss-minio = { group = "io.minio", name = "minio", version.ref = "sdk-oss-minio" }
+io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.9" }
 sdk-oss-aliyun = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version.ref = "sdk-oss-aliyun" }
 sdk-oss-huaweicloud = { group = "com.huaweicloud", name = "esdk-obs-java", version.ref = "sdk-oss-huaweicloud" }
 sdk-pay-wechatv3 = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version.ref = "sdk-pay-wechatv3" }
@@ -134,15 +133,13 @@ util-smilemath = { group = "com.github.haifengl", name = "smile-math", version.r
 util-easyexcel = { group = "com.alibaba", name = "easyexcel", version.ref = "util-easyexcel" }
 util-freemarker = { group = "org.freemarker", name = "freemarker", version.ref = "util-freemarker" }
 util-dozer = { group = "net.sf.dozer", name = "dozer", version.ref = "util-dozer" }
-util-hutoolAll = { group = "cn.hutool", name = "hutool-all", version.ref = "util-hutool" }
-util-hutoolCore = { group = "cn.hutool", name = "hutool-core", version.ref = "util-hutool" }
-util-hutoolCaptcha = { group = "cn.hutool", name = "hutool-captcha", version.ref = "util-hutool" }
-util-hutoolCrypto = { group = "cn.hutool", name = "hutool-crypto", version.ref = "util-hutool" }
-util-hutoolDb = { group = "cn.hutool", name = "hutool-db", version.ref = "util-hutool" }
-util-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "util-mapstruct" }
-util-mapstructProcessor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "util-mapstruct" }
-
-
+cn-hutool-hutool-all = { group = "cn.hutool", name = "hutool-all", version.ref = "hutool" }
+cn-hutool-hutool-core = { group = "cn.hutool", name = "hutool-core", version.ref = "hutool" }
+cn-hutool-hutool-captcha = { group = "cn.hutool", name = "hutool-captcha", version.ref = "hutool" }
+cn-hutool-hutool-crypto = { group = "cn.hutool", name = "hutool-crypto", version.ref = "hutool" }
+cn-hutool-hutool-db = { group = "cn.hutool", name = "hutool-db", version.ref = "hutool" }
+org-mapstruct-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "util-mapstruct" }
+org-mapstruct-mapstruct-processor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "util-mapstruct" }
 security-bcprovJdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "security-bcprovJdk18on" }
 security-auth0Jwt = { group = "com.auth0", name = "java-jwt", version.ref = "security-auth0Jwt" }
 security-jjwtApi = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "security-jjwtApi" }
@@ -165,16 +162,16 @@ json-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jac
 json-jacksonCoreAnnotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "jackson" }
 com-google-code-gson-gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 
-drools-core = { group = "org.drools", name = "drools-core", version.ref = "drools" }
-drools-compiler = { group = "org.drools", name = "drools-compiler", version.ref = "drools" }
-drools-decisiontables = { group = "org.drools", name = "drools-decisiontables", version.ref = "drools" }
-drools-templates = { group = "org.drools", name = "drools-templates", version.ref = "drools" }
-drools-ruleunitsEngine = { group = "org.drools", name = "drools-ruleunits-engine", version.ref = "drools" }
-drools-modelCompiler = { group = "org.drools", name = "drools-model-compiler", version.ref = "drools" }
-drools-engine = { group = "org.drools", name = "drools-engine", version.ref = "drools" }
-kie-api = { group = "org.kie", name = "kie-api", version.ref = "drools" }
-kie-ci = { group = "org.kie", name = "kie-ci", version.ref = "drools" }
-kie-spring = { group = "org.kie", name = "kie-spring", version.ref = "kie-spring" }
+org-drools-drools-core = { group = "org.drools", name = "drools-core", version.ref = "drools" }
+org-drools-drools-compiler = { group = "org.drools", name = "drools-compiler", version.ref = "drools" }
+org-drools-drools-decisiontables = { group = "org.drools", name = "drools-decisiontables", version.ref = "drools" }
+org-drools-drools-templates = { group = "org.drools", name = "drools-templates", version.ref = "drools" }
+org-drools-drools-ruleunitsEngine = { group = "org.drools", name = "drools-ruleunits-engine", version.ref = "drools" }
+org-drools-drools-model-compiler = { group = "org.drools", name = "drools-model-compiler", version.ref = "drools" }
+org-drools-drools-engine = { group = "org.drools", name = "drools-engine", version.ref = "drools" }
+org-kie-kie-api = { group = "org.kie", name = "kie-api", version.ref = "drools" }
+org-kie-kie-ci = { group = "org.kie", name = "kie-ci", version.ref = "drools" }
+org-kie-kie-spring = { group = "org.kie", name = "kie-spring", version.ref = "kie-spring" }
 
 com-yomahub-liteflow-spring-boot-starter = { group = "com.yomahub", name = "liteflow-spring-boot-starter", version.ref = "liteflow" }
 com-baomidou-mybatis-plus-boot-starter = { group = "com.baomidou", name = "mybatis-plus-boot-starter", version.ref = "mybatis-plus" }
@@ -190,7 +187,7 @@ bom-org-droos-drools-bom = { group = "org.drools", name = "drools-bom", version.
 bom-com-alibaba-cloud-spring-cloud-alibaba-dependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
 
 [versions]
-compose = "1.6.469"
+compose = "1.6.472"
 composeGroup = "net.yan100.compose"
 
 gradlePlugin-com-diffplug-spotless = "6.25.0"
@@ -224,11 +221,8 @@ db-sqlite = "3.45.2.0" ### https://mvnrepository.com/artifact/org.xerial/sqlite-
 db-mysqlJava = "8.0.33" ### deprecated https://mvnrepository.com/artifact/mysql/mysql-connector-java
 db-mysqlJ = "8.3.0" ### https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
 crawler-supercsv = "2.4.0" ### https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
-db-flyway = "10.10.0" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
-db-p6spy = "3.9.1" ### deprecated https://mvnrepository.com/artifact/p6spy/p6spy
-db-p6spySpring = "1.9.1" ### deprecated https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
+flyway = "10.11.0" ### https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 
-sdk-oss-minio = "8.5.9" ### https://mvnrepository.com/artifact/io.minio/minio
 sdk-oss-aliyun = "3.17.4" ### https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss
 sdk-oss-huaweicloud = "3.23.9.1" ### https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java
 sdk-pay-wechatv3 = "0.2.12" ### https://mvnrepository.com/artifact/com.github.wechatpay-apiv3/wechatpay-java
@@ -240,10 +234,10 @@ security-auth0Jwt = "4.4.0" ### https://mvnrepository.com/artifact/com.auth0/jav
 security-jjwtApi = "0.12.5" ### deprecated https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
 security-antisamy = "1.7.5" ### deprecated https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
 
-util-byteBuddy = "1.14.12" ### https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
+util-byteBuddy = "1.14.13" ### https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
 util-squareupJavapoet = "1.13.0" ### https://mvnrepository.com/artifact/com.squareup/javapoet
 
-util-hutool = "5.8.26" ### https://mvnrepository.com/artifact/cn.hutool/hutool-all
+hutool = "5.8.27"
 util-dozer = "5.5.1" ### deprecated  https://mvnrepository.com/artifact/net.sf.dozer/dozer
 util-guavaJre = "33.0.0-jre" ### https://mvnrepository.com/artifact/com.google.guava/guava
 util-guavaAndroid = "33.0.0-android" ### https://mvnrepository.com/artifact/com.google.guava/guava
@@ -257,10 +251,10 @@ util-mapstruct = "1.6.0.Beta1" ### https://mvnrepository.com/artifact/org.mapstr
 slf4j = "2.1.0-alpha1" ### https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 
 crawler-ip2region = "2.7.0" ### https://mvnrepository.com/artifact/org.lionsoul/ip2region
-crawler-selenium = "4.18.1" ### https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-crawler-seleniumWebDriverManager = "5.7.0" ### https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
+crawler-selenium = "4.19.1" ### https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+crawler-seleniumWebDriverManager = "5.8.0" ### https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
 
-crawler-nekohtml = "3.11.3" ### https://mvnrepository.com/artifact/org.htmlunit/neko-htmlunit
+crawler-nekohtml = "4.0.0" ### https://mvnrepository.com/artifact/org.htmlunit/neko-htmlunit
 
 jakarta-persistenceApi = "3.2.0-M2" ### https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
 jakarta-servletApi = "6.1.0-M2" ### https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
@@ -280,12 +274,12 @@ liteflow = "2.11.4.2" ### https://mvnrepository.com/artifact/com.yomahub.liteflo
 kie-spring = "7.74.1.Final" ### deprecated https://mvnrepository.com/artifact/org.kie/kie-spring
 
 [bundles]
-test-springKotlinTestNG = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "test-mockk", "test-testng", "db-hsql", "db-sqlite"]
-test-springKotlinJunit5 = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
-test-kotlinJunit5 = ["kt-junit5", "test-mockk", "db-hsql", "db-sqlite"]
+test-springKotlinTestNG = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "io-mockk-mockk", "test-testng", "db-hsql", "db-sqlite"]
+test-springKotlinJunit5 = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-junit5", "io-mockk-mockk", "db-hsql", "db-sqlite"]
+test-kotlinJunit5 = ["kt-junit5", "io-mockk-mockk", "db-hsql", "db-sqlite"]
 kt = ["kt-stdlibJdk8", "kt-reflact", "ktx-coroutineReactor", "kt-reactorExtensions", "jetbrains-annotation", "json-jacksonModuleKotlin"]
-p6spySpring = ["db-p6spySpring", "db-p6spy"]
+p6spySpring = ["com-github-gavlyukovskiy-p6spy-spring-boot-starter", "p6spy-p6spy"]
 spring-redis = ["spring-boot-dataRedis", "spring-boot-dataRedisReactive", "apache-commonsPool2"]
 spring-jpa = ["spring-boot-dataJpa", "spring-modulith-jpa"]
 selenium = ["crawler-selenium", "crawler-seleniumWebDriverManager"]
-knife4j = ["sdk-openapi-knife4jJakarta", "spring-doc-webmvcUi3", "jakarta-openapiV3Annotations"]
+knife4j = ["sdk-openapi-knife4jJakarta", "org-springdoc-springdoc-openapi-starter-webmvc-ui", "jakarta-openapiV3Annotations"]

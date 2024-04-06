@@ -1,7 +1,7 @@
 version = libs.versions.compose.get()
 
 dependencies {
-  implementation(libs.sdk.oss.minio) {
+  implementation(libs.io.minio.minio) {
     exclude(group = "org.apache.logging.log4j", module = "log4j-api")
     exclude(group = "org.apache.logging.log4j", module = "log4j-core")
   }

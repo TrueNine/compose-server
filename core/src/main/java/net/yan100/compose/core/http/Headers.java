@@ -56,6 +56,7 @@ public interface Headers {
 
     String CONTENT_LENGTH = "Content-Length";
     String CONTENT_TYPE = "Content-Type";
+    String CONNECTION = "Connection";
     String CONTENT_DISPOSITION = "Content-Disposition";
     String KEEP_ALIVE = "Keep-Alive";
 

@@ -2,7 +2,7 @@ version = libs.versions.compose.get()
 
 dependencies {
   implementation(libs.util.freemarker)
-  implementation(libs.util.hutoolDb)
+  implementation(libs.cn.hutool.hutool.db)
   runtimeOnly(libs.db.mysqlJ)
   implementation(project(":core"))
   implementation(project(":rds"))

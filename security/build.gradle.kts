@@ -2,7 +2,7 @@ project.version = libs.versions.compose.get()
 
 dependencies {
   api(libs.spring.boot.security)
-  implementation(libs.util.hutoolCaptcha)
+  implementation(libs.cn.hutool.hutool.captcha)
   implementation(libs.security.auth0Jwt)
   implementation(libs.jakarta.servletApi)
   implementation(libs.spring.webmvc)

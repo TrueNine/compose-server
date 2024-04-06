@@ -12,8 +12,8 @@ dependencies {
   implementation(libs.jakarta.servletApi)
   implementation(libs.spring.modulith.core)
 
-  implementation(libs.util.mapstruct)
-  annotationProcessorKapt(libs.util.mapstructProcessor)
+  implementation(libs.org.mapstruct.mapstruct.asProvider())
+  annotationProcessorKapt(libs.org.mapstruct.mapstruct.processor)
 
   implementation(libs.org.springframework.boot.spring.boot.starter.json)
   implementation(libs.spring.security.crypto)
@@ -23,8 +23,8 @@ dependencies {
   implementation(libs.spring.boot.logging)
 
   // TODO hutool
-  implementation(libs.util.hutoolCore)
-  implementation(libs.util.hutoolCrypto)
+  implementation(libs.cn.hutool.hutool.core)
+  implementation(libs.cn.hutool.hutool.crypto)
 
   testImplementation(libs.spring.boot.web)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.json)

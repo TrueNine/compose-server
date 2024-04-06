@@ -28,21 +28,21 @@ private const val DEPRECATED = "该接口或实体的方法不允许调用"
 interface IEnhanceEntity {
   /** 为自身生成 snowflake id */
   @Throws(NotImplementedError::class)
-  @Deprecated(DEPRECATED, level = DeprecationLevel.ERROR)
+  @Deprecated(DEPRECATED, level = DeprecationLevel.HIDDEN)
   fun ____compose_rds____self_generate_snowflake_id() {
     TODO(DEPRECATED)
   }
 
   /** ## 为自身生成 toString 的值 */
   @Throws(NotImplementedError::class)
-  @Deprecated(DEPRECATED, level = DeprecationLevel.ERROR)
+  @Deprecated(DEPRECATED, level = DeprecationLevel.HIDDEN)
   fun ____compose_rds____all_field_toString(): String {
     TODO(DEPRECATED)
   }
 
   /** 为自身生成 bizCode */
   @Throws(NotImplementedError::class)
-  @Deprecated(DEPRECATED, level = DeprecationLevel.ERROR)
+  @Deprecated(DEPRECATED, level = DeprecationLevel.HIDDEN)
   fun ____compose_rds____self_generate_biz_code() {
     TODO(DEPRECATED)
   }

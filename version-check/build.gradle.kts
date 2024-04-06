@@ -18,7 +18,6 @@ plugins {
 
 val l = libs
 
-
 dependencies {
   // bundles
   api(l.bundles.kt)
@@ -66,7 +65,7 @@ dependencies {
   api(l.spring.modulith.core)
   api(l.spring.modulith.test)
   // doc
-  api(l.spring.doc.webmvcUi3)
+  api(l.org.springdoc.springdoc.openapi.starter.webmvc.ui)
 
   // apache
   api(l.apache.commonsPool2)
@@ -82,7 +81,7 @@ dependencies {
   api(l.jetbrains.annotation)
 
   // test
-  api(l.test.mockk)
+  api(l.io.mockk.mockk)
   api(l.test.testng)
   api(l.test.junit5)
   api(l.test.reactorTest)
@@ -97,17 +96,15 @@ dependencies {
   api(l.db.sqlite)
   api(l.db.mysqlJ)
   api(l.db.mysqJava)
-  api(l.db.flywayCore)
-  api(l.db.flywayMysql)
-  api(l.db.flywayPostgresql)
-  api(l.db.p6spy)
-  api(l.db.p6spySpring)
+  api(l.org.flywaydb.flyway.core)
+  api(l.p6spy.p6spy)
+  api(l.com.github.gavlyukovskiy.p6spy.spring.boot.starter)
 
   // sdk
   // oss
-  api(l.sdk.oss.minio)
+  api(l.io.minio.minio)
   api(l.sdk.oss.aliyun)
-  api(l.sdk.oss.huaweicloud)
+  api(l.io.minio.minio)
   // pay
   api(l.sdk.pay.wechatv3)
   // openapi
@@ -136,13 +133,9 @@ dependencies {
   api(l.util.freemarker)
   api(l.util.dozer)
   // hutool
-  api(l.util.hutoolAll)
-  api(l.util.hutoolCore)
-  api(l.util.hutoolCaptcha)
-  api(l.util.hutoolCrypto)
-  api(l.util.hutoolDb)
-  api(l.util.mapstruct)
-  api(l.util.mapstructProcessor)
+  api(l.cn.hutool.hutool.all)
+  api(l.org.mapstruct.mapstruct.asProvider())
+  api(l.org.mapstruct.mapstruct.processor)
 
   //  security
   api(l.security.jjwtApi)
@@ -168,16 +161,16 @@ dependencies {
   api(l.com.google.code.gson.gson)
 
   // drools
-  api(l.drools.core)
-  api(l.drools.compiler)
-  api(l.drools.decisiontables)
-  api(l.drools.templates)
-  api(l.drools.ruleunitsEngine)
-  api(l.drools.modelCompiler)
-  api(l.drools.engine)
-  api(l.kie.api)
-  api(l.kie.ci)
-  api(l.kie.spring)
+  api(l.org.drools.drools.core)
+  api(l.org.drools.drools.compiler)
+  api(l.org.drools.drools.decisiontables)
+  api(l.org.drools.drools.templates)
+  api(l.org.drools.drools.ruleunitsEngine)
+  api(l.org.drools.drools.model.compiler)
+  api(l.org.drools.drools.engine)
+  api(l.org.kie.kie.api)
+  api(l.org.kie.kie.ci)
+  api(l.org.kie.kie.spring)
 
   api(l.com.yomahub.liteflow.spring.boot.starter)
 

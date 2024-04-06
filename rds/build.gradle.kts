@@ -23,7 +23,7 @@ dependencies {
   implementation(libs.spring.security.crypto)
   implementation(libs.jakarta.validationApi)
   implementation(libs.spring.webmvc)
-  implementation(libs.util.hutoolCore)
+  implementation(libs.cn.hutool.hutool.core)
 
   testImplementation(libs.bundles.p6spySpring)
   testImplementation(libs.spring.boot.validation)
@@ -44,8 +44,8 @@ val postgresqlJar by
       sourceSets.creating {
         resources.srcDir("src/main/resources/postgresql")
         dependencies {
-          implementation(libs.db.flywayPostgresql)
-          runtimeOnly(libs.db.postgresql)
+          implementation(libs.org.flywaydb.flyway.core)
+          runtimeOnly(libs.org.flywaydb.flyway.mysql)
         }
       }
     archiveClassifier.set("postgresql")
@@ -58,8 +58,8 @@ val mysqlJar by
       sourceSets.creating {
         resources.srcDir("src/main/resources/mysql")
         dependencies {
-          implementation(libs.db.flywayMysql)
-          runtimeOnly(libs.db.mysqlJ)
+          implementation(libs.org.flywaydb.flyway.core)
+          runtimeOnly(libs.org.flywaydb.flyway.database.postgresql)
         }
       }
     archiveClassifier.set("mysql")
