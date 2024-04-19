@@ -27,6 +27,8 @@ import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.repository.findByIdOrNull
 
 abstract class CrudService<T : IEntity>(private val repo: IRepo<T>) : IService<T> {
+  override fun saveExists(e: T): T = save(e)
+
   override fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq?): Pr<T> = repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
 
   override fun findAllByNotLogicDeleted(@Valid page: Pq?): Pr<T> = repo.findAllByNotLogicDeleted(page.page).result

@@ -93,10 +93,10 @@ test-junit5 = { group = "org.junit.jupiter", name = "junit-jupiter-api", version
 test-testng = { group = "org.testng", name = "testng", version.ref = "test-testng" }
 test-reactorTest = { group = "io.projectreactor", name = "reactor-test" }
 
-cache-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
+com-github-ben-manes-caffeine-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 
-db-hsql = { group = "org.hsqldb", name = "hsqldb", version.ref = "db-hsql" }
-db-h2 = { group = "com.h2database", name = "h2", version.ref = "db-h2" }
+org-hsqldb-hsqldb = { group = "org.hsqldb", name = "hsqldb", version = "2.7.2" }
+com-h2database-h2 = { group = "com.h2database", name = "h2", version = "2.2.224" }
 db-postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "db-postgresql" }
 db-sqlite = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "db-sqlite" }
 db-mysqlJ = { group = "com.mysql", name = "mysql-connector-j", version.ref = "db-mysqlJ" }
@@ -187,21 +187,21 @@ bom-org-droos-drools-bom = { group = "org.drools", name = "drools-bom", version.
 bom-com-alibaba-cloud-spring-cloud-alibaba-dependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
 
 [versions]
-compose = "1.6.472"
+compose = "1.6.476"
 composeGroup = "net.yan100.compose"
 
 gradlePlugin-com-diffplug-spotless = "6.25.0"
 
 java = "21" ### https://bell-sw.com/
-kotlin = "2.0.0-Beta5" ### https://github.com/JetBrains/kotlin/releases
-kt-kspGoogleApi = "2.0.0-Beta5-1.0.19" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
+kotlin = "2.0.0-RC1" ### https://github.com/JetBrains/kotlin/releases
+kt-kspGoogleApi = "2.0.0-RC1-1.0.20" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
 ktx-coroutine = "1.8.1-Beta" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
 gradle = "8.7" ### https://mirrors.cloud.tencent.com/gradle
 
-spring-boot = "3.3.0-M3" ### https://spring.io/projects/spring-boot#learn
-spring-cloud = "2023.0.0" ### https://spring.io/projects/spring-cloud#learn
+spring-boot = "3.3.0-RC1" ### https://spring.io/projects/spring-boot#learn
+spring-cloud = "2023.0.1" ### https://spring.io/projects/spring-cloud#learn
 spring-cloudAlibaba = "2021.0.4.0" ### deprecated https://spring.io/projects/spring-cloud-alibaba#learn
 spring-modulith = "1.2.0-M3" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
 
@@ -214,8 +214,6 @@ test-testng = "7.9.0" ### https://mvnrepository.com/artifact/org.testng/testng
 test-junit5 = "5.10.2" ### https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
 
 
-db-hsql = "2.7.2" ### https://mvnrepository.com/artifact/org.hsqldb/hsqldb
-db-h2 = "2.2.224" ### https://mvnrepository.com/artifact/com.h2database/h2
 db-postgresql = "42.7.3" ### https://mvnrepository.com/artifact/org.postgresql/postgresql
 db-sqlite = "3.45.2.0" ### https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
 db-mysqlJava = "8.0.33" ### deprecated https://mvnrepository.com/artifact/mysql/mysql-connector-java
@@ -229,7 +227,7 @@ sdk-pay-wechatv3 = "0.2.12" ### https://mvnrepository.com/artifact/com.github.we
 sdk-openapi-knife4jJakarta = "4.5.0" ### https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter
 sdk-openapi-knife4j = "3.0.3" ### deprecated https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
 
-security-bcprovJdk18on = "1.77" ### https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+security-bcprovJdk18on = "1.78" ### https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
 security-auth0Jwt = "4.4.0" ### https://mvnrepository.com/artifact/com.auth0/java-jwt
 security-jjwtApi = "0.12.5" ### deprecated https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
 security-antisamy = "1.7.5" ### deprecated https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
@@ -274,9 +272,9 @@ liteflow = "2.11.4.2" ### https://mvnrepository.com/artifact/com.yomahub.liteflo
 kie-spring = "7.74.1.Final" ### deprecated https://mvnrepository.com/artifact/org.kie/kie-spring
 
 [bundles]
-test-springKotlinTestNG = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "io-mockk-mockk", "test-testng", "db-hsql", "db-sqlite"]
-test-springKotlinJunit5 = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-junit5", "io-mockk-mockk", "db-hsql", "db-sqlite"]
-test-kotlinJunit5 = ["kt-junit5", "io-mockk-mockk", "db-hsql", "db-sqlite"]
+test-springKotlinTestNG = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-testng", "io-mockk-mockk", "test-testng", "org-hsqldb-hsqldb", "db-sqlite"]
+test-springKotlinJunit5 = ["spring-boot-test", "spring-security-test", "spring-modulith-test", "kt-junit5", "io-mockk-mockk", "org-hsqldb-hsqldb", "db-sqlite"]
+test-kotlinJunit5 = ["kt-junit5", "io-mockk-mockk", "org-hsqldb-hsqldb", "db-sqlite"]
 kt = ["kt-stdlibJdk8", "kt-reflact", "ktx-coroutineReactor", "kt-reactorExtensions", "jetbrains-annotation", "json-jacksonModuleKotlin"]
 p6spySpring = ["com-github-gavlyukovskiy-p6spy-spring-boot-starter", "p6spy-p6spy"]
 spring-redis = ["spring-boot-dataRedis", "spring-boot-dataRedisReactive", "apache-commonsPool2"]

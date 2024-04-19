@@ -110,13 +110,13 @@ fun <T : IEntity> Iterable<T>.mergeAll(
   checkLength: Boolean = true,
   preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
 ): List<T> {
-  val prepard = targets.filterNot { it.isNew }
-  if (checkLength) check(targets.size == prepard.size) { "需更新的长度不一致" }
+  val prepared = targets.filterNot { it.isNew }
+  if (checkLength) check(targets.size == prepared.size) { "需更新的长度不一致" }
 
-  val dbDatas = findAllByIdFn(prepard.map { it.id })
-  if (checkLength) check(dbDatas.size == prepard.size) { "需更新的长度不一致" }
+  val dbDataEntities = findAllByIdFn(prepared.map { it.id })
+  if (checkLength) check(dbDataEntities.size == prepared.size) { "需更新的长度不一致" }
 
-  val pd = dbDatas.associateBy { prepard.find { d -> it.id == d.id }!! }
+  val pd = dbDataEntities.associateBy { prepared.find { d -> it.id == d.id }!! }
   val allSave =
     pd.map {
       val p = it.key
@@ -125,10 +125,16 @@ fun <T : IEntity> Iterable<T>.mergeAll(
       p.mrd = datetime.now()
       preMergeFn(d, p)
     }
-  if (checkLength) check(allSave.size == prepard.size) { "需更新的长度不一致" }
+  if (checkLength) check(allSave.size == prepared.size) { "需更新的长度不一致" }
   return allSave
 }
 
+/**
+ * ## 合并从数据库内查询的数据
+ *
+ * @param target 数据库实体
+ * @param merge 合并函数：(this 自身实体, db 数据库实体) -> 默认合并的自身实体
+ */
 inline fun <T : IEntity> T.fromDbData(
   target: T,
   crossinline merge: T.(w: T) -> T = { it },

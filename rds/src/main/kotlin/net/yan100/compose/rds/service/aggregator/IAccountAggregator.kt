@@ -53,11 +53,19 @@ interface IAccountAggregator {
     @Schema(title = "描述") var description: String? = null,
   )
 
+  /**
+   * ## 为一个用户信息分配一个死账号
+   *
+   * @param createUserId 创建人
+   * @param userInfoId 用户信息 id
+   */
+  fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr?
+
   fun assignAccount(
     usr: Usr,
     createUserId: RefId,
     userInfo: UserInfo?,
-    roleGroup: Set<String>?,
+    roleGroup: Set<String>? = null,
   ): Usr
 
   /** ## 注册账号 */

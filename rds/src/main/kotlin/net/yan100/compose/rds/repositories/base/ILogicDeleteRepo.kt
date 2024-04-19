@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @NoRepositoryBean
 interface ILogicDeleteRepo<T : IEntity> : IAnyRepo<T> {
+
   @Query("from #{#entityName} e where e.id in :ids and (e.ldf = false or e.ldf is null)")
   fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pageable): Page<T>
 

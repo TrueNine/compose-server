@@ -17,15 +17,33 @@
 package net.yan100.compose.rds.service.impl
 
 import net.yan100.compose.core.alias.RefId
+import net.yan100.compose.rds.core.entities.fromDbData
 import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserInfoServiceImpl(private val infoRepo: IUserInfoRepo) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
+  @Transactional(rollbackFor = [Exception::class])
+  override fun saveExists(e: UserInfo): UserInfo {
+    var f = e
+    e.idCard?.let {
+      if (infoRepo.existsAllByIdCard(it)) {
+        val all = infoRepo.findAllByIdCard(it)
+        f = saveAll(all.map { dbData -> e.fromDbData(dbData) }).first()
+      }
+      if (infoRepo.existsAllByPhone(it)) {
+        val all = infoRepo.findAllByPhone(it)
+        f = saveAll(all.map { dbData -> e.fromDbData(dbData) }).first()
+      }
+    }
+    return f
+  }
+
   override fun savePlainUserInfoByUser(createUserId: RefId, usr: Usr): UserInfo {
     return infoRepo.save(
       UserInfo().apply {

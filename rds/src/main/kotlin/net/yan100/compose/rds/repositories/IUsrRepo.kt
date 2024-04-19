@@ -109,6 +109,14 @@ interface IFullUserRepo : IRepo<FullUsr> {
 
 @Repository
 interface IUserInfoRepo : IRepo<UserInfo> {
+  fun existsAllByPhone(phone: String): Boolean
+
+  fun findAllByPhone(phone: String): List<UserInfo>
+
+  fun existsAllByIdCard(idCard: String): Boolean
+
+  fun findAllByIdCard(idCard: String): List<UserInfo>
+
   @Query("""
     select i.id
     from UserInfo i

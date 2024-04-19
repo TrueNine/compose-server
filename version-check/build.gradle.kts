@@ -87,11 +87,11 @@ dependencies {
   api(l.test.reactorTest)
 
   // cache
-  api(l.cache.caffeine)
+  api(l.com.github.ben.manes.caffeine.caffeine)
 
   // db
-  api(l.db.hsql)
-  api(l.db.h2)
+  api(l.org.hsqldb.hsqldb)
+  api(l.com.h2database.h2)
   api(l.db.postgresql)
   api(l.db.sqlite)
   api(l.db.mysqlJ)

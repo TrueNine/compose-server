@@ -30,6 +30,13 @@ import net.yan100.compose.rds.core.util.Pw
  */
 @JvmDefaultWithoutCompatibility
 interface IService<T : IEntity> {
+  /**
+   * ## 可重写的 保存
+   *
+   * @param e 实体
+   */
+  fun saveExists(e: T): T = save(e)
+
   fun findAll(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
 
   fun findAllOrderByIdDesc(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
