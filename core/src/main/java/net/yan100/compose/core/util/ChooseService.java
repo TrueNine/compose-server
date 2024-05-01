@@ -18,7 +18,6 @@ package net.yan100.compose.core.util;
 
 import jakarta.annotation.Nullable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 策略模式基础接口
@@ -51,10 +50,7 @@ public interface ChooseService<T> {
      */
     @SuppressWarnings("unchecked")
     default @Nullable <R> List<R> findAll(List<? extends ChooseService<T>> chooses, T type) {
-        return chooses.stream()
-                .filter(ele -> ele.choose(type))
-                .map(r -> (R) r)
-                .collect(Collectors.toList());
+        return chooses.stream().filter(ele -> ele.choose(type)).map(r -> (R) r).toList();
     }
 
     /**

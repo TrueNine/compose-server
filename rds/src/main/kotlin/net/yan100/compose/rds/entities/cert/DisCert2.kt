@@ -19,7 +19,9 @@ package net.yan100.compose.rds.entities.cert
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
-import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import java.time.LocalDate
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
@@ -74,7 +76,12 @@ abstract class SuperDisCert2 : IDisCode2, IEntity() {
 
   @Schema(title = "性别") @Column(name = GENDER) @Convert(converter = GenderTypingConverter::class) lateinit var gender: GenderTyping
 
-  @NotNull @Schema(title = "残疾证编号") @Column(name = CODE) lateinit var code: SerialCode
+  @NotBlank
+  @Pattern(regexp = "^(?!.*\\D{2})(?:\\d{17}[xX]|\\d{17}[1-7])(?:\\d{18}[1-4]|\\d{18}[bB]\\d)?$")
+  @Size(max = 22, min = 20, message = "残疾证长度为 20 到 22 位")
+  @Schema(title = "残疾证编号")
+  @Column(name = CODE)
+  lateinit var code: SerialCode
 
   @Schema(title = "姓名") @Column(name = NAME) lateinit var name: String
 
@@ -84,6 +91,11 @@ abstract class SuperDisCert2 : IDisCode2, IEntity() {
   @get:JsonIgnore
   override val disabilityCode: String
     get() = this.code
+
+  override fun asNew() {
+    super.asNew()
+    code = code.uppercase()
+  }
 }
 
 @Entity @DynamicInsert @DynamicUpdate @Table(name = SuperDisCert2.TABLE_NAME) class DisCert2 : SuperDisCert2()

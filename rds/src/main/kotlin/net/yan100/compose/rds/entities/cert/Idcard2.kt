@@ -19,7 +19,9 @@ package net.yan100.compose.rds.entities.cert
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
@@ -58,7 +60,7 @@ abstract class SuperIdcard2 : IIdcard2Code, IEntity() {
 
   @Schema(title = "生日") @Column(name = BIRTHDAY) var birthday: datetime? = null
 
-  @NotNull @Schema(title = "身份证号") @Column(name = CODE) lateinit var code: SerialCode
+  @NotBlank @Pattern(regexp = "^[0-9]{17}[xX]\$", message = "身份证格式不对") @Schema(title = "身份证号") @Column(name = CODE) lateinit var code: SerialCode
 
   @Schema(title = "性别") @Column(name = GENDER) @Convert(converter = GenderTypingConverter::class) var gender: GenderTyping? = null
 

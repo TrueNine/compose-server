@@ -32,7 +32,9 @@ import net.yan100.compose.core.consts.FileDescriptions;
  *
  * @author TrueNine
  * @since 2022-10-29
+ * @deprecated 使用别的稳定的资源路径获取器
  */
+@Deprecated(since = "2024-04-24", forRemoval = true)
 public class ResourcesLocator {
     private static final String JAR_PROTOCOL = "jar";
     private static final String FILE_PROTOCOL = "file";

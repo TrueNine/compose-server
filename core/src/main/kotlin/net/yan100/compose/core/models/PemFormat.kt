@@ -53,15 +53,15 @@ class PemFormat(private val pem: String) {
   var content: String
 
   init {
-    if (triedKey.startsWith(BEGIN_START) && triedKey.endsWith(SEPARATOR)) {
-      val beginAndEnd =
-        triedKey.split("\n").let {
-          content = it.drop(1).dropLast(1).joinToString("")
-          it.first() to it.last()
-        }
-      schema = beginAndEnd.first.substring(BEGIN_START.length).replace(SEPARATOR, "").trim()
-      endSchema = beginAndEnd.second.substring(END_START.length).replace(SEPARATOR, "").trim()
-      if (schema != endSchema) throw IllegalArgumentException("传入的pem 格式不正确，开头与结尾类型不一致")
-    } else throw IllegalArgumentException("该key 非key 文件")
+    check(triedKey.startsWith(BEGIN_START)) { "该key 非key 文件" }
+    check(triedKey.endsWith(SEPARATOR)) { "该key 非key 文件" }
+    val beginAndEnd =
+      triedKey.split("\n").let {
+        content = it.drop(1).dropLast(1).joinToString("")
+        it.first() to it.last()
+      }
+    schema = beginAndEnd.first.substring(BEGIN_START.length).replace(SEPARATOR, "").trim()
+    endSchema = beginAndEnd.second.substring(END_START.length).replace(SEPARATOR, "").trim()
+    check(schema == endSchema) { "传入的pem 格式不正确，开头与结尾类型不一致" }
   }
 }

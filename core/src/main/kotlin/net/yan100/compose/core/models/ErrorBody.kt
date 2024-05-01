@@ -36,7 +36,7 @@ class ErrorBody private constructor() : Serializable {
   var code: Int? = null
     private set
 
-  var errMap: MutableMap<String, String>? = null
+  var errMap: Map<String, String>? = null
     private set
 
   companion object {
@@ -46,7 +46,7 @@ class ErrorBody private constructor() : Serializable {
       msg: String? = null,
       code: Int? = null,
       alt: String? = null,
-      errMap: MutableMap<String, String>? = null,
+      errMap: Map<String, String>? = null,
     ): ErrorBody {
       return ErrorBody().apply {
         this.code = code

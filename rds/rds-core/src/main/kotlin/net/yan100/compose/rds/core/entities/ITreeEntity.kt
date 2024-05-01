@@ -35,7 +35,7 @@ import net.yan100.compose.rds.core.annotations.BizCode
  * @since 2022-12-12
  */
 @MappedSuperclass
-abstract class TreeEntity : IEntity() {
+abstract class ITreeEntity : IEntity() {
   /** 父id */
   @JsonIgnore @Column(name = RPI) @Schema(title = "父id") var rpi: RefId? = null
 

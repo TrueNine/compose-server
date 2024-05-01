@@ -20,7 +20,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertTrue
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.DbTestTreeEntity
+import net.yan100.compose.rds.entities.DbTestITreeEntity
 import net.yan100.compose.rds.repositories.DbTestTreeRepo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,10 +40,10 @@ class TreeRepositoryTest {
   @Test
   @Rollback
   fun testSaveChild() {
-    val b = DbTestTreeEntity()
-    val c = DbTestTreeEntity()
-    val d = DbTestTreeEntity()
-    val savedRoot = treeRepo.saveChild(child = DbTestTreeEntity())
+    val b = DbTestITreeEntity()
+    val c = DbTestITreeEntity()
+    val d = DbTestITreeEntity()
+    val savedRoot = treeRepo.saveChild(child = DbTestITreeEntity())
     val savedChildren = treeRepo.saveChildren(savedRoot) { listOf(b, c, d) }
 
     val nodeIndexes = savedChildren.map { listOf(it.rln, it.rrn) }.flatten()

@@ -24,6 +24,7 @@ import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.IUserInfoRepo
+import net.yan100.compose.rds.repositories.IUsrRepo
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -33,11 +34,13 @@ class UsrInfoServiceImplImplTest {
   @Autowired private lateinit var userInfoService: UserInfoServiceImpl
 
   @Autowired private lateinit var infoRepo: IUserInfoRepo
+  @Autowired private lateinit var userRepo: IUsrRepo
 
   @BeforeEach
   fun setUp() {
     infoRepo = mockk()
-    userInfoService = UserInfoServiceImpl(infoRepo)
+    userRepo = mockk()
+    userInfoService = UserInfoServiceImpl(userRepo, infoRepo)
   }
 
   @Test

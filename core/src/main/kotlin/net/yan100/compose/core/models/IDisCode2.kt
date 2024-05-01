@@ -18,11 +18,12 @@ package net.yan100.compose.core.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
+import net.yan100.compose.core.alias.SerialCode
 
 /** 二代残疾证代码 */
 interface IDisCode2 : IIdcard2Code {
-  private class DefaultDis2Code(dCode: String) : IDisCode2 {
-    override val disabilityCode: String = dCode
+  private class DefaultDis2Code(dCode: SerialCode) : IDisCode2 {
+    override val disabilityCode: SerialCode = dCode
   }
 
   companion object {
@@ -34,8 +35,28 @@ interface IDisCode2 : IIdcard2Code {
 
   @get:Transient
   @get:JsonIgnore
-  override val idcard2Code: String
+  override val idcard2Code: SerialCode
     get() = disabilityCode.substring(0, 18)
 
-  @get:Transient @get:JsonIgnore val disabilityCode: String
+  /** ## 残疾证号 */
+  @get:Transient @get:JsonIgnore val disabilityCode: SerialCode
+
+  /**
+   * ## 是否补办过
+   * 根据第 20 位是否有 b 判断是否有补办过
+   */
+  @get:Transient
+  @get:JsonIgnore
+  val codeReIssued: Boolean
+    get() = disabilityCode.substring(19, 20).uppercase() == "B"
+
+  /**
+   * 补办次数 根据第 21 位 来解析补办次数
+   *
+   * @see codeReIssued
+   */
+  @get:Transient
+  @get:JsonIgnore
+  val codeReIssuedCount: Byte?
+    get() = disabilityCode.substring(20, 21).toByteOrNull()
 }

@@ -35,7 +35,7 @@ abstract class AbstractTypeConverter {
   fun getConverterTypeModel(dbType: String): ConvertTypeModel {
     val getC = converterRule.filter { dbType.uppercase().contains(it.key) }.map { it.value }
     return if (getC.isEmpty()) {
-      converterRule[defaultKey]!!
+      converterRule.getValue(defaultKey)
     } else {
       getC[0]
     }

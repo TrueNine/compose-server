@@ -6,8 +6,8 @@ dependencies {
   api(libs.json.jacksonCoreAnnotations)
   api(libs.jakarta.validationApi)
   api(libs.org.slf4j.slf4j.api)
-  api(libs.jakarta.openapiV3Annotations)
-  api(libs.jakarta.annotationApi)
+  api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
+  api(libs.jakarta.annotation.jakarta.annotation.api)
 
   implementation(libs.jakarta.servletApi)
   implementation(libs.spring.modulith.core)
@@ -17,7 +17,7 @@ dependencies {
 
   implementation(libs.org.springframework.boot.spring.boot.starter.json)
   implementation(libs.spring.security.crypto)
-  implementation(libs.security.bcprovJdk18on)
+  implementation(libs.org.bouncycastle.bcprov.jdk18on)
 
   // TODO 日志
   implementation(libs.spring.boot.logging)

@@ -28,14 +28,14 @@ import net.yan100.compose.core.alias.int
 import net.yan100.compose.core.alias.string
 import net.yan100.compose.core.models.WGS84
 import net.yan100.compose.rds.converters.WGS84Converter
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.ITreeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
 
 @MappedSuperclass
-abstract class SuperAddress : TreeEntity() {
+abstract class SuperAddress : ITreeEntity() {
 
   /** 代码 */
   @Schema(title = "代码") @Column(name = CODE) lateinit var code: SerialCode

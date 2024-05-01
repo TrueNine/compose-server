@@ -40,7 +40,7 @@ import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(title = "任意外键类型，通常与策略模式一起使用")
-public class RefAnyEntity extends IEntity implements Serializable {
+public class RefEntity extends IEntity implements Serializable {
 
     /** 任意外键 */
     public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
@@ -51,12 +51,12 @@ public class RefAnyEntity extends IEntity implements Serializable {
     @Serial private static final long serialVersionUID = 1L;
 
     @JsonIgnore
-    @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
+    @Column(name = ARI)
     @Schema(title = "任意外键id")
     protected Long ari;
 
     @JsonIgnore
-    @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE)
+    @Column(name = TYP)
     @Schema(title = "外键类别")
     protected String typ;
 }

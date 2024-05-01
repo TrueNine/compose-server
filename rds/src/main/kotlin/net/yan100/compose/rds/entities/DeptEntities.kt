@@ -22,7 +22,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.ITreeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
@@ -32,7 +32,7 @@ import org.hibernate.annotations.DynamicUpdate
 @DynamicUpdate
 @Schema(title = "部门")
 @Table(name = SuperRoleGroup.TABLE_NAME)
-class Dept : TreeEntity() {
+class Dept : ITreeEntity() {
   companion object {
     const val TABLE_NAME = "dept"
 

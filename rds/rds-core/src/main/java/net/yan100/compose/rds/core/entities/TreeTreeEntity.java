@@ -40,7 +40,7 @@ import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(title = "预排序树和任意外键的结合体")
-public class TreeAnyRefEntity extends TreeEntity implements Serializable {
+public class TreeTreeEntity extends ITreeEntity implements Serializable {
 
     /** 任意外键 */
     public static final String ARI = DataBaseBasicFieldNames.ANY_REFERENCE_ID;
@@ -51,12 +51,12 @@ public class TreeAnyRefEntity extends TreeEntity implements Serializable {
     @Serial private static final long serialVersionUID = 1L;
 
     @JsonIgnore
-    @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_ID)
+    @Column(name = ARI)
     @Schema(title = "任意外键id")
     protected String ari;
 
     @JsonIgnore
-    @Column(name = DataBaseBasicFieldNames.ANY_REFERENCE_TYPE)
+    @Column(name = TYP)
     @Schema(title = "外键类别")
     protected String typ;
 }

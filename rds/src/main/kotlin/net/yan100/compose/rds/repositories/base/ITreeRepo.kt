@@ -19,7 +19,7 @@ package net.yan100.compose.rds.repositories.base
 import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.BetaTest
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.ITreeEntity
 import net.yan100.compose.rds.entities.address.Address
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -37,14 +37,8 @@ import org.springframework.transaction.annotation.Transactional
  */
 @JvmDefaultWithoutCompatibility
 @NoRepositoryBean
-interface ITreeRepo<T : TreeEntity> : IRepo<T> {
+interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
   fun findChildrenCount(parent: T): BigSerial {
-    /*require(parent.rln != null) {
-        "父节点：$parent 左节点为 null"
-    }
-    require(parent.rrn != null) {
-        "父节点：$parent 右节点为 null"
-    }*/
     return (parent.rrn - parent.rln - 1) / 2
   }
 

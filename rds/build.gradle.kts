@@ -1,5 +1,8 @@
 version = libs.versions.compose.get()
-
+plugins {
+  alias(libs.plugins.ktJvm)
+  alias(libs.plugins.ktKsp)
+}
 sourceSets {
   main {
     resources { setSrcDirs(listOf("src/main/resources/common")) }
@@ -10,14 +13,18 @@ sourceSets {
 
 dependencies {
   api(libs.bundles.spring.jpa)
-  api(libs.jakarta.annotationApi)
+  api(libs.jakarta.annotation.jakarta.annotation.api)
 
   implementation(project(":depend:depend-jvalid"))
 
+
+  ksp(project(":ksp"))
+  implementation(project(":ksp"))
   kapt(variantOf(libs.com.querydsl.querydsl.apt) { classifier("jakarta") })
+
   implementation(variantOf(libs.com.querydsl.querydsl.jpa) { classifier("jakarta") })
   implementation(project(":rds:rds-core"))
-  implementation(libs.jakarta.annotationApi)
+  implementation(libs.jakarta.annotation.jakarta.annotation.api)
   implementation(project(":core"))
 
   implementation(libs.spring.security.crypto)

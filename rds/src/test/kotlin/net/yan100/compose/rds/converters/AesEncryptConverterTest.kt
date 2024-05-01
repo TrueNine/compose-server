@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.DbTestPeriodConverterEntity
+import net.yan100.compose.rds.entities.DbTestPeriodConverterEntityIEntity
 import net.yan100.compose.rds.repositories.DbTestPeriodConverterRepo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,6 +32,6 @@ class AesEncryptConverterTest {
 
   @Test
   fun bootConverter() {
-    repo.save(DbTestPeriodConverterEntity())
+    repo.save(DbTestPeriodConverterEntityIEntity())
   }
 }

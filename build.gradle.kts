@@ -26,6 +26,7 @@ plugins {
   alias(libs.plugins.ktNoArg)
   alias(libs.plugins.ktAllOpen)
   alias(libs.plugins.ktLombok)
+
   alias(libs.plugins.ktJpa)
   alias(libs.plugins.spotless)
   id(libs.plugins.composeGradle.get().pluginId)

@@ -52,17 +52,23 @@ import org.springframework.data.domain.Persistable
   SnowflakeIdInsertListener::class,
   PreSaveDeleteReferenceListener::class
 )
-abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, PagedRequestParam() {
+class IAnyEntity : Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPageableEntity {
+
 
   companion object {
     /** 主键 */
     const val ID = DataBaseBasicFieldNames.ID
 
-    @Serial private val serialVersionUID = 1L
+    @Serial
+    private val serialVersionUID = 1L
   }
 
   /** ## 是否需要脱敏处理 */
-  @JsonIgnore @kotlin.jvm.Transient @Transient @Experimental private var ____sensitive: Boolean = false
+  @JsonIgnore
+  @kotlin.jvm.Transient
+  @Transient
+  @Experimental
+  private var ____sensitive: Boolean = false
 
   /** id */
   @jakarta.persistence.Id
@@ -86,12 +92,39 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
     this.id = id
   }
 
-  override fun getId(): String = this.id ?: ""
+  @JsonIgnore
+  @kotlin.jvm.Transient
+  @Transient
+  private final val ____page = PagedRequestParam()
+
+  override fun getId(): Id = this.id.orEmpty()
+
+  override var pageSize: Int?
+    @Transient
+    get() = ____page.pageSize
+    @Transient
+    set(value) {
+      ____page.pageSize = value
+    }
+  override var offset: Int?
+    @Transient
+    get() = ____page.offset
+    @Transient
+    set(value) {
+      ____page.offset = value
+    }
+  override var unPage: Boolean?
+    @Transient
+    get() = ____page.unPage
+    @Transient
+    set(value) {
+      ____page.unPage = value
+    }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-    return "" != id && id != null && "null" != id && id == (other as AnyEntity).id
+    return "" != id && id != null && "null" != id && id == (other as IAnyEntity).id
   }
 
   override fun hashCode(): Int {
@@ -111,6 +144,7 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   fun withToString(superString: String, vararg properties: Pair<String, Any?>): String = buildString {
     append(superString)
     append("[")
+
     properties.forEach {
       append(it.first)
       append("=")
@@ -125,32 +159,20 @@ abstract class AnyEntity : Persistable<Id>, IPageableEntity, IEnhanceEntity, Pag
   @JsonIgnore
   @Schema(hidden = true)
   override fun isNew(): Boolean {
-    return "" == id || null == id
+    return null == id || "" == id || "null" == id
   }
-}
 
-/** 将自身置空为新的 Entity 对象 */
-fun <T : AnyEntity> T.withNew(): T {
-  asNew()
-  return this
-}
+  protected final fun <T> Companion.late(): IDatabaseDefineEntity.LateInitNonNullBasicValue<T> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-inline fun <T : AnyEntity> T.withNew(crossinline after: (T) -> T): T = after(withNew())
+  protected final fun <T> Companion.boolLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Boolean> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-/** 将集合内的所有元素置空为新的 Entity 对象 */
-fun <T : AnyEntity> List<T>.withNew(): List<T> = map { it.withNew() }
+  protected final fun <T> Companion.byteLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Byte> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-inline fun <T : AnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> = after(this.map { it.withNew() })
+  protected final fun <T> Companion.intLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Int> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-inline fun <T : AnyEntity, R : Any> List<T>.withNewMap(
-  crossinline after: (List<T>) -> List<R>,
-): List<R> = after(this.withNew())
+  protected final fun <T> Companion.longLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Long> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-/** ## 判断当前实体是否为新实体，然后执行 update */
-inline fun <T : AnyEntity> T.takeUpdate(
-  throwException: Boolean = true,
-  crossinline after: (T) -> T?,
-): T? {
-  if (!isNew) return after(this) else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")
-  return null
+  protected final fun <T> Companion.floatLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Float> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+
+  protected final fun <T> Companion.doubleLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Double> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 }

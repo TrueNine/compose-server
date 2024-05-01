@@ -42,7 +42,7 @@ class PreSaveDeleteReferenceListener {
         }
         .forEach { fAttr ->
           log.debug("重置引用参数 = {}", fAttr)
-          fAttr.set(attribute, null)
+          fAttr[attribute] = null
         }
     }
   }

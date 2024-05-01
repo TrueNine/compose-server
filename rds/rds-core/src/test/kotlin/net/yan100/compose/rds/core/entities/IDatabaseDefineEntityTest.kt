@@ -14,31 +14,23 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.core.entities
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
-import java.time.Period
-import net.yan100.compose.rds.core.entities.IEntity
-import org.hibernate.Hibernate
+import java.lang.NullPointerException
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
 
-@Entity
-@Table(name = "db_test_period_converter")
-data class DbTestPeriodConverterEntity(var periods: Period?) : IEntity() {
-  constructor() : this(null)
+class IDatabaseDefineEntityTest {
 
-  override fun equals(o: Any?): Boolean {
-    if (this === o) return true
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false
-    o as DbTestPeriodConverterEntity
+  @Test
+  fun `test init`() {
+    val e = Ae()
+    e.lateVariable = 1
+    println(e.lateVariable)
 
-    return id != null && id == o.id
-  }
-
-  override fun hashCode(): Int = javaClass.hashCode()
-
-  @Override
-  override fun toString(): String {
-    return this::class.simpleName + "(id = $id , rlv = $rlv , ldf = $ldf )"
+    val f = Ae()
+    assertFailsWith<NullPointerException> {
+      println(f.lateVariable)
+    }
   }
 }

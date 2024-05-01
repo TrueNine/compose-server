@@ -26,8 +26,8 @@ fun AuthenticationManager.authenticateByAccount(
   unauthorized: () -> Unit,
 ): UserDetailsWrapper? {
   val principal = this.authenticate(UsernamePasswordAuthenticationToken(account, password)).principal as? UserDetailsWrapper
-  if (null == principal) {
+  return if (null == principal) {
     unauthorized()
-    return null
-  } else return principal
+    null
+  } else principal
 }

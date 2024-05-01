@@ -5,5 +5,5 @@ dependencies {
   implementation(project(":core"))
 
   api(libs.org.springdoc.springdoc.openapi.starter.webmvc.ui)
-  api(libs.jakarta.openapiV3Annotations)
+  api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
 }

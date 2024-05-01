@@ -16,6 +16,4 @@
  */
 package io.tnt
 
-import net.yan100.compose.ksp.ksp.Abstract
-
-@Abstract class Absr {}
+class Absr {}

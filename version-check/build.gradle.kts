@@ -93,7 +93,7 @@ dependencies {
   api(l.org.hsqldb.hsqldb)
   api(l.com.h2database.h2)
   api(l.db.postgresql)
-  api(l.db.sqlite)
+  api(l.org.xerial.sqlite.jdbc)
   api(l.db.mysqlJ)
   api(l.db.mysqJava)
   api(l.org.flywaydb.flyway.core)
@@ -112,11 +112,11 @@ dependencies {
   api(l.sdk.openapi.knife4jJakarta)
 
   // jakarta
-  api(l.jakarta.annotationApi)
+  api(l.jakarta.annotation.jakarta.annotation.api)
   api(l.jakarta.servletApi)
   api(l.jakarta.persistenceApi)
   api(l.jakarta.validationApi)
-  api(l.jakarta.openapiV3Annotations)
+  api(l.io.swagger.core.v3.swagger.annotations.jakarta)
 
   // net
   api(l.net.okhttp3)
@@ -126,7 +126,7 @@ dependencies {
   api(l.util.byteBuddy)
   api(l.util.guavaJre)
   api(l.util.guavaAndroid)
-  api(l.util.ognl)
+  api(l.ognl.ognl)
   api(l.util.ikanalyzer)
   api(l.util.smilemath)
   api(l.util.easyexcel)
@@ -139,7 +139,7 @@ dependencies {
 
   //  security
   api(l.security.jjwtApi)
-  api(l.security.bcprovJdk18on)
+  api(l.org.bouncycastle.bcprov.jdk18on)
   api(l.security.auth0Jwt)
   api(l.security.antisamy)
 
@@ -150,7 +150,7 @@ dependencies {
   api(l.crawler.ip2region)
   api(l.crawler.selenium)
   api(l.crawler.seleniumWebDriverManager)
-  api(l.crawler.playwright)
+  api(l.com.microsoft.playwright.playwright)
   api(l.crawler.jsoup)
   api(l.crawler.nekohtml)
   api(l.crawler.supercsv)

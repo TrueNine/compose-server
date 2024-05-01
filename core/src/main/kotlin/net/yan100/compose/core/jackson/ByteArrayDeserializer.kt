@@ -29,7 +29,7 @@ class ByteArrayDeserializer : JsonDeserializer<ByteArray?>() {
       val str = it.readValueAsTree<JsonNode>()
       val byteArray = ByteArray(str.size())
       for (i in 0 until str.size()) {
-        val j = str.get(i)
+        val j = str[i]
         if (j.isNumber) byteArray[i] = j.asInt().toByte() else throw JsonParseException("序列化为 byte 错误")
       }
       byteArray

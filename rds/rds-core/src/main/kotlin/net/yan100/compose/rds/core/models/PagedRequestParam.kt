@@ -52,7 +52,11 @@ open class PagedRequestParam @JvmOverloads constructor(offset: Int? = MIN_OFFSET
   @Transient
   override var pageSize: Int? = MAX_PAGE_SIZE
 
-  @get:JsonIgnore @get:Transient @set:Transient @Transient override var unPage: Boolean? = false
+  @get:JsonIgnore
+  @get:Transient
+  @set:Transient
+  @Transient
+  override var unPage: Boolean? = false
 
   init {
     this.offset = offset

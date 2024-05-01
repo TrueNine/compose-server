@@ -41,7 +41,9 @@ inline fun <reified T> MultipartFile.readExcelList(
             data?.let { dataList += it }
           }
 
-          override fun doAfterAllAnalysed(context: AnalysisContext?) {}
+          override fun doAfterAllAnalysed(context: AnalysisContext?) {
+            // do nothing
+          }
         },
       )
     } catch (ex: Throwable) {

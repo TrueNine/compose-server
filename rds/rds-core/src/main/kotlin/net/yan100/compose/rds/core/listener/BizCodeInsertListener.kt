@@ -53,8 +53,8 @@ class BizCodeInsertListener {
         }
         .forEach {
           // 当 为 null 时进行设置
-          if (it.second.get(data) == null) {
-            it.second.set(data, bizCodeGenerator.nextString())
+          if (it.second[data] == null) {
+            it.second[data] = bizCodeGenerator.nextString()
           }
         }
     }

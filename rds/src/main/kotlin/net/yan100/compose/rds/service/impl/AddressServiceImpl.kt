@@ -19,8 +19,8 @@ package net.yan100.compose.rds.service.impl
 import jakarta.persistence.criteria.CriteriaQuery
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.rds.core.entities.AnyEntity
-import net.yan100.compose.rds.core.entities.withNew
+import net.yan100.compose.rds.core.entities.IAnyEntity
+import net.yan100.compose.rds.core.extensionfunctions.withNew
 import net.yan100.compose.rds.entities.address.Address
 import net.yan100.compose.rds.repositories.address.IAddressRepo
 import net.yan100.compose.rds.service.IAddressService
@@ -39,7 +39,7 @@ class AddressServiceImpl(private val repo: IAddressRepo) : IAddressService, Crud
   }
 
   override fun clearAndInitProvinces(lazy: () -> List<Address>): List<Address> {
-    repo.delete { root, _: CriteriaQuery<*>?, b -> b.notEqual(root.get<String>(AnyEntity.ID), repo.findRootId()) }
+    repo.delete { root, _: CriteriaQuery<*>?, b -> b.notEqual(root.get<String>(IAnyEntity.ID), repo.findRootId()) }
     val cleanedRoot = repo.save(repo.findRoot().withNew().apply { id = repo.findRootId() })
     return repo.saveChildren(cleanedRoot, lazy())
   }

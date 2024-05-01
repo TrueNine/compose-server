@@ -23,6 +23,13 @@ import net.yan100.compose.rds.service.base.IService
 
 interface IUserInfoService : IService<UserInfo> {
   /**
+   * ## 删除用户信息以及其下的账号
+   *
+   * @param userInfoId 用户信息 id
+   */
+  fun deleteUserInfoAndUser(userInfoId: RefId)
+
+  /**
    * ## 根据用户，保存一个默认的主要用户信息
    *
    * @param createUserId 创建用户的 id

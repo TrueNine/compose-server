@@ -24,7 +24,7 @@ import java.util.*
 import kotlin.reflect.full.findAnnotation
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.rds.core.entities.AnyEntity
+import net.yan100.compose.rds.core.entities.IAnyEntity
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.models.DataRecord
 import net.yan100.compose.rds.entities.TableRowDeleteRecord
@@ -61,7 +61,7 @@ class TableRowDeleteRecordServiceImpl(
     }
   }
 
-  private fun extractTableRow(anyData: AnyEntity): DataRecord {
+  private fun extractTableRow(anyData: IAnyEntity): DataRecord {
     return DataRecord().apply {
       id = anyData.id
       lang = "java"

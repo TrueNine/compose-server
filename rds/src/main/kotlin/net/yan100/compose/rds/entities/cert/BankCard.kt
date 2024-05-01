@@ -25,12 +25,12 @@ import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.alias.string
 import net.yan100.compose.rds.Col
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.ITreeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
 @MappedSuperclass
-abstract class SuperBankCard : TreeEntity() {
+abstract class SuperBankCard : ITreeEntity() {
   companion object {
     const val TABLE_NAME = "bank_card"
 

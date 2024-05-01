@@ -46,7 +46,7 @@ open class JwtVerifier internal constructor() {
           log.trace("jwt 发现加密段 {}", this@JwtVerifier.encryptDataKeyName)
           token.decryptedData =
             decryptData(
-              encData = decodedJwt.claims[this@JwtVerifier.encryptDataKeyName]!!.asString(),
+              encData = decodedJwt.claims.getValue(this@JwtVerifier.encryptDataKeyName).asString(),
               eccPrivateKey = params.contentEncryptEccKey ?: this@JwtVerifier.contentEccPrivateKey,
               targetType = params.encryptDataTargetType!!.kotlin
             )

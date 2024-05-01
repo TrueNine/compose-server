@@ -29,11 +29,11 @@ fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime
 }
 
 fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
-  return DTimer.millisToLocalDate(this)
+  return DTimer.millisToLocalDate(this, zoneId)
 }
 
 fun Long.toLocalTime(zoneId: ZoneId = ZoneId.of(DTimer.ZONE_GMT)): LocalTime {
-  return DTimer.millisToLocalTime(this)
+  return DTimer.millisToLocalTime(this, zoneId)
 }
 
 fun Date.toLong(): Long {

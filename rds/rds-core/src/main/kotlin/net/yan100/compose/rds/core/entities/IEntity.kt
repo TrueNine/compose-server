@@ -28,6 +28,7 @@ import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.alias.bool
 import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
+import net.yan100.compose.rds.core.extensionfunctions.takeUpdate
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 
@@ -39,7 +40,7 @@ import org.springframework.data.annotation.LastModifiedDate
  */
 @MappedSuperclass
 @Schema(title = "顶级抽象类")
-abstract class IEntity : AnyEntity() {
+abstract class IEntity : IAnyEntity() {
   companion object {
     const val RLV = DataBaseBasicFieldNames.LOCK_VERSION
     const val LDF = DataBaseBasicFieldNames.LOGIC_DELETE_FLAG
@@ -110,11 +111,12 @@ fun <T : IEntity> Iterable<T>.mergeAll(
   checkLength: Boolean = true,
   preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
 ): List<T> {
+  val errMsg = "需更新的长度不一致"
   val prepared = targets.filterNot { it.isNew }
-  if (checkLength) check(targets.size == prepared.size) { "需更新的长度不一致" }
+  if (checkLength) check(targets.size == prepared.size) { errMsg }
 
   val dbDataEntities = findAllByIdFn(prepared.map { it.id })
-  if (checkLength) check(dbDataEntities.size == prepared.size) { "需更新的长度不一致" }
+  if (checkLength) check(dbDataEntities.size == prepared.size) { errMsg }
 
   val pd = dbDataEntities.associateBy { prepared.find { d -> it.id == d.id }!! }
   val allSave =

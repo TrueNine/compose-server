@@ -14,24 +14,12 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package io.tnt.entity
 
-import jakarta.persistence.Convert
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
-import net.yan100.compose.core.models.WGS84
-import net.yan100.compose.rds.converters.WGS84Converter
-import net.yan100.compose.rds.core.entities.IEntity
+import jakarta.persistence.MappedSuperclass
 
-@Entity
-@Table(name = DbTestServiceEntity.TABLE_NAME)
-class DbTestServiceEntity : IEntity() {
-  var title: String? = null
+fun b() {}
 
-  @Convert(converter = WGS84Converter::class) var center: WGS84? = null
+fun a() {}
 
-  companion object {
-
-    const val TABLE_NAME = "db_test_service"
-  }
-}
+@MappedSuperclass class TestFileClass {}

@@ -62,7 +62,8 @@ class CaffeineCacheAutoConfiguration {
     log.debug("配置 CaffeineCache 缓存")
     val s = SimpleCacheManager()
 
-    if (m.isNotEmpty()) s.setCaches(m) else throw IllegalStateException("缓存配置为空")
+    check(m.isNotEmpty()) { "缓存配置为空" }
+    s.setCaches(m)
 
     return s
   }

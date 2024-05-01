@@ -14,46 +14,27 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.base
+package net.yan100.compose.core.regex
 
+import java.util.regex.Pattern
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import net.yan100.compose.rds.entities.relationship.RolePermissions
-import net.yan100.compose.rds.repositories.relationship.IRolePermissionsRepo
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+import net.yan100.compose.core.consts.Regexes
 
-@SpringBootTest
-class AnyEntityTest {
-  @Autowired private lateinit var repo: IRolePermissionsRepo
-
+class RegexTest {
   @Test
-  fun `test save and update`() {
-    val empty =
-      RolePermissions().also {
-        it.roleId = "33"
-        it.permissionsId = "44"
-      }
-    assertTrue { empty.isNew }
-    assertFalse {
-      empty
-        .let {
-          it.id = "3344"
-          it
-        }
-        .isNew
-    }
-    val b = repo.save(empty)
-    assertFalse { b.isNew }
-    assertTrue { b.id != null }
-    val c =
-      repo.save(
-        b.let {
-          it.roleId = "4455"
-          it
-        }
-      )
-    repo.save(c)
+  fun `test icCard Match`() {
+    val pattern = Pattern.compile(Regexes.CHINA_ID_CARD)
+    assertTrue { pattern.matcher("430404197210280012").matches() }
+    // 基本匹配
+    assertTrue { pattern.matcher("43040419721028001X").matches() }
+    assertTrue { pattern.matcher("43040419721028001x").matches() }
+    // 位数
+    assertFalse { pattern.matcher("43040419721028001x1").matches() }
+    assertFalse { pattern.matcher("43040419721028001").matches() }
+    // 地理位置不对
+    assertFalse { pattern.matcher("01040419721028001").matches() }
+    assertFalse { pattern.matcher("10040419721028001").matches() }
   }
 }

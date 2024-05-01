@@ -21,7 +21,7 @@ import kotlin.test.*
 import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.core.models.WGS84
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.DbTestServiceEntity
+import net.yan100.compose.rds.entities.DbTestServiceEntityIEntity
 import net.yan100.compose.rds.service.CrudServiceTester
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -36,7 +36,7 @@ class CrudServiceTest {
   fun testFindAll() {
     val a =
       service.save(
-        DbTestServiceEntity().apply {
+        DbTestServiceEntityIEntity().apply {
           title = "wad"
           center = WGS84(BigDecimal("1.3"), BigDecimal("2.44"))
         }
@@ -48,7 +48,7 @@ class CrudServiceTest {
   @Autowired lateinit var snowflake: ISnowflakeGenerator
 
   fun getEntity() =
-    DbTestServiceEntity().apply {
+    DbTestServiceEntityIEntity().apply {
       this.title = "dawda ${snowflake.nextString()}"
       this.center = WGS84(BigDecimal(snowflake.nextString()), BigDecimal(snowflake.nextString()))
     }

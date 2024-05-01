@@ -1,9 +1,12 @@
 version = libs.versions.compose.get()
 
+
+
 dependencies {
   implementation(project(":core"))
   implementation(project(":depend:depend-jvalid"))
   implementation(libs.spring.data.springDataCommons)
+
 
   testImplementation(project(":depend:depend-web-servlet"))
   testImplementation(libs.org.springframework.boot.spring.boot.starter.json)

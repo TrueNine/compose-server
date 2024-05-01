@@ -14,6 +14,6 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.ksp
+package net.yan100.compose.ksp.ksp.helper
 
-@Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS) @Retention(AnnotationRetention.RUNTIME) annotation class Abstract() {}
+class ProcessorHelper {}

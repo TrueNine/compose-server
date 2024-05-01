@@ -17,31 +17,43 @@
 package net.yan100.compose.rds.service.impl
 
 import net.yan100.compose.core.alias.RefId
+import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.rds.core.entities.fromDbData
+import net.yan100.compose.rds.core.extensionfunctions.withNew
 import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.IUserInfoRepo
+import net.yan100.compose.rds.repositories.IUsrRepo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.base.CrudService
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserInfoServiceImpl(private val infoRepo: IUserInfoRepo) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
+class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: IUserInfoRepo) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
+  @Transactional(rollbackFor = [Exception::class])
+  override fun deleteUserInfoAndUser(userInfoId: RefId) {
+    infoRepo.findByIdOrNull(userInfoId)?.also { i ->
+      deleteById(i.id)
+      if (i.userId.hasText()) userRepo.deleteById(i.userId!!)
+    }
+  }
+
   @Transactional(rollbackFor = [Exception::class])
   override fun saveExists(e: UserInfo): UserInfo {
-    var f = e
-    e.idCard?.let {
-      if (infoRepo.existsAllByIdCard(it)) {
-        val all = infoRepo.findAllByIdCard(it)
-        f = saveAll(all.map { dbData -> e.fromDbData(dbData) }).first()
-      }
-      if (infoRepo.existsAllByPhone(it)) {
-        val all = infoRepo.findAllByPhone(it)
-        f = saveAll(all.map { dbData -> e.fromDbData(dbData) }).first()
-      }
-    }
-    return f
+    // 如果存在身份证，则匹配相同的身份证
+    return e.idCard?.let { c ->
+      if (infoRepo.existsAllByIdCard(c)) {
+        saveAll(
+            infoRepo.findAllByIdCard(c).mapIndexed { index, r ->
+              val d = e.fromDbData(r)
+              d.apply { pri = index == 0 }
+            }
+          )
+          .first()
+      } else null
+    } ?: save(e.withNew())
   }
 
   override fun savePlainUserInfoByUser(createUserId: RefId, usr: Usr): UserInfo {

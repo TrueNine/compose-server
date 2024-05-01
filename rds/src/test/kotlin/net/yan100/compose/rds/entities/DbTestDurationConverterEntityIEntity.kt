@@ -18,10 +18,11 @@ package net.yan100.compose.rds.entities
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import net.yan100.compose.rds.core.entities.TreeEntity
+import java.time.Duration
+import net.yan100.compose.rds.core.entities.IEntity
 
 @Entity
-@Table(name = "db_test_presort_tree")
-class DbTestTreeEntity : TreeEntity() {
-  lateinit var title: String
+@Table(name = "db_test_duration_converter")
+data class DbTestDurationConverterEntityIEntity(var durations: Duration?) : IEntity() {
+  constructor() : this(null)
 }

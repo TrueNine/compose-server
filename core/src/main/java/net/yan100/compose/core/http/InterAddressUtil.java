@@ -63,6 +63,7 @@ public interface InterAddressUtil {
             InetAddress addr = InetAddress.getLocalHost();
             hostName = addr.getHostName();
         } catch (Exception ignore) {
+            return null;
         }
         return hostName;
     }
@@ -79,6 +80,7 @@ public interface InterAddressUtil {
                                 .collect(Collectors.toSet()));
             }
         } catch (Exception ignore) {
+            return result;
         }
         return result;
     }

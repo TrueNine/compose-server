@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.entities.withNew
+import net.yan100.compose.rds.core.extensionfunctions.withNew
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.Pw

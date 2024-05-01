@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 import lombok.extern.slf4j.Slf4j
 import net.yan100.compose.core.util.DTimer
 import net.yan100.compose.core.util.Str
-import net.yan100.compose.rds.core.entities.TreeEntity
+import net.yan100.compose.rds.core.entities.ITreeEntity
 import net.yan100.compose.rds.gen.util.DbCaseConverter
 import net.yan100.compose.rds.repositories.base.IRepo
 
@@ -31,7 +31,7 @@ class RenderContext {
   private var dbName: String = ""
   private var pkgName: String = ""
   private var ignoreColumns: MutableSet<String> = mutableSetOf()
-  private var baseEntityClass: String = TreeEntity::class.java.canonicalName
+  private var baseEntityClass: String = ITreeEntity::class.java.canonicalName
   private var baseRepositoryClass: String = IRepo::class.java.canonicalName
   private var baseServiceClass: String = ""
   private var baseServiceImplClass: String = ""
