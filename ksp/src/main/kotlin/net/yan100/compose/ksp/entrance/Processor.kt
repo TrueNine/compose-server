@@ -14,26 +14,31 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.entrance
 
-import kotlin.reflect.KProperty
+import com.google.devtools.ksp.processing.*
+import com.google.devtools.ksp.symbol.KSAnnotated
+import net.yan100.compose.ksp.data.ContextData
+import net.yan100.compose.ksp.data.FileContext
+import net.yan100.compose.ksp.visitor.allClassVisitor
 
-/** # 数据库字段定义函数 */
-sealed interface IDatabaseDefineEntity {
+class Processor(private val environment: SymbolProcessorEnvironment, private val codeGenerator: CodeGenerator, private val logger: KSPLogger) :
+  SymbolProcessor {
+  private var invoked = false
 
-  @Suppress("UNCHECKED_CAST")
-  class LateInitNonNullBasicValue<T> {
-    var v: Any? = null
+  override fun process(resolver: Resolver): List<KSAnnotated> {
+    if (invoked) return emptyList()
+    invoked = true
 
-    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-      if (null == thisRef) {
-        throw NullPointerException("thisRef is null")
+    val allFiles = resolver.getAllFiles()
+
+    allFiles.forEach { f ->
+      allClassVisitor.forEach {
+        val ctx = ContextData(environment, resolver, codeGenerator, logger, f, FileContext(f))
+        f.accept(it, ctx)
       }
-      v = value as Any
     }
 
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-      return v as? T ?: throw NullPointerException("value is not initialized")
-    }
+    return emptyList()
   }
 }

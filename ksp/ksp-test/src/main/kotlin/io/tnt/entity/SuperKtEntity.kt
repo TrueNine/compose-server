@@ -18,23 +18,20 @@ package io.tnt.entity
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
-import jakarta.validation.constraints.NotNull
 import java.math.BigDecimal
 import java.time.LocalDate
 import kotlin.String
-import net.yan100.compose.ksp.ksp.annotations.MetaDef
-import net.yan100.compose.ksp.ksp.annotations.MetaName
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.ksp.annotations.MetaName
 
-@MetaDef
-@MetaName("kt")
+@net.yan100.compose.ksp.annotations.MetaDef
+@net.yan100.compose.ksp.annotations.MetaName("kt")
 class SuperKtEntity : SuperBaseEntity(), Cloneable {
   var delegatedNotNull: Int by late()
 
   var decimal: BigDecimal? = null
 
-  @NotNull
-  var annotationNonNull: Int? = null
+  var annotationNonNull: Int by late()
 
   /**
    * ## test doc
@@ -46,18 +43,18 @@ class SuperKtEntity : SuperBaseEntity(), Cloneable {
   /** KDocumentation */
   var firstName: String? = null
 
-  @Schema(title = "我的")
-  var lastName: String? = null
+  @Schema(title = "我的") var lastName: String? = null
 
   val fullName: String
     get() = "$firstName $lastName"
 
-  @Column(name = "adl_cc")
-  private var abc: String? = null
+  @Column(name = "adl_cc") private var abc: String? = null
 
-  @Column(name = "adl_cc")
-  var ddd: String? = null
+  @Column(name = "adl_cc") var ddd: String? = null
 
-  @Column(name = "bd")
-  var birthday: LocalDate? = null
+  @Column(name = "bd") var birthday: LocalDate? = null
+
+  override fun toString(): String {
+    return super.toString()
+  }
 }

@@ -14,21 +14,24 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.dsl
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.squareup.kotlinpoet.FileSpec
+import kotlin.reflect.KClass
 
-class IDatabaseDefineEntityTest {
+interface StandardBuilderAdaptor<T, R> {
+  val builder: T
 
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
+  fun build(): R
 
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+  val fileBuilder: FileSpec.Builder
+
+  fun importBy(pkg: String, vararg names: String) = fileBuilder.addImport(pkg, *names)
+
+  fun importBy(classDeclaration: KSClassDeclaration) = fileBuilder.addImport(classDeclaration.packageName.asString(), classDeclaration.simpleName.asString())
+
+  fun importBy(clazz: Class<*>) = fileBuilder.addImport(clazz)
+
+  fun importBy(kClazz: KClass<*>) = fileBuilder.addImport(kClazz)
 }

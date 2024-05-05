@@ -14,21 +14,20 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.extensionfunctions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.google.devtools.ksp.findActualType
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
+import com.google.devtools.ksp.symbol.KSTypeAlias
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
+/** ## 获取真实类型的助注解 */
+val KSDeclaration.actualAnnotations: Sequence<KSClassDeclaration>
+  get() {
+    val ats = annotations.map { it.annotationType.resolve().declaration }
+    return ats.map { d ->
+      if (d is KSTypeAlias) {
+        d.findActualType()
+      } else d as KSClassDeclaration
+    }
   }
-}

@@ -14,21 +14,16 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.data
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.google.devtools.ksp.symbol.KSFile
+import kotlinx.io.buffered
+import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readString
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+data class FileContext(private val f: KSFile) : KSFile by f {
+  private val content = SystemFileSystem.source(Path(filePath)).buffered().readString()
+  val lines: List<String> = content.lines()
+  val imports: List<ImportStatement> = lines.filter { it.startsWith("import ") }.map { ImportStatement(it, origin) }
 }

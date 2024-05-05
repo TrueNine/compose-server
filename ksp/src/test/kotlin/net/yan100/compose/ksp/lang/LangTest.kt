@@ -14,21 +14,31 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.lang
 
-import java.lang.NullPointerException
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
-class IDatabaseDefineEntityTest {
+abstract class A {
+  abstract var firstName: String
+  abstract var lastName: String
+}
 
+abstract class B : A() {
+  val fullName: String
+    get() = "$firstName $lastName"
+}
+
+class C : B() {
+  override var firstName: String = ""
+  override var lastName: String = ""
+}
+
+class LangTest {
   @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
+  fun `test extends`() {
+    val c = C()
+    c.firstName = "a"
+    c.lastName = "b"
+    println(c.fullName)
   }
 }

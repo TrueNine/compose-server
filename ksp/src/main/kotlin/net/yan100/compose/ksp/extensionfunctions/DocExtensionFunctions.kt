@@ -14,21 +14,13 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.extensionfunctions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import net.yan100.compose.core.extensionfunctions.hasText
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+fun String?.cleanedDoc(): String? {
+  return if (hasText()) {
+    val doc = this!!
+    doc.replaceFirst("\n", "").split("\n").filter { it.hasText() }.map { it.trim() }.joinToString(separator = "\n") { if (it.hasText()) it else "\n" }
+  } else null
 }

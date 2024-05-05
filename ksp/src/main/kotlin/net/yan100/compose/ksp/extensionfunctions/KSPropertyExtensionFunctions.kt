@@ -14,21 +14,28 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.extensionfunctions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
+fun KSPropertyDeclaration.isBasicType(): Boolean {
+  return when (this.type.resolve().declaration.qualifiedName?.asString()) {
+    "java.lang.Character",
+    "kotlin.Char",
+    "java.lang.Integer",
+    "kotlin.Int",
+    "java.lang.Long",
+    "kotlin.Long",
+    "java.lang.Double",
+    "kotlin.Double",
+    "java.lang.Float",
+    "kotlin.Float",
+    "java.lang.Boolean",
+    "kotlin.Boolean",
+    "java.lang.Short",
+    "kotlin.Short",
+    "java.lang.Byte",
+    "kotlin.Byte", -> true
+    else -> false
   }
 }

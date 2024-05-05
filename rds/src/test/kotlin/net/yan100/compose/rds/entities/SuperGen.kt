@@ -14,21 +14,15 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.rds.entities
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.ksp.annotations.MetaName
+import net.yan100.compose.rds.core.entities.IEntity
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+@net.yan100.compose.ksp.annotations.MetaDef
+@net.yan100.compose.ksp.annotations.MetaName("gen_table")
+abstract class SuperGen : IEntity(), Cloneable {
+  var strNullable: String? = null
+  var intNonNull: Int by late()
 }

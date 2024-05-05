@@ -54,21 +54,15 @@ import org.springframework.data.domain.Persistable
 )
 class IAnyEntity : Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPageableEntity {
 
-
   companion object {
     /** 主键 */
     const val ID = DataBaseBasicFieldNames.ID
 
-    @Serial
-    private val serialVersionUID = 1L
+    @Serial private val serialVersionUID = 1L
   }
 
   /** ## 是否需要脱敏处理 */
-  @JsonIgnore
-  @kotlin.jvm.Transient
-  @Transient
-  @Experimental
-  private var ____sensitive: Boolean = false
+  @JsonIgnore @kotlin.jvm.Transient @Transient @Experimental private var ____sensitive: Boolean = false
 
   /** id */
   @jakarta.persistence.Id
@@ -92,30 +86,26 @@ class IAnyEntity : Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPage
     this.id = id
   }
 
-  @JsonIgnore
-  @kotlin.jvm.Transient
-  @Transient
-  private final val ____page = PagedRequestParam()
+  @JsonIgnore @kotlin.jvm.Transient @Transient private final val ____page = PagedRequestParam()
 
   override fun getId(): Id = this.id.orEmpty()
 
   override var pageSize: Int?
-    @Transient
-    get() = ____page.pageSize
+    @Transient get() = ____page.pageSize
     @Transient
     set(value) {
       ____page.pageSize = value
     }
+
   override var offset: Int?
-    @Transient
-    get() = ____page.offset
+    @Transient get() = ____page.offset
     @Transient
     set(value) {
       ____page.offset = value
     }
+
   override var unPage: Boolean?
-    @Transient
-    get() = ____page.unPage
+    @Transient get() = ____page.unPage
     @Transient
     set(value) {
       ____page.unPage = value
@@ -164,15 +154,15 @@ class IAnyEntity : Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPage
 
   protected final fun <T> Companion.late(): IDatabaseDefineEntity.LateInitNonNullBasicValue<T> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-  protected final fun <T> Companion.boolLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Boolean> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+  protected final fun Companion.boolLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Boolean> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-  protected final fun <T> Companion.byteLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Byte> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+  protected final fun Companion.byteLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Byte> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-  protected final fun <T> Companion.intLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Int> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+  protected final fun Companion.intLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Int> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-  protected final fun <T> Companion.longLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Long> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+  protected final fun Companion.longLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Long> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-  protected final fun <T> Companion.floatLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Float> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+  protected final fun Companion.floatLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Float> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
-  protected final fun <T> Companion.doubleLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Double> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+  protected final fun Companion.doubleLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Double> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 }

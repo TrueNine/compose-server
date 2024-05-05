@@ -14,21 +14,24 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.extensionfunctions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.google.devtools.ksp.isOpen
+import com.google.devtools.ksp.isPublic
+import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ksp.toTypeName
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+fun KSFunctionDeclaration.toFunction(): FunSpec {
+  return FunSpec.builder(simpleName.asString())
+    .also { k ->
+      returnType?.toTypeName()?.also { t -> k.returns(t) }
+      parameters.forEach { p -> k.addParameter(ParameterSpec.builder(p.name!!.asString(), p.type.toTypeName()).build()) }
+      if (null != findOverridee()) k.addModifiers(KModifier.OVERRIDE)
+      else {
+        if (isPublic()) k.addModifiers(KModifier.PUBLIC)
+        if (isOpen()) k.addModifiers(KModifier.OPEN)
+      }
+    }
+    .build()
 }

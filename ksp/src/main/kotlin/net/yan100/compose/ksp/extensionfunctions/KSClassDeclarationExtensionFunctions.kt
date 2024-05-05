@@ -14,21 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.extensionfunctions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import kotlin.reflect.KClass
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
+fun KSClassDeclaration.isAssignableFromDeeply(other: KClass<*>, checkList: MutableSet<KSClassDeclaration> = mutableSetOf()): Boolean {
+  if (!checkList.add(this)) return false
+  if (asStarProjectedType().declaration.qualifiedName?.asString() == other.qualifiedName) return true
+  for (superType in superTypes) {
+    val superTypeDeclaration = superType.resolve().declaration as? KSClassDeclaration ?: continue
+    if (superTypeDeclaration.isAssignableFromDeeply(other, checkList)) return true
   }
+  return false
 }

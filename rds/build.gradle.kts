@@ -1,8 +1,10 @@
 version = libs.versions.compose.get()
+
 plugins {
   alias(libs.plugins.ktJvm)
   alias(libs.plugins.ktKsp)
 }
+
 sourceSets {
   main {
     resources { setSrcDirs(listOf("src/main/resources/common")) }
@@ -16,7 +18,6 @@ dependencies {
   api(libs.jakarta.annotation.jakarta.annotation.api)
 
   implementation(project(":depend:depend-jvalid"))
-
 
   ksp(project(":ksp"))
   implementation(project(":ksp"))

@@ -14,21 +14,16 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.extensionfunctions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.squareup.kotlinpoet.AnnotationSpec
 
-class IDatabaseDefineEntityTest {
+fun AnnotationSpec.Builder.useGet() = useSiteTarget(AnnotationSpec.UseSiteTarget.GET)
 
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
+fun AnnotationSpec.Builder.useSet() = useSiteTarget(AnnotationSpec.UseSiteTarget.SET)
 
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
-}
+fun AnnotationSpec.Builder.useField() = useSiteTarget(AnnotationSpec.UseSiteTarget.FIELD)
+
+fun AnnotationSpec.Builder.useDelegate() = useSiteTarget(AnnotationSpec.UseSiteTarget.DELEGATE)
+
+fun AnnotationSpec.Builder.useProperty() = useSiteTarget(AnnotationSpec.UseSiteTarget.PROPERTY)

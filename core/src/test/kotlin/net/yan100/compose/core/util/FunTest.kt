@@ -14,21 +14,27 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.core.util
 
-import java.lang.NullPointerException
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
-class IDatabaseDefineEntityTest {
+class FunTest {
+  class FunClass(var count: Int = 0) {
+    private fun abc() {
+      count += 1
+    }
+
+    fun b(a: String): String {
+      abc()
+      return "var = $a + $count"
+    }
+  }
 
   @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
+  fun `test call class function`() {
+    val fc = FunClass()
+    val b = fc::b
+    b("a")
+    println(fc.count)
   }
 }

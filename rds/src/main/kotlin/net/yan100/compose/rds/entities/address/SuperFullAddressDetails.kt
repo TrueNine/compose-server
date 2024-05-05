@@ -14,21 +14,23 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.rds.entities.address
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.*
+import net.yan100.compose.ksp.annotations.MetaDef
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
+import org.hibernate.annotations.NotFound
+import org.hibernate.annotations.NotFoundAction
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+@MetaDef
+abstract class SuperFullAddressDetails : SuperAddressDetails() {
+  /** 地址 */
+  @ManyToOne(fetch = FetchType.EAGER)
+  @Schema(title = "地址", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JoinColumn(name = "address_id", referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
+  @NotFound(action = NotFoundAction.IGNORE)
+  @Fetch(FetchMode.JOIN)
+  var address: Address? = null
 }

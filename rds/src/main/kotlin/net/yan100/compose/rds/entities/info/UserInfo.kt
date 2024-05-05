@@ -29,7 +29,6 @@ import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.extensionfunctions.nonText
 import net.yan100.compose.core.models.IIdcard2Code
-import net.yan100.compose.rds.Fk
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
@@ -186,7 +185,7 @@ class FullUserInfo : SuperUserInfo() {
   /** 用户头像 */
   @Schema(title = "头像")
   @ManyToOne(targetEntity = LinkedAttachment::class)
-  @JoinColumn(name = AVATAR_IMG_ID, referencedColumnName = ID, foreignKey = Fk(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
+  @JoinColumn(name = AVATAR_IMG_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
   @NotFound(action = NotFoundAction.IGNORE)
   var avatarImage: LinkedAttachment? = null
 }

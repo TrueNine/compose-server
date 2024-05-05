@@ -14,21 +14,28 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.annotations
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import java.lang.annotation.Inherited
+import kotlin.reflect.KClass
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
-}
+@MustBeDocumented
+@Repeatable
+@Inherited
+@Target(
+  AnnotationTarget.FUNCTION,
+  AnnotationTarget.TYPE,
+  AnnotationTarget.CLASS,
+  AnnotationTarget.FIELD,
+  AnnotationTarget.PROPERTY_GETTER,
+  AnnotationTarget.PROPERTY_SETTER
+)
+@Retention(AnnotationRetention.BINARY)
+annotation class MetaDef(
+  /**
+   * ## 扩展超类，或额外指定的类型
+   *
+   * 例如：在 jpa 当中，默认继承 [net.yan100.compose.rds.core.entities.IEntity]， 但如果需要继承别的类，则可以单独指定，例如：[net.yan100.compose.rds.core.entities.ITreeEntity]
+   */
+  val extendBy: KClass<*> = Unit::class
+)

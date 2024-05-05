@@ -10,7 +10,7 @@ ktNoArg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
 ktAllOpen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 ktLombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
 ktJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
-ktKsp = { id = "com.google.devtools.ksp", version.ref = "kt-kspGoogleApi" }
+ktKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 springBootDependencyManagement = { id = "io.spring.dependency-management", version = "1.1.4" }
@@ -81,7 +81,7 @@ com-squareup-kotlinpoet-jvm = { group = "com.squareup", name = "kotlinpoet-jvm",
 com-squareup-kotlinpoet-ksp = { group = "com.squareup", name = "kotlinpoet-ksp", version = "1.16.0" }
 
 
-kt-kspGoogleApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "kt-kspGoogleApi" }
+kt-kspGoogleApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 kt-GradlePlugin = { group = "org.jetbrains.kotlin", name = "gradle-plugin", version.ref = "kotlin" }
 kt-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kt-stdlibJdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -183,6 +183,8 @@ com-baomidou-mybatis-plus-boot-starter = { group = "com.baomidou", name = "mybat
 org-projectlombok-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.32" }
 com-querydsl-querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa", version.ref = "querydsl" }
 com-querydsl-querydsl-apt = { group = "com.querydsl", name = "querydsl-apt", version.ref = "querydsl" }
+org-jetbrains-kotlinx-kotlinx-io-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinx-io" }
+org-jetbrains-kotlinx-kotlinx-io-core-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core-jvm", version.ref = "kotlinx-io" }
 
 bom-org-springframework-modulith-spring-modulith-bom = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "spring-modulith" }
 bom-org-springframework-boot-spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
@@ -191,18 +193,19 @@ bom-org-droos-drools-bom = { group = "org.drools", name = "drools-bom", version.
 bom-com-alibaba-cloud-spring-cloud-alibaba-dependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
 
 [versions]
-compose = "1.6.481"
+compose = "1.6.482"
 composeGroup = "net.yan100.compose"
 
 gradlePlugin-com-diffplug-spotless = "6.25.0"
 
 java = "21" ### https://bell-sw.com/
-kotlin = "2.0.0-RC1" ### https://github.com/JetBrains/kotlin/releases
-kt-kspGoogleApi = "2.0.0-RC1-1.0.20" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
+kotlin = "2.0.0-RC2" ### https://github.com/JetBrains/kotlin/releases
+ksp = "2.0.0-RC2-1.0.20" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
 ktx-coroutine = "1.8.1-Beta" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
+kotlinx-io = "0.3.3"
 jetbrains-annotations = "24.1.0" ### https://mvnrepository.com/artifact/org.jetbrains/annotations
 
-gradle = "8.7" ### https://mirrors.cloud.tencent.com/gradle
+gradle = "8.8-rc-1" ### https://mirrors.cloud.tencent.com/gradle
 
 spring-boot = "3.3.0-RC1" ### https://spring.io/projects/spring-boot#learn
 spring-cloud = "2023.0.1" ### https://spring.io/projects/spring-cloud#learn

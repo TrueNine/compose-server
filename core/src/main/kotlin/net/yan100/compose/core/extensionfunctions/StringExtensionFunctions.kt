@@ -44,6 +44,11 @@ fun String.resourceAsStream(cls: KClass<*>): InputStream? {
  */
 fun String?.hasText(): Boolean = Str.hasText(this)
 
+fun String?.orElse(default: String): String =
+  if (hasText()) {
+    this!!
+  } else default
+
 /**
  * ## 该字符串没有值
  *

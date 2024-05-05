@@ -14,21 +14,23 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.annotations
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import java.lang.annotation.Inherited
+import net.yan100.compose.core.extensionfunctions.hasText
 
-class IDatabaseDefineEntityTest {
+private typealias tg = AnnotationTarget
 
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
+@MustBeDocumented
+@Repeatable
+@Inherited
+@Target(tg.FUNCTION, tg.TYPE, tg.CLASS, tg.FIELD, tg.PROPERTY_GETTER, tg.PROPERTY_SETTER, AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.BINARY)
+annotation class MetaName(val value: String = "", val name: String = "")
 
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+fun Sequence<MetaName>.getFirstName(): String? {
+  val f = firstOrNull()
+  val value = f?.name
+  val name = f?.value
+  return if (value.hasText()) value else if (name.hasText()) name else null
 }

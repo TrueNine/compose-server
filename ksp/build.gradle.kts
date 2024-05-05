@@ -8,6 +8,7 @@ dependencies {
   implementation(libs.com.squareup.kotlinpoet.ksp)
   implementation(libs.jakarta.validationApi)
   implementation(libs.org.springframework.data.spring.data.commons)
+  implementation(libs.org.jetbrains.kotlinx.kotlinx.io.core)
 
   implementation(project(":rds:rds-core"))
   implementation(project(":core"))

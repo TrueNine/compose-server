@@ -14,21 +14,18 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.extensionfunctions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
 
-class IDatabaseDefineEntityTest {
+fun TypeSpec.Builder.openedModifier(): TypeSpec.Builder = addModifiers(KModifier.OPEN)
 
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
+fun TypeSpec.Builder.privateModifier(): TypeSpec.Builder = addModifiers(KModifier.PRIVATE)
 
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
-}
+fun PropertySpec.Builder.openedModifier(): PropertySpec.Builder = addModifiers(KModifier.OPEN)
+
+fun PropertySpec.Builder.privateModifier(): PropertySpec.Builder = addModifiers(KModifier.PRIVATE)
+
+fun PropertySpec.Builder.constantModifier(): PropertySpec.Builder = addModifiers(KModifier.CONST).mutable(false)

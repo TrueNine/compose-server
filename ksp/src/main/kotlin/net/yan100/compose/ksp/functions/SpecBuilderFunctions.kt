@@ -14,21 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.ksp.functions
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.TypeSpec
 
-class IDatabaseDefineEntityTest {
+fun classBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name)
 
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
+fun classBuilder(className: ClassName): TypeSpec.Builder = TypeSpec.classBuilder(className)
 
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
-}
+fun interfaceBuilder(name: String) = TypeSpec.interfaceBuilder(name)
+
+fun interfaceBuilder(className: ClassName) = TypeSpec.interfaceBuilder(className)
+
+fun companionObjectBuilder(name: String? = null) = TypeSpec.companionObjectBuilder(name)

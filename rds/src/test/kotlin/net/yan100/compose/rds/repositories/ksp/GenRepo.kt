@@ -14,21 +14,10 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.rds.repositories.ksp
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import net.yan100.compose.rds.entities.Gen
+import net.yan100.compose.rds.repositories.base.IRepo
+import org.springframework.stereotype.Repository
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
-}
+@Repository interface GenRepo : IRepo<Gen> {}

@@ -14,21 +14,33 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.rds.entities.address
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.int
+import net.yan100.compose.core.alias.string
+import net.yan100.compose.core.models.WGS84
+import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.rds.core.entities.ITreeEntity
 
-class IDatabaseDefineEntityTest {
+@MetaDef
+abstract class SuperAddress : ITreeEntity() {
 
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
+  /** 代码 */
+  abstract var code: SerialCode
 
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+  /** 名称 */
+  abstract var name: string
+
+  /** 级别 0 为国家 */
+  abstract var level: int?
+
+  /** 年份版本号 */
+  abstract var yearVersion: string?
+
+  /** 定位 */
+  abstract var center: WGS84?
+
+  /** 是否为终结地址（如市辖区） */
+  abstract var leaf: Boolean
 }

@@ -14,21 +14,22 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.entities
+package net.yan100.compose.rds.entities.address
 
-import java.lang.NullPointerException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
+import jakarta.persistence.FetchType.EAGER
+import jakarta.persistence.ForeignKey
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
+import net.yan100.compose.ksp.annotations.MetaDef
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode.SUBSELECT
 
-class IDatabaseDefineEntityTest {
-
-  @Test
-  fun `test init`() {
-    val e = Ae()
-    e.lateVariable = 1
-    println(e.lateVariable)
-
-    val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
-  }
+@MetaDef
+abstract class SuperFullAddress : SuperAddress() {
+  /** 当前地址包含的地址详情 */
+  @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
+  @JoinColumn(name = AddressDetails.ADDRESS_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
+  @Fetch(SUBSELECT)
+  var details: List<AddressDetails> = listOf()
 }
