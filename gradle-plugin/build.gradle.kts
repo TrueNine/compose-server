@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 val l = libs
 
 val pluginGroup = libs.versions.composeGroup.get()
-val pluginVersion = libs.versions.compose.get()
+val pluginVersion = libs.versions.compose.versioncontrol.get()
 val yunxiaoUrl by extra { properties["yunxiaoUrl"] as String }
 val yunxiaoUsername by extra { properties["yunxiaoUsername"] as String }
 val yunxiaoPassword by extra { properties["yunxiaoPassword"] as String }

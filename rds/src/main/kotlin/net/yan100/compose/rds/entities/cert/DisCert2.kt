@@ -89,7 +89,7 @@ abstract class SuperDisCert2 : IDisCode2, IEntity() {
 
   @get:Transient
   @get:JsonIgnore
-  override val disabilityCode: String
+  override val disCode: String
     get() = this.code
 
   override fun asNew() {

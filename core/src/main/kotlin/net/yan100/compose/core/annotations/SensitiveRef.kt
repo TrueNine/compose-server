@@ -33,7 +33,7 @@ import net.yan100.compose.core.jackson.SensitiveSerializer
 @JsonInclude
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FIELD, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY, AnnotationTarget.PROPERTY_GETTER)
+@Target(AnnotationTarget.PROPERTY_GETTER)
 @JacksonAnnotationsInside
 @JsonSerialize(using = SensitiveSerializer::class)
 annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {
@@ -42,29 +42,23 @@ annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {
     NONE({ it }),
 
     /** 手机号 */
-    PHONE({ it.replace("(\\d{3})\\d+(\\d{2})".toRegex(), "$1****$2") }),
-    EMAIL({ it.replace("(\\w{2})\\w+(@[\\w.-]+)".toRegex(), "$1****$2") }),
+    PHONE({ it.replace("^(\\S{3})\\S+(\\S{2})$".toRegex(), "\$1****\$2") }),
+    EMAIL({ it.replace("(\\S{2})\\S+(@[\\w.-]+)".toRegex(), "\$1****\$2") }),
 
     /** 身份证号 */
-    ID_CARD({ it.replace(Regex("(\\d{2})[\\w|](\\w{2})"), "$1****$2") }),
+    ID_CARD({ it.replace("(\\S{2})\\S+(\\S{2})".toRegex(), "\$1****\$2") }),
 
     /** 银行卡号 */
-    BANK_CARD_CODE({ it.replace("(\\d{2})[\\w|](\\w{2})".toRegex(), "$1****$2") }),
+    BANK_CARD_CODE({ it.replace("(\\w{2})\\w+(\\w{2})".toRegex(), "\$1****\$2") }),
 
     /** 姓名 */
-    NAME({
-      var result: String = "*"
-      if (it.nonText()) result = it
-      val lastChar = it.substring(it.length - 1)
-      if (it.length >= 2) result = "**$lastChar"
-      result
-    }),
+    NAME({ if (it.nonText() || it.length < 2) it else "**${it.substring(it.length - 1)}" }),
 
     /** 地址 */
-    ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "$1****$2****") }),
+    ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "\$1****\$2****") }),
 
     /** 密码 */
-    PASSWORD({ "" });
+    PASSWORD({ "****" });
 
     open fun desensitizeSerializer(): (String) -> String {
       return desensitizeSerializer

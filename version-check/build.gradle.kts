@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.get()
+project.version = libs.versions.compose.asProvider().get()
 
 plugins {
   alias(libs.plugins.spotless)

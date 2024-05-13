@@ -13,7 +13,7 @@ ktJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 ktKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
-springBootDependencyManagement = { id = "io.spring.dependency-management", version = "1.1.4" }
+springBootDependencyManagement = { id = "io.spring.dependency-management", version = "1.1.5" }
 hibernateOrm = { id = "org.hibernate.orm", version.ref = "hibernate" }
 versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 graalvmNative = { id = "org.graalvm.buildtools.native", version = "0.10.1" }
@@ -25,26 +25,6 @@ gradlePlugin-spotless = { group = "com.diffplug.spotless", name = "spotless-plug
 gradlePlugin-kt = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 gradlePlugin-springBootDependencyManagement = { group = "io.spring.gradle", name = "dependency-management-plugin", version = "1.1.4" }
 
-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose" }
-compose-ksp = { group = "net.yan100.compose", name = "ksp", version.ref = "compose" }
-compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose" }
-compose-rdsGen = { group = "net.yan100.compose", name = "rds-gen", version.ref = "compose" }
-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose" }
-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose" }
-compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose" }
-compose-securityOauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose" }
-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose" }
-compose-ruleEngine = { group = "net.yan100.compose", name = "rule-engine", version.ref = "compose" }
-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose" }
-compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", version.ref = "compose" }
-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose" }
-compose-datacommonCrawler = { group = "net.yan100.compose", name = "data-common-crawler", version.ref = "compose" }
-compose-datacommonDataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose" }
-compose-dependMqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose" }
-compose-dependWebservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose" }
-compose-dependWebclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose" }
-compose-dependJvalid = { group = "net.yan100.compose", name = "depend-jvalid", version.ref = "compose" }
-compose-testToolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "compose" }
 
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-boot-configureprocessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
@@ -192,14 +172,39 @@ bom-org-springframework-cloud-spring-cloud-dependencies = { group = "org.springf
 bom-org-droos-drools-bom = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 bom-com-alibaba-cloud-spring-cloud-alibaba-dependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
 
+net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose-core" }
+net-yan100-compose-ksp = { group = "net.yan100.compose", name = "ksp", version.ref = "compose" }
+net-yan100-compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose" }
+net-yan100-compose-rds-gen = { group = "net.yan100.compose", name = "rds-gen", version.ref = "compose" }
+net-yan100-compose-rds-core = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose" }
+net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose" }
+net-yan100-compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose" }
+net-yan100-compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose" }
+net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose" }
+net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose" }
+net-yan100-compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", version.ref = "compose-webapidoc" }
+net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose" }
+net-yan100-compose-datacommon-crawler = { group = "net.yan100.compose", name = "data-common-crawler", version.ref = "compose" }
+net-yan100-compose-datacommon-dataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose" }
+net-yan100-compose-depend-mqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose" }
+net-yan100-compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose" }
+net-yan100-compose-depend-webclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose" }
+net-yan100-compose-depend-jvalid = { group = "net.yan100.compose", name = "depend-jvalid", version.ref = "compose" }
+net-yan100-compose-test-toolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "compose" }
+
+
 [versions]
-compose = "1.6.482"
+compose-versioncontrol = "1.6.499" ### 每次其他版本更新则更新此版本
+compose = "1.6.494"
+compose-core = "1.6.497"
+compose-webapidoc = "1.6.496"
+
 composeGroup = "net.yan100.compose"
 
 gradlePlugin-com-diffplug-spotless = "6.25.0"
 
 java = "21" ### https://bell-sw.com/
-kotlin = "2.0.0-RC2" ### https://github.com/JetBrains/kotlin/releases
+kotlin = "2.0.0-RC3" ### https://github.com/JetBrains/kotlin/releases
 ksp = "2.0.0-RC2-1.0.20" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
 ktx-coroutine = "1.8.1-Beta" ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
 kotlinx-io = "0.3.3"

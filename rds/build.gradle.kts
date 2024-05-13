@@ -1,4 +1,4 @@
-version = libs.versions.compose.get()
+version = libs.versions.compose.asProvider().get()
 
 plugins {
   alias(libs.plugins.ktJvm)
@@ -92,6 +92,20 @@ publishing {
       artifact(mysqlJar) { classifier = "mysql" }
     }
   }
+
+  publications {
+    create<MavenPublication>("maven") {
+      groupId = project.group.toString()
+      artifactId = project.name
+      version = project.version.toString()
+      from(components["java"])
+    }
+  }
+}
+
+signing {
+  useGpgCmd()
+  sign(publishing.publications["maven"])
 }
 
 hibernate {

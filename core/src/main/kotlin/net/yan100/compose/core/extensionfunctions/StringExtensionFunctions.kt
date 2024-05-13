@@ -20,6 +20,8 @@ import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 import net.yan100.compose.core.util.Str
 
@@ -42,26 +44,31 @@ fun String.resourceAsStream(cls: KClass<*>): InputStream? {
  *
  * @return [Boolean]
  */
-fun String?.hasText(): Boolean = Str.hasText(this)
+@OptIn(ExperimentalContracts::class)
+fun String?.hasText(): Boolean {
+  contract { returns(true) implies (this@hasText != null) }
+  return Str.hasText(this)
+}
 
-fun String?.orElse(default: String): String =
-  if (hasText()) {
-    this!!
-  } else default
+fun String?.orElse(default: String): String = if (hasText()) this else default
 
 /**
  * ## 该字符串没有值
  *
  * @return [Boolean] 该字符串没有值，对 [hasText] 的反向调用
  */
-fun String?.nonText(): Boolean = !this.hasText()
+@OptIn(ExperimentalContracts::class)
+fun String?.nonText(): Boolean {
+  contract { returns(false) implies (this@nonText != null) }
+  return !this.hasText()
+}
 
 inline fun String?.hasTextAlso(crossinline block: (it: String) -> Unit) {
-  if (this.hasText()) block(this!!)
+  if (this.hasText()) block(this)
 }
 
 inline fun <T> String?.hasTextRun(crossinline block: String.() -> T): T? {
-  return if (hasText()) this!!.block() else null
+  return if (hasText()) this.block() else null
 }
 
 /**

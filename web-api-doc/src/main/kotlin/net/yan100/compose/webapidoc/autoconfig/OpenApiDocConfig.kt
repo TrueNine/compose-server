@@ -103,16 +103,14 @@ class OpenApiDocConfig {
     val cfg = SpringDocUtils.getConfig()
     val datetimeSchema =
       Schema<LocalDateTime>().apply {
-        title = "时间戳 millis"
-        name = "datetime"
-        type = "int64"
+        type = "string"
+        format = "string"
         example = "1711971124475"
       }
     val byteArraySchema =
       Schema<ByteArray>().apply {
-        title = "字节数组"
-        name = "byte serial"
         type = "byte[]"
+        format = "byte[]"
         example = "[1, 0, 0, 1]"
       }
     cfg.replaceWithSchema(ByteArray::class.java, byteArraySchema)

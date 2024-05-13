@@ -19,18 +19,37 @@ package net.yan100.compose.core.models
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import java.util.Objects
+import net.yan100.compose.core.consts.Regexes
 
 /** # 二代身份证代码 */
 interface IIdcard2Code {
-  private class DefaultIdcard2Code(code: String) : IIdcard2Code {
-    override val idcard2Code: String = code
+
+  private class DefaultIdcard2Code(override val idcard2Code: String) : IIdcard2Code {
+    init {
+      check(idcardBirthday.isBefore(LocalDate.now())) { "$idcard2Code is not a valid idcard2Code" }
+      check(idcard2Code.matches(idCardRegex)) { "$idcard2Code is not a valid idcard2Code" }
+    }
+
+    companion object {
+      private val idCardRegex = Regexes.CHINA_ID_CARD.toRegex()
+    }
+
+    override fun hashCode(): Int = Objects.hashCode(idcard2Code)
+
+    override fun equals(other: Any?): Boolean {
+      if (null == other) return false
+      return if (other is IIdcard2Code) {
+        other.idcard2Code == idcard2Code
+      } else false
+    }
+
+    override fun toString(): String = idcard2Code
   }
 
   companion object {
-    @JvmStatic
-    fun of(idcard2Code: String): IIdcard2Code {
-      return DefaultIdcard2Code(idcard2Code)
-    }
+    @JvmStatic fun of(idcard2Code: String): IIdcard2Code = DefaultIdcard2Code(idcard2Code.uppercase())
   }
 
   @get:Transient @get:JsonIgnore val idcard2Code: String
@@ -50,6 +69,28 @@ interface IIdcard2Code {
   val idcardSex: Boolean
     get() = idcardSexCode.toByte() % 2 != 0
 
+  @get:Transient
+  @get:JsonIgnore
+  val idcardAge: Int
+    get() = ChronoUnit.YEARS.between(idcardBirthday, LocalDate.now()).toInt()
+
+  @get:Transient
+  @get:JsonIgnore
+  val idcardRecommendAvailabilityYear: Int
+    get() {
+      return when (idcardAge) {
+        in 0..16 -> 5
+        in 17..25 -> 10
+        in 26..45 -> 20
+        else -> -1
+      }
+    }
+
+  /**
+   * ## 行政区划码
+   *
+   * 不一定有效，可能会夹杂 00
+   */
   @get:Transient
   @get:JsonIgnore
   val idcardDistrictCode: String

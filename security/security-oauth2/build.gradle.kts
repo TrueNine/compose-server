@@ -1,8 +1,24 @@
-project.version = libs.versions.compose.get()
+project.version = libs.versions.compose.asProvider().get()
 
 dependencies {
   implementation(libs.spring.security.core)
   implementation(project(":core"))
   implementation(project(":depend:depend-web-client"))
   testImplementation(libs.spring.boot.web)
+}
+
+publishing {
+  publications {
+    create<MavenPublication>("maven") {
+      groupId = project.group.toString()
+      artifactId = project.name
+      version = project.version.toString()
+      from(components["java"])
+    }
+  }
+}
+
+signing {
+  useGpgCmd()
+  sign(publishing.publications["maven"])
 }

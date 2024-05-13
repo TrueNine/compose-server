@@ -1,6 +1,6 @@
 import net.yan100.compose.plugin.annotationProcessorKapt
 
-version = libs.versions.compose.get()
+version = libs.versions.compose.core.get()
 
 dependencies {
   api(libs.json.jacksonCoreAnnotations)
@@ -28,4 +28,20 @@ dependencies {
 
   testImplementation(libs.spring.boot.web)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.json)
+}
+
+publishing {
+  publications {
+    create<MavenPublication>("maven") {
+      groupId = project.group.toString()
+      artifactId = project.name
+      version = project.version.toString()
+      from(components["java"])
+    }
+  }
+}
+
+signing {
+  useGpgCmd()
+  sign(publishing.publications["maven"])
 }

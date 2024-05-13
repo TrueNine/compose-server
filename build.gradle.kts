@@ -55,13 +55,12 @@ composeGradle {
 
 val l = libs
 
-project.version = libs.versions.compose.get()
+project.version = libs.versions.compose.asProvider().get()
 
 allprojects {
   repositories { aliYunXiao() }
 
   project.group = l.versions.composeGroup.get()
-  project.version = l.versions.compose.get()
 
   tasks {
     withType<ProcessAot> { enabled = false }
@@ -170,20 +169,6 @@ subprojects {
         }
       }
     }
-
-    publications {
-      create<MavenPublication>("maven") {
-        groupId = project.group.toString()
-        artifactId = project.name
-        version = project.version.toString()
-        from(components["java"])
-      }
-    }
-  }
-
-  signing {
-    useGpgCmd()
-    sign(publishing.publications["maven"])
   }
 }
 

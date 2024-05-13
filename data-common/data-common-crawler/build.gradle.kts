@@ -1,4 +1,4 @@
-version = libs.versions.compose.get()
+version = libs.versions.compose.asProvider().get()
 
 dependencies {
   api(project(":data-common:data-common-data-extract"))
@@ -7,4 +7,20 @@ dependencies {
   api(libs.com.microsoft.playwright.playwright)
   implementation(libs.util.ikanalyzer)
   implementation(libs.util.smilemath)
+}
+
+publishing {
+  publications {
+    create<MavenPublication>("maven") {
+      groupId = project.group.toString()
+      artifactId = project.name
+      version = project.version.toString()
+      from(components["java"])
+    }
+  }
+}
+
+signing {
+  useGpgCmd()
+  sign(publishing.publications["maven"])
 }

@@ -25,17 +25,19 @@ package net.yan100.compose.core.consts
 @JvmDefaultWithoutCompatibility
 interface Regexes {
   companion object {
-    private const val `11` = "(1[1-9]|[2-9][0-9])"
-    private const val `01` = "(0[1-9]|[1-9][0-9])"
-    private const val year = "(19|20)\\d{2}"
-    private const val month = "(0[1-9]|1[0-2])"
-    private const val day = "(0[1-9]|[1-2][0-9]|3[0-1])"
+    private const val ONE_ONE = "(1[1-9]|[2-9][0-9])"
+    private const val ZERO_ONE = "(0[1-9]|[1-9][0-9])"
+    private const val ZERO_ZERO_ZERO_ONE = "(00|0[1-9]|[1-9][0-9])"
+    private const val YEAR = "(19|20)\\d{2}"
+    private const val MONTH = "(0[1-9]|1[0-2])"
+    private const val DAY = "(0[1-9]|[1-2][0-9]|3[0-1])"
+    private const val CHINA_ID_CARD_PREFIX = "^${ONE_ONE}${ZERO_ZERO_ZERO_ONE}${ZERO_ONE}${YEAR}${MONTH}${DAY}\\d{3}[xX0-9]"
 
     /** 中国身份证号 */
-    const val CHINA_ID_CARD = "^${`11`}${`01`}${`01`}${year}${month}${day}\\d{3}[xX0-9]$"
+    const val CHINA_ID_CARD = "${CHINA_ID_CARD_PREFIX}$"
 
     /** 中国残疾证号 */
-    const val CHINA_DIS_CARD = "^${`11`}${`01`}${`01`}${year}${month}${day}\\d{3}[xX0-9][1-7][1-4](?:[bB][1-9])?"
+    const val CHINA_DIS_CARD = "${CHINA_ID_CARD_PREFIX}[1-7][1-4](?:[bB][1-9])?$"
 
     /** 英文数字账户 */
     const val ACCOUNT: String = "^[a-zA-Z0-9]+$"
