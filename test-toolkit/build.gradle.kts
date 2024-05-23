@@ -1,11 +1,11 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.test.toolkit.get()
 
 dependencies {
-  api(libs.bundles.knife4j)
   implementation(project(":core"))
-
-  api(libs.org.springdoc.springdoc.openapi.starter.webmvc.ui)
-  api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
+  implementation(libs.org.springframework.spring.test)
+  implementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
+  implementation(libs.org.springframework.boot.spring.boot.test)
+  implementation(libs.org.springframework.security.spring.security.test)
 }
 
 publishing {

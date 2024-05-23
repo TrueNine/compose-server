@@ -82,7 +82,7 @@ dependencies {
 
   // test
   api(l.io.mockk.mockk)
-  api(l.test.testng)
+  api(l.org.testng.testng)
   api(l.test.junit5)
   api(l.test.reactorTest)
 
@@ -92,10 +92,9 @@ dependencies {
   // db
   api(l.org.hsqldb.hsqldb)
   api(l.com.h2database.h2)
-  api(l.db.postgresql)
+  api(l.org.postgresql.postgresql)
   api(l.org.xerial.sqlite.jdbc)
-  api(l.db.mysqlJ)
-  api(l.db.mysqJava)
+  api(l.com.mysql.mysql.connector.j)
   api(l.org.flywaydb.flyway.core)
   api(l.p6spy.p6spy)
   api(l.com.github.gavlyukovskiy.p6spy.spring.boot.starter)
@@ -123,7 +122,7 @@ dependencies {
   api(l.net.retrofig)
 
   // util
-  api(l.util.byteBuddy)
+  api(l.net.bytebuddy.byte.buddy)
   api(l.util.guavaJre)
   api(l.util.guavaAndroid)
   api(l.ognl.ognl)
@@ -148,11 +147,11 @@ dependencies {
 
   // crawler
   api(l.crawler.ip2region)
-  api(l.crawler.selenium)
+  api(l.org.seleniumhq.selenium.selenium.java)
   api(l.crawler.seleniumWebDriverManager)
   api(l.com.microsoft.playwright.playwright)
   api(l.crawler.jsoup)
-  api(l.crawler.nekohtml)
+  api(l.org.htmlunit.neko.htmlunit)
   api(l.crawler.supercsv)
 
   // json

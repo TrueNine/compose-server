@@ -42,7 +42,7 @@ annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {
     NONE({ it }),
 
     /** 手机号 */
-    PHONE({ it.replace("^(\\S{3})\\S+(\\S{2})$".toRegex(), "\$1****\$2") }),
+    PHONE({ it.replace("^(\\S{3})\\S+(\\S{2})$".toRegex(), "\$1********\$2") }),
     EMAIL({ it.replace("(\\S{2})\\S+(@[\\w.-]+)".toRegex(), "\$1****\$2") }),
 
     /** 身份证号 */
@@ -55,7 +55,7 @@ annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {
     NAME({ if (it.nonText() || it.length < 2) it else "**${it.substring(it.length - 1)}" }),
 
     /** 地址 */
-    ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "\$1****\$2****") }),
+    ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "\$1****\$2") }),
 
     /** 密码 */
     PASSWORD({ "****" });

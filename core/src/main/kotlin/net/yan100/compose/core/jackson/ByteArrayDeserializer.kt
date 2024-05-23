@@ -26,10 +26,11 @@ import com.fasterxml.jackson.databind.JsonNode
 class ByteArrayDeserializer : JsonDeserializer<ByteArray?>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): ByteArray? {
     return p?.let {
-      val str = it.readValueAsTree<JsonNode>()
-      val byteArray = ByteArray(str.size())
-      for (i in 0 until str.size()) {
-        val j = str[i]
+      val jsonNode = it.readValueAsTree<JsonNode>()
+      val byteArray = ByteArray(jsonNode.size())
+      val isObj = jsonNode.isObject
+      for (i in 0 until jsonNode.size()) {
+        val j = if (isObj) jsonNode[i.toString()] else jsonNode[i]
         if (j.isNumber) byteArray[i] = j.asInt().toByte() else throw JsonParseException("序列化为 byte 错误")
       }
       byteArray

@@ -46,6 +46,6 @@ interface Regexes {
     const val PASSWORD: String = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^\\da-zA-Z\\s]).{1,9}$"
 
     /** 中国手机号手机 */
-    const val CHINA_PHONE: String = "^1[2-9][1-9]\\d{8}$"
+    const val CHINA_PHONE: String = "^1[3-9][0-9]\\d{8}$"
   }
 }

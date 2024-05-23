@@ -1,9 +1,6 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.rds.get()
 
-plugins {
-  alias(libs.plugins.ktJvm)
-  alias(libs.plugins.ktKsp)
-}
+plugins { alias(libs.plugins.ktKsp) }
 
 sourceSets {
   main {
@@ -35,7 +32,7 @@ dependencies {
 
   testImplementation(libs.bundles.p6spySpring)
   testImplementation(libs.spring.boot.validation)
-  testImplementation(libs.db.mysqlJ)
+  testImplementation(libs.com.mysql.mysql.connector.j)
 }
 
 val common: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/common") }

@@ -26,6 +26,7 @@ import java.time.LocalDate
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.extensionfunctions.nonText
 import net.yan100.compose.core.models.IIdcard2Code
@@ -101,7 +102,7 @@ class SuperUserInfo : IEntity() {
   @Schema(title = "qq号") @Column(name = QQ_ACCOUNT) var qqAccount: ReferenceId? = null
 
   /** 电话号码 */
-  @Nullable @Schema(title = "电话号码") @Column(name = PHONE, unique = true) var phone: String? = null
+  @get:SensitiveRef(SensitiveRef.Strategy.PHONE) @Schema(title = "电话号码") @Column(name = PHONE, unique = true) var phone: String? = null
 
   /** 身份证 */
   @Nullable @Schema(title = "身份证") @Column(name = ID_CARD, unique = true) var idCard: String? = null

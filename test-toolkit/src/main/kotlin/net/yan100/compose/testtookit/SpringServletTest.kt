@@ -14,33 +14,20 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities.address
+package net.yan100.compose.testtookit
 
-import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.alias.int
-import net.yan100.compose.core.alias.string
-import net.yan100.compose.core.models.WGS84
-import net.yan100.compose.ksp.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.ITreeEntity
+import java.lang.annotation.Inherited
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.annotation.Rollback
 
-@MetaDef
-abstract class SuperAddress : ITreeEntity() {
-
-  /** 代码 */
-  abstract var code: SerialCode
-
-  /** 名称 */
-  abstract var name: string
-
-  /** 级别 0 为国家 */
-  abstract var level: int?
-
-  /** 年份版本号 */
-  abstract var yearVersion: string?
-
-  /** 定位 */
-  abstract var center: WGS84?
-
-  /** 是否为终结地址（如市辖区） */
-  abstract var leaf: Boolean?
-}
+@Rollback
+@WithMockUser(roles = ["ROOT", "ADMIN", "USER"])
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Inherited
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
+annotation class SpringServletTest()
