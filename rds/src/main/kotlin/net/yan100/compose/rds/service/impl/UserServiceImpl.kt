@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserServiceImpl(private val userRepo: IUsrRepo, private val fullRepo: IFullUserRepo) : IUserService, CrudService<Usr>(userRepo) {
+
   override fun findUserByAccount(account: String): Usr? {
     return userRepo.findByAccount(account)
   }

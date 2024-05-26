@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface IUsrRepo : IRepo<Usr> {
+
   fun findByAccount(account: String): Usr?
 
   @Query("""
@@ -109,6 +110,12 @@ interface IFullUserRepo : IRepo<FullUsr> {
 
 @Repository
 interface IUserInfoRepo : IRepo<UserInfo> {
+  @Query("""
+    select count(i.id)
+    from UserInfo i
+    join Usr u on u.id = i.userId
+  """) fun countAllByHasUser(): Long
+
   fun existsAllByPhone(phone: String): Boolean
 
   fun findAllByPhone(phone: String): List<UserInfo>

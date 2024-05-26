@@ -202,10 +202,10 @@ net-yan100-compose-test-toolkit = { group = "net.yan100.compose", name = "test-t
 
 [versions]
 ### 增加新版本，提供的 libs 也要更新
-compose-versioncontrol = "1.6.506" ### 每次其他版本更新则更新此版本
+compose-versioncontrol = "1.6.509" ### 每次其他版本更新则更新此版本
 compose = "1.6.495"
 compose-core = "1.6.501"
-compose-rds = "1.6.499"
+compose-rds = "1.6.502"
 compose-test-toolkit = "1.6.495"
 compose-webapidoc = "1.6.497"
 

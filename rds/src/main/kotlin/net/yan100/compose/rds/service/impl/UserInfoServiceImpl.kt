@@ -32,6 +32,10 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: IUserInfoRepo) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
+  override fun countAllByHasUser(): Long {
+    return infoRepo.countAllByHasUser()
+  }
+
   @Transactional(rollbackFor = [Exception::class])
   override fun deleteUserInfoAndUser(userInfoId: RefId) {
     infoRepo.findByIdOrNull(userInfoId)?.also { i ->

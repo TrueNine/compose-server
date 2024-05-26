@@ -27,10 +27,7 @@ import net.yan100.compose.depend.jvalid.group.PostGroup
 @Entity
 @Table(name = "table_gets")
 class GetEntity {
-  @Id
-  @Null(groups = [GetGroup::class], message = "查询时不允许传入 id")
-  @NotNull(groups = [PostGroup::class], message = "新增时必须传入 id")
-  var id: String? = null
+  @Id @Null(groups = [GetGroup::class], message = "查询时不允许传入 id") @NotNull(groups = [PostGroup::class], message = "新增时必须传入 id") var id: String? = null
   var name: String? = null
   var age: Int? = null
 }

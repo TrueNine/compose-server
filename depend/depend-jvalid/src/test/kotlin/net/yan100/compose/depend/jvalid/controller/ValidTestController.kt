@@ -30,8 +30,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("valid-test")
 class ValidTestController {
-  @Autowired
-  lateinit var repo: GetRepo
+  @Autowired lateinit var repo: GetRepo
 
   @GetMapping("get")
   fun getValid(@Validated(GetGroup::class) entity: GetEntity): GetEntity {

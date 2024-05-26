@@ -22,6 +22,8 @@ import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.service.base.IService
 
 interface IUserInfoService : IService<UserInfo> {
+  fun countAllByHasUser(): Long
+
   /**
    * ## 删除用户信息以及其下的账号
    *
