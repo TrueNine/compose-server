@@ -17,16 +17,22 @@
 package net.yan100.compose.rds.service.base
 
 import jakarta.validation.Valid
+import kotlin.reflect.KClass
 import net.yan100.compose.core.alias.Id
+import net.yan100.compose.core.ctx.EventPublisherHolder
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
 import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.repositories.base.IRepo
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 
-abstract class CrudService<T : IEntity>(private val repo: IRepo<T>) : IService<T> {
+abstract class CrudService<T : IEntity>(private val repo: IRepo<T>, private val supportedMergeTypes: List<KClass<*>> = emptyList()) : IService<T> {
+  override val supportedTypes: List<KClass<*>>
+    get() = supportedMergeTypes
+
   override fun saveExists(e: T): T = save(e)
 
   override fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq?): Pr<T> = repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
@@ -66,4 +72,7 @@ abstract class CrudService<T : IEntity>(private val repo: IRepo<T>) : IService<T
   override fun logicDeleteById(id: Id): T? = repo.logicDeleteById(id)
 
   override fun logicDeleteAllById(ids: List<Id>): List<T> = repo.logicDeleteAllById(ids)
+
+  override val mergeEntityEventPublisher: ApplicationEventPublisher
+    get() = EventPublisherHolder.content
 }

@@ -26,7 +26,6 @@ import java.time.LocalDate
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.annotations.SensitiveRef
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.extensionfunctions.nonText
 import net.yan100.compose.core.models.IIdcard2Code
@@ -42,7 +41,7 @@ import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction
 
 @MappedSuperclass
-class SuperUserInfo : IEntity() {
+abstract class SuperUserInfo : IEntity() {
   companion object {
     const val TABLE_NAME = "user_info"
 
@@ -102,7 +101,7 @@ class SuperUserInfo : IEntity() {
   @Schema(title = "qq号") @Column(name = QQ_ACCOUNT) var qqAccount: ReferenceId? = null
 
   /** 电话号码 */
-  @get:SensitiveRef(SensitiveRef.Strategy.PHONE) @Schema(title = "电话号码") @Column(name = PHONE, unique = true) var phone: String? = null
+  @Schema(title = "电话号码") @Column(name = PHONE, unique = true) var phone: String? = null
 
   /** 身份证 */
   @Nullable @Schema(title = "身份证") @Column(name = ID_CARD, unique = true) var idCard: String? = null
@@ -143,7 +142,7 @@ class SuperUserInfo : IEntity() {
 @DynamicUpdate
 @Schema(title = "用户信息")
 @Table(name = SuperUserInfo.TABLE_NAME)
-class UserInfo : SuperUserInfo() {
+open class UserInfo : SuperUserInfo() {
   /** 用户全名 */
   @get:Nullable
   @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)

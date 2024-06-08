@@ -4,7 +4,8 @@ version = libs.versions.compose.core.get()
 
 dependencies {
   api(libs.json.jacksonCoreAnnotations)
-  api(libs.jakarta.validationApi)
+  api(libs.jakarta.validation.jakarta.validation.api)
+  api(libs.jakarta.persistence.jakarta.persistence.api)
   api(libs.org.slf4j.slf4j.api)
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(libs.jakarta.annotation.jakarta.annotation.api)

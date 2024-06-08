@@ -26,12 +26,26 @@ import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.repositories.IUsrRepo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.base.CrudService
+import net.yan100.compose.rds.service.base.IMergeEventService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: IUserInfoRepo) : IUserInfoService, CrudService<UserInfo>(infoRepo) {
+class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: IUserInfoRepo) :
+  IUserInfoService,
+  CrudService<UserInfo>(
+    infoRepo,
+    listOf(
+      UserInfo::class,
+      Usr::class,
+    )
+  ) {
+
+  override fun persistMerge(data: IMergeEventService.MergeData<*>): UserInfo {
+    return data.to as UserInfo
+  }
+
   override fun countAllByHasUser(): Long {
     return infoRepo.countAllByHasUser()
   }

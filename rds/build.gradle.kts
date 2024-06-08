@@ -26,13 +26,14 @@ dependencies {
   implementation(project(":core"))
 
   implementation(libs.spring.security.crypto)
-  implementation(libs.jakarta.validationApi)
+  implementation(libs.jakarta.validation.jakarta.validation.api)
   implementation(libs.spring.webmvc)
   implementation(libs.cn.hutool.hutool.core)
 
   testImplementation(libs.bundles.p6spySpring)
   testImplementation(libs.spring.boot.validation)
   testImplementation(libs.com.mysql.mysql.connector.j)
+  testImplementation(project(":test-toolkit"))
 }
 
 val common: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/common") }

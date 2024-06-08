@@ -28,7 +28,8 @@ import net.yan100.compose.core.util.encrypt.Encryptors
 import net.yan100.compose.security.exceptions.JwtException
 import net.yan100.compose.security.jwt.consts.JwtToken
 import net.yan100.compose.security.jwt.consts.VerifierParam
-import org.slf4j.Logger
+
+private val log = slf4j(JwtVerifier::class)
 
 open class JwtVerifier internal constructor() {
   protected var issuer: String = "issuer with component framework"
@@ -75,21 +76,21 @@ open class JwtVerifier internal constructor() {
           try {
             decode(params)
           } catch (e: Exception) {
-            log.error("jwt 在 decode 时异常", e)
+            log.warn("jwt 在 decode 时异常 ${e.message}")
             null
           }
 
         try {
           verifier.verify(params.token)
         } catch (e: Exception) {
-          log.error("jwt 在 verify 时发生异常", e)
+          log.warn("jwt 在 verify 时发生异常 ${e.message}")
           parseExceptionHandle(e, decoded)
         }
         decoded
       }
   }
 
-  internal fun <T : Any> decryptData(
+  private fun <T : Any> decryptData(
     encData: String,
     targetType: KClass<T>,
     eccPrivateKey: PrivateKey? = this.contentEccPrivateKey,
@@ -98,10 +99,10 @@ open class JwtVerifier internal constructor() {
     return parseContent(content, targetType)
   }
 
-  internal fun <T : Any> parseContent(json: String, classType: KClass<T>) =
+  private fun <T : Any> parseContent(json: String, classType: KClass<T>) =
     runCatching { objectMapper.readValue(json, classType.java) }.onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }.getOrNull()
 
-  internal fun <S : Any, E : Any> parseExceptionHandle(
+  private fun <S : Any, E : Any> parseExceptionHandle(
     e: Exception,
     d: JwtToken<S, E>?,
   ): JwtToken<S, E>? {
@@ -147,7 +148,5 @@ open class JwtVerifier internal constructor() {
 
   companion object {
     @JvmStatic fun createVerifier(): Builder = JwtVerifier().Builder()
-
-    @JvmStatic private val log: Logger = slf4j(JwtVerifier::class)
   }
 }

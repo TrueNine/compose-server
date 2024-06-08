@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AddressServiceImpl(private val repo: IAddressRepo) : IAddressService, CrudService<Address>(repo) {
+
   override fun findByCode(code: SerialCode): Address? {
     return repo.findByCode(code)
   }

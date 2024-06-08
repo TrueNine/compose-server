@@ -18,8 +18,8 @@ package net.yan100.compose.rds.autoconfig
 
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.core.ctx.TenantContextHolder
+import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.util.Str
 import org.hibernate.cfg.AvailableSettings
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer
@@ -29,8 +29,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomi
 class TenantResolver : CurrentTenantIdentifierResolver<String>, HibernatePropertiesCustomizer {
 
   override fun resolveCurrentTenantIdentifier(): String {
-    val id = TenantContextHolder.getCurrentTenantId()
-    return if (null != id && Str.hasText(id)) id else DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT_STR
+    val id = TenantContextHolder.get()
+    return if (id.hasText()) id else DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT_STR
   }
 
   override fun validateExistingCurrentSessions(): Boolean {

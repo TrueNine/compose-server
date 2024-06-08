@@ -14,36 +14,20 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package net.yan100.compose.ksp.annotations.clone
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import java.lang.annotation.Inherited
 
-/**
- * 基础用户传递信息
- *
- * @author T_teng
- * @since 2023-04-06
- */
-open class RequestInfo {
-  lateinit var userId: String
-
-  lateinit var account: String
-
-  @JsonIgnore var deviceId: String? = null
-
-  @JsonIgnore var loginIpAddr: String? = null
-
-  @JsonIgnore var currentIpAddr: String? = null
-
-  override fun toString(): String {
-    return buildString {
-      append(::userId.name)
-      append("=")
-      append(userId)
-      append(",")
-      append(::account.name)
-      append("=")
-      append(account)
-    }
-  }
-}
+@MustBeDocumented
+@Repeatable
+@Inherited
+@Target(
+  AnnotationTarget.FUNCTION,
+  AnnotationTarget.TYPE,
+  AnnotationTarget.CLASS,
+  AnnotationTarget.FIELD,
+  AnnotationTarget.PROPERTY_GETTER,
+  AnnotationTarget.PROPERTY_SETTER
+)
+@Retention(AnnotationRetention.BINARY)
+annotation class CloneDeep {}

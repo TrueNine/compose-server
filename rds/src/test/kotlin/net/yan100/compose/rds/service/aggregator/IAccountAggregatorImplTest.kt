@@ -20,6 +20,8 @@ import java.time.LocalDateTime
 import kotlin.test.*
 import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.rds.RdsEntrance
+import net.yan100.compose.rds.entities.info.UserInfo
+import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -32,6 +34,22 @@ class IAccountAggregatorImplTest {
   @Autowired lateinit var agg: AccountAggregatorImpl
 
   @Autowired lateinit var us: IUserService
+
+  @Autowired lateinit var ui: IUserInfoService
+
+  @Test
+  fun `test assignAccountToUserInfo`() {
+    val userInfo =
+      ui.save(
+        UserInfo().apply {
+          firstName = "赵"
+          lastName = "日天"
+        }
+      )
+    val user = agg.assignAccountToUserInfo("123", userInfo.id)
+
+    assertNotNull(user)
+  }
 
   fun getRegisterParam() =
     IAccountAggregator.RegisterAccountDto().apply {

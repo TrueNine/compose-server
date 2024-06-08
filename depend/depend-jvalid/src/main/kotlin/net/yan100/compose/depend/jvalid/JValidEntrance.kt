@@ -17,5 +17,6 @@
 package net.yan100.compose.depend.jvalid
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.domain.EntityScan
 
-@SpringBootApplication class JValidEntrance {}
+@SpringBootApplication @EntityScan(basePackages = ["net.yan100.compose.depend.jvalid.entities"]) class JValidEntrance {}

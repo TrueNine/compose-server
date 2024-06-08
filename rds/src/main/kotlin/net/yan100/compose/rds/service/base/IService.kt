@@ -28,8 +28,7 @@ import net.yan100.compose.rds.core.util.Pw
  * @author TrueNine
  * @since 2023-05-05
  */
-@JvmDefaultWithoutCompatibility
-interface IService<T : IEntity> {
+interface IService<T : IEntity> : IMergeEventService<T> {
   /**
    * ## 可重写的 保存
    *

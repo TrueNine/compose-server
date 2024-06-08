@@ -14,36 +14,12 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package io.tnt.clonedeep
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import net.yan100.compose.ksp.annotations.clone.CloneDeep
 
-/**
- * 基础用户传递信息
- *
- * @author T_teng
- * @since 2023-04-06
- */
-open class RequestInfo {
-  lateinit var userId: String
-
-  lateinit var account: String
-
-  @JsonIgnore var deviceId: String? = null
-
-  @JsonIgnore var loginIpAddr: String? = null
-
-  @JsonIgnore var currentIpAddr: String? = null
-
-  override fun toString(): String {
-    return buildString {
-      append(::userId.name)
-      append("=")
-      append(userId)
-      append(",")
-      append(::account.name)
-      append("=")
-      append(account)
-    }
-  }
+@CloneDeep
+class Cloneable {
+  var a: String? = null
+  var b: Int? = null
 }

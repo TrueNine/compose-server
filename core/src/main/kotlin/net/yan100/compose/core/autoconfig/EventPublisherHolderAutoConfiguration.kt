@@ -14,36 +14,15 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package net.yan100.compose.core.autoconfig
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import net.yan100.compose.core.ctx.EventPublisherHolder
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.annotation.Configuration
 
-/**
- * 基础用户传递信息
- *
- * @author T_teng
- * @since 2023-04-06
- */
-open class RequestInfo {
-  lateinit var userId: String
-
-  lateinit var account: String
-
-  @JsonIgnore var deviceId: String? = null
-
-  @JsonIgnore var loginIpAddr: String? = null
-
-  @JsonIgnore var currentIpAddr: String? = null
-
-  override fun toString(): String {
-    return buildString {
-      append(::userId.name)
-      append("=")
-      append(userId)
-      append(",")
-      append(::account.name)
-      append("=")
-      append(account)
-    }
+@Configuration
+class EventPublisherHolderAutoConfiguration(publisher: ApplicationEventPublisher) {
+  init {
+    EventPublisherHolder.set(publisher)
   }
 }

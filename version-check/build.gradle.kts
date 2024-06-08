@@ -68,11 +68,11 @@ dependencies {
   api(l.org.springdoc.springdoc.openapi.starter.webmvc.ui)
 
   // apache
-  api(l.apache.commonsPool2)
-  api(l.apache.commonsCompress)
+  api(l.org.apache.commons.commons.pool2)
+  api(l.org.apache.commons.commons.compress)
 
   // kt
-  api(l.kt.kspGoogleApi)
+  api(l.com.google.devtools.ksp.symbol.processing.api)
   api(l.kt.stdlib)
   api(l.kt.stdlibJdk8)
   api(l.kt.reflact)
@@ -113,13 +113,13 @@ dependencies {
   // jakarta
   api(l.jakarta.annotation.jakarta.annotation.api)
   api(l.jakarta.servletApi)
-  api(l.jakarta.persistenceApi)
-  api(l.jakarta.validationApi)
+  api(l.jakarta.persistence.jakarta.persistence.api)
+  api(l.jakarta.validation.jakarta.validation.api)
   api(l.io.swagger.core.v3.swagger.annotations.jakarta)
 
   // net
-  api(l.net.okhttp3)
-  api(l.net.retrofig)
+  api(l.com.squareup.okhttp3.okhttp)
+  api(l.com.squareup.retrofit2.retrofit)
 
   // util
   api(l.net.bytebuddy.byte.buddy)
@@ -129,7 +129,7 @@ dependencies {
   api(l.util.ikanalyzer)
   api(l.util.smilemath)
   api(l.util.easyexcel)
-  api(l.util.freemarker)
+  api(l.org.freemarker.freemarker)
   api(l.util.dozer)
   // hutool
   api(l.cn.hutool.hutool.all)

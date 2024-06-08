@@ -14,36 +14,34 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package net.yan100.compose.core.ctx
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import java.io.Closeable
+import java.util.UUID
+import kotlin.reflect.KClass
+import org.springframework.core.NamedInheritableThreadLocal
 
-/**
- * 基础用户传递信息
- *
- * @author T_teng
- * @since 2023-04-06
- */
-open class RequestInfo {
-  lateinit var userId: String
-
-  lateinit var account: String
-
-  @JsonIgnore var deviceId: String? = null
-
-  @JsonIgnore var loginIpAddr: String? = null
-
-  @JsonIgnore var currentIpAddr: String? = null
-
-  override fun toString(): String {
-    return buildString {
-      append(::userId.name)
-      append("=")
-      append(userId)
-      append(",")
-      append(::account.name)
-      append("=")
-      append(account)
-    }
+abstract class AbstractThreadLocalHolder<T>(nameId: KClass<*>? = null, defaultValue: T? = null) : Closeable {
+  private val holder by lazy {
+    val name = nameId?.qualifiedName ?: this::class.qualifiedName ?: UUID.randomUUID().toString()
+    NamedInheritableThreadLocal<T>(name)
   }
+
+  init {
+    if (defaultValue != null) holder.set(defaultValue)
+  }
+
+  override fun close() = holder.remove()
+
+  var content: T
+    get() = holder.get()
+    set(value) = holder.set(value)
+
+  open fun get(): T = holder.get()
+
+  open fun set(value: T) = holder.set(value)
+
+  fun component1(): T = holder.get()
+
+  fun plusAssign(value: T) = holder.set(value)
 }

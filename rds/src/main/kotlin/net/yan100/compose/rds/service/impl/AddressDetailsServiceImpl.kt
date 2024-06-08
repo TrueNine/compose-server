@@ -56,10 +56,8 @@ class AddressDetailsServiceImpl(
   override fun findFullPathById(id: String): String {
     return detailsRepo.findByIdOrNull(id)?.let { ad ->
       val adPath =
-        ad.addressCode
-          .let { addrCode -> aRepo.findFirstByCode(addrCode)?.let { addr -> aRepo.findParentPath(addr) } }
-          ?.map { it.name }
-          ?.joinToString(separator = "") ?: ""
+        ad.addressCode.let { addrCode -> aRepo.findFirstByCode(addrCode)?.let { addr -> aRepo.findParentPath(addr) } }?.joinToString(separator = "") { it.name }
+          ?: ""
       val maybePath = ad.addressDetails
       "$adPath$maybePath"
     } ?: ""

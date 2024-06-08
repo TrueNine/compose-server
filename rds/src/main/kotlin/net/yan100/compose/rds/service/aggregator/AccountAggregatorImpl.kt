@@ -20,6 +20,7 @@ import jakarta.validation.Valid
 import java.time.LocalDateTime
 import net.yan100.compose.core.IBizCodeGenerator
 import net.yan100.compose.core.alias.RefId
+import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.util.encrypt.Keys
 import net.yan100.compose.rds.core.extensionfunctions.withNew
@@ -40,12 +41,15 @@ class AccountAggregatorImpl(
   private val passwordEncoder: PasswordEncoder,
   private val roleGroupService: IRoleGroupService,
 ) : IAccountAggregator {
+
+  @TODO("触发了脏跟踪特性")
   @Transactional(rollbackFor = [Exception::class])
   override fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr? {
     return if (userInfoService.existsById(userInfoId)) {
       userInfoService.findById(userInfoId)?.let { info ->
         check(info.fullName.hasText()) { "姓名为空，不能转换为呢称" }
         info.pri = true
+
         val account =
           Usr().run {
             this.createUserId = createUserId
@@ -54,9 +58,9 @@ class AccountAggregatorImpl(
             pwdEnc = passwordEncoder.encode(Keys.generateRandomAsciiString())
             userService.saveExists(this)
           }
-        info.userId = account.id
-        userInfoService.saveExists(info)
-        account
+        val saveAccount = userService.saveExists(account)
+        info.userId = saveAccount.id
+        saveAccount
       }
     } else null
   }

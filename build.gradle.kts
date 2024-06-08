@@ -135,7 +135,7 @@ subprojects {
       freeCompilerArgs =
         listOf(
           "-Xjsr305=strict",
-          "-Xjvm-default=all-compatibility",
+          "-Xjvm-default=all",
           "-verbose",
           "-Xjdk-release=${l.versions.java.get()}",
           "-jvm-target=${l.versions.java.get()}",

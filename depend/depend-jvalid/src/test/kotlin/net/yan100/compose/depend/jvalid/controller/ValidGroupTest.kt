@@ -57,12 +57,12 @@ class ValidGroupTest {
     println(fac)
     val ret =
       mockMvc
-        .get(URI("/valid-test/get")) {
+        .get("/valid-test/get") {
           param("name", "123")
           param("age", "123")
           param("id", "123")
         }
-        .andExpect { status { isOk() } }
+        .andExpect { status { isBadRequest() } }
         .andReturn()
         .response
         .contentAsString

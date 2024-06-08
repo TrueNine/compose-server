@@ -14,36 +14,28 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package net.yan100.compose.rds.service.base
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import kotlin.test.Test
+import net.yan100.compose.rds.RdsEntrance
+import net.yan100.compose.rds.entities.info.UserInfo
+import net.yan100.compose.rds.service.IUserInfoService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.Rollback
 
-/**
- * 基础用户传递信息
- *
- * @author T_teng
- * @since 2023-04-06
- */
-open class RequestInfo {
-  lateinit var userId: String
+@Rollback
+@SpringBootTest(classes = [RdsEntrance::class])
+class IMergeEventServiceTest {
+  @Autowired lateinit var service: IUserInfoService
 
-  lateinit var account: String
+  @Test
+  fun `test merge fun 0`() {
+    val from = service.save(UserInfo())
+    val to = service.save(UserInfo())
 
-  @JsonIgnore var deviceId: String? = null
+    val merged = service.cascadeMerge(from, to)
 
-  @JsonIgnore var loginIpAddr: String? = null
-
-  @JsonIgnore var currentIpAddr: String? = null
-
-  override fun toString(): String {
-    return buildString {
-      append(::userId.name)
-      append("=")
-      append(userId)
-      append(",")
-      append(::account.name)
-      append("=")
-      append(account)
-    }
+    println(merged)
   }
 }

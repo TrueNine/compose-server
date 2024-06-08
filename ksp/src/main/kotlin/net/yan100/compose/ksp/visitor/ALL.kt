@@ -19,4 +19,4 @@ package net.yan100.compose.ksp.visitor
 import com.google.devtools.ksp.symbol.KSVisitor
 import net.yan100.compose.ksp.data.ContextData
 
-val allClassVisitor = listOf<KSVisitor<ContextData, Unit>>(JpaNameClassVisitor())
+val allClassVisitor = listOf<KSVisitor<ContextData, Unit>>(JpaNameClassVisitor(), CloneDeepVisitor())
