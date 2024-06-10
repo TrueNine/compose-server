@@ -1,9 +1,9 @@
 [versions]
 ### 增加新版本，提供的 libs 也要更新
-compose-versioncontrol = "1.6.518" ### 每次其他版本更新则更新此版本
+compose-versioncontrol = "1.6.519" ### 每次其他版本更新则更新此版本
 compose = "1.6.503"
 compose-core = "1.6.507"
-compose-rds = "1.6.510"
+compose-rds = "1.6.511"
 compose-test-toolkit = "1.6.501"
 compose-webapidoc = "1.6.503"
 compose-security = "1.6.504"

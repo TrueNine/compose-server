@@ -24,6 +24,8 @@ import net.yan100.compose.rds.service.base.IService
 interface IUserService : IService<Usr> {
   fun findUserByAccount(account: String): Usr?
 
+  fun existsByUserInfoId(userInfoId: String): Boolean
+
   fun findFullUserByAccount(account: String): FullUsr?
 
   fun findAccountByWechatOpenId(openId: String): String?

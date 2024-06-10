@@ -33,6 +33,10 @@ class UserServiceImpl(private val userRepo: IUsrRepo, private val fullRepo: IFul
     return userRepo.findByAccount(account)
   }
 
+  override fun existsByUserInfoId(userInfoId: String): Boolean {
+    return userRepo.existsByUserInfoId(userInfoId)
+  }
+
   override fun findFullUserByAccount(account: String): FullUsr? {
     return fullRepo.findByAccount(account)
   }

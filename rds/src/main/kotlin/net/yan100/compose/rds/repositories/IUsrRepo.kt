@@ -29,19 +29,24 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface IUsrRepo : IRepo<Usr> {
+  @Query("""
+    select count(u.id) > 0
+    from Usr u
+    left join UserInfo i on i.userId = u.id
+  """) fun existsByUserInfoId(userInfoId: RefId): Boolean
 
   fun findByAccount(account: String): Usr?
 
   @Query("""
-    SELECT u.id
-    FROM Usr u
-    WHERE u.account = :account
+    select u.id
+    from Usr u
+    where u.account = :account
   """) fun findIdByAccount(account: String): String
 
   @Query("""
-    SELECT pwdEnc
-    FROM Usr
-    WHERE account = :account
+    select pwdEnc
+    from Usr
+    where account = :account
   """) fun findPwdEncByAccount(account: String): String?
 
   @Query("""
@@ -64,28 +69,28 @@ interface IUsrRepo : IRepo<Usr> {
 
   @Query(
     """
-    SELECT r.name
-    FROM Usr u
-    LEFT JOIN UserRoleGroup urg ON urg.userId = u.id
-    LEFT JOIN RoleGroup rg ON rg.id = urg.roleGroupId
-    LEFT JOIN RoleGroupRole rgr ON rgr.roleGroupId = rg.id
-    LEFT JOIN Role r ON r.id = rgr.roleId
-    WHERE u.account = :account
+    select r.name
+    from Usr u
+    left join UserRoleGroup urg on urg.userId = u.id
+    left join RoleGroup rg on rg.id = urg.roleGroupId
+    left join RoleGroupRole rgr on rgr.roleGroupId = rg.id
+    left join Role r on r.id = rgr.roleId
+    where u.account = :account
   """
   )
   fun findAllRoleNameByAccount(account: String): Set<String>
 
   @Query(
     """
-    SELECT p.name
-    FROM Usr u
-    LEFT JOIN UserRoleGroup urg ON urg.userId = u.id
-    LEFT JOIN RoleGroup rg ON rg.id = urg.roleGroupId
-    LEFT JOIN RoleGroupRole rgr ON rgr.roleGroupId = rg.id
-    LEFT JOIN Role r ON r.id = rgr.roleId
-    LEFT JOIN RolePermissions rp ON rp.roleId = r.id
-    LEFT JOIN Permissions p ON p.id = rp.permissionsId
-    WHERE u.account = :account
+    select p.name
+    from Usr u
+    left join UserRoleGroup urg on urg.userId = u.id
+    left join RoleGroup rg on rg.id = urg.roleGroupId
+    left join RoleGroupRole rgr on rgr.roleGroupId = rg.id
+    left join Role r on r.id = rgr.roleId
+    left join RolePermissions rp on rp.roleId = r.id
+    left join Permissions p on p.id = rp.permissionsId
+    where u.account = :account
   """
   )
   fun findAllPermissionsNameByAccount(account: String): Set<String>
@@ -95,10 +100,10 @@ interface IUsrRepo : IRepo<Usr> {
   @Modifying @Query("UPDATE Usr u SET u.banTime = :banTime WHERE u.account = :account") fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 
   @Query("""
-    SELECT count(i.id) > 0
-    FROM UserInfo i
-    LEFT JOIN Usr u ON i.userId = u.id
-    WHERE i.wechatOpenid = :openId
+    select count(i.id) > 0
+    from UserInfo i
+    left join Usr u on i.userId = u.id
+    where i.wechatOpenid = :openId
   """)
   fun existsByWechatOpenId(openId: String): Boolean
 }
@@ -140,17 +145,17 @@ interface IUserInfoRepo : IRepo<UserInfo> {
 
   /** 根据 微信 openId 查询对应 User */
   @Query("""
-    FROM Usr u
-    LEFT JOIN UserInfo i ON u.id = i.userId
-    WHERE i.wechatOpenid = :openid
+    from Usr u
+    left join UserInfo i ON u.id = i.userId
+    where i.wechatOpenid = :openid
     """)
   fun findUserByWechatOpenId(openid: String): Usr?
 
   /** 根据 电话号码查询用户手机号 */
   @Query("""
-    FROM Usr u
-    LEFT JOIN UserInfo i ON u.id = i.userId
-    WHERE i.phone = :phone
+    from Usr u
+    left join UserInfo i on u.id = i.userId
+    where i.phone = :phone
   """) fun findUserByPhone(phone: String): Usr?
 
   fun existsByPhone(phone: String): Boolean

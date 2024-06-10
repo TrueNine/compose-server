@@ -45,7 +45,7 @@ class AccountAggregatorImpl(
   @TODO("触发了脏跟踪特性")
   @Transactional(rollbackFor = [Exception::class])
   override fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr? {
-    return if (userInfoService.existsById(userInfoId)) {
+    return if (userInfoService.existsById(userInfoId) && !userService.existsByUserInfoId(userInfoId)) {
       userInfoService.findById(userInfoId)?.let { info ->
         check(info.fullName.hasText()) { "姓名为空，不能转换为呢称" }
         info.pri = true
