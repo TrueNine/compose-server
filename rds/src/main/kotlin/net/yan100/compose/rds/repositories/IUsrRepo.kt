@@ -33,7 +33,9 @@ interface IUsrRepo : IRepo<Usr> {
     select count(u.id) > 0
     from Usr u
     left join UserInfo i on i.userId = u.id
-  """) fun existsByUserInfoId(userInfoId: RefId): Boolean
+    where i.id = :userInfoId
+  """)
+  fun existsByUserInfoId(userInfoId: RefId): Boolean
 
   fun findByAccount(account: String): Usr?
 
