@@ -21,9 +21,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
+import net.yan100.compose.core.models.page.IPageParam
 import net.yan100.compose.rds.core.entities.IPageableEntity
-import net.yan100.compose.rds.core.entities.IPageableEntity.Companion.MAX_PAGE_SIZE
-import net.yan100.compose.rds.core.entities.IPageableEntity.Companion.MIN_OFFSET
+import net.yan100.compose.rds.core.util.Pq
 
 /**
  * 分页入参
@@ -32,25 +32,26 @@ import net.yan100.compose.rds.core.entities.IPageableEntity.Companion.MIN_OFFSET
  * @since 2022-12-31
  */
 @Schema(title = "分页请求入参")
-open class PagedRequestParam @JvmOverloads constructor(offset: Int? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false) : IPageableEntity {
+open class PagedRequestParam @JvmOverloads constructor(offset: Int? = Pq.MIN_OFFSET, pageSize: Int? = Pq.MAX_PAGE_SIZE, unPage: Boolean? = false) :
+  IPageableEntity, IPageParam {
 
   @get:JsonIgnore
   @get:Transient
   @set:Transient
   @Transient
-  @get:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
-  @setparam:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
-  override var offset: Int? = MIN_OFFSET
+  @get:Min(value = Pq.MIN_OFFSET.toLong(), message = "分页页码最小为0")
+  @setparam:Min(value = Pq.MIN_OFFSET.toLong(), message = "分页页码最小为0")
+  override var offset: Int? = Pq.MIN_OFFSET
 
   @get:JsonIgnore
   @get:Min(value = 1, message = "页面大小最小为1")
   @setparam:Min(value = 1, message = "页面大小最小为1")
-  @get:Max(value = MAX_PAGE_SIZE.toLong(), message = "分页最大参数为${MAX_PAGE_SIZE}")
-  @setparam:Max(value = MAX_PAGE_SIZE.toLong(), message = "分页最大参数为${MAX_PAGE_SIZE}")
+  @get:Max(value = Pq.MAX_PAGE_SIZE.toLong(), message = "分页最大参数为${Pq.MIN_OFFSET}")
+  @setparam:Max(value = Pq.MAX_PAGE_SIZE.toLong(), message = "分页最大参数为${Pq.MAX_PAGE_SIZE}")
   @get:Transient
   @set:Transient
   @Transient
-  override var pageSize: Int? = MAX_PAGE_SIZE
+  override var pageSize: Int? = Pq.MAX_PAGE_SIZE
 
   @get:JsonIgnore @get:Transient @set:Transient @Transient override var unPage: Boolean? = false
 
