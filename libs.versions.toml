@@ -1,12 +1,13 @@
 [versions]
-### 增加新版本，提供的 libs 也要更新
-compose-versioncontrol = "1.6.519" ### 每次其他版本更新则更新此版本
-compose = "1.6.503"
-compose-core = "1.6.507"
-compose-rds = "1.6.511"
-compose-test-toolkit = "1.6.501"
-compose-webapidoc = "1.6.503"
-compose-security = "1.6.504"
+compose-versioncontrol = "1.6.523"
+compose = "1.6.504"
+compose-depend-webservlet = "1.6.505"
+compose-core = "1.6.510"
+compose-rds = "1.6.514"
+compose-rds-core = "1.6.506"
+compose-test-toolkit = "1.6.502"
+compose-webapidoc = "1.6.504"
+compose-security = "1.6.506"
 composeGroup = "net.yan100.compose"
 
 gradlePlugin-com-diffplug-spotless = "6.25.0"
@@ -90,7 +91,7 @@ net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version
 net-yan100-compose-ksp = { group = "net.yan100.compose", name = "ksp", version.ref = "compose" }
 net-yan100-compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose-rds" }
 net-yan100-compose-rds-gen = { group = "net.yan100.compose", name = "rds-gen", version.ref = "compose" }
-net-yan100-compose-rds-core = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose" }
+net-yan100-compose-rds-core = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rds-core" }
 net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose" }
 net-yan100-compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose-security" }
 net-yan100-compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose" }
@@ -101,7 +102,7 @@ net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable
 net-yan100-compose-datacommon-crawler = { group = "net.yan100.compose", name = "data-common-crawler", version.ref = "compose" }
 net-yan100-compose-datacommon-dataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose" }
 net-yan100-compose-depend-mqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose" }
-net-yan100-compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose" }
+net-yan100-compose-depend-webservlet = { group = "net.yan100.compose", name = "depend-web-servlet", version.ref = "compose-depend-webservlet" }
 net-yan100-compose-depend-webclient = { group = "net.yan100.compose", name = "depend-web-client", version.ref = "compose" }
 net-yan100-compose-depend-jvalid = { group = "net.yan100.compose", name = "depend-jvalid", version.ref = "compose" }
 net-yan100-compose-test-toolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "compose-test-toolkit" }
