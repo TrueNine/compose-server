@@ -22,8 +22,9 @@ import java.io.OutputStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.*
+import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.core.http.Headers
-import net.yan100.compose.core.http.InterAddressUtil
+import net.yan100.compose.core.http.InterAddr
 import net.yan100.compose.core.typing.http.MediaTypes
 
 val HttpServletRequest.headerMap: Map<String, String>
@@ -58,13 +59,14 @@ inline fun HttpServletResponse.useSse(
  * 尽量获取到真实的ip地址
  */
 val HttpServletRequest.remoteRequestIp: String
-  get() = InterAddressUtil.getRequestIpAddress(this)
+  get() = InterAddr.getRequestIpAddress(this)
 
 /** 获取当前设备的 deviceId */
 val HttpServletRequest.deviceId: String
   get() = Headers.getDeviceId(this)
 
 /** ## 设置下载时的东西 */
+@TODO("流使用完毕就关了流")
 fun HttpServletResponse.withDownload(
   fileName: String,
   contentType: MediaTypes = MediaTypes.BINARY,
