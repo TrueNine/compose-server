@@ -19,6 +19,7 @@ package net.yan100.compose.rds.core.models
 import io.swagger.v3.oas.annotations.media.Schema
 import java.io.Serial
 import java.io.Serializable
+import net.yan100.compose.core.models.page.IPage
 
 /**
  * 分页数据包装
@@ -29,12 +30,12 @@ import java.io.Serializable
  */
 @Schema(title = "分页列表信息")
 data class PagedResponseResult<T>(
-  @Schema(title = "数据列表") var dataList: List<T> = mutableListOf(),
-  @get:Schema(title = "结果总数") var total: Long = 0L,
-  @Schema(title = "当前页面大小") var size: Int = 0,
-  @Schema(title = "总页数") var pageSize: Int = 0,
-  @Schema(title = "当前页码") var offset: Long = 0L,
-) : Serializable {
+  @Schema(title = "数据列表") override var dataList: List<T> = emptyList(),
+  @get:Schema(title = "结果总数") override var total: Long = 0L,
+  @Schema(title = "当前页面大小") override var size: Int = 0,
+  @Schema(title = "总页数") override var pageSize: Int = 0,
+  @Schema(title = "当前页码") override var offset: Long = 0L,
+) : Serializable, IPage<T> {
 
   companion object {
     @Serial private val serialVersionUID = 1L
