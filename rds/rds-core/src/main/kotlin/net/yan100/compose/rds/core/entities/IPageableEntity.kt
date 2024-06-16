@@ -19,9 +19,8 @@ package net.yan100.compose.rds.core.entities
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
-import jakarta.validation.constraints.Max
-import jakarta.validation.constraints.Min
 import java.io.Serializable
+import net.yan100.compose.core.models.page.IPageParam
 import net.yan100.compose.rds.core.models.PagedRequestParam
 
 /**
@@ -31,16 +30,13 @@ import net.yan100.compose.rds.core.models.PagedRequestParam
  * @author TrueNine
  * @since 2024-02-27
  */
-interface IPageableEntity : Serializable {
+interface IPageableEntity : IPageParam, Serializable {
   companion object {
-    const val MIN_OFFSET: Int = 0
-    const val MAX_PAGE_SIZE: Int = 42
-
     @JvmStatic
     @JvmOverloads
     fun ofPageableEntity(
-      pageSize: Int = MIN_OFFSET,
-      offset: Int = MAX_PAGE_SIZE,
+      pageSize: Int = IPageParam.MIN_OFFSET,
+      offset: Int = IPageParam.MAX_PAGE_SIZE,
       unPage: Boolean = false,
     ): IPageableEntity = PagedRequestParam(offset, pageSize, unPage)
   }
@@ -50,24 +46,18 @@ interface IPageableEntity : Serializable {
   @get:Schema(
     name = "pageSize",
     type = "int32",
-    title = "页面大小，最大 ${MAX_PAGE_SIZE}，最小 1",
+    title = "页面大小，最大 ${IPageParam.MAX_PAGE_SIZE}，最小 1",
     accessMode = Schema.AccessMode.WRITE_ONLY,
-    defaultValue = MAX_PAGE_SIZE.toString() + ""
+    defaultValue = IPageParam.MAX_PAGE_SIZE.toString() + ""
   )
   @get:JsonIgnore
-  @get:Min(value = 1, message = "页面大小最小为1")
-  @setparam:Min(value = 1, message = "页面大小最小为1")
-  @get:Max(value = MAX_PAGE_SIZE.toLong(), message = "分页最大参数为${MAX_PAGE_SIZE}")
-  @setparam:Max(value = MAX_PAGE_SIZE.toLong(), message = "分页最大参数为${MAX_PAGE_SIZE}")
-  var pageSize: Int?
+  override var pageSize: Int?
 
   @get:Transient
   @set:Transient
   @get:JsonIgnore
   @get:Schema(name = "offset", type = "int32", title = "页码 最小为 0", defaultValue = "0", accessMode = Schema.AccessMode.WRITE_ONLY)
-  @get:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
-  @setparam:Min(value = MIN_OFFSET.toLong(), message = "分页页码最小为0")
-  var offset: Int?
+  override var offset: Int?
 
   @get:Transient
   @set:Transient
@@ -79,5 +69,5 @@ interface IPageableEntity : Serializable {
     accessMode = Schema.AccessMode.WRITE_ONLY,
   )
   @get:JsonIgnore
-  var unPage: Boolean?
+  override var unPage: Boolean?
 }
