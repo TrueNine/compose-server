@@ -14,74 +14,75 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.http;
+package net.yan100.compose.core.http
 
-import jakarta.annotation.Nullable;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import jakarta.servlet.http.HttpServletRequest
+import java.net.InetAddress
+import java.util.*
+import java.util.stream.Collectors
 
 /**
  * @author TrueNine
  * @since 2022-10-28
  */
-public interface InterAddressUtil {
-    String LOCAL_HOST_IP = "127.0.0.1";
-    String LOCAL_HOST_V6 = "0:0:0:0:0:0:0:1";
-    String LOCAL_HOST = "localhost";
-
-    static boolean isLocalAddress(jakarta.servlet.http.HttpServletRequest request) {
-        var remoteHost = request.getRemoteAddr();
-        if (LOCAL_HOST_IP.equalsIgnoreCase(remoteHost)) {
-            return true;
-        }
-        if (LOCAL_HOST.equals(remoteHost)) {
-            return true;
-        }
-
-        return LOCAL_HOST_V6.equalsIgnoreCase(remoteHost);
+interface InterAddr {
+  companion object {
+    private fun isLocalHost(remoteHost: String): Boolean {
+      if (LOCAL_HOST_IP.equals(remoteHost, ignoreCase = true)) return true
+      if (LOCAL_HOST == remoteHost) return true
+      return LOCAL_HOST_V6.equals(remoteHost, ignoreCase = true)
     }
 
-    static String getRequestIpAddress(jakarta.servlet.http.HttpServletRequest request) {
-        var remoteAddress = request.getRemoteAddr();
-        if (isLocalAddress(request)) {
-            try {
-                InetAddress address = InetAddress.getLocalHost();
-                remoteAddress = address.getHostAddress();
-            } catch (Exception ignore) {
-                remoteAddress = LOCAL_HOST_IP;
-            }
-        }
-        return remoteAddress;
-    }
-
-    @Nullable static String getLocalHostName() {
-        String hostName = null;
+    fun getRequestIpAddress(request: HttpServletRequest): String {
+      var remoteAddress = request.remoteAddr
+      if (isLocalHost(remoteAddress)) {
         try {
-            InetAddress addr = InetAddress.getLocalHost();
-            hostName = addr.getHostName();
-        } catch (Exception ignore) {
-            return null;
+          val address = InetAddress.getLocalHost()
+          remoteAddress = address.hostAddress
+        } catch (ignore: Exception) {
+          remoteAddress = LOCAL_HOST_IP
         }
-        return hostName;
+      } else {
+        val xRealIP = request.getHeader(Headers.X_REAL_IP)
+        val xForwardedFor = request.getHeader(Headers.X_FORWARDED_FOR)
+        if (xForwardedFor != null) {
+          remoteAddress = xForwardedFor.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].trim { it <= ' ' }
+        } else if (xRealIP != null) {
+          remoteAddress = xRealIP
+        }
+      }
+      return remoteAddress
     }
 
-    static List<String> getAllLocalHostIP() {
-        List<String> result = new ArrayList<>();
+    private val localHostName: String?
+      get() {
+        val hostName: String
         try {
-            String hostName = getLocalHostName();
-            if (hostName != null) {
-                var addresses = InetAddress.getAllByName(hostName);
-                result.addAll(
-                        Arrays.stream(addresses)
-                                .map(InetAddress::getHostAddress)
-                                .collect(Collectors.toSet()));
-            }
-        } catch (Exception ignore) {
-            return result;
+          val addr = InetAddress.getLocalHost()
+          hostName = addr.hostName
+        } catch (ignore: Exception) {
+          return null
         }
-        return result;
-    }
+        return hostName
+      }
+
+    val allLocalHostIP: List<String>
+      get() {
+        val result: MutableList<String> = ArrayList()
+        try {
+          val hostName = localHostName
+          if (hostName != null) {
+            val addresses = InetAddress.getAllByName(hostName)
+            result.addAll(Arrays.stream(addresses).map { obj: InetAddress -> obj.hostAddress }.collect(Collectors.toSet()))
+          }
+        } catch (ignore: Exception) {
+          return result
+        }
+        return result
+      }
+
+    private const val LOCAL_HOST_IP: String = "127.0.0.1"
+    private const val LOCAL_HOST_V6: String = "0:0:0:0:0:0:0:1"
+    private const val LOCAL_HOST: String = "localhost"
+  }
 }
