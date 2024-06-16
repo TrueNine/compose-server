@@ -1,4 +1,4 @@
-version = libs.versions.compose.rds.get()
+version = libs.versions.compose.rds.asProvider().get()
 
 plugins { alias(libs.plugins.ktKsp) }
 

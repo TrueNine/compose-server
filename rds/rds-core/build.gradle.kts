@@ -1,4 +1,4 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.rds.core.get()
 
 dependencies {
   implementation(project(":core"))

@@ -1,4 +1,4 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.depend.webservlet.get()
 
 dependencies {
   api(libs.spring.boot.web)

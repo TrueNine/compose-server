@@ -1,6 +1,8 @@
 project.version = libs.versions.compose.security.get()
 
 dependencies {
+  implementation(project(":core"))
+  implementation(project(":depend:depend-web-servlet"))
   api(libs.spring.boot.security)
   implementation(libs.cn.hutool.hutool.captcha)
   implementation(libs.security.auth0Jwt)
