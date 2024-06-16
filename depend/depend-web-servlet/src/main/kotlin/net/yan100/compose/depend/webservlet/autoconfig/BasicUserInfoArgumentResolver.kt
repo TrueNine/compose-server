@@ -19,7 +19,7 @@ package net.yan100.compose.depend.webservlet.autoconfig
 import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.http.Headers
-import net.yan100.compose.core.http.InterAddressUtil
+import net.yan100.compose.core.http.InterAddr
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.RequestInfo
 import org.springframework.core.MethodParameter
@@ -30,18 +30,19 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
+private val log = slf4j(BasicUserInfoArgumentResolver::class)
+
 @Component
 class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfigurer {
-  private val log = slf4j(BasicUserInfoArgumentResolver::class)
 
   override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
     super.addArgumentResolvers(resolvers)
-    log.debug("注册用户信息拦ArgumentResolver")
+    log.trace("注册用户信息拦ArgumentResolver")
     resolvers.add(this)
   }
 
   override fun supportsParameter(parameter: MethodParameter): Boolean {
-    log.info("support by parameter = {}", parameter)
+    log.trace("support by parameter = {}", parameter)
     return RequestInfo::class.java.isAssignableFrom(parameter.parameterType)
   }
 
@@ -58,7 +59,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
         RequestInfo().apply {
           val req = webRequest.nativeRequest as HttpServletRequest
           val deviceId = Headers.getDeviceId(req)
-          this.currentIpAddr = InterAddressUtil.getRequestIpAddress(req)
+          this.currentIpAddr = InterAddr.getRequestIpAddress(req)
           this.deviceId = deviceId
         }
       )
