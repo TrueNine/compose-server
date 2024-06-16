@@ -38,7 +38,17 @@ public interface Headers {
     String REFERER = "Referer";
     String USER_AGENT = "User-Agent";
     String X_FORWARDED_FOR = "X-Forwarded-For";
+    String X_FORWARDED_PROTO = "X-Forwarded-Proto";
     String PROXY_CLIENT_IP = "Proxy-Client-IP";
+
+    /**
+     *
+     *
+     * <h2>真实 ip 地址 </h2>
+     *
+     * <p>一般会在 nginx 中设置
+     */
+    String X_REAL_IP = "X-Real-IP";
 
     /** 设备 id */
     String X_DEVICE_ID = "X-Device-Id";
