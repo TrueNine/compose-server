@@ -16,12 +16,14 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
+import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
 import net.yan100.compose.core.extensionfunctions.range.toSafeRange
 import net.yan100.compose.core.models.page.IPage
@@ -43,41 +45,49 @@ fun Path.lines(): List<String> {
   return if (isEmpty()) emptyList() else Files.readAllLines(this)
 }
 
-fun Path.sliceLines(range: LongRange, charset: Charset = Charsets.UTF_8): Sequence<String> {
-  val len = countLines()
-  val n = range.toSafeRange(min = 0, max = len)
+fun Path.sliceLines(range: LongRange, charset: Charset = Charsets.UTF_8, bufferCapacity: Int = capacity, totalLines: Long? = null): Sequence<String> {
+  val lineLength = totalLines ?: countLines()
+  val sliceRange = range.toSafeRange(min = 0, max = lineLength)
   return sequence {
     if (isEmpty()) return@sequence
-    val decoder = charset.newDecoder()
+    val access = RandomAccessFile(this@sliceLines.absolutePathString(), "r")
+    access.channel.use { channel ->
+      val buffer = ByteBuffer.allocate(bufferCapacity)
+      var currentLine = 0L
+      var lineStart = 0L
 
-    FileChannel.open(this@sliceLines, StandardOpenOption.READ).use { channel ->
-      val buffer = ByteBuffer.allocateDirect(capacity)
-
-      var currentPosition = n.first
-      while (currentPosition < n.last) {
-        channel.position(currentPosition)
-        var remainingInRange = n.last - currentPosition
-        buffer.clear()
-
-        while (remainingInRange > 0) {
-          val read = channel.read(buffer)
-          if (read == -1) break
-          remainingInRange -= read
-          currentPosition += read
-          if (remainingInRange <= 0) break
-        }
+      while (currentLine < sliceRange.first) {
+        val bytesRead = channel.read(buffer)
+        if (bytesRead == -1) break
         buffer.flip()
-        // TODO 长度不一
-        val charBuffer = decoder.decode(buffer)
-
-        var lineStart = 0
-        for (i in 0 until charBuffer.limit()) {
-          if (charBuffer[i] == lineSep) {
-            yield(String(charBuffer.array(), lineStart, i - lineStart))
-            lineStart = i + 1
+        while (buffer.hasRemaining()) {
+          if (buffer.get().toInt().toChar() == '\n') {
+            currentLine++
+            if (currentLine >= sliceRange.first) {
+              lineStart = channel.position() - buffer.remaining()
+              break
+            }
           }
         }
-        if (lineStart < charBuffer.limit()) yield(String(charBuffer.array(), lineStart, charBuffer.limit() - lineStart))
+        buffer.clear()
+      }
+      channel.position(lineStart)
+      while (currentLine <= sliceRange.last) {
+        val bytesRead = channel.read(buffer)
+        if (bytesRead == -1) break
+        buffer.flip()
+        buildString {
+          while (buffer.hasRemaining()) {
+            val byte = buffer.get()
+            if (byte.toInt().toChar() == '\n') {
+              currentLine++
+              yield(toString())
+              clear()
+              if (currentLine > sliceRange.last) break
+            } else append(byte.toInt().toChar())
+          }
+        }
+        buffer.clear()
       }
     }
   }
@@ -123,7 +133,7 @@ fun Path.pageLines(param: IPageParam): IPage<String> {
     val p = param.ofSafeTotal(total)
     val range = p.toLongRange()
 
-    val dataList = sliceLines(range).toList()
-    return IPage.DefaultPage(dataList = dataList, total = total, pageSize = p.safePageSize, offset = p.safeOffset.toLong())
+    val dataList = sliceLines(range, totalLines = total).toList()
+    return IPage.of(dataList = dataList, total = total, offset = p.safeOffset.toLong())
   }
 }

@@ -21,6 +21,7 @@ plugins {
   alias(libs.plugins.hibernateOrm)
   alias(libs.plugins.springBootDependencyManagement)
   alias(libs.plugins.ktJvm)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.powerAssert)
   alias(libs.plugins.ktKapt)
   alias(libs.plugins.ktSpring)
   alias(libs.plugins.ktNoArg)
@@ -67,6 +68,8 @@ allprojects {
     withType<BootJar> { enabled = false }
   }
 }
+
+powerAssert { functions = listOf("kotlin.assert", "kotlin.test.assertTrue", "kotlin.test.assertEquals", "kotlin.test.assertNull") }
 
 subprojects {
   apply(plugin = "java")

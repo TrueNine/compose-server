@@ -1,8 +1,8 @@
 [versions]
-compose-versioncontrol = "1.6.523"
+compose-versioncontrol = "1.6.524"
 compose = "1.6.504"
 compose-depend-webservlet = "1.6.505"
-compose-core = "1.6.510"
+compose-core = "1.6.511"
 compose-rds = "1.6.514"
 compose-rds-core = "1.6.506"
 compose-test-toolkit = "1.6.502"
@@ -16,7 +16,7 @@ java = "21" ### https://bell-sw.com/
 kotlin = "2.0.0" ### https://github.com/JetBrains/kotlin/releases
 com-google-devtools-ksp-symbol-processing-api = "2.0.0-1.0.22" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
 kotlinx-io = "0.3.3"
-gradle = "8.8" ### https://mirrors.cloud.tencent.com/gradle
+gradle = "8.5" ### https://mirrors.cloud.tencent.com/gradle
 
 spring-boot = "3.3.0" ### https://spring.io/projects/spring-boot#learn
 spring-cloud = "2023.0.1" ### https://spring.io/projects/spring-cloud#learn
@@ -74,6 +74,7 @@ ktJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ktSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 ktNoArg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
+org-jetbrains-kotlin-plugin-powerAssert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "kotlin" }
 ktAllOpen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 ktLombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
 ktJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }

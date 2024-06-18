@@ -27,11 +27,28 @@ interface IPage<T> {
     override var dataList: List<T> = emptyList(),
     override var total: Long = 0,
     override var size: Int = dataList.size,
-    override var pageSize: Int = 0,
+    override var pageSize: Int = (total / size).toInt(),
     override var offset: Long = 0,
-  ) : IPage<T>
+  ) : IPage<T> {
+    init {
+      if ((total % size) != 0L) pageSize += 1
+    }
+  }
+
+  fun component1(): List<T> = dataList
+
+  fun component2(): Long = total
 
   companion object {
+    @JvmStatic
+    fun <T> of(
+      dataList: List<T> = emptyList(),
+      total: Long = 0,
+      size: Int = dataList.size,
+      pageSize: Int = (total / if (size == 0) 1 else size).toInt(),
+      offset: Long = 0,
+    ): IPage<T> = DefaultPage(dataList, total, size, pageSize, offset)
+
     @JvmStatic
     fun <T> empty(): IPage<T> {
       return DefaultPage()

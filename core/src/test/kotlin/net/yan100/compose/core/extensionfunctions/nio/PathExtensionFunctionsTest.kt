@@ -78,7 +78,6 @@ class PathExtensionFunctionsTest {
 
   @Test
   fun `test page lines`() {
-
     val tempFile = File.createTempFile("test page lines", ".txt")
     tempFile.deleteOnExit()
     tempFile.writeBytes("Hello\nWorld\nThis\nis\na\nTest\ne".toByteArray())
@@ -86,16 +85,23 @@ class PathExtensionFunctionsTest {
     println(tempFile.exists())
     val testPath = tempFile.toPath()
     println(testPath.countLines())
-    val pr =
-      testPath.pageLines(
-        param =
-          object : IPageParam {
-            override var offset: Int? = 1
-            override var pageSize: Int? = 1
-            override var unPage: Boolean? = false
-          }
-      )
 
+    val pr = testPath.pageLines(IPageParam.of(1, 4))
     println(pr)
+
+    assertEquals(pr.total, 7)
+    assertEquals(pr.dataList.size, 4)
+    assertEquals(pr.size, 4)
+    assertEquals(pr.dataList[0], "World")
+    assertEquals(pr.pageSize, 2)
+
+    val pr1 = testPath.pageLines(IPageParam.of(3, 2))
+    println(pr1)
+
+    assertEquals(pr1.total, 7)
+    assertEquals(pr1.dataList.size, 2)
+    assertEquals(pr1.size, 2)
+    assertEquals(pr1.dataList[0], "is")
+    assertEquals(pr1.pageSize, 4)
   }
 }

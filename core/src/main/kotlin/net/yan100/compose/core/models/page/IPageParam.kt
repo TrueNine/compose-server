@@ -79,7 +79,13 @@ interface IPageParam {
     return this
   }
 
-  fun toRange(): IntRange = IntRange(safeOffset, safeOffset + safePageSize)
+  private val safeRandEnd: Int
+    get() {
+      val end = (safeOffset + (safePageSize - 1))
+      return end
+    }
 
-  fun toLongRange(): LongRange = LongRange(safeOffset.toLong(), safeOffset + safePageSize.toLong())
+  fun toRange(): IntRange = IntRange(safeOffset, safeRandEnd)
+
+  fun toLongRange(): LongRange = LongRange(safeOffset.toLong(), safeRandEnd.toLong())
 }
