@@ -20,22 +20,39 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
 import net.yan100.compose.core.extensionfunctions.number.toSafeInt
 
+/**
+ * # 分页参数
+ *
+ * 为所有的分页场景准备的分页参数
+ *
+ * @author TrueNine
+ * @since 2024-06-20
+ */
 interface IPageParam {
-  data class DefaultPageParam(
+  /** ## 一个默认分页实现 */
+  private data class DefaultPageParam(
     @get:Transient override var offset: Int? = MIN_OFFSET,
     @get:Transient override var pageSize: Int? = MAX_PAGE_SIZE,
     @get:Transient override var unPage: Boolean? = false
   ) : IPageParam
 
   companion object {
+    /** ## 最小偏移量 */
     const val MIN_OFFSET: Int = 0
+
+    /** ## 最大分页页面大小 */
     const val MAX_PAGE_SIZE: Int = 42
+
+    /** ## 默认 最大分页实现常量 */
+    val DEFAULT_MAX: IPageParam = of(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
     fun of(offset: Int? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false): IPageParam = DefaultPageParam(offset, pageSize, unPage)
   }
 
+  /** ## 分页 页面 大小 */
   @get:Transient var pageSize: Int?
 
+  /** ## 分页 页面 偏移量 null any */
   @get:Transient
   val safePageSize: Int
     get() = pageSize ?: 0

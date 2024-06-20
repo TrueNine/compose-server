@@ -1,8 +1,8 @@
 [versions]
-compose-versioncontrol = "1.6.524"
+compose-versioncontrol = "1.6.525"
 compose = "1.6.504"
 compose-depend-webservlet = "1.6.505"
-compose-core = "1.6.511"
+compose-core = "1.6.512"
 compose-rds = "1.6.514"
 compose-rds-core = "1.6.506"
 compose-test-toolkit = "1.6.502"

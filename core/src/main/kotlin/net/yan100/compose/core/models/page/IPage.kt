@@ -23,7 +23,7 @@ interface IPage<T> {
   var pageSize: Int
   var offset: Long
 
-  data class DefaultPage<T>(
+  private data class DefaultPage<T>(
     override var dataList: List<T> = emptyList(),
     override var total: Long = 0,
     override var size: Int = dataList.size,
