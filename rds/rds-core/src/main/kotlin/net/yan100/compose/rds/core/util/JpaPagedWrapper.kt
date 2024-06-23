@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.core.util
 
-import net.yan100.compose.core.models.page.IPage
-import net.yan100.compose.core.models.page.IPageParam
-import net.yan100.compose.rds.core.models.PagedRequestParam
+import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.alias.Pr
+import net.yan100.compose.rds.core.models.JpaPagedRequestParam
 import net.yan100.compose.rds.core.models.PagedResponseResult
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -30,13 +30,8 @@ import org.springframework.data.domain.Pageable
  * @author TrueNine
  * @since 2022-12-27
  */
-object PagedWrapper {
-  /** ## 构造一个空的参数 */
-  @JvmStatic fun <T> empty(): PagedResponseResult<T> = PagedResponseResult.empty()
-
-  @JvmField val DEFAULT_MAX: PagedRequestParam = PagedRequestParam(Pq.MIN_OFFSET, Pq.MAX_PAGE_SIZE, false)
-
-  @JvmField val UN_PAGE: PagedRequestParam = PagedRequestParam(Pq.MIN_OFFSET, Pq.MAX_PAGE_SIZE, true)
+object JpaPagedWrapper {
+  @JvmField val DEFAULT_MAX: JpaPagedRequestParam = JpaPagedRequestParam(Pq.MIN_OFFSET, Pq.MAX_PAGE_SIZE, false)
 
   @JvmStatic
   fun <T> result(jpaPage: Page<T>): PagedResponseResult<T> {
@@ -62,7 +57,7 @@ object PagedWrapper {
   }
 
   @JvmStatic
-  fun param(paramSetting: IPageParam? = DEFAULT_MAX): Pageable {
+  fun param(paramSetting: Pq? = Pq.DEFAULT_MAX): Pageable {
     return if (true != paramSetting?.unPage || null == paramSetting.unPage) {
       PageRequest.of(paramSetting?.offset ?: 0, paramSetting?.pageSize ?: Pq.MAX_PAGE_SIZE)
     } else Pageable.unpaged()
@@ -76,7 +71,7 @@ object PagedWrapper {
    */
   @JvmStatic
   fun <T> warpBy(
-    pageParam: PagedRequestParam = DEFAULT_MAX,
+    pageParam: Pq = Pq.DEFAULT_MAX,
     lazySequence: () -> Sequence<T>,
   ): PagedResponseResult<T> {
     val sequence = lazySequence()
@@ -92,19 +87,16 @@ object PagedWrapper {
   }
 }
 
-typealias Pw = PagedWrapper
-
-typealias Pq = IPageParam
-
-typealias Pr<T> = IPage<T>
+@Deprecated("Use Pq instead")
+typealias JpaPw = JpaPagedWrapper
 
 /** # 对分页结果的封装，使得其返回包装对象 */
 val <T> Page<T>.result: Pr<T>
-  get() = PagedWrapper.result(this)
+  get() = JpaPagedWrapper.result(this)
 
 /** # 封装一个新的集合到分页结果 */
-fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> = PagedWrapper.resultByNewList(this, newList)
+fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> = JpaPagedWrapper.resultByNewList(this, newList)
 
 /** # 对分页参数的封装，返回一个包装的对象 */
 val Pq?.page: Pageable
-  get() = PagedWrapper.param(this)
+  get() = JpaPagedWrapper.param(this)
