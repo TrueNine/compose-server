@@ -28,7 +28,6 @@ group = pluginGroup
 version = pluginVersion
 
 repositories {
-  mavenLocal()
   maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"))
   maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"))
   maven(url = uri("https://repo.spring.io/milestone"))
@@ -41,7 +40,6 @@ dependencies {
   implementation(gradleApi())
   implementation(gradleKotlinDsl())
   implementation(libs.gradlePlugin.springBoot)
-  implementation(libs.gradlePlugin.springBootDependencyManagement)
 }
 
 kotlin {
@@ -51,7 +49,7 @@ kotlin {
     freeCompilerArgs =
       listOf(
         "-Xjsr305=strict",
-        "-Xjvm-default=all-compatibility",
+        "-Xjvm-default=all",
         "-verbose",
         "-Xjdk-release=${l.versions.java.get()}",
         "-jvm-target=${l.versions.java.get()}",
@@ -60,18 +58,6 @@ kotlin {
   }
 
   jvmToolchain(21)
-}
-
-tasks {
-  compileJava {
-    options.isFork = true
-    options.forkOptions.memoryMaximumSize = "4G"
-    options.forkOptions.memoryInitialSize = "2G"
-  }
-
-  withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    jvmTargetValidationMode.set(org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.ERROR)
-  }
 }
 
 gradlePlugin {

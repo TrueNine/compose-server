@@ -14,6 +14,8 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.plugin.ide
+package net.yan100.compose.plugin.common
 
-open class IdeExtensionConfig {}
+open class CommonConfig {
+  open var enabled: Boolean = false
+}

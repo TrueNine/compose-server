@@ -16,10 +16,11 @@
  */
 package net.yan100.compose.plugin.jar
 
+import net.yan100.compose.plugin.common.CommonConfig
 import net.yan100.compose.plugin.emptyVersion
 import org.gradle.api.Project
 
-class JarExtensionConfig(project: Project) {
+class JarExtensionConfig(project: Project) : CommonConfig() {
   var bootJarDistName: String = "lib"
   var bootJarConfigName: String = "config"
   var bootJarName: String = project.name

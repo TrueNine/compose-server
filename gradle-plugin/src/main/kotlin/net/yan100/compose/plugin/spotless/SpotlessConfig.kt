@@ -16,4 +16,6 @@
  */
 package net.yan100.compose.plugin.spotless
 
-open class SpotlessConfig {}
+import net.yan100.compose.plugin.common.CommonConfig
+
+open class SpotlessConfig : CommonConfig()

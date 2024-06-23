@@ -17,12 +17,8 @@
 package net.yan100.compose.plugin.entrance
 
 import javax.inject.Inject
-import net.yan100.compose.plugin.clean.CleanExtensionConfig
-import net.yan100.compose.plugin.filler.FillerConfig
 import net.yan100.compose.plugin.generator.GradleGeneratorConfig
-import net.yan100.compose.plugin.ide.IdeExtensionConfig
 import net.yan100.compose.plugin.jar.JarExtensionConfig
-import net.yan100.compose.plugin.publish.PublishExtensionConfig
 import net.yan100.compose.plugin.spotless.SpotlessConfig
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -35,23 +31,12 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.apply
 
 abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
-  val cleanExtension = CleanExtensionConfig()
-  val publishExtension = PublishExtensionConfig()
   val gradleGenerator = GradleGeneratorConfig()
-  val filler = FillerConfig(project)
   val jarExtension = JarExtensionConfig(project)
-  val ideExtension = IdeExtensionConfig()
   val spotless = SpotlessConfig()
 
   /** ## spotless 扩展配置 */
   fun spotless(action: Action<SpotlessConfig>) = action.execute(spotless)
-
-  /**
-   * ## ide 扩展配置
-   *
-   * @param action ide 配置
-   */
-  fun ideExtension(action: Action<IdeExtensionConfig>) = action.execute(ideExtension)
 
   /**
    * ## jar 打包扩展配置
@@ -61,32 +46,11 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   fun jarExtension(action: Action<JarExtensionConfig>) = action.execute(jarExtension)
 
   /**
-   * ## 配置文件填充器
-   *
-   * @param action 配置
-   */
-  fun filler(action: Action<FillerConfig>) = action.execute(filler)
-
-  /**
-   * ## maven or 其他仓库发布扩展配置
-   *
-   * @param action 发布配置
-   */
-  fun publishExtension(action: Action<PublishExtensionConfig>) = action.execute(publishExtension)
-
-  /**
    * ## gradle properties 生成扩展配置
    *
    * @param action 生成配置
    */
   fun gradleGenerator(action: Action<GradleGeneratorConfig>) = action.execute(gradleGenerator)
-
-  /**
-   * ## gradle clean 扩展配置
-   *
-   * @param action 清除配置
-   */
-  fun cleanExtension(action: Action<CleanExtensionConfig>) = action.execute(cleanExtension)
 
   val languages: SetProperty<String>
   val sourceSet: Property<SourceSet>

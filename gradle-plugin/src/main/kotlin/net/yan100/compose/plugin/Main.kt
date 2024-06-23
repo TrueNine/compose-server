@@ -16,13 +16,9 @@
  */
 package net.yan100.compose.plugin
 
-import net.yan100.compose.plugin.clean.CleanExtension
 import net.yan100.compose.plugin.entrance.ConfigEntrance
-import net.yan100.compose.plugin.filler.ReadmeFiller
 import net.yan100.compose.plugin.generator.GradleGenerator
-import net.yan100.compose.plugin.ide.IdeExtension
 import net.yan100.compose.plugin.jar.JarExtension
-import net.yan100.compose.plugin.publish.PublishExtension
 import net.yan100.compose.plugin.spotless.Spotless
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -32,17 +28,19 @@ class Main : Plugin<Project> {
   override fun apply(project: Project) {
     val cfg = project.extensions.create<ConfigEntrance>(ConfigEntrance.DSL_NAME, project)
 
-    val gradleGenerator = GradleGenerator(project, cfg.gradleGenerator)
-    val publish = PublishExtension(project, cfg.publishExtension)
-    val readmeFiller = ReadmeFiller(project, cfg.filler)
-    val ideExtension = IdeExtension(project, cfg.ideExtension)
-    val clean = CleanExtension(project, cfg.cleanExtension)
-    val spotless = Spotless(project, cfg.spotless)
+    if (cfg.gradleGenerator.enabled) {
+      val gradleGenerator = GradleGenerator(project, cfg.gradleGenerator)
+    }
 
-    project.afterEvaluate { p ->
-      p.wrap {
-        val jarExtension = JarExtension(this, cfg.jarExtension)
-        log.debug("注册 jar 扩展 = {}", jarExtension)
+    if (cfg.spotless.enabled) {
+      val spotless = Spotless(project, cfg.spotless)
+    }
+
+    if (cfg.jarExtension.enabled) {
+      project.afterEvaluate { p ->
+        p.wrap {
+          val jarExtension = JarExtension(this, cfg.jarExtension)
+        }
       }
     }
   }
