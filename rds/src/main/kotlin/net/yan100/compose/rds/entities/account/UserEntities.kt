@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.account
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -25,6 +25,7 @@ import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
 import jakarta.validation.constraints.FutureOrPresent
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
@@ -35,6 +36,7 @@ import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.rds.Oto
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.entities.RoleGroup
 import net.yan100.compose.rds.entities.info.FullUserInfo
 import net.yan100.compose.rds.entities.relationship.UserRoleGroup
 import org.hibernate.annotations.DynamicInsert
@@ -70,13 +72,17 @@ abstract class SuperUsr : IEntity() {
   lateinit var account: SerialCode
 
   /** 呢称 */
-  @Nullable @Schema(title = "呢称") @Column(name = NICK_NAME) var nickName: String? = null
+  @Nullable @Schema(title = "呢称") @Column(name = NICK_NAME) @NotBlank var nickName: String? = null
 
   /** 描述 */
   @Nullable @Schema(title = "描述") @Column(name = DOC) var doc: String? = null
 
   /** 密码 */
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) @Size(min = 8) @Schema(title = "密码") @Column(name = PWD_ENC) lateinit var pwdEnc: String
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @Size(min = 8, message = "密码至少 8 位")
+  @Schema(title = "密码")
+  @Column(name = PWD_ENC)
+  lateinit var pwdEnc: String
 
   /** 被封禁结束时间 */
   @Nullable

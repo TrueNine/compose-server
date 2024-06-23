@@ -21,18 +21,23 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.Null
 import jakarta.validation.constraints.Past
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import java.time.LocalDate
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.alias.TODO
+import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.extensionfunctions.nonText
 import net.yan100.compose.core.models.IIdcard2Code
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
-import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.entities.address.AddressDetails
 import net.yan100.compose.rds.entities.attachment.LinkedAttachment
 import org.hibernate.annotations.DynamicInsert
@@ -67,7 +72,7 @@ abstract class SuperUserInfo : IEntity() {
     const val SPARE_PHONE = "spare_phone"
   }
 
-  @Schema(title = "创建此信息的用户") @Column(name = CREATE_USER_ID) var createUserId: ReferenceId? = null
+  @Schema(title = "创建此信息的用户") @Column(name = CREATE_USER_ID) var createUserId: RefId? = null
 
   @Schema(title = "首选用户信息") @Column(name = PRI) var pri: Boolean? = null
 
@@ -78,19 +83,19 @@ abstract class SuperUserInfo : IEntity() {
   @Nullable @Schema(title = "用户头像") @Column(name = AVATAR_IMG_ID) var avatarImgId: RefId? = null
 
   /** 姓 */
-  @Nullable @Schema(title = "姓") @Column(name = FIRST_NAME) var firstName: String? = null
+  @Nullable @Schema(title = "姓") @Column(name = FIRST_NAME) @Size(min = 1, max = 2, message = "姓最短 1, 最长 2") var firstName: String? = null
 
   /** 名 */
-  @Nullable @Schema(title = "名") @Column(name = LAST_NAME) var lastName: String? = null
+  @Nullable @Schema(title = "名") @Size(min = 1, max = 2, message = "名最短 1, 最长 2") @Column(name = LAST_NAME) var lastName: String? = null
 
   /** 邮箱 */
-  @Nullable @Schema(title = "邮箱") @Column(name = EMAIL) var email: @Email String? = null
+  @Nullable @Email(message = "邮箱格式不正确") @Schema(title = "邮箱") @Column(name = EMAIL) var email: @Email(message = "邮箱格式不正确") String? = null
 
   /** 生日 */
-  @Nullable @Schema(title = "生日") @Column(name = BIRTHDAY) @Past var birthday: LocalDate? = null
+  @Nullable @Schema(title = "生日") @Column(name = BIRTHDAY) @Past(message = "没有人出生于未来") var birthday: LocalDate? = null
 
   /** 地址 id */
-  @Nullable @Schema(title = "地址 id") @Column(name = ADDRESS_DETAILS_ID) var addressDetailsId: String? = null
+  @Nullable @Null @TODO("弃用地址 id") @Schema(title = "地址 id") @Column(name = ADDRESS_DETAILS_ID) var addressDetailsId: String? = null
 
   @Nullable @Schema(title = "地址编码") @Column(name = ADDRESS_CODE) var addressCode: SerialCode? = null
 
@@ -101,32 +106,36 @@ abstract class SuperUserInfo : IEntity() {
   @Schema(title = "qq号") @Column(name = QQ_ACCOUNT) var qqAccount: ReferenceId? = null
 
   /** 电话号码 */
-  @Schema(title = "电话号码") @Column(name = PHONE, unique = true) var phone: String? = null
+  @Schema(title = "电话号码") @Pattern(regexp = Regexes.CHINA_PHONE, message = "电话号码格式不正确") @Column(name = PHONE, unique = true) var phone: String? = null
 
   /** 身份证 */
-  @Nullable @Schema(title = "身份证") @Column(name = ID_CARD, unique = true) var idCard: String? = null
+  @Nullable
+  @Schema(title = "身份证")
+  @Pattern(regexp = Regexes.CHINA_ID_CARD, message = "身份证号格式不正确")
+  @Column(name = ID_CARD, unique = true)
+  var idCard: String? = null
 
   /** 性别：0女，1难，2未知 */
-  @Nullable @Schema(title = " 性别：0女，1难，2未知") @Column(name = GENDER) @Convert(converter = GenderTypingConverter::class) var gender: GenderTyping? = null
+  @Nullable @Schema(title = " 性别") @Column(name = GENDER) @Convert(converter = GenderTypingConverter::class) var gender: GenderTyping? = null
 
   /** 微信个人 openId */
   @Nullable @Schema(title = "微信个人 openId") @Column(name = WECHAT_OPENID) var wechatOpenid: String? = null
 
-  @Schema(title = "微信号") @Column(name = WECHAT_ACCOUNT) var wechatAccount: SerialCode? = null
+  @TODO("不再支持微信号") @Schema(title = "微信号") @Column(name = WECHAT_ACCOUNT) var wechatAccount: SerialCode? = null
 
   /** 微信自定义登录id */
   @Nullable @Schema(title = "微信自定义登录id") @Column(name = WECHAT_AUTHID) var wechatAuthid: String? = null
 
-  @Schema(title = "备用手机") @Column(name = SPARE_PHONE) var sparePhone: SerialCode? = null
+  @Schema(title = "备用手机") @Column(name = SPARE_PHONE) @Pattern(regexp = Regexes.CHINA_PHONE, message = "备用手机号码格式不正确") var sparePhone: SerialCode? = null
 
   override fun asNew() {
     super.asNew()
     // 如果存在身份证，则优先采取身份证信息
     if (idCard.hasText()) {
-      val idCard = IIdcard2Code.of(idCard!!)
-      if (null == birthday) birthday = idCard.idcardBirthday
-      if (addressCode.nonText()) addressCode = idCard.idcardDistrictCode
-      if (null == gender) gender = if (idCard.idcardSex) GenderTyping.MAN else GenderTyping.WOMAN
+      val i = IIdcard2Code.of(idCard!!)
+      if (null == birthday) birthday = i.idcardBirthday
+      if (addressCode.nonText()) addressCode = i.idcardDistrictCode
+      if (null == gender) gender = if (i.idcardSex) GenderTyping.MAN else GenderTyping.WOMAN
     }
   }
 }
