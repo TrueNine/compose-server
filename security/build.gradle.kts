@@ -6,7 +6,7 @@ dependencies {
   api(libs.spring.boot.security)
   implementation(libs.cn.hutool.hutool.captcha)
   implementation(libs.security.auth0Jwt)
-  implementation(libs.jakarta.servletApi)
+  implementation(libs.jakarta.servlet.jakarta.servlet.api)
   implementation(libs.spring.webmvc)
   implementation(libs.security.antisamy) {
     // exclude(group = "org.htmlunit:neko-htmlunit", module = "neko-htmlunit")

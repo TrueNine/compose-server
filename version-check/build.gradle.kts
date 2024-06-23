@@ -112,7 +112,7 @@ dependencies {
 
   // jakarta
   api(l.jakarta.annotation.jakarta.annotation.api)
-  api(l.jakarta.servletApi)
+  api(l.jakarta.servlet.jakarta.servlet.api)
   api(l.jakarta.persistence.jakarta.persistence.api)
   api(l.jakarta.validation.jakarta.validation.api)
   api(l.io.swagger.core.v3.swagger.annotations.jakarta)
@@ -128,7 +128,7 @@ dependencies {
   api(l.ognl.ognl)
   api(l.util.ikanalyzer)
   api(l.util.smilemath)
-  api(l.util.easyexcel)
+  api(l.com.alibaba.easyexcel)
   api(l.org.freemarker.freemarker)
   api(l.util.dozer)
   // hutool
@@ -137,7 +137,7 @@ dependencies {
   api(l.org.mapstruct.mapstruct.processor)
 
   //  security
-  api(l.security.jjwtApi)
+  api(l.io.jsonwebtoken.jjwt.api)
   api(l.org.bouncycastle.bcprov.jdk18on)
   api(l.security.auth0Jwt)
   api(l.security.antisamy)

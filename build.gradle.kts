@@ -1,8 +1,4 @@
 import com.diffplug.spotless.LineEnding
-import java.nio.charset.StandardCharsets
-import net.yan100.compose.plugin.aliYunXiao
-import net.yan100.compose.plugin.allAnnotationCompileOnly
-import net.yan100.compose.plugin.distribute
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
@@ -30,7 +26,6 @@ plugins {
 
   alias(libs.plugins.ktJpa)
   alias(libs.plugins.spotless)
-  id(libs.plugins.composeGradle.get().pluginId)
 }
 
 val yunxiaoUrl = extra["yunxiaoUrl"].toString()
@@ -41,26 +36,11 @@ val sonatypePassword = extra["sonatypePassword"].toString()
 
 apply(plugin = libs.plugins.spotless.get().pluginId)
 
-apply(plugin = libs.plugins.composeGradle.get().pluginId)
-
-composeGradle {
-  gradleGenerator { initGradle { mavenType("tencent") } }
-  filler {
-    license {
-      author("TrueNine")
-      website("github.com/TrueNine")
-      email("truenine304520@gmail.com")
-    }
-  }
-}
-
 val l = libs
 
 project.version = libs.versions.compose.asProvider().get()
 
 allprojects {
-  repositories { aliYunXiao() }
-
   project.group = l.versions.composeGroup.get()
 
   tasks {
@@ -86,13 +66,15 @@ subprojects {
   apply(plugin = l.plugins.springBoot.get().pluginId)
   apply(plugin = l.plugins.hibernateOrm.get().pluginId)
   apply(plugin = l.plugins.springBootDependencyManagement.get().pluginId)
-  apply(plugin = l.plugins.composeGradle.get().pluginId)
 
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
 
   dependencies {
     annotationProcessor(l.spring.boot.configureprocessor)
-    allAnnotationCompileOnly(l.org.projectlombok.lombok)
+
+    annotationProcessor(l.org.projectlombok.lombok)
+    compileOnly(l.org.projectlombok.lombok)
+
     implementation(l.bundles.kt)
 
     implementation(l.spring.boot.autoconfigure)
@@ -153,18 +135,10 @@ subprojects {
     withType<AbstractCopyTask> { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
     test { useJUnitPlatform() }
     jar { archiveClassifier.set("") }
-    javadoc { if (JavaVersion.current().isJava9Compatible) (options as StandardJavadocDocletOptions).addBooleanOption("html5", true) }
-
-    compileJava {
-      options.isFork = true
-      options.forkOptions.memoryMaximumSize = "4G"
-      options.forkOptions.memoryInitialSize = "2G"
-    }
   }
 
   publishing {
     repositories {
-      mavenLocal()
       maven(url = uri(yunxiaoUrl)) {
         credentials {
           username = yunxiaoUsername
@@ -174,8 +148,6 @@ subprojects {
     }
   }
 }
-
-rootProject.tasks { wrapper { distribute(libs.versions.gradle.get(), "https://mirrors.cloud.tencent.com/gradle") } }
 
 // https://github.com/diffplug/spotless/tree/main/plugin-gradle#quickstart
 spotless {
@@ -195,7 +167,7 @@ spotless {
     target("**/*.xml")
     indentWithSpaces(2)
     lineEndings = LineEnding.UNIX
-    encoding = StandardCharsets.UTF_8
+    encoding = Charsets.UTF_8
   }
   kotlin {
     indentWithSpaces(2)

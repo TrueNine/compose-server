@@ -1,5 +1,3 @@
-import net.yan100.compose.plugin.annotationProcessorKapt
-
 version = libs.versions.compose.core.get()
 
 dependencies {
@@ -10,11 +8,13 @@ dependencies {
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(libs.jakarta.annotation.jakarta.annotation.api)
 
-  implementation(libs.jakarta.servletApi)
+  implementation(libs.jakarta.servlet.jakarta.servlet.api)
   implementation(libs.spring.modulith.core)
 
   implementation(libs.org.mapstruct.mapstruct.asProvider())
-  annotationProcessorKapt(libs.org.mapstruct.mapstruct.processor)
+
+  kapt(libs.org.mapstruct.mapstruct.processor)
+  annotationProcessor(libs.org.mapstruct.mapstruct.processor)
 
   implementation(libs.org.springframework.boot.spring.boot.starter.json)
   implementation(libs.spring.security.crypto)
