@@ -20,7 +20,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.io.OutputStream
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import java.util.*
 import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.core.http.Headers
@@ -35,7 +34,7 @@ val HttpServletResponse.headerMap: Map<String, String>
 
 inline fun HttpServletResponse.useResponse(
   contentType: MediaTypes = MediaTypes.BINARY,
-  charset: Charset = StandardCharsets.UTF_8,
+  charset: Charset = Charsets.UTF_8,
   locale: Locale = Locale.CHINA,
   crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
@@ -46,7 +45,7 @@ inline fun HttpServletResponse.useResponse(
 }
 
 inline fun HttpServletResponse.useSse(
-  charset: Charset = StandardCharsets.UTF_8,
+  charset: Charset = Charsets.UTF_8,
   locale: Locale = Locale.CHINA,
   crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
@@ -70,7 +69,7 @@ val HttpServletRequest.deviceId: String
 fun HttpServletResponse.withDownload(
   fileName: String,
   contentType: MediaTypes = MediaTypes.BINARY,
-  charset: Charset = StandardCharsets.UTF_8,
+  charset: Charset = Charsets.UTF_8,
   closeBlock: ((outputStream: OutputStream) -> Unit)?,
 ) {
   this.setHeader(Headers.CONTENT_DISPOSITION, Headers.downloadDisposition(fileName, charset))
