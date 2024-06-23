@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import java.util.*
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.ErrorBody
@@ -59,7 +58,7 @@ abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null)
   private fun writeErrorMessage(
     response: HttpServletResponse,
     msg: ErrorBody,
-    charset: Charset = StandardCharsets.UTF_8,
+    charset: Charset = Charsets.UTF_8,
   ) {
     response.status = msg.code!!
     response.characterEncoding = charset.displayName()
