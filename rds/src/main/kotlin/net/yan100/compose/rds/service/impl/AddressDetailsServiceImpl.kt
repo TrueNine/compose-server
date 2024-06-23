@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.rds.core.util.Pq
-import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
 import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.entities.address.AddressDetails
@@ -68,7 +68,7 @@ class AddressDetailsServiceImpl(
       // 地址的路径集合
       val addresses =
         aRepo.findAllByCodeIn(ds.map { it.addressCode }).map { addr ->
-          addr.id to aRepo.findParentPath(addr).sortedBy { it.code }.map { it.name }.joinToString(separator = "") + addr.name
+          addr.id to aRepo.findParentPath(addr).sortedBy { it.code }.joinToString(separator = "") { it.name } + addr.name
         }
       ds.map { dss ->
         val b = addresses.find { it.first == dss.addressId }

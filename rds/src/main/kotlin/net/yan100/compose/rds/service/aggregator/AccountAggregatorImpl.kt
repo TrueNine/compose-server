@@ -24,7 +24,7 @@ import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.util.encrypt.Keys
 import net.yan100.compose.rds.core.extensionfunctions.withNew
-import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
