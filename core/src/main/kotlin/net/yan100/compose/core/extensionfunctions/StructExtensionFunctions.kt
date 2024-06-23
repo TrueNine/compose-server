@@ -49,3 +49,12 @@ fun <K, v> mutableLockMapOf(): MutableMap<K, v> {
 fun <T, C : Collection<T>, R> C?.isNotEmptyRun(block: C.() -> R): R? {
   return if (!this.isNullOrEmpty()) block(this) else null
 }
+
+/**
+ * ## 将 [Pair] 派生为 [Triple]
+ *
+ * @see [Triple]
+ */
+infix fun <A, B, C> Pair<A, B>.and(other: C): Triple<A, B, C> {
+  return Triple(this.first, this.second, other)
+}

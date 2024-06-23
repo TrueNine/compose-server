@@ -18,7 +18,6 @@ package net.yan100.compose.core.encrypt
 
 import java.io.ByteArrayInputStream
 import java.io.IOException
-import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
@@ -47,7 +46,7 @@ class CompressTest {
       return str
     }
     val baos = ByteArrayOutputStream()
-    GZIPOutputStream(baos).use { gzip -> gzip.write(str.toByteArray(StandardCharsets.ISO_8859_1)) }
+    GZIPOutputStream(baos).use { gzip -> gzip.write(str.toByteArray(Charsets.ISO_8859_1)) }
     return Base64.getEncoder().encodeToString(baos.toByteArray())
   }
 
@@ -65,6 +64,6 @@ class CompressTest {
         baos.write(buffer, 0, len)
       }
     }
-    return String(baos.toByteArray(), StandardCharsets.ISO_8859_1)
+    return String(baos.toByteArray(), Charsets.ISO_8859_1)
   }
 }

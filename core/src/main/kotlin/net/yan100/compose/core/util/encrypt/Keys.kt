@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.core.util.encrypt
 
-import java.nio.charset.StandardCharsets
 import java.security.*
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -185,7 +184,7 @@ object Keys {
   ): KeyPair? {
     return runCatching {
         KeyPairGenerator.getInstance(algName, provider).run {
-          initialize(keySize, SecureRandom(seed.toByteArray(StandardCharsets.UTF_8)))
+          initialize(keySize, SecureRandom(seed.toByteArray(Charsets.UTF_8)))
           generateKeyPair()
         }
       }
@@ -220,7 +219,7 @@ object Keys {
   @JvmStatic
   fun generateEccKeyPair(seed: String = generateRandomAsciiString()): EccKeyPair? {
     return runCatching {
-        val random = SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
+        val random = SecureRandom(seed.toByteArray(Charsets.UTF_8))
         val curve = ECNamedCurveTable.getParameterSpec("P-256")
         KeyPairGenerator.getInstance("EC", "BC").run {
           initialize(curve, random)
@@ -243,7 +242,7 @@ object Keys {
   @JvmStatic
   fun generateAesKey(seed: String = DEFAULT_SEED, keySize: Int = AES_KEY_SIZE): SecretKeySpec? {
     return runCatching {
-        val secureRandom = SecureRandom(seed.toByteArray(StandardCharsets.UTF_8))
+        val secureRandom = SecureRandom(seed.toByteArray(Charsets.UTF_8))
         KeyGenerator.getInstance("AES").run {
           init(keySize, secureRandom)
           SecretKeySpec(generateKey().encoded, "AES")

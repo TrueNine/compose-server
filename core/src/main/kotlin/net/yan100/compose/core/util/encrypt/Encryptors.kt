@@ -17,7 +17,6 @@
 package net.yan100.compose.core.util.encrypt
 
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -55,7 +54,7 @@ object Encryptors {
   private const val DEC_MODE = Cipher.DECRYPT_MODE
 
   /** 默认加解密字符串编码格式 */
-  @JvmStatic val charset: Charset = StandardCharsets.UTF_8
+  @JvmStatic val charset: Charset = Charsets.UTF_8
 
   /**
    * @param publicKey 公钥
@@ -268,7 +267,7 @@ object Encryptors {
   fun encryptByAesKeyBase64(
     aesKey: String,
     plaintext: String,
-    charset: Charset = StandardCharsets.UTF_8,
+    charset: Charset = Charsets.UTF_8,
   ): String? = encryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), plaintext, charset)
 
   /**
