@@ -17,10 +17,9 @@
 package net.yan100.compose.rds.service.base
 
 import net.yan100.compose.core.alias.Id
+import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.util.Pq
-import net.yan100.compose.rds.core.util.Pr
-import net.yan100.compose.rds.core.util.Pw
 
 /**
  * # 单一 CRUD 接口
@@ -36,13 +35,13 @@ interface IService<T : IEntity> : IMergeEventService<T> {
    */
   fun saveExists(e: T): T = save(e)
 
-  fun findAll(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+  fun findAll(page: Pq? = Pq.DEFAULT_MAX): Pr<T>
 
-  fun findAllOrderByIdDesc(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+  fun findAllOrderByIdDesc(page: Pq? = Pq.DEFAULT_MAX): Pr<T>
 
   fun findAllOrderByIdDesc(): List<T>
 
-  fun findAllByNotLogicDeleted(page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+  fun findAllByNotLogicDeleted(page: Pq? = Pq.DEFAULT_MAX): Pr<T>
 
   fun findById(id: Id): T?
 
@@ -52,7 +51,7 @@ interface IService<T : IEntity> : IMergeEventService<T> {
 
   fun findByIdAndNotLogicDeletedOrNull(id: Id): T?
 
-  fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq? = Pw.DEFAULT_MAX): Pr<T>
+  fun findAllByIdAndNotLogicDeleted(ids: List<Id>, page: Pq? = Pq.DEFAULT_MAX): Pr<T>
 
   fun countAll(): Long
 

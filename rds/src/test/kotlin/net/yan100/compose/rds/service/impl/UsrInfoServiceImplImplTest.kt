@@ -21,7 +21,7 @@ import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.repositories.IUsrRepo

@@ -22,7 +22,7 @@ import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.alias.NonDesensitizedRef
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.consts.Regexes
-import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaDef
 
 @MetaDef
 abstract class SuperNonDesensitizedAddressDetails : SuperAddressDetails() {

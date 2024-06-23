@@ -24,7 +24,7 @@ import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.models.WGS84
-import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.converters.WGS84Converter
 import net.yan100.compose.rds.core.entities.IEntity
 

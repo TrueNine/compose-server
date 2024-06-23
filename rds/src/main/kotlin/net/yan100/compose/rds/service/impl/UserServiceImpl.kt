@@ -17,8 +17,8 @@
 package net.yan100.compose.rds.service.impl
 
 import java.time.LocalDateTime
-import net.yan100.compose.rds.entities.FullUsr
-import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.account.FullUsr
+import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.repositories.IFullUserRepo
 import net.yan100.compose.rds.repositories.IUsrRepo
 import net.yan100.compose.rds.service.IUserService

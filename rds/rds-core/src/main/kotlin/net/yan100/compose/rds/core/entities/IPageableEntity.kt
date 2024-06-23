@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
 import java.io.Serializable
 import net.yan100.compose.core.models.page.IPageParam
-import net.yan100.compose.rds.core.models.PagedRequestParam
+import net.yan100.compose.rds.core.models.JpaPagedRequestParam
 
 /**
  * ## 内嵌分页的实体类型
@@ -38,7 +38,7 @@ interface IPageableEntity : IPageParam, Serializable {
       pageSize: Int = IPageParam.MIN_OFFSET,
       offset: Int = IPageParam.MAX_PAGE_SIZE,
       unPage: Boolean = false,
-    ): IPageableEntity = PagedRequestParam(offset, pageSize, unPage)
+    ): IPageableEntity = JpaPagedRequestParam(offset, pageSize, unPage)
   }
 
   @get:Transient

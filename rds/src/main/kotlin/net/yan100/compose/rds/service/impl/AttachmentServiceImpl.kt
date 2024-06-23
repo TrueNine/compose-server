@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.rds.core.typing.AttachmentTyping
-import net.yan100.compose.rds.core.util.Pq
-import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
 import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.entities.attachment.Attachment

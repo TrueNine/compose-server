@@ -18,12 +18,11 @@ package net.yan100.compose.rds.base
 
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.extensionfunctions.withNew
-import net.yan100.compose.rds.core.util.Pq
-import net.yan100.compose.rds.core.util.Pr
-import net.yan100.compose.rds.core.util.Pw
 import net.yan100.compose.rds.service.base.IService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.RequestBody
@@ -35,7 +34,7 @@ abstract class BaseController<T : IEntity>(protected val service: IService<T>) {
   // @GetMapping("meta/all")
   @Operation(summary = "【ǃ RDS】分页查询所有数据")
   fun findAllMeta(@Valid page: Pq?): Pr<T> {
-    return service.findAllByNotLogicDeleted(page ?: Pw.DEFAULT_MAX)
+    return service.findAllByNotLogicDeleted(page ?: Pq.DEFAULT_MAX)
   }
 
   @ResponseBody

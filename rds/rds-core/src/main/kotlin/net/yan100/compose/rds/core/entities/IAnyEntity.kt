@@ -33,7 +33,7 @@ import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.PreSaveDeleteReferenceListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
 import net.yan100.compose.rds.core.listener.TableRowDeletePersistenceListener
-import net.yan100.compose.rds.core.models.PagedRequestParam
+import net.yan100.compose.rds.core.models.JpaPagedRequestParam
 import org.hibernate.Hibernate
 import org.jetbrains.annotations.ApiStatus.Experimental
 import org.springframework.data.domain.Persistable
@@ -86,7 +86,7 @@ class IAnyEntity : Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPage
     this.id = id
   }
 
-  @JsonIgnore @kotlin.jvm.Transient @Transient private final val ____page = PagedRequestParam()
+  @JsonIgnore @kotlin.jvm.Transient @Transient private final val ____page = JpaPagedRequestParam()
 
   override fun getId(): Id = this.id.orEmpty()
 

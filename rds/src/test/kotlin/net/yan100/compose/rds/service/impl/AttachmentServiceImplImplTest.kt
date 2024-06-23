@@ -18,9 +18,9 @@ package net.yan100.compose.rds.service.impl
 
 import kotlin.test.*
 import net.yan100.compose.core.ISnowflakeGenerator
+import net.yan100.compose.core.alias.Pq
 import net.yan100.compose.core.util.encrypt.Keys
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.entities.attachment.Attachment
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

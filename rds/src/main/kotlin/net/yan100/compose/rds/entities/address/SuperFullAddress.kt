@@ -21,7 +21,7 @@ import jakarta.persistence.FetchType.EAGER
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
-import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
 

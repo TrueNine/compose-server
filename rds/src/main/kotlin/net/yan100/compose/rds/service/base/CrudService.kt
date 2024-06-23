@@ -19,10 +19,10 @@ package net.yan100.compose.rds.service.base
 import jakarta.validation.Valid
 import kotlin.reflect.KClass
 import net.yan100.compose.core.alias.Id
+import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.core.ctx.EventPublisherHolder
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.util.Pq
-import net.yan100.compose.rds.core.util.Pr
 import net.yan100.compose.rds.core.util.page
 import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.repositories.base.IRepo

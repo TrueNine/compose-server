@@ -21,7 +21,7 @@ import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.rds.entities.Permissions
 import net.yan100.compose.rds.entities.Role
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.repositories.AllRoleEntityRepository
 import net.yan100.compose.rds.repositories.FullRoleGroupEntityRepo
 import net.yan100.compose.rds.service.IPermissionsService

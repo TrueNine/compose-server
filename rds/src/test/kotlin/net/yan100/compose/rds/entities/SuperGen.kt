@@ -16,12 +16,12 @@
  */
 package net.yan100.compose.rds.entities
 
-import net.yan100.compose.ksp.annotations.MetaDef
-import net.yan100.compose.ksp.annotations.MetaName
+import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaName
 import net.yan100.compose.rds.core.entities.IEntity
 
-@net.yan100.compose.ksp.annotations.MetaDef
-@net.yan100.compose.ksp.annotations.MetaName("gen_table")
+@MetaDef
+@MetaName("gen_table")
 abstract class SuperGen : IEntity(), Cloneable {
   var strNullable: String? = null
   var intNonNull: Int by late()

@@ -24,6 +24,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.events.MergeDataBaseEntityEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ApplicationListener
+import org.springframework.transaction.annotation.Transactional
 
 private val log = slf4j<IMergeEventService<*>>()
 
@@ -42,7 +43,6 @@ interface IMergeEventService<T : IEntity> : ApplicationListener<MergeDataBaseEnt
 
   @Suppress("UNCHECKED_CAST") fun persistMerge(data: MergeData<*>): T = data.from as T
 
-  @Suppress("UNCHECKED_CAST")
   override fun onApplicationEvent(event: MergeDataBaseEntityEvent<*>) {
     if (event.processed) return
     if (supportedTypes.isEmpty()) return
@@ -62,6 +62,7 @@ interface IMergeEventService<T : IEntity> : ApplicationListener<MergeDataBaseEnt
     }
   }
 
+  @Transactional(rollbackFor = [Exception::class])
   fun cascadeMerge(from: T, to: T): T {
     val m = MergeDataBaseEntityEvent(from, to)
     log.trace("merge event begin, class = {}", from::class)

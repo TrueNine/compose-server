@@ -23,8 +23,8 @@ import com.querydsl.core.types.dsl.SimpleExpression
 import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
+import net.yan100.compose.core.alias.Pq
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.util.Pq
 import net.yan100.compose.rds.core.util.page
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Sort

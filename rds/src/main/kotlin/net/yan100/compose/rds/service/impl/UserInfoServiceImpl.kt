@@ -20,7 +20,7 @@ import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.rds.core.entities.fromDbData
 import net.yan100.compose.rds.core.extensionfunctions.withNew
-import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.repositories.IUsrRepo

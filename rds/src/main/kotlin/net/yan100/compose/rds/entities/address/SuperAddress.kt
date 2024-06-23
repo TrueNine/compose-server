@@ -20,7 +20,7 @@ import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.alias.int
 import net.yan100.compose.core.alias.string
 import net.yan100.compose.core.models.WGS84
-import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.ITreeEntity
 
 @MetaDef
