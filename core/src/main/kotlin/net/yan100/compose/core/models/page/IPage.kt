@@ -27,11 +27,11 @@ interface IPage<T> {
     override var dataList: List<T> = emptyList(),
     override var total: Long = 0,
     override var size: Int = dataList.size,
-    override var pageSize: Int = (total / size).toInt(),
+    override var pageSize: Int = (total / if (size == 0) 1 else size).toInt(),
     override var offset: Long = 0,
   ) : IPage<T> {
     init {
-      if ((total % size) != 0L) pageSize += 1
+      if (size == 0) pageSize = 0 else if ((total % size) != 0L) pageSize += 1
     }
   }
 

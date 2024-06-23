@@ -14,14 +14,11 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.plugin.publish
+package net.yan100.compose.core.alias
 
-open class PublishExtensionConfig {
-  var localName = DEFAULT_LOCAL_NAME
-  var enable = true
+import net.yan100.compose.core.models.page.IPage
+import net.yan100.compose.core.models.page.IPageParam
 
-  companion object {
-    const val DSL_NAME = "publishExtension"
-    const val DEFAULT_LOCAL_NAME = "local-maven-repo"
-  }
-}
+typealias Pq = IPageParam
+
+typealias Pr<T> = IPage<T>

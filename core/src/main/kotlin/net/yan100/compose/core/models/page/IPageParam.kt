@@ -54,19 +54,21 @@ interface IPageParam {
 
   /** ## 分页 页面 偏移量 null any */
   @get:Transient
+  @get:JsonIgnore
   val safePageSize: Int
     get() = pageSize ?: 0
 
   @get:Transient var offset: Int?
 
   @get:JsonIgnore
+  @get:Transient
   val safeOffset: Int
     get() = offset ?: 0
 
   @get:JsonIgnore @get:Transient var unPage: Boolean?
 
-  @get:Transient
   @get:JsonIgnore
+  @get:Transient
   val safeUnPage: Boolean
     get() = unPage ?: false
 
@@ -98,7 +100,7 @@ interface IPageParam {
 
   private val safeRandEnd: Int
     get() {
-      val end = (safeOffset + (safePageSize - 1))
+      val end = (safeOffset + (safePageSize))
       return end
     }
 
