@@ -17,16 +17,16 @@
 package net.yan100.compose.rds.core.util
 
 import kotlin.test.assertEquals
-import net.yan100.compose.rds.core.util.PagedWrapper.DEFAULT_MAX
+import net.yan100.compose.rds.core.util.JpaPagedWrapper.DEFAULT_MAX
 import org.junit.jupiter.api.Test
 
-class PagedWrapperTest {
+class JpaPagedWrapperTest {
 
   @Test
   fun testWrapBy() {
     val a = generateSequence(0) { it + 1 }.take(1000).map { it.toString() }.toList()
     val b =
-      PagedWrapper.warpBy(DEFAULT_MAX) { a.asSequence() }
+      JpaPagedWrapper.warpBy(DEFAULT_MAX) { a.asSequence() }
         .also {
           assertEquals(it.dataList.size, 42)
           assertEquals(it.size, 42)
