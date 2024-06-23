@@ -17,7 +17,7 @@ dependencies {
   implementation(project(":depend:depend-jvalid"))
 
   ksp(project(":ksp"))
-  implementation(project(":ksp"))
+  implementation(project(":ksp:ksp-core"))
   kapt(variantOf(libs.com.querydsl.querydsl.apt) { classifier("jakarta") })
 
   implementation(variantOf(libs.com.querydsl.querydsl.jpa) { classifier("jakarta") })
