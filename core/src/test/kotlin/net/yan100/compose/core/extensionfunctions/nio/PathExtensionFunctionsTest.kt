@@ -16,36 +16,43 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
-import cn.hutool.core.io.resource.ClassPathResource
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
-import kotlin.io.path.readLines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import net.yan100.compose.core.models.page.IPageParam
 import org.junit.jupiter.api.io.TempDir
 
 class PathExtensionFunctionsTest {
-  private val logPath = Paths.get(ClassPathResource("logs_test/1010.testlog").absolutePath)
-
-  @Test
-  fun `test lines`() {
-    val lines = logPath.readLines().count()
-    val aLines = logPath.lines().count()
-    assertEquals(lines, aLines)
-  }
-
   @TempDir lateinit var tempDir: Path
 
   @Test
+  fun `test slice line first line`() {
+    val firstLineFile = tempDir.resolve("firstLine.txt")
+
+    val firstLine = "\nLine 1\nLine 2\nLine 3\nLine 4\n"
+    File(firstLineFile.toUri()).writeText(firstLine)
+    val lines = firstLineFile.countLines()
+
+    println("test len ${firstLine.length}")
+    println("lines $lines")
+
+    val result = firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
+    val listResult = result.toList()
+  }
+
+  @Test
   fun `test slice lines`() {
-    val tempFile = tempDir.resolve("temp.txt")
+    val tempFile = tempDir.resolve("temper.txt")
     val text = "Line 1\nLine 2\nLine 3\nLine 4"
+    println(text.length)
+
     File(tempFile.toUri()).writeText(text)
 
-    val result = tempFile.sliceLines(0L..text.length)
+    val result = tempFile.sliceLines(sep = "\n", range = 0L..text.length)
     val listResult = result.toList()
+
+    println("line result = $listResult")
 
     assertEquals(4, listResult.size, "The number of lines should be 4")
     assertEquals("Line 1", listResult[0], "The first line should be 'Line 1'")
@@ -59,6 +66,7 @@ class PathExtensionFunctionsTest {
     val tempFile = File.createTempFile("test count lines", ".txt")
     tempFile.deleteOnExit()
     tempFile.writeBytes("Hello\nWorld\nThis\nis\na\nTest\ne".toByteArray())
+
     val testPath = tempFile.toPath()
     val actualLines = testPath.countLines()
     assertEquals(7, actualLines, "The number of lines counted does not match the expected value.")
@@ -80,28 +88,27 @@ class PathExtensionFunctionsTest {
   fun `test page lines`() {
     val tempFile = File.createTempFile("test page lines", ".txt")
     tempFile.deleteOnExit()
-    tempFile.writeBytes("Hello\nWorld\nThis\nis\na\nTest\ne".toByteArray())
+    tempFile.writeText("Hello\nWorld\nThis\nis\na\nTest\ne")
     println(tempFile)
     println(tempFile.exists())
     val testPath = tempFile.toPath()
     println(testPath.countLines())
 
-    val pr = testPath.pageLines(IPageParam.of(1, 4))
+    val pr = testPath.pageLines(IPageParam.of(1, 4), "\n")
     println(pr)
 
-    assertEquals(pr.total, 7)
-    assertEquals(pr.dataList.size, 4)
-    assertEquals(pr.size, 4)
-    assertEquals(pr.dataList[0], "World")
-    assertEquals(pr.pageSize, 2)
+    assertEquals(7, pr.total)
+    assertEquals(4, pr.dataList.size)
+    assertEquals(4, pr.size)
+    assertEquals("World", pr.dataList[0])
+    assertEquals(2, pr.pageSize)
 
-    val pr1 = testPath.pageLines(IPageParam.of(3, 2))
-    println(pr1)
+    val pr1 = testPath.pageLines(IPageParam.of(3, 2), "\n")
 
-    assertEquals(pr1.total, 7)
-    assertEquals(pr1.dataList.size, 2)
-    assertEquals(pr1.size, 2)
-    assertEquals(pr1.dataList[0], "is")
-    assertEquals(pr1.pageSize, 4)
+    assertEquals(7, pr1.total)
+    assertEquals(2, pr1.dataList.size)
+    assertEquals(2, pr1.size)
+    assertEquals("is", pr1.dataList[0])
+    assertEquals(4, pr1.pageSize)
   }
 }
