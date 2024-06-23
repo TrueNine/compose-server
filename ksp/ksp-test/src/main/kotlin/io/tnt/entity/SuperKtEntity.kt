@@ -21,11 +21,11 @@ import jakarta.persistence.Column
 import java.math.BigDecimal
 import java.time.LocalDate
 import kotlin.String
-import net.yan100.compose.ksp.annotations.MetaDef
-import net.yan100.compose.ksp.annotations.MetaName
+import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaName
 
-@net.yan100.compose.ksp.annotations.MetaDef
-@net.yan100.compose.ksp.annotations.MetaName("kt")
+@MetaDef
+@MetaName("kt")
 class SuperKtEntity : SuperBaseEntity(), Cloneable {
   var delegatedNotNull: Int by late()
 

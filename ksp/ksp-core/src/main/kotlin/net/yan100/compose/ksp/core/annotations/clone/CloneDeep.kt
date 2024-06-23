@@ -14,8 +14,20 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.annotations
+package net.yan100.compose.ksp.core.annotations.clone
 
 import java.lang.annotation.Inherited
 
-@MustBeDocumented @Inherited @Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER) annotation class MetaNonNull()
+@MustBeDocumented
+@Repeatable
+@Inherited
+@Target(
+  AnnotationTarget.FUNCTION,
+  AnnotationTarget.TYPE,
+  AnnotationTarget.CLASS,
+  AnnotationTarget.FIELD,
+  AnnotationTarget.PROPERTY_GETTER,
+  AnnotationTarget.PROPERTY_SETTER
+)
+@Retention(AnnotationRetention.BINARY)
+annotation class CloneDeep {}

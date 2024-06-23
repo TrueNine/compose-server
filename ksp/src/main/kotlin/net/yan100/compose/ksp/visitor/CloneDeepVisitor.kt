@@ -27,7 +27,7 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
-import net.yan100.compose.ksp.annotations.clone.CloneDeep
+import net.yan100.compose.ksp.core.annotations.clone.CloneDeep
 import net.yan100.compose.ksp.data.ContextData
 import net.yan100.compose.ksp.dsl.fileDsl
 

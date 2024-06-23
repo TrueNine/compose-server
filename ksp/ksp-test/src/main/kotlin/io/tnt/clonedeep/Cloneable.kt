@@ -16,7 +16,7 @@
  */
 package io.tnt.clonedeep
 
-import net.yan100.compose.ksp.annotations.clone.CloneDeep
+import net.yan100.compose.ksp.core.annotations.clone.CloneDeep
 
 @CloneDeep
 class Cloneable {

@@ -14,23 +14,37 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.annotations
+package net.yan100.compose.ksp.core.annotations
 
 import java.lang.annotation.Inherited
-import net.yan100.compose.core.extensionfunctions.hasText
 
-private typealias tg = AnnotationTarget
+private typealias atg = AnnotationTarget
 
+/**
+ * # 可见性
+ *
+ * 设定元数据的可见性
+ *
+ * 例如：
+ * - 给前端暴露的 val 序列化字段
+ * - 不需要脱敏的字段
+ * - 需要可见性为公开的字段
+ * - 不需要密封的接口
+ *
+ * 但请注意，此类仅控制其字段的可见性，并不直接控制字段的生成， 在绝大多数情况下，字段会按环境要求，注解例如 [kotlin.jvm.Transient],[jakarta.persistence.Transient]等注解
+ */
 @MustBeDocumented
 @Repeatable
 @Inherited
-@Target(tg.FUNCTION, tg.TYPE, tg.CLASS, tg.FIELD, tg.PROPERTY_GETTER, tg.PROPERTY_SETTER, AnnotationTarget.PROPERTY)
+@Target(atg.FUNCTION, atg.TYPE, atg.CLASS, atg.FIELD, atg.PROPERTY_GETTER, atg.PROPERTY_SETTER)
 @Retention(AnnotationRetention.BINARY)
-annotation class MetaName(val value: String = "", val name: String = "")
-
-fun Sequence<MetaName>.getFirstName(): String? {
-  val f = firstOrNull()
-  val value = f?.name
-  val name = f?.value
-  return if (value.hasText()) value else if (name.hasText()) name else null
-}
+annotation class MetaVisible(
+  /** ## 控制其可见性，效果等同于 反向[hidden] */
+  val value: Boolean = true,
+  /** ## 注释其可写性 */
+  val writeOnly: Boolean = false,
+  /** ## 注释其可读性 */
+  val readOnly: Boolean = false,
+  /** ## 是否进行隐藏 */
+  val hidden: Boolean = false
+)

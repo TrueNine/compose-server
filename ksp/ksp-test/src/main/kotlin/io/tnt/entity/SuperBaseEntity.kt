@@ -16,10 +16,10 @@
  */
 package io.tnt.entity
 
-import net.yan100.compose.ksp.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 
-@net.yan100.compose.ksp.annotations.MetaDef
+@MetaDef
 class SuperBaseEntity : IEntity() {
   var baseField: String? = null
 }

@@ -14,16 +14,12 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.plugin.clean
+package net.yan100.compose.ksp.core.annotations
 
-open class CleanExtensionConfig : MutableSet<String> by mutableSetOf(*DEFAULT_CLEANS.toTypedArray()) {
-  internal fun getAllProperties(): Set<String> = this
+import java.lang.annotation.Inherited
 
-  fun delete(vararg path: String) {
-    this += path
-  }
-
-  companion object {
-    val DEFAULT_CLEANS = setOf(".kotlin", ".logs", "gradle.properties", ".logs")
-  }
-}
+@Inherited
+@MustBeDocumented
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)
+annotation class MetaGenerated(val value: String = "")

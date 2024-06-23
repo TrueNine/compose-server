@@ -14,20 +14,15 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.annotations
+package net.yan100.compose.ksp.core.annotations
 
 import java.lang.annotation.Inherited
 
-@MustBeDocumented
-@Repeatable
+private typealias tg = AnnotationTarget
+
 @Inherited
-@Target(
-  AnnotationTarget.FUNCTION,
-  AnnotationTarget.TYPE,
-  AnnotationTarget.CLASS,
-  AnnotationTarget.FIELD,
-  AnnotationTarget.PROPERTY_GETTER,
-  AnnotationTarget.PROPERTY_SETTER
-)
+@Repeatable
+@MustBeDocumented
+@Target(tg.FUNCTION, tg.TYPE, tg.CLASS, tg.FIELD, tg.PROPERTY_GETTER, tg.PROPERTY_SETTER, AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.BINARY)
-annotation class MetaComment(val value: String = "", val title: String = "", val desc: String = "")
+annotation class MetaName(val value: String = "", val name: String = "")

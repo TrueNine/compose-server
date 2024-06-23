@@ -14,20 +14,14 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.annotations.clone
+package net.yan100.compose.ksp.core.extensionfunctions
 
-import java.lang.annotation.Inherited
+import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.ksp.core.annotations.MetaName
 
-@MustBeDocumented
-@Repeatable
-@Inherited
-@Target(
-  AnnotationTarget.FUNCTION,
-  AnnotationTarget.TYPE,
-  AnnotationTarget.CLASS,
-  AnnotationTarget.FIELD,
-  AnnotationTarget.PROPERTY_GETTER,
-  AnnotationTarget.PROPERTY_SETTER
-)
-@Retention(AnnotationRetention.BINARY)
-annotation class CloneDeep {}
+fun Sequence<MetaName>.getFirstName(): String? {
+  val f = firstOrNull()
+  val value = f?.name
+  val name = f?.value
+  return if (value.hasText()) value else if (name.hasText()) name else null
+}

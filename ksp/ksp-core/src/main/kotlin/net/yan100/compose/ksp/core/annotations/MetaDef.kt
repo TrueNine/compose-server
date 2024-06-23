@@ -14,37 +14,28 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.annotations
+package net.yan100.compose.ksp.core.annotations
 
 import java.lang.annotation.Inherited
+import kotlin.reflect.KClass
 
-private typealias atg = AnnotationTarget
-
-/**
- * # 可见性
- *
- * 设定元数据的可见性
- *
- * 例如：
- * - 给前端暴露的 val 序列化字段
- * - 不需要脱敏的字段
- * - 需要可见性为公开的字段
- * - 不需要密封的接口
- *
- * 但请注意，此类仅控制其字段的可见性，并不直接控制字段的生成， 在绝大多数情况下，字段会按环境要求，注解例如 [kotlin.jvm.Transient],[jakarta.persistence.Transient]等注解
- */
 @MustBeDocumented
 @Repeatable
 @Inherited
-@Target(atg.FUNCTION, atg.TYPE, atg.CLASS, atg.FIELD, atg.PROPERTY_GETTER, atg.PROPERTY_SETTER)
+@Target(
+  AnnotationTarget.FUNCTION,
+  AnnotationTarget.TYPE,
+  AnnotationTarget.CLASS,
+  AnnotationTarget.FIELD,
+  AnnotationTarget.PROPERTY_GETTER,
+  AnnotationTarget.PROPERTY_SETTER
+)
 @Retention(AnnotationRetention.BINARY)
-annotation class MetaVisible(
-  /** ## 控制其可见性，效果等同于 反向[hidden] */
-  val value: Boolean = true,
-  /** ## 注释其可写性 */
-  val writeOnly: Boolean = false,
-  /** ## 注释其可读性 */
-  val readOnly: Boolean = false,
-  /** ## 是否进行隐藏 */
-  val hidden: Boolean = false
+annotation class MetaDef(
+  /**
+   * ## 扩展超类，或额外指定的类型
+   *
+   * 例如：在 jpa 当中，默认继承 [net.yan100.compose.rds.core.entities.IEntity]， 但如果需要继承别的类，则可以单独指定，例如：[net.yan100.compose.rds.core.entities.ITreeEntity]
+   */
+  val extendBy: KClass<*> = Unit::class
 )
