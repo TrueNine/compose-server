@@ -31,12 +31,10 @@ class PemFormat(private val pem: String) {
     const val END_START = "${SEPARATOR}END "
 
     @JvmStatic
-    fun ofKey(key: Key, keyType: String? = null): String {
-      return base64ToPem(key.encoded.encodeBase64String, keyType ?: "${key.algorithm} ${key.format ?: ""}")
-    }
+    operator fun get(key: Key, keyType: String? = null): String = get(key.encoded.encodeBase64String, keyType ?: "${key.algorithm} ${key.format ?: ""}")
 
     @JvmStatic
-    fun base64ToPem(base64: String, keyType: String? = null): String {
+    operator fun get(base64: String, keyType: String? = null): String {
       val trim = base64.trim()
       val a = trim.replace("\r", "\n").windowed(LINE_LENGTH, LINE_LENGTH, true).joinToString(System.lineSeparator())
       return "$BEGIN_START${keyType?.uppercase()?.trim() ?: ""}$SEPARATOR" +
