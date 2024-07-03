@@ -93,7 +93,7 @@ object Keys {
 
   @JvmStatic
   fun writeKeyToPem(key: Key, keyType: String? = null): String? =
-    runCatching { PemFormat.ofKey(key, keyType) }.onFailure { log.error(Keys::writeKeyToPem.name, it) }.getOrNull()
+    runCatching { PemFormat[key, keyType] }.onFailure { log.error(Keys::writeKeyToPem.name, it) }.getOrNull()
 
   /**
    * @param secret 密钥
