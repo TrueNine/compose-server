@@ -1,10 +1,7 @@
 project.version = libs.versions.compose.ksp.core.get()
 
 dependencies {
-  api(libs.jakarta.persistence.jakarta.persistence.api)
-  api(libs.jakarta.validation.jakarta.validation.api)
-  api(libs.org.springframework.data.spring.data.commons)
-
+  api(libs.org.springframework.data.springDataCommons)
   api(project(":rds:rds-core"))
   api(project(":core"))
 }
