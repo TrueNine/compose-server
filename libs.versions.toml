@@ -15,29 +15,29 @@ composeGroup = "net.yan100.compose"
 
 spotless = "6.25.0"
 
-gradle = "8.5" ### https://mirrors.cloud.tencent.com/gradle
-java = "21" ### https://bell-sw.com/
-kotlin = "2.0.0" ### https://github.com/JetBrains/kotlin/releases
+gradle = "8.5"
+java = "21"
+kotlin = "2.0.0"
 kotlinx-io = "0.3.3"
-ksp = "2.0.0-1.0.22" ### https://central.sonatype.com/artifact/com.google.devtools.ksp/symbol-processing-api
+ksp = "2.0.0-1.0.22"
 
-spring-boot = "3.3.1" ### https://spring.io/projects/spring-boot#learn
-spring-cloud = "2023.0.1" ### https://spring.io/projects/spring-cloud#learn
-spring-cloudAlibaba = "2021.0.4.0" ### deprecated https://spring.io/projects/spring-cloud-alibaba#learn
-spring-modulith = "1.2.1" ### https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-core?repo=springio-milestone
+spring-boot = "3.3.1"
+spring-cloud = "2023.0.1"
+spring-cloudAlibaba = "2021.0.4.0"
+spring-modulith = "1.2.1"
 
-testng = "7.10.2" ### https://mvnrepository.com/artifact/org.testng/testng
-junit = "5.11.0-M2" ### https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+testng = "7.10.2"
+junit = "5.11.0-M2"
 flyway = "10.15.0"
-mapstruct = "1.6.0.Beta2" ### https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+mapstruct = "1.6.0.Beta2"
 hutool = "5.8.28"
-slf4j = "2.1.0-alpha1" ### https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-mybatis-plus = "3.5.7" ### https://oss.sonatype.org/content/repositories/snapshots/com/baomidou/mybatis-plus-boot-starter/
-jackson = "2.17.0" ### https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-querydsl = "5.1.0" ### https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
-hibernate = "6.5.1.Final" ### https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core   7.0.0.Alpha2  6.5.0.CR2
-drools = "9.44.0.Final" ### https://mvnrepository.com/artifact/org.drools/drools-core
-liteflow = "2.12.1" ### https://mvnrepository.com/artifact/com.yomahub.liteflow/liteflow-spring-boot-starter
+slf4j = "2.1.0-alpha1"
+mybatis-plus = "3.5.7"
+jackson = "2.17.0"
+querydsl = "5.1.0"
+hibernate = "6.5.1.Final"
+drools = "9.44.0.Final"
+liteflow = "2.12.1"
 
 [plugins]
 net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-gradle-plugin" }
