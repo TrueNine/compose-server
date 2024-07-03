@@ -36,9 +36,9 @@ class Main : Plugin<Project> {
       val spotless = Spotless(project, cfg.spotless)
     }
 
-    if (cfg.jarExtension.enabled) {
-      project.afterEvaluate { p ->
-        p.wrap {
+    project.afterEvaluate { s ->
+      if (cfg.jarExtension.enabled) {
+        s.wrap {
           val jarExtension = JarExtension(this, cfg.jarExtension)
         }
       }

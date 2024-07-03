@@ -17,7 +17,6 @@
 package net.yan100.compose.plugin.generator
 
 import java.util.*
-import net.yan100.compose.plugin.common.CommonConfig
 import org.gradle.api.Action
 
 /**
@@ -26,7 +25,10 @@ import org.gradle.api.Action
  * @author TrueNine
  * @since 2024-03-08
  */
-open class GradleGeneratorConfig : CommonConfig() {
+open class GradleGeneratorConfig {
+
+  var enabled: Boolean = false
+
   val initGradle = InitGradleConfig()
 
   fun initGradle(action: Action<InitGradleConfig>) = action.execute(initGradle)

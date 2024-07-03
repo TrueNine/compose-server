@@ -16,6 +16,6 @@
  */
 package net.yan100.compose.plugin.spotless
 
-import net.yan100.compose.plugin.common.CommonConfig
-
-open class SpotlessConfig : CommonConfig()
+open class SpotlessConfig {
+  var enabled: Boolean = false
+}
