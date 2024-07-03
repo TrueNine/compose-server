@@ -30,6 +30,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory
 
+private val log = slf4j(SingleMqttConnectionAutoConfiguration::class)
+
 @Configuration
 class SingleMqttConnectionAutoConfiguration(
   private val p: SingleMqttProperties,
@@ -93,8 +95,6 @@ class SingleMqttConnectionAutoConfiguration(
   }
 
   companion object {
-    private val log = slf4j(SingleMqttConnectionAutoConfiguration::class)
-
     const val CLIENT_FACTORY_BEAN_NAME = "composeMqttClientFactoryChannel"
     const val MQTT_PAHO_CLIENT_BEAN_NAME = "mqttPahoClientBeanName"
   }
