@@ -24,7 +24,6 @@ import java.io.Closeable
  * @author TrueNine
  * @since 2022-10-28
  */
-@JvmDefaultWithoutCompatibility
 interface StreamsMap {
   /**
    * 使用过的流

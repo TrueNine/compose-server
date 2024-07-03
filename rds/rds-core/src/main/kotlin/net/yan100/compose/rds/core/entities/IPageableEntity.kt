@@ -34,7 +34,7 @@ interface IPageableEntity : IPageParam, Serializable {
   companion object {
     @JvmStatic
     @JvmOverloads
-    fun ofPageableEntity(
+    operator fun get(
       pageSize: Int = IPageParam.MIN_OFFSET,
       offset: Int = IPageParam.MAX_PAGE_SIZE,
       unPage: Boolean = false,

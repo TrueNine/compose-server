@@ -29,7 +29,7 @@ import net.yan100.compose.rds.core.typing.userinfo.BloodTyping
 import net.yan100.compose.rds.core.typing.userinfo.DegreeTyping
 import org.springframework.stereotype.Component
 
-@Component @Converter class AttachmentTypingConverter : AttributeConverter<AttachmentTyping?, Int?> by intTyping(AttachmentTyping::findVal)
+@Component @Converter class AttachmentTypingConverter : AttributeConverter<AttachmentTyping?, Int?> by intTyping(AttachmentTyping::get)
 
 @Component @Converter class AuditTypingConverter : AttributeConverter<AuditTyping?, Int?> by intTyping(AuditTyping::findVal)
 

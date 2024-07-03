@@ -37,6 +37,6 @@ enum class AttachmentTyping(private val v: Int) : IntTyping {
   @JsonValue override val value = v
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = entries.find { it.value == v }
+    @JvmStatic operator fun get(v: Int?) = entries.find { it.value == v }
   }
 }

@@ -53,8 +53,8 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
   @Transactional(rollbackFor = [Exception::class])
   override fun deleteUserInfoAndUser(userInfoId: RefId) {
     infoRepo.findByIdOrNull(userInfoId)?.also { i ->
-      deleteById(i.id)
       if (i.userId.hasText()) userRepo.deleteById(i.userId!!)
+      deleteById(i.id)
     }
   }
 
@@ -70,7 +70,8 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
             }
           )
           .first()
-      } else null
+      }
+      else null
     } ?: save(e.withNew())
   }
 

@@ -1,4 +1,0 @@
-url = jdbc:mysql://host
-user = user
-pass = pwd
-showSql = true

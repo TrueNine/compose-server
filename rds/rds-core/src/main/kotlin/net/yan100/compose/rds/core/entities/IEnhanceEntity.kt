@@ -24,7 +24,6 @@ private const val DEPRECATED = "该接口或实体的方法不允许调用"
  * 该实体用于预留增强过的实体类，该接口的方法无需调用
  */
 @Suppress("ALL")
-@JvmDefaultWithoutCompatibility
 interface IEnhanceEntity {
   /** 为自身生成 snowflake id */
   @Throws(NotImplementedError::class)

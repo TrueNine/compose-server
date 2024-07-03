@@ -132,7 +132,7 @@ abstract class SuperUserInfo : IEntity() {
     super.asNew()
     // 如果存在身份证，则优先采取身份证信息
     if (idCard.hasText()) {
-      val i = IIdcard2Code.of(idCard!!)
+      val i = IIdcard2Code.get(idCard!!)
       if (null == birthday) birthday = i.idcardBirthday
       if (addressCode.nonText()) addressCode = i.idcardDistrictCode
       if (null == gender) gender = if (i.idcardSex) GenderTyping.MAN else GenderTyping.WOMAN

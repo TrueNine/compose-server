@@ -20,7 +20,6 @@ import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.annotations.BetaTest
 import net.yan100.compose.rds.core.entities.ITreeEntity
-import net.yan100.compose.rds.entities.address.Address
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Modifying
@@ -35,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional
  * @author TrueNine
  * @since 2023-05-05
  */
-@JvmDefaultWithoutCompatibility
 @NoRepositoryBean
 interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
   fun findChildrenCount(parent: T): BigSerial {
@@ -219,5 +217,5 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
     popRrnByOffset(2, child.rln, child.tgi)
   }
 
-  @Query("from #{#entityName} e where e.nlv = :level") fun findByNodeLevel(level: Long, page: Pageable): Page<Address>
+  @Query("from #{#entityName} e where e.nlv = :level") fun findByNodeLevel(level: Long, page: Pageable): Page<T>
 }
