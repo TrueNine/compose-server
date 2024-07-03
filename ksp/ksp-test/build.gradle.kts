@@ -1,6 +1,6 @@
 plugins {
-  alias(libs.plugins.ktJvm)
-  alias(libs.plugins.ktKsp)
+  alias(libs.plugins.org.jetbrains.kotlin.jvm)
+  alias(libs.plugins.com.google.devtools.ksp)
 }
 
 dependencies {
