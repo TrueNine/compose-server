@@ -180,7 +180,7 @@ class WeChatSinglePayService(
         PaySuccessNotifyResp().apply {
           payCode = transaction.transactionId
           orderCode = transaction.outTradeNo
-          currency = ISO4217.findVal(transaction.amount.currency)
+          currency = ISO4217[transaction.amount.currency]
           meta = mapper.writeValueAsString(transaction)
         }
       } else null
