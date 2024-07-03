@@ -90,7 +90,7 @@ enum class ISO4217(
 
   companion object {
     @JvmStatic
-    fun findVal(v: String?): ISO4217? {
+    operator fun get(v: String?): ISO4217? {
       if (v == null) return null
       var r = entries.find { it.iso4217Str == v }
       if (r == null) r = findValByDesc(v)
