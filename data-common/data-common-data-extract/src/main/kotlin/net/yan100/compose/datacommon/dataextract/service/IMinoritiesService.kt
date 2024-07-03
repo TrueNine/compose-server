@@ -22,7 +22,6 @@ package net.yan100.compose.datacommon.dataextract.service
  * @author TrueNine
  * @since 2024-01-11
  */
-@JvmDefaultWithoutCompatibility
 interface IMinoritiesService {
   companion object {
     @JvmStatic
