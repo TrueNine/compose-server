@@ -1,15 +1,15 @@
 version = libs.versions.compose.asProvider().get()
 
-plugins { alias(libs.plugins.ktKsp) }
+plugins { alias(libs.plugins.com.google.devtools.ksp) }
 
 dependencies {
   testImplementation(project(":test-toolkit"))
   testImplementation(project(":rds:rds-core"))
 
-  testImplementation(libs.spring.boot.web)
-  testImplementation(libs.spring.boot.dataJpa)
+  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
+  testImplementation(libs.org.springframework.boot.springBootStarterDataJpa)
+  implementation(libs.org.springframework.boot.springBootStarterValidation)
 
-  implementation(libs.spring.boot.validation)
   implementation(project(":core"))
 }
 

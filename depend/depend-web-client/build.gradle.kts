@@ -1,7 +1,7 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.spring.boot.webflux)
+  api(libs.org.springframework.boot.springBootStarterWebflux)
   implementation(project(":core"))
 }
 

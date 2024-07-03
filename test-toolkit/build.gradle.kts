@@ -2,10 +2,10 @@ version = libs.versions.compose.test.toolkit.get()
 
 dependencies {
   implementation(project(":core"))
-  implementation(libs.org.springframework.spring.test)
-  implementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
-  implementation(libs.org.springframework.boot.spring.boot.test)
-  implementation(libs.org.springframework.security.spring.security.test)
+  implementation(libs.org.springframework.springTest)
+  implementation(libs.org.springframework.boot.springBootTestAutoconfigure)
+  implementation(libs.org.springframework.boot.springBootTest)
+  implementation(libs.org.springframework.security.springSecurityTest)
 }
 
 publishing {

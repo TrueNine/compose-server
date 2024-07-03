@@ -1,7 +1,7 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.spring.integration.mqtt)
+  api(libs.org.springframework.integration.springIntegrationMqtt)
   implementation(project(":core"))
 }
 

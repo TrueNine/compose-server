@@ -5,8 +5,8 @@ dependencies {
   implementation(project(":core"))
   api(libs.bundles.selenium)
   api(libs.com.microsoft.playwright.playwright)
-  implementation(libs.util.ikanalyzer)
-  implementation(libs.util.smilemath)
+  implementation(libs.com.github.magese.ikAnalyzer)
+  implementation(libs.com.github.haifengl.smileMath)
 }
 
 publishing {

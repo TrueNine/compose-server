@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 val l = libs
 
 val pluginGroup = libs.versions.composeGroup.get()
-val pluginVersion = libs.versions.compose.versioncontrol.get()
+val pluginVersion = libs.versions.compose.gradle.plugin.get()
 val yunxiaoUrl by extra { properties["yunxiaoUrl"] as String }
 val yunxiaoUsername by extra { properties["yunxiaoUsername"] as String }
 val yunxiaoPassword by extra { properties["yunxiaoPassword"] as String }
@@ -12,7 +12,7 @@ val sonatypeUsername by extra { properties["sonatypeUsername"] as String }
 val sonatypePassword by extra { properties["sonatypePassword"] as String }
 
 plugins {
-  alias(libs.plugins.ktJvm)
+  alias(libs.plugins.org.jetbrains.kotlin.jvm)
   java
   signing
   `version-catalog`
@@ -39,7 +39,7 @@ repositories {
 dependencies {
   implementation(gradleApi())
   implementation(gradleKotlinDsl())
-  implementation(libs.gradlePlugin.springBoot)
+  implementation(libs.org.springframework.boot.springBootGradlePlugin)
 }
 
 kotlin {

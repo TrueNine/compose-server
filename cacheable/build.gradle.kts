@@ -1,8 +1,8 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.bundles.spring.redis)
-  api(libs.com.github.ben.manes.caffeine.caffeine)
+  api(libs.bundles.redis)
+  api(libs.com.github.benManes.caffeine.caffeine)
   implementation(project(":core"))
 }
 

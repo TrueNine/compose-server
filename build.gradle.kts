@@ -13,19 +13,19 @@ plugins {
   `visual-studio`
   `maven-publish`
   signing
-  alias(libs.plugins.springBoot)
-  alias(libs.plugins.hibernateOrm)
-  alias(libs.plugins.springBootDependencyManagement)
-  alias(libs.plugins.ktJvm)
+  alias(libs.plugins.com.github.benManes.versions)
+  alias(libs.plugins.org.springframework.boot)
+  alias(libs.plugins.org.hibernate.orm)
+  alias(libs.plugins.io.spring.dependencyManagement)
+  alias(libs.plugins.org.jetbrains.kotlin.jvm)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.powerAssert)
-  alias(libs.plugins.ktKapt)
-  alias(libs.plugins.ktSpring)
-  alias(libs.plugins.ktNoArg)
-  alias(libs.plugins.ktAllOpen)
-  alias(libs.plugins.ktLombok)
-
-  alias(libs.plugins.ktJpa)
-  alias(libs.plugins.spotless)
+  alias(libs.plugins.org.jetbrains.kotlin.kapt)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.noarg)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.allopen)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.lombok)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.jpa)
+  alias(libs.plugins.com.diffplug.spotless)
 }
 
 val yunxiaoUrl = extra["yunxiaoUrl"].toString()
@@ -34,7 +34,7 @@ val yunxiaoPassword = extra["yunxiaoPassword"].toString()
 val sonatypeUsername = extra["sonatypeUsername"].toString()
 val sonatypePassword = extra["sonatypePassword"].toString()
 
-apply(plugin = libs.plugins.spotless.get().pluginId)
+apply(plugin = libs.plugins.com.diffplug.spotless.get().pluginId)
 
 val l = libs
 
@@ -56,30 +56,30 @@ subprojects {
   apply(plugin = "kotlin")
   apply(plugin = "maven-publish")
   apply(plugin = "signing")
-  apply(plugin = l.plugins.ktJvm.get().pluginId)
-  apply(plugin = l.plugins.ktKapt.get().pluginId)
-  apply(plugin = l.plugins.ktLombok.get().pluginId)
-  apply(plugin = l.plugins.ktNoArg.get().pluginId)
-  apply(plugin = l.plugins.ktAllOpen.get().pluginId)
-  apply(plugin = l.plugins.ktSpring.get().pluginId)
-  apply(plugin = l.plugins.ktJpa.get().pluginId)
-  apply(plugin = l.plugins.springBoot.get().pluginId)
-  apply(plugin = l.plugins.hibernateOrm.get().pluginId)
-  apply(plugin = l.plugins.springBootDependencyManagement.get().pluginId)
-
+  apply(plugin = l.plugins.org.jetbrains.kotlin.jvm.get().pluginId)
+  apply(plugin = l.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
+  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.lombok.get().pluginId)
+  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.noarg.get().pluginId)
+  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)
+  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.spring.get().pluginId)
+  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.jpa.get().pluginId)
+  apply(plugin = l.plugins.org.springframework.boot.get().pluginId)
+  apply(plugin = l.plugins.org.hibernate.orm.get().pluginId)
+  apply(plugin = l.plugins.io.spring.dependencyManagement.get().pluginId)
+  apply(plugin = l.plugins.com.github.benManes.versions.get().pluginId)
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
 
   dependencies {
-    annotationProcessor(l.spring.boot.configureprocessor)
+    annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
 
     annotationProcessor(l.org.projectlombok.lombok)
     compileOnly(l.org.projectlombok.lombok)
 
-    implementation(l.bundles.kt)
+    implementation(l.bundles.kotlin)
 
-    implementation(l.spring.boot.autoconfigure)
+    implementation(l.org.springframework.boot.springBootTestAutoconfigure)
 
-    testImplementation(l.bundles.test.springKotlinJunit5)
+    testImplementation(l.bundles.junit5)
   }
 
   dependencyManagement {

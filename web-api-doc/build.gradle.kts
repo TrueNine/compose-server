@@ -2,7 +2,7 @@ version = libs.versions.compose.webapidoc.get()
 
 dependencies {
   implementation(project(":core"))
-  implementation(libs.org.springdoc.springdoc.openapi.starter.webmvc.ui)
+  implementation(libs.org.springdoc.springdocOpenapiStarterWebmvcUi)
 }
 
 publishing {

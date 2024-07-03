@@ -1,11 +1,11 @@
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  api(libs.crawler.jsoup)
-  api(libs.crawler.supercsv)
+  api(libs.org.jsoup.jsoup)
+  api(libs.net.sf.supercsv.superCsv)
   api(libs.com.alibaba.easyexcel) {
     exclude("org.apache.commons", "commons-compress")
-    implementation(libs.org.apache.commons.commons.compress)
+    implementation(libs.org.apache.commons.commonsCompress)
   }
   implementation(project(":core"))
   implementation(project(":depend:depend-web-client"))

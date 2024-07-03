@@ -1,6 +1,6 @@
 version = libs.versions.compose.rds.asProvider().get()
 
-plugins { alias(libs.plugins.ktKsp) }
+plugins { alias(libs.plugins.com.google.devtools.ksp) }
 
 sourceSets {
   main {
@@ -11,28 +11,21 @@ sourceSets {
 }
 
 dependencies {
-  api(libs.bundles.spring.jpa)
-  api(libs.jakarta.annotation.jakarta.annotation.api)
+  api(libs.bundles.jpa)
+  kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
+  implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
+  implementation(libs.org.springframework.security.springSecurityCrypto)
+  implementation(libs.org.springframework.springWebMvc)
+  implementation(libs.cn.hutool.hutoolCore)
 
-  implementation(project(":depend:depend-jvalid"))
+  testImplementation(libs.org.springframework.boot.springBootStarterValidation)
 
   ksp(project(":ksp"))
   implementation(project(":ksp:ksp-core"))
-  kapt(variantOf(libs.com.querydsl.querydsl.apt) { classifier("jakarta") })
-
-  implementation(variantOf(libs.com.querydsl.querydsl.jpa) { classifier("jakarta") })
+  implementation(project(":depend:depend-jvalid"))
   implementation(project(":rds:rds-core"))
-  implementation(libs.jakarta.annotation.jakarta.annotation.api)
   implementation(project(":core"))
 
-  implementation(libs.spring.security.crypto)
-  implementation(libs.jakarta.validation.jakarta.validation.api)
-  implementation(libs.spring.webmvc)
-  implementation(libs.cn.hutool.hutool.core)
-
-  testImplementation(libs.bundles.p6spySpring)
-  testImplementation(libs.spring.boot.validation)
-  testImplementation(libs.com.mysql.mysql.connector.j)
   testImplementation(project(":test-toolkit"))
 }
 
@@ -50,8 +43,8 @@ val postgresqlJar by
       sourceSets.creating {
         resources.srcDir("src/main/resources/postgresql")
         dependencies {
-          implementation(libs.org.flywaydb.flyway.core)
-          runtimeOnly(libs.org.flywaydb.flyway.mysql)
+          implementation(libs.org.flywaydb.flywayCore)
+          runtimeOnly(libs.org.flywaydb.flywayMysql)
         }
       }
     archiveClassifier.set("postgresql")
@@ -64,8 +57,8 @@ val mysqlJar by
       sourceSets.creating {
         resources.srcDir("src/main/resources/mysql")
         dependencies {
-          implementation(libs.org.flywaydb.flyway.core)
-          runtimeOnly(libs.org.flywaydb.flyway.database.postgresql)
+          implementation(libs.org.flywaydb.flywayCore)
+          runtimeOnly(libs.org.flywaydb.flywayDatabasePostgresql)
         }
       }
     archiveClassifier.set("mysql")

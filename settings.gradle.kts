@@ -28,10 +28,6 @@ include("rds")
 
 findProject(":rds")?.name = "rds"
 
-include("rds:rds-gen")
-
-findProject(":rds:rds-gen")?.name = "rds-gen"
-
 include("rds:rds-core")
 
 findProject(":rds:rds-core")?.name = "rds-core"
@@ -107,7 +103,3 @@ findProject(":ksp:ksp-test")?.name = "ksp-test"
 include("ksp:ksp-core")
 
 findProject(":ksp:ksp-core")?.name = "ksp-core"
-
-include("version-check")
-
-findProject(":version-check")?.name = "version-check"

@@ -1,34 +1,33 @@
 version = libs.versions.compose.core.get()
 
 dependencies {
-  api(libs.json.jacksonCoreAnnotations)
-  api(libs.jakarta.validation.jakarta.validation.api)
-  api(libs.jakarta.persistence.jakarta.persistence.api)
-  api(libs.org.slf4j.slf4j.api)
-  api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
-  api(libs.jakarta.annotation.jakarta.annotation.api)
+  api(libs.com.fasterxml.jackson.core.jacksonAnnotations)
+  api(libs.jakarta.validation.jakartaValidationApi)
+  api(libs.jakarta.persistence.jakartaPersistenceApi)
+  api(libs.jakarta.annotation.jakartaAnnotationApi)
+  api(libs.jakarta.servlet.jakartaServletApi)
+  api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)
+  api(libs.org.slf4j.slf4jApi)
 
-  implementation(libs.jakarta.servlet.jakarta.servlet.api)
-  implementation(libs.spring.modulith.core)
+  implementation(libs.org.springframework.modulith.springModulithCore)
+  implementation(libs.org.mapstruct.mapstruct)
 
-  implementation(libs.org.mapstruct.mapstruct.asProvider())
+  kapt(libs.org.mapstruct.mapstructProcessor)
+  annotationProcessor(libs.org.mapstruct.mapstructProcessor)
 
-  kapt(libs.org.mapstruct.mapstruct.processor)
-  annotationProcessor(libs.org.mapstruct.mapstruct.processor)
-
-  implementation(libs.org.springframework.boot.spring.boot.starter.json)
-  implementation(libs.spring.security.crypto)
-  implementation(libs.org.bouncycastle.bcprov.jdk18on)
+  implementation(libs.org.springframework.boot.springBootStarterJson)
+  implementation(libs.org.springframework.security.springSecurityCrypto)
+  implementation(libs.org.bouncycastle.bcprovJdk18on)
 
   // TODO 日志
-  implementation(libs.spring.boot.logging)
+  implementation(libs.org.springframework.boot.springBootStarterLogging)
 
   // TODO hutool
-  implementation(libs.cn.hutool.hutool.core)
-  implementation(libs.cn.hutool.hutool.crypto)
+  implementation(libs.cn.hutool.hutoolCore)
+  implementation(libs.cn.hutool.hutoolCrypto)
 
-  testImplementation(libs.spring.boot.web)
-  testImplementation(libs.org.springframework.boot.spring.boot.starter.json)
+  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
+  testImplementation(libs.org.springframework.boot.springBootStarterJson)
 }
 
 publishing {

@@ -1,17 +1,15 @@
 project.version = libs.versions.compose.security.get()
 
 dependencies {
-  implementation(project(":core"))
-  implementation(project(":depend:depend-web-servlet"))
-  api(libs.spring.boot.security)
-  implementation(libs.cn.hutool.hutool.captcha)
-  implementation(libs.security.auth0Jwt)
-  implementation(libs.jakarta.servlet.jakarta.servlet.api)
-  implementation(libs.spring.webmvc)
-  implementation(libs.security.antisamy) {
+  api(libs.org.springframework.boot.springBootStarterSecurity)
+  implementation(libs.cn.hutool.hutoolCaptcha)
+  implementation(libs.com.auth0.javaJwt)
+  implementation(libs.org.springframework.springWebMvc)
+  implementation(libs.org.owasp.antisamy.antisamy) {
     // exclude(group = "org.htmlunit:neko-htmlunit", module = "neko-htmlunit")
     // implementation(libs.crawler.nekohtml)
   }
+  implementation(project(":depend:depend-web-servlet"))
   implementation(project(":core"))
 }
 
