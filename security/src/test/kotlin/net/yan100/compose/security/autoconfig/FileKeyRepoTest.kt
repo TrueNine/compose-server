@@ -52,8 +52,8 @@ class FileKeyRepoTest {
   @Test
   fun findRsa() {
     val r = Keys.generateRsaKeyPair()!!
-    println(PemFormat.ofKey(r.rsaPublicKey!!))
-    println(PemFormat.ofKey(r.rsaPrivateKey!!))
+    println(PemFormat[r.rsaPublicKey!!])
+    println(PemFormat[r.rsaPrivateKey!!])
 
     val f = FileKeyRepo()
     val k = f.findRsaKeyPairByName("rcc.pem", "rcv.pem")!!
