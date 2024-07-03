@@ -70,8 +70,7 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
             }
           )
           .first()
-      }
-      else null
+      } else null
     } ?: save(e.withNew())
   }
 
