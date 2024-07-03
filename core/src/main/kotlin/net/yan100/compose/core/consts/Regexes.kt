@@ -22,7 +22,6 @@ package net.yan100.compose.core.consts
  * @author TrueNine
  * @since 2023-04-19
  */
-@JvmDefaultWithoutCompatibility
 interface Regexes {
   companion object {
     private const val ONE_ONE = "(1[1-9]|[2-9][0-9])"
