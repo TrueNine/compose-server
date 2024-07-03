@@ -44,6 +44,6 @@ enum class PCB47(
     get() = primaryLang.replace("-", "_")
 
   companion object {
-    @JvmStatic fun findVal(v: String?): PCB47? = entries.find { it.primaryLang == v }
+    @JvmStatic operator fun get(v: String?): PCB47? = entries.find { it.primaryLang == v }
   }
 }
