@@ -49,7 +49,7 @@ interface IIdcard2Code {
   }
 
   companion object {
-    @JvmStatic fun of(idcard2Code: String): IIdcard2Code = DefaultIdcard2Code(idcard2Code.uppercase())
+    @JvmStatic operator fun get(idcard2Code: String): IIdcard2Code = DefaultIdcard2Code(idcard2Code.uppercase())
   }
 
   @get:Transient @get:JsonIgnore val idcard2Code: String
