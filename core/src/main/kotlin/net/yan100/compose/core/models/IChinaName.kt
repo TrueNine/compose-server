@@ -16,10 +16,9 @@
  */
 package net.yan100.compose.core.models
 
-@JvmDefaultWithoutCompatibility
 interface IChinaName {
   companion object {
-    @JvmStatic fun of(name: String): IChinaName = DefaultChinaName(name)
+    @JvmStatic operator fun get(name: String): IChinaName = DefaultChinaName(name)
 
     @JvmStatic
     fun splitName(name: String): Pair<String, String> {
