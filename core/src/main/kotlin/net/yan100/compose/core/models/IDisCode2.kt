@@ -24,7 +24,7 @@ import net.yan100.compose.core.consts.Regexes
 
 /** 二代残疾证代码 */
 interface IDisCode2 : IIdcard2Code {
-  private class DefaultDis2Code(override val disCode: SerialCode) : IDisCode2, IIdcard2Code by IIdcard2Code.of(disCode.substring(0, 18)) {
+  private class DefaultDis2Code(override val disCode: SerialCode) : IDisCode2, IIdcard2Code by IIdcard2Code[disCode.substring(0, 18)] {
     init {
       check(disCode.matches(idCardRegex)) { "$disCode is not a valid disability code" }
     }
@@ -46,10 +46,7 @@ interface IDisCode2 : IIdcard2Code {
   }
 
   companion object {
-    @JvmStatic
-    fun of(code: String): IDisCode2 {
-      return DefaultDis2Code(code.uppercase())
-    }
+    @JvmStatic operator fun get(code: String): IDisCode2 = DefaultDis2Code(code.uppercase())
   }
 
   @get:Transient
