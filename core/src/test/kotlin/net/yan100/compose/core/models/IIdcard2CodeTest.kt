@@ -35,13 +35,13 @@ class IIdcard2CodeTest {
   @Test fun idcardUpperCase() {}
 
   @Test
-  fun of() {
-    IIdcard2Code.of("110101199001011234").let {
+  fun get() {
+    IIdcard2Code["110101199001011234"].let {
       assertEquals("110101", it.idcardDistrictCode)
       assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
       assertEquals(true, it.idcardSex)
     }
-    IIdcard2Code.of("110101199001011204").let {
+    IIdcard2Code.get("110101199001011204").let {
       assertEquals("110101", it.idcardDistrictCode)
       assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
       assertEquals(false, it.idcardSex)

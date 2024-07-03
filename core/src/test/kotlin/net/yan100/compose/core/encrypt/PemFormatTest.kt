@@ -38,7 +38,7 @@ class PemFormatTest {
   fun testParseBase64() {
     val base64 = "base64string1241251251252362374575668679679679vvwsetgwetweywy262362737fsdfsehrejertjrtyj"
     val keyType = "rsa private key"
-    val result = PemFormat.base64ToPem(base64, keyType)
+    val result = PemFormat[base64, keyType]
     val pem = PemFormat(result)
     // Call the function to be tested and check the result
     println(result)

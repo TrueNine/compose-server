@@ -94,7 +94,7 @@ class PathExtensionFunctionsTest {
     val testPath = tempFile.toPath()
     println(testPath.countLines())
 
-    val pr = testPath.pageLines(IPageParam.of(1, 4), "\n")
+    val pr = testPath.pageLines(IPageParam.get(1, 4), "\n")
     println(pr)
 
     assertEquals(7, pr.total)
@@ -103,7 +103,7 @@ class PathExtensionFunctionsTest {
     assertEquals("World", pr.dataList[0])
     assertEquals(2, pr.pageSize)
 
-    val pr1 = testPath.pageLines(IPageParam.of(3, 2), "\n")
+    val pr1 = testPath.pageLines(IPageParam.get(3, 2), "\n")
 
     assertEquals(7, pr1.total)
     assertEquals(2, pr1.dataList.size)
