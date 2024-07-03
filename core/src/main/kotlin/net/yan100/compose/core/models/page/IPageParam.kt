@@ -18,6 +18,7 @@ package net.yan100.compose.core.models.page
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
+import java.io.Serializable
 import net.yan100.compose.core.extensionfunctions.number.toSafeInt
 
 /**
@@ -28,7 +29,7 @@ import net.yan100.compose.core.extensionfunctions.number.toSafeInt
  * @author TrueNine
  * @since 2024-06-20
  */
-interface IPageParam {
+interface IPageParam : Serializable {
   /** ## 一个默认分页实现 */
   private data class DefaultPageParam(
     @get:Transient override var offset: Int? = MIN_OFFSET,
@@ -44,9 +45,12 @@ interface IPageParam {
     const val MAX_PAGE_SIZE: Int = 42
 
     /** ## 默认 最大分页实现常量 */
-    val DEFAULT_MAX: IPageParam = of(MIN_OFFSET, MAX_PAGE_SIZE, false)
+    val DEFAULT_MAX: IPageParam = get(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
-    fun of(offset: Int? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false): IPageParam = DefaultPageParam(offset, pageSize, unPage)
+    @JvmStatic
+    @JvmOverloads
+    operator fun get(offset: Int? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false): IPageParam =
+      DefaultPageParam(offset, pageSize, unPage)
   }
 
   /** ## 分页 页面 大小 */
@@ -78,7 +82,7 @@ interface IPageParam {
     return this
   }
 
-  fun ofSafeTotal(total: Long): IPageParam {
+  operator fun get(total: Long): IPageParam {
     if (total <= 0) {
       offset = 0
       pageSize = 1
@@ -92,12 +96,14 @@ interface IPageParam {
     return this
   }
 
-  fun fromRange(range: IntRange): IPageParam {
+  operator fun get(range: IntRange): IPageParam {
     offset = range.first
     pageSize = range.last - range.first
     return this
   }
 
+  @get:Transient
+  @get:JsonIgnore
   private val safeRandEnd: Int
     get() {
       val end = (safeOffset + (safePageSize))
