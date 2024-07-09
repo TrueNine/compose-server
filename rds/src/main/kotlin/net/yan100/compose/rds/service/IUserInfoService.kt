@@ -22,6 +22,10 @@ import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.service.base.IService
 
 interface IUserInfoService : IService<UserInfo> {
+  suspend fun findIsRealPeopleById(id: RefId): Boolean
+
+  suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean
+
   fun countAllByHasUser(): Long
 
   /**

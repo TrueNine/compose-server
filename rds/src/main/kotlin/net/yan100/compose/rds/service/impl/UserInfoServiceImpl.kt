@@ -16,6 +16,8 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.rds.core.entities.fromDbData
@@ -45,6 +47,11 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
   override fun persistMerge(data: IMergeEventService.MergeData<*>): UserInfo {
     return data.to as UserInfo
   }
+
+  override suspend fun findIsRealPeopleById(id: RefId): Boolean = infoRepo.existsByIdAndIsRealPeople(id)
+
+  override suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean =
+    withContext(Dispatchers.IO) { infoRepo.findFirstByUserIdAndPriIsTrue(userId)?.run { infoRepo.existsByIdAndIsRealPeople(id) } ?: false }
 
   override fun countAllByHasUser(): Long {
     return infoRepo.countAllByHasUser()

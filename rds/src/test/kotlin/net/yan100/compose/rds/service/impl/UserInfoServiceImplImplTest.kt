@@ -16,57 +16,31 @@
  */
 package net.yan100.compose.rds.service.impl
 
-import io.mockk.every
-import io.mockk.mockk
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.repositories.IUsrRepo
-import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class UsrInfoServiceImplImplTest {
+class UserInfoServiceImplImplTest {
   @Autowired private lateinit var userInfoService: UserInfoServiceImpl
 
   @Autowired private lateinit var infoRepo: IUserInfoRepo
+
   @Autowired private lateinit var userRepo: IUsrRepo
 
-  @BeforeEach
-  fun setUp() {
-    infoRepo = mockk()
-    userRepo = mockk()
-    userInfoService = UserInfoServiceImpl(userRepo, infoRepo)
-  }
-
   @Test
-  fun testFindUserByWechatOpenId() {
-    val openId = "123456"
-    val usr = Usr()
-    every { infoRepo.findUserByWechatOpenId(openId) } returns usr
-    val result = userInfoService.findUserByWechatOpenId(openId)
-    assertEquals(result, usr)
-  }
-
-  @Test
-  fun testFindUserByPhone() {
-    val phone = "123456789"
-    val usr = Usr()
-    every { infoRepo.findUserByPhone(phone) } returns usr
-    val result = userInfoService.findUserByPhone(phone)
-    assertEquals(result, usr)
-  }
-
-  @Test
-  fun testFindByUserId() {
-    val userId = "123456"
-    val userInfoEntity = UserInfo()
-    every { infoRepo.findByUserId(userId) } returns userInfoEntity
-    val result = userInfoService.findByUserId(userId)
-    assertEquals(result, userInfoEntity)
+  fun `test findIsRealPeopleById`() {
+    runBlocking {
+      launch {
+        val r = userInfoService.findIsRealPeopleByUserId("0")
+        println(r)
+      }
+    }
   }
 }

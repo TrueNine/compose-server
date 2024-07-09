@@ -18,8 +18,9 @@ spotless = "6.25.0"
 gradle = "8.5"
 java = "21"
 kotlin = "2.0.0"
-kotlinx-io = "0.3.3"
 ksp = "2.0.0-1.0.22"
+kotlinx-io = "0.3.3"
+kotlinx-coroutines = "1.9.0-RC"
 
 spring-boot = "3.3.1"
 spring-cloud = "2023.0.1"
@@ -128,10 +129,13 @@ org-jetbrains-kotlin-kotlinStdlibJdk8 = { group = "org.jetbrains.kotlin", name =
 org-jetbrains-kotlin-kotlinReflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinTestTestng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinTestJunit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
-org-jetbrains-kotlinx-kotlinxCoroutinesReactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version = "1.9.0-RC" } ### https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
+org-jetbrains-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+org-jetbrains-kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+org-jetbrains-kotlinx-kotlinxCoroutinesReactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
 org-jetbrains-kotlinx-kotlinxIoCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinx-io" }
 org-jetbrains-kotlinx-kotlinxIoCoreJvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core-jvm", version.ref = "kotlinx-io" }
 com-google-devtools-ksp-symbolProcessingApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
+
 io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.2.2" }
 
 io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.11" }
@@ -243,9 +247,8 @@ org-droos-droolsBom = { group = "org.drools", name = "drools-bom", version.ref =
 com-alibaba-cloud-springCloudAlibabaDependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
 
 [bundles]
-testng = ["org-springframework-boot-springBootTest", "org-springframework-security-springSecurityTest", "org-springframework-modulith-springModulithStarterTest", "org-jetbrains-kotlin-kotlinTestTestng", "io-mockk-mockk", "org-testng-testng", "org-hsqldb-hsqldb"]
-junit5 = ["org-springframework-boot-springBootTest", "org-springframework-security-springSecurityTest", "org-springframework-modulith-springModulithStarterTest", "org-jetbrains-kotlin-kotlinTestJunit5", "io-mockk-mockk", "org-hsqldb-hsqldb"]
+junit5 = ["org-jetbrains-kotlinxCoroutinesTest","org-springframework-boot-springBootTest", "org-springframework-security-springSecurityTest", "org-springframework-modulith-springModulithStarterTest", "org-jetbrains-kotlin-kotlinTestJunit5", "io-mockk-mockk", "org-hsqldb-hsqldb"]
 kotlin = ["org-jetbrains-kotlin-kotlinStdlib", "org-jetbrains-kotlin-kotlinReflect", "org-jetbrains-kotlinx-kotlinxCoroutinesReactor", "io-projectreactor-kotlin-reactorKotlinExtensions", "com-fasterxml-jackson-module-jacksonModuleKotlin"]
-redis = ["com-github-benManes-caffeine-caffeine","org-springframework-boot-springBootStarterDataRedis", "org-springframework-boot-springBootStarterDataRedisReactive", "org-apache-commons-commonsPool2"]
+redis = ["com-github-benManes-caffeine-caffeine", "org-springframework-boot-springBootStarterDataRedis", "org-springframework-boot-springBootStarterDataRedisReactive", "org-apache-commons-commonsPool2"]
 jpa = ["org-springframework-boot-springBootStarterDataJpa", "org-springframework-modulith-springModulithStarterJpa"]
 selenium = ["org-seleniumhq-selenium-seleniumJava", "io-github-bonigarcia-webdrivermanager"]

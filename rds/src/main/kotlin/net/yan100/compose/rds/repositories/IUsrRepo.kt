@@ -17,7 +17,9 @@
 package net.yan100.compose.rds.repositories
 
 import java.time.LocalDateTime
+import kotlinx.coroutines.*
 import net.yan100.compose.core.alias.RefId
+import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.rds.entities.account.FullUsr
 import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.entities.info.UserInfo
@@ -117,6 +119,28 @@ interface IFullUserRepo : IRepo<FullUsr> {
 
 @Repository
 interface IUserInfoRepo : IRepo<UserInfo> {
+  fun existsAllByIdAndIdCardIsNotNull(id: RefId): Boolean
+
+  fun existsAllByIdAndPhoneIsNotNull(id: RefId): Boolean
+
+  fun existsAllByIdAndFirstNameIsNotNull(id: RefId): Boolean
+
+  fun existsAllByIdAndLastNameIsNotNull(id: RefId): Boolean
+
+  suspend fun existsByIdAndIsRealPeople(id: RefId): Boolean =
+    withContext(Dispatchers.IO) {
+      if (!existsById(id)) false
+      else
+        listOf(
+            async { existsAllByIdAndIdCardIsNotNull(id) },
+            async { existsAllByIdAndPhoneIsNotNull(id) },
+            async { existsAllByIdAndFirstNameIsNotNull(id) },
+            async { existsAllByIdAndLastNameIsNotNull(id) }
+          )
+          .awaitAll()
+          .all { it }
+    }
+
   @Query("""
     select count(i.id)
     from UserInfo i
@@ -143,7 +167,9 @@ interface IUserInfoRepo : IRepo<UserInfo> {
     where i.id = :id
   """) fun findUserIdById(id: RefId): RefId?
 
-  fun findByUserId(userId: String): UserInfo?
+  @TODO("可会查询出多个用户") fun findByUserId(userId: RefId): UserInfo?
+
+  fun findFirstByUserIdAndPriIsTrue(userId: RefId): UserInfo?
 
   /** 根据 微信 openId 查询对应 User */
   @Query("""
