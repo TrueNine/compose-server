@@ -47,13 +47,14 @@ class AccountAggregatorImpl(
   override fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr? {
     return if (userInfoService.existsById(userInfoId) && !userService.existsByUserInfoId(userInfoId)) {
       userInfoService.findById(userInfoId)?.let { info ->
-        check(info.fullName.hasText()) { "姓名为空，不能转换为呢称" }
+        check(info.firstName.hasText()) { "姓名为空，不能转换为呢称" }
+        check(info.lastName.hasText()) { "姓名为空，不能转换为呢称" }
         info.pri = true
 
         val account =
           Usr().run {
             this.createUserId = createUserId
-            nickName = info.fullName
+            nickName = info.firstName + info.lastName
             account = bizCodeGen.nextString()
             pwdEnc = passwordEncoder.encode(Keys.generateRandomAsciiString())
             userService.saveExists(this)
