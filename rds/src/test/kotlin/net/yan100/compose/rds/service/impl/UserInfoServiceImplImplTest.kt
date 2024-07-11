@@ -20,7 +20,6 @@ import kotlin.test.Test
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.repositories.IUsrRepo
 import org.springframework.beans.factory.annotation.Autowired
