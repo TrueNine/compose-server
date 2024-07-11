@@ -33,6 +33,7 @@ import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.extensionfunctions.nonText
+import net.yan100.compose.core.extensionfunctions.sensitive.sensitiveAlso
 import net.yan100.compose.core.models.IIdcard2Code
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
@@ -138,6 +139,18 @@ abstract class SuperUserInfo : IEntity() {
       if (null == gender) gender = if (i.idcardSex) GenderTyping.MAN else GenderTyping.WOMAN
     }
   }
+
+  override fun sensitive() {
+    super.sensitive()
+    sensitiveAlso(this) {
+      it.firstName = firstName?.once()
+      it.lastName = lastName?.chinaName()
+      it.idCard = idCard?.chinaIdCard()
+      it.email = email?.email()
+      it.phone = phone?.chinaPhone()
+      it.sparePhone = sparePhone?.chinaPhone()
+    }
+  }
 }
 
 /**
@@ -146,19 +159,7 @@ abstract class SuperUserInfo : IEntity() {
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "用户信息")
-@Table(name = SuperUserInfo.TABLE_NAME)
-open class UserInfo : SuperUserInfo() {
-  /** 用户全名 */
-  @get:Nullable
-  @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @get:Transient
-  val fullName: String
-    get() = (firstName ?: "") + (lastName ?: "")
-}
+@Entity @DynamicInsert @DynamicUpdate @Schema(title = "用户信息") @Table(name = SuperUserInfo.TABLE_NAME) open class UserInfo : SuperUserInfo()
 
 /** 完全的用户信息 */
 @Entity

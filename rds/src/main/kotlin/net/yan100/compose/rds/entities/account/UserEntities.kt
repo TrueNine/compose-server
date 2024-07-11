@@ -34,6 +34,7 @@ import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.Regexes
+import net.yan100.compose.core.extensionfunctions.sensitive.sensitiveAlso
 import net.yan100.compose.rds.Oto
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.entities.RoleGroup
@@ -100,6 +101,10 @@ abstract class SuperUsr : IEntity() {
   @get:Transient
   val band: Boolean
     get() = (null != banTime && LocalDateTime.now().isBefore(banTime))
+
+  override fun sensitive() {
+    sensitiveAlso(this) { it.pwdEnc = it.pwdEnc.password() }
+  }
 }
 
 /**
