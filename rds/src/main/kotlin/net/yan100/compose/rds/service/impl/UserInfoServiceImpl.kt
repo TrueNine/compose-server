@@ -53,6 +53,10 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
   override suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean =
     withContext(Dispatchers.IO) { infoRepo.findFirstByUserIdAndPriIsTrue(userId)?.run { infoRepo.existsByIdAndIsRealPeople(id) } ?: false }
 
+  override fun groupByUserIdByUserIds(userIds: List<RefId>): Map<RefId, List<UserInfo>> {
+    return infoRepo.findAllByUserId(userIds).groupBy { it.userId!! }
+  }
+
   override fun countAllByHasUser(): Long {
     return infoRepo.countAllByHasUser()
   }
