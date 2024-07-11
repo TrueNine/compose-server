@@ -26,6 +26,7 @@ import jakarta.validation.constraints.NotBlank
 import java.io.Serial
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
+import net.yan100.compose.core.models.sensitive.ISensitivity
 import net.yan100.compose.depend.jvalid.group.DeleteGroup
 import net.yan100.compose.depend.jvalid.group.PatchGroup
 import net.yan100.compose.depend.jvalid.group.PutGroup
@@ -52,7 +53,7 @@ import org.springframework.data.domain.Persistable
   SnowflakeIdInsertListener::class,
   PreSaveDeleteReferenceListener::class
 )
-class IAnyEntity : Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPageableEntity {
+class IAnyEntity : ISensitivity, Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPageableEntity {
 
   companion object {
     /** 主键 */
@@ -165,4 +166,11 @@ class IAnyEntity : Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPage
   protected final fun Companion.floatLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Float> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
 
   protected final fun Companion.doubleLate(): IDatabaseDefineEntity.LateInitNonNullBasicValue<Double> = IDatabaseDefineEntity.LateInitNonNullBasicValue()
+
+  @kotlin.jvm.Transient @Transient @JsonIgnore @Schema(hidden = true) private var sensed: Boolean = false
+
+  override fun sensitive() {
+    check(!sensed) { "数据已经脱敏，无需重复执行" }
+    super.sensitive()
+  }
 }
