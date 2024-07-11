@@ -26,6 +26,13 @@ interface IUserInfoService : IService<UserInfo> {
 
   suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean
 
+  /**
+   * ## 根据用户 id 列表，获取用户信息列表
+   *
+   * @return `user id` to `userInfos`
+   */
+  fun groupByUserIdByUserIds(userIds: List<RefId>): Map<RefId, List<UserInfo>>
+
   fun countAllByHasUser(): Long
 
   /**
