@@ -38,11 +38,14 @@ import net.yan100.compose.core.jackson.SensitiveSerializer
 @JsonSerialize(using = SensitiveSerializer::class)
 annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {
   enum class Strategy(private val desensitizeSerializer: (String) -> String) {
+    /** ## 单个 * 纯掩码 */
+    ONCE({ "*" }),
+
     /** 不进行脱敏处理 */
     NONE({ it }),
 
     /** 手机号 */
-    PHONE({ it.replace("^(\\S{3})\\S+(\\S{2})$".toRegex(), "\$1********\$2") }),
+    PHONE({ it.replace("^(\\S{3})\\S+(\\S{2})$".toRegex(), "\$1****\$2") }),
     EMAIL({ it.replace("(\\S{2})\\S+(@[\\w.-]+)".toRegex(), "\$1****\$2") }),
 
     /** 身份证号 */
@@ -52,7 +55,22 @@ annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {
     BANK_CARD_CODE({ it.replace("(\\w{2})\\w+(\\w{2})".toRegex(), "\$1****\$2") }),
 
     /** 姓名 */
-    NAME({ if (it.nonText() || it.length < 2) it else "**${it.substring(it.length - 1)}" }),
+    NAME({ if (it.nonText()) it else "**${it.substring(it.length - 1)}" }),
+
+    /**
+     * ## 多段落姓名
+     *
+     * 例如：`last_name`
+     */
+    MULTIPLE_NAME({
+      if (it.nonText() || it.length <= 2) {
+        when (it.length) {
+          1 -> "*"
+          2 -> "**"
+          else -> it
+        }
+      } else "**${it.substring(it.length - 1)}"
+    }),
 
     /** 地址 */
     ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "\$1****\$2") }),
