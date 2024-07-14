@@ -14,14 +14,28 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.depend.webservlet
+package net.yan100.compose.depend.webservlet.controller
 
-import net.yan100.compose.depend.webservlet.autoconfig.AutoConfigEntrance
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import net.yan100.compose.core.alias.Pr
+import net.yan100.compose.core.annotations.SensitiveResponse
+import net.yan100.compose.core.models.sensitive.ISensitivity
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-@Import(AutoConfigEntrance::class) class DependServletEntrance
+@RestController
+@RequestMapping("test/sensitive")
+class SensitiveController {
+  class Resp(var a: Int = 1) : ISensitivity {
+    override fun sensitive() {
+      super.sensitive()
+      this.a = 233
+    }
+  }
 
-fun main(args: Array<String>) {
-  runApplication<DependServletEntrance>(*args)
+  @SensitiveResponse
+  @GetMapping("get", produces = ["application/json"])
+  fun `test get a`(): Pr<Resp> {
+    return Pr.of(listOf(Resp(), Resp(), Resp()))
+  }
 }

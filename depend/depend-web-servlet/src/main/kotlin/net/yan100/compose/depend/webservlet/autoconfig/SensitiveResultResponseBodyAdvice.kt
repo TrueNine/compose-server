@@ -16,7 +16,10 @@
  */
 package net.yan100.compose.depend.webservlet.autoconfig
 
+import java.lang.reflect.ParameterizedType
+import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.core.annotations.SensitiveResponse
+import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.models.sensitive.ISensitivity
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
@@ -26,23 +29,60 @@ import org.springframework.http.server.ServerHttpResponse
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 
-@ControllerAdvice
-class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<ISensitivity> {
-  private val supportAnnotationClassType = SensitiveResponse::class.java
+private val log = slf4j<SensitiveResultResponseBodyAdvice>()
 
+@ControllerAdvice
+class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
+  private val supportAnnotationClassType = SensitiveResponse::class.java
+  private val interfaceType = ISensitivity::class.java
+
+  // TODO 加入缓存机制，同时考虑到动态加载
   override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
-    return returnType.method?.isAnnotationPresent(supportAnnotationClassType) ?: false
+    val hasAnnotation = returnType.method?.isAnnotationPresent(supportAnnotationClassType) ?: false
+    return hasAnnotation
+  }
+
+  fun getGenericType(returnType: MethodParameter, clazz: Class<*> = interfaceType): Class<*>? {
+    if (returnType.genericParameterType is ParameterizedType) {
+      val rawType = (returnType.genericParameterType as ParameterizedType).rawType
+      if (rawType is Class<*> && rawType.isAssignableFrom(clazz)) return rawType
+    }
+    return null
+  }
+
+  fun isExtendTypeFor(returnType: MethodParameter, type: Class<*> = interfaceType): Boolean {
+    return getGenericType(returnType) != null
   }
 
   override fun beforeBodyWrite(
-    body: ISensitivity?,
+    body: Any?,
     returnType: MethodParameter,
     selectedContentType: MediaType,
     selectedConverterType: Class<out HttpMessageConverter<*>>,
     request: ServerHttpRequest,
     response: ServerHttpResponse
-  ): ISensitivity? {
-    if (body is ISensitivity) body.sensitive()
+  ): Any? {
+    when (body) {
+      is ISensitivity -> body.sensitive()
+      is Collection<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
+      is Map<*, *> ->
+        body.forEach {
+          if (it.key is ISensitivity) (it.key as ISensitivity).sensitive()
+          if (it.value is ISensitivity) (it.value as ISensitivity).sensitive()
+        }
+      is Array<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
+      is Iterable<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
+      is Iterator<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
+      is Pr<*> -> {
+        if (body.dataList.isNotEmpty()) {
+          val b = body.dataList.firstOrNull()?.let { it is ISensitivity }
+          if (b == true) {
+            body.dataList.forEach { if (it is ISensitivity) it.sensitive() }
+          }
+        }
+      }
+      else -> {}
+    }
     return body
   }
 }

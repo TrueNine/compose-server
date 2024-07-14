@@ -1,7 +1,7 @@
 [versions]
-compose-gradle-plugin = "1.6.536"
+compose-gradle-plugin = "1.6.537"
 compose = "1.6.508"
-compose-depend-webservlet = "1.6.510"
+compose-depend-webservlet = "1.6.511"
 compose-core = "1.6.516"
 compose-rds = "1.6.521"
 compose-rds-core = "1.6.510"

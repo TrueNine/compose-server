@@ -2,6 +2,8 @@ version = libs.versions.compose.depend.webservlet.get()
 
 dependencies {
   api(libs.org.springframework.boot.springBootStarterWeb)
+  testImplementation(libs.org.springframework.boot.springBootStarterJson)
+  testImplementation(libs.org.springframework.boot.springBootStarterTomcat)
   api(libs.jakarta.servlet.jakartaServletApi)
   implementation(libs.org.springframework.boot.springBootStarterWebsocket)
   implementation(project(":core"))
