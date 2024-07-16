@@ -31,18 +31,13 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class AttachmentServiceImpl(
-  private val repo: IAttachmentRepo,
-  private val linkedRepo: ILinkedAttachmentRepo,
-) : IAttachmentService, CrudService<Attachment>(repo) {
+class AttachmentServiceImpl(private val repo: IAttachmentRepo, private val linkedRepo: ILinkedAttachmentRepo) :
+  IAttachmentService, CrudService<Attachment>(repo) {
   override fun existsByBaseUrl(baseUrl: String): Boolean {
     return repo.existsByBaseUrl(baseUrl)
   }
 
-  override fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(
-    baseUrl: String,
-    baseUri: String,
-  ): Attachment {
+  override fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment {
     return findByBaseUrlAndBaseUri(baseUrl, baseUri)
       ?: save(
         Attachment().apply {
@@ -65,10 +60,7 @@ class AttachmentServiceImpl(
     return repo.findAllByBaseUrlIn(baseUrls)
   }
 
-  override fun findAllByBaseUrlInAndBaseUriIn(
-    baseUrls: List<String>,
-    baseUris: List<String>,
-  ): List<Attachment> {
+  override fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment> {
     TODO("Not yet implemented")
   }
 
@@ -100,10 +92,7 @@ class AttachmentServiceImpl(
     return repo.findSaveNameById(id)
   }
 
-  override fun findAllLinkedAttachmentByParentBaseUrl(
-    baseUrl: String,
-    page: Pq,
-  ): Pr<LinkedAttachment> {
+  override fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq): Pr<LinkedAttachment> {
     return linkedRepo.findAllByParentBaseUrl(baseUrl, page.page).result
   }
 }

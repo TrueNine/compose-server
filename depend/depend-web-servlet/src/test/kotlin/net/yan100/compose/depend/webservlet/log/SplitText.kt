@@ -81,7 +81,7 @@ class SplitText {
                 level = level,
                 abbrClassName = packageNameAndLogContent.first,
                 logContent = packageNameAndLogContent.second,
-                append = ""
+                append = "",
               )
             logs += lastData!!
           } else {

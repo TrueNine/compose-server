@@ -30,11 +30,8 @@ import net.yan100.compose.oss.OutMap
  * @author TrueNine
  * @since 2023-02-20
  */
-open class MinioClientAdaptor
-protected constructor(
-  protected val client: MinioClient,
-  protected val exBaseUrl: String = "http://localhost:9000",
-) : MinioClientOperator(client) {
+open class MinioClientAdaptor protected constructor(protected val client: MinioClient, protected val exBaseUrl: String = "http://localhost:9000") :
+  MinioClientOperator(client) {
   open fun ins(resp: ObjectWriteResponse, stream: InputStream): InMap {
     return object : InMap {
       override val usedStream

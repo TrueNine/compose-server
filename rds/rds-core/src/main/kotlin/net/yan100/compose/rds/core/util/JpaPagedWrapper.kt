@@ -70,10 +70,7 @@ object JpaPagedWrapper {
    * @param lazySequence 序列
    */
   @JvmStatic
-  fun <T> warpBy(
-    pageParam: Pq = Pq.DEFAULT_MAX,
-    lazySequence: () -> Sequence<T>,
-  ): PagedResponseResult<T> {
+  fun <T> warpBy(pageParam: Pq = Pq.DEFAULT_MAX, lazySequence: () -> Sequence<T>): PagedResponseResult<T> {
     val sequence = lazySequence()
     val list = sequence.take((pageParam.offset ?: 0) + (pageParam.pageSize ?: 0)).toList()
     val endSize = minOf(pageParam.pageSize ?: 0, list.size)

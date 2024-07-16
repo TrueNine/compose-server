@@ -26,11 +26,13 @@ import org.springframework.stereotype.Repository
 interface RoleGroupRepo : IRepo<RoleGroup> {
   fun findAllByName(name: String): List<RoleGroup>
 
-  @Query("""
+  @Query(
+    """
     from RoleGroup rg
     left join UserRoleGroup ur on rg.id = ur.roleGroupId
     where ur.userId = :userId
-  """)
+  """
+  )
   fun findAllByUserId(userId: Long): List<RoleGroup>
 }
 
@@ -38,10 +40,12 @@ interface RoleGroupRepo : IRepo<RoleGroup> {
 interface FullRoleGroupEntityRepo : IRepo<FullRoleGroup> {
   fun findAllByName(name: String): List<FullRoleGroup>
 
-  @Query("""
+  @Query(
+    """
     from FullRoleGroup rg
     left join UserRoleGroup ur on rg.id = ur.roleGroupId
     where ur.userId = :userId
-  """)
+  """
+  )
   fun findAllByUserId(userId: Long): List<FullRoleGroup>
 }

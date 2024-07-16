@@ -13,7 +13,7 @@ val backupRepoMap =
     "backupRepo0" to "https://repository.sonatype.org/content/groups/forge/",
     "backupRepo1" to "https://repo.maven.apache.org/maven2",
     "backupRepo2" to "https://plugins.gradle.org/m2",
-    "backupRepo3" to "https://dl.google.com/dl/android/maven2"
+    "backupRepo3" to "https://dl.google.com/dl/android/maven2",
   )
 
 fun RepositoryHandler.enableMirror() {

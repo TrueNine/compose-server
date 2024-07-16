@@ -26,10 +26,7 @@ import net.yan100.compose.rds.service.base.IService
 interface IAttachmentService : IService<Attachment> {
   fun existsByBaseUrl(baseUrl: String): Boolean
 
-  fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(
-    baseUrl: String,
-    baseUri: String,
-  ): Attachment
+  fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment
 
   fun findByBaseUrl(baseUrl: String): Attachment?
 
@@ -37,27 +34,18 @@ interface IAttachmentService : IService<Attachment> {
 
   fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment>
 
-  fun findAllByBaseUrlInAndBaseUriIn(
-    baseUrls: List<String>,
-    baseUris: List<String>,
-  ): List<Attachment>
+  fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment>
 
   fun findFullUrlById(id: String): String?
 
-  fun findAllFullUrlByMetaNameStartingWith(
-    metaName: String,
-    page: Pq = JpaPagedWrapper.DEFAULT_MAX,
-  ): Pr<String>
+  fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq = JpaPagedWrapper.DEFAULT_MAX): Pr<String>
 
   fun findMetaNameById(id: String): String?
 
   fun findSaveNameById(id: String): String?
 
   /** ## 根据 baseurl 查询其下的所有文件地址 */
-  fun findAllLinkedAttachmentByParentBaseUrl(
-    baseUrl: String,
-    page: Pq = Pq.DEFAULT_MAX,
-  ): Pr<LinkedAttachment>
+  fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq = Pq.DEFAULT_MAX): Pr<LinkedAttachment>
 
   /** ## 根据 baseurl 查询其下的所有文件 */
   fun findAllByParentBaseUrl(baseUrl: String, page: Pq = Pq.DEFAULT_MAX): Pr<Attachment>

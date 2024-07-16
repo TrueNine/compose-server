@@ -54,11 +54,7 @@ interface SinglePayService {
    * @param totalAmount 退款单 总金额
    * @param currency 币种 （默认 人民币)
    */
-  fun applyRefundPayOrder(
-    refundAmount: BigDecimal,
-    totalAmount: BigDecimal,
-    currency: ISO4217 = ISO4217.CNY,
-  )
+  fun applyRefundPayOrder(refundAmount: BigDecimal, totalAmount: BigDecimal, currency: ISO4217 = ISO4217.CNY)
 
   /** ## 接受异步通知回调 */
   fun receivePayNotify(

@@ -25,9 +25,7 @@ import org.jsoup.Jsoup
 import org.springframework.stereotype.Service
 
 @Service("DataExtractLazyAddressServiceImpls")
-class LazyAddressServiceImpl(
-  private val call: ICnNbsAddressApi,
-) : ILazyAddressService {
+class LazyAddressServiceImpl(private val call: ICnNbsAddressApi) : ILazyAddressService {
   companion object {
     private val log = slf4j(LazyAddressServiceImpl::class)
   }
@@ -40,11 +38,7 @@ class LazyAddressServiceImpl(
     return result
   }
 
-  private fun wrapperModel(
-    code: String,
-    name: String,
-    leaf: Boolean,
-  ) =
+  private fun wrapperModel(code: String, name: String, leaf: Boolean) =
     CnDistrictResp().apply {
       this.leaf = leaf
       this.name = name
@@ -75,43 +69,17 @@ class LazyAddressServiceImpl(
 
   override fun findAllCountyByCode(districtCode: String): List<CnDistrictResp> {
     val model = getModel(districtCode)
-    return extractPlainItem(
-      "countytr",
-      call
-        .getCountyPage(
-          model.provinceCode,
-          model.cityCode,
-        )
-        .body,
-    ) ?: listOf()
+    return extractPlainItem("countytr", call.getCountyPage(model.provinceCode, model.cityCode).body) ?: listOf()
   }
 
   override fun findAllTownByCode(districtCode: String): List<CnDistrictResp> {
     val model = getModel(districtCode)
-    return extractPlainItem(
-      "towntr",
-      call
-        .getTownPage(
-          model.provinceCode,
-          model.cityCode,
-          model.countyCode,
-        )
-        .body,
-    ) ?: listOf()
+    return extractPlainItem("towntr", call.getTownPage(model.provinceCode, model.cityCode, model.countyCode).body) ?: listOf()
   }
 
   override fun findAllVillageByCode(districtCode: String): List<CnDistrictResp> {
     val model = getModel(districtCode)
-    return extractVillages(
-      call
-        .getVillagePage(
-          model.provinceCode,
-          model.cityCode,
-          model.countyCode,
-          model.townCode,
-        )
-        .body,
-    ) ?: listOf()
+    return extractVillages(call.getVillagePage(model.provinceCode, model.cityCode, model.countyCode, model.townCode).body) ?: listOf()
   }
 
   private fun extractVillages(html: String?) =
@@ -123,10 +91,7 @@ class LazyAddressServiceImpl(
       }
     }
 
-  private fun extractPlainItem(
-    className: String,
-    html: String?,
-  ) =
+  private fun extractPlainItem(className: String, html: String?) =
     html?.let {
       Jsoup.parse(it).body().selectXpath("//tr[@class='$className']").mapNotNull { kv ->
         val leaf = kv.child(1).select("a").size <= 0

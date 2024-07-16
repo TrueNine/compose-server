@@ -61,12 +61,7 @@ interface IAccountAggregator {
    */
   fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr?
 
-  fun assignAccount(
-    usr: Usr,
-    createUserId: RefId,
-    userInfo: UserInfo?,
-    roleGroup: Set<String>? = null,
-  ): Usr
+  fun assignAccount(usr: Usr, createUserId: RefId, userInfo: UserInfo?, roleGroup: Set<String>? = null): Usr
 
   /** ## 注册账号 */
   fun registerAccount(param: RegisterAccountDto): Usr?

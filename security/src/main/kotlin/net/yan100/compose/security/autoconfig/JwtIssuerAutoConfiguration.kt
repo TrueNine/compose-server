@@ -28,10 +28,7 @@ import org.springframework.context.annotation.Primary
 
 @Configuration
 @EnableConfigurationProperties(net.yan100.compose.security.properties.JwtProperties::class)
-class JwtIssuerAutoConfiguration(
-  private val jp: net.yan100.compose.security.properties.JwtProperties,
-  private val keysRepository: IKeysRepo,
-) {
+class JwtIssuerAutoConfiguration(private val jp: net.yan100.compose.security.properties.JwtProperties, private val keysRepository: IKeysRepo) {
   @Bean
   @Primary
   fun jwtIssuer(mapper: ObjectMapper): JwtIssuer {

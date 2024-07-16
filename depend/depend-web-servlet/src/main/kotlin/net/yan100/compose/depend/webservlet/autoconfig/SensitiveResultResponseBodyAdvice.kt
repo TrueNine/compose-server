@@ -36,6 +36,8 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
   private val supportAnnotationClassType = SensitiveResponse::class.java
   private val interfaceType = ISensitivity::class.java
 
+  // TODO 实现 resolver ，缓存 每个不同对象的序列化规则，例如：{a: {b: Sensitive}}
+  // TODO 可以实现 resolver ，规范化
   // TODO 加入缓存机制，同时考虑到动态加载
   override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
     val hasAnnotation = returnType.method?.isAnnotationPresent(supportAnnotationClassType) ?: false
@@ -60,7 +62,7 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
     selectedContentType: MediaType,
     selectedConverterType: Class<out HttpMessageConverter<*>>,
     request: ServerHttpRequest,
-    response: ServerHttpResponse
+    response: ServerHttpResponse,
   ): Any? {
     when (body) {
       is ISensitivity -> body.sensitive()

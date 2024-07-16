@@ -33,9 +33,7 @@ class T1 {
   fun testOpen() {
     Playwright.create().use { playwright ->
       playwright.launchBy(headless = false).use { browser ->
-        browser.withActions(
-          Browser.NewContextOptions().setColorScheme(ColorScheme.LIGHT).setViewportSize(1920, 1080),
-        ) { _, page ->
+        browser.withActions(Browser.NewContextOptions().setColorScheme(ColorScheme.LIGHT).setViewportSize(1920, 1080)) { _, page ->
           val locals =
             page
               .loopNext<Any>()

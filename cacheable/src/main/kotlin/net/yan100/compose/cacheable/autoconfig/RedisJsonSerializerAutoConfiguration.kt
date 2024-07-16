@@ -45,9 +45,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
  * @since 2023-02-20
  */
 @Configuration
-class RedisJsonSerializerAutoConfiguration(
-  objectMapper: ObjectMapper,
-) {
+class RedisJsonSerializerAutoConfiguration(objectMapper: ObjectMapper) {
   private val log = slf4j(RedisJsonSerializerAutoConfiguration::class)
 
   private val jsr =
@@ -57,11 +55,7 @@ class RedisJsonSerializerAutoConfiguration(
           .setSerializationInclusion(JsonInclude.Include.NON_NULL)
           .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
           .setAnnotationIntrospector(AnnotationIntrospector.nopInstance())
-          .activateDefaultTyping(
-            polymorphicTypeValidator,
-            ObjectMapper.DefaultTyping.EVERYTHING,
-            JsonTypeInfo.As.WRAPPER_ARRAY,
-          )
+          .activateDefaultTyping(polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.WRAPPER_ARRAY)
       },
       Any::class.java,
     )
@@ -69,16 +63,8 @@ class RedisJsonSerializerAutoConfiguration(
   private val srs = StringRedisSerializer()
   private val cacheManagerConfig =
     RedisCacheConfiguration.defaultCacheConfig()
-      .serializeKeysWith(
-        RedisSerializationContext.SerializationPair.fromSerializer(
-          srs,
-        ),
-      )
-      .serializeValuesWith(
-        RedisSerializationContext.SerializationPair.fromSerializer(
-          jsr,
-        ),
-      )
+      .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(srs))
+      .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsr))
       .disableCachingNullValues()
 
   @Primary
@@ -131,10 +117,7 @@ class RedisJsonSerializerAutoConfiguration(
     return asCacheConfig(factory, Duration.ZERO)
   }
 
-  private fun asCacheConfig(
-    factory: RedisConnectionFactory?,
-    dr: Duration,
-  ): RedisCacheManager {
+  private fun asCacheConfig(factory: RedisConnectionFactory?, dr: Duration): RedisCacheManager {
     return RedisCacheManager.builder(factory!!).cacheDefaults(cacheManagerConfig.entryTtl(dr)).build()
   }
 }

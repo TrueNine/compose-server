@@ -34,7 +34,7 @@ import org.jetbrains.annotations.ApiStatus
   AnnotationTarget.FUNCTION,
   AnnotationTarget.PROPERTY_GETTER,
   AnnotationTarget.PROPERTY_SETTER,
-  AnnotationTarget.CLASS
+  AnnotationTarget.CLASS,
 )
 @MustBeDocumented
 @ApiStatus.Experimental

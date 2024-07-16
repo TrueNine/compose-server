@@ -53,7 +53,7 @@ kotlin {
         "-verbose",
         "-Xjdk-release=${l.versions.java.get()}",
         "-jvm-target=${l.versions.java.get()}",
-        "-Xextended-compiler-checks"
+        "-Xextended-compiler-checks",
       )
   }
 

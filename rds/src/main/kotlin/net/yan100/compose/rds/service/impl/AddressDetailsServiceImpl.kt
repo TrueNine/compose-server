@@ -33,19 +33,13 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class AddressDetailsServiceImpl(
-  private val aRepo: IAddressRepo,
-  private val detailsRepo: IAddressDetailsRepo,
-  private val fRepo: FullAddressDetailsRepo,
-) : IAddressDetailsService, CrudService<AddressDetails>(detailsRepo) {
+class AddressDetailsServiceImpl(private val aRepo: IAddressRepo, private val detailsRepo: IAddressDetailsRepo, private val fRepo: FullAddressDetailsRepo) :
+  IAddressDetailsService, CrudService<AddressDetails>(detailsRepo) {
   override fun findAllByUserId(userId: String, page: Pq): Pr<AddressDetails> {
     return detailsRepo.findAllByUserId(userId, page.page).result
   }
 
-  override fun findNonDesensitizedAllByUserId(
-    userId: String,
-    page: Pq,
-  ): Pr<NonDesensitizedAddressDetails> {
+  override fun findNonDesensitizedAllByUserId(userId: String, page: Pq): Pr<NonDesensitizedAddressDetails> {
     return detailsRepo.findNonDesensitizedAllByUserId(userId, page.page).result
   }
 
@@ -81,10 +75,7 @@ class AddressDetailsServiceImpl(
     return detailsRepo.findAllByPhone(phone, page.page).result
   }
 
-  override fun findNonDesensitizedAllByPhone(
-    phone: String,
-    page: Pq,
-  ): Pr<NonDesensitizedAddressDetails> {
+  override fun findNonDesensitizedAllByPhone(phone: String, page: Pq): Pr<NonDesensitizedAddressDetails> {
     return detailsRepo.findNonDesensitizedAllByPhone(phone, page.page).result
   }
 

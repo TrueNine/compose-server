@@ -51,7 +51,7 @@ fun Path.sliceLines(
   sep: String = lineSep,
   charset: Charset = Charsets.UTF_8,
   bufferCapacity: Int = capacity,
-  totalLines: Long? = null
+  totalLines: Long? = null,
 ): Sequence<String> {
   // TODO 写死的 countLines
   val lineLength = totalLines ?: countLines()

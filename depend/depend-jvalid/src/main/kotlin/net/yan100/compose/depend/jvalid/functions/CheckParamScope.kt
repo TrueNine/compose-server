@@ -29,11 +29,7 @@ import net.yan100.compose.depend.jvalid.exceptions.ValidException
  * @author TrueNine
  * @since 2024-03-13
  */
-class PairDiffScope<A, B>(
-  private val aValue: A?,
-  private val bValue: B?,
-  private val checkExpression: Boolean = false,
-) {
+class PairDiffScope<A, B>(private val aValue: A?, private val bValue: B?, private val checkExpression: Boolean = false) {
   init {
     if (null == aValue && null == bValue) throw ValidException("两侧的值均为空")
   }
@@ -85,9 +81,7 @@ interface CheckParamScope<T> {
    *
    * @property value 校验参数
    */
-  class DefaultCheckScope<T>(
-    private val value: T,
-  ) : CheckParamScope<T> {
+  class DefaultCheckScope<T>(private val value: T) : CheckParamScope<T> {
     override fun require(checkBlock: T.() -> Unit) = checkBlock(value)
   }
 

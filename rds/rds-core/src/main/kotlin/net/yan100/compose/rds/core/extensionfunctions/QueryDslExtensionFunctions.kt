@@ -45,10 +45,8 @@ val prototypeBooleanBuilder = BooleanBuilder()
  * @param e EntityPath
  * @param fn 执行函数
  */
-inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
-  e: T,
-  crossinline fn: QueryDslExtensionFUnctionsArg1<E, T>.() -> R,
-): R = fn(QueryDslExtensionFUnctionsArg1(e, prototypeBooleanBuilder.clone()))
+inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(e: T, crossinline fn: QueryDslExtensionFUnctionsArg1<E, T>.() -> R): R =
+  fn(QueryDslExtensionFUnctionsArg1(e, prototypeBooleanBuilder.clone()))
 
 open class QueryDslExtensionFUnctionsArg3<E : IEntity, T : EntityPathBase<E>>(
   q: T,
@@ -74,17 +72,13 @@ inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
 
 /* order by extension functions */
 
-inline fun querydslOrderBy(
-  crossinline orderFn: MutableList<Sort.Order>.() -> Unit,
-): MutableList<Sort.Order> {
+inline fun querydslOrderBy(crossinline orderFn: MutableList<Sort.Order>.() -> Unit): MutableList<Sort.Order> {
   val i = mutableListOf<Sort.Order>()
   orderFn(i)
   return i
 }
 
-fun <E> FluentQuery.FetchableFluentQuery<E>.sortBy(
-  orders: MutableList<Sort.Order>,
-): FluentQuery.FetchableFluentQuery<E> {
+fun <E> FluentQuery.FetchableFluentQuery<E>.sortBy(orders: MutableList<Sort.Order>): FluentQuery.FetchableFluentQuery<E> {
   return sortBy(orders.asQuerySort())
 }
 

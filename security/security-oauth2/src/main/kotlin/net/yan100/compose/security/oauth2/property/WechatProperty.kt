@@ -37,11 +37,7 @@ class WxpaProperty {
   var jsapiTicket: String? = null
 
   @JvmOverloads
-  fun signature(
-    url: String,
-    nonceString: String = Keys.generateRandomAsciiString(),
-    timestamp: Long = LocalDateTime.now().iso8601LongUtc,
-  ): WxpaSignatureResp {
+  fun signature(url: String, nonceString: String = Keys.generateRandomAsciiString(), timestamp: Long = LocalDateTime.now().iso8601LongUtc): WxpaSignatureResp {
     val splitUrl = url.split("#")[0]
 
     val b =

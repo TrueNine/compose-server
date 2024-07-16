@@ -31,12 +31,7 @@ class EmptyPreflightValidFilter : EmptyDefault, SecurityPreflightValidFilter() {
     log.warn("正在使用默认的jwt过滤器")
   }
 
-  override fun getUserAuthorizationInfo(
-    token: String?,
-    reFlashToken: String?,
-    request: HttpServletRequest,
-    response: HttpServletResponse,
-  ): AuthRequestInfo {
+  override fun getUserAuthorizationInfo(token: String?, reFlashToken: String?, request: HttpServletRequest, response: HttpServletResponse): AuthRequestInfo {
     log.warn("生成了一个空的 {}", ::AuthRequestInfo.name)
     return AuthRequestInfo()
   }

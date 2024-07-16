@@ -33,10 +33,7 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory
 private val log = slf4j(SingleMqttConnectionAutoConfiguration::class)
 
 @Configuration
-class SingleMqttConnectionAutoConfiguration(
-  private val p: SingleMqttProperties,
-  private val objectMapper: ObjectMapper,
-) {
+class SingleMqttConnectionAutoConfiguration(private val p: SingleMqttProperties, private val objectMapper: ObjectMapper) {
 
   @ConditionalOnMissingBean
   @Bean(name = [CLIENT_FACTORY_BEAN_NAME])

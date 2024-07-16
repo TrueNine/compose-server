@@ -19,7 +19,6 @@ package net.yan100.compose.rds.entities.address
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
-import net.yan100.compose.core.alias.NonDesensitizedRef
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
@@ -27,17 +26,14 @@ import net.yan100.compose.ksp.core.annotations.MetaDef
 @MetaDef
 abstract class SuperNonDesensitizedAddressDetails : SuperAddressDetails() {
   /** 联系电话 */
-  @get:NonDesensitizedRef
-  @get:NotBlank(message = "手机号不能为空")
-  @get:Pattern(regexp = Regexes.CHINA_PHONE, message = "请输入正确的电话号码")
-  abstract override var phone: String?
+  @get:NotBlank(message = "手机号不能为空") @get:Pattern(regexp = Regexes.CHINA_PHONE, message = "请输入正确的电话号码") abstract override var phone: String?
 
   /** 地址详情 */
-  @get:NonDesensitizedRef @get:NotBlank(message = "详细地址不能为空") @get:Schema(title = "地址详情") abstract override var addressDetails: String
+  @get:NotBlank(message = "详细地址不能为空") @get:Schema(title = "地址详情") abstract override var addressDetails: String
 
   /** 地址代码 */
-  @get:NonDesensitizedRef @get:NotBlank(message = "地址代码不能为空") abstract override var addressCode: SerialCode
+  @get:NotBlank(message = "地址代码不能为空") abstract override var addressCode: SerialCode
 
   /** 联系人名称 */
-  @get:NonDesensitizedRef @get:NotBlank(message = "姓名不能为空") abstract override var name: String?
+  @get:NotBlank(message = "姓名不能为空") abstract override var name: String?
 }

@@ -29,18 +29,9 @@ import org.springframework.web.multipart.MultipartFile
  * @since 2024-03-20
  */
 interface IAttachmentAggregator {
-  fun uploadAttachment(
-    file: MultipartFile,
-    saveFileCallback: (file: MultipartFile) -> PostAttachmentDto,
-  ): Attachment?
+  fun uploadAttachment(file: MultipartFile, saveFileCallback: (file: MultipartFile) -> PostAttachmentDto): Attachment?
 
-  fun uploadAttachment(
-    stream: InputStream,
-    req: (stream: InputStream) -> PostAttachmentDescriptionDto,
-  ): Attachment?
+  fun uploadAttachment(stream: InputStream, req: (stream: InputStream) -> PostAttachmentDescriptionDto): Attachment?
 
-  fun uploadAttachments(
-    files: List<MultipartFile>,
-    saveFileCallback: (file: MultipartFile) -> PostAttachmentDto,
-  ): List<Attachment>
+  fun uploadAttachments(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> PostAttachmentDto): List<Attachment>
 }

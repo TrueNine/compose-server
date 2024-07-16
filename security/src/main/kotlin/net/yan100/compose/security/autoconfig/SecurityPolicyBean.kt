@@ -57,10 +57,7 @@ class SecurityPolicyBean {
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
-  fun securityExceptionAdware(
-    policyDefine: SecurityPolicyDefine,
-    manager: ObjectMapper,
-  ): SecurityExceptionAdware {
+  fun securityExceptionAdware(policyDefine: SecurityPolicyDefine, manager: ObjectMapper): SecurityExceptionAdware {
     log.debug("注册 ExceptionAdware")
     return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
   }

@@ -51,7 +51,7 @@ import org.springframework.data.domain.Persistable
   TableRowDeletePersistenceListener::class,
   BizCodeInsertListener::class,
   SnowflakeIdInsertListener::class,
-  PreSaveDeleteReferenceListener::class
+  PreSaveDeleteReferenceListener::class,
 )
 class IAnyEntity : ISensitivity, Persistable<Id>, IDatabaseDefineEntity, IEnhanceEntity, IPageableEntity {
 
@@ -76,7 +76,7 @@ class IAnyEntity : ISensitivity, Persistable<Id>, IDatabaseDefineEntity, IEnhanc
     example = "7173087959242248192",
     examples = ["7001234523405", "7001234523441"],
     required = false,
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED,
   )
   private var id: Id? = null
     @Transient @JsonIgnore @JvmName("setKotlinInternalId") set

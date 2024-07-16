@@ -22,10 +22,7 @@ package net.yan100.compose.core.extensionfunctions
  * @param conditions 条件
  * @param lazyMessage 消息
  */
-inline fun requireAll(
-  vararg conditions: Boolean,
-  crossinline lazyMessage: (() -> String),
-): Boolean {
+inline fun requireAll(vararg conditions: Boolean, crossinline lazyMessage: (() -> String)): Boolean {
   require(!conditions.contains(false), lazyMessage)
   return true
 }

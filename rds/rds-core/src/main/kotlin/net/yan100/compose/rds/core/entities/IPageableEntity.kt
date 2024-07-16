@@ -34,11 +34,8 @@ interface IPageableEntity : IPageParam, Serializable {
   companion object {
     @JvmStatic
     @JvmOverloads
-    operator fun get(
-      pageSize: Int = IPageParam.MIN_OFFSET,
-      offset: Int = IPageParam.MAX_PAGE_SIZE,
-      unPage: Boolean = false,
-    ): IPageableEntity = JpaPagedRequestParam(offset, pageSize, unPage)
+    operator fun get(pageSize: Int = IPageParam.MIN_OFFSET, offset: Int = IPageParam.MAX_PAGE_SIZE, unPage: Boolean = false): IPageableEntity =
+      JpaPagedRequestParam(offset, pageSize, unPage)
   }
 
   @get:Transient
@@ -48,7 +45,7 @@ interface IPageableEntity : IPageParam, Serializable {
     type = "int32",
     title = "页面大小，最大 ${IPageParam.MAX_PAGE_SIZE}，最小 1",
     accessMode = Schema.AccessMode.WRITE_ONLY,
-    defaultValue = IPageParam.MAX_PAGE_SIZE.toString() + ""
+    defaultValue = IPageParam.MAX_PAGE_SIZE.toString() + "",
   )
   @get:JsonIgnore
   override var pageSize: Int?
@@ -61,13 +58,7 @@ interface IPageableEntity : IPageParam, Serializable {
 
   @get:Transient
   @set:Transient
-  @get:Schema(
-    name = "unPage",
-    type = "boolean",
-    title = "取消分页请求",
-    defaultValue = "false",
-    accessMode = Schema.AccessMode.WRITE_ONLY,
-  )
+  @get:Schema(name = "unPage", type = "boolean", title = "取消分页请求", defaultValue = "false", accessMode = Schema.AccessMode.WRITE_ONLY)
   @get:JsonIgnore
   override var unPage: Boolean?
 }

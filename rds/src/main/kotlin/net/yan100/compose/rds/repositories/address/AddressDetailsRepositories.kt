@@ -37,27 +37,25 @@ interface IAddressDetailsRepo : IRepo<AddressDetails> {
   fun findAllByUserId(userId: String, page: Pageable): Page<AddressDetails>
 
   /** ## 根据用户ID查询用户地址详情 */
-  @Query("""
+  @Query(
+    """
     FROM NonDesensitizedAddressDetails n
     WHERE n.userId = :userId
-  """)
-  fun findNonDesensitizedAllByUserId(
-    userId: String,
-    page: Pageable,
-  ): Page<NonDesensitizedAddressDetails>
+  """
+  )
+  fun findNonDesensitizedAllByUserId(userId: String, page: Pageable): Page<NonDesensitizedAddressDetails>
 
   /** ## 根据电话查询地址 */
   fun findAllByPhone(phone: String, page: Pageable): Page<AddressDetails>
 
   /** ## 根据电话查询非脱敏地址 */
-  @Query("""
+  @Query(
+    """
     FROM NonDesensitizedAddressDetails n
     WHERE n.phone = :phone
-  """)
-  fun findNonDesensitizedAllByPhone(
-    phone: String,
-    page: Pageable,
-  ): Page<NonDesensitizedAddressDetails>
+  """
+  )
+  fun findNonDesensitizedAllByPhone(phone: String, page: Pageable): Page<NonDesensitizedAddressDetails>
 }
 
 /** # 全路径地址详情 */

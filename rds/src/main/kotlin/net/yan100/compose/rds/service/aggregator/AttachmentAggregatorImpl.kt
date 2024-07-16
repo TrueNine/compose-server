@@ -31,15 +31,10 @@ import org.springframework.web.multipart.MultipartFile
 
 /** 附件聚合实现 */
 @Service
-class AttachmentAggregatorImpl(
-  private val aService: IAttachmentService,
-) : IAttachmentAggregator {
+class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAttachmentAggregator {
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun uploadAttachment(
-    file: MultipartFile,
-    @Valid saveFileCallback: (file: MultipartFile) -> @Valid PostAttachmentDto,
-  ): Attachment? {
+  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: (file: MultipartFile) -> @Valid PostAttachmentDto): Attachment? {
     val saveFile = saveFileCallback(file)
     val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
     // 构建一个新附件对象保存并返回
@@ -57,10 +52,7 @@ class AttachmentAggregatorImpl(
     return aService.save(att)
   }
 
-  override fun uploadAttachment(
-    stream: InputStream,
-    req: (stream: InputStream) -> PostAttachmentDescriptionDto,
-  ): Attachment? {
+  override fun uploadAttachment(stream: InputStream, req: (stream: InputStream) -> PostAttachmentDescriptionDto): Attachment? {
     val saveFile = req(stream)
     val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
     val allBytes = stream.readAllBytes()
@@ -77,10 +69,7 @@ class AttachmentAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun uploadAttachments(
-    files: List<MultipartFile>,
-    saveFileCallback: (file: MultipartFile) -> PostAttachmentDto,
-  ): List<Attachment> {
+  override fun uploadAttachments(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> PostAttachmentDto): List<Attachment> {
     val saved = files.map { saveFileCallback(it) to it }
     val baseUrls =
       aService.findAllByBaseUrlInAndBaseUriIn(saved.map { it.first.baseUrl!! }, saved.map { it.first.baseUri!! }).associateBy { it.baseUrl!! to it.baseUri!! }

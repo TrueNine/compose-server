@@ -89,11 +89,7 @@ abstract class IEntity : IAnyEntity() {
  * @param findByIdFn 查询函数
  * @param preMergeFn 合并前处理函数
  */
-fun <T : IEntity> T.merge(
-  target: T,
-  findByIdFn: (id: Id) -> T?,
-  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
-): T {
+fun <T : IEntity> T.merge(target: T, findByIdFn: (id: Id) -> T?, preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }): T {
   return takeUpdate {
     val queryEntity = findByIdFn(target.id)
     checkNotNull(queryEntity) { "未找到修改的数据版本" }
@@ -137,10 +133,7 @@ fun <T : IEntity> Iterable<T>.mergeAll(
  * @param target 数据库实体
  * @param merge 合并函数：(this 自身实体, db 数据库实体) -> 默认合并的自身实体
  */
-inline fun <T : IEntity> T.fromDbData(
-  target: T,
-  crossinline merge: T.(w: T) -> T = { it },
-): T {
+inline fun <T : IEntity> T.fromDbData(target: T, crossinline merge: T.(w: T) -> T = { it }): T {
   check(!target.isNew) { "要合并的实体必须为数据库内查询的实体" }
 
   id = target.id

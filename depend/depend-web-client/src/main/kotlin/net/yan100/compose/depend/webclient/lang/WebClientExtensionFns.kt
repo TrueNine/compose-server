@@ -81,11 +81,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
 
 class ArgsResolver : HttpServiceArgumentResolver {
 
-  override fun resolve(
-    argument: Any?,
-    parameter: MethodParameter,
-    requestValues: HttpRequestValues.Builder,
-  ): Boolean {
+  override fun resolve(argument: Any?, parameter: MethodParameter, requestValues: HttpRequestValues.Builder): Boolean {
     if (argument != null && argument is AnyTyping) {
       val name =
         parameter.getParameterAnnotation(RequestParam::class.java)?.name

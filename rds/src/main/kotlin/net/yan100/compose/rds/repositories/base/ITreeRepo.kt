@@ -41,19 +41,23 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
   }
 
   /** ## 查询当前节点的所有子节点 */
-  @Query("""
+  @Query(
+    """
     from #{#entityName} e
     where e.tgi = :#{#parent.tgi}
     and e.rln between (:#{#parent.rln}+1) and :#{#parent.rrn}
-  """)
+  """
+  )
   fun findChildren(parent: T): List<T>
 
   /** ## 分页查询当前节点的所有子节点 */
-  @Query("""
+  @Query(
+    """
     from #{#entityName} e
     where e.tgi = :#{#parent.tgi}
     and e.rln between (:#{#parent.rln}+1) and :#{#parent.rrn}
-  """)
+  """
+  )
   fun findChildren(parent: T, page: Pageable): Page<T>
 
   /** ## 查询当前节点的直接子集 */
@@ -79,12 +83,14 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
   fun findDirectChildren(parent: T, page: Pageable): Page<T>
 
   /** 返回当前节点的所有父节点 */
-  @Query("""
+  @Query(
+    """
     from #{#entityName} e
     where e.tgi = :#{#child.tgi}
     and e.rln < :#{#child.rln}
     and e.rrn > :#{#child.rrn}
-  """)
+  """
+  )
   fun findParentPath(child: T): List<T>
 
   /** 计算当前节点的深度级别 */
@@ -100,42 +106,50 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
   fun findTreeLevel(child: T): BigSerial
 
   /** 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来 */
-  @Query("""
+  @Query(
+    """
     update #{#entityName} e
     set e.rln = e.rln + :rlnOffset
     where e.tgi = :tgi
     and e.rln > :parentRln
-  """)
+  """
+  )
   @Modifying
   fun pushRlnByOffset(rlnOffset: BigSerial, parentRln: BigSerial, tgi: SerialCode?)
 
   /** 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来 */
-  @Query("""
+  @Query(
+    """
     update #{#entityName} e
     set e.rrn = e.rrn + :rrnOffset
     where e.tgi = :tgi 
     and e.rrn >= :parentRln
-  """)
+  """
+  )
   @Modifying
   fun pushRrnByOffset(rrnOffset: Long, parentRln: Long, tgi: String?)
 
   /** 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来 */
-  @Query("""
+  @Query(
+    """
     update #{#entityName} c
     set c.rln = c.rln - :rlnOffset
     where c.tgi = :tgi
     and c.rln > :parentRln
-  """)
+  """
+  )
   @Modifying
   fun popRlnByOffset(rlnOffset: Long, parentRln: Long, tgi: String?)
 
   /** 此方法不建议调用，为内部更新时的计算方法，由于接口只能公开的限制，只能暴露了出来 */
-  @Query("""
+  @Query(
+    """
     update #{#entityName} c
     set c.rrn = c.rrn - :rrnOffset
     where c.tgi = :tgi 
     and c.rrn >= :parentRln
-  """)
+  """
+  )
   @Modifying
   fun popRrnByOffset(rrnOffset: Long, parentRln: Long, tgi: String?): Int
 

@@ -18,6 +18,7 @@ package net.yan100.compose.core.alias
 
 /** 数据库主键 */
 typealias Id = String
+
 /** 字符串形式的序列号 */
 typealias SerialCode = String
 

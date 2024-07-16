@@ -19,13 +19,8 @@ package net.yan100.compose.ksp.dsl
 import com.squareup.kotlinpoet.*
 import kotlin.reflect.KClass
 
-class ClassDsl
-@JvmOverloads
-constructor(
-  name: String = "",
-  className: ClassName? = null,
-  override val fileBuilder: FileSpec.Builder,
-) : StandardBuilderAdaptor<TypeSpec.Builder, TypeSpec> {
+class ClassDsl @JvmOverloads constructor(name: String = "", className: ClassName? = null, override val fileBuilder: FileSpec.Builder) :
+  StandardBuilderAdaptor<TypeSpec.Builder, TypeSpec> {
   override val builder = if (null != className) TypeSpec.classBuilder(className) else TypeSpec.classBuilder(name)
 
   fun opened() = builder.addModifiers(KModifier.OPEN)

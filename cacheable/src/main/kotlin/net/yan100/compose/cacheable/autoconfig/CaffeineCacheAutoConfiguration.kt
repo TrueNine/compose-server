@@ -31,14 +31,8 @@ private val log = slf4j(CaffeineCacheAutoConfiguration::class)
 
 @Configuration
 class CaffeineCacheAutoConfiguration {
-  private fun create(
-    name: String,
-    d: Duration,
-  ): CaffeineCache {
-    return CaffeineCache(
-      name,
-      Caffeine.newBuilder().expireAfterWrite(d).build(),
-    )
+  private fun create(name: String, d: Duration): CaffeineCache {
+    return CaffeineCache(name, Caffeine.newBuilder().expireAfterWrite(d).build())
   }
 
   private final val m = mutableListOf<CaffeineCache>()

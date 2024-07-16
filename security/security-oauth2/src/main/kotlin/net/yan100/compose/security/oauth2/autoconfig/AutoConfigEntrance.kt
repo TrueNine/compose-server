@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import
       "net.yan100.compose.security.oauth2.api",
       "net.yan100.compose.security.oauth2.autoconfig",
       "net.yan100.compose.security.oauth2.schedule",
-      "net.yan100.compose.security.oauth2.property"
+      "net.yan100.compose.security.oauth2.property",
     ]
 )
 @EnableConfigurationProperties(value = [WechatProperties::class])

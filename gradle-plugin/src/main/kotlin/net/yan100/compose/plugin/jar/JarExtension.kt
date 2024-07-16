@@ -27,10 +27,7 @@ import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-class JarExtension(
-  private val project: Project,
-  private val dsl: JarExtensionConfig,
-) {
+class JarExtension(private val project: Project, private val dsl: JarExtensionConfig) {
   init {
     if (null != project.tasks.findByName("jar") && dsl.copyLicense) {
       jarCopyLicense()

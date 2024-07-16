@@ -66,10 +66,7 @@ class RbacAggregatorImpl(
         }
       )
 
-  override fun saveAllRoleGroupToUser(
-    roleGroupIds: List<ReferenceId>,
-    userId: ReferenceId,
-  ): List<UserRoleGroup> {
+  override fun saveAllRoleGroupToUser(roleGroupIds: List<ReferenceId>, userId: ReferenceId): List<UserRoleGroup> {
     val existingRoleGroups = urg.findAllRoleGroupIdByUserId(userId)
     val mewRoleGroups =
       roleGroupIds
@@ -102,10 +99,7 @@ class RbacAggregatorImpl(
         }
       )
 
-  override fun saveAllRoleToRoleGroup(
-    roleIds: List<ReferenceId>,
-    roleGroupId: ReferenceId,
-  ): List<RoleGroupRole> {
+  override fun saveAllRoleToRoleGroup(roleIds: List<ReferenceId>, roleGroupId: ReferenceId): List<RoleGroupRole> {
     val existingRoles = rgr.findAllRoleIdByRoleGroupId(roleGroupId)
     val newRoles =
       roleIds
@@ -129,10 +123,7 @@ class RbacAggregatorImpl(
     rgr.deleteAllByRoleIdInAndRoleGroupId(roleIds, roleGroupId)
   }
 
-  override fun savePermissionsToRole(
-    permissionsId: ReferenceId,
-    roleId: ReferenceId,
-  ): RolePermissions? {
+  override fun savePermissionsToRole(permissionsId: ReferenceId, roleId: ReferenceId): RolePermissions? {
     return rp.findByRoleIdAndPermissionsId(roleId, permissionsId)
       ?: rp.save(
         RolePermissions().apply {
@@ -142,10 +133,7 @@ class RbacAggregatorImpl(
       )
   }
 
-  override fun saveAllPermissionsToRole(
-    permissionsIds: List<ReferenceId>,
-    roleId: ReferenceId,
-  ): List<RolePermissions> {
+  override fun saveAllPermissionsToRole(permissionsIds: List<ReferenceId>, roleId: ReferenceId): List<RolePermissions> {
     val existingPermissions = rp.findAllPermissionsIdByRoleId(roleId)
     val newPermissions =
       permissionsIds
@@ -165,10 +153,7 @@ class RbacAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllPermissionsFromRole(
-    permissionsIds: List<ReferenceId>,
-    roleId: ReferenceId,
-  ) {
+  override fun revokeAllPermissionsFromRole(permissionsIds: List<ReferenceId>, roleId: ReferenceId) {
     rp.deleteAllByPermissionsIdInAndRoleId(permissionsIds, roleId)
   }
 }

@@ -24,9 +24,13 @@ import jakarta.validation.constraints.Min
 class CreateMpPayOrderResp {
   @Schema(title = "32位随机字符串，32位以下") @Min(value = 5, message = "随机字符串太短") @Max(value = 32, message = "随机字符串不得超过32位") var random32String: String? = null
 
-  @Schema(title = "统一下单接口返回的 prepay_id", description = """
+  @Schema(
+    title = "统一下单接口返回的 prepay_id",
+    description =
+      """
     prepay_id 参数值，提交格式如：prepay_id=***
-  """)
+  """,
+  )
   var prePayId: String? = null
     get() = "prepay_id=$field"
     set(v) {

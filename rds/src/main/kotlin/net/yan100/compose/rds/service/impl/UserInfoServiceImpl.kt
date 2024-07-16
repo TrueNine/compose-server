@@ -35,14 +35,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: IUserInfoRepo) :
-  IUserInfoService,
-  CrudService<UserInfo>(
-    infoRepo,
-    listOf(
-      UserInfo::class,
-      Usr::class,
-    )
-  ) {
+  IUserInfoService, CrudService<UserInfo>(infoRepo, listOf(UserInfo::class, Usr::class)) {
 
   override fun persistMerge(data: IMergeEventService.MergeData<*>): UserInfo {
     return data.to as UserInfo

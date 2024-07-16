@@ -93,9 +93,7 @@ private fun KSAnnotation.createInvocationHandler(clazz: Class<*>): InvocationHan
 }
 
 @KspExperimental
-private fun KSAnnotation.asAnnotation(
-  annotationInterface: Class<*>,
-): Any {
+private fun KSAnnotation.asAnnotation(annotationInterface: Class<*>): Any {
   return Proxy.newProxyInstance(annotationInterface.classLoader, arrayOf(annotationInterface), this.createInvocationHandler(annotationInterface)) as Proxy
 }
 
@@ -141,7 +139,7 @@ private fun <T> Any.asEnum(returnType: Class<T>): T =
         this.declaration.simpleName.getShortName()
       } else {
         this.toString()
-      }
+      },
     ) as T
 
 private fun Any.asByte(): Byte = if (this is Int) this.toByte() else this as Byte

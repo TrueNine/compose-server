@@ -131,11 +131,7 @@ class WeChatSinglePayService(
   }
 
   @Deprecated(message = "暂时不可用")
-  override fun applyRefundPayOrder(
-    refundAmount: BigDecimal,
-    totalAmount: BigDecimal,
-    currency: ISO4217,
-  ) {
+  override fun applyRefundPayOrder(refundAmount: BigDecimal, totalAmount: BigDecimal, currency: ISO4217) {
     val createRequest = CreateRequest()
     val amountReq =
       AmountReq().apply {

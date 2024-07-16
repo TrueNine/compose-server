@@ -27,7 +27,7 @@ import java.lang.annotation.Inherited
   AnnotationTarget.CLASS,
   AnnotationTarget.FIELD,
   AnnotationTarget.PROPERTY_GETTER,
-  AnnotationTarget.PROPERTY_SETTER
+  AnnotationTarget.PROPERTY_SETTER,
 )
 @Retention(AnnotationRetention.BINARY)
 annotation class CloneDeep {}

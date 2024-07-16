@@ -37,5 +37,5 @@ import kotlin.reflect.KClass
 annotation class ValidChinaName(
   val message: String = "{net.yan100.compose.depend.jvalid.constraints.ValidChinaName.message}",
   val groups: Array<KClass<*>> = [],
-  val payload: Array<KClass<out Payload>> = []
+  val payload: Array<KClass<out Payload>> = [],
 )

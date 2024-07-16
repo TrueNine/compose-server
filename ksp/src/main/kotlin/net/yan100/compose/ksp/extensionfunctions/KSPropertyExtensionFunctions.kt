@@ -35,7 +35,7 @@ fun KSPropertyDeclaration.isBasicType(): Boolean {
     "java.lang.Short",
     "kotlin.Short",
     "java.lang.Byte",
-    "kotlin.Byte", -> true
+    "kotlin.Byte" -> true
     else -> false
   }
 }

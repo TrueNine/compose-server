@@ -18,12 +18,8 @@ package net.yan100.compose.core.util.generator
 
 import net.yan100.compose.core.ISnowflakeGenerator
 
-class SynchronizedSimpleSnowflake(
-  private val workId: Long,
-  private val datacenterId: Long,
-  private var sequence: Long,
-  private val startTimeStamp: Long,
-) : ISnowflakeGenerator {
+class SynchronizedSimpleSnowflake(private val workId: Long, private val datacenterId: Long, private var sequence: Long, private val startTimeStamp: Long) :
+  ISnowflakeGenerator {
   // 长度为5位
   private val workerIdBits = 5L
   private val datacenterIdBits = 5L

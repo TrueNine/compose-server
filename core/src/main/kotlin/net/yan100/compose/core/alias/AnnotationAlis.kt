@@ -17,3 +17,5 @@
 package net.yan100.compose.core.alias
 
 typealias TODO = Deprecated
+
+typealias FIXME = Deprecated

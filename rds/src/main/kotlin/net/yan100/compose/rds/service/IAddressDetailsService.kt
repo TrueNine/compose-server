@@ -28,19 +28,13 @@ import net.yan100.compose.rds.service.base.IService
 interface IAddressDetailsService : IService<AddressDetails> {
   fun findAllByPhone(phone: String, page: Pq = Pq.DEFAULT_MAX): Pr<AddressDetails>
 
-  fun findNonDesensitizedAllByPhone(
-    phone: String,
-    page: Pq = Pq.DEFAULT_MAX,
-  ): Pr<NonDesensitizedAddressDetails>
+  fun findNonDesensitizedAllByPhone(phone: String, page: Pq = Pq.DEFAULT_MAX): Pr<NonDesensitizedAddressDetails>
 
   fun findFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails>
 
   fun findAllByUserId(userId: String, page: Pq = Pq.DEFAULT_MAX): Pr<AddressDetails>
 
-  fun findNonDesensitizedAllByUserId(
-    userId: String,
-    page: Pq = Pq.DEFAULT_MAX,
-  ): Pr<NonDesensitizedAddressDetails>
+  fun findNonDesensitizedAllByUserId(userId: String, page: Pq = Pq.DEFAULT_MAX): Pr<NonDesensitizedAddressDetails>
 
   fun findFullAllByUserId(userId: ReferenceId, page: Pq = Pq.DEFAULT_MAX): Pr<FullAddressDetails>
 

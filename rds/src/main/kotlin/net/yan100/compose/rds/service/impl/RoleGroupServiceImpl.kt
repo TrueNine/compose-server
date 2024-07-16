@@ -24,13 +24,9 @@ import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
-class RoleGroupServiceImpl(
-  private val rgRepo: net.yan100.compose.rds.repositories.RoleGroupRepo,
-  private val urRepo: IUserRoleGroupRepo,
-) : IRoleGroupService, CrudService<RoleGroup>(rgRepo) {
-  override fun assignRootToUser(
-    userId: String,
-  ): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
+class RoleGroupServiceImpl(private val rgRepo: net.yan100.compose.rds.repositories.RoleGroupRepo, private val urRepo: IUserRoleGroupRepo) :
+  IRoleGroupService, CrudService<RoleGroup>(rgRepo) {
+  override fun assignRootToUser(userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
     return net.yan100.compose.rds.entities.relationship
       .UserRoleGroup()
       .apply {
@@ -40,9 +36,7 @@ class RoleGroupServiceImpl(
       .let { urRepo.save(it) }
   }
 
-  override fun assignPlainToUser(
-    userId: String,
-  ): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
+  override fun assignPlainToUser(userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
     return net.yan100.compose.rds.entities.relationship
       .UserRoleGroup()
       .apply {
@@ -52,9 +46,7 @@ class RoleGroupServiceImpl(
       .let { urRepo.save(it) }
   }
 
-  override fun assignAdminToUser(
-    userId: String,
-  ): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
+  override fun assignAdminToUser(userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
     return net.yan100.compose.rds.entities.relationship
       .UserRoleGroup()
       .apply {

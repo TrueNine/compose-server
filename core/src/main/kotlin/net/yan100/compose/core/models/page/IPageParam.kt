@@ -34,7 +34,7 @@ interface IPageParam : Serializable {
   private data class DefaultPageParam(
     @get:Transient override var offset: Int? = MIN_OFFSET,
     @get:Transient override var pageSize: Int? = MAX_PAGE_SIZE,
-    @get:Transient override var unPage: Boolean? = false
+    @get:Transient override var unPage: Boolean? = false,
   ) : IPageParam
 
   companion object {

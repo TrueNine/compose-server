@@ -40,9 +40,7 @@ class ApiExchangesAutoConfiguration {
     val sslCtx = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build()
 
     val unsafeConnector =
-      ReactorClientHttpConnector(
-        HttpClient.create().secure { t -> t.sslContext(sslCtx) }.compress(true).resolver(DefaultAddressResolverGroup.INSTANCE),
-      )
+      ReactorClientHttpConnector(HttpClient.create().secure { t -> t.sslContext(sslCtx) }.compress(true).resolver(DefaultAddressResolverGroup.INSTANCE))
 
     val client =
       WebClient.builder()

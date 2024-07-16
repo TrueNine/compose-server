@@ -130,12 +130,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByRsaPublicKeyBase64(
-    rsaPublicKey: String,
-    data: String,
-    shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = Encryptors.charset,
-  ): String? = encryptByRsaPublicKey(Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!, data, shardingSize, charset)
+  fun encryptByRsaPublicKeyBase64(rsaPublicKey: String, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = Encryptors.charset): String? =
+    encryptByRsaPublicKey(Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!, data, shardingSize, charset)
 
   /**
    * @param publicKey 公钥
@@ -146,12 +142,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByRsaPublicKey(
-    publicKey: RSAPublicKey,
-    data: String,
-    shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = Encryptors.charset,
-  ): String? = encrypt(publicKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA_PADDING)
+  fun encryptByRsaPublicKey(publicKey: RSAPublicKey, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = Encryptors.charset): String? =
+    encrypt(publicKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA_PADDING)
 
   /**
    * ## rsa 私钥加密
@@ -164,12 +156,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByRsaPrivateKey(
-    privateKey: RSAPrivateKey,
-    data: String,
-    shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = Encryptors.charset,
-  ): String? = encryptByPrivateKey(privateKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA_PADDING)
+  fun encryptByRsaPrivateKey(privateKey: RSAPrivateKey, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = Encryptors.charset): String? =
+    encryptByPrivateKey(privateKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA_PADDING)
 
   /**
    * @param eccPublicKey ecc 公钥
@@ -179,11 +167,7 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByEccPublicKey(
-    eccPublicKey: PublicKey,
-    data: String,
-    charset: Charset = Encryptors.charset,
-  ): String? =
+  fun encryptByEccPublicKey(eccPublicKey: PublicKey, data: String, charset: Charset = Encryptors.charset): String? =
     runCatching {
         Cipher.getInstance("ECIES", "BC").run {
           init(ENC_MODE, eccPublicKey, IESParameterSpec(null, null, 256))
@@ -201,11 +185,7 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByEccPrivateKey(
-    eccPrivateKey: PrivateKey,
-    data: String,
-    charset: Charset = Encryptors.charset,
-  ): String? =
+  fun decryptByEccPrivateKey(eccPrivateKey: PrivateKey, data: String, charset: Charset = Encryptors.charset): String? =
     runCatching {
         Cipher.getInstance("ECIES", "BC").run {
           init(DEC_MODE, eccPrivateKey, IESParameterSpec(null, null, 256))
@@ -223,11 +203,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByRsaPrivateKeyBase64(
-    rsaPrivateKey: String,
-    ciphertext: String,
-    charset: Charset = Encryptors.charset,
-  ): String? = decryptByRsaPrivateKey(Keys.readRsaPrivateKeyByBase64(rsaPrivateKey)!!, ciphertext, charset)
+  fun decryptByRsaPrivateKeyBase64(rsaPrivateKey: String, ciphertext: String, charset: Charset = Encryptors.charset): String? =
+    decryptByRsaPrivateKey(Keys.readRsaPrivateKeyByBase64(rsaPrivateKey)!!, ciphertext, charset)
 
   /** 使用 SHA 1 进行签名 */
   @JvmStatic
@@ -250,11 +227,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByRsaPrivateKey(
-    rsaPrivateKey: RSAPrivateKey,
-    ciphertext: String,
-    charset: Charset = Encryptors.charset,
-  ): String? = basicDecrypt(rsaPrivateKey, ciphertext, EncryptAlgorithmTyping.RSA_PADDING, charset)
+  fun decryptByRsaPrivateKey(rsaPrivateKey: RSAPrivateKey, ciphertext: String, charset: Charset = Encryptors.charset): String? =
+    basicDecrypt(rsaPrivateKey, ciphertext, EncryptAlgorithmTyping.RSA_PADDING, charset)
 
   /**
    * @param aesKey 密钥
@@ -264,11 +238,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByAesKeyBase64(
-    aesKey: String,
-    plaintext: String,
-    charset: Charset = Charsets.UTF_8,
-  ): String? = encryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), plaintext, charset)
+  fun encryptByAesKeyBase64(aesKey: String, plaintext: String, charset: Charset = Charsets.UTF_8): String? =
+    encryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), plaintext, charset)
 
   /**
    * @param secret 密钥
@@ -278,11 +249,7 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByAesKey(
-    secret: SecretKeySpec,
-    plain: String,
-    charset: Charset = Encryptors.charset,
-  ): String? =
+  fun encryptByAesKey(secret: SecretKeySpec, plain: String, charset: Charset = Encryptors.charset): String? =
     runCatching {
         Cipher.getInstance("AES/ECB/PKCS5Padding").run {
           init(ENC_MODE, secret)
@@ -300,11 +267,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByAesKeyBase64(
-    aesKey: String,
-    ciphertext: String,
-    charset: Charset = Encryptors.charset,
-  ): String? = decryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), ciphertext, charset)
+  fun decryptByAesKeyBase64(aesKey: String, ciphertext: String, charset: Charset = Encryptors.charset): String? =
+    decryptByAesKey(SecretKeySpec(Base64Helper.decodeToByte(aesKey), "AES"), ciphertext, charset)
 
   /**
    * @param secret 密钥
@@ -314,11 +278,7 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByAesKey(
-    secret: SecretKeySpec,
-    ciphertext: String,
-    charset: Charset = Encryptors.charset,
-  ): String? =
+  fun decryptByAesKey(secret: SecretKeySpec, ciphertext: String, charset: Charset = Encryptors.charset): String? =
     kotlin
       .runCatching {
         Cipher.getInstance("AES/ECB/PKCS5Padding").run {
@@ -331,11 +291,7 @@ object Encryptors {
 
   @JvmStatic
   @JvmOverloads
-  fun signWithSha256WithRsaByRsaPrivateKey(
-    signContent: String,
-    rsaPrivateKey: RSAPrivateKey,
-    charset: Charset = Encryptors.charset,
-  ): Signature {
+  fun signWithSha256WithRsaByRsaPrivateKey(signContent: String, rsaPrivateKey: RSAPrivateKey, charset: Charset = Encryptors.charset): Signature {
     val signature = Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.value)
     signature.initSign(rsaPrivateKey)
     signature.update(signContent.toByteArray(charset))

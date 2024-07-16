@@ -23,9 +23,7 @@ import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
 
 @Component
-class TableRowDeleteSpringListener(
-  private val tableRowDeleteRecordService: ITableRowDeleteRecordService,
-) : ApplicationListener<TableRowDeleteSpringEvent> {
+class TableRowDeleteSpringListener(private val tableRowDeleteRecordService: ITableRowDeleteRecordService) : ApplicationListener<TableRowDeleteSpringEvent> {
   override fun onApplicationEvent(event: TableRowDeleteSpringEvent) {
     tableRowDeleteRecordService.saveAnyEntity(event.source as IEntity)
   }

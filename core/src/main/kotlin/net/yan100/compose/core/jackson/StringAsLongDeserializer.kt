@@ -31,10 +31,7 @@ class StringAsLongDeserializer : JsonDeserializer<Long?>(), ContextualSerializer
     }
   }
 
-  override fun createContextual(
-    prov: SerializerProvider?,
-    property: BeanProperty?,
-  ): JsonSerializer<*>? {
+  override fun createContextual(prov: SerializerProvider?, property: BeanProperty?): JsonSerializer<*>? {
     return property?.let { p ->
       val ref: BigIntegerAsString? = p.getAnnotation(BigIntegerAsString::class.java)
       if (null != ref && p.type.rawClass == Long::class.java) LongAsStringSerializer() else prov?.findValueSerializer(property.type, property)

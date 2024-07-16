@@ -48,7 +48,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
         if (params.containEncryptContent()) {
           withClaim(
             this@JwtIssuer.encryptDataKeyName,
-            encryptData(createContent(params.encryptedDataObj!!), params.contentEncryptEccKey ?: this@JwtIssuer.contentEccPublicKey!!)
+            encryptData(createContent(params.encryptedDataObj!!), params.contentEncryptEccKey ?: this@JwtIssuer.contentEccPublicKey!!),
           )
         }
         withExpiresAt(DTimer.plusMillisFromCurrent(params.duration?.toMillis() ?: this@JwtIssuer.expireMillis))
@@ -74,9 +74,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
       return this
     }
 
-    fun serializer(
-      mapper: ObjectMapper? = null,
-    ): Builder {
+    fun serializer(mapper: ObjectMapper? = null): Builder {
       mapper?.let { objectMapper = it }
       return this
     }

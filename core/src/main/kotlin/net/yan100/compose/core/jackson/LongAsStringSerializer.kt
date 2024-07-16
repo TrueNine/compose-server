@@ -35,10 +35,7 @@ class LongAsStringSerializer : JsonSerializer<Long?>(), ContextualSerializer {
     value?.let { gen?.writeString(it.toString()) }
   }
 
-  override fun createContextual(
-    prov: SerializerProvider?,
-    property: BeanProperty?,
-  ): JsonSerializer<*>? {
+  override fun createContextual(prov: SerializerProvider?, property: BeanProperty?): JsonSerializer<*>? {
     return property?.let { p ->
       val ref: BigIntegerAsString? = p.getAnnotation(BigIntegerAsString::class.java)
       if (null != ref && p.type.rawClass == Long::class.java) this else prov?.findValueSerializer(property.type, property)

@@ -61,8 +61,7 @@ enum class MediaTypes(private val extension: String, vararg m: String) : StringT
   GZIP("gzip", "application/x-gzip"),
   TAR("tar", "application/x-tar"),
   RAR("rar", "application/x-rar-compressed"),
-  SSE("sse", "text/event-stream"),
-  ;
+  SSE("sse", "text/event-stream");
 
   @JsonIgnore private var mm: Array<out String> = m
 

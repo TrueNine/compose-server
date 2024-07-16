@@ -49,7 +49,7 @@ open class JwtVerifier internal constructor() {
             decryptData(
               encData = decodedJwt.claims.getValue(this@JwtVerifier.encryptDataKeyName).asString(),
               eccPrivateKey = params.contentEncryptEccKey ?: this@JwtVerifier.contentEccPrivateKey,
-              targetType = params.encryptDataTargetType!!.kotlin
+              targetType = params.encryptDataTargetType!!.kotlin,
             )
         }
         // 解包 subject
@@ -90,11 +90,7 @@ open class JwtVerifier internal constructor() {
       }
   }
 
-  private fun <T : Any> decryptData(
-    encData: String,
-    targetType: KClass<T>,
-    eccPrivateKey: PrivateKey? = this.contentEccPrivateKey,
-  ): T? {
+  private fun <T : Any> decryptData(encData: String, targetType: KClass<T>, eccPrivateKey: PrivateKey? = this.contentEccPrivateKey): T? {
     val content = eccPrivateKey.let { priKey -> Encryptors.decryptByEccPrivateKey(priKey!!, encData) } ?: encData
     return parseContent(content, targetType)
   }
@@ -102,10 +98,7 @@ open class JwtVerifier internal constructor() {
   private fun <T : Any> parseContent(json: String, classType: KClass<T>) =
     runCatching { objectMapper.readValue(json, classType.java) }.onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }.getOrNull()
 
-  private fun <S : Any, E : Any> parseExceptionHandle(
-    e: Exception,
-    d: JwtToken<S, E>?,
-  ): JwtToken<S, E>? {
+  private fun <S : Any, E : Any> parseExceptionHandle(e: Exception, d: JwtToken<S, E>?): JwtToken<S, E>? {
     return when (e) {
       is com.auth0.jwt.exceptions.TokenExpiredException -> d.also { it?.isExpired = true }
       else -> null

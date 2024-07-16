@@ -133,7 +133,7 @@ class FullUsr : SuperUsr() {
       [
         JoinColumn(name = UserRoleGroup.ROLE_GROUP_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
       ],
-    foreignKey = ForeignKey(NO_CONSTRAINT)
+    foreignKey = ForeignKey(NO_CONSTRAINT),
   )
   @Fetch(SUBSELECT)
   @NotFound(action = IGNORE)

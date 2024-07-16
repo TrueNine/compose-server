@@ -46,5 +46,5 @@ annotation class MetaVisible(
   /** ## 注释其可读性 */
   val readOnly: Boolean = false,
   /** ## 是否进行隐藏 */
-  val hidden: Boolean = false
+  val hidden: Boolean = false,
 )

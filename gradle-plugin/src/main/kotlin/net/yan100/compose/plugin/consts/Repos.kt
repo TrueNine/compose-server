@@ -69,6 +69,6 @@ object Repos {
       springMilestone,
       springLibMilestone,
       springSnapshot,
-      mybatisPlusSnapshot
+      mybatisPlusSnapshot,
     )
 }

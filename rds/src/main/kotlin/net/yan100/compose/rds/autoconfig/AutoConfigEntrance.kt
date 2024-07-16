@@ -29,9 +29,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
   "net.yan100.compose.rds.service",
   "net.yan100.compose.rds.repositories",
   "net.yan100.compose.rds.base",
-  "net.yan100.compose.rds.listener"
+  "net.yan100.compose.rds.listener",
 )
-@EnableJpaRepositories(
-  "net.yan100.compose.rds.repositories",
-)
+@EnableJpaRepositories("net.yan100.compose.rds.repositories")
 class AutoConfigEntrance

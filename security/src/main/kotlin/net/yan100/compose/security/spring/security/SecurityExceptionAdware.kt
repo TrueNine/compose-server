@@ -37,29 +37,17 @@ import org.springframework.security.web.access.AccessDeniedHandler
  * @since 2022-09-28
  */
 abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null) : AccessDeniedHandler, AuthenticationEntryPoint {
-  override fun commence(
-    request: HttpServletRequest,
-    response: HttpServletResponse,
-    ex: AuthenticationException,
-  ) {
+  override fun commence(request: HttpServletRequest, response: HttpServletResponse, ex: AuthenticationException) {
     log.warn("授权校验异常", ex)
     writeErrorMessage(response, ErrorBody.failedByErrMsg(HttpErrorStatus._401))
   }
 
-  override fun handle(
-    request: HttpServletRequest,
-    response: HttpServletResponse,
-    ex: AccessDeniedException,
-  ) {
+  override fun handle(request: HttpServletRequest, response: HttpServletResponse, ex: AccessDeniedException) {
     log.warn("无权限异常", ex)
     writeErrorMessage(response, ErrorBody.failedByErrMsg(HttpErrorStatus._403))
   }
 
-  private fun writeErrorMessage(
-    response: HttpServletResponse,
-    msg: ErrorBody,
-    charset: Charset = Charsets.UTF_8,
-  ) {
+  private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorBody, charset: Charset = Charsets.UTF_8) {
     response.status = msg.code!!
     response.characterEncoding = charset.displayName()
     response.contentType = MediaTypes.JSON.value

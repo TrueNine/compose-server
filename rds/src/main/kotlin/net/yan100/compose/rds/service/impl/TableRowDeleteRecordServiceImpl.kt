@@ -35,10 +35,8 @@ import net.yan100.compose.rds.service.base.IService
 import org.springframework.stereotype.Service
 
 @Service
-class TableRowDeleteRecordServiceImpl(
-  private val delRepo: ITableRowDeleteRecordRepository,
-  private val mapper: ObjectMapper,
-) : ITableRowDeleteRecordService, IService<TableRowDeleteRecord>, CrudService<TableRowDeleteRecord>(delRepo) {
+class TableRowDeleteRecordServiceImpl(private val delRepo: ITableRowDeleteRecordRepository, private val mapper: ObjectMapper) :
+  ITableRowDeleteRecordService, IService<TableRowDeleteRecord>, CrudService<TableRowDeleteRecord>(delRepo) {
 
   private val log = slf4j(this::class)
 

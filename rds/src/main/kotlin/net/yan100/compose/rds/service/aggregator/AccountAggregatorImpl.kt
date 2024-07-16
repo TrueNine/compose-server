@@ -68,12 +68,7 @@ class AccountAggregatorImpl(
 
   // TODO 硬编码
   @Transactional(rollbackFor = [Exception::class])
-  override fun assignAccount(
-    @Valid usr: Usr,
-    createUserId: RefId,
-    @Valid userInfo: UserInfo?,
-    roleGroup: Set<String>?,
-  ): Usr {
+  override fun assignAccount(@Valid usr: Usr, createUserId: RefId, @Valid userInfo: UserInfo?, roleGroup: Set<String>?): Usr {
     val savedUsr =
       usr.withNew().run {
         check(!userService.existsByAccount(account)) { "分配的账号已经存在" }
@@ -120,10 +115,7 @@ class AccountAggregatorImpl(
     } else null
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerAccountForWxpa(
-    param: IAccountAggregator.RegisterAccountDto,
-    openId: String,
-  ): Usr? =
+  override fun registerAccountForWxpa(param: IAccountAggregator.RegisterAccountDto, openId: String): Usr? =
     if (!userInfoService.existsByWechatOpenId(openId)) {
       saveUsrForRegisterParam(param).also {
         roleGroupService.assignPlainToUser(it.id)

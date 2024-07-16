@@ -45,11 +45,7 @@ private val log = slf4j(SecurityPreflightValidFilter::class)
 abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
 
   @Throws(ServletException::class, IOException::class)
-  override fun doFilterInternal(
-    request: HttpServletRequest,
-    response: HttpServletResponse,
-    filterChain: FilterChain,
-  ) {
+  override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
     // 跨域请求直接放行
     if (request.method == Methods.OPTIONS) {
       log.info("直接放行预检请求 uri = {}", request.requestURI)

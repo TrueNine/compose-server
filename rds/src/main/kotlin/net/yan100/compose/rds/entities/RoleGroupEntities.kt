@@ -67,7 +67,7 @@ class FullRoleGroup : SuperRoleGroup() {
           referencedColumnName = ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,
-          updatable = false
+          updatable = false,
         )
       ],
     inverseJoinColumns =
@@ -78,10 +78,10 @@ class FullRoleGroup : SuperRoleGroup() {
           referencedColumnName = ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,
-          updatable = false
+          updatable = false,
         )
       ],
-    foreignKey = Fk(ConstraintMode.NO_CONSTRAINT)
+    foreignKey = Fk(ConstraintMode.NO_CONSTRAINT),
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)

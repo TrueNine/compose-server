@@ -30,11 +30,7 @@ import net.yan100.compose.core.extensionfunctions.*
 
 // FIXME 急需修复 date 的 转换消耗
 class LocalDateTimeSerializer(private val zoneOffset: ZoneOffset) : JsonSerializer<LocalDateTime>() {
-  override fun serialize(
-    value: LocalDateTime,
-    gen: JsonGenerator?,
-    serializers: SerializerProvider?,
-  ) {
+  override fun serialize(value: LocalDateTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
     gen?.writeNumber(value.toDate(zoneOffset).toLong())
   }
 }

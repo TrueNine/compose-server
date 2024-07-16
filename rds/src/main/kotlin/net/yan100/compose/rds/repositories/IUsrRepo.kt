@@ -28,42 +28,54 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IUsrRepo : IRepo<Usr> {
-  @Query("""
+  @Query(
+    """
     select count(u.id) > 0
     from Usr u
     left join UserInfo i on i.userId = u.id
     where i.id = :userInfoId
-  """)
+  """
+  )
   fun existsByUserInfoId(userInfoId: RefId): Boolean
 
   fun findByAccount(account: String): Usr?
 
-  @Query("""
+  @Query(
+    """
     select u.id
     from Usr u
     where u.account = :account
-  """) fun findIdByAccount(account: String): String
+  """
+  )
+  fun findIdByAccount(account: String): String
 
-  @Query("""
+  @Query(
+    """
     select pwdEnc
     from Usr
     where account = :account
-  """) fun findPwdEncByAccount(account: String): String?
+  """
+  )
+  fun findPwdEncByAccount(account: String): String?
 
-  @Query("""
+  @Query(
+    """
     from Usr u
     left join UserInfo i on i.userId = u.id
     where i.pri = true and i.phone = :phone
-  """)
+  """
+  )
   fun findAccountByUserInfoPhone(phone: String): String?
 
-  @Query("""
+  @Query(
+    """
     select u.account
     from Usr u
     left join UserInfo i on i.userId = u.id
     where i.pri = true
     and i.wechatOpenid = :openid
-  """)
+  """
+  )
   fun findAccountByUserInfoWechatOpenid(openid: String): String?
 
   fun findAllByNickName(nickName: String): List<Usr>
@@ -100,12 +112,14 @@ interface IUsrRepo : IRepo<Usr> {
 
   @Modifying @Query("UPDATE Usr u SET u.banTime = :banTime WHERE u.account = :account") fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 
-  @Query("""
+  @Query(
+    """
     select count(i.id) > 0
     from UserInfo i
     left join Usr u on i.userId = u.id
     where i.wechatOpenid = :openId
-  """)
+  """
+  )
   fun existsByWechatOpenId(openId: String): Boolean
 }
 

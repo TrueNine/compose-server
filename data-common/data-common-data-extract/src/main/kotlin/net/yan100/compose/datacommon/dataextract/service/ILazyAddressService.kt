@@ -87,7 +87,7 @@ interface ILazyAddressService {
           object : ILookupFindParam {
             override val code = firstFindCode.code
             override val level = firstFindCode.level
-          },
+          }
         )
       if (null != preFind) return preFind
       val requestQueue = createRequestQueue(firstFindCode, deepCondition, notFound)
@@ -134,7 +134,7 @@ interface ILazyAddressService {
         object : ILookupFindParam {
           override val code = firstFindCode.code
           override val level = firstFindCode.level
-        },
+        }
       )
     if (!preFind.isNullOrEmpty()) return preFind
     var result = listOf<T>()
@@ -150,17 +150,14 @@ interface ILazyAddressService {
               override val deepLevel = it.level
               override val result = responses
               override val notInit = it.empty
-            },
+            }
           )
         } else notFound(false) ?: listOf()
     }
     return result
   }
 
-  fun findAllChildrenByCode(
-    code: SerialCode,
-    level: Int,
-  ): List<CnDistrictResp> {
+  fun findAllChildrenByCode(code: SerialCode, level: Int): List<CnDistrictResp> {
     return if (level in 0..4) {
       try {
         when (level) {
@@ -184,11 +181,7 @@ interface ILazyAddressService {
    * 此函数的作用在于，当拥有某些数据时，则不再需要发送网络请求，减少资源消耗 这个函数应用起来可能有些费解 <br/> 首先传入code <br/> preHandle 预处理函数，返回两个值，条件以及结果 <br/> 当 preHandle 返回的条件为 true 时，直接返回结果 <br/> 否则会调用
    * postProcessor 函数，入参为预取的地址数据
    */
-  fun <T> lazyFindAllChildrenByCode(
-    code: String,
-    preHandle: () -> Pair<Boolean, List<T>>,
-    postProcessor: (List<CnDistrictResp>) -> List<T>,
-  ): List<T> {
+  fun <T> lazyFindAllChildrenByCode(code: String, preHandle: () -> Pair<Boolean, List<T>>, postProcessor: (List<CnDistrictResp>) -> List<T>): List<T> {
     val preFindList = preHandle()
     return if (preFindList.first) {
       preFindList.second

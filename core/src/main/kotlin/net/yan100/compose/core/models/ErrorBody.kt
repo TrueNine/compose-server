@@ -42,12 +42,7 @@ class ErrorBody private constructor() : Serializable {
   companion object {
     @JvmStatic
     @JvmOverloads
-    fun failedBy(
-      msg: String? = null,
-      code: Int? = null,
-      alt: String? = null,
-      errMap: Map<String, String>? = null,
-    ): ErrorBody {
+    fun failedBy(msg: String? = null, code: Int? = null, alt: String? = null, errMap: Map<String, String>? = null): ErrorBody {
       return ErrorBody().apply {
         this.code = code
         this.msg = msg

@@ -38,10 +38,8 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
     return converters[targetType] as Converter<String?, T>
   }
 
-  private inner class AnyTypingConverter(
-    targetClass: Class<out AnyTyping?>,
-    private val mapping: MutableMap<String, AnyTyping> = mutableMapOf(),
-  ) : Converter<String?, AnyTyping?> {
+  private inner class AnyTypingConverter(targetClass: Class<out AnyTyping?>, private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()) :
+    Converter<String?, AnyTyping?> {
     init {
       if (targetClass.isEnum) targetClass.enumConstants.filterNotNull().forEach { mapping += it.value.toString() to it }
       else log.error("class: {} 不是枚举类型", targetClass)

@@ -27,11 +27,13 @@ interface IUserRoleGroupRepo : IRepo<UserRoleGroup> {
 
   fun findAllByUserId(userId: String): List<UserRoleGroup>
 
-  @Query("""
+  @Query(
+    """
     SELECT ur.roleGroupId 
     FROM UserRoleGroup ur
     WHERE ur.userId = :userId
-  """)
+  """
+  )
   fun findAllRoleGroupIdByUserId(userId: String): Set<String>
 
   fun existsByUserIdAndRoleGroupId(userId: String, roleId: String): Boolean

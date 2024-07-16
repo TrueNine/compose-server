@@ -28,5 +28,5 @@ data class ContextData(
   val codeGenerator: CodeGenerator,
   val log: KSPLogger,
   val file: KSFile,
-  val fileContext: FileContext
+  val fileContext: FileContext,
 )

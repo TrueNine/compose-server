@@ -27,10 +27,7 @@ import net.yan100.compose.core.encrypt.Base64Helper
  * @author TrueNine
  * @since 2022-12-09
  */
-data class RsaKeyPair(
-  @JsonIgnore var rsaPublicKey: RSAPublicKey? = null,
-  @JsonIgnore var rsaPrivateKey: RSAPrivateKey? = null,
-) {
+data class RsaKeyPair(@JsonIgnore var rsaPublicKey: RSAPublicKey? = null, @JsonIgnore var rsaPrivateKey: RSAPrivateKey? = null) {
   @get:JsonIgnore
   val rsaPublicKeyBase64: String
     get() = Base64Helper.encode(rsaPublicKey!!.encoded)

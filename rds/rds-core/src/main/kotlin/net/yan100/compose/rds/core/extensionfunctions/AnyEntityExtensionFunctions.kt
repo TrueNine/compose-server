@@ -31,15 +31,10 @@ fun <T : IAnyEntity> List<T>.withNew(): List<T> = map { it.withNew() }
 
 inline fun <T : IAnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> = after(this.map { it.withNew() })
 
-inline fun <T : IAnyEntity, R : Any> List<T>.withNewMap(
-  crossinline after: (List<T>) -> List<R>,
-): List<R> = after(this.withNew())
+inline fun <T : IAnyEntity, R : Any> List<T>.withNewMap(crossinline after: (List<T>) -> List<R>): List<R> = after(this.withNew())
 
 /** ## 判断当前实体是否为新实体，然后执行 update */
-inline fun <T : IAnyEntity> T.takeUpdate(
-  throwException: Boolean = true,
-  crossinline after: (T) -> T?,
-): T? {
+inline fun <T : IAnyEntity> T.takeUpdate(throwException: Boolean = true, crossinline after: (T) -> T?): T? {
   if (!isNew) return after(this) else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")
   return null
 }

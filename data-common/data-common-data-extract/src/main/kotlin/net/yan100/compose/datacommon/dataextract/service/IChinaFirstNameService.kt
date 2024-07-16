@@ -532,7 +532,7 @@ interface IChinaFirstNameService {
           "东门",
           "西门",
           "南宫",
-          "第五"
+          "第五",
         )
   }
 }

@@ -28,7 +28,7 @@ import kotlin.reflect.KClass
   AnnotationTarget.CLASS,
   AnnotationTarget.FIELD,
   AnnotationTarget.PROPERTY_GETTER,
-  AnnotationTarget.PROPERTY_SETTER
+  AnnotationTarget.PROPERTY_SETTER,
 )
 @Retention(AnnotationRetention.BINARY)
 annotation class MetaDef(

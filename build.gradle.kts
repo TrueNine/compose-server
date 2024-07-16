@@ -124,7 +124,7 @@ subprojects {
           "-verbose",
           "-Xjdk-release=${l.versions.java.get()}",
           "-jvm-target=${l.versions.java.get()}",
-          "-Xextended-compiler-checks"
+          "-Xextended-compiler-checks",
         )
     }
 
@@ -205,7 +205,7 @@ spotless {
     target("**/**.java")
     importOrder()
     removeUnusedImports()
-    googleJavaFormat().aosp().reflowLongStrings()
+    // googleJavaFormat().aosp().reflowLongStrings()
     formatAnnotations()
   }
 }

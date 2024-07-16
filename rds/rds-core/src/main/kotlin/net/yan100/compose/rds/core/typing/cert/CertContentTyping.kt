@@ -33,8 +33,7 @@ enum class CertContentTyping(private val v: Int) : IntTyping {
   @Schema(title = "处理过的扫描件") PROCESSED_SCANNED_IMAGE(8),
   @Schema(title = "处理过的图片") PROCESSED_IMAGE(9),
   @Schema(title = "处理过的视频") PROCESSED_VIDEO(10),
-  @Schema(title = "处理过的音频") PROCESSED_AUDIO(11),
-  ;
+  @Schema(title = "处理过的音频") PROCESSED_AUDIO(11);
 
   @JsonValue override val value: Int = v
 

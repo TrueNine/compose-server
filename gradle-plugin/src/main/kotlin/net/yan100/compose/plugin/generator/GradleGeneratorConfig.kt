@@ -69,7 +69,7 @@ open class GradleGeneratorConfig {
       "org.gradle.parallel" to "true",
       "org.gradle.caching" to "false",
       "org.gradle.jvmargs" to "-Xmx8192m -Xms4096m",
-      "org.gradle.workers.max" to Runtime.getRuntime().availableProcessors().toString()
+      "org.gradle.workers.max" to Runtime.getRuntime().availableProcessors().toString(),
     )
 
   fun workers(value: Int) {

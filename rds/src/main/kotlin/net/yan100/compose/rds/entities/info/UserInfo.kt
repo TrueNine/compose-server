@@ -187,7 +187,7 @@ class FullUserInfo : SuperUserInfo() {
     referencedColumnName = ID,
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
     insertable = false,
-    updatable = false
+    updatable = false,
   )
   @NotFound(action = NotFoundAction.IGNORE)
   var addressDetails: AddressDetails? = null

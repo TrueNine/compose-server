@@ -20,10 +20,7 @@ import net.yan100.compose.core.extensionfunctions.nonText
 import net.yan100.compose.core.extensionfunctions.snakeCaseToCamelCase
 import org.springframework.data.domain.Sort
 
-fun MutableList<Sort.Order>.querydslOrderBy(
-  propertyName: String,
-  desc: Boolean? = null,
-): MutableList<Sort.Order> {
+fun MutableList<Sort.Order>.querydslOrderBy(propertyName: String, desc: Boolean? = null): MutableList<Sort.Order> {
   if (propertyName.nonText()) return this
   val pName = propertyName.snakeCaseToCamelCase
   if (desc != null) this += if (desc) Sort.Order.desc(pName) else Sort.Order.asc(pName)

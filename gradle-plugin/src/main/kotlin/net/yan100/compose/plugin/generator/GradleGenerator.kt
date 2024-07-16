@@ -33,10 +33,7 @@ import org.gradle.api.Project
  * org.gradle.jvmargs=-Xmx8192m -Xms4096m
  * org.gradle.workers.max=64
  */
-class GradleGenerator(
-  @Inject private val project: Project,
-  @Inject private val dsl: GradleGeneratorConfig,
-) {
+class GradleGenerator(@Inject private val project: Project, @Inject private val dsl: GradleGeneratorConfig) {
 
   init {
     project.wrap {

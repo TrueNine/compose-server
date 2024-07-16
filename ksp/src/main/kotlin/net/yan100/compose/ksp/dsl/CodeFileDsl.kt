@@ -21,14 +21,8 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.MemberName
 import kotlin.reflect.KClass
 
-class CodeFileDsl
-@JvmOverloads
-constructor(
-  packageName: String = "",
-  fileName: String = "",
-  className: ClassName? = null,
-  memberName: MemberName? = null,
-) : StandardBuilderAdaptor<FileSpec.Builder, FileSpec> {
+class CodeFileDsl @JvmOverloads constructor(packageName: String = "", fileName: String = "", className: ClassName? = null, memberName: MemberName? = null) :
+  StandardBuilderAdaptor<FileSpec.Builder, FileSpec> {
   private val fb: FileSpec.Builder =
     if (null != className) FileSpec.builder(className) else if (null != memberName) FileSpec.builder(memberName) else FileSpec.builder(packageName, fileName)
 

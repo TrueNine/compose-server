@@ -24,8 +24,4 @@ import net.yan100.compose.depend.jvalid.AnyNilValidator
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)
 @Constraint(validatedBy = [AnyNilValidator::class])
-annotation class EntityLevelValid(
-  val message: String = "数据未通过校验",
-  val groups: Array<KClass<*>> = [],
-  val payload: Array<KClass<out Payload>> = [],
-)
+annotation class EntityLevelValid(val message: String = "数据未通过校验", val groups: Array<KClass<*>> = [], val payload: Array<KClass<out Payload>> = [])

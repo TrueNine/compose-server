@@ -47,17 +47,20 @@ interface IUserInfoRepo : IRepo<UserInfo> {
             async { existsAllByIdAndIdCardIsNotNull(id) },
             async { existsAllByIdAndPhoneIsNotNull(id) },
             async { existsAllByIdAndFirstNameIsNotNull(id) },
-            async { existsAllByIdAndLastNameIsNotNull(id) }
+            async { existsAllByIdAndLastNameIsNotNull(id) },
           )
           .awaitAll()
           .all { it }
     }
 
-  @Query("""
+  @Query(
+    """
     select count(i.id)
     from UserInfo i
     join Usr u on u.id = i.userId
-  """) fun countAllByHasUser(): Long
+  """
+  )
+  fun countAllByHasUser(): Long
 
   fun existsAllByPhone(phone: String): Boolean
 
@@ -67,41 +70,55 @@ interface IUserInfoRepo : IRepo<UserInfo> {
 
   fun findAllByIdCard(idCard: String): List<UserInfo>
 
-  @Query("""
+  @Query(
+    """
     select i.id
     from UserInfo i
     where i.userId = :userId
-  """) fun findAllIdByUserId(userId: RefId): List<RefId>
+  """
+  )
+  fun findAllIdByUserId(userId: RefId): List<RefId>
 
-  @Query("""
+  @Query(
+    """
     select i.userId
     from UserInfo i
     where i.id = :id
-  """) fun findUserIdById(id: RefId): RefId?
+  """
+  )
+  fun findUserIdById(id: RefId): RefId?
 
   @TODO("可会查询出多个用户") fun findByUserId(userId: RefId): UserInfo?
 
-  @Query("""
+  @Query(
+    """
   from UserInfo i
   where i.userId in :userIds
-""") fun findAllByUserId(userIds: List<RefId>): List<UserInfo>
+"""
+  )
+  fun findAllByUserId(userIds: List<RefId>): List<UserInfo>
 
   fun findFirstByUserIdAndPriIsTrue(userId: RefId): UserInfo?
 
   /** 根据 微信 openId 查询对应 User */
-  @Query("""
+  @Query(
+    """
     from Usr u
     left join UserInfo i ON u.id = i.userId
     where i.wechatOpenid = :openid
-    """)
+    """
+  )
   fun findUserByWechatOpenId(openid: String): Usr?
 
   /** 根据 电话号码查询用户手机号 */
-  @Query("""
+  @Query(
+    """
     from Usr u
     left join UserInfo i on u.id = i.userId
     where i.phone = :phone
-  """) fun findUserByPhone(phone: String): Usr?
+  """
+  )
+  fun findUserByPhone(phone: String): Usr?
 
   fun existsByPhone(phone: String): Boolean
 

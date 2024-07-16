@@ -54,32 +54,48 @@ abstract class BaseController<T : IEntity>(protected val service: IService<T>) {
 
   @ResponseBody
   // @PostMapping("meta")
-  @Operation(summary = "【ǃ RDS】保存数据", description = """
+  @Operation(
+    summary = "【ǃ RDS】保存数据",
+    description =
+      """
     调用该接口，传入的实体id会被清除然后保存
-  """)
+  """,
+  )
   fun saveMeta(@RequestBody @Valid meta: T): T {
     return service.save(meta.withNew())
   }
 
   @ResponseBody
   // @PostMapping("meta/all")
-  @Operation(summary = "【ǃ RDS】保存一组数据", description = """
+  @Operation(
+    summary = "【ǃ RDS】保存一组数据",
+    description =
+      """
     调用该接口，传入的每个实体id都会被清除
-  """)
+  """,
+  )
   fun saveAllMeta(@RequestBody metas: List<@Valid T>) = metas.map { it.withNew() }.apply { service.saveAll(this) }
 
   @ResponseBody
   // @PutMapping("meta/byId")
-  @Operation(summary = "【ǃ RDS】根据实体id修改数据", description = """
+  @Operation(
+    summary = "【ǃ RDS】根据实体id修改数据",
+    description =
+      """
     调用该接口，传入的实体必须存在id
-  """)
+  """,
+  )
   fun modifyMeta(@RequestBody @Valid meta: T) = meta.id.apply { service.save(meta) }
 
   @ResponseBody
   // @PutMapping("meta/byId/all")
-  @Operation(summary = "【ǃ RDS】根据实体id修改全部数据", description = """
+  @Operation(
+    summary = "【ǃ RDS】根据实体id修改全部数据",
+    description =
+      """
     调用该接口，传入的每个实体必须存在id
-  """)
+  """,
+  )
   fun modifyAllMeta(@RequestBody metas: List<@Valid T>) = metas.filter { it.id.hasText() }.apply { service.saveAll(this) }
 
   @ResponseBody

@@ -112,10 +112,7 @@ interface IWxpaApi {
    * @param type 无需填写
    */
   @GetExchange("cgi-bin/ticket/getticket")
-  fun getTicket(
-    @RequestParam(name = "access_token") accessToken: String,
-    @RequestParam(name = "type") type: String = "jsapi",
-  ): WxpaGetTicketResp
+  fun getTicket(@RequestParam(name = "access_token") accessToken: String, @RequestParam(name = "type") type: String = "jsapi"): WxpaGetTicketResp
 
   /**
    * ## 公众号每天的调用次数
@@ -124,10 +121,7 @@ interface IWxpaApi {
    * @param cgiPath 调用路径
    */
   @GetExchange("cgi-bin/openapi/quota/get")
-  fun findApiQuota(
-    @RequestParam("access_token") accessToken: string,
-    @RequestParam("cgi_path") cgiPath: string,
-  ): WxpaQuotaResp
+  fun findApiQuota(@RequestParam("access_token") accessToken: string, @RequestParam("cgi_path") cgiPath: string): WxpaQuotaResp
 }
 
 fun IWxMpApi.jsCodeToSessionStandard(param: JsCodeToSessionApiReq): JsCodeToSessionResp =

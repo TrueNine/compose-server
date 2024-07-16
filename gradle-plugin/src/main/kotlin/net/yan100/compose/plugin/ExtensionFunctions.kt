@@ -26,9 +26,7 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.wrapper.Wrapper
 
-fun org.gradle.api.artifacts.dsl.DependencyHandler.allAnnotationCompileOnly(
-  dependencyNotation: Any,
-): org.gradle.api.artifacts.Dependency? {
+fun org.gradle.api.artifacts.dsl.DependencyHandler.allAnnotationCompileOnly(dependencyNotation: Any): org.gradle.api.artifacts.Dependency? {
   this.add("annotationProcessor", dependencyNotation)
   this.add("kapt", dependencyNotation)
   this.add("testCompileOnly", dependencyNotation)
@@ -36,9 +34,7 @@ fun org.gradle.api.artifacts.dsl.DependencyHandler.allAnnotationCompileOnly(
   return this.add("compileOnly", dependencyNotation)
 }
 
-fun org.gradle.api.artifacts.dsl.DependencyHandler.annotationProcessorKapt(
-  dependencyNotation: Any,
-): org.gradle.api.artifacts.Dependency? {
+fun org.gradle.api.artifacts.dsl.DependencyHandler.annotationProcessorKapt(dependencyNotation: Any): org.gradle.api.artifacts.Dependency? {
   this.add("annotationProcessor", dependencyNotation)
   return this.add("kapt", dependencyNotation)
 }
@@ -47,10 +43,7 @@ fun RepositoryHandler.chinaRegionRepositories() {
   Repos.publicRepositories.forEach { url -> this.maven { it.url = URI(url) } }
 }
 
-fun RepositoryHandler.aliYunXiao(
-  releaseUrl: String = Repos.yunXiaoRelese,
-  snapshotUrl: String? = Repos.yunXiaoSnapshot,
-) {
+fun RepositoryHandler.aliYunXiao(releaseUrl: String = Repos.yunXiaoRelese, snapshotUrl: String? = Repos.yunXiaoSnapshot) {
   fun get(url: String) {
     this.maven {
       it.isAllowInsecureProtocol = true
@@ -71,10 +64,7 @@ fun ModuleDependency.exclude(dep: Provider<MinimalExternalModuleDependency>) {
   this.exclude(mutableMapOf("group" to dep.get().module.group, "module" to dep.get().module.name))
 }
 
-fun Wrapper.distribute(
-  version: String = "8.5",
-  url: String = "https://mirrors.cloud.tencent.com/gradle",
-): Wrapper {
+fun Wrapper.distribute(version: String = "8.5", url: String = "https://mirrors.cloud.tencent.com/gradle"): Wrapper {
   distributionUrl = "$url/gradle-${version}-all.zip"
   distributionType = Wrapper.DistributionType.ALL
   gradleVersion = version

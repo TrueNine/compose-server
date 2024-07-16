@@ -23,9 +23,7 @@ import com.alibaba.excel.read.listener.ReadListener
 import java.util.concurrent.CopyOnWriteArrayList
 import org.springframework.web.multipart.MultipartFile
 
-inline fun <reified T> MultipartFile.readExcelList(
-  readFn: (readerBuilder: ExcelReaderBuilder) -> Unit = { r -> r.sheet().doRead() },
-): List<T> {
+inline fun <reified T> MultipartFile.readExcelList(readFn: (readerBuilder: ExcelReaderBuilder) -> Unit = { r -> r.sheet().doRead() }): List<T> {
   val dataList = CopyOnWriteArrayList<T>()
 
   val e =
@@ -34,10 +32,7 @@ inline fun <reified T> MultipartFile.readExcelList(
         inputStream,
         T::class.java,
         object : ReadListener<T> {
-          override fun invoke(
-            data: T?,
-            context: AnalysisContext?,
-          ) {
+          override fun invoke(data: T?, context: AnalysisContext?) {
             data?.let { dataList += it }
           }
 

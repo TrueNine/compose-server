@@ -38,10 +38,7 @@ class SensitiveSerializer : JsonSerializer<String>(), ContextualSerializer {
     value?.let { gen?.writeString(strategy.desensitizeSerializer().invoke(it)) }
   }
 
-  override fun createContextual(
-    prov: SerializerProvider?,
-    property: BeanProperty?,
-  ): JsonSerializer<*>? {
+  override fun createContextual(prov: SerializerProvider?, property: BeanProperty?): JsonSerializer<*>? {
     val ref = property?.getAnnotation(SensitiveRef::class.java)
     return ref?.value?.let {
       strategy = it

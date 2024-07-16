@@ -26,12 +26,7 @@ import com.fasterxml.jackson.annotation.JsonValue
  * @author TrueNine
  * @since 2023-05-28
  */
-enum class ISO4217(
-  private val iso4217Str: String,
-  private val cnDescription: String,
-  private val numCode: Int,
-  private val helperCode: Int,
-) : StringTyping {
+enum class ISO4217(private val iso4217Str: String, private val cnDescription: String, private val numCode: Int, private val helperCode: Int) : StringTyping {
   /**
    * ## 人民币
    * China Yuan Renminbi
