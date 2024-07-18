@@ -63,7 +63,7 @@ publishing {
   publications {
     create<MavenPublication>("versionCatalog") {
       groupId = pluginGroup
-      artifactId = "${project.name}"
+      artifactId = project.name
       version = pluginVersion
       from(components["versionCatalog"])
     }
