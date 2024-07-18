@@ -1,8 +1,8 @@
 [versions]
-compose-gradle-plugin = "1.6.538"
+compose-versionCatalog = "1.6.539"
 compose = "1.6.509"
 compose-depend-webservlet = "1.6.512"
-compose-core = "1.6.517"
+compose-core = "1.6.518"
 compose-rds = "1.6.522"
 compose-rds-core = "1.6.511"
 compose-test-toolkit = "1.6.507"
@@ -10,6 +10,7 @@ compose-webapidoc = "1.6.509"
 compose-security = "1.6.511"
 compose-ksp = "1.6.509"
 compose-ksp-core = "1.6.509"
+compose-gradlePlugin = "1.6.538"
 
 composeGroup = "net.yan100.compose"
 
@@ -41,7 +42,8 @@ drools = "9.44.0.Final"
 liteflow = "2.12.1"
 
 [plugins]
-net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-gradle-plugin" }
+net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-gradlePlugin" }
+net-yan100-compose-versionCatalog = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-versionCatalog" }
 net-yan100-compose-ksp = { id = "net.yan100.compose.ksp", version.ref = "compose-ksp" }
 
 com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

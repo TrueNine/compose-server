@@ -1,13 +1,12 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-
 val l = libs
 
 val pluginGroup = libs.versions.composeGroup.get()
-val pluginVersion = libs.versions.compose.gradlePlugin.get()
+val pluginVersion = libs.versions.compose.versionCatalog.get()
+
 val yunxiaoUrl by extra { properties["yunxiaoUrl"] as String }
 val yunxiaoUsername by extra { properties["yunxiaoUsername"] as String }
 val yunxiaoPassword by extra { properties["yunxiaoPassword"] as String }
+
 val sonatypeUsername by extra { properties["sonatypeUsername"] as String }
 val sonatypePassword by extra { properties["sonatypePassword"] as String }
 
@@ -24,7 +23,6 @@ plugins {
 }
 
 group = pluginGroup
-
 version = pluginVersion
 
 repositories {
@@ -34,30 +32,6 @@ repositories {
   gradlePluginPortal()
   mavenCentral()
   google()
-}
-
-dependencies {
-  implementation(gradleApi())
-  implementation(gradleKotlinDsl())
-  implementation(libs.org.springframework.boot.springBootGradlePlugin)
-}
-
-kotlin {
-  compilerOptions {
-    apiVersion = KotlinVersion.KOTLIN_2_0
-    jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
-    freeCompilerArgs =
-      listOf(
-        "-Xjsr305=strict",
-        "-Xjvm-default=all",
-        "-verbose",
-        "-Xjdk-release=${l.versions.java.get()}",
-        "-jvm-target=${l.versions.java.get()}",
-        "-Xextended-compiler-checks",
-      )
-  }
-
-  jvmToolchain(21)
 }
 
 gradlePlugin {
@@ -71,14 +45,6 @@ gradlePlugin {
       implementationClass = "${pluginGroup}.plugin.SettingsMain"
     }
   }
-}
-
-java {
-  sourceCompatibility = JavaVersion.VERSION_21
-  targetCompatibility = JavaVersion.VERSION_21
-
-  toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
-  withSourcesJar()
 }
 
 publishing {
@@ -95,18 +61,18 @@ publishing {
   }
 
   publications {
-    create<MavenPublication>("gradlePlugin") {
-      groupId = "${pluginGroup}.${project.name}"
-      artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
+    create<MavenPublication>("versionCatalog") {
+      groupId = pluginGroup
+      artifactId = "${project.name}"
       version = pluginVersion
-      from(components["java"])
+      from(components["versionCatalog"])
     }
   }
 }
 
 signing {
   useGpgCmd()
-  sign(publishing.publications["gradlePlugin"])
+  sign(publishing.publications["versionCatalog"])
 }
 
 catalog { versionCatalog { from(files("../libs.versions.toml")) } }

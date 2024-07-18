@@ -16,6 +16,8 @@ rootProject.name = "compose-server"
 
 includeBuild("gradle-plugin")
 
+includeBuild("version-catalog")
+
 include("oss")
 
 findProject(":oss")?.name = "oss"
