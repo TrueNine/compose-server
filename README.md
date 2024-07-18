@@ -1,9 +1,21 @@
-# 环境要求
+# Compose Server
+
+## 项目介绍
+
+这是一个基于 以下技术构建的服务器端 sdk
+
+- [Kotlin](https://kotlinlang.org/)
+- [Gradle](https://gradle.org/)
+- [SpringBoot](https://spring.io/projects/spring-boot)
+
+其采用多项目模块化设计
+
+## 环境要求
 
 ```envRequirement
 java: 21.0.2
-kotlin: 1.9.22
-gradle: 8.7-rc-2
+kotlin: 2.0.10-RC
+gradle: 8.9
 ```
 
 > 注：开发机请准备 16GB 内存或以上，磁盘空出 10G 以上（windows 请在 C盘 留下 10G
@@ -32,5 +44,3 @@ gradle wrapper
 # 检查当前项目
 ./gradlew check
 ```
-
-- 如果使用 CLI 构建或其他一切正常，IDEA 可尝试 “修复文件上的 IDE“
