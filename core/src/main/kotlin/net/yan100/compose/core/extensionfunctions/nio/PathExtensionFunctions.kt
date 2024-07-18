@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
+import net.yan100.compose.core.alias.Pq
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
@@ -136,13 +137,13 @@ fun Path.fileSize(): Long {
   return Files.size(this)
 }
 
-fun Path.pageLines(param: IPageParam, sep: String = lineSep, charset: Charset = Charsets.UTF_8): Pr<String> {
+fun Path.pageLines(param: Pq, sep: String = lineSep, charset: Charset = Charsets.UTF_8): Pr<String> {
   return if (isEmpty() || sep.isEmpty()) IPage.empty()
   else {
     val total = countLines()
     val p = param[total]
     val range = p.toLongRange()
     val dataList = sliceLines(range = range, totalLines = total, sep = sep, charset = charset).toList()
-    return Pr.of(dataList = dataList, total = total, offset = p.safeOffset.toLong())
+    return Pr[dataList, param.pageSize, p.safeOffset, total]
   }
 }

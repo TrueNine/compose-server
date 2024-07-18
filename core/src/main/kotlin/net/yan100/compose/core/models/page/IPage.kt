@@ -16,6 +16,8 @@
  */
 package net.yan100.compose.core.models.page
 
+import kotlin.math.ceil
+
 interface IPage<T> {
   var dataList: List<T>
   var total: Long
@@ -24,34 +26,75 @@ interface IPage<T> {
   var offset: Long
 
   private data class DefaultPage<T>(
-    override var dataList: List<T> = emptyList(),
-    override var total: Long = 0,
-    override var size: Int = dataList.size,
-    override var pageSize: Int = (total / if (size == 0) 1 else size).toInt(),
-    override var offset: Long = 0,
-  ) : IPage<T> {
-    init {
-      if (size == 0) pageSize = 0 else if ((total % size) != 0L) pageSize += 1
-    }
-  }
+    override var dataList: List<T>,
+    override var total: Long,
+    override var size: Int,
+    override var pageSize: Int,
+    override var offset: Long,
+  ) : IPage<T>
 
   fun component1(): List<T> = dataList
 
   fun component2(): Long = total
 
   companion object {
+    private fun emptyOne(dataList: List<*>?): Int {
+      return if (dataList.isNullOrEmpty()) 1 else dataList.size
+    }
+
+    private fun defaultTotal(): Long {
+      return 0
+    }
+
+    /**
+     * @param dataList 数据列表
+     * @param pageSize 分页参数页面大小
+     * @param offset 偏移页码
+     * @param total 数据总数
+     */
+    @JvmStatic
+    operator fun <T> get(
+      dataList: List<T> = emptyList(),
+      pageSize: Int? = null,
+      offset: Int = 0,
+      total: Long? = null,
+    ): IPage<T> {
+      return of(dataList, total, dataList.size, pageSize, offset)
+    }
+
+    /**
+     * @param dataList 数据列表
+     * @param pageSize 分页参数页面大小
+     * @param offset 偏移页码
+     * @param total 数据总数
+     */
     @JvmStatic
     fun <T> of(
       dataList: List<T> = emptyList(),
-      total: Long = 0,
-      size: Int = dataList.size,
-      pageSize: Int = (total / if (size == 0) 1 else size).toInt(),
-      offset: Long = 0,
-    ): IPage<T> = DefaultPage(dataList, total, size, pageSize, offset)
+      total: Long? = null,
+      size: Int? = null,
+      pageSize: Int? = null,
+      offset: Int = 0,
+    ): IPage<T> {
+      val safeTotal = total ?: defaultTotal()
+      val safeSize = size ?: dataList.size
+      val safePageSize = pageSize ?: (safeTotal / if (safeSize == 0) 1 else safeSize).toInt()
+
+      val e = ceil(safeTotal.toDouble() / safePageSize.toDouble()).toInt()
+
+      return DefaultPage(dataList, safeTotal, safeSize, e, offset.toLong())
+    }
+
 
     @JvmStatic
     fun <T> empty(): IPage<T> {
-      return DefaultPage()
+      return DefaultPage(
+        dataList = emptyList(),
+        total = 0,
+        size = 0,
+        pageSize = 0,
+        offset = 0
+      )
     }
   }
 }

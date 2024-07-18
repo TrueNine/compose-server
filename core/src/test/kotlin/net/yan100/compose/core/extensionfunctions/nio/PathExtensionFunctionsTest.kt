@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
+import net.yan100.compose.core.alias.Pq
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
@@ -94,21 +95,21 @@ class PathExtensionFunctionsTest {
     val testPath = tempFile.toPath()
     println(testPath.countLines())
 
-    val pr = testPath.pageLines(IPageParam.get(1, 4), "\n")
+    val pr = testPath.pageLines(Pq[1, 4], "\n")
     println(pr)
 
     assertEquals(7, pr.total)
-    assertEquals(4, pr.dataList.size)
-    assertEquals(4, pr.size)
-    assertEquals("World", pr.dataList[0])
+    assertEquals(3, pr.dataList.size)
+    assertEquals(3, pr.size)
+    assertEquals("a", pr.dataList[0])
     assertEquals(2, pr.pageSize)
 
-    val pr1 = testPath.pageLines(IPageParam.get(3, 2), "\n")
+    val pr1 = testPath.pageLines(Pq[3, 2], "\n")
 
     assertEquals(7, pr1.total)
-    assertEquals(2, pr1.dataList.size)
-    assertEquals(2, pr1.size)
-    assertEquals("is", pr1.dataList[0])
+    assertEquals(1, pr1.dataList.size)
+    assertEquals(1, pr1.size)
+    assertEquals("e", pr1.dataList[0])
     assertEquals(4, pr1.pageSize)
   }
 }
