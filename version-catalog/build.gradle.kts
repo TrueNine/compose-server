@@ -23,6 +23,7 @@ plugins {
 }
 
 group = pluginGroup
+
 version = pluginVersion
 
 repositories {
