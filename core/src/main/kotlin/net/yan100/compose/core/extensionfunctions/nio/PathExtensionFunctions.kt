@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
-import net.yan100.compose.core.alias.Pq
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
@@ -26,11 +25,11 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
+import net.yan100.compose.core.alias.Pq
 import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.core.extensionfunctions.number.toSafeInt
 import net.yan100.compose.core.extensionfunctions.range.toSafeRange
 import net.yan100.compose.core.models.page.IPage
-import net.yan100.compose.core.models.page.IPageParam
 
 const val capacity = 8192
 private val lineSep: String = System.lineSeparator()

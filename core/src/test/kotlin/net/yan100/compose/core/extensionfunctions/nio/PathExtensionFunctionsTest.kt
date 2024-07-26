@@ -16,12 +16,11 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
-import net.yan100.compose.core.alias.Pq
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.core.models.page.IPageParam
+import net.yan100.compose.core.alias.Pq
 import org.junit.jupiter.api.io.TempDir
 
 class PathExtensionFunctionsTest {

@@ -53,12 +53,7 @@ interface IPage<T> {
      * @param total 数据总数
      */
     @JvmStatic
-    operator fun <T> get(
-      dataList: List<T> = emptyList(),
-      pageSize: Int? = null,
-      offset: Int = 0,
-      total: Long? = null,
-    ): IPage<T> {
+    operator fun <T> get(dataList: List<T> = emptyList(), pageSize: Int? = null, offset: Int = 0, total: Long? = null): IPage<T> {
       return of(dataList, total, dataList.size, pageSize, offset)
     }
 
@@ -69,13 +64,7 @@ interface IPage<T> {
      * @param total 数据总数
      */
     @JvmStatic
-    fun <T> of(
-      dataList: List<T> = emptyList(),
-      total: Long? = null,
-      size: Int? = null,
-      pageSize: Int? = null,
-      offset: Int = 0,
-    ): IPage<T> {
+    fun <T> of(dataList: List<T> = emptyList(), total: Long? = null, size: Int? = null, pageSize: Int? = null, offset: Int = 0): IPage<T> {
       val safeTotal = total ?: defaultTotal()
       val safeSize = size ?: dataList.size
       val safePageSize = pageSize ?: (safeTotal / if (safeSize == 0) 1 else safeSize).toInt()
@@ -85,16 +74,9 @@ interface IPage<T> {
       return DefaultPage(dataList, safeTotal, safeSize, e, offset.toLong())
     }
 
-
     @JvmStatic
     fun <T> empty(): IPage<T> {
-      return DefaultPage(
-        dataList = emptyList(),
-        total = 0,
-        size = 0,
-        pageSize = 0,
-        offset = 0
-      )
+      return DefaultPage(dataList = emptyList(), total = 0, size = 0, pageSize = 0, offset = 0)
     }
   }
 }

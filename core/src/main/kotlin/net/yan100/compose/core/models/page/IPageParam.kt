@@ -54,8 +54,7 @@ interface IPageParam : Serializable {
   }
 
   /** ## 分页 页面 大小 */
-  @get:Transient
-  var pageSize: Int?
+  @get:Transient var pageSize: Int?
 
   /** ## 分页 页面 偏移量 null any */
   @get:Transient
@@ -63,8 +62,7 @@ interface IPageParam : Serializable {
   val safePageSize: Int
     get() = pageSize ?: 0
 
-  @get:Transient
-  var offset: Int?
+  @get:Transient var offset: Int?
 
   @get:JsonIgnore
   @get:Transient
@@ -76,9 +74,7 @@ interface IPageParam : Serializable {
   private val safeRangeOffset: Int
     get() = safePageSize * safeOffset
 
-  @get:JsonIgnore
-  @get:Transient
-  var unPage: Boolean?
+  @get:JsonIgnore @get:Transient var unPage: Boolean?
 
   @get:JsonIgnore
   @get:Transient
