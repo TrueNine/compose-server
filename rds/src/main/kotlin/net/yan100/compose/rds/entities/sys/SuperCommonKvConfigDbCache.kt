@@ -20,7 +20,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
+import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.ITypedValue
+import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 
@@ -29,7 +31,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MappedSuperclass
 abstract class SuperCommonKvConfigDbCache : IEntity(), ITypedValue {
   /** ## 配置 key */
-  @get:Schema(title = "配置 key") abstract var k: String
+  @get:Pattern(regexp = Regexes.CONFIG_KEY) @get:Schema(title = "配置 key") abstract var k: String
 
   /** ## 配置 json value */
   @get:Hidden @get:JsonIgnore @get:Schema(title = "配置 value") abstract var v: String?

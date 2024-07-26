@@ -32,6 +32,9 @@ interface Regexes {
     private const val DAY = "(0[1-9]|[1-2][0-9]|3[0-1])"
     private const val CHINA_ID_CARD_PREFIX = "^${ONE_ONE}${ZERO_ZERO_ZERO_ONE}${ZERO_ONE}${YEAR}${MONTH}${DAY}\\d{3}[xX0-9]"
 
+    /** 缓存 / 其他配置 key */
+    const val CONFIG_KEY = "^(?![.])[a-zA-Z0-9_.]+$"
+
     /** 中国身份证号 */
     const val CHINA_ID_CARD = "${CHINA_ID_CARD_PREFIX}$"
 
