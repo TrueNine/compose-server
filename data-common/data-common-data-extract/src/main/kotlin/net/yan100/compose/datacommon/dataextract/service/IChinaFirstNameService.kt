@@ -205,6 +205,7 @@ interface IChinaFirstNameService {
           "邓",
           "郁",
           "单",
+          "原",
           "杭",
           "洪",
           "包",
