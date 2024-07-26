@@ -31,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface IUserInfoRepo : IRepo<UserInfo> {
+  fun existsAllByFirstNameAndLastName(firstName: String, lastName: String): Boolean
+
   fun existsAllByIdAndIdCardIsNotNull(id: RefId): Boolean
 
   fun existsAllByIdAndPhoneIsNotNull(id: RefId): Boolean

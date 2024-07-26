@@ -19,6 +19,7 @@ package net.yan100.compose.rds.service.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.yan100.compose.core.alias.RefId
+import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.rds.core.entities.fromDbData
 import net.yan100.compose.rds.core.extensionfunctions.withNew
@@ -45,6 +46,14 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
 
   override suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean =
     withContext(Dispatchers.IO) { infoRepo.findFirstByUserIdAndPriIsTrue(userId)?.run { infoRepo.existsByIdAndIsRealPeople(id) } ?: false }
+
+  override fun existsByFirstNameAndLastName(firstName: String, lastName: String): Boolean {
+    return infoRepo.existsAllByFirstNameAndLastName(firstName, lastName)
+  }
+
+  override fun existsByIdCard(idCard: SerialCode): Boolean {
+    return infoRepo.existsAllByIdCard(idCard)
+  }
 
   override fun groupByUserIdByUserIds(userIds: List<RefId>): Map<RefId, List<UserInfo>> {
     return infoRepo.findAllByUserId(userIds).groupBy { it.userId!! }
@@ -105,10 +114,10 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
   }
 
   override fun findByUserId(userId: String): UserInfo? {
-    return infoRepo.findByUserId(userId)
+    return infoRepo.findFirstByUserIdAndPriIsTrue(userId)
   }
 
-  override fun existsByPhone(phone: String): Boolean {
+  override fun existsByPhone(phone: SerialCode): Boolean {
     return infoRepo.existsByPhone(phone)
   }
 

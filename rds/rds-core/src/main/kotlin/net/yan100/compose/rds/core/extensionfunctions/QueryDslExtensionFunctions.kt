@@ -21,6 +21,7 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.SimpleExpression
 import com.querydsl.core.types.dsl.StringPath
+import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
 import net.yan100.compose.core.alias.Pq
@@ -94,4 +95,9 @@ fun <T> SimpleExpression<T>.eqOrIsNull(value: T): BooleanExpression {
 
 fun StringPath.eqOrIsNullOrIsEmpty(value: String): BooleanExpression {
   return eqOrIsNull(value).or(isEmpty)
+}
+
+fun <T> JPAQuery<T>.limitOffset(pq: Pq = Pq.DEFAULT_MAX) {
+  limit(pq.safePageSize.toLong())
+  offset(pq.safeOffset.toLong() * pq.safePageSize.toLong())
 }
