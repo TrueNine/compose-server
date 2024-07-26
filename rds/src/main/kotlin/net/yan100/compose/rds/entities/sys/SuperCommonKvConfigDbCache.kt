@@ -28,19 +28,12 @@ import net.yan100.compose.rds.core.entities.IEntity
 @Schema(title = "通用配置缓存")
 @MappedSuperclass
 abstract class SuperCommonKvConfigDbCache : IEntity(), ITypedValue {
-  /**
-   * ## 配置 key
-   */
-  @get:Schema(title = "配置 key")
-  abstract var k: String
+  /** ## 配置 key */
+  @get:Schema(title = "配置 key") abstract var k: String
 
-  /**
-   * ## 配置 json value
-   */
-  @get:Hidden
-  @get:JsonIgnore
-  @get:Schema(title = "配置 value")
-  abstract var v: String?
+  /** ## 配置 json value */
+  @get:Hidden @get:JsonIgnore @get:Schema(title = "配置 value") abstract var v: String?
 
-  override val typedSerialValue: Any? get() = v
+  override val typedSerialValue: Any?
+    get() = v
 }
