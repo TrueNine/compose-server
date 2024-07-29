@@ -1,9 +1,9 @@
 [versions]
-compose-versionCatalog = "1.6.542"
+compose-versionCatalog = "1.6.544"
 compose = "1.6.509"
 compose-depend-webservlet = "1.6.512"
 compose-core = "1.6.520"
-compose-rds = "1.6.524"
+compose-rds = "1.6.526"
 compose-rds-core = "1.6.511"
 compose-test-toolkit = "1.6.507"
 compose-webapidoc = "1.6.509"

@@ -71,7 +71,14 @@ abstract class SuperUserInfo : IEntity() {
     const val QQ_OPENID = "qq_openid"
     const val QQ_ACCOUNT = "qq_account"
     const val SPARE_PHONE = "spare_phone"
+
+    const val REMARK = "remark"
+    const val REMARK_NAME = "remark_name"
   }
+
+  @Schema(title = "备注名称") @Column(name = REMARK_NAME) var remarkName: String? = null
+
+  @Schema(title = "备注") @Column(name = REMARK) var remark: String? = null
 
   @Schema(title = "创建此信息的用户") @Column(name = CREATE_USER_ID) var createUserId: RefId? = null
 
