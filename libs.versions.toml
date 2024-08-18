@@ -1,9 +1,9 @@
 [versions]
-compose-versionCatalog = "1.6.544"
+compose-versionCatalog = "1.6.545"
 compose = "1.6.509"
 compose-depend-webservlet = "1.6.512"
 compose-core = "1.6.520"
-compose-rds = "1.6.526"
+compose-rds = "1.6.527"
 compose-rds-core = "1.6.511"
 compose-test-toolkit = "1.6.507"
 compose-webapidoc = "1.6.509"
@@ -16,23 +16,23 @@ composeGroup = "net.yan100.compose"
 
 spotless = "7.0.0.BETA1"
 
-gradle = "8.9"
+gradle = "8.10"
 java = "21"
-kotlin = "2.0.10-RC"
-ksp = "2.0.10-RC-1.0.23"
-kotlinx-io = "0.3.3"
-kotlinx-coroutines = "1.9.0-RC"
+kotlin = "2.0.20-RC2"
+ksp = "2.0.20-RC2-1.0.24"
+kotlinx-io = "0.5.2"
+kotlinx-coroutines = "1.9.0-RC.2"
 
-spring-boot = "3.3.1"
+spring-boot = "3.4.0-M1"
 spring-cloud = "2023.0.1"
 spring-cloudAlibaba = "2021.0.4.0"
-spring-modulith = "1.2.1"
+spring-modulith = "1.3.0-M1"
 
 testng = "7.10.2"
 junit = "5.11.0-M2"
-flyway = "10.15.2"
-mapstruct = "1.6.0.Beta2"
-hutool = "5.8.29"
+flyway = "10.17.1"
+mapstruct = "1.6.0"
+hutool = "5.8.31"
 slf4j = "2.1.0-alpha1"
 mybatis-plus = "3.5.7"
 jackson = "2.17.2"
@@ -120,7 +120,7 @@ org-springframework-modulith-springModulithStarterTest = { group = "org.springfr
 org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.6.0" }
 
 org-apache-commons-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
-org-apache-commons-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.26.2" }
+org-apache-commons-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.27.0" }
 com-squareup-kotlinpoetJvm = { group = "com.squareup", name = "kotlinpoet-jvm", version = "1.18.1" }
 com-squareup-kotlinpoetKsp = { group = "com.squareup", name = "kotlinpoet-ksp", version = "1.18.1" }
 
@@ -138,7 +138,7 @@ org-jetbrains-kotlinx-kotlinxIoCore = { group = "org.jetbrains.kotlinx", name = 
 org-jetbrains-kotlinx-kotlinxIoCoreJvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core-jvm", version.ref = "kotlinx-io" }
 com-google-devtools-ksp-symbolProcessingApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 
-io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.3.0-M1" }
+io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.3.0-M2" }
 
 io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.12" }
 org-junit-jupiter-junitJupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
@@ -160,7 +160,7 @@ p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
 com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.9.1" }
 
 io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.11" }
-com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.0" }
+com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
 com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.3" }
 com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.12" }
 
@@ -183,7 +183,7 @@ com-google-guava-guava-jre = { group = "com.google.guava", name = "guava", versi
 ognl-ognl = { group = "ognl", name = "ognl", version = "3.4.3" }
 com-github-magese-ikAnalyzer = { group = "com.github.magese", name = "ik-analyzer", version = "8.5.0" }
 com-github-haifengl-smileMath = { group = "com.github.haifengl", name = "smile-math", version = "2.6.0" }
-com-alibaba-easyexcel = { group = "com.alibaba", name = "easyexcel", version = "4.0.1" }
+com-alibaba-easyexcel = { group = "com.alibaba", name = "easyexcel", version = "4.0.2" }
 org-freemarker-freemarker = { group = "org.freemarker", name = "freemarker", version = "2.3.33" }
 net-sf-dozer-dozer = { group = "net.sf.dozer", name = "dozer", version = "5.5.1" }
 
@@ -205,10 +205,10 @@ com-github-ulisesbocchio-jasyptSpringBootStarter = { group = "com.github.ulisesb
 
 org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
-org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.22.0" }
+org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.23.1" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
-io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.1" }
-com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.45.0" }
+io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
+com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.46.0" }
 org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
 org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.2.1" }
 net-sf-supercsv-superCsv = { group = "net.sf.supercsv", name = "super-csv", version = "2.4.0" }

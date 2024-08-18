@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.entities.sys
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
@@ -34,7 +33,7 @@ abstract class SuperCommonKvConfigDbCache : IEntity(), ITypedValue {
   @get:Pattern(regexp = Regexes.CONFIG_KEY) @get:Schema(title = "配置 key") abstract var k: String
 
   /** ## 配置 json value */
-  @get:Hidden @get:JsonIgnore @get:Schema(title = "配置 value") abstract var v: String?
+  @get:Hidden @get:Schema(title = "配置 value") abstract var v: String?
 
   override val typedSerialValue: Any?
     get() = v
