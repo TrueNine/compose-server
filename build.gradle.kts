@@ -169,29 +169,6 @@ spotless {
     lineEndings = LineEnding.UNIX
     encoding = Charsets.UTF_8
   }
-  kotlin {
-    indentWithSpaces(2)
-    lineEndings = LineEnding.UNIX
-    licenseHeader(license)
-    target("**/**.kt")
-    ktfmt().googleStyle().configure {
-      it.setBlockIndent(2)
-      it.setContinuationIndent(2)
-      it.setMaxWidth(160)
-      it.setRemoveUnusedImport(true)
-    }
-  }
-  kotlinGradle {
-    indentWithSpaces(2)
-    lineEndings = LineEnding.UNIX
-    target("**/**.kts")
-    ktfmt().googleStyle().configure {
-      it.setBlockIndent(2)
-      it.setContinuationIndent(2)
-      it.setMaxWidth(160)
-      it.setRemoveUnusedImport(true)
-    }
-  }
   sql {
     indentWithSpaces(2)
     lineEndings = LineEnding.UNIX
@@ -209,3 +186,9 @@ spotless {
     formatAnnotations()
   }
 }
+
+tasks.wrapper {
+    distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-8.8-all.zip"
+    networkTimeout = 3000
+    distributionType = Wrapper.DistributionType.ALL
+  }

@@ -34,11 +34,22 @@ open class GradleGeneratorConfig {
   fun initGradle(action: Action<InitGradleConfig>) = action.execute(initGradle)
 
   inner class InitGradleConfig {
+    var wrapperUrl: String = "https://services.gradle.org/distributions"
+      private set
+    var wrapperVersion: String = "8.5"
+      private set
     var mavenType: MavenRepoType = MavenRepoType.DEFAULT
       private set
 
     var otherRepositories: MutableList<String> = mutableListOf()
       private set
+
+    fun wrapperUrl(url: String) {
+      wrapperUrl = url
+    }
+    fun wrapperVersion(version: String) {
+      wrapperVersion = version
+    }
 
     fun otherRepositories(vararg repos: String) {
       otherRepositories += repos

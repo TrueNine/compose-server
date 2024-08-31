@@ -200,8 +200,7 @@ insert
                 from
                     user_info i
                 where
-                    i.user_id = tmp.user_id
-                    and i.pri = tmp.pri
+                    i.id = tmp.id
             );
 
 create

@@ -81,8 +81,15 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
               val d = e.fromDbData(r)
               d.apply { pri = index == 0 }
             }
-          )
-          .first()
+          ).first()
+      } else null
+    } ?: e.phone?.let { c->
+      if (infoRepo.existsAllByPhone(c)) {
+        val phoneList = infoRepo.findAllByPhone(c).mapIndexed { index, r ->
+          val d = e.fromDbData(r)
+          d.apply { pri = index == 0 }
+        }
+        saveAll(phoneList).first()
       } else null
     } ?: save(e.withNew())
   }

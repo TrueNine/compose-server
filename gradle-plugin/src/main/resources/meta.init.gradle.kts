@@ -1,5 +1,10 @@
+import org.gradle.api.tasks.wrapper.Wrapper
+import org.gradle.kotlin.dsl.invoke
+
 val urls = "-$-"
 val repos = "$-$"
+val wUrl = "$[WURL]$"
+val wVersion = "$[WVERSION]$"
 
 val urlMap =
   urls.split(",").associate {
@@ -91,5 +96,15 @@ allprojects {
     gradlePluginPortal()
     otherRepos.forEach { addNonExistsRepo(it) }
     backupRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
+  }
+}
+
+
+tasks {
+  wrapper {
+    distributionUrl = "$wUrl/gradle-${wVersion}-all.zip"
+    networkTimeout = 3000
+    distributionType = Wrapper.DistributionType.ALL
+    validateDistributionUrl = false
   }
 }

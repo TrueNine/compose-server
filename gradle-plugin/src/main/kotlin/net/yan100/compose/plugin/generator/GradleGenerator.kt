@@ -25,6 +25,7 @@ import net.yan100.compose.plugin.consts.MavenRepl
 import net.yan100.compose.plugin.consts.Repos
 import net.yan100.compose.plugin.wrap
 import org.gradle.api.Project
+import javax.print.DocFlavor
 
 /*
  * org.gradle.daemon=true
@@ -93,6 +94,8 @@ class GradleGenerator(@Inject private val project: Project, @Inject private val 
             template
               .replace("-$-", urls.joinToString(",")) // 替换url
               .replace("$-$", cfg.otherRepositories.joinToString(",")) // 替换仓库
+              .replace("$[WURL]", cfg.wrapperUrl)
+              .replace("$[WVERSION]", cfg.wrapperVersion)
           initFile?.let { f ->
             FileWriter(f).use { writer ->
               writer.write(result)
