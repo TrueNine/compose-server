@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.oss
 
+import org.checkerframework.checker.units.qual.A
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -30,11 +31,9 @@ interface Oss {
   /**
    * 获取一个实现对象，以便于应急使用，调用具体细节。 如：使用 minio 实现，则实例为 MinioClient 除非明确知晓类型，否则会类型转换错误
    *
-   * @param instanceType 实例类型
-   * @param <T> 类型
    * @return 实现对象实例 @implSpec MinioClientWrapper
    */
-  fun <T> nativeHandle(instanceType: Class<T>): T
+  fun getNative(): Any
 
   /**
    * ## 根据文件参数删除对象

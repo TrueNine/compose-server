@@ -17,10 +17,12 @@
 package net.yan100.compose.cacheable.autoconfig
 
 import com.github.benmanes.caffeine.cache.Caffeine
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import kotlin.test.Test
 import kotlin.test.assertNull
 
-class CaffeineCacheAutoConfigurationTest {
+@WebMvcTest
+class ICaffeineCacheAutoConfigurationTest {
   @Test
   fun `test caffeine cache`() {
     val ac = Caffeine.newBuilder().build<String, String>()

@@ -16,17 +16,13 @@
  */
 package net.yan100.compose.cacheable.autoconfig
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.annotation.PropertyAccessor
-import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
+import net.yan100.compose.core.autoconfig.JacksonSerializationAutoConfig
 import java.time.Duration
-import net.yan100.compose.core.consts.CacheFieldNames
+import net.yan100.compose.core.consts.ICacheNames
 import net.yan100.compose.core.log.slf4j
-import org.springframework.cache.CacheManager
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -38,6 +34,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 
+private val log = slf4j<RedisJsonSerializerAutoConfiguration>()
+
 /**
  * redis 缓存组件配置
  *
@@ -45,20 +43,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
  * @since 2023-02-20
  */
 @Configuration
-class RedisJsonSerializerAutoConfiguration(objectMapper: ObjectMapper) {
-  private val log = slf4j(RedisJsonSerializerAutoConfiguration::class)
-
-  private val jsr =
-    Jackson2JsonRedisSerializer(
-      objectMapper.copy().run {
-        this.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-          .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-          .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-          .setAnnotationIntrospector(AnnotationIntrospector.nopInstance())
-          .activateDefaultTyping(polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.WRAPPER_ARRAY)
-      },
-      Any::class.java,
-    )
+class RedisJsonSerializerAutoConfiguration(
+  @Qualifier(JacksonSerializationAutoConfig.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
+  objectMapper: ObjectMapper
+) {
+  private val jsr = Jackson2JsonRedisSerializer(objectMapper, Any::class.java)
 
   private val srs = StringRedisSerializer()
   private val cacheManagerConfig =
@@ -68,56 +57,53 @@ class RedisJsonSerializerAutoConfiguration(objectMapper: ObjectMapper) {
       .disableCachingNullValues()
 
   @Primary
-  @Bean(name = [CacheFieldNames.RedisTemplate.STRING_TEMPLATE])
-  fun customRedisJsonSerializable(factory: RedisConnectionFactory): RedisTemplate<String, *> {
-    log.debug("配置 ${CacheFieldNames.RedisTemplate.STRING_TEMPLATE} factory = {}", factory)
-    val rt = RedisTemplate<String, Any>()
-
+  @Bean(name = [ICacheNames.IRedis.HANDLE])
+  fun customRedisJsonSerializable(factory: RedisConnectionFactory): RedisTemplate<String, Any?> {
+    log.trace("注册 redisTemplate factory = {}", factory)
+    val rt = RedisTemplate<String, Any?>()
     rt.setDefaultSerializer(jsr)
-
     rt.hashKeySerializer = srs
     rt.keySerializer = srs
     rt.hashValueSerializer = jsr
     rt.valueSerializer = jsr
     rt.isEnableDefaultSerializer = true
-
     rt.connectionFactory = factory
     return rt
   }
 
-  @Primary
-  @Bean(name = [CacheFieldNames.Redis.H2])
-  fun cacheManager2h(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.Redis.H2} factory = {}", factory)
-    return asCacheConfig(factory, Duration.ofHours(2))
+  @Bean(name = [ICacheNames.IRedis.CACHE_MANAGER])
+  fun cacheManager2h(factory: RedisConnectionFactory): RedisCacheManager {
+    log.debug("注册 RedisCacheManager , factory = {}", factory)
+    return asCacheConfig(factory)
   }
 
-  @Primary
-  @Bean(name = [CacheFieldNames.Redis.H1])
-  fun cacheManager1h(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.Redis.H2} factory = {}", factory)
-    return asCacheConfig(factory, Duration.ofHours(1))
+  private fun withDurationConfig(dr: Duration): RedisCacheConfiguration {
+    return cacheManagerConfig.entryTtl(dr)
   }
 
-  @Bean(name = [CacheFieldNames.Redis.D3])
-  fun cacheManager30day(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.Redis.D3} factory = {}", factory)
-    return asCacheConfig(factory, Duration.ofDays(30))
-  }
+  private val cacheMap = mapOf(
+    ICacheNames.IRedis.M1 to withDurationConfig(Duration.ofMinutes(1)),
+    ICacheNames.IRedis.M5 to withDurationConfig(Duration.ofMinutes(5)),
+    ICacheNames.IRedis.M10 to withDurationConfig(Duration.ofMinutes(10)),
+    ICacheNames.IRedis.M30 to withDurationConfig(Duration.ofMinutes(30)),
+    ICacheNames.IRedis.H1 to withDurationConfig(Duration.ofHours(1)),
+    ICacheNames.IRedis.H2 to withDurationConfig(Duration.ofHours(2)),
+    ICacheNames.IRedis.H3 to withDurationConfig(Duration.ofHours(3)),
+    ICacheNames.IRedis.D1 to withDurationConfig(Duration.ofDays(1)),
+    ICacheNames.IRedis.D2 to withDurationConfig(Duration.ofDays(2)),
+    ICacheNames.IRedis.D3 to withDurationConfig(Duration.ofDays(3)),
+    ICacheNames.IRedis.D7 to withDurationConfig(Duration.ofDays(7)),
+    ICacheNames.IRedis.D30 to withDurationConfig(Duration.ofDays(30)),
+    ICacheNames.IRedis.D60 to withDurationConfig(Duration.ofDays(60)),
+    ICacheNames.IRedis.D180 to withDurationConfig(Duration.ofDays(180)),
+    ICacheNames.IRedis.D365 to withDurationConfig(Duration.ofDays(365))
+  )
 
-  @Bean(name = [CacheFieldNames.Redis.M30])
-  fun cacheManager30m(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.Redis.M30} factory = {}", factory)
-    return asCacheConfig(factory, Duration.ofMinutes(30))
-  }
-
-  @Bean(name = [CacheFieldNames.Redis.FOREVER])
-  fun cacheManagerForever(factory: RedisConnectionFactory?): CacheManager? {
-    log.debug("配置 ${CacheFieldNames.Redis.FOREVER} factory = {}", factory)
-    return asCacheConfig(factory, Duration.ZERO)
-  }
-
-  private fun asCacheConfig(factory: RedisConnectionFactory?, dr: Duration): RedisCacheManager {
-    return RedisCacheManager.builder(factory!!).cacheDefaults(cacheManagerConfig.entryTtl(dr)).build()
+  private fun asCacheConfig(factory: RedisConnectionFactory?): RedisCacheManager {
+    return RedisCacheManager.builder(factory!!).cacheDefaults(
+      cacheManagerConfig.entryTtl(Duration.ofHours(1))
+    )
+      .withInitialCacheConfigurations(cacheMap)
+      .build()
   }
 }

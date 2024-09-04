@@ -21,8 +21,8 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Import
 
-@Import(AutoConfigEntrance::class) @SpringBootApplication class RdsEntrance
+@Import(AutoConfigEntrance::class) @SpringBootApplication internal class RdsEntrance
 
-fun main(args: Array<String>) {
+internal fun main(args: Array<String>) {
   SpringApplication.run(RdsEntrance::class.java, *args)
 }

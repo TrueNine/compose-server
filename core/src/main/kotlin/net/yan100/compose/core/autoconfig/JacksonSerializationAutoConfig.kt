@@ -16,9 +16,13 @@
  */
 package net.yan100.compose.core.autoconfig
 
-import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.cfg.MapperConfig
+import com.fasterxml.jackson.databind.introspect.*
+import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import java.time.LocalDate
@@ -30,10 +34,18 @@ import net.yan100.compose.core.jackson.*
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.typing.AnyTyping
 import net.yan100.compose.core.util.DTimer
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Lazy
+import org.springframework.context.annotation.Primary
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 /**
  * jackson json 序列化策略配置
@@ -49,15 +61,16 @@ class JacksonSerializationAutoConfig {
   private fun ktm(): KotlinModule {
     val kotlinKeyPairDeserializer = KPairDeserializer()
 
-    val k = KotlinModule.Builder().build()
+    val k = KotlinModule.Builder()
+      .build()
     k.addDeserializer(Pair::class.java, kotlinKeyPairDeserializer)
 
     return k
   }
 
-  @Lazy
   @Bean
-  fun jacksonF(): Jackson2ObjectMapperBuilderCustomizer {
+  @Primary
+  fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
     val km = ktm()
 
     val module = JavaTimeModule()
@@ -105,6 +118,60 @@ class JacksonSerializationAutoConfig {
       b.serializationInclusion(JsonInclude.Include.NON_EMPTY)
 
       b.serializationInclusion(JsonInclude.Include.NON_ABSENT)
+    }
+  }
+
+  class IgnoreJsonIgnoreAnnotationIntrospector : JacksonAnnotationIntrospector() {
+    override fun findPropertyIgnoralByName(config: MapperConfig<*>?, a: Annotated?): JsonIgnoreProperties.Value = JsonIgnoreProperties.Value.empty()
+    override fun _isIgnorable(a: Annotated?): Boolean = false
+    override fun hasIgnoreMarker(m: AnnotatedMember?): Boolean = false
+    override fun isIgnorableType(ac: AnnotatedClass?): Boolean = false
+  }
+
+  companion object {
+    const val SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME = "jacksonObjectMapper"
+    const val NON_IGNORE_OBJECT_MAPPER_BEAN_NAME = "nonJsonIgnoreObjectMapper"
+    const val DEFAULT_OBJECT_MAPPER_BEAN_NAME = "defaultObjectMapper"
+  }
+
+  @Primary
+  @Order(Ordered.HIGHEST_PRECEDENCE)
+  @ConditionalOnMissingBean(ObjectMapper::class, name = [SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME])
+  @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
+  fun defaultObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
+    log.debug("注册默认的 objectMapper")
+    return builder.createXmlMapper(false).build()
+  }
+
+  @Order(Ordered.LOWEST_PRECEDENCE)
+  @ConditionalOnBean(ObjectMapper::class)
+  @Bean(name = [NON_IGNORE_OBJECT_MAPPER_BEAN_NAME])
+  fun nonDeserializerObjectMapper(
+    mapper: ObjectMapper
+  ): ObjectMapper {
+    log.debug("注册非忽略注解的 ObjectMapper, defaultMapper = {}", mapper)
+    return mapper.copy().let {
+      val re = IgnoreJsonIgnoreAnnotationIntrospector()
+      val intros =
+        (it.deserializationConfig.annotationIntrospector.allIntrospectors() + it.serializationConfig.annotationIntrospector.allIntrospectors())
+          .filterNot { i -> i is JacksonAnnotationIntrospector }
+          .distinct().toMutableList()
+      intros += re
+      var pair: AnnotationIntrospectorPair? = null
+      if (intros.size >= 2) {
+        for (i in 1 until intros.size) {
+          val p = AnnotationIntrospectorPair(intros[i], intros[i - 1])
+          intros[i] = p
+        }
+        pair = intros.last() as AnnotationIntrospectorPair?
+      }
+      it.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+        .registerModules(KotlinModule.Builder().build())
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
+        .activateDefaultTyping(it.polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.WRAPPER_OBJECT)
+      if (null != pair) it.setAnnotationIntrospector(pair)
+      it
     }
   }
 }

@@ -24,6 +24,7 @@ import net.yan100.compose.oss.FileArgs
 import net.yan100.compose.oss.InMap
 import net.yan100.compose.oss.Oss
 import net.yan100.compose.oss.OutMap
+import org.checkerframework.checker.units.qual.A
 
 /**
  * 阿里云 oss 实现
@@ -32,11 +33,12 @@ import net.yan100.compose.oss.OutMap
  * @author TrueNine
  * @since 2023-02-21
  */
-class AliCloudOss(val oss: OSS) : Oss {
+class AliCloudOss(
+  val oss: OSS
+) : Oss {
 
-  @Suppress("UNCHECKED_CAST")
-  override fun <T : Any?> nativeHandle(instanceType: Class<T>): T {
-    return this.oss as T
+  override fun getNative(): Any {
+    return this.oss
   }
 
   override fun removeObject(fileInfo: FileArgs): Boolean {

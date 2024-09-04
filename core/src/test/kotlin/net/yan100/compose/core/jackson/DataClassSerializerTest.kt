@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.core.jackson
 
+import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlin.test.Test
@@ -24,6 +25,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import net.yan100.compose.core.autoconfig.JacksonSerializationAutoConfig
+import org.springframework.beans.factory.annotation.Qualifier
 
 data class A(val a: String, val b: String)
 
@@ -33,9 +36,11 @@ class B {
 
 @WebMvcTest
 class DataClassSerializerTest {
-  @Autowired lateinit var mockMvc: MockMvc
+  @Autowired
+  lateinit var mockMvc: MockMvc
 
-  @Autowired lateinit var mapper: ObjectMapper
+  @Autowired
+  lateinit var mapper: ObjectMapper
 
   @Test
   fun `test web request`() {
@@ -65,4 +70,37 @@ class DataClassSerializerTest {
     val obj = mapper.readValue<A>(json)
     println(obj)
   }
+
+  @Test
+  fun `test serialize interface internal data class`() {
+    val a = InterFace.InternalClass("a", "b", "c")
+    val json = mapper.writeValueAsString(a)
+    println(json)
+    val obj = mapper.readValue<InterFace.InternalClass>(json)
+    println(obj)
+  }
+
+  @Autowired
+  @Qualifier(JacksonSerializationAutoConfig.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
+  lateinit var map: ObjectMapper
+
+  @Test
+  fun `test serialize interface internal data class be typed`() {
+    val a = InterFace.InternalClass("a", "b", "c")
+    val json = map.writeValueAsString(a)
+    println(json)
+    val obj = map.readValue(json, Any::class.java)
+    println(obj)
+    println(obj::class)
+  }
+}
+
+
+interface InterFace {
+  data class InternalClass(
+    val a: String,
+    val b: String,
+    @JsonIgnore
+    val c: String?
+  )
 }

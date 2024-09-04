@@ -1,13 +1,15 @@
 [versions]
-compose-versionCatalog = "1.6.555"
+compose-versionCatalog = "1.6.568"
 compose = "1.6.510"
+compose-oss = "1.6.512"
+compose-cacheable = "1.6.519"
 compose-depend-webservlet = "1.6.513"
-compose-core = "1.6.521"
+compose-core = "1.6.524"
 compose-rds = "1.6.536"
 compose-rds-core = "1.6.512"
 compose-test-toolkit = "1.6.508"
 compose-webapidoc = "1.6.510"
-compose-security = "1.6.512"
+compose-security = "1.6.514"
 compose-ksp = "1.6.510"
 compose-ksp-core = "1.6.510"
 compose-gradlePlugin = "1.6.539"
@@ -70,13 +72,13 @@ net-yan100-compose-ksp = { group = "net.yan100.compose", name = "ksp", version.r
 net-yan100-compose-kspCore = { group = "net.yan100.compose", name = "ksp-core", version.ref = "compose-ksp-core" }
 net-yan100-compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose-rds" }
 net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rds-core" }
-net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose" }
+net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose-oss" }
 net-yan100-compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose-security" }
 net-yan100-compose-securityOauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose" }
 net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose" }
 net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose" }
 net-yan100-compose-webapidoc = { group = "net.yan100.compose", name = "web-api-doc", version.ref = "compose-webapidoc" }
-net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose" }
+net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose-cacheable" }
 net-yan100-compose-dataCommonCrawler = { group = "net.yan100.compose", name = "data-common-crawler", version.ref = "compose" }
 net-yan100-compose-dataCommonDataextract = { group = "net.yan100.compose", name = "data-common-data-extract", version.ref = "compose" }
 net-yan100-compose-dependMqtt = { group = "net.yan100.compose", name = "depend-mqtt", version.ref = "compose" }

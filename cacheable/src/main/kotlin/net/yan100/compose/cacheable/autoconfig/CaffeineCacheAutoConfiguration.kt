@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.cacheable.autoconfig
 
+import com.github.benmanes.caffeine.cache.AsyncCache
 import com.github.benmanes.caffeine.cache.Caffeine
 import java.time.Duration
-import net.yan100.compose.core.consts.CacheFieldNames
+import net.yan100.compose.core.consts.ICacheNames
 import net.yan100.compose.core.log.slf4j
-import org.springframework.cache.CacheManager
 import org.springframework.cache.caffeine.CaffeineCache
-import org.springframework.cache.support.SimpleCacheManager
+import org.springframework.cache.caffeine.CaffeineCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -31,34 +31,34 @@ private val log = slf4j(CaffeineCacheAutoConfiguration::class)
 
 @Configuration
 class CaffeineCacheAutoConfiguration {
-  private fun create(name: String, d: Duration): CaffeineCache {
-    return CaffeineCache(name, Caffeine.newBuilder().expireAfterWrite(d).build())
+  private fun create(d: Duration): AsyncCache<Any?, Any?> {
+    return Caffeine.newBuilder().expireAfterWrite(d).buildAsync()
   }
 
-  private final val m = mutableListOf<CaffeineCache>()
-
-  init {
-    if (m.isEmpty()) {
-      m += create(CacheFieldNames.Caffeine.M30, Duration.ofMinutes(30))
-      m += create(CacheFieldNames.Caffeine.H1, Duration.ofHours(1))
-      m += create(CacheFieldNames.Caffeine.H2, Duration.ofHours(2))
-      m += create(CacheFieldNames.Caffeine.H3, Duration.ofHours(3))
-      m += create(CacheFieldNames.Caffeine.D1, Duration.ofDays(1))
-      m += create(CacheFieldNames.Caffeine.D2, Duration.ofDays(2))
-      m += create(CacheFieldNames.Caffeine.D3, Duration.ofDays(3))
-      m += create(CacheFieldNames.Caffeine.FOREVER, Duration.ZERO)
-    }
-  }
+  private val cacheMap = mapOf(
+    ICacheNames.ICaffeine.M1 to create(Duration.ofMinutes(1)),
+    ICacheNames.ICaffeine.M5 to create(Duration.ofMinutes(5)),
+    ICacheNames.ICaffeine.M10 to create(Duration.ofMinutes(10)),
+    ICacheNames.ICaffeine.M30 to create(Duration.ofMinutes(30)),
+    ICacheNames.ICaffeine.H1 to create(Duration.ofHours(1)),
+    ICacheNames.ICaffeine.H2 to create(Duration.ofHours(2)),
+    ICacheNames.ICaffeine.H3 to create(Duration.ofHours(3)),
+    ICacheNames.ICaffeine.D1 to create(Duration.ofDays(1)),
+    ICacheNames.ICaffeine.D2 to create(Duration.ofDays(2)),
+    ICacheNames.ICaffeine.D3 to create(Duration.ofDays(3)),
+    ICacheNames.ICaffeine.D7 to create(Duration.ofDays(7)),
+    ICacheNames.ICaffeine.D30 to create(Duration.ofDays(30)),
+    ICacheNames.ICaffeine.D60 to create(Duration.ofDays(60)),
+    ICacheNames.ICaffeine.D180 to create(Duration.ofDays(180)),
+    ICacheNames.ICaffeine.D365 to create(Duration.ofDays(365)),
+  )
 
   @Primary
-  @Bean(name = [CacheFieldNames.Caffeine.CACHE])
-  fun caffeineCacheManager(): CacheManager {
+  @Bean(name = [ICacheNames.ICaffeine.CACHE_MANAGER])
+  fun caffeineCacheManager(): CaffeineCacheManager {
     log.debug("配置 CaffeineCache 缓存")
-    val s = SimpleCacheManager()
-
-    check(m.isNotEmpty()) { "缓存配置为空" }
-    s.setCaches(m)
-
+    val s = CaffeineCacheManager()
+    cacheMap.forEach { (k, v) -> s.registerCustomCache(k, v) }
     return s
   }
 }

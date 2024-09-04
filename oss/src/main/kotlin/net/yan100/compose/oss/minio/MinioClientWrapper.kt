@@ -35,9 +35,8 @@ import net.yan100.compose.oss.OutMap
 class MinioClientWrapper(private val minioClient: MinioClient, private val exposeUrl: String = "http://localhost:9000") :
   Oss, MinioClientAdaptor(minioClient, exposeUrl) {
 
-  @Suppress("UNCHECKED_CAST")
-  override fun <T> nativeHandle(instanceType: Class<T>): T {
-    return super.client as T
+  override fun getNative(): Any {
+    return super.client
   }
 
   override val exposedBaseUrl: String

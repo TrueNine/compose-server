@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authorization.AuthorizationDecision
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -39,6 +40,8 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
+
+private val log = slf4j(SecurityPolicyBean::class)
 
 @Configuration
 @EnableWebSecurity
@@ -100,14 +103,24 @@ class SecurityPolicyBean {
     httpSecurity.authorizeHttpRequests {
       it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
 
+
       log.debug("任意请求是否需要认证 = {}", mergedConfigAnnotation.anyRequestAuthed)
-      if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().denyAll() else it.anyRequest().permitAll()
+      if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().denyAll() else {
+        if (policyDefine.accessor != null) {
+          log.debug("设定 access = {}", policyDefine.accessor)
+          it.anyRequest().access(policyDefine.accessor)
+        } else {
+          it.anyRequest().permitAll()
+        }
+      }
     }
     httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
 
     // 配置异常处理器
     if (policyDefine.exceptionAdware != null) {
-      httpSecurity.exceptionHandling { it.authenticationEntryPoint(policyDefine.exceptionAdware).accessDeniedHandler(policyDefine.exceptionAdware) }
+      httpSecurity.exceptionHandling {
+        it.authenticationEntryPoint(policyDefine.exceptionAdware).accessDeniedHandler(policyDefine.exceptionAdware)
+      }
     } else log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
 
     log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
@@ -125,7 +138,6 @@ class SecurityPolicyBean {
   }
 
   companion object {
-    @JvmStatic private val log = slf4j(this::class)
 
     @JvmStatic
     private fun getAnno(ctx: ApplicationContext): EnableRestSecurity? {

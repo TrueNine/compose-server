@@ -1,4 +1,4 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.oss.get()
 
 dependencies {
   implementation(libs.io.minio.minio) {
