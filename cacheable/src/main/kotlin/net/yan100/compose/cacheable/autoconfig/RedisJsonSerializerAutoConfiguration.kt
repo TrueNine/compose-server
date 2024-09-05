@@ -22,7 +22,6 @@ import java.time.Duration
 import net.yan100.compose.core.consts.ICacheNames
 import net.yan100.compose.core.log.slf4j
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -77,26 +76,27 @@ class RedisJsonSerializerAutoConfiguration(
     return asCacheConfig(factory)
   }
 
-  private fun withDurationConfig(dr: Duration): RedisCacheConfiguration {
+  private fun createRedisCacheConfig(dr: Duration): RedisCacheConfiguration {
     return cacheManagerConfig.entryTtl(dr)
   }
 
   private val cacheMap = mapOf(
-    ICacheNames.IRedis.M1 to withDurationConfig(Duration.ofMinutes(1)),
-    ICacheNames.IRedis.M5 to withDurationConfig(Duration.ofMinutes(5)),
-    ICacheNames.IRedis.M10 to withDurationConfig(Duration.ofMinutes(10)),
-    ICacheNames.IRedis.M30 to withDurationConfig(Duration.ofMinutes(30)),
-    ICacheNames.IRedis.H1 to withDurationConfig(Duration.ofHours(1)),
-    ICacheNames.IRedis.H2 to withDurationConfig(Duration.ofHours(2)),
-    ICacheNames.IRedis.H3 to withDurationConfig(Duration.ofHours(3)),
-    ICacheNames.IRedis.D1 to withDurationConfig(Duration.ofDays(1)),
-    ICacheNames.IRedis.D2 to withDurationConfig(Duration.ofDays(2)),
-    ICacheNames.IRedis.D3 to withDurationConfig(Duration.ofDays(3)),
-    ICacheNames.IRedis.D7 to withDurationConfig(Duration.ofDays(7)),
-    ICacheNames.IRedis.D30 to withDurationConfig(Duration.ofDays(30)),
-    ICacheNames.IRedis.D60 to withDurationConfig(Duration.ofDays(60)),
-    ICacheNames.IRedis.D180 to withDurationConfig(Duration.ofDays(180)),
-    ICacheNames.IRedis.D365 to withDurationConfig(Duration.ofDays(365))
+    ICacheNames.M1 to createRedisCacheConfig(Duration.ofMinutes(1)),
+    ICacheNames.M5 to createRedisCacheConfig(Duration.ofMinutes(5)),
+    ICacheNames.M10 to createRedisCacheConfig(Duration.ofMinutes(10)),
+    ICacheNames.M30 to createRedisCacheConfig(Duration.ofMinutes(30)),
+    ICacheNames.H1 to createRedisCacheConfig(Duration.ofHours(1)),
+    ICacheNames.H2 to createRedisCacheConfig(Duration.ofHours(2)),
+    ICacheNames.H3 to createRedisCacheConfig(Duration.ofHours(3)),
+    ICacheNames.D1 to createRedisCacheConfig(Duration.ofDays(1)),
+    ICacheNames.D2 to createRedisCacheConfig(Duration.ofDays(2)),
+    ICacheNames.D3 to createRedisCacheConfig(Duration.ofDays(3)),
+    ICacheNames.D7 to createRedisCacheConfig(Duration.ofDays(7)),
+    ICacheNames.D30 to createRedisCacheConfig(Duration.ofDays(30)),
+    ICacheNames.D60 to createRedisCacheConfig(Duration.ofDays(60)),
+    ICacheNames.D180 to createRedisCacheConfig(Duration.ofDays(180)),
+    ICacheNames.D365 to createRedisCacheConfig(Duration.ofDays(365)),
+    ICacheNames.FOREVER to createRedisCacheConfig(Duration.ZERO)
   )
 
   private fun asCacheConfig(factory: RedisConnectionFactory?): RedisCacheManager {

@@ -23,6 +23,6 @@ import net.yan100.compose.rds.core.entities.IEntity
 
 @Entity
 @Table(name = "db_test_duration_converter")
-data class DbTestDurationConverterEntityIEntity(var durations: Duration?) : IEntity() {
+data class DbTestDurationConverterEntity(var durations: Duration?) : IEntity() {
   constructor() : this(null)
 }

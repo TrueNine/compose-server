@@ -27,18 +27,20 @@ import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.core.entities.IAnyEntity
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.models.DataRecord
+import net.yan100.compose.rds.entities.SuperTableRowDeleteRecord
 import net.yan100.compose.rds.entities.TableRowDeleteRecord
-import net.yan100.compose.rds.repositories.ITableRowDeleteRecordRepository
+import net.yan100.compose.rds.repositories.ITableRowDeleteRecordRep
 import net.yan100.compose.rds.service.ITableRowDeleteRecordService
 import net.yan100.compose.rds.service.base.CrudService
 import net.yan100.compose.rds.service.base.IService
 import org.springframework.stereotype.Service
 
+private val log = slf4j(TableRowDeleteRecordServiceImpl::class)
+
 @Service
-class TableRowDeleteRecordServiceImpl(private val delRepo: ITableRowDeleteRecordRepository, private val mapper: ObjectMapper) :
+class TableRowDeleteRecordServiceImpl(private val delRepo: ITableRowDeleteRecordRep, private val mapper: ObjectMapper) :
   ITableRowDeleteRecordService, IService<TableRowDeleteRecord>, CrudService<TableRowDeleteRecord>(delRepo) {
 
-  private val log = slf4j(this::class)
 
   override fun saveAnyEntity(anyData: IEntity?): TableRowDeleteRecord? {
     return if (null == anyData) {
@@ -49,8 +51,8 @@ class TableRowDeleteRecordServiceImpl(private val delRepo: ITableRowDeleteRecord
       val userInfo = UserInfoContextHolder.get()
       delRow.apply {
         tableNames = anyData::class.findAnnotation<Table>()?.name!!
-        userId = userInfo?.userId
-        userAccount = userInfo?.account
+        userId = userInfo.userId
+        userAccount = userInfo.account
         deleteDatetime = LocalDateTime.now()
         this.entity = extractTableRow(anyData)
       }

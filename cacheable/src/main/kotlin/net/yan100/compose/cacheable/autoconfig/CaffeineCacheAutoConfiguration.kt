@@ -36,21 +36,22 @@ class CaffeineCacheAutoConfiguration {
   }
 
   private val cacheMap = mapOf(
-    ICacheNames.ICaffeine.M1 to create(Duration.ofMinutes(1)),
-    ICacheNames.ICaffeine.M5 to create(Duration.ofMinutes(5)),
-    ICacheNames.ICaffeine.M10 to create(Duration.ofMinutes(10)),
-    ICacheNames.ICaffeine.M30 to create(Duration.ofMinutes(30)),
-    ICacheNames.ICaffeine.H1 to create(Duration.ofHours(1)),
-    ICacheNames.ICaffeine.H2 to create(Duration.ofHours(2)),
-    ICacheNames.ICaffeine.H3 to create(Duration.ofHours(3)),
-    ICacheNames.ICaffeine.D1 to create(Duration.ofDays(1)),
-    ICacheNames.ICaffeine.D2 to create(Duration.ofDays(2)),
-    ICacheNames.ICaffeine.D3 to create(Duration.ofDays(3)),
-    ICacheNames.ICaffeine.D7 to create(Duration.ofDays(7)),
-    ICacheNames.ICaffeine.D30 to create(Duration.ofDays(30)),
-    ICacheNames.ICaffeine.D60 to create(Duration.ofDays(60)),
-    ICacheNames.ICaffeine.D180 to create(Duration.ofDays(180)),
-    ICacheNames.ICaffeine.D365 to create(Duration.ofDays(365)),
+    ICacheNames.M1 to create(Duration.ofMinutes(1)),
+    ICacheNames.M5 to create(Duration.ofMinutes(5)),
+    ICacheNames.M10 to create(Duration.ofMinutes(10)),
+    ICacheNames.M30 to create(Duration.ofMinutes(30)),
+    ICacheNames.H1 to create(Duration.ofHours(1)),
+    ICacheNames.H2 to create(Duration.ofHours(2)),
+    ICacheNames.H3 to create(Duration.ofHours(3)),
+    ICacheNames.D1 to create(Duration.ofDays(1)),
+    ICacheNames.D2 to create(Duration.ofDays(2)),
+    ICacheNames.D3 to create(Duration.ofDays(3)),
+    ICacheNames.D7 to create(Duration.ofDays(7)),
+    ICacheNames.D30 to create(Duration.ofDays(30)),
+    ICacheNames.D60 to create(Duration.ofDays(60)),
+    ICacheNames.D180 to create(Duration.ofDays(180)),
+    ICacheNames.D365 to create(Duration.ofDays(365)),
+    ICacheNames.FOREVER to create(Duration.ZERO),
   )
 
   @Primary

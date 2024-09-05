@@ -16,10 +16,15 @@
  */
 package net.yan100.compose.rds.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.consts.Regexes
+import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -32,42 +37,32 @@ import org.hibernate.annotations.NotFoundAction
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "api")
-@Table(name = Api.TABLE_NAME)
-abstract class Api : IEntity() {
-  companion object {
-    const val TABLE_NAME = "api"
-    const val NAME = "name"
-    const val DOC = "doc"
-    const val PERMISSIONS_ID = "permissions_id"
-    const val API_PATH = "api_path"
-    const val API_METHOD = "api_method"
-    const val API_PROTOCOL = "api_protocol"
-  }
-
+@MappedSuperclass
+@MetaDef
+abstract class SuperApi : IEntity() {
   /** 名称 */
-  @Schema(title = "名称") @Column(name = NAME) @Nullable var name: String? = null
+  @get:Schema(title = "名称")
+  abstract var name: String?
 
   /** 描述 */
-  @Schema(title = "描述") @Column(name = DOC) @Nullable var doc: String? = null
-
-  /** 权限 */
-  @Nullable
-  @Schema(title = "权限", requiredMode = RequiredMode.NOT_REQUIRED)
-  @ManyToOne
-  @JoinColumn(name = PERMISSIONS_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT))
-  @NotFound(action = NotFoundAction.IGNORE)
-  var permissions: Permissions? = null
+  @get:Schema(title = "描述")
+  abstract var doc: String?
 
   /** 路径 */
-  @Schema(title = "路径") @Column(name = API_PATH) lateinit var apiPath: String
+  @get:Schema(title = "路径")
+  @get:NotBlank(message = "api 路径不得为空")
+  @get:Pattern(message = "路径不合法", regexp = Regexes.ANT_URI)
+  abstract var apiPath: String?
 
   /** 请求方式 */
-  @Schema(title = "请求方式") @Column(name = API_METHOD) lateinit var apiMethod: String
+  @get:Schema(title = "请求方式")
+  abstract var apiMethod: String?
 
   /** 请求协议 */
-  @Schema(title = "请求协议") @Column(name = API_PROTOCOL) lateinit var apiProtocol: String
+  @get:Schema(title = "请求协议")
+  abstract var apiProtocol: String?
+
+  @get:JsonIgnore
+  @get:Transient
+  val uriDeep: Int get() = apiPath?.split("/")?.filter { it.isNotBlank() }?.size ?: 0
 }

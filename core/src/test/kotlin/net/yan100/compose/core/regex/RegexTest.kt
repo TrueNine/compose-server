@@ -37,4 +37,23 @@ class RegexTest {
     assertFalse { pattern.matcher("01040419721028001").matches() }
     assertFalse { pattern.matcher("10040419721028001").matches() }
   }
+
+  @Test
+  fun `test match ant uri`() {
+    val pattern = Regexes.ANT_URI.toRegex()
+    assertTrue {
+      arrayOf("/", "/a", "/a/b", "/.", "/.php", "/aaa.", "/a.b.", "/a.b.c", "/a/*/*", "/a/b/*/*", "/1/2")
+        .map(pattern::matches).reduce(Boolean::and)
+    }
+
+    assertFalse {
+      arrayOf(
+        "//a", "//", "/:", "/:/:", "/%ad",
+        "", "/**", "/..", " ", "/ ", "./", "../", " / ", "/ /\n",
+        "/\n", "/\r", "/.*", "/..", "..", "/../..", "/1/2/**", "/1/2/**/*/a",
+        "/1/2/*a", "/1/2/**", "/1/2/**/", "/1/2/"
+      )
+        .map(pattern::matches).reduce(Boolean::or)
+    }
+  }
 }

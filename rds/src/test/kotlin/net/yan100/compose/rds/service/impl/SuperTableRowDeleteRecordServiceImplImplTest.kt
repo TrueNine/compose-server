@@ -21,13 +21,13 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.DbTestServiceEntityIEntity
+import net.yan100.compose.rds.entities.DbTestServiceEntity
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(classes = [RdsEntrance::class])
-class TableRowDeleteRecordServiceImplImplTest {
+class SuperTableRowDeleteRecordServiceImplImplTest {
   @Autowired private lateinit var service: TableRowDeleteRecordServiceImpl
 
   @Autowired lateinit var mapper: ObjectMapper
@@ -35,7 +35,7 @@ class TableRowDeleteRecordServiceImplImplTest {
   @Test
   fun testSaveAnyEntity() {
     val e =
-      DbTestServiceEntityIEntity().apply {
+      DbTestServiceEntity().apply {
         id = 131.toString()
         title = "测试"
       }
@@ -45,7 +45,7 @@ class TableRowDeleteRecordServiceImplImplTest {
     assertNotNull(saved.entity)
     assertNotNull(saved.entity!!.entityJson)
 
-    val a = mapper.readValue(saved.entity!!.entityJson, DbTestServiceEntityIEntity::class.java)
+    val a = mapper.readValue(saved.entity!!.entityJson, DbTestServiceEntity::class.java)
     assertEquals(a.title, e.title)
 
     val abc = service.saveAnyEntity(null)

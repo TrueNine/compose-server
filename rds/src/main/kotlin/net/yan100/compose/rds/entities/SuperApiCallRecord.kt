@@ -16,10 +16,16 @@
  */
 package net.yan100.compose.rds.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
+import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.alias.datetime
+import net.yan100.compose.core.consts.Regexes
+import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaName
 import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -32,42 +38,47 @@ import org.hibernate.annotations.NotFoundAction
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
-@Schema(title = "API请求记录")
-@Table(name = ApiCallRecordIEntity.TABLE_NAME)
-class ApiCallRecordIEntity : IEntity() {
-  companion object {
-    const val TABLE_NAME = "api_call_record"
-
-    const val API_ID = "api_id"
-    const val DEVICE_CODE = "device_code"
-    const val REQ_IP = "req_ip"
-    const val RESP_CODE = "resp_code"
-    const val RESP_RESULT_ENC = "resp_result_enc"
-    const val LOGIN_IP = "login_ip"
-  }
-
-  /** 从属 API */
-  @Schema(title = "API", requiredMode = RequiredMode.NOT_REQUIRED)
-  @ManyToOne
-  @JoinColumn(name = API_ID, referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT))
-  @NotFound(action = NotFoundAction.IGNORE)
-  var api: Api? = null
-
+@MappedSuperclass
+@MetaDef
+abstract class SuperApiCallRecord : IEntity() {
   /** 设备 id, 浏览器为 agent */
-  @Nullable @Schema(title = "设备 id, 浏览器为 agent") @Column(name = DEVICE_CODE) var deviceCode: String? = null
+  @get:Schema(title = "设备 id", description = "浏览器为 ua ，其他自定义唯一标识即可")
+  abstract var deviceCode: String?
 
   /** 请求 ip */
-  @Nullable @Schema(title = "请求 ip") @Column(name = REQ_IP) var reqIp: String? = null
+  @get:Schema(title = "请求 ip")
+  @get:Pattern(regexp = Regexes.IP_V4)
+  abstract var reqIp: String?
 
   /** 登录 ip */
-  @Nullable @Schema(title = "登录 ip") @Column(name = LOGIN_IP) var loginIp: String? = null
+  @get:Schema(title = "登录 ip")
+  @get:Pattern(regexp = Regexes.IP_V4)
+  abstract var loginIp: String?
 
   /** 响应码 */
-  @Nullable @Schema(title = "响应码") @Column(name = RESP_CODE) var respCode: Int? = null
+  @get:Schema(title = "响应码")
+  abstract var respCode: Int?
 
   /** 请求结果 */
-  @Nullable @Schema(title = "请求结果") @Column(name = RESP_RESULT_ENC) var respResultEnc: String? = null
+  @get:Schema(title = "请求结果")
+  abstract var respResultEnc: String?
+
+  @get:Schema(title = "请求路径")
+  abstract var reqPath: String?
+
+  @get:Schema(title = "请求方法")
+  abstract var reqMethod: String?
+
+  @get:Schema(title = "请求协议")
+  abstract var reqProtocol: String?
+
+  @get:Schema(title = "请求时间")
+  abstract var reqDatetime: datetime?
+
+  @get:Schema(title = "响应时间")
+  abstract var respDatetime: datetime?
+
+  @get:JsonIgnore
+  @get:Transient
+  val uriDeep: Int get() = reqPath?.split("/")?.filter { it.isNotBlank() }?.size ?: 0
 }

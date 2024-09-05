@@ -16,22 +16,29 @@
  */
 package net.yan100.compose.rds.entities
 
-import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import net.yan100.compose.core.models.WGS84
-import net.yan100.compose.rds.converters.WGS84Converter
+import java.time.Period
 import net.yan100.compose.rds.core.entities.IEntity
+import org.hibernate.Hibernate
 
 @Entity
-@Table(name = DbTestServiceEntityIEntity.TABLE_NAME)
-class DbTestServiceEntityIEntity : IEntity() {
-  var title: String? = null
+@Table(name = "db_test_period_converter")
+data class DbTestPeriodConverterEntity(var periods: Period?) : IEntity() {
+  constructor() : this(null)
 
-  @Convert(converter = WGS84Converter::class) var center: WGS84? = null
+  override fun equals(o: Any?): Boolean {
+    if (this === o) return true
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false
+    o as DbTestPeriodConverterEntity
 
-  companion object {
+    return id != null && id == o.id
+  }
 
-    const val TABLE_NAME = "db_test_service"
+  override fun hashCode(): Int = javaClass.hashCode()
+
+  @Override
+  override fun toString(): String {
+    return this::class.simpleName + "(id = $id , rlv = $rlv , ldf = $ldf )"
   }
 }

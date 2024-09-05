@@ -17,6 +17,7 @@
 package net.yan100.compose.rds.service
 
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.entities.SuperTableRowDeleteRecord
 import net.yan100.compose.rds.entities.TableRowDeleteRecord
 import net.yan100.compose.rds.service.base.IService
 
