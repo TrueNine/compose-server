@@ -1,8 +1,8 @@
 [versions]
-compose-versionCatalog = "1.6.576"
+compose-versionCatalog = "1.6.577"
 compose = "1.6.510"
 compose-oss = "1.6.512"
-compose-cacheable = "1.6.520"
+compose-cacheable = "1.6.521"
 compose-depend-webservlet = "1.6.513"
 compose-core = "1.6.526"
 compose-rds = "1.6.543"

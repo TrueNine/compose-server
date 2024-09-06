@@ -57,7 +57,7 @@ class RedisJsonSerializerAutoConfiguration(
 
   @Primary
   @Bean(name = [ICacheNames.IRedis.HANDLE])
-  fun customRedisJsonSerializable(factory: RedisConnectionFactory): RedisTemplate<String, Any?> {
+  fun customRedisJsonSerializable(factory: RedisConnectionFactory): RedisTemplate<String, *> {
     log.trace("注册 redisTemplate factory = {}", factory)
     val rt = RedisTemplate<String, Any?>()
     rt.setDefaultSerializer(jsr)
