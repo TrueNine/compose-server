@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
@@ -41,6 +42,10 @@ import org.hibernate.annotations.NotFoundAction
 @MappedSuperclass
 @MetaDef
 abstract class SuperApiCallRecord : IEntity() {
+  /** api id */
+  @get:Schema(title = "调用的 API ID")
+  abstract var apiId: RefId
+
   /** 设备 id, 浏览器为 agent */
   @get:Schema(title = "设备 id", description = "浏览器为 ua ，其他自定义唯一标识即可")
   abstract var deviceCode: String?
