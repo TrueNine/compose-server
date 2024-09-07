@@ -24,7 +24,6 @@ import jakarta.persistence.Transient
 import net.yan100.compose.core.alias.BigSerial
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.annotations.BigIntegerAsString
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.core.annotations.BizCode
 
@@ -40,7 +39,7 @@ abstract class ITreeEntity : IEntity() {
   @JsonIgnore @Column(name = RPI) @Schema(title = "父id") var rpi: RefId? = null
 
   /** 左节点 */
-  @JsonIgnore @BigIntegerAsString @Column(name = RLN) @Schema(title = "左节点", hidden = true) var rln: BigSerial = 1L
+  @JsonIgnore @Column(name = RLN) @Schema(title = "左节点", hidden = true) var rln: BigSerial = 1L
 
   /** 右节点 */
   @JsonIgnore @Column(name = RRN) @Schema(title = "右节点", hidden = true) var rrn: BigSerial = 2L
