@@ -22,6 +22,7 @@ import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
@@ -35,6 +36,10 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MetaDef
 @MappedSuperclass
 abstract class SuperApi : IEntity() {
+  /** ## 权限 id */
+  @get:Schema(title = "权限 id")
+  abstract var permissionsId: RefId?
+
   /** 名称 */
   @get:Schema(title = "名称")
   abstract var name: String?

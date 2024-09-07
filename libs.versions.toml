@@ -1,11 +1,11 @@
 [versions]
-compose-versionCatalog = "1.6.579"
+compose-versionCatalog = "1.6.580"
 compose = "1.6.512"
 compose-oss = "1.6.514"
 compose-cacheable = "1.6.523"
 compose-depend-webservlet = "1.6.515"
 compose-core = "1.6.528"
-compose-rds = "1.6.545"
+compose-rds = "1.6.546"
 compose-rds-core = "1.6.514"
 compose-test-toolkit = "1.6.510"
 compose-webapidoc = "1.6.512"
