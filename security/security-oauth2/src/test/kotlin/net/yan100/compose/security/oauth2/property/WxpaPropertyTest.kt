@@ -16,15 +16,15 @@
  */
 package net.yan100.compose.security.oauth2.property
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.core.util.encrypt.sha1
 import net.yan100.compose.security.oauth2.Oauth2TestEntrance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @SpringBootTest(classes = [Oauth2TestEntrance::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WxpaPropertyTest {

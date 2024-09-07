@@ -83,6 +83,7 @@ subprojects {
   }
 
   dependencyManagement {
+    applyMavenExclusions(false)
     imports {
       mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
       mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
@@ -188,7 +189,7 @@ spotless {
 }
 
 tasks.wrapper {
-    distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-8.8-all.zip"
-    networkTimeout = 3000
-    distributionType = Wrapper.DistributionType.ALL
-  }
+  distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-${l.versions.gradle.get()}-all.zip"
+  networkTimeout = 3000
+  distributionType = Wrapper.DistributionType.ALL
+}

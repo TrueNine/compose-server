@@ -21,11 +21,11 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Table
-import java.time.LocalDate
 import net.yan100.compose.core.alias.*
 import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import java.time.LocalDate
 
 @MappedSuperclass
 abstract class SuperBizCert : IEntity() {

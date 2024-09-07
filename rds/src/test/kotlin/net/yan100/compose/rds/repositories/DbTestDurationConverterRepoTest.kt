@@ -16,14 +16,14 @@
  */
 package net.yan100.compose.rds.repositories
 
-import java.time.Duration
-import kotlin.test.assertNotNull
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.entities.DbTestDurationConverterEntity
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
+import java.time.Duration
+import kotlin.test.assertNotNull
 
 @Rollback
 @SpringBootTest

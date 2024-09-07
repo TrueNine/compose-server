@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.core.encrypt.base64
 
-import kotlin.test.assertNotEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertNotEquals
 
 class Base64HelperTest {
 

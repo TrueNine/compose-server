@@ -17,13 +17,13 @@
 package net.yan100.compose.core.encrypt
 
 import io.mockk.InternalPlatformDsl.toStr
+import net.yan100.compose.core.util.encrypt.Encryptors
+import net.yan100.compose.core.util.encrypt.Keys
+import net.yan100.compose.core.util.encrypt.sha1
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
-import net.yan100.compose.core.util.encrypt.Encryptors
-import net.yan100.compose.core.util.encrypt.Keys
-import net.yan100.compose.core.util.encrypt.sha1
 
 class EncryptAndDecryptTest {
   @Test

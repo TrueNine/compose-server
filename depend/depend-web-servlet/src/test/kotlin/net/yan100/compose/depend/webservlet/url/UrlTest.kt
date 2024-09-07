@@ -16,14 +16,13 @@
  */
 package net.yan100.compose.depend.webservlet.url
 
-import kotlin.test.Test
 import net.yan100.compose.depend.webservlet.DependServletEntrance
 import net.yan100.compose.depend.webservlet.controller.UrlTestController
 import net.yan100.compose.testtookit.SpringServletTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
+import kotlin.test.Test
 
 @SpringServletTest
 @SpringBootTest(classes = [DependServletEntrance::class, UrlTestController::class])

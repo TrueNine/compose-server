@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.rds.repositories.ksp
 
-import kotlin.test.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
+import kotlin.test.Test
 
 @Rollback
 @SpringBootTest

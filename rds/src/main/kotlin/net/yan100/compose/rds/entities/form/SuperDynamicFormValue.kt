@@ -1,8 +1,6 @@
 package net.yan100.compose.rds.entities.form
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Convert
-import jakarta.persistence.Converter
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.datetime

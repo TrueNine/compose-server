@@ -40,7 +40,7 @@ import org.springframework.data.jpa.domain.Specification
 
 @MappedSuperclass
 abstract class SuperAttachment : IEntity() {
-  companion object {
+  companion            object {
     const val TABLE_NAME = "attachment"
 
     const val URL_ID = "url_id"

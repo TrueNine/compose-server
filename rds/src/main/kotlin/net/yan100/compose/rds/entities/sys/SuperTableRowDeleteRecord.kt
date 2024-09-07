@@ -14,46 +14,41 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.sys
 
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
-import net.yan100.compose.core.alias.*
+import net.yan100.compose.core.alias.RefId
+import net.yan100.compose.core.alias.datetime
+import net.yan100.compose.core.alias.string
 import net.yan100.compose.ksp.core.annotations.MetaDef
-import net.yan100.compose.ksp.core.annotations.MetaName
+import net.yan100.compose.rds.converters.RecordModelConverter
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.models.DataRecord
 
+/**
+ * 数据删除备份表
+ *
+ * @author TrueNine
+ * @since 2023-01-02
+ */
 @MetaDef
 @MappedSuperclass
-@MetaName("flyway_schema_history")
-abstract class SuperFlywaySchemaHistory : IEntity() {
-  @get:Schema(title = "执行是否成功")
-  abstract var success: bool?
+abstract class SuperTableRowDeleteRecord : IEntity() {
+  @get:Schema(title = "表名")
+  abstract var tableNames: String
 
-  @get:Schema(title = "执行时间")
-  abstract var executionTime: timestamp?
+  @get:Schema(title = "删除用户id")
+  abstract var userId: RefId?
 
-  @get:Schema(title = "安装时间")
-  abstract var installedOn: datetime
+  @get:Schema(title = "删除用户账户")
+  abstract var userAccount: string?
 
-  @get:Schema(title = "执行的数据库账号")
-  abstract var installedBy: string
+  @get:Schema(title = "删除时间")
+  abstract var deleteDatetime: datetime
 
-  @get:Schema(title = "哈希")
-  abstract var checksum: int?
-
-  @get:Schema(title = "执行脚本文件名")
-  abstract var script: string
-
-  @get:Schema(title = "类型")
-  abstract var type: string?
-
-  @get:Schema(title = "描述")
-  abstract var description: string?
-
-  @get:Schema(title = "版本")
-  abstract var version: string
-
-  @get:Schema(title = "安装等级")
-  abstract var installedRank: int?
+  @get:Convert(converter = RecordModelConverter::class)
+  @get:Schema(title = "删除实体")
+  abstract var entity: DataRecord?
 }

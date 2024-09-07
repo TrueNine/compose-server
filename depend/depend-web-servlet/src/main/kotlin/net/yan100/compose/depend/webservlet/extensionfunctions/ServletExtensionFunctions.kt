@@ -18,13 +18,13 @@ package net.yan100.compose.depend.webservlet.extensionfunctions
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import java.io.OutputStream
-import java.nio.charset.Charset
-import java.util.*
 import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.core.http.Headers
 import net.yan100.compose.core.http.InterAddr
 import net.yan100.compose.core.typing.http.MediaTypes
+import java.io.OutputStream
+import java.nio.charset.Charset
+import java.util.*
 
 val HttpServletRequest.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()

@@ -16,12 +16,12 @@
  */
 package net.yan100.compose.depend.jvalid
 
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 import net.yan100.compose.depend.jvalid.test.AtLeast
 import net.yan100.compose.depend.jvalid.test.ValidTestFns
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 
 @SpringBootTest(classes = [JValidEntrance::class])
 class ValidTest {

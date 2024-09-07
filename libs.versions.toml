@@ -1,43 +1,43 @@
 [versions]
-compose-versionCatalog = "1.6.577"
-compose = "1.6.510"
-compose-oss = "1.6.512"
-compose-cacheable = "1.6.521"
-compose-depend-webservlet = "1.6.513"
-compose-core = "1.6.526"
-compose-rds = "1.6.543"
-compose-rds-core = "1.6.512"
-compose-test-toolkit = "1.6.508"
-compose-webapidoc = "1.6.510"
-compose-security = "1.6.514"
-compose-ksp = "1.6.510"
-compose-ksp-core = "1.6.510"
-compose-gradlePlugin = "1.6.539"
+compose-versionCatalog = "1.6.579"
+compose = "1.6.512"
+compose-oss = "1.6.514"
+compose-cacheable = "1.6.523"
+compose-depend-webservlet = "1.6.515"
+compose-core = "1.6.528"
+compose-rds = "1.6.545"
+compose-rds-core = "1.6.514"
+compose-test-toolkit = "1.6.510"
+compose-webapidoc = "1.6.512"
+compose-security = "1.6.516"
+compose-ksp = "1.6.512"
+compose-ksp-core = "1.6.512"
+compose-gradlePlugin = "1.6.541"
 
 composeGroup = "net.yan100.compose"
 
-spotless = "7.0.0.BETA1"
+spotless = "7.0.0.BETA2"
 
-gradle = "8.8"
+gradle = "8.10"
 java = "21"
-kotlin = "2.0.20-RC2"
-ksp = "2.0.20-RC2-1.0.24"
-kotlinx-io = "0.5.2"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
+kotlinx-io = "0.5.3"
 kotlinx-coroutines = "1.9.0-RC.2"
 
-spring-boot = "3.4.0-M1"
+spring-boot = "3.4.0-M2"
 spring-cloud = "2023.0.1"
 spring-cloudAlibaba = "2021.0.4.0"
-spring-modulith = "1.3.0-M1"
+spring-modulith = "1.3.0-M2"
 
 testng = "7.10.2"
 junit = "5.11.0-M2"
-flyway = "10.17.1"
+flyway = "10.17.3"
 mapstruct = "1.6.0"
-hutool = "5.8.31"
+hutool = "5.8.32"
 slf4j = "2.1.0-alpha1"
 mybatis-plus = "3.5.7"
-jackson = "2.17.2"
+jackson = "2.18.0-rc1"
 querydsl = "5.1.0"
 hibernate = "6.5.1.Final"
 drools = "9.44.0.Final"
@@ -122,7 +122,7 @@ org-springframework-modulith-springModulithStarterTest = { group = "org.springfr
 org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.6.0" }
 
 org-apache-commons-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
-org-apache-commons-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.27.0" }
+org-apache-commons-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.27.1" }
 com-squareup-kotlinpoetJvm = { group = "com.squareup", name = "kotlinpoet-jvm", version = "1.18.1" }
 com-squareup-kotlinpoetKsp = { group = "com.squareup", name = "kotlinpoet-ksp", version = "1.18.1" }
 
@@ -161,10 +161,10 @@ org-flywaydb-flywayDatabasePostgresql = { group = "org.flywaydb", name = "flyway
 p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
 com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.9.1" }
 
-io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.11" }
+io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.12" }
 com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
-com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.3" }
-com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.12" }
+com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.8" }
+com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.14" }
 
 com-github-xiaoymin-knife4jOpenapi3JakartaSpringBootStarter = { group = "com.github.xiaoymin", name = "knife4j-openapi3-jakarta-spring-boot-starter", version = "4.5.0" }
 com-github-xiaoymin-knife4jSpringBootStarter = { group = "com.github.xiaoymin", name = "knife4j-spring-boot-starter", version = "3.0.3" }
@@ -174,7 +174,7 @@ jakarta-persistence-jakartaPersistenceApi = { group = "jakarta.persistence", nam
 jakarta-validation-jakartaValidationApi = { group = "jakarta.validation", name = "jakarta.validation-api", version = "3.1.0" }
 jakarta-annotation-jakartaAnnotationApi = { group = "jakarta.annotation", name = "jakarta.annotation-api", version = "3.0.0" }
 
-io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.22" }
+io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.23" }
 
 com-squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version = "5.0.0-alpha.12" } ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 com-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" } ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
@@ -207,7 +207,7 @@ com-github-ulisesbocchio-jasyptSpringBootStarter = { group = "com.github.ulisesb
 
 org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
-org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.23.1" }
+org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.24.0" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
 com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.46.0" }

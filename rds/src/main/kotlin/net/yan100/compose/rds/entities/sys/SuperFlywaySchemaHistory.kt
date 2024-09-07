@@ -14,46 +14,46 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package io.tnt.entity
+package net.yan100.compose.rds.entities.sys
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Column
+import jakarta.persistence.MappedSuperclass
+import net.yan100.compose.core.alias.*
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.ksp.core.annotations.MetaName
-import java.math.BigDecimal
-import java.time.LocalDate
+import net.yan100.compose.rds.core.entities.IEntity
 
 @MetaDef
-@MetaName("kt")
-class SuperKtEntity : SuperBaseEntity(), Cloneable {
-  var delegatedNotNull: Int by late()
+@MappedSuperclass
+@MetaName("flyway_schema_history")
+abstract class SuperFlywaySchemaHistory : IEntity() {
+  @get:Schema(title = "执行是否成功")
+  abstract var success: bool?
 
-  var decimal: BigDecimal? = null
+  @get:Schema(title = "执行时间")
+  abstract var executionTime: timestamp?
 
-  var annotationNonNull: Int by late()
+  @get:Schema(title = "安装时间")
+  abstract var installedOn: datetime
 
-  /**
-   * ## test doc
-   *
-   * this is documentation
-   */
-  var date: LocalDate? = null
+  @get:Schema(title = "执行的数据库账号")
+  abstract var installedBy: string
 
-  /** KDocumentation */
-  var firstName: String? = null
+  @get:Schema(title = "哈希")
+  abstract var checksum: int?
 
-  @Schema(title = "我的") var lastName: String? = null
+  @get:Schema(title = "执行脚本文件名")
+  abstract var script: string
 
-  val fullName: String
-    get() = "$firstName $lastName"
+  @get:Schema(title = "类型")
+  abstract var type: string?
 
-  @Column(name = "adl_cc") private var abc: String? = null
+  @get:Schema(title = "描述")
+  abstract var description: string?
 
-  @Column(name = "adl_cc") var ddd: String? = null
+  @get:Schema(title = "版本")
+  abstract var version: string
 
-  @Column(name = "bd") var birthday: LocalDate? = null
-
-  override fun toString(): String {
-    return super.toString()
-  }
+  @get:Schema(title = "安装等级")
+  abstract var installedRank: int?
 }

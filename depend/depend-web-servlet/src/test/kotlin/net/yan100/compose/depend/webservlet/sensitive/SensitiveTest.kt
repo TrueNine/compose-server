@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.depend.webservlet.sensitive
 
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import net.yan100.compose.depend.webservlet.DependServletEntrance
 import net.yan100.compose.depend.webservlet.autoconfig.SensitiveResultResponseBodyAdvice
 import net.yan100.compose.depend.webservlet.controller.SensitiveController
@@ -29,6 +27,8 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 @SpringServletTest
 @SpringBootTest(classes = [DependServletEntrance::class])

@@ -19,7 +19,9 @@ package net.yan100.compose.ksp.extensionfunctions
 import com.google.devtools.ksp.isOpen
 import com.google.devtools.ksp.isPublic
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ksp.toTypeName
 
 fun KSFunctionDeclaration.toFunction(): FunSpec {

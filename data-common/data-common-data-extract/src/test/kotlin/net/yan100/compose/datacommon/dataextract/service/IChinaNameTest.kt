@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.datacommon.dataextract.service
 
-import kotlin.test.Test
 import org.springframework.core.io.ClassPathResource
+import kotlin.test.Test
 
 class IChinaNameTest {
   @Test

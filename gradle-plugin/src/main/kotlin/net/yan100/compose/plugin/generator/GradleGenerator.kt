@@ -16,16 +16,15 @@
  */
 package net.yan100.compose.plugin.generator
 
-import java.io.File
-import java.io.FileWriter
-import java.io.InputStreamReader
-import javax.inject.Inject
 import net.yan100.compose.plugin.consts.Constant
 import net.yan100.compose.plugin.consts.MavenRepl
 import net.yan100.compose.plugin.consts.Repos
 import net.yan100.compose.plugin.wrap
 import org.gradle.api.Project
-import javax.print.DocFlavor
+import java.io.File
+import java.io.FileWriter
+import java.io.InputStreamReader
+import javax.inject.Inject
 
 /*
  * org.gradle.daemon=true

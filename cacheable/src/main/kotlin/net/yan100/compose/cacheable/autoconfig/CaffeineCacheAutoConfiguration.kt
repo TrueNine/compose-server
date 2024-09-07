@@ -18,14 +18,13 @@ package net.yan100.compose.cacheable.autoconfig
 
 import com.github.benmanes.caffeine.cache.AsyncCache
 import com.github.benmanes.caffeine.cache.Caffeine
-import java.time.Duration
 import net.yan100.compose.core.consts.ICacheNames
 import net.yan100.compose.core.log.slf4j
-import org.springframework.cache.caffeine.CaffeineCache
 import org.springframework.cache.caffeine.CaffeineCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import java.time.Duration
 
 private val log = slf4j(CaffeineCacheAutoConfiguration::class)
 

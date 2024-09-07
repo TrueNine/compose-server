@@ -16,11 +16,11 @@
  */
 package net.yan100.compose.core.regex
 
+import net.yan100.compose.core.consts.Regexes
 import java.util.regex.Pattern
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import net.yan100.compose.core.consts.Regexes
 
 class RegexTest {
   @Test

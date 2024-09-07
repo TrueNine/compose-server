@@ -17,7 +17,6 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import java.io.InputStream
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.typing.http.MediaTypes
 import net.yan100.compose.rds.core.typing.AttachmentTyping
@@ -28,6 +27,7 @@ import net.yan100.compose.rds.service.IAttachmentService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.io.InputStream
 
 /** 附件聚合实现 */
 @Service

@@ -21,8 +21,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.lang.annotation.Inherited
-import net.yan100.compose.core.jackson.LongAsStringSerializer
-import net.yan100.compose.core.jackson.StringAsLongDeserializer
 
 /**
  * 将 Long 类型序列化为 String，同样反序列化回来也采取 String
@@ -31,11 +29,10 @@ import net.yan100.compose.core.jackson.StringAsLongDeserializer
  * @since 2023-02-19
  */
 @Inherited
+@Deprecated("不再有此需求", level = DeprecationLevel.ERROR)
 @JsonInclude
 @MustBeDocumented
 @JacksonAnnotationsInside
 @Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER)
 @Retention(AnnotationRetention.RUNTIME)
-@JsonSerialize(using = LongAsStringSerializer::class)
-@JsonDeserialize(using = StringAsLongDeserializer::class)
 annotation class BigIntegerAsString

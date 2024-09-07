@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.core.util
 
-import java.math.BigDecimal
 import net.yan100.compose.core.annotations.BetaTest
+import java.math.BigDecimal
 
 /**
  * # 百分比计算工具

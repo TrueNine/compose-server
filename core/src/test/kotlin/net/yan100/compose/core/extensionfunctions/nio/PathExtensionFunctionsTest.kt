@@ -16,12 +16,12 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
+import net.yan100.compose.core.alias.Pq
+import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.core.alias.Pq
-import org.junit.jupiter.api.io.TempDir
 
 class PathExtensionFunctionsTest {
   @TempDir lateinit var tempDir: Path

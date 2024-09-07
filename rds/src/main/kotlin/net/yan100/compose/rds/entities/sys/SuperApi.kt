@@ -14,48 +14,50 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.sys
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
-import jakarta.annotation.Nullable
-import jakarta.persistence.Column
-import jakarta.persistence.Convert
-import jakarta.persistence.Entity
 import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Table
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.alias.datetime
-import net.yan100.compose.core.alias.string
+import jakarta.persistence.Transient
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
-import net.yan100.compose.rds.converters.RecordModelConverter
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.models.DataRecord
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
 
 /**
- * 数据删除备份表
+ * api
  *
  * @author TrueNine
  * @since 2023-01-02
  */
 @MetaDef
 @MappedSuperclass
-abstract class SuperTableRowDeleteRecord : IEntity() {
-  @get:Schema(title = "表名")
-  abstract var tableNames: String
+abstract class SuperApi : IEntity() {
+  /** 名称 */
+  @get:Schema(title = "名称")
+  abstract var name: String?
 
-  @get:Schema(title = "删除用户id")
-  abstract var userId: RefId?
+  /** 描述 */
+  @get:Schema(title = "描述")
+  abstract var doc: String?
 
-  @get:Schema(title = "删除用户账户")
-  abstract var userAccount: string?
+  /** 路径 */
+  @get:Schema(title = "路径")
+  @get:NotBlank(message = "api 路径不得为空")
+  @get:Pattern(message = "路径不合法", regexp = Regexes.ANT_URI)
+  abstract var apiPath: String?
 
-  @get:Schema(title = "删除时间")
-  abstract var deleteDatetime: datetime
+  /** 请求方式 */
+  @get:Schema(title = "请求方式")
+  abstract var apiMethod: String?
 
-  @get:Convert(converter = RecordModelConverter::class)
-  @get:Schema(title = "删除实体")
-  abstract var entity: DataRecord?
+  /** 请求协议 */
+  @get:Schema(title = "请求协议")
+  abstract var apiProtocol: String?
+
+  @get:JsonIgnore
+  @get:Transient
+  val uriDeep: Int get() = apiPath?.split("/")?.filter { it.isNotBlank() }?.size ?: 0
 }

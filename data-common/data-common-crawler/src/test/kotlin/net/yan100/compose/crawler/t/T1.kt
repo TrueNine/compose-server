@@ -23,9 +23,9 @@ import com.microsoft.playwright.Playwright
 import com.microsoft.playwright.options.AriaRole
 import com.microsoft.playwright.options.ColorScheme
 import com.microsoft.playwright.options.ScreenshotType
+import net.yan100.compose.crawler.playwright.*
 import java.nio.file.Paths
 import java.time.LocalDateTime
-import net.yan100.compose.crawler.playwright.*
 
 class T1 {
 

@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.core.util.encrypt
 
+import net.yan100.compose.core.models.EccKeyPair
+import net.yan100.compose.core.models.RsaKeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import javax.crypto.spec.SecretKeySpec
-import net.yan100.compose.core.models.EccKeyPair
-import net.yan100.compose.core.models.RsaKeyPair
 
 interface IKeysRepo {
   fun basicRsaKeyPair(): RsaKeyPair? = null

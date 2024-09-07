@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.datacommon.dataextract.api
 
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.assertNotNull
 
 @SpringBootTest
 class ICnNbsAddressApiTest {

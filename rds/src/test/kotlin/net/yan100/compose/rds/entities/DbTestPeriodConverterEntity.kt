@@ -18,9 +18,9 @@ package net.yan100.compose.rds.entities
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import java.time.Period
 import net.yan100.compose.rds.core.entities.IEntity
 import org.hibernate.Hibernate
+import java.time.Period
 
 @Entity
 @Table(name = "db_test_period_converter")

@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.core.extensionfunctions.sensitive
 
+import net.yan100.compose.core.annotations.SensitiveRef
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import net.yan100.compose.core.annotations.SensitiveRef
 
 interface SensitiveScope<T> {
   fun String.addressDetails() = SensitiveRef.Strategy.ADDRESS.desensitizeSerializer()(this)

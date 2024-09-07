@@ -18,7 +18,6 @@ package net.yan100.compose.depend.jvalid.controller
 
 import jakarta.validation.Validator
 import jakarta.validation.ValidatorFactory
-import java.net.URI
 import net.yan100.compose.testtookit.SpringServletTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +25,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import java.net.URI
 
 @EntityScan("net.yan100.compose.depend.jvalid")
 @SpringServletTest

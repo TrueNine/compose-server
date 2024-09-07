@@ -23,7 +23,6 @@ import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
-import java.io.Serial
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.core.models.sensitive.ISensitivity
@@ -38,6 +37,7 @@ import net.yan100.compose.rds.core.models.JpaPagedRequestParam
 import org.hibernate.Hibernate
 import org.jetbrains.annotations.ApiStatus.Experimental
 import org.springframework.data.domain.Persistable
+import java.io.Serial
 
 /**
  * ## JPA的最基础基类，包括一个 id

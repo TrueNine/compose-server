@@ -17,35 +17,32 @@
 package net.yan100.compose.core.autoconfig
 
 import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.cfg.MapperConfig
 import com.fasterxml.jackson.databind.introspect.*
-import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneOffset
-import java.util.*
 import net.yan100.compose.core.jackson.*
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.core.typing.AnyTyping
 import net.yan100.compose.core.util.DTimer
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Lazy
 import org.springframework.context.annotation.Primary
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneOffset
+import java.util.*
 
 /**
  * jackson json 序列化策略配置
@@ -73,29 +70,23 @@ class JacksonSerializationAutoConfig {
   fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
     val km = ktm()
 
-    val module = JavaTimeModule()
     val zoneOffset = ZoneOffset.ofHours(8)
+    val module = JavaTimeModule()
 
-    val ldts = LocalDateTimeSerializer(zoneOffset)
-    val ldtd = LocalDateTimeDeserializer(zoneOffset)
-
-    val lts = LocalTimeSerializer(zoneOffset)
-    val ltd = LocalTimeDeserializer(zoneOffset)
-    val lds = LocalDateSerializer(zoneOffset)
-    val ldd = LocalDateDeserializer(zoneOffset)
-
+    val ldts = LocalDateTimeSerializerZ(zoneOffset)
+    val ldtd = LocalDateTimeDeserializerZ(zoneOffset)
     module.addSerializer(LocalDateTime::class.java, ldts)
     module.addDeserializer(LocalDateTime::class.java, ldtd)
+
+    val lts = LocalTimeSerializerY(zoneOffset)
+    val ltd = LocalTimeDeserializerY(zoneOffset)
     module.addSerializer(LocalTime::class.java, lts)
     module.addDeserializer(LocalTime::class.java, ltd)
+
+    val lds = LocalDateSerializerX(zoneOffset)
+    val ldd = LocalDateDeserializerX(zoneOffset)
     module.addSerializer(LocalDate::class.java, lds)
     module.addDeserializer(LocalDate::class.java, ldd)
-
-    // 将 byteArray 处理为 int 数组
-    val byteArraySerializer = ByteArraySerializer()
-    val byteArrayDeserializer = ByteArrayDeserializer()
-    module.addSerializer(ByteArray::class.java, byteArraySerializer)
-    module.addDeserializer(ByteArray::class.java, byteArrayDeserializer)
 
     // 处理枚举类型
     val anyTypingDeserializer = AnyTypingDeserializer()
@@ -128,6 +119,12 @@ class JacksonSerializationAutoConfig {
     override fun isIgnorableType(ac: AnnotatedClass?): Boolean = false
   }
 
+  class IgnoreIntroPair(primary: AnnotationIntrospector, secondary: AnnotationIntrospector) : AnnotationIntrospectorPair(primary, secondary) {
+    override fun findPropertyIgnoralByName(config: MapperConfig<*>?, a: Annotated?): JsonIgnoreProperties.Value = JsonIgnoreProperties.Value.empty()
+    override fun hasIgnoreMarker(m: AnnotatedMember?): Boolean = false
+    override fun isIgnorableType(ac: AnnotatedClass?): Boolean = false
+  }
+
   companion object {
     const val SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME = "jacksonObjectMapper"
     const val NON_IGNORE_OBJECT_MAPPER_BEAN_NAME = "nonJsonIgnoreObjectMapper"
@@ -154,16 +151,19 @@ class JacksonSerializationAutoConfig {
       val re = IgnoreJsonIgnoreAnnotationIntrospector()
       val intros =
         (it.deserializationConfig.annotationIntrospector.allIntrospectors() + it.serializationConfig.annotationIntrospector.allIntrospectors())
-          .filterNot { i -> i is JacksonAnnotationIntrospector }
+          .map { i ->
+            if (i is JacksonAnnotationIntrospector) IgnoreIntroPair(re, i)
+            else i
+          }
           .distinct().toMutableList()
       intros += re
-      var pair: AnnotationIntrospectorPair? = null
+      var pair: IgnoreIntroPair? = null
       if (intros.size >= 2) {
         for (i in 1 until intros.size) {
-          val p = AnnotationIntrospectorPair(intros[i], intros[i - 1])
+          val p = IgnoreIntroPair(intros[i], intros[i - 1])
           intros[i] = p
         }
-        pair = intros.last() as AnnotationIntrospectorPair?
+        pair = intros.last() as IgnoreIntroPair?
       }
       it.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
         .registerModules(KotlinModule.Builder().build())

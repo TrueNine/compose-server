@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.core.extensionfunctions
 
+import net.yan100.compose.core.util.DTimer
 import java.time.*
 import java.util.*
-import net.yan100.compose.core.util.DTimer
 
 fun Long.toDate(): Date {
   return Date(this)

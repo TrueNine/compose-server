@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
-import java.math.BigDecimal
-import java.time.LocalDate
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
@@ -35,6 +33,8 @@ import net.yan100.compose.rds.core.typing.userinfo.DegreeTyping
 import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import java.math.BigDecimal
+import java.time.LocalDate
 
 @MappedSuperclass
 abstract class SuperHouseholdCert : IIdcard2Code, IEntity() {

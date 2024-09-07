@@ -14,9 +14,9 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-import kotlin.test.DefaultAsserter.assertEquals
 import net.yan100.compose.core.models.PemFormat
 import org.junit.jupiter.api.Test
+import kotlin.test.DefaultAsserter.assertEquals
 
 class PemFormatTest {
 

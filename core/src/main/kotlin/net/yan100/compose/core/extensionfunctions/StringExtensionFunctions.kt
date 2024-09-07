@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.core.extensionfunctions
 
+import net.yan100.compose.core.util.Str
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
-import net.yan100.compose.core.util.Str
 
 fun uuid(): String {
   return UUID.randomUUID().toString()

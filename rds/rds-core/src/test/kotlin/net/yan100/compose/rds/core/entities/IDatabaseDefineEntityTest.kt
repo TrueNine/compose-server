@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import java.lang.NullPointerException
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 

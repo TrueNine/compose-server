@@ -18,8 +18,8 @@ package net.yan100.compose.core.models.page
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
-import java.io.Serializable
 import net.yan100.compose.core.extensionfunctions.number.toSafeInt
+import java.io.Serializable
 
 /**
  * # 分页参数

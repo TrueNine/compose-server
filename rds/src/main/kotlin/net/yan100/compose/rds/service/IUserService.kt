@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.rds.service
 
-import java.time.LocalDateTime
 import net.yan100.compose.rds.entities.account.FullUsr
 import net.yan100.compose.rds.entities.account.Usr
 import net.yan100.compose.rds.service.base.IService
+import java.time.LocalDateTime
 
 interface IUserService : IService<Usr> {
   fun findUserByAccount(account: String): Usr?

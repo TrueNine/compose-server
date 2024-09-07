@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.security
 
-import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.models.AuthRequestInfo
 import net.yan100.compose.core.util.Str
 import org.springframework.security.core.GrantedAuthority

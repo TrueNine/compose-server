@@ -18,8 +18,8 @@ package net.yan100.compose.depend.jvalid.annotations
 
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
-import kotlin.reflect.KClass
 import net.yan100.compose.depend.jvalid.AnyNilValidator
+import kotlin.reflect.KClass
 
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)

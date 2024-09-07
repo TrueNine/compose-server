@@ -3,7 +3,6 @@ package net.yan100.compose.rds.entities.form
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.util.Str
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.ksp.core.annotations.MetaName
 import net.yan100.compose.rds.core.entities.IEntity

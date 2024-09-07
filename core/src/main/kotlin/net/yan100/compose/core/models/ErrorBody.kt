@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.core.models
 
+import net.yan100.compose.core.typing.http.HttpErrorStatus
 import java.io.Serial
 import java.io.Serializable
-import net.yan100.compose.core.typing.http.HttpErrorStatus
 
 /**
  * 响应错误消息

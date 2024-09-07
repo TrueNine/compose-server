@@ -17,15 +17,22 @@
 package net.yan100.compose.core.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
+import net.yan100.compose.core.autoconfig.JacksonSerializationAutoConfig
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 @SpringBootTest
 class ByteArrayDeserializerTest {
-  @Autowired lateinit var mapper: ObjectMapper
+  @Autowired
+  lateinit var mapper: ObjectMapper
+
+  @Autowired
+  @Qualifier(JacksonSerializationAutoConfig.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
+  lateinit var map: ObjectMapper
 
   class S {
     var a: String? = null
@@ -44,7 +51,26 @@ class ByteArrayDeserializerTest {
     val ba = mapper.readValue(json, S::class.java)
     println(ba)
     println(json)
-    assertEquals("{\"a\":\"a\",\"b\":[1,0,1,0,1,0]}", json)
+    assertEquals("{\"a\":\"a\",\"b\":\"AQABAAEA\"}", json)
+    assertEquals(ba.a, ab.a)
+    assertContentEquals(ba.b, ab.b)
+  }
+
+  @Test
+  fun `test deserialize byte array`() {
+    val ab =
+      S().apply {
+        a = "a"
+        b = byteArrayOf(1, 0, 1, 0, 1, 0)
+      }
+
+    val json = map.writeValueAsString(ab)
+    println(json)
+
+    val ba = map.readValue(json, S::class.java)
+    println(ba)
+
+    assertEquals("{\"net.yan100.compose.core.jackson.ByteArrayDeserializerTest\$S\":{\"a\":\"a\",\"b\":{\"[B\":\"AQABAAEA\"}}}", json)
     assertEquals(ba.a, ab.a)
     assertContentEquals(ba.b, ab.b)
   }

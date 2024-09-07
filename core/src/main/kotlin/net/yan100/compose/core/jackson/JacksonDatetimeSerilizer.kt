@@ -18,52 +18,74 @@ package net.yan100.compose.core.jackson
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer
+import net.yan100.compose.core.extensionfunctions.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
-import net.yan100.compose.core.extensionfunctions.*
 
-// FIXME 急需修复 date 的 转换消耗
-class LocalDateTimeSerializer(private val zoneOffset: ZoneOffset) : JsonSerializer<LocalDateTime>() {
-  override fun serialize(value: LocalDateTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
-    gen?.writeNumber(value.toDate(zoneOffset).toLong())
+
+class LocalDateTimeSerializerZ(private val zoneOffset: ZoneOffset) : AbstractTypedSerializer<LocalDateTime>(JsonToken.VALUE_NUMBER_INT) {
+  override fun serialize(
+    value: LocalDateTime,
+    gen: JsonGenerator?,
+    serializers: SerializerProvider?
+  ) {
+    val v = value.toDate(zoneOffset).toLong()
+    gen?.writeNumber(v)
   }
 }
 
-class LocalDateTimeDeserializer(private val zoneOffset: ZoneOffset) : JsonDeserializer<LocalDateTime>() {
+class LocalDateTimeDeserializerZ(private val zoneOffset: ZoneOffset) : LocalDateTimeDeserializer() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): LocalDateTime? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
-    return timestamp?.toLocalDateTime(zoneOffset)
+    val v = timestamp?.toLocalDateTime(zoneOffset)
+    return v
   }
 }
 
-class LocalDateSerializer(private val zoneOffset: ZoneOffset) : JsonSerializer<LocalDate>() {
-  override fun serialize(value: LocalDate, gen: JsonGenerator?, serializers: SerializerProvider?) {
+class LocalDateSerializerX(private val zoneOffset: ZoneOffset) : AbstractTypedSerializer<LocalDate>(JsonToken.VALUE_NUMBER_INT) {
+  override fun serialize(
+    value: LocalDate,
+    gen: JsonGenerator?,
+    serializers: SerializerProvider?
+  ) {
     gen?.writeNumber(value.toDate(zoneOffset).toLong())
   }
 }
 
-class LocalDateDeserializer(private val zoneOffset: ZoneOffset) : JsonDeserializer<LocalDate>() {
+class LocalDateDeserializerX(private val zoneOffset: ZoneOffset) : JsonDeserializer<LocalDate>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): LocalDate? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
-    return timestamp?.toLocalDate(zoneOffset)
+    val v = timestamp?.toLocalDate(zoneOffset)
+    return v
   }
 }
 
-class LocalTimeSerializer(private val zoneOffset: ZoneOffset) : JsonSerializer<LocalTime>() {
-  override fun serialize(value: LocalTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
+class LocalTimeSerializerY(private val zoneOffset: ZoneOffset) :
+  AbstractTypedSerializer<LocalTime>(JsonToken.VALUE_NUMBER_INT) {
+
+  override fun serialize(
+    value: LocalTime,
+    gen: JsonGenerator?,
+    serializers: SerializerProvider?
+  ) {
     gen?.writeNumber(value.toDate(zoneOffset).toLong())
   }
 }
 
-class LocalTimeDeserializer(private val zoneOffset: ZoneOffset) : JsonDeserializer<LocalTime>() {
+class LocalTimeDeserializerY(private val zoneOffset: ZoneOffset) : LocalTimeDeserializer() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): LocalTime? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
-    return timestamp?.toLocalTime(zoneOffset)
+    val v = timestamp?.toLocalTime(zoneOffset)
+    return v
   }
 }

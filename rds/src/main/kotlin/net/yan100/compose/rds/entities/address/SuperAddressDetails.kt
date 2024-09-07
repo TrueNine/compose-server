@@ -17,7 +17,7 @@
 package net.yan100.compose.rds.entities.address
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.*
+import jakarta.persistence.Convert
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.alias.RefId

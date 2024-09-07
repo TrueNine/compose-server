@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.rds.repositories
 
-import java.time.LocalDateTime
-import kotlinx.coroutines.*
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.rds.entities.account.FullUsr
 import net.yan100.compose.rds.entities.account.Usr
@@ -25,6 +23,7 @@ import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 interface IUsrRepo : IRepo<Usr> {

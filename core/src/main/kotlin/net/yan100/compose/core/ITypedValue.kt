@@ -18,9 +18,9 @@ package net.yan100.compose.core
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
+import net.yan100.compose.core.ctx.ObjectMapperHolder
 import java.io.Serializable
 import kotlin.reflect.KClass
-import net.yan100.compose.core.ctx.ObjectMapperHolder
 
 inline fun <reified T : Any> ITypedValue.toTypedValue(): T? {
   return toTypedValue(T::class)

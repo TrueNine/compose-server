@@ -17,14 +17,14 @@
 package net.yan100.compose.rds.service.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.DbTestServiceEntity
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class SuperTableRowDeleteRecordServiceImplImplTest {

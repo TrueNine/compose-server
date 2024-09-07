@@ -22,7 +22,6 @@ import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import java.time.LocalDate
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.core.alias.SerialCode
@@ -35,6 +34,7 @@ import net.yan100.compose.rds.core.typing.cert.DisTyping
 import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import java.time.LocalDate
 
 @MappedSuperclass
 abstract class SuperDisCert2 : IDisCode2, IEntity() {

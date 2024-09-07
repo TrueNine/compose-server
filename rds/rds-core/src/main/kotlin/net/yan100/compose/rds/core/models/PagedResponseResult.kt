@@ -17,9 +17,9 @@
 package net.yan100.compose.rds.core.models
 
 import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.models.page.IPage
 import java.io.Serial
 import java.io.Serializable
-import net.yan100.compose.core.models.page.IPage
 
 /**
  * 分页数据包装

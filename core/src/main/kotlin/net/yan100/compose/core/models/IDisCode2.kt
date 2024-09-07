@@ -18,9 +18,9 @@ package net.yan100.compose.core.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
-import java.util.*
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.consts.Regexes
+import java.util.*
 
 /** 二代残疾证代码 */
 interface IDisCode2 : IIdcard2Code {

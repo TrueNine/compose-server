@@ -19,28 +19,26 @@ package net.yan100.compose.rds.service.impl
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.persistence.Table
-import java.time.LocalDateTime
-import java.util.*
-import kotlin.reflect.full.findAnnotation
 import net.yan100.compose.core.ctx.UserInfoContextHolder
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.core.entities.IAnyEntity
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.models.DataRecord
-import net.yan100.compose.rds.entities.SuperTableRowDeleteRecord
-import net.yan100.compose.rds.entities.TableRowDeleteRecord
+import net.yan100.compose.rds.entities.sys.TableRowDeleteRecord
 import net.yan100.compose.rds.repositories.ITableRowDeleteRecordRep
 import net.yan100.compose.rds.service.ITableRowDeleteRecordService
 import net.yan100.compose.rds.service.base.CrudService
 import net.yan100.compose.rds.service.base.IService
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.util.*
+import kotlin.reflect.full.findAnnotation
 
 private val log = slf4j(TableRowDeleteRecordServiceImpl::class)
 
 @Service
-class TableRowDeleteRecordServiceImpl(private val delRepo: ITableRowDeleteRecordRep, private val mapper: ObjectMapper) :
-  ITableRowDeleteRecordService, IService<TableRowDeleteRecord>, CrudService<TableRowDeleteRecord>(delRepo) {
-
+class TableRowDeleteRecordServiceImpl(private val delRepo: ITableRowDeleteRecordRep, private val mapper: ObjectMapper) : ITableRowDeleteRecordService,
+  IService<TableRowDeleteRecord>, CrudService<TableRowDeleteRecord>(delRepo) {
 
   override fun saveAnyEntity(anyData: IEntity?): TableRowDeleteRecord? {
     return if (null == anyData) {

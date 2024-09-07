@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.service.base
 
-import kotlin.reflect.KClass
 import net.yan100.compose.core.alias.TODO
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.core.entities.IAnyEntity
@@ -25,6 +24,7 @@ import net.yan100.compose.rds.events.MergeDataBaseEntityEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ApplicationListener
 import org.springframework.transaction.annotation.Transactional
+import kotlin.reflect.KClass
 
 private val log = slf4j<IMergeEventService<*>>()
 

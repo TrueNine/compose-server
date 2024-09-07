@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.core.util
 
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import net.yan100.compose.core.extensionfunctions.mutableLockListOf
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class StrTest {
   @Test

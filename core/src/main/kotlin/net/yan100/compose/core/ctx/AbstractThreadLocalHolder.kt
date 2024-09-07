@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.core.ctx
 
-import java.io.Closeable
-import java.util.UUID
-import kotlin.reflect.KClass
 import org.springframework.core.NamedInheritableThreadLocal
+import java.io.Closeable
+import java.util.*
+import kotlin.reflect.KClass
 
 abstract class AbstractThreadLocalHolder<T>(nameId: KClass<*>? = null, defaultValue: T? = null) : Closeable {
   private val holder by lazy {

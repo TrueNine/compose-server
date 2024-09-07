@@ -18,11 +18,11 @@ package net.yan100.compose.core.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import java.time.Period
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class PeriodSerializerTest {

@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.rds.base
 
-import kotlin.test.assertContains
-import kotlin.test.assertTrue
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.DbTestITreeEntity
@@ -27,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.support.TransactionTemplate
+import kotlin.test.assertContains
+import kotlin.test.assertTrue
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])

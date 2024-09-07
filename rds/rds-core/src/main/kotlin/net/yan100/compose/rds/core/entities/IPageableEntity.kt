@@ -19,9 +19,9 @@ package net.yan100.compose.rds.core.entities
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
-import java.io.Serializable
 import net.yan100.compose.core.models.page.IPageParam
 import net.yan100.compose.rds.core.models.JpaPagedRequestParam
+import java.io.Serializable
 
 /**
  * ## 内嵌分页的实体类型

@@ -17,10 +17,10 @@
 package net.yan100.compose.rds.core.querydsl
 
 import com.querydsl.core.BooleanBuilder
+import net.yan100.compose.rds.core.entities.QIEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import net.yan100.compose.rds.core.entities.QIEntity
 
 class QueryDslTest {
   @Test fun `test a`() {}

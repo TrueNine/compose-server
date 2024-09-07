@@ -16,11 +16,11 @@
  */
 package net.yan100.compose.rds.autoconfig
 
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @SpringBootTest
 class IBizCodeGeneratorGeneratorBeanTest {

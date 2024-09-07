@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.core.util.generator
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import net.yan100.compose.core.IBizCodeGenerator
 import net.yan100.compose.core.ISnowflakeGenerator
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class SynchronizedSimpleBizCodeGenerator(private val snowflake: ISnowflakeGenerator) : IBizCodeGenerator {
 

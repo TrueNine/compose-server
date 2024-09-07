@@ -32,7 +32,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import java.time.LocalDate
 import net.yan100.compose.core.extensionfunctions.camelCaseToSnakeCase
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.extensionfunctions.nonText
@@ -50,6 +49,7 @@ import org.hibernate.annotations.Comment
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.jetbrains.annotations.NotNull
+import java.time.LocalDate
 
 class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
 

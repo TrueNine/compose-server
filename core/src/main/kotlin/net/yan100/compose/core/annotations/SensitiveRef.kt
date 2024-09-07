@@ -19,9 +19,9 @@ package net.yan100.compose.core.annotations
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import java.lang.annotation.Inherited
 import net.yan100.compose.core.extensionfunctions.nonText
 import net.yan100.compose.core.jackson.SensitiveSerializer
+import java.lang.annotation.Inherited
 
 /**
  * 脱敏字段检查器，通常标记于字段。 配合 Strategy 里面的常用规则使用

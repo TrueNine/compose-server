@@ -18,8 +18,8 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import java.time.Period
 import org.springframework.stereotype.Component
+import java.time.Period
 
 @Component
 @Converter(autoApply = true)

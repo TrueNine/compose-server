@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.rds.base
 
-import java.math.BigDecimal
-import kotlin.test.*
 import net.yan100.compose.core.ISnowflakeGenerator
 import net.yan100.compose.core.models.WGS84
 import net.yan100.compose.rds.RdsEntrance
@@ -26,6 +24,8 @@ import net.yan100.compose.rds.service.CrudServiceTester
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
+import kotlin.test.*
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class CrudServiceTest {

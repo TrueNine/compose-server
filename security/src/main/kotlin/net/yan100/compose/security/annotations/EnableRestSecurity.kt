@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.security.annotations
 
-import java.lang.annotation.Inherited
 import net.yan100.compose.security.autoconfig.SecurityPolicyBean
 import org.springframework.context.annotation.Import
+import java.lang.annotation.Inherited
 
 /**
  * 开启安全管理器

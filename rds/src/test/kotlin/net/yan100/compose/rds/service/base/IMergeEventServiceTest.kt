@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.rds.service.base
 
-import kotlin.test.Test
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.info.UserInfo
 import net.yan100.compose.rds.service.IUserInfoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
+import kotlin.test.Test
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])

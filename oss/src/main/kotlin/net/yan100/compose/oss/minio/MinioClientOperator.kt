@@ -19,11 +19,11 @@ package net.yan100.compose.oss.minio
 import io.minio.*
 import io.minio.messages.Bucket
 import io.minio.messages.Item
-import java.io.InputStream
-import java.io.OutputStream
 import net.yan100.compose.oss.FileArgs
 import net.yan100.compose.oss.amazon.S3PolicyCreator
 import okhttp3.Headers
+import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * minio 基础层

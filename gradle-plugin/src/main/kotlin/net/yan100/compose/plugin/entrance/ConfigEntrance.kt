@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.plugin.entrance
 
-import javax.inject.Inject
 import net.yan100.compose.plugin.generator.GradleGeneratorConfig
 import net.yan100.compose.plugin.jar.JarExtensionConfig
 import net.yan100.compose.plugin.spotless.SpotlessConfig
@@ -29,6 +28,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.apply
+import javax.inject.Inject
 
 abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   val gradleGenerator = GradleGeneratorConfig()

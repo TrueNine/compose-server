@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.plugin
 
-import java.net.URI
 import net.yan100.compose.plugin.consts.Constant
 import net.yan100.compose.plugin.consts.Repos
 import org.gradle.api.Project
@@ -25,6 +24,7 @@ import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.wrapper.Wrapper
+import java.net.URI
 
 fun org.gradle.api.artifacts.dsl.DependencyHandler.allAnnotationCompileOnly(dependencyNotation: Any): org.gradle.api.artifacts.Dependency? {
   this.add("annotationProcessor", dependencyNotation)

@@ -17,7 +17,6 @@
 package net.yan100.compose.rds.service.base
 
 import jakarta.validation.Valid
-import kotlin.reflect.KClass
 import net.yan100.compose.core.alias.Id
 import net.yan100.compose.core.alias.Pq
 import net.yan100.compose.core.alias.Pr
@@ -28,6 +27,7 @@ import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
+import kotlin.reflect.KClass
 
 abstract class CrudService<T : IEntity>(private val repo: IRepo<T>, private val supportedMergeTypes: List<KClass<*>> = emptyList()) : IService<T> {
   override val supportedTypes: List<KClass<*>>

@@ -17,10 +17,10 @@
 package net.yan100.compose.depend.mqtt.paho
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.io.Closeable
-import kotlin.reflect.KClass
 import org.eclipse.paho.client.mqttv3.IMqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import java.io.Closeable
+import kotlin.reflect.KClass
 
 class MqttPahoClientWrapper(private val client: IMqttClient, private val options: MqttConnectOptions, private val objectMapper: ObjectMapper) : Closeable {
   val isConnected: Boolean

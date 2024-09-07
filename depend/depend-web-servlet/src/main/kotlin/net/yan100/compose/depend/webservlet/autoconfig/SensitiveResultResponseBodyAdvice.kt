@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.depend.webservlet.autoconfig
 
-import java.lang.reflect.ParameterizedType
 import net.yan100.compose.core.alias.Pr
 import net.yan100.compose.core.annotations.SensitiveResponse
 import net.yan100.compose.core.log.slf4j
@@ -28,6 +27,7 @@ import org.springframework.http.server.ServerHttpRequest
 import org.springframework.http.server.ServerHttpResponse
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
+import java.lang.reflect.ParameterizedType
 
 private val log = slf4j<SensitiveResultResponseBodyAdvice>()
 

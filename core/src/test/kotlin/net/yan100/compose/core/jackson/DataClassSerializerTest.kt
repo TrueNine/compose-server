@@ -16,17 +16,20 @@
  */
 package net.yan100.compose.core.jackson
 
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import kotlin.test.Test
+import net.yan100.compose.core.alias.date
+import net.yan100.compose.core.alias.datetime
+import net.yan100.compose.core.autoconfig.JacksonSerializationAutoConfig
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
-import net.yan100.compose.core.autoconfig.JacksonSerializationAutoConfig
-import org.springframework.beans.factory.annotation.Qualifier
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 data class A(val a: String, val b: String)
 
@@ -88,8 +91,21 @@ class DataClassSerializerTest {
   fun `test serialize interface internal data class be typed`() {
     val a = InterFace.InternalClass("a", "b", "c")
     val json = map.writeValueAsString(a)
+    assertTrue { json.contains("net.yan100.compose.core.jackson.InterFace\$InternalClass") }
     println(json)
-    val obj = map.readValue(json, Any::class.java)
+    val obj = map.readValue(json, InterFace.InternalClass::class.java)
+    println(obj)
+    println(obj::class)
+  }
+
+  @Test
+  fun `test ignore json serialize datetime`() {
+    val dt = datetime.now()
+    val a = InterFace.InternalClass("a", "b", "c", dt)
+    val json = map.writeValueAsString(a)
+    println(json)
+
+    val obj = map.readValue(json, InterFace.InternalClass::class.java)
     println(obj)
     println(obj::class)
   }
@@ -101,6 +117,8 @@ interface InterFace {
     val a: String,
     val b: String,
     @JsonIgnore
-    val c: String?
+    val c: String?,
+    @JsonIgnore
+    val d: datetime? = null
   )
 }

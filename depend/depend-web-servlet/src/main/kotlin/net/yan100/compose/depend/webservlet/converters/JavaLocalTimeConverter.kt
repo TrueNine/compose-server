@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.depend.webservlet.converters
 
-import java.time.LocalTime
 import net.yan100.compose.core.extensionfunctions.toLocalTime
 import net.yan100.compose.core.log.slf4j
 import org.springframework.core.convert.converter.Converter
+import java.time.LocalTime
 
 private val log = slf4j(JavaLocalTimeConverter::class)
 

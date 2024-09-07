@@ -14,24 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.entities
+package net.yan100.compose.rds.entities.sys
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode
-import jakarta.annotation.Nullable
-import jakarta.persistence.*
+import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.Transient
 import jakarta.validation.constraints.Pattern
-import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.consts.Regexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
-import net.yan100.compose.ksp.core.annotations.MetaName
 import net.yan100.compose.rds.core.entities.IEntity
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
-import org.hibernate.annotations.NotFound
-import org.hibernate.annotations.NotFoundAction
 
 /**
  * API请求记录
@@ -39,13 +32,9 @@ import org.hibernate.annotations.NotFoundAction
  * @author TrueNine
  * @since 2023-01-02
  */
-@MappedSuperclass
 @MetaDef
+@MappedSuperclass
 abstract class SuperApiCallRecord : IEntity() {
-  /** api id */
-  @get:Schema(title = "调用的 API ID")
-  abstract var apiId: RefId
-
   /** 设备 id, 浏览器为 agent */
   @get:Schema(title = "设备 id", description = "浏览器为 ua ，其他自定义唯一标识即可")
   abstract var deviceCode: String?

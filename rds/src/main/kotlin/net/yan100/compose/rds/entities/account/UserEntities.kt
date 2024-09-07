@@ -24,12 +24,7 @@ import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
-import jakarta.validation.constraints.FutureOrPresent
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.NotEmpty
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
-import java.time.LocalDateTime
+import jakarta.validation.constraints.*
 import net.yan100.compose.core.alias.RefId
 import net.yan100.compose.core.alias.SerialCode
 import net.yan100.compose.core.alias.datetime
@@ -46,6 +41,7 @@ import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
 import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction.IGNORE
+import java.time.LocalDateTime
 
 @MappedSuperclass
 abstract class SuperUsr : IEntity() {
