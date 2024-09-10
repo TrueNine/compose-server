@@ -10,7 +10,6 @@ import net.yan100.compose.rds.entities.address.AddressDetails
 import net.yan100.compose.rds.entities.attachment.LinkedAttachment
 import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction
-import org.springframework.web.bind.annotation.RequestAttribute
 
 /** 完全的用户信息 */
 @MetaDef
