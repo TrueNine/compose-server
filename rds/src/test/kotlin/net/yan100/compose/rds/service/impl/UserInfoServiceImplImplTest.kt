@@ -19,8 +19,8 @@ package net.yan100.compose.rds.service.impl
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.repositories.IUserInfoRepo
-import net.yan100.compose.rds.repositories.IUsrRepo
+import net.yan100.compose.rds.repositories.user.IUserInfoRepo
+import net.yan100.compose.rds.repositories.user.IUsrRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test

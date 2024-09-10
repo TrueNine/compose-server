@@ -18,7 +18,7 @@ package net.yan100.compose.rds.service.impl
 
 import net.yan100.compose.core.log.slf4j
 import net.yan100.compose.rds.entities.sys.FlywaySchemaHistory
-import net.yan100.compose.rds.repositories.IFlywaySchemaHistoryRepo
+import net.yan100.compose.rds.repositories.sys.IFlywaySchemaHistoryRepo
 import net.yan100.compose.rds.service.IFlywaySchemaHistoryService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties

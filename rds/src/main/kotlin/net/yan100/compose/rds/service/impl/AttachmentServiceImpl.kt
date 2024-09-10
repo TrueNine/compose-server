@@ -23,8 +23,8 @@ import net.yan100.compose.rds.core.util.page
 import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.entities.attachment.Attachment
 import net.yan100.compose.rds.entities.attachment.LinkedAttachment
-import net.yan100.compose.rds.repositories.IAttachmentRepo
-import net.yan100.compose.rds.repositories.ILinkedAttachmentRepo
+import net.yan100.compose.rds.repositories.attachment.IAttachmentRepo
+import net.yan100.compose.rds.repositories.attachment.ILinkedAttachmentRepo
 import net.yan100.compose.rds.service.IAttachmentService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.data.repository.findByIdOrNull

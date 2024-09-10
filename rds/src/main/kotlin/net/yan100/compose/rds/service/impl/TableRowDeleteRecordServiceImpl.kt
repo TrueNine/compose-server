@@ -25,7 +25,7 @@ import net.yan100.compose.rds.core.entities.IAnyEntity
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.models.DataRecord
 import net.yan100.compose.rds.entities.sys.TableRowDeleteRecord
-import net.yan100.compose.rds.repositories.ITableRowDeleteRecordRep
+import net.yan100.compose.rds.repositories.sys.ITableRowDeleteRecordRep
 import net.yan100.compose.rds.service.ITableRowDeleteRecordService
 import net.yan100.compose.rds.service.base.CrudService
 import net.yan100.compose.rds.service.base.IService
@@ -47,6 +47,7 @@ class TableRowDeleteRecordServiceImpl(private val delRepo: ITableRowDeleteRecord
     } else {
       val delRow = TableRowDeleteRecord()
       val userInfo = UserInfoContextHolder.get()
+      if (null == userInfo) return null // TODO 消除为 null 性质
       delRow.apply {
         tableNames = anyData::class.findAnnotation<Table>()?.name!!
         userId = userInfo.userId

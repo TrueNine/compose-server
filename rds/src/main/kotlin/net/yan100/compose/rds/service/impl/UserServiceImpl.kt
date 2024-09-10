@@ -18,8 +18,8 @@ package net.yan100.compose.rds.service.impl
 
 import net.yan100.compose.rds.entities.account.FullUsr
 import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.repositories.IFullUserRepo
-import net.yan100.compose.rds.repositories.IUsrRepo
+import net.yan100.compose.rds.repositories.user.IFullUserRepo
+import net.yan100.compose.rds.repositories.user.IUsrRepo
 import net.yan100.compose.rds.service.IUserService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service

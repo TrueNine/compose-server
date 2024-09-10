@@ -18,7 +18,7 @@ package net.yan100.compose.rds.hibernate
 
 import jakarta.annotation.Resource
 import net.yan100.compose.rds.entities.attachment.Attachment
-import net.yan100.compose.rds.repositories.IAttachmentRepo
+import net.yan100.compose.rds.repositories.attachment.IAttachmentRepo
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull

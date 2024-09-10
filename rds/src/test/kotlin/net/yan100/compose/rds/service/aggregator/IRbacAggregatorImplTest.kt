@@ -21,8 +21,8 @@ import net.yan100.compose.rds.entities.Permissions
 import net.yan100.compose.rds.entities.Role
 import net.yan100.compose.rds.entities.RoleGroup
 import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.repositories.AllRoleEntityRepository
-import net.yan100.compose.rds.repositories.FullRoleGroupEntityRepo
+import net.yan100.compose.rds.repositories.rbac.IFullRoleGroupRepo
+import net.yan100.compose.rds.repositories.rbac.IFullRoleRepo
 import net.yan100.compose.rds.service.IPermissionsService
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IRoleService
@@ -34,7 +34,7 @@ import kotlin.test.*
 
 @SpringBootTest
 class IRbacAggregatorImplTest {
-  @Autowired lateinit var argRepo: FullRoleGroupEntityRepo
+  @Autowired lateinit var argRepo: IFullRoleGroupRepo
 
   @Autowired lateinit var aggregator: IRbacAggregator
 
@@ -187,7 +187,7 @@ class IRbacAggregatorImplTest {
       doc = "stra ${snowflake.next()}"
     }
 
-  @Autowired lateinit var arRepo: AllRoleEntityRepository
+  @Autowired lateinit var arRepo: IFullRoleRepo
 
   @Test
   fun testSavePermissionsToRole() {

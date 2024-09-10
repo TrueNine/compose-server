@@ -231,5 +231,6 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
     popRrnByOffset(2, child.rln, child.tgi)
   }
 
-  @Query("from #{#entityName} e where e.nlv = :level") fun findByNodeLevel(level: Long, page: Pageable): Page<T>
+  @Query("from #{#entityName} e where e.nlv = :level")
+  fun findByNodeLevel(level: Long, page: Pageable): Page<T>
 }

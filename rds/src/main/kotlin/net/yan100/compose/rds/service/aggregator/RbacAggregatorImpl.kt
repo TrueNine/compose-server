@@ -20,19 +20,21 @@ import net.yan100.compose.core.alias.ReferenceId
 import net.yan100.compose.rds.entities.relationship.RoleGroupRole
 import net.yan100.compose.rds.entities.relationship.RolePermissions
 import net.yan100.compose.rds.entities.relationship.UserRoleGroup
-import net.yan100.compose.rds.repositories.relationship.IRoleGroupRoleRepo
-import net.yan100.compose.rds.repositories.relationship.IRolePermissionsRepo
-import net.yan100.compose.rds.repositories.relationship.IUserRoleGroupRepo
+import net.yan100.compose.rds.repositories.rbac.IFullRoleGroupRepo
+import net.yan100.compose.rds.repositories.rbac.IRoleGroupRoleRepo
+import net.yan100.compose.rds.repositories.rbac.IRolePermissionsRepo
+import net.yan100.compose.rds.repositories.rbac.IUserRoleGroupRepo
+import net.yan100.compose.rds.repositories.user.IUsrRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RbacAggregatorImpl(
   private val urg: IUserRoleGroupRepo,
-  private val userRepo: net.yan100.compose.rds.repositories.IUsrRepo,
+  private val userRepo: IUsrRepo,
   private val rgr: IRoleGroupRoleRepo,
   private val rp: IRolePermissionsRepo,
-  private val rg: net.yan100.compose.rds.repositories.FullRoleGroupEntityRepo,
+  private val rg: IFullRoleGroupRepo,
 ) : IRbacAggregator {
 
   override fun findAllRoleNameByUserAccount(account: String): Set<String> = userRepo.findAllRoleNameByAccount(account)

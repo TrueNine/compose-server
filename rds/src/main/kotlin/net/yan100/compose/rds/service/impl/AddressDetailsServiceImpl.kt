@@ -24,16 +24,16 @@ import net.yan100.compose.rds.core.util.result
 import net.yan100.compose.rds.entities.address.AddressDetails
 import net.yan100.compose.rds.entities.address.FullAddressDetails
 import net.yan100.compose.rds.entities.address.NonDesensitizedAddressDetails
-import net.yan100.compose.rds.repositories.address.FullAddressDetailsRepo
 import net.yan100.compose.rds.repositories.address.IAddressDetailsRepo
 import net.yan100.compose.rds.repositories.address.IAddressRepo
+import net.yan100.compose.rds.repositories.address.IFullAddressDetailsRepo
 import net.yan100.compose.rds.service.IAddressDetailsService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class AddressDetailsServiceImpl(private val aRepo: IAddressRepo, private val detailsRepo: IAddressDetailsRepo, private val fRepo: FullAddressDetailsRepo) :
+class AddressDetailsServiceImpl(private val aRepo: IAddressRepo, private val detailsRepo: IAddressDetailsRepo, private val fRepo: IFullAddressDetailsRepo) :
   IAddressDetailsService, CrudService<AddressDetails>(detailsRepo) {
   override fun findAllByUserId(userId: String, page: Pq): Pr<AddressDetails> {
     return detailsRepo.findAllByUserId(userId, page.page).result

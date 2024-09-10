@@ -1,0 +1,23 @@
+package net.yan100.compose.rds.repositories.attachment
+
+import net.yan100.compose.rds.entities.attachment.LinkedAttachment
+import net.yan100.compose.rds.repositories.base.IRepo
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.Query
+import org.springframework.stereotype.Repository
+
+@Repository
+interface ILinkedAttachmentRepo : IRepo<LinkedAttachment> {
+  /** ## 根据 baseUrl 查询其下的所有 附件 */
+  @Query(
+    """
+    from LinkedAttachment a
+    inner join LinkedAttachment b 
+    on a.urlId = b.id
+    where b.attType = net.yan100.compose.rds.core.typing.AttachmentTyping.BASE_URL
+    and b.baseUrl = :baseUrl
+  """
+  )
+  fun findAllByParentBaseUrl(baseUrl: String, page: Pageable): Page<LinkedAttachment>
+}

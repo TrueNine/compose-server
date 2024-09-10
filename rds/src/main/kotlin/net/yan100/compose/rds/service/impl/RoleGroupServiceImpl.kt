@@ -18,13 +18,14 @@ package net.yan100.compose.rds.service.impl
 
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.repositories.relationship.IUserRoleGroupRepo
+import net.yan100.compose.rds.repositories.rbac.IRoleGroupRepo
+import net.yan100.compose.rds.repositories.rbac.IUserRoleGroupRepo
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
-class RoleGroupServiceImpl(private val rgRepo: net.yan100.compose.rds.repositories.RoleGroupRepo, private val urRepo: IUserRoleGroupRepo) :
+class RoleGroupServiceImpl(private val rgRepo: IRoleGroupRepo, private val urRepo: IUserRoleGroupRepo) :
   IRoleGroupService, CrudService<RoleGroup>(rgRepo) {
   override fun assignRootToUser(userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
     return net.yan100.compose.rds.entities.relationship
