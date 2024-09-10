@@ -71,12 +71,11 @@ subprojects {
 
   dependencies {
     annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
-
     annotationProcessor(l.org.projectlombok.lombok)
+
     compileOnly(l.org.projectlombok.lombok)
 
     implementation(l.bundles.kotlin)
-
     implementation(l.org.springframework.boot.springBootTestAutoconfigure)
 
     testImplementation(l.bundles.junit5)
@@ -125,7 +124,7 @@ subprojects {
           "-verbose",
           "-Xjdk-release=${l.versions.java.get()}",
           "-jvm-target=${l.versions.java.get()}",
-          "-Xextended-compiler-checks",
+          "-Xextended-compiler-checks"
         )
     }
 
