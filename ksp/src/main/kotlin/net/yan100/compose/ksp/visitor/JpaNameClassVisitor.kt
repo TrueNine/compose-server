@@ -35,7 +35,6 @@ import jakarta.persistence.Entity
 import net.yan100.compose.core.extensionfunctions.camelCaseToSnakeCase
 import net.yan100.compose.core.extensionfunctions.hasText
 import net.yan100.compose.core.extensionfunctions.nonText
-import net.yan100.compose.core.extensionfunctions.orElse
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.ksp.core.annotations.MetaGenerated
 import net.yan100.compose.ksp.core.annotations.MetaName
@@ -62,7 +61,7 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
     var basicType: Boolean
   ) {
     init {
-      requireDelegate = requireDelegate || (basicType && !nullable)
+      requireDelegate =  (requireDelegate && basicType && !nullable)
       if (title.nonText()) {
         title = desc?.lines()?.firstOrNull()?.trim()?.replace("#", "")?.trim()?.also { desc = desc?.lines()?.drop(1)?.joinToString("\n")?.trim() }
       }
@@ -150,6 +149,7 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
             requireDelegate = p.isDelegated(),
             basicType = p.isBasicType(),
           )
+        log.warn("hasJpaProperty: $jpaProperty")
 
         p.getKspAnnotationsByType<Schema>().firstOrNull()?.also {
           val sc = it.toAnnotation<Schema>()
@@ -234,8 +234,13 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
     if (pp.requireDelegate) {
       otherAnnotations += AnnotationSpec.builder(Transient::class).useDelegate().build()
       otherAnnotations += AnnotationSpec.builder(jakarta.persistence.Transient::class).useDelegate().build()
-      otherAnnotations += AnnotationSpec.builder(Schema::class).addMember("hidden = true").useDelegate().build()
       otherAnnotations += AnnotationSpec.builder(JsonIgnore::class).useDelegate().build()
+    } else {
+      // 不是委托属性，则可以添加 @field:Column
+      otherAnnotations += AnnotationSpec.builder(Column::class).useField().addMember("name = ${k.simpleName.getShortName().camelCaseToSnakeCase.uppercase()}")
+        .also { ab ->
+          if (pp.nullable) ab.addMember("nullable = true")
+        }.build()
     }
     // columns
     val getColumn =
@@ -246,38 +251,8 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
       AnnotationSpec.builder(Column::class).useSet().addMember("name = ${k.simpleName.getShortName().camelCaseToSnakeCase.uppercase()}").also { ab ->
         if (pp.nullable) ab.addMember("nullable = true")
       }
-    val fieldColumn =
-      AnnotationSpec.builder(Column::class).useField().addMember("name = ${k.simpleName.getShortName().camelCaseToSnakeCase.uppercase()}").also { ab ->
-        if (pp.nullable) ab.addMember("nullable = true")
-      }
-
     otherAnnotations += getColumn.build()
     otherAnnotations += setColumn.build()
-    if (!k.isBasicType()) {
-      otherAnnotations += fieldColumn.build()
-    }
-
-    if (pp.nullable) {
-      otherAnnotations += AnnotationSpec.builder(jakarta.annotation.Nullable::class).useGet().build()
-      otherAnnotations += AnnotationSpec.builder(jakarta.annotation.Nullable::class).useSet().build()
-    }
-
-
-    // schema
-    otherAnnotations +=
-      AnnotationSpec.builder(Schema::class)
-        .addMember("nullable = ${pp.nullable}")
-        .also { s ->
-          pp.title?.also { s.addMember("title = %S", it) }
-          pp.desc?.also { if (it.hasText()) s.addMember("description = %S", it) }
-        }
-        .useGet()
-        .build()
-
-    if (pp.title.hasText()) {
-      otherAnnotations += AnnotationSpec.builder(Comment::class).useGet().addMember("value = %S", pp.title!!).useGet().build()
-      otherAnnotations += AnnotationSpec.builder(Comment::class).useSet().addMember("value = %S", pp.title!!).useGet().build()
-    }
     return otherAnnotations
   }
 
