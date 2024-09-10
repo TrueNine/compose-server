@@ -16,8 +16,9 @@
 */
 package net.yan100.compose.webapidoc.models.resp;
 
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 开放api文档签证官
