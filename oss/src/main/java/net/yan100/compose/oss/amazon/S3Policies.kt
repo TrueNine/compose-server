@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- * 
+ *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
  * and resources. This software and its components are not to be used, reproduced,
@@ -13,25 +13,31 @@
  *     TrueNine
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
-*/
-package net.yan100.compose.oss.amazon;
+ */
+package net.yan100.compose.oss.amazon
 
-public interface S3Policies {
-    interface Effect {
-        String ALLOW = "Allow";
+interface S3Policies {
+  interface Effect {
+    companion object {
+      const val ALLOW: String = "Allow"
     }
+  }
 
-    interface Bucket {
-        String GET_LOCATION = "GetBucketLocation";
-        String LIST = "ListBucket";
-        String LIST_MUL_UPLOADS = "ListBucketMultipartUploads";
+  interface Bucket {
+    companion object {
+      const val GET_LOCATION: String = "GetBucketLocation"
+      const val LIST: String = "ListBucket"
+      const val LIST_MUL_UPLOADS: String = "ListBucketMultipartUploads"
     }
+  }
 
-    interface Object {
-        String GET = "GetObject";
-        String PUT = "PutObject";
-        String DEL = "DeleteObject";
-        String LIST_MUL_UPLOAD_PARTS = "ListMultipartUploadParts";
-        String ABORT_MUL_UPLOAD = "AbortMultipartUpload";
+  interface Object {
+    companion object {
+      const val GET: String = "GetObject"
+      const val PUT: String = "PutObject"
+      const val DEL: String = "DeleteObject"
+      const val LIST_MUL_UPLOAD_PARTS: String = "ListMultipartUploadParts"
+      const val ABORT_MUL_UPLOAD: String = "AbortMultipartUpload"
     }
+  }
 }

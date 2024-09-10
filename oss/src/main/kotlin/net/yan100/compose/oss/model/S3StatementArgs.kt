@@ -14,30 +14,26 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.oss.amazon;
+package net.yan100.compose.oss.model
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
+import net.yan100.compose.oss.amazon.S3PrincipalArgs
 
-@Data
-public class S3StatementArgs {
+data class S3StatementArgs(
+  @JsonProperty("Effect")
+  @SerializedName("Effect")
+  var effect: String? = null,
 
-    @JsonProperty("Effect")
-    @SerializedName("Effect")
-    private String effect;
+  @JsonProperty("Action")
+  @SerializedName("Action")
+  var action: List<String> = ArrayList(),
 
-    @JsonProperty("Action")
-    @SerializedName("Action")
-    private List<String> action = new ArrayList<>();
+  @JsonProperty("Principal")
+  @SerializedName("Principal")
+  var principal: S3PrincipalArgs? = null,
 
-    @JsonProperty("Principal")
-    @SerializedName("Principal")
-    private S3PrincipalArgs principal;
-
-    @JsonProperty("Resource")
-    @SerializedName("Resource")
-    private List<String> resource = new ArrayList<>();
-}
+  @JsonProperty("Resource")
+  @SerializedName("Resource")
+  var resource: List<String> = ArrayList(),
+)

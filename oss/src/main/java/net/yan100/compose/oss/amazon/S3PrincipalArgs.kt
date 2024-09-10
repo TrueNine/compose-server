@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- * 
+ *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
  * and resources. This software and its components are not to be used, reproduced,
@@ -13,18 +13,15 @@
  *     TrueNine
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
-*/
-package net.yan100.compose.oss.amazon;
+ */
+package net.yan100.compose.oss.amazon
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 
-@Data
-public class S3PrincipalArgs {
-    @JsonProperty("AWS")
-    @SerializedName("AWS")
-    private List<String> aws = new ArrayList<>();
-}
+
+data class S3PrincipalArgs(
+  @JsonProperty("AWS")
+  @SerializedName("AWS")
+  var aws: List<String> = ArrayList()
+)
