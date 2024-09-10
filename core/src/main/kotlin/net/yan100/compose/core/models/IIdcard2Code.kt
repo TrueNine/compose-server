@@ -18,10 +18,10 @@ package net.yan100.compose.core.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
+import net.yan100.compose.core.consts.Regexes
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.util.Objects
-import net.yan100.compose.core.consts.Regexes
+import java.util.*
 
 /** # 二代身份证代码 */
 interface IIdcard2Code {

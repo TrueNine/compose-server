@@ -48,3 +48,10 @@ object LogKt {
 fun slf4j(kClass: KClass<*>): Logger = LoggerFactory.getLogger(kClass.java)
 
 inline fun <reified T> slf4j(): Logger = slf4j(T::class)
+
+/**
+ * ## 日志 slf4j 对象
+ *
+ * @return [Logger] log 对象
+ */
+inline val <reified T : Any> T.log: Logger get() = slf4j<T>()
