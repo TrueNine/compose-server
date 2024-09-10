@@ -20,13 +20,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-import java.io.Serial;
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.yan100.compose.core.consts.DataBaseBasicFieldNames;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 任意外键dao
