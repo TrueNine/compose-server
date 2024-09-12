@@ -14,17 +14,16 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.security.properties;
+package net.yan100.compose.security.properties
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties
 
-@Data
+
 @ConfigurationProperties(prefix = "compose.security.jwt")
-public class JwtProperties {
-    String publicKeyClassPath = "security/pub.key";
-    String privateKeyClassPath = "security/pri.key";
-    String encryptDataKeyName = "edt";
-    String issuer = "T-SERVER";
-    Long expiredDuration = (long) (2 * 60 * 60 * 60 * 1000);
+class JwtProperties {
+    var publicKeyClassPath: String = "security/pub.key"
+    var privateKeyClassPath: String = "security/pri.key"
+    var encryptDataKeyName: String = "edt"
+    var issuer: String = "T-SERVER"
+    var expiredDuration: Long = (2 * 60 * 60 * 60 * 1000).toLong()
 }
