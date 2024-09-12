@@ -17,7 +17,7 @@
 package net.yan100.compose.security.jwt
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.util.encrypt.Keys
+import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test

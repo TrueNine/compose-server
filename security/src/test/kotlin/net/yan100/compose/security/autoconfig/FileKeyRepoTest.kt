@@ -17,8 +17,8 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.models.PemFormat
-import net.yan100.compose.core.util.encrypt.Keys
+import net.yan100.compose.core.encrypt.Keys
+import net.yan100.compose.core.encrypt.PemFormat
 import net.yan100.compose.security.jwt.JwtIssuer
 import net.yan100.compose.security.jwt.JwtVerifier
 import net.yan100.compose.security.jwt.consts.IssuerParam
