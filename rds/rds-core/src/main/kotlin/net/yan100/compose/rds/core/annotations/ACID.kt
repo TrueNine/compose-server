@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.annotations
+package net.yan100.compose.rds.core.annotations
 
 import jakarta.transaction.Transactional
 import java.lang.annotation.Inherited

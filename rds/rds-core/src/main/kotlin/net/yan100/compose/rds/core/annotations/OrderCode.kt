@@ -23,4 +23,7 @@ package net.yan100.compose.rds.core.annotations
  * @author TrueNine
  * @since 2023-05-17
  */
-@Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER) @Retention(AnnotationRetention.RUNTIME) @MustBeDocumented annotation class BizCode
+@Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER)
+@Retention(AnnotationRetention.RUNTIME)
+@MustBeDocumented
+annotation class OrderCode
