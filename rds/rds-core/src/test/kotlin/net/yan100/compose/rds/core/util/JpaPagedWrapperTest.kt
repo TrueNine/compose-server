@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.core.util
 
-import net.yan100.compose.rds.core.models.JpaPagedWrapper
-import net.yan100.compose.rds.core.models.JpaPagedWrapper.DEFAULT_MAX
+import net.yan100.compose.rds.core.JpaPagedWrapper
+import net.yan100.compose.rds.core.JpaPagedWrapper.DEFAULT_MAX
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

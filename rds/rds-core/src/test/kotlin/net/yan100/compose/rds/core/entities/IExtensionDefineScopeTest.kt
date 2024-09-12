@@ -19,7 +19,7 @@ package net.yan100.compose.rds.core.entities
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class IDatabaseDefineEntityTest {
+class IExtensionDefineScopeTest {
 
   @Test
   fun `test init`() {

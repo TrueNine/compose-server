@@ -18,6 +18,7 @@ package net.yan100.compose.rds.core.models
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import net.yan100.compose.core.DisRule
 import net.yan100.compose.rds.core.typing.cert.DisTyping
 import kotlin.test.*
 
