@@ -16,41 +16,18 @@
  */
 package net.yan100.compose.security.oauth2.api
 
-import net.yan100.compose.core.alias.string
+import com.fasterxml.jackson.annotation.JsonProperty
+import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.long
+import net.yan100.compose.core.string
 import net.yan100.compose.core.typing.PCB47
 import net.yan100.compose.security.oauth2.models.*
-import net.yan100.compose.security.oauth2.typing.wechat.WechatMpGrantTyping
+import net.yan100.compose.security.oauth2.typing.WechatMpGrantTyping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 
-/**
- * # 微信小程序认证授权
- *
- * @author TrueNine
- * @since 2023-05-31
- */
-@HttpExchange(url = "https://api.weixin.qq.com/")
-interface IWxMpApi {
-
-  /**
-   * ## 小程序登录
-   *
-   * @param appId appId
-   * @param secret secret
-   * @param jsCode 验证令牌
-   * @param grantType 验证类型
-   */
-  @ResponseBody
-  @GetExchange(value = "sns/jscode2session", accept = ["application/json", "text/plain"])
-  fun jsCodeToSession(
-    @RequestParam(name = "appid") appId: String,
-    @RequestParam(name = "secret") secret: String,
-    @RequestParam(name = "js_code") jsCode: String,
-    @RequestParam(name = "grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE,
-  ): WxMpJsCodeToSessionResp
-}
 
 /**
  * # 微信公众号 API
@@ -60,6 +37,108 @@ interface IWxMpApi {
  */
 @HttpExchange(url = "https://api.weixin.qq.com/")
 interface IWxpaApi {
+  @Schema(title = "公众号获取 ticket 返回结果")
+  class WxpaGetTicketResp : BaseWxpaResp() {
+    @Schema(title = "票证")
+    var ticket: String? = null
+  }
+
+  @Schema(title = "公众号获取 ticket 返回结果")
+  class WxpaQuotaResp : BaseWxpaResp() {
+    @Schema(title = "当天该账号可调用该接口的次数")
+    @JsonProperty("daily_limit")
+    var dailyLimit: long? = null
+
+    @Schema(title = "当天已经调用的次数")
+    var used: long? = null
+
+    @Schema(title = "当天剩余调用次数")
+    var remain: long? = null
+  }
+
+
+  @Schema(title = "公众号获取 access_token 返回结果")
+  class WxpaGetAccessTokenResp : BaseWxpaResp() {
+    @Schema(title = "公众号 access_token")
+    @JsonProperty("access_token")
+    var accessToken: String? = null
+  }
+
+  @Schema(title = "微信公众号网页授权获取 access_token 响应")
+  class WxpaWebsiteAuthGetAccessTokenResp : BaseWxpaResp() {
+    @Schema(title = "token")
+    @JsonProperty("access_token")
+    lateinit var accessToken: String
+
+    @Schema(title = "过期时间")
+    @JsonProperty("expires_in")
+    var expireIn: Long? = null
+
+    @JsonProperty("refresh_token")
+    lateinit var refreshToken: String
+
+    @Schema(title = "获取到的 openId")
+    @JsonProperty("openid")
+    lateinit var openId: String
+
+    @Schema(title = "当前使用的 scope")
+    lateinit var scope: String
+
+    @Schema(title = "是否为快照页模式虚拟账号", description = "只有当用户是快照页模式虚拟账号时返回，值为1")
+    @JsonProperty("is_snapshotuser")
+    var isSnapshotUser: Int? = null
+
+    @Schema(title = "用户全局 id")
+    @JsonProperty("unionid")
+    var unionId: String? = null
+  }
+
+
+  /**
+   * ## 微信 access_token
+   *
+   * @author TrueNine
+   * @since 2024-03-20
+   */
+  @Schema(title = "微信用户信息回调结果")
+  class WxpaWebsiteUserInfoResp {
+    @JsonProperty("openid")
+    @Schema(title = "open id")
+    lateinit var openId: SerialCode
+
+    @JsonProperty("nickname")
+    @Schema(title = "呢称")
+    lateinit var nickName: String
+
+    @Schema(title = "微信用户特权", description = "为 json 数组形式")
+    var privilege: List<String>? = null
+
+    @Deprecated("过时的接口数据")
+    @Schema(title = "头像链接")
+    var headimgurl: String? = null
+
+    @Deprecated("过时的接口数据")
+    @Schema(title = "城市")
+    var country: String? = null
+
+    @Deprecated("过时的接口数据")
+    @Schema(title = "诚实", deprecated = true)
+    var city: String? = null
+
+    @Deprecated("过时的接口数据")
+    @Schema(title = "省份", deprecated = true)
+    var province: String? = null
+
+    @Deprecated("过时的接口数据")
+    @Schema(title = "性别", deprecated = true)
+    var sex: Int? = null
+
+    @JsonProperty("unionid")
+    @Schema(title = "union id")
+    var unionId: String? = null
+  }
+
+
   /**
    * ## 通过 openid 获取用户信息
    *
@@ -123,6 +202,3 @@ interface IWxpaApi {
   @GetExchange("cgi-bin/openapi/quota/get")
   fun findApiQuota(@RequestParam("access_token") accessToken: string, @RequestParam("cgi_path") cgiPath: string): WxpaQuotaResp
 }
-
-fun IWxMpApi.jsCodeToSessionStandard(param: JsCodeToSessionApiReq): JsCodeToSessionResp =
-  jsCodeToSession(appId = param.mpAppId, secret = param.mpSecret, jsCode = param.jsCode, grantType = WechatMpGrantTyping.AUTH_CODE).toStandard()
