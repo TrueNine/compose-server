@@ -15,5 +15,6 @@ enum class CacheDuration {
   D30,
   D60,
   D180,
-  D365;
+  D365,
+  FOREVER;
 }

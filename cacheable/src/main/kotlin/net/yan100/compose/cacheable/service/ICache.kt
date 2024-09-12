@@ -12,8 +12,8 @@ interface ICacheStore<C : ICache> {
   fun durationToName(duration: CacheDuration): String
 }
 
-interface IMemoryCacheStore : ICacheStore<IMemoryCache> {}
-interface IPersistentCacheStore : ICacheStore<IPersistentCache> {}
+interface IMemoryCacheStore : ICacheStore<IMemoryCache>
+interface IPersistentCacheStore : ICacheStore<IPersistentCache>
 
 interface ICache {
   fun getNative(): Any
@@ -28,8 +28,6 @@ interface ICache {
   fun clear()
 }
 
-interface IMemoryCache : ICache {
-}
+interface IMemoryCache : ICache
 
-interface IPersistentCache : IMemoryCache {
-}
+interface IPersistentCache : IMemoryCache
