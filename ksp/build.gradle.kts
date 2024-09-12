@@ -8,6 +8,7 @@ dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinxIoCore)
   implementation(libs.org.jetbrains.kotlinx.kotlinxIoCoreJvm)
   implementation(project(":ksp:ksp-core"))
+  implementation(project(":ksp:ksp-toolkit"))
   implementation(project(":core"))
 }
 
