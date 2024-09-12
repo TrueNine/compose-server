@@ -14,12 +14,9 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.util
+package net.yan100.compose.rds.core
 
-import net.yan100.compose.core.alias.Pq
-import net.yan100.compose.core.alias.Pr
-import net.yan100.compose.rds.core.models.JpaPagedRequestParam
-import net.yan100.compose.rds.core.models.PagedResponseResult
+import net.yan100.compose.core.Pq
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -84,16 +81,5 @@ object JpaPagedWrapper {
   }
 }
 
-@Deprecated("Use Pq instead")
-typealias JpaPw = JpaPagedWrapper
 
-/** # 对分页结果的封装，使得其返回包装对象 */
-val <T> Page<T>.result: Pr<T>
-  get() = JpaPagedWrapper.result(this)
 
-/** # 封装一个新的集合到分页结果 */
-fun <T, R> Page<T>.resultByNewList(newList: List<R>): Pr<R> = JpaPagedWrapper.resultByNewList(this, newList)
-
-/** # 对分页参数的封装，返回一个包装的对象 */
-val Pq?.page: Pageable
-  get() = JpaPagedWrapper.param(this)

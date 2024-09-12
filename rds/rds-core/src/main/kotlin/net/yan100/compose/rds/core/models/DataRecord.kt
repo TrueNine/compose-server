@@ -14,14 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.events
+package net.yan100.compose.rds.core.models
 
-import net.yan100.compose.rds.core.entities.IAnyEntity
-import org.springframework.context.ApplicationEvent
+import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.RefId
 
-data class MergeDataBaseEntityEvent<T : IAnyEntity>(val from: T?, val to: T?, var processed: Boolean = false) : ApplicationEvent(from!!) {
-  init {
-    check(!from!!.isNew) { "from entity must be database entity" }
-    check(!to!!.isNew) { "to entity must be database entity" }
-  }
-}
+@Deprecated("已提上删除议程")
+@Schema(title = "表行对象序列化模型")
+data class DataRecord(
+    var id: RefId? = null,
+    var modelHash: Int? = null,
+    var lang: String? = null,
+    var namespace: String? = null,
+    var entityJson: String? = null,
+)

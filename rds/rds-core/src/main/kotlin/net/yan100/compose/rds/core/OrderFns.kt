@@ -14,10 +14,10 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.extensionfunctions
+package net.yan100.compose.rds.core
 
-import net.yan100.compose.core.extensionfunctions.nonText
-import net.yan100.compose.core.extensionfunctions.snakeCaseToCamelCase
+import net.yan100.compose.core.nonText
+import net.yan100.compose.core.snakeCaseToCamelCase
 import org.springframework.data.domain.Sort
 
 fun MutableList<Sort.Order>.querydslOrderBy(propertyName: String, desc: Boolean? = null): MutableList<Sort.Order> {

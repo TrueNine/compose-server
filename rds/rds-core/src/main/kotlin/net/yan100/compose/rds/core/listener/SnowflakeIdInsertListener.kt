@@ -17,14 +17,15 @@
 package net.yan100.compose.rds.core.listener
 
 import jakarta.persistence.PrePersist
-import net.yan100.compose.core.ISnowflakeGenerator
+import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.core.entities.IAnyEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class SnowflakeIdInsertListener {
-  @set:Autowired lateinit var snowflake: ISnowflakeGenerator
+  @set:Autowired
+  lateinit var snowflake: ISnowflakeGenerator
 
   @PrePersist
   fun insertId(data: Any?) {

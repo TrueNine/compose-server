@@ -17,10 +17,10 @@
 package net.yan100.compose.rds.core.listener
 
 import jakarta.persistence.PrePersist
-import net.yan100.compose.core.IBizCodeGenerator
-import net.yan100.compose.core.extensionfunctions.recursionFields
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.rds.core.annotations.BizCode
+import net.yan100.compose.core.generator.IBizCodeGenerator
+import net.yan100.compose.core.recursionFields
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.rds.core.annotations.OrderCode
 import net.yan100.compose.rds.core.entities.IEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -46,10 +46,10 @@ class BizCodeInsertListener {
     data?.let { d ->
       d::class
         .recursionFields(IEntity::class)
-        .filter { it.isAnnotationPresent(BizCode::class.java) }
+        .filter { it.isAnnotationPresent(OrderCode::class.java) }
         .map {
           it.trySetAccessible()
-          it.getAnnotation(BizCode::class.java) to it
+          it.getAnnotation(OrderCode::class.java) to it
         }
         .forEach {
           // 当 为 null 时进行设置

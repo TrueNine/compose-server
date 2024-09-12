@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
 @Schema(title = "血型")
-enum class BloodTyping(private val v: Int) : IntTyping {
+enum class BloodTyping(v: Int) : IntTyping {
   @Schema(title = "A型") A(1),
   @Schema(title = "B型") B(2),
   @Schema(title = "AB型") AB(3),

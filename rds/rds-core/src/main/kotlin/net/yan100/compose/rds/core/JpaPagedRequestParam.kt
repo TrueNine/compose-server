@@ -14,15 +14,15 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.models
+package net.yan100.compose.rds.core
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
-import net.yan100.compose.core.alias.Pq
-import net.yan100.compose.core.models.page.IPageParam
+import net.yan100.compose.core.IPageParam
+import net.yan100.compose.core.Pq
 import net.yan100.compose.rds.core.entities.IPageableEntity
 
 /**
@@ -32,8 +32,12 @@ import net.yan100.compose.rds.core.entities.IPageableEntity
  * @since 2022-12-31
  */
 @Schema(title = "分页请求入参")
-open class JpaPagedRequestParam @JvmOverloads constructor(offset: Int? = Pq.MIN_OFFSET, pageSize: Int? = Pq.MAX_PAGE_SIZE, unPage: Boolean? = false) :
-  IPageableEntity, IPageParam {
+open class JpaPagedRequestParam
+@JvmOverloads constructor(
+  offset: Int? = Pq.MIN_OFFSET,
+  pageSize: Int? = Pq.MAX_PAGE_SIZE,
+  unPage: Boolean? = false
+) : IPageableEntity, IPageParam {
 
   @get:JsonIgnore
   @get:Transient
@@ -53,7 +57,11 @@ open class JpaPagedRequestParam @JvmOverloads constructor(offset: Int? = Pq.MIN_
   @Transient
   override var pageSize: Int? = Pq.MAX_PAGE_SIZE
 
-  @get:JsonIgnore @get:Transient @set:Transient @Transient override var unPage: Boolean? = false
+  @get:JsonIgnore
+  @get:Transient
+  @set:Transient
+  @Transient
+  override var unPage: Boolean? = false
 
   init {
     this.offset = offset

@@ -35,7 +35,7 @@ enum class GenderTyping(private val v: Int) : IntTyping {
   @Schema(title = "女") WOMAN(0),
 
   /** 未知 */
-  @Schema(title = "未知") UNKNOWN(2);
+  @Schema(title = "未知") UNKNOWN(9999);
 
   @JsonValue override val value: Int = v
 

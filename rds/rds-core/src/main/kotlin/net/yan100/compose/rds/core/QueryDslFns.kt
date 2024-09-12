@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.extensionfunctions
+package net.yan100.compose.rds.core
 
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.dsl.BooleanExpression
@@ -24,9 +24,8 @@ import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
-import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.Pq
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.util.page
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.query.FluentQuery
@@ -66,9 +65,9 @@ open class QueryDslExtensionFUnctionsArg3<E : IEntity, T : EntityPathBase<E>>(
  */
 @JvmName("querydslByBooleanBuilderAndEntityManager")
 inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
-  e: T,
-  entityManager: EntityManager,
-  crossinline fn: QueryDslExtensionFUnctionsArg3<E, T>.() -> R,
+    e: T,
+    entityManager: EntityManager,
+    crossinline fn: QueryDslExtensionFUnctionsArg3<E, T>.() -> R,
 ): R = fn(QueryDslExtensionFUnctionsArg3(e, BooleanBuilder(), JPAQueryFactory(entityManager)))
 
 /* order by extension functions */

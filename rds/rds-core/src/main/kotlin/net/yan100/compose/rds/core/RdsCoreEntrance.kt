@@ -16,4 +16,7 @@
  */
 package net.yan100.compose.rds.core
 
-class RdsCoreEntrance
+import org.springframework.boot.autoconfigure.SpringBootApplication
+
+@SpringBootApplication
+internal class RdsCoreEntrance

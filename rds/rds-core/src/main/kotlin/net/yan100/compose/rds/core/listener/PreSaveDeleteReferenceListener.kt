@@ -17,8 +17,10 @@
 package net.yan100.compose.rds.core.listener
 
 import jakarta.persistence.*
-import net.yan100.compose.core.log.slf4j
-import org.springframework.stereotype.Component
+import net.yan100.compose.core.slf4j
+
+@Suppress("DEPRECATION_ERROR")
+private val log = slf4j(PreSaveDeleteReferenceListener::class)
 
 /**
  * ## 在保存一个实体前，删除所有的外键属性
@@ -26,9 +28,8 @@ import org.springframework.stereotype.Component
  * @author TrueNine
  * @since 2023-07-16
  */
-@Component
+@Deprecated(message = "性能过低", level = DeprecationLevel.HIDDEN)
 class PreSaveDeleteReferenceListener {
-  private val log = slf4j(this::class)
 
   @PrePersist
   fun deleteReference(attribute: Any?) {
