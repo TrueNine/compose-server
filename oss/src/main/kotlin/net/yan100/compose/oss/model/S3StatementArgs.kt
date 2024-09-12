@@ -18,22 +18,21 @@ package net.yan100.compose.oss.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.google.gson.annotations.SerializedName
-import net.yan100.compose.oss.amazon.S3PrincipalArgs
 
 data class S3StatementArgs(
-  @JsonProperty("Effect")
+    @JsonProperty("Effect")
   @SerializedName("Effect")
   var effect: String? = null,
 
-  @JsonProperty("Action")
+    @JsonProperty("Action")
   @SerializedName("Action")
-  var action: List<String> = ArrayList(),
+  var action: MutableList<String> = ArrayList(),
 
-  @JsonProperty("Principal")
+    @JsonProperty("Principal")
   @SerializedName("Principal")
   var principal: S3PrincipalArgs? = null,
 
-  @JsonProperty("Resource")
+    @JsonProperty("Resource")
   @SerializedName("Resource")
-  var resource: List<String> = ArrayList(),
+  var resource: MutableList<String> = ArrayList(),
 )

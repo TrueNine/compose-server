@@ -19,6 +19,7 @@ package net.yan100.compose.oss.minio
 import io.minio.*
 import io.minio.messages.Bucket
 import io.minio.messages.Item
+import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.oss.FileArgs
 import net.yan100.compose.oss.amazon.S3PolicyCreator
 import okhttp3.Headers
@@ -33,11 +34,11 @@ import java.io.OutputStream
  */
 open class MinioClientOperator protected constructor(private val client: MinioClient) {
   open fun headerContentType(headers: Headers): String? {
-    return headers[net.yan100.compose.core.http.Headers.CONTENT_TYPE]
+    return headers[IHeaders.CONTENT_TYPE]
   }
 
   open fun headerSizeStr(headers: Headers): String? {
-    return headers[net.yan100.compose.core.http.Headers.CONTENT_LENGTH]
+    return headers[IHeaders.CONTENT_LENGTH]
   }
 
   open fun headerSize(headers: Headers): Long? {

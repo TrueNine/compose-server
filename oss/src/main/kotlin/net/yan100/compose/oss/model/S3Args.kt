@@ -26,5 +26,5 @@ data class S3Args(
 
   @JsonProperty("Statement")
   @SerializedName("Statement")
-  var statement: List<S3StatementArgs> = ArrayList()
+  var statement: MutableList<S3StatementArgs> = ArrayList()
 )

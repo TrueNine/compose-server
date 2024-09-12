@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.oss.amazon
+package net.yan100.compose.oss.model
 
 interface S3Policies {
   interface Effect {

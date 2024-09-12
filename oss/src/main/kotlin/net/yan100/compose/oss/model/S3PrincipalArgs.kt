@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.oss.amazon
+package net.yan100.compose.oss.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.google.gson.annotations.SerializedName
@@ -23,5 +23,5 @@ import com.google.gson.annotations.SerializedName
 data class S3PrincipalArgs(
   @JsonProperty("AWS")
   @SerializedName("AWS")
-  var aws: List<String> = ArrayList()
+  var aws: MutableList<String> = ArrayList()
 )
