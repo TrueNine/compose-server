@@ -17,9 +17,7 @@
 package net.yan100.compose.core.encrypt
 
 import io.mockk.InternalPlatformDsl.toStr
-import net.yan100.compose.core.util.encrypt.Encryptors
-import net.yan100.compose.core.util.encrypt.Keys
-import net.yan100.compose.core.util.encrypt.sha1
+import net.yan100.compose.core.sha1
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -82,8 +80,8 @@ class EncryptAndDecryptTest {
   fun testGenerateKeyBase64() {
     val ab = Keys.generateRsaKeyPair()!!
     val metaCode = ab.rsaPublicKey!!.encoded
-    val base64Byte = Base64Helper.decodeToByte(String(ab.rsaPublicKeyBase64Byte))
-    val strBase64 = Base64Helper.decodeToByte(ab.rsaPublicKeyBase64)
+    val base64Byte = IBase64.decodeToByte(String(ab.rsaPublicKeyBase64Byte))
+    val strBase64 = IBase64.decodeToByte(ab.rsaPublicKeyBase64)
     assertTrue(
       """
       metaCode = ${metaCode.toStr()}

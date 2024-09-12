@@ -16,7 +16,10 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
-import net.yan100.compose.core.alias.Pq
+import net.yan100.compose.core.Pq
+import net.yan100.compose.core.countLines
+import net.yan100.compose.core.pageLines
+import net.yan100.compose.core.sliceLines
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import java.nio.file.Path

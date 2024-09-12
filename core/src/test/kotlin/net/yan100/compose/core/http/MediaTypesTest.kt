@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.http
 
-import net.yan100.compose.core.typing.http.MediaTypes
+import net.yan100.compose.core.typing.MediaTypes
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

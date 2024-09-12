@@ -16,19 +16,20 @@
  */
 package net.yan100.compose.core.models.sensitive
 
+import net.yan100.compose.core.encrypt.ISensitivity
 import org.junit.jupiter.api.Test
 
 class ISensitivityTest {
   abstract class Ab : ISensitivity {
     var ab: String? = null
 
-    override fun sensitive() {
+    override fun changeWithSensitiveData() {
       ab?.also { ab = "ab sensitive" }
     }
   }
 
   class B : Ab() {
-    override fun sensitive() {
+    override fun changeWithSensitiveData() {
       ab?.also { ab = "b sensitive" }
     }
   }
@@ -37,7 +38,7 @@ class ISensitivityTest {
   fun `test sensitive`() {
     val b = B()
     b.ab = "123"
-    b.sensitive()
+    b.changeWithSensitiveData()
     print(b.ab)
   }
 }

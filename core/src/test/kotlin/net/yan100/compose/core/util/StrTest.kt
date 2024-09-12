@@ -16,7 +16,8 @@
  */
 package net.yan100.compose.core.util
 
-import net.yan100.compose.core.extensionfunctions.mutableLockListOf
+import net.yan100.compose.core.IStr
+import net.yan100.compose.core.mutableLockListOf
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -24,23 +25,23 @@ import kotlin.test.assertTrue
 class StrTest {
   @Test
   fun testNonText() {
-    assertTrue { Str.nonText("") }
+    assertTrue { IStr.nonText("") }
   }
 
   @Test
   fun testInLine() {
-    val a = Str.inLine("1\n")
+    val a = IStr.inLine("1\n")
     assertFalse { a.contains("\n") }
   }
 
   @Test
   fun testHasText() {
-    assertTrue { Str.hasText("abc") }
+    assertTrue { IStr.hasText("abc") }
   }
 
   @Test
   fun testOmit() {
-    val b = Str.omit("abc", 2)
+    val b = IStr.omit("abc", 2)
     assertFalse { b.contains("c") }
   }
 

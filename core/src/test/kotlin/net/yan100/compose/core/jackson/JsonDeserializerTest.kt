@@ -18,9 +18,9 @@ package net.yan100.compose.core.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.CoreEntrance
-import net.yan100.compose.core.extensionfunctions.toDate
-import net.yan100.compose.core.extensionfunctions.toLocalDatetime
-import net.yan100.compose.core.extensionfunctions.toLong
+import net.yan100.compose.core.toDate
+import net.yan100.compose.core.toLocalDatetime
+import net.yan100.compose.core.toLong
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

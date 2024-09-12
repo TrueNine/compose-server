@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-import net.yan100.compose.core.models.PemFormat
+import net.yan100.compose.core.encrypt.PemFormat
 import org.junit.jupiter.api.Test
 import kotlin.test.DefaultAsserter.assertEquals
 

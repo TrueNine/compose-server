@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.core.models
 
+import net.yan100.compose.core.IIdcard2Code
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import kotlin.test.assertEquals

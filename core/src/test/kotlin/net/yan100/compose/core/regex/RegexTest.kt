@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.regex
 
-import net.yan100.compose.core.consts.Regexes
+import net.yan100.compose.core.consts.IRegexes
 import java.util.regex.Pattern
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -25,7 +25,7 @@ import kotlin.test.assertTrue
 class RegexTest {
   @Test
   fun `test icCard Match`() {
-    val pattern = Pattern.compile(Regexes.CHINA_ID_CARD)
+    val pattern = Pattern.compile(IRegexes.CHINA_ID_CARD)
     assertTrue { pattern.matcher("430404197210280012").matches() }
     // 基本匹配
     assertTrue { pattern.matcher("43040419721028001X").matches() }
@@ -40,7 +40,7 @@ class RegexTest {
 
   @Test
   fun `test match ant uri`() {
-    val pattern = Regexes.ANT_URI.toRegex()
+    val pattern = IRegexes.ANT_URI.toRegex()
     assertTrue {
       arrayOf("/", "/a", "/a/b", "/.", "/.php", "/aaa.", "/a.b.", "/a.b.c", "/a/*/*", "/a/b/*/*", "/1/2")
         .map(pattern::matches).reduce(Boolean::and)

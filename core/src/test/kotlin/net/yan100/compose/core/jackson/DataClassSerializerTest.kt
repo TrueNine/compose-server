@@ -19,8 +19,8 @@ package net.yan100.compose.core.jackson
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import net.yan100.compose.core.alias.datetime
 import net.yan100.compose.core.autoconfig.JacksonSerializationAutoConfig
+import net.yan100.compose.core.datetime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

@@ -17,7 +17,7 @@
 package net.yan100.compose.core.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.typing.ISO4217Typing
+import net.yan100.compose.core.ISO4217Typing
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
