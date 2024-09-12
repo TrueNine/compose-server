@@ -105,3 +105,7 @@ findProject(":ksp:ksp-test")?.name = "ksp-test"
 include("ksp:ksp-core")
 
 findProject(":ksp:ksp-core")?.name = "ksp-core"
+
+include("ksp:ksp-toolkit")
+
+findProject(":ksp:ksp-toolkit")?.name = "ksp-toolkit"
