@@ -14,10 +14,10 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.core.properties;
+package net.yan100.compose.core.properties
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.Data
+import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
  * @author TrueNine
@@ -25,9 +25,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "compose.core.snowflake")
-public class SnowflakeProperties {
-    private Long workId = 1L;
-    private Long dataCenterId = 2L;
-    private Long sequence = 3L;
-    private Long startTimeStamp = 100000L;
+class SnowflakeProperties {
+  var workId = 1L
+  var dataCenterId = 2L
+  var sequence = 3L
+  var startTimeStamp = 100000L
 }
