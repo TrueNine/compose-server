@@ -17,10 +17,10 @@
 package net.yan100.compose.webapidoc.properties;
 
 import lombok.Data;
-import net.yan100.compose.core.http.Headers;
+import net.yan100.compose.core.consts.IHeaders;
 
 @Data
 public class JwtHeaderInfoProperties {
-    private String authTokenName = Headers.AUTHORIZATION;
-    private String refreshTokenName = Headers.X_REFRESH;
+    private String authTokenName = IHeaders.AUTHORIZATION;
+    private String refreshTokenName = IHeaders.X_REFRESH;
 }
