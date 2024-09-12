@@ -17,11 +17,11 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.security.defaults.EmptyPreflightValidFilter
-import net.yan100.compose.security.defaults.EmptySecurityDetailsService
-import net.yan100.compose.security.defaults.EmptySecurityExceptionAdware
-import net.yan100.compose.security.models.SecurityPolicyDefine
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.security.EmptyPreflightValidFilter
+import net.yan100.compose.security.EmptySecurityDetailsService
+import net.yan100.compose.security.EmptySecurityExceptionAdware
+import net.yan100.compose.security.SecurityPolicyDefine
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

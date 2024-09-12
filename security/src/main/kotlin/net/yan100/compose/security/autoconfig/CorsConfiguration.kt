@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.security.autoconfig
 
-import net.yan100.compose.core.http.Methods
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.consts.IMethods
+import net.yan100.compose.core.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.cors.CorsConfiguration
@@ -37,7 +37,7 @@ class CorsConfiguration : WebMvcConfigurer {
     registry
       .addMapping("/**")
       .allowedOriginPatterns("*")
-      .allowedMethods(*Methods.all())
+      .allowedMethods(*IMethods.all())
       .allowedHeaders("*")
       .exposedHeaders("*")
       .allowCredentials(true)
@@ -50,7 +50,7 @@ class CorsConfiguration : WebMvcConfigurer {
     val all = CorsConfiguration.ALL
     val c = CorsConfiguration()
     c.addAllowedOriginPattern(all)
-    Methods.all().toList().forEach(c::addAllowedMethod)
+    IMethods.all().toList().forEach(c::addAllowedMethod)
     c.addExposedHeader(all)
     c.allowCredentials = true
     c.maxAge = 3600

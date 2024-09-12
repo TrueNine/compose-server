@@ -17,11 +17,11 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.security.EmptySecurityDetailsService
+import net.yan100.compose.security.EmptySecurityExceptionAdware
+import net.yan100.compose.security.SecurityPolicyDefine
 import net.yan100.compose.security.annotations.EnableRestSecurity
-import net.yan100.compose.security.defaults.EmptySecurityDetailsService
-import net.yan100.compose.security.defaults.EmptySecurityExceptionAdware
-import net.yan100.compose.security.models.SecurityPolicyDefine
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
@@ -68,10 +68,10 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityFilterChain(
-    httpSecurity: HttpSecurity,
-    cors: CorsConfiguration,
-    policyDefine: SecurityPolicyDefine,
-    applicationContext: ApplicationContext,
+      httpSecurity: HttpSecurity,
+      cors: CorsConfiguration,
+      policyDefine: SecurityPolicyDefine,
+      applicationContext: ApplicationContext,
   ): SecurityFilterChain {
     val enableAnnotation = getAnno(applicationContext)
     if (enableAnnotation == null) log.warn("未配置 安全注解 注解")

@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.security.autoconfig
 
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.annotations.EnableRestSecurity
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean

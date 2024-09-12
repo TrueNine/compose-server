@@ -17,7 +17,7 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.util.encrypt.IKeysRepo
+import net.yan100.compose.core.encrypt.IKeysRepo
 import net.yan100.compose.security.jwt.JwtIssuer
 import net.yan100.compose.security.jwt.JwtVerifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
