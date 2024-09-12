@@ -3,13 +3,15 @@ version = libs.versions.compose.rds.core.get()
 dependencies {
   implementation(project(":core"))
   implementation(project(":depend:depend-jvalid"))
-  testImplementation(project(":depend:depend-web-servlet"))
   implementation(libs.org.springframework.data.springDataCommons)
-
-  testImplementation(libs.org.springframework.boot.springBootStarterJson)
+  implementation(libs.org.springframework.data.springDataJpa)
+  implementation(libs.com.querydsl.querydslCore)
 
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
+
+  testImplementation(project(":depend:depend-web-servlet"))
+  testImplementation(libs.org.springframework.boot.springBootStarterJson)
 }
 
 hibernate {
