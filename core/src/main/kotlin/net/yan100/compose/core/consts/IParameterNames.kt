@@ -14,21 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.core.http;
+package net.yan100.compose.core.consts
 
-import java.util.List;
-
-public interface Methods {
-    String GET = "GET";
-    String POST = "POST";
-    String PUT = "PUT";
-    String DELETE = "DELETE";
-    String OPTIONS = "OPTIONS";
-    String PATCH = "PATCH";
-    String HEAD = "HEAD";
-    String TRACE = "TRACE";
-
-    static String[] all() {
-        return List.of(GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD, TRACE).toArray(String[]::new);
-    }
+/**
+ * 请求参数名常量
+ *
+ * @author TrueNine
+ * @since 2022-12-26
+ */
+interface IParameterNames {
+  companion object {
+    const val X_TENANT_ID: String = "x_group_code"
+    const val X_INTERNAL_TENANT_ID: String = "x_internal_tenant_id"
+  }
 }

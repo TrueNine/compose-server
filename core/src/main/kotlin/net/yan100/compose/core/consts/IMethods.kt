@@ -14,15 +14,22 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.core.http;
+package net.yan100.compose.core.consts
 
-/**
- * 请求参数名常量
- *
- * @author TrueNine
- * @since 2022-12-26
- */
-public interface ParameterNames {
-    String X_TENANT_ID = "x_group_code";
-    String X_INTERNAL_TENANT_ID = "x_internal_tenant_id";
+
+interface IMethods {
+  companion object {
+    fun all(): Array<String> {
+      return arrayOf(GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD, TRACE)
+    }
+
+    const val GET: String = "GET"
+    const val POST: String = "POST"
+    const val PUT: String = "PUT"
+    const val DELETE: String = "DELETE"
+    const val OPTIONS: String = "OPTIONS"
+    const val PATCH: String = "PATCH"
+    const val HEAD: String = "HEAD"
+    const val TRACE: String = "TRACE"
+  }
 }

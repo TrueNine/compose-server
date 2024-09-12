@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.http
+package net.yan100.compose.core.consts
 
 import jakarta.servlet.http.HttpServletRequest
 import java.net.InetAddress
@@ -25,7 +25,7 @@ import java.util.stream.Collectors
  * @author TrueNine
  * @since 2022-10-28
  */
-interface InterAddr {
+interface IInterAddr {
   companion object {
     private fun isLocalHost(remoteHost: String): Boolean {
       if (LOCAL_HOST_IP.equals(remoteHost, ignoreCase = true)) return true
@@ -43,8 +43,8 @@ interface InterAddr {
           remoteAddress = LOCAL_HOST_IP
         }
       } else {
-        val xRealIP = request.getHeader(Headers.X_REAL_IP)
-        val xForwardedFor = request.getHeader(Headers.X_FORWARDED_FOR)
+        val xRealIP = request.getHeader(IHeaders.X_REAL_IP)
+        val xForwardedFor = request.getHeader(IHeaders.X_FORWARDED_FOR)
         if (xForwardedFor != null) {
           remoteAddress = xForwardedFor.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].trim { it <= ' ' }
         } else if (xRealIP != null) {

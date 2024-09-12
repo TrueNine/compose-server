@@ -22,7 +22,7 @@ package net.yan100.compose.core.consts
  * @author TrueNine
  * @since 2023-04-19
  */
-interface Regexes {
+interface IRegexes {
   companion object {
     private const val ONE_ONE = "(1[1-9]|[2-9][0-9])"
     private const val ZERO_ONE = "(0[1-9]|[1-9][0-9])"
