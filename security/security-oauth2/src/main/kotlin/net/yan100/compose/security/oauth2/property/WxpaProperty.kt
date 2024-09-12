@@ -16,18 +16,27 @@
  */
 package net.yan100.compose.security.oauth2.property
 
-import net.yan100.compose.core.extensionfunctions.iso8601LongUtc
-import net.yan100.compose.core.util.encrypt.Keys
-import net.yan100.compose.core.util.encrypt.sha1
-import java.time.LocalDateTime
+import net.yan100.compose.core.datetime
+import net.yan100.compose.core.encrypt.Keys
+import net.yan100.compose.core.iso8601LongUtc
+import net.yan100.compose.core.sha1
 
 /**
- * 微信公众号属性获取器
+ * # 微信公众号属性获取器
  *
  * @author TrueNine
  * @since 2024-01-04
  */
 class WxpaProperty {
+  data class WxpaSignatureResp(
+    var appId: String? = null,
+    var nonceString: String? = null,
+    var timestamp: Long? = null,
+    var url: String? = null,
+    var sign: String? = null
+  )
+
+
   var fixedExpiredSecond: Long = 700_0L
   lateinit var preValidToken: String
   lateinit var appId: String
@@ -37,30 +46,21 @@ class WxpaProperty {
   var jsapiTicket: String? = null
 
   @JvmOverloads
-  fun signature(url: String, nonceString: String = Keys.generateRandomAsciiString(), timestamp: Long = LocalDateTime.now().iso8601LongUtc): WxpaSignatureResp {
+  fun signature(url: String, nonceString: String = Keys.generateRandomAsciiString(), timestamp: Long = datetime.now().iso8601LongUtc): WxpaSignatureResp {
     val splitUrl = url.split("#")[0]
+    val b = mutableMapOf("noncestr" to nonceString, "jsapi_ticket" to jsapiTicket, "timestamp" to timestamp.toString(), "url" to splitUrl)
+      .map { "${it.key}=${it.value}" }
+      .sorted()
+      .joinToString("&")
+      .sha1
 
-    val b =
-      mutableMapOf("noncestr" to nonceString, "jsapi_ticket" to jsapiTicket, "timestamp" to timestamp.toString(), "url" to splitUrl)
-        .map { "${it.key}=${it.value}" }
-        .sorted()
-        .joinToString("&")
-        .sha1
-
-    return WxpaSignatureResp().also {
-      it.appId = appId
-      it.url = splitUrl
-      it.nonceString = nonceString
-      it.sign = b
-      it.timestamp = timestamp
-    }
+    return WxpaSignatureResp(
+      appId = appId,
+      url = splitUrl,
+      nonceString = nonceString,
+      sign = b,
+      timestamp = timestamp
+    )
   }
 }
 
-open class WxpaSignatureResp {
-  open var appId: String? = null
-  open var nonceString: String? = null
-  open var timestamp: Long? = null
-  open var url: String? = null
-  open var sign: String? = null
-}

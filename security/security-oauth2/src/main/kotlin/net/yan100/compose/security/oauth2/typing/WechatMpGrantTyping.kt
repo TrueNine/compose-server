@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- * 
+ *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
  * and resources. This software and its components are not to be used, reproduced,
@@ -13,19 +13,25 @@
  *     TrueNine
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
-*/
-package net.yan100.compose.security.oauth2.properties;
+ */
+package net.yan100.compose.security.oauth2.typing
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonValue
+import net.yan100.compose.core.typing.StringTyping
 
-@Data
-public class WxpaProperties {
-    /** 验证服务器的配置 token */
-    public String verifyToken;
+/**
+ * # 微信支付验证类型
+ *
+ * @author TrueNine
+ * @since 2023-05-31
+ */
+enum class WechatMpGrantTyping(private val typingCode: String) : StringTyping {
+  CLIENT_CREDENTIAL("client_credential"),
+  AUTH_CODE("authorization_code");
 
-    public String appId;
-    public String appSecret;
+  @JsonValue override val value: String = typingCode
 
-    /** 微信固定的 api 过期时间，一般不需要调整 */
-    private Long fixedExpiredSecond = 700_0L;
+  companion object {
+    @JvmStatic fun findVal(v: String?) = entries.find { it.typingCode == v }
+  }
 }

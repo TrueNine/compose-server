@@ -14,14 +14,15 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.security.oauth2.properties;
+package net.yan100.compose.security.oauth2.properties
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-@Data
-@ConfigurationProperties(prefix = "compose.security.oauth2.wechat")
-public class WechatProperties {
-    @NestedConfigurationProperty private WxpaProperties wxpa = new WxpaProperties();
+class WxpaProperties {
+  /** 验证服务器的配置 token  */
+  var verifyToken: String? = null
+  var appId: String? = null
+  var appSecret: String? = null
+
+  /** 微信固定的 api 过期时间，一般不需要调整  */
+  var fixedExpiredSecond = 7000L
 }

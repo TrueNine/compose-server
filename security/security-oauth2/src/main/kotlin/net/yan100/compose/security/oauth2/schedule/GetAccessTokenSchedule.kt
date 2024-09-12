@@ -17,7 +17,7 @@
 package net.yan100.compose.security.oauth2.schedule
 
 import net.yan100.compose.core.exceptions.RemoteCallException
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.oauth2.api.IWxpaApi
 import net.yan100.compose.security.oauth2.property.WxpaProperty
 import org.springframework.context.ApplicationContext
@@ -46,7 +46,7 @@ class GetAccessTokenSchedule(private val ctx: ApplicationContext, @Lazy private 
   @Scheduled(initialDelay = 1000, fixedRate = 7000 * 1000)
   fun getAccessToken() {
     val pp = ctx.getBean(WxpaProperty::class.java)
-    log.debug("准备更新 access_token appid = {},secret = {}", pp.appId, pp.appSecret)
+    log.trace("准备更新 access_token appid = {},secret = {}", pp.appId, pp.appSecret)
     val ae = api.getAccessToken(pp.appId, pp.appSecret)
     val t = api.getTicket(ae.accessToken!!)
     if (ae.isError || t.isError) {
@@ -54,8 +54,8 @@ class GetAccessTokenSchedule(private val ctx: ApplicationContext, @Lazy private 
       throw RemoteCallException("微信调用公众号时发生错误")
     }
 
-    log.debug("获取到 access_token = {}, exp = {}", ae.accessToken, ae.expireInSecond)
-    log.debug("获取到 ticket = {}, exp = {}", t.ticket, ae.expireInSecond)
+    log.trace("获取到 access_token = {}, exp = {}", ae.accessToken, ae.expireInSecond)
+    log.trace("获取到 ticket = {}, exp = {}", t.ticket, ae.expireInSecond)
 
     checkNotNull(ae.expireInSecond) { "微信服务器返回了空的 access_token 时间戳" }
     checkNotNull(t.expireInSecond) { "微信服务器返回了空的 ticket 时间戳" }
