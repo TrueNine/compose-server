@@ -123,8 +123,7 @@ subprojects {
           "-Xjvm-default=all",
           "-verbose",
           "-Xjdk-release=${l.versions.java.get()}",
-          "-jvm-target=${l.versions.java.get()}",
-          "-Xextended-compiler-checks"
+          "-jvm-target=${l.versions.java.get()}"
         )
     }
 
