@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.pay.service.impl
 
-import net.yan100.compose.core.IBizCodeGenerator
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.generator.IBizCodeGenerator
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

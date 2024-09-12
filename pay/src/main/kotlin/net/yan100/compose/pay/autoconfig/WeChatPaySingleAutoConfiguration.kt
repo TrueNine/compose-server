@@ -19,9 +19,9 @@ package net.yan100.compose.pay.autoconfig
 import com.wechat.pay.java.core.RSAAutoCertificateConfig
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
 import com.wechat.pay.java.service.refund.RefundService
-import net.yan100.compose.core.extensionfunctions.resourceAsStream
-import net.yan100.compose.core.extensionfunctions.utf8String
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.resourceAsStream
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.core.utf8String
 import net.yan100.compose.pay.properties.WeChatPayProperties
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
@@ -82,8 +82,8 @@ class WeChatPaySingleAutoConfiguration {
   @DependsOn(CREATE_CONFIG_NAME)
   @ConditionalOnBean(RSAAutoCertificateConfig::class)
   fun WeChatPaySingleConfigProperty(p: WeChatPayProperties): WeChatPaySingleConfigProperty {
-    val privateKeyFile = p.privateKeyPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
-    val certKeyFile = p.certPath?.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+    val privateKeyFile = p.privateKeyPath.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+    val certKeyFile = p.certPath.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
 
     return WeChatPaySingleConfigProperty().apply {
       enable = p.enableSingle

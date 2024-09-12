@@ -29,16 +29,17 @@ import com.wechat.pay.java.service.refund.model.CreateRequest
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
-import net.yan100.compose.core.IBizCodeGenerator
+import net.yan100.compose.core.encodeBase64String
+import net.yan100.compose.core.encrypt.Encryptors
+import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.core.exceptions.requireKnown
-import net.yan100.compose.core.extensionfunctions.encodeBase64String
-import net.yan100.compose.core.extensionfunctions.hasText
-import net.yan100.compose.core.extensionfunctions.iso8601LongUtc
+import net.yan100.compose.core.generator.IBizCodeGenerator
+import net.yan100.compose.core.hasText
+import net.yan100.compose.core.iso8601LongUtc
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import net.yan100.compose.core.typing.ISO4217
-import net.yan100.compose.core.util.encrypt.Encryptors
-import net.yan100.compose.core.util.encrypt.Keys
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.pay.models.req.FindPayOrderReq
 import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
@@ -63,7 +64,7 @@ class WeChatSinglePayService(
 ) : SinglePayService {
   companion object {
     @JvmStatic private val HUNDRED = BigDecimal("100")
-    private val log = net.yan100.compose.core.log.slf4j(WeChatSinglePayService::class)
+    private val log = slf4j(WeChatSinglePayService::class)
   }
 
   override fun createMpPayOrder(@Valid req: CreateMpPayOrderReq): CreateMpPayOrderResp {
