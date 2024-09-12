@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.core.ISnowflakeGenerator
+import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.entities.Permissions
 import net.yan100.compose.rds.entities.Role
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.repositories.rbac.IFullRoleGroupRepo
-import net.yan100.compose.rds.repositories.rbac.IFullRoleRepo
+import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.repositories.IFullRoleGroupRepo
+import net.yan100.compose.rds.repositories.IFullRoleRepo
 import net.yan100.compose.rds.service.IPermissionsService
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IRoleService
@@ -59,8 +59,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testSaveRoleGroupToUser() {
-    val user = userService.save(getUser())
-    val rg = rgService.save(getRoleGroup())
+    val user = userService.post(getUser())
+    val rg = rgService.post(getRoleGroup())
 
     assertNotNull(user)
     assertNotNull(rg)
@@ -76,8 +76,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testSaveAllRoleGroupToUser() {
-    val rgs = rgService.saveAll(getAllRoleGroup())
-    val u = userService.save(getUser())
+    val rgs = rgService.postAll(getAllRoleGroup())
+    val u = userService.post(getUser())
 
     assertNotNull(rgs)
     assertNotNull(u)
@@ -85,8 +85,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testRevokeRoleGroupFromUser() {
-    val rg = rgService.save(getRoleGroup())
-    val u = userService.save(getUser())
+    val rg = rgService.post(getRoleGroup())
+    val u = userService.post(getUser())
     assertNotNull(rg)
     assertNotNull(u)
     val saved = aggregator.saveRoleGroupToUser(rg.id, u.id)
@@ -102,8 +102,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testRevokeAllRoleGroupFromUser() {
-    val rgs = rgService.saveAll(getRoleGroups())
-    val u = userService.save(getUser())
+    val rgs = rgService.postAll(getRoleGroups())
+    val u = userService.post(getUser())
     assertNotNull(u)
 
     val urs = aggregator.saveAllRoleGroupToUser(rgs.map { it.id }, u.id)
@@ -129,10 +129,10 @@ class IRbacAggregatorImplTest {
     }
 
   @Test
-  fun testSaveRoleToRoleGroup() {
-    val r = roleService.save(getRole())
-    val rg = rgService.save(getRoleGroup())
-    aggregator.saveRoleToRoleGroup(r.id, rg.id)!!
+  fun testLinkRoleToRoleGroup() {
+    val r = roleService.post(getRole())
+    val rg = rgService.post(getRoleGroup())
+    aggregator.linkRoleToRoleGroup(r.id, rg.id)!!
     val srg = argRepo.findByIdOrNull(rg.id)!!
     assertContains(srg.roles.map { it.id }, r.id)
   }
@@ -146,10 +146,10 @@ class IRbacAggregatorImplTest {
     }
 
   @Test
-  fun testSaveAllRoleToRoleGroup() {
-    roleService.saveAll(getRoles()).let { rs ->
-      rgService.save(getRoleGroup()).let { rg ->
-        aggregator.saveAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { sru ->
+  fun testLinkAllRoleToRoleGroup() {
+    roleService.postAll(getRoles()).let { rs ->
+      rgService.post(getRoleGroup()).let { rg ->
+        aggregator.linkAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { sru ->
           argRepo.findByIdOrNull(rg.id)!!.let { nr -> assertEquals(nr.roles.size, rs.size) }
         }
       }
@@ -158,9 +158,9 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testRevokeRoleFromRoleGroup() {
-    roleService.save(getRole()).let { r ->
-      rgService.save(getRoleGroup()).let { rg ->
-        aggregator.saveRoleToRoleGroup(r.id, rg.id)!!.let { rgr ->
+    roleService.post(getRole()).let { r ->
+      rgService.post(getRoleGroup()).let { rg ->
+        aggregator.linkRoleToRoleGroup(r.id, rg.id)!!.let { rgr ->
           aggregator.revokeRoleFromRoleGroup(r.id, rg.id)
           val srg = argRepo.findByIdOrNull(rg.id)!!
           assertTrue { srg.roles.isEmpty() }
@@ -171,9 +171,9 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testRevokeAllRoleFromRoleGroup() {
-    roleService.saveAll(getRoles()).let { rs ->
-      rgService.save(getRoleGroup()).let { rg ->
-        aggregator.saveAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { rgr ->
+    roleService.postAll(getRoles()).let { rs ->
+      rgService.post(getRoleGroup()).let { rg ->
+        aggregator.linkAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { rgr ->
           aggregator.revokeAllRoleFromRoleGroup(rs.map { it.id }, rg.id)
           argRepo.findByIdOrNull(rg.id)!!.let { assertTrue { it.roles.isEmpty() } }
         }
@@ -191,8 +191,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testSavePermissionsToRole() {
-    permissionsService.save(getPermissions()).let { p ->
-      roleService.save(getRole()).let { r ->
+    permissionsService.post(getPermissions()).let { p ->
+      roleService.post(getRole()).let { r ->
         aggregator.savePermissionsToRole(p.id, r.id)!!
         val rl = arRepo.findByIdOrNull(r.id)!!
         assertContains(rl.permissions, p)
@@ -204,8 +204,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testSaveAllPermissionsToRole() {
-    permissionsService.saveAll(getAllPermissions()).let { ps ->
-      roleService.save(getRole()).let { r ->
+    permissionsService.postAll(getAllPermissions()).let { ps ->
+      roleService.post(getRole()).let { r ->
         aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let { all ->
           assertTrue("all$all") { all.isNotEmpty() }
           arRepo.findByIdOrNull(r.id)!!.let { sr -> ps.forEach { assertContains(sr.permissions, it) } }
@@ -216,8 +216,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testRevokePermissionsFromRole() {
-    permissionsService.save(getPermissions()).let { p ->
-      roleService.save(getRole()).let { r ->
+    permissionsService.post(getPermissions()).let { p ->
+      roleService.post(getRole()).let { r ->
         aggregator.savePermissionsToRole(p.id, r.id).let {
           aggregator.revokePermissionsFromRole(p.id, r.id)
           arRepo.findByIdOrNull(r.id)!!.let { sr -> repeat(sr.permissions.size) { assertFalse { sr.permissions.contains(p) } } }
@@ -228,8 +228,8 @@ class IRbacAggregatorImplTest {
 
   @Test
   fun testRevokeAllPermissionsFromRole() {
-    roleService.save(getRole()).let { r ->
-      permissionsService.saveAll(getAllPermissions()).let { ps ->
+    roleService.post(getRole()).let { r ->
+      permissionsService.postAll(getAllPermissions()).let { ps ->
         aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let { srp ->
           aggregator.revokeAllPermissionsFromRole(ps.map { it.id }, r.id)
           arRepo.findByIdOrNull(r.id)!!.let { assertTrue { it.permissions.isEmpty() } }

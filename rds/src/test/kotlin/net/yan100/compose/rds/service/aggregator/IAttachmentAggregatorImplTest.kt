@@ -17,7 +17,6 @@
 package net.yan100.compose.rds.service.aggregator
 
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.models.req.PostAttachmentDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,11 +29,11 @@ class IAttachmentAggregatorImplTest {
   @Autowired lateinit var ass: AttachmentAggregatorImpl
 
   @Test
-  fun testUploadAttachment() {
+  fun testRecordUpload() {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
     ass
-      .uploadAttachment(mockFile) {
-        PostAttachmentDto().apply {
+      .recordUpload(mockFile) {
+        IAttachmentAggregator.PostDto().apply {
           baseUrl = "https://oss.aliyun.com"
           baseUri = "/static"
           saveName = "adwd0juihjrthjrthrhrhrth"
@@ -46,8 +45,8 @@ class IAttachmentAggregatorImplTest {
   @Test
   fun testGetFullUrl() {
     val mockFile = MockMultipartFile("abc", "测试文件".byteInputStream())
-    ass.uploadAttachment(mockFile) {
-      PostAttachmentDto().apply {
+    ass.recordUpload(mockFile) {
+      IAttachmentAggregator.PostDto().apply {
         baseUrl = "https://oss.aliyun.com"
         baseUri = "/static"
         saveName = "adwd0juihjrthjrthrhrhrth"

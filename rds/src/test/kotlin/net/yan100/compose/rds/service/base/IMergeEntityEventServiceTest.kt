@@ -14,46 +14,28 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.base
+package net.yan100.compose.rds.service.base
 
-import net.yan100.compose.rds.entities.relationship.RolePermissions
-import net.yan100.compose.rds.repositories.rbac.IRolePermissionsRepo
+import net.yan100.compose.rds.RdsEntrance
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.service.IUserInfoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.Rollback
 import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
-@SpringBootTest
-class IAnyEntityTest {
-  @Autowired private lateinit var repo: IRolePermissionsRepo
+@Rollback
+@SpringBootTest(classes = [RdsEntrance::class])
+class IMergeEntityEventServiceTest {
+  @Autowired lateinit var service: IUserInfoService
 
   @Test
-  fun `test save and update`() {
-    val empty =
-      RolePermissions().also {
-        it.roleId = "33"
-        it.permissionsId = "44"
-      }
-    assertTrue { empty.isNew }
-    assertFalse {
-      empty
-        .let {
-          it.id = "3344"
-          it
-        }
-        .isNew
-    }
-    val b = repo.save(empty)
-    assertFalse { b.isNew }
-    assertTrue { b.id != null }
-    val c =
-      repo.save(
-        b.let {
-          it.roleId = "4455"
-          it
-        }
-      )
-    repo.save(c)
+  fun `test merge fun 0`() {
+    val from = service.post(UserInfo())
+    val to = service.post(UserInfo())
+
+    val merged = service.cascadeMerge(from, to)
+
+    println(merged)
   }
 }

@@ -39,6 +39,6 @@ data class DbTestPeriodConverterEntity(var periods: Period?) : IEntity() {
 
   @Override
   override fun toString(): String {
-    return this::class.simpleName + "(id = $id , rlv = $rlv , ldf = $ldf )"
+    return this::class.simpleName + "(id = $id , rlv = $dbEntityShadowRemoveTag , ldf = $dbEntityRowLockVersion )"
   }
 }

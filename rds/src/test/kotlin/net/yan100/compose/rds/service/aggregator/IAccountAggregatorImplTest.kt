@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.core.ISnowflakeGenerator
+import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.info.UserInfo
+import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,7 +40,7 @@ class IAccountAggregatorImplTest {
   @Test
   fun `test assignAccountToUserInfo`() {
     val userInfo =
-      ui.save(
+      ui.post(
         UserInfo().apply {
           firstName = "赵"
           lastName = "日天"
@@ -52,7 +52,7 @@ class IAccountAggregatorImplTest {
   }
 
   fun getRegisterParam() =
-    IAccountAggregator.RegisterAccountDto().apply {
+    IAccountAggregator.RegisterDto().apply {
       account = "abcd${snowflake.nextString()}"
       password = "qwer1234"
       nickName = "我艹${snowflake.nextString()}"
@@ -74,7 +74,7 @@ class IAccountAggregatorImplTest {
     assertFalse("重复注册了一次账号") { null != nr }
   }
 
-  fun regUser(): IAccountAggregator.RegisterAccountDto {
+  fun regUser(): IAccountAggregator.RegisterDto {
     val regParam = getRegisterParam()
     agg.registerAccount(regParam)
     return regParam
@@ -86,7 +86,7 @@ class IAccountAggregatorImplTest {
 
     val loginUser =
       agg.login(
-        IAccountAggregator.LoginAccountDto().apply {
+        IAccountAggregator.LoginDto().apply {
           account = regParam.account
           password = regParam.password
         }
@@ -95,7 +95,7 @@ class IAccountAggregatorImplTest {
 
     val errLoginUser =
       agg.login(
-        IAccountAggregator.LoginAccountDto().apply {
+        IAccountAggregator.LoginDto().apply {
           account = regParam.account
           password = "abcdefg"
         }
@@ -108,7 +108,7 @@ class IAccountAggregatorImplTest {
     val regParam = regUser()
     val m =
       agg.modifyPassword(
-        IAccountAggregator.ModifyAccountPasswordDto().apply {
+        IAccountAggregator.ModifyPasswordDto().apply {
           account = regParam.account
           oldPassword = regParam.password
           newPassword = "aaccee3313"
@@ -119,7 +119,7 @@ class IAccountAggregatorImplTest {
     // 不可与之前密码相同
     val n =
       agg.modifyPassword(
-        IAccountAggregator.ModifyAccountPasswordDto().apply {
+        IAccountAggregator.ModifyPasswordDto().apply {
           account = regParam.account
           oldPassword = regParam.password
           newPassword = "aaccee3313"
@@ -140,9 +140,9 @@ class IAccountAggregatorImplTest {
   }
 
   @Test
-  fun testBannedAccountTo() {
+  fun testBanWith() {
     val param = regUser()
-    agg.bannedAccountTo(param.account!!, LocalDateTime.parse("2100-12-01T01:01:01"))
+    agg.banWith(param.account!!, LocalDateTime.parse("2100-12-01T01:01:01"))
     val bandUser = us.findUserByAccount(param.account!!)!!
     assertTrue("用户没有被封禁") { bandUser.band }
   }

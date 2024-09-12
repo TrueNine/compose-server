@@ -17,8 +17,9 @@
 package net.yan100.compose.rds.hibernate
 
 import jakarta.annotation.Resource
-import net.yan100.compose.rds.entities.attachment.Attachment
-import net.yan100.compose.rds.repositories.attachment.IAttachmentRepo
+import net.yan100.compose.rds.core.typing.AttachmentTyping
+import net.yan100.compose.rds.entities.Attachment
+import net.yan100.compose.rds.repositories.IAttachmentRepo
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -45,6 +46,7 @@ class DynamicUpdateAnnotationTest {
         Attachment().also {
           it.size = 133
           it.saveName = "233"
+          it.attType = AttachmentTyping.ATTACHMENT
         }
       )
 

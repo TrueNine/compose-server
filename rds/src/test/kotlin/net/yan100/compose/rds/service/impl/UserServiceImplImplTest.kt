@@ -17,11 +17,11 @@
 package net.yan100.compose.rds.service.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.ISnowflakeGenerator
-import net.yan100.compose.core.consts.DataBaseBasicFieldNames
+import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.entities.info.UserInfo
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.aggregator.IRbacAggregator
@@ -42,7 +42,7 @@ class UserServiceImplImplTest {
 
   fun getUser() =
     Usr().apply {
-      createUserId = DataBaseBasicFieldNames.Rbac.ROOT_ID_STR
+      createUserId = IDbNames.Rbac.ROOT_ID_STR
       account = snowflake.nextString()
       nickName = "ab + ${snowflake.nextString()}"
       pwdEnc = "qwer1234"
@@ -58,9 +58,9 @@ class UserServiceImplImplTest {
 
   @Test
   fun testFindUserByAccount() {
-    val saved = service.save(getUser())
-    val info = infoService.save(UserInfo().apply { userId = saved.id })
-    val rg = roleGroupService.save(RoleGroup().apply { name = "权限1" })
+    val saved = service.post(getUser())
+    val info = infoService.post(UserInfo().apply { userId = saved.id })
+    val rg = roleGroupService.post(RoleGroup().apply { name = "权限1" })
     agg.saveRoleGroupToUser(rg.id, saved.id)!!
     assertEquals(saved.id, info.userId)
     val acc = service.findFullUserByAccount(saved.account)!!
@@ -70,23 +70,23 @@ class UserServiceImplImplTest {
 
   @Test
   fun testFindPwdEncByAccount() {
-    val saved = service.save(getUser())
+    val saved = service.post(getUser())
     val se = service.findPwdEncByAccount(saved.account)
     assertEquals(saved.pwdEnc, se)
   }
 
   @Test
   fun testExistsByAccount() {
-    val saved = service.save(getUser())
+    val saved = service.post(getUser())
     assertTrue { service.existsByAccount(saved.account) }
   }
 
   @Test
   fun testModifyUserBandTimeTo() {
-    val saved = service.save(getUser())
+    val saved = service.post(getUser())
     service.modifyUserBandTimeTo(saved.account, LocalDateTime.parse("2025-01-01T00:00:00"))
 
-    val succ = service.findById(saved.id)!!
+    val succ = service.fetchById(saved.id)!!
     assertTrue("用户没有被封禁") { succ.band }
 
     service.modifyUserBandTimeTo(saved.account, null)

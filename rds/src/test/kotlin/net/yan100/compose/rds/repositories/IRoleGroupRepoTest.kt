@@ -16,9 +16,8 @@
  */
 package net.yan100.compose.rds.repositories
 
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.repositories.rbac.IRoleGroupRepo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

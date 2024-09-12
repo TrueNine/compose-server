@@ -16,11 +16,12 @@
  */
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.core.ISnowflakeGenerator
-import net.yan100.compose.core.alias.Pq
-import net.yan100.compose.core.util.encrypt.Keys
+import net.yan100.compose.core.Pq
+import net.yan100.compose.core.encrypt.Keys
+import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.RdsEntrance
-import net.yan100.compose.rds.entities.attachment.Attachment
+import net.yan100.compose.rds.core.typing.AttachmentTyping
+import net.yan100.compose.rds.entities.Attachment
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -38,7 +39,7 @@ class IAttachmentServiceImplImplTest {
   private lateinit var snowflake: ISnowflakeGenerator
 
   fun getAtt(att: (Attachment) -> Attachment): Attachment {
-    return attachmentService.save(Attachment().run(att))
+    return attachmentService.post(Attachment().run(att))
   }
 
   @Test
@@ -46,6 +47,7 @@ class IAttachmentServiceImplImplTest {
     val baseUrl = "http://example.com"
     getAtt {
       it.baseUrl = baseUrl
+      it.attType = AttachmentTyping.BASE_URL
       it
     }
     val result = attachmentService.existsByBaseUrl(baseUrl)
@@ -63,6 +65,7 @@ class IAttachmentServiceImplImplTest {
   fun testFindByBaseUrl_Exists() {
     val baseUrl = "http://example.com"
     getAtt {
+      it.attType = AttachmentTyping.BASE_URL
       it.baseUrl = baseUrl
       it
     }
@@ -81,14 +84,16 @@ class IAttachmentServiceImplImplTest {
   fun testFindFullUrlById_Exists() {
     val b = getAtt {
       it.baseUrl = "https://www.baidu.com"
+      it.attType = AttachmentTyping.BASE_URL
       it
     }
     val e = getAtt {
       it.urlId = b.id
       it.metaName = "ab"
+      it.attType = AttachmentTyping.ATTACHMENT
       it
     }
-    val all = attachmentService.findAll()
+    val all = attachmentService.fetchAll()
     println(all)
     val result = attachmentService.findFullUrlById(e.id)
     assertNotNull(result)

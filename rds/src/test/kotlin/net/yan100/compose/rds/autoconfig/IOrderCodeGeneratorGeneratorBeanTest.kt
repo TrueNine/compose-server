@@ -23,7 +23,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
-class IBizCodeGeneratorGeneratorBeanTest {
+class IOrderCodeGeneratorGeneratorBeanTest {
   @Autowired lateinit var bizId: BizCodeGeneratorBean
 
   @Test

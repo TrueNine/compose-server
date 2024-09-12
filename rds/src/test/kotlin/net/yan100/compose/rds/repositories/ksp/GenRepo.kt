@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.repositories.ksp
 
+import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.entities.Gen
-import net.yan100.compose.rds.repositories.base.IRepo
 import org.springframework.stereotype.Repository
 
-@Repository interface GenRepo : IRepo<Gen> {}
+@Repository interface GenRepo : IRepo<Gen>

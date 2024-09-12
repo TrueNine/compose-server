@@ -16,8 +16,9 @@
  */
 package net.yan100.compose.rds.repositories
 
+import net.yan100.compose.rds.core.ITreeRepo
 import net.yan100.compose.rds.entities.DbTestITreeEntity
-import net.yan100.compose.rds.repositories.base.ITreeRepo
 import org.springframework.stereotype.Repository
 
-@Repository interface DbTestTreeRepo : ITreeRepo<DbTestITreeEntity>
+@Repository
+interface DbTestTreeRepo : ITreeRepo<DbTestITreeEntity>
