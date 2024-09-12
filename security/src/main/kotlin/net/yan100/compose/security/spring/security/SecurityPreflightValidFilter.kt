@@ -20,14 +20,14 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import net.yan100.compose.core.ctx.UserInfoContextHolder
-import net.yan100.compose.core.extensionfunctions.hasText
-import net.yan100.compose.core.http.Headers
-import net.yan100.compose.core.http.Methods
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.models.AuthRequestInfo
-import net.yan100.compose.depend.webservlet.extensionfunctions.deviceId
-import net.yan100.compose.depend.webservlet.extensionfunctions.remoteRequestIp
+import net.yan100.compose.core.consts.IHeaders
+import net.yan100.compose.core.consts.IMethods
+import net.yan100.compose.core.encrypt.AuthRequestInfo
+import net.yan100.compose.core.hasText
+import net.yan100.compose.core.holders.UserInfoContextHolder
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.depend.webservlet.deviceId
+import net.yan100.compose.depend.webservlet.remoteRequestIp
 import net.yan100.compose.security.UserDetailsWrapper
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -47,7 +47,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
   @Throws(ServletException::class, IOException::class)
   override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
     // 跨域请求直接放行
-    if (request.method == Methods.OPTIONS) {
+    if (request.method == IMethods.OPTIONS) {
       log.info("直接放行预检请求 uri = {}", request.requestURI)
       filterChain.doFilter(request, response)
       return
@@ -95,7 +95,8 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @return [Boolean]
    */
   private fun containsTokenPair(request: HttpServletRequest): Boolean =
-    request.getHeader(Headers.AUTHORIZATION).hasText() && request.getHeader(Headers.X_REFRESH).hasText()
+    request.getHeader(IHeaders.AUTHORIZATION).hasText() && request.getHeader(
+        IHeaders.X_REFRESH).hasText()
 
   /**
    * 从请求得到 token
@@ -103,7 +104,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getToken(request: HttpServletRequest?): String? = request?.getHeader(Headers.AUTHORIZATION)
+  private fun getToken(request: HttpServletRequest?): String? = request?.getHeader(IHeaders.AUTHORIZATION)
 
   /**
    * 从请求获得 re-flash 令牌
@@ -111,7 +112,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    * @param request 请求
    * @return [String]
    */
-  private fun getRefreshToken(request: HttpServletRequest?): String? = request?.getHeader(Headers.X_REFRESH)
+  private fun getRefreshToken(request: HttpServletRequest?): String? = request?.getHeader(IHeaders.X_REFRESH)
 
   /**
    * 合法性检查

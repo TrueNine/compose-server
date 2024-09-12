@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.security.spring.security
 
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.models.AuthRequestInfo
+import net.yan100.compose.core.encrypt.AuthRequestInfo
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.UserDetailsWrapper
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService

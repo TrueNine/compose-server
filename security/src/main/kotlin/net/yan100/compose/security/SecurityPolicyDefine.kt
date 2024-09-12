@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.security.models
+package net.yan100.compose.security
 
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter

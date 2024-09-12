@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.security
 
-import net.yan100.compose.core.models.AuthRequestInfo
-import net.yan100.compose.core.util.Str
+import net.yan100.compose.core.IStr
+import net.yan100.compose.core.encrypt.AuthRequestInfo
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -33,11 +33,11 @@ data class UserDetailsWrapper(val authUserInfo: AuthRequestInfo?) : UserDetails 
 
   init {
     // 添加角色信息
-    auths += authUserInfo?.roles?.filter(Str::hasText)?.map { SimpleGrantedAuthority("ROLE_$it") } ?: emptyList()
+    auths += authUserInfo?.roles?.filter(IStr::hasText)?.map { SimpleGrantedAuthority("ROLE_$it") } ?: emptyList()
     // 添加权限信息
-    auths += authUserInfo?.permissions?.filter(Str::hasText)?.map { SimpleGrantedAuthority(it) } ?: emptyList()
+    auths += authUserInfo?.permissions?.filter(IStr::hasText)?.map { SimpleGrantedAuthority(it) } ?: emptyList()
     // 添加 部门信息
-    auths += authUserInfo?.depts?.filter(Str::hasText)?.map { SimpleGrantedAuthority("DEPT_$it") } ?: emptyList()
+    auths += authUserInfo?.depts?.filter(IStr::hasText)?.map { SimpleGrantedAuthority("DEPT_$it") } ?: emptyList()
   }
 
   override fun getAuthorities(): Collection<GrantedAuthority> = auths

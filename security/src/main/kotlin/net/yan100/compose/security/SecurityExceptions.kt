@@ -14,10 +14,10 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.security.exceptions
+package net.yan100.compose.security
 
 import net.yan100.compose.core.exceptions.KnownException
-import net.yan100.compose.core.typing.http.HttpErrorStatus
+import net.yan100.compose.core.typing.HttpErrorStatus
 
 open class SecurityException(msg: String? = "程序安全异常", meta: Throwable? = null, code: Int? = HttpErrorStatus._403.code) : KnownException(msg, meta, code)
 

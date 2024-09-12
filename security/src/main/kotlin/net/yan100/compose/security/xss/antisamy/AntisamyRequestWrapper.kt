@@ -18,7 +18,7 @@ package net.yan100.compose.security.xss.antisamy
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.slf4j
 import org.owasp.validator.html.AntiSamy
 import org.owasp.validator.html.Policy
 import org.slf4j.Logger

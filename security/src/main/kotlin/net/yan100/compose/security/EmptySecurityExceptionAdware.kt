@@ -14,18 +14,16 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.security.defaults
+package net.yan100.compose.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.util.EmptyDefault
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.core.util.IEmptyDefault
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 
-class EmptySecurityExceptionAdware(mapper: ObjectMapper) : EmptyDefault, SecurityExceptionAdware(mapper) {
-  companion object {
-    @JvmStatic private val log = slf4j(EmptySecurityExceptionAdware::class)
-  }
+private val log = slf4j(EmptySecurityExceptionAdware::class)
 
+class EmptySecurityExceptionAdware(mapper: ObjectMapper) : IEmptyDefault, SecurityExceptionAdware(mapper) {
   init {
     log.warn("正在使用默认安全异常处理器，生产环请自行覆写")
   }

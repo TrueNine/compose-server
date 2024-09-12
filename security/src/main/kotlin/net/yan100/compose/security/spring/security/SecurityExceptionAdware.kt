@@ -19,10 +19,10 @@ package net.yan100.compose.security.spring.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.models.ErrorBody
-import net.yan100.compose.core.typing.http.HttpErrorStatus
-import net.yan100.compose.core.typing.http.MediaTypes
+import net.yan100.compose.core.encrypt.ErrorBody
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.core.typing.HttpErrorStatus
+import net.yan100.compose.core.typing.MediaTypes
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
