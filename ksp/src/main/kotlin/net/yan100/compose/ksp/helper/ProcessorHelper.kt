@@ -16,4 +16,4 @@
  */
 package net.yan100.compose.ksp.helper
 
-class ProcessorHelper {}
+class ProcessorHelper
