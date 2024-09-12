@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.depend.jvalid.functions
 
-import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.hasText
 import net.yan100.compose.depend.jvalid.exceptions.ValidException
 
 /**
@@ -113,7 +113,7 @@ interface CheckParamScope<T> {
    */
   infix fun String?.nonTextThen(lazyMessage: () -> Any): String = toValidException {
     check(hasText(), lazyMessage)
-    this!!
+      this
   }
 
   /**

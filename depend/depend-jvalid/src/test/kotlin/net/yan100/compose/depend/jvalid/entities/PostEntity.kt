@@ -16,4 +16,4 @@
  */
 package net.yan100.compose.depend.jvalid.entities
 
-class PostEntity {}
+class PostEntity

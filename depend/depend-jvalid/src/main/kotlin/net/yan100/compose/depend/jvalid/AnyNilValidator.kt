@@ -22,7 +22,7 @@ import net.yan100.compose.depend.jvalid.annotations.EntityLevelValid
 import org.springframework.stereotype.Component
 
 @Component
-open class AnyNilValidator : ConstraintValidator<EntityLevelValid, Any> {
+class AnyNilValidator : ConstraintValidator<EntityLevelValid, Any> {
 
   override fun isValid(value: Any?, context: ConstraintValidatorContext): Boolean {
     context.clockProvider
