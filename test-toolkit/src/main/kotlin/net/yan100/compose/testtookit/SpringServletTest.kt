@@ -30,4 +30,4 @@ import java.lang.annotation.Inherited
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
-annotation class SpringServletTest()
+annotation class SpringServletTest
