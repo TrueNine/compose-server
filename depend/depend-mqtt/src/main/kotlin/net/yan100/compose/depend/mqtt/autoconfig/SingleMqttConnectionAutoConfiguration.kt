@@ -17,7 +17,7 @@
 package net.yan100.compose.depend.mqtt.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.depend.mqtt.paho.MqttPahoClientWrapper
 import net.yan100.compose.depend.mqtt.properties.SingleMqttProperties
 import org.eclipse.paho.client.mqttv3.MqttClient
@@ -45,7 +45,7 @@ class SingleMqttConnectionAutoConfiguration(private val p: SingleMqttProperties,
       connectOptions.also {
         it.serverURIs = arrayOf(p.fullUrl)
         it.userName = p.username
-        it.password = p.password?.toCharArray()
+        it.password = p.password.toCharArray()
         it.keepAliveInterval = p.keepAliveSecond.toInt()
         it.isCleanSession = false
         it.connectionTimeout = p.connectTimeoutSecond

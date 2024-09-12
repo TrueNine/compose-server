@@ -14,32 +14,27 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.depend.mqtt.properties;
+package net.yan100.compose.depend.mqtt.properties
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import lombok.Data
+import org.springframework.boot.context.properties.ConfigurationProperties
+import java.util.*
 
 @Data
 @ConfigurationProperties(prefix = "compose.mqtt-client")
-public class SingleMqttProperties {
-    /** schema = tcp:// */
-    private String url;
+class SingleMqttProperties {
+  /** schema = tcp://  */
+  var url: String? = null
 
-    private Integer port = 1883;
-    private String clientId = UUID.randomUUID().toString();
-    private List<String> topics = new ArrayList<>();
-    private String username = "";
-    private String password = "";
-    private Integer connectTimeoutSecond = 10;
-    private Long completionTimeout = 1000L * 5L;
-    private Integer qos = 0;
-    private Integer keepAliveSecond = 10;
+  var port = 1883
+  var clientId = UUID.randomUUID().toString()
+  var topics: List<String> = ArrayList()
+  var username = ""
+  var password = ""
+  var connectTimeoutSecond = 10
+  var completionTimeout = 1000L * 5L
+  var qos = 0
+  var keepAliveSecond = 10
 
-    public String getFullUrl() {
-        return getUrl() + ":" + getPort();
-    }
+  val fullUrl: String get() = "$url:$port"
 }
