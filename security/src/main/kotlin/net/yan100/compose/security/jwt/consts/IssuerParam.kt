@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.security.jwt.consts
 
-import net.yan100.compose.core.util.encrypt.Keys
+import net.yan100.compose.core.encrypt.Keys
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.time.Duration
