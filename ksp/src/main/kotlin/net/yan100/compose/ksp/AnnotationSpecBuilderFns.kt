@@ -14,17 +14,16 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.extensionfunctions
+package net.yan100.compose.ksp
 
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import kotlin.reflect.KClass
+import com.squareup.kotlinpoet.AnnotationSpec
 
-fun KSClassDeclaration.isAssignableFromDeeply(other: KClass<*>, checkList: MutableSet<KSClassDeclaration> = mutableSetOf()): Boolean {
-  if (!checkList.add(this)) return false
-  if (asStarProjectedType().declaration.qualifiedName?.asString() == other.qualifiedName) return true
-  for (superType in superTypes) {
-    val superTypeDeclaration = superType.resolve().declaration as? KSClassDeclaration ?: continue
-    if (superTypeDeclaration.isAssignableFromDeeply(other, checkList)) return true
-  }
-  return false
-}
+fun AnnotationSpec.Builder.useGet() = useSiteTarget(AnnotationSpec.UseSiteTarget.GET)
+
+fun AnnotationSpec.Builder.useSet() = useSiteTarget(AnnotationSpec.UseSiteTarget.SET)
+
+fun AnnotationSpec.Builder.useField() = useSiteTarget(AnnotationSpec.UseSiteTarget.FIELD)
+
+fun AnnotationSpec.Builder.useDelegate() = useSiteTarget(AnnotationSpec.UseSiteTarget.DELEGATE)
+
+fun AnnotationSpec.Builder.useProperty() = useSiteTarget(AnnotationSpec.UseSiteTarget.PROPERTY)

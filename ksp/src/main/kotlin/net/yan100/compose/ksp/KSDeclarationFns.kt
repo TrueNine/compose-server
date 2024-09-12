@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp.extensionfunctions
+package net.yan100.compose.ksp
 
 import com.google.devtools.ksp.symbol.KSDeclaration
 

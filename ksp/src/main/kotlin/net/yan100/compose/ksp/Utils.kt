@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.extensionfunctions
+package net.yan100.compose.ksp
 
 import com.google.devtools.ksp.ExceptionMessage
 import com.google.devtools.ksp.KSTypeNotPresentException
@@ -78,6 +78,7 @@ private fun KSAnnotation.createInvocationHandler(clazz: Class<*>): InvocationHan
               val value = { result.asArray(method, clazz) }
               cache.getOrPut(Pair(method.returnType, value), value)
             }
+
             method.returnType.name == "java.lang.Class" -> {
               cache.getOrPut(Pair(method.returnType, result)) {
                 when (result) {
@@ -86,6 +87,7 @@ private fun KSAnnotation.createInvocationHandler(clazz: Class<*>): InvocationHan
                 }
               }
             }
+
             else -> result
           }
         }
@@ -170,4 +172,5 @@ private fun List<KSType>.asClasses(proxyClass: Class<*>) =
     throw KSTypesNotPresentException(this, e)
   }
 
-@KspExperimental private fun Any.asArray(method: Method, proxyClass: Class<*>) = listOf(this).asArray(method, proxyClass)
+@KspExperimental
+private fun Any.asArray(method: Method, proxyClass: Class<*>) = listOf(this).asArray(method, proxyClass)

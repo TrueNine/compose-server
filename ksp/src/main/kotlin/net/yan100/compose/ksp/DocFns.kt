@@ -14,16 +14,13 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.extensionfunctions
+package net.yan100.compose.ksp
 
-import com.squareup.kotlinpoet.AnnotationSpec
+import net.yan100.compose.core.hasText
 
-fun AnnotationSpec.Builder.useGet() = useSiteTarget(AnnotationSpec.UseSiteTarget.GET)
-
-fun AnnotationSpec.Builder.useSet() = useSiteTarget(AnnotationSpec.UseSiteTarget.SET)
-
-fun AnnotationSpec.Builder.useField() = useSiteTarget(AnnotationSpec.UseSiteTarget.FIELD)
-
-fun AnnotationSpec.Builder.useDelegate() = useSiteTarget(AnnotationSpec.UseSiteTarget.DELEGATE)
-
-fun AnnotationSpec.Builder.useProperty() = useSiteTarget(AnnotationSpec.UseSiteTarget.PROPERTY)
+fun String?.cleanedDoc(): String? {
+  return if (hasText()) {
+    val doc = this
+    doc.replaceFirst("\n", "").split("\n").filter { it.hasText() }.map { it.trim() }.joinToString(separator = "\n") { if (it.hasText()) it else "\n" }
+  } else null
+}

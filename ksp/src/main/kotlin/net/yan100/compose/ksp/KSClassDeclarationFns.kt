@@ -14,13 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.extensionfunctions
+package net.yan100.compose.ksp
 
-import net.yan100.compose.core.extensionfunctions.hasText
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import kotlin.reflect.KClass
 
-fun String?.cleanedDoc(): String? {
-  return if (hasText()) {
-    val doc = this!!
-    doc.replaceFirst("\n", "").split("\n").filter { it.hasText() }.map { it.trim() }.joinToString(separator = "\n") { if (it.hasText()) it else "\n" }
-  } else null
+fun KSClassDeclaration.isAssignableFromDeeply(other: KClass<*>, checkList: MutableSet<KSClassDeclaration> = mutableSetOf()): Boolean {
+  if (!checkList.add(this)) return false
+  if (asStarProjectedType().declaration.qualifiedName?.asString() == other.qualifiedName) return true
+  for (superType in superTypes) {
+    val superTypeDeclaration = superType.resolve().declaration as? KSClassDeclaration ?: continue
+    if (superTypeDeclaration.isAssignableFromDeeply(other, checkList)) return true
+  }
+  return false
 }
