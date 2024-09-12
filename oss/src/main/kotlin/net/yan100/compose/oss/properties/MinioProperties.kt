@@ -14,13 +14,19 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.core.http;
+package net.yan100.compose.oss.properties
 
-public interface Protocols {
-    String HTTP = "http";
-    String HTTPS = "https";
-    String WS = "ws";
-    String WSS = "wss";
-    String FILE = "file";
-    String FTP = "ftp";
+/**
+ * minio 配置项
+ *
+ * @author TrueNine
+ * @since 2023-02-21
+ */
+class MinioProperties {
+  var enable = false
+  var enableHttps = false
+  var endpointHost = "localhost"
+  var endpointPort = 9000
+  var accessKey: String? = null
+  var secretKey: String? = null
 }
