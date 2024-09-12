@@ -16,4 +16,4 @@
  */
 package io.tnt
 
-class AGenerator {}
+class AGenerator

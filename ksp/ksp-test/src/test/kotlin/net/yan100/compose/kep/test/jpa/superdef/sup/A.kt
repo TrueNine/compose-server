@@ -12,6 +12,4 @@ abstract class SuperA : IEntity() {
 }
 
 @MetaDef
-abstract class SuperB : SuperA() {
-
-}
+abstract class SuperB : SuperA()

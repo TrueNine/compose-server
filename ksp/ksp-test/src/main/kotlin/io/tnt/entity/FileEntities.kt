@@ -22,4 +22,4 @@ fun b() {}
 
 fun a() {}
 
-@MappedSuperclass class TestFileClass {}
+@MappedSuperclass class TestFileClass

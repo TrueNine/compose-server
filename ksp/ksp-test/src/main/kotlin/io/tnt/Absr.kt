@@ -16,4 +16,4 @@
  */
 package io.tnt
 
-class Absr {}
+class Absr
