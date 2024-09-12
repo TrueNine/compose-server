@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- * 
+ *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
  * and resources. This software and its components are not to be used, reproduced,
@@ -13,11 +13,10 @@
  *     TrueNine
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
-*/
-package net.yan100.compose.schedule.properties;
+ */
+package net.yan100.compose.schedule.properties
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
  * xxl-job 配置项
@@ -25,10 +24,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author t_teng
  * @since 2023-03-25
  */
-@Deprecated
-@Data
+@Deprecated("")
 @ConfigurationProperties(prefix = "compose.schedule.xxl-job")
-public class XxlJobAutoConfigurationProperties {
-    String adminAddress = "http://localhost/xxl-job-admin";
-    String accessToken = "default_token";
+class XxlJobAutoConfigurationProperties {
+  var adminAddress: String = "http://localhost/xxl-job-admin"
+  var accessToken: String = "default_token"
 }

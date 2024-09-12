@@ -14,10 +14,9 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.schedule.properties;
+package net.yan100.compose.schedule.properties
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
  * xxl-job executor 配置项
@@ -25,14 +24,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author t_teng
  * @since 2023-03-25
  */
-@Deprecated
-@Data
+@Deprecated("")
 @ConfigurationProperties(prefix = "compose.schedule.xxl-job.executor")
-public class XxlJobExecutorAutoConfigurationProperties {
-    String appName;
-    String address = "127.0.0.1";
-    String ip = "127.0.0.1";
-    Integer port = -1;
-    String logPath = ".logs/xxl-job";
-    Integer logRetentionDays = 30;
+class XxlJobExecutorAutoConfigurationProperties {
+  var appName: String? = null
+  var address: String = "127.0.0.1"
+  var ip: String = "127.0.0.1"
+  var port: Int = -1
+  var logPath: String = ".logs/xxl-job"
+  var logRetentionDays: Int = 30
 }
