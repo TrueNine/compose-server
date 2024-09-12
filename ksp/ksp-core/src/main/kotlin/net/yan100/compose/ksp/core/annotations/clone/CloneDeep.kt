@@ -30,4 +30,4 @@ import java.lang.annotation.Inherited
   AnnotationTarget.PROPERTY_SETTER,
 )
 @Retention(AnnotationRetention.BINARY)
-annotation class CloneDeep {}
+annotation class CloneDeep

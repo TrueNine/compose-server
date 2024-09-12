@@ -14,9 +14,9 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.core.extensionfunctions
+package net.yan100.compose.ksp.core
 
-import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.hasText
 import net.yan100.compose.ksp.core.annotations.MetaName
 
 fun Sequence<MetaName>.getFirstName(): String? {

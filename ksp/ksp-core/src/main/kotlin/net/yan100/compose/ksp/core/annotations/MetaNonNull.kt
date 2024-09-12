@@ -18,4 +18,4 @@ package net.yan100.compose.ksp.core.annotations
 
 import java.lang.annotation.Inherited
 
-@MustBeDocumented @Inherited @Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER) annotation class MetaNonNull()
+@MustBeDocumented @Inherited @Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER) annotation class MetaNonNull
