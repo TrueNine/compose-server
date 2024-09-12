@@ -14,8 +14,9 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.alias
+package net.yan100.compose.depend.webclient
 
-typealias TODO = Deprecated
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
-typealias FIXME = Deprecated
+@SpringBootApplication
+class DependWebClientEntrance

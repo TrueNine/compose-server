@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.depend.webservlet.autoconfig
 
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.depend.webservlet.converters.JavaLocalDateConverter
 import net.yan100.compose.depend.webservlet.converters.JavaLocalDateTimeConverter
 import net.yan100.compose.depend.webservlet.converters.JavaLocalTimeConverter

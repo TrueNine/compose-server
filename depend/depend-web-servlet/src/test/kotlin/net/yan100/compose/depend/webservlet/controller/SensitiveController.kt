@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.depend.webservlet.controller
 
-import net.yan100.compose.core.alias.Pr
+import net.yan100.compose.core.Pr
 import net.yan100.compose.core.annotations.SensitiveResponse
-import net.yan100.compose.core.models.sensitive.ISensitivity
+import net.yan100.compose.core.encrypt.ISensitivity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("test/sensitive")
 class SensitiveController {
   class Resp(var a: Int = 1) : ISensitivity {
-    override fun sensitive() {
-      super.sensitive()
+    override fun changeWithSensitiveData() {
+      super.changeWithSensitiveData()
       this.a = 233
     }
   }

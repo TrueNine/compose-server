@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
+ * 
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
  * and resources. This software and its components are not to be used, reproduced,
@@ -13,14 +13,23 @@
  *     TrueNine
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
+*/
+package net.yan100.compose.depend.webservlet.properties
+
+import lombok.Data
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.http.converter.StringHttpMessageConverter
+import kotlin.reflect.KClass
+
+/**
+ * spring web mvc http servlet 配置属性
+ *
+ * @author TrueNine
+ * @since 2023-02-20
  */
-package net.yan100.compose.depend.webclient
-
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
-
-@SpringBootApplication class WebClientEntrance
-
-fun main(args: Array<String>) {
-  SpringApplication.run(WebClientEntrance::class.java, *args)
+@Data
+@ConfigurationProperties(prefix = "compose.web-servlet")
+class ServletWebApplicationProperties {
+  var allowConverters = mutableListOf("getDocumentation", "swaggerResources", "openapiJson")
+  var allowConverterClasses = mutableListOf<KClass<*>>(StringHttpMessageConverter::class)
 }

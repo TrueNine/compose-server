@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.depend.webservlet.autoconfig
 
-import net.yan100.compose.core.alias.Pr
+import net.yan100.compose.core.Pr
 import net.yan100.compose.core.annotations.SensitiveResponse
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.models.sensitive.ISensitivity
+import net.yan100.compose.core.encrypt.ISensitivity
+import net.yan100.compose.core.slf4j
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.http.converter.HttpMessageConverter
@@ -65,21 +65,21 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
     response: ServerHttpResponse,
   ): Any? {
     when (body) {
-      is ISensitivity -> body.sensitive()
-      is Collection<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
+      is ISensitivity -> body.changeWithSensitiveData()
+      is Collection<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
       is Map<*, *> ->
         body.forEach {
-          if (it.key is ISensitivity) (it.key as ISensitivity).sensitive()
-          if (it.value is ISensitivity) (it.value as ISensitivity).sensitive()
+          if (it.key is ISensitivity) (it.key as ISensitivity).changeWithSensitiveData()
+          if (it.value is ISensitivity) (it.value as ISensitivity).changeWithSensitiveData()
         }
-      is Array<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
-      is Iterable<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
-      is Iterator<*> -> body.forEach { if (it is ISensitivity) it.sensitive() }
+      is Array<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+      is Iterable<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+      is Iterator<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
       is Pr<*> -> {
         if (body.dataList.isNotEmpty()) {
           val b = body.dataList.firstOrNull()?.let { it is ISensitivity }
           if (b == true) {
-            body.dataList.forEach { if (it is ISensitivity) it.sensitive() }
+            body.dataList.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
           }
         }
       }

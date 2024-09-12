@@ -14,12 +14,12 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.depend.webclient.lang
+package net.yan100.compose.depend.webclient
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.http.Headers
+import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.typing.AnyTyping
-import net.yan100.compose.core.typing.http.MediaTypes
+import net.yan100.compose.core.typing.MediaTypes
 import net.yan100.compose.depend.webclient.encoder.AnyTypingEncoder
 import org.springframework.core.MethodParameter
 import org.springframework.http.codec.EncoderHttpMessageWriter
@@ -68,7 +68,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
     it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMimeTypes))
   }
 
-  clientBuilder.defaultHeader(Headers.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
+  clientBuilder.defaultHeader(IHeaders.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
 
   val cf = builder(clientBuilder, factoryBuilder)
   val client = cf.first.build()

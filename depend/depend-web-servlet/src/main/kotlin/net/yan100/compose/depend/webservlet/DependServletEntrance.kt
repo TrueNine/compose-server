@@ -17,11 +17,9 @@
 package net.yan100.compose.depend.webservlet
 
 import net.yan100.compose.depend.webservlet.autoconfig.AutoConfigEntrance
-import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 
-@Import(AutoConfigEntrance::class) class DependServletEntrance
+@Import(AutoConfigEntrance::class)
+class DependServletEntrance
 
-fun main(args: Array<String>) {
-  runApplication<DependServletEntrance>(*args)
-}
+

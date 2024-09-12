@@ -27,11 +27,11 @@ import reactor.core.publisher.Flux
 
 class AnyTypingEncoder : AbstractEncoder<AnyTyping>() {
   override fun encode(
-    inputStream: Publisher<out AnyTyping>,
-    bufferFactory: DataBufferFactory,
-    elementType: ResolvableType,
-    mimeType: MimeType?,
-    hints: MutableMap<String, Any>?,
+      inputStream: Publisher<out AnyTyping>,
+      bufferFactory: DataBufferFactory,
+      elementType: ResolvableType,
+      mimeType: MimeType?,
+      hints: MutableMap<String, Any>?,
   ): Flux<DataBuffer> {
     return Flux.from(inputStream).map { bufferFactory.wrap(it.toString().toByteArray()) }
   }

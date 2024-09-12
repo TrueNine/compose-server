@@ -17,11 +17,11 @@
 package net.yan100.compose.depend.webservlet.autoconfig
 
 import jakarta.servlet.http.HttpServletRequest
-import net.yan100.compose.core.ctx.UserInfoContextHolder
-import net.yan100.compose.core.http.Headers
-import net.yan100.compose.core.http.InterAddr
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.models.RequestInfo
+import net.yan100.compose.core.consts.IHeaders
+import net.yan100.compose.core.consts.IInterAddr
+import net.yan100.compose.core.encrypt.RequestInfo
+import net.yan100.compose.core.holders.UserInfoContextHolder
+import net.yan100.compose.core.slf4j
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -58,8 +58,8 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
       UserInfoContextHolder.set(
         RequestInfo().apply {
           val req = webRequest.nativeRequest as HttpServletRequest
-          val deviceId = Headers.getDeviceId(req)
-          this.currentIpAddr = InterAddr.getRequestIpAddress(req)
+          val deviceId = IHeaders.getDeviceId(req)
+          this.currentIpAddr = IInterAddr.getRequestIpAddress(req)
           this.deviceId = deviceId
         }
       )

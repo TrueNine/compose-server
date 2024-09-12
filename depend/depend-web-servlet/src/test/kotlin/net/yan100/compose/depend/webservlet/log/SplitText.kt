@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.depend.webservlet.log
 
-import net.yan100.compose.core.alias.datetime
-import net.yan100.compose.core.alias.string
-import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.datetime
+import net.yan100.compose.core.hasText
+import net.yan100.compose.core.string
 import org.slf4j.event.Level
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -28,14 +28,14 @@ import java.util.regex.Pattern
 import kotlin.test.Test
 
 data class MDCLogData(
-  var datetime: datetime,
-  var threadName: string?,
-  var traceId: string?,
-  var ip: string?,
-  var level: Level,
-  var abbrClassName: string,
-  var logContent: string,
-  var append: string?,
+    var datetime: datetime,
+    var threadName: string?,
+    var traceId: string?,
+    var ip: string?,
+    var level: Level,
+    var abbrClassName: string,
+    var logContent: string,
+    var append: string?,
 )
 
 class SplitText {
