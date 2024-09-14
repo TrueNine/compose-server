@@ -17,7 +17,7 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.encrypt.IKeysRepo
+import net.yan100.compose.security.crypto.domain.IKeysRepo
 import net.yan100.compose.security.jwt.JwtIssuer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -36,10 +36,10 @@ class JwtIssuerAutoConfiguration(private val jp: net.yan100.compose.security.pro
     val sig = keysRepository.jwtSignatureIssuerRsaKeyPair()!!
     val enc = keysRepository.jwtEncryptDataIssuerEccKeyPair()!!
     return JwtIssuer.createIssuer()
-      .signatureIssuerKey(sig.rsaPrivateKey!!)
-      .signatureVerifyKey(sig.rsaPublicKey!!)
-      .contentEncryptKey(enc.eccPublicKey!!)
-      .contentDecryptKey(enc.eccPrivateKey!!)
+      .signatureIssuerKey(sig.privateKey)
+      .signatureVerifyKey(sig.publicKey)
+      .contentEncryptKey(enc.publicKey)
+      .contentDecryptKey(enc.privateKey)
       .expireFromDuration(Duration.of(7, ChronoUnit.DAYS))
       .serializer(mapper)
       .encryptDataKeyName(jp.encryptDataKeyName)

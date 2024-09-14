@@ -25,7 +25,7 @@ hibernate {
     enableLazyInitialization.set(true)
   }
 }
-version = libs.versions.compose.rds.core.get()
+version = libs.versions.compose.rdsCore.get()
 
 dependencies {
   implementation(project(":core"))

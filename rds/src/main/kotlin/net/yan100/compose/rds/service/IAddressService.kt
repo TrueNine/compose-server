@@ -16,13 +16,13 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.rds.entities.address.Address
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.string
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.Address
 
-interface IAddressService : IService<Address> {
-  fun findByCode(code: SerialCode): Address?
+interface IAddressService : ICrud<Address> {
+  fun findByCode(code: string): Address?
 
   fun findRoot(): Address
 
@@ -30,7 +30,7 @@ interface IAddressService : IService<Address> {
 
   fun findProvinces(): List<Address>
 
-  fun findByCodeAndLevel(code: SerialCode, level: Int): Address?
+  fun findByCodeAndLevel(code: string, level: Int): Address?
 
   fun findDirectChildrenByCode(code: String): List<Address>
 

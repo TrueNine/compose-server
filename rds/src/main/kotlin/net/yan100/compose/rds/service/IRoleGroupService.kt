@@ -16,11 +16,11 @@
  */
 package net.yan100.compose.rds.service
 
+import net.yan100.compose.rds.core.ICrud
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.entities.relationship.UserRoleGroup
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.entities.UserRoleGroup
 
-interface IRoleGroupService : IService<RoleGroup> {
+interface IRoleGroupService : ICrud<RoleGroup> {
   fun assignRootToUser(userId: String): UserRoleGroup
 
   fun assignPlainToUser(userId: String): UserRoleGroup

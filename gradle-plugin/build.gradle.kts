@@ -28,6 +28,7 @@ group = pluginGroup
 version = pluginVersion
 
 repositories {
+  mavenLocal()
   maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"))
   maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"))
   maven(url = uri("https://repo.spring.io/milestone"))
@@ -52,8 +53,7 @@ kotlin {
         "-Xjvm-default=all",
         "-verbose",
         "-Xjdk-release=${l.versions.java.get()}",
-        "-jvm-target=${l.versions.java.get()}",
-        "-Xextended-compiler-checks",
+        "-jvm-target=${l.versions.java.get()}"
       )
   }
 
@@ -64,11 +64,11 @@ gradlePlugin {
   plugins {
     register("${pluginGroup}.${project.name}") {
       id = "${pluginGroup}.${project.name}"
-      implementationClass = "${pluginGroup}.plugin.Main"
+      implementationClass = "${pluginGroup}.gradleplugin.Main"
     }
     register("${pluginGroup}.${project.name}-settings") {
       id = "${pluginGroup}.${project.name}-settings"
-      implementationClass = "${pluginGroup}.plugin.SettingsMain"
+      implementationClass = "${pluginGroup}.gradleplugin.SettingsMain"
     }
   }
 }
@@ -84,7 +84,6 @@ java {
 publishing {
   repositories {
     mavenLocal()
-    maven(url = layout.buildDirectory.dir("local-maven-repo"))
     maven(url = uri(yunxiaoUrl)) {
       isAllowInsecureProtocol = false
       credentials {

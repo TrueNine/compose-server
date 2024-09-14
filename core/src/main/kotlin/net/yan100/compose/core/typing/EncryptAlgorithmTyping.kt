@@ -24,28 +24,27 @@ import com.fasterxml.jackson.annotation.JsonValue
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class EncryptAlgorithmTyping(private val alg: String) : StringTyping {
+enum class EncryptAlgorithmTyping(
+  private val alg: String,
+  val padding: String
+) : StringTyping {
   /** ecc */
-  ECC("EC"),
-
-  /** ecc padding */
-  ECC_PADDING("SHA256withECDSA"),
+  ECC("EC", "SHA256withECDSA"),
 
   /** rsa */
-  RSA("RSA"),
+  RSA("RSA", "RSA/ECB/PKCS1Padding"),
 
   /** SHA256withRSA */
-  SHA256_WITH_RSA("SHA256withRSA"),
-
-  /** rsa padding */
-  RSA_PADDING("RSA/ECB/PKCS1Padding"),
+  SHA256_WITH_RSA("SHA256withRSA", ""),
 
   /** aes */
-  AES("AES");
+  AES("AES", "AES/ECB/PKCS5Padding");
 
-  @JsonValue override val value: String = this.alg
+  @JsonValue
+  override val value: String = this.alg
 
   companion object {
-    @JvmStatic fun findVal(v: String?) = entries.find { it.alg == v }
+    @JvmStatic
+    fun findVal(v: String?) = entries.find { it.alg == v }
   }
 }

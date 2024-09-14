@@ -17,15 +17,13 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import net.yan100.compose.core.extensionfunctions.hasText
-import net.yan100.compose.core.typing.http.MediaTypes
+import net.yan100.compose.core.hasText
+import net.yan100.compose.core.typing.MediaTypes
+import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.typing.AttachmentTyping
-import net.yan100.compose.rds.entities.attachment.Attachment
-import net.yan100.compose.rds.models.req.PostAttachmentDescriptionDto
-import net.yan100.compose.rds.models.req.PostAttachmentDto
+import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.service.IAttachmentService
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 
@@ -33,8 +31,8 @@ import java.io.InputStream
 @Service
 class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAttachmentAggregator {
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun uploadAttachment(file: MultipartFile, @Valid saveFileCallback: (file: MultipartFile) -> @Valid PostAttachmentDto): Attachment? {
+  @ACID
+  override fun recordUpload(file: MultipartFile, @Valid saveFileCallback: (file: MultipartFile) -> @Valid IAttachmentAggregator.PostDto): Attachment? {
     val saveFile = saveFileCallback(file)
     val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
     // 构建一个新附件对象保存并返回
@@ -49,10 +47,10 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
         attType = AttachmentTyping.ATTACHMENT
       }
     // 重新进行赋值
-    return aService.save(att)
+    return aService.post(att)
   }
 
-  override fun uploadAttachment(stream: InputStream, req: (stream: InputStream) -> PostAttachmentDescriptionDto): Attachment? {
+  override fun recordUpload(stream: InputStream, req: (stream: InputStream) -> IAttachmentAggregator.PostDescDto): Attachment? {
     val saveFile = req(stream)
     val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
     val allBytes = stream.readAllBytes()
@@ -65,11 +63,11 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
         mimeType = saveFile.mimeType?.value ?: MediaTypes.BINARY.value
         attType = AttachmentTyping.ATTACHMENT
       }
-      .let { aService.save(it) }
+      .let { aService.post(it) }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
-  override fun uploadAttachments(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> PostAttachmentDto): List<Attachment> {
+  @ACID
+  override fun recordUploads(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> IAttachmentAggregator.PostDto): List<Attachment> {
     val saved = files.map { saveFileCallback(it) to it }
     val baseUrls =
       aService.findAllByBaseUrlInAndBaseUriIn(saved.map { it.first.baseUrl!! }, saved.map { it.first.baseUri!! }).associateBy { it.baseUrl!! to it.baseUri!! }
@@ -78,7 +76,7 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
       .map {
         val baseUrl =
           baseUrls[it.first.baseUrl to it.first.baseUri]
-            ?: aService.save(
+            ?: aService.post(
               Attachment().apply {
                 attType = AttachmentTyping.BASE_URL
                 baseUrl = it.first.baseUrl
@@ -95,6 +93,6 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
           attType = AttachmentTyping.ATTACHMENT
         }
       }
-      .let { aService.saveAll(it) }
+      .let { aService.postAll(it) }
   }
 }

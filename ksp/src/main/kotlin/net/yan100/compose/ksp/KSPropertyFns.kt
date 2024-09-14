@@ -16,26 +16,6 @@
  */
 package net.yan100.compose.ksp
 
+import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
-fun KSPropertyDeclaration.isBasicType(): Boolean {
-  return when (this.type.resolve().declaration.qualifiedName?.asString()) {
-    "java.lang.Character",
-    "kotlin.Char",
-    "java.lang.Integer",
-    "kotlin.Int",
-    "java.lang.Long",
-    "kotlin.Long",
-    "java.lang.Double",
-    "kotlin.Double",
-    "java.lang.Float",
-    "kotlin.Float",
-    "java.lang.Boolean",
-    "kotlin.Boolean",
-    "java.lang.Short",
-    "kotlin.Short",
-    "java.lang.Byte",
-    "kotlin.Byte" -> true
-    else -> false
-  }
-}

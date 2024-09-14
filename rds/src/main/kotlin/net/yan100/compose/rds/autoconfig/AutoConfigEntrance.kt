@@ -22,13 +22,18 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @EnableJpaAuditing
-@EntityScan(basePackages = ["net.yan100.compose.rds.entities", "net.yan100.compose.rds.models", "net.yan100.compose.rds.base"])
+@EntityScan(
+  basePackages = [
+    "net.yan100.compose.rds.entities",
+    "net.yan100.compose.rds.models",
+    "net.yan100.compose.rds.core"
+  ]
+)
 @ComponentScan(
   "net.yan100.compose.rds.autoconfig",
   "net.yan100.compose.rds.converters",
   "net.yan100.compose.rds.service",
   "net.yan100.compose.rds.repositories",
-  "net.yan100.compose.rds.base",
   "net.yan100.compose.rds.listener",
 )
 @EnableJpaRepositories("net.yan100.compose.rds.repositories")

@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.rds.repositories
 
-import net.yan100.compose.core.slf4j
+import jakarta.annotation.Resource
 import net.yan100.compose.rds.entities.DbTestDurationConverterEntity
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 import java.time.Duration
@@ -28,9 +28,8 @@ import kotlin.test.assertNotNull
 @Rollback
 @SpringBootTest
 class DbTestDurationConverterRepoTest {
-  private val log = slf4j(this::class)
 
-  @Autowired private lateinit var repo: DbTestDurationConverterRepo
+  lateinit var repo: DbTestDurationConverterRepo @Resource set
 
   @Test
   @Rollback

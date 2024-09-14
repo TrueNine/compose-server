@@ -17,9 +17,9 @@
 package net.yan100.compose.cacheable.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.autoconfig.JacksonSerializationAutoConfig
 import net.yan100.compose.core.consts.ICacheNames
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,7 +43,7 @@ private val log = slf4j<RedisJsonSerializerAutoConfiguration>()
  */
 @Configuration
 class RedisJsonSerializerAutoConfiguration(
-  @Qualifier(JacksonSerializationAutoConfig.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
+  @Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
   objectMapper: ObjectMapper
 ) {
   private val jsr = Jackson2JsonRedisSerializer(objectMapper, Any::class.java)

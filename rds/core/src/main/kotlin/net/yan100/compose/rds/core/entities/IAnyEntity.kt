@@ -33,7 +33,6 @@ import net.yan100.compose.rds.core.LateInitNonNullDelegateValue
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
 import org.hibernate.Hibernate
-import org.jetbrains.annotations.ApiStatus.Experimental
 import org.springframework.data.domain.Persistable
 import java.io.Serial
 
@@ -49,7 +48,7 @@ import java.io.Serial
   BizCodeInsertListener::class,
   SnowflakeIdInsertListener::class,
 )
-class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanceEntity {
+abstract class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanceEntity {
   companion object {
     /** 主键 */
     @kotlin.jvm.Transient
@@ -58,17 +57,12 @@ class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanc
     @Serial
     @kotlin.jvm.Transient
     private val serialVersionUID = 1L
+
+    @JsonIgnore
+    @Transient
+    @JvmStatic
+    protected fun <T> Companion.late(): LateInitNonNullDelegateValue<T> = LateInitNonNullDelegateValue()
   }
-
-  @JsonIgnore
-  protected final fun <T> Companion.late(): LateInitNonNullDelegateValue<T> = LateInitNonNullDelegateValue()
-
-  /** ## 是否需要脱敏处理 */
-  @JsonIgnore
-  @kotlin.jvm.Transient
-  @Transient
-  @Experimental
-  private var ____sensitive: Boolean = false
 
   /** id */
   @jakarta.persistence.Id
@@ -85,7 +79,7 @@ class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanc
   )
   @Suppress("ALL")
   private var id: Id? = null
-    @Transient @JsonIgnore @JvmName("____getKotlinInternalId") get() = field ?: ""
+    @Transient @JsonIgnore @JvmName("_\$\$_get_kotlin_internal_primary_id") get() = field ?: ""
 
   @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   fun setId(id: String) {
@@ -125,7 +119,8 @@ class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanc
   private var sensed: Boolean = false
 
   override fun changeWithSensitiveData() {
-    check(!sensed) { "数据已经脱敏，无需重复执行" }
+    require(!sensed) { "数据已经脱敏，无需重复执行" }
+    sensed = true
     super.changeWithSensitiveData()
   }
 }

@@ -25,6 +25,7 @@ import java.lang.annotation.Inherited
  * @author TrueNine
  * @since 2022-10-26
  */
+@Deprecated("多此一举")
 @Inherited
 @Retention(AnnotationRetention.RUNTIME)
 @Target(

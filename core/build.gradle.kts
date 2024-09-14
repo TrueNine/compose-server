@@ -9,25 +9,14 @@ dependencies {
   api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)
   api(libs.org.slf4j.slf4jApi)
 
-  implementation(libs.org.springframework.modulith.springModulithCore)
-  implementation(libs.org.mapstruct.mapstruct)
-
-  kapt(libs.org.mapstruct.mapstructProcessor)
-  annotationProcessor(libs.org.mapstruct.mapstructProcessor)
-
-  implementation(libs.org.springframework.boot.springBootStarterJson)
-  implementation(libs.org.springframework.security.springSecurityCrypto)
-  implementation(libs.org.bouncycastle.bcprovJdk18on)
-
   // TODO 日志
   implementation(libs.org.springframework.boot.springBootStarterLogging)
 
-  // TODO hutool
-  implementation(libs.cn.hutool.hutoolCore)
-  implementation(libs.cn.hutool.hutoolCrypto)
-
   testImplementation(libs.org.springframework.boot.springBootStarterWeb)
-  testImplementation(libs.org.springframework.boot.springBootStarterJson)
+  testImplementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
+  testImplementation(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
+
+  testImplementation(project(":test-toolkit"))
 }
 
 publishing {

@@ -16,32 +16,33 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.rds.entities.relationship.RoleGroupRole
-import net.yan100.compose.rds.entities.relationship.RolePermissions
-import net.yan100.compose.rds.entities.relationship.UserRoleGroup
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.ReferenceId
+import net.yan100.compose.rds.entities.RoleGroupRole
+import net.yan100.compose.rds.entities.RolePermissions
+import net.yan100.compose.rds.entities.UserRoleGroup
 
 /** # 角色权限管理器 */
 interface IRbacAggregator {
-  fun findAllRoleNameByUserAccount(account: String): Set<String>
+  fun fetchAllRoleNameByUserAccount(account: String): Set<String>
 
   fun findAllPermissionsNameByUserAccount(account: String): Set<String>
 
-  fun findAllSecurityNameByUserId(userId: ReferenceId): Set<String>
+  fun findAllSecurityNameByUserId(userId: RefId): Set<String>
 
   fun findAllSecurityNameByAccount(account: String): Set<String>
 
-  fun saveRoleGroupToUser(roleGroupId: ReferenceId, userId: ReferenceId): UserRoleGroup?
+  fun saveRoleGroupToUser(roleGroupId: ReferenceId, userId: RefId): UserRoleGroup?
 
-  fun saveAllRoleGroupToUser(roleGroupIds: List<ReferenceId>, userId: ReferenceId): List<UserRoleGroup>
+  fun saveAllRoleGroupToUser(roleGroupIds: List<ReferenceId>, userId: RefId): List<UserRoleGroup>
 
-  fun revokeRoleGroupFromUser(roleGroupId: ReferenceId, userId: ReferenceId)
+  fun revokeRoleGroupFromUser(roleGroupId: ReferenceId, userId: RefId)
 
-  fun revokeAllRoleGroupFromUser(roleGroupIds: List<ReferenceId>, userId: ReferenceId)
+  fun revokeAllRoleGroupFromUser(roleGroupIds: List<ReferenceId>, userId: RefId)
 
-  fun saveRoleToRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId): RoleGroupRole?
+  fun linkRoleToRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId): RoleGroupRole?
 
-  fun saveAllRoleToRoleGroup(roleIds: List<ReferenceId>, roleGroupId: ReferenceId): List<RoleGroupRole>
+  fun linkAllRoleToRoleGroup(roleIds: List<ReferenceId>, roleGroupId: ReferenceId): List<RoleGroupRole>
 
   fun revokeRoleFromRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId)
 

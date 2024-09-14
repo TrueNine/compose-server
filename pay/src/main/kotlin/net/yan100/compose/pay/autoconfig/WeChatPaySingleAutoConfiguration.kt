@@ -31,23 +31,24 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.DependsOn
 import org.springframework.core.io.ClassPathResource
 
+
+private val log = slf4j(WeChatPaySingleAutoConfiguration::class)
+
 @Configuration
 class WeChatPaySingleAutoConfiguration {
   companion object {
     const val CREATE_CONFIG_NAME = "rsaAutoCertificateConfig"
-
-    @JvmStatic private val log = slf4j(WeChatPaySingleAutoConfiguration::class)
   }
 
   @Bean
   @ConditionalOnProperty("compose.pay.wechat.enable-single", havingValue = "true")
   fun rsaAutoCertificateConfig(p: WeChatPayProperties): RSAAutoCertificateConfig {
-    if (!p.asyncSuccessNotifyUrl.startsWith("https://")) {
-      log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
-    }
-    if (!p.asyncSuccessRefundNotifyUrl.startsWith("https://")) {
-      log.warn("警告：配置的异步退款通知地址不是 https 地址 [{}]", p.asyncSuccessRefundNotifyUrl)
-    }
+    if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false) log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
+
+    if (p.asyncSuccessRefundNotifyUrl?.startsWith("https://") == false) log.warn(
+      "警告：配置的异步退款通知地址不是 https 地址 [{}]",
+      p.asyncSuccessRefundNotifyUrl
+    )
 
     log.info("注册 微信 单支付属性 p = {}", p)
     log.info("privateKeyPath = {}", p.privateKeyPath)

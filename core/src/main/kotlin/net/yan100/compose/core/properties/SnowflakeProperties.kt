@@ -16,14 +16,12 @@
 */
 package net.yan100.compose.core.properties
 
-import lombok.Data
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
  * @author TrueNine
  * @since 2023-04-01
  */
-@Data
 @ConfigurationProperties(prefix = "compose.core.snowflake")
 class SnowflakeProperties {
   var workId = 1L

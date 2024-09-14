@@ -19,9 +19,9 @@ package net.yan100.compose.security.spring.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import net.yan100.compose.core.encrypt.ErrorBody
+import net.yan100.compose.core.ErrorBody
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.core.typing.HttpErrorStatus
+import net.yan100.compose.core.typing.HttpStatusTyping
 import net.yan100.compose.core.typing.MediaTypes
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
@@ -39,12 +39,12 @@ import java.util.*
 abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null) : AccessDeniedHandler, AuthenticationEntryPoint {
   override fun commence(request: HttpServletRequest, response: HttpServletResponse, ex: AuthenticationException) {
     log.warn("授权校验异常", ex)
-    writeErrorMessage(response, ErrorBody.failedByErrMsg(HttpErrorStatus._401))
+    writeErrorMessage(response, ErrorBody.failedByHttpStatus(HttpStatusTyping._401))
   }
 
   override fun handle(request: HttpServletRequest, response: HttpServletResponse, ex: AccessDeniedException) {
     log.warn("无权限异常", ex)
-    writeErrorMessage(response, ErrorBody.failedByErrMsg(HttpErrorStatus._403))
+    writeErrorMessage(response, ErrorBody.failedByHttpStatus(HttpStatusTyping._403))
   }
 
   private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorBody, charset: Charset = Charsets.UTF_8) {

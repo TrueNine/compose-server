@@ -16,10 +16,11 @@
  */
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.rds.entities.attachment.DisCert2
-import net.yan100.compose.rds.repositories.attachment.IDisCert2Repo
-import net.yan100.compose.rds.service.base.CrudService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.jpa
+import net.yan100.compose.rds.entities.DisCert2
+import net.yan100.compose.rds.repositories.IDisCert2Repo
 import org.springframework.stereotype.Service
 
 @Service
-class DisabilityCertificate2ServiceImpl(val repo: IDisCert2Repo) : CrudService<DisCert2>(repo)
+class DisabilityCertificate2ServiceImpl(val dRepo: IDisCert2Repo) : ICrud<DisCert2> by jpa(dRepo)

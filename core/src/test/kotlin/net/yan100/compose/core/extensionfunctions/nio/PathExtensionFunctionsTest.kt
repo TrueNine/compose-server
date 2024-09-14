@@ -16,10 +16,12 @@
  */
 package net.yan100.compose.core.extensionfunctions.nio
 
+
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.countLines
 import net.yan100.compose.core.pageLines
 import net.yan100.compose.core.sliceLines
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import java.nio.file.Path
@@ -27,7 +29,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PathExtensionFunctionsTest {
-  @TempDir lateinit var tempDir: Path
+  @TempDir
+  lateinit var tempDir: Path
 
   @Test
   fun `test slice line first line`() {
@@ -92,26 +95,27 @@ class PathExtensionFunctionsTest {
     val tempFile = File.createTempFile("test page lines", ".txt")
     tempFile.deleteOnExit()
     tempFile.writeText("Hello\nWorld\nThis\nis\na\nTest\ne")
-    println(tempFile)
-    println(tempFile.exists())
+    log.info("tempFile: {}", tempFile)
+    log.info("tempFile exists: {}", tempFile.exists())
     val testPath = tempFile.toPath()
-    println(testPath.countLines())
+    log.info("tempPath countLines: {}", testPath.countLines())
 
-    val pr = testPath.pageLines(Pq[1, 4], "\n")
-    println(pr)
 
-    assertEquals(7, pr.total)
-    assertEquals(3, pr.dataList.size)
-    assertEquals(3, pr.size)
-    assertEquals("a", pr.dataList[0])
-    assertEquals(2, pr.pageSize)
+    val pre = testPath.pageLines(Pq[4, 1], "\n")
 
-    val pr1 = testPath.pageLines(Pq[3, 2], "\n")
+    log.info("pr: {}", pre)
 
-    assertEquals(7, pr1.total)
-    assertEquals(1, pr1.dataList.size)
+    assertEquals(7, pre.t)
+    assertEquals(3, pre.d.size)
+    assertEquals(3, pre.size)
+    assertEquals("a", pre[0])
+    assertEquals(2, pre.p)
+
+    val pr1 = testPath.pageLines(Pq[2, 3], "\n")
+
+    assertEquals(7, pr1.t)
     assertEquals(1, pr1.size)
-    assertEquals("e", pr1.dataList[0])
-    assertEquals(4, pr1.pageSize)
+    assertEquals("e", pr1[0])
+    assertEquals(4, pr1.p)
   }
 }

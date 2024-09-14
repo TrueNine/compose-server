@@ -17,7 +17,7 @@
 package net.yan100.compose.rds.service
 
 
-import net.yan100.compose.rds.entities.attachment.Idcard2
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.Idcard2
 
-interface IIdcard2Service : IService<Idcard2>
+interface IIdcard2Service : ICrud<Idcard2>

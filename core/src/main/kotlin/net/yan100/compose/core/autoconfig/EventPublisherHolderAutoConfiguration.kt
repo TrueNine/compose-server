@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.autoconfig
 
-import net.yan100.compose.core.ctx.EventPublisherHolder
+import net.yan100.compose.core.holders.EventPublisherHolder
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Configuration
 

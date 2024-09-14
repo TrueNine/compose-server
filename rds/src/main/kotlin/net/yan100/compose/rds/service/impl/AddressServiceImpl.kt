@@ -17,52 +17,55 @@
 package net.yan100.compose.rds.service.impl
 
 import jakarta.persistence.criteria.CriteriaQuery
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.alias.SerialCode
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.string
+import net.yan100.compose.rds.core.ICrud
 import net.yan100.compose.rds.core.entities.IAnyEntity
-import net.yan100.compose.rds.core.extensionfunctions.withNew
-import net.yan100.compose.rds.entities.address.Address
-import net.yan100.compose.rds.repositories.address.IAddressRepo
+import net.yan100.compose.rds.core.entities.withNew
+import net.yan100.compose.rds.core.jpa
+import net.yan100.compose.rds.entities.Address
+import net.yan100.compose.rds.repositories.IAddressRepo
 import net.yan100.compose.rds.service.IAddressService
-import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class AddressServiceImpl(private val repo: IAddressRepo) : IAddressService, CrudService<Address>(repo) {
+class AddressServiceImpl(
+ private val aRepo: IAddressRepo
+) : IAddressService, ICrud<Address> by jpa(aRepo) {
 
-  override fun findByCode(code: SerialCode): Address? {
-    return repo.findByCode(code)
+  override fun findByCode(code: string): Address? {
+    return aRepo.findByCode(code)
   }
 
   override fun findRoot(): Address {
-    return repo.findRoot()
+    return aRepo.findRoot()
   }
 
   override fun clearAndInitProvinces(lazy: () -> List<Address>): List<Address> {
-    repo.delete { root, _: CriteriaQuery<*>?, b -> b.notEqual(root.get<String>(IAnyEntity.ID), repo.findRootId()) }
-    val cleanedRoot = repo.save(repo.findRoot().withNew().apply { id = repo.findRootId() })
-    return repo.saveChildren(cleanedRoot, lazy())
+    repo.delete { root, _: CriteriaQuery<*>?, b -> b.notEqual(root.get<String>(IAnyEntity.ID), aRepo.findRootId()) }
+    val cleanedRoot = aRepo.save(aRepo.findRoot().withNew().apply { id = aRepo.findRootId() })
+    return aRepo.saveChildren(cleanedRoot, lazy())
   }
 
   override fun findAllByCodeIn(codes: List<String>): List<Address> {
-    return repo.findAllByCodeIn(codes)
+    return aRepo.findAllByCodeIn(codes)
   }
 
   override fun findProvinces(): List<Address> {
-    return findDirectChildrenById(repo.findRootId())
+    return findDirectChildrenById(aRepo.findRootId())
   }
 
-  override fun findByCodeAndLevel(code: SerialCode, level: Int): Address? {
-    return repo.findFirstByCodeAndLevel(code, level)
+  override fun findByCodeAndLevel(code: string, level: Int): Address? {
+    return aRepo.findFirstByCodeAndLevel(code, level)
   }
 
   override fun findDirectChildrenByCode(code: String): List<Address> {
-    return repo.findByCode(code)?.let { repo.findChildren(it) } ?: listOf()
+    return aRepo.findByCode(code)?.let { aRepo.findChildren(it) } ?: listOf()
   }
 
   override fun findDirectChildrenById(id: RefId): List<Address> {
-    return repo.findByIdOrNull(id)?.let { repo.findDirectChildren(it) } ?: listOf()
+    return repo.findByIdOrNull(id)?.let { aRepo.findDirectChildren(it) } ?: listOf()
   }
 
   override fun findFullPathById(id: RefId): String {

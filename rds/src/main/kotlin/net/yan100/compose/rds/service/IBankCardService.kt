@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entities.attachment.BankCard
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.BankCard
 
-interface IBankCardService : IService<BankCard>
+interface IBankCardService : ICrud<BankCard>

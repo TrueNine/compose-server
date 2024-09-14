@@ -7,25 +7,22 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 plugins {
   java
   idea
-  eclipse
-  `eclipse-wtp`
-  xcode
-  `visual-studio`
   `maven-publish`
   signing
-  alias(libs.plugins.com.github.benManes.versions)
   alias(libs.plugins.org.springframework.boot)
-  alias(libs.plugins.org.hibernate.orm)
   alias(libs.plugins.io.spring.dependencyManagement)
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.powerAssert)
-  alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.jpa)
+
+  alias(libs.plugins.com.diffplug.spotless)
+  alias(libs.plugins.com.github.benManes.versions)
+  alias(libs.plugins.org.hibernate.orm)
+  alias(libs.plugins.com.google.devtools.ksp)
+  alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.noarg)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.allopen)
-  alias(libs.plugins.org.jetbrains.kotlin.plugin.lombok)
-  alias(libs.plugins.org.jetbrains.kotlin.plugin.jpa)
-  alias(libs.plugins.com.diffplug.spotless)
 }
 
 val yunxiaoUrl = extra["yunxiaoUrl"].toString()
@@ -34,11 +31,11 @@ val yunxiaoPassword = extra["yunxiaoPassword"].toString()
 val sonatypeUsername = extra["sonatypeUsername"].toString()
 val sonatypePassword = extra["sonatypePassword"].toString()
 
-apply(plugin = libs.plugins.com.diffplug.spotless.get().pluginId)
 
 val l = libs
 
 project.version = libs.versions.compose.asProvider().get()
+
 
 allprojects {
   project.group = l.versions.composeGroup.get()
@@ -49,40 +46,31 @@ allprojects {
   }
 }
 
-powerAssert { functions = listOf("kotlin.assert", "kotlin.test.assertTrue", "kotlin.test.assertEquals", "kotlin.test.assertNull") }
-
 subprojects {
   apply(plugin = "java")
   apply(plugin = "kotlin")
   apply(plugin = "maven-publish")
   apply(plugin = "signing")
   apply(plugin = l.plugins.org.jetbrains.kotlin.jvm.get().pluginId)
-  apply(plugin = l.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
-  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.lombok.get().pluginId)
-  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.noarg.get().pluginId)
-  apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)
   apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.spring.get().pluginId)
   apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.jpa.get().pluginId)
   apply(plugin = l.plugins.org.springframework.boot.get().pluginId)
-  apply(plugin = l.plugins.org.hibernate.orm.get().pluginId)
   apply(plugin = l.plugins.io.spring.dependencyManagement.get().pluginId)
-  apply(plugin = l.plugins.com.github.benManes.versions.get().pluginId)
-  extra["springCloudVersion"] = l.versions.spring.cloud.get()
 
+  extra["springCloudVersion"] = l.versions.spring.cloud.get()
+  tasks {
+    withType<ProcessAot> { enabled = false }
+    withType<BootJar> { enabled = false }
+  }
   dependencies {
     annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
-    annotationProcessor(l.org.projectlombok.lombok)
-
-    compileOnly(l.org.projectlombok.lombok)
 
     implementation(l.bundles.kotlin)
     implementation(l.org.springframework.boot.springBootTestAutoconfigure)
-
     testImplementation(l.bundles.junit5)
   }
 
   dependencyManagement {
-    applyMavenExclusions(false)
     imports {
       mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
       mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
@@ -94,20 +82,9 @@ subprojects {
 
   configurations { compileOnly { extendsFrom(configurations.annotationProcessor.get()) } }
 
-  kapt {
-    // correctErrorTypes =true
-    keepJavacAnnotationProcessors = true
-    javacOptions { option("querydsl.entityAccessors", true) }
-    arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
-  }
-
-  noArg { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
-  allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
-
   java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-
     toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
     withSourcesJar()
   }
@@ -138,6 +115,7 @@ subprojects {
 
   publishing {
     repositories {
+      mavenLocal()
       maven(url = uri(yunxiaoUrl)) {
         credentials {
           username = yunxiaoUsername

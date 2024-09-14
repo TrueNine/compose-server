@@ -16,7 +16,6 @@
 */
 package net.yan100.compose.core.properties
 
-import lombok.Data
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
@@ -25,8 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @author TrueNine
  * @since 2023-04-22
  */
-@Data
-@ConfigurationProperties(prefix = "compose.keys")
+@ConfigurationProperties(prefix = "compose.core.keys")
 class KeysProperties {
   /** 密钥存放的 resources 对应目录  */
   var dir = "security"

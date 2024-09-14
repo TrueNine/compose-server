@@ -16,42 +16,43 @@
  */
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.core.consts.DataBaseBasicFieldNames
+import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.jpa
 import net.yan100.compose.rds.entities.RoleGroup
-import net.yan100.compose.rds.repositories.rbac.IRoleGroupRepo
-import net.yan100.compose.rds.repositories.rbac.IUserRoleGroupRepo
+import net.yan100.compose.rds.entities.UserRoleGroup
+import net.yan100.compose.rds.repositories.IRoleGroupRepo
+import net.yan100.compose.rds.repositories.IUserRoleGroupRepo
 import net.yan100.compose.rds.service.IRoleGroupService
-import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
-class RoleGroupServiceImpl(private val rgRepo: IRoleGroupRepo, private val urRepo: IUserRoleGroupRepo) :
-  IRoleGroupService, CrudService<RoleGroup>(rgRepo) {
-  override fun assignRootToUser(userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
-    return net.yan100.compose.rds.entities.relationship
-      .UserRoleGroup()
+class RoleGroupServiceImpl(
+    private val rgRepo: IRoleGroupRepo,
+    private val urRepo: IUserRoleGroupRepo
+) : IRoleGroupService, ICrud<RoleGroup> by jpa(rgRepo) {
+  override fun assignRootToUser(userId: String): UserRoleGroup {
+    return UserRoleGroup()
       .apply {
-        this.roleGroupId = DataBaseBasicFieldNames.Rbac.ROOT_ID_STR
+        this.roleGroupId = IDbNames.Rbac.ROOT_ID_STR
         this.userId = userId
       }
       .let { urRepo.save(it) }
   }
 
-  override fun assignPlainToUser(userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
-    return net.yan100.compose.rds.entities.relationship
-      .UserRoleGroup()
+  override fun assignPlainToUser(userId: String): UserRoleGroup {
+    return UserRoleGroup()
       .apply {
-        this.roleGroupId = DataBaseBasicFieldNames.Rbac.USER_ID_STR
+        this.roleGroupId = IDbNames.Rbac.USER_ID_STR
         this.userId = userId
       }
       .let { urRepo.save(it) }
   }
 
-  override fun assignAdminToUser(userId: String): net.yan100.compose.rds.entities.relationship.UserRoleGroup {
-    return net.yan100.compose.rds.entities.relationship
-      .UserRoleGroup()
+  override fun assignAdminToUser(userId: String): UserRoleGroup {
+    return UserRoleGroup()
       .apply {
-        this.roleGroupId = DataBaseBasicFieldNames.Rbac.ADMIN_ID_STR
+        this.roleGroupId = IDbNames.Rbac.ADMIN_ID_STR
         this.userId = userId
       }
       .let { urRepo.save(it) }

@@ -16,14 +16,13 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.core.alias.Pq
-import net.yan100.compose.core.alias.Pr
-import net.yan100.compose.rds.core.util.JpaPagedWrapper
-import net.yan100.compose.rds.entities.attachment.Attachment
-import net.yan100.compose.rds.entities.attachment.LinkedAttachment
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.core.Pq
+import net.yan100.compose.core.Pr
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.Attachment
+import net.yan100.compose.rds.entities.LinkedAttachment
 
-interface IAttachmentService : IService<Attachment> {
+interface IAttachmentService : ICrud<Attachment> {
   fun existsByBaseUrl(baseUrl: String): Boolean
 
   fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment
@@ -38,7 +37,7 @@ interface IAttachmentService : IService<Attachment> {
 
   fun findFullUrlById(id: String): String?
 
-  fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq = JpaPagedWrapper.DEFAULT_MAX): Pr<String>
+  fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq = Pq.DEFAULT_MAX): Pr<String>
 
   fun findMetaNameById(id: String): String?
 

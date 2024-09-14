@@ -16,12 +16,12 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entities.account.FullUsr
-import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.FullUsr
+import net.yan100.compose.rds.entities.Usr
 import java.time.LocalDateTime
 
-interface IUserService : IService<Usr> {
+interface IUserService : ICrud<Usr> {
   fun findUserByAccount(account: String): Usr?
 
   fun existsByUserInfoId(userInfoId: String): Boolean

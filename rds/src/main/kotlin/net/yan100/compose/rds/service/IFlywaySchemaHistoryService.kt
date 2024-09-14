@@ -17,9 +17,9 @@
 package net.yan100.compose.rds.service
 
 
-import net.yan100.compose.rds.entities.sys.FlywaySchemaHistory
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.FlywaySchemaHistory
 
-interface IFlywaySchemaHistoryService : IService<FlywaySchemaHistory> {
+interface IFlywaySchemaHistoryService : ICrud<FlywaySchemaHistory> {
   fun clean()
 }

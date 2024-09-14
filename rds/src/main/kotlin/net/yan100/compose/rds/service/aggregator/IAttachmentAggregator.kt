@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.rds.entities.attachment.Attachment
-import net.yan100.compose.rds.models.req.PostAttachmentDescriptionDto
-import net.yan100.compose.rds.models.req.PostAttachmentDto
+import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.typing.MediaTypes
+import net.yan100.compose.rds.entities.Attachment
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 
@@ -29,9 +29,33 @@ import java.io.InputStream
  * @since 2024-03-20
  */
 interface IAttachmentAggregator {
-  fun uploadAttachment(file: MultipartFile, saveFileCallback: (file: MultipartFile) -> PostAttachmentDto): Attachment?
+  @Schema(title = "记录文件")
+  open class PostDto {
+    @get:Schema(title = "存储的 uri")
+    var baseUri: String? = null
 
-  fun uploadAttachment(stream: InputStream, req: (stream: InputStream) -> PostAttachmentDescriptionDto): Attachment?
+    @get:Schema(title = "存储的url")
+    var baseUrl: String? = null
 
-  fun uploadAttachments(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> PostAttachmentDto): List<Attachment>
+    @get:Schema(title = "保存后的名称")
+    var saveName: String? = null
+  }
+
+  @Schema(title = "记录文件（流辅助描述信息）")
+  class PostDescDto : PostDto() {
+    @Schema(title = "附件大小")
+    var size: Long? = null
+
+    @Schema(title = "存根在系统内的描述符", description = "通常为序列值")
+    var metaName: String? = null
+
+    @Schema(title = "附件类型", description = "通常在默认情况下为 二进制文件")
+    var mimeType: MediaTypes? = null
+  }
+
+  fun recordUpload(file: MultipartFile, saveFileCallback: (file: MultipartFile) -> PostDto): Attachment?
+
+  fun recordUpload(stream: InputStream, req: (stream: InputStream) -> PostDescDto): Attachment?
+
+  fun recordUploads(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> PostDto): List<Attachment>
 }

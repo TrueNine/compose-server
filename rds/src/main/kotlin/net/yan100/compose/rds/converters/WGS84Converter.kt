@@ -18,9 +18,9 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.log.slf4j
-import net.yan100.compose.core.models.WGS84
+import net.yan100.compose.core.domain.Coordinate
 import org.springframework.stereotype.Component
+
 
 /**
  * 将数据库内以字符串存储的坐标转换为 x y 形式
@@ -30,23 +30,13 @@ import org.springframework.stereotype.Component
  */
 @Component
 @Converter(autoApply = true)
-class WGS84Converter : AttributeConverter<WGS84, String> {
+class WGS84Converter : AttributeConverter<Coordinate, String> {
+  override fun convertToDatabaseColumn(attribute: Coordinate?): String? = attribute?.run { "P(${attribute.x},${attribute.y})" }
 
-  init {
-    log.debug("注册 地理位置模型converter = {}", this)
-  }
-
-  companion object {
-    @JvmStatic private val log = slf4j(WGS84Converter::class)
-  }
-
-  override fun convertToDatabaseColumn(attribute: WGS84?): String? = attribute?.run { "P(${attribute.x},${attribute.y})" }
-
-  override fun convertToEntityAttribute(dbData: String?): WGS84? {
-    log.trace("地址 = {} 类型 = {}", dbData, dbData?.javaClass)
+  override fun convertToEntityAttribute(dbData: String?): Coordinate? {
     return dbData?.let { exp ->
       val group = exp.replace(Regex("""(?i)P\(|\)"""), "").split(",").map { it.trim().toBigDecimalOrNull() }
-      WGS84(group[0], group[1])
+      Coordinate(group[0], group[1])
     }
   }
 }

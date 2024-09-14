@@ -16,15 +16,16 @@
  */
 package net.yan100.compose.rds.autoconfig
 
+import jakarta.annotation.Resource
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
 class IOrderCodeGeneratorGeneratorBeanTest {
-  @Autowired lateinit var bizId: BizCodeGeneratorBean
+
+  lateinit var bizId: BizCodeGeneratorBean @Resource set
 
   @Test
   fun testGenerate() {

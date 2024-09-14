@@ -29,12 +29,9 @@ import com.wechat.pay.java.service.refund.model.CreateRequest
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
-import net.yan100.compose.core.encodeBase64String
-import net.yan100.compose.core.encrypt.Encryptors
-import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.core.exceptions.requireKnown
-import net.yan100.compose.core.generator.IBizCodeGenerator
+import net.yan100.compose.core.generator.IOrderCodeGenerator
 import net.yan100.compose.core.hasText
 import net.yan100.compose.core.iso8601LongUtc
 import net.yan100.compose.core.slf4j
@@ -47,6 +44,9 @@ import net.yan100.compose.pay.models.resp.FindPayOrderResp
 import net.yan100.compose.pay.models.resp.PaySuccessNotifyResp
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
+import net.yan100.compose.security.crypto.Encryptors
+import net.yan100.compose.security.crypto.Keys
+import net.yan100.compose.security.crypto.encodeBase64String
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -55,12 +55,12 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class WeChatSinglePayService(
-  private val wechatJsService: JsapiService,
-  private val refundApi: RefundService,
-  private val payProperty: WeChatPaySingleConfigProperty,
-  private val bigCodeGenerator: IBizCodeGenerator,
-  private val rsaConfig: RSAAutoCertificateConfig,
-  private val mapper: ObjectMapper,
+    private val wechatJsService: JsapiService,
+    private val refundApi: RefundService,
+    private val payProperty: WeChatPaySingleConfigProperty,
+    private val bigCodeGenerator: IOrderCodeGenerator,
+    private val rsaConfig: RSAAutoCertificateConfig,
+    private val mapper: ObjectMapper,
 ) : SinglePayService {
   companion object {
     @JvmStatic private val HUNDRED = BigDecimal("100")

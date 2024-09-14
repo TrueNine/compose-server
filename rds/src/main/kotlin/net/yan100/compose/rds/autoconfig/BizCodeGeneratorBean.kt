@@ -16,14 +16,14 @@
  */
 package net.yan100.compose.rds.autoconfig
 
-import net.yan100.compose.core.IBizCodeGenerator
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.generator.IOrderCodeGenerator
+import net.yan100.compose.core.slf4j
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
 import org.springframework.stereotype.Component
 
 @Component
-class BizCodeGeneratorBean(private val bizCodeGenerator: IBizCodeGenerator) : IdentifierGenerator {
+class BizCodeGeneratorBean(private val bizCodeGenerator: IOrderCodeGenerator) : IdentifierGenerator {
   init {
     log.debug("注册业务单号生成器")
   }

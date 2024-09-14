@@ -4,7 +4,6 @@ import net.yan100.compose.cacheable.CacheDuration
 import kotlin.reflect.KClass
 
 
-
 interface ICacheStore<C : ICache> {
   operator fun get(duration: CacheDuration): C
   fun getNative(): Any

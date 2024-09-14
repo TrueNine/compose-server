@@ -16,14 +16,14 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import jakarta.annotation.Resource
 import net.yan100.compose.core.Pq
-import net.yan100.compose.core.encrypt.Keys
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.entities.Attachment
+import net.yan100.compose.security.crypto.Keys
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 import kotlin.test.*
@@ -31,12 +31,8 @@ import kotlin.test.*
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class IAttachmentServiceImplImplTest {
-
-  @Autowired
-  private lateinit var attachmentService: AttachmentServiceImpl
-
-  @Autowired
-  private lateinit var snowflake: ISnowflakeGenerator
+  lateinit var attachmentService: AttachmentServiceImpl @Resource set
+  lateinit var snowflake: ISnowflakeGenerator @Resource set
 
   fun getAtt(att: (Attachment) -> Attachment): Attachment {
     return attachmentService.post(Attachment().run(att))
@@ -109,10 +105,10 @@ class IAttachmentServiceImplImplTest {
   @Test
   fun testFindAllFullUrlByMetaNameStartingWith() {
     val metaName = "test"
-    val page = Pq.get(1, 10, false)
+    val page = Pq[10, 1, false]
     val result = attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
     assertNotNull(result)
-    assertEquals(0, result.total)
+    assertEquals(0, result.t)
   }
 
   @Test
@@ -139,7 +135,7 @@ class IAttachmentServiceImplImplTest {
   @Test
   fun testFindAllFullUrlByMetaNameStartingWith_NegativePage() {
     val metaName = "test"
-    val page = Pq.get(-1, 10, false)
+    val page = Pq[-1, 10, false]
     assertFails { attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page) }
   }
 }

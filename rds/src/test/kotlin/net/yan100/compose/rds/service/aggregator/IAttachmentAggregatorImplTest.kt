@@ -16,9 +16,9 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
+import jakarta.annotation.Resource
 import net.yan100.compose.rds.RdsEntrance
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
 import kotlin.test.assertNotNull
@@ -26,7 +26,7 @@ import kotlin.test.assertNotNull
 @SpringBootTest(classes = [RdsEntrance::class])
 class IAttachmentAggregatorImplTest {
 
-  @Autowired lateinit var ass: AttachmentAggregatorImpl
+  lateinit var ass: AttachmentAggregatorImpl @Resource set
 
   @Test
   fun testRecordUpload() {

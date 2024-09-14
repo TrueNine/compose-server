@@ -20,37 +20,51 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.consts.Regexes
-import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.entities.info.UserInfo
-import java.time.LocalDateTime
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.consts.IRegexes
+import net.yan100.compose.core.datetime
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
 
 interface IAccountAggregator {
   @Schema(title = "修改账号密码")
-  data class ModifyAccountPasswordDto(
-    @NotBlank(message = "账号不能为空") var account: String? = null,
-    @NotBlank(message = "密码不能为空") @Pattern(regexp = Regexes.PASSWORD, message = "密码必须匹配规则为：" + Regexes.PASSWORD) var oldPassword: String? = null,
-    @NotBlank(message = "新密码不能为空") @Pattern(regexp = Regexes.PASSWORD, message = "密码必须匹配规则为：" + Regexes.PASSWORD) var newPassword: String? = null,
+  data class ModifyPasswordDto(
+    @NotBlank(message = "账号不能为空")
+    var account: String? = null,
+    @NotBlank(message = "密码不能为空")
+    @Pattern(regexp = IRegexes.PASSWORD, message = "密码必须匹配规则为：" + IRegexes.PASSWORD)
+    var oldPassword: String? = null,
+    @NotBlank(message = "新密码不能为空")
+    @Pattern(
+      regexp = IRegexes.PASSWORD,
+      message = "密码必须匹配规则为：" + IRegexes.PASSWORD
+    )
+    var newPassword: String? = null,
   )
 
   @Schema(title = "登录账号")
-  data class LoginAccountDto(
-    @Schema(title = "账号") @NotBlank(message = "账号不能为空") var account: String? = null,
-    @Schema(title = "密码") @NotBlank(message = "密码不能为空") var password: String? = null,
+  data class LoginDto(
+    @Schema(title = "账号") @NotBlank(message = "账号不能为空")
+    var account: String? = null,
+    @Schema(title = "密码") @NotBlank(message = "密码不能为空")
+    var password: String? = null,
   )
 
   @Schema(title = "账号注册")
-  data class RegisterAccountDto(
-    @Schema(title = "创建此账户的 id （无需指定）", accessMode = Schema.AccessMode.WRITE_ONLY, hidden = true, deprecated = true) var createUserId: RefId? = null,
-    @Schema(title = "账号") @get:NotBlank(message = "账号不可为空") var account: String? = null,
-    @NotBlank(message = "昵称不能为空") @Size(max = 128, min = 4, message = "昵称最长 128，最短 4") var nickName: String? = null,
-    @Schema(title = "密码")
+  data class RegisterDto(
+      @Schema(title = "创建此账户的 id （无需指定）", accessMode = Schema.AccessMode.WRITE_ONLY, hidden = true, deprecated = true)
+    var createUserId: RefId? = null,
+      @Schema(title = "账号") @get:NotBlank(message = "账号不可为空")
+    var account: String? = null,
+      @NotBlank(message = "昵称不能为空") @Size(max = 128, min = 4, message = "昵称最长 128，最短 4")
+    var nickName: String? = null,
+      @Schema(title = "密码")
     @NotBlank(message = "密码不能为空")
     @Size(max = 100, min = 8, message = "密码最短8位，最长100")
-    @Pattern(regexp = Regexes.PASSWORD, message = "密码必须匹配规则为：" + Regexes.PASSWORD)
+    @Pattern(regexp = IRegexes.PASSWORD, message = "密码必须匹配规则为：" + IRegexes.PASSWORD)
     var password: String? = null,
-    @Schema(title = "描述") var description: String? = null,
+      @Schema(title = "描述")
+    var description: String? = null,
   )
 
   /**
@@ -64,20 +78,20 @@ interface IAccountAggregator {
   fun assignAccount(usr: Usr, createUserId: RefId, userInfo: UserInfo?, roleGroup: Set<String>? = null): Usr
 
   /** ## 注册账号 */
-  fun registerAccount(param: RegisterAccountDto): Usr?
+  fun registerAccount(param: RegisterDto): Usr?
 
   /** ## 根据 微信公众号给予的 openid 进行注册 */
-  fun registerAccountForWxpa(param: RegisterAccountDto, openId: String): Usr?
+  fun registerAccountForWxpa(param: RegisterDto, openId: String): Usr?
 
   /** ## 登录指定账号，返回用户信息 */
-  fun login(param: LoginAccountDto): Usr?
+  fun login(param: LoginDto): Usr?
 
   /** 根据账号修改密码 */
-  fun modifyPassword(param: ModifyAccountPasswordDto): Boolean
+  fun modifyPassword(param: ModifyPasswordDto): Boolean
 
   /** 根据账号校验密码正确性 */
   fun verifyPassword(account: String, password: String): Boolean
 
-  /** 封禁账号到指定时间 */
-  fun bannedAccountTo(account: String, dateTime: LocalDateTime)
+  /** ## 封禁账号到指定时间 */
+  fun banWith(account: String, dateTime: datetime)
 }

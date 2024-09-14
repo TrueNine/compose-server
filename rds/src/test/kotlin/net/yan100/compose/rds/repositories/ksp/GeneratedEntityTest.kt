@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.repositories.ksp
 
-import org.springframework.beans.factory.annotation.Autowired
+import jakarta.annotation.Resource
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 import kotlin.test.Test
@@ -24,7 +24,7 @@ import kotlin.test.Test
 @Rollback
 @SpringBootTest
 class GeneratedEntityTest {
-  @Autowired lateinit var gr: GenRepo
+  lateinit var gr: GenRepo @Resource set
 
   @Test
   fun `test generated`() {

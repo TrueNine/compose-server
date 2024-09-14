@@ -19,7 +19,7 @@ package net.yan100.compose.rds.entities
 import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import net.yan100.compose.core.WGS84
+import net.yan100.compose.core.domain.Coordinate
 import net.yan100.compose.rds.converters.WGS84Converter
 import net.yan100.compose.rds.core.entities.IEntity
 
@@ -28,7 +28,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 class DbTestServiceEntity : IEntity() {
   var title: String? = null
 
-  @Convert(converter = WGS84Converter::class) var center: WGS84? = null
+  @Convert(converter = WGS84Converter::class) var center: Coordinate? = null
 
   companion object {
 

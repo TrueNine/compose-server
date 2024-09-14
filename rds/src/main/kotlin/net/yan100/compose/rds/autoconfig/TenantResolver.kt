@@ -16,10 +16,10 @@
  */
 package net.yan100.compose.rds.autoconfig
 
-import net.yan100.compose.core.consts.DataBaseBasicFieldNames
-import net.yan100.compose.core.ctx.TenantContextHolder
-import net.yan100.compose.core.extensionfunctions.hasText
-import net.yan100.compose.core.log.slf4j
+import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.core.hasText
+import net.yan100.compose.core.holders.TenantContextHolder
+import net.yan100.compose.core.slf4j
 import org.hibernate.cfg.AvailableSettings
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer
@@ -30,7 +30,7 @@ class TenantResolver : CurrentTenantIdentifierResolver<String>, HibernatePropert
 
   override fun resolveCurrentTenantIdentifier(): String {
     val id = TenantContextHolder.get()
-    return if (id.hasText()) id else DataBaseBasicFieldNames.Tenant.DEFAULT_TENANT_STR
+    return if (id.hasText()) id else IDbNames.Tenant.DEFAULT_TENANT_STR
   }
 
   override fun validateExistingCurrentSessions(): Boolean {
@@ -42,7 +42,7 @@ class TenantResolver : CurrentTenantIdentifierResolver<String>, HibernatePropert
   }
 
   override fun isRoot(tenantId: String): Boolean {
-    return tenantId == DataBaseBasicFieldNames.Tenant.ROOT_TENANT_STR
+    return tenantId == IDbNames.Tenant.ROOT_TENANT_STR
   }
 
   private val log = slf4j(this::class)

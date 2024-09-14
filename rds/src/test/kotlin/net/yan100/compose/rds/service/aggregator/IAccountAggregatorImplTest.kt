@@ -16,26 +16,22 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
+import jakarta.annotation.Resource
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 import kotlin.test.*
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class IAccountAggregatorImplTest {
-
-  @Autowired lateinit var snowflake: ISnowflakeGenerator
-
-  @Autowired lateinit var agg: AccountAggregatorImpl
-
-  @Autowired lateinit var us: IUserService
-
-  @Autowired lateinit var ui: IUserInfoService
+  lateinit var snowflake: ISnowflakeGenerator @Resource set
+  lateinit var agg: AccountAggregatorImpl @Resource set
+  lateinit var us: IUserService @Resource set
+  lateinit var ui: IUserInfoService @Resource set
 
   @Test
   fun `test assignAccountToUserInfo`() {

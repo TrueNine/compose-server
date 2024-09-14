@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entities.address.Address
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.Address
 
 /**
  * # 地址服务
@@ -25,7 +25,7 @@ import net.yan100.compose.rds.service.base.IService
  * @author TrueNine
  * @since 2023-05-08
  */
-interface IIAddressService : IService<Address> {
+interface IIAddressService : ICrud<Address> {
   fun findRoot(): Address
 
   fun initProvince()

@@ -17,6 +17,7 @@
 package net.yan100.compose.security.autoconfig
 
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.security.crypto.FileKeyRepo
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary

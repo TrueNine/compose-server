@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.exceptions
 
-import net.yan100.compose.core.typing.http.HttpErrorStatus
+import net.yan100.compose.core.typing.HttpStatusTyping
 
 /**
  * 已知的异常类型
@@ -29,7 +29,7 @@ import net.yan100.compose.core.typing.http.HttpErrorStatus
 open class KnownException(
   private var msg: String? = null,
   private var metaException: Throwable? = null,
-  private var code: Int? = HttpErrorStatus.UNKNOWN_ERROR.code,
+  private var code: Int? = HttpStatusTyping.UNKNOWN.code,
 ) : RuntimeException(msg, metaException) {
 
   open fun getMeta() = this.metaException

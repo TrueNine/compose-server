@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entities.attachment.DisCert2
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.DisCert2
 
-interface IDisabilityCertificate2Service : IService<DisCert2>
+interface IDisabilityCertificate2Service : ICrud<DisCert2>

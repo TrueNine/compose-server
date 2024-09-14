@@ -17,10 +17,13 @@
 package net.yan100.compose.rds.service.impl
 
 
-import net.yan100.compose.rds.entities.attachment.Idcard2
-import net.yan100.compose.rds.repositories.attachment.IIdcard2Repo
-import net.yan100.compose.rds.service.base.CrudService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.jpa
+import net.yan100.compose.rds.entities.Idcard2
+import net.yan100.compose.rds.repositories.IIdcard2Repo
 import org.springframework.stereotype.Service
 
 @Service
-class Idcard2ServiceImpl(val repo: IIdcard2Repo) : CrudService<Idcard2>(repo)
+class Idcard2ServiceImpl(
+  val iRepo: IIdcard2Repo
+) : ICrud<Idcard2> by jpa(iRepo)

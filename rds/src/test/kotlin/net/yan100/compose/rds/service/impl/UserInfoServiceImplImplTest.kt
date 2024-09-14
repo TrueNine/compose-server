@@ -16,22 +16,20 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import jakarta.annotation.Resource
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.repositories.IUsrRepo
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class UserInfoServiceImplImplTest {
-  @Autowired private lateinit var userInfoService: UserInfoServiceImpl
-
-  @Autowired private lateinit var infoRepo: IUserInfoRepo
-
-  @Autowired private lateinit var userRepo: IUsrRepo
+  lateinit var userInfoService: UserInfoServiceImpl @Resource set
+  lateinit var infoRepo: IUserInfoRepo @Resource set
+  lateinit var userRepo: IUsrRepo @Resource set
 
   @Test
   fun `test findIsRealPeopleById`() {

@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.rds.entities.cert.HouseholdCert
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.HouseholdCert
 
-interface IHouseholdRegistrationCardService : IService<HouseholdCert>
+interface IHouseholdRegistrationCardService : ICrud<HouseholdCert>

@@ -23,4 +23,8 @@ import java.lang.annotation.Inherited
  *
  * @see [net.yan100.compose.core.models.sensitive.ISensitivity]
  */
-@Inherited @Retention @MustBeDocumented @Target(AnnotationTarget.FUNCTION) annotation class SensitiveResponse()
+@Inherited
+@Retention
+@MustBeDocumented
+@Target(AnnotationTarget.FUNCTION)
+annotation class SensitiveResponse

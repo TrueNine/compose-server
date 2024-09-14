@@ -17,11 +17,14 @@
 package net.yan100.compose.rds.service.impl
 
 
-import net.yan100.compose.rds.entities.attachment.BankCard
-import net.yan100.compose.rds.repositories.attachment.IBankCardRepo
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.jpa
+import net.yan100.compose.rds.entities.BankCard
+import net.yan100.compose.rds.repositories.IBankCardRepo
 import net.yan100.compose.rds.service.IBankCardService
-import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.stereotype.Service
 
 @Service
-class BankCardServiceImpl(val repo: IBankCardRepo) : IBankCardService, CrudService<BankCard>(repo)
+class BankCardServiceImpl(
+  private val bRepo: IBankCardRepo
+) : IBankCardService, ICrud<BankCard> by jpa(bRepo)

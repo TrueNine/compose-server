@@ -16,15 +16,11 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.rds.entities.relationship.RoleGroupRole
-import net.yan100.compose.rds.entities.relationship.RolePermissions
-import net.yan100.compose.rds.entities.relationship.UserRoleGroup
-import net.yan100.compose.rds.repositories.rbac.IFullRoleGroupRepo
-import net.yan100.compose.rds.repositories.rbac.IRoleGroupRoleRepo
-import net.yan100.compose.rds.repositories.rbac.IRolePermissionsRepo
-import net.yan100.compose.rds.repositories.rbac.IUserRoleGroupRepo
-import net.yan100.compose.rds.repositories.user.IUsrRepo
+import net.yan100.compose.core.ReferenceId
+import net.yan100.compose.rds.entities.RoleGroupRole
+import net.yan100.compose.rds.entities.RolePermissions
+import net.yan100.compose.rds.entities.UserRoleGroup
+import net.yan100.compose.rds.repositories.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -37,7 +33,7 @@ class RbacAggregatorImpl(
   private val rg: IFullRoleGroupRepo,
 ) : IRbacAggregator {
 
-  override fun findAllRoleNameByUserAccount(account: String): Set<String> = userRepo.findAllRoleNameByAccount(account)
+  override fun fetchAllRoleNameByUserAccount(account: String): Set<String> = userRepo.findAllRoleNameByAccount(account)
 
   override fun findAllPermissionsNameByUserAccount(account: String): Set<String> = userRepo.findAllPermissionsNameByAccount(account)
 
@@ -92,7 +88,7 @@ class RbacAggregatorImpl(
     urg.deleteAllByRoleGroupIdInAndUserId(roleGroupIds, userId)
   }
 
-  override fun saveRoleToRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId): RoleGroupRole? =
+  override fun linkRoleToRoleGroup(roleId: ReferenceId, roleGroupId: ReferenceId): RoleGroupRole? =
     rgr.findByRoleGroupIdAndRoleId(roleGroupId, roleId)
       ?: rgr.save(
         RoleGroupRole().apply {
@@ -101,7 +97,7 @@ class RbacAggregatorImpl(
         }
       )
 
-  override fun saveAllRoleToRoleGroup(roleIds: List<ReferenceId>, roleGroupId: ReferenceId): List<RoleGroupRole> {
+  override fun linkAllRoleToRoleGroup(roleIds: List<ReferenceId>, roleGroupId: ReferenceId): List<RoleGroupRole> {
     val existingRoles = rgr.findAllRoleIdByRoleGroupId(roleGroupId)
     val newRoles =
       roleIds

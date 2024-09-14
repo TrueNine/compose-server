@@ -22,13 +22,13 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.consts.IMethods
-import net.yan100.compose.core.encrypt.AuthRequestInfo
+import net.yan100.compose.security.AuthRequestInfo
 import net.yan100.compose.core.hasText
-import net.yan100.compose.core.holders.UserInfoContextHolder
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.depend.webservlet.deviceId
-import net.yan100.compose.depend.webservlet.remoteRequestIp
+import net.yan100.compose.depend.servlet.deviceId
+import net.yan100.compose.depend.servlet.remoteRequestIp
 import net.yan100.compose.security.UserDetailsWrapper
+import net.yan100.compose.security.holders.UserInfoContextHolder
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter

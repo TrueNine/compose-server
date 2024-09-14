@@ -17,6 +17,7 @@
 package net.yan100.compose.rds.service.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import jakarta.annotation.Resource
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.entities.RoleGroup
@@ -26,7 +27,6 @@ import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.aggregator.IRbacAggregator
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
@@ -35,10 +35,8 @@ import kotlin.test.assertTrue
 
 @SpringBootTest
 class UserServiceImplImplTest {
-
-  @Autowired lateinit var service: UserServiceImpl
-
-  @Autowired lateinit var snowflake: ISnowflakeGenerator
+  lateinit var service: UserServiceImpl @Resource set
+  lateinit var snowflake: ISnowflakeGenerator @Resource set
 
   fun getUser() =
     Usr().apply {
@@ -48,13 +46,17 @@ class UserServiceImplImplTest {
       pwdEnc = "qwer1234"
     }
 
-  @Autowired lateinit var infoService: IUserInfoService
+  @Resource
+  lateinit var infoService: IUserInfoService
 
-  @Autowired lateinit var roleGroupService: IRoleGroupService
+  @Resource
+  lateinit var roleGroupService: IRoleGroupService
 
-  @Autowired lateinit var agg: IRbacAggregator
+  @Resource
+  lateinit var agg: IRbacAggregator
 
-  @Autowired lateinit var mapper: ObjectMapper
+  @Resource
+  lateinit var mapper: ObjectMapper
 
   @Test
   fun testFindUserByAccount() {

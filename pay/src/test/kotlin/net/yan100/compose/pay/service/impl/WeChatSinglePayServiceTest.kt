@@ -16,20 +16,18 @@
  */
 package net.yan100.compose.pay.service.impl
 
-import net.yan100.compose.core.generator.IBizCodeGenerator
+import jakarta.annotation.Resource
+import net.yan100.compose.core.generator.IOrderCodeGenerator
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
-import org.springframework.beans.factory.annotation.Autowired
+import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import java.math.BigDecimal
 
 @SpringBootTest
 class WeChatSinglePayServiceTest {
-  private val log = slf4j(this::class)
-
-  @Autowired lateinit var service: WeChatSinglePayService
-
-  @Autowired lateinit var bizCodeGenerator: IBizCodeGenerator
+  lateinit var service: WeChatSinglePayService @Resource set
+  lateinit var bizCodeGenerator: IOrderCodeGenerator @Resource set
 
   // @Test
   fun testCreateOrder() {

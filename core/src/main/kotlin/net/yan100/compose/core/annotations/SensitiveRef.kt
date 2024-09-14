@@ -16,70 +16,50 @@
  */
 package net.yan100.compose.core.annotations
 
-import com.fasterxml.jackson.annotation.JacksonAnnotationsInside
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.yan100.compose.core.extensionfunctions.nonText
-import net.yan100.compose.core.jackson.SensitiveSerializer
-import java.lang.annotation.Inherited
+import net.yan100.compose.core.nonText
 
-/**
- * 脱敏字段检查器，通常标记于字段。 配合 Strategy 里面的常用规则使用
- *
- * @author TrueNine
- * @since 2023-02-19
- */
-@Inherited
-@JsonInclude
-@MustBeDocumented
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.PROPERTY_GETTER)
-@JacksonAnnotationsInside
-@JsonSerialize(using = SensitiveSerializer::class)
-annotation class SensitiveRef(val value: Strategy = Strategy.NONE) {
-  enum class Strategy(private val desensitizeSerializer: (String) -> String) {
-    /** ## 单个 * 纯掩码 */
-    ONCE({ "*" }),
+enum class SensitiveStrategy(private val desensitizeSerializer: (String) -> String) {
+  /** ## 单个 * 纯掩码 */
+  ONCE({ "*" }),
 
-    /** 不进行脱敏处理 */
-    NONE({ it }),
+  /** 不进行脱敏处理 */
+  NONE({ it }),
 
-    /** 手机号 */
-    PHONE({ it.replace("^(\\S{3})\\S+(\\S{2})$".toRegex(), "\$1****\$2") }),
-    EMAIL({ it.replace("(\\S{2})\\S+(@[\\w.-]+)".toRegex(), "\$1****\$2") }),
+  /** 手机号 */
+  PHONE({ it.replace("^(\\S{3})\\S+(\\S{2})$".toRegex(), "\$1****\$2") }),
+  EMAIL({ it.replace("(\\S{2})\\S+(@[\\w.-]+)".toRegex(), "\$1****\$2") }),
 
-    /** 身份证号 */
-    ID_CARD({ it.replace("(\\S{2})\\S+(\\S{2})".toRegex(), "\$1****\$2") }),
+  /** 身份证号 */
+  ID_CARD({ it.replace("(\\S{2})\\S+(\\S{2})".toRegex(), "\$1****\$2") }),
 
-    /** 银行卡号 */
-    BANK_CARD_CODE({ it.replace("(\\w{2})\\w+(\\w{2})".toRegex(), "\$1****\$2") }),
+  /** 银行卡号 */
+  BANK_CARD_CODE({ it.replace("(\\w{2})\\w+(\\w{2})".toRegex(), "\$1****\$2") }),
 
-    /** 姓名 */
-    NAME({ if (it.nonText()) it else "**${it.substring(it.length - 1)}" }),
+  /** 姓名 */
+  NAME({ if (it.nonText()) it else "**${it.substring(it.length - 1)}" }),
 
-    /**
-     * ## 多段落姓名
-     *
-     * 例如：`last_name`
-     */
-    MULTIPLE_NAME({
-      if (it.nonText() || it.length <= 2) {
-        when (it.length) {
-          1 -> "*"
-          2 -> "**"
-          else -> it
-        }
-      } else "**${it.substring(it.length - 1)}"
-    }),
+  /**
+   * ## 多段落姓名
+   *
+   * 例如：`last_name`
+   */
+  MULTIPLE_NAME({
+    if (it.nonText() || it.length <= 2) {
+      when (it.length) {
+        1 -> "*"
+        2 -> "**"
+        else -> it
+      }
+    } else "**${it.substring(it.length - 1)}"
+  }),
 
-    /** 地址 */
-    ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "\$1****\$2") }),
+  /** 地址 */
+  ADDRESS({ it.replace("(\\S{3})\\S{2}(\\S*)\\S{2}".toRegex(), "\$1****\$2") }),
 
-    /** 密码 */
-    PASSWORD({ "****" });
+  /** 密码 */
+  PASSWORD({ "****" });
 
-    open fun desensitizeSerializer(): (String) -> String {
-      return desensitizeSerializer
-    }
+  open fun desensitizeSerializer(): (String) -> String {
+    return desensitizeSerializer
   }
 }

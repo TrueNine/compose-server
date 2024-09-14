@@ -1,5 +1,6 @@
 pluginManagement {
   repositories {
+    mavenLocal()
     maven(url = uri(extra["yunxiaoUrl"].toString())) {
       isAllowInsecureProtocol = true
       credentials {
@@ -13,99 +14,74 @@ pluginManagement {
 dependencyResolutionManagement { versionCatalogs { create("libs") { from(files("libs.versions.toml")) } } }
 
 rootProject.name = "compose-server"
-
 includeBuild("gradle-plugin")
-
 includeBuild("version-catalog")
 
 include("oss")
-
 findProject(":oss")?.name = "oss"
 
 include("core")
-
 findProject(":core")?.name = "core"
 
-include("rds")
-
-findProject(":rds")?.name = "rds"
-
-include("rds:rds-core")
-
-findProject(":rds:rds-core")?.name = "rds-core"
-
-include("data-common")
-
-findProject(":data-common")?.name = "data-common"
-
-include("data-common:data-common-crawler")
-
-findProject(":data-common:data-common-crawler")?.name = "data-common-crawler"
-
-include("data-common:data-common-data-extract")
-
-findProject(":data-common:data-common-data-extract")?.name = "data-common-data-extract"
-
-include("security")
-
-findProject(":security")?.name = "security"
-
-include("security:security-oauth2")
-
-findProject(":security:security-oauth2")?.name = "security-oauth2"
-
-include("web-api-doc")
-
-findProject(":web-api-doc")?.name = "web-api-doc"
-
-include("depend")
-
-findProject(":depend")?.name = "depend"
-
-include("depend:depend-web-servlet")
-
-findProject(":depend:depend-web-servlet")?.name = "depend-web-servlet"
-
-include("depend:depend-mqtt")
-
-findProject(":depend:depend-mqtt")?.name = "depend-mqtt"
-
-include("depend:depend-web-client")
-
-findProject(":depend:depend-web-client")?.name = "depend-web-client"
-
-include("depend:depend-jvalid")
-
-findProject(":depend:depend-jvalid")?.name = "depend-jvalid"
+include("test-toolkit")
+findProject(":test-toolkit")?.name = "test-toolkit"
 
 include("cacheable")
-
-findProject(":depend:test-toolkit")?.name = "test-toolkit"
-
-include("test-toolkit")
-
 findProject(":cacheable")?.name = "cacheable"
 
 include("schedule")
-
 findProject(":schedule")?.name = "schedule"
 
 include("pay")
-
 findProject(":pay")?.name = "pay"
 
+
+// 关系型数据库
+include("rds")
+findProject(":rds")?.name = "rds"
+include("rds:core")
+findProject(":rds:core")?.name = "rds-core"
+
+// 数据采集器
+include("data")
+findProject(":data")?.name = "data"
+include("data:crawler")
+findProject(":data:crawler")?.name = "data-crawler"
+include("data:extract")
+findProject(":data:extract")?.name = "data-extract"
+
+// 安全相关
+include("security")
+findProject(":security")?.name = "security"
+include("security:oauth2")
+findProject(":security:oauth2")?.name = "security-oauth2"
+include("security:crypto")
+findProject(":security:crypto")?.name = "security-crypto"
+
+
+// 特定依赖处理
+include("depend")
+findProject(":depend")?.name = "depend"
+include("depend:servlet")
+findProject(":depend:servlet")?.name = "depend-servlet"
+include("depend:paho")
+findProject(":depend:paho")?.name = "depend-paho"
+include("depend:http-exchange")
+findProject(":depend:http-exchange")?.name = "depend-http-exchange"
+include("depend:jsr303-validation")
+findProject(":depend:jsr303-validation")?.name = "depend-jsr303-validation"
+include("depend:jackson")
+findProject(":depend:jackson")?.name = "depend-jackson"
+include("depend:springdoc-openapi")
+findProject(":depend:springdoc-openapi")?.name = "depend-springdoc-openapi"
+
+
+// ksp
 include("ksp")
-
 findProject(":ksp")?.name = "ksp"
-
-include("ksp:ksp-test")
-
-findProject(":ksp:ksp-test")?.name = "ksp-test"
-
-include("ksp:ksp-core")
-
-findProject(":ksp:ksp-core")?.name = "ksp-core"
-
-include("ksp:ksp-toolkit")
-
-findProject(":ksp:ksp-toolkit")?.name = "ksp-toolkit"
+include("ksp:test")
+findProject(":ksp:test")?.name = "ksp-test"
+include("ksp:core")
+findProject(":ksp:core")?.name = "ksp-core"
+include("ksp:toolkit")
+findProject(":ksp:toolkit")?.name = "ksp-toolkit"

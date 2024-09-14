@@ -16,30 +16,33 @@
  */
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.core.alias.Pq
-import net.yan100.compose.core.alias.Pr
+import net.yan100.compose.core.Pq
+import net.yan100.compose.core.Pr
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.jpa
+import net.yan100.compose.rds.core.page
+import net.yan100.compose.rds.core.result
 import net.yan100.compose.rds.core.typing.AttachmentTyping
-import net.yan100.compose.rds.core.util.page
-import net.yan100.compose.rds.core.util.result
-import net.yan100.compose.rds.entities.attachment.Attachment
-import net.yan100.compose.rds.entities.attachment.LinkedAttachment
-import net.yan100.compose.rds.repositories.attachment.IAttachmentRepo
-import net.yan100.compose.rds.repositories.attachment.ILinkedAttachmentRepo
+import net.yan100.compose.rds.entities.Attachment
+import net.yan100.compose.rds.entities.LinkedAttachment
+import net.yan100.compose.rds.repositories.IAttachmentRepo
+import net.yan100.compose.rds.repositories.ILinkedAttachmentRepo
 import net.yan100.compose.rds.service.IAttachmentService
-import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class AttachmentServiceImpl(private val repo: IAttachmentRepo, private val linkedRepo: ILinkedAttachmentRepo) :
-  IAttachmentService, CrudService<Attachment>(repo) {
+class AttachmentServiceImpl(
+    private val attRepo: IAttachmentRepo,
+    private val linkedRepo: ILinkedAttachmentRepo
+) : IAttachmentService, ICrud<Attachment> by jpa(attRepo) {
   override fun existsByBaseUrl(baseUrl: String): Boolean {
-    return repo.existsByBaseUrl(baseUrl)
+    return attRepo.existsByBaseUrl(baseUrl)
   }
 
   override fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment {
     return findByBaseUrlAndBaseUri(baseUrl, baseUri)
-      ?: save(
+      ?: post(
         Attachment().apply {
           attType = AttachmentTyping.BASE_URL
           this.baseUrl = baseUrl
@@ -49,15 +52,15 @@ class AttachmentServiceImpl(private val repo: IAttachmentRepo, private val linke
   }
 
   override fun findByBaseUrl(baseUrl: String): Attachment? {
-    return repo.findFirstByBaseUrl(baseUrl)
+    return attRepo.findFirstByBaseUrl(baseUrl)
   }
 
   override fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment? {
-    return repo.findFirstByBaseUrlAndBaseUri(baseUrl, baseUri)
+    return attRepo.findFirstByBaseUrlAndBaseUri(baseUrl, baseUri)
   }
 
   override fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment> {
-    return repo.findAllByBaseUrlIn(baseUrls)
+    return attRepo.findAllByBaseUrlIn(baseUrls)
   }
 
   override fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment> {
@@ -65,11 +68,11 @@ class AttachmentServiceImpl(private val repo: IAttachmentRepo, private val linke
   }
 
   override fun findFullUrlById(id: String): String? {
-    return repo.findFullPathById(id)
+    return attRepo.findFullPathById(id)
   }
 
   override fun findAllByParentBaseUrl(baseUrl: String, page: Pq): Pr<Attachment> {
-    return repo.findAllByParentBaseUrl(baseUrl, page.page).result
+    return attRepo.findAllByParentBaseUrl(baseUrl, page.page).result
   }
 
   override fun findLinkedById(id: String): LinkedAttachment? {
@@ -81,15 +84,15 @@ class AttachmentServiceImpl(private val repo: IAttachmentRepo, private val linke
   }
 
   override fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq): Pr<String> {
-    return repo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
+    return attRepo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
   }
 
   override fun findMetaNameById(id: String): String? {
-    return repo.findMetaNameById(id)
+    return attRepo.findMetaNameById(id)
   }
 
   override fun findSaveNameById(id: String): String? {
-    return repo.findSaveNameById(id)
+    return attRepo.findSaveNameById(id)
   }
 
   override fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq): Pr<LinkedAttachment> {

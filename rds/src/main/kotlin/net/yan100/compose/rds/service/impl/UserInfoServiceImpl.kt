@@ -18,30 +18,27 @@ package net.yan100.compose.rds.service.impl
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.core.extensionfunctions.hasText
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.hasText
+import net.yan100.compose.core.string
+import net.yan100.compose.rds.core.ICrud
 import net.yan100.compose.rds.core.entities.fromDbData
-import net.yan100.compose.rds.core.extensionfunctions.withNew
-import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.entities.info.UserInfo
-import net.yan100.compose.rds.repositories.user.IUserInfoRepo
-import net.yan100.compose.rds.repositories.user.IUsrRepo
+import net.yan100.compose.rds.core.entities.withNew
+import net.yan100.compose.rds.core.jpa
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
+import net.yan100.compose.rds.repositories.IUserInfoRepo
+import net.yan100.compose.rds.repositories.IUsrRepo
 import net.yan100.compose.rds.service.IUserInfoService
-import net.yan100.compose.rds.service.base.CrudService
-import net.yan100.compose.rds.service.base.IMergeEventService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: IUserInfoRepo) :
-  IUserInfoService, CrudService<UserInfo>(infoRepo, listOf(UserInfo::class, Usr::class)) {
-
-  override fun persistMerge(data: IMergeEventService.MergeData<*>): UserInfo {
-    return data.to as UserInfo
-  }
-
+class UserInfoServiceImpl(
+    private val userRepo: IUsrRepo,
+    private val infoRepo: IUserInfoRepo
+) : IUserInfoService, ICrud<UserInfo> by jpa(infoRepo, Usr::class) {
   override suspend fun findIsRealPeopleById(id: RefId): Boolean = infoRepo.existsByIdAndIsRealPeople(id)
 
   override suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean =
@@ -51,7 +48,7 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
     return infoRepo.existsAllByFirstNameAndLastName(firstName, lastName)
   }
 
-  override fun existsByIdCard(idCard: SerialCode): Boolean {
+  override fun existsByIdCard(idCard: string): Boolean {
     return infoRepo.existsAllByIdCard(idCard)
   }
 
@@ -67,31 +64,31 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
   override fun deleteUserInfoAndUser(userInfoId: RefId) {
     infoRepo.findByIdOrNull(userInfoId)?.also { i ->
       if (i.userId.hasText()) userRepo.deleteById(i.userId!!)
-      deleteById(i.id)
+      removeById(i.id)
     }
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun saveExists(e: UserInfo): UserInfo {
+  override fun postFound(e: UserInfo): UserInfo {
     // 如果存在身份证，则匹配相同的身份证
     return e.idCard?.let { c ->
       if (infoRepo.existsAllByIdCard(c)) {
-        saveAll(
-            infoRepo.findAllByIdCard(c).mapIndexed { index, r ->
-              val d = e.fromDbData(r)
-              d.apply { pri = index == 0 }
-            }
-          ).first()
+        postAll(
+          infoRepo.findAllByIdCard(c).mapIndexed { index, r ->
+            val d = e.fromDbData(r)
+            d.apply { pri = index == 0 }
+          }
+        ).first()
       } else null
-    } ?: e.phone?.let { c->
+    } ?: e.phone?.let { c ->
       if (infoRepo.existsAllByPhone(c)) {
         val phoneList = infoRepo.findAllByPhone(c).mapIndexed { index, r ->
           val d = e.fromDbData(r)
           d.apply { pri = index == 0 }
         }
-        saveAll(phoneList).first()
+        postAll(phoneList).first()
       } else null
-    } ?: save(e.withNew())
+    } ?: post(e.withNew())
   }
 
   override fun savePlainUserInfoByUser(createUserId: RefId, usr: Usr): UserInfo {
@@ -124,7 +121,7 @@ class UserInfoServiceImpl(private val userRepo: IUsrRepo, private val infoRepo: 
     return infoRepo.findFirstByUserIdAndPriIsTrue(userId)
   }
 
-  override fun existsByPhone(phone: SerialCode): Boolean {
+  override fun existsByPhone(phone: string): Boolean {
     return infoRepo.existsByPhone(phone)
   }
 

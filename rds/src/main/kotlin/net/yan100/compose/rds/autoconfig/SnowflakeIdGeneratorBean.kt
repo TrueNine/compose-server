@@ -16,18 +16,20 @@
  */
 package net.yan100.compose.rds.autoconfig
 
-import net.yan100.compose.core.ISnowflakeGenerator
-import net.yan100.compose.core.log.slf4j
+import jakarta.annotation.Resource
+import net.yan100.compose.core.generator.ISnowflakeGenerator
+import net.yan100.compose.core.slf4j
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+
+private val log = slf4j<SnowflakeIdGeneratorBean>()
 
 @Component
 class SnowflakeIdGeneratorBean : IdentifierGenerator {
-  private val log = slf4j(this::class)
 
-  @Autowired private lateinit var snowflake: ISnowflakeGenerator
+
+  lateinit var snowflake: ISnowflakeGenerator @Resource set
 
   init {
     log.trace("注册 id 生成器 当前未初始")

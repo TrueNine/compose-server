@@ -1,6 +1,5 @@
 package net.yan100.compose.security
 
-import net.yan100.compose.core.models.AuthRequestInfo
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.util.IEmptyDefault
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService

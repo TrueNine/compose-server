@@ -16,20 +16,20 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.alias.SerialCode
-import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.entities.info.UserInfo
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.string
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
 
-interface IUserInfoService : IService<UserInfo> {
+interface IUserInfoService : ICrud<UserInfo> {
   suspend fun findIsRealPeopleById(id: RefId): Boolean
 
   suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean
 
   fun existsByFirstNameAndLastName(firstName: String, lastName: String): Boolean
 
-  fun existsByIdCard(idCard: SerialCode): Boolean
+  fun existsByIdCard(idCard: string): Boolean
 
   /**
    * ## 根据用户 id 列表，获取用户信息列表
@@ -63,7 +63,7 @@ interface IUserInfoService : IService<UserInfo> {
    * @param usr 用户
    * @see [savePlainUserInfoByUser]
    */
-  fun savePlainUserInfoByUser(usr: Usr): UserInfo = savePlainUserInfoByUser(usr.createUserId, usr)
+  fun savePlainUserInfoByUser(usr: Usr): UserInfo = savePlainUserInfoByUser(usr.createUserId!!, usr)
 
   fun findAllIdByUserId(userId: RefId): List<RefId>
 
@@ -75,7 +75,7 @@ interface IUserInfoService : IService<UserInfo> {
 
   fun findByUserId(userId: String): UserInfo?
 
-  fun existsByPhone(phone: SerialCode): Boolean
+  fun existsByPhone(phone: string): Boolean
 
   fun existsByWechatOpenId(openId: String): Boolean
 }

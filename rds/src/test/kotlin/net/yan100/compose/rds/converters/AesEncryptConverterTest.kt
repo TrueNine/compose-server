@@ -16,19 +16,16 @@
  */
 package net.yan100.compose.rds.converters
 
-import net.yan100.compose.core.slf4j
+import jakarta.annotation.Resource
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.DbTestPeriodConverterEntity
 import net.yan100.compose.rds.repositories.DbTestPeriodConverterRepo
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(classes = [RdsEntrance::class])
 class AesEncryptConverterTest {
-
-  @Autowired private lateinit var repo: DbTestPeriodConverterRepo
-  private val log = slf4j(this::class)
+  lateinit var repo: DbTestPeriodConverterRepo @Resource set
 
   @Test
   fun bootConverter() {

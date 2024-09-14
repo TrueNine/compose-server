@@ -20,8 +20,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.DTimer
-import net.yan100.compose.core.encrypt.Encryptors
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.security.crypto.Encryptors
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import org.slf4j.Logger
 import java.security.PrivateKey

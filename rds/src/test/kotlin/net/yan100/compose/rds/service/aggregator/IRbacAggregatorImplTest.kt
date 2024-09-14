@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
+import jakarta.annotation.Resource
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.entities.Permissions
 import net.yan100.compose.rds.entities.Role
@@ -27,26 +28,19 @@ import net.yan100.compose.rds.service.IPermissionsService
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IRoleService
 import net.yan100.compose.rds.service.IUserService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
 import kotlin.test.*
 
 @SpringBootTest
 class IRbacAggregatorImplTest {
-  @Autowired lateinit var argRepo: IFullRoleGroupRepo
-
-  @Autowired lateinit var aggregator: IRbacAggregator
-
-  @Autowired lateinit var userService: IUserService
-
-  @Autowired lateinit var roleService: IRoleService
-
-  @Autowired lateinit var rgService: IRoleGroupService
-
-  @Autowired lateinit var permissionsService: IPermissionsService
-
-  @Autowired lateinit var snowflake: ISnowflakeGenerator
+  lateinit var argRepo: IFullRoleGroupRepo @Resource set
+  lateinit var aggregator: IRbacAggregator @Resource set
+  lateinit var userService: IUserService @Resource set
+  lateinit var roleService: IRoleService @Resource set
+  lateinit var rgService: IRoleGroupService @Resource set
+  lateinit var permissionsService: IPermissionsService @Resource set
+  lateinit var snowflake: ISnowflakeGenerator @Resource set
 
   private fun getUser() =
     Usr().apply {
@@ -149,8 +143,8 @@ class IRbacAggregatorImplTest {
   fun testLinkAllRoleToRoleGroup() {
     roleService.postAll(getRoles()).let { rs ->
       rgService.post(getRoleGroup()).let { rg ->
-        aggregator.linkAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { sru ->
-          argRepo.findByIdOrNull(rg.id)!!.let { nr -> assertEquals(nr.roles.size, rs.size) }
+        aggregator.linkAllRoleToRoleGroup(rs.map { it.id }, rg.id).let {
+          assertEquals(argRepo.findByIdOrNull(rg.id)!!.roles.size, rs.size)
         }
       }
     }
@@ -160,7 +154,7 @@ class IRbacAggregatorImplTest {
   fun testRevokeRoleFromRoleGroup() {
     roleService.post(getRole()).let { r ->
       rgService.post(getRoleGroup()).let { rg ->
-        aggregator.linkRoleToRoleGroup(r.id, rg.id)!!.let { rgr ->
+        aggregator.linkRoleToRoleGroup(r.id, rg.id)!!.let {
           aggregator.revokeRoleFromRoleGroup(r.id, rg.id)
           val srg = argRepo.findByIdOrNull(rg.id)!!
           assertTrue { srg.roles.isEmpty() }
@@ -173,7 +167,7 @@ class IRbacAggregatorImplTest {
   fun testRevokeAllRoleFromRoleGroup() {
     roleService.postAll(getRoles()).let { rs ->
       rgService.post(getRoleGroup()).let { rg ->
-        aggregator.linkAllRoleToRoleGroup(rs.map { it.id }, rg.id).let { rgr ->
+        aggregator.linkAllRoleToRoleGroup(rs.map { it.id }, rg.id).let {
           aggregator.revokeAllRoleFromRoleGroup(rs.map { it.id }, rg.id)
           argRepo.findByIdOrNull(rg.id)!!.let { assertTrue { it.roles.isEmpty() } }
         }
@@ -187,7 +181,8 @@ class IRbacAggregatorImplTest {
       doc = "stra ${snowflake.next()}"
     }
 
-  @Autowired lateinit var arRepo: IFullRoleRepo
+  @Resource
+  lateinit var arRepo: IFullRoleRepo
 
   @Test
   fun testSavePermissionsToRole() {
@@ -230,7 +225,7 @@ class IRbacAggregatorImplTest {
   fun testRevokeAllPermissionsFromRole() {
     roleService.post(getRole()).let { r ->
       permissionsService.postAll(getAllPermissions()).let { ps ->
-        aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let { srp ->
+        aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let {
           aggregator.revokeAllPermissionsFromRole(ps.map { it.id }, r.id)
           arRepo.findByIdOrNull(r.id)!!.let { assertTrue { it.permissions.isEmpty() } }
         }

@@ -17,7 +17,7 @@
 package net.yan100.compose.security.jwt
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.encrypt.Keys
+import net.yan100.compose.security.crypto.Keys
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test
@@ -34,9 +34,9 @@ class JwtTest {
       JwtIssuer.createIssuer()
         .issuer("t")
         .id("1")
-        .signatureIssuerKey(rsaPair.rsaPrivateKey!!)
-        .signatureVerifyKey(rsaPair.rsaPublicKey!!)
-        .contentEncryptKey(eccPair.eccPublicKey!!)
+        .signatureIssuerKey(rsaPair.privateKey)
+        .signatureVerifyKey(rsaPair.publicKey)
+        .contentEncryptKey(eccPair.publicKey)
         .serializer(mapper)
         .build()
 
@@ -44,12 +44,12 @@ class JwtTest {
       JwtVerifier.createVerifier()
         .issuer("t")
         .id("1")
-        .contentDecryptKey(eccPair.eccPrivateKey!!)
-        .signatureVerifyKey(rsaPair.rsaPublicKey!!)
+        .contentDecryptKey(eccPair.privateKey)
+        .signatureVerifyKey(rsaPair.publicKey)
         .serializer(mapper)
         .build()
 
-    val inputs = IssuerParam<Any, Any>(signatureKey = rsaPair.rsaPrivateKey)
+    val inputs = IssuerParam<Any, Any>(signatureKey = rsaPair.privateKey)
     inputs.encryptedDataObj = "我日了狗"
     inputs.subjectObj = mutableListOf("123", "444")
     inputs.encryptedDataObj = mutableListOf("123", "444")

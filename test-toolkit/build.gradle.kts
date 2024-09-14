@@ -1,11 +1,13 @@
-version = libs.versions.compose.test.toolkit.get()
+version = libs.versions.compose.testToolkit.get()
 
 dependencies {
-  implementation(project(":core"))
-  implementation(libs.org.springframework.springTest)
-  implementation(libs.org.springframework.boot.springBootTestAutoconfigure)
-  implementation(libs.org.springframework.boot.springBootTest)
-  implementation(libs.org.springframework.security.springSecurityTest)
+  api(libs.org.slf4j.slf4jApi)
+
+  // spring 测试支持
+  api(libs.org.springframework.springTest)
+  api(libs.org.springframework.boot.springBootTestAutoconfigure)
+  api(libs.org.springframework.boot.springBootTest)
+  api(libs.org.springframework.security.springSecurityTest)
 }
 
 publishing {

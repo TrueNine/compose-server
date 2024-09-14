@@ -17,17 +17,16 @@
 package net.yan100.compose.rds.service.aggregator
 
 import jakarta.validation.Valid
-import net.yan100.compose.core.IBizCodeGenerator
-import net.yan100.compose.core.alias.RefId
-import net.yan100.compose.core.alias.TODO
-import net.yan100.compose.core.extensionfunctions.hasText
-import net.yan100.compose.core.util.encrypt.Keys
-import net.yan100.compose.rds.core.extensionfunctions.withNew
-import net.yan100.compose.rds.entities.account.Usr
-import net.yan100.compose.rds.entities.info.UserInfo
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.generator.IOrderCodeGenerator
+import net.yan100.compose.core.hasText
+import net.yan100.compose.rds.core.entities.withNew
+import net.yan100.compose.rds.entities.UserInfo
+import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
+import net.yan100.compose.security.crypto.Keys
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -36,17 +35,17 @@ import java.time.LocalDateTime
 @Service
 class AccountAggregatorImpl(
   private val userService: IUserService,
-  private val bizCodeGen: IBizCodeGenerator,
+  private val bizCodeGen: IOrderCodeGenerator,
   private val userInfoService: IUserInfoService,
   private val passwordEncoder: PasswordEncoder,
   private val roleGroupService: IRoleGroupService,
 ) : IAccountAggregator {
 
-  @TODO("触发了脏跟踪特性")
+  @Deprecated("触发了脏跟踪特性")
   @Transactional(rollbackFor = [Exception::class])
   override fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr? {
-    return if (userInfoService.existsById(userInfoId) && !userService.existsByUserInfoId(userInfoId)) {
-      userInfoService.findById(userInfoId)?.let { info ->
+    return if (userInfoService.foundById(userInfoId) && !userService.existsByUserInfoId(userInfoId)) {
+      userInfoService.fetchById(userInfoId)?.let { info ->
         check(info.firstName.hasText()) { "姓名为空，不能转换为呢称" }
         check(info.lastName.hasText()) { "姓名为空，不能转换为呢称" }
         info.pri = true
@@ -57,9 +56,9 @@ class AccountAggregatorImpl(
             nickName = info.firstName + info.lastName
             account = bizCodeGen.nextString()
             pwdEnc = passwordEncoder.encode(Keys.generateRandomAsciiString())
-            userService.saveExists(this)
+            userService.postFound(this)
           }
-        val saveAccount = userService.saveExists(account)
+        val saveAccount = userService.postFound(account)
         info.userId = saveAccount.id
         saveAccount
       }
@@ -74,14 +73,14 @@ class AccountAggregatorImpl(
         check(!userService.existsByAccount(account)) { "分配的账号已经存在" }
         pwdEnc = passwordEncoder.encode(this.pwdEnc)
         this.createUserId = createUserId
-        userService.save(this)
+        userService.post(this)
       }
 
     userInfo?.withNew()?.also {
       it.createUserId = createUserId
       it.pri = true
       it.userId = savedUsr.id
-      userInfoService.save(it)
+      userInfoService.post(it)
     }
 
     roleGroup?.also { rg ->
@@ -92,8 +91,8 @@ class AccountAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  internal fun saveUsrForRegisterParam(param: IAccountAggregator.RegisterAccountDto): Usr {
-    return userService.save(
+  internal fun saveUsrForRegisterParam(param: IAccountAggregator.RegisterDto): Usr {
+    return userService.post(
       Usr().withNew().apply {
         checkNotNull(param.createUserId) { "创建此用户的用户 id 不能为空" }
         createUserId = param.createUserId!!
@@ -106,7 +105,7 @@ class AccountAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerAccount(@Valid param: IAccountAggregator.RegisterAccountDto): Usr? =
+  override fun registerAccount(@Valid param: IAccountAggregator.RegisterDto): Usr? =
     if (!userService.existsByAccount(param.account!!)) {
       saveUsrForRegisterParam(param).also {
         userInfoService.savePlainUserInfoByUser(it)
@@ -115,28 +114,28 @@ class AccountAggregatorImpl(
     } else null
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerAccountForWxpa(param: IAccountAggregator.RegisterAccountDto, openId: String): Usr? =
+  override fun registerAccountForWxpa(param: IAccountAggregator.RegisterDto, openId: String): Usr? =
     if (!userInfoService.existsByWechatOpenId(openId)) {
       saveUsrForRegisterParam(param).also {
         roleGroupService.assignPlainToUser(it.id)
         userInfoService.savePlainUserInfoByUser(it).let { u ->
           u.wechatOpenid = openId
-          userInfoService.save(u)
+          userInfoService.post(u)
         }
       }
     } else null
 
-  override fun login(@Valid param: IAccountAggregator.LoginAccountDto): Usr? =
+  override fun login(@Valid param: IAccountAggregator.LoginDto): Usr? =
     if (verifyPassword(param.account!!, param.password!!)) {
       userService.findUserByAccount(param.account!!)
     } else null
 
-  override fun modifyPassword(@Valid param: IAccountAggregator.ModifyAccountPasswordDto): Boolean {
+  override fun modifyPassword(@Valid param: IAccountAggregator.ModifyPasswordDto): Boolean {
     if (!verifyPassword(param.account!!, param.oldPassword!!)) return false
     if (param.oldPassword == param.newPassword) return false
     val user = userService.findUserByAccount(param.account!!) ?: return false
     user.pwdEnc = passwordEncoder.encode(param.newPassword)
-    userService.save(user)
+    userService.post(user)
     return true
   }
 
@@ -147,5 +146,5 @@ class AccountAggregatorImpl(
     } else false
   }
 
-  override fun bannedAccountTo(account: String, dateTime: LocalDateTime) = userService.modifyUserBandTimeTo(account, dateTime)
+  override fun banWith(account: String, dateTime: LocalDateTime) = userService.modifyUserBandTimeTo(account, dateTime)
 }

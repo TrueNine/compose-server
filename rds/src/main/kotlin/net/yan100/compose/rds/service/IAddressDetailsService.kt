@@ -16,29 +16,29 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.core.alias.Id
-import net.yan100.compose.core.alias.Pq
-import net.yan100.compose.core.alias.Pr
-import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.rds.entities.address.AddressDetails
-import net.yan100.compose.rds.entities.address.FullAddressDetails
-import net.yan100.compose.rds.entities.address.NonDesensitizedAddressDetails
-import net.yan100.compose.rds.service.base.IService
+import net.yan100.compose.core.Id
+import net.yan100.compose.core.Pq
+import net.yan100.compose.core.Pr
+import net.yan100.compose.core.ReferenceId
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.entities.AddressDetails
+import net.yan100.compose.rds.entities.FullAddressDetails
+import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
 
-interface IAddressDetailsService : IService<AddressDetails> {
-  fun findAllByPhone(phone: String, page: Pq = Pq.DEFAULT_MAX): Pr<AddressDetails>
+interface IAddressDetailsService : ICrud<AddressDetails> {
+  fun fetchAllByPhone(phone: String, page: Pq = Pq.DEFAULT_MAX): Pr<AddressDetails>
 
-  fun findNonDesensitizedAllByPhone(phone: String, page: Pq = Pq.DEFAULT_MAX): Pr<NonDesensitizedAddressDetails>
+  fun fetchNonDesensitizedAllByPhone(phone: String, pq: Pq = Pq.DEFAULT_MAX): Pr<NonDesensitizedAddressDetails>
 
-  fun findFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails>
+  fun fetchFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails>
 
-  fun findAllByUserId(userId: String, page: Pq = Pq.DEFAULT_MAX): Pr<AddressDetails>
+  fun fetchAllByUserId(userId: String, page: Pq = Pq.DEFAULT_MAX): Pr<AddressDetails>
 
-  fun findNonDesensitizedAllByUserId(userId: String, page: Pq = Pq.DEFAULT_MAX): Pr<NonDesensitizedAddressDetails>
+  fun fetchNonDesensitizedAllByUserId(userId: String, page: Pq = Pq.DEFAULT_MAX): Pr<NonDesensitizedAddressDetails>
 
-  fun findFullAllByUserId(userId: ReferenceId, page: Pq = Pq.DEFAULT_MAX): Pr<FullAddressDetails>
+  fun fetchFullAllByUserId(userId: ReferenceId, page: Pq = Pq.DEFAULT_MAX): Pr<FullAddressDetails>
 
-  fun findFullPathById(id: Id): String
+  fun fetchFullPathById(id: Id): String
 
-  fun findAllFullPathById(ids: List<Id>): List<Pair<Id, String>>
+  fun fetchAllFullPathById(ids: List<Id>): List<Pair<Id, String>>
 }

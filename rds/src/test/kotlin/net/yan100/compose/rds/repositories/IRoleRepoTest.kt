@@ -16,19 +16,17 @@
  */
 package net.yan100.compose.rds.repositories
 
-import net.yan100.compose.core.slf4j
+import jakarta.annotation.Resource
 import net.yan100.compose.rds.RdsEntrance
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
 class IRoleRepoTest {
-
-  @Autowired private lateinit var repo: IRoleRepo
-  val log = slf4j(this::class)
+  lateinit var repo: IRoleRepo @Resource set
 
   @Test
   @Rollback

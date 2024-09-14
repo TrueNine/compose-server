@@ -16,39 +16,43 @@
  */
 package net.yan100.compose.rds.service.impl
 
-import net.yan100.compose.core.alias.Pq
-import net.yan100.compose.core.alias.Pr
-import net.yan100.compose.core.alias.ReferenceId
-import net.yan100.compose.rds.core.util.page
-import net.yan100.compose.rds.core.util.result
-import net.yan100.compose.rds.entities.address.AddressDetails
-import net.yan100.compose.rds.entities.address.FullAddressDetails
-import net.yan100.compose.rds.entities.address.NonDesensitizedAddressDetails
-import net.yan100.compose.rds.repositories.address.IAddressDetailsRepo
-import net.yan100.compose.rds.repositories.address.IAddressRepo
-import net.yan100.compose.rds.repositories.address.IFullAddressDetailsRepo
+import net.yan100.compose.core.Pq
+import net.yan100.compose.core.Pr
+import net.yan100.compose.core.ReferenceId
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.jpa
+import net.yan100.compose.rds.core.page
+import net.yan100.compose.rds.core.result
+import net.yan100.compose.rds.entities.AddressDetails
+import net.yan100.compose.rds.entities.FullAddressDetails
+import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
+import net.yan100.compose.rds.repositories.IAddressDetailsRepo
+import net.yan100.compose.rds.repositories.IAddressRepo
+import net.yan100.compose.rds.repositories.IFullAddressDetailsRepo
 import net.yan100.compose.rds.service.IAddressDetailsService
-import net.yan100.compose.rds.service.base.CrudService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class AddressDetailsServiceImpl(private val aRepo: IAddressRepo, private val detailsRepo: IAddressDetailsRepo, private val fRepo: IFullAddressDetailsRepo) :
-  IAddressDetailsService, CrudService<AddressDetails>(detailsRepo) {
-  override fun findAllByUserId(userId: String, page: Pq): Pr<AddressDetails> {
-    return detailsRepo.findAllByUserId(userId, page.page).result
+class AddressDetailsServiceImpl(
+    private val aRepo: IAddressRepo,
+    override val repo: IAddressDetailsRepo,
+    private val fRepo: IFullAddressDetailsRepo
+) : IAddressDetailsService, ICrud<AddressDetails> by jpa(repo) {
+  override fun fetchAllByUserId(userId: String, page: Pq): Pr<AddressDetails> {
+    return repo.findAllByUserId(userId, page.page).result
   }
 
-  override fun findNonDesensitizedAllByUserId(userId: String, page: Pq): Pr<NonDesensitizedAddressDetails> {
-    return detailsRepo.findNonDesensitizedAllByUserId(userId, page.page).result
+  override fun fetchNonDesensitizedAllByUserId(userId: String, page: Pq): Pr<NonDesensitizedAddressDetails> {
+    return repo.findNonDesensitizedAllByUserId(userId, page.page).result
   }
 
-  override fun findFullAllByUserId(userId: String, page: Pq): Pr<FullAddressDetails> {
+  override fun fetchFullAllByUserId(userId: String, page: Pq): Pr<FullAddressDetails> {
     return fRepo.findAllByUserId(userId, page.page).result
   }
 
-  override fun findFullPathById(id: String): String {
-    return detailsRepo.findByIdOrNull(id)?.let { ad ->
+  override fun fetchFullPathById(id: String): String {
+    return repo.findByIdOrNull(id)?.let { ad ->
       val adPath =
         ad.addressCode.let { addrCode -> aRepo.findFirstByCode(addrCode)?.let { addr -> aRepo.findParentPath(addr) } }?.joinToString(separator = "") { it.name }
           ?: ""
@@ -57,8 +61,8 @@ class AddressDetailsServiceImpl(private val aRepo: IAddressRepo, private val det
     } ?: ""
   }
 
-  override fun findAllFullPathById(ids: List<ReferenceId>): List<Pair<ReferenceId, String>> {
-    return detailsRepo.findAllById(ids).let { ds ->
+  override fun fetchAllFullPathById(ids: List<ReferenceId>): List<Pair<ReferenceId, String>> {
+    return repo.findAllById(ids).let { ds ->
       // 地址的路径集合
       val addresses =
         aRepo.findAllByCodeIn(ds.map { it.addressCode }).map { addr ->
@@ -71,15 +75,15 @@ class AddressDetailsServiceImpl(private val aRepo: IAddressRepo, private val det
     }
   }
 
-  override fun findAllByPhone(phone: String, page: Pq): Pr<AddressDetails> {
-    return detailsRepo.findAllByPhone(phone, page.page).result
+  override fun fetchAllByPhone(phone: String, page: Pq): Pr<AddressDetails> {
+    return repo.findAllByPhone(phone, page.page).result
   }
 
-  override fun findNonDesensitizedAllByPhone(phone: String, page: Pq): Pr<NonDesensitizedAddressDetails> {
-    return detailsRepo.findNonDesensitizedAllByPhone(phone, page.page).result
+  override fun fetchNonDesensitizedAllByPhone(phone: String, pq: Pq): Pr<NonDesensitizedAddressDetails> {
+    return repo.findNonDesensitizedAllByPhone(phone, pq.page).result
   }
 
-  override fun findFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails> {
+  override fun fetchFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails> {
     return fRepo.findAllByPhone(phone, page.page).result
   }
 }
