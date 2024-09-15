@@ -1,35 +1,35 @@
 [versions]
-compose-versionCatalog = "2.0.0"
-compose = "2.0.0"
-compose-oss = "2.0.0"
-compose-pay = "2.0.0"
-compose-schedule = "2.0.0"
-compose-cacheable = "2.0.0"
+compose-versionCatalog = "2.0.2"
+compose = "2.0.1"
+compose-oss = "2.0.1"
+compose-pay = "2.0.1"
+compose-schedule = "2.0.1"
+compose-cacheable = "2.0.1"
 
-compose-dependServlet = "2.0.0"
-compose-dependPaho = "2.0.0"
-compose-dependJackson = "2.0.0"
-compose-dependHttpExchange = "2.0.0"
-compose-dependJsr303Validation = "2.0.0"
-compose-dependSpringdocOpenapi = "2.0.0"
+compose-dependServlet = "2.0.1"
+compose-dependPaho = "2.0.1"
+compose-dependJackson = "2.0.1"
+compose-dependHttpExchange = "2.0.1"
+compose-dependJsr303Validation = "2.0.1"
+compose-dependSpringdocOpenapi = "2.0.1"
 
-compose-core = "2.0.0"
-compose-security = "2.0.0"
-compose-securityCrypto = "2.0.0"
-compose-securityOauth2 = "2.0.0"
-compose-rds = "2.0.0"
-compose-rdsCore = "2.0.0"
+compose-core = "2.0.2"
+compose-security = "2.0.2"
+compose-securityCrypto = "2.0.1"
+compose-securityOauth2 = "2.0.1"
+compose-rds = "2.0.2"
+compose-rdsCore = "2.0.1"
 
-compose-testToolkit = "2.0.0"
+compose-testToolkit = "2.0.1"
 
-compose-dataExtract = "2.0.0"
-compose-dataCrawler = "2.0.0"
+compose-dataExtract = "2.0.2"
+compose-dataCrawler = "2.0.1"
 
-compose-ksp = "2.0.0"
-compose-kspCore = "2.0.0"
-compose-kspToolkit = "2.0.0"
+compose-ksp = "2.0.1"
+compose-kspCore = "2.0.1"
+compose-kspToolkit = "2.0.1"
 
-compose-gradlePlugin = "2.0.0"
+compose-gradlePlugin = "2.0.1"
 
 composeGroup = "net.yan100.compose"
 
@@ -40,16 +40,20 @@ java = "21"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
 kotlinx-io = "0.5.3"
-kotlinx-coroutines = "1.9.0-RC.2"
+kotlinx-coroutines = "1.9.0"
 
 spring-boot = "3.4.0-M2"
+# spring 单独抽取版本序列
+spring-framework = "6.2.0-RC1"
+spring-data = "3.4.0-M1"
+
 spring-cloud = "2023.0.1"
 spring-cloudAlibaba = "2021.0.4.0"
 spring-modulith = "1.3.0-M2"
 
 testng = "7.10.2"
 junit = "5.11.0-M2"
-flyway = "10.17.3"
+flyway = "10.18.0"
 mapstruct = "1.6.0"
 hutool = "5.8.32"
 slf4j = "2.1.0-alpha1"
@@ -121,12 +125,15 @@ org-springframework-boot-springBootStarterLogging = { group = "org.springframewo
 org-springframework-boot-springBootDockerCompose = { group = "org.springframework.boot", name = "spring-boot-docker-compose" }
 org-springframework-cloud-springCloudStarterBootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap" }
 org-springframework-integration-springIntegrationMqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt" }
-org-springframework-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons" }
-org-springframework-data-springDataJpa = { group = "org.springframework.data", name = "spring-data-jpa" }
+
+
+org-springframework-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons", version.ref = "spring-data" }
+org-springframework-data-springDataJpa = { group = "org.springframework.data", name = "spring-data-jpa", version.ref = "spring-data" }
+
 org-springframework-security-springSecurityCrypto = { group = "org.springframework.security", name = "spring-security-crypto" }
 org-springframework-security-springSecurityCore = { group = "org.springframework.security", name = "spring-security-core" }
-org-springframework-springWebMvc = { group = "org.springframework", name = "spring-webmvc" }
-org-springframework-springWeb = { group = "org.springframework", name = "spring-web" }
+org-springframework-springWebMvc = { group = "org.springframework", name = "spring-webmvc", version.ref = "spring-framework" }
+org-springframework-springWeb = { group = "org.springframework", name = "spring-web", version.ref = "spring-framework" }
 org-springframework-springContext = { group = "org.springframework", name = "spring-context" }
 org-springframework-modulith-springModulithStarterJpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 org-springframework-modulith-springModulithCore = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "spring-modulith" }
@@ -197,7 +204,7 @@ com-google-guava-guava-jre = { group = "com.google.guava", name = "guava", versi
 ognl-ognl = { group = "ognl", name = "ognl", version = "3.4.3" }
 com-github-magese-ikAnalyzer = { group = "com.github.magese", name = "ik-analyzer", version = "8.5.0" }
 com-github-haifengl-smileMath = { group = "com.github.haifengl", name = "smile-math", version = "2.6.0" }
-com-alibaba-easyexcel = { group = "com.alibaba", name = "easyexcel", version = "4.0.2" }
+com-alibaba-easyexcel = { group = "com.alibaba", name = "easyexcel", version = "4.0.3" }
 org-freemarker-freemarker = { group = "org.freemarker", name = "freemarker", version = "2.3.33" }
 net-sf-dozer-dozer = { group = "net.sf.dozer", name = "dozer", version = "5.5.1" }
 
@@ -222,9 +229,9 @@ org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "s
 org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.24.0" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
-com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.46.0" }
+com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.47.0" }
 org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
-org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.2.1" }
+org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.4.0" }
 net-sf-supercsv-superCsv = { group = "net.sf.supercsv", name = "super-csv", version = "2.4.0" }
 
 com-fasterxml-jackson-module-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
@@ -237,7 +244,8 @@ com-fasterxml-jackson-datatype-jacksonDatatypeGuava = { group = "com.fasterxml.j
 com-fasterxml-jackson-datatype-jacksonDatatypeJoda = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-joda", version.ref = "jackson" }
 com-google-code-gson-gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 
-org-springframework-springTest = { group = "org.springframework", name = "spring-test" }
+org-springframework-springTest = { group = "org.springframework", name = "spring-test", version.ref = "spring-framework" }
+
 org-springframework-security-springSecurityTest = { group = "org.springframework.security", name = "spring-security-test" }
 org-springframework-boot-springBootTest = { group = "org.springframework.boot", name = "spring-boot-test" }
 org-springframework-boot-springBootTestAutoconfigure = { group = "org.springframework.boot", name = "spring-boot-test-autoconfigure" }

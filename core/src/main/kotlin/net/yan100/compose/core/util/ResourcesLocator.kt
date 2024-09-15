@@ -33,6 +33,7 @@ import java.util.jar.JarFile
  * @author TrueNine
  * @since 2022-10-29
  */
+@Suppress("ALL")
 @Deprecated("使用别的稳定的资源路径获取器")
 object ResourcesLocator {
   private const val JAR_PROTOCOL = "jar"

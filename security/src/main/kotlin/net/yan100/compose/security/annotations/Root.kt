@@ -14,13 +14,14 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.data.extract.autoconfig
+package net.yan100.compose.security.annotations
 
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Import
+import org.springframework.security.access.prepost.PreAuthorize
+import java.lang.annotation.Inherited
 
-@ComponentScan(
-  "net.yan100.compose.data.extract.service",
-  "net.yan100.compose.data.extract.autoconfig"
-)
-class AutoConfigEntrance
+@Inherited
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
+@PreAuthorize("isAuthenticated() && hasPermission('ROOT')")
+annotation class Root
