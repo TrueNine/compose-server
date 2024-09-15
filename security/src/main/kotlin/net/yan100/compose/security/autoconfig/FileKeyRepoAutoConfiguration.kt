@@ -25,7 +25,8 @@ import org.springframework.context.annotation.Primary
 @Configuration
 class FileKeyRepoAutoConfiguration {
   companion object {
-    @JvmStatic private val log = slf4j(FileKeyRepoAutoConfiguration::class)
+    @JvmStatic
+    private val log = slf4j(FileKeyRepoAutoConfiguration::class)
   }
 
   @Bean

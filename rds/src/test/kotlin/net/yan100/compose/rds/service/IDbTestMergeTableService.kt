@@ -5,5 +5,4 @@ import net.yan100.compose.rds.entities.DbTestMergeTable
 import net.yan100.compose.rds.repositories.IDbTestMergeTableRepo
 
 
-interface IDbTestMergeTableService : ICrud<DbTestMergeTable>, IDbTestMergeTableRepo {
-}
+interface IDbTestMergeTableService : ICrud<DbTestMergeTable>, IDbTestMergeTableRepo

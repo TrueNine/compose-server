@@ -28,14 +28,14 @@ import java.util.regex.Pattern
 import kotlin.test.Test
 
 data class MDCLogData(
-    var datetime: datetime,
-    var threadName: string?,
-    var traceId: string?,
-    var ip: string?,
-    var level: Level,
-    var abbrClassName: string,
-    var logContent: string,
-    var append: string?,
+  var datetime: datetime,
+  var threadName: string?,
+  var traceId: string?,
+  var ip: string?,
+  var level: Level,
+  var abbrClassName: string,
+  var logContent: string,
+  var append: string?,
 )
 
 class SplitText {

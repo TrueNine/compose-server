@@ -1,10 +1,8 @@
 package net.yan100.compose.rds.entities
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Transient
 import net.yan100.compose.core.RefId
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.converters.AttachmentTypingConverter

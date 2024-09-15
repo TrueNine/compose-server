@@ -20,4 +20,5 @@ import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.entities.Gen
 import org.springframework.stereotype.Repository
 
-@Repository interface GenRepo : IRepo<Gen>
+@Repository
+interface GenRepo : IRepo<Gen>

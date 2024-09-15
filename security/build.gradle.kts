@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.securityCrypto.get()
+project.version = libs.versions.compose.security.get()
 
 dependencies {
   api(libs.org.springframework.boot.springBootStarterSecurity)

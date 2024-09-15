@@ -85,12 +85,13 @@ interface IMinoritiesService {
         "基诺",
       )
 
-    @JvmStatic val MINORITIES_Z = net.yan100.compose.data.extract.service.IMinoritiesService.Companion.MINORITIES.map { it + "族" }
+    @JvmStatic
+    val MINORITIES_Z = MINORITIES.map { it + "族" }
   }
 
   fun findAllMinorities(): List<String> =
-      net.yan100.compose.data.extract.service.IMinoritiesService.Companion.MINORITIES
+    MINORITIES
 
   fun findAllMinoritiesZ(): List<String> =
-      net.yan100.compose.data.extract.service.IMinoritiesService.Companion.MINORITIES_Z
+    MINORITIES_Z
 }

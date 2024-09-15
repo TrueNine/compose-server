@@ -32,10 +32,10 @@ val HttpServletResponse.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
 
 inline fun HttpServletResponse.useResponse(
-    contentType: MediaTypes = MediaTypes.BINARY,
-    charset: Charset = Charsets.UTF_8,
-    locale: Locale = Locale.CHINA,
-    crossinline with: (HttpServletResponse) -> HttpServletResponse,
+  contentType: MediaTypes = MediaTypes.BINARY,
+  charset: Charset = Charsets.UTF_8,
+  locale: Locale = Locale.CHINA,
+  crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
   this.contentType = contentType.value
   this.characterEncoding = charset.displayName()
@@ -66,10 +66,10 @@ val HttpServletRequest.deviceId: String
 /** ## 设置下载时的东西 */
 @Deprecated("流使用完毕就关了流")
 fun HttpServletResponse.withDownload(
-    fileName: String,
-    contentType: MediaTypes = MediaTypes.BINARY,
-    charset: Charset = Charsets.UTF_8,
-    closeBlock: ((outputStream: OutputStream) -> Unit)?,
+  fileName: String,
+  contentType: MediaTypes = MediaTypes.BINARY,
+  charset: Charset = Charsets.UTF_8,
+  closeBlock: ((outputStream: OutputStream) -> Unit)?,
 ) {
   this.setHeader(IHeaders.CONTENT_DISPOSITION, IHeaders.downloadDisposition(fileName, charset))
   this.setHeader(IHeaders.CONTENT_TYPE, contentType.value)

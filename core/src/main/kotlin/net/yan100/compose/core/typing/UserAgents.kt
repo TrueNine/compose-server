@@ -36,6 +36,7 @@ enum class UserAgents(private val ua: String) : StringTyping {
   override val value: String = ua
 
   companion object {
-    @JvmStatic fun findVal(v: String) = entries.find { it.ua == v }
+    @JvmStatic
+    fun findVal(v: String) = entries.find { it.ua == v }
   }
 }

@@ -45,28 +45,28 @@ class CloneDeepVisitor : KSTopDownVisitor<ContextData, Unit>() {
       val classType = classDeclaration.toClassName()
       val allProperties = classDeclaration.getAllProperties()
       fileDsl(classDeclaration.packageName.asString(), "_CloneDeep${classDeclaration.simpleName.asString()}") {
-          builder.addFunction(
-            FunSpec.builder("fromDeep")
-              .returns(classType)
-              .addParameter(ParameterSpec.builder("other", classType).build())
-              .receiver(classType)
-              .addCode(
-                CodeBlock.builder()
-                  .apply {
-                    allProperties.forEach { p ->
-                      val pName = p.simpleName.asString()
+        builder.addFunction(
+          FunSpec.builder("fromDeep")
+            .returns(classType)
+            .addParameter(ParameterSpec.builder("other", classType).build())
+            .receiver(classType)
+            .addCode(
+              CodeBlock.builder()
+                .apply {
+                  allProperties.forEach { p ->
+                    val pName = p.simpleName.asString()
 
-                      beginControlFlow("if (other.$pName != null)")
-                      addStatement("this.$pName = other.$pName")
-                      endControlFlow()
-                    }
+                    beginControlFlow("if (other.$pName != null)")
+                    addStatement("this.$pName = other.$pName")
+                    endControlFlow()
                   }
-                  .add("return this")
-                  .build()
-              )
-              .build()
-          )
-        }
+                }
+                .add("return this")
+                .build()
+            )
+            .build()
+        )
+      }
         .writeTo(data.codeGenerator, Dependencies.ALL_FILES)
     }
   }

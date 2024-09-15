@@ -35,9 +35,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class AddressDetailsServiceImpl(
-    private val aRepo: IAddressRepo,
-    override val repo: IAddressDetailsRepo,
-    private val fRepo: IFullAddressDetailsRepo
+  private val aRepo: IAddressRepo,
+  override val repo: IAddressDetailsRepo,
+  private val fRepo: IFullAddressDetailsRepo
 ) : IAddressDetailsService, ICrud<AddressDetails> by jpa(repo) {
   override fun fetchAllByUserId(userId: String, page: Pq): Pr<AddressDetails> {
     return repo.findAllByUserId(userId, page.page).result

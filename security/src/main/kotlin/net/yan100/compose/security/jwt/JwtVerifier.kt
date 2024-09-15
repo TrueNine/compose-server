@@ -140,6 +140,7 @@ open class JwtVerifier internal constructor() {
   }
 
   companion object {
-    @JvmStatic fun createVerifier(): Builder = JwtVerifier().Builder()
+    @JvmStatic
+    fun createVerifier(): Builder = JwtVerifier().Builder()
   }
 }

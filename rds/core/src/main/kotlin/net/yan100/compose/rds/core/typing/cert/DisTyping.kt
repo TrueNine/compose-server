@@ -27,17 +27,26 @@ import net.yan100.compose.core.typing.IntTyping
  * @since 2023-11-03
  */
 enum class DisTyping(private val typ: Int) : IntTyping {
-  @Schema(title = "视力") EYE(1),
-  @Schema(title = "听力") EAR(2),
-  @Schema(title = "言语") MOUTH(3),
-  @Schema(title = "肢体") BODY(4),
-  @Schema(title = "智力") IQ(5),
-  @Schema(title = "精神") NERVE(6),
-  @Schema(title = "多重") MULTIPLE(7);
+  @Schema(title = "视力")
+  EYE(1),
+  @Schema(title = "听力")
+  EAR(2),
+  @Schema(title = "言语")
+  MOUTH(3),
+  @Schema(title = "肢体")
+  BODY(4),
+  @Schema(title = "智力")
+  IQ(5),
+  @Schema(title = "精神")
+  NERVE(6),
+  @Schema(title = "多重")
+  MULTIPLE(7);
 
-  @JsonValue override val value = typ
+  @JsonValue
+  override val value = typ
 
   companion object {
-    @JvmStatic fun findVal(typ: Int?) = entries.find { it.typ == typ }
+    @JvmStatic
+    fun findVal(typ: Int?) = entries.find { it.typ == typ }
   }
 }

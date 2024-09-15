@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AddressServiceImpl(
- private val aRepo: IAddressRepo
+  private val aRepo: IAddressRepo
 ) : IAddressService, ICrud<Address> by jpa(aRepo) {
 
   override fun findByCode(code: string): Address? {

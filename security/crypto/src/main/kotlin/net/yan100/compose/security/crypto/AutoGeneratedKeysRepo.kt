@@ -1,7 +1,5 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.core.domain.enc.EccKeyPair
-import net.yan100.compose.core.domain.enc.RsaKeyPair
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.crypto.domain.IEccExtKeyPair
 import net.yan100.compose.security.crypto.domain.IKeysRepo

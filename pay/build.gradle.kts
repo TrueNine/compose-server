@@ -1,4 +1,4 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.pay.get()
 
 dependencies {
   api(libs.com.github.wechatpayApiv3.wechatpayJava)

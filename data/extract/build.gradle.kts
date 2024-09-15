@@ -1,4 +1,4 @@
-version = libs.versions.compose.asProvider().get()
+version = libs.versions.compose.dataExtract.get()
 
 dependencies {
   api(libs.org.jsoup.jsoup)

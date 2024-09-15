@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class RoleGroupServiceImpl(
-    private val rgRepo: IRoleGroupRepo,
-    private val urRepo: IUserRoleGroupRepo
+  private val rgRepo: IRoleGroupRepo,
+  private val urRepo: IUserRoleGroupRepo
 ) : IRoleGroupService, ICrud<RoleGroup> by jpa(rgRepo) {
   override fun assignRootToUser(userId: String): UserRoleGroup {
     return UserRoleGroup()

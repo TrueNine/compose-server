@@ -22,13 +22,18 @@ import net.yan100.compose.core.typing.IntTyping
 
 @Schema(title = "规则状态")
 enum class RuleTyping(private val v: Int) : IntTyping {
-  @Schema(title = "排除") EXCLUDE(0),
-  @Schema(title = "包含") INCLUDE(1),
-  @Schema(title = "固定") FIXED(2);
+  @Schema(title = "排除")
+  EXCLUDE(0),
+  @Schema(title = "包含")
+  INCLUDE(1),
+  @Schema(title = "固定")
+  FIXED(2);
 
-  @JsonValue override val value: Int = v
+  @JsonValue
+  override val value: Int = v
 
   companion object {
-    @JvmStatic fun findVal(e: Int?): RuleTyping? = entries.find { it.value == e }
+    @JvmStatic
+    fun findVal(e: Int?): RuleTyping? = entries.find { it.value == e }
   }
 }

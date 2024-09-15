@@ -18,7 +18,6 @@ package net.yan100.compose.pay.service.impl
 
 import jakarta.annotation.Resource
 import net.yan100.compose.core.generator.IOrderCodeGenerator
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest

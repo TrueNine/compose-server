@@ -1,6 +1,5 @@
 package net.yan100.compose.security.crypto.domain
 
-import net.yan100.compose.core.domain.enc.EccKeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
@@ -19,7 +18,7 @@ interface IKeysRepo {
   }
 
   fun findEccKeyPairByName(publicKeyName: String, privateKeyName: String): IEccExtKeyPair? {
-    return EccExtKeyPair(findEccPublicKeyByName(publicKeyName)!!,findEccPrivateKeyByName(privateKeyName)!!)
+    return EccExtKeyPair(findEccPublicKeyByName(publicKeyName)!!, findEccPrivateKeyByName(privateKeyName)!!)
   }
 
   fun findAesSecretByName(name: String): SecretKeySpec? = null

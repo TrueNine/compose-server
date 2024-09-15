@@ -33,8 +33,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class AttachmentServiceImpl(
-    private val attRepo: IAttachmentRepo,
-    private val linkedRepo: ILinkedAttachmentRepo
+  private val attRepo: IAttachmentRepo,
+  private val linkedRepo: ILinkedAttachmentRepo
 ) : IAttachmentService, ICrud<Attachment> by jpa(attRepo) {
   override fun existsByBaseUrl(baseUrl: String): Boolean {
     return attRepo.existsByBaseUrl(baseUrl)

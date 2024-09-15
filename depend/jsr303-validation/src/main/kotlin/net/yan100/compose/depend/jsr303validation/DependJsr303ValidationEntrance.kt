@@ -19,4 +19,6 @@ package net.yan100.compose.depend.jsr303validation
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.domain.EntityScan
 
-@SpringBootApplication @EntityScan(basePackages = ["net.yan100.compose.depend.jvalid.entities"]) class DependJsr303ValidationEntrance
+@SpringBootApplication
+@EntityScan(basePackages = ["net.yan100.compose.depend.jvalid.entities"])
+class DependJsr303ValidationEntrance

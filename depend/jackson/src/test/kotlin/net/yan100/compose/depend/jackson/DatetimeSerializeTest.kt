@@ -7,9 +7,6 @@ import net.yan100.compose.core.date
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.time
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 

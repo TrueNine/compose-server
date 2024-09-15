@@ -29,14 +29,18 @@ import net.yan100.compose.core.typing.IntTyping
 @Schema(title = "附件类别")
 enum class AttachmentTyping(private val v: Int) : IntTyping {
   /** 文件 */
-  @Schema(title = "文件") ATTACHMENT(0),
+  @Schema(title = "文件")
+  ATTACHMENT(0),
 
   /** 根路径 */
-  @Schema(title = "根路径") BASE_URL(1);
+  @Schema(title = "根路径")
+  BASE_URL(1);
 
-  @JsonValue override val value = v
+  @JsonValue
+  override val value = v
 
   companion object {
-    @JvmStatic operator fun get(v: Int?) = entries.find { it.value == v }
+    @JvmStatic
+    operator fun get(v: Int?) = entries.find { it.value == v }
   }
 }

@@ -62,7 +62,8 @@ enum class MediaTypes(private val extension: String, vararg m: String) : StringT
   RAR("rar", "application/x-rar-compressed"),
   SSE("sse", "text/event-stream");
 
-  @JsonIgnore private var mm: Array<out String> = m
+  @JsonIgnore
+  private var mm: Array<out String> = m
 
   @get:JsonIgnore
   @Suppress("UNCHECKED_CAST")
@@ -78,7 +79,8 @@ enum class MediaTypes(private val extension: String, vararg m: String) : StringT
     return this.value
   }
 
-  @JsonValue override val value: String = this.mm[0]
+  @JsonValue
+  override val value: String = this.mm[0]
 
   companion object {
     fun findVal(media: String): MediaTypes? {

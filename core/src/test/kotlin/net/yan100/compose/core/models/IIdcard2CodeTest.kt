@@ -23,17 +23,29 @@ import kotlin.test.assertEquals
 
 class IIdcard2CodeTest {
 
-  @Test fun getIdcard2Code() {}
+  @Test
+  fun getIdcard2Code() {
+  }
 
-  @Test fun getIdcardBirthday() {}
+  @Test
+  fun getIdcardBirthday() {
+  }
 
-  @Test fun getIdcardSexCode() {}
+  @Test
+  fun getIdcardSexCode() {
+  }
 
-  @Test fun getIdcardSex() {}
+  @Test
+  fun getIdcardSex() {
+  }
 
-  @Test fun getIdcardDistrictCode() {}
+  @Test
+  fun getIdcardDistrictCode() {
+  }
 
-  @Test fun idcardUpperCase() {}
+  @Test
+  fun idcardUpperCase() {
+  }
 
   @Test
   fun get() {

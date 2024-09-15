@@ -28,7 +28,7 @@ import org.springframework.data.repository.NoRepositoryBean
  * @since 2023-05-05
  */
 @NoRepositoryBean
-interface IAnyRepository<T : IAnyEntity>  {
+interface IAnyRepository<T : IAnyEntity> {
   /**
    * ## 根据 ID 查询 ID
    *

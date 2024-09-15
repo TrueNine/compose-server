@@ -22,11 +22,11 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.consts.IMethods
-import net.yan100.compose.security.AuthRequestInfo
 import net.yan100.compose.core.hasText
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.depend.servlet.deviceId
 import net.yan100.compose.depend.servlet.remoteRequestIp
+import net.yan100.compose.security.AuthRequestInfo
 import net.yan100.compose.security.UserDetailsWrapper
 import net.yan100.compose.security.holders.UserInfoContextHolder
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -96,7 +96,8 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
    */
   private fun containsTokenPair(request: HttpServletRequest): Boolean =
     request.getHeader(IHeaders.AUTHORIZATION).hasText() && request.getHeader(
-        IHeaders.X_REFRESH).hasText()
+      IHeaders.X_REFRESH
+    ).hasText()
 
   /**
    * 从请求得到 token

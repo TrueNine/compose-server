@@ -65,9 +65,9 @@ open class QueryDslExtensionFUnctionsArg3<E : IEntity, T : EntityPathBase<E>>(
  */
 @JvmName("querydslByBooleanBuilderAndEntityManager")
 inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
-    e: T,
-    entityManager: EntityManager,
-    crossinline fn: QueryDslExtensionFUnctionsArg3<E, T>.() -> R,
+  e: T,
+  entityManager: EntityManager,
+  crossinline fn: QueryDslExtensionFUnctionsArg3<E, T>.() -> R,
 ): R = fn(QueryDslExtensionFUnctionsArg3(e, BooleanBuilder(), JPAQueryFactory(entityManager)))
 
 /* order by extension functions */

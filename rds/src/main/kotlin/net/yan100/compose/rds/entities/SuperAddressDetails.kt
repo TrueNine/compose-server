@@ -22,8 +22,8 @@ import jakarta.persistence.MappedSuperclass
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.RefId
-import net.yan100.compose.core.domain.Coordinate
 import net.yan100.compose.core.consts.IRegexes
+import net.yan100.compose.core.domain.Coordinate
 import net.yan100.compose.core.string
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.converters.WGS84Converter

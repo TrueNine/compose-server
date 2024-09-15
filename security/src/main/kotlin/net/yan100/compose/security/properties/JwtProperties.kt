@@ -21,9 +21,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "compose.security.jwt")
 class JwtProperties {
-    var publicKeyClassPath: String = "security/pub.key"
-    var privateKeyClassPath: String = "security/pri.key"
-    var encryptDataKeyName: String = "edt"
-    var issuer: String = "T-SERVER"
-    var expiredDuration: Long = (2 * 60 * 60 * 60 * 1000).toLong()
+  var publicKeyClassPath: String = "security/pub.key"
+  var privateKeyClassPath: String = "security/pri.key"
+  var encryptDataKeyName: String = "edt"
+  var issuer: String = "T-SERVER"
+  var expiredDuration: Long = (2 * 60 * 60 * 60 * 1000).toLong()
 }

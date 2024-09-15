@@ -24,6 +24,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 class WechatProperties {
   @NestedConfigurationProperty
   var wxpa = WxpaProperties()
+
   companion object {
     const val PREFIX = "compose.security.oauth2.wechat"
   }

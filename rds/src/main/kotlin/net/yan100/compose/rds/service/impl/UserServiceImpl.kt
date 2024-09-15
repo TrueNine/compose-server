@@ -29,8 +29,8 @@ import java.time.LocalDateTime
 
 @Service
 class UserServiceImpl(
-    private val userRepo: IUsrRepo,
-    private val fullRepo: IFullUserRepo
+  private val userRepo: IUsrRepo,
+  private val fullRepo: IFullUserRepo
 ) : IUserService, ICrud<Usr> by jpa(userRepo) {
 
   override fun findUserByAccount(account: String): Usr? {

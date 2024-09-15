@@ -23,7 +23,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class QueryDslTest {
-  @Test fun `test a`() {}
+  @Test
+  fun `test a`() {
+  }
 
   /**  */
   @Test

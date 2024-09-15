@@ -39,10 +39,16 @@ import org.hibernate.annotations.DynamicUpdate
 @Table(name = UserRoleGroup.TABLE_NAME)
 class UserRoleGroup : IEntity() {
   /** 用户 */
-  @Nullable @Schema(title = "用户") @Column(name = USER_ID) lateinit var userId: RefId
+  @Nullable
+  @Schema(title = "用户")
+  @Column(name = USER_ID)
+  lateinit var userId: RefId
 
   /** 权限组 */
-  @Nullable @Schema(title = "权限组") @Column(name = ROLE_GROUP_ID) lateinit var roleGroupId: RefId
+  @Nullable
+  @Schema(title = "权限组")
+  @Column(name = ROLE_GROUP_ID)
+  lateinit var roleGroupId: RefId
 
   companion object {
     const val TABLE_NAME: String = "user_role_group"

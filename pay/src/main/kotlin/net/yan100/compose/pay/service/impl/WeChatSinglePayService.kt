@@ -55,15 +55,16 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class WeChatSinglePayService(
-    private val wechatJsService: JsapiService,
-    private val refundApi: RefundService,
-    private val payProperty: WeChatPaySingleConfigProperty,
-    private val bigCodeGenerator: IOrderCodeGenerator,
-    private val rsaConfig: RSAAutoCertificateConfig,
-    private val mapper: ObjectMapper,
+  private val wechatJsService: JsapiService,
+  private val refundApi: RefundService,
+  private val payProperty: WeChatPaySingleConfigProperty,
+  private val bigCodeGenerator: IOrderCodeGenerator,
+  private val rsaConfig: RSAAutoCertificateConfig,
+  private val mapper: ObjectMapper,
 ) : SinglePayService {
   companion object {
-    @JvmStatic private val HUNDRED = BigDecimal("100")
+    @JvmStatic
+    private val HUNDRED = BigDecimal("100")
     private val log = slf4j(WeChatSinglePayService::class)
   }
 

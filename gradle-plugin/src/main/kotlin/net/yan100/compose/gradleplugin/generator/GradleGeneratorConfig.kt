@@ -47,6 +47,7 @@ open class GradleGeneratorConfig {
     fun wrapperUrl(url: String) {
       wrapperUrl = url
     }
+
     fun wrapperVersion(version: String) {
       wrapperVersion = version
     }

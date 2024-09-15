@@ -58,6 +58,7 @@ abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null)
   }
 
   companion object {
-    @JvmStatic private val log = slf4j(SecurityExceptionAdware::class)
+    @JvmStatic
+    private val log = slf4j(SecurityExceptionAdware::class)
   }
 }

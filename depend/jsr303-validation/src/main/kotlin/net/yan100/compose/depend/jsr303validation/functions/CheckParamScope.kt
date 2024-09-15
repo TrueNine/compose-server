@@ -33,6 +33,7 @@ class PairDiffScope<A, B>(private val aValue: A?, private val bValue: B?, privat
   init {
     if (null == aValue && null == bValue) throw ValidException("两侧的值均为空")
   }
+
   var lazyMessage: (() -> Any)? = null
 
   /** ## 检测表达式的值，抛出异常 */
@@ -112,7 +113,7 @@ interface CheckParamScope<T> {
    */
   infix fun String?.nonTextThen(lazyMessage: () -> Any): String = toValidException {
     check(hasText(), lazyMessage)
-      this
+    this
   }
 
   /**

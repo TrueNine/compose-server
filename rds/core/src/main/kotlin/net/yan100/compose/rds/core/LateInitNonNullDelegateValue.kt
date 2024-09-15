@@ -9,5 +9,6 @@ class LateInitNonNullDelegateValue<T> {
     if (null == thisRef) throw NullPointerException("thisRef is null")
     v = value as Any
   }
+
   operator fun getValue(thisRef: Any?, property: KProperty<*>): T = v as T
 }

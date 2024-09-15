@@ -26,7 +26,7 @@ class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfi
   }
 
   override fun supportsParameter(parameter: MethodParameter): Boolean {
-   log.trace("support by parameter = {}", parameter)
+    log.trace("support by parameter = {}", parameter)
     return RequestInfo::class.java.isAssignableFrom(parameter.parameterType)
   }
 

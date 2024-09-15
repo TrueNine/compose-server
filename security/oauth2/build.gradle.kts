@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.asProvider().get()
+project.version = libs.versions.compose.securityOauth2.get()
 
 dependencies {
   implementation(project(":core"))

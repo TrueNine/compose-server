@@ -1,14 +1,14 @@
 # 设置时区为 + 8:00
 set
-TIME_ZONE = '+8:00';
+    TIME_ZONE = '+8:00';
 set
-charset utf8mb4;
+    charset utf8mb4;
 
 flush privileges;
 set
-names utf8mb4;
+    names utf8mb4;
 set
-FOREIGN_KEY_CHECKS = 0;
+    FOREIGN_KEY_CHECKS = 0;
 
 # 基础表字段 delimiter $$ create
     procedure add_base_struct(

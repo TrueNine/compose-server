@@ -28,7 +28,8 @@ import net.yan100.compose.rds.core.entities.IEntity
 class DbTestServiceEntity : IEntity() {
   var title: String? = null
 
-  @Convert(converter = WGS84Converter::class) var center: Coordinate? = null
+  @Convert(converter = WGS84Converter::class)
+  var center: Coordinate? = null
 
   companion object {
 

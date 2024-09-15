@@ -33,7 +33,8 @@ interface ICnNbsAddressApi {
     const val DEFAULT_VERSION = "2023"
   }
 
-  @GetExchange(url = "{year}/index.html") fun homePage(@PathVariable(required = false) year: String? = DEFAULT_VERSION): ResponseEntity<String>
+  @GetExchange(url = "{year}/index.html")
+  fun homePage(@PathVariable(required = false) year: String? = DEFAULT_VERSION): ResponseEntity<String>
 
   @GetExchange("{year}/{provinceCode}.html")
   fun getCityPage(@PathVariable provinceCode: String, @PathVariable year: String? = DEFAULT_VERSION): ResponseEntity<String>

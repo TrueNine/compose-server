@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.security.spring.security
 
-import net.yan100.compose.security.AuthRequestInfo
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.security.AuthRequestInfo
 import net.yan100.compose.security.UserDetailsWrapper
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -48,6 +48,7 @@ abstract class SecurityUserDetailsService : UserDetailsService {
   abstract fun loadUserDetailsByAccount(account: String?): AuthRequestInfo?
 
   companion object {
-    @JvmStatic private val log = slf4j(this::class)
+    @JvmStatic
+    private val log = slf4j(this::class)
   }
 }

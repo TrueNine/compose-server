@@ -22,7 +22,6 @@ import net.yan100.compose.security.crypto.Encryptors
 import net.yan100.compose.security.crypto.IBase64
 import net.yan100.compose.security.crypto.Keys
 import net.yan100.compose.testtookit.log
-import java.lang.invoke.MethodHandles.loop
 import kotlin.test.*
 
 class EncryptAndDecryptTest {

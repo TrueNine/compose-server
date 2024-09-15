@@ -1,7 +1,6 @@
 package net.yan100.compose.core.domain.enc
 
 import net.yan100.compose.core.domain.IEccKeyPair
-import net.yan100.compose.core.domain.IKeyPair
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import java.security.PrivateKey
 import java.security.PublicKey

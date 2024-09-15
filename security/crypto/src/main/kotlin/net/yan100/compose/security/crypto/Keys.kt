@@ -1,8 +1,6 @@
 package net.yan100.compose.security.crypto
 
 
-import net.yan100.compose.core.domain.enc.EccKeyPair
-import net.yan100.compose.core.domain.enc.RsaKeyPair
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import net.yan100.compose.security.crypto.domain.EccExtKeyPair
@@ -239,7 +237,7 @@ object Keys {
    * @return eccKeyPair
    */
   @JvmStatic
-  fun readEccKeyPair(eccPublicKeyBase64: String, eccPrivateKeyBase64: String): IEccExtKeyPair? {
+  fun readEccKeyPair(eccPublicKeyBase64: String, eccPrivateKeyBase64: String): IEccExtKeyPair {
     return EccExtKeyPair(readEccPublicKeyByBase64(eccPublicKeyBase64)!!, readEccPrivateKeyByBase64(eccPrivateKeyBase64)!!)
   }
 

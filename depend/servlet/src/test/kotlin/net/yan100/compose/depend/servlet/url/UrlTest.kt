@@ -27,7 +27,9 @@ import kotlin.test.Test
 @SpringServletTest
 @SpringBootTest(classes = [DependServletEntrance::class, UrlTestController::class])
 class UrlTest {
-  lateinit var mockMvc: MockMvc   @Resource set
+  lateinit var mockMvc: MockMvc @Resource set
 
-  @Test fun `test query param split`() {}
+  @Test
+  fun `test query param split`() {
+  }
 }

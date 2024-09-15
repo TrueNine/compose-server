@@ -79,7 +79,8 @@ class PageWaitChain<T : Any>(private var page: Page) {
   private var waitFn: (Page) -> Page? = { it }
   private var endFn: (Page) -> Boolean = { true }
 
-  @Suppress("UNCHECKED_CAST") private var exeFn: (Page) -> T = { Unit as T }
+  @Suppress("UNCHECKED_CAST")
+  private var exeFn: (Page) -> T = { Unit as T }
 
   fun init(i: (Page) -> Page?): PageWaitChain<T> {
     this.initFn = i

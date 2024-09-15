@@ -31,7 +31,6 @@ import com.squareup.kotlinpoet.ksp.writeTo
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.Access
-import jakarta.persistence.AccessType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import net.yan100.compose.core.camelCaseToSnakeCase
@@ -276,8 +275,10 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
 
   private fun generateClassAnnotations(destClassName: ClassName): List<AnnotationSpec> {
     val tableAnno =
-      AnnotationSpec.builder(jakarta.persistence.Table::class).addMember(CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName)
-        .build()).build()
+      AnnotationSpec.builder(jakarta.persistence.Table::class).addMember(
+        CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName)
+          .build()
+      ).build()
     return listOf(
       AnnotationSpec.builder(Entity::class).build(),
       tableAnno,

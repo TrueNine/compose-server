@@ -21,8 +21,8 @@ class FileKeysRepoImpl(
 
   init {
     aesKey = Keys.readAesKeyByBase64(read(aesPaths))
-    rsaKeyPair = Keys.readRsaKeyPair(read(rsaKeyPairPaths.first), read(rsaKeyPairPaths.second))!!
-    eccKeyPair = Keys.readEccKeyPair(read(eccKeyPairPaths.first), read(eccKeyPairPaths.second))!!
+    rsaKeyPair = Keys.readRsaKeyPair(read(rsaKeyPairPaths.first), read(rsaKeyPairPaths.second))
+    eccKeyPair = Keys.readEccKeyPair(read(eccKeyPairPaths.first), read(eccKeyPairPaths.second))
   }
 
   override fun basicEccKeyPair(): IEccExtKeyPair? {

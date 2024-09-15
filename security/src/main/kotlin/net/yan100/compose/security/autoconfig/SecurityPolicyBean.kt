@@ -68,10 +68,10 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityFilterChain(
-      httpSecurity: HttpSecurity,
-      cors: CorsConfiguration,
-      policyDefine: SecurityPolicyDefine,
-      applicationContext: ApplicationContext,
+    httpSecurity: HttpSecurity,
+    cors: CorsConfiguration,
+    policyDefine: SecurityPolicyDefine,
+    applicationContext: ApplicationContext,
   ): SecurityFilterChain {
     val enableAnnotation = getAnno(applicationContext)
     if (enableAnnotation == null) log.warn("未配置 安全注解 注解")

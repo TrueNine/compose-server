@@ -24,10 +24,10 @@ fun <T : IEntity> T.merge(target: T, findByIdFn: (id: Id) -> T?, preMergeFn: (db
 
 @Suppress("DEPRECATION_ERROR")
 fun <T : IEntity> mergeAll(
-    targets: List<T>,
-    findAllByIdFn: (ids: List<Id>) -> List<T>,
-    checkLength: Boolean = true,
-    preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
+  targets: List<T>,
+  findAllByIdFn: (ids: List<Id>) -> List<T>,
+  checkLength: Boolean = true,
+  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
 ): List<T> {
   val errMsg = "需更新的长度不一致"
   val prepared = targets.filterNot { it.isNew }

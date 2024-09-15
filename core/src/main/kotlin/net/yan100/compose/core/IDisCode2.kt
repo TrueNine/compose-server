@@ -45,7 +45,8 @@ interface IDisCode2 : IIdcard2Code {
   }
 
   companion object {
-    @JvmStatic operator fun get(code: String): IDisCode2 = DefaultDis2Code(code.uppercase())
+    @JvmStatic
+    operator fun get(code: String): IDisCode2 = DefaultDis2Code(code.uppercase())
   }
 
   @get:Transient
@@ -60,7 +61,9 @@ interface IDisCode2 : IIdcard2Code {
     get() = disCode.substring(19, 20).toInt()
 
   /** ## 残疾证号 */
-  @get:Transient @get:JsonIgnore val disCode: string
+  @get:Transient
+  @get:JsonIgnore
+  val disCode: string
 
   /**
    * ## 是否补办过

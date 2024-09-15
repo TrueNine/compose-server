@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- * 
+ *
  * The following source code is owned, developed and copyrighted by TrueNine
  * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
  * and resources. This software and its components are not to be used, reproduced,
@@ -13,11 +13,12 @@
  *     TrueNine
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
-*/
+ */
 package net.yan100.compose.oss;
 
 import lombok.Builder;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 文件参数
@@ -34,7 +35,7 @@ public class FileArgs {
     private String mimeType;
     private Long size;
 
-    public static FileArgs useStreamMap(StreamsMap map) {
+    public static FileArgs useStreamMap(@NotNull StreamsMap map) {
         return FileArgs.builder()
             .dir(map.getDirName())
             .fileName(map.getFName())
@@ -43,11 +44,11 @@ public class FileArgs {
             .build();
     }
 
-    public String getSizeStr() {
+    public @NotNull String getSizeStr() {
         return Long.toString(this.size);
     }
 
-    public void setSizeStr(String size) {
+    public void setSizeStr(@NotNull String size) {
         this.setSize(Long.parseLong(size));
     }
 }

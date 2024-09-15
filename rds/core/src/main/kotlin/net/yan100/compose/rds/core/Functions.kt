@@ -16,6 +16,9 @@ inline fun <reified T : IEntity, R : IRepo<T>> jpa(
   return SpringBootStarterDataJpaCrudServiceDelegateProvider(repo, supportedTypes.toList())
 }
 
-fun <E : IEntity, R> IQuerydslExtensionRepository<E>.findByQueryDsl(predicate: com.querydsl.core.types.Predicate, optFn: (q: FluentQuery.FetchableFluentQuery<E>) -> R): R {
+fun <E : IEntity, R> IQuerydslExtensionRepository<E>.findByQueryDsl(
+  predicate: com.querydsl.core.types.Predicate,
+  optFn: (q: FluentQuery.FetchableFluentQuery<E>) -> R
+): R {
   return this.findBy(predicate) { it: FluentQuery.FetchableFluentQuery<E> -> optFn(it) }
 }

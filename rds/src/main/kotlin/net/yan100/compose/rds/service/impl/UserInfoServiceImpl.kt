@@ -36,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserInfoServiceImpl(
-    private val userRepo: IUsrRepo,
-    private val infoRepo: IUserInfoRepo
+  private val userRepo: IUsrRepo,
+  private val infoRepo: IUserInfoRepo
 ) : IUserInfoService, ICrud<UserInfo> by jpa(infoRepo, Usr::class) {
   override suspend fun findIsRealPeopleById(id: RefId): Boolean = infoRepo.existsByIdAndIsRealPeople(id)
 

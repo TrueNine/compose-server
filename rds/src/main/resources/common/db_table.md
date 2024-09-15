@@ -217,12 +217,14 @@ erDiagram
   audit }o--o{ any: "ref_id"
   audit }o--o| usr: "user_id"
 ```
+
 ```mermaid
 erDiagram
   audit_attachment["审核附件表"]
   audit_attachment }o--|| audit: audit_id
   audit_attachment }o--|| attachment: att_id
 ```
+
 ### 证件关联
 
 ```mermaid

@@ -18,4 +18,5 @@ package net.yan100.compose.depend.httpexchange.autoconfig
 
 import org.springframework.context.annotation.Configuration
 
-@Configuration class WebClientAutoConfiguration
+@Configuration
+class WebClientAutoConfiguration

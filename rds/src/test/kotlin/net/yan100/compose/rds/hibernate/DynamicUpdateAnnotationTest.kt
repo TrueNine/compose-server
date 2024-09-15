@@ -35,7 +35,8 @@ import kotlin.test.assertNull
  */
 @SpringBootTest
 class DynamicUpdateAnnotationTest {
-  @Resource lateinit var attRepo: IAttachmentRepo
+  @Resource
+  lateinit var attRepo: IAttachmentRepo
 
   /** 保证在更新 null 后，可以设置为 null */
   @Test

@@ -1,22 +1,35 @@
 [versions]
-compose-versionCatalog = "1.6.594"
-compose = "1.6.515"
-compose-oss = "1.6.518"
-compose-cacheable = "1.6.526"
-compose-dependServlet = "1.6.518"
-compose-dependSpringdocOpenapi = "1.6.515"
-compose-core = "1.6.532"
-compose-security = "1.6.519"
-compose-securityCrypto = "1.6.594"
-compose-securityOauth2 = "1.6.515"
-compose-rds = "1.6.553"
-compose-rdsCore = "1.6.519"
-compose-testToolkit = "1.6.513"
+compose-versionCatalog = "2.0.0"
+compose = "2.0.0"
+compose-oss = "2.0.0"
+compose-pay = "2.0.0"
+compose-schedule = "2.0.0"
+compose-cacheable = "2.0.0"
 
-compose-ksp = "1.6.523"
-compose-kspCore = "1.6.515"
-compose-kspToolkit = "1.6.594"
-compose-gradlePlugin = "1.6.544"
+compose-dependServlet = "2.0.0"
+compose-dependPaho = "2.0.0"
+compose-dependJackson = "2.0.0"
+compose-dependHttpExchange = "2.0.0"
+compose-dependJsr303Validation = "2.0.0"
+compose-dependSpringdocOpenapi = "2.0.0"
+
+compose-core = "2.0.0"
+compose-security = "2.0.0"
+compose-securityCrypto = "2.0.0"
+compose-securityOauth2 = "2.0.0"
+compose-rds = "2.0.0"
+compose-rdsCore = "2.0.0"
+
+compose-testToolkit = "2.0.0"
+
+compose-dataExtract = "2.0.0"
+compose-dataCrawler = "2.0.0"
+
+compose-ksp = "2.0.0"
+compose-kspCore = "2.0.0"
+compose-kspToolkit = "2.0.0"
+
+compose-gradlePlugin = "2.0.0"
 
 composeGroup = "net.yan100.compose"
 
@@ -53,8 +66,8 @@ net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.r
 net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose-core" }
 net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose-cacheable" }
 net-yan100-compose-testToolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "compose-testToolkit" }
-net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose" }
-net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose" }
+net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose-schedule" }
+net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose-pay" }
 
 # ksp
 net-yan100-compose-ksp = { group = "net.yan100.compose", name = "ksp", version.ref = "compose-ksp" }
@@ -71,16 +84,16 @@ net-yan100-compose-securityOauth2 = { group = "net.yan100.compose", name = "secu
 net-yan100-compose-securityCrypto = { group = "net.yan100.compose", name = "security-crypto", version.ref = "compose-securityCrypto" }
 
 # 数据采集器
-net-yan100-compose-dataCrawler = { group = "net.yan100.compose", name = "data-crawler", version.ref = "compose" }
-net-yan100-compose-dataExtract = { group = "net.yan100.compose", name = "data-extract", version.ref = "compose" }
+net-yan100-compose-dataCrawler = { group = "net.yan100.compose", name = "data-crawler", version.ref = "compose-dataCrawler" }
+net-yan100-compose-dataExtract = { group = "net.yan100.compose", name = "data-extract", version.ref = "compose-dataExtract" }
 
 # 依赖
 net-yan100-compose-dependServlet = { group = "net.yan100.compose", name = "depend-servlet", version.ref = "compose-dependServlet" }
 net-yan100-compose-dependSpringdocOpenapi = { group = "net.yan100.compose", name = "depend-springdoc-openapi", version.ref = "compose-dependSpringdocOpenapi" }
-net-yan100-compose-dependPaho = { group = "net.yan100.compose", name = "depend-paho", version.ref = "compose" }
-net-yan100-compose-dependJackson = { group = "net.yan100.compose", name = "depend-jackson", version.ref = "compose" }
-net-yan100-compose-dependHttpExchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "compose" }
-net-yan100-compose-dependJsr303Validation = { group = "net.yan100.compose", name = "depend-jsr303-validation", version.ref = "compose" }
+net-yan100-compose-dependPaho = { group = "net.yan100.compose", name = "depend-paho", version.ref = "compose-dependPaho" }
+net-yan100-compose-dependJackson = { group = "net.yan100.compose", name = "depend-jackson", version.ref = "compose-dependJackson" }
+net-yan100-compose-dependHttpExchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "compose-dependHttpExchange" }
+net-yan100-compose-dependJsr303Validation = { group = "net.yan100.compose", name = "depend-jsr303-validation", version.ref = "compose-dependJsr303Validation" }
 
 
 org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "spring-boot" }

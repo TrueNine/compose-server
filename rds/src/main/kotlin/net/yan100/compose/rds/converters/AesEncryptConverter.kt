@@ -20,8 +20,8 @@ import jakarta.annotation.Resource
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
 import net.yan100.compose.core.IString
-import net.yan100.compose.security.crypto.domain.IKeysRepo
 import net.yan100.compose.security.crypto.Encryptors
+import net.yan100.compose.security.crypto.domain.IKeysRepo
 import org.springframework.stereotype.Component
 
 @Converter

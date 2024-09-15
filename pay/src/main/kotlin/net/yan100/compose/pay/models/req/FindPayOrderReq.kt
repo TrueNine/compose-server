@@ -23,8 +23,10 @@ import jakarta.validation.constraints.Size
 open class FindPayOrderReq {
 
   /** ## 商户订单号 */
-  @Schema(title = "商户订单号") open var merchantOrderId: @Size(min = 6, max = 32, message = "参数长度不对") String? = null
+  @Schema(title = "商户订单号")
+  open var merchantOrderId: @Size(min = 6, max = 32, message = "参数长度不对") String? = null
 
   /** ## 第三方订单号 */
-  @Schema(title = "第三方订单号") open var bizCode: @Size(min = 1, max = 32, message = "参数长度不对") String? = null
+  @Schema(title = "第三方订单号")
+  open var bizCode: @Size(min = 1, max = 32, message = "参数长度不对") String? = null
 }

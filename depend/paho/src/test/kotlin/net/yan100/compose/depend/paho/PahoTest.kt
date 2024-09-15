@@ -28,9 +28,11 @@ class PahoTest {
   @Resource
   lateinit var mqttClient: MqttClient
 
-  @Resource lateinit var options: MqttConnectOptions
+  @Resource
+  lateinit var options: MqttConnectOptions
 
-  @Resource lateinit var wrapper: MqttPahoClientWrapper
+  @Resource
+  lateinit var wrapper: MqttPahoClientWrapper
 
   // @Test
   fun testConnectClient() {

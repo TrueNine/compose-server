@@ -116,8 +116,10 @@ class JwtIssuer private constructor() : JwtVerifier() {
   }
 
   companion object {
-    @JvmStatic fun createIssuer() = JwtIssuer().Builder()
+    @JvmStatic
+    fun createIssuer() = JwtIssuer().Builder()
 
-    @JvmStatic private val log: Logger = slf4j(JwtIssuer::class)
+    @JvmStatic
+    private val log: Logger = slf4j(JwtIssuer::class)
   }
 }

@@ -1,6 +1,5 @@
 package net.yan100.compose.security.crypto.domain
 
-import net.yan100.compose.core.domain.IKeyPair
 import net.yan100.compose.core.domain.IRsaKeyPair
 import net.yan100.compose.core.domain.enc.RsaKeyPair
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping

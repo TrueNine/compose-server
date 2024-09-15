@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository
 
 @Primary
 @Repository
-interface IDbTestAllLateEntityRepo : IRepo<DbTestAllLateEntity> {
-}
+interface IDbTestAllLateEntityRepo : IRepo<DbTestAllLateEntity>

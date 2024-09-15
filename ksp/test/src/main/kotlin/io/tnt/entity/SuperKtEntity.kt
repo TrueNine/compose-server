@@ -42,16 +42,20 @@ class SuperKtEntity : SuperBaseEntity(), Cloneable {
   /** KDocumentation */
   var firstName: String? = null
 
-  @Schema(title = "我的") var lastName: String? = null
+  @Schema(title = "我的")
+  var lastName: String? = null
 
   val fullName: String
     get() = "$firstName $lastName"
 
-  @Column(name = "adl_cc") private var abc: String? = null
+  @Column(name = "adl_cc")
+  private var abc: String? = null
 
-  @Column(name = "adl_cc") var ddd: String? = null
+  @Column(name = "adl_cc")
+  var ddd: String? = null
 
-  @Column(name = "bd") var birthday: LocalDate? = null
+  @Column(name = "bd")
+  var birthday: LocalDate? = null
 
   override fun toString(): String {
     return super.toString()

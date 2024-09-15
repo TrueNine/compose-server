@@ -11,5 +11,4 @@ class DbTestMergeTableServiceImpl(
   private val dRepo: IDbTestMergeTableRepo
 ) : IDbTestMergeTableService,
   ICrud<DbTestMergeTable> by jpa(dRepo),
-  IDbTestMergeTableRepo by dRepo {
-}
+  IDbTestMergeTableRepo by dRepo

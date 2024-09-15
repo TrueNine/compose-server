@@ -26,7 +26,8 @@ private val log = slf4j(AnyTypingConverterFactory::class)
 
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
   companion object {
-    @JvmStatic private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
+    @JvmStatic
+    private val converters = ConcurrentHashMap<Class<*>, Converter<String?, AnyTyping?>>()
   }
 
   @Suppress("UNCHECKED_CAST")

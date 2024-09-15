@@ -16,6 +16,3 @@
  */
 package net.yan100.compose.ksp
 
-import com.google.devtools.ksp.symbol.KSDeclaration
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
-

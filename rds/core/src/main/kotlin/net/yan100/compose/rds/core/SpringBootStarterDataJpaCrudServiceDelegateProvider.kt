@@ -30,5 +30,5 @@ import kotlin.reflect.KClass
  */
 @Deprecated(message = "不建议直接创建此类，请使用其他方式", replaceWith = ReplaceWith("jpa", "net.yan100.compose.rds.core.jpa"), level = DeprecationLevel.ERROR)
 open class SpringBootStarterDataJpaCrudServiceDelegateProvider<T : IEntity, R : IRepo<T>>(
-    override val repo: R, supportedTypes: List<KClass<out IAnyEntity>> = emptyList()
+  override val repo: R, supportedTypes: List<KClass<out IAnyEntity>> = emptyList()
 ) : ICrud<T>, IBaseCrudService<T, IRepo<T>>, IMergeEntityEventService<T> by MergeEntityEventServiceDefaultImpl(supportedTypes)

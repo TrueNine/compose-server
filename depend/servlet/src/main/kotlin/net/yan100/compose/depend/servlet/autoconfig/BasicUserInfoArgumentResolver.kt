@@ -16,6 +16,4 @@
  */
 package net.yan100.compose.depend.servlet.autoconfig
 
-import net.yan100.compose.core.slf4j
-
 
