@@ -2,6 +2,8 @@ package net.yan100.compose.rds.core
 
 import net.yan100.compose.rds.core.entities.IAnyEntity
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.repositories.IQuerydslExtensionRepository
+import net.yan100.compose.rds.core.service.SpringBootStarterDataJpaCrudServiceDelegateProvider
 import org.springframework.data.repository.query.FluentQuery
 import kotlin.reflect.KClass
 

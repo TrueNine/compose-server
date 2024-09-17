@@ -131,9 +131,10 @@ interface IPage<T : Any> {
       dataList: Collection<T> = emptyList(),
       total: Long,
       offset: Long,
-      requestParamPageSize: Int
+      requestParamPageSize: Int,
+      unPage: Boolean? = false
     ): IPage<T> {
-      return get(dataList, total, IPageParam[requestParamPageSize, offset, false])
+      return get(dataList, total, IPageParam[requestParamPageSize, offset, unPage ?: true])
     }
 
     /**
