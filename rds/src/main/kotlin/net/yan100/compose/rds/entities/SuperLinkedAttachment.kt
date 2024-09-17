@@ -22,6 +22,7 @@ import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
 import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.ksp.core.annotations.MetaName
 import net.yan100.compose.rds.converters.AttachmentTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.AttachmentTyping
@@ -38,6 +39,7 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
  */
 @Schema(title = "组合查询附件")
 @MappedSuperclass
+@MetaName("attachment")
 @MetaDef(shadow = true)
 abstract class SuperLinkedAttachment : IEntity() {
   @get:Schema(title = "媒体类型")
