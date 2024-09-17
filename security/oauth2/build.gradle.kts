@@ -7,6 +7,7 @@ dependencies {
   implementation(libs.org.springframework.security.springSecurityCore)
 
   testImplementation(libs.org.springframework.boot.springBootStarterWeb)
+  testImplementation(project(":test-toolkit"))
 }
 
 publishing {

@@ -20,6 +20,7 @@ import jakarta.annotation.Resource
 import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.repositories.IAttachmentRepo
+import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -53,8 +54,8 @@ class DynamicUpdateAnnotationTest {
 
     assertNotNull(firstInsertEntity)
     val a = attRepo.findById(firstInsertEntity.id).get()
-    println(firstInsertEntity)
-    println(a)
+    log.info("firstInsertEntity: {}", firstInsertEntity)
+    log.info("a: {}", a)
 
     val save =
       attRepo.save(

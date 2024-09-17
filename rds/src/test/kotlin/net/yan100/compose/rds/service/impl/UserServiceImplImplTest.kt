@@ -26,6 +26,7 @@ import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.aggregator.IRbacAggregator
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
@@ -67,7 +68,7 @@ class UserServiceImplImplTest {
     assertEquals(saved.id, info.userId)
     val acc = service.findFullUserByAccount(saved.account)!!
     assertEquals(acc.id, info.userId)
-    println(mapper.writeValueAsString(acc))
+    log.info("json: {}", mapper.writeValueAsString(acc))
   }
 
   @Test

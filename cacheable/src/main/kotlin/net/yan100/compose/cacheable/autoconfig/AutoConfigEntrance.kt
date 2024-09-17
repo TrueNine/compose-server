@@ -16,7 +16,9 @@
  */
 package net.yan100.compose.cacheable.autoconfig
 
-import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.ComponentScan
 
-@Import(RedisJsonSerializerAutoConfiguration::class, CaffeineCacheAutoConfiguration::class)
+@ComponentScan(
+  "net.yan100.compose.cacheable.autoconfig"
+)
 class AutoConfigEntrance

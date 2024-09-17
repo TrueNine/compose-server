@@ -14,41 +14,35 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
 */
-package net.yan100.compose.oss;
+package net.yan100.compose.security.properties
 
-import lombok.Builder;
-import lombok.Data;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.context.properties.ConfigurationProperties
+
+private const val PREFIX = "compose.security"
 
 /**
- * 文件参数
+ * 密钥
  *
  * @author TrueNine
- * @since 2022-10-28
+ * @since 2023-04-22
  */
-@Data
-@Builder
-@Deprecated
-public class FileArgs {
-    private String dir;
-    private String fileName;
-    private String mimeType;
-    private Long size;
+@ConfigurationProperties(prefix = "$PREFIX.keys")
+data class KeysProperties(
+  /** 密钥存放的 resources 对应目录  */
+  var dir: String = "security",
 
-    public static FileArgs useStreamMap(@NotNull StreamsMap map) {
-        return FileArgs.builder()
-            .dir(map.getDirName())
-            .fileName(map.getFName())
-            .mimeType(map.getMediaType())
-            .size(map.getSize())
-            .build();
-    }
+  /** ecc 公钥路径  */
+  var eccPublicKeyPath: String = "ecc_public.key",
 
-    public @NotNull String getSizeStr() {
-        return Long.toString(this.size);
-    }
+  /** ecc 私钥路径  */
+  var eccPrivateKeyPath: String = "ecc_private.key",
 
-    public void setSizeStr(@NotNull String size) {
-        this.setSize(Long.parseLong(size));
-    }
-}
+  /** rsa 公钥路径  */
+  var rsaPublicKeyPath: String = "rsa_public.key",
+
+  /** rsa 私钥路径  */
+  var rsaPrivateKeyPath: String = "rsa_private.key",
+
+  /** aes key 路径  */
+  var aesKeyPath: String = "aes.key"
+)

@@ -39,6 +39,6 @@ class LangTest {
     val c = C()
     c.firstName = "a"
     c.lastName = "b"
-    println(c.fullName)
+    println()
   }
 }

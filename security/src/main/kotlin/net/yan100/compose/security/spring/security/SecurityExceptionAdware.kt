@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.ErrorBody
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.typing.HttpStatusTyping
-import net.yan100.compose.core.typing.MediaTypes
+import net.yan100.compose.core.typing.MimeTypes
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
@@ -50,7 +50,7 @@ abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null)
   private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorBody, charset: Charset = Charsets.UTF_8) {
     response.status = msg.code!!
     response.characterEncoding = charset.displayName()
-    response.contentType = MediaTypes.JSON.value
+    response.contentType = MimeTypes.JSON.value
     response.locale = Locale.CHINA
     val write = response.writer
     write.print(mapper?.writeValueAsString(msg))

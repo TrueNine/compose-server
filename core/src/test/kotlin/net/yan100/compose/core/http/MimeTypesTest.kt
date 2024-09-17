@@ -16,17 +16,17 @@
  */
 package net.yan100.compose.core.http
 
-import net.yan100.compose.core.typing.MediaTypes
+import net.yan100.compose.core.typing.MimeTypes
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class MediaTypesTest {
+class MimeTypesTest {
 
   @Test
   fun `test matching media`() {
-    val jpg = MediaTypes.JPEG
+    val jpg = MimeTypes.JPEG
     val name = "image/jpeg"
-    val found = MediaTypes.findVal(name)
+    val found = MimeTypes.findVal(name)
     assertEquals(jpg, found)
     assertEquals(jpg.ext, "jpg")
   }

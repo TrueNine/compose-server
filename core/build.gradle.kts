@@ -9,13 +9,6 @@ dependencies {
   api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)
   api(libs.org.slf4j.slf4jApi)
 
-  // TODO 日志
-  implementation(libs.org.springframework.boot.springBootStarterLogging)
-
-  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
-  testImplementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
-  testImplementation(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
-
   testImplementation(project(":test-toolkit"))
 }
 

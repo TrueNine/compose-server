@@ -16,22 +16,18 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import jakarta.validation.Valid
-import net.yan100.compose.core.hasText
-import net.yan100.compose.core.typing.MediaTypes
-import net.yan100.compose.rds.core.annotations.ACID
+import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.service.IAttachmentService
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 
 /** 附件聚合实现 */
 @Service
 class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAttachmentAggregator {
 
-  @ACID
+  /*@ACID
   override fun recordUpload(file: MultipartFile, @Valid saveFileCallback: (file: MultipartFile) -> @Valid IAttachmentAggregator.PostDto): Attachment? {
     val saveFile = saveFileCallback(file)
     val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
@@ -48,7 +44,7 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
       }
     // 重新进行赋值
     return aService.post(att)
-  }
+  }*/
 
   override fun recordUpload(stream: InputStream, req: (stream: InputStream) -> IAttachmentAggregator.PostDescDto): Attachment? {
     val saveFile = req(stream)
@@ -60,13 +56,13 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
         saveName = saveFile.saveName
         metaName = saveFile.metaName
         size = allBytes.size.toLong()
-        mimeType = saveFile.mimeType?.value ?: MediaTypes.BINARY.value
+        mimeType = saveFile.mimeType?.value ?: MimeTypes.BINARY.value
         attType = AttachmentTyping.ATTACHMENT
       }
       .let { aService.post(it) }
   }
 
-  @ACID
+  /*@ACID
   override fun recordUploads(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> IAttachmentAggregator.PostDto): List<Attachment> {
     val saved = files.map { saveFileCallback(it) to it }
     val baseUrls =
@@ -94,5 +90,5 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
         }
       }
       .let { aService.postAll(it) }
-  }
+  }*/
 }

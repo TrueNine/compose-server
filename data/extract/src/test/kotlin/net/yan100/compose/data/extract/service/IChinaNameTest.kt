@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.data.extract.service
 
+import net.yan100.compose.testtookit.log
 import org.springframework.core.io.ClassPathResource
 import kotlin.test.Test
 
@@ -26,8 +27,7 @@ class IChinaNameTest {
     val a = text.split(",").map { it.trim() }.distinct()
     val b = a.filter { it.length == 1 }.joinToString { "\n\"$it\"" }
     val c = a.filter { it.length == 2 }.joinToString { "\n\"$it\"" }
-    println(b)
-    println("==================")
-    println(c)
+    log.info("b: {}", b)
+    log.info("c: {}", c)
   }
 }

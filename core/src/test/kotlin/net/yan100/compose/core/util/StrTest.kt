@@ -18,6 +18,7 @@ package net.yan100.compose.core.util
 
 import net.yan100.compose.core.IString
 import net.yan100.compose.core.mutableLockListOf
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -57,6 +58,6 @@ class StrTest {
     for ((index, s) in groups.withIndex()) {
       groups[index] = "${s}${names[index + groups.size]}"
     }
-    println(groups)
+    log.info("groups: {}", groups)
   }
 }

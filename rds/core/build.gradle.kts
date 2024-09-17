@@ -2,7 +2,6 @@ plugins {
   alias(libs.plugins.org.hibernate.orm)
   alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.com.google.devtools.ksp)
-  //alias(libs.plugins.org.hibernate.orm)
 }
 apply(plugin = libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
 apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.noarg.get().pluginId)
@@ -16,7 +15,6 @@ kapt {
   javacOptions { option("querydsl.entityAccessors", true) }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
-noArg { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 hibernate {
   enhancement {

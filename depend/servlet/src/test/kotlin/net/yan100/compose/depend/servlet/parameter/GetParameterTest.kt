@@ -19,7 +19,6 @@ import kotlin.test.assertNotNull
  * # 验证以何种方式 给 spring boot 传递 get 参数
  */
 @SpringServletTest
-@SpringBootTest(classes = [DependServletEntrance::class])
 class GetParameterTest {
   lateinit var mockMvc: MockMvc @Resource set
   lateinit var controller: TestGetParameterController @Resource set

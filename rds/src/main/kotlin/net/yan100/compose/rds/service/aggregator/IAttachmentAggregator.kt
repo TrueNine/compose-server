@@ -17,9 +17,8 @@
 package net.yan100.compose.rds.service.aggregator
 
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.core.typing.MediaTypes
+import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.rds.entities.Attachment
-import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 
 /**
@@ -50,12 +49,8 @@ interface IAttachmentAggregator {
     var metaName: String? = null
 
     @Schema(title = "附件类型", description = "通常在默认情况下为 二进制文件")
-    var mimeType: MediaTypes? = null
+    var mimeType: MimeTypes? = null
   }
 
-  fun recordUpload(file: MultipartFile, saveFileCallback: (file: MultipartFile) -> PostDto): Attachment?
-
   fun recordUpload(stream: InputStream, req: (stream: InputStream) -> PostDescDto): Attachment?
-
-  fun recordUploads(files: List<MultipartFile>, saveFileCallback: (file: MultipartFile) -> PostDto): List<Attachment>
 }

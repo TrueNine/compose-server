@@ -3,6 +3,9 @@ version = libs.versions.compose.dependSpringdocOpenapi.get()
 dependencies {
   implementation(project(":core"))
   implementation(libs.org.springdoc.springdocOpenapiStarterWebmvcUi)
+  testImplementation(project(":test-toolkit"))
+  testImplementation(libs.org.springframework.boot.springBootTest)
+  testImplementation(libs.org.springframework.boot.springBootStarterTest)
 }
 
 publishing {

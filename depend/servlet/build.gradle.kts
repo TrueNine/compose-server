@@ -10,9 +10,6 @@ dependencies {
   implementation(project(":core"))
   implementation(project(":security:security-crypto"))
   testImplementation(project(":test-toolkit"))
-  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
-  testImplementation(libs.org.springframework.boot.springBootStarterJson)
-  testImplementation(libs.org.springframework.boot.springBootStarterTomcat)
 }
 
 publishing {

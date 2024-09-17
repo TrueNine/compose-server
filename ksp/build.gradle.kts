@@ -10,6 +10,8 @@ dependencies {
   implementation(project(":ksp:ksp-core"))
   implementation(project(":ksp:ksp-toolkit"))
   implementation(project(":core"))
+
+  testImplementation(project(":test-toolkit"))
 }
 
 publishing {

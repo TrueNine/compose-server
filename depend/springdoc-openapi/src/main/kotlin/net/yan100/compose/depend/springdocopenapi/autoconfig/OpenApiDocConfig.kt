@@ -25,7 +25,7 @@ import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.parameters.HeaderParameter
 import jakarta.annotation.PostConstruct
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.depend.springdocopenapi.properties.SwaggerProperties
+import net.yan100.compose.depend.springdocopenapi.properties.SpringdocOpenApiProperties
 import org.springdoc.core.models.GroupedOpenApi
 import org.springdoc.core.utils.SpringDocUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
@@ -45,7 +45,7 @@ class OpenApiDocConfig {
 
   @Bean
   @ConditionalOnWebApplication
-  fun userApi(p: SwaggerProperties): GroupedOpenApi {
+  fun userApi(p: SpringdocOpenApiProperties): GroupedOpenApi {
     log.debug("注册 OpenApi3 文档")
     val paths = p.scanUrlPatterns.toTypedArray()
     return GroupedOpenApi.builder()
@@ -77,7 +77,7 @@ class OpenApiDocConfig {
   }
 
   @Bean
-  fun customOpenApi(p: SwaggerProperties): OpenAPI {
+  fun customOpenApi(p: SpringdocOpenApiProperties): OpenAPI {
     val authorInfo = p.authorInfo
     return OpenAPI()
       .info(

@@ -5,6 +5,7 @@ dependencies {
   api(libs.com.github.benManes.caffeine.caffeine)
   implementation(project(":depend:depend-jackson"))
   implementation(project(":core"))
+  implementation(project(":test-toolkit"))
 }
 
 publishing {

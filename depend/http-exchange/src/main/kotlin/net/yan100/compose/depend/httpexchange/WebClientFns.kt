@@ -19,7 +19,7 @@ package net.yan100.compose.depend.httpexchange
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.typing.AnyTyping
-import net.yan100.compose.core.typing.MediaTypes
+import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.depend.httpexchange.encoder.AnyTypingEncoder
 import org.springframework.core.MethodParameter
 import org.springframework.http.codec.EncoderHttpMessageWriter
@@ -54,10 +54,10 @@ inline fun <reified T : Any> jsonWebClientRegister(
   val factoryBuilder = HttpServiceProxyFactory.builder()
   val jsonHandleMimeTypes =
     arrayOf(
-      MimeType.valueOf(MediaTypes.JSON.value),
+      MimeType.valueOf(MimeTypes.JSON.value),
       MimeType.valueOf("application/*+json"),
       MimeType.valueOf("application/x-ndjson"),
-      MimeType.valueOf(MediaTypes.TEXT.value),
+      MimeType.valueOf(MimeTypes.TEXT.value),
     )
   clientBuilder.codecs {
     it.defaultCodecs().enableLoggingRequestDetails(true)
@@ -68,7 +68,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
     it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMimeTypes))
   }
 
-  clientBuilder.defaultHeader(IHeaders.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
+  clientBuilder.defaultHeader(IHeaders.ACCEPT, MimeTypes.JSON.value, MimeTypes.TEXT.value)
 
   val cf = builder(clientBuilder, factoryBuilder)
   val client = cf.first.build()

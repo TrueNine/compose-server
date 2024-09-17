@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonValue
  * @author TrueNine
  * @since 2022-11-03
  */
-enum class MediaTypes(private val extension: String, vararg m: String) : StringTyping {
+enum class MimeTypes(private val extension: String, vararg m: String) : StringTyping {
   EXE("exe", "application/ms-download", "application/octet-stream"),
 
   /** 这个比较特殊，他的后缀名 是 binary 注意 */
@@ -83,7 +83,7 @@ enum class MediaTypes(private val extension: String, vararg m: String) : StringT
   override val value: String = this.mm[0]
 
   companion object {
-    fun findVal(media: String): MediaTypes? {
+    fun findVal(media: String): MimeTypes? {
       return entries.find { v -> v.medias.contains(media) }
     }
   }

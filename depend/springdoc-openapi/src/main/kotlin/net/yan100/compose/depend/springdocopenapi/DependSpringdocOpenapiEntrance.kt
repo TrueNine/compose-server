@@ -1,0 +1,6 @@
+package net.yan100.compose.depend.springdocopenapi
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+
+@SpringBootApplication
+internal class DependSpringdocOpenapiEntrance

@@ -16,13 +16,12 @@
 */
 package net.yan100.compose.depend.springdocopenapi.autoconfig
 
-import net.yan100.compose.depend.springdocopenapi.properties.SwaggerProperties
+import net.yan100.compose.depend.springdocopenapi.properties.SpringdocOpenApiProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.ComponentScan
 
-@Import(
-  OpenApiDocConfig::class // 暂时不需要了
-  // OpenApiConfigController.class
+@ComponentScan(
+  "net.yan100.compose.depend.springdocopenapi.autoconfig"
 )
-@EnableConfigurationProperties(SwaggerProperties::class)
+@EnableConfigurationProperties(SpringdocOpenApiProperties::class)
 class AutoConfigEntrance 

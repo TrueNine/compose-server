@@ -22,6 +22,7 @@ import kotlinx.coroutines.runBlocking
 import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.repositories.IUserInfoRepo
 import net.yan100.compose.rds.repositories.IUsrRepo
+import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 
@@ -36,7 +37,7 @@ class UserInfoServiceImplImplTest {
     runBlocking {
       launch {
         val r = userInfoService.findIsRealPeopleByUserId("0")
-        println(r)
+        log.info("r: {}", r)
       }
     }
   }

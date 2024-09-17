@@ -40,23 +40,20 @@ sourceSets {
 
 dependencies {
   api(libs.org.springframework.boot.springBootStarterDataJpa)
-  kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
 
+  kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
 
-  implementation(libs.org.springframework.springWebMvc)
-
-  implementation(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
+  //implementation(libs.org.springframework.springWebMvc)
 
   ksp(project(":ksp"))
-  implementation(project(":ksp:ksp-core"))
 
-  implementation(project(":rds:rds-core"))
-  implementation(project(":security:security-crypto"))
   implementation(project(":core"))
+  implementation(project(":ksp:ksp-core"))
+  implementation(project(":rds:rds-core"))
 
-  testImplementation(libs.org.springframework.boot.springBootStarterValidation)
-  testImplementation(project(":depend:depend-jsr303-validation"))
+  implementation(project(":security:security-crypto"))
+
   testImplementation(project(":test-toolkit"))
 }
 

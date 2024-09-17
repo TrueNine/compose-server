@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.consts.IInterAddr
-import net.yan100.compose.core.typing.MediaTypes
+import net.yan100.compose.core.typing.MimeTypes
 import java.io.OutputStream
 import java.nio.charset.Charset
 import java.util.*
@@ -32,10 +32,10 @@ val HttpServletResponse.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
 
 inline fun HttpServletResponse.useResponse(
-  contentType: MediaTypes = MediaTypes.BINARY,
-  charset: Charset = Charsets.UTF_8,
-  locale: Locale = Locale.CHINA,
-  crossinline with: (HttpServletResponse) -> HttpServletResponse,
+    contentType: MimeTypes = MimeTypes.BINARY,
+    charset: Charset = Charsets.UTF_8,
+    locale: Locale = Locale.CHINA,
+    crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
   this.contentType = contentType.value
   this.characterEncoding = charset.displayName()
@@ -48,7 +48,7 @@ inline fun HttpServletResponse.useSse(
   locale: Locale = Locale.CHINA,
   crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
-  return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) { with(it) }
+  return this.useResponse(contentType = MimeTypes.SSE, charset = charset, locale = locale) { with(it) }
 }
 
 /**
@@ -66,10 +66,10 @@ val HttpServletRequest.deviceId: String
 /** ## 设置下载时的东西 */
 @Deprecated("流使用完毕就关了流")
 fun HttpServletResponse.withDownload(
-  fileName: String,
-  contentType: MediaTypes = MediaTypes.BINARY,
-  charset: Charset = Charsets.UTF_8,
-  closeBlock: ((outputStream: OutputStream) -> Unit)?,
+    fileName: String,
+    contentType: MimeTypes = MimeTypes.BINARY,
+    charset: Charset = Charsets.UTF_8,
+    closeBlock: ((outputStream: OutputStream) -> Unit)?,
 ) {
   this.setHeader(IHeaders.CONTENT_DISPOSITION, IHeaders.downloadDisposition(fileName, charset))
   this.setHeader(IHeaders.CONTENT_TYPE, contentType.value)

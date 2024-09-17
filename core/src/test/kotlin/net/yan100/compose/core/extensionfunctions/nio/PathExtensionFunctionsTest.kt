@@ -40,8 +40,8 @@ class PathExtensionFunctionsTest {
     File(firstLineFile.toUri()).writeText(firstLine)
     val lines = firstLineFile.countLines()
 
-    println("test len ${firstLine.length}")
-    println("lines $lines")
+    log.info("test len {}", firstLine.length)
+    log.info("lines {}", lines)
 
     val result = firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
     val listResult = result.toList()
@@ -51,14 +51,14 @@ class PathExtensionFunctionsTest {
   fun `test slice lines`() {
     val tempFile = tempDir.resolve("temper.txt")
     val text = "Line 1\nLine 2\nLine 3\nLine 4"
-    println(text.length)
+    log.info("text len {}", text.length)
 
     File(tempFile.toUri()).writeText(text)
 
     val result = tempFile.sliceLines(sep = "\n", range = 0L..text.length)
     val listResult = result.toList()
 
-    println("line result = $listResult")
+    log.info("line result: {}", listResult)
 
     assertEquals(4, listResult.size, "The number of lines should be 4")
     assertEquals("Line 1", listResult[0], "The first line should be 'Line 1'")

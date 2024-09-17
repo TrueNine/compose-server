@@ -18,6 +18,7 @@ package net.yan100.compose.data.extract.service
 
 import jakarta.annotation.Resource
 import net.yan100.compose.data.extract.DataExtractEntrance
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.assertFailsWith
@@ -37,7 +38,7 @@ class ILazyAddressServiceTest {
 
     assertFailsWith<IllegalArgumentException> { lazys.findAllChildrenByCode("433") }
     val b = lazys.findAllChildrenByCode("")
-    println(b)
+    log.info("b: {}", b)
   }
 
   @Test
