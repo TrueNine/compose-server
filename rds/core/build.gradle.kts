@@ -36,9 +36,7 @@ dependencies {
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
 
-  testImplementation(project(":depend:depend-servlet"))
-  testImplementation(libs.org.springframework.boot.springBootStarterJson)
-  testImplementation(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
+  testImplementation(project(":test-toolkit"))
 }
 
 

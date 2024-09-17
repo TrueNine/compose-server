@@ -24,11 +24,15 @@ import net.yan100.compose.core.toSafeInt
 import java.io.Serializable
 
 /** ## 一个默认分页实现 */
-private class DefaultPageParam(
+private class DefaultPageParam @Deprecated("不退完直接使用", level = DeprecationLevel.ERROR) constructor(
   @Transient override var o: Long? = MIN_OFFSET,
   @Transient override var s: Int? = MAX_PAGE_SIZE,
   @Transient override var u: Boolean? = false,
-) : IPageParam
+) : IPageParam, Serializable {
+  override fun toString(): String {
+    return "PageParam(offset=$o, pageSize=$s, unPage=$u)"
+  }
+}
 
 /**
  * # 分页参数
@@ -40,6 +44,10 @@ private class DefaultPageParam(
  */
 interface IPageParam : Serializable {
   companion object {
+    fun empty(): IPageParam {
+      return get(0, 0, true)
+    }
+
     /** ## 最小偏移量 */
     const val MIN_OFFSET: Long = 0
 
@@ -47,11 +55,14 @@ interface IPageParam : Serializable {
     const val MAX_PAGE_SIZE: Int = 42
 
     /** ## 默认 最大分页实现常量 */
+    @Suppress("DEPRECATION_ERROR")
     val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
     @JvmStatic
-    operator fun get(pageSize: Int? = MAX_PAGE_SIZE, offset: Long? = MIN_OFFSET, unPage: Boolean? = false): IPageParam {
-      return DefaultPageParam(offset, pageSize, unPage)
+    @Suppress("DEPRECATION_ERROR")
+    operator fun get(offset: Long? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false): IPageParam {
+      return if (unPage == true) DefaultPageParam(0, 0, unPage)
+      else DefaultPageParam(offset, pageSize, unPage)
     }
   }
 

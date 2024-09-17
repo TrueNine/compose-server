@@ -13,8 +13,8 @@ val <T : Any> Page<T>.result: Pr<T>
       content,
       totalElements,
       if (pageable.isPaged) pageable.offset else 0,
-      if (pageable.isUnpaged) pageable.pageSize else content.size,
-      pageable.isUnpaged
+      if (pageable.isPaged) pageable.pageSize else content.size,
+      !pageable.isPaged
     ]
   }
 

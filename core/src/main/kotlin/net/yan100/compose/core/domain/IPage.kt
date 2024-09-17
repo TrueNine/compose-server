@@ -19,6 +19,7 @@ package net.yan100.compose.core.domain
 import com.fasterxml.jackson.annotation.JsonIgnore
 import net.yan100.compose.core.Pq
 import java.beans.Transient
+import java.io.Serializable
 
 /**
  * ## 计算总页数
@@ -27,6 +28,7 @@ import java.beans.Transient
  * @return 总页数
  */
 private fun calcTotalPageSize(total: Long, pageSize: Int): Int {
+  if (total <= 0 || pageSize <= 0) return 0
   val m = (total / pageSize).toInt()
   return if (total % pageSize == 0L) m else m + 1
 }
@@ -40,7 +42,11 @@ private class DefaultPageResult<T : Any>(
   override var t: Long,
   override var o: Long = pageParam?.safeOffset ?: Pq.MIN_OFFSET,
   override var p: Int = calcTotalPageSize(t, pageParam?.safePageSize ?: Pq.MAX_PAGE_SIZE),
-) : IPage<T>
+) : IPage<T>, Serializable {
+  override fun toString(): String {
+    return "IPage(dataList=$d, total=$t, offset=$o, pageSize=$p, size=$size, [pageParam]=$pageParam)"
+  }
+}
 
 /**
  * # 分页结果
@@ -134,7 +140,7 @@ interface IPage<T : Any> {
       requestParamPageSize: Int,
       unPage: Boolean? = false
     ): IPage<T> {
-      return get(dataList, total, IPageParam[requestParamPageSize, offset, unPage ?: true])
+      return get(dataList, total, IPageParam[offset, requestParamPageSize, unPage ?: true])
     }
 
     /**
