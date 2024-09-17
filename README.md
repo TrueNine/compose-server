@@ -14,8 +14,8 @@
 
 ```envRequirement
 java: 21.0.2
-kotlin: 2.0.10-RC
-gradle: 8.9
+kotlin: 2.0.20
+gradle: 8.10.1
 ```
 
 > 注：开发机请准备 16GB 内存或以上，磁盘空出 10G 以上（windows 请在 C盘 留下 10G
