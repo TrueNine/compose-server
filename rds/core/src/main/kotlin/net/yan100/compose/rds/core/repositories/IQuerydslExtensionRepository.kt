@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.core
+package net.yan100.compose.rds.core.repositories
 
 import net.yan100.compose.rds.core.entities.IEntity
 import org.springframework.data.querydsl.QuerydslPredicateExecutor

@@ -14,9 +14,11 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core
+package net.yan100.compose.rds.core.service
 
 
+import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.core.entities.IAnyEntity
 import net.yan100.compose.rds.core.entities.IEntity
 import kotlin.reflect.KClass

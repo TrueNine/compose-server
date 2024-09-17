@@ -13,11 +13,12 @@ val <T : Any> Page<T>.result: Pr<T>
       content,
       totalElements,
       if (pageable.isPaged) pageable.offset else 0,
-      pageable.pageSize,
+      if (pageable.isUnpaged) pageable.pageSize else content.size,
+      pageable.isUnpaged
     ]
   }
 
 /** # 对分页参数的封装，返回一个包装的对象 */
 val Pq?.page: Pageable
-  get() = if (this?.u == false) PageRequest.of((o ?: Pq.MIN_OFFSET).toInt(), s ?: Pq.MAX_PAGE_SIZE)
+  get() = if (this?.u == null || this.u == false) PageRequest.of((this?.o ?: Pq.MIN_OFFSET).toInt(), this?.s ?: Pq.MAX_PAGE_SIZE)
   else Pageable.unpaged()

@@ -14,14 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core
+package net.yan100.compose.rds.core.service
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
+import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.page
+import net.yan100.compose.rds.core.result
 import org.springframework.data.repository.findByIdOrNull
 
 /**

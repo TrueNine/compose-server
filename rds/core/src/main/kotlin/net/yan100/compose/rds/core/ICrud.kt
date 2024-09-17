@@ -1,6 +1,8 @@
 package net.yan100.compose.rds.core
 
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.service.IBaseCrudService
+import net.yan100.compose.rds.core.service.IMergeEntityEventService
 
 /**
  * ## 统一通用查询服务接口

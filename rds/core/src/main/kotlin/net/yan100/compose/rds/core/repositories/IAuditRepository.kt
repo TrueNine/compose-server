@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.core
+package net.yan100.compose.rds.core.repositories
 
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.datetime

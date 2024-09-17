@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core
+package net.yan100.compose.rds.core.repositories
 
 import jakarta.validation.Valid
 import net.yan100.compose.core.Id
@@ -23,6 +23,8 @@ import net.yan100.compose.core.Pr
 import net.yan100.compose.core.i64
 import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.page
+import net.yan100.compose.rds.core.result
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Modifying
@@ -43,7 +45,6 @@ interface ILogicDeleteRepository<T : IEntity> : IBaseRepository<T> {
 
   @Query("select count(e.id) > 0 from #{#entityName} e where e.id = :id and (e.ldf = false or e.ldf is null)")
   fun existsByIdAndNotLogicDeleted(id: Id)
-
 
   @Modifying
   @Query("update #{#entityName} e set e.ldf = :ldf where e.id = :id")

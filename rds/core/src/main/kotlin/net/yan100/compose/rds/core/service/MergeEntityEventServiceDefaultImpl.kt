@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.core
+package net.yan100.compose.rds.core.service
 
 import net.yan100.compose.core.holders.EventPublisherHolder
 import net.yan100.compose.rds.core.entities.IAnyEntity
