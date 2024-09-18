@@ -15,6 +15,7 @@ package net.yan100.compose.security.crpyot/*
  *     website: <github.com/TrueNine>
  */
 import net.yan100.compose.security.crypto.PemFormat
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import kotlin.test.DefaultAsserter.assertEquals
 
@@ -24,7 +25,6 @@ class PemFormatTest {
   fun `test PemFormat`() {
     val key = "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQDo56Mh0tFwuxa8ZSP1L1M0eWtU+1G+1tWp2rJ4p8k8R83a ...\n-----END RSA PRIVATE KEY-----"
     val pemFormat = PemFormat(key)
-
     assertEquals("未识别出参数", "RSA PRIVATE KEY", pemFormat.schema)
   }
 
@@ -41,6 +41,6 @@ class PemFormatTest {
     val result = PemFormat[base64, keyType]
     val pem = PemFormat(result)
     // Call the function to be tested and check the result
-    println(result)
+    log.info(result)
   }
 }

@@ -17,15 +17,24 @@
 package net.yan100.compose.security.crpyot
 
 
+import net.yan100.compose.core.hasText
 import net.yan100.compose.security.crypto.Keys
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
+import kotlin.test.assertTrue
 
 class KeysTest {
   @Test
-  fun `test write key to pem`() {
-
+  fun `write key to pem`() {
     val a = Keys.writeKeyToPem(Keys.generateRsaKeyPair()!!.privateKey)
     val b = Keys.writeKeyToPem(Keys.generateEccKeyPair()!!.privateKey)
-    println(a)
+
+    log.info(a)
+    log.info(b)
+
+    assertTrue(a.hasText())
+    assertTrue(b.hasText())
+    assertTrue(a.contains("-----END RSA PKCS#8-----"))
+    assertTrue(b.contains("-----END EC PKCS#8-----"))
   }
 }

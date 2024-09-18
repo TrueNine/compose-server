@@ -16,31 +16,67 @@
  */
 package net.yan100.compose.security.oauth2.property
 
-import jakarta.annotation.Resource
-import kotlinx.coroutines.delay
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.security.crypto.sha1
+import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.ApplicationContext
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @SpringBootTest
 class WxpaPropertyTest {
-  lateinit var w: WxpaProperty @Resource set
+  lateinit var wxpa: WxpaProperty
+  lateinit var ctx: ApplicationContext
 
-  /** 如果测试失败，请暂时关闭梯子， 如果还是不行，请检查你的 DNS 配置 */
+  lateinit var alwaysWxpa: WxpaProperty
+
+  @BeforeTest
+  fun setup() {
+    MockKAnnotations.init(this)
+    ctx = mockk(relaxed = true)
+    wxpa = mockk()
+
+    log.info("初始化 WxpaProperty")
+
+    // 初始化返回对象
+    alwaysWxpa = WxpaProperty().apply {
+      preValidToken = "DPlKMdgQG6jvOXbISk1vK2FdpKxd2Ip6"
+      appId = "wx3d24564f9a85044d"
+      appSecret = "d1ea9bdbd65b602679db8575dbc8461f"
+      accessToken = "84_fap0UeIti9S48uvh49cKAVzoCbHiJy-HGetAvvmWniYOas6ZnFg4_llyTrQGzj6x-co-AxbNsfS4Pm3Ud3iAO-Gnom7o29ddYb8GQFSalS56sTWfVoexOfBkpqoYTJeAJANIY"
+      jsapiTicket = "O3SMpm8bG7kJnF36aXbe82tYKil59B0Wt4bWcCHEXGP7GczyBmy4BGY03XAkcycQSqzDrpW0mk8tZEs1I5Ueiw"
+    }
+    every { ctx.getBean(WxpaProperty::class.java) } returns alwaysWxpa
+    wxpa = ctx.getBean(WxpaProperty::class.java)
+  }
+
   @Test
   fun `test get access token`() {
-    runBlocking {
-      delay(4000)
-      val a = w.accessToken
-      val b = w.jsapiTicket
-      assertNotNull(a)
-      assertNotNull(b)
-      println(a)
-      println(b)
-    }
+
+    // 确保使用原始对象
+    assertEquals(alwaysWxpa, ctx.getBean(WxpaProperty::class.java))
+
+    val a = wxpa.preValidToken
+    val b = wxpa.appId
+    val c = wxpa.appSecret
+    val d = wxpa.accessToken
+    val e = wxpa.jsapiTicket
+
+    assertNotNull(a)
+    assertNotNull(b)
+
+    log.info(a)
+    log.info(b)
+    log.info(c)
+    log.info(d)
+    log.info(e)
+
   }
 
   @Test

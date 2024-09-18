@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.security.crpyot.base64
+package net.yan100.compose.security.crpyot
 
 import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.security.crypto.IBase64
