@@ -25,6 +25,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.*
 import net.yan100.compose.core.consts.IRegexes
+import net.yan100.compose.core.domain.IIdcard2Code
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity

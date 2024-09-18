@@ -58,6 +58,12 @@ interface IPageParam : Serializable {
     @Suppress("DEPRECATION_ERROR")
     val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
+    /**
+     * ## 构建分页参数
+     * @param offset 偏移量 （最小为 0）
+     * @param pageSize 页面大小
+     * @param unPage 是否禁用分页
+     */
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
     operator fun get(offset: Long? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false): IPageParam {

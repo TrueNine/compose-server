@@ -22,7 +22,7 @@ import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
-import net.yan100.compose.core.IIdcard2Code
+import net.yan100.compose.core.domain.IIdcard2Code
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.ReferenceId
 import net.yan100.compose.core.string

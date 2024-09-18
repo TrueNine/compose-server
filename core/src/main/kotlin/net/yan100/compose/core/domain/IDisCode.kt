@@ -14,16 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core
+package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
 import net.yan100.compose.core.consts.IRegexes
+import net.yan100.compose.core.string
 import java.util.*
 
 /** 二代残疾证代码 */
-interface IDisCode2 : IIdcard2Code {
-  private class DefaultDis2Code(override val disCode: string) : IDisCode2, IIdcard2Code by IIdcard2Code[disCode.substring(0, 18)] {
+interface IDisCode : IIdcard2Code {
+  private class DefaultDis2Code(override val disCode: string) : IDisCode, IIdcard2Code by IIdcard2Code[disCode.substring(0, 18)] {
     init {
       check(disCode.matches(idCardRegex)) { "$disCode is not a valid disability code" }
     }
@@ -46,7 +47,7 @@ interface IDisCode2 : IIdcard2Code {
 
   companion object {
     @JvmStatic
-    operator fun get(code: String): IDisCode2 = DefaultDis2Code(code.uppercase())
+    operator fun get(code: String): IDisCode = DefaultDis2Code(code.uppercase())
   }
 
   @get:Transient

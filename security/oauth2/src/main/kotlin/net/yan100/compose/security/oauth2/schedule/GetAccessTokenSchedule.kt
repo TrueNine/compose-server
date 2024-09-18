@@ -40,17 +40,18 @@ private val log = slf4j(GetAccessTokenSchedule::class)
 @Component
 class GetAccessTokenSchedule(private val ctx: ApplicationContext, @Lazy private val api: IWxpaApi) {
   init {
-    log.debug("注册微信公众号 access_token 调度器")
+    log.trace("注册微信公众号 access_token 调度器")
   }
 
   @Scheduled(initialDelay = 1000, fixedRate = 7000 * 1000)
   fun getAccessToken() {
     val pp = ctx.getBean(WxpaProperty::class.java)
+
     log.trace("准备更新 access_token appid = {},secret = {}", pp.appId, pp.appSecret)
     val ae = api.getAccessToken(pp.appId, pp.appSecret)
     val t = api.getTicket(ae.accessToken!!)
     if (ae.isError || t.isError) {
-      log.error("微信公众号调用发生错误 code = {}, message = {}", ae.errorCode, ae.errorMessage)
+      log.error("微信公众号调用发生错误 code: {}, message: {}", ae.errorCode, ae.errorMessage)
       throw RemoteCallException("微信调用公众号时发生错误")
     }
 

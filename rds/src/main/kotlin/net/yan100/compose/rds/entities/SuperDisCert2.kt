@@ -8,7 +8,7 @@ import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import net.yan100.compose.core.IDisCode2
+import net.yan100.compose.core.domain.IDisCode
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.date
@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperDisCert2 : IDisCode2, IEntity() {
+abstract class SuperDisCert2 : IDisCode, IEntity() {
 
   @get:Schema(title = "用户信息id")
   abstract var userInfoId: RefId?

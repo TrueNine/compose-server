@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core
+package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
