@@ -16,6 +16,7 @@ plugins {
   alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.jpa)
 
+  alias(libs.plugins.org.asciidoctor.jvm.convert)
   alias(libs.plugins.com.diffplug.spotless)
   alias(libs.plugins.com.github.benManes.versions)
   alias(libs.plugins.org.hibernate.orm)
@@ -59,36 +60,36 @@ subprojects {
   apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.jpa.get().pluginId)
   apply(plugin = l.plugins.org.springframework.boot.get().pluginId)
   apply(plugin = l.plugins.io.spring.dependencyManagement.get().pluginId)
+  apply(plugin = l.plugins.org.asciidoctor.jvm.convert.get().pluginId)
 
+  extra["snippetsDir"] = file("build/generated-snippets")
   extra["springCloudVersion"] = l.versions.spring.cloud.get()
+  extra["springAiVersion"] = l.versions.spring.ai.get()
+
   tasks {
     withType<ProcessAot> { enabled = false }
     withType<BootJar> { enabled = false }
   }
   dependencies {
+    implementation(platform(l.org.springframework.boot.springBootDependencies))
+    implementation(platform(l.org.springframework.cloud.springCloudDependencies))
+    implementation(platform(l.org.springframework.modulith.springModulithBom))
+    implementation(platform(l.org.springframework.ai.springAiBom))
+
+    runtimeOnly(l.org.springframework.cloud.springCloudStarterBootstrap)
+
     annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
     kapt(l.org.springframework.springBootConfigurationProcessor)
     implementation(l.org.springframework.springBootConfigurationProcessor)
     implementation(l.org.springframework.boot.springBoot)
-    // TODO 剔除此 SpringBootApplication
     implementation(l.org.springframework.boot.springBootAutoconfigure)
 
     implementation(l.bundles.kotlin)
-
+    testImplementation(l.bundles.kotlinTestJunit5)
     testImplementation(l.bundles.junit5)
   }
 
-  dependencyManagement {
-    imports {
-      mavenBom("org.springframework.boot:spring-boot-dependencies:${l.versions.spring.boot.get()}")
-      mavenBom("org.springframework.cloud:spring-cloud-dependencies:${l.versions.spring.cloud.get()}")
-      mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${l.versions.spring.cloudAlibaba.get()}")
-      mavenBom("org.springframework.modulith:spring-modulith-bom:${l.versions.spring.modulith.get()}")
-      //mavenBom("org.drools:drools-bom:${l.versions.drools.get()}")
-    }
-  }
-
-  configurations { compileOnly { extendsFrom(configurations.annotationProcessor.get()) } }
+  //configurations { compileOnly { extendsFrom(configurations.annotationProcessor.get()) } }
 
   java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -117,7 +118,11 @@ subprojects {
       archiveClassifier.set("")
     }
   }
-
+  tasks.test { outputs.dir(project.extra["snippetsDir"]!!) }
+  tasks.asciidoctor {
+    inputs.dir(project.extra["snippetsDir"]!!)
+    dependsOn(tasks.test)
+  }
   publishing {
     repositories {
       mavenLocal()
