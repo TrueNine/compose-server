@@ -7,7 +7,7 @@ dependencies {
   // json
   api(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
   api(libs.com.fasterxml.jackson.core.jacksonDatabind)
-  api(libs.org.skyscreamer.jsonassert)
+  runtimeOnly(libs.org.skyscreamer.jsonassert)
 
   // spring 测试支持
   api(libs.org.springframework.springTest)
@@ -21,7 +21,7 @@ dependencies {
   api(libs.org.springframework.boot.springBootStarterJson)
 
   // 日志自动配置
-  runtimeOnly(libs.org.springframework.boot.springBootStarterLogging)
+  api(libs.org.springframework.boot.springBootStarterLogging)
 
   // jsr 303
   api(libs.org.springframework.boot.springBootStarterValidation)
