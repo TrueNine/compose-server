@@ -23,5 +23,5 @@ import java.lang.annotation.Inherited
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
-@PreAuthorize("isAuthenticated() && hasPermission('ROOT')")
+@PreAuthorize("isAuthenticated() && hasRole('ROOT')")
 annotation class Root
