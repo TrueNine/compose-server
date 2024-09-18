@@ -14,50 +14,40 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.models
+package net.yan100.compose.core
 
-import net.yan100.compose.core.IIdcard2Code
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
-class IIdcard2CodeTest {
-
+class IStringTest {
   @Test
-  fun getIdcard2Code() {
+  fun `has text`() {
+    assertTrue { IString.hasText("abc") }
+    assertFalse { IString.hasText("") }
+    assertFalse { IString.hasText(" ") }
   }
 
-  @Test
-  fun getIdcardBirthday() {
-  }
 
   @Test
-  fun getIdcardSexCode() {
-  }
-
-  @Test
-  fun getIdcardSex() {
-  }
-
-  @Test
-  fun getIdcardDistrictCode() {
-  }
-
-  @Test
-  fun idcardUpperCase() {
-  }
-
-  @Test
-  fun get() {
-    IIdcard2Code["110101199001011234"].let {
-      assertEquals("110101", it.idcardDistrictCode)
-      assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
-      assertEquals(true, it.idcardSex)
+  fun `non text`() {
+    listOf("", " ", "\n", "\r", "\t", "\r\n").forEach {
+      assertTrue { IString.nonText(it) }
     }
-    IIdcard2Code.get("110101199001011204").let {
-      assertEquals("110101", it.idcardDistrictCode)
-      assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
-      assertEquals(false, it.idcardSex)
-    }
+    assertFalse { IString.nonText("a") }
+  }
+
+  @Test
+  fun `inline text`() {
+    val a = IString.inLine("1\n")
+    assertFalse { a.contains("\n") }
+  }
+
+
+
+  @Test
+  fun `omit text`() {
+    val b = IString.omit("abc", 2)
+    assertFalse { b.contains("c") }
   }
 }

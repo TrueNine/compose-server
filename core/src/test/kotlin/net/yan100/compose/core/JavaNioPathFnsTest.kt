@@ -14,13 +14,9 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.extensionfunctions.nio
+package net.yan100.compose.core
 
 
-import net.yan100.compose.core.Pq
-import net.yan100.compose.core.countLines
-import net.yan100.compose.core.pageLines
-import net.yan100.compose.core.sliceLines
 import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
@@ -28,7 +24,7 @@ import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class PathExtensionFunctionsTest {
+class JavaNioPathFnsTest {
   @TempDir
   lateinit var tempDir: Path
 
@@ -101,7 +97,7 @@ class PathExtensionFunctionsTest {
     log.info("tempPath countLines: {}", testPath.countLines())
 
 
-    val pre = testPath.pageLines(Pq[4, 1], "\n")
+    val pre = testPath.pageLines(Pq[1, 4], "\n")
 
     log.info("pr: {}", pre)
 
@@ -111,7 +107,7 @@ class PathExtensionFunctionsTest {
     assertEquals("a", pre[0])
     assertEquals(2, pre.p)
 
-    val pr1 = testPath.pageLines(Pq[2, 3], "\n")
+    val pr1 = testPath.pageLines(Pq[3, 2], "\n")
 
     assertEquals(7, pr1.t)
     assertEquals(1, pr1.size)

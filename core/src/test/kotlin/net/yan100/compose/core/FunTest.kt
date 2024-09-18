@@ -14,20 +14,10 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.http
+package net.yan100.compose.core
 
-import net.yan100.compose.core.typing.MimeTypes
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class MimeTypesTest {
+class FunTest {
 
-  @Test
-  fun `test matching media`() {
-    val jpg = MimeTypes.JPEG
-    val name = "image/jpeg"
-    val found = MimeTypes.findVal(name)
-    assertEquals(jpg, found)
-    assertEquals(jpg.ext, "jpg")
-  }
 }

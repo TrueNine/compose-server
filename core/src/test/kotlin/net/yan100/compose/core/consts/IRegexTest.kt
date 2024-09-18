@@ -14,17 +14,16 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.regex
+package net.yan100.compose.core.consts
 
-import net.yan100.compose.core.consts.IRegexes
 import java.util.regex.Pattern
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class RegexTest {
+class IRegexTest {
   @Test
-  fun `test icCard Match`() {
+  fun `iccard match`() {
     val pattern = Pattern.compile(IRegexes.CHINA_ID_CARD)
     assertTrue { pattern.matcher("430404197210280012").matches() }
     // 基本匹配

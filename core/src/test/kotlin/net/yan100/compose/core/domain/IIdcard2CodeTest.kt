@@ -14,27 +14,24 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.core.util
+package net.yan100.compose.core.domain
 
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import kotlin.test.assertEquals
 
-class FunTest {
-  class FunClass(var count: Int = 0) {
-    private fun abc() {
-      count += 1
-    }
-
-    fun b(a: String): String {
-      abc()
-      return "var = $a + $count"
-    }
-  }
-
+class IIdcard2CodeTest {
   @Test
-  fun `test call class function`() {
-    val fc = FunClass()
-    val b = fc::b
-    b("a")
-    println(fc.count)
+  fun get() {
+    IIdcard2Code["110101199001011234"].let {
+      assertEquals("110101", it.idcardDistrictCode)
+      assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
+      assertEquals(true, it.idcardSex)
+    }
+    IIdcard2Code.get("110101199001011204").let {
+      assertEquals("110101", it.idcardDistrictCode)
+      assertEquals(LocalDate.of(1990, 1, 1), it.idcardBirthday)
+      assertEquals(false, it.idcardSex)
+    }
   }
 }
