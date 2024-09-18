@@ -68,15 +68,17 @@ class WxpaPropertyTest {
     val d = wxpa.accessToken
     val e = wxpa.jsapiTicket
 
-    assertNotNull(a)
-    assertNotNull(b)
-
     log.info(a)
     log.info(b)
     log.info(c)
     log.info(d)
     log.info(e)
 
+    assertNotNull(a)
+    assertNotNull(b)
+    assertNotNull(c)
+    assertNotNull(d)
+    assertNotNull(e)
   }
 
   @Test
