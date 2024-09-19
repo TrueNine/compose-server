@@ -26,6 +26,7 @@ import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.i64
 import net.yan100.compose.core.string
 import net.yan100.compose.rds.core.annotations.OrderCode
+import net.yan100.compose.rds.core.domain.PersistenceAuditTreeData
 
 /**
  * 预排序树
@@ -52,6 +53,28 @@ abstract class ITreeEntity : IEntity() {
     const val TGI = IDbNames.TREE_GROUP_ID
   }
 
+  /**
+   * ## 当前数据的审计数据，独特于 ITreeEntity
+   */
+  override val dbEntityAuditData: PersistenceAuditTreeData?
+    @JsonIgnore
+    @Transient
+    @Schema(hidden = true)
+    get() = if (isNew) null
+    else PersistenceAuditTreeData(
+      leftNodeNo = rln,
+      rightNodeNo = rrn,
+      nodeLevel = nlv,
+      treeGroupId = tgi,
+      parentId = rpi,
+      shadowRemoved = dbEntityShadowRemoveTag,
+      lockVersion = dbEntityRowLockVersion!!,
+      id = id,
+      createdAt = dbEntityCreatedDatetime!!,
+      updatedAt = dbEntityLastModifyDatetime!!
+    )
+
+
   /** 父id */
   @JsonIgnore
   @Column(name = RPI)
@@ -74,7 +97,7 @@ abstract class ITreeEntity : IEntity() {
   @JsonIgnore
   @Schema(title = "节点级别", defaultValue = "0")
   @Column(name = NLV)
-  var nlv: i64? = 0L
+  var nlv: i64 = 0L
 
   /** ### 树组 id，在节点插入时必须更上，在插入时随着父id进行更改 */
   @OrderCode
@@ -82,6 +105,17 @@ abstract class ITreeEntity : IEntity() {
   @Column(name = TGI)
   @Schema(title = "树 组id", defaultValue = "0")
   var tgi: string? = null
+
+  override fun changeWithSensitiveData() {
+    super.changeWithSensitiveData()
+    this.rln = 0L
+    this.rrn = 0L
+    this.nlv = 0L
+    this.tgi = null
+    rpi = null
+    recordChangedSensitiveData()
+  }
+
 
   @JsonIgnore
   @Transient

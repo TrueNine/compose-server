@@ -25,6 +25,7 @@ import jakarta.persistence.Version
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.i64
+import net.yan100.compose.rds.core.domain.PersistenceAuditData
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 
@@ -50,6 +51,23 @@ abstract class IEntity : IAnyEntity() {
     @kotlin.jvm.Transient
     const val MRD = IDbNames.MODIFY_ROW_DATETIME
   }
+
+  /**
+   * ## 当前数据的审计数据
+   */
+  val dbEntityAuditData: PersistenceAuditData?
+    @JsonIgnore
+    @Transient
+    @Schema(hidden = true)
+    get() = if (isNew) null
+    else PersistenceAuditData(
+      dbEntityShadowRemoveTag,
+      dbEntityRowLockVersion,
+      id,
+      dbEntityCreatedDatetime!!,
+      dbEntityLastModifyDatetime!!
+    )
+
 
   /** 乐观锁版本 */
   @Version
@@ -115,5 +133,15 @@ abstract class IEntity : IAnyEntity() {
     rlv = 0L
     crd = datetime.now()
     mrd = null
+  }
+
+  @Suppress("DEPRECATION_ERROR")
+  override fun changeWithSensitiveData() {
+    super.changeWithSensitiveData()
+    ldf = false
+    rlv = null
+    crd = null
+    mrd = null
+    recordChangedSensitiveData()
   }
 }

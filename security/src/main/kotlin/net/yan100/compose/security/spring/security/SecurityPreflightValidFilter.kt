@@ -34,7 +34,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
-private val log = slf4j(SecurityPreflightValidFilter::class)
+private val log = slf4j<SecurityPreflightValidFilter>()
 
 /**
  * jwt过滤器
@@ -48,7 +48,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
   override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
     // 跨域请求直接放行
     if (request.method == IMethods.OPTIONS) {
-      log.info("直接放行预检请求 uri = {}", request.requestURI)
+      log.trace("直接放行预检请求 uri = {}", request.requestURI)
       filterChain.doFilter(request, response)
       return
     }
@@ -83,8 +83,7 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
     SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
     // 向用户信息内设置信息
     UserInfoContextHolder.set(authInfo)
-    log.info("set user = {}", UserInfoContextHolder.get())
-    log.trace("过滤器放行")
+    log.trace("set user = {}", UserInfoContextHolder.get())
     filterChain.doFilter(request, response)
   }
 

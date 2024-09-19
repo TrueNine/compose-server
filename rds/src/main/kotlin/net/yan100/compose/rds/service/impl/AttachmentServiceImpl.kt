@@ -16,9 +16,13 @@
  */
 package net.yan100.compose.rds.service.impl
 
+import jakarta.validation.Valid
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
+import net.yan100.compose.core.domain.IReadableAttachment
+import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.jpa
 import net.yan100.compose.rds.core.page
 import net.yan100.compose.rds.core.result
@@ -30,18 +34,16 @@ import net.yan100.compose.rds.repositories.ILinkedAttachmentRepo
 import net.yan100.compose.rds.service.IAttachmentService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.io.InputStream
 
 @Service
 class AttachmentServiceImpl(
   private val attRepo: IAttachmentRepo,
   private val linkedRepo: ILinkedAttachmentRepo
-) : IAttachmentService, ICrud<Attachment> by jpa(attRepo) {
-  override fun existsByBaseUrl(baseUrl: String): Boolean {
-    return attRepo.existsByBaseUrl(baseUrl)
-  }
-
+) : IAttachmentService, ICrud<Attachment> by jpa(attRepo),
+  IAttachmentRepo by attRepo {
   override fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment {
-    return findByBaseUrlAndBaseUri(baseUrl, baseUri)
+    return fetchByBaseUrlAndBaseUri(baseUrl, baseUri)
       ?: post(
         Attachment().apply {
           attType = AttachmentTyping.BASE_URL
@@ -51,51 +53,104 @@ class AttachmentServiceImpl(
       )
   }
 
-  override fun findByBaseUrl(baseUrl: String): Attachment? {
+  override fun fetchByBaseUrl(baseUrl: String): Attachment? {
     return attRepo.findFirstByBaseUrl(baseUrl)
   }
 
-  override fun findByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment? {
+  override fun fetchByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment? {
     return attRepo.findFirstByBaseUrlAndBaseUri(baseUrl, baseUri)
   }
 
-  override fun findAllByBaseUrlIn(baseUrls: List<String>): List<Attachment> {
-    return attRepo.findAllByBaseUrlIn(baseUrls)
-  }
-
-  override fun findAllByBaseUrlInAndBaseUriIn(baseUrls: List<String>, baseUris: List<String>): List<Attachment> {
-    TODO("Not yet implemented")
-  }
-
-  override fun findFullUrlById(id: String): String? {
+  override fun fetchFullUrlById(id: String): String? {
     return attRepo.findFullPathById(id)
   }
 
-  override fun findAllByParentBaseUrl(baseUrl: String, page: Pq): Pr<Attachment> {
+  override fun fetchAllByParentBaseUrl(baseUrl: String, page: Pq): Pr<Attachment> {
     return attRepo.findAllByParentBaseUrl(baseUrl, page.page).result
   }
 
-  override fun findLinkedById(id: String): LinkedAttachment? {
+  override fun fetchLinkedById(id: String): LinkedAttachment? {
     return linkedRepo.findByIdOrNull(id)
   }
 
-  override fun findAllLinkedById(ids: List<String>): List<LinkedAttachment> {
+  override fun fetchAllLinkedById(ids: List<String>): List<LinkedAttachment> {
     return linkedRepo.findAllById(ids)
   }
 
-  override fun findAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq): Pr<String> {
+  override fun fetchAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq): Pr<String> {
     return attRepo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
   }
 
-  override fun findMetaNameById(id: String): String? {
-    return attRepo.findMetaNameById(id)
-  }
-
-  override fun findSaveNameById(id: String): String? {
-    return attRepo.findSaveNameById(id)
-  }
-
-  override fun findAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq): Pr<LinkedAttachment> {
+  override fun fetchAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq): Pr<LinkedAttachment> {
     return linkedRepo.findAllByParentBaseUrl(baseUrl, page.page).result
+  }
+
+  @ACID
+  override fun recordUpload(
+    readableAttachment: IReadableAttachment,
+    @Valid saveFn: (readableAttachment: IReadableAttachment) -> @Valid IAttachmentService.PostDto
+  ): Attachment? {
+    val saveFile = saveFn(readableAttachment)
+    val location = fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
+    // 构建一个新附件对象保存并返回
+    val att =
+      Attachment().apply {
+        // 将之于根路径连接
+        urlId = location.id
+        saveName = saveFile.saveName
+        metaName = readableAttachment.name
+        size = readableAttachment.size
+        mimeType = readableAttachment.mimeType ?: MimeTypes.BINARY.value
+        attType = AttachmentTyping.ATTACHMENT
+      }
+    // 重新进行赋值
+    return post(att)
+  }
+
+  @ACID
+  override fun recordUpload(stream: InputStream, saveFn: (stream: InputStream) -> IAttachmentService.PostDto): Attachment? {
+    val saveFile = saveFn(stream)
+    val location = fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)
+    val allBytes = stream.readAllBytes()
+    return Attachment()
+      .apply {
+        urlId = location.id
+        saveName = saveFile.saveName
+        metaName = saveFile.metaName
+        size = allBytes.size.toLong()
+        mimeType = saveFile.mimeType?.value ?: MimeTypes.BINARY.value
+        attType = AttachmentTyping.ATTACHMENT
+      }
+      .let { post(it) }
+  }
+
+  @ACID
+  override fun recordUpload(
+    readableAttachments: List<IReadableAttachment>,
+    saveFn: (att: IReadableAttachment) -> IAttachmentService.PostDto
+  ): List<Attachment> {
+    val saved = readableAttachments.map { saveFn(it) to it }
+    val baseUrls =
+      findAllByBaseUrlInAndBaseUriIn(saved.map { it.first.baseUrl!! }, saved.map { it.first.baseUri!! }).associateBy { it.baseUrl!! to it.baseUri!! }
+    return saved
+      .map {
+        val baseUrl =
+          baseUrls[it.first.baseUrl to it.first.baseUri] ?: post(
+            Attachment().apply {
+              attType = AttachmentTyping.BASE_URL
+              baseUrl = it.first.baseUrl
+              baseUri = it.first.baseUri
+            }
+          )
+        Attachment().apply {
+          // 将之于根路径连接
+          urlId = baseUrl.id
+          saveName = it.first.saveName
+          metaName = it.second.name
+          size = it.second.size
+          mimeType = it.second.mimeType
+          attType = AttachmentTyping.ATTACHMENT
+        }
+      }.let { postAll(it) }
   }
 }

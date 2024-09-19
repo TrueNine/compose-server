@@ -56,6 +56,10 @@ abstract class SuperUsr : IEntity() {
   val band: Boolean get() = (null != banTime && datetime.now().isBefore(banTime))
 
   override fun changeWithSensitiveData() {
-    sensitiveAlso(this) { it.pwdEnc = it.pwdEnc.password() }
+    super.changeWithSensitiveData()
+    sensitiveAlso(this) {
+      it.pwdEnc = it.pwdEnc.password()
+    }
+    recordChangedSensitiveData()
   }
 }

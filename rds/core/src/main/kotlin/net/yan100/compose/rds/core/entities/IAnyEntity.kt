@@ -24,17 +24,19 @@ import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
 import net.yan100.compose.core.Id
+import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.domain.ISensitivity
 import net.yan100.compose.depend.jsr303validation.group.DeleteGroup
 import net.yan100.compose.depend.jsr303validation.group.PatchGroup
 import net.yan100.compose.depend.jsr303validation.group.PutGroup
-import net.yan100.compose.rds.core.LateInitNonNullDelegateValue
+import net.yan100.compose.rds.core.DelegateGetSetLateinitvarValue
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
 import org.hibernate.Hibernate
 import org.springframework.data.domain.Persistable
 import java.io.Serial
+import java.io.Serializable
 
 /**
  * ## JPA的最基础基类，包括一个 id
@@ -48,25 +50,25 @@ import java.io.Serial
   BizCodeInsertListener::class,
   SnowflakeIdInsertListener::class,
 )
-abstract class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanceEntity {
+abstract class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanceEntity, Serializable {
   companion object {
+    @Serial
+    const val serialVersionUID = 1L
+
     /** 主键 */
     @kotlin.jvm.Transient
     const val ID = IDbNames.ID
 
-    @Serial
-    @kotlin.jvm.Transient
-    private val serialVersionUID = 1L
-
     @JsonIgnore
     @Transient
     @JvmStatic
-    protected fun <T> Companion.late(): LateInitNonNullDelegateValue<T> = LateInitNonNullDelegateValue()
+    @Suppress("DEPRECATION_ERROR")
+    protected fun <T> Companion.late() = DelegateGetSetLateinitvarValue<T>()
   }
 
   /** id */
   @jakarta.persistence.Id
-  @Column(name = IDbNames.ID)
+  @Column(name = ID)
   @NotBlank(groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class], message = "在修改数据时，需携带数据 id")
   @Schema(
     title = ID,
@@ -116,11 +118,22 @@ abstract class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope
   @Transient
   @JsonIgnore
   @Schema(hidden = true)
-  private var sensed: Boolean = false
+  private var _sensed: Boolean = false
+
+  override fun recordChangedSensitiveData() {
+    _sensed = true
+  }
+
+  @kotlin.jvm.Transient
+  @Transient
+  @JsonIgnore
+  @Schema(hidden = true)
+  override val isChangedToSensitiveData: bool = _sensed
 
   override fun changeWithSensitiveData() {
-    require(!sensed) { "数据已经脱敏，无需重复执行" }
-    sensed = true
     super.changeWithSensitiveData()
+    require(!_sensed) { "数据已经脱敏，无需重复执行" }
+    this.id = null
+    recordChangedSensitiveData()
   }
 }

@@ -30,7 +30,7 @@ import kotlin.test.*
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class IAttachmentServiceImplImplTest {
+class IReadableAttachmentServiceImplImplTest {
   lateinit var attachmentService: AttachmentServiceImpl @Resource set
   lateinit var snowflake: ISnowflakeGenerator @Resource set
 
@@ -65,14 +65,14 @@ class IAttachmentServiceImplImplTest {
       it.baseUrl = baseUrl
       it
     }
-    val result = attachmentService.findByBaseUrl(baseUrl)
+    val result = attachmentService.fetchByBaseUrl(baseUrl)
     assertNotNull(result)
   }
 
   @Test
   fun testFindByBaseUrl_NotExists() {
     val baseUrl = "http://notexists.com"
-    val result = attachmentService.findByBaseUrl(baseUrl)
+    val result = attachmentService.fetchByBaseUrl(baseUrl)
     assertNull(result)
   }
 
@@ -91,14 +91,14 @@ class IAttachmentServiceImplImplTest {
     }
     val all = attachmentService.fetchAll()
     println(all)
-    val result = attachmentService.findFullUrlById(e.id)
+    val result = attachmentService.fetchFullUrlById(e.id)
     assertNotNull(result)
   }
 
   @Test
   fun testFindFullUrlById_NotExists() {
     val id = snowflake.nextString()
-    val result = attachmentService.findFullUrlById(id)
+    val result = attachmentService.fetchFullUrlById(id)
     assertNull(result)
   }
 
@@ -106,7 +106,7 @@ class IAttachmentServiceImplImplTest {
   fun testFindAllFullUrlByMetaNameStartingWith() {
     val metaName = "test"
     val page = Pq[10, 1, false]
-    val result = attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page)
+    val result = attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page)
     assertNotNull(result)
     assertEquals(0, result.t)
   }
@@ -121,14 +121,14 @@ class IAttachmentServiceImplImplTest {
   @Test
   fun testFindByBaseUrl_EmptyBaseUrl() {
     val baseUrl = Keys.generateRandomAsciiString(32)
-    val result = attachmentService.findByBaseUrl(baseUrl)
+    val result = attachmentService.fetchByBaseUrl(baseUrl)
     assertNull(result)
   }
 
   @Test
   fun testFindFullUrlById_NegativeId() {
     val id = snowflake.nextString()
-    val result = attachmentService.findFullUrlById(id)
+    val result = attachmentService.fetchFullUrlById(id)
     assertNull(result)
   }
 
@@ -136,6 +136,6 @@ class IAttachmentServiceImplImplTest {
   fun testFindAllFullUrlByMetaNameStartingWith_NegativePage() {
     val metaName = "test"
     val page = Pq[-1, 10, false]
-    assertFails { attachmentService.findAllFullUrlByMetaNameStartingWith(metaName, page) }
+    assertFails { attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page) }
   }
 }

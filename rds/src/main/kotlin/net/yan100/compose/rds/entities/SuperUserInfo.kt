@@ -129,5 +129,6 @@ abstract class SuperUserInfo : IEntity() {
       it.phone = phone?.chinaPhone()
       it.sparePhone = sparePhone?.chinaPhone()
     }
+    recordChangedSensitiveData()
   }
 }
