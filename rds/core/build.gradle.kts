@@ -18,9 +18,9 @@ kapt {
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 hibernate {
   enhancement {
-    enableAssociationManagement.set(true)
     enableDirtyTracking.set(true)
     enableLazyInitialization.set(true)
+    enableAssociationManagement.set(true)
   }
 }
 version = libs.versions.compose.rdsCore.get()

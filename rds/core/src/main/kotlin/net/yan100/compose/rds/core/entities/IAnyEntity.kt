@@ -37,6 +37,8 @@ import org.hibernate.Hibernate
 import org.springframework.data.domain.Persistable
 import java.io.Serial
 import java.io.Serializable
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /**
  * ## JPA的最基础基类，包括一个 id
@@ -88,7 +90,7 @@ abstract class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope
     this.id = id
   }
 
-  override fun getId(): Id = this.id.orEmpty()
+  override fun getId(): Id = this.id!!
 
   override fun equals(other: Any?): Boolean {
     return if (this === other) true

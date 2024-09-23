@@ -24,9 +24,9 @@ noArg { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 hibernate {
   enhancement {
-    enableAssociationManagement.set(true)
     enableDirtyTracking.set(true)
     enableLazyInitialization.set(true)
+    enableAssociationManagement.set(true)
   }
 }
 
