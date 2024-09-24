@@ -56,10 +56,10 @@ abstract class ITreeEntity : IEntity() {
   /**
    * ## 当前数据的审计数据，独特于 ITreeEntity
    */
+  @get:JsonIgnore
+  @get:Transient
+  @get:Schema(hidden = true)
   override val dbEntityAuditData: PersistenceAuditTreeData?
-    @JsonIgnore
-    @Transient
-    @Schema(hidden = true)
     get() = if (isNew) null
     else PersistenceAuditTreeData(
       leftNodeNo = rln,

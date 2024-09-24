@@ -55,10 +55,10 @@ abstract class IEntity : IAnyEntity() {
   /**
    * ## 当前数据的审计数据
    */
+  @get:JsonIgnore
+  @get:Transient
+  @get:Schema(hidden = true)
   val dbEntityAuditData: PersistenceAuditData?
-    @JsonIgnore
-    @Transient
-    @Schema(hidden = true)
     get() = if (isNew) null
     else PersistenceAuditData(
       dbEntityShadowRemoveTag,
