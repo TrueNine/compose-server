@@ -64,8 +64,8 @@ abstract class IEntity : IAnyEntity() {
       dbEntityShadowRemoveTag,
       dbEntityRowLockVersion,
       id,
-      dbEntityCreatedDatetime!!,
-      dbEntityLastModifyDatetime!!
+      dbEntityCreatedDatetime,
+      dbEntityLastModifyDatetime
     )
 
 

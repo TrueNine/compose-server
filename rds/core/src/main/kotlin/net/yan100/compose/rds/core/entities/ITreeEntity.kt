@@ -68,10 +68,10 @@ abstract class ITreeEntity : IEntity() {
       treeGroupId = tgi,
       parentId = rpi,
       shadowRemoved = dbEntityShadowRemoveTag,
-      lockVersion = dbEntityRowLockVersion!!,
+      lockVersion = dbEntityRowLockVersion,
       id = id,
-      createdAt = dbEntityCreatedDatetime!!,
-      updatedAt = dbEntityLastModifyDatetime!!
+      createdAt = dbEntityCreatedDatetime,
+      updatedAt = dbEntityLastModifyDatetime
     )
 
 
