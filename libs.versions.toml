@@ -1,35 +1,35 @@
 [versions]
-compose-versionCatalog = "2.0.18"
-compose = "2.0.5"
-compose-oss = "2.0.6"
-compose-pay = "2.0.7"
-compose-schedule = "2.0.6"
-compose-cacheable = "2.0.7"
-compose-dependServlet = "2.0.7"
-compose-dependPaho = "2.0.6"
-compose-dependJackson = "2.0.6"
-compose-dependHttpExchange = "2.0.6"
-compose-dependJsr303Validation = "2.0.6"
-compose-dependSpringdocOpenapi = "2.0.6"
-compose-core = "2.0.11"
-compose-security = "2.0.9"
-compose-securityCrypto = "2.0.7"
-compose-securityOauth2 = "2.0.8"
-compose-rds = "2.0.11"
-compose-rdsCore = "2.0.13"
-compose-testToolkit = "2.0.6"
-compose-dataExtract = "2.0.7"
-compose-dataCrawler = "2.0.6"
-compose-ksp = "2.0.6"
-compose-kspCore = "2.0.6"
-compose-kspToolkit = "2.0.6"
-compose-gradlePlugin = "2.0.6"
+compose-versionCatalog = "2.0.19"
+compose = "2.0.6"
+compose-oss = "2.0.7"
+compose-pay = "2.0.8"
+compose-schedule = "2.0.7"
+compose-cacheable = "2.0.8"
+compose-dependServlet = "2.0.8"
+compose-dependPaho = "2.0.7"
+compose-dependJackson = "2.0.7"
+compose-dependHttpExchange = "2.0.7"
+compose-dependJsr303Validation = "2.0.7"
+compose-dependSpringdocOpenapi = "2.0.7"
+compose-core = "2.0.12"
+compose-security = "2.0.10"
+compose-securityCrypto = "2.0.8"
+compose-securityOauth2 = "2.0.9"
+compose-rds = "2.0.12"
+compose-rdsCore = "2.0.14"
+compose-testToolkit = "2.0.7"
+compose-dataExtract = "2.0.8"
+compose-dataCrawler = "2.0.7"
+compose-ksp = "2.0.7"
+compose-kspCore = "2.0.7"
+compose-kspToolkit = "2.0.7"
+compose-gradlePlugin = "2.0.7"
 
 composeGroup = "net.yan100.compose"
 
 spotless = "7.0.0.BETA2"
 
-gradle = "8.10.1"
+gradle = "8.10.2"
 java = "21"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
@@ -49,10 +49,10 @@ spring-cloudAlibaba = "2021.0.4.0"
 spring-modulith = "1.3.0-M2"
 
 testng = "7.10.2"
-junit = "5.11.0-M2"
+junit5 = "5.11.0"
 junitPlatform = "1.11.0"
 
-flyway = "10.18.0"
+flyway = "10.18.1"
 mapstruct = "1.6.0"
 hutool = "5.8.32"
 slf4j = "2.1.0-alpha1"
@@ -166,11 +166,11 @@ com-google-devtools-ksp-symbolProcessingApi = { group = "com.google.devtools.ksp
 io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.3.0-M2" }
 
 io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.12" }
-org-junit-jupiter-junitJupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+org-junit-jupiter-junitJupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
 org-junit-platform-junitPlatformLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatform" }
 
 org-testng-testng = { group = "org.testng", name = "testng", version.ref = "testng" }
-io-projectreactor-reactorTest = { group = "io.projectreactor", name = "reactor-test", version = "3.7.0-M1" }
+io-projectreactor-reactorTest = { group = "io.projectreactor", name = "reactor-test", version = "3.7.0-M6" }
 
 com-github-benManes-caffeine-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 
@@ -199,7 +199,7 @@ jakarta-persistence-jakartaPersistenceApi = { group = "jakarta.persistence", nam
 jakarta-validation-jakartaValidationApi = { group = "jakarta.validation", name = "jakarta.validation-api", version = "3.1.0" }
 jakarta-annotation-jakartaAnnotationApi = { group = "jakarta.annotation", name = "jakarta.annotation-api", version = "3.0.0" }
 
-io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.23" }
+io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.24" }
 
 com-squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version = "5.0.0-alpha.12" } ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 com-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" } ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
@@ -232,7 +232,7 @@ com-github-ulisesbocchio-jasyptSpringBootStarter = { group = "com.github.ulisesb
 
 org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
-org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.24.0" }
+org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.25.0" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
 com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.47.0" }
