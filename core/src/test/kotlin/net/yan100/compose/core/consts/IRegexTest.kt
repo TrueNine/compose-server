@@ -55,4 +55,9 @@ class IRegexTest {
         .map(pattern::matches).reduce(Boolean::or)
     }
   }
+
+  @Test
+  fun `rbac name match`() {
+
+  }
 }
