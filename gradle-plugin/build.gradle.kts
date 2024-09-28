@@ -8,8 +8,6 @@ val pluginVersion = libs.versions.compose.gradlePlugin.get()
 val yunxiaoUrl by extra { properties["yunxiaoUrl"] as String }
 val yunxiaoUsername by extra { properties["yunxiaoUsername"] as String }
 val yunxiaoPassword by extra { properties["yunxiaoPassword"] as String }
-val sonatypeUsername by extra { properties["sonatypeUsername"] as String }
-val sonatypePassword by extra { properties["sonatypePassword"] as String }
 
 plugins {
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
