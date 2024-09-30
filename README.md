@@ -21,6 +21,7 @@ java: 21.0.4
 kotlin: 2.0.20
 gradle: 8.10.2
 maven: 3.9.9
+gpg4
 ```
 
 - 所有构建链当中，路径不要存在任何非 ISO8859-1 字符，包括中文等的
@@ -30,6 +31,7 @@ maven: 3.9.9
 - 将 本地 maven 路径配置到 `MVN_HOME`
 - 将项目内的 `init.gradle.bak` 以及 `gradle.properties.bak` copy 到 本地 .gradle 下
 - 将 `init.gradle.bak` 以及 `gradle.properties.bak` 去除 `.bak` 后缀
+- 使用 `gpg` 设置或生成证书并上传至服务器，使用 `gpg --list-secret-keys` 查看已生成的证书
 - 将 `gradle.properties` 的所有值填写完整，亦可自行更改项目内的取值，达到相同效果即可
 
 ```shell
@@ -42,6 +44,7 @@ gradle wrapper
 # 3. 检查当前项目所有测试是否可以正常运行
 ./gradlew check
 ```
+
 
 ## 使用技巧
 
