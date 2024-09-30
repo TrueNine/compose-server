@@ -17,17 +17,9 @@
 package net.yan100.compose.gradleplugin.consts
 
 /** maven 仓库管理 */
+@Deprecated("无需使用")
 object Repos {
-  object Credentials {
-    val yunXiaoUsername: String = System.getenv("YUNXIAO_USER")
-    val yunXiaoPassword: String = System.getenv("YUNXIAO_PWD")
-  }
-
-  const val tencentCloudMavenPublic = "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"
-  const val tencentCloudGradlePlugin = "https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"
-
-  const val yunXiaoRelese = "https://packages.aliyun.com/maven/repository/2336368-release-CiFRF5/"
-  const val yunXiaoSnapshot = "https://packages.aliyun.com/maven/repository/2336368-snapshot-7SUFMh/"
+  const val tencentCloudMavenPublic = "https://mirrors.cloud.tencent.com/repository/maven-public/"
 
   private const val ALI_REPO = "https://maven.aliyun.com/repository/"
 
@@ -65,7 +57,6 @@ object Repos {
       aliGrailsCore,
       aliApacheSnapshots,
       tencentCloudMavenPublic,
-      tencentCloudGradlePlugin,
       springMilestone,
       springLibMilestone,
       springSnapshot,
