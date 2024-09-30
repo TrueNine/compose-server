@@ -1,25 +1,29 @@
-val urls =
-  "https://repo.maven.apache.org/maven2/__https://mirrors.cloud.tencent.com/nexus/repository/maven-public/,https://dl.google.com/dl/android/maven2/__https://mirrors.cloud.tencent.com/nexus/repository/maven-public/,https://plugins.gradle.org/m2/__https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"
-val repos = "https://repo.spring.io/milestone,https://repo.spring.io/snapshot,https://oss.sonatype.org/content/repositories/snapshots/"
-
-val urlMap =
-  urls.split(",").associate {
-    val (url, mapping) = it.split("__")
-    url.removeSuffix("/") to mapping
-  }
-val otherRepos = repos.split(",")
-val backupRepoMap =
+val metaRepoMap =
   mapOf(
-    "backupRepo0" to "https://repository.sonatype.org/content/groups/forge/",
-    "backupRepo1" to "https://repo.maven.apache.org/maven2",
-    "backupRepo2" to "https://plugins.gradle.org/m2",
-    "backupRepo3" to "https://dl.google.com/dl/android/maven2",
+    "sonatype" to "https://repository.sonatype.org/content/groups/forge/",
+    "maven2" to "https://repo.maven.apache.org/maven2/",
+    "gradle" to "https://plugins.gradle.org/m2/",
+    "google" to "https://dl.google.com/dl/android/maven2/"
   )
+
+val urlMap = mapOf<String, String>(
+  metaRepoMap["maven2"]!!.removeSuffix("/") to "https://mirrors.cloud.tencent.com/nexus/repository/maven-public",
+  metaRepoMap["google"]!!.removeSuffix("/") to "https://mirrors.cloud.tencent.com/nexus/repository/maven-public",
+  metaRepoMap["gradle"]!!.removeSuffix("/") to "https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin"
+)
+
+val otherRepos = listOf(
+  "https://repo.spring.io/milestone/",
+  "https://repo.spring.io/snapshot/",
+  "https://oss.sonatype.org/content/repositories/snapshots/"
+)
+
+
 
 fun RepositoryHandler.enableMirror() {
   whenObjectAdded {
     if (this is MavenArtifactRepository && !name.startsWith("backupRepo")) {
-      var str = "mirror for ${javaClass.simpleName} "
+      var str = "mirror for ${javaClass.simpleName}"
       val oUrl = this.url.toString().removeSuffix("/")
       str += oUrl
       urlMap[oUrl]?.also {
@@ -56,7 +60,7 @@ beforeSettings {
       google()
       gradlePluginPortal()
       otherRepos.forEach { addNonExistsRepo(it) }
-      backupRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
+      metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
     }
   }
   dependencyResolutionManagement {
@@ -67,7 +71,7 @@ beforeSettings {
       google()
       gradlePluginPortal()
       otherRepos.forEach { addNonExistsRepo(it) }
-      backupRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
+      metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
     }
   }
 }
@@ -81,7 +85,7 @@ allprojects {
       google()
       gradlePluginPortal()
       otherRepos.forEach { addNonExistsRepo(it) }
-      backupRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
+      metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
     }
   }
   repositories {
@@ -91,6 +95,6 @@ allprojects {
     google()
     gradlePluginPortal()
     otherRepos.forEach { addNonExistsRepo(it) }
-    backupRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
+    metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
   }
 }
