@@ -1,12 +1,11 @@
 pluginManagement {
   repositories {
-    mavenLocal()
-    maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"))
-    maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"))
-    maven(url = uri("https://repo.spring.io/milestone"))
-    gradlePluginPortal()
-    mavenCentral()
-    google()
+    maven(url = uri(extra["url.yunxiao.1"].toString())) {
+      credentials {
+        username = extra["usr.yunxiao.1"].toString()
+        password = extra["pwd.yunxiao.1"].toString()
+      }
+    }
   }
 }
 

@@ -3,9 +3,9 @@ val l = libs
 val pluginGroup = libs.versions.composeGroup.get()
 val pluginVersion = libs.versions.compose.versionCatalog.get()
 
-val yunxiaoUrl by extra { properties["yunxiaoUrl"] as String }
-val yunxiaoUsername by extra { properties["yunxiaoUsername"] as String }
-val yunxiaoPassword by extra { properties["yunxiaoPassword"] as String }
+val yunxiaoUrl by extra { properties["url.yunxiao.1"] as String }
+val yunxiaoUsername by extra { properties["usr.yunxiao.1"] as String }
+val yunxiaoPassword by extra { properties["pwd.yunxiao.1"] as String }
 
 plugins {
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
@@ -23,15 +23,6 @@ group = pluginGroup
 
 version = pluginVersion
 
-repositories {
-  maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin/"))
-  maven(url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/"))
-  maven(url = uri("https://repo.spring.io/milestone"))
-  gradlePluginPortal()
-  mavenCentral()
-  google()
-}
-
 gradlePlugin {
   plugins {
     register("${pluginGroup}.${project.name}") {
@@ -48,7 +39,6 @@ gradlePlugin {
 publishing {
   repositories {
     mavenLocal()
-    maven(url = layout.buildDirectory.dir("local-maven-repo"))
     maven(url = uri(yunxiaoUrl)) {
       isAllowInsecureProtocol = false
       credentials {

@@ -1,11 +1,9 @@
 pluginManagement {
   repositories {
-    mavenLocal()
-    maven(url = uri(extra["yunxiaoUrl"].toString())) {
-      isAllowInsecureProtocol = true
+    maven(url = uri(extra["url.yunxiao.1"].toString())) {
       credentials {
-        username = extra["yunxiaoUsername"].toString()
-        password = extra["yunxiaoPassword"].toString()
+        username = extra["usr.yunxiao.1"].toString()
+        password = extra["pwd.yunxiao.1"].toString()
       }
     }
   }

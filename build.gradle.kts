@@ -25,11 +25,11 @@ plugins {
   alias(libs.plugins.org.jetbrains.kotlin.plugin.allopen)
 }
 
-val yunxiaoUrl = extra["yunxiaoUrl"].toString()
-val yunxiaoUsername = extra["yunxiaoUsername"].toString()
-val yunxiaoPassword = extra["yunxiaoPassword"].toString()
-val sonatypeUsername = extra["sonatypeUsername"].toString()
-val sonatypePassword = extra["sonatypePassword"].toString()
+val yunxiaoUrl = extra["url.yunxiao.1"].toString()
+val yunxiaoUsername = extra["usr.yunxiao.1"].toString()
+val yunxiaoPassword = extra["pwd.yunxiao.1"].toString()
+val sonatypeUsername = extra["usr.sonatype.1"].toString()
+val sonatypePassword = extra["pwd.sonatype.1"].toString()
 
 val l = libs
 
