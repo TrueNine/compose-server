@@ -22,7 +22,6 @@ plugins {
 }
 
 group = pluginGroup
-
 version = pluginVersion
 
 dependencies {
