@@ -15,26 +15,11 @@ plugins {
   `java-library`
   `java-gradle-plugin`
   `maven-publish`
-  // id("com.gradle.plugin-publish") version "1.2.1"
-  // id("io.github.gradle-nexus.publish-plugin") version "2.0.0-rc-2"
 }
 
 group = pluginGroup
 
 version = pluginVersion
-
-gradlePlugin {
-  plugins {
-    register("${pluginGroup}.${project.name}") {
-      id = "${pluginGroup}.${project.name}"
-      implementationClass = "${pluginGroup}.plugin.Main"
-    }
-    register("${pluginGroup}.${project.name}-settings") {
-      id = "${pluginGroup}.${project.name}-settings"
-      implementationClass = "${pluginGroup}.plugin.SettingsMain"
-    }
-  }
-}
 
 publishing {
   repositories {
