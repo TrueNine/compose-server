@@ -41,20 +41,3 @@ fun ModuleDependency.exclude(dep: Provider<MinimalExternalModuleDependency>) {
  */
 val Project.emptyVersion: String
   get() = if (this.project.version.toString() == Constant.Gradle.UNKNOWN_PROJECT_VERSION) "" else this.project.version.toString()
-
-
-fun RepositoryHandler.aliYunXiao(releaseUrl: String = Repos.yunXiaoRelese, snapshotUrl: String? = Repos.yunXiaoSnapshot) {
-  fun get(url: String) {
-    this.maven {
-      it.isAllowInsecureProtocol = true
-      it.url = URI(url)
-      it.credentials { c ->
-        c.username = Repos.Credentials.yunXiaoUsername
-        c.password = Repos.Credentials.yunXiaoPassword
-      }
-    }
-  }
-
-  get(releaseUrl)
-  snapshotUrl?.let { get(it) }
-}
