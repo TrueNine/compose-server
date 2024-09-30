@@ -40,6 +40,13 @@ tasks {
   withType<BootJar> { enabled = false }
 }
 
+data class Define(
+  val url: String? = null,
+  val username: String? = null,
+  val password: String? = null
+)
+
+
 allprojects {
   project.group = l.versions.composeGroup.get()
 
@@ -148,6 +155,4 @@ spotless {
 
 tasks.wrapper {
   distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-${l.versions.gradle.get()}-all.zip"
-  networkTimeout = 3000
-  distributionType = Wrapper.DistributionType.ALL
 }

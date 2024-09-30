@@ -1,100 +1,92 @@
-val metaRepoMap =
-  mapOf(
-    "sonatype" to "https://repository.sonatype.org/content/groups/forge/",
-    "maven2" to "https://repo.maven.apache.org/maven2/",
-    "gradle" to "https://plugins.gradle.org/m2/",
-    "google" to "https://dl.google.com/dl/android/maven2/"
-  )
-
-val urlMap = mapOf<String, String>(
-  metaRepoMap["maven2"]!!.removeSuffix("/") to "https://mirrors.cloud.tencent.com/nexus/repository/maven-public",
-  metaRepoMap["google"]!!.removeSuffix("/") to "https://mirrors.cloud.tencent.com/nexus/repository/maven-public",
-  metaRepoMap["gradle"]!!.removeSuffix("/") to "https://mirrors.cloud.tencent.com/nexus/repository/gradle-plugin"
+import java.util.Properties
+// 外部仓库名称
+val replaceName: String = "external"
+// 外部仓库地址
+val replaceMap = mapOf(
+  "${replaceName}public" to "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/",
+  "${replaceName}central" to "https://mirrors.cloud.tencent.com/nexus/repository/maven-central/",
+  "${replaceName}gradlePlugin" to "https://maven.aliyun.com/repository/gradle-plugin/",
+  "${replaceName}spring" to "https://repo.spring.io/milestone/"
 )
 
-val otherRepos = listOf(
-  "https://repo.spring.io/milestone/",
-  "https://repo.spring.io/snapshot/",
-  "https://oss.sonatype.org/content/repositories/snapshots/"
-)
-
-
-
-fun RepositoryHandler.enableMirror() {
-  whenObjectAdded {
-    if (this is MavenArtifactRepository && !name.startsWith("backupRepo")) {
-      var str = "mirror for ${javaClass.simpleName}"
-      val oUrl = this.url.toString().removeSuffix("/")
-      str += oUrl
-      urlMap[oUrl]?.also {
-        str += " -> $it"
-        this.setUrl(it)
+data class Define(val url: String? = null, val username: String? = null, val password: String? = null)
+fun getPrivateRepoDefine(): Set<Define> {
+  fun getSeriesKey(key: String, sur: String, ad: String) = key.replace("$sur.", "$ad.")
+  val pSet = mutableSetOf<Define>()
+  val pMap = gradle.gradleUserHomeDir.listFiles()?.find {
+    it.name == "gradle.properties" && it.exists()
+  }?.let {
+    val p = Properties()
+    p.load(it.inputStream())
+    p
+  }
+  if (pMap == null) return pSet
+  pMap.forEach { (sk, sv) ->
+    val k = sk as? String?
+    val v = sv as? String?
+    if (k != null && k.toString().startsWith("usr.")) {
+      val url = pMap[getSeriesKey(k, "usr", "url")] as? String?
+      val pwd = pMap[getSeriesKey(k, "usr", "pwd")] as? String?
+      pSet += Define(url, username = v, password = pwd)
+    }
+  }
+  return pSet.filter { it.url != null && it.username != null && it.password != null }.toSet()
+}
+val privateRepoList = getPrivateRepoDefine()
+fun RepositoryHandler.mappingPrivateRepoTask() {
+  privateRepoList.forEach {
+    maven {
+      url = uri(it.url!!)
+      credentials {
+        username = it.username
+        password = it.password
       }
     }
   }
 }
+// 普通仓库
+fun RepositoryHandler.mappingRepoTask() {
+  mavenLocal()
+  mappingPrivateRepoTask()
+  addExternalRepo("public")
+  addExternalRepo("central")
+  addExternalRepo("spring")
+  addExternalRepo("gradlePlugin")
+  mavenCentral()
+}
+// 插件仓库
+fun RepositoryHandler.mappingPluginRepoTask() {
+  mavenLocal()
+  mappingPrivateRepoTask()
+  addExternalRepo("gradlePlugin")
+  addExternalRepo("spring")
+  gradlePluginPortal()
+}
 
-fun RepositoryHandler.addNonExistsRepo(url: String, name: String? = null) {
+fun RepositoryHandler.addRepo(url: String, name: String? = null) {
   val rUrl = url.removeSuffix("/")
   val urlStringLists = map { (it as? MavenArtifactRepository)?.url?.toString()?.removeSuffix("/") }
   if (urlStringLists.contains(rUrl)) return
-  else
-    maven {
-      setUrl(uri(url))
-      name?.also { this.name = it }
-    }
+  else maven {
+    this.url = uri(url)
+    name?.also { this.name = it }
+  }
 }
-
-fun RepositoryHandler.addNonExistsMavenLocal() {
-  val urlStringLists = map { (it as? MavenArtifactRepository)?.url?.toString()?.removeSuffix("/") }
-  val h = urlStringLists.any { it?.startsWith("file://") ?: false }
-  if (!h) mavenLocal()
+fun RepositoryHandler.addExternalRepo(name: String) {
+  val u = replaceMap["$replaceName$name"]
+  u?.also { addRepo(it, "$replaceName$name") }
 }
 
 beforeSettings {
-  pluginManagement {
-    repositories {
-      addNonExistsMavenLocal()
-      enableMirror()
-      mavenCentral()
-      google()
-      gradlePluginPortal()
-      otherRepos.forEach { addNonExistsRepo(it) }
-      metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
-    }
-  }
-  dependencyResolutionManagement {
-    repositories {
-      addNonExistsMavenLocal()
-      enableMirror()
-      mavenCentral()
-      google()
-      gradlePluginPortal()
-      otherRepos.forEach { addNonExistsRepo(it) }
-      metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
-    }
-  }
+  pluginManagement { repositories { mappingPluginRepoTask() } }
+  dependencyResolutionManagement { repositories { mappingPluginRepoTask() } }
+}
+
+beforeProject {
+  repositories { mappingRepoTask() }
 }
 
 allprojects {
-  buildscript {
-    repositories {
-      addNonExistsMavenLocal()
-      enableMirror()
-      mavenCentral()
-      google()
-      gradlePluginPortal()
-      otherRepos.forEach { addNonExistsRepo(it) }
-      metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
-    }
-  }
-  repositories {
-    addNonExistsMavenLocal()
-    enableMirror()
-    mavenCentral()
-    google()
-    gradlePluginPortal()
-    otherRepos.forEach { addNonExistsRepo(it) }
-    metaRepoMap.forEach { addNonExistsRepo(it.value, it.key) }
-  }
+  buildscript { repositories { mappingRepoTask() } }
+  repositories { mappingRepoTask() }
 }
