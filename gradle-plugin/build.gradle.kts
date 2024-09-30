@@ -54,10 +54,12 @@ gradlePlugin {
       id = "${pluginGroup}.${project.name}"
       implementationClass = "${pluginGroup}.gradleplugin.Main"
     }
-    register("${pluginGroup}.${project.name}-settings") {
+
+    // TODO 暂时屏蔽 settings 插件
+    /*register("${pluginGroup}.${project.name}-settings") {
       id = "${pluginGroup}.${project.name}-settings"
       implementationClass = "${pluginGroup}.gradleplugin.SettingsMain"
-    }
+    }*/
   }
 }
 
