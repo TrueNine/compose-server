@@ -18,6 +18,9 @@ package net.yan100.compose.rds.entities
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
+import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 
@@ -33,6 +36,8 @@ import net.yan100.compose.rds.core.entities.IEntity
 abstract class SuperPermissions : IEntity() {
   /** 权限名 */
   @get:Schema(title = "权限名")
+  @get:NotBlank(message = "权限名称不能为空")
+  @get:Pattern(regexp = IRegexes.RBAC_NAME, message = "权限名称不合法")
   abstract var name: String
 
   /** 权限描述 */
