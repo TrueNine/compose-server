@@ -22,7 +22,9 @@ import net.yan100.compose.core.Id
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
 import net.yan100.compose.rds.core.IRepo
+import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.fromDbData
 import net.yan100.compose.rds.core.page
 import net.yan100.compose.rds.core.result
 import org.springframework.data.repository.findByIdOrNull
@@ -43,6 +45,7 @@ interface IBaseCrudService<T : IEntity, R : IRepo<T>> {
    *
    * @param e 实体
    */
+  @ACID
   fun postFound(e: T): T = post(e)
 
   /**
@@ -50,6 +53,7 @@ interface IBaseCrudService<T : IEntity, R : IRepo<T>> {
    *
    * @param es 实体集合
    */
+  @ACID
   fun postAllFound(es: List<T>): List<T> = postAll(es)
 
   fun fetchAll(page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAll(page.page).result
@@ -78,8 +82,18 @@ interface IBaseCrudService<T : IEntity, R : IRepo<T>> {
 
   fun foundShadowRemovedById(id: Id): Boolean = repo.findLdfById(id) ?: false
 
-  fun post(e: T): T = repo.save(e)
+  @ACID
+  fun post(e: T): T {
+    return if (e.isNew) repo.save(e)
+    else {
+      val dbData = fetchById(id = e.id)
+      checkNotNull(dbData) { "数据库中不存在该数据" }
+      val mergedDbData = e.fromDbData(dbData)
+      repo.save(mergedDbData)
+    }
+  }
 
+  @ACID
   fun postAll(es: List<T>): List<T> = repo.saveAll(es)
 
   fun removeById(id: Id) = repo.deleteById(id)
