@@ -51,14 +51,12 @@ fun RepositoryHandler.mappingRepoTask() {
   addExternalRepo("public")
   addExternalRepo("central")
   addExternalRepo("spring")
-  addExternalRepo("gradlePlugin")
   mavenCentral()
 }
 // 插件仓库
 fun RepositoryHandler.mappingPluginRepoTask() {
   mavenLocal()
   mappingPrivateRepoTask()
-  addExternalRepo("gradlePlugin")
   addExternalRepo("spring")
   gradlePluginPortal()
 }
