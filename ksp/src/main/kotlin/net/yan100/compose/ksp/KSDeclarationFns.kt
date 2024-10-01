@@ -8,6 +8,10 @@ import com.google.devtools.ksp.symbol.KSTypeAlias
 
 val KSDeclaration.sName: String get() = simpleName.asString()
 val KSDeclaration.qName: String? get() = qualifiedName?.asString()
+
+/**
+ * `simpleName.getShortName()`
+ */
 val KSDeclaration.shName: String get() = simpleName.getShortName()
 val KSDeclaration.actualType: KSDeclaration
   get() {
