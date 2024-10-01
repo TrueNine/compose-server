@@ -26,11 +26,11 @@ import java.time.LocalDate
 @MetaDef
 @MetaName("kt")
 class SuperKtEntity : SuperBaseEntity(), Cloneable {
-  var delegatedNotNull: Int by late()
+  var delegatedNotNull: Int by @Suppress("DEPRECATION_ERROR") late()
 
   var decimal: BigDecimal? = null
 
-  var annotationNonNull: Int by late()
+  var annotationNonNull: Int by @Suppress("DEPRECATION_ERROR") late()
 
   /**
    * ## test doc
