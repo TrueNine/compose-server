@@ -29,7 +29,7 @@ enum class MavenRepoType(
   TENCENT_CLOUD(
     mavenCentralUrl = Repos.tencentCloudMavenPublic,
     googlePluginUrl = Repos.tencentCloudMavenPublic,
-    gradlePluginUrl = Repos.tencentCloudGradlePlugin,
+    gradlePluginUrl = Repos.aliGradlePlugin,
   ),
   HUAWEI_CLOUD(mavenCentralUrl = Repos.huaweiCloudMaven),
   DEFAULT,
