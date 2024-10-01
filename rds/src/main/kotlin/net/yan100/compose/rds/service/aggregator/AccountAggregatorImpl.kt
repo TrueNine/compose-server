@@ -20,6 +20,7 @@ import jakarta.validation.Valid
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.generator.IOrderCodeGenerator
 import net.yan100.compose.core.hasText
+import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.withNew
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
@@ -41,8 +42,8 @@ class AccountAggregatorImpl(
   private val roleGroupService: IRoleGroupService,
 ) : IAccountAggregator {
 
+  @ACID
   @Deprecated("触发了脏跟踪特性")
-  @Transactional(rollbackFor = [Exception::class])
   override fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr? {
     return if (userInfoService.foundById(userInfoId) && !userService.existsByUserInfoId(userInfoId)) {
       userInfoService.fetchById(userInfoId)?.let { info ->
@@ -66,7 +67,7 @@ class AccountAggregatorImpl(
   }
 
   // TODO 硬编码
-  @Transactional(rollbackFor = [Exception::class])
+  @ACID
   override fun assignAccount(@Valid usr: Usr, createUserId: RefId, @Valid userInfo: UserInfo?, roleGroup: Set<String>?): Usr {
     val savedUsr =
       usr.withNew().run {
@@ -90,7 +91,7 @@ class AccountAggregatorImpl(
     return savedUsr
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+  @ACID
   internal fun saveUsrForRegisterParam(param: IAccountAggregator.RegisterDto): Usr {
     return userService.post(
       Usr().withNew().apply {
@@ -104,7 +105,7 @@ class AccountAggregatorImpl(
     )
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+  @ACID
   override fun registerAccount(@Valid param: IAccountAggregator.RegisterDto): Usr? =
     if (!userService.existsByAccount(param.account!!)) {
       saveUsrForRegisterParam(param).also {

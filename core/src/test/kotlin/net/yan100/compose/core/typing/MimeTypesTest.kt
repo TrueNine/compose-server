@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.core.typing
 
-import net.yan100.compose.core.typing.MimeTypes
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

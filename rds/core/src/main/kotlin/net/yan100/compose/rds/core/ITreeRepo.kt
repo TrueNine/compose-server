@@ -199,7 +199,7 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
       children.map {
         it.apply {
           rpi = parent.id
-          nlv = parent.nlv!! + 1
+          nlv = parent.nlv + 1
           tgi = parent.tgi
         }
       }
@@ -226,7 +226,7 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
       child.tgi = parent.tgi
       child.rln = parent.rln + 1
       child.rrn = child.rln + 1
-      save(child.apply { nlv = parent.nlv!! + 1 })
+      save(child.apply { nlv = parent.nlv + 1 })
     }
   }
 

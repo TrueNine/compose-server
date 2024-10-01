@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.core
 
-import kotlin.test.Test
-
 class FunTest {
 
 }

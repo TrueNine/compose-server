@@ -22,6 +22,7 @@ import net.yan100.compose.core.RefId
 import net.yan100.compose.core.hasText
 import net.yan100.compose.core.string
 import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.fromDbData
 import net.yan100.compose.rds.core.entities.withNew
 import net.yan100.compose.rds.core.jpa
@@ -68,7 +69,7 @@ class UserInfoServiceImpl(
     }
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+  @ACID
   override fun postFound(e: UserInfo): UserInfo {
     // 如果存在身份证，则匹配相同的身份证
     return e.idCard?.let { c ->

@@ -23,9 +23,12 @@ import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
-import net.yan100.compose.core.*
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.ReferenceId
 import net.yan100.compose.core.consts.IRegexes
+import net.yan100.compose.core.datetime
 import net.yan100.compose.core.domain.IIdcard2Code
+import net.yan100.compose.core.string
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity

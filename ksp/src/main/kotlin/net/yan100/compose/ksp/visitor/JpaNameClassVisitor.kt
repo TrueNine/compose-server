@@ -48,7 +48,6 @@ import org.hibernate.annotations.Comment
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.jetbrains.annotations.NotNull
-import java.time.LocalDate
 
 class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
   val accessAnnotation = AnnotationSpec.builder(Access::class)

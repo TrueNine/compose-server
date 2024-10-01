@@ -17,6 +17,7 @@
 package net.yan100.compose.rds.service.aggregator
 
 import net.yan100.compose.core.ReferenceId
+import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.entities.RoleGroupRole
 import net.yan100.compose.rds.entities.RolePermissions
 import net.yan100.compose.rds.entities.UserRoleGroup
@@ -150,7 +151,7 @@ class RbacAggregatorImpl(
     rp.deleteByRoleIdAndPermissionsId(roleId, permissionsId)
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+  @ACID
   override fun revokeAllPermissionsFromRole(permissionsIds: List<ReferenceId>, roleId: ReferenceId) {
     rp.deleteAllByPermissionsIdInAndRoleId(permissionsIds, roleId)
   }

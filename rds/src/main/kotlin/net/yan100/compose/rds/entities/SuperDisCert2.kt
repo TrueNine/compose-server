@@ -8,10 +8,10 @@ import jakarta.persistence.Transient
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import net.yan100.compose.core.domain.IDisCode
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.date
+import net.yan100.compose.core.domain.IDisCode
 import net.yan100.compose.core.string
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.converters.DisTypingConverter
