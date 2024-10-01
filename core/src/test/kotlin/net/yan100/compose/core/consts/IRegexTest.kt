@@ -58,6 +58,21 @@ class IRegexTest {
 
   @Test
   fun `rbac name match`() {
-
+    val reg = Pattern.compile(IRegexes.RBAC_NAME)
+    assertTrue { reg.matcher("abc").matches() }
+    assertTrue { reg.matcher("user_read").matches() }
+    assertTrue { reg.matcher("user:read").matches() }
+    assertTrue { reg.matcher("a").matches() }
+    // 失败
+    assertFalse { reg.matcher("_").matches() }
+    assertFalse { reg.matcher("_a").matches() }
+    assertFalse { reg.matcher(":").matches() }
+    assertFalse { reg.matcher(":a").matches() }
+    assertFalse { reg.matcher("-").matches() }
+    assertFalse { reg.matcher("-a").matches() }
+    assertFalse { reg.matcher("9").matches() }
+    assertFalse { reg.matcher("2a").matches() }
+    assertFalse { reg.matcher("1:").matches() }
+    assertFalse { reg.matcher("\n").matches() }
   }
 }
