@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.org.hibernate.orm)
+  //alias(libs.plugins.org.hibernate.orm)
   alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.com.google.devtools.ksp)
   //alias(libs.plugins.org.hibernate.orm)
@@ -9,7 +9,7 @@ apply(plugin = libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
 apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.noarg.get().pluginId)
 apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)
 apply(plugin = libs.plugins.com.google.devtools.ksp.get().pluginId)
-apply(plugin = libs.plugins.org.hibernate.orm.get().pluginId)
+//apply(plugin = libs.plugins.org.hibernate.orm.get().pluginId)
 
 version = libs.versions.compose.rds.get()
 
@@ -22,13 +22,14 @@ kapt {
 
 noArg { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
-hibernate {
+
+/*hibernate {
   enhancement {
-    enableDirtyTracking.set(true)
-    enableLazyInitialization.set(true)
-    enableAssociationManagement.set(true)
+    enableDirtyTracking.set(false)
+    enableLazyInitialization.set(false)
+    enableAssociationManagement.set(false)
   }
-}
+}*/
 
 sourceSets {
   main {

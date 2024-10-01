@@ -1,6 +1,6 @@
 package net.yan100.compose.rds.core.annotations
 
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import java.lang.annotation.Inherited
 
 /**
@@ -18,6 +18,6 @@ import java.lang.annotation.Inherited
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
-@Transactional(rollbackOn = [Exception::class, Throwable::class, Error::class])
+@Transactional(rollbackFor = [Exception::class, Throwable::class, Error::class])
 annotation class ACID
 

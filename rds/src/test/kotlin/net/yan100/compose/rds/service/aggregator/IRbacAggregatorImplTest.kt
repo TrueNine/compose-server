@@ -118,7 +118,7 @@ class IRbacAggregatorImplTest {
 
   fun getRole() =
     Role().apply {
-      name = "测试权限${snowflake.next()}"
+      name = "TEST_PERMISSIONS:${snowflake.next()}"
       doc = "nul"
     }
 
@@ -134,7 +134,7 @@ class IRbacAggregatorImplTest {
   fun getRoles() =
     List(10) {
       Role().apply {
-        name = "没有${snowflake.next()}"
+        name = "NONE_PERMISSIONS:${snowflake.next()}"
         doc = "md = ${snowflake.next()}"
       }
     }
@@ -177,7 +177,7 @@ class IRbacAggregatorImplTest {
 
   fun getPermissions() =
     Permissions().apply {
-      name = "权限 ${snowflake.next()}"
+      name = "PERMISSIONS:${snowflake.next()}"
       doc = "stra ${snowflake.next()}"
     }
 

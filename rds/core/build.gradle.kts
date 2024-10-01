@@ -1,5 +1,5 @@
 plugins {
-  alias(libs.plugins.org.hibernate.orm)
+  //alias(libs.plugins.org.hibernate.orm)
   alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.com.google.devtools.ksp)
 }
@@ -7,7 +7,7 @@ apply(plugin = libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
 apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.noarg.get().pluginId)
 apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)
 apply(plugin = libs.plugins.com.google.devtools.ksp.get().pluginId)
-apply(plugin = libs.plugins.org.hibernate.orm.get().pluginId)
+//apply(plugin = libs.plugins.org.hibernate.orm.get().pluginId)
 
 kapt {
   correctErrorTypes = true
@@ -16,13 +16,15 @@ kapt {
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
-hibernate {
+
+/*hibernate {
   enhancement {
-    enableDirtyTracking.set(true)
-    enableLazyInitialization.set(true)
-    enableAssociationManagement.set(true)
+    enableDirtyTracking.set(false)
+    enableLazyInitialization.set(false)
+    enableAssociationManagement.set(false)
   }
-}
+}*/
+
 version = libs.versions.compose.rdsCore.get()
 
 dependencies {
@@ -37,6 +39,8 @@ dependencies {
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
 
   testImplementation(project(":test-toolkit"))
+
+  implementation(libs.org.hibernate.orm.hibernateCore)
 }
 
 

@@ -19,7 +19,7 @@ plugins {
   alias(libs.plugins.org.asciidoctor.jvm.convert)
   alias(libs.plugins.com.diffplug.spotless)
   alias(libs.plugins.com.github.benManes.versions)
-  alias(libs.plugins.org.hibernate.orm)
+  //alias(libs.plugins.org.hibernate.orm)
   alias(libs.plugins.com.google.devtools.ksp)
   alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.allopen)

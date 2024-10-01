@@ -63,7 +63,7 @@ class UserServiceImplImplTest {
   fun testFindUserByAccount() {
     val saved = service.post(getUser())
     val info = infoService.post(UserInfo().apply { userId = saved.id })
-    val rg = roleGroupService.post(RoleGroup().apply { name = "权限1" })
+    val rg = roleGroupService.post(RoleGroup().apply { name = "PERMISSIONS:1" })
     agg.saveRoleGroupToUser(rg.id, saved.id)!!
     assertEquals(saved.id, info.userId)
     val acc = service.findFullUserByAccount(saved.account)!!
