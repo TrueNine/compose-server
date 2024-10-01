@@ -1,29 +1,29 @@
 [versions]
-compose-versionCatalog = "2.0.20"
-compose = "2.0.7"
-compose-oss = "2.0.8"
-compose-pay = "2.0.9"
-compose-schedule = "2.0.8"
-compose-cacheable = "2.0.9"
-compose-dependServlet = "2.0.9"
-compose-dependPaho = "2.0.8"
-compose-dependJackson = "2.0.8"
-compose-dependHttpExchange = "2.0.8"
-compose-dependJsr303Validation = "2.0.8"
-compose-dependSpringdocOpenapi = "2.0.8"
-compose-core = "2.0.13"
-compose-security = "2.0.11"
-compose-securityCrypto = "2.0.9"
-compose-securityOauth2 = "2.0.10"
-compose-rds = "2.0.13"
-compose-rdsCore = "2.0.15"
-compose-testToolkit = "2.0.8"
-compose-dataExtract = "2.0.9"
-compose-dataCrawler = "2.0.8"
-compose-ksp = "2.0.8"
-compose-kspCore = "2.0.8"
-compose-kspToolkit = "2.0.8"
-compose-gradlePlugin = "2.0.8"
+compose-versionCatalog = "2.0.21"
+compose = "2.0.8"
+compose-oss = "2.0.9"
+compose-pay = "2.0.10"
+compose-schedule = "2.0.9"
+compose-cacheable = "2.0.10"
+compose-dependServlet = "2.0.10"
+compose-dependPaho = "2.0.9"
+compose-dependJackson = "2.0.9"
+compose-dependHttpExchange = "2.0.9"
+compose-dependJsr303Validation = "2.0.9"
+compose-dependSpringdocOpenapi = "2.0.9"
+compose-core = "2.0.14"
+compose-security = "2.0.12"
+compose-securityCrypto = "2.0.10"
+compose-securityOauth2 = "2.0.11"
+compose-rds = "2.0.14"
+compose-rdsCore = "2.0.16"
+compose-testToolkit = "2.0.9"
+compose-dataExtract = "2.0.10"
+compose-dataCrawler = "2.0.9"
+compose-ksp = "2.0.9"
+compose-kspCore = "2.0.9"
+compose-kspToolkit = "2.0.9"
+compose-gradlePlugin = "2.0.9"
 
 composeGroup = "net.yan100.compose"
 
@@ -33,7 +33,7 @@ gradle = "8.10.2"
 java = "21"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
-kotlinx-io = "0.5.3"
+kotlinx-io = "0.5.4"
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.9.0"
 
@@ -49,15 +49,15 @@ spring-cloudAlibaba = "2021.0.4.0"
 spring-modulith = "1.3.0-M2"
 
 testng = "7.10.2"
-junit5 = "5.11.0"
+junit5 = "5.11.1"
 junitPlatform = "1.11.0"
 
-flyway = "10.18.1"
+flyway = "10.18.2"
 mapstruct = "1.6.0"
 hutool = "5.8.32"
 slf4j = "2.1.0-alpha1"
 mybatis-plus = "3.5.7"
-jackson = "2.18.0-rc1"
+jackson = "2.18.0"
 querydsl = "5.1.0"
 hibernate = "6.6.0.Final"
 drools = "9.44.0.Final"
@@ -188,7 +188,7 @@ com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyuko
 
 io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.12" }
 com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
-com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.8" }
+com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.9" }
 com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.14" }
 
 com-github-xiaoymin-knife4jOpenapi3JakartaSpringBootStarter = { group = "com.github.xiaoymin", name = "knife4j-openapi3-jakarta-spring-boot-starter", version = "4.5.0" }
@@ -283,7 +283,7 @@ org-springframework-cloud-springCloudDependencies = { group = "org.springframewo
 org-droos-droolsBom = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
 com-alibaba-cloud-springCloudAlibabaDependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
 org-hibernate-orm-hibernateCore = { group = "org.hibernate", name = "hibernate-core", version.ref = "hibernate" }
-org-skyscreamer-jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "1.5.3" }
+org-skyscreamer-jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "2.0-rc1" }
 
 # 捆绑包
 [bundles]
@@ -342,4 +342,4 @@ io-spring-dependencyManagement = { id = "io.spring.dependency-management", versi
 org-hibernate-orm = { id = "org.hibernate.orm", version.ref = "hibernate" }
 com-github-benManes-versions = { id = "com.github.ben-manes.versions", version = "0.51.0" } ### https://plugins.gradle.org/plugin/com.github.ben-manes.versions
 org-graalvm-buildtools-native = { id = "org.graalvm.buildtools.native", version = "0.10.2" }
-org-asciidoctor-jvm-convert = { id = "org.asciidoctor.jvm.convert", version = "4.0.2" }
+org-asciidoctor-jvm-convert = { id = "org.asciidoctor.jvm.convert", version = "4.0.3" }
