@@ -10,9 +10,9 @@ class DbTestGetterAndSetterEntity : IEntity() {
 
   @delegate:Transient
   @get:Column(name = "name")
-  var name: String by late()
+  var name: String by @Suppress("DEPRECATION_ERROR") late()
 
   @delegate:Transient
   @get:Column(name = "aged")
-  var aged: i32 by late()
+  var aged: i32 by @Suppress("DEPRECATION_ERROR") late()
 }

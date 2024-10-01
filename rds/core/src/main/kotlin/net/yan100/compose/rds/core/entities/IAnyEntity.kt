@@ -26,11 +26,11 @@ import jakarta.validation.constraints.NotBlank
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.core.domain.AbstractLateinitvarScope
 import net.yan100.compose.core.domain.ISensitivity
 import net.yan100.compose.depend.jsr303validation.group.DeleteGroup
 import net.yan100.compose.depend.jsr303validation.group.PatchGroup
 import net.yan100.compose.depend.jsr303validation.group.PutGroup
-import net.yan100.compose.rds.core.DelegateGetSetLateinitvarValue
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
 import org.hibernate.Hibernate
@@ -50,7 +50,11 @@ import java.io.Serializable
   BizCodeInsertListener::class,
   SnowflakeIdInsertListener::class,
 )
-abstract class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope, IEnhanceEntity, Serializable {
+abstract class IAnyEntity : ISensitivity,
+  Persistable<Id>,
+  IExtensionDefineScope,
+  IEnhanceEntity, Serializable,
+  AbstractLateinitvarScope() {
   companion object {
     @Serial
     const val serialVersionUID = 1L
@@ -58,12 +62,6 @@ abstract class IAnyEntity : ISensitivity, Persistable<Id>, IExtensionDefineScope
     /** 主键 */
     @kotlin.jvm.Transient
     const val ID = IDbNames.ID
-
-    @JsonIgnore
-    @Transient
-    @JvmStatic
-    @Suppress("DEPRECATION_ERROR")
-    protected fun <T> Companion.late() = DelegateGetSetLateinitvarValue<T>()
   }
 
   /** id */

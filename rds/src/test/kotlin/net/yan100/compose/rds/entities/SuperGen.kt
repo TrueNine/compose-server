@@ -24,5 +24,5 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MetaName("gen_table")
 abstract class SuperGen : IEntity(), Cloneable {
   var strNullable: String? = null
-  var intNonNull: Int by late()
+  var intNonNull: Int by @Suppress("DEPRECATION_ERROR") late()
 }

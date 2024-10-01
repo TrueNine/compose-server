@@ -20,5 +20,5 @@ import jakarta.persistence.Entity
 
 @Entity
 class Ae : IEntity() {
-  var lateVariable: Int by late()
+  var lateVariable: Int by @Suppress("DEPRECATION_ERROR") late()
 }
