@@ -25,8 +25,8 @@ import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.entities.fromDbData
-import net.yan100.compose.rds.core.page
-import net.yan100.compose.rds.core.result
+import net.yan100.compose.rds.core.toPageable
+import net.yan100.compose.rds.core.toPr
 import org.springframework.data.repository.findByIdOrNull
 
 /**
@@ -56,13 +56,13 @@ interface IBaseCrudService<T : IEntity, R : IRepo<T>> {
   @ACID
   fun postAllFound(es: List<T>): List<T> = postAll(es)
 
-  fun fetchAll(page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAll(page.page).result
+  fun fetchAllOrderByIdDesc(page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAllOrderByIdDesc(page.toPageable()).toPr()
 
-  fun fetchAllOrderByIdDesc(page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAllOrderByIdDesc(page.page).result
+  fun fetchAll(pq: Pq? = Pq.DEFAULT_MAX): Pr<T> = fetchAllOrderByIdDesc(pq)
 
   fun fetchAllOrderByIdDesc(): List<T> = repo.findAllOrderByIdDesc()
 
-  fun fetchAllByNotShadowRemoved(page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAllByNotLogicDeleted(page.page).result
+  fun fetchAllByNotShadowRemoved(page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAllByNotLogicDeleted(page.toPageable()).toPr()
 
   fun fetchById(id: Id): T? = repo.findByIdOrNull(id)
 
@@ -72,7 +72,7 @@ interface IBaseCrudService<T : IEntity, R : IRepo<T>> {
 
   fun fetchByIdAndNotShadowRemovedOrNull(id: Id): T? = repo.findByIdAndNotLogicDeleteOrNull(id)
 
-  fun fetchAllByIdAndNotShadowRemoved(ids: List<Id>, page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAllByIdAndNotLogicDeleted(ids, page.page).result
+  fun fetchAllByIdAndNotShadowRemoved(ids: List<Id>, page: Pq? = Pq.DEFAULT_MAX): Pr<T> = repo.findAllByIdAndNotLogicDeleted(ids, page.toPageable()).toPr()
 
   fun lenAll(): Long = repo.count()
 
