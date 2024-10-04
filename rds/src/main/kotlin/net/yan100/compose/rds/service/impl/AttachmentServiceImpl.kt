@@ -21,11 +21,8 @@ import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
 import net.yan100.compose.core.domain.IReadableAttachment
 import net.yan100.compose.core.typing.MimeTypes
-import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.*
 import net.yan100.compose.rds.core.annotations.ACID
-import net.yan100.compose.rds.core.jpa
-import net.yan100.compose.rds.core.page
-import net.yan100.compose.rds.core.result
 import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.entities.LinkedAttachment
@@ -42,6 +39,7 @@ class AttachmentServiceImpl(
   private val linkedRepo: ILinkedAttachmentRepo
 ) : IAttachmentService, ICrud<Attachment> by jpa(attRepo),
   IAttachmentRepo by attRepo {
+  @ACID
   override fun fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(baseUrl: String, baseUri: String): Attachment {
     return fetchByBaseUrlAndBaseUri(baseUrl, baseUri)
       ?: post(
@@ -66,7 +64,7 @@ class AttachmentServiceImpl(
   }
 
   override fun fetchAllByParentBaseUrl(baseUrl: String, page: Pq): Pr<Attachment> {
-    return attRepo.findAllByParentBaseUrl(baseUrl, page.page).result
+    return attRepo.findAllByParentBaseUrl(baseUrl, page.toPageable()).toPr()
   }
 
   override fun fetchLinkedById(id: String): LinkedAttachment? {
@@ -78,11 +76,11 @@ class AttachmentServiceImpl(
   }
 
   override fun fetchAllFullUrlByMetaNameStartingWith(metaName: String, page: Pq): Pr<String> {
-    return attRepo.findAllFullUrlByMetaNameStartingWith(metaName, page.page).result
+    return attRepo.findAllFullUrlByMetaNameStartingWith(metaName, page.toPageable()).toPr()
   }
 
   override fun fetchAllLinkedAttachmentByParentBaseUrl(baseUrl: String, page: Pq): Pr<LinkedAttachment> {
-    return linkedRepo.findAllByParentBaseUrl(baseUrl, page.page).result
+    return linkedRepo.findAllByParentBaseUrl(baseUrl, page.toPageable()).toPr()
   }
 
   @ACID

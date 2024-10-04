@@ -19,10 +19,7 @@ package net.yan100.compose.rds.service.impl
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
 import net.yan100.compose.core.ReferenceId
-import net.yan100.compose.rds.core.ICrud
-import net.yan100.compose.rds.core.jpa
-import net.yan100.compose.rds.core.page
-import net.yan100.compose.rds.core.result
+import net.yan100.compose.rds.core.*
 import net.yan100.compose.rds.entities.AddressDetails
 import net.yan100.compose.rds.entities.FullAddressDetails
 import net.yan100.compose.rds.entities.NonDesensitizedAddressDetails
@@ -40,15 +37,15 @@ class AddressDetailsServiceImpl(
   private val fRepo: IFullAddressDetailsRepo
 ) : IAddressDetailsService, ICrud<AddressDetails> by jpa(repo) {
   override fun fetchAllByUserId(userId: String, page: Pq): Pr<AddressDetails> {
-    return repo.findAllByUserId(userId, page.page).result
+    return repo.findAllByUserId(userId, page.toPageable()).toPr()
   }
 
   override fun fetchNonDesensitizedAllByUserId(userId: String, page: Pq): Pr<NonDesensitizedAddressDetails> {
-    return repo.findNonDesensitizedAllByUserId(userId, page.page).result
+    return repo.findNonDesensitizedAllByUserId(userId, page.toPageable()).toPr()
   }
 
   override fun fetchFullAllByUserId(userId: String, page: Pq): Pr<FullAddressDetails> {
-    return fRepo.findAllByUserId(userId, page.page).result
+    return fRepo.findAllByUserId(userId, page.toPageable()).toPr()
   }
 
   override fun fetchFullPathById(id: String): String {
@@ -76,14 +73,14 @@ class AddressDetailsServiceImpl(
   }
 
   override fun fetchAllByPhone(phone: String, page: Pq): Pr<AddressDetails> {
-    return repo.findAllByPhone(phone, page.page).result
+    return repo.findAllByPhone(phone, page.toPageable()).toPr()
   }
 
   override fun fetchNonDesensitizedAllByPhone(phone: String, pq: Pq): Pr<NonDesensitizedAddressDetails> {
-    return repo.findNonDesensitizedAllByPhone(phone, pq.page).result
+    return repo.findNonDesensitizedAllByPhone(phone, pq.toPageable()).toPr()
   }
 
   override fun fetchFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails> {
-    return fRepo.findAllByPhone(phone, page.page).result
+    return fRepo.findAllByPhone(phone, page.toPageable()).toPr()
   }
 }

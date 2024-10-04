@@ -16,17 +16,17 @@ class SpringPageFnsTest {
   fun `un paged not exception`() {
     val pq = Pq[1, 2, false]
     log.info("pq: {}", pq)
-    val pqPage = pq.page
+    val pqPage = pq.toPageable()
     log.info("pqPage: {}", pqPage)
 
     assertIs<PageRequest>(pqPage)
 
     val upq = Pq.empty()
-    val pg = upq.page
+    val pg = upq.toPageable()
     val uclass = Pageable.unpaged()::class
     assertEquals(pg::class, uclass)
     assertTrue(pg.isUnpaged)
-    val uResult = Page.empty<Any>(pg).result
+    val uResult = Page.empty<Any>(pg).toPr()
     log.info("uResult: {}", uResult)
   }
 }

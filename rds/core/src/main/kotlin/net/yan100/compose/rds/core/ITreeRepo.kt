@@ -242,5 +242,5 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
 
   @Query("from #{#entityName} e where e.nlv = :level")
   fun findByNlv(level: Long, page: Pageable): Page<T>
-  fun findByNlv(level: Long, page: Pq): Pr<T> = findByNlv(level, page.page).result
+  fun findByNlv(level: Long, page: Pq): Pr<T> = findByNlv(level, page.toPageable()).toPr()
 }

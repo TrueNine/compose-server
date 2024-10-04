@@ -83,7 +83,7 @@ fun <E> FluentQuery.FetchableFluentQuery<E>.sortBy(orders: MutableList<Sort.Orde
 }
 
 fun <E> FluentQuery.FetchableFluentQuery<E>.page(pq: Pq?): Page<E> {
-  return page(pq.page)
+  return page(pq.toPageable())
 }
 
 /* path or expression extension functions */
