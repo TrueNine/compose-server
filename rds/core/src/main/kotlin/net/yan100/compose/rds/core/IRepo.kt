@@ -16,6 +16,8 @@
  */
 package net.yan100.compose.rds.core
 
+import net.yan100.compose.core.Id
+import net.yan100.compose.rds.core.domain.PersistenceAuditData
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.repositories.*
 import org.springframework.data.domain.Page
@@ -38,5 +40,17 @@ interface IRepo<T : IEntity> :
   @Query(findAllOrderByIdDesc)
   fun findAllOrderByIdDesc(page: Pageable): Page<T>
 
+  /*@Query("""
+    select new net.yan100.compose.rds.core.domain.PersistenceAuditData(
+      e.ldf,
+      e.rlv,
+      e.id,
+      e.crd,
+      e.mrd
+    )
+    from #{#entityName} e
+    where e.id = :id
+  """)
+  fun findPersistenceAuditDataById(id: Id): PersistenceAuditData?*/
 
 }

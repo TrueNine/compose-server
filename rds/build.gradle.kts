@@ -1,35 +1,22 @@
 plugins {
-  //alias(libs.plugins.org.hibernate.orm)
   alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.com.google.devtools.ksp)
-  //alias(libs.plugins.org.hibernate.orm)
 }
 
-apply(plugin = libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
-apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.noarg.get().pluginId)
 apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)
+apply(plugin = libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
 apply(plugin = libs.plugins.com.google.devtools.ksp.get().pluginId)
-//apply(plugin = libs.plugins.org.hibernate.orm.get().pluginId)
 
 version = libs.versions.compose.rds.get()
 
 kapt {
   correctErrorTypes = true
   keepJavacAnnotationProcessors = true
-  javacOptions { option("querydsl.entityAccessors", true) }
+  javacOptions { option("querydsl.entityAccessors", "true") }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
 
-noArg { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
-
-/*hibernate {
-  enhancement {
-    enableDirtyTracking.set(false)
-    enableLazyInitialization.set(false)
-    enableAssociationManagement.set(false)
-  }
-}*/
 
 sourceSets {
   main {
@@ -44,8 +31,6 @@ dependencies {
 
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
-
-  //implementation(libs.org.springframework.springWebMvc)
 
   ksp(project(":ksp"))
 
@@ -127,5 +112,3 @@ signing {
   useGpgCmd()
   sign(publishing.publications["maven"])
 }
-
-

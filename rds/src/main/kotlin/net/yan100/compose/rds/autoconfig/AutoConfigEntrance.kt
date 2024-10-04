@@ -25,10 +25,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @EntityScan(
   basePackages = [
     "net.yan100.compose.rds.entities",
-    "net.yan100.compose.rds.models",
-    "net.yan100.compose.rds.core"
+    "net.yan100.compose.rds.core.entities"
   ]
 )
+@EnableJpaRepositories("net.yan100.compose.rds.repositories")
 @ComponentScan(
   "net.yan100.compose.rds.autoconfig",
   "net.yan100.compose.rds.converters",
@@ -36,5 +36,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
   "net.yan100.compose.rds.repositories",
   "net.yan100.compose.rds.listener",
 )
-@EnableJpaRepositories("net.yan100.compose.rds.repositories")
 class AutoConfigEntrance

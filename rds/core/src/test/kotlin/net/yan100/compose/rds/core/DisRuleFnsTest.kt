@@ -14,16 +14,15 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.models
+package net.yan100.compose.rds.core
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import net.yan100.compose.core.DisRule
-import net.yan100.compose.rds.core.match
 import net.yan100.compose.rds.core.typing.cert.DisTyping
 import kotlin.test.*
 
-class DisRuleTest {
+class DisRuleFnsTest {
 
   @Test
   fun `test create`() {

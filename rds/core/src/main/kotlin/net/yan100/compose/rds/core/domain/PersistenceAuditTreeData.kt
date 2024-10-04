@@ -15,6 +15,21 @@ open class PersistenceAuditTreeData(
   override val createdAt: datetime?,
   override val updatedAt: datetime?
 ) : PersistenceAuditData(shadowRemoved, lockVersion, id, createdAt, updatedAt), Serializable {
+  @Deprecated("不建议直接调用", level = DeprecationLevel.WARNING)
+  public constructor() : this(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  )
+
+
   override fun toString(): String {
     return "${super.toString()}, leftNodeNo=$leftNodeNo, rightNodeNo=$rightNodeNo, nodeLevel=$nodeLevel, treeGroupId=$treeGroupId, parentId=$parentId"
   }

@@ -13,6 +13,9 @@ open class PersistenceAuditData(
   open val createdAt: datetime?,
   open val updatedAt: datetime?
 ) : Serializable {
+  @Deprecated("不建议直接调用", level = DeprecationLevel.WARNING)
+  public constructor() : this(null, null, null, null, null)
+
   open operator fun component1(): RefId? = id
   open operator fun component2(): datetime? = createdAt
   open operator fun component3(): datetime? = updatedAt
