@@ -19,6 +19,7 @@ package net.yan100.compose.depend.jackson
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
 import net.yan100.compose.core.ISO4217Typing
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
@@ -40,6 +41,6 @@ class AnyTypingDeserializerTest {
     val ff = mapper.readValue("{\"typ\":1}", AB::class.java)
     val ee = mapper.readValue("{\"typ\":\"1\"}", AB::class.java)
 
-    println(json)
+    log.info("json: {}", json)
   }
 }

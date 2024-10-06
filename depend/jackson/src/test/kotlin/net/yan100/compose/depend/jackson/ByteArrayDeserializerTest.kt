@@ -19,6 +19,7 @@ package net.yan100.compose.depend.jackson
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.assertContentEquals
@@ -47,8 +48,8 @@ class ByteArrayDeserializerTest {
 
     val json = mapper.writeValueAsString(ab)
     val ba = mapper.readValue(json, S::class.java)
-    println(ba)
-    println(json)
+    log.info("ba: {}", ba)
+    log.info("json: {}", json)
     assertEquals("{\"a\":\"a\",\"b\":\"AQABAAEA\"}", json)
     assertEquals(ba.a, ab.a)
     assertContentEquals(ba.b, ab.b)
@@ -63,10 +64,10 @@ class ByteArrayDeserializerTest {
       }
 
     val json = map.writeValueAsString(ab)
-    println(json)
+    log.info("json a: {}", json)
 
     val ba = map.readValue(json, S::class.java)
-    println(ba)
+    log.info("ba: {}", ba)
 
     assertEquals("{\"net.yan100.compose.depend.jackson.ByteArrayDeserializerTest\$S\":{\"a\":\"a\",\"b\":{\"[B\":\"AQABAAEA\"}}}", json)
     assertEquals(ba.a, ab.a)

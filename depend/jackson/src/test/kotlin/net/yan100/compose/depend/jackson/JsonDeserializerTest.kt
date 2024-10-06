@@ -21,6 +21,7 @@ import jakarta.annotation.Resource
 import net.yan100.compose.core.toDate
 import net.yan100.compose.core.toLocalDatetime
 import net.yan100.compose.core.toLong
+import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
@@ -37,9 +38,9 @@ class JsonDeserializerTest {
   fun testLocalDatetime() {
     val localDatetime = Date().toLocalDatetime()
     val json = mapper.writeValueAsString(localDatetime)
-    println(json)
+    log.info(json)
     val local = mapper.readValue(json, LocalDateTime::class.java)
-    println(local.toDate().toLong())
+    log.info("local: {}", local.toDate().toLong())
     assertEquals(local.toDate().toLong(), localDatetime.toDate().toLong())
   }
 }

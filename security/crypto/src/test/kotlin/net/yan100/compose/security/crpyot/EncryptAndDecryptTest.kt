@@ -30,12 +30,13 @@ class EncryptAndDecryptTest {
     val key = Keys.generateAesKey()!!
     val bKey = Keys.writeAesKeyToBase64(key)!!
     val base64Key = Keys.readAesKeyByBase64(bKey)!!
-    println(base64Key)
-    val text = "我日你妈"
+    log.info("base64Key: {}", base64Key)
+
+    val text = "cccccccc"
     val cipher = Encryptors.encryptByAesKey(base64Key, text)!!
-    println(cipher)
+    log.info(cipher)
     val plain = Encryptors.decryptByAesKey(base64Key, cipher)
-    println(plain)
+    log.info(plain)
     assertEquals(plain, text)
   }
 
@@ -68,7 +69,7 @@ class EncryptAndDecryptTest {
   @Test
   fun testAes() {
     val key = Keys.generateAesKey()!!
-    val data = "我是你爹"
+    val data = "i is did"
     val enc = Encryptors.encryptByAesKey(key, data)!!
     val dec = Encryptors.decryptByAesKey(key, enc)
     println(enc)
@@ -88,8 +89,7 @@ class EncryptAndDecryptTest {
       metaCode = ${metaCode.toStr()}
       base64de = ${base64Byte.toStr()}
       strBas64 = ${strBase64.toStr()}
-    """
-        .trimIndent()
+    """.trimIndent()
     ) {
       metaCode.contentEquals(base64Byte)
       base64Byte.contentEquals(strBase64)

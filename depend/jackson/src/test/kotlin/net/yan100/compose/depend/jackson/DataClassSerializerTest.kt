@@ -23,6 +23,7 @@ import jakarta.annotation.Resource
 import net.yan100.compose.core.datetime
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
 import net.yan100.compose.testtookit.SpringServletTest
+import net.yan100.compose.testtookit.log
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -46,13 +47,10 @@ class DataClassSerializerTest {
 
   @Test
   fun `test web request`() {
-    val b =
-      mockMvc
-        .post("/v1/a") {
-          content = A("a", "b")
-          contentType = MediaType.APPLICATION_JSON
-        }
-        .andDo { this.print() }
+    val b = mockMvc.post("/v1/a") {
+      content = A("a", "b")
+      contentType = MediaType.APPLICATION_JSON
+    }.andDo { this.print() }
   }
 
   @Test
@@ -61,25 +59,25 @@ class DataClassSerializerTest {
     b.s = "s"
     val json = mapper.writeValueAsString(b)
     val obj = mapper.readValue<B>(json)
-    println(obj)
+    log.info("obj b: {}", obj)
   }
 
   @Test
   fun `test serialize data class`() {
     val a = A("a", "b")
     val json = mapper.writeValueAsString(a)
-    println(json)
+    log.info("a json: {}", json)
     val obj = mapper.readValue<A>(json)
-    println(obj)
+    log.info("deserialization obj: {}", obj)
   }
 
   @Test
   fun `test serialize interface internal data class`() {
     val a = InterFace.InternalClass("a", "b", "c")
     val json = mapper.writeValueAsString(a)
-    println(json)
+    log.info("json: {}", json)
     val obj = mapper.readValue<InterFace.InternalClass>(json)
-    println(obj)
+    log.info("obj: {}", obj)
   }
 
   @Resource
@@ -91,10 +89,10 @@ class DataClassSerializerTest {
     val a = InterFace.InternalClass("a", "b", "c")
     val json = map.writeValueAsString(a)
     assertTrue { json.contains("net.yan100.compose.depend.jackson.InterFace\$InternalClass") }
-    println(json)
+    log.info("json a: {}", json)
     val obj = map.readValue(json, InterFace.InternalClass::class.java)
-    println(obj)
-    println(obj::class)
+    log.info("obj a: {}", obj)
+    log.info("obj class: {}", obj::class)
   }
 
   @Test
@@ -102,22 +100,17 @@ class DataClassSerializerTest {
     val dt = datetime.now()
     val a = InterFace.InternalClass("a", "b", "c", dt)
     val json = map.writeValueAsString(a)
-    println(json)
+    log.info("json m: {}", json)
 
     val obj = map.readValue(json, InterFace.InternalClass::class.java)
-    println(obj)
-    println(obj::class)
+    log.info("obj c: {}", obj)
+    log.info("obj c class: {}", obj::class)
   }
 }
 
 
 interface InterFace {
   data class InternalClass(
-    val a: String,
-    val b: String,
-    @JsonIgnore
-    val c: String?,
-    @JsonIgnore
-    val d: datetime? = null
+    val a: String, val b: String, @JsonIgnore val c: String?, @JsonIgnore val d: datetime? = null
   )
 }

@@ -19,6 +19,7 @@ package net.yan100.compose.depend.jackson
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.annotation.Resource
+import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.Period
 import kotlin.test.Test
@@ -35,7 +36,7 @@ class PeriodSerializerTest {
     assertEquals(period.years, 1)
 
     val value = mapper.writeValueAsString(period)
-    println(value)
+    log.info(value)
 
     val a = mapper.readValue<Period>(value)
     assertEquals(a, period)

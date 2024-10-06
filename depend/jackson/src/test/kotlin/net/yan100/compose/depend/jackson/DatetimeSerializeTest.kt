@@ -7,6 +7,7 @@ import net.yan100.compose.core.date
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.time
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
+import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 
@@ -14,32 +15,27 @@ import kotlin.test.Test
 @SpringBootTest
 class DatetimeSerializeTest {
   data class Obj(
-    val d: date,
-    val t: time,
-    val dt: datetime
+    val d: date, val t: time, val dt: datetime
   )
 
   lateinit var mapper: ObjectMapper
     @Resource set
 
   lateinit var map: ObjectMapper
-    @Resource(name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
-    set
+    @Resource(name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) set
 
   @Test
   fun `test serialize obj`() {
     val obj = Obj(
-      d = date.now(),
-      t = time.now(),
-      dt = datetime.now()
+      d = date.now(), t = time.now(), dt = datetime.now()
     )
     val json = mapper.writeValueAsString(obj)
-    println(json)
+    log.info(json)
 
     val nJson = map.writeValueAsString(obj)
-    println(nJson)
+    log.info(nJson)
     val nObj = map.readValue<Obj>(nJson)
-    println(nObj)
+    log.info("n obj: {}", nObj)
   }
 
   @Test
@@ -47,7 +43,7 @@ class DatetimeSerializeTest {
     val d = datetime.now()
     val json = mapper.writeValueAsString(d)
     val nJson = map.writeValueAsString(d)
-    println(json)
-    println(nJson)
+    log.info(json)
+    log.info(nJson)
   }
 }
