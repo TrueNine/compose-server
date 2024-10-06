@@ -20,7 +20,7 @@ import jakarta.persistence.*
 import net.yan100.compose.core.slf4j
 
 @Suppress("DEPRECATION_ERROR")
-private val log = slf4j(PreSaveDeleteReferenceListener::class)
+private val log = slf4j<PreSaveDeleteReferenceListener>()
 
 /**
  * ## 在保存一个实体前，删除所有的外键属性

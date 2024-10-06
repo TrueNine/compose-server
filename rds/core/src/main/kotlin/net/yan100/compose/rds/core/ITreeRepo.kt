@@ -17,7 +17,6 @@
 package net.yan100.compose.rds.core
 
 import net.yan100.compose.core.*
-import net.yan100.compose.core.annotations.BetaTest
 import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.ITreeEntity
 import org.springframework.data.domain.Page
@@ -28,7 +27,6 @@ import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.findByIdOrNull
 
 private const val DEPRECATED_TEXT = "接口内部实现方法，不建议调用"
-private const val SUP = "DEPRECATION_ERROR"
 
 /**
  * # 线索树 CRUD 接口
@@ -179,7 +177,7 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
    * @return 保存后的子节点
    */
   @ACID
-  @Suppress(SUP)
+  @Suppress("DEPRECATION_ERROR")
   fun saveChildren(parent: T, children: List<T>): List<T> {
     if (children.isEmpty()) return listOf()
     require(parent.nlv != null && parent.tgi != null) { "父节点缺少必要的值 = $parent" }
@@ -195,15 +193,13 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
       children[idx].rln = leftStep + i
       children[idx].rrn = leftStep + i + 1
     }
-    return saveAll(
-      children.map {
-        it.apply {
-          rpi = parent.id
-          nlv = parent.nlv + 1
-          tgi = parent.tgi
-        }
+    return saveAll(children.map {
+      it.apply {
+        rpi = parent.id
+        nlv = parent.nlv + 1
+        tgi = parent.tgi
       }
-    )
+    })
   }
 
   /** 对 saveChildren 的尾随闭包调用 **警告：一次事务只能调用一次** */
@@ -214,7 +210,7 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
 
   /** 保存单个子节点 **警告：一次事务只能调用一次** */
   @ACID
-  @Suppress(SUP)
+  @Suppress("DEPRECATION_ERROR")
   fun saveChild(parent: T? = null, child: T): T {
     return if (parent == null) {
       child.toNewEntity()
@@ -232,8 +228,7 @@ interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
 
   /** **警告：一次事务只能调用一次** */
   @ACID
-  @BetaTest
-  @Suppress(SUP)
+  @Suppress("DEPRECATION_ERROR")
   fun deleteChild(child: T) {
     delete(child)
     popRlnByOffset(2, child.rln, child.tgi)

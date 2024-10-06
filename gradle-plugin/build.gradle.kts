@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 val l = libs
 
@@ -32,7 +31,8 @@ dependencies {
 
 kotlin {
   compilerOptions {
-    apiVersion = KotlinVersion.KOTLIN_2_0
+    //apiVersion = KotlinVersion.KOTLIN_2_0
+    //languageVersion = KotlinVersion.KOTLIN_2_0
     jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
     freeCompilerArgs =
       listOf(
@@ -44,7 +44,7 @@ kotlin {
       )
   }
 
-  jvmToolchain(21)
+  jvmToolchain(l.versions.java.get().toInt())
 }
 
 gradlePlugin {

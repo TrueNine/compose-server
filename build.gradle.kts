@@ -1,6 +1,5 @@
 import com.diffplug.spotless.LineEnding
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
@@ -83,15 +82,19 @@ subprojects {
     implementation(platform(l.org.springframework.modulith.springModulithBom))
     implementation(platform(l.org.springframework.ai.springAiBom))
 
-    runtimeOnly(l.org.springframework.cloud.springCloudStarterBootstrap)
 
+    // 自动处理 spring 配置
     annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
     kapt(l.org.springframework.springBootConfigurationProcessor)
+    runtimeOnly(l.org.springframework.cloud.springCloudStarterBootstrap)
+
     implementation(l.org.springframework.springBootConfigurationProcessor)
     implementation(l.org.springframework.boot.springBoot)
     implementation(l.org.springframework.boot.springBootAutoconfigure)
 
     implementation(l.bundles.kotlin)
+
+    // junit 全平台 测试
     testImplementation(l.bundles.kotlinTestJunit5)
     testImplementation(l.bundles.junit5)
   }
@@ -107,15 +110,15 @@ subprojects {
 
   kotlin {
     compilerOptions {
-      apiVersion = KotlinVersion.KOTLIN_1_9
-      languageVersion = KotlinVersion.KOTLIN_1_9
+      //apiVersion = KotlinVersion.KOTLIN_2_0
+      //languageVersion = KotlinVersion.KOTLIN_2_0
       jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
       freeCompilerArgs = listOf(
         "-Xjsr305=strict", "-Xjvm-default=all", "-verbose", "-Xjdk-release=${l.versions.java.get()}", "-jvm-target=${l.versions.java.get()}"
       )
     }
 
-    jvmToolchain(21)
+    jvmToolchain(l.versions.java.get().toInt())
   }
 
   tasks {

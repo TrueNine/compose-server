@@ -1,8 +1,9 @@
 version = libs.versions.compose.testToolkit.get()
 
 dependencies {
+  api(libs.org.jetbrains.kotlin.kotlinTestJunit5)
+
   api(libs.org.slf4j.slf4jApi)
-  api(libs.org.springframework.boot.springBootStarterWeb)
 
   // json
   api(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
