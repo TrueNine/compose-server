@@ -99,7 +99,6 @@ subprojects {
     testImplementation(l.bundles.junit5)
   }
 
-  //configurations { compileOnly { extendsFrom(configurations.annotationProcessor.get()) } }
 
   java {
     sourceCompatibility = JavaVersion.VERSION_21
