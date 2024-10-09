@@ -2,6 +2,7 @@ version = libs.versions.compose.testToolkit.get()
 
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlinTestJunit5)
+  api(libs.io.mockk.mockk)
 
   api(libs.org.slf4j.slf4jApi)
 
