@@ -24,18 +24,27 @@ import net.yan100.compose.core.typing.IntTyping
 enum class AuditTyping(val v: Int) : IntTyping {
   @Schema(title = "未审核")
   NONE(0),
+
   @Schema(title = "分配给审核员")
   ASSIGNED(1),
+
   @Schema(title = "审核通过")
   PASS(2),
+
   @Schema(title = "审核未通过")
   FAIL(3),
+
   @Schema(title = "已撤销")
   CANCEL(4),
+
   @Schema(title = "已过期")
   EXPIRED(5),
+
   @Schema(title = "驳回")
-  REJECT(6);
+  REJECT(6),
+
+  @Schema(title = "被隐藏")
+  SHADOW_BAN(7);
 
   @JsonValue
   override val value: Int = v
