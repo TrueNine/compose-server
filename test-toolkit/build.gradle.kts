@@ -27,6 +27,10 @@ dependencies {
 
   // jsr 303
   api(libs.org.springframework.boot.springBootStarterValidation)
+
+  // 测试用数据库
+  runtimeOnly(libs.org.hsqldb.hsqldb)
+  runtimeOnly(libs.com.h2database.h2)
 }
 
 publishing {
