@@ -9,10 +9,10 @@ spring:
     baseline-version: 99
     enabled: false
   datasource:
-    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    driver-class-name: org.h2.Driver
     username: sa
     password:
-    url: jdbc:hsqldb:mem:testdb?useUnicode=true&characterEncoding=utf8
+    url: jdbc:h2:mem:testdb?useUnicode=true&characterEncoding=utf8
   jpa:
     properties:
       hibernate:
@@ -21,12 +21,10 @@ spring:
         order_updates: true
         jdbc:
           batch_size: 1023
-        show_sql: true
+        show_sql: false
     open-in-view: false
-    database-platform: org.hibernate.dialect.HSQLDialect
-    database: hsql
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: h2
     hibernate:
       ddl-auto: create
-logging:
-  level:
-    root: info
+
