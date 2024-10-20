@@ -1,33 +1,34 @@
 [versions]
-compose-versionCatalog = "2.0.29"
-compose = "2.0.9"
-compose-oss = "2.0.10"
-compose-pay = "2.0.11"
-compose-schedule = "2.0.10"
-compose-cacheable = "2.0.11"
-compose-dependServlet = "2.0.11"
-compose-dependPaho = "2.0.10"
-compose-dependJackson = "2.0.10"
-compose-dependHttpExchange = "2.0.10"
-compose-dependJsr303Validation = "2.0.10"
-compose-dependSpringdocOpenapi = "2.0.10"
-compose-core = "2.0.17"
-compose-security = "2.0.13"
-compose-securityCrypto = "2.0.11"
-compose-securityOauth2 = "2.0.12"
-compose-rds = "2.0.20"
-compose-rdsCore = "2.0.21"
-compose-testToolkit = "2.0.11"
-compose-dataExtract = "2.0.11"
-compose-dataCrawler = "2.0.10"
-compose-ksp = "2.0.12"
-compose-kspCore = "2.0.10"
-compose-kspToolkit = "2.0.10"
-compose-gradlePlugin = "2.0.10"
+compose-versionCatalog = "2.0.31"
+compose = "2.0.10"
+compose-oss = "2.0.11"
+compose-pay = "2.0.12"
+compose-schedule = "2.0.11"
+compose-cacheable = "2.0.12"
+compose-dependServlet = "2.0.12"
+compose-dependPaho = "2.0.11"
+compose-dependJackson = "2.0.11"
+compose-dependHttpExchange = "2.0.11"
+compose-dependJsr303Validation = "2.0.11"
+compose-dependSpringdocOpenapi = "2.0.11"
+compose-core = "2.0.18"
+compose-security = "2.0.14"
+compose-securityCrypto = "2.0.12"
+compose-securityOauth2 = "2.0.13"
+compose-rds = "2.0.21"
+compose-rdsCore = "2.0.23"
+compose-rdsJimmer = "0.0.2"
+compose-testToolkit = "2.0.12"
+compose-dataExtract = "2.0.12"
+compose-dataCrawler = "2.0.11"
+compose-ksp = "2.0.13"
+compose-kspCore = "2.0.11"
+compose-kspToolkit = "2.0.11"
+compose-gradlePlugin = "2.0.11"
 
 composeGroup = "net.yan100.compose"
 
-spotless = "7.0.0.BETA2"
+spotless = "7.0.0.BETA3"
 
 gradle = "8.10.2"
 java = "21"
@@ -37,23 +38,24 @@ kotlinx-io = "0.5.4"
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.9.0"
 
-spring-boot = "3.3.4"
+spring-boot = "3.4.0-M3"
 # spring 单独抽取版本序列
 spring-framework = "6.2.0-RC1"
 spring-data = "3.4.0-M1"
 
 
-spring-cloud = "2023.0.3"
+spring-cloud = "2024.0.0-M2"
 spring-ai = "1.0.0-M2"
 spring-cloudAlibaba = "2021.0.4.0"
 spring-modulith = "1.3.0-M2"
 
 testng = "7.10.2"
-junit5 = "5.11.1"
+junit5 = "5.11.2"
 junitPlatform = "1.11.0"
 
-flyway = "10.18.2"
+flyway = "10.19.0"
 mapstruct = "1.6.0"
+jimmer = "0.8.186"
 hutool = "5.8.32"
 slf4j = "2.1.0-alpha1"
 mybatis-plus = "3.5.7"
@@ -80,6 +82,7 @@ net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-tool
 # rds
 net-yan100-compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose-rds" }
 net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rdsCore" }
+net-yan100-compose-rdsJimmer = { group = "net.yan100.compose", name = "rds-jimmer", version.ref = "compose-rdsJimmer" }
 
 # security
 net-yan100-compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose-security" }
@@ -163,19 +166,19 @@ org-jetbrains-kotlinx-kotlinxDatetimeJvm = { group = "org.jetbrains.kotlinx", na
 
 com-google-devtools-ksp-symbolProcessingApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 
-io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.3.0-M2" }
+io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.3.0-RC1" }
 
-io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.12" }
+io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.13" }
 org-junit-jupiter-junitJupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
 org-junit-platform-junitPlatformLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatform" }
 
 org-testng-testng = { group = "org.testng", name = "testng", version.ref = "testng" }
-io-projectreactor-reactorTest = { group = "io.projectreactor", name = "reactor-test", version = "3.7.0-M6" }
+io-projectreactor-reactorTest = { group = "io.projectreactor", name = "reactor-test", version = "3.7.0-RC1" }
 
 com-github-benManes-caffeine-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 
 org-hsqldb-hsqldb = { group = "org.hsqldb", name = "hsqldb", version = "2.7.3" }
-com-h2database-h2 = { group = "com.h2database", name = "h2", version = "2.2.224" }
+com-h2database-h2 = { group = "com.h2database", name = "h2", version = "2.3.232" }
 org-postgresql-postgresql = { group = "org.postgresql", name = "postgresql", version = "42.7.3" }
 org-xerial-sqliteJdbc = { group = "org.xerial", name = "sqlite-jdbc", version = "3.46.0.0" }
 com-mysql-mysqlConnectorJ = { group = "com.mysql", name = "mysql-connector-j", version = "8.4.0" }
@@ -184,7 +187,7 @@ org-flywaydb-flywayCore = { group = "org.flywaydb", name = "flyway-core", versio
 org-flywaydb-flywayMysql = { group = "org.flywaydb", name = "flyway-mysql", version.ref = "flyway" }
 org-flywaydb-flywayDatabasePostgresql = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "flyway" }
 p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
-com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.9.1" }
+com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.9.2" }
 
 io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.12" }
 com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
@@ -199,7 +202,7 @@ jakarta-persistence-jakartaPersistenceApi = { group = "jakarta.persistence", nam
 jakarta-validation-jakartaValidationApi = { group = "jakarta.validation", name = "jakarta.validation-api", version = "3.1.0" }
 jakarta-annotation-jakartaAnnotationApi = { group = "jakarta.annotation", name = "jakarta.annotation-api", version = "3.0.0" }
 
-io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.24" }
+io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.25" }
 
 com-squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version = "5.0.0-alpha.12" } ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 com-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" } ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
@@ -285,6 +288,14 @@ com-alibaba-cloud-springCloudAlibabaDependencies = { group = "com.alibaba.cloud"
 org-hibernate-orm-hibernateCore = { group = "org.hibernate", name = "hibernate-core", version.ref = "hibernate" }
 org-skyscreamer-jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "2.0-rc1" }
 
+org-babyfish-jimmer-jimmerSql = { group = "org.babyfish.jimmer", name = "jimmer-sql", version.ref = "jimmer" }
+org-babyfish-jimmer-jimmerSqlKotlin = { group = "org.babyfish.jimmer", name = "jimmer-sql-kotlin", version.ref = "jimmer" }
+org-babyfish-jimmer-jimmerApt = { group = "org.babyfish.jimmer", name = "jimmer-apt", version.ref = "jimmer" }
+org-babyfish-jimmer-jimmerKsp = { group = "org.babyfish.jimmer", name = "jimmer-ksp", version.ref = "jimmer" }
+org-babyfish-jimmer-jimmerMapstructApt = { group = "org.babyfish.jimmer", name = "jimmer-mapstruct-apt", version.ref = "jimmer" }
+org-babyfish-jimmer-jimmerSpringBootStarter = { group = "org.babyfish.jimmer", name = "jimmer-spring-boot-starter", version.ref = "jimmer" }
+
+
 # 捆绑包
 [bundles]
 kotlinTestJunit5 = [
@@ -293,10 +304,15 @@ kotlinTestJunit5 = [
   "org-jetbrains-kotlinx-kotlinxCoroutinesTest",
   "io-projectreactor-reactorTest"
 ]
+p6spy = [
+  "p6spy-p6spy",
+  "com-github-gavlyukovskiy-p6spySpringBootStarter"
+]
 junit5 = [
   "org-junit-platform-junitPlatformLauncher",
   "org-junit-jupiter-junitJupiterApi",
-  "org-hsqldb-hsqldb"
+  "org-hsqldb-hsqldb",
+  "com-h2database-h2"
 ]
 kotlin = [
   "org-jetbrains-kotlin-kotlinStdlib",
@@ -335,7 +351,7 @@ org-jetbrains-kotlin-plugin-allopen = { id = "org.jetbrains.kotlin.plugin.allope
 org-jetbrains-kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
 org-jetbrains-kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
+tech-argonariod-gradlePluginJimmer = { id = "tech.argonariod.gradle-plugin-jimmer", version = "1.2.0" }
 org-springframework-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 io-spring-dependencyManagement = { id = "io.spring.dependency-management", version = "1.1.6" }
 

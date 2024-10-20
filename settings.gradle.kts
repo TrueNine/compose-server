@@ -28,6 +28,8 @@ include("rds")
 findProject(":rds")?.name = "rds"
 include("rds:core")
 findProject(":rds:core")?.name = "rds-core"
+include("rds:jimmer")
+findProject(":rds:jimmer")?.name = "rds-jimmer"
 
 // 数据采集器
 include("data")

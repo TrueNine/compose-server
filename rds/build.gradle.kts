@@ -41,6 +41,7 @@ dependencies {
   implementation(project(":security:security-crypto"))
 
   testImplementation(project(":test-toolkit"))
+  testRuntimeOnly(libs.bundles.p6spy)
 }
 
 val common: SourceSet by sourceSets.creating { resources.srcDir("src/main/resources/common") }

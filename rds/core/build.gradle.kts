@@ -32,6 +32,7 @@ dependencies {
 
   testImplementation(project(":test-toolkit"))
   testImplementation(libs.org.springframework.boot.springBootStarterDataJpa)
+  testRuntimeOnly(libs.bundles.p6spy)
 }
 
 publishing {
