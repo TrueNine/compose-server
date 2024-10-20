@@ -118,16 +118,16 @@ abstract class IEntity : IAnyEntity() {
   @Suppress("DEPRECATION_ERROR")
   override fun toNewEntity() {
     super.toNewEntity()
-    ldf = false
-    rlv = 0L
-    crd = datetime.now()
+    ldf = null
+    rlv = null
+    crd = null
     mrd = null
   }
 
   @Suppress("DEPRECATION_ERROR")
   override fun changeWithSensitiveData() {
     super.changeWithSensitiveData()
-    ldf = false
+    ldf = null
     rlv = null
     crd = null
     mrd = null
