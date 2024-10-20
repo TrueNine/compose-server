@@ -18,10 +18,7 @@ package net.yan100.compose.rds.core.entities
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Column
-import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Transient
-import jakarta.persistence.Version
+import jakarta.persistence.*
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.i64
@@ -61,11 +58,7 @@ abstract class IEntity : IAnyEntity() {
   val dbEntityAuditData: PersistenceAuditData?
     get() = if (isNew) null
     else PersistenceAuditData(
-      dbEntityShadowRemoveTag,
-      dbEntityRowLockVersion,
-      id,
-      dbEntityCreatedDatetime,
-      dbEntityLastModifyDatetime
+      dbEntityShadowRemoveTag, dbEntityRowLockVersion, id, dbEntityCreatedDatetime, dbEntityLastModifyDatetime
     )
 
 
@@ -74,17 +67,18 @@ abstract class IEntity : IAnyEntity() {
   @JsonIgnore
   @Column(name = RLV)
   @Schema(hidden = true, title = "乐观锁版本")
+  @Basic(fetch = FetchType.LAZY)
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityRowLockVersion"))
+
   var rlv: i64? = null
 
   @Suppress("DEPRECATION_ERROR")
   val dbEntityRowLockVersion: i64?
-    @Schema(title = "字段乐观锁版本号")
-    @Transient
-    @JsonIgnore get() = rlv
+    @Schema(title = "字段乐观锁版本号") @Transient @JsonIgnore get() = rlv
 
   @CreatedDate
   @JsonIgnore
+  @Basic(fetch = FetchType.LAZY)
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityCreatedDatetime"))
   @Schema(title = "表行创建时间")
   @Column(name = CRD)
@@ -92,12 +86,11 @@ abstract class IEntity : IAnyEntity() {
 
   @Suppress("DEPRECATION_ERROR")
   val dbEntityCreatedDatetime: datetime?
-    @Schema(title = "字段创建时间")
-    @Transient
-    @JsonIgnore get() = crd
+    @Schema(title = "字段创建时间") @Transient @JsonIgnore get() = crd
 
   @JsonIgnore
   @LastModifiedDate
+  @Basic(fetch = FetchType.LAZY)
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityLastModifyDatetime"))
   @Schema(title = "表行修改时间")
   @Column(name = MRD)
@@ -105,13 +98,11 @@ abstract class IEntity : IAnyEntity() {
 
   @Suppress("DEPRECATION_ERROR")
   val dbEntityLastModifyDatetime: datetime?
-    @Schema(title = "字段的修改时间")
-    @Transient
-    @JsonIgnore
-    get() = mrd
+    @Schema(title = "字段的修改时间") @Transient @JsonIgnore get() = mrd
 
   /** 逻辑删除标志 */
   @JsonIgnore
+  @Basic(fetch = FetchType.LAZY)
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityShadowRemoveTag"))
   @Column(name = LDF)
   @Schema(hidden = true, title = "逻辑删除标志")
@@ -120,9 +111,7 @@ abstract class IEntity : IAnyEntity() {
   @Suppress("DEPRECATION_ERROR")
   @get:Schema(title = "是否已经删除")
   val dbEntityShadowRemoveTag: Boolean
-    @Transient
-    @JsonIgnore
-    get() = ldf == true
+    @Transient @JsonIgnore get() = ldf == true
 
   @Transient
   @JsonIgnore
