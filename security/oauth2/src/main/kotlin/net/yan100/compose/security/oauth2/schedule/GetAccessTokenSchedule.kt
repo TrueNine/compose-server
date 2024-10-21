@@ -49,14 +49,21 @@ class GetAccessTokenSchedule(private val ctx: ApplicationContext, @Lazy private 
 
     log.trace("准备更新 access_token appid = {},secret = {}", pp.appId, pp.appSecret)
     val ae = api.getAccessToken(pp.appId, pp.appSecret)
-    val t = api.getTicket(ae.accessToken!!)
-    if (ae.isError || t.isError) {
-      log.error("微信公众号调用发生错误 code: {}, message: {}", ae.errorCode, ae.errorMessage)
-      throw RemoteCallException("微信调用公众号时发生错误")
+    if (ae.accessToken == null) {
+      log.error("未兑换到 access_token code: {}, message: {}", ae.errorCode, ae.errorMessage)
+      throw RemoteCallException("未兑换到 access_token")
     }
-
-    log.trace("获取到 access_token = {}, exp = {}", ae.accessToken, ae.expireInSecond)
-    log.trace("获取到 ticket = {}, exp = {}", t.ticket, ae.expireInSecond)
+    if (ae.isError) {
+      log.error("换取 access_token 时 发生错误 code: {}, message: {}", ae.errorCode, ae.errorMessage)
+      throw RemoteCallException("换取 access_token 时 发生错误")
+    }
+    val t = api.getTicket(ae.accessToken!!)
+    if (t.isError) {
+      log.error("换取 ticket 时 发生错误 code: {}, message: {}", ae.errorCode, ae.errorMessage)
+      throw RemoteCallException("换取 ticket 时 发生错误")
+    }
+    log.trace("获取到 access_token: mask, exp: mask")
+    log.trace("获取到 ticket: mask, exp: mask")
 
     checkNotNull(ae.expireInSecond) { "微信服务器返回了空的 access_token 时间戳" }
     checkNotNull(t.expireInSecond) { "微信服务器返回了空的 ticket 时间戳" }
