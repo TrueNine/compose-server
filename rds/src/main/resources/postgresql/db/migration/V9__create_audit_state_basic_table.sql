@@ -18,21 +18,29 @@ table
 select
     add_base_struct('audit');
 
-create
-    index if not exists status_idx on
-    audit(status);
+select
+    ct_idx(
+        'audit',
+        'status'
+    );
 
-create
-    index if not exists audit_user_id_idx on
-    audit(audit_user_id);
+select
+    ct_idx(
+        'audit',
+        'audit_user_id'
+    );
 
-create
-    index if not exists ref_id_idx on
-    audit(ref_id);
+select
+    ct_idx(
+        'audit',
+        'ref_id'
+    );
 
-create
-    index if not exists ref_type_idx on
-    audit(ref_type);
+select
+    ct_idx(
+        'audit',
+        'ref_type'
+    );
 
 create
     table
@@ -45,14 +53,20 @@ create
 select
     add_base_struct('audit_attachment');
 
-create
-    index if not exists status_idx on
-    audit_attachment(status);
+select
+    ct_idx(
+        'audit_attachment',
+        'status'
+    );
 
-create
-    index if not exists att_id_idx on
-    audit_attachment(att_id);
+select
+    ct_idx(
+        'audit_attachment',
+        'att_id'
+    );
 
-create
-    index if not exists audit_id_idx on
-    audit_attachment(audit_id);
+select
+    ct_idx(
+        'audit_attachment',
+        'audit_id'
+    );

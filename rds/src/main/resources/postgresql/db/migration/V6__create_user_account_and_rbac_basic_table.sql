@@ -102,41 +102,65 @@ table
 select
     add_base_struct('user_info');
 
-create
-    index if not exists user_id_idx on
-    user_info(user_id);
+select
+    ct_idx(
+        'user_info',
+        'user_id'
+    );
 
-create
-    index if not exists create_user_id_idx on
-    user_info(create_user_id);
+select
+    ct_idx(
+        'user_info',
+        'create_user_id'
+    );
 
-create
-    index if not exists phone_idx on
-    user_info(phone);
+select
+    ct_idx(
+        'user_info',
+        'phone'
+    );
 
-create
-    index if not exists email_idx on
-    user_info(email);
+select
+    ct_idx(
+        'user_info',
+        'email'
+    );
 
-create
-    index if not exists id_card_idx on
-    user_info(id_card);
+select
+    ct_idx(
+        'user_info',
+        'id_card'
+    );
 
-create
-    index if not exists address_details_id_idx on
-    user_info(address_details_id);
+select
+    ct_idx(
+        'user_info',
+        'address_details_id'
+    );
 
-create
-    index if not exists avatar_img_id_idx on
-    user_info(avatar_img_id);
+select
+    ct_idx(
+        'user_info',
+        'address_details_id'
+    );
 
-create
-    index if not exists wechat_openid_idx on
-    user_info(wechat_openid);
+select
+    ct_idx(
+        'user_info',
+        'avatar_img_id'
+    );
 
-create
-    index if not exists wechat_authid_idx on
-    user_info(wechat_authid);
+select
+    ct_idx(
+        'user_info',
+        'wechat_openid'
+    );
+
+select
+    ct_idx(
+        'user_info',
+        'wechat_authid'
+    );
 
 insert
     into
@@ -379,13 +403,17 @@ table
 select
     add_base_struct('role_permissions');
 
-create
-    index if not exists role_id_idx on
-    role_permissions(role_id);
+select
+    ct_idx(
+        'role_permissions',
+        'role_id'
+    );
 
-create
-    index if not exists permissions_id_idx on
-    role_permissions(permissions_id);
+select
+    ct_idx(
+        'role_permissions',
+        'permissions_id'
+    );
 
 insert
     into
@@ -456,13 +484,17 @@ table
 select
     add_base_struct('role_group_role');
 
-create
-    index if not exists role_group_id_idx on
-    role_group_role(role_group_id);
+select
+    ct_idx(
+        'role_group_role',
+        'role_group_id'
+    );
 
-create
-    index if not exists role_id_idx on
-    role_group_role(role_id);
+select
+    ct_idx(
+        'role_group_role',
+        'role_id'
+    );
 
 insert
     into
@@ -533,13 +565,17 @@ table
 select
     add_base_struct('user_role_group');
 
-create
-    index if not exists role_group_id_idx on
-    user_role_group(role_group_id);
+select
+    ct_idx(
+        'user_role_group',
+        'role_group_id'
+    );
 
-create
-    index if not exists user_id_idx on
-    user_role_group(user_id);
+select
+    ct_idx(
+        'user_role_group',
+        'user_id'
+    );
 
 insert
     into

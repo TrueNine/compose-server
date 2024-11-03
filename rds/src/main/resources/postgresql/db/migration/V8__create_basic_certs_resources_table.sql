@@ -130,14 +130,20 @@ table
 select
     add_base_struct('biz_cert');
 
-create
-    index if not exists user_id_idx on
-    biz_cert(user_id);
+select
+    ct_idx(
+        'biz_cert',
+        'user_id'
+    );
 
-create
-    index if not exists address_code_idx on
-    biz_cert(address_code);
+select
+    ct_idx(
+        'biz_cert',
+        'address_code'
+    );
 
-create
-    index if not exists address_details_id_idx on
-    biz_cert(address_details_id);
+select
+    ct_idx(
+        'biz_cert',
+        'address_details_id'
+    );

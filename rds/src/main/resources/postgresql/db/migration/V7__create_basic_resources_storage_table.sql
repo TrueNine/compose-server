@@ -16,9 +16,11 @@ table
 select
     add_base_struct('api');
 
-create
-    index if not exists permissions_id_idx on
-    api(permissions_id);
+select
+    ct_idx(
+        'api',
+        'permissions_id'
+    );
 
 create
     table
@@ -38,9 +40,11 @@ table
 select
     add_base_struct('api_call_record');
 
-create
-    index if not exists api_id_idx on
-    api_call_record(api_id);
+select
+    ct_idx(
+        'api_call_record',
+        'api_id'
+    );
 
 create
     table
@@ -64,29 +68,41 @@ table
 select
     add_base_struct('attachment');
 
-create
-    index if not exists url_id_idx on
-    attachment(url_id);
+select
+    ct_idx(
+        'attachment',
+        'url_id'
+    );
 
-create
-    index if not exists meta_name_idx on
-    attachment(meta_name);
+select
+    ct_idx(
+        'attachment',
+        'meta_name'
+    );
 
-create
-    index if not exists base_url_idx on
-    attachment(base_url);
+select
+    ct_idx(
+        'attachment',
+        'base_url'
+    );
 
-create
-    index if not exists base_uri_idx on
-    attachment(base_uri);
+select
+    ct_idx(
+        'attachment',
+        'base_uri'
+    );
 
-create
-    index if not exists att_type_idx on
-    attachment(att_type);
+select
+    ct_idx(
+        'attachment',
+        'att_type'
+    );
 
-create
-    index if not exists mime_type_idx on
-    attachment(mime_type);
+select
+    ct_idx(
+        'attachment',
+        'mime_type'
+    );
 
 create
     table
@@ -110,9 +126,11 @@ select
 select
     add_presort_tree_struct('address');
 
-create
-    index if not exists name_idx on
-    address(name);
+select
+    ct_idx(
+        'address',
+        'name'
+    );
 
 insert
     into
@@ -178,17 +196,23 @@ table
 select
     add_base_struct('address_details');
 
-create
-    index if not exists address_id_idx on
-    address_details(address_id);
+select
+    ct_idx(
+        'address_details',
+        'address_id'
+    );
 
-create
-    index if not exists user_id_idx on
-    address_details(user_id);
+select
+    ct_idx(
+        'address_details',
+        'user_id'
+    );
 
-create
-    index if not exists address_code_idx on
-    address_details(address_code);
+select
+    ct_idx(
+        'address_details',
+        'address_code'
+    );
 
 create
     table
@@ -196,7 +220,8 @@ create
             table_names varchar(127) null,
             user_id bigint null,
             user_account varchar(255) null,
-            delete_datetime timestamp default now(),
+            delete_datetime timestamp default now(
+            ),
             entity json not null
         );
 
@@ -207,17 +232,23 @@ table
 select
     add_base_struct('table_row_delete_record');
 
-create
-    index if not exists table_names_idx on
-    table_row_delete_record(table_names);
+select
+    ct_idx(
+        'table_row_delete_record',
+        'table_names'
+    );
 
-create
-    index if not exists user_account_idx on
-    table_row_delete_record(user_account);
+select
+    ct_idx(
+        'table_row_delete_record',
+        'user_account'
+    );
 
-create
-    index if not exists user_id_idx on
-    table_row_delete_record(user_id);
+select
+    ct_idx(
+        'table_row_delete_record',
+        'user_id'
+    );
 
 create
     table
@@ -241,22 +272,32 @@ table
 select
     add_base_struct('table_row_change_record');
 
-create
-    index if not exists table_names_idx on
-    table_row_change_record(table_names);
+select
+    ct_idx(
+        'table_row_change_record',
+        'table_names'
+    );
 
-create
-    index if not exists create_user_account_idx on
-    table_row_change_record(create_user_account);
+select
+    ct_idx(
+        'table_row_change_record',
+        'create_user_account'
+    );
 
-create
-    index if not exists last_modify_user_account_idx on
-    table_row_change_record(last_modify_user_account);
+select
+    ct_idx(
+        'table_row_change_record',
+        'last_modify_user_account'
+    );
 
-create
-    index if not exists create_user_id_idx on
-    table_row_change_record(create_user_id);
+select
+    ct_idx(
+        'table_row_change_record',
+        'create_user_id'
+    );
 
-create
-    index if not exists last_modify_user_id_idx on
-    table_row_change_record(last_modify_user_id);
+select
+    ct_idx(
+        'table_row_change_record',
+        'last_modify_user_id'
+    );

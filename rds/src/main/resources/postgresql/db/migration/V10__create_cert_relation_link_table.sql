@@ -26,22 +26,32 @@ table
 select
     add_base_struct('cert');
 
-create
-    index if not exists user_id_idx on
-    cert(user_id);
+select
+    ct_idx(
+        'cert',
+        'user_id'
+    );
 
-create
-    index if not exists user_info_id_idx on
-    cert(user_info_id);
+select
+    ct_idx(
+        'cert',
+        'user_info_id'
+    );
 
-create
-    index if not exists create_user_id_idx on
-    cert(create_user_id);
+select
+    ct_idx(
+        'cert',
+        'create_user_id'
+    );
 
-create
-    index if not exists att_id_idx on
-    cert(att_id);
+select
+    ct_idx(
+        'cert',
+        'att_id'
+    );
 
-create
-    index if not exists wm_att_id_idx on
-    cert(wm_att_id);
+select
+    ct_idx(
+        'cert',
+        'wm_att_id'
+    );
