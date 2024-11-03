@@ -1,6 +1,7 @@
 package net.yan100.compose.data.extract.service.impl
 
 import jakarta.annotation.Resource
+import net.yan100.compose.testtookit.assertNotEmpty
 import net.yan100.compose.testtookit.log
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
@@ -15,7 +16,36 @@ class LazyAddressCsvServiceImplTest {
   fun setup() {
     service.csvVersions += "2010" to "area_code_2010.csv"
     service.csvVersions += "2018" to "area_code_2018.csv"
+    assertTrue { service.supportedYearVersions.contains("2024") }
+    assertTrue { service.lastYearVersion == "2024" }
   }
+
+  @Test
+  fun `test init set version`() {
+    assertTrue { service.supportedYearVersions.contains("2024") }
+    assertTrue { service.lastYearVersion == "2024" }
+  }
+
+  @Test
+  fun `test last version`() {
+    assertEquals("2024", service.lastYearVersion)
+  }
+
+  @Test
+  fun `test supported versions`() {
+    assertTrue {
+      service.supportedYearVersions.contains("2024")
+    }
+  }
+
+  @Test
+  fun `test fetch all by code and level`() {
+    val beijing = service.fetchAllByCodeAndLevel("11", 2)
+    assertNotEmpty { beijing }
+    assertEquals(1, beijing.size)
+    assertEquals("市辖区", beijing[0].name)
+  }
+
 
   @Test
   fun `test find all city by code`() {
@@ -58,7 +88,9 @@ class LazyAddressCsvServiceImplTest {
     service.csvVersions += "1010" to "2010.csv"
     service.csvVersions += "1017" to "2017.csv"
     service.csvVersions += "1018" to "2018.csv"
+    service.csvVersions += "3001" to "3001.csv"
     val yearVersion = service.lastYearVersion
-    assertEquals("2018", yearVersion)
+    assertEquals("3001", yearVersion)
+    service.csvVersions -= "3001"
   }
 }
