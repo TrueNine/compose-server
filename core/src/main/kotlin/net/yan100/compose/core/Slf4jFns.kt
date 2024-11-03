@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.core
 
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
 
@@ -34,7 +33,7 @@ object Slf4jKotlinAdaptor {
    * @param kClazz 当前日志记录的 kt 类对象
    * @return [Logger] log 对象
    */
-  private fun getLog(kClazz: KClass<*>): Logger = LoggerFactory.getLogger(kClazz.java)
+  private fun getLog(kClazz: KClass<*>): SysLogger = LoggerFactory.getLogger(kClazz.java)
 
   /**
    * 获取日志对象
@@ -42,9 +41,9 @@ object Slf4jKotlinAdaptor {
    * @param anyWay 当前日志记录的 kt 类对象
    * @return [Logger] log 对象
    */
-  fun getLog(anyWay: Any): Logger = getLog(anyWay::class)
+  fun getLog(anyWay: Any): SysLogger = getLog(anyWay::class)
 }
 
-fun slf4j(clz: Class<*>): Logger = LoggerFactory.getLogger(clz)
-fun slf4j(kClass: KClass<*>): Logger = slf4j(kClass.java)
-inline fun <reified T> slf4j(): Logger = slf4j(T::class)
+fun slf4j(clz: Class<*>): SysLogger = LoggerFactory.getLogger(clz)
+fun slf4j(kClass: KClass<*>): SysLogger = slf4j(kClass.java)
+inline fun <reified T> slf4j(): SysLogger = slf4j(T::class)

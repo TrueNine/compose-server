@@ -19,6 +19,7 @@ package net.yan100.compose.core
 import net.yan100.compose.core.domain.IPage
 import net.yan100.compose.core.domain.IPageParam
 import net.yan100.compose.core.typing.ISO4217
+import org.slf4j.Logger
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.LocalDate
@@ -71,3 +72,6 @@ typealias u64 = ULong
 typealias f32 = Float
 typealias f64 = Double
 typealias char = Char
+
+
+typealias SysLogger = Logger
