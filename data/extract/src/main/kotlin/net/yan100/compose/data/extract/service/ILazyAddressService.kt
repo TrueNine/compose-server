@@ -17,7 +17,9 @@
 package net.yan100.compose.data.extract.service
 
 
+import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.exceptions.RemoteCallException
+import net.yan100.compose.core.nonText
 import net.yan100.compose.core.string
 import net.yan100.compose.data.extract.domain.CnDistrictCode
 import kotlin.properties.Delegates
@@ -47,14 +49,30 @@ private fun <T> createRequestQueue(
 }
 
 interface ILazyAddressService {
+  companion object {
+    fun verifyCode(code: String): Boolean {
+      return code.matches(IRegexes.CHINA_AD_CODE.toRegex())
+    }
+
+    fun convertToFillCode(code: String): String {
+      return if (code.nonText()) code
+      else {
+        if (!verifyCode(code)) code
+        else code.padEnd(12, '0')
+      }
+    }
+  }
+
   class CnDistrictResp {
     lateinit var code: CnDistrictCode
     lateinit var name: String
     lateinit var yearVersion: String
     var leaf by Delegates.notNull<Boolean>()
     var level by Delegates.notNull<Int>()
+    override fun toString(): String {
+      return "CnDistrictResp(code=$code, name=$name, yearVersion=$yearVersion, leaf=$leaf, level=$level)"
+    }
   }
-
 
   fun findAllProvinces(): List<CnDistrictResp>
 

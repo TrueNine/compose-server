@@ -21,30 +21,33 @@ import net.yan100.compose.data.extract.api.ICnNbsAddressApi
 import net.yan100.compose.data.extract.domain.CnDistrictCode
 import net.yan100.compose.data.extract.service.ILazyAddressService
 import org.jsoup.Jsoup
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.stereotype.Service
 
+private val log = slf4j<LazyAddressServiceImpl>()
+
+@ConditionalOnMissingBean(ILazyAddressService::class)
+@Deprecated("统计局已暂时不能使用")
 @Service("DataExtractLazyAddressServiceImpls")
-class LazyAddressServiceImpl(private val call: ICnNbsAddressApi) : ILazyAddressService {
-  companion object {
-    private val log = slf4j(LazyAddressServiceImpl::class)
-  }
+class LazyAddressServiceImpl(
+  private val chstApi: ICnNbsAddressApi
+) : ILazyAddressService {
 
   override fun findAllProvinces(): List<ILazyAddressService.CnDistrictResp> {
-    val homeBody = call.homePage().body
+    val homeBody = chstApi.homePage().body
     log.debug("homeBody = {}", homeBody)
-    val result = extractProvinces(call.homePage().body)
+    val result = extractProvinces(chstApi.homePage().body)
     log.debug("result = {}", result)
     return result
   }
 
-  private fun wrapperModel(code: String, name: String, leaf: Boolean) =
-    ILazyAddressService.CnDistrictResp().apply {
-      this.leaf = leaf
-      this.name = name
-      this.code = CnDistrictCode(code)
-      this.yearVersion = ICnNbsAddressApi.DEFAULT_VERSION
-      level = this.code.level
-    }
+  private fun wrapperModel(code: String, name: String, leaf: Boolean) = ILazyAddressService.CnDistrictResp().apply {
+    this.leaf = leaf
+    this.name = name
+    this.code = CnDistrictCode(code)
+    this.yearVersion = ICnNbsAddressApi.DEFAULT_VERSION
+    level = this.code.level
+  }
 
   private fun getModel(code: String): CnDistrictCode {
     return CnDistrictCode(code)
@@ -61,42 +64,40 @@ class LazyAddressServiceImpl(private val call: ICnNbsAddressApi) : ILazyAddressS
   }
 
   override fun findAllCityByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
-    val h = call.getCityPage(getModel(districtCode).provinceCode)
+    val h = chstApi.getCityPage(getModel(districtCode).provinceCode)
     log.debug("h.headers = {}", h.headers)
     return extractPlainItem("citytr", h.body) ?: listOf()
   }
 
   override fun findAllCountyByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
     val model = getModel(districtCode)
-    return extractPlainItem("countytr", call.getCountyPage(model.provinceCode, model.cityCode).body) ?: listOf()
+    return extractPlainItem("countytr", chstApi.getCountyPage(model.provinceCode, model.cityCode).body) ?: listOf()
   }
 
   override fun findAllTownByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
     val model = getModel(districtCode)
-    return extractPlainItem("towntr", call.getTownPage(model.provinceCode, model.cityCode, model.countyCode).body) ?: listOf()
+    return extractPlainItem("towntr", chstApi.getTownPage(model.provinceCode, model.cityCode, model.countyCode).body) ?: listOf()
   }
 
   override fun findAllVillageByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
     val model = getModel(districtCode)
-    return extractVillages(call.getVillagePage(model.provinceCode, model.cityCode, model.countyCode, model.townCode).body) ?: listOf()
+    return extractVillages(chstApi.getVillagePage(model.provinceCode, model.cityCode, model.countyCode, model.townCode).body) ?: listOf()
   }
 
-  private fun extractVillages(html: String?) =
-    html?.let {
-      Jsoup.parse(it).body().selectXpath("//tr[@class='villagetr']").mapNotNull { element ->
-        val code = element.child(0).text()
-        val name = element.child(2).text()
-        wrapperModel(code, name, true)
-      }
+  private fun extractVillages(html: String?) = html?.let {
+    Jsoup.parse(it).body().selectXpath("//tr[@class='villagetr']").mapNotNull { element ->
+      val code = element.child(0).text()
+      val name = element.child(2).text()
+      wrapperModel(code, name, true)
     }
+  }
 
-  private fun extractPlainItem(className: String, html: String?) =
-    html?.let {
-      Jsoup.parse(it).body().selectXpath("//tr[@class='$className']").mapNotNull { kv ->
-        val leaf = kv.child(1).select("a").size <= 0
-        val code = kv.child(0).text()
-        val name = kv.child(1).text()
-        wrapperModel(code, name, leaf)
-      }
+  private fun extractPlainItem(className: String, html: String?) = html?.let {
+    Jsoup.parse(it).body().selectXpath("//tr[@class='$className']").mapNotNull { kv ->
+      val leaf = kv.child(1).select("a").size <= 0
+      val code = kv.child(0).text()
+      val name = kv.child(1).text()
+      wrapperModel(code, name, leaf)
     }
+  }
 }

@@ -21,11 +21,9 @@ import net.yan100.compose.data.extract.DataExtractEntrance
 import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
+@Ignore
 @SpringBootTest(classes = [DataExtractEntrance::class])
 class ILazyAddressServiceTest {
   lateinit var lazys: ILazyAddressService @Resource set

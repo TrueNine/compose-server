@@ -17,10 +17,12 @@
 package net.yan100.compose.data.extract.api
 
 import jakarta.annotation.Resource
-import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.Ignore
+import kotlin.test.Test
 import kotlin.test.assertNotNull
 
+@Ignore
 @SpringBootTest
 class ICnNbsAddressApiTest {
   @Resource
@@ -51,7 +53,7 @@ class ICnNbsAddressApiTest {
   }
 
   @Test
-  fun testGetVillagePage() {
+  fun `test get village page`() {
     val villagePage = remoteCall.getVillagePage("43", "31", "27", "103")
     assertNotNull(villagePage)
   }

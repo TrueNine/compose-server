@@ -27,6 +27,7 @@ import org.springframework.web.service.annotation.HttpExchange
  *
  * @version 2023
  */
+@Deprecated(message = "统计局接口已经挂掉")
 @HttpExchange("https://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm")
 interface ICnNbsAddressApi {
   companion object {

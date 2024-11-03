@@ -59,20 +59,13 @@ class CnDistrictCode(code: String = "") {
     }
 
   init {
-    val padCode =
-      code.let {
-        when (it.length) {
-          1,
-          3,
-          5,
-          7,
-          8,
-          10,
-          11 -> throw IllegalArgumentException("行政区编码格式缺失")
+    val padCode = code.let {
+      when (it.length) {
+        1, 3, 5, 7, 8, 10, 11 -> throw IllegalArgumentException("行政区编码格式缺失")
 
-          else -> it.padEnd(12, '0')
-        }
+        else -> it.padEnd(12, '0')
       }
+    }
     this.empty = padCode.startsWith(THREE_ZERO)
 
     provinceCode = padCode.substring(0, 2)
@@ -95,4 +88,6 @@ class CnDistrictCode(code: String = "") {
       else -> null
     }
   }
+
+  override fun toString(): String = padCode
 }
