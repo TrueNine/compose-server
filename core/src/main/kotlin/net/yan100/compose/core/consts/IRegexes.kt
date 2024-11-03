@@ -32,6 +32,17 @@ interface IRegexes {
     private const val DAY = "(0[1-9]|[1-2][0-9]|3[0-1])"
     private const val CHINA_ID_CARD_PREFIX = "^${ONE_ONE}${ZERO_ZERO_ZERO_ONE}${ZERO_ONE}${YEAR}${MONTH}${DAY}\\d{3}[xX0-9]"
 
+    /**
+     * 中国行政区划代码
+     * 支持：
+     * - 2位
+     * - 4位
+     * - 6位
+     * - 9位
+     * - 12位
+     */
+    const val CHINA_AD_CODE = "(?:[1-9]\\d{1}|[1-9]\\d{3}|[1-9]\\d{5}|[1-9]\\d{8}|[1-9]\\d{11})\$"
+
     /** 缓存 / 其他配置 key */
     const val CONFIG_KEY = "^(?![.])[a-zA-Z0-9_.]+$"
 
