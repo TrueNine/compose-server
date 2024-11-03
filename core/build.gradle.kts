@@ -10,6 +10,7 @@ dependencies {
   api(libs.org.slf4j.slf4jApi)
 
   testImplementation(project(":test-toolkit"))
+  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
 }
 
 publishing {
