@@ -23,6 +23,24 @@ import kotlin.test.assertTrue
 
 class IRegexTest {
   @Test
+  fun `match china ad code`() {
+    val pattern = Pattern.compile(IRegexes.CHINA_AD_CODE)
+    assertTrue { pattern.matcher("43").matches() }
+    assertTrue { pattern.matcher("4304").matches() }
+    assertTrue { pattern.matcher("430404").matches() }
+    assertTrue { pattern.matcher("430404100").matches() }
+    assertTrue { pattern.matcher("430404100101").matches() }
+
+
+    assertTrue { pattern.matcher("430404").matches() }
+
+    assertFalse { pattern.matcher("00").matches() }
+    assertFalse { pattern.matcher("01").matches() }
+    assertFalse { pattern.matcher("4304041").matches() }
+  }
+
+
+  @Test
   fun `iccard match`() {
     val pattern = Pattern.compile(IRegexes.CHINA_ID_CARD)
     assertTrue { pattern.matcher("430404197210280012").matches() }
