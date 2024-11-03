@@ -17,6 +17,7 @@
 package net.yan100.compose.data.extract.service.impl
 
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.core.string
 import net.yan100.compose.data.extract.api.ICnNbsAddressApi
 import net.yan100.compose.data.extract.domain.CnDistrictCode
 import net.yan100.compose.data.extract.service.ILazyAddressService
@@ -32,8 +33,25 @@ private val log = slf4j<LazyAddressServiceImpl>()
 class LazyAddressServiceImpl(
   private val chstApi: ICnNbsAddressApi
 ) : ILazyAddressService {
+  override val supportedDefaultYearVersion: String
+    get() = "2023"
+  override val supportedYearVersions: List<String>
+    get() = listOf(supportedDefaultYearVersion)
 
-  override fun findAllProvinces(): List<ILazyAddressService.CnDistrictResp> {
+  override val logger get() = log
+
+  override fun fetchAllByCodeAndLevel(code: string, level: Int, yearVersion: String): List<ILazyAddressService.CnDistrict> {
+    return when (level) {
+      1 -> findAllProvinces()
+      2 -> findAllCityByCode(code)
+      3 -> findAllCountyByCode(code)
+      4 -> findAllTownByCode(code)
+      5 -> findAllVillageByCode(code)
+      else -> TODO("Not yet implemented")
+    }
+  }
+
+  override fun findAllProvinces(yearVersion: String): List<ILazyAddressService.CnDistrict> {
     val homeBody = chstApi.homePage().body
     log.debug("homeBody = {}", homeBody)
     val result = extractProvinces(chstApi.homePage().body)
@@ -41,45 +59,41 @@ class LazyAddressServiceImpl(
     return result
   }
 
-  private fun wrapperModel(code: String, name: String, leaf: Boolean) = ILazyAddressService.CnDistrictResp().apply {
-    this.leaf = leaf
-    this.name = name
-    this.code = CnDistrictCode(code)
-    this.yearVersion = ICnNbsAddressApi.DEFAULT_VERSION
-    level = this.code.level
-  }
+  private fun toCnDistrict(code: String, name: String, leaf: Boolean) = ILazyAddressService.CnDistrict(
+    leaf = leaf, name = name, code = CnDistrictCode(code), yearVersion = ICnNbsAddressApi.DEFAULT_VERSION
+  )
 
   private fun getModel(code: String): CnDistrictCode {
     return CnDistrictCode(code)
   }
 
-  private fun extractProvinces(page: String?): List<ILazyAddressService.CnDistrictResp> {
+  private fun extractProvinces(page: String?): List<ILazyAddressService.CnDistrict> {
     return page?.let {
       Jsoup.parse(it).body().selectXpath("//tr[@class='provincetr']/td/a").map { link ->
         val code = link.attr("href").replace(".html", "0000000000")
         val name = link.text()
-        wrapperModel(code, name, false)
+        toCnDistrict(code, name, false)
       }
     } ?: listOf()
   }
 
-  override fun findAllCityByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
+  override fun findAllCityByCode(districtCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
     val h = chstApi.getCityPage(getModel(districtCode).provinceCode)
     log.debug("h.headers = {}", h.headers)
     return extractPlainItem("citytr", h.body) ?: listOf()
   }
 
-  override fun findAllCountyByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
+  override fun findAllCountyByCode(districtCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
     val model = getModel(districtCode)
     return extractPlainItem("countytr", chstApi.getCountyPage(model.provinceCode, model.cityCode).body) ?: listOf()
   }
 
-  override fun findAllTownByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
+  override fun findAllTownByCode(districtCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
     val model = getModel(districtCode)
     return extractPlainItem("towntr", chstApi.getTownPage(model.provinceCode, model.cityCode, model.countyCode).body) ?: listOf()
   }
 
-  override fun findAllVillageByCode(districtCode: String): List<ILazyAddressService.CnDistrictResp> {
+  override fun findAllVillageByCode(districtCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
     val model = getModel(districtCode)
     return extractVillages(chstApi.getVillagePage(model.provinceCode, model.cityCode, model.countyCode, model.townCode).body) ?: listOf()
   }
@@ -88,7 +102,7 @@ class LazyAddressServiceImpl(
     Jsoup.parse(it).body().selectXpath("//tr[@class='villagetr']").mapNotNull { element ->
       val code = element.child(0).text()
       val name = element.child(2).text()
-      wrapperModel(code, name, true)
+      toCnDistrict(code, name, true)
     }
   }
 
@@ -97,7 +111,7 @@ class LazyAddressServiceImpl(
       val leaf = kv.child(1).select("a").size <= 0
       val code = kv.child(0).text()
       val name = kv.child(1).text()
-      wrapperModel(code, name, leaf)
+      toCnDistrict(code, name, leaf)
     }
   }
 }
