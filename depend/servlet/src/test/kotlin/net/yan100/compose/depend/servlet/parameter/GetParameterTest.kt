@@ -3,7 +3,7 @@ package net.yan100.compose.depend.servlet.parameter
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
 import net.yan100.compose.depend.servlet.controller.TestGetParameterController
-import net.yan100.compose.testtookit.SpringServletTest
+import net.yan100.compose.testtookit.annotations.SpringServletTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get

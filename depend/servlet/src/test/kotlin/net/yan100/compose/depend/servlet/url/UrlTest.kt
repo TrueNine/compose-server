@@ -19,7 +19,7 @@ package net.yan100.compose.depend.servlet.url
 import jakarta.annotation.Resource
 import net.yan100.compose.depend.servlet.DependServletEntrance
 import net.yan100.compose.depend.servlet.controller.UrlTestController
-import net.yan100.compose.testtookit.SpringServletTest
+import net.yan100.compose.testtookit.annotations.SpringServletTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import kotlin.test.Test

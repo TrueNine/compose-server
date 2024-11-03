@@ -1,7 +1,7 @@
 package net.yan100.compose.depend.servlet
 
 import jakarta.annotation.Resource
-import net.yan100.compose.testtookit.SpringServletTest
+import net.yan100.compose.testtookit.annotations.SpringServletTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import kotlin.test.Test

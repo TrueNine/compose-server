@@ -22,7 +22,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.annotation.Resource
 import net.yan100.compose.core.datetime
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
-import net.yan100.compose.testtookit.SpringServletTest
+import net.yan100.compose.testtookit.annotations.SpringServletTest
 import net.yan100.compose.testtookit.log
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType

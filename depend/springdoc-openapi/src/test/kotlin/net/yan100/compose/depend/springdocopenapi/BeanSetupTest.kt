@@ -1,7 +1,7 @@
 package net.yan100.compose.depend.springdocopenapi
 
 import jakarta.annotation.Resource
-import net.yan100.compose.testtookit.SpringServletTest
+import net.yan100.compose.testtookit.annotations.SpringServletTest
 import net.yan100.compose.testtookit.log
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
