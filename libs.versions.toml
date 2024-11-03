@@ -1,65 +1,66 @@
 [versions]
-compose-versionCatalog = "2.0.33"
-compose = "2.0.10"
-compose-oss = "2.0.11"
-compose-pay = "2.0.12"
-compose-schedule = "2.0.11"
-compose-cacheable = "2.0.12"
-compose-dependServlet = "2.0.12"
-compose-dependPaho = "2.0.11"
-compose-dependJackson = "2.0.11"
-compose-dependHttpExchange = "2.0.11"
-compose-dependJsr303Validation = "2.0.11"
-compose-dependSpringdocOpenapi = "2.0.11"
-compose-core = "2.0.18"
-compose-security = "2.0.14"
-compose-securityCrypto = "2.0.12"
-compose-securityOauth2 = "2.0.14"
-compose-rds = "2.0.22"
-compose-rdsCore = "2.0.24"
-compose-rdsJimmer = "0.0.2"
-compose-testToolkit = "2.0.12"
-compose-dataExtract = "2.0.12"
-compose-dataCrawler = "2.0.11"
-compose-ksp = "2.0.13"
-compose-kspCore = "2.0.11"
-compose-kspToolkit = "2.0.11"
-compose-gradlePlugin = "2.0.11"
+compose-versionCatalog = "2.0.37"
+compose = "2.0.11"
+compose-oss = "2.0.12"
+compose-pay = "2.0.13"
+compose-schedule = "2.0.12"
+compose-cacheable = "2.0.13"
+compose-dependServlet = "2.0.13"
+compose-dependPaho = "2.0.12"
+compose-dependJackson = "2.0.12"
+compose-dependHttpExchange = "2.0.12"
+compose-dependJsr303Validation = "2.0.12"
+compose-dependSpringdocOpenapi = "2.0.12"
+compose-core = "2.0.19"
+compose-security = "2.0.15"
+compose-securityCrypto = "2.0.13"
+compose-securityOauth2 = "2.0.15"
+compose-rds = "2.0.26"
+compose-rdsCore = "2.0.25"
+compose-rdsJimmer = "0.0.3"
+compose-testToolkit = "2.0.13"
+compose-dataExtract = "2.0.13"
+compose-dataCrawler = "2.0.12"
+compose-ksp = "2.0.14"
+compose-kspCore = "2.0.12"
+compose-kspToolkit = "2.0.12"
+compose-gradlePlugin = "2.0.12"
 
 composeGroup = "net.yan100.compose"
 
-spotless = "7.0.0.BETA3"
+spotless = "7.0.0.BETA4"
 
-gradle = "8.10.2"
+gradle = "8.11-rc-2"
 java = "21"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
+kotlinpoet = "2.0.0"
 kotlinx-io = "0.5.4"
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.9.0"
 
-spring-boot = "3.4.0-M3"
+spring-boot = "3.4.0-RC1"
 # spring 单独抽取版本序列
 spring-framework = "6.2.0-RC1"
 spring-data = "3.4.0-M1"
 
 
 spring-cloud = "2024.0.0-M2"
-spring-ai = "1.0.0-M2"
+spring-ai = "1.0.0-M3"
 spring-cloudAlibaba = "2021.0.4.0"
 spring-modulith = "1.3.0-M2"
 
 testng = "7.10.2"
-junit5 = "5.11.2"
-junitPlatform = "1.11.0"
+junit5 = "5.11.3"
+junitPlatform = "1.11.3"
 
-flyway = "10.19.0"
+flyway = "10.20.1"
 mapstruct = "1.6.0"
-jimmer = "0.8.186"
+jimmer = "0.9.7"
 hutool = "5.8.32"
 slf4j = "2.1.0-alpha1"
 mybatis-plus = "3.5.7"
-jackson = "2.18.0"
+jackson = "2.18.1"
 querydsl = "5.1.0"
 hibernate = "6.6.0.Final"
 drools = "9.44.0.Final"
@@ -143,9 +144,10 @@ org-springframework-modulith-springModulithStarterTest = { group = "org.springfr
 org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.6.0" }
 
 org-apache-commons-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
+org-apache-commons-commonsCsv = { group = "org.apache.commons", name = "commons-csv", version = "1.12.0" }
 org-apache-commons-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.27.1" }
-com-squareup-kotlinpoetJvm = { group = "com.squareup", name = "kotlinpoet-jvm", version = "1.18.1" }
-com-squareup-kotlinpoetKsp = { group = "com.squareup", name = "kotlinpoet-ksp", version = "1.18.1" }
+com-squareup-kotlinpoetJvm = { group = "com.squareup", name = "kotlinpoet-jvm", version.ref = "kotlinpoet" }
+com-squareup-kotlinpoetKsp = { group = "com.squareup", name = "kotlinpoet-ksp", version.ref = "kotlinpoet" }
 
 org-jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version = "24.1.0" }
 org-jetbrains-kotlin-GradlePlugin = { group = "org.jetbrains.kotlin", name = "gradle-plugin", version.ref = "kotlin" }
@@ -189,7 +191,7 @@ org-flywaydb-flywayDatabasePostgresql = { group = "org.flywaydb", name = "flyway
 p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
 com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.9.2" }
 
-io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.12" }
+io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.13" }
 com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
 com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.9" }
 com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.14" }
@@ -226,7 +228,7 @@ cn-hutool-hutoolDb = { group = "cn.hutool", name = "hutool-db", version.ref = "h
 org-mapstruct-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
 org-mapstruct-mapstructProcessor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
 
-org-bouncycastle-bcprovJdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version = "1.78.1" }
+org-bouncycastle-bcprovJdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version = "1.79" }
 com-auth0-javaJwt = { group = "com.auth0", name = "java-jwt", version = "4.4.0" }
 io-jsonwebtoken-jjwtApi = { group = "io.jsonwebtoken", name = "jjwt-api", version = "0.12.6" }
 org-owasp-antisamy-antisamy = { group = "org.owasp.antisamy", name = "antisamy", version = "1.7.6" }
@@ -235,12 +237,12 @@ com-github-ulisesbocchio-jasyptSpringBootStarter = { group = "com.github.ulisesb
 
 org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
-org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.25.0" }
+org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.26.0" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
-com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.47.0" }
+com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.48.0" }
 org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
-org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.4.0" }
+org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.5.0" }
 net-sf-supercsv-superCsv = { group = "net.sf.supercsv", name = "super-csv", version = "2.4.0" }
 
 com-fasterxml-jackson-module-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
