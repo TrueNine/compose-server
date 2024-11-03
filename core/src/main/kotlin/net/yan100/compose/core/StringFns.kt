@@ -81,26 +81,21 @@ val String.inline: String
 
 /** ## 将 foo_bar 类型的字符串转换为 fooBar */
 val String.snakeCaseToCamelCase: String
-  get() =
-    this.split(STR_UNDERLINE)
-      .joinToString(STR_EMPTY) {
-        if (it.isNotEmpty()) it.replaceFirstChar { r -> if (r.isLowerCase()) r.titlecase(Locale.getDefault()) else r.toString() } else STR_EMPTY
-      }
-      .replaceFirstChar { it.lowercase(Locale.getDefault()) }
+  get() = this.split(STR_UNDERLINE).joinToString(STR_EMPTY) {
+    if (it.isNotEmpty()) it.replaceFirstChar { r -> if (r.isLowerCase()) r.titlecase(Locale.getDefault()) else r.toString() } else STR_EMPTY
+  }.replaceFirstChar { it.lowercase(Locale.getDefault()) }
 
 val String.snakeCaseToPascalCase: String
   get() = if (hasText()) split(STR_UNDERLINE).joinToString(STR_EMPTY) { it.replaceFirstChar { it1 -> it1.uppercaseChar() } } else this
 
 val String.camelCaseToSnakeCase: String
-  get() =
-    fold(StringBuilder()) { acc, c ->
-      if (c.isUpperCase()) {
-        if (acc.isNotEmpty()) acc.append(STR_UNDERLINE)
-        acc.append(c.lowercaseChar())
-      } else acc.append(c)
-      acc
-    }
-      .toString()
+  get() = fold(StringBuilder()) { acc, c ->
+    if (c.isUpperCase()) {
+      if (acc.isNotEmpty()) acc.append(STR_UNDERLINE)
+      acc.append(c.lowercaseChar())
+    } else acc.append(c)
+    acc
+  }.toString()
 
 val String.pascalCaseToSnakeCase: String
   get() = camelCaseToSnakeCase.replaceFirst(STR_UNDERLINE, STR_EMPTY)
@@ -123,4 +118,3 @@ fun String.replaceFirstX(meta: String, replacement: String): String {
 fun String?.emptyWithNull(): String? {
   return if (this.hasText()) this else null
 }
-
