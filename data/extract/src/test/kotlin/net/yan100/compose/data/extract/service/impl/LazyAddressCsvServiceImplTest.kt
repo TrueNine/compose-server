@@ -14,8 +14,8 @@ class LazyAddressCsvServiceImplTest {
 
   @BeforeTest
   fun setup() {
-    service.csvVersions += "2010" to "area_code_2010.csv"
-    service.csvVersions += "2018" to "area_code_2018.csv"
+    service.csvVersions += "2010" to LazyAddressCsvServiceImpl.CsvDefine("area_code_2010.csv")
+    service.csvVersions += "2018" to LazyAddressCsvServiceImpl.CsvDefine("area_code_2018.csv")
     assertTrue { service.supportedYearVersions.contains("2024") }
     assertTrue { service.lastYearVersion == "2024" }
   }
@@ -85,10 +85,10 @@ class LazyAddressCsvServiceImplTest {
 
   @Test
   fun `get last year version`() {
-    service.csvVersions += "1010" to "2010.csv"
-    service.csvVersions += "1017" to "2017.csv"
-    service.csvVersions += "1018" to "2018.csv"
-    service.csvVersions += "3001" to "3001.csv"
+    service.csvVersions += "1010" to LazyAddressCsvServiceImpl.CsvDefine("2010.csv")
+    service.csvVersions += "1017" to LazyAddressCsvServiceImpl.CsvDefine("2017.csv")
+    service.csvVersions += "1018" to LazyAddressCsvServiceImpl.CsvDefine("2018.csv")
+    service.csvVersions += "3001" to LazyAddressCsvServiceImpl.CsvDefine("3001.csv")
     val yearVersion = service.lastYearVersion
     assertEquals("3001", yearVersion)
     service.csvVersions -= "3001"

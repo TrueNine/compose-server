@@ -17,13 +17,35 @@ private val log = slf4j<LazyAddressCsvServiceImpl>()
 class LazyAddressCsvServiceImpl(
   private val resourceHolder: ResourceHolder
 ) : ILazyAddressService {
+  data class CsvDefine(
+    val fileName: String, val codeLine: Int = 0, val nameLine: Int = 1, val levelLine: Int = 2, val parentCodeLine: Int = 3
+  )
+
+  final val csvVersions: MutableMap<String, CsvDefine> = ConcurrentHashMap(16)
   override val logger get() = log
-  final val csvVersions: MutableMap<String, String> = ConcurrentHashMap(16)
   final override val supportedDefaultYearVersion: String get() = "2024"
 
   init {
-    csvVersions += supportedDefaultYearVersion to "area_code_2024.csv"
+    csvVersions += supportedDefaultYearVersion to CsvDefine("area_code_2024.csv")
     log.debug("设定 csv 版本: {}", csvVersions)
+  }
+
+  fun removeSupportedYear(year: String) {
+    csvVersions -= year
+  }
+
+  operator fun plusAssign(definePair: Pair<String, CsvDefine>) {
+    addSupportedYear(definePair.first, definePair.second)
+  }
+
+  operator fun minusAssign(yearKey: String) {
+    removeSupportedYear(yearKey)
+  }
+
+  fun addSupportedYear(
+    year: String, csvDefine: CsvDefine
+  ) {
+    csvVersions += year to csvDefine
   }
 
   override val supportedYearVersions: List<String>
@@ -39,7 +61,7 @@ class LazyAddressCsvServiceImpl(
 
 
   internal fun getCsvResource(yearVersion: String): Resource? {
-    return csvVersions[lastYearVersion]?.let { resourceHolder.getConfigResource(it) }
+    return csvVersions[lastYearVersion]?.let { resourceHolder.getConfigResource(it.fileName) }
   }
 
   internal fun getCsvSequence(yearVersion: String): Sequence<ILazyAddressService.CnDistrict>? {
