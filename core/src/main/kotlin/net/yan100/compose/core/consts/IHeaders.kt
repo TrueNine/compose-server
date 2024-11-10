@@ -16,9 +16,8 @@
 */
 package net.yan100.compose.core.consts
 
-import jakarta.annotation.Nullable
 import jakarta.servlet.http.HttpServletRequest
-import net.yan100.compose.core.IString
+import net.yan100.compose.core.hasText
 import java.net.URLEncoder
 import java.nio.charset.Charset
 
@@ -48,10 +47,12 @@ interface IHeaders {
      * @param request 请求 id
      * @return 设备 id
      */
-    @Nullable
-    fun getDeviceId(request: HttpServletRequest): String {
+    fun getDeviceId(request: HttpServletRequest): String? {
       val deviceId = request.getHeader(X_DEVICE_ID)
-      return if (IString.hasText(deviceId)) deviceId else request.getHeader(USER_AGENT)
+      val userAgent = request.getHeader(USER_AGENT)
+      return if (deviceId.hasText()) deviceId
+      else if (userAgent.hasText()) userAgent
+      else null
     }
 
     const val SERVER: String = "Server"
