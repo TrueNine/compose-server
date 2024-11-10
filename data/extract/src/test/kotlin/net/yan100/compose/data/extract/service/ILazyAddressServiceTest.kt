@@ -73,14 +73,29 @@ class ILazyAddressServiceTest {
 
   @Test
   fun `test lookupByCode`() {
-    val a = service.lookupByCode("433127103", firstFind = { null }, deepCondition = { false }) {
-      println("触发保存 =$it")
-      it.result.find { ir -> ir.code.code == "433127103" }
+    val a = service.lookupByCode("11") {
+      it.result.find { ir -> ir.code.code == "11" }
     }
     assertNotNull(a)
-
-    val b = service.lookupByCode("433127103221", firstFind = { null }, deepCondition = { false }) { it.result }
+    assertEquals("11", a.code.code)
+    assertEquals("北京市", a.name)
+    val b = service.lookupByCode("1101") {
+      it.result.find { ir -> ir.code.code == "1101" }
+    }
     assertNotNull(b)
+    assertEquals("1101", b.code.code)
+    assertEquals("市辖区", b.name)
+
+    val c = service.lookupByCode("99") {
+      it.result.find { ir -> ir.code.code == "99" }
+    }
+    assertNull(c)
+
+    val d = service.lookupByCode("370125") {
+      it.result.find { ir -> ir.code.code == "370125" }
+    }
+    assertNotNull(d)
+    assertEquals("370125", d.code.code)
   }
 
   @Test
@@ -134,5 +149,18 @@ class ILazyAddressServiceTest {
         }
       }
     }
+  }
+
+  @Test
+  fun `test get lastYearVersionOrNull`() {
+    log.info("last version: {}", service.lastYearVersion)
+    assertTrue { service.supportedYearVersions.size > 1 }
+
+    log.info("supported versions: {}", service.supportedYearVersions)
+    val nextVersion = service.supportedYearVersions.sorted().reversed()[1]
+    log.info("next version: {}", nextVersion)
+    assertEquals(
+      nextVersion, service.lastYearVersionOrNull(service.lastYearVersion)
+    )
   }
 }

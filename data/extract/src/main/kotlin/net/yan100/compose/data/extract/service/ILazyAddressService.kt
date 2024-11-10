@@ -26,17 +26,16 @@ import net.yan100.compose.data.extract.domain.CnDistrictCode
 
 private fun <T> createRequestQueue(
   firstFindCode: CnDistrictCode,
-  deepCondition: (param: ILazyAddressService.ILookupFindParam) -> Boolean,
-  notFound: (forehead: Boolean) -> T? = { null },
-): MutableList<CnDistrictCode> {
+  deepCondition: (param: ILazyAddressService.LookupFindDto) -> Boolean,
+  notFound: (forehead: Boolean) -> Unit? = { },
+): List<CnDistrictCode> {
   val requestQueue = mutableListOf(firstFindCode)
   var lastSize = 0
   while (requestQueue.size > lastSize) {
     val requireRequest = requestQueue.last()
-    val r = object : ILazyAddressService.ILookupFindParam {
-      override val code = requireRequest.code
-      override val level = requireRequest.level
-    }
+    val r = ILazyAddressService.LookupFindDto(
+      code = requireRequest.code, level = requireRequest.level
+    )
     val findFnResult = deepCondition(r)
     if (!findFnResult) {
       val back = requireRequest.back()
@@ -44,7 +43,7 @@ private fun <T> createRequestQueue(
     }
     lastSize += 1
   }
-  return requestQueue
+  return requestQueue.reversed()
 }
 
 interface ILazyAddressService {
@@ -53,6 +52,14 @@ interface ILazyAddressService {
 
     fun verifyCode(code: String): Boolean {
       return code.matches(IRegexes.CHINA_AD_CODE.toRegex())
+    }
+
+    fun createCnDistrict(code: String?): CnDistrictCode? {
+      if (code.nonText()) return null
+      if (code.length > 12) return null
+      val codeObj = CnDistrictCode(code)
+      if (codeObj.empty) return null
+      return codeObj
     }
 
     fun convertToFillCode(code: String): String {
@@ -64,21 +71,16 @@ interface ILazyAddressService {
     }
   }
 
-  interface ILookupFindParam {
-    val code: string
-    val level: Int
-  }
+  data class LookupFindDto(
+    val code: string, val level: Int
+  )
 
-  interface ILookupSortedSaveParam {
-    val parentCode: String
-    val deepLevel: Int
-    val notInit: Boolean
-    val yearVersion: String
-    val result: List<CnDistrict>
-  }
+  data class LookupSortedSaveVo(
+    val parentCode: String, val deepLevel: Int, val notInit: Boolean, val yearVersion: String, val result: List<CnDistrict>
+  )
 
   data class CnDistrict(
-    val code: CnDistrictCode, val name: String, val yearVersion: String, val level: Int = code.level, val leaf: Boolean = level < 5
+    val code: CnDistrictCode, val name: String, val yearVersion: String, val level: Int = code.level, val leaf: Boolean = level >= 5
   )
 
   /**
@@ -96,6 +98,20 @@ interface ILazyAddressService {
   val supportedYearVersions: List<String>
   val supportedDefaultYearVersion: String
   val supportedMaxLevel: Int get() = 5
+
+  /**
+   * 获取当前年份版本之前一个年份版本
+   * 基于 [supportedYearVersions]
+   */
+  fun lastYearVersionOrNull(yearVersion: String): String? {
+    if (yearVersion.nonText()) return null
+    val sortedVersions = supportedYearVersions.sorted().reversed()
+    val currentYearVersion = yearVersion.toIntOrNull() ?: return null
+    return sortedVersions.firstNotNullOfOrNull {
+      if (it.toInt() < currentYearVersion) it
+      else null
+    }
+  }
 
   /**
    * 最新的支持的年份版本
@@ -128,47 +144,73 @@ interface ILazyAddressService {
     return CnDistrictCode(code).back()?.let { a -> findAllChildrenByCode(a.code).find { it.code.code == a.code } }
   }
 
+  /**
+   * ## 预取地址数据（根据代码查找单个地址）
+   *
+   * @param code 地址代码
+   * @param firstFind 首次查找函数
+   * @param deepCondition 逐级向上查找，报告条件
+   * @param notFound 当未找到符合条件或空时，调用
+   * @param sortedSave 当拥有需要的上级数据时，进行调用
+   * @param yearVersion 年份版本（默认使用最新版本）
+   * @return 自定义返回结果
+   */
   fun <T> lookupByCode(
     code: string,
-    firstFind: (param: ILookupFindParam) -> T?,
-    deepCondition: (param: ILookupFindParam) -> Boolean,
-    notFound: (forehead: Boolean) -> T? = { null },
+    firstFind: (param: LookupFindDto) -> T? = { null },
+    deepCondition: (param: LookupFindDto) -> Boolean = { false },
+    notFound: (forehead: Boolean) -> Unit? = { },
     yearVersion: String = lastYearVersion,
-    sortedSave: (param: ILookupSortedSaveParam) -> T?,
+    sortedSave: (param: LookupSortedSaveVo) -> T? = { null },
   ): T? {
-    return CnDistrictCode(code).back()?.let { firstFindCode ->
-      if (firstFindCode.empty) return notFound(false)
-      val preFind = firstFind(object : ILookupFindParam {
-        override val code = firstFindCode.code
-        override val level = firstFindCode.level
-      })
-      if (null != preFind) return preFind
-      val requestQueue = createRequestQueue(firstFindCode, deepCondition, notFound)
-      var result: T? = null
-      requestQueue.reversed().forEach {
-        val responses = findAllChildrenByCode(code = it.code, yearVersion)
-        val b = object : ILookupSortedSaveParam {
-          override val parentCode = it.code
-          override val yearVersion: String = yearVersion
-          override val deepLevel = it.level
-          override val result = responses
-          override val notInit = it.empty
+    fun deepFind(
+      code: string,
+      firstFind: (param: LookupFindDto) -> T?,
+      deepCondition: (param: LookupFindDto) -> Boolean,
+      notFound: (forehead: Boolean) -> Unit? = { },
+      yearVersion: String = lastYearVersion,
+      end: Boolean = false,
+      sortedSave: (param: LookupSortedSaveVo) -> T?,
+    ): Pair<T?, Boolean> {
+      val codeObj = createCnDistrict(code) ?: return null to true
+      return codeObj.back()?.let { firstFindCode ->
+        var result = firstFind(
+          LookupFindDto(
+            code = firstFindCode.code, level = firstFindCode.level
+          )
+        )
+        if (null != result) return result to true
+        val requestQueue = createRequestQueue<List<CnDistrictCode>>(firstFindCode, deepCondition, notFound)
+
+        fun notFound(): Pair<T?, Boolean> {
+          return if (end) {
+            notFound(true)
+            logger?.warn("lookupByCode all not found: $code, lastYearVersion: {}", yearVersion)
+            return null to true
+          } else {
+            val next = lastYearVersionOrNull(yearVersion)
+            logger?.debug("code recursion in next version: {}", next)
+            deepFind(codeObj.code, firstFind, deepCondition, notFound, next ?: yearVersion, next.isNullOrEmpty(), sortedSave)
+          }
         }
-        result = if (responses.isNotEmpty()) sortedSave(b)
-        else {
-          val currentVersion = yearVersion.toInt()
-          supportedYearVersions.sorted().reversed().find { y -> y.toInt() < currentVersion }?.let { y ->
-              lookupByCode(
-                code, firstFind, deepCondition, notFound, y, sortedSave
-              )
-            }
-        } ?: run {
-          logger?.warn("lookupByCode: $code, $result")
-          notFound(true)
+
+        for (it in requestQueue) {
+          val responses = findAllChildrenByCode(code = it.code, yearVersion)
+          val saveVo = LookupSortedSaveVo(
+            parentCode = it.code, yearVersion = yearVersion, deepLevel = it.level, result = responses, notInit = it.empty
+          )
+
+          result = if (responses.isNotEmpty()) sortedSave(saveVo)
+          else notFound().first
         }
+        if (null == result) notFound()
+        else result to false
+      } ?: run {
+        notFound(true)
+        null to true
       }
-      result
     }
+    return deepFind(code, firstFind, deepCondition, notFound, yearVersion, false, sortedSave).first
   }
 
   /**
@@ -184,64 +226,48 @@ interface ILazyAddressService {
    */
   fun <T> lookupAllChildrenByCode(
     code: string,
-    firstFind: (param: ILookupFindParam) -> List<T>? = { _ -> null },
-    deepCondition: (param: ILookupFindParam) -> Boolean = { false },
+    firstFind: (param: LookupFindDto) -> List<T>? = { _ -> null },
+    deepCondition: (param: LookupFindDto) -> Boolean = { false },
     notFound: (forehead: Boolean) -> Unit? = { },
     yearVersion: String = lastYearVersion,
-    sortedSave: (param: ILookupSortedSaveParam) -> List<T> = { emptyList() },
+    sortedSave: (param: LookupSortedSaveVo) -> List<T> = { emptyList() },
   ): List<T> {
     fun deepFind(
       code: string,
-      firstFind: (param: ILookupFindParam) -> List<T>?,
-      deepCondition: (param: ILookupFindParam) -> Boolean,
+      firstFind: (param: LookupFindDto) -> List<T>?,
+      deepCondition: (param: LookupFindDto) -> Boolean,
       notFound: (forehead: Boolean) -> Unit? = { },
       yearVersion: String = lastYearVersion,
-      deepEnd: Boolean = false,
-      sortedSave: (param: ILookupSortedSaveParam) -> List<T>,
+      end: Boolean = false,
+      sortedSave: (param: LookupSortedSaveVo) -> List<T>,
     ): Pair<List<T>, Boolean> {
-      if (code.nonText()) {
-        logger?.warn("code 为空")
-        return emptyList<T>() to true
-      }
-      val toCode = CnDistrictCode(code)
-      if (toCode.empty) {
-        logger?.warn("code: {} 非法", code)
-        return emptyList<T>() to true
-      }
-      if (toCode.level >= 5) {
-        logger?.warn("给定的 code: {} 超出支持到的范围: {}", toCode.code, supportedMaxLevel)
-        return emptyList<T>() to true
-      }
+      val toCode = createCnDistrict(code) ?: return emptyList<T>() to true
       logger?.debug("begin find code: {} yearVersion: {}", code, yearVersion)
-      val preFind = if (yearVersion == lastYearVersion) firstFind(object : ILookupFindParam {
-        override val code = toCode.code
-        override val level = toCode.level
-      }) else {
+      val preFind = if (yearVersion == lastYearVersion) firstFind(
+        LookupFindDto(
+          code = toCode.code, level = toCode.level
+        )
+      ) else {
         logger?.debug("skip first find")
         null
       }
       if (!preFind.isNullOrEmpty()) return preFind to true
-      val requestQueue = createRequestQueue(toCode, deepCondition, notFound).reversed()
+      val requestQueue = createRequestQueue<List<CnDistrictCode>>(toCode, deepCondition, notFound)
       var result = listOf<T>()
-
       for (it in requestQueue) {
         val responses = findAllChildrenByCode(code = it.code, yearVersion)
         logger?.debug("implemented responses: {}", responses)
         result = if (responses.isNotEmpty()) {
-          sortedSave(object : ILookupSortedSaveParam {
-            override val parentCode = it.code
-            override val yearVersion: String = yearVersion
-            override val deepLevel = it.level
-            override val result = responses
-            override val notInit = it.empty
-          })
+          sortedSave(
+            LookupSortedSaveVo(
+              parentCode = it.code, yearVersion = yearVersion, deepLevel = it.level, result = responses, notInit = it.empty
+            )
+          )
+        } else if (end) {
+          notFound(true)
+          logger?.warn("lookupAllChildrenByCode all not found: $code, lastYearVersion: {}", yearVersion)
+          return emptyList<T>() to true
         } else {
-          if (deepEnd) {
-            notFound(true).run {
-              logger?.warn("lookupAllChildrenByCode all not found: $code, lastYearVersion: {}", yearVersion)
-            }
-            return emptyList<T>() to true
-          }
           logger?.warn(" not found code: {} version: {}", it, yearVersion)
           val sortedVersions = supportedYearVersions.sorted().reversed()
           val currentYearVersion = yearVersion.toInt()
@@ -255,7 +281,7 @@ interface ILazyAddressService {
           else r.first
         }
       }
-      return result to deepEnd
+      return result to true
     }
     return deepFind(code, firstFind, deepCondition, notFound, yearVersion, false, sortedSave).first
   }
@@ -283,7 +309,7 @@ interface ILazyAddressService {
    * 此函数的作用在于，当拥有某些数据时，则不再需要发送网络请求，减少资源消耗 这个函数应用起来可能有些费解 <br/> 首先传入code <br/> preHandle 预处理函数，返回两个值，条件以及结果 <br/> 当 preHandle 返回的条件为 true 时，直接返回结果 <br/> 否则会调用
    * postProcessor 函数，入参为预取的地址数据
    */
-  fun <T> lazyFindAllChildrenByCode(code: String, preHandle: () -> Pair<Boolean, List<T>>, postProcessor: (List<CnDistrict>) -> List<T>): List<T> {
+  fun <T> lazyFindAllChildrenByCode(code: String, preHandle: () -> Pair<Boolean, List<T>>, postProcessor: (List<CnDistrict>) -> List<T>): List<T?> {
     val preFindList = preHandle()
     return if (preFindList.first) {
       preFindList.second
