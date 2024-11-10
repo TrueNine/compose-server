@@ -5,8 +5,6 @@ spring:
   profiles:
     active: default
   flyway:
-    baseline-on-migrate: false
-    baseline-version: 99
     enabled: false
   datasource:
     driver-class-name: org.h2.Driver
@@ -27,4 +25,3 @@ spring:
     database: h2
     hibernate:
       ddl-auto: create
-
