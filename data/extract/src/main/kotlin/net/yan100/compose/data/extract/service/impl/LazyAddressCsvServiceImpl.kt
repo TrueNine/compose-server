@@ -26,6 +26,15 @@ class LazyAddressCsvServiceImpl(
   final override val supportedDefaultYearVersion: String get() = "2024"
 
   init {
+    val confinedCsvResources = resourceHolder.matchConfigResources("area_code*.csv")
+    val r = confinedCsvResources.map {
+      val yearVersion = "\\d{4}".toRegex().find(it.filename!!)?.value
+      yearVersion to it.filename!!
+    }.filter { it.first != null }
+      .forEach {
+        csvVersions += it.first!! to CsvDefine(it.second)
+      }
+
     csvVersions += supportedDefaultYearVersion to CsvDefine("area_code_2024.csv")
     log.debug("设定 csv 版本: {}", csvVersions)
   }
@@ -53,15 +62,20 @@ class LazyAddressCsvServiceImpl(
 
 
   override fun fetchAllByCodeAndLevel(code: string, level: Int, yearVersion: String): List<ILazyAddressService.CnDistrict> {
+    log.debug("fetch csv version: {}", yearVersion)
     return getCsvSequence(yearVersion)?.filter { c ->
       if (code == ILazyAddressService.DEFAULT_COUNTRY_CODE) c.level == level
       else c.code.padCode.startsWith(code) && c.level == level
     }?.toList() ?: emptyList()
   }
 
-
   internal fun getCsvResource(yearVersion: String): Resource? {
-    return csvVersions[lastYearVersion]?.let { resourceHolder.getConfigResource(it.fileName) }
+    return run {
+      csvVersions[yearVersion] ?: run {
+        log.warn("not get supported version csv file: {}", yearVersion)
+        csvVersions[yearVersion]
+      }
+    }?.let { resourceHolder.getConfigResource(it.fileName) }
   }
 
   internal fun getCsvSequence(yearVersion: String): Sequence<ILazyAddressService.CnDistrict>? {

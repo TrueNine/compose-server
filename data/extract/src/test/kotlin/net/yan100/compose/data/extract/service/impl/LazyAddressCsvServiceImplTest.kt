@@ -31,6 +31,7 @@ class LazyAddressCsvServiceImplTest {
     assertEquals("2024", service.lastYearVersion)
   }
 
+
   @Test
   fun `test supported versions`() {
     assertTrue {
