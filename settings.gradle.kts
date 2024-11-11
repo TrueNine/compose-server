@@ -24,12 +24,16 @@ findProject(":pay")?.name = "pay"
 
 
 // 关系型数据库
-include("rds")
-findProject(":rds")?.name = "rds"
+include("rds:crud")
+findProject(":rds:crud")?.name = "rds-crud"
 include("rds:core")
 findProject(":rds:core")?.name = "rds-core"
 include("rds:jimmer")
 findProject(":rds:jimmer")?.name = "rds-jimmer"
+include("rds:migration-mysql")
+findProject(":rds:jimmer")?.name = "rds-migration-mysql"
+include("rds:migration-postgres")
+findProject(":rds:jimmer")?.name = "rds-migration-postgres"
 
 // 数据采集器
 include("data")

@@ -1,5 +1,5 @@
 [versions]
-compose-versionCatalog = "2.0.45"
+compose-versionCatalog = "2.0.46"
 compose = "2.0.12"
 compose-oss = "2.0.13"
 compose-pay = "2.0.14"
@@ -16,7 +16,10 @@ compose-security = "2.0.16"
 compose-securityCrypto = "2.0.14"
 compose-securityOauth2 = "2.0.16"
 compose-rds = "2.0.27"
+compose-rdsCrud = "2.0.28"
 compose-rdsCore = "2.0.26"
+compose-rdsMigrationPostgres = "0.0.1"
+compose-rdsMigrationMysql = "0.0.1"
 compose-rdsJimmer = "0.0.4"
 compose-testToolkit = "2.0.14"
 compose-dataExtract = "2.0.20"
@@ -82,6 +85,9 @@ net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-tool
 
 # rds
 net-yan100-compose-rds = { group = "net.yan100.compose", name = "rds", version.ref = "compose-rds" }
+net-yan100-compose-rdsCrud = { group = "net.yan100.compose", name = "rds-crud", version.ref = "compose-rdsCrud" }
+net-yan100-compose-rdsMigrationMysql = { group = "net.yan100.compose", name = "rds-migration-mysql", version.ref = "compose-rdsMigrationMysql" }
+net-yan100-compose-rdsMigrationPostgres = { group = "net.yan100.compose", name = "rds-migration-postgres", version.ref = "compose-rdsMigrationPostgres" }
 net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rdsCore" }
 net-yan100-compose-rdsJimmer = { group = "net.yan100.compose", name = "rds-jimmer", version.ref = "compose-rdsJimmer" }
 
