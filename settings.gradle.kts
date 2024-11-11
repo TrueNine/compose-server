@@ -31,9 +31,9 @@ findProject(":rds:core")?.name = "rds-core"
 include("rds:jimmer")
 findProject(":rds:jimmer")?.name = "rds-jimmer"
 include("rds:migration-mysql")
-findProject(":rds:jimmer")?.name = "rds-migration-mysql"
+findProject(":rds:migration-mysql")?.name = "rds-migration-mysql"
 include("rds:migration-postgres")
-findProject(":rds:jimmer")?.name = "rds-migration-postgres"
+findProject(":rds:migration-postgres")?.name = "rds-migration-postgres"
 
 // 数据采集器
 include("data")
