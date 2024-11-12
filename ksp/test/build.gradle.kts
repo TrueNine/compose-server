@@ -9,7 +9,7 @@ apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)
 kapt {
   correctErrorTypes = true
   keepJavacAnnotationProcessors = true
-  javacOptions { option("querydsl.entityAccessors", true) }
+  javacOptions { option("querydsl.entityAccessors", "true") }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
