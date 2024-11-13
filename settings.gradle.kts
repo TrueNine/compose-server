@@ -44,8 +44,8 @@ include("data:extract")
 findProject(":data:extract")?.name = "data-extract"
 
 // 安全相关
-include("security")
-findProject(":security")?.name = "security"
+include("security:spring")
+findProject(":security:spring")?.name = "security-spring"
 include("security:oauth2")
 findProject(":security:oauth2")?.name = "security-oauth2"
 include("security:crypto")

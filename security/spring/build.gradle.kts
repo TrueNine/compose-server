@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.security.get()
+project.version = libs.versions.compose.securitySpring.get()
 
 dependencies {
   api(libs.org.springframework.boot.springBootStarterSecurity)

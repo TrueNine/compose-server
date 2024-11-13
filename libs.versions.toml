@@ -1,5 +1,5 @@
 [versions]
-compose-versionCatalog = "2.0.48"
+compose-versionCatalog = "2.0.49"
 compose = "2.0.13"
 compose-oss = "2.0.14"
 compose-pay = "2.0.15"
@@ -12,7 +12,7 @@ compose-dependHttpExchange = "2.0.14"
 compose-dependJsr303Validation = "2.0.14"
 compose-dependSpringdocOpenapi = "2.0.14"
 compose-core = "2.0.24"
-compose-security = "2.0.17"
+compose-securitySpring = "2.0.18"
 compose-securityCrypto = "2.0.15"
 compose-securityOauth2 = "2.0.17"
 compose-rdsCrud = "2.0.30"
@@ -90,7 +90,7 @@ net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", 
 net-yan100-compose-rdsJimmer = { group = "net.yan100.compose", name = "rds-jimmer", version.ref = "compose-rdsJimmer" }
 
 # security
-net-yan100-compose-security = { group = "net.yan100.compose", name = "security", version.ref = "compose-security" }
+net-yan100-compose-securitySpring = { group = "net.yan100.compose", name = "security-spring", version.ref = "compose-securitySpring" }
 net-yan100-compose-securityOauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose-securityOauth2" }
 net-yan100-compose-securityCrypto = { group = "net.yan100.compose", name = "security-crypto", version.ref = "compose-securityCrypto" }
 
