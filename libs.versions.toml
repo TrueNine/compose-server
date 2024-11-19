@@ -182,6 +182,9 @@ org-testng-testng = { group = "org.testng", name = "testng", version.ref = "test
 io-projectreactor-reactorTest = { group = "io.projectreactor", name = "reactor-test", version = "3.7.0-RC1" }
 
 com-github-benManes-caffeine-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
+com-github-junrar-junrar = { group = "com.github.junrar", name = "junrar", version = "7.5.5" }
+net-sf-sevenzipjbinding-sevenzipjbindingAllPlatforms = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding-all-platforms", version = "16.02-2.01" }
+net-sf-sevenzipjbinding-sevenzipjbinding = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding", version = "16.02-2.01" }
 
 org-hsqldb-hsqldb = { group = "org.hsqldb", name = "hsqldb", version = "2.7.4" }
 com-h2database-h2 = { group = "com.h2database", name = "h2", version = "2.3.232" }
@@ -260,7 +263,7 @@ com-fasterxml-jackson-datatype-jacksonDatatypeJoda = { group = "com.fasterxml.ja
 com-google-code-gson-gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 org-springframework-ai-springAiBom = { group = "org.springframework.ai", name = "spring-ai-bom", version.ref = "spring-ai" }
 org-springframework-springTest = { group = "org.springframework", name = "spring-test" }
-
+org-gradle-gradleApi = { group = "org.gradle", name = "gradle-api", version.ref = "gradle" }
 org-springframework-security-springSecurityTest = { group = "org.springframework.security", name = "spring-security-test" }
 org-springframework-boot-springBootTest = { group = "org.springframework.boot", name = "spring-boot-test" }
 org-springframework-boot-springBootTestAutoconfigure = { group = "org.springframework.boot", name = "spring-boot-test-autoconfigure" }

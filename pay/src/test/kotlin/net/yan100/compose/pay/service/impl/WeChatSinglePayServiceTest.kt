@@ -22,13 +22,16 @@ import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import java.math.BigDecimal
+import kotlin.test.Ignore
+import kotlin.test.Test
 
+@Ignore
 @SpringBootTest
 class WeChatSinglePayServiceTest {
   lateinit var service: WeChatSinglePayService @Resource set
   lateinit var bizCodeGenerator: IOrderCodeGenerator @Resource set
 
-  // @Test
+  @Test
   fun testCreateOrder() {
     val customOrderId = bizCodeGenerator.nextString()
     val crp =

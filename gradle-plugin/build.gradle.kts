@@ -4,9 +4,7 @@ val l = libs
 
 val pluginGroup = libs.versions.composeGroup.get()
 val pluginVersion = libs.versions.compose.gradlePlugin.get()
-val yunxiaoUrl by extra { properties["url.yunxiao.1"] as String }
-val yunxiaoUsername by extra { properties["usr.yunxiao.1"] as String }
-val yunxiaoPassword by extra { properties["pwd.yunxiao.1"] as String }
+
 
 plugins {
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
@@ -31,16 +29,14 @@ dependencies {
 
 kotlin {
   compilerOptions {
-    //apiVersion = KotlinVersion.KOTLIN_2_0
-    //languageVersion = KotlinVersion.KOTLIN_2_0
     jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
     freeCompilerArgs =
       listOf(
         "-Xjsr305=strict",
         "-Xjvm-default=all",
         "-verbose",
-        "-Xjdk-release=${l.versions.java.get()}",
-        "-jvm-target=${l.versions.java.get()}"
+        "-Xjdk-release=${libs.versions.java.get()}",
+        "-jvm-target=${libs.versions.java.get()}"
       )
   }
 
@@ -65,16 +61,19 @@ gradlePlugin {
 java {
   sourceCompatibility = JavaVersion.VERSION_21
   targetCompatibility = JavaVersion.VERSION_21
-
   toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
-  withSourcesJar()
+  //withSourcesJar()
 }
 
 publishing {
   repositories {
     mavenLocal()
+
+    val yunxiaoUrl by extra { properties["url.yunxiao.1"] as String }
     maven(url = uri(yunxiaoUrl)) {
       credentials {
+        val yunxiaoUsername by extra { properties["usr.yunxiao.1"] as String }
+        val yunxiaoPassword by extra { properties["pwd.yunxiao.1"] as String }
         username = yunxiaoUsername
         password = yunxiaoPassword
       }

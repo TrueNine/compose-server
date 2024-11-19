@@ -18,7 +18,6 @@ plugins {
   alias(libs.plugins.org.asciidoctor.jvm.convert)
   alias(libs.plugins.com.diffplug.spotless)
   alias(libs.plugins.com.github.benManes.versions)
-  //alias(libs.plugins.org.hibernate.orm)
   alias(libs.plugins.com.google.devtools.ksp)
   alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.allopen)
@@ -98,7 +97,15 @@ subprojects {
     testImplementation(l.bundles.kotlinTestJunit5)
     testImplementation(l.bundles.junit5)
   }
-
+  sourceSets {
+    test {
+      resources {
+        project.rootProject.layout.projectDirectory.also { rootDir ->
+          srcDir(rootDir.dir("common-test-resources").asFile.absolutePath)
+        }
+      }
+    }
+  }
 
   java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -109,8 +116,6 @@ subprojects {
 
   kotlin {
     compilerOptions {
-      //apiVersion = KotlinVersion.KOTLIN_2_0
-      //languageVersion = KotlinVersion.KOTLIN_2_0
       jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
       freeCompilerArgs = listOf(
         "-Xjsr305=strict", "-Xjvm-default=all", "-verbose", "-Xjdk-release=${l.versions.java.get()}", "-jvm-target=${l.versions.java.get()}"

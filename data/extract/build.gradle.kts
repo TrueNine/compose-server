@@ -3,6 +3,9 @@ version = libs.versions.compose.dataExtract.get()
 dependencies {
   api(libs.org.jsoup.jsoup)
   api(libs.net.sf.supercsv.superCsv)
+
+  testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding)
+  testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbindingAllPlatforms)
   api(libs.com.alibaba.easyexcel) {
     exclude("org.apache.commons", "commons-compress")
     implementation(libs.org.apache.commons.commonsCompress)
