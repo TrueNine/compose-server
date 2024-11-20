@@ -2,6 +2,7 @@ package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
+import kotlin.properties.Delegates
 
 /**
  * ## by late function scope
@@ -16,13 +17,12 @@ abstract class AbstractLateinitvarScope {
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
     @Deprecated(
-      "不推荐直接调用此方法，应使用 ksp 或其他工具进行生成，然后禁用警告",
+      "use Delegates.notNull()",
       ReplaceWith(
-        "DelegateGetSetLateinitvarValue<T>()",
-        "net.yan100.compose.core.domain.DelegateGetSetLateinitvarValue"
+        "Delegates.notNull()"
       ),
       level = DeprecationLevel.ERROR
     )
-    protected fun <T> Companion.late() = DelegateGetSetLateinitvarValue<T>()
+    protected fun <T : Any> Companion.late() = Delegates.notNull<T>()
   }
 }
