@@ -70,8 +70,8 @@ findProject(":depend:springdoc-openapi")?.name = "depend-springdoc-openapi"
 
 
 // ksp
-include("ksp")
-findProject(":ksp")?.name = "ksp"
+include("ksp:plugin")
+findProject(":ksp:plugin")?.name = "ksp-plugin"
 include("ksp:test")
 findProject(":ksp:test")?.name = "ksp-test"
 include("ksp:core")

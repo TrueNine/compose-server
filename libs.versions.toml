@@ -23,7 +23,7 @@ compose-rdsJimmer = "0.0.5"
 compose-testToolkit = "2.0.15"
 compose-dataExtract = "2.0.21"
 compose-dataCrawler = "2.0.14"
-compose-ksp = "2.0.16"
+compose-kspPlugin = "2.0.17"
 compose-kspCore = "2.0.14"
 compose-kspToolkit = "2.0.14"
 compose-gradlePlugin = "2.0.14"
@@ -78,7 +78,7 @@ net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule",
 net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose-pay" }
 
 # ksp
-net-yan100-compose-ksp = { group = "net.yan100.compose", name = "ksp", version.ref = "compose-ksp" }
+net-yan100-compose-ksp = { group = "net.yan100.compose", name = "ksp", version.ref = "compose-kspPlugin" }
 net-yan100-compose-kspCore = { group = "net.yan100.compose", name = "ksp-core", version.ref = "compose-kspCore" }
 net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "compose-kspToolkit" }
 
@@ -348,7 +348,7 @@ selenium = [
 [plugins]
 net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-gradlePlugin" }
 net-yan100-compose-versionCatalog = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-versionCatalog" }
-net-yan100-compose-ksp = { id = "net.yan100.compose.ksp", version.ref = "compose-ksp" }
+net-yan100-compose-kspPlugin = { id = "net.yan100.compose.ksp-plugin", version.ref = "compose-kspPlugin" }
 
 com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
