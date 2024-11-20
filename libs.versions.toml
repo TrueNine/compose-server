@@ -1,5 +1,5 @@
 [versions]
-compose-versionCatalog = "2.0.49"
+compose-versionCatalog = "2.0.50"
 compose = "2.0.13"
 compose-oss = "2.0.14"
 compose-pay = "2.0.15"

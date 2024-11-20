@@ -8,8 +8,8 @@ plugins {
   `maven-publish`
 }
 
-group = libs.versions.composeGroup
-version = libs.versions.compose.versionCatalog
+group = libs.versions.composeGroup.get()
+version = libs.versions.compose.versionCatalog.get()
 
 publishing {
   repositories {
