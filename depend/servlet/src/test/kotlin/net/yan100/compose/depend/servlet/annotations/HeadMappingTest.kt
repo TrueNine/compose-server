@@ -25,7 +25,7 @@ class HeadMappingTest {
       .andExpect {
         status { isOk() }
         content {
-          string("true")
+          string("")
         }
       }
   }
