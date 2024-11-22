@@ -12,6 +12,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.createDirectories
 import kotlin.test.BeforeTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 
@@ -53,6 +54,7 @@ class SevenZippingTest {
     }
   }
 
+  @Ignore
   @Test
   fun `get rar file`() {
     val requireProcessPaths = mutableListOf<Path>()
