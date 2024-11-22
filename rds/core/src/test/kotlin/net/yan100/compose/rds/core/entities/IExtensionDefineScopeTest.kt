@@ -28,6 +28,6 @@ class IExtensionDefineScopeTest {
     println(e.lateVariable)
 
     val f = Ae()
-    assertFailsWith<NullPointerException> { println(f.lateVariable) }
+    assertFailsWith<IllegalStateException> { println(f.lateVariable) }
   }
 }

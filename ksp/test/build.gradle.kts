@@ -15,7 +15,7 @@ kapt {
 allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 
 dependencies {
-  ksp(project(":ksp"))
+  ksp(project(":ksp:ksp-plugin"))
   implementation(project(":ksp:ksp-core"))
   implementation(project(":rds"))
   implementation(project(":core"))

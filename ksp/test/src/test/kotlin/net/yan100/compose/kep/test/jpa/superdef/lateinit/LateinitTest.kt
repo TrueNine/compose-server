@@ -28,9 +28,12 @@ class LateinitTest {
 
     getNameMethod.isAccessible = true
 
-    val r = getNameMethod.invoke(la)
-    assertNull(r)
-    log.info("getName result: {}", r)
+    assertFails("应当获取不到 late init 属性 并报错") {
+      val r = getNameMethod.invoke(la)
+      assertNull(r)
+      log.info("getName result: {}", r)
+    }
+
     la.name = "hello"
     val r2 = getNameMethod.invoke(la)
     assertNotNull(r2)
