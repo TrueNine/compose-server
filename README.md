@@ -13,13 +13,12 @@
 本项目目前由于种种原因，没有上架到 maven 中央
 仓库（流程过于复杂），目前只在私有仓库，可以自行进行构建上传到自己仓库，说明会介绍步骤。
 
-
 ## 环境准备
 
 ```envRequirement
 java: 21.0.4
-kotlin: 2.0.20
-gradle: 8.10.2
+kotlin: 2.1.0-RC2
+gradle: 8.11.1
 maven: 3.9.9
 gpg4
 ```
@@ -44,7 +43,6 @@ gradle wrapper
 # 3. 检查当前项目所有测试是否可以正常运行
 ./gradlew check
 ```
-
 
 ## 使用技巧
 
@@ -79,16 +77,16 @@ plugins {
 dependencies {
   // 正常依赖引入方式
   implementation(libs.net.yan100.compose.security)
-  
+
   // 引入一组依赖捆绑包
   implementation(libs.bundles.kotlin)
-  
+
   // 引入 maven bom...
   implementation(platform(libs.org.springframework.boot.springBootDependencies))
-  
+
   // 引入 特定 分类器版本的依赖
   implementation(variantOf(libs.net.yan100.compose.rds) { classifier("postgresql") })
-  
+
   // ksp 或 kapt 同样支持此类引入方式
   ksp(libs.net.yan100.compose.ksp)
 }
