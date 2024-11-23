@@ -73,7 +73,7 @@ publishing {
 
   publications {
     create<MavenPublication>("gradlePlugin") {
-      groupId = pluginGroup
+      groupId = "${pluginGroup}.${project.name}"
       artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
       version = pluginVersion
       from(components["java"])

@@ -1,5 +1,5 @@
 [versions]
-compose-versionCatalog = "2.0.61"
+compose-versionCatalog = "2.0.63"
 compose = "2.0.16"
 compose-oss = "2.0.17"
 compose-pay = "2.0.18"
@@ -26,7 +26,7 @@ compose-dataCrawler = "2.0.17"
 compose-kspPlugin = "2.0.21"
 compose-kspCore = "2.0.17"
 compose-kspToolkit = "2.0.17"
-compose-gradlePlugin = "2.0.17"
+compose-gradlePlugin = "2.0.19"
 
 composeGroup = "net.yan100.compose"
 
@@ -107,8 +107,7 @@ net-yan100-compose-dependHttpExchange = { group = "net.yan100.compose", name = "
 net-yan100-compose-dependJsr303Validation = { group = "net.yan100.compose", name = "depend-jsr303-validation", version.ref = "compose-dependJsr303Validation" }
 
 # gradle 插件的直接依赖
-net-yan100-compose-netYan100ComposeGradlePluginGradlePlugin = { group = "net.yan100.compose", name = "net.yan100.compose.gradle-plugin.gradle.plugin", version.ref = "compose-gradlePlugin" }
-net-yan100-compose-netYan100ComposeSettingsGradlePluginGradlePlugin = { group = "net.yan100.compose", name = "net.yan100.compose.settings-gradle-plugin.gradle.plugin", version.ref = "compose-gradlePlugin" }
+net-yan100-compose-gradlePlugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "compose-gradlePlugin" }
 
 
 org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "spring-boot" }
