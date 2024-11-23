@@ -50,11 +50,10 @@ gradlePlugin {
       implementationClass = "${pluginGroup}.gradleplugin.Main"
     }
 
-    // TODO 暂时屏蔽 settings 插件
-    /*register("${pluginGroup}.${project.name}-settings") {
-      id = "${pluginGroup}.${project.name}-settings"
+    register("${pluginGroup}.settings-${project.name}") {
+      id = "${pluginGroup}.settings-${project.name}"
       implementationClass = "${pluginGroup}.gradleplugin.SettingsMain"
-    }*/
+    }
   }
 }
 
@@ -82,11 +81,17 @@ publishing {
 
   publications {
     create<MavenPublication>("gradlePlugin") {
-      groupId = "${pluginGroup}.${project.name}"
+      groupId = pluginGroup
       artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
       version = pluginVersion
       from(components["java"])
     }
+    /*  create<MavenPublication>("gradleSettingsPlugin") {
+        groupId = pluginGroup
+        artifactId = "${pluginGroup}.settings-${project.name}.gradle.plugin"
+        version = pluginVersion
+        from(components["java"])
+      }*/
   }
 }
 

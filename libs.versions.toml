@@ -106,6 +106,11 @@ net-yan100-compose-dependJackson = { group = "net.yan100.compose", name = "depen
 net-yan100-compose-dependHttpExchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "compose-dependHttpExchange" }
 net-yan100-compose-dependJsr303Validation = { group = "net.yan100.compose", name = "depend-jsr303-validation", version.ref = "compose-dependJsr303Validation" }
 
+# gradle 插件的直接依赖
+net-yan100-compose-netYan100ComposeGradlePluginGradlePlugin = { group = "net.yan100.compose", name = "net.yan100.compose.gradle-plugin.gradle.plugin", version.ref = "compose-gradlePlugin" }
+net-yan100-compose-netYan100ComposeSettingsGradlePluginGradlePlugin = { group = "net.yan100.compose", name = "net.yan100.compose.settings-gradle-plugin.gradle.plugin", version.ref = "compose-gradlePlugin" }
+
+
 org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "spring-boot" }
 com-diffplug-spotless-spotlessPluginGradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 org-jetbrains-kotlin-kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -130,7 +135,7 @@ org-springframework-boot-springBootStarterDataJpa = { group = "org.springframewo
 org-springframework-boot-springBootStarterDataRedisReactive = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis-reactive" }
 org-springframework-boot-springBootStarterLogging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
 org-springframework-boot-springBootDockerCompose = { group = "org.springframework.boot", name = "spring-boot-docker-compose" }
-org-springframework-cloud-springCloudStarterBootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap" }
+org-springframework-cloud-springCloudStarterBootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap", version = "4.2.0-RC1" }
 org-springframework-integration-springIntegrationMqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt" }
 
 
@@ -329,9 +334,9 @@ kotlin = [
   "org-jetbrains-kotlin-kotlinReflect",
   "org-jetbrains-kotlin-kotlinSerialization",
   "org-jetbrains-kotlinx-kotlinxDatetime",
-  "org-jetbrains-kotlinx-kotlinxDatetimeJvm",
-  "org-jetbrains-kotlinx-kotlinxIoCore",
-  "org-jetbrains-kotlinx-kotlinxIoCoreJvm",
+  "org-jetbrains-kotlinx-kotlinxIoCore"
+]
+kotlinReactor = [
   "org-jetbrains-kotlinx-kotlinxCoroutinesReactor",
   "io-projectreactor-kotlin-reactorKotlinExtensions"
 ]
@@ -347,8 +352,7 @@ selenium = [
 
 [plugins]
 net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-gradlePlugin" }
-net-yan100-compose-versionCatalog = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-versionCatalog" }
-net-yan100-compose-kspPlugin = { id = "net.yan100.compose.ksp-plugin", version.ref = "compose-kspPlugin" }
+net-yan100-compose-gradleSettingsPlugin = { id = "net.yan100.compose.settings-gradle-plugin", version.ref = "compose-gradlePlugin" }
 
 com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

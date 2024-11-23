@@ -8,17 +8,10 @@ dependencies {
 
   implementation(libs.com.aliyun.oss.aliyunSdkOss)
   implementation(libs.com.huaweicloud.esdkObsJava)
-  implementation(libs.org.springframework.boot.springBootStarterWeb)
 
-  implementation(project(":depend:depend-http-exchange"))
   implementation(project(":core"))
-}
-
-configurations {
-  all {
-    exclude("org.apache.logging.log4j", "log4j-core")
-    exclude("org.apache.logging.log4j", "log4j-api")
-  }
+  implementation(project(":depend:depend-http-exchange"))
+  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
 }
 
 publishing {

@@ -1,6 +1,8 @@
 project.version = libs.versions.compose.securityOauth2.get()
 
 dependencies {
+  runtimeOnly(libs.org.springframework.cloud.springCloudStarterBootstrap)
+
   implementation(project(":core"))
   implementation(project(":depend:depend-http-exchange"))
   implementation(project(":security:security-crypto"))
