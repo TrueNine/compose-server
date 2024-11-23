@@ -17,10 +17,11 @@
 package net.yan100.compose.oss.aliyun
 
 import com.aliyun.oss.OSSClientBuilder
+import kotlin.test.Ignore
 
 class ConnectTest {
 
-  // TODO 继续测试
+  @Ignore
   fun connect() {
     val endpoint = "oss-cn-shenzhen.aliyuncs.com"
     val accessKeyId = "LTAI5tRUDCxxi9QusF5w6YMG"

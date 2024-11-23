@@ -11,6 +11,7 @@ dependencies {
 
   implementation(project(":core"))
   implementation(project(":depend:depend-http-exchange"))
+  testImplementation(project(":test-toolkit"))
   testImplementation(libs.org.springframework.boot.springBootStarterWeb)
 }
 
