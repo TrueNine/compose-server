@@ -21,10 +21,19 @@ import org.gradle.api.initialization.Settings
 
 class SettingsMain : Plugin<Settings> {
   override fun apply(target: Settings) {
+    val properties = target.extensions.extraProperties.properties
+    
+    target.dependencyResolutionManagement { drm ->
+      drm.versionCatalogs { vc ->
+        vc.create("libs") {
+
+        }
+      }
+    }
     target.pluginManagement {
       it.repositories { ir ->
+
         ir.chinaRegionRepositories()
-        println("开始加载")
         ir.forEach { e -> println(e) }
       }
     }

@@ -54,6 +54,13 @@ allprojects {
   }
 }
 
+dependencies {
+  implementation(platform(l.org.springframework.boot.springBootDependencies))
+  implementation(platform(l.org.springframework.cloud.springCloudDependencies))
+  implementation(platform(l.org.springframework.modulith.springModulithBom))
+  implementation(platform(l.org.springframework.ai.springAiBom))
+}
+
 subprojects {
   apply(plugin = "java")
   apply(plugin = "kotlin")
@@ -76,16 +83,9 @@ subprojects {
     withType<BootJar> { enabled = false }
   }
   dependencies {
-    implementation(platform(l.org.springframework.boot.springBootDependencies))
-    implementation(platform(l.org.springframework.cloud.springCloudDependencies))
-    implementation(platform(l.org.springframework.modulith.springModulithBom))
-    implementation(platform(l.org.springframework.ai.springAiBom))
-
-
     // 自动处理 spring 配置
     annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
     kapt(l.org.springframework.springBootConfigurationProcessor)
-    runtimeOnly(l.org.springframework.cloud.springCloudStarterBootstrap)
 
     implementation(l.org.springframework.springBootConfigurationProcessor)
     implementation(l.org.springframework.boot.springBoot)
@@ -94,8 +94,8 @@ subprojects {
     implementation(l.bundles.kotlin)
 
     // junit 全平台 测试
-    testImplementation(l.bundles.kotlinTestJunit5)
-    testImplementation(l.bundles.junit5)
+    testRuntimeOnly(l.bundles.kotlinTestJunit5)
+    testRuntimeOnly(l.bundles.junit5)
   }
   sourceSets {
     test {

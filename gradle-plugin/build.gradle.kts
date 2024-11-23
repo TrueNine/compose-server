@@ -1,21 +1,13 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-val l = libs
-
 val pluginGroup = libs.versions.composeGroup.get()
 val pluginVersion = libs.versions.compose.gradlePlugin.get()
 
-
 plugins {
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
-  java
   signing
-  `version-catalog`
-  `java-library`
   `java-gradle-plugin`
   `maven-publish`
-  // id("com.gradle.plugin-publish") version "1.2.1"
-  // id("io.github.gradle-nexus.publish-plugin") version "2.0.0-rc-2"
 }
 
 group = pluginGroup
@@ -29,7 +21,7 @@ dependencies {
 
 kotlin {
   compilerOptions {
-    jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
+    jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
     freeCompilerArgs =
       listOf(
         "-Xjsr305=strict",
@@ -40,7 +32,7 @@ kotlin {
       )
   }
 
-  jvmToolchain(l.versions.java.get().toInt())
+  jvmToolchain(libs.versions.java.get().toInt())
 }
 
 gradlePlugin {
@@ -86,12 +78,6 @@ publishing {
       version = pluginVersion
       from(components["java"])
     }
-    /*  create<MavenPublication>("gradleSettingsPlugin") {
-        groupId = pluginGroup
-        artifactId = "${pluginGroup}.settings-${project.name}.gradle.plugin"
-        version = pluginVersion
-        from(components["java"])
-      }*/
   }
 }
 
@@ -99,5 +85,3 @@ signing {
   useGpgCmd()
   sign(publishing.publications["gradlePlugin"])
 }
-
-catalog { versionCatalog { from(files("../libs.versions.toml")) } }
