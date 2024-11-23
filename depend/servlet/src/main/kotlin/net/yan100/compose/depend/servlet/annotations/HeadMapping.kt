@@ -1,6 +1,7 @@
 package net.yan100.compose.depend.servlet.annotations
 
 import org.springframework.core.annotation.AliasFor
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.Mapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 @Retention(AnnotationRetention.RUNTIME)
 @Mapping
 @MustBeDocumented
-@RequestMapping(method = [RequestMethod.HEAD])
+@RequestMapping(method = [RequestMethod.HEAD], produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
 annotation class HeadMapping(
   @get:AliasFor(annotation = RequestMapping::class, attribute = "value")
   vararg val value: String = [],

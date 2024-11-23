@@ -4,16 +4,19 @@ import net.yan100.compose.core.datetime
 import net.yan100.compose.core.i32
 import net.yan100.compose.core.i64
 import net.yan100.compose.core.toLong
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 
 data class ResponseEntityScope(
-  internal val builder: ResponseEntity.BodyBuilder = ResponseEntity.ok(),
   internal var status: i32 = 200,
+  internal var contentType: String? = null,
   internal var lastModifier: i64? = null,
   internal var contentLength: i64? = null,
 ) {
-  init {
-    builder.body(null)
+
+
+  fun type(contentType: String?) {
+    this.contentType = contentType
   }
 
   fun size(len: () -> i64?) {
@@ -44,6 +47,15 @@ data class ResponseEntityScope(
       if (lastModifier != null) it.lastModified(lastModifier!!)
     }.also {
       if (contentLength != null) it.contentLength(contentLength!!)
+    }.also {
+      if (contentType != null) {
+        val media = try {
+          MediaType.parseMediaType(contentType!!)
+        } catch (e: Exception) {
+          MediaType.APPLICATION_OCTET_STREAM
+        }
+        it.contentType(media)
+      }
     }.body(Unit)
 
     return re

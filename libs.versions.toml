@@ -1,11 +1,11 @@
 [versions]
-compose-versionCatalog = "2.0.63"
+compose-versionCatalog = "2.0.64"
 compose = "2.0.16"
 compose-oss = "2.0.17"
 compose-pay = "2.0.18"
 compose-schedule = "2.0.17"
 compose-cacheable = "2.0.18"
-compose-dependServlet = "2.0.24"
+compose-dependServlet = "2.0.25"
 compose-dependPaho = "2.0.17"
 compose-dependJackson = "2.0.17"
 compose-dependHttpExchange = "2.0.17"
