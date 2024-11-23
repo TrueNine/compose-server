@@ -41,7 +41,7 @@ kotlinx-io = "0.5.4"
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.9.0"
 
-spring-boot = "3.4.0-RC1"
+spring-boot = "3.4.0"
 # spring 单独抽取版本序列
 spring-framework = "6.2.0-RC1"
 spring-data = "3.4.0-M1"
@@ -64,7 +64,7 @@ slf4j = "2.1.0-alpha1"
 mybatis-plus = "3.5.7"
 jackson = "2.18.1"
 querydsl = "5.1.0"
-hibernate = "6.6.0.Final"
+hibernate = "6.6.2.Final"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
 
@@ -121,6 +121,7 @@ org-springframework-boot-springBoot = { group = "org.springframework.boot", name
 org-springframework-boot-springBootAutoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 org-springframework-springBootConfigurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor", version.ref = "spring-boot" }
 org-springframework-boot-springBootStarterTest = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+org-springframework-boot-springBootStarterBatch = { group = "org.springframework.boot", name = "spring-boot-starter-batch" }
 org-springframework-boot-springBootStarterJson = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
 org-springframework-boot-springBootStarterWebflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
 org-springframework-boot-springBootStarterWeb = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
@@ -141,7 +142,7 @@ org-springframework-integration-springIntegrationMqtt = { group = "org.springfra
 
 org-springframework-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons" }
 org-springframework-data-springDataJpa = { group = "org.springframework.data", name = "spring-data-jpa" }
-
+org-springframework-batch-springBatchTest = { group = "org.springframework.batch", name = "spring-batch-test" }
 org-springframework-security-springSecurityCrypto = { group = "org.springframework.security", name = "spring-security-crypto" }
 org-springframework-security-springSecurityCore = { group = "org.springframework.security", name = "spring-security-core" }
 org-springframework-springWebMvc = { group = "org.springframework", name = "spring-webmvc" }

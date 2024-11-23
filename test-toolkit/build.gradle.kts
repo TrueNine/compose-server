@@ -22,6 +22,9 @@ dependencies {
   api(libs.org.springframework.boot.springBootStarterTomcat)
   api(libs.org.springframework.boot.springBootStarterJson)
 
+  // spring batch
+  api(libs.org.springframework.batch.springBatchTest)
+
   // 日志自动配置
   api(libs.org.springframework.boot.springBootStarterLogging)
 
