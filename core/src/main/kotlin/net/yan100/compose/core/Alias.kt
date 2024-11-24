@@ -18,6 +18,7 @@ package net.yan100.compose.core
 
 import net.yan100.compose.core.domain.IPage
 import net.yan100.compose.core.domain.IPageParam
+import net.yan100.compose.core.domain.IPageParamLike
 import net.yan100.compose.core.typing.ISO4217
 import org.slf4j.Logger
 import java.math.BigDecimal
@@ -54,6 +55,7 @@ typealias ReferenceId = Id
 typealias RefId = ReferenceId
 
 typealias Pq = IPageParam
+typealias PqLike = IPageParamLike
 typealias Pr<T> = IPage<T>
 
 typealias ISO4217Typing = ISO4217

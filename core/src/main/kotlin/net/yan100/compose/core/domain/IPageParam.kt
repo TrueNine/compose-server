@@ -42,8 +42,14 @@ private class DefaultPageParam @Deprecated("不退完直接使用", level = Depr
  * @author TrueNine
  * @since 2024-06-20
  */
-interface IPageParam : Serializable {
+interface IPageParam : IPageParamLike, Serializable {
   companion object {
+    @JvmStatic
+    fun from(param: IPageParamLike): IPageParam {
+      return get(param.o, param.s)
+    }
+
+    @JvmStatic
     fun empty(): IPageParam {
       return get(0, 0, true)
     }
@@ -70,34 +76,22 @@ interface IPageParam : Serializable {
       return if (unPage == true) DefaultPageParam(0, 0, unPage)
       else DefaultPageParam(offset, pageSize, unPage)
     }
+
+    @JvmStatic
+    operator fun get(param: IPageParamLike?): IPageParam {
+      return get(param?.o, param?.s)
+    }
   }
 
-  /** ## 分页 页面 大小 */
-  @get:Transient
-  var s: Int?
-
-  /**
-   * ## UnPaged（禁用分页）
-   */
-  @get:JsonIgnore
-  @get:Transient
-  var u: Boolean?
-
-  @get:Transient
-  var o: Long?
 
   @Transient
   @JsonIgnore
   operator fun plus(total: Long): IPageParam {
-    if (total <= 0) {
-      o = 0
-      s = 1
-      return this
-    }
-    s = if (safePageSize >= total) total.toSafeInt() else safePageSize
+    if (total <= 0) return empty()
+    val ss = if (safePageSize >= total) total.toSafeInt() else safePageSize
     val c = (safeOffset + 1) * safePageSize
-    o = if (c > total) (total / safePageSize) else safeOffset
-    return this
+    val oo = if (c > total) (total / safePageSize) else safeOffset
+    return get(oo, ss, u)
   }
 
   @get:JsonIgnore
