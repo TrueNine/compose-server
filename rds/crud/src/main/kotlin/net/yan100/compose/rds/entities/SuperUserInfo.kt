@@ -42,12 +42,12 @@ abstract class SuperUserInfo : IEntity() {
 
   /** 姓 */
   @get:Schema(title = "姓")
-  @get:Size(min = 1, max = 2, message = "姓最短 1, 最长 2")
+  @get:Size(min = 1, max = 20, message = "姓最短 1, 最长 20")
   abstract var firstName: String?
 
   /** 名 */
   @get:Schema(title = "名")
-  @get:Size(min = 1, max = 2, message = "名最短 1, 最长 2")
+  @get:Size(min = 1, max = 20, message = "名最短 1, 最长 20")
   abstract var lastName: String?
 
   /** 邮箱 */
