@@ -20,12 +20,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
+import net.yan100.compose.core.Pq
 import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.core.annotations.ACID
+import net.yan100.compose.rds.core.toPageable
+import net.yan100.compose.rds.core.toPr
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
 import org.springframework.context.annotation.Primary
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
@@ -33,6 +38,10 @@ import org.springframework.stereotype.Repository
 @Repository
 interface IUserInfoRepo : IRepo<UserInfo> {
   fun existsAllByFirstNameAndLastName(firstName: String, lastName: String): Boolean
+
+  fun findAllByUserId(userId: RefId): List<UserInfo>
+  fun findAllByUserId(userId: RefId, page: Pageable): Page<UserInfo>
+  fun findAllByUserId(userId: RefId, pq: Pq) = findAllByUserId(userId, pq.toPageable()).toPr()
 
   fun existsAllByIdAndIdCardIsNotNull(id: RefId): Boolean
 
