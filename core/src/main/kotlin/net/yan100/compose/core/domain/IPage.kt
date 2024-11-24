@@ -53,7 +53,7 @@ private class DefaultPageResult<T : Any>(
  * @author TrueNine
  * @since 2024-09-14
  */
-interface IPage<T : Any> {
+interface IPage<T : Any?> {
   /**
    * ## Data List
    * 数据列表
@@ -156,6 +156,9 @@ interface IPage<T : Any> {
       pageParam: IPageParam
     ): IPage<T> =
       DefaultPageResult(pageParam = pageParam, d = dataList, t = total)
+
+    @JvmStatic
+    fun <T : Any> one(data: T?): IPage<T> = if (data != null) get(listOf(data)) else empty()
 
     @JvmStatic
     fun <T : Any> empty(): IPage<T> = get()
