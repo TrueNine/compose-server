@@ -205,12 +205,22 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
           ?: destClassName.simpleName.camelCaseToSnakeCase
 
       fileDsl(classDeclaration.packageName.asString(), destName) {
+
+        builder.addAnnotation(
+          AnnotationSpec.builder(
+            Suppress::class
+          ).addMember("%S", "Unused").addMember("%S", "RedundantVisibilityModifier").useFile().build()
+        )
+
         classBy(destClassName) {
+          opened()
           annotateBy(accessAnnotation)
+
           log.info("generate class: $destClassName")
+
           annotateAllBy(generateClassAnnotations(destClassName))
           extendsBy(superClassName)
-          opened()
+
           val fieldAndAnnotations = reGetAllProperty(classDeclaration, destName)
           builder.addProperties(fieldAndAnnotations.map { it.second }.toSet())
           builder.addType(generateCompanionObject(tableName, fieldAndAnnotations.map {

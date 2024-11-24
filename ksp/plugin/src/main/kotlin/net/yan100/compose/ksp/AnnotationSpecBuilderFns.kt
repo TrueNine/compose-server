@@ -18,6 +18,8 @@ package net.yan100.compose.ksp
 
 import com.squareup.kotlinpoet.AnnotationSpec
 
+fun AnnotationSpec.Builder.useFile() = useSiteTarget(AnnotationSpec.UseSiteTarget.FILE)
+
 fun AnnotationSpec.Builder.useGet() = useSiteTarget(AnnotationSpec.UseSiteTarget.GET)
 
 fun AnnotationSpec.Builder.useSet() = useSiteTarget(AnnotationSpec.UseSiteTarget.SET)
