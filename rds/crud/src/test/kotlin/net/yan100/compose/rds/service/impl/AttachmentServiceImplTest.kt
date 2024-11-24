@@ -30,7 +30,7 @@ import kotlin.test.*
 
 @Rollback
 @SpringBootTest(classes = [RdsEntrance::class])
-class IReadableAttachmentServiceImplImplTest {
+class AttachmentServiceImplTest {
   lateinit var attachmentService: AttachmentServiceImpl @Resource set
   lateinit var snowflake: ISnowflakeGenerator @Resource set
 
