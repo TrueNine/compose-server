@@ -1,6 +1,8 @@
 version = libs.versions.composeCore.get()
 
 dependencies {
+  implementation(libs.org.jetbrains.kotlin.kotlinStdlib)
+
   api(libs.com.fasterxml.jackson.core.jacksonAnnotations)
   api(libs.jakarta.validation.jakartaValidationApi)
   api(libs.jakarta.persistence.jakartaPersistenceApi)
