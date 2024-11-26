@@ -2,9 +2,10 @@ version = libs.versions.composeDataExtract.get()
 
 dependencies {
   implementation(libs.bundles.kotlinReactor)
+  implementation(libs.org.springframework.springWeb)
+  implementation(libs.org.springframework.boot.springBootStarterWebflux)
   api(libs.org.jsoup.jsoup)
   api(libs.net.sf.supercsv.superCsv)
-
 
   api(libs.com.alibaba.easyexcel) {
     exclude("org.apache.commons", "commons-compress")
