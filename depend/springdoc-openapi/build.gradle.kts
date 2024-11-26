@@ -1,8 +1,18 @@
+plugins {
+  alias(libs.plugins.org.jetbrains.kotlin.jvm)
+}
+
 version = libs.versions.composeDependSpringdocOpenapi.get()
 
+
 dependencies {
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
+  api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)
+
   implementation(project(":core"))
   implementation(libs.org.springdoc.springdocOpenapiStarterWebmvcUi)
+
   testImplementation(project(":test-toolkit"))
   testImplementation(libs.org.springframework.boot.springBootTest)
   testImplementation(libs.org.springframework.boot.springBootStarterTest)
