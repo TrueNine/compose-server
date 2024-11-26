@@ -16,8 +16,6 @@
 */
 package net.yan100.compose.schedule.properties
 
-import org.springframework.boot.context.properties.ConfigurationProperties
-
 private const val PREFIX = "compose.schedule.xxl-job"
 
 /**
@@ -27,7 +25,6 @@ private const val PREFIX = "compose.schedule.xxl-job"
  * @since 2023-03-25
  */
 @Deprecated("不再使用此组件")
-@ConfigurationProperties(prefix = "$PREFIX.xxl-job.executor")
 data class XxlJobExecutorAutoConfigurationProperties(
   var appName: String? = null,
   var address: String = "127.0.0.1",

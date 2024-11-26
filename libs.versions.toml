@@ -14,7 +14,7 @@ composeSecurityCrypto = "2.0.18"
 composePay = "2.0.18"
 composeCacheable = "2.0.18"
 composeOss = "2.0.17"
-composeSchedule = "2.0.17"
+composeDependXxlJob = "2.0.17"
 composeDependPaho = "2.0.17"
 composeDependJackson = "2.0.17"
 composeDependHttpExchange = "2.0.17"
@@ -48,6 +48,7 @@ springCloud = "2024.0.0-RC1"
 springAi = "1.0.0-M4"
 springCloudAlibaba = "2021.0.4.0"
 springModulith = "1.3.0"
+springIntegration = "6.4.0"
 
 testng = "7.10.2"
 junit5 = "5.11.3"
@@ -65,13 +66,13 @@ hibernate = "6.6.2.Final"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
 kotlinCompileTesting = "1.6.0"
+xxlJob = "2.4.2"
 
 [libraries]
 net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "composeOss" }
 net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "composeCore" }
 net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "composeCacheable" }
 net-yan100-compose-testToolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "composeTestToolkit" }
-net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "composeSchedule" }
 net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "composePay" }
 
 # ksp
@@ -102,6 +103,7 @@ net-yan100-compose-dependPaho = { group = "net.yan100.compose", name = "depend-p
 net-yan100-compose-dependJackson = { group = "net.yan100.compose", name = "depend-jackson", version.ref = "composeDependJackson" }
 net-yan100-compose-dependHttpExchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "composeDependHttpExchange" }
 net-yan100-compose-dependJsr303Validation = { group = "net.yan100.compose", name = "depend-jsr303-validation", version.ref = "composeDependJsr303Validation" }
+net-yan100-compose-dependXxlJob = { group = "net.yan100.compose", name = "depend-xxl-job", version.ref = "composeDependXxlJob" }
 
 # gradle 插件的直接依赖
 net-yan100-compose-gradlePlugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "composeGradlePlugin" }
@@ -134,8 +136,9 @@ org-springframework-boot-springBootStarterDataRedisReactive = { group = "org.spr
 org-springframework-boot-springBootStarterLogging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
 org-springframework-boot-springBootDockerCompose = { group = "org.springframework.boot", name = "spring-boot-docker-compose" }
 org-springframework-cloud-springCloudStarterBootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap", version = "4.2.0-RC1" }
-org-springframework-integration-springIntegrationMqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt" }
-
+org-springframework-integration-springIntegrationMqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt", version.ref = "springIntegration" }
+org-springframework-integration-springIntegrationCore = { group = "org.springframework.integration", name = "spring-integration-core", version.ref = "springIntegration" }
+com-xuxueli-xxlJobCore = { group = "com.xuxueli", name = "xxl-job-core", version.ref = "xxlJob" }
 io-netty-nettyHandler = { group = "io.netty", name = "netty-handler", version.ref = "netty" }
 org-springframework-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons" }
 org-springframework-data-springDataJpa = { group = "org.springframework.data", name = "spring-data-jpa" }

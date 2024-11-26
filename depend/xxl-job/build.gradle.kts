@@ -1,7 +1,10 @@
-project.version = libs.versions.composeSchedule.get()
+project.version = libs.versions.composeDependXxlJob.get()
 
 dependencies {
-  // api("com.xuxueli:xxl-job-core:${V.Schedule.xxlJob}")
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
+  api(libs.com.xuxueli.xxlJobCore)
   implementation(project(":core"))
 }
 
