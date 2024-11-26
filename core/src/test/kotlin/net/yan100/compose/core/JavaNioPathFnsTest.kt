@@ -17,15 +17,15 @@
 package net.yan100.compose.core
 
 
+import net.yan100.compose.testtookit.TempDirMapping
 import net.yan100.compose.testtookit.log
-import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class JavaNioPathFnsTest {
-  @TempDir
+  @TempDirMapping
   lateinit var tempDir: Path
 
   @Test

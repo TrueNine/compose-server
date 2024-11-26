@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core
 
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -42,7 +42,6 @@ class IStringTest {
     val a = IString.inLine("1\n")
     assertFalse { a.contains("\n") }
   }
-
 
 
   @Test

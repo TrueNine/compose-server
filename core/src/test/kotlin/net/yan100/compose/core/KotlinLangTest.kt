@@ -3,7 +3,7 @@ package net.yan100.compose.core
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.testtookit.info
 import net.yan100.compose.testtookit.log
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**

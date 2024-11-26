@@ -62,7 +62,7 @@ class ResourceHolderTest {
       assertContains(it, "external.testconfigreplacefile")
 
       assertTrue {
-        it.count { it == "replace.testconfigreplacefile" } == 2
+        it.count { s -> s == "replace.testconfigreplacefile" } == 2
       }
     }
   }
