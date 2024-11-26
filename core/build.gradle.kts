@@ -1,7 +1,3 @@
-plugins {
-  alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
-}
-
 version = libs.versions.composeCore.get()
 
 dependencies {
