@@ -40,9 +40,9 @@ kotlinpoet = "2.0.0"
 kotlinxIo = "0.6.0"
 kotlinxDatetime = "0.6.1"
 kotlinxCoroutines = "1.9.0"
-
+netty = "4.1.115.Final"
 springBoot = "3.4.0"
-springFramework = "6.2.0-RC1"
+springFramework = "6.2.0"
 springData = "3.4.0-M1"
 springCloud = "2024.0.0-RC1"
 springAi = "1.0.0-M4"
@@ -114,17 +114,17 @@ io-spring-gradle-dependencyManagementPlugin = { group = "io.spring.gradle", name
 
 com-github-tschuchortdev-kotlinCompileTesting = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing", version.ref = "kotlinCompileTesting" }
 com-github-tschuchortdev-kotlinCompileTestingKsp = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing-ksp", version.ref = "kotlinCompileTesting" }
-org-springframework-boot-springBoot = { group = "org.springframework.boot", name = "spring-boot" }
-org-springframework-boot-springBootAutoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
+org-springframework-boot-springBoot = { group = "org.springframework.boot", name = "spring-boot", version.ref = "springBoot" }
+org-springframework-boot-springBootAutoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure", version.ref = "springBoot" }
 org-springframework-springBootConfigurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor", version.ref = "springBoot" }
-org-springframework-boot-springBootStarterTest = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+org-springframework-boot-springBootStarterTest = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBoot" }
 org-springframework-boot-springBootStarterBatch = { group = "org.springframework.boot", name = "spring-boot-starter-batch" }
 org-springframework-boot-springBootStarterJson = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
-org-springframework-boot-springBootStarterWebflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
-org-springframework-boot-springBootStarterWeb = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+org-springframework-boot-springBootStarterWebflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux", version.ref = "springBoot" }
+org-springframework-boot-springBootStarterWeb = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
 org-springframework-boot-springBootStarterActuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 org-springframework-boot-springBootStarterWebsocket = { group = "org.springframework.boot", name = "spring-boot-starter-websocket" }
-org-springframework-boot-springBootStarterValidation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+org-springframework-boot-springBootStarterValidation = { group = "org.springframework.boot", name = "spring-boot-starter-validation", version.ref = "springBoot" }
 org-springframework-boot-springBootStarterSecurity = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 org-springframework-boot-springBootStarterUndertow = { group = "org.springframework.boot", name = "spring-boot-starter-undertow" }
 org-springframework-boot-springBootStarterTomcat = { group = "org.springframework.boot", name = "spring-boot-starter-tomcat" }
@@ -136,15 +136,17 @@ org-springframework-boot-springBootDockerCompose = { group = "org.springframewor
 org-springframework-cloud-springCloudStarterBootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap", version = "4.2.0-RC1" }
 org-springframework-integration-springIntegrationMqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt" }
 
-
+io-netty-nettyHandler = { group = "io.netty", name = "netty-handler", version.ref = "netty" }
 org-springframework-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons" }
 org-springframework-data-springDataJpa = { group = "org.springframework.data", name = "spring-data-jpa" }
 org-springframework-batch-springBatchTest = { group = "org.springframework.batch", name = "spring-batch-test" }
 org-springframework-security-springSecurityCrypto = { group = "org.springframework.security", name = "spring-security-crypto" }
 org-springframework-security-springSecurityCore = { group = "org.springframework.security", name = "spring-security-core" }
 org-springframework-springWebMvc = { group = "org.springframework", name = "spring-webmvc" }
-org-springframework-springWeb = { group = "org.springframework", name = "spring-web" }
-org-springframework-springContext = { group = "org.springframework", name = "spring-context" }
+org-springframework-springWeb = { group = "org.springframework", name = "spring-web", version.ref = "springFramework" }
+org-springframework-springWebflux = { group = "org.springframework", name = "spring-webflux", version.ref = "springFramework" }
+org-springframework-springContext = { group = "org.springframework", name = "spring-context", version.ref = "springFramework" }
+org-springframework-springCore = { group = "org.springframework", name = "spring-core", version.ref = "springFramework" }
 org-springframework-modulith-springModulithStarterJpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 org-springframework-modulith-springModulithCore = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "springModulith" }
 org-springframework-modulith-springModulithStarterTest = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
@@ -323,7 +325,6 @@ p6spy = [
 junit5 = [
   "org-junit-platform-junitPlatformLauncher",
   "org-junit-jupiter-junitJupiterApi",
-  "org-hsqldb-hsqldb",
   "com-h2database-h2"
 ]
 kotlinReactor = [
