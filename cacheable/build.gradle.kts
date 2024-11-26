@@ -1,13 +1,16 @@
 version = libs.versions.composeCacheable.get()
 
 dependencies {
-  api(libs.bundles.redis)
-  api(libs.com.github.benManes.caffeine.caffeine)
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
+  implementation(libs.bundles.redis)
+  implementation(libs.com.github.benManes.caffeine.caffeine)
 
   implementation(project(":depend:depend-jackson"))
   implementation(project(":core"))
 
-  implementation(project(":test-toolkit"))
+  testImplementation(project(":test-toolkit"))
 }
 
 publishing {
