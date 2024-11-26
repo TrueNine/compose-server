@@ -5,7 +5,6 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
   java
-  idea
   `maven-publish`
   signing
   alias(libs.plugins.org.springframework.boot)
@@ -31,7 +30,7 @@ val sonatypePassword = extra["pwd.sonatype.1"].toString()
 
 val l = libs
 
-project.version = libs.versions.compose.asProvider().get()
+project.version = libs.versions.compose.get()
 
 tasks {
   withType<ProcessAot> { enabled = false }
@@ -75,13 +74,23 @@ subprojects {
   apply(plugin = l.plugins.org.asciidoctor.jvm.convert.get().pluginId)
 
   extra["snippetsDir"] = file("build/generated-snippets")
-  extra["springCloudVersion"] = l.versions.spring.cloud.get()
-  extra["springAiVersion"] = l.versions.spring.ai.get()
+  extra["springCloudVersion"] = l.versions.springCloud.get()
+  extra["springAiVersion"] = l.versions.springAi.get()
+
+  kapt {
+    arguments {
+      arg("annotationFilter", "org.springframework.boot.context.properties.EnableConfigurationProperties")
+      arg("annotationFilter", "org.springframework.boot.context.properties.ConfigurationProperties")
+      arg("annotationFilter", "org.springframework.context.annotation.ComponentScan")
+      arg("annotationFilter", "org.springframework.context.annotation.Configuration")
+    }
+  }
 
   tasks {
     withType<ProcessAot> { enabled = false }
     withType<BootJar> { enabled = false }
   }
+
   dependencies {
     // 自动处理 spring 配置
     annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
