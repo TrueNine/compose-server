@@ -1,11 +1,12 @@
 version = libs.versions.composeDataCrawler.get()
 
 dependencies {
-  api(project(":data:data-extract"))
   implementation(project(":core"))
 
-  api(libs.bundles.selenium)
+  implementation(libs.bundles.selenium)
+
   api(libs.com.microsoft.playwright.playwright)
+
   implementation(libs.com.github.magese.ikAnalyzer)
   implementation(libs.com.github.haifengl.smileMath)
   testImplementation(project(":test-toolkit"))
