@@ -326,14 +326,6 @@ junit5 = [
   "org-hsqldb-hsqldb",
   "com-h2database-h2"
 ]
-kotlin = [
-  "org-jetbrains-kotlin-kotlinStdlib",
-  "org-jetbrains-kotlinx-kotlinxCoroutinesCore",
-  "org-jetbrains-kotlin-kotlinReflect",
-  "org-jetbrains-kotlin-kotlinSerialization",
-  "org-jetbrains-kotlinx-kotlinxDatetime",
-  "org-jetbrains-kotlinx-kotlinxIoCore"
-]
 kotlinReactor = [
   "org-jetbrains-kotlinx-kotlinxCoroutinesReactor",
   "io-projectreactor-kotlin-reactorKotlinExtensions"
