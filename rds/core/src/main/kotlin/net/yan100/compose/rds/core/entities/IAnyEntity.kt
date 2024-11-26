@@ -82,7 +82,7 @@ abstract class IAnyEntity : ISensitivity,
     @Transient @JsonIgnore @JvmName("_\$\$_get_kotlin_internal_primary_id") get() = field ?: ""
 
   @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  fun setId(id: String) {
+  final fun setId(id: String) {
     this.id = id
   }
 
@@ -90,8 +90,12 @@ abstract class IAnyEntity : ISensitivity,
 
   override fun equals(other: Any?): Boolean {
     return if (this === other) true
-    else if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) false
+    else if (null == other || Hibernate.getClass(this) != Hibernate.getClass(other)) false
     else !isNew && id == (other as IAnyEntity).id
+  }
+
+  override fun toString(): String {
+    return if (isNew) "AnyEntity(New)" else "AnyEntity(id=$id)"
   }
 
   override fun hashCode(): Int {
@@ -102,13 +106,13 @@ abstract class IAnyEntity : ISensitivity,
   @JsonIgnore
   @Schema(hidden = true)
   fun toNewEntity() {
-    this.id = null
+    id = null
   }
 
   @Transient
   @JsonIgnore
   @Schema(hidden = true)
-  override fun isNew(): Boolean {
+  final override fun isNew(): Boolean {
     return null == id || "" == id || "null" == id
   }
 
