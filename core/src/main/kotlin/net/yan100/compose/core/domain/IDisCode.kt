@@ -17,7 +17,6 @@
 package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.persistence.Transient
 import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.string
 import java.util.*
@@ -30,6 +29,7 @@ interface IDisCode : IIdcard2Code {
     }
 
     companion object {
+      @Transient
       private val idCardRegex = IRegexes.CHINA_DIS_CARD.toRegex()
     }
 
@@ -50,7 +50,6 @@ interface IDisCode : IIdcard2Code {
     operator fun get(code: String): IDisCode = DefaultDis2Code(code.uppercase())
   }
 
-  @get:Transient
   @get:JsonIgnore
   override val idcard2Code: string
     get() = disCode.substring(0, 18)
@@ -62,7 +61,6 @@ interface IDisCode : IIdcard2Code {
     get() = disCode.substring(19, 20).toInt()
 
   /** ## 残疾证号 */
-  @get:Transient
   @get:JsonIgnore
   val disCode: string
 
@@ -70,7 +68,6 @@ interface IDisCode : IIdcard2Code {
    * ## 是否补办过
    * 根据第 20 位是否有 b 判断是否有补办过
    */
-  @get:Transient
   @get:JsonIgnore
   val disCodeIsReIssued: Boolean
     get() = disCode.substring(19, 20).uppercase() == "B"
@@ -80,7 +77,6 @@ interface IDisCode : IIdcard2Code {
    *
    * @see disCodeIsReIssued
    */
-  @get:Transient
   @get:JsonIgnore
   val disCodeReIssuedCount: Byte?
     get() = disCode.substring(20, 21).toByteOrNull()

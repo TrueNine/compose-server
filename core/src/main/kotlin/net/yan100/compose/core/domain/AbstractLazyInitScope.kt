@@ -1,7 +1,6 @@
 package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.persistence.Transient
 import kotlin.properties.Delegates
 
 /**
@@ -10,10 +9,9 @@ import kotlin.properties.Delegates
  * @author TrueNine
  * @since 2024-10-01
  */
-abstract class AbstractLateinitvarScope {
+abstract class AbstractLazyInitScope {
   companion object {
     @JsonIgnore
-    @Transient
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
     @Deprecated(

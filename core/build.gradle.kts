@@ -1,11 +1,15 @@
+plugins {
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
+}
+
 version = libs.versions.composeCore.get()
 
 dependencies {
-  implementation(libs.org.jetbrains.kotlin.kotlinStdlib)
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
 
   api(libs.com.fasterxml.jackson.core.jacksonAnnotations)
-  api(libs.jakarta.validation.jakartaValidationApi)
-  api(libs.jakarta.persistence.jakartaPersistenceApi)
+  //api(libs.jakarta.persistence.jakartaPersistenceApi)
   api(libs.jakarta.annotation.jakartaAnnotationApi)
   api(libs.jakarta.servlet.jakartaServletApi)
   api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)

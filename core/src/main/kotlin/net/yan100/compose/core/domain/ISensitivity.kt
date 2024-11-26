@@ -2,7 +2,6 @@ package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Transient
 import net.yan100.compose.core.bool
 
 /**
@@ -24,7 +23,6 @@ interface ISensitivity {
   }
 
   @get:JsonIgnore
-  @get:Transient
   @get:Schema(hidden = true)
   val isChangedToSensitiveData: bool get() = true
 

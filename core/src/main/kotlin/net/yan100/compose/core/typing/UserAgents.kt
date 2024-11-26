@@ -37,6 +37,9 @@ enum class UserAgents(private val ua: String) : StringTyping {
 
   companion object {
     @JvmStatic
-    fun findVal(v: String) = entries.find { it.ua == v }
+    operator fun get(v: String?) = findVal(v)
+
+    @JvmStatic
+    fun findVal(v: String?) = entries.find { it.ua == v }
   }
 }

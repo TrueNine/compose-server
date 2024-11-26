@@ -36,7 +36,6 @@ private fun calcTotalPageSize(total: Long, pageSize: Int): Int {
 private class DefaultPageResult<T : Any>(
   @JsonIgnore
   @kotlin.jvm.Transient
-  @jakarta.persistence.Transient
   override var pageParam: IPageParam?,
   override var d: Collection<T>,
   override var t: Long,

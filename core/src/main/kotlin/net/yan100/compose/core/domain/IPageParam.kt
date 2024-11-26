@@ -17,7 +17,6 @@
 package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.persistence.Transient
 import net.yan100.compose.core.domain.IPageParam.Companion.MAX_PAGE_SIZE
 import net.yan100.compose.core.domain.IPageParam.Companion.MIN_OFFSET
 import net.yan100.compose.core.toSafeInt
@@ -84,7 +83,6 @@ interface IPageParam : IPageParamLike, Serializable {
   }
 
 
-  @Transient
   @JsonIgnore
   operator fun plus(total: Long): IPageParam {
     if (total <= 0) return empty()
@@ -95,19 +93,16 @@ interface IPageParam : IPageParamLike, Serializable {
   }
 
   @get:JsonIgnore
-  @get:Transient
   val safeOffset: Long get() = o ?: 0
 
   /** ## 分页 页面 偏移量 null any */
-  @get:Transient
+
   @get:JsonIgnore
   val safePageSize: Int get() = s ?: 0
 
   @get:JsonIgnore
-  @get:Transient
   private val safeRangeOffset: Long get() = (safePageSize.toLong() * safeOffset)
 
-  @get:Transient
   @get:JsonIgnore
   private val safeRandEnd: Long
     get() {
@@ -115,7 +110,6 @@ interface IPageParam : IPageParamLike, Serializable {
       return end
     }
 
-  @Transient
   @JsonIgnore
   fun toLongRange(): LongRange = LongRange(safeRangeOffset, safeRandEnd)
 }
