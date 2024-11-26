@@ -1,6 +1,10 @@
 version = libs.versions.composeOss.get()
 
 dependencies {
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
+
   implementation(libs.io.minio.minio) {
     exclude(group = "org.apache.logging.log4j", module = "log4j-api")
     exclude(group = "org.apache.logging.log4j", module = "log4j-core")
@@ -11,6 +15,7 @@ dependencies {
 
   implementation(project(":core"))
   implementation(project(":depend:depend-http-exchange"))
+
   testImplementation(project(":test-toolkit"))
   testImplementation(libs.org.springframework.boot.springBootStarterWeb)
 }
