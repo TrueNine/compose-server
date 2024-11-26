@@ -1,8 +1,6 @@
 version = libs.versions.composeCacheable.get()
 
 dependencies {
-  implementation(libs.org.springframework.boot.springBootAutoconfigure)
-  kapt(libs.org.springframework.springBootConfigurationProcessor)
 
   implementation(libs.bundles.redis)
   implementation(libs.com.github.benManes.caffeine.caffeine)
