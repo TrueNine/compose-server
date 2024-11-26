@@ -1,6 +1,8 @@
 version = libs.versions.composeSecurityCrypto.get()
 
 dependencies {
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+
   api(libs.org.springframework.security.springSecurityCrypto)
 
   implementation(libs.org.bouncycastle.bcprovJdk18on)
