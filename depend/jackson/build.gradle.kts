@@ -1,10 +1,14 @@
 version = libs.versions.composeDependJackson.get()
 
 dependencies {
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
   api(libs.com.fasterxml.jackson.core.jacksonDatabind)
   api(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
 
   implementation(libs.org.springframework.springWeb)
+
   implementation(libs.com.fasterxml.jackson.datatype.jacksonDatatypeJsr310)
   implementation(libs.com.fasterxml.jackson.datatype.jacksonDatatypeJdk8)
   implementation(libs.com.fasterxml.jackson.datatype.jacksonDatatypeGuava)

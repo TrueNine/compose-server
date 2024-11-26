@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import net.yan100.compose.core.typing.AnyTyping
 
+@Deprecated("准备移除")
 class AnyTypingDeserializer : JsonDeserializer<AnyTyping?>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): AnyTyping? {
     TODO("Not yet implemented")
