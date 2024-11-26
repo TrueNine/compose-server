@@ -18,13 +18,12 @@ package net.yan100.compose.data.extract.service.impl
 
 import jakarta.annotation.Resource
 import net.yan100.compose.core.exceptions.RemoteCallException
-import net.yan100.compose.data.extract.DataExtractEntrance
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.*
 
 @Ignore
-@SpringBootTest(classes = [DataExtractEntrance::class])
+@SpringBootTest
 class LazyAddressServiceImplTest {
   lateinit var lazys: LazyAddressServiceImpl @Resource set
   private val testCode = "433127103101"

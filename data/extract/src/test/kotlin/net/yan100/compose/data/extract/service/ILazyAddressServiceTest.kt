@@ -17,7 +17,6 @@
 package net.yan100.compose.data.extract.service
 
 import jakarta.annotation.Resource
-import net.yan100.compose.data.extract.DataExtractEntrance
 import net.yan100.compose.testtookit.assertEmpty
 import net.yan100.compose.testtookit.assertNotEmpty
 import net.yan100.compose.testtookit.log
@@ -27,8 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.ResourceLoader
 import kotlin.test.*
 
-
-@SpringBootTest(classes = [DataExtractEntrance::class])
+@SpringBootTest
 class ILazyAddressServiceTest {
   lateinit var service: ILazyAddressService @Resource set
 
