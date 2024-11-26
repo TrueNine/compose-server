@@ -4,6 +4,7 @@ dependencies {
   api(libs.org.jetbrains.kotlin.kotlinTestJunit5)
   api(libs.io.mockk.mockk)
 
+  implementation(libs.org.junit.jupiter.junitJupiterApi)
   implementation(libs.org.slf4j.slf4jApi)
 
   // json
@@ -13,13 +14,20 @@ dependencies {
 
   // spring 测试支持
   runtimeOnly(libs.org.springframework.springTest)
-  runtimeOnly(libs.org.springframework.boot.springBootTest)
+  runtimeOnly(libs.org.springframework.boot.springBootTest) {
+    exclude("org.junit.jupiter")
+    exclude("org.junit.platform")
+  }
   runtimeOnly(libs.org.springframework.boot.springBootTestAutoconfigure)
   implementation(libs.org.springframework.security.springSecurityTest)
   implementation(libs.org.springframework.boot.springBootTestAutoconfigure)
 
   // spring web
   api(libs.org.springframework.boot.springBootStarterWeb)
+  api(libs.org.springframework.boot.springBootStarterTest) {
+    exclude("org.junit.jupiter")
+    exclude("org.junit.platform")
+  }
   runtimeOnly(libs.org.springframework.boot.springBootStarterJson)
   runtimeOnly(libs.org.springframework.boot.springBootStarterTomcat)
 
