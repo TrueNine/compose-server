@@ -1,6 +1,9 @@
 version = libs.versions.composeDependServlet.get()
 
 dependencies {
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
   api(libs.org.springframework.boot.springBootStarterWeb)
   api(libs.jakarta.servlet.jakartaServletApi)
 
