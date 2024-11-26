@@ -133,4 +133,8 @@ abstract class IEntity : IAnyEntity() {
     mrd = null
     recordChangedSensitiveData()
   }
+
+  override fun toString(): String {
+    return "Entity(ldf=$dbEntityShadowRemoveTag, rlv=$dbEntityRowLockVersion, crd=$dbEntityCreatedDatetime, mrd=$dbEntityLastModifyDatetime) <${super.toString()}"
+  }
 }
