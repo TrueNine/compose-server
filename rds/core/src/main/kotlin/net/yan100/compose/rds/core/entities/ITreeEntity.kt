@@ -127,4 +127,8 @@ abstract class ITreeEntity : IEntity() {
     tgi = IDbNames.Rbac.ROOT_ID_STR
     rpi = null
   }
+
+  override fun toString(): String {
+    return "TreeEntity(parentId=$rpi, leftNode=$rln, rightNode=$rrn, nodeLevel=$nlv, treeGroupId=$tgi) <${super.toString()}"
+  }
 }
