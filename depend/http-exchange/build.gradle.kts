@@ -1,8 +1,14 @@
 version = libs.versions.composeDependHttpExchange.get()
 
 dependencies {
-  api(libs.org.springframework.boot.springBootStarterWebflux)
   implementation(project(":core"))
+  implementation(libs.org.springframework.springCore)
+  implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
+  implementation(libs.org.springframework.springWeb)
+  implementation(libs.io.netty.nettyHandler)
+  implementation(libs.org.springframework.springWebflux)
+
+  testImplementation(libs.org.springframework.boot.springBootStarterWebflux)
 }
 
 publishing {
