@@ -1,6 +1,10 @@
 project.version = libs.versions.composeSecurityOauth2.get()
 
 dependencies {
+  implementation(libs.org.jetbrains.kotlin.kotlinStdlib)
+  implementation(libs.org.jetbrains.kotlinx.kotlinxCoroutinesCore)
+
+
   runtimeOnly(libs.org.springframework.cloud.springCloudStarterBootstrap)
 
   implementation(project(":core"))
