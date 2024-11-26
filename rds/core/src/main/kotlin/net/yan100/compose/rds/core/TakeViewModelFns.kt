@@ -5,6 +5,7 @@ import kotlin.reflect.KClass
 import kotlin.TODO as KotlinTodo
 
 data class IDynamicFetchScope<R : Any>(
+  private var nullResultThrow: Boolean = false,
   private var result: R? = null,
 ) {
   private var todoThrows = false
@@ -32,6 +33,14 @@ data class IDynamicFetchScope<R : Any>(
    */
   infix fun defaultResult(resolver: () -> R) {
     defaultResolver = resolver
+  }
+
+  /**
+   * ## 立即终结其他所有条件
+   * 等价于 `true takeFinally {...}`，其更符合语境，一般于 逻辑最后进行终结调用
+   */
+  fun returns(resolver: () -> R?) {
+    true takeFinally resolver
   }
 
   private var finalizer: Boolean = false
@@ -127,15 +136,14 @@ data class IDynamicFetchScope<R : Any>(
 
   infix fun Boolean?.takeFinallyImmediate(result: R?) = this takeFinally { result }
 
-  val lastResult: R?
-    get() {
-      return if (todoThrows) KotlinTodo("类型定义在使用后需要清除，移除所有类型定义以解决此问题")
-      else result ?: defaultResolver()
+  val lastResult: R? get() = lastResult()
+  fun lastResult(): R? {
+    return if (todoThrows) KotlinTodo("类型定义在使用后需要清除，移除所有类型定义以解决此问题")
+    else {
+      val r = result ?: defaultResolver()
+      if (r == null && nullResultThrow) error("没有获取到结果")
+      r
     }
-
-  fun lastResult() {
-    if (todoThrows) KotlinTodo("类型定义在使用后需要清除，移除所有类型定义以解决此问题")
-    else result ?: defaultResolver()
   }
 }
 
@@ -153,17 +161,31 @@ inline fun <reified Dto : Any> IDynamicFetchScope<Dto>.todo() = todo(Dto::class)
  * @return 返回可能的视图对象，如果输入的Dto为null，则返回null
  *
  * 注：该函数使用了泛型，使其能够适用于不同的数据传输对象和视图对象类型
+ * @param nullResultThrow 无结果是否抛出异常，默认为 `false`
  */
-fun <Vo : Any, Dto : Any> Dto?.takeViewModel(routeScope: IDynamicFetchScope<Vo>.(dto: Dto) -> Unit): Vo? {
+fun <Vo : Any, Dto : Any> Dto?.takeViewModel(nullResultThrow: Boolean = false, routeScope: IDynamicFetchScope<Vo>.(dto: Dto) -> Unit): Vo? {
   if (this == null) return null
-  val scope = IDynamicFetchScope<Vo>()
+  val scope = IDynamicFetchScope<Vo>(nullResultThrow = nullResultThrow)
   routeScope(scope, this)
   return scope.lastResult
 }
 
+/**
+ * @see takeViewModel 设置了默认值
+ */
+fun <Vo : Any, Dto : Any> Dto?.takeViewModelOrThrow(routeScope: IDynamicFetchScope<Vo>.(dto: Dto) -> Unit): Vo? {
+  if (this == null) return null
+  val scope = IDynamicFetchScope<Vo>(nullResultThrow = true)
+  routeScope(scope, this)
+  return scope.lastResult
+}
+
+/**
+ * @see takeViewModel 单纯执行逻辑而忽略结果
+ */
 fun <Dto : Any> Dto?.executeViewModel(routeScope: IDynamicFetchScope<Unit>.(dto: Dto) -> Unit) {
   if (this == null) return
-  val scope = IDynamicFetchScope<Unit>()
+  val scope = IDynamicFetchScope<Unit>(nullResultThrow = false)
   routeScope(scope, this)
   scope.lastResult()
 }
