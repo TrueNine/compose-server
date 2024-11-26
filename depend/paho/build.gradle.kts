@@ -1,9 +1,13 @@
 version = libs.versions.composeDependPaho.get()
 
 dependencies {
-  api(libs.org.springframework.integration.springIntegrationMqtt)
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
+  implementation(libs.org.springframework.integration.springIntegrationMqtt)
   implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
   implementation(project(":core"))
+  testImplementation(project(":test-toolkit"))
 }
 
 publishing {

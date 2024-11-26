@@ -25,6 +25,6 @@ import org.springframework.context.annotation.ComponentScan
 @ComponentScan(basePackages = ["net.yan100.compose.depend.paho.autoconfig", "net.yan100.compose.depend.paho.integration"])
 @EnableConfigurationProperties(SingleMqttProperties::class)
 @SpringBootApplication
-class DependMqttEntrance
+class TestEntrance
 
 
