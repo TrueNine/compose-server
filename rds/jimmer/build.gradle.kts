@@ -1,4 +1,4 @@
-version = libs.versions.compose.rdsJimmer.get()
+version = libs.versions.composeRdsJimmer.get()
 
 plugins {
   alias(libs.plugins.tech.argonariod.gradlePluginJimmer)

@@ -9,7 +9,7 @@ plugins {
 }
 
 group = libs.versions.composeGroup.get()
-version = libs.versions.compose.versionCatalog.get()
+version = libs.versions.composeVersionCatalog.get()
 
 publishing {
   repositories {

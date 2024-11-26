@@ -1,4 +1,4 @@
-version = libs.versions.compose.dataExtract.get()
+version = libs.versions.composeDataExtract.get()
 
 dependencies {
   implementation(libs.bundles.kotlinReactor)

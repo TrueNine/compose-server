@@ -1,4 +1,4 @@
-version = libs.versions.compose.core.get()
+version = libs.versions.composeCore.get()
 
 dependencies {
   api(libs.com.fasterxml.jackson.core.jacksonAnnotations)

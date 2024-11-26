@@ -1,4 +1,4 @@
-version = libs.versions.compose.dependServlet.get()
+version = libs.versions.composeDependServlet.get()
 
 dependencies {
   api(libs.org.springframework.boot.springBootStarterWeb)

@@ -1,32 +1,32 @@
 [versions]
-compose-versionCatalog = "2.0.67"
+composeVersionCatalog = "2.0.68"
+composeRdsCrud = "2.0.33"
+composeRdsCore = "2.0.31"
+composeCore = "2.0.29"
+composeDependServlet = "2.0.25"
+composeDataExtract = "2.0.24"
+composeKspPlugin = "2.0.22"
+composeSecuritySpring = "2.0.21"
+composeSecurityOauth2 = "2.0.20"
+composeGradlePlugin = "2.0.19"
+composeSecurityCrypto = "2.0.18"
+composePay = "2.0.18"
+composeCacheable = "2.0.18"
+composeTestToolkit = "2.0.18"
+composeOss = "2.0.17"
+composeSchedule = "2.0.17"
+composeDependPaho = "2.0.17"
+composeDependJackson = "2.0.17"
+composeDependHttpExchange = "2.0.17"
+composeDependJsr303Validation = "2.0.17"
+composeDependSpringdocOpenapi = "2.0.17"
+composeDataCrawler = "2.0.17"
+composeKspCore = "2.0.17"
+composeKspToolkit = "2.0.17"
 compose = "2.0.16"
-compose-oss = "2.0.17"
-compose-pay = "2.0.18"
-compose-schedule = "2.0.17"
-compose-cacheable = "2.0.18"
-compose-dependServlet = "2.0.25"
-compose-dependPaho = "2.0.17"
-compose-dependJackson = "2.0.17"
-compose-dependHttpExchange = "2.0.17"
-compose-dependJsr303Validation = "2.0.17"
-compose-dependSpringdocOpenapi = "2.0.17"
-compose-core = "2.0.29"
-compose-securitySpring = "2.0.21"
-compose-securityCrypto = "2.0.18"
-compose-securityOauth2 = "2.0.20"
-compose-rdsCrud = "2.0.33"
-compose-rdsCore = "2.0.31"
-compose-rdsMigrationPostgres = "0.0.6"
-compose-rdsMigrationMysql = "0.0.6"
-compose-rdsJimmer = "0.0.8"
-compose-testToolkit = "2.0.18"
-compose-dataExtract = "2.0.24"
-compose-dataCrawler = "2.0.17"
-compose-kspPlugin = "2.0.22"
-compose-kspCore = "2.0.17"
-compose-kspToolkit = "2.0.17"
-compose-gradlePlugin = "2.0.19"
+composeRdsJimmer = "0.0.8"
+composeRdsMigrationPostgres = "0.0.6"
+composeRdsMigrationMysql = "0.0.6"
 
 composeGroup = "net.yan100.compose"
 
@@ -34,23 +34,20 @@ spotless = "7.0.0.BETA4"
 
 gradle = "8.11.1"
 java = "21"
-kotlin = "2.1.0-RC2"
-ksp = "2.1.0-RC2-1.0.28"
+kotlin = "2.0.21"
+ksp = "2.0.21-1.0.28"
 kotlinpoet = "2.0.0"
-kotlinx-io = "0.6.0"
-kotlinx-datetime = "0.6.1"
-kotlinx-coroutines = "1.9.0"
+kotlinxIo = "0.6.0"
+kotlinxDatetime = "0.6.1"
+kotlinxCoroutines = "1.9.0"
 
-spring-boot = "3.4.0"
-# spring 单独抽取版本序列
-spring-framework = "6.2.0-RC1"
-spring-data = "3.4.0-M1"
-
-
-spring-cloud = "2024.0.0-RC1"
-spring-ai = "1.0.0-M4"
-spring-cloudAlibaba = "2021.0.4.0"
-spring-modulith = "1.3.0"
+springBoot = "3.4.0"
+springFramework = "6.2.0-RC1"
+springData = "3.4.0-M1"
+springCloud = "2024.0.0-RC1"
+springAi = "1.0.0-M4"
+springCloudAlibaba = "2021.0.4.0"
+springModulith = "1.3.0"
 
 testng = "7.10.2"
 junit5 = "5.11.3"
@@ -61,64 +58,65 @@ mapstruct = "1.6.0"
 jimmer = "0.9.19"
 hutool = "5.8.33"
 slf4j = "2.1.0-alpha1"
-mybatis-plus = "3.5.7"
+mybatisPlus = "3.5.7"
 jackson = "2.18.1"
 querydsl = "5.1.0"
 hibernate = "6.6.2.Final"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
-
+kotlinCompileTesting = "1.6.0"
 
 [libraries]
-net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "compose-oss" }
-net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose-core" }
-net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose-cacheable" }
-net-yan100-compose-testToolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "compose-testToolkit" }
-net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "compose-schedule" }
-net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose-pay" }
+net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "composeOss" }
+net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "composeCore" }
+net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "composeCacheable" }
+net-yan100-compose-testToolkit = { group = "net.yan100.compose", name = "test-toolkit", version.ref = "composeTestToolkit" }
+net-yan100-compose-schedule = { group = "net.yan100.compose", name = "schedule", version.ref = "composeSchedule" }
+net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "composePay" }
 
 # ksp
-net-yan100-compose-kspPlugin = { group = "net.yan100.compose", name = "ksp-plugin", version.ref = "compose-kspPlugin" }
-net-yan100-compose-kspCore = { group = "net.yan100.compose", name = "ksp-core", version.ref = "compose-kspCore" }
-net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "compose-kspToolkit" }
+net-yan100-compose-kspPlugin = { group = "net.yan100.compose", name = "ksp-plugin", version.ref = "composeKspPlugin" }
+net-yan100-compose-kspCore = { group = "net.yan100.compose", name = "ksp-core", version.ref = "composeKspCore" }
+net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "composeKspToolkit" }
 
 # rds
-net-yan100-compose-rdsCrud = { group = "net.yan100.compose", name = "rds-crud", version.ref = "compose-rdsCrud" }
-net-yan100-compose-rdsMigrationMysql = { group = "net.yan100.compose", name = "rds-migration-mysql", version.ref = "compose-rdsMigrationMysql" }
-net-yan100-compose-rdsMigrationPostgres = { group = "net.yan100.compose", name = "rds-migration-postgres", version.ref = "compose-rdsMigrationPostgres" }
-net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rdsCore" }
-net-yan100-compose-rdsJimmer = { group = "net.yan100.compose", name = "rds-jimmer", version.ref = "compose-rdsJimmer" }
+net-yan100-compose-rdsCrud = { group = "net.yan100.compose", name = "rds-crud", version.ref = "composeRdsCrud" }
+net-yan100-compose-rdsMigrationMysql = { group = "net.yan100.compose", name = "rds-migration-mysql", version.ref = "composeRdsMigrationMysql" }
+net-yan100-compose-rdsMigrationPostgres = { group = "net.yan100.compose", name = "rds-migration-postgres", version.ref = "composeRdsMigrationPostgres" }
+net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "composeRdsCore" }
+net-yan100-compose-rdsJimmer = { group = "net.yan100.compose", name = "rds-jimmer", version.ref = "composeRdsJimmer" }
 
 # security
-net-yan100-compose-securitySpring = { group = "net.yan100.compose", name = "security-spring", version.ref = "compose-securitySpring" }
-net-yan100-compose-securityOauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose-securityOauth2" }
-net-yan100-compose-securityCrypto = { group = "net.yan100.compose", name = "security-crypto", version.ref = "compose-securityCrypto" }
+net-yan100-compose-securitySpring = { group = "net.yan100.compose", name = "security-spring", version.ref = "composeSecuritySpring" }
+net-yan100-compose-securityOauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "composeSecurityOauth2" }
+net-yan100-compose-securityCrypto = { group = "net.yan100.compose", name = "security-crypto", version.ref = "composeSecurityCrypto" }
 
 # 数据采集器
-net-yan100-compose-dataCrawler = { group = "net.yan100.compose", name = "data-crawler", version.ref = "compose-dataCrawler" }
-net-yan100-compose-dataExtract = { group = "net.yan100.compose", name = "data-extract", version.ref = "compose-dataExtract" }
+net-yan100-compose-dataCrawler = { group = "net.yan100.compose", name = "data-crawler", version.ref = "composeDataCrawler" }
+net-yan100-compose-dataExtract = { group = "net.yan100.compose", name = "data-extract", version.ref = "composeDataExtract" }
 
 # 依赖
-net-yan100-compose-dependServlet = { group = "net.yan100.compose", name = "depend-servlet", version.ref = "compose-dependServlet" }
-net-yan100-compose-dependSpringdocOpenapi = { group = "net.yan100.compose", name = "depend-springdoc-openapi", version.ref = "compose-dependSpringdocOpenapi" }
-net-yan100-compose-dependPaho = { group = "net.yan100.compose", name = "depend-paho", version.ref = "compose-dependPaho" }
-net-yan100-compose-dependJackson = { group = "net.yan100.compose", name = "depend-jackson", version.ref = "compose-dependJackson" }
-net-yan100-compose-dependHttpExchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "compose-dependHttpExchange" }
-net-yan100-compose-dependJsr303Validation = { group = "net.yan100.compose", name = "depend-jsr303-validation", version.ref = "compose-dependJsr303Validation" }
+net-yan100-compose-dependServlet = { group = "net.yan100.compose", name = "depend-servlet", version.ref = "composeDependServlet" }
+net-yan100-compose-dependSpringdocOpenapi = { group = "net.yan100.compose", name = "depend-springdoc-openapi", version.ref = "composeDependSpringdocOpenapi" }
+net-yan100-compose-dependPaho = { group = "net.yan100.compose", name = "depend-paho", version.ref = "composeDependPaho" }
+net-yan100-compose-dependJackson = { group = "net.yan100.compose", name = "depend-jackson", version.ref = "composeDependJackson" }
+net-yan100-compose-dependHttpExchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "composeDependHttpExchange" }
+net-yan100-compose-dependJsr303Validation = { group = "net.yan100.compose", name = "depend-jsr303-validation", version.ref = "composeDependJsr303Validation" }
 
 # gradle 插件的直接依赖
-net-yan100-compose-gradlePlugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "compose-gradlePlugin" }
+net-yan100-compose-gradlePlugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "composeGradlePlugin" }
 
 
-org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "spring-boot" }
+org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "springBoot" }
 com-diffplug-spotless-spotlessPluginGradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 org-jetbrains-kotlin-kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 io-spring-gradle-dependencyManagementPlugin = { group = "io.spring.gradle", name = "dependency-management-plugin", version = "1.1.4" }
 
-
+com-github-tschuchortdev-kotlinCompileTesting = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing", version.ref = "kotlinCompileTesting" }
+com-github-tschuchortdev-kotlinCompileTestingKsp = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing-ksp", version.ref = "kotlinCompileTesting" }
 org-springframework-boot-springBoot = { group = "org.springframework.boot", name = "spring-boot" }
 org-springframework-boot-springBootAutoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
-org-springframework-springBootConfigurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor", version.ref = "spring-boot" }
+org-springframework-springBootConfigurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor", version.ref = "springBoot" }
 org-springframework-boot-springBootStarterTest = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 org-springframework-boot-springBootStarterBatch = { group = "org.springframework.boot", name = "spring-boot-starter-batch" }
 org-springframework-boot-springBootStarterJson = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
@@ -148,7 +146,7 @@ org-springframework-springWebMvc = { group = "org.springframework", name = "spri
 org-springframework-springWeb = { group = "org.springframework", name = "spring-web" }
 org-springframework-springContext = { group = "org.springframework", name = "spring-context" }
 org-springframework-modulith-springModulithStarterJpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
-org-springframework-modulith-springModulithCore = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "spring-modulith" }
+org-springframework-modulith-springModulithCore = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "springModulith" }
 org-springframework-modulith-springModulithStarterTest = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
 org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.7.0-RC1" }
 
@@ -166,14 +164,14 @@ org-jetbrains-kotlin-kotlinReflect = { group = "org.jetbrains.kotlin", name = "k
 org-jetbrains-kotlin-kotlinTestTestng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinSerialization = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinTestJunit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
-org-jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-org-jetbrains-kotlinx-kotlinxCoroutinesGuava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinx-coroutines" }
-org-jetbrains-kotlinx-kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-org-jetbrains-kotlinx-kotlinxCoroutinesReactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
-org-jetbrains-kotlinx-kotlinxIoCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinx-io" }
-org-jetbrains-kotlinx-kotlinxIoCoreJvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core-jvm", version.ref = "kotlinx-io" }
-org-jetbrains-kotlinx-kotlinxDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
-org-jetbrains-kotlinx-kotlinxDatetimeJvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime-jvm", version.ref = "kotlinx-datetime" }
+org-jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+org-jetbrains-kotlinx-kotlinxCoroutinesGuava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
+org-jetbrains-kotlinx-kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+org-jetbrains-kotlinx-kotlinxCoroutinesReactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlinxCoroutines" }
+org-jetbrains-kotlinx-kotlinxIoCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinxIo" }
+org-jetbrains-kotlinx-kotlinxIoCoreJvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core-jvm", version.ref = "kotlinxIo" }
+org-jetbrains-kotlinx-kotlinxDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+org-jetbrains-kotlinx-kotlinxDatetimeJvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime-jvm", version.ref = "kotlinxDatetime" }
 
 com-google-devtools-ksp-symbolProcessingApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 
@@ -266,7 +264,7 @@ com-fasterxml-jackson-datatype-jacksonDatatypeJdk8 = { group = "com.fasterxml.ja
 com-fasterxml-jackson-datatype-jacksonDatatypeGuava = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-guava", version.ref = "jackson" }
 com-fasterxml-jackson-datatype-jacksonDatatypeJoda = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-joda", version.ref = "jackson" }
 com-google-code-gson-gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
-org-springframework-ai-springAiBom = { group = "org.springframework.ai", name = "spring-ai-bom", version.ref = "spring-ai" }
+org-springframework-ai-springAiBom = { group = "org.springframework.ai", name = "spring-ai-bom", version.ref = "springAi" }
 org-springframework-springTest = { group = "org.springframework", name = "spring-test" }
 org-gradle-gradleApi = { group = "org.gradle", name = "gradle-api", version.ref = "gradle" }
 org-springframework-security-springSecurityTest = { group = "org.springframework.security", name = "spring-security-test" }
@@ -286,7 +284,7 @@ org-kie-kieSpring = { group = "org.kie", name = "kie-spring", version = "7.74.1.
 
 com-yomahub-liteflowSpringBootStarter = { group = "com.yomahub", name = "liteflow-spring-boot-starter", version.ref = "liteflow" }
 
-com-baomidou-mybatisPlusBootStarter = { group = "com.baomidou", name = "mybatis-plus-boot-starter", version.ref = "mybatis-plus" }
+com-baomidou-mybatisPlusBootStarter = { group = "com.baomidou", name = "mybatis-plus-boot-starter", version.ref = "mybatisPlus" }
 
 org-projectlombok-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.34" }
 
@@ -294,11 +292,11 @@ com-querydsl-querydslJpa = { group = "com.querydsl", name = "querydsl-jpa", vers
 com-querydsl-querydslCore = { group = "com.querydsl", name = "querydsl-core", version.ref = "querydsl" }
 com-querydsl-querydslApt = { group = "com.querydsl", name = "querydsl-apt", version.ref = "querydsl" }
 
-org-springframework-modulith-springModulithBom = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "spring-modulith" }
-org-springframework-boot-springBootDependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
-org-springframework-cloud-springCloudDependencies = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "spring-cloud" }
+org-springframework-modulith-springModulithBom = { group = "org.springframework.modulith", name = "spring-modulith-bom", version.ref = "springModulith" }
+org-springframework-boot-springBootDependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "springBoot" }
+org-springframework-cloud-springCloudDependencies = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "springCloud" }
 org-droos-droolsBom = { group = "org.drools", name = "drools-bom", version.ref = "drools" }
-com-alibaba-cloud-springCloudAlibabaDependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "spring-cloudAlibaba" }
+com-alibaba-cloud-springCloudAlibabaDependencies = { group = "com.alibaba.cloud", name = "spring-cloud-alibaba-dependencies", version.ref = "springCloudAlibaba" }
 org-hibernate-orm-hibernateCore = { group = "org.hibernate", name = "hibernate-core", version.ref = "hibernate" }
 org-skyscreamer-jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "2.0-rc1" }
 
@@ -351,8 +349,8 @@ selenium = [
 ]
 
 [plugins]
-net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-gradlePlugin" }
-net-yan100-compose-gradleSettingsPlugin = { id = "net.yan100.compose.settings-gradle-plugin", version.ref = "compose-gradlePlugin" }
+net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "composeGradlePlugin" }
+net-yan100-compose-gradleSettingsPlugin = { id = "net.yan100.compose.settings-gradle-plugin", version.ref = "composeGradlePlugin" }
 
 com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -365,7 +363,7 @@ org-jetbrains-kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok"
 org-jetbrains-kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 tech-argonariod-gradlePluginJimmer = { id = "tech.argonariod.gradle-plugin-jimmer", version = "1.2.0" }
-org-springframework-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+org-springframework-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
 io-spring-dependencyManagement = { id = "io.spring.dependency-management", version = "1.1.6" }
 
 org-hibernate-orm = { id = "org.hibernate.orm", version.ref = "hibernate" }

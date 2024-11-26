@@ -1,4 +1,4 @@
-version = libs.versions.compose.dependJackson.get()
+version = libs.versions.composeDependJackson.get()
 
 dependencies {
   api(libs.com.fasterxml.jackson.core.jacksonDatabind)

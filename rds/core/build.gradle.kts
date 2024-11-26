@@ -3,7 +3,7 @@ plugins {
   alias(libs.plugins.com.google.devtools.ksp)
 }
 
-version = libs.versions.compose.rdsCore.get()
+version = libs.versions.composeRdsCore.get()
 
 apply(plugin = libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
 apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)

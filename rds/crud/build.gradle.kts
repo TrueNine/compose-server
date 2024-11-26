@@ -3,7 +3,7 @@ plugins {
   alias(libs.plugins.com.google.devtools.ksp)
 }
 
-version = libs.versions.compose.rdsCrud.get()
+version = libs.versions.composeRdsCrud.get()
 
 kapt {
   correctErrorTypes = true

@@ -1,4 +1,4 @@
-version = libs.versions.compose.dependPaho.get()
+version = libs.versions.composeDependPaho.get()
 
 dependencies {
   api(libs.org.springframework.integration.springIntegrationMqtt)

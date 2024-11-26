@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.kspPlugin.get()
+project.version = libs.versions.composeKspPlugin.get()
 
 dependencies {
   implementation(libs.com.google.devtools.ksp.symbolProcessingApi)
@@ -12,6 +12,7 @@ dependencies {
   implementation(project(":core"))
 
   testImplementation(project(":test-toolkit"))
+  testImplementation(libs.com.github.tschuchortdev.kotlinCompileTestingKsp)
 }
 
 publishing {

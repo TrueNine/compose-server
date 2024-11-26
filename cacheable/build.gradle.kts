@@ -1,4 +1,4 @@
-version = libs.versions.compose.cacheable.get()
+version = libs.versions.composeCacheable.get()
 
 dependencies {
   api(libs.bundles.redis)

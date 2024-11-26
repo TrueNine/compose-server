@@ -1,4 +1,4 @@
-version = libs.versions.compose.dataCrawler.get()
+version = libs.versions.composeDataCrawler.get()
 
 dependencies {
   api(project(":data:data-extract"))

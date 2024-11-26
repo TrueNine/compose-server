@@ -1,4 +1,4 @@
-version = libs.versions.compose.dependHttpExchange.get()
+version = libs.versions.composeDependHttpExchange.get()
 
 dependencies {
   api(libs.org.springframework.boot.springBootStarterWebflux)

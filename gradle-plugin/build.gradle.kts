@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val pluginGroup = libs.versions.composeGroup.get()
-val pluginVersion = libs.versions.compose.gradlePlugin.get()
+val pluginVersion = libs.versions.composeGradlePlugin.get()
 
 plugins {
   alias(libs.plugins.org.jetbrains.kotlin.jvm)

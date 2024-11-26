@@ -1,4 +1,4 @@
-version = libs.versions.compose.rdsMigrationMysql.get()
+version = libs.versions.composeRdsMigrationMysql.get()
 
 publishing {
   publications {

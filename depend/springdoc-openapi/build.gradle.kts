@@ -1,4 +1,4 @@
-version = libs.versions.compose.dependSpringdocOpenapi.get()
+version = libs.versions.composeDependSpringdocOpenapi.get()
 
 dependencies {
   implementation(project(":core"))

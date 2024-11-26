@@ -1,10 +1,10 @@
-version = libs.versions.compose.testToolkit.get()
+version = libs.versions.composeTestToolkit.get()
 
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlinTestJunit5)
   api(libs.io.mockk.mockk)
 
-  api(libs.org.slf4j.slf4jApi)
+  implementation(libs.org.slf4j.slf4jApi)
 
   // json
   api(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
@@ -12,24 +12,25 @@ dependencies {
   runtimeOnly(libs.org.skyscreamer.jsonassert)
 
   // spring 测试支持
-  api(libs.org.springframework.springTest)
-  api(libs.org.springframework.boot.springBootTest)
-  api(libs.org.springframework.boot.springBootTestAutoconfigure)
-  api(libs.org.springframework.security.springSecurityTest)
+  runtimeOnly(libs.org.springframework.springTest)
+  runtimeOnly(libs.org.springframework.boot.springBootTest)
+  runtimeOnly(libs.org.springframework.boot.springBootTestAutoconfigure)
+  implementation(libs.org.springframework.security.springSecurityTest)
+  implementation(libs.org.springframework.boot.springBootTestAutoconfigure)
 
   // spring web
   api(libs.org.springframework.boot.springBootStarterWeb)
-  api(libs.org.springframework.boot.springBootStarterTomcat)
-  api(libs.org.springframework.boot.springBootStarterJson)
+  runtimeOnly(libs.org.springframework.boot.springBootStarterJson)
+  runtimeOnly(libs.org.springframework.boot.springBootStarterTomcat)
 
   // spring batch
   api(libs.org.springframework.batch.springBatchTest)
 
   // 日志自动配置
-  api(libs.org.springframework.boot.springBootStarterLogging)
+  runtimeOnly(libs.org.springframework.boot.springBootStarterLogging)
 
   // jsr 303
-  api(libs.org.springframework.boot.springBootStarterValidation)
+  implementation(libs.org.springframework.boot.springBootStarterValidation)
 
   // 测试用数据库
   runtimeOnly(libs.org.hsqldb.hsqldb)

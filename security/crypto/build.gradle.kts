@@ -1,4 +1,4 @@
-version = libs.versions.compose.securityCrypto.get()
+version = libs.versions.composeSecurityCrypto.get()
 
 dependencies {
   api(libs.org.springframework.security.springSecurityCrypto)

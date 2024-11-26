@@ -1,4 +1,4 @@
-project.version = libs.versions.compose.securityOauth2.get()
+project.version = libs.versions.composeSecurityOauth2.get()
 
 dependencies {
   runtimeOnly(libs.org.springframework.cloud.springCloudStarterBootstrap)

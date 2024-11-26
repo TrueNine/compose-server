@@ -1,4 +1,4 @@
-version = libs.versions.compose.dependJsr303Validation.get()
+version = libs.versions.composeDependJsr303Validation.get()
 
 plugins { alias(libs.plugins.com.google.devtools.ksp) }
 
