@@ -33,7 +33,7 @@ gpg4
 - 使用 `gpg` 设置或生成证书并上传至服务器，使用 `gpg --list-secret-keys` 查看已生成的证书
 - 将 `gradle.properties` 的所有值填写完整，亦可自行更改项目内的取值，达到相同效果即可
 
-> 如果网络问题，gradle可以[配置代理](/documentation/gradlePropertiesProxyConfig)
+> 如果网络问题，gradle可以[配置代理](/documentation/gradle配置本地代理.md)
 
 ```shell
 # 1. 初始化项目
