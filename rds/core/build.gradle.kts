@@ -10,14 +10,17 @@ dependencies {
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
 
   implementation(project(":core"))
-  implementation(libs.jakarta.validation.jakartaValidationApi)
-  implementation(project(":security:security-crypto"))
+  //implementation(libs.jakarta.validation.jakartaValidationApi)
+
+  implementation(libs.org.springframework.security.springSecurityCrypto)
+
   implementation(libs.org.springframework.data.springDataCommons)
   implementation(libs.org.springframework.data.springDataJpa)
-  implementation(libs.com.querydsl.querydslCore)
 
-  kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
+  implementation(libs.com.querydsl.querydslCore)
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
+  //kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
+
   implementation(libs.org.hibernate.orm.hibernateCore)
 
   testImplementation(project(":test-toolkit"))
