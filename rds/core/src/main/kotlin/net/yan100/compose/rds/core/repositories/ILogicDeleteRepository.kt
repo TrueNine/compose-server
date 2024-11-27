@@ -16,14 +16,13 @@
  */
 package net.yan100.compose.rds.core.repositories
 
-import jakarta.validation.Valid
+
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
 import net.yan100.compose.core.i64
 import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.IEntity
-import net.yan100.compose.rds.core.page
 import net.yan100.compose.rds.core.toPageable
 import net.yan100.compose.rds.core.toPr
 import org.springframework.data.domain.Page
@@ -82,5 +81,5 @@ interface ILogicDeleteRepository<T : IEntity> : IBaseRepository<T> {
 
   @Query("from #{#entityName} e where e.ldf = false")
   fun findAllByNotLogicDeleted(page: Pageable): Page<T>
-  fun findAllByNotLogicDeleted(@Valid pq: Pq?): Pr<T> = findAllByNotLogicDeleted(pq.toPageable()).toPr()
+  fun findAllByNotLogicDeleted(pq: Pq?): Pr<T> = findAllByNotLogicDeleted(pq.toPageable()).toPr()
 }
