@@ -33,7 +33,7 @@ composeGroup = "net.yan100.compose"
 spotless = "7.0.0.BETA4"
 
 gradle = "8.11.1"
-java = "21"
+java = "23"
 kotlin = "2.1.0-RC2"
 ksp = "2.1.0-RC2-1.0.28"
 kotlinpoet = "2.0.0"

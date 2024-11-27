@@ -16,7 +16,7 @@
 ## 环境准备
 
 ```envRequirement
-java: 21.0.4
+java: 23.0.1+13
 kotlin: 2.1.0-RC2
 gradle: 8.11.1
 maven: 3.9.9

@@ -58,9 +58,9 @@ subprojects {
   }
 
   java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-    toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
+    sourceCompatibility = JavaVersion.toVersion(l.versions.java.get())
+    targetCompatibility = JavaVersion.toVersion(l.versions.java.get())
+    toolchain { languageVersion.set(JavaLanguageVersion.of(l.versions.java.get())) }
     withSourcesJar()
   }
 

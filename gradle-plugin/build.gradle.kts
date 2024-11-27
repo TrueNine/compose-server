@@ -50,16 +50,15 @@ gradlePlugin {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_21
-  targetCompatibility = JavaVersion.VERSION_21
-  toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
-  //withSourcesJar()
+  sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
+  targetCompatibility = JavaVersion.toVersion(libs.versions.java.get())
+  toolchain { languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get())) }
+  withSourcesJar()
 }
 
 publishing {
   repositories {
     mavenLocal()
-
     val yunxiaoUrl by extra { properties["url.yunxiao.1"] as String }
     maven(url = uri(yunxiaoUrl)) {
       credentials {
