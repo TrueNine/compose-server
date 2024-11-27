@@ -28,7 +28,6 @@ import com.wechat.pay.java.service.refund.model.AmountReq
 import com.wechat.pay.java.service.refund.model.CreateRequest
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import jakarta.validation.Valid
 import net.yan100.compose.core.exceptions.KnownException
 import net.yan100.compose.core.exceptions.requireKnown
 import net.yan100.compose.core.generator.IOrderCodeGenerator
@@ -37,11 +36,9 @@ import net.yan100.compose.core.iso8601LongUtc
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 import net.yan100.compose.core.typing.ISO4217
-import net.yan100.compose.pay.models.req.CreateMpPayOrderReq
-import net.yan100.compose.pay.models.req.FindPayOrderReq
-import net.yan100.compose.pay.models.resp.CreateMpPayOrderResp
-import net.yan100.compose.pay.models.resp.FindPayOrderResp
-import net.yan100.compose.pay.models.resp.PaySuccessNotifyResp
+import net.yan100.compose.pay.models.FindPayOrderDto
+import net.yan100.compose.pay.models.FindPayOrderVo
+import net.yan100.compose.pay.models.PaySuccessNotifyVo
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
 import net.yan100.compose.pay.service.SinglePayService
 import net.yan100.compose.security.crypto.Encryptors
@@ -68,7 +65,7 @@ class WeChatSinglePayService(
     private val log = slf4j(WeChatSinglePayService::class)
   }
 
-  override fun createMpPayOrder(@Valid req: CreateMpPayOrderReq): CreateMpPayOrderResp {
+  override fun createMpPayOrder(req: SinglePayService.CreateMpPayDto): SinglePayService.CreateMpPayVo {
     val amount =
       Amount().apply {
         currency = req.currency.value
@@ -86,13 +83,13 @@ class WeChatSinglePayService(
         mchid = payProperty.merchantId
         notifyUrl = payProperty.asyncSuccessNotifyUrl
       }
-
     val prePay = wechatJsService.prepay(request)
-    return CreateMpPayOrderResp().apply {
-      random32String = Keys.generateRandomAsciiString(32)
+    return SinglePayService.CreateMpPayVo(
+      random32String = Keys.generateRandomAsciiString(32),
+      iso8601Second = LocalDateTime.now().iso8601LongUtc.toString(),
+      signType = EncryptAlgorithmTyping.RSA.value,
+    ).apply {
       prePayId = prePay?.prepayId
-      iso8601Second = LocalDateTime.now().iso8601LongUtc.toString()
-      signType = EncryptAlgorithmTyping.RSA.value
       // 签名
       val signatureStr = "${payProperty.mpAppId}\n${iso8601Second}\n${random32String}\n${prePayId}\n"
       val signature = Encryptors.signWithSha256WithRsaByRsaPrivateKey(signatureStr, Keys.readRsaPrivateKeyByBase64AndStandard(payProperty.privateKey)!!)
@@ -100,7 +97,7 @@ class WeChatSinglePayService(
     }
   }
 
-  override fun findPayOrder(findRq: FindPayOrderReq): FindPayOrderResp? {
+  override fun findPayOrder(findRq: FindPayOrderDto): FindPayOrderVo? {
     requireKnown(!(findRq.merchantOrderId.hasText() && findRq.bizCode.hasText())) { "商户订单号和第三方订单号不能同时为空" }
 
     val transaction =
@@ -120,16 +117,15 @@ class WeChatSinglePayService(
         )
       } else throw KnownException("订单号或商户订单号为空为空")
 
-    return FindPayOrderResp().apply {
-      meta = transaction
-      customOrderId = transaction!!.outTradeNo
-      orderNumber = transaction.transactionId
-      amount = BigDecimal(transaction.amount.total).setScale(2, RoundingMode.UNNECESSARY).divide(HUNDRED, RoundingMode.UNNECESSARY)
-      tradeStatus = transaction.tradeState.toString()
-      tradeStatusDesc = transaction.tradeStateDesc
-
+    return FindPayOrderVo(
+      meta = transaction,
+      customOrderId = transaction!!.outTradeNo,
+      orderNumber = transaction.transactionId,
+      amount = BigDecimal(transaction.amount.total).setScale(2, RoundingMode.UNNECESSARY).divide(HUNDRED, RoundingMode.UNNECESSARY),
+      tradeStatus = transaction.tradeState.toString(),
+      tradeStatusDesc = transaction.tradeStateDesc,
       paySuccessDatetime = LocalDateTime.parse(transaction.successTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"))
-    }
+    )
   }
 
   @Deprecated(message = "暂时不可用")
@@ -159,7 +155,7 @@ class WeChatSinglePayService(
     metaData: String,
     request: HttpServletRequest,
     response: HttpServletResponse,
-    lazyCall: (successReq: PaySuccessNotifyResp) -> Unit,
+    lazyCall: (successReq: PaySuccessNotifyVo) -> Unit,
   ): String? {
     val headersMap = request.headerNames.asSequence().map { it to request.getHeader(it) }.toMap()
     val requestParam =
@@ -172,15 +168,15 @@ class WeChatSinglePayService(
         .body(metaData)
         .build()
 
-    val transaction = NotificationParser(rsaConfig).let { parser -> parser.parse(requestParam, Transaction::class.java) }
+    val transaction = NotificationParser(rsaConfig).parse(requestParam, Transaction::class.java)
     val r =
       if (transaction.tradeState == Transaction.TradeStateEnum.SUCCESS) {
-        PaySuccessNotifyResp().apply {
-          payCode = transaction.transactionId
-          orderCode = transaction.outTradeNo
-          currency = ISO4217[transaction.amount.currency]
-          meta = mapper.writeValueAsString(transaction)
-        }
+        PaySuccessNotifyVo(
+          payCode = transaction.transactionId,
+          orderCode = transaction.outTradeNo,
+          currency = ISO4217[transaction.amount.currency],
+          meta = mapper.writeValueAsString(transaction),
+        )
       } else null
     try {
       lazyCall(r!!)

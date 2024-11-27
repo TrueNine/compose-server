@@ -1,10 +1,14 @@
 version = libs.versions.composePay.get()
 
 dependencies {
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
   api(libs.com.github.wechatpayApiv3.wechatpayJava)
 
   implementation(project(":core"))
   implementation(project(":depend:depend-http-exchange"))
+  implementation(libs.org.springframework.boot.springBootStarterWebflux)
   implementation(project(":security:security-oauth2"))
   implementation(project(":security:security-crypto"))
 
