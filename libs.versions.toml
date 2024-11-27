@@ -23,7 +23,6 @@ composeDependSpringdocOpenapi = "2.0.17"
 composeDataCrawler = "2.0.17"
 composeKspCore = "2.0.17"
 composeKspToolkit = "2.0.17"
-compose = "2.0.16"
 composeRdsJimmer = "0.0.8"
 composeRdsMigrationPostgres = "0.0.6"
 composeRdsMigrationMysql = "0.0.6"
@@ -180,6 +179,7 @@ org-jetbrains-kotlinx-kotlinxIoCoreJvm = { group = "org.jetbrains.kotlinx", name
 org-jetbrains-kotlinx-kotlinxDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 org-jetbrains-kotlinx-kotlinxDatetimeJvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime-jvm", version.ref = "kotlinxDatetime" }
 
+com-google-devtools-ksp-symbolProcessing = { group = "com.google.devtools.ksp", name = "symbol-processing", version.ref = "ksp" }
 com-google-devtools-ksp-symbolProcessingApi = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 
 io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.3.0-RC1" }
