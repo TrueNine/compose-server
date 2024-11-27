@@ -1,4 +1,4 @@
-project.version = libs.versions.composeKspCore.get()
+version = libs.versions.composeKspCore.get()
 
 dependencies {
   api(libs.org.springframework.data.springDataCommons)
