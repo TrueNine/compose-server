@@ -115,18 +115,40 @@ subprojects {
             url = "https://github.com/TrueNine/compose-server/blob/main/LICENSE"
           }
         }
+        inceptionYear = "2020"
         developers {
           developer {
             id = "TrueNine"
             name = "赵日天"
             email = "truenine304520@gmail.com"
           }
+          developer {
+            id = "t_teng"
+            name = "阿腾"
+            email = "616057370@qq.com"
+          }
         }
         scm {
           connection = "scm:git:git://github.com/TrueNine/compose-server.git"
           developerConnection = "scm:git:ssh://github.com:/TrueNine/compose-server.git"
           url = "https://github.com/TrueNine/compose-server"
+          tag = project.version.toString()
         }
+        organization {
+          name = "Yan100 Dev Group"
+          url = "https://gitee.com/yan100"
+        }
+        issueManagement {
+          system = "GitHub"
+          url = "https://github.com/TrueNine/compose-server/issues"
+        }
+        properties = mapOf(
+          "project.build.sourceEncoding" to "UTF-8",
+          "maven.compiler.source" to libs.versions.java.get(),
+          "maven.compiler.target" to libs.versions.java.get(),
+          "maven.compiler.release" to libs.versions.java.get(),
+
+          )
       }
     }
   }
