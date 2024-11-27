@@ -11,6 +11,8 @@ dependencies {
   api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)
   api(libs.org.slf4j.slf4jApi)
 
+  implementation(libs.org.springframework.security.springSecurityCrypto)
+
   testImplementation(project(":test-toolkit"))
   testImplementation(libs.org.springframework.boot.springBootStarterWeb)
 }
