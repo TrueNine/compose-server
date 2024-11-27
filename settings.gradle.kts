@@ -16,8 +16,7 @@ findProject(":test-toolkit")?.name = "test-toolkit"
 include("cacheable")
 findProject(":cacheable")?.name = "cacheable"
 
-include("schedule")
-findProject(":schedule")?.name = "schedule"
+
 
 include("pay")
 findProject(":pay")?.name = "pay"
@@ -67,13 +66,12 @@ include("depend:jackson")
 findProject(":depend:jackson")?.name = "depend-jackson"
 include("depend:springdoc-openapi")
 findProject(":depend:springdoc-openapi")?.name = "depend-springdoc-openapi"
-
+include(":depend:xxl-job")
+findProject(":depend:xxl-job")?.name = "depend-xxl-job"
 
 // ksp
 include("ksp:plugin")
 findProject(":ksp:plugin")?.name = "ksp-plugin"
-include("ksp:test")
-findProject(":ksp:test")?.name = "ksp-test"
 include("ksp:core")
 findProject(":ksp:core")?.name = "ksp-core"
 include("ksp:toolkit")
