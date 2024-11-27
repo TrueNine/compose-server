@@ -26,6 +26,7 @@ fun TypeSpec.Builder.privateModifier(): TypeSpec.Builder = addModifiers(KModifie
 
 fun PropertySpec.Builder.openedModifier(): PropertySpec.Builder = addModifiers(KModifier.OPEN)
 fun PropertySpec.Builder.overrideModifier(): PropertySpec.Builder = addModifiers(KModifier.OVERRIDE)
+fun PropertySpec.Builder.finalModifier(): PropertySpec.Builder = addModifiers(KModifier.FINAL)
 
 fun PropertySpec.Builder.privateModifier(): PropertySpec.Builder = addModifiers(KModifier.PRIVATE)
 
