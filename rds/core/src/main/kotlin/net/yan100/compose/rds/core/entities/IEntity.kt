@@ -55,7 +55,7 @@ abstract class IEntity : IAnyEntity() {
   @get:JsonIgnore
   @get:Transient
   @get:Schema(hidden = true)
-  val dbEntityAuditData: PersistenceAuditData?
+  protected open val dbEntityAuditData: PersistenceAuditData?
     get() = if (isNew) null
     else PersistenceAuditData(
       dbEntityShadowRemoveTag, dbEntityRowLockVersion, id, dbEntityCreatedDatetime, dbEntityLastModifyDatetime

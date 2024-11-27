@@ -22,15 +22,11 @@ import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
-import jakarta.validation.constraints.NotBlank
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
-import net.yan100.compose.core.domain.AbstractLateinitvarScope
+import net.yan100.compose.core.domain.AbstractLazyInitScope
 import net.yan100.compose.core.domain.ISensitivity
-import net.yan100.compose.depend.jsr303validation.group.DeleteGroup
-import net.yan100.compose.depend.jsr303validation.group.PatchGroup
-import net.yan100.compose.depend.jsr303validation.group.PutGroup
 import net.yan100.compose.rds.core.listener.BizCodeInsertListener
 import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
 import org.hibernate.Hibernate
@@ -54,7 +50,7 @@ abstract class IAnyEntity : ISensitivity,
   Persistable<Id>,
   IExtensionDefineScope,
   IEnhanceEntity, Serializable,
-  AbstractLateinitvarScope() {
+  AbstractLazyInitScope() {
   companion object {
     @Serial
     const val serialVersionUID = 1L
@@ -67,7 +63,6 @@ abstract class IAnyEntity : ISensitivity,
   /** id */
   @jakarta.persistence.Id
   @Column(name = ID)
-  @NotBlank(groups = [PutGroup::class, PatchGroup::class, DeleteGroup::class], message = "在修改数据时，需携带数据 id")
   @Schema(
     title = ID,
     name = ID,
@@ -82,7 +77,7 @@ abstract class IAnyEntity : ISensitivity,
     @Transient @JsonIgnore @JvmName("_\$\$_get_kotlin_internal_primary_id") get() = field ?: ""
 
   @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  final fun setId(id: String) {
+  fun setId(id: String) {
     this.id = id
   }
 
@@ -105,7 +100,7 @@ abstract class IAnyEntity : ISensitivity,
   @Transient
   @JsonIgnore
   @Schema(hidden = true)
-  fun toNewEntity() {
+  open fun toNewEntity() {
     id = null
   }
 

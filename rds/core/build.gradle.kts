@@ -1,26 +1,16 @@
-plugins {
-  alias(libs.plugins.org.jetbrains.kotlin.kapt)
-  alias(libs.plugins.com.google.devtools.ksp)
-}
-
 version = libs.versions.composeRdsCore.get()
 
-apply(plugin = libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
-apply(plugin = libs.plugins.org.jetbrains.kotlin.plugin.allopen.get().pluginId)
-apply(plugin = libs.plugins.com.google.devtools.ksp.get().pluginId)
-
-allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 
 kapt {
-  correctErrorTypes = true
-  keepJavacAnnotationProcessors = true
   javacOptions { option("querydsl.entityAccessors", "true") }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
 
 dependencies {
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+
   implementation(project(":core"))
-  implementation(project(":depend:depend-jsr303-validation"))
+  implementation(libs.jakarta.validation.jakartaValidationApi)
   implementation(project(":security:security-crypto"))
   implementation(libs.org.springframework.data.springDataCommons)
   implementation(libs.org.springframework.data.springDataJpa)
