@@ -1,25 +1,17 @@
 import com.diffplug.spotless.LineEnding
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.springframework.boot.gradle.tasks.aot.ProcessAot
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
   java
   `maven-publish`
   signing
-  alias(libs.plugins.org.springframework.boot)
-  alias(libs.plugins.io.spring.dependencyManagement)
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
-  alias(libs.plugins.org.jetbrains.kotlin.plugin.powerAssert)
+  alias(libs.plugins.org.jetbrains.kotlin.kapt)
+  //alias(libs.plugins.io.spring.dependencyManagement)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.jpa)
-
-  alias(libs.plugins.org.asciidoctor.jvm.convert)
   alias(libs.plugins.com.diffplug.spotless)
   alias(libs.plugins.com.github.benManes.versions)
-  alias(libs.plugins.com.google.devtools.ksp)
-  alias(libs.plugins.org.jetbrains.kotlin.kapt)
-  alias(libs.plugins.org.jetbrains.kotlin.plugin.allopen)
 }
 
 val yunxiaoUrl = extra["url.yunxiao.1"].toString()
@@ -30,82 +22,31 @@ val sonatypePassword = extra["pwd.sonatype.1"].toString()
 
 val l = libs
 
-project.version = libs.versions.compose.get()
-
-tasks {
-  withType<ProcessAot> { enabled = false }
-  withType<BootJar> { enabled = false }
-}
-
-data class Define(
-  val url: String? = null,
-  val username: String? = null,
-  val password: String? = null
-)
-
-
-allprojects {
-  project.group = l.versions.composeGroup.get()
-
-  tasks {
-    withType<ProcessAot> { enabled = false }
-    withType<BootJar> { enabled = false }
-  }
-}
-
-dependencies {
-  implementation(platform(l.org.springframework.boot.springBootDependencies))
-  implementation(platform(l.org.springframework.cloud.springCloudDependencies))
-  implementation(platform(l.org.springframework.modulith.springModulithBom))
-  implementation(platform(l.org.springframework.ai.springAiBom))
-}
-
 subprojects {
   apply(plugin = "java")
-  apply(plugin = "kotlin")
   apply(plugin = "maven-publish")
   apply(plugin = "signing")
   apply(plugin = l.plugins.org.jetbrains.kotlin.jvm.get().pluginId)
   apply(plugin = l.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
   apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.spring.get().pluginId)
   apply(plugin = l.plugins.org.jetbrains.kotlin.plugin.jpa.get().pluginId)
-  apply(plugin = l.plugins.org.springframework.boot.get().pluginId)
-  apply(plugin = l.plugins.io.spring.dependencyManagement.get().pluginId)
-  apply(plugin = l.plugins.org.asciidoctor.jvm.convert.get().pluginId)
+
+  project.group = l.versions.composeGroup.get()
 
   extra["snippetsDir"] = file("build/generated-snippets")
   extra["springCloudVersion"] = l.versions.springCloud.get()
   extra["springAiVersion"] = l.versions.springAi.get()
 
-  kapt {
-    arguments {
-      arg("annotationFilter", "org.springframework.boot.context.properties.EnableConfigurationProperties")
-      arg("annotationFilter", "org.springframework.boot.context.properties.ConfigurationProperties")
-      arg("annotationFilter", "org.springframework.context.annotation.ComponentScan")
-      arg("annotationFilter", "org.springframework.context.annotation.Configuration")
-    }
-  }
-
-  tasks {
-    withType<ProcessAot> { enabled = false }
-    withType<BootJar> { enabled = false }
-  }
-
   dependencies {
-    // 自动处理 spring 配置
-    annotationProcessor(l.org.springframework.springBootConfigurationProcessor)
-    kapt(l.org.springframework.springBootConfigurationProcessor)
-
-    implementation(l.org.springframework.springBootConfigurationProcessor)
-    implementation(l.org.springframework.boot.springBoot)
-    implementation(l.org.springframework.boot.springBootAutoconfigure)
-
-    implementation(l.bundles.kotlin)
+    //implementation(platform(l.org.springframework.boot.springBootDependencies))
+    //implementation(platform(l.org.springframework.cloud.springCloudDependencies))
+    //implementation(platform(l.org.springframework.modulith.springModulithBom))
+    //implementation(platform(l.org.springframework.ai.springAiBom))
 
     // junit 全平台 测试
-    testRuntimeOnly(l.bundles.kotlinTestJunit5)
     testRuntimeOnly(l.bundles.junit5)
   }
+
   sourceSets {
     test {
       resources {
@@ -127,25 +68,29 @@ subprojects {
     compilerOptions {
       jvmTarget = JvmTarget.fromTarget(l.versions.java.get())
       freeCompilerArgs = listOf(
-        "-Xjsr305=strict", "-Xjvm-default=all", "-verbose", "-Xjdk-release=${l.versions.java.get()}", "-jvm-target=${l.versions.java.get()}"
+        "-Xjsr305=strict",
+        "-Xjvm-default=all",
+        "-verbose",
+        "-Xjdk-release=${l.versions.java.get()}",
+        "-jvm-target=${l.versions.java.get()}"
       )
     }
-
     jvmToolchain(l.versions.java.get().toInt())
   }
 
+  kapt {
+    correctErrorTypes = true
+    keepJavacAnnotationProcessors = true
+  }
+
   tasks {
-    withType<AbstractCopyTask> { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
+    //withType<AbstractCopyTask> { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
     test { useJUnitPlatform() }
     jar {
-      archiveClassifier.set("")
+      archiveClassifier = ""
     }
   }
   tasks.test { outputs.dir(project.extra["snippetsDir"]!!) }
-  tasks.asciidoctor {
-    inputs.dir(project.extra["snippetsDir"]!!)
-    dependsOn(tasks.test)
-  }
   publishing {
     repositories {
       mavenLocal()
@@ -153,6 +98,34 @@ subprojects {
         credentials {
           username = yunxiaoUsername
           password = yunxiaoPassword
+        }
+      }
+    }
+  }
+
+  afterEvaluate {
+    publishing.publications?.withType<MavenPublication>()?.forEach { pub ->
+      pub.pom {
+        name = "${rootProject.name}-${project.name}"
+        description = project.description
+        url = "https://github.com/TrueNine/compose-server"
+        licenses {
+          license {
+            name = "The private license of TrueNine"
+            url = "https://github.com/TrueNine/compose-server/blob/main/LICENSE"
+          }
+        }
+        developers {
+          developer {
+            id = "TrueNine"
+            name = "赵日天"
+            email = "truenine304520@gmail.com"
+          }
+        }
+        scm {
+          connection = "scm:git:git://github.com/TrueNine/compose-server.git"
+          developerConnection = "scm:git:ssh://github.com:/TrueNine/compose-server.git"
+          url = "https://github.com/TrueNine/compose-server"
         }
       }
     }
