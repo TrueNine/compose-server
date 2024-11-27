@@ -165,11 +165,15 @@ com-squareup-kotlinpoetKsp = { group = "com.squareup", name = "kotlinpoet-ksp", 
 org-jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version = "24.1.0" }
 org-jetbrains-kotlin-GradlePlugin = { group = "org.jetbrains.kotlin", name = "gradle-plugin", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+org-jetbrains-kotlin-kotlinGradlePluginApi = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinStdlibJdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinReflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinTestTestng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinSerialization = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinTestJunit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
+org-jetbrains-kotlin-kotlinAnnotaitonProcessingEmbedable = { group = "org.jetbrains.kotlin", name = "kotlin-annotation-processing-embeddable", version.ref = "kotlin" }
+org-jetbrains-kotlin-kotlinCompilerEmbeddable = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-embeddable", version.ref = "kotlin" }
+
 org-jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 org-jetbrains-kotlinx-kotlinxCoroutinesGuava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
 org-jetbrains-kotlinx-kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -347,6 +351,8 @@ selenium = [
 ]
 
 [plugins]
+org-gradle-toolchains-foojayResolverConvention = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "0.8.0" }
+
 net-yan100-compose-gradlePlugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "composeGradlePlugin" }
 net-yan100-compose-gradleSettingsPlugin = { id = "net.yan100.compose.settings-gradle-plugin", version.ref = "composeGradlePlugin" }
 
