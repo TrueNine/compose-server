@@ -1,4 +1,4 @@
-project.version = libs.versions.composeKspToolkit.get()
+version = libs.versions.composeKspToolkit.get()
 
 dependencies {
   implementation(libs.com.google.devtools.ksp.symbolProcessingApi)
