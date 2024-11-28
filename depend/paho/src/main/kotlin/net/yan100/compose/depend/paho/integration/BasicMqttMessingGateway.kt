@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.depend.paho.integration
 
-import net.yan100.compose.core.replaceFirstX
+import net.yan100.compose.core.replaceFirstIfPrefix
 import org.springframework.integration.mqtt.support.MqttHeaders
 import org.springframework.messaging.handler.annotation.Header
 
@@ -49,6 +49,6 @@ interface BasicMqttMessingGateway {
    * @param data 发送数据
    */
   fun <T> sendToTopic(@Header(MqttHeaders.TOPIC) topic: String, data: T) {
-    return unsafeSendToTopic(topic.replaceFirstX("/", ""), data)
+    return unsafeSendToTopic(topic.replaceFirstIfPrefix("/", ""), data)
   }
 }
