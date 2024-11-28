@@ -14,17 +14,14 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.functions
+package net.yan100.compose.ksp
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.TypeSpec
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
+import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
-fun classBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name)
-
-fun classBuilder(className: ClassName): TypeSpec.Builder = TypeSpec.classBuilder(className)
-
-fun interfaceBuilder(name: String) = TypeSpec.interfaceBuilder(name)
-
-fun interfaceBuilder(className: ClassName) = TypeSpec.interfaceBuilder(className)
-
-fun companionObjectBuilder(name: String? = null) = TypeSpec.companionObjectBuilder(name)
+class KspPluginMain : SymbolProcessorProvider {
+  override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
+    return KspPluginProcessor(environment, environment.codeGenerator, environment.logger)
+  }
+}

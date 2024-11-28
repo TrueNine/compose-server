@@ -14,17 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.data
+package net.yan100.compose.ksp
 
-import com.google.devtools.ksp.symbol.Origin
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.TypeSpec
 
-data class ImportStatement(val statement: String, val origin: Origin, var useAll: Boolean = false, var useAlias: Boolean = false) {
-  init {
-    useAlias = statement.contains(" as ")
-    useAll = statement.contains(".*")
-  }
+fun classBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name)
 
-  companion object {
-    private val importRegex = "import\\s+.+?".toRegex()
-  }
-}
+fun classBuilder(className: ClassName): TypeSpec.Builder = TypeSpec.classBuilder(className)
+
+fun interfaceBuilder(name: String) = TypeSpec.interfaceBuilder(name)
+
+fun interfaceBuilder(className: ClassName) = TypeSpec.interfaceBuilder(className)
+
+fun companionObjectBuilder(name: String? = null) = TypeSpec.companionObjectBuilder(name)

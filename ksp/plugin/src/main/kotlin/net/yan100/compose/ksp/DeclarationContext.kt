@@ -14,16 +14,29 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.data
+package net.yan100.compose.ksp
 
+import com.google.devtools.ksp.processing.*
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSFile
-import kotlinx.io.buffered
-import kotlinx.io.files.Path
-import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.readString
+import java.util.concurrent.CopyOnWriteArraySet
 
-data class FileContext(private val f: KSFile) : KSFile by f {
-  private val content = SystemFileSystem.source(Path(filePath)).buffered().readString()
-  val lines: List<String> = content.lines()
-  val imports: List<ImportStatement> = lines.filter { it.startsWith("import ") }.map { ImportStatement(it, origin) }
+data class DeclarationContext<D : KSDeclaration>(
+  val declaration: D,
+  val environment: SymbolProcessorEnvironment,
+  val resolver: Resolver,
+  val codeGenerator: CodeGenerator,
+  val log: KSPLogger,
+  val file: KSFile = declaration.containingFile!!,
+  var dependencies: Dependencies = Dependencies.ALL_FILES,
+  private val notProcessReportList: MutableSet<KSAnnotated> = CopyOnWriteArraySet()
+) {
+  fun clearReported() {
+    notProcessReportList.clear()
+  }
+
+  fun report(annotated: KSAnnotated) {
+    notProcessReportList += annotated
+  }
 }
