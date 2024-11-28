@@ -1,4 +1,49 @@
 [versions]
+java = "23"
+gradle = "8.11.1"
+kotlin = "2.1.0"
+
+# kotlin language toolchain versions
+ksp = "2.1.0-1.0.29"
+kotlinpoet = "2.0.0"
+kotlinxIo = "0.6.0"
+kotlinxDatetime = "0.6.1"
+kotlinxCoroutines = "1.9.0"
+
+# spring versions
+springBoot = "3.4.0"
+springFramework = "6.2.0"
+springBatch = "5.2.0"
+springCloud = "2024.0.0-RC1"
+springAi = "1.0.0-M4"
+springCloudAlibaba = "2021.0.4.0"
+springModulith = "1.3.0"
+springIntegration = "6.4.0"
+springSecurity = "6.3.4"
+
+# others
+slf4j = "2.1.0-alpha1"
+flyway = "10.20.1"
+mapstruct = "1.6.0"
+jackson = "2.18.1"
+hibernate = "6.6.2.Final"
+netty = "4.1.115.Final"
+querydsl = "5.1.0"
+jimmer = "0.9.19"
+drools = "9.44.0.Final"
+liteflow = "2.12.1"
+hutool = "5.8.33"
+xxlJob = "2.4.2"
+mybatisPlus = "3.5.7"
+
+# testing tools and gradle plugins
+spotless = "7.0.0.BETA4"
+testng = "7.10.2"
+junit5 = "5.11.3"
+junitPlatform = "1.11.3"
+kotlinCompileTesting = "1.6.0"
+
+## === compose server versions ===
 composeVersionCatalog = "2.0.69"
 composeRdsCrud = "2.0.33"
 composeRdsCore = "2.0.31"
@@ -26,48 +71,8 @@ composeKspToolkit = "2.0.17"
 composeRdsJimmer = "0.0.8"
 composeRdsMigrationPostgres = "0.0.6"
 composeRdsMigrationMysql = "0.0.6"
-
 composeGroup = "net.yan100.compose"
 
-spotless = "7.0.0.BETA4"
-
-gradle = "8.11.1"
-java = "23"
-kotlin = "2.1.0"
-ksp = "2.1.0-1.0.29"
-kotlinpoet = "2.0.0"
-kotlinxIo = "0.6.0"
-kotlinxDatetime = "0.6.1"
-kotlinxCoroutines = "1.9.0"
-netty = "4.1.115.Final"
-
-springBoot = "3.4.0"
-springFramework = "6.2.0"
-springBatch = "5.2.0"
-springCloud = "2024.0.0-RC1"
-springAi = "1.0.0-M4"
-springCloudAlibaba = "2021.0.4.0"
-springModulith = "1.3.0"
-springIntegration = "6.4.0"
-springSecurity = "6.3.4"
-
-testng = "7.10.2"
-junit5 = "5.11.3"
-junitPlatform = "1.11.3"
-
-flyway = "10.20.1"
-mapstruct = "1.6.0"
-jimmer = "0.9.19"
-hutool = "5.8.33"
-slf4j = "2.1.0-alpha1"
-mybatisPlus = "3.5.7"
-jackson = "2.18.1"
-querydsl = "5.1.0"
-hibernate = "6.6.2.Final"
-drools = "9.44.0.Final"
-liteflow = "2.12.1"
-kotlinCompileTesting = "1.6.0"
-xxlJob = "2.4.2"
 
 [libraries]
 net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "composeOss" }
@@ -109,6 +114,7 @@ net-yan100-compose-dependXxlJob = { group = "net.yan100.compose", name = "depend
 # gradle 插件的直接依赖
 net-yan100-compose-gradlePlugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "composeGradlePlugin" }
 
+### ===
 
 org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "springBoot" }
 com-diffplug-spotless-spotlessPluginGradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
