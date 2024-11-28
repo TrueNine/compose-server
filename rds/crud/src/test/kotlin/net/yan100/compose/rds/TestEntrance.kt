@@ -19,4 +19,4 @@ package net.yan100.compose.rds
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-internal class RdsEntrance
+internal class TestEntrance
