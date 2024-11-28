@@ -16,12 +16,14 @@
  */
 package net.yan100.compose.ksp.core
 
-import net.yan100.compose.core.hasText
+
 import net.yan100.compose.ksp.core.annotations.MetaName
 
 fun Sequence<MetaName>.getFirstName(): String? {
   val f = firstOrNull()
   val value = f?.name
   val name = f?.value
-  return if (value.hasText()) value else if (name.hasText()) name else null
+  if (!value.isNullOrBlank()) return value
+  if (!name.isNullOrBlank()) return name
+  return null
 }

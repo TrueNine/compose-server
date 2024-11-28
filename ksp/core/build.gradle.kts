@@ -1,10 +1,8 @@
 version = libs.versions.composeKspCore.get()
 
 dependencies {
-  api(libs.org.springframework.data.springDataCommons)
-  api(libs.org.hibernate.orm.hibernateCore)
-  api(project(":rds:rds-core"))
-  api(project(":core"))
+  compileOnly(libs.org.springframework.data.springDataCommons)
+  compileOnly(libs.org.hibernate.orm.hibernateCore)
 }
 
 publishing {
