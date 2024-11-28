@@ -1,5 +1,4 @@
 plugins {
-  alias(libs.plugins.org.jetbrains.kotlin.kapt)
   alias(libs.plugins.com.google.devtools.ksp)
 }
 
@@ -11,8 +10,6 @@ kapt {
   javacOptions { option("querydsl.entityAccessors", "true") }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
-
-allOpen { annotations("jakarta.persistence.MappedSuperclass", "jakarta.persistence.Entity") }
 
 dependencies {
   api(libs.org.springframework.boot.springBootStarterDataJpa)
