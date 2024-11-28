@@ -1,56 +1,66 @@
-## 环境准备
+此说明为希望为项目提供贡献，需在本地构建工程而作步骤说明，因为发现 gradle 应用的真的不多
+（如仅是使用，则默认都会以下构建）。我尽量减少所带来的心智负担。
 
-```text
-java: 23.0.1+13
-kotlin: 2.1.0
-gradle: 8.11.1
-maven: 3.9.9
-gpg4
-```
+> 注意：
+> - 所有依赖版本均可在 [version-catalog](../libs.versions.toml) 中找到对应显眼的版本号，
+> - 所有构建链目录或文件路径等当中，非必要不使用任何`非ASCII字符`
 
-> 如无需推送到制品仓库，则 gnugpg 无需安装配置
+### java
 
-- 所有构建链当中，路径不要存在任何非 ISO8859-1 字符，包括中文等的
-- 将 本地 java 配置到 `JAVA_HOME` 且 保证版本至少为 21，并包含 `bin` 在执行路径中
-- 将 本地 gradle 安装路径配置到环境变量 `GRADLE_HOME`
-- 将 本地 .gradle 路径配置到 `GRADLE_USER_HOME`
-- 将 本地 maven 路径配置到 `MVN_HOME`
-- 将项目内的 `init.gradle.bak` 以及 `gradle.properties.bak` copy 到 本地 .gradle 下
-- 将 `init.gradle.bak` 以及 `gradle.properties.bak` 去除 `.bak` 后缀
-- 使用 `gpg` 设置或生成证书并上传至服务器，使用 `gpg --list-secret-keys` 查看已生成的证书
-- 将 `gradle.properties` 的所有值填写完整，亦可自行更改项目内的取值，达到相同效果即可
+将 本地 java 配置到 `JAVA_HOME` 并包含 `bin` 在执行路径中
+
+### maven
+
+> gradle 的所有构件存储于 maven 仓库，所有才会使用到 maven
+
+- （可选）将 本地 maven 路径配置到 `MVN_HOME`
+
+### gradle
+
+- （可选）配置本地 .gradle.properties 文件，[参考](./example/gradle.properties.example)
+- （可选）配置本地 init.gradle.kts 文件，[参考](./example/init.gradle.kts.example)
+- （可选）如遇网络问题，gradle可以[配置 gradle properties](./example/gradle.properties.example) 进行代理配置
+- （可选）使用 `gpg` [生成密钥](./gpg_key_generate.md)
+
+### gpg
+
+> 如无需推送到制品仓库，则 gpg 无需安装配置
+
+## 构建启动项目
 
 ```shell
-# 1. 初始化项目
+# 1. 使用本地gradle初始化项目
 gradle init
 
-# 2. 生成 gradle wrapper
+# 2. 使用本地gradle为项目生成 gradle wrapper
 gradle wrapper
 
 # 3. 检查当前项目所有测试是否可以正常运行
 ./gradlew check
 ```
 
-> 如果网络问题，gradle可以[配置代理](/documentation/gradle配置本地代理.md)
+> 一般，IDE会替你完成上述步骤，但如果出现其他问题，可按照上述 命令执行进行反复尝试
 
-## 使用技巧
+## gradle 的一些使用指南
 
 鉴于很多时候，都不太会使用 gradle，以下为一些不太常用的技巧
 
-### settings.gradle.kts 配置 gradle plugin repositories
+### settings.gradle.kts
 
 ```kotlin
 dependencyResolutionManagement {
   repositories {
-    // ... 所有所在仓狂
+    mavenCentral()
+    maven(url = uri("your-repository-url"))
+    // ...
   }
-  // （可选）引入 version-catalog
+  // 引入 version-catalog
   versionCatalogs { create("libs") { from("net.yan100.compose:version-catalog:sdk版本") } }
 }
 ```
 
 所有 版本以及依赖交由 gradle version catalog
-管理，请参考 [gradle version catalog](https://docs.gradle.org/current/userguide/dependency_management_basics.html#version_catalog)
+管理，可参考 [gradle version catalog](https://docs.gradle.org/current/userguide/dependency_management_basics.html#version_catalog)
 
 ### version-catalog 依赖引入方式
 

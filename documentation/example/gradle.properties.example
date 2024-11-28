@@ -12,7 +12,17 @@ org.gradle.daemon=true
 org.gradle.parallel=true
 org.gradle.jvmargs=-Xms2048m -Xmx4096m
 
+### enable ksp 2
+ksp.useKSP2=true
+
 ### sign gnu gpg config
 signing.gnupg.executable=
 signing.gnupg.keyName=
 signing.gnupg.passphrase=
+
+### system http or https proxy settings
+# systemProp.http.proxyHost=
+# systemProp.http.proxyPort=
+# systemProp.https.proxyHost=
+# systemProp.https.proxyPort=
+

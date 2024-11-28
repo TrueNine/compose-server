@@ -1,5 +1,7 @@
 可以使用以下命令查看当前生成密钥的 keyName
 
+使用 `gpg --list-secret-keys` 查看已生成的证书
+
 ```shell
 gpg --list-secret-keys --keyid-format LONG
 ```
