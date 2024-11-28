@@ -26,13 +26,14 @@ import kotlin.reflect.KClass
 
 
 const val STR_EMPTY = ""
-const val STR_SLASH = "/"
 const val STR_UNDERLINE = "_"
-const val STR_DOT = "."
-const val STR_SPACE = " "
 
 fun String.resourceAsStream(cls: KClass<*>): InputStream? {
   return cls.java.classLoader.getResourceAsStream(this)
+}
+
+inline fun <reified C : KClass<*>> String.resourceAsStream(): InputStream? {
+  return C::class.java.classLoader.getResourceAsStream(this)
 }
 
 /**
@@ -59,7 +60,7 @@ fun String?.nonText(): Boolean {
   return !this.hasText()
 }
 
-inline fun String?.hasTextAlso(crossinline block: (it: String) -> Unit) {
+inline fun String?.ifNotNullOrBlank(crossinline block: (it: String) -> Unit) {
   if (this.hasText()) block(this)
 }
 
@@ -67,38 +68,39 @@ inline fun <T> String?.hasTextRun(crossinline block: String.() -> T): T? {
   return if (hasText()) block() else null
 }
 
-/**
- * ## 防空字符串
- * - 如果该字符串为 null 则转换为 ""
- * - 否则返回本身
- */
-val String?.withEmpty: String
-  get() = this ?: STR_EMPTY
-
 /** ## 将该字符串转换为单行字符串 */
-val String.inline: String
-  get() = IString.inLine(this)
+fun String.toOneLine(): String = IString.inLine(this)
 
 /** ## 将 foo_bar 类型的字符串转换为 fooBar */
-val String.snakeCaseToCamelCase: String
-  get() = this.split(STR_UNDERLINE).joinToString(STR_EMPTY) {
-    if (it.isNotEmpty()) it.replaceFirstChar { r -> if (r.isLowerCase()) r.titlecase(Locale.getDefault()) else r.toString() } else STR_EMPTY
-  }.replaceFirstChar { it.lowercase(Locale.getDefault()) }
+fun String.toPascalCase(firstUppercase: Boolean = false): String {
+  return if (length == 1 || isNotBlank()) {
+    split(STR_UNDERLINE).joinToString(STR_EMPTY) {
+      it.replaceFirstChar { it1 -> it1.uppercaseChar() }
+    }.replaceFirstChar { if (!firstUppercase) it.lowercaseChar() else it }
+  } else {
+    this
+  }
+}
 
-val String.snakeCaseToPascalCase: String
-  get() = if (hasText()) split(STR_UNDERLINE).joinToString(STR_EMPTY) { it.replaceFirstChar { it1 -> it1.uppercaseChar() } } else this
+fun String.toSnakeCase(): String {
+  if (length == 1 || isBlank()) return lowercase()
+  return buildString {
+    this@toSnakeCase.forEachIndexed { i, c ->
+      if (i == 0 || i == length - 1) {
+        append(c.lowercaseChar())
+        return@forEachIndexed
+      }
+      val next = this@toSnakeCase.getOrNull(i + 1)
+      val prev = this@toSnakeCase.getOrNull(i - 1)
+      when {
+        c.isUpperCase() && prev?.isLowerCase() == true -> append('_').append(c.lowercaseChar())
+        c.isLowerCase() && next?.isUpperCase() == true -> append(c).append('_')
+        else -> append(c.lowercaseChar())
+      }
+    }
+  }
+}
 
-val String.camelCaseToSnakeCase: String
-  get() = fold(StringBuilder()) { acc, c ->
-    if (c.isUpperCase()) {
-      if (acc.isNotEmpty()) acc.append(STR_UNDERLINE)
-      acc.append(c.lowercaseChar())
-    } else acc.append(c)
-    acc
-  }.toString()
-
-val String.pascalCaseToSnakeCase: String
-  get() = camelCaseToSnakeCase.replaceFirst(STR_UNDERLINE, STR_EMPTY)
 
 /**
  * ## 将字符串进行 url 编码
@@ -107,14 +109,9 @@ val String.pascalCaseToSnakeCase: String
  * @param charset 字符集
  * @return 编码完成的字符串，使用 [java.net.URLEncoder]
  */
-fun String?.urlEncoded(charset: Charset = Charsets.UTF_8): String = java.net.URLEncoder.encode(this.withEmpty, charset)
+fun String?.toUrlEncoded(charset: Charset = Charsets.UTF_8): String = java.net.URLEncoder.encode(this ?: STR_EMPTY, charset)
 
 
-fun String.replaceFirstX(meta: String, replacement: String): String {
+fun String.replaceFirstIfPrefix(meta: String, replacement: String): String {
   return if (indexOf(meta) == 0) replaceFirst(meta, replacement) else meta
-}
-
-/** ## 将所有空串视为 null */
-fun String?.emptyWithNull(): String? {
-  return if (this.hasText()) this else null
 }

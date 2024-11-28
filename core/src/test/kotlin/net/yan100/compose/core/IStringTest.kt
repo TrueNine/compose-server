@@ -17,6 +17,7 @@
 package net.yan100.compose.core
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -43,6 +44,29 @@ class IStringTest {
     assertFalse { a.contains("\n") }
   }
 
+  @Test
+  fun `test toSnakeCase`() {
+    val result = "MDCFilter".toSnakeCase()
+    assertEquals("mdcfilter", result)
+    val result2 = "_PascCase".toSnakeCase()
+    assertEquals("_pasc_case", result2)
+    val result3 = "PascalCase".toSnakeCase()
+    assertEquals("pascal_case", result3)
+    val result4 = "camelCase".toSnakeCase()
+    assertEquals("camel_case", result4)
+  }
+
+  @Test
+  fun `test toPascalCase`() {
+    val result = "mdc_filter".toPascalCase()
+    assertEquals("mdcFilter", result)
+    val result2 = "mdc_filter".toPascalCase(true)
+    assertEquals("MdcFilter", result2)
+    val result3 = "_mdc_filter".toPascalCase()
+    assertEquals("mdcFilter", result3)
+    val result4 = "_mdc__filter_".toPascalCase()
+    assertEquals("mdcFilter", result4)
+  }
 
   @Test
   fun `omit text`() {
