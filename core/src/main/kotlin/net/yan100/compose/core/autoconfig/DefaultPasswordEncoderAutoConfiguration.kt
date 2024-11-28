@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package net.yan100.compose.core.autoconfig
 
 import net.yan100.compose.core.slf4j
