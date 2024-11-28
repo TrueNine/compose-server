@@ -7,10 +7,6 @@ dependencyResolutionManagement { versionCatalogs { create("libs") { from(files("
 rootProject.name = "compose-server"
 includeBuild("version-catalog")
 
-
-
-findProject(":gradle-plugin")?.name = "gradle-plugin"
-
 listOf(
   "test-toolkit",
   "core",
