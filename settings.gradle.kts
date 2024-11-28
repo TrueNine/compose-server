@@ -1,14 +1,23 @@
+plugins {
+  id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}
+
 dependencyResolutionManagement { versionCatalogs { create("libs") { from(files("libs.versions.toml")) } } }
 
 rootProject.name = "compose-server"
-includeBuild("gradle-plugin")
 includeBuild("version-catalog")
+
+
+include("gradle-plugin")
+findProject(":gradle-plugin")?.name = "gradle-plugin"
+
+include("core")
+findProject(":core")?.name = "core"
+
 
 include("oss")
 findProject(":oss")?.name = "oss"
 
-include("core")
-findProject(":core")?.name = "core"
 
 include("test-toolkit")
 findProject(":test-toolkit")?.name = "test-toolkit"
