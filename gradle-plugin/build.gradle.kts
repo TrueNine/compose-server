@@ -1,80 +1,51 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
-val pluginGroup = libs.versions.composeGroup.get()
-val pluginVersion = libs.versions.composeGradlePlugin.get()
-
 plugins {
-  alias(libs.plugins.org.jetbrains.kotlin.jvm)
-  signing
   `java-gradle-plugin`
-  `maven-publish`
 }
 
-group = pluginGroup
-version = pluginVersion
+val gp = libs.versions.composeGroup.get()
+val v = libs.versions.composeGradlePlugin.get()
+
+group = libs.versions.composeGroup.get()
+version = libs.versions.composeGradlePlugin.get()
 
 dependencies {
-  implementation(gradleApi())
-  implementation(gradleKotlinDsl())
+  compileOnly(gradleApi())
+  compileOnly(libs.org.jetbrains.kotlin.kotlinGradlePluginApi)
+  compileOnly(libs.org.jetbrains.kotlin.kotlinGradlePlugin)
+  compileOnly(libs.org.jetbrains.kotlin.kotlinStdlib)
+  compileOnly(gradleKotlinDsl())
+
   implementation(libs.org.springframework.boot.springBootGradlePlugin)
-}
 
-kotlin {
-  compilerOptions {
-    jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
-    freeCompilerArgs =
-      listOf(
-        "-Xjsr305=strict",
-        "-Xjvm-default=all",
-        "-verbose",
-        "-Xjdk-release=${libs.versions.java.get()}",
-        "-jvm-target=${libs.versions.java.get()}"
-      )
-  }
-
-  jvmToolchain(libs.versions.java.get().toInt())
+  testImplementation(gradleApi())
+  testImplementation(gradleTestKit())
+  testImplementation(gradleKotlinDsl())
 }
 
 gradlePlugin {
   plugins {
-    register("${pluginGroup}.${project.name}") {
-      id = "${pluginGroup}.${project.name}"
-      implementationClass = "${pluginGroup}.gradleplugin.Main"
+    register("${gp}.${project.name}") {
+      id = "${gp}.${project.name}"
+      displayName = "${gp}.${project.name}.gradle.plugin"
+      implementationClass = "${gp}.gradleplugin.Main"
+      description = "compose server development gradle"
     }
 
-    register("${pluginGroup}.settings-${project.name}") {
-      id = "${pluginGroup}.settings-${project.name}"
-      implementationClass = "${pluginGroup}.gradleplugin.SettingsMain"
+    register("${gp}.settings-${project.name}") {
+      id = "${gp}.settings-${project.name}"
+      displayName = "${gp}.settings-${project.name}.gradle.plugin"
+      implementationClass = "${gp}.gradleplugin.Main"
+      implementationClass = "${gp}.gradleplugin.SettingsMain"
     }
   }
-}
-
-java {
-  sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
-  targetCompatibility = JavaVersion.toVersion(libs.versions.java.get())
-  toolchain { languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get())) }
-  withSourcesJar()
 }
 
 publishing {
-  repositories {
-    mavenLocal()
-    val yunxiaoUrl by extra { properties["url.yunxiao.1"] as String }
-    maven(url = uri(yunxiaoUrl)) {
-      credentials {
-        val yunxiaoUsername by extra { properties["usr.yunxiao.1"] as String }
-        val yunxiaoPassword by extra { properties["pwd.yunxiao.1"] as String }
-        username = yunxiaoUsername
-        password = yunxiaoPassword
-      }
-    }
-  }
-
   publications {
     create<MavenPublication>("gradlePlugin") {
-      groupId = "${pluginGroup}.${project.name}"
-      artifactId = "${pluginGroup}.${project.name}.gradle.plugin"
-      version = pluginVersion
+      groupId = "${gp}.${project.name}"
+      artifactId = "${gp}.${project.name}.gradle.plugin"
+      version = project.version.toString()
       from(components["java"])
     }
   }
