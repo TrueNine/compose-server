@@ -2,7 +2,7 @@
 
 ```text
 java: 23.0.1+13
-kotlin: 2.1.0-RC2
+kotlin: 2.1.0
 gradle: 8.11.1
 maven: 3.9.9
 gpg4
