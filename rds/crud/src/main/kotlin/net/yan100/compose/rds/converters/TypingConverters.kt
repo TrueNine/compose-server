@@ -18,7 +18,7 @@ package net.yan100.compose.rds.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.intTyping
+import net.yan100.compose.rds.core.intTyping
 import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.core.typing.AuditTyping
 import net.yan100.compose.rds.core.typing.RuleTyping
