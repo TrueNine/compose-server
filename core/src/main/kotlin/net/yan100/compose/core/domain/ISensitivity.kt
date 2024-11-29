@@ -22,6 +22,7 @@ interface ISensitivity {
   fun recordChangedSensitiveData() {
   }
 
+
   @get:JsonIgnore
   @get:Schema(hidden = true)
   val isChangedToSensitiveData: bool get() = true

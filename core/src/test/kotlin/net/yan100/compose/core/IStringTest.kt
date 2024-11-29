@@ -48,12 +48,14 @@ class IStringTest {
   fun `test toSnakeCase`() {
     val result = "MDCFilter".toSnakeCase()
     assertEquals("mdcfilter", result)
-    val result2 = "_PascCase".toSnakeCase()
-    assertEquals("_pasc_case", result2)
+    val result2 = "PascCase".toSnakeCase()
+    assertEquals("pasc_case", result2)
     val result3 = "PascalCase".toSnakeCase()
     assertEquals("pascal_case", result3)
     val result4 = "camelCase".toSnakeCase()
     assertEquals("camel_case", result4)
+    val result5 = "roleGroupId".toSnakeCase()
+    assertEquals("role_group_id", result5)
   }
 
   @Test

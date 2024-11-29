@@ -83,19 +83,17 @@ fun String.toPascalCase(firstUppercase: Boolean = false): String {
 }
 
 fun String.toSnakeCase(): String {
-  if (length == 1 || isBlank()) return lowercase()
+  if (length <= 1 || isBlank()) return lowercase()
   return buildString {
+    var prevIsLower = false
     this@toSnakeCase.forEachIndexed { i, c ->
-      if (i == 0 || i == length - 1) {
+      if (c.isUpperCase()) {
+        if (prevIsLower) append('_')
         append(c.lowercaseChar())
-        return@forEachIndexed
-      }
-      val next = this@toSnakeCase.getOrNull(i + 1)
-      val prev = this@toSnakeCase.getOrNull(i - 1)
-      when {
-        c.isUpperCase() && prev?.isLowerCase() == true -> append('_').append(c.lowercaseChar())
-        c.isLowerCase() && next?.isUpperCase() == true -> append(c).append('_')
-        else -> append(c.lowercaseChar())
+        prevIsLower = false
+      } else {
+        append(c.lowercaseChar())
+        prevIsLower = true
       }
     }
   }
