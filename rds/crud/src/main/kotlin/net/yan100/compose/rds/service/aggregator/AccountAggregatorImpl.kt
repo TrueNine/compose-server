@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import jakarta.validation.Valid
+
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.generator.IOrderCodeGenerator
 import net.yan100.compose.core.hasText
@@ -70,7 +70,7 @@ class AccountAggregatorImpl(
 
   // TODO 硬编码
   @ACID
-  override fun assignAccount(@Valid usr: Usr, createUserId: RefId, @Valid userInfo: UserInfo?, roleGroup: Set<String>?): Usr {
+  override fun assignAccount(usr: Usr, createUserId: RefId, userInfo: UserInfo?, roleGroup: Set<String>?): Usr {
     val savedUsr =
       usr.withNew().run {
         check(!userService.existsByAccount(account)) { "分配的账号已经存在" }
@@ -108,7 +108,7 @@ class AccountAggregatorImpl(
   }
 
   @ACID
-  override fun registerAccount(@Valid param: IAccountAggregator.RegisterDto): Usr? =
+  override fun registerAccount(param: IAccountAggregator.RegisterDto): Usr? =
     if (!userService.existsByAccount(param.account!!)) {
       saveUsrForRegisterParam(param).also {
         userInfoService.savePlainUserInfoByUser(it)
@@ -128,12 +128,12 @@ class AccountAggregatorImpl(
       }
     } else null
 
-  override fun login(@Valid param: IAccountAggregator.LoginDto): Usr? =
+  override fun login(param: IAccountAggregator.LoginDto): Usr? =
     if (verifyPassword(param.account!!, param.password!!)) {
       userService.findUserByAccount(param.account!!)
     } else null
 
-  override fun modifyPassword(@Valid param: IAccountAggregator.ModifyPasswordDto): Boolean {
+  override fun modifyPassword(param: IAccountAggregator.ModifyPasswordDto): Boolean {
     if (!verifyPassword(param.account!!, param.oldPassword!!)) return false
     if (param.oldPassword == param.newPassword) return false
     val user = userService.findUserByAccount(param.account!!) ?: return false

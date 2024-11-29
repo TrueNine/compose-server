@@ -16,9 +16,10 @@
  */
 package net.yan100.compose.rds.service
 
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.string
+import io.swagger.v3.oas.annotations.media.Schema
+import net.yan100.compose.core.*
 import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.entities.Usr
 
@@ -78,4 +79,67 @@ interface IUserInfoService : ICrud<UserInfo> {
   fun existsByPhone(phone: string): Boolean
 
   fun existsByWechatOpenId(openId: String): Boolean
+
+
+  fun fetchAllBy(dto: UserInfoFetchParam): Pr<UserInfo>
+
+
+  data class UserInfoFetchParam(
+    @Schema(title = "用户id")
+    val userId: RefId? = null,
+
+    @Schema(title = "生日")
+    val birthday: date? = null,
+
+    @Schema(title = "手机号")
+    val phone: String? = null,
+
+    @Schema(title = "备用手机号")
+    val sparePhone: String? = null,
+
+    @Schema(title = "身份证号")
+    val idCard: String? = null,
+
+    @Schema(title = "性别")
+    val gender: GenderTyping? = null,
+
+    @Schema(title = "微信openId")
+    val wechatOpenId: String? = null,
+
+    @Schema(title = "微信账号")
+    val wechatAccount: String? = null,
+
+    @Schema(title = "所属地址编码")
+    val addressCode: String? = null,
+
+    @Schema(title = "用户信息id")
+    val id: RefId? = null,
+
+    @Schema(title = "备注信息")
+    val remark: String? = null,
+
+    @Schema(title = "备注名称")
+    val remarkName: String? = null,
+
+    @Schema(title = "姓氏")
+    val firstName: String? = null,
+
+    @Schema(title = "名字")
+    val lastName: String? = null,
+
+    @Schema(title = "姓名")
+    val fullName: String? = null,
+
+    @Schema(title = "创建人id")
+    val createUserId: RefId? = null,
+
+    @Schema(title = "邮箱")
+    val email: String? = null,
+
+    @Schema(title = "年龄")
+    val age: Int? = null,
+
+    @Schema(title = "是否有头像")
+    val hasAvatar: Boolean? = null,
+  ) : PqLike
 }

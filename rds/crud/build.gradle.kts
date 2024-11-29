@@ -17,7 +17,7 @@ dependencies {
   api(libs.org.springframework.boot.springBootStarterDataJpa)
   implementation(libs.org.hibernate.orm.hibernateCore)
 
-  implementation(libs.jakarta.validation.jakartaValidationApi)
+  //implementation(libs.jakarta.validation.jakartaValidationApi)
 
   implementation(libs.org.springframework.security.springSecurityCrypto)
 

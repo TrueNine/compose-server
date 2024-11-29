@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.service.impl
 
-import jakarta.validation.Valid
+
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
 import net.yan100.compose.core.domain.IReadableAttachment
@@ -86,7 +86,7 @@ class AttachmentServiceImpl(
   @ACID
   override fun recordUpload(
     readableAttachment: IReadableAttachment,
-    @Valid saveFn: (readableAttachment: IReadableAttachment) -> @Valid IAttachmentService.PostDto
+    saveFn: (readableAttachment: IReadableAttachment) -> IAttachmentService.PostDto
   ): Attachment? {
     val saveFile = saveFn(readableAttachment)
     val location = fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)

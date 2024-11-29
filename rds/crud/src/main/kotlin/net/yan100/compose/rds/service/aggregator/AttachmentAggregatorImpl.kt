@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.service.aggregator
 
-import jakarta.validation.Valid
+
 import net.yan100.compose.core.domain.IReadableAttachment
 import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.rds.core.annotations.ACID
@@ -33,7 +33,7 @@ class AttachmentAggregatorImpl(private val aService: IAttachmentService) : IAtta
   @ACID
   override fun recordUpload(
     readableAttachment: IReadableAttachment,
-    @Valid saveFn: (readableAttachment: IReadableAttachment) -> @Valid IAttachmentAggregator.PostDto
+    saveFn: (readableAttachment: IReadableAttachment) -> IAttachmentAggregator.PostDto
   ): Attachment? {
     val saveFile = saveFn(readableAttachment)
     val location = aService.fetchOrCreateAttachmentLocationByBaseUrlAndBaseUri(saveFile.baseUrl!!, saveFile.baseUri!!)

@@ -3,12 +3,7 @@ package net.yan100.compose.rds.entities
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
-import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.Past
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
 import net.yan100.compose.core.*
-import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.domain.IIdcard2Code
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.converters.GenderTypingConverter
@@ -42,22 +37,18 @@ abstract class SuperUserInfo : IEntity() {
 
   /** 姓 */
   @get:Schema(title = "姓")
-  @get:Size(min = 1, max = 20, message = "姓最短 1, 最长 20")
   abstract var firstName: String?
 
   /** 名 */
   @get:Schema(title = "名")
-  @get:Size(min = 1, max = 20, message = "名最短 1, 最长 20")
   abstract var lastName: String?
 
   /** 邮箱 */
-  @get:Email(message = "邮箱格式不正确")
   @get:Schema(title = "邮箱")
   abstract var email: String?
 
   /** 生日 */
   @get:Schema(title = "生日")
-  @get:Past(message = "没有人出生于未来")
   abstract var birthday: LocalDate?
 
   /** 地址 id */
@@ -79,12 +70,10 @@ abstract class SuperUserInfo : IEntity() {
 
   /** 电话号码 */
   @get:Schema(title = "电话号码")
-  @get:Pattern(regexp = IRegexes.CHINA_PHONE, message = "电话号码格式不正确")
   abstract var phone: String?
 
   /** 身份证 */
   @get:Schema(title = "身份证")
-  @get:Pattern(regexp = IRegexes.CHINA_ID_CARD, message = "身份证号格式不正确")
   abstract var idCard: String?
 
   /** 性别：0女，1难，2未知 */
@@ -105,7 +94,6 @@ abstract class SuperUserInfo : IEntity() {
   abstract var wechatAuthid: String?
 
   @get:Schema(title = "备用手机")
-  @get:Pattern(regexp = IRegexes.CHINA_PHONE, message = "备用手机号码格式不正确")
   abstract var sparePhone: string?
 
   override fun toNewEntity() {

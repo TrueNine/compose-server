@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
-import jakarta.validation.constraints.NotBlank
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.ReferenceId
 import net.yan100.compose.core.domain.IIdcard2Code
@@ -58,7 +57,6 @@ abstract class SuperHouseholdCert : IIdcard2Code, IEntity() {
   @get:Convert(converter = DegreeTypingConverter::class)
   abstract var educationLevel: DegreeTyping?
 
-  @get:NotBlank
   @get:Schema(title = "户口所属身份证号")
   abstract var idcardCode: string
 

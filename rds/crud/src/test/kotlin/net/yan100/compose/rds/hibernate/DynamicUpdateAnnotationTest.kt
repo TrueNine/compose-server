@@ -22,6 +22,7 @@ import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.rds.repositories.IAttachmentRepo
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -36,13 +37,16 @@ import kotlin.test.assertNull
  */
 @SpringBootTest
 class DynamicUpdateAnnotationTest {
-  @Resource
-  lateinit var attRepo: IAttachmentRepo
+  lateinit var attRepo: IAttachmentRepo @Resource set
+
+  @BeforeTest
+  fun setup() {
+    assertNotNull(attRepo)
+  }
 
   /** 保证在更新 null 后，可以设置为 null */
   @Test
   fun `test dynamic update annotation future`() {
-    assertNotNull(attRepo)
     val firstInsertEntity =
       attRepo.save(
         Attachment().also {
