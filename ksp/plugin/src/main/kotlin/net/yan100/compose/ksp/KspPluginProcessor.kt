@@ -26,11 +26,11 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSDeclaration
-import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.ksp.toolkit.models.DeclarationContext
 import net.yan100.compose.ksp.toolkit.simpleNameAsStringStr
 import net.yan100.compose.ksp.visitor.JpaNameClassVisitor
 import net.yan100.compose.ksp.visitor.RepositoryIPageExtensionsVisitor
+import net.yan100.compose.meta.annotations.MetaDef
 
 class KspPluginProcessor(
   private val environment: SymbolProcessorEnvironment,

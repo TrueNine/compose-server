@@ -2,16 +2,15 @@ version = libs.versions.composeKspPlugin.get()
 
 dependencies {
   compileOnly(libs.com.google.devtools.ksp.symbolProcessingApi)
+  testImplementation(libs.com.google.devtools.ksp.symbolProcessingApi)
 
   implementation(libs.com.squareup.kotlinpoetJvm)
   implementation(libs.com.squareup.kotlinpoetKsp)
 
-  implementation(project(":ksp:ksp-core"))
+  api(project(":meta"))
+
   implementation(project(":core"))
   implementation(project(":ksp:ksp-toolkit"))
-
-  testImplementation(project(":core"))
-  testImplementation(project(":test-toolkit"))
 
   testImplementation(libs.com.github.tschuchortdev.kotlinCompileTestingKsp) {
     //exclude("com.google.devtools.ksp")

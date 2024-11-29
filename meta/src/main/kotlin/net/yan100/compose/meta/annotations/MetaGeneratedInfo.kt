@@ -14,16 +14,14 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.core
+package net.yan100.compose.meta.annotations
 
+import java.lang.annotation.Inherited
 
-import net.yan100.compose.ksp.core.annotations.MetaName
-
-fun Sequence<MetaName>.getFirstName(): String? {
-  val f = firstOrNull()
-  val value = f?.name
-  val name = f?.value
-  if (!value.isNullOrBlank()) return value
-  if (!name.isNullOrBlank()) return name
-  return null
-}
+@Inherited
+@MustBeDocumented
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)
+annotation class MetaGeneratedInfo(
+  val value: String = ""
+)

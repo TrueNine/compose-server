@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.core.annotations
+package net.yan100.compose.meta.annotations
 
 import java.lang.annotation.Inherited
 import kotlin.reflect.KClass

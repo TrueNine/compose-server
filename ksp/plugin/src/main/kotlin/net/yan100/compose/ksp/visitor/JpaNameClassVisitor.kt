@@ -27,12 +27,12 @@ import com.squareup.kotlinpoet.ksp.toAnnotationSpec
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import net.yan100.compose.core.toSnakeCase
-import net.yan100.compose.ksp.core.annotations.MetaDef
-import net.yan100.compose.ksp.core.annotations.MetaName
-import net.yan100.compose.ksp.core.getFirstName
 import net.yan100.compose.ksp.toolkit.*
 import net.yan100.compose.ksp.toolkit.dsl.fileDsl
 import net.yan100.compose.ksp.toolkit.models.DeclarationContext
+import net.yan100.compose.meta.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaName
+import net.yan100.compose.meta.getFirstName
 import org.jetbrains.annotations.NotNull
 
 private val jakartaAccessAnnotationClassName = ClassName("jakarta.persistence", "Access")
