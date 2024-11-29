@@ -25,8 +25,8 @@ import net.yan100.compose.rds.converters.AuditTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.AuditTyping
 
-@MappedSuperclass
 @MetaDef
+@MappedSuperclass
 abstract class SuperAuditAttachment : IEntity() {
   @get:Schema(title = "审核文件状态")
   @get:Convert(converter = AuditTypingConverter::class)
