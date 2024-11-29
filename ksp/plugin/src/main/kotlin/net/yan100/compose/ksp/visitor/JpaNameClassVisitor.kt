@@ -176,10 +176,12 @@ class JpaNameClassVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclarati
 
     val destName = classSimpleName.replaceFirst("Super", "")
     val destClassName = ClassName(classDeclaration.packageName.asString(), destName)
-    val tableName =
+    val tableName = run {
       classDeclaration.getAnnotationsByType(MetaName::class).getFirstName()
         ?: findSuperName(classDeclaration)
-        ?: destClassName.simpleName.toSnakeCase()
+        ?: destClassName.simpleName
+    }.toSnakeCase()
+
     val metaDefIsShadow = classDeclaration.getAnnotationsByType(MetaDef::class).firstOrNull()?.shadow ?: false
 
     fileDsl(classDeclaration.packageName.asString(), destName) {
