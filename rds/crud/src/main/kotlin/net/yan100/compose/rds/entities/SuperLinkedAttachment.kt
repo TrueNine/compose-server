@@ -45,43 +45,35 @@ abstract class SuperLinkedAttachment : IEntity() {
   @get:Schema(title = "媒体类型")
   abstract var mimeType: String
 
-  @JsonIgnore
-  @Column(name = Attachment.BASE_URL, insertable = false, updatable = false)
-  lateinit var baseUrl: String
+  @get:JsonIgnore
+  abstract var baseUrl: String
 
-  @JsonIgnore
-  @Column(name = Attachment.BASE_URI, insertable = false, updatable = false)
-  var baseUri: String? = null
+  @get:JsonIgnore
+  abstract var baseUri: String?
 
-  @JsonIgnore
-  @Column(name = Attachment.URL_ID, insertable = false, updatable = false)
-  lateinit var urlId: String
+  @get:JsonIgnore
+  abstract var urlId: String
 
-  @Schema(title = "保存后的名称")
-  @Column(name = Attachment.SAVE_NAME, insertable = false, updatable = false)
-  lateinit var saveName: String
+  @get:Schema(title = "保存后的名称")
+  abstract var saveName: String
 
-  @Schema(title = "原始名称")
-  @Column(name = Attachment.META_NAME, insertable = false, updatable = false)
-  lateinit var metaName: String
+  @get:Schema(title = "原始名称")
+  abstract var metaName: String
 
-  @JsonIgnore
-  @Column(name = "att_type")
-  @get:Column(name = "att_type")
-  @set:Column(name = "att_type")
-  @Convert(converter = AttachmentTypingConverter::class)
-  lateinit var attType: AttachmentTyping
+  @get:JsonIgnore
+  @get:Convert(converter = AttachmentTypingConverter::class)
+  abstract var attType: AttachmentTyping
 
   @JsonIgnore
   @ManyToOne(fetch = EAGER)
   @JoinColumn(name = Attachment.URL_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
   @Fetch(JOIN)
   @NotFound(action = IGNORE)
-  lateinit var base: Attachment
+  open lateinit var base: Attachment
 
   @get:JsonIgnore
   @get:Transient
-  val uri: String
+  open val uri: String
     get() {
       val uri = base.baseUri?.let { if (it.startsWith("/")) it.slice(1..it.length) else it } ?: ""
       val lastUri = if (uri.endsWith("/")) uri else "$uri/"
@@ -90,7 +82,7 @@ abstract class SuperLinkedAttachment : IEntity() {
     }
 
   @get:Transient
-  val url: String
+  open val url: String
     get() {
       val based = base.baseUrl?.let { if (it.endsWith("/")) it else "$it/" } ?: ""
       return "$based$uri"
