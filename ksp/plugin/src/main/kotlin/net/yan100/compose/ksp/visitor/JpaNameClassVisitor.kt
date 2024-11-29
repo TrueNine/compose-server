@@ -40,8 +40,10 @@ private val jakartaTransientAnnotationClassName = ClassName("jakarta.persistence
 private val jakartaColumnAnnotationClassName = ClassName("jakarta.persistence", "Column")
 private val jakartaTableAnnotationClassName = ClassName("jakarta.persistence", "Table")
 private val jakartaEntityAnnotationClassName = ClassName("jakarta.persistence", "Entity")
-private val jakartaSecondaryTableAnnotationClassName = ClassName("jakarta.persistence", "SecondaryTable")
+
+//private val jakartaSecondaryTableAnnotationClassName = ClassName("jakarta.persistence", "SecondaryTable")
 private val jsonIgnoreAnnotationClassName = ClassName("com.fasterxml.jackson.annotation", "JsonIgnore")
+
 private val hibernateDynamicInsertAnnotationClassName = ClassName("org.hibernate.annotations", "DynamicInsert")
 private val hibernateDynamicUpdateAnnotationClassName = ClassName("org.hibernate.annotations", "DynamicUpdate")
 private val hibernateImmutableAnnotationClassName = ClassName("org.hibernate.annotations", "Immutable")
@@ -320,7 +322,7 @@ class JpaNameClassVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclarati
 
   private fun generateClassAnnotations(destClassName: ClassName, metaDefIsShadow: Boolean): List<AnnotationSpec> {
     val tableAnnotation = AnnotationSpec.builder(
-      if (metaDefIsShadow) jakartaSecondaryTableAnnotationClassName
+      if (metaDefIsShadow) jakartaTableAnnotationClassName //jakartaSecondaryTableAnnotationClassName
       else jakartaTableAnnotationClassName
     ).addMember(
       CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName).build()
