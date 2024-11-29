@@ -19,7 +19,6 @@ package net.yan100.compose.rds.service.impl
 import jakarta.annotation.Resource
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.generator.ISnowflakeGenerator
-import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.entities.Attachment
 import net.yan100.compose.security.crypto.Keys
@@ -29,7 +28,7 @@ import org.springframework.test.annotation.Rollback
 import kotlin.test.*
 
 @Rollback
-@SpringBootTest(classes = [RdsEntrance::class])
+@SpringBootTest
 class AttachmentServiceImplTest {
   lateinit var attachmentService: AttachmentServiceImpl @Resource set
   lateinit var snowflake: ISnowflakeGenerator @Resource set

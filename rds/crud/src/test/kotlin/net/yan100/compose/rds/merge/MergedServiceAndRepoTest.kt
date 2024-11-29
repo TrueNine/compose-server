@@ -1,7 +1,6 @@
 package net.yan100.compose.rds.merge
 
 import jakarta.annotation.Resource
-import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.repositories.IDbTestMergeTableRepo
 import net.yan100.compose.rds.service.IDbTestMergeTableService
 import org.springframework.boot.test.context.SpringBootTest
@@ -13,7 +12,7 @@ import kotlin.test.assertTrue
 
 
 @Rollback
-@SpringBootTest(classes = [RdsEntrance::class])
+@SpringBootTest
 class MergedServiceAndRepoTest {
   lateinit var repo: IDbTestMergeTableRepo @Resource set
   lateinit var service: IDbTestMergeTableService @Resource set

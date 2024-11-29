@@ -19,9 +19,9 @@ package net.yan100.compose.rds.service.impl
 import jakarta.annotation.Resource
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.service.IUserInfoService
+import net.yan100.compose.testtookit.RDBRollback
 import net.yan100.compose.testtookit.assertNotEmpty
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,38 +29,41 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
-@SpringBootTest(classes = [RdsEntrance::class])
+@RDBRollback
+@SpringBootTest
 class UserInfoServiceImplTest {
-    lateinit var userInfoService: UserInfoServiceImpl @Resource set
+  lateinit var userInfoService: UserInfoServiceImpl @Resource set
 
-    @BeforeTest
-    fun setup() {
-        userInfoService.postFound(UserInfo().apply {
-            firstName = "R"
-            lastName = "OOT"
-        })
-    }
+  @RDBRollback
+  @BeforeTest
+  fun setup() {
+    userInfoService.postFound(UserInfo().apply {
+      firstName = "R"
+      lastName = "OOT"
+    })
+  }
 
-    @Test
-    fun `query dsl fetch all by`() {
-        val e = userInfoService.fetchAll()
-        val result = userInfoService.fetchAllBy(
-            IUserInfoService.UserInfoFetchParam(
-                firstName = "R"
-            )
-        )
-        assertNotNull(result)
-        assertNotEmpty { result.d.toList() }
-        log.info("result: {}", result)
-    }
+  @Test
+  @RDBRollback
+  fun `query dsl fetch all by`() {
+    val e = userInfoService.fetchAll()
+    val result = userInfoService.fetchAllBy(
+      IUserInfoService.UserInfoFetchParam(
+        firstName = "R"
+      )
+    )
+    assertNotNull(result)
+    assertNotEmpty { result.d.toList() }
+    log.info("result: {}", result)
+  }
 
-    @Test
-    fun `test findIsRealPeopleById`() {
-        runBlocking {
-            launch {
-                val r = userInfoService.findIsRealPeopleByUserId("0")
-                log.info("r: {}", r)
-            }
-        }
+  @Test
+  fun `test findIsRealPeopleById`() {
+    runBlocking {
+      launch {
+        val r = userInfoService.findIsRealPeopleByUserId("0")
+        log.info("r: {}", r)
+      }
     }
+  }
 }

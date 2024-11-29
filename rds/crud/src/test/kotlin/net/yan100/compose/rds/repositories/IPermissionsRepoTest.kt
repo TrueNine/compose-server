@@ -17,14 +17,13 @@
 package net.yan100.compose.rds.repositories
 
 import jakarta.annotation.Resource
-import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 
 @Rollback
-@SpringBootTest(classes = [RdsEntrance::class])
+@SpringBootTest
 class IPermissionsRepoTest {
   lateinit var repo: IPermissionsRepo @Resource set
 

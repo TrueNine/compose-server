@@ -17,7 +17,6 @@
 package net.yan100.compose.rds.service.base
 
 import jakarta.annotation.Resource
-import net.yan100.compose.rds.RdsEntrance
 import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.service.IUserInfoService
 import org.springframework.boot.test.context.SpringBootTest
@@ -25,7 +24,7 @@ import org.springframework.test.annotation.Rollback
 import kotlin.test.Test
 
 @Rollback
-@SpringBootTest(classes = [RdsEntrance::class])
+@SpringBootTest
 class IMergeEntityEventServiceTest {
   lateinit var service: IUserInfoService @Resource set
 

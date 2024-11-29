@@ -18,13 +18,12 @@ package net.yan100.compose.rds.repositories
 
 import jakarta.annotation.Resource
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.rds.RdsEntrance
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 
 @Rollback
-@SpringBootTest(classes = [RdsEntrance::class])
+@SpringBootTest
 class IRoleGroupRepoTest {
   lateinit var repo: IRoleGroupRepo @Resource set
   val log = slf4j(this::class)
