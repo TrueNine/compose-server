@@ -2,10 +2,6 @@ spring:
   threads:
     virtual:
       enabled: true
-  profiles:
-    active: default
-  flyway:
-    enabled: false
   datasource:
     driver-class-name: org.h2.Driver
     username: sa
@@ -21,7 +17,6 @@ spring:
           batch_size: 1023
         show_sql: false
     open-in-view: false
-    database-platform: org.hibernate.dialect.H2Dialect
     database: h2
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
