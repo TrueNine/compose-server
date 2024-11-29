@@ -10,6 +10,7 @@ includeBuild("version-catalog")
 listOf(
   "test-toolkit",
   "core",
+  "meta",
   "gradle-plugin",
   "oss",
   "cacheable",

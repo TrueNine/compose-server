@@ -71,6 +71,7 @@ composeKspToolkit = "2.0.17"
 composeRdsJimmer = "0.0.8"
 composeRdsMigrationPostgres = "0.0.6"
 composeRdsMigrationMysql = "0.0.6"
+composeMeta = "0.0.1"
 composeGroup = "net.yan100.compose"
 
 
@@ -82,8 +83,8 @@ net-yan100-compose-testToolkit = { group = "net.yan100.compose", name = "test-to
 net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "composePay" }
 
 # ksp
+net-yan100-compose-meta = { group = "net.yan100.compose", name = "meta", version.ref = "composeMeta" }
 net-yan100-compose-kspPlugin = { group = "net.yan100.compose", name = "ksp-plugin", version.ref = "composeKspPlugin" }
-net-yan100-compose-kspCore = { group = "net.yan100.compose", name = "ksp-core", version.ref = "composeKspCore" }
 net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "composeKspToolkit" }
 
 # rds
