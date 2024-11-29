@@ -7,7 +7,7 @@ plugins {
   signing
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
   alias(libs.plugins.org.jetbrains.kotlin.kapt)
-  //alias(libs.plugins.io.spring.dependencyManagement)
+  alias(libs.plugins.io.spring.dependencyManagement)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
   alias(libs.plugins.org.jetbrains.kotlin.plugin.jpa)
   alias(libs.plugins.com.diffplug.spotless)
