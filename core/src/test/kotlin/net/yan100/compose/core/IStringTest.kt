@@ -56,6 +56,10 @@ class IStringTest {
     assertEquals("camel_case", result4)
     val result5 = "roleGroupId".toSnakeCase()
     assertEquals("role_group_id", result5)
+    val result6 = "Address".toSnakeCase()
+    assertEquals("address", result6)
+    val result7 = "address_details".toSnakeCase()
+    assertEquals("address_details", result7)
   }
 
   @Test
