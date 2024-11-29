@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
-import jakarta.validation.constraints.Pattern
-import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.datetime
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
@@ -41,12 +39,10 @@ abstract class SuperApiCallRecord : IEntity() {
 
   /** 请求 ip */
   @get:Schema(title = "请求 ip")
-  @get:Pattern(regexp = IRegexes.IP_V4)
   abstract var reqIp: String?
 
   /** 登录 ip */
   @get:Schema(title = "登录 ip")
-  @get:Pattern(regexp = IRegexes.IP_V4)
   abstract var loginIp: String?
 
   /** 响应码 */

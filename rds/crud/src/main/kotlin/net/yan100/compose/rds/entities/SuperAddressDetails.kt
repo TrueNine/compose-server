@@ -16,13 +16,9 @@
  */
 package net.yan100.compose.rds.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.RefId
-import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.domain.Coordinate
 import net.yan100.compose.core.string
 import net.yan100.compose.ksp.core.annotations.MetaDef
@@ -36,29 +32,21 @@ abstract class SuperAddressDetails : IEntity() {
   abstract var addressId: RefId
 
   /** 联系电话 */
-  @get:NotBlank(message = "手机号不能为空")
-  @get:Pattern(regexp = IRegexes.CHINA_PHONE, message = "请输入正确的电话号码")
   abstract var phone: string?
 
   /** ## 用户 id */
-  @get:NotBlank(message = "用户 id 不能数为空")
   abstract var userId: RefId
 
   /** 联系人名称 */
-  @get:NotBlank(message = "请留一个姓名")
-  @get:Schema(title = "联系人名称")
   abstract var name: String?
 
   /** 地址代码 */
-  @get:NotBlank(message = "地址代码不能为空")
   abstract var addressCode: string
 
   /** 地址详情 */
-  @get:NotBlank(message = "详细地址不能为空")
   abstract var addressDetails: String
 
   /** 定位 */
-  @get:Schema(title = "定位")
   @get:Convert(converter = WGS84Converter::class)
   abstract var center: Coordinate?
 }

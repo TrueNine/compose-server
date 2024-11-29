@@ -20,10 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.RefId
-import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 
@@ -50,8 +47,6 @@ abstract class SuperApi : IEntity() {
 
   /** 路径 */
   @get:Schema(title = "路径")
-  @get:NotBlank(message = "api 路径不得为空")
-  @get:Pattern(message = "路径不合法", regexp = IRegexes.ANT_URI)
   abstract var apiPath: String?
 
   /** 请求方式 */
