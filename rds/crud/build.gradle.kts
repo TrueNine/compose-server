@@ -12,18 +12,29 @@ kapt {
 }
 
 dependencies {
+  implementation(libs.org.jetbrains.kotlinx.kotlinxCoroutinesCore)
+
   api(libs.org.springframework.boot.springBootStarterDataJpa)
+  implementation(libs.org.hibernate.orm.hibernateCore)
+
+  implementation(libs.jakarta.validation.jakartaValidationApi)
+
+  implementation(libs.org.springframework.security.springSecurityCrypto)
 
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
 
   ksp(project(":ksp:ksp-plugin"))
-  implementation(project(":core"))
   implementation(project(":ksp:ksp-core"))
+
+  implementation(project(":core"))
   implementation(project(":rds:rds-core"))
 
-  implementation(project(":security:security-crypto"))
+  testImplementation(project(":security:security-crypto"))
+
   implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
+
+  testImplementation(project(":security:security-crypto"))
   testImplementation(project(":test-toolkit"))
   testRuntimeOnly(libs.bundles.p6spy)
 }
