@@ -19,7 +19,6 @@ package net.yan100.compose.rds.repositories
 import net.yan100.compose.core.string
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.entities.FlywaySchemaHistory
-import org.jetbrains.annotations.ApiStatus
 import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -33,7 +32,6 @@ interface IFlywaySchemaHistoryRepo : IRepo<FlywaySchemaHistory> {
   fun nativeDropTableForPostgresql(name: string = FlywaySchemaHistory.TABLE_NAME)
 
   @Modifying
-  @ApiStatus.Experimental
   @Query("drop table if exists :name", nativeQuery = true)
   fun nativeDropTableForMysql(name: string = FlywaySchemaHistory.TABLE_NAME)
 }
