@@ -30,6 +30,7 @@ interface IAddressDetailsService : ICrud<AddressDetails> {
 
   fun fetchNonDesensitizedAllByPhone(phone: String, pq: Pq = Pq.DEFAULT_MAX): Pr<NonDesensitizedAddressDetails>
 
+  @Deprecated("vo")
   fun fetchFullAllByPhone(phone: String, page: Pq): Pr<FullAddressDetails>
 
   fun fetchAllByUserId(userId: String, page: Pq = Pq.DEFAULT_MAX): Pr<AddressDetails>
