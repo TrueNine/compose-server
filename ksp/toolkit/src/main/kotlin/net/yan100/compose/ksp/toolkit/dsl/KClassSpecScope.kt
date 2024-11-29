@@ -14,12 +14,12 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.dsl
+package net.yan100.compose.ksp.toolkit.dsl
 
 import com.squareup.kotlinpoet.*
 import kotlin.reflect.KClass
 
-class ClassDsl @JvmOverloads constructor(name: String = "", className: ClassName? = null, override val fileBuilder: FileSpec.Builder) :
+class KClassSpecScope @JvmOverloads constructor(name: String = "", className: ClassName? = null, override val fileBuilder: FileSpec.Builder) :
   StandardBuilderAdaptor<TypeSpec.Builder, TypeSpec> {
   override val builder = if (null != className) TypeSpec.classBuilder(className) else TypeSpec.classBuilder(name)
 
@@ -42,8 +42,8 @@ class ClassDsl @JvmOverloads constructor(name: String = "", className: ClassName
 
   fun property(propertySpec: PropertySpec) = builder.addProperty(propertySpec)
 
-  fun kdoc(f: KDocDsl.() -> Unit) {
-    builder.addKdoc(KDocDsl(fileBuilder).apply(f).build())
+  fun kdoc(f: KDocSpecScope.() -> Unit) {
+    builder.addKdoc(KDocSpecScope(fileBuilder).apply(f).build())
   }
 
   fun type(typeSpec: TypeSpec) = builder.addType(typeSpec)

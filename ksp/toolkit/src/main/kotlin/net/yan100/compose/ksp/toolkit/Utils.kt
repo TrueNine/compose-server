@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp
+package net.yan100.compose.ksp.toolkit
 
 import com.google.devtools.ksp.ExceptionMessage
 import com.google.devtools.ksp.KSTypeNotPresentException

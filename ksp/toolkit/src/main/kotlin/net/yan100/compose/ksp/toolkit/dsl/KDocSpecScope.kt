@@ -14,13 +14,13 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.dsl
+package net.yan100.compose.ksp.toolkit.dsl
 
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import java.time.LocalDate
 
-class KDocDsl(override val fileBuilder: FileSpec.Builder) : StandardBuilderAdaptor<CodeBlock.Builder, CodeBlock> {
+class KDocSpecScope(override val fileBuilder: FileSpec.Builder) : StandardBuilderAdaptor<CodeBlock.Builder, CodeBlock> {
   private val cb: CodeBlock.Builder = CodeBlock.builder()
 
   private fun addTitleFormat(title: String, count: Int = 1, vararg args: Any) {

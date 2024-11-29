@@ -14,21 +14,27 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.dsl
+package net.yan100.compose.ksp.toolkit.dsl
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.MemberName
 import kotlin.reflect.KClass
 
-class CodeFileDsl @JvmOverloads constructor(packageName: String = "", fileName: String = "", className: ClassName? = null, memberName: MemberName? = null) :
+class KFileSpecScope @JvmOverloads constructor(
+  packageName: String = "",
+  fileName: String = "",
+  className: ClassName? = null,
+  memberName: MemberName? = null
+) :
   StandardBuilderAdaptor<FileSpec.Builder, FileSpec> {
   private val fb: FileSpec.Builder =
     if (null != className) FileSpec.builder(className) else if (null != memberName) FileSpec.builder(memberName) else FileSpec.builder(packageName, fileName)
 
   fun annotateBy(cls: KClass<*>) = builder.addAnnotation(cls)
 
-  fun classBy(className: ClassName, classDsl: ClassDsl.() -> Unit) = builder.addType(ClassDsl(className = className, fileBuilder = fb).apply(classDsl).build())
+  fun classBy(className: ClassName, KClassSpecScope: KClassSpecScope.() -> Unit) =
+    builder.addType(KClassSpecScope(className = className, fileBuilder = fb).apply(KClassSpecScope).build())
 
   override val fileBuilder = fb
   override val builder: FileSpec.Builder = fileBuilder
@@ -36,8 +42,4 @@ class CodeFileDsl @JvmOverloads constructor(packageName: String = "", fileName: 
   override fun build(): FileSpec = fileBuilder.build()
 }
 
-fun fileDsl(packageName: String, fileName: String, receiver: CodeFileDsl.() -> Unit): FileSpec {
-  val fb = CodeFileDsl(packageName, fileName)
-  receiver(fb)
-  return fb.build()
-}
+

@@ -14,26 +14,14 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp
+package net.yan100.compose.ksp.toolkit
 
-import com.google.devtools.ksp.isOpen
-import com.google.devtools.ksp.isPublic
-import com.google.devtools.ksp.symbol.KSFunctionDeclaration
-import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.ParameterSpec
-import com.squareup.kotlinpoet.ksp.toTypeName
+import com.squareup.kotlinpoet.PropertySpec
 
-fun KSFunctionDeclaration.toFunction(): FunSpec {
-  return FunSpec.builder(simpleName.asString())
-    .also { k ->
-      returnType?.toTypeName()?.also { t -> k.returns(t) }
-      parameters.forEach { p -> k.addParameter(ParameterSpec.builder(p.name!!.asString(), p.type.toTypeName()).build()) }
-      if (null != findOverridee()) k.addModifiers(KModifier.OVERRIDE)
-      else {
-        if (isPublic()) k.addModifiers(KModifier.PUBLIC)
-        if (isOpen()) k.addModifiers(KModifier.OPEN)
-      }
-    }
-    .build()
-}
+
+fun PropertySpec.Builder.addOpeneModifier(): PropertySpec.Builder = addModifiers(KModifier.OPEN)
+fun PropertySpec.Builder.addOverrideModifier(): PropertySpec.Builder = addModifiers(KModifier.OVERRIDE)
+fun PropertySpec.Builder.addFinalModifier(): PropertySpec.Builder = addModifiers(KModifier.FINAL)
+fun PropertySpec.Builder.addPrivateModifier(): PropertySpec.Builder = addModifiers(KModifier.PRIVATE)
+fun PropertySpec.Builder.addConstModifier(): PropertySpec.Builder = addModifiers(KModifier.CONST).mutable(false)

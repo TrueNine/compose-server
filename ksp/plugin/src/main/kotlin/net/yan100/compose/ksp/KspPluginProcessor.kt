@@ -17,46 +17,46 @@
 package net.yan100.compose.ksp
 
 import com.google.devtools.ksp.KspExperimental
-import com.google.devtools.ksp.isAbstract
-import com.google.devtools.ksp.processing.*
+import com.google.devtools.ksp.getAnnotationsByType
+import com.google.devtools.ksp.getDeclaredProperties
+import com.google.devtools.ksp.processing.Resolver
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
+import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSDeclaration
 import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.ksp.toolkit.models.DeclarationContext
+import net.yan100.compose.ksp.toolkit.simpleNameAsStringStr
 import net.yan100.compose.ksp.visitor.JpaNameClassVisitor
 import net.yan100.compose.ksp.visitor.RepositoryIPageExtensionsVisitor
 
 class KspPluginProcessor(
   private val environment: SymbolProcessorEnvironment,
-  private val codeGenerator: CodeGenerator,
-  private val logger: KSPLogger
 ) : SymbolProcessor {
   private fun <D : KSDeclaration> getCtxData(declaration: D, resolver: Resolver): DeclarationContext<D> {
-    return DeclarationContext(declaration, environment, resolver, codeGenerator, logger)
+    return DeclarationContext(declaration, environment, resolver)
   }
 
   @OptIn(KspExperimental::class)
   override fun process(resolver: Resolver): List<KSAnnotated> {
-    resolver.getSymbolsWithAnnotation(MetaDef::class.qualifiedName!!)
+    resolver.getSymbolsWithAnnotation("net.yan100.compose.ksp.core.annotations.MetaDef")
       .filterIsInstance<KSClassDeclaration>()
+      //.filter { it.isAbstract() }
+      .filter { it.getDeclaredProperties().toList().isNotEmpty() }
       .filter {
-        it.isAbstract()
+        !it.isCompanionObject
       }
-      .filter {
-        it.qName.let { s ->
-          s?.startsWith("Super")
-        } == true
-      }
-      .map {
-        getCtxData(it, resolver)
-      }.forEach { ctx ->
-        ctx.declaration.accept(JpaNameClassVisitor(), ctx)
-      }
+      .filter { it.simpleNameAsStringStr.startsWith("Super") }
+      .filterNot { it.simpleNameAsStringStr.contains("$") }
+      .filter { it.getAnnotationsByType(MetaDef::class).toList().isNotEmpty() }
+      .forEach { getCtxData(it, resolver).accept(JpaNameClassVisitor()) }
 
-    resolver.getPackagesWithAnnotation("org.springframework.stereotype.Repository").filterIsInstance<KSClassDeclaration>().map {
-      RepositoryIPageExtensionsVisitor()
-    }
-
+    resolver.getPackagesWithAnnotation("org.springframework.stereotype.Repository")
+      .filterIsInstance<KSClassDeclaration>()
+      .filter { it.classKind == ClassKind.INTERFACE }
+      .forEach { getCtxData(it, resolver).accept(RepositoryIPageExtensionsVisitor()) }
     return emptyList()
   }
 }

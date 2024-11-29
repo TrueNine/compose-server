@@ -1,8 +1,8 @@
 version = libs.versions.composeKspCore.get()
 
 dependencies {
-  compileOnly(libs.org.springframework.data.springDataCommons)
-  compileOnly(libs.org.hibernate.orm.hibernateCore)
+  //compileOnly(libs.org.springframework.data.springDataCommons)
+  //compileOnly(libs.org.hibernate.orm.hibernateCore)
 }
 
 publishing {

@@ -16,9 +16,7 @@
  */
 package net.yan100.compose.ksp.visitor
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.google.devtools.ksp.*
-import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSNode
@@ -28,33 +26,36 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ksp.toAnnotationSpec
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
-import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.annotation.Nullable
-import jakarta.persistence.Access
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import net.yan100.compose.core.camelCaseToSnakeCase
-import net.yan100.compose.core.hasText
-import net.yan100.compose.core.nonText
-import net.yan100.compose.ksp.*
+import net.yan100.compose.core.toSnakeCase
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.ksp.core.annotations.MetaName
-import net.yan100.compose.ksp.core.annotations.MetaNonNull
 import net.yan100.compose.ksp.core.getFirstName
-import net.yan100.compose.ksp.data.ContextData
-import net.yan100.compose.ksp.dsl.fileDsl
-import net.yan100.compose.ksp.functions.companionObjectBuilder
-import org.hibernate.annotations.Comment
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
+import net.yan100.compose.ksp.toolkit.*
+import net.yan100.compose.ksp.toolkit.dsl.fileDsl
+import net.yan100.compose.ksp.toolkit.models.DeclarationContext
 import org.jetbrains.annotations.NotNull
 
-class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
-  val accessAnnotation = AnnotationSpec.builder(Access::class)
-    .addMember("jakarta.persistence.AccessType.PROPERTY")
-    .build()
+private val jakartaAccessAnnotationClassName = ClassName("jakarta.persistence", "Access")
+private val jakartaTransientAnnotationClassName = ClassName("jakarta.persistence", "Transient")
+private val jakartaColumnAnnotationClassName = ClassName("jakarta.persistence", "Column")
+private val jakartaTableAnnotationClassName = ClassName("jakarta.persistence", "Table")
+private val jakartaEntityAnnotationClassName = ClassName("jakarta.persistence", "Entity")
+private val jakartaSecondaryTableAnnotationClassName = ClassName("jakarta.persistence", "SecondaryTable")
+private val jsonIgnoreAnnotationClassName = ClassName("com.fasterxml.jackson.annotation", "JsonIgnore")
+private val hibernateDynamicInsertAnnotationClassName = ClassName("org.hibernate.annotations", "DynamicInsert")
+private val hibernateDynamicUpdateAnnotationClassName = ClassName("org.hibernate.annotations", "DynamicUpdate")
+private val hibernateImmutableAnnotationClassName = ClassName("org.hibernate.annotations", "Immutable")
+
+class JpaNameClassVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclaration>, Unit>() {
+  private val accessAnnotation = AnnotationSpec.builder(jakartaAccessAnnotationClassName).addMember("jakarta.persistence.AccessType.PROPERTY").build()
   private val jvmTransient = AnnotationSpec.builder(Transient::class)
-  private val jpaTransient = AnnotationSpec.builder(jakarta.persistence.Transient::class)
+  private val jpaTransient = AnnotationSpec.builder(jakartaTransientAnnotationClassName)
+
+  private lateinit var log: KSPLogger
+
+  override fun defaultHandler(node: KSNode, data: DeclarationContext<KSClassDeclaration>) {
+    log = data.log
+  }
 
   data class JpaProperty(
     var name: String,
@@ -67,51 +68,27 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
   ) {
     init {
       requireDelegate = ((basicType && !nullable) || !nullable) // 满足此条件则必须进行委托
-      if (title.nonText()) {
+      if (title.isNullOrBlank()) {
         title = desc?.lines()?.firstOrNull()?.trim()?.replace("#", "")?.trim()?.also { desc = desc?.lines()?.drop(1)?.joinToString("\n")?.trim() }
       }
     }
   }
 
-  /** ## 当前类是否为 jpa 类 */
   @OptIn(KspExperimental::class)
-  private fun KSClassDeclaration.isJpaHandle(prefix: String = "super"): Boolean {
-    val lower = shName.lowercase()
-    val annotations = getAnnotationsByType(MetaDef::class).toList()
-    return lower.startsWith(prefix) && annotations.isNotEmpty()
-  }
-
-  @OptIn(KspExperimental::class)
-  private fun KSPropertyDeclaration.getColumnName(): String {
-    return getAnnotationsByType(Column::class).firstOrNull()?.name
-      ?: (getAnnotationsByType(MetaName::class).getFirstName() ?: shName.camelCaseToSnakeCase)
+  private fun getColumnName(property: KSPropertyDeclaration): String {
+    return (property.getAnnotationsByType(MetaName::class).getFirstName() ?: property.simpleNameGetShortNameStr.toSnakeCase())
   }
 
   @OptIn(KspExperimental::class)
   private fun KSPropertyDeclaration.isAnnotatedNonNull(): Boolean {
-    val isJpaNonNull = isAnnotationPresent(jakarta.validation.constraints.NotNull::class)
     val isJbrNonNull = isAnnotationPresent(NotNull::class)
-    val isValidNonNull = isAnnotationPresent(jakarta.validation.constraints.NotNull::class)
-    val isAnnoNonNull = isAnnotationPresent(MetaNonNull::class)
-    return isAnnoNonNull || isValidNonNull || isJpaNonNull || isJbrNonNull
+    return isJbrNonNull
   }
 
   private val propertyIgnoreAnnotations =
     listOf(
-      Schema::class,
-      Column::class,
-      Comment::class,
-      NotNull::class,
       MetaName::class,
-      MetaNonNull::class,
-      Nullable::class,
-      org.jetbrains.annotations.Nullable::class,
     )
-  private lateinit var log: KSPLogger
-
-  override fun defaultHandler(node: KSNode, data: ContextData) {
-    log = data.log
-  }
 
   @OptIn(KspExperimental::class)
   fun findSuperName(classDeclaration: KSClassDeclaration): String? {
@@ -119,13 +96,18 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
     val x =
       ab.lastOrNull()?.let {
         val anno = it.getAnnotationsByType(MetaName::class).lastOrNull()
-        if (anno?.name.hasText()) anno?.name else if (anno?.value.hasText()) anno?.value else it.simpleName.asString().replace("Super", "").camelCaseToSnakeCase
+        if (anno?.name?.isBlank() == true) anno.name else if (anno?.value?.isNotBlank() == true) anno.value else it.simpleName.asString()
+          .replaceFirst("Super", "")
       }
     return x
   }
 
   @OptIn(KspExperimental::class)
-  private fun reGetAllProperty(classDeclaration: KSClassDeclaration, destClassName: String): List<Pair<KSPropertyDeclaration, PropertySpec>> {
+  private fun regetProperties(
+    classDeclaration: KSClassDeclaration,
+    destClassName: String,
+    metaDefIsShadow: Boolean
+  ): List<Pair<KSPropertyDeclaration, PropertySpec>> {
     val currentAllProperties = classDeclaration.getDeclaredProperties().toMutableList()
     val superTypes =
       classDeclaration.superTypes
@@ -134,13 +116,12 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
 
     val sp =
       superTypes
-        .map { reGetAllProperty(it, destClassName) }
+        .map { regetProperties(it, destClassName, metaDefIsShadow) }
         .flatten()
         .filter {
           val (k) = it
           currentAllProperties.none { a -> a.simpleName.getShortName() == k.simpleName.getShortName() }
         }
-    val metaDefIsShadow = classDeclaration.getAnnotationsByType(MetaDef::class).firstOrNull()?.shadow ?: false
 
     return currentAllProperties
       .filter { it.isPublic() && it.isAbstract() && it.isMutable }
@@ -148,28 +129,23 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
       .map { p ->
         val jpaProperty =
           JpaProperty(
-            name = p.shName,
+            name = p.simpleNameGetShortNameStr,
             title = null,
-            desc = p.docString.cleanedDoc(),
+            desc = null,
             nullable = !p.isAnnotatedNonNull() && p.type.resolve().isMarkedNullable,
             requireDelegate = p.isDelegated(),
-            basicType = p.actualType.isBasicType(),
+            basicType = p.actualDeclaration.isBasicType(),
             shadow = metaDefIsShadow
           )
-        log.info("type: ${p.qName} basic: ${p.isBasicType()} actual: ${p.actualType.qName} actualBasicType: ${p.actualType.isBasicType()}  jpa property: $jpaProperty")
+        log.info("handle class type: ${p.qualifiedNameAsStringStr} basic: ${p.isBasicType()} actual: ${p.actualDeclaration.qualifiedNameAsStringStr} actualBasicType: ${p.actualDeclaration.isBasicType()}  jpa property: $jpaProperty")
 
-        p.getKspAnnotationsByType<Schema>().firstOrNull()?.also {
-          val sc = it.toAnnotation<Schema>()
-          if (sc.title.hasText()) jpaProperty.title = sc.title
-          if (sc.description.hasText()) jpaProperty.desc = sc.description
-        }
-
-        p to PropertySpec.builder(p.sName, p.type.toTypeName().copy(jpaProperty.nullable))
-          .openedModifier()
-          .overrideModifier()
+        p to PropertySpec.builder(p.simpleNameAsStringStr, p.type.toTypeName().copy(jpaProperty.nullable))
+          .addOverrideModifier()
+          .addOpeneModifier()
+          //.addFinalModifier()
           .also { b ->
-            b.addAnnotations(generatePropertyAnnotations(p, jpaProperty))
-            if (!jpaProperty.nullable && !jpaProperty.requireDelegate && !p.actualType.isBasicType()) {
+            b.addAnnotations(generatePropertyOtherAnnotations(p, jpaProperty))
+            if (!jpaProperty.nullable && !jpaProperty.requireDelegate && !p.actualDeclaration.isBasicType()) {
               if (!jpaProperty.basicType) b.addModifiers(KModifier.LATEINIT)
             } else if (jpaProperty.nullable) {
               b.initializer("null")
@@ -184,54 +160,100 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
   }
 
   private fun getConstantProperty(p: KSPropertyDeclaration): PropertySpec {
-    val cn = p.getColumnName()
-    return PropertySpec.builder(p.shName.camelCaseToSnakeCase.uppercase(), String::class)
-      .constantModifier().initializer("%S", cn)
+    val cn = getColumnName(p)
+    return PropertySpec.builder(p.simpleNameGetShortNameStr.toSnakeCase().uppercase(), String::class)
+      .addConstModifier().initializer("%S", cn)
       .addAnnotation(jvmTransient.useField().build())
       .build()
   }
 
   @OptIn(KspExperimental::class)
-  override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: ContextData) {
-    super.visitClassDeclaration(classDeclaration, data)
+  override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: DeclarationContext<KSClassDeclaration>) {
+    log = data.log
+
     val classSimpleName = classDeclaration.simpleName.getShortName()
     val superClassName = ClassName(classDeclaration.packageName.asString(), classDeclaration.simpleName.asString())
-    if (classDeclaration.isJpaHandle()) {
-      val destName = classSimpleName.replaceFirst("Super", "")
-      val destClassName = ClassName(classDeclaration.packageName.asString(), destName)
-      val tableName =
-        classDeclaration.getAnnotationsByType(MetaName::class).getFirstName()
-          ?: findSuperName(classDeclaration)
-          ?: destClassName.simpleName.camelCaseToSnakeCase
 
-      fileDsl(classDeclaration.packageName.asString(), destName) {
+    val destName = classSimpleName.replaceFirst("Super", "")
+    val destClassName = ClassName(classDeclaration.packageName.asString(), destName)
+    val tableName =
+      classDeclaration.getAnnotationsByType(MetaName::class).getFirstName()
+        ?: findSuperName(classDeclaration)
+        ?: destClassName.simpleName.toSnakeCase()
+    val metaDefIsShadow = classDeclaration.getAnnotationsByType(MetaDef::class).firstOrNull()?.shadow ?: false
 
-        builder.addAnnotation(
-          AnnotationSpec.builder(
-            Suppress::class
-          ).addMember("%S", "Unused").addMember("%S", "RedundantVisibilityModifier").useFile().build()
-        )
+    fileDsl(classDeclaration.packageName.asString(), destName) {
+      builder.addAnnotation(
+        AnnotationSpec.builder(
+          Suppress::class
+        ).addMember("%S", "Unused").addMember("%S", "RedundantVisibilityModifier").useFile().build()
+      )
 
-        classBy(destClassName) {
-          opened()
-          annotateBy(accessAnnotation)
-
-          log.info("generate class: $destClassName")
-
-          annotateAllBy(generateClassAnnotations(destClassName))
-          extendsBy(superClassName)
-
-          val fieldAndAnnotations = reGetAllProperty(classDeclaration, destName)
-          builder.addProperties(fieldAndAnnotations.map { it.second }.toSet())
-          builder.addType(generateCompanionObject(tableName, fieldAndAnnotations.map {
-            getConstantProperty(it.first)
-          }.asSequence()))
+      classBy(destClassName) {
+        opened()
+        annotateBy(accessAnnotation)
+        if (metaDefIsShadow) {
+          annotateBy(AnnotationSpec.builder(hibernateImmutableAnnotationClassName).build())
         }
-      }.writeTo(data.codeGenerator, Dependencies.ALL_FILES)
-    }
+
+        log.info("generate class: $destClassName")
+
+        annotateAllBy(generateClassAnnotations(destClassName, metaDefIsShadow))
+        extendsBy(superClassName)
+
+        val fieldAndAnnotations = regetProperties(classDeclaration, destName, metaDefIsShadow)
+
+
+        if (fieldAndAnnotations.isNotEmpty()) {
+          // 生成一个空构造器
+          val secondaryConstructorParameters = fieldAndAnnotations.map { (_, it) ->
+            ParameterSpec.builder(it.name, it.type.copy(nullable = it.type.isNullable))
+              .also { i ->
+                if (it.type.isNullable) i.defaultValue("null")
+              }
+              .build()
+          }
+          builder.primaryConstructor(FunSpec.constructorBuilder().build())
+          builder.addFunction(
+            FunSpec.constructorBuilder()
+              .callThisConstructor()
+              .addParameters(secondaryConstructorParameters)
+              .addCode(
+                CodeBlock.builder()
+                  .also { c ->
+                    fieldAndAnnotations.forEach { (_, p) ->
+                      c.addStatement("this.${p.name} = ${p.name}")
+                    }
+                  }
+                  .build())
+              .build()
+          )
+
+          // 生成一个默认 toString()
+          builder.addFunction(
+            FunSpec.builder("toString")
+              .addModifiers(KModifier.OVERRIDE)
+              .returns(String::class)
+              .addCode(
+                CodeBlock.builder()
+                  .addStatement("return \"%T(%L) <\${%L}\"", destClassName, fieldAndAnnotations.joinToString { (_, p) ->
+                    "${p.name}=\${${p.name}}"
+                  }, "super.toString()")
+                  .build()
+              )
+              .build()
+          )
+        }
+
+        builder.addProperties(fieldAndAnnotations.map { it.second }.toSet())
+        builder.addType(generateCompanionObject(tableName, fieldAndAnnotations.map {
+          getConstantProperty(it.first)
+        }.asSequence()))
+      }
+    }.writeTo(data.codeGenerator, data.dependencies)
   }
 
-  private fun generatePropertyAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
+  private fun generatePropertyOtherAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
     val otherAnnotations =
       k.annotations
         .filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationBy(it) } }
@@ -245,9 +267,19 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
         }
         .toMutableList()
         .also { e ->
-          k.getter
-            ?.annotations
-            ?.filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationBy(it) } }
+          k.getter?.annotations
+            ?.filterNot { getterAnnotation ->
+              propertyIgnoreAnnotations.any {
+                try {
+                  log.info("getter annotation: $getterAnnotation")
+                  getterAnnotation.isAnnotationBy(it)
+                } catch (e: Exception) {
+                  log.error("annotation")
+                  log.exception(e)
+                  false
+                }
+              }
+            }
             ?.map { it.toAnnotationSpec().toBuilder().useGet().build() }
             ?.apply(e::addAll)
           k.setter
@@ -260,14 +292,15 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
     if (pp.requireDelegate) {
       otherAnnotations += jvmTransient.useDelegate().build()
       otherAnnotations += jpaTransient.useDelegate().build()
-      otherAnnotations += AnnotationSpec.builder(JsonIgnore::class).useDelegate().build()
+      otherAnnotations += AnnotationSpec.builder(jsonIgnoreAnnotationClassName).useDelegate().build()
     }
     otherAnnotations += buildColumnAnnotations(k, pp)
     return otherAnnotations
   }
 
   private fun buildColumnAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
-    val meta = AnnotationSpec.builder(Column::class).addMember("name = ${k.shName.camelCaseToSnakeCase.uppercase()}")
+    val meta = AnnotationSpec.builder(jakartaColumnAnnotationClassName)
+      .addMember("name = ${k.simpleNameGetShortNameStr.toSnakeCase().uppercase()}")
     if (!pp.nullable) meta.addMember("nullable = false")
     if (pp.shadow) {
       meta.addMember("insertable = false")
@@ -278,29 +311,30 @@ class JpaNameClassVisitor : KSTopDownVisitor<ContextData, Unit>() {
       results += meta.useDelegate().build()
       results += accessAnnotation.toBuilder().useGet().build()
       results += accessAnnotation.toBuilder().useSet().build()
-    } //else results += meta.useField().build()
+    }
     results += meta.useGet().build()
     return results
   }
 
-  private fun generateClassAnnotations(destClassName: ClassName): List<AnnotationSpec> {
-    val tableAnno =
-      AnnotationSpec.builder(jakarta.persistence.Table::class).addMember(
-        CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName)
-          .build()
-      ).build()
+  private fun generateClassAnnotations(destClassName: ClassName, metaDefIsShadow: Boolean): List<AnnotationSpec> {
+    val tableAnnotation = AnnotationSpec.builder(
+      if (metaDefIsShadow) jakartaSecondaryTableAnnotationClassName
+      else jakartaTableAnnotationClassName
+    ).addMember(
+      CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName).build()
+    ).build()
     return listOf(
-      AnnotationSpec.builder(Entity::class).build(),
-      tableAnno,
-      AnnotationSpec.builder(DynamicInsert::class).build(),
-      AnnotationSpec.builder(DynamicUpdate::class).build(),
+      AnnotationSpec.builder(jakartaEntityAnnotationClassName).build(),
+      AnnotationSpec.builder(hibernateDynamicInsertAnnotationClassName).build(),
+      AnnotationSpec.builder(hibernateDynamicUpdateAnnotationClassName).build(),
+      tableAnnotation
     )
   }
 
   private fun generateCompanionObject(tableName: String, ppc: Sequence<PropertySpec>): TypeSpec {
-    val tableNameConst = PropertySpec.builder("TABLE_NAME", String::class).constantModifier()
+    val tableNameConst = PropertySpec.builder("TABLE_NAME", String::class).addConstModifier()
       .addAnnotation(jvmTransient.useField().build())
       .initializer("%S", tableName).build()
-    return companionObjectBuilder().addProperty(tableNameConst).addProperties(ppc.toSet()).build()
+    return TypeSpec.companionObjectBuilder().addProperty(tableNameConst).addProperties(ppc.toSet()).build()
   }
 }

@@ -22,6 +22,7 @@ import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
 class KspPluginMain : SymbolProcessorProvider {
   override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-    return KspPluginProcessor(environment, environment.codeGenerator, environment.logger)
+    environment.logger.info("start ksp generate, kspVersion: ${environment.kspVersion}, kotlinVersion${environment.kspVersion}, platforms: ${environment.platforms}, options: ${environment.options}")
+    return KspPluginProcessor(environment)
   }
 }

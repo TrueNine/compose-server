@@ -14,24 +14,19 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.dsl
+package net.yan100.compose.ksp.toolkit.dsl
 
-import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import kotlin.reflect.KClass
+import com.squareup.kotlinpoet.TypeSpec
 
-interface StandardBuilderAdaptor<T, R> {
-  val builder: T
+class KObjectSpecScope @JvmOverloads constructor(
+  name: String = "",
+  className: ClassName? = null,
+  override val fileBuilder: FileSpec.Builder
+) :
+  StandardBuilderAdaptor<TypeSpec.Builder, TypeSpec> {
+  override val builder: TypeSpec.Builder = if (null != className) TypeSpec.objectBuilder(className) else TypeSpec.classBuilder(name)
 
-  fun build(): R
-
-  val fileBuilder: FileSpec.Builder
-
-  fun importBy(pkg: String, vararg names: String) = fileBuilder.addImport(pkg, *names)
-
-  fun importBy(classDeclaration: KSClassDeclaration) = fileBuilder.addImport(classDeclaration.packageName.asString(), classDeclaration.simpleName.asString())
-
-  fun importBy(clazz: Class<*>) = fileBuilder.addImport(clazz)
-
-  fun importBy(kClazz: KClass<*>) = fileBuilder.addImport(kClazz)
+  override fun build(): TypeSpec = builder.build()
 }

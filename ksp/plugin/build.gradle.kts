@@ -1,19 +1,40 @@
-project.version = libs.versions.composeKspPlugin.get()
+version = libs.versions.composeKspPlugin.get()
 
 dependencies {
-  implementation(libs.com.google.devtools.ksp.symbolProcessingApi)
-  implementation(libs.com.squareup.javapoet)
+  compileOnly(libs.com.google.devtools.ksp.symbolProcessingApi)
+
   implementation(libs.com.squareup.kotlinpoetJvm)
   implementation(libs.com.squareup.kotlinpoetKsp)
-  implementation(libs.org.jetbrains.kotlinx.kotlinxIoCore)
-  implementation(libs.org.jetbrains.kotlinx.kotlinxIoCoreJvm)
-  implementation(project(":ksp:ksp-core"))
-  implementation(project(":ksp:ksp-toolkit"))
-  implementation(project(":core"))
 
+  implementation(project(":ksp:ksp-core"))
+  implementation(project(":core"))
+  implementation(project(":ksp:ksp-toolkit"))
+
+  testImplementation(project(":core"))
   testImplementation(project(":test-toolkit"))
-  testImplementation(libs.com.github.tschuchortdev.kotlinCompileTestingKsp)
+
+  testImplementation(libs.com.github.tschuchortdev.kotlinCompileTestingKsp) {
+    //exclude("com.google.devtools.ksp")
+    //exclude("org.jetbrains.kotlin")
+  }
 }
+
+/*if (JavaVersion.current() >= JavaVersion.VERSION_16) {
+  tasks.withType<Test>().all {
+    jvmArgs(
+      "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+      "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+    )
+  }
+}*/
 
 publishing {
   publications {

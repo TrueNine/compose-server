@@ -14,15 +14,18 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.ksp.dsl
+package net.yan100.compose.ksp.toolkit
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.AnnotationSpec
 
-class ObjectDsl @JvmOverloads constructor(name: String = "", className: ClassName? = null, override val fileBuilder: FileSpec.Builder) :
-  StandardBuilderAdaptor<TypeSpec.Builder, TypeSpec> {
-  override val builder: TypeSpec.Builder = if (null != className) TypeSpec.objectBuilder(className) else TypeSpec.classBuilder(name)
+fun AnnotationSpec.Builder.useFile() = useSiteTarget(AnnotationSpec.UseSiteTarget.FILE)
 
-  override fun build(): TypeSpec = builder.build()
-}
+fun AnnotationSpec.Builder.useGet() = useSiteTarget(AnnotationSpec.UseSiteTarget.GET)
+
+fun AnnotationSpec.Builder.useSet() = useSiteTarget(AnnotationSpec.UseSiteTarget.SET)
+
+fun AnnotationSpec.Builder.useField() = useSiteTarget(AnnotationSpec.UseSiteTarget.FIELD)
+
+fun AnnotationSpec.Builder.useDelegate() = useSiteTarget(AnnotationSpec.UseSiteTarget.DELEGATE)
+
+fun AnnotationSpec.Builder.useProperty() = useSiteTarget(AnnotationSpec.UseSiteTarget.PROPERTY)

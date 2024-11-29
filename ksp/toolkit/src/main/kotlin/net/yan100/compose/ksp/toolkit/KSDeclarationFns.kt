@@ -1,22 +1,35 @@
-package net.yan100.compose.ksp
+package net.yan100.compose.ksp.toolkit
 
 import com.google.devtools.ksp.findActualType
-import com.google.devtools.ksp.symbol.FileLocation
-import com.google.devtools.ksp.symbol.KSDeclaration
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
-import com.google.devtools.ksp.symbol.KSTypeAlias
-import net.yan100.compose.core.hasText
+import com.google.devtools.ksp.symbol.*
 import kotlin.reflect.KClass
 
+/**
+ * `simpleName.asString()`
+ * @see KSDeclaration.simpleName
+ * @see KSName.asString
+ */
+val KSDeclaration.simpleNameAsStringStr: String get() = simpleName.asString()
 
-val KSDeclaration.sName: String get() = simpleName.asString()
-val KSDeclaration.qName: String? get() = qualifiedName?.asString()
+/**
+ * # 一般用此类表示 包名 + 类名
+ * `qualifiedName.asString()`
+ * @see KSDeclaration.qualifiedName
+ * @see KSName.asString
+ */
+val KSDeclaration.qualifiedNameAsStringStr: String? get() = qualifiedName?.asString()
 
 /**
  * `simpleName.getShortName()`
+ * @see KSDeclaration.simpleName
+ * @see KSName.getShortName
  */
-val KSDeclaration.shName: String get() = simpleName.getShortName()
-val KSDeclaration.actualType: KSDeclaration
+val KSDeclaration.simpleNameGetShortNameStr: String get() = simpleName.getShortName()
+
+/**
+ * 其真实指向的 [KSDeclaration]
+ */
+val KSDeclaration.actualDeclaration: KSDeclaration
   get() {
     val resolved = if (this is KSTypeAlias) findActualType()
     else this
@@ -26,8 +39,11 @@ val KSDeclaration.actualType: KSDeclaration
     }
   }
 
+/**
+ * 该定义是否为基础类型
+ */
 fun KSDeclaration.isBasicType(): Boolean {
-  return when (actualType.qName) {
+  return when (actualDeclaration.qualifiedNameAsStringStr) {
     "java.lang.Character",
     "kotlin.Char",
     "java.lang.Integer",
@@ -49,15 +65,39 @@ fun KSDeclaration.isBasicType(): Boolean {
   }
 }
 
-fun KSDeclaration.isType(clazz: KClass<*>): Boolean {
-  val name = clazz.qualifiedName
-  require(name.hasText()) { "class $clazz qName be null,qName ${clazz.qualifiedName}}" }
-  return qName == name
+/**
+ * 判断是否为指定类型
+ */
+fun KSDeclaration.isClass(kClass: KClass<*>): Boolean {
+  return isClassQualifiedName(kClass.qualifiedName!!)
 }
 
+/**
+ * 判断是否为指定类型
+ */
+fun KSDeclaration.isClassQualifiedName(qualifiedName: String): Boolean {
+  require(qualifiedName.isBlank()) { "class $qualifiedName qName be null,qName ${qualifiedName}}" }
+  return qualifiedNameAsStringStr == qualifiedName.trim()
+}
+
+
+/** ## 获取真实类型的助注解 */
+val KSDeclaration.actualAnnotationClassDeclarations: Sequence<KSClassDeclaration>
+  get() {
+    val ats = annotations.map { it.annotationType.resolve().declaration }
+    return ats.map { d ->
+      if (d is KSTypeAlias) {
+        d.findActualType()
+      } else d as KSClassDeclaration
+    }
+  }
+
+/**
+ * 根据当前定义输出一段调试信息
+ */
 fun KSDeclaration.debugInfo(): String = buildString {
-  val annotationInfos = actualAnnotations.map {
-    val name = it.qName
+  val annotationInfos = actualAnnotationClassDeclarations.map {
+    val name = it.qualifiedNameAsStringStr
     buildString {
       appendLine("Name: $name")
     }

@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp
+package net.yan100.compose.ksp.toolkit
 
 import com.google.devtools.ksp.symbol.KSDeclaration
 import com.squareup.kotlinpoet.FileSpec
