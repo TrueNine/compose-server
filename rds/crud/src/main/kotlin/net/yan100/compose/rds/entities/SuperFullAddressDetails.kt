@@ -33,5 +33,5 @@ abstract class SuperFullAddressDetails : SuperAddressDetails() {
   @JoinColumn(name = "address_id", referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
   @NotFound(action = NotFoundAction.IGNORE)
   @Fetch(FetchMode.JOIN)
-  var address: Address? = null
+  open var address: Address? = null
 }

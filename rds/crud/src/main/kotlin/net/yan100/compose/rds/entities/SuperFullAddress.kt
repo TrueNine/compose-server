@@ -33,5 +33,5 @@ abstract class SuperFullAddress : SuperAddress() {
   @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
   @JoinColumn(name = AddressDetails.ADDRESS_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
   @Fetch(SUBSELECT)
-  var details: List<AddressDetails> = listOf()
+  open var details: List<AddressDetails> = listOf()
 }

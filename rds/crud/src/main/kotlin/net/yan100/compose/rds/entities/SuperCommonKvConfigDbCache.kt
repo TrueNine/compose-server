@@ -19,8 +19,6 @@ package net.yan100.compose.rds.entities
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
-import jakarta.validation.constraints.Pattern
-import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 
@@ -29,7 +27,6 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MappedSuperclass
 abstract class SuperCommonKvConfigDbCache : IEntity() {
   /** ## 配置 key */
-  @get:Pattern(regexp = IRegexes.CONFIG_KEY)
   @get:Schema(title = "配置 key")
   abstract var k: String
 
@@ -37,6 +34,4 @@ abstract class SuperCommonKvConfigDbCache : IEntity() {
   @get:Hidden
   @get:Schema(title = "配置 value")
   abstract var v: String?
-
-
 }

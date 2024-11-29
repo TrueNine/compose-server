@@ -34,30 +34,30 @@ abstract class SuperFullRoleGroup : SuperRoleGroup() {
   @JoinTable(
     name = RoleGroupRole.TABLE_NAME,
     joinColumns =
-    [
-      JoinColumn(
-        table = RoleGroupRole.TABLE_NAME,
-        name = RoleGroupRole.ROLE_GROUP_ID,
-        referencedColumnName = ID,
-        foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-        insertable = false,
-        updatable = false,
-      )
-    ],
+      [
+        JoinColumn(
+          table = RoleGroupRole.TABLE_NAME,
+          name = RoleGroupRole.ROLE_GROUP_ID,
+          referencedColumnName = ID,
+          foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+          insertable = false,
+          updatable = false,
+        )
+      ],
     inverseJoinColumns =
-    [
-      JoinColumn(
-        table = RoleGroupRole.TABLE_NAME,
-        name = RoleGroupRole.ROLE_ID,
-        referencedColumnName = ID,
-        foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-        insertable = false,
-        updatable = false,
-      )
-    ],
+      [
+        JoinColumn(
+          table = RoleGroupRole.TABLE_NAME,
+          name = RoleGroupRole.ROLE_ID,
+          referencedColumnName = ID,
+          foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+          insertable = false,
+          updatable = false,
+        )
+      ],
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)
-  var roles: List<@JvmSuppressWildcards FullRole> = mutableListOf()
+  open var roles: List<@JvmSuppressWildcards FullRole> = mutableListOf()
 }

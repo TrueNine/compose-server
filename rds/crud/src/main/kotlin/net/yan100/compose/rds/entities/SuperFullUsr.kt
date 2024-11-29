@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.entities
 
-import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED
@@ -40,25 +39,14 @@ abstract class SuperFullUsr : SuperUsr() {
   @JoinTable(
     name = UserRoleGroup.TABLE_NAME,
     joinColumns =
-    [JoinColumn(name = UserRoleGroup.USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)],
+      [JoinColumn(name = UserRoleGroup.USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)],
     inverseJoinColumns =
-    [
-      JoinColumn(name = UserRoleGroup.ROLE_GROUP_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
-    ],
+      [
+        JoinColumn(name = UserRoleGroup.ROLE_GROUP_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
+      ],
     foreignKey = ForeignKey(NO_CONSTRAINT),
   )
   @Fetch(SUBSELECT)
   @NotFound(action = IGNORE)
-  var roleGroups: List<RoleGroup> = mutableListOf()
-
-  /** 用户信息 */
-  @Schema(title = "用户信息", requiredMode = NOT_REQUIRED)
-  @JsonManagedReference
-  @OneToOne(mappedBy = MAPPED_BY_USR)
-  @NotFound(action = IGNORE)
-  var info: FullUserInfo? = null
-
-  companion object {
-    const val MAPPED_BY_USR = "usr"
-  }
+  open var roleGroups: List<RoleGroup> = mutableListOf()
 }

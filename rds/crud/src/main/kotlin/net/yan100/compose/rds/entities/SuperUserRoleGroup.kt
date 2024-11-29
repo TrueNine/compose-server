@@ -17,14 +17,10 @@
 package net.yan100.compose.rds.entities
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.annotation.Nullable
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.RefId
+import net.yan100.compose.ksp.core.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
 
 /**
  * 用户 角色组
@@ -32,27 +28,15 @@ import org.hibernate.annotations.DynamicUpdate
  * @author TrueNine
  * @since 2023-01-02
  */
-@Entity
-@DynamicInsert
-@DynamicUpdate
+@MetaDef
+@MappedSuperclass
 @Schema(title = "用户  角色组")
-@Table(name = UserRoleGroup.TABLE_NAME)
-class UserRoleGroup : IEntity() {
+abstract class SuperUserRoleGroup : IEntity() {
   /** 用户 */
-  @Nullable
-  @Schema(title = "用户")
-  @Column(name = USER_ID)
-  lateinit var userId: RefId
+  @get:Schema(title = "用户")
+  abstract var userId: RefId
 
   /** 权限组 */
-  @Nullable
-  @Schema(title = "权限组")
-  @Column(name = ROLE_GROUP_ID)
-  lateinit var roleGroupId: RefId
-
-  companion object {
-    const val TABLE_NAME: String = "user_role_group"
-    const val USER_ID: String = "user_id"
-    const val ROLE_GROUP_ID: String = "role_group_id"
-  }
+  @get:Schema(title = "权限组")
+  abstract var roleGroupId: RefId
 }

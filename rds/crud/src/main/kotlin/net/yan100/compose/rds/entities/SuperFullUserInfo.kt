@@ -16,7 +16,7 @@ abstract class SuperFullUserInfo : SuperUserInfo() {
   @JoinColumn(name = "user_id", referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
   @JsonBackReference
   @NotFound(action = NotFoundAction.IGNORE)
-  var usr: Usr? = null
+  open var usr: Usr? = null
 
   /** 用户住址 */
   @Schema(title = "用户住址", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
@@ -29,12 +29,12 @@ abstract class SuperFullUserInfo : SuperUserInfo() {
     updatable = false,
   )
   @NotFound(action = NotFoundAction.IGNORE)
-  var addressDetails: AddressDetails? = null
+  open var addressDetails: AddressDetails? = null
 
   /** 用户头像 */
   @Schema(title = "头像")
   @ManyToOne(targetEntity = LinkedAttachment::class)
   @JoinColumn(name = "avatar_img_id", referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
   @NotFound(action = NotFoundAction.IGNORE)
-  var avatarImage: LinkedAttachment? = null
+  open var avatarImage: LinkedAttachment? = null
 }

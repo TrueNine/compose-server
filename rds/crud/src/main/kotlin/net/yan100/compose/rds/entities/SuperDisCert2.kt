@@ -5,11 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
 import net.yan100.compose.core.RefId
-import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.date
 import net.yan100.compose.core.domain.IDisCode
 import net.yan100.compose.core.string
@@ -57,9 +53,6 @@ abstract class SuperDisCert2 : IDisCode, IEntity() {
   @get:Convert(converter = GenderTypingConverter::class)
   abstract var gender: GenderTyping
 
-  @get:NotBlank(message = "不能为空")
-  @get:Pattern(regexp = IRegexes.CHINA_DIS_CARD, message = "残疾证号不合法")
-  @get:Size(max = 22, min = 20, message = "残疾证长度为 20 到 22 位")
   @get:Schema(title = "残疾证编号")
   abstract var code: string
 

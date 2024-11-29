@@ -35,30 +35,30 @@ abstract class SuperFullRole : SuperRole() {
   @JoinTable(
     name = "role_permissions",
     joinColumns =
-    [
-      JoinColumn(
-        table = "role_permissions",
-        name = "role_id",
-        referencedColumnName = ID,
-        foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-        insertable = false,
-        updatable = false,
-      )
-    ],
+      [
+        JoinColumn(
+          table = "role_permissions",
+          name = "role_id",
+          referencedColumnName = ID,
+          foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+          insertable = false,
+          updatable = false,
+        )
+      ],
     inverseJoinColumns =
-    [
-      JoinColumn(
-        table = "role_permissions",
-        name = "permissions_id",
-        referencedColumnName = ID,
-        foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
-        insertable = false,
-        updatable = false,
-      )
-    ],
+      [
+        JoinColumn(
+          table = "role_permissions",
+          name = "permissions_id",
+          referencedColumnName = ID,
+          foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+          insertable = false,
+          updatable = false,
+        )
+      ],
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
   )
   @Fetch(FetchMode.SUBSELECT)
   @NotFound(action = NotFoundAction.IGNORE)
-  var permissions: List<@JvmSuppressWildcards Permissions> = mutableListOf()
+  open var permissions: List<@JvmSuppressWildcards Permissions> = mutableListOf()
 }

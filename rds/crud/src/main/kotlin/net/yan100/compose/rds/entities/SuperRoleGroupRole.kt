@@ -28,8 +28,8 @@ import net.yan100.compose.rds.core.entities.IEntity
  * @author TrueNine
  * @since 2023-01-02
  */
-@MappedSuperclass
 @MetaDef
+@MappedSuperclass
 @Schema(title = "角色组  角色")
 abstract class SuperRoleGroupRole : IEntity() {
   /** 用户组 */

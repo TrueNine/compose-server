@@ -21,11 +21,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.ReferenceId
-import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.domain.IIdcard2Code
 import net.yan100.compose.core.string
@@ -52,8 +49,6 @@ abstract class SuperIdcard2 : IIdcard2Code, IEntity() {
   @get:Schema(title = "生日")
   abstract var birthday: datetime?
 
-  @get:NotBlank
-  @get:Pattern(regexp = IRegexes.CHINA_ID_CARD, message = "身份证格式不对")
   @get:Schema(title = "身份证号")
   abstract var code: string
 
