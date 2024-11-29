@@ -27,11 +27,12 @@ import net.yan100.compose.rds.entities.Usr
 import net.yan100.compose.rds.service.IRoleGroupService
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
-import net.yan100.compose.security.crypto.Keys
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Service
 class AccountAggregatorImpl(
@@ -42,6 +43,7 @@ class AccountAggregatorImpl(
   private val roleGroupService: IRoleGroupService,
 ) : IAccountAggregator {
 
+  @OptIn(ExperimentalUuidApi::class)
   @ACID
   @Deprecated("触发了脏跟踪特性")
   override fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): Usr? {
@@ -56,7 +58,7 @@ class AccountAggregatorImpl(
             this.createUserId = createUserId
             nickName = info.firstName + info.lastName
             account = bizCodeGen.nextString()
-            pwdEnc = passwordEncoder.encode(Keys.generateRandomAsciiString())
+            pwdEnc = passwordEncoder.encode(Uuid.random().toHexString())
             userService.postFound(this)
           }
         val saveAccount = userService.postFound(account)
