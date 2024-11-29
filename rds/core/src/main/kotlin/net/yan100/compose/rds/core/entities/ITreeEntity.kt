@@ -36,23 +36,6 @@ import net.yan100.compose.rds.core.domain.PersistenceAuditTreeData
  */
 @MappedSuperclass
 abstract class ITreeEntity : IEntity() {
-  companion object {
-    @kotlin.jvm.Transient
-    const val RPI = IDbNames.ROW_PARENT_ID
-
-    @kotlin.jvm.Transient
-    const val RLN = IDbNames.LEFT_NODE
-
-    @kotlin.jvm.Transient
-    const val RRN = IDbNames.RIGHT_NODE
-
-    @kotlin.jvm.Transient
-    const val NLV = IDbNames.NODE_LEVEL
-
-    @kotlin.jvm.Transient
-    const val TGI = IDbNames.TREE_GROUP_ID
-  }
-
   /**
    * ## 当前数据的审计数据，独特于 ITreeEntity
    */
@@ -79,32 +62,32 @@ abstract class ITreeEntity : IEntity() {
   @JsonIgnore
   @Column(name = RPI)
   @Schema(title = "父id")
-  var rpi: RefId? = null
+  open var rpi: RefId? = null
 
   /** 左节点 */
   @JsonIgnore
   @Column(name = RLN)
   @Schema(title = "左节点", hidden = true)
-  var rln: i64 = 1L
+  open var rln: i64 = 1L
 
   /** 右节点 */
   @JsonIgnore
   @Column(name = RRN)
   @Schema(title = "右节点", hidden = true)
-  var rrn: i64 = 2L
+  open var rrn: i64 = 2L
 
   /** 节点级别 */
   @JsonIgnore
   @Schema(title = "节点级别", defaultValue = "0")
   @Column(name = NLV)
-  var nlv: i64 = 0L
+  open var nlv: i64 = 0L
 
   /** ### 树组 id，在节点插入时必须更上，在插入时随着父id进行更改 */
   @OrderCode
   @JsonIgnore
   @Column(name = TGI)
   @Schema(title = "树 组id", defaultValue = "0")
-  var tgi: string? = null
+  open var tgi: string? = null
 
   override fun changeWithSensitiveData() {
     super.changeWithSensitiveData()
@@ -130,5 +113,22 @@ abstract class ITreeEntity : IEntity() {
 
   override fun toString(): String {
     return "TreeEntity(parentId=$rpi, leftNode=$rln, rightNode=$rrn, nodeLevel=$nlv, treeGroupId=$tgi) <${super.toString()}"
+  }
+
+  companion object {
+    @kotlin.jvm.Transient
+    const val RPI = IDbNames.ROW_PARENT_ID
+
+    @kotlin.jvm.Transient
+    const val RLN = IDbNames.LEFT_NODE
+
+    @kotlin.jvm.Transient
+    const val RRN = IDbNames.RIGHT_NODE
+
+    @kotlin.jvm.Transient
+    const val NLV = IDbNames.NODE_LEVEL
+
+    @kotlin.jvm.Transient
+    const val TGI = IDbNames.TREE_GROUP_ID
   }
 }

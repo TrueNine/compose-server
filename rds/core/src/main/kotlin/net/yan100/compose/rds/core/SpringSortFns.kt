@@ -17,12 +17,12 @@
 package net.yan100.compose.rds.core
 
 import net.yan100.compose.core.nonText
-import net.yan100.compose.core.snakeCaseToCamelCase
+import net.yan100.compose.core.toPascalCase
 import org.springframework.data.domain.Sort
 
 fun MutableList<Sort.Order>.querydslOrderBy(propertyName: String, desc: Boolean? = null): MutableList<Sort.Order> {
   if (propertyName.nonText()) return this
-  val pName = propertyName.snakeCaseToCamelCase
+  val pName = propertyName.toPascalCase(false)
   if (desc != null) this += if (desc) Sort.Order.desc(pName) else Sort.Order.asc(pName)
   return this
 }

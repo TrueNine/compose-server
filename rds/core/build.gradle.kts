@@ -2,13 +2,15 @@ version = libs.versions.composeRdsCore.get()
 
 
 kapt {
+  correctErrorTypes = true
+  keepJavacAnnotationProcessors = true
   javacOptions { option("querydsl.entityAccessors", "true") }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
 
 dependencies {
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
-
+  implementation(libs.jakarta.persistence.jakartaPersistenceApi)
   implementation(project(":core"))
   //implementation(libs.jakarta.validation.jakartaValidationApi)
 
@@ -18,8 +20,10 @@ dependencies {
   implementation(libs.org.springframework.data.springDataJpa)
 
   implementation(libs.com.querydsl.querydslCore)
-  implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
-  //kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
+
+
+  compileOnly(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
+  kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
 
   implementation(libs.org.hibernate.orm.hibernateCore)
 

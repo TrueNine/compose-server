@@ -77,7 +77,7 @@ abstract class IAnyEntity : ISensitivity,
     @Transient @JsonIgnore @JvmName("_\$\$_get_kotlin_internal_primary_id") get() = field ?: ""
 
   @Schema(required = false, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  fun setId(id: String) {
+  open fun setId(id: String) {
     this.id = id
   }
 
@@ -117,7 +117,7 @@ abstract class IAnyEntity : ISensitivity,
   @Schema(hidden = true)
   private var _sensed: Boolean = false
 
-  override fun recordChangedSensitiveData() {
+  final override fun recordChangedSensitiveData() {
     _sensed = true
   }
 
@@ -125,7 +125,7 @@ abstract class IAnyEntity : ISensitivity,
   @Transient
   @JsonIgnore
   @Schema(hidden = true)
-  override val isChangedToSensitiveData: bool = _sensed
+  final override val isChangedToSensitiveData: bool = _sensed
 
   override fun changeWithSensitiveData() {
     super.changeWithSensitiveData()

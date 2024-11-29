@@ -35,19 +35,6 @@ import org.springframework.data.annotation.LastModifiedDate
 @MappedSuperclass
 @Schema(title = "顶级抽象类")
 abstract class IEntity : IAnyEntity() {
-  companion object {
-    @kotlin.jvm.Transient
-    const val RLV = IDbNames.ROW_LOCK_VERSION
-
-    @kotlin.jvm.Transient
-    const val LDF = IDbNames.LOGIC_DELETE_FLAG
-
-    @kotlin.jvm.Transient
-    const val CRD = IDbNames.CREATE_ROW_DATETIME
-
-    @kotlin.jvm.Transient
-    const val MRD = IDbNames.MODIFY_ROW_DATETIME
-  }
 
   /**
    * ## 当前数据的审计数据
@@ -69,8 +56,7 @@ abstract class IEntity : IAnyEntity() {
   @Schema(hidden = true, title = "乐观锁版本")
   @Basic(fetch = FetchType.LAZY)
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityRowLockVersion"))
-
-  var rlv: i64? = null
+  open var rlv: i64? = null
 
   @Suppress("DEPRECATION_ERROR")
   val dbEntityRowLockVersion: i64?
@@ -82,7 +68,7 @@ abstract class IEntity : IAnyEntity() {
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityCreatedDatetime"))
   @Schema(title = "表行创建时间")
   @Column(name = CRD)
-  var crd: datetime? = null
+  open var crd: datetime? = null
 
   @Suppress("DEPRECATION_ERROR")
   val dbEntityCreatedDatetime: datetime?
@@ -94,7 +80,7 @@ abstract class IEntity : IAnyEntity() {
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityLastModifyDatetime"))
   @Schema(title = "表行修改时间")
   @Column(name = MRD)
-  var mrd: datetime? = null
+  open var mrd: datetime? = null
 
   @Suppress("DEPRECATION_ERROR")
   val dbEntityLastModifyDatetime: datetime?
@@ -106,7 +92,7 @@ abstract class IEntity : IAnyEntity() {
   @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityShadowRemoveTag"))
   @Column(name = LDF)
   @Schema(hidden = true, title = "逻辑删除标志")
-  var ldf: Boolean? = null
+  open var ldf: Boolean? = null
 
   @Suppress("DEPRECATION_ERROR")
   @get:Schema(title = "是否已经删除")
@@ -136,5 +122,19 @@ abstract class IEntity : IAnyEntity() {
 
   override fun toString(): String {
     return "Entity(ldf=$dbEntityShadowRemoveTag, rlv=$dbEntityRowLockVersion, crd=$dbEntityCreatedDatetime, mrd=$dbEntityLastModifyDatetime) <${super.toString()}"
+  }
+
+  companion object {
+    @kotlin.jvm.Transient
+    const val RLV = IDbNames.ROW_LOCK_VERSION
+
+    @kotlin.jvm.Transient
+    const val LDF = IDbNames.LOGIC_DELETE_FLAG
+
+    @kotlin.jvm.Transient
+    const val CRD = IDbNames.CREATE_ROW_DATETIME
+
+    @kotlin.jvm.Transient
+    const val MRD = IDbNames.MODIFY_ROW_DATETIME
   }
 }
