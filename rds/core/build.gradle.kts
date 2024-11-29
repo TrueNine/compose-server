@@ -10,9 +10,8 @@ kapt {
 
 dependencies {
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
-  implementation(libs.jakarta.persistence.jakartaPersistenceApi)
+  //implementation(libs.jakarta.persistence.jakartaPersistenceApi)
   implementation(project(":core"))
-  //implementation(libs.jakarta.validation.jakartaValidationApi)
 
   implementation(libs.org.springframework.security.springSecurityCrypto)
 
