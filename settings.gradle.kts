@@ -62,7 +62,7 @@ listOf(
 
 // ksp
 ("ksp" to listOf(
-  "plugin", "core", "toolkit"
+  "plugin", "toolkit"
 )).apply {
   second.forEach { n ->
     include("$first:$n")
