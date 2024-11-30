@@ -1,13 +1,15 @@
 package com.example.entities
 
+import org.babyfish.jimmer.jackson.JsonConverter
+import org.babyfish.jimmer.jackson.LongToStringConverter
 import org.babyfish.jimmer.sql.*
 import java.math.BigDecimal
 
 @Entity
 interface Book {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonConverter(LongToStringConverter::class)
   val id: Long
 
   @Key

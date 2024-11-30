@@ -1,13 +1,15 @@
 package com.example.entities
 
 import com.example.enums.EGender
+import org.babyfish.jimmer.jackson.JsonConverter
+import org.babyfish.jimmer.jackson.LongToStringConverter
 import org.babyfish.jimmer.sql.*
 
 @Entity
 interface Author {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonConverter(LongToStringConverter::class)
   val id: Long
 
   @Key
