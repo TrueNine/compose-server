@@ -11,9 +11,14 @@ jimmer {
 }
 
 dependencies {
+  implementation(project(":core"))
+
   ksp(libs.org.babyfish.jimmer.jimmerKsp)
   testImplementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
   testImplementation(project(":test-toolkit"))
+  testImplementation(libs.org.springframework.boot.springBootStarterDataJdbc)
+  testImplementation(libs.org.springframework.boot.springBootStarterJdbc)
+  testImplementation(libs.org.flywaydb.flywayCore)
 }
 
 /*

@@ -1,2 +1,19 @@
 jimmer:
   language: kotlin
+  dialect: org.babyfish.jimmer.sql.dialect.H2Dialect
+  show-sql: true
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:jimmer_demo;
+    username: sa
+    password:
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    baseline-version: 3000
+    baseline-on-migrate: true
+    locations: classpath:jimmer

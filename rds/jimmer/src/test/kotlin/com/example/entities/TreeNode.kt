@@ -1,4 +1,4 @@
-package com.example.model
+package com.example.entities
 
 import org.babyfish.jimmer.sql.*
 

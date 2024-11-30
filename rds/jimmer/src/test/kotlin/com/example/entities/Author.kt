@@ -1,5 +1,6 @@
-package com.example.model
+package com.example.entities
 
+import com.example.enums.EGender
 import org.babyfish.jimmer.sql.*
 
 @Entity
@@ -18,7 +19,7 @@ interface Author {
   /*
    * 这里，Gender是一个枚举，，代码稍后给出
    */
-  val gender: Gender
+  val gender: EGender
 
   @ManyToMany(mappedBy = "authors")
   val books: List<Book>
