@@ -4,7 +4,7 @@ dependencies {
   implementation(libs.com.google.devtools.ksp.symbolProcessingApi)
   implementation(libs.com.squareup.kotlinpoetJvm)
   implementation(libs.com.squareup.kotlinpoetKsp)
-  implementation(project(":ksp:ksp-core"))
+  implementation(project(":meta"))
 }
 
 publishing {
