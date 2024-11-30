@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.RefId
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.converters.AttachmentTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.AttachmentTyping

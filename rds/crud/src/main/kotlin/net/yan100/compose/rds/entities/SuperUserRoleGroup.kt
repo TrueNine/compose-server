@@ -19,7 +19,7 @@ package net.yan100.compose.rds.entities
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.RefId
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 
 /**
@@ -32,11 +32,11 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MappedSuperclass
 @Schema(title = "用户  角色组")
 abstract class SuperUserRoleGroup : IEntity() {
-  /** 用户 */
-  @get:Schema(title = "用户")
-  abstract var userId: RefId
+    /** 用户 */
+    @get:Schema(title = "用户")
+    abstract var userId: RefId
 
-  /** 权限组 */
-  @get:Schema(title = "权限组")
-  abstract var roleGroupId: RefId
+    /** 权限组 */
+    @get:Schema(title = "权限组")
+    abstract var roleGroupId: RefId
 }

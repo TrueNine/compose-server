@@ -18,7 +18,7 @@ package net.yan100.compose.rds.entities
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.NotFound

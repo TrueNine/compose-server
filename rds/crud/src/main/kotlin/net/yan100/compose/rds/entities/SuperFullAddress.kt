@@ -22,7 +22,7 @@ import jakarta.persistence.ForeignKey
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.OneToMany
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
 

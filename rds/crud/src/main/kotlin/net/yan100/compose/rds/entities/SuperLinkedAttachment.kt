@@ -21,8 +21,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
-import net.yan100.compose.ksp.core.annotations.MetaDef
-import net.yan100.compose.ksp.core.annotations.MetaName
+import net.yan100.compose.meta.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaName
 import net.yan100.compose.rds.converters.AttachmentTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.AttachmentTyping

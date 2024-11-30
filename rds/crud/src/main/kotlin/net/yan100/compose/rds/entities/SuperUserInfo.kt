@@ -5,7 +5,7 @@ import jakarta.persistence.Convert
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.*
 import net.yan100.compose.core.domain.IIdcard2Code
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.converters.GenderTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity
 import net.yan100.compose.rds.core.typing.userinfo.GenderTyping

@@ -8,7 +8,7 @@ import net.yan100.compose.core.RefId
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.sensitiveAlso
 import net.yan100.compose.core.string
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
 
 @MetaDef

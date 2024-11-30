@@ -25,7 +25,7 @@ import net.yan100.compose.core.RefId
 import net.yan100.compose.core.ReferenceId
 import net.yan100.compose.core.domain.IIdcard2Code
 import net.yan100.compose.core.string
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.converters.BloodTypingConverter
 import net.yan100.compose.rds.converters.DegreeTypingConverter
 import net.yan100.compose.rds.core.entities.IEntity

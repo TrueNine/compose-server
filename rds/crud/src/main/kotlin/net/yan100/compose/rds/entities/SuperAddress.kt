@@ -20,7 +20,7 @@ import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.domain.Coordinate
 import net.yan100.compose.core.int
 import net.yan100.compose.core.string
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.ITreeEntity
 
 @MetaDef

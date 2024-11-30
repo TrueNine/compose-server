@@ -19,7 +19,7 @@ package net.yan100.compose.rds.entities
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.string
-import net.yan100.compose.ksp.core.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaDef
 
 @MetaDef(shadow = true)
 @MappedSuperclass
