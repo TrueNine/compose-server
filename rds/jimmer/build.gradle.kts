@@ -13,6 +13,7 @@ jimmer {
 dependencies {
   ksp(libs.org.babyfish.jimmer.jimmerKsp)
   testImplementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
+  testImplementation(project(":test-toolkit"))
 }
 
 /*
