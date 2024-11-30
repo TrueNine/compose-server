@@ -118,9 +118,8 @@ interface IPage<T : Any?> {
     operator fun <T : Any> get(
       dataList: Collection<T> = emptyList(),
       total: Long = dataList.size.toLong(),
-      pageParam: IPageParam = IPageParam.DEFAULT_MAX
+      pageParam: IPageParam? = null
     ): IPage<T> {
-      require(pageParam.safePageSize >= 0) { "pageSize ${pageParam.safePageSize} must be greater than 0" }
       return of(dataList, total, pageParam)
     }
 
@@ -152,7 +151,7 @@ interface IPage<T : Any?> {
     fun <T : Any> of(
       dataList: Collection<T>,
       total: Long,
-      pageParam: IPageParam
+      pageParam: IPageParam?
     ): IPage<T> =
       DefaultPageResult(pageParam = pageParam, d = dataList, t = total)
 
