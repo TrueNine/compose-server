@@ -176,6 +176,7 @@ org-jetbrains-kotlin-kotlinStdlibJdk8 = { group = "org.jetbrains.kotlin", name =
 org-jetbrains-kotlin-kotlinReflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinTestTestng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinSerialization = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
+org-jetbrains-kotlin-kotlinTest = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinTestJunit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinAnnotaitonProcessingEmbedable = { group = "org.jetbrains.kotlin", name = "kotlin-annotation-processing-embeddable", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlinCompilerEmbeddable = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-embeddable", version.ref = "kotlin" }
@@ -196,6 +197,7 @@ io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.
 
 io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.13" }
 org-junit-jupiter-junitJupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
+org-junit-jupiter-junitJupiterEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit5" }
 org-junit-platform-junitPlatformLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatform" }
 
 org-testng-testng = { group = "org.testng", name = "testng", version.ref = "testng" }
@@ -340,7 +342,7 @@ p6spy = [
 junit5 = [
   "org-junit-platform-junitPlatformLauncher",
   "org-junit-jupiter-junitJupiterApi",
-  "com-h2database-h2"
+  "org-junit-jupiter-junitJupiterEngine"
 ]
 kotlinReactor = [
   "org-jetbrains-kotlinx-kotlinxCoroutinesReactor",
