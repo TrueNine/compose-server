@@ -25,7 +25,7 @@ dependencies {
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
 
   ksp(project(":ksp:ksp-plugin"))
-  implementation(project(":ksp:ksp-core"))
+  implementation(project(":meta"))
 
   implementation(project(":core"))
   implementation(project(":rds:rds-core"))
