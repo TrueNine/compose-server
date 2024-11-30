@@ -23,7 +23,7 @@ springSecurity = "6.3.4"
 
 # others
 slf4j = "2.1.0-alpha1"
-flyway = "10.20.1"
+flyway = "11.0.0"
 mapstruct = "1.6.0"
 jackson = "2.18.1"
 hibernate = "6.6.3.Final"
@@ -139,6 +139,7 @@ org-springframework-boot-springBootStarterUndertow = { group = "org.springframew
 org-springframework-boot-springBootStarterTomcat = { group = "org.springframework.boot", name = "spring-boot-starter-tomcat" }
 org-springframework-boot-springBootStarterDataRedis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBoot" }
 org-springframework-boot-springBootStarterDataJpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa", version.ref = "springBoot" }
+org-springframework-boot-springBootStarterDataJdbc = { group = "org.springframework.boot", name = "spring-boot-starter-data-jdbc", version.ref = "springBoot" }
 org-springframework-boot-springBootStarterDataRedisReactive = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis-reactive" }
 org-springframework-boot-springBootStarterLogging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
 org-springframework-boot-springBootDockerCompose = { group = "org.springframework.boot", name = "spring-boot-docker-compose" }
