@@ -29,29 +29,18 @@ import com.squareup.kotlinpoet.ksp.writeTo
 import net.yan100.compose.core.toSnakeCase
 import net.yan100.compose.ksp.toolkit.*
 import net.yan100.compose.ksp.toolkit.dsl.fileDsl
+import net.yan100.compose.ksp.toolkit.kotlinpoet.ClassNames
 import net.yan100.compose.ksp.toolkit.models.DeclarationContext
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
 import net.yan100.compose.meta.getFirstName
 import org.jetbrains.annotations.NotNull
 
-private val jakartaAccessAnnotationClassName = ClassName("jakarta.persistence", "Access")
-private val jakartaTransientAnnotationClassName = ClassName("jakarta.persistence", "Transient")
-private val jakartaColumnAnnotationClassName = ClassName("jakarta.persistence", "Column")
-private val jakartaTableAnnotationClassName = ClassName("jakarta.persistence", "Table")
-private val jakartaEntityAnnotationClassName = ClassName("jakarta.persistence", "Entity")
-
-//private val jakartaSecondaryTableAnnotationClassName = ClassName("jakarta.persistence", "SecondaryTable")
-private val jsonIgnoreAnnotationClassName = ClassName("com.fasterxml.jackson.annotation", "JsonIgnore")
-
-private val hibernateDynamicInsertAnnotationClassName = ClassName("org.hibernate.annotations", "DynamicInsert")
-private val hibernateDynamicUpdateAnnotationClassName = ClassName("org.hibernate.annotations", "DynamicUpdate")
-private val hibernateImmutableAnnotationClassName = ClassName("org.hibernate.annotations", "Immutable")
 
 class JpaNameClassVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclaration>, Unit>() {
-  private val accessAnnotation = AnnotationSpec.builder(jakartaAccessAnnotationClassName).addMember("jakarta.persistence.AccessType.PROPERTY").build()
+  private val accessAnnotation = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Access).addMember("jakarta.persistence.AccessType.PROPERTY").build()
+  private val jpaTransient = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Transient)
   private val jvmTransient = AnnotationSpec.builder(Transient::class)
-  private val jpaTransient = AnnotationSpec.builder(jakartaTransientAnnotationClassName)
 
   private lateinit var log: KSPLogger
 
@@ -197,7 +186,7 @@ class JpaNameClassVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclarati
         opened()
         annotateBy(accessAnnotation)
         if (metaDefIsShadow) {
-          annotateBy(AnnotationSpec.builder(hibernateImmutableAnnotationClassName).build())
+          annotateBy(AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.Immutable).build())
         }
 
         log.info("generate class: $destClassName")
@@ -296,14 +285,14 @@ class JpaNameClassVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclarati
     if (pp.requireDelegate) {
       otherAnnotations += jvmTransient.useDelegate().build()
       otherAnnotations += jpaTransient.useDelegate().build()
-      otherAnnotations += AnnotationSpec.builder(jsonIgnoreAnnotationClassName).useDelegate().build()
+      otherAnnotations += AnnotationSpec.builder(ClassNames.Com.Fasterxml.Jackson.Annotation.JsonIgnore).useDelegate().build()
     }
     otherAnnotations += buildColumnAnnotations(k, pp)
     return otherAnnotations
   }
 
   private fun buildColumnAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
-    val meta = AnnotationSpec.builder(jakartaColumnAnnotationClassName)
+    val meta = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Column)
       .addMember("name = ${k.simpleNameGetShortNameStr.toSnakeCase().uppercase()}")
     if (!pp.nullable) meta.addMember("nullable = false")
     if (pp.shadow) {
@@ -322,15 +311,15 @@ class JpaNameClassVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclarati
 
   private fun generateClassAnnotations(destClassName: ClassName, metaDefIsShadow: Boolean): List<AnnotationSpec> {
     val tableAnnotation = AnnotationSpec.builder(
-      if (metaDefIsShadow) jakartaTableAnnotationClassName //jakartaSecondaryTableAnnotationClassName
-      else jakartaTableAnnotationClassName
+      if (metaDefIsShadow) ClassNames.Jakarta.Persistence.Table //jakartaSecondaryTableAnnotationClassName
+      else ClassNames.Jakarta.Persistence.Table
     ).addMember(
       CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName).build()
     ).build()
     return listOf(
-      AnnotationSpec.builder(jakartaEntityAnnotationClassName).build(),
-      AnnotationSpec.builder(hibernateDynamicInsertAnnotationClassName).build(),
-      AnnotationSpec.builder(hibernateDynamicUpdateAnnotationClassName).build(),
+      AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Entity).build(),
+      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicInsert).build(),
+      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicUpdate).build(),
       tableAnnotation
     )
   }
