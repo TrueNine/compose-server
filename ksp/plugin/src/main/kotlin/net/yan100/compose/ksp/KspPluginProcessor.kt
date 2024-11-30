@@ -41,7 +41,7 @@ class KspPluginProcessor(
 
   @OptIn(KspExperimental::class)
   override fun process(resolver: Resolver): List<KSAnnotated> {
-    resolver.getSymbolsWithAnnotation("net.yan100.compose.ksp.core.annotations.MetaDef")
+    resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
       .filterIsInstance<KSClassDeclaration>()
       //.filter { it.isAbstract() }
       .filter { it.getDeclaredProperties().toList().isNotEmpty() }
