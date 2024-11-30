@@ -14,8 +14,7 @@ dependencies {
   implementation(libs.org.springdoc.springdocOpenapiStarterWebmvcUi)
 
   testImplementation(project(":test-toolkit"))
-  testImplementation(libs.org.springframework.boot.springBootTest)
-  testImplementation(libs.org.springframework.boot.springBootStarterTest)
+  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
 }
 
 publishing {
