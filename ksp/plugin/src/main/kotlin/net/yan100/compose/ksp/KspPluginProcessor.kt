@@ -19,6 +19,7 @@ package net.yan100.compose.ksp
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getDeclaredProperties
+import com.google.devtools.ksp.isAnnotationPresent
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
@@ -31,6 +32,7 @@ import net.yan100.compose.ksp.toolkit.simpleNameAsStringStr
 import net.yan100.compose.ksp.visitor.JpaNameClassVisitor
 import net.yan100.compose.ksp.visitor.RepositoryIPageExtensionsVisitor
 import net.yan100.compose.meta.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaSkipGeneration
 
 class KspPluginProcessor(
   private val environment: SymbolProcessorEnvironment,
@@ -44,6 +46,7 @@ class KspPluginProcessor(
     resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
       .filterIsInstance<KSClassDeclaration>()
       //.filter { it.isAbstract() }
+      .filter { !it.isAnnotationPresent(MetaSkipGeneration::class) }
       .filter { it.getDeclaredProperties().toList().isNotEmpty() }
       .filter {
         !it.isCompanionObject
