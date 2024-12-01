@@ -27,7 +27,7 @@ private const val findAllOrderByIdDesc = "from #{#entityName} e order by e.id de
 
 @NoRepositoryBean
 interface IRepo<T : IEntity> : IAnyRepository<T>, IAuditRepository<T>, ILogicDeleteRepository<T>, IBaseRepository<T>, IQuerydslExtensionRepository<T> {
-  @Query(findAllOrderByIdDesc)
+  @Query("from #{#entityName} e order by e.id desc, e.mrd desc")
   fun findAllOrderByIdDesc(): List<T>
 
   @Query(findAllOrderByIdDesc)
