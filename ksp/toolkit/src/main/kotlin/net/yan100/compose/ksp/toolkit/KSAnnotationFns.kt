@@ -5,17 +5,25 @@ import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.symbol.KSAnnotation
 import kotlin.reflect.KClass
 
-inline fun <reified A : Annotation> KSAnnotation.isAnnotationBy(): Boolean {
+inline fun <reified A : Annotation> KSAnnotation.isAnnotationByKClass(): Boolean {
   val c = A::class
   return shortName.getShortName() == c.simpleName && annotationType.resolve().declaration.qualifiedName?.asString() == c.qualifiedName
 }
 
-fun <A : Annotation> KSAnnotation.isAnnotationBy(annotationKClass: KClass<A>?): Boolean {
-  if (annotationKClass == null) return false
+val KSAnnotation.simpleName get() = shortName.getShortName()
 
-  val name = shortName.getShortName() == annotationKClass.simpleName
-  val qName = annotationType.resolve().declaration.qualifiedName?.asString() == annotationKClass.qualifiedName
+fun KSAnnotation.isAnnotationByKClassQualifiedName(qualifiedName: String): Boolean {
+  if (qualifiedName.isBlank()) return false
+  val simpleName = qualifiedName.substringAfterLast(".")
+  val name = this.simpleName == simpleName
+  val qName = resolvedDeclaration.qualifiedNameAsStringStr == qualifiedName
   return name && qName
+}
+
+fun <A : Annotation> KSAnnotation.isAnnotationByKClass(annotationKClass: KClass<A>): Boolean {
+  val qName = annotationKClass.qualifiedName
+  if (qName.isNullOrBlank()) return false
+  return isAnnotationByKClassQualifiedName(qName)
 }
 
 @OptIn(KspExperimental::class)
