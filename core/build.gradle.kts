@@ -1,6 +1,7 @@
 version = libs.versions.composeCore.get()
 
 dependencies {
+  implementation(project(":meta"))
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
   kapt(libs.org.springframework.springBootConfigurationProcessor)
 

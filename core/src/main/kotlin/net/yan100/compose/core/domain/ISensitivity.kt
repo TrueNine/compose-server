@@ -1,6 +1,7 @@
 package net.yan100.compose.core.domain
 
 import net.yan100.compose.core.bool
+import net.yan100.compose.meta.annotations.MetaSkipGeneration
 
 /**
  * # 可 有状态 脱敏 数据类
@@ -20,5 +21,6 @@ interface ISensitivity {
   fun recordChangedSensitiveData() {
   }
 
-  val isChangedToSensitiveData: bool get() = true
+  @MetaSkipGeneration
+  val isChangedToSensitiveData: bool get() = false
 }
