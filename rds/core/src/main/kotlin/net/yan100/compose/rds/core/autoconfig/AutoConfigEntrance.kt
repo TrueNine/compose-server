@@ -17,6 +17,8 @@
 package net.yan100.compose.rds.core.autoconfig
 
 import org.springframework.boot.autoconfigure.domain.EntityScan
+import org.springframework.context.annotation.ComponentScan
 
 @EntityScan("net.yan100.compose.rds.core.entities")
+@ComponentScan("net.yan100.compose.rds.core.listeners")
 class AutoConfigEntrance

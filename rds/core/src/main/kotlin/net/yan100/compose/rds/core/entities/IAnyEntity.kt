@@ -16,15 +16,14 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Column
-import jakarta.persistence.EntityListeners
-import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.*
 import net.yan100.compose.core.Id
+import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.domain.ISensitivity
-import net.yan100.compose.rds.core.listener.BizCodeInsertListener
-import net.yan100.compose.rds.core.listener.SnowflakeIdInsertListener
+import net.yan100.compose.meta.annotations.MetaSkipGeneration
+import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
+import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
 import org.springframework.data.domain.Persistable
 import java.io.Serializable
 
@@ -35,12 +34,13 @@ import java.io.Serializable
  * @since 2023-04-23
  */
 @MappedSuperclass
-@Schema(title = "顶级任意抽象类")
 @EntityListeners(
   BizCodeInsertListener::class,
   SnowflakeIdInsertListener::class,
 )
-interface IAnyEntity : ISensitivity,
+@Access(AccessType.PROPERTY)
+interface IAnyEntity :
+  ISensitivity,
   Persistable<Id>,
   IExtensionDefineScope,
   IEnhanceEntity, Serializable {
@@ -50,21 +50,24 @@ interface IAnyEntity : ISensitivity,
     const val ID = IDbNames.ID
   }
 
+  @MetaSkipGeneration
+  override val isChangedToSensitiveData: bool
+    @Transient
+    get() = super.isChangedToSensitiveData
+
   /** id */
-  fun setId(id: Id) {
-    throw NotImplementedError("entity not implement primary id set function")
-  }
+  fun setId(id: Id)
 
   /** id */
   @jakarta.persistence.Id
   @Column(name = ID)
-  override fun getId(): Id = throw NotImplementedError("entity not implement primary id get function")
+  override fun getId(): Id
 
   fun toNewEntity() {
     id = ""
   }
 
-
+  @Transient
   override fun isNew(): Boolean {
     return "" == id || "null" == id
   }

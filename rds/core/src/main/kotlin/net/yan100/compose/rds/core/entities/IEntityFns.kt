@@ -1,7 +1,14 @@
 package net.yan100.compose.rds.core.entities
 
+import jakarta.persistence.*
 import net.yan100.compose.core.Id
+import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.datetime
+import net.yan100.compose.core.i64
+import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
+import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 
 
 /**
@@ -63,4 +70,31 @@ inline fun <T : IEntity> T.fromDbData(target: T, crossinline merge: T.(w: T) -> 
   crd = target.crd
   mrd = datetime.now()
   return merge(target, this)
+}
+
+@EntityListeners(
+  BizCodeInsertListener::class,
+  SnowflakeIdInsertListener::class,
+)
+@Access(AccessType.PROPERTY)
+@MappedSuperclass
+open class IEntityDelegate : IAnyEntityDelegate(), IEntity {
+  @Version
+  @Column(name = IDbNames.ROW_LOCK_VERSION)
+  override var rlv: i64? = null
+
+  @CreatedDate
+  @Column(name = IDbNames.CREATE_ROW_DATETIME)
+  override var crd: datetime? = null
+
+  @LastModifiedDate
+  @Column(name = IDbNames.MODIFY_ROW_DATETIME)
+  override var mrd: datetime? = null
+
+  @Column(name = IDbNames.LOGIC_DELETE_FLAG)
+  override var ldf: Boolean? = null
+}
+
+fun entity(): IEntity {
+  return IEntityDelegate()
 }

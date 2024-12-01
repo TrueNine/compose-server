@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.listener
+package net.yan100.compose.rds.core.listeners
 
 import jakarta.annotation.Resource
 import jakarta.persistence.PrePersist

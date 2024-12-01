@@ -14,39 +14,37 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.listener
+package net.yan100.compose.rds.core.listeners
 
-import jakarta.annotation.Resource
-import jakarta.persistence.PreRemove
+import jakarta.persistence.*
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.rds.core.event.TableRowDeleteSpringEvent
-import org.springframework.context.ApplicationEventPublisher
-import org.springframework.stereotype.Component
+
+@Suppress("DEPRECATION_ERROR")
+private val log = slf4j<PreSaveDeleteReferenceListener>()
 
 /**
- * 备份删除监听器
+ * ## 在保存一个实体前，删除所有的外键属性
  *
  * @author TrueNine
- * @since 2022-12-13
+ * @since 2023-07-16
  */
-@Component
-class TableRowDeletePersistenceListener {
-  lateinit var pub: ApplicationEventPublisher @Resource set
+@Deprecated(message = "性能过低", level = DeprecationLevel.HIDDEN)
+class PreSaveDeleteReferenceListener {
 
-  init {
-    log.debug("注册jpa数据删除监听器 = {}", this)
-  }
-
-  @PreRemove
-  fun preRemoveHandle(models: Any?) {
-    log.debug("进行数据删除 models = {}", models)
-    if (null != models) {
-      log.debug("发布删除事件 models = {}", models)
-      pub.publishEvent(TableRowDeleteSpringEvent(models))
+  @PrePersist
+  fun deleteReference(attribute: Any?) {
+    attribute?.let { attr ->
+      attr.javaClass.declaredFields
+        .filter {
+          it.isAnnotationPresent(OneToOne::class.java) &&
+            it.isAnnotationPresent(OneToMany::class.java) &&
+            it.isAnnotationPresent(ManyToOne::class.java) &&
+            it.isAnnotationPresent(ManyToMany::class.java)
+        }
+        .forEach { fAttr ->
+          log.debug("重置引用参数 = {}", fAttr)
+          fAttr[attribute] = null
+        }
     }
-  }
-
-  companion object {
-    private val log = slf4j(TableRowDeletePersistenceListener::class)
   }
 }

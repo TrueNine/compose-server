@@ -16,13 +16,11 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.i64
-import net.yan100.compose.rds.core.domain.PersistenceAuditData
+import net.yan100.compose.meta.annotations.MetaAutoManagement
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 
@@ -33,74 +31,42 @@ import org.springframework.data.annotation.LastModifiedDate
  * @since 2022-12-12
  */
 @MappedSuperclass
-@Schema(title = "顶级抽象类")
-abstract class IEntity : IAnyEntity() {
-
-  /**
-   * ## 当前数据的审计数据
-   */
-  @get:JsonIgnore
-  @get:Transient
-  @get:Schema(hidden = true)
-  protected open val dbEntityAuditData: PersistenceAuditData?
-    get() = if (isNew) null
-    else PersistenceAuditData(
-      dbEntityShadowRemoveTag, dbEntityRowLockVersion, id, dbEntityCreatedDatetime, dbEntityLastModifyDatetime
-    )
-
+interface IEntity : IAnyEntity {
 
   /** 乐观锁版本 */
-  @Version
-  @JsonIgnore
-  @Column(name = RLV)
-  @Schema(hidden = true, title = "乐观锁版本")
-  @Basic(fetch = FetchType.LAZY)
-  @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityRowLockVersion"))
-  open var rlv: i64? = null
+  @get:Column(name = RLV)
+  @get:Version
+  @get:MetaAutoManagement
+  @get:Basic(fetch = FetchType.LAZY)
+  var rlv: i64?
 
-  @Suppress("DEPRECATION_ERROR")
-  val dbEntityRowLockVersion: i64?
-    @Schema(title = "字段乐观锁版本号") @Transient @JsonIgnore get() = rlv
+  /**
+   * 创建时间
+   */
+  @get:Column(name = CRD)
+  @get:Basic(fetch = FetchType.LAZY)
+  @get:CreatedDate
+  @set:CreatedDate
+  @get:MetaAutoManagement
+  var crd: datetime?
 
-  @CreatedDate
-  @JsonIgnore
-  @Basic(fetch = FetchType.LAZY)
-  @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityCreatedDatetime"))
-  @Schema(title = "表行创建时间")
-  @Column(name = CRD)
-  open var crd: datetime? = null
-
-  @Suppress("DEPRECATION_ERROR")
-  val dbEntityCreatedDatetime: datetime?
-    @Schema(title = "字段创建时间") @Transient @JsonIgnore get() = crd
-
-  @JsonIgnore
-  @LastModifiedDate
-  @Basic(fetch = FetchType.LAZY)
-  @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityLastModifyDatetime"))
-  @Schema(title = "表行修改时间")
-  @Column(name = MRD)
-  open var mrd: datetime? = null
-
-  @Suppress("DEPRECATION_ERROR")
-  val dbEntityLastModifyDatetime: datetime?
-    @Schema(title = "字段的修改时间") @Transient @JsonIgnore get() = mrd
+  /**
+   * 修改时间
+   */
+  @get:Column(name = MRD)
+  @get:Basic(fetch = FetchType.LAZY)
+  @get:LastModifiedDate
+  @set:LastModifiedDate
+  @get:MetaAutoManagement
+  var mrd: datetime?
 
   /** 逻辑删除标志 */
-  @JsonIgnore
-  @Basic(fetch = FetchType.LAZY)
-  @Deprecated(message = "不建议直接调用", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dbEntityShadowRemoveTag"))
-  @Column(name = LDF)
-  @Schema(hidden = true, title = "逻辑删除标志")
-  open var ldf: Boolean? = null
-
-  @Suppress("DEPRECATION_ERROR")
-  @get:Schema(title = "是否已经删除")
-  val dbEntityShadowRemoveTag: Boolean
-    @Transient @JsonIgnore get() = ldf == true
+  @get:Column(name = LDF)
+  @get:Basic(fetch = FetchType.LAZY)
+  @get:MetaAutoManagement
+  var ldf: Boolean?
 
   @Transient
-  @JsonIgnore
   @Suppress("DEPRECATION_ERROR")
   override fun toNewEntity() {
     super.toNewEntity()
@@ -120,21 +86,10 @@ abstract class IEntity : IAnyEntity() {
     recordChangedSensitiveData()
   }
 
-  override fun toString(): String {
-    return "Entity(ldf=$dbEntityShadowRemoveTag, rlv=$dbEntityRowLockVersion, crd=$dbEntityCreatedDatetime, mrd=$dbEntityLastModifyDatetime) <${super.toString()}"
-  }
-
   companion object {
-    @kotlin.jvm.Transient
     const val RLV = IDbNames.ROW_LOCK_VERSION
-
-    @kotlin.jvm.Transient
     const val LDF = IDbNames.LOGIC_DELETE_FLAG
-
-    @kotlin.jvm.Transient
     const val CRD = IDbNames.CREATE_ROW_DATETIME
-
-    @kotlin.jvm.Transient
     const val MRD = IDbNames.MODIFY_ROW_DATETIME
   }
 }

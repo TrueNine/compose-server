@@ -14,20 +14,31 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.listener
+package net.yan100.compose.rds.core.listeners
 
 import jakarta.annotation.Resource
 import jakarta.persistence.PrePersist
 import net.yan100.compose.core.generator.ISnowflakeGenerator
+import net.yan100.compose.core.slf4j
 import net.yan100.compose.rds.core.entities.IAnyEntity
 import org.springframework.stereotype.Component
 
+private val log = slf4j<SnowflakeIdInsertListener>()
+
 @Component
 class SnowflakeIdInsertListener {
-  lateinit var snowflake: ISnowflakeGenerator @Resource set
+  private lateinit var internalSnowflake: ISnowflakeGenerator
+  var snowflake: ISnowflakeGenerator
+    @Resource
+    set(v) {
+      log.trace("注册 id 生成器监听器: {}", v)
+      internalSnowflake = v
+    }
+    get() = internalSnowflake
 
   @PrePersist
   fun insertId(data: Any?) {
+    log.trace("开始执行 id 生成 data: {}", data)
     if (data is IAnyEntity && data.isNew) {
       data.id = snowflake.nextString()
     }

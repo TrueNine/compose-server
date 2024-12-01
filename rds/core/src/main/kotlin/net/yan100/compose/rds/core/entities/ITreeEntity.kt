@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
@@ -25,8 +23,8 @@ import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.i64
 import net.yan100.compose.core.string
+import net.yan100.compose.meta.annotations.MetaAutoManagement
 import net.yan100.compose.rds.core.annotations.OrderCode
-import net.yan100.compose.rds.core.domain.PersistenceAuditTreeData
 
 /**
  * 预排序树
@@ -35,59 +33,33 @@ import net.yan100.compose.rds.core.domain.PersistenceAuditTreeData
  * @since 2022-12-12
  */
 @MappedSuperclass
-abstract class ITreeEntity : IEntity() {
-  /**
-   * ## 当前数据的审计数据，独特于 ITreeEntity
-   */
-  @get:JsonIgnore
-  @get:Transient
-  @get:Schema(hidden = true)
-  override val dbEntityAuditData: PersistenceAuditTreeData?
-    get() = if (isNew) null
-    else PersistenceAuditTreeData(
-      leftNodeNo = rln,
-      rightNodeNo = rrn,
-      nodeLevel = nlv,
-      treeGroupId = tgi,
-      parentId = rpi,
-      shadowRemoved = dbEntityShadowRemoveTag,
-      lockVersion = dbEntityRowLockVersion,
-      id = id,
-      createdAt = dbEntityCreatedDatetime,
-      updatedAt = dbEntityLastModifyDatetime
-    )
-
+interface ITreeEntity : IEntity {
 
   /** 父id */
-  @JsonIgnore
-  @Column(name = RPI)
-  @Schema(title = "父id")
-  open var rpi: RefId? = null
+  @get:Column(name = RPI)
+  @get:MetaAutoManagement
+  var rpi: RefId?
 
   /** 左节点 */
-  @JsonIgnore
-  @Column(name = RLN)
-  @Schema(title = "左节点", hidden = true)
-  open var rln: i64 = 1L
+  @get:Column(name = RLN)
+  @get:MetaAutoManagement
+  var rln: i64
 
   /** 右节点 */
-  @JsonIgnore
-  @Column(name = RRN)
-  @Schema(title = "右节点", hidden = true)
-  open var rrn: i64 = 2L
+  @get:Column(name = RRN)
+  @get:MetaAutoManagement
+  var rrn: i64
 
   /** 节点级别 */
-  @JsonIgnore
-  @Schema(title = "节点级别", defaultValue = "0")
-  @Column(name = NLV)
-  open var nlv: i64 = 0L
+  @get:Column(name = NLV)
+  @get:MetaAutoManagement
+  var nlv: i64
 
   /** ### 树组 id，在节点插入时必须更上，在插入时随着父id进行更改 */
-  @OrderCode
-  @JsonIgnore
-  @Column(name = TGI)
-  @Schema(title = "树 组id", defaultValue = "0")
-  open var tgi: string? = null
+  @get:OrderCode
+  @get:Column(name = TGI)
+  @get:MetaAutoManagement
+  var tgi: string?
 
   override fun changeWithSensitiveData() {
     super.changeWithSensitiveData()
@@ -99,8 +71,6 @@ abstract class ITreeEntity : IEntity() {
     recordChangedSensitiveData()
   }
 
-
-  @JsonIgnore
   @Transient
   override fun toNewEntity() {
     super.toNewEntity()
@@ -111,24 +81,11 @@ abstract class ITreeEntity : IEntity() {
     rpi = null
   }
 
-  override fun toString(): String {
-    return "TreeEntity(parentId=$rpi, leftNode=$rln, rightNode=$rrn, nodeLevel=$nlv, treeGroupId=$tgi) <${super.toString()}"
-  }
-
   companion object {
-    @kotlin.jvm.Transient
     const val RPI = IDbNames.ROW_PARENT_ID
-
-    @kotlin.jvm.Transient
     const val RLN = IDbNames.LEFT_NODE
-
-    @kotlin.jvm.Transient
     const val RRN = IDbNames.RIGHT_NODE
-
-    @kotlin.jvm.Transient
     const val NLV = IDbNames.NODE_LEVEL
-
-    @kotlin.jvm.Transient
     const val TGI = IDbNames.TREE_GROUP_ID
   }
 }

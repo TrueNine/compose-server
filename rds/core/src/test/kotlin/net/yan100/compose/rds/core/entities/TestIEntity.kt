@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "ientity")
-open class TestIEntity : IEntity {
+open class TestIEntity : IEntity by entity() {
   fun a() {
     this.id
   }

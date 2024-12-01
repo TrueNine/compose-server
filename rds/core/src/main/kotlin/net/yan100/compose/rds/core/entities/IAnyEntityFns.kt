@@ -16,6 +16,13 @@
  */
 package net.yan100.compose.rds.core.entities
 
+import jakarta.persistence.*
+import net.yan100.compose.core.Id
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
+import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
+
 /** 将自身置空为新的 Entity 对象 */
 fun <T : IAnyEntity> T.withNew(): T {
   toNewEntity()
@@ -35,4 +42,30 @@ inline fun <T : IAnyEntity, R : Any> List<T>.withNewMap(crossinline after: (List
 inline fun <T : IAnyEntity> T.takeUpdate(throwException: Boolean = true, crossinline after: (T) -> T?): T? {
   if (!isNew) return after(this) else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")
   return null
+}
+
+@EntityListeners(
+  BizCodeInsertListener::class,
+  SnowflakeIdInsertListener::class,
+)
+@Access(AccessType.PROPERTY)
+@MappedSuperclass
+open class IAnyEntityDelegate : IAnyEntity {
+  @Transient
+  @kotlin.jvm.Transient
+  private var ____internal_primary_id: RefId? = null
+
+  override fun setId(id: Id) {
+    this.____internal_primary_id = id
+  }
+
+  @jakarta.persistence.Id
+  @Column(name = IDbNames.ID)
+  override fun getId(): Id {
+    return this.____internal_primary_id ?: ""
+  }
+}
+
+fun anyEntity(): IAnyEntity {
+  return IAnyEntityDelegate()
 }

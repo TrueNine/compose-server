@@ -20,6 +20,6 @@ import jakarta.persistence.Entity
 import kotlin.properties.Delegates
 
 @Entity
-class Ae : IEntity {
+class Ae : IEntity by entity() {
   var lateVariable: Int by Delegates.notNull()
 }
