@@ -1,6 +1,5 @@
 package net.yan100.compose.core.domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import kotlin.properties.Delegates
 
 /**
@@ -9,9 +8,15 @@ import kotlin.properties.Delegates
  * @author TrueNine
  * @since 2024-10-01
  */
-abstract class AbstractLazyInitScope {
+@Deprecated(
+  "use Delegates.notNull()",
+  ReplaceWith(
+    "Delegates.notNull()"
+  ),
+  level = DeprecationLevel.ERROR
+)
+interface AbstractLazyInitScope {
   companion object {
-    @JsonIgnore
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
     @Deprecated(
@@ -21,6 +26,6 @@ abstract class AbstractLazyInitScope {
       ),
       level = DeprecationLevel.ERROR
     )
-    protected fun <T : Any> Companion.late() = Delegates.notNull<T>()
+    fun <T : Any> Companion.late() = Delegates.notNull<T>()
   }
 }
