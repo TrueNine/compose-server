@@ -34,14 +34,14 @@ class RepositoryIPageExtensionsVisitor : KSTopDownVisitor<DeclarationContext<KSC
     if (declaration.classKind != ClassKind.INTERFACE) return emptyList()
     return declaration.getDeclaredFunctions().filter { f ->
       val rtType = f.returnType
-      if (rtType?.resolve()?.declaration?.isClassQualifiedName(pageAnnotationPath) == false) return@filter false
+      if (rtType?.resolve()?.declaration?.isKClassQualifiedName(pageAnnotationPath) == false) return@filter false
       val p = f.parameters
       if (p.isEmpty()) return@filter false
       val hasPageable = p.any {
-        it.type.resolve().declaration.isClassQualifiedName(pageableAnnotationPath)
+        it.type.resolve().declaration.isKClassQualifiedName(pageableAnnotationPath)
       }
       if (!hasPageable) {
-        log.warn("${f.qualifiedNameAsStringStr} return Page, but no Pageable parameter found.")
+        log.warn("${f.qualifiedNameAsString} return Page, but no Pageable parameter found.")
         return@filter false
       }
       true
@@ -74,13 +74,13 @@ class RepositoryIPageExtensionsVisitor : KSTopDownVisitor<DeclarationContext<KSC
         val returnTypeGeneric = g?.toTypeName()
 
         if (returnTypeGeneric == null || returnTypeGeneric.isNullable) {
-          log.error("${pageFn.qualifiedNameAsStringStr} but nullable generic, not generate extension function")
+          log.error("${pageFn.qualifiedNameAsString} but nullable generic, not generate extension function")
           return@forEach
         }
         importExt()
         // 替换参数
         val replaceParameters = pageFn.parameters.map { p ->
-          val isPageable = p.type.resolve().declaration.isClassQualifiedName(pageableAnnotationPath)
+          val isPageable = p.type.resolve().declaration.isKClassQualifiedName(pageableAnnotationPath)
           if (isPageable) {
             ParameterSpec.builder("pq", Pq::class)
               .defaultValue("%T.DEFAULT_MAX", Pq::class)
@@ -88,14 +88,14 @@ class RepositoryIPageExtensionsVisitor : KSTopDownVisitor<DeclarationContext<KSC
           } else ParameterSpec.builder(p.name!!.asString(), p.type.toTypeName()).build()
         }
 
-        val extensionFunction = FunSpec.builder(pageFn.simpleNameAsStringStr)
+        val extensionFunction = FunSpec.builder(pageFn.simpleNameAsString)
           .addParameters(replaceParameters)
           .returns(Pr::class.asClassName().parameterizedBy(returnTypeGeneric))
           .receiver(classDeclaration.toClassName())
           .also {
             it.addStatement(
               "return this.%N(%L).toIPage()",
-              pageFn.simpleNameAsStringStr,
+              pageFn.simpleNameAsString,
               replaceParameters.joinToString { p -> if (p.name == "pq") "pq.toPageable()" else p.name })// Page<*>::toIPage
           }
           .build()
