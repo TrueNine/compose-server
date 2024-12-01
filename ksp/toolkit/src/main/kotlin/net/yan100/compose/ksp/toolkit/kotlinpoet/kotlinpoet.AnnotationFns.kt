@@ -13,6 +13,7 @@ object ClassNames {
   object Net {
     object Yan100 {
       object Compose {
+
         object Meta {
           object Annotations {
             val MetaSkipGeneration = ClassName("net.yan100.compose.meta.annotations", "MetaSkipGeneration")
@@ -21,6 +22,11 @@ object ClassNames {
 
         object Rds {
           object Core {
+            object Listeners {
+              val BizCodeInsertListener = ClassName("net.yan100.compose.rds.core.listeners", "BizCodeInsertListener")
+              val SnowflakeIdInsertListener = ClassName("net.yan100.compose.rds.core.listeners", "SnowflakeIdInsertListener")
+            }
+
             object Entities {
               val IAnyEntity = ClassName("net.yan100.compose.rds.core.entities", "IAnyEntity")
             }
@@ -44,6 +50,7 @@ object ClassNames {
 
   object Jakarta {
     object Persistence {
+      val EntityListeners = ClassName("jakarta.persistence", "EntityListeners")
       val SecondaryTable = ClassName("jakarta.persistence", "SecondaryTable")
       val Access = ClassName("jakarta.persistence", "Access")
       val Table = ClassName("jakarta.persistence", "Table")

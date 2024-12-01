@@ -16,7 +16,7 @@ fun KSAnnotation.isAnnotationByKClassQualifiedName(qualifiedName: String): Boole
   if (qualifiedName.isBlank()) return false
   val simpleName = qualifiedName.substringAfterLast(".")
   val name = this.simpleName == simpleName
-  val qName = resolvedDeclaration.qualifiedNameAsStringStr == qualifiedName
+  val qName = resolvedDeclaration.qualifiedNameAsString == qualifiedName
   return name && qName
 }
 

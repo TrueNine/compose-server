@@ -40,3 +40,4 @@ private fun KSClassDeclaration.internalIsAssignableFromDeeply(other: KClass<*>, 
 fun KSClassDeclaration.isAssignableFromDeeply(other: KClass<*>): Boolean {
   return internalIsAssignableFromDeeply(other, mutableSetOf())
 }
+
