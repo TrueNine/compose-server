@@ -17,8 +17,9 @@
 package net.yan100.compose.rds.core.entities
 
 import jakarta.persistence.Entity
+import kotlin.properties.Delegates
 
 @Entity
-class Ae : IEntity() {
-  var lateVariable: Int by @Suppress("DEPRECATION_ERROR") late()
+class Ae : IEntity {
+  var lateVariable: Int by Delegates.notNull()
 }
