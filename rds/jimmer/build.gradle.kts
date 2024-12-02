@@ -1,9 +1,12 @@
 version = libs.versions.composeRdsJimmer.get()
 
 plugins {
+  idea
   alias(libs.plugins.tech.argonariod.gradlePluginJimmer)
   alias(libs.plugins.com.google.devtools.ksp)
 }
+
+
 
 jimmer {
   // 设定 jimmer 依赖版本，此处也可以使用 "latest.release" 或 "0.+" 等版本范围表达式
@@ -11,6 +14,9 @@ jimmer {
 }
 
 dependencies {
+  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
+
   implementation(project(":core"))
 
   ksp(libs.org.babyfish.jimmer.jimmerKsp)
