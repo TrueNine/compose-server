@@ -19,7 +19,7 @@ import java.time.LocalDate
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperDisCert2 : IDisCode, IEntity() {
+abstract class SuperDisCert2 : IDisCode, IEntity {
 
   @get:Schema(title = "用户信息id")
   abstract var userInfoId: RefId?

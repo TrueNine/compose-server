@@ -16,16 +16,23 @@
  */
 package net.yan100.compose.rds.entities
 
+import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.domain.Coordinate
 import net.yan100.compose.core.int
 import net.yan100.compose.core.string
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.ITreeEntity
+import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
+import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
 
+@EntityListeners(
+  BizCodeInsertListener::class,
+  SnowflakeIdInsertListener::class,
+)
 @MetaDef
 @MappedSuperclass
-abstract class SuperAddress : ITreeEntity() {
+abstract class SuperAddress : ITreeEntity {
 
   /** 代码 */
   abstract var code: string

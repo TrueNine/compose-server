@@ -11,7 +11,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MappedSuperclass
 @MetaName("dynamic_form")
 @Schema(title = "动态表单字段")
-abstract class SuperDynamicForm : IEntity() {
+abstract class SuperDynamicForm : IEntity {
   @get:Schema(title = "动态表单组 id")
   abstract var dynamicFormGroupId: RefId
 

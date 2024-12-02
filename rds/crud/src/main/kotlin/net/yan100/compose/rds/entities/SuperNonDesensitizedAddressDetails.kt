@@ -16,24 +16,20 @@
  */
 package net.yan100.compose.rds.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.string
 import net.yan100.compose.meta.annotations.MetaDef
 
 @MetaDef(shadow = true)
-@MappedSuperclass
-abstract class SuperNonDesensitizedAddressDetails : SuperAddressDetails() {
+interface SuperNonDesensitizedAddressDetails : SuperAddressDetails {
   /** 联系电话 */
-  abstract override var phone: String?
+  override var phone: String?
 
   /** 地址详情 */
-  @get:Schema(title = "地址详情")
-  abstract override var addressDetails: String
+  override var addressDetails: String
 
   /** 地址代码 */
-  abstract override var addressCode: string
+  override var addressCode: string
 
   /** 联系人名称 */
-  abstract override var name: String?
+  override var name: String?
 }

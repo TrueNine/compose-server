@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
+import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -25,13 +25,17 @@ import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction
 
 @MetaDef(shadow = true)
-@MappedSuperclass
-abstract class SuperFullAddressDetails : SuperAddressDetails() {
+interface SuperFullAddressDetails : SuperAddressDetails {
   /** 地址 */
-  @ManyToOne(fetch = FetchType.EAGER)
-  @Schema(title = "地址", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JoinColumn(name = "address_id", referencedColumnName = ID, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false)
-  @NotFound(action = NotFoundAction.IGNORE)
-  @Fetch(FetchMode.JOIN)
-  open var address: Address? = null
+  @get:ManyToOne(fetch = FetchType.EAGER)
+  @get:JoinColumn(
+    name = "address_id",
+    referencedColumnName = IDbNames.ID,
+    foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
+  @get:NotFound(action = NotFoundAction.IGNORE)
+  @get:Fetch(FetchMode.JOIN)
+  var address: Address?
 }

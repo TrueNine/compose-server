@@ -32,7 +32,7 @@ import net.yan100.compose.rds.core.entities.IEntity
  */
 @MetaDef
 @MappedSuperclass
-abstract class SuperApiCallRecord : IEntity() {
+abstract class SuperApiCallRecord : IEntity {
   /** 设备 id, 浏览器为 agent */
   @get:Schema(title = "设备 id", description = "浏览器为 ua ，其他自定义唯一标识即可")
   abstract var deviceCode: String?

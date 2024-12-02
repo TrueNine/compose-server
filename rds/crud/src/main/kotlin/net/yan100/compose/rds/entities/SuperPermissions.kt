@@ -30,7 +30,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MappedSuperclass
 @MetaDef
 @Schema(title = "权限")
-abstract class SuperPermissions : IEntity() {
+abstract class SuperPermissions : IEntity {
   /** 权限名 */
   @get:Schema(title = "权限名")
   abstract var name: String

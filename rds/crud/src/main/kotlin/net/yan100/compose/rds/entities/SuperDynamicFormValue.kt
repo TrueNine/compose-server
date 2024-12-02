@@ -12,7 +12,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MappedSuperclass
 @MetaName("dynamic_form_value")
 @Schema(name = "")
-abstract class SuperDynamicFormValue : IEntity() {
+abstract class SuperDynamicFormValue : IEntity {
 
   abstract var apiFor: String?
 

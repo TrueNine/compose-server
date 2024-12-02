@@ -30,7 +30,7 @@ import net.yan100.compose.rds.core.typing.AuditTyping
 @MetaDef
 @Schema(title = "审核条目")
 @MappedSuperclass
-abstract class SuperAudit : IEntity() {
+abstract class SuperAudit : IEntity {
 
 
   @get:Schema(title = "审核人设备 id")

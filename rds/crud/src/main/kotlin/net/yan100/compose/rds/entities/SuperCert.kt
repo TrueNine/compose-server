@@ -35,7 +35,7 @@ import net.yan100.compose.rds.core.typing.cert.CertTyping
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperCert : IEntity() {
+abstract class SuperCert : IEntity {
   @get:Schema(title = "用户信息id")
   abstract var userInfoId: RefId?
 

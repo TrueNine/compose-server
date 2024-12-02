@@ -13,7 +13,7 @@ import java.time.LocalDate
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperUserInfo : IEntity() {
+abstract class SuperUserInfo : IEntity {
 
   @get:Schema(title = "备注名称")
   abstract var remarkName: String?

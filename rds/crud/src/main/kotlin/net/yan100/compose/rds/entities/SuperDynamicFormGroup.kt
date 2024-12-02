@@ -10,7 +10,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MappedSuperclass
 @Schema(title = "动态表单组")
 @MetaName("dynamic_form_group")
-abstract class SuperDynamicFormGroup : IEntity() {
+abstract class SuperDynamicFormGroup : IEntity {
   @get:Schema(title = "名称", description = "名称（不可重复）")
   abstract var name: String
 

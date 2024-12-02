@@ -33,7 +33,7 @@ import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperIdcard2 : IIdcard2Code, IEntity() {
+abstract class SuperIdcard2 : IIdcard2Code, IEntity {
   @get:Schema(title = "用户信息")
   abstract var userInfoId: RefId?
 

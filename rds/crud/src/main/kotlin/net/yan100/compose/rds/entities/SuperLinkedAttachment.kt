@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
 import net.yan100.compose.rds.converters.AttachmentTypingConverter
@@ -41,7 +42,7 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
 @MappedSuperclass
 @MetaName("attachment")
 @MetaDef(shadow = true)
-abstract class SuperLinkedAttachment : IEntity() {
+abstract class SuperLinkedAttachment : IEntity {
   @get:Schema(title = "媒体类型")
   abstract var mimeType: String
 
@@ -64,9 +65,12 @@ abstract class SuperLinkedAttachment : IEntity() {
   @get:Convert(converter = AttachmentTypingConverter::class)
   abstract var attType: AttachmentTyping
 
-  @JsonIgnore
   @ManyToOne(fetch = EAGER)
-  @JoinColumn(name = Attachment.URL_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
+  @JoinColumn(
+    name = Attachment.URL_ID,
+    referencedColumnName = IDbNames.ID,
+    foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false
+  )
   @Fetch(JOIN)
   @NotFound(action = IGNORE)
   open lateinit var base: Attachment

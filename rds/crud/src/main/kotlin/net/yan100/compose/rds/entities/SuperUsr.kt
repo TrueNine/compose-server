@@ -1,50 +1,40 @@
 package net.yan100.compose.rds.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED
-import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.sensitiveAlso
 import net.yan100.compose.core.string
 import net.yan100.compose.meta.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaSkipGeneration
 import net.yan100.compose.rds.core.entities.IEntity
 
 @MetaDef
-@MappedSuperclass
-abstract class SuperUsr : IEntity() {
+interface SuperUsr : IEntity {
   /** 创建此账号的 user id */
-  @get:Schema(title = "创建此账号的 user id")
-  abstract var createUserId: RefId?
+  var createUserId: RefId?
 
   /** 账号 */
-  @get:Schema(title = "账号")
-  abstract var account: string
+  var account: string
 
   /** 呢称 */
-  @get:Schema(title = "呢称")
-  abstract var nickName: String?
+  var nickName: String?
 
   /** 描述 */
-  @get:Schema(title = "描述")
-  abstract var doc: String?
+  var doc: String?
 
   /** 密码 */
-  @get:Schema(title = "密码")
-  abstract var pwdEnc: String
+  var pwdEnc: String
 
   /** 被封禁结束时间 */
-  @get:Schema(title = "被封禁结束时间")
-  abstract var banTime: datetime?
+  var banTime: datetime?
 
   /** 最后请求时间 */
-  @get:Schema(title = "最后请求时间")
-  abstract var lastLoginTime: datetime?
+  var lastLoginTime: datetime?
 
   /** @return 当前用户是否被封禁 */
-  @get:Schema(requiredMode = NOT_REQUIRED)
   @get:Transient
+  @MetaSkipGeneration
   val band: Boolean get() = (null != banTime && datetime.now().isBefore(banTime))
 
   override fun changeWithSensitiveData() {

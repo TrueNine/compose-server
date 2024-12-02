@@ -16,12 +16,13 @@
  */
 package net.yan100.compose.rds.entities
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED
-import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import jakarta.persistence.ForeignKey
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
+import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
@@ -30,23 +31,32 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
 
 
 @MetaDef(shadow = true)
-@MappedSuperclass
-abstract class SuperFullUsr : SuperUsr() {
+interface SuperFullUsr : SuperUsr {
   /** 角色组 */
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @Schema(title = "角色组", requiredMode = NOT_REQUIRED)
-  @ManyToMany(fetch = EAGER, targetEntity = RoleGroup::class)
-  @JoinTable(
+  @get:ManyToMany(fetch = EAGER, targetEntity = RoleGroup::class)
+  @get:JoinTable(
     name = UserRoleGroup.TABLE_NAME,
     joinColumns =
-      [JoinColumn(name = UserRoleGroup.USER_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)],
+      [JoinColumn(
+        name = UserRoleGroup.USER_ID,
+        referencedColumnName = IDbNames.ID,
+        foreignKey = ForeignKey(NO_CONSTRAINT),
+        insertable = false,
+        updatable = false
+      )],
     inverseJoinColumns =
       [
-        JoinColumn(name = UserRoleGroup.ROLE_GROUP_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
+        JoinColumn(
+          name = UserRoleGroup.ROLE_GROUP_ID,
+          referencedColumnName = IDbNames.ID,
+          foreignKey = ForeignKey(NO_CONSTRAINT),
+          insertable = false,
+          updatable = false
+        )
       ],
     foreignKey = ForeignKey(NO_CONSTRAINT),
   )
-  @Fetch(SUBSELECT)
-  @NotFound(action = IGNORE)
-  open var roleGroups: List<RoleGroup> = mutableListOf()
+  @get:Fetch(SUBSELECT)
+  @get:NotFound(action = IGNORE)
+  var roleGroups: MutableList<RoleGroup>
 }

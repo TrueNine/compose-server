@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.entities
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
@@ -32,7 +31,7 @@ import net.yan100.compose.rds.core.entities.IEntity
  */
 @MetaDef
 @MappedSuperclass
-abstract class SuperApi : IEntity() {
+abstract class SuperApi : IEntity {
   /** ## 权限 id */
   @get:Schema(title = "权限 id")
   abstract var permissionsId: RefId?
@@ -57,7 +56,6 @@ abstract class SuperApi : IEntity() {
   @get:Schema(title = "请求协议")
   abstract var apiProtocol: String?
 
-  @get:JsonIgnore
   @get:Transient
   val uriDeep: Int get() = apiPath?.split("/")?.filter { it.isNotBlank() }?.size ?: 0
 }

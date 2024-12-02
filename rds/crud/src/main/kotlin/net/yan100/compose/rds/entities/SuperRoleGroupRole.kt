@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.rds.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.MappedSuperclass
 import net.yan100.compose.core.RefId
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IEntity
@@ -29,15 +27,10 @@ import net.yan100.compose.rds.core.entities.IEntity
  * @since 2023-01-02
  */
 @MetaDef
-@MappedSuperclass
-@Schema(title = "角色组  角色")
-abstract class SuperRoleGroupRole : IEntity() {
+abstract class SuperRoleGroupRole : IEntity {
   /** 用户组 */
-  @get:Schema(title = "用户组")
   abstract var roleGroupId: RefId
 
   /** 角色 */
-  @get:Schema(title = "角色")
   abstract var roleId: RefId
-
 }

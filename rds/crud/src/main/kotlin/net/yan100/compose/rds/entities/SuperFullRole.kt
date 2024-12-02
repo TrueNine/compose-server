@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
+import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -30,16 +30,15 @@ import org.hibernate.annotations.NotFoundAction
 abstract class SuperFullRole : SuperRole() {
 
   /** 权限 */
-  @Schema(title = "权限", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @ManyToMany(fetch = FetchType.EAGER, targetEntity = Permissions::class)
-  @JoinTable(
+  @get:ManyToMany(fetch = FetchType.EAGER, targetEntity = Permissions::class)
+  @get:JoinTable(
     name = "role_permissions",
     joinColumns =
       [
         JoinColumn(
           table = "role_permissions",
           name = "role_id",
-          referencedColumnName = ID,
+          referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,
           updatable = false,
@@ -50,7 +49,7 @@ abstract class SuperFullRole : SuperRole() {
         JoinColumn(
           table = "role_permissions",
           name = "permissions_id",
-          referencedColumnName = ID,
+          referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,
           updatable = false,
@@ -58,7 +57,7 @@ abstract class SuperFullRole : SuperRole() {
       ],
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
   )
-  @Fetch(FetchMode.SUBSELECT)
-  @NotFound(action = NotFoundAction.IGNORE)
-  open var permissions: List<@JvmSuppressWildcards Permissions> = mutableListOf()
+  @get:Fetch(FetchMode.SUBSELECT)
+  @get:NotFound(action = NotFoundAction.IGNORE)
+  open var permissions: MutableList<@JvmSuppressWildcards Permissions> = mutableListOf()
 }

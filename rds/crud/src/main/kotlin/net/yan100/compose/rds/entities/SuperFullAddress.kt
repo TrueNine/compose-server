@@ -22,16 +22,26 @@ import jakarta.persistence.ForeignKey
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.OneToMany
+import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaSkipGeneration
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
+
 
 @MetaDef(shadow = true)
 @MappedSuperclass
 abstract class SuperFullAddress : SuperAddress() {
   /** 当前地址包含的地址详情 */
+  @MetaSkipGeneration
   @OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
-  @JoinColumn(name = AddressDetails.ADDRESS_ID, referencedColumnName = ID, foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false)
+  @JoinColumn(
+    name = AddressDetails.ADDRESS_ID,
+    referencedColumnName = IDbNames.ID,
+    foreignKey = ForeignKey(NO_CONSTRAINT),
+    insertable = false,
+    updatable = false
+  )
   @Fetch(SUBSELECT)
   open var details: List<AddressDetails> = listOf()
 }

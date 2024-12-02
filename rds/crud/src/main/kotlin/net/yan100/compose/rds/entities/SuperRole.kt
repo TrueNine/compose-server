@@ -7,7 +7,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperRole : IEntity() {
+abstract class SuperRole : IEntity {
   /** 角色名称 */
   @get:Schema(title = "角色名称")
   abstract var name: String

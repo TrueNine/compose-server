@@ -25,7 +25,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MetaDef
 @Schema(title = "通用配置缓存")
 @MappedSuperclass
-abstract class SuperCommonKvConfigDbCache : IEntity() {
+abstract class SuperCommonKvConfigDbCache : IEntity {
   /** ## 配置 key */
   @get:Schema(title = "配置 key")
   abstract var k: String

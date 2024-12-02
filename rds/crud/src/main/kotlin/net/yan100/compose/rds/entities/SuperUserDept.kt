@@ -14,7 +14,7 @@ import net.yan100.compose.rds.core.entities.IEntity
  */
 @MetaDef
 @MappedSuperclass
-abstract class SuperUserDept : IEntity() {
+abstract class SuperUserDept : IEntity {
   @get:Schema(title = "用户id")
   abstract var userId: RefId
 

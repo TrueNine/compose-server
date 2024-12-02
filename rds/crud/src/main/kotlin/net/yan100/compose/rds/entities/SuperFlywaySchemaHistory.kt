@@ -26,7 +26,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 @MetaDef
 @MappedSuperclass
 @MetaName("flyway_schema_history")
-abstract class SuperFlywaySchemaHistory : IEntity() {
+abstract class SuperFlywaySchemaHistory : IEntity {
   @get:Schema(title = "执行是否成功")
   abstract var success: bool?
 

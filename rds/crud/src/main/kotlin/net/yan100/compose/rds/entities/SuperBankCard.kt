@@ -25,7 +25,7 @@ import net.yan100.compose.rds.core.entities.ITreeEntity
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperBankCard : ITreeEntity() {
+abstract class SuperBankCard : ITreeEntity {
   @get:Schema(title = "银行预留手机号")
   abstract var reservePhone: string?
 

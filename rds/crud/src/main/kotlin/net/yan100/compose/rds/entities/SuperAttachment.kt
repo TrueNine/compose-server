@@ -11,7 +11,7 @@ import net.yan100.compose.rds.core.typing.AttachmentTyping
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperAttachment : IEntity() {
+abstract class SuperAttachment : IEntity {
   /** 保存前的名称 */
   @get:Schema(title = "保存前的名称")
   abstract var metaName: String?

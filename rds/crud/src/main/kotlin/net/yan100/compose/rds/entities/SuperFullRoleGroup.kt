@@ -16,8 +16,8 @@
  */
 package net.yan100.compose.rds.entities
 
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
+import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -26,19 +26,17 @@ import org.hibernate.annotations.NotFoundAction
 
 
 @MetaDef(shadow = true)
-@MappedSuperclass
 abstract class SuperFullRoleGroup : SuperRoleGroup() {
   /** 角色 */
-  @Schema(title = "角色", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @ManyToMany(fetch = FetchType.EAGER, targetEntity = FullRole::class)
-  @JoinTable(
+  @get:ManyToMany(fetch = FetchType.EAGER, targetEntity = FullRole::class)
+  @get:JoinTable(
     name = RoleGroupRole.TABLE_NAME,
     joinColumns =
       [
         JoinColumn(
           table = RoleGroupRole.TABLE_NAME,
           name = RoleGroupRole.ROLE_GROUP_ID,
-          referencedColumnName = ID,
+          referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,
           updatable = false,
@@ -49,7 +47,7 @@ abstract class SuperFullRoleGroup : SuperRoleGroup() {
         JoinColumn(
           table = RoleGroupRole.TABLE_NAME,
           name = RoleGroupRole.ROLE_ID,
-          referencedColumnName = ID,
+          referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,
           updatable = false,
@@ -57,7 +55,7 @@ abstract class SuperFullRoleGroup : SuperRoleGroup() {
       ],
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
   )
-  @Fetch(FetchMode.SUBSELECT)
-  @NotFound(action = NotFoundAction.IGNORE)
-  open var roles: List<@JvmSuppressWildcards FullRole> = mutableListOf()
+  @get:Fetch(FetchMode.SUBSELECT)
+  @get:NotFound(action = NotFoundAction.IGNORE)
+  open var roles: MutableList<@JvmSuppressWildcards FullRole> = mutableListOf()
 }

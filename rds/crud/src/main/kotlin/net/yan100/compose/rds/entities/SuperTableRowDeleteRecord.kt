@@ -34,7 +34,7 @@ import net.yan100.compose.rds.core.entities.IEntity
  */
 @MetaDef
 @MappedSuperclass
-abstract class SuperTableRowDeleteRecord : IEntity() {
+abstract class SuperTableRowDeleteRecord : IEntity {
   @get:Schema(title = "表名")
   abstract var tableNames: String
 

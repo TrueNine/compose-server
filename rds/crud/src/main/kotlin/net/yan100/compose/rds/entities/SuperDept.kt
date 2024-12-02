@@ -24,7 +24,7 @@ import net.yan100.compose.rds.core.entities.ITreeEntity
 /** # 部门 */
 @MappedSuperclass
 @MetaDef
-abstract class SuperDept : ITreeEntity() {
+abstract class SuperDept : ITreeEntity {
   @get:Schema(title = "名称")
   abstract var name: String
 
