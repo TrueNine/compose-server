@@ -41,17 +41,30 @@ class KspPluginProcessor(
 
   @OptIn(KspExperimental::class)
   override fun process(resolver: Resolver): List<KSAnnotated> {
+    val nextSymbols = mutableSetOf<KSAnnotated>()
+    val options = environment.options
+    val enableJpa = options["net.yan100.compose.ksp.plugin.generateJpa"]?.toBooleanStrictOrNull() ?: false
+
+    if (enableJpa) nextSymbols += jpaGenerate(resolver)
+
+    resolver.getPackagesWithAnnotation("org.springframework.stereotype.Repository")
+      .filterIsInstance<KSClassDeclaration>()
+      .filter { it.classKind == ClassKind.INTERFACE }
+      .forEach { getCtxData(it, resolver).accept(RepositoryIPageExtensionsVisitor()) }
+    return nextSymbols.toList()
+  }
+
+  @OptIn(KspExperimental::class)
+  fun jpaGenerate(resolver: Resolver): Sequence<KSAnnotated> {
     val lis = resolver.getSymbolsWithAnnotation(
       "jakarta.persistence.EntityListener"
     ).filterIsInstance<KSDeclaration>().firstOrNull()?.let {
       it.annotations.firstOrNull()?.toAnnotationSpec()
     }
     val jpaSymbols = resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
-    val nextSymbols = jpaSymbols.filter { !it.validate() }.toList()
     jpaSymbols
       .filter { it.validate() }
       .filterIsInstance<KSClassDeclaration>()
-      .filterNot { nextSymbols.contains(it) }
       .filter { !it.isAnnotationPresent(MetaSkipGeneration::class) }
       .filter { it.getDeclaredProperties().toList().isNotEmpty() }
       .filter {
@@ -65,11 +78,6 @@ class KspPluginProcessor(
           JpaNameClassVisitor(lis)
         )
       }
-
-    resolver.getPackagesWithAnnotation("org.springframework.stereotype.Repository")
-      .filterIsInstance<KSClassDeclaration>()
-      .filter { it.classKind == ClassKind.INTERFACE }
-      .forEach { getCtxData(it, resolver).accept(RepositoryIPageExtensionsVisitor()) }
-    return nextSymbols
+    return resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef").filter { !it.validate() }
   }
 }
