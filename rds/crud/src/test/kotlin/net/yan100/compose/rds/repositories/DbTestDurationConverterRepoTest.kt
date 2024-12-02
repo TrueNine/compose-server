@@ -34,7 +34,7 @@ class DbTestDurationConverterRepoTest {
   @Test
   @Rollback
   fun testSaveAndFind() {
-    val entity = DbTestDurationConverterEntity().apply { durations = Duration.parse("PT24H") }
+    val entity = DbTestDurationConverterEntity(durations = Duration.parse("PT24H"))
     entity.durations = Duration.parse("PT24H")
     val saved = repo.save(entity)
     assertNotNull(saved)

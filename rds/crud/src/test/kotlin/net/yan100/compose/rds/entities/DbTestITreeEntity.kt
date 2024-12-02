@@ -18,10 +18,49 @@ package net.yan100.compose.rds.entities
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
+import net.yan100.compose.core.*
 import net.yan100.compose.rds.core.entities.ITreeEntity
 
 @Entity
 @Table(name = "db_test_presort_tree")
-class DbTestITreeEntity : ITreeEntity() {
+class DbTestITreeEntity : ITreeEntity {
+  private var internalId: RefId = ""
+  override var rpi: RefId?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var rln: i64
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var rrn: i64
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var nlv: i64
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var tgi: string?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var rlv: i64?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var crd: datetime?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var mrd: datetime?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var ldf: Boolean?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+
+  override fun setId(id: Id) {
+    internalId = id
+  }
+
+  @jakarta.persistence.Id
+  override fun getId(): Id {
+    return internalId
+  }
+
   lateinit var title: String
 }

@@ -7,7 +7,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 
 @MetaDef
 @MappedSuperclass
-abstract class SuperDbTestMergeTable : IEntity() {
+abstract class SuperDbTestMergeTable : IEntity {
   abstract var name: String
   abstract var age: i32
 }

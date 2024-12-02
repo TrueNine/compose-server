@@ -6,7 +6,7 @@ import net.yan100.compose.rds.core.entities.IEntity
 
 @MappedSuperclass
 @MetaDef
-abstract class SuperDbTestAllLateEntity : IEntity() {
+abstract class SuperDbTestAllLateEntity : IEntity {
   abstract var a: Int
   abstract var b: Double
   abstract var c: String

@@ -19,13 +19,40 @@ package net.yan100.compose.rds.entities
 import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
+import net.yan100.compose.core.Id
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.datetime
 import net.yan100.compose.core.domain.Coordinate
+import net.yan100.compose.core.i64
 import net.yan100.compose.rds.converters.WGS84Converter
 import net.yan100.compose.rds.core.entities.IEntity
 
 @Entity
 @Table(name = DbTestServiceEntity.TABLE_NAME)
-class DbTestServiceEntity : IEntity() {
+class DbTestServiceEntity : IEntity {
+  private var internalId: RefId = ""
+  override var rlv: i64?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var crd: datetime?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var mrd: datetime?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+  override var ldf: Boolean?
+    get() = TODO("Not yet implemented")
+    set(value) {}
+
+  override fun setId(id: Id) {
+    internalId = id
+  }
+
+  @jakarta.persistence.Id
+  override fun getId(): Id {
+    return internalId
+  }
+
   var title: String? = null
 
   @Convert(converter = WGS84Converter::class)

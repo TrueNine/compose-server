@@ -22,9 +22,11 @@ import net.yan100.compose.rds.entities.UserInfo
 import net.yan100.compose.rds.service.IUserInfoService
 import net.yan100.compose.rds.service.IUserService
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.Rollback
 import java.time.LocalDateTime
 import kotlin.test.*
 
+@Rollback
 @SpringBootTest
 class IAccountAggregatorImplTest {
   lateinit var snowflake: ISnowflakeGenerator @Resource set
@@ -50,8 +52,8 @@ class IAccountAggregatorImplTest {
     IAccountAggregator.RegisterDto().apply {
       account = "abcd${snowflake.nextString()}"
       password = "qwer1234"
-      nickName = "我艹${snowflake.nextString()}"
-      description = "我命由我不白天"
+      nickName = "dawdawdawdawd${snowflake.nextString()}"
+      description = "awdawdawdawdaw"
       createUserId = "0"
     }
 

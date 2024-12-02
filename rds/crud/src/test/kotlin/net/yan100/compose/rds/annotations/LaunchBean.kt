@@ -25,7 +25,7 @@ class LaunchBean(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  fun throwSave() {
+  fun throwTransactionalSave() {
     saveException()
   }
 
