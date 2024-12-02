@@ -31,9 +31,10 @@ class KClassSpecScope @JvmOverloads constructor(name: String = "", className: Cl
 
   fun annotateAllBy(specs: Iterable<AnnotationSpec>) = builder.addAnnotations(specs)
 
-  fun extendsBy(superClass: KClass<*>) = builder.superclass(superClass)
-
-  fun extendsBy(typeName: TypeName) = builder.superclass(typeName)
+  fun extendsClassBy(superClass: KClass<*>) = builder.superclass(superClass)
+  fun extendsClassBy(typeName: TypeName) = builder.superclass(typeName)
+  fun extendsInterfaceBy(typeName: TypeName) = builder.addSuperinterface(typeName)
+  fun extendsInterfaceBy(superClass: KClass<*>) = builder.addSuperinterface(superClass)
 
   // TODO CodeBlock Dsl
   fun implBy(superInterface: KClass<*>) = builder.addSuperinterface(superInterface)
