@@ -41,9 +41,14 @@ subprojects {
     //implementation(platform(l.org.springframework.cloud.springCloudDependencies))
     //implementation(platform(l.org.springframework.modulith.springModulithBom))
     //implementation(platform(l.org.springframework.ai.springAiBom))
-
-    // junit 全平台 测试
     testRuntimeOnly(l.bundles.junit5)
+  }
+  sourceSets {
+    main {
+      java {
+        srcDir("src/main/dto")
+      }
+    }
   }
 
   sourceSets {
