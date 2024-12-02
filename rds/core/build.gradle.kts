@@ -10,7 +10,7 @@ kapt {
 
 dependencies {
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
-  //implementation(libs.jakarta.persistence.jakartaPersistenceApi)
+
   implementation(project(":core"))
   implementation(project(":meta"))
 
