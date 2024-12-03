@@ -56,10 +56,10 @@ interface IDbNames {
             ROW_LOCK_VERSION,
             CREATE_ROW_DATETIME,
             MODIFY_ROW_DATETIME,
-            LEFT_NODE,
-            NODE_LEVEL,
+            TREE_LEFT_NODE,
+            TREE_NODE_LEVEL,
             TREE_GROUP_ID,
-            RIGHT_NODE,
+            TREE_RIGHT_NODE,
             ROW_PARENT_ID,
             LOGIC_DELETE_FLAG,
             ANY_REFERENCE_ID,
@@ -73,9 +73,9 @@ interface IDbNames {
     const val CREATE_ROW_DATETIME: String = "crd"
     const val MODIFY_ROW_DATETIME: String = "mrd"
     const val LOGIC_DELETE_FLAG: String = "ldf"
-    const val LEFT_NODE: String = "rln"
-    const val RIGHT_NODE: String = "rrn"
-    const val NODE_LEVEL: String = "nlv"
+    const val TREE_LEFT_NODE: String = "rln"
+    const val TREE_RIGHT_NODE: String = "rrn"
+    const val TREE_NODE_LEVEL: String = "nlv"
     const val TREE_GROUP_ID: String = "tgi"
     const val ROW_LOCK_VERSION: String = "rlv"
     const val ROW_PARENT_ID: String = "rpi"
