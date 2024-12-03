@@ -45,7 +45,7 @@ kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
 composeVersionCatalog = "2.0.81"
-composeRdsJpa = "2.0.34"
+composeRdsCrud = "2.0.34"
 composeRdsCore = "2.0.32"
 composeCore = "2.0.29"
 composeDependServlet = "2.0.26"
@@ -87,7 +87,7 @@ net-yan100-compose-kspPlugin = { group = "net.yan100.compose", name = "ksp-plugi
 net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "composeKspToolkit" }
 
 # rds
-net-yan100-compose-rdsJpa = { group = "net.yan100.compose", name = "rds-jpa", version.ref = "composeRdsJpa" }
+net-yan100-compose-rdsCrud = { group = "net.yan100.compose", name = "rds-crud", version.ref = "composeRdsCrud" }
 net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", version.ref = "composeRdsCore" }
 net-yan100-compose-rdsJimmer = { group = "net.yan100.compose", name = "rds-jimmer", version.ref = "composeRdsJimmer" }
 net-yan100-compose-rdsMigrationMysql = { group = "net.yan100.compose", name = "rds-migration-mysql", version.ref = "composeRdsMigrationMysql" }

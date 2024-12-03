@@ -22,7 +22,7 @@ listOf(
 }
 
 ("rds" to listOf(
-  "core", "jpa", "jimmer", "migration-mysql", "migration-postgres"
+  "core", "crud", "jimmer", "migration-mysql", "migration-postgres", "migration-h2"
 )).apply {
   second.forEach { n ->
     include("$first:$n")
