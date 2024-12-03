@@ -311,7 +311,7 @@ class JpaNameClassVisitor(
           val idColumnAnnotation = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Column)
             .addMember("name = %T.ID", IDbNames::class)
           builder.addProperty(
-            PropertySpec.builder(internalIdName, Id::class.asTypeName().copy(nullable = true), KModifier.PRIVATE)
+            PropertySpec.builder(internalIdName, Id::class.asTypeName().copy(nullable = true), KModifier.PRIVATE, KModifier.FINAL)
               .initializer("%L", null)
               .mutable(true)
               .addAnnotation(ClassNames.Jakarta.Persistence.Transient)
