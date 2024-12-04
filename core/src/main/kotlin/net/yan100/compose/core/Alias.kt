@@ -49,10 +49,9 @@ typealias datetime = LocalDateTime
 
 /** 数据库主键 */
 typealias Id = String
-/** 数据库外键 */
-typealias ReferenceId = Id
-/** @see ReferenceId */
-typealias RefId = ReferenceId
+
+/** @see Id */
+typealias RefId = Id
 
 typealias Pq = IPageParam
 typealias PqLike = IPageParamLike

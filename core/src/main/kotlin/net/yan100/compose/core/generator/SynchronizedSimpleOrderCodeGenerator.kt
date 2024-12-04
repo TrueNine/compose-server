@@ -16,13 +16,15 @@
  */
 package net.yan100.compose.core.generator
 
-import java.time.LocalDateTime
+import net.yan100.compose.core.datetime
 import java.time.format.DateTimeFormatter
 
-class SynchronizedSimpleOrderCodeGenerator(private val snowflake: ISnowflakeGenerator) : IOrderCodeGenerator {
+class SynchronizedSimpleOrderCodeGenerator(
+  private val snowflake: ISnowflakeGenerator
+) : IOrderCodeGenerator {
 
   override fun nextString(): String {
-    val dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
+    val dt = datetime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
     val st = snowflake.nextString()
     return "$dt${st.substring(st.length - 4)}"
   }
