@@ -17,7 +17,6 @@ ksp {
 
 dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinxCoroutinesCore)
-
   api(libs.org.springframework.boot.springBootStarterDataJpa)
   implementation(libs.org.hibernate.orm.hibernateCore)
 
