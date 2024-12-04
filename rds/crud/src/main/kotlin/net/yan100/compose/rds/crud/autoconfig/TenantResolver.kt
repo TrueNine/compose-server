@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.autoconfig
+package net.yan100.compose.rds.crud.autoconfig
 
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.hasText
