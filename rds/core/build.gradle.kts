@@ -1,3 +1,9 @@
+plugins {
+  alias(
+    libs.plugins.com.google.devtools.ksp
+  )
+}
+
 version = libs.versions.composeRdsCore.get()
 
 
@@ -9,6 +15,8 @@ kapt {
 }
 
 dependencies {
+  ksp(libs.org.babyfish.jimmer.jimmerKsp)
+
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
 
   implementation(project(":core"))
@@ -26,6 +34,12 @@ dependencies {
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
 
   implementation(libs.org.hibernate.orm.hibernateCore)
+
+  // jimmer
+  implementation(libs.org.babyfish.jimmer.jimmerCore)
+  implementation(libs.org.babyfish.jimmer.jimmerSql)
+  implementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
+
 
   testImplementation(project(":test-toolkit"))
   testImplementation(libs.org.springframework.boot.springBootStarterDataJpa)
