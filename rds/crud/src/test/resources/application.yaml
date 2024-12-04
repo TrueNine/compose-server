@@ -2,6 +2,11 @@ spring:
   threads:
     virtual:
       enabled: true
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    baseline-version: 3000
+    baseline-on-migrate: true
   datasource:
     driver-class-name: org.h2.Driver
     username: sa
@@ -19,7 +24,16 @@ spring:
     open-in-view: false
     database: h2
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 logging:
   level:
     net.yan100: trace
+
+jimmer:
+  language: kotlin
+  dialect: org.babyfish.jimmer.sql.dialect.H2Dialect
+  show-sql: true
+  #pretty-sql: true
+  #inline-sql-variables: true
+  #database-validation-mode: error
+  is-foreign-key-enabled-by-default: false

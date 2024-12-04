@@ -5,12 +5,12 @@
   <!-- 服务测试需要初始化数据 -->
   <test name="服务测试" parallel="methods">
     <packages>
-      <package name="net.yan100.compose.rds.service.impl"/>
+      <package name="net.yan100.compose.rds.crud.service.impl"/>
     </packages>
   </test>
   <test name="聚合服务测试" parallel="classes">
     <packages>
-      <package name="net.yan100.compose.rds.service.aggregator"/>
+      <package name="net.yan100.compose.rds.crud.service.aggregator"/>
     </packages>
   </test>
   <test name="仓库测试" parallel="methods">
