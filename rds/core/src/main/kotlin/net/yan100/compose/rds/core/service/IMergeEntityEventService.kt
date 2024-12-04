@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.rds.core.annotations.ACID
-import net.yan100.compose.rds.core.entities.IAnyEntity
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.core.entities.IJpaPersistentEntity
 import net.yan100.compose.rds.core.event.MergeDataBaseEntityEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ApplicationListener
@@ -14,8 +14,8 @@ import kotlin.reflect.KClass
 private val log = slf4j<IMergeEntityEventService<*>>()
 
 @Suppress("DEPRECATION")
-interface IMergeEntityEventService<T : IEntity> : ApplicationListener<MergeDataBaseEntityEvent<*>> {
-  data class MergeData<D : IAnyEntity>(val from: D, val to: D, val type: KClass<out IAnyEntity>)
+interface IMergeEntityEventService<T : IJpaEntity> : ApplicationListener<MergeDataBaseEntityEvent<*>> {
+  data class MergeData<D : IJpaPersistentEntity>(val from: D, val to: D, val type: KClass<out IJpaPersistentEntity>)
 
   /**
    * ## 发布订阅调度器
@@ -29,7 +29,7 @@ interface IMergeEntityEventService<T : IEntity> : ApplicationListener<MergeDataB
    */
   @get:JsonIgnore
   @get:Transient
-  val supportedMergeTypes: List<KClass<out IAnyEntity>>
+  val supportedMergeTypes: List<KClass<out IJpaPersistentEntity>>
     get() = emptyList()
 
   /**
@@ -38,7 +38,7 @@ interface IMergeEntityEventService<T : IEntity> : ApplicationListener<MergeDataB
    * 实现类可自行决定实现逻辑
    */
   @Deprecated("需保存 support 路径以提高效率", replaceWith = ReplaceWith(""))
-  fun supportedMergeEntityEvent(data: MergeData<out IAnyEntity>): Boolean {
+  fun supportedMergeEntityEvent(data: MergeData<out IJpaPersistentEntity>): Boolean {
     return supportedMergeTypes.isNotEmpty() && supportedMergeTypes.any { it.isInstance(data.from) }
   }
 
@@ -46,7 +46,7 @@ interface IMergeEntityEventService<T : IEntity> : ApplicationListener<MergeDataB
    * ## 服务方法的的合并实现
    */
   @Suppress("UNCHECKED_CAST")
-  fun mergeEntityEventProcessor(data: MergeData<out IAnyEntity>): T = data.from as T
+  fun mergeEntityEventProcessor(data: MergeData<out IJpaPersistentEntity>): T = data.from as T
 
   /**
    * ## 内部调用进行 spring 事件发布

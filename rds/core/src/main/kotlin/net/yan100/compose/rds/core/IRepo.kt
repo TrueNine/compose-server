@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.rds.core
 
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.core.repositories.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -26,7 +26,8 @@ import org.springframework.data.repository.NoRepositoryBean
 private const val findAllOrderByIdDesc = "from #{#entityName} e order by e.id desc, e.mrd desc"
 
 @NoRepositoryBean
-interface IRepo<T : IEntity> : IAnyRepository<T>, IAuditRepository<T>, ILogicDeleteRepository<T>, IBaseRepository<T>, IQuerydslExtensionRepository<T> {
+interface IRepo<T : IJpaEntity> : IPersistentRepository<T>, IAuditRepository<T>, ILogicDeleteRepository<T>, IBaseRepository<T>,
+  IQuerydslExtensionRepository<T> {
   @Query("from #{#entityName} e order by e.id desc, e.mrd desc")
   fun findAllOrderByIdDesc(): List<T>
 

@@ -16,7 +16,11 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import jakarta.persistence.*
+import jakarta.persistence.Basic
+import jakarta.persistence.FetchType
+import jakarta.persistence.Transient
+import jakarta.persistence.Version
+import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.i64
@@ -30,11 +34,9 @@ import org.springframework.data.annotation.LastModifiedDate
  * @author TrueNine
  * @since 2022-12-12
  */
-@MappedSuperclass
-interface IEntity : IAnyEntity {
+interface IJpaEntity : IJpaPersistentEntity {
 
   /** 乐观锁版本 */
-  @get:Column(name = RLV)
   @get:Version
   @get:MetaAutoManagement
   @get:Basic(fetch = FetchType.LAZY)
@@ -43,7 +45,6 @@ interface IEntity : IAnyEntity {
   /**
    * 创建时间
    */
-  @get:Column(name = CRD)
   @get:Basic(fetch = FetchType.LAZY)
   @get:CreatedDate
   @set:CreatedDate
@@ -53,7 +54,6 @@ interface IEntity : IAnyEntity {
   /**
    * 修改时间
    */
-  @get:Column(name = MRD)
   @get:Basic(fetch = FetchType.LAZY)
   @get:LastModifiedDate
   @set:LastModifiedDate
@@ -61,10 +61,9 @@ interface IEntity : IAnyEntity {
   var mrd: datetime?
 
   /** 逻辑删除标志 */
-  @get:Column(name = LDF)
   @get:Basic(fetch = FetchType.LAZY)
   @get:MetaAutoManagement
-  var ldf: Boolean?
+  var ldf: bool?
 
   @Transient
   @Suppress("DEPRECATION_ERROR")

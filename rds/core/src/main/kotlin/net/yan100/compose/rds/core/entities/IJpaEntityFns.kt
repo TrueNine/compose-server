@@ -19,7 +19,7 @@ import org.springframework.data.annotation.LastModifiedDate
  * @param preMergeFn 合并前处理函数
  */
 @Suppress("DEPRECATION_ERROR")
-fun <T : IEntity> T.merge(target: T, findByIdFn: (id: Id) -> T?, preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }): T {
+fun <T : IJpaEntity> T.merge(target: T, findByIdFn: (id: Id) -> T?, preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }): T {
   return takeUpdate {
     val queryEntity = findByIdFn(target.id)
     checkNotNull(queryEntity) { "未找到修改的数据版本" }
@@ -30,7 +30,7 @@ fun <T : IEntity> T.merge(target: T, findByIdFn: (id: Id) -> T?, preMergeFn: (db
 }
 
 @Suppress("DEPRECATION_ERROR")
-fun <T : IEntity> mergeAll(
+fun <T : IJpaEntity> mergeAll(
   targets: List<T>,
   findAllByIdFn: (ids: List<Id>) -> List<T>,
   checkLength: Boolean = true,
@@ -63,7 +63,7 @@ fun <T : IEntity> mergeAll(
  * @param merge 合并函数：(this 自身实体, db 数据库实体) -> 默认合并的自身实体
  */
 @Suppress("DEPRECATION_ERROR")
-inline fun <T : IEntity> T.fromDbData(target: T, crossinline merge: T.(w: T) -> T = { it }): T {
+inline fun <T : IJpaEntity> T.fromDbData(target: T, crossinline merge: T.(w: T) -> T = { it }): T {
   check(!target.isNew) { "要合并的实体必须为数据库内查询的实体" }
   id = target.id
   rlv = target.rlv
@@ -78,7 +78,7 @@ inline fun <T : IEntity> T.fromDbData(target: T, crossinline merge: T.(w: T) -> 
 )
 @Access(AccessType.PROPERTY)
 @MappedSuperclass
-open class IEntityDelegate : IAnyEntityDelegate(), IEntity {
+open class IEntityDelegate : IAnyEntityDelegate(), IJpaEntity {
   @Version
   @Column(name = IDbNames.ROW_LOCK_VERSION)
   override var rlv: i64? = null
@@ -95,6 +95,6 @@ open class IEntityDelegate : IAnyEntityDelegate(), IEntity {
   override var ldf: Boolean? = null
 }
 
-fun entity(): IEntity {
+fun entity(): IJpaEntity {
   return IEntityDelegate()
 }

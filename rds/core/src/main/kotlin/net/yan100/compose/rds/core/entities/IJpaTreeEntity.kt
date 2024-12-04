@@ -17,7 +17,6 @@
 package net.yan100.compose.rds.core.entities
 
 import jakarta.persistence.Column
-import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames
@@ -32,8 +31,7 @@ import net.yan100.compose.rds.core.annotations.OrderCode
  * @author TrueNine
  * @since 2022-12-12
  */
-@MappedSuperclass
-interface ITreeEntity : IEntity {
+interface IJpaTreeEntity : IJpaEntity {
 
   /** 父id */
   @get:Column(name = RPI)
@@ -83,9 +81,9 @@ interface ITreeEntity : IEntity {
 
   companion object {
     const val RPI = IDbNames.ROW_PARENT_ID
-    const val RLN = IDbNames.LEFT_NODE
-    const val RRN = IDbNames.RIGHT_NODE
-    const val NLV = IDbNames.NODE_LEVEL
+    const val RLN = IDbNames.TREE_LEFT_NODE
+    const val RRN = IDbNames.TREE_RIGHT_NODE
+    const val NLV = IDbNames.TREE_NODE_LEVEL
     const val TGI = IDbNames.TREE_GROUP_ID
   }
 }

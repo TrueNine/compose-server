@@ -4,7 +4,7 @@ import net.yan100.compose.core.Id
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.i64
 import net.yan100.compose.core.minus
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.NoRepositoryBean
 import java.time.Duration
@@ -13,7 +13,7 @@ import java.time.Duration
  * # 审计查询接口
  */
 @NoRepositoryBean
-interface IAuditRepository<T : IEntity> : IBaseRepository<T> {
+interface IAuditRepository<T : IJpaEntity> : IBaseRepository<T> {
   /**
    * ## 根据 id 查询乐观锁版本号
    */

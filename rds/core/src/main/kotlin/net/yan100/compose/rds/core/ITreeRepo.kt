@@ -18,7 +18,7 @@ package net.yan100.compose.rds.core
 
 import net.yan100.compose.core.*
 import net.yan100.compose.rds.core.annotations.ACID
-import net.yan100.compose.rds.core.entities.ITreeEntity
+import net.yan100.compose.rds.core.entities.IJpaTreeEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Modifying
@@ -35,7 +35,7 @@ private const val DEPRECATED_TEXT = "接口内部实现方法，不建议调用"
  * @since 2023-05-05
  */
 @NoRepositoryBean
-interface ITreeRepo<T : ITreeEntity> : IRepo<T> {
+interface ITreeRepo<T : IJpaTreeEntity> : IRepo<T> {
   fun findChildrenCount(parent: T): i64 {
     return (parent.rrn - parent.rln - 1) / 2
   }

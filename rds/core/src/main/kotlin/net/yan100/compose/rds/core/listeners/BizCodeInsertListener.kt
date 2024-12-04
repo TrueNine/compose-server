@@ -22,7 +22,7 @@ import net.yan100.compose.core.generator.IOrderCodeGenerator
 import net.yan100.compose.core.recursionFields
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.rds.core.annotations.OrderCode
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
 import org.springframework.stereotype.Component
 
 private val log = slf4j(BizCodeInsertListener::class)
@@ -39,7 +39,7 @@ class BizCodeInsertListener {
   fun insertBizCode(data: Any?) {
     data?.let { d ->
       d::class
-        .recursionFields(IEntity::class)
+        .recursionFields(IJpaEntity::class)
         .filter { it.isAnnotationPresent(OrderCode::class.java) }
         .map {
           it.trySetAccessible()

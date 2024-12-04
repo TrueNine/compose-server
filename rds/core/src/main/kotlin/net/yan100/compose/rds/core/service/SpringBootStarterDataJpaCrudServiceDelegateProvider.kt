@@ -19,8 +19,8 @@ package net.yan100.compose.rds.core.service
 
 import net.yan100.compose.rds.core.ICrud
 import net.yan100.compose.rds.core.IRepo
-import net.yan100.compose.rds.core.entities.IAnyEntity
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.core.entities.IJpaPersistentEntity
 import kotlin.reflect.KClass
 
 /**
@@ -31,11 +31,11 @@ import kotlin.reflect.KClass
  * @param supportedTypes 级联合并操作所需关联的类型
  */
 
-open class SpringBootStarterDataJpaCrudServiceDelegateProvider<T : IEntity, R : IRepo<T>>
+open class SpringBootStarterDataJpaCrudServiceDelegateProvider<T : IJpaEntity, R : IRepo<T>>
 @Deprecated(
   message = "不建议直接创建此类，请使用其他方式",
   replaceWith = ReplaceWith("jpa", "net.yan100.compose.rds.core.jpa"),
   level = DeprecationLevel.ERROR
 ) constructor(
-  override val repo: R, supportedTypes: List<KClass<out IAnyEntity>> = emptyList()
+  override val repo: R, supportedTypes: List<KClass<out IJpaPersistentEntity>> = emptyList()
 ) : ICrud<T>, IBaseCrudService<T, IRepo<T>>, IMergeEntityEventService<T> by MergeEntityEventServiceDefaultImpl(supportedTypes)

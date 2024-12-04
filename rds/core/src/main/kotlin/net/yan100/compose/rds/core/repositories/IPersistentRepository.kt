@@ -17,7 +17,7 @@
 package net.yan100.compose.rds.core.repositories
 
 import net.yan100.compose.core.Id
-import net.yan100.compose.rds.core.entities.IAnyEntity
+import net.yan100.compose.rds.core.entities.IJpaPersistentEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.NoRepositoryBean
 
@@ -28,7 +28,7 @@ import org.springframework.data.repository.NoRepositoryBean
  * @since 2023-05-05
  */
 @NoRepositoryBean
-interface IAnyRepository<T : IAnyEntity> {
+interface IPersistentRepository<T : IJpaPersistentEntity> {
   /**
    * ## 根据 ID 查询 ID
    *

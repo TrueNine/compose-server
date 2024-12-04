@@ -1,6 +1,6 @@
 package net.yan100.compose.rds.core
 
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.core.service.IBaseCrudService
 import net.yan100.compose.rds.core.service.IMergeEntityEventService
 
@@ -17,4 +17,4 @@ import net.yan100.compose.rds.core.service.IMergeEntityEventService
  * ```
  * @see [jpa]
  */
-interface ICrud<T : IEntity> : IBaseCrudService<T, IRepo<T>>, IMergeEntityEventService<T>
+interface ICrud<T : IJpaEntity> : IBaseCrudService<T, IRepo<T>>, IMergeEntityEventService<T>

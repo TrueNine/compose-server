@@ -23,7 +23,7 @@ import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.core.annotations.ACID
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.core.entities.fromDbData
 import net.yan100.compose.rds.core.toPageable
 import net.yan100.compose.rds.core.toPr
@@ -35,7 +35,7 @@ import org.springframework.data.repository.findByIdOrNull
  * @author TrueNine
  * @since 2023-05-05
  */
-interface IBaseCrudService<T : IEntity, R : IRepo<T>> {
+interface IBaseCrudService<T : IJpaEntity, R : IRepo<T>> {
   @get:JsonIgnore
   @get:Transient
   val repo: R

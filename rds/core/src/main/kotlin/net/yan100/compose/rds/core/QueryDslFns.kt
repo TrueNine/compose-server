@@ -25,12 +25,12 @@ import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
 import net.yan100.compose.core.Pq
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.query.FluentQuery
 
-open class QueryDslExtensionFUnctionsArg1<E : IEntity, T : EntityPathBase<E>>(
+open class QueryDslExtensionFUnctionsArg1<E : IJpaEntity, T : EntityPathBase<E>>(
   /** ## 当前使用的表达式 */
   val q: T,
   /** ## BooleanBuilder 用于构建条件 */
@@ -45,10 +45,10 @@ val prototypeBooleanBuilder = BooleanBuilder()
  * @param e EntityPath
  * @param fn 执行函数
  */
-inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(e: T, crossinline fn: QueryDslExtensionFUnctionsArg1<E, T>.() -> R): R =
+inline fun <E : IJpaEntity, T : EntityPathBase<E>, R> querydsl(e: T, crossinline fn: QueryDslExtensionFUnctionsArg1<E, T>.() -> R): R =
   fn(QueryDslExtensionFUnctionsArg1(e, prototypeBooleanBuilder.clone()))
 
-open class QueryDslExtensionFUnctionsArg3<E : IEntity, T : EntityPathBase<E>>(
+open class QueryDslExtensionFUnctionsArg3<E : IJpaEntity, T : EntityPathBase<E>>(
   q: T,
   bb: BooleanBuilder,
   /** ## JPA Query Factory */
@@ -64,7 +64,7 @@ open class QueryDslExtensionFUnctionsArg3<E : IEntity, T : EntityPathBase<E>>(
  * @see jakarta.persistence.PersistenceContext
  */
 @JvmName("querydslByBooleanBuilderAndEntityManager")
-inline fun <E : IEntity, T : EntityPathBase<E>, R> querydsl(
+inline fun <E : IJpaEntity, T : EntityPathBase<E>, R> querydsl(
   e: T,
   entityManager: EntityManager,
   crossinline fn: QueryDslExtensionFUnctionsArg3<E, T>.() -> R,

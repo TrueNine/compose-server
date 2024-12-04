@@ -20,7 +20,7 @@ import jakarta.annotation.Resource
 import jakarta.persistence.PrePersist
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.rds.core.entities.IAnyEntity
+import net.yan100.compose.rds.core.entities.IJpaPersistentEntity
 import org.springframework.stereotype.Component
 
 private val log = slf4j<SnowflakeIdInsertListener>()
@@ -39,7 +39,7 @@ class SnowflakeIdInsertListener {
   @PrePersist
   fun insertId(data: Any?) {
     log.trace("开始执行 id 生成 data: {}", data)
-    if (data is IAnyEntity && data.isNew) {
+    if (data is IJpaPersistentEntity && data.isNew) {
       data.id = snowflake.nextString()
     }
   }

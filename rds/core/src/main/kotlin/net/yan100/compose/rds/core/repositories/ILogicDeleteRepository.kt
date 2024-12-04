@@ -22,7 +22,7 @@ import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
 import net.yan100.compose.core.i64
 import net.yan100.compose.rds.core.annotations.ACID
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.core.toPageable
 import net.yan100.compose.rds.core.toPr
 import org.springframework.data.domain.Page
@@ -33,7 +33,7 @@ import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.findByIdOrNull
 
 @NoRepositoryBean
-interface ILogicDeleteRepository<T : IEntity> : IBaseRepository<T> {
+interface ILogicDeleteRepository<T : IJpaEntity> : IBaseRepository<T> {
   /**
    * ## 查询逻辑删除标志
    */

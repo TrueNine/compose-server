@@ -14,6 +14,8 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
+@file:JvmName("IJpaPersistentEntityKt")
+
 package net.yan100.compose.rds.core.entities
 
 import jakarta.persistence.*
@@ -24,22 +26,22 @@ import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
 import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
 
 /** 将自身置空为新的 Entity 对象 */
-fun <T : IAnyEntity> T.withNew(): T {
+fun <T : IJpaPersistentEntity> T.withNew(): T {
   toNewEntity()
   return this
 }
 
-inline fun <T : IAnyEntity> T.withNew(crossinline after: (T) -> T): T = after(withNew())
+inline fun <T : IJpaPersistentEntity> T.withNew(crossinline after: (T) -> T): T = after(withNew())
 
 /** 将集合内的所有元素置空为新的 Entity 对象 */
-fun <T : IAnyEntity> List<T>.withNew(): List<T> = map { it.withNew() }
+fun <T : IJpaPersistentEntity> List<T>.withNew(): List<T> = map { it.withNew() }
 
-inline fun <T : IAnyEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> = after(this.map { it.withNew() })
+inline fun <T : IJpaPersistentEntity> List<T>.withNew(crossinline after: (List<T>) -> List<T>): List<T> = after(this.map { it.withNew() })
 
-inline fun <T : IAnyEntity, R : Any> List<T>.withNewMap(crossinline after: (List<T>) -> List<R>): List<R> = after(this.withNew())
+inline fun <T : IJpaPersistentEntity, R : Any> List<T>.withNewMap(crossinline after: (List<T>) -> List<R>): List<R> = after(this.withNew())
 
 /** ## 判断当前实体是否为新实体，然后执行 update */
-inline fun <T : IAnyEntity> T.takeUpdate(throwException: Boolean = true, crossinline after: (T) -> T?): T? {
+inline fun <T : IJpaPersistentEntity> T.takeUpdate(throwException: Boolean = true, crossinline after: (T) -> T?): T? {
   if (!isNew) return after(this) else if (throwException) throw IllegalStateException("当前数据为新数据，不能执行更改")
   return null
 }
@@ -50,7 +52,7 @@ inline fun <T : IAnyEntity> T.takeUpdate(throwException: Boolean = true, crossin
 )
 @Access(AccessType.PROPERTY)
 @MappedSuperclass
-open class IAnyEntityDelegate : IAnyEntity {
+open class IAnyEntityDelegate : IJpaPersistentEntity {
   @Transient
   @kotlin.jvm.Transient
   private var ____internal_primary_id: RefId? = null
@@ -66,6 +68,6 @@ open class IAnyEntityDelegate : IAnyEntity {
   }
 }
 
-fun anyEntity(): IAnyEntity {
+fun anyEntity(): IJpaPersistentEntity {
   return IAnyEntityDelegate()
 }

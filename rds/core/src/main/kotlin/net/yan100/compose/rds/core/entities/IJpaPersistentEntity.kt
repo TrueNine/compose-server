@@ -22,8 +22,6 @@ import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.domain.ISensitivity
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
-import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
-import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
 import org.springframework.data.domain.Persistable
 import java.io.Serializable
 
@@ -34,12 +32,12 @@ import java.io.Serializable
  * @since 2023-04-23
  */
 @MappedSuperclass
-@EntityListeners(
+/*@EntityListeners(
   BizCodeInsertListener::class,
   SnowflakeIdInsertListener::class,
-)
+)*/
 @Access(AccessType.PROPERTY)
-interface IAnyEntity :
+interface IJpaPersistentEntity :
   ISensitivity,
   Persistable<Id>,
   IExtensionDefineScope,

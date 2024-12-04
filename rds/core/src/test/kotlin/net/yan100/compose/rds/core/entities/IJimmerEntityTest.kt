@@ -7,8 +7,8 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 
-class IEntityTest {
-  class A : IEntity by entity() {
+class IJimmerEntityTest {
+  class A : IJpaEntity by entity() {
     var a: string? = null
   }
 

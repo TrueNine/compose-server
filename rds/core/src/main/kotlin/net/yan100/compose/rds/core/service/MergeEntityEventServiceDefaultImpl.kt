@@ -1,15 +1,15 @@
 package net.yan100.compose.rds.core.service
 
 import net.yan100.compose.core.holders.EventPublisherHolder
-import net.yan100.compose.rds.core.entities.IAnyEntity
-import net.yan100.compose.rds.core.entities.IEntity
+import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.core.entities.IJpaPersistentEntity
 import org.springframework.context.ApplicationEventPublisher
 import kotlin.reflect.KClass
 
-open class MergeEntityEventServiceDefaultImpl<T : IEntity>(
-  private val supportedTypes: List<KClass<out IAnyEntity>> = emptyList()
+open class MergeEntityEventServiceDefaultImpl<T : IJpaEntity>(
+  private val supportedTypes: List<KClass<out IJpaPersistentEntity>> = emptyList()
 ) : IMergeEntityEventService<T> {
-  override val supportedMergeTypes: List<KClass<out IAnyEntity>> get() = this.supportedTypes
+  override val supportedMergeTypes: List<KClass<out IJpaPersistentEntity>> get() = this.supportedTypes
 
   /**
    * ## 默认的 [ApplicationEventPublisher] 获取器
