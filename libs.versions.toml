@@ -29,7 +29,7 @@ jackson = "2.18.1"
 hibernate = "6.6.3.Final"
 netty = "4.1.115.Final"
 querydsl = "5.1.0"
-jimmer = "0.9.23"
+jimmer = "0.9.24"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
 hutool = "5.8.33"
@@ -322,6 +322,7 @@ org-hibernate-orm-hibernateCore = { group = "org.hibernate", name = "hibernate-c
 org-skyscreamer-jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "2.0-rc1" }
 
 org-babyfish-jimmer-jimmerSql = { group = "org.babyfish.jimmer", name = "jimmer-sql", version.ref = "jimmer" }
+org-babyfish-jimmer-jimmerCore = { group = "org.babyfish.jimmer", name = "jimmer-core", version.ref = "jimmer" }
 org-babyfish-jimmer-jimmerSqlKotlin = { group = "org.babyfish.jimmer", name = "jimmer-sql-kotlin", version.ref = "jimmer" }
 org-babyfish-jimmer-jimmerApt = { group = "org.babyfish.jimmer", name = "jimmer-apt", version.ref = "jimmer" }
 org-babyfish-jimmer-jimmerKsp = { group = "org.babyfish.jimmer", name = "jimmer-ksp", version.ref = "jimmer" }
