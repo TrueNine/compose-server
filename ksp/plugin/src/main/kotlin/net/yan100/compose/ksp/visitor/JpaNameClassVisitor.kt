@@ -385,7 +385,7 @@ class JpaNameClassVisitor(
                 else false""".trimIndent(),
                 ClassNames.Org.Hibernate.Hibernate,
                 ClassNames.Org.Hibernate.Hibernate,
-                ClassNames.Net.Yan100.Compose.Rds.Core.Entities.IAnyEntity
+                ClassNames.Net.Yan100.Compose.Rds.Core.Entities.IJpaPersistentEntity
               )
               .returns(Boolean::class)
               .build()
