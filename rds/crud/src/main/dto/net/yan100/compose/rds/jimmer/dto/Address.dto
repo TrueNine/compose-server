@@ -1,0 +1,12 @@
+export net.yan100.compose.rds.crud.entities.jimmer.Address
+  -> package net.yan100.compose.rds.crud.dto.jimmer.address
+
+
+CodeAndNameAddressView {
+  code
+  name
+  parentAddr {
+    code
+    name
+  }
+}
