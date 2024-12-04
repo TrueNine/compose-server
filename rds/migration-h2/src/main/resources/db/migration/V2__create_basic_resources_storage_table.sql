@@ -8,7 +8,7 @@ create
             rlv bigint default 0,
             name varchar(128) default null,
             doc varchar(128) default null,
-            permissions_id bigint default 3,
+            permissions_id bigint default null,
             api_path text,
             api_method text,
             api_protocol varchar(63) default null
@@ -26,11 +26,15 @@ create
             crd timestamp default now(),
             mrd timestamp default now(),
             rlv bigint default 0,
-            api_id bigint not null,
             device_code text null,
             req_ip varchar(63) null,
             login_ip varchar(63) null,
             resp_code int null,
+            req_method varchar(63) default null,
+            req_path text default null,
+            req_datetime timestamp default null,
+            resp_datetime timestamp default null,
+            req_protocol varchar(63) default null,
             resp_result_enc text
         );
 
