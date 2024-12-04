@@ -1,6 +1,7 @@
 package com.example.entities
 
 import com.example.enums.EGender
+import net.yan100.compose.rds.jimmer.generators.JimmerSnowflakeLongIdGenerator
 import org.babyfish.jimmer.jackson.JsonConverter
 import org.babyfish.jimmer.jackson.LongToStringConverter
 import org.babyfish.jimmer.sql.*
@@ -8,7 +9,7 @@ import org.babyfish.jimmer.sql.*
 @Entity
 interface Author {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(generatorRef = JimmerSnowflakeLongIdGenerator.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME)
   @JsonConverter(LongToStringConverter::class)
   val id: Long
 

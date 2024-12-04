@@ -9,15 +9,16 @@ plugins {
 
 
 jimmer {
-  // 设定 jimmer 依赖版本，此处也可以使用 "latest.release" 或 "0.+" 等版本范围表达式
   version = libs.versions.jimmer.get()
 }
 
 dependencies {
+  implementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
   kapt(libs.org.springframework.springBootConfigurationProcessor)
 
   implementation(project(":core"))
+  implementation(project(":rds:rds-core"))
 
   ksp(libs.org.babyfish.jimmer.jimmerKsp)
   testImplementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
@@ -25,6 +26,7 @@ dependencies {
   testImplementation(libs.org.springframework.boot.springBootStarterDataJdbc)
   testImplementation(libs.org.springframework.boot.springBootStarterJdbc)
   testImplementation(libs.org.flywaydb.flywayCore)
+  testImplementation(project(":rds:rds-migration-h2"))
 }
 
 /*

@@ -1,11 +1,15 @@
-package com.example
+package net.yan100.compose.rds.jimmer
 
-import net.yan100.compose.rds.jimmer.autoconfig.AutoConfigEntrance
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
 
-@Import(AutoConfigEntrance::class)
+
+@EnableJdbcRepositories(
+  basePackages = [
+    "net.yan100.compose.rds.jimmer.entities"
+  ]
+)
 @SpringBootApplication
 internal class TestEntrance {
   fun main(args: Array<String>) {
