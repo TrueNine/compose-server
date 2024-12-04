@@ -28,7 +28,7 @@ object ClassNames {
             }
 
             object Entities {
-              val IAnyEntity = ClassName("net.yan100.compose.rds.core.entities", "IAnyEntity")
+              val IJpaPersistentEntity = ClassName("net.yan100.compose.rds.core.entities", "IJpaPersistentEntity")
             }
           }
         }
