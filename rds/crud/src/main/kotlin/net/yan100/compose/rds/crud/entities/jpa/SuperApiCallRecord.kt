@@ -16,11 +16,11 @@
  */
 package net.yan100.compose.rds.crud.entities.jpa
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Transient
 import net.yan100.compose.core.datetime
 import net.yan100.compose.meta.annotations.MetaDef
+import net.yan100.compose.meta.annotations.MetaSkipGeneration
 import net.yan100.compose.rds.core.entities.IJpaEntity
 
 /**
@@ -66,7 +66,7 @@ interface SuperApiCallRecord : IJpaEntity {
   @get:Schema(title = "响应时间")
   var respDatetime: datetime?
 
-  @get:JsonIgnore
+  @MetaSkipGeneration
   @get:Transient
   val uriDeep: Int get() = reqPath?.split("/")?.filter { it.isNotBlank() }?.size ?: 0
 }
