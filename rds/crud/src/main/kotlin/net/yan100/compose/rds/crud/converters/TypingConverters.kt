@@ -14,7 +14,7 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.converters
+package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter

@@ -14,21 +14,21 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.converters
+package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
+import net.yan100.compose.rds.core.typing.shopping.OrderStatusTyping
 import org.springframework.stereotype.Component
-import java.time.Period
 
 @Component
-@Converter(autoApply = true)
-class PeriodAsStringConverter : AttributeConverter<Period, String> {
-  override fun convertToDatabaseColumn(attribute: Period?): String? {
-    return attribute?.run { this.toString() }
+@Converter
+class OrderStatusTypingConverter : AttributeConverter<OrderStatusTyping?, Int?> {
+  override fun convertToDatabaseColumn(attribute: OrderStatusTyping?): Int? {
+    return attribute?.value
   }
 
-  override fun convertToEntityAttribute(dbData: String?): Period? {
-    return dbData?.run { Period.parse(this) }
+  override fun convertToEntityAttribute(dbData: Int?): OrderStatusTyping? {
+    return OrderStatusTyping.findVal(dbData)
   }
 }

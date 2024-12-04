@@ -14,17 +14,14 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.converters
+package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.core.typing.shopping.GoodsTyping
+import net.yan100.compose.rds.core.intTyping
+import net.yan100.compose.rds.core.typing.relation.RelationItemTyping
 import org.springframework.stereotype.Component
 
 @Component
 @Converter
-class GoodsTypingConverter : AttributeConverter<GoodsTyping?, Int?> {
-  override fun convertToDatabaseColumn(attribute: GoodsTyping?): Int? = attribute?.value
-
-  override fun convertToEntityAttribute(dbData: Int?): GoodsTyping? = GoodsTyping.findVal(dbData)
-}
+class RelationItemTypingConverter : AttributeConverter<RelationItemTyping?, Int?> by intTyping(RelationItemTyping::findVal)

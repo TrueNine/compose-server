@@ -14,17 +14,21 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.converters
+package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.typing.ISO4217
 import org.springframework.stereotype.Component
+import java.time.Duration
 
-@Converter
 @Component
-class ISO4217Converter : AttributeConverter<ISO4217?, String?> {
-  override fun convertToDatabaseColumn(attribute: ISO4217?): String? = attribute?.value
+@Converter(autoApply = true)
+class DurationAsStringConverter : AttributeConverter<Duration, String> {
+  override fun convertToDatabaseColumn(attribute: Duration?): String? {
+    return attribute?.toString()
+  }
 
-  override fun convertToEntityAttribute(dbData: String?): ISO4217? = ISO4217.get(dbData)
+  override fun convertToEntityAttribute(dbData: String?): Duration? {
+    return dbData?.run { Duration.parse(this) }
+  }
 }

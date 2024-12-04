@@ -14,21 +14,17 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.converters
+package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
+import net.yan100.compose.rds.core.typing.shopping.GoodsTyping
 import org.springframework.stereotype.Component
-import java.time.Duration
 
 @Component
-@Converter(autoApply = true)
-class DurationAsStringConverter : AttributeConverter<Duration, String> {
-  override fun convertToDatabaseColumn(attribute: Duration?): String? {
-    return attribute?.toString()
-  }
+@Converter
+class GoodsTypingConverter : AttributeConverter<GoodsTyping?, Int?> {
+  override fun convertToDatabaseColumn(attribute: GoodsTyping?): Int? = attribute?.value
 
-  override fun convertToEntityAttribute(dbData: String?): Duration? {
-    return dbData?.run { Duration.parse(this) }
-  }
+  override fun convertToEntityAttribute(dbData: Int?): GoodsTyping? = GoodsTyping.findVal(dbData)
 }
