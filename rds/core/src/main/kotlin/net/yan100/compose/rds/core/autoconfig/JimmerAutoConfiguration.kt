@@ -17,8 +17,8 @@ class JimmerAutoConfiguration {
   @Bean
   @ConditionalOnMissingBean
   fun lowercaseDatabaseNamingStrategy(): DatabaseNamingStrategy {
-    log.trace("register jimmer lowercaseNamingStrategy")
-    return org.babyfish.jimmer.sql.runtime.DefaultDatabaseNamingStrategy.LOWER_CASE
+    log.trace("register jimmer lowercaseNamingStrategy::customized")
+    return JimmerGenericNamingStrategy()
   }
 
   @ConditionalOnMissingBean
