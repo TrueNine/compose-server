@@ -16,21 +16,24 @@
  */
 package net.yan100.compose.rds.crud.service.impl
 
+import net.yan100.compose.core.datetime
 import net.yan100.compose.rds.core.ICrud
+import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.jpa
 import net.yan100.compose.rds.crud.entities.jpa.FullUserAccount
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
+import net.yan100.compose.rds.crud.repositories.jimmer.IJimmerUserAccountRepo
 import net.yan100.compose.rds.crud.repositories.jpa.IFullUserAccountRepo
 import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
 import net.yan100.compose.rds.crud.service.IUserAccountService
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
 class UserAccountServiceImpl(
   private val userRepo: IUserAccountRepo,
-  private val fullRepo: IFullUserAccountRepo
+  private val fullRepo: IFullUserAccountRepo,
+  private val jimmerUserAccountRepo: IJimmerUserAccountRepo
 ) : IUserAccountService, ICrud<UserAccount> by jpa(userRepo) {
 
   override fun fetchByAccount(account: String): UserAccount? {
@@ -61,9 +64,9 @@ class UserAccountServiceImpl(
     return userRepo.existsByWechatOpenId(openId)
   }
 
-  @Transactional(rollbackFor = [Exception::class])
+  @ACID
   override fun modifyUserBandTimeTo(account: String, dateTime: LocalDateTime?) {
-    if (null == dateTime || LocalDateTime.now().isBefore(dateTime)) {
+    if (null == dateTime || datetime.now().isBefore(dateTime)) {
       userRepo.saveUserBanTimeByAccount(dateTime, account)
     }
   }

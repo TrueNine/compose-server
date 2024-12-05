@@ -33,7 +33,8 @@ jimmer:
   language: kotlin
   dialect: org.babyfish.jimmer.sql.dialect.H2Dialect
   show-sql: true
-  #pretty-sql: true
-  #inline-sql-variables: true
+  pretty-sql: true
+  inline-sql-variables: true
   #database-validation-mode: error
   is-foreign-key-enabled-by-default: false
+  database-validation-mode: warning
