@@ -19,20 +19,20 @@ springAi = "1.0.0-M4"
 springCloudAlibaba = "2021.0.4.0"
 springModulith = "1.3.0"
 springIntegration = "6.4.0"
-springSecurity = "6.3.4"
+springSecurity = "6.4.1"
 
 # others
 slf4j = "2.1.0-alpha1"
-flyway = "11.0.0"
+flyway = "11.0.1"
 mapstruct = "1.6.0"
-jackson = "2.18.1"
+jackson = "2.18.2"
 hibernate = "6.6.3.Final"
 netty = "4.1.115.Final"
 querydsl = "5.1.0"
-jimmer = "0.9.24"
+jimmer = "0.9.25"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
-hutool = "5.8.33"
+hutool = "5.8.34"
 xxlJob = "2.4.2"
 mybatisPlus = "3.5.7"
 
@@ -144,7 +144,7 @@ org-springframework-boot-springBootStarterDataJdbc = { group = "org.springframew
 org-springframework-boot-springBootStarterDataRedisReactive = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis-reactive" }
 org-springframework-boot-springBootStarterLogging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
 org-springframework-boot-springBootDockerCompose = { group = "org.springframework.boot", name = "spring-boot-docker-compose" }
-org-springframework-cloud-springCloudStarterBootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap", version = "4.2.0-RC1" }
+org-springframework-cloud-springCloudStarterBootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap", version = "4.2.0" }
 org-springframework-integration-springIntegrationMqtt = { group = "org.springframework.integration", name = "spring-integration-mqtt", version.ref = "springIntegration" }
 org-springframework-integration-springIntegrationCore = { group = "org.springframework.integration", name = "spring-integration-core", version.ref = "springIntegration" }
 com-xuxueli-xxlJobCore = { group = "com.xuxueli", name = "xxl-job-core", version.ref = "xxlJob" }
@@ -162,7 +162,7 @@ org-springframework-springCore = { group = "org.springframework", name = "spring
 org-springframework-modulith-springModulithStarterJpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 org-springframework-modulith-springModulithCore = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "springModulith" }
 org-springframework-modulith-springModulithStarterTest = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
-org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.7.0-RC1" }
+org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.7.0" }
 
 org-apache-commons-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
 org-apache-commons-commonsCsv = { group = "org.apache.commons", name = "commons-csv", version = "1.12.0" }
@@ -222,7 +222,7 @@ org-flywaydb-flywayDatabasePostgresql = { group = "org.flywaydb", name = "flyway
 p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
 com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.10.0" }
 
-io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.13" }
+io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.14" }
 com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
 com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.9" }
 com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.15" }
@@ -268,12 +268,12 @@ com-github-ulisesbocchio-jasyptSpringBootStarter = { group = "com.github.ulisesb
 
 org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
-org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.26.0" }
+org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.27.0" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
 com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.49.0" }
-org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
-org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.6.0" }
+org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.3" }
+org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.7.0" }
 net-sf-supercsv-superCsv = { group = "net.sf.supercsv", name = "super-csv", version = "2.4.0" }
 
 com-fasterxml-jackson-module-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
