@@ -19,7 +19,7 @@ package net.yan100.compose.rds.crud.service
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.*
 import net.yan100.compose.rds.core.ICrud
-import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
+import net.yan100.compose.rds.core.typing.GenderTyping
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
 import net.yan100.compose.rds.crud.entities.jpa.UserInfo
 
