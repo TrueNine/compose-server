@@ -26,5 +26,5 @@ import org.springframework.stereotype.Component
 class ISO4217Converter : AttributeConverter<ISO4217?, String?> {
   override fun convertToDatabaseColumn(attribute: ISO4217?): String? = attribute?.value
 
-  override fun convertToEntityAttribute(dbData: String?): ISO4217? = ISO4217.get(dbData)
+  override fun convertToEntityAttribute(dbData: String?): ISO4217? = ISO4217[dbData]
 }
