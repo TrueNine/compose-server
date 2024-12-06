@@ -30,7 +30,7 @@ dependencies {
   implementation(libs.com.querydsl.querydslCore)
 
 
-  compileOnly(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
+  implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
 
   implementation(libs.org.hibernate.orm.hibernateCore)
