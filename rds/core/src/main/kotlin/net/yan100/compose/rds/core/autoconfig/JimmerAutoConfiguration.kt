@@ -2,6 +2,8 @@ package net.yan100.compose.rds.core.autoconfig
 
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.rds.core.converters.jimmer.IntTypingJimmerProvider
+import net.yan100.compose.rds.core.converters.jimmer.StringTypingJimmerProvider
 import net.yan100.compose.rds.jimmer.generators.JimmerSnowflakeLongIdGenerator
 import net.yan100.compose.rds.jimmer.generators.JimmerSnowflakeStringIdGenerator
 import org.babyfish.jimmer.sql.meta.DatabaseNamingStrategy
@@ -35,5 +37,17 @@ class JimmerAutoConfiguration {
     val e = JimmerSnowflakeLongIdGenerator(snowflake)
     log.trace("register jimmer snowflake long id generator snowflake: {}, jimmer generator: {}", snowflake, e)
     return e
+  }
+
+  @Bean
+  fun stringTypingJimmerProvider(): StringTypingJimmerProvider {
+    log.trace("register jimmer string typing enum provider")
+    return StringTypingJimmerProvider()
+  }
+
+  @Bean
+  fun intTypingJimmerProvider(): IntTypingJimmerProvider {
+    log.trace("register jimmer int typing enum provider")
+    return IntTypingJimmerProvider()
   }
 }
