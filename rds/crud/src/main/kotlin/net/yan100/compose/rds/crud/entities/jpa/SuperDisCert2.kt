@@ -7,8 +7,8 @@ import net.yan100.compose.core.date
 import net.yan100.compose.core.string
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IJpaEntity
-import net.yan100.compose.rds.core.typing.cert.DisTyping
-import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
+import net.yan100.compose.rds.core.typing.DisTyping
+import net.yan100.compose.rds.core.typing.GenderTyping
 import net.yan100.compose.rds.crud.converters.DisTypingConverter
 import net.yan100.compose.rds.crud.converters.GenderTypingConverter
 import java.time.LocalDate

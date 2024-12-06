@@ -23,9 +23,9 @@ import net.yan100.compose.core.string
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.core.typing.AuditTyping
-import net.yan100.compose.rds.core.typing.cert.CertContentTyping
-import net.yan100.compose.rds.core.typing.cert.CertPointTyping
-import net.yan100.compose.rds.core.typing.cert.CertTyping
+import net.yan100.compose.rds.core.typing.CertContentTyping
+import net.yan100.compose.rds.core.typing.CertPointTyping
+import net.yan100.compose.rds.core.typing.CertTyping
 import net.yan100.compose.rds.crud.converters.AuditTypingConverter
 import net.yan100.compose.rds.crud.converters.CertContentTypingConverter
 import net.yan100.compose.rds.crud.converters.CertPointTypingConverter

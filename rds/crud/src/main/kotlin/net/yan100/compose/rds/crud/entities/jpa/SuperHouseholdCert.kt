@@ -21,9 +21,9 @@ import net.yan100.compose.core.RefId
 import net.yan100.compose.core.string
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IJpaEntity
-import net.yan100.compose.rds.core.typing.userinfo.BloodTyping
-import net.yan100.compose.rds.core.typing.userinfo.DegreeTyping
-import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
+import net.yan100.compose.rds.core.typing.BloodTyping
+import net.yan100.compose.rds.core.typing.DegreeTyping
+import net.yan100.compose.rds.core.typing.GenderTyping
 import net.yan100.compose.rds.crud.converters.BloodTypingConverter
 import net.yan100.compose.rds.crud.converters.DegreeTypingConverter
 import java.math.BigDecimal

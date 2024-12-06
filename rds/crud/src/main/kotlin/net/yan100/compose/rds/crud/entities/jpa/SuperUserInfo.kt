@@ -5,7 +5,7 @@ import net.yan100.compose.core.*
 import net.yan100.compose.core.domain.IIdcard2Code
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IJpaEntity
-import net.yan100.compose.rds.core.typing.userinfo.GenderTyping
+import net.yan100.compose.rds.core.typing.GenderTyping
 import net.yan100.compose.rds.crud.converters.GenderTypingConverter
 import java.time.LocalDate
 
