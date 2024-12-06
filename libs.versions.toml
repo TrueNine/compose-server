@@ -44,7 +44,7 @@ junitPlatform = "1.11.3"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.89"
+composeVersionCatalog = "2.0.90"
 composeRdsCrud = "2.0.39"
 composeRdsCore = "2.0.36"
 composeCore = "2.0.32"
@@ -212,7 +212,7 @@ net-sf-sevenzipjbinding-sevenzipjbinding = { group = "net.sf.sevenzipjbinding", 
 
 org-hsqldb-hsqldb = { group = "org.hsqldb", name = "hsqldb", version = "2.7.4" }
 com-h2database-h2 = { group = "com.h2database", name = "h2", version = "2.3.232" }
-org-postgresql-postgresql = { group = "org.postgresql", name = "postgresql", version = "42.7.3" }
+org-postgresql-postgresql = { group = "org.postgresql", name = "postgresql", version = "42.7.4" }
 org-xerial-sqliteJdbc = { group = "org.xerial", name = "sqlite-jdbc", version = "3.46.0.0" }
 com-mysql-mysqlConnectorJ = { group = "com.mysql", name = "mysql-connector-j", version = "8.4.0" }
 mysql-mysqlConnectorJava = { group = "mysql", name = "mysql-connector-java", version = "8.0.33" }
