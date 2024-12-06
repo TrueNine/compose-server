@@ -14,31 +14,50 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.typing.relation
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "关系对象类型")
-enum class RelationItemTyping(private val v: Int) : IntTyping {
-  @Schema(title = "无")
-  NONE(0),
-  @Schema(title = "用户")
-  USER(1),
-  @Schema(title = "客户")
-  CUSTOMER(2),
-  @Schema(title = "企业")
-  ENTERPRISE(3),
-  @Schema(title = "员工")
-  EMPLOYEE(4),
-  @Schema(title = "其他")
-  OTHER(9999);
+/**
+ * # 订单流转状态
+ *
+ * @author TrueNine
+ * @since 2023-05-04
+ */
+@Schema(title = "订单流转状态")
+enum class OrderStatusTyping(private val orderType: Int) : IntTyping {
+  @Schema(title = "预付款")
+  PRE_PAY(1001),
+
+  @Schema(title = "取消支付")
+  CANCEL_PAY(1002),
+
+  @Schema(title = "已付款")
+  PAID(2001),
+
+  @Schema(title = "订单已取消")
+  CANCEL(2003),
+
+  @Schema(title = "已退款")
+  REFUNDED(2002),
+
+  @Schema(title = "订单已完成")
+  COMPLETED(2023),
+
+  @Schema(title = "预退款")
+  PRE_REFUND(4001),
+
+  /** 支付成功，但业务出现异常 */
+  @Schema(title = "支付成功，但业务出现异常")
+  PAY_SUCCESS_BIZ_FAILED(5002);
 
   @JsonValue
-  override val value: Int = v
+  override val value: Int = orderType
 
   companion object {
-    fun findVal(v: Int?) = entries.find { it.v == v }
+    @JvmStatic
+    fun findVal(v: Int?) = entries.find { it.orderType == v }
   }
 }

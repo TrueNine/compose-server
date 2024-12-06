@@ -14,27 +14,26 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.typing.shopping
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-/**
- * 商品改动类型
- *
- * @author TrueNine
- * @since 2023-04-23
- */
-@Schema(title = "商品改动类型")
-enum class GoodsChangeRecordTyping(private val v: Int) : IntTyping {
-  /** 改价格 */
-  @Schema(title = "改价格")
-  CHANGE_PRICE(0),
+/** 商品信息分类 */
+@Schema(title = "商品信息分类")
+enum class GoodsInfoTyping(private val v: Int) : IntTyping {
+  /** 检索类型 */
+  @Schema(title = "检索类型")
+  RETRIEVAL(0),
 
-  /** 改标题 */
-  @Schema(title = "改标题")
-  CHANGE_TITLE(1);
+  /** 商品单位信息 */
+  @Schema(title = "商品单位信息")
+  GOODS_UNIT_INFO(1),
+
+  /** 商品单位继承信息 */
+  @Schema(title = "商品单位继承信息")
+  GOODS_UNIT_EXTEND_INFO(2);
 
   @JsonValue
   override val value = v

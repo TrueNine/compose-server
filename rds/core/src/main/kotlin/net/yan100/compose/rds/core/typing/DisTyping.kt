@@ -14,34 +14,45 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.typing.cert
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "证件印面类型")
-enum class CertPointTyping(private val v: Int) : IntTyping {
-  @Schema(title = "无要求")
-  NONE(0),
-  @Schema(title = "正面")
-  HEADS(1),
-  @Schema(title = "反面")
-  TAILS(2),
-  @Schema(title = "双面")
-  DOUBLE(3),
-  @Schema(title = "所有")
-  ALL(4),
-  @Schema(title = "所有内容")
-  ALL_CONTENT(5),
-  @Schema(title = "完整的", description = "针对于视频，音频等等……")
-  INTACT(6);
+/**
+ * # 第二代残疾证残疾类别
+ *
+ * @author TrueNine
+ * @since 2023-11-03
+ */
+enum class DisTyping(private val typ: Int) : IntTyping {
+  @Schema(title = "视力")
+  EYE(1),
+
+  @Schema(title = "听力")
+  EAR(2),
+
+  @Schema(title = "言语")
+  MOUTH(3),
+
+  @Schema(title = "肢体")
+  BODY(4),
+
+  @Schema(title = "智力")
+  IQ(5),
+
+  @Schema(title = "精神")
+  NERVE(6),
+
+  @Schema(title = "多重")
+  MULTIPLE(7);
 
   @JsonValue
-  override val value: Int = v
+  override val value = typ
 
   companion object {
     @JvmStatic
-    fun findVal(value: Int?) = entries.find { value == it.v }
+    fun findVal(typ: Int?) = entries.find { it.typ == typ }
   }
 }

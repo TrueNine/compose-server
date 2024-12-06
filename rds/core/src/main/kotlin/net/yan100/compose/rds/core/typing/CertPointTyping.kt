@@ -14,37 +14,40 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.typing.shopping
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-/**
- * 商品服务类型
- *
- * @author TrueNine
- * @since 2023-04-23
- */
-@Schema(title = "商品类型")
-enum class GoodsTyping(private val v: Int) : IntTyping {
-  /** 实体商品 */
-  @Schema(title = "实体商品")
-  PHYSICAL_GOODS(0),
+@Schema(title = "证件印面类型")
+enum class CertPointTyping(private val v: Int) : IntTyping {
+  @Schema(title = "无要求")
+  NONE(0),
 
-  /** 服务商品 */
-  @Schema(title = "服务商品")
-  SERVICE_GOODS(1),
+  @Schema(title = "正面")
+  HEADS(1),
 
-  /** 虚拟商品 */
-  @Schema(title = "虚拟商品")
-  VIRTUAL_GOODS(2);
+  @Schema(title = "反面")
+  TAILS(2),
+
+  @Schema(title = "双面")
+  DOUBLE(3),
+
+  @Schema(title = "所有")
+  ALL(4),
+
+  @Schema(title = "所有内容")
+  ALL_CONTENT(5),
+
+  @Schema(title = "完整的", description = "针对于视频，音频等等……")
+  INTACT(6);
 
   @JsonValue
   override val value: Int = v
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?): GoodsTyping? = entries.find { it.value == v }
+    fun findVal(value: Int?) = entries.find { value == it.v }
   }
 }

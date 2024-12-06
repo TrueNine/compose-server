@@ -14,44 +14,33 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.typing.shopping
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
 import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
 /**
- * # 订单流转状态
+ * 商品改动类型
  *
  * @author TrueNine
- * @since 2023-05-04
+ * @since 2023-04-23
  */
-@Schema(title = "订单流转状态")
-enum class OrderStatusTyping(private val orderType: Int) : IntTyping {
-  @Schema(title = "预付款")
-  PRE_PAY(1001),
-  @Schema(title = "取消支付")
-  CANCEL_PAY(1002),
-  @Schema(title = "已付款")
-  PAID(2001),
-  @Schema(title = "订单已取消")
-  CANCEL(2003),
-  @Schema(title = "已退款")
-  REFUNDED(2002),
-  @Schema(title = "订单已完成")
-  COMPLETED(2023),
-  @Schema(title = "预退款")
-  PRE_REFUND(4001),
+@Schema(title = "商品改动类型")
+enum class GoodsChangeRecordTyping(private val v: Int) : IntTyping {
+  /** 改价格 */
+  @Schema(title = "改价格")
+  CHANGE_PRICE(0),
 
-  /** 支付成功，但业务出现异常 */
-  @Schema(title = "支付成功，但业务出现异常")
-  PAY_SUCCESS_BIZ_FAILED(5002);
+  /** 改标题 */
+  @Schema(title = "改标题")
+  CHANGE_TITLE(1);
 
   @JsonValue
-  override val value: Int = orderType
+  override val value = v
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = entries.find { it.orderType == v }
+    fun findVal(v: Int?) = entries.find { it.value == v }
   }
 }

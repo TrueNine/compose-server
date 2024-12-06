@@ -17,8 +17,11 @@
 package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.AttachmentTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
+import org.babyfish.jimmer.sql.EnumType.Strategy
 
 /**
  * 附件类别
@@ -26,14 +29,14 @@ import net.yan100.compose.core.typing.IntTyping
  * @author TrueNine
  * @since 2023-04-23
  */
-@Schema(title = "附件类别")
-enum class AttachmentTyping(private val v: Int) : IntTyping {
+@EnumType(Strategy.ORDINAL)
+enum class AttachmentTyping(v: Int) : IntTyping {
   /** 文件 */
-  @Schema(title = "文件")
+  @EnumItem(ordinal = 0)
   ATTACHMENT(0),
 
   /** 根路径 */
-  @Schema(title = "根路径")
+  @EnumItem(ordinal = 1)
   BASE_URL(1);
 
   @JsonValue
@@ -41,6 +44,10 @@ enum class AttachmentTyping(private val v: Int) : IntTyping {
 
   companion object {
     @JvmStatic
-    operator fun get(v: Int?) = entries.find { it.value == v }
+    @Deprecated("use operation get", replaceWith = ReplaceWith("get"))
+    fun findVal(v: Int?) = entries.find { it.value == v }
+
+    @JvmStatic
+    operator fun get(v: Int?) = findVal(v)
   }
 }

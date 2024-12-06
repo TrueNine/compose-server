@@ -14,37 +14,83 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.typing.userinfo
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
 /**
- * 性别类型
- *
- * @author TrueNine
- * @since 2023-04-23
+ * ## 证件种类
  */
-@Schema(title = "性别")
-enum class GenderTyping(private val v: Int) : IntTyping {
-  /** 男 */
-  @Schema(title = "男")
-  MAN(1),
+enum class CertTyping(v: Int) : IntTyping {
+  /**
+   * 无具体类型
+   */
+  NONE(0),
 
-  /** 女 */
-  @Schema(title = "女")
-  WOMAN(0),
+  /**
+   * 身份证
+   */
+  ID_CARD(1),
 
-  /** 未知 */
-  @Schema(title = "未知")
-  UNKNOWN(9999);
+  /**
+   * 二代身份证
+   */
+  IC_CARD2(2),
+
+  /**
+   * 残疾证
+   */
+  DISABILITY_CARD(3),
+
+  /**
+   * 二代残疾证
+   */
+  DISABILITY_CARD2(4),
+
+  /**
+   * 三代残疾卡
+   */
+  DISABILITY_CARD3(5),
+
+  /**
+   * 户口
+   */
+  HOUSEHOLD_CARD(6),
+
+  /**
+   * 银行卡
+   */
+  BANK_CARD(7),
+
+  /**
+   * 合同
+   */
+  CONTRACT(8),
+
+  /**
+   * 营业执照
+   */
+  BIZ_LICENSE(9),
+
+  /**
+   * 寸照
+   */
+  TITLE_IMAGE(10),
+
+  /**
+   * 个人所得税状况录屏
+   */
+  PERSONAL_INCOME_TAX_VIDEO(11);
 
   @JsonValue
   override val value: Int = v
 
   companion object {
     @JvmStatic
-    fun findVal(v: Int?) = entries.find { it.value == v }
+    fun findVal(v: Int?) = CertTyping.entries.find { it.value == v }
+
+    @JvmStatic
+    fun get(v: Int?) = findVal(v)
   }
 }

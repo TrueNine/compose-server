@@ -17,33 +17,50 @@
 package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "审核状态")
-enum class AuditTyping(val v: Int) : IntTyping {
-  @Schema(title = "未审核")
+/**
+ * 审核状态
+ */
+enum class AuditTyping(v: Int) : IntTyping {
+  /**
+   * 未审核
+   */
   NONE(0),
 
-  @Schema(title = "分配给审核员")
+  /**
+   * 分配给审核员
+   */
   ASSIGNED(1),
 
-  @Schema(title = "审核通过")
+  /**
+   * 审核通过
+   */
   PASS(2),
 
-  @Schema(title = "审核未通过")
+  /**
+   * 审核未通过
+   */
   FAIL(3),
 
-  @Schema(title = "已撤销")
+  /**
+   * 已撤销
+   */
   CANCEL(4),
 
-  @Schema(title = "已过期")
+  /**
+   * 已过期
+   */
   EXPIRED(5),
 
-  @Schema(title = "驳回")
+  /**
+   * 驳回
+   */
   REJECT(6),
 
-  @Schema(title = "被隐藏")
+  /**
+   * 被隐藏
+   */
   SHADOW_BAN(7);
 
   @JsonValue
@@ -51,6 +68,9 @@ enum class AuditTyping(val v: Int) : IntTyping {
 
   companion object {
     @JvmStatic
-    fun findVal(value: Int?) = entries.find { it.v == value }
+    fun findVal(value: Int?) = entries.find { it.value == value }
+
+    @JvmStatic
+    fun get(value: Int?) = findVal(value)
   }
 }

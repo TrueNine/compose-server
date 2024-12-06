@@ -14,23 +14,39 @@
  *     email: <truenine304520@gmail.com>
  *     website: <github.com/TrueNine>
  */
-package net.yan100.compose.rds.core.typing.userinfo
+package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
 
-@Schema(title = "血型")
+/**
+ * ## 用户信息所属的常规血型
+ *
+ */
 enum class BloodTyping(v: Int) : IntTyping {
-  @Schema(title = "A型")
+  /**
+   * A型
+   */
   A(1),
-  @Schema(title = "B型")
+
+  /**
+   * B型
+   */
   B(2),
-  @Schema(title = "AB型")
+
+  /**
+   * AB型
+   */
   AB(3),
-  @Schema(title = "O型")
+
+  /**
+   * O型
+   */
   O(4),
-  @Schema(title = "其他血型")
+
+  /**
+   * 其他血型
+   */
   OTHER(9999);
 
   @JsonValue
@@ -39,5 +55,8 @@ enum class BloodTyping(v: Int) : IntTyping {
   companion object {
     @JvmStatic
     fun findVal(v: Int?) = BloodTyping.entries.find { it.value == v }
+
+    @JvmStatic
+    fun get(v: Int?) = findVal(v)
   }
 }
