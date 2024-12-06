@@ -24,7 +24,6 @@ interface Attachment : IJimmerEntity {
   @Formula(dependencies = ["baseUrl", "baseUri"])
   val linkedUrl: String? get() = if (baseUrl.isNullOrBlank()) null else (baseUrl ?: "") + (baseUri ?: "")
 
-
   @OneToOne
   @JoinColumn(name = "url_id")
   val parentUrl: Attachment?
@@ -32,9 +31,6 @@ interface Attachment : IJimmerEntity {
   @IdView("parentUrl")
   val urlId: RefId?
 
-
   val size: i64?
   val mimeType: string?
 }
-
-
