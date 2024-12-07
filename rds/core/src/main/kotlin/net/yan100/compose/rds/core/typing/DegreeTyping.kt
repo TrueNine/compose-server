@@ -17,41 +17,79 @@
 package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
+/**
+ * 用户学历
+ */
+@EnumType(EnumType.Strategy.ORDINAL)
 enum class DegreeTyping(v: Int, val level: Int) : IntTyping {
-  @Schema(title = "文盲")
+  /**
+   * 文盲
+   */
+  @EnumItem(ordinal = 0)
   NONE(0, 0),
 
-  @Schema(title = "小学")
+  /**
+   * 小学
+   */
+  @EnumItem(ordinal = 1)
   MIN(1, 1),
 
-  @Schema(title = "初中")
+  /**
+   * 初中
+   */
+  @EnumItem(ordinal = 2)
   HALF(2, 2),
 
-  @Schema(title = "中专")
+  /**
+   * 中专
+   */
+  @EnumItem(ordinal = 8)
   HALF_TECH(8, 3),
 
-  @Schema(title = "高中")
+  /**
+   * 高中
+   */
+  @EnumItem(ordinal = 3)
   HEIGHT(3, 4),
 
-  @Schema(title = "大专")
+  /**
+   * 大专
+   */
+  @EnumItem(ordinal = 9)
   HEIGHT_TECH(9, 5),
 
-  @Schema(title = "本科")
+  /**
+   * 本科
+   */
+  @EnumItem(ordinal = 4)
   BIG(4, 6),
 
-  @Schema(title = "研究生")
+  /**
+   * 研究生
+   */
+  @EnumItem(ordinal = 5)
   DISCOVERY(5, 7),
 
-  @Schema(title = "博士")
+  /**
+   * 博士
+   */
+  @EnumItem(ordinal = 6)
   EXPERT(6, 8),
 
-  @Schema(title = "博士后")
+  /**
+   * 博士后
+   */
+  @EnumItem(ordinal = 7)
   AFTER_EXPERT(7, 9),
 
-  @Schema(title = "其他")
+  /**
+   * 其他
+   */
+  @EnumItem(ordinal = 9999)
   OTHER(9999, -1);
 
   @JsonValue
@@ -60,5 +98,8 @@ enum class DegreeTyping(v: Int, val level: Int) : IntTyping {
   companion object {
     @JvmStatic
     fun findVal(v: Int?) = DegreeTyping.entries.find { it.value == v }
+
+    @JvmStatic
+    operator fun get(v: Int) = findVal(v)
   }
 }
