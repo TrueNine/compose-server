@@ -22,7 +22,6 @@ import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.jpa
 import net.yan100.compose.rds.crud.entities.jpa.FullUserAccount
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
-import net.yan100.compose.rds.crud.repositories.jimmer.IJimmerUserAccountRepo
 import net.yan100.compose.rds.crud.repositories.jpa.IFullUserAccountRepo
 import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
 import net.yan100.compose.rds.crud.service.IUserAccountService
@@ -33,7 +32,6 @@ import java.time.LocalDateTime
 class UserAccountServiceImpl(
   private val userRepo: IUserAccountRepo,
   private val fullRepo: IFullUserAccountRepo,
-  private val jimmerUserAccountRepo: IJimmerUserAccountRepo
 ) : IUserAccountService, ICrud<UserAccount> by jpa(userRepo) {
 
   override fun fetchByAccount(account: String): UserAccount? {
