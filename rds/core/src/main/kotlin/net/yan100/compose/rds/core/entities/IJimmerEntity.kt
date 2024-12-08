@@ -5,12 +5,8 @@ import org.babyfish.jimmer.sql.MappedSuperclass
 
 @MappedSuperclass
 interface IJimmerEntity : IJimmerPersistentEntity {
-  //@LogicalDeleted("true")
   val ldf: Boolean?
-
   val crd: datetime?
   val mrd: datetime?
-
-  //@Version
   val rlv: Long?
 }

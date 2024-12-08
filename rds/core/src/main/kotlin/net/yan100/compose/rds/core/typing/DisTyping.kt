@@ -17,35 +17,59 @@
 package net.yan100.compose.rds.core.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.DisTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
 /**
- * # 第二代残疾证残疾类别
+ * # 第二、三代中国残疾证残疾类别
  *
  * @author TrueNine
  * @since 2023-11-03
  */
-enum class DisTyping(private val typ: Int) : IntTyping {
-  @Schema(title = "视力")
+@EnumType(EnumType.Strategy.ORDINAL)
+enum class DisTyping(typ: Int) : IntTyping {
+  /**
+   * 视力
+   */
+  @EnumItem(ordinal = 1)
   EYE(1),
 
-  @Schema(title = "听力")
+  /**
+   * 听力
+   */
+  @EnumItem(ordinal = 2)
   EAR(2),
 
-  @Schema(title = "言语")
+  /**
+   * 言语
+   */
+  @EnumItem(ordinal = 3)
   MOUTH(3),
 
-  @Schema(title = "肢体")
+  /**
+   * 肢体
+   */
+  @EnumItem(ordinal = 4)
   BODY(4),
 
-  @Schema(title = "智力")
+  /**
+   * 智力
+   */
+  @EnumItem(ordinal = 5)
   IQ(5),
 
-  @Schema(title = "精神")
+  /**
+   * 精神
+   */
+  @EnumItem(ordinal = 6)
   NERVE(6),
 
-  @Schema(title = "多重")
+  /**
+   * 多重
+   */
+  @EnumItem(ordinal = 7)
   MULTIPLE(7);
 
   @JsonValue
@@ -53,6 +77,9 @@ enum class DisTyping(private val typ: Int) : IntTyping {
 
   companion object {
     @JvmStatic
-    fun findVal(typ: Int?) = entries.find { it.typ == typ }
+    fun findVal(typ: Int?) = entries.find { it.value == typ }
+
+    @JvmStatic
+    operator fun get(v: Int?) = findVal(v)
   }
 }
