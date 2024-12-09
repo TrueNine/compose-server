@@ -45,5 +45,5 @@ object Slf4jKotlinAdaptor {
 }
 
 fun slf4j(clz: Class<*>): SysLogger = LoggerFactory.getLogger(clz)
-fun slf4j(kClass: KClass<*>): SysLogger = slf4j(kClass.java)
-inline fun <reified T> slf4j(): SysLogger = slf4j(T::class)
+fun slf4j(kClass: KClass<*> = SysLogger::class): SysLogger = slf4j(kClass.java)
+inline fun <reified T : Any> slf4j(): SysLogger = slf4j(T::class)
