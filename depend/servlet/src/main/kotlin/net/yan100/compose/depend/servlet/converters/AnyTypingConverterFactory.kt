@@ -22,7 +22,7 @@ import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
 import java.util.concurrent.ConcurrentHashMap
 
-private val log = slf4j(AnyTypingConverterFactory::class)
+private val log = slf4j<AnyTypingConverterFactory>()
 
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
   companion object {
@@ -32,22 +32,34 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
 
   @Suppress("UNCHECKED_CAST")
   override fun <T : AnyTyping?> getConverter(targetType: Class<T>): Converter<String?, T> {
-    if (converters[targetType] == null) {
-      log.trace("反推枚举转换器，target type = {}", targetType)
-      converters[targetType] = AnyTypingConverter(targetType)
-    }
-    return converters[targetType] as Converter<String?, T>
+    converters[targetType]
+    return converters[targetType].let {
+      it ?: AnyTypingConverter(targetType).also { addedConverter ->
+        log.trace("inject any typing converter, the target class: {}", targetType)
+        converters[targetType] = addedConverter
+      }
+    } as Converter<String?, T>
   }
 
-  private inner class AnyTypingConverter(targetClass: Class<out AnyTyping?>, private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()) :
-    Converter<String?, AnyTyping?> {
+  private inner class AnyTypingConverter(
+    targetClass: Class<out AnyTyping?>,
+    private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()
+  ) : Converter<String?, AnyTyping?> {
     init {
-      if (targetClass.isEnum) targetClass.enumConstants.filterNotNull().forEach { mapping += it.value.toString() to it }
-      else log.error("class: {} 不是枚举类型", targetClass)
+      if (targetClass.isEnum) targetClass.enumConstants.filterNotNull().also { es ->
+        
+      }.forEach {
+        mapping += it.value.toString() to it
+        // TODO 不安全的枚举名称直接映射
+        (it as? Enum<*>)?.name?.also { eName ->
+          mapping += eName to it
+        }
+      }
+      else error("target class: $targetClass not enum type")
     }
 
     override fun convert(source: String): AnyTyping? {
-      log.trace("转换枚举 值 = {}", source)
+      log.trace("convert source: {}", source)
       return mapping[source]
     }
   }
