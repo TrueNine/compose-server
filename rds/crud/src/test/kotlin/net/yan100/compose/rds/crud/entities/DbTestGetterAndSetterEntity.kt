@@ -12,7 +12,7 @@ import kotlin.properties.Delegates
 @Entity
 @Access(AccessType.PROPERTY)
 class DbTestGetterAndSetterEntity : IJpaEntity {
-  private var internalId: RefId = ""
+  private var internalId: RefId = Long.MIN_VALUE
 
   @jakarta.persistence.Id
   override fun getId(): Id {

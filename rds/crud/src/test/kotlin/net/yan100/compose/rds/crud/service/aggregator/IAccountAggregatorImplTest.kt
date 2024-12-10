@@ -43,7 +43,7 @@ class IAccountAggregatorImplTest {
           lastName = "日天"
         }
       )
-    val user = agg.assignAccountToUserInfo("123", userInfo.id)
+    val user = agg.assignAccountToUserInfo(123, userInfo.id)
 
     assertNotNull(user)
   }
@@ -54,7 +54,7 @@ class IAccountAggregatorImplTest {
       password = "qwer1234"
       nickName = "dawdawdawdawd${snowflake.nextString()}"
       description = "awdawdawdawdaw"
-      createUserId = "0"
+      createUserId = 0
     }
 
   @Test

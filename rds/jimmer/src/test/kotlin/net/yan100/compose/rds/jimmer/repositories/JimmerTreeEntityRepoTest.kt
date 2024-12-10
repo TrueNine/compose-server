@@ -27,7 +27,7 @@ class JimmerTreeEntityRepoTest {
   fun `test find parent`() {
     val parent = repo.insertIfAbsent(
       Address {
-        parentAddr = repo.findById("0").getOrNull()
+        parentAddr = repo.findById(0).getOrNull()
         code = "11"
         name = "北京市"
         yearVersion = "2023"
@@ -55,7 +55,7 @@ class JimmerTreeEntityRepoTest {
   fun destroy() {
     repo.deleteAll()
     repo.insert(Address {
-      id = "0"
+      id = 0
       level = 0
       name = ""
       rln = 1

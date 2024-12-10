@@ -23,6 +23,7 @@ import net.yan100.compose.rds.crud.repositories.jpa.IAttachmentRepo
 import net.yan100.compose.testtookit.RDBRollback
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -49,27 +50,29 @@ class DynamicUpdateAnnotationTest {
   @Test
   @RDBRollback
   fun `test dynamic update annotation future`() {
-    val firstInsertEntity =
-      attRepo.save(
-        Attachment().also {
-          it.size = 133
-          it.saveName = "233"
-          it.attType = AttachmentTyping.ATTACHMENT
-        }
-      )
+    val att = Attachment(
+      size = 133,
+      saveName = "233",
+      attType = AttachmentTyping.ATTACHMENT
+    )
+    val firstInsertEntity = attRepo.save(
+      att
+    )
 
     assertNotNull(firstInsertEntity)
-    val a = attRepo.findById(firstInsertEntity.id).get()
+
+    val a = attRepo.findByIdOrNull(firstInsertEntity.id)
+    assertNotNull(a)
     log.info("firstInsertEntity: {}", firstInsertEntity)
     log.info("a: {}", a)
 
     val save =
       attRepo.save(
-        a.let {
-          it.saveName = null
-          it
+        a.apply {
+          saveName = null
+          attType = AttachmentTyping.BASE_URL
         }
       )
-    assertNull(save.saveName, "更新实体字段为 null 时，不能证券设置 null")
+    assertNull(save.saveName, "更新实体字段为 null 时，不能正确设置 null")
   }
 }

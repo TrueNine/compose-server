@@ -5,6 +5,7 @@ import net.yan100.compose.rds.crud.entities.jpa.UserAccount
 import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import kotlin.test.assertNotNull
 
 @Component
 class LaunchBean(
@@ -12,11 +13,16 @@ class LaunchBean(
 ) {
 
   fun saveOk() {
-    repo.save(UserAccount().apply {
-      account = "abcdeferqwrqwrqwrqwreqweqw"
-      pwdEnc = "abcdefghijk"
+    val account = UserAccount(
+      account = "abcdeferqwrqwrqwrqwreqweqw",
+      pwdEnc = "abcdefghijk",
       nickName = "呢称名字"
-    })
+    )
+    assertNotNull(account.account)
+    assertNotNull(account.pwdEnc)
+    repo.save(
+      account
+    )
   }
 
   fun saveException() {

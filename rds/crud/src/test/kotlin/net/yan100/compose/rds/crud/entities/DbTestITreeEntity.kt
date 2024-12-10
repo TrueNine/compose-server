@@ -24,7 +24,7 @@ import net.yan100.compose.rds.core.entities.IJpaTreeEntity
 @Entity
 @Table(name = "db_test_presort_tree")
 class DbTestITreeEntity : IJpaTreeEntity {
-  private var internalId: RefId = ""
+  private var internalId: RefId = Long.MIN_VALUE
   override var rpi: RefId?
     get() = TODO("Not yet implemented")
     set(value) {}

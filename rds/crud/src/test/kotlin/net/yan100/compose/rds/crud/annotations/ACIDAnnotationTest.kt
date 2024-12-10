@@ -24,12 +24,13 @@ class ACIDAnnotationTest {
   }
 
   @Test
+  @RDBRollback
   fun `ensure transactional call after rollback`() {
     val all = usrRepo.findAll()
-    assertEquals(2, all.size, "确保无任何其他数据")
+    val allSize = all.size
     assertThrows<IllegalStateException> { launchBean.throwTransactionalSave() }
     val afterAllData = usrRepo.findAll()
-    assertEquals(2, afterAllData.size, "确保数据被回滚")
+    assertEquals(allSize, afterAllData.size, "确保数据被回滚")
   }
 
   @Test

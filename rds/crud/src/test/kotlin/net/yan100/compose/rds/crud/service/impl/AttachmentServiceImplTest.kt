@@ -102,7 +102,7 @@ class AttachmentServiceImplTest {
   @Test
   @RDBRollback
   fun testFindFullUrlById_NotExists() {
-    val id = snowflake.nextString()
+    val id = snowflake.next()
     val result = attachmentService.fetchFullUrlById(id)
     assertNull(result)
   }
@@ -136,7 +136,7 @@ class AttachmentServiceImplTest {
   @Test
   @RDBRollback
   fun testFindFullUrlById_NegativeId() {
-    val id = snowflake.nextString()
+    val id = snowflake.next()
     val result = attachmentService.fetchFullUrlById(id)
     assertNull(result)
   }

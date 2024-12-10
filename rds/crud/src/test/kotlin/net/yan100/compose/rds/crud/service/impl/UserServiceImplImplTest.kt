@@ -40,7 +40,7 @@ class UserServiceImplImplTest {
 
   fun getUser() =
     UserAccount().apply {
-      createUserId = IDbNames.Rbac.ROOT_ID_STR
+      createUserId = IDbNames.Rbac.ROOT_ID
       account = snowflake.nextString()
       nickName = "ab + ${snowflake.nextString()}"
       pwdEnc = "qwer1234"

@@ -61,7 +61,7 @@ class UserInfoServiceImplTest {
   fun `test findIsRealPeopleById`() {
     runBlocking {
       launch {
-        val r = userInfoService.findIsRealPeopleByUserId("0")
+        val r = userInfoService.findIsRealPeopleByUserId(0)
         log.info("r: {}", r)
       }
     }
