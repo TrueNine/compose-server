@@ -11,6 +11,7 @@ plugins {
   alias(libs.plugins.org.jetbrains.kotlin.plugin.jpa)
   alias(libs.plugins.com.diffplug.spotless)
   alias(libs.plugins.com.github.benManes.versions)
+  alias(libs.plugins.io.spring.dependencyManagement)
 }
 
 val yunxiaoUrl = extra["url.yunxiao.1"].toString()

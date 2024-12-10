@@ -44,9 +44,9 @@ junitPlatform = "1.11.3"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.99"
-composeRdsCrud = "2.0.42"
-composeRdsCore = "2.0.41"
+composeVersionCatalog = "2.0.100"
+composeRdsCrud = "2.0.43"
+composeRdsCore = "2.0.42"
 composeCore = "2.0.34"
 composeDependServlet = "2.0.29"
 composeDataExtract = "2.0.27"
@@ -68,6 +68,7 @@ composeDataCrawler = "2.0.20"
 composeKspToolkit = "2.0.20"
 composeOss = "2.0.20"
 composeRdsJimmer = "0.0.12"
+composeRdsMigrationH2 = "0.0.10"
 composeRdsMigrationPostgres = "0.0.9"
 composeRdsMigrationMysql = "0.0.9"
 composeMeta = "0.0.3"
@@ -92,6 +93,7 @@ net-yan100-compose-rdsCore = { group = "net.yan100.compose", name = "rds-core", 
 net-yan100-compose-rdsJimmer = { group = "net.yan100.compose", name = "rds-jimmer", version.ref = "composeRdsJimmer" }
 net-yan100-compose-rdsMigrationMysql = { group = "net.yan100.compose", name = "rds-migration-mysql", version.ref = "composeRdsMigrationMysql" }
 net-yan100-compose-rdsMigrationPostgres = { group = "net.yan100.compose", name = "rds-migration-postgres", version.ref = "composeRdsMigrationPostgres" }
+net-yan100-compose-rdsMigrationH2 = { group = "net.yan100.compose", name = "rds-migration-h2", version.ref = "composeRdsMigrationH2" }
 
 # security
 net-yan100-compose-securitySpring = { group = "net.yan100.compose", name = "security-spring", version.ref = "composeSecuritySpring" }
