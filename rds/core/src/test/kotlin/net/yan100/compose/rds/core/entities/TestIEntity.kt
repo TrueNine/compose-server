@@ -14,6 +14,6 @@ open class TestIEntity : IJpaEntity by entity() {
     this.id
   }
 
-  var name: String? = null
-  var doc: String? = null
+  open var name: String? = null
+  open var doc: String? = null
 }

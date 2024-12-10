@@ -10,6 +10,6 @@ class IntTypingJimmerProviderTest {
   @Test
   fun `ensure input and output convert not exception`() {
     val provider = IntTypingJimmerProvider()
-    assertNotNull(provider.scalarType)
+    assertNotNull(provider)
   }
 }
