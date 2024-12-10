@@ -48,7 +48,7 @@ typealias time = LocalTime
 typealias datetime = LocalDateTime
 
 /** 数据库主键 */
-typealias Id = String
+typealias Id = Long
 
 /** @see Id */
 typealias RefId = Id
