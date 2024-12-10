@@ -1,4 +1,4 @@
-version = libs.versions.composeRdsMigrationPostgres.get()
+version = libs.versions.composeRdsMigrationH2.get()
 
 publishing {
   publications {

@@ -7,10 +7,10 @@ create
             mrd timestamp default now(),
             rlv bigint default 0,
             create_user_id bigint default null,
-            account varchar(255) default null,
-            nick_name varchar(2047) default null,
+            account varchar(255) not null,
+            nick_name varchar(2047) not null,
             doc text default null,
-            pwd_enc varchar(2047) default null,
+            pwd_enc varchar(2047) not null,
             ban_time timestamp default null,
             last_login_time timestamp default now(),
             unique(account)
