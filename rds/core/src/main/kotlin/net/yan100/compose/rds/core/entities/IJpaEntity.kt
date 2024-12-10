@@ -16,8 +16,6 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import jakarta.persistence.Basic
-import jakarta.persistence.FetchType
 import jakarta.persistence.Transient
 import jakarta.persistence.Version
 import net.yan100.compose.core.bool
@@ -39,13 +37,11 @@ interface IJpaEntity : IJpaPersistentEntity {
   /** 乐观锁版本 */
   @get:Version
   @get:MetaAutoManagement
-  @get:Basic(fetch = FetchType.LAZY)
   var rlv: i64?
 
   /**
    * 创建时间
    */
-  @get:Basic(fetch = FetchType.LAZY)
   @get:CreatedDate
   @set:CreatedDate
   @get:MetaAutoManagement
@@ -54,14 +50,12 @@ interface IJpaEntity : IJpaPersistentEntity {
   /**
    * 修改时间
    */
-  @get:Basic(fetch = FetchType.LAZY)
   @get:LastModifiedDate
   @set:LastModifiedDate
   @get:MetaAutoManagement
   var mrd: datetime?
 
   /** 逻辑删除标志 */
-  @get:Basic(fetch = FetchType.LAZY)
   @get:MetaAutoManagement
   var ldf: bool?
 
