@@ -53,6 +53,7 @@ object ClassNames {
       val EntityListeners = ClassName("jakarta.persistence", "EntityListeners")
       val SecondaryTable = ClassName("jakarta.persistence", "SecondaryTable")
       val Access = ClassName("jakarta.persistence", "Access")
+      val Basic = ClassName("jakarta.persistence", "Basic")
       val Table = ClassName("jakarta.persistence", "Table")
       val Entity = ClassName("jakarta.persistence", "Entity")
       val Column = ClassName("jakarta.persistence", "Column")
