@@ -70,7 +70,7 @@ interface IJpaPersistentEntity :
 
   @Transient
   override fun isNew(): Boolean {
-    return id.isId()
+    return !id.isId()
   }
 
   override fun recordChangedSensitiveData() {
