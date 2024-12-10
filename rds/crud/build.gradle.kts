@@ -40,7 +40,6 @@ dependencies {
   testImplementation(project(":test-toolkit"))
   testImplementation(libs.org.flywaydb.flywayCore)
   testImplementation(project(":rds:rds-migration-h2"))
-  //testRuntimeOnly(libs.bundles.p6spy)
 }
 
 publishing {
