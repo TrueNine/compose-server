@@ -74,7 +74,7 @@ interface IUserInfoService : ICrud<UserInfo> {
 
   fun findUserByPhone(phone: String): UserAccount?
 
-  fun findByUserId(userId: String): UserInfo?
+  fun findByUserId(userId: RefId): UserInfo?
 
   fun existsByPhone(phone: string): Boolean
 

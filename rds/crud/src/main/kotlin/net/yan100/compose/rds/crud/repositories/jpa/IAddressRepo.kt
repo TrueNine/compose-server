@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.crud.repositories.jpa
 
+import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames.Rbac
 import net.yan100.compose.core.string
 import net.yan100.compose.rds.core.ITreeRepo
@@ -43,11 +44,11 @@ interface IAddressRepo : ITreeRepo<Address> {
   @Query("select a.id from Address a where a.code = :code")
   fun findIdByCode(code: String): String
 
-  @Query("from Address e where e.id = '0'")
-  fun findRoot(): Address
+  @Query("from Address e where e.id = :rootId")
+  fun findRoot(rootId: RefId = Rbac.ROOT_ID): Address
 
-  fun findRootId(): String {
-    return Rbac.ROOT_ID_STR
+  fun findRootId(): RefId {
+    return Rbac.ROOT_ID
   }
 
   fun findAllByCode(code: String): List<Address>

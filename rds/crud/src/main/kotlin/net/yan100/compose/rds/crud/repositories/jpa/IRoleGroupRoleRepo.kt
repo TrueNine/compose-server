@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.crud.repositories.jpa
 
+import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.crud.entities.jpa.RoleGroupRole
 import org.springframework.context.annotation.Primary
@@ -25,16 +26,16 @@ import org.springframework.stereotype.Repository
 @Primary
 @Repository
 interface IRoleGroupRoleRepo : IRepo<RoleGroupRole> {
-  fun findByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String): RoleGroupRole?
+  fun findByRoleGroupIdAndRoleId(roleGroupId: RefId, roleId: RefId): RoleGroupRole?
 
   @Query("select rr.roleId from RoleGroupRole rr")
-  fun findAllRoleIdByRoleGroupId(roleGroupId: String): Set<String>
+  fun findAllRoleIdByRoleGroupId(roleGroupId: RefId): Set<RefId>
 
-  fun findAllByRoleGroupId(roleGroupId: String): List<RoleGroupRole>
+  fun findAllByRoleGroupId(roleGroupId: RefId): List<RoleGroupRole>
 
-  fun existsByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String): Boolean
+  fun existsByRoleGroupIdAndRoleId(roleGroupId: RefId, roleId: RefId): Boolean
 
-  fun deleteByRoleGroupIdAndRoleId(roleGroupId: String, roleId: String)
+  fun deleteByRoleGroupIdAndRoleId(roleGroupId: RefId, roleId: RefId)
 
-  fun deleteAllByRoleIdInAndRoleGroupId(roleIds: List<String>, roleGroupId: String)
+  fun deleteAllByRoleIdInAndRoleGroupId(roleIds: List<RefId>, roleGroupId: RefId)
 }

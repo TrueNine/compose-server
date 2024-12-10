@@ -55,7 +55,7 @@ class RbacAggregatorImpl(
     return allNames.filterNotNull().toSet()
   }
 
-  override fun findAllSecurityNameByAccount(account: String): Set<String> = findAllSecurityNameByUserId(userRepo.findIdByAccount(account))
+  override fun findAllSecurityNameByAccount(account: String): Set<String> = findAllSecurityNameByUserId(userRepo.findIdByAccount(account)!!)
 
   override fun saveRoleGroupToUser(roleGroupId: RefId, userId: RefId): UserRoleGroup? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)

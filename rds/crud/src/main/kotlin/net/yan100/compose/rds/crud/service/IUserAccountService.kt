@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.crud.service
 
+import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.ICrud
 import net.yan100.compose.rds.crud.entities.jpa.FullUserAccount
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
@@ -24,7 +25,7 @@ import java.time.LocalDateTime
 interface IUserAccountService : ICrud<UserAccount> {
   fun fetchByAccount(account: String): UserAccount?
 
-  fun foundByUserInfoId(userInfoId: String): Boolean
+  fun foundByUserInfoId(userInfoId: RefId): Boolean
 
   fun findFullUserByAccount(account: String): FullUserAccount?
 

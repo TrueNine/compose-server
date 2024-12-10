@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.rds.crud.service.impl
 
+import net.yan100.compose.core.RefId
 import net.yan100.compose.core.datetime
 import net.yan100.compose.rds.core.ICrud
 import net.yan100.compose.rds.core.annotations.ACID
@@ -38,7 +39,7 @@ class UserAccountServiceImpl(
     return userRepo.findByAccount(account)
   }
 
-  override fun foundByUserInfoId(userInfoId: String): Boolean {
+  override fun foundByUserInfoId(userInfoId: RefId): Boolean {
     return userRepo.existsByUserInfoId(userInfoId)
   }
 

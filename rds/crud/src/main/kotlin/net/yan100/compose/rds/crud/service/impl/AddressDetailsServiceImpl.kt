@@ -47,11 +47,11 @@ class AddressDetailsServiceImpl(
     return repo.findNonDesensitizedAllByUserId(userId, page.toPageable()).toPr()
   }
 
-  override fun fetchFullAllByUserId(userId: String, page: Pq): Pr<FullAddressDetails> {
+  override fun fetchFullAllByUserId(userId: RefId, page: Pq): Pr<FullAddressDetails> {
     return fRepo.findAllByUserId(userId, page.toPageable()).toPr()
   }
 
-  override fun fetchFullPathById(id: String): String {
+  override fun fetchFullPathById(id: RefId): String {
     return repo.findByIdOrNull(id)?.let { ad ->
       val adPath =
         ad.addressCode.let { addrCode -> aRepo.findFirstByCode(addrCode)?.let { addr -> aRepo.findParentPath(addr) } }?.joinToString(separator = "") { it.name }

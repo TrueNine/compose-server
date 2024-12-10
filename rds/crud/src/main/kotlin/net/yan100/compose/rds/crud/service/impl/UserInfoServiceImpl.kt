@@ -68,7 +68,7 @@ class UserInfoServiceImpl(
   @Transactional(rollbackFor = [Exception::class])
   override fun deleteUserInfoAndUser(userInfoId: RefId) {
     infoRepo.findByIdOrNull(userInfoId)?.also { i ->
-      if (i.userId.hasText()) userRepo.deleteById(i.userId!!)
+      if (i.userId.isId()) userRepo.deleteById(i.userId!!)
       removeById(i.id)
     }
   }
@@ -122,7 +122,7 @@ class UserInfoServiceImpl(
     return infoRepo.findUserByPhone(phone)
   }
 
-  override fun findByUserId(userId: String): UserInfo? {
+  override fun findByUserId(userId: RefId): UserInfo? {
     return infoRepo.findFirstByUserIdAndPriIsTrue(userId)
   }
 

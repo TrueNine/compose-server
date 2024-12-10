@@ -19,6 +19,7 @@ package net.yan100.compose.rds.crud.entities.jpa
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
+import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
@@ -43,7 +44,7 @@ interface SuperLinkedAttachment : IJpaEntity {
   var mimeType: String
   var baseUrl: String
   var baseUri: String?
-  var urlId: String
+  var urlId: RefId
   var saveName: String
   var metaName: String
 

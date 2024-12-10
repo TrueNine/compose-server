@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.crud.repositories.jpa
 
+import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.crud.entities.jpa.Attachment
 import org.springframework.context.annotation.Primary
@@ -36,7 +37,7 @@ interface IAttachmentRepo : IRepo<Attachment> {
     where a.id = :id
 """
   )
-  fun findFullPathById(@Param("id") id: String): String?
+  fun findFullPathById(@Param("id") id: RefId): String?
 
   @Query(
     """

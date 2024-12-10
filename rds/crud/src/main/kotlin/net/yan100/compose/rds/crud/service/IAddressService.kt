@@ -34,7 +34,7 @@ interface IAddressService : ICrud<Address> {
 
   fun findDirectChildrenByCode(code: String): List<Address>
 
-  fun findDirectChildrenById(id: String): List<Address>
+  fun findDirectChildrenById(id: RefId): List<Address>
 
   fun findFullPathById(id: RefId): String
 

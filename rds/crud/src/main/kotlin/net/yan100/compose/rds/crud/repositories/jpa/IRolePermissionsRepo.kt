@@ -17,6 +17,7 @@
 package net.yan100.compose.rds.crud.repositories.jpa
 
 
+import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.crud.entities.jpa.RolePermissions
 import org.springframework.context.annotation.Primary
@@ -26,16 +27,16 @@ import org.springframework.stereotype.Repository
 @Primary
 @Repository
 interface IRolePermissionsRepo : IRepo<RolePermissions> {
-  fun findByRoleIdAndPermissionsId(roleId: String, permissionsId: String): RolePermissions?
+  fun findByRoleIdAndPermissionsId(roleId: RefId, permissionsId: RefId): RolePermissions?
 
   @Query("select rp.permissionsId from RolePermissions rp")
-  fun findAllPermissionsIdByRoleId(roleId: String): Set<String>
+  fun findAllPermissionsIdByRoleId(roleId: RefId): Set<RefId>
 
-  fun findAllByRoleId(role: String): List<RolePermissions>
+  fun findAllByRoleId(roleId: RefId): List<RolePermissions>
 
-  fun existsByRoleIdAndPermissionsId(roleId: String, permissionsId: String): Boolean
+  fun existsByRoleIdAndPermissionsId(roleId: RefId, permissionsId: RefId): Boolean
 
-  fun deleteByRoleIdAndPermissionsId(roleId: String, permissionsId: String)
+  fun deleteByRoleIdAndPermissionsId(roleId: RefId, permissionsId: RefId)
 
-  fun deleteAllByPermissionsIdInAndRoleId(permissionsIds: List<String>, roleId: String)
+  fun deleteAllByPermissionsIdInAndRoleId(permissionsIds: List<RefId>, roleId: RefId)
 }

@@ -32,7 +32,7 @@ interface IUserAccountRepo : IRepo<UserAccount> {
     where u.account = :account
   """
   )
-  fun findIdByAccount(account: String): String
+  fun findIdByAccount(account: String): RefId?
 
   @Query(
     """

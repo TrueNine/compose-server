@@ -19,6 +19,7 @@ package net.yan100.compose.rds.crud.service.impl
 
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.Pr
+import net.yan100.compose.core.RefId
 import net.yan100.compose.core.domain.IReadableAttachment
 import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.rds.core.ICrud
@@ -62,7 +63,7 @@ class AttachmentServiceImpl(
     return attRepo.findFirstByBaseUrlAndBaseUri(baseUrl, baseUri)
   }
 
-  override fun fetchFullUrlById(id: String): String? {
+  override fun fetchFullUrlById(id: RefId): String? {
     return attRepo.findFullPathById(id)
   }
 
@@ -70,11 +71,11 @@ class AttachmentServiceImpl(
     return attRepo.findAllByParentBaseUrl(baseUrl, page.toPageable()).toPr()
   }
 
-  override fun fetchLinkedById(id: String): LinkedAttachment? {
+  override fun fetchLinkedById(id: RefId): LinkedAttachment? {
     return linkedRepo.findByIdOrNull(id)
   }
 
-  override fun fetchAllLinkedById(ids: List<String>): List<LinkedAttachment> {
+  override fun fetchAllLinkedById(ids: List<RefId>): List<LinkedAttachment> {
     return linkedRepo.findAllById(ids)
   }
 
