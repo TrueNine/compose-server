@@ -38,9 +38,8 @@ class SnowflakeIdInsertListener {
 
   @PrePersist
   fun insertId(data: Any?) {
-    log.trace("开始执行 id 生成 data: {}", data)
     if (data is IJpaPersistentEntity && data.isNew) {
-      data.id = snowflake.nextString()
+      data.id = snowflake.next()
     }
   }
 }
