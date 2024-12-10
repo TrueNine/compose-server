@@ -54,8 +54,9 @@ class JpaNameClassVisitor(
   private val listenerSpec: AnnotationSpec?
 ) : KSTopDownVisitor<DeclarationContext<KSClassDeclaration>, Unit>() {
 
-  private val accessAnnotation = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Access).addMember("jakarta.persistence.AccessType.PROPERTY").build()
-  private val jpaTransient = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Transient)
+  private val accessAnnotation =
+    AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Access.toClassName()).addMember("jakarta.persistence.AccessType.PROPERTY").build()
+  private val jpaTransient = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Transient.toClassName())
   private val jvmTransient = AnnotationSpec.builder(Transient::class)
 
   private lateinit var log: KSPLogger
@@ -195,7 +196,7 @@ class JpaNameClassVisitor(
     }.map { (a, b) ->
       if (a.getter?.getKsAnnotationsByAnnotationClassQualifiedName("jakarta.persistence.Basic")?.firstOrNull() == null) {
         b.addAnnotation(
-          AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Basic)
+          AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Basic.toClassName())
             .useGet()
             .addMember("fetch = jakarta.persistence.FetchType.EAGER")
             .build()
@@ -251,10 +252,10 @@ class JpaNameClassVisitor(
           builder.addAnnotation(
             AnnotationSpec.builder(
               ClassNames.Jakarta.Persistence
-                .EntityListeners
+                .EntityListeners.toClassName()
             )
-              .addMember("%T::class", ClassNames.Net.Yan100.Compose.Rds.Core.Listeners.SnowflakeIdInsertListener)
-              .addMember("%T::class", ClassNames.Net.Yan100.Compose.Rds.Core.Listeners.BizCodeInsertListener)
+              .addMember("%T::class", ClassNames.Net.Yan100.Compose.Rds.Core.Listeners.SnowflakeIdInsertListener.toClassName())
+              .addMember("%T::class", ClassNames.Net.Yan100.Compose.Rds.Core.Listeners.BizCodeInsertListener.toClassName())
               .build()
           )
         }
@@ -306,15 +307,15 @@ class JpaNameClassVisitor(
 
           // 添加 internal id
           val internalIdName = "____database_internal_${destSimpleName.toSnakeCase()}_field_primary_id"
-          val idColumnAnnotation = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Column)
+          val idColumnAnnotation = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Column.toClassName())
             .addMember("name = %T.ID", IDbNames::class)
           builder.addProperty(
             PropertySpec.builder(internalIdName, Id::class.asTypeName().copy(nullable = true), KModifier.PRIVATE, KModifier.FINAL)
               .initializer("%L", null)
               .mutable(true)
-              .addAnnotation(ClassNames.Jakarta.Persistence.Transient)
-              .addAnnotation(ClassNames.Jakarta.Persistence.Id)
-              .addAnnotation(ClassNames.Kotlin.Jvm.Transient)
+              .addAnnotation(ClassNames.Jakarta.Persistence.Transient.toClassName())
+              .addAnnotation(ClassNames.Jakarta.Persistence.Id.toClassName())
+              .addAnnotation(ClassNames.Kotlin.Jvm.Transient.toClassName())
               .addAnnotation(
                 AnnotationSpec.builder(Deprecated::class)
                   .addMember("%S", "not access internal field")
@@ -337,11 +338,11 @@ class JpaNameClassVisitor(
             FunSpec.builder("getId")
               .addAnnotation(
                 AnnotationSpec.builder(
-                  ClassNames.Jakarta.Persistence.Basic
+                  ClassNames.Jakarta.Persistence.Basic.toClassName()
                 ).addMember("fetch = jakarta.persistence.FetchType.EAGER").build()
               )
               .addModifiers(KModifier.OVERRIDE)
-              .addAnnotation(ClassNames.Jakarta.Persistence.Id)
+              .addAnnotation(ClassNames.Jakarta.Persistence.Id.toClassName())
               .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
               .addStatement("return this.%L ?: %L", internalIdName, "net.yan100.compose.core.getDefaultNullableId()")
               .addAnnotation(idColumnAnnotation.build())
@@ -387,9 +388,9 @@ class JpaNameClassVisitor(
                 else if (%T.getClass(this) != %T.getClass(other)) false
                 else if (!isNew && id == (other as %T).id) true
                 else false""".trimIndent(),
-                ClassNames.Org.Hibernate.Hibernate,
-                ClassNames.Org.Hibernate.Hibernate,
-                ClassNames.Net.Yan100.Compose.Rds.Core.Entities.IJpaPersistentEntity
+                ClassNames.Org.Hibernate.Hibernate.toClassName(),
+                ClassNames.Org.Hibernate.Hibernate.toClassName(),
+                ClassNames.Net.Yan100.Compose.Rds.Core.Entities.IJpaPersistentEntity.toClassName()
               )
               .returns(Boolean::class)
               .build()
@@ -469,7 +470,7 @@ class JpaNameClassVisitor(
     if (notGenColumn) return emptyList()
 
     val meta = AnnotationSpec
-      .builder(ClassNames.Jakarta.Persistence.Column)
+      .builder(ClassNames.Jakarta.Persistence.Column.toClassName())
       .addMember("name = ${k.simpleNameGetShortNameStr.toSnakeCase().uppercase()}")
     return meta.run {
       buildList {
@@ -489,15 +490,15 @@ class JpaNameClassVisitor(
 
   private fun generateClassAnnotations(destClassName: ClassName, metaDefIsShadow: Boolean): List<AnnotationSpec> {
     val tableAnnotation = AnnotationSpec.builder(
-      if (metaDefIsShadow) ClassNames.Jakarta.Persistence.Table //jakartaSecondaryTableAnnotationClassName
-      else ClassNames.Jakarta.Persistence.Table
+      if (metaDefIsShadow) ClassNames.Jakarta.Persistence.Table.toClassName() //jakartaSecondaryTableAnnotationClassName
+      else ClassNames.Jakarta.Persistence.Table.toClassName()
     ).addMember(
       CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName).build()
     ).build()
     return listOf(
-      AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Entity).build(),
-      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicInsert).build(),
-      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicUpdate).build(),
+      AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Entity.toClassName()).build(),
+      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicInsert.toClassName()).build(),
+      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicUpdate.toClassName()).build(),
       tableAnnotation
     )
   }

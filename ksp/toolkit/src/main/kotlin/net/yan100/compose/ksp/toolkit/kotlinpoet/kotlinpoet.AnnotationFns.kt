@@ -1,34 +1,33 @@
 package net.yan100.compose.ksp.toolkit.kotlinpoet
 
-import com.squareup.kotlinpoet.ClassName
+import net.yan100.compose.ksp.toolkit.models.ClassDefine
 
 object ClassNames {
   object Kotlin {
     object Jvm {
-      val Transient = ClassName("kotlin.jvm", "Transient")
-      val JvmStatic = ClassName("kotlin.jvm", "JvmStatic")
+      val Transient = ClassDefine("kotlin.jvm", "Transient")
+      val JvmStatic = ClassDefine("kotlin.jvm", "JvmStatic")
     }
   }
 
   object Net {
     object Yan100 {
       object Compose {
-
         object Meta {
           object Annotations {
-            val MetaSkipGeneration = ClassName("net.yan100.compose.meta.annotations", "MetaSkipGeneration")
+            val MetaSkipGeneration = ClassDefine("net.yan100.compose.meta.annotations", "MetaSkipGeneration")
           }
         }
 
         object Rds {
           object Core {
             object Listeners {
-              val BizCodeInsertListener = ClassName("net.yan100.compose.rds.core.listeners", "BizCodeInsertListener")
-              val SnowflakeIdInsertListener = ClassName("net.yan100.compose.rds.core.listeners", "SnowflakeIdInsertListener")
+              val BizCodeInsertListener = ClassDefine("net.yan100.compose.rds.core.listeners", "BizCodeInsertListener")
+              val SnowflakeIdInsertListener = ClassDefine("net.yan100.compose.rds.core.listeners", "SnowflakeIdInsertListener")
             }
 
             object Entities {
-              val IJpaPersistentEntity = ClassName("net.yan100.compose.rds.core.entities", "IJpaPersistentEntity")
+              val IJpaPersistentEntity = ClassDefine("net.yan100.compose.rds.core.entities", "IJpaPersistentEntity")
             }
           }
         }
@@ -38,27 +37,27 @@ object ClassNames {
 
   object Org {
     object Hibernate {
-      val Hibernate = ClassName("org.hibernate", "Hibernate")
+      val Hibernate = ClassDefine("org.hibernate", "Hibernate")
 
       object Annotations {
-        val DynamicInsert = ClassName("org.hibernate.annotations", "DynamicInsert")
-        val DynamicUpdate = ClassName("org.hibernate.annotations", "DynamicUpdate")
-        val Immutable = ClassName("org.hibernate.annotations", "Immutable")
+        val DynamicInsert = ClassDefine("org.hibernate.annotations", "DynamicInsert")
+        val DynamicUpdate = ClassDefine("org.hibernate.annotations", "DynamicUpdate")
+        val Immutable = ClassDefine("org.hibernate.annotations", "Immutable")
       }
     }
   }
 
   object Jakarta {
     object Persistence {
-      val EntityListeners = ClassName("jakarta.persistence", "EntityListeners")
-      val SecondaryTable = ClassName("jakarta.persistence", "SecondaryTable")
-      val Access = ClassName("jakarta.persistence", "Access")
-      val Basic = ClassName("jakarta.persistence", "Basic")
-      val Table = ClassName("jakarta.persistence", "Table")
-      val Entity = ClassName("jakarta.persistence", "Entity")
-      val Column = ClassName("jakarta.persistence", "Column")
-      val Transient = ClassName("jakarta.persistence", "Transient")
-      val Id = ClassName("jakarta.persistence", "Id")
+      val EntityListeners = ClassDefine("jakarta.persistence", "EntityListeners")
+      val SecondaryTable = ClassDefine("jakarta.persistence", "SecondaryTable")
+      val Access = ClassDefine("jakarta.persistence", "Access")
+      val Basic = ClassDefine("jakarta.persistence", "Basic")
+      val Table = ClassDefine("jakarta.persistence", "Table")
+      val Entity = ClassDefine("jakarta.persistence", "Entity")
+      val Column = ClassDefine("jakarta.persistence", "Column")
+      val Transient = ClassDefine("jakarta.persistence", "Transient")
+      val Id = ClassDefine("jakarta.persistence", "Id")
     }
   }
 
@@ -66,7 +65,7 @@ object ClassNames {
     object Fasterxml {
       object Jackson {
         object Annotation {
-          val JsonIgnore = ClassName("com.fasterxml.jackson.annotation", "JsonIgnore")
+          val JsonIgnore = ClassDefine("com.fasterxml.jackson.annotation", "JsonIgnore")
         }
       }
     }
