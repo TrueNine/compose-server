@@ -41,17 +41,14 @@ import kotlin.properties.Delegates
 
 private data class JpaProperty(
   var name: String,
+  var ksPropertyDeclaration: KSPropertyDeclaration,
   var title: String? = null,
   var desc: String? = null,
   var nullable: Boolean,
   var requireDelegate: Boolean,
   var basicType: Boolean,
   var shadow: Boolean
-) {
-  init {
-    requireDelegate = ((!nullable)) // 满足此条件则必须进行委托
-  }
-}
+)
 
 class JpaNameClassVisitor(
   private val listenerSpec: AnnotationSpec?
@@ -99,6 +96,9 @@ class JpaNameClassVisitor(
     return x
   }
 
+  /**
+   * 生成所有属性
+   */
   @OptIn(KspExperimental::class)
   private fun regetProperties(
     classDeclaration: KSClassDeclaration,
@@ -108,104 +108,102 @@ class JpaNameClassVisitor(
   ): List<Pair<KSPropertyDeclaration, PropertySpec>> {
     val allProperties = classDeclaration.getAllProperties()
       .filter { it.isOpen() }
+      .filter { it.isPublic() }
+      .filterNot { it.isAnnotationPresent(MetaSkipGeneration::class) }
       .toMutableList()
-
-    return allProperties
-      .filter { it.isPublic() && !it.type.resolve().isError && !it.isAnnotationPresent(MetaSkipGeneration::class) }
-      .map { destProperty ->
-        val jpaProperty = JpaProperty(
-          name = destProperty.simpleNameGetShortNameStr,
-          nullable = !destProperty.isAnnotatedNonNull() && destProperty.type.resolve().isMarkedNullable,
-          requireDelegate = destProperty.isDelegated(),
-          basicType = destProperty.isBasicType(),
-          shadow = metaDefIsShadow
-        )
-
-        val propertyType = try {
-          destProperty.type.toTypeName().copy(jpaProperty.nullable)
-        } catch (e: IllegalArgumentException) {
-          throw IllegalArgumentException(
-            "type ${destProperty.parentDeclaration?.qualifiedNameAsString} property: ${destProperty.simpleNameAsString} is error type",
-            e
-          )
-        }
-
-        destProperty to PropertySpec.builder(destProperty.simpleNameAsString, propertyType)
-          .addKdoc(destProperty.docString ?: "")
-          .addOverrideModifier()
-          .addOpeneModifier()
-          .also { b ->
-            val isBasicType = jpaProperty.basicType
-            val isDelegate = jpaProperty.requireDelegate
-            val isNotNull = !jpaProperty.nullable
-            // 非空的委托基本类型
-            if (isNotNull && isDelegate && isBasicType) {
-              b.delegate("%T.notNull()", Delegates::class)
-              return@also
-            }
-            if (!isNotNull) {
-              b.initializer("null")
-              return@also
-            }
-
-            // 初始化一些常见集合类型
-            when (val qName = destProperty.type.resolve().declaration.realDeclaration.qualifiedNameAsString) {
-              List::class.qualifiedName -> {
-                jpaProperty.requireDelegate = false
-                b.initializer("emptyList()")
-              }
-
-              Set::class.qualifiedName -> {
-                b.initializer("emptySet()")
-                jpaProperty.requireDelegate = false
-              }
-
-              Map::class.qualifiedName -> {
-                b.initializer("emptyMap()")
-                jpaProperty.requireDelegate = false
-              }
-
-              Array::class.qualifiedName -> {
-                b.initializer("emptyArray()")
-                jpaProperty.requireDelegate = false
-              }
-
-              "kotlin.collections.MutableList",
-              java.util.List::class.qualifiedName,
-                -> {
-                jpaProperty.requireDelegate = false
-                b.initializer("mutableListOf()")
-              }
-
-              MutableSet::class.qualifiedName,
-              java.util.Set::class.qualifiedName
-                -> b.initializer("mutableSetOf()")
-
-              MutableMap::class.qualifiedName,
-              java.util.Map::class.qualifiedName
-                -> {
-                jpaProperty.requireDelegate = false
-                b.initializer("mutableMapOf()")
-              }
-
-              String::class.qualifiedName,
-              java.lang.String::class.qualifiedName -> {
-                jpaProperty.requireDelegate = false
-                b.delegate("%T.notNull()", Delegates::class)
-              }
-
-              else -> {
-                log.warn("not resolved type: $qName")
-                b.delegate("%T.notNull()", Delegates::class)
-              }
-            }
-          }.also { b ->
-            b.addAnnotations(generateJpaColumnPropertyAnnotations(destProperty, jpaProperty))
-            b.addAnnotations(generateJpaPropertyAnnotations(destProperty, jpaProperty))
+    return allProperties.map { destProperty ->
+      val isNil = destProperty.isAnnotatedNonNull() || destProperty.type.resolve().isMarkedNullable
+      val jpaProperty = JpaProperty(
+        name = destProperty.simpleNameGetShortNameStr,
+        nullable = isNil,
+        requireDelegate = !isNil,
+        basicType = destProperty.isBasicType(),
+        shadow = metaDefIsShadow,
+        ksPropertyDeclaration = destProperty
+      )
+      val propertyType = destProperty.type.toTypeName().copy(jpaProperty.nullable)
+      destProperty to PropertySpec.builder(destProperty.simpleNameAsString, propertyType)
+        .addKdoc(destProperty.docString ?: "")
+        .addOverrideModifier()
+        .addOpeneModifier()
+        .also { b ->
+          val isBasicType = jpaProperty.basicType
+          val isDelegate = jpaProperty.requireDelegate
+          val isNotNull = !jpaProperty.nullable
+          // 非空的委托基本类型
+          if (isNotNull && isDelegate && isBasicType) {
+            b.delegate("%T.notNull()", Delegates::class)
+            return@also
           }
-          .mutable(true)
-          .build()
-      }.sortedBy { it.first.simpleNameAsString }
+          if (!isNotNull) {
+            b.initializer("null")
+            return@also
+          }
+
+
+          // 初始化一些常见集合类型
+          when (val qName = destProperty.type.resolve().declaration.realDeclaration.qualifiedNameAsString) {
+            List::class.qualifiedName -> {
+              jpaProperty.requireDelegate = false
+              b.initializer("emptyList()")
+            }
+
+            Set::class.qualifiedName -> {
+              b.initializer("emptySet()")
+              jpaProperty.requireDelegate = false
+            }
+
+            Map::class.qualifiedName -> {
+              b.initializer("emptyMap()")
+              jpaProperty.requireDelegate = false
+            }
+
+            Array::class.qualifiedName -> {
+              b.initializer("emptyArray()")
+              jpaProperty.requireDelegate = false
+            }
+
+            "kotlin.collections.MutableList",
+            java.util.List::class.qualifiedName,
+              -> {
+              jpaProperty.requireDelegate = false
+              b.initializer("mutableListOf()")
+            }
+
+            MutableSet::class.qualifiedName,
+            java.util.Set::class.qualifiedName
+              -> b.initializer("mutableSetOf()")
+
+            MutableMap::class.qualifiedName,
+            java.util.Map::class.qualifiedName
+              -> {
+              jpaProperty.requireDelegate = false
+              b.initializer("mutableMapOf()")
+            }
+
+            else -> {
+              log.warn("not resolved type: $qName")
+              jpaProperty.requireDelegate = true
+              b.delegate("%T.notNull()", Delegates::class)
+            }
+          }
+        }.also { b ->
+          b.addAnnotations(generateJpaColumnPropertyAnnotations(destProperty, jpaProperty))
+          b.addAnnotations(generateJpaPropertyAnnotations(destProperty, jpaProperty))
+        }
+        .mutable(true)
+    }.map { (a, b) ->
+      if (a.getter?.getKsAnnotationsByAnnotationClassQualifiedName("jakarta.persistence.Basic")?.firstOrNull() == null) {
+        b.addAnnotation(
+          AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Basic)
+            .useGet()
+            .addMember("fetch = jakarta.persistence.FetchType.EAGER")
+            .build()
+        )
+      }
+      a to b.build()
+    }
+      .sortedBy { it.first.simpleNameAsString }
   }
 
   /**
@@ -328,6 +326,7 @@ class JpaNameClassVisitor(
           builder.addFunction(
             FunSpec.builder("setId")
               .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
+
               .addParameter(ParameterSpec.builder("id", Id::class).build())
               .addAnnotation(idColumnAnnotation.build())
               .addModifiers(KModifier.OVERRIDE)
@@ -336,10 +335,15 @@ class JpaNameClassVisitor(
           )
           builder.addFunction(
             FunSpec.builder("getId")
+              .addAnnotation(
+                AnnotationSpec.builder(
+                  ClassNames.Jakarta.Persistence.Basic
+                ).addMember("fetch = jakarta.persistence.FetchType.EAGER").build()
+              )
               .addModifiers(KModifier.OVERRIDE)
               .addAnnotation(ClassNames.Jakarta.Persistence.Id)
               .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
-              .addStatement("return this.%L ?: %S", internalIdName, "")
+              .addStatement("return this.%L ?: %L", internalIdName, "net.yan100.compose.core.getDefaultNullableId()")
               .addAnnotation(idColumnAnnotation.build())
               .returns(Id::class)
               .build()
@@ -401,46 +405,45 @@ class JpaNameClassVisitor(
   }
 
   private fun generateJpaPropertyAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
-    val otherAnnotations =
-      k.annotations
-        .filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }
-        .filter { a -> a.useSiteTarget == null || a.useSiteTarget == AnnotationUseSiteTarget.FIELD }
-        .map { it.toAnnotationSpec(true) }
-        .toMutableList()
-        .let {
-          if (pp.requireDelegate) {
-            //it.map { a -> a.toBuilder().useDelegate().build() }
-            it.map { a -> a.toBuilder().useGet().build() }
-          } else it
-        }
-        .toMutableList()
-        .also { e ->
-          k.getter?.annotations
-            ?.filterNot { getAnno ->
-              getAnno.simpleName == "Column"
-            }
-            ?.filterNot { getterAnnotation ->
-              propertyIgnoreAnnotations.any {
-                try {
-                  log.info("getter annotation: $getterAnnotation")
-                  getterAnnotation.isAnnotationByKClass(it)
-                } catch (e: Exception) {
-                  log.exception(e)
-                  false
-                }
+    val otherAnnotations = k.annotations
+      .filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }
+      .filter { a -> a.useSiteTarget == null || a.useSiteTarget == AnnotationUseSiteTarget.FIELD }
+      .map { it.toAnnotationSpec(true) }
+      .toMutableList()
+      .let {
+        if (pp.requireDelegate) {
+          //it.map { a -> a.toBuilder().useDelegate().build() }
+          it.map { a -> a.toBuilder().useGet().build() }
+        } else it
+      }
+      .toMutableList()
+      .also { e ->
+        k.getter?.annotations
+          ?.filterNot { getAnno ->
+            getAnno.simpleName == "Column"
+          }
+          ?.filterNot { getterAnnotation ->
+            propertyIgnoreAnnotations.any {
+              try {
+                log.info("getter annotation: $getterAnnotation")
+                getterAnnotation.isAnnotationByKClass(it)
+              } catch (e: Exception) {
+                log.exception(e)
+                false
               }
             }
-            ?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }
-            ?.apply(e::addAll)
-          k.setter
-            ?.annotations
-            ?.filterNot { getAnno ->
-              getAnno.simpleName == "Column"
-            }
-            ?.filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }
-            ?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }
-            ?.apply(e::addAll)
-        }
+          }
+          ?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }
+          ?.apply(e::addAll)
+        k.setter
+          ?.annotations
+          ?.filterNot { getAnno ->
+            getAnno.simpleName == "Column"
+          }
+          ?.filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }
+          ?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }
+          ?.apply(e::addAll)
+      }
 
     if (pp.requireDelegate) {
       otherAnnotations += jvmTransient.useDelegate().build()
@@ -476,7 +479,7 @@ class JpaNameClassVisitor(
           addMember("updatable = %L", false)
         }
         if (pp.requireDelegate) {
-          add(useDelegate().build())
+          //add(useDelegate().build())
           add(accessAnnotation.toBuilder().useGet().build())
         }
         add(useGet().build())
