@@ -21,6 +21,8 @@ import net.yan100.compose.core.Id
 import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.domain.ISensitivity
+import net.yan100.compose.core.getDefaultNullableId
+import net.yan100.compose.core.isId
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
 import org.springframework.data.domain.Persistable
 import java.io.Serializable
@@ -61,22 +63,24 @@ interface IJpaPersistentEntity :
   @Column(name = ID)
   override fun getId(): Id
 
+  @Suppress("DEPRECATION_ERROR")
   fun toNewEntity() {
-    id = ""
+    id = getDefaultNullableId()
   }
 
   @Transient
   override fun isNew(): Boolean {
-    return "" == id || "null" == id
+    return id.isId()
   }
 
   override fun recordChangedSensitiveData() {
   }
 
+  @Suppress("DEPRECATION_ERROR")
   override fun changeWithSensitiveData() {
     super.changeWithSensitiveData()
     require(!isChangedToSensitiveData) { "数据已经脱敏，无需重复执行" }
-    this.id = ""
+    this.id = getDefaultNullableId()
     recordChangedSensitiveData()
   }
 }

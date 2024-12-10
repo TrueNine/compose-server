@@ -22,6 +22,7 @@ import jakarta.persistence.*
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.core.getDefaultNullableId
 import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
 import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
 
@@ -61,10 +62,11 @@ open class IAnyEntityDelegate : IJpaPersistentEntity {
     this.____internal_primary_id = id
   }
 
+  @Suppress("DEPRECATION_ERROR")
   @jakarta.persistence.Id
   @Column(name = IDbNames.ID)
   override fun getId(): Id {
-    return this.____internal_primary_id ?: ""
+    return this.____internal_primary_id ?: getDefaultNullableId()
   }
 }
 
