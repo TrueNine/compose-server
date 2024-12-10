@@ -44,9 +44,9 @@ junitPlatform = "1.11.3"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.95"
-composeRdsCrud = "2.0.40"
-composeRdsCore = "2.0.38"
+composeVersionCatalog = "2.0.96"
+composeRdsCrud = "2.0.41"
+composeRdsCore = "2.0.39"
 composeCore = "2.0.33"
 composeDependServlet = "2.0.29"
 composeDataExtract = "2.0.27"
