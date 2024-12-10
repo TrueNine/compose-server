@@ -42,8 +42,9 @@ dependencies {
 
 
   testImplementation(project(":test-toolkit"))
+  testImplementation(project(":rds:rds-migration-h2"))
   testImplementation(libs.org.springframework.boot.springBootStarterDataJpa)
-  testRuntimeOnly(libs.bundles.p6spy)
+  testImplementation(libs.org.flywaydb.flywayCore)
 }
 
 publishing {
