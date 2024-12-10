@@ -30,7 +30,6 @@ import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.typing.AnyTyping
 import net.yan100.compose.depend.jackson.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.ApplicationContext
@@ -157,7 +156,6 @@ class JacksonAutoConfiguration {
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
-  @ConditionalOnBean(ObjectMapper::class)
   @Bean(name = [NON_IGNORE_OBJECT_MAPPER_BEAN_NAME])
   fun nonDeserializerObjectMapper(
     mapper: ObjectMapper
