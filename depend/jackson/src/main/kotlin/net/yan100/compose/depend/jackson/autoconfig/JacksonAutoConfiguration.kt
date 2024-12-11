@@ -94,7 +94,7 @@ class JacksonAutoConfiguration {
     return builder
   }
 
-  @Bean
+  @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @Primary
   @ConditionalOnMissingBean
   fun jacksonObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
@@ -140,6 +140,7 @@ class JacksonAutoConfiguration {
 
   companion object {
     const val NON_IGNORE_OBJECT_MAPPER_BEAN_NAME = "nonJsonIgnoreObjectMapper"
+    const val DEFAULT_OBJECT_MAPPER_BEAN_NAME = "jacksonObjectMapper"
   }
 
   class IgnoreJsonIgnoreAnnotationIntrospector : JacksonAnnotationIntrospector() {
