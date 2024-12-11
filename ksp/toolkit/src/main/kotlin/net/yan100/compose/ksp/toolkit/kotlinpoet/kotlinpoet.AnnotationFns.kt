@@ -2,9 +2,13 @@ package net.yan100.compose.ksp.toolkit.kotlinpoet
 
 import net.yan100.compose.ksp.toolkit.models.ClassDefine
 
-object ClassNames {
+object Libs {
   object Kotlin {
     object Jvm {
+      val JvmField = ClassDefine("kotlin.jvm", "JvmField")
+      val JvmName = ClassDefine("kotlin.jvm", "JvmName")
+      val JvmSynthetic = ClassDefine("kotlin.jvm", "JvmSynthetic")
+      val JvmOverloads = ClassDefine("kotlin.jvm", "JvmOverloads")
       val Transient = ClassDefine("kotlin.jvm", "Transient")
       val JvmStatic = ClassDefine("kotlin.jvm", "JvmStatic")
     }
@@ -56,8 +60,21 @@ object ClassNames {
       val Table = ClassDefine("jakarta.persistence", "Table")
       val Entity = ClassDefine("jakarta.persistence", "Entity")
       val Column = ClassDefine("jakarta.persistence", "Column")
+      val JoinColumn = ClassDefine("jakarta.persistence", "JoinColumn")
+      val JoinTable = ClassDefine("jakarta.persistence", "JoinTable")
+      val ManyToOne = ClassDefine("jakarta.persistence", "ManyToOne")
+      val OneToMany = ClassDefine("jakarta.persistence", "OneToMany")
+      val ManyToMany = ClassDefine("jakarta.persistence", "ManyToMany")
+      val OneToOne = ClassDefine("jakarta.persistence", "OneToOne")
+      val ElementCollection = ClassDefine("jakarta.persistence", "ElementCollection")
       val Transient = ClassDefine("jakarta.persistence", "Transient")
       val Id = ClassDefine("jakarta.persistence", "Id")
+    }
+  }
+
+  object Java {
+    object Lang {
+      val Long = ClassDefine("java.lang", "Long")
     }
   }
 

@@ -1,5 +1,6 @@
 package net.yan100.compose.ksp.toolkit.models
 
+import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 
 data class ClassDefine(
@@ -12,5 +13,17 @@ data class ClassDefine(
    */
   fun toClassName(): ClassName {
     return ClassName(packageName, className)
+  }
+
+  fun toQualifiedName(): String {
+    return "$packageName.$className"
+  }
+
+  fun toAnnotationSpec(): AnnotationSpec {
+    return toAnnotationSpecBuilder().build()
+  }
+
+  fun toAnnotationSpecBuilder(): AnnotationSpec.Builder {
+    return AnnotationSpec.builder(this.toClassName())
   }
 }
