@@ -22,7 +22,7 @@ import jakarta.persistence.*
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames
-import net.yan100.compose.core.getDefaultNullableId
+import net.yan100.compose.core.isId
 import net.yan100.compose.rds.core.listeners.BizCodeInsertListener
 import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
 
@@ -57,19 +57,39 @@ open class IAnyEntityDelegate : IJpaPersistentEntity {
   @Transient
   @kotlin.jvm.Transient
   private var ____internal_primary_id: RefId? = null
+  final override var id: Id
+    @Transient
+    @JvmSynthetic
+    @Suppress("DEPRECATION_ERROR")
+    get() = this.____internal_primary_id!!
+    @Transient
+    @JvmSynthetic
+    @Suppress("DEPRECATION_ERROR")
+    set(v) {
+      this.____internal_primary_id = v
+    }
 
-  override fun setId(id: Id) {
-    this.____internal_primary_id = id
+  @Transient
+  override fun isNew(): Boolean {
+    return this.____internal_primary_id.isId()
   }
 
   @Suppress("DEPRECATION_ERROR")
-  @jakarta.persistence.Id
-  @Column(name = IDbNames.ID)
-  override fun getId(): Id {
-    return this.____internal_primary_id ?: getDefaultNullableId()
+  @Deprecated(
+    "",
+    level = DeprecationLevel.ERROR,
+  )
+  fun setId(jvmIdSetValue: Long?) {
+    this.____internal_primary_id = jvmIdSetValue
   }
-}
 
-fun anyEntity(): IJpaPersistentEntity {
-  return IAnyEntityDelegate()
+  @Basic(fetch = FetchType.EAGER)
+  @Deprecated(
+    "",
+    level = DeprecationLevel.ERROR,
+  )
+  @jakarta.persistence.Id
+  @Suppress("DEPRECATION_ERROR")
+  @Column(name = IDbNames.ID)
+  override fun getId(): Long? = if (this.____internal_primary_id === null) error("提前获取 id") else this.____internal_primary_id
 }

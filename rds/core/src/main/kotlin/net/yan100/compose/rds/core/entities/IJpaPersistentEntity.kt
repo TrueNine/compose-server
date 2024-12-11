@@ -16,13 +16,16 @@
  */
 package net.yan100.compose.rds.core.entities
 
-import jakarta.persistence.*
+import jakarta.persistence.Access
+import jakarta.persistence.AccessType
+import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.Transient
 import net.yan100.compose.core.Id
+import net.yan100.compose.core.RefId
 import net.yan100.compose.core.bool
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.domain.ISensitivity
 import net.yan100.compose.core.getDefaultNullableId
-import net.yan100.compose.core.isId
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
 import org.springframework.data.domain.Persistable
 import java.io.Serializable
@@ -34,14 +37,10 @@ import java.io.Serializable
  * @since 2023-04-23
  */
 @MappedSuperclass
-/*@EntityListeners(
-  BizCodeInsertListener::class,
-  SnowflakeIdInsertListener::class,
-)*/
 @Access(AccessType.PROPERTY)
 interface IJpaPersistentEntity :
   ISensitivity,
-  Persistable<Id>,
+  Persistable<RefId>,
   IExtensionDefineScope,
   IEnhanceEntity, Serializable {
   companion object {
@@ -51,26 +50,16 @@ interface IJpaPersistentEntity :
   }
 
   @MetaSkipGeneration
-  override val isChangedToSensitiveData: bool
-    @Transient
-    get() = super.isChangedToSensitiveData
+  override val isChangedToSensitiveData: bool @Transient get() = super.isChangedToSensitiveData
 
   /** id */
-  fun setId(id: Id)
-
-  /** id */
-  @jakarta.persistence.Id
-  @Column(name = ID)
-  override fun getId(): Id
+  @get:Transient
+  @set:Transient
+  var id: Id
 
   @Suppress("DEPRECATION_ERROR")
   fun toNewEntity() {
     id = getDefaultNullableId()
-  }
-
-  @Transient
-  override fun isNew(): Boolean {
-    return !id.isId()
   }
 
   override fun recordChangedSensitiveData() {
