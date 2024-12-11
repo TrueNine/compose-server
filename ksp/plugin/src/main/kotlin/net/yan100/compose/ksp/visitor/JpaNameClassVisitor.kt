@@ -25,38 +25,37 @@ import com.squareup.kotlinpoet.ksp.toAnnotationSpec
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import net.yan100.compose.core.Id
+import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.core.toSnakeCase
 import net.yan100.compose.ksp.toolkit.*
 import net.yan100.compose.ksp.toolkit.dsl.fileDsl
-import net.yan100.compose.ksp.toolkit.kotlinpoet.ClassNames
+import net.yan100.compose.ksp.toolkit.kotlinpoet.Libs
 import net.yan100.compose.ksp.toolkit.models.DeclarationContext
 import net.yan100.compose.meta.annotations.MetaAutoManagement
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
 import net.yan100.compose.meta.getFirstName
-import org.jetbrains.annotations.NotNull
 import kotlin.properties.Delegates
 
-private data class JpaProperty(
-  var name: String,
-  var ksPropertyDeclaration: KSPropertyDeclaration,
+private data class JpaProperty @OptIn(KspExperimental::class) constructor(
+  val ksPropertyDeclaration: KSPropertyDeclaration,
+  val name: String = ksPropertyDeclaration.simpleNameGetShortNameStr,
+  val ctx: DeclarationContext<KSClassDeclaration>,
   var title: String? = null,
   var desc: String? = null,
-  var nullable: Boolean,
-  var requireDelegate: Boolean,
-  var basicType: Boolean,
-  var shadow: Boolean
+  var nullable: Boolean = ksPropertyDeclaration.type.resolve().isMarkedNullable,
+  var requireDelegate: Boolean = !nullable,
+  val basicType: Boolean = ksPropertyDeclaration.isBasicType(),
+  val shadow: Boolean = ctx.declaration.getAnnotationsByType(MetaDef::class).firstOrNull()?.shadow ?: false
 )
 
 class JpaNameClassVisitor(
   private val listenerSpec: AnnotationSpec?
 ) : KSTopDownVisitor<DeclarationContext<KSClassDeclaration>, Unit>() {
-
   private val accessAnnotation =
-    AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Access.toClassName()).addMember("jakarta.persistence.AccessType.PROPERTY").build()
-  private val jpaTransient = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Transient.toClassName())
+    AnnotationSpec.builder(Libs.Jakarta.Persistence.Access.toClassName()).addMember("jakarta.persistence.AccessType.PROPERTY").build()
   private val jvmTransient = AnnotationSpec.builder(Transient::class)
 
   private lateinit var log: KSPLogger
@@ -66,34 +65,24 @@ class JpaNameClassVisitor(
   }
 
   @OptIn(KspExperimental::class)
-  private fun getColumnName(property: KSPropertyDeclaration): String {
-    return (property.getAnnotationsByType(MetaName::class).getFirstName() ?: property.simpleNameGetShortNameStr.toSnakeCase())
-  }
-
-  @OptIn(KspExperimental::class)
-  private fun KSPropertyDeclaration.isAnnotatedNonNull(): Boolean {
-    val isJbrNonNull = isAnnotationPresent(NotNull::class)
-    return isJbrNonNull
+  private fun getColumnName(property: JpaProperty): String {
+    return (property.ksPropertyDeclaration.getAnnotationsByType(MetaName::class).getFirstName()
+      ?: property.ksPropertyDeclaration.simpleNameGetShortNameStr.toSnakeCase())
   }
 
   // 需在生成后过滤掉的属性
-  private val propertyIgnoreAnnotations =
-    listOf(
-      MetaName::class,
-      MetaDef::class,
-      MetaSkipGeneration::class,
-      MetaAutoManagement::class
-    )
+  private val propertyIgnoreAnnotations = listOf(
+    MetaName::class, MetaDef::class, MetaSkipGeneration::class, MetaAutoManagement::class
+  )
 
   @OptIn(KspExperimental::class)
   fun findSuperName(classDeclaration: KSClassDeclaration): String? {
     val ab = classDeclaration.getAllSuperTypes().map { it.declaration }.filter { it.isAnnotationPresent(MetaDef::class) }
-    val x =
-      ab.lastOrNull()?.let {
-        val anno = it.getAnnotationsByType(MetaName::class).lastOrNull()
-        if (anno?.name?.isBlank() == true) anno.name else if (anno?.value?.isNotBlank() == true) anno.value else it.simpleName.asString()
-          .replaceFirst("Super", "")
-      }
+    val x = ab.lastOrNull()?.let {
+      val anno = it.getAnnotationsByType(MetaName::class).lastOrNull()
+      if (anno?.name?.isBlank() == true) anno.name else if (anno?.value?.isNotBlank() == true) anno.value else it.simpleName.asString()
+        .replaceFirst("Super", "")
+    }
     return x
   }
 
@@ -102,32 +91,19 @@ class JpaNameClassVisitor(
    */
   @OptIn(KspExperimental::class)
   private fun regetProperties(
-    classDeclaration: KSClassDeclaration,
-    destClassName: String,
-    metaDefIsShadow: Boolean,
     ctx: DeclarationContext<KSClassDeclaration>
-  ): List<Pair<KSPropertyDeclaration, PropertySpec>> {
-    val allProperties = classDeclaration.getAllProperties()
-      .filter { it.isOpen() }
-      .filter { it.isPublic() }
-      .filterNot { it.isAnnotationPresent(MetaSkipGeneration::class) }
-      .toMutableList()
+  ): List<Pair<JpaProperty, PropertySpec>> {
+    val allProperties =
+      ctx.declaration.getAllProperties().filter { it.isOpen() }.filter { it.isPublic() }.filterNot { it.isAnnotationPresent(MetaSkipGeneration::class) }
+        .filterNot { it.simpleName.asString() == "id" }.toMutableList()
     return allProperties.map { destProperty ->
-      val isNil = destProperty.isAnnotatedNonNull() || destProperty.type.resolve().isMarkedNullable
       val jpaProperty = JpaProperty(
-        name = destProperty.simpleNameGetShortNameStr,
-        nullable = isNil,
-        requireDelegate = !isNil,
-        basicType = destProperty.isBasicType(),
-        shadow = metaDefIsShadow,
+        ctx = ctx,
         ksPropertyDeclaration = destProperty
       )
       val propertyType = destProperty.type.toTypeName().copy(jpaProperty.nullable)
-      destProperty to PropertySpec.builder(destProperty.simpleNameAsString, propertyType)
-        .addKdoc(destProperty.docString ?: "")
-        .addOverrideModifier()
-        .addOpeneModifier()
-        .also { b ->
+      jpaProperty to PropertySpec.builder(destProperty.simpleNameAsString, propertyType).addKdoc(destProperty.docString ?: "").addOverrideModifier()
+        .addOpeneModifier().also { b ->
           val isBasicType = jpaProperty.basicType
           val isDelegate = jpaProperty.requireDelegate
           val isNotNull = !jpaProperty.nullable
@@ -140,7 +116,6 @@ class JpaNameClassVisitor(
             b.initializer("null")
             return@also
           }
-
 
           // 初始化一些常见集合类型
           when (val qName = destProperty.type.resolve().declaration.realDeclaration.qualifiedNameAsString) {
@@ -171,13 +146,9 @@ class JpaNameClassVisitor(
               b.initializer("mutableListOf()")
             }
 
-            MutableSet::class.qualifiedName,
-            java.util.Set::class.qualifiedName
-              -> b.initializer("mutableSetOf()")
+            MutableSet::class.qualifiedName, java.util.Set::class.qualifiedName -> b.initializer("mutableSetOf()")
 
-            MutableMap::class.qualifiedName,
-            java.util.Map::class.qualifiedName
-              -> {
+            MutableMap::class.qualifiedName, java.util.Map::class.qualifiedName -> {
               jpaProperty.requireDelegate = false
               b.initializer("mutableMapOf()")
             }
@@ -191,31 +162,25 @@ class JpaNameClassVisitor(
         }.also { b ->
           b.addAnnotations(generateJpaColumnPropertyAnnotations(destProperty, jpaProperty))
           b.addAnnotations(generateJpaPropertyAnnotations(destProperty, jpaProperty))
-        }
-        .mutable(true)
+        }.mutable(true)
     }.map { (a, b) ->
-      if (a.getter?.getKsAnnotationsByAnnotationClassQualifiedName("jakarta.persistence.Basic")?.firstOrNull() == null) {
+      if (a.ksPropertyDeclaration.getter?.getKsAnnotationsByAnnotationClassQualifiedName("jakarta.persistence.Basic")?.firstOrNull() == null) {
         b.addAnnotation(
-          AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Basic.toClassName())
-            .useGet()
-            .addMember("fetch = jakarta.persistence.FetchType.EAGER")
-            .build()
+          AnnotationSpec.builder(Libs.Jakarta.Persistence.Basic.toClassName()).useGet().addMember("fetch = jakarta.persistence.FetchType.EAGER").build()
         )
       }
       a to b.build()
     }
-      .sortedBy { it.first.simpleNameAsString }
   }
 
   /**
    * 生成伴生对象字段
    */
-  private fun getConstantProperty(p: KSPropertyDeclaration): PropertySpec {
+  private fun getConstantProperty(p: JpaProperty): PropertySpec {
     val cn = getColumnName(p)
-    return PropertySpec.builder(p.simpleNameGetShortNameStr.toSnakeCase().uppercase(), String::class)
-      .addConstModifier().initializer("%S", cn)
-      .addAnnotation(jvmTransient.useField().build())
-      .build()
+    return PropertySpec.builder(p.ksPropertyDeclaration.simpleNameGetShortNameStr.toSnakeCase().uppercase(), String::class).addConstModifier()
+      .initializer("%S", cn)
+      .addAnnotation(jvmTransient.useField().build()).build()
   }
 
   /**
@@ -229,11 +194,8 @@ class JpaNameClassVisitor(
     val destSimpleName = classSimpleName.replaceFirst("Super", "")
     val destClassName = ClassName(classDeclaration.packageNameAsString, destSimpleName)
     val tableName = run {
-      classDeclaration.getAnnotationsByType(MetaName::class).getFirstName()
-        ?: findSuperName(classDeclaration)
-        ?: destClassName.simpleName
+      classDeclaration.getAnnotationsByType(MetaName::class).getFirstName() ?: findSuperName(classDeclaration) ?: destClassName.simpleName
     }.toSnakeCase()
-    val metaDefIsShadow = classDeclaration.getAnnotationsByType(MetaDef::class).firstOrNull()?.shadow ?: false
 
     // 定义文件并输出
     fileDsl(classDeclaration.packageName.asString(), destSimpleName) {
@@ -244,156 +206,138 @@ class JpaNameClassVisitor(
       )
       classBy(destClassName) {
         opened()
-        if (listenerSpec != null) {
-          builder.addAnnotation(
-            listenerSpec
-          )
-        } else {
-          builder.addAnnotation(
-            AnnotationSpec.builder(
-              ClassNames.Jakarta.Persistence
-                .EntityListeners.toClassName()
-            )
-              .addMember("%T::class", ClassNames.Net.Yan100.Compose.Rds.Core.Listeners.SnowflakeIdInsertListener.toClassName())
-              .addMember("%T::class", ClassNames.Net.Yan100.Compose.Rds.Core.Listeners.BizCodeInsertListener.toClassName())
-              .build()
-          )
-        }
-
+        if (listenerSpec != null) builder.addAnnotation(listenerSpec)
+        else builder.addAnnotation(
+          AnnotationSpec.builder(Libs.Jakarta.Persistence.EntityListeners.toClassName())
+            .addMember("%T::class", Libs.Net.Yan100.Compose.Rds.Core.Listeners.SnowflakeIdInsertListener.toClassName())
+            .addMember("%T::class", Libs.Net.Yan100.Compose.Rds.Core.Listeners.BizCodeInsertListener.toClassName()).build()
+        )
         annotateBy(accessAnnotation)
-        annotateAllBy(generateClassAnnotations(destClassName, metaDefIsShadow))
+        annotateAllBy(generateClassAnnotations(destClassName))
         // 继承父类
         when (classDeclaration.classKind) {
           ClassKind.CLASS -> extendsClassBy(superClassName)
           ClassKind.INTERFACE -> extendsInterfaceBy(superClassName)
           else -> {}
         }
-
-
-        val fieldAndAnnotations = regetProperties(classDeclaration, destSimpleName, metaDefIsShadow, data)
+        val fieldAndAnnotations = regetProperties(data)
         if (fieldAndAnnotations.isNotEmpty()) {
           // 不生成自动管理的属性
-          val managementProperties = fieldAndAnnotations
-            .filterNot { (k, _) ->
-              k.isAnnotationPresent(MetaAutoManagement::class)
-                || k.getter?.isAnnotationPresent(MetaAutoManagement::class) == true
-                || k.setter?.isAnnotationPresent(MetaAutoManagement::class) == true
-            }
-          val secondaryConstructorParameters = managementProperties
-            .map { (_, it) ->
-              ParameterSpec.builder(it.name, it.type.copy(nullable = it.type.isNullable))
-                .also { i ->
-                  if (it.type.isNullable) i.defaultValue("null")
-                }
-                .build()
-            }
+          val managementProperties = fieldAndAnnotations.filterNot { (k, _) ->
+            k.ksPropertyDeclaration.isAnnotationPresent(MetaAutoManagement::class)
+              || k.ksPropertyDeclaration.getter?.isAnnotationPresent(MetaAutoManagement::class) == true
+              || k.ksPropertyDeclaration.setter?.isAnnotationPresent(
+              MetaAutoManagement::class
+            ) == true
+          }
+          val secondaryConstructorParameters = managementProperties.map { (_, it) ->
+            ParameterSpec.builder(it.name, it.type.copy(nullable = it.type.isNullable)).also { i ->
+              if (it.type.isNullable) i.defaultValue("null")
+            }.build()
+          }
           // 生成空主构造器和值设置附构造器
           builder.primaryConstructor(FunSpec.constructorBuilder().build())
           builder.addFunction(
-            FunSpec.constructorBuilder()
-              .callThisConstructor()
-              .addParameters(secondaryConstructorParameters)
-              .addCode(
-                CodeBlock.builder()
-                  .also { c ->
-                    managementProperties
-                      .forEach { (_, p) ->
-                        c.addStatement("this.${p.name} = ${p.name}")
-                      }
-                  }
-                  .build())
-              .build()
+            FunSpec.constructorBuilder().callThisConstructor().addParameters(secondaryConstructorParameters)
+              .addCode(CodeBlock.builder().also { c ->
+                managementProperties.forEach { (_, p) ->
+                  c.addStatement("this.${p.name} = ${p.name}")
+                }
+              }.build()).build()
           )
-
           // 添加 internal id
           val internalIdName = "____database_internal_${destSimpleName.toSnakeCase()}_field_primary_id"
-          val idColumnAnnotation = AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Column.toClassName())
-            .addMember("name = %T.ID", IDbNames::class)
+          val idColumnAnnotation = AnnotationSpec.builder(Libs.Jakarta.Persistence.Column.toClassName()).addMember("name = %T.ID", IDbNames::class)
           builder.addProperty(
-            PropertySpec.builder(internalIdName, Id::class.asTypeName().copy(nullable = true), KModifier.PRIVATE, KModifier.FINAL)
-              .initializer("%L", null)
-              .mutable(true)
-              .addAnnotation(ClassNames.Jakarta.Persistence.Transient.toClassName())
-              .addAnnotation(ClassNames.Jakarta.Persistence.Id.toClassName())
-              .addAnnotation(ClassNames.Kotlin.Jvm.Transient.toClassName())
+            PropertySpec.builder(internalIdName, RefId::class.asTypeName().copy(nullable = true), KModifier.PRIVATE, KModifier.FINAL).initializer("%L", null)
+              .mutable(true).addAnnotation(Libs.Jakarta.Persistence.Transient.toClassName()).addAnnotation(Libs.Kotlin.Jvm.Transient.toClassName())
               .addAnnotation(
-                AnnotationSpec.builder(Deprecated::class)
-                  .addMember("%S", "not access internal field")
-                  .addMember("level = %T.ERROR", DeprecationLevel::class)
+                AnnotationSpec.builder(Deprecated::class).addMember("%S", "not access internal field").addMember("level = %T.ERROR", DeprecationLevel::class)
                   .build()
               )
-              .addAnnotation(idColumnAnnotation.build()).build()
-          )
-          builder.addFunction(
-            FunSpec.builder("setId")
-              .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
-
-              .addParameter(ParameterSpec.builder("id", Id::class).build())
-              .addAnnotation(idColumnAnnotation.build())
-              .addModifiers(KModifier.OVERRIDE)
-              .addStatement("this.%L = id", internalIdName)
               .build()
           )
+          builder.addProperty(
+            PropertySpec.builder("id", RefId::class).mutable(true).addOverrideModifier().addFinalModifier().getter(
+              FunSpec.getterBuilder().addAnnotation(Libs.Jakarta.Persistence.Id.toAnnotationSpec())
+                .addAnnotation(JvmSynthetic::class)
+                .addAnnotation(Libs.Jakarta.Persistence.Transient.toAnnotationSpec())
+                .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
+                .addStatement("return if (this.%L === null) error(%S) else this.%L!!", internalIdName, "提前获取 id", internalIdName).build()
+
+            ).setter(
+              FunSpec.setterBuilder().addAnnotation(Libs.Jakarta.Persistence.Transient.toAnnotationSpec())
+                .addAnnotation(JvmSynthetic::class)
+                .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build()).addParameter("v", RefId::class)
+                .addStatement("this.%L = v", internalIdName).build()
+            ).build()
+          )
           builder.addFunction(
-            FunSpec.builder("getId")
-              .addAnnotation(
-                AnnotationSpec.builder(
-                  ClassNames.Jakarta.Persistence.Basic.toClassName()
-                ).addMember("fetch = jakarta.persistence.FetchType.EAGER").build()
-              )
-              .addModifiers(KModifier.OVERRIDE)
-              .addAnnotation(ClassNames.Jakarta.Persistence.Id.toClassName())
-              .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
-              .addStatement("return this.%L ?: %L", internalIdName, "net.yan100.compose.core.getDefaultNullableId()")
+            FunSpec.builder("setId").addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
+              .addAnnotation(AnnotationSpec.builder(Deprecated::class).addMember("%S", "").addMember("level = %T.HIDDEN", DeprecationLevel::class).build())
               .addAnnotation(idColumnAnnotation.build())
-              .returns(Id::class)
+              .addModifiers(KModifier.OPEN)
+              .addParameter(ParameterSpec.builder("jvmIdSetValue", RefId::class.asTypeName().copy(nullable = true)).build())
+              .addStatement("this.%L = jvmIdSetValue", internalIdName).build()
+          )
+          builder.addFunction(
+            FunSpec.builder("getId").addAnnotation(
+              AnnotationSpec.builder(
+                Libs.Jakarta.Persistence.Basic.toClassName()
+              ).addMember("fetch = jakarta.persistence.FetchType.EAGER").build()
+            ).addAnnotation(
+              AnnotationSpec.builder(Deprecated::class).addMember("%S", "").addMember("level = %T.ERROR", DeprecationLevel::class).build()
+            ).addModifiers(KModifier.OVERRIDE)
+              .addAnnotation(Libs.Jakarta.Persistence.Id.toClassName())
+              .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
+              .addStatement("return if (%L == net.yan100.compose.core.getDefaultNullableId()) null else %L", internalIdName, internalIdName)
+              .addAnnotation(idColumnAnnotation.build())
+              .addModifiers(KModifier.OPEN)
+              .returns(Id::class.asTypeName().copy(nullable = true)).build()
+          )
+          builder.addFunction(
+            FunSpec.builder("isNew")
+              .addAnnotation(Libs.Jakarta.Persistence.Transient.toAnnotationSpec())
+              .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
+              .addStatement("return %L == null || %L == net.yan100.compose.core.getDefaultNullableId()", internalIdName, internalIdName)
+              .returns(Boolean::class)
+              .addModifiers(KModifier.OVERRIDE)
               .build()
           )
 
           // toString()
           builder.addFunction(
-            FunSpec.builder("toString")
-              .addModifiers(KModifier.OVERRIDE)
-              .returns(String::class)
-              .addCode(
-                CodeBlock.builder()
-                  .addStatement("return \"%T(id=\$id,%L)\"", destClassName, fieldAndAnnotations.joinToString(separator = ",") { (_, p) ->
-                    "${p.name}=\$${p.name}"
-                  })
+            FunSpec.builder("toString").addModifiers(KModifier.OVERRIDE).returns(String::class)
+              .addAnnotation(
+                AnnotationSpec.builder(Suppress::class)
+                  .addMember("%S", "DEPRECATION_ERROR")
                   .build()
               )
+              .addStatement(
+                "return \"%T(id=\$%L,%L)\"", destClassName, internalIdName, fieldAndAnnotations.joinToString(separator = ",") { (_, p) ->
+                  "${p.name}=\$${p.name}"
+                })
               .build()
-          )
+          ).build()
           // hashCode
           builder.addFunction(
-            FunSpec.builder("hashCode")
-              .addModifiers(KModifier.OVERRIDE)
-              .returns(Int::class)
-              .addCode(
-                CodeBlock.builder()
-                  .addStatement("return javaClass.hashCode()")
-                  .build()
-              )
-              .build()
+            FunSpec.builder("hashCode").addModifiers(KModifier.OVERRIDE).returns(Int::class).addCode(
+              CodeBlock.builder().addStatement("return javaClass.hashCode()").build()
+            ).build()
           )
           // equals
           builder.addFunction(
-            FunSpec.builder("equals")
-              .addModifiers(KModifier.OVERRIDE)
-              .addParameter("other", Any::class.asTypeName().copy(nullable = true))
-              .addStatement(
-                """
+            FunSpec.builder("equals").addModifiers(KModifier.OVERRIDE).addParameter("other", Any::class.asTypeName().copy(nullable = true)).addStatement(
+              """
                 return if (null == other) false
                 else if (this === other) true
                 else if (%T.getClass(this) != %T.getClass(other)) false
                 else if (!isNew && id == (other as %T).id) true
                 else false""".trimIndent(),
-                ClassNames.Org.Hibernate.Hibernate.toClassName(),
-                ClassNames.Org.Hibernate.Hibernate.toClassName(),
-                ClassNames.Net.Yan100.Compose.Rds.Core.Entities.IJpaPersistentEntity.toClassName()
-              )
-              .returns(Boolean::class)
-              .build()
+              Libs.Org.Hibernate.Hibernate.toClassName(),
+              Libs.Org.Hibernate.Hibernate.toClassName(),
+              Libs.Net.Yan100.Compose.Rds.Core.Entities.IJpaPersistentEntity.toClassName()
+            ).returns(Boolean::class).build()
           )
         }
 
@@ -406,72 +350,56 @@ class JpaNameClassVisitor(
   }
 
   private fun generateJpaPropertyAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
-    val otherAnnotations = k.annotations
-      .filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }
-      .filter { a -> a.useSiteTarget == null || a.useSiteTarget == AnnotationUseSiteTarget.FIELD }
-      .map { it.toAnnotationSpec(true) }
-      .toMutableList()
-      .let {
+    val otherAnnotations = k.annotations.filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }
+      .filter { a -> a.useSiteTarget == null || a.useSiteTarget == AnnotationUseSiteTarget.FIELD }.map { it.toAnnotationSpec(true) }.toMutableList().let {
         if (pp.requireDelegate) {
           //it.map { a -> a.toBuilder().useDelegate().build() }
           it.map { a -> a.toBuilder().useGet().build() }
         } else it
-      }
-      .toMutableList()
-      .also { e ->
-        k.getter?.annotations
-          ?.filterNot { getAnno ->
-            getAnno.simpleName == "Column"
-          }
-          ?.filterNot { getterAnnotation ->
-            propertyIgnoreAnnotations.any {
-              try {
-                log.info("getter annotation: $getterAnnotation")
-                getterAnnotation.isAnnotationByKClass(it)
-              } catch (e: Exception) {
-                log.exception(e)
-                false
-              }
+      }.toMutableList().also { e ->
+        k.getter?.annotations?.filterNot { getAnno ->
+          getAnno.simpleName == "Column"
+        }?.filterNot { getterAnnotation ->
+          propertyIgnoreAnnotations.any {
+            try {
+              log.info("getter annotation: $getterAnnotation")
+              getterAnnotation.isAnnotationByKClass(it)
+            } catch (e: Exception) {
+              log.exception(e)
+              false
             }
           }
-          ?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }
-          ?.apply(e::addAll)
-        k.setter
-          ?.annotations
-          ?.filterNot { getAnno ->
-            getAnno.simpleName == "Column"
-          }
-          ?.filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }
-          ?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }
+        }?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }?.apply(e::addAll)
+        k.setter?.annotations?.filterNot { getAnno ->
+          getAnno.simpleName == "Column"
+        }?.filterNot { a -> propertyIgnoreAnnotations.any { a.isAnnotationByKClass(it) } }?.map { it.toAnnotationSpec(true).toBuilder().useGet().build() }
           ?.apply(e::addAll)
       }
 
     if (pp.requireDelegate) {
       otherAnnotations += jvmTransient.useDelegate().build()
-      otherAnnotations += jpaTransient.useDelegate().build()
+      otherAnnotations += Libs.Jakarta.Persistence.Transient.toAnnotationSpecBuilder().useDelegate().build()
     }
     return otherAnnotations.distinctBy { it.useSiteTarget to it.typeName }
   }
 
   private fun generateJpaColumnPropertyAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
     val notGenColumn = listOf(
-      "jakarta.persistence.JoinColumn",
-      "jakarta.persistence.JoinTable",
-      "jakarta.persistence.ManyToOne",
-      "jakarta.persistence.OneToMany",
-      "jakarta.persistence.ManyToMany",
-      "jakarta.persistence.OneToOne",
-      "jakarta.persistence.ElementCollection"
+      Libs.Jakarta.Persistence.JoinColumn.toQualifiedName(),
+      Libs.Jakarta.Persistence.JoinTable.toQualifiedName(),
+      Libs.Jakarta.Persistence.ManyToOne.toQualifiedName(),
+      Libs.Jakarta.Persistence.OneToMany.toQualifiedName(),
+      Libs.Jakarta.Persistence.ManyToMany.toQualifiedName(),
+      Libs.Jakarta.Persistence.OneToOne.toQualifiedName(),
+      Libs.Jakarta.Persistence.ElementCollection.toQualifiedName(),
     ).any {
-      k.getKsAnnotationsByAnnotationClassQualifiedName(it).firstOrNull() != null
-        || k.getter?.getKsAnnotationsByAnnotationClassQualifiedName(it)?.firstOrNull() != null
-        || k.setter?.getKsAnnotationsByAnnotationClassQualifiedName(it)?.firstOrNull() != null
+      k.getKsAnnotationsByAnnotationClassQualifiedName(it).firstOrNull() != null || k.getter?.getKsAnnotationsByAnnotationClassQualifiedName(it)
+        ?.firstOrNull() != null || k.setter?.getKsAnnotationsByAnnotationClassQualifiedName(it)?.firstOrNull() != null
     }
     if (notGenColumn) return emptyList()
 
-    val meta = AnnotationSpec
-      .builder(ClassNames.Jakarta.Persistence.Column.toClassName())
-      .addMember("name = ${k.simpleNameGetShortNameStr.toSnakeCase().uppercase()}")
+    val meta =
+      AnnotationSpec.builder(Libs.Jakarta.Persistence.Column.toClassName()).addMember("name = ${k.simpleNameGetShortNameStr.toSnakeCase().uppercase()}")
     return meta.run {
       buildList {
         if (!pp.nullable) addMember("nullable = false")
@@ -488,25 +416,21 @@ class JpaNameClassVisitor(
     }
   }
 
-  private fun generateClassAnnotations(destClassName: ClassName, metaDefIsShadow: Boolean): List<AnnotationSpec> {
-    val tableAnnotation = AnnotationSpec.builder(
-      if (metaDefIsShadow) ClassNames.Jakarta.Persistence.Table.toClassName() //jakartaSecondaryTableAnnotationClassName
-      else ClassNames.Jakarta.Persistence.Table.toClassName()
-    ).addMember(
+  private fun generateClassAnnotations(destClassName: ClassName): List<AnnotationSpec> {
+    val tableAnnotation = AnnotationSpec.builder(Libs.Jakarta.Persistence.Table.toClassName()).addMember(
       CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName).build()
     ).build()
     return listOf(
-      AnnotationSpec.builder(ClassNames.Jakarta.Persistence.Entity.toClassName()).build(),
-      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicInsert.toClassName()).build(),
-      AnnotationSpec.builder(ClassNames.Org.Hibernate.Annotations.DynamicUpdate.toClassName()).build(),
+      AnnotationSpec.builder(Libs.Jakarta.Persistence.Entity.toClassName()).build(),
+      AnnotationSpec.builder(Libs.Org.Hibernate.Annotations.DynamicInsert.toClassName()).build(),
+      AnnotationSpec.builder(Libs.Org.Hibernate.Annotations.DynamicUpdate.toClassName()).build(),
       tableAnnotation
     )
   }
 
   private fun generateCompanionObject(tableName: String, ppc: Sequence<PropertySpec>): TypeSpec {
-    val tableNameConst = PropertySpec.builder("TABLE_NAME", String::class).addConstModifier()
-      .addAnnotation(jvmTransient.useField().build())
-      .initializer("%S", tableName).build()
+    val tableNameConst =
+      PropertySpec.builder("TABLE_NAME", String::class).addConstModifier().addAnnotation(jvmTransient.useField().build()).initializer("%S", tableName).build()
     return TypeSpec.companionObjectBuilder().addProperty(tableNameConst).addProperties(ppc.toSet()).build()
   }
 }
