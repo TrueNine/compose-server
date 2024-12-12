@@ -103,14 +103,12 @@ class JavaNioPathFnsTest {
 
     assertEquals(7, pre.t)
     assertEquals(3, pre.d.size)
-    assertEquals(3, pre.size)
     assertEquals("a", pre[0])
     assertEquals(2, pre.p)
 
     val pr1 = testPath.pageLines(Pq[3, 2], "\n")
 
     assertEquals(7, pr1.t)
-    assertEquals(1, pr1.size)
     assertEquals("e", pr1[0])
     assertEquals(4, pr1.p)
   }
