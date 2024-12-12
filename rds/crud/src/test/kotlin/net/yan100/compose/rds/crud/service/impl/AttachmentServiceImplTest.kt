@@ -146,6 +146,11 @@ class AttachmentServiceImplTest {
   fun testFindAllFullUrlByMetaNameStartingWith_NegativePage() {
     val metaName = "test"
     val page = Pq[-1, 10, false]
-    assertFails { attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page) }
+    assertEquals(0, page.o)
+    assertEquals(10, page.s)
+    val pageResult = attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page)
+    assertNotNull(pageResult)
+    assertNotNull(pageResult.d)
+    assertEquals(pageResult.d.size.toLong(), pageResult.t)
   }
 }
