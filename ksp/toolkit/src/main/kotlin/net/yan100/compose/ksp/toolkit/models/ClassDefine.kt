@@ -15,9 +15,11 @@ data class ClassDefine(
     return ClassName(packageName, className)
   }
 
-  fun toQualifiedName(): String {
-    return "$packageName.$className"
-  }
+  /**
+   * 类 或其他全名
+   */
+  val qualifiedName: String = arrayOf(packageName, className).joinToString(".")
+
 
   fun toAnnotationSpec(): AnnotationSpec {
     return toAnnotationSpecBuilder().build()

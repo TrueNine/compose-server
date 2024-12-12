@@ -116,49 +116,8 @@ class JpaNameClassVisitor(
             b.initializer("null")
             return@also
           }
-
           // 初始化一些常见集合类型
-          when (val qName = destProperty.type.resolve().declaration.realDeclaration.qualifiedNameAsString) {
-            List::class.qualifiedName -> {
-              jpaProperty.requireDelegate = false
-              b.initializer("emptyList()")
-            }
-
-            Set::class.qualifiedName -> {
-              b.initializer("emptySet()")
-              jpaProperty.requireDelegate = false
-            }
-
-            Map::class.qualifiedName -> {
-              b.initializer("emptyMap()")
-              jpaProperty.requireDelegate = false
-            }
-
-            Array::class.qualifiedName -> {
-              b.initializer("emptyArray()")
-              jpaProperty.requireDelegate = false
-            }
-
-            "kotlin.collections.MutableList",
-            java.util.List::class.qualifiedName,
-              -> {
-              jpaProperty.requireDelegate = false
-              b.initializer("mutableListOf()")
-            }
-
-            MutableSet::class.qualifiedName, java.util.Set::class.qualifiedName -> b.initializer("mutableSetOf()")
-
-            MutableMap::class.qualifiedName, java.util.Map::class.qualifiedName -> {
-              jpaProperty.requireDelegate = false
-              b.initializer("mutableMapOf()")
-            }
-
-            else -> {
-              log.warn("not resolved type: $qName")
-              jpaProperty.requireDelegate = true
-              b.delegate("%T.notNull()", Delegates::class)
-            }
-          }
+          initNonNilProperty(b, jpaProperty)
         }.also { b ->
           b.addAnnotations(generateJpaColumnPropertyAnnotations(destProperty, jpaProperty))
           b.addAnnotations(generateJpaPropertyAnnotations(destProperty, jpaProperty))
@@ -170,6 +129,53 @@ class JpaNameClassVisitor(
         )
       }
       a to b.build()
+    }
+  }
+
+  /**
+   * 初始化集合类型
+   */
+  private fun initNonNilProperty(builder: PropertySpec.Builder, jpaProperty: JpaProperty) {
+    when (val qName = jpaProperty.ksPropertyDeclaration.type.resolve().declaration.realDeclaration.qualifiedNameAsString) {
+      List::class.qualifiedName -> {
+        jpaProperty.requireDelegate = false
+        builder.initializer("emptyList()")
+      }
+
+      Set::class.qualifiedName -> {
+        builder.initializer("emptySet()")
+        jpaProperty.requireDelegate = false
+      }
+
+      Map::class.qualifiedName -> {
+        builder.initializer("emptyMap()")
+        jpaProperty.requireDelegate = false
+      }
+
+      Array::class.qualifiedName -> {
+        builder.initializer("emptyArray()")
+        jpaProperty.requireDelegate = false
+      }
+
+      "kotlin.collections.MutableList",
+      java.util.List::class.qualifiedName,
+        -> {
+        jpaProperty.requireDelegate = false
+        builder.initializer("mutableListOf()")
+      }
+
+      MutableSet::class.qualifiedName, java.util.Set::class.qualifiedName -> builder.initializer("mutableSetOf()")
+
+      MutableMap::class.qualifiedName, java.util.Map::class.qualifiedName -> {
+        jpaProperty.requireDelegate = false
+        builder.initializer("mutableMapOf()")
+      }
+
+      else -> {
+        log.warn("not resolved type: $qName")
+        jpaProperty.requireDelegate = true
+        builder.delegate("%T.notNull()", Delegates::class)
+      }
     }
   }
 
@@ -385,13 +391,13 @@ class JpaNameClassVisitor(
 
   private fun generateJpaColumnPropertyAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
     val notGenColumn = listOf(
-      Libs.Jakarta.Persistence.JoinColumn.toQualifiedName(),
-      Libs.Jakarta.Persistence.JoinTable.toQualifiedName(),
-      Libs.Jakarta.Persistence.ManyToOne.toQualifiedName(),
-      Libs.Jakarta.Persistence.OneToMany.toQualifiedName(),
-      Libs.Jakarta.Persistence.ManyToMany.toQualifiedName(),
-      Libs.Jakarta.Persistence.OneToOne.toQualifiedName(),
-      Libs.Jakarta.Persistence.ElementCollection.toQualifiedName(),
+      Libs.Jakarta.Persistence.JoinColumn.qualifiedName,
+      Libs.Jakarta.Persistence.JoinTable.qualifiedName,
+      Libs.Jakarta.Persistence.ManyToOne.qualifiedName,
+      Libs.Jakarta.Persistence.OneToMany.qualifiedName,
+      Libs.Jakarta.Persistence.ManyToMany.qualifiedName,
+      Libs.Jakarta.Persistence.OneToOne.qualifiedName,
+      Libs.Jakarta.Persistence.ElementCollection.qualifiedName,
     ).any {
       k.getKsAnnotationsByAnnotationClassQualifiedName(it).firstOrNull() != null || k.getter?.getKsAnnotationsByAnnotationClassQualifiedName(it)
         ?.firstOrNull() != null || k.setter?.getKsAnnotationsByAnnotationClassQualifiedName(it)?.firstOrNull() != null
