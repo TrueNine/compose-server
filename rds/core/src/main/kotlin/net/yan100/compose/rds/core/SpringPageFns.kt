@@ -15,7 +15,11 @@ import org.springframework.data.domain.Pageable
 )
 val <T : Any> Page<T>.result: Pr<T>
   get() {
-    return Pr[content, totalElements, if (pageable.isPaged) pageable.offset else 0, if (pageable.isPaged) pageable.pageSize else content.size, !pageable.isPaged]
+    return if (totalElements == 0L) Pr.emptyWith()
+    else if (pageable.isUnpaged) Pr.unPage(content)
+    else {
+      Pr[content, totalElements, totalPages]
+    }
   }
 
 @Suppress("DEPRECATION")
@@ -29,8 +33,13 @@ fun <T : Any> Page<T>.toIPage(): IPage<T> = toPr()
   )
 )
 val Pq?.page: Pageable
-  get() = if (this?.u == null || this.u == false) PageRequest.of((this?.o ?: Pq.MIN_OFFSET).toInt(), this?.s ?: Pq.MAX_PAGE_SIZE)
-  else Pageable.unpaged()
+  get() = if (this?.u != true) {
+    PageRequest.of(
+      (this?.o ?: Pq.MIN_OFFSET).toInt(), this?.s ?: Pq.MAX_PAGE_SIZE
+    )
+  } else {
+    Pageable.unpaged()
+  }
 
 /**
  * @see [org.springframework.data.domain.PageRequest]
