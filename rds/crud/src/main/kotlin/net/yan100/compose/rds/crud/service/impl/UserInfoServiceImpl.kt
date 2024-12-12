@@ -170,6 +170,6 @@ class UserInfoServiceImpl(
       }
       dto.hasAvatar execute { bb.and(q.avatarImgId.isNotNull) }
       returns { infoRepo.findAll(bb, Pq[dto].toPageable()).toPr() }
-    } ?: Pr.empty()
+    } ?: Pr.emptyWith()
   }
 }
