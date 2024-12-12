@@ -133,7 +133,7 @@ fun Path.fileSize(): Long {
 }
 
 fun Path.pageLines(param: Pq, sep: String = lineSep, charset: Charset = Charsets.UTF_8): Pr<String> {
-  return if (isEmpty() || sep.isEmpty()) IPage.empty()
+  return if (isEmpty() || sep.isEmpty()) IPage.emptyWith()
   else {
     val total = countLines()
     val p = param + total
