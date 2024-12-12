@@ -72,8 +72,27 @@ interface IPageParam : IPageParamLike, Serializable {
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
     operator fun get(offset: Long? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false): IPageParam {
-      return if (unPage == true) DefaultPageParam(0, 0, unPage)
-      else DefaultPageParam(offset, pageSize, unPage)
+      return if (pageSize == 0) {
+        DefaultPageParam(0, 0, unPage)
+      } else if (unPage == true) {
+        DefaultPageParam(0, Int.MAX_VALUE, unPage)
+      } else {
+        val ps = (pageSize ?: MAX_PAGE_SIZE)
+        val o = (offset ?: MIN_OFFSET)
+        DefaultPageParam(
+          if (o <= 0) MIN_OFFSET else o,
+          if (ps <= 0) 1 else ps,
+          unPage
+        )
+      }
+    }
+
+    /**
+     * ## 不进行分页
+     */
+    @JvmStatic
+    fun unPage(): IPageParam {
+      return get(0, Int.MAX_VALUE, true)
     }
 
     @JvmStatic
@@ -96,7 +115,6 @@ interface IPageParam : IPageParamLike, Serializable {
   val safeOffset: Long get() = o ?: 0
 
   /** ## 分页 页面 偏移量 null any */
-
   @get:JsonIgnore
   val safePageSize: Int get() = s ?: 0
 
