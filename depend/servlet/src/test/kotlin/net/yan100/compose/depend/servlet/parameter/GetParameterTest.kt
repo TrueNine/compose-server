@@ -22,9 +22,9 @@ class GetParameterTest {
 
   @Test
   fun `test encode uri component`() {
-    val queryParam = listOf("1,2,3", "1", "rre").map {
+    val queryParam = listOf("1,2,3", "1", "rre").joinToString(",") {
       URLEncoder.QUERY.encode(it, Charsets.UTF_8)
-    }.joinToString(",")
+    }
     assertEquals("1%2C2%2C3,1,rre", queryParam)
   }
 
@@ -36,9 +36,9 @@ class GetParameterTest {
       status { isOk() }
     }
     mockMvc.get("/test/getParameter/strList") {
-      queryParam("list", listOf("1,2,3", "1", "rre").map {
+      queryParam("list", listOf("1,2,3", "1", "rre").joinToString(",") {
         URLEncoder.QUERY.encode(it, Charsets.UTF_8)
-      }.joinToString(","))
+      })
     }.andExpect {
       content {
         assertFails { json("""["1,2,3","1","rre"]""") }
@@ -85,7 +85,7 @@ class GetParameterTest {
       status { isOk() }
       content {
         contentType(MediaType.APPLICATION_JSON)
-        json("{\"name\":\"1\",\"age\":2}")
+        json("""{"name":"1","age":2}""")
       }
     }
 
