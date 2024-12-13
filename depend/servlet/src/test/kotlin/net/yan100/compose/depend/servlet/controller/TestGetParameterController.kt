@@ -28,4 +28,9 @@ class TestGetParameterController {
 
   @GetMapping("nonAnnotationDataClass")
   fun nonAnnotationDataClass(dto: DataClassDto) = dto
+
+  @GetMapping("strList")
+  fun inputStringList(@RequestParam list: List<String>): List<String> {
+    return list
+  }
 }
