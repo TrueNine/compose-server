@@ -20,13 +20,14 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.yan100.compose.core.*
-import net.yan100.compose.core.domain.IChinaName
-import net.yan100.compose.rds.core.*
+import net.yan100.compose.core.RefId
+import net.yan100.compose.core.isId
+import net.yan100.compose.core.string
+import net.yan100.compose.rds.core.ICrud
 import net.yan100.compose.rds.core.annotations.ACID
 import net.yan100.compose.rds.core.entities.fromDbData
 import net.yan100.compose.rds.core.entities.withNew
-import net.yan100.compose.rds.crud.entities.jpa.QUserInfo
+import net.yan100.compose.rds.core.jpa
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
 import net.yan100.compose.rds.crud.entities.jpa.UserInfo
 import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
@@ -35,7 +36,6 @@ import net.yan100.compose.rds.crud.service.IUserInfoService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.Period
 
 @Service
 class UserInfoServiceImpl(
@@ -47,7 +47,7 @@ class UserInfoServiceImpl(
   override suspend fun findIsRealPeopleById(id: RefId): Boolean = infoRepo.existsByIdAndIsRealPeople(id)
 
   override suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean =
-    withContext(Dispatchers.IO) { infoRepo.findFirstByUserIdAndPriIsTrue(userId)?.run { infoRepo.existsByIdAndIsRealPeople(id) } ?: false }
+    withContext(Dispatchers.IO) { infoRepo.findFirstByUserIdAndPriIsTrue(userId)?.run { infoRepo.existsByIdAndIsRealPeople(id) } == true }
 
   override fun existsByFirstNameAndLastName(firstName: String, lastName: String): Boolean {
     return infoRepo.existsAllByFirstNameAndLastName(firstName, lastName)
@@ -132,44 +132,5 @@ class UserInfoServiceImpl(
 
   override fun existsByWechatOpenId(openId: String): Boolean {
     return infoRepo.existsByWechatOpenid(openId)
-  }
-
-  override fun fetchAllBy(dto: IUserInfoService.UserInfoFetchParam) = querydsl(QUserInfo.userInfo, em) {
-    dto.takeViewModel {
-      dto.id?.also { it.isId() takeFinally { Pr.one(fetchById(it)) } }
-      dto.userId?.also { it.isId() takeFinally { infoRepo.findAllByUserId(it, Pq[dto]) } }
-
-      dto.idCard?.also { it.hasText() execute { bb.and(q.idCard.eq(it)) } }
-      dto.phone?.also { it.hasText() execute { bb.and(q.phone.eq(it)) } }
-      dto.birthday?.also { bb.and(q.birthday.eq(it)) }
-
-      dto.email?.also { it.hasText() execute { bb.and(q.email.eq(it)) } }
-      dto.addressCode?.also { it.hasText() execute { bb.and(q.addressCode.like("$it%")) } }
-      dto.gender?.also { bb.and(q.gender.eq(it)) }
-
-      // 全名 和 姓 名 二选一
-      dto.fullName?.also {
-        if (it.nonText()) return@also
-        val name = IChinaName[it]
-        bb.and(q.firstName.eq(name.firstName))
-        bb.and(q.lastName.eq(name.lastName))
-      } ?: apply {
-        dto.firstName?.also { bb.and(q.firstName.like("$it%")) }
-        dto.lastName?.also { bb.and(q.lastName.like("$it%")) }
-      }
-      // =
-
-      dto.remarkName?.also { it.hasText() execute { bb.and(q.remarkName.like("$it%")) } }
-      dto.remark?.also { it.hasText() execute { bb.and(q.remark.like("%$it%")) } }
-
-      dto.age?.also {
-        (it in 0..120) execute {
-          val beYear = date.now() - Period.ofYears(it)
-          bb.and(q.birthday.between(beYear, date.now()))
-        }
-      }
-      dto.hasAvatar execute { bb.and(q.avatarImgId.isNotNull) }
-      returns { infoRepo.findAll(bb, Pq[dto].toPageable()).toPr() }
-    } ?: Pr.emptyWith()
   }
 }
