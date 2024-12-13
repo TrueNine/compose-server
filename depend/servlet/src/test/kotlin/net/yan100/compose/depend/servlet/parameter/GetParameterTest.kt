@@ -47,7 +47,9 @@ class GetParameterTest {
       status { isOk() }
     }
 
-    mockMvc.get("/test/getParameter/strList?list=1,2,3,4,5,6").andExpect {
+    mockMvc.get("/test/getParameter/strList") {
+      queryParam("list", "1,2,3,4,5,6")
+    }.andExpect {
       content { json("""["1", "2", "3", "4", "5", "6"]""") }
       status { isOk() }
     }
@@ -67,7 +69,10 @@ class GetParameterTest {
       }
     }
 
-    mockMvc.get("/test/getParameter/nonAnnotation?name=1&age=2").andExpect {
+    mockMvc.get("/test/getParameter/nonAnnotation") {
+      queryParam("name", "1")
+      queryParam("age", "2")
+    }.andExpect {
       status { isOk() }
       content {
         contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +94,10 @@ class GetParameterTest {
       }
     }
 
-    mockMvc.get("/test/getParameter/nonAnnotationDataClass?name=1&age=2").andExpect {
+    mockMvc.get("/test/getParameter/nonAnnotationDataClass") {
+      queryParam("name", "1")
+      queryParam("age", "2")
+    }.andExpect {
       status { isOk() }
       content {
         contentType(MediaType.APPLICATION_JSON)
