@@ -71,7 +71,7 @@ class GetParameterTest {
       status { isOk() }
       content {
         contentType(MediaType.APPLICATION_JSON)
-        json("{\"name\":\"1\",\"age\":2}")
+        json("""{"name":"1","age":2}""")
       }
     }
   }
@@ -93,7 +93,7 @@ class GetParameterTest {
       status { isOk() }
       content {
         contentType(MediaType.APPLICATION_JSON)
-        json("{\"name\":\"1\",\"age\":2}")
+        json("""{"name":"1","age":2}""")
       }
     }
   }
