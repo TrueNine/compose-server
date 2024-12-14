@@ -7,6 +7,7 @@ import net.yan100.compose.core.sensitiveAlso
 import net.yan100.compose.core.string
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
+import net.yan100.compose.meta.annotations.orm.MetaFormula
 import net.yan100.compose.rds.core.entities.IJpaEntity
 
 @MetaDef
@@ -35,6 +36,7 @@ interface SuperUserAccount : IJpaEntity {
   /** @return 当前用户是否被封禁 */
   @get:Transient
   @MetaSkipGeneration
+  @MetaFormula
   val band: Boolean get() = (null != banTime && datetime.now().isBefore(banTime))
 
   override fun changeWithSensitiveData() {

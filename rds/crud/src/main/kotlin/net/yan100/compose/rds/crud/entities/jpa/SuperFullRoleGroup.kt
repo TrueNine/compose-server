@@ -19,7 +19,6 @@ package net.yan100.compose.rds.crud.entities.jpa
 import jakarta.persistence.*
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.crud.entities.jpa.FullRole
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.NotFound
@@ -36,7 +35,7 @@ interface SuperFullRoleGroup : SuperRoleGroup {
       [
         JoinColumn(
           table = RoleGroupRole.TABLE_NAME,
-          name = RoleGroupRole.ROLE_GROUP_ID,
+          name = "role_group_id",
           referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,
@@ -47,7 +46,7 @@ interface SuperFullRoleGroup : SuperRoleGroup {
       [
         JoinColumn(
           table = RoleGroupRole.TABLE_NAME,
-          name = RoleGroupRole.ROLE_ID,
+          name = "role_id",
           referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
           insertable = false,

@@ -24,7 +24,6 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.crud.entities.jpa.RoleGroup
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
 import org.hibernate.annotations.NotFound
@@ -39,7 +38,7 @@ interface SuperFullUserAccount : SuperUserAccount {
     name = UserRoleGroup.TABLE_NAME,
     joinColumns =
       [JoinColumn(
-        name = UserRoleGroup.USER_ID,
+        name = "user_id",
         referencedColumnName = IDbNames.ID,
         foreignKey = ForeignKey(NO_CONSTRAINT),
         insertable = false,
@@ -48,7 +47,7 @@ interface SuperFullUserAccount : SuperUserAccount {
     inverseJoinColumns =
       [
         JoinColumn(
-          name = UserRoleGroup.ROLE_GROUP_ID,
+          name = "role_group_id",
           referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(NO_CONSTRAINT),
           insertable = false,

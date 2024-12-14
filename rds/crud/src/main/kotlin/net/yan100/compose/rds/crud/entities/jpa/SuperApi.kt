@@ -19,6 +19,7 @@ package net.yan100.compose.rds.crud.entities.jpa
 import net.yan100.compose.core.RefId
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
+import net.yan100.compose.meta.annotations.orm.MetaFormula
 import net.yan100.compose.rds.core.entities.IJpaEntity
 
 /**
@@ -47,6 +48,7 @@ interface SuperApi : IJpaEntity {
   /** 请求协议 */
   var apiProtocol: String?
 
+  @MetaFormula
   @MetaSkipGeneration
   val uriDeep: Int get() = apiPath?.split("/")?.filter { it.isNotBlank() }?.size ?: 0
 }

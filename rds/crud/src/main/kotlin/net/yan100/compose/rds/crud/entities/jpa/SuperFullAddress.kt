@@ -23,7 +23,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.crud.entities.jpa.AddressDetails
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT
 
@@ -33,7 +32,7 @@ interface SuperFullAddress : SuperAddress {
   /** 当前地址包含的地址详情 */
   @get:OneToMany(targetEntity = AddressDetails::class, fetch = EAGER)
   @get:JoinColumn(
-    name = AddressDetails.ADDRESS_ID,
+    name = "address_id",
     referencedColumnName = IDbNames.ID,
     foreignKey = ForeignKey(NO_CONSTRAINT),
     insertable = false,

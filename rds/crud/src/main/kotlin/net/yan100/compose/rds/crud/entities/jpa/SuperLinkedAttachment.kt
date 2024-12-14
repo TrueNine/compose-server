@@ -23,6 +23,7 @@ import net.yan100.compose.core.RefId
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
+import net.yan100.compose.meta.annotations.orm.MetaFormula
 import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.crud.converters.AttachmentTypingConverter
@@ -37,7 +38,6 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
  * - 序列化到前端，只会出现全路径
  * - 只能用于查询，无法插入
  */
-
 @MetaName("attachment")
 @MetaDef(shadow = true)
 interface SuperLinkedAttachment : IJpaEntity {
@@ -54,7 +54,7 @@ interface SuperLinkedAttachment : IJpaEntity {
 
   @get:ManyToOne(fetch = EAGER)
   @get:JoinColumn(
-    name = Attachment.URL_ID,
+    name = "url_id",
     referencedColumnName = IDbNames.ID,
     foreignKey = ForeignKey(NO_CONSTRAINT), insertable = false, updatable = false
   )
@@ -62,7 +62,7 @@ interface SuperLinkedAttachment : IJpaEntity {
   @get:NotFound(action = IGNORE)
   var base: Attachment
 
-
+  @MetaFormula
   @get:Transient
   val uri: String
     get() {
@@ -73,6 +73,7 @@ interface SuperLinkedAttachment : IJpaEntity {
     }
 
   @get:Transient
+  @MetaFormula
   val url: String
     get() {
       val based = base.baseUrl?.let { if (it.endsWith("/")) it else "$it/" } ?: ""
