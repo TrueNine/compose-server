@@ -48,14 +48,13 @@ private data class JpaProperty @OptIn(KspExperimental::class) constructor(
   var nullable: Boolean = ksPropertyDeclaration.type.resolve().isMarkedNullable,
   var requireDelegate: Boolean = !nullable,
   val basicType: Boolean = ksPropertyDeclaration.isBasicType(),
-  val shadow: Boolean = ctx.declaration.getAnnotationsByType(MetaDef::class).firstOrNull()?.shadow ?: false
+  val shadow: Boolean = ctx.declaration.getAnnotationsByType(MetaDef::class).firstOrNull()?.shadow == true
 )
 
 class JpaNameClassVisitor(
   private val listenerSpec: AnnotationSpec?
 ) : KSTopDownVisitor<DeclarationContext<KSClassDeclaration>, Unit>() {
-  private val accessAnnotation =
-    AnnotationSpec.builder(Libs.Jakarta.Persistence.Access.toClassName()).addMember("jakarta.persistence.AccessType.PROPERTY").build()
+
   private val jvmTransient = AnnotationSpec.builder(Transient::class)
 
   private lateinit var log: KSPLogger
@@ -123,11 +122,6 @@ class JpaNameClassVisitor(
           b.addAnnotations(generateJpaPropertyAnnotations(destProperty, jpaProperty))
         }.mutable(true)
     }.map { (a, b) ->
-      if (a.ksPropertyDeclaration.getter?.getKsAnnotationsByAnnotationClassQualifiedName("jakarta.persistence.Basic")?.firstOrNull() == null) {
-        b.addAnnotation(
-          AnnotationSpec.builder(Libs.Jakarta.Persistence.Basic.toClassName()).useGet().addMember("fetch = jakarta.persistence.FetchType.EAGER").build()
-        )
-      }
       a to b.build()
     }
   }
@@ -218,7 +212,6 @@ class JpaNameClassVisitor(
             .addMember("%T::class", Libs.Net.Yan100.Compose.Rds.Core.Listeners.SnowflakeIdInsertListener.toClassName())
             .addMember("%T::class", Libs.Net.Yan100.Compose.Rds.Core.Listeners.BizCodeInsertListener.toClassName()).build()
         )
-        annotateBy(accessAnnotation)
         annotateAllBy(generateClassAnnotations(destClassName))
         // 继承父类
         when (classDeclaration.classKind) {
@@ -288,10 +281,6 @@ class JpaNameClassVisitor(
           )
           builder.addFunction(
             FunSpec.builder("getId").addAnnotation(
-              AnnotationSpec.builder(
-                Libs.Jakarta.Persistence.Basic.toClassName()
-              ).addMember("fetch = jakarta.persistence.FetchType.EAGER").build()
-            ).addAnnotation(
               AnnotationSpec.builder(Deprecated::class).addMember("%S", "").addMember("level = %T.ERROR", DeprecationLevel::class).build()
             ).addModifiers(KModifier.OVERRIDE)
               .addAnnotation(Libs.Jakarta.Persistence.Id.toClassName())
@@ -412,10 +401,6 @@ class JpaNameClassVisitor(
         if (pp.shadow) {
           addMember("insertable = %L", false)
           addMember("updatable = %L", false)
-        }
-        if (pp.requireDelegate) {
-          //add(useDelegate().build())
-          add(accessAnnotation.toBuilder().useGet().build())
         }
         add(useGet().build())
       }
