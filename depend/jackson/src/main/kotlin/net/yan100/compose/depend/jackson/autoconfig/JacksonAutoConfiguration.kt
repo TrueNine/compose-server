@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.introspect.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import net.yan100.compose.core.DTimer
+import net.yan100.compose.core.domain.IPageParam
+import net.yan100.compose.core.domain.IPageParamLike
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.typing.AnyTyping
 import net.yan100.compose.depend.jackson.*
@@ -123,6 +125,8 @@ class JacksonAutoConfiguration {
     module.addDeserializer(LocalDate::class.java, ldd)
     // 处理枚举类型
     val anyTypingDeserializer = AnyTypingDeserializer()
+    module.addDeserializer(IPageParamLike::class.java, IPageParamLikeSerializer()) // 分页参数
+    module.addDeserializer(IPageParam::class.java, IPageParamLikeSerializer()) // 分页参数
     module.addDeserializer(AnyTyping::class.java, anyTypingDeserializer)
     return Jackson2ObjectMapperBuilderCustomizer { b ->
       b.modules(module, km)
