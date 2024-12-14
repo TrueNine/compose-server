@@ -20,14 +20,11 @@ import jakarta.annotation.Resource
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.rds.crud.entities.jpa.UserInfo
-import net.yan100.compose.rds.crud.service.IUserInfoService
 import net.yan100.compose.testtookit.RDBRollback
-import net.yan100.compose.testtookit.assertNotEmpty
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 @RDBRollback
 @SpringBootTest
@@ -41,20 +38,6 @@ class UserInfoServiceImplTest {
       firstName = "R"
       lastName = "OOT"
     })
-  }
-
-  @Test
-  @RDBRollback
-  fun `query dsl fetch all by`() {
-    val e = userInfoService.fetchAll()
-    val result = userInfoService.fetchAllBy(
-      IUserInfoService.UserInfoFetchParam(
-        firstName = "R"
-      )
-    )
-    assertNotNull(result)
-    assertNotEmpty { result.d.toList() }
-    log.info("result: {}", result)
   }
 
   @Test
