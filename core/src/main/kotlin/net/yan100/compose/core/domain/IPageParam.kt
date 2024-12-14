@@ -31,6 +31,21 @@ private class DefaultPageParam @Deprecated("不退完直接使用", level = Depr
   override fun toString(): String {
     return "PageParam(offset=$o, pageSize=$s, unPage=$u)"
   }
+
+  override fun hashCode(): Int {
+    return listOf(o, s, u).hashCode()
+  }
+
+  override fun equals(other: Any?): Boolean {
+    return when (other) {
+      is IPageParam -> {
+        o == other.o && s == other.s
+          && (u == true) == (other.u == true)
+      }
+
+      else -> false
+    }
+  }
 }
 
 /**

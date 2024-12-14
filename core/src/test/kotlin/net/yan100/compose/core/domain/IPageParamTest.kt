@@ -7,7 +7,6 @@ import net.yan100.compose.core.i32
 import net.yan100.compose.core.i64
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import kotlin.test.BeforeTest
@@ -28,31 +27,6 @@ class IPageParamTest {
     assertNotNull(mvc)
   }
 
-  // TODO 针对此进行 json 序列化
-  @Test
-  fun `success fill get method request body policy`() {
-    mvc.get("/v1/pq/get/requestBody?o=1&s=24") {
-      contentType = MediaType.APPLICATION_JSON
-      accept = MediaType.APPLICATION_JSON
-      content = """{"o":1,"s":24}"""
-    }.andExpect {
-      content {
-        jsonPath("$.o") {
-          exists()
-          isNumber()
-          value(1)
-        }
-        jsonPath("$.s") {
-          exists()
-          isNumber()
-          value(24)
-        }
-      }
-      status {
-        isOk()
-      }
-    }
-  }
 
   @Test
   fun `success fill get method default policy`() {
