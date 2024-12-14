@@ -44,8 +44,8 @@ junitPlatform = "1.11.3"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.109"
-composeRdsCrud = "2.0.48"
+composeVersionCatalog = "2.0.110"
+composeRdsCrud = "2.0.49"
 composeRdsCore = "2.0.47"
 composeCore = "2.0.38"
 composeKspPlugin = "2.0.31"
@@ -71,7 +71,7 @@ composeRdsJimmer = "0.0.12"
 composeRdsMigrationH2 = "0.0.10"
 composeRdsMigrationPostgres = "0.0.9"
 composeRdsMigrationMysql = "0.0.9"
-composeMeta = "0.0.3"
+composeMeta = "0.0.4"
 composeGroup = "net.yan100.compose"
 
 
