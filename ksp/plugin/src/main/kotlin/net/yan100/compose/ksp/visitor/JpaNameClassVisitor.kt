@@ -36,6 +36,7 @@ import net.yan100.compose.meta.annotations.MetaAutoManagement
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
+import net.yan100.compose.meta.annotations.orm.MetaFormula
 import net.yan100.compose.meta.getFirstName
 import kotlin.properties.Delegates
 
@@ -94,7 +95,9 @@ class JpaNameClassVisitor(
   ): List<Pair<JpaProperty, PropertySpec>> {
     val allProperties =
       ctx.declaration.getAllProperties().filter { it.isOpen() }.filter { it.isPublic() }.filterNot { it.isAnnotationPresent(MetaSkipGeneration::class) }
-        .filterNot { it.simpleName.asString() == "id" }.toMutableList()
+        .filterNot { it.simpleName.asString() == "id" }
+        .filterNot { it.isAnnotationPresent(MetaFormula::class) }
+        .toMutableList()
     return allProperties.map { destProperty ->
       val jpaProperty = JpaProperty(
         ctx = ctx,
