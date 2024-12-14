@@ -42,7 +42,7 @@ import org.hibernate.annotations.NotFoundAction.IGNORE
 @MetaDef(shadow = true)
 interface SuperLinkedAttachment : IJpaEntity {
   var mimeType: String
-  var baseUrl: String
+  var baseUrl: String?
   var baseUri: String?
   var urlId: RefId
   var saveName: String
