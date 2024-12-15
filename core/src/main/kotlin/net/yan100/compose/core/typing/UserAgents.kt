@@ -16,6 +16,9 @@
  */
 package net.yan100.compose.core.typing
 
+import net.yan100.compose.core.typing.UserAgents.entries
+
+
 /**
  * 一些收集的 userAgent 枚举 使用 val() 方法进行调用
  *
@@ -23,7 +26,6 @@ package net.yan100.compose.core.typing
  * @since 2022-10-28
  */
 enum class UserAgents(private val ua: String) : StringTyping {
-
   /** chrome windows 103 */
   CHROME_WIN_103("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"),
   CHROME_WIN_115("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"),

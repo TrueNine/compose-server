@@ -16,8 +16,7 @@
  */
 package net.yan100.compose.core.typing
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonValue
+import net.yan100.compose.core.typing.MimeTypes.entries
 
 /**
  * mime类型
@@ -62,15 +61,15 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
   RAR("rar", "application/x-rar-compressed"),
   SSE("sse", "text/event-stream");
 
-  @JsonIgnore
+
   private var mm: Array<out String> = m
 
-  @get:JsonIgnore
+
   @Suppress("UNCHECKED_CAST")
   val medias: Array<String>
     get() = mm as Array<String>
 
-  @get:JsonIgnore
+
   val ext: String
     get() = extension
 
@@ -79,7 +78,6 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
     return this.value
   }
 
-  @JsonValue
   override val value: String = this.mm[0]
 
   companion object {

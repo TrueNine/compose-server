@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
+import net.yan100.compose.core.typing.EncryptAlgorithmTyping.entries
 
 /**
  * 算法
@@ -40,7 +40,6 @@ enum class EncryptAlgorithmTyping(
   /** aes */
   AES("AES", "AES/ECB/PKCS5Padding");
 
-  @JsonValue
   override val value: String = this.alg
 
   companion object {

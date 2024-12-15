@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
+import net.yan100.compose.core.typing.PCB47.entries
 
 /**
  * # 各语言 按照 PBC47 标准的序列化字符串
@@ -32,7 +32,6 @@ enum class PCB47(private val primaryLang: String, vararg secondaryLanguages: Str
   ZH_TW("zh-TW"),
   EN_US("en-US");
 
-  @get:JsonValue
   override val value: String
     get() = primaryLang
 

@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
+import net.yan100.compose.core.typing.HttpStatusTyping.entries
 
 /**
  * 错误信息枚举类
@@ -55,7 +55,6 @@ enum class HttpStatusTyping(val code: Int, var message: String, var alert: Strin
 
   UNKNOWN(9999, "Server Unknown Error", "发生了重大未知错误！目前错误原因未知，请尽快联系管理员或技术人员");
 
-  @JsonValue
   override val value: Int = code
 
   companion object {

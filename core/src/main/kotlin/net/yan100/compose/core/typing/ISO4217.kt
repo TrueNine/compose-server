@@ -16,7 +16,7 @@
  */
 package net.yan100.compose.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
+import net.yan100.compose.core.typing.ISO4217.entries
 
 
 /**
@@ -82,7 +82,7 @@ enum class ISO4217(private val iso4217Str: String, private val cnDescription: St
    */
   KRW("KRW", "韩圆", 410, 0);
 
-  @JsonValue
+  //@JsonValue
   override val value: String = this.iso4217Str
 
   companion object {
