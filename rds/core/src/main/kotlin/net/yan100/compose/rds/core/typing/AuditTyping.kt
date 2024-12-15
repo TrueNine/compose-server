@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
 import net.yan100.compose.rds.core.typing.AuditTyping.entries
 import org.babyfish.jimmer.sql.EnumItem
@@ -75,7 +74,6 @@ enum class AuditTyping(v: Int) : IntTyping {
   @EnumItem(ordinal = 7)
   SHADOW_BAN(7);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {

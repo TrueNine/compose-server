@@ -16,9 +16,10 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.GoodsTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
 /**
  * 商品服务类型
@@ -26,25 +27,27 @@ import net.yan100.compose.core.typing.IntTyping
  * @author TrueNine
  * @since 2023-04-23
  */
-@Schema(title = "商品类型")
-enum class GoodsTyping(private val v: Int) : IntTyping {
+@EnumType(EnumType.Strategy.ORDINAL)
+enum class GoodsTyping(v: Int) : IntTyping {
   /** 实体商品 */
-  @Schema(title = "实体商品")
-  PHYSICAL_GOODS(0),
+  @EnumItem(ordinal = 1)
+  PHYSICAL_GOODS(1),
 
   /** 服务商品 */
-  @Schema(title = "服务商品")
-  SERVICE_GOODS(1),
+  @EnumItem(ordinal = 2)
+  SERVICE_GOODS(2),
 
   /** 虚拟商品 */
-  @Schema(title = "虚拟商品")
-  VIRTUAL_GOODS(2);
+  @EnumItem(ordinal = 3)
+  VIRTUAL_GOODS(3);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {
     @JvmStatic
     fun findVal(v: Int?): GoodsTyping? = entries.find { it.value == v }
+
+    @JvmStatic
+    operator fun get(v: Int?): GoodsTyping? = findVal(v)
   }
 }

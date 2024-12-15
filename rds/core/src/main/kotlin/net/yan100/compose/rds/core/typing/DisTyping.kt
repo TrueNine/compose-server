@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
 import net.yan100.compose.rds.core.typing.DisTyping.entries
 import org.babyfish.jimmer.sql.EnumItem
@@ -72,7 +71,6 @@ enum class DisTyping(typ: Int) : IntTyping {
   @EnumItem(ordinal = 7)
   MULTIPLE(7);
 
-  @JsonValue
   override val value = typ
 
   companion object {

@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
 import net.yan100.compose.rds.core.typing.GenderTyping.entries
 import org.babyfish.jimmer.sql.EnumItem
@@ -44,7 +43,6 @@ enum class GenderTyping(private val v: Int) : IntTyping {
   @EnumItem(ordinal = 9999)
   UNKNOWN(9999);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {

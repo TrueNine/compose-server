@@ -16,9 +16,10 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.GoodsChangeRecordTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
 /**
  * 商品改动类型
@@ -26,21 +27,30 @@ import net.yan100.compose.core.typing.IntTyping
  * @author TrueNine
  * @since 2023-04-23
  */
-@Schema(title = "商品改动类型")
-enum class GoodsChangeRecordTyping(private val v: Int) : IntTyping {
+@Deprecated("不明确的业务类型混入")
+@EnumType(EnumType.Strategy.ORDINAL)
+enum class GoodsChangeRecordTyping(v: Int) : IntTyping {
+  /**
+   * 无改动
+   */
+  @EnumItem(ordinal = 0)
+  NONE(0),
+
   /** 改价格 */
-  @Schema(title = "改价格")
-  CHANGE_PRICE(0),
+  @EnumItem(ordinal = 1)
+  CHANGE_PRICE(1),
 
   /** 改标题 */
-  @Schema(title = "改标题")
-  CHANGE_TITLE(1);
+  @EnumItem(ordinal = 2)
+  CHANGE_TITLE(2);
 
-  @JsonValue
   override val value = v
 
   companion object {
     @JvmStatic
     fun findVal(v: Int?) = entries.find { it.value == v }
+
+    @JvmStatic
+    fun get(v: Int?) = findVal(v)
   }
 }

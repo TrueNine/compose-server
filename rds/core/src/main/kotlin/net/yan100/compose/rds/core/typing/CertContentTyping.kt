@@ -16,53 +16,94 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
-@Schema(title = "证件内容类型")
+/**
+ * 证件内容类型
+ */
+@EnumType(EnumType.Strategy.ORDINAL)
 enum class CertContentTyping(private val v: Int) : IntTyping {
-  @Schema(title = "无要求")
+  /**
+   * 无要求
+   */
+  @EnumItem(ordinal = 0)
   NONE(0),
 
-  @Schema(title = "图片")
+  /**
+   * 图片
+   */
+  @EnumItem(ordinal = 0)
   IMAGE(1),
 
-  @Schema(title = "扫描件图片")
+  /**
+   * 扫描件图片
+   */
+  @EnumItem(ordinal = 2)
   SCANNED_IMAGE(2),
 
-  @Schema(title = "截图")
+  /**
+   * 截图
+   */
+  @EnumItem(ordinal = 3)
   SCREEN_SHOT(3),
 
-  @Schema(title = "视频")
+  /**
+   * 视频
+   */
+  @EnumItem(ordinal = 4)
   VIDEO(4),
 
-  @Schema(title = "录音")
+  /**
+   * 录音
+   */
+  @EnumItem(ordinal = 5)
   RECORDING(5),
 
-  @Schema(title = "复印件图片")
+  /**
+   * 复印件图片
+   */
+  @EnumItem(ordinal = 6)
   COPYFILE_IMAGE(6),
 
-  @Schema(title = "翻拍图片")
+  /**
+   * 翻拍图片
+   */
+  @EnumItem(ordinal = 7)
   REMAKE_IMAGE(7),
 
-  @Schema(title = "处理过的扫描件")
+  /**
+   * 处理过的扫描件
+   */
+  @EnumItem(ordinal = 8)
   PROCESSED_SCANNED_IMAGE(8),
 
-  @Schema(title = "处理过的图片")
+  /**
+   * 处理过的图片
+   */
+  @EnumItem(ordinal = 9)
   PROCESSED_IMAGE(9),
 
-  @Schema(title = "处理过的视频")
+  /**
+   * 处理过的视频
+   */
+  @EnumItem(ordinal = 10)
   PROCESSED_VIDEO(10),
 
-  @Schema(title = "处理过的音频")
+  /**
+   * 处理过的音频
+   */
+  @EnumItem(ordinal = 11)
   PROCESSED_AUDIO(11);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {
     @JvmStatic
     fun findVal(v: Int?) = CertContentTyping.entries.find { it.value == v }
+
+    @JvmStatic
+    operator fun get(v: Int?) = findVal(v)
   }
 }

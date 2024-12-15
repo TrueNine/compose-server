@@ -16,30 +16,34 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.GoodsInfoTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
 /** 商品信息分类 */
-@Schema(title = "商品信息分类")
-enum class GoodsInfoTyping(private val v: Int) : IntTyping {
+@Deprecated("无明确业务类型混入")
+@EnumType(EnumType.Strategy.ORDINAL)
+enum class GoodsInfoTyping(v: Int) : IntTyping {
   /** 检索类型 */
-  @Schema(title = "检索类型")
-  RETRIEVAL(0),
+  @EnumItem(ordinal = 1)
+  RETRIEVAL(1),
 
   /** 商品单位信息 */
-  @Schema(title = "商品单位信息")
-  GOODS_UNIT_INFO(1),
+  @EnumItem(ordinal = 2)
+  GOODS_UNIT_INFO(2),
 
   /** 商品单位继承信息 */
-  @Schema(title = "商品单位继承信息")
-  GOODS_UNIT_EXTEND_INFO(2);
+  @EnumItem(ordinal = 3)
+  GOODS_UNIT_EXTEND_INFO(3);
 
-  @JsonValue
   override val value = v
 
   companion object {
     @JvmStatic
     fun findVal(v: Int?) = entries.find { it.value == v }
+
+    @JvmStatic
+    fun get(v: Int?) = findVal(v)
   }
 }

@@ -46,7 +46,7 @@ kotlinCompileTesting = "1.6.0"
 ## === compose server versions ===
 composeVersionCatalog = "2.0.110"
 composeRdsCrud = "2.0.49"
-composeRdsCore = "2.0.47"
+composeRdsCore = "2.0.48"
 composeCore = "2.0.39"
 composeKspPlugin = "2.0.31"
 composeDependServlet = "2.0.30"

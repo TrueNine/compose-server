@@ -16,34 +16,55 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.RelationItemTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
-@Schema(title = "关系对象类型")
-enum class RelationItemTyping(private val v: Int) : IntTyping {
-  @Schema(title = "无")
+/**
+ * 关系对象类型
+ */
+@EnumType(EnumType.Strategy.ORDINAL)
+enum class RelationItemTyping(v: Int) : IntTyping {
+  /**
+   * 无
+   */
+  @EnumItem(ordinal = 0)
   NONE(0),
 
-  @Schema(title = "用户")
+  /**
+   * 用户
+   */
+  @EnumItem(ordinal = 1)
   USER(1),
 
-  @Schema(title = "客户")
+  /**
+   * 客户
+   */
+  @EnumItem(ordinal = 2)
   CUSTOMER(2),
 
-  @Schema(title = "企业")
+  /**
+   * 企业
+   */
+  @EnumItem(ordinal = 3)
   ENTERPRISE(3),
 
-  @Schema(title = "员工")
+  /**
+   * 员工
+   */
+  @EnumItem(ordinal = 4)
   EMPLOYEE(4),
 
-  @Schema(title = "其他")
+  /**
+   * 其他
+   */
+  @EnumItem(ordinal = 9999)
   OTHER(9999);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {
-    fun findVal(v: Int?) = entries.find { it.v == v }
+    fun findVal(v: Int?) = entries.find { it.value == v }
   }
 }

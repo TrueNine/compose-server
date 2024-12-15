@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
@@ -92,7 +91,7 @@ enum class DegreeTyping(v: Int, val level: Int) : IntTyping {
   @EnumItem(ordinal = 9999)
   OTHER(9999, -1);
 
-  @JsonValue
+
   override val value = v
 
   companion object {

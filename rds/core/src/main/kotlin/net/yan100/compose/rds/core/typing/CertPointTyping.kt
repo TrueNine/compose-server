@@ -16,38 +16,67 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
-import io.swagger.v3.oas.annotations.media.Schema
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.CertPointTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
-@Schema(title = "证件印面类型")
+/**
+ * 证件印面类型
+ */
+@EnumType(EnumType.Strategy.ORDINAL)
 enum class CertPointTyping(private val v: Int) : IntTyping {
-  @Schema(title = "无要求")
+  /**
+   * 无要求
+   */
+  @EnumItem(ordinal = 0)
   NONE(0),
 
-  @Schema(title = "正面")
+  /**
+   * 正面
+   */
+  @EnumItem(ordinal = 1)
   HEADS(1),
 
-  @Schema(title = "反面")
+  /**
+   * 反面
+   */
+  @EnumItem(ordinal = 2)
   TAILS(2),
 
-  @Schema(title = "双面")
+  /**
+   * 双面
+   */
+  @EnumItem(ordinal = 3)
   DOUBLE(3),
 
-  @Schema(title = "所有")
+  /**
+   * 所有
+   */
+  @EnumItem(ordinal = 4)
   ALL(4),
 
-  @Schema(title = "所有内容")
+  /**
+   * 所有内容
+   */
+  @EnumItem(ordinal = 5)
   ALL_CONTENT(5),
 
-  @Schema(title = "完整的", description = "针对于视频，音频等等……")
+  /**
+   * 完整的
+   *
+   * 针对于视频，音频等等……
+   */
+  @EnumItem(ordinal = 6)
   INTACT(6);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {
     @JvmStatic
     fun findVal(value: Int?) = entries.find { value == it.v }
+
+    @JvmStatic
+    operator fun get(v: Int?) = findVal(v)
   }
 }

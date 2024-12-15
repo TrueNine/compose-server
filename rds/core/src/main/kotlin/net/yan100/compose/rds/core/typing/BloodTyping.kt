@@ -16,40 +16,46 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
 /**
  * ## 用户信息所属的常规血型
  *
  */
+@EnumType(EnumType.Strategy.ORDINAL)
 enum class BloodTyping(v: Int) : IntTyping {
   /**
    * A型
    */
+  @EnumItem(ordinal = 1)
   A(1),
 
   /**
    * B型
    */
+  @EnumItem(ordinal = 2)
   B(2),
 
   /**
    * AB型
    */
+  @EnumItem(ordinal = 3)
   AB(3),
 
   /**
    * O型
    */
+  @EnumItem(ordinal = 4)
   O(4),
 
   /**
    * 其他血型
    */
+  @EnumItem(ordinal = 9999)
   OTHER(9999);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {

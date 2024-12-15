@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
 import net.yan100.compose.rds.core.typing.AttachmentTyping.entries
 import org.babyfish.jimmer.sql.EnumItem
@@ -39,7 +38,6 @@ enum class AttachmentTyping(v: Int) : IntTyping {
   @EnumItem(ordinal = 1)
   BASE_URL(1);
 
-  @JsonValue
   override val value = v
 
   companion object {

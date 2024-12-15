@@ -16,29 +16,39 @@
  */
 package net.yan100.compose.rds.core.typing
 
-import com.fasterxml.jackson.annotation.JsonValue
 import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.rds.core.typing.RuleTyping.entries
+import org.babyfish.jimmer.sql.EnumItem
+import org.babyfish.jimmer.sql.EnumType
 
 /**
  * ## 规则状态
  */
+@EnumType(EnumType.Strategy.ORDINAL)
 enum class RuleTyping(v: Int) : IntTyping {
+  /**
+   * 无类型
+   */
+  NONE(0),
+
   /**
    * 排除
    */
-  EXCLUDE(0),
+  @EnumItem(ordinal = 1)
+  EXCLUDE(1),
 
   /**
    * 包含
    */
-  INCLUDE(1),
+  @EnumItem(ordinal = 2)
+  INCLUDE(2),
 
   /**
    * 固定
    */
-  FIXED(2);
+  @EnumItem(ordinal = 3)
+  FIXED(3);
 
-  @JsonValue
   override val value: Int = v
 
   companion object {
@@ -46,6 +56,6 @@ enum class RuleTyping(v: Int) : IntTyping {
     fun findVal(e: Int?): RuleTyping? = entries.find { it.value == e }
 
     @JvmStatic
-    fun get(v: Int?) = findVal(v)
+    operator fun get(v: Int?) = findVal(v)
   }
 }
