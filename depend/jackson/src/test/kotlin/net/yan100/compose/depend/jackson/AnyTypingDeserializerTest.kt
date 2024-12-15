@@ -18,29 +18,32 @@ package net.yan100.compose.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
-import net.yan100.compose.core.ISO4217Typing
+import net.yan100.compose.core.typing.HttpStatusTyping
+import net.yan100.compose.core.typing.UserAgents
 import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
-open class AB {
-  var typ: ISO4217Typing? = null
-}
 
 @SpringBootTest
 class AnyTypingDeserializerTest {
-  @Resource
-  lateinit var mapper: ObjectMapper
+  lateinit var mapper: ObjectMapper @Resource set
 
   @Test
   fun `test deserializer`() {
-    val d = ISO4217Typing.CNY
-    val dd = AB().apply { typ = d }
+    val stringTyping = UserAgents.CHROME_WIN_103
+    val intTyping = HttpStatusTyping._403
+    val dd = AnyTypingRecord(stringTyping, intTyping)
     val json = mapper.writeValueAsString(dd)
-    val cc = mapper.readValue(json, AB::class.java)
-    val ff = mapper.readValue("{\"typ\":1}", AB::class.java)
-    val ee = mapper.readValue("{\"typ\":\"1\"}", AB::class.java)
-
     log.info("json: {}", json)
+    assertEquals(
+      """{"stringTyping1":"${UserAgents.CHROME_WIN_103.value}","intTyping2":${HttpStatusTyping._403.value}}""",
+      json
+    )
+    val des = mapper.readValue(json, AnyTypingRecord::class.java)
+    log.info("des: {}", des)
+    assertNotNull(des)
   }
 }
