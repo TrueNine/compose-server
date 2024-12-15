@@ -1,4 +1,4 @@
-package net.yan100.compose.depend.jackson
+package net.yan100.compose.depend.jackson.serializers
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonToken

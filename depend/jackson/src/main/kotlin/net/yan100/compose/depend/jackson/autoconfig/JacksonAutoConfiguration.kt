@@ -26,11 +26,11 @@ import com.fasterxml.jackson.databind.introspect.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import net.yan100.compose.core.DTimer
-import net.yan100.compose.core.domain.IPageParam
-import net.yan100.compose.core.domain.IPageParamLike
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.core.typing.AnyTyping
 import net.yan100.compose.depend.jackson.*
+import net.yan100.compose.depend.jackson.modules.DatetimeCustomModule
+import net.yan100.compose.depend.jackson.modules.KotlinCustomModule
+import net.yan100.compose.depend.jackson.serializers.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
@@ -42,9 +42,6 @@ import org.springframework.context.annotation.Scope
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneOffset
 import java.util.*
 
@@ -60,16 +57,6 @@ private val log = slf4j<JacksonAutoConfiguration>()
 class JacksonAutoConfiguration {
   init {
     log.debug("jackson 自动配置中...")
-  }
-
-  /** kotlin module 配置 */
-  private fun ktm(): KotlinModule {
-    val kotlinKeyPairDeserializer = KPairDeserializer()
-    val k = KotlinModule.Builder()
-      .build()
-    k.addDeserializer(Pair::class.java, kotlinKeyPairDeserializer)
-
-    return k
   }
 
   private fun customize(
@@ -96,8 +83,8 @@ class JacksonAutoConfiguration {
     return builder
   }
 
-  @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @Primary
+  @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @ConditionalOnMissingBean
   fun jacksonObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
     log.debug("create jackson objectMapper, builder: {}", builder)
@@ -108,30 +95,23 @@ class JacksonAutoConfiguration {
   @Primary
   fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
     log.debug("config jackson custom jackson2ObjectMapperBuilderCustomizer")
-    val km = ktm()
     val zoneOffset = ZoneOffset.ofHours(8)
-    val module = JavaTimeModule()
-    val ldts = LocalDateTimeSerializerZ(zoneOffset)
-    val ldtd = LocalDateTimeDeserializerZ(zoneOffset)
-    module.addSerializer(LocalDateTime::class.java, ldts)
-    module.addDeserializer(LocalDateTime::class.java, ldtd)
-    val lts = LocalTimeSerializerY(zoneOffset)
-    val ltd = LocalTimeDeserializerY(zoneOffset)
-    module.addSerializer(LocalTime::class.java, lts)
-    module.addDeserializer(LocalTime::class.java, ltd)
-    val lds = LocalDateSerializerX(zoneOffset)
-    val ldd = LocalDateDeserializerX(zoneOffset)
-    module.addSerializer(LocalDate::class.java, lds)
-    module.addDeserializer(LocalDate::class.java, ldd)
-    // 处理枚举类型
-    val anyTypingDeserializer = AnyTypingDeserializer()
-    module.addDeserializer(IPageParamLike::class.java, IPageParamLikeSerializer()) // 分页参数
-    module.addDeserializer(IPageParam::class.java, IPageParamLikeSerializer()) // 分页参数
-    module.addDeserializer(AnyTyping::class.java, anyTypingDeserializer)
+
+    val datetimeModuleCustom = DatetimeCustomModule(zoneOffset)
+    val kotlinModuleCustom = KotlinCustomModule()
+    val kotlinModule = KotlinModule.Builder().build()
+    val javaTimeModule = JavaTimeModule()
+
     return Jackson2ObjectMapperBuilderCustomizer { b ->
-      b.modules(module, km)
+      b.modules(
+        javaTimeModule,
+        kotlinModule,
+        datetimeModuleCustom,
+        kotlinModuleCustom
+      )
+
       b.timeZone(TimeZone.getTimeZone(zoneOffset))
-      b.locale(Locale.CHINA)
+      b.locale(Locale.US)
       b.simpleDateFormat(DTimer.DATETIME)
       b.defaultViewInclusion(true)
       b.featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
