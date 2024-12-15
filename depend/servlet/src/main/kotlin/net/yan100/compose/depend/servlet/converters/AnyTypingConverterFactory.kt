@@ -18,6 +18,8 @@ package net.yan100.compose.depend.servlet.converters
 
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.typing.AnyTyping
+import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.core.typing.StringTyping
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
 import java.util.concurrent.ConcurrentHashMap
@@ -32,7 +34,6 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
 
   @Suppress("UNCHECKED_CAST")
   override fun <T : AnyTyping?> getConverter(targetType: Class<T>): Converter<String?, T> {
-    converters[targetType]
     return converters[targetType].let {
       it ?: AnyTypingConverter(targetType).also { addedConverter ->
         log.trace("inject any typing converter, the target class: {}", targetType)
@@ -43,24 +44,29 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
 
   private inner class AnyTypingConverter(
     targetClass: Class<out AnyTyping?>,
-    private val mapping: MutableMap<String, AnyTyping> = mutableMapOf()
   ) : Converter<String?, AnyTyping?> {
-    init {
-      if (targetClass.isEnum) targetClass.enumConstants.filterNotNull().also { es ->
-        
-      }.forEach {
-        mapping += it.value.toString() to it
-        // TODO 不安全的枚举名称直接映射
-        (it as? Enum<*>)?.name?.also { eName ->
-          mapping += eName to it
-        }
-      }
-      else error("target class: $targetClass not enum type")
+    private val isString = StringTyping::class.java.isAssignableFrom(targetClass)
+    private val isInt = IntTyping::class.java.isAssignableFrom(targetClass)
+    private val valueMappingMap = targetClass.enumConstants.associateBy {
+      it.value
+    }
+    private val nameMappingMap = targetClass.enumConstants.associateBy {
+      (it as Enum<*>).name
+    }
+    private val ordinalMappingMap = targetClass.enumConstants.associateBy {
+      (it as Enum<*>).ordinal
     }
 
     override fun convert(source: String): AnyTyping? {
-      log.trace("convert source: {}", source)
-      return mapping[source]
+      if (source.isBlank()) return null
+      val ordinalOrTypeInt = source.toIntOrNull()
+      return if (ordinalOrTypeInt != null) {
+        if (isInt) valueMappingMap[source]
+        else ordinalMappingMap[ordinalOrTypeInt]
+      } else {
+        if (isString) valueMappingMap[source]
+        else nameMappingMap[source]
+      }
     }
   }
 }
