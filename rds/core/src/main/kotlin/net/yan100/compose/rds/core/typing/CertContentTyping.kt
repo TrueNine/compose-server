@@ -34,7 +34,7 @@ enum class CertContentTyping(private val v: Int) : IntTyping {
   /**
    * 图片
    */
-  @EnumItem(ordinal = 0)
+  @EnumItem(ordinal = 1)
   IMAGE(1),
 
   /**
