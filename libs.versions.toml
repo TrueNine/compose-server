@@ -1,6 +1,6 @@
 [versions]
 java = "23"
-gradle = "8.11.1"
+gradle = "8.12-rc-1"
 kotlin = "2.1.0"
 
 # kotlin language toolchain versions
@@ -12,7 +12,8 @@ kotlinxCoroutines = "1.9.0"
 
 # spring versions
 springBoot = "3.4.0"
-springFramework = "6.2.0"
+springData = "3.4.1"
+springFramework = "6.2.1"
 springBatch = "5.2.0"
 springCloud = "2024.0.0-RC1"
 springAi = "1.0.0-M4"
@@ -23,7 +24,7 @@ springSecurity = "6.4.1"
 
 # others
 slf4j = "2.1.0-alpha1"
-flyway = "11.0.1"
+flyway = "11.1.0"
 mapstruct = "1.6.0"
 jackson = "2.18.2"
 hibernate = "6.6.3.Final"
@@ -151,8 +152,8 @@ org-springframework-integration-springIntegrationMqtt = { group = "org.springfra
 org-springframework-integration-springIntegrationCore = { group = "org.springframework.integration", name = "spring-integration-core", version.ref = "springIntegration" }
 com-xuxueli-xxlJobCore = { group = "com.xuxueli", name = "xxl-job-core", version.ref = "xxlJob" }
 io-netty-nettyHandler = { group = "io.netty", name = "netty-handler", version.ref = "netty" }
-org-springframework-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons", version.ref = "springBoot" }
-org-springframework-data-springDataJpa = { group = "org.springframework.data", name = "spring-data-jpa", version.ref = "springBoot" }
+org-springframework-data-springDataCommons = { group = "org.springframework.data", name = "spring-data-commons", version.ref = "springData" }
+org-springframework-data-springDataJpa = { group = "org.springframework.data", name = "spring-data-jpa", version.ref = "springData" }
 org-springframework-batch-springBatchTest = { group = "org.springframework.batch", name = "spring-batch-test", version.ref = "springBatch" }
 org-springframework-security-springSecurityCrypto = { group = "org.springframework.security", name = "spring-security-crypto", version.ref = "springSecurity" }
 org-springframework-security-springSecurityCore = { group = "org.springframework.security", name = "spring-security-core", version.ref = "springSecurity" }
@@ -237,7 +238,7 @@ jakarta-persistence-jakartaPersistenceApi = { group = "jakarta.persistence", nam
 jakarta-validation-jakartaValidationApi = { group = "jakarta.validation", name = "jakarta.validation-api", version = "3.1.0" }
 jakarta-annotation-jakartaAnnotationApi = { group = "jakarta.annotation", name = "jakarta.annotation-api", version = "3.0.0" }
 
-io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.26" }
+io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.27" }
 
 com-squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version = "5.0.0-alpha.12" } ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 com-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" } ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
