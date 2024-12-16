@@ -27,10 +27,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import net.yan100.compose.core.DTimer
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.depend.jackson.*
 import net.yan100.compose.depend.jackson.modules.DatetimeCustomModule
 import net.yan100.compose.depend.jackson.modules.KotlinCustomModule
-import net.yan100.compose.depend.jackson.serializers.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
@@ -147,29 +145,11 @@ class JacksonAutoConfiguration {
   ): ObjectMapper {
     log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
     return mapper.copy().let {
-      val re = IgnoreJsonIgnoreAnnotationIntrospector()
-      val intros =
-        (it.deserializationConfig.annotationIntrospector.allIntrospectors() + it.serializationConfig.annotationIntrospector.allIntrospectors())
-          .map { i ->
-            if (i is JacksonAnnotationIntrospector) IgnoreIntroPair(re, i)
-            else i
-          }
-          .distinct().toMutableList()
-      intros += re
-      var pair: IgnoreIntroPair? = null
-      if (intros.size >= 2) {
-        for (i in 1 until intros.size) {
-          val p = IgnoreIntroPair(intros[i], intros[i - 1])
-          intros[i] = p
-        }
-        pair = intros.last() as IgnoreIntroPair?
-      }
       it.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
         .registerModules(KotlinModule.Builder().build())
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
         .activateDefaultTyping(it.polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.WRAPPER_OBJECT)
-      if (null != pair) it.setAnnotationIntrospector(pair)
       it
     }
   }
