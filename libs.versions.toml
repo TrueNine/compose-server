@@ -46,7 +46,7 @@ junitPlatform = "1.11.3"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.116"
+composeVersionCatalog = "2.0.117"
 composeRdsCrud = "2.0.50"
 composeRdsCore = "2.0.50"
 composeCore = "2.0.40"
@@ -261,6 +261,7 @@ cn-hutool-hutoolCrypto = { group = "cn.hutool", name = "hutool-crypto", version.
 cn-hutool-hutoolDb = { group = "cn.hutool", name = "hutool-db", version.ref = "hutool" }
 
 cn-dev33-saTokenSpringBootStarter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "saToken" }
+cn-dev33-saTokenSpring3BootStarter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "saToken" }
 cn-dev33-saTokenRedisJackson = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "saToken" }
 cn-dev33-saTokenRedis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "saToken" }
 
