@@ -2,7 +2,7 @@ import com.diffplug.spotless.LineEnding
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-  java
+  `java-library`
   `maven-publish`
   signing
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
@@ -23,7 +23,7 @@ val sonatypePassword = extra["pwd.sonatype.1"].toString()
 val l = libs
 
 subprojects {
-  apply(plugin = "java")
+  apply(plugin = "java-library")
   apply(plugin = "maven-publish")
   apply(plugin = "signing")
   apply(plugin = l.plugins.org.jetbrains.kotlin.jvm.get().pluginId)
