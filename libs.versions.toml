@@ -35,6 +35,7 @@ drools = "9.44.0.Final"
 liteflow = "2.12.1"
 hutool = "5.8.34"
 xxlJob = "2.4.2"
+saToken = "1.39.0"
 mybatisPlus = "3.5.7"
 
 # testing tools and gradle plugins
@@ -45,7 +46,7 @@ junitPlatform = "1.11.3"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.114"
+composeVersionCatalog = "2.0.115"
 composeRdsCrud = "2.0.50"
 composeRdsCore = "2.0.50"
 composeCore = "2.0.40"
@@ -258,6 +259,8 @@ cn-hutool-hutoolCore = { group = "cn.hutool", name = "hutool-core", version.ref 
 cn-hutool-hutoolCaptcha = { group = "cn.hutool", name = "hutool-captcha", version.ref = "hutool" }
 cn-hutool-hutoolCrypto = { group = "cn.hutool", name = "hutool-crypto", version.ref = "hutool" }
 cn-hutool-hutoolDb = { group = "cn.hutool", name = "hutool-db", version.ref = "hutool" }
+
+cn-dev33-saTokenSpringBootStarter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "saToken" }
 
 org-mapstruct-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
 org-mapstruct-mapstructProcessor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
