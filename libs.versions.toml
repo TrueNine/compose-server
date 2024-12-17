@@ -30,7 +30,7 @@ jackson = "2.18.2"
 hibernate = "6.6.3.Final"
 netty = "4.1.115.Final"
 querydsl = "5.1.0"
-jimmer = "0.9.32"
+jimmer = "0.9.34"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
 hutool = "5.8.34"
@@ -46,7 +46,7 @@ junitPlatform = "1.11.3"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.117"
+composeVersionCatalog = "2.0.119"
 composeRdsCrud = "2.0.50"
 composeRdsCore = "2.0.50"
 composeCore = "2.0.40"
@@ -261,7 +261,7 @@ cn-hutool-hutoolCrypto = { group = "cn.hutool", name = "hutool-crypto", version.
 cn-hutool-hutoolDb = { group = "cn.hutool", name = "hutool-db", version.ref = "hutool" }
 
 cn-dev33-saTokenSpringBootStarter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "saToken" }
-cn-dev33-saTokenSpring3BootStarter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "saToken" }
+cn-dev33-saTokenSpringBoot3Starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "saToken" }
 cn-dev33-saTokenRedisJackson = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "saToken" }
 cn-dev33-saTokenRedis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "saToken" }
 
