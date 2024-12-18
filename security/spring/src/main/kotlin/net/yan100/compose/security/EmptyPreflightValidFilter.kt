@@ -18,6 +18,7 @@ package net.yan100.compose.security
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import net.yan100.compose.core.domain.AuthRequestInfo
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.core.util.IEmptyDefault
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter

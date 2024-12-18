@@ -17,6 +17,7 @@
 package net.yan100.compose.security
 
 import net.yan100.compose.core.IString
+import net.yan100.compose.core.domain.AuthRequestInfo
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -45,11 +46,11 @@ data class UserDetailsWrapper(val authUserInfo: AuthRequestInfo?) : UserDetails 
 
   override fun getUsername(): String = authUserInfo?.account!!
 
-  override fun isAccountNonExpired(): Boolean = authUserInfo?.nonExpired ?: true
+  override fun isAccountNonExpired(): Boolean = authUserInfo?.nonExpired != false
 
-  override fun isAccountNonLocked(): Boolean = authUserInfo?.nonLocked ?: true
+  override fun isAccountNonLocked(): Boolean = authUserInfo?.nonLocked != false
 
-  override fun isCredentialsNonExpired(): Boolean = authUserInfo?.nonExpired ?: true
+  override fun isCredentialsNonExpired(): Boolean = authUserInfo?.nonExpired != false
 
-  override fun isEnabled(): Boolean = authUserInfo?.enabled ?: true
+  override fun isEnabled(): Boolean = authUserInfo?.enabled != false
 }

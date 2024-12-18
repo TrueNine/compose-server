@@ -1,6 +1,6 @@
-package net.yan100.compose.security
+package net.yan100.compose.core.domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import net.yan100.compose.core.RefId
 
 /**
  * 基础用户传递信息
@@ -9,16 +9,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
  * @since 2023-04-06
  */
 open class RequestInfo {
-  lateinit var userId: String
-
-  lateinit var account: String
-
-  @JsonIgnore
+  var userId: RefId? = null
+  var account: String? = null
   var deviceId: String? = null
-
-  @JsonIgnore
   var loginIpAddr: String? = null
-
-  @JsonIgnore
   var currentIpAddr: String? = null
 }

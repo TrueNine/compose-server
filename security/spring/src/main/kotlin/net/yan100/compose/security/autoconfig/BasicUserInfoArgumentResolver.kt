@@ -3,8 +3,8 @@ package net.yan100.compose.security.autoconfig
 import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.consts.IInterAddr
+import net.yan100.compose.core.domain.RequestInfo
 import net.yan100.compose.core.slf4j
-import net.yan100.compose.security.RequestInfo
 import net.yan100.compose.security.holders.UserInfoContextHolder
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
