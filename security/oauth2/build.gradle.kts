@@ -4,10 +4,7 @@ dependencies {
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
   kapt(libs.org.springframework.springBootConfigurationProcessor)
 
-  implementation(libs.org.jetbrains.kotlin.kotlinStdlib)
   implementation(libs.org.jetbrains.kotlinx.kotlinxCoroutinesCore)
-
-  runtimeOnly(libs.org.springframework.cloud.springCloudStarterBootstrap)
 
   implementation(project(":core"))
   implementation(project(":depend:depend-http-exchange"))

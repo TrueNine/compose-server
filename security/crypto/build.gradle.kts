@@ -2,6 +2,7 @@ version = libs.versions.composeSecurityCrypto.get()
 
 dependencies {
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  kapt(libs.org.springframework.springBootConfigurationProcessor)
 
   api(libs.org.springframework.security.springSecurityCrypto)
 
