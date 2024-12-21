@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 inline fun <reified A : Annotation> KSAnnotation.isAnnotationByKClass(): Boolean {
   val c = A::class
-  return shortName.getShortName() == c.simpleName && annotationType.resolve().declaration.qualifiedName?.asString() == c.qualifiedName
+  return shortName.getShortName() == c.simpleName && annotationType.fastResolve().declaration.qualifiedName?.asString() == c.qualifiedName
 }
 
 val KSAnnotation.simpleName get() = shortName.getShortName()
@@ -29,11 +29,11 @@ fun <A : Annotation> KSAnnotation.isAnnotationByKClass(annotationKClass: KClass<
 @OptIn(KspExperimental::class)
 fun Sequence<KSAnnotation>.matchAnnotationByTarget(vararg targets: AnnotationTarget) = filter { ksAnno ->
   val target = ksAnno.annotationType.getAnnotationsByType(Target::class).firstOrNull()
-  target?.allowedTargets?.any { it in targets } ?: false
+  target?.allowedTargets?.any { it in targets } == true
 }
 
 @OptIn(KspExperimental::class)
 fun KSAnnotation.matchAnnotationByTarget(vararg targets: AnnotationTarget): Boolean {
   val target = annotationType.getAnnotationsByType(Target::class).firstOrNull()
-  return target?.allowedTargets?.any { it in targets } ?: false
+  return target?.allowedTargets?.any { it in targets } == true
 }

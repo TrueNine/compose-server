@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 fun KSAnnotated.getKsAnnotationsByAnnotationClassQualifiedName(qualifiedName: String): Sequence<KSAnnotation> {
   return annotations.filter {
-    it.annotationType.resolve().declaration.qualifiedName?.asString() == qualifiedName
+    it.annotationType.fastResolve().declaration.qualifiedName?.asString() == qualifiedName
   }
 }
 
@@ -22,7 +22,7 @@ fun <A : Annotation> KSAnnotated.getKsAnnotationsByAnnotationClass(annotationKCl
  */
 val KSAnnotation.resolvedDeclaration: KSDeclaration
   get() {
-    return annotationType.resolve().declaration
+    return annotationType.fastResolve().declaration
   }
 
 inline fun <reified A : Annotation> KSAnnotated.getKsAnnotationsByAnnotationClass(): Sequence<KSAnnotation> {

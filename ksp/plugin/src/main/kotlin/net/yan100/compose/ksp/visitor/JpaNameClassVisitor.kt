@@ -211,9 +211,9 @@ class JpaNameClassVisitor(
         opened()
         if (listenerSpec != null) builder.addAnnotation(listenerSpec)
         else builder.addAnnotation(
-          AnnotationSpec.builder(Libs.Jakarta.Persistence.EntityListeners.toClassName())
-            .addMember("%T::class", Libs.Net.Yan100.Compose.Rds.Core.Listeners.SnowflakeIdInsertListener.toClassName())
-            .addMember("%T::class", Libs.Net.Yan100.Compose.Rds.Core.Listeners.BizCodeInsertListener.toClassName()).build()
+          AnnotationSpec.builder(Libs.jakarta.persistence.EntityListeners.toClassName())
+            .addMember("%T::class", Libs.net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener.toClassName())
+            .addMember("%T::class", Libs.net.yan100.compose.rds.core.listeners.BizCodeInsertListener.toClassName()).build()
         )
         annotateAllBy(generateClassAnnotations(destClassName))
         // 继承父类
@@ -249,10 +249,10 @@ class JpaNameClassVisitor(
           )
           // 添加 internal id
           val internalIdName = "____database_internal_${destSimpleName.toSnakeCase()}_field_primary_id"
-          val idColumnAnnotation = AnnotationSpec.builder(Libs.Jakarta.Persistence.Column.toClassName()).addMember("name = %T.ID", IDbNames::class)
+          val idColumnAnnotation = AnnotationSpec.builder(Libs.jakarta.persistence.Column.toClassName()).addMember("name = %T.ID", IDbNames::class)
           builder.addProperty(
             PropertySpec.builder(internalIdName, RefId::class.asTypeName().copy(nullable = true), KModifier.PRIVATE, KModifier.FINAL).initializer("%L", null)
-              .mutable(true).addAnnotation(Libs.Jakarta.Persistence.Transient.toClassName()).addAnnotation(Libs.Kotlin.Jvm.Transient.toClassName())
+              .mutable(true).addAnnotation(Libs.jakarta.persistence.Transient.toClassName()).addAnnotation(Libs.kotlin.jvm.Transient.toClassName())
               .addAnnotation(
                 AnnotationSpec.builder(Deprecated::class).addMember("%S", "not access internal field").addMember("level = %T.ERROR", DeprecationLevel::class)
                   .build()
@@ -261,14 +261,14 @@ class JpaNameClassVisitor(
           )
           builder.addProperty(
             PropertySpec.builder("id", RefId::class).mutable(true).addOverrideModifier().addFinalModifier().getter(
-              FunSpec.getterBuilder().addAnnotation(Libs.Jakarta.Persistence.Id.toAnnotationSpec())
+              FunSpec.getterBuilder().addAnnotation(Libs.jakarta.persistence.Id.toAnnotationSpec())
                 .addAnnotation(JvmSynthetic::class)
-                .addAnnotation(Libs.Jakarta.Persistence.Transient.toAnnotationSpec())
+                .addAnnotation(Libs.jakarta.persistence.Transient.toAnnotationSpec())
                 .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
                 .addStatement("return if (this.%L === null) error(%S) else this.%L!!", internalIdName, "提前获取 id", internalIdName).build()
 
             ).setter(
-              FunSpec.setterBuilder().addAnnotation(Libs.Jakarta.Persistence.Transient.toAnnotationSpec())
+              FunSpec.setterBuilder().addAnnotation(Libs.jakarta.persistence.Transient.toAnnotationSpec())
                 .addAnnotation(JvmSynthetic::class)
                 .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build()).addParameter("v", RefId::class)
                 .addStatement("this.%L = v", internalIdName).build()
@@ -286,7 +286,7 @@ class JpaNameClassVisitor(
             FunSpec.builder("getId").addAnnotation(
               AnnotationSpec.builder(Deprecated::class).addMember("%S", "").addMember("level = %T.ERROR", DeprecationLevel::class).build()
             ).addModifiers(KModifier.OVERRIDE)
-              .addAnnotation(Libs.Jakarta.Persistence.Id.toClassName())
+              .addAnnotation(Libs.jakarta.persistence.Id.toClassName())
               .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
               .addStatement("return if (%L == net.yan100.compose.core.getDefaultNullableId()) null else %L", internalIdName, internalIdName)
               .addAnnotation(idColumnAnnotation.build())
@@ -295,7 +295,7 @@ class JpaNameClassVisitor(
           )
           builder.addFunction(
             FunSpec.builder("isNew")
-              .addAnnotation(Libs.Jakarta.Persistence.Transient.toAnnotationSpec())
+              .addAnnotation(Libs.jakarta.persistence.Transient.toAnnotationSpec())
               .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
               .addStatement("return %L == null || %L == net.yan100.compose.core.getDefaultNullableId()", internalIdName, internalIdName)
               .returns(Boolean::class)
@@ -332,9 +332,9 @@ class JpaNameClassVisitor(
                 else if (%T.getClass(this) != %T.getClass(other)) false
                 else if (!isNew && id == (other as %T).id) true
                 else false""".trimIndent(),
-              Libs.Org.Hibernate.Hibernate.toClassName(),
-              Libs.Org.Hibernate.Hibernate.toClassName(),
-              Libs.Net.Yan100.Compose.Rds.Core.Entities.IJpaPersistentEntity.toClassName()
+              Libs.org.hibernate.Hibernate.toClassName(),
+              Libs.org.hibernate.Hibernate.toClassName(),
+              Libs.net.yan100.compose.rds.core.entities.IJpaPersistentEntity.toClassName()
             ).returns(Boolean::class).build()
           )
         }
@@ -376,20 +376,20 @@ class JpaNameClassVisitor(
 
     if (pp.requireDelegate) {
       otherAnnotations += jvmTransient.useDelegate().build()
-      otherAnnotations += Libs.Jakarta.Persistence.Transient.toAnnotationSpecBuilder().useDelegate().build()
+      otherAnnotations += Libs.jakarta.persistence.Transient.toAnnotationSpecBuilder().useDelegate().build()
     }
     return otherAnnotations.distinctBy { it.useSiteTarget to it.typeName }
   }
 
   private fun generateJpaColumnPropertyAnnotations(k: KSPropertyDeclaration, pp: JpaProperty): List<AnnotationSpec> {
     val notGenColumn = listOf(
-      Libs.Jakarta.Persistence.JoinColumn.qualifiedName,
-      Libs.Jakarta.Persistence.JoinTable.qualifiedName,
-      Libs.Jakarta.Persistence.ManyToOne.qualifiedName,
-      Libs.Jakarta.Persistence.OneToMany.qualifiedName,
-      Libs.Jakarta.Persistence.ManyToMany.qualifiedName,
-      Libs.Jakarta.Persistence.OneToOne.qualifiedName,
-      Libs.Jakarta.Persistence.ElementCollection.qualifiedName,
+      Libs.jakarta.persistence.JoinColumn.qualifiedName,
+      Libs.jakarta.persistence.JoinTable.qualifiedName,
+      Libs.jakarta.persistence.ManyToOne.qualifiedName,
+      Libs.jakarta.persistence.OneToMany.qualifiedName,
+      Libs.jakarta.persistence.ManyToMany.qualifiedName,
+      Libs.jakarta.persistence.OneToOne.qualifiedName,
+      Libs.jakarta.persistence.ElementCollection.qualifiedName,
     ).any {
       k.getKsAnnotationsByAnnotationClassQualifiedName(it).firstOrNull() != null || k.getter?.getKsAnnotationsByAnnotationClassQualifiedName(it)
         ?.firstOrNull() != null || k.setter?.getKsAnnotationsByAnnotationClassQualifiedName(it)?.firstOrNull() != null
@@ -397,7 +397,7 @@ class JpaNameClassVisitor(
     if (notGenColumn) return emptyList()
 
     val meta =
-      AnnotationSpec.builder(Libs.Jakarta.Persistence.Column.toClassName()).addMember("name = ${k.simpleNameGetShortNameStr.toSnakeCase().uppercase()}")
+      AnnotationSpec.builder(Libs.jakarta.persistence.Column.toClassName()).addMember("name = ${k.simpleNameGetShortNameStr.toSnakeCase().uppercase()}")
     return meta.run {
       buildList {
         if (!pp.nullable) addMember("nullable = false")
@@ -411,13 +411,13 @@ class JpaNameClassVisitor(
   }
 
   private fun generateClassAnnotations(destClassName: ClassName): List<AnnotationSpec> {
-    val tableAnnotation = AnnotationSpec.builder(Libs.Jakarta.Persistence.Table.toClassName()).addMember(
+    val tableAnnotation = AnnotationSpec.builder(Libs.jakarta.persistence.Table.toClassName()).addMember(
       CodeBlock.builder().add("name = %T.TABLE_NAME", destClassName).build()
     ).build()
     return listOf(
-      AnnotationSpec.builder(Libs.Jakarta.Persistence.Entity.toClassName()).build(),
-      AnnotationSpec.builder(Libs.Org.Hibernate.Annotations.DynamicInsert.toClassName()).build(),
-      AnnotationSpec.builder(Libs.Org.Hibernate.Annotations.DynamicUpdate.toClassName()).build(),
+      AnnotationSpec.builder(Libs.jakarta.persistence.Entity.toClassName()).build(),
+      AnnotationSpec.builder(Libs.org.hibernate.annotations.DynamicInsert.toClassName()).build(),
+      AnnotationSpec.builder(Libs.org.hibernate.annotations.DynamicUpdate.toClassName()).build(),
       tableAnnotation
     )
   }

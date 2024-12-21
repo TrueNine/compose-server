@@ -1,10 +1,10 @@
 version = libs.versions.composeKspToolkit.get()
 
 dependencies {
-  implementation(libs.com.google.devtools.ksp.symbolProcessingApi)
-  implementation(libs.com.squareup.kotlinpoetJvm)
-  implementation(libs.com.squareup.kotlinpoetKsp)
-  implementation(project(":meta"))
+  api(libs.com.google.devtools.ksp.symbolProcessingApi)
+  api(libs.com.squareup.kotlinpoetJvm)
+  api(libs.com.squareup.kotlinpoetKsp)
+  api(project(":meta"))
 }
 
 publishing {

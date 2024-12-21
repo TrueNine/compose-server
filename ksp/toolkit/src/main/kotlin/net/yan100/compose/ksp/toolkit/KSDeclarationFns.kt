@@ -17,7 +17,20 @@ val KSDeclaration.simpleNameAsString: String get() = simpleName.asString()
  * @see KSDeclaration.qualifiedName
  * @see KSName.asString
  */
-val KSDeclaration.qualifiedNameAsString: String? get() = qualifiedName?.asString()
+val KSDeclaration.qualifiedNameAsString: String?
+  get() {
+    if (this.parentDeclaration != null) {
+      val name = parentDeclaration?.qualifiedNameAsString!!
+      if (this is KSTypeParameter) {
+        this.bounds.map {
+          it
+        }
+        return "<${name}::[${this.variance.label}] ${simpleNameAsString}>"
+      }
+      return "${name}\$${simpleNameAsString}"
+    }
+    return qualifiedName?.asString()
+  }
 
 /**
  * `packageName.asString()`
@@ -40,7 +53,7 @@ val KSDeclaration.simpleNameGetShortNameStr: String get() = simpleName.getShortN
 val KSDeclaration.realDeclaration: KSDeclaration
   get() {
     val r = when (this) {
-      is KSPropertyDeclaration -> this.type.resolve().declaration
+      is KSPropertyDeclaration -> this.type.fastResolve().declaration
       else -> this
     }
     return when (r) {
@@ -94,7 +107,7 @@ fun KSDeclaration.isKClassQualifiedName(qualifiedName: String): Boolean {
 /** ## 获取真实类型的助注解 */
 val KSDeclaration.actualAnnotationClassDeclarations: Sequence<KSClassDeclaration>
   get() {
-    val ats = annotations.map { it.annotationType.resolve().declaration }
+    val ats = annotations.map { it.annotationType.fastResolve().declaration }
     return ats.map { d ->
       if (d is KSTypeAlias) {
         d.findActualType()

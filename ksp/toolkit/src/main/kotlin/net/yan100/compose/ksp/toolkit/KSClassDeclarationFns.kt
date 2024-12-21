@@ -23,7 +23,7 @@ private fun KSClassDeclaration.internalIsAssignableFromDeeply(other: KClass<*>, 
   if (!checkList.add(this)) return false
   if (asStarProjectedType().declaration.qualifiedName?.asString() == other.qualifiedName) return true
   for (superType in superTypes) {
-    val superTypeDeclaration = superType.resolve().declaration as? KSClassDeclaration ?: continue
+    val superTypeDeclaration = superType.fastResolve().declaration as? KSClassDeclaration ?: continue
     if (superTypeDeclaration.internalIsAssignableFromDeeply(other, checkList)) return true
   }
   return false
