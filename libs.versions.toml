@@ -74,8 +74,10 @@ composeRdsMigrationH2 = "0.0.11"
 composeRdsMigrationPostgres = "0.0.10"
 composeRdsMigrationMysql = "0.0.10"
 composeMeta = "0.0.5"
+composeKspClient = "0.0.1"
+composeClient = "0.0.1"
+composeKspTspoet = "0.0.1"
 composeGroup = "net.yan100.compose"
-
 
 [libraries]
 net-yan100-compose-oss = { group = "net.yan100.compose", name = "oss", version.ref = "composeOss" }
@@ -86,6 +88,9 @@ net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.r
 
 # ksp
 net-yan100-compose-meta = { group = "net.yan100.compose", name = "meta", version.ref = "composeMeta" }
+net-yan100-compose-client = { group = "net.yan100.compose", name = "client", version.ref = "composeClient" }
+net-yan100-compose-tspoet = { group = "net.yan100.compose", name = "ksp-tspoet", version.ref = "composeKspTspoet" }
+net-yan100-compose-kspClient = { group = "net.yan100.compose", name = "ksp-client", version.ref = "composeKspClient" }
 net-yan100-compose-kspPlugin = { group = "net.yan100.compose", name = "ksp-plugin", version.ref = "composeKspPlugin" }
 net-yan100-compose-kspToolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "composeKspToolkit" }
 
@@ -158,7 +163,7 @@ org-springframework-data-springDataJpa = { group = "org.springframework.data", n
 org-springframework-batch-springBatchTest = { group = "org.springframework.batch", name = "spring-batch-test", version.ref = "springBatch" }
 org-springframework-security-springSecurityCrypto = { group = "org.springframework.security", name = "spring-security-crypto", version.ref = "springSecurity" }
 org-springframework-security-springSecurityCore = { group = "org.springframework.security", name = "spring-security-core", version.ref = "springSecurity" }
-org-springframework-springWebMvc = { group = "org.springframework", name = "spring-webmvc" }
+org-springframework-springWebMvc = { group = "org.springframework", name = "spring-webmvc", version.ref = "springFramework" }
 org-springframework-springWeb = { group = "org.springframework", name = "spring-web", version.ref = "springFramework" }
 org-springframework-springWebflux = { group = "org.springframework", name = "spring-webflux", version.ref = "springFramework" }
 org-springframework-springContext = { group = "org.springframework", name = "spring-context", version.ref = "springFramework" }
