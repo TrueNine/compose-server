@@ -65,6 +65,8 @@ class StubVerifyTest {
     fun a(defs: List<ClientType>) {
       defs.map { it.superTypes }.flatten().forEach { d ->
         assertNull(d.typeKind)
+        assertNotEquals("kotlin.Any", d.typeName)
+        assertNotEquals("kotlin.io.Serializable", d.typeName)
         assertEquals(0, d.properties.size)
         a(d.superTypes)
       }
