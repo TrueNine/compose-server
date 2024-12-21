@@ -10,6 +10,7 @@ includeBuild("version-catalog")
 listOf(
   "test-toolkit",
   "core",
+  "client",
   "meta",
   "gradle-plugin",
   "oss",
@@ -62,7 +63,7 @@ listOf(
 
 // ksp
 ("ksp" to listOf(
-  "plugin", "toolkit"
+  "plugin", "toolkit", "client", "tspoet"
 )).apply {
   second.forEach { n ->
     include("$first:$n")
