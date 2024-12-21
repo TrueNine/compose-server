@@ -13,6 +13,8 @@ interface IPageLike<T : Any?> {
    */
   @Deprecated("无需此属性")
   var o: Long?
+    get() = null
+    set(_) {}
 
   /**
    * ## Total Page Size
