@@ -79,14 +79,15 @@ class PropertyHandler(
       }
     }
     return results.values
-      .map {
-        it.copy(
-          superTypes = it.superTypes.mapNotNull { r ->
-            results[typeNameInterceptor(r.typeName)]?.clipToSuperType()
-          }.filterNot { r -> superTypeIgnoreInterceptor(r.typeName) }
-        )
-      }
+      .map { it.copy(superTypes = cleanSuperTypes(it.superTypes)) }
       .filterNot { ignoreInterceptor(it.typeName) }
+  }
+
+  private fun cleanSuperTypes(superTypes: List<ClientType>): List<ClientType> {
+    return superTypes.mapNotNull { r ->
+      results[typeNameInterceptor(r.typeName)]?.clipToSuperType()
+    }.filterNot { r -> superTypeIgnoreInterceptor(r.typeName) }
+      .map { it.copy(superTypes = cleanSuperTypes(it.superTypes)) }
   }
 
   private fun handlePropertyDeclaration(propertyDeclaration: KSPropertyDeclaration): ClientProp {
