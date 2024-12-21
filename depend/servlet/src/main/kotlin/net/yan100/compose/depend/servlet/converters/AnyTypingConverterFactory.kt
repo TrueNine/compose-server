@@ -48,7 +48,7 @@ open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
     private val isString = StringTyping::class.java.isAssignableFrom(targetClass)
     private val isInt = IntTyping::class.java.isAssignableFrom(targetClass)
     private val valueMappingMap = targetClass.enumConstants.associateBy {
-      it.value
+      it?.value
     }
     private val nameMappingMap = targetClass.enumConstants.associateBy {
       (it as Enum<*>).name
