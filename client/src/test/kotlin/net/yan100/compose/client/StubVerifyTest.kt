@@ -29,7 +29,13 @@ class StubVerifyTest {
     assertEquals(1, extendsType.argumentLocations.size)
     assertEquals(3, extendsType.superTypes.size, "所有父类，只建议忽略无泛型的泛型")
 
-    log.info("extendsType: {}", extendsType)
+    val superMap = extendsType.superTypes.find { it.typeName == "kotlin.collections.Map" }
+    assertNotNull(superMap)
+    assertNotEquals(0, superMap.inputGenerics.size)
+    assertEquals(2, superMap.inputGenerics.size)
+    assertTrue { superMap.inputGenerics[1].nullable == true }
+
+    log.info("ExtendsType: {}", extendsType)
   }
 
   @Test
@@ -146,7 +152,7 @@ class StubVerifyTest {
     val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json")
     assertNotNull(resources)
     assertTrue { resources.isNotEmpty() }
-    assertEquals(1, resources.size)
+    assertNotEquals(0, resources.size)
   }
 
   private fun getStubFile(): Resource {

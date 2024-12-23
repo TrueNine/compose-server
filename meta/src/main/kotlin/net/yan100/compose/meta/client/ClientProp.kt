@@ -40,4 +40,10 @@ data class ClientProp(
    * 是否定义了默认值
    */
   val definedDefaultValue: Boolean? = null
-)
+) {
+  fun resolveAll(
+
+  ) {
+
+  }
+}

@@ -9,6 +9,11 @@ enum class TypeKind {
   TYPEALIAS,
 
   /**
+   * 瞬态类型，这表示该类型正在被处理，非稳定可存储类型
+   */
+  TRANSIENT,
+
+  /**
    * jimmer 的 entity
    */
   IMMUTABLE,

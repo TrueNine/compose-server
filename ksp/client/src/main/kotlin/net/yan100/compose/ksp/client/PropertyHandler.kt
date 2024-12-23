@@ -6,6 +6,7 @@ import com.google.devtools.ksp.symbol.*
 import net.yan100.compose.ksp.toolkit.*
 import net.yan100.compose.meta.client.ClientProp
 import net.yan100.compose.meta.client.ClientType
+import net.yan100.compose.meta.types.TypeName
 
 class PropertyHandler(
   private val resolver: Resolver,
@@ -17,7 +18,8 @@ class PropertyHandler(
     when (it) {
       "kotlin.Any", "kotlin.io.Serializable", // 1
       "kotlin.Number",// 1
-      "kotlin.Enum", // 其枚举类型必然是本身
+      "kotlin.Enum",
+      "kotlin.Comparable"// 其枚举类型必然是本身
         -> true
 
       else -> false
@@ -46,6 +48,19 @@ class PropertyHandler(
       "java.lang.Object" -> "kotlin.Any"
       "java.lang.String" -> "kotlin.String"
       else -> it
+    }
+  }
+  private var builtinsInterceptor = { it: TypeName ->
+    when (it.typeName) {
+      "kotlin.Any",
+      "kotlin.Int",
+      "kotlin.Long",
+      "kotlin.Boolean",
+      "kotlin.Unit",
+      "kotlin.CharSequence",
+      "kotlin.String" -> true
+
+      else -> false
     }
   }
 
@@ -85,9 +100,16 @@ class PropertyHandler(
 
   private fun cleanSuperTypes(superTypes: List<ClientType>): List<ClientType> {
     return superTypes.mapNotNull { r ->
-      results[typeNameInterceptor(r.typeName)]?.clipToSuperType()
-    }.filterNot { r -> superTypeIgnoreInterceptor(r.typeName) }
-      .map { it.copy(superTypes = cleanSuperTypes(it.superTypes)) }
+      val handle = results[typeNameInterceptor(r.typeName)]?.clipToSuperType()
+      if (handle == null) null
+      else r to handle
+    }.filterNot { (i, r) -> superTypeIgnoreInterceptor(r.typeName) }
+      .map { (i, r) ->
+        r.copy(
+          superTypes = cleanSuperTypes(r.superTypes),
+          inputGenerics = i.inputGenerics
+        )
+      }
   }
 
   private fun handlePropertyDeclaration(propertyDeclaration: KSPropertyDeclaration): ClientProp {
@@ -110,7 +132,8 @@ class PropertyHandler(
         handleClassDeclaration(declaration.realDeclaration)
         results += typeName to type.copy(
           aliasForTypeName = typeNameInterceptor(type.aliasForTypeName!!),
-          inputGenerics = declaration.type.fastResolve().arguments.toInputGenericTypeList()
+          inputGenerics = declaration.type.fastResolve().arguments.toInputGenericTypeList(),
+          builtin = if (builtinsInterceptor(type)) true else null
         )
         return
       }

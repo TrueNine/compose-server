@@ -1,7 +1,7 @@
 package net.yan100.compose.client.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.client.generator.LazyGenerator
+import net.yan100.compose.client.generator.TypescriptFileGenerator
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.meta.client.ClientApi
 import org.springframework.boot.ApplicationArguments
@@ -41,8 +41,8 @@ class ClientApiAutoConfiguration : ApplicationRunner {
   fun tsApiLazyGenerator(
     ctx: ApplicationContext,
     api: ClientApi
-  ): LazyGenerator {
-    return LazyGenerator(ctx, api)
+  ): TypescriptFileGenerator {
+    return TypescriptFileGenerator(ctx, api)
   }
 
   override fun run(args: ApplicationArguments?) {

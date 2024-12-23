@@ -28,7 +28,7 @@ class TsReturnTypeController {
     val generic: List<T>,
     override val value: String,
     private val thisMap: Map<String, Boolean>
-  ) : StringTyping, Map<String, Boolean> by thisMap, IPage<String> {
+  ) : StringTyping, Map<String, Boolean?> by thisMap, IPage<String> {
     override var pageParam: IPageParam?
       get() = null
       set(value) {}

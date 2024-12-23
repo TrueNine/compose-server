@@ -2,6 +2,9 @@ version = libs.versions.composeMeta.get()
 
 dependencies {
   implementation(libs.com.fasterxml.jackson.core.jacksonAnnotations)
+
+  testImplementation(project(":core"))
+  testImplementation(project(":test-toolkit"))
 }
 
 publishing {

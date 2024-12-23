@@ -29,10 +29,16 @@ fun KSDeclaration.toClientType(log: KSPLogger? = null): ClientType {
     is KSTypeAlias -> realDeclaration as KSClassDeclaration
     else -> error("$this is not a KSClassDeclaration")
   }
-  val superTypes = dec.superTypes.map { e -> e.fastResolve().declaration }.map { it.toClientType(log).clipToSuperType() }
+  val superTypes = dec.superTypes.map { e -> e.fastResolve() }.map {
+    val superParameter = it.arguments.toInputGenericTypeList()
+    it.declaration.toClientType(log)
+      .copy(inputGenerics = superParameter)
+      .clipToSuperType()
+  }
+
   val isAlias = this is KSTypeAlias
   val aliasForTypeName = if (isAlias) realDeclaration.qualifiedNameAsString else null
-  val typeParameters = this@toClientType.typeParameters.map { it.qualifiedNameAsString!! }.toMutableList()
+  val typeParameters = this@toClientType.typeParameters.map { it.qualifiedNameAsString!! }
   return ClientType(
     typeName = qualifiedNameAsString!!,
     typeKind = kind,
@@ -130,8 +136,8 @@ fun List<KSTypeArgument>.toInputGenericTypeList(): List<ClientInputGenericType> 
 fun ClientType.clipToSuperType(): ClientType {
   return copy(
     superTypes = superTypes.map { it.clipToSuperType() },
-    argumentLocations = emptyList(),
     properties = emptyList(),
+    argumentLocations = emptyList(),
     typeKind = null
   )
 }

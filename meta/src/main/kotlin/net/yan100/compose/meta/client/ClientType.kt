@@ -1,8 +1,14 @@
 package net.yan100.compose.meta.client
 
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import net.yan100.compose.meta.types.Doc
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.meta.types.TypeName
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KClass
+
+private val classResolveCache = ConcurrentHashMap<String, Class<*>?>()
 
 /**
  * 类型定义
@@ -12,6 +18,7 @@ data class ClientType(
   override val doc: Doc? = null,
   override val typeKind: TypeKind? = null,
   override val superTypes: List<ClientType> = emptyList(),
+  override val builtin: Boolean? = null,
 
   /**
    * 是否为别名
@@ -38,7 +45,6 @@ data class ClientType(
    */
   val properties: List<ClientProp> = emptyList(),
 
-
   /**
    * 枚举常量值列表
    *
@@ -47,7 +53,121 @@ data class ClientType(
   val enumConstants: Map<String, Int> = emptyMap(),
 
   /**
-   * 是否建议为 null
+   * 是否建议为 null，一般表现在 ReturnType
    */
   val nullable: Boolean? = null,
-) : TypeName
+) : TypeName {
+  private fun String.toTransientType(): ClientType {
+    return ClientType(this, typeKind = TypeKind.TRANSIENT)
+  }
+
+  fun resolveEnumConstants(): Map<String, Comparable<Nothing>> {
+    val java = resolveJava() ?: return emptyMap()
+    if (!java.isEnum) return emptyMap()
+    val superEnum = resolveJava("net.yan100.compose.core.typing.AnyTyping")
+    val isTyping = superEnum?.isAssignableFrom(java) ?: false
+    return java.enumConstants.filterIsInstance<Enum<*>>().map {
+      if (isTyping) {
+        it.name to java.getMethod("getValue").invoke(it) as Comparable<*>
+      } else {
+        it.name to it.ordinal
+      }
+    }.toMap()
+  }
+
+  private fun resolveJava(typeName: String): Class<*>? {
+    return try {
+      if (classResolveCache.containsKey(typeName)) return classResolveCache[typeName]
+      classResolveCache[typeName] = try {
+        Class.forName(typeName)
+      } catch (_: ClassNotFoundException) {
+        null
+      }
+      classResolveCache[typeName]
+    } catch (_: ClassNotFoundException) {
+      null
+    }
+  }
+
+  private fun resolveJava(): Class<*>? {
+    return resolveJava(typeName)
+  }
+
+  fun resolveKotlin(): KClass<*>? {
+    return resolveJava()?.kotlin
+  }
+
+  fun changeAllTypeToCopy(
+    resolver: (ClientType) -> ClientType?
+  ): ClientType? {
+    val r = resolver(this) ?: return null
+    val properties = r.properties.mapNotNull {
+      val eee = resolver(it.typeName.toTransientType())
+      eee?.typeName?.let { n -> it.copy(typeName = n) }
+    }
+    return r.copy(
+      properties = properties,
+      superTypes = resolveAllSuperTypes(r.superTypes, resolver)
+    )
+  }
+
+  private fun resolveAllSuperTypes(superTypes: List<ClientType>, newSuperTypeResolver: (ClientType) -> ClientType?): List<ClientType> {
+    return superTypes.mapNotNull {
+      val r = newSuperTypeResolver(it)
+      r?.copy(superTypes = resolveAllSuperTypes(it.superTypes, newSuperTypeResolver))
+    }
+  }
+}
+
+
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typeKind"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = ClientDefinition.Enum::class, name = "ENUM_CLASS"),
+  JsonSubTypes.Type(value = ClientDefinition.TypeAlias::class, name = "TYPEALIAS"),
+  JsonSubTypes.Type(value = ClientDefinition.SuperType::class, name = "SUPER_TYPE"),
+  JsonSubTypes.Type(value = ClientDefinition.ReturnType::class, name = "RETURN_TYPE")
+)
+sealed class ClientDefinition(
+  open val typeName: ClientTypeName,
+) {
+  /**
+   * 枚举类型
+   */
+  data class Enum(
+    override val typeName: ClientTypeName,
+    val superTypes: List<SuperType>,
+    val values: Map<String, Int>
+  ) : ClientDefinition(typeName = typeName)
+
+  /**
+   * 父类
+   */
+  data class SuperType(
+    override val typeName: ClientTypeName,
+    val superTypes: List<SuperType>,
+    val usedGenerics: List<ClientInputGenericType> = emptyList()
+  ) : ClientDefinition(typeName)
+
+  /**
+   * 类型别名
+   */
+  data class TypeAlias(
+    override val typeName: ClientTypeName,
+    val aliasForTypeName: String,
+    val doc: Doc? = null,
+    val generics: List<String> = emptyList()
+  ) : ClientDefinition(typeName = typeName)
+
+  /**
+   * 返回值
+   */
+  data class ReturnType(
+    override val typeName: ClientTypeName,
+    val nullable: Boolean? = null,
+    val usedGenericTypes: List<ClientInputGenericType> = emptyList(),
+  ) : ClientDefinition(typeName = typeName)
+}

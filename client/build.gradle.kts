@@ -10,7 +10,6 @@ dependencies {
 
   implementation(project(":meta"))
   implementation(project(":core"))
-  implementation(project(":ksp:ksp-tspoet"))
 
   implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
   implementation(libs.org.springframework.springWebMvc)

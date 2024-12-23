@@ -20,4 +20,21 @@ data class ClientInputGenericType(
    * 套娃泛型参数
    */
   val inputGenerics: List<ClientInputGenericType> = emptyList()
-)
+) {
+  fun changeAllToCopy(
+    newInputGenericResolver: (ClientInputGenericType) -> ClientInputGenericType?
+  ): ClientInputGenericType? {
+    val r = newInputGenericResolver(this) ?: return null
+    return r.copy(inputGenerics = resolveAllSuperTypes(r.inputGenerics, newInputGenericResolver))
+  }
+
+  private fun resolveAllSuperTypes(
+    inputGenerics: List<ClientInputGenericType>,
+    newInputGenericResolver: (ClientInputGenericType) -> ClientInputGenericType?
+  ): List<ClientInputGenericType> {
+    return inputGenerics.mapNotNull {
+      val r = newInputGenericResolver(it)
+      r?.copy(inputGenerics = resolveAllSuperTypes(it.inputGenerics, newInputGenericResolver))
+    }
+  }
+}

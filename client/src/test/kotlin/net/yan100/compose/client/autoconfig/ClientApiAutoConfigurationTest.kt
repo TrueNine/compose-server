@@ -1,7 +1,7 @@
 package net.yan100.compose.client.autoconfig
 
 import jakarta.annotation.Resource
-import net.yan100.compose.client.generator.LazyGenerator
+import net.yan100.compose.client.generator.TypescriptFileGenerator
 import net.yan100.compose.meta.annotations.client.Api
 import net.yan100.compose.meta.client.ClientApi
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -18,7 +18,7 @@ class ClientApiAutoConfigurationTest {
   lateinit var apis: List<ClientApi> @Resource set
   lateinit var primaryClientApi: ClientApi @Resource set
   lateinit var handles: List<RequestMappingHandlerMapping> @Resource set
-  lateinit var generator: LazyGenerator @Resource set
+  lateinit var generator: TypescriptFileGenerator @Resource set
 
   @Test
   fun `ensure register lazy generator`() {
