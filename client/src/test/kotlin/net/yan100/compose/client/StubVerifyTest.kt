@@ -2,7 +2,7 @@ package net.yan100.compose.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.client.ts.TsReturnTypeController
-import net.yan100.compose.meta.client.ClientApi
+import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.testtookit.assertNotEmpty
@@ -139,9 +139,9 @@ class StubVerifyTest {
   }
 
   @Test
-  fun `test parse to client api`() {
-    val file = getStubFile()
-    val api = mapper.readValue(file.inputStream, ClientApi::class.java)
+  fun `能使用序列化手段成功读取到至少一个存根文件 `() {
+    val file = getStubFiles()[0]
+    val api = mapper.readValue(file.inputStream, ClientApiStubs::class.java)
     assertNotNull(api)
   }
 
@@ -155,18 +155,22 @@ class StubVerifyTest {
     assertNotEquals(0, resources.size)
   }
 
-  private fun getStubFile(): Resource {
+  private fun getStubFiles(): Array<out Resource> {
     val resolver = PathMatchingResourcePatternResolver()
     val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json")
     assertNotNull(resources)
     assertNotNull(resources[0])
-    return resources[0]
+    return resources
   }
 
-  private fun getClientApi(): ClientApi {
-    val file = getStubFile()
-    val api = mapper.readValue(file.inputStream, ClientApi::class.java)
-    assertNotNull(api)
-    return api
+  private fun getClientApi(): ClientApiStubs {
+    return getStubFiles().map {
+      mapper.readValue(it.inputStream, ClientApiStubs::class.java)
+    }.reduce { acc, cur ->
+      acc.copy(
+        services = (acc.services + cur.services).distinct(),
+        definitions = (acc.definitions + cur.definitions).distinct()
+      )
+    }
   }
 }

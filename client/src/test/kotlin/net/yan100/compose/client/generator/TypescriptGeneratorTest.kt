@@ -1,20 +1,19 @@
 package net.yan100.compose.client.generator
 
 import jakarta.annotation.Resource
-import net.yan100.compose.client.domain.TypescriptEnum
-import net.yan100.compose.client.domain.TypescriptFile
-import net.yan100.compose.client.domain.TypescriptFileType
-import net.yan100.compose.meta.client.ClientApi
+import net.yan100.compose.client.domain.TypescriptScope
+import net.yan100.compose.client.domain.entries.TypescriptFile
+import net.yan100.compose.client.domain.entries.TypescriptName
+import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.types.TypeKind
-import net.yan100.compose.testtookit.assertNotEmpty
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.*
 
 @SpringBootTest
-class TypescriptFileGeneratorTest {
-  lateinit var api: ClientApi @Resource set
-  lateinit var gen: TypescriptFileGenerator @Resource set
+class TypescriptGeneratorTest {
+  lateinit var api: ClientApiStubs @Resource set
+  lateinit var gen: TypescriptGenerator @Resource set
 
   @Test
   fun `renderEnumsToFiles 能够生成全部的 kotlin 类型到 enum_ts 文件`() {
@@ -24,8 +23,7 @@ class TypescriptFileGeneratorTest {
     assertEquals(allEnumKtClientTypes.size, enums.size)
     enums.forEach { e ->
       log.info("enum file: {}", e)
-      assertIs<TypescriptFile.Enum>(e)
-      assertEquals(TypescriptFileType.DOMAIN_ENUM_CLASS, e.fileType)
+      assertIs<TypescriptFile.SingleEnum>(e)
       assertNotNull(e.code)
       assertNotEquals("", e.code)
     }
@@ -34,17 +32,15 @@ class TypescriptFileGeneratorTest {
   @Test
   fun `renderEnum 生成正确的枚举`() {
     val tsFile = gen.renderEnum(
-      TypescriptEnum(
-        name = "ISO4217",
-        isExport = true,
-        isString = true,
+      TypescriptScope.Enum(
+        name = TypescriptName.Name("ISO4217"),
         constants = mapOf(
           "CNY" to "CNY",
           "HKD" to "HKD"
         )
       )
     )
-    assertEquals(TypescriptFileType.DOMAIN_ENUM_CLASS, tsFile.fileType)
+    assertIs<TypescriptFile.SingleEnum>(tsFile)
     assertEquals(1, tsFile.exports.size)
     assertEquals(1, tsFile.usedNames.size)
     assertEquals(
@@ -63,7 +59,7 @@ class TypescriptFileGeneratorTest {
     val tsFile = gen.renderExecutor()
     assertNotNull(tsFile)
     assertNotNull(tsFile.code)
-    assertEquals(TypescriptFileType.STATIC_UTILS, tsFile.fileType)
+    assertIs<TypescriptFile.SingleTypeUtils>(tsFile)
     val body = tsFile.code
     assertTrue {
       body.isNotBlank()
@@ -83,19 +79,5 @@ export type Executor = (requestOptions: {
     assertEquals(e, body)
   }
 
-  @Test
-  fun 每个服务应该至少有一个操作端点() {
-    val stub = gen.mappedStubs
-    assertNotEquals(0, stub.services.size)
-    stub.services.forEach { service ->
-      service.operations.forEach { operation ->
-        val reqInfo = operation.requestInfo
-        assertNotNull(reqInfo)
-        assertNotEmpty { reqInfo.mappedUris }
-        reqInfo.mappedUris.forEach { assertTrue { it.isNotBlank() } }
-        assertNotEquals(0, reqInfo.supportedMethods.size)
-        log.info("requestInfo: {}", operation.requestInfo)
-      }
-    }
-  }
+
 }

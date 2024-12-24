@@ -1,8 +1,8 @@
 package net.yan100.compose.client.contexts
 
 import jakarta.annotation.Resource
-import net.yan100.compose.client.interceptors.TypeInterceptor
-import net.yan100.compose.meta.client.ClientApi
+import net.yan100.compose.client.interceptors.TypeToTypeInterceptor
+import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.testtookit.log
@@ -14,16 +14,18 @@ import kotlin.test.assertNotEquals
 
 @SpringBootTest
 class KotlinGeneratorLauncherTest {
-  lateinit var api: ClientApi @Resource set
-  
+  lateinit var api: ClientApiStubs @Resource set
+
 
   @Test
   fun 客户端拦截器拦截并转换为了目标类型() {
     val ctx = KotlinGeneratorLauncher(api)
     val typealiasSize = ctx.definitions.filter { it.typeKind == TypeKind.TYPEALIAS }.size
     var processCount = 0
-    val interceptor = object : TypeInterceptor() {
+    var supportedCount = 0
+    val interceptor = object : TypeToTypeInterceptor() {
       override fun supported(source: ClientType): Boolean {
+        supportedCount += 1
         return source.typeKind == TypeKind.TYPEALIAS
       }
 
@@ -35,6 +37,7 @@ class KotlinGeneratorLauncherTest {
     }
     val result = ctx.handleClientTypeInterceptors(api.definitions, listOf(interceptor))
     assertEquals(typealiasSize, processCount)
+
 
     result.filter { it.typeKind == TypeKind.TYPEALIAS }
       .forEach {
