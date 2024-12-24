@@ -1,12 +1,10 @@
-package net.yan100.compose.client.generator
+package net.yan100.compose.client.autoconfig
 
-import net.yan100.compose.client.domain.TypescriptEnum
-import net.yan100.compose.client.domain.TypescriptFile
-import net.yan100.compose.client.templates.UtilsTemplate
-import net.yan100.compose.client.toTypescriptEnum
 import net.yan100.compose.meta.annotations.client.Api
-import net.yan100.compose.meta.client.*
-import net.yan100.compose.meta.types.TypeKind
+import net.yan100.compose.meta.client.ClientApiStubs
+import net.yan100.compose.meta.client.ClientOperation
+import net.yan100.compose.meta.client.ClientPostProcessApiOperationInfo
+import net.yan100.compose.meta.client.ClientService
 import org.springframework.context.ApplicationContext
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
@@ -14,49 +12,22 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 private val pathVariableRegex = "\\{([^}]+)}".toRegex()
 
-class TypescriptFileGenerator(
-  private val ctx: ApplicationContext, private val api: ClientApi
+class SpringClientApiStubInfoProvider(
+  private val ctxProvider: () -> ApplicationContext,
 ) {
-
-  internal fun renderEnum(tsEnum: TypescriptEnum): TypescriptFile {
-    return TypescriptFile.Enum(tsEnum)
-  }
-
-  internal fun renderEnumsToFiles(enumDefinitions: List<ClientType> = emptyList()): List<TypescriptFile> {
-    return enumDefinitions.filter { it.typeKind == TypeKind.ENUM_CLASS }.map { enumClientType ->
-      val constants = enumClientType.resolveEnumConstants()
-      renderEnum(
-        enumClientType.toTypescriptEnum().copy(
-          constants = constants
-        )
-      )
-    }
-  }
-
-  fun renderExecutor(): TypescriptFile {
-    return TypescriptFile.SingleUtils(
-      name = "Executor",
-      code = UtilsTemplate.renderExecutor(),
-      usedNames = listOf("HTTPMethod", "BodyType")
-    )
-  }
+  private val ctx get() = ctxProvider()
+  private val api get() = ctx.getBean(ClientApiStubs::class.java)
 
   private val mergedMappingMap
     get() = ctx.getBeansOfType(RequestMappingHandlerMapping::class.java).values.map { mapping ->
       mapping.handlerMethods
     }.reduce { acc, cur -> acc + cur }
-
-  /**
-   * 所有被标记的 HTTP Mapping
-   */
-  val markedApiMappingMap
+  private val markedApiMappingMap
     get() = mergedMappingMap.filter { (_, m) ->
       m.method.isAnnotationPresent(Api::class.java)
     }
 
-
   init {
-    // validate all method
     markedApiMappingMap.keys.forEach {
       if (it.methodsCondition.methods.size == 0) error("@Api marker HTTP PATH: ${it.pathPatternsCondition?.patterns} has no HTTP METHOD")
     }
@@ -74,10 +45,6 @@ class TypescriptFileGenerator(
     return infos
   }
 
-
-  /**
-   * 已经映射完毕的 ClientType
-   */
   val mappedStubs
     get() = run {
       val ser = api.services.map { service ->
