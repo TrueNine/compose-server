@@ -1,10 +1,10 @@
 [versions]
 java = "23"
-gradle = "8.12-rc-1"
-kotlin = "2.1.0"
+gradle = "8.12"
+kotlin = "2.1.20-Beta1"
 
 # kotlin language toolchain versions
-ksp = "2.1.0-1.0.29"
+ksp = "2.1.20-Beta1-1.0.29"
 kotlinpoet = "2.0.0"
 kotlinxIo = "0.6.0"
 kotlinxDatetime = "0.6.1"
@@ -30,7 +30,7 @@ jackson = "2.18.2"
 hibernate = "6.6.3.Final"
 netty = "4.1.115.Final"
 querydsl = "5.1.0"
-jimmer = "0.9.34"
+jimmer = "0.9.36"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
 hutool = "5.8.34"
