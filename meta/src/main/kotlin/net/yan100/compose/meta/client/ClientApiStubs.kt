@@ -3,7 +3,7 @@ package net.yan100.compose.meta.client
 /**
  * 根 root 解析API对象
  */
-data class ClientApi(
+data class ClientApiStubs(
   /**
    * 服务端点列表
    */

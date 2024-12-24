@@ -13,7 +13,7 @@ import com.google.devtools.ksp.validate
 import net.yan100.compose.ksp.toolkit.*
 import net.yan100.compose.ksp.toolkit.kotlinpoet.Libs
 import net.yan100.compose.meta.annotations.client.Api
-import net.yan100.compose.meta.client.ClientApi
+import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientOperation
 import net.yan100.compose.meta.client.ClientProp
 import net.yan100.compose.meta.client.ClientService
@@ -104,7 +104,7 @@ class KspClientProcessor(
     }.toMutableList()
 
     // 组装模型
-    val def = ClientApi(
+    val def = ClientApiStubs(
       services = services, definitions = allTypes.toMutableList()
     )
 
