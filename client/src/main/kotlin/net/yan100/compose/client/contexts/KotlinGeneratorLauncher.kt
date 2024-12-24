@@ -1,18 +1,18 @@
 package net.yan100.compose.client.contexts
 
 import net.yan100.compose.client.interceptors.Interceptor
-import net.yan100.compose.client.interceptors.PropertyInterceptor
-import net.yan100.compose.client.interceptors.TypeInterceptor
-import net.yan100.compose.meta.client.ClientApi
+import net.yan100.compose.client.interceptors.PropertyToPropertyInterceptor
+import net.yan100.compose.client.interceptors.TypeToTypeInterceptor
+import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 
 
 class KotlinGeneratorLauncher(
-  api: ClientApi,
-  private val interceptors: List<Interceptor<*>> = emptyList(),
+  api: ClientApiStubs,
+  private val interceptors: List<Interceptor<*, *>> = emptyList(),
 ) {
-  internal val api: ClientApi = api.copy()
+  internal val api: ClientApiStubs = api.copy()
   internal var definitions = api.definitions.toMutableList()
   internal var services = api.services.toMutableList()
 
@@ -35,7 +35,7 @@ class KotlinGeneratorLauncher(
   }
 
 
-  internal fun handleClientTypeInterceptors(definitions: List<ClientType>, interceptors: List<Interceptor<*>>): List<ClientType> {
+  internal fun handleClientTypeInterceptors(definitions: List<ClientType>, interceptors: List<Interceptor<*, *>>): List<ClientType> {
     if (definitions.isEmpty() || interceptors.isEmpty()) return definitions
     var all = definitions
     var modified: Boolean
@@ -47,8 +47,8 @@ class KotlinGeneratorLauncher(
       val newAll = mutableListOf<ClientType>()
       for (inter in interceptors) {
         when (inter) {
-          is TypeInterceptor -> newAll.addAll(processInterceptor(inter, all))
-          is PropertyInterceptor -> {
+          is TypeToTypeInterceptor -> newAll.addAll(processInterceptor(inter, all))
+          is PropertyToPropertyInterceptor -> {
             newAll.addAll(all.map { typ ->
               if (typ.properties.isNotEmpty()) {
                 val props = processInterceptor(inter, typ.properties)
@@ -68,9 +68,8 @@ class KotlinGeneratorLauncher(
     return all
   }
 
-
-  private fun <T : Any> processInterceptor(interceptor: Interceptor<T>, all: List<T>): List<T> {
-    val processed = all.filter(interceptor::supported).map(interceptor::process)
-    return all.filterNot(interceptor::supported) + processed
+  private fun <T : Any, S : Any> processInterceptor(interceptor: Interceptor<S, T>, all: List<S>): List<T> {
+    val (supported, unsupported) = all.partition { interceptor.supported(it) }
+    return unsupported.map { interceptor.defaultProcess(it) } + supported.map { interceptor.process(it) }
   }
 }
