@@ -1,6 +1,7 @@
 package net.yan100.compose.client.interceptors
 
-interface Interceptor<T : Any> {
-  fun supported(source: T): Boolean
-  fun process(source: T): T
+interface Interceptor<S : Any, T : Any> {
+  fun supported(source: S): Boolean
+  fun process(source: S): T
+  fun defaultProcess(source: S): T
 }
