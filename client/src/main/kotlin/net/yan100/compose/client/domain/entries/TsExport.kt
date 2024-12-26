@@ -1,24 +1,24 @@
 package net.yan100.compose.client.domain.entries
 
-sealed class TypescriptExport {
+sealed class TsExport {
   /**
    * 该文件已具有一些导出，只做声明
    */
-  data class ExportedDefine(val name: TypescriptName) : TypescriptExport()
+  data class ExportedDefined(val name: TsName) : TsExport()
 
   /**
    * `export {name,name as newName ...}`
    */
   data class Export(
-    val names: List<TypescriptName>
-  ) : TypescriptExport()
+    val names: List<TsName>
+  ) : TsExport()
 
   /**
    * `export * as asName from 'fromPath'`
    */
   data class ExternalImportAllNamingAsExport(
     val fromPath: String,
-    val asName: TypescriptName.As
+    val asName: TsName.As
   )
 
   /**
@@ -32,6 +32,6 @@ sealed class TypescriptExport {
    */
   data class ExternalImportUsingExport(
     val fromPath: String,
-    val usingNames: List<TypescriptName>
+    val usingNames: List<TsName>
   )
 }

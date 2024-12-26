@@ -1,7 +1,7 @@
 package net.yan100.compose.client.domain.entries
 
-data class TypescriptImport(
+data class TsImport(
   val fromPath: String,
   val useType: Boolean,
-  val usingNames: List<TypescriptName>
+  val usingNames: List<TsName>
 )
