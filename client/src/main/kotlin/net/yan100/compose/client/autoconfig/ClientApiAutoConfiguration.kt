@@ -20,7 +20,7 @@ class ClientApiAutoConfiguration : ApplicationRunner {
   lateinit var api: ClientApiStubs
 
   @Bean
-  fun listsClientApis(mapper: ObjectMapper): ClientApiStubs {
+  fun listsClientApiStubs(mapper: ObjectMapper): ClientApiStubs {
     val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json").filter { it.exists() }
     val apis = resources.map {
       mapper.readValue(it.inputStream, ClientApiStubs::class.java)
