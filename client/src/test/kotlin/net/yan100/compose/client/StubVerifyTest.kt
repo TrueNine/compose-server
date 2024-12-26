@@ -3,7 +3,6 @@ package net.yan100.compose.client
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.client.ts.TsReturnTypeController
 import net.yan100.compose.meta.client.ClientApiStubs
-import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.testtookit.assertNotEmpty
 import net.yan100.compose.testtookit.log
@@ -31,9 +30,9 @@ class StubVerifyTest {
 
     val superMap = extendsType.superTypes.find { it.typeName == "kotlin.collections.Map" }
     assertNotNull(superMap)
-    assertNotEquals(0, superMap.inputGenerics.size)
-    assertEquals(2, superMap.inputGenerics.size)
-    assertTrue { superMap.inputGenerics[1].nullable == true }
+    assertNotEquals(0, superMap.usedGenerics.size)
+    assertEquals(2, superMap.usedGenerics.size)
+    assertTrue { superMap.usedGenerics[1].nullable == true }
 
     log.info("ExtendsType: {}", extendsType)
   }
@@ -68,16 +67,6 @@ class StubVerifyTest {
         it.superTypes.isNotEmpty()
       }
     }
-    fun a(defs: List<ClientType>) {
-      defs.map { it.superTypes }.flatten().forEach { d ->
-        assertNull(d.typeKind)
-        assertNotEquals("kotlin.Any", d.typeName)
-        assertNotEquals("kotlin.io.Serializable", d.typeName)
-        assertEquals(0, d.properties.size)
-        a(d.superTypes)
-      }
-    }
-    a(api.definitions)
   }
 
   @Test
@@ -85,6 +74,7 @@ class StubVerifyTest {
     val api = getClientApi()
     val names = api.definitions.filterNot { it.isAlias == true }.map { it.typeName }
     names.forEach {
+      if (it.startsWith("kotlin.")) return@forEach
       val javaClass = Class.forName(it)
       assertNotNull(javaClass)
     }

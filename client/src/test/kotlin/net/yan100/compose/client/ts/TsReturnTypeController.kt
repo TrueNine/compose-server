@@ -85,6 +85,12 @@ class TsReturnTypeController {
   }
 
   @Api
+  @GetMapping("abc")
+  fun returnNullableEmptyEnum(): EmptyEnum? {
+    return null
+  }
+
+  @Api
   @GetMapping("inputNullInt")
   fun inputNullInt(nullInt: Int?) {
 
