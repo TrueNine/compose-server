@@ -38,7 +38,7 @@ data class ClientType(
   /**
    * 所填写的泛型参数
    */
-  val inputGenerics: List<ClientInputGenericType> = emptyList(),
+  val usedGenerics: List<ClientInputGenericType> = emptyList(),
 
   /**
    * 该类具有的属性列表
@@ -57,6 +57,14 @@ data class ClientType(
    */
   val nullable: Boolean? = null,
 ) : TypeName {
+  companion object {
+    fun none(): ClientType {
+      return ClientType(
+        typeName = ""
+      )
+    }
+  }
+
   private fun String.toTransientType(): ClientType {
     return ClientType(this, typeKind = TypeKind.TRANSIENT)
   }
