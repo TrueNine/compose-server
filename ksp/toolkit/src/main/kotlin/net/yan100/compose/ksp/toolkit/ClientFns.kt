@@ -32,7 +32,7 @@ fun KSDeclaration.toClientType(log: KSPLogger? = null): ClientType {
   val superTypes = dec.superTypes.map { e -> e.fastResolve() }.map {
     val superParameter = it.arguments.toInputGenericTypeList()
     it.declaration.toClientType(log)
-      .copy(inputGenerics = superParameter)
+      .copy(usedGenerics = superParameter)
       .clipToSuperType()
   }
 

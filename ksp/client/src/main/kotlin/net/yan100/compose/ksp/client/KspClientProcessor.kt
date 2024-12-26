@@ -71,7 +71,7 @@ class KspClientProcessor(
           val isNull = operation.returnType?.fastResolve()?.isMarkedNullable
           copy(
             nullable = if (isNull == true) true else null,
-            inputGenerics = operation.returnType?.fastResolve()?.arguments?.toInputGenericTypeList()?.toMutableList() ?: mutableListOf()
+            usedGenerics = operation.returnType?.fastResolve()?.arguments?.toInputGenericTypeList()?.toMutableList() ?: mutableListOf()
           )
         }
         val params = operation.parameters.map { parameter ->

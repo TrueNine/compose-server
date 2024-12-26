@@ -6,7 +6,6 @@ import com.google.devtools.ksp.symbol.*
 import net.yan100.compose.ksp.toolkit.*
 import net.yan100.compose.meta.client.ClientProp
 import net.yan100.compose.meta.client.ClientType
-import net.yan100.compose.meta.types.TypeName
 
 class PropertyHandler(
   private val resolver: Resolver,
@@ -14,59 +13,9 @@ class PropertyHandler(
   private val log: KSPLogger? = null
 ) {
   private val results: MutableMap<String, ClientType> = mutableMapOf()
-  private var superTypeIgnoreInterceptor = { it: String ->
-    when (it) {
-      "kotlin.Any", "kotlin.io.Serializable", // 1
-      "kotlin.Number",// 1
-      "kotlin.Enum",
-      "kotlin.Comparable"// 其枚举类型必然是本身
-        -> true
-
-      else -> false
-    }
-  }
-
-  private var ignoreInterceptor = { it: String ->
-    when (it) {
-      "kotlin.Any", "kotlin.io.Serializable", // 1
-      "kotlin.collections.Iterable", "kotlin.collections.Collection", // 1
-      "kotlin.collections.List", "kotlin.collections.Set",// 1
-      "kotlin.collections.Map", "kotlin.Number",// 1
-      "kotlin.Int", "kotlin.Long",// 1
-      "kotlin.Unit", "kotlin.Boolean",// 1
-      "kotlin.String", "kotlin.Comparable",// 1
-      "kotlin.Enum", "kotlin.CharSequence" // 1
-        -> true
-
-      else -> false
-    }
-  }
-  private var typeNameInterceptor = { it: String ->
-    when (it) {
-      "java.lang.Enum" -> "kotlin.Enum"
-      "java.io.Serializable" -> "kotlin.io.Serializable"
-      "java.lang.Object" -> "kotlin.Any"
-      "java.lang.String" -> "kotlin.String"
-      else -> it
-    }
-  }
-  private var builtinsInterceptor = { it: TypeName ->
-    when (it.typeName) {
-      "kotlin.Any",
-      "kotlin.Int",
-      "kotlin.Long",
-      "kotlin.Boolean",
-      "kotlin.Unit",
-      "kotlin.CharSequence",
-      "kotlin.String" -> true
-
-      else -> false
-    }
-  }
 
   fun getCopyClientTypeToReturnType(typeName: String): ClientType? {
-    val name = typeNameInterceptor(typeName)
-    return results[name]?.copy(
+    return results[typeName]?.copy(
       superTypes = mutableListOf(),
       isAlias = null,
       aliasForTypeName = null,
@@ -77,14 +26,6 @@ class PropertyHandler(
     )
   }
 
-  fun handleTypeNameInterceptor(interceptor: (String) -> String) {
-    typeNameInterceptor = interceptor
-  }
-
-  fun ignoreNameInterceptor(interceptor: (String) -> Boolean) {
-    ignoreInterceptor = interceptor
-  }
-
   fun getAllClientTypes(): List<ClientType> {
     results.clear()
     classDeclarations.forEach {
@@ -93,28 +34,26 @@ class PropertyHandler(
         is KSTypeAlias -> handleClassDeclaration(it.declaration)
       }
     }
-    return results.values
-      .map { it.copy(superTypes = cleanSuperTypes(it.superTypes)) }
-      .filterNot { ignoreInterceptor(it.typeName) }
+    return results.values.map { it.copy(superTypes = cleanSuperTypes(it.superTypes)) }
   }
 
   private fun cleanSuperTypes(superTypes: List<ClientType>): List<ClientType> {
     return superTypes.mapNotNull { r ->
-      val handle = results[typeNameInterceptor(r.typeName)]?.clipToSuperType()
+      val handle = results[r.typeName]?.clipToSuperType()
       if (handle == null) null
       else r to handle
-    }.filterNot { (i, r) -> superTypeIgnoreInterceptor(r.typeName) }
+    }
       .map { (i, r) ->
         r.copy(
           superTypes = cleanSuperTypes(r.superTypes),
-          inputGenerics = i.inputGenerics
+          usedGenerics = i.usedGenerics
         )
       }
   }
 
   private fun handlePropertyDeclaration(propertyDeclaration: KSPropertyDeclaration): ClientProp {
     val type = propertyDeclaration.type.fastResolve().declaration
-    val name = typeNameInterceptor(type.qualifiedNameAsString!!)
+    val name = type.qualifiedNameAsString!!
     if (!results.containsKey(name)) {
       when (type) {
         is KSClassDeclaration,
@@ -125,15 +64,14 @@ class PropertyHandler(
   }
 
   private fun handleClassDeclaration(declaration: KSDeclaration) {
-    val typeName = typeNameInterceptor(declaration.qualifiedNameAsString!!)
+    val typeName = declaration.qualifiedNameAsString!!
     if (!results.containsKey(typeName)) {
       if (declaration is KSTypeAlias) {
         val type = declaration.toClientType()
         handleClassDeclaration(declaration.realDeclaration)
         results += typeName to type.copy(
-          aliasForTypeName = typeNameInterceptor(type.aliasForTypeName!!),
-          inputGenerics = declaration.type.fastResolve().arguments.toInputGenericTypeList(),
-          builtin = if (builtinsInterceptor(type)) true else null
+          aliasForTypeName = type.aliasForTypeName!!,
+          usedGenerics = declaration.type.fastResolve().arguments.toInputGenericTypeList(),
         )
         return
       }
@@ -141,8 +79,6 @@ class PropertyHandler(
       if (declaration !is KSClassDeclaration) error("$declaration  not class")
       val e = declaration.getAllProperties().map {
         handlePropertyDeclaration(it)
-      }.map {
-        it.copy(typeName = typeNameInterceptor(it.typeName))
       }
 
       val clientType = declaration.toClientType(log).run {
@@ -157,7 +93,7 @@ class PropertyHandler(
       }
 
       results += typeName to clientType.copy(
-        typeName = typeNameInterceptor(clientType.typeName),
+        typeName = clientType.typeName,
         superTypes = clientType.superTypes
       )
     } else {
