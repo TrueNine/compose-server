@@ -1,7 +1,5 @@
 package net.yan100.compose.meta.client
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import net.yan100.compose.meta.types.Doc
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.meta.types.TypeName
@@ -60,7 +58,8 @@ data class ClientType(
   companion object {
     fun none(): ClientType {
       return ClientType(
-        typeName = ""
+        typeName = "",
+        nullable = true
       )
     }
   }
@@ -125,57 +124,4 @@ data class ClientType(
       r?.copy(superTypes = resolveAllSuperTypes(it.superTypes, newSuperTypeResolver))
     }
   }
-}
-
-
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "__typeKind"
-)
-@JsonSubTypes(
-  JsonSubTypes.Type(value = ClientDefinition.Enum::class, name = "ENUM_CLASS"),
-  JsonSubTypes.Type(value = ClientDefinition.TypeAlias::class, name = "TYPEALIAS"),
-  JsonSubTypes.Type(value = ClientDefinition.SuperType::class, name = "SUPER_TYPE"),
-  JsonSubTypes.Type(value = ClientDefinition.ReturnType::class, name = "RETURN_TYPE")
-)
-sealed class ClientDefinition(
-  open val typeName: ClientTypeName,
-) {
-  /**
-   * 枚举类型
-   */
-  data class Enum(
-    override val typeName: ClientTypeName,
-    val superTypes: List<SuperType>,
-    val values: Map<String, Int>
-  ) : ClientDefinition(typeName = typeName)
-
-  /**
-   * 父类
-   */
-  data class SuperType(
-    override val typeName: ClientTypeName,
-    val superTypes: List<SuperType>,
-    val usedGenerics: List<ClientInputGenericType> = emptyList()
-  ) : ClientDefinition(typeName)
-
-  /**
-   * 类型别名
-   */
-  data class TypeAlias(
-    override val typeName: ClientTypeName,
-    val aliasForTypeName: String,
-    val doc: Doc? = null,
-    val generics: List<String> = emptyList()
-  ) : ClientDefinition(typeName = typeName)
-
-  /**
-   * 返回值
-   */
-  data class ReturnType(
-    override val typeName: ClientTypeName,
-    val nullable: Boolean? = null,
-    val usedGenericTypes: List<ClientInputGenericType> = emptyList(),
-  ) : ClientDefinition(typeName = typeName)
 }
