@@ -38,10 +38,7 @@ subprojects {
   extra["springAiVersion"] = l.versions.springAi.get()
 
   dependencies {
-    //implementation(platform(l.org.springframework.boot.springBootDependencies))
-    //implementation(platform(l.org.springframework.cloud.springCloudDependencies))
-    //implementation(platform(l.org.springframework.modulith.springModulithBom))
-    //implementation(platform(l.org.springframework.ai.springAiBom))
+    implementation(l.org.jetbrains.kotlin.kotlinStdlib)
     testRuntimeOnly(l.bundles.junit5)
   }
   sourceSets {
