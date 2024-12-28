@@ -26,7 +26,7 @@ open class JavaInternalInterceptor : KotlinToKotlinInterceptor() {
       typeName = ctx.getTypeNameByName(source.typeName),
       superTypes = source.superTypes.map { process(ctx, it) },
       aliasForTypeName = source.aliasForTypeName?.let { ctx.getTypeNameByName(it) },
-      argumentLocations = source.argumentLocations.map {
+      arguments = source.arguments.map {
         it.unwrapGenericName()
       },
       properties = source.properties.map { p ->
