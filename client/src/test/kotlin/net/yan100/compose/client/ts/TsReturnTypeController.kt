@@ -26,6 +26,8 @@ class TsReturnTypeController {
 
   class ExtendsType<T>(
     val generic: List<T>,
+    val mapEntry: Map.Entry<String, T>,
+    val singleGeneric: T?,
     override val value: String,
     private val thisMap: Map<String, Boolean>
   ) : StringTyping, Map<String, Boolean?> by thisMap, IPage<String> {
