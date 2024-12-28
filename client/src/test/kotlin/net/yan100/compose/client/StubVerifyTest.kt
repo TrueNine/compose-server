@@ -25,7 +25,7 @@ class StubVerifyTest {
     log.info("targetClassName: {}", targetName)
     val extendsType = api.definitions.find { it.typeName == targetName }
     assertNotNull(extendsType)
-    assertEquals(1, extendsType.argumentLocations.size)
+    assertEquals(1, extendsType.arguments.size)
     assertEquals(3, extendsType.superTypes.size, "所有父类，只建议忽略无泛型的泛型")
 
     val superMap = extendsType.superTypes.find { it.typeName == "kotlin.collections.Map" }
