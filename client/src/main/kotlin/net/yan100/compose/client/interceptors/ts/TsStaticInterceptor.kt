@@ -7,11 +7,11 @@ import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.domain.entries.TsName
-import net.yan100.compose.client.interceptors.KotlinToTypescriptInterceptor
+import net.yan100.compose.client.interceptors.TsScopeInterceptor
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 
-class TsStaticInterceptor : KotlinToTypescriptInterceptor() {
+class TsStaticInterceptor : TsScopeInterceptor() {
   override val executeStage: ExecuteStage = ExecuteStage.RESOLVE_TS_SCOPE
 
   private val supportedKinds = listOf(
@@ -24,7 +24,7 @@ class TsStaticInterceptor : KotlinToTypescriptInterceptor() {
   override fun process(ctx: KtToTsContext, source: ClientType): TsScope {
     val name = source.typeName.toTsStylePathName()
     val properties = ctx.getClientPropsByClientType(source)
-    val generics = source.argumentLocations.mapIndexed { i, it ->
+    val generics = source.arguments.mapIndexed { i, it ->
       TsGeneric.Defined(
         name = TsName.Name(it),
         index = i
@@ -43,7 +43,7 @@ class TsStaticInterceptor : KotlinToTypescriptInterceptor() {
     }
 
     val superTypes = source.superTypes.mapNotNull {
-      when (val r = ctx.resolveTsTypeValByClientType(it)) {
+      when (val r = ctx.getTsTypeValByType(it)) {
         is TsTypeVal.TypeDef -> {
           r.copy(
             typeName = r.typeName,
