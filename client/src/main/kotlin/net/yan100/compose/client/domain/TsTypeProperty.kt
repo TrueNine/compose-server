@@ -13,6 +13,10 @@ data class TsTypeProperty(
   val partial: Boolean = false,
   val defined: TsTypeVal
 ) {
+  fun isBasic(): Boolean {
+    return defined.isBasic()
+  }
+
   override fun toString(): String {
     if (name is TsName.Anonymous) return defined.toString()
     return "$name${if (partial) "?" else ""}: $defined"
