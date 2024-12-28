@@ -4,9 +4,9 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.*
 import net.yan100.compose.ksp.toolkit.kotlinpoet.Libs
 import net.yan100.compose.meta.client.ClientDoc
-import net.yan100.compose.meta.client.ClientInputGenericType
 import net.yan100.compose.meta.client.ClientProp
 import net.yan100.compose.meta.client.ClientType
+import net.yan100.compose.meta.client.ClientUsedGeneric
 import net.yan100.compose.meta.types.Doc
 import net.yan100.compose.meta.types.TypeKind
 
@@ -44,7 +44,7 @@ fun KSDeclaration.toClientType(log: KSPLogger? = null): ClientType {
     typeKind = kind,
     isAlias = if (isAlias) true else null,
     aliasForTypeName = aliasForTypeName,
-    argumentLocations = typeParameters,
+    arguments = typeParameters,
     doc = docString.toDoc(),
     enumConstants = let {
       if (this is KSClassDeclaration && this.classKind == ClassKind.ENUM_CLASS) {
@@ -102,14 +102,14 @@ fun String?.toDoc(): Doc? {
  * 将泛型参数转换为可填写泛型参数
  */
 @JvmName("ksTypeParameterListToInputGenericTypeList")
-fun List<KSTypeParameter>.toInputGenericTypeList(): List<ClientInputGenericType> {
+fun List<KSTypeParameter>.toInputGenericTypeList(): List<ClientUsedGeneric> {
   return mapIndexed { i, it ->
     val args = it.typeParameters.toInputGenericTypeList()
     val argName = it.qualifiedNameAsString!!
-    ClientInputGenericType(
+    ClientUsedGeneric(
       typeName = argName,
       index = i,
-      inputGenerics = args
+      usedGenerics = args
     )
   }
 }
@@ -122,17 +122,17 @@ fun List<KSTypeArgument>.toDeclarations(): List<KSDeclaration> {
 }
 
 @JvmName("kSTypeArgumentListToInputGenericTypeList")
-fun List<KSTypeArgument>.toInputGenericTypeList(): List<ClientInputGenericType> {
+fun List<KSTypeArgument>.toInputGenericTypeList(): List<ClientUsedGeneric> {
   return mapIndexed { i, it ->
     val args = it.type?.fastResolve()?.arguments
     val declaration = it.type!!.fastResolve()
     val argName = declaration.declaration.qualifiedNameAsString!!
     val nullable = declaration.isMarkedNullable
-    ClientInputGenericType(
+    ClientUsedGeneric(
       typeName = argName,
       index = i,
       nullable = if (nullable) true else null,
-      inputGenerics = args?.toInputGenericTypeList() ?: emptyList()
+      usedGenerics = args?.toInputGenericTypeList() ?: emptyList()
     )
   }
 }
@@ -144,7 +144,7 @@ fun ClientType.clipToSuperType(): ClientType {
   return copy(
     superTypes = superTypes.map { it.clipToSuperType() },
     properties = emptyList(),
-    argumentLocations = emptyList(),
+    arguments = emptyList(),
     typeKind = null
   )
 }

@@ -22,7 +22,7 @@ class PropertyHandler(
       typeKind = null,
       properties = mutableListOf(),
       enumConstants = mutableMapOf(),
-      argumentLocations = mutableListOf()
+      arguments = mutableListOf()
     )
   }
 
