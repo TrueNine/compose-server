@@ -15,6 +15,16 @@ sealed class TsScope(
   open val scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
   open val modifier: TsTypeModifier = TsTypeModifier.None
 ) {
+  fun isBasic(): Boolean {
+    return when (this) {
+      is Enum -> true
+      is TypeVal -> definition.isBasic()
+      is TypeAlias -> aliasFor.isBasic() && usedGenerics.all { it.isBasic() }
+      is Interface -> superTypes.all { it.isBasic() } && properties.all { it.defined.isBasic() }
+      is Class -> error("Class is not supported")
+    }
+  }
+
   fun toTsTypeVal(): TsTypeVal {
     return when (this) {
       is Interface -> TsTypeVal.TypeDef(typeName = name)
