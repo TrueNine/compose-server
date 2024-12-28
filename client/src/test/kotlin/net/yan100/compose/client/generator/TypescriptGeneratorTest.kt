@@ -1,6 +1,7 @@
 package net.yan100.compose.client.generator
 
 import jakarta.annotation.Resource
+import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.entries.TsFile
 import net.yan100.compose.client.domain.entries.TsName
@@ -56,6 +57,13 @@ class TypescriptGeneratorTest {
     assertNotEmpty { interfaces }
     interfaces.forEach { interfaced ->
       interfaced.name is TsName.PathName
+      interfaced.generics.forEach { g ->
+        assertIs<TsGeneric.Defined>(g)
+        assertFalse(g.name.toString()) { g.name.toString().contains(".") }
+        assertFalse(g.name.toString()) { g.name.toString().contains("$") }
+        assertFalse(g.name.toString()) { g.name.toString().contains("<") }
+        assertFalse(g.name.toString()) { g.name.toString().contains(">") }
+      }
     }
   }
 
@@ -162,7 +170,7 @@ export type Executor = (requestOptions: {
 """.trimIndent().plus("\n")
     assertEquals(expectResult, body)
     assertEquals(1, tsFile.exports.size)
-    assertEquals(TsName.Name("Executor"), tsFile.fileName)
+    assertEquals(TsName.PathName("Executor"), tsFile.fileName)
   }
 
 
