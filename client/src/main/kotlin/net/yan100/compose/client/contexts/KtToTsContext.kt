@@ -5,8 +5,8 @@ import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeProperty
 import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.interceptors.Interceptor
-import net.yan100.compose.client.interceptors.KotlinToTsTypeValInterceptor
 import net.yan100.compose.client.interceptors.KotlinToTypescriptInterceptor
+import net.yan100.compose.client.interceptors.TsPreReferenceInterceptor
 import net.yan100.compose.client.isGenericName
 import net.yan100.compose.client.toTsStyleName
 import net.yan100.compose.meta.client.ClientApiStubs
@@ -56,7 +56,7 @@ open class KtToTsContext(
 
 
   private fun updateTsScopes() {
-    val tsTypeValInterceptors = interceptorChain.filterIsInstance<KotlinToTsTypeValInterceptor>()
+    val tsTypeValInterceptors = interceptorChain.filterIsInstance<TsPreReferenceInterceptor>()
     val toTsInterceptors = interceptorChain.filterIsInstance<KotlinToTypescriptInterceptor>()
     if (definitions.isEmpty()) {
       error("context definitions is not init")

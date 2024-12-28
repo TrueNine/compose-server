@@ -4,10 +4,10 @@ import net.yan100.compose.client.contexts.ExecuteStage
 import net.yan100.compose.client.contexts.KtToTsContext
 import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsTypeVal
-import net.yan100.compose.client.interceptors.KotlinToTsTypeValInterceptor
+import net.yan100.compose.client.interceptors.TsPreReferenceInterceptor
 import net.yan100.compose.meta.client.ClientType
 
-open class TsBuiltinTypeValInterceptor : KotlinToTsTypeValInterceptor() {
+open class TsBuiltinTypeValInterceptor : TsPreReferenceInterceptor() {
   override val executeStage: ExecuteStage = ExecuteStage.LOOP_RESOLVE_TS_REFERENCES
   private val nameTable = mapOf(
     "java.io.Serializable" to TsTypeVal.Never,
