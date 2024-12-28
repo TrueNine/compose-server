@@ -2,7 +2,6 @@ package net.yan100.compose.client.domain
 
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.toVariableName
-import net.yan100.compose.client.unwrapGenericName
 
 /**
  * typescript 的类型通常右值定义
@@ -30,17 +29,9 @@ sealed class TsTypeVal {
   }
 
   data class Generic(
-    var typeName: kotlin.String
+    val generic: TsGeneric
   ) : TsTypeVal() {
-    fun toGeneric(index: Int = 0): TsGeneric.Defined {
-      return TsGeneric.Defined(TsName.Generic(typeName), index)
-    }
-
-    init {
-      typeName = typeName.unwrapGenericName()
-    }
-
-    override fun toString(): kotlin.String = typeName
+    override fun toString(): kotlin.String = generic.toString()
   }
 
   /**
@@ -223,5 +214,34 @@ sealed class TsTypeVal {
    */
   data object Void : TsTypeVal() {
     override fun toString(): kotlin.String = "void"
+  }
+
+  fun isBasic(): kotlin.Boolean {
+    return when (this) {
+      is TypeDef -> false
+      is Never,
+      is Any,
+      is String,
+      is Unknown,
+      is Void,
+      is Boolean,
+      is Bigint,
+      is Number,
+      is Symbol,
+      is Null,
+      is Undefined,
+      is EmptyObject
+        -> true
+
+      is Array -> usedGeneric.isBasic()
+      is Union -> joinTypes.all { it.isBasic() }
+      is AnonymousFunction -> params.all { it.defined.isBasic() } && returnType.isBasic()
+      is Generic -> false
+      is Object -> elements.all { it.defined.isBasic() }
+      is Promise -> usedGeneric.isBasic()
+      is Record -> keyUsedGeneric.isBasic() && valueUsedGeneric.isBasic()
+      is Tuple -> elements.all { it.isBasic() }
+      is TypeConstant -> element.isBasic()
+    }
   }
 }
