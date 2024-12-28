@@ -38,4 +38,12 @@ sealed class TsGeneric(
    * 没有填写泛型
    */
   data object UnUsed : TsGeneric(index = Int.MIN_VALUE)
+
+  fun isBasic(): Boolean {
+    return when (this) {
+      is Defined -> true
+      is Used -> used.isBasic()
+      is UnUsed -> false
+    }
+  }
 }
