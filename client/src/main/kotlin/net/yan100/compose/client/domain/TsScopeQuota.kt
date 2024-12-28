@@ -9,6 +9,6 @@ enum class TsScopeQuota(
 ) {
   OBJECT("{", "}"),
   ARRAY("[", "]"),
-  UNION("(", ")"),
+  BRACKETS("(", ")"),
   BLANK("", "");
 }

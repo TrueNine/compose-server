@@ -6,80 +6,86 @@ import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.toRenderCode
 import net.yan100.compose.client.toVariableName
 
-sealed class TsFile(
+sealed class TsFile<T : TsFile<T>>(
   open val fileName: TsName,
-  open val ext: String = "ts",
+  open val fileExt: String = "ts",
   open val imports: List<TsImport> = emptyList(),
   open val scopes: List<TsScope> = emptyList(),
   open val usedNames: List<TsName> = emptyList(),
   open val exports: List<TsExport> = emptyList(),
-  open val code: String = ""
 ) {
+  abstract val render: (T) -> String
+
+  @Suppress("UNCHECKED_CAST")
+  val code: String
+    get() {
+      return this.render(this as T)
+    }
+
   /**
    * 单接口文件
    */
   data class SingleInterface(
     val interfaces: TsScope.Interface,
     override val fileName: TsName = interfaces.name,
-    override val ext: String = "ts"
-  ) : TsFile(
+    override val fileExt: String = "ts",
+  ) : TsFile<SingleInterface>(
     imports = interfaces.collectImports(),
     scopes = listOf(interfaces),
     exports = listOf(TsExport.ExportedDefined(fileName)),
     usedNames = listOf(interfaces.name),
-    ext = ext,
+    fileExt = fileExt,
     fileName = fileName,
-    code = buildString {
-      val imports = interfaces.collectImports()
-      val name = interfaces.name.toVariableName()
-      if (imports.isNotEmpty()) {
-        appendLine(imports.toRenderCode())
+  ) {
+    override val render: (SingleInterface) -> String = { file ->
+      val imports = file.interfaces.collectImports()
+      buildString {
+        val name = file.interfaces.name.toVariableName()
+        if (imports.isNotEmpty()) {
+          appendLine(imports.toRenderCode())
+          appendLine()
+        }
+        append("export ")
+        append(file.interfaces.modifier.marker)
+        append(" ")
+        append(name)
+        if (file.interfaces.generics.isNotEmpty()) append(file.interfaces.generics.toRenderCode())
+        val superTypes = file.interfaces.superTypes.filterNot { it is TsTypeVal.TypeDef && it.typeName is TsName.Anonymous }
+        if (file.interfaces.superTypes.isNotEmpty()) {
+          append(" extends ")
+          val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->
+            superType.toString()
+          }
+          append(superTypeNames)
+        }
+        appendLine(" ${file.interfaces.scopeQuota.left}")
+        val properties = file.interfaces.properties.joinToString(",\n") {
+          "  $it"
+        }
+        appendLine(properties)
+        append(file.interfaces.scopeQuota.right)
         appendLine()
       }
-      append("export ")
-      append(interfaces.modifier.marker)
-
-      if (interfaces.superTypes.isEmpty()) {
-        append(" extends")
-        interfaces.superTypes.forEach { superType ->
-          when (superType) {
-            is TsTypeVal.TypeDef -> {
-              append(" ${superType.typeName.toVariableName()},")
-            }
-
-            else -> {}
-          }
-          removeSuffix(",")
-        }
-      }
-
-      appendLine(" $name ${interfaces.scopeQuota.left}")
-      val properties = interfaces.properties.joinToString(",\n") {
-        "${it.name}: ${TsTypeVal.Any}"
-      }
-      appendLine(properties)
-      append(interfaces.scopeQuota.right)
     }
-  )
+  }
 
   /**
    * 单工具类文件
    */
   data class SingleTypeUtils(
     override val fileName: TsName,
-    override val code: String,
+    override val render: (SingleTypeUtils) -> String,
     override val scopes: List<TsScope> = emptyList(),
     override val usedNames: List<TsName> = emptyList(),
     val exportName: TsExport = TsExport.ExportedDefined(fileName),
     override val imports: List<TsImport> = emptyList(),
-  ) : TsFile(
+  ) : TsFile<SingleTypeUtils>(
     fileName = fileName,
-    code = code,
     imports = imports,
     exports = listOf(exportName),
     scopes = scopes,
     usedNames = usedNames + fileName,
-    ext = "ts"
+    fileExt = "ts"
   )
 
   /**
@@ -89,28 +95,32 @@ sealed class TsFile(
     val enums: TsScope.Enum,
     override val fileName: TsName = enums.name,
     override val scopes: List<TsScope> = listOf(enums),
-  ) : TsFile(
+  ) : TsFile<SingleEnum>(
     usedNames = listOf(fileName),
     scopes = scopes,
     fileName = fileName,
     exports = listOf(
       TsExport.ExportedDefined(enums.name)
     ),
-    code = buildString {
-      val name = when (enums.name) {
-        is TsName.Name -> enums.name.name
-        is TsName.PathName -> enums.name.name
-        else -> error("enum name ${enums.name} is not supported")
+  ) {
+    override val render: (SingleEnum) -> String
+      get() = {
+        buildString {
+          val name = when (enums.name) {
+            is TsName.Name -> enums.name.name
+            is TsName.PathName -> enums.name.name
+            else -> error("enum name ${enums.name} is not supported")
+          }
+          append("export ")
+          append(enums.modifier.marker)
+          appendLine(" $name ${enums.scopeQuota.left}")
+          val constants = enums.constants.map { (k, v) ->
+            """  $k = ${if (v is String) "'$v'" else v}"""
+          }.joinToString(",\n")
+          appendLine(constants)
+          append(enums.scopeQuota.right)
+          appendLine()
+        }
       }
-      append("export ")
-      append(enums.modifier.marker)
-      appendLine(" $name ${enums.scopeQuota.left}")
-      val constants = enums.constants.map { (k, v) ->
-        """  $k = ${if (v is String) "'$v'" else v}"""
-      }.joinToString(",\n")
-      appendLine(constants)
-      append(enums.scopeQuota.right)
-      appendLine()
-    }
-  )
+  }
 }

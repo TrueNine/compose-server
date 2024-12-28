@@ -1,6 +1,8 @@
 package net.yan100.compose.client.domain
 
 import net.yan100.compose.client.domain.entries.TsName
+import net.yan100.compose.client.toVariableName
+import net.yan100.compose.client.unwrapGenericName
 
 /**
  * typescript 的类型通常右值定义
@@ -16,7 +18,30 @@ import net.yan100.compose.client.domain.entries.TsName
 sealed class TsTypeVal {
   data class Tuple(
     val elements: List<TsTypeProperty>
-  ) : TsTypeVal()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String {
+      return if (elements.isEmpty()) Array(TsGeneric.Used(Unknown, 0)).toString()
+      else elements.joinToString(
+        ", ",
+        prefix = "[",
+        postfix = "]"
+      ) { it.toString() }
+    }
+  }
+
+  data class Generic(
+    var typeName: kotlin.String
+  ) : TsTypeVal() {
+    fun toGeneric(index: Int = 0): TsGeneric.Defined {
+      return TsGeneric.Defined(TsName.Generic(typeName), index)
+    }
+
+    init {
+      typeName = typeName.unwrapGenericName()
+    }
+
+    override fun toString(): kotlin.String = typeName
+  }
 
   /**
    * 匿名函数定义
@@ -29,7 +54,11 @@ sealed class TsTypeVal {
   data class AnonymousFunction(
     val params: List<TsTypeProperty>,
     val returnType: TsTypeVal
-  ) : TsTypeVal()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String {
+      return "${TsScopeQuota.BRACKETS.left}${params.joinToString(", ") { it.toString() }}${TsScopeQuota.BRACKETS.right} => $returnType"
+    }
+  }
 
   /**
    * 联合类型
@@ -39,7 +68,9 @@ sealed class TsTypeVal {
    */
   data class Union(
     val joinTypes: List<TsTypeVal>
-  ) : TsTypeVal()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String = joinTypes.joinToString(" | ") { it.toString() }
+  }
 
   /**
    * 表示 typescript 中的 object 对象
@@ -55,8 +86,17 @@ sealed class TsTypeVal {
    * @see [TsTypeVal.Record]
    */
   data class Object(
-    val elements: List<TsTypeProperty>
-  ) : TsTypeVal()
+    val elements: List<TsTypeProperty> = emptyList()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String {
+      return if (elements.isEmpty()) EmptyObject.toString()
+      else elements.joinToString(
+        ", ",
+        prefix = TsScopeQuota.OBJECT.left,
+        postfix = TsScopeQuota.OBJECT.right
+      ) { it.toString() }
+    }
+  }
 
   /**
    * 此应当被转换为 `as const`，支持大多默认类型处理
@@ -69,17 +109,35 @@ sealed class TsTypeVal {
    */
   data class TypeConstant(
     val element: TsTypeVal
-  ) : TsTypeVal()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String {
+      return "$element as const"
+    }
+  }
 
   /**
    * 最直接的 type 类型
+   *
+   * ```typescript
+   * Foo
+   * Bar
+   * Foo<T>
+   * Bar<A,B,string>
+   * ```
    * @param typeName 类型名称
    * @param usedGenerics 使用的泛型
    */
   data class TypeDef(
     val typeName: TsName,
     val usedGenerics: List<TsGeneric> = emptyList()
-  ) : TsTypeVal()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String {
+      return when (usedGenerics.size) {
+        0 -> typeName.toVariableName()
+        else -> "${typeName.toVariableName()}<${usedGenerics.joinToString(", ") { it.toString() }}>"
+      }
+    }
+  }
 
   data object Number : TsTypeVal() {
     override fun toString(): kotlin.String = "number"
@@ -108,19 +166,26 @@ sealed class TsTypeVal {
   data class Record(
     val keyUsedGeneric: TsGeneric,
     val valueUsedGeneric: TsGeneric
-  ) : TsTypeVal()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String {
+      return "Record<$keyUsedGeneric, $valueUsedGeneric>"
+    }
+  }
 
   /**
    * 异步函数定义
    */
   data class Promise(
     val usedGeneric: TsGeneric
-  ) : TsTypeVal()
+  ) : TsTypeVal() {
+    override fun toString(): kotlin.String = "Promise<$usedGeneric>"
+  }
 
   data class Array(
     val usedGeneric: TsGeneric
-  ) : TsTypeVal()
-
+  ) : TsTypeVal() {
+    override fun toString() = "Array<$usedGeneric>"
+  }
 
   /**
    * 在大多情况下，不推荐直接使用 `any`
@@ -143,6 +208,10 @@ sealed class TsTypeVal {
    */
   data object Undefined : TsTypeVal() {
     override fun toString(): kotlin.String = "undefined"
+  }
+
+  data object Never : TsTypeVal() {
+    override fun toString(): kotlin.String = "never"
   }
 
   data object EmptyObject : TsTypeVal() {

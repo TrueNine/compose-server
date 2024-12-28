@@ -11,14 +11,23 @@ import net.yan100.compose.meta.client.ClientType
  */
 sealed class TsScope(
   open val name: TsName,
-  open val meta: ClientType,
+  open val meta: ClientType? = null,
   open val scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
   open val modifier: TsTypeModifier = TsTypeModifier.None
 ) {
+  fun toTsTypeVal(): TsTypeVal {
+    return when (this) {
+      is Interface -> TsTypeVal.TypeDef(typeName = name)
+      is Class -> TsTypeVal.TypeDef(typeName = name)
+      is Enum -> TsTypeVal.TypeDef(typeName = name)
+      is TypeAlias -> TsTypeVal.TypeDef(typeName = name)
+      is TypeVal -> definition
+    }
+  }
 
   data class TypeAlias(
     override val name: TsName,
-    override val meta: ClientType,
+    override val meta: ClientType? = null,
     val aliasFor: TsTypeVal = TsTypeVal.Unknown,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val usedGenerics: List<TsGeneric> = emptyList()
@@ -31,7 +40,7 @@ sealed class TsScope(
 
   data class TypeVal(
     val definition: TsTypeVal,
-    override val meta: ClientType
+    override val meta: ClientType? = null
   ) : TsScope(
     name = TsName.Anonymous,
     scopeQuota = TsScopeQuota.BLANK,
@@ -45,7 +54,7 @@ sealed class TsScope(
    */
   data class Interface(
     override val name: TsName,
-    override val meta: ClientType,
+    override val meta: ClientType? = null,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val superTypes: List<TsTypeVal> = emptyList(),
     val properties: List<TsTypeProperty> = emptyList()
@@ -61,7 +70,7 @@ sealed class TsScope(
    */
   data class Enum(
     override val name: TsName,
-    override val meta: ClientType,
+    override val meta: ClientType? = null,
     val constants: Map<String, Comparable<*>>,
   ) : TsScope(
     name = name,
@@ -75,7 +84,7 @@ sealed class TsScope(
    */
   data class Class(
     override val name: TsName,
-    override val meta: ClientType,
+    override val meta: ClientType? = null,
     val superTypes: List<TsTypeVal.TypeDef>,
     // TODO 定义其他类的属性
   ) : TsScope(
