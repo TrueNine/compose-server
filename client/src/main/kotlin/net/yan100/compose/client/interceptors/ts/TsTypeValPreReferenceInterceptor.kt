@@ -8,7 +8,7 @@ import net.yan100.compose.client.toTsStylePathName
 import net.yan100.compose.client.unwrapGenericName
 import net.yan100.compose.meta.client.ClientType
 
-class TsPreReferenceTypeValInterceptor : TsPreReferenceInterceptor() {
+class TsTypeValPreReferenceInterceptor : TsPreReferenceInterceptor() {
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = true
 
   override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal {
