@@ -68,6 +68,27 @@ data class ClientType(
     return ClientType(this, typeKind = TypeKind.TRANSIENT)
   }
 
+  fun isAssignableFrom(otherQualifierName: String): Boolean {
+    return when {
+      typeName == otherQualifierName -> true
+      isAlias == true -> {
+        val aliasForTypeName = this.aliasForTypeName ?: return false
+        val aliasForType = ClientType(aliasForTypeName)
+        aliasForType.isAssignableFrom(otherQualifierName)
+      }
+
+      superTypes.isNotEmpty() -> {
+        return superTypes.any {
+          it.isAssignableFrom(otherQualifierName)
+        }
+      }
+
+      else -> false
+    }
+  }
+
+  fun isAssignableFrom(other: ClientType): Boolean = isAssignableFrom(other.typeName)
+
   fun resolveEnumConstants(): Map<String, Comparable<Nothing>> {
     val java = resolveJava() ?: return emptyMap()
     if (!java.isEnum) return emptyMap()
