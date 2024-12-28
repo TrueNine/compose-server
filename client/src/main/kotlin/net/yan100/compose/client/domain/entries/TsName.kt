@@ -3,6 +3,17 @@ package net.yan100.compose.client.domain.entries
 import net.yan100.compose.client.unwrapGenericName
 
 sealed class TsName {
+  fun isBasic(): Boolean {
+    return when (this) {
+      Anonymous,
+      is Generic,
+      is Name -> true
+
+      is As,
+      is PathName -> false
+    }
+  }
+
   /**
    * 将名称重定向到一个新的名称
    */
