@@ -65,7 +65,7 @@ sealed class TsName {
   data class Name(
     val name: String
   ) : TsName() {
-    override fun toString(): String = name
+    override fun toString(): String = name.unwrapGenericName()
   }
 
   /**
