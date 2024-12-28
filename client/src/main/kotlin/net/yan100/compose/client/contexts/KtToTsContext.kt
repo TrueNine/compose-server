@@ -5,13 +5,13 @@ import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeProperty
 import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.interceptors.Interceptor
-import net.yan100.compose.client.interceptors.KotlinToTypescriptInterceptor
 import net.yan100.compose.client.interceptors.TsPreReferenceInterceptor
+import net.yan100.compose.client.interceptors.TsScopeInterceptor
 import net.yan100.compose.client.isGenericName
 import net.yan100.compose.client.toTsStyleName
 import net.yan100.compose.meta.client.ClientApiStubs
-import net.yan100.compose.meta.client.ClientInputGenericType
 import net.yan100.compose.meta.client.ClientType
+import net.yan100.compose.meta.client.ClientUsedGeneric
 
 open class KtToTsContext(
   stub: ClientApiStubs,
@@ -56,14 +56,11 @@ open class KtToTsContext(
 
 
   private fun updateTsScopes() {
-    val tsTypeValInterceptors = interceptorChain.filterIsInstance<TsPreReferenceInterceptor>()
-    val toTsInterceptors = interceptorChain.filterIsInstance<KotlinToTypescriptInterceptor>()
-    if (definitions.isEmpty()) {
-      error("context definitions is not init")
-    }
-
-    val allTypeVal = definitions.map { type ->
-      val process = tsTypeValInterceptors.firstOrNull { it.supported(this, type) }
+    if (definitions.isEmpty()) error("context definitions is not init")
+    val tsPreReferenceInterceptors = interceptorChain.filterIsInstance<TsPreReferenceInterceptor>()
+    val tsPostReferenceInterceptors = interceptorChain.filterIsInstance<TsPreReferenceInterceptor>()
+    val allPreReferences = definitions.map { type ->
+      val process = tsPreReferenceInterceptors.firstOrNull { it.supported(this, type) }
       type to process?.run {
         TsScope.TypeVal(
           definition = process(this@KtToTsContext, type),
@@ -72,36 +69,58 @@ open class KtToTsContext(
       }
     }
 
-    val (supportedTypeVals, unsupportedTypeVals) = allTypeVal.partition { it.second != null }
-    internalTsScopes = supportedTypeVals.map { (_, typeVal) ->
-      typeVal!!
-    }.toMutableList()
-
-    internalTsScopesMap = internalTsScopes.associateBy { it.meta!!.typeName }.toMutableMap()
-    val (notHandled, h) =
-      (supportedTypeVals + unsupportedTypeVals)
-        .partition { (_, def) ->
-          if (def == null) return@partition true
-          if (def.definition !is TsTypeVal.TypeDef) return@partition false
-          true
-        }
-
-    val all = notHandled.map { (type, prev) ->
-      val process = toTsInterceptors.firstOrNull { it.supported(this, type) }
-      if (prev == null) {
-        type to process?.process(this, type)!!
-      } else type to (process?.process(this, type) ?: prev)
+    val (supportedPreReferences, unsupportedPreReferences) = allPreReferences.partition { it.second != null }
+    if (unsupportedPreReferences.isNotEmpty()) {
+      error("unsupported pre references, pre reference stage requires processing all references: ${unsupportedPreReferences.map { it.first }}")
     }
+    internalTsScopesMap = supportedPreReferences.associateBy { (_, it) -> it!!.meta!!.typeName }.mapValues { (_, v) -> v.second!! }.toMutableMap()
+    internalTsScopes = internalTsScopesMap.values.toMutableList()
 
-    val r = (all.map {
-      it.second
-    } + h.map { it.second!! })
-    internalTsScopes = r.toMutableList()
-    internalTsScopesMap = internalTsScopes.associateBy { it.meta!!.typeName }.toMutableMap()
+    val allPostReferences = definitions.map { type ->
+      val process = tsPostReferenceInterceptors.firstOrNull { it.supported(this, type) }
+      type to process?.run {
+        TsScope.TypeVal(
+          definition = process(this@KtToTsContext, type),
+          meta = type
+        )
+      }
+    }
+    val (supportedPostReferences, unsupportedPostReferences) = allPostReferences.partition { it.second != null }
+    if (unsupportedPostReferences.isNotEmpty()) {
+      error("unsupported post references, post reference stage requires processing all references: ${unsupportedPostReferences.map { it.first }}")
+    }
+    internalTsScopesMap += supportedPostReferences.associateBy { (_, it) -> it!!.meta!!.typeName }.mapValues { (_, v) -> v.second!! }.toMutableMap()
+    internalTsScopes = internalTsScopesMap.values.toMutableList()
+    updateCustomScopes(internalTsScopesMap.mapKeys { (k) -> getTypeByName(k)!! })
   }
 
-  fun getTsGenericByClientGenerics(
-    clientGenerics: List<ClientInputGenericType>
+  private fun updateCustomScopes(supportedPostReferences: Map<ClientType, TsScope?>) {
+    val toTsInterceptors = interceptorChain.filterIsInstance<TsScopeInterceptor>()
+    val (notHandledTypeDefinitions, basicScopes) = supportedPostReferences.entries.partition { (_, def) ->
+      when (def) {
+        is TsScope.Enum, null
+          -> false
+
+        is TsScope.TypeVal -> when (def.definition) {
+          is TsTypeVal.TypeDef -> true
+          else -> false
+        }
+
+        else -> false
+      }
+    }
+    val linkedScopes = notHandledTypeDefinitions.associate { (type, prev) ->
+      val process = toTsInterceptors.firstOrNull { it.supported(this, type) }
+      type to (process?.process(this, type) ?: prev!!)
+    }
+
+    val processedResult = (linkedScopes + basicScopes.associate { (a, it) -> a to it!! })
+    internalTsScopesMap += processedResult.mapKeys { it.key.typeName }
+    internalTsScopes = internalTsScopesMap.values.toMutableList()
+  }
+
+  fun getTsGenericByGenerics(
+    clientGenerics: List<ClientUsedGeneric>
   ): List<TsGeneric> {
     if (clientGenerics.isEmpty()) return emptyList()
     return clientGenerics.map { usedGeneric ->
@@ -116,7 +135,7 @@ open class KtToTsContext(
           is TsTypeVal.TypeDef -> {
             g.copy(
               typeName = g.typeName,
-              usedGenerics = getTsGenericByClientGenerics(usedGeneric.inputGenerics)
+              usedGenerics = getTsGenericByGenerics(usedGeneric.usedGenerics)
             )
           }
 
@@ -144,7 +163,7 @@ open class KtToTsContext(
         )
       }
       val thatPropType = this.getTypeByName(clientProp.typeName)!!
-      val def = resolveTsTypeValByClientType(thatPropType)
+      val def = getTsTypeValByType(thatPropType)
       if (def !is TsTypeVal.TypeDef) {
         return@map TsTypeProperty(
           name = clientProp.name.toTsStyleName(),
@@ -154,7 +173,7 @@ open class KtToTsContext(
       }
       TsTypeProperty(
         name = clientProp.name.toTsStyleName(),
-        defined = def.copy(usedGenerics = getTsGenericByClientGenerics(clientProp.inputGenerics))
+        defined = def.copy(usedGenerics = getTsGenericByGenerics(clientProp.inputGenerics))
       )
     }
   }
@@ -171,10 +190,10 @@ open class KtToTsContext(
     typeName: String
   ): TsTypeVal {
     val clientType = this.getTypeByName(typeName) ?: error("$typeName is not found")
-    return resolveTsTypeValByClientType(clientType)
+    return getTsTypeValByType(clientType)
   }
 
-  fun resolveTsTypeValByClientType(
+  fun getTsTypeValByType(
     clientType: ClientType,
   ): TsTypeVal {
     val name = getTypeNameByName(clientType.typeName)
@@ -194,6 +213,4 @@ open class KtToTsContext(
       tsScopesMap[name] ?: error("$name is not found")
     }
   }
-
-
 }
