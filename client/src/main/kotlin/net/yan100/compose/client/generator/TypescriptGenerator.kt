@@ -23,7 +23,7 @@ class TypescriptGenerator(
   internal val convertedTsScopes: List<TsScope> get() = context.tsScopes
 
   internal fun renderInterface(interfaceScope: TsScope.Interface) = TsFile.SingleInterface(interfaceScope)
-  fun renderStaticInterfacesToFiles(): List<TsFile<TsFile.SingleInterface>> {
+  fun renderStaticInterfacesToFiles(): List<TsFile.SingleInterface> {
     val interfaces = context.tsScopes.filterIsInstance<TsScope.Interface>()
     return interfaces.map {
       renderInterface(it)
@@ -41,7 +41,7 @@ class TypescriptGenerator(
 
   fun renderExecutorToFile(): TsFile.SingleTypeUtils {
     return TsFile.SingleTypeUtils(
-      fileName = TsName.Name("Executor"),
+      fileName = TsName.PathName("Executor"),
       usedNames = listOf("HTTPMethod", "BodyType").map(TsName::Name),
       render = {
         """
