@@ -1,7 +1,7 @@
 package net.yan100.compose.client.contexts
 
 import jakarta.annotation.Resource
-import net.yan100.compose.client.interceptors.kt.KotlinQualifierNameInterceptor
+import net.yan100.compose.client.interceptors.QualifierNameInterceptor
 import net.yan100.compose.client.interceptors.ts.TsEnumInterceptor
 import net.yan100.compose.client.interceptors.ts.TsJimmerInterceptor
 import net.yan100.compose.client.interceptors.ts.TsTypeAliasInterceptor
@@ -21,7 +21,7 @@ class KtToKtContextTest {
   fun `addInterceptor 后置添加拦截器并能获取到`() {
     val ctx = KtToKtContext(
       stub,
-      KotlinQualifierNameInterceptor.KotlinNameToJavaNameInterceptor()
+      QualifierNameInterceptor.KotlinNameToJavaNameInterceptor()
     )
     assertEquals(1, ctx.getInterceptors().size)
     ctx.addInterceptor(TsTypeAliasInterceptor())
@@ -34,7 +34,7 @@ class KtToKtContextTest {
   fun `拦截器上下文，装载名称拦截器后，处理了所有定义的名称`() {
     val ctx = KtToKtContext(
       stub,
-      KotlinQualifierNameInterceptor.KotlinNameToJavaNameInterceptor()
+      QualifierNameInterceptor.KotlinNameToJavaNameInterceptor()
     )
     val def = ctx.definitions
     val any = def.find { it.typeName == "kotlin.Any" }

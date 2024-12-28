@@ -23,25 +23,15 @@ class TypescriptGeneratorTest {
   lateinit var api: ClientApiStubs @Resource set
   lateinit var gen: TypescriptGenerator @Resource set
 
-  fun newWriterFile(name: String, block: ((Writer) -> Unit)? = null): File {
-    val dir = File(this::class.java.getResource("/")?.file ?: error("文件不存在"))
-    log.info("dir: {}", dir)
-    assertTrue { dir.exists() }
-    val a = dir.resolve(name)
-    log.info("create file: {}", a)
-    if (a.exists()) {
-      a.delete()
-    }
-    if (a.parentFile?.exists() == false) {
-      a.parentFile.mkdirs()
-    }
-    a.createNewFile()
-    block?.let { b ->
-      BufferedWriter(FileWriter(a, false)).use {
-        b(it)
+  @Test
+  fun `renderStaticInterfacesToFiles 测试将所有静态接口到文件`() {
+    gen.renderStaticInterfacesToFiles().forEach {
+      newWriterFile(
+        it.fileName.toString() + "." + it.fileExt,
+      ) { writer ->
+        writer.write(it.code)
       }
     }
-    return a
   }
 
   @Test
@@ -51,7 +41,7 @@ class TypescriptGeneratorTest {
     }
     gen.renderEnumsToFiles().forEach {
       newWriterFile(
-        it.fileName.toString() + "." + it.ext,
+        it.fileName.toString() + "." + it.fileExt,
       ) { writer ->
         writer.write(it.code)
       }
@@ -172,5 +162,27 @@ export type Executor = (requestOptions: {
     assertEquals(expectResult, body)
     assertEquals(1, tsFile.exports.size)
     assertEquals(TsName.Name("Executor"), tsFile.fileName)
+  }
+
+
+  fun newWriterFile(name: String, block: ((Writer) -> Unit)? = null): File {
+    val dir = File(this::class.java.getResource("/")?.file ?: error("文件不存在"))
+    log.info("dir: {}", dir)
+    assertTrue { dir.exists() }
+    val a = dir.resolve(name)
+    log.info("create file: {}", a)
+    if (a.exists()) {
+      a.delete()
+    }
+    if (a.parentFile?.exists() == false) {
+      a.parentFile.mkdirs()
+    }
+    a.createNewFile()
+    block?.let { b ->
+      BufferedWriter(FileWriter(a, false)).use {
+        b(it)
+      }
+    }
+    return a
   }
 }
