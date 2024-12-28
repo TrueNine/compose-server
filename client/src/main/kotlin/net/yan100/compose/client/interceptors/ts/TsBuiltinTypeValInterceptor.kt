@@ -13,11 +13,8 @@ open class TsBuiltinTypeValInterceptor : TsPreReferenceInterceptor() {
     "java.io.Serializable" to TsTypeVal.Never,
     "java.lang.String" to TsTypeVal.String,
     "java.lang.CharSequence" to TsTypeVal.String,
-    "kotlin.String" to TsTypeVal.String,
-    "kotlin.Any" to TsTypeVal.Any,
     "java.lang.Cloneable" to TsTypeVal.Never,
-
-    "java.lang.Object" to TsTypeVal.Any,
+    "java.lang.Object" to TsTypeVal.Unknown,
     "java.lang.Void" to TsTypeVal.Void,
     "java.lang.Boolean" to TsTypeVal.Boolean,
     "java.lang.Integer" to TsTypeVal.Number,
@@ -28,6 +25,7 @@ open class TsBuiltinTypeValInterceptor : TsPreReferenceInterceptor() {
     "java.lang.Byte" to TsTypeVal.Number,
     "java.lang.Number" to TsTypeVal.Number,
     "java.lang.Character" to TsTypeVal.String,
+
     "kotlin.ByteArray" to TsTypeVal.Array(
       TsGeneric.Used(
         used = TsTypeVal.Number,
