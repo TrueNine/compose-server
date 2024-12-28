@@ -10,6 +10,6 @@ import net.yan100.compose.meta.client.ClientType
  * 获取到预处理好的 TypeVal
  */
 abstract class TsPostReferenceInterceptor : Interceptor<ClientType, TsTypeVal, KtToTsContext> {
-  override val executeStage: ExecuteStage = ExecuteStage.LOOP_RESOLVE_TS_REFERENCES
+  final override val executeStage: ExecuteStage = ExecuteStage.LOOP_RESOLVE_TS_REFERENCES
   override fun defaultProcess(ctx: KtToTsContext, source: ClientType): TsTypeVal = TsTypeVal.Never
 }
