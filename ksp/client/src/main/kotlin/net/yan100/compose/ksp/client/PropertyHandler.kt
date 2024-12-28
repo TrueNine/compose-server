@@ -52,12 +52,22 @@ class PropertyHandler(
   }
 
   private fun handlePropertyDeclaration(propertyDeclaration: KSPropertyDeclaration): ClientProp {
-    val type = propertyDeclaration.type.fastResolve().declaration
-    val name = type.qualifiedNameAsString!!
+    val type = propertyDeclaration.type.fastResolve()
+    val name = type.declaration.qualifiedNameAsString!!
     if (!results.containsKey(name)) {
-      when (type) {
+      when (val d = type.declaration) {
         is KSClassDeclaration,
-        is KSTypeAlias -> handleClassDeclaration(type)
+        is KSTypeAlias -> {
+          handleClassDeclaration(d)
+        }
+      }
+    }
+    type.arguments.toDeclarations().forEach {
+      when (it) {
+        is KSClassDeclaration,
+        is KSTypeAlias -> {
+          handleClassDeclaration(it)
+        }
       }
     }
     return propertyDeclaration.toClientProp()

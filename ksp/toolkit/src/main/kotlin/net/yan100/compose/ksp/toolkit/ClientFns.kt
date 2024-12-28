@@ -114,6 +114,13 @@ fun List<KSTypeParameter>.toInputGenericTypeList(): List<ClientInputGenericType>
   }
 }
 
+
+fun List<KSTypeArgument>.toDeclarations(): List<KSDeclaration> {
+  return map {
+    it.type!!.fastResolve().declaration
+  }
+}
+
 @JvmName("kSTypeArgumentListToInputGenericTypeList")
 fun List<KSTypeArgument>.toInputGenericTypeList(): List<ClientInputGenericType> {
   return mapIndexed { i, it ->
