@@ -59,6 +59,7 @@ class TypescriptGeneratorTest {
       interfaced.name is TsName.PathName
       interfaced.generics.forEach { g ->
         assertIs<TsGeneric.Defined>(g)
+        assertIs<TsName.Generic>(g.name)
         assertFalse(g.name.toString()) { g.name.toString().contains(".") }
         assertFalse(g.name.toString()) { g.name.toString().contains("$") }
         assertFalse(g.name.toString()) { g.name.toString().contains("<") }
