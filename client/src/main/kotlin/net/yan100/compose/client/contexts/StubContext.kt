@@ -33,12 +33,18 @@ abstract class StubContext<C : StubContext<C>>(
     return this as C
   }
 
-  abstract fun getAllClientTypes(): List<ClientType>
-  abstract fun getClientTypeByQualifierName(qualifierName: String): ClientType?
-  abstract fun getClientTypeByKClass(kClass: KClass<*>): ClientType?
+  abstract fun getAllTypes(): List<ClientType>
+  abstract fun getTypeByName(typeName: String): ClientType?
+  open fun getTypeByKClass(kClass: KClass<*>): ClientType? {
+    return this.getTypeByName(kClass.qualifiedName!!)
+  }
 
-  protected abstract fun addClientType(type: ClientType): C
+  open fun getTypeByClass(clazz: Class<*>): ClientType? {
+    return this.getTypeByName(clazz.kotlin.qualifiedName!!)
+  }
 
-  abstract var currentStage: Interceptor.ExecuteStage
+  protected abstract fun addType(type: ClientType): C
+
+  abstract var currentStage: ExecuteStage
     protected set
 }
