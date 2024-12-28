@@ -9,7 +9,7 @@ import net.yan100.compose.client.unwrapGenericName
  * @param index 插入索引
  */
 sealed class TsGeneric(
-  open val index: Int,
+  open val index: Int = 0,
 ) {
 
   /**
@@ -17,7 +17,7 @@ sealed class TsGeneric(
    */
   data class Defined(
     val name: TsName,
-    override val index: Int,
+    override val index: Int = 0,
   ) : TsGeneric(index) {
     override fun toString(): String = name.toVariableName().unwrapGenericName()
   }
@@ -29,8 +29,16 @@ sealed class TsGeneric(
    */
   data class Used(
     val used: TsTypeVal,
-    override val index: Int
+    override val index: Int = 0
   ) : TsGeneric(index) {
     override fun toString(): String = used.toString()
   }
+
+  /**
+   * 没有填写泛型
+   */
+  data class UnUsed(
+    val used: TsTypeVal = TsTypeVal.Never,
+    override val index: Int = 0
+  ) : TsGeneric(index)
 }
