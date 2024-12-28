@@ -19,7 +19,7 @@ val standardClientTypeToTsScopeInterceptors = listOf(
   TsJimmerInterceptor(),
   //
   TsBuiltinTypeValInterceptor(),
-  TsPreReferenceTypeValInterceptor(),
+  TsTypeValPreReferenceInterceptor(),
   TsListTypeValInterceptor()
 )
 
