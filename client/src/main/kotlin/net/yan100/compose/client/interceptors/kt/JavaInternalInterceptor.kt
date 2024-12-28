@@ -1,16 +1,18 @@
 package net.yan100.compose.client.interceptors.kt
 
+import net.yan100.compose.client.contexts.ExecuteStage
 import net.yan100.compose.client.contexts.KtToKtContext
-import net.yan100.compose.client.interceptors.Interceptor
 import net.yan100.compose.client.interceptors.KotlinToKotlinInterceptor
+import net.yan100.compose.client.isGenericName
+import net.yan100.compose.client.unwrapGenericName
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 
 
 open class JavaInternalInterceptor : KotlinToKotlinInterceptor() {
-  override val executeStage: Interceptor.ExecuteStage = Interceptor.ExecuteStage.BEFORE_ALWAYS
+  override val executeStage: ExecuteStage = ExecuteStage.LOOP_RESOLVE_CLASS
   override fun defaultProcess(ctx: KtToKtContext, source: ClientType): ClientType = source
-  val supportedKinds = listOf(
+  private val supportedKinds = listOf(
     TypeKind.CLASS,
     TypeKind.INTERFACE,
   )
@@ -20,6 +22,23 @@ open class JavaInternalInterceptor : KotlinToKotlinInterceptor() {
   }
 
   override fun process(ctx: KtToKtContext, source: ClientType): ClientType {
-    return source
+    return source.copy(
+      typeName = ctx.getTypeNameByName(source.typeName),
+      superTypes = source.superTypes.map { process(ctx, it) },
+      aliasForTypeName = source.aliasForTypeName?.let { ctx.getTypeNameByName(it) },
+      argumentLocations = source.argumentLocations.map {
+        it.unwrapGenericName()
+      },
+      properties = source.properties.map { p ->
+        p.copy(
+          typeName = ctx.getTypeNameByName(p.typeName),
+          inputGenerics = p.inputGenerics.map { ig ->
+            ig.copy(
+              typeName = if (p.typeName.isGenericName()) ig.typeName else ctx.getTypeNameByName(ig.typeName)
+            )
+          }
+        )
+      }
+    )
   }
 }
