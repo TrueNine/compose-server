@@ -37,8 +37,5 @@ sealed class TsGeneric(
   /**
    * 没有填写泛型
    */
-  data class UnUsed(
-    val used: TsTypeVal = TsTypeVal.Never,
-    override val index: Int = 0
-  ) : TsGeneric(index)
+  data object UnUsed : TsGeneric(index = Int.MIN_VALUE)
 }
