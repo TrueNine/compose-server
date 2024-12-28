@@ -1,15 +1,15 @@
-package net.yan100.compose.client.interceptors.kt
+package net.yan100.compose.client.interceptors
 
+import net.yan100.compose.client.contexts.ExecuteStage
 import net.yan100.compose.client.contexts.KtToKtContext
-import net.yan100.compose.client.interceptors.Interceptor
 
-abstract class KotlinQualifierNameInterceptor : Interceptor<String, String, KtToKtContext> {
+abstract class QualifierNameInterceptor : Interceptor<String, String, KtToKtContext> {
   val kotlinJavaNameMap = mapOf(
-    "kotlin.Any" to "java.lang.Object",
-    "kotlin.Nothing" to "java.lang.Void",
-    "kotlin.Comparable" to "java.lang.Comparable",
     "kotlin.io.Serializable" to "java.io.Serializable",
+    "kotlin.Comparable" to "java.lang.Comparable",
+    "kotlin.Nothing" to "java.lang.Void",
     "kotlin.Number" to "java.lang.Number",
+    "kotlin.Any" to "java.lang.Object",
     "kotlin.Int" to "java.lang.Integer",
     "kotlin.Long" to "java.lang.Long",
     "kotlin.Float" to "java.lang.Float",
@@ -30,10 +30,10 @@ abstract class KotlinQualifierNameInterceptor : Interceptor<String, String, KtTo
     "kotlin.collections.Map" to "java.util.Map"
   )
 
-  override val executeStage: Interceptor.ExecuteStage = Interceptor.ExecuteStage.BEFORE_PRE_PROCESS
+  override val executeStage: ExecuteStage = ExecuteStage.CONVERT_QUALIFIER_NAME
   override fun defaultProcess(ctx: KtToKtContext, source: String): String = source
 
-  class KotlinNameToJavaNameInterceptor : KotlinQualifierNameInterceptor() {
+  open class KotlinNameToJavaNameInterceptor : QualifierNameInterceptor() {
     override fun supported(ctx: KtToKtContext, source: String): Boolean {
       return source in kotlinJavaNameMap.keys
     }
