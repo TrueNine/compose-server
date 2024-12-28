@@ -4,7 +4,9 @@ import net.yan100.compose.client.interceptors.Interceptor
 import net.yan100.compose.client.interceptors.QualifierNameInterceptor
 import net.yan100.compose.client.isGenericName
 import net.yan100.compose.meta.client.ClientApiStubs
+import net.yan100.compose.meta.client.ClientProp
 import net.yan100.compose.meta.client.ClientType
+import net.yan100.compose.meta.client.ClientUsedGeneric
 
 
 open class KtToKtContext(
@@ -15,7 +17,6 @@ open class KtToKtContext(
   private var internalDefinitions: MutableList<ClientType> = mutableListOf()
   private var internalDefinitionsMap: MutableMap<String, ClientType> = mutableMapOf()
   private var getDefinitionCircularCount = 0
-
 
   val definitions: List<ClientType>
     get() {
@@ -49,15 +50,40 @@ open class KtToKtContext(
       }
     }
 
-  private fun updateDefinitions(clientTypes: List<ClientType> = stub.definitions) {
+  private fun convertAllUsedGenerics(clientInputGenerics: List<ClientUsedGeneric>): List<ClientUsedGeneric> {
+    return clientInputGenerics.map {
+      if (it.typeName.isGenericName()) return@map it
+      it.copy(
+        typeName = getTypeNameByName(it.typeName),
+        usedGenerics = convertAllUsedGenerics(it.usedGenerics)
+      )
+    }
+  }
+
+  private fun convertAllPropertyName(clientProps: List<ClientProp>): List<ClientProp> {
+    return clientProps.map {
+      if (it.typeName.isGenericName()) return@map it
+      it.copy(
+        typeName = getTypeNameByName(it.typeName)
+      )
+    }
+  }
+
+  private fun updateDefinitions(clientTypes: List<ClientType> = stub.definitions, deepCount: Int = 0) {
+    if (deepCount > 63) error("Circular reference detected in updateDefinitions")
     internalDefinitions = mutableListOf()
     internalDefinitionsMap = mutableMapOf()
     val convertedName = clientTypes.map {
       it.copy(
         typeName = getTypeNameByName(it.typeName),
         superTypes = convertSuperTypes(it),
-        aliasForTypeName = it.aliasForTypeName?.let { n -> getTypeNameByName(n) }
+        aliasForTypeName = it.aliasForTypeName?.let { n -> getTypeNameByName(n) },
+        usedGenerics = convertAllUsedGenerics(it.usedGenerics),
+        properties = convertAllPropertyName(it.properties)
       )
+    }
+    if (!clientTypes.containsAll(convertedName)) {
+      updateDefinitions(convertedName, deepCount + 1)
     }
     internalDefinitions = convertedName.toMutableList()
     internalDefinitionsMap = internalDefinitions.associateBy { it.typeName }.toMutableMap()
@@ -75,12 +101,17 @@ open class KtToKtContext(
     }
   }
 
-
+  private val typeNameToNameCache = mutableMapOf<String, String>()
   fun getTypeNameByName(typeName: String): String {
+    if (typeNameToNameCache.containsKey(typeName)) return typeNameToNameCache[typeName]!!
     if (internalDefinitionsMap.containsKey(typeName) && internalDefinitionsMap.isNotEmpty()) return internalDefinitionsMap[typeName]!!.typeName
     val chains = interceptorChain.filterIsInstance<QualifierNameInterceptor>()
-    if (chains.isEmpty()) error("Not a single name interceptor was found, which may not have been expected")
-    return chains.processOrNull(this, typeName) ?: typeName
+    if (chains.isEmpty()) error("Not a qualifier name interceptor was found, which may not have been expected")
+    val processedName = chains.processOrNull(this, typeName)
+    return if (null != processedName) {
+      typeNameToNameCache[typeName] = processedName
+      processedName
+    } else typeName
   }
 
   fun getTypeByType(
