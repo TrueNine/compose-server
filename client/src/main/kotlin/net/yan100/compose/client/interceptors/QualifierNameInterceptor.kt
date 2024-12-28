@@ -5,6 +5,7 @@ import net.yan100.compose.client.contexts.KtToKtContext
 
 abstract class QualifierNameInterceptor : Interceptor<String, String, KtToKtContext> {
   val kotlinJavaNameMap = mapOf(
+    "kotlin.collections.Map\$Entry" to "java.util.Map\$Entry",
     "kotlin.io.Serializable" to "java.io.Serializable",
     "kotlin.Comparable" to "java.lang.Comparable",
     "kotlin.Nothing" to "java.lang.Void",
