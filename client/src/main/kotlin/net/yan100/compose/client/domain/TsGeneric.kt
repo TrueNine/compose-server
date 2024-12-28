@@ -11,6 +11,13 @@ import net.yan100.compose.client.unwrapGenericName
 sealed class TsGeneric(
   open val index: Int = 0,
 ) {
+  fun isBasic(): Boolean {
+    return when (this) {
+      is UnUsed -> false
+      is Defined -> name.isBasic()
+      is Used -> used.isBasic()
+    }
+  }
 
   /**
    * 定义之上的泛型定义
@@ -38,12 +45,4 @@ sealed class TsGeneric(
    * 没有填写泛型
    */
   data object UnUsed : TsGeneric(index = Int.MIN_VALUE)
-
-  fun isBasic(): Boolean {
-    return when (this) {
-      is Defined -> true
-      is Used -> used.isBasic()
-      is UnUsed -> false
-    }
-  }
 }
