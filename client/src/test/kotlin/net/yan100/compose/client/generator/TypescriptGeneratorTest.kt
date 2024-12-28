@@ -25,7 +25,8 @@ class TypescriptGeneratorTest {
 
   @Test
   fun `renderStaticInterfacesToFiles 测试将所有静态接口到文件`() {
-    gen.renderStaticInterfacesToFiles().forEach {
+    val interfaceFiles = gen.renderStaticInterfacesToFiles()
+    interfaceFiles.forEach {
       newWriterFile(
         it.fileName.toString() + "." + it.fileExt,
       ) { writer ->
