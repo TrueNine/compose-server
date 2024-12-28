@@ -218,7 +218,7 @@ sealed class TsTypeVal {
 
   fun isBasic(): kotlin.Boolean {
     return when (this) {
-      is TypeDef -> false
+      is TypeDef -> typeName.isBasic() && usedGenerics.all { it.isBasic() }
       is Never,
       is Any,
       is String,
@@ -233,10 +233,10 @@ sealed class TsTypeVal {
       is EmptyObject
         -> true
 
+      is Generic -> generic.isBasic()
       is Array -> usedGeneric.isBasic()
       is Union -> joinTypes.all { it.isBasic() }
       is AnonymousFunction -> params.all { it.defined.isBasic() } && returnType.isBasic()
-      is Generic -> false
       is Object -> elements.all { it.defined.isBasic() }
       is Promise -> usedGeneric.isBasic()
       is Record -> keyUsedGeneric.isBasic() && valueUsedGeneric.isBasic()
