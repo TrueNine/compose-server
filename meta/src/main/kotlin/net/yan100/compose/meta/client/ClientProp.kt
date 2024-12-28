@@ -24,7 +24,7 @@ data class ClientProp(
   /**
    * 填写的泛型参数列表
    */
-  val inputGenerics: List<ClientInputGenericType> = emptyList(),
+  val inputGenerics: List<ClientUsedGeneric> = emptyList(),
 
   /**
    * 属性索引

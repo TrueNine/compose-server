@@ -31,12 +31,12 @@ data class ClientType(
   /**
    * 该类的泛型列表，仅表示当前类需要填写多少泛型参数
    */
-  val argumentLocations: List<String> = emptyList(),
+  val arguments: List<String> = emptyList(),
 
   /**
    * 所填写的泛型参数
    */
-  val usedGenerics: List<ClientInputGenericType> = emptyList(),
+  val usedGenerics: List<ClientUsedGeneric> = emptyList(),
 
   /**
    * 该类具有的属性列表
