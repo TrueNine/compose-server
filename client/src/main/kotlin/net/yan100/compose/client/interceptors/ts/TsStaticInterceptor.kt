@@ -26,7 +26,7 @@ class TsStaticInterceptor : TsScopeInterceptor() {
     val properties = ctx.getClientPropsByClientType(source)
     val generics = source.arguments.mapIndexed { i, it ->
       TsGeneric.Defined(
-        name = TsName.Name(it),
+        name = TsName.Generic(it),
         index = i
       )
     }
