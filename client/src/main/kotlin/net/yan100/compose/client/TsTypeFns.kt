@@ -79,10 +79,9 @@ fun TsScope.collectImports(): List<TsImport> {
   val imports = when (this) {
     is TsScope.TypeAlias -> aliasFor.asImports(true)
     is TsScope.Interface -> {
-      val imps = superTypes.map { it.asImports(true) }.flatten() +
-        properties.map { it.defined.getUsedNames() }.flatten().mapNotNull { it.toTsImport(true) } +
+      val imps = superTypes.flatMap { it.asImports(true) } +
+        properties.flatMap { it.defined.getUsedNames().mapNotNull { e -> e.toTsImport(true) } } +
         generics.mapNotNull { it.name.toTsImport(true) }
-      
       imps.distinct()
     }
 
@@ -98,11 +97,19 @@ fun TsScope.collectImports(): List<TsImport> {
   }
 
   return imports.groupBy { it.fromPath to it.useType }
-    .map { (_, tsImport) ->
+    .mapNotNull { (a, tsImport) ->
+      val (path) = a
+      val iss = tsImport.map {
+        it.usingNames.mapNotNull { uname ->
+          if (name is TsName.PathName && name == uname && path == it.fromPath) null
+          else uname
+        }
+      }.flatten()
+      if (iss.isEmpty()) return@mapNotNull null
       TsImport(
         useType = tsImport.first().useType,
         fromPath = tsImport.first().fromPath,
-        usingNames = tsImport.map { it.usingNames }.flatten()
+        usingNames = iss
       )
     }
 }
@@ -143,4 +150,3 @@ fun TsGeneric.Defined.toRenderCode(): String {
 fun List<TsGeneric.Defined>.toRenderCode(): String = joinToString(separator = ", ", prefix = "<", postfix = ">") {
   it.toRenderCode()
 }
-
