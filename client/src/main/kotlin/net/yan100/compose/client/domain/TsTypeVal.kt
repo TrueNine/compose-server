@@ -30,7 +30,18 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
       is AnonymousFunction,
       is TypeConstant -> this as T
 
-      else -> this as T
+      is Any,
+      is Boolean,
+      is EmptyObject,
+      is Never,
+      is Null,
+      is Number,
+      is String,
+      is Symbol,
+      is Undefined,
+      is Unknown,
+      is Void,
+      is Bigint -> this as T
     }
   }
 
