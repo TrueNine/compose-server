@@ -176,7 +176,7 @@ open class KtToTsContext(
     }
   }
 
-  fun getClientPropsByClientType(
+  fun getPropsByType(
     clientType: ClientType
   ): List<TsTypeProperty> {
     if (clientType.properties.isEmpty()) return emptyList()
@@ -200,7 +200,7 @@ open class KtToTsContext(
       }
       TsTypeProperty(
         name = clientProp.name.toTsStyleName(),
-        defined = def.copy(usedGenerics = getTsGenericByGenerics(clientProp.inputGenerics))
+        defined = def.copy(usedGenerics = getTsGenericByGenerics(clientProp.usedGenerics))
       )
     }
   }
