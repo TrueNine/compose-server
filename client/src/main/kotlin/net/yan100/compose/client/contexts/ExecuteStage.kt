@@ -29,8 +29,22 @@ enum class ExecuteStage {
    * 提供类型引用
    */
   LOOP_RESOLVE_TS_REFERENCES,
-  RESOLVE_TS_VAL,
+
+  /**
+   * 此阶段提供基本的 ts scope 声明
+   *
+   * - 枚举 被直接提供
+   * - 接口 被直接提供（但未填写泛型参数）
+   * - 别名 被直接提供（但未填写泛型）
+   */
   RESOLVE_TS_SCOPE,
+
+  /**
+   * 此阶段循环提供 ts scope 的所有属性
+   * - 接口 （已填写泛型参数）
+   * - 别名 （已填写泛型）
+   */
+  RESOLVE_TS_SCOPE_ALWAYS,
 
   RESOLVE_SERVICE,
   RESOLVE_OPERATIONS
