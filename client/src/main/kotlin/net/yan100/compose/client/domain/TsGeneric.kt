@@ -11,6 +11,14 @@ import net.yan100.compose.client.unwrapGenericName
 sealed class TsGeneric(
   open val index: Int = 0,
 ) {
+  fun fillGenerics(usedGenerics: List<TsGeneric>): TsGeneric {
+    return when (this) {
+      is UnUsed -> this
+      is Defined -> this
+      is Used -> copy(used = used.fillGenerics(usedGenerics))
+    }
+  }
+
   fun isRequireUseGeneric(): Boolean {
     return when (this) {
       UnUsed -> true
