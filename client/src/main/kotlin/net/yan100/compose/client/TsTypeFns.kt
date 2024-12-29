@@ -13,7 +13,7 @@ fun TsGeneric.getUsedNames(): List<TsName> {
   }
 }
 
-fun TsTypeVal.toTsName(): TsName {
+fun TsTypeVal<*>.toTsName(): TsName {
   return when (this) {
     is TsTypeVal.TypeDef -> this.typeName
     else -> TsName.Name(this.toString())
@@ -40,7 +40,7 @@ fun TsScope<*>.getUsedNames(): List<TsName> {
   }
 }
 
-fun TsTypeVal.getUsedNames(): List<TsName> {
+fun TsTypeVal<*>.getUsedNames(): List<TsName> {
   return when (this) {
     is TsTypeVal.Array -> usedGeneric.getUsedNames()
     is TsTypeVal.Object -> elements.map { it.defined.getUsedNames() }.flatten()
@@ -69,7 +69,7 @@ fun TsName.toTsImport(useType: Boolean = true): TsImport? {
   }
 }
 
-fun TsTypeVal.asImports(useType: Boolean = true): List<TsImport> {
+fun TsTypeVal<*>.asImports(useType: Boolean = true): List<TsImport> {
   return getUsedNames().mapNotNull {
     it.toTsImport(useType)
   }
