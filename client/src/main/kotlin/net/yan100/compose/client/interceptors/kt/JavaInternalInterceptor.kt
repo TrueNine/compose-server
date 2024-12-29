@@ -32,7 +32,7 @@ open class JavaInternalInterceptor : KotlinToKotlinInterceptor() {
       properties = source.properties.map { p ->
         p.copy(
           typeName = ctx.getTypeNameByName(p.typeName),
-          inputGenerics = p.inputGenerics.map { ig ->
+          usedGenerics = p.usedGenerics.map { ig ->
             ig.copy(
               typeName = if (p.typeName.isGenericName()) ig.typeName else ctx.getTypeNameByName(ig.typeName)
             )
