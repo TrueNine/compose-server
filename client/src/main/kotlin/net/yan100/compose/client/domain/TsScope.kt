@@ -20,7 +20,7 @@ sealed class TsScope<T : TsScope<T>>(
     if (!isRequireUseGeneric()) return this as T
     val r = when (this) {
       is TypeAlias -> copy(usedGenerics = usedGenerics) as T
-      is TypeVal -> definition.fillGenerics(usedGenerics) as T
+      is TypeVal -> copy(definition = definition.fillGenerics(usedGenerics)) as T
       else -> this as T
     }
 
