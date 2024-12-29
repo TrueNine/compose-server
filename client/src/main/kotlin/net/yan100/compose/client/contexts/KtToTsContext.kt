@@ -157,7 +157,7 @@ open class KtToTsContext(
           index = usedGeneric.index
         )
       }
-      val usedResult = resolveTsTypeValByClientTypeTypeName(usedGeneric.typeName).let { g ->
+      val usedResult = getTsTypeValByName(usedGeneric.typeName).let { g ->
         when (g) {
           is TsTypeVal.TypeDef -> {
             g.copy(
@@ -176,7 +176,7 @@ open class KtToTsContext(
     }
   }
 
-  fun getPropsByType(
+  fun getTsTypePropertyByType(
     clientType: ClientType
   ): List<TsTypeProperty> {
     if (clientType.properties.isEmpty()) return emptyList()
@@ -210,10 +210,10 @@ open class KtToTsContext(
     typeName: String
   ): TsScope {
     val clientType = this.getTypeByName(typeName) ?: return TsScope.TypeVal(TsTypeVal.Never)
-    return resolveTsScopeByClientType(clientType)
+    return getTsScopeByType(clientType)
   }
 
-  fun resolveTsTypeValByClientTypeTypeName(
+  fun getTsTypeValByName(
     typeName: String
   ): TsTypeVal {
     val clientType = this.getTypeByName(typeName) ?: error("$typeName is not found")
@@ -227,14 +227,14 @@ open class KtToTsContext(
     return tsScopesMap[name]?.toTsTypeVal() ?: error("$name is not found")
   }
 
-  fun resolveTsScopeByClientType(
+  fun getTsScopeByType(
     clientType: ClientType
   ): TsScope {
-    val tsScope = resolveTsScopesByClientTypes(listOf(clientType)).first()
+    val tsScope = getTsScopesByTypes(listOf(clientType)).first()
     return tsScope
   }
 
-  fun resolveTsScopesByClientTypes(clientTypes: List<ClientType>): List<TsScope> {
+  fun getTsScopesByTypes(clientTypes: List<ClientType>): List<TsScope> {
     return clientTypes.map {
       val name = getTypeNameByName(it.typeName)
       tsScopesMap[name] ?: error("$name is not found")
