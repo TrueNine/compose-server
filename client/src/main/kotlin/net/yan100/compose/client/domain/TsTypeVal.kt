@@ -19,16 +19,17 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
   open fun fillGenerics(usedGenerics: List<TsGeneric>): T {
     if (!isRequireUseGeneric()) return this as T
     return when (this) {
-      is Object -> TODO()
-      is Union -> TODO()
-      is AnonymousFunction -> TODO()
       is Array -> copy(usedGeneric = usedGenerics.first()) as T
       is Generic -> copy(generic = usedGenerics.first()) as T
       is Promise -> copy(usedGeneric = usedGenerics.first()) as T
-      is Record -> copy(keyUsedGeneric = usedGenerics.first(), valueUsedGeneric = usedGenerics.last()) as T
-      is Tuple -> copy(elements = elements.map { it.fillGenerics(usedGenerics) }) as T
       is TypeDef -> copy(usedGenerics = usedGenerics) as T
+      is Record -> copy(keyUsedGeneric = usedGenerics[0], valueUsedGeneric = usedGenerics[1]) as T
+      is Union,
+      is Tuple,
+      is Object,
+      is AnonymousFunction,
       is TypeConstant -> this as T
+
       else -> this as T
     }
   }
