@@ -71,18 +71,18 @@ class KspClientProcessor(
           val isNull = operation.returnType?.fastResolve()?.isMarkedNullable
           copy(
             nullable = if (isNull == true) true else null,
-            usedGenerics = operation.returnType?.fastResolve()?.arguments?.toInputGenericTypeList()?.toMutableList() ?: mutableListOf()
+            usedGenerics = operation.returnType?.fastResolve()?.arguments?.toUsedGenerics()?.toMutableList() ?: mutableListOf()
           )
         }
         val params = operation.parameters.map { parameter ->
           val typeResolver = parameter.type.fastResolve()
           val type = handler.getCopyClientTypeToReturnType(typeResolver.declaration.qualifiedNameAsString!!)!!
-          val inputGenerics = typeResolver.arguments.toInputGenericTypeList().toMutableList()
+          val inputGenerics = typeResolver.arguments.toUsedGenerics().toMutableList()
           ClientProp(
             name = parameter.name!!.asString(),
             typeName = type.typeName,
             nullable = if (typeResolver.isMarkedNullable) true else null,
-            inputGenerics = inputGenerics
+            usedGenerics = inputGenerics
           )
         }.toMutableList()
         val pK = params.joinToString(":") { p -> p.typeName }
