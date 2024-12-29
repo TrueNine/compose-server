@@ -37,8 +37,8 @@ sealed class TsScope(
 
   data class TypeAlias(
     override val name: TsName,
+    val aliasFor: TsTypeVal,
     override val meta: ClientType? = null,
-    val aliasFor: TsTypeVal = TsTypeVal.Unknown,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val usedGenerics: List<TsGeneric> = emptyList()
   ) : TsScope(
