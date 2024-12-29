@@ -11,7 +11,7 @@ import net.yan100.compose.meta.client.ClientType
 class TsTypeValPreReferenceInterceptor : TsPreReferenceInterceptor() {
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = true
 
-  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal {
+  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal<*> {
     return TsTypeVal.TypeDef(
       typeName = ctx.getTypeNameByName(source.typeName).toTsStylePathName(),
       usedGenerics = source.toTsGenericUsed { ctx.getTypeNameByName(source.typeName).unwrapGenericName().toTsStylePathName() }

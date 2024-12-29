@@ -48,5 +48,5 @@ open class TsBuiltinTypeValInterceptor : TsPreReferenceInterceptor() {
   )
 
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeName in nameTable
-  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal = nameTable[ctx.getTypeNameByName(source.typeName)]!!
+  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal<*> = nameTable[ctx.getTypeNameByName(source.typeName)]!!
 }

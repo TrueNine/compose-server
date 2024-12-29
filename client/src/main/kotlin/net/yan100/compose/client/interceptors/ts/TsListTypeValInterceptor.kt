@@ -19,7 +19,7 @@ open class TsListTypeValInterceptor : TsPostReferenceInterceptor() {
       || nameMap.any { source.isAssignableFrom(it.key) }
   }
 
-  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal {
+  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal<*> {
     return TsTypeVal.Array(
       TsGeneric.UnUsed
     )

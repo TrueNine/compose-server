@@ -28,5 +28,5 @@ class TsMapEntryInterceptor : TsPostReferenceInterceptor() {
   }
 
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeName in nameMap
-  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal = nameMap[source.typeName]!!
+  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal<*> = nameMap[source.typeName]!!
 }
