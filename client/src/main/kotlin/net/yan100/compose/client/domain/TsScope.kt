@@ -56,7 +56,7 @@ sealed class TsScope<T : TsScope<T>>(
     }
   }
 
-  fun toTsTypeVal(): TsTypeVal {
+  fun toTsTypeVal(): TsTypeVal<*> {
     return when (this) {
       is Interface -> TsTypeVal.TypeDef(typeName = name)
       is Class -> TsTypeVal.TypeDef(typeName = name)
@@ -68,7 +68,7 @@ sealed class TsScope<T : TsScope<T>>(
 
   data class TypeAlias(
     override val name: TsName,
-    val aliasFor: TsTypeVal,
+    val aliasFor: TsTypeVal<*>,
     override val meta: ClientType? = null,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val usedGenerics: List<TsGeneric> = emptyList()
@@ -80,7 +80,7 @@ sealed class TsScope<T : TsScope<T>>(
   )
 
   data class TypeVal(
-    val definition: TsTypeVal,
+    val definition: TsTypeVal<*>,
     override val meta: ClientType? = null
   ) : TsScope<TypeVal>(
     name = TsName.Anonymous,
@@ -97,7 +97,7 @@ sealed class TsScope<T : TsScope<T>>(
     override val name: TsName,
     override val meta: ClientType? = null,
     val generics: List<TsGeneric.Defined> = emptyList(),
-    val superTypes: List<TsTypeVal> = emptyList(),
+    val superTypes: List<TsTypeVal<*>> = emptyList(),
     val properties: List<TsTypeProperty> = emptyList()
   ) : TsScope<Interface>(
     name = name,
