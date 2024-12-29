@@ -18,10 +18,14 @@ sealed class TsScope<T : TsScope<T>>(
   @Suppress("UNCHECKED_CAST")
   fun fillGenerics(usedGenerics: List<TsGeneric>): T {
     if (!isRequireUseGeneric()) return this as T
-    when {
-      this is TypeAlias -> {
-        copy()
+    val r = when (this) {
+      is TypeAlias -> copy(usedGenerics = usedGenerics)
+      is TypeVal -> {
+        this.definition
+        TODO()
       }
+
+      else -> this as T
     }
 
     return this as T
