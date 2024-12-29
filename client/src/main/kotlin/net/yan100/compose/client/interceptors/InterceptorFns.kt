@@ -22,7 +22,9 @@ val standardClientTypeToTsScopeInterceptors = listOf(
   TsTypeValPreReferenceInterceptor(),
   TsMapEntryInterceptor(),
   TsListTypeValInterceptor(),
-  TsMapPostInterceptor()
+  TsMapPostInterceptor(),
+  // post scope
+  TsPostScopeUseGenericInterceptor()
 )
 
 val standardNameInterceptors = listOf(
