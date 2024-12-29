@@ -20,6 +20,26 @@ fun TsTypeVal.toTsName(): TsName {
   }
 }
 
+fun TsScope.getUsedNames(): List<TsName> {
+  return when (this) {
+    is TsScope.Class -> TODO()
+    is TsScope.Enum -> listOf(name) + constants.keys.map(TsName::Name)
+    is TsScope.Interface -> {
+      val superUsedNames = superTypes.map { it.getUsedNames() }.flatten()
+      val propertiesNames = properties.map { it.defined.getUsedNames() }.flatten()
+      ((superUsedNames + propertiesNames) + name).distinct()
+    }
+
+    is TsScope.TypeAlias -> listOf(this.name) +
+      aliasFor.getUsedNames() +
+      usedGenerics.filterIsInstance<TsGeneric.Used>()
+        .map { it.used.getUsedNames() }
+        .flatten().distinct()
+
+    is TsScope.TypeVal -> definition.getUsedNames()
+  }
+}
+
 fun TsTypeVal.getUsedNames(): List<TsName> {
   return when (this) {
     is TsTypeVal.Array -> usedGeneric.getUsedNames()
@@ -59,10 +79,11 @@ fun TsScope.collectImports(): List<TsImport> {
   val imports = when (this) {
     is TsScope.TypeAlias -> aliasFor.asImports(true)
     is TsScope.Interface -> {
-      val imports = superTypes.map { it.asImports(true) }.flatten() +
+      val imps = superTypes.map { it.asImports(true) }.flatten() +
         properties.map { it.defined.getUsedNames() }.flatten().mapNotNull { it.toTsImport(true) } +
         generics.mapNotNull { it.name.toTsImport(true) }
-      imports.distinct()
+      
+      imps.distinct()
     }
 
     is TsScope.Class -> {
