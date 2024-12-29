@@ -105,22 +105,22 @@ open class KtToTsContext(
     if (supportedMap.isEmpty()) return supportedMap
     val tsGenericsInterceptors = interceptorChain.filterIsInstance<TsPostScopeInterceptor>()
     if (tsGenericsInterceptors.isEmpty()) return supportedMap
-    val (nextProcessMap, basicMap) = supportedMap.entries.partition { (_, def) ->
+    val (preparedProcessMap, basicMap) = supportedMap.entries.partition { (_, def) ->
       !def.isBasic()
     }.let {
       it.first.associate { (k, v) -> k to v } to it.second.associate { (k, v) -> k to v }
     }
-    val processedPostRefs = nextProcessMap.map { (type, def) ->
+    val processedMap = preparedProcessMap.map { (type, def) ->
       val process = tsGenericsInterceptors.firstOrNull { it.supported(this, type to def) }
       if (process == null) return@map type to def
       type to process.run {
         process(this@KtToTsContext, type to def)
       }
     }.run { toMap() }
-    val all = (processedPostRefs + basicMap)
-    addAllTsScopeByType(all)
-    if (processedPostRefs != nextProcessMap) return updatePostScopes(all, deep + 1)
-    return all
+    val resultMap = (processedMap + basicMap)
+    addAllTsScopeByType(resultMap)
+    if (processedMap != preparedProcessMap) return updatePostScopes(resultMap, deep + 1)
+    return resultMap
   }
 
   private fun updatePostReference(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
