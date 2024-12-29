@@ -11,7 +11,7 @@ import net.yan100.compose.client.domain.entries.TsName
 data class TsTypeProperty(
   val name: TsName,
   val partial: Boolean = false,
-  val defined: TsTypeVal
+  val defined: TsTypeVal<*>
 ) {
   fun isRequireUseGeneric(): Boolean {
     return defined.isRequireUseGeneric()
