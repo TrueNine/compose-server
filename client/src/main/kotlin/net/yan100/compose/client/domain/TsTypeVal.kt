@@ -15,6 +15,24 @@ import net.yan100.compose.client.toVariableName
  * - type type<generic...>
  */
 sealed class TsTypeVal<T : TsTypeVal<T>> {
+  @Suppress("UNCHECKED_CAST")
+  open fun fillGenerics(usedGenerics: List<TsGeneric>): T {
+    if (!isRequireUseGeneric()) return this as T
+    return when (this) {
+      is Object -> TODO()
+      is Union -> TODO()
+      is AnonymousFunction -> TODO()
+      is Array -> copy(usedGeneric = usedGenerics.first()) as T
+      is Generic -> copy(generic = usedGenerics.first()) as T
+      is Promise -> copy(usedGeneric = usedGenerics.first()) as T
+      is Record -> copy(keyUsedGeneric = usedGenerics.first(), valueUsedGeneric = usedGenerics.last()) as T
+      is Tuple -> copy(elements = elements.map { it.fillGenerics(usedGenerics) }) as T
+      is TypeDef -> copy(usedGenerics = usedGenerics) as T
+      is TypeConstant -> this as T
+      else -> this as T
+    }
+  }
+
   fun isRequireUseGeneric(): kotlin.Boolean {
     return when (this) {
       is Any,
