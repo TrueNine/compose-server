@@ -25,6 +25,7 @@ class TsReturnTypeController {
   }
 
   class ExtendsType<T>(
+    val importThis: ExtendsType<T>,
     val generic: List<T>,
     val mapEntry: Map.Entry<String, T>,
     val singleGeneric: T?,
