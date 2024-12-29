@@ -38,7 +38,6 @@ sealed class TsFile<T : TsFile<T>>(
     fileName = fileName,
   ) {
     override val render: (SingleInterface) -> String = { file ->
-      val imports = file.interfaces.collectImports()
       buildString {
         val name = file.interfaces.name.toVariableName()
         if (imports.isNotEmpty()) {
