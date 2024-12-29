@@ -40,10 +40,10 @@ sealed class TsGeneric(
   /**
    * 使用的泛型
    * @param used 插入的值
-   * @param useGenerics 其内嵌套使用的泛型
+   * @param index 其内嵌套使用的泛型
    */
   data class Used(
-    val used: TsTypeVal,
+    val used: TsTypeVal<*>,
     override val index: Int = 0
   ) : TsGeneric(index) {
     override fun toString(): String = used.toString()
