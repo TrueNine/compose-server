@@ -77,11 +77,11 @@ fun TsScope.collectImports(): List<TsImport> {
   }
 
   return imports.groupBy { it.fromPath to it.useType }
-    .map { (_, imports) ->
+    .map { (_, tsImport) ->
       TsImport(
-        useType = imports.first().useType,
-        fromPath = imports.first().fromPath,
-        usingNames = imports.map { it.usingNames }.flatten()
+        useType = tsImport.first().useType,
+        fromPath = tsImport.first().fromPath,
+        usingNames = tsImport.map { it.usingNames }.flatten()
       )
     }
 }
