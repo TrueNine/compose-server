@@ -30,7 +30,7 @@ fun KSDeclaration.toClientType(log: KSPLogger? = null): ClientType {
     else -> error("$this is not a KSClassDeclaration")
   }
   val superTypes = dec.superTypes.map { e -> e.fastResolve() }.map {
-    val superParameter = it.arguments.toInputGenericTypeList()
+    val superParameter = it.arguments.toUsedGenerics()
     it.declaration.toClientType(log)
       .copy(usedGenerics = superParameter)
       .clipToSuperType()
@@ -58,16 +58,17 @@ fun KSDeclaration.toClientType(log: KSPLogger? = null): ClientType {
 
 
 fun KSPropertyDeclaration.toClientProp(): ClientProp {
-  val typeName = this.type.fastResolve().declaration.qualifiedNameAsString!!
-  val nullable = this.type.fastResolve().isMarkedNullable
+  val type = this.type.fastResolve()
+  val typeName = type.declaration.qualifiedNameAsString!!
+  val nullable = type.isMarkedNullable
   val doc = docString
-  val generics = this.type.fastResolve().arguments.toInputGenericTypeList()
+  val generics = type.arguments.toUsedGenerics()
 
   return ClientProp(
     name = simpleNameAsString,
     typeName = typeName,
     nullable = if (nullable) true else null,
-    inputGenerics = generics,
+    usedGenerics = generics,
     doc = doc.toDoc()// TODO 支持过期注释
   )
 }
@@ -101,10 +102,10 @@ fun String?.toDoc(): Doc? {
 /**
  * 将泛型参数转换为可填写泛型参数
  */
-@JvmName("ksTypeParameterListToInputGenericTypeList")
-fun List<KSTypeParameter>.toInputGenericTypeList(): List<ClientUsedGeneric> {
+@JvmName("List_KSTypeParameter_toUsedGenerics")
+fun List<KSTypeParameter>.toUsedGenerics(): List<ClientUsedGeneric> {
   return mapIndexed { i, it ->
-    val args = it.typeParameters.toInputGenericTypeList()
+    val args = it.typeParameters.toUsedGenerics()
     val argName = it.qualifiedNameAsString!!
     ClientUsedGeneric(
       typeName = argName,
@@ -121,8 +122,8 @@ fun List<KSTypeArgument>.toDeclarations(): List<KSDeclaration> {
   }
 }
 
-@JvmName("kSTypeArgumentListToInputGenericTypeList")
-fun List<KSTypeArgument>.toInputGenericTypeList(): List<ClientUsedGeneric> {
+@JvmName("List_KSTypeArgument_toUsedGenerics")
+fun List<KSTypeArgument>.toUsedGenerics(): List<ClientUsedGeneric> {
   return mapIndexed { i, it ->
     val args = it.type?.fastResolve()?.arguments
     val declaration = it.type!!.fastResolve()
@@ -132,7 +133,7 @@ fun List<KSTypeArgument>.toInputGenericTypeList(): List<ClientUsedGeneric> {
       typeName = argName,
       index = i,
       nullable = if (nullable) true else null,
-      usedGenerics = args?.toInputGenericTypeList() ?: emptyList()
+      usedGenerics = args?.toUsedGenerics() ?: emptyList()
     )
   }
 }
