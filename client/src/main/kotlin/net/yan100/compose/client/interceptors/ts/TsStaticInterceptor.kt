@@ -23,7 +23,15 @@ class TsStaticInterceptor : TsScopeInterceptor() {
 
   override fun process(ctx: KtToTsContext, source: ClientType): TsScope {
     val name = source.typeName.toTsStylePathName()
-    val properties = ctx.getClientPropsByClientType(source)
+    val properties = ctx.getPropsByType(source)
+    // 如果 没有属性，则处理为 type xxx = object
+    if (properties.isEmpty()) {
+      return TsScope.TypeVal(
+        definition = TsTypeVal.EmptyObject,
+        meta = source
+      )
+    }
+
     val generics = source.arguments.mapIndexed { i, it ->
       TsGeneric.Defined(
         name = TsName.Generic(it),
@@ -31,40 +39,23 @@ class TsStaticInterceptor : TsScopeInterceptor() {
       )
     }
 
-    // 如果 没有属性，则处理为 type xxx = object
-    if (properties.isEmpty()) {
-      return TsScope.TypeVal(
-        definition = TsTypeVal.Record(
-          keyUsedGeneric = TsGeneric.Used(TsTypeVal.String, index = 0),
-          valueUsedGeneric = TsGeneric.Used(TsTypeVal.Unknown, index = 1)
-        ),
-        meta = source
-      )
-    }
-
     val superTypes = source.superTypes.mapNotNull {
-      when (val r = ctx.getTsTypeValByType(it)) {
+      val r = ctx.getTsTypeValByType(it)
+      if (r.isBasic()) return@mapNotNull null
+      when (r) {
+        is TsTypeVal.Record,
+        is TsTypeVal.Object -> return@mapNotNull r
+
         is TsTypeVal.TypeDef -> {
-          r.copy(
+          if (r.isBasic()) r
+          else r.copy(
             typeName = r.typeName,
             usedGenerics = it.toTsGenericUsed { er ->
-              if (er.typeName.isGenericName()) {
-                er.typeName.unwrapGenericName().toTsStyleName()
-              } else {
-                ctx.resolveTsTypeValByClientTypeTypeName(er.typeName).toTsName()
-              }
+              if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsStyleName()
+              else ctx.resolveTsTypeValByClientTypeTypeName(er.typeName).toTsName()
             }
           )
         }
-
-        is TsTypeVal.Any,
-        is TsTypeVal.String,
-        is TsTypeVal.Unknown,
-        is TsTypeVal.TypeConstant,
-        is TsTypeVal.EmptyObject -> null
-
-        is TsTypeVal.Record,
-        is TsTypeVal.Object -> r
 
         else -> null
       }
