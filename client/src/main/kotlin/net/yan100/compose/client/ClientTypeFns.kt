@@ -67,6 +67,16 @@ internal fun String.isGenericName(): Boolean {
   return contains("<") && contains(">") && contains("::") && contains("[") && contains("]")
 }
 
+internal fun <T : Any> String.ifGenericName(default: T, block: (String) -> T = { default }): T {
+  return if (isGenericName()) block(this)
+  else default
+}
+
+internal fun <T : Any> String.ifNotGenericName(default: T, block: (String) -> T = { default }): T {
+  return if (!isGenericName()) block(this)
+  else default
+}
+
 /**
  * 将原始的未经转换的泛型参数，转换为 `T` or `E` 此类形式
  */
