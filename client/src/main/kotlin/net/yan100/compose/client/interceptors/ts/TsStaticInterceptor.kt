@@ -23,7 +23,7 @@ class TsStaticInterceptor : TsScopeInterceptor() {
 
   override fun process(ctx: KtToTsContext, source: ClientType): TsScope {
     val name = source.typeName.toTsStylePathName()
-    val properties = ctx.getPropsByType(source)
+    val properties = ctx.getTsTypePropertyByType(source)
     // 如果 没有属性，则处理为 type xxx = object
     if (properties.isEmpty()) {
       return TsScope.TypeVal(
@@ -52,7 +52,7 @@ class TsStaticInterceptor : TsScopeInterceptor() {
             typeName = r.typeName,
             usedGenerics = it.toTsGenericUsed { er ->
               if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsStyleName()
-              else ctx.resolveTsTypeValByClientTypeTypeName(er.typeName).toTsName()
+              else ctx.getTsTypeValByName(er.typeName).toTsName()
             }
           )
         }
