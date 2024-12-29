@@ -14,7 +14,7 @@ import net.yan100.compose.client.toVariableName
  * - {}
  * - type type<generic...>
  */
-sealed class TsTypeVal {
+sealed class TsTypeVal<T : TsTypeVal<T>> {
   fun isRequireUseGeneric(): kotlin.Boolean {
     return when (this) {
       is Any,
@@ -45,7 +45,7 @@ sealed class TsTypeVal {
 
   data class Tuple(
     val elements: List<TsTypeProperty>
-  ) : TsTypeVal() {
+  ) : TsTypeVal<Tuple>() {
     override fun toString(): kotlin.String {
       return if (elements.isEmpty()) Array(TsGeneric.Used(Unknown, 0)).toString()
       else elements.joinToString(
@@ -58,7 +58,7 @@ sealed class TsTypeVal {
 
   data class Generic(
     val generic: TsGeneric
-  ) : TsTypeVal() {
+  ) : TsTypeVal<Generic>() {
     override fun toString(): kotlin.String = generic.toString()
   }
 
@@ -72,8 +72,8 @@ sealed class TsTypeVal {
    */
   data class AnonymousFunction(
     val params: List<TsTypeProperty>,
-    val returnType: TsTypeVal
-  ) : TsTypeVal() {
+    val returnType: TsTypeVal<*>
+  ) : TsTypeVal<AnonymousFunction>() {
     override fun toString(): kotlin.String {
       return "${TsScopeQuota.BRACKETS.left}${params.joinToString(", ") { it.toString() }}${TsScopeQuota.BRACKETS.right} => $returnType"
     }
@@ -86,8 +86,8 @@ sealed class TsTypeVal {
    * ```
    */
   data class Union(
-    val joinTypes: List<TsTypeVal>
-  ) : TsTypeVal() {
+    val joinTypes: List<TsTypeVal<*>>
+  ) : TsTypeVal<Union>() {
     override fun toString(): kotlin.String = joinTypes.joinToString(" | ") { it.toString() }
   }
 
@@ -106,7 +106,7 @@ sealed class TsTypeVal {
    */
   data class Object(
     val elements: List<TsTypeProperty> = emptyList()
-  ) : TsTypeVal() {
+  ) : TsTypeVal<Object>() {
     override fun toString(): kotlin.String {
       return if (elements.isEmpty()) EmptyObject.toString()
       else elements.joinToString(
@@ -127,8 +127,8 @@ sealed class TsTypeVal {
    * ```
    */
   data class TypeConstant(
-    val element: TsTypeVal
-  ) : TsTypeVal() {
+    val element: TsTypeVal<*>
+  ) : TsTypeVal<TypeConstant>() {
     override fun toString(): kotlin.String {
       return "$element as const"
     }
@@ -149,7 +149,7 @@ sealed class TsTypeVal {
   data class TypeDef(
     val typeName: TsName,
     val usedGenerics: List<TsGeneric> = emptyList()
-  ) : TsTypeVal() {
+  ) : TsTypeVal<TypeDef>() {
     override fun toString(): kotlin.String {
       return when (usedGenerics.size) {
         0 -> typeName.toVariableName()
@@ -158,23 +158,23 @@ sealed class TsTypeVal {
     }
   }
 
-  data object Number : TsTypeVal() {
+  data object Number : TsTypeVal<Number>() {
     override fun toString(): kotlin.String = "number"
   }
 
-  data object String : TsTypeVal() {
+  data object String : TsTypeVal<String>() {
     override fun toString(): kotlin.String = "string"
   }
 
-  data object Bigint : TsTypeVal() {
+  data object Bigint : TsTypeVal<Bigint>() {
     override fun toString(): kotlin.String = "bigint"
   }
 
-  data object Boolean : TsTypeVal() {
+  data object Boolean : TsTypeVal<Boolean>() {
     override fun toString(): kotlin.String = "boolean"
   }
 
-  data object Symbol : TsTypeVal() {
+  data object Symbol : TsTypeVal<Symbol>() {
     override fun toString(): kotlin.String = "symbol"
   }
 
@@ -185,7 +185,7 @@ sealed class TsTypeVal {
   data class Record(
     val keyUsedGeneric: TsGeneric,
     val valueUsedGeneric: TsGeneric
-  ) : TsTypeVal() {
+  ) : TsTypeVal<Record>() {
     override fun toString(): kotlin.String {
       return "Record<$keyUsedGeneric, $valueUsedGeneric>"
     }
@@ -196,51 +196,51 @@ sealed class TsTypeVal {
    */
   data class Promise(
     val usedGeneric: TsGeneric
-  ) : TsTypeVal() {
+  ) : TsTypeVal<Promise>() {
     override fun toString(): kotlin.String = "Promise<$usedGeneric>"
   }
 
   data class Array(
     val usedGeneric: TsGeneric
-  ) : TsTypeVal() {
+  ) : TsTypeVal<Array>() {
     override fun toString() = "Array<$usedGeneric>"
   }
 
   /**
    * 在大多情况下，不推荐直接使用 `any`
    */
-  data object Any : TsTypeVal() {
+  data object Any : TsTypeVal<Any>() {
     override fun toString(): kotlin.String = "any"
   }
 
 
-  data object Unknown : TsTypeVal() {
+  data object Unknown : TsTypeVal<Unknown>() {
     override fun toString(): kotlin.String = "unknown"
   }
 
-  data object Null : TsTypeVal() {
+  data object Null : TsTypeVal<Null>() {
     override fun toString(): kotlin.String = "null"
   }
 
   /**
    * `undefined` 仅为类型定义，对应的值类型应当是 `void 0` 操作符
    */
-  data object Undefined : TsTypeVal() {
+  data object Undefined : TsTypeVal<Undefined>() {
     override fun toString(): kotlin.String = "undefined"
   }
 
-  data object Never : TsTypeVal() {
+  data object Never : TsTypeVal<Never>() {
     override fun toString(): kotlin.String = "never"
   }
 
-  data object EmptyObject : TsTypeVal() {
+  data object EmptyObject : TsTypeVal<EmptyObject>() {
     override fun toString(): kotlin.String = "object"
   }
 
   /**
    * 独特于 function 的返回值，不应当出现于其他场合
    */
-  data object Void : TsTypeVal() {
+  data object Void : TsTypeVal<Void>() {
     override fun toString(): kotlin.String = "void"
   }
 
