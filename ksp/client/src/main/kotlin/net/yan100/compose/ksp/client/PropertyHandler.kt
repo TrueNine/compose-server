@@ -54,11 +54,17 @@ class PropertyHandler(
   private fun handlePropertyDeclaration(propertyDeclaration: KSPropertyDeclaration): ClientProp {
     val type = propertyDeclaration.type.fastResolve()
     val name = type.declaration.qualifiedNameAsString!!
+    val parentDeclaration = propertyDeclaration.parentDeclaration
+    val parentName = parentDeclaration?.qualifiedNameAsString ?: error("$name parent is null")
     if (!results.containsKey(name)) {
       when (val d = type.declaration) {
         is KSClassDeclaration,
         is KSTypeAlias -> {
-          handleClassDeclaration(d)
+          if (parentDeclaration != type.declaration
+            && parentName != name
+          ) {
+            handleClassDeclaration(d)
+          }
         }
       }
     }
@@ -66,7 +72,12 @@ class PropertyHandler(
       when (it) {
         is KSClassDeclaration,
         is KSTypeAlias -> {
-          handleClassDeclaration(it)
+          if (parentDeclaration != type.declaration
+            && parentName != name
+            && !results.containsKey(name)
+          ) {
+            handleClassDeclaration(it)
+          }
         }
       }
     }
@@ -81,13 +92,13 @@ class PropertyHandler(
         handleClassDeclaration(declaration.realDeclaration)
         results += typeName to type.copy(
           aliasForTypeName = type.aliasForTypeName!!,
-          usedGenerics = declaration.type.fastResolve().arguments.toInputGenericTypeList(),
+          usedGenerics = declaration.type.fastResolve().arguments.toUsedGenerics(),
         )
         return
       }
 
       if (declaration !is KSClassDeclaration) error("$declaration  not class")
-      val e = declaration.getAllProperties().map {
+      val allProperties = declaration.getAllProperties().map {
         handlePropertyDeclaration(it)
       }
 
@@ -98,7 +109,7 @@ class PropertyHandler(
               handleClassDeclaration(resolver.getClassDeclarationByRuntimeName(it.typeName)!!)
             }
           }
-          copy(properties = properties + e)
+          copy(properties = properties + allProperties)
         } else this
       }
 
