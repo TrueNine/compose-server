@@ -206,7 +206,7 @@ open class KtToTsContext(
   }
 
 
-  fun resolveTsScopeByClientTypeTypeName(
+  fun getTsScopeByName(
     typeName: String
   ): TsScope {
     val clientType = this.getTypeByName(typeName) ?: return TsScope.TypeVal(TsTypeVal.Never)
