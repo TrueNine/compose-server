@@ -19,12 +19,8 @@ sealed class TsScope<T : TsScope<T>>(
   fun fillGenerics(usedGenerics: List<TsGeneric>): T {
     if (!isRequireUseGeneric()) return this as T
     val r = when (this) {
-      is TypeAlias -> copy(usedGenerics = usedGenerics)
-      is TypeVal -> {
-        this.definition
-        TODO()
-      }
-
+      is TypeAlias -> copy(usedGenerics = usedGenerics) as T
+      is TypeVal -> definition.fillGenerics(usedGenerics) as T
       else -> this as T
     }
 
@@ -35,14 +31,9 @@ sealed class TsScope<T : TsScope<T>>(
     return when (this) {
       is Class -> TODO()
       is Enum -> false
-      is Interface -> {
-
-        TODO()
-      }
-
+      is Interface -> superTypes.any { it.isRequireUseGeneric() } || properties.any { it.isRequireUseGeneric() }
       is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
-
-      is TypeVal -> TODO()
+      is TypeVal -> definition.isRequireUseGeneric()
     }
   }
 
