@@ -17,7 +17,7 @@ import net.yan100.compose.client.toVariableName
 sealed class TsTypeVal<T : TsTypeVal<T>> {
   @Suppress("UNCHECKED_CAST")
   open fun fillGenerics(usedGenerics: List<TsGeneric>): T {
-    if (!isRequireUseGeneric()) return this as T
+    if (usedGenerics.isEmpty() || !isRequireUseGeneric()) return this as T
     return when (this) {
       is Array -> copy(usedGeneric = usedGenerics.first()) as T
       is Generic -> copy(generic = usedGenerics.first()) as T
