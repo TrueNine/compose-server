@@ -13,6 +13,14 @@ data class TsTypeProperty(
   val partial: Boolean = false,
   val defined: TsTypeVal<*>
 ) {
+  fun fillGenerics(usedGenerics: List<TsGeneric>): TsTypeProperty {
+    return TsTypeProperty(
+      name = name,
+      partial = partial,
+      defined = defined.fillGenerics(usedGenerics)
+    )
+  }
+
   fun isRequireUseGeneric(): Boolean {
     return defined.isRequireUseGeneric()
   }
