@@ -14,7 +14,7 @@ class TsEnumInterceptor : TsScopeInterceptor() {
     return source.typeKind == TypeKind.ENUM_CLASS
   }
 
-  override fun process(ctx: KtToTsContext, source: ClientType): TsScope {
+  override fun process(ctx: KtToTsContext, source: ClientType): TsScope<*> {
     return source.toTypescriptEnum()
   }
 }

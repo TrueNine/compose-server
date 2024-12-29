@@ -8,8 +8,8 @@ import net.yan100.compose.meta.client.ClientType
 
 class TsBuiltinInterceptor : TsScopeInterceptor() {
   override val executeStage: ExecuteStage = ExecuteStage.RESOLVE_TS_SCOPE
-  private val nameTable = mapOf<String, TsScope>()
+  private val nameTable = mapOf<String, TsScope<*>>()
 
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeName in nameTable
-  override fun process(ctx: KtToTsContext, source: ClientType): TsScope = nameTable[source.typeName]!!
+  override fun process(ctx: KtToTsContext, source: ClientType): TsScope<*> = nameTable[source.typeName]!!
 }

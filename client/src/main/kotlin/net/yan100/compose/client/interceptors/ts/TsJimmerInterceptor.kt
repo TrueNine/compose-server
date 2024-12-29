@@ -20,7 +20,7 @@ class TsJimmerInterceptor : TsScopeInterceptor() {
     return source.typeKind in jimmerTypeKinds
   }
 
-  override fun process(ctx: KtToTsContext, source: ClientType): TsScope {
+  override fun process(ctx: KtToTsContext, source: ClientType): TsScope<*> {
     return TsScope.TypeVal(TsTypeVal.Unknown, meta = source)
   }
 }

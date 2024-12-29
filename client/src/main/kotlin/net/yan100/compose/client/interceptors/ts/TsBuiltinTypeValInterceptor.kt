@@ -5,6 +5,9 @@ import net.yan100.compose.client.contexts.KtToTsContext
 import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.interceptors.TsPreReferenceInterceptor
+import net.yan100.compose.core.typing.AnyTyping
+import net.yan100.compose.core.typing.IntTyping
+import net.yan100.compose.core.typing.StringTyping
 import net.yan100.compose.meta.client.ClientType
 
 open class TsBuiltinTypeValInterceptor : TsPreReferenceInterceptor() {
@@ -25,6 +28,10 @@ open class TsBuiltinTypeValInterceptor : TsPreReferenceInterceptor() {
     "java.lang.Byte" to TsTypeVal.Number,
     "java.lang.Number" to TsTypeVal.Number,
     "java.lang.Character" to TsTypeVal.String,
+
+    AnyTyping::class.qualifiedName to TsTypeVal.Never,
+    StringTyping::class.qualifiedName to TsTypeVal.Never,
+    IntTyping::class.qualifiedName to TsTypeVal.Never,
 
     "kotlin.ByteArray" to TsTypeVal.Array(
       TsGeneric.Used(

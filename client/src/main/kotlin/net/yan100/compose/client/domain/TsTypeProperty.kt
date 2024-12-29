@@ -13,6 +13,10 @@ data class TsTypeProperty(
   val partial: Boolean = false,
   val defined: TsTypeVal
 ) {
+  fun isRequireUseGeneric(): Boolean {
+    return defined.isRequireUseGeneric()
+  }
+
   fun isBasic(): Boolean {
     return defined.isBasic()
   }

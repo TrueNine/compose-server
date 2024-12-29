@@ -20,7 +20,7 @@ class TypescriptGenerator(
     *standardInterceptors.toTypedArray()
   )
 
-  internal val convertedTsScopes: List<TsScope> get() = context.tsScopes
+  internal val convertedTsScopes: List<TsScope<*>> get() = context.tsScopes
 
   internal fun renderInterface(interfaceScope: TsScope.Interface) = TsFile.SingleInterface(interfaceScope)
   fun renderStaticInterfacesToFiles(): List<TsFile.SingleInterface> {

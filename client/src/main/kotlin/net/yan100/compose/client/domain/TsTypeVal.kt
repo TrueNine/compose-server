@@ -15,6 +15,34 @@ import net.yan100.compose.client.toVariableName
  * - type type<generic...>
  */
 sealed class TsTypeVal {
+  fun isRequireUseGeneric(): kotlin.Boolean {
+    return when (this) {
+      is Any,
+      is Boolean,
+      is EmptyObject,
+      is Never,
+      is Null,
+      is Number,
+      is String,
+      is Symbol,
+      is Undefined,
+      is Unknown,
+      is Void,
+      is Bigint -> false
+
+      is Object -> elements.any { it.isRequireUseGeneric() }
+      is AnonymousFunction -> params.any { it.isRequireUseGeneric() } || returnType.isRequireUseGeneric()
+      is Array -> usedGeneric.isRequireUseGeneric()
+      is Generic -> generic.isRequireUseGeneric()
+      is Promise -> usedGeneric.isRequireUseGeneric()
+      is Record -> keyUsedGeneric.isRequireUseGeneric() || valueUsedGeneric.isRequireUseGeneric()
+      is Tuple -> elements.any { it.isRequireUseGeneric() }
+      is TypeConstant -> element.isRequireUseGeneric()
+      is TypeDef -> usedGenerics.any { it.isRequireUseGeneric() }
+      is Union -> joinTypes.any { it.isRequireUseGeneric() }
+    }
+  }
+
   data class Tuple(
     val elements: List<TsTypeProperty>
   ) : TsTypeVal() {

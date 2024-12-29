@@ -9,12 +9,39 @@ import net.yan100.compose.meta.client.ClientType
  * @param scopeQuota 作用域环绕修饰符
  * @param modifier 作用域特定前缀修饰符
  */
-sealed class TsScope(
+sealed class TsScope<T : TsScope<T>>(
   open val name: TsName,
   open val meta: ClientType? = null,
   open val scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
   open val modifier: TsTypeModifier = TsTypeModifier.None
 ) {
+  @Suppress("UNCHECKED_CAST")
+  fun fillGenerics(usedGenerics: List<TsGeneric>): T {
+    if (!isRequireUseGeneric()) return this as T
+    when {
+      this is TypeAlias -> {
+        copy()
+      }
+    }
+
+    return this as T
+  }
+
+  fun isRequireUseGeneric(): Boolean {
+    return when (this) {
+      is Class -> TODO()
+      is Enum -> false
+      is Interface -> {
+
+        TODO()
+      }
+
+      is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
+
+      is TypeVal -> TODO()
+    }
+  }
+
   fun isBasic(): Boolean {
     return when (this) {
       is Enum -> true
@@ -41,7 +68,7 @@ sealed class TsScope(
     override val meta: ClientType? = null,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val usedGenerics: List<TsGeneric> = emptyList()
-  ) : TsScope(
+  ) : TsScope<TypeAlias>(
     name = name,
     meta = meta,
     scopeQuota = TsScopeQuota.BLANK,
@@ -51,7 +78,7 @@ sealed class TsScope(
   data class TypeVal(
     val definition: TsTypeVal,
     override val meta: ClientType? = null
-  ) : TsScope(
+  ) : TsScope<TypeVal>(
     name = TsName.Anonymous,
     scopeQuota = TsScopeQuota.BLANK,
     meta = meta,
@@ -68,7 +95,7 @@ sealed class TsScope(
     val generics: List<TsGeneric.Defined> = emptyList(),
     val superTypes: List<TsTypeVal> = emptyList(),
     val properties: List<TsTypeProperty> = emptyList()
-  ) : TsScope(
+  ) : TsScope<Interface>(
     name = name,
     meta = meta,
     modifier = TsTypeModifier.Interface,
@@ -82,7 +109,7 @@ sealed class TsScope(
     override val name: TsName,
     override val meta: ClientType? = null,
     val constants: Map<String, Comparable<*>>,
-  ) : TsScope(
+  ) : TsScope<Enum>(
     name = name,
     meta = meta,
     modifier = TsTypeModifier.Enum,
@@ -97,7 +124,7 @@ sealed class TsScope(
     override val meta: ClientType? = null,
     val superTypes: List<TsTypeVal.TypeDef>,
     // TODO 定义其他类的属性
-  ) : TsScope(
+  ) : TsScope<Class>(
     name = name,
     modifier = TsTypeModifier.Class,
     meta = meta,

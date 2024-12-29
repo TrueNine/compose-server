@@ -11,6 +11,14 @@ import net.yan100.compose.client.unwrapGenericName
 sealed class TsGeneric(
   open val index: Int = 0,
 ) {
+  fun isRequireUseGeneric(): Boolean {
+    return when (this) {
+      UnUsed -> true
+      is Defined -> false
+      is Used -> used.isRequireUseGeneric()
+    }
+  }
+
   fun isBasic(): Boolean {
     return when (this) {
       is UnUsed -> false

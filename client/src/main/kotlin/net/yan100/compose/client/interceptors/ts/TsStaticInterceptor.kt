@@ -21,7 +21,7 @@ class TsStaticInterceptor : TsScopeInterceptor() {
 
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeKind in supportedKinds
 
-  override fun process(ctx: KtToTsContext, source: ClientType): TsScope {
+  override fun process(ctx: KtToTsContext, source: ClientType): TsScope<*> {
     val name = source.typeName.toTsStylePathName()
     val properties = ctx.getTsTypePropertyByType(source)
     // 如果 没有属性，则处理为 type xxx = object

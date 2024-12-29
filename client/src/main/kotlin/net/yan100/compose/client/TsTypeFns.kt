@@ -20,7 +20,7 @@ fun TsTypeVal.toTsName(): TsName {
   }
 }
 
-fun TsScope.getUsedNames(): List<TsName> {
+fun TsScope<*>.getUsedNames(): List<TsName> {
   return when (this) {
     is TsScope.Class -> TODO()
     is TsScope.Enum -> listOf(name) + constants.keys.map(TsName::Name)
@@ -75,7 +75,7 @@ fun TsTypeVal.asImports(useType: Boolean = true): List<TsImport> {
   }
 }
 
-fun TsScope.collectImports(): List<TsImport> {
+fun TsScope<*>.collectImports(): List<TsImport> {
   val imports = when (this) {
     is TsScope.TypeAlias -> aliasFor.asImports(true)
     is TsScope.Interface -> {

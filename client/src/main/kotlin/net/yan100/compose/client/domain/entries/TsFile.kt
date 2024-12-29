@@ -10,7 +10,7 @@ sealed class TsFile<T : TsFile<T>>(
   open val fileName: TsName,
   open val fileExt: String = "ts",
   open val imports: List<TsImport> = emptyList(),
-  open val scopes: List<TsScope> = emptyList(),
+  open val scopes: List<TsScope<*>> = emptyList(),
   open val usedNames: List<TsName> = emptyList(),
   open val exports: List<TsExport> = emptyList(),
 ) {
@@ -74,7 +74,7 @@ sealed class TsFile<T : TsFile<T>>(
   data class SingleTypeUtils(
     override val fileName: TsName,
     override val render: (SingleTypeUtils) -> String,
-    override val scopes: List<TsScope> = emptyList(),
+    override val scopes: List<TsScope<*>> = emptyList(),
     override val usedNames: List<TsName> = emptyList(),
     val exportName: TsExport = TsExport.ExportedDefined(fileName),
     override val imports: List<TsImport> = emptyList(),
@@ -93,7 +93,7 @@ sealed class TsFile<T : TsFile<T>>(
   data class SingleEnum(
     val enums: TsScope.Enum,
     override val fileName: TsName = enums.name,
-    override val scopes: List<TsScope> = listOf(enums),
+    override val scopes: List<TsScope<*>> = listOf(enums),
   ) : TsFile<SingleEnum>(
     usedNames = listOf(fileName),
     scopes = scopes,
