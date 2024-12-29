@@ -242,14 +242,14 @@ open class KtToTsContext(
 
   fun getTsTypeValByName(
     typeName: String
-  ): TsTypeVal {
+  ): TsTypeVal<*> {
     val clientType = this.getTypeByName(typeName) ?: error("$typeName is not found")
     return getTsTypeValByType(clientType)
   }
 
   fun getTsTypeValByType(
     clientType: ClientType,
-  ): TsTypeVal {
+  ): TsTypeVal<*> {
     val name = getTypeNameByName(clientType.typeName)
     return tsScopesMap[name]?.toTsTypeVal() ?: error("$name is not found")
   }
