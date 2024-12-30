@@ -36,7 +36,6 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
 
       is Union,
       is Tuple,
-      is Object,
       is AnonymousFunction,
       is TypeConstant -> this as T
 
