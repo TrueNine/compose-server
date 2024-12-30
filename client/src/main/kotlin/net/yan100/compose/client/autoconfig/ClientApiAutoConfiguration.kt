@@ -20,6 +20,7 @@ class ClientApiAutoConfiguration : ApplicationRunner {
   lateinit var api: ClientApiStubs
 
   @Bean
+  @ConditionalOnMissingBean
   fun listsClientApiStubs(mapper: ObjectMapper): ClientApiStubs {
     val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json").filter { it.exists() }
     val apis = resources.map {
