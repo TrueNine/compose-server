@@ -4,12 +4,14 @@ import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeProperty
 import net.yan100.compose.client.domain.TsTypeVal
+import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.interceptors.*
 import net.yan100.compose.client.isGenericName
 import net.yan100.compose.client.toTsStyleName
 import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.client.ClientUsedGeneric
+import net.yan100.compose.meta.types.TypeKind.*
 
 open class KtToTsContext(
   stub: ClientApiStubs,
@@ -123,6 +125,9 @@ open class KtToTsContext(
     return resultMap
   }
 
+  /**
+   * 后置处理 reference
+   */
   private fun updatePostReference(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
     if (deep > 16) error("Circular dependency detected")
     if (supportedMap.isEmpty()) return supportedMap
@@ -149,6 +154,9 @@ open class KtToTsContext(
     return all
   }
 
+  /**
+   * 环绕处理 scope
+   */
   private fun updateCustomScopes(supportedPostReferences: Map<ClientType, TsScope<*>>): Map<ClientType, TsScope<*>> {
     val toTsInterceptors = interceptorChain.filterIsInstance<TsScopeInterceptor>()
     val (notHandledTypeDefinitions, basicScopes) = supportedPostReferences.entries.partition { (_, def) ->
