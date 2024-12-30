@@ -152,6 +152,39 @@ open class KtToTsContext(
     return addAllTsScopeByType(processedMap)
   }
 
+  fun getUnUsedSuperTypes(source: ClientType): List<TsTypeVal<*>> {
+    return source.superTypes.mapNotNull { superType ->
+      val r = getTsTypeValByType(superType)
+      if (r is TsTypeVal.Record) return@mapNotNull null // 不处理 Record类型
+      if (r is TsTypeVal.Array) return@mapNotNull null // 不处理 Record类型
+      val used = superType.toTsGenericUsed { er ->
+        if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsStyleName()
+        else getTsTypeValByName(er.typeName).toTsName()
+      }
+
+      if (r.isBasic()) return@mapNotNull null
+      when (r) {
+        is TsTypeVal.Object -> {
+          if (r.isBasic()) r
+          else r.fillGenerics(used)
+        }
+
+        is TsTypeVal.TypeDef -> {
+          if (r.isBasic()) r
+          else r.copy(
+            typeName = r.typeName,
+            usedGenerics = superType.toTsGenericUsed { er ->
+              if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsStyleName()
+              else getTsTypeValByName(er.typeName).toTsName()
+            }
+          )
+        }
+
+        else -> null
+      }
+    }
+  }
+
   /**
    * 后置处理 scope
    */
@@ -172,8 +205,7 @@ open class KtToTsContext(
         process(this@KtToTsContext, type to def)
       }
     }.run { toMap() }
-    val resultMap = (processedMap + basicMap)
-    addAllTsScopeByType(resultMap)
+    val resultMap = addAllTsScopeByType((processedMap + basicMap))
     if (processedMap != preparedProcessMap) return updatePostScopes(resultMap, deep + 1)
     return resultMap
   }
