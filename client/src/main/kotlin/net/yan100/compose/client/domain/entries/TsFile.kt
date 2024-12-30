@@ -27,15 +27,12 @@ sealed class TsFile<T : TsFile<T>>(
    */
   data class SingleInterface(
     val interfaces: TsScope.Interface,
-    override val fileName: TsName = interfaces.name,
-    override val fileExt: String = "ts",
   ) : TsFile<SingleInterface>(
     imports = interfaces.collectImports(),
     scopes = listOf(interfaces),
-    exports = listOf(TsExport.ExportedDefined(fileName)),
+    exports = listOf(TsExport.ExportedDefined(interfaces.name)),
     usedNames = listOf(interfaces.name),
-    fileExt = fileExt,
-    fileName = fileName,
+    fileName = interfaces.name,
   ) {
     override val render: (SingleInterface) -> String = { file ->
       buildString {
@@ -63,6 +60,34 @@ sealed class TsFile<T : TsFile<T>>(
         }
         appendLine(properties)
         append(file.interfaces.scopeQuota.right)
+        appendLine()
+      }
+    }
+  }
+
+  data class SingleTypeAlias(
+    val typeAlias: TsScope.TypeAlias,
+  ) : TsFile<SingleTypeAlias>(
+    imports = typeAlias.collectImports(),
+    scopes = listOf(typeAlias),
+    exports = listOf(TsExport.ExportedDefined(typeAlias.name)),
+    usedNames = listOf(typeAlias.name),
+    fileName = typeAlias.name,
+  ) {
+    override val render: (SingleTypeAlias) -> String = { file ->
+      buildString {
+        val name = file.typeAlias.name.toVariableName()
+        if (imports.isNotEmpty()) {
+          appendLine(imports.toRenderCode())
+          appendLine()
+        }
+        append("export ")
+        append(file.typeAlias.modifier.marker)
+        append(" ")
+        append(name)
+        if (file.typeAlias.generics.isNotEmpty()) append(file.typeAlias.generics.toRenderCode())
+        append(" = ")
+        append(file.typeAlias.aliasFor.toString())
         appendLine()
       }
     }
