@@ -12,8 +12,8 @@ class TsMapPostInterceptor : TsPostReferenceInterceptor() {
     "java.util.Map"
   ).associateWith {
     TsTypeVal.Record(
-      keyUsedGeneric = TsGeneric.UnUsed,
-      valueUsedGeneric = TsGeneric.UnUsed
+      keyUsedGeneric = TsGeneric.Used(TsTypeVal.String),
+      valueUsedGeneric = TsGeneric.Used(TsTypeVal.Unknown)
     )
   }
 
