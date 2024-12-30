@@ -22,6 +22,15 @@ class TypescriptGenerator(
 
   internal val convertedTsScopes: List<TsScope<*>> get() = context.tsScopes
 
+
+  internal fun renderTypeAlias(typeAlias: TsScope.TypeAlias): TsFile.SingleTypeAlias = TsFile.SingleTypeAlias(typeAlias)
+  fun renderTypeAliasesToFiles(): List<TsFile.SingleTypeAlias> {
+    val typeAliases = context.tsScopes.filterIsInstance<TsScope.TypeAlias>()
+    return typeAliases.map {
+      renderTypeAlias(it)
+    }
+  }
+
   internal fun renderInterface(interfaceScope: TsScope.Interface) = TsFile.SingleInterface(interfaceScope)
   fun renderStaticInterfacesToFiles(): List<TsFile.SingleInterface> {
     val interfaces = context.tsScopes.filterIsInstance<TsScope.Interface>()
