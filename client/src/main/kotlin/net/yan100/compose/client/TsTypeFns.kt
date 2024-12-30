@@ -89,7 +89,7 @@ fun TsScope<*>.collectImports(): List<TsImport> {
     is TsScope.Class -> TODO("略有难度")
     is TsScope.TypeVal -> TODO("略有难度")
   }
-
+  val thisImport = name.toTsImport()
   return imports.groupBy { it.fromPath to it.useType }
     .mapNotNull { (a, tsImport) ->
       val (path) = a
@@ -100,10 +100,27 @@ fun TsScope<*>.collectImports(): List<TsImport> {
         }
       }.flatten()
       if (iss.isEmpty()) return@mapNotNull null
-
+      val first = tsImport.first()
       TsImport(
-        useType = tsImport.first().useType,
-        fromPath = tsImport.first().fromPath,
+        useType = first.useType,
+        fromPath = first.fromPath.let { metaPath ->
+          if (thisImport == null) {
+            "../$metaPath"
+          } else {
+            val thisPaths = thisImport.fromPath.split("/")
+            val importPaths = first.fromPath.split("/")
+            check(thisPaths.size == 2)
+            check(importPaths.size == 2)
+            val t1 = thisPaths[0]
+            val i1 = importPaths[0]
+            val i2 = importPaths[1]
+            if (t1 == i1) {
+              "../${i2}"
+            } else {
+              "../../${i1}/${i2}"
+            }
+          }
+        },
         usingNames = iss
       )
     }
