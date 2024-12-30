@@ -236,7 +236,7 @@ open class KtToTsContext(
   fun getTsScopeByName(
     typeName: String
   ): TsScope<*> {
-    val clientType = this.getTypeByName(typeName) ?: return TsScope.TypeVal(TsTypeVal.Never)
+    val clientType = getTypeByName(typeName) ?: error("$typeName is not found")
     return getTsScopeByType(clientType)
   }
 
