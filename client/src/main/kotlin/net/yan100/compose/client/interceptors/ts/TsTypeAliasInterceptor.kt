@@ -19,7 +19,6 @@ class TsTypeAliasInterceptor : TsScopeInterceptor() {
       prevScope.definition.toTsName()
     } else prevScope.name
 
-
     val generics = source.arguments.mapIndexed { i, it ->
       TsGeneric.Defined(
         name = TsName.Name(it),
@@ -27,14 +26,16 @@ class TsTypeAliasInterceptor : TsScopeInterceptor() {
       )
     }
 
-    val useGenerics = ctx.getTsGenericByGenerics(source.usedGenerics)
     val aliasFor = ctx.getTsTypeValByName(source.aliasForTypeName!!)
+    val aliasUses = if (source.usedGenerics.isEmpty()) emptyList()
+    else ctx.getTsGenericByGenerics(source.usedGenerics)
+
     return TsScope.TypeAlias(
       name = name,
-      aliasFor = aliasFor,
+      aliasFor = aliasFor.fillGenerics(aliasUses),
       meta = source,
       generics = generics,
-      usedGenerics = useGenerics
+      usedGenerics = aliasUses
     )
   }
 }
