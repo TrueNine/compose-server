@@ -104,8 +104,8 @@ fun TsScope<*>.collectImports(): List<TsImport> {
         } else {
           val thisPaths = thisImport.fromPath.split("/")
           val importPaths = tsImport.fromPath.split("/")
-          check(thisPaths.size == 2)
-          check(importPaths.size == 2)
+          check(thisPaths.size == 2) { "thisImport is not supported $thisPaths" }
+          check(importPaths.size == 2) { "importPaths is not supported $importPaths" }
           val t1 = thisPaths[0]
           val i1 = importPaths[0]
           val i2 = importPaths[1]
