@@ -11,7 +11,7 @@ import net.yan100.compose.meta.client.ClientType
  */
 sealed class TsScope<T : TsScope<T>>(
   open val name: TsName,
-  open val meta: ClientType? = null,
+  open val meta: ClientType,
   open val scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
   open val modifier: TsTypeModifier = TsTypeModifier.None
 ) {
@@ -60,7 +60,7 @@ sealed class TsScope<T : TsScope<T>>(
   data class TypeAlias(
     override val name: TsName,
     val aliasFor: TsTypeVal<*>,
-    override val meta: ClientType? = null,
+    override val meta: ClientType,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val usedGenerics: List<TsGeneric> = emptyList()
   ) : TsScope<TypeAlias>(
@@ -72,7 +72,7 @@ sealed class TsScope<T : TsScope<T>>(
 
   data class TypeVal(
     val definition: TsTypeVal<*>,
-    override val meta: ClientType? = null
+    override val meta: ClientType
   ) : TsScope<TypeVal>(
     name = TsName.Anonymous,
     scopeQuota = TsScopeQuota.BLANK,
@@ -86,7 +86,7 @@ sealed class TsScope<T : TsScope<T>>(
    */
   data class Interface(
     override val name: TsName,
-    override val meta: ClientType? = null,
+    override val meta: ClientType,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val superTypes: List<TsTypeVal<*>> = emptyList(),
     val properties: List<TsTypeProperty> = emptyList()
@@ -102,7 +102,7 @@ sealed class TsScope<T : TsScope<T>>(
    */
   data class Enum(
     override val name: TsName,
-    override val meta: ClientType? = null,
+    override val meta: ClientType,
     val constants: Map<String, Comparable<*>>,
   ) : TsScope<Enum>(
     name = name,
@@ -116,7 +116,7 @@ sealed class TsScope<T : TsScope<T>>(
    */
   data class Class(
     override val name: TsName,
-    override val meta: ClientType? = null,
+    override val meta: ClientType,
     val superTypes: List<TsTypeVal.TypeDef>,
     // TODO 定义其他类的属性
   ) : TsScope<Class>(
