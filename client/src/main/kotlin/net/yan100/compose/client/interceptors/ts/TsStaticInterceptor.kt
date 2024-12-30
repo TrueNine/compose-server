@@ -11,12 +11,14 @@ import net.yan100.compose.client.interceptors.TsScopeInterceptor
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 
-class TsStaticInterceptor : TsScopeInterceptor() {
+open class TsStaticInterceptor : TsScopeInterceptor() {
   override val executeStage: ExecuteStage = ExecuteStage.RESOLVE_TS_SCOPE
 
   private val supportedKinds = listOf(
     TypeKind.INTERFACE,
-    TypeKind.CLASS
+    TypeKind.CLASS,
+    TypeKind.EMBEDDABLE,
+    TypeKind.IMMUTABLE
   )
 
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeKind in supportedKinds
