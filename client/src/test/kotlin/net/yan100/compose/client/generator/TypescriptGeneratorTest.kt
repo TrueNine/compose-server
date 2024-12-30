@@ -25,6 +25,18 @@ class TypescriptGeneratorTest {
   lateinit var gen: TypescriptGenerator @Resource set
 
   @Test
+  fun `比对 双 path 进行 zip`() {
+    val aList = "static/net_yan100_compose/c".split("/")
+    val bList = "typealias/net_yan100_compose".split("/")
+    val maxZip = (0 until maxOf(aList.size, bList.size)).map { index ->
+      val a = aList.getOrNull(index)
+      val b = bList.getOrNull(index)
+      a to b
+    }
+    println(maxZip)
+  }
+
+  @Test
   fun `renderStaticInterfacesToFiles 测试将所有静态接口到文件`() {
     val interfaceFiles = gen.renderStaticInterfacesToFiles()
     interfaceFiles.forEach {

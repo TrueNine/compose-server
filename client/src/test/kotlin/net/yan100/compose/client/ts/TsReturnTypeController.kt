@@ -2,6 +2,7 @@ package net.yan100.compose.client.ts
 
 import net.yan100.compose.client.jimmer.JimmerEntity
 import net.yan100.compose.client.jimmer.by
+import net.yan100.compose.core.RefId
 import net.yan100.compose.core.domain.IPage
 import net.yan100.compose.core.domain.IPageParam
 import net.yan100.compose.core.typing.ISO4217
@@ -27,6 +28,10 @@ class TsReturnTypeController {
   class ExtendsType<T>(
     val importThis: ExtendsType<T>,
     val generic: List<T>,
+    val dep: DeprecationDataClass?,
+    val refId: RefId?,
+    val isO4217: ISO4217,
+    val userAgents: UserAgents,
     val mapEntry: Map.Entry<String, T>,
     val singleGeneric: T?,
     override val value: String,
