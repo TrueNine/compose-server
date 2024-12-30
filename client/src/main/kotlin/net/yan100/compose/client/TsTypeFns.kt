@@ -133,7 +133,7 @@ internal fun TsName.toVariableName(): String {
     is TsName.Name -> name
     is TsName.PathName -> name
     is TsName.Generic -> name.unwrapGenericName()
-    else -> error("variable name $this is not supported")
+    else -> error("variable name [$this] is not supported")
   }
 }
 
