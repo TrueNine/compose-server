@@ -99,7 +99,38 @@ open class KtToTsContext(
     addAllTsScope(preReferenceMap.mapKeys { it.key.typeName })
     val postReferenceMap = updatePostReference(preReferenceMap)
     val customScopeMap = updateCustomScopes(postReferenceMap)
-    updatePostScopes(customScopeMap)
+    val genericsMap = updatePostScopes(customScopeMap)
+    redirectAllScopes(genericsMap)
+  }
+
+  private fun layoutScopePath(scope: TsScope<*>): TsScope<*> {
+    val type = scope.meta
+    val kind = when (type.typeKind) {
+      OBJECT,
+      INTERFACE,
+      CLASS -> "static"
+
+      IMMUTABLE -> "dynamic"
+      EMBEDDABLE -> "embeddable"
+      TYPEALIAS -> "typealias"
+      ENUM_CLASS -> "enum"
+      TRANSIENT,
+      ENUM_ENTRY,
+      ANNOTATION_CLASS,
+      null -> TODO()
+    }
+    val name = if (scope.name is TsName.PathName) scope.name as TsName.PathName else return scope
+    val r = name.copy(
+      name = name.name,
+      path = "$kind/${name.path}"
+    )
+    return when (scope) {
+      is TsScope.TypeVal -> scope
+      is TsScope.Class -> scope.copy(name = r)
+      is TsScope.Enum -> scope.copy(name = r)
+      is TsScope.Interface -> scope.copy(name = r)
+      is TsScope.TypeAlias -> scope.copy(name = r)
+    }
   }
 
   private fun updatePostScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
