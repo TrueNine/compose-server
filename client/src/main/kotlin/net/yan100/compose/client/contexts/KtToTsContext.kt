@@ -133,6 +133,32 @@ open class KtToTsContext(
     }
   }
 
+  private fun redirectAllScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
+    if (deep > 16) error("Circular dependency detected")
+    if (supportedMap.isEmpty()) return supportedMap
+    val (preparedProcessMap, basicMap) = supportedMap.entries.partition { (_, def) ->
+      when (def) {
+        is TsScope.TypeVal -> false
+        is TsScope.TypeAlias -> true
+        is TsScope.Interface -> true
+        is TsScope.Enum -> true
+        else -> false
+      }
+    }.let {
+      it.first.associate { (k, v) -> k to v } to it.second.associate { (k, v) -> k to v }
+    }
+    val processedMap = preparedProcessMap.mapValues { (_, v) ->
+      layoutScopePath(v)
+    }
+
+    val all = (processedMap + basicMap)
+    addAllTsScopeByType(all)
+    return all
+  }
+
+  /**
+   * 后置处理 scope
+   */
   private fun updatePostScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
     if (deep > 16) error("Circular dependency detected")
     if (supportedMap.isEmpty()) return supportedMap
