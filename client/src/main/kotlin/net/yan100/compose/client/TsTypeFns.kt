@@ -15,8 +15,8 @@ fun TsGeneric.getUsedNames(): List<TsName> {
 
 fun TsTypeVal<*>.toTsName(): TsName {
   return when (this) {
-    is TsTypeVal.TypeDef -> this.typeName
-    else -> TsName.Name(this.toString())
+    is TsTypeVal.TypeDef -> typeName
+    else -> TsName.Name(toString())
   }
 }
 
@@ -60,7 +60,7 @@ fun TsName.toTsImport(useType: Boolean = true): TsImport? {
     is TsName.PathName -> {
       TsImport(
         useType = useType,
-        fromPath = this.path,
+        fromPath = path,
         usingNames = listOf(this)
       )
     }
@@ -77,6 +77,7 @@ fun TsTypeVal<*>.asImports(useType: Boolean = true): List<TsImport> {
 
 fun TsScope<*>.collectImports(): List<TsImport> {
   val imports = when (this) {
+    is TsScope.Enum -> emptyList()
     is TsScope.TypeAlias -> aliasFor.asImports(true)
     is TsScope.Interface -> {
       val imps = superTypes.flatMap { it.asImports(true) } +
@@ -85,15 +86,8 @@ fun TsScope<*>.collectImports(): List<TsImport> {
       imps.distinct()
     }
 
-    is TsScope.Class -> {
-      // TODO 略有难度
-      emptyList()
-    }
-
-    is TsScope.Enum,
-      -> emptyList()
-
-    else -> emptyList()
+    is TsScope.Class -> TODO("略有难度")
+    is TsScope.TypeVal -> TODO("略有难度")
   }
 
   return imports.groupBy { it.fromPath to it.useType }
@@ -106,6 +100,7 @@ fun TsScope<*>.collectImports(): List<TsImport> {
         }
       }.flatten()
       if (iss.isEmpty()) return@mapNotNull null
+
       TsImport(
         useType = tsImport.first().useType,
         fromPath = tsImport.first().fromPath,
