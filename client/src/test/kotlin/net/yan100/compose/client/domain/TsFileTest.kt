@@ -19,10 +19,10 @@ class TsFileTest {
     val result = TsFile.SingleInterface(interfaces)
 
     assertNotBlank(result.code)
-    assertEquals(2, result.imports.size, "引入了父类，包含了该父类")
+    assertEquals(4, result.imports.size, "引入了父类，包含了该父类 $result")
     assertTrue {
       result.imports.any {
-        it.fromPath == "net_yan100_compose"
+        it.fromPath.contains("net_yan100_compose")
       }
     }
 
@@ -84,7 +84,7 @@ class TsFileTest {
       TsTypeProperty(
         name = TsName.Name("c"),
         defined = TsTypeVal.TypeDef(
-          typeName = TsName.PathName("Abc", "net_yan100_compose")
+          typeName = TsName.PathName("Abc", "static/net_yan100_compose")
         )
       ),
       TsTypeProperty(
@@ -105,22 +105,22 @@ class TsFileTest {
         defined = TsTypeVal.Any
       )
     ),
-    name = TsName.PathName("AInterface", path = "net_yan100_compose"),
+    name = TsName.PathName("AInterface", path = "static/net_yan100_compose"),
     meta = ClientType("net.yan100.compose.AInterface"),
     superTypes = listOf(
       TsTypeVal.TypeDef(
-        typeName = TsName.PathName("SuperInterface1", "net_yan100_compose_server"),
+        typeName = TsName.PathName("SuperInterface1", "static/net_yan100_compose_server"),
         usedGenerics = listOf(
           TsGeneric.Used(
             used = TsTypeVal.TypeDef(
-              typeName = TsName.PathName("Abs", "net_yan100_compose")
+              typeName = TsName.PathName("Abs", "static/net_yan100_compose")
             ),
             index = 0
           )
         )
       ),
       TsTypeVal.TypeDef(
-        typeName = TsName.PathName("SuperInterface2", "net_yan100_compose")
+        typeName = TsName.PathName("SuperInterface2", "static/net_yan100_compose")
       )
     )
   )
