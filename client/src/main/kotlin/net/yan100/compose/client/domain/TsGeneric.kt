@@ -60,5 +60,7 @@ sealed class TsGeneric(
   /**
    * 没有填写泛型
    */
-  data object UnUsed : TsGeneric(index = Int.MIN_VALUE)
+  data object UnUsed : TsGeneric(index = Int.MIN_VALUE) {
+    override fun toString(): String = TsTypeVal.Unknown.toString()
+  }
 }
