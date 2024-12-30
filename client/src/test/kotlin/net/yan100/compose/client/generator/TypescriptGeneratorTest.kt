@@ -25,15 +25,15 @@ class TypescriptGeneratorTest {
   lateinit var gen: TypescriptGenerator @Resource set
 
   @Test
-  fun `比对 双 path 进行 zip`() {
-    val aList = "static/net_yan100_compose/c".split("/")
-    val bList = "typealias/net_yan100_compose".split("/")
-    val maxZip = (0 until maxOf(aList.size, bList.size)).map { index ->
-      val a = aList.getOrNull(index)
-      val b = bList.getOrNull(index)
-      a to b
+  fun `renderTypeAliasesToFiles 测试将所有类型别名到文件`() {
+    val typealiases = gen.renderTypeAliasesToFiles()
+    typealiases.forEach {
+      newWriterFile(
+        it.fileName.toString() + "." + it.fileExt,
+      ) { writer ->
+        writer.write(it.code)
+      }
     }
-    println(maxZip)
   }
 
   @Test
