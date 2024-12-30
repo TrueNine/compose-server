@@ -14,10 +14,7 @@ class TsPostScopeUseGenericInterceptor : TsPostScopeInterceptor() {
       is TsScope.Interface -> {
         val r = scope.meta
         // TODO 处理父类类型
-        val supers = if (scope.superTypes.any { it.isRequireUseGeneric() }) {
-          r.superTypes.map { ctx.getTsTypeValByType(it) }
-        } else scope.superTypes
-
+        val supers = ctx.getUnUsedSuperTypes(r)
         val properties = if (scope.properties.any { it.isRequireUseGeneric() }) {
           (r.properties zip scope.properties).map { (meta, prop) ->
             meta.typeName.ifNotGenericName(prop) {
