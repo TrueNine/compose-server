@@ -11,7 +11,7 @@ import net.yan100.compose.client.toTsStyleName
 import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.client.ClientUsedGeneric
-import net.yan100.compose.meta.types.TypeKind.*
+import net.yan100.compose.meta.types.TypeKind
 
 open class KtToTsContext(
   stub: ClientApiStubs,
@@ -61,8 +61,9 @@ open class KtToTsContext(
 
   private fun addAllTsScopeByType(
     tsScopes: Map<ClientType, TsScope<*>>
-  ): MutableMap<String, TsScope<*>> {
-    return addAllTsScope(tsScopes.mapKeys { it.key.typeName })
+  ): Map<ClientType, TsScope<*>> {
+    addAllTsScope(tsScopes.mapKeys { it.key.typeName })
+    return tsScopes
   }
 
   private fun addAllTsScope(
