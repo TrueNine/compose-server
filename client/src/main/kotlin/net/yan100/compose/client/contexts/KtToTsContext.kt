@@ -69,7 +69,11 @@ open class KtToTsContext(
   private fun addAllTsScope(
     tsScopes: Map<String, TsScope<*>>
   ): MutableMap<String, TsScope<*>> {
-    internalTsScopesMap += tsScopes
+    tsScopes.forEach { (k, v) ->
+      if (internalTsScopesMap.containsKey(k)) {
+        internalTsScopesMap[k] = v
+      } else internalTsScopesMap[k] = v
+    }
     internalTsScopes.clear()
     internalTsScopes.addAll(internalTsScopesMap.values)
     return internalTsScopesMap
@@ -99,62 +103,53 @@ open class KtToTsContext(
     }
     addAllTsScope(preReferenceMap.mapKeys { it.key.typeName })
     val postReferenceMap = updatePostReference(preReferenceMap)
-    val customScopeMap = updateCustomScopes(postReferenceMap)
-    val genericsMap = updatePostScopes(customScopeMap)
-    redirectAllScopes(genericsMap)
-  }
-
-  private fun layoutScopePath(scope: TsScope<*>): TsScope<*> {
-    val type = scope.meta
-    val kind = when (type.typeKind) {
-      OBJECT,
-      INTERFACE,
-      CLASS -> "static"
-
-      IMMUTABLE -> "dynamic"
-      EMBEDDABLE -> "embeddable"
-      TYPEALIAS -> "typealias"
-      ENUM_CLASS -> "enum"
-      TRANSIENT,
-      ENUM_ENTRY,
-      ANNOTATION_CLASS,
-      null -> TODO()
-    }
-    val name = if (scope.name is TsName.PathName) scope.name as TsName.PathName else return scope
-    val r = name.copy(
-      name = name.name,
-      path = "$kind/${name.path}"
-    )
-    return when (scope) {
-      is TsScope.TypeVal -> scope
-      is TsScope.Class -> scope.copy(name = r)
-      is TsScope.Enum -> scope.copy(name = r)
-      is TsScope.Interface -> scope.copy(name = r)
-      is TsScope.TypeAlias -> scope.copy(name = r)
-    }
+    val redirected = redirectAllScopes(postReferenceMap)
+    val customScopeMap = updateCustomScopes(redirected)
+    updatePostScopes(customScopeMap)
   }
 
   private fun redirectAllScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
     if (deep > 16) error("Circular dependency detected")
     if (supportedMap.isEmpty()) return supportedMap
-    val (preparedProcessMap, basicMap) = supportedMap.entries.partition { (_, def) ->
-      when (def) {
-        is TsScope.TypeVal -> false
-        is TsScope.TypeAlias -> true
-        is TsScope.Interface -> true
-        is TsScope.Enum -> true
-        else -> false
-      }
-    }.let {
-      it.first.associate { (k, v) -> k to v } to it.second.associate { (k, v) -> k to v }
-    }
-    val processedMap = preparedProcessMap.mapValues { (_, v) ->
-      layoutScopePath(v)
-    }
+    val processedMap = supportedMap.mapValues { (t, s) ->
+      val kind = when (t.typeKind) {
+        TypeKind.CLASS,
+        TypeKind.OBJECT,
+        TypeKind.INTERFACE -> "static"
 
-    val all = (processedMap + basicMap)
-    addAllTsScopeByType(all)
-    return all
+        TypeKind.ENUM_CLASS -> "enums"
+
+        TypeKind.IMMUTABLE -> "dynamic"
+        TypeKind.EMBEDDABLE -> "embeddable"
+        TypeKind.TYPEALIAS -> "typealias"
+
+        TypeKind.ENUM_ENTRY,
+        TypeKind.ANNOTATION_CLASS,
+        TypeKind.TRANSIENT,
+        null -> error("unsupported type kind: ${t.typeKind}")
+      }
+      if (s is TsScope.TypeVal && s.definition is TsTypeVal.TypeDef && s.definition.typeName is TsName.PathName) {
+        val name = s.definition.typeName.copy(
+          name = s.definition.typeName.name,
+          path = "${kind}/${s.definition.typeName.path}"
+        )
+        s.copy(definition = s.definition.copy(typeName = name))
+      } else if (s.name is TsName.PathName) {
+        val name = (s.name as TsName.PathName)
+        val asName = name.copy(
+          name = name.name,
+          path = "${kind}/${name.path}"
+        )
+        when (s) {
+          is TsScope.Class -> s.copy(name = asName)
+          is TsScope.Enum -> s.copy(name = asName)
+          is TsScope.Interface -> s.copy(name = asName)
+          is TsScope.TypeAlias -> s.copy(name = asName)
+          is TsScope.TypeVal -> error("unsupported scope kind: ${s.definition}")
+        }
+      } else s
+    }
+    return addAllTsScopeByType(processedMap)
   }
 
   /**
@@ -330,7 +325,7 @@ open class KtToTsContext(
   fun getTsScopesByTypes(clientTypes: List<ClientType>): List<TsScope<*>> {
     return clientTypes.map {
       val name = getTypeNameByName(it.typeName)
-      tsScopesMap[name] ?: error("$name is not found")
+      internalTsScopesMap[name] ?: error("$name is not found")
     }
   }
 }
