@@ -1,6 +1,5 @@
 package net.yan100.compose.client.interceptors.ts
 
-import net.yan100.compose.client.*
 import net.yan100.compose.client.contexts.ExecuteStage
 import net.yan100.compose.client.contexts.KtToTsContext
 import net.yan100.compose.client.domain.TsGeneric
@@ -8,6 +7,7 @@ import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.interceptors.TsScopeInterceptor
+import net.yan100.compose.client.toTsName
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 
@@ -45,27 +45,7 @@ open class TsStaticInterceptor : TsScopeInterceptor() {
       )
     }
 
-    val superTypes = source.superTypes.mapNotNull {
-      val r = ctx.getTsTypeValByType(it)
-      if (r.isBasic()) return@mapNotNull null
-      when (r) {
-        is TsTypeVal.Record,
-        is TsTypeVal.Object -> return@mapNotNull r
-
-        is TsTypeVal.TypeDef -> {
-          if (r.isBasic()) r
-          else r.copy(
-            typeName = r.typeName,
-            usedGenerics = it.toTsGenericUsed { er ->
-              if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsStyleName()
-              else ctx.getTsTypeValByName(er.typeName).toTsName()
-            }
-          )
-        }
-
-        else -> null
-      }
-    }
+    val superTypes = ctx.getUnUsedSuperTypes(source)
 
     return TsScope.Interface(
       meta = source,
