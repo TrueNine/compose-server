@@ -90,40 +90,42 @@ fun TsScope<*>.collectImports(): List<TsImport> {
     is TsScope.TypeVal -> TODO("略有难度")
   }
   val thisImport = name.toTsImport()
-  return imports.groupBy { it.fromPath to it.useType }
-    .mapNotNull { (a, tsImport) ->
-      val (path) = a
-      val iss = tsImport.map {
-        it.usingNames.mapNotNull { uname ->
-          if (name is TsName.PathName && name == uname && path == it.fromPath) null
-          else uname
-        }
-      }.flatten()
-      if (iss.isEmpty()) return@mapNotNull null
-      val first = tsImport.first()
-      TsImport(
-        useType = first.useType,
-        fromPath = first.fromPath.let { metaPath ->
-          if (thisImport == null) {
-            "../$metaPath"
+  return imports.mapNotNull { tsImport ->
+    if (tsImport.fromPath == thisImport?.fromPath
+      && thisImport.usingNames == tsImport.usingNames
+    ) return@mapNotNull null
+    if (tsImport.usingNames.isEmpty()) return@mapNotNull null
+    val firstName = tsImport.usingNames.first().toVariableName()
+    TsImport(
+      useType = tsImport.useType,
+      fromPath = tsImport.fromPath.let { metaPath ->
+        if (thisImport == null) {
+          "../$metaPath"
+        } else {
+          val thisPaths = thisImport.fromPath.split("/")
+          val importPaths = tsImport.fromPath.split("/")
+          check(thisPaths.size == 2)
+          check(importPaths.size == 2)
+          val t1 = thisPaths[0]
+          val i1 = importPaths[0]
+          val i2 = importPaths[1]
+          if (t1 == i1) {
+            "../${i2}/${firstName}"
           } else {
-            val thisPaths = thisImport.fromPath.split("/")
-            val importPaths = first.fromPath.split("/")
-            check(thisPaths.size == 2)
-            check(importPaths.size == 2)
-            val t1 = thisPaths[0]
-            val i1 = importPaths[0]
-            val i2 = importPaths[1]
-            if (t1 == i1) {
-              "../${i2}"
-            } else {
-              "../../${i1}/${i2}"
-            }
+            "../../${i1}/${i2}/${firstName}"
           }
-        },
-        usingNames = iss
-      )
-    }
+        }
+      },
+      usingNames = tsImport.usingNames
+    )
+  }.groupBy { it.fromPath to it.useType }.map { (key, value) ->
+    val (fromPath, useType) = key
+    TsImport(
+      fromPath = fromPath,
+      useType = useType,
+      usingNames = value.flatMap { it.usingNames }.distinct()
+    )
+  }
 }
 
 @JvmName("list_TsImport_toRenderCode")
