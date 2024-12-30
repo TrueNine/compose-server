@@ -1,13 +1,12 @@
 package net.yan100.compose.client.contexts
 
+import net.yan100.compose.client.*
 import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeProperty
 import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.interceptors.*
-import net.yan100.compose.client.isGenericName
-import net.yan100.compose.client.toTsStyleName
 import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.client.ClientUsedGeneric
