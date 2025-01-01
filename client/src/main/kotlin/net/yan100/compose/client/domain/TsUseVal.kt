@@ -2,6 +2,7 @@ package net.yan100.compose.client.domain
 
 import net.yan100.compose.client.TsTypeDefine
 import net.yan100.compose.client.domain.entries.TsName
+import net.yan100.compose.client.toVariableName
 
 sealed class TsUseVal<T : TsUseVal<T>>(
   open val typeVal: TsTypeVal<*>,
@@ -27,13 +28,11 @@ sealed class TsUseVal<T : TsUseVal<T>>(
   }
 
   @Suppress("UNCHECKED_CAST")
-  override fun fillGenerics(usedGenerics: List<TsGeneric>): T {
-    if (usedGenerics.isEmpty()) return this as T
-    return when (this) {
-      is Parameter -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
-      is Return -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
-      is Prop -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
-    }
+  override fun fillGenerics(usedGenerics: List<TsGeneric>): T = if (usedGenerics.isEmpty()) this as T
+  else when (this) {
+    is Parameter -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
+    is Return -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
+    is Prop -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
   }
 
   data class Prop(
@@ -43,7 +42,9 @@ sealed class TsUseVal<T : TsUseVal<T>>(
   ) : TsUseVal<Prop>(
     typeVal = typeVal,
     partial = partial
-  )
+  ) {
+    override fun toString(): String = "${name.toVariableName()}${if (partial) "?" else ""}: $typeVal"
+  }
 
   data class Return(
     override val typeVal: TsTypeVal<*>,
