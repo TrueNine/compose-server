@@ -24,11 +24,10 @@ sealed class TsFile<T : TsFile<T>>(
 
   @Suppress("UNCHECKED_CAST")
   val code: String
-    get() {
-      val builder = CodeBuildable<T>()
-      render(builder, this as T)
-      return builder.toString()
-    }
+    get() = CodeBuildable<T>().also {
+      render(it, this as T)
+    }.toString()
+
 
   data class SingleServiceClass(
     val serviceClassScope: TsScope.Class
