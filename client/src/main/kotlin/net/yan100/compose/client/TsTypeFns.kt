@@ -95,8 +95,8 @@ fun TsScope<*>.collectImports(): List<TsImport> {
       imps.distinct()
     }
 
-    is TsScope.Class -> TODO("略有难度")
-    is TsScope.TypeVal -> TODO("略有难度")
+    is TsScope.Class -> emptyList()
+    is TsScope.TypeVal -> error("调用错误")
   }
   val thisImport = name.toTsImport()
   return imports.mapNotNull { tsImport ->
