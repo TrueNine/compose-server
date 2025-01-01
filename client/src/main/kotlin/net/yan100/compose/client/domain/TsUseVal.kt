@@ -4,20 +4,20 @@ import net.yan100.compose.client.TsTypeDefine
 import net.yan100.compose.client.domain.entries.TsName
 
 sealed class TsUseVal<T : TsUseVal<T>>(
-  open val typeValue: TsTypeVal<*>,
+  open val typeVal: TsTypeVal<*>,
   open val partial: Boolean = false
 ) : TsTypeDefine<T> {
   override val isBasic: Boolean
     get() = when (this) {
-      is ParameterType -> typeValue.isBasic
-      is ReturnType -> typeValue.isBasic
-      is Prop -> typeValue.isBasic
+      is Parameter -> typeVal.isBasic
+      is ReturnType -> typeVal.isBasic
+      is Prop -> typeVal.isBasic
     }
   override val isRequireUseGeneric: Boolean
     get() = when (this) {
-      is ParameterType -> typeValue.isRequireUseGeneric
-      is ReturnType -> typeValue.isRequireUseGeneric
-      is Prop -> typeValue.isRequireUseGeneric
+      is Parameter -> typeVal.isRequireUseGeneric
+      is ReturnType -> typeVal.isRequireUseGeneric
+      is Prop -> typeVal.isRequireUseGeneric
     }
 
   @Suppress("UNCHECKED_CAST")
@@ -30,35 +30,35 @@ sealed class TsUseVal<T : TsUseVal<T>>(
   override fun fillGenerics(usedGenerics: List<TsGeneric>): T {
     if (usedGenerics.isEmpty()) return this as T
     return when (this) {
-      is ParameterType -> copy(typeValue = typeValue.fillGenerics(usedGenerics)) as T
-      is ReturnType -> copy(typeValue = typeValue.fillGenerics(usedGenerics)) as T
-      is Prop -> copy(typeValue = typeValue.fillGenerics(usedGenerics)) as T
+      is Parameter -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
+      is ReturnType -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
+      is Prop -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
     }
   }
 
   data class Prop(
     val name: TsName,
-    override val typeValue: TsTypeVal<*>,
+    override val typeVal: TsTypeVal<*>,
     override val partial: Boolean = false
   ) : TsUseVal<Prop>(
-    typeValue = typeValue,
+    typeVal = typeVal,
     partial = partial
   )
 
   data class ReturnType(
-    override val typeValue: TsTypeVal<*>,
+    override val typeVal: TsTypeVal<*>,
     override val partial: Boolean = false
   ) : TsUseVal<ReturnType>(
-    typeValue = typeValue,
+    typeVal = typeVal,
     partial = partial
   )
 
-  data class ParameterType(
+  data class Parameter(
     val name: TsName.Name,
-    override val typeValue: TsTypeVal<*>,
+    override val typeVal: TsTypeVal<*>,
     override val partial: Boolean = false
-  ) : TsUseVal<ParameterType>(
-    typeValue = typeValue,
+  ) : TsUseVal<Parameter>(
+    typeVal = typeVal,
     partial = partial
   ) {
     @Deprecated("改为 Use")
@@ -70,7 +70,7 @@ sealed class TsUseVal<T : TsUseVal<T>>(
     return TsTypeProperty(
       name = TsName.Anonymous,
       partial = partial,
-      defined = typeValue
+      defined = typeVal
     )
   }
 }
