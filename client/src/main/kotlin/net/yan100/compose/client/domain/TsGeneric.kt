@@ -1,5 +1,6 @@
 package net.yan100.compose.client.domain
 
+import net.yan100.compose.client.TsTypeDefine
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.toVariableName
 import net.yan100.compose.client.unwrapGenericName
@@ -10,8 +11,13 @@ import net.yan100.compose.client.unwrapGenericName
  */
 sealed class TsGeneric(
   open val index: Int = 0,
-) {
-  fun fillGenerics(usedGenerics: List<TsGeneric>): TsGeneric {
+) : TsTypeDefine<TsGeneric> {
+  override fun fillGenerics(vararg generic: TsGeneric): TsGeneric {
+    return this.fillGenerics(generic.toList())
+  }
+
+  override fun fillGenerics(usedGenerics: List<TsGeneric>): TsGeneric {
+    if (usedGenerics.isEmpty()) return this
     return when (this) {
       is UnUsed -> this
       is Defined -> this
@@ -19,21 +25,22 @@ sealed class TsGeneric(
     }
   }
 
-  fun isRequireUseGeneric(): Boolean {
-    return when (this) {
+  override val isRequireUseGeneric: Boolean
+    get() = when (this) {
       UnUsed -> true
       is Defined -> false
       is Used -> used.isRequireUseGeneric()
     }
-  }
 
-  fun isBasic(): Boolean {
-    return when (this) {
-      is UnUsed -> false
-      is Defined -> name.isBasic()
-      is Used -> used.isBasic()
+
+  override val isBasic: Boolean
+    get() {
+      return when (this) {
+        is UnUsed -> false
+        is Defined -> name.isBasic()
+        is Used -> used.isBasic()
+      }
     }
-  }
 
   /**
    * 定义之上的泛型定义

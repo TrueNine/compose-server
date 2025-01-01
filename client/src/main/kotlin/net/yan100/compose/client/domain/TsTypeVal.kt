@@ -70,13 +70,13 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
 
       is Object -> elements.any { it.isRequireUseGeneric() }
       is AnonymousFunction -> params.any { it.isRequireUseGeneric() } || returnType.isRequireUseGeneric()
-      is Array -> usedGeneric.isRequireUseGeneric()
-      is Generic -> generic.isRequireUseGeneric()
-      is Promise -> usedGeneric.isRequireUseGeneric()
-      is Record -> keyUsedGeneric.isRequireUseGeneric() || valueUsedGeneric.isRequireUseGeneric()
+      is Array -> usedGeneric.isRequireUseGeneric
+      is Generic -> generic.isRequireUseGeneric
+      is Promise -> usedGeneric.isRequireUseGeneric
+      is Record -> keyUsedGeneric.isRequireUseGeneric || valueUsedGeneric.isRequireUseGeneric
       is Tuple -> elements.any { it.isRequireUseGeneric() }
       is TypeConstant -> element.isRequireUseGeneric()
-      is TypeDef -> usedGenerics.any { it.isRequireUseGeneric() }
+      is TypeDef -> usedGenerics.any { it.isRequireUseGeneric }
       is Union -> joinTypes.any { it.isRequireUseGeneric() }
     }
   }
@@ -284,7 +284,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
 
   fun isBasic(): kotlin.Boolean {
     return when (this) {
-      is TypeDef -> typeName.isBasic() && usedGenerics.all { it.isBasic() }
+      is TypeDef -> typeName.isBasic() && usedGenerics.all { it.isBasic }
       is Never,
       is Any,
       is String,
@@ -299,13 +299,13 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
       is EmptyObject
         -> true
 
-      is Generic -> generic.isBasic()
-      is Array -> usedGeneric.isBasic()
+      is Generic -> generic.isBasic
+      is Array -> usedGeneric.isBasic
       is Union -> joinTypes.all { it.isBasic() }
       is AnonymousFunction -> params.all { it.defined.isBasic() } && returnType.isBasic()
       is Object -> elements.all { it.defined.isBasic() }
-      is Promise -> usedGeneric.isBasic()
-      is Record -> keyUsedGeneric.isBasic() && valueUsedGeneric.isBasic()
+      is Promise -> usedGeneric.isBasic
+      is Record -> keyUsedGeneric.isBasic && valueUsedGeneric.isBasic
       is Tuple -> elements.all { it.isBasic() }
       is TypeConstant -> element.isBasic()
     }
