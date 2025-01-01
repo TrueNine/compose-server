@@ -38,7 +38,6 @@ sealed class TsFile<T : TsFile<T>>(
         append("${classScope.modifier.marker} ")
         append("${classScope.name.toVariableName()} ")
         appendLine(classScope.scopeQuota.left)
-
         appendLine(classScope.scopeQuota.right)
       }
     }
