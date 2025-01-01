@@ -92,7 +92,7 @@ sealed class TsScope<T : TsScope<T>>(
     override val name: TsName,
     override val meta: ClientType,
     val generics: List<TsGeneric.Defined> = emptyList(),
-    val superTypes: List<TsTypeVal<*>> = emptyList(),
+    val superTypes: List<TsTypeVal.Ref> = emptyList(),
     val properties: List<TsUseVal.Prop> = emptyList()
   ) : TsScope<Interface>(
     name = name,
