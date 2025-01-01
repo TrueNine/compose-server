@@ -13,7 +13,16 @@ open class KtToKtContext(
   stub: ClientApiStubs,
   vararg interceptorChain: Interceptor<*, *, *> = arrayOf()
 ) : StubContext<KtToKtContext>(interceptorChain.toMutableList()) {
+  /**
+   * 已装载的存根
+   */
   private val stub = stub.copy()
+
+  /**
+   * 已装载的服务端点
+   */
+  val clientServiceMap = stub.services.groupBy({ it.toClientType() }) { it.operations }.mapValues { (_, v) -> v.flatten() }
+  
   private val internalDefinitionsMap: MutableMap<String, ClientType> = mutableMapOf()
   private val internalDefinitions: MutableList<ClientType> = mutableListOf()
   private var getDefinitionCircularCount = 0
@@ -59,14 +68,13 @@ open class KtToKtContext(
     }
   }
 
-  private fun convertAllPropertyName(clientProps: List<ClientProp>): List<ClientProp> {
-    return clientProps.map {
-      if (it.typeName.isGenericName()) return@map it
-      it.copy(
-        typeName = getTypeNameByName(it.typeName)
-      )
-    }
+  private fun convertAllPropertyName(clientProps: List<ClientProp>): List<ClientProp> = clientProps.map {
+    if (it.typeName.isGenericName()) return@map it
+    it.copy(
+      typeName = getTypeNameByName(it.typeName)
+    )
   }
+
 
   private fun dispatch(clientTypes: List<ClientType> = stub.definitions, deepCount: Int = 0): Map<String, ClientType> {
     if (deepCount > 16) error("Circular reference detected in updateDefinitions")
