@@ -7,7 +7,6 @@ import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientOperation
 import net.yan100.compose.meta.client.ClientPostProcessApiOperationInfo
 import net.yan100.compose.meta.client.ClientService
-import org.springframework.context.ApplicationContext
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.method.HandlerMethod
@@ -18,13 +17,11 @@ private val pathVariableRegex = "\\{([^}]+)}".toRegex()
 private val log = slf4j<SpringClientApiStubInfoProvider>()
 
 class SpringClientApiStubInfoProvider(
-  private val ctxProvider: () -> ApplicationContext,
+  internal var api: ClientApiStubs = ClientApiStubs(),
+  internal var mappings: List<RequestMappingHandlerMapping>
 ) {
-  private val ctx get() = ctxProvider()
-  private val api get() = ctx.getBean(ClientApiStubs::class.java)
-
   private val mergedMappingMap
-    get() = ctx.getBeansOfType(RequestMappingHandlerMapping::class.java).values.map { mapping ->
+    get() = mappings.map { mapping ->
       mapping.handlerMethods
     }.reduce { acc, cur -> acc + cur }
   private val markedApiMappingMap

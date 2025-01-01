@@ -21,28 +21,32 @@ class ClientApiAutoConfiguration : ApplicationRunner {
 
   @Bean
   @ConditionalOnMissingBean
-  fun listsClientApiStubs(mapper: ObjectMapper): ClientApiStubs {
+  fun listsClientApiStubs(
+    mapper: ObjectMapper,
+    provider: SpringClientApiStubInfoProvider
+  ): ClientApiStubs {
     val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json").filter { it.exists() }
-    val apis = resources.map {
-      mapper.readValue(it.inputStream, ClientApiStubs::class.java)
-    }
+    val apis = resources.map { mapper.readValue(it.inputStream, ClientApiStubs::class.java) }
     val definitions = apis.map { it.definitions }.flatten().distinct()
     val services = apis.map { it.services }.flatten().distinct()
     api = ClientApiStubs(
       services = services,
       definitions = definitions
     )
-    return api
+    provider.api = api
+    return provider.mappedStubs
   }
 
   @Bean
   @ConditionalOnMissingBean
-  fun springClientApiStubInfoProvider(ctx: ApplicationContext): SpringClientApiStubInfoProvider = SpringClientApiStubInfoProvider { ctx }
+  fun springClientApiStubInfoProvider(ctx: ApplicationContext): SpringClientApiStubInfoProvider =
+    SpringClientApiStubInfoProvider(mappings = ctx.getBeansOfType(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping::class.java).values.toList())
+
 
   @Bean
   @ConditionalOnMissingBean
-  fun tsApiLazyGenerator(provider: SpringClientApiStubInfoProvider): TypescriptGenerator {
-    return TypescriptGenerator { provider.mappedStubs }
+  fun tsApiLazyGenerator(apiStub: ClientApiStubs): TypescriptGenerator {
+    return TypescriptGenerator { apiStub }
   }
 
   override fun run(args: ApplicationArguments?) {
