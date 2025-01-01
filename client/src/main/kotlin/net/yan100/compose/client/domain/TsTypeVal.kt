@@ -1,5 +1,6 @@
 package net.yan100.compose.client.domain
 
+import net.yan100.compose.client.TsTypeDefine
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.toVariableName
 
@@ -14,15 +15,21 @@ import net.yan100.compose.client.toVariableName
  * - {}
  * - type type<generic...>
  */
-sealed class TsTypeVal<T : TsTypeVal<T>> {
+sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
   @Suppress("UNCHECKED_CAST")
-  open fun fillGenerics(usedGenerics: List<TsGeneric>): T {
-    if (usedGenerics.isEmpty() || !isRequireUseGeneric()) return this as T
+  override fun fillGenerics(vararg generic: TsGeneric): T {
+    if (generic.isEmpty()) return this as T
+    return this.fillGenerics(generic.toList())
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  override fun fillGenerics(usedGenerics: List<TsGeneric>): T {
+    if (usedGenerics.isEmpty() || !isRequireUseGeneric) return this as T
     return when (this) {
       is Array -> copy(usedGeneric = usedGenerics.first()) as T
       is Generic -> copy(generic = usedGenerics.first()) as T
       is Promise -> copy(usedGeneric = usedGenerics.first()) as T
-      is TypeDef -> copy(usedGenerics = usedGenerics) as T
+      is TypeReference -> copy(usedGenerics = usedGenerics) as T
       is Record -> copy(keyUsedGeneric = usedGenerics[0], valueUsedGeneric = usedGenerics[1]) as T
       is Object -> copy(
         elements = usedGenerics.mapIndexed { i, it ->
@@ -53,33 +60,64 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
     }
   }
 
-  fun isRequireUseGeneric(): kotlin.Boolean {
-    return when (this) {
-      is Any,
-      is Boolean,
-      is EmptyObject,
-      is Never,
-      is Null,
-      is Number,
-      is String,
-      is Symbol,
-      is Undefined,
-      is Unknown,
-      is Void,
-      is Bigint -> false
+  override val isRequireUseGeneric: kotlin.Boolean
+    get() {
+      return when (this) {
+        is Any,
+        is Boolean,
+        is EmptyObject,
+        is Never,
+        is Null,
+        is Number,
+        is String,
+        is Symbol,
+        is Undefined,
+        is Unknown,
+        is Void,
+        is Bigint -> false
 
-      is Object -> elements.any { it.isRequireUseGeneric() }
-      is AnonymousFunction -> params.any { it.isRequireUseGeneric() } || returnType.isRequireUseGeneric()
-      is Array -> usedGeneric.isRequireUseGeneric
-      is Generic -> generic.isRequireUseGeneric
-      is Promise -> usedGeneric.isRequireUseGeneric
-      is Record -> keyUsedGeneric.isRequireUseGeneric || valueUsedGeneric.isRequireUseGeneric
-      is Tuple -> elements.any { it.isRequireUseGeneric() }
-      is TypeConstant -> element.isRequireUseGeneric()
-      is TypeDef -> usedGenerics.any { it.isRequireUseGeneric }
-      is Union -> joinTypes.any { it.isRequireUseGeneric() }
+        is Object -> elements.any { it.isRequireUseGeneric() }
+        is AnonymousFunction -> params.any { it.isRequireUseGeneric() } || returnType.isRequireUseGeneric
+        is Array -> usedGeneric.isRequireUseGeneric
+        is Generic -> generic.isRequireUseGeneric
+        is Promise -> usedGeneric.isRequireUseGeneric
+        is Record -> keyUsedGeneric.isRequireUseGeneric || valueUsedGeneric.isRequireUseGeneric
+        is Tuple -> elements.any { it.isRequireUseGeneric() }
+        is TypeConstant -> element.isRequireUseGeneric
+        is TypeReference -> usedGenerics.any { it.isRequireUseGeneric }
+        is Union -> joinTypes.any { it.isRequireUseGeneric }
+      }
     }
-  }
+
+  override val isBasic: kotlin.Boolean
+    get() {
+      return when (this) {
+        is TypeReference -> typeName.isBasic() && usedGenerics.all { it.isBasic }
+        is Never,
+        is Any,
+        is String,
+        is Unknown,
+        is Void,
+        is Boolean,
+        is Bigint,
+        is Number,
+        is Symbol,
+        is Null,
+        is Undefined,
+        is EmptyObject
+          -> true
+
+        is Generic -> generic.isBasic
+        is Array -> usedGeneric.isBasic
+        is Union -> joinTypes.all { it.isBasic }
+        is AnonymousFunction -> params.all { it.defined.isBasic } && returnType.isBasic
+        is Object -> elements.all { it.defined.isBasic }
+        is Promise -> usedGeneric.isBasic
+        is Record -> keyUsedGeneric.isBasic && valueUsedGeneric.isBasic
+        is Tuple -> elements.all { it.isBasic() }
+        is TypeConstant -> element.isBasic
+      }
+    }
 
   data class Tuple(
     val elements: List<TsTypeProperty>
@@ -184,10 +222,10 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
    * @param typeName 类型名称
    * @param usedGenerics 使用的泛型
    */
-  data class TypeDef(
+  data class TypeReference(
     val typeName: TsName,
     val usedGenerics: List<TsGeneric> = emptyList()
-  ) : TsTypeVal<TypeDef>() {
+  ) : TsTypeVal<TypeReference>() {
     override fun toString(): kotlin.String {
       return when (usedGenerics.size) {
         0 -> typeName.toVariableName()
@@ -282,32 +320,5 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
     override fun toString(): kotlin.String = "void"
   }
 
-  fun isBasic(): kotlin.Boolean {
-    return when (this) {
-      is TypeDef -> typeName.isBasic() && usedGenerics.all { it.isBasic }
-      is Never,
-      is Any,
-      is String,
-      is Unknown,
-      is Void,
-      is Boolean,
-      is Bigint,
-      is Number,
-      is Symbol,
-      is Null,
-      is Undefined,
-      is EmptyObject
-        -> true
 
-      is Generic -> generic.isBasic
-      is Array -> usedGeneric.isBasic
-      is Union -> joinTypes.all { it.isBasic() }
-      is AnonymousFunction -> params.all { it.defined.isBasic() } && returnType.isBasic()
-      is Object -> elements.all { it.defined.isBasic() }
-      is Promise -> usedGeneric.isBasic
-      is Record -> keyUsedGeneric.isBasic && valueUsedGeneric.isBasic
-      is Tuple -> elements.all { it.isBasic() }
-      is TypeConstant -> element.isBasic()
-    }
-  }
 }

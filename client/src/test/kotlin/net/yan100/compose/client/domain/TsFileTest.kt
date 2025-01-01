@@ -73,7 +73,7 @@ class TsFileTest {
       ),
       TsTypeProperty(
         name = TsName.Name("ab"),
-        defined = TsTypeVal.TypeDef(
+        defined = TsTypeVal.TypeReference(
           typeName = TsName.Name("File"),
           usedGenerics = listOf(
             TsGeneric.Defined(TsName.Generic("T1"), index = 0),
@@ -83,7 +83,7 @@ class TsFileTest {
       ),
       TsTypeProperty(
         name = TsName.Name("c"),
-        defined = TsTypeVal.TypeDef(
+        defined = TsTypeVal.TypeReference(
           typeName = TsName.PathName("Abc", "static/net_yan100_compose")
         )
       ),
@@ -93,7 +93,7 @@ class TsFileTest {
           elements = listOf(
             TsTypeProperty(
               name = TsName.Name("a"),
-              defined = TsTypeVal.TypeDef(
+              defined = TsTypeVal.TypeReference(
                 typeName = TsName.Name("A")
               )
             )
@@ -108,18 +108,18 @@ class TsFileTest {
     name = TsName.PathName("AInterface", path = "static/net_yan100_compose"),
     meta = ClientType("net.yan100.compose.AInterface"),
     superTypes = listOf(
-      TsTypeVal.TypeDef(
+      TsTypeVal.TypeReference(
         typeName = TsName.PathName("SuperInterface1", "static/net_yan100_compose_server"),
         usedGenerics = listOf(
           TsGeneric.Used(
-            used = TsTypeVal.TypeDef(
+            used = TsTypeVal.TypeReference(
               typeName = TsName.PathName("Abs", "static/net_yan100_compose")
             ),
             index = 0
           )
         )
       ),
-      TsTypeVal.TypeDef(
+      TsTypeVal.TypeReference(
         typeName = TsName.PathName("SuperInterface2", "static/net_yan100_compose")
       )
     )

@@ -22,11 +22,11 @@ data class TsTypeProperty(
   }
 
   fun isRequireUseGeneric(): Boolean {
-    return defined.isRequireUseGeneric()
+    return defined.isRequireUseGeneric
   }
 
   fun isBasic(): Boolean {
-    return defined.isBasic()
+    return defined.isBasic
   }
 
   override fun toString(): String {

@@ -30,7 +30,7 @@ internal fun ClientUsedGeneric.toTsGenericUsed(
   typeNameProvider: (ClientUsedGeneric) -> TsName
 ): TsGeneric.Used {
   return TsGeneric.Used(
-    used = TsTypeVal.TypeDef(
+    used = TsTypeVal.TypeReference(
       typeName = typeNameProvider(this),
       usedGenerics = this.usedGenerics.map { it.toTsGenericUsed(typeNameProvider) }
     ),
@@ -43,7 +43,7 @@ internal fun ClientType.toTsGenericUsed(
 ): List<TsGeneric.Used> {
   return usedGenerics.mapIndexed { index, used ->
     TsGeneric.Used(
-      used = TsTypeVal.TypeDef(
+      used = TsTypeVal.TypeReference(
         typeName = typeNameProvider(used),
         usedGenerics = used.usedGenerics.map { it.toTsGenericUsed(typeNameProvider) }
       ),

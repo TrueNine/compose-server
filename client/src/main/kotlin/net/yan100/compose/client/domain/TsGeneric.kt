@@ -29,7 +29,7 @@ sealed class TsGeneric(
     get() = when (this) {
       UnUsed -> true
       is Defined -> false
-      is Used -> used.isRequireUseGeneric()
+      is Used -> used.isRequireUseGeneric
     }
 
 
@@ -38,7 +38,7 @@ sealed class TsGeneric(
       return when (this) {
         is UnUsed -> false
         is Defined -> name.isBasic()
-        is Used -> used.isBasic()
+        is Used -> used.isBasic
       }
     }
 

@@ -15,7 +15,7 @@ fun TsGeneric.getUsedNames(): List<TsName> {
 
 fun TsTypeVal<*>.toTsName(): TsName {
   return when (this) {
-    is TsTypeVal.TypeDef -> typeName
+    is TsTypeVal.TypeReference -> typeName
     else -> TsName.Name(toString())
   }
 }
@@ -50,7 +50,7 @@ fun TsTypeVal<*>.getUsedNames(): List<TsName> {
     is TsTypeVal.TypeConstant -> element.getUsedNames()
     is TsTypeVal.Record -> keyUsedGeneric.getUsedNames() + valueUsedGeneric.getUsedNames()
     is TsTypeVal.Promise -> usedGeneric.getUsedNames()
-    is TsTypeVal.TypeDef -> listOf(typeName) + usedGenerics.map { it.getUsedNames() }.flatten()
+    is TsTypeVal.TypeReference -> listOf(typeName) + usedGenerics.map { it.getUsedNames() }.flatten()
     else -> emptyList()
   }
 }

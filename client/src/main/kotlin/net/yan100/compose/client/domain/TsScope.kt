@@ -18,7 +18,7 @@ sealed class TsScope<T : TsScope<T>>(
   @Suppress("UNCHECKED_CAST")
   fun fillGenerics(usedGenerics: List<TsGeneric>): T {
     if (!isRequireUseGeneric()) return this as T
-    val r = when (this) {
+    when (this) {
       is TypeAlias -> copy(usedGenerics = usedGenerics) as T
       is TypeVal -> copy(definition = definition.fillGenerics(usedGenerics)) as T
       else -> this as T
@@ -31,28 +31,28 @@ sealed class TsScope<T : TsScope<T>>(
     return when (this) {
       is Class -> TODO()
       is Enum -> false
-      is Interface -> superTypes.any { it.isRequireUseGeneric() } || properties.any { it.isRequireUseGeneric() }
+      is Interface -> superTypes.any { it.isRequireUseGeneric } || properties.any { it.isRequireUseGeneric() }
       is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
-      is TypeVal -> definition.isRequireUseGeneric()
+      is TypeVal -> definition.isRequireUseGeneric
     }
   }
 
   fun isBasic(): Boolean {
     return when (this) {
       is Enum -> true
-      is TypeVal -> definition.isBasic()
-      is TypeAlias -> aliasFor.isBasic() && usedGenerics.all { it.isBasic() }
-      is Interface -> superTypes.all { it.isBasic() } && properties.all { it.defined.isBasic() }
+      is TypeVal -> definition.isBasic
+      is TypeAlias -> aliasFor.isBasic && usedGenerics.all { it.isBasic }
+      is Interface -> superTypes.all { it.isBasic } && properties.all { it.defined.isBasic }
       is Class -> error("Class is not supported")
     }
   }
 
   fun toTsTypeVal(): TsTypeVal<*> {
     return when (this) {
-      is Interface -> TsTypeVal.TypeDef(typeName = name)
-      is Class -> TsTypeVal.TypeDef(typeName = name)
-      is Enum -> TsTypeVal.TypeDef(typeName = name)
-      is TypeAlias -> TsTypeVal.TypeDef(typeName = name)
+      is Interface -> TsTypeVal.TypeReference(typeName = name)
+      is Class -> TsTypeVal.TypeReference(typeName = name)
+      is Enum -> TsTypeVal.TypeReference(typeName = name)
+      is TypeAlias -> TsTypeVal.TypeReference(typeName = name)
       is TypeVal -> definition
     }
   }
@@ -117,7 +117,7 @@ sealed class TsScope<T : TsScope<T>>(
   data class Class(
     override val name: TsName,
     override val meta: ClientType,
-    val superTypes: List<TsTypeVal.TypeDef>,
+    val superTypes: List<TsTypeVal.TypeReference>,
     // TODO 定义其他类的属性
   ) : TsScope<Class>(
     name = name,

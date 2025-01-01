@@ -46,7 +46,7 @@ sealed class TsFile<T : TsFile<T>>(
         append(" ")
         append(name)
         if (file.interfaces.generics.isNotEmpty()) append(file.interfaces.generics.toRenderCode())
-        val superTypes = file.interfaces.superTypes.filterNot { it is TsTypeVal.TypeDef && it.typeName is TsName.Anonymous }
+        val superTypes = file.interfaces.superTypes.filterNot { it is TsTypeVal.TypeReference && it.typeName is TsName.Anonymous }
         if (file.interfaces.superTypes.isNotEmpty()) {
           append(" extends ")
           val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->
