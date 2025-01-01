@@ -12,7 +12,6 @@ import net.yan100.compose.meta.client.ClientType
  */
 sealed class TsScope<T : TsScope<T>>(
   open val name: TsName,
-  open val meta: ClientType,
   open val scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
   open val modifier: TsTypeModifier = TsTypeModifier.None
 ) : TsTypeDefine<TsScope<T>> {
@@ -62,23 +61,21 @@ sealed class TsScope<T : TsScope<T>>(
   data class TypeAlias(
     override val name: TsName,
     val aliasFor: TsTypeVal<*>,
-    override val meta: ClientType,
+    val meta: ClientType,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val usedGenerics: List<TsGeneric> = emptyList()
   ) : TsScope<TypeAlias>(
     name = name,
-    meta = meta,
     scopeQuota = TsScopeQuota.BLANK,
     modifier = TsTypeModifier.Type
   )
 
   data class TypeVal(
     val definition: TsTypeVal<*>,
-    override val meta: ClientType
+    val meta: ClientType
   ) : TsScope<TypeVal>(
     name = TsName.Anonymous,
     scopeQuota = TsScopeQuota.BLANK,
-    meta = meta,
     modifier = TsTypeModifier.None
   )
 
@@ -88,13 +85,12 @@ sealed class TsScope<T : TsScope<T>>(
    */
   data class Interface(
     override val name: TsName,
-    override val meta: ClientType,
+    val meta: ClientType,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val superTypes: List<TsTypeVal.Ref> = emptyList(),
     val properties: List<TsUseVal.Prop> = emptyList()
   ) : TsScope<Interface>(
     name = name,
-    meta = meta,
     modifier = TsTypeModifier.Interface,
     scopeQuota = TsScopeQuota.OBJECT
   )
@@ -104,11 +100,10 @@ sealed class TsScope<T : TsScope<T>>(
    */
   data class Enum(
     override val name: TsName,
-    override val meta: ClientType,
+    val meta: ClientType,
     val constants: Map<String, Comparable<*>>,
   ) : TsScope<Enum>(
     name = name,
-    meta = meta,
     modifier = TsTypeModifier.Enum,
     scopeQuota = TsScopeQuota.OBJECT
   )
@@ -118,13 +113,12 @@ sealed class TsScope<T : TsScope<T>>(
    */
   data class Class(
     override val name: TsName,
-    override val meta: ClientType,
+    val meta: ClientType,
     val superTypes: List<TsTypeVal.Ref> = emptyList(),
     // TODO 定义其他类的属性
   ) : TsScope<Class>(
     name = name,
     modifier = TsTypeModifier.Class,
-    meta = meta,
     scopeQuota = TsScopeQuota.OBJECT
   )
 }
