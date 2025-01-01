@@ -20,9 +20,4 @@ data class ClientPostProcessApiOperationInfo(
    * 接口接受的请求类型
    */
   val requestAcceptType: String,
-
-  /**
-   * 接口返回的响应类型
-   */
-  val responseContentType: String
 )
