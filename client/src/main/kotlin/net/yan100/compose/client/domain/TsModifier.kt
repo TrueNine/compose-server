@@ -85,7 +85,7 @@ sealed class TsModifier(
     override fun toString(): String = modifier
   }
 
-  data object Public : TsModifier(modifier = "private") {
+  data object Public : TsModifier(modifier = "public") {
     override fun toString(): String = modifier
   }
 }
