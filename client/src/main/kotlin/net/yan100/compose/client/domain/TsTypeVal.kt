@@ -103,8 +103,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is Symbol,
         is Null,
         is Undefined,
-        is EmptyObject
-          -> true
+        is EmptyObject -> true
 
         is Generic -> generic.isBasic
         is Array -> usedGeneric.isBasic
@@ -204,9 +203,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
   data class TypeConstant(
     val element: TsTypeVal<*>
   ) : TsTypeVal<TypeConstant>() {
-    override fun toString(): kotlin.String {
-      return "$element as const"
-    }
+    override fun toString(): kotlin.String = "$element as const"
   }
 
   /**
@@ -225,11 +222,9 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
     val typeName: TsName,
     val usedGenerics: List<TsGeneric> = emptyList()
   ) : TsTypeVal<Ref>() {
-    override fun toString(): kotlin.String {
-      return when (usedGenerics.size) {
-        0 -> typeName.toVariableName()
-        else -> "${typeName.toVariableName()}<${usedGenerics.joinToString(", ") { it.toString() }}>"
-      }
+    override fun toString(): kotlin.String = when (usedGenerics.size) {
+      0 -> typeName.toVariableName()
+      else -> "${typeName.toVariableName()}<${usedGenerics.joinToString(", ") { it.toString() }}>"
     }
   }
 
@@ -261,9 +256,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
     val keyUsedGeneric: TsGeneric,
     val valueUsedGeneric: TsGeneric
   ) : TsTypeVal<Record>() {
-    override fun toString(): kotlin.String {
-      return "Record<$keyUsedGeneric, $valueUsedGeneric>"
-    }
+    override fun toString(): kotlin.String = "Record<$keyUsedGeneric, $valueUsedGeneric>"
   }
 
   /**
