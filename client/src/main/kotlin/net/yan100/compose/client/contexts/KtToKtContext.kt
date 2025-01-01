@@ -17,10 +17,9 @@ open class KtToKtContext(
   private var internalDefinitions: MutableList<ClientType> = mutableListOf()
   private var internalDefinitionsMap: MutableMap<String, ClientType> = mutableMapOf()
   private var getDefinitionCircularCount = 0
-
   val definitions: List<ClientType>
     get() {
-      if (getDefinitionCircularCount > 63) {
+      if (getDefinitionCircularCount > 16) {
         getDefinitionCircularCount = 0
         error("Circular reference detected in definitions")
       }
@@ -36,7 +35,7 @@ open class KtToKtContext(
   private var internalDefinitionsMapCircularCount = 0
   val definitionsMap: Map<String, ClientType>
     get() {
-      if (internalDefinitionsMapCircularCount > 63) {
+      if (internalDefinitionsMapCircularCount > 16) {
         internalDefinitionsMapCircularCount = 0
         error("Circular reference detected in definitionsMap")
       }
