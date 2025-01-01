@@ -10,13 +10,13 @@ sealed class TsUseVal<T : TsUseVal<T>>(
   override val isBasic: Boolean
     get() = when (this) {
       is Parameter -> typeVal.isBasic
-      is ReturnType -> typeVal.isBasic
+      is Return -> typeVal.isBasic
       is Prop -> typeVal.isBasic
     }
   override val isRequireUseGeneric: Boolean
     get() = when (this) {
       is Parameter -> typeVal.isRequireUseGeneric
-      is ReturnType -> typeVal.isRequireUseGeneric
+      is Return -> typeVal.isRequireUseGeneric
       is Prop -> typeVal.isRequireUseGeneric
     }
 
@@ -31,7 +31,7 @@ sealed class TsUseVal<T : TsUseVal<T>>(
     if (usedGenerics.isEmpty()) return this as T
     return when (this) {
       is Parameter -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
-      is ReturnType -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
+      is Return -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
       is Prop -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T
     }
   }
@@ -45,10 +45,10 @@ sealed class TsUseVal<T : TsUseVal<T>>(
     partial = partial
   )
 
-  data class ReturnType(
+  data class Return(
     override val typeVal: TsTypeVal<*>,
     override val partial: Boolean = false
-  ) : TsUseVal<ReturnType>(
+  ) : TsUseVal<Return>(
     typeVal = typeVal,
     partial = partial
   )

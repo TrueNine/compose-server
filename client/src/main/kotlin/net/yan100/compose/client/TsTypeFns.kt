@@ -45,7 +45,7 @@ fun TsUseVal<*>.getUsedNames(): List<TsName> {
   return when (this) {
     is TsUseVal.Prop -> typeVal.getUsedNames()
     is TsUseVal.Parameter -> typeVal.getUsedNames()
-    is TsUseVal.ReturnType -> typeVal.getUsedNames()
+    is TsUseVal.Return -> typeVal.getUsedNames()
   }
 }
 
