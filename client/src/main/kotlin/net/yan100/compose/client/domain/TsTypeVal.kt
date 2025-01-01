@@ -89,8 +89,8 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
     }
 
   override val isBasic: kotlin.Boolean
-    get() {
-      return when (this) {
+    get() =
+      when (this) {
         is Ref -> typeName.isBasic() && usedGenerics.all { it.isBasic }
         is Never,
         is Any,
@@ -115,7 +115,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is Tuple -> elements.all { it.isBasic }
         is TypeConstant -> element.isBasic
       }
-    }
+
 
   data class Tuple(
     val elements: List<TsTypeVal<*>>
