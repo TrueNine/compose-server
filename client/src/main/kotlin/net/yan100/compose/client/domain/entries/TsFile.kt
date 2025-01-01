@@ -147,11 +147,7 @@ sealed class TsFile<T : TsFile<T>>(
     exports = listOf(TsExport.ExportedDefined(enums.name)),
   ) {
     override val render: CodeBuildable<SingleEnum>.(SingleEnum) -> Unit = {
-      val name = when (enums.name) {
-        is TsName.Name -> enums.name.name
-        is TsName.PathName -> enums.name.name
-        else -> error("enum name ${enums.name} is not supported")
-      }
+      val name = enums.name.toVariableName()
       append("${TsModifier.Export} ")
       append(enums.modifier.marker)
       appendLine(" $name ${enums.scopeQuota.left}")
