@@ -53,7 +53,8 @@ class TypescriptGenerator(
       fileName = TsName.PathName("Executor"),
       usedNames = listOf("HTTPMethod", "BodyType").map(TsName::Name),
       render = {
-        """
+        append(
+          """
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'TRACE'
 type BodyType = 'json' | 'form'
 export type Executor = (requestOptions: {
@@ -64,6 +65,7 @@ export type Executor = (requestOptions: {
   readonly bodyType?: BodyType
 }) => Promise<unknown>
     """.trimIndent().plus("\n")
+        )
       }
     )
   }
