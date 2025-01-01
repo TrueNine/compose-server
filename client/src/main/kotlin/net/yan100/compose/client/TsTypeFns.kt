@@ -3,6 +3,7 @@ package net.yan100.compose.client
 import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeVal
+import net.yan100.compose.client.domain.TsUseVal
 import net.yan100.compose.client.domain.entries.TsImport
 import net.yan100.compose.client.domain.entries.TsName
 
@@ -40,12 +41,20 @@ fun TsScope<*>.getUsedNames(): List<TsName> {
   }
 }
 
+fun TsUseVal<*>.getUsedNames(): List<TsName> {
+  return when (this) {
+    is TsUseVal.Prop -> typeVal.getUsedNames()
+    is TsUseVal.Parameter -> typeVal.getUsedNames()
+    is TsUseVal.ReturnType -> typeVal.getUsedNames()
+  }
+}
+
 fun TsTypeVal<*>.getUsedNames(): List<TsName> {
   return when (this) {
     is TsTypeVal.Array -> usedGeneric.getUsedNames()
-    is TsTypeVal.Object -> elements.map { it.defined.getUsedNames() }.flatten()
-    is TsTypeVal.Tuple -> elements.map { it.defined.getUsedNames() }.flatten()
-    is TsTypeVal.AnonymousFunction -> returnType.getUsedNames() + params.map { it.defined.getUsedNames() }.flatten()
+    is TsTypeVal.Object -> elements.map { it.getUsedNames() }.flatten()
+    is TsTypeVal.Tuple -> elements.map { it.getUsedNames() }.flatten()
+    is TsTypeVal.AnonymousFunction -> returnType.getUsedNames() + params.map { it.getUsedNames() }.flatten()
     is TsTypeVal.Union -> joinTypes.map { it.getUsedNames() }.flatten()
     is TsTypeVal.TypeConstant -> element.getUsedNames()
     is TsTypeVal.Record -> keyUsedGeneric.getUsedNames() + valueUsedGeneric.getUsedNames()
