@@ -162,6 +162,5 @@ sealed class TsFile<T : TsFile<T>>(
       append(enums.scopeQuota.right)
       appendLine()
     }
-
   }
 }
