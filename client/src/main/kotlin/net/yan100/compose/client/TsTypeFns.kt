@@ -27,7 +27,7 @@ fun TsScope<*>.getUsedNames(): List<TsName> {
     is TsScope.Enum -> listOf(name) + constants.keys.map(TsName::Name)
     is TsScope.Interface -> {
       val superUsedNames = superTypes.map { it.getUsedNames() }.flatten()
-      val propertiesNames = properties.map { it.defined.getUsedNames() }.flatten()
+      val propertiesNames = properties.map { it.getUsedNames() }.flatten()
       ((superUsedNames + propertiesNames) + name).distinct()
     }
 
@@ -90,7 +90,7 @@ fun TsScope<*>.collectImports(): List<TsImport> {
     is TsScope.TypeAlias -> aliasFor.asImports(true)
     is TsScope.Interface -> {
       val imps = superTypes.flatMap { it.asImports(true) } +
-        properties.flatMap { it.defined.getUsedNames().mapNotNull { e -> e.toTsImport(true) } } +
+        properties.flatMap { it.getUsedNames().mapNotNull { e -> e.toTsImport(true) } } +
         generics.mapNotNull { it.name.toTsImport(true) }
       imps.distinct()
     }

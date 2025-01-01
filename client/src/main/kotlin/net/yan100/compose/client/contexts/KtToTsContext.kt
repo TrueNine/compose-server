@@ -3,8 +3,8 @@ package net.yan100.compose.client.contexts
 import net.yan100.compose.client.*
 import net.yan100.compose.client.domain.TsGeneric
 import net.yan100.compose.client.domain.TsScope
-import net.yan100.compose.client.domain.TsTypeProperty
 import net.yan100.compose.client.domain.TsTypeVal
+import net.yan100.compose.client.domain.TsUseVal
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.interceptors.*
 import net.yan100.compose.meta.client.ClientApiStubs
@@ -298,29 +298,29 @@ open class KtToTsContext(
 
   fun getTsTypePropertyByType(
     clientType: ClientType
-  ): List<TsTypeProperty> {
+  ): List<TsUseVal.Prop> {
     if (clientType.properties.isEmpty()) return emptyList()
     val r = getTypeByType(clientType) ?: return emptyList()
     return r.properties.map { clientProp ->
       if (clientProp.typeName.isGenericName()) {
-        return@map TsTypeProperty(
+        return@map TsUseVal.Prop(
           name = clientProp.name.toTsStyleName(),
-          defined = TsTypeVal.Generic(TsGeneric.Defined(name = clientProp.typeName.toTsStyleName())),
+          typeVal = TsTypeVal.Generic(TsGeneric.Defined(name = clientProp.typeName.toTsStyleName())),
           partial = clientProp.nullable == true
         )
       }
       val thatPropType = this.getTypeByName(clientProp.typeName)!!
       val def = getTsTypeValByType(thatPropType)
       if (def !is TsTypeVal.Ref) {
-        return@map TsTypeProperty(
+        return@map TsUseVal.Prop(
           name = clientProp.name.toTsStyleName(),
-          defined = def,
+          typeVal = def,
           partial = clientProp.nullable == true
         )
       }
-      TsTypeProperty(
+      TsUseVal.Prop(
         name = clientProp.name.toTsStyleName(),
-        defined = def.copy(usedGenerics = getTsGenericByGenerics(clientProp.usedGenerics))
+        typeVal = def.copy(usedGenerics = getTsGenericByGenerics(clientProp.usedGenerics))
       )
     }
   }

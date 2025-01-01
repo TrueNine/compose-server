@@ -66,14 +66,14 @@ class TsFileTest {
       TsGeneric.Defined(TsName.Name("T4"), 3),
     ),
     properties = listOf(
-      TsTypeProperty(
+      TsUseVal.Prop(
         name = TsName.Name("ab"),
         partial = true,
-        defined = TsTypeVal.String
+        typeVal = TsTypeVal.String
       ),
-      TsTypeProperty(
+      TsUseVal.Prop(
         name = TsName.Name("ab"),
-        defined = TsTypeVal.Ref(
+        typeVal = TsTypeVal.Ref(
           typeName = TsName.Name("File"),
           usedGenerics = listOf(
             TsGeneric.Defined(TsName.Generic("T1"), index = 0),
@@ -81,15 +81,15 @@ class TsFileTest {
           )
         )
       ),
-      TsTypeProperty(
+      TsUseVal.Prop(
         name = TsName.Name("c"),
-        defined = TsTypeVal.Ref(
+        typeVal = TsTypeVal.Ref(
           typeName = TsName.PathName("Abc", "static/net_yan100_compose")
         )
       ),
-      TsTypeProperty(
+      TsUseVal.Prop(
         name = TsName.Name("obj"),
-        defined = TsTypeVal.Object(
+        typeVal = TsTypeVal.Object(
           elements = listOf(
             TsUseVal.Prop(
               name = TsName.Name("a"),
@@ -100,9 +100,9 @@ class TsFileTest {
           )
         )
       ),
-      TsTypeProperty(
+      TsUseVal.Prop(
         name = TsName.Name("acc"),
-        defined = TsTypeVal.Any
+        typeVal = TsTypeVal.Any
       )
     ),
     name = TsName.PathName("AInterface", path = "static/net_yan100_compose"),

@@ -37,7 +37,7 @@ sealed class TsScope<T : TsScope<T>>(
       return when (this) {
         is Class -> TODO()
         is Enum -> false
-        is Interface -> superTypes.any { it.isRequireUseGeneric } || properties.any { it.isRequireUseGeneric() }
+        is Interface -> superTypes.any { it.isRequireUseGeneric } || properties.any { it.isRequireUseGeneric }
         is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
         is TypeVal -> definition.isRequireUseGeneric
       }
@@ -48,7 +48,7 @@ sealed class TsScope<T : TsScope<T>>(
       is Enum -> true
       is TypeVal -> definition.isBasic
       is TypeAlias -> aliasFor.isBasic && usedGenerics.all { it.isBasic }
-      is Interface -> superTypes.all { it.isBasic } && properties.all { it.defined.isBasic }
+      is Interface -> superTypes.all { it.isBasic } && properties.all { it.isBasic }
       is Class -> error("Class is not supported")
     }
 
@@ -87,14 +87,14 @@ sealed class TsScope<T : TsScope<T>>(
 
   /**
    * 接口定义作用域
-   * @param superTypes 所继承的父定义，不合理的应当被抹除
+   * @param superTypes 所继承的父定义，不合理 应当被抹除
    */
   data class Interface(
     override val name: TsName,
     override val meta: ClientType,
     val generics: List<TsGeneric.Defined> = emptyList(),
     val superTypes: List<TsTypeVal<*>> = emptyList(),
-    val properties: List<TsTypeProperty> = emptyList()
+    val properties: List<TsUseVal.Prop> = emptyList()
   ) : TsScope<Interface>(
     name = name,
     meta = meta,
