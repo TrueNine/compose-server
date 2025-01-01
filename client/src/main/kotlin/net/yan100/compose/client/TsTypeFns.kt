@@ -139,6 +139,7 @@ fun TsScope<*>.collectImports(): List<TsImport> {
 
 @JvmName("list_TsImport_toRenderCode")
 fun List<TsImport>.toRenderCode(): String {
+  if (isEmpty()) return ""
   return mapNotNull { tsImport ->
     if (tsImport.usingNames.isEmpty()) return@mapNotNull null
     val prefix = "import" + if (tsImport.useType) " type" else ""
@@ -152,7 +153,7 @@ fun List<TsImport>.toRenderCode(): String {
       }
     }
     "$prefix $usingNames $suffix"
-  }.joinToString("\n")
+  }.joinToString("\n").let { "$it\n" }
 }
 
 
