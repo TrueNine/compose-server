@@ -33,15 +33,14 @@ sealed class TsScope<T : TsScope<T>>(
   }
 
   override val isRequireUseGeneric: Boolean
-    get() {
-      return when (this) {
-        is Class -> TODO()
-        is Enum -> false
-        is Interface -> superTypes.any { it.isRequireUseGeneric } || properties.any { it.isRequireUseGeneric }
-        is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
-        is TypeVal -> definition.isRequireUseGeneric
-      }
+    get() = when (this) {
+      is Class -> TODO()
+      is Enum -> false
+      is Interface -> superTypes.any { it.isRequireUseGeneric } || properties.any { it.isRequireUseGeneric }
+      is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
+      is TypeVal -> definition.isRequireUseGeneric
     }
+
 
   override val isBasic: Boolean
     get() = when (this) {
