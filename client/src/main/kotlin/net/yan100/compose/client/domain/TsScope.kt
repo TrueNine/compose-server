@@ -121,7 +121,7 @@ sealed class TsScope<T : TsScope<T>>(
   data class Class(
     override val name: TsName,
     override val meta: ClientType,
-    val superTypes: List<TsTypeVal.Ref>,
+    val superTypes: List<TsTypeVal.Ref> = emptyList(),
     // TODO 定义其他类的属性
   ) : TsScope<Class>(
     name = name,
