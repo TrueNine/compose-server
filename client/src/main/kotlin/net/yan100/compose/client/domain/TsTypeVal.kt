@@ -29,7 +29,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
       is Array -> copy(usedGeneric = usedGenerics.first()) as T
       is Generic -> copy(generic = usedGenerics.first()) as T
       is Promise -> copy(usedGeneric = usedGenerics.first()) as T
-      is TypeReference -> copy(usedGenerics = usedGenerics) as T
+      is Ref -> copy(usedGenerics = usedGenerics) as T
       is Record -> copy(keyUsedGeneric = usedGenerics[0], valueUsedGeneric = usedGenerics[1]) as T
       is Object -> copy(
         elements = usedGenerics.mapIndexed { i, it ->
@@ -83,7 +83,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is Record -> keyUsedGeneric.isRequireUseGeneric || valueUsedGeneric.isRequireUseGeneric
         is Tuple -> elements.any { it.isRequireUseGeneric }
         is TypeConstant -> element.isRequireUseGeneric
-        is TypeReference -> usedGenerics.any { it.isRequireUseGeneric }
+        is Ref -> usedGenerics.any { it.isRequireUseGeneric }
         is Union -> joinTypes.any { it.isRequireUseGeneric }
       }
     }
@@ -91,7 +91,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
   override val isBasic: kotlin.Boolean
     get() {
       return when (this) {
-        is TypeReference -> typeName.isBasic() && usedGenerics.all { it.isBasic }
+        is Ref -> typeName.isBasic() && usedGenerics.all { it.isBasic }
         is Never,
         is Any,
         is String,
@@ -221,10 +221,10 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
    * @param typeName 类型名称
    * @param usedGenerics 使用的泛型
    */
-  data class TypeReference(
+  data class Ref(
     val typeName: TsName,
     val usedGenerics: List<TsGeneric> = emptyList()
-  ) : TsTypeVal<TypeReference>() {
+  ) : TsTypeVal<Ref>() {
     override fun toString(): kotlin.String {
       return when (usedGenerics.size) {
         0 -> typeName.toVariableName()

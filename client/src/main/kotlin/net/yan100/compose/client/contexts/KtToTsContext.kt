@@ -127,7 +127,7 @@ open class KtToTsContext(
         TypeKind.TRANSIENT,
         null -> error("unsupported type kind: ${t.typeKind}")
       }
-      if (s is TsScope.TypeVal && s.definition is TsTypeVal.TypeReference && s.definition.typeName is TsName.PathName) {
+      if (s is TsScope.TypeVal && s.definition is TsTypeVal.Ref && s.definition.typeName is TsName.PathName) {
         val name = s.definition.typeName.copy(
           name = s.definition.typeName.name,
           path = "${kind}/${s.definition.typeName.path}"
@@ -168,7 +168,7 @@ open class KtToTsContext(
           else r.fillGenerics(used)
         }
 
-        is TsTypeVal.TypeReference -> {
+        is TsTypeVal.Ref -> {
           if (r.isBasic) r
           else r.copy(
             typeName = r.typeName,
@@ -249,7 +249,7 @@ open class KtToTsContext(
           -> false
 
         is TsScope.TypeVal -> when (def.definition) {
-          is TsTypeVal.TypeReference -> true
+          is TsTypeVal.Ref -> true
           else -> false
         }
 
@@ -279,7 +279,7 @@ open class KtToTsContext(
       }
       val usedResult = getTsTypeValByName(usedGeneric.typeName).let { g ->
         when (g) {
-          is TsTypeVal.TypeReference -> {
+          is TsTypeVal.Ref -> {
             g.copy(
               typeName = g.typeName,
               usedGenerics = getTsGenericByGenerics(usedGeneric.usedGenerics)
@@ -311,7 +311,7 @@ open class KtToTsContext(
       }
       val thatPropType = this.getTypeByName(clientProp.typeName)!!
       val def = getTsTypeValByType(thatPropType)
-      if (def !is TsTypeVal.TypeReference) {
+      if (def !is TsTypeVal.Ref) {
         return@map TsTypeProperty(
           name = clientProp.name.toTsStyleName(),
           defined = def,

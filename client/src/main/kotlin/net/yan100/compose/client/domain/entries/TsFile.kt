@@ -17,10 +17,7 @@ sealed class TsFile<T : TsFile<T>>(
   abstract val render: (T) -> String
 
   @Suppress("UNCHECKED_CAST")
-  val code: String
-    get() {
-      return this.render(this as T)
-    }
+  val code: String get() = render(this as T)
 
   /**
    * 单接口文件
@@ -46,7 +43,7 @@ sealed class TsFile<T : TsFile<T>>(
         append(" ")
         append(name)
         if (file.interfaces.generics.isNotEmpty()) append(file.interfaces.generics.toRenderCode())
-        val superTypes = file.interfaces.superTypes.filterNot { it is TsTypeVal.TypeReference && it.typeName is TsName.Anonymous }
+        val superTypes = file.interfaces.superTypes.filterNot { it is TsTypeVal.Ref && it.typeName is TsName.Anonymous }
         if (file.interfaces.superTypes.isNotEmpty()) {
           append(" extends ")
           val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->

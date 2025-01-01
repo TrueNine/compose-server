@@ -12,7 +12,7 @@ class TsTypeValPreReferenceInterceptor : TsPreReferenceInterceptor() {
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = true
 
   override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal<*> {
-    return TsTypeVal.TypeReference(
+    return TsTypeVal.Ref(
       typeName = ctx.getTypeNameByName(source.typeName).toTsStylePathName(),
       usedGenerics = source.toTsGenericUsed { ctx.getTypeNameByName(source.typeName).unwrapGenericName().toTsStylePathName() }
     )

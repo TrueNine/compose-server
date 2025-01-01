@@ -54,10 +54,10 @@ sealed class TsScope<T : TsScope<T>>(
 
   fun toTsTypeVal(): TsTypeVal<*> {
     return when (this) {
-      is Interface -> TsTypeVal.TypeReference(typeName = name)
-      is Class -> TsTypeVal.TypeReference(typeName = name)
-      is Enum -> TsTypeVal.TypeReference(typeName = name)
-      is TypeAlias -> TsTypeVal.TypeReference(typeName = name)
+      is Interface -> TsTypeVal.Ref(typeName = name)
+      is Class -> TsTypeVal.Ref(typeName = name)
+      is Enum -> TsTypeVal.Ref(typeName = name)
+      is TypeAlias -> TsTypeVal.Ref(typeName = name)
       is TypeVal -> definition
     }
   }
@@ -122,7 +122,7 @@ sealed class TsScope<T : TsScope<T>>(
   data class Class(
     override val name: TsName,
     override val meta: ClientType,
-    val superTypes: List<TsTypeVal.TypeReference>,
+    val superTypes: List<TsTypeVal.Ref>,
     // TODO 定义其他类的属性
   ) : TsScope<Class>(
     name = name,
