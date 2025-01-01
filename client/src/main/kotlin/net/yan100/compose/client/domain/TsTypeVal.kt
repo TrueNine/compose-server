@@ -39,7 +39,6 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         }.filterNotNull()
       ) as T
 
-
       is Union,
       is Tuple,
       is AnonymousFunction,

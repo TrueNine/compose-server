@@ -15,6 +15,13 @@ interface TsTypeDefine<T : TsTypeDefine<T>> {
    */
   val isBasic: Boolean
 
+  /**
+   * 浅层填充泛型
+   */
   fun fillGenerics(vararg generic: TsGeneric): T
+
+  /**
+   * 浅层填充泛型
+   */
   fun fillGenerics(usedGenerics: List<TsGeneric>): T
 }
