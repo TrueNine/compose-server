@@ -14,8 +14,8 @@ open class KtToKtContext(
   vararg interceptorChain: Interceptor<*, *, *> = arrayOf()
 ) : StubContext<KtToKtContext>(interceptorChain.toMutableList()) {
   private val stub = stub.copy()
-  private var internalDefinitions: MutableList<ClientType> = mutableListOf()
-  private var internalDefinitionsMap: MutableMap<String, ClientType> = mutableMapOf()
+  private val internalDefinitionsMap: MutableMap<String, ClientType> = mutableMapOf()
+  private val internalDefinitions: MutableList<ClientType> = mutableListOf()
   private var getDefinitionCircularCount = 0
   val definitions: List<ClientType>
     get() {
@@ -28,7 +28,7 @@ open class KtToKtContext(
         internalDefinitions
       } else {
         getDefinitionCircularCount += 1
-        updateDefinitions()
+        dispatch()
         internalDefinitions
       }
     }
@@ -44,7 +44,7 @@ open class KtToKtContext(
         internalDefinitionsMap
       } else {
         internalDefinitionsMapCircularCount += 1
-        updateDefinitions()
+        dispatch()
         internalDefinitionsMap
       }
     }
@@ -68,11 +68,10 @@ open class KtToKtContext(
     }
   }
 
-  private fun updateDefinitions(clientTypes: List<ClientType> = stub.definitions, deepCount: Int = 0) {
-    if (deepCount > 63) error("Circular reference detected in updateDefinitions")
-    internalDefinitions = mutableListOf()
-    internalDefinitionsMap = mutableMapOf()
-    val convertedName = clientTypes.map {
+  private fun dispatch(clientTypes: List<ClientType> = stub.definitions, deepCount: Int = 0): Map<String, ClientType> {
+    if (deepCount > 16) error("Circular reference detected in updateDefinitions")
+    if (clientTypes.isEmpty()) return emptyMap()
+    val nameConvertedTypes = clientTypes.map {
       it.copy(
         typeName = getTypeNameByName(it.typeName),
         superTypes = convertSuperTypes(it),
@@ -81,11 +80,11 @@ open class KtToKtContext(
         properties = convertAllPropertyName(it.properties)
       )
     }
-    if (!clientTypes.containsAll(convertedName)) {
-      updateDefinitions(convertedName, deepCount + 1)
-    }
-    internalDefinitions = convertedName.toMutableList()
-    internalDefinitionsMap = internalDefinitions.associateBy { it.typeName }.toMutableMap()
+    if (!clientTypes.containsAll(nameConvertedTypes)) internalDefinitionsMap.putAll(dispatch(nameConvertedTypes, deepCount + 1))
+    internalDefinitionsMap.putAll(nameConvertedTypes.associateBy { it.typeName })
+    internalDefinitions.clear()
+    internalDefinitions.addAll(internalDefinitionsMap.values)
+    return internalDefinitionsMap
   }
 
   private fun convertSuperTypes(clientType: ClientType): List<ClientType> {
@@ -130,9 +129,7 @@ open class KtToKtContext(
   }
 
   override fun addType(type: ClientType): KtToKtContext {
-    updateDefinitions(
-      stub.definitions + listOf(type)
-    )
+    dispatch(stub.definitions + listOf(type))
     return this
   }
 
