@@ -84,7 +84,6 @@ sealed class TsFile<T : TsFile<T>>(
       appendLine(properties)
       append(file.interfaces.scopeQuota.right)
       appendLine()
-
     }
   }
 
