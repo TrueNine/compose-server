@@ -28,7 +28,6 @@ sealed class TsFile<T : TsFile<T>>(
       render(it, this as T)
     }.toString()
 
-
   data class SingleServiceClass(
     val serviceClassScope: TsScope.Class
   ) : TsFile<SingleServiceClass>(
