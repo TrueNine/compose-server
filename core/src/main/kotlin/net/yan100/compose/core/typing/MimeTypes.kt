@@ -29,6 +29,8 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
 
   /** 这个比较特殊，他的后缀名 是 binary 注意 */
   BINARY("binary", "application/octet-stream"),
+  URL("", "application/x-www-form-urlencoded"),
+  MULTIPART_FORM_DATA("", "multipart/form-data"),
   PNG("png", "image/png"),
   JPEG("jpg", "image/jpg", "image/jpeg"),
   BMP("bmp", "image/bmp"),
@@ -59,7 +61,7 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
   GZIP("gzip", "application/x-gzip"),
   TAR("tar", "application/x-tar"),
   RAR("rar", "application/x-rar-compressed"),
-  SSE("sse", "text/event-stream");
+  SSE("", "text/event-stream");
 
 
   private var mm: Array<out String> = m
@@ -81,8 +83,13 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
   override val value: String = this.mm[0]
 
   companion object {
-    fun findVal(media: String): MimeTypes? {
-      return entries.find { v -> v.medias.contains(media) }
+    @JvmStatic
+    fun findVal(media: String?): MimeTypes? = entries.find { v ->
+      if (media.isNullOrBlank()) false
+      else v.medias.contains(media)
     }
+
+    @JvmStatic
+    operator fun get(v: String?): MimeTypes? = findVal(v)
   }
 }
