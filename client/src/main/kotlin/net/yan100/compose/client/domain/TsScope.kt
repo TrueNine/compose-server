@@ -17,14 +17,13 @@ sealed class TsScope<T : TsScope<T>>(
   open val modifier: TsTypeModifier = TsTypeModifier.None
 ) : TsTypeDefine<TsScope<T>> {
   @Suppress("UNCHECKED_CAST")
-  override fun fillGenerics(usedGenerics: List<TsGeneric>): T {
-    if (!isRequireUseGeneric) return this as T
-    return when (this) {
-      is TypeAlias -> copy(usedGenerics = usedGenerics) as T
-      is TypeVal -> copy(definition = definition.fillGenerics(usedGenerics)) as T
-      else -> this as T
-    }
+  override fun fillGenerics(usedGenerics: List<TsGeneric>): T = if (!isRequireUseGeneric) this as T
+  else when (this) {
+    is TypeAlias -> copy(usedGenerics = usedGenerics) as T
+    is TypeVal -> copy(definition = definition.fillGenerics(usedGenerics)) as T
+    else -> this as T
   }
+
 
   @Suppress("UNCHECKED_CAST")
   override fun fillGenerics(vararg generic: TsGeneric): T {
