@@ -28,13 +28,13 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(serviceClassScope.name),
     fileName = serviceClassScope.name,
   ) {
-    override val render: (SingleServiceClass) -> String
-      get() = { file ->
-        val classScope = file.serviceClassScope
-        buildString {
-          append(classScope.toString())
-        }
+    override val render: (SingleServiceClass) -> String = { file ->
+      val classScope = file.serviceClassScope
+      buildString {
+        appendLine(imports.toRenderCode())
+        append(classScope.toString())
       }
+    }
   }
 
   /**
