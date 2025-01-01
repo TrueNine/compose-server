@@ -34,7 +34,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
       is Object -> copy(
         elements = usedGenerics.mapIndexed { i, it ->
           val r = elements.getOrNull(i)
-          if (r != null && r.isRequireUseGeneric()) r.copy(defined = r.defined.fillGenerics(listOf(it)))
+          if (r != null && r.isRequireUseGeneric) r.fillGenerics(it)
           else r
         }.filterNotNull()
       ) as T
@@ -75,13 +75,13 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is Void,
         is Bigint -> false
 
-        is Object -> elements.any { it.isRequireUseGeneric() }
-        is AnonymousFunction -> params.any { it.isRequireUseGeneric() } || returnType.isRequireUseGeneric
+        is Object -> elements.any { it.isRequireUseGeneric }
+        is AnonymousFunction -> params.any { it.isRequireUseGeneric } || returnType.isRequireUseGeneric
         is Array -> usedGeneric.isRequireUseGeneric
         is Generic -> generic.isRequireUseGeneric
         is Promise -> usedGeneric.isRequireUseGeneric
         is Record -> keyUsedGeneric.isRequireUseGeneric || valueUsedGeneric.isRequireUseGeneric
-        is Tuple -> elements.any { it.isRequireUseGeneric() }
+        is Tuple -> elements.any { it.isRequireUseGeneric }
         is TypeConstant -> element.isRequireUseGeneric
         is TypeReference -> usedGenerics.any { it.isRequireUseGeneric }
         is Union -> joinTypes.any { it.isRequireUseGeneric }
@@ -109,17 +109,17 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is Generic -> generic.isBasic
         is Array -> usedGeneric.isBasic
         is Union -> joinTypes.all { it.isBasic }
-        is AnonymousFunction -> params.all { it.defined.isBasic } && returnType.isBasic
-        is Object -> elements.all { it.defined.isBasic }
+        is AnonymousFunction -> params.all { it.isBasic } && returnType.isBasic
+        is Object -> elements.all { it.isBasic }
         is Promise -> usedGeneric.isBasic
         is Record -> keyUsedGeneric.isBasic && valueUsedGeneric.isBasic
-        is Tuple -> elements.all { it.isBasic() }
+        is Tuple -> elements.all { it.isBasic }
         is TypeConstant -> element.isBasic
       }
     }
 
   data class Tuple(
-    val elements: List<TsTypeProperty>
+    val elements: List<TsTypeVal<*>>
   ) : TsTypeVal<Tuple>() {
     override fun toString(): kotlin.String {
       return if (elements.isEmpty()) Array(TsGeneric.Used(Unknown, 0)).toString()
@@ -146,7 +146,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
    * ```
    */
   data class AnonymousFunction(
-    val params: List<TsTypeProperty>,
+    val params: List<TsUseVal.Parameter>,
     val returnType: TsTypeVal<*>
   ) : TsTypeVal<AnonymousFunction>() {
     override fun toString(): kotlin.String {
@@ -180,7 +180,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
    * @see [TsTypeVal.Record]
    */
   data class Object(
-    val elements: List<TsTypeProperty> = emptyList()
+    val elements: List<TsUseVal.Prop> = emptyList()
   ) : TsTypeVal<Object>() {
     override fun toString(): kotlin.String {
       return if (elements.isEmpty()) EmptyObject.toString()
