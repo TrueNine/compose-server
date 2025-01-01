@@ -1,7 +1,9 @@
-package net.yan100.compose.client.domain
+package net.yan100.compose.client.domain.entries
 
-import net.yan100.compose.client.domain.entries.TsFile
-import net.yan100.compose.client.domain.entries.TsName
+import net.yan100.compose.client.domain.TsGeneric
+import net.yan100.compose.client.domain.TsScope
+import net.yan100.compose.client.domain.TsTypeVal
+import net.yan100.compose.client.domain.TsUseVal
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.testtookit.assertNotBlank
 import net.yan100.compose.testtookit.log
@@ -14,6 +16,16 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class TsFileTest {
+  @Test
+  fun `SingleServiceClass 测试渲染`() {
+    TsFile.SingleServiceClass(
+      TsScope.Class(
+        name = TsName.PathName("service/AuthApi"),
+        meta = ClientType.none()
+      )
+    )
+  }
+
   @Test
   fun `SingleInterface 正确地序列化了接口类型`() {
     val result = TsFile.SingleInterface(interfaces)
@@ -34,7 +46,6 @@ class TsFileTest {
       log.info(result.code)
     }
   }
-
 
   private fun newWriterFile(name: String, block: ((Writer) -> Unit)? = null): File {
     val dir = File(this::class.java.getResource("/")?.file ?: error("文件不存在"))
