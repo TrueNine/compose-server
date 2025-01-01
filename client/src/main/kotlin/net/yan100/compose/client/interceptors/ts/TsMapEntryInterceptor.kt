@@ -2,8 +2,8 @@ package net.yan100.compose.client.interceptors.ts
 
 import net.yan100.compose.client.contexts.KtToTsContext
 import net.yan100.compose.client.domain.TsGeneric
-import net.yan100.compose.client.domain.TsTypeProperty
 import net.yan100.compose.client.domain.TsTypeVal
+import net.yan100.compose.client.domain.TsUseVal
 import net.yan100.compose.client.interceptors.TsPostReferenceInterceptor
 import net.yan100.compose.client.toTsStyleName
 import net.yan100.compose.meta.client.ClientType
@@ -15,13 +15,13 @@ class TsMapEntryInterceptor : TsPostReferenceInterceptor() {
   ).associateWith {
     TsTypeVal.Object(
       elements = listOf(
-        TsTypeProperty(
+        TsUseVal.Prop(
           name = "key".toTsStyleName(),
-          defined = TsTypeVal.Generic(TsGeneric.UnUsed)
+          typeVal = TsTypeVal.Generic(TsGeneric.UnUsed)
         ),
-        TsTypeProperty(
+        TsUseVal.Prop(
           name = "value".toTsStyleName(),
-          defined = TsTypeVal.Generic(TsGeneric.UnUsed)
+          typeVal = TsTypeVal.Generic(TsGeneric.UnUsed)
         )
       )
     )
