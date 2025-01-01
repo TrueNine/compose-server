@@ -65,8 +65,6 @@ class SpringClientApiStubInfoProvider(
           ) error("@Api marker HTTP PATH: ${rInfo.pathPatternsCondition?.patterns} has more than one HTTP PATH")
 
           val uri = rInfo.pathPatternsCondition!!.firstPattern.toString()
-
-
           val pathVariables = pathVariableRegex.findAll(uri).map { it.groupValues[1] }.toList()
           val methods = rInfo.methodsCondition.methods.map { it.name }.toList()
           val useRequestBody = rMethod.method.parameterCount > 0 && (rMethod.method.parameters?.any { it.isAnnotationPresent(RequestBody::class.java) } == true)
@@ -75,6 +73,7 @@ class SpringClientApiStubInfoProvider(
             log.warn("@Api marker HTTP PATH: {} has use @RequestBody in GET method", rInfo.pathPatternsCondition?.patterns)
           }
           val acceptType = when {
+            useRequestPart && useRequestBody -> error("@Api marker HTTP PATH: $uri has use @RequestBody and @RequestPart in same method")
             useRequestBody -> MimeTypes.JSON.value
             useRequestPart -> MimeTypes.MULTIPART_FORM_DATA.value
             else -> MimeTypes.URL.value
