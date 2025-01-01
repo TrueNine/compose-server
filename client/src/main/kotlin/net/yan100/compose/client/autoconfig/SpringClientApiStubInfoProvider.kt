@@ -29,7 +29,7 @@ class SpringClientApiStubInfoProvider(
 
   init {
     markedApiMappingMap.keys.forEach {
-      if (it.methodsCondition.methods.size == 0) error("@Api marker HTTP PATH: ${it.pathPatternsCondition?.patterns} has no HTTP METHOD")
+      if (it.methodsCondition.methods.isEmpty()) error("@Api marker HTTP PATH: ${it.pathPatternsCondition?.patterns} has no HTTP METHOD")
     }
   }
 
@@ -48,11 +48,14 @@ class SpringClientApiStubInfoProvider(
   val mappedStubs
     get() = run {
       val ser = api.services.map { service ->
+        service.operations.groupBy { it.name }.forEach {
+          if (it.value.size > 1) error("@Api marker HTTP endpoint function name: ${it.key} repeated, methods: [${it.value.map { it.key }}]")
+        }
         service.operations.map { operation ->
           val (rInfo) = findMapping(service, operation)
-          if (rInfo.methodsCondition.methods.size <= 0) error("@Api marker HTTP METHOD: ${rInfo.pathPatternsCondition?.patterns} has no HTTP METHOD")
-          if ((rInfo.pathPatternsCondition?.patterns?.size
-              ?: 0) > 1
+          if (rInfo.methodsCondition.methods.isEmpty()) error("@Api marker HTTP METHOD: ${rInfo.pathPatternsCondition?.patterns} has no HTTP METHOD")
+          if (
+            (rInfo.pathPatternsCondition?.patterns?.size ?: 0) > 1
           ) error("@Api marker HTTP PATH: ${rInfo.pathPatternsCondition?.patterns} has more than one HTTP PATH")
 
           val uri = rInfo.pathPatternsCondition!!.firstPattern.toString()
@@ -60,7 +63,11 @@ class SpringClientApiStubInfoProvider(
           val methods = rInfo.methodsCondition.methods.map { it.name }.toList()
 
           val requestInfo = ClientPostProcessApiOperationInfo(
-            mappedUris = listOf(uri), supportedMethods = methods, pathVariables = pathVariables, requestAcceptType = "", responseContentType = ""
+            mappedUris = listOf(uri),
+            supportedMethods = methods,
+            pathVariables = pathVariables,
+            requestAcceptType = "",
+            responseContentType = ""
           )
           operation.copy(requestInfo = requestInfo)
         }.let { service.copy(operations = it) }
