@@ -12,7 +12,7 @@ private typealias MList<E> = List<E>
 class TsParameterTestController {
   @Api
   @PostMapping("inputNullParameter")
-  fun inputNullParameter(data: Map<String, Map<String?, List<Boolean?>>>): Map<String, List<String>?>? {
+  fun inputNullParameter(@RequestBody data: Map<String, Map<String?, List<Boolean?>>>): Map<String, List<String>?>? {
     return null
   }
 
