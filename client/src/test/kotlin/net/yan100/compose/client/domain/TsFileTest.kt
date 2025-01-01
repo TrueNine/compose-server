@@ -91,9 +91,9 @@ class TsFileTest {
         name = TsName.Name("obj"),
         defined = TsTypeVal.Object(
           elements = listOf(
-            TsTypeProperty(
+            TsUseVal.Prop(
               name = TsName.Name("a"),
-              defined = TsTypeVal.TypeReference(
+              typeVal = TsTypeVal.TypeReference(
                 typeName = TsName.Name("A")
               )
             )
