@@ -319,6 +319,4 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
   data object Void : TsTypeVal<Void>() {
     override fun toString(): kotlin.String = "void"
   }
-
-
 }
