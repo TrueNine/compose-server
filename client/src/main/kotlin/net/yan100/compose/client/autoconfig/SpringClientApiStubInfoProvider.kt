@@ -1,16 +1,21 @@
 package net.yan100.compose.client.autoconfig
 
+import net.yan100.compose.core.slf4j
+import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.meta.annotations.client.Api
 import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientOperation
 import net.yan100.compose.meta.client.ClientPostProcessApiOperationInfo
 import net.yan100.compose.meta.client.ClientService
 import org.springframework.context.ApplicationContext
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 
 private val pathVariableRegex = "\\{([^}]+)}".toRegex()
+private val log = slf4j<SpringClientApiStubInfoProvider>()
 
 class SpringClientApiStubInfoProvider(
   private val ctxProvider: () -> ApplicationContext,
@@ -52,22 +57,34 @@ class SpringClientApiStubInfoProvider(
           if (it.value.size > 1) error("@Api marker HTTP endpoint function name: ${it.key} repeated, methods: [${it.value.map { it.key }}]")
         }
         service.operations.map { operation ->
-          val (rInfo) = findMapping(service, operation)
+          val (rInfo, rMethod) = findMapping(service, operation)
+          log.trace("handle method: {}", rMethod)
           if (rInfo.methodsCondition.methods.isEmpty()) error("@Api marker HTTP METHOD: ${rInfo.pathPatternsCondition?.patterns} has no HTTP METHOD")
           if (
             (rInfo.pathPatternsCondition?.patterns?.size ?: 0) > 1
           ) error("@Api marker HTTP PATH: ${rInfo.pathPatternsCondition?.patterns} has more than one HTTP PATH")
 
           val uri = rInfo.pathPatternsCondition!!.firstPattern.toString()
+
+
           val pathVariables = pathVariableRegex.findAll(uri).map { it.groupValues[1] }.toList()
           val methods = rInfo.methodsCondition.methods.map { it.name }.toList()
+          val useRequestBody = rMethod.method.parameterCount > 0 && (rMethod.method.parameters?.any { it.isAnnotationPresent(RequestBody::class.java) } == true)
+          val useRequestPart = rMethod.method.parameterCount > 0 && (rMethod.method.parameters?.any { it.isAnnotationPresent(RequestPart::class.java) } == true)
+          if (useRequestBody && methods.any { it == "GET" }) {
+            log.warn("@Api marker HTTP PATH: {} has use @RequestBody in GET method", rInfo.pathPatternsCondition?.patterns)
+          }
+          val acceptType = when {
+            useRequestBody -> MimeTypes.JSON.value
+            useRequestPart -> MimeTypes.MULTIPART_FORM_DATA.value
+            else -> MimeTypes.URL.value
+          }
 
           val requestInfo = ClientPostProcessApiOperationInfo(
             mappedUris = listOf(uri),
             supportedMethods = methods,
             pathVariables = pathVariables,
-            requestAcceptType = "",
-            responseContentType = ""
+            requestAcceptType = acceptType,
           )
           operation.copy(requestInfo = requestInfo)
         }.let { service.copy(operations = it) }
