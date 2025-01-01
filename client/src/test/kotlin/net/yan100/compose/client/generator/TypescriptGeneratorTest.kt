@@ -118,7 +118,6 @@ class TypescriptGeneratorTest {
     )
   }
 
-
   @Test
   fun `renderEnumsToFiles 生成全部的 kotlin 类型到 enum_ts 文件`() {
     val allEnumKtClientTypes = api.definitions.filter { it.typeKind == TypeKind.ENUM_CLASS }
