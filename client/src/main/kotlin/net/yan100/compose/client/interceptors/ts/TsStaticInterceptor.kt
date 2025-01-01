@@ -45,7 +45,7 @@ open class TsStaticInterceptor : TsScopeInterceptor() {
       )
     }
 
-    val superTypes = ctx.getUnUsedSuperTypes(source)
+    val superTypes = ctx.getSuperTypeRefs(source)
 
     return TsScope.Interface(
       meta = source,
