@@ -60,17 +60,5 @@ sealed class TsUseVal<T : TsUseVal<T>>(
   ) : TsUseVal<Parameter>(
     typeVal = typeVal,
     partial = partial
-  ) {
-    @Deprecated("改为 Use")
-    override fun toTsTypeProperty(): TsTypeProperty = super.toTsTypeProperty().copy(name = name)
-  }
-
-  @Deprecated("改为 Use")
-  open fun toTsTypeProperty(): TsTypeProperty {
-    return TsTypeProperty(
-      name = TsName.Anonymous,
-      partial = partial,
-      defined = typeVal
-    )
-  }
+  )
 }
