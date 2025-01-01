@@ -12,18 +12,29 @@ import java.io.File
 import java.io.FileWriter
 import java.io.Writer
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class TsFileTest {
   @Test
   fun `SingleServiceClass 测试渲染`() {
-    TsFile.SingleServiceClass(
+    val expectResult = TsFile.SingleServiceClass(
       TsScope.Class(
-        name = TsName.PathName("service/AuthApi"),
+        name = TsName.PathName(name = "AuthApi", path = "service"),
         meta = ClientType.none()
       )
     )
+
+    assertEquals(1, expectResult.exports.size)
+    assertEquals(TsName.PathName(name = "AuthApi", path = "service"), expectResult.fileName)
+    assertEquals(1, expectResult.exports.size)
+    assertEquals(TsExport.ExportedDefined(name = expectResult.fileName), expectResult.exports.first())
+    expectResult.code.let {
+      assertNotBlank(it)
+      assertContains(it, "export ")
+      assertContains(it, "class ")
+    }
   }
 
   @Test
