@@ -14,12 +14,21 @@ sealed class TsFile<T : TsFile<T>>(
   open val usedNames: List<TsName> = emptyList(),
   open val exports: List<TsExport> = emptyList(),
 ) {
-  class CodeBuildable<T : TsFile<T>>
+  inner class CodeBuildable<T : TsFile<T>>(
+    private val builder: Appendable = StringBuilder()
+  ) : Appendable by builder {
+    override fun toString(): String = builder.toString()
+  }
 
-  abstract val render: CodeBuildable<T>.(file: T) -> String
+  abstract val render: CodeBuildable<T>.(file: T) -> Unit
 
   @Suppress("UNCHECKED_CAST")
-  val code: String get() = render(CodeBuildable(), this as T)
+  val code: String
+    get() {
+      val builder = CodeBuildable<T>()
+      render(builder, this as T)
+      return builder.toString()
+    }
 
   data class SingleServiceClass(
     val serviceClassScope: TsScope.Class
@@ -30,16 +39,14 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(serviceClassScope.name),
     fileName = serviceClassScope.name,
   ) {
-    override val render: CodeBuildable<SingleServiceClass>.(SingleServiceClass) -> String = { file ->
+    override val render: CodeBuildable<SingleServiceClass>.(SingleServiceClass) -> Unit = { file ->
       val classScope = file.serviceClassScope
-      buildString {
-        appendLine(file.imports.toRenderCode())
-        append("${TsModifier.Export} ")
-        append("${classScope.modifier.marker} ")
-        append("${classScope.name.toVariableName()} ")
-        appendLine(classScope.scopeQuota.left)
-        appendLine(classScope.scopeQuota.right)
-      }
+      appendLine(file.imports.toRenderCode())
+      append("${TsModifier.Export} ")
+      append("${classScope.modifier.marker} ")
+      append("${classScope.name.toVariableName()} ")
+      appendLine(classScope.scopeQuota.left)
+      appendLine(classScope.scopeQuota.right)
     }
   }
 
@@ -55,30 +62,29 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(interfaces.name),
     fileName = interfaces.name,
   ) {
-    override val render: CodeBuildable<SingleInterface>.(SingleInterface) -> String = { file ->
-      buildString {
-        val name = file.interfaces.name.toVariableName()
-        appendLine(imports.toRenderCode())
-        append("${TsModifier.Export} ")
-        append("${file.interfaces.modifier.marker} ")
-        append(name)
-        if (file.interfaces.generics.isNotEmpty()) append(file.interfaces.generics.toRenderCode())
-        val superTypes = file.interfaces.superTypes
-        if (file.interfaces.superTypes.isNotEmpty()) {
-          append(" ${TsModifier.Extends} ")
-          val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->
-            superType.toString()
-          }
-          append(superTypeNames)
+    override val render: CodeBuildable<SingleInterface>.(SingleInterface) -> Unit = { file ->
+      val name = file.interfaces.name.toVariableName()
+      appendLine(imports.toRenderCode())
+      append("${TsModifier.Export} ")
+      append("${file.interfaces.modifier.marker} ")
+      append(name)
+      if (file.interfaces.generics.isNotEmpty()) append(file.interfaces.generics.toRenderCode())
+      val superTypes = file.interfaces.superTypes
+      if (file.interfaces.superTypes.isNotEmpty()) {
+        append(" ${TsModifier.Extends} ")
+        val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->
+          superType.toString()
         }
-        appendLine(" ${file.interfaces.scopeQuota.left}")
-        val properties = file.interfaces.properties.joinToString(",\n") {
-          "  $it"
-        }
-        appendLine(properties)
-        append(file.interfaces.scopeQuota.right)
-        appendLine()
+        append(superTypeNames)
       }
+      appendLine(" ${file.interfaces.scopeQuota.left}")
+      val properties = file.interfaces.properties.joinToString(",\n") {
+        "  $it"
+      }
+      appendLine(properties)
+      append(file.interfaces.scopeQuota.right)
+      appendLine()
+
     }
   }
 
@@ -91,22 +97,20 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(typeAlias.name),
     fileName = typeAlias.name,
   ) {
-    override val render: CodeBuildable<SingleTypeAlias>.(SingleTypeAlias) -> String = { file ->
-      buildString {
-        val name = file.typeAlias.name.toVariableName()
-        if (imports.isNotEmpty()) {
-          appendLine(imports.toRenderCode())
-          appendLine()
-        }
-        append("${TsModifier.Export} ")
-        append(file.typeAlias.modifier.marker)
-        append(" ")
-        append(name)
-        if (file.typeAlias.generics.isNotEmpty()) append(file.typeAlias.generics.toRenderCode())
-        append(" = ")
-        append(file.typeAlias.aliasFor.toString())
+    override val render: CodeBuildable<SingleTypeAlias>.(SingleTypeAlias) -> Unit = { file ->
+      val name = file.typeAlias.name.toVariableName()
+      if (imports.isNotEmpty()) {
+        appendLine(imports.toRenderCode())
         appendLine()
       }
+      append("${TsModifier.Export} ")
+      append(file.typeAlias.modifier.marker)
+      append(" ")
+      append(name)
+      if (file.typeAlias.generics.isNotEmpty()) append(file.typeAlias.generics.toRenderCode())
+      append(" = ")
+      append(file.typeAlias.aliasFor.toString())
+      appendLine()
     }
   }
 
@@ -119,7 +123,7 @@ sealed class TsFile<T : TsFile<T>>(
     override val usedNames: List<TsName> = emptyList(),
     val exportName: TsExport = TsExport.ExportedDefined(fileName),
     override val imports: List<TsImport> = emptyList(),
-    override val render: CodeBuildable<SingleTypeUtils>.(SingleTypeUtils) -> String,
+    override val render: CodeBuildable<SingleTypeUtils>.(SingleTypeUtils) -> Unit,
   ) : TsFile<SingleTypeUtils>(
     fileName = fileName,
     imports = imports,
@@ -140,28 +144,24 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(fileName),
     scopes = scopes,
     fileName = fileName,
-    exports = listOf(
-      TsExport.ExportedDefined(enums.name)
-    ),
+    exports = listOf(TsExport.ExportedDefined(enums.name)),
   ) {
-    override val render: CodeBuildable<SingleEnum>.(SingleEnum) -> String
-      get() = {
-        buildString {
-          val name = when (enums.name) {
-            is TsName.Name -> enums.name.name
-            is TsName.PathName -> enums.name.name
-            else -> error("enum name ${enums.name} is not supported")
-          }
-          append("${TsModifier.Export} ")
-          append(enums.modifier.marker)
-          appendLine(" $name ${enums.scopeQuota.left}")
-          val constants = enums.constants.map { (k, v) ->
-            """  $k = ${if (v is String) "'$v'" else v}"""
-          }.joinToString(",\n")
-          appendLine(constants)
-          append(enums.scopeQuota.right)
-          appendLine()
-        }
+    override val render: CodeBuildable<SingleEnum>.(SingleEnum) -> Unit = {
+      val name = when (enums.name) {
+        is TsName.Name -> enums.name.name
+        is TsName.PathName -> enums.name.name
+        else -> error("enum name ${enums.name} is not supported")
       }
+      append("${TsModifier.Export} ")
+      append(enums.modifier.marker)
+      appendLine(" $name ${enums.scopeQuota.left}")
+      val constants = enums.constants.map { (k, v) ->
+        """  $k = ${if (v is String) "'$v'" else v}"""
+      }.joinToString(",\n")
+      appendLine(constants)
+      append(enums.scopeQuota.right)
+      appendLine()
+    }
+
   }
 }
