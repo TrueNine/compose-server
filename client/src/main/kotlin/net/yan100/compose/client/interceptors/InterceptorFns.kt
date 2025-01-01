@@ -18,6 +18,7 @@ val standardClientTypeToTsScopeInterceptors = listOf(
   TsTypeAliasInterceptor(),
   TsJimmerInterceptor(),
   //
+  TsSpringMvcInterceptor(),
   TsBuiltinTypeValInterceptor(),
   TsTypeValPreReferenceInterceptor(),
   TsMapEntryInterceptor(),
