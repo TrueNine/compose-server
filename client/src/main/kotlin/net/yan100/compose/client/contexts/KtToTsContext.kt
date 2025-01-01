@@ -17,7 +17,6 @@ open class KtToTsContext(
   vararg tsInterceptorChains: Interceptor<*, *, *> = arrayOf()
 ) : KtToKtContext(stub, *tsInterceptorChains) {
   override var currentStage: ExecuteStage = ExecuteStage.RESOLVE_OPERATIONS
-
   private val internalTsScopes: MutableList<TsScope<*>> = mutableListOf()
   private val internalTsScopesMap: MutableMap<String, TsScope<*>> = mutableMapOf()
   private var internalTsScopesCircularCount = 0
@@ -78,6 +77,7 @@ open class KtToTsContext(
     return internalTsScopesMap
   }
 
+
   /**
    * 更新入口
    */
@@ -105,6 +105,33 @@ open class KtToTsContext(
     val redirected = redirectAllScopes(postReferenceMap)
     val customScopeMap = updateCustomScopes(redirected)
     updatePostScopes(customScopeMap)
+    processService()
+  }
+
+  /**
+   * 处理 services
+   */
+  fun processService() {
+    val r = clientServiceMap.mapKeys { (type) ->
+      val typeName = type.typeName.toTsStylePathName()
+      TsScope.Class(
+        name = typeName.copy(path = "service/${typeName.path}"),
+        meta = type
+      )
+    }.mapValues { (_, operations) ->
+      operations.map { operation ->
+        val requestInfo = operation.requestInfo!!
+        if (requestInfo.supportedMethods.size > 1) {
+          requestInfo.supportedMethods.map { method ->
+            operation.copy(
+              requestInfo = requestInfo.copy(supportedMethods = listOf(method)),
+              name = operation.name + "For${method}"
+            )
+          }
+        } else listOf(operation)
+      }.flatten()
+    }
+    println(r)
   }
 
   private fun redirectAllScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
