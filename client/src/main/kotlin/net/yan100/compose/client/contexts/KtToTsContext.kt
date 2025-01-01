@@ -193,7 +193,7 @@ open class KtToTsContext(
     val tsGenericsInterceptors = interceptorChain.filterIsInstance<TsPostScopeInterceptor>()
     if (tsGenericsInterceptors.isEmpty()) return supportedMap
     val (preparedProcessMap, basicMap) = supportedMap.entries.partition { (_, def) ->
-      !def.isBasic()
+      !def.isBasic
     }.let {
       it.first.associate { (k, v) -> k to v } to it.second.associate { (k, v) -> k to v }
     }

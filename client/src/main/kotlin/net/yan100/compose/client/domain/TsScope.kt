@@ -1,5 +1,6 @@
 package net.yan100.compose.client.domain
 
+import net.yan100.compose.client.TsTypeDefine
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.meta.client.ClientType
 
@@ -14,38 +15,42 @@ sealed class TsScope<T : TsScope<T>>(
   open val meta: ClientType,
   open val scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
   open val modifier: TsTypeModifier = TsTypeModifier.None
-) {
+) : TsTypeDefine<TsScope<T>> {
   @Suppress("UNCHECKED_CAST")
-  fun fillGenerics(usedGenerics: List<TsGeneric>): T {
-    if (!isRequireUseGeneric()) return this as T
-    when (this) {
+  override fun fillGenerics(usedGenerics: List<TsGeneric>): T {
+    if (!isRequireUseGeneric) return this as T
+    return when (this) {
       is TypeAlias -> copy(usedGenerics = usedGenerics) as T
       is TypeVal -> copy(definition = definition.fillGenerics(usedGenerics)) as T
       else -> this as T
     }
-
-    return this as T
   }
 
-  fun isRequireUseGeneric(): Boolean {
-    return when (this) {
-      is Class -> TODO()
-      is Enum -> false
-      is Interface -> superTypes.any { it.isRequireUseGeneric } || properties.any { it.isRequireUseGeneric() }
-      is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
-      is TypeVal -> definition.isRequireUseGeneric
+  @Suppress("UNCHECKED_CAST")
+  override fun fillGenerics(vararg generic: TsGeneric): T {
+    if (generic.isEmpty()) return this as T
+    return fillGenerics(generic.toList())
+  }
+
+  override val isRequireUseGeneric: Boolean
+    get() {
+      return when (this) {
+        is Class -> TODO()
+        is Enum -> false
+        is Interface -> superTypes.any { it.isRequireUseGeneric } || properties.any { it.isRequireUseGeneric() }
+        is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
+        is TypeVal -> definition.isRequireUseGeneric
+      }
     }
-  }
 
-  fun isBasic(): Boolean {
-    return when (this) {
+  override val isBasic: Boolean
+    get() = when (this) {
       is Enum -> true
       is TypeVal -> definition.isBasic
       is TypeAlias -> aliasFor.isBasic && usedGenerics.all { it.isBasic }
       is Interface -> superTypes.all { it.isBasic } && properties.all { it.defined.isBasic }
       is Class -> error("Class is not supported")
     }
-  }
 
   fun toTsTypeVal(): TsTypeVal<*> {
     return when (this) {

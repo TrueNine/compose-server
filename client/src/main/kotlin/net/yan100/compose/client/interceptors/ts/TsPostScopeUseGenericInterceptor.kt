@@ -7,9 +7,9 @@ import net.yan100.compose.client.interceptors.TsPostScopeInterceptor
 import net.yan100.compose.meta.client.ClientType
 
 class TsPostScopeUseGenericInterceptor : TsPostScopeInterceptor() {
-  override fun supported(ctx: KtToTsContext, source: Pair<ClientType, TsScope<*>>): Boolean = source.second.isRequireUseGeneric()
+  override fun supported(ctx: KtToTsContext, source: Pair<ClientType, TsScope<*>>): Boolean = source.second.isRequireUseGeneric
   override fun process(ctx: KtToTsContext, source: Pair<ClientType, TsScope<*>>): TsScope<*> {
-    val (typed, scope) = source
+    val (_, scope) = source
     return when (scope) {
       is TsScope.Interface -> {
         val r = scope.meta
