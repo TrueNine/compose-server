@@ -19,6 +19,24 @@ sealed class TsFile<T : TsFile<T>>(
   @Suppress("UNCHECKED_CAST")
   val code: String get() = render(this as T)
 
+  data class SingleServiceClass(
+    val serviceClassScope: TsScope.Class
+  ) : TsFile<SingleServiceClass>(
+    imports = serviceClassScope.collectImports(),
+    scopes = listOf(serviceClassScope),
+    exports = listOf(TsExport.ExportedDefined(serviceClassScope.name)),
+    usedNames = listOf(serviceClassScope.name),
+    fileName = serviceClassScope.name,
+  ) {
+    override val render: (SingleServiceClass) -> String
+      get() = { file ->
+        val classScope = file.serviceClassScope
+        buildString {
+          append(classScope.toString())
+        }
+      }
+  }
+
   /**
    * 单接口文件
    */
