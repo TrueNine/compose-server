@@ -3,7 +3,6 @@ package net.yan100.compose.client.domain.entries
 import net.yan100.compose.client.collectImports
 import net.yan100.compose.client.domain.TsModifier
 import net.yan100.compose.client.domain.TsScope
-import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.toRenderCode
 import net.yan100.compose.client.toVariableName
 
@@ -15,10 +14,12 @@ sealed class TsFile<T : TsFile<T>>(
   open val usedNames: List<TsName> = emptyList(),
   open val exports: List<TsExport> = emptyList(),
 ) {
-  abstract val render: (T) -> String
+  class CodeBuildable<T : TsFile<T>>
+
+  abstract val render: CodeBuildable<T>.(file: T) -> String
 
   @Suppress("UNCHECKED_CAST")
-  val code: String get() = render(this as T)
+  val code: String get() = render(CodeBuildable(), this as T)
 
   data class SingleServiceClass(
     val serviceClassScope: TsScope.Class
@@ -29,7 +30,7 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(serviceClassScope.name),
     fileName = serviceClassScope.name,
   ) {
-    override val render: (SingleServiceClass) -> String = { file ->
+    override val render: CodeBuildable<SingleServiceClass>.(SingleServiceClass) -> String = { file ->
       val classScope = file.serviceClassScope
       buildString {
         appendLine(file.imports.toRenderCode())
@@ -55,7 +56,7 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(interfaces.name),
     fileName = interfaces.name,
   ) {
-    override val render: (SingleInterface) -> String = { file ->
+    override val render: CodeBuildable<SingleInterface>.(SingleInterface) -> String = { file ->
       buildString {
         val name = file.interfaces.name.toVariableName()
         appendLine(imports.toRenderCode())
@@ -63,7 +64,7 @@ sealed class TsFile<T : TsFile<T>>(
         append("${file.interfaces.modifier.marker} ")
         append(name)
         if (file.interfaces.generics.isNotEmpty()) append(file.interfaces.generics.toRenderCode())
-        val superTypes = file.interfaces.superTypes.filterNot { it is TsTypeVal.Ref && it.typeName is TsName.Anonymous }
+        val superTypes = file.interfaces.superTypes
         if (file.interfaces.superTypes.isNotEmpty()) {
           append(" ${TsModifier.Extends} ")
           val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->
@@ -91,14 +92,14 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(typeAlias.name),
     fileName = typeAlias.name,
   ) {
-    override val render: (SingleTypeAlias) -> String = { file ->
+    override val render: CodeBuildable<SingleTypeAlias>.(SingleTypeAlias) -> String = { file ->
       buildString {
         val name = file.typeAlias.name.toVariableName()
         if (imports.isNotEmpty()) {
           appendLine(imports.toRenderCode())
           appendLine()
         }
-        append("export ")
+        append("${TsModifier.Export} ")
         append(file.typeAlias.modifier.marker)
         append(" ")
         append(name)
@@ -115,11 +116,11 @@ sealed class TsFile<T : TsFile<T>>(
    */
   data class SingleTypeUtils(
     override val fileName: TsName,
-    override val render: (SingleTypeUtils) -> String,
     override val scopes: List<TsScope<*>> = emptyList(),
     override val usedNames: List<TsName> = emptyList(),
     val exportName: TsExport = TsExport.ExportedDefined(fileName),
     override val imports: List<TsImport> = emptyList(),
+    override val render: CodeBuildable<SingleTypeUtils>.(SingleTypeUtils) -> String,
   ) : TsFile<SingleTypeUtils>(
     fileName = fileName,
     imports = imports,
@@ -144,7 +145,7 @@ sealed class TsFile<T : TsFile<T>>(
       TsExport.ExportedDefined(enums.name)
     ),
   ) {
-    override val render: (SingleEnum) -> String
+    override val render: CodeBuildable<SingleEnum>.(SingleEnum) -> String
       get() = {
         buildString {
           val name = when (enums.name) {
@@ -152,7 +153,7 @@ sealed class TsFile<T : TsFile<T>>(
             is TsName.PathName -> enums.name.name
             else -> error("enum name ${enums.name} is not supported")
           }
-          append("export ")
+          append("${TsModifier.Export} ")
           append(enums.modifier.marker)
           appendLine(" $name ${enums.scopeQuota.left}")
           val constants = enums.constants.map { (k, v) ->
