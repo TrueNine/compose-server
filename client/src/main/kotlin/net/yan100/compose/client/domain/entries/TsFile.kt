@@ -1,6 +1,7 @@
 package net.yan100.compose.client.domain.entries
 
 import net.yan100.compose.client.collectImports
+import net.yan100.compose.client.domain.TsModifier
 import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.domain.TsTypeVal
 import net.yan100.compose.client.toRenderCode
@@ -31,8 +32,13 @@ sealed class TsFile<T : TsFile<T>>(
     override val render: (SingleServiceClass) -> String = { file ->
       val classScope = file.serviceClassScope
       buildString {
-        appendLine(imports.toRenderCode())
-        append(classScope.toString())
+        appendLine(file.imports.toRenderCode())
+        append("${TsModifier.Export} ")
+        append("${classScope.modifier.marker} ")
+        append("${classScope.name.toVariableName()} ")
+        appendLine(classScope.scopeQuota.left)
+
+        appendLine(classScope.scopeQuota.right)
       }
     }
   }
@@ -52,18 +58,14 @@ sealed class TsFile<T : TsFile<T>>(
     override val render: (SingleInterface) -> String = { file ->
       buildString {
         val name = file.interfaces.name.toVariableName()
-        if (imports.isNotEmpty()) {
-          appendLine(imports.toRenderCode())
-          appendLine()
-        }
-        append("export ")
-        append(file.interfaces.modifier.marker)
-        append(" ")
+        appendLine(imports.toRenderCode())
+        append("${TsModifier.Export} ")
+        append("${file.interfaces.modifier.marker} ")
         append(name)
         if (file.interfaces.generics.isNotEmpty()) append(file.interfaces.generics.toRenderCode())
         val superTypes = file.interfaces.superTypes.filterNot { it is TsTypeVal.Ref && it.typeName is TsName.Anonymous }
         if (file.interfaces.superTypes.isNotEmpty()) {
-          append(" extends ")
+          append(" ${TsModifier.Extends} ")
           val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->
             superType.toString()
           }
