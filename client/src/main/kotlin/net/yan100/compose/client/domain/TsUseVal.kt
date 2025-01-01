@@ -11,11 +11,13 @@ sealed class TsUseVal<T : TsUseVal<T>>(
     get() = when (this) {
       is ParameterType -> typeValue.isBasic
       is ReturnType -> typeValue.isBasic
+      is Prop -> typeValue.isBasic
     }
   override val isRequireUseGeneric: Boolean
     get() = when (this) {
       is ParameterType -> typeValue.isRequireUseGeneric
       is ReturnType -> typeValue.isRequireUseGeneric
+      is Prop -> typeValue.isRequireUseGeneric
     }
 
   @Suppress("UNCHECKED_CAST")
@@ -30,8 +32,18 @@ sealed class TsUseVal<T : TsUseVal<T>>(
     return when (this) {
       is ParameterType -> copy(typeValue = typeValue.fillGenerics(usedGenerics)) as T
       is ReturnType -> copy(typeValue = typeValue.fillGenerics(usedGenerics)) as T
+      is Prop -> copy(typeValue = typeValue.fillGenerics(usedGenerics)) as T
     }
   }
+
+  data class Prop(
+    val name: TsName,
+    override val typeValue: TsTypeVal<*>,
+    override val partial: Boolean = false
+  ) : TsUseVal<Prop>(
+    typeValue = typeValue,
+    partial = partial
+  )
 
   data class ReturnType(
     override val typeValue: TsTypeVal<*>,
@@ -46,12 +58,14 @@ sealed class TsUseVal<T : TsUseVal<T>>(
     override val typeValue: TsTypeVal<*>,
     override val partial: Boolean = false
   ) : TsUseVal<ParameterType>(
-    typeValue,
-    partial
+    typeValue = typeValue,
+    partial = partial
   ) {
+    @Deprecated("改为 Use")
     override fun toTsTypeProperty(): TsTypeProperty = super.toTsTypeProperty().copy(name = name)
   }
 
+  @Deprecated("改为 Use")
   open fun toTsTypeProperty(): TsTypeProperty {
     return TsTypeProperty(
       name = TsName.Anonymous,
