@@ -19,4 +19,11 @@ data class ClientService(
    * 所以的方法
    */
   val operations: List<ClientOperation> = emptyList()
-)
+) {
+
+  fun toClientType(): ClientType = ClientType(
+    typeName = typeName,
+    doc = doc,
+  )
+
+}
