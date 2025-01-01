@@ -11,6 +11,7 @@ import net.yan100.compose.core.typing.UserAgents
 import net.yan100.compose.meta.annotations.client.Api
 import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 /**
  * controller 顶层注释
@@ -28,6 +29,7 @@ class TsReturnTypeController {
   class ExtendsType<T>(
     val importThis: ExtendsType<T>,
     val generic: List<T>,
+    val springFile: MultipartFile,
     val dep: DeprecationDataClass?,
     val refId: RefId?,
     val isO4217: ISO4217,

@@ -2,6 +2,7 @@ package net.yan100.compose.client.ts
 
 import net.yan100.compose.meta.annotations.client.Api
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 private typealias Erv = List<String>
 private typealias MList<E> = List<E>
@@ -20,6 +21,13 @@ class TsParameterTestController {
   @PostMapping("outputGenericList")
   fun outputGenericList(): MList<Erv>? {
     return null
+  }
+
+  @Api
+  @PostMapping("inputFile")
+  fun inputFile(
+    file: MultipartFile?
+  ) {
   }
 
   @Api
