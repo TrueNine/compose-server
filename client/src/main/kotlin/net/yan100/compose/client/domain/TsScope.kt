@@ -24,7 +24,6 @@ sealed class TsScope<T : TsScope<T>>(
     else -> this as T
   }
 
-
   @Suppress("UNCHECKED_CAST")
   override fun fillGenerics(vararg generic: TsGeneric): T {
     if (generic.isEmpty()) return this as T
