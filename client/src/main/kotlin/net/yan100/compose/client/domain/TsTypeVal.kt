@@ -24,15 +24,14 @@ sealed class TsTypeVal<T : TsTypeVal<T>> {
       is Promise -> copy(usedGeneric = usedGenerics.first()) as T
       is TypeDef -> copy(usedGenerics = usedGenerics) as T
       is Record -> copy(keyUsedGeneric = usedGenerics[0], valueUsedGeneric = usedGenerics[1]) as T
-      is Object -> {
-        copy(
-          elements = usedGenerics.mapIndexed { i, it ->
-            val r = elements.getOrNull(i)
-            if (r != null && r.isRequireUseGeneric()) r.copy(defined = r.defined.fillGenerics(listOf(it)))
-            else r
-          }.filterNotNull()
-        ) as T
-      }
+      is Object -> copy(
+        elements = usedGenerics.mapIndexed { i, it ->
+          val r = elements.getOrNull(i)
+          if (r != null && r.isRequireUseGeneric()) r.copy(defined = r.defined.fillGenerics(listOf(it)))
+          else r
+        }.filterNotNull()
+      ) as T
+
 
       is Union,
       is Tuple,
