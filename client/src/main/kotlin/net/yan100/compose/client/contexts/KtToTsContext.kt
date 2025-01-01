@@ -118,18 +118,6 @@ open class KtToTsContext(
         name = typeName.copy(path = "service/${typeName.path}"),
         meta = type
       )
-    }.mapValues { (_, operations) ->
-      operations.map { operation ->
-        val requestInfo = operation.requestInfo!!
-        if (requestInfo.supportedMethods.size > 1) {
-          requestInfo.supportedMethods.map { method ->
-            operation.copy(
-              requestInfo = requestInfo.copy(supportedMethods = listOf(method)),
-              name = operation.name + "For${method}"
-            )
-          }
-        } else listOf(operation)
-      }.flatten()
     }
     println(r)
   }
