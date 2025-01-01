@@ -8,6 +8,7 @@ import net.yan100.compose.client.domain.entries.TsName
  * @param partial 是否可选
  * @param defined 属性的类型
  */
+@Deprecated("改为 UseTypeVal")
 data class TsTypeProperty(
   val name: TsName,
   val partial: Boolean = false,
