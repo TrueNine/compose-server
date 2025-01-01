@@ -21,8 +21,22 @@ open class KtToKtContext(
   /**
    * 已装载的服务端点
    */
-  val clientServiceMap = stub.services.groupBy({ it.toClientType() }) { it.operations }.mapValues { (_, v) -> v.flatten() }
-  
+  val clientServiceMap = stub.services.groupBy({ it.toClientType() }) { it.operations }
+    .mapValues { (_, v) -> v.flatten() }
+    .mapValues { (clientType, operations) ->
+      operations.map { operation ->
+        val requestInfo = operation.requestInfo ?: error("RequestInfo is null class: ${clientType.typeName}#${operation.name}")
+        if (requestInfo.supportedMethods.size > 1) {
+          requestInfo.supportedMethods.map { method ->
+            operation.copy(
+              requestInfo = requestInfo.copy(supportedMethods = listOf(method)),
+              name = operation.name + "For${method}"
+            )
+          }
+        } else listOf(operation)
+      }.flatten()
+    }
+
   private val internalDefinitionsMap: MutableMap<String, ClientType> = mutableMapOf()
   private val internalDefinitions: MutableList<ClientType> = mutableListOf()
   private var getDefinitionCircularCount = 0
