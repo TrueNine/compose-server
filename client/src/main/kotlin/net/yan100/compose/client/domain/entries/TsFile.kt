@@ -4,6 +4,7 @@ import net.yan100.compose.client.collectImports
 import net.yan100.compose.client.domain.TsModifier
 import net.yan100.compose.client.domain.TsScope
 import net.yan100.compose.client.toRenderCode
+import net.yan100.compose.client.toTsName
 import net.yan100.compose.client.toVariableName
 
 sealed class TsFile<T : TsFile<T>>(
@@ -28,16 +29,21 @@ sealed class TsFile<T : TsFile<T>>(
       render(it, this as T)
     }.toString()
 
-  data class SingleServiceClass(
-    val serviceClassScope: TsScope.Class
-  ) : TsFile<SingleServiceClass>(
-    imports = serviceClassScope.collectImports(),
+  data class ServiceClass(
+    val serviceClassScope: TsScope.Class,
+    override val imports: List<TsImport> = serviceClassScope.collectImports() + TsImport(
+      useType = true,
+      usingNames = listOf("Executor".toTsName()),
+      fromPath = "../../Executor"
+    )
+  ) : TsFile<ServiceClass>(
+    imports = imports,
     scopes = listOf(serviceClassScope),
     exports = listOf(TsExport.ExportedDefined(serviceClassScope.name)),
     usedNames = listOf(serviceClassScope.name),
     fileName = serviceClassScope.name,
   ) {
-    override val render: CodeBuildable<SingleServiceClass>.(SingleServiceClass) -> Unit = { file ->
+    override val render: CodeBuildable<ServiceClass>.(ServiceClass) -> Unit = { file ->
       val classScope = file.serviceClassScope
       appendLine(file.imports.toRenderCode())
       append("${TsModifier.Export} ")
