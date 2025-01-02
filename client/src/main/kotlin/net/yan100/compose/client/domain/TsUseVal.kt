@@ -22,12 +22,6 @@ sealed class TsUseVal<T : TsUseVal<T>>(
     }
 
   @Suppress("UNCHECKED_CAST")
-  override fun fillGenerics(vararg generic: TsGeneric): T {
-    if (generic.isEmpty()) return this as T
-    return fillGenerics(generic.toList())
-  }
-
-  @Suppress("UNCHECKED_CAST")
   override fun fillGenerics(usedGenerics: List<TsGeneric>): T = if (usedGenerics.isEmpty()) this as T
   else when (this) {
     is Parameter -> copy(typeVal = typeVal.fillGenerics(usedGenerics)) as T

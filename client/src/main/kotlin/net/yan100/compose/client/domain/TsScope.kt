@@ -23,12 +23,6 @@ sealed class TsScope<T : TsScope<T>>(
     else -> this as T
   }
 
-  @Suppress("UNCHECKED_CAST")
-  override fun fillGenerics(vararg generic: TsGeneric): T {
-    if (generic.isEmpty()) return this as T
-    return fillGenerics(generic.toList())
-  }
-
   override val isRequireUseGeneric: Boolean
     get() = when (this) {
       is Class -> TODO()
@@ -37,7 +31,6 @@ sealed class TsScope<T : TsScope<T>>(
       is TypeAlias -> usedGenerics.any { it is TsGeneric.UnUsed }
       is TypeVal -> definition.isRequireUseGeneric
     }
-
 
   override val isBasic: Boolean
     get() = when (this) {
@@ -115,7 +108,7 @@ sealed class TsScope<T : TsScope<T>>(
     override val name: TsName,
     val meta: ClientType,
     val superTypes: List<TsTypeVal.Ref> = emptyList(),
-    // TODO 定义其他类的属性
+    val generics: List<TsGeneric.Defined> = emptyList()
   ) : TsScope<Class>(
     name = name,
     modifier = TsTypeModifier.Class,

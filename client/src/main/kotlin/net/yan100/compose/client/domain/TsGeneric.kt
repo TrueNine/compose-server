@@ -12,10 +12,6 @@ import net.yan100.compose.client.unwrapGenericName
 sealed class TsGeneric(
   open val index: Int = 0,
 ) : TsTypeDefine<TsGeneric> {
-  override fun fillGenerics(vararg generic: TsGeneric): TsGeneric {
-    return this.fillGenerics(generic.toList())
-  }
-
   override fun fillGenerics(usedGenerics: List<TsGeneric>): TsGeneric {
     if (usedGenerics.isEmpty()) return this
     return when (this) {

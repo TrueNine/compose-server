@@ -19,12 +19,6 @@ import net.yan100.compose.client.toVariableName
  */
 sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
   @Suppress("UNCHECKED_CAST")
-  override fun fillGenerics(vararg generic: TsGeneric): T {
-    if (generic.isEmpty()) return this as T
-    return this.fillGenerics(generic.toList())
-  }
-
-  @Suppress("UNCHECKED_CAST")
   override fun fillGenerics(usedGenerics: List<TsGeneric>): T {
     if (usedGenerics.isEmpty() || !isRequireUseGeneric) return this as T
     return when (this) {
