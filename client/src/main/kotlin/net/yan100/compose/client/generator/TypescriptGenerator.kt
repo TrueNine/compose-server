@@ -21,8 +21,8 @@ class TypescriptGenerator(
   )
 
   internal val convertedTsScopes: List<TsScope<*>> get() = context.tsScopes
-
-
+  
+  internal fun renderServiceClass(serviceClass: TsScope.Class) = TsFile.ServiceClass(serviceClassScope = serviceClass)
   internal fun renderTypeAlias(typeAlias: TsScope.TypeAlias): TsFile.SingleTypeAlias = TsFile.SingleTypeAlias(typeAlias)
   fun renderTypeAliasesToFiles(): List<TsFile.SingleTypeAlias> {
     val typeAliases = context.tsScopes.filterIsInstance<TsScope.TypeAlias>()
@@ -65,7 +65,7 @@ export type Executor = (requestOptions: {
   readonly bodyType?: BodyType
 }) => Promise<unknown>
     """.trimIndent().plus("\n")
-        )
+        ) // TODO 剔除多余定义内容
       }
     )
   }
