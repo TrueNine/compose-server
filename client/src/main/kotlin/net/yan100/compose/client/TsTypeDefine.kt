@@ -18,7 +18,11 @@ interface TsTypeDefine<T : TsTypeDefine<T>> {
   /**
    * 浅层填充泛型
    */
-  fun fillGenerics(vararg generic: TsGeneric): T
+  @Suppress("UNCHECKED_CAST")
+  fun fillGenerics(vararg generic: TsGeneric): T {
+    return if (isRequireUseGeneric && generic.isNotEmpty()) fillGenerics(generic.toList())
+    else this as T
+  }
 
   /**
    * 浅层填充泛型
