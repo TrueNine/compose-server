@@ -113,11 +113,15 @@ open class KtToTsContext(
    */
   fun processService() {
     val r = clientServiceMap.mapKeys { (type) ->
-      val typeName = type.typeName.toTsStylePathName()
+      val typeName = type.typeName.toTsPathName()
       TsScope.Class(
         name = typeName.copy(path = "service/${typeName.path}"),
         meta = type
       )
+    }.mapValues { (_, operations) ->
+      operations.map { operation ->
+        operation
+      }
     }
     println(r)
   }
@@ -175,7 +179,7 @@ open class KtToTsContext(
           else r.copy(
             typeName = r.typeName,
             usedGenerics = superType.toTsGenericUsed { er ->
-              if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsStyleName()
+              if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsName()
               else getTsTypeValByName(er.typeName).toTsName()
             }
           )
@@ -276,7 +280,7 @@ open class KtToTsContext(
     return clientGenerics.map { usedGeneric ->
       if (usedGeneric.typeName.isGenericName()) {
         return@map TsGeneric.Used(
-          used = TsTypeVal.Generic(TsGeneric.Defined(name = usedGeneric.typeName.toTsStyleName())),
+          used = TsTypeVal.Generic(TsGeneric.Defined(name = usedGeneric.typeName.toTsName())),
           index = usedGeneric.index
         )
       }
@@ -307,8 +311,8 @@ open class KtToTsContext(
     return r.properties.map { clientProp ->
       if (clientProp.typeName.isGenericName()) {
         return@map TsUseVal.Prop(
-          name = clientProp.name.toTsStyleName(),
-          typeVal = TsTypeVal.Generic(TsGeneric.Defined(name = clientProp.typeName.toTsStyleName())),
+          name = clientProp.name.toTsName(),
+          typeVal = TsTypeVal.Generic(TsGeneric.Defined(name = clientProp.typeName.toTsName())),
           partial = clientProp.nullable == true
         )
       }
@@ -316,13 +320,13 @@ open class KtToTsContext(
       val def = getTsTypeValByType(thatPropType)
       if (def !is TsTypeVal.Ref) {
         return@map TsUseVal.Prop(
-          name = clientProp.name.toTsStyleName(),
+          name = clientProp.name.toTsName(),
           typeVal = def,
           partial = clientProp.nullable == true
         )
       }
       TsUseVal.Prop(
-        name = clientProp.name.toTsStyleName(),
+        name = clientProp.name.toTsName(),
         typeVal = def.copy(usedGenerics = getTsGenericByGenerics(clientProp.usedGenerics))
       )
     }
