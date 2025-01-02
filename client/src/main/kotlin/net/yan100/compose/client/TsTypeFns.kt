@@ -153,7 +153,7 @@ fun List<TsImport>.toRenderCode(): String {
       }
     }
     "$prefix $usingNames $suffix"
-  }.joinToString("\n").let { "$it\n" }
+  }.joinToString("\n")
 }
 
 
