@@ -1,6 +1,8 @@
 package net.yan100.compose.client.domain
 
 import net.yan100.compose.client.TsTypeDefine
+import net.yan100.compose.client.domain.TsUseVal.Parameter
+import net.yan100.compose.client.domain.TsUseVal.Return
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.toVariableName
 
@@ -41,7 +43,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
 
       is Union,
       is Tuple,
-      is AnonymousFunction,
+      is Function,
       is TypeConstant -> this as T
 
       is Any,
@@ -76,7 +78,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is Bigint -> false
 
         is Object -> elements.any { it.isRequireUseGeneric }
-        is AnonymousFunction -> params.any { it.isRequireUseGeneric } || returnType.isRequireUseGeneric
+        is Function -> params.any { it.isRequireUseGeneric } || returns.isRequireUseGeneric
         is Array -> usedGeneric.isRequireUseGeneric
         is Generic -> generic.isRequireUseGeneric
         is Promise -> usedGeneric.isRequireUseGeneric
@@ -108,7 +110,7 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is Generic -> generic.isBasic
         is Array -> usedGeneric.isBasic
         is Union -> joinTypes.all { it.isBasic }
-        is AnonymousFunction -> params.all { it.isBasic } && returnType.isBasic
+        is Function -> params.all { it.isBasic } && returns.isBasic
         is Object -> elements.all { it.isBasic }
         is Promise -> usedGeneric.isBasic
         is Record -> keyUsedGeneric.isBasic && valueUsedGeneric.isBasic
@@ -137,19 +139,20 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
   }
 
   /**
-   * 匿名函数定义
+   * 函数定义
+   *
    * ```typescript
    * interface Foo {
    *   bar: (param: string) => void
    * }
    * ```
    */
-  data class AnonymousFunction(
-    val params: List<TsUseVal.Parameter>,
-    val returnType: TsTypeVal<*>
-  ) : TsTypeVal<AnonymousFunction>() {
+  data class Function(
+    val params: List<Parameter> = emptyList(),
+    val returns: Return = Return(Void)
+  ) : TsTypeVal<Function>() {
     override fun toString(): kotlin.String {
-      return "${TsScopeQuota.BRACKETS.left}${params.joinToString(", ") { it.toString() }}${TsScopeQuota.BRACKETS.right} => $returnType"
+      return "(${TsScopeQuota.BRACKETS.left}${params.joinToString(", ") { it.toString() }}${TsScopeQuota.BRACKETS.right}) => $returns"
     }
   }
 
@@ -310,5 +313,17 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
    */
   data object Void : TsTypeVal<Void>() {
     override fun toString(): kotlin.String = "void"
+  }
+
+  companion object {
+    fun promiseFunction(
+      params: List<Parameter> = emptyList(),
+      returns: TsGeneric = TsGeneric.Used(Void)
+    ) = Function(
+      params = params,
+      returns = Return(
+        Promise(returns)
+      )
+    )
   }
 }
