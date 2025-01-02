@@ -19,13 +19,13 @@ import kotlin.test.assertTrue
 class TsFileTest {
   @Test
   fun `SingleServiceClass 测试渲染`() {
-    val expectResult = TsFile.SingleServiceClass(
+    val expectResult = TsFile.ServiceClass(
       TsScope.Class(
         name = TsName.PathName(name = "AuthApi", path = "service"),
         meta = ClientType.none()
       )
     )
-
+    println(expectResult.code)
     assertEquals(1, expectResult.exports.size)
     assertEquals(TsName.PathName(name = "AuthApi", path = "service"), expectResult.fileName)
     assertEquals(1, expectResult.exports.size)
