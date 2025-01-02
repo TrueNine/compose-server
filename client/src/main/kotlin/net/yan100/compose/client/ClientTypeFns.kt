@@ -7,21 +7,21 @@ import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.client.ClientUsedGeneric
 
-internal fun String.toTsStyleName(): TsName.Name {
+internal fun String.toTsName(): TsName.Name {
   if (isGenericName()) return TsName.Generic(this.unwrapGenericName()).toName()
   return TsName.Name(this.split(".").last().replace("$", "_"))
 }
 
-internal fun String.toTsStylePathName(): TsName.PathName {
+internal fun String.toTsPathName(): TsName.PathName {
   val packageAndClassName = split(".")
   if (packageAndClassName.size == 1) {
     return TsName.PathName(
-      name = this.toTsStyleName().name,
+      name = this.toTsName().name,
       path = ""
     )
   }
   return TsName.PathName(
-    name = packageAndClassName.last().toTsStyleName().name,
+    name = packageAndClassName.last().toTsName().name,
     path = packageAndClassName.dropLast(1).joinToString("_")
   )
 }
@@ -55,7 +55,7 @@ internal fun ClientType.toTsGenericUsed(
 internal fun ClientType.toTypescriptEnum(): TsScope.Enum {
   return TsScope.Enum(
     meta = this,
-    name = typeName.toTsStylePathName(),
+    name = typeName.toTsPathName(),
     constants = resolveEnumConstants()
   )
 }

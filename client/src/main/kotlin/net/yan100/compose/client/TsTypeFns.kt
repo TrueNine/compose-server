@@ -54,7 +54,7 @@ fun TsTypeVal<*>.getUsedNames(): List<TsName> {
     is TsTypeVal.Array -> usedGeneric.getUsedNames()
     is TsTypeVal.Object -> elements.map { it.getUsedNames() }.flatten()
     is TsTypeVal.Tuple -> elements.map { it.getUsedNames() }.flatten()
-    is TsTypeVal.AnonymousFunction -> returnType.getUsedNames() + params.map { it.getUsedNames() }.flatten()
+    is TsTypeVal.Function -> returns.getUsedNames() + params.map { it.getUsedNames() }.flatten()
     is TsTypeVal.Union -> joinTypes.map { it.getUsedNames() }.flatten()
     is TsTypeVal.TypeConstant -> element.getUsedNames()
     is TsTypeVal.Record -> keyUsedGeneric.getUsedNames() + valueUsedGeneric.getUsedNames()
