@@ -36,7 +36,7 @@ liteflow = "2.12.1"
 hutool = "5.8.34"
 xxlJob = "2.4.2"
 saToken = "1.39.0"
-mybatisPlus = "3.5.7"
+mybatisPlus = "3.5.9"
 
 # testing tools and gradle plugins
 spotless = "7.0.0.BETA4"
