@@ -47,12 +47,14 @@ sealed class TsUseVal<T : TsUseVal<T>>(
   }
 
   data class Return(
-    override val typeVal: TsTypeVal<*>,
+    override val typeVal: TsTypeVal<*> = TsTypeVal.Void,
     override val partial: Boolean = false
   ) : TsUseVal<Return>(
     typeVal = typeVal,
     partial = partial
-  )
+  ) {
+    override fun toString(): String = if (partial) TsTypeVal.Union(listOf(typeVal, TsTypeVal.Undefined)).toString() else typeVal.toString()
+  }
 
   data class Parameter(
     val name: TsName.Name,
@@ -61,5 +63,7 @@ sealed class TsUseVal<T : TsUseVal<T>>(
   ) : TsUseVal<Parameter>(
     typeVal = typeVal,
     partial = partial
-  )
+  ) {
+    override fun toString(): String = "${name.toVariableName()}${if (partial) "?" else ""}: $typeVal"
+  }
 }
