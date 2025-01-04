@@ -93,13 +93,13 @@ open class KtToKtContext(
   private fun dispatch(clientTypes: List<ClientType> = stub.definitions, deepCount: Int = 0): Map<String, ClientType> {
     if (deepCount > 16) error("Circular reference detected in updateDefinitions")
     if (clientTypes.isEmpty()) return emptyMap()
-    val nameConvertedTypes = clientTypes.map {
-      it.copy(
-        typeName = getTypeNameByName(it.typeName),
-        superTypes = convertSuperTypes(it),
-        aliasForTypeName = it.aliasForTypeName?.let { n -> getTypeNameByName(n) },
-        usedGenerics = convertAllUsedGenerics(it.usedGenerics),
-        properties = convertAllPropertyName(it.properties)
+    val nameConvertedTypes = clientTypes.map { clientType ->
+      clientType.copy(
+        typeName = getTypeNameByName(clientType.typeName),
+        superTypes = convertSuperTypes(clientType),
+        aliasForTypeName = clientType.aliasForTypeName?.let { n -> getTypeNameByName(n) },
+        usedGenerics = convertAllUsedGenerics(clientType.usedGenerics),
+        properties = convertAllPropertyName(clientType.properties)
       )
     }
     if (!clientTypes.containsAll(nameConvertedTypes)) internalDefinitionsMap.putAll(dispatch(nameConvertedTypes, deepCount + 1))
@@ -112,10 +112,10 @@ open class KtToKtContext(
   private fun convertSuperTypes(clientType: ClientType): List<ClientType> {
     return if (clientType.superTypes.isEmpty()) emptyList()
     else {
-      clientType.superTypes.map {
-        it.copy(
-          typeName = getTypeNameByName(it.typeName),
-          superTypes = convertSuperTypes(it)
+      clientType.superTypes.map { superType ->
+        superType.copy(
+          typeName = getTypeNameByName(superType.typeName),
+          superTypes = convertSuperTypes(superType)
         )
       }
     }
