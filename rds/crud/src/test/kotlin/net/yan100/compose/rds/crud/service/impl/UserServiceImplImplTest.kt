@@ -86,7 +86,7 @@ class UserServiceImplImplTest {
   @Test
   fun testModifyUserBandTimeTo() {
     val saved = service.post(getUser())
-    service.modifyUserBandTimeTo(saved.account, LocalDateTime.parse("2025-01-01T00:00:00"))
+    service.modifyUserBandTimeTo(saved.account, LocalDateTime.parse("2077-01-01T00:00:00"))
 
     val succ = service.fetchById(saved.id)!!
     assertTrue("用户没有被封禁") { succ.band }
