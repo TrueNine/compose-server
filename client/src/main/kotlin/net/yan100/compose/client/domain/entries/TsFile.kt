@@ -1,8 +1,7 @@
 package net.yan100.compose.client.domain.entries
 
 import net.yan100.compose.client.*
-import net.yan100.compose.client.domain.TsModifier
-import net.yan100.compose.client.domain.TsScope
+import net.yan100.compose.client.domain.*
 
 
 sealed class TsFile<T : TsFile<T>>(
@@ -14,7 +13,7 @@ sealed class TsFile<T : TsFile<T>>(
   open val exports: List<TsExport> = emptyList(),
 ) {
 
-  abstract val render: FileRender<T>
+  abstract val render: CodeRender<T>
 
   @Suppress("UNCHECKED_CAST")
   val code: String
@@ -24,23 +23,81 @@ sealed class TsFile<T : TsFile<T>>(
 
   data class ServiceClass(
     val serviceClassScope: TsScope.Class,
+    val optionsName: String = "${serviceClassScope.name.toVariableName()}ApiOptions",
     override val imports: List<TsImport> = serviceClassScope.collectImports() + TsImport(
       useType = true,
       usingNames = listOf("Executor".toTsName()),
       fromPath = "../../Executor"
     )
   ) : TsFile<ServiceClass>(
-    imports = imports,
+    imports = imports + listOf(
+      TsImport(
+        usingNames = listOf("Executor".toTsName()),
+        useType = true,
+        fromPath = "../../Executor" // TODO 写死的值
+      )
+    ),
     scopes = listOf(serviceClassScope),
-    exports = listOf(TsExport.ExportedDefined(serviceClassScope.name)),
+    exports = listOf(
+      TsExport.ExportedDefined(serviceClassScope.name),
+      TsExport.ExportedDefined(optionsName.toTsName())
+    ),
     usedNames = listOf(serviceClassScope.name),
     fileName = serviceClassScope.name,
   ) {
-    override val render: FileRender<ServiceClass> = { file ->
+    override val render: CodeRender<ServiceClass> = { file ->
       val classScope = file.serviceClassScope
       imports(file.imports)
       exportScope(classScope) {
-        line("123")
+        if (classScope.functions.isNotEmpty()) {
+          indent()
+          space("constructor(private executor: Executor)")
+          inlineScope(TsScopeQuota.OBJECT)
+        }
+        line()
+        classScope.functions.forEach { f ->
+          indent()
+          f.modifiers.forEach { m -> space(m) }
+          code(f.name.name)
+          inlineScope(TsScopeQuota.ASSIGNMENT) {
+            bracketInlineScope {
+              """options: ${optionsName}['${f.name}']"""
+            }
+            inlineScope(TsScopeQuota.ARROW) {
+              spaces(f.returnType.toString(), TsScopeQuota.ASSIGN)
+            }
+          }
+          if (f.isAsync) space(TsModifier.Async)
+          inlineScope(TsScopeQuota.BRACKETS) {
+            code(f.params.joinToString(",") { it.name.toString() })
+          }
+          inlineScope(TsScopeQuota.ARROW)
+          scope(TsScopeQuota.OBJECT) {
+            f.code.lines().filter { it.isNotBlank() }.forEach {
+              line(it.trim())
+            }
+          }
+        }
+      }
+      line()
+      spaces(TsModifier.Export, TsTypeModifier.Type, optionsName)
+      scope(TsScopeQuota.ASSIGN_OBJECT) {
+        classScope.functions.forEach { f ->
+          indent()
+          space("""'${f.name.name}':""")
+          if (f.params.isNotEmpty()) {
+            scope(TsScopeQuota.OBJECT) {
+              f.params.forEach { p ->
+                indent()
+                space(p.name.toString())
+                space(":")
+                code(p.typeVal.toString())
+                code("\n")
+              }
+            }
+          } else code(TsTypeVal.EmptyObject)
+          code("\n")
+        }
       }
     }
   }
@@ -57,7 +114,7 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(interfaces.name),
     fileName = interfaces.name,
   ) {
-    override val render: FileRender<SingleInterface> = { file ->
+    override val render: CodeRender<SingleInterface> = { file ->
       imports(file.imports)
       exportScope(file.interfaces) {
         val properties = file.interfaces.properties.joinToString(",\n") {
@@ -77,7 +134,7 @@ sealed class TsFile<T : TsFile<T>>(
     usedNames = listOf(typeAlias.name),
     fileName = typeAlias.name,
   ) {
-    override val render: FileRender<SingleTypeAlias> = { file ->
+    override val render: CodeRender<SingleTypeAlias> = { file ->
       val name = file.typeAlias.name.toVariableName()
       imports(file.imports)
       space(TsModifier.Export)
@@ -98,7 +155,7 @@ sealed class TsFile<T : TsFile<T>>(
     override val usedNames: List<TsName> = emptyList(),
     val exportName: TsExport = TsExport.ExportedDefined(fileName),
     override val imports: List<TsImport> = emptyList(),
-    override val render: FileRender<SingleTypeUtils>,
+    override val render: CodeRender<SingleTypeUtils>,
   ) : TsFile<SingleTypeUtils>(
     fileName = fileName,
     imports = imports,
@@ -121,7 +178,7 @@ sealed class TsFile<T : TsFile<T>>(
     fileName = fileName,
     exports = listOf(TsExport.ExportedDefined(enums.name)),
   ) {
-    override val render: FileRender<SingleEnum> = { file ->
+    override val render: CodeRender<SingleEnum> = { file ->
       exportScope(file.enums) { e ->
         val constants = e.constants.map { (k, v) ->
           """$k = ${if (v is String) "'$v'" else v}"""
