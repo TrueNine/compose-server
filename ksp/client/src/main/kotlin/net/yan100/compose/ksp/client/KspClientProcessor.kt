@@ -15,7 +15,7 @@ import net.yan100.compose.ksp.toolkit.kotlinpoet.Libs
 import net.yan100.compose.meta.annotations.client.Api
 import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientOperation
-import net.yan100.compose.meta.client.ClientProp
+import net.yan100.compose.meta.client.ClientParameter
 import net.yan100.compose.meta.client.ClientService
 import java.io.OutputStreamWriter
 import java.util.*
@@ -78,7 +78,7 @@ class KspClientProcessor(
           val typeResolver = parameter.type.fastResolve()
           val type = handler.getCopyClientTypeToReturnType(typeResolver.declaration.qualifiedNameAsString!!)!!
           val inputGenerics = typeResolver.arguments.toUsedGenerics().toMutableList()
-          ClientProp(
+          ClientParameter(
             name = parameter.name!!.asString(),
             typeName = type.typeName,
             nullable = if (typeResolver.isMarkedNullable) true else null,
@@ -93,7 +93,7 @@ class KspClientProcessor(
           name = operation.simpleNameAsString,
           key = key,
           doc = operation.docString.toDoc(),
-          parameterTypes = params,
+          params = params,
           returnType = returnType,
         )
       }.toMutableList()
