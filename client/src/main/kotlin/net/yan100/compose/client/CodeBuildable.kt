@@ -1,13 +1,9 @@
 package net.yan100.compose.client
 
-import net.yan100.compose.client.domain.TsModifier
-import net.yan100.compose.client.domain.TsScope
-import net.yan100.compose.client.domain.TsScopeQuota
-import net.yan100.compose.client.domain.TsTypeModifier
-import net.yan100.compose.client.domain.entries.TsFile
+import net.yan100.compose.client.domain.*
 import net.yan100.compose.client.domain.entries.TsImport
 
-class CodeBuildable<T : TsFile<T>>(
+class CodeBuildable<T>(
   private val builder: Appendable = StringBuilder(),
   val indentCount: Int = 2,
   val indentChar: Char = ' ',
@@ -32,9 +28,23 @@ class CodeBuildable<T : TsFile<T>>(
     append(" ")
   }
 
+  fun space(tsScopeQuota: TsScopeQuota) {
+    inlineScope(tsScopeQuota, postfix = " ")
+  }
+
   fun space(tsTypeModifier: TsTypeModifier) {
     code(tsTypeModifier.marker)
     space()
+  }
+
+  fun spaces(vararg tsModifiers: Any) = tsModifiers.forEach {
+    when (it) {
+      is String -> space(it)
+      is TsModifier -> space(it)
+      is TsTypeModifier -> space(it.marker)
+      is TsScopeQuota -> space(it.left + it.right)
+      else -> error("$it unsupported")
+    }
   }
 
   fun space(tsModifier: TsModifier) {
@@ -60,18 +70,33 @@ class CodeBuildable<T : TsFile<T>>(
     }
   }
 
+  fun indent() {
+    append(indentStr)
+  }
+
+  fun code(tsTypeVal: TsTypeVal<*>) {
+    code(tsTypeVal.toString())
+  }
+
+
   fun code(code: String) {
     if (code.isNotEmpty()) append(code)
   }
 
-  fun <S : TsScope<S>> exportScope(scope: S, block: CodeBuildable<T>.(scope: S) -> Unit) {
+  fun <S : TsScope<S>> exportScope(scope: S, block: CodeBuildable<T>.(scope: S) -> Unit = {}) {
     space(TsModifier.Export)
     scope(scope) {
       block(this, scope)
     }
   }
 
-  fun scope(scope: TsScope<*>, block: CodeBuildable<T>.(scope: TsScope<*>) -> Unit) {
+  fun bracketInlineScope(block: CodeBuildable<T>.() -> String = { "" }) {
+    code(TsScopeQuota.BRACKETS.left)
+    code(block(this))
+    space(TsScopeQuota.BRACKETS.right)
+  }
+
+  fun scope(scope: TsScope<*>, block: CodeBuildable<T>.(scope: TsScope<*>) -> Unit = {}) {
     val name = scope.name.toVariableName()
     space(scope.modifier)
     space(name)
@@ -98,7 +123,20 @@ class CodeBuildable<T : TsFile<T>>(
     scope(scope.scopeQuota) { block(this, scope) }
   }
 
-  fun scope(scopeQuota: TsScopeQuota = TsScopeQuota.BLANK, block: CodeBuildable<T>.() -> Unit) {
+  fun inlineScope(
+    scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
+    prefix: String = "",
+    postfix: String = "",
+    block: CodeBuildable<T>.() -> Unit = {}
+  ) {
+    code(scopeQuota.left)
+    code(prefix)
+    block(this)
+    code(postfix)
+    code(scopeQuota.right)
+  }
+
+  fun scope(scopeQuota: TsScopeQuota = TsScopeQuota.BLANK, block: CodeBuildable<T>.() -> Unit = {}) {
     line(scopeQuota.left)
     dirty { block(this) }
     line(scopeQuota.right)
