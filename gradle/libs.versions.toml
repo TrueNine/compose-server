@@ -46,37 +46,37 @@ junitPlatform = "1.11.4"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.122"
-composeRdsCrud = "2.0.51"
-composeRdsCore = "2.0.51"
-composeCore = "2.0.43"
-composeKspPlugin = "2.0.33"
-composeDependServlet = "2.0.32"
-composeDataExtract = "2.0.29"
-composeDependJackson = "2.0.27"
-composeSecuritySpring = "2.0.27"
-composeSecurityOauth2 = "2.0.26"
-composeTestToolkit = "2.0.25"
-composeCacheable = "2.0.25"
-composeKspToolkit = "2.0.25"
-composeGradlePlugin = "2.0.24"
-composeSecurityCrypto = "2.0.24"
-composePay = "2.0.23"
-composeDependXxlJob = "2.0.22"
-composeDependPaho = "2.0.22"
-composeDependHttpExchange = "2.0.22"
-composeDependJsr303Validation = "2.0.22"
-composeDependSpringdocOpenapi = "2.0.22"
-composeDataCrawler = "2.0.22"
-composeOss = "2.0.22"
-composeRdsJimmer = "0.0.14"
-composeRdsMigrationH2 = "0.0.12"
-composeRdsMigrationPostgres = "0.0.11"
-composeRdsMigrationMysql = "0.0.11"
-composeMeta = "0.0.6"
-composeKspClient = "0.0.2"
-composeClient = "0.0.2"
-composeKspTspoet = "0.0.2"
+composeVersionCatalog = "2.0.123"
+composeRdsCrud = "2.0.52"
+composeRdsCore = "2.0.52"
+composeCore = "2.0.44"
+composeKspPlugin = "2.0.34"
+composeDependServlet = "2.0.33"
+composeDataExtract = "2.0.30"
+composeDependJackson = "2.0.28"
+composeSecuritySpring = "2.0.28"
+composeSecurityOauth2 = "2.0.27"
+composeTestToolkit = "2.0.26"
+composeCacheable = "2.0.26"
+composeKspToolkit = "2.0.26"
+composeGradlePlugin = "2.0.25"
+composeSecurityCrypto = "2.0.25"
+composePay = "2.0.24"
+composeDependXxlJob = "2.0.23"
+composeDependPaho = "2.0.23"
+composeDependHttpExchange = "2.0.23"
+composeDependJsr303Validation = "2.0.23"
+composeDependSpringdocOpenapi = "2.0.23"
+composeDataCrawler = "2.0.23"
+composeOss = "2.0.23"
+composeRdsJimmer = "0.0.15"
+composeRdsMigrationH2 = "0.0.13"
+composeRdsMigrationPostgres = "0.0.12"
+composeRdsMigrationMysql = "0.0.12"
+composeMeta = "0.0.7"
+composeKspClient = "0.0.3"
+composeClient = "0.0.3"
+composeKspTspoet = "0.0.3"
 composeGroup = "net.yan100.compose"
 
 [libraries]
@@ -122,13 +122,16 @@ net-yan100-compose-dependXxlJob = { group = "net.yan100.compose", name = "depend
 
 # gradle 插件的直接依赖
 net-yan100-compose-gradlePlugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "composeGradlePlugin" }
+org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "springBoot" }
+org-jetbrains-kotlin-plugin-spring-orgJetbrainsKotlinPluginSpringGradlePlugin = { group = "org.jetbrains.kotlin.plugin.spring", name = "org.jetbrains.kotlin.plugin.spring.gradle.plugin", version.ref = "kotlin" }
+org-jetbrains-kotlin-jvm-orgJetbrainsKotlinJvmGradlePlugin = { group = "org.jetbrains.kotlin.jvm", name = "org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
+org-jetbrains-kotlin-kapt-orgJetbrainsKotlinKaptGradlePlugin = { group = "org.jetbrains.kotlin.kapt", name = "org.jetbrains.kotlin.kapt.gradle.plugin", version.ref = "kotlin" }
+org-jetbrains-kotlin-plugin-jpa-orgJetbrainsKotlinPluginJpaGradlePlugin = { group = "org.jetbrains.kotlin.plugin.jpa", name = "org.jetbrains.kotlin.plugin.jpa.gradle.plugin", version.ref = "kotlin" }
+org-jetbrains-kotlin-kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+io-spring-gradle-dependencyManagementPlugin = { group = "io.spring.gradle", name = "dependency-management-plugin", version = "1.1.7" }
+com-diffplug-spotless-comDiffplugSpotlessGradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
 
 ### ===
-
-org-springframework-boot-springBootGradlePlugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "springBoot" }
-com-diffplug-spotless-spotlessPluginGradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
-org-jetbrains-kotlin-kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-io-spring-gradle-dependencyManagementPlugin = { group = "io.spring.gradle", name = "dependency-management-plugin", version = "1.1.4" }
 
 com-github-tschuchortdev-kotlinCompileTesting = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing", version.ref = "kotlinCompileTesting" }
 com-github-tschuchortdev-kotlinCompileTestingKsp = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing-ksp", version.ref = "kotlinCompileTesting" }
