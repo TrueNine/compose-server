@@ -1,8 +1,10 @@
 package net.yan100.compose.client.domain
 
+import net.yan100.compose.client.TsSymbol
+
 sealed class TsTypeModifier(
   open val marker: String
-) {
+) : TsSymbol {
   data object None : TsTypeModifier(marker = "")
   data object Type : TsTypeModifier(marker = "type")
   data object Const : TsTypeModifier(marker = "const")
