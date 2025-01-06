@@ -1,10 +1,8 @@
 plugins {
   `java-gradle-plugin`
+  `publish-convention`
 }
 
-val gp = libs.versions.composeGroup.get()
-
-group = libs.versions.composeGroup.get()
 version = libs.versions.composeGradlePlugin.get()
 
 dependencies {
@@ -23,34 +21,19 @@ dependencies {
 
 gradlePlugin {
   plugins {
-    register("${gp}.${project.name}") {
-      id = "${gp}.${project.name}"
-      displayName = "${gp}.${project.name}.gradle.plugin"
-      implementationClass = "${gp}.gradleplugin.Main"
-      description = "compose server development gradle"
+    register("${libs.versions.composeGroup.get()}.${project.name}") {
+      id = "${libs.versions.composeGroup.get()}.${project.name}"
+      displayName = "${libs.versions.composeGroup.get()}.${project.name}.gradle.plugin"
+      implementationClass = "${libs.versions.composeGroup.get()}.gradleplugin.Main"
+      description = "compose server development gradle plugin"
     }
 
-    register("${gp}.settings-${project.name}") {
-      id = "${gp}.settings-${project.name}"
-      displayName = "${gp}.settings-${project.name}.gradle.plugin"
-      implementationClass = "${gp}.gradleplugin.Main"
-      implementationClass = "${gp}.gradleplugin.SettingsMain"
-    }
-  }
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("gradlePlugin") {
-      groupId = "${gp}.${project.name}"
-      artifactId = "${gp}.${project.name}.gradle.plugin"
-      version = project.version.toString()
-      from(components["java"])
+    register("${libs.versions.composeGroup.get()}.settings-${project.name}") {
+      id = "${libs.versions.composeGroup.get()}.settings-${project.name}"
+      displayName = "${libs.versions.composeGroup.get()}.settings-${project.name}.gradle.plugin"
+      implementationClass = "${libs.versions.composeGroup.get()}.gradleplugin.Main"
+      implementationClass = "${libs.versions.composeGroup.get()}.gradleplugin.SettingsMain"
+      description = "compose server development gradle settings plugin"
     }
   }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["gradlePlugin"])
 }
