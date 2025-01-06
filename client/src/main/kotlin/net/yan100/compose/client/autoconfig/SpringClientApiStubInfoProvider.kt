@@ -40,7 +40,7 @@ class SpringClientApiStubInfoProvider(
     val infos = f.find { (_, m) ->
       val isServiceClass = m.beanType.name == service.typeName
       val isOperationName = m.method.name == operation.name
-      val isParamsCountMatch = m.method.parameterCount == operation.parameterTypes.size
+      val isParamsCountMatch = m.method.parameterCount == operation.params.size
       isServiceClass && isOperationName && isParamsCountMatch
     }
     if (infos == null) error("can not find mapping for service: ${service.typeName}, operation: ${operation.name}")
@@ -63,16 +63,20 @@ class SpringClientApiStubInfoProvider(
 
           val uri = rInfo.pathPatternsCondition!!.firstPattern.toString()
           val pathVariables = pathVariableRegex.findAll(uri).map { it.groupValues[1] }.toList()
-          val methods = rInfo.methodsCondition.methods.map { it.name }.toList()
-          val useRequestBody = rMethod.method.parameterCount > 0 && (rMethod.method.parameters?.any { it.isAnnotationPresent(RequestBody::class.java) } == true)
-          val useRequestPart = rMethod.method.parameterCount > 0 && (rMethod.method.parameters?.any { it.isAnnotationPresent(RequestPart::class.java) } == true)
-          if (useRequestBody && methods.any { it == "GET" }) {
+          val methods = rInfo.methodsCondition.methods.map { it.name }
+
+          val useAnyRequestBody =
+            rMethod.method.parameterCount > 0 && (rMethod.method.parameters?.any { it.isAnnotationPresent(RequestBody::class.java) } == true)
+          val useAnyRequestPart =
+            rMethod.method.parameterCount > 0 && (rMethod.method.parameters?.any { it.isAnnotationPresent(RequestPart::class.java) } == true)
+          if (useAnyRequestBody && methods.any { it == "GET" }) {
             log.warn("@Api marker HTTP PATH: {} has use @RequestBody in GET method", rInfo.pathPatternsCondition?.patterns)
           }
+
           val acceptType = when {
-            useRequestPart && useRequestBody -> error("@Api marker HTTP PATH: $uri has use @RequestBody and @RequestPart in same method")
-            useRequestBody -> MimeTypes.JSON.value
-            useRequestPart -> MimeTypes.MULTIPART_FORM_DATA.value
+            useAnyRequestPart && useAnyRequestBody -> error("@Api marker HTTP PATH: $uri has use @RequestBody and @RequestPart in same method")
+            useAnyRequestBody -> MimeTypes.JSON.value
+            useAnyRequestPart -> MimeTypes.MULTIPART_FORM_DATA.value
             else -> MimeTypes.URL.value
           }
 
@@ -82,7 +86,9 @@ class SpringClientApiStubInfoProvider(
             pathVariables = pathVariables,
             requestAcceptType = acceptType,
           )
-          operation.copy(requestInfo = requestInfo)
+          operation.copy(
+            requestInfo = requestInfo
+          )
         }.let { service.copy(operations = it) }
       }
       api.copy(services = ser)
