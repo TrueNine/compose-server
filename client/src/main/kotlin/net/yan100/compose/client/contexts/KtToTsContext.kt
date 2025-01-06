@@ -1,12 +1,10 @@
 package net.yan100.compose.client.contexts
 
 import net.yan100.compose.client.*
-import net.yan100.compose.client.domain.TsGeneric
-import net.yan100.compose.client.domain.TsScope
-import net.yan100.compose.client.domain.TsTypeVal
-import net.yan100.compose.client.domain.TsUseVal
+import net.yan100.compose.client.domain.*
 import net.yan100.compose.client.domain.entries.TsName
 import net.yan100.compose.client.interceptors.*
+import net.yan100.compose.core.typing.MimeTypes
 import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.client.ClientUsedGeneric
@@ -112,7 +110,7 @@ open class KtToTsContext(
    * 处理 services
    */
   fun processService() {
-    val r = clientServiceMap.mapKeys { (type) ->
+    val result = clientServiceMap.mapKeys { (type) ->
       val typeName = type.typeName.toTsPathName()
       TsScope.Class(
         name = typeName.copy(path = "service/${typeName.path}"),
@@ -120,10 +118,48 @@ open class KtToTsContext(
       )
     }.mapValues { (_, operations) ->
       operations.map { operation ->
-        operation
+        val requestInfo = operation.requestInfo!!
+        MimeTypes[requestInfo.requestAcceptType]!!
+        val returnType = (operation.returnType?.let { rt ->
+          val returnTypeGenerics = getTsGenericByGenerics(rt.usedGenerics)
+          val v = getTsTypeValByType(rt).fillGenerics(returnTypeGenerics)
+          val types = buildList<TsTypeVal<*>> {
+            add(v)
+            if (rt.nullable == true) {
+              add(TsTypeVal.Undefined)
+            }
+          }
+          TsUseVal.Return(
+            typeVal = TsTypeVal.Promise(
+              usedGeneric = TsGeneric.Used(TsTypeVal.Union(types))
+            )
+          )
+        } ?: TsUseVal.Return())
+
+        val params = operation.params.map { typeParameter ->
+          val generics = getTsGenericByGenerics(typeParameter.usedGenerics)
+          TsUseVal.Parameter(
+            name = typeParameter.actualName.toTsName(),
+            typeVal = getTsTypeValByName(typeParameter.typeName).fillGenerics(generics)
+          )
+        }
+        TsVal.Function(
+          modifiers = listOf(TsModifier.Readonly),
+          name = operation.name.toTsName(),
+          params = params,
+          returnType = returnType
+        ) { f ->
+          line("let __uri = '${requestInfo.mappedUris.first()}'")
+          line("const __method = '${requestInfo.supportedMethods.first()}'")
+
+
+          line("return (await this.executor({uri: __uri as unknown as `/${'$'}{string}`, method: __method}) as unknown as ${f.returnType}")
+        }
       }
     }
-    println(r)
+    val res = result.values.flatten().map { it.code }
+    // TODO println
+    println(res)
   }
 
   private fun redirectAllScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
