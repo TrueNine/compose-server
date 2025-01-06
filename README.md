@@ -4,7 +4,7 @@
 其采用[多项目模块化设计](./documentation/model_manifest.md)，如果您希望为此项目贡献，
 可参考[构建环境](./documentation/build_env.md)在此表示衷心感谢！
 
-- 使用的依赖版本可查看[libs.versions.toml](./libs.versions.toml)，均采用统一化的版本管理机制
+- 使用的依赖版本可查看[libs.versions.toml](gradle/libs.versions.toml)，均采用统一化的版本管理机制
 
 > 警告，此项目目前暂时采用私有协议，仅公开源代码，详见 [LICENSE](./LICENSE)
 
