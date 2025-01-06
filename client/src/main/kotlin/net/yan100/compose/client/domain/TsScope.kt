@@ -108,7 +108,8 @@ sealed class TsScope<T : TsScope<T>>(
     override val name: TsName,
     val meta: ClientType,
     val superTypes: List<TsTypeVal.Ref> = emptyList(),
-    val generics: List<TsGeneric.Defined> = emptyList()
+    val generics: List<TsGeneric.Defined> = emptyList(),
+    val functions: List<TsVal.Function> = emptyList()
   ) : TsScope<Class>(
     name = name,
     modifier = TsTypeModifier.Class,
