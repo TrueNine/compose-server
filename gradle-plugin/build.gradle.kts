@@ -3,7 +3,6 @@ plugins {
 }
 
 val gp = libs.versions.composeGroup.get()
-val v = libs.versions.composeGradlePlugin.get()
 
 group = libs.versions.composeGroup.get()
 version = libs.versions.composeGradlePlugin.get()
