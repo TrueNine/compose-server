@@ -29,7 +29,7 @@ data class ClientOperation(
   /**
    * 方法参数
    */
-  val parameterTypes: List<ClientProp> = emptyList(),
+  val params: List<ClientParameter> = emptyList(),
 
   /**
    * 方法返回值
