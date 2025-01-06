@@ -112,7 +112,6 @@ sealed class TsTypeVal<T : TsTypeVal<T>> : TsTypeDefine<T> {
         is TypeConstant -> element.isBasic
       }
 
-
   data class Tuple(
     val elements: List<TsTypeVal<*>>
   ) : TsTypeVal<Tuple>() {
