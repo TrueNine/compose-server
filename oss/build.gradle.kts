@@ -1,10 +1,10 @@
+plugins {
+  `kotlinspring-convention`
+}
+
 version = libs.versions.composeOss.get()
 
 dependencies {
-  implementation(libs.org.springframework.boot.springBootAutoconfigure)
-  kapt(libs.org.springframework.springBootConfigurationProcessor)
-
-
   implementation(libs.io.minio.minio) {
     exclude(group = "org.apache.logging.log4j", module = "log4j-api")
     exclude(group = "org.apache.logging.log4j", module = "log4j-core")
@@ -13,25 +13,9 @@ dependencies {
   implementation(libs.com.aliyun.oss.aliyunSdkOss)
   implementation(libs.com.huaweicloud.esdkObsJava)
 
-  implementation(project(":core"))
-  implementation(project(":depend:depend-http-exchange"))
+  implementation(projects.core)
+  implementation(projects.depend.dependHttpExchange)
 
-  testImplementation(project(":test-toolkit"))
+  testImplementation(projects.testToolkit)
   testImplementation(libs.org.springframework.boot.springBootStarterWeb)
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = project.group.toString()
-      artifactId = project.name
-      version = project.version.toString()
-      from(components["java"])
-    }
-  }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["maven"])
 }
