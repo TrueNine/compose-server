@@ -1,3 +1,7 @@
+plugins {
+  `kotlin-convention`
+}
+
 version = libs.versions.composeTestToolkit.get()
 
 dependencies {
@@ -22,6 +26,7 @@ dependencies {
     exclude("org.junit.jupiter")
     exclude("org.junit.platform")
   }
+
   runtimeOnly(libs.org.springframework.boot.springBootTestAutoconfigure)
   implementation(libs.org.springframework.security.springSecurityTest)
   implementation(libs.org.springframework.boot.springBootTestAutoconfigure)
@@ -30,27 +35,13 @@ dependencies {
     exclude("org.junit.jupiter")
     exclude("org.junit.platform")
   }
+
   // spring batch
   api(libs.org.springframework.batch.springBatchTest)
+
   // 日志自动配置
   runtimeOnly(libs.org.springframework.boot.springBootStarterLogging)
 
   // 测试用数据库
   runtimeOnly(libs.com.h2database.h2)
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = project.group.toString()
-      artifactId = project.name
-      version = project.version.toString()
-      from(components["java"])
-    }
-  }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["maven"])
 }
