@@ -1,9 +1,10 @@
+plugins {
+  `kotlinspring-convention`
+}
+
 version = libs.versions.composeDependJackson.get()
 
 dependencies {
-  implementation(libs.org.springframework.boot.springBootAutoconfigure)
-  kapt(libs.org.springframework.springBootConfigurationProcessor)
-
   api(libs.com.fasterxml.jackson.core.jacksonDatabind)
   api(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
 
@@ -14,25 +15,9 @@ dependencies {
   implementation(libs.com.fasterxml.jackson.datatype.jacksonDatatypeGuava)
   implementation(libs.com.fasterxml.jackson.datatype.jacksonDatatypeJoda)
 
-  implementation(project(":core"))
+  implementation(projects.core)
 
-  testImplementation(project(":test-toolkit"))
+  testImplementation(projects.testToolkit)
   testImplementation(libs.org.springframework.boot.springBootStarterJson)
   testImplementation(libs.org.springframework.boot.springBootStarterWeb)
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = project.group.toString()
-      artifactId = project.name
-      version = project.version.toString()
-      from(components["java"])
-    }
-  }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["maven"])
 }
