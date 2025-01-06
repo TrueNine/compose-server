@@ -2,7 +2,7 @@
 （如仅是使用，则默认都会以下构建）。我尽量减少所带来的心智负担。
 
 > 注意：
-> - 所有依赖版本均可在 [version-catalog](../libs.versions.toml) 中找到对应显眼的版本号，
+> - 所有依赖版本均可在 [version-catalog](../gradle/libs.versions.toml) 中找到对应显眼的版本号，
 > - 所有构建链目录或文件路径等当中，非必要不使用任何`非ASCII字符`
 
 ### java
