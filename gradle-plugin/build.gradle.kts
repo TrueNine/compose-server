@@ -1,5 +1,6 @@
 plugins {
   `java-gradle-plugin`
+  `kotlin-convention`
   `publish-convention`
 }
 
@@ -31,7 +32,6 @@ gradlePlugin {
     register("${libs.versions.composeGroup.get()}.settings-${project.name}") {
       id = "${libs.versions.composeGroup.get()}.settings-${project.name}"
       displayName = "${libs.versions.composeGroup.get()}.settings-${project.name}.gradle.plugin"
-      implementationClass = "${libs.versions.composeGroup.get()}.gradleplugin.Main"
       implementationClass = "${libs.versions.composeGroup.get()}.gradleplugin.SettingsMain"
       description = "compose server development gradle settings plugin"
     }
