@@ -1,8 +1,10 @@
 package net.yan100.compose.client.domain
 
+import net.yan100.compose.client.TsSymbol
+
 sealed class TsModifier(
   open val modifier: String
-) {
+) : TsSymbol {
   override fun toString(): String = modifier
 
   data object Default : TsModifier(modifier = "default") {
