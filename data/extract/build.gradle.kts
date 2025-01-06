@@ -1,3 +1,7 @@
+plugins {
+  `kotlinspring-convention`
+}
+
 version = libs.versions.composeDataExtract.get()
 
 dependencies {
@@ -12,26 +16,10 @@ dependencies {
     implementation(libs.org.apache.commons.commonsCompress)
   }
 
-  implementation(project(":core"))
-  implementation(project(":depend:depend-http-exchange"))
+  implementation(projects.core)
+  implementation(projects.depend.dependHttpExchange)
 
-  testImplementation(project(":test-toolkit"))
+  testImplementation(projects.testToolkit)
   testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding)
   testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbindingAllPlatforms)
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = project.group.toString()
-      artifactId = project.name
-      version = project.version.toString()
-      from(components["java"])
-    }
-  }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["maven"])
 }
