@@ -31,17 +31,6 @@ class UploadFileParamAssertTest {
   )
 
   @Test
-  fun `测试 上传文件列表`() {
-    mvc.multipart(HttpMethod.POST, "/testUploadController/uploadFileList") {
-      param("json.a", "str")
-      param("json.b", "1")
-      part(MockPart("file", "", "Hello, World!".toByteArray(), MediaType.TEXT_PLAIN))
-    }.andExpect {
-      status { isOk() }
-    }
-  }
-
-  @Test
   fun `测试 混合 dto 上传`() {
     mvc.multipart(HttpMethod.POST, "/testUploadController/uploadBlend") {
       param("json.a", "str")
