@@ -2,12 +2,13 @@ plugins {
   id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-rootProject.name = "compose-server"
-includeBuild("version-catalog")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 listOf(
   "test-toolkit",
+  "version-catalog",
   "core",
+  "bom",
   "client",
   "meta",
   "gradle-plugin",
