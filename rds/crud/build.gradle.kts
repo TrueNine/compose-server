@@ -1,12 +1,11 @@
 plugins {
   alias(libs.plugins.com.google.devtools.ksp)
+  `kotlinspring-convention`
 }
 
 version = libs.versions.composeRdsCrud.get()
 
 kapt {
-  correctErrorTypes = true
-  keepJavacAnnotationProcessors = true
   javacOptions { option("querydsl.entityAccessors", "true") }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
@@ -25,35 +24,19 @@ dependencies {
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
 
-  ksp(project(":ksp:ksp-plugin"))
+  ksp(projects.ksp.kspPlugin)
   ksp(libs.org.babyfish.jimmer.jimmerKsp)
 
   implementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
 
-  implementation(project(":core"))
-  implementation(project(":meta"))
-  implementation(project(":rds:rds-core"))
+  implementation(projects.core)
+  implementation(projects.meta)
+  implementation(projects.rds.rdsCore)
 
   implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
 
-  testImplementation(project(":security:security-crypto"))
-  testImplementation(project(":test-toolkit"))
+  testImplementation(projects.security.securityCrypto)
+  testImplementation(projects.testToolkit)
   testImplementation(libs.org.flywaydb.flywayCore)
-  testImplementation(project(":rds:rds-migration-h2"))
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = project.group.toString()
-      artifactId = project.name
-      version = project.version.toString()
-      from(components["java"])
-    }
-  }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["maven"])
+  testImplementation(projects.rds.rdsMigrationH2)
 }
