@@ -1,15 +1,11 @@
 plugins {
-  alias(
-    libs.plugins.com.google.devtools.ksp
-  )
+  `kotlinspring-convention`
+  alias(libs.plugins.com.google.devtools.ksp)
 }
 
 version = libs.versions.composeRdsCore.get()
 
-
 kapt {
-  correctErrorTypes = true
-  keepJavacAnnotationProcessors = true
   javacOptions { option("querydsl.entityAccessors", "true") }
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
@@ -19,8 +15,8 @@ dependencies {
 
   implementation(libs.org.springframework.boot.springBootAutoconfigure)
 
-  implementation(project(":core"))
-  implementation(project(":meta"))
+  implementation(projects.core)
+  implementation(projects.meta)
 
   implementation(libs.org.springframework.security.springSecurityCrypto)
 
@@ -28,7 +24,6 @@ dependencies {
   implementation(libs.org.springframework.data.springDataJpa)
 
   implementation(libs.com.querydsl.querydslCore)
-
 
   implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
   kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
@@ -40,25 +35,8 @@ dependencies {
   implementation(libs.org.babyfish.jimmer.jimmerSql)
   implementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
 
-
-  testImplementation(project(":test-toolkit"))
-  testImplementation(project(":rds:rds-migration-h2"))
+  testImplementation(projects.testToolkit)
+  testImplementation(projects.rds.rdsMigrationH2)
   testImplementation(libs.org.springframework.boot.springBootStarterDataJpa)
   testImplementation(libs.org.flywaydb.flywayCore)
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = project.group.toString()
-      artifactId = project.name
-      version = project.version.toString()
-      from(components["java"])
-    }
-  }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["maven"])
 }
