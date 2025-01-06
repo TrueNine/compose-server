@@ -1,11 +1,15 @@
 package net.yan100.compose.client
 
-import net.yan100.compose.client.domain.TsGeneric
-import net.yan100.compose.client.domain.TsScope
-import net.yan100.compose.client.domain.TsTypeVal
-import net.yan100.compose.client.domain.TsUseVal
+import net.yan100.compose.client.domain.*
 import net.yan100.compose.client.domain.entries.TsImport
 import net.yan100.compose.client.domain.entries.TsName
+
+fun TsVal.getUsedNames(): List<TsName> {
+  return when (this) {
+    is TsVal.Constructor -> params.flatMap { it.getUsedNames() }
+    is TsVal.Function -> params.flatMap { it.getUsedNames() } + returnType.getUsedNames()
+  }
+}
 
 fun TsGeneric.getUsedNames(): List<TsName> {
   return when (this) {
@@ -23,19 +27,26 @@ fun TsTypeVal<*>.toTsName(): TsName {
 
 fun TsScope<*>.getUsedNames(): List<TsName> {
   return when (this) {
-    is TsScope.Class -> TODO()
-    is TsScope.Enum -> listOf(name) + constants.keys.map(TsName::Name)
+
+
+    is TsScope.Enum -> listOf(name)
     is TsScope.Interface -> {
-      val superUsedNames = superTypes.map { it.getUsedNames() }.flatten()
-      val propertiesNames = properties.map { it.getUsedNames() }.flatten()
+      val superUsedNames = superTypes.flatMap { it.getUsedNames() }
+      val propertiesNames = properties.flatMap { it.getUsedNames() }
       ((superUsedNames + propertiesNames) + name).distinct()
     }
 
-    is TsScope.TypeAlias -> listOf(this.name) +
+    is TsScope.Class -> {
+      val generics = generics.flatMap { it.getUsedNames() }
+      val superTypes = superTypes.flatMap { it.getUsedNames() }
+      val functions = functions.flatMap { it.getUsedNames() }
+      (generics + superTypes + functions + name).distinct()
+    }
+
+    is TsScope.TypeAlias ->
       aliasFor.getUsedNames() +
-      usedGenerics.filterIsInstance<TsGeneric.Used>()
-        .map { it.used.getUsedNames() }
-        .flatten().distinct()
+        name +
+        usedGenerics.filterIsInstance<TsGeneric.Used>().flatMap { it.used.getUsedNames() }.distinct()
 
     is TsScope.TypeVal -> definition.getUsedNames()
   }
@@ -52,19 +63,31 @@ fun TsUseVal<*>.getUsedNames(): List<TsName> {
 fun TsTypeVal<*>.getUsedNames(): List<TsName> {
   return when (this) {
     is TsTypeVal.Array -> usedGeneric.getUsedNames()
-    is TsTypeVal.Object -> elements.map { it.getUsedNames() }.flatten()
-    is TsTypeVal.Tuple -> elements.map { it.getUsedNames() }.flatten()
-    is TsTypeVal.Function -> returns.getUsedNames() + params.map { it.getUsedNames() }.flatten()
-    is TsTypeVal.Union -> joinTypes.map { it.getUsedNames() }.flatten()
+    is TsTypeVal.Object -> elements.flatMap { it.getUsedNames() }
+    is TsTypeVal.Tuple -> elements.flatMap { it.getUsedNames() }
+    is TsTypeVal.Function -> returns.getUsedNames() + params.flatMap { it.getUsedNames() }
+    is TsTypeVal.Union -> joinTypes.flatMap { it.getUsedNames() }
     is TsTypeVal.TypeConstant -> element.getUsedNames()
     is TsTypeVal.Record -> keyUsedGeneric.getUsedNames() + valueUsedGeneric.getUsedNames()
     is TsTypeVal.Promise -> usedGeneric.getUsedNames()
-    is TsTypeVal.Ref -> listOf(typeName) + usedGenerics.map { it.getUsedNames() }.flatten()
-    else -> emptyList()
+    is TsTypeVal.Ref -> listOf(typeName) + usedGenerics.flatMap { it.getUsedNames() }
+    is TsTypeVal.Generic -> generic.getUsedNames()
+    TsTypeVal.Any,
+    TsTypeVal.Bigint,
+    TsTypeVal.Boolean,
+    TsTypeVal.EmptyObject,
+    TsTypeVal.Never,
+    TsTypeVal.Null,
+    TsTypeVal.Number,
+    TsTypeVal.String,
+    TsTypeVal.Symbol,
+    TsTypeVal.Undefined,
+    TsTypeVal.Unknown,
+    TsTypeVal.Void -> emptyList()
   }
 }
 
-fun TsName.toTsImport(useType: Boolean = true): TsImport? {
+fun TsName.asTsImport(useType: Boolean = true): TsImport? {
   return when (this) {
     is TsName.PathName -> {
       TsImport(
@@ -80,7 +103,7 @@ fun TsName.toTsImport(useType: Boolean = true): TsImport? {
 
 fun TsTypeVal<*>.asImports(useType: Boolean = true): List<TsImport> {
   return getUsedNames().mapNotNull {
-    it.toTsImport(useType)
+    it.asTsImport(useType)
   }
 }
 
@@ -89,16 +112,20 @@ fun TsScope<*>.collectImports(): List<TsImport> {
     is TsScope.Enum -> emptyList()
     is TsScope.TypeAlias -> aliasFor.asImports(true)
     is TsScope.Interface -> {
-      val imps = superTypes.flatMap { it.asImports(true) } +
-        properties.flatMap { it.getUsedNames().mapNotNull { e -> e.toTsImport(true) } } +
-        generics.mapNotNull { it.name.toTsImport(true) }
-      imps.distinct()
+      val superTypes = superTypes.flatMap { it.asImports(true) }
+      val properties = properties.flatMap { it.getUsedNames().mapNotNull { e -> e.asTsImport(true) } }
+      (properties + superTypes).distinct()
     }
 
-    is TsScope.Class -> emptyList()
+    is TsScope.Class -> {
+      val functions = functions.flatMap { it.getUsedNames() }.mapNotNull { it.asTsImport(true) }
+      val superType = superTypes.mapNotNull { it.typeName.asTsImport(true) }
+      (superType + functions).distinct()
+    }
+
     is TsScope.TypeVal -> error("调用错误")
   }
-  val thisImport = name.toTsImport()
+  val thisImport = name.asTsImport()
   return imports.mapNotNull { tsImport ->
     if (tsImport.fromPath == thisImport?.fromPath
       && thisImport.usingNames == tsImport.usingNames
