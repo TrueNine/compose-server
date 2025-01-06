@@ -1,3 +1,7 @@
+plugins {
+  `kotlin-convention`
+}
+
 version = libs.versions.composeKspPlugin.get()
 
 dependencies {
@@ -7,15 +11,12 @@ dependencies {
   implementation(libs.com.squareup.kotlinpoetJvm)
   implementation(libs.com.squareup.kotlinpoetKsp)
 
-  api(project(":meta"))
+  api(projects.meta)
 
-  implementation(project(":core"))
-  implementation(project(":ksp:ksp-toolkit"))
+  implementation(projects.core)
+  implementation(projects.ksp.kspToolkit)
 
-  testImplementation(libs.com.github.tschuchortdev.kotlinCompileTestingKsp) {
-    //exclude("com.google.devtools.ksp")
-    //exclude("org.jetbrains.kotlin")
-  }
+  testImplementation(libs.com.github.tschuchortdev.kotlinCompileTestingKsp)
 }
 
 /*if (JavaVersion.current() >= JavaVersion.VERSION_16) {
@@ -34,19 +35,3 @@ dependencies {
     )
   }
 }*/
-
-publishing {
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = project.group.toString()
-      artifactId = project.name
-      version = project.version.toString()
-      from(components["java"])
-    }
-  }
-}
-
-signing {
-  useGpgCmd()
-  sign(publishing.publications["maven"])
-}
