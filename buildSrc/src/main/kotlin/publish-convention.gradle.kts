@@ -25,14 +25,15 @@ publishing {
     create<MavenPublication>("mavenJava") {
       groupId = libs.versions.composeGroup.get()
       artifactId = project.name
-      plugins.withType<JavaPlugin> {
-        from(components["java"])
-      }
-      plugins.withType<JavaPlatformPlugin> {
-        from(components["javaPlatform"])
-      }
-      plugins.withType<VersionCatalogPlugin> {
-        from(components["versionCatalog"])
+      when {
+        plugins.hasPlugin("java-gradle-plugin") ||
+          plugins.hasPlugin("java-library") ||
+          plugins.hasPlugin("java") -> from(components["java"])
+
+        plugins.hasPlugin("java-platform") -> from(components["javaPlatform"])
+
+        plugins.hasPlugin("version-catalog") -> from(components["versionCatalog"])
+        else -> throw IllegalStateException("Unknown plugin type")
       }
     }
   }
@@ -81,9 +82,8 @@ publishing {
           "project.build.sourceEncoding" to "UTF-8",
           "maven.compiler.source" to libs.versions.java.get(),
           "maven.compiler.target" to libs.versions.java.get(),
-          "maven.compiler.release" to libs.versions.java.get(),
-
-          )
+          "maven.compiler.release" to libs.versions.java.get()
+        )
       }
     }
   }
