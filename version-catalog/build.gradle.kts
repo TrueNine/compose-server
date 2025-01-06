@@ -38,4 +38,4 @@ signing {
   sign(publishing.publications["versionCatalog"])
 }
 
-catalog { versionCatalog { from(files("../libs.versions.toml")) } }
+catalog { versionCatalog { from(files("../gradle/libs.versions.toml")) } }
