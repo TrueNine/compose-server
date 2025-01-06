@@ -83,7 +83,7 @@ class TsReturnTypeController {
   fun inputAndOutputDeprecation(
     dep: DeprecationDataClass
   ): DeprecationDataClass.DoubleDataClass? {
-    return null
+    return dep as? DeprecationDataClass.DoubleDataClass?
   }
 
   @Api

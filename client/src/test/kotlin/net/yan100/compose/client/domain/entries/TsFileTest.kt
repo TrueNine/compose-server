@@ -1,9 +1,7 @@
 package net.yan100.compose.client.domain.entries
 
-import net.yan100.compose.client.domain.TsGeneric
-import net.yan100.compose.client.domain.TsScope
-import net.yan100.compose.client.domain.TsTypeVal
-import net.yan100.compose.client.domain.TsUseVal
+import net.yan100.compose.client.domain.*
+import net.yan100.compose.client.toTsName
 import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.testtookit.assertNotBlank
 import net.yan100.compose.testtookit.log
@@ -18,17 +16,75 @@ import kotlin.test.assertTrue
 
 class TsFileTest {
   @Test
-  fun `SingleServiceClass 测试渲染`() {
+  fun `SingleServiceClass 测试渲染服务方法`() {
     val expectResult = TsFile.ServiceClass(
       TsScope.Class(
-        name = TsName.PathName(name = "AuthApi", path = "service"),
-        meta = ClientType.none()
+        name = TsName.PathName(name = "AuthApi", path = "service/a"),
+        meta = ClientType.none(),
+        functions = listOf(
+          TsVal.Function(
+            modifiers = listOf(TsModifier.Readonly),
+            name = "abd".toTsName(),
+            returnType = TsUseVal.Return(
+              TsTypeVal.Promise(
+                TsGeneric.Used(
+                  TsTypeVal.Ref(
+                    typeName = TsName.PathName(
+                      name = "Abc",
+                      path = "static/net_yan100_compose"
+                    )
+                  )
+                )
+              ),
+            )
+          ) {
+            code(
+              """let __uri = ''
+    const __method = 'GET'
+    return (await this.executor({uri: __uri as unknown as `/${'$'}{string}`, method: __method})) as unknown as Promise<Abc>""".trimIndent()
+            )
+          },
+          TsVal.Function(
+            modifiers = listOf(TsModifier.Readonly),
+            name = "ab".toTsName(),
+            returnType = TsUseVal.Return(TsTypeVal.Promise(TsGeneric.Used(TsTypeVal.String))),
+            params = listOf(
+              TsUseVal.Parameter(
+                name = "str".toTsName(),
+                typeVal = TsTypeVal.String
+              )
+            )
+          ) {
+            code(
+              """let __uri = ''
+    const __method = 'GET'
+    return (await this.executor({uri: __uri as unknown as `/${'$'}{string}`, method: __method})) as unknown as Promise<Abc>""".trimIndent()
+            )
+          },
+          TsVal.Function(
+            modifiers = listOf(TsModifier.Readonly),
+            name = "cc".toTsName(),
+            returnType = TsUseVal.Return(TsTypeVal.Promise(TsGeneric.Used(TsTypeVal.String))),
+            params = listOf(
+              TsUseVal.Parameter(
+                name = "str".toTsName(),
+                typeVal = TsTypeVal.String
+              )
+            )
+          ) {
+            code(
+              """let __uri = ''
+    const __method = 'GET'
+    return (await this.executor({uri: __uri as unknown as `/${'$'}{string}`, method: __method})) as unknown as Promise<Abc>""".trimIndent()
+            )
+          }
+        )
       )
     )
+
     println(expectResult.code)
-    assertEquals(1, expectResult.exports.size)
-    assertEquals(TsName.PathName(name = "AuthApi", path = "service"), expectResult.fileName)
-    assertEquals(1, expectResult.exports.size)
+    assertEquals(2, expectResult.exports.size)
+    assertEquals(TsName.PathName(name = "AuthApi", path = "service/a"), expectResult.fileName)
     assertEquals(TsExport.ExportedDefined(name = expectResult.fileName), expectResult.exports.first())
     expectResult.code.let {
       assertNotBlank(it)
