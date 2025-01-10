@@ -25,8 +25,8 @@ dependencies {
 
   implementation(libs.com.querydsl.querydslCore)
 
-  implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
-  kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
+  implementation(libs.com.querydsl.querydslJpa)
+  kapt(libs.com.querydsl.querydslApt)
 
   implementation(libs.org.hibernate.orm.hibernateCore)
 

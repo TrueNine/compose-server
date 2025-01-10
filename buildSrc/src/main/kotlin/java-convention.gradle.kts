@@ -6,6 +6,31 @@ plugins {
   `java-library`
   idea
   id("publish-convention")
+  id("repositories-convention")
+}
+
+
+configurations.all {
+  resolutionStrategy {
+    dependencySubstitution {
+      val jpa = libs.com.querydsl.querydslJpa.get()
+      val apt = libs.com.querydsl.querydslApt.get()
+      substitute(module(jpa.module.toString()))
+        .using(
+          module(
+            jpa.module.toString() + ":" + jpa.version
+          )
+        )
+        .withClassifier("jakarta")
+      substitute(module(apt.module.toString()))
+        .using(
+          module(
+            apt.module.toString() + ":" + apt.version
+          )
+        )
+        .withClassifier("jakarta")
+    }
+  }
 }
 
 java {

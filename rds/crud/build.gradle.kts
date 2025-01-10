@@ -21,8 +21,8 @@ dependencies {
 
   implementation(libs.org.springframework.security.springSecurityCrypto)
 
-  kapt(variantOf(libs.com.querydsl.querydslApt) { classifier("jakarta") })
-  implementation(variantOf(libs.com.querydsl.querydslJpa) { classifier("jakarta") })
+  kapt(libs.com.querydsl.querydslApt)
+  implementation(libs.com.querydsl.querydslJpa)
 
   ksp(projects.ksp.kspPlugin)
   ksp(libs.org.babyfish.jimmer.jimmerKsp)
