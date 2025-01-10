@@ -39,14 +39,14 @@ saToken = "1.39.0"
 mybatisPlus = "3.5.9"
 
 # testing tools and gradle plugins
-spotless = "7.0.0.BETA4"
+spotless = "7.0.1"
 testng = "7.10.2"
 junit5 = "5.11.4"
 junitPlatform = "1.11.4"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.123"
+composeVersionCatalog = "2.0.124"
 composeRdsCrud = "2.0.52"
 composeRdsCore = "2.0.52"
 composeCore = "2.0.44"
