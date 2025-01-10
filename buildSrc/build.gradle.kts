@@ -1,6 +1,17 @@
 plugins {
   `kotlin-dsl`
-  alias(libs.plugins.org.jetbrains.kotlin.plugin.spring)
+}
+
+val publicRepo = "https://maven.aliyun.com/repository/public"
+val gradlePluginRepo = "https://maven.aliyun.com/repository/gradle-plugin"
+val springRepo = "https://repo.spring.io/milestone"
+
+repositories {
+  mavenLocal()
+  maven(publicRepo)
+  maven(gradlePluginRepo)
+  maven(springRepo)
+  gradlePluginPortal()
 }
 
 dependencies {
@@ -12,6 +23,3 @@ dependencies {
   api(libs.org.jetbrains.kotlin.kapt.orgJetbrainsKotlinKaptGradlePlugin)
   api(libs.org.jetbrains.kotlin.plugin.spring.orgJetbrainsKotlinPluginSpringGradlePlugin)
 }
-
-
-
