@@ -11,9 +11,9 @@ abstract class AbstractJimmerTypingProvider<T : AnyTyping, S : Any>(ct: KClass<T
   ct.java,
   st.java
 ) {
-  protected val converterCache: MutableMap<Type, Method> = ConcurrentHashMap()
+  private val converterCache: MutableMap<Type, Method> = ConcurrentHashMap()
 
-  protected fun getCallable(type: Type): Method {
+  private fun getCallable(type: Type): Method {
     val st = scalarType
     val fn = converterCache[st]
     return if (fn != null) {
