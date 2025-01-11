@@ -4,9 +4,9 @@ import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.rds.core.converters.jimmer.IntTypingJimmerProvider
 import net.yan100.compose.rds.core.converters.jimmer.StringTypingJimmerProvider
+import net.yan100.compose.rds.core.generators.JimmerSnowflakeLongIdGenerator
+import net.yan100.compose.rds.core.generators.JimmerSnowflakeStringIdGenerator
 import net.yan100.compose.rds.core.listeners.IJimmerEntityDraftInterceptor
-import net.yan100.compose.rds.jimmer.generators.JimmerSnowflakeLongIdGenerator
-import net.yan100.compose.rds.jimmer.generators.JimmerSnowflakeStringIdGenerator
 import org.babyfish.jimmer.sql.meta.DatabaseNamingStrategy
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean

@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.jimmer.generators
+package net.yan100.compose.rds.core.generators
 
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import org.babyfish.jimmer.sql.meta.UserIdGenerator

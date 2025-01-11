@@ -2,7 +2,7 @@ package net.yan100.compose.rds.core.entities
 
 import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.converters.jimmer.JimmerLongToStringConverter
-import net.yan100.compose.rds.jimmer.generators.JimmerSnowflakeLongIdGenerator
+import net.yan100.compose.rds.core.generators.JimmerSnowflakeLongIdGenerator
 import org.babyfish.jimmer.jackson.JsonConverter
 import org.babyfish.jimmer.sql.Column
 import org.babyfish.jimmer.sql.GeneratedValue
