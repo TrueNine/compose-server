@@ -7,9 +7,9 @@ plugins {
   signing
 }
 
-val yunxiaoUrl = extra["url.yunxiao.1"].toString()
-val yunxiaoUsername = extra["usr.yunxiao.1"].toString()
-val yunxiaoPassword = extra["pwd.yunxiao.1"].toString()
+val yunxiaoUrl = extra["repositories.url.yunxiao"].toString()
+val yunxiaoUsername = extra["repositories.username.yunxiao"].toString()
+val yunxiaoPassword = extra["repositories.password.yunxiao"].toString()
 
 publishing {
   repositories {
