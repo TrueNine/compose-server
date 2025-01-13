@@ -4,6 +4,7 @@ val springRepo = "https://repo.spring.io/milestone"
 
 fun RepositoryHandler.setupDependencyRepositories() {
   mavenLocal()
+  mavenCentral()
   maven(publicRepo)
   maven(centralRepo)
   maven(springRepo)
