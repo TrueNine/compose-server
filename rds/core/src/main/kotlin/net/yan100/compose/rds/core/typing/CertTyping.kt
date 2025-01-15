@@ -42,7 +42,7 @@ enum class CertTyping(v: Int) : IntTyping {
    * 二代身份证
    */
   @EnumItem(ordinal = 2)
-  IC_CARD2(2),
+  ID_CARD2(2),
 
   /**
    * 残疾证
