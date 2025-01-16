@@ -13,18 +13,18 @@ kotlinxCoroutines = "1.10.1"
 # spring versions
 springBoot = "3.4.1"
 springData = "3.4.1"
-springFramework = "6.2.1"
-springBatch = "5.2.0"
+springFramework = "6.2.2"
+springBatch = "5.2.1"
 springCloud = "2024.0.0-RC1"
 springAi = "1.0.0-M4"
 springCloudAlibaba = "2021.0.4.0"
 springModulith = "1.3.0"
-springIntegration = "6.4.0"
+springIntegration = "6.4.1"
 springSecurity = "6.4.2"
 
 # others
 slf4j = "2.1.0-alpha1"
-flyway = "11.1.0"
+flyway = "11.1.1"
 mapstruct = "1.6.0"
 jackson = "2.18.2"
 hibernate = "6.6.3.Final"
@@ -34,7 +34,7 @@ jimmer = "0.9.46"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
 hutool = "5.8.35"
-xxlJob = "2.4.2"
+xxlJob = "2.5.0"
 saToken = "1.39.0"
 mybatisPlus = "3.5.9"
 
@@ -46,37 +46,37 @@ junitPlatform = "1.11.4"
 kotlinCompileTesting = "1.6.0"
 
 ## === compose server versions ===
-composeVersionCatalog = "2.0.134"
-composeRdsCore = "2.0.60"
-composeRdsCrud = "2.0.56"
-composeCore = "2.0.44"
-composeKspPlugin = "2.0.34"
-composeDependServlet = "2.0.33"
-composeDataExtract = "2.0.30"
-composeDependJackson = "2.0.28"
-composeSecuritySpring = "2.0.28"
-composeSecurityOauth2 = "2.0.27"
-composeTestToolkit = "2.0.27"
-composeCacheable = "2.0.26"
-composeKspToolkit = "2.0.26"
-composeGradlePlugin = "2.0.25"
-composeSecurityCrypto = "2.0.25"
-composePay = "2.0.24"
-composeDependXxlJob = "2.0.23"
-composeDependPaho = "2.0.23"
-composeDependHttpExchange = "2.0.23"
-composeDependJsr303Validation = "2.0.23"
-composeDependSpringdocOpenapi = "2.0.23"
-composeDataCrawler = "2.0.23"
-composeOss = "2.0.23"
-composeRdsJimmer = "0.0.15"
-composeRdsMigrationH2 = "0.0.13"
-composeRdsMigrationPostgres = "0.0.13"
-composeRdsMigrationMysql = "0.0.12"
-composeMeta = "0.0.7"
-composeKspClient = "0.0.3"
-composeClient = "0.0.3"
-composeKspTspoet = "0.0.3"
+composeVersionCatalog = "2.0.135"
+composeRdsCore = "2.0.61"
+composeRdsCrud = "2.0.57"
+composeCore = "2.0.45"
+composeKspPlugin = "2.0.35"
+composeDependServlet = "2.0.34"
+composeDataExtract = "2.0.31"
+composeDependJackson = "2.0.29"
+composeSecuritySpring = "2.0.29"
+composeSecurityOauth2 = "2.0.28"
+composeTestToolkit = "2.0.28"
+composeCacheable = "2.0.27"
+composeKspToolkit = "2.0.27"
+composeGradlePlugin = "2.0.26"
+composeSecurityCrypto = "2.0.26"
+composePay = "2.0.25"
+composeDependXxlJob = "2.0.24"
+composeDependPaho = "2.0.24"
+composeDependHttpExchange = "2.0.24"
+composeDependJsr303Validation = "2.0.24"
+composeDependSpringdocOpenapi = "2.0.24"
+composeDataCrawler = "2.0.24"
+composeOss = "2.0.24"
+composeRdsJimmer = "0.0.16"
+composeRdsMigrationH2 = "0.0.14"
+composeRdsMigrationPostgres = "0.0.14"
+composeRdsMigrationMysql = "0.0.13"
+composeMeta = "0.0.8"
+composeKspClient = "0.0.4"
+composeClient = "0.0.4"
+composeKspTspoet = "0.0.4"
 composeGroup = "net.yan100.compose"
 
 [libraries]
@@ -174,7 +174,7 @@ org-springframework-springCore = { group = "org.springframework", name = "spring
 org-springframework-modulith-springModulithStarterJpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 org-springframework-modulith-springModulithCore = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "springModulith" }
 org-springframework-modulith-springModulithStarterTest = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
-org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.8.1" }
+org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.8.3" }
 
 org-apache-commons-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
 org-apache-commons-commonsCsv = { group = "org.apache.commons", name = "commons-csv", version = "1.12.0" }
@@ -209,7 +209,7 @@ com-google-devtools-ksp-symbolProcessingApi = { group = "com.google.devtools.ksp
 
 io-projectreactor-kotlin-reactorKotlinExtensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.3.0-RC1" }
 
-io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.14" }
+io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.16" }
 org-junit-jupiter-junitJupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
 org-junit-jupiter-junitJupiterEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit5" }
 org-junit-platform-junitPlatformLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatform" }
@@ -234,7 +234,7 @@ org-flywaydb-flywayDatabasePostgresql = { group = "org.flywaydb", name = "flyway
 p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
 com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.10.0" }
 
-io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.14" }
+io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.16" }
 com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
 com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.12" }
 com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.15" }
@@ -276,7 +276,7 @@ cn-dev33-saTokenRedis = { group = "cn.dev33", name = "sa-token-redis", version.r
 org-mapstruct-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
 org-mapstruct-mapstructProcessor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
 
-org-bouncycastle-bcprovJdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version = "1.79" }
+org-bouncycastle-bcprovJdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version = "1.80" }
 com-auth0-javaJwt = { group = "com.auth0", name = "java-jwt", version = "4.4.0" }
 io-jsonwebtoken-jjwtApi = { group = "io.jsonwebtoken", name = "jjwt-api", version = "0.12.6" }
 org-owasp-antisamy-antisamy = { group = "org.owasp.antisamy", name = "antisamy", version = "1.7.7" }
@@ -290,7 +290,7 @@ org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version =
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
 com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.49.0" }
 org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.3" }
-org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.7.0" }
+org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.8.0" }
 net-sf-supercsv-superCsv = { group = "net.sf.supercsv", name = "super-csv", version = "2.4.0" }
 
 com-fasterxml-jackson-module-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
