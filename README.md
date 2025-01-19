@@ -1,5 +1,6 @@
 # Compose Server
 
+请注意，此项目采用 [BSD 3-Clause License](/LICENSE) 协议，
 快速且对开发者友好的服务端快速开发框架，涵盖了大多开发场景，未来可期，
 其采用[多项目模块化设计](./documentation/model_manifest.md)，如果您希望为此项目贡献，
 可参考[构建环境](./documentation/build_env.md)在此表示衷心感谢！
