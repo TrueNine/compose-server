@@ -30,7 +30,7 @@ private val log = slf4j(CaffeineCacheAutoConfiguration::class)
 
 @Configuration
 class CaffeineCacheAutoConfiguration {
-  private fun create(d: Duration): AsyncCache<Any?, Any?> {
+  private fun create(d: Duration): AsyncCache<Any, Any?> {
     return Caffeine.newBuilder()
       .recordStats()
       .expireAfterWrite(d).buildAsync()
