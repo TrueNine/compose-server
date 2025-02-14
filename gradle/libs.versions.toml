@@ -11,17 +11,16 @@ kotlinxDatetime = "0.6.1"
 kotlinxCoroutines = "1.10.1"
 
 # spring versions
-springBoot = "3.5.0-M1"
-springData = "4.0.0-M1"
-springFramework = "7.0.0-M2"
+springBoot = "3.4.1"
+springData = "3.4.1"
+springFramework = "6.2.2"
 springBatch = "5.2.1"
 springCloud = "2024.0.0-RC1"
 springAi = "1.0.0-M4"
 springCloudAlibaba = "2021.0.4.0"
 springModulith = "1.3.0"
-springIntegration = "6.5.0-M1"
-springSecurity = "6.5.0-M1"
-
+springIntegration = "6.4.1"
+springSecurity = "6.4.2"
 # others
 slf4j = "2.1.0-alpha1"
 flyway = "11.3.2"
@@ -41,7 +40,7 @@ mybatisPlus = "3.5.9"
 # testing tools and gradle plugins
 spotless = "7.0.2"
 testng = "7.10.2"
-junit5 = "5.12.0-RC2"
+junit5 = "5.11.4"
 junitPlatform = "1.11.4"
 kotlinCompileTesting = "1.6.0"
 
@@ -132,7 +131,7 @@ io-spring-gradle-dependencyManagementPlugin = { group = "io.spring.gradle", name
 com-diffplug-spotless-comDiffplugSpotlessGradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
 
 ### ===
-
+org-eclipse-paho-client-mqttv3 = { module = "org.eclipse.paho:org.eclipse.paho.client.mqttv3", version = "1.2.5" }
 com-github-tschuchortdev-kotlinCompileTesting = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing", version.ref = "kotlinCompileTesting" }
 com-github-tschuchortdev-kotlinCompileTestingKsp = { group = "com.github.tschuchortdev", name = "kotlin-compile-testing-ksp", version.ref = "kotlinCompileTesting" }
 org-springframework-boot-springBoot = { group = "org.springframework.boot", name = "spring-boot", version.ref = "springBoot" }
