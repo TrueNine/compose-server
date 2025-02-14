@@ -16,7 +16,6 @@
  */
 package net.yan100.compose.core.typing
 
-import net.yan100.compose.core.typing.HttpStatusTyping.entries
 
 /**
  * 错误信息枚举类
