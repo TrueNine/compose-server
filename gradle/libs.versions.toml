@@ -399,6 +399,6 @@ org-springframework-boot = { id = "org.springframework.boot", version.ref = "spr
 io-spring-dependencyManagement = { id = "io.spring.dependency-management", version = "1.1.7" }
 
 org-hibernate-orm = { id = "org.hibernate.orm", version.ref = "hibernate" }
-com-github-benManes-versions = { id = "com.github.ben-manes.versions", version = "0.51.0" } ### https://plugins.gradle.org/plugin/com.github.ben-manes.versions
+com-github-benManes-versions = { id = "com.github.ben-manes.versions", version = "0.52.0" } ### https://plugins.gradle.org/plugin/com.github.ben-manes.versions
 org-graalvm-buildtools-native = { id = "org.graalvm.buildtools.native", version = "0.10.2" }
 org-asciidoctor-jvm-convert = { id = "org.asciidoctor.jvm.convert", version = "4.0.3" }
