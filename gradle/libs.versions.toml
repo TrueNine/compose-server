@@ -1,47 +1,47 @@
 [versions]
 java = "23"
-gradle = "8.12"
-kotlin = "2.1.20-Beta1"
+gradle = "8.13-rc-1"
+kotlin = "2.1.20-Beta2"
 
 # kotlin language toolchain versions
-ksp = "2.1.20-Beta1-1.0.29"
+ksp = "2.1.20-Beta2-1.0.29"
 kotlinpoet = "2.0.0"
 kotlinxIo = "0.6.0"
 kotlinxDatetime = "0.6.1"
 kotlinxCoroutines = "1.10.1"
 
 # spring versions
-springBoot = "3.4.1"
-springData = "3.4.1"
-springFramework = "6.2.2"
+springBoot = "3.5.0-M1"
+springData = "4.0.0-M1"
+springFramework = "7.0.0-M2"
 springBatch = "5.2.1"
 springCloud = "2024.0.0-RC1"
 springAi = "1.0.0-M4"
 springCloudAlibaba = "2021.0.4.0"
 springModulith = "1.3.0"
-springIntegration = "6.4.1"
-springSecurity = "6.4.2"
+springIntegration = "6.5.0-M1"
+springSecurity = "6.5.0-M1"
 
 # others
 slf4j = "2.1.0-alpha1"
-flyway = "11.1.1"
+flyway = "11.3.2"
 mapstruct = "1.6.0"
 jackson = "2.18.2"
 hibernate = "6.6.3.Final"
 netty = "4.1.115.Final"
 querydsl = "5.1.0"
-jimmer = "0.9.46"
+jimmer = "0.9.51"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
 hutool = "5.8.35"
-xxlJob = "2.5.0"
+xxlJob = "3.0.0"
 saToken = "1.39.0"
 mybatisPlus = "3.5.9"
 
 # testing tools and gradle plugins
 spotless = "7.0.2"
 testng = "7.10.2"
-junit5 = "5.11.4"
+junit5 = "5.12.0-RC2"
 junitPlatform = "1.11.4"
 kotlinCompileTesting = "1.6.0"
 
@@ -174,9 +174,9 @@ org-springframework-springCore = { group = "org.springframework", name = "spring
 org-springframework-modulith-springModulithStarterJpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa" }
 org-springframework-modulith-springModulithCore = { group = "org.springframework.modulith", name = "spring-modulith-core", version.ref = "springModulith" }
 org-springframework-modulith-springModulithStarterTest = { group = "org.springframework.modulith", name = "spring-modulith-starter-test" }
-org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.8.3" }
+org-springdoc-springdocOpenapiStarterWebmvcUi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.8.4" }
 
-org-apache-commons-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
+org-apache-commons-commonsPool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.1" }
 org-apache-commons-commonsCsv = { group = "org.apache.commons", name = "commons-csv", version = "1.12.0" }
 org-apache-commons-commonsCompress = { group = "org.apache.commons", name = "commons-compress", version = "1.27.1" }
 com-squareup-kotlinpoetJvm = { group = "com.squareup", name = "kotlinpoet-jvm", version.ref = "kotlinpoet" }
@@ -217,7 +217,7 @@ org-junit-platform-junitPlatformLauncher = { group = "org.junit.platform", name 
 org-testng-testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 io-projectreactor-reactorTest = { group = "io.projectreactor", name = "reactor-test", version = "3.7.0" }
 
-com-github-benManes-caffeine-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
+com-github-benManes-caffeine-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.0" }
 com-github-junrar-junrar = { group = "com.github.junrar", name = "junrar", version = "7.5.5" }
 net-sf-sevenzipjbinding-sevenzipjbindingAllPlatforms = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding-all-platforms", version = "16.02-2.01" }
 net-sf-sevenzipjbinding-sevenzipjbinding = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding", version = "16.02-2.01" }
@@ -234,10 +234,10 @@ org-flywaydb-flywayDatabasePostgresql = { group = "org.flywaydb", name = "flyway
 p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
 com-github-gavlyukovskiy-p6spySpringBootStarter = { group = "com.github.gavlyukovskiy", name = "p6spy-spring-boot-starter", version = "1.10.0" }
 
-io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.16" }
+io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.17" }
 com-aliyun-oss-aliyunSdkOss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version = "3.18.1" }
 com-huaweicloud-esdkObsJava = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.12" }
-com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.15" }
+com-github-wechatpayApiv3-wechatpayJava = { group = "com.github.wechatpay-apiv3", name = "wechatpay-java", version = "0.2.16" }
 
 com-github-xiaoymin-knife4jOpenapi3JakartaSpringBootStarter = { group = "com.github.xiaoymin", name = "knife4j-openapi3-jakarta-spring-boot-starter", version = "4.5.0" }
 com-github-xiaoymin-knife4jSpringBootStarter = { group = "com.github.xiaoymin", name = "knife4j-spring-boot-starter", version = "3.0.3" }
@@ -247,7 +247,7 @@ jakarta-persistence-jakartaPersistenceApi = { group = "jakarta.persistence", nam
 jakarta-validation-jakartaValidationApi = { group = "jakarta.validation", name = "jakarta.validation-api", version = "3.1.0" }
 jakarta-annotation-jakartaAnnotationApi = { group = "jakarta.annotation", name = "jakarta.annotation-api", version = "3.0.0" }
 
-io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.27" }
+io-swagger-core-v3-swaggerAnnotationsJakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.28" }
 
 com-squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version = "5.0.0-alpha.12" } ### https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 com-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" } ### https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
@@ -277,7 +277,7 @@ org-mapstruct-mapstruct = { group = "org.mapstruct", name = "mapstruct", version
 org-mapstruct-mapstructProcessor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
 
 org-bouncycastle-bcprovJdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version = "1.80" }
-com-auth0-javaJwt = { group = "com.auth0", name = "java-jwt", version = "4.4.0" }
+com-auth0-javaJwt = { group = "com.auth0", name = "java-jwt", version = "4.5.0" }
 io-jsonwebtoken-jjwtApi = { group = "io.jsonwebtoken", name = "jjwt-api", version = "0.12.6" }
 org-owasp-antisamy-antisamy = { group = "org.owasp.antisamy", name = "antisamy", version = "1.7.7" }
 
@@ -285,12 +285,12 @@ com-github-ulisesbocchio-jasyptSpringBootStarter = { group = "com.github.ulisesb
 
 org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
-org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.27.0" }
+org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.28.1" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
-io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.2" }
-com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.49.0" }
+io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.3" }
+com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.50.0" }
 org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.3" }
-org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.8.0" }
+org-htmlunit-nekoHtmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.9.0" }
 net-sf-supercsv-superCsv = { group = "net.sf.supercsv", name = "super-csv", version = "2.4.0" }
 
 com-fasterxml-jackson-module-jacksonModuleKotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
