@@ -2,16 +2,13 @@ plugins {
   `kotlin-dsl`
 }
 
-val publicRepo = "https://maven.aliyun.com/repository/public"
-val gradlePluginRepo = "https://maven.aliyun.com/repository/gradle-plugin"
 val springRepo = "https://repo.spring.io/milestone"
 
 repositories {
   mavenLocal()
-  maven(publicRepo)
-  maven(gradlePluginRepo)
-  maven(springRepo)
   gradlePluginPortal()
+  mavenCentral()
+  maven(springRepo)
 }
 
 dependencies {
