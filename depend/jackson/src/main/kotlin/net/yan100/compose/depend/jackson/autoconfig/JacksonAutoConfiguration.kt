@@ -149,7 +149,7 @@ class JacksonAutoConfiguration {
         .registerModules(KotlinModule.Builder().build())
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-        .activateDefaultTyping(it.polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.WRAPPER_OBJECT)
+        .activateDefaultTyping(it.polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.PROPERTY)
       it
     }
   }
