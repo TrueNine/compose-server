@@ -16,6 +16,7 @@
  */
 package net.yan100.compose.cacheable.autoconfig
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.consts.ICacheNames
 import net.yan100.compose.core.slf4j
@@ -28,7 +29,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
@@ -46,7 +47,11 @@ class RedisJsonSerializerAutoConfiguration(
   @Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
   objectMapper: ObjectMapper
 ) {
-  private val jsr = Jackson2JsonRedisSerializer(objectMapper, Any::class.java)
+  private val jsr = GenericJackson2JsonRedisSerializer(objectMapper).apply {
+    configure {
+      it.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    }
+  }
 
   private val srs = StringRedisSerializer()
   private val cacheManagerConfig =
