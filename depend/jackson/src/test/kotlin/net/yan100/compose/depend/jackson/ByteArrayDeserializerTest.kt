@@ -69,7 +69,7 @@ class ByteArrayDeserializerTest {
     val ba = map.readValue(json, S::class.java)
     log.info("ba: {}", ba)
 
-    assertEquals("{\"net.yan100.compose.depend.jackson.ByteArrayDeserializerTest\$S\":{\"a\":\"a\",\"b\":{\"[B\":\"AQABAAEA\"}}}", json)
+    assertEquals("{\"@class\":\"net.yan100.compose.depend.jackson.ByteArrayDeserializerTest\$S\",\"a\":\"a\",\"b\":[\"[B\",\"AQABAAEA\"]}", json)
     assertEquals(ba.a, ab.a)
     assertContentEquals(ba.b, ab.b)
   }

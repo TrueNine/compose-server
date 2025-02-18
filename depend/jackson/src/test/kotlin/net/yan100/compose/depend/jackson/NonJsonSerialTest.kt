@@ -41,11 +41,55 @@ class NonJsonSerialTest {
     }
   }
 
+  data class LongData(
+    val longData: Long,
+    private var nullableLong: Long? = null
+  ) {
+    fun getNullableLong(): Long? {
+      return this.nullableLong
+    }
+
+    fun setNullableLong(a: Long) {
+      this.nullableLong = a
+    }
+  }
+
+  @Test
+  fun `确保 long 序列化为简单值`() {
+    val testData = LongData(123)
+    val json = mapper.writeValueAsString(testData)
+    val deserialized = mapper.readValue(json, Any::class.java)
+    assertEquals(testData, deserialized)
+    assertEquals(
+      "{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$LongData\",\"longData\":123}",
+      json
+    )
+    println(json)
+
+    val testData2 = LongData(123, null)
+    val json2 = mapper.writeValueAsString(testData2)
+    val deserialized2 = mapper.readValue(json2, Any::class.java)
+    assertEquals(testData2, deserialized2)
+    assertEquals(
+      "{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$LongData\",\"longData\":123}",
+      json2
+    )
+
+    val testData3 = LongData(123, 3L)
+    val json3 = mapper.writeValueAsString(testData3)
+    val deserialized3 = mapper.readValue(json3, Any::class.java)
+    assertEquals(testData3, deserialized3)
+    assertEquals(
+      "{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$LongData\",\"longData\":123,\"nullableLong\":[\"java.lang.Long\",3]}",
+      json3
+    )
+  }
+
   @Test
   fun `ensure non-json serialization java lang long`() {
     val jsonObj = IdJson()
     val json = mapper.writeValueAsString(jsonObj)
-    assertEquals("{\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$IdJson\":{}}", json)
+    assertEquals("{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$IdJson\"}", json)
     log.info("json: {}", json)
     val readValue = mapper.readValue<IdJson>(json)
     log.info("readValue: {}", readValue)
