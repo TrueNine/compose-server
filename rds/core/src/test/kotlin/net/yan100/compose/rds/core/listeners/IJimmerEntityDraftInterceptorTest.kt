@@ -24,15 +24,15 @@ class IJimmerEntityDraftInterceptorTest {
     }).modifiedEntity
     assertNotNull(saved)
     assertNotNull(saved.databaseMetadata)
-    assertNotNull(saved.databaseMetadata.crd)
-    assertNull(saved.databaseMetadata.mrd)
-    assertNull(saved.databaseMetadata.ldf)
-    assertEquals(0, saved.databaseMetadata.rlv)
+    assertNotNull(saved.databaseMetadata?.crd)
+    assertNull(saved.databaseMetadata?.mrd)
+    assertNull(saved.databaseMetadata?.ldf)
+    assertEquals(0, saved.databaseMetadata?.rlv)
 
     val endDt = datetime.now()
     assertTrue {
-      startDt.isBefore(saved.databaseMetadata.crd) &&
-        saved.databaseMetadata.crd.isBefore(endDt)
+      startDt.isBefore(saved.databaseMetadata?.crd) &&
+        (saved.databaseMetadata?.crd?.isBefore(endDt) ?: false)
     }
   }
 }

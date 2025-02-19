@@ -8,5 +8,5 @@ interface IJimmerEntity : IJimmerPersistentEntity {
   /**
    * 数据库内元数据
    */
-  val databaseMetadata: IDbMetadata
+  val databaseMetadata: IDbMetadata?
 }
