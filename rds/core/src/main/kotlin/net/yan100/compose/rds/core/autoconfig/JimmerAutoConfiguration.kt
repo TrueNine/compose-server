@@ -2,7 +2,9 @@ package net.yan100.compose.rds.core.autoconfig
 
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.rds.core.converters.jimmer.DurationScalarProvider
 import net.yan100.compose.rds.core.converters.jimmer.IntTypingJimmerProvider
+import net.yan100.compose.rds.core.converters.jimmer.PeriodScalarProvider
 import net.yan100.compose.rds.core.converters.jimmer.StringTypingJimmerProvider
 import net.yan100.compose.rds.core.generators.JimmerSnowflakeLongIdGenerator
 import net.yan100.compose.rds.core.generators.JimmerSnowflakeStringIdGenerator
@@ -56,5 +58,15 @@ class JimmerAutoConfiguration {
   fun iJimmerEntityDraftInterceptor(): IJimmerEntityDraftInterceptor {
     log.trace("register jimmer database metadata interceptor")
     return IJimmerEntityDraftInterceptor()
+  }
+
+  @Bean
+  fun jimmerPeriodScalarProvider(): PeriodScalarProvider {
+    return PeriodScalarProvider()
+  }
+
+  @Bean
+  fun jimmerDurationScalarProvider(): DurationScalarProvider {
+    return DurationScalarProvider()
   }
 }
