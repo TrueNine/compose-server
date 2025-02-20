@@ -1,17 +1,17 @@
 [versions]
 java = "23"
-gradle = "8.13-rc-1"
-kotlin = "2.1.20-Beta2"
+gradle = "8.13-rc-2"
+kotlin = "2.1.20-RC"
 
 # kotlin language toolchain versions
-ksp = "2.1.20-Beta2-1.0.29"
+ksp = "2.1.20-RC-1.0.30"
 kotlinpoet = "2.0.0"
 kotlinxIo = "0.6.0"
 kotlinxDatetime = "0.6.1"
 kotlinxCoroutines = "1.10.1"
 
 # spring versions
-springBoot = "3.5.0-M1"
+springBoot = "3.5.0-M2"
 springData = "3.5.0-M1"
 springFramework = "6.2.2"
 springBatch = "5.2.1"
