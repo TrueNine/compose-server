@@ -16,23 +16,23 @@ springData = "3.5.0-M1"
 springFramework = "6.2.2"
 springBatch = "5.2.1"
 springCloud = "2024.0.0-RC1"
-springAi = "1.0.0-M4"
+springAi = "2.8.5"
 springCloudAlibaba = "2021.0.4.0"
 springModulith = "1.3.0"
 springIntegration = "6.4.1"
-springSecurity = "6.5.0-M1"
+springSecurity = "6.5.0-M2"
 # others
 slf4j = "2.1.0-alpha1"
-flyway = "11.3.2"
+flyway = "11.3.3"
 mapstruct = "1.6.0"
 jackson = "2.18.2"
 hibernate = "6.6.3.Final"
 netty = "4.1.115.Final"
 querydsl = "5.1.0"
-jimmer = "0.9.56"
+jimmer = "0.9.57"
 drools = "9.44.0.Final"
 liteflow = "2.12.1"
-hutool = "5.8.35"
+hutool = "5.8.36"
 xxlJob = "3.0.0"
 saToken = "1.40.0"
 mybatisPlus = "3.5.9"
@@ -284,7 +284,7 @@ com-github-ulisesbocchio-jasyptSpringBootStarter = { group = "com.github.ulisesb
 
 org-slf4j-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
-org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.28.1" }
+org-seleniumhq-selenium-seleniumJava = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.29.0" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.3" }
 com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.50.0" }
