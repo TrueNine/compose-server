@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.depend.httpexchange.jsonWebClientRegister
 import net.yan100.compose.security.oauth2.api.IWxMpApi
-import net.yan100.compose.security.oauth2.api.IWxpaApi
+import net.yan100.compose.security.oauth2.api.IWxpaWebClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -35,7 +35,7 @@ class ApiExchangeAutoConfiguration {
   }
 
   @Bean
-  fun wxpaApi(objectMapper: ObjectMapper): IWxpaApi {
-    return jsonWebClientRegister<IWxpaApi>(objectMapper) { a, b -> a to b }
+  fun wxpaApi(objectMapper: ObjectMapper): IWxpaWebClient {
+    return jsonWebClientRegister<IWxpaWebClient>(objectMapper) { a, b -> a to b }
   }
 }

@@ -36,11 +36,10 @@ class WxpaProperty {
     var sign: String? = null
   )
 
-
   var fixedExpiredSecond: Long = 700_0L
-  lateinit var preValidToken: String
-  lateinit var appId: String
-  lateinit var appSecret: String
+  var preValidToken: String? = null
+  var appId: String? = null
+  var appSecret: String? = null
 
   var accessToken: String? = null
   var jsapiTicket: String? = null
