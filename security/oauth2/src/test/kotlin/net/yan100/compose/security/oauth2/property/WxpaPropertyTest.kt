@@ -42,7 +42,7 @@ class WxpaPropertyTest {
     ctx = mockk(relaxed = true)
     wxpa = mockk()
 
-    log.info("初始化 WxpaProperty")
+    log.info("init WxpaProperty")
 
     // 初始化返回对象
     alwaysWxpa = WxpaProperty().apply {
