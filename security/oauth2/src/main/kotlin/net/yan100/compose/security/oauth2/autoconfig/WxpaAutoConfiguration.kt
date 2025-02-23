@@ -17,15 +17,28 @@
 package net.yan100.compose.security.oauth2.autoconfig
 
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.security.oauth2.api.IWxpaWebClient
 import net.yan100.compose.security.oauth2.properties.WechatProperties
 import net.yan100.compose.security.oauth2.property.WxpaProperty
+import net.yan100.compose.security.oauth2.service.WxpaService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class WxpaPropertyAutoConfiguration {
+class WxpaAutoConfiguration {
   companion object {
-    private val log = slf4j(WxpaPropertyAutoConfiguration::class)
+    private val log = slf4j(WxpaAutoConfiguration::class)
+  }
+
+  @Bean
+  fun wxpaService(
+    client: IWxpaWebClient,
+    property: WxpaProperty
+  ): WxpaService {
+    return WxpaService(
+      client = client,
+      property = property
+    )
   }
 
   @Bean
