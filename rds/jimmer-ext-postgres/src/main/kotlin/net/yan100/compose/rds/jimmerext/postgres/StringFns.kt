@@ -11,10 +11,8 @@ import org.babyfish.jimmer.sql.kt.ast.query.KMutableRootQuery
  * @param end 结束位置
  */
 fun KNullablePropExpression<String>.substr(start: Int?, end: Int?): KNonNullExpression<String> {
-  return sql(String::class, "substr(%e,%v,%v)") {
+  return sql(String::class, "substr(%e,%${start ?: "null"},${end ?: "null"})") {
     expression(this@substr)
-    value(start ?: "null")
-    value(end ?: "null")
   }
 }
 
@@ -25,9 +23,5 @@ fun KNullablePropExpression<String>.substr(start: Int?, end: Int?): KNonNullExpr
  * @param end 结束位置
  */
 fun <E : Any> KMutableRootQuery<E>.substr(str: String?, start: Int?, end: Int?): KNonNullExpression<String> {
-  return sql(String::class, "substr(%v,%v,%v)") {
-    value(str ?: "null")
-    value(start ?: "null")
-    value(end ?: "null")
-  }
+  return sql(String::class, "substr($str,${start ?: "null"},${end ?: "null"})")
 }

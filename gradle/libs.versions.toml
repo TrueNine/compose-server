@@ -44,7 +44,7 @@ junit5 = "5.12.0"
 kotlin-compile-testing = "1.6.0"
 
 ## === compose server versions ===
-compose = "2.0.154"
+compose = "2.0.155"
 compose-rds-core = "2.0.73"
 compose-rds-crud = "2.0.66"
 compose-core = "2.0.51"
@@ -73,7 +73,7 @@ compose-meta = "0.0.13"
 compose-ksp-client = "0.0.9"
 compose-client = "0.0.9"
 compose-ksp-tspoet = "0.0.9"
-compose-rds-jimmer-ext-postgres = "0.0.2"
+compose-rds-jimmer-ext-postgres = "0.0.3"
 
 compose-group = "net.yan100.compose"
 [libraries]
