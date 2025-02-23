@@ -44,7 +44,7 @@ junit5 = "5.12.0"
 kotlin-compile-testing = "1.6.0"
 
 ## === compose server versions ===
-compose = "2.0.152"
+compose = "2.0.153"
 compose-rds-core = "2.0.73"
 compose-rds-crud = "2.0.66"
 compose-core = "2.0.51"
@@ -73,8 +73,8 @@ compose-meta = "0.0.13"
 compose-ksp-client = "0.0.9"
 compose-client = "0.0.9"
 compose-ksp-tspoet = "0.0.9"
+compose-rds-jimmer-ext-postgres = "0.0.1"
 compose-group = "net.yan100.compose"
-
 [libraries]
 net-yan100-compose-oss = { module = "net.yan100.compose:oss", version.ref = "compose-oss" }
 net-yan100-compose-core = { module = "net.yan100.compose:core", version.ref = "compose-core" }
@@ -89,6 +89,7 @@ net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", vers
 net-yan100-compose-ksp-toolkit = { module = "net.yan100.compose:ksp-toolkit", version.ref = "compose-ksp-toolkit" }
 net-yan100-compose-rds-crud = { module = "net.yan100.compose:rds-crud", version.ref = "compose-rds-crud" }
 net-yan100-compose-rds-core = { module = "net.yan100.compose:rds-core", version.ref = "compose-rds-core" }
+net-yan100-compose-rds-jimmer-ext-postgres = { module = "net.yan100.compose:rds-jimmer-ext-postgres", version.ref = "compose-rds-jimmer-ext-postgres" }
 net-yan100-compose-rds-migration-mysql = { module = "net.yan100.compose:rds-migration-mysql", version.ref = "compose-rds-migraiton-mysql" }
 net-yan100-compose-rds-migration-postgres = { module = "net.yan100.compose:rds-migration-postgres", version.ref = "compose-rds-migration-postgres" }
 net-yan100-compose-rds-migration-h2 = { module = "net.yan100.compose:rds-migration-h2", version.ref = "compose-rds-migration-h2" }
