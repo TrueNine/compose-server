@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.jimmerext.postgres
 
+import org.babyfish.jimmer.sql.kt.ast.expression.KNonNullExpression
 import org.babyfish.jimmer.sql.kt.ast.expression.KNullablePropExpression
 import org.babyfish.jimmer.sql.kt.ast.expression.sql
 import org.babyfish.jimmer.sql.kt.ast.query.KMutableRootQuery
@@ -9,8 +10,8 @@ import org.babyfish.jimmer.sql.kt.ast.query.KMutableRootQuery
  * @param start 起始位置 从 1 开始
  * @param end 结束位置
  */
-fun KNullablePropExpression<String>.substr(start: Int?, end: Int?) {
-  sql(String::class, "substr(%e,%v,%v)") {
+fun KNullablePropExpression<String>.substr(start: Int?, end: Int?): KNonNullExpression<String> {
+  return sql(String::class, "substr(%e,%v,%v)") {
     expression(this@substr)
     value(start ?: "null")
     value(end ?: "null")
@@ -23,8 +24,8 @@ fun KNullablePropExpression<String>.substr(start: Int?, end: Int?) {
  * @param start 起始位置 从 1 开始
  * @param end 结束位置
  */
-fun <E : Any> KMutableRootQuery<E>.substr(str: String?, start: Int?, end: Int?) {
-  sql(String::class, "substr(%v,%v,%v)") {
+fun <E : Any> KMutableRootQuery<E>.substr(str: String?, start: Int?, end: Int?): KNonNullExpression<String> {
+  return sql(String::class, "substr(%v,%v,%v)") {
     value(str ?: "null")
     value(start ?: "null")
     value(end ?: "null")
