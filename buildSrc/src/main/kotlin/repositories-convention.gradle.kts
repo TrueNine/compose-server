@@ -8,6 +8,7 @@ fun RepositoryHandler.setupDependencyRepositories() {
   maven(publicRepo)
   maven(centralRepo)
   maven(springRepo)
+  gradlePluginPortal()
 }
 
 repositories {
