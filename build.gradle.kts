@@ -1,3 +1,3 @@
 plugins {
-  alias(libs.plugins.com.github.benManes.versions)
+  alias(libs.plugins.com.github.ben.manes.versions)
 }

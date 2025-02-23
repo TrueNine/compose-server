@@ -1,7 +1,7 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 listOf(
-  "test-toolkit",
+  "testtoolkit",
   "version-catalog",
   "core",
   "bom",

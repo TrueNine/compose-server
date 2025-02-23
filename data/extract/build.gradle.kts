@@ -2,24 +2,24 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeDataExtract.get()
+version = libs.versions.compose.data.extract.get()
 
 dependencies {
-  implementation(libs.bundles.kotlinReactor)
-  implementation(libs.org.springframework.springWeb)
-  implementation(libs.org.springframework.boot.springBootStarterWebflux)
+  implementation(libs.bundles.kotlin.reactor)
+  implementation(libs.org.springframework.spring.web)
+  implementation(libs.org.springframework.boot.spring.boot.starter.webflux)
   api(libs.org.jsoup.jsoup)
-  api(libs.net.sf.supercsv.superCsv)
+  api(libs.net.sf.supercsv.`super`.csv)
 
   api(libs.com.alibaba.easyexcel) {
     exclude("org.apache.commons", "commons-compress")
-    implementation(libs.org.apache.commons.commonsCompress)
+    implementation(libs.org.apache.commons.commons.compress)
   }
 
   implementation(projects.core)
   implementation(projects.depend.dependHttpExchange)
 
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
   testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding)
-  testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbindingAllPlatforms)
+  testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding.all.platforms)
 }

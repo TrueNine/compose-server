@@ -3,4 +3,4 @@ plugins {
   `sqlmigration-convention`
 }
 
-version = libs.versions.composeRdsMigrationPostgres.get()
+version = libs.versions.compose.rds.migration.postgres.get()

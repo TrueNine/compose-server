@@ -2,21 +2,21 @@ plugins {
   `kotlin-convention`
 }
 
-version = libs.versions.composeKspPlugin.get()
+version = libs.versions.compose.ksp.plugin.get()
 
 dependencies {
-  compileOnly(libs.com.google.devtools.ksp.symbolProcessingApi)
-  testImplementation(libs.com.google.devtools.ksp.symbolProcessingApi)
+  compileOnly(libs.com.google.devtools.ksp.symbol.processing.api)
+  testImplementation(libs.com.google.devtools.ksp.symbol.processing.api)
 
-  implementation(libs.com.squareup.kotlinpoetJvm)
-  implementation(libs.com.squareup.kotlinpoetKsp)
+  implementation(libs.com.squareup.kotlinpoet.jvm)
+  implementation(libs.com.squareup.kotlinpoet.ksp)
 
   api(projects.meta)
 
   implementation(projects.core)
   implementation(projects.ksp.kspToolkit)
 
-  testImplementation(libs.com.github.tschuchortdev.kotlinCompileTestingKsp)
+  testImplementation(libs.com.github.tschuchortdev.kotlin.compile.testing.ksp)
 }
 
 /*if (JavaVersion.current() >= JavaVersion.VERSION_16) {

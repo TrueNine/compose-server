@@ -2,13 +2,13 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeCacheable.get()
+version = libs.versions.compose.cacheable.get()
 
 dependencies {
   implementation(libs.bundles.redis)
-  implementation(libs.com.github.benManes.caffeine.caffeine)
+  implementation(libs.com.github.ben.manes.caffeine.caffeine)
 
   implementation(projects.depend.dependJackson)
   implementation(projects.core)
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
 }

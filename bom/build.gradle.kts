@@ -3,7 +3,7 @@ plugins {
   `publish-convention`
 }
 
-version = libs.versions.composeVersionCatalog.get()
+version = libs.versions.compose.asProvider().get()
 
 dependencies {
   constraints {
@@ -15,7 +15,6 @@ dependencies {
     api(projects.data.dataCrawler)
     api(projects.depend.dependHttpExchange)
     api(projects.depend.dependJackson)
-    api(projects.depend.dependJsr303Validation)
     api(projects.depend.dependPaho)
     api(projects.depend.dependServlet)
     api(projects.depend.dependSpringdocOpenapi)
@@ -35,7 +34,7 @@ dependencies {
     api(projects.security.securityCrypto)
     api(projects.security.securityOauth2)
     api(projects.security.securitySpring)
-    api(projects.testToolkit)
+    api(projects.testtoolkit)
     api(projects.versionCatalog)
   }
 }

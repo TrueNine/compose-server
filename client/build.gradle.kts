@@ -3,23 +3,23 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeClient.get()
+version = libs.versions.compose.client.get()
 
 dependencies {
   implementation(projects.meta)
   implementation(projects.core)
 
-  implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
-  implementation(libs.org.springframework.springWebMvc)
-  implementation(libs.org.springframework.springWebflux)
+  implementation(libs.com.fasterxml.jackson.core.jackson.databind)
+  implementation(libs.org.springframework.spring.webmvc)
+  implementation(libs.org.springframework.spring.webflux)
 
-  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
   kspTest(projects.ksp.kspClient)
 
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
   testImplementation(projects.depend.dependJackson)
 
-  kspTest(libs.org.babyfish.jimmer.jimmerKsp)
-  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
-  testImplementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
+  kspTest(libs.org.babyfish.jimmer.jimmer.ksp)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
+  testImplementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
 }

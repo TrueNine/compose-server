@@ -2,16 +2,16 @@ plugins {
   `kotlin-convention`
 }
 
-version = libs.versions.composeDependHttpExchange.get()
+version = libs.versions.compose.depend.http.exchange.get()
 
 dependencies {
   implementation(projects.core)
 
-  implementation(libs.org.springframework.springCore)
-  implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
-  implementation(libs.org.springframework.springWeb)
-  implementation(libs.io.netty.nettyHandler)
-  implementation(libs.org.springframework.springWebflux)
+  implementation(libs.org.springframework.spring.core)
+  implementation(libs.com.fasterxml.jackson.core.jackson.databind)
+  implementation(libs.org.springframework.spring.web)
+  implementation(libs.io.netty.netty.handler)
+  implementation(libs.org.springframework.spring.webflux)
 
-  testImplementation(libs.org.springframework.boot.springBootStarterWebflux)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.webflux)
 }

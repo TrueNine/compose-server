@@ -2,14 +2,14 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeDependSpringdocOpenapi.get()
+version = libs.versions.compose.depend.springdoc.openapi.get()
 
 dependencies {
-  api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)
+  api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
 
   implementation(projects.core)
-  implementation(libs.org.springdoc.springdocOpenapiStarterWebmvcUi)
+  implementation(libs.org.springdoc.springdoc.openapi.starter.webmvc.ui)
 
-  testImplementation(projects.testToolkit)
-  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
+  testImplementation(projects.testtoolkit)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
 }

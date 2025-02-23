@@ -10,8 +10,8 @@ plugins {
 }
 
 dependencies {
-  implementation(libs.org.jetbrains.kotlin.kotlinStdlib)
-  implementation(libs.org.jetbrains.kotlin.kotlinReflect)
+  implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
+  implementation(libs.org.jetbrains.kotlin.kotlin.reflect)
 }
 
 kotlin {

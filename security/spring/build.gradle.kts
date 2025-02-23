@@ -2,21 +2,21 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeSecuritySpring.get()
+version = libs.versions.compose.security.spring.get()
 
 dependencies {
-  api(libs.org.springframework.boot.springBootStarterSecurity)
+  api(libs.org.springframework.boot.spring.boot.starter.security)
 
-  implementation(libs.cn.hutool.hutoolCaptcha)
-  implementation(libs.com.auth0.javaJwt)
+  implementation(libs.cn.hutool.hutool.captcha)
+  implementation(libs.com.auth0.java.jwt)
 
-  implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
+  implementation(libs.com.fasterxml.jackson.core.jackson.databind)
 
-  implementation(libs.org.springframework.springWebMvc)
+  implementation(libs.org.springframework.spring.webmvc)
 
   implementation(libs.org.owasp.antisamy.antisamy) {
     exclude(group = "org.htmlunit", module = "neko-htmlunit")
-    implementation(libs.org.htmlunit.nekoHtmlunit)
+    implementation(libs.org.htmlunit.neko.htmlunit)
   }
 
   //implementation(project(":depend:depend-http-exchange"))
@@ -25,7 +25,7 @@ dependencies {
   implementation(projects.security.securityCrypto)
   implementation(projects.core)
 
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
 }
 
 

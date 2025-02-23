@@ -2,12 +2,12 @@ plugins {
   `kotlin-convention`
 }
 
-version = libs.versions.composeKspToolkit.get()
+version = libs.versions.compose.ksp.toolkit.get()
 
 dependencies {
-  api(libs.com.google.devtools.ksp.symbolProcessingApi)
-  api(libs.com.squareup.kotlinpoetJvm)
-  api(libs.com.squareup.kotlinpoetKsp)
-  
+  api(libs.com.google.devtools.ksp.symbol.processing.api)
+  api(libs.com.squareup.kotlinpoet.jvm)
+  api(libs.com.squareup.kotlinpoet.ksp)
+
   api(projects.meta)
 }

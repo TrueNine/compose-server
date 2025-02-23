@@ -2,16 +2,16 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composePay.get()
+version = libs.versions.compose.pay.get()
 
 dependencies {
-  api(libs.com.github.wechatpayApiv3.wechatpayJava)
+  api(libs.com.github.wechatpay.apiv3.wechatpay.java)
 
   implementation(projects.core)
   implementation(projects.depend.dependHttpExchange)
-  implementation(libs.org.springframework.boot.springBootStarterWebflux)
+  implementation(libs.org.springframework.boot.spring.boot.starter.webflux)
   implementation(projects.security.securityOauth2)
   implementation(projects.security.securityCrypto)
 
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
 }

@@ -23,7 +23,7 @@ publishing {
 
   publications {
     create<MavenPublication>("mavenJava") {
-      groupId = libs.versions.composeGroup.get()
+      groupId = libs.versions.compose.group.get()
       artifactId = project.name
       when {
         plugins.hasPlugin("java-gradle-plugin") ||

@@ -3,19 +3,19 @@ plugins {
   `publish-convention`
 }
 
-version = libs.versions.composeCore.get()
+version = libs.versions.compose.core.get()
 
 dependencies {
   implementation(projects.meta)
 
-  api(libs.com.fasterxml.jackson.core.jacksonAnnotations)
-  api(libs.jakarta.annotation.jakartaAnnotationApi)
-  api(libs.jakarta.servlet.jakartaServletApi)
-  api(libs.io.swagger.core.v3.swaggerAnnotationsJakarta)
-  api(libs.org.slf4j.slf4jApi)
+  api(libs.com.fasterxml.jackson.core.jackson.annotations)
+  api(libs.jakarta.annotation.jakarta.annotation.api)
+  api(libs.jakarta.servlet.jakarta.servlet.api)
+  api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
+  api(libs.org.slf4j.slf4j.api)
 
-  implementation(libs.org.springframework.security.springSecurityCrypto)
+  implementation(libs.org.springframework.security.spring.security.crypto)
 
-  testImplementation(projects.testToolkit)
-  testImplementation(libs.org.springframework.boot.springBootStarterWeb)
+  testImplementation(projects.testtoolkit)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
 }

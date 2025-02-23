@@ -13,8 +13,8 @@ plugins {
 configurations.all {
   resolutionStrategy {
     dependencySubstitution {
-      val jpa = libs.com.querydsl.querydslJpa.get()
-      val apt = libs.com.querydsl.querydslApt.get()
+      val jpa = libs.com.querydsl.querydsl.jpa.get()
+      val apt = libs.com.querydsl.querydsl.apt.get()
       substitute(module(jpa.module.toString()))
         .using(
           module(

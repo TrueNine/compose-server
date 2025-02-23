@@ -2,16 +2,16 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeDependServlet.get()
+version = libs.versions.compose.depend.servlet.get()
 
 dependencies {
-  api(libs.org.springframework.boot.springBootStarterWeb)
-  api(libs.jakarta.servlet.jakartaServletApi)
+  api(libs.org.springframework.boot.spring.boot.starter.web)
+  api(libs.jakarta.servlet.jakarta.servlet.api)
 
-  implementation(libs.org.springframework.boot.springBootStarterWebsocket)
-  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  implementation(libs.org.springframework.boot.spring.boot.starter.websocket)
+  implementation(libs.org.springframework.boot.spring.boot.autoconfigure)
 
   implementation(projects.core)
   implementation(projects.security.securityCrypto)
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
 }

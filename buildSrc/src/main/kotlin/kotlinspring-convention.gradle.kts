@@ -9,6 +9,6 @@ plugins {
 }
 
 dependencies {
-  kapt(libs.org.springframework.springBootConfigurationProcessor)
+  kapt(libs.org.springframework.spring.boot.configuration.processor)
 }
 

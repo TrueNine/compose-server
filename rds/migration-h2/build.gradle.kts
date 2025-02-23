@@ -3,4 +3,4 @@ plugins {
   `sqlmigration-convention`
 }
 
-version = libs.versions.composeRdsMigrationH2.get()
+version = libs.versions.compose.rds.migration.h2.get()

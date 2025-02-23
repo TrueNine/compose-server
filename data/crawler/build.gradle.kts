@@ -2,7 +2,7 @@ plugins {
   `kotlin-convention`
 }
 
-version = libs.versions.composeDataCrawler.get()
+version = libs.versions.compose.data.crawler.get()
 
 dependencies {
   implementation(projects.core)
@@ -10,8 +10,8 @@ dependencies {
   implementation(libs.bundles.selenium)
   api(libs.com.microsoft.playwright.playwright)
 
-  implementation(libs.com.github.magese.ikAnalyzer)
-  implementation(libs.com.github.haifengl.smileMath)
+  implementation(libs.com.github.magese.ik.analyzer)
+  implementation(libs.com.github.haifengl.smile.math)
 
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
 }

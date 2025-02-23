@@ -2,18 +2,18 @@ plugins {
   `kotlin-convention`
 }
 
-version = libs.versions.composeKspClient.get()
+version = libs.versions.compose.ksp.client.get()
 
 dependencies {
-  compileOnly(libs.com.google.devtools.ksp.symbolProcessingApi)
+  compileOnly(libs.com.google.devtools.ksp.symbol.processing.api)
 
-  implementation(libs.com.squareup.kotlinpoetJvm)
-  implementation(libs.com.squareup.kotlinpoetKsp)
+  implementation(libs.com.squareup.kotlinpoet.jvm)
+  implementation(libs.com.squareup.kotlinpoet.ksp)
 
   implementation(projects.core)
   implementation(projects.meta)
-  implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
-  implementation(libs.com.fasterxml.jackson.module.jacksonModuleKotlin)
+  implementation(libs.com.fasterxml.jackson.core.jackson.databind)
+  implementation(libs.com.fasterxml.jackson.module.jackson.module.kotlin)
 
   implementation(projects.ksp.kspToolkit)
 }

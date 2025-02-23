@@ -3,7 +3,7 @@ plugins {
   alias(libs.plugins.com.google.devtools.ksp)
 }
 
-version = libs.versions.composeRdsCore.get()
+version = libs.versions.compose.rds.core.get()
 
 kapt {
   javacOptions { option("querydsl.entityAccessors", "true") }
@@ -11,32 +11,32 @@ kapt {
 }
 
 dependencies {
-  ksp(libs.org.babyfish.jimmer.jimmerKsp)
+  ksp(libs.org.babyfish.jimmer.jimmer.ksp)
 
-  implementation(libs.org.springframework.boot.springBootAutoconfigure)
+  implementation(libs.org.springframework.boot.spring.boot.autoconfigure)
 
   implementation(projects.core)
   implementation(projects.meta)
 
-  implementation(libs.org.springframework.security.springSecurityCrypto)
+  implementation(libs.org.springframework.security.spring.security.crypto)
 
-  implementation(libs.org.springframework.data.springDataCommons)
-  implementation(libs.org.springframework.data.springDataJpa)
+  implementation(libs.org.springframework.data.spring.data.commons)
+  implementation(libs.org.springframework.data.spring.data.jpa)
 
-  implementation(libs.com.querydsl.querydslCore)
+  implementation(libs.com.querydsl.querydsl.core)
 
-  implementation(libs.com.querydsl.querydslJpa)
-  kapt(libs.com.querydsl.querydslApt)
+  implementation(libs.com.querydsl.querydsl.jpa)
+  kapt(libs.com.querydsl.querydsl.apt)
 
-  implementation(libs.org.hibernate.orm.hibernateCore)
+  implementation(libs.org.hibernate.orm.hibernate.core)
 
   // jimmer
-  implementation(libs.org.babyfish.jimmer.jimmerCore)
-  implementation(libs.org.babyfish.jimmer.jimmerSql)
-  implementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
+  implementation(libs.org.babyfish.jimmer.jimmer.core)
+  implementation(libs.org.babyfish.jimmer.jimmer.sql)
+  implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
 
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
   testImplementation(projects.rds.rdsMigrationH2)
-  testImplementation(libs.org.springframework.boot.springBootStarterDataJpa)
-  testImplementation(libs.org.flywaydb.flywayCore)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.data.jpa)
+  testImplementation(libs.org.flywaydb.flyway.core)
 }

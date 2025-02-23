@@ -3,7 +3,7 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeRdsCrud.get()
+version = libs.versions.compose.rds.crud.get()
 
 kapt {
   javacOptions { option("querydsl.entityAccessors", "true") }
@@ -15,28 +15,28 @@ ksp {
 }
 
 dependencies {
-  implementation(libs.org.jetbrains.kotlinx.kotlinxCoroutinesCore)
-  api(libs.org.springframework.boot.springBootStarterDataJpa)
-  implementation(libs.org.hibernate.orm.hibernateCore)
+  implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+  api(libs.org.springframework.boot.spring.boot.starter.data.jpa)
+  implementation(libs.org.hibernate.orm.hibernate.core)
 
-  implementation(libs.org.springframework.security.springSecurityCrypto)
+  implementation(libs.org.springframework.security.spring.security.crypto)
 
-  kapt(libs.com.querydsl.querydslApt)
-  implementation(libs.com.querydsl.querydslJpa)
+  kapt(libs.com.querydsl.querydsl.apt)
+  implementation(libs.com.querydsl.querydsl.jpa)
 
   ksp(projects.ksp.kspPlugin)
-  ksp(libs.org.babyfish.jimmer.jimmerKsp)
+  ksp(libs.org.babyfish.jimmer.jimmer.ksp)
 
-  implementation(libs.org.babyfish.jimmer.jimmerSpringBootStarter)
+  implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
 
   implementation(projects.core)
   implementation(projects.meta)
   implementation(projects.rds.rdsCore)
 
-  implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
+  implementation(libs.com.fasterxml.jackson.core.jackson.databind)
 
   testImplementation(projects.security.securityCrypto)
-  testImplementation(projects.testToolkit)
-  testImplementation(libs.org.flywaydb.flywayCore)
+  testImplementation(projects.testtoolkit)
+  testImplementation(libs.org.flywaydb.flyway.core)
   testImplementation(projects.rds.rdsMigrationH2)
 }

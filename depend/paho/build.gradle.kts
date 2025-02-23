@@ -2,13 +2,13 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.composeDependPaho.get()
+version = libs.versions.compose.depend.paho.get()
 
 dependencies {
-  implementation(libs.org.springframework.integration.springIntegrationMqtt)
+  implementation(libs.org.springframework.integration.spring.integration.mqtt)
   implementation(libs.org.eclipse.paho.client.mqttv3)
-  implementation(libs.com.fasterxml.jackson.core.jacksonDatabind)
+  implementation(libs.com.fasterxml.jackson.core.jackson.databind)
   implementation(projects.core)
 
-  testImplementation(projects.testToolkit)
+  testImplementation(projects.testtoolkit)
 }

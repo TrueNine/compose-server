@@ -7,10 +7,10 @@ plugins {
 }
 
 extra["snippetsDir"] = file("build/generated-snippets")
-extra["springCloudVersion"] = libs.versions.springCloud.get()
-extra["springAiVersion"] = libs.versions.springAi.get()
+extra["springCloudVersion"] = libs.versions.spring.cloud.asProvider().get()
+extra["springAiVersion"] = libs.versions.spring.ai.get()
 
 dependencies {
-  implementation(libs.org.springframework.boot.springBootAutoconfigure)
-  annotationProcessor(libs.org.springframework.springBootConfigurationProcessor)
+  implementation(libs.org.springframework.boot.spring.boot.autoconfigure)
+  annotationProcessor(libs.org.springframework.spring.boot.configuration.processor)
 }
