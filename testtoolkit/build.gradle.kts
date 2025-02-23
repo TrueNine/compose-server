@@ -6,13 +6,12 @@ version = libs.versions.compose.testtoolkit.get()
 
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test)
-  api(libs.org.jetbrains.kotlin.kotlin.test.junit5) {
-    exclude("org.junit.platform")
-  }
+  api(libs.org.jetbrains.kotlin.kotlin.test.junit5)
   api(libs.io.mockk.mockk)
 
   implementation(libs.org.junit.jupiter.junit.jupiter.api) // 覆盖依赖
   implementation(libs.org.junit.jupiter.junit.jupiter.engine) // kotlin
+  implementation(libs.org.junit.vintage.junit.vintage.engine)
   implementation(libs.org.slf4j.slf4j.api)
 
   // json
