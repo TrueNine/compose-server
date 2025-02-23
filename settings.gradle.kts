@@ -48,7 +48,7 @@ listOf(
 
 // 特定依赖处理
 ("depend" to listOf(
-  "servlet", "paho", "http-exchange", "jsr303-validation", "jackson", "springdoc-openapi", "xxl-job"
+  "servlet", "paho", "http-exchange", "jackson", "springdoc-openapi", "xxl-job"
 )).apply {
   second.forEach { n ->
     include("$first:$n")
