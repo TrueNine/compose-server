@@ -26,14 +26,14 @@ publishing {
       groupId = libs.versions.compose.group.get()
       artifactId = project.name
       when {
+        plugins.hasPlugin("version-catalog") -> from(components["versionCatalog"])
         plugins.hasPlugin("java-gradle-plugin") ||
           plugins.hasPlugin("java-library") ||
           plugins.hasPlugin("java") -> from(components["java"])
 
         plugins.hasPlugin("java-platform") -> from(components["javaPlatform"])
-
-        plugins.hasPlugin("version-catalog") -> from(components["versionCatalog"])
-        else -> throw IllegalStateException("Unknown plugin type")
+        
+        else -> error("Unknown plugin type")
       }
     }
   }
