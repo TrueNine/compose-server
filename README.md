@@ -14,4 +14,4 @@
 - [Kotlin](https://kotlinlang.org/), [GitHub](https://github.com/JetBrains/kotlin)
 - [Gradle](https://gradle.org/), [GitHub](https://github.com/gradle)
 - [SpringBoot](https://spring.io/projects/spring-boot), [GitHub](https://github.com/spring-projects)
-- [babyfish-ct jimmer], [GitHub](https://github.com/babyfish-ct/jimmer)
+- [babyfish-ct jimmer](https://github.com/babyfish-ct), [GitHub](https://github.com/babyfish-ct/jimmer)
