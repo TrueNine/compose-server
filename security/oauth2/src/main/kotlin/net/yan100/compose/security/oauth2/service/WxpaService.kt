@@ -94,8 +94,8 @@ class WxpaService(
       jsCode
     )
     if (null == codeToken) return null
-    if (!codeToken.isError) {
-      log.warn("codeToken is error, token: {}", codeToken)
+    if (codeToken.isError) {
+      log.warn("codeToken is error, errCode: {},errorMsg: {}  token: {}", codeToken.errorCode, codeToken.errorMessage, codeToken)
       return null
     }
     if (codeToken.accessToken == null) {
