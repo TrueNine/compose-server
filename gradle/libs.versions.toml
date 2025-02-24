@@ -1,6 +1,5 @@
 [versions]
 java = "23"
-gradle = "8.13-rc-2"
 kotlin = "2.1.20-RC"
 
 # kotlin language toolchain versions
@@ -44,15 +43,15 @@ junit5 = "5.12.0"
 kotlin-compile-testing = "1.6.0"
 
 ## === compose server versions ===
-compose = "2.0.162"
+compose = "2.0.163"
 compose-rds-core = "2.0.74"
 compose-rds-crud = "2.0.67"
 compose-core = "2.0.51"
 compose-ksp-plugin = "2.0.40"
-compose-depend-servlet = "2.0.39"
+compose-depend-servlet = "2.0.40"
 compose-data-extract = "2.0.36"
 compose-security-oauth2 = "2.0.41"
-compose-depend-jackson = "2.0.35"
+compose-depend-jackson = "2.0.36"
 compose-security-spring = "2.0.34"
 compose-cacheable = "2.0.34"
 compose-testtoolkit = "2.0.33"
