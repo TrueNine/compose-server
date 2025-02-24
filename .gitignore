@@ -42,6 +42,7 @@ src/test/**/out/
 .jpb/
 *.hprof
 /out/
+/amplicode.xml
 
 ### NetBeans ###
 /nbproject/private/
