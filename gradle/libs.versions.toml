@@ -23,7 +23,7 @@ spring-integration = "6.5.0-M2"
 spring-security = "6.5.0-M2"
 
 # others
-jimmer = "0.9.59"
+jimmer = "0.9.60"
 sa-token = "1.40.0"
 slf4j = "2.1.0-alpha1"
 flyway = "11.3.3"
@@ -44,9 +44,9 @@ junit5 = "5.12.0"
 kotlin-compile-testing = "1.6.0"
 
 ## === compose server versions ===
-compose = "2.0.161"
-compose-rds-core = "2.0.73"
-compose-rds-crud = "2.0.66"
+compose = "2.0.162"
+compose-rds-core = "2.0.74"
+compose-rds-crud = "2.0.67"
 compose-core = "2.0.51"
 compose-ksp-plugin = "2.0.40"
 compose-depend-servlet = "2.0.39"
