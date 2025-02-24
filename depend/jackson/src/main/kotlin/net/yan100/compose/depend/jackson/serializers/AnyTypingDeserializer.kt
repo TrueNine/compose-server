@@ -9,7 +9,7 @@ import net.yan100.compose.core.typing.IntTyping
 import net.yan100.compose.core.typing.StringTyping
 import kotlin.reflect.KClass
 
-
+@Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
 class AnyTypingDeserializer(
   typingType: KClass<Enum<*>>
 ) : StdDeserializer<Enum<*>>(Enum::class.java) {

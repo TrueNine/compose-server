@@ -7,10 +7,11 @@ import net.yan100.compose.core.typing.AnyTyping
 import net.yan100.compose.core.typing.IntTyping
 import net.yan100.compose.core.typing.StringTyping
 
+@Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
 class AnyTypingSerializer : JsonSerializer<AnyTyping>() {
-  @Suppress("UNCHECKED_CAST")
-  override fun handledType(): Class<AnyTyping>? {
-    return AnyTyping::class.java as? Class<AnyTyping>?
+
+  override fun handledType(): Class<AnyTyping> {
+    return AnyTyping::class.java
   }
 
   override fun serialize(
