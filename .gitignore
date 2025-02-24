@@ -4,10 +4,8 @@
 ### gradle ###
 .gradle
 /gradle.properties
-gradlew
-gradlew.bat
 build/
-generated/
+/generated/
 generated_tests/
 .generated/
 .temp/
