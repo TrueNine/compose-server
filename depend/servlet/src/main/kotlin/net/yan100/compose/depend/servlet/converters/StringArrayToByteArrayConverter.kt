@@ -24,6 +24,7 @@ import org.springframework.core.convert.converter.Converter
  * @author TrueNine
  * @since 2024-02-29
  */
+@Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
 class StringArrayToByteArrayConverter : Converter<Array<String>, ByteArray> {
   override fun convert(source: Array<String>): ByteArray {
     return source.map { it.toByte() }.toByteArray()

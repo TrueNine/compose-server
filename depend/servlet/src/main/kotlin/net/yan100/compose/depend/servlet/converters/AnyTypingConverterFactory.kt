@@ -24,8 +24,10 @@ import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
 import java.util.concurrent.ConcurrentHashMap
 
+@Suppress("DEPRECATION_ERROR")
 private val log = slf4j<AnyTypingConverterFactory>()
 
+@Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
 open class AnyTypingConverterFactory : ConverterFactory<String?, AnyTyping?> {
   companion object {
     @JvmStatic
