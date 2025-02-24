@@ -76,7 +76,7 @@ interface IWxpaWebClient {
    * @param isSnapshotUser 是否为快照页模式虚拟账号 ，只有当用户是快照页模式虚拟账号时返回，值为1
    * @param unionId 用户全局 id
    */
-  class WxpaWebsiteAuthGetAccessTokenResp(
+  data class WxpaWebsiteAuthGetAccessTokenResp(
     @JsonProperty("access_token")
     val accessToken: String?,
     @JsonProperty("expires_in")
