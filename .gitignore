@@ -69,3 +69,4 @@ src/test/**/out/
 logs
 .logs
 *.log
+.env*
