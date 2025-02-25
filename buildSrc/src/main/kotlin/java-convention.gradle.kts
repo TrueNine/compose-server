@@ -9,7 +9,6 @@ plugins {
   id("repositories-convention")
 }
 
-
 configurations.all {
   resolutionStrategy {
     dependencySubstitution {
@@ -64,4 +63,46 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.javadoc {
   enabled = false
+}
+
+fun loadEnv(): MutableMap<String, String> {
+  val env = mutableMapOf<String, String>()
+  val envPath = extra.takeIf { it.has("env.file") }?.get("env.file")?.toString() ?: ".env"
+  logger.info("loadEnv envPath: $envPath")
+  val envFile = file(envPath).takeIf { it.exists() } ?: rootProject
+    .layout.projectDirectory.file(".env").asFile.takeIf { it.exists() }
+  if (envFile == null) {
+    logger.error("Error: path $envPath is not exists. add gradle.properties env.file path or add .env file to root project")
+    return env.also {
+      logger.error("Error: loadEnv is empty")
+      it["ENV_FILE_EMPTY"] = "true"
+    }
+  }
+
+  envFile.readLines().filter { it.isNotBlank() && !it.trimStart().startsWith("#") }
+    .forEach {
+      val parts = it.split("=".toRegex(), 2)
+      if (parts.size >= 2) {
+        env[parts[0].trim()] = parts[1].trim().removeSurrounding("\"")
+      }
+    }
+  return env
+}
+
+fun configureTaskEnvironment(task: Task) {
+  if (task !is JavaForkOptions) {
+    logger.error("Error: task is not JavaForkOptions")
+    return
+  }
+  task.doFirst {
+    task.environment.putAll(loadEnv())
+  }
+}
+
+tasks.withType<Test>().configureEach {
+  configureTaskEnvironment(this)
+}
+
+tasks.withType<JavaExec>().configureEach {
+  configureTaskEnvironment(this)
 }
