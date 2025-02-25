@@ -1,26 +1,11 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.ksp.toolkit.dsl
 
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import java.time.LocalDate
 
-class KDocSpecScope(override val fileBuilder: FileSpec.Builder) : StandardBuilderAdaptor<CodeBlock.Builder, CodeBlock> {
+class KDocSpecScope(override val fileBuilder: FileSpec.Builder) :
+  StandardBuilderAdaptor<CodeBlock.Builder, CodeBlock> {
   private val cb: CodeBlock.Builder = CodeBlock.builder()
 
   private fun addTitleFormat(title: String, count: Int = 1, vararg args: Any) {
@@ -50,11 +35,13 @@ class KDocSpecScope(override val fileBuilder: FileSpec.Builder) : StandardBuilde
 
   fun see(desc: String = "") = cb.add("@see $desc\n")
 
-  fun since(version: String = LocalDate.now().toString()) = cb.add("@since $version\n")
+  fun since(version: String = LocalDate.now().toString()) =
+    cb.add("@since $version\n")
 
   fun throws(type: String, desc: String = "") = cb.add("@throws $type $desc\n")
 
-  fun throws(type: Throwable, desc: String = "") = cb.add("@throws ${type::class.qualifiedName} $desc\n")
+  fun throws(type: Throwable, desc: String = "") =
+    cb.add("@throws ${type::class.qualifiedName} $desc\n")
 
   override fun build(): CodeBlock = cb.build()
 

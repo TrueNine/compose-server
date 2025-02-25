@@ -1,25 +1,10 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.core.entities
 
 import jakarta.persistence.Access
 import jakarta.persistence.AccessType
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Transient
+import java.io.Serializable
 import net.yan100.compose.core.Id
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.bool
@@ -28,7 +13,6 @@ import net.yan100.compose.core.domain.ISensitivity
 import net.yan100.compose.core.getDefaultNullableId
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
 import org.springframework.data.domain.Persistable
-import java.io.Serializable
 
 /**
  * ## JPA的最基础基类，包括一个 id
@@ -42,7 +26,8 @@ interface IJpaPersistentEntity :
   ISensitivity,
   Persistable<RefId>,
   IExtensionDefineScope,
-  IEnhanceEntity, Serializable {
+  IEnhanceEntity,
+  Serializable {
   companion object {
 
     /** 主键 */
@@ -50,20 +35,18 @@ interface IJpaPersistentEntity :
   }
 
   @MetaSkipGeneration
-  override val isChangedToSensitiveData: bool @Transient get() = super.isChangedToSensitiveData
+  override val isChangedToSensitiveData: bool
+    @Transient get() = super.isChangedToSensitiveData
 
   /** id */
-  @get:Transient
-  @set:Transient
-  var id: Id
+  @get:Transient @set:Transient var id: Id
 
   @Suppress("DEPRECATION_ERROR")
   fun toNewEntity() {
     id = getDefaultNullableId()
   }
 
-  override fun recordChangedSensitiveData() {
-  }
+  override fun recordChangedSensitiveData() {}
 
   @Suppress("DEPRECATION_ERROR")
   override fun changeWithSensitiveData() {

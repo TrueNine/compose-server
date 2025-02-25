@@ -1,6 +1,4 @@
-plugins {
-  `kotlin-convention`
-}
+plugins { `kotlin-convention` }
 
 version = libs.versions.compose.ksp.toolkit.get()
 

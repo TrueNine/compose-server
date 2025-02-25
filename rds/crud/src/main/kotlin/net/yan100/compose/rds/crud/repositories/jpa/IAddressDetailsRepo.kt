@@ -28,7 +28,10 @@ interface IAddressDetailsRepo : IRepo<AddressDetails> {
     WHERE n.userId = :userId
   """
   )
-  fun findNonDesensitizedAllByUserId(userId: String, page: Pageable): Page<NonDesensitizedAddressDetails>
+  fun findNonDesensitizedAllByUserId(
+    userId: String,
+    page: Pageable,
+  ): Page<NonDesensitizedAddressDetails>
 
   /** ## 根据电话查询地址 */
   fun findAllByPhone(phone: String, page: Pageable): Page<AddressDetails>
@@ -40,5 +43,8 @@ interface IAddressDetailsRepo : IRepo<AddressDetails> {
     WHERE n.phone = :phone
   """
   )
-  fun findNonDesensitizedAllByPhone(phone: String, page: Pageable): Page<NonDesensitizedAddressDetails>
+  fun findNonDesensitizedAllByPhone(
+    phone: String,
+    page: Pageable,
+  ): Page<NonDesensitizedAddressDetails>
 }

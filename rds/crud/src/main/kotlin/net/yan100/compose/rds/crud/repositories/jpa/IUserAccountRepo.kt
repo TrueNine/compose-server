@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.crud.repositories.jpa
 
+import java.time.LocalDateTime
 import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
@@ -7,7 +8,6 @@ import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import java.time.LocalDateTime
 
 @Primary
 @Repository
@@ -96,7 +96,9 @@ interface IUserAccountRepo : IRepo<UserAccount> {
   fun existsAllByAccount(account: String): Boolean
 
   @Modifying
-  @Query("UPDATE UserAccount u SET u.banTime = :banTime WHERE u.account = :account")
+  @Query(
+    "UPDATE UserAccount u SET u.banTime = :banTime WHERE u.account = :account"
+  )
   fun saveUserBanTimeByAccount(banTime: LocalDateTime?, account: String)
 
   @Query(

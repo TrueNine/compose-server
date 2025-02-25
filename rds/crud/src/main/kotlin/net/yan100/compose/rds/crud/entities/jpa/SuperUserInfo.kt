@@ -1,35 +1,26 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.Convert
+import java.time.LocalDate
 import net.yan100.compose.core.*
 import net.yan100.compose.core.domain.IIdcard2Code
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.core.typing.GenderTyping
 import net.yan100.compose.rds.crud.converters.GenderTypingConverter
-import java.time.LocalDate
 
 @MetaDef
 interface SuperUserInfo : IJpaEntity {
-  /**
-   * 备注名称
-   */
-
+  /** 备注名称 */
   var remarkName: String?
 
-  /**
-   * 备注
-   */
+  /** 备注 */
   var remark: String?
 
-  /**
-   * 创建此信息的用户
-   */
+  /** 创建此信息的用户 */
   var createUserId: RefId?
 
-  /**
-   * 首选用户信息
-   */
+  /** 首选用户信息 */
   var pri: Boolean?
 
   /** 用户 */
@@ -60,21 +51,13 @@ interface SuperUserInfo : IJpaEntity {
    */
   var addressCode: string?
 
-  /**
-   * 地址 id
-   * 推荐使用地址 code
-   */
-  @Deprecated("推荐直接使用 code")
-  var addressId: RefId?
+  /** 地址 id 推荐使用地址 code */
+  @Deprecated("推荐直接使用 code") var addressId: RefId?
 
-  /**
-   * qq openid
-   */
+  /** qq openid */
   var qqOpenid: RefId?
 
-  /**
-   * qq号
-   */
+  /** qq号 */
   var qqAccount: RefId?
 
   /** 电话号码 */
@@ -90,18 +73,13 @@ interface SuperUserInfo : IJpaEntity {
   /** 微信个人 openId */
   var wechatOpenid: String?
 
-  /**
-   * 微信号
-   */
-  @Deprecated("不再支持微信号")
-  var wechatAccount: string?
+  /** 微信号 */
+  @Deprecated("不再支持微信号") var wechatAccount: string?
 
   /** 微信自定义登录id */
   var wechatAuthid: String?
 
-  /**
-   * 备用手机
-   */
+  /** 备用手机 */
   var sparePhone: string?
 
   override fun toNewEntity() {
@@ -111,7 +89,8 @@ interface SuperUserInfo : IJpaEntity {
       val i = IIdcard2Code[idCard!!]
       if (null == birthday) birthday = i.idcardBirthday
       if (addressCode.nonText()) addressCode = i.idcardDistrictCode
-      if (null == gender) gender = if (i.idcardSex) GenderTyping.MAN else GenderTyping.WOMAN
+      if (null == gender)
+        gender = if (i.idcardSex) GenderTyping.MAN else GenderTyping.WOMAN
     }
   }
 

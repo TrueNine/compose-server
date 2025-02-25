@@ -1,31 +1,15 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.depend.servlet.log
 
-import net.yan100.compose.core.datetime
-import net.yan100.compose.core.hasText
-import net.yan100.compose.core.string
-import org.slf4j.event.Level
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 import kotlin.test.Test
+import net.yan100.compose.core.datetime
+import net.yan100.compose.core.hasText
+import net.yan100.compose.core.string
+import org.slf4j.event.Level
 
 data class MDCLogData(
   var datetime: datetime,
@@ -42,10 +26,18 @@ class SplitText {
 
   @Test
   fun `read log file and split`() {
-    val resource = SplitText::class.java.classLoader.getResourceAsStream("test-split-log.txt")!!
+    val resource =
+      SplitText::class
+        .java
+        .classLoader
+        .getResourceAsStream("test-split-log.txt")!!
     val reader = BufferedReader(InputStreamReader(resource))
-    val datetimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-    val pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}) \\[(.*?)\\] (\\w+) (.*)")
+    val datetimeFormatter =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+    val pattern =
+      Pattern.compile(
+        "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}) \\[(.*?)\\] (\\w+) (.*)"
+      )
     val logs = mutableListOf<MDCLogData>()
     var lastData: MDCLogData? = null
 

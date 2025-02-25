@@ -29,9 +29,13 @@ sealed class TsVal(
         this.render(cb, this)
         return cb.toString()
       }
+
     val isAsync: Boolean = returnType.typeVal is TsTypeVal.Promise
   }
 
-  val isReadonly: Boolean get() = modifiers.any { it is TsModifier.Readonly }
-  val isStatic: Boolean get() = modifiers.any { it is TsModifier.Static }
+  val isReadonly: Boolean
+    get() = modifiers.any { it is TsModifier.Readonly }
+
+  val isStatic: Boolean
+    get() = modifiers.any { it is TsModifier.Static }
 }

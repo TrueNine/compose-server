@@ -1,68 +1,32 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.core.typing
 
 import net.yan100.compose.core.typing.IntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
-/**
- * ## 用户信息所属的常规血型
- *
- */
+/** ## 用户信息所属的常规血型 */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class BloodTyping(v: Int) : IntTyping {
-  /**
-   * A型
-   */
-  @EnumItem(ordinal = 1)
-  A(1),
+  /** A型 */
+  @EnumItem(ordinal = 1) A(1),
 
-  /**
-   * B型
-   */
-  @EnumItem(ordinal = 2)
-  B(2),
+  /** B型 */
+  @EnumItem(ordinal = 2) B(2),
 
-  /**
-   * AB型
-   */
-  @EnumItem(ordinal = 3)
-  AB(3),
+  /** AB型 */
+  @EnumItem(ordinal = 3) AB(3),
 
-  /**
-   * O型
-   */
-  @EnumItem(ordinal = 4)
-  O(4),
+  /** O型 */
+  @EnumItem(ordinal = 4) O(4),
 
-  /**
-   * 其他血型
-   */
-  @EnumItem(ordinal = 9999)
-  OTHER(9999);
+  /** 其他血型 */
+  @EnumItem(ordinal = 9999) OTHER(9999);
 
   override val value: Int = v
 
   companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = BloodTyping.entries.find { it.value == v }
+    @JvmStatic fun findVal(v: Int?) = BloodTyping.entries.find { it.value == v }
 
-    @JvmStatic
-    fun get(v: Int?) = findVal(v)
+    @JvmStatic fun get(v: Int?) = findVal(v)
   }
 }

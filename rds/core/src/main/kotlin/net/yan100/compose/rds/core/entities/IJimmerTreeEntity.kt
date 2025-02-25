@@ -7,7 +7,6 @@ import org.babyfish.jimmer.sql.MappedSuperclass
 interface IJimmerTreeEntity : IJimmerEntity {
   /**
    * 树节点元数据
-   *
    * > 不能传入，也不会输出，不应干预
    */
   val databaseTreeMetadata: IDbTreeMetadata?

@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
@@ -29,7 +13,6 @@ import org.hibernate.annotations.FetchMode.SUBSELECT
 import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction.IGNORE
 
-
 @MetaDef(shadow = true)
 interface SuperFullUserAccount : SuperUserAccount {
   /** 角色组 */
@@ -37,13 +20,15 @@ interface SuperFullUserAccount : SuperUserAccount {
   @get:JoinTable(
     name = UserRoleGroup.TABLE_NAME,
     joinColumns =
-      [JoinColumn(
-        name = "user_id",
-        referencedColumnName = IDbNames.ID,
-        foreignKey = ForeignKey(NO_CONSTRAINT),
-        insertable = false,
-        updatable = false
-      )],
+      [
+        JoinColumn(
+          name = "user_id",
+          referencedColumnName = IDbNames.ID,
+          foreignKey = ForeignKey(NO_CONSTRAINT),
+          insertable = false,
+          updatable = false,
+        )
+      ],
     inverseJoinColumns =
       [
         JoinColumn(
@@ -51,7 +36,7 @@ interface SuperFullUserAccount : SuperUserAccount {
           referencedColumnName = IDbNames.ID,
           foreignKey = ForeignKey(NO_CONSTRAINT),
           insertable = false,
-          updatable = false
+          updatable = false,
         )
       ],
     foreignKey = ForeignKey(NO_CONSTRAINT),

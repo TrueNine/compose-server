@@ -8,18 +8,16 @@ import org.babyfish.jimmer.kt.isLoaded
 import org.babyfish.jimmer.meta.TypedProp
 import org.babyfish.jimmer.sql.DraftInterceptor
 
-class IJimmerEntityDraftInterceptor : DraftInterceptor<IJimmerEntity, IJimmerEntityDraft> {
+class IJimmerEntityDraftInterceptor :
+  DraftInterceptor<IJimmerEntity, IJimmerEntityDraft> {
   override fun dependencies(): Collection<TypedProp<IJimmerEntity, *>> {
-    return listOf(
-      IJimmerEntityProps.ID,
-      IJimmerEntityProps.DATABASE_METADATA
-    )
+    return listOf(IJimmerEntityProps.ID, IJimmerEntityProps.DATABASE_METADATA)
   }
 
-  override fun beforeSaveAll(items: Collection<DraftInterceptor.Item<IJimmerEntity, IJimmerEntityDraft>>) {
-    items.forEach {
-      beforeSave(it.draft, it.original)
-    }
+  override fun beforeSaveAll(
+    items: Collection<DraftInterceptor.Item<IJimmerEntity, IJimmerEntityDraft>>
+  ) {
+    items.forEach { beforeSave(it.draft, it.original) }
   }
 
   override fun beforeSave(draft: IJimmerEntityDraft, original: IJimmerEntity?) {

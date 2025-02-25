@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core
 
 import java.time.*
@@ -24,7 +8,9 @@ fun Long.toDate(): Date {
   return Date(this)
 }
 
-fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+fun Long.toLocalDateTime(
+  zoneId: ZoneId = ZoneId.systemDefault()
+): LocalDateTime {
   return DTimer.millisToLocalDateTime(this, zoneId)
 }
 
@@ -40,7 +26,9 @@ fun Date.toLong(): Long {
   return this.time
 }
 
-fun Date.toLocalDatetime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+fun Date.toLocalDatetime(
+  zoneId: ZoneId = ZoneId.systemDefault()
+): LocalDateTime {
   return DTimer.dateToLocalDatetime(this, zoneId)
 }
 
@@ -86,11 +74,13 @@ operator fun LocalDate.minus(other: LocalDate): Period {
 
 fun nowDatetimeFirstDayOfMonth(): datetime = datetime.now().firstDayOfMonth()
 
-fun datetime.firstDayOfMonth(): datetime = with(TemporalAdjusters.firstDayOfMonth())
+fun datetime.firstDayOfMonth(): datetime =
+  with(TemporalAdjusters.firstDayOfMonth())
 
 fun nowDatetimeLastDayOfMonth(): datetime = datetime.now().lastDayOfMonth()
 
-fun datetime.lastDayOfMonth(): datetime = datetime.now().with(TemporalAdjusters.lastDayOfMonth())
+fun datetime.lastDayOfMonth(): datetime =
+  datetime.now().with(TemporalAdjusters.lastDayOfMonth())
 
 fun nowDateFirstDayOfMonth(): date = date.now().lastDayOfMonth()
 

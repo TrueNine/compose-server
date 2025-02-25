@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.service.impl
 
 import jakarta.persistence.EntityManager
@@ -41,15 +25,22 @@ import org.springframework.transaction.annotation.Transactional
 class UserInfoServiceImpl(
   private val userRepo: IUserAccountRepo,
   private val infoRepo: IUserInfoRepo,
-  @PersistenceContext
-  private val em: EntityManager
+  @PersistenceContext private val em: EntityManager,
 ) : IUserInfoService, ICrud<UserInfo> by jpa(infoRepo, UserAccount::class) {
-  override suspend fun findIsRealPeopleById(id: RefId): Boolean = infoRepo.existsByIdAndIsRealPeople(id)
+  override suspend fun findIsRealPeopleById(id: RefId): Boolean =
+    infoRepo.existsByIdAndIsRealPeople(id)
 
   override suspend fun findIsRealPeopleByUserId(userId: RefId): Boolean =
-    withContext(Dispatchers.IO) { infoRepo.findFirstByUserIdAndPriIsTrue(userId)?.run { infoRepo.existsByIdAndIsRealPeople(id) } == true }
+    withContext(Dispatchers.IO) {
+      infoRepo.findFirstByUserIdAndPriIsTrue(userId)?.run {
+        infoRepo.existsByIdAndIsRealPeople(id)
+      } == true
+    }
 
-  override fun existsByFirstNameAndLastName(firstName: String, lastName: String): Boolean {
+  override fun existsByFirstNameAndLastName(
+    firstName: String,
+    lastName: String,
+  ): Boolean {
     return infoRepo.existsAllByFirstNameAndLastName(firstName, lastName)
   }
 
@@ -57,7 +48,9 @@ class UserInfoServiceImpl(
     return infoRepo.existsAllByIdCard(idCard)
   }
 
-  override fun groupByUserIdByUserIds(userIds: List<RefId>): Map<RefId, List<UserInfo>> {
+  override fun groupByUserIdByUserIds(
+    userIds: List<RefId>
+  ): Map<RefId, List<UserInfo>> {
     return infoRepo.findAllByUserId(userIds).groupBy { it.userId!! }
   }
 
@@ -79,24 +72,31 @@ class UserInfoServiceImpl(
     return e.idCard?.let { c ->
       if (infoRepo.existsAllByIdCard(c)) {
         postAll(
-          infoRepo.findAllByIdCard(c).mapIndexed { index, r ->
-            val d = e.fromDbData(r)
-            d.apply { pri = index == 0 }
-          }
-        ).first()
+            infoRepo.findAllByIdCard(c).mapIndexed { index, r ->
+              val d = e.fromDbData(r)
+              d.apply { pri = index == 0 }
+            }
+          )
+          .first()
       } else null
-    } ?: e.phone?.let { c ->
-      if (infoRepo.existsAllByPhone(c)) {
-        val phoneList = infoRepo.findAllByPhone(c).mapIndexed { index, r ->
-          val d = e.fromDbData(r)
-          d.apply { pri = index == 0 }
-        }
-        postAll(phoneList).first()
-      } else null
-    } ?: post(e.withNew())
+    }
+      ?: e.phone?.let { c ->
+        if (infoRepo.existsAllByPhone(c)) {
+          val phoneList =
+            infoRepo.findAllByPhone(c).mapIndexed { index, r ->
+              val d = e.fromDbData(r)
+              d.apply { pri = index == 0 }
+            }
+          postAll(phoneList).first()
+        } else null
+      }
+      ?: post(e.withNew())
   }
 
-  override fun savePlainUserInfoByUser(createUserId: RefId, usr: UserAccount): UserInfo {
+  override fun savePlainUserInfoByUser(
+    createUserId: RefId,
+    usr: UserAccount,
+  ): UserInfo {
     return infoRepo.save(
       UserInfo().apply {
         this.createUserId = createUserId

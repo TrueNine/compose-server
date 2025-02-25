@@ -11,6 +11,5 @@ fun MultipartFile.toReadableAttachment(): IReadableAttachment {
     isEmpty,
     size,
     bytes,
-    inputStream
-  ]
+    inputStream]
 }

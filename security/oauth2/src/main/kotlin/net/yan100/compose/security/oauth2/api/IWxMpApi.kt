@@ -19,32 +19,30 @@ interface IWxMpApi {
   @Schema(
     title = "小程序登录返回（标准接口）",
     description =
-    """
+      """
   登录凭证校验。通过 wx.login 接口获得临时登录凭证 code 后传到开发者服务器调用此接口完成登录流程。更多使用方法详见小程序登录。
 """,
   )
   class JsCodeToSessionResp {
-    @Schema(title = "会话密钥")
-    var sessionKey: String? = null
+    @Schema(title = "会话密钥") var sessionKey: String? = null
 
-    @Schema(title = "开放平台唯一标识符", description = """用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回，详见 UnionID 机制说明。""")
+    @Schema(
+      title = "开放平台唯一标识符",
+      description = """用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回，详见 UnionID 机制说明。""",
+    )
     var unionId: String? = null
 
-    @Schema(title = "用户唯一标识")
-    var openId: String? = null
+    @Schema(title = "用户唯一标识") var openId: String? = null
 
-    @Schema(title = "错误信息")
-    var errorMessage: String? = null
+    @Schema(title = "错误信息") var errorMessage: String? = null
 
-    @Schema(title = "错误码")
-    var errorCode: Int? = null
+    @Schema(title = "错误码") var errorCode: Int? = null
   }
-
 
   @Schema(
     title = "小程序登录返回",
     description =
-    """
+      """
   登录凭证校验。通过 wx.login 接口获得临时登录凭证 code 后传到开发者服务器调用此接口完成登录流程。更多使用方法详见小程序登录。
 """,
   )
@@ -53,23 +51,21 @@ interface IWxMpApi {
     @JsonProperty("session_key")
     var sessionKey: String? = null
 
-    @Schema(title = "开放平台唯一标识符", description = """用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回，详见 UnionID 机制说明。""")
+    @Schema(
+      title = "开放平台唯一标识符",
+      description = """用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回，详见 UnionID 机制说明。""",
+    )
     @JsonProperty("unionid")
     var unionId: String? = null
 
-    @Schema(title = "用户唯一标识")
-    @JsonProperty("openid")
-    var openId: String? = null
+    @Schema(title = "用户唯一标识") @JsonProperty("openid") var openId: String? = null
 
     @Schema(title = "错误信息")
     @JsonProperty("errmeg")
     var errorMessage: String? = null
 
-    @Schema(title = "错误码")
-    @JsonProperty("errcode")
-    var errorCode: Int? = null
+    @Schema(title = "错误码") @JsonProperty("errcode") var errorCode: Int? = null
   }
-
 
   class JsCodeToSessionApiReq {
     @Schema(title = "小程序 appId")
@@ -98,11 +94,15 @@ interface IWxMpApi {
    * @param grantType 验证类型
    */
   @ResponseBody
-  @GetExchange(value = "sns/jscode2session", accept = ["application/json", "text/plain"])
+  @GetExchange(
+    value = "sns/jscode2session",
+    accept = ["application/json", "text/plain"],
+  )
   fun jsCodeToSession(
     @RequestParam(name = "appid") appId: String,
     @RequestParam(name = "secret") secret: String,
     @RequestParam(name = "js_code") jsCode: String,
-    @RequestParam(name = "grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE,
+    @RequestParam(name = "grant_type")
+    grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE,
   ): WxMpJsCodeToSessionResp
 }

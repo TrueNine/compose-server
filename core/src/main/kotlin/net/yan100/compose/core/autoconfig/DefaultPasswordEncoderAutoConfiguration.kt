@@ -28,9 +28,13 @@ class DefaultPasswordEncoderAutoConfiguration : ApplicationContextAware {
   }
 
   override fun setApplicationContext(applicationContext: ApplicationContext) {
-    val passwordEncoder = applicationContext.containsBean("messageDigestPasswordEncoder")
+    val passwordEncoder =
+      applicationContext.containsBean("messageDigestPasswordEncoder")
     if (passwordEncoder) {
-      log.error("默认在使用不安全的 PasswordEncoder MD5 加密算法，这仅用于测试或启动项目使用，请尽快更换其他可用的加密算法，passwordEncoder: {}", passwordEncoder)
+      log.error(
+        "默认在使用不安全的 PasswordEncoder MD5 加密算法，这仅用于测试或启动项目使用，请尽快更换其他可用的加密算法，passwordEncoder: {}",
+        passwordEncoder,
+      )
     }
   }
 }

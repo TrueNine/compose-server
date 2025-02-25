@@ -7,9 +7,6 @@ package net.yan100.compose.meta.annotations.client
  */
 @MustBeDocumented
 @Repeatable
-@Target(
-  AnnotationTarget.TYPE,
-  AnnotationTarget.CLASS,
-)
+@Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ApiGeneratingAll

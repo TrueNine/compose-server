@@ -1,29 +1,15 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.io.Serializable
 import net.yan100.compose.core.domain.IPageParam.Companion.MAX_PAGE_SIZE
 import net.yan100.compose.core.domain.IPageParam.Companion.MIN_OFFSET
 import net.yan100.compose.core.toSafeInt
-import java.io.Serializable
 
 /** ## 一个默认分页实现 */
-private class DefaultPageParam @Deprecated("不退完直接使用", level = DeprecationLevel.ERROR) constructor(
+private class DefaultPageParam
+@Deprecated("不退完直接使用", level = DeprecationLevel.ERROR)
+constructor(
   @Transient override var o: Long? = MIN_OFFSET,
   @Transient override var s: Int? = MAX_PAGE_SIZE,
   @Transient override var u: Boolean? = false,
@@ -39,8 +25,7 @@ private class DefaultPageParam @Deprecated("不退完直接使用", level = Depr
   override fun equals(other: Any?): Boolean {
     return when (other) {
       is IPageParam -> {
-        o == other.o && s == other.s
-          && (u == true) == (other.u == true)
+        o == other.o && s == other.s && (u == true) == (other.u == true)
       }
 
       else -> false
@@ -76,17 +61,23 @@ interface IPageParam : IPageParamLike, Serializable {
 
     /** ## 默认 最大分页实现常量 */
     @Suppress("DEPRECATION_ERROR")
-    val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
+    val DEFAULT_MAX: IPageParam =
+      DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
     /**
      * ## 构建分页参数
+     *
      * @param offset 偏移量 （最小为 0）
      * @param pageSize 页面大小
      * @param unPage 是否禁用分页
      */
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
-    operator fun get(offset: Long? = MIN_OFFSET, pageSize: Int? = MAX_PAGE_SIZE, unPage: Boolean? = false): IPageParam {
+    operator fun get(
+      offset: Long? = MIN_OFFSET,
+      pageSize: Int? = MAX_PAGE_SIZE,
+      unPage: Boolean? = false,
+    ): IPageParam {
       return if (pageSize == 0) {
         DefaultPageParam(0, 0, unPage)
       } else if (unPage == true) {
@@ -97,14 +88,12 @@ interface IPageParam : IPageParamLike, Serializable {
         DefaultPageParam(
           if (o <= 0) MIN_OFFSET else o,
           if (ps <= 0) 1 else ps,
-          unPage
+          unPage,
         )
       }
     }
 
-    /**
-     * ## 不进行分页
-     */
+    /** ## 不进行分页 */
     @JvmStatic
     fun unPage(): IPageParam {
       return get(0, Int.MAX_VALUE, true)
@@ -116,7 +105,6 @@ interface IPageParam : IPageParamLike, Serializable {
     }
   }
 
-
   @JsonIgnore
   operator fun plus(total: Long): IPageParam {
     if (total <= 0) return empty()
@@ -127,14 +115,17 @@ interface IPageParam : IPageParamLike, Serializable {
   }
 
   @get:JsonIgnore
-  val safeOffset: Long get() = o ?: 0
+  val safeOffset: Long
+    get() = o ?: 0
 
   /** ## 分页 页面 偏移量 null any */
   @get:JsonIgnore
-  val safePageSize: Int get() = s ?: 0
+  val safePageSize: Int
+    get() = s ?: 0
 
   @get:JsonIgnore
-  private val safeRangeOffset: Long get() = (safePageSize.toLong() * safeOffset)
+  private val safeRangeOffset: Long
+    get() = (safePageSize.toLong() * safeOffset)
 
   @get:JsonIgnore
   private val safeRandEnd: Long

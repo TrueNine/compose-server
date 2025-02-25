@@ -1,6 +1,4 @@
-plugins {
-  `kotlinspring-convention`
-}
+plugins { `kotlinspring-convention` }
 
 version = libs.versions.compose.data.extract.get()
 
@@ -21,5 +19,7 @@ dependencies {
 
   testImplementation(projects.testtoolkit)
   testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding)
-  testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding.all.platforms)
+  testImplementation(
+    libs.net.sf.sevenzipjbinding.sevenzipjbinding.all.platforms
+  )
 }

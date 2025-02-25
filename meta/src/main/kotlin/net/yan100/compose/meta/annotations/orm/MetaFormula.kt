@@ -11,7 +11,7 @@ import java.lang.annotation.Inherited
   AnnotationTarget.PROPERTY,
   AnnotationTarget.PROPERTY_GETTER,
   AnnotationTarget.PROPERTY_SETTER,
-  AnnotationTarget.FUNCTION
+  AnnotationTarget.FUNCTION,
 )
 @Inherited
 @MustBeDocumented

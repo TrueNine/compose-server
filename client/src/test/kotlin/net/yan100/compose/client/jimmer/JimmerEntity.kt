@@ -6,8 +6,7 @@ import org.babyfish.jimmer.sql.Id
 
 @Entity
 interface JimmerEntity {
-  @Id
-  val id: String
+  @Id val id: String
   val name: RefId
   val fullName: FullName?
 }

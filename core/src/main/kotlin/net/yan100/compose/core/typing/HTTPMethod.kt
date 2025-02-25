@@ -1,8 +1,6 @@
 package net.yan100.compose.core.typing
 
-enum class HTTPMethod(
-  val methodName: String
-) : StringTyping {
+enum class HTTPMethod(val methodName: String) : StringTyping {
   GET("GET"),
   POST("POST"),
   PUT("PUT"),
@@ -11,12 +9,12 @@ enum class HTTPMethod(
   HEAD("HEAD"),
   OPTIONS("OPTIONS"),
   TRACE("TRACE"),
-  CONNECT("CONNECT"),
-  ;
+  CONNECT("CONNECT");
 
   override val value: String = methodName
 
   companion object {
-    operator fun get(methodName: String?): HTTPMethod? = entries.firstOrNull { it.methodName == methodName?.uppercase() }
+    operator fun get(methodName: String?): HTTPMethod? =
+      entries.firstOrNull { it.methodName == methodName?.uppercase() }
   }
 }

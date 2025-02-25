@@ -7,8 +7,8 @@ import net.yan100.compose.security.spring.security.SecurityUserDetailsService
 
 private val log = slf4j(EmptySecurityDetailsService::class)
 
-
-class EmptySecurityDetailsService : IEmptyDefault, SecurityUserDetailsService() {
+class EmptySecurityDetailsService :
+  IEmptyDefault, SecurityUserDetailsService() {
 
   init {
     log.warn("正在使用默认安全服务，生产环请自行重写")

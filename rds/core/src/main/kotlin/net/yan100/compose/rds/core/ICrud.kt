@@ -8,6 +8,7 @@ import net.yan100.compose.rds.core.service.IMergeEntityEventService
  * ## 统一通用查询服务接口
  *
  * ### 使用范例
+ *
  * ```kotlin
  * @Service
  * class UserServiceImpl(
@@ -15,6 +16,8 @@ import net.yan100.compose.rds.core.service.IMergeEntityEventService
  *   private val fullRepo: IFullUserRepo
  * ) : IUserService, ICrud<Usr> by jpa(userRepo) {
  * ```
+ *
  * @see [jpa]
  */
-interface ICrud<T : IJpaEntity> : IBaseCrudService<T, IRepo<T>>, IMergeEntityEventService<T>
+interface ICrud<T : IJpaEntity> :
+  IBaseCrudService<T, IRepo<T>>, IMergeEntityEventService<T>

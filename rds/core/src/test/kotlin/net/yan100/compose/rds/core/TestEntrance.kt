@@ -8,11 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @EnableJpaAuditing
 @SpringBootApplication
-@EntityScan(
-  basePackages = [
-    "net.yan100.compose.rds.core.entities"
-  ]
-)
+@EntityScan(basePackages = ["net.yan100.compose.rds.core.entities"])
 @EnableJpaRepositories("net.yan100.compose.rds.core.repositories")
 @EnableJimmerRepositories("net.yan100.compose.rds.core.repositories.jimmer")
 internal class TestEntrance

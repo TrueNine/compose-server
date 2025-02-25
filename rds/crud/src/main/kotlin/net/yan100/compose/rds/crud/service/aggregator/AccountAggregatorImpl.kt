@@ -1,22 +1,8 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.service.aggregator
 
-
+import java.time.LocalDateTime
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.generator.IOrderCodeGenerator
 import net.yan100.compose.core.hasText
@@ -29,9 +15,6 @@ import net.yan100.compose.rds.crud.service.IUserInfoService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Service
 class AccountAggregatorImpl(
@@ -39,14 +22,21 @@ class AccountAggregatorImpl(
   private val bizCodeGen: IOrderCodeGenerator,
   private val userInfoService: IUserInfoService,
   private val passwordEncoder: PasswordEncoder,
-  private val roleGroupService: net.yan100.compose.rds.crud.service.IRoleGroupService,
+  private val roleGroupService:
+    net.yan100.compose.rds.crud.service.IRoleGroupService,
 ) : IAccountAggregator {
 
   @OptIn(ExperimentalUuidApi::class)
   @ACID
   @Deprecated("触发了脏跟踪特性")
-  override fun assignAccountToUserInfo(createUserId: RefId, userInfoId: RefId): UserAccount? {
-    return if (userInfoService.foundById(userInfoId) && !userService.foundByUserInfoId(userInfoId)) {
+  override fun assignAccountToUserInfo(
+    createUserId: RefId,
+    userInfoId: RefId,
+  ): UserAccount? {
+    return if (
+      userInfoService.foundById(userInfoId) &&
+        !userService.foundByUserInfoId(userInfoId)
+    ) {
       userInfoService.fetchById(userInfoId)?.let { info ->
         check(info.firstName.hasText()) { "姓名为空，不能转换为呢称" }
         check(info.lastName.hasText()) { "姓名为空，不能转换为呢称" }
@@ -69,7 +59,12 @@ class AccountAggregatorImpl(
 
   // TODO 硬编码
   @ACID
-  override fun assignAccount(usr: UserAccount, createUserId: RefId, userInfo: UserInfo?, roleGroup: Set<String>?): UserAccount {
+  override fun assignAccount(
+    usr: UserAccount,
+    createUserId: RefId,
+    userInfo: UserInfo?,
+    roleGroup: Set<String>?,
+  ): UserAccount {
     val savedUsr =
       usr.withNew().run {
         check(!userService.existsByAccount(account)) { "分配的账号已经存在" }
@@ -93,7 +88,9 @@ class AccountAggregatorImpl(
   }
 
   @ACID
-  internal fun saveUsrForRegisterParam(param: IAccountAggregator.RegisterDto): UserAccount {
+  internal fun saveUsrForRegisterParam(
+    param: IAccountAggregator.RegisterDto
+  ): UserAccount {
     return userService.post(
       UserAccount().withNew().apply {
         checkNotNull(param.createUserId) { "创建此用户的用户 id 不能为空" }
@@ -107,7 +104,9 @@ class AccountAggregatorImpl(
   }
 
   @ACID
-  override fun registerAccount(param: IAccountAggregator.RegisterDto): UserAccount? =
+  override fun registerAccount(
+    param: IAccountAggregator.RegisterDto
+  ): UserAccount? =
     if (!userService.existsByAccount(param.account!!)) {
       saveUsrForRegisterParam(param).also {
         userInfoService.savePlainUserInfoByUser(it)
@@ -116,7 +115,10 @@ class AccountAggregatorImpl(
     } else null
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun registerAccountForWxpa(param: IAccountAggregator.RegisterDto, openId: String): UserAccount? =
+  override fun registerAccountForWxpa(
+    param: IAccountAggregator.RegisterDto,
+    openId: String,
+  ): UserAccount? =
     if (!userInfoService.existsByWechatOpenId(openId)) {
       saveUsrForRegisterParam(param).also {
         roleGroupService.assignPlainToUser(it.id)
@@ -132,7 +134,9 @@ class AccountAggregatorImpl(
       userService.fetchByAccount(param.account!!)
     } else null
 
-  override fun modifyPassword(param: IAccountAggregator.ModifyPasswordDto): Boolean {
+  override fun modifyPassword(
+    param: IAccountAggregator.ModifyPasswordDto
+  ): Boolean {
     if (!verifyPassword(param.account!!, param.oldPassword!!)) return false
     if (param.oldPassword == param.newPassword) return false
     val user = userService.fetchByAccount(param.account!!) ?: return false
@@ -148,5 +152,6 @@ class AccountAggregatorImpl(
     } else false
   }
 
-  override fun banWith(account: String, dateTime: LocalDateTime) = userService.modifyUserBandTimeTo(account, dateTime)
+  override fun banWith(account: String, dateTime: LocalDateTime) =
+    userService.modifyUserBandTimeTo(account, dateTime)
 }

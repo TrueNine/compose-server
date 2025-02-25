@@ -1,21 +1,4 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.service.aggregator
-
 
 import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.annotations.ACID
@@ -35,9 +18,12 @@ class RbacAggregatorImpl(
   private val rg: IFullRoleGroupRepo,
 ) : IRbacAggregator {
 
-  override fun fetchAllRoleNameByUserAccount(account: String): Set<String> = userRepo.findAllRoleNameByAccount(account)
+  override fun fetchAllRoleNameByUserAccount(account: String): Set<String> =
+    userRepo.findAllRoleNameByAccount(account)
 
-  override fun findAllPermissionsNameByUserAccount(account: String): Set<String> = userRepo.findAllPermissionsNameByAccount(account)
+  override fun findAllPermissionsNameByUserAccount(
+    account: String
+  ): Set<String> = userRepo.findAllPermissionsNameByAccount(account)
 
   override fun findAllSecurityNameByUserId(userId: RefId): Set<String> {
     // FIXME 待优化
@@ -48,16 +34,29 @@ class RbacAggregatorImpl(
     val allNames =
       with(userRoleGroupIds) {
         val roleGroups = rg.findAllById(this)
-        val roleNames = roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
-        val permissionNames = roleGroups.asSequence().map { it.roles }.flatten().map { it.permissions }.flatten().map { it.name }.toList()
+        val roleNames =
+          roleGroups.map { it.roles }.flatten().map { "ROLE_${it.name}" }
+        val permissionNames =
+          roleGroups
+            .asSequence()
+            .map { it.roles }
+            .flatten()
+            .map { it.permissions }
+            .flatten()
+            .map { it.name }
+            .toList()
         roleNames + permissionNames
       }
     return allNames.filterNotNull().toSet()
   }
 
-  override fun findAllSecurityNameByAccount(account: String): Set<String> = findAllSecurityNameByUserId(userRepo.findIdByAccount(account)!!)
+  override fun findAllSecurityNameByAccount(account: String): Set<String> =
+    findAllSecurityNameByUserId(userRepo.findIdByAccount(account)!!)
 
-  override fun saveRoleGroupToUser(roleGroupId: RefId, userId: RefId): UserRoleGroup? =
+  override fun saveRoleGroupToUser(
+    roleGroupId: RefId,
+    userId: RefId,
+  ): UserRoleGroup? =
     urg.findByUserIdAndRoleGroupId(userId, roleGroupId)
       ?: urg.save(
         UserRoleGroup().apply {
@@ -66,7 +65,10 @@ class RbacAggregatorImpl(
         }
       )
 
-  override fun saveAllRoleGroupToUser(roleGroupIds: List<RefId>, userId: RefId): List<UserRoleGroup> {
+  override fun saveAllRoleGroupToUser(
+    roleGroupIds: List<RefId>,
+    userId: RefId,
+  ): List<UserRoleGroup> {
     val existingRoleGroups = urg.findAllRoleGroupIdByUserId(userId)
     val mewRoleGroups =
       roleGroupIds
@@ -86,11 +88,17 @@ class RbacAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleGroupFromUser(roleGroupIds: List<RefId>, userId: RefId) {
+  override fun revokeAllRoleGroupFromUser(
+    roleGroupIds: List<RefId>,
+    userId: RefId,
+  ) {
     urg.deleteAllByRoleGroupIdInAndUserId(roleGroupIds, userId)
   }
 
-  override fun linkRoleToRoleGroup(roleId: RefId, roleGroupId: RefId): RoleGroupRole? =
+  override fun linkRoleToRoleGroup(
+    roleId: RefId,
+    roleGroupId: RefId,
+  ): RoleGroupRole? =
     rgr.findByRoleGroupIdAndRoleId(roleGroupId, roleId)
       ?: rgr.save(
         RoleGroupRole().apply {
@@ -99,7 +107,10 @@ class RbacAggregatorImpl(
         }
       )
 
-  override fun linkAllRoleToRoleGroup(roleIds: List<RefId>, roleGroupId: RefId): List<RoleGroupRole> {
+  override fun linkAllRoleToRoleGroup(
+    roleIds: List<RefId>,
+    roleGroupId: RefId,
+  ): List<RoleGroupRole> {
     val existingRoles = rgr.findAllRoleIdByRoleGroupId(roleGroupId)
     val newRoles =
       roleIds
@@ -119,11 +130,17 @@ class RbacAggregatorImpl(
   }
 
   @Transactional(rollbackFor = [Exception::class])
-  override fun revokeAllRoleFromRoleGroup(roleIds: List<RefId>, roleGroupId: RefId) {
+  override fun revokeAllRoleFromRoleGroup(
+    roleIds: List<RefId>,
+    roleGroupId: RefId,
+  ) {
     rgr.deleteAllByRoleIdInAndRoleGroupId(roleIds, roleGroupId)
   }
 
-  override fun savePermissionsToRole(permissionsId: RefId, roleId: RefId): RolePermissions? {
+  override fun savePermissionsToRole(
+    permissionsId: RefId,
+    roleId: RefId,
+  ): RolePermissions? {
     return rp.findByRoleIdAndPermissionsId(roleId, permissionsId)
       ?: rp.save(
         RolePermissions().apply {
@@ -133,7 +150,10 @@ class RbacAggregatorImpl(
       )
   }
 
-  override fun saveAllPermissionsToRole(permissionsIds: List<RefId>, roleId: RefId): List<RolePermissions> {
+  override fun saveAllPermissionsToRole(
+    permissionsIds: List<RefId>,
+    roleId: RefId,
+  ): List<RolePermissions> {
     val existingPermissions = rp.findAllPermissionsIdByRoleId(roleId)
     val newPermissions =
       permissionsIds
@@ -153,7 +173,10 @@ class RbacAggregatorImpl(
   }
 
   @ACID
-  override fun revokeAllPermissionsFromRole(permissionsIds: List<RefId>, roleId: RefId) {
+  override fun revokeAllPermissionsFromRole(
+    permissionsIds: List<RefId>,
+    roleId: RefId,
+  ) {
     rp.deleteAllByPermissionsIdInAndRoleId(permissionsIds, roleId)
   }
 }

@@ -7,8 +7,7 @@ import net.yan100.compose.rds.crud.repositories.jpa.IDbTestMergeTableRepo
 import org.springframework.stereotype.Service
 
 @Service
-class DbTestMergeTableServiceImpl(
-  private val dRepo: IDbTestMergeTableRepo
-) : IDbTestMergeTableService,
+class DbTestMergeTableServiceImpl(private val dRepo: IDbTestMergeTableRepo) :
+  IDbTestMergeTableService,
   ICrud<DbTestMergeTable> by jpa(dRepo),
   IDbTestMergeTableRepo by dRepo

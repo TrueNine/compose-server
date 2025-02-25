@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.core.domain
 
-import net.yan100.compose.core.*
 import java.io.Serializable
+import net.yan100.compose.core.*
 
 open class PersistenceAuditTreeData(
   val leftNodeNo: i64?,
@@ -13,22 +13,13 @@ open class PersistenceAuditTreeData(
   override val lockVersion: i64?,
   override val id: Id?,
   override val createdAt: datetime?,
-  override val updatedAt: datetime?
-) : PersistenceAuditData(shadowRemoved, lockVersion, id, createdAt, updatedAt), Serializable {
+  override val updatedAt: datetime?,
+) :
+  PersistenceAuditData(shadowRemoved, lockVersion, id, createdAt, updatedAt),
+  Serializable {
   @Deprecated("不建议直接调用", level = DeprecationLevel.WARNING)
-  public constructor() : this(
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
-  )
-
+  public constructor() :
+    this(null, null, null, null, null, null, null, null, null, null)
 
   override fun toString(): String {
     return "${super.toString()}, leftNodeNo=$leftNodeNo, rightNodeNo=$rightNodeNo, nodeLevel=$nodeLevel, treeGroupId=$treeGroupId, parentId=$parentId"

@@ -37,13 +37,12 @@ interface SuperUserAccount : IJpaEntity {
   @get:Transient
   @MetaSkipGeneration
   @MetaFormula
-  val band: Boolean get() = (null != banTime && datetime.now().isBefore(banTime))
+  val band: Boolean
+    get() = (null != banTime && datetime.now().isBefore(banTime))
 
   override fun changeWithSensitiveData() {
     super.changeWithSensitiveData()
-    sensitiveAlso(this) {
-      it.pwdEnc = it.pwdEnc.password()
-    }
+    sensitiveAlso(this) { it.pwdEnc = it.pwdEnc.password() }
     recordChangedSensitiveData()
   }
 }

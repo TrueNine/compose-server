@@ -1,6 +1,10 @@
 package net.yan100.compose.core.domain
 
 import jakarta.annotation.Resource
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.bool
 import net.yan100.compose.core.i32
@@ -9,24 +13,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-
 
 @AutoConfigureMockMvc
 @SpringBootTest
 class IPageParamTest {
-  lateinit var controller: TestPqController @Resource set
-  lateinit var mvc: MockMvc @Resource set
+  lateinit var controller: TestPqController
+    @Resource set
+
+  lateinit var mvc: MockMvc
+    @Resource set
 
   @BeforeTest
   fun setup() {
     assertNotNull(controller)
     assertNotNull(mvc)
   }
-
 
   @Test
   fun `success fill get method default policy`() {
@@ -43,23 +44,24 @@ class IPageParamTest {
           value(24)
         }
       }
-      status {
-        isOk()
-      }
+      status { isOk() }
     }
   }
 
   @Test
   fun `success get from like empty`() {
-    val e = Pq[object : IPageParamLike {
-      override val s: i32?
-        get() = null
-      override val o: i64?
-        get() = null
-      override val u: bool?
-        get() = null
+    val e =
+      Pq[
+        object : IPageParamLike {
+          override val s: i32?
+            get() = null
 
-    }]
+          override val o: i64?
+            get() = null
+
+          override val u: bool?
+            get() = null
+        }]
     assertEquals(Pq.MIN_OFFSET, e.o)
     assertEquals(Pq.MAX_PAGE_SIZE, e.s)
   }

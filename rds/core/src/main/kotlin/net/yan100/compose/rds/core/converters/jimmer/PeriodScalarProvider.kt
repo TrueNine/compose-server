@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.core.converters.jimmer
 
-import org.babyfish.jimmer.sql.runtime.ScalarProvider
 import java.time.Period
+import org.babyfish.jimmer.sql.runtime.ScalarProvider
 
 class PeriodScalarProvider : ScalarProvider<Period?, String?> {
   override fun toScalar(sqlValue: String): Period? {

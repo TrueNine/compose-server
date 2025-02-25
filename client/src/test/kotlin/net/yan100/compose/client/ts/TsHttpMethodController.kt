@@ -9,26 +9,20 @@ import org.springframework.web.bind.annotation.*
 class TsHttpMethodController {
   /**
    * 返回 null
+   *
    * @param a 请求参数
    */
   @Api
   @GetMapping("methodRequestMapping")
-  fun methodRequestMapping(a: String? = "abc"): Map<String, List<Map<String, Boolean>>>? {
+  fun methodRequestMapping(
+    a: String? = "abc"
+  ): Map<String, List<Map<String, Boolean>>>? {
     return null
   }
 
-  @Api
-  @RequestMapping(method = [RequestMethod.HEAD])
-  fun methodHead() {
-
-  }
+  @Api @RequestMapping(method = [RequestMethod.HEAD]) fun methodHead() {}
 
   @Api
   @RequestMapping("{a}/{b}", method = [RequestMethod.GET, RequestMethod.POST])
-  fun inputPathVariable(
-    @PathVariable a: String,
-    @PathVariable b: String
-  ) {
-
-  }
+  fun inputPathVariable(@PathVariable a: String, @PathVariable b: String) {}
 }

@@ -1,21 +1,4 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core
-
 
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -23,7 +6,6 @@ import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
-
 
 const val STR_EMPTY = ""
 const val STR_UNDERLINE = "_"
@@ -74,9 +56,11 @@ fun String.toOneLine(): String = IString.inLine(this)
 /** ## 将 foo_bar 类型的字符串转换为 fooBar */
 fun String.toPascalCase(firstUppercase: Boolean = false): String {
   return if (length == 1 || isNotBlank()) {
-    split(STR_UNDERLINE).joinToString(STR_EMPTY) {
-      it.replaceFirstChar { it1 -> it1.uppercaseChar() }
-    }.replaceFirstChar { if (!firstUppercase) it.lowercaseChar() else it }
+    split(STR_UNDERLINE)
+      .joinToString(STR_EMPTY) {
+        it.replaceFirstChar { it1 -> it1.uppercaseChar() }
+      }
+      .replaceFirstChar { if (!firstUppercase) it.lowercaseChar() else it }
   } else {
     this
   }
@@ -99,7 +83,6 @@ fun String.toSnakeCase(): String {
   }
 }
 
-
 /**
  * ## 将字符串进行 url 编码
  * 首先调用 [withEmpty] 进行防空，然后再进行编码
@@ -107,8 +90,8 @@ fun String.toSnakeCase(): String {
  * @param charset 字符集
  * @return 编码完成的字符串，使用 [java.net.URLEncoder]
  */
-fun String?.toUrlEncoded(charset: Charset = Charsets.UTF_8): String = java.net.URLEncoder.encode(this ?: STR_EMPTY, charset)
-
+fun String?.toUrlEncoded(charset: Charset = Charsets.UTF_8): String =
+  java.net.URLEncoder.encode(this ?: STR_EMPTY, charset)
 
 fun String.replaceFirstIfPrefix(meta: String, replacement: String): String {
   return if (indexOf(meta) == 0) replaceFirst(meta, replacement) else meta

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
-
 @Primary
 @Repository
 @Deprecated("关联过于复杂")

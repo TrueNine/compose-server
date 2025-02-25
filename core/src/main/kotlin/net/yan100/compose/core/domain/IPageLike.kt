@@ -30,5 +30,6 @@ interface IPageLike<T : Any?> {
   var t: Long
 
   fun component1(): Collection<T> = d
+
   fun component2(): Long = t
 }

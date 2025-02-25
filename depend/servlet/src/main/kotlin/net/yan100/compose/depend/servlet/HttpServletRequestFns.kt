@@ -8,8 +8,8 @@ val HttpServletRequest.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
 
 /** 获取当前设备的 deviceId */
-val HttpServletRequest.deviceId: String? get() = IHeaders.getDeviceId(this)
-
+val HttpServletRequest.deviceId: String?
+  get() = IHeaders.getDeviceId(this)
 
 /**
  * ## 当前请求的 ip 地址

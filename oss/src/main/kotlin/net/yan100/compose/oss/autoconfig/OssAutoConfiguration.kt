@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.oss.autoconfig
 
 import io.minio.MinioClient
@@ -40,7 +24,10 @@ class OssAutoConfiguration {
   }
 
   @Bean(name = [MINIO_CLIENT_BEAN_NAME])
-  @ConditionalOnProperty(value = ["compose.oss.minio.enable"], havingValue = "true")
+  @ConditionalOnProperty(
+    value = ["compose.oss.minio.enable"],
+    havingValue = "true",
+  )
   fun minioClient(p: OssProperties): MinioClient {
     log.debug("注册 minio = {}", p.minio)
     return MinioClient.builder()
@@ -54,7 +41,11 @@ class OssAutoConfiguration {
   fun oss(p: OssProperties, ctx: ApplicationContext): Oss? {
     log.debug("注册 oss 客户端，oss 类型为 = {}", p.type)
     return when (p.type) {
-      MINIO -> MinioClientWrapper(ctx.getBean(MinioClient::class.java), p.exposeBaseUrl)
+      MINIO ->
+        MinioClientWrapper(
+          ctx.getBean(MinioClient::class.java),
+          p.exposeBaseUrl,
+        )
       FILE -> null
       MYSQL_DB -> null
       HUAWEI_CLOUD -> null

@@ -12,13 +12,9 @@ import net.yan100.compose.rds.core.entities.IJpaEntity
  */
 @MetaDef
 interface SuperUserDept : IJpaEntity {
-  /**
-   * 用户id
-   */
+  /** 用户id */
   var userId: RefId
 
-  /**
-   * 部门id
-   */
+  /** 部门id */
   var deptId: RefId
 }

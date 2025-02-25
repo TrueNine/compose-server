@@ -7,10 +7,11 @@ import net.yan100.compose.core.domain.IPageParamLike
 import net.yan100.compose.depend.jackson.serializers.IPageParamLikeSerializer
 import net.yan100.compose.depend.jackson.serializers.KPairDeserializer
 
-class KotlinCustomModule : SimpleModule(
-  KotlinCustomModule::class.java.name,
-  com.fasterxml.jackson.core.Version(0, 0, 1, "", "net.yan100", "compose")
-) {
+class KotlinCustomModule :
+  SimpleModule(
+    KotlinCustomModule::class.java.name,
+    com.fasterxml.jackson.core.Version(0, 0, 1, "", "net.yan100", "compose"),
+  ) {
   override fun setupModule(context: SetupContext) {
     super.setupModule(context)
     context.addDeserializers(

@@ -12,30 +12,33 @@ import net.yan100.compose.meta.types.TypeKind
 
 class TsTypeAliasInterceptor : TsScopeInterceptor() {
   override val executeStage: ExecuteStage = ExecuteStage.RESOLVE_TS_SCOPE
-  override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeKind == TypeKind.TYPEALIAS
+
+  override fun supported(ctx: KtToTsContext, source: ClientType): Boolean =
+    source.typeKind == TypeKind.TYPEALIAS
+
   override fun process(ctx: KtToTsContext, source: ClientType): TsScope<*> {
     val prevScope = ctx.getTsScopeByType(source)
-    val name = if (prevScope is TsScope.TypeVal) {
-      prevScope.definition.toTsName()
-    } else prevScope.name
+    val name =
+      if (prevScope is TsScope.TypeVal) {
+        prevScope.definition.toTsName()
+      } else prevScope.name
 
-    val generics = source.arguments.mapIndexed { i, it ->
-      TsGeneric.Defined(
-        name = TsName.Name(it),
-        index = i
-      )
-    }
+    val generics =
+      source.arguments.mapIndexed { i, it ->
+        TsGeneric.Defined(name = TsName.Name(it), index = i)
+      }
 
     val aliasFor = ctx.getTsTypeValByName(source.aliasForTypeName!!)
-    val aliasUses = if (source.usedGenerics.isEmpty()) emptyList()
-    else ctx.getTsGenericByGenerics(source.usedGenerics)
+    val aliasUses =
+      if (source.usedGenerics.isEmpty()) emptyList()
+      else ctx.getTsGenericByGenerics(source.usedGenerics)
 
     return TsScope.TypeAlias(
       name = name,
       aliasFor = aliasFor.fillGenerics(aliasUses),
       meta = source,
       generics = generics,
-      usedGenerics = aliasUses
+      usedGenerics = aliasUses,
     )
   }
 }

@@ -16,32 +16,47 @@ private val log = slf4j<ClientApiAutoConfiguration>()
 
 @Configuration
 class ClientApiAutoConfiguration : ApplicationRunner {
-  private val resolver: PathMatchingResourcePatternResolver = PathMatchingResourcePatternResolver()
+  private val resolver: PathMatchingResourcePatternResolver =
+    PathMatchingResourcePatternResolver()
   lateinit var api: ClientApiStubs
 
   @Bean
   @ConditionalOnMissingBean
   fun listsClientApiStubs(
     mapper: ObjectMapper,
-    provider: SpringClientApiStubInfoProvider
+    provider: SpringClientApiStubInfoProvider,
   ): ClientApiStubs {
-    val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json").filter { it.exists() }
-    val apis = resources.map { mapper.readValue(it.inputStream, ClientApiStubs::class.java) }
+    val resources =
+      resolver
+        .getResources("classpath:META-INF/compose-client/*-client-ts.stub.json")
+        .filter { it.exists() }
+    val apis =
+      resources.map {
+        mapper.readValue(it.inputStream, ClientApiStubs::class.java)
+      }
     val definitions = apis.map { it.definitions }.flatten().distinct()
     val services = apis.map { it.services }.flatten().distinct()
-    api = ClientApiStubs(
-      services = services,
-      definitions = definitions
-    )
+    api = ClientApiStubs(services = services, definitions = definitions)
     provider.api = api
     return provider.mappedStubs
   }
 
   @Bean
   @ConditionalOnMissingBean
-  fun springClientApiStubInfoProvider(ctx: ApplicationContext): SpringClientApiStubInfoProvider =
-    SpringClientApiStubInfoProvider(mappings = ctx.getBeansOfType(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping::class.java).values.toList())
-
+  fun springClientApiStubInfoProvider(
+    ctx: ApplicationContext
+  ): SpringClientApiStubInfoProvider =
+    SpringClientApiStubInfoProvider(
+      mappings =
+        ctx
+          .getBeansOfType(
+            org.springframework.web.servlet.mvc.method.annotation
+                .RequestMappingHandlerMapping::class
+              .java
+          )
+          .values
+          .toList()
+    )
 
   @Bean
   @ConditionalOnMissingBean

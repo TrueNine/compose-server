@@ -2,9 +2,7 @@ package net.yan100.compose.testtookit
 
 import kotlin.test.*
 
-/**
- * 确保能够启动
- */
+/** 确保能够启动 */
 class LaunchTest {
   private val logger = log
 

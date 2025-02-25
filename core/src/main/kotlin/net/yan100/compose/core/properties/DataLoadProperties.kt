@@ -8,5 +8,5 @@ private const val PREFIX = "compose.core"
 data class DataLoadProperties(
   val location: String = "data",
   val matchFiles: MutableList<String> = mutableListOf(),
-  val configLocation: String = "config"
+  val configLocation: String = "config",
 )

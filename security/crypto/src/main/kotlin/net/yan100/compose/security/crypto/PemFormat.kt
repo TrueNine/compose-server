@@ -14,12 +14,20 @@ class PemFormat(private val pem: String) {
     const val END_START = "${SEPARATOR}END "
 
     @JvmStatic
-    operator fun get(key: Key, keyType: String? = null): String = get(key.encoded.encodeBase64String, keyType ?: "${key.algorithm} ${key.format ?: ""}")
+    operator fun get(key: Key, keyType: String? = null): String =
+      get(
+        key.encoded.encodeBase64String,
+        keyType ?: "${key.algorithm} ${key.format ?: ""}",
+      )
 
     @JvmStatic
     operator fun get(base64: String, keyType: String? = null): String {
       val trim = base64.trim()
-      val a = trim.replace("\r", "\n").windowed(LINE_LENGTH, LINE_LENGTH, true).joinToString(System.lineSeparator())
+      val a =
+        trim
+          .replace("\r", "\n")
+          .windowed(LINE_LENGTH, LINE_LENGTH, true)
+          .joinToString(System.lineSeparator())
       return "$BEGIN_START${keyType?.uppercase()?.trim() ?: ""}$SEPARATOR" +
         System.lineSeparator() +
         a +
@@ -28,7 +36,8 @@ class PemFormat(private val pem: String) {
     }
   }
 
-  private val triedKey: String = pem.trim().replace("\r", "\n").replace("\n\n", "\n")
+  private val triedKey: String =
+    pem.trim().replace("\r", "\n").replace("\n\n", "\n")
   var schema: String
   private var endSchema: String
   var content: String
@@ -41,8 +50,16 @@ class PemFormat(private val pem: String) {
         content = it.drop(1).dropLast(1).joinToString("")
         it.first() to it.last()
       }
-    schema = beginAndEnd.first.substring(BEGIN_START.length).replace(SEPARATOR, "").trim()
-    endSchema = beginAndEnd.second.substring(END_START.length).replace(SEPARATOR, "").trim()
+    schema =
+      beginAndEnd.first
+        .substring(BEGIN_START.length)
+        .replace(SEPARATOR, "")
+        .trim()
+    endSchema =
+      beginAndEnd.second
+        .substring(END_START.length)
+        .replace(SEPARATOR, "")
+        .trim()
     check(schema == endSchema) { "传入的pem 格式不正确，开头与结尾类型不一致" }
   }
 }

@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.security.oauth2.schedule
 
 import net.yan100.compose.core.slf4j
@@ -39,8 +23,7 @@ private val log = slf4j(GetAccessTokenSchedule::class)
 @EnableScheduling
 class GetAccessTokenSchedule(
   private val ctx: ApplicationContext,
-  @Lazy
-  private val api: IWxpaWebClient
+  @Lazy private val api: IWxpaWebClient,
 ) {
   init {
     log.trace("注册微信公众号 access_token 调度器")
@@ -51,21 +34,37 @@ class GetAccessTokenSchedule(
     val pp = ctx.getBean(WxpaProperty::class.java)
     checkNotNull(pp.appId) { "微信公众号 access_token 获取失败，appId 为空" }
     checkNotNull(pp.appSecret) { "微信公众号 access_token 获取失败，appSecret 为空" }
-    log.trace("ready update access_token appid = {},secret = {}", pp.appId, pp.appSecret)
+    log.trace(
+      "ready update access_token appid = {},secret = {}",
+      pp.appId,
+      pp.appSecret,
+    )
     val ae = api.getAccessToken(pp.appId!!, pp.appSecret!!)
     checkNotNull(ae) { "微信公众号 access_token 获取失败" }
     require(!ae.isError) { "微信公众号 access_token 获取失败，返回错误码 ${ae.errorCode}" }
     if (ae.accessToken == null) {
-      log.error("未兑换到 access_token code: {}, message: {}", ae.errorCode, ae.errorMessage)
+      log.error(
+        "未兑换到 access_token code: {}, message: {}",
+        ae.errorCode,
+        ae.errorMessage,
+      )
       error("未兑换到 access_token")
     }
     if (ae.isError) {
-      log.error("换取 access_token 时 发生错误 code: {}, message: {}", ae.errorCode, ae.errorMessage)
+      log.error(
+        "换取 access_token 时 发生错误 code: {}, message: {}",
+        ae.errorCode,
+        ae.errorMessage,
+      )
       error("换取 access_token 时 发生错误")
     }
     val t = api.getTicket(ae.accessToken)
     if (t.isError) {
-      log.error("换取 ticket 时 发生错误 code: {}, message: {}", ae.errorCode, ae.errorMessage)
+      log.error(
+        "换取 ticket 时 发生错误 code: {}, message: {}",
+        ae.errorCode,
+        ae.errorMessage,
+      )
       error("换取 ticket 时 发生错误")
     }
     log.trace("获取到 access_token: mask, exp: mask")
@@ -76,10 +75,16 @@ class GetAccessTokenSchedule(
 
     if (ae.expireInSecond!! >= pp.fixedExpiredSecond) {
       pp.accessToken = ae.accessToken
-    } else error("获取 access_token 时 微信公众号返回了一个大于 ${pp.fixedExpiredSecond} 的时间戳 ${ae.expireInSecond}")
+    } else
+      error(
+        "获取 access_token 时 微信公众号返回了一个大于 ${pp.fixedExpiredSecond} 的时间戳 ${ae.expireInSecond}"
+      )
 
     if (t.expireInSecond!! >= pp.fixedExpiredSecond) {
       pp.jsapiTicket = t.ticket
-    } else error("获取 ticket 时 微信公众号返回了一个 大于 ${pp.fixedExpiredSecond} 的时间戳 ${t.expireInSecond}")
+    } else
+      error(
+        "获取 ticket 时 微信公众号返回了一个 大于 ${pp.fixedExpiredSecond} 的时间戳 ${t.expireInSecond}"
+      )
   }
 }

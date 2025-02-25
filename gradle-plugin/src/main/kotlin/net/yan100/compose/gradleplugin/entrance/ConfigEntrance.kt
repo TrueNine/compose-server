@@ -1,21 +1,6 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.gradleplugin.entrance
 
+import javax.inject.Inject
 import net.yan100.compose.gradleplugin.generator.GradleGeneratorConfig
 import net.yan100.compose.gradleplugin.jar.JarExtensionConfig
 import net.yan100.compose.gradleplugin.spotless.SpotlessConfig
@@ -28,7 +13,6 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.apply
-import javax.inject.Inject
 
 abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   val gradleGenerator = GradleGeneratorConfig()
@@ -43,14 +27,16 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
    *
    * @param action 打包配置
    */
-  fun jarExtension(action: Action<JarExtensionConfig>) = action.execute(jarExtension)
+  fun jarExtension(action: Action<JarExtensionConfig>) =
+    action.execute(jarExtension)
 
   /**
    * ## gradle properties 生成扩展配置
    *
    * @param action 生成配置
    */
-  fun gradleGenerator(action: Action<GradleGeneratorConfig>) = action.execute(gradleGenerator)
+  fun gradleGenerator(action: Action<GradleGeneratorConfig>) =
+    action.execute(gradleGenerator)
 
   val languages: SetProperty<String>
   val sourceSet: Property<SourceSet>
@@ -59,8 +45,14 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
 
   init {
     logger = project.logger
-    languages = project.objects.setProperty(String::class.java).convention(listOf("java", "kotlin"))
-    sourceSet = project.objects.property(SourceSet::class.java).convention(mainSourceSet(project))
+    languages =
+      project.objects
+        .setProperty(String::class.java)
+        .convention(listOf("java", "kotlin"))
+    sourceSet =
+      project.objects
+        .property(SourceSet::class.java)
+        .convention(mainSourceSet(project))
   }
 
   private fun mainSourceSet(project: Project): SourceSet {
@@ -68,7 +60,8 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   }
 
   private fun resolveSourceSet(name: String, project: Project): SourceSet {
-    val javaPluginExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+    val javaPluginExtension =
+      project.extensions.getByType(JavaPluginExtension::class.java)
     return javaPluginExtension.sourceSets.getByName(name)
   }
 

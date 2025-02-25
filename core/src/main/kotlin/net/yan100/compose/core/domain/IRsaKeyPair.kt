@@ -8,5 +8,6 @@ interface IRsaKeyPair : IKeyPair {
   override val privateKey: RSAPrivateKey
 
   override fun component1(): RSAPublicKey = publicKey
+
   override fun component2(): RSAPrivateKey = privateKey
 }

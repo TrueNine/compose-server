@@ -10,7 +10,6 @@ import net.yan100.compose.rds.core.listeners.SnowflakeIdInsertListener
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 
-
 /**
  * ## 合并从数据库内查询的实体
  *
@@ -19,7 +18,11 @@ import org.springframework.data.annotation.LastModifiedDate
  * @param preMergeFn 合并前处理函数
  */
 @Suppress("DEPRECATION_ERROR")
-fun <T : IJpaEntity> T.merge(target: T, findByIdFn: (id: Id) -> T?, preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h }): T {
+fun <T : IJpaEntity> T.merge(
+  target: T,
+  findByIdFn: (id: Id) -> T?,
+  preMergeFn: (dbData: T, thisData: T) -> T = { _, h -> h },
+): T {
   return takeUpdate {
     val queryEntity = findByIdFn(target.id)
     checkNotNull(queryEntity) { "未找到修改的数据版本" }
@@ -63,7 +66,10 @@ fun <T : IJpaEntity> mergeAll(
  * @param merge 合并函数：(this 自身实体, db 数据库实体) -> 默认合并的自身实体
  */
 @Suppress("DEPRECATION_ERROR")
-inline fun <T : IJpaEntity> T.fromDbData(target: T, crossinline merge: T.(w: T) -> T = { it }): T {
+inline fun <T : IJpaEntity> T.fromDbData(
+  target: T,
+  crossinline merge: T.(w: T) -> T = { it },
+): T {
   check(!target.isNew) { "要合并的实体必须为数据库内查询的实体" }
   id = target.id
   rlv = target.rlv
@@ -72,10 +78,7 @@ inline fun <T : IJpaEntity> T.fromDbData(target: T, crossinline merge: T.(w: T) 
   return merge(target, this)
 }
 
-@EntityListeners(
-  BizCodeInsertListener::class,
-  SnowflakeIdInsertListener::class,
-)
+@EntityListeners(BizCodeInsertListener::class, SnowflakeIdInsertListener::class)
 @Access(AccessType.PROPERTY)
 @MappedSuperclass
 open class IEntityDelegate : IAnyEntityDelegate(), IJpaEntity {
@@ -91,8 +94,7 @@ open class IEntityDelegate : IAnyEntityDelegate(), IJpaEntity {
   @Column(name = IDbNames.MODIFY_ROW_DATETIME)
   override var mrd: datetime? = null
 
-  @Column(name = IDbNames.LOGIC_DELETE_FLAG)
-  override var ldf: Boolean? = null
+  @Column(name = IDbNames.LOGIC_DELETE_FLAG) override var ldf: Boolean? = null
 }
 
 fun entity(): IJpaEntity {

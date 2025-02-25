@@ -18,20 +18,19 @@ private val log = slf4j<WxpaService>()
 @Service
 class WxpaService(
   private val client: IWxpaWebClient,
-  private val property: WxpaProperty
+  private val property: WxpaProperty,
 ) {
   data class WxpaVerifyDto(
     var preValidToken: String,
     var timestamp: Int,
     var nonce: String,
     var signature: String,
-    var echostr: String
+    var echostr: String,
   )
 
-  /**
-   * ## 公众号配置信息
-   */
-  val wxpaConfigInfo get() = property
+  /** ## 公众号配置信息 */
+  val wxpaConfigInfo
+    get() = property
 
   /**
    * ## 验证微信公众平台的基本配置信息
@@ -41,9 +40,7 @@ class WxpaService(
    * @return 返回验证成功后的响应字符串
    * @throws IllegalStateException 如果验证失败则抛出异常
    */
-  fun verifyBasicConfigOrThrow(
-    body: WxpaVerifyDto
-  ): String {
+  fun verifyBasicConfigOrThrow(body: WxpaVerifyDto): String {
     return verifyBasicConfig(body) ?: error("verifyBasicConfig failed")
   }
 
@@ -54,10 +51,16 @@ class WxpaService(
    * @param body 包含微信公众平台验证请求的DTO对象
    * @return 返回验证成功后的响应字符串
    */
-  fun verifyBasicConfig(
-    body: WxpaVerifyDto
-  ): String? {
-    val a = listOf(wxpaConfigInfo.preValidToken!!, body.timestamp.toString(), body.nonce).sorted().joinToString("").sha1
+  fun verifyBasicConfig(body: WxpaVerifyDto): String? {
+    val a =
+      listOf(
+          wxpaConfigInfo.preValidToken!!,
+          body.timestamp.toString(),
+          body.nonce,
+        )
+        .sorted()
+        .joinToString("")
+        .sha1
     log.trace("gen sig = {}, body.sign = {}", a, body.signature)
     return body.echostr
   }
@@ -70,16 +73,21 @@ class WxpaService(
    */
   fun fetchJsApiSignature(
     encodedUrl: String,
-    nonceString: String?
+    nonceString: String?,
   ): WxpaProperty.WxpaSignatureResp {
-    return if (nonceString.hasText()) wxpaConfigInfo.signature(encodedUrl, nonceString) else wxpaConfigInfo.signature(encodedUrl)
+    return if (nonceString.hasText())
+      wxpaConfigInfo.signature(encodedUrl, nonceString)
+    else wxpaConfigInfo.signature(encodedUrl)
   }
 
   /**
    * ## 获取公众号用户信息
+   *
    * @param jsCode jsCode
    */
-  fun fetchUserInfoByAccessToken(jsCode: String): IWxpaWebClient.WxpaWebsiteUserInfoResp? {
+  fun fetchUserInfoByAccessToken(
+    jsCode: String
+  ): IWxpaWebClient.WxpaWebsiteUserInfoResp? {
     if (property.appId == null) {
       log.warn("appId is null")
       return null
@@ -88,14 +96,20 @@ class WxpaService(
       log.warn("appSecret is null")
       return null
     }
-    val codeToken = client.getWebsiteAccessToken(
-      property.appId!!,
-      property.appSecret!!,
-      jsCode
-    )
+    val codeToken =
+      client.getWebsiteAccessToken(
+        property.appId!!,
+        property.appSecret!!,
+        jsCode,
+      )
     if (null == codeToken) return null
     if (codeToken.isError) {
-      log.warn("codeToken is error, errCode: {},errorMsg: {}  token: {}", codeToken.errorCode, codeToken.errorMessage, codeToken)
+      log.warn(
+        "codeToken is error, errCode: {},errorMsg: {}  token: {}",
+        codeToken.errorCode,
+        codeToken.errorMessage,
+        codeToken,
+      )
       return null
     }
     if (codeToken.accessToken == null) {
@@ -106,7 +120,8 @@ class WxpaService(
       log.warn("codeToken.openId is null, token: {}", codeToken)
       return null
     }
-    val userInfo = client.getUserInfoByAccessToken(codeToken.accessToken, codeToken.openId)
+    val userInfo =
+      client.getUserInfoByAccessToken(codeToken.accessToken, codeToken.openId)
     if (userInfo?.openId == null) {
       log.warn("userInfo is null, token: {}", codeToken)
       return null

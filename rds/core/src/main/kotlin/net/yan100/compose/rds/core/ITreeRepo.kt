@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.core
 
 import net.yan100.compose.core.*
@@ -158,7 +142,10 @@ interface ITreeRepo<T : IJpaTreeEntity> : IRepo<T> {
   fun popRrnByOffset(rrnOffset: Long, parentRln: Long, tgi: String?): Int
 
   @ACID
-  fun saveChildrenByParentId(parentId: RefId, childrenLazy: () -> List<T>): List<T> {
+  fun saveChildrenByParentId(
+    parentId: RefId,
+    childrenLazy: () -> List<T>,
+  ): List<T> {
     return saveChildren(findByIdOrNull(parentId)!!, childrenLazy())
   }
 
@@ -193,13 +180,15 @@ interface ITreeRepo<T : IJpaTreeEntity> : IRepo<T> {
       children[idx].rln = leftStep + i
       children[idx].rrn = leftStep + i + 1
     }
-    return saveAll(children.map {
-      it.apply {
-        rpi = parent.id
-        nlv = parent.nlv + 1
-        tgi = parent.tgi
+    return saveAll(
+      children.map {
+        it.apply {
+          rpi = parent.id
+          nlv = parent.nlv + 1
+          tgi = parent.tgi
+        }
       }
-    })
+    )
   }
 
   /** 对 saveChildren 的尾随闭包调用 **警告：一次事务只能调用一次** */
@@ -237,5 +226,7 @@ interface ITreeRepo<T : IJpaTreeEntity> : IRepo<T> {
 
   @Query("from #{#entityName} e where e.nlv = :level")
   fun findByNlv(level: Long, page: Pageable): Page<T>
-  fun findByNlv(level: Long, page: Pq): Pr<T> = findByNlv(level, page.toPageable()).toPr()
+
+  fun findByNlv(level: Long, page: Pq): Pr<T> =
+    findByNlv(level, page.toPageable()).toPr()
 }

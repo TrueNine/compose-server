@@ -1,18 +1,19 @@
 package net.yan100.compose.depend.springdocopenapi
 
 import jakarta.annotation.Resource
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 import net.yan100.compose.testtookit.annotations.SpringServletTest
 import net.yan100.compose.testtookit.log
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 @SpringServletTest
 class BeanSetupTest {
-  lateinit var mock: MockMvc @Resource set
+  lateinit var mock: MockMvc
+    @Resource set
 
   @BeforeTest
   fun setup() {
@@ -21,19 +22,22 @@ class BeanSetupTest {
 
   @Test
   fun `auto loaded swagger config`() {
-    val jsonStr = mock.get("/v3/api-docs/swagger-config")
-      .andExpect {
-        content {
-          contentType(MediaType.APPLICATION_JSON)
-          jsonPath("$.configUrl") {
-            isString()
-            value("/v3/api-docs/swagger-config")
+    val jsonStr =
+      mock
+        .get("/v3/api-docs/swagger-config")
+        .andExpect {
+          content {
+            contentType(MediaType.APPLICATION_JSON)
+            jsonPath("$.configUrl") {
+              isString()
+              value("/v3/api-docs/swagger-config")
+            }
           }
+          status { isOk() }
         }
-        status {
-          isOk()
-        }
-      }.andReturn().response.contentAsString
+        .andReturn()
+        .response
+        .contentAsString
     log.info(jsonStr)
   }
 }

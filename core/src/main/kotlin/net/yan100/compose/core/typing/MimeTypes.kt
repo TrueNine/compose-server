@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core.typing
 
 import net.yan100.compose.core.typing.MimeTypes.entries
@@ -24,7 +8,8 @@ import net.yan100.compose.core.typing.MimeTypes.entries
  * @author TrueNine
  * @since 2022-11-03
  */
-enum class MimeTypes(private val extension: String, vararg m: String) : StringTyping {
+enum class MimeTypes(private val extension: String, vararg m: String) :
+  StringTyping {
   EXE("exe", "application/ms-download", "application/octet-stream"),
 
   /** 这个比较特殊，他的后缀名 是 binary 注意 */
@@ -40,9 +25,18 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
   PDF("pdf", "application/pdf"),
   WORD("doc", "application/msword"),
   EXCEL("xls", "application/vnd.ms-excel"),
-  PPTX("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
-  XLSX("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-  DOCX("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+  PPTX(
+    "pptx",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  ),
+  XLSX(
+    "xlsx",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ),
+  DOCX(
+    "docx",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ),
   PPT("ppt", "application/vnd.ms-powerpoint"),
   JSON("json", "application/json"),
   HTML("html", "text/html"),
@@ -63,14 +57,11 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
   RAR("rar", "application/x-rar-compressed"),
   SSE("", "text/event-stream");
 
-
   private var mm: Array<out String> = m
-
 
   @Suppress("UNCHECKED_CAST")
   val medias: Array<String>
     get() = mm as Array<String>
-
 
   val ext: String
     get() = extension
@@ -84,12 +75,11 @@ enum class MimeTypes(private val extension: String, vararg m: String) : StringTy
 
   companion object {
     @JvmStatic
-    fun findVal(media: String?): MimeTypes? = entries.find { v ->
-      if (media.isNullOrBlank()) false
-      else v.medias.contains(media)
-    }
+    fun findVal(media: String?): MimeTypes? =
+      entries.find { v ->
+        if (media.isNullOrBlank()) false else v.medias.contains(media)
+      }
 
-    @JvmStatic
-    operator fun get(v: String?): MimeTypes? = findVal(v)
+    @JvmStatic operator fun get(v: String?): MimeTypes? = findVal(v)
   }
 }

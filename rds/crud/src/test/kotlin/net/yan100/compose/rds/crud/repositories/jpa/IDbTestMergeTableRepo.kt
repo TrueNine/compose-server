@@ -11,5 +11,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface IDbTestMergeTableRepo : IRepo<DbTestMergeTable> {
   fun findAllByName(name: string): List<DbTestMergeTable>
+
   fun findAllByAge(age: i32): List<DbTestMergeTable>
 }

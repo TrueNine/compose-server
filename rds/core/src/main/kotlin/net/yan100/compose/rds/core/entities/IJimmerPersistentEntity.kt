@@ -9,12 +9,14 @@ import org.babyfish.jimmer.sql.GeneratedValue
 import org.babyfish.jimmer.sql.Id
 import org.babyfish.jimmer.sql.MappedSuperclass
 
-
 @MappedSuperclass
 interface IJimmerPersistentEntity {
   @Id
   @Column(sqlType = "bigint")
   @JsonConverter(JimmerLongToStringConverter::class)
-  @GeneratedValue(generatorRef = JimmerSnowflakeLongIdGenerator.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME)
+  @GeneratedValue(
+    generatorRef =
+      JimmerSnowflakeLongIdGenerator.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME
+  )
   val id: RefId
 }

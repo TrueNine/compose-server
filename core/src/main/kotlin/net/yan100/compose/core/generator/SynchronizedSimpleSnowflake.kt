@@ -1,23 +1,11 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core.generator
 
-class SynchronizedSimpleSnowflake(private val workId: Long, private val datacenterId: Long, private var sequence: Long, private val startTimeStamp: Long) :
-  ISnowflakeGenerator {
+class SynchronizedSimpleSnowflake(
+  private val workId: Long,
+  private val datacenterId: Long,
+  private var sequence: Long,
+  private val startTimeStamp: Long,
+) : ISnowflakeGenerator {
   // 长度为5位
   private val workerIdBits = 5L
   private val datacenterIdBits = 5L
@@ -30,8 +18,12 @@ class SynchronizedSimpleSnowflake(private val workId: Long, private val datacent
   private var lastTimestamp = -1L
 
   init {
-    require(!(workId <= 0 || workId >= maxWorkerId)) { "workId 大于$maxDatacenterId 或者小于0" }
-    require(!(datacenterId <= 0 || datacenterId >= maxDatacenterId)) { "datacenterId 大于 $maxDatacenterId 或者小于0" }
+    require(!(workId <= 0 || workId >= maxWorkerId)) {
+      "workId 大于$maxDatacenterId 或者小于0"
+    }
+    require(!(datacenterId <= 0 || datacenterId >= maxDatacenterId)) {
+      "datacenterId 大于 $maxDatacenterId 或者小于0"
+    }
     lastTimestamp = currentTimeMillis()
   }
 
@@ -52,7 +44,8 @@ class SynchronizedSimpleSnowflake(private val workId: Long, private val datacent
   private val datacenterIdShift = sequenceBits + workerIdBits
 
   // 时间戳需要左移位数 12+5+5=22位
-  private val timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits
+  private val timestampLeftShift =
+    sequenceBits + workerIdBits + datacenterIdBits
 
   @Synchronized
   override fun next(): Long {

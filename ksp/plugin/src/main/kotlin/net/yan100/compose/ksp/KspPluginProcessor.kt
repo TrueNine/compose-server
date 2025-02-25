@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.ksp
 
 import com.google.devtools.ksp.*
@@ -32,10 +16,12 @@ import net.yan100.compose.ksp.visitor.RepositoryIPageExtensionsVisitor
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
 
-class KspPluginProcessor(
-  private val environment: SymbolProcessorEnvironment,
-) : SymbolProcessor {
-  private fun <D : KSDeclaration> getCtxData(declaration: D, resolver: Resolver): DeclarationContext<D> {
+class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) :
+  SymbolProcessor {
+  private fun <D : KSDeclaration> getCtxData(
+    declaration: D,
+    resolver: Resolver,
+  ): DeclarationContext<D> {
     return DeclarationContext(declaration, environment, resolver)
   }
 
@@ -43,41 +29,46 @@ class KspPluginProcessor(
   override fun process(resolver: Resolver): List<KSAnnotated> {
     val nextSymbols = mutableSetOf<KSAnnotated>()
     val options = environment.options
-    val enableJpa = options["net.yan100.compose.ksp.plugin.generateJpa"]?.toBooleanStrictOrNull() ?: false
+    val enableJpa =
+      options["net.yan100.compose.ksp.plugin.generateJpa"]
+        ?.toBooleanStrictOrNull() ?: false
 
     if (enableJpa) nextSymbols += jpaGenerate(resolver)
 
-    resolver.getPackagesWithAnnotation("org.springframework.stereotype.Repository")
+    resolver
+      .getPackagesWithAnnotation("org.springframework.stereotype.Repository")
       .filterIsInstance<KSClassDeclaration>()
       .filter { it.classKind == ClassKind.INTERFACE }
-      .forEach { getCtxData(it, resolver).accept(RepositoryIPageExtensionsVisitor()) }
+      .forEach {
+        getCtxData(it, resolver).accept(RepositoryIPageExtensionsVisitor())
+      }
     return nextSymbols.toList()
   }
 
   @OptIn(KspExperimental::class)
   fun jpaGenerate(resolver: Resolver): Sequence<KSAnnotated> {
-    val lis = resolver.getSymbolsWithAnnotation(
-      "jakarta.persistence.EntityListener"
-    ).filterIsInstance<KSDeclaration>().firstOrNull()?.let {
-      it.annotations.firstOrNull()?.toAnnotationSpec()
-    }
-    val jpaSymbols = resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
+    val lis =
+      resolver
+        .getSymbolsWithAnnotation("jakarta.persistence.EntityListener")
+        .filterIsInstance<KSDeclaration>()
+        .firstOrNull()
+        ?.let { it.annotations.firstOrNull()?.toAnnotationSpec() }
+    val jpaSymbols =
+      resolver.getSymbolsWithAnnotation(
+        "net.yan100.compose.meta.annotations.MetaDef"
+      )
     jpaSymbols
       .filter { it.validate() }
       .filterIsInstance<KSClassDeclaration>()
       .filter { !it.isAnnotationPresent(MetaSkipGeneration::class) }
       .filter { it.getDeclaredProperties().toList().isNotEmpty() }
-      .filter {
-        !it.isCompanionObject
-      }
+      .filter { !it.isCompanionObject }
       .filter { it.simpleNameAsString.startsWith("Super") }
       .filterNot { it.simpleNameAsString.contains("$") }
       .filter { it.getAnnotationsByType(MetaDef::class).toList().isNotEmpty() }
-      .forEach {
-        getCtxData(it, resolver).accept(
-          JpaNameClassVisitor(lis)
-        )
-      }
-    return resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef").filter { !it.validate() }
+      .forEach { getCtxData(it, resolver).accept(JpaNameClassVisitor(lis)) }
+    return resolver
+      .getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
+      .filter { !it.validate() }
   }
 }

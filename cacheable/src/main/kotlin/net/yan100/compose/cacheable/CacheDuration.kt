@@ -1,6 +1,5 @@
 package net.yan100.compose.cacheable
 
-
 enum class CacheDuration {
   M1,
   M5,
@@ -16,5 +15,5 @@ enum class CacheDuration {
   D60,
   D180,
   D365,
-  FOREVER;
+  FOREVER,
 }

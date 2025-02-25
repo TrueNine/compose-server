@@ -1,6 +1,4 @@
-plugins {
-  `kotlinspring-convention`
-}
+plugins { `kotlinspring-convention` }
 
 version = libs.versions.compose.depend.paho.get()
 

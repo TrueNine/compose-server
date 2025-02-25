@@ -9,12 +9,10 @@ import net.yan100.compose.meta.client.ClientType
 import net.yan100.compose.meta.types.TypeKind
 
 class TsJimmerInterceptor : TsScopeInterceptor() {
-  override val executeStage: ExecuteStage = ExecuteStage.LOOP_RESOLVE_TS_REFERENCES
+  override val executeStage: ExecuteStage =
+    ExecuteStage.LOOP_RESOLVE_TS_REFERENCES
 
-  private val jimmerTypeKinds = setOf(
-    TypeKind.EMBEDDABLE,
-    TypeKind.IMMUTABLE
-  )
+  private val jimmerTypeKinds = setOf(TypeKind.EMBEDDABLE, TypeKind.IMMUTABLE)
 
   override fun supported(ctx: KtToTsContext, source: ClientType): Boolean {
     return source.typeKind in jimmerTypeKinds

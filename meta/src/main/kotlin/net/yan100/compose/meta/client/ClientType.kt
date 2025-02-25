@@ -1,16 +1,14 @@
 package net.yan100.compose.meta.client
 
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KClass
 import net.yan100.compose.meta.types.Doc
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.meta.types.TypeName
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.reflect.KClass
 
 private val classResolveCache = ConcurrentHashMap<String, Class<*>?>()
 
-/**
- * 类型定义
- */
+/** 类型定义 */
 data class ClientType(
   override val typeName: String,
   override val doc: Doc? = null,
@@ -18,29 +16,19 @@ data class ClientType(
   override val superTypes: List<ClientType> = emptyList(),
   override val builtin: Boolean? = null,
 
-  /**
-   * 是否为别名
-   */
+  /** 是否为别名 */
   val isAlias: Boolean? = null,
 
-  /**
-   * 该别名对应的类型名
-   */
+  /** 该别名对应的类型名 */
   val aliasForTypeName: String? = null,
 
-  /**
-   * 该类的泛型列表，仅表示当前类需要填写多少泛型参数
-   */
+  /** 该类的泛型列表，仅表示当前类需要填写多少泛型参数 */
   val arguments: List<String> = emptyList(),
 
-  /**
-   * 所填写的泛型参数
-   */
+  /** 所填写的泛型参数 */
   val usedGenerics: List<ClientUsedGeneric> = emptyList(),
 
-  /**
-   * 该类具有的属性列表
-   */
+  /** 该类具有的属性列表 */
   val properties: List<ClientProp> = emptyList(),
 
   /**
@@ -50,17 +38,12 @@ data class ClientType(
    */
   val enumConstants: Map<String, Int> = emptyMap(),
 
-  /**
-   * 是否建议为 null，一般表现在 ReturnType
-   */
+  /** 是否建议为 null，一般表现在 ReturnType */
   val nullable: Boolean? = null,
 ) : TypeName {
   companion object {
     fun none(): ClientType {
-      return ClientType(
-        typeName = "",
-        nullable = true
-      )
+      return ClientType(typeName = "", nullable = true)
     }
   }
 
@@ -78,39 +61,43 @@ data class ClientType(
       }
 
       superTypes.isNotEmpty() -> {
-        return superTypes.any {
-          it.isAssignableFrom(otherQualifierName)
-        }
+        return superTypes.any { it.isAssignableFrom(otherQualifierName) }
       }
 
       else -> false
     }
   }
 
-  fun isAssignableFrom(other: ClientType): Boolean = isAssignableFrom(other.typeName)
+  fun isAssignableFrom(other: ClientType): Boolean =
+    isAssignableFrom(other.typeName)
 
   fun resolveEnumConstants(): Map<String, Comparable<Nothing>> {
     val java = resolveJava() ?: return emptyMap()
     if (!java.isEnum) return emptyMap()
     val superEnum = resolveJava("net.yan100.compose.core.typing.AnyTyping")
     val isTyping = superEnum?.isAssignableFrom(java) ?: false
-    return java.enumConstants.filterIsInstance<Enum<*>>().map {
-      if (isTyping) {
-        it.name to java.getMethod("getValue").invoke(it) as Comparable<*>
-      } else {
-        it.name to it.ordinal
+    return java.enumConstants
+      .filterIsInstance<Enum<*>>()
+      .map {
+        if (isTyping) {
+          it.name to java.getMethod("getValue").invoke(it) as Comparable<*>
+        } else {
+          it.name to it.ordinal
+        }
       }
-    }.toMap()
+      .toMap()
   }
 
   private fun resolveJava(typeName: String): Class<*>? {
     return try {
-      if (classResolveCache.containsKey(typeName)) return classResolveCache[typeName]
-      classResolveCache[typeName] = try {
-        Class.forName(typeName)
-      } catch (_: ClassNotFoundException) {
-        null
-      }
+      if (classResolveCache.containsKey(typeName))
+        return classResolveCache[typeName]
+      classResolveCache[typeName] =
+        try {
+          Class.forName(typeName)
+        } catch (_: ClassNotFoundException) {
+          null
+        }
       classResolveCache[typeName]
     } catch (_: ClassNotFoundException) {
       null
@@ -125,24 +112,28 @@ data class ClientType(
     return resolveJava()?.kotlin
   }
 
-  fun changeAllTypeToCopy(
-    resolver: (ClientType) -> ClientType?
-  ): ClientType? {
+  fun changeAllTypeToCopy(resolver: (ClientType) -> ClientType?): ClientType? {
     val r = resolver(this) ?: return null
-    val properties = r.properties.mapNotNull {
-      val eee = resolver(it.typeName.toTransientType())
-      eee?.typeName?.let { n -> it.copy(typeName = n) }
-    }
+    val properties =
+      r.properties.mapNotNull {
+        val eee = resolver(it.typeName.toTransientType())
+        eee?.typeName?.let { n -> it.copy(typeName = n) }
+      }
     return r.copy(
       properties = properties,
-      superTypes = resolveAllSuperTypes(r.superTypes, resolver)
+      superTypes = resolveAllSuperTypes(r.superTypes, resolver),
     )
   }
 
-  private fun resolveAllSuperTypes(superTypes: List<ClientType>, newSuperTypeResolver: (ClientType) -> ClientType?): List<ClientType> {
+  private fun resolveAllSuperTypes(
+    superTypes: List<ClientType>,
+    newSuperTypeResolver: (ClientType) -> ClientType?,
+  ): List<ClientType> {
     return superTypes.mapNotNull {
       val r = newSuperTypeResolver(it)
-      r?.copy(superTypes = resolveAllSuperTypes(it.superTypes, newSuperTypeResolver))
+      r?.copy(
+        superTypes = resolveAllSuperTypes(it.superTypes, newSuperTypeResolver)
+      )
     }
   }
 }

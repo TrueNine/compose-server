@@ -3,28 +3,33 @@ package net.yan100.compose.depend.jackson
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.annotation.Resource
-import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
-import net.yan100.compose.testtookit.log
-import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
+import net.yan100.compose.testtookit.log
+import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class NonJsonSerialTest {
-  lateinit var mapper: ObjectMapper @Resource(name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) set
-  lateinit var plainMapper: ObjectMapper @Resource(name = JacksonAutoConfiguration.DEFAULT_OBJECT_MAPPER_BEAN_NAME) set
+  lateinit var mapper: ObjectMapper
+    @Resource(
+      name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME
+    )
+    set
+
+  lateinit var plainMapper: ObjectMapper
+    @Resource(name = JacksonAutoConfiguration.DEFAULT_OBJECT_MAPPER_BEAN_NAME)
+    set
 
   @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-  open class IdJson(
-    @Transient
-    private var __internalId: Long? = null
-  ) {
+  open class IdJson(@Transient private var __internalId: Long? = null) {
     var id: Long
       @JvmName("____getdwadawdawdawdawdawdawd")
       get() {
-        if (__internalId === null) throw IllegalStateException("数据库 id 当前为空，不能获取")
+        if (__internalId === null)
+          throw IllegalStateException("数据库 id 当前为空，不能获取")
         return __internalId!!
       }
       @JvmName("____setdwadawdawdawdawdawdawd")
@@ -43,7 +48,7 @@ class NonJsonSerialTest {
 
   data class LongData(
     val longData: Long,
-    private var nullableLong: Long? = null
+    private var nullableLong: Long? = null,
   ) {
     fun getNullableLong(): Long? {
       return this.nullableLong
@@ -62,7 +67,7 @@ class NonJsonSerialTest {
     assertEquals(testData, deserialized)
     assertEquals(
       "{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$LongData\",\"longData\":123}",
-      json
+      json,
     )
     println(json)
 
@@ -72,7 +77,7 @@ class NonJsonSerialTest {
     assertEquals(testData2, deserialized2)
     assertEquals(
       "{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$LongData\",\"longData\":123}",
-      json2
+      json2,
     )
 
     val testData3 = LongData(123, 3L)
@@ -81,7 +86,7 @@ class NonJsonSerialTest {
     assertEquals(testData3, deserialized3)
     assertEquals(
       "{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$LongData\",\"longData\":123,\"nullableLong\":[\"java.lang.Long\",3]}",
-      json3
+      json3,
     )
   }
 
@@ -89,7 +94,10 @@ class NonJsonSerialTest {
   fun `ensure non-json serialization java lang long`() {
     val jsonObj = IdJson()
     val json = mapper.writeValueAsString(jsonObj)
-    assertEquals("{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$IdJson\"}", json)
+    assertEquals(
+      "{\"@class\":\"net.yan100.compose.depend.jackson.NonJsonSerialTest\$IdJson\"}",
+      json,
+    )
     log.info("json: {}", json)
     val readValue = mapper.readValue<IdJson>(json)
     log.info("readValue: {}", readValue)

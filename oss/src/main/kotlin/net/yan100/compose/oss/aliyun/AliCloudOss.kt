@@ -1,29 +1,13 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.oss.aliyun
 
 import com.aliyun.oss.OSS
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.function.Consumer
 import net.yan100.compose.oss.FileArgs
 import net.yan100.compose.oss.InMap
 import net.yan100.compose.oss.Oss
 import net.yan100.compose.oss.OutMap
-import java.io.InputStream
-import java.io.OutputStream
-import java.util.function.Consumer
 
 /**
  * 阿里云 oss 实现
@@ -32,9 +16,7 @@ import java.util.function.Consumer
  * @author TrueNine
  * @since 2023-02-21
  */
-class AliCloudOss(
-  val oss: OSS
-) : Oss {
+class AliCloudOss(val oss: OSS) : Oss {
 
   override fun getNative(): Any {
     return this.oss
@@ -67,11 +49,19 @@ class AliCloudOss(
     TODO("Not yet implemented")
   }
 
-  override fun upload(stream: InputStream, fileInfo: FileArgs, afterExec: Runnable): InMap {
+  override fun upload(
+    stream: InputStream,
+    fileInfo: FileArgs,
+    afterExec: Runnable,
+  ): InMap {
     TODO("Not yet implemented")
   }
 
-  override fun upload(stream: InputStream, fileArgs: FileArgs, afterExec: Consumer<FileArgs>): InMap {
+  override fun upload(
+    stream: InputStream,
+    fileArgs: FileArgs,
+    afterExec: Consumer<FileArgs>,
+  ): InMap {
     TODO("Not yet implemented")
   }
 
@@ -79,11 +69,19 @@ class AliCloudOss(
     TODO("Not yet implemented")
   }
 
-  override fun download(beforeExec: Runnable, stream: OutputStream, fileInfo: FileArgs): OutMap {
+  override fun download(
+    beforeExec: Runnable,
+    stream: OutputStream,
+    fileInfo: FileArgs,
+  ): OutMap {
     TODO("Not yet implemented")
   }
 
-  override fun download(beforeExec: Consumer<FileArgs>, stream: OutputStream, fileInfo: FileArgs): OutMap {
+  override fun download(
+    beforeExec: Consumer<FileArgs>,
+    stream: OutputStream,
+    fileInfo: FileArgs,
+  ): OutMap {
     TODO("Not yet implemented")
   }
 

@@ -8,44 +8,47 @@ import net.yan100.compose.client.interceptors.Interceptor
 import net.yan100.compose.client.interceptors.standardInterceptors
 import net.yan100.compose.meta.client.ClientApiStubs
 
-
 class TypescriptGenerator(
   interceptorChain: MutableList<Interceptor<*, *, *>> = mutableListOf(),
-  stubsProvider: () -> ClientApiStubs
+  stubsProvider: () -> ClientApiStubs,
 ) {
   private val stubs = stubsProvider().copy()
-  var context: KtToTsContext = KtToTsContext(
-    stubs,
-    *interceptorChain.toTypedArray(),
-    *standardInterceptors.toTypedArray()
-  )
+  var context: KtToTsContext =
+    KtToTsContext(
+      stubs,
+      *interceptorChain.toTypedArray(),
+      *standardInterceptors.toTypedArray(),
+    )
 
-  internal val convertedTsScopes: List<TsScope<*>> get() = context.tsScopes
-  
-  internal fun renderServiceClass(serviceClass: TsScope.Class) = TsFile.ServiceClass(serviceClassScope = serviceClass)
-  internal fun renderTypeAlias(typeAlias: TsScope.TypeAlias): TsFile.SingleTypeAlias = TsFile.SingleTypeAlias(typeAlias)
+  internal val convertedTsScopes: List<TsScope<*>>
+    get() = context.tsScopes
+
+  internal fun renderServiceClass(serviceClass: TsScope.Class) =
+    TsFile.ServiceClass(serviceClassScope = serviceClass)
+
+  internal fun renderTypeAlias(
+    typeAlias: TsScope.TypeAlias
+  ): TsFile.SingleTypeAlias = TsFile.SingleTypeAlias(typeAlias)
+
   fun renderTypeAliasesToFiles(): List<TsFile.SingleTypeAlias> {
     val typeAliases = context.tsScopes.filterIsInstance<TsScope.TypeAlias>()
-    return typeAliases.map {
-      renderTypeAlias(it)
-    }
+    return typeAliases.map { renderTypeAlias(it) }
   }
 
-  internal fun renderInterface(interfaceScope: TsScope.Interface) = TsFile.SingleInterface(interfaceScope)
+  internal fun renderInterface(interfaceScope: TsScope.Interface) =
+    TsFile.SingleInterface(interfaceScope)
+
   fun renderStaticInterfacesToFiles(): List<TsFile.SingleInterface> {
     val interfaces = context.tsScopes.filterIsInstance<TsScope.Interface>()
-    return interfaces.map {
-      renderInterface(it)
-    }
+    return interfaces.map { renderInterface(it) }
   }
 
-  internal fun renderEnum(enums: TsScope.Enum): TsFile.SingleEnum = TsFile.SingleEnum(enums)
+  internal fun renderEnum(enums: TsScope.Enum): TsFile.SingleEnum =
+    TsFile.SingleEnum(enums)
 
   fun renderEnumsToFiles(): List<TsFile.SingleEnum> {
     val enums = context.tsScopes.filterIsInstance<TsScope.Enum>()
-    return enums.map {
-      renderEnum(it)
-    }
+    return enums.map { renderEnum(it) }
   }
 
   fun renderExecutorToFile(): TsFile.SingleTypeUtils {
@@ -64,9 +67,11 @@ export type Executor = (requestOptions: {
   readonly body?: unknown
   readonly bodyType?: BodyType
 }) => Promise<unknown>
-    """.trimIndent().plus("\n")
+    """
+            .trimIndent()
+            .plus("\n")
         ) // TODO 剔除多余定义内容
-      }
+      },
     )
   }
 }

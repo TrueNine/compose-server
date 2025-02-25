@@ -1,10 +1,10 @@
 package net.yan100.compose.core
 
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.testtookit.info
-import net.yan100.compose.testtookit.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import net.yan100.compose.testtookit.info
+import net.yan100.compose.testtookit.log
 
 /**
  * # kotlin 特性测试
@@ -30,7 +30,6 @@ class KotlinLangTest {
     b("a")
     log.info(fc::count)
   }
-
 
   @Test
   fun `get reflect function name`() {

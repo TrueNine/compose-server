@@ -20,89 +20,139 @@ import net.yan100.compose.ksp.toolkit.dsl.fileDsl
 import net.yan100.compose.ksp.toolkit.models.DeclarationContext
 
 private const val pageAnnotationPath = "org.springframework.data.domain.Page"
-private const val pageableAnnotationPath = "org.springframework.data.domain.Pageable"
+private const val pageableAnnotationPath =
+  "org.springframework.data.domain.Pageable"
 
-class RepositoryIPageExtensionsVisitor : KSTopDownVisitor<DeclarationContext<KSClassDeclaration>, Unit>() {
+class RepositoryIPageExtensionsVisitor :
+  KSTopDownVisitor<DeclarationContext<KSClassDeclaration>, Unit>() {
   private lateinit var log: KSPLogger
 
-  override fun defaultHandler(node: KSNode, data: DeclarationContext<KSClassDeclaration>) {
+  override fun defaultHandler(
+    node: KSNode,
+    data: DeclarationContext<KSClassDeclaration>,
+  ) {
     log = data.log
   }
 
-  private fun supported(declaration: KSDeclaration): List<KSFunctionDeclaration> {
+  private fun supported(
+    declaration: KSDeclaration
+  ): List<KSFunctionDeclaration> {
     if (declaration !is KSClassDeclaration) return emptyList()
     if (declaration.classKind != ClassKind.INTERFACE) return emptyList()
-    return declaration.getDeclaredFunctions().filter { f ->
-      val rtType = f.returnType
-      if (rtType?.resolve()?.declaration?.isKClassQualifiedName(pageAnnotationPath) == false) return@filter false
-      val p = f.parameters
-      if (p.isEmpty()) return@filter false
-      val hasPageable = p.any {
-        it.type.resolve().declaration.isKClassQualifiedName(pageableAnnotationPath)
+    return declaration
+      .getDeclaredFunctions()
+      .filter { f ->
+        val rtType = f.returnType
+        if (
+          rtType
+            ?.resolve()
+            ?.declaration
+            ?.isKClassQualifiedName(pageAnnotationPath) == false
+        )
+          return@filter false
+        val p = f.parameters
+        if (p.isEmpty()) return@filter false
+        val hasPageable =
+          p.any {
+            it.type
+              .resolve()
+              .declaration
+              .isKClassQualifiedName(pageableAnnotationPath)
+          }
+        if (!hasPageable) {
+          log.warn(
+            "${f.qualifiedNameAsString} return Page, but no Pageable parameter found."
+          )
+          return@filter false
+        }
+        true
       }
-      if (!hasPageable) {
-        log.warn("${f.qualifiedNameAsString} return Page, but no Pageable parameter found.")
-        return@filter false
-      }
-      true
-    }.toList()
+      .toList()
   }
 
-  override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: DeclarationContext<KSClassDeclaration>) {
+  override fun visitClassDeclaration(
+    classDeclaration: KSClassDeclaration,
+    data: DeclarationContext<KSClassDeclaration>,
+  ) {
     val list = supported(classDeclaration)
     if (list.isEmpty()) return
     var hasError = false
-    fileDsl(classDeclaration.packageName.asString(), "${classDeclaration.simpleNameGetShortNameStr}PageExtensionsFunctions") {
-      builder.addAnnotation(
-        AnnotationSpec.builder(
-          Suppress::class
-        ).addMember("%S", "Unused").addMember("%S", "RedundantVisibilityModifier").useFile().build()
-      )
-      var imported = false
-      fun importExt() {
-        if (imported) return
-        builder.addImport("net.yan100.compose.rds.core", "toIPage", "toPageable")
-        imported = true
-      }
-
-      list.forEach { pageFn ->
-        val g = pageFn.returnType?.resolve()?.arguments?.firstOrNull()
-        if (g?.type?.resolve()?.isError == true) {
-          hasError = true
-          return@fileDsl
-        }
-        val returnTypeGeneric = g?.toTypeName()
-
-        if (returnTypeGeneric == null || returnTypeGeneric.isNullable) {
-          log.error("${pageFn.qualifiedNameAsString} but nullable generic, not generate extension function")
-          return@forEach
-        }
-        importExt()
-        // 替换参数
-        val replaceParameters = pageFn.parameters.map { p ->
-          val isPageable = p.type.resolve().declaration.isKClassQualifiedName(pageableAnnotationPath)
-          if (isPageable) {
-            ParameterSpec.builder("pq", Pq::class)
-              .defaultValue("%T.DEFAULT_MAX", Pq::class)
-              .build()
-          } else ParameterSpec.builder(p.name!!.asString(), p.type.toTypeName()).build()
+    fileDsl(
+        classDeclaration.packageName.asString(),
+        "${classDeclaration.simpleNameGetShortNameStr}PageExtensionsFunctions",
+      ) {
+        builder.addAnnotation(
+          AnnotationSpec.builder(Suppress::class)
+            .addMember("%S", "Unused")
+            .addMember("%S", "RedundantVisibilityModifier")
+            .useFile()
+            .build()
+        )
+        var imported = false
+        fun importExt() {
+          if (imported) return
+          builder.addImport(
+            "net.yan100.compose.rds.core",
+            "toIPage",
+            "toPageable",
+          )
+          imported = true
         }
 
-        val extensionFunction = FunSpec.builder(pageFn.simpleNameAsString)
-          .addParameters(replaceParameters)
-          .returns(Pr::class.asClassName().parameterizedBy(returnTypeGeneric))
-          .receiver(classDeclaration.toClassName())
-          .also {
-            it.addStatement(
-              "return this.%N(%L).toIPage()",
-              pageFn.simpleNameAsString,
-              replaceParameters.joinToString { p -> if (p.name == "pq") "pq.toPageable()" else p.name })// Page<*>::toIPage
+        list.forEach { pageFn ->
+          val g = pageFn.returnType?.resolve()?.arguments?.firstOrNull()
+          if (g?.type?.resolve()?.isError == true) {
+            hasError = true
+            return@fileDsl
           }
-          .build()
-        builder.addFunction(extensionFunction)
+          val returnTypeGeneric = g?.toTypeName()
+
+          if (returnTypeGeneric == null || returnTypeGeneric.isNullable) {
+            log.error(
+              "${pageFn.qualifiedNameAsString} but nullable generic, not generate extension function"
+            )
+            return@forEach
+          }
+          importExt()
+          // 替换参数
+          val replaceParameters =
+            pageFn.parameters.map { p ->
+              val isPageable =
+                p.type
+                  .resolve()
+                  .declaration
+                  .isKClassQualifiedName(pageableAnnotationPath)
+              if (isPageable) {
+                ParameterSpec.builder("pq", Pq::class)
+                  .defaultValue("%T.DEFAULT_MAX", Pq::class)
+                  .build()
+              } else
+                ParameterSpec.builder(p.name!!.asString(), p.type.toTypeName())
+                  .build()
+            }
+
+          val extensionFunction =
+            FunSpec.builder(pageFn.simpleNameAsString)
+              .addParameters(replaceParameters)
+              .returns(
+                Pr::class.asClassName().parameterizedBy(returnTypeGeneric)
+              )
+              .receiver(classDeclaration.toClassName())
+              .also {
+                it.addStatement(
+                  "return this.%N(%L).toIPage()",
+                  pageFn.simpleNameAsString,
+                  replaceParameters.joinToString { p ->
+                    if (p.name == "pq") "pq.toPageable()" else p.name
+                  },
+                ) // Page<*>::toIPage
+              }
+              .build()
+          builder.addFunction(extensionFunction)
+        }
+        // 用代码输出文件内容
       }
-      // 用代码输出文件内容
-    }.writeTo(data.codeGenerator, Dependencies.ALL_FILES)
+      .writeTo(data.codeGenerator, Dependencies.ALL_FILES)
     if (hasError) data.report(classDeclaration)
   }
 }

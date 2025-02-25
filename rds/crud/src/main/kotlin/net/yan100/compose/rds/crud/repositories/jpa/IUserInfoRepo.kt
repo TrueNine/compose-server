@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.repositories.jpa
 
 import kotlinx.coroutines.Dispatchers
@@ -37,11 +21,17 @@ import org.springframework.stereotype.Repository
 @Primary
 @Repository
 interface IUserInfoRepo : IRepo<UserInfo> {
-  fun existsAllByFirstNameAndLastName(firstName: String, lastName: String): Boolean
+  fun existsAllByFirstNameAndLastName(
+    firstName: String,
+    lastName: String,
+  ): Boolean
 
   fun findAllByUserId(userId: RefId): List<UserInfo>
+
   fun findAllByUserId(userId: RefId, page: Pageable): Page<UserInfo>
-  fun findAllByUserId(userId: RefId, pq: Pq) = findAllByUserId(userId, pq.toPageable()).toPr()
+
+  fun findAllByUserId(userId: RefId, pq: Pq) =
+    findAllByUserId(userId, pq.toPageable()).toPr()
 
   fun existsAllByIdAndIdCardIsNotNull(id: RefId): Boolean
 
@@ -56,11 +46,11 @@ interface IUserInfoRepo : IRepo<UserInfo> {
       if (!existsById(id)) false
       else
         listOf(
-          async { existsAllByIdAndIdCardIsNotNull(id) },
-          async { existsAllByIdAndPhoneIsNotNull(id) },
-          async { existsAllByIdAndFirstNameIsNotNull(id) },
-          async { existsAllByIdAndLastNameIsNotNull(id) },
-        )
+            async { existsAllByIdAndIdCardIsNotNull(id) },
+            async { existsAllByIdAndPhoneIsNotNull(id) },
+            async { existsAllByIdAndFirstNameIsNotNull(id) },
+            async { existsAllByIdAndLastNameIsNotNull(id) },
+          )
           .awaitAll()
           .all { it }
     }
@@ -100,8 +90,7 @@ interface IUserInfoRepo : IRepo<UserInfo> {
   )
   fun findUserIdById(id: RefId): RefId?
 
-  @Deprecated("可会查询出多个用户")
-  fun findByUserId(userId: RefId): UserInfo?
+  @Deprecated("可会查询出多个用户") fun findByUserId(userId: RefId): UserInfo?
 
   @Query(
     """
@@ -137,6 +126,5 @@ interface IUserInfoRepo : IRepo<UserInfo> {
 
   fun existsByWechatOpenid(wechatOpenId: String): Boolean
 
-  @ACID
-  fun deleteByPhone(phone: String): Int
+  @ACID fun deleteByPhone(phone: String): Int
 }

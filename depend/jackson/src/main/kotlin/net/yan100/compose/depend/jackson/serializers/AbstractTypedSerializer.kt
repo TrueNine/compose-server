@@ -13,13 +13,15 @@ abstract class AbstractTypedSerializer<T>(
     value: T,
     gen: JsonGenerator?,
     serializers: SerializerProvider?,
-    typeSer: TypeSerializer
+    typeSer: TypeSerializer,
   ) {
-    val typeIdDef = when (typeToken) {
-      // TODO 有待完善
-      JsonToken.START_ARRAY -> typeSer.writeTypePrefix(gen, typeSer.typeId(value, null))
-      else -> typeSer.writeTypePrefix(gen, typeSer.typeId(value, null))
-    }
+    val typeIdDef =
+      when (typeToken) {
+        // TODO 有待完善
+        JsonToken.START_ARRAY ->
+          typeSer.writeTypePrefix(gen, typeSer.typeId(value, null))
+        else -> typeSer.writeTypePrefix(gen, typeSer.typeId(value, null))
+      }
     serialize(value, gen, serializers)
     typeSer.writeTypeSuffix(gen, typeIdDef)
   }

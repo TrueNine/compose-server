@@ -1,21 +1,6 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.service.impl
 
+import java.time.LocalDateTime
 import net.yan100.compose.core.RefId
 import net.yan100.compose.core.datetime
 import net.yan100.compose.rds.core.ICrud
@@ -27,7 +12,6 @@ import net.yan100.compose.rds.crud.repositories.jpa.IFullUserAccountRepo
 import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
 import net.yan100.compose.rds.crud.service.IUserAccountService
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class UserAccountServiceImpl(
@@ -55,9 +39,11 @@ class UserAccountServiceImpl(
     return userRepo.findAccountByUserInfoPhone(phone)
   }
 
-  override fun findPwdEncByAccount(account: String): String? = userRepo.findPwdEncByAccount(account)
+  override fun findPwdEncByAccount(account: String): String? =
+    userRepo.findPwdEncByAccount(account)
 
-  override fun existsByAccount(account: String): Boolean = userRepo.existsAllByAccount(account)
+  override fun existsByAccount(account: String): Boolean =
+    userRepo.existsAllByAccount(account)
 
   override fun existsByWechatOpenId(openId: String): Boolean {
     return userRepo.existsByWechatOpenId(openId)

@@ -9,24 +9,27 @@ import net.yan100.compose.client.toTsName
 import net.yan100.compose.meta.client.ClientType
 
 class TsMapEntryInterceptor : TsPostReferenceInterceptor() {
-  private val nameMap = listOf(
-    "java.util.Map\$Entry",
-    "kotlin.collections.Map\$Entry",
-  ).associateWith {
-    TsTypeVal.Object(
-      elements = listOf(
-        TsUseVal.Prop(
-          name = "key".toTsName(),
-          typeVal = TsTypeVal.Generic(TsGeneric.UnUsed)
-        ),
-        TsUseVal.Prop(
-          name = "value".toTsName(),
-          typeVal = TsTypeVal.Generic(TsGeneric.UnUsed)
+  private val nameMap =
+    listOf("java.util.Map\$Entry", "kotlin.collections.Map\$Entry")
+      .associateWith {
+        TsTypeVal.Object(
+          elements =
+            listOf(
+              TsUseVal.Prop(
+                name = "key".toTsName(),
+                typeVal = TsTypeVal.Generic(TsGeneric.UnUsed),
+              ),
+              TsUseVal.Prop(
+                name = "value".toTsName(),
+                typeVal = TsTypeVal.Generic(TsGeneric.UnUsed),
+              ),
+            )
         )
-      )
-    )
-  }
+      }
 
-  override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeName in nameMap
-  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal<*> = nameMap[source.typeName]!!
+  override fun supported(ctx: KtToTsContext, source: ClientType): Boolean =
+    source.typeName in nameMap
+
+  override fun process(ctx: KtToTsContext, source: ClientType): TsTypeVal<*> =
+    nameMap[source.typeName]!!
 }

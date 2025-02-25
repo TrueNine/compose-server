@@ -17,9 +17,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 private val log = slf4j(BasicUserInfoArgumentResolver::class)
 
 @Component
-class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfigurer {
+class BasicUserInfoArgumentResolver :
+  HandlerMethodArgumentResolver, WebMvcConfigurer {
 
-  override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
+  override fun addArgumentResolvers(
+    resolvers: MutableList<HandlerMethodArgumentResolver>
+  ) {
     super.addArgumentResolvers(resolvers)
     log.trace("注册用户信息拦ArgumentResolver")
     resolvers.add(this)

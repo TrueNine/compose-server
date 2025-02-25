@@ -2,24 +2,23 @@ package net.yan100.compose.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import net.yan100.compose.core.datetime
 import net.yan100.compose.core.toLong
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @SpringBootTest
 class DatetimeSerializerTest {
-  lateinit var mapper: ObjectMapper @Resource set
+  lateinit var mapper: ObjectMapper
+    @Resource set
 
   @Test
   fun `ensure serialize to number`() {
     val dt = datetime.now()
-    val dtJson = mapper.writeValueAsString(
-      dt
-    )
+    val dtJson = mapper.writeValueAsString(dt)
     log.info("dtJson: {}", dtJson)
     assertNotNull(dtJson.toLongOrNull())
     val dt2 = mapper.readValue(dtJson, datetime::class.java)

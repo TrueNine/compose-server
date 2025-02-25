@@ -7,10 +7,11 @@ class CodeBuildable<T>(
   private val builder: Appendable = StringBuilder(),
   val indentCount: Int = 2,
   val indentChar: Char = ' ',
-  private val indent: String = indentChar.toString().repeat(indentCount)
+  private val indent: String = indentChar.toString().repeat(indentCount),
 ) : Appendable by builder {
   private var dirtyCount: Int = 0
-  private val indentStr get() = if (dirtyCount > 0) indent.repeat(dirtyCount) else ""
+  private val indentStr
+    get() = if (dirtyCount > 0) indent.repeat(dirtyCount) else ""
 
   private fun dirty(block: () -> Unit) {
     dirtyCount += 1
@@ -37,15 +38,16 @@ class CodeBuildable<T>(
     space()
   }
 
-  fun spaces(vararg tsModifiers: Any) = tsModifiers.forEach {
-    when (it) {
-      is String -> space(it)
-      is TsModifier -> space(it)
-      is TsTypeModifier -> space(it.marker)
-      is TsScopeQuota -> space(it.left + it.right)
-      else -> error("$it unsupported")
+  fun spaces(vararg tsModifiers: Any) =
+    tsModifiers.forEach {
+      when (it) {
+        is String -> space(it)
+        is TsModifier -> space(it)
+        is TsTypeModifier -> space(it.marker)
+        is TsScopeQuota -> space(it.left + it.right)
+        else -> error("$it unsupported")
+      }
     }
-  }
 
   fun space(tsModifier: TsModifier) {
     space(tsModifier.modifier)
@@ -62,11 +64,14 @@ class CodeBuildable<T>(
 
   fun line(code: String) {
     if (code.isNotBlank()) {
-      code.lines().filter { it.isNotBlank() }.forEach {
-        code(indentStr)
-        code(it.trim())
-        line()
-      }
+      code
+        .lines()
+        .filter { it.isNotBlank() }
+        .forEach {
+          code(indentStr)
+          code(it.trim())
+          line()
+        }
     }
   }
 
@@ -78,16 +83,16 @@ class CodeBuildable<T>(
     code(tsTypeVal.toString())
   }
 
-
   fun code(code: String) {
     if (code.isNotEmpty()) append(code)
   }
 
-  fun <S : TsScope<S>> exportScope(scope: S, block: CodeBuildable<T>.(scope: S) -> Unit = {}) {
+  fun <S : TsScope<S>> exportScope(
+    scope: S,
+    block: CodeBuildable<T>.(scope: S) -> Unit = {},
+  ) {
     space(TsModifier.Export)
-    scope(scope) {
-      block(this, scope)
-    }
+    scope(scope) { block(this, scope) }
   }
 
   fun bracketInlineScope(block: CodeBuildable<T>.() -> String = { "" }) {
@@ -96,27 +101,35 @@ class CodeBuildable<T>(
     space(TsScopeQuota.BRACKETS.right)
   }
 
-  fun scope(scope: TsScope<*>, block: CodeBuildable<T>.(scope: TsScope<*>) -> Unit = {}) {
+  fun scope(
+    scope: TsScope<*>,
+    block: CodeBuildable<T>.(scope: TsScope<*>) -> Unit = {},
+  ) {
     val name = scope.name.toVariableName()
     space(scope.modifier)
     space(name)
-    val generics = when (scope) {
-      is TsScope.Interface -> scope.generics
-      is TsScope.TypeAlias -> scope.generics
-      is TsScope.Class -> scope.generics
-      is TsScope.Enum -> emptyList()
-      is TsScope.TypeVal -> emptyList()
-    }
-    val superTypes = when (scope) {
-      is TsScope.Class -> if (scope.superTypes.isNotEmpty()) scope.superTypes else emptyList()
-      is TsScope.Interface -> if (scope.superTypes.isNotEmpty()) scope.superTypes else emptyList()
-      else -> emptyList()
-    }
+    val generics =
+      when (scope) {
+        is TsScope.Interface -> scope.generics
+        is TsScope.TypeAlias -> scope.generics
+        is TsScope.Class -> scope.generics
+        is TsScope.Enum -> emptyList()
+        is TsScope.TypeVal -> emptyList()
+      }
+    val superTypes =
+      when (scope) {
+        is TsScope.Class ->
+          if (scope.superTypes.isNotEmpty()) scope.superTypes else emptyList()
+        is TsScope.Interface ->
+          if (scope.superTypes.isNotEmpty()) scope.superTypes else emptyList()
+        else -> emptyList()
+      }
     if (generics.isNotEmpty()) space(generics.toRenderCode())
     if (superTypes.isNotEmpty()) {
-      val superTypeNames = superTypes.joinToString(separator = ", ") { superType ->
-        superType.toString()
-      }
+      val superTypeNames =
+        superTypes.joinToString(separator = ", ") { superType ->
+          superType.toString()
+        }
       space(TsModifier.Extends)
       space(superTypeNames)
     }
@@ -127,7 +140,7 @@ class CodeBuildable<T>(
     scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
     prefix: String = "",
     postfix: String = "",
-    block: CodeBuildable<T>.() -> Unit = {}
+    block: CodeBuildable<T>.() -> Unit = {},
   ) {
     code(scopeQuota.left)
     code(prefix)
@@ -136,7 +149,10 @@ class CodeBuildable<T>(
     code(scopeQuota.right)
   }
 
-  fun scope(scopeQuota: TsScopeQuota = TsScopeQuota.BLANK, block: CodeBuildable<T>.() -> Unit = {}) {
+  fun scope(
+    scopeQuota: TsScopeQuota = TsScopeQuota.BLANK,
+    block: CodeBuildable<T>.() -> Unit = {},
+  ) {
     line(scopeQuota.left)
     dirty { block(this) }
     line(scopeQuota.right)

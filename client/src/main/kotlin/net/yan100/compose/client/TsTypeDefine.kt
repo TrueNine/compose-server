@@ -10,22 +10,17 @@ interface TsTypeDefine<T : TsTypeDefine<T>> {
    */
   val isRequireUseGeneric: Boolean
 
-  /**
-   * 判定自身是否为基本 无引用类型，无需填充泛型
-   */
+  /** 判定自身是否为基本 无引用类型，无需填充泛型 */
   val isBasic: Boolean
 
-  /**
-   * 浅层填充泛型
-   */
+  /** 浅层填充泛型 */
   @Suppress("UNCHECKED_CAST")
   fun fillGenerics(vararg generic: TsGeneric): T {
-    return if (isRequireUseGeneric && generic.isNotEmpty()) fillGenerics(generic.toList())
+    return if (isRequireUseGeneric && generic.isNotEmpty())
+      fillGenerics(generic.toList())
     else this as T
   }
 
-  /**
-   * 浅层填充泛型
-   */
+  /** 浅层填充泛型 */
   fun fillGenerics(usedGenerics: List<TsGeneric>): T
 }

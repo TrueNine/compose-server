@@ -1,8 +1,6 @@
 package net.yan100.compose.oss
 
-class FileArgsBuilder(
-  private var internalFileArgs: FileArgs = FileArgs()
-) {
+class FileArgsBuilder(private var internalFileArgs: FileArgs = FileArgs()) {
   fun dir(dir: String): FileArgsBuilder {
     internalFileArgs.dir = dir
     return this

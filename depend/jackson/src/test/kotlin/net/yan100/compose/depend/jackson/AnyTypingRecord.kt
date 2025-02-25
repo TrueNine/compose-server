@@ -5,5 +5,5 @@ import net.yan100.compose.core.typing.UserAgents
 
 data class AnyTypingRecord(
   var stringTyping1: UserAgents? = null,
-  var intTyping2: HttpStatusTyping? = null
+  var intTyping2: HttpStatusTyping? = null,
 )

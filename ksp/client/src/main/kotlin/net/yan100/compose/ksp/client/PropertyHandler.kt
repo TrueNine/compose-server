@@ -10,7 +10,7 @@ import net.yan100.compose.meta.client.ClientType
 class PropertyHandler(
   private val resolver: Resolver,
   private val classDeclarations: List<KSType>,
-  private val log: KSPLogger? = null
+  private val log: KSPLogger? = null,
 ) {
   private val results: MutableMap<String, ClientType> = mutableMapOf()
 
@@ -22,7 +22,7 @@ class PropertyHandler(
       typeKind = null,
       properties = mutableListOf(),
       enumConstants = mutableMapOf(),
-      arguments = mutableListOf()
+      arguments = mutableListOf(),
     )
   }
 
@@ -34,35 +34,38 @@ class PropertyHandler(
         is KSTypeAlias -> handleClassDeclaration(it.declaration)
       }
     }
-    return results.values.map { it.copy(superTypes = cleanSuperTypes(it.superTypes)) }
+    return results.values.map {
+      it.copy(superTypes = cleanSuperTypes(it.superTypes))
+    }
   }
 
   private fun cleanSuperTypes(superTypes: List<ClientType>): List<ClientType> {
-    return superTypes.mapNotNull { r ->
-      val handle = results[r.typeName]?.clipToSuperType()
-      if (handle == null) null
-      else r to handle
-    }
+    return superTypes
+      .mapNotNull { r ->
+        val handle = results[r.typeName]?.clipToSuperType()
+        if (handle == null) null else r to handle
+      }
       .map { (i, r) ->
         r.copy(
           superTypes = cleanSuperTypes(r.superTypes),
-          usedGenerics = i.usedGenerics
+          usedGenerics = i.usedGenerics,
         )
       }
   }
 
-  private fun handlePropertyDeclaration(propertyDeclaration: KSPropertyDeclaration): ClientProp {
+  private fun handlePropertyDeclaration(
+    propertyDeclaration: KSPropertyDeclaration
+  ): ClientProp {
     val type = propertyDeclaration.type.fastResolve()
     val name = type.declaration.qualifiedNameAsString!!
     val parentDeclaration = propertyDeclaration.parentDeclaration
-    val parentName = parentDeclaration?.qualifiedNameAsString ?: error("$name parent is null")
+    val parentName =
+      parentDeclaration?.qualifiedNameAsString ?: error("$name parent is null")
     if (!results.containsKey(name)) {
       when (val d = type.declaration) {
         is KSClassDeclaration,
         is KSTypeAlias -> {
-          if (parentDeclaration != type.declaration
-            && parentName != name
-          ) {
+          if (parentDeclaration != type.declaration && parentName != name) {
             handleClassDeclaration(d)
           }
         }
@@ -72,9 +75,10 @@ class PropertyHandler(
       when (it) {
         is KSClassDeclaration,
         is KSTypeAlias -> {
-          if (parentDeclaration != type.declaration
-            && parentName != name
-            && !results.containsKey(name)
+          if (
+            parentDeclaration != type.declaration &&
+              parentName != name &&
+              !results.containsKey(name)
           ) {
             handleClassDeclaration(it)
           }
@@ -90,33 +94,40 @@ class PropertyHandler(
       if (declaration is KSTypeAlias) {
         val type = declaration.toClientType()
         handleClassDeclaration(declaration.realDeclaration)
-        results += typeName to type.copy(
-          aliasForTypeName = type.aliasForTypeName!!,
-          usedGenerics = declaration.type.fastResolve().arguments.toUsedGenerics(),
-        )
+        results +=
+          typeName to
+            type.copy(
+              aliasForTypeName = type.aliasForTypeName!!,
+              usedGenerics =
+                declaration.type.fastResolve().arguments.toUsedGenerics(),
+            )
         return
       }
 
       if (declaration !is KSClassDeclaration) error("$declaration  not class")
-      val allProperties = declaration.getAllProperties().map {
-        handlePropertyDeclaration(it)
-      }
+      val allProperties =
+        declaration.getAllProperties().map { handlePropertyDeclaration(it) }
 
-      val clientType = declaration.toClientType(log).run {
-        if (declaration.classKind != ClassKind.ENUM_CLASS) {
-          superTypes.forEach {
-            if (!results.containsKey(it.typeName)) {
-              handleClassDeclaration(resolver.getClassDeclarationByRuntimeName(it.typeName)!!)
+      val clientType =
+        declaration.toClientType(log).run {
+          if (declaration.classKind != ClassKind.ENUM_CLASS) {
+            superTypes.forEach {
+              if (!results.containsKey(it.typeName)) {
+                handleClassDeclaration(
+                  resolver.getClassDeclarationByRuntimeName(it.typeName)!!
+                )
+              }
             }
-          }
-          copy(properties = properties + allProperties)
-        } else this
-      }
+            copy(properties = properties + allProperties)
+          } else this
+        }
 
-      results += typeName to clientType.copy(
-        typeName = clientType.typeName,
-        superTypes = clientType.superTypes
-      )
+      results +=
+        typeName to
+          clientType.copy(
+            typeName = clientType.typeName,
+            superTypes = clientType.superTypes,
+          )
     } else {
       results[typeName]!!
     }

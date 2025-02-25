@@ -10,10 +10,8 @@ import kotlin.properties.Delegates
  */
 @Deprecated(
   "use Delegates.notNull()",
-  ReplaceWith(
-    "Delegates.notNull()"
-  ),
-  level = DeprecationLevel.ERROR
+  ReplaceWith("Delegates.notNull()"),
+  level = DeprecationLevel.ERROR,
 )
 interface AbstractLazyInitScope {
   companion object {
@@ -21,10 +19,8 @@ interface AbstractLazyInitScope {
     @Suppress("DEPRECATION_ERROR")
     @Deprecated(
       "use Delegates.notNull()",
-      ReplaceWith(
-        "Delegates.notNull()"
-      ),
-      level = DeprecationLevel.ERROR
+      ReplaceWith("Delegates.notNull()"),
+      level = DeprecationLevel.ERROR,
     )
     fun <T : Any> Companion.late() = Delegates.notNull<T>()
   }

@@ -1,6 +1,8 @@
 package net.yan100.compose.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import jakarta.annotation.Resource as JakartaResource
+import kotlin.test.*
 import net.yan100.compose.client.ts.TsReturnTypeController
 import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.types.TypeKind
@@ -9,12 +11,11 @@ import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
-import kotlin.test.*
-import jakarta.annotation.Resource as JakartaResource
 
 @SpringBootTest
 class StubVerifyTest {
-  lateinit var mapper: ObjectMapper @JakartaResource set
+  lateinit var mapper: ObjectMapper
+    @JakartaResource set
 
   @Test
   fun `ensure super types use input generic`() {
@@ -28,7 +29,8 @@ class StubVerifyTest {
     assertEquals(1, extendsType.arguments.size)
     assertEquals(3, extendsType.superTypes.size, "所有父类，只建议忽略无泛型的泛型")
 
-    val superMap = extendsType.superTypes.find { it.typeName == "kotlin.collections.Map" }
+    val superMap =
+      extendsType.superTypes.find { it.typeName == "kotlin.collections.Map" }
     assertNotNull(superMap)
     assertNotEquals(0, superMap.usedGenerics.size)
     assertEquals(2, superMap.usedGenerics.size)
@@ -51,9 +53,10 @@ class StubVerifyTest {
 
       // 比较枚举值是否一致
       it.enumConstants.forEach { (name, ordinal) ->
-        val enumConstant = enumClass.getEnumConstants().find {
-          name == (it as Enum<*>).name && ordinal == it.ordinal
-        }
+        val enumConstant =
+          enumClass.getEnumConstants().find {
+            name == (it as Enum<*>).name && ordinal == it.ordinal
+          }
         assertNotNull(enumConstant)
       }
     }
@@ -62,17 +65,14 @@ class StubVerifyTest {
   @Test
   fun `ensure all define super types`() {
     val api = getClientApi()
-    assertTrue {
-      api.definitions.any {
-        it.superTypes.isNotEmpty()
-      }
-    }
+    assertTrue { api.definitions.any { it.superTypes.isNotEmpty() } }
   }
 
   @Test
   fun `test get all definitions classes`() {
     val api = getClientApi()
-    val names = api.definitions.filterNot { it.isAlias == true }.map { it.typeName }
+    val names =
+      api.definitions.filterNot { it.isAlias == true }.map { it.typeName }
     names.forEach {
       if (it.startsWith("kotlin.")) return@forEach
       val javaClass = Class.forName(it)
@@ -97,7 +97,8 @@ class StubVerifyTest {
   @Test
   fun `verify jimmer entity to immutable`() {
     val api = getClientApi()
-    val jimmerEntity = api.definitions.find { it.typeName.contains("JimmerEntity") }
+    val jimmerEntity =
+      api.definitions.find { it.typeName.contains("JimmerEntity") }
     assertNotNull(jimmerEntity)
     assertEquals(TypeKind.IMMUTABLE, jimmerEntity.typeKind)
   }
@@ -135,11 +136,13 @@ class StubVerifyTest {
     assertNotNull(api)
   }
 
-
   @Test
   fun `ensure stub file is generated`() {
     val resolver = PathMatchingResourcePatternResolver()
-    val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json")
+    val resources =
+      resolver.getResources(
+        "classpath:META-INF/compose-client/*-client-ts.stub.json"
+      )
     assertNotNull(resources)
     assertTrue { resources.isNotEmpty() }
     assertNotEquals(0, resources.size)
@@ -147,20 +150,23 @@ class StubVerifyTest {
 
   private fun getStubFiles(): Array<out Resource> {
     val resolver = PathMatchingResourcePatternResolver()
-    val resources = resolver.getResources("classpath:META-INF/compose-client/*-client-ts.stub.json")
+    val resources =
+      resolver.getResources(
+        "classpath:META-INF/compose-client/*-client-ts.stub.json"
+      )
     assertNotNull(resources)
     assertNotNull(resources[0])
     return resources
   }
 
   private fun getClientApi(): ClientApiStubs {
-    return getStubFiles().map {
-      mapper.readValue(it.inputStream, ClientApiStubs::class.java)
-    }.reduce { acc, cur ->
-      acc.copy(
-        services = (acc.services + cur.services).distinct(),
-        definitions = (acc.definitions + cur.definitions).distinct()
-      )
-    }
+    return getStubFiles()
+      .map { mapper.readValue(it.inputStream, ClientApiStubs::class.java) }
+      .reduce { acc, cur ->
+        acc.copy(
+          services = (acc.services + cur.services).distinct(),
+          definitions = (acc.definitions + cur.definitions).distinct(),
+        )
+      }
   }
 }

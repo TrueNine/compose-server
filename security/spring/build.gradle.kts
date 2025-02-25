@@ -1,6 +1,4 @@
-plugins {
-  `kotlinspring-convention`
-}
+plugins { `kotlinspring-convention` }
 
 version = libs.versions.compose.security.spring.get()
 
@@ -19,7 +17,7 @@ dependencies {
     implementation(libs.org.htmlunit.neko.htmlunit)
   }
 
-  //implementation(project(":depend:depend-http-exchange"))
+  // implementation(project(":depend:depend-http-exchange"))
   // TODO 剥离 web模块
   implementation(projects.depend.dependServlet)
   implementation(projects.security.securityCrypto)
@@ -27,5 +25,3 @@ dependencies {
 
   testImplementation(projects.testtoolkit)
 }
-
-

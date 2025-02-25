@@ -1,22 +1,9 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+import kotlin.test.assertNotNull
 import net.yan100.compose.security.crypto.FileKeyRepo
 import net.yan100.compose.security.crypto.Keys
 import net.yan100.compose.security.crypto.PemFormat
@@ -24,11 +11,7 @@ import net.yan100.compose.security.jwt.JwtIssuer
 import net.yan100.compose.security.jwt.JwtVerifier
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import net.yan100.compose.security.jwt.consts.VerifierParam
-
 import org.junit.jupiter.api.Test
-import java.time.Duration
-import java.time.temporal.ChronoUnit
-import kotlin.test.assertNotNull
 
 class FileKeyRepoTest {
 
@@ -85,7 +68,12 @@ class FileKeyRepoTest {
         .contentDecryptKey(e.privateKey)
         .build()
 
-    val ver = JwtVerifier.createVerifier().serializer(ObjectMapper()).contentDecryptKey(e.privateKey).signatureVerifyKey(s.publicKey).build()
+    val ver =
+      JwtVerifier.createVerifier()
+        .serializer(ObjectMapper())
+        .contentDecryptKey(e.privateKey)
+        .signatureVerifyKey(s.publicKey)
+        .build()
 
     val issToken =
       iss.issued(
@@ -94,7 +82,14 @@ class FileKeyRepoTest {
           subjectObj = "3" to "4"
         }
       )
-    val res = ver.verify(VerifierParam(issToken, subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java))
+    val res =
+      ver.verify(
+        VerifierParam(
+          issToken,
+          subjectTargetType = Any::class.java,
+          encryptDataTargetType = Any::class.java,
+        )
+      )
     println(res?.subject)
     println(res?.decryptedData)
   }

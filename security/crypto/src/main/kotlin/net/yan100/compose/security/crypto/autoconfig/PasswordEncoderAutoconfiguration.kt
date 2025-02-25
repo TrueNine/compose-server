@@ -1,6 +1,5 @@
 package net.yan100.compose.security.crypto.autoconfig
 
-
 import net.yan100.compose.core.slf4j
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -20,7 +19,6 @@ private val log = slf4j<PasswordEncoderAutoconfiguration>()
 @Configuration
 class PasswordEncoderAutoconfiguration {
 
-
   /**
    * 配置主要的密码加密策略 目前使用 BCrypt 2a 14 策略
    *
@@ -29,7 +27,8 @@ class PasswordEncoderAutoconfiguration {
   @Bean
   @Primary
   fun bCryptPasswordEncoder(ctx: ApplicationContext?): PasswordEncoder {
-    val bCryptPasswordEncoder = BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.`$2A`, 14)
+    val bCryptPasswordEncoder =
+      BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.`$2A`, 14)
     log.trace("注册 bCryptPasswordEncoder = {}", bCryptPasswordEncoder)
     return bCryptPasswordEncoder
   }

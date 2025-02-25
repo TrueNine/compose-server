@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
-
 @Primary
 @Repository
 interface ILinkedAttachmentRepo : IRepo<LinkedAttachment> {
@@ -22,5 +21,8 @@ interface ILinkedAttachmentRepo : IRepo<LinkedAttachment> {
     and b.baseUrl = :baseUrl
   """
   )
-  fun findAllByParentBaseUrl(baseUrl: String, page: Pageable): Page<LinkedAttachment>
+  fun findAllByParentBaseUrl(
+    baseUrl: String,
+    page: Pageable,
+  ): Page<LinkedAttachment>
 }

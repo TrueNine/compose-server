@@ -14,36 +14,34 @@ import net.yan100.compose.meta.types.TypeKind
 open class TsStaticInterceptor : TsScopeInterceptor() {
   override val executeStage: ExecuteStage = ExecuteStage.RESOLVE_TS_SCOPE
 
-  private val supportedKinds = listOf(
-    TypeKind.INTERFACE,
-    TypeKind.CLASS,
-    TypeKind.EMBEDDABLE,
-    TypeKind.IMMUTABLE
-  )
+  private val supportedKinds =
+    listOf(
+      TypeKind.INTERFACE,
+      TypeKind.CLASS,
+      TypeKind.EMBEDDABLE,
+      TypeKind.IMMUTABLE,
+    )
 
-  override fun supported(ctx: KtToTsContext, source: ClientType): Boolean = source.typeKind in supportedKinds
+  override fun supported(ctx: KtToTsContext, source: ClientType): Boolean =
+    source.typeKind in supportedKinds
 
   override fun process(ctx: KtToTsContext, source: ClientType): TsScope<*> {
     val prevScope = ctx.getTsScopeByType(source)
-    val name = if (prevScope is TsScope.TypeVal) {
-      prevScope.definition.toTsName()
-    } else prevScope.name
+    val name =
+      if (prevScope is TsScope.TypeVal) {
+        prevScope.definition.toTsName()
+      } else prevScope.name
 
     val properties = ctx.getTsTypePropertyByType(source)
     // 如果 没有属性，则处理为 type xxx = object
     if (properties.isEmpty()) {
-      return TsScope.TypeVal(
-        definition = TsTypeVal.EmptyObject,
-        meta = source
-      )
+      return TsScope.TypeVal(definition = TsTypeVal.EmptyObject, meta = source)
     }
 
-    val generics = source.arguments.mapIndexed { i, it ->
-      TsGeneric.Defined(
-        name = TsName.Generic(it),
-        index = i
-      )
-    }
+    val generics =
+      source.arguments.mapIndexed { i, it ->
+        TsGeneric.Defined(name = TsName.Generic(it), index = i)
+      }
 
     val superTypes = ctx.getSuperTypeRefs(source)
 
@@ -52,7 +50,7 @@ open class TsStaticInterceptor : TsScopeInterceptor() {
       name = name,
       superTypes = superTypes,
       generics = generics,
-      properties = properties
+      properties = properties,
     )
   }
 }

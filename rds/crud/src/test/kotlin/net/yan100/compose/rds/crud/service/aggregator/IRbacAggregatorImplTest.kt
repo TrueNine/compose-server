@@ -1,22 +1,7 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.service.aggregator
 
 import jakarta.annotation.Resource
+import kotlin.test.*
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.crud.entities.jpa.Permissions
 import net.yan100.compose.rds.crud.entities.jpa.Role
@@ -29,17 +14,29 @@ import net.yan100.compose.rds.crud.service.IRoleService
 import net.yan100.compose.rds.crud.service.IUserAccountService
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
-import kotlin.test.*
 
 @SpringBootTest
 class IRbacAggregatorImplTest {
-  lateinit var argRepo: IFullRoleGroupRepo @Resource set
-  lateinit var aggregator: IRbacAggregator @Resource set
-  lateinit var userService: IUserAccountService @Resource set
-  lateinit var roleService: IRoleService @Resource set
-  lateinit var rgService: net.yan100.compose.rds.crud.service.IRoleGroupService @Resource set
-  lateinit var permissionsService: IPermissionsService @Resource set
-  lateinit var snowflake: ISnowflakeGenerator @Resource set
+  lateinit var argRepo: IFullRoleGroupRepo
+    @Resource set
+
+  lateinit var aggregator: IRbacAggregator
+    @Resource set
+
+  lateinit var userService: IUserAccountService
+    @Resource set
+
+  lateinit var roleService: IRoleService
+    @Resource set
+
+  lateinit var rgService: net.yan100.compose.rds.crud.service.IRoleGroupService
+    @Resource set
+
+  lateinit var permissionsService: IPermissionsService
+    @Resource set
+
+  lateinit var snowflake: ISnowflakeGenerator
+    @Resource set
 
   private fun getUser() =
     UserAccount().apply {
@@ -48,7 +45,8 @@ class IRbacAggregatorImplTest {
       pwdEnc = "aa${snowflake.next()}"
     }
 
-  private fun getRoleGroup() = RoleGroup().apply { name = "ab${snowflake.next()}" }
+  private fun getRoleGroup() =
+    RoleGroup().apply { name = "ab${snowflake.next()}" }
 
   @Test
   fun testSaveRoleGroupToUser() {
@@ -168,7 +166,9 @@ class IRbacAggregatorImplTest {
       rgService.post(getRoleGroup()).let { rg ->
         aggregator.linkAllRoleToRoleGroup(rs.map { it.id }, rg.id).let {
           aggregator.revokeAllRoleFromRoleGroup(rs.map { it.id }, rg.id)
-          argRepo.findByIdOrNull(rg.id)!!.let { assertTrue { it.roles.isEmpty() } }
+          argRepo.findByIdOrNull(rg.id)!!.let {
+            assertTrue { it.roles.isEmpty() }
+          }
         }
       }
     }
@@ -180,8 +180,7 @@ class IRbacAggregatorImplTest {
       doc = "stra ${snowflake.next()}"
     }
 
-  @Resource
-  lateinit var arRepo: IFullRoleRepo
+  @Resource lateinit var arRepo: IFullRoleRepo
 
   @Test
   fun testSavePermissionsToRole() {
@@ -202,7 +201,9 @@ class IRbacAggregatorImplTest {
       roleService.post(getRole()).let { r ->
         aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let { all ->
           assertTrue("all$all") { all.isNotEmpty() }
-          arRepo.findByIdOrNull(r.id)!!.let { sr -> ps.forEach { assertContains(sr.permissions, it) } }
+          arRepo.findByIdOrNull(r.id)!!.let { sr ->
+            ps.forEach { assertContains(sr.permissions, it) }
+          }
         }
       }
     }
@@ -214,7 +215,11 @@ class IRbacAggregatorImplTest {
       roleService.post(getRole()).let { r ->
         aggregator.savePermissionsToRole(p.id, r.id).let {
           aggregator.revokePermissionsFromRole(p.id, r.id)
-          arRepo.findByIdOrNull(r.id)!!.let { sr -> repeat(sr.permissions.size) { assertFalse { sr.permissions.contains(p) } } }
+          arRepo.findByIdOrNull(r.id)!!.let { sr ->
+            repeat(sr.permissions.size) {
+              assertFalse { sr.permissions.contains(p) }
+            }
+          }
         }
       }
     }
@@ -226,7 +231,9 @@ class IRbacAggregatorImplTest {
       permissionsService.postAll(getAllPermissions()).let { ps ->
         aggregator.saveAllPermissionsToRole(ps.map { it.id }, r.id).let {
           aggregator.revokeAllPermissionsFromRole(ps.map { it.id }, r.id)
-          arRepo.findByIdOrNull(r.id)!!.let { assertTrue { it.permissions.isEmpty() } }
+          arRepo.findByIdOrNull(r.id)!!.let {
+            assertTrue { it.permissions.isEmpty() }
+          }
         }
       }
     }

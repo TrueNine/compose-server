@@ -12,11 +12,12 @@ import net.yan100.compose.meta.types.TypeKind
 
 open class KtToTsContext(
   stub: ClientApiStubs,
-  vararg tsInterceptorChains: Interceptor<*, *, *> = arrayOf()
+  vararg tsInterceptorChains: Interceptor<*, *, *> = arrayOf(),
 ) : KtToKtContext(stub, *tsInterceptorChains) {
   override var currentStage: ExecuteStage = ExecuteStage.RESOLVE_OPERATIONS
   private val internalTsScopes: MutableList<TsScope<*>> = mutableListOf()
-  private val internalTsScopesMap: MutableMap<String, TsScope<*>> = mutableMapOf()
+  private val internalTsScopesMap: MutableMap<String, TsScope<*>> =
+    mutableMapOf()
   private var internalTsScopesCircularCount = 0
   val tsScopes: List<TsScope<*>>
     get() {
@@ -33,6 +34,7 @@ open class KtToTsContext(
         internalTsScopes
       }
     }
+
   private var internalTsScopesMapCircularCount = 0
   val tsScopesMap: Map<String, TsScope<*>>
     get() {
@@ -75,29 +77,37 @@ open class KtToTsContext(
     return internalTsScopesMap
   }
 
-
-  /**
-   * 更新入口
-   */
+  /** 更新入口 */
   private fun dispatch() {
     if (definitions.isEmpty()) error("context definitions is not init")
     clearAllTsScope()
-    val tsPreReferenceInterceptors = interceptorChain.filterIsInstance<TsPreReferenceInterceptor>()
-    check(tsPreReferenceInterceptors.isNotEmpty()) { "context interceptor chain is not init" }
-    val allPreReferences = definitions.map { type ->
-      val process = tsPreReferenceInterceptors.firstOrNull { it.supported(this, type) }
-      type to process?.run {
-        TsScope.TypeVal(
-          definition = process(this@KtToTsContext, type),
-          meta = type
-        )
+    val tsPreReferenceInterceptors =
+      interceptorChain.filterIsInstance<TsPreReferenceInterceptor>()
+    check(tsPreReferenceInterceptors.isNotEmpty()) {
+      "context interceptor chain is not init"
+    }
+    val allPreReferences =
+      definitions.map { type ->
+        val process =
+          tsPreReferenceInterceptors.firstOrNull { it.supported(this, type) }
+        type to
+          process?.run {
+            TsScope.TypeVal(
+              definition = process(this@KtToTsContext, type),
+              meta = type,
+            )
+          }
       }
-    }
-    val preReferenceMap = allPreReferences.partition { it.second != null }.let { (s, u) ->
-      if (u.isNotEmpty()) {
-        error("unsupported pre references, pre reference stage requires processing all references: ${u.map { it.first }}")
-      } else s.associate { it.first to it.second!! }
-    }
+    val preReferenceMap =
+      allPreReferences
+        .partition { it.second != null }
+        .let { (s, u) ->
+          if (u.isNotEmpty()) {
+            error(
+              "unsupported pre references, pre reference stage requires processing all references: ${u.map { it.first }}"
+            )
+          } else s.associate { it.first to it.second!! }
+        }
     addAllTsScope(preReferenceMap.mapKeys { it.key.typeName })
     val postReferenceMap = updatePostReference(preReferenceMap)
     val redirected = redirectAllScopes(postReferenceMap)
@@ -106,103 +116,121 @@ open class KtToTsContext(
     processService()
   }
 
-  /**
-   * 处理 services
-   */
+  /** 处理 services */
   fun processService() {
-    val result = clientServiceMap.mapKeys { (type) ->
-      val typeName = type.typeName.toTsPathName()
-      TsScope.Class(
-        name = typeName.copy(path = "service/${typeName.path}"),
-        meta = type
-      )
-    }.mapValues { (_, operations) ->
-      operations.map { operation ->
-        val requestInfo = operation.requestInfo!!
-        MimeTypes[requestInfo.requestAcceptType]!!
-        val returnType = (operation.returnType?.let { rt ->
-          val returnTypeGenerics = getTsGenericByGenerics(rt.usedGenerics)
-          val v = getTsTypeValByType(rt).fillGenerics(returnTypeGenerics)
-          val types = buildList<TsTypeVal<*>> {
-            add(v)
-            if (rt.nullable == true) {
-              add(TsTypeVal.Undefined)
+    val result =
+      clientServiceMap
+        .mapKeys { (type) ->
+          val typeName = type.typeName.toTsPathName()
+          TsScope.Class(
+            name = typeName.copy(path = "service/${typeName.path}"),
+            meta = type,
+          )
+        }
+        .mapValues { (_, operations) ->
+          operations.map { operation ->
+            val requestInfo = operation.requestInfo!!
+            MimeTypes[requestInfo.requestAcceptType]!!
+            val returnType =
+              (operation.returnType?.let { rt ->
+                val returnTypeGenerics = getTsGenericByGenerics(rt.usedGenerics)
+                val v = getTsTypeValByType(rt).fillGenerics(returnTypeGenerics)
+                val types =
+                  buildList<TsTypeVal<*>> {
+                    add(v)
+                    if (rt.nullable == true) {
+                      add(TsTypeVal.Undefined)
+                    }
+                  }
+                TsUseVal.Return(
+                  typeVal =
+                    TsTypeVal.Promise(
+                      usedGeneric = TsGeneric.Used(TsTypeVal.Union(types))
+                    )
+                )
+              } ?: TsUseVal.Return())
+
+            val params =
+              operation.params.map { typeParameter ->
+                val generics =
+                  getTsGenericByGenerics(typeParameter.usedGenerics)
+                TsUseVal.Parameter(
+                  name = typeParameter.actualName.toTsName(),
+                  typeVal =
+                    getTsTypeValByName(typeParameter.typeName)
+                      .fillGenerics(generics),
+                )
+              }
+            TsVal.Function(
+              modifiers = listOf(TsModifier.Readonly),
+              name = operation.name.toTsName(),
+              params = params,
+              returnType = returnType,
+            ) { f ->
+              line("let __uri = '${requestInfo.mappedUris.first()}'")
+              line("const __method = '${requestInfo.supportedMethods.first()}'")
+
+              line(
+                "return (await this.executor({uri: __uri as unknown as `/${'$'}{string}`, method: __method}) as unknown as ${f.returnType}"
+              )
             }
           }
-          TsUseVal.Return(
-            typeVal = TsTypeVal.Promise(
-              usedGeneric = TsGeneric.Used(TsTypeVal.Union(types))
-            )
-          )
-        } ?: TsUseVal.Return())
-
-        val params = operation.params.map { typeParameter ->
-          val generics = getTsGenericByGenerics(typeParameter.usedGenerics)
-          TsUseVal.Parameter(
-            name = typeParameter.actualName.toTsName(),
-            typeVal = getTsTypeValByName(typeParameter.typeName).fillGenerics(generics)
-          )
         }
-        TsVal.Function(
-          modifiers = listOf(TsModifier.Readonly),
-          name = operation.name.toTsName(),
-          params = params,
-          returnType = returnType
-        ) { f ->
-          line("let __uri = '${requestInfo.mappedUris.first()}'")
-          line("const __method = '${requestInfo.supportedMethods.first()}'")
-
-
-          line("return (await this.executor({uri: __uri as unknown as `/${'$'}{string}`, method: __method}) as unknown as ${f.returnType}")
-        }
-      }
-    }
     val res = result.values.flatten().map { it.code }
     // TODO println
     println(res)
   }
 
-  private fun redirectAllScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
+  private fun redirectAllScopes(
+    supportedMap: Map<ClientType, TsScope<*>>,
+    deep: Int = 0,
+  ): Map<ClientType, TsScope<*>> {
     if (deep > 16) error("Circular dependency detected")
     if (supportedMap.isEmpty()) return supportedMap
-    val processedMap = supportedMap.mapValues { (t, s) ->
-      val kind = when (t.typeKind) {
-        TypeKind.CLASS,
-        TypeKind.OBJECT,
-        TypeKind.INTERFACE -> "static"
+    val processedMap =
+      supportedMap.mapValues { (t, s) ->
+        val kind =
+          when (t.typeKind) {
+            TypeKind.CLASS,
+            TypeKind.OBJECT,
+            TypeKind.INTERFACE -> "static"
 
-        TypeKind.ENUM_CLASS -> "enums"
+            TypeKind.ENUM_CLASS -> "enums"
 
-        TypeKind.IMMUTABLE -> "dynamic"
-        TypeKind.EMBEDDABLE -> "embeddable"
-        TypeKind.TYPEALIAS -> "typealias"
+            TypeKind.IMMUTABLE -> "dynamic"
+            TypeKind.EMBEDDABLE -> "embeddable"
+            TypeKind.TYPEALIAS -> "typealias"
 
-        TypeKind.ENUM_ENTRY,
-        TypeKind.ANNOTATION_CLASS,
-        TypeKind.TRANSIENT,
-        null -> error("unsupported type kind: ${t.typeKind}")
+            TypeKind.ENUM_ENTRY,
+            TypeKind.ANNOTATION_CLASS,
+            TypeKind.TRANSIENT,
+            null -> error("unsupported type kind: ${t.typeKind}")
+          }
+        if (
+          s is TsScope.TypeVal &&
+            s.definition is TsTypeVal.Ref &&
+            s.definition.typeName is TsName.PathName
+        ) {
+          val name =
+            s.definition.typeName.copy(
+              name = s.definition.typeName.name,
+              path = "${kind}/${s.definition.typeName.path}",
+            )
+          s.copy(definition = s.definition.copy(typeName = name))
+        } else if (s.name is TsName.PathName) {
+          val name = (s.name as TsName.PathName)
+          val asName =
+            name.copy(name = name.name, path = "${kind}/${name.path}")
+          when (s) {
+            is TsScope.Class -> s.copy(name = asName)
+            is TsScope.Enum -> s.copy(name = asName)
+            is TsScope.Interface -> s.copy(name = asName)
+            is TsScope.TypeAlias -> s.copy(name = asName)
+            is TsScope.TypeVal ->
+              error("unsupported scope kind: ${s.definition}")
+          }
+        } else s
       }
-      if (s is TsScope.TypeVal && s.definition is TsTypeVal.Ref && s.definition.typeName is TsName.PathName) {
-        val name = s.definition.typeName.copy(
-          name = s.definition.typeName.name,
-          path = "${kind}/${s.definition.typeName.path}"
-        )
-        s.copy(definition = s.definition.copy(typeName = name))
-      } else if (s.name is TsName.PathName) {
-        val name = (s.name as TsName.PathName)
-        val asName = name.copy(
-          name = name.name,
-          path = "${kind}/${name.path}"
-        )
-        when (s) {
-          is TsScope.Class -> s.copy(name = asName)
-          is TsScope.Enum -> s.copy(name = asName)
-          is TsScope.Interface -> s.copy(name = asName)
-          is TsScope.TypeAlias -> s.copy(name = asName)
-          is TsScope.TypeVal -> error("unsupported scope kind: ${s.definition}")
-        }
-      } else s
-    }
     return addAllTsScopeByType(processedMap)
   }
 
@@ -212,13 +240,16 @@ open class KtToTsContext(
       when {
         r is TsTypeVal.Ref -> {
           if (r.isBasic) r
-          else r.copy(
-            typeName = r.typeName,
-            usedGenerics = superType.toTsGenericUsed { er ->
-              if (er.typeName.isGenericName()) er.typeName.unwrapGenericName().toTsName()
-              else getTsTypeValByName(er.typeName).toTsName()
-            }
-          )
+          else
+            r.copy(
+              typeName = r.typeName,
+              usedGenerics =
+                superType.toTsGenericUsed { er ->
+                  if (er.typeName.isGenericName())
+                    er.typeName.unwrapGenericName().toTsName()
+                  else getTsTypeValByName(er.typeName).toTsName()
+                },
+            )
         }
 
         r.isBasic -> null
@@ -227,84 +258,109 @@ open class KtToTsContext(
     }
   }
 
-  /**
-   * 后置处理 scope
-   */
-  private fun updatePostScopes(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
+  /** 后置处理 scope */
+  private fun updatePostScopes(
+    supportedMap: Map<ClientType, TsScope<*>>,
+    deep: Int = 0,
+  ): Map<ClientType, TsScope<*>> {
     if (deep > 16) error("Circular dependency detected")
     if (supportedMap.isEmpty()) return supportedMap
-    val tsGenericsInterceptors = interceptorChain.filterIsInstance<TsPostScopeInterceptor>()
+    val tsGenericsInterceptors =
+      interceptorChain.filterIsInstance<TsPostScopeInterceptor>()
     if (tsGenericsInterceptors.isEmpty()) return supportedMap
-    val (preparedProcessMap, basicMap) = supportedMap.entries.partition { (_, def) ->
-      !def.isBasic
-    }.let {
-      it.first.associate { (k, v) -> k to v } to it.second.associate { (k, v) -> k to v }
-    }
-    val processedMap = preparedProcessMap.map { (type, def) ->
-      val process = tsGenericsInterceptors.firstOrNull { it.supported(this, type to def) }
-      if (process == null) return@map type to def
-      type to process.run {
-        process(this@KtToTsContext, type to def)
-      }
-    }.run { toMap() }
+    val (preparedProcessMap, basicMap) =
+      supportedMap.entries
+        .partition { (_, def) -> !def.isBasic }
+        .let {
+          it.first.associate { (k, v) -> k to v } to
+            it.second.associate { (k, v) -> k to v }
+        }
+    val processedMap =
+      preparedProcessMap
+        .map { (type, def) ->
+          val process =
+            tsGenericsInterceptors.firstOrNull {
+              it.supported(this, type to def)
+            }
+          if (process == null) return@map type to def
+          type to process.run { process(this@KtToTsContext, type to def) }
+        }
+        .run { toMap() }
     val resultMap = addAllTsScopeByType((processedMap + basicMap))
-    if (processedMap != preparedProcessMap) return updatePostScopes(resultMap, deep + 1)
+    if (processedMap != preparedProcessMap)
+      return updatePostScopes(resultMap, deep + 1)
     return resultMap
   }
 
-  /**
-   * 后置处理 reference
-   */
-  private fun updatePostReference(supportedMap: Map<ClientType, TsScope<*>>, deep: Int = 0): Map<ClientType, TsScope<*>> {
+  /** 后置处理 reference */
+  private fun updatePostReference(
+    supportedMap: Map<ClientType, TsScope<*>>,
+    deep: Int = 0,
+  ): Map<ClientType, TsScope<*>> {
     if (deep > 16) error("Circular dependency detected")
     if (supportedMap.isEmpty()) return supportedMap
-    val tsPostInterceptors = interceptorChain.filterIsInstance<TsPostReferenceInterceptor>()
+    val tsPostInterceptors =
+      interceptorChain.filterIsInstance<TsPostReferenceInterceptor>()
     if (tsPostInterceptors.isEmpty()) return supportedMap
-    val (basicMap, nextProcessMap) = supportedMap.entries.partition { (_, def) ->
-      def is TsScope.TypeVal && def.definition.isBasic
-    }.let {
-      it.first.associate { (k, v) -> k to v } to it.second.associate { (k, v) -> k to v }
-    }
-    val processedPostRefs = nextProcessMap.map { (type, def) ->
-      val process = tsPostInterceptors.firstOrNull { it.supported(this, type) }
-      if (process == null) return@map type to def
-      type to process.run {
-        TsScope.TypeVal(
-          definition = process(this@KtToTsContext, type),
-          meta = type
-        )
-      }
-    }.run { toMap().toMutableMap() }
+    val (basicMap, nextProcessMap) =
+      supportedMap.entries
+        .partition { (_, def) ->
+          def is TsScope.TypeVal && def.definition.isBasic
+        }
+        .let {
+          it.first.associate { (k, v) -> k to v } to
+            it.second.associate { (k, v) -> k to v }
+        }
+    val processedPostRefs =
+      nextProcessMap
+        .map { (type, def) ->
+          val process =
+            tsPostInterceptors.firstOrNull { it.supported(this, type) }
+          if (process == null) return@map type to def
+          type to
+            process.run {
+              TsScope.TypeVal(
+                definition = process(this@KtToTsContext, type),
+                meta = type,
+              )
+            }
+        }
+        .run { toMap().toMutableMap() }
     val all = (processedPostRefs + basicMap)
     addAllTsScopeByType(all)
-    if (processedPostRefs != nextProcessMap) return updatePostReference(all, deep + 1)
+    if (processedPostRefs != nextProcessMap)
+      return updatePostReference(all, deep + 1)
     return all
   }
 
-  /**
-   * 环绕处理 scope
-   */
-  private fun updateCustomScopes(supportedPostReferences: Map<ClientType, TsScope<*>>): Map<ClientType, TsScope<*>> {
-    val toTsInterceptors = interceptorChain.filterIsInstance<TsScopeInterceptor>()
-    val (notHandledTypeDefinitions, basicScopes) = supportedPostReferences.entries.partition { (_, def) ->
-      when (def) {
-        is TsScope.Enum
-          -> false
+  /** 环绕处理 scope */
+  private fun updateCustomScopes(
+    supportedPostReferences: Map<ClientType, TsScope<*>>
+  ): Map<ClientType, TsScope<*>> {
+    val toTsInterceptors =
+      interceptorChain.filterIsInstance<TsScopeInterceptor>()
+    val (notHandledTypeDefinitions, basicScopes) =
+      supportedPostReferences.entries.partition { (_, def) ->
+        when (def) {
+          is TsScope.Enum -> false
 
-        is TsScope.TypeVal -> when (def.definition) {
-          is TsTypeVal.Ref -> true
+          is TsScope.TypeVal ->
+            when (def.definition) {
+              is TsTypeVal.Ref -> true
+              else -> false
+            }
+
           else -> false
         }
-
-        else -> false
       }
-    }
-    val linkedScopes = notHandledTypeDefinitions.associate { (type, prev) ->
-      val process = toTsInterceptors.firstOrNull { it.supported(this, type) }
-      type to (process?.process(this, type) ?: prev)
-    }
+    val linkedScopes =
+      notHandledTypeDefinitions.associate { (type, prev) ->
+        val process = toTsInterceptors.firstOrNull { it.supported(this, type) }
+        type to (process?.process(this, type) ?: prev)
+      }
 
-    val processedResult = (linkedScopes + basicScopes.associate { (a, it) -> a to it })
+    val processedResult =
+      (linkedScopes + basicScopes.associate { (a, it) -> a to it })
     addAllTsScope(processedResult.mapKeys { it.key.typeName })
     return processedResult
   }
@@ -316,40 +372,42 @@ open class KtToTsContext(
     return clientGenerics.map { usedGeneric ->
       if (usedGeneric.typeName.isGenericName()) {
         return@map TsGeneric.Used(
-          used = TsTypeVal.Generic(TsGeneric.Defined(name = usedGeneric.typeName.toTsName())),
-          index = usedGeneric.index
+          used =
+            TsTypeVal.Generic(
+              TsGeneric.Defined(name = usedGeneric.typeName.toTsName())
+            ),
+          index = usedGeneric.index,
         )
       }
-      val usedResult = getTsTypeValByName(usedGeneric.typeName).let { g ->
-        when (g) {
-          is TsTypeVal.Ref -> {
-            g.copy(
-              typeName = g.typeName,
-              usedGenerics = getTsGenericByGenerics(usedGeneric.usedGenerics)
-            )
-          }
+      val usedResult =
+        getTsTypeValByName(usedGeneric.typeName).let { g ->
+          when (g) {
+            is TsTypeVal.Ref -> {
+              g.copy(
+                typeName = g.typeName,
+                usedGenerics = getTsGenericByGenerics(usedGeneric.usedGenerics),
+              )
+            }
 
-          else -> g
+            else -> g
+          }
         }
-      }
-      TsGeneric.Used(
-        used = usedResult,
-        index = usedGeneric.index
-      )
+      TsGeneric.Used(used = usedResult, index = usedGeneric.index)
     }
   }
 
-  fun getTsTypePropertyByType(
-    clientType: ClientType
-  ): List<TsUseVal.Prop> {
+  fun getTsTypePropertyByType(clientType: ClientType): List<TsUseVal.Prop> {
     if (clientType.properties.isEmpty()) return emptyList()
     val r = getTypeByType(clientType) ?: return emptyList()
     return r.properties.map { clientProp ->
       if (clientProp.typeName.isGenericName()) {
         return@map TsUseVal.Prop(
           name = clientProp.name.toTsName(),
-          typeVal = TsTypeVal.Generic(TsGeneric.Defined(name = clientProp.typeName.toTsName())),
-          partial = clientProp.nullable == true
+          typeVal =
+            TsTypeVal.Generic(
+              TsGeneric.Defined(name = clientProp.typeName.toTsName())
+            ),
+          partial = clientProp.nullable == true,
         )
       }
       val thatPropType = this.getTypeByName(clientProp.typeName)!!
@@ -358,40 +416,36 @@ open class KtToTsContext(
         return@map TsUseVal.Prop(
           name = clientProp.name.toTsName(),
           typeVal = def,
-          partial = clientProp.nullable == true
+          partial = clientProp.nullable == true,
         )
       }
       TsUseVal.Prop(
         name = clientProp.name.toTsName(),
-        typeVal = def.copy(usedGenerics = getTsGenericByGenerics(clientProp.usedGenerics))
+        typeVal =
+          def.copy(
+            usedGenerics = getTsGenericByGenerics(clientProp.usedGenerics)
+          ),
       )
     }
   }
 
-  fun getTsScopeByName(
-    typeName: String
-  ): TsScope<*> {
+  fun getTsScopeByName(typeName: String): TsScope<*> {
     val clientType = getTypeByName(typeName) ?: error("$typeName is not found")
     return getTsScopeByType(clientType)
   }
 
-  fun getTsTypeValByName(
-    typeName: String
-  ): TsTypeVal<*> {
-    val clientType = this.getTypeByName(typeName) ?: error("$typeName is not found")
+  fun getTsTypeValByName(typeName: String): TsTypeVal<*> {
+    val clientType =
+      this.getTypeByName(typeName) ?: error("$typeName is not found")
     return getTsTypeValByType(clientType)
   }
 
-  fun getTsTypeValByType(
-    clientType: ClientType,
-  ): TsTypeVal<*> {
+  fun getTsTypeValByType(clientType: ClientType): TsTypeVal<*> {
     val name = getTypeNameByName(clientType.typeName)
     return tsScopesMap[name]?.toTsTypeVal() ?: error("$name is not found")
   }
 
-  fun getTsScopeByType(
-    clientType: ClientType
-  ): TsScope<*> {
+  fun getTsScopeByType(clientType: ClientType): TsScope<*> {
     val tsScope = getTsScopesByTypes(listOf(clientType)).first()
     return tsScope
   }

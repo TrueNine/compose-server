@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import net.yan100.compose.core.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.crud.entities.jpa.LinkedAttachment
 import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction
 
@@ -18,7 +17,7 @@ interface SuperFullUserInfo : SuperUserInfo {
     referencedColumnName = IDbNames.ID,
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
     insertable = false,
-    updatable = false
+    updatable = false,
   )
   @get:JsonBackReference
   @get:NotFound(action = NotFoundAction.IGNORE)
@@ -43,7 +42,7 @@ interface SuperFullUserInfo : SuperUserInfo {
     referencedColumnName = IDbNames.ID,
     foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
     insertable = false,
-    updatable = false
+    updatable = false,
   )
   @get:NotFound(action = NotFoundAction.IGNORE)
   var avatarImage: LinkedAttachment?

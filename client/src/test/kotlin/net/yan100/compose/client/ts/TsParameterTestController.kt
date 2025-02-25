@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 private typealias Erv = List<String>
+
 private typealias MList<E> = List<E>
 
 @Api
@@ -13,7 +14,9 @@ private typealias MList<E> = List<E>
 class TsParameterTestController {
   @Api
   @PostMapping("inputNullParameter")
-  fun inputNullParameter(@RequestBody data: Map<String, Map<String?, List<Boolean?>>>): Map<String, List<String>?>? {
+  fun inputNullParameter(
+    @RequestBody data: Map<String, Map<String?, List<Boolean?>>>
+  ): Map<String, List<String>?>? {
     return null
   }
 
@@ -23,12 +26,7 @@ class TsParameterTestController {
     return null
   }
 
-  @Api
-  @PostMapping("inputFile")
-  fun inputFile(
-    file: MultipartFile?
-  ) {
-  }
+  @Api @PostMapping("inputFile") fun inputFile(file: MultipartFile?) {}
 
   @Api
   @PutMapping("outputAlias")
@@ -36,9 +34,5 @@ class TsParameterTestController {
     return null
   }
 
-  @Api
-  @GetMapping("outputVoidOrUnit")
-  fun outputVoidOrUnit() {
-
-  }
+  @Api @GetMapping("outputVoidOrUnit") fun outputVoidOrUnit() {}
 }

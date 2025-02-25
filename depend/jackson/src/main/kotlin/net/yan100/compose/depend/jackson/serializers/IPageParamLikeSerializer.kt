@@ -10,7 +10,7 @@ import net.yan100.compose.core.domain.IPageParam
 class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
   override fun deserialize(
     p: JsonParser?,
-    ctxt: DeserializationContext?
+    ctxt: DeserializationContext?,
   ): IPageParam? {
     // 检查 JsonParser 是否为空
     if (p == null) return null
@@ -57,5 +57,10 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
 
   // 扩展函数：安全解析 Boolean 值
   private fun JsonParser.booleanValueOrNull(): Boolean? =
-    if (currentToken == JsonToken.VALUE_TRUE || currentToken == JsonToken.VALUE_FALSE) booleanValue else null
+    if (
+      currentToken == JsonToken.VALUE_TRUE ||
+        currentToken == JsonToken.VALUE_FALSE
+    )
+      booleanValue
+    else null
 }

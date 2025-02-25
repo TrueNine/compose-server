@@ -1,6 +1,4 @@
-plugins {
-  `kotlin-convention`
-}
+plugins { `kotlin-convention` }
 
 version = libs.versions.compose.data.crawler.get()
 

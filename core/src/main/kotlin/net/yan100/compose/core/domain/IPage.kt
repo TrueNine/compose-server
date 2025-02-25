@@ -1,28 +1,13 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import net.yan100.compose.core.Pq
 import java.beans.Transient
 import java.io.Serializable
+import net.yan100.compose.core.Pq
 
 /**
  * ## 计算总页数
+ *
  * @param total 数据总数
  * @param pageSize 分页页面大小
  * @return 总页数
@@ -38,7 +23,8 @@ private class DefaultPageResult<T : Any>(
   override var d: Collection<T>,
   override var t: Long,
   override var o: Long? = null,
-  override var p: Int = calcTotalPageSize(t, pageParam?.safePageSize ?: Pq.MAX_PAGE_SIZE),
+  override var p: Int =
+    calcTotalPageSize(t, pageParam?.safePageSize ?: Pq.MAX_PAGE_SIZE),
 ) : IPage<T>, Serializable {
   init {
     if (pageParam?.u == true) pageParam = null
@@ -51,13 +37,12 @@ private class DefaultPageResult<T : Any>(
 
 /**
  * # 分页结果
+ *
  * @author TrueNine
  * @since 2024-09-14
  */
 interface IPage<T : Any?> : IPageLike<T> {
-  /**
-   * ## 原始分页请求参数
-   */
+  /** ## 原始分页请求参数 */
   @get:JsonIgnore
   @get:Transient
   @set:JsonIgnore
@@ -71,7 +56,7 @@ interface IPage<T : Any?> : IPageLike<T> {
     /**
      * @param dataList 数据列表
      * @param total 数据总数
-     * @param  pageParam 原始分页参数
+     * @param pageParam 原始分页参数
      */
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
@@ -79,13 +64,14 @@ interface IPage<T : Any?> : IPageLike<T> {
     operator fun <T : Any> get(
       dataList: Collection<T>,
       total: Long = dataList.size.toLong(),
-      pageParam: IPageParam? = null
+      pageParam: IPageParam? = null,
     ): IPage<T> {
       return of(dataList, total, pageParam)
     }
 
     /**
      * ## 构建分页结果
+     *
      * @param dataList 数据列表
      * @param total 数据总行数
      * @param totalPageNumber 数据总页数
@@ -93,17 +79,10 @@ interface IPage<T : Any?> : IPageLike<T> {
     operator fun <T : Any> get(
       dataList: Collection<T>,
       total: Long,
-      totalPageNumber: Int
+      totalPageNumber: Int,
     ): IPage<T> {
-      return DefaultPageResult(
-        null,
-        dataList,
-        total,
-        null,
-        totalPageNumber
-      )
+      return DefaultPageResult(null, dataList, total, null, totalPageNumber)
     }
-
 
     /**
      * @param dataList 数据列表
@@ -119,15 +98,12 @@ interface IPage<T : Any?> : IPageLike<T> {
       total: Long,
       offset: Long,
       requestParamPageSize: Int,
-      unPage: Boolean?
+      unPage: Boolean?,
     ): IPage<T> {
       return get(
         dataList,
         total,
-        IPageParam[
-          offset,
-          requestParamPageSize,
-          unPage ?: true]
+        IPageParam[offset, requestParamPageSize, unPage ?: true],
       )
     }
 
@@ -137,31 +113,29 @@ interface IPage<T : Any?> : IPageLike<T> {
      * @param pageParam 原始分页参数
      */
     @JvmStatic
-    @Deprecated("use get", replaceWith = ReplaceWith("get()"), level = DeprecationLevel.ERROR)
+    @Deprecated(
+      "use get",
+      replaceWith = ReplaceWith("get()"),
+      level = DeprecationLevel.ERROR,
+    )
     fun <T : Any> of(
       dataList: Collection<T>,
       total: Long,
-      pageParam: IPageParam?
-    ): IPage<T> = DefaultPageResult(pageParam = pageParam, d = dataList, t = total)
+      pageParam: IPageParam?,
+    ): IPage<T> =
+      DefaultPageResult(pageParam = pageParam, d = dataList, t = total)
 
     @JvmStatic
-    fun <T : Any> one(data: T?): IPage<T> = if (data != null) get(listOf(data)) else emptyWith<T>()
+    fun <T : Any> one(data: T?): IPage<T> =
+      if (data != null) get(listOf(data)) else emptyWith<T>()
 
-    @JvmStatic
-    fun <T : Any> emptyWith(): IPage<T> = get(emptyList())
+    @JvmStatic fun <T : Any> emptyWith(): IPage<T> = get(emptyList())
 
     @JvmStatic
     fun <T : Any> unPage(dataList: Collection<T>): IPage<T> {
-      return DefaultPageResult(
-        null,
-        dataList,
-        dataList.size.toLong(),
-        null,
-        1
-      )
+      return DefaultPageResult(null, dataList, dataList.size.toLong(), null, 1)
     }
 
-    @JvmStatic
-    fun empty(): IPage<*> = emptyWith<Any>()
+    @JvmStatic fun empty(): IPage<*> = emptyWith<Any>()
   }
 }

@@ -31,9 +31,7 @@ class PeriodScalarProviderTest {
     val invalidInput = "invalid"
 
     // Act & Assert
-    assertFailsWith<DateTimeParseException> {
-      provider.toScalar(invalidInput)
-    }
+    assertFailsWith<DateTimeParseException> { provider.toScalar(invalidInput) }
   }
 
   @Test
@@ -51,9 +49,7 @@ class PeriodScalarProviderTest {
   @Test
   fun `toScalar should throw exception on empty string`() {
     // Act & Assert
-    assertFailsWith<DateTimeParseException> {
-      provider.toScalar("")
-    }
+    assertFailsWith<DateTimeParseException> { provider.toScalar("") }
   }
 
   // endregion

@@ -1,17 +1,16 @@
 package net.yan100.compose.depend.servlet
 
 import jakarta.annotation.Resource
+import kotlin.test.Test
 import net.yan100.compose.testtookit.annotations.SpringServletTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import kotlin.test.Test
 
-/**
- * # 确保 pathVariable 的解析性质
- */
+/** # 确保 pathVariable 的解析性质 */
 @SpringServletTest
 class PathVariableTest {
-  lateinit var mockMvc: MockMvc @Resource set
+  lateinit var mockMvc: MockMvc
+    @Resource set
 
   @Test
   fun `ensure urlencoded parameter to path variable`() {

@@ -17,7 +17,7 @@ class AnyTypingSerializer : JsonSerializer<AnyTyping>() {
   override fun serialize(
     value: AnyTyping?,
     gen: JsonGenerator?,
-    serializers: SerializerProvider?
+    serializers: SerializerProvider?,
   ) {
     when (value) {
       is StringTyping -> gen?.writeString(value.value)

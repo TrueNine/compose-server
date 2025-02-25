@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core.consts
 
 import jakarta.servlet.http.HttpServletRequest
@@ -46,7 +30,12 @@ interface IInterAddr {
         val xRealIP = request.getHeader(IHeaders.X_REAL_IP)
         val xForwardedFor = request.getHeader(IHeaders.X_FORWARDED_FOR)
         if (xForwardedFor != null) {
-          remoteAddress = xForwardedFor.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].trim { it <= ' ' }
+          remoteAddress =
+            xForwardedFor
+              .split(",".toRegex())
+              .dropLastWhile { it.isEmpty() }
+              .toTypedArray()[0]
+              .trim { it <= ' ' }
         } else if (xRealIP != null) {
           remoteAddress = xRealIP
         }
@@ -73,7 +62,11 @@ interface IInterAddr {
           val hostName = localHostName
           if (hostName != null) {
             val addresses = InetAddress.getAllByName(hostName)
-            result.addAll(Arrays.stream(addresses).map { obj: InetAddress -> obj.hostAddress }.collect(Collectors.toSet()))
+            result.addAll(
+              Arrays.stream(addresses)
+                .map { obj: InetAddress -> obj.hostAddress }
+                .collect(Collectors.toSet())
+            )
           }
         } catch (ignore: Exception) {
           return result

@@ -1,30 +1,14 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.oss.minio
 
 import io.minio.*
 import io.minio.messages.Bucket
 import io.minio.messages.Item
+import java.io.InputStream
+import java.io.OutputStream
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.oss.FileArgs
 import net.yan100.compose.oss.amazon.S3PolicyCreator
 import okhttp3.Headers
-import java.io.InputStream
-import java.io.OutputStream
 
 /**
  * minio 基础层
@@ -32,7 +16,8 @@ import java.io.OutputStream
  * @author TrueNine
  * @since 2022-12-29
  */
-open class MinioClientOperator protected constructor(private val client: MinioClient) {
+open class MinioClientOperator
+protected constructor(private val client: MinioClient) {
   open fun headerContentType(headers: Headers): String? {
     return headers[IHeaders.CONTENT_TYPE]
   }
@@ -45,16 +30,31 @@ open class MinioClientOperator protected constructor(private val client: MinioCl
     return headerSizeStr(headers)?.toLong()
   }
 
-  open fun getObject(fileInfo: FileArgs, stream: OutputStream): GetObjectResponse? {
-    return client.getObject(GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
+  open fun getObject(
+    fileInfo: FileArgs,
+    stream: OutputStream,
+  ): GetObjectResponse? {
+    return client.getObject(
+      GetObjectArgs.builder()
+        .bucket(fileInfo.dir)
+        .`object`(fileInfo.fileName)
+        .build()
+    )
   }
 
   open fun publicBucket(bucketName: String) {
-    client.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(bucketName).config(S3PolicyCreator.publicBucketAndReadOnly(bucketName).json()).build())
+    client.setBucketPolicy(
+      SetBucketPolicyArgs.builder()
+        .bucket(bucketName)
+        .config(S3PolicyCreator.publicBucketAndReadOnly(bucketName).json())
+        .build()
+    )
   }
 
   open fun bucketExists(bucketName: String): Boolean {
-    return client.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
+    return client.bucketExists(
+      BucketExistsArgs.builder().bucket(bucketName).build()
+    )
   }
 
   open fun bucketNotExists(bucketName: String): Boolean {
@@ -64,7 +64,12 @@ open class MinioClientOperator protected constructor(private val client: MinioCl
   open fun removeObject(fileInfo: FileArgs): Boolean {
     if (bucketNotExists(fileInfo.dir)) return false
     try {
-      client.removeObject(RemoveObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
+      client.removeObject(
+        RemoveObjectArgs.builder()
+          .bucket(fileInfo.dir)
+          .`object`(fileInfo.fileName)
+          .build()
+      )
       return true
     } catch (e: Exception) {
       e.printStackTrace()
@@ -72,19 +77,29 @@ open class MinioClientOperator protected constructor(private val client: MinioCl
     }
   }
 
-  open fun putObject(fileInfo: FileArgs, stream: InputStream): ObjectWriteResponse? {
+  open fun putObject(
+    fileInfo: FileArgs,
+    stream: InputStream,
+  ): ObjectWriteResponse? {
     if (bucketNotExists(fileInfo.dir)) {
       client.makeBucket(MakeBucketArgs.builder().bucket(fileInfo.dir).build())
     }
 
     return client.putObject(
-      PutObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).contentType(fileInfo.mimeType).stream(stream, fileInfo.size, -1).build()
+      PutObjectArgs.builder()
+        .bucket(fileInfo.dir)
+        .`object`(fileInfo.fileName)
+        .contentType(fileInfo.mimeType)
+        .stream(stream, fileInfo.size, -1)
+        .build()
     )
   }
 
   open fun listFiles(dir: String): List<String> {
     if (bucketNotExists(dir)) return listOf()
-    return client.listObjects(ListObjectsArgs.builder().bucket(dir).build()).map { it.get().objectName() }
+    return client
+      .listObjects(ListObjectsArgs.builder().bucket(dir).build())
+      .map { it.get().objectName() }
   }
 
   open fun listDir(): List<String> {

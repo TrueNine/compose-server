@@ -1,18 +1,21 @@
 package net.yan100.compose.depend.servlet.annotations
 
 import jakarta.annotation.Resource
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 import net.yan100.compose.depend.servlet.controller.HeadController
 import net.yan100.compose.testtookit.annotations.SpringServletTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.head
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 @SpringServletTest
 class HeadMappingTest {
-  lateinit var mock: MockMvc @Resource set
-  lateinit var controller: HeadController @Resource set
+  lateinit var mock: MockMvc
+    @Resource set
+
+  lateinit var controller: HeadController
+    @Resource set
 
   @BeforeTest
   fun setup() {
@@ -21,12 +24,9 @@ class HeadMappingTest {
 
   @Test
   fun `test found action`() {
-    mock.head("/test/head/a")
-      .andExpect {
-        status { isOk() }
-        content {
-          string("")
-        }
-      }
+    mock.head("/test/head/a").andExpect {
+      status { isOk() }
+      content { string("") }
+    }
   }
 }

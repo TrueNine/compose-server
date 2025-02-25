@@ -1,21 +1,4 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core.typing
-
 
 /**
  * 错误信息枚举类
@@ -23,9 +6,12 @@ package net.yan100.compose.core.typing
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class HttpStatusTyping(val code: Int, var message: String, var alert: String) : IntTyping {
+enum class HttpStatusTyping(
+  val code: Int,
+  var message: String,
+  var alert: String,
+) : IntTyping {
   _200(200, "OK", "请求成功"),
-
   _400(400, "Bad Request", "用户错误"),
   _401(401, "Unauthorized", "请进行身份校验"),
   _402(402, "Payment Required", "需付款"),
@@ -44,21 +30,18 @@ enum class HttpStatusTyping(val code: Int, var message: String, var alert: Strin
   _415(415, "Unsupported Media Type", "不支持请求的媒体类型"),
   _416(416, "Requested Range Not Satisfiable", "无法提供请求的字节范围"),
   _417(417, "Expectation Failed", "服务器无法满足 Expect 请求标头中给出的期望"),
-
   _500(500, "Internal Server Error", "内部服务器错误"),
   _501(501, "Not Implemented", "服务器不支持当前请求所需要的功能"),
   _502(502, "Bad Gateway", "网关上游服务异常"),
   _503(503, "Service Unavailable", "由于超载或系统维护，服务器暂时的无法处理客户端的请求"),
   _504(504, "Gateway Timeout", "网关超时"),
   _505(505, "HTTP Version Not Supported", "服务器不支持或者拒绝 此 HTTP 版本"),
-
   UNKNOWN(9999, "Server Unknown Error", "发生了重大未知错误！目前错误原因未知，请尽快联系管理员或技术人员");
 
   override val value: Int = code
 
   companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = valueOf(v)
+    @JvmStatic fun findVal(v: Int?) = valueOf(v)
 
     @JvmStatic
     fun valueOf(code: Int?): HttpStatusTyping {

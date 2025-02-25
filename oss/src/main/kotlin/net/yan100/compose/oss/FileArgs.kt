@@ -1,6 +1,5 @@
 package net.yan100.compose.oss
 
-
 class FileArgs {
   lateinit var dir: String
   lateinit var fileName: String
@@ -9,8 +8,7 @@ class FileArgs {
   val sizeStr: String = size.toString()
 
   companion object {
-    @JvmStatic
-    fun builder(): FileArgsBuilder = FileArgsBuilder()
+    @JvmStatic fun builder(): FileArgsBuilder = FileArgsBuilder()
 
     @JvmStatic
     fun useStreamMap(map: StreamsMap): FileArgs {

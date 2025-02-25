@@ -1,5 +1,6 @@
 package net.yan100.compose.security.autoconfig
 
+import java.lang.reflect.ParameterizedType
 import net.yan100.compose.core.Pr
 import net.yan100.compose.core.annotations.SensitiveResponse
 import net.yan100.compose.core.domain.ISensitivity
@@ -11,7 +12,6 @@ import org.springframework.http.server.ServerHttpRequest
 import org.springframework.http.server.ServerHttpResponse
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
-import java.lang.reflect.ParameterizedType
 
 private val log = slf4j<SensitiveResultResponseBodyAdvice>()
 
@@ -23,20 +23,32 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
   // TODO 实现 resolver ，缓存 每个不同对象的序列化规则，例如：{a: {b: Sensitive}}
   // TODO 可以实现 resolver ，规范化
   // TODO 加入缓存机制，同时考虑到动态加载
-  override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
-    val hasAnnotation = returnType.method?.isAnnotationPresent(supportAnnotationClassType) ?: false
+  override fun supports(
+    returnType: MethodParameter,
+    converterType: Class<out HttpMessageConverter<*>>,
+  ): Boolean {
+    val hasAnnotation =
+      returnType.method?.isAnnotationPresent(supportAnnotationClassType)
+        ?: false
     return hasAnnotation
   }
 
-  fun getGenericType(returnType: MethodParameter, clazz: Class<*> = interfaceType): Class<*>? {
+  fun getGenericType(
+    returnType: MethodParameter,
+    clazz: Class<*> = interfaceType,
+  ): Class<*>? {
     if (returnType.genericParameterType is ParameterizedType) {
-      val rawType = (returnType.genericParameterType as ParameterizedType).rawType
+      val rawType =
+        (returnType.genericParameterType as ParameterizedType).rawType
       if (rawType is Class<*> && rawType.isAssignableFrom(clazz)) return rawType
     }
     return null
   }
 
-  fun isExtendTypeFor(returnType: MethodParameter, type: Class<*> = interfaceType): Boolean {
+  fun isExtendTypeFor(
+    returnType: MethodParameter,
+    type: Class<*> = interfaceType,
+  ): Boolean {
     return getGenericType(returnType) != null
   }
 
@@ -50,21 +62,29 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
   ): Any? {
     when (body) {
       is ISensitivity -> body.changeWithSensitiveData()
-      is Collection<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+      is Collection<*> ->
+        body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
       is Map<*, *> ->
         body.forEach {
-          if (it.key is ISensitivity) (it.key as ISensitivity).changeWithSensitiveData()
-          if (it.value is ISensitivity) (it.value as ISensitivity).changeWithSensitiveData()
+          if (it.key is ISensitivity)
+            (it.key as ISensitivity).changeWithSensitiveData()
+          if (it.value is ISensitivity)
+            (it.value as ISensitivity).changeWithSensitiveData()
         }
 
-      is Array<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
-      is Iterable<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
-      is Iterator<*> -> body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+      is Array<*> ->
+        body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+      is Iterable<*> ->
+        body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+      is Iterator<*> ->
+        body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
       is Pr<*> -> {
         if (body.d.isNotEmpty()) {
           val b = body.d.firstOrNull()?.let { it is ISensitivity }
           if (b == true) {
-            body.d.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+            body.d.forEach {
+              if (it is ISensitivity) it.changeWithSensitiveData()
+            }
           }
         }
       }

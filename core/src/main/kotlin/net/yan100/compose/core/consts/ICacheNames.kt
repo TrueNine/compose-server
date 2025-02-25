@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core.consts
 
 /**
@@ -26,7 +10,8 @@ interface ICacheNames {
   interface IRedis {
     companion object {
       const val HANDLE: String = "JsonStringRedisTemplateYan100Handle"
-      const val CACHE_MANAGER: String = "JsonStringRedisTemplateYan100CacheManager"
+      const val CACHE_MANAGER: String =
+        "JsonStringRedisTemplateYan100CacheManager"
     }
   }
 
@@ -63,6 +48,24 @@ interface ICacheNames {
     const val MO1: String = D30
     const val Y1: String = D365
 
-    val ALL: Array<String> = arrayOf(M1, M5, M10, M30, H1, H2, H3, D1, D2, D3, D7, D30, D60, D180, D365, FOREVER)
+    val ALL: Array<String> =
+      arrayOf(
+        M1,
+        M5,
+        M10,
+        M30,
+        H1,
+        H2,
+        H3,
+        D1,
+        D2,
+        D3,
+        D7,
+        D30,
+        D60,
+        D180,
+        D365,
+        FOREVER,
+      )
   }
 }

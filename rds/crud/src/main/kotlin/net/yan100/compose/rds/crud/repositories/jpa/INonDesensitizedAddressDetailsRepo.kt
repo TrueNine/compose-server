@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Primary
 @Repository
-interface INonDesensitizedAddressDetailsRepo : IRepo<NonDesensitizedAddressDetails>
+interface INonDesensitizedAddressDetailsRepo :
+  IRepo<NonDesensitizedAddressDetails>

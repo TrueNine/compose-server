@@ -10,7 +10,10 @@ private val log = slf4j<ObjectMapperPostAutoConfiguration>()
 
 @Configuration
 class ObjectMapperPostAutoConfiguration : BeanPostProcessor {
-  override fun postProcessAfterInitialization(bean: Any, beanName: String): Any? {
+  override fun postProcessAfterInitialization(
+    bean: Any,
+    beanName: String,
+  ): Any? {
     if (bean is ObjectMapper) {
       log.trace("注入全局 jackson holder bean: {} beanName: {}", bean, beanName)
       ObjectMapperHolder.set(bean)

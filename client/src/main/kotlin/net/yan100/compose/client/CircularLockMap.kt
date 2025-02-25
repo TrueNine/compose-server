@@ -4,7 +4,7 @@ class CircularLockMap<K, V : Any>(
   private val maxCount: Int = 63,
   private val contents: MutableList<V> = mutableListOf(),
   private val contentsMap: MutableMap<K, V> = mutableMapOf(),
-  val update: () -> Map<K, V>
+  val update: () -> Map<K, V>,
 ) {
   private fun clearAndUpdate() {
     contentsMap.clear()
@@ -29,6 +29,7 @@ class CircularLockMap<K, V : Any>(
         contentsMap
       }
     }
+
   val elements: List<V>
     get() {
       if (circularCounter > maxCount) {
@@ -46,6 +47,7 @@ class CircularLockMap<K, V : Any>(
     }
 
   operator fun component1(): Map<K, V> = map
+
   operator fun component2(): List<V> = elements
 
   operator fun get(key: K): V? {

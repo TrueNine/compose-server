@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.data.crawler.playwright
 
 import com.microsoft.playwright.Locator
@@ -34,7 +18,8 @@ fun Page.navigatorWebdriver(): Boolean {
   return d != null && d == true
 }
 
-fun Page.currentUserAgent(): String? = this.evaluate("navigator.userAgent") as? String?
+fun Page.currentUserAgent(): String? =
+  this.evaluate("navigator.userAgent") as? String?
 
 @Suppress("UNCHECKED_CAST")
 fun Page.sessionStorage(): Map<String, String> {
@@ -45,11 +30,15 @@ fun Page.sessionStorage(): Map<String, String> {
 fun Page.cookies(): List<Cookie> = this.context().cookies()
 
 fun Page.initHiddenWebDriver() {
-  this.addInitScript("Object.defineProperties(navigator,{webdriver:{get:undefined}})")
+  this.addInitScript(
+    "Object.defineProperties(navigator,{webdriver:{get:undefined}})"
+  )
 }
 
 fun Page.hiddenWebDriver() {
-  this.evaluate("Object.defineProperties(navigator,{webdriver:{get:undefined}})")
+  this.evaluate(
+    "Object.defineProperties(navigator,{webdriver:{get:undefined}})"
+  )
 }
 
 fun Page.waitForPageAllLoaded(): Page {
@@ -62,7 +51,8 @@ fun Page.waitForPageAllLoaded(): Page {
 fun Page.locatorWaitFor(
   selector: String,
   locatorOptions: Page.LocatorOptions? = null,
-  waitForOptions: WaitForOptions? = WaitForOptions().setState(WaitForSelectorState.ATTACHED),
+  waitForOptions: WaitForOptions? =
+    WaitForOptions().setState(WaitForSelectorState.ATTACHED),
 ): Locator {
   val l = this.locator(selector, locatorOptions)
   l.waitFor(waitForOptions)
@@ -79,8 +69,7 @@ class PageWaitChain<T : Any>(private var page: Page) {
   private var waitFn: (Page) -> Page? = { it }
   private var endFn: (Page) -> Boolean = { true }
 
-  @Suppress("UNCHECKED_CAST")
-  private var exeFn: (Page) -> T = { Unit as T }
+  @Suppress("UNCHECKED_CAST") private var exeFn: (Page) -> T = { Unit as T }
 
   fun init(i: (Page) -> Page?): PageWaitChain<T> {
     this.initFn = i

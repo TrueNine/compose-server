@@ -1,32 +1,14 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.core
 
-
-import net.yan100.compose.testtookit.TempDirMapping
-import net.yan100.compose.testtookit.log
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import net.yan100.compose.testtookit.TempDirMapping
+import net.yan100.compose.testtookit.log
 
 class JavaNioPathFnsTest {
-  @TempDirMapping
-  lateinit var tempDir: Path
+  @TempDirMapping lateinit var tempDir: Path
 
   @Test
   fun `test slice line first line`() {
@@ -39,7 +21,8 @@ class JavaNioPathFnsTest {
     log.info("test len {}", firstLine.length)
     log.info("lines {}", lines)
 
-    val result = firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
+    val result =
+      firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
     val listResult = result.toList()
   }
 
@@ -71,19 +54,35 @@ class JavaNioPathFnsTest {
 
     val testPath = tempFile.toPath()
     val actualLines = testPath.countLines()
-    assertEquals(7, actualLines, "The number of lines counted does not match the expected value.")
+    assertEquals(
+      7,
+      actualLines,
+      "The number of lines counted does not match the expected value.",
+    )
 
     tempFile.writeText("")
     val emptyLines = testPath.countLines()
-    assertEquals(0, emptyLines, "The number of lines counted for an empty file should be 0.")
+    assertEquals(
+      0,
+      emptyLines,
+      "The number of lines counted for an empty file should be 0.",
+    )
 
     tempFile.writeText("he\n")
     val oneLines = testPath.countLines()
-    assertEquals(1, oneLines, "The number of lines counted for an empty file should be 0.")
+    assertEquals(
+      1,
+      oneLines,
+      "The number of lines counted for an empty file should be 0.",
+    )
 
     tempFile.writeText("a\nb")
     val twoLines = testPath.countLines()
-    assertEquals(2, twoLines, "The number of lines counted for an empty file should be 0.")
+    assertEquals(
+      2,
+      twoLines,
+      "The number of lines counted for an empty file should be 0.",
+    )
   }
 
   @Test
@@ -95,7 +94,6 @@ class JavaNioPathFnsTest {
     log.info("tempFile exists: {}", tempFile.exists())
     val testPath = tempFile.toPath()
     log.info("tempPath countLines: {}", testPath.countLines())
-
 
     val pre = testPath.pageLines(Pq[1, 4], "\n")
 

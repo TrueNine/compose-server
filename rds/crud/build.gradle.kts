@@ -10,9 +10,7 @@ kapt {
   arguments { arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor") }
 }
 
-ksp {
-  arg("net.yan100.compose.ksp.plugin.generateJpa", "true")
-}
+ksp { arg("net.yan100.compose.ksp.plugin.generateJpa", "true") }
 
 dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)

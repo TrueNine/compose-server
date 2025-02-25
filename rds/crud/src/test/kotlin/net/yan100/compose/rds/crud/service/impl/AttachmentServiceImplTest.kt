@@ -1,22 +1,7 @@
-/*
- *  Copyright (c) 2020-2024 TrueNine. All rights reserved.
- *
- * The following source code is owned, developed and copyrighted by TrueNine
- * (truenine304520@gmail.com) and represents a substantial investment of time, effort,
- * and resources. This software and its components are not to be used, reproduced,
- * distributed, or sublicensed in any form without the express written consent of
- * the copyright owner, except as permitted by law.
- * Any unauthorized use, distribution, or modification of this source code,
- * or any portion thereof, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
- * For inquiries regarding usage or redistribution, please contact:
- *     TrueNine
- *     email: <truenine304520@gmail.com>
- *     website: <github.com/TrueNine>
- */
 package net.yan100.compose.rds.crud.service.impl
 
 import jakarta.annotation.Resource
+import kotlin.test.*
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.generator.ISnowflakeGenerator
 import net.yan100.compose.rds.core.typing.AttachmentTyping
@@ -25,13 +10,15 @@ import net.yan100.compose.security.crypto.Keys
 import net.yan100.compose.testtookit.RDBRollback
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.*
 
 @RDBRollback
 @SpringBootTest
 class AttachmentServiceImplTest {
-  lateinit var attachmentService: AttachmentServiceImpl @Resource set
-  lateinit var snowflake: ISnowflakeGenerator @Resource set
+  lateinit var attachmentService: AttachmentServiceImpl
+    @Resource set
+
+  lateinit var snowflake: ISnowflakeGenerator
+    @Resource set
 
   fun getAtt(att: (Attachment) -> Attachment): Attachment {
     return attachmentService.post(Attachment().run(att))
@@ -112,7 +99,8 @@ class AttachmentServiceImplTest {
   fun testFindAllFullUrlByMetaNameStartingWith() {
     val metaName = "test"
     val page = Pq[10, 1, false]
-    val result = attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page)
+    val result =
+      attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page)
     assertNotNull(result)
     assertEquals(0, result.t)
   }
@@ -148,7 +136,8 @@ class AttachmentServiceImplTest {
     val page = Pq[-1, 10, false]
     assertEquals(0, page.o)
     assertEquals(10, page.s)
-    val pageResult = attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page)
+    val pageResult =
+      attachmentService.fetchAllFullUrlByMetaNameStartingWith(metaName, page)
     assertNotNull(pageResult)
     assertNotNull(pageResult.d)
     assertEquals(pageResult.d.size.toLong(), pageResult.t)
