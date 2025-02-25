@@ -1,7 +1,6 @@
 package net.yan100.compose.rds.core.typing
 
 import net.yan100.compose.core.typing.IntTyping
-import net.yan100.compose.rds.core.typing.GoodsTyping.entries
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
@@ -11,16 +10,20 @@ import org.babyfish.jimmer.sql.EnumType
  * @author TrueNine
  * @since 2023-04-23
  */
+@Deprecated("无明确业务类型混入")
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class GoodsTyping(v: Int) : IntTyping {
   /** 实体商品 */
-  @EnumItem(ordinal = 1) PHYSICAL_GOODS(1),
+  @EnumItem(ordinal = 1)
+  PHYSICAL_GOODS(1),
 
   /** 服务商品 */
-  @EnumItem(ordinal = 2) SERVICE_GOODS(2),
+  @EnumItem(ordinal = 2)
+  SERVICE_GOODS(2),
 
   /** 虚拟商品 */
-  @EnumItem(ordinal = 3) VIRTUAL_GOODS(3);
+  @EnumItem(ordinal = 3)
+  VIRTUAL_GOODS(3);
 
   override val value: Int = v
 
@@ -28,6 +31,7 @@ enum class GoodsTyping(v: Int) : IntTyping {
     @JvmStatic
     fun findVal(v: Int?): GoodsTyping? = entries.find { it.value == v }
 
-    @JvmStatic operator fun get(v: Int?): GoodsTyping? = findVal(v)
+    @JvmStatic
+    operator fun get(v: Int?): GoodsTyping? = findVal(v)
   }
 }
