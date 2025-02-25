@@ -43,8 +43,8 @@ junit5 = "5.12.0"
 kotlin-compile-testing = "1.6.0"
 
 ## === compose server versions ===
-compose = "2.0.163"
-compose-rds-core = "2.0.74"
+compose = "2.0.164"
+compose-rds-core = "2.0.75"
 compose-rds-crud = "2.0.67"
 compose-core = "2.0.51"
 compose-ksp-plugin = "2.0.40"
