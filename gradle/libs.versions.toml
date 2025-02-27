@@ -2,7 +2,7 @@
 format.version = "1.1"
 
 [versions]
-compose = "2.0.167"
+compose = "2.0.168"
 compose-cacheable = "2.0.35"
 compose-client = "0.0.10"
 compose-core = "2.0.53"
@@ -29,7 +29,7 @@ compose-rds-jimmer-ext-postgres = "0.0.5"
 compose-rds-migraiton-mysql = "0.0.19"
 compose-rds-migration-h2 = "0.0.20"
 compose-rds-migration-postgres = "0.0.20"
-compose-security-crypto = "2.0.32"
+compose-security-crypto = "2.0.33"
 compose-security-oauth2 = "2.0.42"
 compose-security-spring = "2.0.35"
 compose-testtoolkit = "2.0.34"
