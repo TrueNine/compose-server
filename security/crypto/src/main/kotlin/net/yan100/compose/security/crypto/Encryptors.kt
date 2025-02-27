@@ -18,6 +18,7 @@ private val log = slf4j<Encryptors>()
 /** 分片 base64 分隔符 */
 private const val SHARDING_SEP = "."
 private val sha1 = MessageDigest.getInstance("SHA-1")
+private val sha256 = MessageDigest.getInstance("SHA-256")
 
 /** 分片大小 */
 private const val SHARDING_SIZE = 245
@@ -254,10 +255,27 @@ object Encryptors {
       .joinToString("") { "%02x".format(it) }
   }
 
+  /** 使用 sha-256 进行签名 */
+  @JvmStatic
+  @JvmOverloads
+  fun signatureBySha256(
+    plaintext: String,
+    charset: Charset = defaultCharset,
+  ): String {
+    return signatureBySha256ByteArray(plaintext.toByteArray(charset))
+      .joinToString("") { "%02x".format(it) }
+  }
+
   /** 使用 SHA 1 进行签名 byte[] */
   @JvmStatic
   fun signatureBySha1ByteArray(plaintext: ByteArray): ByteArray {
     return sha1.digest(plaintext)
+  }
+
+  /** 使用 sha-256 进行签名 */
+  @JvmStatic
+  fun signatureBySha256ByteArray(plaintext: ByteArray): ByteArray {
+    return sha256.digest(plaintext)
   }
 
   /**
