@@ -14,9 +14,7 @@ import org.babyfish.jimmer.sql.EnumType.Strategy
 @EnumType(Strategy.NAME)
 enum class PlatformType(v: String) : StringTyping {
   /** 未知 */
-  @EnumItem(name = "NONE")
-  @Deprecated(message = "一般情况，请明确指定平台")
-  NONE("NONE"),
+  @EnumItem(name = "NONE") @Deprecated(message = "一般情况，请明确指定平台") NONE("NONE"),
 
   /** 微信公众号 */
   @EnumItem(name = "WECHAT_PUBLIC_ACCOUNT")
@@ -31,24 +29,19 @@ enum class PlatformType(v: String) : StringTyping {
   WECHAT_OPEN_PLATFORM("WECHAT_OPEN_PLATFORM"),
 
   /** 移动端 veb view */
-  @EnumItem(name = "MOBILE_WEB_VIEW")
-  MOBILE_WEB_VIEW("MOBILE_WEB_VIEW"),
+  @EnumItem(name = "MOBILE_WEB_VIEW") MOBILE_WEB_VIEW("MOBILE_WEB_VIEW"),
 
   /** 移动端 h5 */
-  @EnumItem(name = "MOBILE_H5")
-  MOBILE_H5("MOBILE_H5"),
+  @EnumItem(name = "MOBILE_H5") MOBILE_H5("MOBILE_H5"),
 
   /** 微信网页 */
-  @EnumItem(name = "WECHAT_WEB_SITE")
-  WECHAT_WEB_SITE("WECHAT_WEB_SITE"),
+  @EnumItem(name = "WECHAT_WEB_SITE") WECHAT_WEB_SITE("WECHAT_WEB_SITE"),
 
   /** pc 网站 */
-  @EnumItem(name = "PC_WEB_SITE")
-  PC_WEB_SITE("PC_WEB_SITE"),
+  @EnumItem(name = "PC_WEB_SITE") PC_WEB_SITE("PC_WEB_SITE"),
 
   /** web 后台管理端 */
-  @EnumItem(name = "WEB_ADMIN_SITE")
-  WEB_ADMIN_SITE("WEB_ADMIN_SITE"),
+  @EnumItem(name = "WEB_ADMIN_SITE") WEB_ADMIN_SITE("WEB_ADMIN_SITE"),
 
   /** 其他 */
   @EnumItem(name = "OTHER")
@@ -59,7 +52,6 @@ enum class PlatformType(v: String) : StringTyping {
 
   companion object {
 
-    @JvmStatic
-    operator fun get(v: String?) = entries.find { it.value == v }
+    @JvmStatic operator fun get(v: String?) = entries.find { it.value == v }
   }
 }
