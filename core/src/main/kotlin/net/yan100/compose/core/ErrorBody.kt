@@ -9,6 +9,7 @@ import net.yan100.compose.core.typing.HttpStatusTyping
  * @author TrueNine
  * @since 2022-09-24
  */
+@Deprecated(message = "API 难于调用")
 class ErrorBody private constructor() : Serializable {
   var msg: String? = null
     private set

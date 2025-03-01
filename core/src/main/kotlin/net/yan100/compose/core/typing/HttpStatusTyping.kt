@@ -8,8 +8,8 @@ package net.yan100.compose.core.typing
  */
 enum class HttpStatusTyping(
   val code: Int,
-  var message: String,
-  var alert: String,
+  val message: String,
+  val alert: String,
 ) : IntTyping {
   _200(200, "OK", "请求成功"),
   _400(400, "Bad Request", "用户错误"),
