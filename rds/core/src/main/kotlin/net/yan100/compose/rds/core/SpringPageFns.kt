@@ -32,14 +32,10 @@ fun <T : Any> Page<T>.toIPage(): IPage<T> = toPr()
 )
 val Pq?.page: Pageable
   get() =
-    if (this?.u != true) {
-      PageRequest.of(
-        (this?.o ?: Pq.MIN_OFFSET).toInt(),
-        this?.s ?: Pq.MAX_PAGE_SIZE,
-      )
-    } else {
-      Pageable.unpaged()
-    }
+    PageRequest.of(
+      (this?.o ?: Pq.MIN_OFFSET).toInt(),
+      this?.s ?: Pq.MAX_PAGE_SIZE,
+    )
 
 /** @see [org.springframework.data.domain.PageRequest] */
 @Suppress("DEPRECATION") fun Pq?.toPageable(): Pageable = page

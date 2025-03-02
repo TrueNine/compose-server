@@ -26,11 +26,7 @@ fun <E : Any> KConfigurableRootQuery<*, E>.fetchPq(
   pq: Pq? = Pq.DEFAULT_MAX,
   conn: Connection? = null,
 ): IPage<E> {
-  return fetchPage(
-      (pq?.o ?: Pq.MIN_OFFSET).toSafeInt(),
-      (pq?.s ?: Pq.MAX_PAGE_SIZE),
-      conn,
-    )
+  return fetchPage((pq?.o ?: Pq.MIN_OFFSET), (pq?.s ?: Pq.MAX_PAGE_SIZE), conn)
     .toPr()
 }
 

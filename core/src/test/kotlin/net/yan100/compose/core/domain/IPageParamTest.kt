@@ -8,7 +8,6 @@ import kotlin.test.assertNotNull
 import net.yan100.compose.core.Pq
 import net.yan100.compose.core.bool
 import net.yan100.compose.core.i32
-import net.yan100.compose.core.i64
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
@@ -56,9 +55,10 @@ class IPageParamTest {
           override val s: i32?
             get() = null
 
-          override val o: i64?
+          override val o: i32?
             get() = null
 
+          @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR)
           override val u: bool?
             get() = null
         }]
@@ -71,7 +71,6 @@ class IPageParamTest {
     val pq = Pq[-1, -13]
     assertEquals(Pq.MIN_OFFSET, pq.o)
     assertEquals(1, pq.s)
-    assertEquals(false, pq.u)
   }
 
   @Test
@@ -79,7 +78,6 @@ class IPageParamTest {
     val empty = Pq.empty()
     assertEquals(0, empty.o)
     assertEquals(0, empty.s)
-    assertEquals(true, empty.u)
   }
 
   @Test
@@ -87,7 +85,6 @@ class IPageParamTest {
     val pq = Pq.unPage()
     assertEquals(0, pq.o)
     assertEquals(Int.MAX_VALUE, pq.s)
-    assertEquals(true, pq.u)
   }
 
   @Test
@@ -95,6 +92,5 @@ class IPageParamTest {
     val pq = Pq[0, 42]
     assertEquals(0, pq.o)
     assertEquals(42, pq.s)
-    assertEquals(false, pq.u)
   }
 }

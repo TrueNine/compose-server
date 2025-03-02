@@ -16,7 +16,7 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
     if (p == null) return null
 
     // 按需解析字段，减少中间对象的分配
-    var offset: Long? = null
+    var offset: Int? = null
     var pageSize: Int? = null
     var unPage: Boolean? = null
 
@@ -25,7 +25,7 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
       when (p.currentName()) {
         "o" -> {
           p.nextToken()
-          offset = p.longValueOrNull()
+          offset = p.intValueOrNull()
         }
 
         "s" -> {

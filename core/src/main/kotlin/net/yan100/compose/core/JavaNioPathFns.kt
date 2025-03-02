@@ -136,7 +136,7 @@ fun Path.pageLines(
   return if (isEmpty() || sep.isEmpty()) IPage.emptyWith()
   else {
     val total = countLines()
-    val p = param + total
+    val p = param + total.toSafeInt()
     val range = p.toLongRange()
     val dataList =
       sliceLines(

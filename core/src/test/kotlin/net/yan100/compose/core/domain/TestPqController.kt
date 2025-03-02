@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("v1/pq")
 class TestPqController {
   @GetMapping("get/default")
-  fun inputPq(pq: Pq?): Pq? {
-    return pq
+  fun inputPq(pq: Pq?): IPageParam {
+    return Pq[pq?.o, pq?.s]
   }
 
   @GetMapping("get/requestBody")

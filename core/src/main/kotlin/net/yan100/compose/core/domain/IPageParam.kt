@@ -1,31 +1,37 @@
 package net.yan100.compose.core.domain
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.io.Serializable
-import net.yan100.compose.core.domain.IPageParam.Companion.MAX_PAGE_SIZE
-import net.yan100.compose.core.domain.IPageParam.Companion.MIN_OFFSET
-import net.yan100.compose.core.toSafeInt
+import net.yan100.compose.core.bool
+import net.yan100.compose.core.i32
 
 /** ## 一个默认分页实现 */
-private class DefaultPageParam
+class DefaultPageParam
 @Deprecated("不退完直接使用", level = DeprecationLevel.ERROR)
+@JsonCreator
 constructor(
-  @Transient override var o: Long? = MIN_OFFSET,
-  @Transient override var s: Int? = MAX_PAGE_SIZE,
-  @Transient override var u: Boolean? = false,
+  @Transient @JsonProperty("o") override var o: i32? = null,
+  @Transient @JsonProperty("s") override var s: i32? = null,
+  @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR)
+  @Transient
+  @JsonProperty("u")
+  override var u: Boolean? = null,
 ) : IPageParam, Serializable {
+
   override fun toString(): String {
-    return "PageParam(offset=$o, pageSize=$s, unPage=$u)"
+    return "PageParam(offset=$o, pageSize=$s)"
   }
 
   override fun hashCode(): Int {
-    return listOf(o, s, u).hashCode()
+    return listOf(o, s).hashCode()
   }
 
   override fun equals(other: Any?): Boolean {
     return when (other) {
       is IPageParam -> {
-        o == other.o && s == other.s && (u == true) == (other.u == true)
+        o == other.o && s == other.s
       }
 
       else -> false
@@ -54,10 +60,10 @@ interface IPageParam : IPageParamLike, Serializable {
     }
 
     /** ## 最小偏移量 */
-    const val MIN_OFFSET: Long = 0
+    const val MIN_OFFSET: i32 = 0
 
     /** ## 最大分页页面大小 */
-    const val MAX_PAGE_SIZE: Int = 42
+    const val MAX_PAGE_SIZE: i32 = 42
 
     /** ## 默认 最大分页实现常量 */
     @Suppress("DEPRECATION_ERROR")
@@ -72,11 +78,12 @@ interface IPageParam : IPageParamLike, Serializable {
      * @param unPage 是否禁用分页
      */
     @JvmStatic
+    @JsonCreator
     @Suppress("DEPRECATION_ERROR")
     operator fun get(
-      offset: Long? = MIN_OFFSET,
-      pageSize: Int? = MAX_PAGE_SIZE,
-      unPage: Boolean? = false,
+      @JsonProperty("o") offset: i32? = MIN_OFFSET,
+      @JsonProperty("s") pageSize: i32? = MAX_PAGE_SIZE,
+      @JsonProperty("u") unPage: bool? = false,
     ): IPageParam {
       return if (pageSize == 0) {
         DefaultPageParam(0, 0, unPage)
@@ -106,16 +113,16 @@ interface IPageParam : IPageParamLike, Serializable {
   }
 
   @JsonIgnore
-  operator fun plus(total: Long): IPageParam {
+  operator fun plus(total: i32): IPageParam {
     if (total <= 0) return empty()
-    val ss = if (safePageSize >= total) total.toSafeInt() else safePageSize
+    val ss = if (safePageSize >= total) total else safePageSize
     val c = (safeOffset + 1) * safePageSize
     val oo = if (c > total) (total / safePageSize) else safeOffset
-    return get(oo, ss, u)
+    return get(oo, ss)
   }
 
   @get:JsonIgnore
-  val safeOffset: Long
+  val safeOffset: i32
     get() = o ?: 0
 
   /** ## 分页 页面 偏移量 null any */

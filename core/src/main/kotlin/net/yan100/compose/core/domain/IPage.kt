@@ -22,13 +22,10 @@ private class DefaultPageResult<T : Any>(
   @JsonIgnore @kotlin.jvm.Transient override var pageParam: IPageParam? = null,
   override var d: Collection<T>,
   override var t: Long,
-  override var o: Long? = null,
+  @Deprecated("无需此属性") override var o: Long? = null,
   override var p: Int =
     calcTotalPageSize(t, pageParam?.safePageSize ?: Pq.MAX_PAGE_SIZE),
 ) : IPage<T>, Serializable {
-  init {
-    if (pageParam?.u == true) pageParam = null
-  }
 
   override fun toString(): String {
     return "IPage(dataList=$d, total=$t, offset=$o, pageSize=$p, size=${d.size}, [pageParam]=$pageParam)"
@@ -96,7 +93,7 @@ interface IPage<T : Any?> : IPageLike<T> {
     operator fun <T : Any> get(
       dataList: Collection<T>,
       total: Long,
-      offset: Long,
+      offset: Int,
       requestParamPageSize: Int,
       unPage: Boolean?,
     ): IPage<T> {
