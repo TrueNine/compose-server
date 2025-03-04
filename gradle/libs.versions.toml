@@ -32,6 +32,7 @@ compose-rds-migration-postgres = "0.0.24"
 compose-security-crypto = "2.0.34"
 compose-security-oauth2 = "2.0.43"
 compose-security-spring = "2.0.36"
+compose-sms-tencent = "0.0.1"
 compose-testtoolkit = "2.0.35"
 flyway = "11.3.4"
 hibernate = "6.6.3.Final"
@@ -69,6 +70,8 @@ testng = "7.11.0"
 xxl-job = "3.0.0"
 
 [libraries]
+com-tencentcloudapi-tencentcloud-sdk-java-sms = { group = "com.tencentcloudapi", name = "tencentcloud-sdk-java-sms", version = "3.1.1179" }
+net-yan100-compose-sms-tencent = { group = "net.yan100.compose", name = "sms-tencent", version.ref = "compose-sms-tencent" }
 cn-dev33-sa-token-redis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "sa-token" }
 cn-dev33-sa-token-redis-jackson = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "sa-token" }
 cn-dev33-sa-token-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "sa-token" }
