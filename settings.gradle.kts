@@ -1,5 +1,12 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+fun Pair<String, List<String>>.useFile() {
+  second.forEach { n ->
+    include("$first:$n")
+    findProject(":$first:$n")?.name = "$first-$n"
+  }
+}
+
 listOf(
   "testtoolkit",
   "version-catalog",
@@ -17,6 +24,10 @@ listOf(
   findProject(":$p")?.name = p
 }
 
+("sms" to listOf(
+  "tencent"
+)).useFile()
+
 ("rds" to listOf(
   "core",
   "crud",
@@ -24,49 +35,24 @@ listOf(
   "migration-mysql",
   "migration-postgres",
   "migration-h2"
-)).apply {
-  second.forEach { n ->
-    include("$first:$n")
-    findProject(":$first:$n")?.name = "$first-$n"
-  }
-}
+)).useFile()
 
 // 数据采集器
 ("data" to listOf(
   "crawler", "extract"
-)).apply {
-  second.forEach { n ->
-    include("$first:$n")
-    findProject(":$first:$n")?.name = "$first-$n"
-  }
-}
+)).useFile()
 
 // 安全相关
 ("security" to listOf(
   "spring", "oauth2", "crypto"
-)).apply {
-  second.forEach { n ->
-    include("$first:$n")
-    findProject(":$first:$n")?.name = "$first-$n"
-  }
-}
+)).useFile()
 
 // 特定依赖处理
 ("depend" to listOf(
   "servlet", "paho", "http-exchange", "jackson", "springdoc-openapi", "xxl-job"
-)).apply {
-  second.forEach { n ->
-    include("$first:$n")
-    findProject(":$first:$n")?.name = "$first-$n"
-  }
-}
+)).useFile()
 
 // ksp
 ("ksp" to listOf(
   "plugin", "toolkit", "client"
-)).apply {
-  second.forEach { n ->
-    include("$first:$n")
-    findProject(":$first:$n")?.name = "$first-$n"
-  }
-}
+)).useFile()
