@@ -22,6 +22,7 @@ fun RepositoryHandler.setupDependencyRepositories() {
   }
   maven(springRepo) {
     mavenContent {
+      snapshotsOnly()
       includeGroupAndSubgroups("org.springframework")
       includeGroupAndSubgroups("io.spring")
     }
