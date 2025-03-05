@@ -57,7 +57,7 @@ com-querydsl = "5.1.0"
 com-dev33-sa-token = "1.40.0"
 org-slf4j = "2.1.0-alpha1"
 com-diffplug-spotless = "7.0.2"
-spring-ai = "1.0.0-M6"
+spring-ai = "1.0.0-M5"
 spring-batch = "5.2.1"
 spring-boot = "3.5.0-M2"
 spring-cloud = "2025.0.0-M2"
@@ -143,7 +143,7 @@ jakarta-persistence-jakarta-persistence-api = { group = "jakarta.persistence", n
 jakarta-servlet-jakarta-servlet-api = { group = "jakarta.servlet", name = "jakarta.servlet-api", version = "6.1.0" }
 jakarta-validation-jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validation-api", version = "3.1.1" }
 mysql-mysql-connector-java = { group = "mysql", name = "mysql-connector-java", version = "8.0.33" }
-net-bytebuddy-byte-buddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.17.1" }
+net-bytebuddy-byte-buddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.17.2" }
 net-sf-dozer-dozer = { group = "net.sf.dozer", name = "dozer", version = "5.5.1" }
 net-sf-sevenzipjbinding-sevenzipjbinding = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding", version = "16.02-2.01" }
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding-all-platforms", version = "16.02-2.01" }
@@ -223,7 +223,7 @@ org-jetbrains-kotlinx-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name
 org-jetbrains-kotlinx-kotlinx-datetime-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime-jvm", version.ref = "org-jetbrains-kotlinx-datetime" }
 org-jetbrains-kotlinx-kotlinx-io-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "org-jetbrains-kotlinx-io" }
 org-jetbrains-kotlinx-kotlinxIo-core-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core-jvm", version.ref = "org-jetbrains-kotlinx-io" }
-org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.3" }
+org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.19.1" }
 org-junit-jupiter-junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "org-junit-junit5" }
 org-junit-jupiter-junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "org-junit-junit5" }
 org-junit-platform-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.0" }
