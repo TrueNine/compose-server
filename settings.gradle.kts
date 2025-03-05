@@ -25,7 +25,7 @@ listOf(
 }
 
 ("sms" to listOf(
-  "tencent"
+  "tencent", "shared"
 )).useFile()
 
 ("rds" to listOf(

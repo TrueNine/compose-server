@@ -2,6 +2,7 @@ import kotlin.jvm.optionals.getOrNull
 
 plugins {
   java
+  alias(libs.plugins.com.github.ben.manes.versions)
   `repositories-convention`
   `version-catalog`
   `publish-convention`
