@@ -3,7 +3,13 @@ plugins { `kotlinspring-convention` }
 version = libs.versions.compose.depend.jackson.get()
 
 dependencies {
-  api(libs.com.fasterxml.jackson.core.jackson.databind)
+  api(libs.com.fasterxml.jackson.core.jackson.databind) {
+    exclude(
+      group = libs.com.google.guava.guava.jre.get().module.group,
+      module = libs.com.google.guava.guava.jre.get().module.name
+    )
+  }
+  implementation(libs.com.google.guava.guava.jre)
   api(libs.com.fasterxml.jackson.module.jackson.module.kotlin)
 
   implementation(libs.org.springframework.spring.web)

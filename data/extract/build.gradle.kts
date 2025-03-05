@@ -10,9 +10,12 @@ dependencies {
   api(libs.net.sf.supercsv.`super`.csv)
 
   api(libs.com.alibaba.easyexcel) {
-    exclude("org.apache.commons", "commons-compress")
-    implementation(libs.org.apache.commons.commons.compress)
+    exclude(
+      group = libs.org.apache.commons.commons.compress.get().module.group,
+      module = libs.org.apache.commons.commons.compress.get().module.name
+    )
   }
+  implementation(libs.org.apache.commons.commons.compress)
 
   implementation(projects.core)
   implementation(projects.depend.dependHttpExchange)

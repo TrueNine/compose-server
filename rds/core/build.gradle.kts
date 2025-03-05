@@ -33,7 +33,13 @@ dependencies {
   // jimmer
   implementation(libs.org.babyfish.jimmer.jimmer.core)
   implementation(libs.org.babyfish.jimmer.jimmer.sql)
-  implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
+  implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter) {
+    exclude(
+      group = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.group,
+      module = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.name,
+    )
+  }
+  implementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
 
   testImplementation(projects.testtoolkit)
   testImplementation(projects.rds.rdsMigrationH2)
