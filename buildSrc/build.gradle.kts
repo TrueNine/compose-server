@@ -5,7 +5,6 @@ plugins {
 val springRepo = "https://repo.spring.io/milestone"
 
 repositories {
-  mavenLocal()
   gradlePluginPortal()
   mavenCentral()
   maven(springRepo)
