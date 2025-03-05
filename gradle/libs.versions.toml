@@ -70,8 +70,6 @@ testng = "7.11.0"
 xxl-job = "3.0.0"
 
 [libraries]
-com-tencentcloudapi-tencentcloud-sdk-java-sms = { group = "com.tencentcloudapi", name = "tencentcloud-sdk-java-sms", version = "3.1.1179" }
-net-yan100-compose-sms-tencent = { group = "net.yan100.compose", name = "sms-tencent", version.ref = "compose-sms-tencent" }
 cn-dev33-sa-token-redis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "sa-token" }
 cn-dev33-sa-token-redis-jackson = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "sa-token" }
 cn-dev33-sa-token-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "sa-token" }
@@ -121,7 +119,9 @@ com-squareup-javapoet = { group = "com.squareup", name = "javapoet", version = "
 com-squareup-kotlinpoet-jvm = { group = "com.squareup", name = "kotlinpoet-jvm", version.ref = "kotlinpoet" }
 com-squareup-kotlinpoet-ksp = { group = "com.squareup", name = "kotlinpoet-ksp", version.ref = "kotlinpoet" }
 com-squareup-okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version = "5.0.0-alpha.14" }
+com-squareup-okio-okio = { group = "com.squareup.okio", name = "okio", version = "3.10.2" }
 com-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.11.0" }
+com-tencentcloudapi-tencentcloud-sdk-java-sms = { group = "com.tencentcloudapi", name = "tencentcloud-sdk-java-sms", version = "3.1.1179" }
 com-xuxueli-xxl-job-core = { group = "com.xuxueli", name = "xxl-job-core", version.ref = "xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { group = "com.yomahub", name = "liteflow-spring-boot-starter", version.ref = "liteflow" }
 io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.3" }
@@ -170,6 +170,7 @@ net-yan100-compose-rds-migration-postgres = { group = "net.yan100.compose", name
 net-yan100-compose-security-crypto = { group = "net.yan100.compose", name = "security-crypto", version.ref = "compose-security-crypto" }
 net-yan100-compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose-security-oauth2" }
 net-yan100-compose-security-spring = { group = "net.yan100.compose", name = "security-spring", version.ref = "compose-security-spring" }
+net-yan100-compose-sms-tencent = { group = "net.yan100.compose", name = "sms-tencent", version.ref = "compose-sms-tencent" }
 net-yan100-compose-testtoolkit = { group = "net.yan100.compose", name = "testtoolkit", version.ref = "compose-testtoolkit" }
 net-yan100-compose-tspoet = { group = "net.yan100.compose", name = "ksp-tspoet", version.ref = "compose-ksp-tspoet" }
 ognl-ognl = { group = "ognl", name = "ognl", version = "3.4.6" }
@@ -206,6 +207,7 @@ org-jetbrains-kotlin-kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name
 org-jetbrains-kotlin-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlin-test-junit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlin-test-testng = { group = "org.jetbrains.kotlin", name = "kotlin-test-testng", version.ref = "kotlin" }
+org-jetbrains-kotlin-multiplatform-org-jetbrains-kotlin-multiplatform-gradle-plugin = { group = "org.jetbrains.kotlin.multiplatform", name = "org.jetbrains.kotlin.multiplatform.gradle.plugin", version.ref = "kotlin" }
 org-jetbrains-kotlin-plugin-jpa-org-jetbrains-kotlin-plugin-jpa-gradle-plugin = { group = "org.jetbrains.kotlin.plugin.jpa", name = "org.jetbrains.kotlin.plugin.jpa.gradle.plugin", version.ref = "kotlin" }
 org-jetbrains-kotlin-plugin-spring-org-jetbrains-kotlin-plugin-spring-gradle-plugin = { group = "org.jetbrains.kotlin.plugin.spring", name = "org.jetbrains.kotlin.plugin.spring.gradle.plugin", version.ref = "kotlin" }
 org-jetbrains-kotlinx-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -236,6 +238,7 @@ org-springframework-batch-spring-batch-test = { group = "org.springframework.bat
 org-springframework-boot-spring-boot = { group = "org.springframework.boot", name = "spring-boot", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
+org-springframework-boot-spring-boot-docker-compose = { group = "org.springframework.boot", name = "spring-boot-docker-compose", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-gradle-plugin = { group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-starter-batch = { group = "org.springframework.boot", name = "spring-boot-starter-batch", version.ref = "spring-boot" }
@@ -256,7 +259,6 @@ org-springframework-boot-spring-boot-starter-webflux = { group = "org.springfram
 org-springframework-boot-spring-boot-starter-websocket = { group = "org.springframework.boot", name = "spring-boot-starter-websocket", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-test", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-test-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-test-autoconfigure", version.ref = "spring-boot" }
-org-springframework-boot-springBoot-docker-compose = { group = "org.springframework.boot", name = "spring-boot-docker-compose", version.ref = "spring-boot" }
 org-springframework-cloud-spring-cloud-dependencies = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "spring-cloud" }
 org-springframework-cloud-spring-cloud-starter-bootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap", version = "4.3.0-M2" }
 org-springframework-data-spring-data-commons = { group = "org.springframework.data", name = "spring-data-commons", version.ref = "spring-data" }
@@ -302,6 +304,7 @@ org-gradle-toolchains-foojay-resolver-convention = { id = "org.gradle.toolchains
 org-hibernate-orm = { id = "org.hibernate.orm", version.ref = "hibernate" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+org-jetbrains-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 org-jetbrains-kotlin-plugin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 org-jetbrains-kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 org-jetbrains-kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
@@ -310,3 +313,4 @@ org-jetbrains-kotlin-plugin-power-assert = { id = "org.jetbrains.kotlin.plugin.p
 org-jetbrains-kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 org-springframework-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 tech-argonariod-gradle-plugin-jimmer = { id = "tech.argonariod.gradle-plugin-jimmer", version = "1.2.0" }
+
