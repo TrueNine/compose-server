@@ -15,8 +15,11 @@ dependencies {
   allVersionCatalogs.libraryAliases.forEach { aliasLib ->
     val dependency = allVersionCatalogs.findLibrary(aliasLib).getOrNull()?.get()
     dependency?.also { d ->
-      if (d.group?.contains("net.yan100.compose") == false) {
+      if (d.module.group.contains("net.yan100.compose") == false) {
         compileOnly(d)
+      }
+      if (d.module.group == "cn.enaium" && d.module.name == "immutable-dependency") {
+        return@also
       }
     }
   }
