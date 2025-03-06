@@ -4,6 +4,8 @@ val springRepo = "https://repo.spring.io/milestone"
 
 val noChinaRepo = listOf(
   "com.squareup",
+  "org.springframework",
+  "io.spring",
   "org.jetbrains.kotlin",
   "org.jetbrains.kotlinx",
   "io.projectreactor.kotlin",
@@ -22,7 +24,6 @@ fun RepositoryHandler.setupDependencyRepositories() {
   }
   maven(springRepo) {
     mavenContent {
-      snapshotsOnly()
       includeGroupAndSubgroups("org.springframework")
       includeGroupAndSubgroups("io.spring")
     }
