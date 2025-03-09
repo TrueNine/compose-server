@@ -8,7 +8,6 @@ import net.yan100.compose.rds.core.converters.jimmer.PeriodScalarProvider
 import net.yan100.compose.rds.core.converters.jimmer.StringTypingJimmerProvider
 import net.yan100.compose.rds.core.generators.JimmerSnowflakeLongIdGenerator
 import net.yan100.compose.rds.core.generators.JimmerSnowflakeStringIdGenerator
-import net.yan100.compose.rds.core.listeners.IJimmerEntityDraftInterceptor
 import org.babyfish.jimmer.sql.meta.DatabaseNamingStrategy
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -73,12 +72,6 @@ class JimmerAutoConfiguration {
   fun intTypingJimmerProvider(): IntTypingJimmerProvider {
     log.trace("register jimmer int typing enum provider")
     return IntTypingJimmerProvider()
-  }
-
-  @Bean
-  fun iJimmerEntityDraftInterceptor(): IJimmerEntityDraftInterceptor {
-    log.trace("register jimmer database metadata interceptor")
-    return IJimmerEntityDraftInterceptor()
   }
 
   @Bean

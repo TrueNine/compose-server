@@ -12,7 +12,7 @@ dependencies {
   api(libs.com.alibaba.easyexcel) {
     exclude(
       group = libs.org.apache.commons.commons.compress.get().module.group,
-      module = libs.org.apache.commons.commons.compress.get().module.name
+      module = libs.org.apache.commons.commons.compress.get().module.name,
     )
   }
   implementation(libs.org.apache.commons.commons.compress)

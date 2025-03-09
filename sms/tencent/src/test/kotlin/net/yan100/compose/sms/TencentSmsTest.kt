@@ -8,7 +8,6 @@ import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse
 import kotlin.test.*
 
-
 class TencentSmsTest {
 
   @Ignore
@@ -45,7 +44,11 @@ class TencentSmsTest {
     assertTrue { statusSet.size > 0 }
     assertNotNull(res.requestId)
     statusSet.forEach {
-      assertNotEquals(it.code, "FailedOperation.SignatureIncorrectOrUnapproved", "签名不正确或未审核通过")
+      assertNotEquals(
+        it.code,
+        "FailedOperation.SignatureIncorrectOrUnapproved",
+        "签名不正确或未审核通过",
+      )
       assertContains(it.code, "Ok")
     }
   }

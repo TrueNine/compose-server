@@ -6,7 +6,7 @@ dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.databind) {
     exclude(
       group = libs.com.google.guava.guava.jre.get().module.group,
-      module = libs.com.google.guava.guava.jre.get().module.name
+      module = libs.com.google.guava.guava.jre.get().module.name,
     )
   }
   implementation(libs.com.google.guava.guava.jre)

@@ -10,11 +10,11 @@ dependencies {
     )
     exclude(
       group = libs.org.apache.logging.log4j.log4j.api.get().group,
-      module = libs.org.apache.logging.log4j.log4j.api.get().name
+      module = libs.org.apache.logging.log4j.log4j.api.get().name,
     )
     exclude(
       group = libs.org.apache.logging.log4j.log4j.core.get().group,
-      module = libs.org.apache.logging.log4j.log4j.core.get().name
+      module = libs.org.apache.logging.log4j.log4j.core.get().name,
     )
   }
 
