@@ -4,6 +4,7 @@ val springRepo = "https://repo.spring.io/milestone"
 
 val noChinaRepo = listOf(
   "com.squareup",
+  "org.babyfish.jimmer",
   "org.springframework",
   "io.spring",
   "org.jetbrains.kotlin",
