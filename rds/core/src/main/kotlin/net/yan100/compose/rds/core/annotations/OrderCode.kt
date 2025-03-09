@@ -7,6 +7,7 @@ package net.yan100.compose.rds.core.annotations
  * @author TrueNine
  * @since 2023-05-17
  */
+@Deprecated("建议自动生成业务单号")
 @Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER)
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
