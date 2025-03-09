@@ -1,17 +1,32 @@
 package net.yan100.compose.core.domain
 
-import net.yan100.compose.core.RefId
-
 /**
  * 基础用户传递信息
  *
  * @author T_teng
  * @since 2023-04-06
+ * @param deviceId 设备ID
+ * @param currentIpAddr 当前请求的IP地址
  */
-open class RequestInfo {
-  var userId: RefId? = null
-  var account: String? = null
-  var deviceId: String? = null
-  var loginIpAddr: String? = null
-  var currentIpAddr: String? = null
+open class RequestInfo(
+  open val deviceId: String? = null,
+  open val currentIpAddr: String? = null
+) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is RequestInfo) return false
+    if (deviceId != other.deviceId) return false
+    if (currentIpAddr != other.currentIpAddr) return false
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = deviceId?.hashCode() ?: 0
+    result = 31 * result + (currentIpAddr?.hashCode() ?: 0)
+    return result
+  }
+
+  override fun toString(): String {
+    return "RequestInfo(deviceId=$deviceId, currentIpAddr=$currentIpAddr)"
+  }
 }

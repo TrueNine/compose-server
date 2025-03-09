@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import java.io.IOException
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.consts.IMethods
 import net.yan100.compose.core.domain.AuthRequestInfo
@@ -17,6 +16,7 @@ import net.yan100.compose.security.holders.UserInfoContextHolder
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
+import java.io.IOException
 
 private val log = slf4j<SecurityPreflightValidFilter>()
 
@@ -44,7 +44,10 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
       if (containsTokenPair(request)) {
         val token = getToken(request)
         val ref = getRefreshToken(request)
-        getUserAuthorizationInfo(token, ref, request, response)
+        getUserAuthorizationInfo(token, ref, request, response)?.copy(
+          currentIpAddr = request.remoteRequestIp,
+          deviceId = request.deviceId
+        )
       } else {
         log.trace("没有发现用户信息，直接放行")
         filterChain.doFilter(request, response)
@@ -56,9 +59,6 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
       filterChain.doFilter(request, response)
       return
     }
-
-    authInfo.currentIpAddr = request.remoteRequestIp
-    authInfo.deviceId = request.deviceId
 
     log.trace("获取到用户信息 = {}", authInfo)
     val details = UserDetailsWrapper(authInfo)

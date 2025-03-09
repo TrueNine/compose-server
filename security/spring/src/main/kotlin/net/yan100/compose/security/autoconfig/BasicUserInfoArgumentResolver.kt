@@ -2,9 +2,9 @@ package net.yan100.compose.security.autoconfig
 
 import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.core.consts.IHeaders
-import net.yan100.compose.core.consts.IInterAddr
 import net.yan100.compose.core.domain.RequestInfo
 import net.yan100.compose.core.slf4j
+import net.yan100.compose.depend.servlet.remoteRequestIp
 import net.yan100.compose.security.holders.UserInfoContextHolder
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
@@ -42,13 +42,13 @@ class BasicUserInfoArgumentResolver :
     val u = UserInfoContextHolder.get()
     log.trace("argument injection for: {}", u)
     if (u == null) {
+      val req = webRequest.nativeRequest as HttpServletRequest
+      val deviceId = IHeaders.getDeviceId(req)
       UserInfoContextHolder.set(
-        RequestInfo().apply {
-          val req = webRequest.nativeRequest as HttpServletRequest
-          val deviceId = IHeaders.getDeviceId(req)
-          this.currentIpAddr = IInterAddr.getRequestIpAddress(req)
-          this.deviceId = deviceId
-        }
+        RequestInfo(
+          currentIpAddr = req.remoteRequestIp,
+          deviceId = deviceId
+        )
       )
     }
     return u
