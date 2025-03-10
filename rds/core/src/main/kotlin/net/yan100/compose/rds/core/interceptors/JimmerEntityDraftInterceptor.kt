@@ -36,7 +36,6 @@ class JimmerEntityDraftInterceptor :
       }
     } else {
       draft.mrd = datetime.now()
-      draft.rlv?.also { draft.rlv = it + 1 }
     }
   }
 }
