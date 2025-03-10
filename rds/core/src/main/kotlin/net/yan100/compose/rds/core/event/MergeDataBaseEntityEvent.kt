@@ -3,6 +3,7 @@ package net.yan100.compose.rds.core.event
 import net.yan100.compose.rds.core.entities.IJpaPersistentEntity
 import org.springframework.context.ApplicationEvent
 
+@Deprecated("难于维护")
 data class MergeDataBaseEntityEvent<T : IJpaPersistentEntity>(
   val from: T?,
   val to: T?,
