@@ -1,13 +1,10 @@
 package net.yan100.compose.core.domain
 
-import net.yan100.compose.core.RefId
 import java.util.concurrent.CopyOnWriteArrayList
+import net.yan100.compose.core.RefId
 
 /**
  * security校验所需的用户身份
- *
- * @author TrueNine
- * @since 2022-12-10
  *
  * @param deviceId 设备ID
  * @param currentIpAddr 当前请求的IP地址
@@ -22,6 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList
  * @param roles 角色列表
  * @param permissions 权限列表
  * @param depts 部门列表
+ * @author TrueNine
+ * @since 2022-12-10
  */
 data class AuthRequestInfo(
   override val deviceId: String? = null,
@@ -39,7 +38,7 @@ data class AuthRequestInfo(
   val depts: List<String> = CopyOnWriteArrayList(),
 ) : RequestInfo() {
   /** ## 当前是否已经完全登录 */
-  val isLogin get() = userId != null && enabled && nonLocked && nonExpired && account != null
+  val isLogin
+    get() =
+      userId != null && enabled && nonLocked && nonExpired && account != null
 }
-
-

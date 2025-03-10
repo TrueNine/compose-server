@@ -3,14 +3,14 @@ package net.yan100.compose.core.domain
 /**
  * 基础用户传递信息
  *
- * @author T_teng
- * @since 2023-04-06
  * @param deviceId 设备ID
  * @param currentIpAddr 当前请求的IP地址
+ * @author T_teng
+ * @since 2023-04-06
  */
 open class RequestInfo(
   open val deviceId: String? = null,
-  open val currentIpAddr: String? = null
+  open val currentIpAddr: String? = null,
 ) {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
