@@ -12,7 +12,7 @@ class JimmerSnowflakeLongIdGenerator(
       "jimmerSnowflakeLongIdGenerator"
   }
 
-  override fun generate(entityType: Class<*>?): Long {
+  override fun generate(entityType: Class<*>): Long {
     return snowflake.next()
   }
 }

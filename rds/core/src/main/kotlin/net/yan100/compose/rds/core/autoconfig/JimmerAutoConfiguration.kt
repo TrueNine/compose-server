@@ -8,6 +8,7 @@ import net.yan100.compose.rds.core.converters.jimmer.PeriodScalarProvider
 import net.yan100.compose.rds.core.converters.jimmer.StringTypingJimmerProvider
 import net.yan100.compose.rds.core.generators.JimmerSnowflakeLongIdGenerator
 import net.yan100.compose.rds.core.generators.JimmerSnowflakeStringIdGenerator
+import net.yan100.compose.rds.core.interceptors.JimmerEntityDraftInterceptor
 import org.babyfish.jimmer.sql.meta.DatabaseNamingStrategy
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -77,6 +78,11 @@ class JimmerAutoConfiguration {
   @Bean
   fun jimmerPeriodScalarProvider(): PeriodScalarProvider {
     return PeriodScalarProvider()
+  }
+
+  @Bean
+  fun jimmerEntityDraftInterceptor(): JimmerEntityDraftInterceptor {
+    return JimmerEntityDraftInterceptor()
   }
 
   @Bean
