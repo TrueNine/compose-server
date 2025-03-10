@@ -1,9 +1,9 @@
 package net.yan100.compose.rds.core.interceptors
 
-import com.tnmaster.entities.jimmer.baseies.IJimmerEntity
-import com.tnmaster.entities.jimmer.baseies.IJimmerEntityDraft
-import com.tnmaster.entities.jimmer.baseies.IJimmerEntityProps
 import net.yan100.compose.core.datetime
+import net.yan100.compose.rds.core.entities.IJimmerEntity
+import net.yan100.compose.rds.core.entities.IJimmerEntityDraft
+import net.yan100.compose.rds.core.entities.IJimmerEntityProps
 import org.babyfish.jimmer.kt.isLoaded
 import org.babyfish.jimmer.meta.TypedProp
 import org.babyfish.jimmer.sql.DraftInterceptor
