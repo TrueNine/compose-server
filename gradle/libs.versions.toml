@@ -16,10 +16,10 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "2.0.179"
+compose = "2.0.180"
 compose-cacheable = "2.0.38"
 compose-client = "0.0.13"
-compose-core = "2.0.59"
+compose-core = "2.0.60"
 compose-data-crawler = "2.0.33"
 compose-data-extract = "2.0.41"
 compose-depend-http-exchange = "2.0.33"
@@ -37,15 +37,15 @@ compose-ksp-tspoet = "0.0.13"
 compose-meta = "0.0.17"
 compose-oss = "2.0.33"
 compose-pay = "2.0.34"
-compose-rds-core = "2.0.85"
-compose-rds-crud = "2.0.73"
-compose-rds-jimmer-ext-postgres = "0.0.10"
+compose-rds-core = "2.0.86"
+compose-rds-crud = "2.0.74"
+compose-rds-jimmer-ext-postgres = "0.0.11"
 compose-rds-migraiton-mysql = "0.0.22"
 compose-rds-migration-h2 = "0.0.23"
-compose-rds-migration-postgres = "0.0.26"
-compose-security-crypto = "2.0.36"
-compose-security-oauth2 = "2.0.45"
-compose-security-spring = "2.0.39"
+compose-rds-migration-postgres = "0.0.27"
+compose-security-crypto = "2.0.37"
+compose-security-oauth2 = "2.0.46"
+compose-security-spring = "2.0.40"
 compose-sms-tencent = "0.0.3"
 compose-testtoolkit = "2.0.37"
 io-netty = "4.1.119.Final"
@@ -287,7 +287,6 @@ org-springframework-spring-webmvc = { group = "org.springframework", name = "spr
 org-testng-testng = { group = "org.testng", name = "testng", version.ref = "org-testng" }
 org-xerial-sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version = "3.49.1.0" }
 p6spy-p6spy = { group = "p6spy", name = "p6spy", version = "3.9.1" }
-test = { group = "cn.enaium", name = "immutable-dependency", version = "1.0-SNAPSHOT" }
 
 [bundles]
 junit5 = ["org-junit-platform-junit-platform-launcher", "org-junit-jupiter-junit-jupiter-api", "org-junit-jupiter-junit-jupiter-engine"]
