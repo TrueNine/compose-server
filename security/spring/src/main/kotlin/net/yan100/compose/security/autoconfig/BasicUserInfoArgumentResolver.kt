@@ -45,10 +45,7 @@ class BasicUserInfoArgumentResolver :
       val req = webRequest.nativeRequest as HttpServletRequest
       val deviceId = IHeaders.getDeviceId(req)
       UserInfoContextHolder.set(
-        RequestInfo(
-          currentIpAddr = req.remoteRequestIp,
-          deviceId = deviceId
-        )
+        RequestInfo(currentIpAddr = req.remoteRequestIp, deviceId = deviceId)
       )
     }
     return u
