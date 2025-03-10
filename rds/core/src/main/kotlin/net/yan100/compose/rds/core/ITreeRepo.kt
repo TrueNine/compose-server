@@ -18,6 +18,7 @@ private const val DEPRECATED_TEXT = "接口内部实现方法，不建议调用"
  * @author TrueNine
  * @since 2023-05-05
  */
+@Deprecated("维护难度过大，极其容易出错")
 @NoRepositoryBean
 interface ITreeRepo<T : IJpaTreeEntity> : IRepo<T> {
   fun findChildrenCount(parent: T): i64 {

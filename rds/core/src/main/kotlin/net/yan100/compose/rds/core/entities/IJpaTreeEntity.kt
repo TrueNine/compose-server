@@ -15,6 +15,7 @@ import net.yan100.compose.rds.core.annotations.OrderCode
  * @author TrueNine
  * @since 2022-12-12
  */
+@Deprecated("树结构已废弃")
 interface IJpaTreeEntity : IJpaEntity {
 
   /** 父id */
