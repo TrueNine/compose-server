@@ -9,8 +9,9 @@ import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 
 class EmptyPreflightValidFilter :
   IEmptyDefault, SecurityPreflightValidFilter() {
-
-  private val log = slf4j(this::class)
+  companion object {
+    @JvmStatic private val log = slf4j(EmptyPreflightValidFilter::class)
+  }
 
   init {
     log.warn("正在使用默认的jwt过滤器")
@@ -21,8 +22,7 @@ class EmptyPreflightValidFilter :
     reFlashToken: String?,
     request: HttpServletRequest,
     response: HttpServletResponse,
-  ): AuthRequestInfo {
-    log.warn("生成了一个空的 {}", ::AuthRequestInfo.name)
-    return AuthRequestInfo()
+  ): AuthRequestInfo? {
+    return null
   }
 }
