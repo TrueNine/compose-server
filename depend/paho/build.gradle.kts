@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.depend.paho.get()
+version = libs.versions.compose.depend.get()
 
 dependencies {
   implementation(libs.org.springframework.integration.spring.integration.mqtt)

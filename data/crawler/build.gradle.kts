@@ -1,6 +1,6 @@
 plugins { `kotlin-convention` }
 
-version = libs.versions.compose.data.crawler.get()
+version = libs.versions.compose.data.get()
 
 dependencies {
   implementation(projects.core)

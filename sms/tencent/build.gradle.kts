@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.sms.tencent.get()
+version = libs.versions.compose.sms.get()
 
 dependencies {
   api(libs.com.tencentcloudapi.tencentcloud.sdk.java.sms) {

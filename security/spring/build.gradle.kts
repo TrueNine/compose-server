@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.security.spring.get()
+version = libs.versions.compose.security.get()
 
 dependencies {
   api(libs.org.springframework.boot.spring.boot.starter.security)

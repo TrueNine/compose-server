@@ -6,13 +6,13 @@ private const val PREFIX = "compose.oss"
 
 /**
  * ## minio 配置属性
+ *
  * @param endpoint 连接 url
  * @param exposedBaseUrl 暴露的 baseUrl
  * @param endpointPort 连接端口
  * @param accessKey accessKey
  * @param secretKey secretKey
  * @param enableHttps 是否启用 https
- *
  * @author TrueNine
  * @since 2022-10-28
  */

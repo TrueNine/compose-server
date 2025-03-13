@@ -10,6 +10,6 @@ fun MultipartFile.toReadableAttachment(): IReadableAttachment {
     size = this.size,
     bytes = { this.bytes },
     inputStream = this.inputStream,
-    empty = this.isEmpty
+    empty = this.isEmpty,
   )
 }

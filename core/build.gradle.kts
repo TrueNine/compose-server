@@ -3,7 +3,7 @@ plugins {
   `publish-convention`
 }
 
-version = libs.versions.compose.core.get()
+version = libs.versions.compose.asProvider().get()
 
 dependencies {
   implementation(projects.meta)

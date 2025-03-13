@@ -3,7 +3,7 @@ plugins {
   alias(libs.plugins.com.google.devtools.ksp)
 }
 
-version = libs.versions.compose.rds.core.get()
+version = libs.versions.compose.rds.get()
 
 kapt {
   javacOptions { option("querydsl.entityAccessors", "true") }

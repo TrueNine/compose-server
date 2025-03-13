@@ -3,7 +3,7 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.compose.rds.crud.get()
+version = libs.versions.compose.rds.get()
 
 kapt {
   javacOptions { option("querydsl.entityAccessors", "true") }

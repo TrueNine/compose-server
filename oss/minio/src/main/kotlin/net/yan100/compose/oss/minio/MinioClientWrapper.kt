@@ -1,13 +1,13 @@
 package net.yan100.compose.oss.minio
 
 import io.minio.*
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.oss.common.*
 import net.yan100.compose.oss.common.ObjectArgs
 import okhttp3.Headers
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
 /**
  * oss 的 minio 实现
@@ -31,9 +31,7 @@ class MinioClientWrapper(
     return getHeaderSizeString(headers)?.toLongOrNull()
   }
 
-  private fun getObject(
-    fileInfo: FileArgs,
-  ): GetObjectResponse? {
+  private fun getObject(fileInfo: FileArgs): GetObjectResponse? {
     return client.getObject(
       GetObjectArgs.builder()
         .bucket(fileInfo.dir)
@@ -53,7 +51,10 @@ class MinioClientWrapper(
     return true
   }
 
-  private fun createInputMap(resp: ObjectWriteResponse, stream: InputStream): InMap {
+  private fun createInputMap(
+    resp: ObjectWriteResponse,
+    stream: InputStream,
+  ): InMap {
     return object : InMap {
       override val usedStream
         get() = stream
@@ -75,7 +76,10 @@ class MinioClientWrapper(
     }
   }
 
-  private fun createOutputMap(resp: GetObjectResponse, stream: OutputStream): OutMap {
+  private fun createOutputMap(
+    resp: GetObjectResponse,
+    stream: OutputStream,
+  ): OutMap {
     return object : OutMap {
       override val usedStream
         get() = stream
@@ -96,7 +100,6 @@ class MinioClientWrapper(
         get() = exposeUrl
     }
   }
-
 
   @Suppress("UNCHECKED_CAST")
   override fun <T : Any> getNativeClient(): T? {
@@ -133,14 +136,15 @@ class MinioClientWrapper(
     if (!existsBucketByName(fileInfo.dir)) {
       createBucketByName(fileInfo.dir)
     }
-    val ins = client.putObject(
-      PutObjectArgs.builder()
-        .bucket(fileInfo.dir)
-        .`object`(fileInfo.fileName)
-        .contentType(fileInfo.mimeType)
-        .stream(stream, fileInfo.size, -1)
-        .build()
-    )
+    val ins =
+      client.putObject(
+        PutObjectArgs.builder()
+          .bucket(fileInfo.dir)
+          .`object`(fileInfo.fileName)
+          .contentType(fileInfo.mimeType)
+          .stream(stream, fileInfo.size, -1)
+          .build()
+      )
 
     return createInputMap(ins!!, stream)
   }
@@ -156,7 +160,10 @@ class MinioClientWrapper(
   }
 
   @Throws(IOException::class)
-  override fun downloadObject(stream: OutputStream, fileInfo: FileArgs): OutMap {
+  override fun downloadObject(
+    stream: OutputStream,
+    fileInfo: FileArgs,
+  ): OutMap {
     val outs = getObject(fileInfo)
     outs?.transferTo(stream)
     return createOutputMap(outs!!, stream)
@@ -174,7 +181,9 @@ class MinioClientWrapper(
     return downloadObject(stream, fileInfo)
   }
 
-  override fun fetchAllObjectNameByBucketName(bucketName: String): List<String> {
+  override fun fetchAllObjectNameByBucketName(
+    bucketName: String
+  ): List<String> {
     if (!existsBucketByName(bucketName)) return listOf()
     return client
       .listObjects(ListObjectsArgs.builder().bucket(bucketName).build())

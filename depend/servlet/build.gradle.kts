@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.depend.servlet.get()
+version = libs.versions.compose.depend.get()
 
 dependencies {
   api(libs.org.springframework.boot.spring.boot.starter.web)

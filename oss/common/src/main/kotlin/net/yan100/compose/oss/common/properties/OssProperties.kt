@@ -6,10 +6,10 @@ private const val PREFIX = "compose.oss"
 
 /**
  * oss属性
+ *
  * @param baseUrl 连接 url
  * @param exposeBaseUrl 暴露的 baseUrl
  * @param port 连接端口
- *
  * @author TrueNine
  * @since 2022-10-28
  */

@@ -3,7 +3,7 @@ plugins {
   `kotlinspring-convention`
 }
 
-version = libs.versions.compose.client.get()
+version = libs.versions.compose.build.get()
 
 dependencies {
   implementation(projects.meta)

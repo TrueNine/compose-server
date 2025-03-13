@@ -1,6 +1,6 @@
 plugins { `kotlin-convention` }
 
-version = libs.versions.compose.testtoolkit.get()
+version = libs.versions.compose.build.get()
 
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test)

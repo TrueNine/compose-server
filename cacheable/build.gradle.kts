@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.cacheable.get()
+version = libs.versions.compose.asProvider().get()
 
 dependencies {
   implementation(libs.bundles.redis)

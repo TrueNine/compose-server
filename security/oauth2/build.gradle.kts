@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-project.version = libs.versions.compose.security.oauth2.get()
+project.version = libs.versions.compose.security.get()
 
 dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)

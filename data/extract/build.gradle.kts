@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.data.extract.get()
+version = libs.versions.compose.data.get()
 
 dependencies {
   implementation(libs.bundles.kotlin.reactor)

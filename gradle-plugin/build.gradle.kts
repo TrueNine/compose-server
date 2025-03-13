@@ -4,7 +4,7 @@ plugins {
   `publish-convention`
 }
 
-version = libs.versions.compose.gradle.plugin.get()
+version = libs.versions.compose.build.get()
 
 dependencies {
   compileOnly(gradleApi())
@@ -29,15 +29,6 @@ gradlePlugin {
       implementationClass =
         "${libs.versions.compose.group.get()}.gradleplugin.Main"
       description = "compose server development gradle plugin"
-    }
-
-    register("${libs.versions.compose.group.get()}.settings-${project.name}") {
-      id = "${libs.versions.compose.group.get()}.settings-${project.name}"
-      displayName =
-        "${libs.versions.compose.group.get()}.settings-${project.name}.gradle.plugin"
-      implementationClass =
-        "${libs.versions.compose.group.get()}.gradleplugin.SettingsMain"
-      description = "compose server development gradle settings plugin"
     }
   }
 }

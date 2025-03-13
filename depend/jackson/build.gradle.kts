@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.depend.jackson.get()
+version = libs.versions.compose.depend.get()
 
 dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.databind) {

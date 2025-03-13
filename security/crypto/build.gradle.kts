@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.security.crypto.get()
+version = libs.versions.compose.security.get()
 
 dependencies {
   api(libs.org.springframework.security.spring.security.crypto)

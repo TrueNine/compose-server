@@ -16,38 +16,17 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "2.0.185"
-compose-cacheable = "2.0.38"
-compose-client = "0.0.13"
-compose-core = "2.0.61"
-compose-data-crawler = "2.0.33"
-compose-data-extract = "2.0.41"
-compose-depend-http-exchange = "2.0.33"
-compose-depend-jackson = "2.0.42"
-compose-depend-paho = "2.0.33"
-compose-depend-servlet = "2.0.44"
-compose-depend-springdoc-openapi = "2.0.33"
-compose-depend-xxl-job = "2.0.33"
-compose-gradle-plugin = "2.0.35"
+compose = "3.0.0"
+compose-data = "3.0.0"
+compose-depend = "3.0.0"
+compose-build = "3.0.0"
 compose-group = "net.yan100.compose"
-compose-ksp-client = "0.0.13"
-compose-ksp-plugin = "2.0.44"
-compose-ksp-toolkit = "2.0.36"
-compose-ksp-tspoet = "0.0.13"
-compose-meta = "0.0.17"
-compose-oss = "2.0.33"
-compose-pay = "2.0.34"
-compose-rds-core = "2.0.90"
-compose-rds-crud = "2.0.75"
-compose-rds-jimmer-ext-postgres = "0.0.12"
-compose-rds-migraiton-mysql = "0.0.22"
-compose-rds-migration-h2 = "0.0.23"
-compose-rds-migration-postgres = "0.0.29"
-compose-security-crypto = "2.0.37"
-compose-security-oauth2 = "2.0.46"
-compose-security-spring = "2.0.41"
-compose-sms-tencent = "0.0.3"
-compose-testtoolkit = "2.0.37"
+compose-meta = "3.0.0"
+compose-oss = "3.0.0"
+compose-pay = "3.0.0"
+compose-rds = "3.0.0"
+compose-security = "3.0.0"
+compose-sms = "3.0.0"
 io-netty = "4.1.119.Final"
 java = "23"
 org-apache-logging-log4j = "2.24.3"
@@ -146,38 +125,37 @@ net-sf-dozer-dozer = { group = "net.sf.dozer", name = "dozer", version = "5.5.1"
 net-sf-sevenzipjbinding-sevenzipjbinding = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding", version = "16.02-2.01" }
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding-all-platforms", version = "16.02-2.01" }
 net-sf-supercsv-super-csv = { group = "net.sf.supercsv", name = "super-csv", version = "2.4.0" }
-net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose-cacheable" }
-net-yan100-compose-client = { group = "net.yan100.compose", name = "client", version.ref = "compose-client" }
-net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose-core" }
-net-yan100-compose-data-crawler = { group = "net.yan100.compose", name = "data-crawler", version.ref = "compose-data-crawler" }
-net-yan100-compose-data-extract = { group = "net.yan100.compose", name = "data-extract", version.ref = "compose-data-extract" }
-net-yan100-compose-depend-http-exchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "compose-depend-http-exchange" }
-net-yan100-compose-depend-jackson = { group = "net.yan100.compose", name = "depend-jackson", version.ref = "compose-depend-jackson" }
-net-yan100-compose-depend-paho = { group = "net.yan100.compose", name = "depend-paho", version.ref = "compose-depend-paho" }
-net-yan100-compose-depend-servlet = { group = "net.yan100.compose", name = "depend-servlet", version.ref = "compose-depend-servlet" }
-net-yan100-compose-depend-springdoc-openapi = { group = "net.yan100.compose", name = "depend-springdoc-openapi", version.ref = "compose-depend-springdoc-openapi" }
-net-yan100-compose-depend-xxl-job = { group = "net.yan100.compose", name = "depend-xxl-job", version.ref = "compose-depend-xxl-job" }
-net-yan100-compose-gradle-plugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "compose-gradle-plugin" }
-net-yan100-compose-ksp-client = { group = "net.yan100.compose", name = "ksp-client", version.ref = "compose-ksp-client" }
-net-yan100-compose-ksp-plugin = { group = "net.yan100.compose", name = "ksp-plugin", version.ref = "compose-ksp-plugin" }
-net-yan100-compose-ksp-toolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "compose-ksp-toolkit" }
-net-yan100-compose-meta = { group = "net.yan100.compose", name = "meta", version.ref = "compose-meta" }
+net-yan100-compose-cacheable = { group = "net.yan100.compose", name = "cacheable", version.ref = "compose" }
+net-yan100-compose-client = { group = "net.yan100.compose", name = "client", version.ref = "compose-build" }
+net-yan100-compose-core = { group = "net.yan100.compose", name = "core", version.ref = "compose" }
+net-yan100-compose-data-crawler = { group = "net.yan100.compose", name = "data-crawler", version.ref = "compose-data" }
+net-yan100-compose-data-extract = { group = "net.yan100.compose", name = "data-extract", version.ref = "compose-data" }
+net-yan100-compose-depend-http-exchange = { group = "net.yan100.compose", name = "depend-http-exchange", version.ref = "compose-depend" }
+net-yan100-compose-depend-jackson = { group = "net.yan100.compose", name = "depend-jackson", version.ref = "compose-depend" }
+net-yan100-compose-depend-paho = { group = "net.yan100.compose", name = "depend-paho", version.ref = "compose-depend" }
+net-yan100-compose-depend-servlet = { group = "net.yan100.compose", name = "depend-servlet", version.ref = "compose-depend" }
+net-yan100-compose-depend-springdoc-openapi = { group = "net.yan100.compose", name = "depend-springdoc-openapi", version.ref = "compose-depend" }
+net-yan100-compose-depend-xxl-job = { group = "net.yan100.compose", name = "depend-xxl-job", version.ref = "compose-depend" }
+net-yan100-compose-gradle-plugin = { group = "net.yan100.compose", name = "gradle-plugin", version.ref = "compose-build" }
+net-yan100-compose-ksp-client = { group = "net.yan100.compose", name = "ksp-client", version.ref = "compose-build" }
+net-yan100-compose-ksp-plugin = { group = "net.yan100.compose", name = "ksp-plugin", version.ref = "compose-build" }
+net-yan100-compose-ksp-toolkit = { group = "net.yan100.compose", name = "ksp-toolkit", version.ref = "compose-build" }
+net-yan100-compose-meta = { group = "net.yan100.compose", name = "meta", version.ref = "compose-build" }
 net-yan100-compose-oss-common = { group = "net.yan100.compose", name = "oss-common", version.ref = "compose-oss" }
 net-yan100-compose-oss-aliyun-oss = { group = "net.yan100.compose", name = "oss-aliyun-oss", version.ref = "compose-oss" }
 net-yan100-compose-oss-huawei-obs = { group = "net.yan100.compose", name = "oss-huawei-obs", version.ref = "compose-oss" }
 net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose-pay" }
-net-yan100-compose-rds-core = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rds-core" }
-net-yan100-compose-rds-crud = { group = "net.yan100.compose", name = "rds-crud", version.ref = "compose-rds-crud" }
-net-yan100-compose-rds-jimmer-ext-postgres = { group = "net.yan100.compose", name = "rds-jimmer-ext-postgres", version.ref = "compose-rds-jimmer-ext-postgres" }
-net-yan100-compose-rds-migration-h2 = { group = "net.yan100.compose", name = "rds-migration-h2", version.ref = "compose-rds-migration-h2" }
-net-yan100-compose-rds-migration-mysql = { group = "net.yan100.compose", name = "rds-migration-mysql", version.ref = "compose-rds-migraiton-mysql" }
-net-yan100-compose-rds-migration-postgres = { group = "net.yan100.compose", name = "rds-migration-postgres", version.ref = "compose-rds-migration-postgres" }
-net-yan100-compose-security-crypto = { group = "net.yan100.compose", name = "security-crypto", version.ref = "compose-security-crypto" }
-net-yan100-compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose-security-oauth2" }
-net-yan100-compose-security-spring = { group = "net.yan100.compose", name = "security-spring", version.ref = "compose-security-spring" }
-net-yan100-compose-sms-tencent = { group = "net.yan100.compose", name = "sms-tencent", version.ref = "compose-sms-tencent" }
-net-yan100-compose-testtoolkit = { group = "net.yan100.compose", name = "testtoolkit", version.ref = "compose-testtoolkit" }
-net-yan100-compose-tspoet = { group = "net.yan100.compose", name = "ksp-tspoet", version.ref = "compose-ksp-tspoet" }
+net-yan100-compose-rds-core = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rds" }
+net-yan100-compose-rds-crud = { group = "net.yan100.compose", name = "rds-crud", version.ref = "compose-rds" }
+net-yan100-compose-rds-jimmer-ext-postgres = { group = "net.yan100.compose", name = "rds-jimmer-ext-postgres", version.ref = "compose-rds" }
+net-yan100-compose-rds-migration-h2 = { group = "net.yan100.compose", name = "rds-migration-h2", version.ref = "compose-rds" }
+net-yan100-compose-rds-migration-mysql = { group = "net.yan100.compose", name = "rds-migration-mysql", version.ref = "compose-rds" }
+net-yan100-compose-rds-migration-postgres = { group = "net.yan100.compose", name = "rds-migration-postgres", version.ref = "compose-rds" }
+net-yan100-compose-security-crypto = { group = "net.yan100.compose", name = "security-crypto", version.ref = "compose-security" }
+net-yan100-compose-security-oauth2 = { group = "net.yan100.compose", name = "security-oauth2", version.ref = "compose-security" }
+net-yan100-compose-security-spring = { group = "net.yan100.compose", name = "security-spring", version.ref = "compose-security" }
+net-yan100-compose-sms-tencent = { group = "net.yan100.compose", name = "sms-tencent", version.ref = "compose-sms" }
+net-yan100-compose-testtoolkit = { group = "net.yan100.compose", name = "testtoolkit", version.ref = "compose-build" }
 ognl-ognl = { group = "ognl", name = "ognl", version = "3.4.6" }
 org-apache-commons-commons-compress = { group = "org.apache.commons", name = "commons-compress", version = "1.27.1" }
 org-apache-commons-commons-csv = { group = "org.apache.commons", name = "commons-csv", version = "1.13.0" }
@@ -303,8 +281,7 @@ com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "com-diffp
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
 io-spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
-net-yan100-compose-gradle-plugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-gradle-plugin" }
-net-yan100-compose-gradle-settings-plugin = { id = "net.yan100.compose.settings-gradle-plugin", version.ref = "compose-gradle-plugin" }
+net-yan100-compose-gradle-plugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-build" }
 org-asciidoctor-jvm-convert = { id = "org.asciidoctor.jvm.convert", version = "4.0.3" }
 org-graalvm-buildtools-native = { id = "org.graalvm.buildtools.native", version = "0.10.2" }
 org-gradle-toolchains-foojay-resolver-convention = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "0.8.0" }

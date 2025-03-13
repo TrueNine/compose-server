@@ -1,10 +1,10 @@
 package net.yan100.compose.core.domain
 
+import java.io.InputStream
+import java.io.Serializable
 import net.yan100.compose.core.bool
 import net.yan100.compose.core.i64
 import net.yan100.compose.core.string
-import java.io.InputStream
-import java.io.Serializable
 
 /**
  * # 附件表示形式

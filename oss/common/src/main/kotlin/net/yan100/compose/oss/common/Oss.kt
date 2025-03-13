@@ -12,20 +12,22 @@ import java.io.OutputStream
  */
 interface Oss {
   fun createBucketByName(bucketName: String)
+
   fun setBucketPolicyToPublicReadonly(bucketName: String)
+
   fun existsBucketByName(bucketName: String): Boolean
 
-  @Deprecated("java api")
-  fun removeObject(objectInfo: FileArgs): Boolean
+  @Deprecated("java api") fun removeObject(objectInfo: FileArgs): Boolean
 
   fun removeObject(info: ObjectArgs)
 
   fun fetchAllBucketNames(): List<String>
+
   fun fetchAllObjectNameByBucketName(bucketName: String): List<String>
 
   fun <T : Any> getNativeClient(): T?
-  val exposedBaseUrl: String
 
+  val exposedBaseUrl: String
 
   /**
    * 上传

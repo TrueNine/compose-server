@@ -5,8 +5,6 @@ import net.yan100.compose.core.typing.MimeTypes
 
 /**
  * ## oss bucket -> object 参数表示
- * @author TrueNine
- * @since 2025-03-13
  *
  * @param bucketName bucket 名称
  * @param objectName object 名称
@@ -14,6 +12,8 @@ import net.yan100.compose.core.typing.MimeTypes
  * @param contentTypeFor object mimeType
  * @param contentType 媒体类型
  * @param headers object 头部信息
+ * @author TrueNine
+ * @since 2025-03-13
  */
 data class ObjectArgs(
   val objectName: String,

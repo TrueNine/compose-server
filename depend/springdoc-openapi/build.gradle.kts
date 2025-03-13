@@ -1,6 +1,6 @@
 plugins { `kotlinspring-convention` }
 
-version = libs.versions.compose.depend.springdoc.openapi.get()
+version = libs.versions.compose.depend.get()
 
 dependencies {
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)

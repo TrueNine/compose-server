@@ -3,4 +3,4 @@ plugins {
   `sqlmigration-convention`
 }
 
-version = libs.versions.compose.rds.migraiton.mysql.get()
+version = libs.versions.compose.rds.get()

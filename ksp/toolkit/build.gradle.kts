@@ -1,6 +1,6 @@
 plugins { `kotlin-convention` }
 
-version = libs.versions.compose.ksp.toolkit.get()
+version = libs.versions.compose.build.get()
 
 dependencies {
   api(libs.com.google.devtools.ksp.symbol.processing.api)

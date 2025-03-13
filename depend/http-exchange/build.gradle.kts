@@ -1,6 +1,6 @@
 plugins { `kotlin-convention` }
 
-version = libs.versions.compose.depend.http.exchange.get()
+version = libs.versions.compose.depend.get()
 
 dependencies {
   implementation(projects.core)
