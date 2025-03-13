@@ -1,0 +1,5 @@
+compose:
+  oss:
+    minio:
+      access-key: minio
+      secret-key: minio123
