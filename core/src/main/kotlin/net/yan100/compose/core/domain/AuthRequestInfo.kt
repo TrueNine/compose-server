@@ -23,13 +23,13 @@ import net.yan100.compose.core.RefId
  * @since 2022-12-10
  */
 data class AuthRequestInfo(
+  val userId: RefId,
+  val account: String,
   override val deviceId: String? = null,
   override val currentIpAddr: String? = null,
   val encryptedPassword: String? = null,
   val loginIpAddr: String? = null,
   val loginPlatform: String? = null,
-  val userId: RefId? = null,
-  val account: String? = null,
   val nonLocked: Boolean = false,
   val nonExpired: Boolean = false,
   val enabled: Boolean = false,
