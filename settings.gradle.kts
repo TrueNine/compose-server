@@ -15,7 +15,6 @@ listOf(
   "client",
   "meta",
   "gradle-plugin",
-  "oss",
   "cacheable",
   "cacheable",
   "pay"
@@ -26,6 +25,10 @@ listOf(
 
 ("sms" to listOf(
   "tencent", "shared"
+)).useFile()
+
+("oss" to listOf(
+  "common", "minio", "aliyun-oss", "huawei-obs"
 )).useFile()
 
 ("rds" to listOf(
