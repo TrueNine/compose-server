@@ -16,15 +16,15 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "3.0.1"
+compose = "3.0.3"
 compose-data = "3.0.1"
 compose-depend = "3.0.1"
 compose-build = "3.0.1"
 compose-group = "net.yan100.compose"
 compose-meta = "3.0.1"
-compose-oss = "3.0.1"
+compose-oss = "3.0.2"
 compose-pay = "3.0.1"
-compose-rds = "3.0.1"
+compose-rds = "3.0.2"
 compose-security = "3.0.1"
 compose-sms = "3.0.1"
 io-netty = "4.1.119.Final"
@@ -144,6 +144,7 @@ net-yan100-compose-meta = { group = "net.yan100.compose", name = "meta", version
 net-yan100-compose-oss-common = { group = "net.yan100.compose", name = "oss-common", version.ref = "compose-oss" }
 net-yan100-compose-oss-aliyun-oss = { group = "net.yan100.compose", name = "oss-aliyun-oss", version.ref = "compose-oss" }
 net-yan100-compose-oss-huawei-obs = { group = "net.yan100.compose", name = "oss-huawei-obs", version.ref = "compose-oss" }
+net-yan100-compose-oss-minio = { group = "net.yan100.compose", name = "oss-minio", version.ref = "compose-oss" }
 net-yan100-compose-pay = { group = "net.yan100.compose", name = "pay", version.ref = "compose-pay" }
 net-yan100-compose-rds-core = { group = "net.yan100.compose", name = "rds-core", version.ref = "compose-rds" }
 net-yan100-compose-rds-crud = { group = "net.yan100.compose", name = "rds-crud", version.ref = "compose-rds" }

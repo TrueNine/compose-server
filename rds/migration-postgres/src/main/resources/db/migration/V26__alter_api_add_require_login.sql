@@ -1,2 +1,2 @@
 alter table
-    if exists api add column require_login boolean default null;
+    if exists api add column if not exists require_login boolean default null;
