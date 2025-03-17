@@ -9,34 +9,34 @@ com-diffplug-spotless = "7.0.2"
 com-fasterxml-jackson = "2.18.3"
 com-flywaydb-flyway = "11.4.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.1.20-RC2-1.0.31"
+com-google-devtools-ksp = "2.1.20-RC3-1.0.31"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "3.0.4"
-compose-data = "3.0.1"
-compose-depend = "3.0.1"
-compose-build = "3.0.1"
+compose = "3.0.5"
+compose-data = "3.0.2"
+compose-depend = "3.0.2"
+compose-build = "3.0.2"
 compose-group = "net.yan100.compose"
-compose-meta = "3.0.1"
-compose-oss = "3.0.2"
-compose-pay = "3.0.1"
-compose-rds = "3.0.2"
-compose-security = "3.0.1"
-compose-sms = "3.0.1"
+compose-meta = "3.0.2"
+compose-oss = "3.0.3"
+compose-pay = "3.0.2"
+compose-rds = "3.0.3"
+compose-security = "3.0.2"
+compose-sms = "3.0.2"
 io-netty = "4.1.119.Final"
 java = "23"
 org-apache-logging-log4j = "2.24.3"
-org-babyfish-jimmer = "0.9.64"
+org-babyfish-jimmer = "0.9.65"
 org-hibernate-orm = "6.6.9.Final"
-org-jetbrains-kotlin = "2.1.20-RC2"
+org-jetbrains-kotlin = "2.1.20-RC3"
 org-jetbrains-kotlinx-coroutines = "1.10.1"
 org-jetbrains-kotlinx-datetime = "0.6.2"
 org-jetbrains-kotlinx-io = "0.7.0"
-org-junit-junit5 = "5.12.0"
+org-junit-junit5 = "5.12.1"
 org-slf4j = "2.1.0-alpha1"
 org-testng = "7.11.0"
 spring-ai = "1.0.0-M5"
@@ -112,7 +112,7 @@ io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.17" }
 io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.17" }
 io-netty-netty-handler = { group = "io.netty", name = "netty-handler", version.ref = "io-netty" }
 io-projectreactor-kotlin-reactor-kotlin-extensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version = "1.2.3" }
-io-projectreactor-reactor-test = { group = "io.projectreactor", name = "reactor-test", version = "3.7.3" }
+io-projectreactor-reactor-test = { group = "io.projectreactor", name = "reactor-test", version = "3.8.0-M1" }
 io-spring-gradle-dependency-management-plugin = { group = "io.spring.gradle", name = "dependency-management-plugin", version = "1.1.7" }
 io-swagger-core-v3-swagger-annotations-jakarta = { group = "io.swagger.core.v3", name = "swagger-annotations-jakarta", version = "2.2.29" }
 jakarta-annotation-jakarta-annotation-api = { group = "jakarta.annotation", name = "jakarta.annotation-api", version = "3.0.0" }
@@ -207,7 +207,7 @@ org-jetbrains-kotlinx-kotlinxIo-core-jvm = { group = "org.jetbrains.kotlinx", na
 org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.19.1" }
 org-junit-jupiter-junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "org-junit-junit5" }
 org-junit-jupiter-junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "org-junit-junit5" }
-org-junit-platform-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.0" }
+org-junit-platform-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.1" }
 org-junit-vintage-junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version.ref = "org-junit-junit5" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 org-mapstruct-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "com-mapstruct" }
