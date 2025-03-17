@@ -49,6 +49,21 @@ interface IPage<T : Any?> : IPageLike<T> {
 
   operator fun get(index: Int): T = d.toList()[index]
 
+  /**
+   * ## 转换分页结果
+   *
+   * @param transform 转换函数
+   */
+  fun <R : Any> transferTo(transform: (T) -> R): IPage<R> {
+    return DefaultPageResult(
+      pageParam = pageParam,
+      d = d.map(transform),
+      t = t,
+      o = o,
+      p = p,
+    )
+  }
+
   companion object {
     /**
      * @param dataList 数据列表
