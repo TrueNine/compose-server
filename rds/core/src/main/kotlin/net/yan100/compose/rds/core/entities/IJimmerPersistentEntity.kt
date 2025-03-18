@@ -1,4 +1,4 @@
-package com.tnmaster.entities.jimmer.baseies
+package net.yan100.compose.rds.core.entities
 
 import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.converters.jimmer.JimmerLongToStringConverter

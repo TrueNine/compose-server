@@ -1,6 +1,5 @@
 package net.yan100.compose.rds.core.entities
 
-import com.tnmaster.entities.jimmer.baseies.IJimmerPersistentEntity
 import net.yan100.compose.core.datetime
 import org.babyfish.jimmer.sql.Column
 import org.babyfish.jimmer.sql.MappedSuperclass

@@ -1,6 +1,6 @@
 package net.yan100.compose.rds.core
 
-import com.tnmaster.entities.jimmer.baseies.IJimmerPersistentEntity
+import net.yan100.compose.rds.core.entities.IJimmerPersistentEntity
 import org.babyfish.jimmer.spring.repository.KRepository
 import org.springframework.data.repository.NoRepositoryBean
 
