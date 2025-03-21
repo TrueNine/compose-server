@@ -4,35 +4,35 @@ format.version = "1.1"
 [versions]
 cn-hutool = "5.8.36"
 com-baomidou-mybatis-plus = "3.5.10.1"
-com-dev33-sa-token = "1.40.0"
+cn-dev33-sa-token = "1.40.0"
 com-diffplug-spotless = "7.0.2"
 com-fasterxml-jackson = "2.18.3"
 com-flywaydb-flyway = "11.4.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.1.20-RC3-1.0.31"
+com-google-devtools-ksp = "2.1.20-1.0.31"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "3.0.9"
-compose-data = "3.0.3"
-compose-depend = "3.0.3"
-compose-build = "3.0.3"
+compose = "3.0.10"
+compose-data = "3.0.4"
+compose-depend = "3.0.4"
+compose-build = "3.0.4"
 compose-group = "net.yan100.compose"
-compose-meta = "3.0.3"
-compose-oss = "3.0.4"
-compose-pay = "3.0.3"
-compose-rds = "3.0.6"
-compose-security = "3.0.3"
-compose-sms = "3.0.3"
+compose-meta = "3.0.4"
+compose-oss = "3.0.5"
+compose-pay = "3.0.4"
+compose-rds = "3.0.7"
+compose-security = "3.0.4"
+compose-sms = "3.0.4"
 io-netty = "4.1.119.Final"
 java = "23"
 org-apache-logging-log4j = "2.24.3"
-org-babyfish-jimmer = "0.9.66"
+org-babyfish-jimmer = "0.9.68"
 org-hibernate-orm = "6.6.11.Final"
-org-jetbrains-kotlin = "2.1.20-RC3"
+org-jetbrains-kotlin = "2.1.20"
 org-jetbrains-kotlinx-coroutines = "1.10.1"
 org-jetbrains-kotlinx-datetime = "0.6.2"
 org-jetbrains-kotlinx-io = "0.7.0"
@@ -41,7 +41,7 @@ org-slf4j = "2.1.0-alpha1"
 org-testng = "7.11.0"
 spring-ai = "1.0.0-M5"
 spring-batch = "5.2.1"
-spring-boot = "3.5.0-M2"
+spring-boot = "3.5.0-M3"
 spring-cloud = "2025.0.0-M2"
 spring-cloud-alibaba = "2023.0.3.2"
 spring-data = "3.5.0-M1"
@@ -51,10 +51,10 @@ spring-modulith = "1.4.0-M2"
 spring-security = "6.5.0-M2"
 
 [libraries]
-cn-dev33-sa-token-redis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "com-dev33-sa-token" }
-cn-dev33-sa-token-redis-jackson = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "com-dev33-sa-token" }
-cn-dev33-sa-token-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "com-dev33-sa-token" }
-cn-dev33-sa-token-spring-boot3-starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "com-dev33-sa-token" }
+cn-dev33-sa-token-redis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "cn-dev33-sa-token" }
+cn-dev33-sa-token-redis-jackson = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
+cn-dev33-sa-token-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "cn-dev33-sa-token" }
+cn-dev33-sa-token-spring-boot3-starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "cn-dev33-sa-token" }
 cn-hutool-hutool-all = { group = "cn.hutool", name = "hutool-all", version.ref = "cn-hutool" }
 cn-hutool-hutool-captcha = { group = "cn.hutool", name = "hutool-captcha", version.ref = "cn-hutool" }
 cn-hutool-hutool-core = { group = "cn.hutool", name = "hutool-core", version.ref = "cn-hutool" }
