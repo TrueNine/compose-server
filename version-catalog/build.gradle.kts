@@ -1,4 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import kotlin.jvm.optionals.getOrNull
 
 plugins {
@@ -26,18 +25,6 @@ dependencies {
   }
 }
 
-fun isNonStable(version: String): Boolean {
-  val stableKeyword = listOf("release", "final", "ga", "-jre").any { version.lowercase().contains(it) }
-  val regex = "^[0-9,.v-]+(-r)?$".toRegex()
-  val isStable = stableKeyword || regex.matches(version)
-  return isStable.not()
-}
 
 // https://github.com/ben-manes/gradle-versions-plugin
-tasks.withType<DependencyUpdatesTask> {
-  this.rejectVersionIf {
-    isNonStable(candidate.version)
-  }
-}
-
 catalog { versionCatalog { from(files("../gradle/libs.versions.toml")) } }
