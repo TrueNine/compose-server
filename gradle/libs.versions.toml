@@ -3,11 +3,11 @@ format.version = "1.1"
 
 [versions]
 cn-hutool = "5.8.36"
-com-baomidou-mybatis-plus = "3.5.10.1"
-cn-dev33-sa-token = "1.40.0"
+com-baomidou-mybatis-plus = "3.5.11"
+cn-dev33-sa-token = "1.41.0"
 com-diffplug-spotless = "7.0.2"
 com-fasterxml-jackson = "2.18.3"
-com-flywaydb-flyway = "11.4.0"
+com-flywaydb-flyway = "11.4.1"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
 com-google-devtools-ksp = "2.1.20-1.0.31"
 com-mapstruct = "1.6.3"
@@ -16,17 +16,17 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "3.0.10"
-compose-data = "3.0.4"
-compose-depend = "3.0.4"
-compose-build = "3.0.4"
+compose = "3.0.11"
+compose-data = "3.0.5"
+compose-depend = "3.0.5"
+compose-build = "3.0.5"
 compose-group = "net.yan100.compose"
-compose-meta = "3.0.4"
-compose-oss = "3.0.5"
-compose-pay = "3.0.4"
-compose-rds = "3.0.7"
-compose-security = "3.0.4"
-compose-sms = "3.0.4"
+compose-meta = "3.0.5"
+compose-oss = "3.0.6"
+compose-pay = "3.0.5"
+compose-rds = "3.0.8"
+compose-security = "3.0.5"
+compose-sms = "3.0.5"
 io-netty = "4.1.119.Final"
 java = "23"
 org-apache-logging-log4j = "2.24.3"
@@ -40,15 +40,15 @@ org-junit-junit5 = "5.12.1"
 org-slf4j = "2.1.0-alpha1"
 org-testng = "7.11.0"
 spring-ai = "1.0.0-M5"
-spring-batch = "5.2.1"
+spring-batch = "5.2.2"
 spring-boot = "3.5.0-M3"
 spring-cloud = "2025.0.0-M2"
 spring-cloud-alibaba = "2023.0.3.2"
 spring-data = "3.5.0-M1"
 spring-framework = "6.2.4"
 spring-integration = "6.5.0-M2"
-spring-modulith = "1.4.0-M2"
-spring-security = "6.5.0-M2"
+spring-modulith = "1.4.0-M3"
+spring-security = "6.5.0-M3"
 
 [libraries]
 cn-dev33-sa-token-redis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "cn-dev33-sa-token" }
@@ -88,7 +88,7 @@ com-github-xiaoymin-knife4j-spring-boot-starter = { group = "com.github.xiaoymin
 com-google-code-gson-gson = { group = "com.google.code.gson", name = "gson", version = "2.12.1" }
 com-google-devtools-ksp-symbol-processing = { group = "com.google.devtools.ksp", name = "symbol-processing", version.ref = "com-google-devtools-ksp" }
 com-google-devtools-ksp-symbol-processing-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "com-google-devtools-ksp" }
-com-google-guava-guava-jre = { group = "com.google.guava", name = "guava", version = "33.4.0-jre" }
+com-google-guava-guava-jre = { group = "com.google.guava", name = "guava", version = "33.4.5-jre" }
 com-h2database-h2 = { group = "com.h2database", name = "h2", version = "2.3.232" }
 com-huaweicloud-esdk-obs-java = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.12" }
 com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.51.0" }
@@ -106,7 +106,7 @@ com-squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "re
 com-tencentcloudapi-tencentcloud-sdk-java-sms = { group = "com.tencentcloudapi", name = "tencentcloud-sdk-java-sms", version = "3.1.1179" }
 com-xuxueli-xxl-job-core = { group = "com.xuxueli", name = "xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { group = "com.yomahub", name = "liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
-io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "5.9.3" }
+io-github-bonigarcia-webdrivermanager = { group = "io.github.bonigarcia", name = "webdrivermanager", version = "6.0.0" }
 io-jsonwebtoken-jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version = "0.12.6" }
 io-minio-minio = { group = "io.minio", name = "minio", version = "8.5.17" }
 io-mockk-mockk = { group = "io.mockk", name = "mockk", version = "1.13.17" }
@@ -120,7 +120,7 @@ jakarta-persistence-jakarta-persistence-api = { group = "jakarta.persistence", n
 jakarta-servlet-jakarta-servlet-api = { group = "jakarta.servlet", name = "jakarta.servlet-api", version = "6.1.0" }
 jakarta-validation-jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validation-api", version = "3.1.1" }
 mysql-mysql-connector-java = { group = "mysql", name = "mysql-connector-java", version = "8.0.33" }
-net-bytebuddy-byte-buddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.17.2" }
+net-bytebuddy-byte-buddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.17.4" }
 net-sf-dozer-dozer = { group = "net.sf.dozer", name = "dozer", version = "5.5.1" }
 net-sf-sevenzipjbinding-sevenzipjbinding = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding", version = "16.02-2.01" }
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { group = "net.sf.sevenzipjbinding", name = "sevenzipjbinding-all-platforms", version = "16.02-2.01" }
@@ -159,7 +159,7 @@ net-yan100-compose-sms-tencent = { group = "net.yan100.compose", name = "sms-ten
 net-yan100-compose-testtoolkit = { group = "net.yan100.compose", name = "testtoolkit", version.ref = "compose-build" }
 ognl-ognl = { group = "ognl", name = "ognl", version = "3.4.6" }
 org-apache-commons-commons-compress = { group = "org.apache.commons", name = "commons-compress", version = "1.27.1" }
-org-apache-commons-commons-csv = { group = "org.apache.commons", name = "commons-csv", version = "1.13.0" }
+org-apache-commons-commons-csv = { group = "org.apache.commons", name = "commons-csv", version = "1.14.0" }
 org-apache-commons-commons-pool2 = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.1" }
 org-apache-logging-log4j-log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "org-apache-logging-log4j" }
 org-apache-logging-log4j-log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "org-apache-logging-log4j" }
@@ -178,7 +178,7 @@ org-flywaydb-flyway-mysql = { group = "org.flywaydb", name = "flyway-mysql", ver
 org-freemarker-freemarker = { group = "org.freemarker", name = "freemarker", version = "2.3.34" }
 org-hibernate-orm-hibernate-core = { group = "org.hibernate", name = "hibernate-core", version.ref = "org-hibernate-orm" }
 org-hsqldb-hsqldb = { group = "org.hsqldb", name = "hsqldb", version = "2.7.4" }
-org-htmlunit-neko-htmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.10.0" }
+org-htmlunit-neko-htmlunit = { group = "org.htmlunit", name = "neko-htmlunit", version = "4.11.0" }
 org-jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
 org-jetbrains-kotlin-jvm-org-jetbrains-kotlin-jvm-gradle-plugin = { group = "org.jetbrains.kotlin.jvm", name = "org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kapt-org-jetbrains-kotlin-kapt-gradle-plugin = { group = "org.jetbrains.kotlin.kapt", name = "org.jetbrains.kotlin.kapt.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
@@ -215,10 +215,10 @@ org-mapstruct-mapstruct-processor = { group = "org.mapstruct", name = "mapstruct
 org-owasp-antisamy-antisamy = { group = "org.owasp.antisamy", name = "antisamy", version = "1.7.7" }
 org-postgresql-postgresql = { group = "org.postgresql", name = "postgresql", version = "42.7.5" }
 org-projectlombok-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
-org-seleniumhq-selenium-selenium-java = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.29.0" }
+org-seleniumhq-selenium-selenium-java = { group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.30.0" }
 org-skyscreamer-jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "2.0-rc1" }
 org-slf4j-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "org-slf4j" }
-org-springdoc-springdoc-openapi-starter-webmvc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.8.5" }
+org-springdoc-springdoc-openapi-starter-webmvc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version = "2.8.6" }
 org-springframework-ai-spring-ai-bom = { group = "org.springframework.ai", name = "spring-ai-bom", version.ref = "spring-ai" }
 org-springframework-batch-spring-batch-test = { group = "org.springframework.batch", name = "spring-batch-test", version.ref = "spring-batch" }
 org-springframework-boot-spring-boot = { group = "org.springframework.boot", name = "spring-boot", version.ref = "spring-boot" }
