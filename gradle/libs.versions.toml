@@ -5,28 +5,29 @@ format.version = "1.1"
 cn-hutool = "5.8.36"
 com-baomidou-mybatis-plus = "3.5.11"
 cn-dev33-sa-token = "1.41.0"
+cn-dev33-sa-token-redis = "1.40.0"
 com-diffplug-spotless = "7.0.2"
 com-fasterxml-jackson = "2.18.3"
-com-flywaydb-flyway = "11.4.1"
+com-flywaydb-flyway = "11.5.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.1.20-1.0.31"
+com-google-devtools-ksp = "2.1.20-1.0.32"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "3.0.12"
-compose-data = "3.0.5"
-compose-depend = "3.0.5"
-compose-build = "3.0.5"
+compose = "3.0.13"
+compose-data = "3.0.6"
+compose-depend = "3.0.6"
+compose-build = "3.0.6"
 compose-group = "net.yan100.compose"
-compose-meta = "3.0.5"
-compose-oss = "3.0.6"
-compose-pay = "3.0.5"
-compose-rds = "3.0.9"
-compose-security = "3.0.5"
-compose-sms = "3.0.5"
+compose-meta = "3.0.6"
+compose-oss = "3.0.7"
+compose-pay = "3.0.6"
+compose-rds = "3.0.10"
+compose-security = "3.0.6"
+compose-sms = "3.0.6"
 io-netty = "4.1.119.Final"
 java = "23"
 org-apache-logging-log4j = "2.24.3"
@@ -36,7 +37,8 @@ org-jetbrains-kotlin = "2.1.20"
 org-jetbrains-kotlinx-coroutines = "1.10.1"
 org-jetbrains-kotlinx-datetime = "0.6.2"
 org-jetbrains-kotlinx-io = "0.7.0"
-org-junit-junit5 = "5.12.1"
+org-junit-junit5 = "5.13.0-M2"
+org-junit-platform = "1.13.0-M2"
 org-slf4j = "2.1.0-alpha1"
 org-testng = "7.11.0"
 spring-ai = "1.0.0-M5"
@@ -46,12 +48,12 @@ spring-cloud = "2025.0.0-M2"
 spring-cloud-alibaba = "2023.0.3.2"
 spring-data = "3.5.0-M1"
 spring-framework = "6.2.4"
-spring-integration = "6.5.0-M2"
+spring-integration = "6.5.0-M3"
 spring-modulith = "1.4.0-M3"
 spring-security = "6.5.0-M3"
 
 [libraries]
-cn-dev33-sa-token-redis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "cn-dev33-sa-token" }
+cn-dev33-sa-token-redis = { group = "cn.dev33", name = "sa-token-redis", version.ref = "cn-dev33-sa-token-redis" }
 cn-dev33-sa-token-redis-jackson = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot-starter", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot3-starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "cn-dev33-sa-token" }
@@ -88,7 +90,7 @@ com-github-xiaoymin-knife4j-spring-boot-starter = { group = "com.github.xiaoymin
 com-google-code-gson-gson = { group = "com.google.code.gson", name = "gson", version = "2.12.1" }
 com-google-devtools-ksp-symbol-processing = { group = "com.google.devtools.ksp", name = "symbol-processing", version.ref = "com-google-devtools-ksp" }
 com-google-devtools-ksp-symbol-processing-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "com-google-devtools-ksp" }
-com-google-guava-guava-jre = { group = "com.google.guava", name = "guava", version = "33.4.5-jre" }
+com-google-guava-guava-jre = { group = "com.google.guava", name = "guava", version = "33.4.6-jre" }
 com-h2database-h2 = { group = "com.h2database", name = "h2", version = "2.3.232" }
 com-huaweicloud-esdk-obs-java = { group = "com.huaweicloud", name = "esdk-obs-java", version = "3.24.12" }
 com-microsoft-playwright-playwright = { group = "com.microsoft.playwright", name = "playwright", version = "1.51.0" }
@@ -207,7 +209,7 @@ org-jetbrains-kotlinx-kotlinxIo-core-jvm = { group = "org.jetbrains.kotlinx", na
 org-jsoup-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.19.1" }
 org-junit-jupiter-junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "org-junit-junit5" }
 org-junit-jupiter-junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "org-junit-junit5" }
-org-junit-platform-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.1" }
+org-junit-platform-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "org-junit-platform" }
 org-junit-vintage-junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version.ref = "org-junit-junit5" }
 org-lionsoul-ip2region = { group = "org.lionsoul", name = "ip2region", version = "2.7.0" }
 org-mapstruct-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "com-mapstruct" }
