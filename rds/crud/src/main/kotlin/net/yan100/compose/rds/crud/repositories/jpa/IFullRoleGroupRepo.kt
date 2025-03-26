@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Repository("IFullRoleGroupRepository")
 @Deprecated("关联过于复杂")
 interface IFullRoleGroupRepo : IRepo<FullRoleGroup> {
   fun findAllByName(name: String): List<FullRoleGroup>

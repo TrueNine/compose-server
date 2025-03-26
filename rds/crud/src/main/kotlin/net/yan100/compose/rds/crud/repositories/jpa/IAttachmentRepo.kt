@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IAttachmentRepository")
 interface IAttachmentRepo : IRepo<Attachment> {
   @Query(
     """

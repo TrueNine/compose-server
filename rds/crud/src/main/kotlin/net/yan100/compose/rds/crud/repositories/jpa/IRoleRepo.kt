@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IRoleRepository")
 interface IRoleRepo : IRepo<Role> {
   fun findAllByName(name: String): List<Role>
 

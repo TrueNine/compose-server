@@ -12,7 +12,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IAddressRepository")
 interface IAddressRepo : ITreeRepo<Address> {
   fun existsByCode(code: string): Boolean
 

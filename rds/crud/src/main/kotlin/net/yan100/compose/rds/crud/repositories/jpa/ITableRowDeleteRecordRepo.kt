@@ -6,5 +6,6 @@ import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
-interface ITableRowDeleteRecordRep : IRepo<TableRowDeleteRecord>
+@Deprecated("弃用 JPA")
+@Repository("ITableRowDeleteRecordRepository")
+interface ITableRowDeleteRecordRepo : IRepo<TableRowDeleteRecord>

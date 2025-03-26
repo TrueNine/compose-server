@@ -16,7 +16,8 @@ import org.springframework.stereotype.Repository
  * @since 2023-06-13
  */
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IAddressDetailsRepository")
 interface IAddressDetailsRepo : IRepo<AddressDetails> {
   /** ## 根据用户ID查询用户地址详情 */
   fun findAllByUserId(userId: String, page: Pageable): Page<AddressDetails>

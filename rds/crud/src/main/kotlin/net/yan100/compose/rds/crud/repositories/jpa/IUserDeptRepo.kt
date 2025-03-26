@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IUserDeptRepository")
 interface IUserDeptRepo : IRepo<UserDept> {
   fun findAllByUserId(userId: RefId): List<UserDept>
 }

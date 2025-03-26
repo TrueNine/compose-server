@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 
 /** # 全路径地址详情 */
 @Primary
-@Repository
+@Repository("IFullAddressDetailsRepository")
 @Deprecated("关联过于复杂")
 interface IFullAddressDetailsRepo : IRepo<FullAddressDetails> {
   /** ## 根据用户ID查询用户地址详情 */

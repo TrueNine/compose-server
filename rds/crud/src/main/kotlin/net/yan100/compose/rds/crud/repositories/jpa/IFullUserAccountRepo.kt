@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Repository("IFullUserAccountRepository")
 @Deprecated("关联过于复杂")
 interface IFullUserAccountRepo : IRepo<FullUserAccount> {
   fun findByAccount(account: String): FullUserAccount?

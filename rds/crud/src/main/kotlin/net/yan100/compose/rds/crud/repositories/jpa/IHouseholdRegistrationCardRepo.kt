@@ -6,5 +6,6 @@ import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IHouseholdRegistrationCardRepository")
 interface IHouseholdRegistrationCardRepo : IRepo<HouseholdCert>

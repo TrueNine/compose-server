@@ -5,4 +5,7 @@ import net.yan100.compose.rds.crud.entities.jpa.BankCard
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
-@Primary @Repository interface IBankCardRepo : IRepo<BankCard>
+@Primary
+@Deprecated("弃用 JPA")
+@Repository("IBankCardRepository")
+interface IBankCardRepo : IRepo<BankCard>

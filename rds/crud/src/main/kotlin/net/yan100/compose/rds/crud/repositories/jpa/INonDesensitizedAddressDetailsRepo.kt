@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("INonDesensitizedAddressDetailsRepository")
 interface INonDesensitizedAddressDetailsRepo :
   IRepo<NonDesensitizedAddressDetails>

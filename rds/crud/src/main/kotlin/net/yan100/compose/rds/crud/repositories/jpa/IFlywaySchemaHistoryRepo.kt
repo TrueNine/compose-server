@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IFlywaySchemaHistoryRepository")
 interface IFlywaySchemaHistoryRepo : IRepo<FlywaySchemaHistory> {
   @Modifying
   @Query("drop table if exists :name", nativeQuery = true)

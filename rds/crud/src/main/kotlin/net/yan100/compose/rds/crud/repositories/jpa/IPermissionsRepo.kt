@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IPermissionsRepository")
 interface IPermissionsRepo : IRepo<Permissions> {
   fun findAllByName(name: String): List<Permissions>
 

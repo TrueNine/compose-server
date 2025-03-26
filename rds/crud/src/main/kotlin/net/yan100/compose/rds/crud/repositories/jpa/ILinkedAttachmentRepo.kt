@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("ILinkedAttachmentRepository")
 interface ILinkedAttachmentRepo : IRepo<LinkedAttachment> {
   /** ## 根据 baseUrl 查询其下的所有 附件 */
   @Query(

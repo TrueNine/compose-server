@@ -1,6 +1,5 @@
 package net.yan100.compose.rds.crud.repositories.jpa
 
-import java.time.LocalDateTime
 import net.yan100.compose.core.RefId
 import net.yan100.compose.rds.core.IRepo
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
@@ -8,9 +7,11 @@ import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Primary
-@Repository
+@Deprecated("弃用 JPA")
+@Repository("IUserAccountRepository")
 interface IUserAccountRepo : IRepo<UserAccount> {
 
   @Query(
