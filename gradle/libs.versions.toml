@@ -205,7 +205,8 @@ org-jetbrains-kotlinx-kotlinx-coroutines-test = { module = "org.jetbrains.kotlin
 org-jetbrains-kotlinx-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "org-jetbrains-kotlinx-datetime" }
 org-jetbrains-kotlinx-kotlinx-datetime-jvm = { module = "org.jetbrains.kotlinx:kotlinx-datetime-jvm", version.ref = "org-jetbrains-kotlinx-datetime" }
 org-jetbrains-kotlinx-kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "org-jetbrains-kotlinx-io" }
-org-jetbrains-kotlinx-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization", version.ref = "org-jetbrains-kotlinx-serialization" }
+org-jetbrains-kotlinx-kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "org-jetbrains-kotlinx-serialization" }
+org-jetbrains-kotlinx-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "org-jetbrains-kotlinx-serialization" }
 org-jetbrains-kotlinx-kotlinxIo-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-io-core-jvm", version.ref = "org-jetbrains-kotlinx-io" }
 org-jsoup-jsoup = "org.jsoup:jsoup:1.19.1"
 org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-junit5" }
@@ -297,29 +298,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-    "org-junit-jupiter-junit-jupiter-api",
-    "org-junit-jupiter-junit-jupiter-engine",
-    "org-junit-platform-junit-platform-launcher",
+  "org-junit-jupiter-junit-jupiter-api",
+  "org-junit-jupiter-junit-jupiter-engine",
+  "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-    "io-projectreactor-kotlin-reactor-kotlin-extensions",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+  "io-projectreactor-kotlin-reactor-kotlin-extensions",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-    "io-mockk-mockk",
-    "io-projectreactor-reactor-test",
-    "org-jetbrains-kotlin-kotlin-test-junit5",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+  "io-mockk-mockk",
+  "io-projectreactor-reactor-test",
+  "org-jetbrains-kotlin-kotlin-test-junit5",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-    "p6spy-p6spy",
+  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+  "p6spy-p6spy",
 ]
 redis = [
-    "org-apache-commons-commons-pool2",
-    "org-springframework-boot-spring-boot-starter-data-redis",
+  "org-apache-commons-commons-pool2",
+  "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-    "io-github-bonigarcia-webdrivermanager",
-    "org-seleniumhq-selenium-selenium-java",
+  "io-github-bonigarcia-webdrivermanager",
+  "org-seleniumhq-selenium-selenium-java",
 ]
