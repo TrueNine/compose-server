@@ -22,12 +22,12 @@ dependencies {
 
 gradlePlugin {
   plugins {
-    register("${libs.versions.compose.group.get()}.${project.name}") {
-      id = "${libs.versions.compose.group.get()}.${project.name}"
+    register("${libs.versions.group.get()}.${project.name}") {
+      id = "${libs.versions.group.get()}.${project.name}"
       displayName =
-        "${libs.versions.compose.group.get()}.${project.name}.gradle.plugin"
+        "${libs.versions.group.get()}.${project.name}.gradle.plugin"
       implementationClass =
-        "${libs.versions.compose.group.get()}.gradleplugin.Main"
+        "${libs.versions.group.get()}.gradleplugin.Main"
       description = "compose server development gradle plugin"
     }
   }

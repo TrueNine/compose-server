@@ -1,6 +1,6 @@
 plugins { `kotlin-convention` }
 
-version = libs.versions.compose.meta.get()
+version = libs.versions.compose.asProvider().get()
 
 dependencies {
   implementation(libs.com.fasterxml.jackson.core.jackson.annotations)
