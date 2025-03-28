@@ -23,7 +23,7 @@ publishing {
 
   publications {
     create<MavenPublication>("mavenJava") {
-      groupId = libs.versions.compose.group.get()
+      groupId = libs.versions.group.get()
       artifactId = project.name
       when {
         plugins.hasPlugin("version-catalog") -> from(components["versionCatalog"])
@@ -32,7 +32,7 @@ publishing {
           plugins.hasPlugin("java") -> from(components["java"])
 
         plugins.hasPlugin("java-platform") -> from(components["javaPlatform"])
-        
+
         else -> error("Unknown plugin type")
       }
     }
