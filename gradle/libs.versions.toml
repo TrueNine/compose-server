@@ -46,7 +46,7 @@ spring-boot = "3.5.0-M3"
 spring-cloud = "2025.0.0-M2"
 spring-cloud-alibaba = "2023.0.3.2"
 spring-data = "3.5.0-M1"
-spring-framework = "6.2.4"
+spring-framework = "6.2.5"
 spring-integration = "6.5.0-M3"
 spring-modulith = "1.4.0-M3"
 spring-security = "6.5.0-M3"
@@ -224,6 +224,7 @@ org-skyscreamer-jsonassert = "org.skyscreamer:jsonassert:2.0-rc1"
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
 org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6"
 org-springframework-ai-spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "spring-ai" }
+org-springframework-ai-spring-ai-spring-boot-docker-compose = { module = "org.springframework.ai:spring-ai-spring-boot-docker-compose", version.ref = "spring-ai" }
 org-springframework-batch-spring-batch-test = { module = "org.springframework.batch:spring-batch-test", version.ref = "spring-batch" }
 org-springframework-boot-spring-boot = { module = "org.springframework.boot:spring-boot", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure", version.ref = "spring-boot" }
