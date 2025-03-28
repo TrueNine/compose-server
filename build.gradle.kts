@@ -12,5 +12,7 @@ idea {
 }
 
 versionCatalogUpdate {
-
+  keep {
+    keepUnusedVersions = true
+  }
 }
