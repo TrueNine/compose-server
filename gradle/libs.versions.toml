@@ -14,7 +14,7 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "3.0.15"
+compose = "3.0.16"
 compose-build = "3.0.8"
 compose-data = "3.0.8"
 compose-depend = "3.0.8"
@@ -141,7 +141,7 @@ net-yan100-compose-gradle-plugin = { module = "net.yan100.compose:gradle-plugin"
 net-yan100-compose-ksp-client = { module = "net.yan100.compose:ksp-client", version.ref = "compose-build" }
 net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", version.ref = "compose-build" }
 net-yan100-compose-ksp-toolkit = { module = "net.yan100.compose:ksp-toolkit", version.ref = "compose-build" }
-net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "compose-build" }
+net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "compose" }
 net-yan100-compose-oss-aliyun-oss = { module = "net.yan100.compose:oss-aliyun-oss", version.ref = "compose-oss" }
 net-yan100-compose-oss-common = { module = "net.yan100.compose:oss-common", version.ref = "compose-oss" }
 net-yan100-compose-oss-huawei-obs = { module = "net.yan100.compose:oss-huawei-obs", version.ref = "compose-oss" }
