@@ -14,15 +14,15 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
-compose = "3.0.14"
-compose-build = "3.0.7"
-compose-data = "3.0.7"
-compose-depend = "3.0.7"
-compose-oss = "3.0.8"
-compose-pay = "3.0.7"
-compose-rds = "3.0.11"
-compose-security = "3.0.7"
-compose-sms = "3.0.7"
+compose = "3.0.15"
+compose-build = "3.0.8"
+compose-data = "3.0.8"
+compose-depend = "3.0.8"
+compose-oss = "3.0.9"
+compose-pay = "3.0.8"
+compose-rds = "3.0.12"
+compose-security = "3.0.8"
+compose-sms = "3.0.8"
 group = "net.yan100.compose"
 io-netty = "4.1.119.Final"
 java = "23"
@@ -299,29 +299,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-    "org-junit-jupiter-junit-jupiter-api",
-    "org-junit-jupiter-junit-jupiter-engine",
-    "org-junit-platform-junit-platform-launcher",
+  "org-junit-jupiter-junit-jupiter-api",
+  "org-junit-jupiter-junit-jupiter-engine",
+  "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-    "io-projectreactor-kotlin-reactor-kotlin-extensions",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+  "io-projectreactor-kotlin-reactor-kotlin-extensions",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-    "io-mockk-mockk",
-    "io-projectreactor-reactor-test",
-    "org-jetbrains-kotlin-kotlin-test-junit5",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+  "io-mockk-mockk",
+  "io-projectreactor-reactor-test",
+  "org-jetbrains-kotlin-kotlin-test-junit5",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-    "p6spy-p6spy",
+  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+  "p6spy-p6spy",
 ]
 redis = [
-    "org-apache-commons-commons-pool2",
-    "org-springframework-boot-spring-boot-starter-data-redis",
+  "org-apache-commons-commons-pool2",
+  "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-    "io-github-bonigarcia-webdrivermanager",
-    "org-seleniumhq-selenium-selenium-java",
+  "io-github-bonigarcia-webdrivermanager",
+  "org-seleniumhq-selenium-selenium-java",
 ]
