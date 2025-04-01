@@ -15,6 +15,7 @@ com-squareup-okio = "3.10.2"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.0"
 compose = "3.0.16"
+org-testcontainers = "1.19.1"
 compose-build = "3.0.8"
 compose-data = "3.0.8"
 compose-depend = "3.0.8"
@@ -52,6 +53,9 @@ spring-modulith = "1.4.0-M3"
 spring-security = "6.5.0-M3"
 
 [libraries]
+org-testcontainers-testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "org-testcontainers" }
+org-testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "org-testcontainers" }
+org-testcontainers-minio = { module = "org.testcontainers:minio", version.ref = "org-testcontainers" }
 cn-dev33-sa-token-redis = { module = "cn.dev33:sa-token-redis", version.ref = "cn-dev33-sa-token-redis" }
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot-starter = { module = "cn.dev33:sa-token-spring-boot-starter", version.ref = "cn-dev33-sa-token" }
