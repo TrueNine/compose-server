@@ -7,6 +7,10 @@ dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test.junit5)
   api(libs.io.mockk.mockk)
 
+  // Testcontainers
+  testImplementation(libs.org.testcontainers.testcontainers)
+  testImplementation(libs.org.testcontainers.junit.jupiter)
+
   implementation(libs.org.junit.jupiter.junit.jupiter.api) // 覆盖依赖
   implementation(libs.org.junit.jupiter.junit.jupiter.engine) // kotlin
   implementation(libs.org.junit.vintage.junit.vintage.engine)
