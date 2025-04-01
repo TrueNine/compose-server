@@ -7,6 +7,7 @@ val noChinaRepo = listOf(
   "org.babyfish.jimmer",
   "org.springframework",
   "io.spring",
+  "cn.hutool",
   "org.flywaydb",
   "org.jetbrains.kotlin",
   "org.jetbrains.kotlinx",
