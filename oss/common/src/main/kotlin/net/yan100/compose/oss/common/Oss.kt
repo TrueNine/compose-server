@@ -17,7 +17,8 @@ interface Oss {
 
   fun existsBucketByName(bucketName: String): Boolean
 
-  @Deprecated("java api") fun removeObject(objectInfo: FileArgs): Boolean
+  @Deprecated("java api")
+  fun removeObject(objectInfo: FileArgs): Boolean
 
   fun removeObject(info: ObjectArgs)
 
@@ -80,4 +81,9 @@ interface Oss {
     stream: OutputStream,
     fileInfo: FileArgs,
   ): OutMap
+
+  /**
+   * 是否连接
+   */
+  val isConnected: Boolean
 }

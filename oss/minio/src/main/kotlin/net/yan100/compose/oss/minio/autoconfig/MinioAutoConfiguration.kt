@@ -1,6 +1,7 @@
 package net.yan100.compose.oss.minio.autoconfig
 
 import io.minio.MinioClient
+import jakarta.annotation.Resource
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.oss.common.Oss
 import net.yan100.compose.oss.common.properties.OssProperties
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class MinioAutoConfiguration {
   companion object {
+    @JvmStatic
     private val log = slf4j(MinioAutoConfiguration::class)
   }
 
@@ -46,6 +48,15 @@ class MinioAutoConfiguration {
     ossProperties: OssProperties,
     minioProperties: MinioProperties,
   ): Oss {
+    try {
+      // 尝试执行一个简单的操作来验证连接
+      minioClient.listBuckets()
+      log.info("Minio 服务连接成功")
+    } catch (e: Exception) {
+      log.error("Minio 服务连接失败", e)
+      throw RuntimeException("Minio 服务连接失败，应用启动终止", e)
+    }
+
     val exposeBaseUrl =
       ossProperties.exposeBaseUrl
         ?: minioProperties.exposedBaseUrl
@@ -56,6 +67,8 @@ class MinioAutoConfiguration {
       minioClient,
       exposeBaseUrl,
     )
-    return MinioClientWrapper(minioClient, exposeBaseUrl)
+    val clientWrapper = MinioClientWrapper(minioClient, exposeBaseUrl)
+
+    return clientWrapper
   }
 }

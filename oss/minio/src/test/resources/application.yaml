@@ -1,5 +1,9 @@
 compose:
   oss:
     minio:
+      endpoint: http://localhost
+      endpoint-port: 9000
+      enable-https: false
       access-key: minio
       secret-key: minio123
+      exposed-base-url: http://localhost:9000
