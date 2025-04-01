@@ -24,4 +24,8 @@ dependencies {
 
   implementation(projects.core)
   testImplementation(projects.testtoolkit)
+
+  // TestContainers
+  testImplementation(libs.org.testcontainers.testcontainers)
+  testImplementation(libs.org.testcontainers.minio)
 }
