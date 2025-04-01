@@ -7,8 +7,6 @@
 
 - 使用的依赖版本可查看[libs.versions.toml](gradle/libs.versions.toml)，均采用统一化的版本管理机制
 
-> 警告，此项目目前暂时采用私有协议，仅公开源代码，详见 [LICENSE](./LICENSE)
-
 # 特别鸣谢
 
 - [Kotlin](https://kotlinlang.org/), [GitHub](https://github.com/JetBrains/kotlin)
