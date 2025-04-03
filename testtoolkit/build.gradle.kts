@@ -25,6 +25,8 @@ dependencies {
   runtimeOnly(libs.org.springframework.spring.test)
   runtimeOnly(libs.org.springframework.boot.spring.boot.test) {
     exclude("org.junit.jupiter")
+    exclude("org.mockito", "mockito-core")
+    exclude("org.mockito", "mockito-junit-jupiter")
     exclude("org.junit.platform")
   }
 
@@ -35,6 +37,8 @@ dependencies {
   api(libs.org.springframework.boot.spring.boot.starter.test) {
     exclude("org.junit.jupiter")
     exclude("org.junit.platform")
+    exclude("org.mockito", "mockito-core")
+    exclude("org.mockito", "mockito-junit-jupiter")
   }
 
   // spring batch
