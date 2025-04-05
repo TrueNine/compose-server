@@ -1,8 +1,8 @@
-val publicRepo = "https://maven.aliyun.com/repository/public"
-val centralRepo = "https://maven.aliyun.com/repository/central"
-val springRepo = "https://repo.spring.io/milestone"
+val repos = mapOf(
+  "spring" to "https://repo.spring.io/milestone"
+)
 
-val noChinaRepo = listOf(
+val includedGroups = setOf(
   "com.squareup",
   "org.babyfish.jimmer",
   "org.springframework",
@@ -11,33 +11,29 @@ val noChinaRepo = listOf(
   "org.flywaydb",
   "org.jetbrains.kotlin",
   "org.jetbrains.kotlinx",
-  "io.projectreactor.kotlin",
+  "org/seleniumhq",
+  "io.projectreactor.kotlin"
 )
 
 fun RepositoryHandler.setupDependencyRepositories() {
-  maven(publicRepo) {
-    mavenContent {
-      noChinaRepo.forEach { excludeGroupAndSubgroups(it) }
-    }
-  }
-  maven(centralRepo) {
-    mavenContent {
-      noChinaRepo.forEach { excludeGroupAndSubgroups(it) }
-    }
-  }
-  maven(springRepo) {
+  mavenLocal()
+  mavenCentral()
+  // Spring 仓库
+  maven(repos["spring"]!!) {
     mavenContent {
       includeGroupAndSubgroups("org.springframework")
       includeGroupAndSubgroups("io.spring")
     }
   }
+
+  // Maven Central 仓库
   mavenCentral {
     mavenContent {
-      mavenContent {
-        noChinaRepo.forEach { includeGroupAndSubgroups(it) }
-      }
+      includedGroups.forEach { includeGroupAndSubgroups(it) }
     }
   }
+
+  // Gradle 插件仓库
   gradlePluginPortal {
     content {
       includeGroupAndSubgroups("com.diffplug.spotless")
@@ -45,18 +41,15 @@ fun RepositoryHandler.setupDependencyRepositories() {
   }
 }
 
-repositories {
-  setupDependencyRepositories()
-}
-
+// 统一配置所有项目的仓库
 allprojects {
+  repositories {
+    setupDependencyRepositories()
+  }
+
   buildscript {
     repositories {
       setupDependencyRepositories()
     }
   }
-  repositories {
-    setupDependencyRepositories()
-  }
 }
-
