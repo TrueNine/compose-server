@@ -59,10 +59,3 @@ listOf(
 ("ksp" to listOf(
   "plugin", "toolkit", "client"
 )).useFile()
-
-// 读取 gradle.properties 中的 external.project.relative.path 属性 来加入外部链接项目
-val externalProjectRelativePath = settings.extra.properties["external.project.relative.path"] as? String?
-externalProjectRelativePath?.let {
-  include(":external-project")
-  project(":external-project").projectDir = file(it)
-}
