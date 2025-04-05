@@ -41,9 +41,8 @@ class ApiExchangesAutoConfiguration {
         .defaultHeaders { it["Accept-Charset"] = "utf-8" }
         .defaultStatusHandler({ httpCode -> httpCode.isError }) { resp ->
           RemoteCallException(
-              msg = resp.toString(),
-              code = resp.statusCode().value(),
-            )
+            msg = resp.toString(),
+          )
             .toMono()
         }
         .build()
