@@ -6,15 +6,12 @@ plugins {
 version = libs.versions.compose.asProvider().get()
 
 dependencies {
-  implementation(projects.meta)
-
   api(libs.com.fasterxml.jackson.core.jackson.annotations)
   api(libs.jakarta.annotation.jakarta.annotation.api)
   api(libs.jakarta.servlet.jakarta.servlet.api)
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(libs.org.slf4j.slf4j.api)
-
-  implementation(libs.org.springframework.security.spring.security.crypto)
+  implementation(projects.meta)
 
   testImplementation(projects.testtoolkit)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)

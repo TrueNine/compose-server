@@ -6,8 +6,8 @@ package net.yan100.compose.core.exceptions
  * @author TrueNine
  * @since 2023-04-19
  */
+@Deprecated("过于泛用，不建议使用")
 open class RemoteCallException(
   msg: String? = null,
   metaException: Throwable? = null,
-  private val code: Int? = null,
 ) : KnownException(msg, metaException)
