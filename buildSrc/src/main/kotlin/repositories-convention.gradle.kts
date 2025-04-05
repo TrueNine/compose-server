@@ -1,5 +1,5 @@
-val repos = mapOf(
-  "spring" to "https://repo.spring.io/milestone"
+val repositoriesMap = mapOf(
+  "spring" to "https://repo.spring.io/milestone", "mavenCentral" to "https://repo.maven.apache.org/maven2/", "gradlePlugins" to "https://plugins.gradle.org/m2/"
 )
 
 val includedGroups = setOf(
@@ -12,36 +12,42 @@ val includedGroups = setOf(
   "org.jetbrains.kotlin",
   "org.jetbrains.kotlinx",
   "org/seleniumhq",
-  "io.projectreactor.kotlin"
+  "io.projectreactor.kotlin",
+  "com.fasterxml.jackson",
+  "com.fasterxml.jackson.core",
+  "com.fasterxml.jackson.module",
+  "com.fasterxml.jackson.datatype"
 )
 
 fun RepositoryHandler.setupDependencyRepositories() {
   mavenLocal()
-  mavenCentral()
+
+  // Maven Central 仓库
+  maven {
+    url = uri(repositoriesMap["mavenCentral"]!!)
+    mavenContent {
+      releasesOnly()
+    }
+  }
+
   // Spring 仓库
-  maven(repos["spring"]!!) {
+  maven {
+    url = uri(repositoriesMap["spring"]!!)
     mavenContent {
       includeGroupAndSubgroups("org.springframework")
       includeGroupAndSubgroups("io.spring")
     }
   }
 
-  // Maven Central 仓库
-  mavenCentral {
-    mavenContent {
-      includedGroups.forEach { includeGroupAndSubgroups(it) }
-    }
-  }
-
   // Gradle 插件仓库
-  gradlePluginPortal {
-    content {
+  maven {
+    url = uri(repositoriesMap["gradlePlugins"]!!)
+    mavenContent {
       includeGroupAndSubgroups("com.diffplug.spotless")
     }
   }
 }
 
-// 统一配置所有项目的仓库
 allprojects {
   repositories {
     setupDependencyRepositories()
