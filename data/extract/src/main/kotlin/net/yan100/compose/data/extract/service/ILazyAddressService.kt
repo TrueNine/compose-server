@@ -1,31 +1,34 @@
 package net.yan100.compose.data.extract.service
 
+import java.util.concurrent.ConcurrentHashMap
 import net.yan100.compose.core.SysLogger
 import net.yan100.compose.core.consts.IRegexes
 import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.core.nonText
 import net.yan100.compose.core.string
 import net.yan100.compose.data.extract.domain.CnDistrictCode
-import java.util.concurrent.ConcurrentHashMap
 
 private fun createRequestQueue(
   firstFindCode: CnDistrictCode,
   deepCondition: (param: ILazyAddressService.LookupFindDto) -> Boolean,
-): List<CnDistrictCode> = buildList {
-  add(firstFindCode)
-  var lastSize = 0
-  while (size > lastSize) {
-    val requireRequest = last()
-    val lookupDto = ILazyAddressService.LookupFindDto(
-      code = requireRequest.code,
-      level = requireRequest.level,
-    )
-    if (!deepCondition(lookupDto)) {
-      requireRequest.back()?.let { add(it) }
+): List<CnDistrictCode> =
+  buildList {
+      add(firstFindCode)
+      var lastSize = 0
+      while (size > lastSize) {
+        val requireRequest = last()
+        val lookupDto =
+          ILazyAddressService.LookupFindDto(
+            code = requireRequest.code,
+            level = requireRequest.level,
+          )
+        if (!deepCondition(lookupDto)) {
+          requireRequest.back()?.let { add(it) }
+        }
+        lastSize++
+      }
     }
-    lastSize++
-  }
-}.reversed()
+    .reversed()
 
 interface ILazyAddressService {
   companion object {
@@ -36,19 +39,22 @@ interface ILazyAddressService {
 
     fun verifyCode(code: String): Boolean = code.matches(CHINA_AD_CODE_REGEX)
 
-    fun createCnDistrict(code: String?): CnDistrictCode? = when {
-      code.nonText() -> null
-      code.length > 12 -> null
-      else -> CnDistrictCode(code).takeUnless { it.empty }
-    }
+    fun createCnDistrict(code: String?): CnDistrictCode? =
+      when {
+        code.nonText() -> null
+        code.length > 12 -> null
+        else -> CnDistrictCode(code).takeUnless { it.empty }
+      }
 
-    fun convertToFillCode(code: String): String = when {
-      code.nonText() -> code
-      !verifyCode(code) -> code
-      else -> code.padEnd(12, '0')
-    }
+    fun convertToFillCode(code: String): String =
+      when {
+        code.nonText() -> code
+        !verifyCode(code) -> code
+        else -> code.padEnd(12, '0')
+      }
 
-    private fun getCacheKey(code: String, yearVersion: String) = "${code}_$yearVersion"
+    private fun getCacheKey(code: String, yearVersion: String) =
+      "${code}_$yearVersion"
   }
 
   data class LookupFindDto(val code: string, val level: Int)
@@ -88,10 +94,9 @@ interface ILazyAddressService {
   fun lastYearVersionOrNull(yearVersion: String): String? {
     if (yearVersion.nonText()) return null
     val currentYearVersion = yearVersion.toIntOrNull() ?: return null
-    return supportedYearVersions
-      .sorted()
-      .reversed()
-      .firstOrNull { it.toInt() < currentYearVersion }
+    return supportedYearVersions.sorted().reversed().firstOrNull {
+      it.toInt() < currentYearVersion
+    }
   }
 
   /** 最新的支持的年份版本 */
@@ -104,7 +109,9 @@ interface ILazyAddressService {
     yearVersion: String = lastYearVersion,
   ): List<CnDistrict>
 
-  fun findAllProvinces(yearVersion: String = lastYearVersion): List<CnDistrict> =
+  fun findAllProvinces(
+    yearVersion: String = lastYearVersion
+  ): List<CnDistrict> =
     fetchAllByCodeAndLevel(DEFAULT_COUNTRY_CODE, 1, yearVersion)
 
   fun findAllCityByCode(
@@ -134,7 +141,9 @@ interface ILazyAddressService {
     val cacheKey = getCacheKey(code, yearVersion)
     return districtCache.getOrPut(cacheKey) {
       CnDistrictCode(code).back()?.let { backCode ->
-        findAllChildrenByCode(backCode.code).find { it.code.code == backCode.code }
+        findAllChildrenByCode(backCode.code).find {
+          it.code.code == backCode.code
+        }
       } ?: return null
     }
   }
@@ -166,26 +175,34 @@ interface ILazyAddressService {
     while (!isEnd) {
       codeObj.back()?.let { firstFindCode ->
         // 尝试首次查找
-        firstFind(LookupFindDto(code = firstFindCode.code, level = firstFindCode.level))?.let {
-          return it
-        }
+        firstFind(
+            LookupFindDto(
+              code = firstFindCode.code,
+              level = firstFindCode.level,
+            )
+          )
+          ?.let {
+            return it
+          }
 
         // 创建请求队列
         val requestQueue = createRequestQueue(firstFindCode, deepCondition)
 
         // 处理请求队列
         for (request in requestQueue) {
-          val responses = findAllChildrenByCode(code = request.code, currentYearVersion)
+          val responses =
+            findAllChildrenByCode(code = request.code, currentYearVersion)
           if (responses.isNotEmpty()) {
-            result = sortedSave(
-              LookupSortedSaveVo(
-                parentCode = request.code,
-                yearVersion = currentYearVersion,
-                deepLevel = request.level,
-                result = responses,
-                notInit = request.empty
+            result =
+              sortedSave(
+                LookupSortedSaveVo(
+                  parentCode = request.code,
+                  yearVersion = currentYearVersion,
+                  deepLevel = request.level,
+                  result = responses,
+                  notInit = request.empty,
+                )
               )
-            )
             if (result != null) {
               return result
             }
@@ -197,15 +214,19 @@ interface ILazyAddressService {
         if (nextVersion == null) {
           isEnd = true
           notFound(true)
-          logger?.warn("lookupByCode all not found: $code, lastYearVersion: {}", currentYearVersion)
+          logger?.warn(
+            "lookupByCode all not found: $code, lastYearVersion: {}",
+            currentYearVersion,
+          )
         } else {
           currentYearVersion = nextVersion
           logger?.debug("code recursion in next version: {}", nextVersion)
         }
-      } ?: run {
-        isEnd = true
-        notFound(true)
       }
+        ?: run {
+          isEnd = true
+          notFound(true)
+        }
     }
 
     return result
@@ -233,73 +254,75 @@ interface ILazyAddressService {
     val toCode = createCnDistrict(code) ?: return emptyList()
     var currentYearVersion = yearVersion
     var result = listOf<T>()
-    
+
     // 尝试从缓存获取结果
     val cacheKey = getCacheKey(code, currentYearVersion)
     @Suppress("UNCHECKED_CAST")
     childrenCache[cacheKey]?.let { cached ->
-        return sortedSave(
-            LookupSortedSaveVo(
-                parentCode = code,
-                yearVersion = currentYearVersion,
-                deepLevel = toCode.level,
-                result = cached,
-                notInit = toCode.empty
-            )
+      return sortedSave(
+        LookupSortedSaveVo(
+          parentCode = code,
+          yearVersion = currentYearVersion,
+          deepLevel = toCode.level,
+          result = cached,
+          notInit = toCode.empty,
         )
+      )
     }
 
     // 尝试首次查找（仅在最新版本时）
     if (currentYearVersion == lastYearVersion) {
-        firstFind(LookupFindDto(code = toCode.code, level = toCode.level))?.let {
-            return it
-        }
+      firstFind(LookupFindDto(code = toCode.code, level = toCode.level))?.let {
+        return it
+      }
     }
 
     // 创建请求队列
     val requestQueue = createRequestQueue(toCode, deepCondition)
-    
+
     while (true) {
-        var found = false
-        for (request in requestQueue) {
-            val responses = findAllChildrenByCode(code = request.code, currentYearVersion)
-            logger?.debug("implemented responses: {}", responses)
+      var found = false
+      for (request in requestQueue) {
+        val responses =
+          findAllChildrenByCode(code = request.code, currentYearVersion)
+        logger?.debug("implemented responses: {}", responses)
 
-            if (responses.isNotEmpty()) {
-                result = sortedSave(
-                    LookupSortedSaveVo(
-                        parentCode = request.code,
-                        yearVersion = currentYearVersion,
-                        deepLevel = request.level,
-                        result = responses,
-                        notInit = request.empty
-                    )
-                )
-                found = true
-                break
-            }
-        }
-
-        if (found) break
-
-        val nextVersion = lastYearVersionOrNull(currentYearVersion)
-        if (nextVersion == null) {
-            notFound(true)
-            logger?.warn(
-                "lookupAllChildrenByCode all not found: $code, lastYearVersion: {}",
-                currentYearVersion
+        if (responses.isNotEmpty()) {
+          result =
+            sortedSave(
+              LookupSortedSaveVo(
+                parentCode = request.code,
+                yearVersion = currentYearVersion,
+                deepLevel = request.level,
+                result = responses,
+                notInit = request.empty,
+              )
             )
-            return emptyList()
+          found = true
+          break
         }
-        
-        currentYearVersion = nextVersion
-        logger?.debug("recursion in next version: {}", nextVersion)
+      }
+
+      if (found) break
+
+      val nextVersion = lastYearVersionOrNull(currentYearVersion)
+      if (nextVersion == null) {
+        notFound(true)
+        logger?.warn(
+          "lookupAllChildrenByCode all not found: $code, lastYearVersion: {}",
+          currentYearVersion,
+        )
+        return emptyList()
+      }
+
+      currentYearVersion = nextVersion
+      logger?.debug("recursion in next version: {}", nextVersion)
     }
 
     // 缓存结果
     if (result.isNotEmpty()) {
-        @Suppress("UNCHECKED_CAST")
-        childrenCache[cacheKey] = result as List<CnDistrict>
+      @Suppress("UNCHECKED_CAST")
+      childrenCache[cacheKey] = result as List<CnDistrict>
     }
 
     return result
@@ -309,22 +332,24 @@ interface ILazyAddressService {
     code: string,
     level: Int,
     yearVersion: String = lastYearVersion,
-  ): List<CnDistrict> = when {
-    level !in 0 .. 4 -> emptyList()
-    else -> try {
-      when (level) {
-        0 -> findAllProvinces(yearVersion)
-        1 -> findAllCityByCode(code, yearVersion)
-        2 -> findAllCountyByCode(code, yearVersion)
-        3 -> findAllTownByCode(code, yearVersion)
-        4 -> findAllVillageByCode(code, yearVersion)
-        else -> emptyList()
-      }
-    } catch (e: RemoteCallException) {
-      logger?.warn("获取地址出错", e)
-      emptyList()
+  ): List<CnDistrict> =
+    when {
+      level !in 0..4 -> emptyList()
+      else ->
+        try {
+          when (level) {
+            0 -> findAllProvinces(yearVersion)
+            1 -> findAllCityByCode(code, yearVersion)
+            2 -> findAllCountyByCode(code, yearVersion)
+            3 -> findAllTownByCode(code, yearVersion)
+            4 -> findAllVillageByCode(code, yearVersion)
+            else -> emptyList()
+          }
+        } catch (e: RemoteCallException) {
+          logger?.warn("获取地址出错", e)
+          emptyList()
+        }
     }
-  }
 
   /**
    * ## 预取地址数据
