@@ -1,7 +1,6 @@
 package net.yan100.compose.oss.minio.autoconfig
 
 import io.minio.MinioClient
-import jakarta.annotation.Resource
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.oss.common.Oss
 import net.yan100.compose.oss.common.properties.OssProperties
@@ -21,8 +20,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class MinioAutoConfiguration {
   companion object {
-    @JvmStatic
-    private val log = slf4j(MinioAutoConfiguration::class)
+    @JvmStatic private val log = slf4j(MinioAutoConfiguration::class)
   }
 
   @Bean

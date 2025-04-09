@@ -39,10 +39,7 @@ class ApiExchangesAutoConfiguration {
         .clientConnector(unsafeConnector)
         .defaultHeaders { it["Accept-Charset"] = "utf-8" }
         .defaultStatusHandler({ httpCode -> httpCode.isError }) { resp ->
-          RemoteCallException(
-            msg = resp.toString(),
-          )
-            .toMono()
+          RemoteCallException(msg = resp.toString()).toMono()
         }
         .build()
     val factory =

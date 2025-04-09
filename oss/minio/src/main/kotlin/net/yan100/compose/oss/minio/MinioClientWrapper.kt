@@ -10,6 +10,9 @@ import io.minio.ObjectWriteResponse
 import io.minio.PutObjectArgs
 import io.minio.RemoveObjectArgs
 import io.minio.SetBucketPolicyArgs
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import net.yan100.compose.core.consts.IHeaders
 import net.yan100.compose.core.slf4j
 import net.yan100.compose.oss.common.FileArgs
@@ -19,9 +22,6 @@ import net.yan100.compose.oss.common.Oss
 import net.yan100.compose.oss.common.OutMap
 import net.yan100.compose.oss.common.S3PolicyCreator
 import okhttp3.Headers
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
 /**
  * oss 的 minio 实现
@@ -47,14 +47,20 @@ class MinioClientWrapper(
 
   private fun getObject(fileInfo: FileArgs): GetObjectResponse? {
     return client.getObject(
-      GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build()
+      GetObjectArgs.builder()
+        .bucket(fileInfo.dir)
+        .`object`(fileInfo.fileName)
+        .build()
     )
   }
 
   override fun removeObject(objectInfo: FileArgs): Boolean {
     if (!existsBucketByName(objectInfo.dir)) return true
     client.removeObject(
-      RemoveObjectArgs.builder().bucket(objectInfo.dir).`object`(objectInfo.fileName).build()
+      RemoveObjectArgs.builder()
+        .bucket(objectInfo.dir)
+        .`object`(objectInfo.fileName)
+        .build()
     )
     return true
   }
@@ -133,7 +139,10 @@ class MinioClientWrapper(
 
   override fun setBucketPolicyToPublicReadonly(bucketName: String) {
     client.setBucketPolicy(
-      SetBucketPolicyArgs.builder().bucket(bucketName).config(S3PolicyCreator.publicReadonlyBucket(bucketName).json()).build()
+      SetBucketPolicyArgs.builder()
+        .bucket(bucketName)
+        .config(S3PolicyCreator.publicReadonlyBucket(bucketName).json())
+        .build()
     )
   }
 
@@ -141,9 +150,15 @@ class MinioClientWrapper(
     if (!existsBucketByName(fileInfo.dir)) {
       createBucketByName(fileInfo.dir)
     }
-    val ins = client.putObject(
-      PutObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).contentType(fileInfo.mimeType).stream(stream, fileInfo.size, -1).build()
-    )
+    val ins =
+      client.putObject(
+        PutObjectArgs.builder()
+          .bucket(fileInfo.dir)
+          .`object`(fileInfo.fileName)
+          .contentType(fileInfo.mimeType)
+          .stream(stream, fileInfo.size, -1)
+          .build()
+      )
 
     return createInputMap(ins!!, stream)
   }
@@ -181,24 +196,26 @@ class MinioClientWrapper(
   }
 
   override val isConnected: Boolean
-    get() = try {
-      client.listBuckets()
-      true
-    } catch (e: Exception) {
-      log.error("minio client connect error", e)
-      false
-    }
+    get() =
+      try {
+        client.listBuckets()
+        true
+      } catch (e: Exception) {
+        log.error("minio client connect error", e)
+        false
+      }
 
   companion object {
-    @JvmStatic
-    private val log = slf4j<MinioClientWrapper>()
+    @JvmStatic private val log = slf4j<MinioClientWrapper>()
   }
 
   override fun fetchAllObjectNameByBucketName(
-    bucketName: String,
+    bucketName: String
   ): List<String> {
     if (!existsBucketByName(bucketName)) return listOf()
-    return client.listObjects(ListObjectsArgs.builder().bucket(bucketName).build()).map { it.get().objectName() }
+    return client
+      .listObjects(ListObjectsArgs.builder().bucket(bucketName).build())
+      .map { it.get().objectName() }
   }
 
   override fun fetchAllBucketNames(): List<String> {
