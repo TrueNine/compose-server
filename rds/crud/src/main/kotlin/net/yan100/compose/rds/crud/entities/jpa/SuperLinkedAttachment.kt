@@ -3,14 +3,14 @@ package net.yan100.compose.rds.crud.entities.jpa
 import jakarta.persistence.*
 import jakarta.persistence.ConstraintMode.NO_CONSTRAINT
 import jakarta.persistence.FetchType.EAGER
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.RefId
+import net.yan100.compose.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
 import net.yan100.compose.meta.annotations.orm.MetaFormula
-import net.yan100.compose.rds.core.entities.IJpaEntity
-import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.crud.converters.AttachmentTypingConverter
+import net.yan100.compose.rds.entities.IJpaEntity
+import net.yan100.compose.rds.typing.AttachmentTyping
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.JOIN
 import org.hibernate.annotations.NotFound
@@ -53,7 +53,7 @@ interface SuperLinkedAttachment : IJpaEntity {
     get() {
       val uri =
         base.baseUri?.let {
-          if (it.startsWith("/")) it.slice(1..it.length) else it
+          if (it.startsWith("/")) it.slice(1 .. it.length) else it
         } ?: ""
       val lastUri = if (uri.endsWith("/")) uri else "$uri/"
       val name = saveName

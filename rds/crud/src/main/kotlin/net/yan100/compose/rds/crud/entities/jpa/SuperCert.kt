@@ -1,19 +1,19 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.Convert
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.datetime
-import net.yan100.compose.core.string
+import net.yan100.compose.RefId
+import net.yan100.compose.datetime
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaEntity
-import net.yan100.compose.rds.core.typing.AuditTyping
-import net.yan100.compose.rds.core.typing.CertContentTyping
-import net.yan100.compose.rds.core.typing.CertPointTyping
-import net.yan100.compose.rds.core.typing.CertTyping
 import net.yan100.compose.rds.crud.converters.AuditTypingConverter
 import net.yan100.compose.rds.crud.converters.CertContentTypingConverter
 import net.yan100.compose.rds.crud.converters.CertPointTypingConverter
 import net.yan100.compose.rds.crud.converters.CertTypingConverter
+import net.yan100.compose.rds.entities.IJpaEntity
+import net.yan100.compose.rds.typing.AuditTyping
+import net.yan100.compose.rds.typing.CertContentTyping
+import net.yan100.compose.rds.typing.CertPointTyping
+import net.yan100.compose.rds.typing.CertTyping
+import net.yan100.compose.string
 
 @MetaDef
 interface SuperCert : IJpaEntity {
@@ -59,5 +59,6 @@ interface SuperCert : IJpaEntity {
   var coType: CertContentTyping?
 
   /** 证件类型 */
-  @get:Convert(converter = CertTypingConverter::class) var doType: CertTyping?
+  @get:Convert(converter = CertTypingConverter::class)
+  var doType: CertTyping?
 }

@@ -4,14 +4,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
-import net.yan100.compose.core.Pq
-import net.yan100.compose.core.RefId
-import net.yan100.compose.rds.core.IRepo
-import net.yan100.compose.rds.core.annotations.ACID
-import net.yan100.compose.rds.core.toPageable
-import net.yan100.compose.rds.core.toPr
+import net.yan100.compose.Pq
+import net.yan100.compose.RefId
+import net.yan100.compose.rds.IRepo
+import net.yan100.compose.rds.annotations.ACID
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
 import net.yan100.compose.rds.crud.entities.jpa.UserInfo
+import net.yan100.compose.rds.toPageable
+import net.yan100.compose.rds.toPr
 import org.springframework.context.annotation.Primary
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -47,11 +47,11 @@ interface IUserInfoRepo : IRepo<UserInfo> {
       if (!existsById(id)) false
       else
         listOf(
-            async { existsAllByIdAndIdCardIsNotNull(id) },
-            async { existsAllByIdAndPhoneIsNotNull(id) },
-            async { existsAllByIdAndFirstNameIsNotNull(id) },
-            async { existsAllByIdAndLastNameIsNotNull(id) },
-          )
+          async { existsAllByIdAndIdCardIsNotNull(id) },
+          async { existsAllByIdAndPhoneIsNotNull(id) },
+          async { existsAllByIdAndFirstNameIsNotNull(id) },
+          async { existsAllByIdAndLastNameIsNotNull(id) },
+        )
           .awaitAll()
           .all { it }
     }
@@ -91,7 +91,8 @@ interface IUserInfoRepo : IRepo<UserInfo> {
   )
   fun findUserIdById(id: RefId): RefId?
 
-  @Deprecated("可会查询出多个用户") fun findByUserId(userId: RefId): UserInfo?
+  @Deprecated("可会查询出多个用户")
+  fun findByUserId(userId: RefId): UserInfo?
 
   @Query(
     """
@@ -127,5 +128,6 @@ interface IUserInfoRepo : IRepo<UserInfo> {
 
   fun existsByWechatOpenid(wechatOpenId: String): Boolean
 
-  @ACID fun deleteByPhone(phone: String): Int
+  @ACID
+  fun deleteByPhone(phone: String): Int
 }

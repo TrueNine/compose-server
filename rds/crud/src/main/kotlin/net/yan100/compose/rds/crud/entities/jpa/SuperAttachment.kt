@@ -1,11 +1,11 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.Convert
-import net.yan100.compose.core.RefId
+import net.yan100.compose.RefId
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaEntity
-import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.crud.converters.AttachmentTypingConverter
+import net.yan100.compose.rds.entities.IJpaEntity
+import net.yan100.compose.rds.typing.AttachmentTyping
 
 @MetaDef
 interface SuperAttachment : IJpaEntity {

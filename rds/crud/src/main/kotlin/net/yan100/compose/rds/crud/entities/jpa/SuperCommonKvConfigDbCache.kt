@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.entities.IJpaEntity
 
 /**
  * 数据库版的 kv 值缓存

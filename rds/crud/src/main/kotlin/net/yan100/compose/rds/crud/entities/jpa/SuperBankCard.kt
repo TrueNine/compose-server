@@ -1,9 +1,9 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.string
+import net.yan100.compose.RefId
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaTreeEntity
+import net.yan100.compose.rds.entities.IJpaTreeEntity
+import net.yan100.compose.string
 
 @MetaDef
 interface SuperBankCard : IJpaTreeEntity {

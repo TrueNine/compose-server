@@ -2,8 +2,8 @@ package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.core.intTyping
-import net.yan100.compose.rds.core.typing.RelationItemTyping
+import net.yan100.compose.rds.intTyping
+import net.yan100.compose.rds.typing.RelationItemTyping
 import org.springframework.stereotype.Component
 
 @Component

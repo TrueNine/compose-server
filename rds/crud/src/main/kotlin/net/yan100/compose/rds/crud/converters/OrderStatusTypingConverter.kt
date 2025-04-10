@@ -2,7 +2,7 @@ package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.rds.core.typing.OrderStatusTyping
+import net.yan100.compose.rds.typing.OrderStatusTyping
 import org.springframework.stereotype.Component
 
 @Component

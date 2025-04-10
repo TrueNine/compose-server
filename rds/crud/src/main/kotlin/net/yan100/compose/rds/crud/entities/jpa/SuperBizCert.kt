@@ -1,11 +1,11 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.date
-import net.yan100.compose.core.decimal
-import net.yan100.compose.core.string
+import net.yan100.compose.RefId
+import net.yan100.compose.date
+import net.yan100.compose.decimal
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.entities.IJpaEntity
+import net.yan100.compose.string
 
 @MetaDef
 interface SuperBizCert : IJpaEntity {

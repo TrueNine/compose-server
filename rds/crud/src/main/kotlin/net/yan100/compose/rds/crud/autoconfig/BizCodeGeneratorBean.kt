@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.crud.autoconfig
 
-import net.yan100.compose.core.generator.IOrderCodeGenerator
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.generator.IOrderCodeGenerator
+import net.yan100.compose.slf4j
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
 import org.springframework.stereotype.Component

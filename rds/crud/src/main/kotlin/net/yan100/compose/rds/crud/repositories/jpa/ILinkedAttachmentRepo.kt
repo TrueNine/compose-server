@@ -1,6 +1,6 @@
 package net.yan100.compose.rds.crud.repositories.jpa
 
-import net.yan100.compose.rds.core.IRepo
+import net.yan100.compose.rds.IRepo
 import net.yan100.compose.rds.crud.entities.jpa.LinkedAttachment
 import org.springframework.context.annotation.Primary
 import org.springframework.data.domain.Page
@@ -18,7 +18,7 @@ interface ILinkedAttachmentRepo : IRepo<LinkedAttachment> {
     from LinkedAttachment a
     inner join LinkedAttachment b 
     on a.urlId = b.id
-    where b.attType = net.yan100.compose.rds.core.typing.AttachmentTyping.BASE_URL
+    where b.attType = net.yan100.compose.rds.typing.AttachmentTyping.BASE_URL
     and b.baseUrl = :baseUrl
   """
   )

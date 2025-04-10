@@ -1,10 +1,10 @@
 package net.yan100.compose.rds.crud.repositories.jpa
 
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.consts.IDbNames.Rbac
-import net.yan100.compose.core.string
-import net.yan100.compose.rds.core.ITreeRepo
+import net.yan100.compose.RefId
+import net.yan100.compose.consts.IDbNames.Rbac
+import net.yan100.compose.rds.ITreeRepo
 import net.yan100.compose.rds.crud.entities.jpa.Address
+import net.yan100.compose.string
 import org.springframework.context.annotation.Primary
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

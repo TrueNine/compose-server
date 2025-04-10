@@ -5,7 +5,7 @@ import jakarta.persistence.FetchType.EAGER
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
-import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode.SUBSELECT

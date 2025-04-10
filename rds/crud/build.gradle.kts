@@ -27,9 +27,9 @@ dependencies {
 
   implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
 
-  implementation(projects.core)
+  api(projects.shared)
   implementation(projects.meta)
-  implementation(projects.rds.rdsCore)
+  api(projects.rds.rdsShared)
 
   implementation(libs.com.fasterxml.jackson.core.jackson.databind)
 

@@ -1,9 +1,13 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
-import net.yan100.compose.core.*
+import net.yan100.compose.bool
+import net.yan100.compose.datetime
+import net.yan100.compose.int
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaName
-import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.entities.IJpaEntity
+import net.yan100.compose.string
+import net.yan100.compose.timestamp
 
 @MetaDef
 @MetaName("flyway_schema_history")

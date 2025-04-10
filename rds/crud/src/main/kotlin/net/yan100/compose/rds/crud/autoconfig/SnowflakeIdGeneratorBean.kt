@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.crud.autoconfig
 
 import jakarta.annotation.Resource
-import net.yan100.compose.core.generator.ISnowflakeGenerator
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.generator.ISnowflakeGenerator
+import net.yan100.compose.slf4j
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
 import org.springframework.stereotype.Component

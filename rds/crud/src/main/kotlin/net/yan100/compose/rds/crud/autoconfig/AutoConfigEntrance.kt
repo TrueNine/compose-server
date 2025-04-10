@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
   basePackages =
     [
       "net.yan100.compose.rds.crud.entities",
-      "net.yan100.compose.rds.core.entities",
+      "net.yan100.compose.rds.entities",
     ]
 )
 @EnableJpaRepositories(

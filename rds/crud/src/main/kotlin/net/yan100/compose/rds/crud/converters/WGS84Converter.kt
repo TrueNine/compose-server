@@ -2,7 +2,7 @@ package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.domain.Coordinate
+import net.yan100.compose.domain.Coordinate
 import org.springframework.stereotype.Component
 
 /**

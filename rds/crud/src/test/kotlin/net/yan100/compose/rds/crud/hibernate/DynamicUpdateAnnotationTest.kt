@@ -1,17 +1,17 @@
 package net.yan100.compose.rds.crud.hibernate
 
 import jakarta.annotation.Resource
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import net.yan100.compose.rds.core.typing.AttachmentTyping
 import net.yan100.compose.rds.crud.entities.jpa.Attachment
 import net.yan100.compose.rds.crud.repositories.jpa.IAttachmentRepo
+import net.yan100.compose.rds.typing.AttachmentTyping
 import net.yan100.compose.testtookit.RDBRollback
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 /**
  * ## hibernate 测试

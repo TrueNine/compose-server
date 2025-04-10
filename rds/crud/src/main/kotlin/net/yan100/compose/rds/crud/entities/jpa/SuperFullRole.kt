@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.*
-import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode

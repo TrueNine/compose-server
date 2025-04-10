@@ -2,7 +2,7 @@ package net.yan100.compose.rds.crud.entities.jpa
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
-import net.yan100.compose.core.consts.IDbNames
+import net.yan100.compose.consts.IDbNames
 import net.yan100.compose.meta.annotations.MetaDef
 import org.hibernate.annotations.NotFound
 import org.hibernate.annotations.NotFoundAction

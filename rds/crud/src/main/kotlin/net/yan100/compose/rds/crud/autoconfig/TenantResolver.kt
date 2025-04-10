@@ -1,9 +1,9 @@
 package net.yan100.compose.rds.crud.autoconfig
 
-import net.yan100.compose.core.consts.IDbNames
-import net.yan100.compose.core.hasText
-import net.yan100.compose.core.holders.TenantContextHolder
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.consts.IDbNames
+import net.yan100.compose.hasText
+import net.yan100.compose.holders.TenantContextHolder
+import net.yan100.compose.slf4j
 import org.hibernate.cfg.AvailableSettings
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer

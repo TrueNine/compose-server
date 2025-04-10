@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.rds.core.models.DataRecord
+import net.yan100.compose.rds.models.DataRecord
+import net.yan100.compose.slf4j
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,7 +15,8 @@ class RecordModelConverter : AttributeConverter<DataRecord, String> {
     log.debug("注册 备份删除表 converter")
   }
 
-  @Resource private lateinit var mapper: ObjectMapper
+  @Resource
+  private lateinit var mapper: ObjectMapper
 
   override fun convertToDatabaseColumn(attribute: DataRecord?): String? {
     log.trace("转换删除对象 = {}", attribute)

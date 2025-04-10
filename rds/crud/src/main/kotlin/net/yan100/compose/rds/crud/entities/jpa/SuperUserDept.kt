@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
-import net.yan100.compose.core.RefId
+import net.yan100.compose.RefId
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.entities.IJpaEntity
 
 /**
  * # 用户 部门

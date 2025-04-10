@@ -1,12 +1,12 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.Convert
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.domain.Coordinate
-import net.yan100.compose.core.string
+import net.yan100.compose.RefId
+import net.yan100.compose.domain.Coordinate
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaEntity
 import net.yan100.compose.rds.crud.converters.WGS84Converter
+import net.yan100.compose.rds.entities.IJpaEntity
+import net.yan100.compose.string
 
 @MetaDef
 interface SuperAddressDetails : IJpaEntity {
@@ -29,5 +29,6 @@ interface SuperAddressDetails : IJpaEntity {
   var addressDetails: String
 
   /** 定位 */
-  @get:Convert(converter = WGS84Converter::class) var center: Coordinate?
+  @get:Convert(converter = WGS84Converter::class)
+  var center: Coordinate?
 }

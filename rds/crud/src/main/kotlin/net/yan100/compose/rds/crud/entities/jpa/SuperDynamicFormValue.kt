@@ -1,9 +1,9 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
-import net.yan100.compose.core.RefId
-import net.yan100.compose.core.datetime
+import net.yan100.compose.RefId
+import net.yan100.compose.datetime
 import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.rds.core.entities.IJpaEntity
+import net.yan100.compose.rds.entities.IJpaEntity
 
 @MetaDef
 interface SuperDynamicFormValue : IJpaEntity {
@@ -13,7 +13,8 @@ interface SuperDynamicFormValue : IJpaEntity {
 
   var inputUserId: RefId?
 
-  @get:Deprecated("不建议使用，使用 user_id") var inputUserInfoId: RefId?
+  @get:Deprecated("不建议使用，使用 user_id")
+  var inputUserInfoId: RefId?
 
   var inputDatetime: datetime?
 
