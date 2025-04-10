@@ -7,6 +7,6 @@ dependencies {
   implementation(libs.com.github.ben.manes.caffeine.caffeine)
 
   implementation(projects.depend.dependJackson)
-  implementation(projects.core)
+  api(projects.shared)
   testImplementation(projects.testtoolkit)
 }
