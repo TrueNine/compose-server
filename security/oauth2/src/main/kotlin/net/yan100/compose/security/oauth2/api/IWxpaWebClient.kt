@@ -1,11 +1,11 @@
 package net.yan100.compose.security.oauth2.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import net.yan100.compose.core.long
-import net.yan100.compose.core.string
-import net.yan100.compose.core.typing.PCB47
+import net.yan100.compose.long
 import net.yan100.compose.security.oauth2.models.BaseWxpaResponseEntity
 import net.yan100.compose.security.oauth2.typing.WechatMpGrantTyping
+import net.yan100.compose.string
+import net.yan100.compose.typing.PCB47
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
@@ -44,7 +44,7 @@ interface IWxpaWebClient {
    * @param accessToken 公众号 access_token
    */
   data class WxpaGetAccessTokenResp(
-    @JsonProperty("access_token") val accessToken: String?
+    @JsonProperty("access_token") val accessToken: String?,
   ) : BaseWxpaResponseEntity()
 
   /**

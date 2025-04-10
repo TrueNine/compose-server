@@ -1,5 +1,13 @@
 package net.yan100.compose.security.crypto
 
+import net.yan100.compose.security.crypto.domain.EccExtKeyPair
+import net.yan100.compose.security.crypto.domain.IEccExtKeyPair
+import net.yan100.compose.security.crypto.domain.IRsaExtKeyPair
+import net.yan100.compose.security.crypto.domain.RsaExtKeyPair
+import net.yan100.compose.slf4j
+import net.yan100.compose.typing.EncryptAlgorithmTyping
+import org.bouncycastle.jce.ECNamedCurveTable
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.*
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -7,14 +15,6 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.SecretKeySpec
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.core.typing.EncryptAlgorithmTyping
-import net.yan100.compose.security.crypto.domain.EccExtKeyPair
-import net.yan100.compose.security.crypto.domain.IEccExtKeyPair
-import net.yan100.compose.security.crypto.domain.IRsaExtKeyPair
-import net.yan100.compose.security.crypto.domain.RsaExtKeyPair
-import org.bouncycastle.jce.ECNamedCurveTable
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 
 private val log = slf4j<Keys>()
 
@@ -31,7 +31,8 @@ object Keys {
   private const val AES_KEY_SIZE = 256
   private val SECURE_RANDOM = SecureRandom()
 
-  @JvmStatic private val rsaAlg = EncryptAlgorithmTyping.RSA.padding
+  @JvmStatic
+  private val rsaAlg = EncryptAlgorithmTyping.RSA.padding
   private const val DEFAULT_SEED = "T-DECRYPT-AND-ENCRYPT"
 
   /**
@@ -125,7 +126,7 @@ object Keys {
    */
   @JvmStatic
   fun readRsaPrivateKeyByBase64AndStandard(
-    standardKeyBase64: String
+    standardKeyBase64: String,
   ): RSAPrivateKey? =
     readRsaPrivateKeyByBase64(
       standardKeyBase64
@@ -154,10 +155,10 @@ object Keys {
     alg: EncryptAlgorithmTyping,
   ): PublicKey? {
     return runCatching {
-        X509EncodedKeySpec(IBase64.decodeToByte(base64)).run {
-          KeyFactory.getInstance(alg.value).generatePublic(this)
-        }
+      X509EncodedKeySpec(IBase64.decodeToByte(base64)).run {
+        KeyFactory.getInstance(alg.value).generatePublic(this)
       }
+    }
       .onFailure { log.error(Keys::readPublicKeyByBase64AndAlg.name, it) }
       .getOrNull()
   }
@@ -173,10 +174,10 @@ object Keys {
     alg: EncryptAlgorithmTyping,
   ): PrivateKey? {
     return runCatching {
-        PKCS8EncodedKeySpec(IBase64.decodeToByte(base64)).run {
-          KeyFactory.getInstance(alg.value).generatePrivate(this)
-        }
+      PKCS8EncodedKeySpec(IBase64.decodeToByte(base64)).run {
+        KeyFactory.getInstance(alg.value).generatePrivate(this)
       }
+    }
       .onFailure { log.error(Keys::readPrivateKeyByBase64AndAlg.name, it) }
       .getOrNull()
   }
@@ -196,11 +197,11 @@ object Keys {
     provider: String? = "SunJCE",
   ): KeyPair? {
     return runCatching {
-        KeyPairGenerator.getInstance(algName, provider).run {
-          initialize(keySize, SecureRandom(seed.toByteArray(Charsets.UTF_8)))
-          generateKeyPair()
-        }
+      KeyPairGenerator.getInstance(algName, provider).run {
+        initialize(keySize, SecureRandom(seed.toByteArray(Charsets.UTF_8)))
+        generateKeyPair()
       }
+    }
       .onFailure { log.error(Keys::generateKeyPair.name, it) }
       .getOrNull()
   }
@@ -216,11 +217,11 @@ object Keys {
     keySize: Int = RSA_KEY_SIZE,
   ): IRsaExtKeyPair? {
     return generateKeyPair(
-        seed,
-        keySize,
-        EncryptAlgorithmTyping.RSA.value,
-        "SunRsaSign",
-      )
+      seed,
+      keySize,
+      EncryptAlgorithmTyping.RSA.value,
+      "SunRsaSign",
+    )
       ?.let {
         RsaExtKeyPair(it.public as RSAPublicKey, it.private as RSAPrivateKey)
       }
@@ -232,17 +233,17 @@ object Keys {
    */
   @JvmStatic
   fun generateEccKeyPair(
-    seed: String = generateRandomAsciiString()
+    seed: String = generateRandomAsciiString(),
   ): EccExtKeyPair? {
     return runCatching {
-        val random = SecureRandom(seed.toByteArray(Charsets.UTF_8))
-        val curve = ECNamedCurveTable.getParameterSpec("P-256")
-        KeyPairGenerator.getInstance("EC", "BC").run {
-          initialize(curve, random)
-          val keyPair = generateKeyPair()
-          EccExtKeyPair(keyPair.public, keyPair.private)
-        }
+      val random = SecureRandom(seed.toByteArray(Charsets.UTF_8))
+      val curve = ECNamedCurveTable.getParameterSpec("P-256")
+      KeyPairGenerator.getInstance("EC", "BC").run {
+        initialize(curve, random)
+        val keyPair = generateKeyPair()
+        EccExtKeyPair(keyPair.public, keyPair.private)
       }
+    }
       .onFailure { log.error(Keys::generateEccKeyPair.name, it) }
       .getOrNull()
   }
@@ -258,12 +259,12 @@ object Keys {
     keySize: Int = AES_KEY_SIZE,
   ): SecretKeySpec? {
     return runCatching {
-        val secureRandom = SecureRandom(seed.toByteArray(Charsets.UTF_8))
-        KeyGenerator.getInstance("AES").run {
-          init(keySize, secureRandom)
-          SecretKeySpec(generateKey().encoded, "AES")
-        }
+      val secureRandom = SecureRandom(seed.toByteArray(Charsets.UTF_8))
+      KeyGenerator.getInstance("AES").run {
+        init(keySize, secureRandom)
+        SecretKeySpec(generateKey().encoded, "AES")
       }
+    }
       .onFailure { log.error(Keys::generateAesKey.name, it) }
       .getOrNull()
   }
@@ -327,9 +328,9 @@ object Keys {
     alg: EncryptAlgorithmTyping,
   ): KeyPair? {
     return KeyPair(
-        readPublicKeyByBase64AndAlg(publicKeyBase64, alg),
-        readPrivateKeyByBase64AndAlg(privateKeyBase64, alg),
-      )
+      readPublicKeyByBase64AndAlg(publicKeyBase64, alg),
+      readPrivateKeyByBase64AndAlg(privateKeyBase64, alg),
+    )
       .takeIf { null != it.public && null != it.private }
   }
 

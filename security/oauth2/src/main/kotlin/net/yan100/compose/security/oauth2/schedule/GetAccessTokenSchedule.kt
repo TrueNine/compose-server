@@ -1,8 +1,8 @@
 package net.yan100.compose.security.oauth2.schedule
 
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.oauth2.api.IWxpaWebClient
 import net.yan100.compose.security.oauth2.property.WxpaProperty
+import net.yan100.compose.slf4j
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Lazy
 import org.springframework.scheduling.annotation.EnableAsync

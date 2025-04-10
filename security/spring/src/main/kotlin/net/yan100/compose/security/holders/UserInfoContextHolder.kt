@@ -1,6 +1,6 @@
 package net.yan100.compose.security.holders
 
-import net.yan100.compose.core.domain.RequestInfo
-import net.yan100.compose.core.holders.AbstractThreadLocalHolder
+import net.yan100.compose.domain.RequestInfo
+import net.yan100.compose.holders.AbstractThreadLocalHolder
 
 object UserInfoContextHolder : AbstractThreadLocalHolder<RequestInfo?>()

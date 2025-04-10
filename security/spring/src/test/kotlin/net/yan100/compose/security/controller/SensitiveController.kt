@@ -1,8 +1,8 @@
 package net.yan100.compose.security.controller
 
-import net.yan100.compose.core.Pr
-import net.yan100.compose.core.annotations.SensitiveResponse
-import net.yan100.compose.core.domain.ISensitivity
+import net.yan100.compose.Pr
+import net.yan100.compose.annotations.SensitiveResponse
+import net.yan100.compose.domain.ISensitivity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController

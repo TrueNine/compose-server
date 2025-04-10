@@ -5,7 +5,7 @@ project.version = libs.versions.compose.security.get()
 dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
 
-  implementation(projects.core)
+  api(projects.shared)
   implementation(projects.depend.dependHttpExchange)
   implementation(libs.org.springframework.boot.spring.boot.starter.webflux)
 

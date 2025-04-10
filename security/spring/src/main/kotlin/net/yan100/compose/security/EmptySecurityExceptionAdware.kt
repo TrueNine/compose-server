@@ -1,8 +1,8 @@
 package net.yan100.compose.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
+import net.yan100.compose.slf4j
 
 private val log = slf4j(EmptySecurityExceptionAdware::class)
 

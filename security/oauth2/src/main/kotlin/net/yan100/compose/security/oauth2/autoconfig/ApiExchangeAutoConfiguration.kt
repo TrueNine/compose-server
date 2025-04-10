@@ -1,10 +1,10 @@
 package net.yan100.compose.security.oauth2.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.depend.httpexchange.jsonWebClientRegister
 import net.yan100.compose.security.oauth2.api.IWxMpApi
 import net.yan100.compose.security.oauth2.api.IWxpaWebClient
+import net.yan100.compose.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

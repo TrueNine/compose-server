@@ -1,7 +1,7 @@
 package net.yan100.compose.security.autoconfig
 
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.annotations.EnableRestSecurity
+import net.yan100.compose.slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -22,7 +22,8 @@ import org.springframework.security.web.SecurityFilterChain
 @ConditionalOnMissingBean(SecurityPolicyBean::class)
 class DisableSecurityPolicyBean {
   companion object {
-    @JvmStatic private val log = slf4j(DisableSecurityPolicyBean::class)
+    @JvmStatic
+    private val log = slf4j(DisableSecurityPolicyBean::class)
   }
 
   @Bean

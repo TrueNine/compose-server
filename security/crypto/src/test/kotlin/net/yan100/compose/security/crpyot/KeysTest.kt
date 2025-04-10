@@ -1,10 +1,10 @@
 package net.yan100.compose.security.crpyot
 
-import kotlin.test.assertTrue
-import net.yan100.compose.core.hasText
+import net.yan100.compose.hasText
 import net.yan100.compose.security.crypto.Keys
 import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
+import kotlin.test.assertTrue
 
 class KeysTest {
   @Test

@@ -1,10 +1,10 @@
 package net.yan100.compose.security.crypto.domain
 
+import net.yan100.compose.domain.IEccKeyPair
+import net.yan100.compose.domain.enc.EccKeyPair
+import net.yan100.compose.typing.EncryptAlgorithmTyping
 import java.security.PrivateKey
 import java.security.PublicKey
-import net.yan100.compose.core.domain.IEccKeyPair
-import net.yan100.compose.core.domain.enc.EccKeyPair
-import net.yan100.compose.core.typing.EncryptAlgorithmTyping
 
 class EccExtKeyPair(
   override val publicKey: PublicKey,

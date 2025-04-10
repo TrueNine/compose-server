@@ -1,10 +1,10 @@
 package net.yan100.compose.security.oauth2.autoconfig
 
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.oauth2.api.IWxpaWebClient
 import net.yan100.compose.security.oauth2.properties.WechatProperties
 import net.yan100.compose.security.oauth2.property.WxpaProperty
 import net.yan100.compose.security.oauth2.service.WxpaService
+import net.yan100.compose.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

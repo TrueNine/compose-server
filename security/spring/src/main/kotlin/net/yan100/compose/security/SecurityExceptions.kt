@@ -1,7 +1,7 @@
 package net.yan100.compose.security
 
-import net.yan100.compose.core.exceptions.KnownException
-import net.yan100.compose.core.typing.HttpStatusTyping
+import net.yan100.compose.exceptions.KnownException
+import net.yan100.compose.typing.HttpStatusTyping
 
 open class SecurityException(
   msg: String? = "程序安全异常",

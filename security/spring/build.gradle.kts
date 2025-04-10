@@ -21,7 +21,7 @@ dependencies {
   // TODO 剥离 web模块
   implementation(projects.depend.dependServlet)
   implementation(projects.security.securityCrypto)
-  implementation(projects.core)
+  api(projects.shared)
 
   testImplementation(projects.testtoolkit)
 }

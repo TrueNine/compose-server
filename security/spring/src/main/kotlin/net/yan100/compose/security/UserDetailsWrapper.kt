@@ -1,7 +1,7 @@
 package net.yan100.compose.security
 
-import net.yan100.compose.core.IString
-import net.yan100.compose.core.domain.AuthRequestInfo
+import net.yan100.compose.IString
+import net.yan100.compose.domain.AuthRequestInfo
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

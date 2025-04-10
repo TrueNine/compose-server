@@ -1,6 +1,6 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.core.datetime
+import net.yan100.compose.datetime
 
 /**
  * 过期时间令牌

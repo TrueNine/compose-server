@@ -1,6 +1,6 @@
 package net.yan100.compose.security.crypto.autoconfig
 
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.slf4j
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

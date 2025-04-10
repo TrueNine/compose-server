@@ -1,11 +1,11 @@
 package net.yan100.compose.security.autoconfig
 
 import jakarta.servlet.http.HttpServletRequest
-import net.yan100.compose.core.consts.IHeaders
-import net.yan100.compose.core.domain.RequestInfo
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.consts.IHeaders
 import net.yan100.compose.depend.servlet.remoteRequestIp
+import net.yan100.compose.domain.RequestInfo
 import net.yan100.compose.security.holders.UserInfoContextHolder
+import net.yan100.compose.slf4j
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -21,7 +21,7 @@ class BasicUserInfoArgumentResolver :
   HandlerMethodArgumentResolver, WebMvcConfigurer {
 
   override fun addArgumentResolvers(
-    resolvers: MutableList<HandlerMethodArgumentResolver>
+    resolvers: MutableList<HandlerMethodArgumentResolver>,
   ) {
     super.addArgumentResolvers(resolvers)
     log.trace("注册用户信息拦ArgumentResolver")

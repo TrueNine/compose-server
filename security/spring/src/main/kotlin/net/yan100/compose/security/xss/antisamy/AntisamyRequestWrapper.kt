@@ -2,7 +2,7 @@ package net.yan100.compose.security.xss.antisamy
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.slf4j
 import org.owasp.validator.html.AntiSamy
 import org.owasp.validator.html.Policy
 import org.slf4j.Logger
@@ -34,8 +34,10 @@ class AntisamyRequestWrapper(request: HttpServletRequest?) :
     @JvmStatic
     private val POLICY: Policy = Policy.getInstance("antisamy-ebay.xml")
 
-    @JvmStatic private val ANTI_SAMY = AntiSamy()
+    @JvmStatic
+    private val ANTI_SAMY = AntiSamy()
 
-    @JvmStatic private val log: Logger = slf4j(this::class)
+    @JvmStatic
+    private val log: Logger = slf4j(this::class)
   }
 }

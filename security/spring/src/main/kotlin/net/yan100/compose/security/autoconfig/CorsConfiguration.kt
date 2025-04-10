@@ -1,7 +1,7 @@
 package net.yan100.compose.security.autoconfig
 
-import net.yan100.compose.core.consts.IMethods
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.consts.IMethods
+import net.yan100.compose.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.cors.CorsConfiguration

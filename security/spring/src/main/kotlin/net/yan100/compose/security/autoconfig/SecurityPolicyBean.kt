@@ -1,7 +1,6 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.security.EmptySecurityDetailsService
 import net.yan100.compose.security.EmptySecurityExceptionAdware
 import net.yan100.compose.security.SecurityPolicyDefine
@@ -9,6 +8,7 @@ import net.yan100.compose.security.annotations.EnableRestSecurity
 import net.yan100.compose.security.spring.security.SecurityExceptionAdware
 import net.yan100.compose.security.spring.security.SecurityPreflightValidFilter
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
+import net.yan100.compose.slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -36,7 +36,7 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityDetailsService(
-    desc: SecurityPolicyDefine
+    desc: SecurityPolicyDefine,
   ): SecurityUserDetailsService {
     log.debug("注册 UserDetailsService")
     return desc.service ?: EmptySecurityDetailsService()
@@ -129,7 +129,7 @@ class SecurityPolicyBean {
   @Bean
   @Primary
   fun authenticationManager(
-    ac: AuthenticationConfiguration
+    ac: AuthenticationConfiguration,
   ): AuthenticationManager? {
     log.debug("注册 AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager

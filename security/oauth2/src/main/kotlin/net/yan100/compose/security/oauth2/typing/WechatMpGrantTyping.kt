@@ -1,7 +1,7 @@
 package net.yan100.compose.security.oauth2.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import net.yan100.compose.core.typing.StringTyping
+import net.yan100.compose.typing.StringTyping
 
 /**
  * # 微信支付验证类型
@@ -13,9 +13,11 @@ enum class WechatMpGrantTyping(private val typingCode: String) : StringTyping {
   CLIENT_CREDENTIAL("client_credential"),
   AUTH_CODE("authorization_code");
 
-  @JsonValue override val value: String = typingCode
+  @JsonValue
+  override val value: String = typingCode
 
   companion object {
-    @JvmStatic fun findVal(v: String?) = entries.find { it.typingCode == v }
+    @JvmStatic
+    fun findVal(v: String?) = entries.find { it.typingCode == v }
   }
 }

@@ -1,10 +1,9 @@
 package net.yan100.compose.security.autoconfig
 
-import java.lang.reflect.ParameterizedType
-import net.yan100.compose.core.Pr
-import net.yan100.compose.core.annotations.SensitiveResponse
-import net.yan100.compose.core.domain.ISensitivity
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.Pr
+import net.yan100.compose.annotations.SensitiveResponse
+import net.yan100.compose.domain.ISensitivity
+import net.yan100.compose.slf4j
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.http.converter.HttpMessageConverter
@@ -12,6 +11,7 @@ import org.springframework.http.server.ServerHttpRequest
 import org.springframework.http.server.ServerHttpResponse
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
+import java.lang.reflect.ParameterizedType
 
 private val log = slf4j<SensitiveResultResponseBodyAdvice>()
 
@@ -28,8 +28,7 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
     converterType: Class<out HttpMessageConverter<*>>,
   ): Boolean {
     val hasAnnotation =
-      returnType.method?.isAnnotationPresent(supportAnnotationClassType)
-        ?: false
+      returnType.method?.isAnnotationPresent(supportAnnotationClassType) == true
     return hasAnnotation
   }
 
@@ -64,6 +63,7 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
       is ISensitivity -> body.changeWithSensitiveData()
       is Collection<*> ->
         body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+
       is Map<*, *> ->
         body.forEach {
           if (it.key is ISensitivity)
@@ -74,10 +74,13 @@ class SensitiveResultResponseBodyAdvice : ResponseBodyAdvice<Any> {
 
       is Array<*> ->
         body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+
       is Iterable<*> ->
         body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+
       is Iterator<*> ->
         body.forEach { if (it is ISensitivity) it.changeWithSensitiveData() }
+
       is Pr<*> -> {
         if (body.d.isNotEmpty()) {
           val b = body.d.firstOrNull()?.let { it is ISensitivity }

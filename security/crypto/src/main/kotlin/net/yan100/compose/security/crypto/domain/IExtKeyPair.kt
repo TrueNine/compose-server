@@ -1,6 +1,6 @@
 package net.yan100.compose.security.crypto.domain
 
-import net.yan100.compose.core.domain.IKeyPair
+import net.yan100.compose.domain.IKeyPair
 import net.yan100.compose.security.crypto.IBase64
 
 interface IExtKeyPair : IKeyPair {

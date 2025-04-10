@@ -1,7 +1,7 @@
 package net.yan100.compose.security.oauth2.property
 
-import net.yan100.compose.core.datetime
-import net.yan100.compose.core.iso8601LongUtc
+import net.yan100.compose.datetime
+import net.yan100.compose.iso8601LongUtc
 import net.yan100.compose.security.crypto.Keys
 import net.yan100.compose.security.crypto.sha1
 
@@ -37,11 +37,11 @@ class WxpaProperty {
     val splitUrl = url.split("#")[0]
     val b =
       mutableMapOf(
-          "noncestr" to nonceString,
-          "jsapi_ticket" to jsapiTicket,
-          "timestamp" to timestamp.toString(),
-          "url" to splitUrl,
-        )
+        "noncestr" to nonceString,
+        "jsapi_ticket" to jsapiTicket,
+        "timestamp" to timestamp.toString(),
+        "url" to splitUrl,
+      )
         .map { "${it.key}=${it.value}" }
         .sorted()
         .joinToString("&")

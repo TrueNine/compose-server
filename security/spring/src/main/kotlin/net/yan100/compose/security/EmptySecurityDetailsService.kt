@@ -1,9 +1,9 @@
 package net.yan100.compose.security
 
-import net.yan100.compose.core.domain.AuthRequestInfo
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.core.util.IEmptyDefault
+import net.yan100.compose.domain.AuthRequestInfo
 import net.yan100.compose.security.spring.security.SecurityUserDetailsService
+import net.yan100.compose.slf4j
+import net.yan100.compose.util.IEmptyDefault
 
 private val log = slf4j(EmptySecurityDetailsService::class)
 

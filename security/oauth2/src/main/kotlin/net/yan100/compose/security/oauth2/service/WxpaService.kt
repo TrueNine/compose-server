@@ -1,10 +1,10 @@
 package net.yan100.compose.security.oauth2.service
 
-import net.yan100.compose.core.hasText
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.hasText
 import net.yan100.compose.security.crypto.sha1
 import net.yan100.compose.security.oauth2.api.IWxpaWebClient
 import net.yan100.compose.security.oauth2.property.WxpaProperty
+import net.yan100.compose.slf4j
 import org.springframework.stereotype.Service
 
 private val log = slf4j<WxpaService>()
@@ -54,10 +54,10 @@ class WxpaService(
   fun verifyBasicConfig(body: WxpaVerifyDto): String? {
     val a =
       listOf(
-          wxpaConfigInfo.preValidToken!!,
-          body.timestamp.toString(),
-          body.nonce,
-        )
+        wxpaConfigInfo.preValidToken!!,
+        body.timestamp.toString(),
+        body.nonce,
+      )
         .sorted()
         .joinToString("")
         .sha1
@@ -86,7 +86,7 @@ class WxpaService(
    * @param jsCode jsCode
    */
   fun fetchUserInfoByAccessToken(
-    jsCode: String
+    jsCode: String,
   ): IWxpaWebClient.WxpaWebsiteUserInfoResp? {
     if (property.appId == null) {
       log.warn("appId is null")
