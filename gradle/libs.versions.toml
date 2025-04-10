@@ -7,7 +7,7 @@ com-diffplug-spotless = "7.0.3"
 com-fasterxml-jackson = "2.18.3"
 com-flywaydb-flyway = "11.6.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.1.20-1.0.32"
+com-google-devtools-ksp = "2.1.20-2.0.0"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.1.0"
@@ -128,7 +128,6 @@ net-sf-sevenzipjbinding-sevenzipjbinding = { module = "net.sf.sevenzipjbinding:s
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { module = "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-supercsv-super-csv = "net.sf.supercsv:super-csv:2.4.0"
 net-yan100-compose-cacheable = { module = "net.yan100.compose:cacheable", version.ref = "compose" }
-net-yan100-compose-client = { module = "net.yan100.compose:client", version.ref = "compose-build" }
 net-yan100-compose-core = { module = "net.yan100.compose:core", version.ref = "compose" }
 net-yan100-compose-data-crawler = { module = "net.yan100.compose:data-crawler", version.ref = "compose-data" }
 net-yan100-compose-data-extract = { module = "net.yan100.compose:data-extract", version.ref = "compose-data" }
