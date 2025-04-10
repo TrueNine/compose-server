@@ -19,14 +19,6 @@
 
 ## 快速开始
 
-1. 克隆项目
-
-```bash
-git clone https://github.com/your-username/compose-server.git
-```
-
-2. 导入项目
-
 - 使用 IntelliJ IDEA 或 Android Studio 打开项目
 - 等待 Gradle 同步完成
 
