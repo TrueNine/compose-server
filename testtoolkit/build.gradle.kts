@@ -5,7 +5,11 @@ version = libs.versions.compose.build.get()
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test)
   api(libs.org.jetbrains.kotlin.kotlin.test.junit5)
+  // mockk
   api(libs.io.mockk.mockk)
+  // kotlin 协程测试
+  api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+  api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
 
   // Testcontainers
   testImplementation(libs.org.testcontainers.testcontainers)
@@ -50,7 +54,5 @@ dependencies {
   // 测试用数据库
   runtimeOnly(libs.com.h2database.h2)
 
-  // kotlin 协程测试
-  testImplementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
-  testImplementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
+
 }
