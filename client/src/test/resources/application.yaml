@@ -1,4 +1,0 @@
-spring:
-  threads:
-    virtual:
-      enabled: true

@@ -1,6 +1,0 @@
-export net.yan100.compose.client.jimmer.JimmerEntity
-    -> package net.yan100.compose.client.jimmer
-
-specification Query {
-  name
-}
