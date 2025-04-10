@@ -6,23 +6,32 @@ class SynchronizedSimpleSnowflake(
   private var sequence: Long,
   private val startTimeStamp: Long,
 ) : ISnowflakeGenerator {
-  // 长度为5位
-  private val workerIdBits = 5L
-  private val datacenterIdBits = 5L
+  companion object {
+    // 位长度定义
+    private const val WORKER_ID_BITS = 5L
+    private const val DATACENTER_ID_BITS = 5L
+    private const val SEQUENCE_BITS = 12L
 
-  // 最大值
-  private val maxWorkerId = (-1L shl workerIdBits.toInt()).inv()
-  private val maxDatacenterId = (-1L shl datacenterIdBits.toInt()).inv()
+    // 最大值计算
+    private val MAX_WORKER_ID = (-1L shl WORKER_ID_BITS.toInt()).inv()
+    private val MAX_DATACENTER_ID = (-1L shl DATACENTER_ID_BITS.toInt()).inv()
+    private val SEQUENCE_MASK = (-1L shl SEQUENCE_BITS.toInt()).inv()
+
+    // 位移量计算
+    private val WORKER_ID_SHIFT = SEQUENCE_BITS
+    private val DATACENTER_ID_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS
+    private val TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATACENTER_ID_BITS
+  }
 
   // 上次时间戳，初始值为负数
   private var lastTimestamp = -1L
 
   init {
-    require(!(workId <= 0 || workId >= maxWorkerId)) {
-      "workId 大于$maxDatacenterId 或者小于0"
+    require(workId in 1 .. MAX_WORKER_ID) {
+      "workId 必须在 1 到 $MAX_WORKER_ID 之间"
     }
-    require(!(datacenterId <= 0 || datacenterId >= maxDatacenterId)) {
-      "datacenterId 大于 $maxDatacenterId 或者小于0"
+    require(datacenterId in 1 .. MAX_DATACENTER_ID) {
+      "datacenterId 必须在 1 到 $MAX_DATACENTER_ID 之间"
     }
     lastTimestamp = currentTimeMillis()
   }
@@ -31,41 +40,31 @@ class SynchronizedSimpleSnowflake(
     return System.currentTimeMillis()
   }
 
-  // 序列号id长度
-  private val sequenceBits = 12L
-
-  // 序列号最大值
-  private val sequenceMask = (-1L shl sequenceBits.toInt()).inv()
-
-  // 工作id需要左移的位数，12位
-  private val workerIdShift = sequenceBits
-
-  // 数据id需要左移位数 12+5=17位
-  private val datacenterIdShift = sequenceBits + workerIdBits
-
-  // 时间戳需要左移位数 12+5+5=22位
-  private val timestampLeftShift =
-    sequenceBits + workerIdBits + datacenterIdBits
-
   @Synchronized
   override fun next(): Long {
-    var timeStamp: Long = currentTimeMillis()
-    if (lastTimestamp > timeStamp) {
-      throw RuntimeException("时间小于当前时间戳：" + (timeStamp - lastTimestamp))
+    var timestamp = currentTimeMillis()
+
+    // 处理时钟回拨
+    if (timestamp < lastTimestamp) {
+      throw RuntimeException("时钟回拨，时间戳小于上次时间戳：${timestamp - lastTimestamp}")
     }
-    if (lastTimestamp == timeStamp) {
-      sequence = sequence + 1 and sequenceMask
-      if (0L == sequence) {
-        timeStamp = tilNextTimeMillis(lastTimestamp)
+
+    // 同一毫秒内生成多个ID
+    if (timestamp == lastTimestamp) {
+      sequence = (sequence + 1) and SEQUENCE_MASK
+      if (sequence == 0L) {
+        timestamp = tilNextTimeMillis(lastTimestamp)
       }
     } else {
       sequence = 0
     }
-    lastTimestamp = timeStamp
-    return timeStamp - startTimeStamp shl
-      timestampLeftShift.toInt() or
-      (datacenterId shl datacenterIdShift.toInt()) or
-      (workId shl workerIdShift.toInt()) or
+
+    lastTimestamp = timestamp
+
+    // 组合各部分生成最终ID
+    return ((timestamp - startTimeStamp) shl TIMESTAMP_LEFT_SHIFT.toInt()) or
+      (datacenterId shl DATACENTER_ID_SHIFT.toInt()) or
+      (workId shl WORKER_ID_SHIFT.toInt()) or
       sequence
   }
 
