@@ -14,7 +14,6 @@ dependencies {
       val dependency = allVersionCatalogs.findLibrary(aliasLib).getOrNull()?.get()
       dependency?.also { dep ->
         api(dep)
-        logger.debug("add dependency: {}", dep)
       }
     }
   }
