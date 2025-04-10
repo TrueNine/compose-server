@@ -9,6 +9,7 @@ import net.yan100.compose.data.extract.service.ILazyAddressService
 import org.springframework.context.annotation.Primary
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
+import java.util.concurrent.ConcurrentMap
 
 private val log = slf4j<LazyAddressCsvServiceImpl>()
 
@@ -25,6 +26,10 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
   )
 
   final val csvVersions: MutableMap<String, CsvDefine> = ConcurrentHashMap(16)
+  
+  // 添加缓存来存储已解析的数据
+  private val districtCache: ConcurrentMap<String, List<ILazyAddressService.CnDistrict>> = ConcurrentHashMap()
+  
   override val logger
     get() = log
 
@@ -50,6 +55,7 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
 
   fun removeSupportedYear(year: String) {
     csvVersions -= year
+    districtCache.remove(year)
   }
 
   operator fun plusAssign(definePair: Pair<String, CsvDefine>) {
@@ -62,6 +68,7 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
 
   fun addSupportedYear(year: String, csvDefine: CsvDefine) {
     csvVersions += year to csvDefine
+    districtCache.remove(year) // 清除相关缓存
   }
 
   override val supportedYearVersions: List<String>
@@ -73,41 +80,40 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
     yearVersion: String,
   ): List<ILazyAddressService.CnDistrict> {
     log.debug("fetch csv version: {}", yearVersion)
-    return getCsvSequence(yearVersion)
-      ?.filter { c ->
-        if (code == ILazyAddressService.DEFAULT_COUNTRY_CODE) c.level == level
-        else c.code.padCode.startsWith(code) && c.level == level
+    
+    // 首先尝试从缓存获取数据
+    return districtCache.computeIfAbsent(yearVersion) { 
+      getCsvSequence(yearVersion)?.toList() ?: emptyList()
+    }.filter { district ->
+      if (code == ILazyAddressService.DEFAULT_COUNTRY_CODE) {
+        district.level == level
+      } else {
+        district.code.padCode.startsWith(code) && district.level == level
       }
-      ?.toList() ?: emptyList()
+    }
   }
 
   internal fun getCsvResource(yearVersion: String): Resource? {
-    return run {
-        csvVersions[yearVersion]
-          ?: run {
-            log.warn("not get supported version csv file: {}", yearVersion)
-            csvVersions[yearVersion]
-          }
-      }
-      ?.let { resourceHolder.getConfigResource(it.fileName) }
+    return csvVersions[yearVersion]?.let { resourceHolder.getConfigResource(it.fileName) }
   }
 
   internal fun getCsvSequence(
     yearVersion: String
   ): Sequence<ILazyAddressService.CnDistrict>? {
-    return getCsvResource(yearVersion)
-      ?.inputStream
-      ?.bufferedReader()
-      ?.lineSequence()
-      ?.filter { it.isNotBlank() }
-      ?.map {
-        val a = it.split(",")
-        ILazyAddressService.CnDistrict(
-          code = CnDistrictCode(a[0]),
-          name = a[1],
-          yearVersion = yearVersion,
-          level = a[2].toInt(),
-        )
+    return getCsvResource(yearVersion)?.let { resource ->
+      resource.inputStream.bufferedReader().useLines { lines ->
+        lines.filter { it.isNotBlank() }
+          .map { line ->
+            line.split(',', limit = 4).let { parts ->
+              ILazyAddressService.CnDistrict(
+                code = CnDistrictCode(parts[0]),
+                name = parts[1],
+                yearVersion = yearVersion,
+                level = parts[2].toInt()
+              )
+            }
+          }.toList()
       }
+    }?.asSequence()
   }
 }
