@@ -12,7 +12,6 @@ listOf(
   "version-catalog",
   "core",
   "bom",
-  "client",
   "meta",
   "gradle-plugin",
   "cacheable",
