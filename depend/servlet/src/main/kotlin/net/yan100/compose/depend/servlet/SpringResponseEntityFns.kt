@@ -66,7 +66,7 @@ data class ResponseEntityScope(
 
 /** 加以限制的 HTTP HEAD 返回 */
 inline fun headMethodResponse(
-  scope: ResponseEntityScope.() -> Unit,
+  scope: ResponseEntityScope.() -> Unit
 ): ResponseEntity<Unit> {
   val sc = ResponseEntityScope()
   scope(sc)

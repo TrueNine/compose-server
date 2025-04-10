@@ -2,13 +2,13 @@ package net.yan100.compose.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import net.yan100.compose.domain.IPageParam
 import net.yan100.compose.domain.IPageParamLike
 import net.yan100.compose.testtookit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @SpringBootTest
 class IPageParamTest {

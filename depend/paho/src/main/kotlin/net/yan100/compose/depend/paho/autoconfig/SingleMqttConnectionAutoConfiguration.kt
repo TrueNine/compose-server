@@ -68,7 +68,7 @@ class SingleMqttConnectionAutoConfiguration(
 
   @Bean
   fun mqttConnectionOptions(
-    factory: MqttPahoClientFactory,
+    factory: MqttPahoClientFactory
   ): MqttConnectOptions? {
     return factory.connectionOptions
   }
@@ -76,7 +76,7 @@ class SingleMqttConnectionAutoConfiguration(
   @Bean
   @ConditionalOnBean(name = [CLIENT_FACTORY_BEAN_NAME])
   fun mqttPahoClientWrapper(
-    factory: MqttPahoClientFactory,
+    factory: MqttPahoClientFactory
   ): MqttPahoClientWrapper {
     val client = factory.getClientInstance(p.fullUrl, p.clientId)
     return MqttPahoClientWrapper(

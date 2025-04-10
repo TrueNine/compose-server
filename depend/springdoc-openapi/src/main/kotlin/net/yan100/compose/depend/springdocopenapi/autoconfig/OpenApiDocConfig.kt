@@ -8,6 +8,10 @@ import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.parameters.HeaderParameter
 import jakarta.annotation.PostConstruct
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.*
 import net.yan100.compose.depend.springdocopenapi.properties.SpringdocOpenApiProperties
 import net.yan100.compose.slf4j
 import org.springdoc.core.models.GroupedOpenApi
@@ -16,10 +20,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.HandlerMethod
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.*
 
 @Configuration
 class OpenApiDocConfig {

@@ -1,15 +1,15 @@
 package net.yan100.compose.depend.servlet.log
 
-import net.yan100.compose.datetime
-import net.yan100.compose.hasText
-import net.yan100.compose.string
-import org.slf4j.event.Level
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 import kotlin.test.Test
+import net.yan100.compose.datetime
+import net.yan100.compose.hasText
+import net.yan100.compose.string
+import org.slf4j.event.Level
 
 data class MDCLogData(
   var datetime: datetime,
@@ -50,7 +50,7 @@ class SplitText {
             val mdcAndThreadName =
               with(matcher.group(2)) {
                 val sep = indexOf(" - ")
-                val mdc = substring(0 .. sep)
+                val mdc = substring(0..sep)
                 val tidAndIp = mdc.trim().split(',')
                 val mdcPair = tidAndIp[0] to tidAndIp[1]
                 val c = substring(sep + 3)
@@ -60,7 +60,7 @@ class SplitText {
             val packageNameAndLogContent =
               with(matcher.group(4)) {
                 val sep = indexOf(" - ")
-                val b = substring(0 .. sep)
+                val b = substring(0..sep)
                 val c = substring(sep + 3)
                 b to c
               }

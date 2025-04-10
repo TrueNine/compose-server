@@ -3,10 +3,10 @@ package net.yan100.compose.depend.jackson.serializers
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.SerializerProvider
-import net.yan100.compose.toDate
-import net.yan100.compose.toLong
 import java.time.LocalTime
 import java.time.ZoneOffset
+import net.yan100.compose.toDate
+import net.yan100.compose.toLong
 
 class LocalTimeSerializerY(private val zoneOffset: ZoneOffset) :
   AbstractTypedSerializer<LocalTime>(JsonToken.VALUE_NUMBER_INT) {
