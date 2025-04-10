@@ -19,15 +19,10 @@ import org.springframework.data.annotation.LastModifiedDate
 interface IJpaEntity : IJpaPersistentEntity {
 
   /** 乐观锁版本 */
-  @get:Version
-  @get:MetaAutoManagement
-  var rlv: i64?
+  @get:Version @get:MetaAutoManagement var rlv: i64?
 
   /** 创建时间 */
-  @get:CreatedDate
-  @set:CreatedDate
-  @get:MetaAutoManagement
-  var crd: datetime?
+  @get:CreatedDate @set:CreatedDate @get:MetaAutoManagement var crd: datetime?
 
   /** 修改时间 */
   @get:LastModifiedDate
@@ -36,8 +31,7 @@ interface IJpaEntity : IJpaPersistentEntity {
   var mrd: datetime?
 
   /** 逻辑删除标志 */
-  @get:MetaAutoManagement
-  var ldf: bool?
+  @get:MetaAutoManagement var ldf: bool?
 
   @Transient
   @Suppress("DEPRECATION_ERROR")

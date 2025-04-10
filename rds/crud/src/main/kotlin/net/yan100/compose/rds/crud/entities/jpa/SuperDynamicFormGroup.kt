@@ -11,9 +11,7 @@ interface SuperDynamicFormGroup : IJpaEntity {
    * ## 名称
    * 名称（不可重复）
    */
-  @get:Schema(title = "", description = "")
-  var name: String
+  @get:Schema(title = "", description = "") var name: String
 
-  @get:Schema(title = "描述")
-  var doc: String?
+  @get:Schema(title = "描述") var doc: String?
 }

@@ -59,6 +59,5 @@ interface SuperCert : IJpaEntity {
   var coType: CertContentTyping?
 
   /** 证件类型 */
-  @get:Convert(converter = CertTypingConverter::class)
-  var doType: CertTyping?
+  @get:Convert(converter = CertTypingConverter::class) var doType: CertTyping?
 }

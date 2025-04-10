@@ -17,7 +17,7 @@ import org.springframework.data.repository.query.FluentQuery
 open class QueryDslExtensionFUnctionsArg1<
   E : IJpaEntity,
   T : EntityPathBase<E>,
-  >(
+>(
   /** ## 当前使用的表达式 */
   val q: T,
   /** ## BooleanBuilder 用于构建条件 */
@@ -40,7 +40,7 @@ inline fun <E : IJpaEntity, T : EntityPathBase<E>, R> querydsl(
 open class QueryDslExtensionFUnctionsArg3<
   E : IJpaEntity,
   T : EntityPathBase<E>,
-  >(
+>(
   q: T,
   bb: BooleanBuilder,
   /** ## JPA Query Factory */
@@ -73,7 +73,7 @@ inline fun <E : IJpaEntity, T : EntityPathBase<E>, R> querydsl(
 /* order by extension functions */
 
 inline fun querydslOrderBy(
-  crossinline orderFn: MutableList<Sort.Order>.() -> Unit,
+  crossinline orderFn: MutableList<Sort.Order>.() -> Unit
 ): MutableList<Sort.Order> {
   val i = mutableListOf<Sort.Order>()
   orderFn(i)
@@ -81,7 +81,7 @@ inline fun querydslOrderBy(
 }
 
 fun <E> FluentQuery.FetchableFluentQuery<E>.sortBy(
-  orders: MutableList<Sort.Order>,
+  orders: MutableList<Sort.Order>
 ): FluentQuery.FetchableFluentQuery<E> {
   return sortBy(orders.asQuerySort())
 }

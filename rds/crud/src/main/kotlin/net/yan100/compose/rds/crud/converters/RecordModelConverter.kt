@@ -15,8 +15,7 @@ class RecordModelConverter : AttributeConverter<DataRecord, String> {
     log.debug("注册 备份删除表 converter")
   }
 
-  @Resource
-  private lateinit var mapper: ObjectMapper
+  @Resource private lateinit var mapper: ObjectMapper
 
   override fun convertToDatabaseColumn(attribute: DataRecord?): String? {
     log.trace("转换删除对象 = {}", attribute)

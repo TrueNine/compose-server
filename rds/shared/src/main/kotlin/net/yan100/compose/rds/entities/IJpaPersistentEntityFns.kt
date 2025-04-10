@@ -24,18 +24,18 @@ fun <T : IJpaPersistentEntity> T.withNew(): T {
 }
 
 inline fun <T : IJpaPersistentEntity> T.withNew(
-  crossinline after: (T) -> T,
+  crossinline after: (T) -> T
 ): T = after(withNew())
 
 /** 将集合内的所有元素置空为新的 Entity 对象 */
 fun <T : IJpaPersistentEntity> List<T>.withNew(): List<T> = map { it.withNew() }
 
 inline fun <T : IJpaPersistentEntity> List<T>.withNew(
-  crossinline after: (List<T>) -> List<T>,
+  crossinline after: (List<T>) -> List<T>
 ): List<T> = after(this.map { it.withNew() })
 
 inline fun <T : IJpaPersistentEntity, R : Any> List<T>.withNewMap(
-  crossinline after: (List<T>) -> List<R>,
+  crossinline after: (List<T>) -> List<R>
 ): List<R> = after(this.withNew())
 
 /** ## 判断当前实体是否为新实体，然后执行 update */

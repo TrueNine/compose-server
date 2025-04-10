@@ -1,5 +1,7 @@
 package net.yan100.compose.rds
 
+import java.sql.Connection
+import kotlin.reflect.KClass
 import net.yan100.compose.Pq
 import net.yan100.compose.Pr
 import net.yan100.compose.domain.IPage
@@ -9,8 +11,6 @@ import org.babyfish.jimmer.View
 import org.babyfish.jimmer.sql.fetcher.DtoMetadata
 import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.ast.query.KConfigurableRootQuery
-import java.sql.Connection
-import kotlin.reflect.KClass
 
 /** ## 将 jimmer page 转换为 自定义 page */
 fun <E : Any> Page<E>.toPr(): IPage<E> {

@@ -19,24 +19,16 @@ import net.yan100.compose.string
 interface IJpaTreeEntity : IJpaEntity {
 
   /** 父id */
-  @get:Column(name = RPI)
-  @get:MetaAutoManagement
-  var rpi: RefId?
+  @get:Column(name = RPI) @get:MetaAutoManagement var rpi: RefId?
 
   /** 左节点 */
-  @get:Column(name = RLN)
-  @get:MetaAutoManagement
-  var rln: i64
+  @get:Column(name = RLN) @get:MetaAutoManagement var rln: i64
 
   /** 右节点 */
-  @get:Column(name = RRN)
-  @get:MetaAutoManagement
-  var rrn: i64
+  @get:Column(name = RRN) @get:MetaAutoManagement var rrn: i64
 
   /** 节点级别 */
-  @get:Column(name = NLV)
-  @get:MetaAutoManagement
-  var nlv: i64
+  @get:Column(name = NLV) @get:MetaAutoManagement var nlv: i64
 
   /** ### 树组 id，在节点插入时必须更上，在插入时随着父id进行更改 */
   @get:OrderCode

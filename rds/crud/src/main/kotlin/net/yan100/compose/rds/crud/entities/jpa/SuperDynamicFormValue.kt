@@ -13,8 +13,7 @@ interface SuperDynamicFormValue : IJpaEntity {
 
   var inputUserId: RefId?
 
-  @get:Deprecated("不建议使用，使用 user_id")
-  var inputUserInfoId: RefId?
+  @get:Deprecated("不建议使用，使用 user_id") var inputUserInfoId: RefId?
 
   var inputDatetime: datetime?
 

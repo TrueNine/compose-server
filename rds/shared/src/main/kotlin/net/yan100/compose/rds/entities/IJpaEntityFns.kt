@@ -99,8 +99,7 @@ open class IEntityDelegate : IAnyEntityDelegate(), IJpaEntity {
   @Column(name = IDbNames.MODIFY_ROW_DATETIME)
   override var mrd: datetime? = null
 
-  @Column(name = IDbNames.LOGIC_DELETE_FLAG)
-  override var ldf: Boolean? = null
+  @Column(name = IDbNames.LOGIC_DELETE_FLAG) override var ldf: Boolean? = null
 }
 
 fun entity(): IJpaEntity {

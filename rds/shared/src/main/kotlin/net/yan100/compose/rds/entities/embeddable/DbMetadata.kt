@@ -9,18 +9,14 @@ import org.babyfish.jimmer.sql.Embeddable
 @Embeddable
 interface DbMetadata {
   /** 字段创建时间 */
-  @Column(name = "crd", sqlType = "datetime")
-  val crd: datetime?
+  @Column(name = "crd", sqlType = "datetime") val crd: datetime?
 
   /** 字段修改时间 */
-  @Column(name = "mrd", sqlType = "datetime")
-  val mrd: datetime?
+  @Column(name = "mrd", sqlType = "datetime") val mrd: datetime?
 
   /** 乐观锁版本号 */
-  @Column(name = "rlv", sqlType = "bigint")
-  val rlv: Long?
+  @Column(name = "rlv", sqlType = "bigint") val rlv: Long?
 
   /** 逻辑删除标志 */
-  @Column(name = "ldf", sqlType = "boolean")
-  val ldf: Boolean?
+  @Column(name = "ldf", sqlType = "boolean") val ldf: Boolean?
 }

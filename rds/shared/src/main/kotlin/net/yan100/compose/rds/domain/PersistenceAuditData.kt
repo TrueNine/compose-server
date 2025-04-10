@@ -1,10 +1,10 @@
 package net.yan100.compose.rds.domain
 
+import java.io.Serializable
 import net.yan100.compose.RefId
 import net.yan100.compose.bool
 import net.yan100.compose.datetime
 import net.yan100.compose.i64
-import java.io.Serializable
 
 open class PersistenceAuditData(
   open val shadowRemoved: bool?,

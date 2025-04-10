@@ -1,5 +1,6 @@
 package net.yan100.compose.rds.crud.annotations
 
+import kotlin.test.assertNotNull
 import net.yan100.compose.rds.annotations.ACID
 import net.yan100.compose.rds.crud.entities.jpa.UserAccount
 import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertNotNull
 
 @Component
 class LaunchBean(private val repo: IUserAccountRepo) {
@@ -32,7 +32,7 @@ class LaunchBean(private val repo: IUserAccountRepo) {
   @Transactional(
     rollbackFor = [Exception::class],
     isolation = Isolation.SERIALIZABLE,
-    propagation = Propagation.REQUIRES_NEW
+    propagation = Propagation.REQUIRES_NEW,
   )
   fun throwTransactionalSave() {
     saveException()

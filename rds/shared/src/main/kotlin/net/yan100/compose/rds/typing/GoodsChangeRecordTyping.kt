@@ -14,24 +14,19 @@ import org.babyfish.jimmer.sql.EnumType
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class GoodsChangeRecordTyping(v: Int) : IntTyping {
   /** 无改动 */
-  @EnumItem(ordinal = 0)
-  NONE(0),
+  @EnumItem(ordinal = 0) NONE(0),
 
   /** 改价格 */
-  @EnumItem(ordinal = 1)
-  CHANGE_PRICE(1),
+  @EnumItem(ordinal = 1) CHANGE_PRICE(1),
 
   /** 改标题 */
-  @EnumItem(ordinal = 2)
-  CHANGE_TITLE(2);
+  @EnumItem(ordinal = 2) CHANGE_TITLE(2);
 
   override val value = v
 
   companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = entries.find { it.value == v }
+    @JvmStatic fun findVal(v: Int?) = entries.find { it.value == v }
 
-    @JvmStatic
-    fun get(v: Int?) = findVal(v)
+    @JvmStatic fun get(v: Int?) = findVal(v)
   }
 }

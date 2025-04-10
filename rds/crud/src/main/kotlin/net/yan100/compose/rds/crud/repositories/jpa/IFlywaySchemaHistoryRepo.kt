@@ -15,7 +15,7 @@ interface IFlywaySchemaHistoryRepo : IRepo<FlywaySchemaHistory> {
   @Modifying
   @Query("drop table if exists :name", nativeQuery = true)
   fun nativeDropTableForPostgresql(
-    name: string = FlywaySchemaHistory.TABLE_NAME,
+    name: string = FlywaySchemaHistory.TABLE_NAME
   )
 
   @Modifying

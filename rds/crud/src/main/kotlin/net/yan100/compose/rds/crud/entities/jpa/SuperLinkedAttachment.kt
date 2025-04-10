@@ -53,7 +53,7 @@ interface SuperLinkedAttachment : IJpaEntity {
     get() {
       val uri =
         base.baseUri?.let {
-          if (it.startsWith("/")) it.slice(1 .. it.length) else it
+          if (it.startsWith("/")) it.slice(1..it.length) else it
         } ?: ""
       val lastUri = if (uri.endsWith("/")) uri else "$uri/"
       val name = saveName

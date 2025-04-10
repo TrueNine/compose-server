@@ -21,7 +21,7 @@ class JimmerEntityDraftInterceptor :
   }
 
   override fun beforeSaveAll(
-    items: Collection<DraftInterceptor.Item<IJimmerEntity, IJimmerEntityDraft>>,
+    items: Collection<DraftInterceptor.Item<IJimmerEntity, IJimmerEntityDraft>>
   ) {
     for (it in items) {
       beforeSave(it.draft, it.original)

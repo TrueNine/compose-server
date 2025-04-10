@@ -1,14 +1,14 @@
 package net.yan100.compose.rds.service
 
+import kotlin.reflect.KClass
 import net.yan100.compose.holders.EventPublisherHolder
 import net.yan100.compose.rds.entities.IJpaEntity
 import net.yan100.compose.rds.entities.IJpaPersistentEntity
 import org.springframework.context.ApplicationEventPublisher
-import kotlin.reflect.KClass
 
 open class MergeEntityEventServiceDefaultImpl<T : IJpaEntity>(
   private val supportedTypes: List<KClass<out IJpaPersistentEntity>> =
-    emptyList(),
+    emptyList()
 ) : IMergeEntityEventService<T> {
   override val supportedMergeTypes: List<KClass<out IJpaPersistentEntity>>
     get() = this.supportedTypes

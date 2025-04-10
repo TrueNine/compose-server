@@ -1,11 +1,11 @@
 package net.yan100.compose.rds.domain
 
+import java.io.Serializable
 import net.yan100.compose.Id
 import net.yan100.compose.bool
 import net.yan100.compose.datetime
 import net.yan100.compose.i64
 import net.yan100.compose.string
-import java.io.Serializable
 
 open class PersistenceAuditTreeData(
   val leftNodeNo: i64?,

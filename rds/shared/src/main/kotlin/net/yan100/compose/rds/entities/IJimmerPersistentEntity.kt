@@ -17,7 +17,8 @@ interface IJimmerPersistentEntity {
   @JsonConverter(JimmerLongToStringConverter::class)
   @GeneratedValue(
     generatorRef =
-      JimmerSnowflakeLongIdGenerator.Companion.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME
+      JimmerSnowflakeLongIdGenerator.Companion
+        .JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME
   )
   val id: RefId
 }

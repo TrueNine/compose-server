@@ -47,11 +47,11 @@ interface IUserInfoRepo : IRepo<UserInfo> {
       if (!existsById(id)) false
       else
         listOf(
-          async { existsAllByIdAndIdCardIsNotNull(id) },
-          async { existsAllByIdAndPhoneIsNotNull(id) },
-          async { existsAllByIdAndFirstNameIsNotNull(id) },
-          async { existsAllByIdAndLastNameIsNotNull(id) },
-        )
+            async { existsAllByIdAndIdCardIsNotNull(id) },
+            async { existsAllByIdAndPhoneIsNotNull(id) },
+            async { existsAllByIdAndFirstNameIsNotNull(id) },
+            async { existsAllByIdAndLastNameIsNotNull(id) },
+          )
           .awaitAll()
           .all { it }
     }
@@ -91,8 +91,7 @@ interface IUserInfoRepo : IRepo<UserInfo> {
   )
   fun findUserIdById(id: RefId): RefId?
 
-  @Deprecated("可会查询出多个用户")
-  fun findByUserId(userId: RefId): UserInfo?
+  @Deprecated("可会查询出多个用户") fun findByUserId(userId: RefId): UserInfo?
 
   @Query(
     """
@@ -128,6 +127,5 @@ interface IUserInfoRepo : IRepo<UserInfo> {
 
   fun existsByWechatOpenid(wechatOpenId: String): Boolean
 
-  @ACID
-  fun deleteByPhone(phone: String): Int
+  @ACID fun deleteByPhone(phone: String): Int
 }

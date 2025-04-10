@@ -8,44 +8,35 @@ import org.babyfish.jimmer.sql.EnumType
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class CertPointTyping(private val v: Int) : IntTyping {
   /** 无要求 */
-  @EnumItem(ordinal = 0)
-  NONE(0),
+  @EnumItem(ordinal = 0) NONE(0),
 
   /** 正面 */
-  @EnumItem(ordinal = 1)
-  HEADS(1),
+  @EnumItem(ordinal = 1) HEADS(1),
 
   /** 反面 */
-  @EnumItem(ordinal = 2)
-  TAILS(2),
+  @EnumItem(ordinal = 2) TAILS(2),
 
   /** 双面 */
-  @EnumItem(ordinal = 3)
-  DOUBLE(3),
+  @EnumItem(ordinal = 3) DOUBLE(3),
 
   /** 所有 */
-  @EnumItem(ordinal = 4)
-  ALL(4),
+  @EnumItem(ordinal = 4) ALL(4),
 
   /** 所有内容 */
-  @EnumItem(ordinal = 5)
-  ALL_CONTENT(5),
+  @EnumItem(ordinal = 5) ALL_CONTENT(5),
 
   /**
    * 完整的
    *
    * 针对于视频，音频等等……
    */
-  @EnumItem(ordinal = 6)
-  INTACT(6);
+  @EnumItem(ordinal = 6) INTACT(6);
 
   override val value: Int = v
 
   companion object {
-    @JvmStatic
-    fun findVal(value: Int?) = entries.find { value == it.v }
+    @JvmStatic fun findVal(value: Int?) = entries.find { value == it.v }
 
-    @JvmStatic
-    operator fun get(v: Int?) = findVal(v)
+    @JvmStatic operator fun get(v: Int?) = findVal(v)
   }
 }

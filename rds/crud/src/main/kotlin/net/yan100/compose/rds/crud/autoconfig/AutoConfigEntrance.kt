@@ -7,10 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @EntityScan(
   basePackages =
-    [
-      "net.yan100.compose.rds.crud.entities",
-      "net.yan100.compose.rds.entities",
-    ]
+    ["net.yan100.compose.rds.crud.entities", "net.yan100.compose.rds.entities"]
 )
 @EnableJpaRepositories(
   basePackages = ["net.yan100.compose.rds.crud.repositories.jpa"]

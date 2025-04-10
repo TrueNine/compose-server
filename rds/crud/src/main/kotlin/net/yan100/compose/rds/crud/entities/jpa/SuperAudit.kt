@@ -31,6 +31,5 @@ interface SuperAudit : IJpaEntity {
   var createDatetime: datetime
 
   /** 审核状态 */
-  @get:Convert(converter = AuditTypingConverter::class)
-  var state: AuditTyping
+  @get:Convert(converter = AuditTypingConverter::class) var state: AuditTyping
 }

@@ -1,6 +1,8 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.Convert
+import java.math.BigDecimal
+import java.time.LocalDate
 import net.yan100.compose.RefId
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.crud.converters.BloodTypingConverter
@@ -10,8 +12,6 @@ import net.yan100.compose.rds.typing.BloodTyping
 import net.yan100.compose.rds.typing.DegreeTyping
 import net.yan100.compose.rds.typing.GenderTyping
 import net.yan100.compose.string
-import java.math.BigDecimal
-import java.time.LocalDate
 
 @MetaDef
 interface SuperHouseholdCert : IJpaEntity {

@@ -35,7 +35,7 @@ class JimmerAutoConfiguration {
       ]
   )
   fun userSnowflakeStringIdGenerator(
-    snowflake: ISnowflakeGenerator,
+    snowflake: ISnowflakeGenerator
   ): JimmerSnowflakeStringIdGenerator {
     val e = JimmerSnowflakeStringIdGenerator(snowflake)
     log.trace(
@@ -52,7 +52,7 @@ class JimmerAutoConfiguration {
   )
   @ConditionalOnMissingBean
   fun userSnowflakeLongIdGenerator(
-    snowflake: ISnowflakeGenerator,
+    snowflake: ISnowflakeGenerator
   ): JimmerSnowflakeLongIdGenerator {
     val e = JimmerSnowflakeLongIdGenerator(snowflake)
     log.trace(

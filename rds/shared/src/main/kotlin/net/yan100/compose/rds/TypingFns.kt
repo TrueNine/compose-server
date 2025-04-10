@@ -8,7 +8,7 @@ import net.yan100.compose.typing.StringTyping
 /** # int 枚举转换器 */
 @Converter
 class IntTypingConverterDelegate<T : IntTyping?>(
-  private val searchValueFn: (b: Int?) -> T?,
+  private val searchValueFn: (b: Int?) -> T?
 ) : AttributeConverter<T, Int?> {
   override fun convertToDatabaseColumn(attribute: T?): Int? = attribute?.value
 
@@ -19,7 +19,7 @@ class IntTypingConverterDelegate<T : IntTyping?>(
 /** # string 枚举转换器 */
 @Converter
 class StringTypingConverterDelegate<T : StringTyping?>(
-  private val searchValueFn: (b: String?) -> T?,
+  private val searchValueFn: (b: String?) -> T?
 ) : AttributeConverter<T, String?> {
   override fun convertToDatabaseColumn(attribute: T?): String? =
     attribute?.value
@@ -29,13 +29,13 @@ class StringTypingConverterDelegate<T : StringTyping?>(
 }
 
 fun <T : IntTyping?> intTyping(
-  c: (b: Int?) -> T?,
+  c: (b: Int?) -> T?
 ): IntTypingConverterDelegate<T> {
   return IntTypingConverterDelegate(c)
 }
 
 fun <T : StringTyping> stringTyping(
-  c: (b: String?) -> T?,
+  c: (b: String?) -> T?
 ): StringTypingConverterDelegate<T> {
   return StringTypingConverterDelegate(c)
 }

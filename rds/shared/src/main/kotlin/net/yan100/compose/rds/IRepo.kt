@@ -24,8 +24,7 @@ interface IRepo<T : IJpaEntity> :
   @Query("from #{#entityName} e order by e.id desc, e.mrd desc")
   fun findAllOrderByIdDesc(): List<T>
 
-  @Query(findAllOrderByIdDesc)
-  fun findAllOrderByIdDesc(page: Pageable): Page<T>
+  @Query(findAllOrderByIdDesc) fun findAllOrderByIdDesc(page: Pageable): Page<T>
 
   /**
    * ## 重写的 findAll 方法
