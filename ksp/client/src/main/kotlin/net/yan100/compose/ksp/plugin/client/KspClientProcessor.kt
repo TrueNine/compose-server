@@ -10,6 +10,8 @@ import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.validate
+import java.io.OutputStreamWriter
+import java.util.*
 import net.yan100.compose.ksp.fastResolve
 import net.yan100.compose.ksp.kotlinpoet.Libs
 import net.yan100.compose.ksp.qualifiedNameAsString
@@ -21,8 +23,6 @@ import net.yan100.compose.meta.client.ClientApiStubs
 import net.yan100.compose.meta.client.ClientOperation
 import net.yan100.compose.meta.client.ClientParameter
 import net.yan100.compose.meta.client.ClientService
-import java.io.OutputStreamWriter
-import java.util.*
 
 class KspClientProcessor(
   private val environment: SymbolProcessorEnvironment,
@@ -94,59 +94,59 @@ class KspClientProcessor(
         .map { (c, e) ->
           val opts =
             e.map { operation ->
-              val returnTypeName =
-                operation.returnType!!
-                  .fastResolve()
-                  .declaration
-                  .qualifiedNameAsString!!
-              val returnType =
-                if (returnTypeName == "kotlin.Unit") null
-                else
-                  handler.getCopyClientTypeToReturnType(returnTypeName)?.run {
-                    val isNull =
-                      operation.returnType?.fastResolve()?.isMarkedNullable
-                    copy(
-                      nullable = if (isNull == true) true else null,
-                      usedGenerics =
-                        operation.returnType
-                          ?.fastResolve()
-                          ?.arguments
-                          ?.toUsedGenerics()
-                          ?.toMutableList() ?: mutableListOf(),
-                    )
-                  }
-              val params =
-                operation.parameters
-                  .map { parameter ->
-                    val typeResolver = parameter.type.fastResolve()
-                    val type =
-                      handler.getCopyClientTypeToReturnType(
-                        typeResolver.declaration.qualifiedNameAsString!!
-                      )!!
-                    val inputGenerics =
-                      typeResolver.arguments.toUsedGenerics().toMutableList()
-                    ClientParameter(
-                      name = parameter.name!!.asString(),
-                      typeName = type.typeName,
-                      nullable =
-                        if (typeResolver.isMarkedNullable) true else null,
-                      usedGenerics = inputGenerics,
-                    )
-                  }
-                  .toMutableList()
-              val pK = params.joinToString(":") { p -> p.typeName }
+                val returnTypeName =
+                  operation.returnType!!
+                    .fastResolve()
+                    .declaration
+                    .qualifiedNameAsString!!
+                val returnType =
+                  if (returnTypeName == "kotlin.Unit") null
+                  else
+                    handler.getCopyClientTypeToReturnType(returnTypeName)?.run {
+                      val isNull =
+                        operation.returnType?.fastResolve()?.isMarkedNullable
+                      copy(
+                        nullable = if (isNull == true) true else null,
+                        usedGenerics =
+                          operation.returnType
+                            ?.fastResolve()
+                            ?.arguments
+                            ?.toUsedGenerics()
+                            ?.toMutableList() ?: mutableListOf(),
+                      )
+                    }
+                val params =
+                  operation.parameters
+                    .map { parameter ->
+                      val typeResolver = parameter.type.fastResolve()
+                      val type =
+                        handler.getCopyClientTypeToReturnType(
+                          typeResolver.declaration.qualifiedNameAsString!!
+                        )!!
+                      val inputGenerics =
+                        typeResolver.arguments.toUsedGenerics().toMutableList()
+                      ClientParameter(
+                        name = parameter.name!!.asString(),
+                        typeName = type.typeName,
+                        nullable =
+                          if (typeResolver.isMarkedNullable) true else null,
+                        usedGenerics = inputGenerics,
+                      )
+                    }
+                    .toMutableList()
+                val pK = params.joinToString(":") { p -> p.typeName }
 
-              val key =
-                "${c.qualifiedNameAsString!!}#${operation.simpleNameAsString}::${pK}"
+                val key =
+                  "${c.qualifiedNameAsString!!}#${operation.simpleNameAsString}::${pK}"
 
-              ClientOperation(
-                name = operation.simpleNameAsString,
-                key = key,
-                doc = operation.docString.toDoc(),
-                params = params,
-                returnType = returnType,
-              )
-            }
+                ClientOperation(
+                  name = operation.simpleNameAsString,
+                  key = key,
+                  doc = operation.docString.toDoc(),
+                  params = params,
+                  returnType = returnType,
+                )
+              }
               .toMutableList()
 
           ClientService(

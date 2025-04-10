@@ -20,7 +20,8 @@ import net.yan100.compose.ksp.simpleNameAsString
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
 
-class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
+class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) :
+  SymbolProcessor {
   private fun <D : KSDeclaration> getCtxData(
     declaration: D,
     resolver: Resolver,
@@ -32,12 +33,17 @@ class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) : 
   override fun process(resolver: Resolver): List<KSAnnotated> {
     val nextSymbols = mutableSetOf<KSAnnotated>()
     val options = environment.options
-    val enableJpa = options["net.yan100.compose.ksp.plugin.generateJpa"]?.toBooleanStrictOrNull() == true
+    val enableJpa =
+      options["net.yan100.compose.ksp.plugin.generateJpa"]
+        ?.toBooleanStrictOrNull() == true
 
     if (enableJpa) nextSymbols += jpaGenerate(resolver)
 
-    resolver.getPackagesWithAnnotation("org.springframework.stereotype.Repository").filterIsInstance<KSClassDeclaration>()
-      .filter { it.classKind == ClassKind.INTERFACE }.forEach {
+    resolver
+      .getPackagesWithAnnotation("org.springframework.stereotype.Repository")
+      .filterIsInstance<KSClassDeclaration>()
+      .filter { it.classKind == ClassKind.INTERFACE }
+      .forEach {
         getCtxData(it, resolver).accept(RepositoryIPageExtensionsVisitor())
       }
     return nextSymbols.toList()
@@ -45,15 +51,28 @@ class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) : 
 
   @OptIn(KspExperimental::class)
   fun jpaGenerate(resolver: Resolver): Sequence<KSAnnotated> {
-    val lis = resolver.getSymbolsWithAnnotation("jakarta.persistence.EntityListener").filterIsInstance<KSDeclaration>().firstOrNull()
-      ?.let { it.annotations.firstOrNull()?.toAnnotationSpec() }
-    val jpaSymbols = resolver.getSymbolsWithAnnotation(
-      "net.yan100.compose.meta.annotations.MetaDef"
-    )
-    jpaSymbols.filter { it.validate() }.filterIsInstance<KSClassDeclaration>().filter { !it.isAnnotationPresent(MetaSkipGeneration::class) }
-      .filter { it.getDeclaredProperties().toList().isNotEmpty() }.filter { !it.isCompanionObject }.filter { it.simpleNameAsString.startsWith("Super") }
-      .filterNot { it.simpleNameAsString.contains("$") }.filter { it.getAnnotationsByType(MetaDef::class).toList().isNotEmpty() }
+    val lis =
+      resolver
+        .getSymbolsWithAnnotation("jakarta.persistence.EntityListener")
+        .filterIsInstance<KSDeclaration>()
+        .firstOrNull()
+        ?.let { it.annotations.firstOrNull()?.toAnnotationSpec() }
+    val jpaSymbols =
+      resolver.getSymbolsWithAnnotation(
+        "net.yan100.compose.meta.annotations.MetaDef"
+      )
+    jpaSymbols
+      .filter { it.validate() }
+      .filterIsInstance<KSClassDeclaration>()
+      .filter { !it.isAnnotationPresent(MetaSkipGeneration::class) }
+      .filter { it.getDeclaredProperties().toList().isNotEmpty() }
+      .filter { !it.isCompanionObject }
+      .filter { it.simpleNameAsString.startsWith("Super") }
+      .filterNot { it.simpleNameAsString.contains("$") }
+      .filter { it.getAnnotationsByType(MetaDef::class).toList().isNotEmpty() }
       .forEach { getCtxData(it, resolver).accept(JpaNameClassVisitor(lis)) }
-    return resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef").filter { !it.validate() }
+    return resolver
+      .getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
+      .filter { !it.validate() }
   }
 }

@@ -36,13 +36,13 @@ fun <T : Annotation> KSAnnotation.toAnnotation(annotationClass: Class<T>): T {
 @KspExperimental
 @Suppress("TooGenericExceptionCaught")
 private fun KSAnnotation.createInvocationHandler(
-  clazz: Class<*>,
+  clazz: Class<*>
 ): InvocationHandler {
   val cache = ConcurrentHashMap<Pair<Class<*>, Any>, Any>(arguments.size)
   return InvocationHandler { proxy, method, _ ->
     if (
       method.name == "toString" &&
-      arguments.none { it.name?.asString() == "toString" }
+        arguments.none { it.name?.asString() == "toString" }
     ) {
       clazz.canonicalName +
         arguments

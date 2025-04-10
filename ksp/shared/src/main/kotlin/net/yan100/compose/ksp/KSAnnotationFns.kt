@@ -10,14 +10,14 @@ inline fun <reified A : Annotation> KSAnnotation.isAnnotationByKClass():
   val c = A::class
   return shortName.getShortName() == c.simpleName &&
     annotationType.fastResolve().declaration.qualifiedName?.asString() ==
-    c.qualifiedName
+      c.qualifiedName
 }
 
 val KSAnnotation.simpleName
   get() = shortName.getShortName()
 
 fun KSAnnotation.isAnnotationByKClassQualifiedName(
-  qualifiedName: String,
+  qualifiedName: String
 ): Boolean {
   if (qualifiedName.isBlank()) return false
   val simpleName = qualifiedName.substringAfterLast(".")
@@ -27,7 +27,7 @@ fun KSAnnotation.isAnnotationByKClassQualifiedName(
 }
 
 fun <A : Annotation> KSAnnotation.isAnnotationByKClass(
-  annotationKClass: KClass<A>,
+  annotationKClass: KClass<A>
 ): Boolean {
   val qName = annotationKClass.qualifiedName
   if (qName.isNullOrBlank()) return false
@@ -36,7 +36,7 @@ fun <A : Annotation> KSAnnotation.isAnnotationByKClass(
 
 @OptIn(KspExperimental::class)
 fun Sequence<KSAnnotation>.matchAnnotationByTarget(
-  vararg targets: AnnotationTarget,
+  vararg targets: AnnotationTarget
 ) = filter { ksAnno ->
   val target =
     ksAnno.annotationType.getAnnotationsByType(Target::class).firstOrNull()
@@ -45,7 +45,7 @@ fun Sequence<KSAnnotation>.matchAnnotationByTarget(
 
 @OptIn(KspExperimental::class)
 fun KSAnnotation.matchAnnotationByTarget(
-  vararg targets: AnnotationTarget,
+  vararg targets: AnnotationTarget
 ): Boolean {
   val target = annotationType.getAnnotationsByType(Target::class).firstOrNull()
   return target?.allowedTargets?.any { it in targets } == true

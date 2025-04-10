@@ -22,15 +22,15 @@ fun KSDeclaration.toClientType(log: KSPLogger? = null): ClientType {
       is KSClassDeclaration -> {
         if (
           getKsAnnotationsByAnnotationClassQualifiedName(
-            Libs.org.babyfish.jimmer.sql.Entity.qualifiedName
-          )
+              Libs.org.babyfish.jimmer.sql.Entity.qualifiedName
+            )
             .firstOrNull() != null
         ) {
           TypeKind.IMMUTABLE
         } else if (
           getKsAnnotationsByAnnotationClassQualifiedName(
-            Libs.org.babyfish.jimmer.sql.Embeddable.qualifiedName
-          )
+              Libs.org.babyfish.jimmer.sql.Embeddable.qualifiedName
+            )
             .firstOrNull() != null
         ) {
           TypeKind.EMBEDDABLE

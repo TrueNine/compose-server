@@ -9,7 +9,7 @@ class KDocSpecScope(override val fileBuilder: FileSpec.Builder) :
   private val cb: CodeBlock.Builder = CodeBlock.builder()
 
   private fun addTitleFormat(title: String, count: Int = 1, vararg args: Any) {
-    for (i in 1 .. count) cb.add("#")
+    for (i in 1..count) cb.add("#")
     cb.add(" $title", args)
   }
 

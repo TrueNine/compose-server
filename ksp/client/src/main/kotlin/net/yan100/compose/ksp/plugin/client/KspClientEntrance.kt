@@ -8,7 +8,7 @@ import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
 class KspClientEntrance : SymbolProcessorProvider {
   override fun create(
-    environment: SymbolProcessorEnvironment,
+    environment: SymbolProcessorEnvironment
   ): SymbolProcessor {
     val mapper = ObjectMapper()
     mapper.enable(

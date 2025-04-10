@@ -67,7 +67,7 @@ class PropertyHandler(
   }
 
   private fun handlePropertyDeclaration(
-    propertyDeclaration: KSPropertyDeclaration,
+    propertyDeclaration: KSPropertyDeclaration
   ): ClientProp {
     val type = propertyDeclaration.type.fastResolve()
     val name = type.declaration.qualifiedNameAsString!!
@@ -77,8 +77,7 @@ class PropertyHandler(
     if (!results.containsKey(name)) {
       when (val d = type.declaration) {
         is KSClassDeclaration,
-        is KSTypeAlias,
-          -> {
+        is KSTypeAlias -> {
           if (parentDeclaration != type.declaration && parentName != name) {
             handleClassDeclaration(d)
           }
@@ -88,12 +87,11 @@ class PropertyHandler(
     type.arguments.toDeclarations().forEach {
       when (it) {
         is KSClassDeclaration,
-        is KSTypeAlias,
-          -> {
+        is KSTypeAlias -> {
           if (
             parentDeclaration != type.declaration &&
-            parentName != name &&
-            !results.containsKey(name)
+              parentName != name &&
+              !results.containsKey(name)
           ) {
             handleClassDeclaration(it)
           }
