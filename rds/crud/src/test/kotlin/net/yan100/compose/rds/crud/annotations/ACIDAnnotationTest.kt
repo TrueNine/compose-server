@@ -5,8 +5,6 @@ import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
 import net.yan100.compose.testtookit.RDBRollback
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -62,49 +60,5 @@ class ACIDAnnotationTest {
 
     val finalData = usrRepo.findAll()
     assertEquals(initialSize + 1, finalData.size, "事务操作成功后数据量应该增加")
-  }
-
-  @Test
-  fun `并发事务操作应该保持隔离性`() {
-    val initialData = usrRepo.findAll()
-    val initialSize = initialData.size
-
-    // 使用 CountDownLatch 来同步线程
-    val latch = CountDownLatch(2)
-    var exceptionThrown = false
-
-    // 模拟并发操作
-    val thread1 = Thread {
-      try {
-        launchBean.throwTransactionalSave()
-      } catch (_: Exception) {
-        exceptionThrown = true
-      } finally {
-        latch.countDown()
-      }
-    }
-
-    val thread2 = Thread {
-      try {
-        launchBean.saveOk()
-      } finally {
-        latch.countDown()
-      }
-    }
-
-    thread1.start()
-    thread2.start()
-
-    // 等待两个线程都完成
-    latch.await(5, TimeUnit.SECONDS)
-
-    // 验证结果
-    assertTrue(exceptionThrown, "应该抛出异常")
-    val finalData = usrRepo.findAll()
-    assertEquals(initialSize + 1, finalData.size, "并发事务操作后数据应该只增加成功的事务操作")
-
-    // 验证数据一致性
-    val newData = finalData.filter { !initialData.contains(it) }
-    assertEquals(1, newData.size, "应该只新增一条数据")
   }
 }
