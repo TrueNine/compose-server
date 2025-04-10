@@ -1,9 +1,9 @@
 package net.yan100.compose.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import net.yan100.compose.Pq
 import java.beans.Transient
 import java.io.Serializable
+import net.yan100.compose.Pq
 
 /**
  * ## 计算总页数
@@ -141,15 +141,13 @@ interface IPage<T : Any?> : IPageLike<T> {
     fun <T : Any> one(data: T?): IPage<T> =
       if (data != null) get(listOf(data)) else emptyWith<T>()
 
-    @JvmStatic
-    fun <T : Any> emptyWith(): IPage<T> = get(emptyList())
+    @JvmStatic fun <T : Any> emptyWith(): IPage<T> = get(emptyList())
 
     @JvmStatic
     fun <T : Any> unPage(dataList: Collection<T>): IPage<T> {
       return DefaultPageResult(null, dataList, dataList.size.toLong(), null, 1)
     }
 
-    @JvmStatic
-    fun empty(): IPage<*> = emptyWith<Any>()
+    @JvmStatic fun empty(): IPage<*> = emptyWith<Any>()
   }
 }

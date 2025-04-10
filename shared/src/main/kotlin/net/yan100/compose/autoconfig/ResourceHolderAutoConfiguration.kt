@@ -12,7 +12,7 @@ class ResourceHolderAutoConfiguration(private val p: DataLoadProperties) {
 
   @Bean
   fun resourceHolder(
-    defaultResourceLoader: DefaultResourceLoader,
+    defaultResourceLoader: DefaultResourceLoader
   ): ResourceHolder {
     val home = ApplicationHome()
     val res = ResourceHolder(home, defaultResourceLoader, p)

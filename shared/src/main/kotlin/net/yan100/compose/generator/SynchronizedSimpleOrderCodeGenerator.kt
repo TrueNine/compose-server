@@ -1,10 +1,10 @@
 package net.yan100.compose.generator
 
-import net.yan100.compose.datetime
 import java.time.format.DateTimeFormatter
+import net.yan100.compose.datetime
 
 class SynchronizedSimpleOrderCodeGenerator(
-  private val snowflake: ISnowflakeGenerator,
+  private val snowflake: ISnowflakeGenerator
 ) : IOrderCodeGenerator {
   private val dateTimeFormatter =
     DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")

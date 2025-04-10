@@ -1,8 +1,8 @@
 package net.yan100.compose.domain
 
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.decimal
 import java.io.Serializable
+import net.yan100.compose.decimal
 
 /**
  * # 地址定位模型

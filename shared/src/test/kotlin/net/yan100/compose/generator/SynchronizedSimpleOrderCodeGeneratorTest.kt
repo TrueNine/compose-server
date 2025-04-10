@@ -1,5 +1,13 @@
 package net.yan100.compose.generator
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -9,14 +17,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @SpringBootTest
 class SynchronizedSimpleOrderCodeGeneratorTest {
@@ -110,7 +110,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     val ids = ConcurrentHashMap.newKeySet<String>()
 
     val deferreds =
-      (1 .. coroutineCount).map {
+      (1..coroutineCount).map {
         async(Dispatchers.Default) {
           repeat(idsPerCoroutine) {
             val id = generator.nextString()

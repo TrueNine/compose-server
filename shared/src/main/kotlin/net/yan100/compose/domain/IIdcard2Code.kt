@@ -1,10 +1,10 @@
 package net.yan100.compose.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import net.yan100.compose.consts.IRegexes
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.*
+import net.yan100.compose.consts.IRegexes
 
 /** # 二代身份证代码 */
 interface IIdcard2Code {
@@ -42,8 +42,7 @@ interface IIdcard2Code {
       DefaultIdcard2Code(idcard2Code.uppercase())
   }
 
-  @get:JsonIgnore
-  val idcard2Code: String
+  @get:JsonIgnore val idcard2Code: String
 
   @get:JsonIgnore
   val idcardBirthday: LocalDate
@@ -70,9 +69,9 @@ interface IIdcard2Code {
   val idcardRecommendAvailabilityYear: Int
     get() {
       return when (idcardAge) {
-        in 0 .. 16 -> 5
-        in 17 .. 25 -> 10
-        in 26 .. 45 -> 20
+        in 0..16 -> 5
+        in 17..25 -> 10
+        in 26..45 -> 20
         else -> -1
       }
     }

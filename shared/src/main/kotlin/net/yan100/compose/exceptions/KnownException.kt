@@ -18,8 +18,7 @@ open class KnownException(
   private var code: Int? = HttpStatusTyping.UNKNOWN.code,
 ) : RuntimeException(msg, metaException) {
 
-  @Deprecated("过于泛用，不建议使用")
-  open fun getMeta() = this.metaException
+  @Deprecated("过于泛用，不建议使用") open fun getMeta() = this.metaException
 
   @Deprecated("过于泛用，不建议使用")
   open fun setMeta(ex: Throwable?) {
@@ -31,11 +30,9 @@ open class KnownException(
     this.msg = msg
   }
 
-  @Deprecated("过于泛用，不建议使用")
-  open fun getMsg() = this.msg
+  @Deprecated("过于泛用，不建议使用") open fun getMsg() = this.msg
 
-  @Deprecated("过于泛用，不建议使用")
-  open fun getCode() = this.code
+  @Deprecated("过于泛用，不建议使用") open fun getCode() = this.code
 
   @Deprecated("过于泛用，不建议使用")
   open fun setCode(code: Int?) {

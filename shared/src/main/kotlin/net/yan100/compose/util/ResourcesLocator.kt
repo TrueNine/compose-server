@@ -1,6 +1,5 @@
 package net.yan100.compose.util
 
-import net.yan100.compose.IString
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -14,6 +13,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
+import net.yan100.compose.IString
 
 /**
  * 系统资源定位器

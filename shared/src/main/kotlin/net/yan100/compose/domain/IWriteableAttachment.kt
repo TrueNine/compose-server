@@ -1,8 +1,8 @@
 package net.yan100.compose.domain
 
+import java.io.OutputStream
 import net.yan100.compose.bool
 import net.yan100.compose.i64
-import java.io.OutputStream
 
 interface IWriteableAttachment {
   val name: String

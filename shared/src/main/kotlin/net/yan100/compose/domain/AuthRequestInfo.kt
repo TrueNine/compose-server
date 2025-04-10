@@ -1,7 +1,7 @@
 package net.yan100.compose.domain
 
-import net.yan100.compose.RefId
 import java.util.concurrent.CopyOnWriteArrayList
+import net.yan100.compose.RefId
 
 /**
  * security校验所需的用户身份

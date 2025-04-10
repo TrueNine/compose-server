@@ -3,9 +3,9 @@ package net.yan100.compose.domain
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.io.Serializable
 import net.yan100.compose.bool
 import net.yan100.compose.i32
-import java.io.Serializable
 
 /** ## 一个默认分页实现 */
 class DefaultPageParam

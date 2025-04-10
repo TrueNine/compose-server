@@ -1,9 +1,9 @@
 package net.yan100.compose.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.util.*
 import net.yan100.compose.consts.IRegexes
 import net.yan100.compose.string
-import java.util.*
 
 /** 二代残疾证代码 */
 interface IDisCode : IIdcard2Code {
@@ -16,8 +16,7 @@ interface IDisCode : IIdcard2Code {
     }
 
     companion object {
-      @Transient
-      private val idCardRegex = IRegexes.CHINA_DIS_CARD.toRegex()
+      @Transient private val idCardRegex = IRegexes.CHINA_DIS_CARD.toRegex()
     }
 
     override fun hashCode(): Int = Objects.hashCode(disCode)
@@ -48,8 +47,7 @@ interface IDisCode : IIdcard2Code {
     get() = disCode.substring(19, 20).toInt()
 
   /** ## 残疾证号 */
-  @get:JsonIgnore
-  val disCode: string
+  @get:JsonIgnore val disCode: string
 
   /**
    * ## 是否补办过

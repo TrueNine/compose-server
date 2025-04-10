@@ -1,8 +1,8 @@
 package net.yan100.compose.domain
 
-import net.yan100.compose.Pr
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import net.yan100.compose.Pr
 
 class IPageTest {
   @Test

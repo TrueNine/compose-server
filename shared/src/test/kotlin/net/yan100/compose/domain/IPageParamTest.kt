@@ -1,6 +1,10 @@
 package net.yan100.compose.domain
 
 import jakarta.annotation.Resource
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import net.yan100.compose.Pq
 import net.yan100.compose.bool
 import net.yan100.compose.i32
@@ -8,10 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @AutoConfigureMockMvc
 @SpringBootTest

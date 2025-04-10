@@ -2,7 +2,6 @@ package net.yan100.compose
 
 import kotlin.contracts.ExperimentalContracts
 
-
 inline fun Long.isId(): Boolean {
   return this > 0L
 }

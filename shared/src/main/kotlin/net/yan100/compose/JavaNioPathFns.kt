@@ -1,6 +1,5 @@
 package net.yan100.compose
 
-import net.yan100.compose.domain.IPage
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
@@ -10,6 +9,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
+import net.yan100.compose.domain.IPage
 
 const val capacity = 8192
 private val lineSep: String = System.lineSeparator()
@@ -43,10 +43,10 @@ fun Path.sliceLines(
     fileChannel().use { channel ->
       val first = sliceRange.first.toSafeInt()
       countWordBySeparator(
-        sep = sep,
-        bufferCapacity = bufferCapacity,
-        charset = charset,
-      )
+          sep = sep,
+          bufferCapacity = bufferCapacity,
+          charset = charset,
+        )
         .drop(first)
         .take(sliceRange.last.toSafeInt() - sliceRange.first.toSafeInt())
         .map {
@@ -140,11 +140,11 @@ fun Path.pageLines(
     val range = p.toLongRange()
     val dataList =
       sliceLines(
-        range = range,
-        totalLines = total,
-        sep = sep,
-        charset = charset,
-      )
+          range = range,
+          totalLines = total,
+          sep = sep,
+          charset = charset,
+        )
         .toList()
     return Pr[dataList, total, p]
   }

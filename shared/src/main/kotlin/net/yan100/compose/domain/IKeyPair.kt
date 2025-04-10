@@ -1,10 +1,10 @@
 package net.yan100.compose.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import net.yan100.compose.typing.EncryptAlgorithmTyping
 import java.io.Serializable
 import java.security.PrivateKey
 import java.security.PublicKey
+import net.yan100.compose.typing.EncryptAlgorithmTyping
 
 interface IKeyPair : Serializable {
   val publicKey: PublicKey
