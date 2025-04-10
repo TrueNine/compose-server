@@ -10,6 +10,9 @@ import io.minio.ObjectWriteResponse
 import io.minio.PutObjectArgs
 import io.minio.RemoveObjectArgs
 import io.minio.SetBucketPolicyArgs
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import net.yan100.compose.consts.IHeaders
 import net.yan100.compose.oss.FileArgs
 import net.yan100.compose.oss.InMap
@@ -19,9 +22,6 @@ import net.yan100.compose.oss.OutMap
 import net.yan100.compose.oss.S3PolicyCreator
 import net.yan100.compose.slf4j
 import okhttp3.Headers
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
 /**
  * oss 的 minio 实现
@@ -206,12 +206,11 @@ class MinioClientWrapper(
       }
 
   companion object {
-    @JvmStatic
-    private val log = slf4j<MinioClientWrapper>()
+    @JvmStatic private val log = slf4j<MinioClientWrapper>()
   }
 
   override fun fetchAllObjectNameByBucketName(
-    bucketName: String,
+    bucketName: String
   ): List<String> {
     if (!existsBucketByName(bucketName)) return listOf()
     return client

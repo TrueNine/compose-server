@@ -20,8 +20,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class MinioAutoConfiguration {
   companion object {
-    @JvmStatic
-    private val log = slf4j(MinioAutoConfiguration::class)
+    @JvmStatic private val log = slf4j(MinioAutoConfiguration::class)
   }
 
   @Bean
