@@ -1,7 +1,7 @@
-package net.yan100.compose.oss.common
+package net.yan100.compose.oss
 
-import net.yan100.compose.core.i64
-import net.yan100.compose.core.typing.MimeTypes
+import net.yan100.compose.i64
+import net.yan100.compose.typing.MimeTypes
 
 /**
  * ## oss bucket -> object 参数表示

@@ -1,11 +1,11 @@
 package net.yan100.compose.oss.minio.autoconfig
 
 import io.minio.MinioClient
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.oss.common.Oss
-import net.yan100.compose.oss.common.properties.OssProperties
+import net.yan100.compose.oss.Oss
 import net.yan100.compose.oss.minio.MinioClientWrapper
 import net.yan100.compose.oss.minio.properties.MinioProperties
+import net.yan100.compose.oss.properties.OssProperties
+import net.yan100.compose.slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class MinioAutoConfiguration {
   companion object {
-    @JvmStatic private val log = slf4j(MinioAutoConfiguration::class)
+    @JvmStatic
+    private val log = slf4j(MinioAutoConfiguration::class)
   }
 
   @Bean

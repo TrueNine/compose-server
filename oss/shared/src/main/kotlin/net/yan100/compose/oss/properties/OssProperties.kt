@@ -1,4 +1,4 @@
-package net.yan100.compose.oss.common.properties
+package net.yan100.compose.oss.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

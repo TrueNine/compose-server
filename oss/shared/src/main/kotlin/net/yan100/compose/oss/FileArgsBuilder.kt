@@ -1,4 +1,4 @@
-package net.yan100.compose.oss.common
+package net.yan100.compose.oss
 
 @Deprecated("不建议使用 builder API")
 class FileArgsBuilder(private var internalFileArgs: FileArgs = FileArgs()) {

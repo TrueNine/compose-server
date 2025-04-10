@@ -1,4 +1,4 @@
-package net.yan100.compose.oss.common
+package net.yan100.compose.oss
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper

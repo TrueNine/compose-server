@@ -1,4 +1,4 @@
-package net.yan100.compose.oss.common
+package net.yan100.compose.oss
 
 import java.io.IOException
 import java.io.InputStream
@@ -17,7 +17,8 @@ interface Oss {
 
   fun existsBucketByName(bucketName: String): Boolean
 
-  @Deprecated("java api") fun removeObject(objectInfo: FileArgs): Boolean
+  @Deprecated("java api")
+  fun removeObject(objectInfo: FileArgs): Boolean
 
   fun removeObject(info: ObjectArgs)
 

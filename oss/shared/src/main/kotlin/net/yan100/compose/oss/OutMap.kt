@@ -1,4 +1,4 @@
-package net.yan100.compose.oss.common
+package net.yan100.compose.oss
 
 import java.io.OutputStream
 

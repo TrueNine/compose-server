@@ -1,4 +1,4 @@
-package net.yan100.compose.oss.common
+package net.yan100.compose.oss
 
 @Deprecated("不建议使用 builder")
 class FileArgs {
@@ -8,6 +8,7 @@ class FileArgs {
   var size: Long = 0L
 
   companion object {
-    @JvmStatic fun builder(): FileArgsBuilder = FileArgsBuilder()
+    @JvmStatic
+    fun builder(): FileArgsBuilder = FileArgsBuilder()
   }
 }

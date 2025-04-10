@@ -1,7 +1,7 @@
-package net.yan100.compose.oss.common.autoconfig
+package net.yan100.compose.oss.autoconfig
 
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.oss.common.properties.OssProperties
+import net.yan100.compose.oss.properties.OssProperties
+import net.yan100.compose.slf4j
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 

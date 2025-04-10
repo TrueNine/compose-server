@@ -10,18 +10,18 @@ import io.minio.ObjectWriteResponse
 import io.minio.PutObjectArgs
 import io.minio.RemoveObjectArgs
 import io.minio.SetBucketPolicyArgs
+import net.yan100.compose.consts.IHeaders
+import net.yan100.compose.oss.FileArgs
+import net.yan100.compose.oss.InMap
+import net.yan100.compose.oss.ObjectArgs
+import net.yan100.compose.oss.Oss
+import net.yan100.compose.oss.OutMap
+import net.yan100.compose.oss.S3PolicyCreator
+import net.yan100.compose.slf4j
+import okhttp3.Headers
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import net.yan100.compose.core.consts.IHeaders
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.oss.common.FileArgs
-import net.yan100.compose.oss.common.InMap
-import net.yan100.compose.oss.common.ObjectArgs
-import net.yan100.compose.oss.common.Oss
-import net.yan100.compose.oss.common.OutMap
-import net.yan100.compose.oss.common.S3PolicyCreator
-import okhttp3.Headers
 
 /**
  * oss 的 minio 实现
@@ -206,11 +206,12 @@ class MinioClientWrapper(
       }
 
   companion object {
-    @JvmStatic private val log = slf4j<MinioClientWrapper>()
+    @JvmStatic
+    private val log = slf4j<MinioClientWrapper>()
   }
 
   override fun fetchAllObjectNameByBucketName(
-    bucketName: String
+    bucketName: String,
   ): List<String> {
     if (!existsBucketByName(bucketName)) return listOf()
     return client
