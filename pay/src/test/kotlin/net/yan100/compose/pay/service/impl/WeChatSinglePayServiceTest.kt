@@ -1,13 +1,13 @@
 package net.yan100.compose.pay.service.impl
 
 import jakarta.annotation.Resource
-import java.math.BigDecimal
-import kotlin.test.Ignore
-import kotlin.test.Test
-import net.yan100.compose.core.generator.IOrderCodeGenerator
+import net.yan100.compose.generator.IOrderCodeGenerator
 import net.yan100.compose.pay.service.SinglePayService
 import net.yan100.compose.testtookit.log
 import org.springframework.boot.test.context.SpringBootTest
+import java.math.BigDecimal
+import kotlin.test.Ignore
+import kotlin.test.Test
 
 @Ignore
 @SpringBootTest

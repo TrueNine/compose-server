@@ -3,11 +3,11 @@ package net.yan100.compose.pay.autoconfig
 import com.wechat.pay.java.core.RSAAutoCertificateConfig
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
 import com.wechat.pay.java.service.refund.RefundService
-import net.yan100.compose.core.resourceAsStream
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.core.utf8String
 import net.yan100.compose.pay.properties.WeChatPayProperties
 import net.yan100.compose.pay.properties.WeChatPaySingleConfigProperty
+import net.yan100.compose.resourceAsStream
+import net.yan100.compose.slf4j
+import net.yan100.compose.utf8String
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -29,7 +29,7 @@ class WeChatPaySingleAutoConfiguration {
     havingValue = "true",
   )
   fun rsaAutoCertificateConfig(
-    p: WeChatPayProperties
+    p: WeChatPayProperties,
   ): RSAAutoCertificateConfig {
     if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false)
       log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
@@ -71,16 +71,15 @@ class WeChatPaySingleAutoConfiguration {
   @DependsOn(CREATE_CONFIG_NAME)
   @ConditionalOnBean(RSAAutoCertificateConfig::class)
   fun WeChatPaySingleConfigProperty(
-    p: WeChatPayProperties
+    p: WeChatPayProperties,
   ): WeChatPaySingleConfigProperty {
     val privateKeyFile =
       p.privateKeyPath.resourceAsStream(this::class).use {
         it?.readAllBytes()?.utf8String
       }
-    val certKeyFile =
-      p.certPath.resourceAsStream(this::class).use {
-        it?.readAllBytes()?.utf8String
-      }
+    p.certPath.resourceAsStream(this::class).use {
+      it?.readAllBytes()?.utf8String
+    }
 
     return WeChatPaySingleConfigProperty().apply {
       enable = p.enableSingle
