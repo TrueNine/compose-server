@@ -10,7 +10,7 @@ fun Pair<String, List<String>>.useFile() {
 listOf(
   "testtoolkit",
   "version-catalog",
-  "core",
+  "shared",
   "bom",
   "meta",
   "gradle-plugin",
@@ -27,11 +27,11 @@ listOf(
 )).useFile()
 
 ("oss" to listOf(
-  "common", "minio", "aliyun-oss", "huawei-obs"
+  "shared", "minio", "aliyun-oss", "huawei-obs"
 )).useFile()
 
 ("rds" to listOf(
-  "core",
+  "shared",
   "crud",
   "jimmer-ext-postgres",
   "migration-mysql",
@@ -56,5 +56,5 @@ listOf(
 
 // ksp
 ("ksp" to listOf(
-  "plugin", "toolkit", "client"
+  "plugin", "shared", "client"
 )).useFile()
