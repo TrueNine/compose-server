@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.annotation.Resource
-import kotlin.test.Test
-import kotlin.test.assertTrue
-import net.yan100.compose.core.datetime
+import net.yan100.compose.datetime
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
 import net.yan100.compose.testtookit.annotations.SpringServletTest
 import net.yan100.compose.testtookit.log
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 data class A(val a: String, val b: String)
 
@@ -23,19 +23,20 @@ class B {
 
 @SpringServletTest
 class DataClassSerializerTest {
-  @Resource lateinit var mockMvc: MockMvc
+  @Resource
+  lateinit var mockMvc: MockMvc
 
-  @Resource lateinit var mapper: ObjectMapper
+  @Resource
+  lateinit var mapper: ObjectMapper
 
   @Test
   fun `test web request`() {
-    val b =
-      mockMvc
-        .post("/v1/a") {
-          content = A("a", "b")
-          contentType = MediaType.APPLICATION_JSON
-        }
-        .andDo { this.print() }
+    mockMvc
+      .post("/v1/a") {
+        content = A("a", "b")
+        contentType = MediaType.APPLICATION_JSON
+      }
+      .andDo { this.print() }
   }
 
   @Test

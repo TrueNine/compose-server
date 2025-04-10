@@ -9,7 +9,7 @@ dependencies {
   implementation(libs.org.springframework.boot.spring.boot.starter.websocket)
   implementation(libs.org.springframework.boot.spring.boot.autoconfigure)
 
-  implementation(projects.core)
+  api(projects.shared)
   implementation(projects.security.securityCrypto)
   testImplementation(projects.testtoolkit)
 }

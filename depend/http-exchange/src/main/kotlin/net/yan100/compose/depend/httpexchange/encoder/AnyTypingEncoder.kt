@@ -1,6 +1,6 @@
 package net.yan100.compose.depend.httpexchange.encoder
 
-import net.yan100.compose.core.typing.AnyTyping
+import net.yan100.compose.typing.AnyTyping
 import org.reactivestreams.Publisher
 import org.springframework.core.ResolvableType
 import org.springframework.core.codec.AbstractEncoder

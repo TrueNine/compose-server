@@ -1,10 +1,10 @@
 package net.yan100.compose.data.extract.service.impl
 
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.core.string
 import net.yan100.compose.data.extract.api.ICnNbsAddressApi
 import net.yan100.compose.data.extract.domain.CnDistrictCode
 import net.yan100.compose.data.extract.service.ILazyAddressService
+import net.yan100.compose.slf4j
+import net.yan100.compose.string
 import org.jsoup.Jsoup
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.stereotype.Service
@@ -41,7 +41,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) :
   }
 
   override fun findAllProvinces(
-    yearVersion: String
+    yearVersion: String,
   ): List<ILazyAddressService.CnDistrict> {
     val homeBody = chstApi.homePage().body
     log.debug("homeBody = {}", homeBody)
@@ -63,7 +63,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) :
   }
 
   private fun extractProvinces(
-    page: String?
+    page: String?,
   ): List<ILazyAddressService.CnDistrict> {
     return page?.let {
       Jsoup.parse(it)

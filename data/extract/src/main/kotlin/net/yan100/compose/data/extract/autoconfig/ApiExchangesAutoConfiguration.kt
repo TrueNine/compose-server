@@ -3,9 +3,9 @@ package net.yan100.compose.data.extract.autoconfig
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import io.netty.resolver.DefaultAddressResolverGroup
-import net.yan100.compose.core.exceptions.RemoteCallException
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.data.extract.api.ICnNbsAddressApi
+import net.yan100.compose.exceptions.RemoteCallException
+import net.yan100.compose.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.reactive.ReactorClientHttpConnector

@@ -19,7 +19,7 @@ dependencies {
   implementation(libs.com.fasterxml.jackson.datatype.jackson.datatype.guava)
   implementation(libs.com.fasterxml.jackson.datatype.jackson.datatype.joda)
 
-  implementation(projects.core)
+  api(projects.shared)
 
   testImplementation(projects.testtoolkit)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.json)

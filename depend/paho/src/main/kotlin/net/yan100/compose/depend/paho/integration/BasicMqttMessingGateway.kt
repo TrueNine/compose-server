@@ -1,6 +1,6 @@
 package net.yan100.compose.depend.paho.integration
 
-import net.yan100.compose.core.replaceFirstIfPrefix
+import net.yan100.compose.replaceFirstIfPrefix
 import org.springframework.integration.mqtt.support.MqttHeaders
 import org.springframework.messaging.handler.annotation.Header
 

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
-import net.yan100.compose.core.Pq
-import net.yan100.compose.core.domain.IPageParam
+import net.yan100.compose.Pq
+import net.yan100.compose.domain.IPageParam
 
 class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
   override fun deserialize(
@@ -59,7 +59,7 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
   private fun JsonParser.booleanValueOrNull(): Boolean? =
     if (
       currentToken == JsonToken.VALUE_TRUE ||
-        currentToken == JsonToken.VALUE_FALSE
+      currentToken == JsonToken.VALUE_FALSE
     )
       booleanValue
     else null

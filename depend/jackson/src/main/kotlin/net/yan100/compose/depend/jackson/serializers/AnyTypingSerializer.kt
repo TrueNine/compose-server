@@ -3,9 +3,9 @@ package net.yan100.compose.depend.jackson.serializers
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import net.yan100.compose.core.typing.AnyTyping
-import net.yan100.compose.core.typing.IntTyping
-import net.yan100.compose.core.typing.StringTyping
+import net.yan100.compose.typing.AnyTyping
+import net.yan100.compose.typing.IntTyping
+import net.yan100.compose.typing.StringTyping
 
 @Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
 class AnyTypingSerializer : JsonSerializer<AnyTyping>() {

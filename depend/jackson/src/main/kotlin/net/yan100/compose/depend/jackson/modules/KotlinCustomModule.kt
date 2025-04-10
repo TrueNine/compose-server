@@ -2,10 +2,10 @@ package net.yan100.compose.depend.jackson.modules
 
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleModule
-import net.yan100.compose.core.domain.IPageParam
-import net.yan100.compose.core.domain.IPageParamLike
 import net.yan100.compose.depend.jackson.serializers.IPageParamLikeSerializer
 import net.yan100.compose.depend.jackson.serializers.KPairDeserializer
+import net.yan100.compose.domain.IPageParam
+import net.yan100.compose.domain.IPageParamLike
 
 class KotlinCustomModule :
   SimpleModule(

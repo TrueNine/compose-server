@@ -1,9 +1,9 @@
 package net.yan100.compose.depend.servlet
 
-import net.yan100.compose.core.datetime
-import net.yan100.compose.core.i32
-import net.yan100.compose.core.i64
-import net.yan100.compose.core.toLong
+import net.yan100.compose.datetime
+import net.yan100.compose.i32
+import net.yan100.compose.i64
+import net.yan100.compose.toLong
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 
@@ -66,7 +66,7 @@ data class ResponseEntityScope(
 
 /** 加以限制的 HTTP HEAD 返回 */
 inline fun headMethodResponse(
-  scope: ResponseEntityScope.() -> Unit
+  scope: ResponseEntityScope.() -> Unit,
 ): ResponseEntity<Unit> {
   val sc = ResponseEntityScope()
   scope(sc)

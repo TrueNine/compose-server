@@ -1,8 +1,8 @@
 package net.yan100.compose.depend.jackson.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.depend.jackson.holders.ObjectMapperHolder
+import net.yan100.compose.slf4j
 import org.springframework.beans.factory.config.BeanPostProcessor
 import org.springframework.context.annotation.Configuration
 

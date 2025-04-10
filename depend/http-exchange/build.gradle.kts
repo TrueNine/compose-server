@@ -3,7 +3,7 @@ plugins { `kotlin-convention` }
 version = libs.versions.compose.depend.get()
 
 dependencies {
-  implementation(projects.core)
+  api(projects.shared)
 
   implementation(libs.org.springframework.spring.core)
   implementation(libs.com.fasterxml.jackson.core.jackson.databind)

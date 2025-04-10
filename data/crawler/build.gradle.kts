@@ -3,7 +3,7 @@ plugins { `kotlin-convention` }
 version = libs.versions.compose.data.get()
 
 dependencies {
-  implementation(projects.core)
+  api(projects.shared)
 
   implementation(libs.bundles.selenium)
   api(libs.com.microsoft.playwright.playwright)

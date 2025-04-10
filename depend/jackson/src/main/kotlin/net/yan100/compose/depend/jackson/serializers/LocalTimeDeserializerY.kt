@@ -3,9 +3,9 @@ package net.yan100.compose.depend.jackson.serializers
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer
+import net.yan100.compose.toLocalTime
 import java.time.LocalTime
 import java.time.ZoneOffset
-import net.yan100.compose.core.toLocalTime
 
 class LocalTimeDeserializerY(private val zoneOffset: ZoneOffset) :
   LocalTimeDeserializer() {

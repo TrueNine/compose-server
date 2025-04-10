@@ -1,15 +1,15 @@
 package net.yan100.compose.data.extract.service.impl
 
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
-import net.yan100.compose.core.holders.ResourceHolder
-import net.yan100.compose.core.slf4j
-import net.yan100.compose.core.string
 import net.yan100.compose.data.extract.domain.CnDistrictCode
 import net.yan100.compose.data.extract.service.ILazyAddressService
+import net.yan100.compose.holders.ResourceHolder
+import net.yan100.compose.slf4j
+import net.yan100.compose.string
 import org.springframework.context.annotation.Primary
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 private val log = slf4j<LazyAddressCsvServiceImpl>()
 
@@ -104,7 +104,7 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
   }
 
   internal fun getCsvSequence(
-    yearVersion: String
+    yearVersion: String,
   ): Sequence<ILazyAddressService.CnDistrict>? {
     return getCsvResource(yearVersion)
       ?.let { resource ->

@@ -1,7 +1,7 @@
 package net.yan100.compose.depend.servlet.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

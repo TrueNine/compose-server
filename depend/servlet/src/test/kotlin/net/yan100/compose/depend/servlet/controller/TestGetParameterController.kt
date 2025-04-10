@@ -1,7 +1,7 @@
 package net.yan100.compose.depend.servlet.controller
 
-import net.yan100.compose.core.int
-import net.yan100.compose.core.string
+import net.yan100.compose.int
+import net.yan100.compose.string
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -17,7 +17,8 @@ class TestGetParameterController {
 
   data class DataClassDto(var name: String? = null, var age: Int? = null)
 
-  @GetMapping("nonAnnotation") fun nonAnnotation(dto: Dto): Dto = dto
+  @GetMapping("nonAnnotation")
+  fun nonAnnotation(dto: Dto): Dto = dto
 
   @GetMapping("requestParam")
   fun requestParam(@RequestParam dto: Dto): Dto = dto

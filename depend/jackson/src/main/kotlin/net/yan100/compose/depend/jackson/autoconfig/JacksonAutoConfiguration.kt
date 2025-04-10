@@ -1,20 +1,26 @@
 package net.yan100.compose.depend.jackson.autoconfig
 
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.cfg.MapperConfig
-import com.fasterxml.jackson.databind.introspect.*
+import com.fasterxml.jackson.databind.introspect.Annotated
+import com.fasterxml.jackson.databind.introspect.AnnotatedClass
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import java.time.ZoneOffset
-import java.util.*
-import net.yan100.compose.core.DTimer
-import net.yan100.compose.core.slf4j
+import net.yan100.compose.DTimer
 import net.yan100.compose.depend.jackson.modules.DatetimeCustomModule
 import net.yan100.compose.depend.jackson.modules.KotlinCustomModule
+import net.yan100.compose.slf4j
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
@@ -26,6 +32,8 @@ import org.springframework.context.annotation.Scope
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import java.time.ZoneOffset
+import java.util.*
 
 private val log = slf4j<JacksonAutoConfiguration>()
 

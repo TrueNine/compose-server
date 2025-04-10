@@ -17,7 +17,7 @@ dependencies {
   }
   implementation(libs.org.apache.commons.commons.compress)
 
-  implementation(projects.core)
+  api(projects.shared)
   implementation(projects.depend.dependHttpExchange)
 
   testImplementation(projects.testtoolkit)

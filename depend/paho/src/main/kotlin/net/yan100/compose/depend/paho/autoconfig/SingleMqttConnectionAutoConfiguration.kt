@@ -1,9 +1,9 @@
 package net.yan100.compose.depend.paho.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.core.slf4j
 import net.yan100.compose.depend.paho.paho.MqttPahoClientWrapper
 import net.yan100.compose.depend.paho.properties.SingleMqttProperties
+import net.yan100.compose.slf4j
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
@@ -68,7 +68,7 @@ class SingleMqttConnectionAutoConfiguration(
 
   @Bean
   fun mqttConnectionOptions(
-    factory: MqttPahoClientFactory
+    factory: MqttPahoClientFactory,
   ): MqttConnectOptions? {
     return factory.connectionOptions
   }
@@ -76,7 +76,7 @@ class SingleMqttConnectionAutoConfiguration(
   @Bean
   @ConditionalOnBean(name = [CLIENT_FACTORY_BEAN_NAME])
   fun mqttPahoClientWrapper(
-    factory: MqttPahoClientFactory
+    factory: MqttPahoClientFactory,
   ): MqttPahoClientWrapper {
     val client = factory.getClientInstance(p.fullUrl, p.clientId)
     return MqttPahoClientWrapper(

@@ -1,8 +1,8 @@
 package net.yan100.compose.depend.servlet
 
 import jakarta.servlet.http.HttpServletRequest
-import net.yan100.compose.core.consts.IHeaders
-import net.yan100.compose.core.consts.IInterAddr
+import net.yan100.compose.consts.IHeaders
+import net.yan100.compose.consts.IInterAddr
 
 val HttpServletRequest.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()

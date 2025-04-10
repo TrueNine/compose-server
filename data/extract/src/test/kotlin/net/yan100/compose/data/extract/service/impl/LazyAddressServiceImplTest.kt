@@ -1,10 +1,14 @@
 package net.yan100.compose.data.extract.service.impl
 
 import jakarta.annotation.Resource
-import kotlin.test.*
-import net.yan100.compose.core.exceptions.RemoteCallException
+import net.yan100.compose.exceptions.RemoteCallException
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.Ignore
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @Ignore
 @SpringBootTest

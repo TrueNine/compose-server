@@ -1,6 +1,6 @@
 package net.yan100.compose.depend.servlet
 
-import net.yan100.compose.core.domain.IReadableAttachment
+import net.yan100.compose.domain.IReadableAttachment
 import org.springframework.web.multipart.MultipartFile
 
 fun MultipartFile.toReadableAttachment(): IReadableAttachment {

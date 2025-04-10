@@ -5,13 +5,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifySequence
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
-import net.yan100.compose.core.exceptions.RemoteCallException
 import net.yan100.compose.data.extract.domain.CnDistrictCode
+import net.yan100.compose.exceptions.RemoteCallException
 import net.yan100.compose.testtookit.assertEmpty
 import net.yan100.compose.testtookit.assertNotEmpty
 import org.junit.jupiter.api.BeforeEach
@@ -23,6 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @SpringBootTest
 @ExtendWith(SpringExtension::class)
@@ -44,7 +44,8 @@ class ILazyAddressServiceTest {
     }
   }
 
-  @Autowired private lateinit var service: ILazyAddressService
+  @Autowired
+  private lateinit var service: ILazyAddressService
 
   @BeforeEach
   fun setup() {
@@ -370,10 +371,10 @@ class ILazyAddressServiceTest {
           // 执行 firstFind 函数
           val firstFind =
             secondArg<
-              (ILazyAddressService.LookupFindDto) -> List<
-                  ILazyAddressService.CnDistrict
-                >
-            >()
+                (ILazyAddressService.LookupFindDto) -> List<
+              ILazyAddressService.CnDistrict
+              >
+              >()
           val lookupDto =
             ILazyAddressService.LookupFindDto(code = "653126201", level = 3)
           firstFind(lookupDto)
