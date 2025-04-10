@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp.client
+package net.yan100.compose.ksp.plugin.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -8,7 +8,7 @@ import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
 class KspClientEntrance : SymbolProcessorProvider {
   override fun create(
-    environment: SymbolProcessorEnvironment
+    environment: SymbolProcessorEnvironment,
   ): SymbolProcessor {
     val mapper = ObjectMapper()
     mapper.enable(

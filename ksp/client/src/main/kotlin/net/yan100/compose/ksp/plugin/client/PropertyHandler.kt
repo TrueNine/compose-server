@@ -1,9 +1,22 @@
-package net.yan100.compose.ksp.client
+package net.yan100.compose.ksp.plugin.client
 
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.symbol.*
-import net.yan100.compose.ksp.toolkit.*
+import com.google.devtools.ksp.symbol.ClassKind
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
+import com.google.devtools.ksp.symbol.KSPropertyDeclaration
+import com.google.devtools.ksp.symbol.KSType
+import com.google.devtools.ksp.symbol.KSTypeAlias
+import net.yan100.compose.ksp.clipToSuperType
+import net.yan100.compose.ksp.fastResolve
+import net.yan100.compose.ksp.getClassDeclarationByRuntimeName
+import net.yan100.compose.ksp.qualifiedNameAsString
+import net.yan100.compose.ksp.realDeclaration
+import net.yan100.compose.ksp.toClientProp
+import net.yan100.compose.ksp.toClientType
+import net.yan100.compose.ksp.toDeclarations
+import net.yan100.compose.ksp.toUsedGenerics
 import net.yan100.compose.meta.client.ClientProp
 import net.yan100.compose.meta.client.ClientType
 
@@ -54,7 +67,7 @@ class PropertyHandler(
   }
 
   private fun handlePropertyDeclaration(
-    propertyDeclaration: KSPropertyDeclaration
+    propertyDeclaration: KSPropertyDeclaration,
   ): ClientProp {
     val type = propertyDeclaration.type.fastResolve()
     val name = type.declaration.qualifiedNameAsString!!
@@ -64,7 +77,8 @@ class PropertyHandler(
     if (!results.containsKey(name)) {
       when (val d = type.declaration) {
         is KSClassDeclaration,
-        is KSTypeAlias -> {
+        is KSTypeAlias,
+          -> {
           if (parentDeclaration != type.declaration && parentName != name) {
             handleClassDeclaration(d)
           }
@@ -74,11 +88,12 @@ class PropertyHandler(
     type.arguments.toDeclarations().forEach {
       when (it) {
         is KSClassDeclaration,
-        is KSTypeAlias -> {
+        is KSTypeAlias,
+          -> {
           if (
             parentDeclaration != type.declaration &&
-              parentName != name &&
-              !results.containsKey(name)
+            parentName != name &&
+            !results.containsKey(name)
           ) {
             handleClassDeclaration(it)
           }
