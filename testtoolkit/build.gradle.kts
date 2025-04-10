@@ -53,6 +53,4 @@ dependencies {
 
   // 测试用数据库
   runtimeOnly(libs.com.h2database.h2)
-
-
 }
