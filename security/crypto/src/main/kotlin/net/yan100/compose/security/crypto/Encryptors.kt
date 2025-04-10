@@ -1,8 +1,5 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.slf4j
-import net.yan100.compose.typing.EncryptAlgorithmTyping
-import org.bouncycastle.jce.spec.IESParameterSpec
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import java.security.PrivateKey
@@ -12,6 +9,9 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import net.yan100.compose.slf4j
+import net.yan100.compose.typing.EncryptAlgorithmTyping
+import org.bouncycastle.jce.spec.IESParameterSpec
 
 private val log = slf4j<Encryptors>()
 
@@ -56,15 +56,15 @@ object Encryptors {
     alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA,
   ): String? =
     runCatching {
-      Cipher.getInstance(alg.padding).run {
-        init(ENC_MODE, publicKey)
-        sharding(data.toByteArray(charset), shardingSize).joinToString(
-          SHARDING_SEP
-        ) {
-          IBase64.encode(doFinal(it))
+        Cipher.getInstance(alg.padding).run {
+          init(ENC_MODE, publicKey)
+          sharding(data.toByteArray(charset), shardingSize).joinToString(
+            SHARDING_SEP
+          ) {
+            IBase64.encode(doFinal(it))
+          }
         }
       }
-    }
       .onFailure { log.error(Encryptors::encrypt.name, it) }
       .getOrNull()
 
@@ -77,15 +77,15 @@ object Encryptors {
     alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA,
   ): String? =
     runCatching {
-      Cipher.getInstance(alg.value).run {
-        init(ENC_MODE, privateKey)
-        sharding(data.toByteArray(charset), shardingSize).joinToString(
-          SHARDING_SEP
-        ) {
-          IBase64.encode(doFinal(it))
+        Cipher.getInstance(alg.value).run {
+          init(ENC_MODE, privateKey)
+          sharding(data.toByteArray(charset), shardingSize).joinToString(
+            SHARDING_SEP
+          ) {
+            IBase64.encode(doFinal(it))
+          }
         }
       }
-    }
       .onFailure { log.error(Encryptors::encrypt.name, it) }
       .getOrNull()
 
@@ -104,16 +104,16 @@ object Encryptors {
     charset: Charset = defaultCharset,
   ): String? =
     runCatching {
-      Cipher.getInstance(alg.value).run {
-        init(DEC_MODE, privateKey)
-        data
-          .split(SHARDING_SEP)
-          .map { IBase64.decodeToByte(it) }
-          .map { doFinal(it) }
-          .reduce { acc, byt -> acc + byt }
-          .let { String(it, charset) }
+        Cipher.getInstance(alg.value).run {
+          init(DEC_MODE, privateKey)
+          data
+            .split(SHARDING_SEP)
+            .map { IBase64.decodeToByte(it) }
+            .map { doFinal(it) }
+            .reduce { acc, byt -> acc + byt }
+            .let { String(it, charset) }
+        }
       }
-    }
       .onFailure { log.error(Encryptors::basicDecrypt.name, it) }
       .getOrNull()
 
@@ -195,11 +195,11 @@ object Encryptors {
     charset: Charset = defaultCharset,
   ): String? =
     runCatching {
-      Cipher.getInstance("ECIES", "BC").run {
-        init(ENC_MODE, eccPublicKey, IESParameterSpec(null, null, 256))
-        doFinal(data.toByteArray(charset)).let(IBase64::encode)
+        Cipher.getInstance("ECIES", "BC").run {
+          init(ENC_MODE, eccPublicKey, IESParameterSpec(null, null, 256))
+          doFinal(data.toByteArray(charset)).let(IBase64::encode)
+        }
       }
-    }
       .onFailure { log.error(Encryptors::encryptByEccPublicKey.name, it) }
       .getOrNull()
 
@@ -217,11 +217,11 @@ object Encryptors {
     charset: Charset = defaultCharset,
   ): String? =
     runCatching {
-      Cipher.getInstance("ECIES", "BC").run {
-        init(DEC_MODE, eccPrivateKey, IESParameterSpec(null, null, 256))
-        String(doFinal(IBase64.decodeToByte(data)), charset)
+        Cipher.getInstance("ECIES", "BC").run {
+          init(DEC_MODE, eccPrivateKey, IESParameterSpec(null, null, 256))
+          String(doFinal(IBase64.decodeToByte(data)), charset)
+        }
       }
-    }
       .onFailure { log.error(Encryptors::decryptByEccPrivateKey.name, it) }
       .getOrNull()
 
@@ -326,11 +326,11 @@ object Encryptors {
     charset: Charset = defaultCharset,
   ): String? =
     runCatching {
-      Cipher.getInstance("AES/ECB/PKCS5Padding").run {
-        init(ENC_MODE, secret)
-        IBase64.encode(doFinal(plain.toByteArray(charset)))
+        Cipher.getInstance("AES/ECB/PKCS5Padding").run {
+          init(ENC_MODE, secret)
+          IBase64.encode(doFinal(plain.toByteArray(charset)))
+        }
       }
-    }
       .onFailure { log.error(Encryptors::encryptByAesKey.name, it) }
       .getOrNull()
 

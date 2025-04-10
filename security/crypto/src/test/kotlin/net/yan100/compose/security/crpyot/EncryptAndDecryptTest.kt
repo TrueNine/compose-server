@@ -1,16 +1,16 @@
 package net.yan100.compose.security.crpyot
 
 import io.mockk.InternalPlatformDsl.toStr
-import net.yan100.compose.consts.IRegexes
-import net.yan100.compose.security.crypto.Encryptors
-import net.yan100.compose.security.crypto.IBase64
-import net.yan100.compose.security.crypto.Keys
-import net.yan100.compose.testtookit.log
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
+import net.yan100.compose.consts.IRegexes
+import net.yan100.compose.security.crypto.Encryptors
+import net.yan100.compose.security.crypto.IBase64
+import net.yan100.compose.security.crypto.Keys
+import net.yan100.compose.testtookit.log
 
 class EncryptAndDecryptTest {
   @Test
@@ -35,7 +35,7 @@ class EncryptAndDecryptTest {
     val pub = Keys.readEccPublicKeyByBase64(eccPair.publicKeyBase64)!!
 
     val sb = StringBuilder()
-    for (i in 0 .. 1000) {
+    for (i in 0..1000) {
       sb.append("我艹我艹我艹我艹我艹我艹我艹我艹")
     }
     val str = sb.toString()

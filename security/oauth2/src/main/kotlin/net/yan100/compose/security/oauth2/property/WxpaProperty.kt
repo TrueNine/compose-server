@@ -37,11 +37,11 @@ class WxpaProperty {
     val splitUrl = url.split("#")[0]
     val b =
       mutableMapOf(
-        "noncestr" to nonceString,
-        "jsapi_ticket" to jsapiTicket,
-        "timestamp" to timestamp.toString(),
-        "url" to splitUrl,
-      )
+          "noncestr" to nonceString,
+          "jsapi_ticket" to jsapiTicket,
+          "timestamp" to timestamp.toString(),
+          "url" to splitUrl,
+        )
         .map { "${it.key}=${it.value}" }
         .sorted()
         .joinToString("&")

@@ -22,8 +22,7 @@ import org.springframework.security.web.SecurityFilterChain
 @ConditionalOnMissingBean(SecurityPolicyBean::class)
 class DisableSecurityPolicyBean {
   companion object {
-    @JvmStatic
-    private val log = slf4j(DisableSecurityPolicyBean::class)
+    @JvmStatic private val log = slf4j(DisableSecurityPolicyBean::class)
   }
 
   @Bean

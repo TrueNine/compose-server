@@ -1,8 +1,8 @@
 package net.yan100.compose.security.crypto.domain
 
-import net.yan100.compose.domain.IRsaKeyPair
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
+import net.yan100.compose.domain.IRsaKeyPair
 
 interface IRsaExtKeyPair : IRsaKeyPair, IExtKeyPair {
   override fun component1(): RSAPublicKey

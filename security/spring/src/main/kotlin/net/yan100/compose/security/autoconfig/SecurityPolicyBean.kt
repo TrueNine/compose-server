@@ -36,7 +36,7 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityDetailsService(
-    desc: SecurityPolicyDefine,
+    desc: SecurityPolicyDefine
   ): SecurityUserDetailsService {
     log.debug("注册 UserDetailsService")
     return desc.service ?: EmptySecurityDetailsService()
@@ -129,7 +129,7 @@ class SecurityPolicyBean {
   @Bean
   @Primary
   fun authenticationManager(
-    ac: AuthenticationConfiguration,
+    ac: AuthenticationConfiguration
   ): AuthenticationManager? {
     log.debug("注册 AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager

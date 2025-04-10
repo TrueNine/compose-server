@@ -54,10 +54,10 @@ class WxpaService(
   fun verifyBasicConfig(body: WxpaVerifyDto): String? {
     val a =
       listOf(
-        wxpaConfigInfo.preValidToken!!,
-        body.timestamp.toString(),
-        body.nonce,
-      )
+          wxpaConfigInfo.preValidToken!!,
+          body.timestamp.toString(),
+          body.nonce,
+        )
         .sorted()
         .joinToString("")
         .sha1
@@ -86,7 +86,7 @@ class WxpaService(
    * @param jsCode jsCode
    */
   fun fetchUserInfoByAccessToken(
-    jsCode: String,
+    jsCode: String
   ): IWxpaWebClient.WxpaWebsiteUserInfoResp? {
     if (property.appId == null) {
       log.warn("appId is null")

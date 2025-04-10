@@ -1,11 +1,11 @@
 package net.yan100.compose.security.crpyot
 
-import net.yan100.compose.consts.IRegexes
-import net.yan100.compose.security.crypto.IBase64
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
+import net.yan100.compose.consts.IRegexes
+import net.yan100.compose.security.crypto.IBase64
 
 class IBase64Test {
   private val metaText = "这是一段测试字符串"

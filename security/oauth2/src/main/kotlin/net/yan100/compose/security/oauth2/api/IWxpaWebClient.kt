@@ -44,7 +44,7 @@ interface IWxpaWebClient {
    * @param accessToken 公众号 access_token
    */
   data class WxpaGetAccessTokenResp(
-    @JsonProperty("access_token") val accessToken: String?,
+    @JsonProperty("access_token") val accessToken: String?
   ) : BaseWxpaResponseEntity()
 
   /**

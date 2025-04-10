@@ -21,7 +21,7 @@ class BasicUserInfoArgumentResolver :
   HandlerMethodArgumentResolver, WebMvcConfigurer {
 
   override fun addArgumentResolvers(
-    resolvers: MutableList<HandlerMethodArgumentResolver>,
+    resolvers: MutableList<HandlerMethodArgumentResolver>
   ) {
     super.addArgumentResolvers(resolvers)
     log.trace("注册用户信息拦ArgumentResolver")
