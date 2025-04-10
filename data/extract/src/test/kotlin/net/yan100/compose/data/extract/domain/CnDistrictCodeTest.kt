@@ -1,11 +1,11 @@
 package net.yan100.compose.data.extract.domain
 
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class CnDistrictCodeTest {
 
@@ -27,9 +27,7 @@ class CnDistrictCodeTest {
     val invalidLengths = listOf(1, 3, 5, 7, 8, 10, 11)
     invalidLengths.forEach { length ->
       val invalidCode = "1".repeat(length)
-      assertThrows<IllegalArgumentException> {
-        CnDistrictCode(invalidCode)
-      }
+      assertThrows<IllegalArgumentException> { CnDistrictCode(invalidCode) }
     }
   }
 
@@ -151,13 +149,14 @@ class CnDistrictCodeTest {
 
   @Test
   fun `测试编码补全`() {
-    val codes = mapOf(
-      "11" to "110000000000",
-      "1101" to "110100000000",
-      "110101" to "110101000000",
-      "110101001" to "110101001000",
-      "110101001001" to "110101001001"
-    )
+    val codes =
+      mapOf(
+        "11" to "110000000000",
+        "1101" to "110100000000",
+        "110101" to "110101000000",
+        "110101001" to "110101001000",
+        "110101001001" to "110101001001",
+      )
 
     codes.forEach { (input, expected) ->
       val districtCode = CnDistrictCode(input)
@@ -168,14 +167,15 @@ class CnDistrictCodeTest {
 
   @Test
   fun `测试level计算逻辑`() {
-    val testCases = mapOf(
-      "000000000000" to 0,  // 空编码
-      "110000000000" to 1,  // 省级
-      "110100000000" to 2,  // 市级
-      "110101000000" to 3,  // 区县级
-      "110101001000" to 4,  // 乡镇级
-      "110101001001" to 5   // 村级
-    )
+    val testCases =
+      mapOf(
+        "000000000000" to 0, // 空编码
+        "110000000000" to 1, // 省级
+        "110100000000" to 2, // 市级
+        "110101000000" to 3, // 区县级
+        "110101001000" to 4, // 乡镇级
+        "110101001001" to 5, // 村级
+      )
 
     testCases.forEach { (input, expectedLevel) ->
       val districtCode = CnDistrictCode(input)

@@ -13,9 +13,7 @@ package net.yan100.compose.data.extract.domain
  * @property villageCode 村庄编码(3位)
  * @property empty 是否为空编码
  */
-class CnDistrictCode(
-  code: String = "",
-) {
+class CnDistrictCode(code: String = "") {
   companion object {
     private const val ZERO = "00"
     private const val THREE_ZERO = "000"
@@ -42,14 +40,15 @@ class CnDistrictCode(
     get() = calculateLevel()
 
   private val levelSub: Int?
-    get() = when (level) {
-      1 -> PROVINCE_LENGTH
-      2 -> PROVINCE_LENGTH + CITY_LENGTH
-      3 -> PROVINCE_LENGTH + CITY_LENGTH + COUNTY_LENGTH
-      4 -> PROVINCE_LENGTH + CITY_LENGTH + COUNTY_LENGTH + TOWN_LENGTH
-      5 -> FULL_LENGTH
-      else -> null
-    }
+    get() =
+      when (level) {
+        1 -> PROVINCE_LENGTH
+        2 -> PROVINCE_LENGTH + CITY_LENGTH
+        3 -> PROVINCE_LENGTH + CITY_LENGTH + COUNTY_LENGTH
+        4 -> PROVINCE_LENGTH + CITY_LENGTH + COUNTY_LENGTH + TOWN_LENGTH
+        5 -> FULL_LENGTH
+        else -> null
+      }
 
   init {
     require(!INVALID_LENGTHS.contains(code.length)) { "行政区编码格式缺失" }
@@ -87,14 +86,15 @@ class CnDistrictCode(
     return maxLevel
   }
 
-  fun back(): CnDistrictCode? = when (level) {
-    1 -> CnDistrictCode()
-    2 -> CnDistrictCode(provinceCode)
-    3 -> CnDistrictCode(provinceCode + cityCode)
-    4 -> CnDistrictCode(provinceCode + cityCode + countyCode)
-    5 -> CnDistrictCode(provinceCode + cityCode + countyCode + townCode)
-    else -> null
-  }
+  fun back(): CnDistrictCode? =
+    when (level) {
+      1 -> CnDistrictCode()
+      2 -> CnDistrictCode(provinceCode)
+      3 -> CnDistrictCode(provinceCode + cityCode)
+      4 -> CnDistrictCode(provinceCode + cityCode + countyCode)
+      5 -> CnDistrictCode(provinceCode + cityCode + countyCode + townCode)
+      else -> null
+    }
 
   override fun toString(): String = padCode
 }
