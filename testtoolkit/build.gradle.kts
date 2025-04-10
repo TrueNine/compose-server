@@ -49,4 +49,8 @@ dependencies {
 
   // 测试用数据库
   runtimeOnly(libs.com.h2database.h2)
+
+  // kotlin 协程测试
+  testImplementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+  testImplementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
 }

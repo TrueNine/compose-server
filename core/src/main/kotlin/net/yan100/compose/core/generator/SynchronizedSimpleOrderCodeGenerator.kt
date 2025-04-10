@@ -6,11 +6,12 @@ import net.yan100.compose.core.datetime
 class SynchronizedSimpleOrderCodeGenerator(
   private val snowflake: ISnowflakeGenerator
 ) : IOrderCodeGenerator {
+  private val dateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
 
   override fun nextString(): String {
-    val dt =
-      datetime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
+    val dt = datetime.now().format(dateTimeFormatter)
     val st = snowflake.nextString()
-    return "$dt${st.substring(st.length - 4)}"
+    return "$dt${st}"
   }
 }

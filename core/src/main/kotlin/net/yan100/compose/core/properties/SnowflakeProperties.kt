@@ -7,6 +7,7 @@ private const val PREFIX = "compose.core"
 /**
  * # snowflake id 生成器自动配置
  *
+ * @see net.yan100.compose.core.generator.SynchronizedSimpleSnowflake
  * @author TrueNine
  * @since 2023-04-01
  */
