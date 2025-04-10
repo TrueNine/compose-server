@@ -1,33 +1,33 @@
 package net.yan100.compose.data.extract.service
 
+import java.util.concurrent.ConcurrentHashMap
 import net.yan100.compose.SysLogger
 import net.yan100.compose.consts.IRegexes
 import net.yan100.compose.data.extract.domain.CnDistrictCode
 import net.yan100.compose.exceptions.RemoteCallException
 import net.yan100.compose.nonText
 import net.yan100.compose.string
-import java.util.concurrent.ConcurrentHashMap
 
 private fun createRequestQueue(
   firstFindCode: CnDistrictCode,
   deepCondition: (param: ILazyAddressService.LookupFindDto) -> Boolean,
 ): List<CnDistrictCode> =
   buildList {
-    add(firstFindCode)
-    var lastSize = 0
-    while (size > lastSize) {
-      val requireRequest = last()
-      val lookupDto =
-        ILazyAddressService.LookupFindDto(
-          code = requireRequest.code,
-          level = requireRequest.level,
-        )
-      if (!deepCondition(lookupDto)) {
-        requireRequest.back()?.let { add(it) }
+      add(firstFindCode)
+      var lastSize = 0
+      while (size > lastSize) {
+        val requireRequest = last()
+        val lookupDto =
+          ILazyAddressService.LookupFindDto(
+            code = requireRequest.code,
+            level = requireRequest.level,
+          )
+        if (!deepCondition(lookupDto)) {
+          requireRequest.back()?.let { add(it) }
+        }
+        lastSize++
       }
-      lastSize++
     }
-  }
     .reversed()
 
 interface ILazyAddressService {
@@ -110,7 +110,7 @@ interface ILazyAddressService {
   ): List<CnDistrict>
 
   fun findAllProvinces(
-    yearVersion: String = lastYearVersion,
+    yearVersion: String = lastYearVersion
   ): List<CnDistrict> =
     fetchAllByCodeAndLevel(DEFAULT_COUNTRY_CODE, 1, yearVersion)
 
@@ -176,11 +176,11 @@ interface ILazyAddressService {
       codeObj.back()?.let { firstFindCode ->
         // 尝试首次查找
         firstFind(
-          LookupFindDto(
-            code = firstFindCode.code,
-            level = firstFindCode.level,
+            LookupFindDto(
+              code = firstFindCode.code,
+              level = firstFindCode.level,
+            )
           )
-        )
           ?.let {
             return it
           }
@@ -334,7 +334,7 @@ interface ILazyAddressService {
     yearVersion: String = lastYearVersion,
   ): List<CnDistrict> =
     when {
-      level !in 0 .. 4 -> emptyList()
+      level !in 0..4 -> emptyList()
       else ->
         try {
           when (level) {

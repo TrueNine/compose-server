@@ -41,7 +41,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) :
   }
 
   override fun findAllProvinces(
-    yearVersion: String,
+    yearVersion: String
   ): List<ILazyAddressService.CnDistrict> {
     val homeBody = chstApi.homePage().body
     log.debug("homeBody = {}", homeBody)
@@ -63,7 +63,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) :
   }
 
   private fun extractProvinces(
-    page: String?,
+    page: String?
   ): List<ILazyAddressService.CnDistrict> {
     return page?.let {
       Jsoup.parse(it)
