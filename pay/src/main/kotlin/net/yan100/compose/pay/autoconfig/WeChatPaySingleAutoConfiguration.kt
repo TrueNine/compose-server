@@ -29,7 +29,7 @@ class WeChatPaySingleAutoConfiguration {
     havingValue = "true",
   )
   fun rsaAutoCertificateConfig(
-    p: WeChatPayProperties,
+    p: WeChatPayProperties
   ): RSAAutoCertificateConfig {
     if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false)
       log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
@@ -71,7 +71,7 @@ class WeChatPaySingleAutoConfiguration {
   @DependsOn(CREATE_CONFIG_NAME)
   @ConditionalOnBean(RSAAutoCertificateConfig::class)
   fun WeChatPaySingleConfigProperty(
-    p: WeChatPayProperties,
+    p: WeChatPayProperties
   ): WeChatPaySingleConfigProperty {
     val privateKeyFile =
       p.privateKeyPath.resourceAsStream(this::class).use {

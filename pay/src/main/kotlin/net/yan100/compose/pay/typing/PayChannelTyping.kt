@@ -12,16 +12,12 @@ import net.yan100.compose.typing.IntTyping
  */
 @Schema(title = "支付渠道类型")
 enum class PayChannelTyping(private val channelId: Int) : IntTyping {
-  @Schema(title = "微信支付")
-  WECHAT(0),
-  @Schema(title = "支付宝")
-  ALIPAY(1);
+  @Schema(title = "微信支付") WECHAT(0),
+  @Schema(title = "支付宝") ALIPAY(1);
 
-  @JsonValue
-  override val value: Int = channelId
+  @JsonValue override val value: Int = channelId
 
   companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = entries.find { it.channelId == v }
+    @JvmStatic fun findVal(v: Int?) = entries.find { it.channelId == v }
   }
 }
