@@ -1,10 +1,10 @@
 package net.yan100.compose.meta.client
 
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.reflect.KClass
 import net.yan100.compose.meta.types.Doc
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.meta.types.TypeName
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KClass
 
 private val classResolveCache = ConcurrentHashMap<String, Class<*>?>()
 
@@ -74,8 +74,8 @@ data class ClientType(
   fun resolveEnumConstants(): Map<String, Comparable<Nothing>> {
     val java = resolveJava() ?: return emptyMap()
     if (!java.isEnum) return emptyMap()
-    val superEnum = resolveJava("net.yan100.compose.core.typing.AnyTyping")
-    val isTyping = superEnum?.isAssignableFrom(java) ?: false
+    val superEnum = resolveJava("net.yan100.compose.typing.AnyTyping")
+    val isTyping = superEnum?.isAssignableFrom(java) == true
     return java.enumConstants
       .filterIsInstance<Enum<*>>()
       .map {

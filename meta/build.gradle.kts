@@ -5,6 +5,6 @@ version = libs.versions.compose.asProvider().get()
 dependencies {
   implementation(libs.com.fasterxml.jackson.core.jackson.annotations)
 
-  testImplementation(projects.core)
+  testImplementation(projects.shared)
   testImplementation(projects.testtoolkit)
 }
