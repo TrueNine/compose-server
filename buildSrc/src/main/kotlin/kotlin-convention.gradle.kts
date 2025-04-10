@@ -21,12 +21,13 @@ kotlin {
     freeCompilerArgs = listOf(
       "-Xjsr305=strict",
       "-Xjvm-default=all",
-      "-verbose",
-      "-Xjdk-release=${libs.versions.java.get()}",
-      "-jvm-target=${libs.versions.java.get()}"
+      "-verbose"
     )
   }
   jvmToolchain(libs.versions.java.get().toInt())
+}
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+  jvmTargetValidationMode.set(org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.WARNING)
 }
 
 kapt {
