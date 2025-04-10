@@ -1,10 +1,10 @@
 package net.yan100.compose.meta.client
 
-import net.yan100.compose.meta.types.TypeKind
-import net.yan100.compose.typing.UserAgents
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import net.yan100.compose.meta.types.TypeKind
+import net.yan100.compose.typing.UserAgents
 
 class ClientTypeTest {
 

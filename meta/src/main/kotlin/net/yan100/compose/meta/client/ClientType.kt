@@ -1,10 +1,10 @@
 package net.yan100.compose.meta.client
 
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KClass
 import net.yan100.compose.meta.types.Doc
 import net.yan100.compose.meta.types.TypeKind
 import net.yan100.compose.meta.types.TypeName
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.reflect.KClass
 
 private val classResolveCache = ConcurrentHashMap<String, Class<*>?>()
 
