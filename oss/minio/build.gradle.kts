@@ -3,7 +3,8 @@ plugins { `kotlinspring-convention` }
 version = libs.versions.compose.oss.get()
 
 dependencies {
-  implementation(projects.oss.ossShared)
+  api(projects.oss.ossShared)
+  api(projects.shared)
   implementation(libs.io.minio.minio) {
     exclude(
       group = libs.com.squareup.okhttp3.okhttp.get().group,
@@ -22,7 +23,6 @@ dependencies {
   runtimeOnly(libs.org.apache.logging.log4j.log4j.api)
   runtimeOnly(libs.com.squareup.okhttp3.okhttp)
 
-  api(projects.shared)
   testImplementation(projects.testtoolkit)
 
   // TestContainers
