@@ -19,6 +19,6 @@ fun Number.toId(): Id? {
   return this.toLong().takeIf { it != Long.MIN_VALUE }
 }
 
-fun String.toId() {
-  this.toLongOrNull()?.takeIf { it != Long.MIN_VALUE }
+fun String.toId(): Id? {
+  return this.toLongOrNull()?.takeIf { it != Long.MIN_VALUE }
 }
