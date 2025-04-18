@@ -6,9 +6,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-/**
- * ID 类型相关扩展函数的测试类
- */
+/** ID 类型相关扩展函数的测试类 */
 class AliasFnsTest {
 
   @Test
@@ -62,4 +60,4 @@ class AliasFnsTest {
     assertNull("123abc".toId(), "混合字符串应该返回null")
     assertNull(Long.MIN_VALUE.toString().toId(), "Long.MIN_VALUE字符串应该返回null")
   }
-} 
+}
