@@ -187,8 +187,10 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 正常递归遍历所有子节点`() {
     val visited = mutableListOf<Pair<String, Int>>()
-    service.traverseChildrenRecursive("110000", 3, "2024") { district, depth, parent ->
-      visited += district.code.code to depth
+    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code to depth
+      }
       true // 继续递归
     }
     // 应该遍历到所有下级
@@ -199,10 +201,12 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 回调返回false时中断分支`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("110000", 3, "2024") { district, depth, parent ->
-      visited += district.code.code
+    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code
+      }
       // 只遍历到市级
-      district.level < 2
+      children.all { it.level < 2 }
     }
     // 只会访问到省和市，不会访问到区县
     assertTrue(visited.contains("1101"))
@@ -212,8 +216,10 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 只遍历一层`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("110000", 1, "2024") { district, depth, parent ->
-      visited += district.code.code
+    service.traverseChildrenRecursive("110000", 1, "2024") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code
+      }
       true
     }
     // 只会访问到市级
@@ -223,8 +229,10 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive parentDistrict 参数正确`() {
     val parentMap = mutableMapOf<String, String?>()
-    service.traverseChildrenRecursive("110000", 3, "2024") { district, depth, parent ->
-      parentMap[district.code.code] = parent?.code?.code
+    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
+      children.forEach { district ->
+        parentMap[district.code.code] = parent?.code?.code
+      }
       true
     }
     // 市的父是 null，区的父是市
@@ -235,15 +243,19 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 空数据和无效parentCode`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("999999", 3, "2024") { district, depth, parent ->
-      visited += district.code.code
+    service.traverseChildrenRecursive("999999", 3, "2024") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code
+      }
       true
     }
     assertTrue(visited.isEmpty())
 
     val visited2 = mutableListOf<String>()
-    service.traverseChildrenRecursive("invalid", 3, "2024") { district, depth, parent ->
-      visited2 += district.code.code
+    service.traverseChildrenRecursive("invalid", 3, "2024") { children, depth, parent ->
+      children.forEach { district ->
+        visited2 += district.code.code
+      }
       true
     }
     assertTrue(visited2.isEmpty())
@@ -269,8 +281,10 @@ class LazyAddressCsvServiceImplTest {
     }
     every { resourceHolder.getConfigResource(any()) } returns resource
     val result = mutableListOf<String>()
-    service.traverseChildrenRecursive("000000000000", 3, "2024") { district, depth, parent ->
-      result += district.code.code
+    service.traverseChildrenRecursive("000000000000", 3, "2024") { children, depth, parent ->
+      children.forEach { district ->
+        result += district.code.code
+      }
       true
     }
     assertEquals(listOf("11"), result)

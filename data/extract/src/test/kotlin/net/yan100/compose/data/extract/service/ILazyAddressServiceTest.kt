@@ -39,7 +39,7 @@ class ILazyAddressServiceTest {
         parentCode: string,
         maxDepth: Int,
         yearVersion: String,
-        onVisit: (ILazyAddressService.CnDistrict, Int, ILazyAddressService.CnDistrict?) -> Boolean,
+        onVisit: (List<ILazyAddressService.CnDistrict>, Int, ILazyAddressService.CnDistrict?) -> Boolean,
       ) {
         TODO("Not yet implemented")
       }
@@ -188,7 +188,7 @@ class ILazyAddressServiceTest {
         parentCode: string,
         maxDepth: Int,
         yearVersion: String,
-        onVisit: (ILazyAddressService.CnDistrict, Int, ILazyAddressService.CnDistrict?) -> Boolean,
+        onVisit: (List<ILazyAddressService.CnDistrict>, Int, ILazyAddressService.CnDistrict?) -> Boolean,
       ) {
         TODO("Not yet implemented")
       }

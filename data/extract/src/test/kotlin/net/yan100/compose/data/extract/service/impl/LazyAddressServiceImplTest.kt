@@ -33,8 +33,10 @@ class LazyAddressServiceImplTest {
     }
     // 遍历
     val visited = mutableListOf<Pair<String, Int>>()
-    service.traverseChildrenRecursive("000000000000", 3, "2023") { district, depth, parent ->
-      visited += district.code.code to depth
+    service.traverseChildrenRecursive("000000000000", 3, "2023") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code to depth
+      }
       true
     }
     assertTrue(visited.any { it.first == "110000" && it.second == 1 })
@@ -52,10 +54,12 @@ class LazyAddressServiceImplTest {
       every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>东城区</td></tr></body></html>"
     }
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("000000000000", 3, "2023") { district, depth, parent ->
-      visited += district.code.code
+    service.traverseChildrenRecursive("000000000000", 3, "2023") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code
+      }
       // 只遍历到省级
-      district.level < 1
+      children.all { it.level < 1 }
     }
     assertTrue(visited.contains("110000"))
     assertFalse(visited.contains("110100"))
@@ -69,8 +73,10 @@ class LazyAddressServiceImplTest {
       every { body } returns "<html><body><tr class='citytr'><td><a href='110100.html'>北京市市辖区</a></td><td><a href='110100.html'>北京市市辖区</a></td></tr></body></html>"
     }
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("000000000000", 1, "2023") { district, depth, parent ->
-      visited += district.code.code
+    service.traverseChildrenRecursive("000000000000", 1, "2023") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code
+      }
       true
     }
     assertTrue(visited.contains("110000"))
@@ -87,8 +93,10 @@ class LazyAddressServiceImplTest {
       every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>东城区</td></tr></body></html>"
     }
     val parentMap = mutableMapOf<String, String?>()
-    service.traverseChildrenRecursive("000000000000", 3, "2023") { district, depth, parent ->
-      parentMap[district.code.code] = parent?.code?.code
+    service.traverseChildrenRecursive("000000000000", 3, "2023") { children, depth, parent ->
+      children.forEach { district ->
+        parentMap[district.code.code] = parent?.code?.code
+      }
       true
     }
     assertEquals("000000000000", parentMap["110000"])
@@ -100,15 +108,19 @@ class LazyAddressServiceImplTest {
   fun `traverseChildrenRecursive 空数据和无效parentCode`() {
     every { chstApi.homePage().body } returns "<html><body></body></html>"
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("999999", 3, "2023") { district, depth, parent ->
-      visited += district.code.code
+    service.traverseChildrenRecursive("999999", 3, "2023") { children, depth, parent ->
+      children.forEach { district ->
+        visited += district.code.code
+      }
       true
     }
     assertTrue(visited.isEmpty())
 
     val visited2 = mutableListOf<String>()
-    service.traverseChildrenRecursive("invalid", 3, "2023") { district, depth, parent ->
-      visited2 += district.code.code
+    service.traverseChildrenRecursive("invalid", 3, "2023") { children, depth, parent ->
+      children.forEach { district ->
+        visited2 += district.code.code
+      }
       true
     }
     assertTrue(visited2.isEmpty())

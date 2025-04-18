@@ -154,27 +154,27 @@ interface ILazyAddressService {
    */
   fun fetchChildrenRecursive(
     parentCode: string,
-    maxDepth: Int,
-    yearVersion: String,
+    maxDepth: Int = supportedMaxLevel,
+    yearVersion: String = lastYearVersion,
   ): List<CnDistrict>
 
   /**
    * 以遍历的方式递归处理指定代码下的所有子孙行政区划。
    * 该方法通过回调函数让调用者能够控制遍历过程，适合大数据量的数据库操作。
-   * 
+   *
    * @param parentCode 父级行政区划代码
    * @param maxDepth 相对于 `parentCode` 的最大遍历深度
    * @param yearVersion **起始** 遍历的数据年份版本
    * @param onVisit 访问节点的回调函数，返回 true 继续遍历，返回 false 停止当前分支的遍历
    *                参数说明：
-   *                - district: 当前访问的节点信息
+   *                - children: 当前访问的节点的直接子节点列表
    *                - depth: 当前节点相对于 parentCode 的深度（从1开始）
    *                - parentDistrict: 父节点信息（如果是顶级节点则为null）
    */
   fun traverseChildrenRecursive(
     parentCode: string,
-    maxDepth: Int,
-    yearVersion: String,
-    onVisit: (district: CnDistrict, depth: Int, parentDistrict: CnDistrict?) -> Boolean
+    maxDepth: Int = supportedMaxLevel,
+    yearVersion: String = lastYearVersion,
+    onVisit: (children: List<CnDistrict>, depth: Int, parentDistrict: CnDistrict?) -> Boolean,
   )
 }

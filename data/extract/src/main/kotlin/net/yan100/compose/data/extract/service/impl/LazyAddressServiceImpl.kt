@@ -118,15 +118,18 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) :
     parentCode: string,
     maxDepth: Int,
     yearVersion: String,
-    onVisit: (district: ILazyAddressService.CnDistrict, depth: Int, parentDistrict: ILazyAddressService.CnDistrict?) -> Boolean
+    onVisit: (children: List<ILazyAddressService.CnDistrict>, depth: Int, parentDistrict: ILazyAddressService.CnDistrict?) -> Boolean
   ) {
     fun walk(currentCode: String, depth: Int, parent: ILazyAddressService.CnDistrict?) {
       if (depth > maxDepth) return
       val children = fetchChildren(currentCode, yearVersion)
-      for (child in children) {
-        val shouldContinue = onVisit(child, depth, parent)
-        if (shouldContinue && !child.leaf) {
-          walk(child.code.code, depth + 1, child)
+      if (children.isEmpty()) return
+      val shouldContinue = onVisit(children, depth, parent)
+      if (shouldContinue) {
+        for (child in children) {
+          if (!child.leaf) {
+            walk(child.code.code, depth + 1, child)
+          }
         }
       }
     }
