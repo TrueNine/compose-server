@@ -2,26 +2,30 @@ package net.yan100.compose.depend.servlet.parameter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
-import kotlin.test.*
-import net.yan100.compose.depend.servlet.controller.TestGetParameterController
 import net.yan100.compose.testtookit.annotations.SpringServletTest
 import org.apache.catalina.util.URLEncoder
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.web.bind.MissingServletRequestParameterException
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 
 /** # 验证以何种方式 给 spring boot 传递 get 参数 */
 @SpringServletTest
+@Import(GetParameterTest.TestGetParameterController::class)
 class GetParameterTest {
-  lateinit var mockMvc: MockMvc
-    @Resource set
-
-  lateinit var controller: TestGetParameterController
-    @Resource set
-
-  lateinit var objectMapper: ObjectMapper
-    @Resource set
+  lateinit var mockMvc: MockMvc @Resource set
+  lateinit var objectMapper: ObjectMapper @Resource set
 
   @Test
   fun `test encode uri component`() {
@@ -139,7 +143,32 @@ class GetParameterTest {
   @BeforeTest
   fun setup() {
     assertNotNull(mockMvc)
-    assertNotNull(controller, "未扫描到 controller")
     assertNotNull(objectMapper, "未正确注册 json 解析器")
+  }
+
+  // 内嵌 Controller
+  @RestController
+  @RequestMapping("test/getParameter")
+  class TestGetParameterController {
+    open class Dto {
+      var name: String? = null
+      var age: Int? = null
+    }
+
+    data class DataClassDto(var name: String? = null, var age: Int? = null)
+
+    @GetMapping("nonAnnotation")
+    fun nonAnnotation(dto: Dto): Dto = dto
+
+    @GetMapping("requestParam")
+    fun requestParam(@RequestParam dto: Dto): Dto = dto
+
+    @GetMapping("nonAnnotationDataClass")
+    fun nonAnnotationDataClass(dto: DataClassDto) = dto
+
+    @GetMapping("strList")
+    fun inputStringList(@RequestParam list: List<String>): List<String> {
+      return list
+    }
   }
 }
