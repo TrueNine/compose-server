@@ -10,6 +10,8 @@ dependencies {
   // kotlin 协程测试
   api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
   api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
+  // junit5 参数化测试扩展包
+  api(libs.org.junit.jupiter.junit.jupiter.params)
 
   // Testcontainers
   testImplementation(libs.org.testcontainers.testcontainers)
