@@ -3,41 +3,10 @@ package net.yan100.compose.domain
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.io.Serializable
 import net.yan100.compose.bool
 import net.yan100.compose.i32
+import java.io.Serializable
 
-/** ## 一个默认分页实现 */
-class DefaultPageParam
-@Deprecated("不退完直接使用", level = DeprecationLevel.ERROR)
-@JsonCreator
-constructor(
-  @Transient @JsonProperty("o") override var o: i32? = null,
-  @Transient @JsonProperty("s") override var s: i32? = null,
-  @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR)
-  @Transient
-  @JsonProperty("u")
-  override var u: Boolean? = null,
-) : IPageParam, Serializable {
-
-  override fun toString(): String {
-    return "PageParam(offset=$o, pageSize=$s)"
-  }
-
-  override fun hashCode(): Int {
-    return listOf(o, s).hashCode()
-  }
-
-  override fun equals(other: Any?): Boolean {
-    return when (other) {
-      is IPageParam -> {
-        o == other.o && s == other.s
-      }
-
-      else -> false
-    }
-  }
-}
 
 /**
  * # 分页参数
@@ -67,8 +36,7 @@ interface IPageParam : IPageParamLike, Serializable {
 
     /** ## 默认 最大分页实现常量 */
     @Suppress("DEPRECATION_ERROR")
-    val DEFAULT_MAX: IPageParam =
-      DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
+    val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
     /**
      * ## 构建分页参数
@@ -110,6 +78,34 @@ interface IPageParam : IPageParamLike, Serializable {
     operator fun get(param: IPageParamLike?): IPageParam {
       return get(param?.o, param?.s)
     }
+
+    /** ## 一个默认分页实现 */
+    class DefaultPageParam
+    @Deprecated("不建议直接使用", level = DeprecationLevel.ERROR) @JsonCreator constructor(
+      @Transient @JsonProperty("o") override var o: i32? = null,
+      @Transient @JsonProperty("s") override var s: i32? = null,
+      @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR) @Transient @JsonProperty("u") override var u: Boolean? = null,
+    ) : IPageParam, Serializable {
+
+      override fun toString(): String {
+        return "PageParam(offset=$o, pageSize=$s)"
+      }
+
+      override fun hashCode(): Int {
+        return listOf(o, s).hashCode()
+      }
+
+      override fun equals(other: Any?): Boolean {
+        return when (other) {
+          is IPageParam -> {
+            o == other.o && s == other.s
+          }
+
+          else -> false
+        }
+      }
+    }
+
   }
 
   @JsonIgnore
