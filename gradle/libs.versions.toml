@@ -14,9 +14,9 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.11.0"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.1.1"
-compose = "3.0.28"
+compose = "3.0.29"
 compose-build = "3.0.16"
-compose-data = "3.0.17"
+compose-data = "3.0.18"
 compose-depend = "3.0.15"
 compose-oss = "3.0.17"
 compose-pay = "3.0.15"
@@ -305,29 +305,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-    "org-junit-jupiter-junit-jupiter-api",
-    "org-junit-jupiter-junit-jupiter-engine",
-    "org-junit-platform-junit-platform-launcher",
+  "org-junit-jupiter-junit-jupiter-api",
+  "org-junit-jupiter-junit-jupiter-engine",
+  "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-    "io-projectreactor-kotlin-reactor-kotlin-extensions",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+  "io-projectreactor-kotlin-reactor-kotlin-extensions",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-    "io-mockk-mockk",
-    "io-projectreactor-reactor-test",
-    "org-jetbrains-kotlin-kotlin-test-junit5",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+  "io-mockk-mockk",
+  "io-projectreactor-reactor-test",
+  "org-jetbrains-kotlin-kotlin-test-junit5",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-    "p6spy-p6spy",
+  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+  "p6spy-p6spy",
 ]
 redis = [
-    "org-apache-commons-commons-pool2",
-    "org-springframework-boot-spring-boot-starter-data-redis",
+  "org-apache-commons-commons-pool2",
+  "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-    "io-github-bonigarcia-webdrivermanager",
-    "org-seleniumhq-selenium-selenium-java",
+  "io-github-bonigarcia-webdrivermanager",
+  "org-seleniumhq-selenium-selenium-java",
 ]
