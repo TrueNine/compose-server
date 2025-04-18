@@ -39,16 +39,6 @@ java {
   withSourcesJar()
 }
 
-sourceSets {
-  test {
-    resources {
-      project.rootProject.layout.projectDirectory.also { rootDir ->
-        srcDir(rootDir.dir("common-test-resources").asFile.absolutePath)
-      }
-    }
-  }
-}
-
 tasks.test {
   useJUnitPlatform()
   // 允许 java agent 动态代理
