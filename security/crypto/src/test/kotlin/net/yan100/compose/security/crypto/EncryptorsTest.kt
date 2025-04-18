@@ -1,9 +1,8 @@
-package net.yan100.compose.security.crpyot
+package net.yan100.compose.security.crypto
 
+import net.yan100.compose.testtookit.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.security.crypto.Encryptors
-import net.yan100.compose.testtookit.log
 
 class EncryptorsTest {
 
