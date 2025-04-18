@@ -1,12 +1,16 @@
 ---
-description: 当前开发环境配置
+description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
+
 # env rules
+
 all recommendations and operations are specific to this environment, no cross - system analogies.
 editor: Cursor (vscode fork)
+
 # local dev env
+
 os: windows 11 24H2
 cpu: intel i7 14650HX
 gpu: nvidia 4070 8g laptop
