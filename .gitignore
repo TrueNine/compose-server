@@ -51,9 +51,6 @@ src/test/**/out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
-
 ### visual studio ###
 .vs
 *.sln
