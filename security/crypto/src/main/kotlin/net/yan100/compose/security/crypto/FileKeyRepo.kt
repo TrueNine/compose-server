@@ -1,5 +1,9 @@
 package net.yan100.compose.security.crypto
 
+import net.yan100.compose.security.crypto.domain.IEccExtKeyPair
+import net.yan100.compose.security.crypto.domain.IKeysRepo
+import net.yan100.compose.security.crypto.domain.IRsaExtKeyPair
+import org.springframework.core.io.ClassPathResource
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -7,28 +11,24 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
-import net.yan100.compose.security.crypto.domain.IEccExtKeyPair
-import net.yan100.compose.security.crypto.domain.IKeysRepo
-import net.yan100.compose.security.crypto.domain.IRsaExtKeyPair
-import org.springframework.core.io.ClassPathResource
 
 class FileKeyRepo(private val baseDir: String = "keys") : IKeysRepo {
   private fun isPem(content: String): Boolean {
-    return content.startsWith(PemFormat.BEGIN_START)
+    return content.startsWith(PemFormat.BEGIN_PREFIX)
   }
 
   private fun load(path: String): String {
     return BufferedReader(
-        InputStreamReader(
-          BufferedInputStream(ClassPathResource("$baseDir/$path").inputStream)
-        )
+      InputStreamReader(
+        BufferedInputStream(ClassPathResource("$baseDir/$path").inputStream)
       )
+    )
       .use { it.readText() }
   }
 
   private fun readBase64(name: String): String {
     val a = load(name)
-    return if (isPem(a)) PemFormat(a).content else a.base64Decode()
+    return if (isPem(a)) PemFormat.parse(a).content else a.base64Decode()
   }
 
   override fun findRsaPrivetKeyByName(name: String): RSAPrivateKey? {
