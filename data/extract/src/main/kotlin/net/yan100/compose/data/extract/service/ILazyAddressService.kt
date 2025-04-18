@@ -1,72 +1,69 @@
 package net.yan100.compose.data.extract.service
 
-import java.util.concurrent.ConcurrentHashMap
 import net.yan100.compose.SysLogger
 import net.yan100.compose.consts.IRegexes
 import net.yan100.compose.data.extract.domain.CnDistrictCode
-import net.yan100.compose.exceptions.RemoteCallException
 import net.yan100.compose.nonText
 import net.yan100.compose.string
 
-private fun createRequestQueue(
-  firstFindCode: CnDistrictCode,
-  deepCondition: (param: ILazyAddressService.LookupFindDto) -> Boolean,
-): List<CnDistrictCode> =
-  buildList {
-      add(firstFindCode)
-      var lastSize = 0
-      while (size > lastSize) {
-        val requireRequest = last()
-        val lookupDto =
-          ILazyAddressService.LookupFindDto(
-            code = requireRequest.code,
-            level = requireRequest.level,
-          )
-        if (!deepCondition(lookupDto)) {
-          requireRequest.back()?.let { add(it) }
-        }
-        lastSize++
-      }
-    }
-    .reversed()
-
+/**
+ * 懒加载行政区划代码服务接口。
+ * 提供按需、分版本获取中国行政区划代码（统计用区划代码和城乡划分代码）的功能。
+ */
 interface ILazyAddressService {
   companion object {
-    const val DEFAULT_COUNTRY_CODE = "0"
+    /** 默认表示国家的代码 */
+    const val DEFAULT_COUNTRY_CODE = "000000000000"
     private val CHINA_AD_CODE_REGEX = IRegexes.CHINA_AD_CODE.toRegex()
-    private val districtCache = ConcurrentHashMap<String, CnDistrict>()
-    private val childrenCache = ConcurrentHashMap<String, List<CnDistrict>>()
 
+    /**
+     * 校验给定的字符串是否符合中国行政区划代码的格式。
+     * @param code 待校验的代码字符串。
+     * @return 如果符合格式则返回 true，否则返回 false。
+     */
     fun verifyCode(code: String): Boolean = code.matches(CHINA_AD_CODE_REGEX)
 
-    fun createCnDistrict(code: String?): CnDistrictCode? =
-      when {
-        code.nonText() -> null
-        code.length > 12 -> null
-        else -> CnDistrictCode(code).takeUnless { it.empty }
-      }
+    /**
+     * 将不完整的12位代码补全为12位（末尾补0）。
+     * 如果输入无效或不符合代码格式，则原样返回。
+     * @param code 待补全的代码字符串。
+     * @return 补全后的12位代码字符串或原始字符串。
+     */
+    fun convertToFillCode(code: String): String = when {
+      code.nonText() -> code
+      !verifyCode(code) -> code
+      else -> code.padEnd(12, '0')
+    }
 
-    fun convertToFillCode(code: String): String =
-      when {
-        code.nonText() -> code
-        !verifyCode(code) -> code
-        else -> code.padEnd(12, '0')
+    /**
+     * (公开辅助方法) 尝试根据字符串创建 CnDistrictCode 对象。
+     * 实现类 **可以** 使用此方法，但推荐在内部处理代码解析。
+     * @param code 代码字符串。
+     * @return CnDistrictCode 对象或 null（如果代码无效）。
+     */
+    fun createCnDistrictCode(code: String?): CnDistrictCode? = when {
+      code.nonText() -> null
+      // 允许最长12位
+      code.length > 12 -> null
+      // 验证基础格式，允许非12位但符合基本数字和长度的格式
+      // 补全后再验证
+      !verifyCode(code.padEnd(12, '0')) -> null
+      else -> try {
+        CnDistrictCode(code).takeUnless { it.empty }
+      } catch (_: IllegalArgumentException) {
+        null
       }
-
-    private fun getCacheKey(code: String, yearVersion: String) =
-      "${code}_$yearVersion"
+    }
   }
 
-  data class LookupFindDto(val code: string, val level: Int)
-
-  data class LookupSortedSaveVo(
-    val parentCode: String,
-    val deepLevel: Int,
-    val notInit: Boolean,
-    val yearVersion: String,
-    val result: List<CnDistrict>,
-  )
-
+  /**
+   * 表示一个行政区划单位的信息。
+   * @property code 地区代码对象。
+   * @property name 地区名称。
+   * @property yearVersion 数据对应的年份版本。
+   * @property level 地区层级 (1:省, 2:市, 3:县, 4:乡镇, 5:村)。
+   * @property leaf 是否为叶子节点（通常指村级或无法再下钻的级别）。
+   */
   data class CnDistrict(
     val code: CnDistrictCode,
     val name: String,
@@ -75,18 +72,21 @@ interface ILazyAddressService {
     val leaf: Boolean = level >= 5,
   )
 
-  /** 提供的日志记录器 */
+  // --- 服务属性 ---
+  /** 提供的日志记录器 (可选) */
   val logger: SysLogger?
     get() = null
 
   /**
-   * 所有支持的年份版本 以下为例
-   * - `2023`
-   * - `2024`
-   * - `2018`
+   * 所有支持的年份版本，例如：
+   * - `["2023", "2024", "2018"]`
    */
   val supportedYearVersions: List<String>
+
+  /** 默认使用的年份版本 */
   val supportedDefaultYearVersion: String
+
+  /** 支持的最大行政层级，默认为 5 (村级) */
   val supportedMaxLevel: Int
     get() = 5
 
@@ -94,289 +94,87 @@ interface ILazyAddressService {
   fun lastYearVersionOrNull(yearVersion: String): String? {
     if (yearVersion.nonText()) return null
     val currentYearVersion = yearVersion.toIntOrNull() ?: return null
-    return supportedYearVersions.sorted().reversed().firstOrNull {
-      it.toInt() < currentYearVersion
-    }
+    // 查找小于当前年份且最接近的版本
+    return supportedYearVersions.mapNotNull { it.toIntOrNull() }.distinct().sortedDescending().filter { it < currentYearVersion }.maxOrNull()?.toString()
   }
 
   /** 最新的支持的年份版本 */
   val lastYearVersion: String
-    get() = supportedYearVersions.maxOf { it }
+    get() = supportedYearVersions.maxOrNull() ?: supportedDefaultYearVersion
 
-  fun fetchAllByCodeAndLevel(
-    code: string,
-    level: Int,
-    yearVersion: String = lastYearVersion,
+  /**
+   * 获取指定代码表示的行政区划的 **直接子级** 列表。
+   * 例如，给定省代码，返回该省下的所有市；给定国家代码 "0"，返回所有省。
+   * 实现类需要处理 `parentCode` 无效或找不到的情况，并负责根据 `yearVersion` 查找数据，**无需** 自动版本回退。
+   *
+   * @param parentCode 父级行政区划代码 (例如：省代码 "110000000000", 国家代码 "0")。
+   * @param yearVersion 需要查找的数据年份版本。
+   * @return 直接子级 [CnDistrict] 列表，如果父代码无效、无子级或指定年份无数据则返回空列表。
+   */
+  fun fetchChildren(
+    parentCode: string,
+    yearVersion: String,
   ): List<CnDistrict>
 
-  fun findAllProvinces(
-    yearVersion: String = lastYearVersion
-  ): List<CnDistrict> =
-    fetchAllByCodeAndLevel(DEFAULT_COUNTRY_CODE, 1, yearVersion)
-
-  fun findAllCityByCode(
-    districtCode: String,
-    yearVersion: String = lastYearVersion,
-  ): List<CnDistrict> = fetchAllByCodeAndLevel(districtCode, 2, yearVersion)
-
-  fun findAllCountyByCode(
-    districtCode: String,
-    yearVersion: String = lastYearVersion,
-  ): List<CnDistrict> = fetchAllByCodeAndLevel(districtCode, 3, yearVersion)
-
-  fun findAllTownByCode(
-    districtCode: String,
-    yearVersion: String = lastYearVersion,
-  ): List<CnDistrict> = fetchAllByCodeAndLevel(districtCode, 4, yearVersion)
-
-  fun findAllVillageByCode(
-    districtCode: String,
-    yearVersion: String = lastYearVersion,
-  ): List<CnDistrict> = fetchAllByCodeAndLevel(districtCode, 5, yearVersion)
-
-  fun findByCode(
-    code: string,
-    yearVersion: String = lastYearVersion,
-  ): CnDistrict? {
-    val cacheKey = getCacheKey(code, yearVersion)
-    return districtCache.getOrPut(cacheKey) {
-      CnDistrictCode(code).back()?.let { backCode ->
-        findAllChildrenByCode(backCode.code).find {
-          it.code.code == backCode.code
-        }
-      } ?: return null
-    }
-  }
-
   /**
-   * ## 预取地址数据（根据代码查找单个地址）
+   * 获取所有省份列表（国家 "0" 的直接子级）。
+   * 实现类应调用 `findChildren(DEFAULT_COUNTRY_CODE, yearVersion)`。
    *
-   * @param code 地址代码
-   * @param firstFind 首次查找函数
-   * @param deepCondition 逐级向上查找，报告条件
-   * @param notFound 当未找到符合条件或空时，调用
-   * @param sortedSave 当拥有需要的上级数据时，进行调用
-   * @param yearVersion 年份版本（默认使用最新版本）
-   * @return 自定义返回结果
+   * @param yearVersion 数据年份版本。
+   * @return 省份 [CnDistrict] 列表。
    */
-  fun <T> lookupByCode(
-    code: string,
-    firstFind: (param: LookupFindDto) -> T? = { null },
-    deepCondition: (param: LookupFindDto) -> Boolean = { false },
-    notFound: (forehead: Boolean) -> Unit? = {},
-    yearVersion: String = lastYearVersion,
-    sortedSave: (param: LookupSortedSaveVo) -> T? = { null },
-  ): T? {
-    val codeObj = createCnDistrict(code) ?: return null
-    var currentYearVersion = yearVersion
-    var result: T? = null
-    var isEnd = false
-
-    while (!isEnd) {
-      codeObj.back()?.let { firstFindCode ->
-        // 尝试首次查找
-        firstFind(
-            LookupFindDto(
-              code = firstFindCode.code,
-              level = firstFindCode.level,
-            )
-          )
-          ?.let {
-            return it
-          }
-
-        // 创建请求队列
-        val requestQueue = createRequestQueue(firstFindCode, deepCondition)
-
-        // 处理请求队列
-        for (request in requestQueue) {
-          val responses =
-            findAllChildrenByCode(code = request.code, currentYearVersion)
-          if (responses.isNotEmpty()) {
-            result =
-              sortedSave(
-                LookupSortedSaveVo(
-                  parentCode = request.code,
-                  yearVersion = currentYearVersion,
-                  deepLevel = request.level,
-                  result = responses,
-                  notInit = request.empty,
-                )
-              )
-            if (result != null) {
-              return result
-            }
-          }
-        }
-
-        // 如果当前版本未找到，尝试上一个版本
-        val nextVersion = lastYearVersionOrNull(currentYearVersion)
-        if (nextVersion == null) {
-          isEnd = true
-          notFound(true)
-          logger?.warn(
-            "lookupByCode all not found: $code, lastYearVersion: {}",
-            currentYearVersion,
-          )
-        } else {
-          currentYearVersion = nextVersion
-          logger?.debug("code recursion in next version: {}", nextVersion)
-        }
-      }
-        ?: run {
-          isEnd = true
-          notFound(true)
-        }
-    }
-
-    return result
-  }
+  fun fetchAllProvinces(
+    yearVersion: String = supportedDefaultYearVersion,
+  ): List<CnDistrict> = fetchChildren(DEFAULT_COUNTRY_CODE, yearVersion)
 
   /**
-   * ## 预取地址数据
+   * 查找指定代码对应的单个行政区划信息。
+   * 实现类需要处理 `code` 无效或找不到的情况。
+   * 实现类 **需要** 处理版本回退逻辑：如果 `yearVersion` 找不到，则尝试使用 `lastYearVersionOrNull` 获取更早版本进行查找，直到找到或所有版本都尝试过。
    *
-   * @param code 地址代码
-   * @param firstFind 首次查找函数
-   * @param deepCondition 逐级向上查找，报告条件
-   * @param notFound 当未找到符合条件或空时，调用
-   * @param sortedSave 当拥有需要的上级数据时，进行调用
-   * @param yearVersion 年份版本（默认使用最新版本）
-   * @return 自定义返回的列表
+   * @param code 需要查找的行政区划代码（可以是任意层级的部分或完整代码）。
+   * @param yearVersion **起始** 查找的数据年份版本 (若希望总是从最新开始，传入 `lastYearVersion`)。
+   * @return 找到的 [CnDistrict] 信息 (应包含实际找到数据的年份版本)，如果所有支持年份版本中都找不到则返回 null。
    */
-  fun <T> lookupAllChildrenByCode(
+  fun fetchDistrict(
     code: string,
-    firstFind: (param: LookupFindDto) -> List<T>? = { null },
-    deepCondition: (param: LookupFindDto) -> Boolean = { false },
-    notFound: (forehead: Boolean) -> Unit? = {},
-    yearVersion: String = lastYearVersion,
-    sortedSave: (param: LookupSortedSaveVo) -> List<T> = { emptyList() },
-  ): List<T> {
-    val toCode = createCnDistrict(code) ?: return emptyList()
-    var currentYearVersion = yearVersion
-    var result = listOf<T>()
-
-    // 尝试从缓存获取结果
-    val cacheKey = getCacheKey(code, currentYearVersion)
-    @Suppress("UNCHECKED_CAST")
-    childrenCache[cacheKey]?.let { cached ->
-      return sortedSave(
-        LookupSortedSaveVo(
-          parentCode = code,
-          yearVersion = currentYearVersion,
-          deepLevel = toCode.level,
-          result = cached,
-          notInit = toCode.empty,
-        )
-      )
-    }
-
-    // 尝试首次查找（仅在最新版本时）
-    if (currentYearVersion == lastYearVersion) {
-      firstFind(LookupFindDto(code = toCode.code, level = toCode.level))?.let {
-        return it
-      }
-    }
-
-    // 创建请求队列
-    val requestQueue = createRequestQueue(toCode, deepCondition)
-
-    while (true) {
-      var found = false
-      for (request in requestQueue) {
-        val responses =
-          findAllChildrenByCode(code = request.code, currentYearVersion)
-        logger?.debug("implemented responses: {}", responses)
-
-        if (responses.isNotEmpty()) {
-          result =
-            sortedSave(
-              LookupSortedSaveVo(
-                parentCode = request.code,
-                yearVersion = currentYearVersion,
-                deepLevel = request.level,
-                result = responses,
-                notInit = request.empty,
-              )
-            )
-          found = true
-          break
-        }
-      }
-
-      if (found) break
-
-      val nextVersion = lastYearVersionOrNull(currentYearVersion)
-      if (nextVersion == null) {
-        notFound(true)
-        logger?.warn(
-          "lookupAllChildrenByCode all not found: $code, lastYearVersion: {}",
-          currentYearVersion,
-        )
-        return emptyList()
-      }
-
-      currentYearVersion = nextVersion
-      logger?.debug("recursion in next version: {}", nextVersion)
-    }
-
-    // 缓存结果
-    if (result.isNotEmpty()) {
-      @Suppress("UNCHECKED_CAST")
-      childrenCache[cacheKey] = result as List<CnDistrict>
-    }
-
-    return result
-  }
-
-  fun findAllChildrenByCode(
-    code: string,
-    level: Int,
-    yearVersion: String = lastYearVersion,
-  ): List<CnDistrict> =
-    when {
-      level !in 0..4 -> emptyList()
-      else ->
-        try {
-          when (level) {
-            0 -> findAllProvinces(yearVersion)
-            1 -> findAllCityByCode(code, yearVersion)
-            2 -> findAllCountyByCode(code, yearVersion)
-            3 -> findAllTownByCode(code, yearVersion)
-            4 -> findAllVillageByCode(code, yearVersion)
-            else -> emptyList()
-          }
-        } catch (e: RemoteCallException) {
-          logger?.warn("获取地址出错", e)
-          emptyList()
-        }
-    }
+    yearVersion: String,
+  ): CnDistrict?
 
   /**
-   * ## 预取地址数据
-   * 此函数的作用在于，当拥有某些数据时，则不再需要发送网络请求，减少资源消耗 这个函数应用起来可能有些费解 <br/> 首先传入code <br/>
-   * preHandle 预处理函数，返回两个值，条件以及结果 <br/> 当 preHandle 返回的条件为 true 时，直接返回结果 <br/>
-   * 否则会调用 postProcessor 函数，入参为预取的地址数据
+   * 递归查找指定代码下的 **所有子孙** 行政区划列表，直到指定的最大深度。
+   * 实现类需要处理 `parentCode` 无效或找不到的情况，并处理 `maxDepth`。
+   * 实现类 **需要** 处理版本回退逻辑：对于查找的每一层级，如果在一个版本中找不到子节点，应尝试更早的版本。
+   * （注意：版本回退逻辑可能比较复杂，例如，父节点在 V2 找到，子节点在 V1 找到）。
+   *
+   * @param parentCode 父级行政区划代码。
+   * @param maxDepth 相对于 `parentCode` 的最大查找深度（例如 `maxDepth = 1` 表示只查找直接子级，等同于 `findChildren`）。
+   * @param yearVersion **起始** 查找的数据年份版本 (每一层递归都应从这个版本开始尝试)。
+   * @return 所有符合条件的子孙 [CnDistrict] 列表 (每个 District 应包含实际找到数据的年份版本)。
    */
-  fun <T> lazyFindAllChildrenByCode(
-    code: String,
-    preHandle: () -> Pair<Boolean, List<T>>,
-    postProcessor: (List<CnDistrict>) -> List<T>,
-  ): List<T?> {
-    val (shouldUsePreResult, preResult) = preHandle()
-    return if (shouldUsePreResult) {
-      preResult
-    } else {
-      postProcessor(findAllChildrenByCode(code))
-    }
-  }
+  fun fetchChildrenRecursive(
+    parentCode: string,
+    maxDepth: Int,
+    yearVersion: String,
+  ): List<CnDistrict>
 
-  fun findAllChildrenByCode(
-    code: string,
-    yearVersion: String = lastYearVersion,
-  ): List<CnDistrict> {
-    val cacheKey = getCacheKey(code, yearVersion)
-    return childrenCache.getOrPut(cacheKey) {
-      findAllChildrenByCode(code, CnDistrictCode(code).level, yearVersion)
-    }
-  }
+  /**
+   * 以遍历的方式递归处理指定代码下的所有子孙行政区划。
+   * 该方法通过回调函数让调用者能够控制遍历过程，适合大数据量的数据库操作。
+   * 
+   * @param parentCode 父级行政区划代码
+   * @param maxDepth 相对于 `parentCode` 的最大遍历深度
+   * @param yearVersion **起始** 遍历的数据年份版本
+   * @param onVisit 访问节点的回调函数，返回 true 继续遍历，返回 false 停止当前分支的遍历
+   *                参数说明：
+   *                - district: 当前访问的节点信息
+   *                - depth: 当前节点相对于 parentCode 的深度（从1开始）
+   *                - parentDistrict: 父节点信息（如果是顶级节点则为null）
+   */
+  fun traverseChildrenRecursive(
+    parentCode: string,
+    maxDepth: Int,
+    yearVersion: String,
+    onVisit: (district: CnDistrict, depth: Int, parentDistrict: CnDistrict?) -> Boolean
+  )
 }

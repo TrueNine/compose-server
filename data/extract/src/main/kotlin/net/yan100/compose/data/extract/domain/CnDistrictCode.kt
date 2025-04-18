@@ -13,7 +13,16 @@ package net.yan100.compose.data.extract.domain
  * @property villageCode 村庄编码(3位)
  * @property empty 是否为空编码
  */
-class CnDistrictCode(code: String = "") {
+data class CnDistrictCode(
+  val code: String,
+  val padCode: String,
+  val provinceCode: String,
+  val cityCode: String,
+  val countyCode: String,
+  val townCode: String,
+  val villageCode: String,
+  val empty: Boolean,
+) {
   companion object {
     private const val ZERO = "00"
     private const val THREE_ZERO = "000"
@@ -25,22 +34,63 @@ class CnDistrictCode(code: String = "") {
     private const val VILLAGE_LENGTH = 3
 
     private val INVALID_LENGTHS = setOf(1, 3, 5, 7, 8, 10, 11)
-  }
 
-  val code: String
-  val padCode: String
-  val provinceCode: String
-  val cityCode: String
-  val countyCode: String
-  val townCode: String
-  val villageCode: String
-  val empty: Boolean
+    // 工厂方法，替代原来的主构造函数逻辑
+    operator fun invoke(code: String = ""): CnDistrictCode {
+      require(!INVALID_LENGTHS.contains(code.length)) { "行政区编码格式缺失" }
 
-  val level: Int
-    get() = calculateLevel()
+      // 补全编码到12位
+      val padCode = code.padEnd(FULL_LENGTH, '0')
+      val empty = padCode.startsWith(THREE_ZERO)
 
-  private val levelSub: Int?
-    get() =
+      // 解析各级编码
+      var currentIndex = 0
+      val provinceCode = padCode.substring(currentIndex, PROVINCE_LENGTH)
+      currentIndex += PROVINCE_LENGTH
+
+      val cityCode = padCode.substring(currentIndex, currentIndex + CITY_LENGTH)
+      currentIndex += CITY_LENGTH
+
+      val countyCode = padCode.substring(currentIndex, currentIndex + COUNTY_LENGTH)
+      currentIndex += COUNTY_LENGTH
+
+      val townCode = padCode.substring(currentIndex, currentIndex + TOWN_LENGTH)
+      currentIndex += TOWN_LENGTH
+
+      val villageCode = padCode.substring(currentIndex, currentIndex + VILLAGE_LENGTH)
+
+      val level = calculateLevel(provinceCode, cityCode, countyCode, townCode, villageCode)
+      val actualCode = code.substring(0, getLevelSub(level) ?: 0)
+
+      return CnDistrictCode(
+        code = actualCode,
+        padCode = padCode,
+        provinceCode = provinceCode,
+        cityCode = cityCode,
+        countyCode = countyCode,
+        townCode = townCode,
+        villageCode = villageCode,
+        empty = empty
+      )
+    }
+
+    private fun calculateLevel(
+      provinceCode: String,
+      cityCode: String,
+      countyCode: String,
+      townCode: String,
+      villageCode: String,
+    ): Int {
+      var maxLevel = 5
+      if (villageCode == THREE_ZERO) maxLevel--
+      if (townCode == THREE_ZERO) maxLevel--
+      if (countyCode == ZERO) maxLevel--
+      if (cityCode == ZERO) maxLevel--
+      if (provinceCode == ZERO) maxLevel--
+      return maxLevel
+    }
+
+    private fun getLevelSub(level: Int): Int? =
       when (level) {
         1 -> PROVINCE_LENGTH
         2 -> PROVINCE_LENGTH + CITY_LENGTH
@@ -49,50 +99,18 @@ class CnDistrictCode(code: String = "") {
         5 -> FULL_LENGTH
         else -> null
       }
-
-  init {
-    require(!INVALID_LENGTHS.contains(code.length)) { "行政区编码格式缺失" }
-
-    // 补全编码到12位
-    padCode = code.padEnd(FULL_LENGTH, '0')
-    empty = padCode.startsWith(THREE_ZERO)
-
-    // 解析各级编码
-    var currentIndex = 0
-    provinceCode = padCode.substring(currentIndex, PROVINCE_LENGTH)
-    currentIndex += PROVINCE_LENGTH
-
-    cityCode = padCode.substring(currentIndex, currentIndex + CITY_LENGTH)
-    currentIndex += CITY_LENGTH
-
-    countyCode = padCode.substring(currentIndex, currentIndex + COUNTY_LENGTH)
-    currentIndex += COUNTY_LENGTH
-
-    townCode = padCode.substring(currentIndex, currentIndex + TOWN_LENGTH)
-    currentIndex += TOWN_LENGTH
-
-    villageCode = padCode.substring(currentIndex, currentIndex + VILLAGE_LENGTH)
-
-    this.code = code.substring(0, levelSub ?: 0)
   }
 
-  private fun calculateLevel(): Int {
-    var maxLevel = 5
-    if (villageCode == THREE_ZERO) maxLevel--
-    if (townCode == THREE_ZERO) maxLevel--
-    if (countyCode == ZERO) maxLevel--
-    if (cityCode == ZERO) maxLevel--
-    if (provinceCode == ZERO) maxLevel--
-    return maxLevel
-  }
+  val level: Int
+    get() = calculateLevel(provinceCode, cityCode, countyCode, townCode, villageCode)
 
   fun back(): CnDistrictCode? =
     when (level) {
-      1 -> CnDistrictCode()
-      2 -> CnDistrictCode(provinceCode)
-      3 -> CnDistrictCode(provinceCode + cityCode)
-      4 -> CnDistrictCode(provinceCode + cityCode + countyCode)
-      5 -> CnDistrictCode(provinceCode + cityCode + countyCode + townCode)
+      1 -> invoke()
+      2 -> invoke(provinceCode)
+      3 -> invoke(provinceCode + cityCode)
+      4 -> invoke(provinceCode + cityCode + countyCode)
+      5 -> invoke(provinceCode + cityCode + countyCode + townCode)
       else -> null
     }
 
