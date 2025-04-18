@@ -1,9 +1,13 @@
 package net.yan100.compose.testtookit
 
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 /** 确保能够启动 */
-class LaunchTest {
+class GradleEnvironmentTest {
   private val logger = log
 
   @BeforeTest
