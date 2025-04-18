@@ -35,5 +35,6 @@
   "diffEditor.experimental.useTrueInlineView": true,
   "diffEditor.hideUnchangedRegions.contextLineCount": 1,
   "diffEditor.hideUnchangedRegions.enabled": false,
-  "git.closeDiffOnOperation": true
+  "git.closeDiffOnOperation": true,
+  "java.compile.nullAnalysis.mode": "automatic"
 }
