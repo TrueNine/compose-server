@@ -14,15 +14,15 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.11.0"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.1.1"
-compose = "3.0.27"
-compose-build = "3.0.15"
-compose-data = "3.0.16"
-compose-depend = "3.0.14"
-compose-oss = "3.0.16"
-compose-pay = "3.0.14"
-compose-rds = "3.0.19"
-compose-security = "3.0.14"
-compose-sms = "3.0.14"
+compose = "3.0.28"
+compose-build = "3.0.16"
+compose-data = "3.0.17"
+compose-depend = "3.0.15"
+compose-oss = "3.0.17"
+compose-pay = "3.0.15"
+compose-rds = "3.0.20"
+compose-security = "3.0.15"
+compose-sms = "3.0.15"
 group = "net.yan100.compose"
 io-netty = "4.2.0.Final"
 java = "23"
@@ -128,7 +128,6 @@ net-sf-sevenzipjbinding-sevenzipjbinding = { module = "net.sf.sevenzipjbinding:s
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { module = "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-supercsv-super-csv = "net.sf.supercsv:super-csv:2.4.0"
 net-yan100-compose-cacheable = { module = "net.yan100.compose:cacheable", version.ref = "compose" }
-net-yan100-compose-shared = { module = "net.yan100.compose:shared", version.ref = "compose" }
 net-yan100-compose-data-crawler = { module = "net.yan100.compose:data-crawler", version.ref = "compose-data" }
 net-yan100-compose-data-extract = { module = "net.yan100.compose:data-extract", version.ref = "compose-data" }
 net-yan100-compose-depend-http-exchange = { module = "net.yan100.compose:depend-http-exchange", version.ref = "compose-depend" }
@@ -143,19 +142,20 @@ net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", vers
 net-yan100-compose-ksp-shared = { module = "net.yan100.compose:ksp-shared", version.ref = "compose-build" }
 net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "compose" }
 net-yan100-compose-oss-aliyun-oss = { module = "net.yan100.compose:oss-aliyun-oss", version.ref = "compose-oss" }
-net-yan100-compose-oss-shared = { module = "net.yan100.compose:oss-shared", version.ref = "compose-oss" }
 net-yan100-compose-oss-huawei-obs = { module = "net.yan100.compose:oss-huawei-obs", version.ref = "compose-oss" }
 net-yan100-compose-oss-minio = { module = "net.yan100.compose:oss-minio", version.ref = "compose-oss" }
+net-yan100-compose-oss-shared = { module = "net.yan100.compose:oss-shared", version.ref = "compose-oss" }
 net-yan100-compose-pay = { module = "net.yan100.compose:pay", version.ref = "compose-pay" }
-net-yan100-compose-rds-shared = { module = "net.yan100.compose:rds-shared", version.ref = "compose-rds" }
 net-yan100-compose-rds-crud = { module = "net.yan100.compose:rds-crud", version.ref = "compose-rds" }
 net-yan100-compose-rds-jimmer-ext-postgres = { module = "net.yan100.compose:rds-jimmer-ext-postgres", version.ref = "compose-rds" }
 net-yan100-compose-rds-migration-h2 = { module = "net.yan100.compose:rds-migration-h2", version.ref = "compose-rds" }
 net-yan100-compose-rds-migration-mysql = { module = "net.yan100.compose:rds-migration-mysql", version.ref = "compose-rds" }
 net-yan100-compose-rds-migration-postgres = { module = "net.yan100.compose:rds-migration-postgres", version.ref = "compose-rds" }
+net-yan100-compose-rds-shared = { module = "net.yan100.compose:rds-shared", version.ref = "compose-rds" }
 net-yan100-compose-security-crypto = { module = "net.yan100.compose:security-crypto", version.ref = "compose-security" }
 net-yan100-compose-security-oauth2 = { module = "net.yan100.compose:security-oauth2", version.ref = "compose-security" }
 net-yan100-compose-security-spring = { module = "net.yan100.compose:security-spring", version.ref = "compose-security" }
+net-yan100-compose-shared = { module = "net.yan100.compose:shared", version.ref = "compose" }
 net-yan100-compose-sms-tencent = { module = "net.yan100.compose:sms-tencent", version.ref = "compose-sms" }
 net-yan100-compose-testtoolkit = { module = "net.yan100.compose:testtoolkit", version.ref = "compose-build" }
 nl-littlerobots-version-catalog-update-nl-littlerobots-version-catalog-update-gradle-plugin = { module = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
@@ -210,8 +210,8 @@ org-jetbrains-kotlinx-kotlinx-serialization-bom = { module = "org.jetbrains.kotl
 org-jetbrains-kotlinx-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "org-jetbrains-kotlinx-serialization" }
 org-jsoup-jsoup = "org.jsoup:jsoup:1.19.1"
 org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-junit5" }
-org-junit-jupiter-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "org-junit-junit5" }
 org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-junit5" }
+org-junit-jupiter-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "org-junit-junit5" }
 org-junit-platform-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "org-junit-platform" }
 org-junit-vintage-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "org-junit-junit5" }
 org-lionsoul-ip2region = "org.lionsoul:ip2region:2.7.0"
@@ -305,29 +305,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-  "org-junit-jupiter-junit-jupiter-api",
-  "org-junit-jupiter-junit-jupiter-engine",
-  "org-junit-platform-junit-platform-launcher",
+    "org-junit-jupiter-junit-jupiter-api",
+    "org-junit-jupiter-junit-jupiter-engine",
+    "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-  "io-projectreactor-kotlin-reactor-kotlin-extensions",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+    "io-projectreactor-kotlin-reactor-kotlin-extensions",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-  "io-mockk-mockk",
-  "io-projectreactor-reactor-test",
-  "org-jetbrains-kotlin-kotlin-test-junit5",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+    "io-mockk-mockk",
+    "io-projectreactor-reactor-test",
+    "org-jetbrains-kotlin-kotlin-test-junit5",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-  "p6spy-p6spy",
+    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+    "p6spy-p6spy",
 ]
 redis = [
-  "org-apache-commons-commons-pool2",
-  "org-springframework-boot-spring-boot-starter-data-redis",
+    "org-apache-commons-commons-pool2",
+    "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-  "io-github-bonigarcia-webdrivermanager",
-  "org-seleniumhq-selenium-selenium-java",
+    "io-github-bonigarcia-webdrivermanager",
+    "org-seleniumhq-selenium-selenium-java",
 ]
