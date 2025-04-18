@@ -1,12 +1,11 @@
 package net.yan100.compose.security.crypto
 
-import javax.crypto.spec.SecretKeySpec
 import net.yan100.compose.security.crypto.domain.IEccExtKeyPair
 import net.yan100.compose.security.crypto.domain.IKeysRepo
 import net.yan100.compose.security.crypto.domain.IRsaExtKeyPair
 import net.yan100.compose.slf4j
+import javax.crypto.spec.SecretKeySpec
 
-private val log = slf4j<FileKeysRepoImpl>()
 
 class FileKeysRepoImpl(
   private val keyDest: String = "security",
@@ -50,5 +49,10 @@ class FileKeysRepoImpl(
       javaClass.classLoader.getResource("${this.keyDest}/$name")!!.readText()
     log.trace("text = {}", text)
     return text
+  }
+
+  companion object {
+    @JvmStatic
+    private val log = slf4j<FileKeysRepoImpl>()
   }
 }
