@@ -9,6 +9,8 @@ plugins {
   id("repositories-convention")
 }
 
+group = libs.versions.group.get()
+
 configurations.all {
   resolutionStrategy {
     dependencySubstitution {
