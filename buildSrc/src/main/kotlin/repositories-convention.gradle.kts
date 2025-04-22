@@ -23,40 +23,24 @@ fun RepositoryHandler.setupDependencyRepositories() {
   mavenLocal()
 
   // Maven Central 仓库
-  maven {
-    url = uri("https://repo.maven.apache.org/maven2/")
-    mavenContent {
-      releasesOnly()
-    }
-  }
+  maven { url = uri("https://repo.maven.apache.org/maven2/") }
 
   // Spring 仓库
-  maven {
-    url = uri(repos["spring"]!!)
-    mavenContent {
-      includeGroupAndSubgroups("org.springframework")
-      includeGroupAndSubgroups("io.spring")
-    }
-  }
+  maven { url = uri(repos["spring"]!!) }
 
   // Gradle 插件仓库
-  maven {
-    url = uri("https://plugins.gradle.org/m2/")
-    mavenContent {
-      includeGroupAndSubgroups("com.diffplug.spotless")
-    }
-  }
+  maven { url = uri("https://plugins.gradle.org/m2/") }
 }
 
 // 统一配置所有项目的仓库
 allprojects {
-  repositories {
-    setupDependencyRepositories()
-  }
-
   buildscript {
     repositories {
       setupDependencyRepositories()
     }
+  }
+
+  repositories {
+    setupDependencyRepositories()
   }
 }
