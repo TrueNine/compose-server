@@ -14,15 +14,15 @@ com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.11.0"
 com-xuxueli-xxl-job = "3.0.0"
 com-yomahub-liteflow = "2.13.1.1"
-compose = "3.0.30"
-compose-build = "3.0.17"
-compose-data = "3.0.19"
-compose-depend = "3.0.16"
-compose-oss = "3.0.18"
-compose-pay = "3.0.16"
-compose-rds = "3.0.21"
-compose-security = "3.0.16"
-compose-sms = "3.0.16"
+compose = "3.0.32"
+compose-build = "3.0.18"
+compose-data = "3.0.20"
+compose-depend = "3.0.17"
+compose-oss = "3.0.19"
+compose-pay = "3.0.17"
+compose-rds = "3.0.22"
+compose-security = "3.0.17"
+compose-sms = "3.0.17"
 group = "net.yan100.compose"
 io-netty = "4.2.0.Final"
 java = "23"
@@ -53,7 +53,7 @@ spring-modulith = "1.4.0-M3"
 spring-security = "6.5.0-M3"
 
 [libraries]
-cn-dev33-sa-token-redis = { module = "cn.dev33:sa-token-redis", version.ref = "cn-dev33-sa-token-redis" }
+cn-dev33-sa-token-redis-template = { module = "cn.dev33:sa-token-redis-template", version.ref = "cn-dev33-sa-token-redis" }
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot-starter = { module = "cn.dev33:sa-token-spring-boot-starter", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot3-starter = { module = "cn.dev33:sa-token-spring-boot3-starter", version.ref = "cn-dev33-sa-token" }
