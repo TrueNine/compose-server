@@ -15,19 +15,20 @@ dependencies {
   implementation(libs.org.jetbrains.kotlin.kotlin.reflect)
 }
 
-kotlin {
-  compilerOptions {
-    jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
-    freeCompilerArgs = listOf(
-      "-Xjsr305=strict",
-      "-Xjvm-default=all",
-      "-verbose"
-    )
+configurations.all {
+  val javaToolchainVersion = extensions.findByType<JavaPluginExtension>()?.toolchain?.languageVersion?.get()?.asInt()?.toString()
+  if (javaToolchainVersion == null) {
+    return@all
   }
-  jvmToolchain(libs.versions.java.get().toInt())
-}
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-  jvmTargetValidationMode.set(org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.WARNING)
+  kotlin {
+    compilerOptions {
+      jvmTarget = JvmTarget.fromTarget(javaToolchainVersion)
+      freeCompilerArgs = listOf(
+        "-Xjsr305=strict", "-Xjvm-default=all", "-verbose"
+      )
+    }
+    jvmToolchain(javaToolchainVersion.toInt())
+  }
 }
 
 kapt {
