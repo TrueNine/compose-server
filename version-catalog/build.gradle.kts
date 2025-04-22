@@ -3,13 +3,25 @@ import kotlin.jvm.optionals.getOrNull
 
 plugins {
   java
-  alias(libs.plugins.com.github.ben.manes.versions)
   `repositories-convention`
+  alias(libs.plugins.com.github.ben.manes.versions)
   `version-catalog`
   `publish-convention`
 }
 
 version = libs.versions.compose.asProvider().get()
+
+repositories {
+  mavenCentral()
+}
+
+java {
+  val jv = JavaVersion.VERSION_17
+  sourceCompatibility = jv
+  targetCompatibility = jv
+  toolchain { languageVersion.set(JavaLanguageVersion.of(jv.ordinal + 1)) }
+  withSourcesJar()
+}
 
 dependencies {
   val allVersionCatalogs = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
