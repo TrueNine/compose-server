@@ -1,5 +1,4 @@
 import org.gradle.accessors.dm.LibrariesForLibs
-import java.util.*
 
 val libs = the<LibrariesForLibs>()
 
@@ -77,12 +76,19 @@ publishing {
           system = "GitHub"
           url = "https://github.com/TrueNine/compose-server/issues"
         }
-        properties = mapOf(
+
+        val javaToolchainVersion = extensions.findByType<JavaPluginExtension>()?.toolchain?.languageVersion?.get()?.asInt()?.toString()
+
+        properties = mutableMapOf(
           "project.build.sourceEncoding" to "UTF-8",
-          "maven.compiler.source" to libs.versions.java.get(),
-          "maven.compiler.target" to libs.versions.java.get(),
-          "maven.compiler.release" to libs.versions.java.get()
-        )
+        ).apply {
+          if (javaToolchainVersion != null) {
+            put("java.version", javaToolchainVersion)
+            put("maven.compiler.source", javaToolchainVersion)
+            put("maven.compiler.target", javaToolchainVersion)
+            put("maven.compiler.release", javaToolchainVersion)
+          }
+        }
       }
     }
   }
