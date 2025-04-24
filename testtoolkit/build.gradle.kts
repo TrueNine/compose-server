@@ -65,4 +65,18 @@ dependencies {
   // 测试用数据库
   runtimeOnly(libs.com.h2database.h2)
   testImplementation(libs.org.testcontainers.postgresql)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
+  testRuntimeOnly(libs.org.postgresql.postgresql)
+
+  // Redis 支持
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.data.redis)
+
+  // MinIO 支持
+  testImplementation(libs.io.minio.minio)
+
+  // 测试容器支持
+  testImplementation(libs.org.testcontainers.junit.jupiter)
+  testImplementation(libs.org.testcontainers.postgresql)
+  testImplementation(libs.io.minio.minio)
+  testImplementation(libs.org.testcontainers.testcontainers)
 }
