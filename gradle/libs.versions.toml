@@ -53,8 +53,8 @@ spring-modulith = "1.4.0-M3"
 spring-security = "6.5.0-M3"
 
 [libraries]
-cn-dev33-sa-token-redis-template = { module = "cn.dev33:sa-token-redis-template", version.ref = "cn-dev33-sa-token-redis" }
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
+cn-dev33-sa-token-redis-template = { module = "cn.dev33:sa-token-redis-template", version.ref = "cn-dev33-sa-token-redis" }
 cn-dev33-sa-token-spring-boot-starter = { module = "cn.dev33:sa-token-spring-boot-starter", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot3-starter = { module = "cn.dev33:sa-token-spring-boot3-starter", version.ref = "cn-dev33-sa-token" }
 cn-hutool-hutool-all = { module = "cn.hutool:hutool-all", version.ref = "cn-hutool" }
@@ -289,7 +289,7 @@ net-yan100-compose-gradle-plugin = { id = "net.yan100.compose.gradle-plugin", ve
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 org-asciidoctor-jvm-convert = "org.asciidoctor.jvm.convert:4.0.4"
 org-graalvm-buildtools-native = "org.graalvm.buildtools.native:0.10.6"
-org-gradle-toolchains-foojay-resolver-convention = "org.gradle.toolchains.foojay-resolver-convention:0.9.0"
+org-gradle-toolchains-foojay-resolver-convention = "org.gradle.toolchains.foojay-resolver-convention:0.10.0"
 org-hibernate-orm = { id = "org.hibernate.orm", version.ref = "org-hibernate-orm" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin" }
@@ -305,29 +305,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-  "org-junit-jupiter-junit-jupiter-api",
-  "org-junit-jupiter-junit-jupiter-engine",
-  "org-junit-platform-junit-platform-launcher",
+    "org-junit-jupiter-junit-jupiter-api",
+    "org-junit-jupiter-junit-jupiter-engine",
+    "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-  "io-projectreactor-kotlin-reactor-kotlin-extensions",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+    "io-projectreactor-kotlin-reactor-kotlin-extensions",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-  "io-mockk-mockk",
-  "io-projectreactor-reactor-test",
-  "org-jetbrains-kotlin-kotlin-test-junit5",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+    "io-mockk-mockk",
+    "io-projectreactor-reactor-test",
+    "org-jetbrains-kotlin-kotlin-test-junit5",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-  "p6spy-p6spy",
+    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+    "p6spy-p6spy",
 ]
 redis = [
-  "org-apache-commons-commons-pool2",
-  "org-springframework-boot-spring-boot-starter-data-redis",
+    "org-apache-commons-commons-pool2",
+    "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-  "io-github-bonigarcia-webdrivermanager",
-  "org-seleniumhq-selenium-selenium-java",
+    "io-github-bonigarcia-webdrivermanager",
+    "org-seleniumhq-selenium-selenium-java",
 ]
