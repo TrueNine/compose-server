@@ -2,6 +2,14 @@ plugins { `kotlin-convention` }
 
 version = libs.versions.compose.build.get()
 
+java {
+  val jv = JavaVersion.VERSION_17
+  sourceCompatibility = jv
+  targetCompatibility = jv
+  toolchain { languageVersion.set(JavaLanguageVersion.of(jv.ordinal + 1)) }
+  withSourcesJar()
+}
+
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test)
   api(libs.org.jetbrains.kotlin.kotlin.test.junit5)
@@ -14,8 +22,9 @@ dependencies {
   api(libs.org.junit.jupiter.junit.jupiter.params)
 
   // Testcontainers
-  testImplementation(libs.org.testcontainers.testcontainers)
-  testImplementation(libs.org.testcontainers.junit.jupiter)
+  api(libs.org.testcontainers.testcontainers)
+  api(libs.org.testcontainers.postgresql)
+  api(libs.org.testcontainers.junit.jupiter)
 
   implementation(libs.org.junit.jupiter.junit.jupiter.api) // 覆盖依赖
   implementation(libs.org.junit.jupiter.junit.jupiter.engine) // kotlin
