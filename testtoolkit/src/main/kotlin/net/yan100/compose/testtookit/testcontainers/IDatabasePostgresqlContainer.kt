@@ -20,7 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
  * ## 使用方式
  * ```kotlin
  * @SpringBootTest
- * class YourTestClass : IDatabaseContainers {
+ * class YourTestClass : IDatabasePostgresqlContainer {
  *   // 你的测试代码
  * }
  * ```
@@ -30,7 +30,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.PostgreSQLContainer
  */
 @Testcontainers
-interface IDatabaseContainers {
+interface IDatabasePostgresqlContainer {
   companion object {
     /**
      * PostgreSQL测试容器实例
@@ -46,6 +46,7 @@ interface IDatabaseContainers {
       withDatabaseName("testdb")
       withUsername("test")
       withPassword("test")
+      addExposedPorts(5432)
       start()
     }
 
