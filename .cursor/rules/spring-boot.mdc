@@ -1,55 +1,66 @@
 ---
-description: 
-globs: *Api.kt,*Service.kt,*Repository.kt,*Controller.kt,*Config.kt
+description: Spring Boot Kotlin 项目规范与最佳实践指南
+globs: *Api.kt,*Service.kt,*Repository.kt,*Controller.kt,*Config.kt,*Entity.kt,*Dto.kt
 alwaysApply: false
 ---
-- spring-boot3
-- jakarta-ee
 
-### 开发实践
+# 🛠 技术栈规范
 
-- 依赖注入：构造器注入优先，字段注入使用`@Resource`+lateinit
-- 异常处理：禁用 throw，强制使用`error`/`require`/`check`系列
-- 实体主键类型为`id: RefId`（Long别名）,inputDto 或者 outputDto 中, jimmer 会将其转换为 `String`
-- 贫血模型：Controller/Api 仅做参数校验和结果返回
+- Spring Boot 3.4+
+- Jakarta EE9+
 
----
+# 📚 架构设计原则
 
-- `RefId` 通常指代 `net.yan100.compose.core.RefId`, 它是 kotlin 的 typealias, 真实类型为 `kotlin.Long`
-- `RefId` 为其准备了基本类型到 `RefId` 的扩展方法 `net.yan100.compose.core.toId`. 调用示例: `1l.toId()`,`"1".toId()`
-- `RefId` 为其准备判断是否为`RefId`的扩展方法 `net.yan100.compose.core.isId`. 调用示例: `id.isId()`
+## 分层架构
+- Controller/Api：参数校验、结果返回
+- Service：业务逻辑处理
+- Repository：数据访问层
 
----
+## 命名规范
+### 分层命名动词
+- Repository 层：`find`/`insert`/`update`/`delete`
+- Service 层：`fetch`/`post`/`remove`/`persist`
+- API 层：`get`/`post`/`put`/`delete`
 
-- 后缀规则：Controller 类`Api`结尾，API路径含版本号（如`v1/user_account`）
-- 分层命名：
-  - Repository：`find`/`insert`/`update`/`delete`
-  - Service：`fetch`/`post`/`remove`/`persist`
-  - API：`get`/`post`/`put`/`delete`
-- 禁用词：`ID`（统一使用`id`/`Id`）
+### 通用命名规则
+- 禁用 `ID` 全大写（统一使用 `id`/`Id`）
+- 类后缀：Controller 统一使用 `Api` 结尾
+- API 路径：必须包含版本号（如 `v1/user_account`）
+- 避免使用全大写缩写（使用 `userId` 而非 `userID`）
+- 实体标识符统一使用小写 `id`
 
-- 命名规范：
-  - 避免使用全大写缩写（如：使用`userId`而不是`userID`）
-  - 避免使用后缀命名（如：使用`User`而不是`UserApi`）
-  - 实体标识符统一使用`id`小写形式
+# 💡 开发最佳实践
 
+## 依赖注入
 ```kotlin
-/**
- * # 用户服务
- * > 提供用户相关的核心功能
- *
- * 处理用户注册、认证等基础服务
- * @param name 用户名称
- * @param email 电子邮箱
- */
-class User {
-  /**
-   * ## 获取用户信息
-   * @param userId 用户标识符
-   * @return 用户详细信息
-   */
-  fun get(userId: RefId) {
-    // ...
-  }
-}
+// ✅ 推荐：构造器注入
+class UserService(
+  private val userRepository: UserRepository
+)
+
+// ✅ 允许：字段注入（配合 lateinit）
+lateinit var userRepository: UserRepository @Resource set
 ```
+
+## ID 类型处理
+- 实体主键统一使用 `RefId`（`Long` 的类型别名）
+- DTO 层自动转换为 `String` 类型
+- 提供便捷扩展方法：
+```kotlin
+// 数值转换
+// Long -> RefId
+1L.toId()
+// String -> RefId
+"1".toId()
+
+// 类型检查
+// 检查是否为有效 ID
+id.isId()
+```
+
+# ⚠️ 注意事项
+
+- 保持贫血模型：Controller/Api 层只负责参数校验和结果返回
+- 所有外部输入必须经过验证
+- 避免在 Service 层直接操作 HTTP 相关对象
+- 优先使用 Kotlin 的空安全特性，避免显式空检查

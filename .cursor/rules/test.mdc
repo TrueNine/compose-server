@@ -1,83 +1,172 @@
 ---
-description:
+description: Kotlin 测试规范与最佳实践指南
 globs: *Test.kt,*Test.java
 alwaysApply: false
 ---
 
-# 测试技术栈与规范（Kotlin/Java）
+## 测试规范
 
-可用依赖：jUnit5、junit5-params、kotlin.test、mockk、spring-boot-test、testcontainers
+- 单元测试覆盖率必须达到 100%
+- 必须包含充分的边界条件
+- 对测试使用合理的分组
 
----
+# Kotlin 测试规范与最佳实践 🧪
 
-## 测试框架选型
+## 技术栈 🛠
 
-- Java：JUnit 5
-- Kotlin Mock 框架：MockK
-- Java Mock 框架：Mockito
-- 集成测试：Testcontainers（数据库/Redis/消息队列）
+- 测试框架：JUnit 5 + kotlin.test
+- Mock 框架：MockK（首选）/ Mockito（Java 互操作时）
+- 参数化测试：JUnit 5 Params
+- 集成测试：Testcontainers
+- Spring 测试：spring-boot-test
 
----
+## 命名规范 📝
 
-## 命名规范
+### 测试类命名
 
-- 测试类名：被测类名 + Test
-- 测试方法名：用反引号包裹，描述场景
-  - 正向：`方法名 输入条件 返回预期结果`
-  - 异常：`方法名 失败场景 抛出预期异常`
-  - 边界：`方法名 边界条件 返回预期结果`
-  - 性能：`方法名 性能指标 返回预期结果`
+- 单元测试：`[类名]Test`
+- 集成测试：`[类名]IntegrationTest`
+- 性能测试：`[类名]PerfTest`
 
----
+### 测试方法命名
 
-## Kotlin 风格测试编写规则
-
-- 测试代码应充分体现 Kotlin 语言特性：
-  - 善用扩展函数、数据类、解构、空安全等 Kotlin 语法糖
-  - 命名风格遵循 Kotlin 惯例，变量名简洁、可读性强
-  - 断言优先使用 kotlin.test 提供的方法，表达式化书写
-  - Mock 框架优先选用 mockk，避免 Java 习惯的 Mockito
-  - 测试代码整体尽量函数式、表达式化，减少冗余和样板代码
-  - 使用 mockMvc 进行接口测试时，也要保持 Kotlin 风味：推荐用 Kotlin 的 DSL、扩展函数和空安全特性封装 mockMvc 操作，断言和链式调用表达式化，避免冗余的 Java 风格写法，充分利用
-    Kotlin 语法优势
-
----
-
-## 代码示例
+使用反引号包裹，采用中文描述性命名：
 
 ```kotlin
-import kotlin.test.*
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
+@Test
+fun `当用户是管理员时，拥有完整访问权限`() {}
+```
 
-class ExampleApiTest {
-  @BeforeTest
+命名模式：
+- 正向测试：`当 [条件] 时，[预期结果]`
+- 异常测试：`当 [异常条件] 时，抛出 [异常类型]`
+- 边界测试：`当 [边界条件] 时，[预期结果]`
+- 性能测试：`验证 [功能] 性能达到 [指标]`
+
+## Kotlin 测试编写规范 ✨
+
+### 基本原则
+
+1. 充分利用 Kotlin 特性：
+```kotlin
+// 使用数据类
+data class TestUser(val id: String, val role: String)
+
+// 使用解构
+val (id, role) = TestUser("1", "admin")
+
+// 使用扩展函数
+fun TestUser.hasAdminAccess() = role == "admin"
+```
+
+2. 测试结构组织：
+```kotlin
+class UserServiceTest {
+  private lateinit var userService: UserService
+  private val mockRepo = mockk<UserRepository>()
+
+  @BeforeEach
   fun setup() {
-  }
-  @AfterTest
-  fun after() {
+    userService = UserService(mockRepo)
   }
 
-  @Test
-  fun `getUserDatas 失败后返回 403 响应码`() {
-  }
-
-  @Test
-  fun `postUserDatas 保证接口幂等性`() {
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = ["admin", "guest", "user"])
-  fun `getUserRole 输入不同角色 返回预期权限`(role: String) {
+  @Nested
+  inner class CreateUser {
+    @Test
+    fun `当输入有效时，创建用户`() {
+      val input = UserInput("test@email.com")
+      val result = userService.createUser(input)
+      assertNotNull(result)
+      assertEquals("test@email.com", result.email)
+    }
   }
 }
 ```
 
----
+### MockK 使用规范
 
-## 测试失败处理建议
+```kotlin
+// 推荐写法
+every { mockRepo.findById(any<T>()) } returns user
+verify(exactly = 1) { mockRepo.save(any<T>()) }
 
-- 明确失败原因，断言/日志输出具体信息
-- 针对失败场景，提出修复或优化建议
-- 反思被测对象设计，必要时优化业务逻辑
-- 主动提出改进建议，共同提升质量
+// 协程支持
+coEvery { mockRepo.suspendFindById(any<T>()) } returns user
+coVerify { mockRepo.suspendSave(any<T>()) }
+```
+
+### 断言最佳实践
+
+```kotlin
+// 使用 kotlin.test 断言
+assertEquals(expected, actual)
+assertIs<UserType>(user)
+assertFailsWith<IllegalArgumentException> { 
+  userService.createUser(invalidInput)
+}
+
+// 集合断言
+assertContains(users, expectedUser)
+assertTrue(users.all { it.isActive })
+```
+
+## 参数化测试 📊
+
+```kotlin
+@ParameterizedTest
+@CsvSource(
+  "ADMIN, true",
+  "USER, false",
+  "GUEST, false"
+)
+fun `verify user access based on role`(
+  role: String,
+  expectedAccess: Boolean
+) {
+  val user = User(role = role)
+  assertEquals(expectedAccess, user.hasAccess())
+}
+```
+
+## 集成测试规范 🔄
+
+```kotlin
+@SpringBootTest
+class UserIntegrationTest {
+  lateinit var userService: UserService @Resource set
+
+  @Container
+  val postgres = PostgreSQLContainer<Nothing>("postgres:14").apply {
+    withDatabaseName("testdb")
+  }
+
+  @Test
+  fun `验证用户持久化`() = runTest {
+    // 测试实现
+  }
+}
+```
+
+## 测试覆盖率要求 📈
+
+- 单元测试覆盖率 > 100%
+- 关键业务逻辑覆盖率 > 100%
+- 异常分支必须覆盖
+- 边界条件必须测试
+
+## 故障排查指南 🔍
+
+- 性能问题：
+  + 使用 JVM 分析工具
+  + 检查资源使用情况
+  + 对比历史性能数据
+
+## 最佳实践提示 💡
+
+- 保持测试简单、清晰
+- 一个测试只验证一个行为
+- 避免测试间的依赖
+- 合理使用测试夹具
+- 及时清理测试资源
+- 定期重构测试代码
+- 保持测试代码质量与产品代码同等重要

@@ -1,0 +1,182 @@
+---
+description: Kotlin 项目规范与最佳实践指南
+globs: *.kt
+alwaysApply: false
+---
+
+- Kotlin 2.1+
+- JDK 24+
+
+# 🔄 Kotlin 与 Java 互操作规范
+
+## 类设计原则
+```kotlin
+// ✅ 推荐：显式声明 open 以支持继承
+open class BaseService
+
+// ✅ 推荐：使用 @JvmField 暴露公共字段
+@JvmField
+val MAX_COUNT = 100
+
+// ✅ 推荐：为属性生成 Java 风格访问器
+@get:JvmName("getValue")
+@set:JvmName("setValue")
+var value: String = ""
+```
+
+## 空安全处理
+```kotlin
+// ✅ 推荐：明确的可空性声明
+class UserDto {
+  // Java 调用时自动处理可空性
+  @get:JvmName("getName")
+  val name: String? = null
+
+  // 确保 Java 代码必须处理空值
+  @NotNull
+  lateinit var email: String
+}
+```
+
+## 函数设计
+```kotlin
+// ✅ 推荐：为默认参数提供 Java 重载
+@JvmOverloads
+fun process(data: String, retry: Int = 3)
+
+// ✅ 推荐：扩展函数使用伴生对象
+class StringUtils {
+  companion object {
+    @JvmStatic
+    fun String.encrypt(): String = // 实现
+  }
+}
+```
+
+## 协程支持
+```kotlin
+// ✅ 推荐：提供阻塞式 Java 调用方法
+@JvmName("fetchUserBlocking")
+fun fetchUser() = runBlocking {
+  // 协程实现
+}
+
+// ✅ 推荐：暴露 suspend 函数的 Java 适配器
+@JvmName("fetchUserAsync")
+fun fetchUserAsync() = GlobalScope.future {
+  // 协程实现
+}
+```
+
+# 🎯 函数式 API 最佳实践
+
+## 集合操作
+```kotlin
+// ✅ 推荐：使用函数式链式调用
+users.asSequence()
+  .filter { it.age > 18 }
+  .map { it.toDto() }
+  .toList()
+
+// ❌ 禁止：使用多个中间集合
+val adults = users.filter { it.age > 18 }
+val dtos = adults.map { it.toDto() }
+```
+
+## 作用域函数
+```kotlin
+// ✅ 推荐：使用 let 处理可空值
+user?.let {
+  processUser(it)
+}
+
+// ✅ 推荐：使用 apply 配置对象
+UserEntity().apply {
+  name = "Alice"
+  age = 20
+  email = "alice@example.com"
+}
+
+// ✅ 推荐：使用 run 执行代码块并返回结果
+val result = user.run {
+  validate()
+  process()
+  toDto()
+}
+
+// ✅ 推荐：使用 also 执行副作用
+user.also {
+  logger.info("Processing user: ${it.id}")
+}
+```
+
+## 高阶函数
+```kotlin
+// ✅ 推荐：使用 TypeAlias 简化函数类型
+typealias Operation<T> = (T) -> Unit
+typealias Transformer<T, R> = (T) -> R
+
+// ✅ 推荐：使用高阶函数增强可复用性
+fun <T> withTransaction(block: () -> T): T {
+  return try {
+    beginTransaction()
+    val result = block()
+    commit()
+    result
+  } catch (e: Exception) {
+    rollback()
+    throw e
+  }
+}
+
+// ✅ 推荐：使用 inline 优化性能
+inline fun <T> measureTimeMillis(block: () -> T): Pair<T, Long> {
+  val start = System.currentTimeMillis()
+  val result = block()
+  val end = System.currentTimeMillis()
+  return result to (end - start)
+}
+```
+
+## 扩展函数
+```kotlin
+// ✅ 推荐：使用扩展函数增强现有类
+fun List<UserEntity>.toUserDtos(): List<UserDto> =
+  map { it.toDto() }
+
+// ✅ 推荐：使用扩展属性简化访问
+val UserEntity.fullName: String
+  get() = "$firstName $lastName"
+```
+
+## 异常处理
+```kotlin
+// ✅ 推荐：使用 Kotlin 内置检查函数
+require(age > 0) { "年龄必须大于 0" }
+check(email.contains("@")) { "邮箱格式不正确" }
+error("未知错误")
+
+// ❌ 禁止：直接抛出异常
+throw IllegalArgumentException("xxx")
+```
+
+# 📝 文档规范
+
+## 类文档模板
+```kotlin
+/**
+ * # 功能名称
+ *
+ * 详细说明
+ * @param paramName 参数说明
+ */
+```
+
+## 方法文档模板
+```kotlin
+/**
+ * ## 方法名称
+ * @param paramName 参数说明
+ * @return 返回值说明
+ */
+```
