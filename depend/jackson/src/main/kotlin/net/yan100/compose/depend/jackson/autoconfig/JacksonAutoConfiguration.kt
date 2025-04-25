@@ -1,24 +1,14 @@
 package net.yan100.compose.depend.jackson.autoconfig
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.annotation.PropertyAccessor
+import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.cfg.MapperConfig
-import com.fasterxml.jackson.databind.introspect.Annotated
-import com.fasterxml.jackson.databind.introspect.AnnotatedClass
-import com.fasterxml.jackson.databind.introspect.AnnotatedMember
-import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
+import com.fasterxml.jackson.databind.introspect.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import java.time.ZoneOffset
-import java.util.*
 import net.yan100.compose.DTimer
 import net.yan100.compose.depend.jackson.modules.DatetimeCustomModule
 import net.yan100.compose.depend.jackson.modules.KotlinCustomModule
@@ -34,8 +24,9 @@ import org.springframework.context.annotation.Scope
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import java.time.ZoneOffset
+import java.util.*
 
-private val log = slf4j<JacksonAutoConfiguration>()
 
 /**
  * jackson json 序列化策略配置
@@ -45,6 +36,7 @@ private val log = slf4j<JacksonAutoConfiguration>()
  */
 @Configuration
 class JacksonAutoConfiguration {
+
   init {
     log.debug("jackson 自动配置中...")
   }
@@ -90,8 +82,7 @@ class JacksonAutoConfiguration {
 
   @Bean
   @Primary
-  fun jackson2ObjectMapperBuilderCustomizer():
-    Jackson2ObjectMapperBuilderCustomizer {
+  fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
     log.debug("config jackson custom jackson2ObjectMapperBuilderCustomizer")
     val zoneOffset = ZoneOffset.ofHours(8)
 
@@ -129,10 +120,11 @@ class JacksonAutoConfiguration {
   companion object {
     const val NON_IGNORE_OBJECT_MAPPER_BEAN_NAME = "nonJsonIgnoreObjectMapper"
     const val DEFAULT_OBJECT_MAPPER_BEAN_NAME = "jacksonObjectMapper"
+
+    private val log = slf4j<JacksonAutoConfiguration>()
   }
 
-  class IgnoreJsonIgnoreAnnotationIntrospector :
-    JacksonAnnotationIntrospector() {
+  class IgnoreJsonIgnoreAnnotationIntrospector : JacksonAnnotationIntrospector() {
     override fun findPropertyIgnoralByName(
       config: MapperConfig<*>?,
       a: Annotated?,
@@ -164,12 +156,8 @@ class JacksonAutoConfiguration {
   fun nonDeserializerObjectMapper(mapper: ObjectMapper): ObjectMapper {
     log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
     return mapper.copy().let {
-      it
-        .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-        .registerModules(KotlinModule.Builder().build())
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-        .activateDefaultTyping(
+      it.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS).registerModules(KotlinModule.Builder().build())
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL).setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY).activateDefaultTyping(
           it.polymorphicTypeValidator,
           ObjectMapper.DefaultTyping.EVERYTHING,
           JsonTypeInfo.As.PROPERTY,
