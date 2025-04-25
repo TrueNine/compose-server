@@ -4,8 +4,8 @@ cn-dev33-sa-token-redis = "1.42.0"
 cn-hutool = "5.8.37"
 com-baomidou-mybatis-plus = "3.5.11"
 com-diffplug-spotless = "7.0.3"
-com-fasterxml-jackson = "2.18.3"
-com-flywaydb-flyway = "11.7.2"
+com-fasterxml-jackson = "2.19.0"
+com-flywaydb-flyway = "11.8.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
 com-google-devtools-ksp = "2.1.21-RC-2.0.0"
 com-mapstruct = "1.6.3"
@@ -13,7 +13,7 @@ com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.1.0"
 com-squareup-okio = "3.11.0"
 com-xuxueli-xxl-job = "3.0.0"
-com-yomahub-liteflow = "2.13.1.1"
+com-yomahub-liteflow = "2.13.1.2"
 compose = "3.0.38"
 compose-build = "3.0.24"
 compose-data = "3.0.25"
@@ -30,7 +30,7 @@ net-sf-sevenzipjbinding = "16.02-2.01"
 nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
 org-apache-logging-log4j = "2.24.3"
 org-babyfish-jimmer = "0.9.76"
-org-hibernate-orm = "6.6.13.Final"
+org-hibernate-orm = "6.4.3.Final"
 org-jetbrains-kotlin = "2.1.21-RC"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
@@ -39,11 +39,11 @@ org-jetbrains-kotlinx-serialization = "1.8.1"
 org-junit-junit5 = "5.13.0-M2"
 org-junit-platform = "1.13.0-M2"
 org-slf4j = "2.1.0-alpha1"
-org-testcontainers = "1.20.6"
+org-testcontainers = "1.21.0"
 org-testng = "7.11.0"
 spring-ai = "1.0.0-M5"
 spring-batch = "5.2.2"
-spring-boot = "3.5.0-M3"
+spring-boot = "3.5.0-RC1"
 spring-cloud = "2025.0.0-M2"
 spring-cloud-alibaba = "2023.0.3.2"
 spring-data = "3.5.0-M1"
@@ -87,7 +87,7 @@ com-github-ulisesbocchio-jasypt-spring-boot-starter = "com.github.ulisesbocchio:
 com-github-wechatpay-apiv3-wechatpay-java = "com.github.wechatpay-apiv3:wechatpay-java:0.2.17"
 com-github-xiaoymin-knife4j-openapi3-jakarta-spring-boot-starter = "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:4.5.0"
 com-github-xiaoymin-knife4j-spring-boot-starter = "com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3"
-com-google-code-gson-gson = "com.google.code.gson:gson:2.13.0"
+com-google-code-gson-gson = "com.google.code.gson:gson:2.13.1"
 com-google-devtools-ksp-symbol-processing = { module = "com.google.devtools.ksp:symbol-processing", version.ref = "com-google-devtools-ksp" }
 com-google-devtools-ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "com-google-devtools-ksp" }
 com-google-guava-guava-jre = "com.google.guava:guava:33.4.8-jre"
@@ -108,7 +108,7 @@ com-squareup-retrofit2-retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
 com-tencentcloudapi-tencentcloud-sdk-java-sms = "com.tencentcloudapi:tencentcloud-sdk-java-sms:3.1.1179"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
-io-github-bonigarcia-webdrivermanager = "io.github.bonigarcia:webdrivermanager:6.0.1"
+io-github-bonigarcia-webdrivermanager = "io.github.bonigarcia:webdrivermanager:6.1.0"
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.12.6"
 io-minio-minio = "io.minio:minio:8.5.17"
 io-mockk-mockk = "io.mockk:mockk:1.14.0"
@@ -305,29 +305,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-  "org-junit-jupiter-junit-jupiter-api",
-  "org-junit-jupiter-junit-jupiter-engine",
-  "org-junit-platform-junit-platform-launcher",
+    "org-junit-jupiter-junit-jupiter-api",
+    "org-junit-jupiter-junit-jupiter-engine",
+    "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-  "io-projectreactor-kotlin-reactor-kotlin-extensions",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+    "io-projectreactor-kotlin-reactor-kotlin-extensions",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-  "io-mockk-mockk",
-  "io-projectreactor-reactor-test",
-  "org-jetbrains-kotlin-kotlin-test-junit5",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+    "io-mockk-mockk",
+    "io-projectreactor-reactor-test",
+    "org-jetbrains-kotlin-kotlin-test-junit5",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-  "p6spy-p6spy",
+    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+    "p6spy-p6spy",
 ]
 redis = [
-  "org-apache-commons-commons-pool2",
-  "org-springframework-boot-spring-boot-starter-data-redis",
+    "org-apache-commons-commons-pool2",
+    "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-  "io-github-bonigarcia-webdrivermanager",
-  "org-seleniumhq-selenium-selenium-java",
+    "io-github-bonigarcia-webdrivermanager",
+    "org-seleniumhq-selenium-selenium-java",
 ]
