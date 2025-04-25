@@ -2,6 +2,7 @@ package net.yan100.compose
 
 import net.yan100.compose.annotations.SensitiveStrategy
 
+@Deprecated("使用量很少")
 interface ISensitiveScope<T> {
   fun String.addressDetails() =
     SensitiveStrategy.ADDRESS.desensitizeSerializer()(this)
