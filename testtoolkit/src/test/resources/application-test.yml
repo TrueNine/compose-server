@@ -1,10 +1,13 @@
 spring:
+  test:
+    # 关闭 Spring Boot 测试条件评估报告
+    print-condition-evaluation-report: false
   # 数据源配置由 IDatabasePostgresqlContainer 动态提供
   datasource:
     hikari:
       maximum-pool-size: 5
       minimum-idle: 1
-      
+
   # Redis 配置由 ICacheRedisContainer 动态提供
   data:
     redis:
