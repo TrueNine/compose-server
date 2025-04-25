@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+```text
+
+buildSrc/ #buildSrc 目录
+**/src/ #源代码目录
+└─**/main/kotlin/ #kotlin 源码
+└─**/resources/ #资源文件
+└─**/test/kotlin/ #kotlin 测试代码
+**/src/[main|test]/resources/ #资源目录
+└─**/application.[yml|yaml|properties] #spring boot 配置文件
+.editorconfig #editorconfig 格式化文件（严格遵照 editorconfig 配置的格式化规则）
+.gitignore #.gitignore 文件
+gradle/libs.versions.toml #gradle 依赖版本配置文件（重要，所有依赖均在此管理）
+gradlew #gradlew 文件
+gradlew.bat #gradlew.bat 文件
+LICENSE #许可证文件
+README.md #项目说明文档
+**/*settings.gradle.kts #settings.gradle.kts 文件
+**/build.gradle.kts #build.gradle.kts 文件
+**/src/[main|test]/dto/**.dto #jimmer DTO 文件
+```

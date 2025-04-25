@@ -6,7 +6,7 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import net.yan100.compose.generator.IOrderCodeGenerator
 import net.yan100.compose.pay.service.SinglePayService
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import org.springframework.boot.test.context.SpringBootTest
 
 @Ignore

@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import net.yan100.compose.datetime
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import net.yan100.compose.toLong
 import org.springframework.boot.test.context.SpringBootTest
 

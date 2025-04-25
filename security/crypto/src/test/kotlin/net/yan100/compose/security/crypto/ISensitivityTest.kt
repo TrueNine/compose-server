@@ -1,7 +1,7 @@
 package net.yan100.compose.security.crypto
 
 import net.yan100.compose.domain.ISensitivity
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

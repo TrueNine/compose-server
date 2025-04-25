@@ -4,11 +4,12 @@ import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.testtookit.TempDirMapping
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.TempDirMapping
+import net.yan100.compose.testtoolkit.log
 
 class JavaNioPathFnsTest {
-  @TempDirMapping lateinit var tempDir: Path
+  @TempDirMapping
+  lateinit var tempDir: Path
 
   @Test
   fun `test slice line first line`() {
@@ -22,7 +23,7 @@ class JavaNioPathFnsTest {
     log.info("lines {}", lines)
 
     val result =
-      firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
+      firstLineFile.sliceLines(sep = "\n", range = 0L .. firstLine.length)
     val listResult = result.toList()
   }
 
@@ -34,7 +35,7 @@ class JavaNioPathFnsTest {
 
     File(tempFile.toUri()).writeText(text)
 
-    val result = tempFile.sliceLines(sep = "\n", range = 0L..text.length)
+    val result = tempFile.sliceLines(sep = "\n", range = 0L .. text.length)
     val listResult = result.toList()
 
     log.info("line result: {}", listResult)

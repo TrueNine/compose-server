@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import net.yan100.compose.toDate
 import net.yan100.compose.toLocalDatetime
 import net.yan100.compose.toLong

@@ -7,7 +7,7 @@ import kotlin.test.Test
 import net.yan100.compose.date
 import net.yan100.compose.datetime
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import net.yan100.compose.time
 import org.springframework.boot.test.context.SpringBootTest
 

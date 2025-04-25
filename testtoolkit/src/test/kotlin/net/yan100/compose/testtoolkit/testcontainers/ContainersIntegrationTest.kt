@@ -1,4 +1,4 @@
-package net.yan100.compose.testtookit.testcontainers
+package net.yan100.compose.testtoolkit.testcontainers
 
 import io.minio.BucketExistsArgs
 import io.minio.MakeBucketArgs

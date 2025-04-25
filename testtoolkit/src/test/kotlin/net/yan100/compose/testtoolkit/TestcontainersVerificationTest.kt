@@ -1,4 +1,4 @@
-package net.yan100.compose.testtookit
+package net.yan100.compose.testtoolkit
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

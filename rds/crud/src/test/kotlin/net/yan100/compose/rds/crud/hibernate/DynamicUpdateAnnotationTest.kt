@@ -8,8 +8,8 @@ import kotlin.test.assertNull
 import net.yan100.compose.rds.crud.entities.jpa.Attachment
 import net.yan100.compose.rds.crud.repositories.jpa.IAttachmentRepo
 import net.yan100.compose.rds.typing.AttachmentTyping
-import net.yan100.compose.testtookit.RDBRollback
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.RDBRollback
+import net.yan100.compose.testtoolkit.log
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
 

@@ -1,4 +1,4 @@
-package net.yan100.compose.testtookit
+package net.yan100.compose.testtoolkit
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 

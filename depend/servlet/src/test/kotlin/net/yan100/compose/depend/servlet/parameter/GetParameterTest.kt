@@ -2,7 +2,7 @@ package net.yan100.compose.depend.servlet.parameter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
-import net.yan100.compose.testtookit.annotations.SpringServletTest
+import net.yan100.compose.testtoolkit.annotations.SpringServletTest
 import org.apache.catalina.util.URLEncoder
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType

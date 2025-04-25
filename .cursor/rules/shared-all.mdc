@@ -6,17 +6,16 @@ alwaysApply: true
 
 # 📖 强制执行规则
 
-- `run_terminal_cmd` 需严格按照 环境配置 来选择对应可用的命令行工具
-- 强烈建议尽量多地使用 `web_search` 来进行问题建议
+`run_terminal_cmd` 严格按照[环境配置](mdc:.cursor/rules/shared-dev-env.mdc)选择对应的命令行工具
 
-以下规则文件，执行所有操作前，按需使用 `read_file` 阅读一个或多个对应规则并加入上下文
+以下规则文件，执行所有操作前，按需使用 `read_file`
 
-| 读取优先级 | 规则地址 | 描述 |
-| --- | --- | --- |
-| 总是读取 | [编程守则](mdc:.cursor/rules/shared-dev-standard.mdc) | 必须严格遵守 |
-| 总是读取 | [环境配置](mdc:.cursor/rules/shared-dev-env.mdc) | 依据环境配置来执行对应操作 |
-| 但凡提及单元测试相关 | [测试守则](mdc:.cursor/rules/test.mdc) | 用户提出与单元测试相关的任何需求，必须遵循 |
-| 但凡提及Git提交相关 | [提交消息规范](mdc:.cursor/rules/shared-git-commit-message-standard.mdc) | Git 提交信息必须符合 |
+| 优先级 | 规则
+| - | - |
+| 总是读取 | [编程守则](mdc:.cursor/rules/shared-dev-standard.mdc) |
+| 总是读取 | [环境配置](mdc:.cursor/rules/shared-dev-env.mdc) |
+| 但凡提及单元测试相关 | [测试守则](mdc:.cursor/rules/test.mdc) |
+| 但凡提及Git提交相关 | [提交消息规范](mdc:.cursor/rules/shared-git-commit-message-standard.mdc) |
 
 # 🎯 核心原则
 
@@ -29,19 +28,3 @@ alwaysApply: true
 - 严格控制内存分配和复制操作
 - 关注关键指标：响应时间、内存占用、启动时间
 - 优化算法复杂度，合理控制资源开销
-
-# 📝 代码规范要求
-
-- 编译期检查优先于运行时检查
-- 删除所有注释掉的无用代码
-
-# 📚 文档规范
-
-- 所有公开接口必须有完整文档
-- 复杂业务逻辑必须有详细注释
-
-# 🔒 安全规范
-
-- 禁止硬编码任何敏感信息
-- 不信任任何外部输入
-- 所有外部输入必须经过验证

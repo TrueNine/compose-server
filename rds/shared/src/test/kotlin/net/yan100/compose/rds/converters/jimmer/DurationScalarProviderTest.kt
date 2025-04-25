@@ -3,7 +3,7 @@ package net.yan100.compose.rds.converters.jimmer
 import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 

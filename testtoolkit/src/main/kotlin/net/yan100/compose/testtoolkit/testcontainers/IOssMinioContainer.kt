@@ -1,4 +1,4 @@
-package net.yan100.compose.testtookit.testcontainers
+package net.yan100.compose.testtoolkit.testcontainers
 
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource

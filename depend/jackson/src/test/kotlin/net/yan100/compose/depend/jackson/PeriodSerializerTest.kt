@@ -6,12 +6,13 @@ import jakarta.annotation.Resource
 import java.time.Period
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class PeriodSerializerTest {
-  @Resource lateinit var mapper: ObjectMapper
+  @Resource
+  lateinit var mapper: ObjectMapper
 
   @Test
   fun `test serialize period`() {

@@ -4,8 +4,8 @@ import jakarta.annotation.Resource
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
-import net.yan100.compose.testtookit.annotations.SpringServletTest
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.annotations.SpringServletTest
+import net.yan100.compose.testtoolkit.log
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get

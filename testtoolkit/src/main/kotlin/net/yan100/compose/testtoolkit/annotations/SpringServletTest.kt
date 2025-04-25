@@ -1,4 +1,4 @@
-package net.yan100.compose.testtookit.annotations
+package net.yan100.compose.testtoolkit.annotations
 
 import java.lang.annotation.Inherited
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

@@ -1,10 +1,8 @@
 package net.yan100.compose.depend.servlet.annotations
 
 import jakarta.annotation.Resource
-import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertNotNull
-import net.yan100.compose.testtookit.annotations.SpringServletTest
+import net.yan100.compose.testtoolkit.annotations.SpringServletTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.head
 import org.springframework.context.annotation.Import

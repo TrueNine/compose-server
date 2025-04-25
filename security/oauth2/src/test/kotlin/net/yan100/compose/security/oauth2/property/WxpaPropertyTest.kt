@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.security.crypto.sha1
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 
@@ -85,11 +85,11 @@ class WxpaPropertyTest {
 
       val b =
         mutableMapOf(
-            "noncestr" to n,
-            "jsapi_ticket" to j,
-            "timestamp" to t,
-            "url" to splitUrl,
-          )
+          "noncestr" to n,
+          "jsapi_ticket" to j,
+          "timestamp" to t,
+          "url" to splitUrl,
+        )
           .map { "${it.key}=${it.value}" }
           .sorted()
           .joinToString("&")

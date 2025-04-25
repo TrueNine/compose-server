@@ -1,6 +1,6 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

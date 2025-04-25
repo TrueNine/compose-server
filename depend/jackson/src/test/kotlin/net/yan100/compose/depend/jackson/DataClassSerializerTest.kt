@@ -8,8 +8,8 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 import net.yan100.compose.datetime
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
-import net.yan100.compose.testtookit.annotations.SpringServletTest
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.annotations.SpringServletTest
+import net.yan100.compose.testtoolkit.log
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -23,9 +23,11 @@ class B {
 
 @SpringServletTest
 class DataClassSerializerTest {
-  @Resource lateinit var mockMvc: MockMvc
+  @Resource
+  lateinit var mockMvc: MockMvc
 
-  @Resource lateinit var mapper: ObjectMapper
+  @Resource
+  lateinit var mapper: ObjectMapper
 
   @Test
   fun `test web request`() {

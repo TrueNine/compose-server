@@ -1,4 +1,4 @@
-package net.yan100.compose.testtookit
+package net.yan100.compose.testtoolkit
 
 import org.junit.jupiter.api.io.TempDir
 import org.springframework.test.annotation.Rollback

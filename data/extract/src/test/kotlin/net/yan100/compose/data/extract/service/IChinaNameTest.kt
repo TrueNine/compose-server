@@ -1,7 +1,7 @@
 package net.yan100.compose.data.extract.service
 
 import kotlin.test.Test
-import net.yan100.compose.testtookit.log
+import net.yan100.compose.testtoolkit.log
 import org.springframework.core.io.ClassPathResource
 
 class IChinaNameTest {
