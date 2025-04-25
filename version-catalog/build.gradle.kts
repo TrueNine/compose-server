@@ -23,6 +23,13 @@ java {
   withSourcesJar()
 }
 
+configurations.all {
+  resolutionStrategy {
+    // 解决kotlin-test-framework-impl冲突
+    exclude(group = "org.jetbrains.kotlin", module = "kotlin-test-testng")
+  }
+}
+
 dependencies {
   val allVersionCatalogs = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
   allVersionCatalogs.libraryAliases.forEach { aliasLib ->
