@@ -137,7 +137,6 @@ net-yan100-compose-depend-servlet = { module = "net.yan100.compose:depend-servle
 net-yan100-compose-depend-springdoc-openapi = { module = "net.yan100.compose:depend-springdoc-openapi", version.ref = "compose-depend" }
 net-yan100-compose-depend-xxl-job = { module = "net.yan100.compose:depend-xxl-job", version.ref = "compose-depend" }
 net-yan100-compose-gradle-plugin = { module = "net.yan100.compose:gradle-plugin", version.ref = "compose-build" }
-net-yan100-compose-ksp-client = { module = "net.yan100.compose:ksp-client", version.ref = "compose-build" }
 net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", version.ref = "compose-build" }
 net-yan100-compose-ksp-shared = { module = "net.yan100.compose:ksp-shared", version.ref = "compose-build" }
 net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "compose" }
@@ -305,29 +304,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-    "org-junit-jupiter-junit-jupiter-api",
-    "org-junit-jupiter-junit-jupiter-engine",
-    "org-junit-platform-junit-platform-launcher",
+  "org-junit-jupiter-junit-jupiter-api",
+  "org-junit-jupiter-junit-jupiter-engine",
+  "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-    "io-projectreactor-kotlin-reactor-kotlin-extensions",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+  "io-projectreactor-kotlin-reactor-kotlin-extensions",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-    "io-mockk-mockk",
-    "io-projectreactor-reactor-test",
-    "org-jetbrains-kotlin-kotlin-test-junit5",
-    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+  "io-mockk-mockk",
+  "io-projectreactor-reactor-test",
+  "org-jetbrains-kotlin-kotlin-test-junit5",
+  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-    "p6spy-p6spy",
+  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+  "p6spy-p6spy",
 ]
 redis = [
-    "org-apache-commons-commons-pool2",
-    "org-springframework-boot-spring-boot-starter-data-redis",
+  "org-apache-commons-commons-pool2",
+  "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-    "io-github-bonigarcia-webdrivermanager",
-    "org-seleniumhq-selenium-selenium-java",
+  "io-github-bonigarcia-webdrivermanager",
+  "org-seleniumhq-selenium-selenium-java",
 ]

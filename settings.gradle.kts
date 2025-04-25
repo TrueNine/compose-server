@@ -62,5 +62,5 @@ listOf(
 
 // ksp
 ("ksp" to listOf(
-  "plugin", "shared", "client"
+  "plugin", "shared"
 )).useFile()

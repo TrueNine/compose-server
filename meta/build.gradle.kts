@@ -11,6 +11,5 @@ java {
 dependencies {
   implementation(libs.com.fasterxml.jackson.core.jackson.annotations)
 
-  testImplementation(projects.shared)
   testImplementation(projects.testtoolkit)
 }

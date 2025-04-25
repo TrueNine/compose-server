@@ -17,7 +17,6 @@ dependencies {
 
   api(projects.meta)
 
-  api(projects.shared)
   implementation(projects.ksp.kspShared)
 
   testImplementation(libs.com.github.tschuchortdev.kotlin.compile.testing.ksp)
