@@ -1,5 +1,8 @@
 val springRepo = "https://repo.spring.io/milestone"
 
+// 明确设置buildSrc的项目名称
+rootProject.name = "buildSrc"
+
 dependencyResolutionManagement {
   pluginManagement {
     repositories {
