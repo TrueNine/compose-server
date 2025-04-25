@@ -49,7 +49,7 @@ open class JwtVerifier internal constructor() {
           token.subject =
             parseContent(decodedJwt.subject, params.subjectTargetType!!.kotlin)
         }
-        token.expireDateTime = DTimer.dateToLocalDatetime(decodedJwt.expiresAt)
+        token.expireDateTime = DTimer.instantToLocalDateTime(decodedJwt.expiresAt.toInstant())
         token.id = decodedJwt.id
         token.signatureAlgName = decodedJwt.algorithm
       }

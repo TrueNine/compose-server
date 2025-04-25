@@ -3,7 +3,7 @@ package net.yan100.compose.depend.servlet
 import net.yan100.compose.datetime
 import net.yan100.compose.i32
 import net.yan100.compose.i64
-import net.yan100.compose.toLong
+import net.yan100.compose.toMillis
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 
@@ -23,7 +23,7 @@ data class ResponseEntityScope(
   }
 
   fun lastModifyBy(dt: () -> datetime?) {
-    lastModifier = dt()?.toLong()
+    lastModifier = dt()?.toMillis()
   }
 
   fun exists(sc: () -> Any?) {
