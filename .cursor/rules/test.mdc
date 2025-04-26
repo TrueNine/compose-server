@@ -1,72 +1,49 @@
 ---
 description: Kotlin 测试规范与最佳实践指南
-globs: *Test.kt,*Test.java
+globs: *Test.kt
 alwaysApply: false
 ---
 
-## 测试规范
+# 核心原则
+- 严格践行测试驱动开发，确保 90% 以上覆盖率
+- 全面测试：包含边界条件和异常场景
+- 测试组织：合理分组，规范命名
+- 及时维护：修正不符命名，清理冗余测试
+- 优化代码：使用参数化测试减少重复
 
-- 单元测试覆盖率必须达到 100%
-- 必须包含充分的边界条件
-- 对测试使用合理的分组
+## 通用命名规范
 
+- 合理遵循特定语言命名方式
+
+### 测试类/套件命名
+- 单元测试：`[类名/文件名]Test`
+- 分组/嵌套：`[被测试方法/功能][Function|Variable|Class|Object]Group`
+
+### 测试方法/用例命名
+- 正向测试：描述 `正常/预期 [条件] 时，[预期结果]`
+- 异常测试：描述 `异常/错误 [条件] 时，[抛出异常/错误处理]`
+- 边界测试：描述 `边界 [条件] 时，[预期结果]`
+- 性能测试：描述 `性能 [功能] 应达到 [指标]`
+- 特性测试：描述 `特性 [特性] 时，[预期结果]`
+
+### 测试组织规范
+- 一个测试类/文件专注于测试一个主要对象
+- 逻辑相关的测试用例应分组组织
+- 避免测试间的依赖，每个测试应独立可运行
+- 功能类似或重复的测试应合并或参数化
+
+# Kotlin 测试技术栈
 - 测试框架：JUnit 5 + kotlin.test
 - Mock 框架：MockK（首选）/ Mockito（Java 互操作时）
 - 参数化测试：JUnit 5 Params
-- 集成测试：Testcontainers
+- 集成测试：testcontainers
 - Spring 测试：spring-boot-starter-test
-# 总则
-- 命名规范、测试组织等严格按照此规范进行
-- 与被测对象名称不符，立即立即修改
-- 没有进行分组的测试，立即立即分组
-- 功能类似或重复的测试，立即按需合并
-- 多余的旧测试必须删除
-- 尽可能多使用参数化测试来减少重复代码
-# 测试类分组规范
-- 一个类测试一个对象
-- 使用 `@Nested` 嵌套单个同名的被测试方法、类、变量等
 
-# 命名规范
-## 测试类命名
-- 单元测试 `[类名]Test`
-- 分组类名 `[被测试方法名|变量名][Function|Variable|Class]Group`
-## 测试方法命名
-- 正向测试：`正常 [条件] 时，[预期结果]`
-- 异常测试：`异常 [条件] 时，抛出 [异常类型]`
-- 边界测试：`边界 [条件] 时，[预期结果]`
-- 性能测试：`预期 [功能] 达到 [指标]`
-
-# 测试覆盖率要求
-- 代码覆盖率 > 100%
-- 边界条件覆盖率 > 100%
-- 异常分支覆盖率 > 100%
-- 性能测试按需编写，确保核心业务场景覆盖即可
+# Kotlin特定命名规范
+- 单元测试类命名：`[类名]Test`
+- 分组类名：`[被测试方法名|变量名][Function|Variable|Class]Group`
 
 # Kotlin 测试编写规范
-## 基本原则
 1. 充分利用 Kotlin 特性，减少样板代码，提升代码可读性
 2. 一个测试方法只验证一个行为
 3. 禁止测试间的依赖
-4. 测试结构组织：
-```kotlin
-class UserServiceTest {
-  private lateinit var userService: UserService
-  private val mockRepo = mockk<UserRepository>()
-
-  @BeforeEach
-  fun setup() {
-    userService = UserService(mockRepo)
-  }
-
-  @Nested
-  inner class CreateUser {
-    @Test
-    fun `当输入有效时，创建用户`() {
-      val input = UserInput("test@email.com")
-      val result = userService.createUser(input)
-      assertNotNull(result)
-      assertEquals("test@email.com", result.email)
-    }
-  }
-}
-```

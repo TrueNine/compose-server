@@ -6,10 +6,11 @@ alwaysApply: false
 
 # 🛠 技术栈规范
 
-- Spring Boot 3.4+
+- Spring Boot 3.5+
 - Jakarta EE9+
+- Jimmer kotlin
 
-# 📚 架构设计原则
+# 架构设计原则
 
 ## 分层架构
 - Controller/Api：参数校验、结果返回
@@ -29,16 +30,16 @@ alwaysApply: false
 - 避免使用全大写缩写（使用 `userId` 而非 `userID`）
 - 实体标识符统一使用小写 `id`
 
-# 💡 开发最佳实践
+# 开发最佳实践
 
 ## 依赖注入
 ```kotlin
-// ✅ 推荐：构造器注入
+// 推荐：构造器注入
 class UserService(
   private val userRepository: UserRepository
 )
 
-// ✅ 允许：字段注入（配合 lateinit）
+// 允许：字段注入（配合 lateinit）
 lateinit var userRepository: UserRepository @Resource set
 ```
 
@@ -48,9 +49,9 @@ lateinit var userRepository: UserRepository @Resource set
 - 提供便捷扩展方法：
 ```kotlin
 // 数值转换
-// Long -> RefId
+// Long -> RefId?
 1L.toId()
-// String -> RefId
+// String -> RefId?
 "1".toId()
 
 // 类型检查
@@ -58,7 +59,7 @@ lateinit var userRepository: UserRepository @Resource set
 id.isId()
 ```
 
-# ⚠️ 注意事项
+# 注意事项
 
 - 保持贫血模型：Controller/Api 层只负责参数校验和结果返回
 - 所有外部输入必须经过验证
