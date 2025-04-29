@@ -11,8 +11,13 @@ import org.springframework.web.method.support.ModelAndViewContainer
 
 @Component
 class IPageParamLikeArgumentResolver : HandlerMethodArgumentResolver {
+  private val typeList = listOf(
+    IPageParam::class.java,
+    IPageParamLike::class.java,
+  )
+
   override fun supportsParameter(parameter: MethodParameter): Boolean {
-    return parameter.parameterType == IPageParamLike::class.java
+    return parameter.parameterType in typeList
   }
 
   override fun resolveArgument(
