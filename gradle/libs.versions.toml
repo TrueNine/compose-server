@@ -111,7 +111,17 @@ com-squareup-retrofit2-retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
 com-tencentcloudapi-tencentcloud-sdk-java-sms = "com.tencentcloudapi:tencentcloud-sdk-java-sms:3.1.1179"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
+dev-langchain4j-langchain4j = { module = "dev.langchain4j:langchain4j", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-bom = { module = "dev.langchain4j:langchain4j-bom", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-mcp = { module = "dev.langchain4j:langchain4j-mcp", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-ollama = { module = "dev.langchain4j:langchain4j-ollama", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-ollama-spring-boot-starter = { module = "dev.langchain4j:langchain4j-ollama-spring-boot-starter", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-pgvector = { module = "dev.langchain4j:langchain4j-pgvector", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-reactor = { module = "dev.langchain4j:langchain4j-reactor", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-spring-boot-starter = { module = "dev.langchain4j:langchain4j-spring-boot-starter", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-zhipu-ai = { module = "dev.langchain4j:llangchain4j-zhipu-ai", version.ref = "dev-langchain4j" }
 io-github-bonigarcia-webdrivermanager = "io.github.bonigarcia:webdrivermanager:6.1.0"
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.12.6"
 io-minio-minio = "io.minio:minio:8.5.17"
