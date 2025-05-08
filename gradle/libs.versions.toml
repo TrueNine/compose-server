@@ -24,6 +24,7 @@ compose-pay = "3.0.26"
 compose-rds = "3.0.31"
 compose-security = "3.0.26"
 compose-sms = "3.0.26"
+dev-langchain4j = "1.0.0-beta4"
 group = "net.yan100.compose"
 io-netty = "4.2.1.Final"
 java = "24"
@@ -110,6 +111,7 @@ com-squareup-retrofit2-retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
 com-tencentcloudapi-tencentcloud-sdk-java-sms = "com.tencentcloudapi:tencentcloud-sdk-java-sms:3.1.1179"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
+dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j" }
 io-github-bonigarcia-webdrivermanager = "io.github.bonigarcia:webdrivermanager:6.1.0"
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.12.6"
 io-minio-minio = "io.minio:minio:8.5.17"
