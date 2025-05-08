@@ -7,16 +7,29 @@ plugins {
   signing
 }
 
-val yunxiaoUrl = extra["repositories.url.yunxiao"].toString()
-val yunxiaoUsername = extra["repositories.username.yunxiao"].toString()
-val yunxiaoPassword = extra["repositories.password.yunxiao"].toString()
+val yunxiaoUrl = extra["repositories.url.yunxiao"]?.toString()
+val yzYunxiaoUrl = extra["repositories.url.yz-yunxiao"]?.toString()
+val yunxiaoUsername = extra["repositories.username.yunxiao"]?.toString()
+val yzYunxiaoUsername = extra["repositories.username.yz-yunxiao"]?.toString()
+val yunxiaoPassword = extra["repositories.password.yunxiao"]?.toString()
+val yzYunxiaoPassword = extra["repositories.password.yz-yunxiao"]?.toString()
 
 publishing {
   repositories {
-    maven(url = uri(yunxiaoUrl)) {
-      credentials {
-        username = yunxiaoUsername
-        password = yunxiaoPassword
+    yunxiaoUrl?.also {
+      maven(url = uri(it)) {
+        credentials {
+          username = yunxiaoUsername
+          password = yunxiaoPassword
+        }
+      }
+    }
+    yzYunxiaoUrl?.also {
+      maven(url = uri(it)) {
+        credentials {
+          username = yzYunxiaoUsername
+          password = yzYunxiaoPassword
+        }
       }
     }
   }
