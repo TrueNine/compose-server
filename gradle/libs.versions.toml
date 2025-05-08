@@ -39,6 +39,7 @@ org-jetbrains-kotlinx-io = "0.7.0"
 org-jetbrains-kotlinx-serialization = "1.8.1"
 org-junit-junit5 = "5.13.0-M2"
 org-junit-platform = "1.13.0-M2"
+org-liquibase = "4.31.1"
 org-slf4j = "2.1.0-alpha1"
 org-testcontainers = "1.21.0"
 org-testng = "7.11.0"
@@ -217,6 +218,7 @@ org-junit-jupiter-junit-jupiter-params = { module = "org.junit.jupiter:junit-jup
 org-junit-platform-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "org-junit-platform" }
 org-junit-vintage-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "org-junit-junit5" }
 org-lionsoul-ip2region = "org.lionsoul:ip2region:2.7.0"
+org-liquibase-liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "org-liquibase" }
 org-mapstruct-mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "com-mapstruct" }
 org-mapstruct-mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "com-mapstruct" }
 org-owasp-antisamy-antisamy = "org.owasp.antisamy:antisamy:1.7.7"
