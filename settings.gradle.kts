@@ -32,6 +32,10 @@ listOf(
   "tencent", "shared"
 )).useFile()
 
+("mcp" to listOf(
+  "shared", "langchain4j"
+)).useFile()
+
 ("oss" to listOf(
   "shared", "minio", "aliyun-oss", "huawei-obs"
 )).useFile()

@@ -15,6 +15,7 @@ com-squareup-okio = "3.11.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2"
 compose = "3.0.42"
+compose-ai = "0.0.1"
 compose-build = "3.0.28"
 compose-data = "3.0.29"
 compose-depend = "3.0.25"
@@ -139,6 +140,8 @@ net-yan100-compose-depend-xxl-job = { module = "net.yan100.compose:depend-xxl-jo
 net-yan100-compose-gradle-plugin = { module = "net.yan100.compose:gradle-plugin", version.ref = "compose-build" }
 net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", version.ref = "compose-build" }
 net-yan100-compose-ksp-shared = { module = "net.yan100.compose:ksp-shared", version.ref = "compose-build" }
+net-yan100-compose-mcp-langchain4j = { module = "net.yan100.compose:mcp-langchain4j", version.ref = "compose-ai" }
+net-yan100-compose-mcp-shared = { module = "net.yan100.compose:mcp-shared", version.ref = "compose-ai" }
 net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "compose" }
 net-yan100-compose-oss-aliyun-oss = { module = "net.yan100.compose:oss-aliyun-oss", version.ref = "compose-oss" }
 net-yan100-compose-oss-huawei-obs = { module = "net.yan100.compose:oss-huawei-obs", version.ref = "compose-oss" }
@@ -304,29 +307,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-  "org-junit-jupiter-junit-jupiter-api",
-  "org-junit-jupiter-junit-jupiter-engine",
-  "org-junit-platform-junit-platform-launcher",
+    "org-junit-jupiter-junit-jupiter-api",
+    "org-junit-jupiter-junit-jupiter-engine",
+    "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-  "io-projectreactor-kotlin-reactor-kotlin-extensions",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+    "io-projectreactor-kotlin-reactor-kotlin-extensions",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-  "io-mockk-mockk",
-  "io-projectreactor-reactor-test",
-  "org-jetbrains-kotlin-kotlin-test-junit5",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+    "io-mockk-mockk",
+    "io-projectreactor-reactor-test",
+    "org-jetbrains-kotlin-kotlin-test-junit5",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-  "p6spy-p6spy",
+    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+    "p6spy-p6spy",
 ]
 redis = [
-  "org-apache-commons-commons-pool2",
-  "org-springframework-boot-spring-boot-starter-data-redis",
+    "org-apache-commons-commons-pool2",
+    "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-  "io-github-bonigarcia-webdrivermanager",
-  "org-seleniumhq-selenium-selenium-java",
+    "io-github-bonigarcia-webdrivermanager",
+    "org-seleniumhq-selenium-selenium-java",
 ]
