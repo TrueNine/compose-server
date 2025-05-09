@@ -8,20 +8,18 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.utility.MountableFile
 import kotlin.io.path.createTempFile
+import kotlin.test.assertEquals
 
 class TestcontainersVerificationTest {
-  private val logger =
-    LoggerFactory.getLogger(TestcontainersVerificationTest::class.java)
+  private val logger = LoggerFactory.getLogger(TestcontainersVerificationTest::class.java)
 
   @Test
   fun `启动 Alpine 容器 输出日志并校验运行状态`() {
     logger.info("开始测试 Testcontainers")
 
-    GenericContainer("alpine:3.19.1")
-      .apply {
+    GenericContainer("alpine:3.19.1").apply {
         withCommand("sh", "-c", "echo 'Hello, Testcontainers!' && sleep 1")
-      }
-      .use { container ->
+      }.use { container ->
         logger.info("正在启动测试容器...")
         container.start()
 
@@ -39,15 +37,13 @@ class TestcontainersVerificationTest {
   fun `启动 PostgreSQL 容器 获取连接信息并校验运行状态`() {
     logger.info("开始测试 PostgreSQL 容器")
 
-    PostgreSQLContainer<Nothing>("postgres:16-alpine")
-      .apply {
+    PostgreSQLContainer<Nothing>("postgres:16-alpine").apply {
         withDatabaseName("testdb")
         withUsername("testuser")
         withPassword("testpass")
         withExposedPorts(5432)
         withLogConsumer(Slf4jLogConsumer(logger))
-      }
-      .use { postgres ->
+      }.use { postgres ->
         logger.info("正在启动 PostgreSQL 容器...")
         postgres.start()
 
@@ -58,8 +54,7 @@ class TestcontainersVerificationTest {
 
         val expectedJdbcUrlPrefix = "jdbc:postgresql://"
         Assertions.assertTrue(
-          postgres.jdbcUrl.startsWith(expectedJdbcUrlPrefix),
-          "JDBC URL 应该以 $expectedJdbcUrlPrefix 开头"
+          postgres.jdbcUrl.startsWith(expectedJdbcUrlPrefix), "JDBC URL 应该以 $expectedJdbcUrlPrefix 开头"
         )
 
         logger.info("PostgreSQL 测试完成")
@@ -70,11 +65,9 @@ class TestcontainersVerificationTest {
   fun `在 Alpine 容器内执行命令 返回预期输出`() {
     logger.info("开始测试容器命令执行")
 
-    GenericContainer("alpine:3.19.1")
-      .apply {
+    GenericContainer("alpine:3.19.1").apply {
         withCommand("tail", "-f", "/dev/null")
-      }
-      .use { container ->
+      }.use { container ->
         container.start()
 
         // 执行命令并获取结果
@@ -92,11 +85,9 @@ class TestcontainersVerificationTest {
   fun `向 Alpine 容器复制文件 校验内容一致`() {
     logger.info("开始测试容器文件复制")
 
-    GenericContainer("alpine:3.19.1")
-      .apply {
+    GenericContainer("alpine:3.19.1").apply {
         withCommand("tail", "-f", "/dev/null")
-      }
-      .use { container ->
+      }.use { container ->
         container.start()
 
         // 创建测试文件内容
@@ -120,19 +111,17 @@ class TestcontainersVerificationTest {
   @Test
   fun `Alpine 容器访问外部网络 返回 200 状态码`() {
     logger.info("开始测试容器网络连接")
-    GenericContainer("curlimages/curl:8.7.1")
-      .apply {
+    GenericContainer("curlimages/curl:8.7.1").apply {
         withCommand("sleep", "600") // 保证容器一直运行
-      }
-      .use { container ->
+      }.use { container ->
         container.start()
         // 直接用 curl，无需安装
         val result = container.execInContainer(
-          "curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "https://www.baidu.com"
+          "curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "https://httpstat.us/200"
         )
         logger.info("curl exitCode: ${result.exitCode}, stdout: ${result.stdout}, stderr: ${result.stderr}")
-        Assertions.assertEquals(0, result.exitCode, "网络命令应该执行成功")
-        Assertions.assertEquals("200", result.stdout.trim(), "应该返回 HTTP 200 状态码")
+        assertEquals(0, result.exitCode, "网络命令应该执行成功")
+        assertEquals("200", result.stdout.trim(), "应该返回 HTTP 200 状态码")
         logger.info("网络连接测试完成")
       }
   }
