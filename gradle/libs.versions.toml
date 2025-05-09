@@ -25,6 +25,7 @@ compose-rds = "3.0.31"
 compose-security = "3.0.26"
 compose-sms = "3.0.26"
 dev-langchain4j = "1.0.0-beta4"
+dev-langchain4j-community = "1.0.0-beta4"
 group = "net.yan100.compose"
 io-netty = "4.2.1.Final"
 java = "24"
@@ -113,6 +114,7 @@ com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = 
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
 dev-langchain4j-langchain4j = { module = "dev.langchain4j:langchain4j", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-bom = { module = "dev.langchain4j:langchain4j-bom", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-community-bom = { module = "dev.langchain4j:langchain4j-community-bom", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-mcp = { module = "dev.langchain4j:langchain4j-mcp", version.ref = "dev-langchain4j" }
@@ -233,7 +235,7 @@ org-lionsoul-ip2region = "org.lionsoul:ip2region:2.7.0"
 org-liquibase-liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "org-liquibase" }
 org-mapstruct-mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "com-mapstruct" }
 org-mapstruct-mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "com-mapstruct" }
-org-owasp-antisamy-antisamy = "org.owasp.antisamy:antisamy:1.7.7"
+org-owasp-antisamy-antisamy = "org.owasp.antisamy:antisamy:1.7.8"
 org-postgresql-postgresql = "org.postgresql:postgresql:42.7.5"
 org-projectlombok-lombok = "org.projectlombok:lombok:1.18.38"
 org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4.32.0"
