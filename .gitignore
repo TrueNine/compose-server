@@ -67,3 +67,5 @@ logs
 .logs
 *.log
 .env*
+### publish gpg ###
+/private.gpg
