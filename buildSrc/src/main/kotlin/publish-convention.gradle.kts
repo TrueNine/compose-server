@@ -139,11 +139,6 @@ publishing {
   }
 }
 
-// 配置签名
-signing {
-  useGpgCmd()
-  sign(publishing.publications["mavenJava"])
-}
 
 // 为每个发布任务添加检查逻辑，避免重复发布
 afterEvaluate {
@@ -177,4 +172,15 @@ afterEvaluate {
       }
     }
   }
+}
+
+
+signing {
+  val key = System.getenv("SIGNING_KEY")
+  val keyId = System.getenv("SIGNING_KEY_ID")
+  val password = System.getenv("SIGNING_PASSWORD")
+  listOf(key, keyId, password).takeIf { it.all { v -> !v.isNullOrBlank() } }?.let {
+    useInMemoryPgpKeys(keyId!!, String(java.util.Base64.getDecoder().decode(key)), password!!)
+  }
+  sign(publishing.publications["mavenJava"])
 }
