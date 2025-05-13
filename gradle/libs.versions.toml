@@ -123,7 +123,7 @@ dev-langchain4j-langchain4j-ollama-spring-boot-starter = { module = "dev.langcha
 dev-langchain4j-langchain4j-pgvector = { module = "dev.langchain4j:langchain4j-pgvector", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-reactor = { module = "dev.langchain4j:langchain4j-reactor", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-spring-boot-starter = { module = "dev.langchain4j:langchain4j-spring-boot-starter", version.ref = "dev-langchain4j" }
-dev-langchain4j-langchain4j-zhipu-ai = { module = "dev.langchain4j:llangchain4j-zhipu-ai", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-zhipu-ai = "dev.langchain4j:langchain4j-zhipu-ai:0.36.2"
 io-github-bonigarcia-webdrivermanager = "io.github.bonigarcia:webdrivermanager:6.1.0"
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.12.6"
 io-minio-minio = "io.minio:minio:8.5.17"
