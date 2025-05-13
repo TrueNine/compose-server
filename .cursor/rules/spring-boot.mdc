@@ -4,7 +4,7 @@ globs: *Api.kt,*Service.kt,*Repository.kt,*Controller.kt,*Config.kt,*Entity.kt,*
 alwaysApply: false
 ---
 
-# 🛠 技术栈规范
+# 技术栈规范
 
 - Spring Boot 3.5+
 - Jakarta EE9+
@@ -33,31 +33,13 @@ alwaysApply: false
 # 开发最佳实践
 
 ## 依赖注入
-```kotlin
-// 推荐：构造器注入
-class UserService(
-  private val userRepository: UserRepository
-)
-
-// 允许：字段注入（配合 lateinit）
-lateinit var userRepository: UserRepository @Resource set
-```
+- 推荐：构造器注入
+- 允许：字段注入（配合 lateinit）
 
 ## ID 类型处理
 - 实体主键统一使用 `RefId`（`Long` 的类型别名）
 - DTO 层自动转换为 `String` 类型
-- 提供便捷扩展方法：
-```kotlin
-// 数值转换
-// Long -> RefId?
-1L.toId()
-// String -> RefId?
-"1".toId()
-
-// 类型检查
-// 检查是否为有效 ID
-id.isId()
-```
+- 提供便捷扩展方法用于数值转换和类型检查
 
 # 注意事项
 

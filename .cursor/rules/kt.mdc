@@ -4,153 +4,46 @@ globs: *.kt
 alwaysApply: false
 ---
 
-- Kotlin 2.1+
+# 项目技术
+
+- Kotlin 2.2+
 - JDK 24+
 
 # Kotlin 与 Java 互操作规范
 
 ## 类设计原则
-```kotlin
-// 推荐显式声明 open 以支持继承
-open class BaseService
-
-// 推荐使用 @JvmField 暴露公共字段
-@JvmField
-val MAX_COUNT = 100
-```
+- 推荐显式声明 `open` 以支持继承
+- 推荐使用 `@JvmField` 暴露公共字段
 
 ## 空安全处理
-```kotlin
-// 推荐明确的可空性声明
-class UserDto {
-  // Java 调用时自动处理可空性
-  @get:JvmName("getName")
-  val name: String? = null
-
-  // 确保 Java 代码必须处理空值
-  @NotNull
-  lateinit var email: String
-}
-```
+- 推荐明确的可空性声明
+- 使用 `@get:JvmName` 自定义 getter 名称
+- 使用 `@NotNull` 确保 Java 代码必须处理空值
+- 适当使用 `lateinit` 声明非空变量
 
 ## 函数设计
-```kotlin
-// 推荐为默认参数提供 Java 重载
-@JvmOverloads
-fun process(data: String, retry: Int = 3)
-
-// 推荐扩展函数使用伴生对象
-class StringUtils {
-  companion object {
-    @JvmStatic
-    fun String.encrypt(): String = // 实现
-  }
-}
-```
+- 推荐为默认参数提供 Java 重载 (`@JvmOverloads`)
+- 推荐扩展函数使用伴生对象和 `@JvmStatic` 注解
 
 ## 协程支持
-```kotlin
-// 推荐提供阻塞式 Java 调用方法
-@JvmName("fetchUserBlocking")
-fun fetchUser() = runBlocking {
-  // 协程实现
-}
-
-// 推荐：暴露 suspend 函数的 Java 适配器
-@JvmName("fetchUserAsync")
-fun fetchUserAsync() = GlobalScope.future {
-  // 协程实现
-}
-```
+- 推荐提供阻塞式 Java 调用方法 (`@JvmName`)
+- 推荐暴露 suspend 函数的 Java 适配器
 
 # 函数式 API 最佳实践
 
 ## 集合操作
-```kotlin
-// 推荐使用函数式链式调用
-users.asSequence()
-  .filter { it.age > 18 }
-  .map { it.toDto() }
-  .toList()
-
-// 禁止使用多个中间集合
-val adults = users.filter { it.age > 18 }
-val dtos = adults.map { it.toDto() }
-```
-
-## 作用域函数
-```kotlin
-// 推荐使用 let 处理可空值
-user?.let {
-  processUser(it)
-}
-
-// 推荐使用 apply 配置对象
-UserEntity().apply {
-  name = "Alice"
-  age = 20
-  email = "alice@example.com"
-}
-
-// 推荐使用 run 执行代码块并返回结果
-val result = user.run {
-  validate()
-  process()
-  toDto()
-}
-
-// 推荐使用 also 执行副作用
-user.also {
-  logger.info("Processing user: ${it.id}")
-}
-```
+- 推荐使用函数式链式调用和 Sequence
+- 禁止使用多个中间集合
 
 ## 高阶函数
-```kotlin
-// 推荐使用 TypeAlias 简化函数类型
-typealias Operation<T> = (T) -> Unit
-typealias Transformer<T, R> = (T) -> R
-
-// 推荐使用高阶函数增强可复用性
-fun <T> withTransaction(block: () -> T): T {
-  return try {
-    beginTransaction()
-    val result = block()
-    commit()
-    result
-  } catch (e: Exception) {
-    rollback()
-    throw e
-  }
-}
-
-// 推荐使用 inline 优化性能
-inline fun <T> measureTimeMillis(block: () -> T): Pair<T, Long> {
-  val start = System.currentTimeMillis()
-  val result = block()
-  val end = System.currentTimeMillis()
-  return result to (end - start)
-}
-```
+- 推荐使用 TypeAlias 简化函数类型
+- 推荐使用高阶函数增强可复用性
+- 推荐使用 inline 优化性能
 
 ## 扩展函数
-```kotlin
-// 推荐使用扩展函数增强现有类
-fun List<UserEntity>.toUserDtos(): List<UserDto> =
-  map { it.toDto() }
-
-// 推荐使用扩展属性简化访问
-val UserEntity.fullName: String
-  get() = "$firstName $lastName"
-```
+- 推荐使用扩展函数增强现有类
+- 推荐使用扩展属性简化访问
 
 ## 异常处理
-```kotlin
-// 推荐使用 Kotlin 内置检查函数
-require(age > 0) { "年龄必须大于 0" }
-check(email.contains("@")) { "邮箱格式不正确" }
-error("未知错误")
-
-// 禁止直接抛出异常
-throw IllegalArgumentException("xxx")
-```
+- 推荐使用 Kotlin 内置检查函数：`require`, `check`, `error`
+- 禁止直接抛出异常或者显式捕获异常
