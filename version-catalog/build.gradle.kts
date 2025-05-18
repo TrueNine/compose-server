@@ -45,14 +45,23 @@ dependencies {
   }
 }
 
-fun isNonStable(version: String): Boolean {
+val skipGroups = listOf(
+  "org.jetbrains.kotlin",
+  "org.springframework",
+  "com.google.devtools"
+)
+
+fun isNonStable(version: ModuleComponentIdentifier): Boolean {
+  if (skipGroups.any { version.group.startsWith(it) }) {
+    return false
+  }
   val nonStableKeywords = listOf("alpha", "beta", "rc", "cr", "m", "eap", "dev", "snapshot")
-  return nonStableKeywords.any { version.contains(it, true) }
+  return nonStableKeywords.any { version.version.contains(it, true) }
 }
 // https://github.com/ben-manes/gradle-versions-plugin
 tasks.withType<DependencyUpdatesTask> {
   rejectVersionIf {
-    isNonStable(candidate.version)
+    isNonStable(candidate)
   }
 }
 
