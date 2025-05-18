@@ -30,19 +30,3 @@ versionCatalogUpdate {
     keepUnusedVersions = true
   }
 }
-
-tasks.register("cleanAll") {
-  group = "build"
-  description = "清理所有项目（包括子项目）的构建产物，包括 build、.kotlin、bin 和 .logs 目录"
-
-  doLast {
-    allprojects {
-      project.delete(
-        fileTree(project.projectDir) {
-          include(
-            ".kotlin", "bin", ".logs", "build"
-          )
-        })
-    }
-  }
-}
