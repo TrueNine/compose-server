@@ -113,7 +113,7 @@ class TestcontainersVerificationTest {
   @Test
   fun `Alpine 容器访问外部网络 返回 200 状态码`() {
     assertTimeout(
-      Duration.ofSeconds(20), "可能由于docker 网络原因导致测试失败，考虑检查 docker 网络配置"
+      Duration.ofSeconds(30), "可能由于docker 网络原因导致测试失败，考虑检查 docker 网络配置"
     ) {
       logger.info("开始测试容器网络连接")
       GenericContainer("alpine/curl:latest").apply {
