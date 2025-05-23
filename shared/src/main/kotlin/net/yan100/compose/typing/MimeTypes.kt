@@ -78,6 +78,7 @@ enum class MimeTypes(private val extension: String, vararg m: String) :
         if (media.isNullOrBlank()) false else v.medias.contains(media)
       }
 
-    @JvmStatic operator fun get(v: String?): MimeTypes? = findVal(v)
+    @JvmStatic
+    operator fun get(v: String?): MimeTypes? = findVal(v)
   }
 }

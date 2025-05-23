@@ -20,21 +20,25 @@ import org.springframework.data.repository.findByIdOrNull
  * @since 2023-05-05
  */
 interface IBaseCrudService<T : IJpaEntity, R : IRepo<T>> {
-  @get:JsonIgnore @get:Transient val repo: R
+  @get:JsonIgnore
+  @get:Transient
+  val repo: R
 
   /**
    * ## 可重写的 保存
    *
    * @param e 实体
    */
-  @ACID fun postFound(e: T): T = post(e)
+  @ACID
+  fun postFound(e: T): T = post(e)
 
   /**
    * ## 可重写的 批量保存
    *
    * @param es 实体集合
    */
-  @ACID fun postAllFound(es: List<T>): List<T> = postAll(es)
+  @ACID
+  fun postAllFound(es: List<T>): List<T> = postAll(es)
 
   fun fetchAllOrderByIdDesc(page: Pq? = Pq.DEFAULT_MAX): Pr<T> =
     repo.findAllOrderByIdDesc(page.toPageable()).toPr()
@@ -80,7 +84,8 @@ interface IBaseCrudService<T : IJpaEntity, R : IRepo<T>> {
     }
   }
 
-  @ACID fun postAll(es: List<T>): List<T> = repo.saveAll(es)
+  @ACID
+  fun postAll(es: List<T>): List<T> = repo.saveAll(es)
 
   fun removeById(id: Id) = repo.deleteById(id)
 

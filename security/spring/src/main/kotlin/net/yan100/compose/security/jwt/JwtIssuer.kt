@@ -3,16 +3,16 @@ package net.yan100.compose.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.security.PrivateKey
-import java.security.PublicKey
-import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
-import java.time.Duration
 import net.yan100.compose.DTimer
 import net.yan100.compose.security.crypto.Encryptors
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import net.yan100.compose.slf4j
 import org.slf4j.Logger
+import java.security.PrivateKey
+import java.security.PublicKey
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
+import java.time.Duration
 
 class JwtIssuer private constructor() : JwtVerifier() {
   var expireMillis: Long = Duration.ofMinutes(30).toMillis()
@@ -111,8 +111,10 @@ class JwtIssuer private constructor() : JwtVerifier() {
   }
 
   companion object {
-    @JvmStatic fun createIssuer() = JwtIssuer().Builder()
+    @JvmStatic
+    fun createIssuer() = JwtIssuer().Builder()
 
-    @JvmStatic private val log: Logger = slf4j(JwtIssuer::class)
+    @JvmStatic
+    private val log: Logger = slf4j(JwtIssuer::class)
   }
 }

@@ -11,13 +11,16 @@ enum class RuleTyping(v: Int) : IntTyping {
   NONE(0),
 
   /** 排除 */
-  @EnumItem(ordinal = 1) EXCLUDE(1),
+  @EnumItem(ordinal = 1)
+  EXCLUDE(1),
 
   /** 包含 */
-  @EnumItem(ordinal = 2) INCLUDE(2),
+  @EnumItem(ordinal = 2)
+  INCLUDE(2),
 
   /** 固定 */
-  @EnumItem(ordinal = 3) FIXED(3);
+  @EnumItem(ordinal = 3)
+  FIXED(3);
 
   override val value: Int = v
 
@@ -25,6 +28,7 @@ enum class RuleTyping(v: Int) : IntTyping {
     @JvmStatic
     fun findVal(e: Int?): RuleTyping? = entries.find { it.value == e }
 
-    @JvmStatic operator fun get(v: Int?) = findVal(v)
+    @JvmStatic
+    operator fun get(v: Int?) = findVal(v)
   }
 }

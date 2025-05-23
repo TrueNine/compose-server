@@ -6,11 +6,11 @@ fun IWxMpApi.jsCodeToSessionStandard(
   param: IWxMpApi.JsCodeToSessionApiReq
 ): IWxMpApi.JsCodeToSessionResp =
   jsCodeToSession(
-      appId = param.mpAppId,
-      secret = param.mpSecret,
-      jsCode = param.jsCode,
-      grantType = WechatMpGrantTyping.AUTH_CODE,
-    )
+    appId = param.mpAppId,
+    secret = param.mpSecret,
+    jsCode = param.jsCode,
+    grantType = WechatMpGrantTyping.AUTH_CODE,
+  )
     .toStandard()
 
 fun IWxMpApi.WxMpJsCodeToSessionResp.toStandard():

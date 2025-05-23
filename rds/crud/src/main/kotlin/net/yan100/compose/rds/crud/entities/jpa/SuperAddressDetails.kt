@@ -29,5 +29,6 @@ interface SuperAddressDetails : IJpaEntity {
   var addressDetails: String
 
   /** 定位 */
-  @get:Convert(converter = WGS84Converter::class) var center: Coordinate?
+  @get:Convert(converter = WGS84Converter::class)
+  var center: Coordinate?
 }

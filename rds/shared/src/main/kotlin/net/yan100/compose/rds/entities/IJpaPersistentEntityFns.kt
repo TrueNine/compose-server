@@ -2,14 +2,7 @@
 
 package net.yan100.compose.rds.entities
 
-import jakarta.persistence.Access
-import jakarta.persistence.AccessType
-import jakarta.persistence.Basic
-import jakarta.persistence.Column
-import jakarta.persistence.EntityListeners
-import jakarta.persistence.FetchType
-import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Transient
+import jakarta.persistence.*
 import net.yan100.compose.Id
 import net.yan100.compose.RefId
 import net.yan100.compose.consts.IDbNames

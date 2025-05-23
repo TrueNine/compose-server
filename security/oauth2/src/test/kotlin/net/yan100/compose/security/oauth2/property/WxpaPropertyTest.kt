@@ -3,15 +3,15 @@ package net.yan100.compose.security.oauth2.property
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import net.yan100.compose.security.crypto.sha1
 import net.yan100.compose.testtoolkit.log
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @SpringBootTest
 class WxpaPropertyTest {

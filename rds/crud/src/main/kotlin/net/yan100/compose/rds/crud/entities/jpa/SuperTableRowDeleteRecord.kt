@@ -29,5 +29,6 @@ interface SuperTableRowDeleteRecord : IJpaEntity {
   var deleteDatetime: datetime
 
   /** 删除实体 */
-  @get:Convert(converter = RecordModelConverter::class) var entity: String?
+  @get:Convert(converter = RecordModelConverter::class)
+  var entity: String?
 }

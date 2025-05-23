@@ -1,15 +1,16 @@
 package net.yan100.compose.data.extract.api
 
 import jakarta.annotation.Resource
+import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertNotNull
-import org.springframework.boot.test.context.SpringBootTest
 
 @Ignore
 @SpringBootTest
 class ICnNbsAddressApiTest {
-  @Resource lateinit var remoteCall: ICnNbsAddressApi
+  @Resource
+  lateinit var remoteCall: ICnNbsAddressApi
 
   @Test
   fun testGetHomePage() {

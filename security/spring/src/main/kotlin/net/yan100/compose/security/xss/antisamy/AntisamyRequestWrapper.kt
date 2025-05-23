@@ -34,8 +34,10 @@ class AntisamyRequestWrapper(request: HttpServletRequest?) :
     @JvmStatic
     private val POLICY: Policy = Policy.getInstance("antisamy-ebay.xml")
 
-    @JvmStatic private val ANTI_SAMY = AntiSamy()
+    @JvmStatic
+    private val ANTI_SAMY = AntiSamy()
 
-    @JvmStatic private val log: Logger = slf4j(this::class)
+    @JvmStatic
+    private val log: Logger = slf4j(this::class)
   }
 }

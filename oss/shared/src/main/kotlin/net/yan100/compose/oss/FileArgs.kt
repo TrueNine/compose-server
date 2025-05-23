@@ -8,6 +8,7 @@ class FileArgs {
   var size: Long = 0L
 
   companion object {
-    @JvmStatic fun builder(): FileArgsBuilder = FileArgsBuilder()
+    @JvmStatic
+    fun builder(): FileArgsBuilder = FileArgsBuilder()
   }
 }

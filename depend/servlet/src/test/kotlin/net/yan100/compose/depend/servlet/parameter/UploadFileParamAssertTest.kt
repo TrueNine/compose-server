@@ -1,22 +1,22 @@
 package net.yan100.compose.depend.servlet.parameter
 
 import jakarta.annotation.Resource
-import java.nio.charset.StandardCharsets
-import kotlin.test.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.mock.web.MockPart
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.multipart
-import org.springframework.context.annotation.Import
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.nio.charset.StandardCharsets
+import kotlin.test.Test
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -83,7 +83,9 @@ class UploadFileParamAssertTest {
 
     open class FileList(val a: String, val jsonDto: JsonDto)
 
-    @PostMapping("uploadFileList") fun uploadFileList(file: FileList) {}
+    @PostMapping("uploadFileList")
+    fun uploadFileList(file: FileList) {
+    }
 
     @PostMapping("uploadBlend")
     fun uploadBlend(blendDto: BlendDto) {

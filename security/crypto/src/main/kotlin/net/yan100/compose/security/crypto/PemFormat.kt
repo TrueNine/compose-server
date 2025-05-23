@@ -40,7 +40,7 @@ class PemFormat private constructor(
     operator fun get(key: Key, keyType: String? = null): String {
       val encoded = requireNotNull(key.encoded) { "密钥编码失败" }
       val algorithm = requireNotNull(key.algorithm) { "密钥算法不能为空" }
-      
+
       val defaultType = buildString {
         append(algorithm)
         if (key is PrivateKey) {
@@ -50,7 +50,7 @@ class PemFormat private constructor(
         }
         append(" KEY")
       }
-      
+
       return get(encoded.encodeBase64String, keyType ?: defaultType)
     }
 
@@ -93,23 +93,23 @@ class PemFormat private constructor(
       require(pem.isNotBlank()) { "PEM 内容不能为空" }
       require(pem.contains(BEGIN_PREFIX)) { "无效的 PEM 格式：缺少 BEGIN 标记" }
       require(pem.contains(END_PREFIX)) { "无效的 PEM 格式：缺少 END 标记" }
-      
+
       val lines = pem.trim().lines()
       require(lines.size >= 3) { "无效的 PEM 格式：内容不完整" }
-      
+
       val beginLine = lines.first()
       val endLine = lines.last()
-      
+
       require(beginLine.startsWith(BEGIN_PREFIX)) { "无效的 PEM 格式：BEGIN 标记格式错误" }
       require(endLine.startsWith(END_PREFIX)) { "无效的 PEM 格式：END 标记格式错误" }
-      
+
       val beginSchema = beginLine.substring(BEGIN_PREFIX.length).removeSuffix(SEPARATOR).trim()
       val endSchema = endLine.substring(END_PREFIX.length).removeSuffix(SEPARATOR).trim()
-      
+
       require(beginSchema.isNotBlank()) { "PEM 类型标识不能为空" }
       require(endSchema.isNotBlank()) { "PEM 结束类型标识不能为空" }
       require(beginSchema == endSchema) { "PEM 格式错误：BEGIN 类型「$beginSchema」与 END 类型「$endSchema」不匹配" }
-      
+
       return PemFormat(pem)
     }
   }

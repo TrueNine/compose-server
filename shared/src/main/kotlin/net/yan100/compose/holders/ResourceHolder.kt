@@ -1,6 +1,5 @@
 package net.yan100.compose.holders
 
-import java.io.File
 import net.yan100.compose.hasText
 import net.yan100.compose.properties.DataLoadProperties
 import net.yan100.compose.slf4j
@@ -10,6 +9,7 @@ import org.springframework.core.io.FileSystemResourceLoader
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import java.io.File
 
 private val log = slf4j<ResourceHolder>()
 

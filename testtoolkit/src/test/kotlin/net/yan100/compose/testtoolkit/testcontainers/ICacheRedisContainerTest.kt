@@ -65,7 +65,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
 
       // 验证端口映射
       val redisPort = container.getMappedPort(6379)
-      assertTrue(redisPort in 1024 .. 65535, "Redis 端口映射应在有效范围内")
+      assertTrue(redisPort in 1024..65535, "Redis 端口映射应在有效范围内")
     }
 
     @Test
@@ -169,7 +169,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
       // 特殊验证端口属性（因为端口是动态分配的）
       val portValue = environment.getProperty("spring.data.redis.port")
       assertNotNull(portValue, "环境变量中缺少端口配置")
-      assertTrue(portValue.toInt() in 1024 .. 65535, "端口值应在有效范围内")
+      assertTrue(portValue.toInt() in 1024..65535, "端口值应在有效范围内")
     }
   }
 } 

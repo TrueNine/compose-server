@@ -20,26 +20,35 @@ interface SuperApiCallRecord : IJpaEntity {
   var deviceCode: String?
 
   /** 请求 ip */
-  @get:Schema(title = "请求 ip") var reqIp: String?
+  @get:Schema(title = "请求 ip")
+  var reqIp: String?
 
   /** 登录 ip */
-  @get:Schema(title = "登录 ip") var loginIp: String?
+  @get:Schema(title = "登录 ip")
+  var loginIp: String?
 
   /** 响应码 */
-  @get:Schema(title = "响应码") var respCode: Int?
+  @get:Schema(title = "响应码")
+  var respCode: Int?
 
   /** 请求结果 */
-  @get:Schema(title = "请求结果") var respResultEnc: String?
+  @get:Schema(title = "请求结果")
+  var respResultEnc: String?
 
-  @get:Schema(title = "请求路径") var reqPath: String?
+  @get:Schema(title = "请求路径")
+  var reqPath: String?
 
-  @get:Schema(title = "请求方法") var reqMethod: String?
+  @get:Schema(title = "请求方法")
+  var reqMethod: String?
 
-  @get:Schema(title = "请求协议") var reqProtocol: String?
+  @get:Schema(title = "请求协议")
+  var reqProtocol: String?
 
-  @get:Schema(title = "请求时间") var reqDatetime: datetime?
+  @get:Schema(title = "请求时间")
+  var reqDatetime: datetime?
 
-  @get:Schema(title = "响应时间") var respDatetime: datetime?
+  @get:Schema(title = "响应时间")
+  var respDatetime: datetime?
 
   @MetaSkipGeneration
   @get:Transient

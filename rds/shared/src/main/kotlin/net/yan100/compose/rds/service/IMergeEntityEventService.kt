@@ -2,7 +2,6 @@ package net.yan100.compose.rds.service
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Transient
-import kotlin.reflect.KClass
 import net.yan100.compose.rds.annotations.ACID
 import net.yan100.compose.rds.entities.IJpaEntity
 import net.yan100.compose.rds.entities.IJpaPersistentEntity
@@ -10,6 +9,7 @@ import net.yan100.compose.rds.event.MergeDataBaseEntityEvent
 import net.yan100.compose.slf4j
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ApplicationListener
+import kotlin.reflect.KClass
 
 private val log = slf4j<IMergeEntityEventService<*>>()
 

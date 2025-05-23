@@ -1,7 +1,7 @@
 package net.yan100.compose.security.annotations
 
-import java.lang.annotation.Inherited
 import org.springframework.security.access.prepost.PreAuthorize
+import java.lang.annotation.Inherited
 
 @Inherited
 @MustBeDocumented

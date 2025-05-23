@@ -1,14 +1,14 @@
 package net.yan100.compose.security.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.time.Duration
-import java.time.temporal.ChronoUnit
 import net.yan100.compose.security.crypto.domain.IKeysRepo
 import net.yan100.compose.security.jwt.JwtIssuer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 
 @Configuration
 @EnableConfigurationProperties(

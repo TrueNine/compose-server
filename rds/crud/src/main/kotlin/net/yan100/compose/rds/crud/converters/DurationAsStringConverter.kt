@@ -2,8 +2,8 @@ package net.yan100.compose.rds.crud.converters
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import java.time.Duration
 import org.springframework.stereotype.Component
+import java.time.Duration
 
 @Component
 @Converter(autoApply = true)

@@ -14,19 +14,24 @@ import org.babyfish.jimmer.sql.EnumType.Strategy
 @EnumType(Strategy.ORDINAL)
 enum class GenderTyping(private val v: Int) : IntTyping {
   /** 男 */
-  @EnumItem(ordinal = 1) MAN(1),
+  @EnumItem(ordinal = 1)
+  MAN(1),
 
   /** 女 */
-  @EnumItem(ordinal = 0) WOMAN(0),
+  @EnumItem(ordinal = 0)
+  WOMAN(0),
 
   /** 未知 */
-  @EnumItem(ordinal = 9999) UNKNOWN(9999);
+  @EnumItem(ordinal = 9999)
+  UNKNOWN(9999);
 
   override val value: Int = v
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = entries.find { it.value == v }
+    @JvmStatic
+    fun findVal(v: Int?) = entries.find { it.value == v }
 
-    @JvmStatic operator fun get(v: Int?) = findVal(v)
+    @JvmStatic
+    operator fun get(v: Int?) = findVal(v)
   }
 }

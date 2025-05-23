@@ -28,6 +28,7 @@ interface AnyTyping {
   val value: Any
 
   companion object {
-    @JvmStatic operator fun get(v: Any?): AnyTyping? = null
+    @JvmStatic
+    operator fun get(v: Any?): AnyTyping? = null
   }
 }

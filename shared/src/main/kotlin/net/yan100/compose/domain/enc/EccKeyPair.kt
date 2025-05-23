@@ -1,9 +1,9 @@
 package net.yan100.compose.domain.enc
 
-import java.security.PrivateKey
-import java.security.PublicKey
 import net.yan100.compose.domain.IEccKeyPair
 import net.yan100.compose.typing.EncryptAlgorithmTyping
+import java.security.PrivateKey
+import java.security.PublicKey
 
 /**
  * ecc 密钥对

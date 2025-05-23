@@ -1,12 +1,7 @@
 package net.yan100.compose.security.crypto
 
 import net.yan100.compose.consts.IRegexes
-import kotlin.test.Test
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class EncryptAndDecryptTest {
   // 测试数据
@@ -199,7 +194,7 @@ class EncryptAndDecryptTest {
       val random = Keys.generateRandomAsciiString(length)
       assertEquals(length, random.length, "生成的随机字符串长度不正确")
       assertTrue(
-        random.all { it in '0' .. '9' || it in 'a' .. 'z' || it in 'A' .. 'Z' },
+        random.all { it in '0'..'9' || it in 'a'..'z' || it in 'A'..'Z' },
         "随机字符串包含非法字符"
       )
     }

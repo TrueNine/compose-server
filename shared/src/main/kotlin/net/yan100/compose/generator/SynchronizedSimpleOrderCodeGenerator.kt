@@ -1,7 +1,7 @@
 package net.yan100.compose.generator
 
-import java.time.format.DateTimeFormatter
 import net.yan100.compose.datetime
+import java.time.format.DateTimeFormatter
 
 class SynchronizedSimpleOrderCodeGenerator(
   private val snowflake: ISnowflakeGenerator

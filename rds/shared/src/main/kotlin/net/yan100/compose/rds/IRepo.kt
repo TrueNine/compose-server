@@ -1,11 +1,7 @@
 package net.yan100.compose.rds
 
 import net.yan100.compose.rds.entities.IJpaEntity
-import net.yan100.compose.rds.repositories.IAuditRepository
-import net.yan100.compose.rds.repositories.IBaseRepository
-import net.yan100.compose.rds.repositories.ILogicDeleteRepository
-import net.yan100.compose.rds.repositories.IPersistentRepository
-import net.yan100.compose.rds.repositories.IQuerydslExtensionRepository
+import net.yan100.compose.rds.repositories.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
@@ -24,7 +20,8 @@ interface IRepo<T : IJpaEntity> :
   @Query("from #{#entityName} e order by e.id desc, e.mrd desc")
   fun findAllOrderByIdDesc(): List<T>
 
-  @Query(findAllOrderByIdDesc) fun findAllOrderByIdDesc(page: Pageable): Page<T>
+  @Query(findAllOrderByIdDesc)
+  fun findAllOrderByIdDesc(page: Pageable): Page<T>
 
   /**
    * ## 重写的 findAll 方法

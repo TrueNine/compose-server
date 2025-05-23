@@ -1,9 +1,9 @@
 package net.yan100.compose.holders
 
+import org.springframework.core.NamedInheritableThreadLocal
 import java.io.Closeable
 import java.util.*
 import kotlin.reflect.KClass
-import org.springframework.core.NamedInheritableThreadLocal
 
 abstract class AbstractThreadLocalHolder<T>(
   nameId: KClass<*>? = null,

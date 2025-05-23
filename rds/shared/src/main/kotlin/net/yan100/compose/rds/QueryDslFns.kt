@@ -17,7 +17,7 @@ import org.springframework.data.repository.query.FluentQuery
 open class QueryDslExtensionFUnctionsArg1<
   E : IJpaEntity,
   T : EntityPathBase<E>,
->(
+  >(
   /** ## 当前使用的表达式 */
   val q: T,
   /** ## BooleanBuilder 用于构建条件 */
@@ -40,7 +40,7 @@ inline fun <E : IJpaEntity, T : EntityPathBase<E>, R> querydsl(
 open class QueryDslExtensionFUnctionsArg3<
   E : IJpaEntity,
   T : EntityPathBase<E>,
->(
+  >(
   q: T,
   bb: BooleanBuilder,
   /** ## JPA Query Factory */

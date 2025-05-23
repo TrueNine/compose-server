@@ -1,6 +1,5 @@
 package net.yan100.compose.rds.repositories
 
-import java.time.Duration
 import net.yan100.compose.Id
 import net.yan100.compose.datetime
 import net.yan100.compose.i64
@@ -8,6 +7,7 @@ import net.yan100.compose.minus
 import net.yan100.compose.rds.entities.IJpaEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.NoRepositoryBean
+import java.time.Duration
 
 /** # 审计查询接口 */
 @NoRepositoryBean

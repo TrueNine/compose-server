@@ -1,5 +1,4 @@
 import org.gradle.api.tasks.wrapper.Wrapper
-import org.gradle.kotlin.dsl.invoke
 
 val urls = "-$-"
 val repos = "$-$"

@@ -1,15 +1,11 @@
 package net.yan100.compose.rds.crud.annotations
 
 import jakarta.annotation.Resource
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import net.yan100.compose.rds.crud.repositories.jpa.IUserAccountRepo
 import net.yan100.compose.testtoolkit.RDBRollback
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.*
 
 @RDBRollback
 @SpringBootTest

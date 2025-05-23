@@ -59,7 +59,7 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
   private fun JsonParser.booleanValueOrNull(): Boolean? =
     if (
       currentToken == JsonToken.VALUE_TRUE ||
-        currentToken == JsonToken.VALUE_FALSE
+      currentToken == JsonToken.VALUE_FALSE
     )
       booleanValue
     else null

@@ -1,9 +1,9 @@
 package net.yan100.compose.consts
 
 import jakarta.servlet.http.HttpServletRequest
+import net.yan100.compose.hasText
 import java.net.URLEncoder
 import java.nio.charset.Charset
-import net.yan100.compose.hasText
 
 /**
  * http Header Info

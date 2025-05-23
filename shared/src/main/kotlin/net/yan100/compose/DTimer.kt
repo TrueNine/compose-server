@@ -1,5 +1,6 @@
 package net.yan100.compose
 
+import net.yan100.compose.DTimer.plusMillis
 import java.time.*
 
 /**
@@ -23,7 +24,7 @@ object DTimer {
    * @return 增加后的Instant对象
    */
   @JvmStatic
-  fun plusMillisFromCurrent(plusMillis: Long): Instant = 
+  fun plusMillisFromCurrent(plusMillis: Long): Instant =
     Instant.ofEpochMilli(System.currentTimeMillis() + plusMillis)
 
   /**

@@ -21,7 +21,8 @@ val <T : Any> Page<T>.result: Pr<T>
     }
   }
 
-@Suppress("DEPRECATION") fun <T : Any> Page<T>.toPr(): Pr<T> = result
+@Suppress("DEPRECATION")
+fun <T : Any> Page<T>.toPr(): Pr<T> = result
 
 fun <T : Any> Page<T>.toIPage(): IPage<T> = toPr()
 
@@ -38,4 +39,5 @@ val Pq?.page: Pageable
     )
 
 /** @see [org.springframework.data.domain.PageRequest] */
-@Suppress("DEPRECATION") fun Pq?.toPageable(): Pageable = page
+@Suppress("DEPRECATION")
+fun Pq?.toPageable(): Pageable = page

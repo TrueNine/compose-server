@@ -1,11 +1,11 @@
 package net.yan100.compose.rds.converters.jimmer
 
+import net.yan100.compose.typing.AnyTyping
+import org.babyfish.jimmer.sql.runtime.AbstractScalarProvider
 import java.lang.reflect.Method
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
-import net.yan100.compose.typing.AnyTyping
-import org.babyfish.jimmer.sql.runtime.AbstractScalarProvider
 
 abstract class AbstractJimmerTypingProvider<T : AnyTyping, S : Any>(
   ct: KClass<T>,

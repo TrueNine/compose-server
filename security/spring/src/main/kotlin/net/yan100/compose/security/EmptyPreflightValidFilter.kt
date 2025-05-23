@@ -10,7 +10,8 @@ import net.yan100.compose.util.IEmptyDefault
 class EmptyPreflightValidFilter :
   IEmptyDefault, SecurityPreflightValidFilter() {
   companion object {
-    @JvmStatic private val log = slf4j(EmptyPreflightValidFilter::class)
+    @JvmStatic
+    private val log = slf4j(EmptyPreflightValidFilter::class)
   }
 
   init {

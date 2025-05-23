@@ -25,6 +25,7 @@ enum class EncryptAlgorithmTyping(
   override val value: String = this.alg
 
   companion object {
-    @JvmStatic fun findVal(v: String?) = entries.find { it.alg == v }
+    @JvmStatic
+    fun findVal(v: String?) = entries.find { it.alg == v }
   }
 }

@@ -1,9 +1,9 @@
 package net.yan100.compose.depend.paho.properties
 
-import java.util.*
 import net.yan100.compose.i32
 import net.yan100.compose.i64
 import org.springframework.boot.context.properties.ConfigurationProperties
+import java.util.*
 
 private const val PREFIX = "compose.depend.paho"
 

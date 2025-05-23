@@ -1,13 +1,13 @@
 package net.yan100.compose.rds.crud.entities.jpa
 
 import jakarta.persistence.Convert
-import java.time.LocalDate
 import net.yan100.compose.*
 import net.yan100.compose.domain.IIdcard2Code
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.rds.crud.converters.GenderTypingConverter
 import net.yan100.compose.rds.entities.IJpaEntity
 import net.yan100.compose.rds.typing.GenderTyping
+import java.time.LocalDate
 
 @MetaDef
 interface SuperUserInfo : IJpaEntity {
@@ -52,7 +52,8 @@ interface SuperUserInfo : IJpaEntity {
   var addressCode: string?
 
   /** 地址 id 推荐使用地址 code */
-  @Deprecated("推荐直接使用 code") var addressId: RefId?
+  @Deprecated("推荐直接使用 code")
+  var addressId: RefId?
 
   /** qq openid */
   var qqOpenid: RefId?
@@ -74,7 +75,8 @@ interface SuperUserInfo : IJpaEntity {
   var wechatOpenid: String?
 
   /** 微信号 */
-  @Deprecated("不再支持微信号") var wechatAccount: string?
+  @Deprecated("不再支持微信号")
+  var wechatAccount: string?
 
   /** 微信自定义登录id */
   var wechatAuthid: String?

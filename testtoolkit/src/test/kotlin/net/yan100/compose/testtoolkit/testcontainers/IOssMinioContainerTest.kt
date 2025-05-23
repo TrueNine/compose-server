@@ -66,8 +66,8 @@ class IOssMinioContainerTest : IOssMinioContainer {
       val apiPort = container.getMappedPort(9000)
       val consolePort = container.getMappedPort(9001)
 
-      assertTrue(apiPort in 1024 .. 65535, "API 端口映射应在有效范围内")
-      assertTrue(consolePort in 1024 .. 65535, "控制台端口映射应在有效范围内")
+      assertTrue(apiPort in 1024..65535, "API 端口映射应在有效范围内")
+      assertTrue(consolePort in 1024..65535, "控制台端口映射应在有效范围内")
       assertNotEquals(apiPort, consolePort, "API 端口和控制台端口不应相同")
     }
 
@@ -140,7 +140,7 @@ class IOssMinioContainerTest : IOssMinioContainer {
       // 特殊验证端口属性（因为端口是动态分配的）
       val portValue = environment.getProperty("compose.oss.port")
       assertNotNull(portValue, "环境变量中缺少端口配置")
-      assertTrue(portValue.toInt() in 1024 .. 65535, "端口值应在有效范围内")
+      assertTrue(portValue.toInt() in 1024..65535, "端口值应在有效范围内")
     }
   }
 } 

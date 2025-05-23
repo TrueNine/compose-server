@@ -10,7 +10,8 @@ import net.yan100.compose.rds.typing.AuditTyping
 @MetaDef
 interface SuperAuditAttachment : IJpaEntity {
   /** 审核文件状态 */
-  @get:Convert(converter = AuditTypingConverter::class) var status: AuditTyping
+  @get:Convert(converter = AuditTypingConverter::class)
+  var status: AuditTyping
 
   /** 审核条目 id */
   var auditId: RefId

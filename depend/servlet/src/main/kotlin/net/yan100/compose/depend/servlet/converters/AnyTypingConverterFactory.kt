@@ -1,12 +1,12 @@
 package net.yan100.compose.depend.servlet.converters
 
-import java.util.concurrent.ConcurrentHashMap
 import net.yan100.compose.slf4j
 import net.yan100.compose.typing.AnyTyping
 import net.yan100.compose.typing.IntTyping
 import net.yan100.compose.typing.StringTyping
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
+import java.util.concurrent.ConcurrentHashMap
 
 @Suppress("DEPRECATION_ERROR")
 private val log = slf4j<AnyTypingConverterFactory>()

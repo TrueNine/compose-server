@@ -1,7 +1,7 @@
 package net.yan100.compose
 
-import java.io.Serializable
 import net.yan100.compose.typing.HttpStatusTyping
+import java.io.Serializable
 
 /**
  * 响应错误消息

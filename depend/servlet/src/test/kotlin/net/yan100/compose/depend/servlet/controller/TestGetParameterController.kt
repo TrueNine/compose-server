@@ -17,7 +17,8 @@ class TestGetParameterController {
 
   data class DataClassDto(var name: String? = null, var age: Int? = null)
 
-  @GetMapping("nonAnnotation") fun nonAnnotation(dto: Dto): Dto = dto
+  @GetMapping("nonAnnotation")
+  fun nonAnnotation(dto: Dto): Dto = dto
 
   @GetMapping("requestParam")
   fun requestParam(@RequestParam dto: Dto): Dto = dto

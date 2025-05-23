@@ -1,12 +1,12 @@
 package net.yan100.compose.holders
 
 import jakarta.annotation.Resource
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.core.io.ResourceLoader
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.test.*
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.core.io.ResourceLoader
 
 @SpringBootTest
 class ResourceHolderTest {

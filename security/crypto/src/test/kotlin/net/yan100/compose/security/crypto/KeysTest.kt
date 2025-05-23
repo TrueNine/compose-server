@@ -2,12 +2,7 @@ package net.yan100.compose.security.crypto
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /**
  * Keys工具类的单元测试
@@ -28,7 +23,7 @@ class KeysTest {
     val length = 32
     val result = Keys.generateRandomAsciiString(length)
     assertEquals(length, result.length)
-    assertTrue(result.all { it in '0' .. '9' || it in 'a' .. 'z' || it in 'A' .. 'Z' })
+    assertTrue(result.all { it in '0'..'9' || it in 'a'..'z' || it in 'A'..'Z' })
   }
 
   @Test

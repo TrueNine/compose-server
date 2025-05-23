@@ -8,22 +8,28 @@ import org.babyfish.jimmer.sql.EnumType
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class RelationItemTyping(v: Int) : IntTyping {
   /** 无 */
-  @EnumItem(ordinal = 0) NONE(0),
+  @EnumItem(ordinal = 0)
+  NONE(0),
 
   /** 用户 */
-  @EnumItem(ordinal = 1) USER(1),
+  @EnumItem(ordinal = 1)
+  USER(1),
 
   /** 客户 */
-  @EnumItem(ordinal = 2) CUSTOMER(2),
+  @EnumItem(ordinal = 2)
+  CUSTOMER(2),
 
   /** 企业 */
-  @EnumItem(ordinal = 3) ENTERPRISE(3),
+  @EnumItem(ordinal = 3)
+  ENTERPRISE(3),
 
   /** 员工 */
-  @EnumItem(ordinal = 4) EMPLOYEE(4),
+  @EnumItem(ordinal = 4)
+  EMPLOYEE(4),
 
   /** 其他 */
-  @EnumItem(ordinal = 9999) OTHER(9999);
+  @EnumItem(ordinal = 9999)
+  OTHER(9999);
 
   override val value: Int = v
 

@@ -1,11 +1,6 @@
 package net.yan100.compose.rds.entities
 
-import jakarta.persistence.Access
-import jakarta.persistence.AccessType
-import jakarta.persistence.Column
-import jakarta.persistence.EntityListeners
-import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.Version
+import jakarta.persistence.*
 import net.yan100.compose.Id
 import net.yan100.compose.consts.IDbNames
 import net.yan100.compose.datetime
@@ -99,7 +94,8 @@ open class IEntityDelegate : IAnyEntityDelegate(), IJpaEntity {
   @Column(name = IDbNames.MODIFY_ROW_DATETIME)
   override var mrd: datetime? = null
 
-  @Column(name = IDbNames.LOGIC_DELETE_FLAG) override var ldf: Boolean? = null
+  @Column(name = IDbNames.LOGIC_DELETE_FLAG)
+  override var ldf: Boolean? = null
 }
 
 fun entity(): IJpaEntity {

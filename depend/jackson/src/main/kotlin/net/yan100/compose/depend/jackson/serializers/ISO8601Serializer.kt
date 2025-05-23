@@ -52,7 +52,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
      * 无参构造函数，用于Jackson反序列化
      */
     constructor() : this(ZoneOffset.UTC)
-    
+
     /**
      * ## 返回处理的类型
      * @return LocalDate 类
@@ -86,7 +86,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
      * 无参构造函数，用于Jackson反序列化
      */
     constructor() : this(ZoneOffset.UTC)
-    
+
     /**
      * ## 返回处理的类型
      * @return LocalDateTime 类
@@ -120,7 +120,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
      * 无参构造函数，用于Jackson反序列化
      */
     constructor() : this(ZoneOffset.UTC)
-    
+
     /**
      * ## 返回处理的类型
      * @return LocalTime 类

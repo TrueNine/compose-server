@@ -41,7 +41,8 @@ enum class HttpStatusTyping(
   override val value: Int = code
 
   companion object {
-    @JvmStatic fun findVal(v: Int?) = valueOf(v)
+    @JvmStatic
+    fun findVal(v: Int?) = valueOf(v)
 
     @JvmStatic
     fun valueOf(code: Int?): HttpStatusTyping {

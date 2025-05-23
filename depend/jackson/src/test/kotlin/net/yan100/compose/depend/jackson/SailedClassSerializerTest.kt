@@ -2,11 +2,11 @@ package net.yan100.compose.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
+import net.yan100.compose.i16
+import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
-import net.yan100.compose.i16
-import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class SailedClassSerializerTest {

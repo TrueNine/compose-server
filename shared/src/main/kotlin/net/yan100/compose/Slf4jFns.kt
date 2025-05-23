@@ -1,7 +1,7 @@
 package net.yan100.compose
 
-import kotlin.reflect.KClass
 import org.slf4j.LoggerFactory
+import kotlin.reflect.KClass
 
 /**
  * slf4j 日志 log 对象桥接器，针对 kotlin

@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.converters.jimmer
 
-import java.time.Duration
 import org.babyfish.jimmer.sql.runtime.ScalarProvider
+import java.time.Duration
 
 class DurationScalarProvider : ScalarProvider<Duration?, String?> {
   override fun toScalar(sqlValue: String): Duration? {

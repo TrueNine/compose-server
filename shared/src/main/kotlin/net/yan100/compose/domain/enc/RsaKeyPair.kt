@@ -1,9 +1,9 @@
 package net.yan100.compose.domain.enc
 
-import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
 import net.yan100.compose.domain.IRsaKeyPair
 import net.yan100.compose.typing.EncryptAlgorithmTyping
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 
 /**
  * rsa密钥对

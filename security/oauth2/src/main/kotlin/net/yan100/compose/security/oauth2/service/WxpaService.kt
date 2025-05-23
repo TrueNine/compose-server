@@ -54,10 +54,10 @@ class WxpaService(
   fun verifyBasicConfig(body: WxpaVerifyDto): String? {
     val a =
       listOf(
-          wxpaConfigInfo.preValidToken!!,
-          body.timestamp.toString(),
-          body.nonce,
-        )
+        wxpaConfigInfo.preValidToken!!,
+        body.timestamp.toString(),
+        body.nonce,
+      )
         .sorted()
         .joinToString("")
         .sha1

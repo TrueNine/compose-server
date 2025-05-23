@@ -18,6 +18,7 @@ private fun mapCapacity(expectedSize: Int): Int =
     expectedSize < 3 -> expectedSize + 1
     expectedSize < INT_MAX_POWER_OF_TWO ->
       ((expectedSize / 0.75F) + 1.0F).toInt()
+
     else -> Int.MAX_VALUE
   }
 

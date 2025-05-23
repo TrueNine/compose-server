@@ -13,9 +13,11 @@ enum class WechatMpGrantTyping(private val typingCode: String) : StringTyping {
   CLIENT_CREDENTIAL("client_credential"),
   AUTH_CODE("authorization_code");
 
-  @JsonValue override val value: String = typingCode
+  @JsonValue
+  override val value: String = typingCode
 
   companion object {
-    @JvmStatic fun findVal(v: String?) = entries.find { it.typingCode == v }
+    @JvmStatic
+    fun findVal(v: String?) = entries.find { it.typingCode == v }
   }
 }

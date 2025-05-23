@@ -1,10 +1,10 @@
 package net.yan100.compose.depend.paho.paho
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.io.Closeable
-import kotlin.reflect.KClass
 import org.eclipse.paho.client.mqttv3.IMqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import java.io.Closeable
+import kotlin.reflect.KClass
 
 class MqttPahoClientWrapper(
   private val client: IMqttClient,

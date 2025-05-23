@@ -2,14 +2,10 @@ package net.yan100.compose.rds
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import net.yan100.compose.DisRule
 import net.yan100.compose.rds.typing.DisTyping
 import org.junit.jupiter.api.Test
+import kotlin.test.*
 
 class DisRuleFnsTest {
 

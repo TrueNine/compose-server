@@ -24,7 +24,8 @@ interface IWxMpApi {
 """,
   )
   class JsCodeToSessionResp {
-    @Schema(title = "会话密钥") var sessionKey: String? = null
+    @Schema(title = "会话密钥")
+    var sessionKey: String? = null
 
     @Schema(
       title = "开放平台唯一标识符",
@@ -32,11 +33,14 @@ interface IWxMpApi {
     )
     var unionId: String? = null
 
-    @Schema(title = "用户唯一标识") var openId: String? = null
+    @Schema(title = "用户唯一标识")
+    var openId: String? = null
 
-    @Schema(title = "错误信息") var errorMessage: String? = null
+    @Schema(title = "错误信息")
+    var errorMessage: String? = null
 
-    @Schema(title = "错误码") var errorCode: Int? = null
+    @Schema(title = "错误码")
+    var errorCode: Int? = null
   }
 
   @Schema(
@@ -58,13 +62,17 @@ interface IWxMpApi {
     @JsonProperty("unionid")
     var unionId: String? = null
 
-    @Schema(title = "用户唯一标识") @JsonProperty("openid") var openId: String? = null
+    @Schema(title = "用户唯一标识")
+    @JsonProperty("openid")
+    var openId: String? = null
 
     @Schema(title = "错误信息")
     @JsonProperty("errmeg")
     var errorMessage: String? = null
 
-    @Schema(title = "错误码") @JsonProperty("errcode") var errorCode: Int? = null
+    @Schema(title = "错误码")
+    @JsonProperty("errcode")
+    var errorCode: Int? = null
   }
 
   class JsCodeToSessionApiReq {

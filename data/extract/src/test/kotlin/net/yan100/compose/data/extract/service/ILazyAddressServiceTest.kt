@@ -1,13 +1,7 @@
 package net.yan100.compose.data.extract.service
 
 import net.yan100.compose.string
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /**
  * # ILazyAddressService 接口测试

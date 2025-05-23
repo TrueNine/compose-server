@@ -3,18 +3,7 @@ package net.yan100.compose.rds.crud.converters
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
 import net.yan100.compose.rds.intTyping
-import net.yan100.compose.rds.typing.AttachmentTyping
-import net.yan100.compose.rds.typing.AuditTyping
-import net.yan100.compose.rds.typing.BloodTyping
-import net.yan100.compose.rds.typing.CertContentTyping
-import net.yan100.compose.rds.typing.CertPointTyping
-import net.yan100.compose.rds.typing.CertTyping
-import net.yan100.compose.rds.typing.DegreeTyping
-import net.yan100.compose.rds.typing.DisTyping
-import net.yan100.compose.rds.typing.GenderTyping
-import net.yan100.compose.rds.typing.GoodsChangeRecordTyping
-import net.yan100.compose.rds.typing.RelationTyping
-import net.yan100.compose.rds.typing.RuleTyping
+import net.yan100.compose.rds.typing.*
 import org.springframework.stereotype.Component
 
 @Component

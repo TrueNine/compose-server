@@ -42,7 +42,7 @@ private fun KSAnnotation.createInvocationHandler(
   return InvocationHandler { proxy, method, _ ->
     if (
       method.name == "toString" &&
-        arguments.none { it.name?.asString() == "toString" }
+      arguments.none { it.name?.asString() == "toString" }
     ) {
       clazz.canonicalName +
         arguments

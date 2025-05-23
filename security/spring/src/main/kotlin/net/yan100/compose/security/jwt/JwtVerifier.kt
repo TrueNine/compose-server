@@ -3,15 +3,15 @@ package net.yan100.compose.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.security.PrivateKey
-import java.security.interfaces.RSAPublicKey
-import kotlin.reflect.KClass
 import net.yan100.compose.DTimer
 import net.yan100.compose.security.JwtException
 import net.yan100.compose.security.crypto.Encryptors
 import net.yan100.compose.security.jwt.consts.JwtToken
 import net.yan100.compose.security.jwt.consts.VerifierParam
 import net.yan100.compose.slf4j
+import java.security.PrivateKey
+import java.security.interfaces.RSAPublicKey
+import kotlin.reflect.KClass
 
 private val log = slf4j(JwtVerifier::class)
 
@@ -59,8 +59,8 @@ open class JwtVerifier internal constructor() {
   @Throws(JwtException::class)
   fun <S : Any, E : Any> verify(params: VerifierParam<S, E>): JwtToken<S, E>? {
     return JWT.require(
-        Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey)
-      )
+      Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey)
+    )
       .withIssuer(params.issuer ?: this.issuer)
       .withJWTId(params.id ?: this.id)
       .acceptLeeway(0)
@@ -148,6 +148,7 @@ open class JwtVerifier internal constructor() {
   }
 
   companion object {
-    @JvmStatic fun createVerifier(): Builder = JwtVerifier().Builder()
+    @JvmStatic
+    fun createVerifier(): Builder = JwtVerifier().Builder()
   }
 }

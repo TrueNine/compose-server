@@ -32,6 +32,7 @@ abstract class SecurityUserDetailsService : UserDetailsService {
   abstract fun loadUserDetailsByAccount(account: String?): AuthRequestInfo?
 
   companion object {
-    @JvmStatic private val log = slf4j(this::class)
+    @JvmStatic
+    private val log = slf4j(this::class)
   }
 }

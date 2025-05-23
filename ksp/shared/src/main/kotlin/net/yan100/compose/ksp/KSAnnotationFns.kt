@@ -10,7 +10,7 @@ inline fun <reified A : Annotation> KSAnnotation.isAnnotationByKClass():
   val c = A::class
   return shortName.getShortName() == c.simpleName &&
     annotationType.fastResolve().declaration.qualifiedName?.asString() ==
-      c.qualifiedName
+    c.qualifiedName
 }
 
 val KSAnnotation.simpleName

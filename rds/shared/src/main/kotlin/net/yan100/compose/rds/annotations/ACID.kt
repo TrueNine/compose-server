@@ -1,7 +1,7 @@
 package net.yan100.compose.rds.annotations
 
-import java.lang.annotation.Inherited
 import org.springframework.transaction.annotation.Transactional
+import java.lang.annotation.Inherited
 
 /**
  * ## spring 中 事务注解 别称

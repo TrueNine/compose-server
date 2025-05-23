@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.annotation.Resource
-import kotlin.test.Test
-import kotlin.test.assertTrue
 import net.yan100.compose.datetime
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
 import net.yan100.compose.testtoolkit.annotations.SpringServletTest
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 data class A(val a: String, val b: String)
 

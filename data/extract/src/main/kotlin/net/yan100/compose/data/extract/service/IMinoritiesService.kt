@@ -69,7 +69,8 @@ interface IMinoritiesService {
         "基诺",
       )
 
-    @JvmStatic val MINORITIES_Z = MINORITIES.map { it + "族" }
+    @JvmStatic
+    val MINORITIES_Z = MINORITIES.map { it + "族" }
   }
 
   fun findAllMinorities(): List<String> = MINORITIES
