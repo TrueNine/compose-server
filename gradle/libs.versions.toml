@@ -1,6 +1,6 @@
 [versions]
 cn-dev33-sa-token = "1.43.0"
-cn-dev33-sa-token-redis = "1.42.0"
+cn-dev33-sa-token-redis = "1.43.0"
 cn-hutool = "5.8.38"
 com-baomidou-mybatis-plus = "3.5.12"
 com-diffplug-spotless = "7.0.3"
@@ -33,7 +33,7 @@ net-sf-sevenzipjbinding = "16.02-2.01"
 nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
 org-apache-logging-log4j = "2.24.3"
 org-babyfish-jimmer = "0.9.89"
-org-hibernate-orm = "6.6.15.Final"
+org-hibernate-orm = "7.0.0.Final"
 org-jetbrains-kotlin = "2.2.0-RC"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
@@ -41,13 +41,13 @@ org-jetbrains-kotlinx-io = "0.7.0"
 org-jetbrains-kotlinx-serialization = "1.8.1"
 org-junit-junit5 = "5.13.0-RC1"
 org-junit-platform = "1.13.0-RC1"
-org-liquibase = "4.31.1"
+org-liquibase = "4.32.0"
 org-slf4j = "2.1.0-alpha1"
 org-testcontainers = "1.21.0"
 org-testng = "7.11.0"
 spring-ai = "1.0.0-RC1"
 spring-batch = "5.2.2"
-spring-boot = "3.5.0-RC1"
+spring-boot = "3.5.0"
 spring-cloud = "2025.0.0-M2"
 spring-cloud-alibaba = "2023.0.3.2"
 spring-data = "3.5.0-M1"
@@ -112,8 +112,8 @@ com-squareup-retrofit2-retrofit = "com.squareup.retrofit2:retrofit:3.0.0"
 com-tencentcloudapi-tencentcloud-sdk-java-sms = "com.tencentcloudapi:tencentcloud-sdk-java-sms:3.1.1179"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
-dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.0.0"
-dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.0.0"
+dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.0.1"
+dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.0.1"
 dev-langchain4j-langchain4j-community-bom = { module = "dev.langchain4j:langchain4j-community-bom", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j" }
@@ -307,7 +307,7 @@ net-yan100-compose-gradle-plugin = { id = "net.yan100.compose.gradle-plugin", ve
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 org-asciidoctor-jvm-convert = "org.asciidoctor.jvm.convert:4.0.4"
 org-graalvm-buildtools-native = "org.graalvm.buildtools.native:0.10.6"
-org-gradle-toolchains-foojay-resolver-convention = "org.gradle.toolchains.foojay-resolver-convention:1.0.0-rc-1"
+org-gradle-toolchains-foojay-resolver-convention = "org.gradle.toolchains.foojay-resolver-convention:1.0.0"
 org-hibernate-orm = { id = "org.hibernate.orm", version.ref = "org-hibernate-orm" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin" }
@@ -323,29 +323,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-  "org-junit-jupiter-junit-jupiter-api",
-  "org-junit-jupiter-junit-jupiter-engine",
-  "org-junit-platform-junit-platform-launcher",
+    "org-junit-jupiter-junit-jupiter-api",
+    "org-junit-jupiter-junit-jupiter-engine",
+    "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-  "io-projectreactor-kotlin-reactor-kotlin-extensions",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+    "io-projectreactor-kotlin-reactor-kotlin-extensions",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-  "io-mockk-mockk",
-  "io-projectreactor-reactor-test",
-  "org-jetbrains-kotlin-kotlin-test-junit5",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+    "io-mockk-mockk",
+    "io-projectreactor-reactor-test",
+    "org-jetbrains-kotlin-kotlin-test-junit5",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-  "p6spy-p6spy",
+    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+    "p6spy-p6spy",
 ]
 redis = [
-  "org-apache-commons-commons-pool2",
-  "org-springframework-boot-spring-boot-starter-data-redis",
+    "org-apache-commons-commons-pool2",
+    "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-  "io-github-bonigarcia-webdrivermanager",
-  "org-seleniumhq-selenium-selenium-java",
+    "io-github-bonigarcia-webdrivermanager",
+    "org-seleniumhq-selenium-selenium-java",
 ]
