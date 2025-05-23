@@ -15,10 +15,6 @@ val repoConfig = mapOf(
     "url" to extra["repositories.url.yunxiao"]?.toString(),
     "username" to extra["repositories.username.yunxiao"]?.toString(),
     "password" to extra["repositories.password.yunxiao"]?.toString()
-  ), "yz-yunxiao" to mapOf(
-    "url" to extra["repositories.url.yz-yunxiao"]?.toString(),
-    "username" to extra["repositories.username.yz-yunxiao"]?.toString(),
-    "password" to extra["repositories.password.yz-yunxiao"]?.toString()
   )
 )
 
@@ -167,8 +163,9 @@ afterEvaluate {
       }
 
       if (artifactExists(repoUrl, username, password, publication.groupId, publication.artifactId, publication.version, extension)) {
-        logger.lifecycle("跳过发布 ${publication.groupId}:${publication.artifactId}:${publication.version} 到 $repoUrl，制品已存在")
-        throw StopExecutionException("制品已存在，发布被跳过")
+        val msg = "skip ${publication.groupId}:${publication.artifactId}:${publication.version} to $repoUrl , because it already exists."
+        logger.lifecycle(msg)
+        throw StopExecutionException(msg)
       }
     }
   }
@@ -176,11 +173,25 @@ afterEvaluate {
 
 
 signing {
-  val key = System.getenv("SIGNING_KEY")
-  val keyId = System.getenv("SIGNING_KEY_ID")
-  val password = System.getenv("SIGNING_PASSWORD")
-  listOf(key, keyId, password).takeIf { it.all { v -> !v.isNullOrBlank() } }?.let {
-    useInMemoryPgpKeys(keyId!!, String(java.util.Base64.getDecoder().decode(key)), password!!)
+  val keyId = System.getenv("SIGNING_KEY_ID") ?: extra["signing.keyId"]?.toString()
+  val password = System.getenv("SIGNING_PASSWORD") ?: extra["signing.password"]?.toString()
+  val key = System.getenv("SIGNING_KEY") ?: extra["signing.secretKeyRingFile"]?.toString()?.let {
+    File(it).readText()
+  }
+
+  listOf(key, keyId, password)
+    .takeIf { it.all { v -> !v.isNullOrBlank() } }
+    ?.filterNotNull()
+    ?.let { (key, keyId, password) ->
+      if (!key.startsWith("-----BEGIN PGP PRIVATE KEY BLOCK-----")) {
+        val msg = "key is not a valid PGP private key"
+        logger.error(msg)
+        error(msg)
+      }
+      useInMemoryPgpKeys(keyId, key, password!!)
+    } ?: run {
+    logger.warn("use gnu pgp key to command line")
+    useGpgCmd()
   }
   sign(publishing.publications["mavenJava"])
 }
