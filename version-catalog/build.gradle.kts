@@ -59,11 +59,11 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
   return nonStableKeywords.any { version.version.contains(it, true) }
 }
 // https://github.com/ben-manes/gradle-versions-plugin
-tasks.withType<DependencyUpdatesTask> {
+/*tasks.withType<DependencyUpdatesTask> {
   rejectVersionIf {
     isNonStable(candidate)
   }
-}
+}*/
 
 // https://github.com/ben-manes/gradle-versions-plugin
 catalog { versionCatalog { from(files("../gradle/libs.versions.toml")) } }
