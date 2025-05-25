@@ -4,7 +4,6 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import java.time.Duration
@@ -45,22 +44,19 @@ interface IOssMinioContainer {
      * - API 端口: 随机分配
      * - 控制台端口: 随机分配
      */
-    @Container
     @JvmStatic
-    val minio = GenericContainer(DockerImageName.parse("minio/minio:RELEASE.2025-04-22T22-12-26Z")).apply {
-      withEnv("MINIO_ROOT_USER", "minioadmin")  // 使用新的环境变量名
-      withEnv("MINIO_ROOT_PASSWORD", "minioadmin")  // 使用新的环境变量名
-      withEnv("MINIO_CONSOLE_ADDRESS", ":9001")  // 固定控制台端口
-      withCommand("server", "/data")
-      addExposedPorts(9000, 9001)  // 使用 addExposedPorts 让 testcontainers 自动分配随机端口
-
-      // 设置等待策略
-      setWaitStrategy(
-        Wait.forLogMessage(".*MinIO Object Storage Server.*\\n", 1)
-          .withStartupTimeout(Duration.ofSeconds(30))
-      )
-
-      start()
+    val minio by lazy {
+      GenericContainer(DockerImageName.parse("minio/minio:RELEASE.2025-04-22T22-12-26Z")).apply {
+        withEnv("MINIO_ROOT_USER", "minioadmin")
+        withEnv("MINIO_ROOT_PASSWORD", "minioadmin")
+        withEnv("MINIO_CONSOLE_ADDRESS", ":9001")
+        withCommand("server", "/data")
+        withExposedPorts(9000, 9001)
+        setWaitStrategy(
+          Wait.forLogMessage(".*MinIO Object Storage Server.*\\n", 1)
+            .withStartupTimeout(Duration.ofSeconds(10))
+        )
+      }
     }
 
     /**
@@ -76,8 +72,9 @@ interface IOssMinioContainer {
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      val host = "localhost"
-      val port = minio.getMappedPort(9000)  // 获取随机分配的 API 端口
+      minio.start()
+      val host = minio.host
+      val port = minio.getMappedPort(9000)
 
       registry.add("compose.oss.base-url") { host }
       registry.add("compose.oss.expose-base-url") { "http://$host:$port" }

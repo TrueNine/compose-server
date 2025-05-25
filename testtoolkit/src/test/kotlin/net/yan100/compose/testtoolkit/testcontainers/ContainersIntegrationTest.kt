@@ -31,6 +31,12 @@ class ContainersIntegrationTest :
   ICacheRedisContainer,
   IOssMinioContainer {
 
+  companion object {
+    init {
+
+    }
+  }
+
   @Resource
   private lateinit var jdbcTemplate: JdbcTemplate
 

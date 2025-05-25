@@ -106,8 +106,8 @@ class IOssMinioContainerTest : IOssMinioContainer {
 
       // 验证所有必需的属性都已配置
       val expectedProperties = mapOf(
-        "compose.oss.base-url" to "localhost",
-        "compose.oss.expose-base-url" to "http://localhost:${minioContainer!!.getMappedPort(9000)}",
+        "compose.oss.base-url" to "127.0.0.1",
+        "compose.oss.expose-base-url" to "http://${minioContainer!!.host}:${minioContainer!!.getMappedPort(9000)}",
         "compose.oss.port" to minioContainer!!.getMappedPort(9000).toString(),
         "compose.oss.minio.enable-https" to "false",
         "compose.oss.minio.access-key" to "minioadmin",
@@ -124,8 +124,8 @@ class IOssMinioContainerTest : IOssMinioContainer {
     @DisplayName("验证环境变量注入正确")
     fun `验证环境变量注入正确`() {
       val expectedProperties = mapOf(
-        "compose.oss.base-url" to "localhost",
-        "compose.oss.expose-base-url" to "http://localhost:${minioContainer!!.getMappedPort(9000)}",
+        "compose.oss.base-url" to minioContainer!!.host,
+        "compose.oss.expose-base-url" to "http://${minioContainer!!.host}:${minioContainer!!.getMappedPort(9000)}",
         "compose.oss.minio.enable-https" to "false",
         "compose.oss.minio.access-key" to "minioadmin",
         "compose.oss.minio.secret-key" to "minioadmin"
