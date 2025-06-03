@@ -1,4 +1,6 @@
-plugins { `kotlin-convention` }
+plugins {
+  `kotlin-convention`
+}
 
 version = libs.versions.compose.build.get()
 
@@ -13,21 +15,17 @@ java {
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test)
   api(libs.org.jetbrains.kotlin.kotlin.test.junit5)
-  // mockk
   api(libs.io.mockk.mockk)
-  // kotlin 协程测试
   api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
   api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
-  // junit5 参数化测试扩展包
   api(libs.org.junit.jupiter.junit.jupiter.params)
 
-  // Testcontainers
   api(libs.org.testcontainers.testcontainers)
   api(libs.org.testcontainers.postgresql)
   api(libs.org.testcontainers.junit.jupiter)
 
-  implementation(libs.org.junit.jupiter.junit.jupiter.api) // 覆盖依赖
-  implementation(libs.org.junit.jupiter.junit.jupiter.engine) // kotlin
+  implementation(libs.org.junit.jupiter.junit.jupiter.api)
+  implementation(libs.org.junit.jupiter.junit.jupiter.engine)
   implementation(libs.org.junit.vintage.junit.vintage.engine)
   implementation(libs.org.slf4j.slf4j.api)
 
@@ -45,7 +43,6 @@ dependencies {
     exclude("org.junit.platform")
   }
 
-  runtimeOnly(libs.org.springframework.boot.spring.boot.test.autoconfigure)
   implementation(libs.org.springframework.security.spring.security.test)
   implementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
 
@@ -62,21 +59,13 @@ dependencies {
   // 日志自动配置
   runtimeOnly(libs.org.springframework.boot.spring.boot.starter.logging)
 
-  // 测试用数据库
-  runtimeOnly(libs.com.h2database.h2)
   testImplementation(libs.org.testcontainers.postgresql)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
-  testRuntimeOnly(libs.org.postgresql.postgresql)
 
-  // Redis 支持
-  testImplementation(libs.org.springframework.boot.spring.boot.starter.data.redis)
-
-  // MinIO 支持
   testImplementation(libs.io.minio.minio)
-
-  // 测试容器支持
+  testRuntimeOnly(libs.org.postgresql.postgresql)
   testImplementation(libs.org.testcontainers.junit.jupiter)
   testImplementation(libs.org.testcontainers.postgresql)
-  testImplementation(libs.io.minio.minio)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.data.redis)
   testImplementation(libs.org.testcontainers.testcontainers)
 }
