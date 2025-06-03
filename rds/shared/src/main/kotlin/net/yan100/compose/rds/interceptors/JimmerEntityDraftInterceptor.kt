@@ -1,35 +1,35 @@
 package net.yan100.compose.rds.interceptors
 
 import net.yan100.compose.datetime
-import net.yan100.compose.rds.entities.IJimmerEntity
-import net.yan100.compose.rds.entities.IJimmerEntityDraft
-import net.yan100.compose.rds.entities.IJimmerEntityProps
+import net.yan100.compose.rds.entities.IEntity
+import net.yan100.compose.rds.entities.IEntityDraft
+import net.yan100.compose.rds.entities.IEntityProps
 import org.babyfish.jimmer.kt.isLoaded
 import org.babyfish.jimmer.meta.TypedProp
 import org.babyfish.jimmer.sql.DraftInterceptor
 
 class JimmerEntityDraftInterceptor :
-  DraftInterceptor<IJimmerEntity, IJimmerEntityDraft> {
-  override fun dependencies(): Collection<TypedProp<IJimmerEntity, *>> {
+  DraftInterceptor<IEntity, IEntityDraft> {
+  override fun dependencies(): Collection<TypedProp<IEntity, *>> {
     return listOf(
-      IJimmerEntityProps.ID,
-      IJimmerEntityProps.CRD,
-      IJimmerEntityProps.MRD,
-      IJimmerEntityProps.RLV,
-      IJimmerEntityProps.LDF,
+      IEntityProps.ID,
+      IEntityProps.CRD,
+      IEntityProps.MRD,
+      IEntityProps.RLV,
+      IEntityProps.LDF,
     )
   }
 
   override fun beforeSaveAll(
-    items: Collection<DraftInterceptor.Item<IJimmerEntity, IJimmerEntityDraft>>
+    items: Collection<DraftInterceptor.Item<IEntity, IEntityDraft>>
   ) {
     for (it in items) {
       beforeSave(it.draft, it.original)
     }
   }
 
-  override fun beforeSave(draft: IJimmerEntityDraft, original: IJimmerEntity?) {
-    if (!isLoaded(draft, IJimmerEntity::id)) {
+  override fun beforeSave(draft: IEntityDraft, original: IEntity?) {
+    if (!isLoaded(draft, IEntity::id)) {
       if (original === null) {
         draft.crd = datetime.now()
         draft.rlv = 0
