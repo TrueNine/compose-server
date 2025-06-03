@@ -4,7 +4,6 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import java.time.Duration
@@ -44,16 +43,17 @@ interface ICacheRedisContainer {
      * - 版本: 7.4.2-alpine3.21
      * - 无密码认证
      */
-    @Container
     @JvmStatic
-    val redis = GenericContainer(DockerImageName.parse("redis:7.4.2-alpine3.21")).apply {
-      withExposedPorts(6379)
-      // 设置等待策略
-      setWaitStrategy(
-        Wait.forLogMessage(".*Ready to accept connections.*\\n", 1)
-          .withStartupTimeout(Duration.ofSeconds(30))
-      )
-      start()
+    val redis by lazy {
+      GenericContainer(DockerImageName.parse("redis:7.4.2-alpine3.21")).apply {
+        withExposedPorts(6379)
+        // 设置等待策略
+        setWaitStrategy(
+          Wait.forLogMessage(".*Ready to accept connections.*\\n", 1)
+            .withStartupTimeout(Duration.ofSeconds(10))
+        )
+        start()
+      }
     }
 
     /**
@@ -68,7 +68,8 @@ interface ICacheRedisContainer {
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      val host = "localhost"
+
+      val host = redis.host
       val port = redis.getMappedPort(6379)
 
       registry.add("spring.data.redis.host") { host }

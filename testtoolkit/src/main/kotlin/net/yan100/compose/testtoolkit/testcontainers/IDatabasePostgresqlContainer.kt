@@ -3,7 +3,6 @@ package net.yan100.compose.testtoolkit.testcontainers
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
 /**
@@ -40,14 +39,15 @@ interface IDatabasePostgresqlContainer {
      * - 用户名: test
      * - 密码: test
      */
-    @Container
     @JvmStatic
-    val pg = PostgreSQLContainer<Nothing>("postgres:17.4-alpine").apply {
-      withDatabaseName("testdb")
-      withUsername("test")
-      withPassword("test")
-      addExposedPorts(5432)
-      start()
+    val pg by lazy {
+      PostgreSQLContainer<Nothing>("postgres:17.4-alpine").apply {
+        withDatabaseName("testdb")
+        withUsername("test")
+        withPassword("test")
+        addExposedPorts(5432)
+        start()
+      }
     }
 
     /**
