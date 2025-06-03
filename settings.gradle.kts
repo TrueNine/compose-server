@@ -46,7 +46,7 @@ listOf(
   "jimmer-ext-postgres",
   "migration-mysql",
   "migration-postgres",
-  "migration-h2"
+  "flyway-migration-postgresql"
 )).useFile()
 
 // 数据采集器
