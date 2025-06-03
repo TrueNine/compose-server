@@ -285,4 +285,128 @@ class FlywayIntegrationTest : IDatabasePostgresqlContainer {
     )
     assertTrue(ldfInfo["column_default"] == null, "ldf 字段默认值应为 null")
   }
+
+  @Test
+  @Transactional
+  fun `base_struct_to_jimmer_style 应正确处理 boolean ldf 字段`() {
+    jdbcTemplate.execute("drop table if exists test_table")
+    jdbcTemplate.execute(
+      """
+      create table test_table(
+        id bigint primary key,
+        ldf boolean default true
+      )
+      """
+        .trimIndent()
+    )
+    // 插入多种情况
+    jdbcTemplate.execute(
+      "insert into test_table(id, ldf) values (1, true), (2, false), (3, null)"
+    )
+    // 调用函数
+    jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
+    // 检查 ldf 字段类型
+    val ldfInfo =
+      jdbcTemplate.queryForMap(
+        """
+        select data_type, column_default
+        from information_schema.columns
+        where table_name = 'test_table' and column_name = 'ldf'
+        """
+          .trimIndent()
+      )
+    assertEquals(
+      "timestamp without time zone",
+      ldfInfo["data_type"],
+      "ldf 字段类型应为 timestamp",
+    )
+    assertTrue(ldfInfo["column_default"] == null, "ldf 字段默认值应为 null")
+    // 检查数据转换
+    val results =
+      jdbcTemplate.queryForList("select id, ldf from test_table order by id")
+    assertTrue(
+      results[0]["ldf"] != null,
+      "true 应转为 now()，实际: ${results[0]["ldf"]}",
+    )
+    assertEquals(null, results[1]["ldf"], "false 应转为 null")
+    assertEquals(null, results[2]["ldf"], "null 应转为 null")
+  }
+
+  @Test
+  @Transactional
+  fun `base_struct_to_jimmer_style 幂等性测试`() {
+    jdbcTemplate.execute("drop table if exists test_table")
+    jdbcTemplate.execute(
+      """
+        create table test_table(
+          id bigint primary key,
+          rlv int default 0,
+          ldf timestamp default null
+        )
+      """
+        .trimIndent()
+    )
+    // 连续多次执行
+    repeat(3) {
+      jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
+    }
+    val rlvInfo =
+      jdbcTemplate.queryForMap(
+        """
+        select data_type, column_default
+        from information_schema.columns
+        where table_name = 'test_table' and column_name = 'rlv'
+      """
+          .trimIndent()
+      )
+    assertEquals("integer", rlvInfo["data_type"])
+    assertTrue(rlvInfo["column_default"].toString().contains("0"))
+    val ldfInfo =
+      jdbcTemplate.queryForMap(
+        """
+        select data_type, column_default
+        from information_schema.columns
+        where table_name = 'test_table' and column_name = 'ldf'
+      """
+          .trimIndent()
+      )
+    assertEquals("timestamp without time zone", ldfInfo["data_type"])
+    assertTrue(ldfInfo["column_default"] == null)
+  }
+
+  @Test
+  @Transactional
+  fun `base_struct_to_jimmer_style 字段缺失时不报错`() {
+    jdbcTemplate.execute("drop table if exists test_table")
+    jdbcTemplate.execute("create table test_table(id bigint primary key)")
+    jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
+    // 能正常执行即通过
+  }
+
+  @Test
+  @Transactional
+  fun `base_struct_to_jimmer_style ldf为int类型时能正确转换`() {
+    jdbcTemplate.execute("drop table if exists test_table")
+    jdbcTemplate.execute(
+      """
+        create table test_table(
+          id bigint primary key,
+          ldf int default 123
+        )
+      """
+        .trimIndent()
+    )
+    jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
+    val ldfInfo =
+      jdbcTemplate.queryForMap(
+        """
+        select data_type, column_default
+        from information_schema.columns
+        where table_name = 'test_table' and column_name = 'ldf'
+      """
+          .trimIndent()
+      )
+    assertEquals("timestamp without time zone", ldfInfo["data_type"])
+    assertTrue(ldfInfo["column_default"] == null)
+  }
 }
