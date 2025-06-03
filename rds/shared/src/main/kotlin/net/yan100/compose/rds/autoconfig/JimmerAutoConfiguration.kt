@@ -1,10 +1,10 @@
 package net.yan100.compose.rds.autoconfig
 
 import net.yan100.compose.generator.ISnowflakeGenerator
-import net.yan100.compose.rds.converters.jimmer.DurationScalarProvider
-import net.yan100.compose.rds.converters.jimmer.IntTypingJimmerProvider
-import net.yan100.compose.rds.converters.jimmer.PeriodScalarProvider
-import net.yan100.compose.rds.converters.jimmer.StringTypingJimmerProvider
+import net.yan100.compose.rds.converters.DurationScalarProvider
+import net.yan100.compose.rds.converters.IntTypingJimmerProvider
+import net.yan100.compose.rds.converters.PeriodScalarProvider
+import net.yan100.compose.rds.converters.StringTypingJimmerProvider
 import net.yan100.compose.rds.generators.JimmerSnowflakeLongIdGenerator
 import net.yan100.compose.rds.generators.JimmerSnowflakeStringIdGenerator
 import net.yan100.compose.rds.interceptors.JimmerEntityDraftInterceptor
