@@ -34,8 +34,6 @@ dependencies {
   //implementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
 
   testImplementation(projects.testtoolkit)
-  testImplementation(libs.com.h2database.h2)
-  testImplementation(projects.rds.rdsMigrationH2)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.data.jpa)
   testImplementation(libs.org.flywaydb.flyway.core)
 }
