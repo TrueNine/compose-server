@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.converters.jimmer
+package net.yan100.compose.rds.converters
 
 import net.yan100.compose.RefId
 import org.babyfish.jimmer.jackson.Converter
