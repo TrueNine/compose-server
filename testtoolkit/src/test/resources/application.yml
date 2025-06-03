@@ -1,0 +1,21 @@
+spring:
+  test:
+    # 关闭 Spring Boot 测试条件评估报告
+    print-condition-evaluation-report: false
+  # Redis 配置由 ICacheRedisContainer 动态提供
+  data:
+    redis:
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1
+
+# MinIO 配置由 IOssMinioContainer 动态提供
+compose:
+  oss:
+    minio:
+      bucket: test-bucket
+      region: us-east-1 
