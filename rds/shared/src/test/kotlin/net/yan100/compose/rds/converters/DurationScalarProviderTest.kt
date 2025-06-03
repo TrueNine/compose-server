@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.converters.jimmer
+package net.yan100.compose.rds.converters
 
 import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.converters.jimmer
+package net.yan100.compose.rds.converters
 
 import java.time.Period
 import java.time.format.DateTimeParseException

@@ -1,4 +1,4 @@
-package net.yan100.compose.rds.converters.jimmer
+package net.yan100.compose.rds.converters
 
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
