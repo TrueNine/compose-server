@@ -1,40 +1,22 @@
 spring:
+  test:
+    print-condition-evaluation-report: false
   threads:
     virtual:
       enabled: true
   flyway:
+    fail-on-missing-locations: true
     enabled: true
     encoding: UTF-8
     baseline-version: 3000
     baseline-on-migrate: true
-  datasource:
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    url: jdbc:h2:mem:testdb?useUnicode=true&characterEncoding=utf8
-  jpa:
-    properties:
-      hibernate:
-        default_batch_fetch_size: 20
-        order_inserts: true
-        order_updates: true
-        jdbc:
-          batch_size: 1023
-        show_sql: false
-    open-in-view: false
-    database: h2
-    hibernate:
-      ddl-auto: none
 logging:
   level:
     net.yan100: trace
 
 jimmer:
   language: kotlin
-  dialect: org.babyfish.jimmer.sql.dialect.H2Dialect
   show-sql: true
   pretty-sql: true
   inline-sql-variables: true
-  #database-validation-mode: error
-  is-foreign-key-enabled-by-default: false
-  database-validation-mode: warning
+  database-validation-mode: error
