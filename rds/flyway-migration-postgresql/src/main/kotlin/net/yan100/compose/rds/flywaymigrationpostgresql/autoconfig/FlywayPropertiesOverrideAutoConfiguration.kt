@@ -12,7 +12,8 @@ class FlywayPropertiesOverrideAutoConfiguration {
   @Bean
   @Primary
   fun flywayProperties(
-    @Value("\${spring.flyway.baseline-version:#{null}}") baselineVersion: String?,
+    @Value("\${spring.flyway.baseline-version:#{null}}")
+    baselineVersion: String?,
     @Value("\${spring.flyway.enabled:#{true}}") enabled: Boolean?,
   ): FlywayProperties {
     val p = FlywayProperties()
