@@ -4,6 +4,10 @@ import jakarta.annotation.Resource
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.data.redis.connection.RedisConnectionFactory
@@ -42,7 +46,13 @@ import kotlin.test.assertTrue
  * @see ICacheRedisContainer
  */
 @SpringBootTest
-@DisplayName("Redis 测试容器集成测试")
+@EnableAutoConfiguration(
+  exclude = [
+    DataSourceAutoConfiguration::class,
+    DataSourceTransactionManagerAutoConfiguration::class,
+    HibernateJpaAutoConfiguration::class
+  ]
+)
 class ICacheRedisContainerTest : ICacheRedisContainer {
   lateinit var environment: Environment @Resource set
   lateinit var redisConnectionFactory: RedisConnectionFactory @Resource set
@@ -143,7 +153,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
 
       // 验证所有必需的属性都已配置
       val expectedProperties = mapOf(
-        "spring.data.redis.host" to "localhost",
+        "spring.data.redis.host" to "127.0.0.1",
         "spring.data.redis.port" to redisContainer!!.getMappedPort(6379).toString()
       )
 
@@ -157,7 +167,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
     @DisplayName("验证环境变量注入正确")
     fun `验证环境变量注入正确`() {
       val expectedProperties = mapOf(
-        "spring.data.redis.host" to "localhost"
+        "spring.data.redis.host" to "127.0.0.1"
       )
 
       expectedProperties.forEach { (prop, expectedValue) ->

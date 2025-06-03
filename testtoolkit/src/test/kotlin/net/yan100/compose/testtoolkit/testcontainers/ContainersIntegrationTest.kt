@@ -24,7 +24,6 @@ import kotlin.test.assertTrue
  * @since 2025-04-24
  */
 @SpringBootTest
-@ActiveProfiles("test")
 @Import(TestConfiguration::class)
 class ContainersIntegrationTest :
   IDatabasePostgresqlContainer,

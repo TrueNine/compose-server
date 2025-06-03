@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.test.context.DynamicPropertyRegistry
@@ -43,7 +47,13 @@ import kotlin.test.assertTrue
  * @see IOssMinioContainer
  */
 @SpringBootTest
-@DisplayName("MinIO 测试容器集成测试")
+@EnableAutoConfiguration(
+  exclude = [
+    DataSourceAutoConfiguration::class,
+    DataSourceTransactionManagerAutoConfiguration::class,
+    HibernateJpaAutoConfiguration::class
+  ]
+)
 class IOssMinioContainerTest : IOssMinioContainer {
   lateinit var environment: Environment @Resource set
 
