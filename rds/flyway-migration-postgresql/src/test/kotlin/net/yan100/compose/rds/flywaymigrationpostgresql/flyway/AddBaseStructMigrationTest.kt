@@ -1,20 +1,21 @@
-package net.yan100.compose.rds.flywaymigrationpostgresql
+package net.yan100.compose.rds.flywaymigrationpostgresql.flyway
 
 import jakarta.annotation.Resource
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @SpringBootTest
 @Transactional
 @Rollback
-class AddBaseStructTest : IDatabasePostgresqlContainer {
-  @Resource lateinit var jdbcTemplate: JdbcTemplate
+class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
+  @Resource
+  lateinit var jdbcTemplate: JdbcTemplate
 
   @Test
   @Transactional
@@ -80,4 +81,28 @@ class AddBaseStructTest : IDatabasePostgresqlContainer {
       }
     assertEquals(listOf(1L, 2L, 3L), ids, "id 字段未按 0 开始自增填充，实际: $ids")
   }
-}
+
+  @Test
+  @Transactional
+  fun `add_base_struct 幂等性测试`() {
+    jdbcTemplate.execute("drop table if exists test_table")
+    jdbcTemplate.execute("create table test_table(id bigint primary key)")
+    jdbcTemplate.execute("select add_base_struct('test_table')")
+    jdbcTemplate.execute("select add_base_struct('test_table')")
+    val columns =
+      jdbcTemplate
+        .queryForList(
+          """
+            select column_name from information_schema.columns
+            where table_name = 'test_table'
+            """
+            .trimIndent()
+        )
+        .map { it["column_name"] }
+    val expectedColumns = listOf("id", "rlv", "crd", "mrd", "ldf")
+    assertTrue(
+      columns.containsAll(expectedColumns),
+      "幂等性失败: " + (expectedColumns - columns),
+    )
+  }
+} 
