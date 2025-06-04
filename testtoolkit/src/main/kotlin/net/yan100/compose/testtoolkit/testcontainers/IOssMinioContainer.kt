@@ -45,7 +45,7 @@ interface IOssMinioContainer {
      * - 控制台端口: 随机分配
      */
     @JvmStatic
-    val minio by lazy {
+    val container by lazy {
       GenericContainer(DockerImageName.parse("minio/minio:RELEASE.2025-04-22T22-12-26Z")).apply {
         withEnv("MINIO_ROOT_USER", "minioadmin")
         withEnv("MINIO_ROOT_PASSWORD", "minioadmin")
@@ -56,6 +56,7 @@ interface IOssMinioContainer {
           Wait.forLogMessage(".*MinIO Object Storage Server.*\\n", 1)
             .withStartupTimeout(Duration.ofSeconds(10))
         )
+        start()
       }
     }
 
@@ -72,9 +73,8 @@ interface IOssMinioContainer {
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      minio.start()
-      val host = minio.host
-      val port = minio.getMappedPort(9000)
+      val host = container.host
+      val port = container.getMappedPort(9000)
 
       registry.add("compose.oss.base-url") { host }
       registry.add("compose.oss.expose-base-url") { "http://$host:$port" }
@@ -85,5 +85,5 @@ interface IOssMinioContainer {
     }
   }
 
-  val minioContainer: GenericContainer<*>? get() = minio
+  val minioContainer: GenericContainer<*>? get() = container
 }

@@ -32,15 +32,15 @@ import org.testcontainers.junit.jupiter.Testcontainers
 interface IDatabasePostgresqlContainer {
   companion object {
     /**
-     * PostgreSQL测试容器实例
+     * PostgreSQL 测试容器实例
      *
-     * 预配置的PostgreSQL容器，具有以下默认设置：
+     * 预配置的 PostgreSQL 容器，具有以下默认设置：
      * - 数据库名称: testdb
      * - 用户名: test
      * - 密码: test
      */
     @JvmStatic
-    val pg by lazy {
+    val container by lazy {
       PostgreSQLContainer<Nothing>("postgres:17.4-alpine").apply {
         withDatabaseName("testdb")
         withUsername("test")
@@ -64,12 +64,12 @@ interface IDatabasePostgresqlContainer {
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      registry.add("spring.datasource.url", pg::getJdbcUrl)
-      registry.add("spring.datasource.username", pg::getUsername)
-      registry.add("spring.datasource.password", pg::getPassword)
+      registry.add("spring.datasource.url", container::getJdbcUrl)
+      registry.add("spring.datasource.username", container::getUsername)
+      registry.add("spring.datasource.password", container::getPassword)
       registry.add("spring.datasource.driver-class-name") { "org.postgresql.Driver" }
     }
   }
 
-  val postgresqlContainer: PostgreSQLContainer<*>? get() = pg
+  val postgresqlContainer: PostgreSQLContainer<*>? get() = container
 }

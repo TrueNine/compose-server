@@ -44,10 +44,9 @@ interface ICacheRedisContainer {
      * - 无密码认证
      */
     @JvmStatic
-    val redis by lazy {
+    val container by lazy {
       GenericContainer(DockerImageName.parse("redis:7.4.2-alpine3.21")).apply {
         withExposedPorts(6379)
-        // 设置等待策略
         setWaitStrategy(
           Wait.forLogMessage(".*Ready to accept connections.*\\n", 1)
             .withStartupTimeout(Duration.ofSeconds(10))
@@ -69,13 +68,13 @@ interface ICacheRedisContainer {
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
 
-      val host = redis.host
-      val port = redis.getMappedPort(6379)
+      val host = container.host
+      val port = container.getMappedPort(6379)
 
       registry.add("spring.data.redis.host") { host }
       registry.add("spring.data.redis.port") { port }
     }
   }
 
-  val redisContainer: GenericContainer<*>? get() = redis
+  val redisContainer: GenericContainer<*>? get() = container
 }
