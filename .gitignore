@@ -74,4 +74,6 @@ logs
 .lingma/
 .cursor/
 .cursorignore
-.cursorignore
+
+### Customs ###
+TODO.*
