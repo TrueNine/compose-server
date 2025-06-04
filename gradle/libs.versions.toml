@@ -5,7 +5,7 @@ cn-hutool = "5.8.38"
 com-baomidou-mybatis-plus = "3.5.12"
 com-diffplug-spotless = "7.0.4"
 com-fasterxml-jackson = "2.19.0"
-com-flywaydb-flyway = "11.8.2"
+com-flywaydb-flyway = "11.9.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
 com-google-devtools-ksp = "2.2.0-RC-2.0.1"
 com-mapstruct = "1.6.3"
@@ -14,16 +14,16 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.12.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.0.51"
-compose-ai = "0.0.6"
-compose-build = "3.0.34"
-compose-data = "3.0.35"
-compose-depend = "3.0.31"
-compose-oss = "3.0.34"
-compose-pay = "3.0.32"
-compose-rds = "3.0.37"
-compose-security = "3.0.32"
-compose-sms = "3.0.32"
+compose = "3.0.52"
+compose-ai = "0.0.7"
+compose-build = "3.0.35"
+compose-data = "3.0.36"
+compose-depend = "3.0.32"
+compose-oss = "3.0.35"
+compose-pay = "3.0.33"
+compose-rds = "3.0.38"
+compose-security = "3.0.33"
+compose-sms = "3.0.33"
 dev-langchain4j = "1.0.1-beta6"
 dev-langchain4j-community = "1.0.1-beta6"
 group = "net.yan100.compose"
@@ -39,22 +39,22 @@ org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
 org-jetbrains-kotlinx-io = "0.7.0"
 org-jetbrains-kotlinx-serialization = "1.8.1"
-org-junit-junit5 = "5.13.0-RC1"
-org-junit-platform = "1.13.0-RC1"
+org-junit-junit5 = "5.13.0"
+org-junit-platform = "1.13.0"
 org-liquibase = "4.32.0"
 org-slf4j = "2.1.0-alpha1"
-org-testcontainers = "1.21.0"
+org-testcontainers = "1.21.1"
 org-testng = "7.11.0"
 spring-ai = "1.0.0"
 spring-batch = "5.2.2"
 spring-boot = "3.5.0"
-spring-cloud = "2025.0.0-RC1"
-spring-cloud-alibaba = "2023.0.3.2"
+spring-cloud = "2025.0.0"
+spring-cloud-alibaba = "2023.0.3.3"
 spring-data = "3.5.0-M1"
 spring-framework = "6.2.6"
 spring-integration = "6.5.0-RC1"
 spring-modulith = "1.4.0"
-spring-security = "6.5.0-RC1"
+spring-security = "6.5.0"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
@@ -105,7 +105,7 @@ com-querydsl-querydsl-jpa = { module = "com.querydsl:querydsl-jpa", version.ref 
 com-squareup-javapoet = "com.squareup:javapoet:1.13.0"
 com-squareup-kotlinpoet-jvm = { module = "com.squareup:kotlinpoet-jvm", version.ref = "com-squareup-kotlinpoet" }
 com-squareup-kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "com-squareup-kotlinpoet" }
-com-squareup-okhttp3-okhttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
+com-squareup-okhttp3-okhttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.16"
 com-squareup-okio-okio = { module = "com.squareup.okio:okio", version.ref = "com-squareup-okio" }
 com-squareup-okio-okio-jvm = { module = "com.squareup.okio:okio-jvm", version.ref = "com-squareup-okio" }
 com-squareup-retrofit2-retrofit = "com.squareup.retrofit2:retrofit:3.0.0"
@@ -164,10 +164,11 @@ net-yan100-compose-oss-minio = { module = "net.yan100.compose:oss-minio", versio
 net-yan100-compose-oss-shared = { module = "net.yan100.compose:oss-shared", version.ref = "compose-oss" }
 net-yan100-compose-pay = { module = "net.yan100.compose:pay", version.ref = "compose-pay" }
 net-yan100-compose-rds-crud = { module = "net.yan100.compose:rds-crud", version.ref = "compose-rds" }
+net-yan100-compose-rds-flyway-migration-postgresql = { module = "net.yan100.compose:rds-flyway-migration-postgresql", version.ref = "compose-rds" }
 net-yan100-compose-rds-jimmer-ext-postgres = { module = "net.yan100.compose:rds-jimmer-ext-postgres", version.ref = "compose-rds" }
-net-yan100-compose-rds-migration-h2 = { module = "net.yan100.compose:rds-migration-h2", version.ref = "compose-rds" }
-net-yan100-compose-rds-migration-mysql = { module = "net.yan100.compose:rds-migration-mysql", version.ref = "compose-rds" }
-net-yan100-compose-rds-migration-postgres = { module = "net.yan100.compose:rds-migration-postgres", version.ref = "compose-rds" }
+net-yan100-compose-rds-migration-h2 = "net.yan100.compose:rds-migration-h2:3.0.37"
+net-yan100-compose-rds-migration-mysql = "net.yan100.compose:rds-migration-mysql:3.0.37"
+net-yan100-compose-rds-migration-postgres = "net.yan100.compose:rds-migration-postgres:3.0.37"
 net-yan100-compose-rds-shared = { module = "net.yan100.compose:rds-shared", version.ref = "compose-rds" }
 net-yan100-compose-security-crypto = { module = "net.yan100.compose:security-crypto", version.ref = "compose-security" }
 net-yan100-compose-security-oauth2 = { module = "net.yan100.compose:security-oauth2", version.ref = "compose-security" }
@@ -189,7 +190,7 @@ org-babyfish-jimmer-jimmer-mapstruct-apt = { module = "org.babyfish.jimmer:jimme
 org-babyfish-jimmer-jimmer-spring-boot-starter = { module = "org.babyfish.jimmer:jimmer-spring-boot-starter", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-sql = { module = "org.babyfish.jimmer:jimmer-sql", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-sql-kotlin = { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "org-babyfish-jimmer" }
-org-bouncycastle-bcprov-jdk18on = "org.bouncycastle:bcprov-jdk18on:1.80"
+org-bouncycastle-bcprov-jdk18on = "org.bouncycastle:bcprov-jdk18on:1.81"
 org-eclipse-paho-client-mqttv3 = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 org-flywaydb-flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "com-flywaydb-flyway" }
 org-flywaydb-flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "com-flywaydb-flyway" }
@@ -197,7 +198,7 @@ org-flywaydb-flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref 
 org-freemarker-freemarker = "org.freemarker:freemarker:2.3.34"
 org-hibernate-orm-hibernate-core = { module = "org.hibernate:hibernate-core", version.ref = "org-hibernate-orm" }
 org-hsqldb-hsqldb = "org.hsqldb:hsqldb:2.7.4"
-org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.12.0"
+org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.13.0"
 org-jetbrains-annotations = "org.jetbrains:annotations:26.0.2"
 org-jetbrains-kotlin-jvm-org-jetbrains-kotlin-jvm-gradle-plugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kapt-org-jetbrains-kotlin-kapt-gradle-plugin = { module = "org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
@@ -236,7 +237,7 @@ org-liquibase-liquibase-core = { module = "org.liquibase:liquibase-core", versio
 org-mapstruct-mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "com-mapstruct" }
 org-mapstruct-mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "com-mapstruct" }
 org-owasp-antisamy-antisamy = "org.owasp.antisamy:antisamy:1.7.8"
-org-postgresql-postgresql = "org.postgresql:postgresql:42.7.5"
+org-postgresql-postgresql = "org.postgresql:postgresql:42.7.6"
 org-projectlombok-lombok = "org.projectlombok:lombok:1.18.38"
 org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4.33.0"
 org-skyscreamer-jsonassert = "org.skyscreamer:jsonassert:2.0-rc1"
