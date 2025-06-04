@@ -3,4 +3,4 @@ plugins {
   `sqlmigration-convention`
 }
 
-version = libs.versions.compose.rds.get()
+version = "3.0.37"
