@@ -409,4 +409,50 @@ class FlywayIntegrationTest : IDatabasePostgresqlContainer {
     assertEquals("timestamp without time zone", ldfInfo["data_type"])
     assertTrue(ldfInfo["column_default"] == null)
   }
+
+  @Test
+  @Transactional
+  fun `add_base_struct 应为无 id 且多行数据的表自动填充 id 并设为主键`() {
+    jdbcTemplate.execute("drop table if exists test_no_id")
+    jdbcTemplate.execute(
+      """
+      create table test_no_id(nick_name varchar(255), password_enc varchar(255));
+      insert into test_no_id(nick_name, password_enc) values ('a', 'p1'), ('b', 'p2'), ('c', 'p3');
+      """
+        .trimIndent()
+    )
+    // 调用 add_base_struct
+    jdbcTemplate.execute("select add_base_struct('test_no_id')")
+    // 检查 id 字段已存在且为主键，且为 0 开始自增
+    val columns =
+      jdbcTemplate
+        .queryForList(
+          """
+        select column_name from information_schema.columns
+        where table_name = 'test_no_id'
+      """
+            .trimIndent()
+        )
+        .map { it["column_name"] }
+    assertTrue(columns.contains("id"), "未自动添加 id 字段")
+    // 检查主键
+    val pk =
+      jdbcTemplate
+        .queryForList(
+          """
+        select kcu.column_name from information_schema.table_constraints tc
+        join information_schema.key_column_usage kcu on tc.constraint_name = kcu.constraint_name
+        where tc.table_name = 'test_no_id' and tc.constraint_type = 'PRIMARY KEY'
+      """
+            .trimIndent()
+        )
+        .map { it["column_name"] }
+    assertTrue(pk.contains("id"), "id 字段未设为主键")
+    // 检查 id 值为 0 开始自增
+    val ids =
+      jdbcTemplate.queryForList("select id from test_no_id order by id").map {
+        it["id"]
+      }
+    assertEquals(listOf(1L, 2L, 3L), ids, "id 字段未按 0 开始自增填充，实际: $ids")
+  }
 }
