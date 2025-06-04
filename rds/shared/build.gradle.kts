@@ -22,16 +22,14 @@ dependencies {
   implementation(libs.org.babyfish.jimmer.jimmer.sql)
   implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter) {
     exclude(
-      group =
-        libs.org.springframework.boot.spring.boot.starter.jdbc
-          .get()
-          .module
-          .group,
-      module =
-        libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.name,
+      group = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.group,
+      module = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.name,
     )
   }
-  //implementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
+
+  testImplementation(libs.org.postgresql.postgresql)
+  testImplementation(libs.org.flywaydb.flyway.core)
+  testImplementation(libs.org.flywaydb.flyway.database.postgresql)
 
   testImplementation(projects.testtoolkit)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.data.jpa)
