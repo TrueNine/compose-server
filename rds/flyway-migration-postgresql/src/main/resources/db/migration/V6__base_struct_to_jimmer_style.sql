@@ -11,8 +11,7 @@ rlv_data_type text;
 
 rlv_column_default text;
 
-begin -- rlv 字段处理
-select
+begin select
     column_name,
     data_type,
     column_default into
@@ -25,14 +24,18 @@ select
         table_name = tab_name
         and column_name = 'rlv';
 
-if existing_column_name is not null then -- 仅当类型不是 int 时才转换
-if rlv_data_type != 'integer' then execute format(
+if existing_column_name is not null then if rlv_data_type != 'integer' then if rlv_column_default is not null then execute format(
+    'alter table if exists %I alter column rlv drop default;',
+    tab_name
+);
+end if;
+
+execute format(
     'alter table if exists %I alter column rlv type int using rlv::int;',
     tab_name
 );
 end if;
 
--- 仅当 default 不为 0 时才设置
 if rlv_column_default is null
 or rlv_column_default != '0' then execute format(
     'alter table if exists %I alter column rlv set default 0;',
@@ -41,7 +44,6 @@ or rlv_column_default != '0' then execute format(
 end if;
 end if;
 
--- ldf 字段处理
 select
     column_name,
     data_type,
@@ -55,8 +57,7 @@ select
         table_name = tab_name
         and column_name = 'ldf';
 
-if existing_column_name is not null then if ldf_data_type = 'boolean' then -- 仅当 default 存在时才 drop
-if ldf_column_default is not null then execute format(
+if existing_column_name is not null then if ldf_data_type = 'boolean' then if ldf_column_default is not null then execute format(
     'alter table if exists %I alter column ldf drop default;',
     tab_name
 );
@@ -92,8 +93,7 @@ if ldf_column_default is not null then execute format(
 );
 end if;
 
-elsif ldf_data_type = 'integer' then -- integer 类型全部置为 null，避免类型转换报错
-if ldf_column_default is not null then execute format(
+elsif ldf_data_type = 'integer' then if ldf_column_default is not null then execute format(
     'alter table if exists %I alter column ldf drop default;',
     tab_name
 );
@@ -128,8 +128,7 @@ if ldf_column_default is not null then execute format(
     tab_name
 );
 end if;
-else -- 其他类型
-if ldf_column_default is not null then execute format(
+else if ldf_column_default is not null then execute format(
     'alter table if exists %I alter column ldf drop default;',
     tab_name
 );
