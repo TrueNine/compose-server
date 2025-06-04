@@ -3,6 +3,7 @@ package net.yan100.compose.rds.flywaymigrationpostgresql.flyway
 import jakarta.annotation.Resource
 import kotlin.test.assertEquals
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -15,10 +16,14 @@ import org.springframework.transaction.annotation.Transactional
 class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
   @Resource lateinit var jdbcTemplate: JdbcTemplate
 
+  @BeforeEach
+  fun cleanTables() {
+    jdbcTemplate.execute("drop table if exists test_table")
+  }
+
   @Test
   @Transactional
   fun `base_struct_to_jimmer_style 应正确转换 rlv 字段类型及 default`() {
-    jdbcTemplate.execute("drop table if exists test_table")
     jdbcTemplate.execute(
       "create table test_table(id bigint primary key, rlv varchar(10))"
     )
@@ -48,7 +53,6 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `base_struct_to_jimmer_style 应正确转换 ldf 字段类型及 default`() {
-    jdbcTemplate.execute("drop table if exists test_table")
     jdbcTemplate.execute(
       "create table test_table(id bigint primary key, ldf boolean default true)"
     )
@@ -73,7 +77,6 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `base_struct_to_jimmer_style 幂等性测试`() {
-    jdbcTemplate.execute("drop table if exists test_table")
     jdbcTemplate.execute(
       "create table test_table(id bigint primary key, rlv varchar(10), ldf boolean)"
     )

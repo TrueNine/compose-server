@@ -1,25 +1,32 @@
 package net.yan100.compose.rds.flywaymigrationpostgresql.flyway
 
 import jakarta.annotation.Resource
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @SpringBootTest
 @Transactional
 @Rollback
 class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
-  @Resource lateinit var jdbcTemplate: JdbcTemplate
+  @Resource
+  lateinit var jdbcTemplate: JdbcTemplate
+
+  @BeforeEach
+  fun cleanTables() {
+    jdbcTemplate.execute("drop table if exists test_table")
+    jdbcTemplate.execute("drop table if exists test_no_id")
+  }
 
   @Test
   @Transactional
   fun `add_base_struct 应正确增加字段`() {
-    jdbcTemplate.execute("drop table if exists test_table")
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     val columns =
@@ -42,7 +49,6 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `add_base_struct 应为无 id 且多行数据的表自动填充 id 并设为主键`() {
-    jdbcTemplate.execute("drop table if exists test_no_id")
     jdbcTemplate.execute(
       """
             create table test_no_id(nick_name varchar(255), password_enc varchar(255));
@@ -84,7 +90,6 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `add_base_struct 幂等性测试`() {
-    jdbcTemplate.execute("drop table if exists test_table")
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select add_base_struct('test_table')")

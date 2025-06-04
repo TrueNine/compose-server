@@ -3,6 +3,7 @@ package net.yan100.compose.rds.flywaymigrationpostgresql.flyway
 import jakarta.annotation.Resource
 import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -16,6 +17,11 @@ import org.springframework.transaction.annotation.Transactional
 @Rollback
 class FunctionExistenceAndCallTest : IDatabasePostgresqlContainer {
   @Resource lateinit var jdbcTemplate: JdbcTemplate
+
+  @BeforeEach
+  fun cleanTables() {
+    jdbcTemplate.execute("drop table if exists test_table")
+  }
 
   companion object {
     @JvmStatic
@@ -51,7 +57,6 @@ class FunctionExistenceAndCallTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `所有函数都能被调用`() {
-    jdbcTemplate.execute("drop table if exists test_table")
     jdbcTemplate.execute(
       "create table if not exists test_table(id bigint primary key)"
     )
@@ -60,6 +65,5 @@ class FunctionExistenceAndCallTest : IDatabasePostgresqlContainer {
     jdbcTemplate.execute("select all_to_nullable('test_table')")
     jdbcTemplate.execute("select add_presort_tree_struct('test_table')")
     jdbcTemplate.execute("select add_tree_struct('test_table')")
-    jdbcTemplate.execute("drop table if exists test_table")
   }
 }
