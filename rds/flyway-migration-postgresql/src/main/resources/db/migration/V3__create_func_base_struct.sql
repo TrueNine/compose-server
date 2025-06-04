@@ -21,7 +21,57 @@ existing_column_name text;
 
 column_definition text [];
 
-begin foreach column_definition slice 1 in array column_definitions loop select
+row_count bigint;
+
+has_id_column boolean;
+
+begin -- 检查是否存在 id 字段
+select
+    count( 1 )> 0 into
+        has_id_column
+    from
+        information_schema.columns
+    where
+        table_name = tab_name
+        and column_name = 'id';
+
+-- 检查表数据量
+execute format(
+    'select count(*) from %I',
+    tab_name
+) into
+    row_count;
+
+if row_count > 1
+and not has_id_column then -- 创建临时 sequence
+execute 'create sequence if not exists temp_seq start 1';
+
+-- 增加 id 字段并用 sequence 填充
+execute format(
+    'alter table if exists %I add column if not exists id bigint default nextval(''temp_seq'')',
+    tab_name
+);
+
+execute format(
+    'update %I set id = nextval(''temp_seq'') where id is null',
+    tab_name
+);
+
+execute format(
+    'alter table if exists %I alter column id set not null',
+    tab_name
+);
+
+execute format(
+    'alter table if exists %I add primary key (id)',
+    tab_name
+);
+
+-- 删除临时 sequence
+execute 'drop sequence if exists temp_seq cascade';
+end if;
+
+foreach column_definition slice 1 in array column_definitions loop select
     column_name into
         existing_column_name
     from
