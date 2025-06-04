@@ -9,13 +9,9 @@ plugins {
   signing
 }
 
-// 仓库凭证
-val repoConfig = mapOf(
-  "yunxiao" to mapOf(
-    "url" to extra["repositories.url.yunxiao"]?.toString(),
-    "username" to extra["repositories.username.yunxiao"]?.toString(),
-    "password" to extra["repositories.password.yunxiao"]?.toString()
-  )
+val yunXiaoUsernameAndPassword = extra["credentials.yunxiao.username"]?.toString() to extra["credentials.yunxiao.password"]?.toString()
+val yunXiaoRepositoryUrls = listOf(
+  extra["repositories.yunxiao"]?.toString()
 )
 
 // 检查远程仓库中是否已存在制品
@@ -42,25 +38,28 @@ fun artifactExists(repoUrl: String, username: String?, password: String?, groupI
 
 publishing {
   repositories {
-    // 配置仓库
-    repoConfig.forEach { (key, config) ->
-      config["url"]?.also {
-        maven(url = uri(it)) {
-          credentials {
-            username = config["username"]
-            password = config["password"]
+    yunXiaoRepositoryUrls.forEach { repoUrl ->
+      repoUrl.takeIf { !it.isNullOrBlank() }?.also { ru ->
+        maven {
+          url = uri(ru)
+          yunXiaoUsernameAndPassword.takeIf { (username, password) ->
+            (!username.isNullOrBlank() && !password.isNullOrBlank())
+          }?.also { (u, p) ->
+            credentials {
+              username = u
+              password = p
+            }
+          } ?: run {
+            logger.warn("see yunxiao url: $ru not set username and password")
           }
         }
       }
     }
   }
-
   publications {
     create<MavenPublication>("mavenJava") {
       groupId = libs.versions.group.get()
       artifactId = project.name
-
-      // 根据插件类型选择组件
       when {
         plugins.hasPlugin("version-catalog") -> from(components["versionCatalog"])
         plugins.hasPlugin("java-gradle-plugin") || plugins.hasPlugin("java-library") || plugins.hasPlugin("java") -> from(components["java"])
@@ -80,7 +79,7 @@ publishing {
 
         licenses {
           license {
-            name = "The private license of TrueNine"
+            name = "GNU Lesser General Public License v2.1"
             url = "https://github.com/TrueNine/compose-server/blob/main/LICENSE"
           }
         }
@@ -112,7 +111,7 @@ publishing {
 
         organization {
           name = "Yan100 Dev Group"
-          url = "https://gitee.com/yan100"
+          url = "https://github.com/TrueNine"
         }
 
         issueManagement {
@@ -120,7 +119,6 @@ publishing {
           url = "https://github.com/TrueNine/compose-server/issues"
         }
 
-        // 配置编译属性
         val javaVersion = extensions.findByType<JavaPluginExtension>()?.toolchain?.languageVersion?.get()?.asInt()?.toString()
         properties = mutableMapOf("project.build.sourceEncoding" to "UTF-8").apply {
           javaVersion?.let {
@@ -135,25 +133,13 @@ publishing {
   }
 }
 
-
-// 为每个发布任务添加检查逻辑，避免重复发布
 afterEvaluate {
   tasks.withType<PublishToMavenRepository>().configureEach {
     doFirst {
       val publication = publication as MavenPublication
       val repoUrl = repository.url.toString()
+      val (username, password) = repository.credentials.username to repository.credentials.password
 
-      // 确定仓库凭据
-      val repoType = when (repoUrl) {
-        repoConfig["yunxiao"]?.get("url") -> "yunxiao"
-        repoConfig["yz-yunxiao"]?.get("url") -> "yz-yunxiao"
-        else -> null
-      }
-
-      val username = repoType?.let { repoConfig[it]?.get("username") }
-      val password = repoType?.let { repoConfig[it]?.get("password") }
-
-      // 检查主要制品是否已存在
       val extension = when {
         publication.artifacts.any { it.extension == "pom" } -> "pom"
         publication.artifacts.any { it.extension == "toml" } -> "toml"
@@ -188,7 +174,7 @@ signing {
         logger.error(msg)
         error(msg)
       }
-      useInMemoryPgpKeys(keyId, key, password!!)
+      useInMemoryPgpKeys(keyId, key, password)
     } ?: run {
     logger.warn("use gnu pgp key to command line")
     useGpgCmd()
