@@ -1,21 +1,20 @@
 package net.yan100.compose.rds.flywaymigrationpostgresql.flyway
 
 import jakarta.annotation.Resource
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @SpringBootTest
 @Transactional
 @Rollback
 class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
-  @Resource
-  lateinit var jdbcTemplate: JdbcTemplate
+  @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @Test
   @Transactional
@@ -105,4 +104,4 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
       "幂等性失败: " + (expectedColumns - columns),
     )
   }
-} 
+}

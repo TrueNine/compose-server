@@ -1,20 +1,19 @@
 package net.yan100.compose.rds.flywaymigrationpostgresql.flyway
 
 import jakarta.annotation.Resource
+import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertTrue
 
 @SpringBootTest
 @Transactional
 @Rollback
 class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
-  @Resource
-  lateinit var jdbcTemplate: JdbcTemplate
+  @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @Test
   @Transactional
@@ -45,7 +44,9 @@ class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
   @Transactional
   fun `all_to_nullable 幂等性测试`() {
     jdbcTemplate.execute("drop table if exists test_table")
-    jdbcTemplate.execute("create table test_table(id bigint primary key, name varchar(10) not null, age int not null default 18)")
+    jdbcTemplate.execute(
+      "create table test_table(id bigint primary key, name varchar(10) not null, age int not null default 18)"
+    )
     jdbcTemplate.execute("select all_to_nullable('test_table')")
     jdbcTemplate.execute("select all_to_nullable('test_table')")
     val nullables =
@@ -58,7 +59,10 @@ class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .associate { it["column_name"] to it["is_nullable"] }
-    assertTrue("YES" == nullables["name"]?.toString()?.uppercase(), "name 字段不是可空")
+    assertTrue(
+      "YES" == nullables["name"]?.toString()?.uppercase(),
+      "name 字段不是可空",
+    )
     assertTrue("YES" == nullables["age"]?.toString()?.uppercase(), "age 字段不是可空")
   }
-} 
+}
