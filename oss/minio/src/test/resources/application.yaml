@@ -1,3 +1,7 @@
+spring:
+  test:
+    print-condition-evaluation-report: false
+
 compose:
   oss:
     minio:
