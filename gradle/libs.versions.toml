@@ -2,12 +2,13 @@
 cn-dev33-sa-token = "1.43.0"
 cn-dev33-sa-token-redis = "1.43.0"
 cn-hutool = "5.8.38"
+com-alibaba-cloud = "2023.0.3.3"
 com-baomidou-mybatis-plus = "3.5.12"
 com-diffplug-spotless = "7.0.4"
 com-fasterxml-jackson = "2.19.0"
-com-flywaydb-flyway = "11.9.0"
+com-flywaydb-flyway = "11.9.1"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.2.0-RC-2.0.1"
+com-google-devtools-ksp = "2.2.0-RC2-2.0.1"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.2.0"
@@ -34,7 +35,7 @@ nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
 org-apache-logging-log4j = "2.24.3"
 org-babyfish-jimmer = "0.9.89"
 org-hibernate-orm = "6.6.15.Final"
-org-jetbrains-kotlin = "2.2.0-RC"
+org-jetbrains-kotlin = "2.2.0-RC2"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
 org-jetbrains-kotlinx-io = "0.7.0"
@@ -43,18 +44,17 @@ org-junit-junit5 = "5.13.0"
 org-junit-platform = "1.13.0"
 org-liquibase = "4.32.0"
 org-slf4j = "2.1.0-alpha1"
+org-springframework-ai = "1.0.0"
+org-springframework-batch = "5.2.2"
+org-springframework-boot = "3.5.0"
+org-springframework-cloud = "2025.0.0"
+org-springframework-data = "3.5.0-M1"
+org-springframework-framework = "6.2.6"
+org-springframework-integration = "6.5.0"
+org-springframework-modulith = "1.4.0"
+org-springframework-security = "6.5.0"
 org-testcontainers = "1.21.1"
 org-testng = "7.11.0"
-spring-ai = "1.0.0"
-spring-batch = "5.2.2"
-spring-boot = "3.5.0"
-spring-cloud = "2025.0.0"
-spring-cloud-alibaba = "2023.0.3.3"
-spring-data = "3.5.0-M1"
-spring-framework = "6.2.6"
-spring-integration = "6.5.0-RC1"
-spring-modulith = "1.4.0"
-spring-security = "6.5.0"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
@@ -66,7 +66,7 @@ cn-hutool-hutool-captcha = { module = "cn.hutool:hutool-captcha", version.ref = 
 cn-hutool-hutool-core = { module = "cn.hutool:hutool-core", version.ref = "cn-hutool" }
 cn-hutool-hutool-crypto = { module = "cn.hutool:hutool-crypto", version.ref = "cn-hutool" }
 cn-hutool-hutool-db = { module = "cn.hutool:hutool-db", version.ref = "cn-hutool" }
-com-alibaba-cloud-spring-cloud-alibaba-dependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "spring-cloud-alibaba" }
+com-alibaba-cloud-spring-cloud-alibaba-dependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "com-alibaba-cloud" }
 com-alibaba-easyexcel = "com.alibaba:easyexcel:4.0.3"
 com-aliyun-oss-aliyun-sdk-oss = "com.aliyun.oss:aliyun-sdk-oss:3.18.2"
 com-auth0-java-jwt = "com.auth0:java-jwt:4.5.0"
@@ -96,7 +96,7 @@ com-google-devtools-ksp-symbol-processing = { module = "com.google.devtools.ksp:
 com-google-devtools-ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "com-google-devtools-ksp" }
 com-google-guava-guava-jre = "com.google.guava:guava:33.4.8-jre"
 com-h2database-h2 = "com.h2database:h2:2.3.232"
-com-huaweicloud-esdk-obs-java = "com.huaweicloud:esdk-obs-java:3.25.4"
+com-huaweicloud-esdk-obs-java = "com.huaweicloud:esdk-obs-java:3.25.5"
 com-microsoft-playwright-playwright = "com.microsoft.playwright:playwright:1.52.0"
 com-mysql-mysqlConnector-j = "com.mysql:mysql-connector-j:9.3.0"
 com-querydsl-querydsl-apt = { module = "com.querydsl:querydsl-apt", version.ref = "com-querydsl" }
@@ -243,54 +243,54 @@ org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4
 org-skyscreamer-jsonassert = "org.skyscreamer:jsonassert:2.0-rc1"
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
 org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8"
-org-springframework-ai-spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "spring-ai" }
-org-springframework-ai-spring-ai-spring-boot-docker-compose = { module = "org.springframework.ai:spring-ai-spring-boot-docker-compose", version.ref = "spring-ai" }
-org-springframework-batch-spring-batch-test = { module = "org.springframework.batch:spring-batch-test", version.ref = "spring-batch" }
-org-springframework-boot-spring-boot = { module = "org.springframework.boot:spring-boot", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-batch = { module = "org.springframework.boot:spring-boot-starter-batch", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-data-redis-reactive = { module = "org.springframework.boot:spring-boot-starter-data-redis-reactive", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-json = { module = "org.springframework.boot:spring-boot-starter-json", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-logging", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-tomcat = { module = "org.springframework.boot:spring-boot-starter-tomcat", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-undertow = { module = "org.springframework.boot:spring-boot-starter-undertow", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-test = { module = "org.springframework.boot:spring-boot-test", version.ref = "spring-boot" }
-org-springframework-boot-spring-boot-test-autoconfigure = { module = "org.springframework.boot:spring-boot-test-autoconfigure", version.ref = "spring-boot" }
-org-springframework-cloud-spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring-cloud" }
-org-springframework-cloud-spring-cloud-starter-bootstrap = "org.springframework.cloud:spring-cloud-starter-bootstrap:4.3.0-RC1"
-org-springframework-data-spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "spring-data" }
-org-springframework-data-spring-data-jpa = { module = "org.springframework.data:spring-data-jpa", version.ref = "spring-data" }
-org-springframework-integration-spring-integration-core = { module = "org.springframework.integration:spring-integration-core", version.ref = "spring-integration" }
-org-springframework-integration-spring-integration-mqtt = { module = "org.springframework.integration:spring-integration-mqtt", version.ref = "spring-integration" }
-org-springframework-modulith-spring-modulith-bom = { module = "org.springframework.modulith:spring-modulith-bom", version.ref = "spring-modulith" }
-org-springframework-modulith-spring-modulith-core = { module = "org.springframework.modulith:spring-modulith-core", version.ref = "spring-modulith" }
-org-springframework-modulith-spring-modulith-starter-jpa = { module = "org.springframework.modulith:spring-modulith-starter-jpa", version.ref = "spring-modulith" }
-org-springframework-modulith-spring-modulith-starter-test = { module = "org.springframework.modulith:spring-modulith-starter-test", version.ref = "spring-modulith" }
-org-springframework-security-spring-security-core = { module = "org.springframework.security:spring-security-core", version.ref = "spring-security" }
-org-springframework-security-spring-security-crypto = { module = "org.springframework.security:spring-security-crypto", version.ref = "spring-security" }
-org-springframework-security-spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security" }
-org-springframework-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
-org-springframework-spring-context = { module = "org.springframework:spring-context", version.ref = "spring-framework" }
-org-springframework-spring-core = { module = "org.springframework:spring-core", version.ref = "spring-framework" }
-org-springframework-spring-jdbc = { module = "org.springframework:spring-jdbc", version.ref = "spring-framework" }
-org-springframework-spring-test = { module = "org.springframework:spring-test", version.ref = "spring-framework" }
-org-springframework-spring-web = { module = "org.springframework:spring-web", version.ref = "spring-framework" }
-org-springframework-spring-webflux = { module = "org.springframework:spring-webflux", version.ref = "spring-framework" }
-org-springframework-spring-webmvc = { module = "org.springframework:spring-webmvc", version.ref = "spring-framework" }
+org-springframework-ai-spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "org-springframework-ai" }
+org-springframework-ai-spring-ai-spring-boot-docker-compose = { module = "org.springframework.ai:spring-ai-spring-boot-docker-compose", version.ref = "org-springframework-ai" }
+org-springframework-batch-spring-batch-test = { module = "org.springframework.batch:spring-batch-test", version.ref = "org-springframework-batch" }
+org-springframework-boot-spring-boot = { module = "org.springframework.boot:spring-boot", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-batch = { module = "org.springframework.boot:spring-boot-starter-batch", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-data-redis-reactive = { module = "org.springframework.boot:spring-boot-starter-data-redis-reactive", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-json = { module = "org.springframework.boot:spring-boot-starter-json", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-logging", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-tomcat = { module = "org.springframework.boot:spring-boot-starter-tomcat", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-undertow = { module = "org.springframework.boot:spring-boot-starter-undertow", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-test = { module = "org.springframework.boot:spring-boot-test", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-test-autoconfigure = { module = "org.springframework.boot:spring-boot-test-autoconfigure", version.ref = "org-springframework-boot" }
+org-springframework-cloud-spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "org-springframework-cloud" }
+org-springframework-cloud-spring-cloud-starter-bootstrap = "org.springframework.cloud:spring-cloud-starter-bootstrap:4.3.0"
+org-springframework-data-spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "org-springframework-data" }
+org-springframework-data-spring-data-jpa = { module = "org.springframework.data:spring-data-jpa", version.ref = "org-springframework-data" }
+org-springframework-integration-spring-integration-core = { module = "org.springframework.integration:spring-integration-core", version.ref = "org-springframework-integration" }
+org-springframework-integration-spring-integration-mqtt = { module = "org.springframework.integration:spring-integration-mqtt", version.ref = "org-springframework-integration" }
+org-springframework-modulith-spring-modulith-bom = { module = "org.springframework.modulith:spring-modulith-bom", version.ref = "org-springframework-modulith" }
+org-springframework-modulith-spring-modulith-core = { module = "org.springframework.modulith:spring-modulith-core", version.ref = "org-springframework-modulith" }
+org-springframework-modulith-spring-modulith-starter-jpa = { module = "org.springframework.modulith:spring-modulith-starter-jpa", version.ref = "org-springframework-modulith" }
+org-springframework-modulith-spring-modulith-starter-test = { module = "org.springframework.modulith:spring-modulith-starter-test", version.ref = "org-springframework-modulith" }
+org-springframework-security-spring-security-core = { module = "org.springframework.security:spring-security-core", version.ref = "org-springframework-security" }
+org-springframework-security-spring-security-crypto = { module = "org.springframework.security:spring-security-crypto", version.ref = "org-springframework-security" }
+org-springframework-security-spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "org-springframework-security" }
+org-springframework-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "org-springframework-boot" }
+org-springframework-spring-context = { module = "org.springframework:spring-context", version.ref = "org-springframework-framework" }
+org-springframework-spring-core = { module = "org.springframework:spring-core", version.ref = "org-springframework-framework" }
+org-springframework-spring-jdbc = { module = "org.springframework:spring-jdbc", version.ref = "org-springframework-framework" }
+org-springframework-spring-test = { module = "org.springframework:spring-test", version.ref = "org-springframework-framework" }
+org-springframework-spring-web = { module = "org.springframework:spring-web", version.ref = "org-springframework-framework" }
+org-springframework-spring-webflux = { module = "org.springframework:spring-webflux", version.ref = "org-springframework-framework" }
+org-springframework-spring-webmvc = { module = "org.springframework:spring-webmvc", version.ref = "org-springframework-framework" }
 org-testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "org-testcontainers" }
 org-testcontainers-minio = { module = "org.testcontainers:minio", version.ref = "org-testcontainers" }
 org-testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "org-testcontainers" }
@@ -320,34 +320,34 @@ org-jetbrains-kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok"
 org-jetbrains-kotlin-plugin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-power-assert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "org-jetbrains-kotlin" }
-org-springframework-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+org-springframework-boot = { id = "org.springframework.boot", version.ref = "org-springframework-boot" }
 tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2.0"
 
 [bundles]
 junit5 = [
-  "org-junit-jupiter-junit-jupiter-api",
-  "org-junit-jupiter-junit-jupiter-engine",
-  "org-junit-platform-junit-platform-launcher",
+    "org-junit-jupiter-junit-jupiter-api",
+    "org-junit-jupiter-junit-jupiter-engine",
+    "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-  "io-projectreactor-kotlin-reactor-kotlin-extensions",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+    "io-projectreactor-kotlin-reactor-kotlin-extensions",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-  "io-mockk-mockk",
-  "io-projectreactor-reactor-test",
-  "org-jetbrains-kotlin-kotlin-test-junit5",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+    "io-mockk-mockk",
+    "io-projectreactor-reactor-test",
+    "org-jetbrains-kotlin-kotlin-test-junit5",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-  "p6spy-p6spy",
+    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+    "p6spy-p6spy",
 ]
 redis = [
-  "org-apache-commons-commons-pool2",
-  "org-springframework-boot-spring-boot-starter-data-redis",
+    "org-apache-commons-commons-pool2",
+    "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-  "io-github-bonigarcia-webdrivermanager",
-  "org-seleniumhq-selenium-selenium-java",
+    "io-github-bonigarcia-webdrivermanager",
+    "org-seleniumhq-selenium-selenium-java",
 ]
