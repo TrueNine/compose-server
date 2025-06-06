@@ -6,17 +6,15 @@ plugins {
 version = libs.versions.compose.rds.get()
 
 dependencies {
+  ksp(libs.org.babyfish.jimmer.jimmer.ksp)
+  implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
+
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
 
   implementation(libs.org.springframework.security.spring.security.crypto)
 
-  ksp(libs.org.babyfish.jimmer.jimmer.ksp)
-
-  implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
-
   api(projects.shared)
   api(projects.rds.rdsShared)
-  implementation(projects.meta)
 
   implementation(libs.com.fasterxml.jackson.core.jackson.databind)
 
