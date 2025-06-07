@@ -22,8 +22,8 @@ class JarExtension(
 
     if (
       null != project.tasks.findByName("bootJar") &&
-      null != project.configurations.findByName("runtimeClasspath") &&
-      dsl.bootJarSeparate
+        null != project.configurations.findByName("runtimeClasspath") &&
+        dsl.bootJarSeparate
     ) {
       springBootJarSeparate()
     }
@@ -56,10 +56,10 @@ class JarExtension(
           group = Constant.TASK_GROUP
           into(
             listOf(
-              layout.buildDirectory.get().asFile.absolutePath,
-              dsl.jarDistDir,
-              dsl.bootJarDistName,
-            )
+                layout.buildDirectory.get().asFile.absolutePath,
+                dsl.jarDistDir,
+                dsl.bootJarDistName,
+              )
               .filter(String::isNotEmpty)
               .joinToString(separator = "/")
           )
@@ -71,10 +71,10 @@ class JarExtension(
           group = Constant.TASK_GROUP
           into(
             listOf(
-              layout.buildDirectory.get().asFile.absolutePath,
-              dsl.jarDistDir,
-              dsl.bootJarConfigName,
-            )
+                layout.buildDirectory.get().asFile.absolutePath,
+                dsl.jarDistDir,
+                dsl.bootJarConfigName,
+              )
               .filter(String::isNotEmpty)
               .joinToString(separator = "/")
           )

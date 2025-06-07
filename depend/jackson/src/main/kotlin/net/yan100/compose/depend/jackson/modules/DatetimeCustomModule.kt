@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.module.SimpleSerializers
-import net.yan100.compose.depend.jackson.serializers.ISO8601Deserializer
-import net.yan100.compose.depend.jackson.serializers.ISO8601Serializer
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
+import net.yan100.compose.depend.jackson.serializers.ISO8601Deserializer
+import net.yan100.compose.depend.jackson.serializers.ISO8601Serializer
 
 class DatetimeCustomModule(
   private val zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)
@@ -37,9 +37,18 @@ class DatetimeCustomModule(
     context?.addDeserializers(
       SimpleDeserializers(
         buildMap {
-          put(LocalDate::class.java, ISO8601Deserializer.LocalDateDeserializerX(zoneOffset))
-          put(LocalDateTime::class.java, ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset))
-          put(LocalTime::class.java, ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset))
+          put(
+            LocalDate::class.java,
+            ISO8601Deserializer.LocalDateDeserializerX(zoneOffset),
+          )
+          put(
+            LocalDateTime::class.java,
+            ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset),
+          )
+          put(
+            LocalTime::class.java,
+            ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset),
+          )
         }
       )
     )

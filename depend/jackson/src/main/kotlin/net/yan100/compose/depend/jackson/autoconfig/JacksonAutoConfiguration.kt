@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.cfg.MapperConfig
 import com.fasterxml.jackson.databind.introspect.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import java.time.ZoneOffset
+import java.util.*
 import net.yan100.compose.DTimer
 import net.yan100.compose.depend.jackson.modules.DatetimeCustomModule
 import net.yan100.compose.depend.jackson.modules.KotlinCustomModule
@@ -24,9 +26,6 @@ import org.springframework.context.annotation.Scope
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
-import java.time.ZoneOffset
-import java.util.*
-
 
 /**
  * jackson json 序列化策略配置
@@ -82,7 +81,8 @@ class JacksonAutoConfiguration {
 
   @Bean
   @Primary
-  fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
+  fun jackson2ObjectMapperBuilderCustomizer():
+    Jackson2ObjectMapperBuilderCustomizer {
     log.debug("config jackson custom jackson2ObjectMapperBuilderCustomizer")
     val zoneOffset = ZoneOffset.ofHours(8)
 
@@ -124,7 +124,8 @@ class JacksonAutoConfiguration {
     private val log = slf4j<JacksonAutoConfiguration>()
   }
 
-  class IgnoreJsonIgnoreAnnotationIntrospector : JacksonAnnotationIntrospector() {
+  class IgnoreJsonIgnoreAnnotationIntrospector :
+    JacksonAnnotationIntrospector() {
     override fun findPropertyIgnoralByName(
       config: MapperConfig<*>?,
       a: Annotated?,
@@ -156,8 +157,12 @@ class JacksonAutoConfiguration {
   fun nonDeserializerObjectMapper(mapper: ObjectMapper): ObjectMapper {
     log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
     return mapper.copy().let {
-      it.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS).registerModules(KotlinModule.Builder().build())
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL).setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY).activateDefaultTyping(
+      it
+        .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+        .registerModules(KotlinModule.Builder().build())
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
+        .activateDefaultTyping(
           it.polymorphicTypeValidator,
           ObjectMapper.DefaultTyping.EVERYTHING,
           JsonTypeInfo.As.PROPERTY,

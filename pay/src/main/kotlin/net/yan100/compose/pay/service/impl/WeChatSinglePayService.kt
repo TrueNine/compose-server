@@ -12,6 +12,10 @@ import com.wechat.pay.java.service.refund.model.AmountReq
 import com.wechat.pay.java.service.refund.model.CreateRequest
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import net.yan100.compose.exceptions.KnownException
 import net.yan100.compose.exceptions.requireKnown
 import net.yan100.compose.generator.IOrderCodeGenerator
@@ -29,10 +33,6 @@ import net.yan100.compose.slf4j
 import net.yan100.compose.typing.EncryptAlgorithmTyping
 import net.yan100.compose.typing.ISO4217
 import org.springframework.stereotype.Service
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Service
 class WeChatSinglePayService(
@@ -44,8 +44,7 @@ class WeChatSinglePayService(
   private val mapper: ObjectMapper,
 ) : SinglePayService {
   companion object {
-    @JvmStatic
-    private val HUNDRED = BigDecimal("100")
+    @JvmStatic private val HUNDRED = BigDecimal("100")
     private val log = slf4j(WeChatSinglePayService::class)
   }
 
@@ -71,10 +70,10 @@ class WeChatSinglePayService(
       }
     val prePay = wechatJsService.prepay(request)
     return SinglePayService.CreateMpPayVo(
-      random32String = Keys.generateRandomAsciiString(32),
-      iso8601Second = LocalDateTime.now().iso8601LongUtc.toString(),
-      signType = EncryptAlgorithmTyping.RSA.value,
-    )
+        random32String = Keys.generateRandomAsciiString(32),
+        iso8601Second = LocalDateTime.now().iso8601LongUtc.toString(),
+        signType = EncryptAlgorithmTyping.RSA.value,
+      )
       .apply {
         prePayId = prePay?.prepayId
         // 签名

@@ -1,5 +1,6 @@
 package net.yan100.compose.gradleplugin
 
+import java.net.URI
 import net.yan100.compose.gradleplugin.consts.Constant
 import net.yan100.compose.gradleplugin.consts.Repos
 import org.gradle.api.Project
@@ -7,7 +8,6 @@ import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Provider
-import java.net.URI
 
 fun RepositoryHandler.chinaRegionRepositories() {
   Repos.publicRepositories.forEach { url -> this.maven { it.url = URI(url) } }

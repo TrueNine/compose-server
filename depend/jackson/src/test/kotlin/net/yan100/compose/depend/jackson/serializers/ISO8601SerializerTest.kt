@@ -5,19 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import net.yan100.compose.toMillis
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-
+import net.yan100.compose.toMillis
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class ISO8601SerializerTest {
 
@@ -33,15 +32,33 @@ class ISO8601SerializerTest {
 
     // 创建一个简单模块并添加序列化器
     val serializerModule = SimpleModule()
-    serializerModule.addSerializer(LocalDate::class.java, ISO8601Serializer.ISO8601DateSerializer(zoneOffset))
-    serializerModule.addSerializer(LocalDateTime::class.java, ISO8601Serializer.ISO8601DateTimeSerializer(zoneOffset))
-    serializerModule.addSerializer(LocalTime::class.java, ISO8601Serializer.ISO8601TimeSerializer(zoneOffset))
+    serializerModule.addSerializer(
+      LocalDate::class.java,
+      ISO8601Serializer.ISO8601DateSerializer(zoneOffset),
+    )
+    serializerModule.addSerializer(
+      LocalDateTime::class.java,
+      ISO8601Serializer.ISO8601DateTimeSerializer(zoneOffset),
+    )
+    serializerModule.addSerializer(
+      LocalTime::class.java,
+      ISO8601Serializer.ISO8601TimeSerializer(zoneOffset),
+    )
 
     // 创建一个简单模块并添加反序列化器
     val deserializerModule = SimpleModule()
-    deserializerModule.addDeserializer(LocalDate::class.java, ISO8601Deserializer.LocalDateDeserializerX(zoneOffset))
-    deserializerModule.addDeserializer(LocalDateTime::class.java, ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset))
-    deserializerModule.addDeserializer(LocalTime::class.java, ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset))
+    deserializerModule.addDeserializer(
+      LocalDate::class.java,
+      ISO8601Deserializer.LocalDateDeserializerX(zoneOffset),
+    )
+    deserializerModule.addDeserializer(
+      LocalDateTime::class.java,
+      ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset),
+    )
+    deserializerModule.addDeserializer(
+      LocalTime::class.java,
+      ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset),
+    )
 
     // 注册模块
     objectMapper.registerModule(serializerModule)
@@ -123,7 +140,8 @@ class ISO8601SerializerTest {
       val json = """{"dateTime":$timestamp}"""
 
       // 反序列化
-      val result = objectMapper.readValue(json, LocalDateTimeWrapper::class.java)
+      val result =
+        objectMapper.readValue(json, LocalDateTimeWrapper::class.java)
 
       // 验证
       assertNotNull(result.dateTime)
@@ -140,7 +158,8 @@ class ISO8601SerializerTest {
       val minJson = objectMapper.writeValueAsString(minTestData)
 
       // 反序列化验证
-      val minResult = objectMapper.readValue(minJson, LocalDateTimeWrapper::class.java)
+      val minResult =
+        objectMapper.readValue(minJson, LocalDateTimeWrapper::class.java)
       assertEquals(minDateTime, minResult.dateTime)
 
       // 测试当前时间
@@ -151,7 +170,8 @@ class ISO8601SerializerTest {
       val nowJson = objectMapper.writeValueAsString(nowTestData)
 
       // 反序列化验证
-      val nowResult = objectMapper.readValue(nowJson, LocalDateTimeWrapper::class.java)
+      val nowResult =
+        objectMapper.readValue(nowJson, LocalDateTimeWrapper::class.java)
 
       // 由于毫秒精度可能不同，所以比较年月日时分秒
       assertEquals(nowDateTime.year, nowResult.dateTime?.year)
@@ -228,14 +248,32 @@ class ISO8601SerializerTest {
 
       // 创建并注册序列化和反序列化模块
       val serializerModule = SimpleModule()
-      serializerModule.addSerializer(LocalDate::class.java, ISO8601Serializer.ISO8601DateSerializer(zoneOffset))
-      serializerModule.addSerializer(LocalDateTime::class.java, ISO8601Serializer.ISO8601DateTimeSerializer(zoneOffset))
-      serializerModule.addSerializer(LocalTime::class.java, ISO8601Serializer.ISO8601TimeSerializer(zoneOffset))
+      serializerModule.addSerializer(
+        LocalDate::class.java,
+        ISO8601Serializer.ISO8601DateSerializer(zoneOffset),
+      )
+      serializerModule.addSerializer(
+        LocalDateTime::class.java,
+        ISO8601Serializer.ISO8601DateTimeSerializer(zoneOffset),
+      )
+      serializerModule.addSerializer(
+        LocalTime::class.java,
+        ISO8601Serializer.ISO8601TimeSerializer(zoneOffset),
+      )
 
       val deserializerModule = SimpleModule()
-      deserializerModule.addDeserializer(LocalDate::class.java, ISO8601Deserializer.LocalDateDeserializerX(zoneOffset))
-      deserializerModule.addDeserializer(LocalDateTime::class.java, ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset))
-      deserializerModule.addDeserializer(LocalTime::class.java, ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset))
+      deserializerModule.addDeserializer(
+        LocalDate::class.java,
+        ISO8601Deserializer.LocalDateDeserializerX(zoneOffset),
+      )
+      deserializerModule.addDeserializer(
+        LocalDateTime::class.java,
+        ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset),
+      )
+      deserializerModule.addDeserializer(
+        LocalTime::class.java,
+        ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset),
+      )
 
       polymorphicMapper.registerModule(serializerModule)
       polymorphicMapper.registerModule(deserializerModule)
@@ -245,15 +283,15 @@ class ISO8601SerializerTest {
       val date = dateTime.toLocalDate()
       val time = dateTime.toLocalTime()
 
-      val testData = TypeInfoWrapper(
-        date = date, dateTime = dateTime, time = time
-      )
+      val testData =
+        TypeInfoWrapper(date = date, dateTime = dateTime, time = time)
 
       // 序列化
       val json = polymorphicMapper.writeValueAsString(testData)
 
       // 反序列化
-      val result = polymorphicMapper.readValue(json, TypeInfoWrapper::class.java)
+      val result =
+        polymorphicMapper.readValue(json, TypeInfoWrapper::class.java)
 
       // 验证
       assertEquals(date, result.date)
@@ -275,6 +313,6 @@ class ISO8601SerializerTest {
   data class TypeInfoWrapper(
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS) val date: LocalDate?,
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS) val dateTime: LocalDateTime?,
-    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS) val time: LocalTime?
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS) val time: LocalTime?,
   )
-} 
+}

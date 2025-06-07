@@ -1,7 +1,7 @@
 package net.yan100.compose.gradleplugin.generator
 
-import org.gradle.api.Action
 import java.util.*
+import org.gradle.api.Action
 
 /**
  * # gradle.properties 生成配置

@@ -1,14 +1,14 @@
 package net.yan100.compose.gradleplugin.generator
 
+import java.io.File
+import java.io.FileWriter
+import java.io.InputStreamReader
+import javax.inject.Inject
 import net.yan100.compose.gradleplugin.consts.Constant
 import net.yan100.compose.gradleplugin.consts.MavenRepl
 import net.yan100.compose.gradleplugin.consts.Repos
 import net.yan100.compose.gradleplugin.wrap
 import org.gradle.api.Project
-import java.io.File
-import java.io.FileWriter
-import java.io.InputStreamReader
-import javax.inject.Inject
 
 /*
  * org.gradle.daemon=true

@@ -2,33 +2,37 @@ package net.yan100.compose.data.extract.service.impl
 
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.*
 import net.yan100.compose.holders.ResourceHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.core.io.ByteArrayResource
-import kotlin.test.*
 
 class LazyAddressCsvServiceImplTest {
   private lateinit var resourceHolder: ResourceHolder
   private lateinit var service: LazyAddressCsvServiceImpl
 
-  private val testCsvContent = """
+  private val testCsvContent =
+    """
         110000000000,北京市,1,000000000000
         110100000000,北京市市辖区,2,110000000000
         110101000000,东城区,3,110100000000
-    """.trimIndent()
+    """
+      .trimIndent()
 
   @BeforeEach
   fun setup() {
     resourceHolder = mockk(relaxed = true)
 
     // 设置默认的mock行为
-    val testResource = object : ByteArrayResource(testCsvContent.toByteArray()) {
-      override fun getFilename(): String = "area_code_2024.csv"
-    }
+    val testResource =
+      object : ByteArrayResource(testCsvContent.toByteArray()) {
+        override fun getFilename(): String = "area_code_2024.csv"
+      }
 
-    every { resourceHolder.matchConfigResources("area_code*.csv") } returns listOf(testResource)
+    every { resourceHolder.matchConfigResources("area_code*.csv") } returns
+      listOf(testResource)
     every { resourceHolder.getConfigResource(any()) } returns testResource
 
     service = LazyAddressCsvServiceImpl(resourceHolder)
@@ -155,13 +159,16 @@ class LazyAddressCsvServiceImplTest {
 
   @Test
   fun `测试CSV格式错误处理`() {
-    val invalidCsvContent = """
+    val invalidCsvContent =
+      """
             110000
             110100,北京市
             invalid,data,here
-        """.trimIndent()
+        """
+        .trimIndent()
 
-    val invalidResource = ByteArrayResource(invalidCsvContent.toByteArray(), "area_code_2024.csv")
+    val invalidResource =
+      ByteArrayResource(invalidCsvContent.toByteArray(), "area_code_2024.csv")
     every { resourceHolder.getConfigResource(any()) } returns invalidResource
 
     assertThrows<IndexOutOfBoundsException> {
@@ -183,10 +190,11 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 正常递归遍历所有子节点`() {
     val visited = mutableListOf<Pair<String, Int>>()
-    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
-      children.forEach { district ->
-        visited += district.code.code to depth
-      }
+    service.traverseChildrenRecursive("110000", 3, "2024") {
+      children,
+      depth,
+      parent ->
+      children.forEach { district -> visited += district.code.code to depth }
       true // 继续递归
     }
     // 应该遍历到所有下级
@@ -197,10 +205,11 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 回调返回false时中断分支`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
-      children.forEach { district ->
-        visited += district.code.code
-      }
+    service.traverseChildrenRecursive("110000", 3, "2024") {
+      children,
+      depth,
+      parent ->
+      children.forEach { district -> visited += district.code.code }
       // 只遍历到市级
       children.all { it.level < 2 }
     }
@@ -212,10 +221,11 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 只遍历一层`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("110000", 1, "2024") { children, depth, parent ->
-      children.forEach { district ->
-        visited += district.code.code
-      }
+    service.traverseChildrenRecursive("110000", 1, "2024") {
+      children,
+      depth,
+      parent ->
+      children.forEach { district -> visited += district.code.code }
       true
     }
     // 只会访问到市级
@@ -225,7 +235,10 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive parentDistrict 参数正确`() {
     val parentMap = mutableMapOf<String, String?>()
-    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
+    service.traverseChildrenRecursive("110000", 3, "2024") {
+      children,
+      depth,
+      parent ->
       children.forEach { district ->
         parentMap[district.code.code] = parent?.code?.code
       }
@@ -239,19 +252,21 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 空数据和无效parentCode`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("999999", 3, "2024") { children, depth, parent ->
-      children.forEach { district ->
-        visited += district.code.code
-      }
+    service.traverseChildrenRecursive("999999", 3, "2024") {
+      children,
+      depth,
+      parent ->
+      children.forEach { district -> visited += district.code.code }
       true
     }
     assertTrue(visited.isEmpty())
 
     val visited2 = mutableListOf<String>()
-    service.traverseChildrenRecursive("invalid", 3, "2024") { children, depth, parent ->
-      children.forEach { district ->
-        visited2 += district.code.code
-      }
+    service.traverseChildrenRecursive("invalid", 3, "2024") {
+      children,
+      depth,
+      parent ->
+      children.forEach { district -> visited2 += district.code.code }
       true
     }
     assertTrue(visited2.isEmpty())
@@ -259,9 +274,10 @@ class LazyAddressCsvServiceImplTest {
 
   @Test
   fun `空CSV文件 fetchChildren 返回空`() {
-    val emptyResource = object : ByteArrayResource("".toByteArray()) {
-      override fun getFilename() = "area_code_2024.csv"
-    }
+    val emptyResource =
+      object : ByteArrayResource("".toByteArray()) {
+        override fun getFilename() = "area_code_2024.csv"
+      }
     every { resourceHolder.getConfigResource(any()) } returns emptyResource
     val children = service.fetchChildren("110000", "2024")
     assertTrue(children.isEmpty())
@@ -269,18 +285,22 @@ class LazyAddressCsvServiceImplTest {
 
   @Test
   fun `只有省级数据 fetchChildrenRecursive 只返回省`() {
-    val provinceOnly = """
+    val provinceOnly =
+      """
     110000000000,北京市,1,000000000000
-  """.trimIndent()
-    val resource = object : ByteArrayResource(provinceOnly.toByteArray()) {
-      override fun getFilename() = "area_code_2024.csv"
-    }
+  """
+        .trimIndent()
+    val resource =
+      object : ByteArrayResource(provinceOnly.toByteArray()) {
+        override fun getFilename() = "area_code_2024.csv"
+      }
     every { resourceHolder.getConfigResource(any()) } returns resource
     val result = mutableListOf<String>()
-    service.traverseChildrenRecursive("000000000000", 3, "2024") { children, depth, parent ->
-      children.forEach { district ->
-        result += district.code.code
-      }
+    service.traverseChildrenRecursive("000000000000", 3, "2024") {
+      children,
+      depth,
+      parent ->
+      children.forEach { district -> result += district.code.code }
       true
     }
     assertEquals(listOf("11"), result)
@@ -288,12 +308,15 @@ class LazyAddressCsvServiceImplTest {
 
   @Test
   fun `CSV脏数据 level非数字 graceful fail`() {
-    val badCsv = """
+    val badCsv =
+      """
       110000000000,北京市,notanumber,000000000000
-    """.trimIndent()
-    val resource = object : ByteArrayResource(badCsv.toByteArray()) {
-      override fun getFilename() = "area_code_2024.csv"
-    }
+    """
+        .trimIndent()
+    val resource =
+      object : ByteArrayResource(badCsv.toByteArray()) {
+        override fun getFilename() = "area_code_2024.csv"
+      }
     every { resourceHolder.getConfigResource(any()) } returns resource
     assertThrows<NumberFormatException> {
       service.getCsvSequence("2024")?.toList()
@@ -311,4 +334,4 @@ class LazyAddressCsvServiceImplTest {
     val children = service.fetchChildren("110000", "")
     assertTrue(children.isEmpty())
   }
-} 
+}

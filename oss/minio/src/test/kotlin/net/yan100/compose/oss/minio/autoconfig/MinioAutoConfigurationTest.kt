@@ -2,6 +2,8 @@ package net.yan100.compose.oss.minio.autoconfig
 
 import io.minio.MinioClient
 import jakarta.annotation.Resource
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 import net.yan100.compose.oss.minio.MinioClientWrapper
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.test.context.SpringBootTest
@@ -9,8 +11,6 @@ import org.springframework.context.ApplicationContext
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 @SpringBootTest
 class MinioAutoConfigurationTest {
@@ -30,9 +30,9 @@ class MinioAutoConfigurationTest {
         )
         .waitingFor(
           org.testcontainers.containers.wait.strategy.Wait.forLogMessage(
-            ".*MinIO Object Storage Server.*",
-            1,
-          )
+              ".*MinIO Object Storage Server.*",
+              1,
+            )
             .withStartupTimeout(java.time.Duration.ofSeconds(30))
         )
 

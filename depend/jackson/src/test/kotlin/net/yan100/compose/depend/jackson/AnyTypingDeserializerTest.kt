@@ -2,14 +2,14 @@ package net.yan100.compose.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 import net.yan100.compose.testtoolkit.log
 import net.yan100.compose.typing.HttpStatusTyping
 import net.yan100.compose.typing.UserAgents
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
 
 @SpringBootTest
 class AnyTypingDeserializerTest {

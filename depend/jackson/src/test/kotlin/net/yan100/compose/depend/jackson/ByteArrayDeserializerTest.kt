@@ -2,12 +2,12 @@ package net.yan100.compose.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
 import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
 
 @SpringBootTest
 class ByteArrayDeserializerTest {

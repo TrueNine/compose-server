@@ -10,7 +10,7 @@ private fun KSClassDeclaration.internalIsAssignableFromDeeply(
   if (!checkList.add(this)) return false
   if (
     asStarProjectedType().declaration.qualifiedName?.asString() ==
-    other.qualifiedName
+      other.qualifiedName
   )
     return true
   for (superType in superTypes) {

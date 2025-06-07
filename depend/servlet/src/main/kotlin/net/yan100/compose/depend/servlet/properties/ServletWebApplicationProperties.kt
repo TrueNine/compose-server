@@ -1,8 +1,8 @@
 package net.yan100.compose.depend.servlet.properties
 
+import kotlin.reflect.KClass
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.http.converter.StringHttpMessageConverter
-import kotlin.reflect.KClass
 
 private const val PREFIX = "compose.depend.servlet"
 

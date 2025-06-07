@@ -1,12 +1,12 @@
 package net.yan100.compose.depend.paho
 
 import jakarta.annotation.Resource
+import kotlin.test.Ignore
 import net.yan100.compose.depend.paho.paho.MqttPahoClientWrapper
 import net.yan100.compose.depend.paho.paho.subscribe
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.Ignore
 
 @SpringBootTest
 class PahoTest {

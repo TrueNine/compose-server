@@ -32,6 +32,7 @@ val KSAnnotation.resolvedDeclaration: KSDeclaration
     return annotationType.fastResolve().declaration
   }
 
-inline fun <reified A : Annotation> KSAnnotated.getKsAnnotationsByAnnotationClass(): Sequence<KSAnnotation> {
+inline fun <reified A : Annotation> KSAnnotated
+  .getKsAnnotationsByAnnotationClass(): Sequence<KSAnnotation> {
   return getKsAnnotationsByAnnotationClass(A::class)
 }

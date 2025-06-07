@@ -1,6 +1,7 @@
 package net.yan100.compose.depend.servlet.annotations
 
 import jakarta.annotation.Resource
+import kotlin.test.Test
 import net.yan100.compose.testtoolkit.annotations.SpringServletTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.ResponseEntity
@@ -8,12 +9,12 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.head
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import kotlin.test.Test
 
 @SpringServletTest
 @Import(HeadMappingTest.HeadController::class)
 class HeadMappingTest {
-  lateinit var mock: MockMvc @Resource set
+  lateinit var mock: MockMvc
+    @Resource set
 
   @Test
   fun `test found action`() {

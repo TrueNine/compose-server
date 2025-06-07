@@ -1,5 +1,7 @@
 package net.yan100.compose.data.extract.service.impl
 
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 import net.yan100.compose.data.extract.domain.CnDistrictCode
 import net.yan100.compose.data.extract.service.ILazyAddressService
 import net.yan100.compose.holders.ResourceHolder
@@ -8,8 +10,6 @@ import net.yan100.compose.string
 import org.springframework.context.annotation.Primary
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 
 private val log = slf4j<LazyAddressCsvServiceImpl>()
 
@@ -51,7 +51,9 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
 
     // 确保默认年份版本存在
     if (!csvVersions.containsKey(supportedDefaultYearVersion)) {
-      csvVersions += supportedDefaultYearVersion to CsvDefine("area_code_${supportedDefaultYearVersion}.csv")
+      csvVersions +=
+        supportedDefaultYearVersion to
+          CsvDefine("area_code_${supportedDefaultYearVersion}.csv")
     }
     log.debug("设定 csv 版本: {}", csvVersions)
   }
@@ -82,7 +84,11 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
     parentCode: string,
     yearVersion: String,
   ): List<ILazyAddressService.CnDistrict> {
-    log.debug("Finding children for parent code: {} in year: {}", parentCode, yearVersion)
+    log.debug(
+      "Finding children for parent code: {} in year: {}",
+      parentCode,
+      yearVersion,
+    )
 
     // 如果年份版本不存在，返回空列表
     if (!csvVersions.containsKey(yearVersion)) {
@@ -90,9 +96,10 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
     }
 
     // 获取指定年份的所有数据
-    val allDistricts = districtCache.computeIfAbsent(yearVersion) {
-      getCsvSequence(yearVersion)?.toList() ?: emptyList()
-    }
+    val allDistricts =
+      districtCache.computeIfAbsent(yearVersion) {
+        getCsvSequence(yearVersion)?.toList() ?: emptyList()
+      }
 
     // 如果是查询国家的子集，直接返回所有省级数据
     if (parentCode == ILazyAddressService.DEFAULT_COUNTRY_CODE) {
@@ -100,12 +107,14 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
     }
 
     // 创建父级代码对象
-    val parentCodeObj = ILazyAddressService.createCnDistrictCode(parentCode) ?: return emptyList()
+    val parentCodeObj =
+      ILazyAddressService.createCnDistrictCode(parentCode) ?: return emptyList()
     val targetLevel = parentCodeObj.level + 1
 
     // 过滤出子级数据
     return allDistricts.filter { district ->
-      district.level == targetLevel && district.code.code.startsWith(parentCodeObj.code)
+      district.level == targetLevel &&
+        district.code.code.startsWith(parentCodeObj.code)
     }
   }
 
@@ -124,14 +133,13 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
     val codeObj = ILazyAddressService.createCnDistrictCode(code) ?: return null
 
     // 获取指定年份的所有数据
-    val allDistricts = districtCache.computeIfAbsent(yearVersion) {
-      getCsvSequence(yearVersion)?.toList() ?: emptyList()
-    }
+    val allDistricts =
+      districtCache.computeIfAbsent(yearVersion) {
+        getCsvSequence(yearVersion)?.toList() ?: emptyList()
+      }
 
     // 查找匹配的区划
-    return allDistricts.firstOrNull {
-      it.code.code == codeObj.code
-    }
+    return allDistricts.firstOrNull { it.code.code == codeObj.code }
   }
 
   override fun fetchChildrenRecursive(
@@ -141,7 +149,9 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
   ): List<ILazyAddressService.CnDistrict> {
     log.debug(
       "Finding recursive children for code: {} with maxDepth: {} in year: {}",
-      parentCode, maxDepth, yearVersion
+      parentCode,
+      maxDepth,
+      yearVersion,
     )
 
     // 如果年份版本不存在，返回空列表
@@ -176,9 +186,18 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
     parentCode: string,
     maxDepth: Int,
     yearVersion: String,
-    onVisit: (children: List<ILazyAddressService.CnDistrict>, depth: Int, parentDistrict: ILazyAddressService.CnDistrict?) -> Boolean
+    onVisit:
+      (
+        children: List<ILazyAddressService.CnDistrict>,
+        depth: Int,
+        parentDistrict: ILazyAddressService.CnDistrict?,
+      ) -> Boolean,
   ) {
-    fun walk(currentCode: String, depth: Int, parent: ILazyAddressService.CnDistrict?) {
+    fun walk(
+      currentCode: String,
+      depth: Int,
+      parent: ILazyAddressService.CnDistrict?,
+    ) {
       if (depth > maxDepth) return
       val children = fetchChildren(currentCode, yearVersion)
       if (children.isEmpty()) return
@@ -200,7 +219,9 @@ class LazyAddressCsvServiceImpl(private val resourceHolder: ResourceHolder) :
     }
   }
 
-  internal fun getCsvSequence(yearVersion: String): List<ILazyAddressService.CnDistrict>? {
+  internal fun getCsvSequence(
+    yearVersion: String
+  ): List<ILazyAddressService.CnDistrict>? {
     return getCsvResource(yearVersion)?.let { resource ->
       resource.inputStream.bufferedReader().useLines { lines ->
         lines

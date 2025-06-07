@@ -1,9 +1,9 @@
 package net.yan100.compose.depend.servlet.converters
 
+import java.time.LocalTime
 import net.yan100.compose.slf4j
 import net.yan100.compose.toLocalTime
 import org.springframework.core.convert.converter.Converter
-import java.time.LocalTime
 
 private val log = slf4j(JavaLocalTimeConverter::class)
 

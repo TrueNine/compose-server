@@ -2,6 +2,7 @@ package net.yan100.compose.cacheable.autoconfig
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.time.Duration
 import net.yan100.compose.consts.ICacheNames
 import net.yan100.compose.depend.jackson.autoconfig.JacksonAutoConfiguration
 import net.yan100.compose.slf4j
@@ -16,7 +17,6 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
-import java.time.Duration
 
 private val log = slf4j<RedisJsonSerializerAutoConfiguration>()
 

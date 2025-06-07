@@ -20,8 +20,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class MinioAutoConfiguration {
   companion object {
-    @JvmStatic
-    private val log = slf4j<MinioAutoConfiguration>()
+    @JvmStatic private val log = slf4j<MinioAutoConfiguration>()
   }
 
   @Bean
@@ -32,10 +31,16 @@ class MinioAutoConfiguration {
   ): MinioClient {
     val accessUrl = ossProperties.baseUrl ?: minioProperties.endpoint
     val accessPort = ossProperties.port ?: minioProperties.endpointPort
-    log.trace("register minio client accessUrl: {} , accessPort: {}", accessUrl, accessPort)
+    log.trace(
+      "register minio client accessUrl: {} , accessPort: {}",
+      accessUrl,
+      accessPort,
+    )
 
     val minioClient =
-      MinioClient.builder().endpoint(accessUrl, accessPort, minioProperties.enableHttps).credentials(minioProperties.accessKey, minioProperties.secretKey)
+      MinioClient.builder()
+        .endpoint(accessUrl, accessPort, minioProperties.enableHttps)
+        .credentials(minioProperties.accessKey, minioProperties.secretKey)
         .build()
 
     try {
@@ -57,7 +62,11 @@ class MinioAutoConfiguration {
     ossProperties: OssProperties,
     minioProperties: MinioProperties,
   ): Oss {
-    val exposeBaseUrl = ossProperties.exposeBaseUrl ?: minioProperties.exposedBaseUrl ?: ossProperties.baseUrl ?: minioProperties.endpoint
+    val exposeBaseUrl =
+      ossProperties.exposeBaseUrl
+        ?: minioProperties.exposedBaseUrl
+        ?: ossProperties.baseUrl
+        ?: minioProperties.endpoint
     log.trace(
       "register minio client wrapper, client: {} , exposeBaseUrl: {}",
       minioClient,

@@ -1,11 +1,11 @@
 package net.yan100.compose.data.extract.domain
 
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class CnDistrictCodeTest {
 

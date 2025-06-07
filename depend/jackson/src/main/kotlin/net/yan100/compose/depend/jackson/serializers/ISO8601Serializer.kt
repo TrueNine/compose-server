@@ -5,16 +5,17 @@ import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
-import net.yan100.compose.toMillis
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
+import net.yan100.compose.toMillis
 
 /**
  * # ISO8601 标准毫秒时间戳序列化器
  *
  * 为 Java 时间类型提供 ISO8601 标准的 JSON 序列化支持，将日期时间转换为时间戳格式
+ *
  * @param T 需要序列化的时间类型，支持 LocalDate、LocalDateTime 和 LocalTime
  * @author TrueNine
  * @since 2025-04-26
@@ -45,16 +46,18 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
    * # LocalDate ISO8601 序列化器
    *
    * 将 LocalDate 类型转换为 ISO8601 标准的时间戳
+   *
    * @param zoneOffset 时区偏移量，用于时区转换
    */
-  class ISO8601DateSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalDate>() {
-    /**
-     * 无参构造函数，用于Jackson反序列化
-     */
+  class ISO8601DateSerializer(
+    private val zoneOffset: ZoneOffset = ZoneOffset.UTC
+  ) : ISO8601Serializer<LocalDate>() {
+    /** 无参构造函数，用于Jackson反序列化 */
     constructor() : this(ZoneOffset.UTC)
 
     /**
      * ## 返回处理的类型
+     *
      * @return LocalDate 类
      */
     override fun handledType(): Class<LocalDate> = LocalDate::class.java
@@ -79,16 +82,18 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
    * # LocalDateTime ISO8601 序列化器
    *
    * 将 LocalDateTime 类型转换为 ISO8601 标准的时间戳
+   *
    * @param zoneOffset 时区偏移量，用于时区转换
    */
-  class ISO8601DateTimeSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalDateTime>() {
-    /**
-     * 无参构造函数，用于Jackson反序列化
-     */
+  class ISO8601DateTimeSerializer(
+    private val zoneOffset: ZoneOffset = ZoneOffset.UTC
+  ) : ISO8601Serializer<LocalDateTime>() {
+    /** 无参构造函数，用于Jackson反序列化 */
     constructor() : this(ZoneOffset.UTC)
 
     /**
      * ## 返回处理的类型
+     *
      * @return LocalDateTime 类
      */
     override fun handledType(): Class<LocalDateTime> = LocalDateTime::class.java
@@ -113,16 +118,18 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
    * # LocalTime ISO8601 序列化器
    *
    * 将 LocalTime 类型转换为 ISO8601 标准的时间戳
+   *
    * @param zoneOffset 时区偏移量，用于时区转换
    */
-  class ISO8601TimeSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalTime>() {
-    /**
-     * 无参构造函数，用于Jackson反序列化
-     */
+  class ISO8601TimeSerializer(
+    private val zoneOffset: ZoneOffset = ZoneOffset.UTC
+  ) : ISO8601Serializer<LocalTime>() {
+    /** 无参构造函数，用于Jackson反序列化 */
     constructor() : this(ZoneOffset.UTC)
 
     /**
      * ## 返回处理的类型
+     *
      * @return LocalTime 类
      */
     override fun handledType(): Class<LocalTime> = LocalTime::class.java
@@ -143,5 +150,3 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
     }
   }
 }
-
-

@@ -3,16 +3,15 @@ package net.yan100.compose.depend.jackson
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.annotation.Resource
-import net.yan100.compose.testtoolkit.log
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.Period
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import net.yan100.compose.testtoolkit.log
+import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class PeriodSerializerTest {
-  @Resource
-  lateinit var mapper: ObjectMapper
+  @Resource lateinit var mapper: ObjectMapper
 
   @Test
   fun `test serialize period`() {

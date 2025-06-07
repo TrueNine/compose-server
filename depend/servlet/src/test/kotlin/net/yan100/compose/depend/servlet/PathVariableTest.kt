@@ -1,6 +1,7 @@
 package net.yan100.compose.depend.servlet
 
 import jakarta.annotation.Resource
+import kotlin.test.Test
 import net.yan100.compose.testtoolkit.annotations.SpringServletTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import kotlin.test.Test
 
 /** # 确保 pathVariable 的解析性质 */
 @SpringServletTest
