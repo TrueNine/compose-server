@@ -40,8 +40,6 @@ listOf(
       "shared",
       "crud",
       "jimmer-ext-postgres",
-      "migration-mysql",
-      "migration-postgres",
       "flyway-migration-postgresql",
     ))
   .useFile()
