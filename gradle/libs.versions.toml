@@ -15,7 +15,7 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.12.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.0.56"
+compose = "3.0.57"
 compose-ai = "0.0.8"
 compose-build = "3.0.36"
 compose-data = "3.0.37"
@@ -166,9 +166,6 @@ net-yan100-compose-pay = { module = "net.yan100.compose:pay", version.ref = "com
 net-yan100-compose-rds-crud = { module = "net.yan100.compose:rds-crud", version.ref = "compose-rds" }
 net-yan100-compose-rds-flyway-migration-postgresql = { module = "net.yan100.compose:rds-flyway-migration-postgresql", version.ref = "compose-rds" }
 net-yan100-compose-rds-jimmer-ext-postgres = { module = "net.yan100.compose:rds-jimmer-ext-postgres", version.ref = "compose-rds" }
-net-yan100-compose-rds-migration-h2 = "net.yan100.compose:rds-migration-h2:3.0.37"
-net-yan100-compose-rds-migration-mysql = "net.yan100.compose:rds-migration-mysql:3.0.37"
-net-yan100-compose-rds-migration-postgres = "net.yan100.compose:rds-migration-postgres:3.0.37"
 net-yan100-compose-rds-shared = { module = "net.yan100.compose:rds-shared", version.ref = "compose-rds" }
 net-yan100-compose-security-crypto = { module = "net.yan100.compose:security-crypto", version.ref = "compose-security" }
 net-yan100-compose-security-oauth2 = { module = "net.yan100.compose:security-oauth2", version.ref = "compose-security" }
