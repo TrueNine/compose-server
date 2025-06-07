@@ -1,7 +1,6 @@
 plugins {
   alias(libs.plugins.com.google.devtools.ksp)
   `kotlinspring-convention`
-  `sqlmigration-convention`
 }
 
 version = libs.versions.compose.rds.get()

@@ -1,6 +1,9 @@
-plugins { `kotlin-convention` }
+plugins {
+  `kotlin-convention`
+}
 
 version = libs.versions.compose.build.get()
+
 java {
   val jv = JavaVersion.VERSION_17
   sourceCompatibility = jv
@@ -8,6 +11,7 @@ java {
   toolchain { languageVersion.set(JavaLanguageVersion.of(jv.ordinal + 1)) }
   withSourcesJar()
 }
+
 dependencies {
   compileOnly(libs.com.google.devtools.ksp.symbol.processing.api)
   testImplementation(libs.com.google.devtools.ksp.symbol.processing.api)

@@ -6,7 +6,6 @@ plugins {
 
 version = libs.versions.compose.build.get()
 
-
 java {
   val jv = JavaVersion.VERSION_17
   sourceCompatibility = jv

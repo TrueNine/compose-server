@@ -1,4 +1,6 @@
-plugins { `kotlinspring-convention` }
+plugins {
+  `kotlinspring-convention`
+}
 
 project.version = libs.versions.compose.depend.get()
 
