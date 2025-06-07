@@ -2,6 +2,14 @@
 
 一个快速且对开发者友好的服务端快速开发框架，采用多项目模块化设计，涵盖了大多数开发场景。
 
+## git 地址
+
+```text
+https://github.com/TrueNine/compose-server (fetch)
+https://codeup.aliyun.com/63fc0978360d441ff22c91e5/TrueNine/compose-server.git
+https://codeup.aliyun.com/67396204e50481de876d1cf2/compose-server.git
+```
+
 ## 项目特点
 
 - 🚀 **快速开发**：基于 Spring Boot 和 Kotlin，提供高效的开发体验
