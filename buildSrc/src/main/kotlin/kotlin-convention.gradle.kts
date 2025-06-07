@@ -5,7 +5,6 @@ val libs = the<LibrariesForLibs>()
 
 plugins {
   id("java-convention")
-  id("kotlin-code-format-convention")
   kotlin("jvm")
   kotlin("kapt")
 }

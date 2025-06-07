@@ -7,6 +7,7 @@ plugins {
   idea
   id("publish-convention")
   id("repositories-convention")
+  id("jacoco-convention")
 }
 
 group = libs.versions.group.get()

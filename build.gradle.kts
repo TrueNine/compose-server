@@ -3,7 +3,11 @@ plugins {
   alias(libs.plugins.nl.littlerobots.version.catalog.update)
   idea
   base
+  id("spotless-convention")
+  id("org.jetbrains.kotlin.jvm")
 }
+
+repositories { mavenCentral() }
 
 idea {
   module {
@@ -13,20 +17,22 @@ idea {
 }
 
 versionCatalogUpdate {
-  versionSelector(object : nl.littlerobots.vcu.plugin.resolver.ModuleVersionSelector {
-    override fun select(candidate: nl.littlerobots.vcu.plugin.resolver.ModuleVersionCandidate): Boolean {
-      val g = candidate.candidate.group
-      val v = candidate.candidate.version
-      return when {
-        g == libs.versions.group.get() -> false
-        v.lowercase().contains("snapshot") -> false
-        v.lowercase().contains("alpha") -> false
-        v.lowercase().contains("beta") -> false
-        else -> true
+  versionSelector(
+    object : nl.littlerobots.vcu.plugin.resolver.ModuleVersionSelector {
+      override fun select(
+        candidate: nl.littlerobots.vcu.plugin.resolver.ModuleVersionCandidate
+      ): Boolean {
+        val g = candidate.candidate.group
+        val v = candidate.candidate.version
+        return when {
+          g == libs.versions.group.get() -> false
+          v.lowercase().contains("snapshot") -> false
+          v.lowercase().contains("alpha") -> false
+          v.lowercase().contains("beta") -> false
+          else -> true
+        }
       }
     }
-  })
-  keep {
-    keepUnusedVersions = true
-  }
+  )
+  keep { keepUnusedVersions = true }
 }
