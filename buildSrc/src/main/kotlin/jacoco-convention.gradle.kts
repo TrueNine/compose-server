@@ -1,6 +1,3 @@
-import org.gradle.api.tasks.testing.Test
-import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
-
 plugins {
   id("jacoco")
 }
@@ -25,5 +22,5 @@ tasks.withType<JacocoReport>().configureEach {
     })
   )
   sourceDirectories.setFrom(files(mainSrc))
-  executionData.setFrom(fileTree(buildDir).include("**/jacoco/test.exec", "**/jacoco.exec"))
-} 
+  executionData.setFrom(fileTree(project.layout.buildDirectory).include("**/jacoco/test.exec", "**/jacoco.exec"))
+}
