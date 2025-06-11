@@ -15,7 +15,7 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.12.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.0.58"
+compose = "3.0.59"
 compose-ai = "0.0.9"
 compose-build = "3.0.37"
 compose-data = "3.0.38"
@@ -181,6 +181,7 @@ org-apache-commons-commons-pool2 = "org.apache.commons:commons-pool2:2.12.1"
 org-apache-logging-log4j-log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "org-apache-logging-log4j" }
 org-apache-logging-log4j-log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "org-apache-logging-log4j" }
 org-babyfish-jimmer-jimmer-apt = { module = "org.babyfish.jimmer:jimmer-apt", version.ref = "org-babyfish-jimmer" }
+org-babyfish-jimmer-jimmer-client = { module = "org.babyfish.jimmer:jimmer-client", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-core = { module = "org.babyfish.jimmer:jimmer-core", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-ksp = { module = "org.babyfish.jimmer:jimmer-ksp", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-mapstruct-apt = { module = "org.babyfish.jimmer:jimmer-mapstruct-apt", version.ref = "org-babyfish-jimmer" }
