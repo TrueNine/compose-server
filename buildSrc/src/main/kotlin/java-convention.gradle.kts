@@ -44,7 +44,6 @@ java {
 
 tasks.test {
   useJUnitPlatform()
-  // 允许 java agent 动态代理
   jvmArgs = listOf("-XX:+EnableDynamicAgentLoading")
 }
 
