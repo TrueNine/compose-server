@@ -21,6 +21,7 @@ fun <E : Any> Page<E>.toPr(): IPage<E> {
  * ## 自定义 分页查询
  *
  * @param pq 分页参数
+ * @param conn 数据库连接
  */
 fun <E : Any> KConfigurableRootQuery<*, E>.fetchPq(
   pq: Pq? = Pq.DEFAULT_MAX,
@@ -28,6 +29,22 @@ fun <E : Any> KConfigurableRootQuery<*, E>.fetchPq(
 ): IPage<E> {
   return fetchPage((pq?.o ?: Pq.MIN_OFFSET), (pq?.s ?: Pq.MAX_PAGE_SIZE), conn)
     .toPr()
+}
+
+/**
+ * ## 自定义 分页查询
+ *
+ * @param pq 分页参数
+ * @param conn 数据库连接
+ * @param transformer 转换器
+ */
+fun <E : Any, R : Any> KConfigurableRootQuery<*, E>.fetchPq(
+  pq: Pq? = Pq.DEFAULT_MAX,
+  conn: Connection? = null,
+  transformer: (E) -> R
+): IPage<R> {
+  return fetchPage((pq?.o ?: Pq.MIN_OFFSET), (pq?.s ?: Pq.MAX_PAGE_SIZE), conn)
+    .toPr().transferTo(transformer)
 }
 
 /** ## 从 View::class 获取 一个 fetcher 实例 */
