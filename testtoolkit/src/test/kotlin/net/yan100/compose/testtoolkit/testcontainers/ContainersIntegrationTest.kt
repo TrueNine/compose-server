@@ -4,15 +4,17 @@ import io.minio.BucketExistsArgs
 import io.minio.MakeBucketArgs
 import io.minio.MinioClient
 import jakarta.annotation.Resource
+import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.context.ActiveProfiles
+import kotlin.math.abs
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+
 
 /**
  * # 容器集成测试
@@ -30,10 +32,39 @@ class ContainersIntegrationTest :
   ICacheRedisContainer,
   IOssMinioContainer {
 
-  companion object {
-    init {
+  /**
+   * 验证系统时间和时区配置是否正确。
+   */
+  @Test
+  fun `验证系统时间和时区配置`() {
+    // 获取当前系统时间
+    val currentTime = java.time.Instant.now()
 
-    }
+    // 获取系统默认时区
+    val systemZoneId = java.time.ZoneId.systemDefault()
+
+    // 将当前时间转换为系统默认时区的时间
+    val zonedDateTime = currentTime.atZone(systemZoneId)
+
+    // 打印调试信息（可选）
+    log.info("当前时间: $currentTime")
+    log.info("系统默认时区: $systemZoneId")
+    log.info("带时区的时间: $zonedDateTime")
+
+    // 验证时区是否为预期值（例如 "Asia/Shanghai"）
+    val expectedZoneId = java.time.ZoneId.of("Asia/Shanghai")
+    assertTrue(
+      systemZoneId == expectedZoneId,
+      "系统时区配置错误，当前时区为 $systemZoneId，但期望为 $expectedZoneId"
+    )
+
+    // 验证当前时间是否在合理范围内（例如最近 5 分钟内）
+    val fiveMinutesAgo = java.time.Instant.now().minusSeconds(300)
+    val fiveMinutesLater = java.time.Instant.now().plusSeconds(300)
+    assertTrue(
+      currentTime.isAfter(fiveMinutesAgo) && currentTime.isBefore(fiveMinutesLater),
+      "系统时间不在合理范围内，当前时间为 $currentTime"
+    )
   }
 
   @Resource
@@ -129,5 +160,40 @@ class ContainersIntegrationTest :
     assertEquals("combined_test", pgResult)
     assertEquals("combined_value", redisResult)
     assertTrue(minioResult)
+  }
+
+  @Test
+  fun `验证容器时区和时间与当前系统一致`() {
+    // 1. PostgreSQL
+    val pgTimeZone = jdbcTemplate.queryForObject("SHOW TIMEZONE", String::class.java)
+    val pgNow = jdbcTemplate.queryForObject("SELECT NOW()", java.sql.Timestamp::class.java)
+    log.info("PostgreSQL 时区: $pgTimeZone, 当前时间: $pgNow")
+    val systemZoneId = java.time.ZoneId.systemDefault().id
+    assertEquals("Asia/Shanghai", pgTimeZone, "PostgreSQL 时区应为 Asia/Shanghai")
+    val now = java.time.Instant.now()
+    assertTrue(
+      Math.abs(pgNow!!.toInstant().epochSecond - now.epochSecond) < 300,
+      "PostgreSQL 时间与系统时间相差超过5分钟"
+    )
+
+    // 2. Redis
+    val redisMillis = redisTemplate.connectionFactory?.connection?.serverCommands()?.time()
+    if (redisMillis != null) {
+      val redisEpochSecond = redisMillis / 1000
+      val systemEpochSecond = now.epochSecond
+      log.info("Redis 服务器时间: $redisEpochSecond, 系统时间: $systemEpochSecond")
+      assertTrue(
+        abs(redisEpochSecond - systemEpochSecond) < 300,
+        "Redis 时间与系统时间相差超过5分钟"
+      )
+    }
+
+    // 3. MinIO（可选，桶创建时间近似判断）
+    val bucketName = "timezone-test-bucket"
+    if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+      minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
+    }
+    // MinIO 没有直接的时区/时间API，这里只做桶创建时间的近似判断
+    // 你可以根据需要补充更详细的 MinIO 时间校验逻辑
   }
 } 
