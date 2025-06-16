@@ -5,7 +5,7 @@ cn-hutool = "5.8.38"
 com-alibaba-cloud = "2023.0.3.3"
 com-baomidou-mybatis-plus = "3.5.12"
 com-diffplug-spotless = "7.0.4"
-com-fasterxml-jackson = "2.19.0"
+com-fasterxml-jackson = "2.19.1"
 com-flywaydb-flyway = "11.9.1"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
 com-google-devtools-ksp = "2.2.0-RC2-2.0.2"
@@ -15,16 +15,16 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.13.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.1.0"
-compose-ai = "0.1.0"
-compose-build = "3.1.0"
-compose-data = "3.1.0"
-compose-depend = "3.1.0"
-compose-oss = "3.1.0"
-compose-pay = "3.1.0"
-compose-rds = "3.1.0"
-compose-security = "3.1.0"
-compose-sms = "3.1.0"
+compose = "3.1.1"
+compose-ai = "0.1.1"
+compose-build = "3.1.1"
+compose-data = "3.1.1"
+compose-depend = "3.1.1"
+compose-oss = "3.1.1"
+compose-pay = "3.1.1"
+compose-rds = "3.1.1"
+compose-security = "3.1.1"
+compose-sms = "3.1.1"
 dev-langchain4j = "1.0.1-beta6"
 dev-langchain4j-community = "1.0.1-beta6"
 group = "net.yan100.compose"
@@ -33,7 +33,7 @@ java = "24"
 net-sf-sevenzipjbinding = "16.02-2.01"
 nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
 org-apache-logging-log4j = "2.24.3"
-org-babyfish-jimmer = "0.9.91"
+org-babyfish-jimmer = "0.9.93"
 org-hibernate-orm = "6.6.15.Final"
 org-jetbrains-kotlin = "2.2.0-RC2"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
@@ -324,29 +324,29 @@ tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2
 
 [bundles]
 junit5 = [
-  "org-junit-jupiter-junit-jupiter-api",
-  "org-junit-jupiter-junit-jupiter-engine",
-  "org-junit-platform-junit-platform-launcher",
+    "org-junit-jupiter-junit-jupiter-api",
+    "org-junit-jupiter-junit-jupiter-engine",
+    "org-junit-platform-junit-platform-launcher",
 ]
 kotlin-reactor = [
-  "io-projectreactor-kotlin-reactor-kotlin-extensions",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
+    "io-projectreactor-kotlin-reactor-kotlin-extensions",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-reactor",
 ]
 kotlin-test-junit5 = [
-  "io-mockk-mockk",
-  "io-projectreactor-reactor-test",
-  "org-jetbrains-kotlin-kotlin-test-junit5",
-  "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+    "io-mockk-mockk",
+    "io-projectreactor-reactor-test",
+    "org-jetbrains-kotlin-kotlin-test-junit5",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
 ]
 p6spy = [
-  "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
-  "p6spy-p6spy",
+    "com-github-gavlyukovskiy-p6spy-spring-boot-starter",
+    "p6spy-p6spy",
 ]
 redis = [
-  "org-apache-commons-commons-pool2",
-  "org-springframework-boot-spring-boot-starter-data-redis",
+    "org-apache-commons-commons-pool2",
+    "org-springframework-boot-spring-boot-starter-data-redis",
 ]
 selenium = [
-  "io-github-bonigarcia-webdrivermanager",
-  "org-seleniumhq-selenium-selenium-java",
+    "io-github-bonigarcia-webdrivermanager",
+    "org-seleniumhq-selenium-selenium-java",
 ]
