@@ -24,22 +24,33 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.0.0-rc-1'
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Cache Gradle packages
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-buildx-
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run tests
-        run: ./gradlew test --no-daemon --stacktrace
+      - name: Run tests with Testcontainers
+        run: ./gradlew test --no-daemon --stacktrace --parallel
+        env:
+          # Testcontainers 配置
+          TESTCONTAINERS_RYUK_DISABLED: false
+          TESTCONTAINERS_CHECKS_DISABLE: false
+          # Docker 相关配置
+          DOCKER_HOST: unix:///var/run/docker.sock
+          # 提高 Testcontainers 性能
+          TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
+          TESTCONTAINERS_HOST_OVERRIDE: localhost
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -48,4 +59,20 @@ jobs:
           name: test-results
           path: |
             **/build/test-results/test/
-            **/build/reports/tests/test/ 
+            **/build/reports/tests/test/
+            **/build/reports/jacoco/
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: |
+            **/build/reports/jacoco/test/html/
+            **/build/reports/jacoco/test/jacocoTestReport.xml
+
+      - name: Cleanup Docker containers
+        if: always()
+        run: |
+          docker container prune -f
+          docker image prune -f 
