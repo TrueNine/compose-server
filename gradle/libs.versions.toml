@@ -8,7 +8,7 @@ com-diffplug-spotless = "7.0.4"
 com-fasterxml-jackson = "2.19.1"
 com-flywaydb-flyway = "11.9.1"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.2.0-RC2-2.0.2"
+com-google-devtools-ksp = "2.2.0-RC3-2.0.2"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.2.0"
@@ -25,7 +25,7 @@ compose-pay = "3.1.1"
 compose-rds = "3.1.1"
 compose-security = "3.1.1"
 compose-sms = "3.1.1"
-dev-langchain4j = "1.0.1-beta6"
+dev-langchain4j = "1.1.0-beta7"
 dev-langchain4j-community = "1.0.1-beta6"
 group = "net.yan100.compose"
 io-netty = "4.2.1.Final"
@@ -35,7 +35,7 @@ nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
 org-apache-logging-log4j = "2.24.3"
 org-babyfish-jimmer = "0.9.93"
 org-hibernate-orm = "6.6.15.Final"
-org-jetbrains-kotlin = "2.2.0-RC2"
+org-jetbrains-kotlin = "2.2.0-RC3"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
 org-jetbrains-kotlinx-io = "0.7.0"
@@ -52,8 +52,8 @@ org-springframework-data = "3.5.0-M1"
 org-springframework-framework = "6.2.6"
 org-springframework-integration = "6.5.0"
 org-springframework-modulith = "1.4.0"
-org-springframework-security = "6.5.0"
-org-testcontainers = "1.21.1"
+org-springframework-security = "6.5.1"
+org-testcontainers = "1.21.2"
 org-testng = "7.11.0"
 
 [libraries]
@@ -112,14 +112,14 @@ com-squareup-retrofit2-retrofit = "com.squareup.retrofit2:retrofit:3.0.0"
 com-tencentcloudapi-tencentcloud-sdk-java-sms = "com.tencentcloudapi:tencentcloud-sdk-java-sms:3.1.1281"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
-dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.0.1"
-dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.0.1"
+dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.1.0"
+dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.1.0"
 dev-langchain4j-langchain4j-community-bom = { module = "dev.langchain4j:langchain4j-community-bom", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-mcp = { module = "dev.langchain4j:langchain4j-mcp", version.ref = "dev-langchain4j" }
-dev-langchain4j-langchain4j-ollama = { module = "dev.langchain4j:langchain4j-ollama", version.ref = "dev-langchain4j" }
-dev-langchain4j-langchain4j-ollama-spring-boot-starter = { module = "dev.langchain4j:langchain4j-ollama-spring-boot-starter", version.ref = "dev-langchain4j" }
+dev-langchain4j-langchain4j-ollama =  "dev.langchain4j:langchain4j-ollama:1.1.0-rc1"
+dev-langchain4j-langchain4j-ollama-spring-boot-starter =  "dev.langchain4j:langchain4j-ollama-spring-boot-starter:1.1.0-beta7"
 dev-langchain4j-langchain4j-pgvector = { module = "dev.langchain4j:langchain4j-pgvector", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-reactor = { module = "dev.langchain4j:langchain4j-reactor", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-spring-boot-starter = { module = "dev.langchain4j:langchain4j-spring-boot-starter", version.ref = "dev-langchain4j" }
@@ -139,7 +139,7 @@ jakarta-persistence-jakarta-persistence-api = "jakarta.persistence:jakarta.persi
 jakarta-servlet-jakarta-servlet-api = "jakarta.servlet:jakarta.servlet-api:6.1.0"
 jakarta-validation-jakarta-validation-api = "jakarta.validation:jakarta.validation-api:3.1.1"
 mysql-mysql-connector-java = "mysql:mysql-connector-java:8.0.33"
-net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.17.5"
+net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.17.6"
 net-sf-dozer-dozer = "net.sf.dozer:dozer:5.5.1"
 net-sf-sevenzipjbinding-sevenzipjbinding = { module = "net.sf.sevenzipjbinding:sevenzipjbinding", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { module = "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms", version.ref = "net-sf-sevenzipjbinding" }
