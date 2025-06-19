@@ -14,10 +14,10 @@ dependencies {
   implementation(libs.org.jetbrains.kotlin.kotlin.reflect)
 }
 
-configurations.all {
+configurations.configureEach {
   val javaToolchainVersion = extensions.findByType<JavaPluginExtension>()?.toolchain?.languageVersion?.get()?.asInt()?.toString()
   if (javaToolchainVersion == null) {
-    return@all
+    return@configureEach
   }
   kotlin {
     compilerOptions {
