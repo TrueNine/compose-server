@@ -6,7 +6,6 @@ val libs = the<LibrariesForLibs>()
 plugins {
   id("java-convention")
   kotlin("jvm")
-  kotlin("kapt")
 }
 
 dependencies {
@@ -28,9 +27,4 @@ configurations.configureEach {
     }
     jvmToolchain(javaToolchainVersion.toInt())
   }
-}
-
-kapt {
-  correctErrorTypes = true
-  keepJavacAnnotationProcessors = true
 }
