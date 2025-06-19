@@ -14,6 +14,5 @@ java {
 
 dependencies {
   implementation(libs.com.fasterxml.jackson.core.jackson.annotations)
-  implementation("com.facebook:ktfmt:0.53")
   testImplementation(projects.testtoolkit)
 }
