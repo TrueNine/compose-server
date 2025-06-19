@@ -159,9 +159,9 @@ afterEvaluate {
 
 
 signing {
-  val keyId = System.getenv("SIGNING_KEY_ID") ?: extra["signing.keyId"]?.toString()
-  val password = System.getenv("SIGNING_PASSWORD") ?: extra["signing.password"]?.toString()
-  val key = System.getenv("SIGNING_KEY") ?: extra["signing.secretKeyRingFile"]?.toString()?.let {
+  val keyId = System.getenv("SIGNING_KEY_ID") ?: extra.properties["signing.keyId"]?.toString()
+  val password = System.getenv("SIGNING_PASSWORD") ?: extra.properties["signing.password"]?.toString()
+  val key = System.getenv("SIGNING_KEY") ?: extra.properties["signing.secretKeyRingFile"]?.toString()?.let {
     File(it).readText()
   }
 
