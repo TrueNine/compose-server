@@ -23,6 +23,7 @@ dependencies {
   api(libs.org.testcontainers.testcontainers)
   api(libs.org.testcontainers.postgresql)
   api(libs.org.testcontainers.junit.jupiter)
+  api(libs.org.testcontainers.minio)
 
   implementation(libs.org.junit.jupiter.junit.jupiter.api)
   implementation(libs.org.junit.jupiter.junit.jupiter.engine)
@@ -68,4 +69,5 @@ dependencies {
   testImplementation(libs.org.testcontainers.postgresql)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.data.redis)
   testImplementation(libs.org.testcontainers.testcontainers)
+  testImplementation(libs.org.testcontainers.minio)
 }

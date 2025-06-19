@@ -115,10 +115,11 @@ class IOssMinioContainerTest : IOssMinioContainer {
       IOssMinioContainer.properties(mockRegistry)
 
       // 验证所有必需的属性都已配置
+      val container = minioContainer!!
       val expectedProperties = mapOf(
-        "compose.oss.base-url" to "127.0.0.1",
-        "compose.oss.expose-base-url" to "http://${minioContainer!!.host}:${minioContainer!!.getMappedPort(9000)}",
-        "compose.oss.port" to minioContainer!!.getMappedPort(9000).toString(),
+        "compose.oss.base-url" to container.host,
+        "compose.oss.expose-base-url" to "http://${container.host}:${container.getMappedPort(9000)}",
+        "compose.oss.port" to container.getMappedPort(9000).toString(),
         "compose.oss.minio.enable-https" to "false",
         "compose.oss.minio.access-key" to "minioadmin",
         "compose.oss.minio.secret-key" to "minioadmin"
