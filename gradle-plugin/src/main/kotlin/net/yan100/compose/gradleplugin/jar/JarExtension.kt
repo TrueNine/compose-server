@@ -78,7 +78,7 @@ class JarExtension(
               .filter(String::isNotEmpty)
               .joinToString(separator = "/")
           )
-          from(mainResources)
+          from(mainResources!!)
         }
 
       tasks.withType(BootJar::class.java).configureEach { bootJar ->
