@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationListener=\
+net.yan100.compose.testtoolkit.autoconfig.TestEnvironmentApplicationListener 
