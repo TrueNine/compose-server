@@ -1,5 +1,5 @@
 plugins {
-  `kotlin-convention`
+  `kotlinspring-convention`
 }
 
 version = libs.versions.compose.build.get()
