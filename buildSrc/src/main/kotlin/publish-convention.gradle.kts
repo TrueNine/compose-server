@@ -9,9 +9,9 @@ plugins {
   signing
 }
 
-val yunXiaoUsernameAndPassword = extra["credentials.yunxiao.username"]?.toString() to extra["credentials.yunxiao.password"]?.toString()
+val yunXiaoUsernameAndPassword = extra.properties["credentials.yunxiao.username"]?.toString() to extra.properties["credentials.yunxiao.password"]?.toString()
 val yunXiaoRepositoryUrls = listOf(
-  extra["repositories.yunxiao"]?.toString()
+  extra.properties["repositories.yunxiao"]?.toString()
 )
 
 // 检查远程仓库中是否已存在制品
