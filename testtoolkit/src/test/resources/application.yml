@@ -1,7 +1,6 @@
 spring:
-  test:
-    # 关闭 Spring Boot 测试条件评估报告
-    print-condition-evaluation-report: false
+  main:
+    banner-mode: off
   # Redis 配置由 ICacheRedisContainer 动态提供
   data:
     redis:

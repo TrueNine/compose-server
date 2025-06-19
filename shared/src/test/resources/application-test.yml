@@ -1,0 +1,10 @@
+compose:
+  testtoolkit:
+    enabled: true
+    disable-condition-evaluation-report: true
+    enable-virtual-threads: true
+    ansi-output-mode: always
+
+logging:
+  level:
+    net.yan100.compose.testtoolkit: DEBUG 
