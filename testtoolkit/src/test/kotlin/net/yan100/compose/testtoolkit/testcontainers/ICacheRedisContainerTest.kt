@@ -153,13 +153,13 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
 
       // 验证所有必需的属性都已配置
       val expectedProperties = mapOf(
-        "spring.data.redis.host" to "127.0.0.1",
+        "spring.data.redis.host" to redisContainer!!.host,
         "spring.data.redis.port" to redisContainer!!.getMappedPort(6379).toString()
       )
 
       expectedProperties.forEach { (prop, expectedValue) ->
-        assertTrue(registry.containsKey(prop), "属性 $prop 必须存在")
-        assertEquals(expectedValue, registry[prop], "属性 $prop 的值配置不正确")
+        assertTrue(registry.containsKey(prop), "property $prop must exist")
+        assertEquals(expectedValue, registry[prop], "property $prop value is incorrect")
       }
     }
 
@@ -167,19 +167,19 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
     @DisplayName("验证环境变量注入正确")
     fun `验证环境变量注入正确`() {
       val expectedProperties = mapOf(
-        "spring.data.redis.host" to "127.0.0.1"
+        "spring.data.redis.host" to redisContainer!!.host
       )
 
       expectedProperties.forEach { (prop, expectedValue) ->
         val actualValue = environment.getProperty(prop)
-        assertNotNull(actualValue, "环境变量中缺少属性: $prop")
-        assertEquals(expectedValue, actualValue, "环境变量 $prop 的值配置不正确")
+        assertNotNull(actualValue, "environment variable missing property: $prop")
+        assertEquals(expectedValue, actualValue, "environment variable $prop value is incorrect")
       }
 
       // 特殊验证端口属性（因为端口是动态分配的）
       val portValue = environment.getProperty("spring.data.redis.port")
-      assertNotNull(portValue, "环境变量中缺少端口配置")
-      assertTrue(portValue.toInt() in 1024..65535, "端口值应在有效范围内")
+      assertNotNull(portValue, "environment variable missing port configuration")
+      assertTrue(portValue.toInt() in 1024..65535, "port value should be in valid range")
     }
   }
 } 
