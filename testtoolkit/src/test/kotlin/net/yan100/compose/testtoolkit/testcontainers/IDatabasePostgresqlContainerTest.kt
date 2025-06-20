@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment
 import org.springframework.jdbc.core.JdbcTemplate
 import java.sql.DriverManager
 import java.sql.SQLException
+import java.util.TimeZone
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
@@ -131,11 +132,8 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
     )
     assertNotNull(timezone, "数据库时区设置应该存在")
 
-    // 验证时区功能是否正常
-    val timestampCheck = jdbcTemplate.queryForObject(
-      "SELECT EXTRACT(TIMEZONE FROM CURRENT_TIMESTAMP)::integer != 0 AS has_timezone",
-      Boolean::class.java
-    )
-    assertTrue(timestampCheck == true, "时区功能应该正常工作")
+    // 验证数据库时区与系统时区一致
+    val systemTimezone = TimeZone.getDefault().id
+    assertEquals(systemTimezone, timezone, "数据库时区应与系统时区 ($systemTimezone) 保持一致")
   }
 }
