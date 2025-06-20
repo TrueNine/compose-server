@@ -15,7 +15,7 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.13.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.1.4"
+compose = "3.1.5"
 compose-ai = "0.1.4"
 compose-build = "3.1.4"
 compose-data = "3.1.4"
@@ -98,7 +98,7 @@ com-google-guava-guava-jre = "com.google.guava:guava:33.4.8-jre"
 com-h2database-h2 = "com.h2database:h2:2.3.232"
 com-huaweicloud-esdk-obs-java = "com.huaweicloud:esdk-obs-java:3.25.5"
 com-microsoft-playwright-playwright = "com.microsoft.playwright:playwright:1.52.0"
-com-mysql-mysqlConnector-j = "com.mysql:mysql-connector-j:9.3.0"
+com-mysql-mysql-connector-j = "com.mysql:mysql-connector-j:9.3.0"
 com-querydsl-querydsl-apt = { module = "com.querydsl:querydsl-apt", version.ref = "com-querydsl" }
 com-querydsl-querydsl-core = { module = "com.querydsl:querydsl-core", version.ref = "com-querydsl" }
 com-querydsl-querydsl-jpa = { module = "com.querydsl:querydsl-jpa", version.ref = "com-querydsl" }
