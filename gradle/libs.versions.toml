@@ -15,7 +15,7 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.13.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.1.6"
+compose = "3.1.7"
 compose-ai = "0.1.5"
 compose-build = "3.1.5"
 compose-data = "3.1.5"
@@ -118,8 +118,8 @@ dev-langchain4j-langchain4j-community-bom = { module = "dev.langchain4j:langchai
 dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-mcp = { module = "dev.langchain4j:langchain4j-mcp", version.ref = "dev-langchain4j" }
-dev-langchain4j-langchain4j-ollama =  "dev.langchain4j:langchain4j-ollama:1.1.0-rc1"
-dev-langchain4j-langchain4j-ollama-spring-boot-starter =  "dev.langchain4j:langchain4j-ollama-spring-boot-starter:1.1.0-beta7"
+dev-langchain4j-langchain4j-ollama = "dev.langchain4j:langchain4j-ollama:1.1.0-rc1"
+dev-langchain4j-langchain4j-ollama-spring-boot-starter = { module = "dev.langchain4j:langchain4j-ollama-spring-boot-starter", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-pgvector = { module = "dev.langchain4j:langchain4j-pgvector", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-reactor = { module = "dev.langchain4j:langchain4j-reactor", version.ref = "dev-langchain4j" }
 dev-langchain4j-langchain4j-spring-boot-starter = { module = "dev.langchain4j:langchain4j-spring-boot-starter", version.ref = "dev-langchain4j" }
