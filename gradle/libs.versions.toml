@@ -15,7 +15,7 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.13.0"
 com-xuxueli-xxl-job = "3.1.0"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.1.15"
+compose = "3.1.16"
 compose-ai = "0.1.6"
 compose-build = "3.1.6"
 compose-data = "3.1.6"
@@ -72,8 +72,8 @@ com-aliyun-oss-aliyun-sdk-oss = "com.aliyun.oss:aliyun-sdk-oss:3.18.2"
 com-auth0-java-jwt = "com.auth0:java-jwt:4.5.0"
 com-baomidou-mybatis-plus-boot-starter = { module = "com.baomidou:mybatis-plus-boot-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-boot-starter-test = { module = "com.baomidou:mybatis-plus-boot-starter-test", version.ref = "com-baomidou-mybatis-plus" }
-com-baomidou-mybatis-plus-boot3-starter = { module = "com.baomidou:mybatis-plus-boot3-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "com-baomidou-mybatis-plus" }
+com-baomidou-mybatis-plus-spring-boot3-starter = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-diffplug-spotless-com-diffplug-spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "com-diffplug-spotless" }
 com-fasterxml-jackson-core-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "com-fasterxml-jackson" }
