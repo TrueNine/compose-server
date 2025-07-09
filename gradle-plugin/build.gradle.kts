@@ -1,7 +1,7 @@
 plugins {
   `java-gradle-plugin`
-  `kotlin-convention`
-  `publish-convention`
+  id("buildlogic.kotlin-conventions")
+  id("buildlogic.publish-conventions")
 }
 
 version = libs.versions.compose.build.get()

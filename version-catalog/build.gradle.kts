@@ -3,10 +3,10 @@ import kotlin.jvm.optionals.getOrNull
 
 plugins {
   java
-  `repositories-convention`
+  id("buildlogic.repositories-conventions")
   alias(libs.plugins.com.github.ben.manes.versions)
   `version-catalog`
-  `publish-convention`
+  id("buildlogic.publish-conventions")
 }
 
 version = libs.versions.compose.asProvider().get()

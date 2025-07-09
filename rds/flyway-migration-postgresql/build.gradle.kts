@@ -1,6 +1,6 @@
 plugins {
   alias(libs.plugins.com.google.devtools.ksp)
-  `kotlinspring-convention`
+  id("buildlogic.kotlinspring-conventions")
 }
 
 version = libs.versions.compose.rds.get()

@@ -1,5 +1,5 @@
 plugins {
-  `kotlin-convention`
+  id("buildlogic.kotlin-conventions")
 }
 
 version = libs.versions.compose.build.get()

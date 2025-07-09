@@ -1,4 +1,4 @@
-plugins { `kotlinspring-convention` }
+plugins { id("buildlogic.kotlinspring-conventions") }
 
 project.version = libs.versions.compose.security.get()
 

@@ -2,7 +2,7 @@ import kotlin.jvm.optionals.getOrNull
 
 plugins {
   `java-platform`
-  `publish-convention`
+  id("buildlogic.publish-conventions")
 }
 
 version = libs.versions.compose.asProvider().get()

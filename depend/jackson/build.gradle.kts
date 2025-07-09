@@ -1,5 +1,5 @@
 plugins {
-  `kotlinspring-convention`
+  id("buildlogic.kotlinspring-conventions")
 }
 
 version = libs.versions.compose.depend.get()

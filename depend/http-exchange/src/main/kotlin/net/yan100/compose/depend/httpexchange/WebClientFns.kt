@@ -48,7 +48,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
     )
   clientBuilder.codecs {
     it.defaultCodecs().enableLoggingRequestDetails(true)
-    it.writers.addFirst(EncoderHttpMessageWriter(AnyTypingEncoder()))
+    it.writers.add(0, EncoderHttpMessageWriter(AnyTypingEncoder()))
 
     it
       .defaultCodecs()

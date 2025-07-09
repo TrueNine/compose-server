@@ -1,6 +1,6 @@
 plugins {
-  `kotlinspring-convention`
-  `publish-convention`
+  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.publish-conventions")
 }
 
 version = libs.versions.compose.asProvider().get()

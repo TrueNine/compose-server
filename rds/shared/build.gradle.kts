@@ -1,5 +1,5 @@
 plugins {
-  `kotlinspring-convention`
+  id("buildlogic.kotlinspring-conventions")
   alias(libs.plugins.com.google.devtools.ksp)
 }
 

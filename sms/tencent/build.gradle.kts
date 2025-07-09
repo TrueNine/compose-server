@@ -1,4 +1,4 @@
-plugins { `kotlinspring-convention` }
+plugins { id("buildlogic.kotlinspring-conventions") }
 
 version = libs.versions.compose.sms.get()
 
