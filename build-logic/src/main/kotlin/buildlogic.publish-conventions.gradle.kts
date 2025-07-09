@@ -72,7 +72,7 @@ publishing {
   publications {
     create<MavenPublication>("mavenJava") {
       groupId = libs.versions.group.get()
-      artifactId = project.name
+      // 延迟到 afterEvaluate 中设置 artifactId 以避免配置缓存问题
       when {
         plugins.hasPlugin("version-catalog") -> from(components["versionCatalog"])
         plugins.hasPlugin("java-gradle-plugin") || plugins.hasPlugin("java-library") || plugins.hasPlugin("java") -> from(components["java"])
@@ -84,7 +84,8 @@ publishing {
 
   afterEvaluate {
     publishing.publications.withType<MavenPublication>().forEach { pub ->
-      version = project.version.toString()
+      pub.artifactId = project.name
+      pub.version = project.version.toString()
       pub.pom {
         name = "${rootProject.name}-${project.name}"
         description = project.description
@@ -119,7 +120,7 @@ publishing {
           connection = "scm:git:git://github.com/TrueNine/compose-server.git"
           developerConnection = "scm:git:ssh://github.com:/TrueNine/compose-server.git"
           url = "https://github.com/TrueNine/compose-server"
-          tag = project.version.toString()
+          tag = pub.version
         }
 
         organization {

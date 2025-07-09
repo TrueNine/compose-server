@@ -53,6 +53,9 @@ afterEvaluate {
     mustRunAfter(tasks.withType<Javadoc>())
     tasks.findByName("javadocJar")?.let { mustRunAfter(it) }
     tasks.findByName("sourcesJar")?.let { mustRunAfter(it) }
+    
+    // 解决跨项目依赖的隐式依赖问题
+    dependsOn(configurations.testRuntimeClasspath)
   }
 }
 
