@@ -15,8 +15,6 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.15.0"
 com-xuxueli-xxl-job = "3.1.1"
 com-yomahub-liteflow = "2.13.2.1"
-project = "4.0.0"
-
 dev-langchain4j = "1.1.0-beta7"
 dev-langchain4j-community = "1.1.0-beta7"
 group = "net.yan100.compose"
@@ -50,6 +48,7 @@ org-springframework-modulith = "1.4.1"
 org-springframework-security = "6.5.1"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
+project = "4.0.0"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
@@ -250,6 +249,7 @@ org-springframework-ai-spring-ai-spring-boot-docker-compose = { module = "org.sp
 org-springframework-batch-spring-batch-test = { module = "org.springframework.batch:spring-batch-test", version.ref = "org-springframework-batch" }
 org-springframework-boot-spring-boot = { module = "org.springframework.boot:spring-boot", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "org-springframework-boot" }
@@ -285,7 +285,6 @@ org-springframework-modulith-spring-modulith-starter-test = { module = "org.spri
 org-springframework-security-spring-security-core = { module = "org.springframework.security:spring-security-core", version.ref = "org-springframework-security" }
 org-springframework-security-spring-security-crypto = { module = "org.springframework.security:spring-security-crypto", version.ref = "org-springframework-security" }
 org-springframework-security-spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "org-springframework-security" }
-org-springframework-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "org-springframework-boot" }
 org-springframework-spring-context = { module = "org.springframework:spring-context", version.ref = "org-springframework-framework" }
 org-springframework-spring-core = { module = "org.springframework:spring-core", version.ref = "org-springframework-framework" }
 org-springframework-spring-jdbc = { module = "org.springframework:spring-jdbc", version.ref = "org-springframework-framework" }
