@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlin-conventions")
 }
 
-version = libs.versions.compose.build.get()
-
 java {
   val jv = JavaVersion.VERSION_17
   sourceCompatibility = jv

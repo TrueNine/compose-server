@@ -1,4 +1,3 @@
-
 plugins {
   `java-library`
   idea
@@ -8,6 +7,7 @@ plugins {
 }
 
 group = "net.yan100.compose"
+version = "4.0.0"
 
 configurations.all {
   resolutionStrategy {

@@ -9,8 +9,6 @@ plugins {
   id("buildlogic.publish-conventions")
 }
 
-version = libs.versions.compose.asProvider().get()
-
 repositories {
   mavenCentral()
 }

@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.pay.get()
-
 dependencies {
   api(libs.com.github.wechatpay.apiv3.wechatpay.java)
 

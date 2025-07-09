@@ -3,8 +3,6 @@ plugins {
   id("buildlogic.publish-conventions")
 }
 
-version = libs.versions.compose.asProvider().get()
-
 dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.annotations)
   api(libs.jakarta.annotation.jakarta.annotation.api)

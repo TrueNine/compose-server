@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.depend.get()
-
 dependencies {
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(projects.shared)

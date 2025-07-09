@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.oss.get()
-
 dependencies {
   api(projects.oss.ossShared)
   api(projects.shared)

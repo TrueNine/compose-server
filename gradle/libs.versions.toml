@@ -15,16 +15,8 @@ com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.15.0"
 com-xuxueli-xxl-job = "3.1.1"
 com-yomahub-liteflow = "2.13.2.1"
-compose = "3.1.19"
-compose-ai = "0.1.7"
-compose-build = "3.1.7"
-compose-data = "3.1.7"
-compose-depend = "3.1.7"
-compose-oss = "3.1.7"
-compose-pay = "3.1.7"
-compose-rds = "3.1.7"
-compose-security = "3.1.7"
-compose-sms = "3.1.7"
+project = "4.0.0"
+
 dev-langchain4j = "1.1.0-beta7"
 dev-langchain4j-community = "1.1.0-beta7"
 group = "net.yan100.compose"
@@ -151,36 +143,36 @@ net-sf-dozer-dozer = "net.sf.dozer:dozer:5.5.1"
 net-sf-sevenzipjbinding-sevenzipjbinding = { module = "net.sf.sevenzipjbinding:sevenzipjbinding", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { module = "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-supercsv-super-csv = "net.sf.supercsv:super-csv:2.4.0"
-net-yan100-compose-cacheable = { module = "net.yan100.compose:cacheable", version.ref = "compose" }
-net-yan100-compose-data-crawler = { module = "net.yan100.compose:data-crawler", version.ref = "compose-data" }
-net-yan100-compose-data-extract = { module = "net.yan100.compose:data-extract", version.ref = "compose-data" }
-net-yan100-compose-depend-http-exchange = { module = "net.yan100.compose:depend-http-exchange", version.ref = "compose-depend" }
-net-yan100-compose-depend-jackson = { module = "net.yan100.compose:depend-jackson", version.ref = "compose-depend" }
-net-yan100-compose-depend-paho = { module = "net.yan100.compose:depend-paho", version.ref = "compose-depend" }
-net-yan100-compose-depend-servlet = { module = "net.yan100.compose:depend-servlet", version.ref = "compose-depend" }
-net-yan100-compose-depend-springdoc-openapi = { module = "net.yan100.compose:depend-springdoc-openapi", version.ref = "compose-depend" }
-net-yan100-compose-depend-xxl-job = { module = "net.yan100.compose:depend-xxl-job", version.ref = "compose-depend" }
-net-yan100-compose-gradle-plugin = { module = "net.yan100.compose:gradle-plugin", version.ref = "compose-build" }
-net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", version.ref = "compose-build" }
-net-yan100-compose-ksp-shared = { module = "net.yan100.compose:ksp-shared", version.ref = "compose-build" }
-net-yan100-compose-mcp-langchain4j = { module = "net.yan100.compose:mcp-langchain4j", version.ref = "compose-ai" }
-net-yan100-compose-mcp-shared = { module = "net.yan100.compose:mcp-shared", version.ref = "compose-ai" }
-net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "compose" }
-net-yan100-compose-oss-aliyun-oss = { module = "net.yan100.compose:oss-aliyun-oss", version.ref = "compose-oss" }
-net-yan100-compose-oss-huawei-obs = { module = "net.yan100.compose:oss-huawei-obs", version.ref = "compose-oss" }
-net-yan100-compose-oss-minio = { module = "net.yan100.compose:oss-minio", version.ref = "compose-oss" }
-net-yan100-compose-oss-shared = { module = "net.yan100.compose:oss-shared", version.ref = "compose-oss" }
-net-yan100-compose-pay = { module = "net.yan100.compose:pay", version.ref = "compose-pay" }
-net-yan100-compose-rds-crud = { module = "net.yan100.compose:rds-crud", version.ref = "compose-rds" }
-net-yan100-compose-rds-flyway-migration-postgresql = { module = "net.yan100.compose:rds-flyway-migration-postgresql", version.ref = "compose-rds" }
-net-yan100-compose-rds-jimmer-ext-postgres = { module = "net.yan100.compose:rds-jimmer-ext-postgres", version.ref = "compose-rds" }
-net-yan100-compose-rds-shared = { module = "net.yan100.compose:rds-shared", version.ref = "compose-rds" }
-net-yan100-compose-security-crypto = { module = "net.yan100.compose:security-crypto", version.ref = "compose-security" }
-net-yan100-compose-security-oauth2 = { module = "net.yan100.compose:security-oauth2", version.ref = "compose-security" }
-net-yan100-compose-security-spring = { module = "net.yan100.compose:security-spring", version.ref = "compose-security" }
-net-yan100-compose-shared = { module = "net.yan100.compose:shared", version.ref = "compose" }
-net-yan100-compose-sms-tencent = { module = "net.yan100.compose:sms-tencent", version.ref = "compose-sms" }
-net-yan100-compose-testtoolkit = { module = "net.yan100.compose:testtoolkit", version.ref = "compose-build" }
+net-yan100-compose-cacheable = { module = "net.yan100.compose:cacheable", version.ref = "project" }
+net-yan100-compose-data-crawler = { module = "net.yan100.compose:data-crawler", version.ref = "project" }
+net-yan100-compose-data-extract = { module = "net.yan100.compose:data-extract", version.ref = "project" }
+net-yan100-compose-depend-http-exchange = { module = "net.yan100.compose:depend-http-exchange", version.ref = "project" }
+net-yan100-compose-depend-jackson = { module = "net.yan100.compose:depend-jackson", version.ref = "project" }
+net-yan100-compose-depend-paho = { module = "net.yan100.compose:depend-paho", version.ref = "project" }
+net-yan100-compose-depend-servlet = { module = "net.yan100.compose:depend-servlet", version.ref = "project" }
+net-yan100-compose-depend-springdoc-openapi = { module = "net.yan100.compose:depend-springdoc-openapi", version.ref = "project" }
+net-yan100-compose-depend-xxl-job = { module = "net.yan100.compose:depend-xxl-job", version.ref = "project" }
+net-yan100-compose-gradle-plugin = { module = "net.yan100.compose:gradle-plugin", version.ref = "project" }
+net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", version.ref = "project" }
+net-yan100-compose-ksp-shared = { module = "net.yan100.compose:ksp-shared", version.ref = "project" }
+net-yan100-compose-mcp-langchain4j = { module = "net.yan100.compose:mcp-langchain4j", version.ref = "project" }
+net-yan100-compose-mcp-shared = { module = "net.yan100.compose:mcp-shared", version.ref = "project" }
+net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "project" }
+net-yan100-compose-oss-aliyun-oss = { module = "net.yan100.compose:oss-aliyun-oss", version.ref = "project" }
+net-yan100-compose-oss-huawei-obs = { module = "net.yan100.compose:oss-huawei-obs", version.ref = "project" }
+net-yan100-compose-oss-minio = { module = "net.yan100.compose:oss-minio", version.ref = "project" }
+net-yan100-compose-oss-shared = { module = "net.yan100.compose:oss-shared", version.ref = "project" }
+net-yan100-compose-pay = { module = "net.yan100.compose:pay", version.ref = "project" }
+net-yan100-compose-rds-crud = { module = "net.yan100.compose:rds-crud", version.ref = "project" }
+net-yan100-compose-rds-flyway-migration-postgresql = { module = "net.yan100.compose:rds-flyway-migration-postgresql", version.ref = "project" }
+net-yan100-compose-rds-jimmer-ext-postgres = { module = "net.yan100.compose:rds-jimmer-ext-postgres", version.ref = "project" }
+net-yan100-compose-rds-shared = { module = "net.yan100.compose:rds-shared", version.ref = "project" }
+net-yan100-compose-security-crypto = { module = "net.yan100.compose:security-crypto", version.ref = "project" }
+net-yan100-compose-security-oauth2 = { module = "net.yan100.compose:security-oauth2", version.ref = "project" }
+net-yan100-compose-security-spring = { module = "net.yan100.compose:security-spring", version.ref = "project" }
+net-yan100-compose-shared = { module = "net.yan100.compose:shared", version.ref = "project" }
+net-yan100-compose-sms-tencent = { module = "net.yan100.compose:sms-tencent", version.ref = "project" }
+net-yan100-compose-testtoolkit = { module = "net.yan100.compose:testtoolkit", version.ref = "project" }
 nl-littlerobots-version-catalog-update-nl-littlerobots-version-catalog-update-gradle-plugin = { module = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 ognl-ognl = "ognl:ognl:3.4.7"
 org-apache-commons-commons-compress = "org.apache.commons:commons-compress:1.27.1"
@@ -315,7 +307,7 @@ com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "com-diffp
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.52.0"
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
 io-spring-dependency-management = "io.spring.dependency-management:1.1.7"
-net-yan100-compose-gradle-plugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "compose-build" }
+net-yan100-compose-gradle-plugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "project" }
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 org-asciidoctor-jvm-convert = "org.asciidoctor.jvm.convert:4.0.4"
 org-graalvm-buildtools-native = "org.graalvm.buildtools.native:0.10.6"

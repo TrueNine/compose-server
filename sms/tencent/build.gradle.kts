@@ -1,6 +1,5 @@
 plugins { id("buildlogic.kotlinspring-conventions") }
 
-version = libs.versions.compose.sms.get()
 
 dependencies {
   api(libs.com.tencentcloudapi.tencentcloud.sdk.java.sms) {

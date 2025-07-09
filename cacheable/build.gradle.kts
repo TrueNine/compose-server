@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.asProvider().get()
-
 dependencies {
   implementation(libs.bundles.redis)
   implementation(libs.com.github.ben.manes.caffeine.caffeine)

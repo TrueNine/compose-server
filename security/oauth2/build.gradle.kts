@@ -1,7 +1,5 @@
 plugins { id("buildlogic.kotlinspring-conventions") }
 
-project.version = libs.versions.compose.security.get()
-
 dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
 

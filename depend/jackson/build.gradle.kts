@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.depend.get()
-
 dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.databind) {
     exclude(

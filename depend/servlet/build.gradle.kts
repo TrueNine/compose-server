@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.depend.get()
-
 dependencies {
   api(libs.org.springframework.boot.spring.boot.starter.web)
   api(libs.jakarta.servlet.jakarta.servlet.api)

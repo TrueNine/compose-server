@@ -3,8 +3,6 @@ plugins {
   alias(libs.plugins.com.google.devtools.ksp)
 }
 
-version = libs.versions.compose.rds.get()
-
 dependencies {
   ksp(libs.org.babyfish.jimmer.jimmer.ksp)
   api(projects.shared)

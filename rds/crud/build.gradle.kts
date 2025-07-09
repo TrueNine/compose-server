@@ -3,8 +3,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.rds.get()
-
 dependencies {
   ksp(libs.org.babyfish.jimmer.jimmer.ksp)
   implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)

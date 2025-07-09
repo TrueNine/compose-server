@@ -3,8 +3,6 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
-version = libs.versions.compose.rds.get()
-
 dependencies {
   runtimeOnly(libs.org.flywaydb.flyway.core)
   runtimeOnly(libs.org.flywaydb.flyway.database.postgresql)

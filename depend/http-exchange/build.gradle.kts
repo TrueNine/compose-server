@@ -2,8 +2,6 @@ plugins {
   id("buildlogic.kotlin-conventions")
 }
 
-version = libs.versions.compose.depend.get()
-
 dependencies {
   api(projects.shared)
 

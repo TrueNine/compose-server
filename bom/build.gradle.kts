@@ -5,8 +5,6 @@ plugins {
   id("buildlogic.publish-conventions")
 }
 
-version = libs.versions.compose.asProvider().get()
-
 dependencies {
   constraints {
     val allVersionCatalogs = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
