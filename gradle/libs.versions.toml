@@ -26,13 +26,16 @@ compose-rds = "3.1.7"
 compose-security = "3.1.7"
 compose-sms = "3.1.7"
 dev-langchain4j = "1.1.0-beta7"
-dev-langchain4j-community = "1.0.1-beta7"
+dev-langchain4j-community = "1.1.0-beta7"
 group = "net.yan100.compose"
 io-netty = "4.2.1.Final"
 java = "24"
 net-sf-sevenzipjbinding = "16.02-2.01"
 nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
+org-apache-commons-exec = "1.5.0"
 org-apache-logging-log4j = "2.24.3"
+# GitHub Actions 测试相关依赖
+org-assertj = "3.27.2"
 org-babyfish-jimmer = "0.9.97"
 org-hibernate-orm = "6.6.15.Final"
 org-jetbrains-kotlin = "2.2.0"
@@ -78,6 +81,7 @@ com-diffplug-spotless-com-diffplug-spotless-gradle-plugin = { module = "com.diff
 com-fasterxml-jackson-core-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "com-fasterxml-jackson" }
+com-fasterxml-jackson-dataformat-jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-datatype-jackson-datatype-guava = { module = "com.fasterxml.jackson.datatype:jackson-datatype-guava", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-datatype-jackson-datatype-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jdk8", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-datatype-jackson-datatype-joda = { module = "com.fasterxml.jackson.datatype:jackson-datatype-joda", version.ref = "com-fasterxml-jackson" }
@@ -181,9 +185,12 @@ nl-littlerobots-version-catalog-update-nl-littlerobots-version-catalog-update-gr
 ognl-ognl = "ognl:ognl:3.4.7"
 org-apache-commons-commons-compress = "org.apache.commons:commons-compress:1.27.1"
 org-apache-commons-commons-csv = "org.apache.commons:commons-csv:1.14.0"
+org-apache-commons-commons-exec = { module = "org.apache.commons:commons-exec", version.ref = "org-apache-commons-exec" }
 org-apache-commons-commons-pool2 = "org.apache.commons:commons-pool2:2.12.1"
 org-apache-logging-log4j-log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "org-apache-logging-log4j" }
 org-apache-logging-log4j-log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "org-apache-logging-log4j" }
+# GitHub Actions 测试相关库
+org-assertj-assertj-core = { module = "org.assertj:assertj-core", version.ref = "org-assertj" }
 org-babyfish-jimmer-jimmer-apt = { module = "org.babyfish.jimmer:jimmer-apt", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-client = { module = "org.babyfish.jimmer:jimmer-client", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-core = { module = "org.babyfish.jimmer:jimmer-core", version.ref = "org-babyfish-jimmer" }
