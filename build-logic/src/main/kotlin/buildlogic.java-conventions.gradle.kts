@@ -27,7 +27,7 @@ java {
   sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
   targetCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
   withJavadocJar()
-  withJavadocJar()
+  withSourcesJar()
   toolchain {
     languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
   }
@@ -45,7 +45,16 @@ testing {
   }
 }
 
-
+// 修复 Gradle 9.0.0-rc-1 的隐式依赖问题
+// 使用 afterEvaluate 确保在配置阶段之后执行
+afterEvaluate {
+  tasks.withType<Test>().configureEach {
+    // 确保测试任务在当前项目的jar任务之后运行
+    mustRunAfter(tasks.withType<Javadoc>())
+    tasks.findByName("javadocJar")?.let { mustRunAfter(it) }
+    tasks.findByName("sourcesJar")?.let { mustRunAfter(it) }
+  }
+}
 
 tasks.withType<JavaCompile>().configureEach {
   options.compilerArgs.add("-parameters")

@@ -35,6 +35,8 @@ fun artifactExists(repoUrl: String, username: String?, password: String?, groupI
   }
 }
 
+val mavenCentralUsernameAndPassword = extra.properties["credentials.sonatype.username"]?.toString() to extra.properties["credentials.sonatype.password"]?.toString()
+
 publishing {
   repositories {
     yunXiaoRepositoryUrls.forEach { repoUrl ->
@@ -51,6 +53,18 @@ publishing {
           } ?: run {
             logger.warn("see yunxiao url: $ru not set username and password")
           }
+        }
+      }
+    }
+    mavenCentralUsernameAndPassword.takeIf { (username, password) ->
+      (!username.isNullOrBlank() && !password.isNullOrBlank())
+    }?.also { (u, p) ->
+      maven {
+        name = "MavenCentral"
+        url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+        credentials {
+          username = u
+          password = p
         }
       }
     }
