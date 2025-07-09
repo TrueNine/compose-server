@@ -1,5 +1,10 @@
-plugins {
-  id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+pluginManagement {
+  includeBuild("build-logic")
+  repositories {
+    gradlePluginPortal()
+    mavenCentral()
+    maven("https://repo.spring.io/milestone")
+  }
 }
 
 rootProject.name = "compose-server"

@@ -3,8 +3,8 @@ plugins {
   alias(libs.plugins.nl.littlerobots.version.catalog.update)
   idea
   base
-  id("spotless-convention")
-  id("org.jetbrains.kotlin.jvm")
+  id("buildlogic.spotless-conventions")
+  alias(libs.plugins.org.jetbrains.kotlin.jvm)
 }
 
 repositories { mavenCentral() }

@@ -1,8 +1,5 @@
-import org.gradle.accessors.dm.LibrariesForLibs
 import java.net.HttpURLConnection
 import java.net.URI
-
-val libs = the<LibrariesForLibs>()
 
 plugins {
   `maven-publish`
@@ -58,7 +55,7 @@ publishing {
   }
   publications {
     create<MavenPublication>("mavenJava") {
-      groupId = libs.versions.group.get()
+      groupId = "net.yan100.compose"
       artifactId = project.name
       when {
         plugins.hasPlugin("version-catalog") -> from(components["versionCatalog"])
