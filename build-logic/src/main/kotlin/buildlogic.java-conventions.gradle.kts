@@ -26,31 +26,31 @@ configurations.all {
 java {
   sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
   targetCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
-  withSourcesJar()
+  withJavadocJar()
+  withJavadocJar()
   toolchain {
     languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
   }
 }
 
-
-tasks.test {
-  useJUnitPlatform()
-  jvmArgs = listOf("-XX:+EnableDynamicAgentLoading")
-}
-
-tasks.jar {
+tasks.withType<Jar> {
   archiveClassifier = ""
 }
+
+testing {
+  suites {
+    val test by getting(JvmTestSuite::class) {
+      useJUnitJupiter(libs.versions.org.junit.junit5.get())
+    }
+  }
+}
+
+
 
 tasks.withType<JavaCompile>().configureEach {
   options.compilerArgs.add("-parameters")
 }
 
-tasks.javadoc {
-  enabled = false
-}
-
 tasks.withType<Wrapper> {
   distributionType = Wrapper.DistributionType.ALL
-  //gradleVersion =
 }
