@@ -17,7 +17,7 @@ com-xuxueli-xxl-job = "3.1.1"
 com-yomahub-liteflow = "2.13.2.1"
 dev-langchain4j = "1.1.0-beta7"
 dev-langchain4j-community = "1.1.0-beta7"
-group = "net.yan100.compose"
+group = "io.github.truenine"
 io-netty = "4.2.1.Final"
 java = "24"
 net-sf-sevenzipjbinding = "16.02-2.01"
@@ -48,7 +48,7 @@ org-springframework-modulith = "1.4.1"
 org-springframework-security = "6.5.1"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "4.0.0"
+project = "0.0.1"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
