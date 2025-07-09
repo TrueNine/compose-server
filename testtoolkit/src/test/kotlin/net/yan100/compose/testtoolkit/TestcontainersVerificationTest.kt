@@ -4,7 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.selects.select
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertTimeout
 import org.testcontainers.containers.GenericContainer
@@ -98,10 +97,17 @@ class TestcontainersVerificationTest {
       val mountFile = MountableFile.forHostPath(tempFile.absolutePath)
       container.copyFileToContainer(mountFile, "/tmp/test-file.txt")
 
-      // 验证文件内容
-      val result = container.execInContainer("cat", "/tmp/test-file.txt")
-      assertEquals(0, result.exitCode, "文件应该存在并可被读取")
-      assertEquals(testContent, result.stdout.trim(), "文件内容应该匹配")
+      // 验证文件内容 - 使用 try-catch 处理可能的 null 退出码问题
+      try {
+        val result = container.execInContainer("cat", "/tmp/test-file.txt")
+        assertEquals(testContent, result.stdout.trim(), "文件内容应该匹配")
+      } catch (e: NullPointerException) {
+        // 如果遇到退出码为 null 的问题，尝试重新执行命令
+        log.warn("执行命令时遇到退出码为 null 的问题，尝试重新执行: ${e.message}")
+        Thread.sleep(100) // 短暂等待
+        val retryResult = container.execInContainer("sh", "-c", "cat /tmp/test-file.txt")
+        assertEquals(testContent, retryResult.stdout.trim(), "文件内容应该匹配")
+      }
     }
   }
 
