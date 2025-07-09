@@ -19,9 +19,7 @@ idea {
 versionCatalogUpdate {
   versionSelector(
     object : nl.littlerobots.vcu.plugin.resolver.ModuleVersionSelector {
-      override fun select(
-        candidate: nl.littlerobots.vcu.plugin.resolver.ModuleVersionCandidate
-      ): Boolean {
+      override fun select(candidate: nl.littlerobots.vcu.plugin.resolver.ModuleVersionCandidate): Boolean {
         val g = candidate.candidate.group
         val v = candidate.candidate.version
         return when {
