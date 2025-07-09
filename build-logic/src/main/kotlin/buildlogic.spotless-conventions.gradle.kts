@@ -7,7 +7,7 @@ plugins {
 spotless {
   kotlinGradle {
     ktfmt().googleStyle().configure {
-      it.setMaxWidth(80)
+      it.setMaxWidth(160)
       it.setBlockIndent(2)
       it.setContinuationIndent(2)
       it.setRemoveUnusedImports(true)
@@ -16,7 +16,7 @@ spotless {
   kotlin {
     licenseHeader("")
     ktfmt().googleStyle().configure {
-      it.setMaxWidth(80)
+      it.setMaxWidth(160)
       it.setBlockIndent(2)
       it.setContinuationIndent(2)
       it.setRemoveUnusedImports(true)

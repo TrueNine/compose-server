@@ -1,13 +1,14 @@
+val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
+
 plugins {
   `java-library`
-  idea
   id("buildlogic.publish-conventions")
   id("buildlogic.repositories-conventions")
   id("buildlogic.jacoco-conventions")
 }
 
-group = "net.yan100.compose"
-version = "4.0.0"
+group = libs.versions.group.get()
+version = libs.versions.project.get()
 
 configurations.all {
   resolutionStrategy {
@@ -23,11 +24,14 @@ configurations.all {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
-  toolchain { languageVersion.set(JavaLanguageVersion.of(17)) }
+  sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
+  targetCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
   withSourcesJar()
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
+  }
 }
+
 
 tasks.test {
   useJUnitPlatform()
@@ -44,4 +48,9 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.javadoc {
   enabled = false
+}
+
+tasks.withType<Wrapper> {
+  distributionType = Wrapper.DistributionType.ALL
+  //gradleVersion =
 }

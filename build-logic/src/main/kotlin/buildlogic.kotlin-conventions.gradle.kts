@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
+
 plugins {
   id("buildlogic.java-conventions")
   kotlin("jvm")
@@ -12,10 +14,10 @@ dependencies {
 
 kotlin {
   compilerOptions {
-    jvmTarget = JvmTarget.JVM_17
+    jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
     freeCompilerArgs = listOf(
-      "-Xjsr305=strict", "-Xjvm-default=all", "-verbose"
+      "-Xjsr305=strict", "-Xjvm-default=all"
     )
   }
-  jvmToolchain(17)
+  jvmToolchain(libs.versions.java.get().toInt())
 }
