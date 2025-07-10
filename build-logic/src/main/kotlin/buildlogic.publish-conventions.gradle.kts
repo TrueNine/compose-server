@@ -43,6 +43,13 @@ mavenPublishing {
         timezone = "GMT+8"
         email = "616057370@qq.com"
       }
+      developer {
+        id = "bambuo"
+        name = "Johana Ĉen"
+        url = "https://github.com/bambuo"
+        timezone = "GMT+8"
+        email = "845586878@qq.com"
+      }
     }
 
     scm {
