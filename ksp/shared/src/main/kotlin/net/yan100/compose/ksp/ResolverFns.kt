@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp
+package io.github.truenine.composeserver.ksp
 
 import com.google.devtools.ksp.getClassDeclarationByName
 import com.google.devtools.ksp.processing.Resolver

@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
-import net.yan100.compose.gradleplugin.consts.Repos
+import io.github.truenine.composeserver.gradleplugin.consts.Repos
 
 enum class MavenRepoType(
   val mavenCentralUrl: String? = null,

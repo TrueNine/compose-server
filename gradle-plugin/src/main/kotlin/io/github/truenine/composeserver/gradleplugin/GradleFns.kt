@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.gradleplugin
 
 import java.net.URI
-import net.yan100.compose.gradleplugin.consts.Constant
-import net.yan100.compose.gradleplugin.consts.Repos
+import io.github.truenine.composeserver.gradleplugin.consts.Constant
+import io.github.truenine.composeserver.gradleplugin.consts.Repos
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.ModuleDependency

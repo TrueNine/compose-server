@@ -1,4 +1,4 @@
-package net.yan100.compose.meta.types
+package io.github.truenine.composeserver.meta.types
 
 enum class TypeKind {
   CLASS,

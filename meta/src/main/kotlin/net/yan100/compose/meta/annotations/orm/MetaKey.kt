@@ -1,3 +1,3 @@
-package net.yan100.compose.meta.annotations.orm
+package io.github.truenine.composeserver.meta.annotations.orm
 
 annotation class MetaKey()

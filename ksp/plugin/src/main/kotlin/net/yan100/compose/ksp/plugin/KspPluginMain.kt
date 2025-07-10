@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp.plugin
+package io.github.truenine.composeserver.ksp.plugin
 
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment

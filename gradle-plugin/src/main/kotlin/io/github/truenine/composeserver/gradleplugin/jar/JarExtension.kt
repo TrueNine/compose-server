@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.gradleplugin.jar
 
-import net.yan100.compose.gradleplugin.consts.Constant
-import net.yan100.compose.gradleplugin.wrap
+import io.github.truenine.composeserver.gradleplugin.consts.Constant
+import io.github.truenine.composeserver.gradleplugin.wrap
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import sun.tools.jconsole.LabeledComponent.layout
 
 class JarExtension(private val project: Project, private val dsl: JarExtensionConfig) {
   init {

@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp
+package io.github.truenine.composeserver.ksp
 
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec

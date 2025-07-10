@@ -1,6 +1,6 @@
-package net.yan100.compose.meta
+package io.github.truenine.composeserver.meta
 
-import net.yan100.compose.meta.annotations.MetaName
+import io.github.truenine.composeserver.meta.annotations.MetaName
 
 fun Sequence<MetaName>.getFirstName(): String? {
   val f = firstOrNull()

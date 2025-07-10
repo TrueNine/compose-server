@@ -4,10 +4,10 @@ import java.io.File
 import java.io.FileWriter
 import java.io.InputStreamReader
 import javax.inject.Inject
-import net.yan100.compose.gradleplugin.consts.Constant
-import net.yan100.compose.gradleplugin.consts.MavenRepl
-import net.yan100.compose.gradleplugin.consts.Repos
-import net.yan100.compose.gradleplugin.wrap
+import io.github.truenine.composeserver.gradleplugin.consts.Constant
+import io.github.truenine.composeserver.gradleplugin.consts.MavenRepl
+import io.github.truenine.composeserver.gradleplugin.consts.Repos
+import io.github.truenine.composeserver.gradleplugin.wrap
 import org.gradle.api.Project
 
 /*

@@ -1,4 +1,4 @@
-package net.yan100.compose.meta.annotations
+package io.github.truenine.composeserver.meta.annotations
 
 import java.lang.annotation.Inherited
 import kotlin.reflect.KClass

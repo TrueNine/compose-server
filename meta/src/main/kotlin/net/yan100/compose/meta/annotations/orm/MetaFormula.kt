@@ -1,4 +1,4 @@
-package net.yan100.compose.meta.annotations.orm
+package io.github.truenine.composeserver.meta.annotations.orm
 
 import java.lang.annotation.Inherited
 

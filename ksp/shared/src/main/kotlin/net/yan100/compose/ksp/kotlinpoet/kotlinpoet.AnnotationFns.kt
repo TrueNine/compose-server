@@ -1,6 +1,6 @@
-package net.yan100.compose.ksp.kotlinpoet
+package io.github.truenine.composeserver.ksp.kotlinpoet
 
-import net.yan100.compose.ksp.models.ClassDefine
+import io.github.truenine.composeserver.ksp.models.ClassDefine
 
 object Libs {
   object kotlin {
@@ -14,30 +14,32 @@ object Libs {
     }
   }
 
-  object net {
-    object yan100 {
-      object compose {
-        object meta {
-          object annotations {
-            object client {
-              val Api = ClassDefine("net.yan100.compose.meta.annotations.client", "Api")
-              val ApiIgnore = ClassDefine("net.yan100.compose.meta.annotations.client", "ApiIgnore")
-              val ApiGeneratingAll = ClassDefine("net.yan100.compose.meta.annotations.client", "ApiGeneratingAll")
+  object io {
+    object github {
+      object truenine {
+        object composeserver {
+          object meta {
+            object annotations {
+              object client {
+                val Api = ClassDefine("io.github.truenine.composeserver.meta.annotations.client", "Api")
+                val ApiIgnore = ClassDefine("io.github.truenine.composeserver.meta.annotations.client", "ApiIgnore")
+                val ApiGeneratingAll = ClassDefine("io.github.truenine.composeserver.meta.annotations.client", "ApiGeneratingAll")
+              }
+
+              val MetaSkipGeneration = ClassDefine("io.github.truenine.composeserver.meta.annotations", "MetaSkipGeneration")
+            }
+          }
+
+          object rds {
+
+            object listeners {
+              val BizCodeInsertListener = ClassDefine("io.github.truenine.composeserver.rds.listeners", "BizCodeInsertListener")
+              val SnowflakeIdInsertListener = ClassDefine("io.github.truenine.composeserver.rds.listeners", "SnowflakeIdInsertListener")
             }
 
-            val MetaSkipGeneration = ClassDefine("net.yan100.compose.meta.annotations", "MetaSkipGeneration")
-          }
-        }
-
-        object rds {
-
-          object listeners {
-            val BizCodeInsertListener = ClassDefine("net.yan100.compose.rds.listeners", "BizCodeInsertListener")
-            val SnowflakeIdInsertListener = ClassDefine("net.yan100.compose.rds.listeners", "SnowflakeIdInsertListener")
-          }
-
-          object entities {
-            val IJpaPersistentEntity = ClassDefine("net.yan100.compose.rds.entities", "IJpaPersistentEntity")
+            object entities {
+              val IJpaPersistentEntity = ClassDefine("io.github.truenine.composeserver.rds.entities", "IJpaPersistentEntity")
+            }
           }
         }
       }

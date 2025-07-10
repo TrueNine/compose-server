@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp
+package io.github.truenine.composeserver.ksp
 
 import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSType

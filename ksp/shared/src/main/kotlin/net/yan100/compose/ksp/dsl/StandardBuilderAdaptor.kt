@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp.dsl
+package io.github.truenine.composeserver.ksp.dsl
 
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.squareup.kotlinpoet.FileSpec

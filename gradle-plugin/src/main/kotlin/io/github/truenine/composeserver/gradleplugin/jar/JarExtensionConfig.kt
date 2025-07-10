@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.gradleplugin.jar
 
-import net.yan100.compose.gradleplugin.emptyVersion
+import io.github.truenine.composeserver.gradleplugin.emptyVersion
 import org.gradle.api.Project
 
 open class JarExtensionConfig(project: Project) {

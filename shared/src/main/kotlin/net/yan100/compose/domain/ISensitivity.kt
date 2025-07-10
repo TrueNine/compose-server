@@ -1,7 +1,7 @@
 package net.yan100.compose.domain
 
+import io.github.truenine.composeserver.meta.annotations.MetaSkipGeneration
 import net.yan100.compose.bool
-import net.yan100.compose.meta.annotations.MetaSkipGeneration
 
 /**
  * # 可 有状态 脱敏 数据类

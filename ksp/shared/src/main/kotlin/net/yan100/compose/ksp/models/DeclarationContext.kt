@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp.models
+package io.github.truenine.composeserver.ksp.models
 
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated

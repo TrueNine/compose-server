@@ -1,4 +1,4 @@
-package net.yan100.compose.ksp.plugin.visitor
+package io.github.truenine.composeserver.ksp.plugin.visitor
 
 import com.google.devtools.ksp.*
 import com.google.devtools.ksp.processing.KSPLogger
@@ -8,17 +8,17 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ksp.toAnnotationSpec
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
+import io.github.truenine.composeserver.ksp.*
+import io.github.truenine.composeserver.ksp.dsl.fileDsl
+import io.github.truenine.composeserver.ksp.kotlinpoet.Libs
+import io.github.truenine.composeserver.ksp.models.DeclarationContext
+import io.github.truenine.composeserver.meta.annotations.MetaAutoManagement
+import io.github.truenine.composeserver.meta.annotations.MetaDef
+import io.github.truenine.composeserver.meta.annotations.MetaName
+import io.github.truenine.composeserver.meta.annotations.MetaSkipGeneration
+import io.github.truenine.composeserver.meta.annotations.orm.MetaFormula
+import io.github.truenine.composeserver.meta.getFirstName
 import kotlin.properties.Delegates
-import net.yan100.compose.ksp.*
-import net.yan100.compose.ksp.dsl.fileDsl
-import net.yan100.compose.ksp.kotlinpoet.Libs
-import net.yan100.compose.ksp.models.DeclarationContext
-import net.yan100.compose.meta.annotations.MetaAutoManagement
-import net.yan100.compose.meta.annotations.MetaDef
-import net.yan100.compose.meta.annotations.MetaName
-import net.yan100.compose.meta.annotations.MetaSkipGeneration
-import net.yan100.compose.meta.annotations.orm.MetaFormula
-import net.yan100.compose.meta.getFirstName
 
 private sealed class PropertyProcessingResult {
   data class Success(val annotations: List<AnnotationSpec>) : PropertyProcessingResult()
@@ -212,8 +212,8 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
           else
             builder.addAnnotation(
               AnnotationSpec.builder(Libs.jakarta.persistence.EntityListeners.toClassName())
-                .addMember("%T::class", Libs.net.yan100.compose.rds.listeners.SnowflakeIdInsertListener.toClassName())
-                .addMember("%T::class", Libs.net.yan100.compose.rds.listeners.BizCodeInsertListener.toClassName())
+                .addMember("%T::class", Libs.io.github.truenine.composeserver.rds.listeners.SnowflakeIdInsertListener.toClassName())
+                .addMember("%T::class", Libs.io.github.truenine.composeserver.rds.listeners.BizCodeInsertListener.toClassName())
                 .build()
             )
           annotateAllBy(generateClassAnnotations(destClassName))
@@ -303,7 +303,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
                 .addModifiers(KModifier.OVERRIDE)
                 .addAnnotation(Libs.jakarta.persistence.Id.toClassName())
                 .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
-                .addStatement("return if (%L == net.yan100.compose.getDefaultNullableId()) null else %L", internalIdName, internalIdName)
+                .addStatement("return if (%L == io.github.truenine.composeserver.getDefaultNullableId()) null else %L", internalIdName, internalIdName)
                 .addAnnotation(idColumnAnnotation.build())
                 .addModifiers(KModifier.OPEN)
                 .returns(Long::class.asTypeName().copy(nullable = true))
@@ -313,7 +313,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
               FunSpec.builder("isNew")
                 .addAnnotation(Libs.jakarta.persistence.Transient.toAnnotationSpec())
                 .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
-                .addStatement("return %L == null || %L == net.yan100.compose.getDefaultNullableId()", internalIdName, internalIdName)
+                .addStatement("return %L == null || %L == io.github.truenine.composeserver.getDefaultNullableId()", internalIdName, internalIdName)
                 .returns(Boolean::class)
                 .addModifiers(KModifier.OVERRIDE)
                 .build()
@@ -358,7 +358,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
                     .trimIndent(),
                   Libs.org.hibernate.Hibernate.toClassName(),
                   Libs.org.hibernate.Hibernate.toClassName(),
-                  Libs.net.yan100.compose.rds.entities.IJpaPersistentEntity.toClassName(),
+                  Libs.io.github.truenine.composeserver.rds.entities.IJpaPersistentEntity.toClassName(),
                 )
                 .returns(Boolean::class)
                 .build()
