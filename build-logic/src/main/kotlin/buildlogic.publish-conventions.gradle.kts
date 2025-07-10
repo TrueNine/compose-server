@@ -46,7 +46,7 @@ mavenPublishing {
   )
   pom {
     name = "${rootProject.name}-${project.name}"
-    description = project.description
+    description = project.description ?: "A component of the ${rootProject.name} project"
     url = "https://github.com/TrueNine/compose-server"
 
     licenses {
@@ -104,13 +104,13 @@ mavenPublishing {
       system = "GitHub"
       url = "https://github.com/TrueNine/compose-server/issues"
     }
-    val javaVersion = extensions.findByType<JavaPluginExtension>()?.toolchain?.languageVersion?.get()?.asInt()?.toString()
     properties = mutableMapOf("project.build.sourceEncoding" to "UTF-8").apply {
-      javaVersion?.let {
-        put("java.version", it)
-        put("maven.compiler.source", it)
-        put("maven.compiler.target", it)
-        put("maven.compiler.release", it)
+      // 只有在项目应用了 Java 插件且配置了 toolchain 时才设置 Java 版本相关属性
+      extensions.findByType<JavaPluginExtension>()?.toolchain?.languageVersion?.orNull?.asInt()?.toString()?.let { javaVersion ->
+        put("java.version", javaVersion)
+        put("maven.compiler.source", javaVersion)
+        put("maven.compiler.target", javaVersion)
+        put("maven.compiler.release", javaVersion)
       }
     }
   }

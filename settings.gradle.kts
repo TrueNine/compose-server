@@ -24,7 +24,7 @@ listOf("testtoolkit", "version-catalog", "shared", "bom", "meta", "gradle-plugin
 }
 
 // 监控模块
-("surveillance" to listOf("shared","hikvision")).useFile()
+("surveillance" to listOf("shared", "hikvision")).useFile()
 
 // 短信服务
 ("sms" to listOf("tencent", "shared")).useFile()

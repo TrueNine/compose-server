@@ -1,23 +1,14 @@
 import kotlin.jvm.optionals.getOrNull
 
 plugins {
-  java
   id("buildlogic.repositories-conventions")
   alias(libs.plugins.com.github.ben.manes.versions)
   `version-catalog`
+  java
   id("buildlogic.publish-conventions")
-  id("buildlogic.spotless-conventions")
 }
 
 repositories { mavenCentral() }
-
-java {
-  val jv = JavaVersion.VERSION_17
-  sourceCompatibility = jv
-  targetCompatibility = jv
-  toolchain { languageVersion.set(JavaLanguageVersion.of(jv.ordinal + 1)) }
-  withSourcesJar()
-}
 
 configurations.all {
   resolutionStrategy {
