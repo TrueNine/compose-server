@@ -4,10 +4,10 @@
 <suite name="核心包测试" parallel="classes">
   <test name="核心包测试" parallel="methods">
     <packages>
-      <package name="net.yan100.compose.encrypt"/>
-      <package name="net.yan100.compose.encrypt.base64"/>
-      <package name="net.yan100.compose.lang"/>
-      <package name="net.yan100.compose.jackson"/>
+      <package name="io.github.truenine.composeserver.encrypt"/>
+      <package name="io.github.truenine.composeserver.encrypt.base64"/>
+      <package name="io.github.truenine.composeserver.lang"/>
+      <package name="io.github.truenine.composeserver.jackson"/>
     </packages>
   </test>
 </suite>
