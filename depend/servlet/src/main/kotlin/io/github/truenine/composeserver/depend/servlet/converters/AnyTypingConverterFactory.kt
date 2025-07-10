@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.depend.servlet.converters
 
+import io.github.truenine.composeserver.slf4j
+import io.github.truenine.composeserver.typing.AnyTyping
+import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.typing.StringTyping
 import java.util.concurrent.ConcurrentHashMap
-import net.yan100.compose.slf4j
-import net.yan100.compose.typing.AnyTyping
-import net.yan100.compose.typing.IntTyping
-import net.yan100.compose.typing.StringTyping
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
 

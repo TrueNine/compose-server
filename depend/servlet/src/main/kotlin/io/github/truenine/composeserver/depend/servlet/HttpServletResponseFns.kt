@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.depend.servlet
 
+import io.github.truenine.composeserver.consts.IHeaders
+import io.github.truenine.composeserver.typing.MimeTypes
 import jakarta.servlet.http.HttpServletResponse
 import java.io.OutputStream
 import java.nio.charset.Charset
 import java.util.*
-import net.yan100.compose.consts.IHeaders
-import net.yan100.compose.typing.MimeTypes
 
 val HttpServletResponse.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()

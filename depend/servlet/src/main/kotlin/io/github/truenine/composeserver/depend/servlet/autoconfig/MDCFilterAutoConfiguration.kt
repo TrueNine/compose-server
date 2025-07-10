@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet.autoconfig
 
 import io.github.truenine.composeserver.depend.servlet.filter.MDCFilter
-import net.yan100.compose.slf4j
+import io.github.truenine.composeserver.slf4j
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

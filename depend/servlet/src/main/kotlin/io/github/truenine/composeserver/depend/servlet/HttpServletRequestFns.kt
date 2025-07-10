@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.depend.servlet
 
+import io.github.truenine.composeserver.consts.IHeaders
+import io.github.truenine.composeserver.consts.IInterAddr
 import jakarta.servlet.http.HttpServletRequest
-import net.yan100.compose.consts.IHeaders
-import net.yan100.compose.consts.IInterAddr
 
 val HttpServletRequest.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()

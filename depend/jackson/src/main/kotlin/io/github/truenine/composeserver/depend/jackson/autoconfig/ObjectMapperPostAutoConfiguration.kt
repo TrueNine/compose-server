@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.depend.jackson.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.holders.ObjectMapperHolder
-import net.yan100.compose.slf4j
+import io.github.truenine.composeserver.slf4j
 import org.springframework.beans.factory.config.BeanPostProcessor
 import org.springframework.context.annotation.Configuration
 

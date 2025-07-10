@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
-import net.yan100.compose.Pq
-import net.yan100.compose.domain.IPageParam
+import io.github.truenine.composeserver.Pq
+import io.github.truenine.composeserver.domain.IPageParam
 
 class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): IPageParam? {

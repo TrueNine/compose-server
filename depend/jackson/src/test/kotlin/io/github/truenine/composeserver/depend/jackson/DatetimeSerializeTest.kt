@@ -2,13 +2,13 @@ package io.github.truenine.composeserver.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.github.truenine.composeserver.date
+import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.log
+import io.github.truenine.composeserver.time
 import jakarta.annotation.Resource
 import kotlin.test.Test
-import net.yan100.compose.date
-import net.yan100.compose.datetime
-import net.yan100.compose.time
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest

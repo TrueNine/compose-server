@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import io.github.truenine.composeserver.typing.AnyTyping
+import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.typing.StringTyping
 import kotlin.reflect.KClass
-import net.yan100.compose.typing.AnyTyping
-import net.yan100.compose.typing.IntTyping
-import net.yan100.compose.typing.StringTyping
 
 @Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
 class AnyTypingDeserializer(typingType: KClass<Enum<*>>) : StdDeserializer<Enum<*>>(Enum::class.java) {

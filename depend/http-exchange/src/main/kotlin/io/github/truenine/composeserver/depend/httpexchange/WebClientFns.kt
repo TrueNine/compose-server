@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.depend.httpexchange
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.consts.IHeaders
 import io.github.truenine.composeserver.depend.httpexchange.encoder.AnyTypingEncoder
+import io.github.truenine.composeserver.typing.AnyTyping
+import io.github.truenine.composeserver.typing.MimeTypes
 import java.time.Duration
 import java.time.temporal.ChronoUnit
-import net.yan100.compose.consts.IHeaders
-import net.yan100.compose.typing.AnyTyping
-import net.yan100.compose.typing.MimeTypes
 import org.springframework.core.MethodParameter
 import org.springframework.http.codec.EncoderHttpMessageWriter
 import org.springframework.http.codec.json.Jackson2JsonDecoder

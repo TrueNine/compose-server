@@ -9,12 +9,12 @@ import com.fasterxml.jackson.databind.cfg.MapperConfig
 import com.fasterxml.jackson.databind.introspect.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import io.github.truenine.composeserver.DTimer
 import io.github.truenine.composeserver.depend.jackson.modules.DatetimeCustomModule
 import io.github.truenine.composeserver.depend.jackson.modules.KotlinCustomModule
+import io.github.truenine.composeserver.slf4j
 import java.time.ZoneOffset
 import java.util.*
-import net.yan100.compose.DTimer
-import net.yan100.compose.slf4j
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer

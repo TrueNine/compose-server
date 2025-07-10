@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet.autoconfig
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.slf4j
+import io.github.truenine.composeserver.slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

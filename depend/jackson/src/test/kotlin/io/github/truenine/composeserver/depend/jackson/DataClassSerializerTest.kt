@@ -3,13 +3,13 @@ package io.github.truenine.composeserver.depend.jackson
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.annotations.SpringServletTest
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import net.yan100.compose.datetime
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc

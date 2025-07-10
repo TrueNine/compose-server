@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.depend.servlet
 
-import net.yan100.compose.domain.IReadableAttachment
+import io.github.truenine.composeserver.domain.IReadableAttachment
 import org.springframework.web.multipart.MultipartFile
 
 fun MultipartFile.toReadableAttachment(): IReadableAttachment {

@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.depend.paho.integration
 
-import net.yan100.compose.replaceFirstIfPrefix
+import io.github.truenine.composeserver.replaceFirstIfPrefix
 import org.springframework.integration.mqtt.support.MqttHeaders
 import org.springframework.messaging.handler.annotation.Header
 

@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet.controller
 
-import net.yan100.compose.int
-import net.yan100.compose.string
+import io.github.truenine.composeserver.int
+import io.github.truenine.composeserver.string
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

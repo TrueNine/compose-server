@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.depend.paho.autoconfig
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.paho.paho.MqttPahoClientWrapper
 import io.github.truenine.composeserver.depend.paho.properties.SingleMqttProperties
-import net.yan100.compose.slf4j
+import io.github.truenine.composeserver.slf4j
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence

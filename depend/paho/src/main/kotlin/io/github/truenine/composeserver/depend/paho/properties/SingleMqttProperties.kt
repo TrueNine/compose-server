@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.depend.paho.properties
 
+import io.github.truenine.composeserver.i32
+import io.github.truenine.composeserver.i64
 import java.util.*
-import net.yan100.compose.i32
-import net.yan100.compose.i64
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 private const val PREFIX = "compose.depend.paho"

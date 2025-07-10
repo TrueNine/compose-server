@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.depend.springdocopenapi.autoconfig
 
 import io.github.truenine.composeserver.depend.springdocopenapi.properties.SpringdocOpenApiProperties
+import io.github.truenine.composeserver.slf4j
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.info.Info
@@ -13,7 +14,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
-import net.yan100.compose.slf4j
 import org.springdoc.core.models.GroupedOpenApi
 import org.springdoc.core.utils.SpringDocUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication

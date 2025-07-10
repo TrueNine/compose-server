@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet.resolvers
 
-import net.yan100.compose.domain.IPageParam
-import net.yan100.compose.domain.IPageParamLike
+import io.github.truenine.composeserver.domain.IPageParam
+import io.github.truenine.composeserver.domain.IPageParamLike
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory

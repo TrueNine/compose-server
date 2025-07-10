@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.depend.springdocopenapi.properties
 
-import net.yan100.compose.consts.IHeaders
+import io.github.truenine.composeserver.consts.IHeaders
 
 class JwtHeaderInfoProperties {
   var authTokenName = IHeaders.AUTHORIZATION

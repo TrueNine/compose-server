@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleModule
 import io.github.truenine.composeserver.depend.jackson.serializers.IPageParamLikeSerializer
 import io.github.truenine.composeserver.depend.jackson.serializers.KPairDeserializer
-import net.yan100.compose.domain.IPageParam
-import net.yan100.compose.domain.IPageParamLike
+import io.github.truenine.composeserver.domain.IPageParam
+import io.github.truenine.composeserver.domain.IPageParamLike
 
 class KotlinCustomModule : SimpleModule(KotlinCustomModule::class.java.name, com.fasterxml.jackson.core.Version(0, 0, 1, "", "net.yan100", "compose")) {
   override fun setupModule(context: SetupContext) {

@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet.autoconfig
 
 import io.github.truenine.composeserver.depend.servlet.resolvers.IPageParamLikeArgumentResolver
-import net.yan100.compose.slf4j
+import io.github.truenine.composeserver.slf4j
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.web.method.support.HandlerMethodArgumentResolver

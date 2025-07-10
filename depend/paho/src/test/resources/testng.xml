@@ -4,7 +4,7 @@
 <suite name="MQTT 连接测试" parallel="methods">
   <test name="mqtt" parallel="methods">
     <packages>
-      <package name="net.yan100.compose.depend.paho"/>
+      <package name="io.github.truenine.composeserver.depend.paho"/>
     </packages>
   </test>
 </suite>

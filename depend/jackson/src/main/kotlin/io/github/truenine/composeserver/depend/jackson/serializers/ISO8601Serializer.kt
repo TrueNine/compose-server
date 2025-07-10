@@ -5,11 +5,11 @@ import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
+import io.github.truenine.composeserver.toMillis
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
-import net.yan100.compose.toMillis
 
 /**
  * # ISO8601 标准毫秒时间戳序列化器

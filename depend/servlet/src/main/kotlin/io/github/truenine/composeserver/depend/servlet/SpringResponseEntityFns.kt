@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.depend.servlet
 
-import net.yan100.compose.datetime
-import net.yan100.compose.i32
-import net.yan100.compose.i64
-import net.yan100.compose.toMillis
+import io.github.truenine.composeserver.datetime
+import io.github.truenine.composeserver.i32
+import io.github.truenine.composeserver.i64
+import io.github.truenine.composeserver.toMillis
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 

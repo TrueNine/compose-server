@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.depend.httpexchange.encoder
 
-import net.yan100.compose.typing.AnyTyping
+import io.github.truenine.composeserver.typing.AnyTyping
 import org.reactivestreams.Publisher
 import org.springframework.core.ResolvableType
 import org.springframework.core.codec.AbstractEncoder

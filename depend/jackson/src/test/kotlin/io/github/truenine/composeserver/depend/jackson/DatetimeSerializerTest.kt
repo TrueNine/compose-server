@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.depend.jackson.modules.DatetimeCustomModule
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
@@ -8,7 +9,6 @@ import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import net.yan100.compose.datetime
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.springframework.boot.test.context.SpringBootTest
