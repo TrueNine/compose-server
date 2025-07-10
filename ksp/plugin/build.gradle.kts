@@ -2,6 +2,11 @@ plugins {
   id("buildlogic.kotlin-conventions")
 }
 
+description = """
+Kotlin Symbol Processing (KSP) plugin for compile-time code generation and analysis.
+Provides annotation processing capabilities with KotlinPoet integration for generating type-safe code.
+""".trimIndent()
+
 dependencies {
   compileOnly(libs.com.google.devtools.ksp.symbol.processing.api)
   testImplementation(libs.com.google.devtools.ksp.symbol.processing.api)

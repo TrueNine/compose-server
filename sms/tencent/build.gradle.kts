@@ -1,5 +1,10 @@
 plugins { id("buildlogic.kotlinspring-conventions") }
 
+description = """
+Tencent Cloud SMS service integration for reliable message delivery.
+Provides SMS sending capabilities through Tencent Cloud SMS API with template support and delivery tracking.
+""".trimIndent()
+
 
 dependencies {
   api(libs.com.tencentcloudapi.tencentcloud.sdk.java.sms) {

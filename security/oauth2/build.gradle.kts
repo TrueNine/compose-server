@@ -1,5 +1,10 @@
 plugins { id("buildlogic.kotlinspring-conventions") }
 
+description = """
+OAuth2 authentication and authorization implementation with support for various providers.
+Provides OAuth2 client configurations, token management, and third-party integration capabilities.
+""".trimIndent()
+
 dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
 

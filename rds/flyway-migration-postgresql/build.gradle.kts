@@ -3,6 +3,11 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
+description = """
+Flyway database migration scripts and configuration for PostgreSQL databases.
+Contains versioned SQL migration files and Spring Boot integration for automated database schema evolution.
+""".trimIndent()
+
 dependencies {
   runtimeOnly(libs.org.flywaydb.flyway.core)
   runtimeOnly(libs.org.flywaydb.flyway.database.postgresql)

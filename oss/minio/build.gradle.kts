@@ -2,6 +2,11 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
+description = """
+MinIO object storage integration providing S3-compatible storage operations.
+Includes bucket management, file operations, and comprehensive testing with TestContainers support.
+""".trimIndent()
+
 dependencies {
   api(projects.oss.ossShared)
   api(projects.shared)

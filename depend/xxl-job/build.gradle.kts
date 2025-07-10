@@ -2,6 +2,11 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
+description = """
+XXL-JOB distributed task scheduling framework integration for enterprise job management.
+Provides distributed task execution, scheduling, and monitoring capabilities with fault tolerance.
+""".trimIndent()
+
 dependencies {
   api(libs.com.xuxueli.xxl.job.core)
   api(projects.shared)

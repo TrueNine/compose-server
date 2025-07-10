@@ -3,6 +3,11 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
+description = """
+CRUD operation abstractions and utilities built on top of Jimmer ORM.
+Provides generic repository patterns, transaction management, and database operation helpers.
+""".trimIndent()
+
 dependencies {
   ksp(libs.org.babyfish.jimmer.jimmer.ksp)
   implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)

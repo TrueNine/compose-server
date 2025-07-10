@@ -2,6 +2,11 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
+description = """
+Jackson JSON processing library integration with comprehensive data type support.
+Provides Kotlin module, JSR310 datetime, JDK8 Optional, Guava, and Joda-Time serialization support.
+""".trimIndent()
+
 dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.databind) {
     exclude(

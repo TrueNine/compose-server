@@ -63,5 +63,10 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
   }
 }*/
 
+description = """
+Version catalog module for managing and publishing dependency versions across the project ecosystem.
+Provides centralized version management and dependency update capabilities with automated version checking.
+""".trimIndent()
+
 // https://github.com/ben-manes/gradle-versions-plugin
 catalog { versionCatalog { from(files("../gradle/libs.versions.toml")) } }

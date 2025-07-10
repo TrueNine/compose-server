@@ -2,6 +2,11 @@ plugins {
   id("buildlogic.kotlin-conventions")
 }
 
+description = """
+Web crawling and data scraping utilities with support for multiple automation frameworks.
+Includes Selenium WebDriver, Microsoft Playwright, and intelligent text analysis capabilities.
+""".trimIndent()
+
 dependencies {
   api(projects.shared)
 

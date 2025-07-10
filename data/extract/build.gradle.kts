@@ -2,6 +2,11 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
+description = """
+Data extraction utilities supporting multiple formats including Excel, CSV, and web scraping.
+Provides EasyExcel integration, JSoup for HTML parsing, and reactive data processing capabilities.
+""".trimIndent()
+
 dependencies {
   implementation(libs.bundles.kotlin.reactor)
   implementation(libs.org.springframework.spring.web)

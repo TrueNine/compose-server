@@ -5,6 +5,11 @@ plugins {
   id("buildlogic.publish-conventions")
 }
 
+description = """
+Bill of Materials (BOM) for centralized dependency version management across all project modules.
+Provides a platform for consistent dependency versions and simplified dependency declarations.
+""".trimIndent()
+
 dependencies {
   constraints {
     val allVersionCatalogs = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")

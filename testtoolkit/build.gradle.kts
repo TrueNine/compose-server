@@ -2,6 +2,11 @@ plugins {
   id("buildlogic.kotlinspring-conventions")
 }
 
+description = """
+Comprehensive testing toolkit with TestContainers, MockK, and Spring Boot test support.
+Provides unified testing utilities for unit, integration, and contract testing across all modules.
+""".trimIndent()
+
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test)
   api(libs.org.jetbrains.kotlin.kotlin.test.junit5)

@@ -1,5 +1,10 @@
 plugins { id("buildlogic.kotlinspring-conventions") }
 
+description = """
+Spring Security integration providing authentication, authorization, and security configurations.
+Includes JWT token handling, CAPTCHA support, XSS protection, and comprehensive security filters.
+""".trimIndent()
+
 dependencies {
   api(libs.org.springframework.boot.spring.boot.starter.security)
 

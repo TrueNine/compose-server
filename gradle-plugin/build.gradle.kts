@@ -4,6 +4,11 @@ plugins {
   id("buildlogic.publish-conventions")
 }
 
+description = """
+Custom Gradle plugin for Compose Server development workflow automation.
+Provides project configuration, build conventions, and Spring Boot integration for development efficiency.
+""".trimIndent()
+
 dependencies {
   compileOnly(gradleApi())
   compileOnly(libs.org.jetbrains.kotlin.kotlin.gradle.plugin.api)

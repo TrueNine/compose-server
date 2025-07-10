@@ -3,6 +3,11 @@ plugins {
   alias(libs.plugins.com.google.devtools.ksp)
 }
 
+description = """
+Shared components for relational database operations using Jimmer ORM framework.
+Provides common database configurations, entities, and utilities for database access layers.
+""".trimIndent()
+
 dependencies {
   ksp(libs.org.babyfish.jimmer.jimmer.ksp)
   api(projects.shared)

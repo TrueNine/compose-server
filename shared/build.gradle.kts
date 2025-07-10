@@ -3,6 +3,11 @@ plugins {
   id("buildlogic.publish-conventions")
 }
 
+description = """
+Shared foundation library providing core utilities, exception handling, and common types for all modules.
+Includes base configurations, extension functions, and fundamental building blocks used across the entire application.
+""".trimIndent()
+
 dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.annotations)
   api(libs.jakarta.annotation.jakarta.annotation.api)
