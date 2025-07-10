@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.entrance
+package io.github.truenine.composeserver.gradleplugin.entrance
 
 import javax.inject.Inject
 import net.yan100.compose.gradleplugin.generator.GradleGeneratorConfig

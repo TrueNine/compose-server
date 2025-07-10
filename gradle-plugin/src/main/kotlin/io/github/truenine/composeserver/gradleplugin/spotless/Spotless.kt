@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.spotless
+package io.github.truenine.composeserver.gradleplugin.spotless
 
 import org.gradle.api.Project
 

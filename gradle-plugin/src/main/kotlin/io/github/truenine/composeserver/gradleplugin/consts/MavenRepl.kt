@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.consts
+package io.github.truenine.composeserver.gradleplugin.consts
 
 object MavenRepl {
   const val MAVEN_CENTRAL = "https://repo.maven.apache.org/maven2/"

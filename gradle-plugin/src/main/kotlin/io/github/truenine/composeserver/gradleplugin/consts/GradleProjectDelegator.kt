@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.consts
+package io.github.truenine.composeserver.gradleplugin.consts
 
 import org.gradle.api.Action
 import org.gradle.api.Project

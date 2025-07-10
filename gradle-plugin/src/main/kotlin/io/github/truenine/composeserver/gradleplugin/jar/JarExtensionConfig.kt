@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.jar
+package io.github.truenine.composeserver.gradleplugin.jar
 
 import net.yan100.compose.gradleplugin.emptyVersion
 import org.gradle.api.Project

@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin
+package io.github.truenine.composeserver.gradleplugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings

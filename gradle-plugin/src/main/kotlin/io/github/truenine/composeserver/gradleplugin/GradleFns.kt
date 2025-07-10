@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin
+package io.github.truenine.composeserver.gradleplugin
 
 import java.net.URI
 import net.yan100.compose.gradleplugin.consts.Constant

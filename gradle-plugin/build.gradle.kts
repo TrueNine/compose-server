@@ -31,7 +31,7 @@ gradlePlugin {
     register("${libs.versions.group.get()}.${project.name}") {
       id = "${libs.versions.group.get()}.${project.name}"
       displayName = "${libs.versions.group.get()}.${project.name}.gradle.plugin"
-      implementationClass = "${libs.versions.group.get()}.gradleplugin.Main"
+      implementationClass = "${libs.versions.group.get()}.composeserver.gradleplugin.Main"
       description = "compose server development gradle plugin"
     }
   }

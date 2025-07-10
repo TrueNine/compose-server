@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.consts
+package io.github.truenine.composeserver.gradleplugin.consts
 
 object Constant {
   const val TASK_GROUP = "compose gradle"

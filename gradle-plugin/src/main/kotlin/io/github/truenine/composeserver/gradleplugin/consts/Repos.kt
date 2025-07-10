@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.consts
+package io.github.truenine.composeserver.gradleplugin.consts
 
 /** maven 仓库管理 */
 @Deprecated("无需使用")

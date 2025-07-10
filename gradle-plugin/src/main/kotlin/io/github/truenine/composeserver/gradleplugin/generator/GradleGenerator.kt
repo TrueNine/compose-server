@@ -1,4 +1,4 @@
-package net.yan100.compose.gradleplugin.generator
+package io.github.truenine.composeserver.gradleplugin.generator
 
 import java.io.File
 import java.io.FileWriter
