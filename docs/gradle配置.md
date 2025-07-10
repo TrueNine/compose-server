@@ -4,7 +4,10 @@
 repositories.yunxiao=#
 credentials.yunxiao.username=#
 credentials.yunxiao.password=#
+credentials.sonatype.username=#
+credentials.sonatype.password=#
 
+# 切记 signing.keyId 等字段的尾随空格问题
 signing.keyId=#
 signing.password=#
 signing.secretKeyRingFile=#
@@ -23,6 +26,7 @@ org.gradle.daemon=true
 org.gradle.parallel=true
 org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+UseParallelGC -Dfile.encoding=UTF-8
 kapt.use.k2=true
+# 本地 .env 配置文件
 dotenv=#
 
 kotlin.code.style=official
