@@ -3,6 +3,4 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-dependencies {
-  implementation(projects.shared)
-}
+dependencies { implementation(projects.shared) }
