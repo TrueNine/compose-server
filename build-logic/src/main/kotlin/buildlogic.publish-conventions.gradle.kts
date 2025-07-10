@@ -1,3 +1,8 @@
+import com.vanniktech.maven.publish.GradlePlugin
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.VersionCatalog
+
 val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
 
 plugins {
@@ -8,9 +13,32 @@ plugins {
 mavenPublishing {
   publishToMavenCentral(automaticRelease = true)
   signAllPublications()
-}
 
-mavenPublishing {
+  // 根据项目类型配置发布方式
+  when {
+    // 优先检测 version-catalog 插件
+    project.plugins.hasPlugin("version-catalog") -> {
+      configure(VersionCatalog())
+    }
+    // 检测 gradle plugin 相关插件
+    project.plugins.hasPlugin("java-gradle-plugin") || 
+    project.plugins.hasPlugin("kotlin-dsl") -> {
+      configure(GradlePlugin(
+        javadocJar = JavadocJar.Javadoc(),
+        sourcesJar = true
+      ))
+    }
+    // 检测 Kotlin JVM 插件（包括间接应用）
+    project.plugins.hasPlugin("org.jetbrains.kotlin.jvm") ||
+    project.plugins.hasPlugin("buildlogic.kotlin-conventions") ||
+    project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
+      configure(KotlinJvm(
+        javadocJar = JavadocJar.Dokka("dokkaHtml"),
+        sourcesJar = true
+      ))
+    }
+  }
+
   coordinates(
     groupId = libs.versions.group.get(),
     artifactId = "composeserver-${project.name}",
