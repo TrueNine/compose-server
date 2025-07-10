@@ -35,6 +35,9 @@ java {
 
 tasks.withType<Jar> {
   archiveClassifier = ""
+  // 确保 kotlin_module 文件被正确包含
+  from(sourceSets.main.get().output)
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 testing {

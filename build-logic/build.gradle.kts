@@ -12,4 +12,5 @@ dependencies {
   implementation(libs.org.jetbrains.kotlin.multiplatform.org.jetbrains.kotlin.multiplatform.gradle.plugin)
   implementation(libs.org.jetbrains.kotlin.kapt.org.jetbrains.kotlin.kapt.gradle.plugin)
   implementation(libs.org.jetbrains.kotlin.plugin.spring.org.jetbrains.kotlin.plugin.spring.gradle.plugin)
+  implementation(libs.org.jetbrains.dokka.dokka.gradle.plugin)
 }

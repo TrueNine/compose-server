@@ -33,7 +33,7 @@ mavenPublishing {
     project.plugins.hasPlugin("buildlogic.kotlin-conventions") ||
     project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
       configure(KotlinJvm(
-        javadocJar = JavadocJar.Dokka("dokkaHtml"),
+        javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
         sourcesJar = true
       ))
     }
