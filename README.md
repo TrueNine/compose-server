@@ -27,8 +27,18 @@ https://codeup.aliyun.com/67396204e50481de876d1cf2/compose-server.git
 
 ## 快速开始
 
-- 使用 IntelliJ IDEA 或 Android Studio 打开项目
-- 等待 Gradle 同步完成
+```kotlin
+implementation("io.github.truenine:composeserver-*:latest")
+```
+
+```xml
+<dependency>
+  <groupId>io.github.truenine</groupId>
+  <artifactId>composeserver-*</artifactId>
+  <version>latest</version>
+</dependency>
+```
+
 
 ## 项目结构
 
