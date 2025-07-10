@@ -1,0 +1,5 @@
+package io.github.truenine.composeserver.depend.springdocopenapi
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+
+@SpringBootApplication internal class DependSpringdocOpenapiEntrance

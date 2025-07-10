@@ -1,8 +1,8 @@
 package net.yan100.compose.security.autoconfig
 
+import io.github.truenine.composeserver.depend.servlet.remoteRequestIp
 import jakarta.servlet.http.HttpServletRequest
 import net.yan100.compose.consts.IHeaders
-import net.yan100.compose.depend.servlet.remoteRequestIp
 import net.yan100.compose.domain.RequestInfo
 import net.yan100.compose.security.holders.UserInfoContextHolder
 import net.yan100.compose.slf4j

@@ -1,5 +1,7 @@
 package net.yan100.compose.security.spring.security
 
+import io.github.truenine.composeserver.depend.servlet.deviceId
+import io.github.truenine.composeserver.depend.servlet.remoteRequestIp
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
@@ -7,8 +9,6 @@ import jakarta.servlet.http.HttpServletResponse
 import java.io.IOException
 import net.yan100.compose.consts.IHeaders
 import net.yan100.compose.consts.IMethods
-import net.yan100.compose.depend.servlet.deviceId
-import net.yan100.compose.depend.servlet.remoteRequestIp
 import net.yan100.compose.domain.AuthRequestInfo
 import net.yan100.compose.hasText
 import net.yan100.compose.security.UserDetailsWrapper
