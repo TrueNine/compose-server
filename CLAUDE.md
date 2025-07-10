@@ -7,28 +7,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 这是一个基于 Gradle 的 Kotlin 多模块项目。
 
 ### 基本构建命令
+
 - `./gradlew build` - 构建整个项目
 - `./gradlew clean` - 清理构建输出
 - `./gradlew publishToMavenLocal` - 发布到本地 Maven 仓库
 - `./gradlew versionCatalogUpdate` - 更新版本目录中的依赖版本
 
 ### 测试命令
+
 - `./gradlew test` - 运行所有测试
 - `./gradlew :模块名:test` - 运行特定模块的测试
 - `./gradlew :shared:test` - 运行共享模块测试
 - `./gradlew :rds:shared:test` - 运行 RDS 共享模块测试
 
 ### 代码质量检查
+
 - `./gradlew spotlessCheck` - 检查代码格式
 - `./gradlew spotlessApply` - 自动修复代码格式
 
 ### 单个模块构建
+
 - `./gradlew :模块名:build` - 构建特定模块
 - `./gradlew :shared:build` - 构建共享模块
 
 ## 项目架构
 
 ### 模块化结构
+
 项目采用多模块设计，主要模块包括：
 
 - **shared** - 共享基础组件，包含通用工具类、异常处理、类型定义等
@@ -60,6 +65,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **mcp** - AI 相关模块
 
 ### 技术栈
+
 - **语言**: Kotlin (JVM)
 - **框架**: Spring Boot 3.5.3
 - **ORM**: Jimmer 0.9.97
@@ -69,23 +75,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **对象存储**: MinIO, 阿里云 OSS, 华为云 OBS
 
 ### 依赖管理
+
 - 使用 Gradle Version Catalog (`gradle/libs.versions.toml`) 统一管理依赖版本
 - 通过 buildSrc 自定义 Gradle 插件和约定
 - 所有模块版本通过 `compose` 版本号统一管理
 
 ### 代码约定
+
 - 所有模块使用 `kotlinspring-convention` 插件，集成 Spring Boot 和 Kotlin 配置
 - 测试类命名为 `TestEntrance`
 - 使用 Spotless 进行代码格式化
 - 包名遵循 `net.yan100.compose.模块名` 格式
 
 ### 开发工作流
+
 1. 修改代码后运行 `./gradlew spotlessApply` 格式化代码
 2. 运行 `./gradlew test` 确保测试通过
 3. 运行 `./gradlew build` 构建项目
 4. 使用 `./gradlew publishToMavenLocal` 发布到本地测试
 
 ### 数据库迁移
+
 - 使用 Flyway 进行数据库版本管理
 - 迁移脚本位于 `rds/flyway-migration-postgresql/src/main/resources/db/migration/`
 - 命名规则：`V版本号__描述.sql`
