@@ -1,11 +1,14 @@
 plugins {
   id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Caching abstractions and implementations supporting both distributed and local caching strategies.
 Includes Redis integration for distributed caching and Caffeine for high-performance local caching.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   implementation(libs.bundles.redis)

@@ -1,7 +1,7 @@
-package net.yan100.compose.cacheable.service
+package io.github.truenine.composeserver.cacheable.service
 
+import io.github.truenine.composeserver.cacheable.CacheDuration
 import kotlin.reflect.KClass
-import net.yan100.compose.cacheable.CacheDuration
 
 interface ICacheStore<C : ICache> {
   operator fun get(duration: CacheDuration): C

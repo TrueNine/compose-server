@@ -1,9 +1,9 @@
-package net.yan100.compose.cacheable.caffeine
+package io.github.truenine.composeserver.cacheable.caffeine
 
+import io.github.truenine.composeserver.cacheable.CacheableEntrance
+import io.github.truenine.composeserver.cacheable.get
 import jakarta.annotation.Resource
 import kotlin.test.*
-import net.yan100.compose.cacheable.CacheableEntrance
-import net.yan100.compose.cacheable.get
 import net.yan100.compose.consts.ICacheNames
 import net.yan100.compose.slf4j
 import org.springframework.boot.test.context.SpringBootTest

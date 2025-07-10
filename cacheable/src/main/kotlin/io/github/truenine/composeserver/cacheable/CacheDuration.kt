@@ -1,4 +1,4 @@
-package net.yan100.compose.cacheable
+package io.github.truenine.composeserver.cacheable
 
 enum class CacheDuration {
   M1,

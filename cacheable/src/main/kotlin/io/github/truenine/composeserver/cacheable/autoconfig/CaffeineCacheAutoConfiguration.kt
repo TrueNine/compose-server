@@ -1,4 +1,4 @@
-package net.yan100.compose.cacheable.autoconfig
+package io.github.truenine.composeserver.cacheable.autoconfig
 
 import com.github.benmanes.caffeine.cache.AsyncCache
 import com.github.benmanes.caffeine.cache.Caffeine
