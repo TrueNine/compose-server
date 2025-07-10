@@ -1,4 +1,4 @@
-package net.yan100.compose.sms
+package io.github.truenine.composeserver.sms.tencent
 
 import com.tencentcloudapi.common.Credential
 import com.tencentcloudapi.common.profile.ClientProfile
