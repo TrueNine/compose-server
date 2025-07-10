@@ -8,59 +8,70 @@ description: Kotlin 和 Spring Boot 开发规范
 ## Kotlin 编码规范
 
 ### 类和函数命名
+
 - 类名使用 PascalCase: `UserService`, `PaymentController`
 - 函数和变量使用 camelCase: `getUserInfo()`, `paymentAmount`
 - 常量使用 UPPER_SNAKE_CASE: `MAX_RETRY_COUNT`
 
 ### 空值处理
+
 - 优先使用 Kotlin 的空安全特性
 - 使用 `?.` 安全调用操作符
 - 使用 `!!` 操作符时要谨慎，确保值不为空
 - 使用 `let`, `run`, `apply` 等作用域函数
 
 ### 数据类
+
 - 使用 `data class` 定义数据传输对象
 - 对于实体类，考虑使用 Jimmer 的实体定义方式
 
 ## Spring Boot 约定
 
 ### 控制器层 (Controller)
+
 - 使用 `@RestController` 注解
 - 请求映射使用 `@GetMapping`, `@PostMapping` 等具体注解
 - 使用 `@RequestBody` 和 `@ResponseBody` 进行数据绑定
 - 统一错误处理使用 `@ControllerAdvice`
 
 ### 服务层 (Service)
+
 - 使用 `@Service` 注解
 - 业务逻辑封装在服务层
 - 使用 `@Transactional` 管理事务
 
 ### 数据访问层 (Repository)
+
 - 使用 Jimmer 的 Repository 接口
 - 遵循 Jimmer 的查询方法命名规范
 - 复杂查询使用 Jimmer 的 DSL
 
 ### 配置类
+
 - 使用 `@Configuration` 注解
 - 使用 `@ConfigurationProperties` 绑定配置属性
 - 使用 `@Bean` 定义自定义 Bean
 
 ## 依赖注入
+
 - 优先使用构造函数注入
 - 避免使用 `@Autowired` 字段注入
 - 使用 `@Qualifier` 指定特定的 Bean
 
 ## 异常处理
+
 - 创建自定义异常类继承合适的基础异常
 - 使用 `@ExceptionHandler` 处理特定异常
 - 返回统一的错误响应格式
 
 ## 日志记录
+
 - 使用 SLF4J 进行日志记录
 - 使用结构化日志格式
 - 适当的日志级别：DEBUG, INFO, WARN, ERROR
 
 ## 测试规范
+
 - 使用 JUnit 5 进行单元测试
 - 使用 `@SpringBootTest` 进行集成测试
 - 使用 MockK 进行 Kotlin 模拟测试
@@ -72,30 +83,30 @@ description: Kotlin 和 Spring Boot 开发规范
 @RestController
 @RequestMapping("/api/users")
 class UserController(
-    private val userService: UserService
+  private val userService: UserService
 ) {
     
-    @GetMapping("/{id}")
-    fun getUser(@PathVariable id: Long): UserDto {
-        return userService.findById(id)
-    }
-    
-    @PostMapping
-    fun createUser(@RequestBody @Valid request: CreateUserRequest): UserDto {
-        return userService.create(request)
-    }
+  @GetMapping("/{id}")
+  fun getUser(@PathVariable id: Long): UserDto {
+    return userService.findById(id)
+  }
+  
+  @PostMapping
+  fun createUser(@RequestBody @Valid request: CreateUserRequest): UserDto {
+    return userService.create(request)
+  }
 }
 
 @Service
 @Transactional
 class UserService(
-    private val userRepository: UserRepository
+  private val userRepository: UserRepository
 ) {
     
-    fun findById(id: Long): UserDto {
-        return userRepository.findById(id)
-            ?.let { UserDto.from(it) }
-            ?: throw UserNotFoundException("User not found: $id")
-    }
+  fun findById(id: Long): UserDto {
+    return userRepository.findById(id)
+      ?.let { UserDto.from(it) }
+      ?: throw UserNotFoundException("User not found: $id")
+  }
 }
 ```

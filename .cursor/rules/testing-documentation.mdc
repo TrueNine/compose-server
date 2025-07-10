@@ -8,6 +8,7 @@ globs: "**/test/**/*.kt,**/*Test.kt,**/docs/**/*.md"
 ## 测试规范
 
 ### 测试文件结构
+
 ```
 src/test/kotlin/
 ├── unit/              # 单元测试
@@ -17,157 +18,164 @@ src/test/kotlin/
 ```
 
 ### 单元测试
+
 ```kotlin
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserServiceTest {
     
-    @MockK
-    private lateinit var userRepository: UserRepository
+  @MockK
+  private lateinit var userRepository: UserRepository
+  
+  private lateinit var userService: UserService
+  
+  @BeforeEach
+  fun setup() {
+    MockKAnnotations.init(this)
+    userService = UserService(userRepository)
+  }
+  
+  @Test
+  fun `should create user when valid request provided`() {
+    // given
+    val request = CreateUserRequest("testuser", "test@example.com")
+    val expectedUser = User.builder()
+      .username("testuser")
+      .email("test@example.com")
+      .build()
     
-    private lateinit var userService: UserService
+    every { userRepository.save(any()) } returns expectedUser
     
-    @BeforeEach
-    fun setup() {
-        MockKAnnotations.init(this)
-        userService = UserService(userRepository)
+    // when
+    val result = userService.createUser(request)
+    
+    // then
+    result shouldBe expectedUser
+    verify { userRepository.save(any()) }
+  }
+  
+  @Test
+  fun `should throw exception when duplicate username provided`() {
+    // given
+    val request = CreateUserRequest("existinguser", "test@example.com")
+    every { userRepository.findByUsername("existinguser") } returns mockk()
+    
+    // when & then
+    shouldThrow<UserAlreadyExistsException> {
+        userService.createUser(request)
     }
-    
-    @Test
-    fun `should create user when valid request provided`() {
-        // given
-        val request = CreateUserRequest("testuser", "test@example.com")
-        val expectedUser = User.builder()
-            .username("testuser")
-            .email("test@example.com")
-            .build()
-        
-        every { userRepository.save(any()) } returns expectedUser
-        
-        // when
-        val result = userService.createUser(request)
-        
-        // then
-        result shouldBe expectedUser
-        verify { userRepository.save(any()) }
-    }
-    
-    @Test
-    fun `should throw exception when duplicate username provided`() {
-        // given
-        val request = CreateUserRequest("existinguser", "test@example.com")
-        every { userRepository.findByUsername("existinguser") } returns mockk()
-        
-        // when & then
-        shouldThrow<UserAlreadyExistsException> {
-            userService.createUser(request)
-        }
-    }
+  }
 }
 ```
 
 ### 集成测试
+
 ```kotlin
 @SpringBootTest
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserRepositoryIntegrationTest {
+  
+  @Container
+  companion object {
+    @JvmStatic
+    val postgres = PostgreSQLContainer<Nothing>("postgres:13")
+      .apply {
+        withDatabaseName("testdb")
+        withUsername("test")
+        withPassword("test")
+      }
+  }
+  
+  @Autowired
+  private lateinit var userRepository: UserRepository
+  
+  @Test
+  fun `should save and find user`() {
+    // given
+    val user = User.builder()
+      .username("testuser")
+      .email("test@example.com")
+      .build()
     
-    @Container
-    companion object {
-        @JvmStatic
-        val postgres = PostgreSQLContainer<Nothing>("postgres:13")
-            .apply {
-                withDatabaseName("testdb")
-                withUsername("test")
-                withPassword("test")
-            }
-    }
+    // when
+    val savedUser = userRepository.save(user)
+    val foundUser = userRepository.findById(savedUser.id)
     
-    @Autowired
-    private lateinit var userRepository: UserRepository
-    
-    @Test
-    fun `should save and find user`() {
-        // given
-        val user = User.builder()
-            .username("testuser")
-            .email("test@example.com")
-            .build()
-        
-        // when
-        val savedUser = userRepository.save(user)
-        val foundUser = userRepository.findById(savedUser.id)
-        
-        // then
-        foundUser shouldNotBe null
-        foundUser?.username shouldBe "testuser"
-        foundUser?.email shouldBe "test@example.com"
-    }
+    // then
+    foundUser shouldNotBe null
+    foundUser?.username shouldBe "testuser"
+    foundUser?.email shouldBe "test@example.com"
+  }
 }
 ```
 
 ### Web 层测试
+
 ```kotlin
 @WebMvcTest(UserController::class)
 class UserControllerTest {
     
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+  @Autowired
+  private lateinit var mockMvc: MockMvc
+  
+  @MockBean
+  private lateinit var userService: UserService
+  
+  @Test
+  fun `should return user when valid id provided`() {
+    // given
+    val userId = 1L
+    val user = User.builder()
+      .id(userId)
+      .username("testuser")
+      .email("test@example.com")
+      .build()
     
-    @MockBean
-    private lateinit var userService: UserService
+    every { userService.findById(userId) } returns user
     
-    @Test
-    fun `should return user when valid id provided`() {
-        // given
-        val userId = 1L
-        val user = User.builder()
-            .id(userId)
-            .username("testuser")
-            .email("test@example.com")
-            .build()
-        
-        every { userService.findById(userId) } returns user
-        
-        // when & then
-        mockMvc.perform(get("/api/users/{id}", userId))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(userId))
-            .andExpect(jsonPath("$.username").value("testuser"))
-            .andExpect(jsonPath("$.email").value("test@example.com"))
-    }
+    // when & then
+    mockMvc.perform(get("/api/users/{id}", userId))
+      .andExpect(status().isOk)
+      .andExpect(jsonPath("$.id").value(userId))
+      .andExpect(jsonPath("$.username").value("testuser"))
+      .andExpect(jsonPath("$.email").value("test@example.com"))
+  }
     
-    @Test
-    fun `should return 404 when user not found`() {
-        // given
-        val userId = 999L
-        every { userService.findById(userId) } throws UserNotFoundException("User not found")
-        
-        // when & then
-        mockMvc.perform(get("/api/users/{id}", userId))
-            .andExpect(status().isNotFound)
-    }
+  @Test
+  fun `should return 404 when user not found`() {
+    // given
+    val userId = 999L
+    every { userService.findById(userId) } throws UserNotFoundException("User not found")
+    
+    // when & then
+    mockMvc.perform(get("/api/users/{id}", userId))
+      .andExpect(status().isNotFound)
+  }
 }
 ```
 
 ## 测试最佳实践
 
 ### 测试命名
+
 - 测试方法使用描述性名称
 - 使用 `should_xxx_when_xxx` 格式
 - 中文项目可使用中文描述：`` `应该创建用户当提供有效请求时` ``
 
 ### 测试结构
+
 - 使用 Given-When-Then 模式
 - 每个测试只验证一个行为
 - 测试数据独立，不依赖其他测试
 
 ### 断言
+
 - 使用 Kotest 的流畅断言
 - 提供清晰的错误信息
 - 验证关键的业务逻辑
 
 ### 测试数据
+
 - 使用 TestContainers 进行数据库测试
 - 使用 MockK 进行模拟测试
 - 创建测试数据构建器
@@ -175,31 +183,33 @@ class UserControllerTest {
 ## 文档规范
 
 ### API 文档
+
 ```kotlin
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "用户管理", description = "用户相关的 API")
 class UserController(
-    private val userService: UserService
+  private val userService: UserService
 ) {
-    
-    @GetMapping("/{id}")
-    @Operation(summary = "获取用户信息", description = "根据用户ID获取用户详细信息")
-    @ApiResponses(
-        ApiResponse(responseCode = "200", description = "成功"),
-        ApiResponse(responseCode = "404", description = "用户不存在")
-    )
-    fun getUser(
-        @PathVariable
-        @Parameter(description = "用户ID", example = "1")
-        id: Long
-    ): UserDto {
-        return userService.findById(id)
-    }
+  
+  @GetMapping("/{id}")
+  @Operation(summary = "获取用户信息", description = "根据用户ID获取用户详细信息")
+  @ApiResponses(
+    ApiResponse(responseCode = "200", description = "成功"),
+    ApiResponse(responseCode = "404", description = "用户不存在")
+  )
+  fun getUser(
+    @PathVariable
+    @Parameter(description = "用户ID", example = "1")
+    id: Long
+  ): UserDto {
+    return userService.findById(id)
+  }
 }
 ```
 
 ### 代码文档
+
 ```kotlin
 /**
  * 用户服务类
@@ -215,31 +225,32 @@ class UserController(
 @Service
 @Transactional
 class UserService(
-    private val userRepository: UserRepository
+  private val userRepository: UserRepository
 ) {
     
-    /**
-     * 创建新用户
-     * 
-     * @param request 用户创建请求，包含用户名和邮箱
-     * @return 创建成功的用户对象
-     * @throws UserAlreadyExistsException 当用户名已存在时
-     * @throws InvalidEmailException 当邮箱格式无效时
-     */
-    fun createUser(request: CreateUserRequest): User {
-        validateUserRequest(request)
+  /**
+   * 创建新用户
+   * 
+   * @param request 用户创建请求，包含用户名和邮箱
+   * @return 创建成功的用户对象
+   * @throws UserAlreadyExistsException 当用户名已存在时
+   * @throws InvalidEmailException 当邮箱格式无效时
+   */
+  fun createUser(request: CreateUserRequest): User {
+    validateUserRequest(request)
+    
+    val user = User.builder()
+      .username(request.username)
+      .email(request.email)
+      .build()
         
-        val user = User.builder()
-            .username(request.username)
-            .email(request.email)
-            .build()
-            
-        return userRepository.save(user)
-    }
+    return userRepository.save(user)
+  }
 }
 ```
 
 ### README 文档结构
+
 ```markdown
 # 模块名称
 
@@ -290,21 +301,25 @@ class UserService(
 ## 文档最佳实践
 
 ### 代码注释
+
 - 解释为什么，而不是做什么
 - 使用 KDoc 格式
 - 保持注释与代码同步
 
 ### API 文档
+
 - 使用 OpenAPI 3.0 规范
 - 提供完整的示例
 - 包含错误处理说明
 
 ### 模块文档
+
 - 每个模块都有独立的 README
 - 包含使用示例
 - 说明依赖关系
 
 ### 更新维护
+
 - 代码变更时同步更新文档
 - 定期检查文档的准确性
 - 收集用户反馈改进文档
@@ -312,16 +327,19 @@ class UserService(
 ## 质量保证
 
 ### 测试覆盖率
+
 - 单元测试覆盖率 >= 80%
 - 集成测试覆盖核心业务流程
 - 使用 JaCoCo 生成覆盖率报告
 
 ### 性能测试
+
 - 关键 API 的性能基准测试
 - 数据库查询性能测试
 - 并发测试
 
 ### 代码质量
+
 - 使用 Detekt 进行静态分析
 - 代码 Review 检查清单
 - 持续集成中的质量门禁

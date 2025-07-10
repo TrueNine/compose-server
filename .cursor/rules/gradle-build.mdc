@@ -8,6 +8,7 @@ description: Gradle 构建和版本管理规范
 ## 项目构建配置
 
 ### 构建脚本文件
+
 - [build.gradle.kts](mdc:build.gradle.kts): 根项目构建配置
 - [settings.gradle.kts](mdc:settings.gradle.kts): 项目设置和模块配置
 - [gradle.properties](mdc:gradle.properties): Gradle 属性和配置
@@ -15,11 +16,13 @@ description: Gradle 构建和版本管理规范
 - `gradle/wrapper/`: Gradle Wrapper 配置
 
 ### 版本管理
+
 - 使用 `gradle/libs.versions.toml` 进行版本目录管理
 - 统一管理所有依赖版本，避免版本冲突
 - 使用 `version-catalog-update` 插件自动更新版本
 
 ### 插件管理
+
 - 使用 `plugins` 块声明插件
 - 通过 `alias()` 引用版本目录中的插件
 - 自定义插件放在 `build-logic` 目录中
@@ -27,28 +30,31 @@ description: Gradle 构建和版本管理规范
 ## 构建约定
 
 ### 模块结构
+
 - 每个模块都有独立的 `build.gradle.kts`
 - 共享配置通过约定插件实现
 - 模块间依赖通过 `api()` 和 `implementation()` 管理
 
 ### 依赖声明
+
 ```kotlin
 dependencies {
-    // 使用版本目录
-    implementation(libs.spring.boot.starter.web)
-    implementation(libs.kotlin.stdlib)
-    
-    // 项目内模块依赖
-    implementation(projects.shared)
-    api(projects.rds.shared)
-    
-    // 测试依赖
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.mockk)
+  // 使用版本目录
+  implementation(libs.spring.boot.starter.web)
+  implementation(libs.kotlin.stdlib)
+
+  // 项目内模块依赖
+  implementation(projects.shared)
+  api(projects.rds.shared)
+
+  // 测试依赖
+  testImplementation(libs.spring.boot.starter.test)
+  testImplementation(libs.mockk)
 }
 ```
 
 ### 代码质量
+
 - 使用 Spotless 进行代码格式化
 - 配置 KtLint 进行 Kotlin 代码检查
 - 使用 Detekt 进行静态代码分析
@@ -56,13 +62,15 @@ dependencies {
 ## 构建任务
 
 ### 常用构建命令
+
 - `./gradlew build`: 构建项目
 - `./gradlew test`: 运行测试
 - `./gradlew clean`: 清理构建输出
 - `./gradlew spotlessApply`: 应用代码格式化
-- `./gradlew versionCatalogUpdate`: 更新版本目录
+- `./gradlew versionCatalogFormat`: 格式化版本目录
 
 ### 发布配置
+
 - 使用 Maven Publish 插件发布构件
 - 配置 BOM (Bill of Materials) 管理依赖版本
 - 使用 Gradle 元数据进行依赖解析
@@ -70,11 +78,13 @@ dependencies {
 ## 性能优化
 
 ### 构建缓存
+
 - 启用 Gradle 构建缓存
 - 使用 Configuration Cache 提高构建性能
 - 并行构建多个模块
 
 ### 内存配置
+
 ```properties
 # gradle.properties
 org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m
@@ -86,11 +96,13 @@ org.gradle.configuration-cache=true
 ## 开发环境
 
 ### IDE 配置
+
 - 使用 IntelliJ IDEA 或 Android Studio
 - 启用 Gradle 同步
 - 配置代码格式化和检查
 
 ### 环境变量
+
 - 设置 `GRADLE_USER_HOME` 指定 Gradle 缓存目录
 - 使用 `JAVA_HOME` 指定 JDK 版本
 - 配置 `GRADLE_OPTS` 设置 JVM 参数
@@ -98,33 +110,36 @@ org.gradle.configuration-cache=true
 ## 模块开发指南
 
 ### 新建模块
+
 1. 在 [settings.gradle.kts](mdc:settings.gradle.kts) 中添加模块
 2. 创建模块目录和 `build.gradle.kts`
 3. 配置模块依赖和插件
 4. 添加源代码目录结构
 
 ### 依赖管理
+
 - 共享依赖在 `shared` 模块中声明
 - 特定功能依赖在相应模块中声明
 - 使用 `api()` 导出传递性依赖
 - 使用 `implementation()` 隐藏内部依赖
 
 ### 示例模块配置
+
 ```kotlin
 plugins {
-    id("buildlogic.kotlin-library-conventions")
-    id("buildlogic.spotless-conventions")
+  id("buildlogic.kotlin-library-conventions")
+  id("buildlogic.spotless-conventions")
 }
 
 dependencies {
-    api(projects.shared)
-    implementation(libs.spring.boot.starter)
-    
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.mockk)
+  api(projects.shared)
+  implementation(libs.spring.boot.starter)
+
+  testImplementation(libs.spring.boot.starter.test)
+  testImplementation(libs.mockk)
 }
 
 tasks.test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
 ```

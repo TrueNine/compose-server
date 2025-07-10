@@ -6,42 +6,45 @@ globs: "**/entity/**/*.kt,**/repository/**/*.kt,**/dto/**/*.kt"
 # Jimmer 数据访问层开发指南
 
 ## Jimmer 简介
+
 Jimmer 是一个强大的 ORM 框架，专为 Java 和 Kotlin 设计，提供了类型安全的查询 DSL 和强大的对象关系映射功能。
 
 ## 实体定义
 
 ### 实体类定义
+
 ```kotlin
 @Entity
 @Table(name = "users")
 interface User {
     
-    @Id
-    @GeneratedValue(generationType = GenerationType.IDENTITY)
-    val id: Long
-    
-    @Column(nullable = false, length = 50)
-    val username: String
-    
-    @Column(nullable = false, length = 100)
-    val email: String
-    
-    @Column(name = "created_at", nullable = false)
-    val createdAt: LocalDateTime
-    
-    @Column(name = "updated_at", nullable = false)
-    val updatedAt: LocalDateTime
-    
-    @OneToMany(mappedBy = "user")
-    val orders: List<Order>
-    
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    val role: Role?
+  @Id
+  @GeneratedValue(generationType = GenerationType.IDENTITY)
+  val id: Long
+  
+  @Column(nullable = false, length = 50)
+  val username: String
+  
+  @Column(nullable = false, length = 100)
+  val email: String
+  
+  @Column(name = "created_at", nullable = false)
+  val createdAt: LocalDateTime
+  
+  @Column(name = "updated_at", nullable = false)
+  val updatedAt: LocalDateTime
+  
+  @OneToMany(mappedBy = "user")
+  val orders: List<Order>
+  
+  @ManyToOne
+  @JoinColumn(name = "role_id")
+  val role: Role?
 }
 ```
 
 ### 实体注解
+
 - `@Entity`: 标记为实体类
 - `@Table`: 指定表名
 - `@Column`: 指定列属性
@@ -52,233 +55,246 @@ interface User {
 ## Repository 接口
 
 ### 基础 Repository
+
 ```kotlin
 @Repository
 interface UserRepository : KRepository<User, Long> {
-    
-    // 根据用户名查询
-    fun findByUsername(username: String): User?
-    
-    // 根据邮箱查询
-    fun findByEmail(email: String): User?
-    
-    // 查询活跃用户
-    fun findByActiveTrue(): List<User>
-    
-    // 分页查询
-    fun findByUsernameContaining(
-        username: String,
-        pageable: Pageable
-    ): Page<User>
+
+  // 根据用户名查询
+  fun findByUsername(username: String): User?
+
+  // 根据邮箱查询
+  fun findByEmail(email: String): User?
+  
+  // 查询活跃用户
+  fun findByActiveTrue(): List<User>
+  
+  // 分页查询
+  fun findByUsernameContaining(
+      username: String,
+      pageable: Pageable
+  ): Page<User>
 }
 ```
 
 ### 自定义查询
+
 ```kotlin
 @Repository
 interface UserRepository : KRepository<User, Long> {
     
-    // 使用 DSL 查询
-    fun findUserWithOrders(userId: Long): User? {
-        return sql.createQuery(User::class) {
-            where(table.id eq userId)
-            select(table.fetchBy {
-                allScalarFields()
-                orders {
-                    allScalarFields()
-                }
-            })
-        }.fetchOneOrNull()
-    }
-    
-    // 复杂查询
-    fun findUsersByCondition(
-        username: String?,
-        email: String?,
-        roleId: Long?
-    ): List<User> {
-        return sql.createQuery(User::class) {
-            where {
-                username?.let { table.username like "%$it%" }
-                email?.let { table.email eq it }
-                roleId?.let { table.role.id eq it }
-            }
-            select(table)
-        }.execute()
-    }
+  // 使用 DSL 查询
+  fun findUserWithOrders(userId: Long): User? {
+      return sql.createQuery(User::class) {
+          where(table.id eq userId)
+          select(table.fetchBy {
+              allScalarFields()
+              orders {
+                  allScalarFields()
+              }
+          })
+      }.fetchOneOrNull()
+  }
+  
+  // 复杂查询
+  fun findUsersByCondition(
+    username: String?,
+    email: String?,
+    roleId: Long?
+  ): List<User> {
+    return sql.createQuery(User::class) {
+      where {
+        username?.let { table.username like "%$it%" }
+        email?.let { table.email eq it }
+        roleId?.let { table.role.id eq it }
+      }
+      select(table)
+    }.execute()
+  }
 }
 ```
 
 ## DTO 投影
 
 ### 简单 DTO
+
 ```kotlin
 @Dto
 data class UserDto(
-    val id: Long,
-    val username: String,
-    val email: String,
-    val createdAt: LocalDateTime
+  val id: Long,
+  val username: String,
+  val email: String,
+  val createdAt: LocalDateTime
 ) {
-    companion object {
-        fun from(user: User): UserDto {
-            return UserDto(
-                id = user.id,
-                username = user.username,
-                email = user.email,
-                createdAt = user.createdAt
-            )
-        }
+  companion object {
+    fun from(user: User): UserDto {
+      return UserDto(
+        id = user.id,
+        username = user.username,
+        email = user.email,
+        createdAt = user.createdAt
+      )
     }
+  }
 }
 ```
 
 ### 嵌套 DTO
+
 ```kotlin
 @Dto
 data class UserWithOrdersDto(
-    val id: Long,
-    val username: String,
-    val email: String,
-    val orders: List<OrderDto>
+  val id: Long,
+  val username: String,
+  val email: String,
+  val orders: List<OrderDto>
 )
 
 @Dto
 data class OrderDto(
-    val id: Long,
-    val orderNumber: String,
-    val amount: BigDecimal,
-    val status: OrderStatus
+  val id: Long,
+  val orderNumber: String,
+  val amount: BigDecimal,
+  val status: OrderStatus
 )
 ```
 
 ## 查询 DSL
 
 ### 基础查询
+
 ```kotlin
 // 简单查询
 val users = sql.createQuery(User::class) {
-    where(table.username eq "admin")
-    select(table)
+  where(table.username eq "admin")
+  select(table)
 }.execute()
 
 // 分页查询
 val page = sql.createQuery(User::class) {
-    where(table.active eq true)
-    orderBy(table.createdAt.desc())
-    select(table)
+  where(table.active eq true)
+  orderBy(table.createdAt.desc())
+  select(table)
 }.fetchPage(pageIndex = 0, pageSize = 10)
 ```
 
 ### 关联查询
+
 ```kotlin
 // 关联查询
 val usersWithOrders = sql.createQuery(User::class) {
-    where(table.id `in` listOf(1L, 2L, 3L))
-    select(table.fetchBy {
-        allScalarFields()
-        orders {
-            allScalarFields()
-        }
-    })
+  where(table.id `in` listOf(1L, 2L, 3L))
+  select(table.fetchBy {
+    allScalarFields()
+    orders {
+      allScalarFields()
+    }
+  })
 }.execute()
 
 // 左连接查询
 val result = sql.createQuery(User::class) {
-    from(table)
-    leftJoin(table.orders) {
-        where(joinedTable.status eq OrderStatus.COMPLETED)
-    }
-    select(table)
+  from(table)
+  leftJoin(table.orders) {
+    where(joinedTable.status eq OrderStatus.COMPLETED)
+  }
+  select(table)
 }.execute()
 ```
 
 ### 聚合查询
+
 ```kotlin
 // 统计查询
 val count = sql.createQuery(User::class) {
-    where(table.active eq true)
-    select(count(table.id))
+  where(table.active eq true)
+  select(count(table.id))
 }.fetchOne()
 
 // 分组查询
 val stats = sql.createQuery(User::class) {
-    groupBy(table.role.id)
-    select(
-        table.role.id,
-        count(table.id),
-        avg(table.age)
-    )
+  groupBy(table.role.id)
+  select(
+    table.role.id,
+    count(table.id),
+    avg(table.age)
+  )
 }.execute()
 ```
 
 ## 事务管理
 
 ### 声明式事务
+
 ```kotlin
 @Service
 @Transactional
 class UserService(
-    private val userRepository: UserRepository
+  private val userRepository: UserRepository
 ) {
     
-    @Transactional
-    fun createUser(request: CreateUserRequest): User {
-        val user = User.builder()
-            .username(request.username)
-            .email(request.email)
-            .build()
-        return userRepository.save(user)
-    }
+  @Transactional
+  fun createUser(request: CreateUserRequest): User {
+    val user = User.builder()
+      .username(request.username)
+      .email(request.email)
+      .build()
+    return userRepository.save(user)
+  }
     
     @Transactional(readOnly = true)
     fun findUserById(id: Long): User? {
-        return userRepository.findById(id)
+      return userRepository.findById(id)
     }
 }
 ```
 
 ### 编程式事务
+
 ```kotlin
 @Service
 class UserService(
-    private val userRepository: UserRepository,
-    private val transactionTemplate: TransactionTemplate
+  private val userRepository: UserRepository,
+  private val transactionTemplate: TransactionTemplate
 ) {
     
-    fun createUserWithTransaction(request: CreateUserRequest): User {
-        return transactionTemplate.execute { status ->
-            val user = User.builder()
-                .username(request.username)
-                .email(request.email)
-                .build()
-            userRepository.save(user)
-        }
+  fun createUserWithTransaction(request: CreateUserRequest): User {
+    return transactionTemplate.execute { status ->
+      val user = User.builder()
+        .username(request.username)
+        .email(request.email)
+        .build()
+      userRepository.save(user)
     }
+  }
 }
 ```
 
 ## 最佳实践
 
 ### 实体设计
+
 1. 使用接口定义实体
 2. 合理使用关联关系
 3. 避免过度的级联操作
 4. 使用合适的抓取策略
 
 ### 查询优化
+
 1. 使用 DTO 投影减少数据传输
 2. 合理使用关联查询
 3. 避免 N+1 查询问题
 4. 使用批量操作提高性能
 
 ### 错误处理
+
 1. 处理 `OptimisticLockingFailureException`
 2. 合理处理空值和异常
 3. 使用自定义异常类型
 4. 记录查询日志用于调试
 
 ### 缓存策略
+
 1. 使用二级缓存提高查询性能
 2. 合理配置缓存过期时间
 3. 注意缓存一致性问题
