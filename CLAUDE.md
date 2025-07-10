@@ -69,7 +69,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **语言**: Kotlin (JVM)
 - **框架**: Spring Boot 3.5.3
 - **ORM**: Jimmer 0.9.97
-- **构建工具**: Gradle 8.x
+- **构建工具**: Gradle 9.x
 - **数据库**: PostgreSQL (主要)
 - **缓存**: Redis, Caffeine
 - **对象存储**: MinIO, 阿里云 OSS, 华为云 OBS
@@ -77,15 +77,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 依赖管理
 
 - 使用 Gradle Version Catalog (`gradle/libs.versions.toml`) 统一管理依赖版本
-- 通过 buildSrc 自定义 Gradle 插件和约定
-- 所有模块版本通过 `compose` 版本号统一管理
+- 通过 build-logic 自定义 Gradle 插件和约定，使用 pluginManagement includeBuild 引入
+- 所有模块版本通过 `project` 版本号统一管理
+- 所有 groupId 通过 `group` 版本号统一管理
 
 ### 代码约定
 
 - 所有模块使用 `kotlinspring-convention` 插件，集成 Spring Boot 和 Kotlin 配置
 - 测试类命名为 `TestEntrance`
 - 使用 Spotless 进行代码格式化
-- 包名遵循 `net.yan100.compose.模块名` 格式
+- 包名遵循 `io.github.truenine.composeserver.模块名` 格式
 
 ### 开发工作流
 
