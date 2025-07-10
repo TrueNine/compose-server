@@ -34,9 +34,9 @@ https://codeup.aliyun.com/67396204e50481de876d1cf2/compose-server.git
 
 ```
 compose-server/
-├── documentation/     # 项目文档
-├── gradle/           # Gradle 配置
-└── build.gradle.kts  # 项目构建配置
+├── documentation/       # 项目文档
+├── gradle/              # Gradle 配置
+└── build.gradle.kts     # 项目构建配置
 └── settings.gradle.kts  # 项目构建设置
 ```
 
