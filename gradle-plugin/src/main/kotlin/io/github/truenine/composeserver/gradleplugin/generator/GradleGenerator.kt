@@ -1,13 +1,13 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
-import java.io.File
-import java.io.FileWriter
-import java.io.InputStreamReader
-import javax.inject.Inject
 import io.github.truenine.composeserver.gradleplugin.consts.Constant
 import io.github.truenine.composeserver.gradleplugin.consts.MavenRepl
 import io.github.truenine.composeserver.gradleplugin.consts.Repos
 import io.github.truenine.composeserver.gradleplugin.wrap
+import java.io.File
+import java.io.FileWriter
+import java.io.InputStreamReader
+import javax.inject.Inject
 import org.gradle.api.Project
 
 /*

@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.gradleplugin.entrance
 
-import javax.inject.Inject
 import io.github.truenine.composeserver.gradleplugin.generator.GradleGeneratorConfig
 import io.github.truenine.composeserver.gradleplugin.jar.JarExtensionConfig
 import io.github.truenine.composeserver.gradleplugin.spotless.SpotlessConfig
+import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
