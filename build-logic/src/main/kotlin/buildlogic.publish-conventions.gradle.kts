@@ -1,6 +1,7 @@
 val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
 
 plugins {
+  // https://github.com/vanniktech/gradle-maven-publish-plugin
   id("com.vanniktech.maven.publish")
 }
 
