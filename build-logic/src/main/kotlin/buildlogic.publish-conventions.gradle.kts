@@ -12,7 +12,7 @@ mavenPublishing {
 mavenPublishing {
   coordinates(
     groupId = libs.versions.group.get(),
-    artifactId = project.name,
+    artifactId = "composeserver-${project.name}",
     version = libs.versions.project.get()
   )
   pom {
@@ -34,19 +34,26 @@ mavenPublishing {
         id = "TrueNine"
         name = "赵日天"
         url = "https://github.com/TrueNine"
+        organizationUrl = "https://github.com/TrueNine"
         timezone = "GMT+8"
+        organization = "Yan100 Dev Group"
+        roles = listOf("developer", "founder")
         email = "truenine304520@gmail.com"
       }
       developer {
         id = "t_teng"
         name = "滕腾"
+        organization = "Nanning, Guangxi, China Yan100 technology Ltd"
+        roles = listOf("sponsor")
         timezone = "GMT+8"
         email = "616057370@qq.com"
       }
       developer {
         id = "bambuo"
         name = "Johana Ĉen"
+        roles = listOf("sponsor")
         url = "https://github.com/bambuo"
+        organization = "Hubei, China Tianshu technology Ltd"
         timezone = "GMT+8"
         email = "845586878@qq.com"
       }

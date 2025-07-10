@@ -144,36 +144,36 @@ net-sf-dozer-dozer = "net.sf.dozer:dozer:5.5.1"
 net-sf-sevenzipjbinding-sevenzipjbinding = { module = "net.sf.sevenzipjbinding:sevenzipjbinding", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { module = "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-supercsv-super-csv = "net.sf.supercsv:super-csv:2.4.0"
-net-yan100-compose-cacheable = { module = "net.yan100.compose:cacheable", version.ref = "project" }
-net-yan100-compose-data-crawler = { module = "net.yan100.compose:data-crawler", version.ref = "project" }
-net-yan100-compose-data-extract = { module = "net.yan100.compose:data-extract", version.ref = "project" }
-net-yan100-compose-depend-http-exchange = { module = "net.yan100.compose:depend-http-exchange", version.ref = "project" }
-net-yan100-compose-depend-jackson = { module = "net.yan100.compose:depend-jackson", version.ref = "project" }
-net-yan100-compose-depend-paho = { module = "net.yan100.compose:depend-paho", version.ref = "project" }
-net-yan100-compose-depend-servlet = { module = "net.yan100.compose:depend-servlet", version.ref = "project" }
-net-yan100-compose-depend-springdoc-openapi = { module = "net.yan100.compose:depend-springdoc-openapi", version.ref = "project" }
-net-yan100-compose-depend-xxl-job = { module = "net.yan100.compose:depend-xxl-job", version.ref = "project" }
-net-yan100-compose-gradle-plugin = { module = "net.yan100.compose:gradle-plugin", version.ref = "project" }
-net-yan100-compose-ksp-plugin = { module = "net.yan100.compose:ksp-plugin", version.ref = "project" }
-net-yan100-compose-ksp-shared = { module = "net.yan100.compose:ksp-shared", version.ref = "project" }
-net-yan100-compose-mcp-langchain4j = { module = "net.yan100.compose:mcp-langchain4j", version.ref = "project" }
-net-yan100-compose-mcp-shared = { module = "net.yan100.compose:mcp-shared", version.ref = "project" }
-net-yan100-compose-meta = { module = "net.yan100.compose:meta", version.ref = "project" }
-net-yan100-compose-oss-aliyun-oss = { module = "net.yan100.compose:oss-aliyun-oss", version.ref = "project" }
-net-yan100-compose-oss-huawei-obs = { module = "net.yan100.compose:oss-huawei-obs", version.ref = "project" }
-net-yan100-compose-oss-minio = { module = "net.yan100.compose:oss-minio", version.ref = "project" }
-net-yan100-compose-oss-shared = { module = "net.yan100.compose:oss-shared", version.ref = "project" }
-net-yan100-compose-pay = { module = "net.yan100.compose:pay", version.ref = "project" }
-net-yan100-compose-rds-crud = { module = "net.yan100.compose:rds-crud", version.ref = "project" }
-net-yan100-compose-rds-flyway-migration-postgresql = { module = "net.yan100.compose:rds-flyway-migration-postgresql", version.ref = "project" }
-net-yan100-compose-rds-jimmer-ext-postgres = { module = "net.yan100.compose:rds-jimmer-ext-postgres", version.ref = "project" }
-net-yan100-compose-rds-shared = { module = "net.yan100.compose:rds-shared", version.ref = "project" }
-net-yan100-compose-security-crypto = { module = "net.yan100.compose:security-crypto", version.ref = "project" }
-net-yan100-compose-security-oauth2 = { module = "net.yan100.compose:security-oauth2", version.ref = "project" }
-net-yan100-compose-security-spring = { module = "net.yan100.compose:security-spring", version.ref = "project" }
-net-yan100-compose-shared = { module = "net.yan100.compose:shared", version.ref = "project" }
-net-yan100-compose-sms-tencent = { module = "net.yan100.compose:sms-tencent", version.ref = "project" }
-net-yan100-compose-testtoolkit = { module = "net.yan100.compose:testtoolkit", version.ref = "project" }
+io-github-truenine-composeserver-cacheable = { module = "io.github.truenine:composeserver-cacheable", version.ref = "project" }
+io-github-truenine-composeserver-data-crawler = { module = "io.github.truenine:composeserver-data-crawler", version.ref = "project" }
+io-github-truenine-composeserver-data-extract = { module = "io.github.truenine:composeserver-data-extract", version.ref = "project" }
+io-github-truenine-composeserver-depend-http-exchange = { module = "io.github.truenine:composeserver-depend-http-exchange", version.ref = "project" }
+io-github-truenine-composeserver-depend-jackson = { module = "io.github.truenine:composeserver-depend-jackson", version.ref = "project" }
+io-github-truenine-composeserver-depend-paho = { module = "io.github.truenine:composeserver-depend-paho", version.ref = "project" }
+io-github-truenine-composeserver-depend-servlet = { module = "io.github.truenine:composeserver-depend-servlet", version.ref = "project" }
+io-github-truenine-composeserver-depend-springdoc-openapi = { module = "io.github.truenine:composeserver-depend-springdoc-openapi", version.ref = "project" }
+io-github-truenine-composeserver-depend-xxl-job = { module = "io.github.truenine:composeserver-depend-xxl-job", version.ref = "project" }
+io-github-truenine-composeserver-gradle-plugin = { module = "io.github.truenine:composeserver-gradle-plugin", version.ref = "project" }
+io-github-truenine-composeserver-ksp-plugin = { module = "io.github.truenine:composeserver-ksp-plugin", version.ref = "project" }
+io-github-truenine-composeserver-ksp-shared = { module = "io.github.truenine:composeserver-ksp-shared", version.ref = "project" }
+io-github-truenine-composeserver-mcp-langchain4j = { module = "io.github.truenine:composeserver-mcp-langchain4j", version.ref = "project" }
+io-github-truenine-composeserver-mcp-shared = { module = "io.github.truenine:composeserver-mcp-shared", version.ref = "project" }
+io-github-truenine-composeserver-meta = { module = "io.github.truenine:composeserver-meta", version.ref = "project" }
+io-github-truenine-composeserver-oss-aliyun-oss = { module = "io.github.truenine:composeserver-oss-aliyun-oss", version.ref = "project" }
+io-github-truenine-composeserver-oss-huawei-obs = { module = "io.github.truenine:composeserver-oss-huawei-obs", version.ref = "project" }
+io-github-truenine-composeserver-oss-minio = { module = "io.github.truenine:composeserver-oss-minio", version.ref = "project" }
+io-github-truenine-composeserver-oss-shared = { module = "io.github.truenine:composeserver-oss-shared", version.ref = "project" }
+io-github-truenine-composeserver-pay = { module = "io.github.truenine:composeserver-pay", version.ref = "project" }
+io-github-truenine-composeserver-rds-crud = { module = "io.github.truenine:composeserver-rds-crud", version.ref = "project" }
+io-github-truenine-composeserver-rds-flyway-migration-postgresql = { module = "io.github.truenine:composeserver-rds-flyway-migration-postgresql", version.ref = "project" }
+io-github-truenine-composeserver-rds-jimmer-ext-postgres = { module = "io.github.truenine:composeserver-rds-jimmer-ext-postgres", version.ref = "project" }
+io-github-truenine-composeserver-rds-shared = { module = "io.github.truenine:composeserver-rds-shared", version.ref = "project" }
+io-github-truenine-composeserver-security-crypto = { module = "io.github.truenine:composeserver-security-crypto", version.ref = "project" }
+io-github-truenine-composeserver-security-oauth2 = { module = "io.github.truenine:composeserver-security-oauth2", version.ref = "project" }
+io-github-truenine-composeserver-security-spring = { module = "io.github.truenine:composeserver-security-spring", version.ref = "project" }
+io-github-truenine-composeserver-shared = { module = "io.github.truenine:composeserver-shared", version.ref = "project" }
+io-github-truenine-composeserver-sms-tencent = { module = "io.github.truenine:composeserver-sms-tencent", version.ref = "project" }
+io-github-truenine-composeserver-testtoolkit = { module = "io.github.truenine:composeserver-testtoolkit", version.ref = "project" }
 nl-littlerobots-version-catalog-update-nl-littlerobots-version-catalog-update-gradle-plugin = { module = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 ognl-ognl = "ognl:ognl:3.4.7"
 org-apache-commons-commons-compress = "org.apache.commons:commons-compress:1.27.1"
@@ -310,7 +310,7 @@ com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "com-diffp
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.52.0"
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
 io-spring-dependency-management = "io.spring.dependency-management:1.1.7"
-net-yan100-compose-gradle-plugin = { id = "net.yan100.compose.gradle-plugin", version.ref = "project" }
+io-github-truenine-composeserver-gradle-plugin = { id = "io.github.truenine.composeserver.gradle-plugin", version.ref = "project" }
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 org-asciidoctor-jvm-convert = "org.asciidoctor.jvm.convert:4.0.4"
 org-graalvm-buildtools-native = "org.graalvm.buildtools.native:0.10.6"
