@@ -1,11 +1,11 @@
 package net.yan100.compose
 
+import io.github.truenine.composeserver.testtoolkit.TempDirMapping
+import io.github.truenine.composeserver.testtoolkit.log
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.testtoolkit.TempDirMapping
-import net.yan100.compose.testtoolkit.log
 
 class JavaNioPathFnsTest {
   @TempDirMapping lateinit var tempDir: Path

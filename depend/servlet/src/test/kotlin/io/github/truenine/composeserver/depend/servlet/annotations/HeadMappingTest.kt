@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.depend.servlet.annotations
 
+import io.github.truenine.composeserver.testtoolkit.annotations.SpringServletTest
 import jakarta.annotation.Resource
 import kotlin.test.Test
-import net.yan100.compose.testtoolkit.annotations.SpringServletTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc

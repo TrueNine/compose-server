@@ -1,5 +1,6 @@
 package net.yan100.compose.security.crypto
 
+import io.github.truenine.composeserver.testtoolkit.log
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -7,7 +8,6 @@ import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.test.Test
-import net.yan100.compose.testtoolkit.log
 
 /**
  * @author TrueNine

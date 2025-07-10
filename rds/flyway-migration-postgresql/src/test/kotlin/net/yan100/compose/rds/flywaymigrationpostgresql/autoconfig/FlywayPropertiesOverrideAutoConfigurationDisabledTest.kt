@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.flywaymigrationpostgresql.autoconfig
 
+import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
 import kotlin.test.Test
-import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.springframework.boot.autoconfigure.flyway.FlywayProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext

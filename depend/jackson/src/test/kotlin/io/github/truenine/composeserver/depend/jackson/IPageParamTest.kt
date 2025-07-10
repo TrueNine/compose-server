@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import net.yan100.compose.domain.IPageParam
 import net.yan100.compose.domain.IPageParamLike
-import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 

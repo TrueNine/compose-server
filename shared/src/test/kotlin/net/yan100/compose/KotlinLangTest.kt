@@ -1,10 +1,10 @@
 package net.yan100.compose
 
+import io.github.truenine.composeserver.testtoolkit.info
+import io.github.truenine.composeserver.testtoolkit.log
 import io.swagger.v3.oas.annotations.media.Schema
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.testtoolkit.info
-import net.yan100.compose.testtoolkit.log
 
 /**
  * # kotlin 特性测试

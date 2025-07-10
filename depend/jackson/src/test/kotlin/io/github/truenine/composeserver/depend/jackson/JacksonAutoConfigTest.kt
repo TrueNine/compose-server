@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import kotlin.test.Test
-import net.yan100.compose.testtoolkit.log
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 
 @WebMvcTest

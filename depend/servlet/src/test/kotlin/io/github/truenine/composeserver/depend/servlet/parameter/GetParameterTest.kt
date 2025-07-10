@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.depend.servlet.parameter
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.testtoolkit.annotations.SpringServletTest
 import jakarta.annotation.Resource
 import kotlin.test.*
-import net.yan100.compose.testtoolkit.annotations.SpringServletTest
 import org.apache.catalina.util.URLEncoder
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType

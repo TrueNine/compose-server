@@ -1,12 +1,12 @@
 package net.yan100.compose.pay.service.impl
 
+import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import java.math.BigDecimal
 import kotlin.test.Ignore
 import kotlin.test.Test
 import net.yan100.compose.generator.IOrderCodeGenerator
 import net.yan100.compose.pay.service.SinglePayService
-import net.yan100.compose.testtoolkit.log
 import org.springframework.boot.test.context.SpringBootTest
 
 @Ignore

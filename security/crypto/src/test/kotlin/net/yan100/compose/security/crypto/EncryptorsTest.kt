@@ -1,8 +1,8 @@
 package net.yan100.compose.security.crypto
 
+import io.github.truenine.composeserver.testtoolkit.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.yan100.compose.testtoolkit.log
 
 class EncryptorsTest {
 

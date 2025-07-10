@@ -1,8 +1,8 @@
 package net.yan100.compose.rds.flywaymigrationpostgresql.flyway
 
+import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
 import kotlin.test.assertTrue
-import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

@@ -1,8 +1,8 @@
 package net.yan100.compose.security.jwt
 
+import io.github.truenine.composeserver.testtoolkit.info
+import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
-import net.yan100.compose.testtoolkit.info
-import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext

@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.data.extract.service
 
+import io.github.truenine.composeserver.testtoolkit.log
 import kotlin.test.Test
-import net.yan100.compose.testtoolkit.log
 import org.springframework.core.io.ClassPathResource
 
 class IChinaNameTest {

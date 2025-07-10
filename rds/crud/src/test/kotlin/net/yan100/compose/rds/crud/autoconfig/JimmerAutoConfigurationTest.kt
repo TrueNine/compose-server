@@ -1,9 +1,9 @@
 package net.yan100.compose.rds.crud.autoconfig
 
+import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
 import kotlin.test.Test
 import kotlin.test.assertNotNull
-import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.babyfish.jimmer.sql.meta.DatabaseNamingStrategy
 import org.springframework.boot.test.context.SpringBootTest
 
