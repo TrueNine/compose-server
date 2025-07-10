@@ -6,6 +6,7 @@ plugins {
   alias(libs.plugins.com.github.ben.manes.versions)
   `version-catalog`
   id("buildlogic.publish-conventions")
+  id("buildlogic.spotless-conventions")
 }
 
 repositories {

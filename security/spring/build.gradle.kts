@@ -1,4 +1,7 @@
-plugins { id("buildlogic.kotlinspring-conventions") }
+plugins { 
+  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.spotless-conventions")
+}
 
 description = """
 Spring Security integration providing authentication, authorization, and security configurations.

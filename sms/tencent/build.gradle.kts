@@ -1,4 +1,7 @@
-plugins { id("buildlogic.kotlinspring-conventions") }
+plugins { 
+  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.spotless-conventions")
+}
 
 description = """
 Tencent Cloud SMS service integration for reliable message delivery.

@@ -1,4 +1,7 @@
-plugins { id("buildlogic.kotlinspring-conventions") }
+plugins { 
+  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.spotless-conventions")
+}
 
 description = """
 Cryptographic utilities and security functions using Spring Security and BouncyCastle.

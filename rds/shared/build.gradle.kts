@@ -1,6 +1,7 @@
 plugins {
   id("buildlogic.kotlinspring-conventions")
   alias(libs.plugins.com.google.devtools.ksp)
+  id("buildlogic.spotless-conventions")
 }
 
 description = """

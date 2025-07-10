@@ -3,6 +3,7 @@ import kotlin.jvm.optionals.getOrNull
 plugins {
   `java-platform`
   id("buildlogic.publish-conventions")
+  id("buildlogic.spotless-conventions")
 }
 
 description = """

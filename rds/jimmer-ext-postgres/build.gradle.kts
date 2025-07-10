@@ -1,4 +1,7 @@
-plugins { id("buildlogic.kotlinspring-conventions") }
+plugins { 
+  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.spotless-conventions")
+}
 
 description = """
 PostgreSQL-specific extensions and enhancements for Jimmer ORM framework.

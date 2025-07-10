@@ -1,4 +1,7 @@
-plugins { id("buildlogic.kotlinspring-conventions") }
+plugins { 
+  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.spotless-conventions")
+}
 
 description = """
 OAuth2 authentication and authorization implementation with support for various providers.

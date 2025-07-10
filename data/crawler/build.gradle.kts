@@ -1,5 +1,6 @@
 plugins {
   id("buildlogic.kotlin-conventions")
+  id("buildlogic.spotless-conventions")
 }
 
 description = """

@@ -1,5 +1,6 @@
 plugins {
 
+  id("buildlogic.spotless-conventions")
 }
 
 description = """
