@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.data.extract.service
 
+import io.github.truenine.composeserver.string
 import kotlin.test.*
-import net.yan100.compose.string
 
 /**
  * # ILazyAddressService 接口测试

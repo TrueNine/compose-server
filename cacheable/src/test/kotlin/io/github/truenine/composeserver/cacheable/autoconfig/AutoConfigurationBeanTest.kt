@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.cacheable.autoconfig
 
 import io.github.truenine.composeserver.cacheable.CacheableEntrance
+import io.github.truenine.composeserver.slf4j
 import jakarta.annotation.Resource
 import kotlin.test.Test
 import kotlin.test.assertNotNull
-import net.yan100.compose.slf4j
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.caffeine.CaffeineCacheManager
 

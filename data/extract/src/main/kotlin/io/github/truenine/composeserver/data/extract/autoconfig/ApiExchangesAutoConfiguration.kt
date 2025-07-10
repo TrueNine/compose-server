@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.data.extract.autoconfig
 
 import io.github.truenine.composeserver.data.extract.api.ICnNbsAddressApi
+import io.github.truenine.composeserver.exceptions.RemoteCallException
+import io.github.truenine.composeserver.slf4j
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import io.netty.resolver.DefaultAddressResolverGroup
-import net.yan100.compose.exceptions.RemoteCallException
-import net.yan100.compose.slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.reactive.ReactorClientHttpConnector

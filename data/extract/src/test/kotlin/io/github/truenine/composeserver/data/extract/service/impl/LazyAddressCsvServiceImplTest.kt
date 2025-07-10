@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.data.extract.service.impl
 
+import io.github.truenine.composeserver.holders.ResourceHolder
 import io.mockk.every
 import io.mockk.mockk
 import kotlin.test.*
-import net.yan100.compose.holders.ResourceHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

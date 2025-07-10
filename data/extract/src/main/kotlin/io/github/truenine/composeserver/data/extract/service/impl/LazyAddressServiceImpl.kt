@@ -3,8 +3,8 @@ package io.github.truenine.composeserver.data.extract.service.impl
 import io.github.truenine.composeserver.data.extract.api.ICnNbsAddressApi
 import io.github.truenine.composeserver.data.extract.domain.CnDistrictCode
 import io.github.truenine.composeserver.data.extract.service.ILazyAddressService
-import net.yan100.compose.slf4j
-import net.yan100.compose.string
+import io.github.truenine.composeserver.slf4j
+import io.github.truenine.composeserver.string
 import org.jsoup.Jsoup
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.stereotype.Service

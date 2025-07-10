@@ -2,10 +2,10 @@ package io.github.truenine.composeserver.cacheable.autoconfig
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.consts.ICacheNames
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
+import io.github.truenine.composeserver.slf4j
 import java.time.Duration
-import net.yan100.compose.consts.ICacheNames
-import net.yan100.compose.slf4j
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

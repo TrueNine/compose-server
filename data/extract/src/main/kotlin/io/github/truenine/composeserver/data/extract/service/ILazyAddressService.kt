@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.data.extract.service
 
+import io.github.truenine.composeserver.SysLogger
+import io.github.truenine.composeserver.consts.IRegexes
 import io.github.truenine.composeserver.data.extract.domain.CnDistrictCode
-import net.yan100.compose.SysLogger
-import net.yan100.compose.consts.IRegexes
-import net.yan100.compose.nonText
-import net.yan100.compose.string
+import io.github.truenine.composeserver.nonText
+import io.github.truenine.composeserver.string
 
 /** 懒加载行政区划代码服务接口。 提供按需、分版本获取中国行政区划代码（统计用区划代码和城乡划分代码）的功能。 */
 interface ILazyAddressService {

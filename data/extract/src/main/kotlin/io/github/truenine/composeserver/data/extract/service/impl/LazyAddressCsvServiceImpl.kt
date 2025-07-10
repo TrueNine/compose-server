@@ -2,11 +2,11 @@ package io.github.truenine.composeserver.data.extract.service.impl
 
 import io.github.truenine.composeserver.data.extract.domain.CnDistrictCode
 import io.github.truenine.composeserver.data.extract.service.ILazyAddressService
+import io.github.truenine.composeserver.holders.ResourceHolder
+import io.github.truenine.composeserver.slf4j
+import io.github.truenine.composeserver.string
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
-import net.yan100.compose.holders.ResourceHolder
-import net.yan100.compose.slf4j
-import net.yan100.compose.string
 import org.springframework.context.annotation.Primary
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
