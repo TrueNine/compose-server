@@ -1,4 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import kotlin.jvm.optionals.getOrNull
 
 plugins {
