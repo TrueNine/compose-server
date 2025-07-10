@@ -20,8 +20,6 @@ class ApiExchangeAutoConfiguration {
 
   @Bean
   fun wxpaApi(objectMapper: ObjectMapper): IWxpaWebClient {
-    return jsonWebClientRegister<IWxpaWebClient>(objectMapper) { a, b ->
-      a to b
-    }
+    return jsonWebClientRegister<IWxpaWebClient>(objectMapper) { a, b -> a to b }
   }
 }

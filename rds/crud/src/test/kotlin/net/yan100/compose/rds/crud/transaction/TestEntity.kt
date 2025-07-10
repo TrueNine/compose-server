@@ -7,9 +7,7 @@ import org.babyfish.jimmer.sql.Id
 
 @Entity
 interface TestEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  val id: Long
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long
   val name: String?
   val value: Int?
 }

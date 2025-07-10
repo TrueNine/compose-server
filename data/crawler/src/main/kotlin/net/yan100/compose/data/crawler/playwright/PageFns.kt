@@ -18,8 +18,7 @@ fun Page.navigatorWebdriver(): Boolean {
   return d != null && d == true
 }
 
-fun Page.currentUserAgent(): String? =
-  this.evaluate("navigator.userAgent") as? String?
+fun Page.currentUserAgent(): String? = this.evaluate("navigator.userAgent") as? String?
 
 @Suppress("UNCHECKED_CAST")
 fun Page.sessionStorage(): Map<String, String> {
@@ -30,15 +29,11 @@ fun Page.sessionStorage(): Map<String, String> {
 fun Page.cookies(): List<Cookie> = this.context().cookies()
 
 fun Page.initHiddenWebDriver() {
-  this.addInitScript(
-    "Object.defineProperties(navigator,{webdriver:{get:undefined}})"
-  )
+  this.addInitScript("Object.defineProperties(navigator,{webdriver:{get:undefined}})")
 }
 
 fun Page.hiddenWebDriver() {
-  this.evaluate(
-    "Object.defineProperties(navigator,{webdriver:{get:undefined}})"
-  )
+  this.evaluate("Object.defineProperties(navigator,{webdriver:{get:undefined}})")
 }
 
 fun Page.waitForPageAllLoaded(): Page {
@@ -51,8 +46,7 @@ fun Page.waitForPageAllLoaded(): Page {
 fun Page.locatorWaitFor(
   selector: String,
   locatorOptions: Page.LocatorOptions? = null,
-  waitForOptions: WaitForOptions? =
-    WaitForOptions().setState(WaitForSelectorState.ATTACHED),
+  waitForOptions: WaitForOptions? = WaitForOptions().setState(WaitForSelectorState.ATTACHED),
 ): Locator {
   val l = this.locator(selector, locatorOptions)
   l.waitFor(waitForOptions)

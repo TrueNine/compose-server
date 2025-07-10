@@ -1,11 +1,10 @@
 package net.yan100.compose.security.crypto
 
+import javax.crypto.spec.SecretKeySpec
 import net.yan100.compose.security.crypto.domain.IEccExtKeyPair
 import net.yan100.compose.security.crypto.domain.IKeysRepo
 import net.yan100.compose.security.crypto.domain.IRsaExtKeyPair
 import net.yan100.compose.slf4j
-import javax.crypto.spec.SecretKeySpec
-
 
 class FileKeysRepoImpl(
   private val keyDest: String = "security",
@@ -20,16 +19,8 @@ class FileKeysRepoImpl(
 
   init {
     aesKey = Keys.readAesKeyByBase64(read(aesPaths))
-    rsaKeyPair =
-      Keys.readRsaKeyPair(
-        read(rsaKeyPairPaths.first),
-        read(rsaKeyPairPaths.second),
-      )
-    eccKeyPair =
-      Keys.readEccKeyPair(
-        read(eccKeyPairPaths.first),
-        read(eccKeyPairPaths.second),
-      )
+    rsaKeyPair = Keys.readRsaKeyPair(read(rsaKeyPairPaths.first), read(rsaKeyPairPaths.second))
+    eccKeyPair = Keys.readEccKeyPair(read(eccKeyPairPaths.first), read(eccKeyPairPaths.second))
   }
 
   override fun basicEccKeyPair(): IEccExtKeyPair? {
@@ -45,14 +36,12 @@ class FileKeysRepoImpl(
   }
 
   private fun read(name: String): String {
-    val text =
-      javaClass.classLoader.getResource("${this.keyDest}/$name")!!.readText()
+    val text = javaClass.classLoader.getResource("${this.keyDest}/$name")!!.readText()
     log.trace("text = {}", text)
     return text
   }
 
   companion object {
-    @JvmStatic
-    private val log = slf4j<FileKeysRepoImpl>()
+    @JvmStatic private val log = slf4j<FileKeysRepoImpl>()
   }
 }

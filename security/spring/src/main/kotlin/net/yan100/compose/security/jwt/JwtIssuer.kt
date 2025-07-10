@@ -3,16 +3,16 @@ package net.yan100.compose.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.yan100.compose.DTimer
-import net.yan100.compose.security.crypto.Encryptors
-import net.yan100.compose.security.jwt.consts.IssuerParam
-import net.yan100.compose.slf4j
-import org.slf4j.Logger
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.Duration
+import net.yan100.compose.DTimer
+import net.yan100.compose.security.crypto.Encryptors
+import net.yan100.compose.security.jwt.consts.IssuerParam
+import net.yan100.compose.slf4j
+import org.slf4j.Logger
 
 class JwtIssuer private constructor() : JwtVerifier() {
   var expireMillis: Long = Duration.ofMinutes(30).toMillis()
@@ -32,29 +32,18 @@ class JwtIssuer private constructor() : JwtVerifier() {
         if (params.containEncryptContent()) {
           withClaim(
             this@JwtIssuer.encryptDataKeyName,
-            encryptData(
-              createContent(params.encryptedDataObj!!),
-              params.contentEncryptEccKey
-                ?: this@JwtIssuer.contentEccPublicKey!!,
-            ),
+            encryptData(createContent(params.encryptedDataObj!!), params.contentEncryptEccKey ?: this@JwtIssuer.contentEccPublicKey!!),
           )
         }
-        withExpiresAt(
-          DTimer.plusMillisFromCurrent(
-            params.duration?.toMillis() ?: this@JwtIssuer.expireMillis
-          )
-        )
+        withExpiresAt(DTimer.plusMillisFromCurrent(params.duration?.toMillis() ?: this@JwtIssuer.expireMillis))
       }
       .sign(Algorithm.RSA256(params.signatureKey ?: this.signatureIssuerKey))
   }
 
   internal fun createContent(content: Any): String =
-    runCatching { objectMapper.writeValueAsString(content) }
-      .onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }
-      .getOrElse { "{}" }
+    runCatching { objectMapper.writeValueAsString(content) }.onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }.getOrElse { "{}" }
 
-  internal fun encryptData(encData: String, eccPublicKey: PublicKey): String? =
-    Encryptors.encryptByEccPublicKey(eccPublicKey, encData)
+  internal fun encryptData(encData: String, eccPublicKey: PublicKey): String? = Encryptors.encryptByEccPublicKey(eccPublicKey, encData)
 
   inner class Builder {
     fun build(): JwtIssuer = this@JwtIssuer
@@ -111,10 +100,8 @@ class JwtIssuer private constructor() : JwtVerifier() {
   }
 
   companion object {
-    @JvmStatic
-    fun createIssuer() = JwtIssuer().Builder()
+    @JvmStatic fun createIssuer() = JwtIssuer().Builder()
 
-    @JvmStatic
-    private val log: Logger = slf4j(JwtIssuer::class)
+    @JvmStatic private val log: Logger = slf4j(JwtIssuer::class)
   }
 }

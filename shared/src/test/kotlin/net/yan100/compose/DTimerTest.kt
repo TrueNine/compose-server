@@ -1,17 +1,15 @@
 package net.yan100.compose
 
+import java.time.*
+import java.util.stream.Stream
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.time.*
-import java.util.stream.Stream
-import kotlin.test.assertEquals
 
-/**
- * DTimer 工具类单元测试
- */
+/** DTimer 工具类单元测试 */
 class DTimerTest {
 
   // 固定基准时间，使用UTC时区以避免时区问题
@@ -55,10 +53,7 @@ class DTimerTest {
     @Test
     fun `正常将 LocalDate 转换为 Instant 时，返回正确的 Instant`() {
       val result = DTimer.localDateToInstant(fixedTestLocalDate, utcZone)
-      assertEquals(
-        LocalDateTime.of(fixedTestLocalDate, LocalTime.MIDNIGHT)
-          .toInstant(utcZone).toEpochMilli(), result.toEpochMilli()
-      )
+      assertEquals(LocalDateTime.of(fixedTestLocalDate, LocalTime.MIDNIGHT).toInstant(utcZone).toEpochMilli(), result.toEpochMilli())
     }
 
     @Test
@@ -146,8 +141,8 @@ class DTimerTest {
 
     @Test
     fun `边界值测试日期变更线时，正确处理时间转换`() {
-      val eastZone = ZoneId.of("Pacific/Kiritimati")  // UTC+14
-      val westZone = ZoneId.of("Pacific/Niue")       // UTC-11
+      val eastZone = ZoneId.of("Pacific/Kiritimati") // UTC+14
+      val westZone = ZoneId.of("Pacific/Niue") // UTC-11
 
       val testInstant = Instant.parse("2023-01-01T00:00:00Z")
 
@@ -168,22 +163,10 @@ class DTimerTest {
       val testInstant = Instant.parse("2023-01-01T12:00:00Z")
 
       return Stream.of(
-        Arguments.of(
-          ZoneId.of("UTC"),
-          testInstant,
-          LocalDateTime.of(2023, 1, 1, 12, 0, 0)
-        ),
-        Arguments.of(
-          ZoneId.of("Asia/Shanghai"),
-          testInstant,
-          LocalDateTime.of(2023, 1, 1, 20, 0, 0)
-        ),
-        Arguments.of(
-          ZoneId.of("America/New_York"),
-          testInstant,
-          LocalDateTime.of(2023, 1, 1, 7, 0, 0)
-        )
+        Arguments.of(ZoneId.of("UTC"), testInstant, LocalDateTime.of(2023, 1, 1, 12, 0, 0)),
+        Arguments.of(ZoneId.of("Asia/Shanghai"), testInstant, LocalDateTime.of(2023, 1, 1, 20, 0, 0)),
+        Arguments.of(ZoneId.of("America/New_York"), testInstant, LocalDateTime.of(2023, 1, 1, 7, 0, 0)),
       )
     }
   }
-} 
+}

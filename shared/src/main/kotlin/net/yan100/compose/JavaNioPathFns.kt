@@ -1,6 +1,5 @@
 package net.yan100.compose
 
-import net.yan100.compose.domain.IPage
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
@@ -10,6 +9,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
+import net.yan100.compose.domain.IPage
 
 const val capacity = 8192
 private val lineSep: String = System.lineSeparator()
@@ -23,8 +23,7 @@ fun Path.isEmpty(): Boolean {
 }
 
 fun Path.fileChannel(mode: String = "r"): FileChannel {
-  return if (isFile()) RandomAccessFile(this.absolutePathString(), mode).channel
-  else throw FileNotFoundException("$this is not a file")
+  return if (isFile()) RandomAccessFile(this.absolutePathString(), mode).channel else throw FileNotFoundException("$this is not a file")
 }
 
 fun Path.sliceLines(
@@ -42,11 +41,7 @@ fun Path.sliceLines(
     if (isEmpty()) return@sequence
     fileChannel().use { channel ->
       val first = sliceRange.first.toSafeInt()
-      countWordBySeparator(
-        sep = sep,
-        bufferCapacity = bufferCapacity,
-        charset = charset,
-      )
+      countWordBySeparator(sep = sep, bufferCapacity = bufferCapacity, charset = charset)
         .drop(first)
         .take(sliceRange.last.toSafeInt() - sliceRange.first.toSafeInt())
         .map {
@@ -74,10 +69,7 @@ private operator fun ByteBuffer.minus(other: Triple<Int, Int, Int>): ByteArray {
   return arr
 }
 
-inline fun FileChannel.loopBytes(
-  bufferCapacity: Int = capacity,
-  block: (ByteBuffer) -> Unit,
-) {
+inline fun FileChannel.loopBytes(bufferCapacity: Int = capacity, block: (ByteBuffer) -> Unit) {
   val buffer = ByteBuffer.allocateDirect(bufferCapacity)
   while (read(buffer) != -1) {
     buffer.flip()
@@ -88,11 +80,7 @@ inline fun FileChannel.loopBytes(
   }
 }
 
-fun Path.countWordBySeparator(
-  sep: String = lineSep,
-  bufferCapacity: Int = capacity,
-  charset: Charset = Charsets.UTF_8,
-): Sequence<Pair<Long, Long>> {
+fun Path.countWordBySeparator(sep: String = lineSep, bufferCapacity: Int = capacity, charset: Charset = Charsets.UTF_8): Sequence<Pair<Long, Long>> {
   if (isEmpty()) return emptySequence()
   if (sep.isEmpty()) error("separator must be text")
 
@@ -128,24 +116,13 @@ fun Path.fileSize(): Long {
   return Files.size(this)
 }
 
-fun Path.pageLines(
-  param: Pq,
-  sep: String = lineSep,
-  charset: Charset = Charsets.UTF_8,
-): Pr<String> {
+fun Path.pageLines(param: Pq, sep: String = lineSep, charset: Charset = Charsets.UTF_8): Pr<String> {
   return if (isEmpty() || sep.isEmpty()) IPage.emptyWith()
   else {
     val total = countLines()
     val p = param + total.toSafeInt()
     val range = p.toLongRange()
-    val dataList =
-      sliceLines(
-        range = range,
-        totalLines = total,
-        sep = sep,
-        charset = charset,
-      )
-        .toList()
+    val dataList = sliceLines(range = range, totalLines = total, sep = sep, charset = charset).toList()
     return Pr[dataList, total, p]
   }
 }

@@ -1,16 +1,13 @@
 package net.yan100.compose.rds.converters
 
-import net.yan100.compose.typing.AnyTyping
-import org.babyfish.jimmer.sql.runtime.AbstractScalarProvider
 import java.lang.reflect.Method
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
+import net.yan100.compose.typing.AnyTyping
+import org.babyfish.jimmer.sql.runtime.AbstractScalarProvider
 
-abstract class AbstractJimmerTypingProvider<T : AnyTyping, S : Any>(
-  ct: KClass<T>,
-  st: KClass<S>,
-) : AbstractScalarProvider<T, S>(ct.java, st.java) {
+abstract class AbstractJimmerTypingProvider<T : AnyTyping, S : Any>(ct: KClass<T>, st: KClass<S>) : AbstractScalarProvider<T, S>(ct.java, st.java) {
   private val converterCache: MutableMap<Type, Method> = ConcurrentHashMap()
 
   private fun getCallable(type: Type): Method {
@@ -19,13 +16,8 @@ abstract class AbstractJimmerTypingProvider<T : AnyTyping, S : Any>(
     return if (fn != null) {
       fn.also { converterCache[type] = fn }
     } else {
-      val methods =
-        (type as Class<*>).declaredMethods.filter {
-          (it.name == "get" || it.name == "findVal") && it.parameters.size == 1
-        }
-      val callFn =
-        methods.firstOrNull()
-          ?: error("type: $type has no method named 'get' or 'findVal'")
+      val methods = (type as Class<*>).declaredMethods.filter { (it.name == "get" || it.name == "findVal") && it.parameters.size == 1 }
+      val callFn = methods.firstOrNull() ?: error("type: $type has no method named 'get' or 'findVal'")
       callFn.also { converterCache[type] = callFn }
     }
   }

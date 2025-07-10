@@ -37,10 +37,7 @@ class AddPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expected = listOf("rpi", "rln", "rrn", "nlv", "tgi")
-    assertTrue(
-      columns.containsAll(expected),
-      "缺少 presort tree 字段: " + (expected - columns),
-    )
+    assertTrue(columns.containsAll(expected), "缺少 presort tree 字段: " + (expected - columns))
   }
 
   @Test
@@ -60,9 +57,6 @@ class AddPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expected = listOf("rpi", "rln", "rrn", "nlv", "tgi")
-    assertTrue(
-      columns.containsAll(expected),
-      "add_presort_tree_struct 幂等性失败: " + (expected - columns),
-    )
+    assertTrue(columns.containsAll(expected), "add_presort_tree_struct 幂等性失败: " + (expected - columns))
   }
 }

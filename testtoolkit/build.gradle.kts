@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Comprehensive testing toolkit with TestContainers, MockK, and Spring Boot test support.
 Provides unified testing utilities for unit, integration, and contract testing across all modules.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(libs.org.jetbrains.kotlin.kotlin.test)

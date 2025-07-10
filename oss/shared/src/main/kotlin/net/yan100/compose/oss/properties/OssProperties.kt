@@ -13,9 +13,4 @@ private const val PREFIX = "compose.oss"
  * @author TrueNine
  * @since 2022-10-28
  */
-@ConfigurationProperties(prefix = PREFIX)
-data class OssProperties(
-  var baseUrl: String? = null,
-  var exposeBaseUrl: String? = null,
-  var port: Int? = null,
-)
+@ConfigurationProperties(prefix = PREFIX) data class OssProperties(var baseUrl: String? = null, var exposeBaseUrl: String? = null, var port: Int? = null)

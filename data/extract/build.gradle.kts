@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Data extraction utilities supporting multiple formats including Excel, CSV, and web scraping.
 Provides EasyExcel integration, JSoup for HTML parsing, and reactive data processing capabilities.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   implementation(libs.bundles.kotlin.reactor)
@@ -16,10 +18,7 @@ dependencies {
   api(libs.net.sf.supercsv.`super`.csv)
 
   api(libs.com.alibaba.easyexcel) {
-    exclude(
-      group = libs.org.apache.commons.commons.compress.get().module.group,
-      module = libs.org.apache.commons.commons.compress.get().module.name,
-    )
+    exclude(group = libs.org.apache.commons.commons.compress.get().module.group, module = libs.org.apache.commons.commons.compress.get().module.name)
   }
   implementation(libs.org.apache.commons.commons.compress)
 
@@ -28,7 +27,5 @@ dependencies {
 
   testImplementation(projects.testtoolkit)
   testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding)
-  testImplementation(
-    libs.net.sf.sevenzipjbinding.sevenzipjbinding.all.platforms
-  )
+  testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding.all.platforms)
 }

@@ -1,9 +1,9 @@
 package net.yan100.compose.security.oauth2.service
 
 import jakarta.annotation.Resource
-import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
+import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class WxpaServiceTest {

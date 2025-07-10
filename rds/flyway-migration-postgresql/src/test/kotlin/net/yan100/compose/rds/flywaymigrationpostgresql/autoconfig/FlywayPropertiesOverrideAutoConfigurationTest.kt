@@ -11,8 +11,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.jdbc.core.JdbcTemplate
 
 @SpringBootTest
-class FlywayPropertiesOverrideAutoConfigurationTest :
-  IDatabasePostgresqlContainer {
+class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContainer {
   @Resource lateinit var ctx: ApplicationContext
 
   @Resource lateinit var jdbcTemplate: JdbcTemplate
@@ -49,9 +48,7 @@ class FlywayPropertiesOverrideAutoConfigurationTest :
   fun `确保 flyway properties 的 enabled 已经被覆盖`() {
     val flywayProperties = ctx.getBean(FlywayProperties::class.java)
 
-    assertTrue("没有覆盖到 flyway properties 的 enabled 属性") {
-      flywayProperties.isEnabled
-    }
+    assertTrue("没有覆盖到 flyway properties 的 enabled 属性") { flywayProperties.isEnabled }
     assertTrue { flywayProperties.isBaselineOnMigrate }
     assertTrue { flywayProperties.isOutOfOrder }
     assertEquals("9000", flywayProperties.baselineVersion)

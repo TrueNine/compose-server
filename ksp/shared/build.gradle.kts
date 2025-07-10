@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Shared utilities and base classes for Kotlin Symbol Processing (KSP) development.
 Provides common KSP APIs, KotlinPoet utilities, and shared metadata for code generation tasks.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(libs.com.google.devtools.ksp.symbol.processing.api)

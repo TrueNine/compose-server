@@ -6,11 +6,7 @@ package net.yan100.compose.typing
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class HttpStatusTyping(
-  val code: Int,
-  val message: String,
-  val alert: String,
-) : IntTyping {
+enum class HttpStatusTyping(val code: Int, val message: String, val alert: String) : IntTyping {
   _200(200, "OK", "请求成功"),
   _400(400, "Bad Request", "用户错误"),
   _401(401, "Unauthorized", "请进行身份校验"),
@@ -41,8 +37,7 @@ enum class HttpStatusTyping(
   override val value: Int = code
 
   companion object {
-    @JvmStatic
-    fun findVal(v: Int?) = valueOf(v)
+    @JvmStatic fun findVal(v: Int?) = valueOf(v)
 
     @JvmStatic
     fun valueOf(code: Int?): HttpStatusTyping {

@@ -3,6 +3,8 @@ package net.yan100.compose.security.spring.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import java.nio.charset.Charset
+import java.util.*
 import net.yan100.compose.ErrorBody
 import net.yan100.compose.slf4j
 import net.yan100.compose.typing.HttpStatusTyping
@@ -11,8 +13,6 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.access.AccessDeniedHandler
-import java.nio.charset.Charset
-import java.util.*
 
 /**
  * 异常过滤器
@@ -20,38 +20,18 @@ import java.util.*
  * @author TrueNine
  * @since 2022-09-28
  */
-abstract class SecurityExceptionAdware(
-  private var mapper: ObjectMapper? = null
-) : AccessDeniedHandler, AuthenticationEntryPoint {
-  override fun commence(
-    request: HttpServletRequest,
-    response: HttpServletResponse,
-    ex: AuthenticationException,
-  ) {
+abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null) : AccessDeniedHandler, AuthenticationEntryPoint {
+  override fun commence(request: HttpServletRequest, response: HttpServletResponse, ex: AuthenticationException) {
     log.warn("授权校验异常", ex)
-    writeErrorMessage(
-      response,
-      ErrorBody.failedByHttpStatus(HttpStatusTyping._401),
-    )
+    writeErrorMessage(response, ErrorBody.failedByHttpStatus(HttpStatusTyping._401))
   }
 
-  override fun handle(
-    request: HttpServletRequest,
-    response: HttpServletResponse,
-    ex: AccessDeniedException,
-  ) {
+  override fun handle(request: HttpServletRequest, response: HttpServletResponse, ex: AccessDeniedException) {
     log.warn("无权限异常", ex)
-    writeErrorMessage(
-      response,
-      ErrorBody.failedByHttpStatus(HttpStatusTyping._403),
-    )
+    writeErrorMessage(response, ErrorBody.failedByHttpStatus(HttpStatusTyping._403))
   }
 
-  private fun writeErrorMessage(
-    response: HttpServletResponse,
-    msg: ErrorBody,
-    charset: Charset = Charsets.UTF_8,
-  ) {
+  private fun writeErrorMessage(response: HttpServletResponse, msg: ErrorBody, charset: Charset = Charsets.UTF_8) {
     response.status = msg.code!!
     response.characterEncoding = charset.displayName()
     response.contentType = MimeTypes.JSON.value
@@ -62,7 +42,6 @@ abstract class SecurityExceptionAdware(
   }
 
   companion object {
-    @JvmStatic
-    private val log = slf4j(SecurityExceptionAdware::class)
+    @JvmStatic private val log = slf4j(SecurityExceptionAdware::class)
   }
 }

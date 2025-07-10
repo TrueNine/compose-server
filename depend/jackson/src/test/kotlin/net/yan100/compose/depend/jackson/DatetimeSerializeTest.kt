@@ -19,10 +19,7 @@ class DatetimeSerializeTest {
     @Resource set
 
   lateinit var map: ObjectMapper
-    @Resource(
-      name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME
-    )
-    set
+    @Resource(name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) set
 
   @Test
   fun `test serialize obj`() {

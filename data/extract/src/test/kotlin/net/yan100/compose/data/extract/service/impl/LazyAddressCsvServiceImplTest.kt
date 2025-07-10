@@ -31,8 +31,7 @@ class LazyAddressCsvServiceImplTest {
         override fun getFilename(): String = "area_code_2024.csv"
       }
 
-    every { resourceHolder.matchConfigResources("area_code*.csv") } returns
-      listOf(testResource)
+    every { resourceHolder.matchConfigResources("area_code*.csv") } returns listOf(testResource)
     every { resourceHolder.getConfigResource(any()) } returns testResource
 
     service = LazyAddressCsvServiceImpl(resourceHolder)
@@ -167,13 +166,10 @@ class LazyAddressCsvServiceImplTest {
         """
         .trimIndent()
 
-    val invalidResource =
-      ByteArrayResource(invalidCsvContent.toByteArray(), "area_code_2024.csv")
+    val invalidResource = ByteArrayResource(invalidCsvContent.toByteArray(), "area_code_2024.csv")
     every { resourceHolder.getConfigResource(any()) } returns invalidResource
 
-    assertThrows<IndexOutOfBoundsException> {
-      service.getCsvSequence("2024")?.toList()
-    }
+    assertThrows<IndexOutOfBoundsException> { service.getCsvSequence("2024")?.toList() }
   }
 
   @Test
@@ -190,10 +186,7 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 正常递归遍历所有子节点`() {
     val visited = mutableListOf<Pair<String, Int>>()
-    service.traverseChildrenRecursive("110000", 3, "2024") {
-      children,
-      depth,
-      parent ->
+    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code to depth }
       true // 继续递归
     }
@@ -205,10 +198,7 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 回调返回false时中断分支`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("110000", 3, "2024") {
-      children,
-      depth,
-      parent ->
+    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code }
       // 只遍历到市级
       children.all { it.level < 2 }
@@ -221,10 +211,7 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 只遍历一层`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("110000", 1, "2024") {
-      children,
-      depth,
-      parent ->
+    service.traverseChildrenRecursive("110000", 1, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code }
       true
     }
@@ -235,13 +222,8 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive parentDistrict 参数正确`() {
     val parentMap = mutableMapOf<String, String?>()
-    service.traverseChildrenRecursive("110000", 3, "2024") {
-      children,
-      depth,
-      parent ->
-      children.forEach { district ->
-        parentMap[district.code.code] = parent?.code?.code
-      }
+    service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
+      children.forEach { district -> parentMap[district.code.code] = parent?.code?.code }
       true
     }
     // 市的父是 null，区的父是市
@@ -252,20 +234,14 @@ class LazyAddressCsvServiceImplTest {
   @Test
   fun `traverseChildrenRecursive 空数据和无效parentCode`() {
     val visited = mutableListOf<String>()
-    service.traverseChildrenRecursive("999999", 3, "2024") {
-      children,
-      depth,
-      parent ->
+    service.traverseChildrenRecursive("999999", 3, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code }
       true
     }
     assertTrue(visited.isEmpty())
 
     val visited2 = mutableListOf<String>()
-    service.traverseChildrenRecursive("invalid", 3, "2024") {
-      children,
-      depth,
-      parent ->
+    service.traverseChildrenRecursive("invalid", 3, "2024") { children, depth, parent ->
       children.forEach { district -> visited2 += district.code.code }
       true
     }
@@ -296,10 +272,7 @@ class LazyAddressCsvServiceImplTest {
       }
     every { resourceHolder.getConfigResource(any()) } returns resource
     val result = mutableListOf<String>()
-    service.traverseChildrenRecursive("000000000000", 3, "2024") {
-      children,
-      depth,
-      parent ->
+    service.traverseChildrenRecursive("000000000000", 3, "2024") { children, depth, parent ->
       children.forEach { district -> result += district.code.code }
       true
     }
@@ -318,9 +291,7 @@ class LazyAddressCsvServiceImplTest {
         override fun getFilename() = "area_code_2024.csv"
       }
     every { resourceHolder.getConfigResource(any()) } returns resource
-    assertThrows<NumberFormatException> {
-      service.getCsvSequence("2024")?.toList()
-    }
+    assertThrows<NumberFormatException> { service.getCsvSequence("2024")?.toList() }
   }
 
   @Test

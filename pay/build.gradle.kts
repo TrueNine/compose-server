@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Payment processing integration supporting multiple payment providers including WeChat Pay.
 Provides secure payment gateway integration, transaction handling, and payment verification capabilities.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(libs.com.github.wechatpay.apiv3.wechatpay.java)

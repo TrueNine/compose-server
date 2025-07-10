@@ -24,16 +24,10 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `base_struct_to_jimmer_style 应正确转换 rlv 字段类型及 default`() {
-    jdbcTemplate.execute(
-      "create table test_table(id bigint primary key, rlv varchar(10))"
-    )
+    jdbcTemplate.execute("create table test_table(id bigint primary key, rlv varchar(10))")
     jdbcTemplate.execute("select add_base_struct('test_table')")
-    jdbcTemplate.execute(
-      "alter table test_table alter column rlv type varchar(10)"
-    )
-    jdbcTemplate.execute(
-      "alter table test_table alter column rlv set default '1'"
-    )
+    jdbcTemplate.execute("alter table test_table alter column rlv type varchar(10)")
+    jdbcTemplate.execute("alter table test_table alter column rlv set default '1'")
     jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
     val rlvInfo =
       jdbcTemplate.queryForMap(
@@ -44,23 +38,16 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
           .trimIndent()
       )
     assertEquals("integer", rlvInfo["data_type"])
-    assertEquals(
-      "0",
-      rlvInfo["column_default"].toString().replace("::integer", ""),
-    )
+    assertEquals("0", rlvInfo["column_default"].toString().replace("::integer", ""))
   }
 
   @Test
   @Transactional
   fun `base_struct_to_jimmer_style 应正确转换 ldf 字段类型及 default`() {
-    jdbcTemplate.execute(
-      "create table test_table(id bigint primary key, ldf boolean default true)"
-    )
+    jdbcTemplate.execute("create table test_table(id bigint primary key, ldf boolean default true)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("alter table test_table alter column ldf type boolean")
-    jdbcTemplate.execute(
-      "alter table test_table alter column ldf set default true"
-    )
+    jdbcTemplate.execute("alter table test_table alter column ldf set default true")
     jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
     val ldfInfo =
       jdbcTemplate.queryForMap(
@@ -77,9 +64,7 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `base_struct_to_jimmer_style 幂等性测试`() {
-    jdbcTemplate.execute(
-      "create table test_table(id bigint primary key, rlv varchar(10), ldf boolean)"
-    )
+    jdbcTemplate.execute("create table test_table(id bigint primary key, rlv varchar(10), ldf boolean)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
     jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
@@ -100,10 +85,7 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
           .trimIndent()
       )
     assertEquals("integer", rlvInfo["data_type"])
-    assertEquals(
-      "0",
-      rlvInfo["column_default"].toString().replace("::integer", ""),
-    )
+    assertEquals("0", rlvInfo["column_default"].toString().replace("::integer", ""))
     assertEquals("timestamp without time zone", ldfInfo["data_type"])
   }
 }

@@ -2,10 +2,10 @@ package net.yan100.compose.rds
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlin.test.*
 import net.yan100.compose.DisRule
 import net.yan100.compose.rds.typing.DisTyping
 import org.junit.jupiter.api.Test
-import kotlin.test.*
 
 class DisRuleFnsTest {
 
@@ -13,9 +13,7 @@ class DisRuleFnsTest {
   fun `test create`() {
     val emptyArray = DisRule(byteArrayOf())
     assertTrue { emptyArray.meta.size == 28 }
-    emptyArray.meta.forEach {
-      assertTrue { it == 0.toByte() || it == 1.toByte() }
-    }
+    emptyArray.meta.forEach { assertTrue { it == 0.toByte() || it == 1.toByte() } }
   }
 
   @Test

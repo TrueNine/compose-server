@@ -11,9 +11,7 @@ import org.springframework.core.io.DefaultResourceLoader
 class ResourceHolderAutoConfiguration(private val p: DataLoadProperties) {
 
   @Bean
-  fun resourceHolder(
-    defaultResourceLoader: DefaultResourceLoader
-  ): ResourceHolder {
+  fun resourceHolder(defaultResourceLoader: DefaultResourceLoader): ResourceHolder {
     val home = ApplicationHome()
     val res = ResourceHolder(home, defaultResourceLoader, p)
     return res

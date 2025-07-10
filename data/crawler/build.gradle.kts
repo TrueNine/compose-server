@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Web crawling and data scraping utilities with support for multiple automation frameworks.
 Includes Selenium WebDriver, Microsoft Playwright, and intelligent text analysis capabilities.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(projects.shared)

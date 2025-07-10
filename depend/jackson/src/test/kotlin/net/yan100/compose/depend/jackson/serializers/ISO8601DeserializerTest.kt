@@ -37,18 +37,9 @@ class ISO8601DeserializerTest {
 
     // 创建一个简单模块并添加反序列化器
     val module = SimpleModule()
-    module.addDeserializer(
-      LocalDate::class.java,
-      ISO8601Deserializer.LocalDateDeserializerX(zoneOffset),
-    )
-    module.addDeserializer(
-      LocalDateTime::class.java,
-      ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset),
-    )
-    module.addDeserializer(
-      LocalTime::class.java,
-      ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset),
-    )
+    module.addDeserializer(LocalDate::class.java, ISO8601Deserializer.LocalDateDeserializerX(zoneOffset))
+    module.addDeserializer(LocalDateTime::class.java, ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset))
+    module.addDeserializer(LocalTime::class.java, ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset))
 
     // 注册模块
     objectMapper.registerModule(module)
@@ -143,8 +134,7 @@ class ISO8601DeserializerTest {
       val json = """{"dateTime":"$timestamp"}"""
 
       // 反序列化
-      val result =
-        objectMapper.readValue(json, LocalDateTimeWrapper::class.java)
+      val result = objectMapper.readValue(json, LocalDateTimeWrapper::class.java)
 
       // 验证
       assertNotNull(result.dateTime)
@@ -159,8 +149,7 @@ class ISO8601DeserializerTest {
       val minJson = """{"dateTime":"$minTimestamp"}"""
 
       // 反序列化
-      val minResult =
-        objectMapper.readValue(minJson, LocalDateTimeWrapper::class.java)
+      val minResult = objectMapper.readValue(minJson, LocalDateTimeWrapper::class.java)
       assertEquals(minDateTime, minResult.dateTime)
 
       // 测试当前时间
@@ -169,8 +158,7 @@ class ISO8601DeserializerTest {
       val nowJson = """{"dateTime":"$nowTimestamp"}"""
 
       // 反序列化
-      val nowResult =
-        objectMapper.readValue(nowJson, LocalDateTimeWrapper::class.java)
+      val nowResult = objectMapper.readValue(nowJson, LocalDateTimeWrapper::class.java)
 
       // 由于毫秒精度可能不同，所以比较年月日时分秒
       assertEquals(nowDateTime.year, nowResult.dateTime?.year)
@@ -228,8 +216,7 @@ class ISO8601DeserializerTest {
     fun `forLocalDate工厂方法应创建正确的反序列化器`() {
       // 准备测试数据
       val testZoneOffset = ZoneOffset.ofHours(8)
-      val deserializer =
-        ISO8601Deserializer.LocalDateDeserializerX(testZoneOffset)
+      val deserializer = ISO8601Deserializer.LocalDateDeserializerX(testZoneOffset)
 
       // 验证类型
       assertEquals("LocalDateDeserializerX", deserializer.javaClass.simpleName)
@@ -239,22 +226,17 @@ class ISO8601DeserializerTest {
     fun `forLocalDateTime工厂方法应创建正确的反序列化器`() {
       // 准备测试数据
       val testZoneOffset = ZoneOffset.ofHours(8)
-      val deserializer =
-        ISO8601Deserializer.LocalDateTimeDeserializerZ(testZoneOffset)
+      val deserializer = ISO8601Deserializer.LocalDateTimeDeserializerZ(testZoneOffset)
 
       // 验证类型
-      assertEquals(
-        "LocalDateTimeDeserializerZ",
-        deserializer.javaClass.simpleName,
-      )
+      assertEquals("LocalDateTimeDeserializerZ", deserializer.javaClass.simpleName)
     }
 
     @Test
     fun `forLocalTime工厂方法应创建正确的反序列化器`() {
       // 准备测试数据
       val testZoneOffset = ZoneOffset.ofHours(8)
-      val deserializer =
-        ISO8601Deserializer.LocalTimeDeserializerY(testZoneOffset)
+      val deserializer = ISO8601Deserializer.LocalTimeDeserializerY(testZoneOffset)
 
       // 验证类型
       assertEquals("LocalTimeDeserializerY", deserializer.javaClass.simpleName)
@@ -269,10 +251,7 @@ class ISO8601DeserializerTest {
       // 使用不同的时区创建反序列化器
       val beijingZone = ZoneOffset.ofHours(8)
       val module = SimpleModule()
-      module.addDeserializer(
-        LocalDate::class.java,
-        ISO8601Deserializer.LocalDateDeserializerX(beijingZone),
-      )
+      module.addDeserializer(LocalDate::class.java, ISO8601Deserializer.LocalDateDeserializerX(beijingZone))
 
       val beijingMapper = ObjectMapper()
       beijingMapper.registerModule(KotlinModule.Builder().build())

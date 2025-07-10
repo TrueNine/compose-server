@@ -96,15 +96,12 @@ fun KSDeclaration.isKClass(kClass: KClass<*>): Boolean {
 
 /** 判断是否为指定类型 */
 fun KSDeclaration.isKClassQualifiedName(qualifiedName: String): Boolean {
-  require(qualifiedName.isBlank()) {
-    "class $qualifiedName qName be null,qName ${qualifiedName}}"
-  }
+  require(qualifiedName.isBlank()) { "class $qualifiedName qName be null,qName ${qualifiedName}}" }
   return qualifiedNameAsString == qualifiedName.trim()
 }
 
 /** ## 获取真实类型的助注解 */
-val KSDeclaration.actualAnnotationClassDeclarations:
-  Sequence<KSClassDeclaration>
+val KSDeclaration.actualAnnotationClassDeclarations: Sequence<KSClassDeclaration>
   get() {
     val ats = annotations.map { it.annotationType.fastResolve().declaration }
     return ats.map { d ->
@@ -127,17 +124,12 @@ fun KSDeclaration.debugInfo(): String = buildString {
   appendLine("## Compose KSP DEBUG INFO START ============")
   appendLine("\n### DECLARATION\n")
   appendLine("- OriginType: `${origin.name}`")
-  appendLine(
-    "- location: `${(if (location is FileLocation) (location as FileLocation).filePath else "")}`"
-  )
-  appendLine(
-    "- lineNumber: `${(if (location is FileLocation) (location as FileLocation).lineNumber else 0)}`"
-  )
+  appendLine("- location: `${(if (location is FileLocation) (location as FileLocation).filePath else "")}`")
+  appendLine("- lineNumber: `${(if (location is FileLocation) (location as FileLocation).lineNumber else 0)}`")
   appendLine("- isActual: `${isActual}`")
   appendLine("- isExpect: `${isExpect}`")
   appendLine("- TypeParameters Names: `${typeParameters.map { it.name }}`")
-  if (modifiers.isNotEmpty())
-    appendLine("- Modifiers: `${modifiers.joinToString { it.name }}`")
+  if (modifiers.isNotEmpty()) appendLine("- Modifiers: `${modifiers.joinToString { it.name }}`")
 
   appendLine("- packageName asString: `${packageName.asString()}`")
   appendLine("- packageName getShortName: ${packageName.getShortName()}")

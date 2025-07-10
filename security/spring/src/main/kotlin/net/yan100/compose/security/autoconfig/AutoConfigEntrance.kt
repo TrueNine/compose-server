@@ -11,6 +11,4 @@ import org.springframework.context.annotation.ComponentScan
  * @author TrueNine
  * @since 2022-10-28
  */
-@EnableConfigurationProperties(JwtProperties::class, KeysProperties::class)
-@ComponentScan("net.yan100.compose.security.autoconfig")
-class AutoConfigEntrance
+@EnableConfigurationProperties(JwtProperties::class, KeysProperties::class) @ComponentScan("net.yan100.compose.security.autoconfig") class AutoConfigEntrance

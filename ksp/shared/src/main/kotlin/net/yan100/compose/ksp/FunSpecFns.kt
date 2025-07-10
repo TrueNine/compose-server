@@ -12,12 +12,7 @@ fun KSFunctionDeclaration.toFunSpec(): FunSpec {
   return FunSpec.builder(simpleName.asString())
     .also { k ->
       returnType?.toTypeName()?.also { t -> k.returns(t) }
-      parameters.forEach { p ->
-        k.addParameter(
-          ParameterSpec.builder(p.name!!.asString(), p.type.toTypeName())
-            .build()
-        )
-      }
+      parameters.forEach { p -> k.addParameter(ParameterSpec.builder(p.name!!.asString(), p.type.toTypeName()).build()) }
       if (null != findOverridee()) k.addModifiers(KModifier.OVERRIDE)
       else {
         if (isPublic()) k.addModifiers(KModifier.PUBLIC)

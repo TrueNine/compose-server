@@ -1,12 +1,14 @@
-plugins { 
+plugins {
   id("buildlogic.kotlinspring-conventions")
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 OAuth2 authentication and authorization implementation with support for various providers.
 Provides OAuth2 client configurations, token management, and third-party integration capabilities.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)

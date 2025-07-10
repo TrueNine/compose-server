@@ -66,13 +66,7 @@ interface ILazyAddressService {
    * @property level 地区层级 (1:省, 2:市, 3:县, 4:乡镇, 5:村)。
    * @property leaf 是否为叶子节点（通常指村级或无法再下钻的级别）。
    */
-  data class CnDistrict(
-    val code: CnDistrictCode,
-    val name: String,
-    val yearVersion: String,
-    val level: Int = code.level,
-    val leaf: Boolean = level >= 5,
-  )
+  data class CnDistrict(val code: CnDistrictCode, val name: String, val yearVersion: String, val level: Int = code.level, val leaf: Boolean = level >= 5)
 
   // --- 服务属性 ---
   /** 提供的日志记录器 (可选) */
@@ -97,13 +91,7 @@ interface ILazyAddressService {
     if (yearVersion.nonText()) return null
     val currentYearVersion = yearVersion.toIntOrNull() ?: return null
     // 查找小于当前年份且最接近的版本
-    return supportedYearVersions
-      .mapNotNull { it.toIntOrNull() }
-      .distinct()
-      .sortedDescending()
-      .filter { it < currentYearVersion }
-      .maxOrNull()
-      ?.toString()
+    return supportedYearVersions.mapNotNull { it.toIntOrNull() }.distinct().sortedDescending().filter { it < currentYearVersion }.maxOrNull()?.toString()
   }
 
   /** 最新的支持的年份版本 */
@@ -111,8 +99,7 @@ interface ILazyAddressService {
     get() = supportedYearVersions.maxOrNull() ?: supportedDefaultYearVersion
 
   /**
-   * 获取指定代码表示的行政区划的 **直接子级** 列表。 例如，给定省代码，返回该省下的所有市；给定国家代码 "0"，返回所有省。 实现类需要处理
-   * `parentCode` 无效或找不到的情况，并负责根据 `yearVersion` 查找数据，**无需** 自动版本回退。
+   * 获取指定代码表示的行政区划的 **直接子级** 列表。 例如，给定省代码，返回该省下的所有市；给定国家代码 "0"，返回所有省。 实现类需要处理 `parentCode` 无效或找不到的情况，并负责根据 `yearVersion` 查找数据，**无需** 自动版本回退。
    *
    * @param parentCode 父级行政区划代码 (例如：省代码 "110000000000", 国家代码 "0")。
    * @param yearVersion 需要查找的数据年份版本。
@@ -121,19 +108,15 @@ interface ILazyAddressService {
   fun fetchChildren(parentCode: string, yearVersion: String): List<CnDistrict>
 
   /**
-   * 获取所有省份列表（国家 "0" 的直接子级）。 实现类应调用 `findChildren(DEFAULT_COUNTRY_CODE,
-   * yearVersion)`。
+   * 获取所有省份列表（国家 "0" 的直接子级）。 实现类应调用 `findChildren(DEFAULT_COUNTRY_CODE, yearVersion)`。
    *
    * @param yearVersion 数据年份版本。
    * @return 省份 [CnDistrict] 列表。
    */
-  fun fetchAllProvinces(
-    yearVersion: String = supportedDefaultYearVersion
-  ): List<CnDistrict> = fetchChildren(DEFAULT_COUNTRY_CODE, yearVersion)
+  fun fetchAllProvinces(yearVersion: String = supportedDefaultYearVersion): List<CnDistrict> = fetchChildren(DEFAULT_COUNTRY_CODE, yearVersion)
 
   /**
-   * 查找指定代码对应的单个行政区划信息。 实现类需要处理 `code` 无效或找不到的情况。 实现类 **需要** 处理版本回退逻辑：如果
-   * `yearVersion` 找不到，则尝试使用 `lastYearVersionOrNull` 获取更早版本进行查找，直到找到或所有版本都尝试过。
+   * 查找指定代码对应的单个行政区划信息。 实现类需要处理 `code` 无效或找不到的情况。 实现类 **需要** 处理版本回退逻辑：如果 `yearVersion` 找不到，则尝试使用 `lastYearVersionOrNull` 获取更早版本进行查找，直到找到或所有版本都尝试过。
    *
    * @param code 需要查找的行政区划代码（可以是任意层级的部分或完整代码）。
    * @param yearVersion **起始** 查找的数据年份版本 (若希望总是从最新开始，传入 `lastYearVersion`)。
@@ -142,21 +125,15 @@ interface ILazyAddressService {
   fun fetchDistrict(code: string, yearVersion: String): CnDistrict?
 
   /**
-   * 递归查找指定代码下的 **所有子孙** 行政区划列表，直到指定的最大深度。 实现类需要处理 `parentCode` 无效或找不到的情况，并处理
-   * `maxDepth`。 实现类 **需要** 处理版本回退逻辑：对于查找的每一层级，如果在一个版本中找不到子节点，应尝试更早的版本。
+   * 递归查找指定代码下的 **所有子孙** 行政区划列表，直到指定的最大深度。 实现类需要处理 `parentCode` 无效或找不到的情况，并处理 `maxDepth`。 实现类 **需要** 处理版本回退逻辑：对于查找的每一层级，如果在一个版本中找不到子节点，应尝试更早的版本。
    * （注意：版本回退逻辑可能比较复杂，例如，父节点在 V2 找到，子节点在 V1 找到）。
    *
    * @param parentCode 父级行政区划代码。
-   * @param maxDepth 相对于 `parentCode` 的最大查找深度（例如 `maxDepth = 1` 表示只查找直接子级，等同于
-   *   `findChildren`）。
+   * @param maxDepth 相对于 `parentCode` 的最大查找深度（例如 `maxDepth = 1` 表示只查找直接子级，等同于 `findChildren`）。
    * @param yearVersion **起始** 查找的数据年份版本 (每一层递归都应从这个版本开始尝试)。
    * @return 所有符合条件的子孙 [CnDistrict] 列表 (每个 District 应包含实际找到数据的年份版本)。
    */
-  fun fetchChildrenRecursive(
-    parentCode: string,
-    maxDepth: Int = supportedMaxLevel,
-    yearVersion: String = lastYearVersion,
-  ): List<CnDistrict>
+  fun fetchChildrenRecursive(parentCode: string, maxDepth: Int = supportedMaxLevel, yearVersion: String = lastYearVersion): List<CnDistrict>
 
   /**
    * 以遍历的方式递归处理指定代码下的所有子孙行政区划。 该方法通过回调函数让调用者能够控制遍历过程，适合大数据量的数据库操作。
@@ -173,9 +150,6 @@ interface ILazyAddressService {
     parentCode: string,
     maxDepth: Int = supportedMaxLevel,
     yearVersion: String = lastYearVersion,
-    onVisit:
-      (
-        children: List<CnDistrict>, depth: Int, parentDistrict: CnDistrict?,
-      ) -> Boolean,
+    onVisit: (children: List<CnDistrict>, depth: Int, parentDistrict: CnDistrict?) -> Boolean,
   )
 }

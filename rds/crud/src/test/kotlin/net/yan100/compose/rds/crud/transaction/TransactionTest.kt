@@ -1,17 +1,16 @@
 package net.yan100.compose.rds.crud.transaction
 
 import jakarta.annotation.Resource
+import kotlin.test.*
 import net.yan100.compose.testtoolkit.RDBRollback
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.*
 
 @RDBRollback
 @SpringBootTest
 class TransactionTest : IDatabasePostgresqlContainer {
-  @Resource
-  private lateinit var testService: TestService
+  @Resource private lateinit var testService: TestService
 
   @Test
   @Transactional
@@ -80,4 +79,4 @@ class TransactionTest : IDatabasePostgresqlContainer {
     val found = testService.findEntity(Long.MAX_VALUE)
     assertNull(found)
   }
-} 
+}

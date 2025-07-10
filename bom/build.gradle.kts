@@ -6,19 +6,19 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Bill of Materials (BOM) for centralized dependency version management across all project modules.
 Provides a platform for consistent dependency versions and simplified dependency declarations.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   constraints {
     val allVersionCatalogs = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
     allVersionCatalogs.libraryAliases.forEach { aliasLib ->
       val dependency = allVersionCatalogs.findLibrary(aliasLib).getOrNull()?.get()
-      dependency?.also { dep ->
-        api(dep)
-      }
+      dependency?.also { dep -> api(dep) }
     }
   }
 }

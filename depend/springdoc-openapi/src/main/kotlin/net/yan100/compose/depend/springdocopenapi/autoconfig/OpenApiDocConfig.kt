@@ -35,9 +35,7 @@ class OpenApiDocConfig {
     return GroupedOpenApi.builder()
       .group(p.group)
       .pathsToMatch(*paths)
-      .packagesToScan(
-        *p.scanPackages.apply { this += "net.yan100.compose" }.toTypedArray()
-      )
+      .packagesToScan(*p.scanPackages.apply { this += "net.yan100.compose" }.toTypedArray())
       .addOperationCustomizer { operation: Operation, _: HandlerMethod? ->
         if (p.enableJwtHeader) {
           operation
@@ -46,23 +44,14 @@ class OpenApiDocConfig {
                 .name(p.jwtHeaderInfo.authTokenName)
                 .example("eyJ0eXAiOiJ")
                 .description("jwt校验头")
-                .schema(
-                  StringSchema()
-                    .name(p.jwtHeaderInfo.authTokenName)
-                    .description("jwt校验头")
-                )
+                .schema(StringSchema().name(p.jwtHeaderInfo.authTokenName).description("jwt校验头"))
             )
             .addParametersItem(
               HeaderParameter()
                 .name(p.jwtHeaderInfo.refreshTokenName)
                 .example("eyJ0eXAiOiJ")
                 .description("jwt 刷新 token")
-                .schema(
-                  StringSchema()
-                    .name(p.jwtHeaderInfo.refreshTokenName)
-                    .example("eyJ0eXAiOiJ")
-                    .description("jwt 刷新 token")
-                )
+                .schema(StringSchema().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token"))
             )
         } else {
           operation
@@ -81,9 +70,7 @@ class OpenApiDocConfig {
           .version(authorInfo.version)
           .description(authorInfo.description)
           .termsOfService(authorInfo.location)
-          .license(
-            License().name(authorInfo.license).url(authorInfo.licenseUrl)
-          )
+          .license(License().name(authorInfo.license).url(authorInfo.licenseUrl))
       )
   }
 

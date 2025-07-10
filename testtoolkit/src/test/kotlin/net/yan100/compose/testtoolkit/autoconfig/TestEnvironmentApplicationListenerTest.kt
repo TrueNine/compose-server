@@ -3,6 +3,8 @@ package net.yan100.compose.testtoolkit.autoconfig
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -11,8 +13,6 @@ import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEven
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
 import org.springframework.core.env.MutablePropertySources
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class TestEnvironmentApplicationListenerTest {
 
@@ -26,12 +26,8 @@ class TestEnvironmentApplicationListenerTest {
     log.trace("initializing test environment application listener test")
 
     mockPropertySources = mockk<MutablePropertySources>(relaxed = true)
-    mockEnvironment = mockk<ConfigurableEnvironment> {
-      every { propertySources } returns mockPropertySources
-    }
-    mockEvent = mockk<ApplicationEnvironmentPreparedEvent> {
-      every { environment } returns mockEnvironment
-    }
+    mockEnvironment = mockk<ConfigurableEnvironment> { every { propertySources } returns mockPropertySources }
+    mockEvent = mockk<ApplicationEnvironmentPreparedEvent> { every { environment } returns mockEnvironment }
 
     listener = TestEnvironmentApplicationListener()
   }
@@ -51,9 +47,7 @@ class TestEnvironmentApplicationListenerTest {
 
       // 捕获添加的属性源
       var capturedPropertySource: MapPropertySource? = null
-      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers {
-        capturedPropertySource = firstArg()
-      }
+      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers { capturedPropertySource = firstArg() }
 
       listener.onApplicationEvent(mockEvent)
 
@@ -101,9 +95,7 @@ class TestEnvironmentApplicationListenerTest {
 
       // 捕获添加的属性源
       var capturedPropertySource: MapPropertySource? = null
-      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers {
-        capturedPropertySource = firstArg()
-      }
+      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers { capturedPropertySource = firstArg() }
 
       listener.onApplicationEvent(mockEvent)
 
@@ -121,4 +113,4 @@ class TestEnvironmentApplicationListenerTest {
       log.debug("partial configuration verified")
     }
   }
-} 
+}

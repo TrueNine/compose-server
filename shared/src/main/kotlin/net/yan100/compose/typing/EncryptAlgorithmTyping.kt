@@ -6,10 +6,7 @@ package net.yan100.compose.typing
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class EncryptAlgorithmTyping(
-  private val alg: String,
-  val padding: String,
-) : StringTyping {
+enum class EncryptAlgorithmTyping(private val alg: String, val padding: String) : StringTyping {
   /** ecc */
   ECC("EC", "SHA256withECDSA"),
 
@@ -25,7 +22,6 @@ enum class EncryptAlgorithmTyping(
   override val value: String = this.alg
 
   companion object {
-    @JvmStatic
-    fun findVal(v: String?) = entries.find { it.alg == v }
+    @JvmStatic fun findVal(v: String?) = entries.find { it.alg == v }
   }
 }

@@ -16,12 +16,7 @@ class IdGeneratorAutoConfiguration {
 
   @Bean(SNOWFLAKE_BEAN_NAME)
   fun snowflake(p: SnowflakeProperties): ISnowflakeGenerator {
-    return SynchronizedSimpleSnowflake(
-      p.workId,
-      p.dataCenterId,
-      p.sequence,
-      p.startTimeStamp,
-    )
+    return SynchronizedSimpleSnowflake(p.workId, p.dataCenterId, p.sequence, p.startTimeStamp)
   }
 
   @Bean

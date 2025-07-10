@@ -31,16 +31,10 @@ data class WeChatPayProperties(
   /** appId 小程序 Id */
   var mpAppId: String? = null,
 
-  /**
-   * 支付成功异步通知 url <br></br>
-   * [微信支付通知文档](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_5.shtml)
-   */
+  /** 支付成功异步通知 url <br></br> [微信支付通知文档](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_5.shtml) */
   var asyncSuccessNotifyUrl: String? = null,
 
-  /**
-   * 异步成功退款通知 url <br></br>
-   * [微信退款文档](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_11.shtml)
-   */
+  /** 异步成功退款通知 url <br></br> [微信退款文档](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_11.shtml) */
   var asyncSuccessRefundNotifyUrl: String? = null,
 
   /** api 密钥 */

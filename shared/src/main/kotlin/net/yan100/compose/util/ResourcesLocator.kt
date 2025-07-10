@@ -1,6 +1,5 @@
 package net.yan100.compose.util
 
-import net.yan100.compose.IString
 import java.io.*
 import java.net.URI
 import java.net.URISyntaxException
@@ -10,6 +9,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
+import net.yan100.compose.IString
 
 /**
  * 系统资源定位器
@@ -29,8 +29,7 @@ object ResourcesLocator {
   private val APPLICATION_PROTOCOL: String
 
   /**
-   * 获取一个根路径文件，区别如下： 1. 处于 ide 或者 classes 环境时，和 classes 同级 2. 处于 jar 时，为 jar
-   * 同级目录
+   * 获取一个根路径文件，区别如下： 1. 处于 ide 或者 classes 环境时，和 classes 同级 2. 处于 jar 时，为 jar 同级目录
    *
    * @return root dir
    */
@@ -52,17 +51,12 @@ object ResourcesLocator {
   }
 
   private fun initApplicationProtocol(): String {
-    return Objects.requireNonNull(ResourcesLocator::class.java.getResource("/"))
-      .protocol
+    return Objects.requireNonNull(ResourcesLocator::class.java.getResource("/")).protocol
   }
 
   private fun initDefinedClasses() {
     if (FILE_PROTOCOL == APPLICATION_PROTOCOL) {
-      rootPath =
-        Objects.requireNonNull<URL>(CLASS_SELF.getResource("/"))
-          .toString()
-          .replace("file:/", IString.EMPTY)
-          .replace("\\", "/")
+      rootPath = Objects.requireNonNull<URL>(CLASS_SELF.getResource("/")).toString().replace("file:/", IString.EMPTY).replace("\\", "/")
       scanFilePackages(File(rootPath))
     } else if (JAR_PROTOCOL == APPLICATION_PROTOCOL) {
       rootPath =
@@ -83,12 +77,7 @@ object ResourcesLocator {
           val entry: JarEntry = entries.nextElement()
           val name = entry.name
           if (name.endsWith(".class")) {
-            val definedClassName =
-              name
-                .replace("\\", "/")
-                .replace(rootPath!!, IString.EMPTY)
-                .replace(".class", IString.EMPTY)
-                .replace("/", ".")
+            val definedClassName = name.replace("\\", "/").replace(rootPath!!, IString.EMPTY).replace(".class", IString.EMPTY).replace("/", ".")
             ALL_CLASS_NAME.add(definedClassName)
           }
         }
@@ -125,9 +114,7 @@ object ResourcesLocator {
     // 初始化根路径
     val uri: URI
     try {
-      uri =
-        Objects.requireNonNull(ResourcesLocator::class.java.getResource("/"))
-          .toURI()
+      uri = Objects.requireNonNull(ResourcesLocator::class.java.getResource("/")).toURI()
     } catch (e: URISyntaxException) {
       throw RuntimeException("获取文件根路径异常", e)
     }
@@ -135,12 +122,7 @@ object ResourcesLocator {
     // 判断 是否为 jar 环境
     if (JAR_PROTOCOL == APPLICATION_PROTOCOL) {
       val meta = uri.toString()
-      val jar =
-        meta
-          .replace("jar:file:/", "")
-          .split("!/".toRegex())
-          .dropLastWhile { it.isEmpty() }
-          .toTypedArray()[0]
+      val jar = meta.replace("jar:file:/", "").split("!/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
       return File(jar).parentFile
     } else if (FILE_PROTOCOL == APPLICATION_PROTOCOL) {
       val path = Path.of(uri)
@@ -163,11 +145,7 @@ object ResourcesLocator {
   }
 
   fun classpathReader(internalPath: String?): BufferedReader {
-    return BufferedReader(
-      InputStreamReader(
-        Objects.requireNonNull<InputStream?>(classpathInputStream(internalPath))
-      )
-    )
+    return BufferedReader(InputStreamReader(Objects.requireNonNull<InputStream?>(classpathInputStream(internalPath))))
   }
 
   fun readClasspathByte(internalPath: String?): ByteArray? {
@@ -185,8 +163,7 @@ object ResourcesLocator {
 
   val executeDir: File
     /**
-     * 返回执行目录，区别如下： 1. 在 IDE 内 为项目根目录 2. 在 命令行执行情况下，为当前命令行的执行路径 3. 如果在被打包成 jar
-     * 后，为当前命令行的执行路径 其原理使用 系统属性 user.dir 实现
+     * 返回执行目录，区别如下： 1. 在 IDE 内 为项目根目录 2. 在 命令行执行情况下，为当前命令行的执行路径 3. 如果在被打包成 jar 后，为当前命令行的执行路径 其原理使用 系统属性 user.dir 实现
      *
      * 万不可将其作为获取 resources 的方式
      *

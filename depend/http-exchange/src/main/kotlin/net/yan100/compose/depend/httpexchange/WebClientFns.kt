@@ -32,10 +32,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 inline fun <reified T : Any> jsonWebClientRegister(
   objectMapper: ObjectMapper,
   timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
-  builder:
-    (
-      client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder,
-    ) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>,
+  builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>,
 ): T {
   val clientBuilder = WebClient.builder()
   val factoryBuilder = HttpServiceProxyFactory.builder()
@@ -50,42 +47,24 @@ inline fun <reified T : Any> jsonWebClientRegister(
     it.defaultCodecs().enableLoggingRequestDetails(true)
     it.writers.add(0, EncoderHttpMessageWriter(AnyTypingEncoder()))
 
-    it
-      .defaultCodecs()
-      .jackson2JsonDecoder(
-        Jackson2JsonDecoder(objectMapper, *jsonHandleMimeTypes)
-      )
-    it
-      .defaultCodecs()
-      .jackson2JsonEncoder(
-        Jackson2JsonEncoder(objectMapper, *jsonHandleMimeTypes)
-      )
+    it.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, *jsonHandleMimeTypes))
+    it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMimeTypes))
   }
 
-  clientBuilder.defaultHeader(
-    IHeaders.ACCEPT,
-    MimeTypes.JSON.value,
-    MimeTypes.TEXT.value,
-  )
+  clientBuilder.defaultHeader(IHeaders.ACCEPT, MimeTypes.JSON.value, MimeTypes.TEXT.value)
 
   val cf = builder(clientBuilder, factoryBuilder)
   val client = cf.first.build()
   return cf.second
     .customArgumentResolver(ArgsResolver())
-    .exchangeAdapter(
-      WebClientAdapter.create(client).apply { blockTimeout = timeout }
-    )
+    .exchangeAdapter(WebClientAdapter.create(client).apply { blockTimeout = timeout })
     .build()
     .createClient(T::class.java)
 }
 
 class ArgsResolver : HttpServiceArgumentResolver {
 
-  override fun resolve(
-    argument: Any?,
-    parameter: MethodParameter,
-    requestValues: HttpRequestValues.Builder,
-  ): Boolean {
+  override fun resolve(argument: Any?, parameter: MethodParameter, requestValues: HttpRequestValues.Builder): Boolean {
     if (argument != null && argument is AnyTyping) {
       val name =
         parameter.getParameterAnnotation(RequestParam::class.java)?.name

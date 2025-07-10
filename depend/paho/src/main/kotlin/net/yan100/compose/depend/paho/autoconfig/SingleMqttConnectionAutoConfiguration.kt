@@ -17,10 +17,7 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory
 private val log = slf4j(SingleMqttConnectionAutoConfiguration::class)
 
 @Configuration
-class SingleMqttConnectionAutoConfiguration(
-  private val p: SingleMqttProperties,
-  private val objectMapper: ObjectMapper,
-) {
+class SingleMqttConnectionAutoConfiguration(private val p: SingleMqttProperties, private val objectMapper: ObjectMapper) {
 
   @ConditionalOnMissingBean
   @Bean(name = [CLIENT_FACTORY_BEAN_NAME])
@@ -67,23 +64,15 @@ class SingleMqttConnectionAutoConfiguration(
   }
 
   @Bean
-  fun mqttConnectionOptions(
-    factory: MqttPahoClientFactory
-  ): MqttConnectOptions? {
+  fun mqttConnectionOptions(factory: MqttPahoClientFactory): MqttConnectOptions? {
     return factory.connectionOptions
   }
 
   @Bean
   @ConditionalOnBean(name = [CLIENT_FACTORY_BEAN_NAME])
-  fun mqttPahoClientWrapper(
-    factory: MqttPahoClientFactory
-  ): MqttPahoClientWrapper {
+  fun mqttPahoClientWrapper(factory: MqttPahoClientFactory): MqttPahoClientWrapper {
     val client = factory.getClientInstance(p.fullUrl, p.clientId)
-    return MqttPahoClientWrapper(
-      client,
-      factory.connectionOptions,
-      objectMapper,
-    )
+    return MqttPahoClientWrapper(client, factory.connectionOptions, objectMapper)
   }
 
   companion object {

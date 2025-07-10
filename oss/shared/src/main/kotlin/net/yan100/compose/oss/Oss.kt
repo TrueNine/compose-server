@@ -36,8 +36,7 @@ interface Oss {
    * @param fileInfo 文件信息
    * @return [InMap]
    */
-  @Deprecated("java api")
-  fun uploadObject(stream: InputStream, fileInfo: FileArgs): InMap
+  @Deprecated("java api") fun uploadObject(stream: InputStream, fileInfo: FileArgs): InMap
 
   /**
    * 上传
@@ -47,12 +46,7 @@ interface Oss {
    * @param afterExec 后执行
    * @return [InMap]
    */
-  @Deprecated("java api")
-  fun uploadObject(
-    stream: InputStream,
-    fileInfo: FileArgs,
-    afterExec: Runnable,
-  ): InMap
+  @Deprecated("java api") fun uploadObject(stream: InputStream, fileInfo: FileArgs, afterExec: Runnable): InMap
 
   /**
    * 下载
@@ -62,8 +56,7 @@ interface Oss {
    * @return [OutMap]
    * @throws IOException ioexception
    */
-  @Deprecated("java api")
-  fun downloadObject(stream: OutputStream, fileInfo: FileArgs): OutMap
+  @Deprecated("java api") fun downloadObject(stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /**
    * 下载
@@ -74,12 +67,7 @@ interface Oss {
    * @return [OutMap]
    * @throws IOException ioexception
    */
-  @Deprecated("java api")
-  fun downloadObject(
-    beforeExec: Runnable,
-    stream: OutputStream,
-    fileInfo: FileArgs,
-  ): OutMap
+  @Deprecated("java api") fun downloadObject(beforeExec: Runnable, stream: OutputStream, fileInfo: FileArgs): OutMap
 
   /** 是否连接 */
   val isConnected: Boolean

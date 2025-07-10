@@ -7,5 +7,4 @@ fun MockMultipartFile.copy(
   originalFilename: String = this.originalFilename,
   contentType: String? = this.contentType,
   content: ByteArray = this.inputStream.readAllBytes(),
-): MockMultipartFile =
-  MockMultipartFile(name, originalFilename, contentType, content)
+): MockMultipartFile = MockMultipartFile(name, originalFilename, contentType, content)

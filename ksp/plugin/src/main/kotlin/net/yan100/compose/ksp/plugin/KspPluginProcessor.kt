@@ -14,12 +14,8 @@ import net.yan100.compose.ksp.simpleNameAsString
 import net.yan100.compose.meta.annotations.MetaDef
 import net.yan100.compose.meta.annotations.MetaSkipGeneration
 
-class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) :
-  SymbolProcessor {
-  private fun <D : KSDeclaration> getCtxData(
-    declaration: D,
-    resolver: Resolver,
-  ): DeclarationContext<D> {
+class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
+  private fun <D : KSDeclaration> getCtxData(declaration: D, resolver: Resolver): DeclarationContext<D> {
     return DeclarationContext(declaration, environment, resolver)
   }
 
@@ -27,9 +23,7 @@ class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) :
   override fun process(resolver: Resolver): List<KSAnnotated> {
     val nextSymbols = mutableSetOf<KSAnnotated>()
     val options = environment.options
-    val enableJpa =
-      options["net.yan100.compose.ksp.plugin.generateJpa"]
-        ?.toBooleanStrictOrNull() == true
+    val enableJpa = options["net.yan100.compose.ksp.plugin.generateJpa"]?.toBooleanStrictOrNull() == true
 
     if (enableJpa) nextSymbols += jpaGenerate(resolver)
 
@@ -39,15 +33,10 @@ class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) :
   @OptIn(KspExperimental::class)
   fun jpaGenerate(resolver: Resolver): Sequence<KSAnnotated> {
     val lis =
-      resolver
-        .getSymbolsWithAnnotation("jakarta.persistence.EntityListener")
-        .filterIsInstance<KSDeclaration>()
-        .firstOrNull()
-        ?.let { it.annotations.firstOrNull()?.toAnnotationSpec() }
-    val jpaSymbols =
-      resolver.getSymbolsWithAnnotation(
-        "net.yan100.compose.meta.annotations.MetaDef"
-      )
+      resolver.getSymbolsWithAnnotation("jakarta.persistence.EntityListener").filterIsInstance<KSDeclaration>().firstOrNull()?.let {
+        it.annotations.firstOrNull()?.toAnnotationSpec()
+      }
+    val jpaSymbols = resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
     jpaSymbols
       .filter { it.validate() }
       .filterIsInstance<KSClassDeclaration>()
@@ -58,8 +47,6 @@ class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) :
       .filterNot { it.simpleNameAsString.contains("$") }
       .filter { it.getAnnotationsByType(MetaDef::class).toList().isNotEmpty() }
       .forEach { getCtxData(it, resolver).accept(JpaNameClassVisitor(lis)) }
-    return resolver
-      .getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef")
-      .filter { !it.validate() }
+    return resolver.getSymbolsWithAnnotation("net.yan100.compose.meta.annotations.MetaDef").filter { !it.validate() }
   }
 }

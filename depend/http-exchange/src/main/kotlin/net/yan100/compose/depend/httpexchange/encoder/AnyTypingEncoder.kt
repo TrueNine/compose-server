@@ -17,8 +17,6 @@ class AnyTypingEncoder : AbstractEncoder<AnyTyping>() {
     mimeType: MimeType?,
     hints: MutableMap<String, Any>?,
   ): Flux<DataBuffer> {
-    return Flux.from(inputStream).map {
-      bufferFactory.wrap(it.toString().toByteArray())
-    }
+    return Flux.from(inputStream).map { bufferFactory.wrap(it.toString().toByteArray()) }
   }
 }

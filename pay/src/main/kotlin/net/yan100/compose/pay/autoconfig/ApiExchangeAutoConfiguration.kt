@@ -11,8 +11,6 @@ class ApiExchangeAutoConfiguration {
 
   @Bean
   fun wechatPayJsApi(objectMapper: ObjectMapper): WechatPayV3JsApi {
-    return jsonWebClientRegister<WechatPayV3JsApi>(objectMapper) { a, b ->
-      a to b
-    }
+    return jsonWebClientRegister<WechatPayV3JsApi>(objectMapper) { a, b -> a to b }
   }
 }

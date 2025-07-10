@@ -35,9 +35,7 @@ fun RepositoryHandler.enableMirror() {
 
 fun RepositoryHandler.addNonExistsRepo(url: String, name: String? = null) {
   val rUrl = url.removeSuffix("/")
-  val urlStringLists = map {
-    (it as? MavenArtifactRepository)?.url?.toString()?.removeSuffix("/")
-  }
+  val urlStringLists = map { (it as? MavenArtifactRepository)?.url?.toString()?.removeSuffix("/") }
   if (urlStringLists.contains(rUrl)) return
   else
     maven {
@@ -47,9 +45,7 @@ fun RepositoryHandler.addNonExistsRepo(url: String, name: String? = null) {
 }
 
 fun RepositoryHandler.addNonExistsMavenLocal() {
-  val urlStringLists = map {
-    (it as? MavenArtifactRepository)?.url?.toString()?.removeSuffix("/")
-  }
+  val urlStringLists = map { (it as? MavenArtifactRepository)?.url?.toString()?.removeSuffix("/") }
   val h = urlStringLists.any { it?.startsWith("file://") ?: false }
   if (!h) mavenLocal()
 }

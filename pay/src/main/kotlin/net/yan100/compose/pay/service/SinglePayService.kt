@@ -37,10 +37,7 @@ interface SinglePayService {
     @Schema(title = "签名方法，SHA256-RSA") var signType: String? = "RSA",
     @Schema(title = "签名字符串") var paySign: String? = null,
   ) {
-    @Schema(
-      title = "统一下单接口返回的 prepay_id",
-      description = "prepay_id 参数值，提交格式如：prepay_id=***",
-    )
+    @Schema(title = "统一下单接口返回的 prepay_id", description = "prepay_id 参数值，提交格式如：prepay_id=***")
     var prePayId: String? = null
       get() = "prepay_id=$field"
       set(v) {
@@ -69,11 +66,7 @@ interface SinglePayService {
    * @param totalAmount 退款单 总金额
    * @param currency 币种 （默认 人民币)
    */
-  fun applyRefundPayOrder(
-    refundAmount: BigDecimal,
-    totalAmount: BigDecimal,
-    currency: ISO4217 = ISO4217.CNY,
-  )
+  fun applyRefundPayOrder(refundAmount: BigDecimal, totalAmount: BigDecimal, currency: ISO4217 = ISO4217.CNY)
 
   /** ## 接受异步通知回调 */
   fun receivePayNotify(

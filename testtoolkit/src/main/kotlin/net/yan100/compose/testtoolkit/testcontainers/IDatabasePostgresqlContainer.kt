@@ -8,8 +8,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 /**
  * # 数据库测试容器接口
  *
- * 该接口提供了PostgreSQL测试容器的标准配置，用于集成测试环境。
- * 通过实现此接口，测试类可以自动获得配置好的PostgreSQL测试数据库实例。
+ * 该接口提供了PostgreSQL测试容器的标准配置，用于集成测试环境。 通过实现此接口，测试类可以自动获得配置好的PostgreSQL测试数据库实例。
  *
  * ## 特性
  * - 自动配置PostgreSQL测试容器
@@ -17,16 +16,18 @@ import org.testcontainers.junit.jupiter.Testcontainers
  * - 支持Spring Test的动态属性注入
  *
  * ## 使用方式
+ *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : IDatabasePostgresqlContainer {
  *   // 你的测试代码
  * }
  * ```
- * @author TrueNine
- * @since 2025-04-24
+ *
  * @see org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.PostgreSQLContainer
+ * @author TrueNine
+ * @since 2025-04-24
  */
 @Testcontainers
 interface IDatabasePostgresqlContainer {
@@ -71,5 +72,6 @@ interface IDatabasePostgresqlContainer {
     }
   }
 
-  val postgresqlContainer: PostgreSQLContainer<*>? get() = container
+  val postgresqlContainer: PostgreSQLContainer<*>?
+    get() = container
 }

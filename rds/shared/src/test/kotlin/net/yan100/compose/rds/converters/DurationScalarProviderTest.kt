@@ -1,12 +1,12 @@
 package net.yan100.compose.rds.converters
 
+import java.time.Duration
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import net.yan100.compose.testtoolkit.log
 import net.yan100.compose.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.Duration
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @SpringBootTest
 class DurationScalarProviderTest : IDatabasePostgresqlContainer {

@@ -29,30 +29,15 @@ class WxpaProperty {
   var jsapiTicket: String? = null
 
   @JvmOverloads
-  fun signature(
-    url: String,
-    nonceString: String = Keys.generateRandomAsciiString(),
-    timestamp: Long = datetime.now().iso8601LongUtc,
-  ): WxpaSignatureResp {
+  fun signature(url: String, nonceString: String = Keys.generateRandomAsciiString(), timestamp: Long = datetime.now().iso8601LongUtc): WxpaSignatureResp {
     val splitUrl = url.split("#")[0]
     val b =
-      mutableMapOf(
-        "noncestr" to nonceString,
-        "jsapi_ticket" to jsapiTicket,
-        "timestamp" to timestamp.toString(),
-        "url" to splitUrl,
-      )
+      mutableMapOf("noncestr" to nonceString, "jsapi_ticket" to jsapiTicket, "timestamp" to timestamp.toString(), "url" to splitUrl)
         .map { "${it.key}=${it.value}" }
         .sorted()
         .joinToString("&")
         .sha1
 
-    return WxpaSignatureResp(
-      appId = appId,
-      url = splitUrl,
-      nonceString = nonceString,
-      sign = b,
-      timestamp = timestamp,
-    )
+    return WxpaSignatureResp(appId = appId, url = splitUrl, nonceString = nonceString, sign = b, timestamp = timestamp)
   }
 }

@@ -8,10 +8,7 @@ package net.yan100.compose.domain
  * @author T_teng
  * @since 2023-04-06
  */
-open class RequestInfo(
-  open val deviceId: String? = null,
-  open val currentIpAddr: String? = null,
-) {
+open class RequestInfo(open val deviceId: String? = null, open val currentIpAddr: String? = null) {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is RequestInfo) return false

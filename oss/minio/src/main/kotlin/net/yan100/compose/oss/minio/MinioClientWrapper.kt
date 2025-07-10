@@ -16,10 +16,7 @@ import okhttp3.Headers
  * @author TrueNine
  * @since 2023-02-20
  */
-class MinioClientWrapper(
-  private val client: MinioClient,
-  private val exposeUrl: String,
-) : Oss {
+class MinioClientWrapper(private val client: MinioClient, private val exposeUrl: String) : Oss {
   fun getHeaderContentType(headers: Headers): String? {
     return headers[IHeaders.CONTENT_TYPE]
   }
@@ -33,29 +30,16 @@ class MinioClientWrapper(
   }
 
   private fun getObject(fileInfo: FileArgs): GetObjectResponse? {
-    return client.getObject(
-      GetObjectArgs.builder()
-        .bucket(fileInfo.dir)
-        .`object`(fileInfo.fileName)
-        .build()
-    )
+    return client.getObject(GetObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).build())
   }
 
   override fun removeObject(objectInfo: FileArgs): Boolean {
     if (!existsBucketByName(objectInfo.dir)) return true
-    client.removeObject(
-      RemoveObjectArgs.builder()
-        .bucket(objectInfo.dir)
-        .`object`(objectInfo.fileName)
-        .build()
-    )
+    client.removeObject(RemoveObjectArgs.builder().bucket(objectInfo.dir).`object`(objectInfo.fileName).build())
     return true
   }
 
-  private fun createInputMap(
-    resp: ObjectWriteResponse,
-    stream: InputStream,
-  ): InMap {
+  private fun createInputMap(resp: ObjectWriteResponse, stream: InputStream): InMap {
     return object : InMap {
       override val usedStream
         get() = stream
@@ -77,10 +61,7 @@ class MinioClientWrapper(
     }
   }
 
-  private fun createOutputMap(
-    resp: GetObjectResponse,
-    stream: OutputStream,
-  ): OutMap {
+  private fun createOutputMap(resp: GetObjectResponse, stream: OutputStream): OutMap {
     return object : OutMap {
       override val usedStream
         get() = stream
@@ -115,9 +96,7 @@ class MinioClientWrapper(
   }
 
   override fun existsBucketByName(bucketName: String): Boolean {
-    return client.bucketExists(
-      BucketExistsArgs.builder().bucket(bucketName).build()
-    )
+    return client.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
   }
 
   override fun removeObject(info: ObjectArgs) {
@@ -125,12 +104,7 @@ class MinioClientWrapper(
   }
 
   override fun setBucketPolicyToPublicReadonly(bucketName: String) {
-    client.setBucketPolicy(
-      SetBucketPolicyArgs.builder()
-        .bucket(bucketName)
-        .config(S3PolicyCreator.publicReadonlyBucket(bucketName).json())
-        .build()
-    )
+    client.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(bucketName).config(S3PolicyCreator.publicReadonlyBucket(bucketName).json()).build())
   }
 
   override fun uploadObject(stream: InputStream, fileInfo: FileArgs): InMap {
@@ -139,43 +113,27 @@ class MinioClientWrapper(
     }
     val ins =
       client.putObject(
-        PutObjectArgs.builder()
-          .bucket(fileInfo.dir)
-          .`object`(fileInfo.fileName)
-          .contentType(fileInfo.mimeType)
-          .stream(stream, fileInfo.size, -1)
-          .build()
+        PutObjectArgs.builder().bucket(fileInfo.dir).`object`(fileInfo.fileName).contentType(fileInfo.mimeType).stream(stream, fileInfo.size, -1).build()
       )
 
     return createInputMap(ins!!, stream)
   }
 
-  override fun uploadObject(
-    stream: InputStream,
-    fileInfo: FileArgs,
-    afterExec: Runnable,
-  ): InMap {
+  override fun uploadObject(stream: InputStream, fileInfo: FileArgs, afterExec: Runnable): InMap {
     val ins = uploadObject(stream, fileInfo)
     afterExec.run()
     return ins
   }
 
   @Throws(IOException::class)
-  override fun downloadObject(
-    stream: OutputStream,
-    fileInfo: FileArgs,
-  ): OutMap {
+  override fun downloadObject(stream: OutputStream, fileInfo: FileArgs): OutMap {
     val outs = getObject(fileInfo)
     outs?.transferTo(stream)
     return createOutputMap(outs!!, stream)
   }
 
   @Throws(IOException::class)
-  override fun downloadObject(
-    beforeExec: Runnable,
-    stream: OutputStream,
-    fileInfo: FileArgs,
-  ): OutMap {
+  override fun downloadObject(beforeExec: Runnable, stream: OutputStream, fileInfo: FileArgs): OutMap {
     val outs = getObject(fileInfo)
     beforeExec.run()
     outs?.transferTo(stream)
@@ -196,13 +154,9 @@ class MinioClientWrapper(
     @JvmStatic private val log = slf4j<MinioClientWrapper>()
   }
 
-  override fun fetchAllObjectNameByBucketName(
-    bucketName: String
-  ): List<String> {
+  override fun fetchAllObjectNameByBucketName(bucketName: String): List<String> {
     if (!existsBucketByName(bucketName)) return listOf()
-    return client
-      .listObjects(ListObjectsArgs.builder().bucket(bucketName).build())
-      .map { it.get().objectName() }
+    return client.listObjects(ListObjectsArgs.builder().bucket(bucketName).build()).map { it.get().objectName() }
   }
 
   override fun fetchAllBucketNames(): List<String> {

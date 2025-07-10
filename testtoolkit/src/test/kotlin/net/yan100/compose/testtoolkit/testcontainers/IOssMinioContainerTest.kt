@@ -1,6 +1,11 @@
 package net.yan100.compose.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
+import java.util.function.Supplier
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -13,11 +18,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.test.context.DynamicPropertyRegistry
-import java.util.function.Supplier
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 /**
  * # MinIO 测试容器集成测试
@@ -35,6 +35,7 @@ import kotlin.test.assertTrue
  * - Spring 属性注入验证
  *
  * ## 使用方式
+ *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : IOssMinioContainer {
@@ -42,20 +43,17 @@ import kotlin.test.assertTrue
  * }
  * ```
  *
+ * @see IOssMinioContainer
  * @author TrueNine
  * @since 2024-04-24
- * @see IOssMinioContainer
  */
 @SpringBootTest
 @EnableAutoConfiguration(
-  exclude = [
-    DataSourceAutoConfiguration::class,
-    DataSourceTransactionManagerAutoConfiguration::class,
-    HibernateJpaAutoConfiguration::class
-  ]
+  exclude = [DataSourceAutoConfiguration::class, DataSourceTransactionManagerAutoConfiguration::class, HibernateJpaAutoConfiguration::class]
 )
 class IOssMinioContainerTest : IOssMinioContainer {
-  lateinit var environment: Environment @Resource set
+  lateinit var environment: Environment
+    @Resource set
 
   @Nested
   @DisplayName("容器基本功能测试")
@@ -106,24 +104,26 @@ class IOssMinioContainerTest : IOssMinioContainer {
     @DisplayName("验证动态属性注册正确")
     fun `验证动态属性注册正确`() {
       val registry = mutableMapOf<String, String>()
-      val mockRegistry = object : DynamicPropertyRegistry {
-        override fun add(name: String, valueSupplier: Supplier<in Any>) {
-          registry[name] = valueSupplier.get().toString()
+      val mockRegistry =
+        object : DynamicPropertyRegistry {
+          override fun add(name: String, valueSupplier: Supplier<in Any>) {
+            registry[name] = valueSupplier.get().toString()
+          }
         }
-      }
 
       IOssMinioContainer.properties(mockRegistry)
 
       // 验证所有必需的属性都已配置
       val container = minioContainer!!
-      val expectedProperties = mapOf(
-        "compose.oss.base-url" to container.host,
-        "compose.oss.expose-base-url" to "http://${container.host}:${container.getMappedPort(9000)}",
-        "compose.oss.port" to container.getMappedPort(9000).toString(),
-        "compose.oss.minio.enable-https" to "false",
-        "compose.oss.minio.access-key" to "minioadmin",
-        "compose.oss.minio.secret-key" to "minioadmin"
-      )
+      val expectedProperties =
+        mapOf(
+          "compose.oss.base-url" to container.host,
+          "compose.oss.expose-base-url" to "http://${container.host}:${container.getMappedPort(9000)}",
+          "compose.oss.port" to container.getMappedPort(9000).toString(),
+          "compose.oss.minio.enable-https" to "false",
+          "compose.oss.minio.access-key" to "minioadmin",
+          "compose.oss.minio.secret-key" to "minioadmin",
+        )
 
       expectedProperties.forEach { (prop, expectedValue) ->
         assertTrue(registry.containsKey(prop), "属性 $prop 必须存在")
@@ -134,13 +134,14 @@ class IOssMinioContainerTest : IOssMinioContainer {
     @Test
     @DisplayName("验证环境变量注入正确")
     fun `验证环境变量注入正确`() {
-      val expectedProperties = mapOf(
-        "compose.oss.base-url" to minioContainer!!.host,
-        "compose.oss.expose-base-url" to "http://${minioContainer!!.host}:${minioContainer!!.getMappedPort(9000)}",
-        "compose.oss.minio.enable-https" to "false",
-        "compose.oss.minio.access-key" to "minioadmin",
-        "compose.oss.minio.secret-key" to "minioadmin"
-      )
+      val expectedProperties =
+        mapOf(
+          "compose.oss.base-url" to minioContainer!!.host,
+          "compose.oss.expose-base-url" to "http://${minioContainer!!.host}:${minioContainer!!.getMappedPort(9000)}",
+          "compose.oss.minio.enable-https" to "false",
+          "compose.oss.minio.access-key" to "minioadmin",
+          "compose.oss.minio.secret-key" to "minioadmin",
+        )
 
       expectedProperties.forEach { (prop, expectedValue) ->
         val actualValue = environment.getProperty(prop)
@@ -154,4 +155,4 @@ class IOssMinioContainerTest : IOssMinioContainer {
       assertTrue(portValue.toInt() in 1024..65535, "端口值应在有效范围内")
     }
   }
-} 
+}

@@ -4,6 +4,9 @@ import io.minio.BucketExistsArgs
 import io.minio.MakeBucketArgs
 import io.minio.MinioClient
 import jakarta.annotation.Resource
+import kotlin.math.abs
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -11,30 +14,20 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.jdbc.core.JdbcTemplate
-import kotlin.math.abs
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-
 
 /**
  * # 容器集成测试
  *
- * 该测试类验证三个测试容器（PostgreSQL、Redis、MinIO）的组合使用。
- * 测试确保所有容器能够正常启动、配置正确并且可以进行基本操作。
+ * 该测试类验证三个测试容器（PostgreSQL、Redis、MinIO）的组合使用。 测试确保所有容器能够正常启动、配置正确并且可以进行基本操作。
  *
  * @author TrueNine
  * @since 2025-04-24
  */
 @SpringBootTest
 @Import(TestConfiguration::class)
-class ContainersIntegrationTest :
-  IDatabasePostgresqlContainer,
-  ICacheRedisContainer,
-  IOssMinioContainer {
+class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisContainer, IOssMinioContainer {
 
-  /**
-   * 验证系统时间和时区配置是否正确。
-   */
+  /** 验证系统时间和时区配置是否正确。 */
   @Test
   fun `验证系统时间和时区配置`() {
     // 获取当前系统时间
@@ -50,35 +43,27 @@ class ContainersIntegrationTest :
     log.info("[验证系统时间和时区配置] current time: {} , system zone id: {} , zoned date time: {}", currentTime, systemZoneId, zonedDateTime)
 
     // 验证时区不为空且有效
-    assertTrue(
-      systemZoneId.id.isNotBlank(),
-      "system zone id should not be blank, current zone id: $systemZoneId"
-    )
+    assertTrue(systemZoneId.id.isNotBlank(), "system zone id should not be blank, current zone id: $systemZoneId")
 
     // 验证当前时间是否在合理范围内（例如最近 5 分钟内）
     val fiveMinutesAgo = java.time.Instant.now().minusSeconds(300)
     val fiveMinutesLater = java.time.Instant.now().plusSeconds(300)
     assertTrue(
       currentTime.isAfter(fiveMinutesAgo) && currentTime.isBefore(fiveMinutesLater),
-      "system time is out of reasonable range, current time: $currentTime"
+      "system time is out of reasonable range, current time: $currentTime",
     )
   }
 
-  @Resource
-  private lateinit var jdbcTemplate: JdbcTemplate
+  @Resource private lateinit var jdbcTemplate: JdbcTemplate
 
-  @Resource
-  private lateinit var redisTemplate: StringRedisTemplate
+  @Resource private lateinit var redisTemplate: StringRedisTemplate
 
   private lateinit var minioClient: MinioClient
 
   @BeforeEach
   fun setup() {
     // 初始化 MinIO 客户端
-    minioClient = MinioClient.builder()
-      .endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}")
-      .credentials("minioadmin", "minioadmin")
-      .build()
+    minioClient = MinioClient.builder().endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build()
 
     // 初始化 PostgreSQL 测试表
     jdbcTemplate.execute(
@@ -87,7 +72,8 @@ class ContainersIntegrationTest :
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL
             )
-        """.trimIndent()
+        """
+        .trimIndent()
     )
   }
 
@@ -97,11 +83,7 @@ class ContainersIntegrationTest :
     jdbcTemplate.update("INSERT INTO test_table (name) VALUES (?)", "test_name")
 
     // 验证数据
-    val result = jdbcTemplate.queryForObject(
-      "SELECT name FROM test_table WHERE name = ?",
-      String::class.java,
-      "test_name"
-    )
+    val result = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "test_name")
     assertEquals("test_name", result)
   }
 
@@ -144,15 +126,9 @@ class ContainersIntegrationTest :
     minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
 
     // 验证所有操作
-    val pgResult = jdbcTemplate.queryForObject(
-      "SELECT name FROM test_table WHERE name = ?",
-      String::class.java,
-      "combined_test"
-    )
+    val pgResult = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "combined_test")
     val redisResult = redisTemplate.opsForValue().get(redisKey)
-    val minioResult = minioClient.bucketExists(
-      BucketExistsArgs.builder().bucket(bucketName).build()
-    )
+    val minioResult = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
 
     assertEquals("combined_test", pgResult)
     assertEquals("combined_value", redisResult)
@@ -165,15 +141,12 @@ class ContainersIntegrationTest :
     val pgTimeZone = jdbcTemplate.queryForObject("SHOW TIMEZONE", String::class.java)
     val pgNow = jdbcTemplate.queryForObject("SELECT NOW()", java.sql.Timestamp::class.java)
     log.info("[验证容器时区和时间与当前系统一致] postgresql timezone: {} , current time: {}", pgTimeZone, pgNow)
-    
+
     // 验证PostgreSQL时区不为空
     assertTrue(pgTimeZone!!.isNotBlank(), "postgresql timezone should not be blank")
-    
+
     val now = java.time.Instant.now()
-    assertTrue(
-      Math.abs(pgNow!!.toInstant().epochSecond - now.epochSecond) < 300,
-      "postgresql time differs from system time by more than 5 minutes"
-    )
+    assertTrue(Math.abs(pgNow!!.toInstant().epochSecond - now.epochSecond) < 300, "postgresql time differs from system time by more than 5 minutes")
 
     // 2. Redis
     val redisMillis = redisTemplate.connectionFactory?.connection?.serverCommands()?.time()
@@ -181,10 +154,7 @@ class ContainersIntegrationTest :
       val redisEpochSecond = redisMillis / 1000
       val systemEpochSecond = now.epochSecond
       log.info("[验证容器时区和时间与当前系统一致] redis server time: {} , system time: {}", redisEpochSecond, systemEpochSecond)
-      assertTrue(
-        abs(redisEpochSecond - systemEpochSecond) < 300,
-        "redis time differs from system time by more than 5 minutes"
-      )
+      assertTrue(abs(redisEpochSecond - systemEpochSecond) < 300, "redis time differs from system time by more than 5 minutes")
     }
 
     // 3. MinIO（可选，桶创建时间近似判断）
@@ -195,4 +165,4 @@ class ContainersIntegrationTest :
     // MinIO 没有直接的时区/时间API，这里只做桶创建时间的近似判断
     // 你可以根据需要补充更详细的 MinIO 时间校验逻辑
   }
-} 
+}

@@ -25,13 +25,7 @@ class JwtTest {
         .build()
 
     val verifier =
-      JwtVerifier.createVerifier()
-        .issuer("t")
-        .id("1")
-        .contentDecryptKey(eccPair.privateKey)
-        .signatureVerifyKey(rsaPair.publicKey)
-        .serializer(mapper)
-        .build()
+      JwtVerifier.createVerifier().issuer("t").id("1").contentDecryptKey(eccPair.privateKey).signatureVerifyKey(rsaPair.publicKey).serializer(mapper).build()
 
     val inputs = IssuerParam<Any, Any>(signatureKey = rsaPair.privateKey)
     inputs.encryptedDataObj = "我日了狗"
@@ -39,12 +33,7 @@ class JwtTest {
     inputs.encryptedDataObj = mutableListOf("123", "444")
 
     val token = issuer.issued(inputs)
-    val outputs =
-      VerifierParam(
-        token = token,
-        subjectTargetType = Any::class.java,
-        encryptDataTargetType = Any::class.java,
-      )
+    val outputs = VerifierParam(token = token, subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java)
     val parsed = verifier.verify(outputs)
     println(token)
     println(parsed?.decryptedData)

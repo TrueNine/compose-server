@@ -150,13 +150,7 @@ class CnDistrictCodeTest {
   @Test
   fun `测试编码补全`() {
     val codes =
-      mapOf(
-        "11" to "110000000000",
-        "1101" to "110100000000",
-        "110101" to "110101000000",
-        "110101001" to "110101001000",
-        "110101001001" to "110101001001",
-      )
+      mapOf("11" to "110000000000", "1101" to "110100000000", "110101" to "110101000000", "110101001" to "110101001000", "110101001001" to "110101001001")
 
     codes.forEach { (input, expected) ->
       val districtCode = CnDistrictCode(input)

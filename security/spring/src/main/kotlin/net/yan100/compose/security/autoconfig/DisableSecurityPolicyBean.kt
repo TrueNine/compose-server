@@ -22,18 +22,13 @@ import org.springframework.security.web.SecurityFilterChain
 @ConditionalOnMissingBean(SecurityPolicyBean::class)
 class DisableSecurityPolicyBean {
   companion object {
-    @JvmStatic
-    private val log = slf4j(DisableSecurityPolicyBean::class)
+    @JvmStatic private val log = slf4j(DisableSecurityPolicyBean::class)
   }
 
   @Bean
   @Throws(Exception::class)
   fun disableSecurityFilterChain(security: HttpSecurity): SecurityFilterChain {
-    log.warn(
-      "生产环境请启用 WebSecurity, 使用 {} 来启用并配置完成 {}",
-      EnableRestSecurity::class.java.name,
-      SecurityPolicyBean::class.java.name,
-    )
+    log.warn("生产环境请启用 WebSecurity, 使用 {} 来启用并配置完成 {}", EnableRestSecurity::class.java.name, SecurityPolicyBean::class.java.name)
     return security
       .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
       .authorizeHttpRequests { a -> a.anyRequest().permitAll() }

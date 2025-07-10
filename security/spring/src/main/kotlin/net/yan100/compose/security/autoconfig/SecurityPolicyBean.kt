@@ -35,9 +35,7 @@ class SecurityPolicyBean {
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
-  fun securityDetailsService(
-    desc: SecurityPolicyDefine
-  ): SecurityUserDetailsService {
+  fun securityDetailsService(desc: SecurityPolicyDefine): SecurityUserDetailsService {
     log.debug("注册 UserDetailsService")
     return desc.service ?: EmptySecurityDetailsService()
   }
@@ -45,10 +43,7 @@ class SecurityPolicyBean {
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
-  fun securityExceptionAdware(
-    policyDefine: SecurityPolicyDefine,
-    manager: ObjectMapper,
-  ): SecurityExceptionAdware {
+  fun securityExceptionAdware(policyDefine: SecurityPolicyDefine, manager: ObjectMapper): SecurityExceptionAdware {
     log.debug("注册 ExceptionAdware")
     return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
   }
@@ -71,15 +66,11 @@ class SecurityPolicyBean {
     allowPatterns += listOf(*mergedConfigAnnotation.logoutUrl)
     allowPatterns += listOf(*mergedConfigAnnotation.allowPatterns)
 
-    if (mergedConfigAnnotation.allowSwagger)
-      allowPatterns += policyDefine.swaggerPatterns
+    if (mergedConfigAnnotation.allowSwagger) allowPatterns += policyDefine.swaggerPatterns
     if (mergedConfigAnnotation.allowWebJars) allowPatterns += "/webjars/**"
 
     if (policyDefine.preValidFilter != null) {
-      httpSecurity.addFilterBefore(
-        policyDefine.preValidFilter,
-        UsernamePasswordAuthenticationFilter::class.java,
-      )
+      httpSecurity.addFilterBefore(policyDefine.preValidFilter, UsernamePasswordAuthenticationFilter::class.java)
     } else log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
 
     // 打印错误日志
@@ -89,9 +80,7 @@ class SecurityPolicyBean {
       // 关闭 csrf
       .csrf { it.disable() }
       // 关闭 session
-      .sessionManagement {
-        it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      }
+      .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
 
     httpSecurity.cors { it.configurationSource { cors } }
     httpSecurity.authorizeHttpRequests {
@@ -108,17 +97,11 @@ class SecurityPolicyBean {
         }
       }
     }
-    httpSecurity.userDetailsService(
-      policyDefine.service ?: EmptySecurityDetailsService()
-    )
+    httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
 
     // 配置异常处理器
     if (policyDefine.exceptionAdware != null) {
-      httpSecurity.exceptionHandling {
-        it
-          .authenticationEntryPoint(policyDefine.exceptionAdware)
-          .accessDeniedHandler(policyDefine.exceptionAdware)
-      }
+      httpSecurity.exceptionHandling { it.authenticationEntryPoint(policyDefine.exceptionAdware).accessDeniedHandler(policyDefine.exceptionAdware) }
     } else log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
 
     log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
@@ -128,9 +111,7 @@ class SecurityPolicyBean {
 
   @Bean
   @Primary
-  fun authenticationManager(
-    ac: AuthenticationConfiguration
-  ): AuthenticationManager? {
+  fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
     log.debug("注册 AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager
     log.debug("获取到 AuthManager = {}", manager != null)

@@ -1,23 +1,19 @@
 package net.yan100.compose.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.util.*
 import net.yan100.compose.consts.IRegexes
 import net.yan100.compose.string
-import java.util.*
 
 /** 二代残疾证代码 */
 interface IDisCode : IIdcard2Code {
-  private class DefaultDis2Code(override val disCode: string) :
-    IDisCode, IIdcard2Code by IIdcard2Code[disCode.substring(0, 18)] {
+  private class DefaultDis2Code(override val disCode: string) : IDisCode, IIdcard2Code by IIdcard2Code[disCode.substring(0, 18)] {
     init {
-      check(disCode.matches(idCardRegex)) {
-        "$disCode is not a valid disability code"
-      }
+      check(disCode.matches(idCardRegex)) { "$disCode is not a valid disability code" }
     }
 
     companion object {
-      @Transient
-      private val idCardRegex = IRegexes.CHINA_DIS_CARD.toRegex()
+      @Transient private val idCardRegex = IRegexes.CHINA_DIS_CARD.toRegex()
     }
 
     override fun hashCode(): Int = Objects.hashCode(disCode)
@@ -33,8 +29,7 @@ interface IDisCode : IIdcard2Code {
   }
 
   companion object {
-    @JvmStatic
-    operator fun get(code: String): IDisCode = DefaultDis2Code(code.uppercase())
+    @JvmStatic operator fun get(code: String): IDisCode = DefaultDis2Code(code.uppercase())
   }
 
   @get:JsonIgnore
@@ -48,8 +43,7 @@ interface IDisCode : IIdcard2Code {
     get() = disCode.substring(19, 20).toInt()
 
   /** ## 残疾证号 */
-  @get:JsonIgnore
-  val disCode: string
+  @get:JsonIgnore val disCode: string
 
   /**
    * ## 是否补办过

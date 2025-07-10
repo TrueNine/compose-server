@@ -39,10 +39,7 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expectedColumns = listOf("id", "rlv", "crd", "mrd", "ldf")
-    assertTrue(
-      columns.containsAll(expectedColumns),
-      "缺少字段: " + (expectedColumns - columns),
-    )
+    assertTrue(columns.containsAll(expectedColumns), "缺少字段: " + (expectedColumns - columns))
   }
 
   @Test
@@ -79,10 +76,7 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     assertTrue(pk.contains("id"), "id 字段未设为主键")
-    val ids =
-      jdbcTemplate.queryForList("select id from test_no_id order by id").map {
-        it["id"]
-      }
+    val ids = jdbcTemplate.queryForList("select id from test_no_id order by id").map { it["id"] }
     assertEquals(listOf(1L, 2L, 3L), ids, "id 字段未按 0 开始自增填充，实际: $ids")
   }
 
@@ -103,9 +97,6 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expectedColumns = listOf("id", "rlv", "crd", "mrd", "ldf")
-    assertTrue(
-      columns.containsAll(expectedColumns),
-      "幂等性失败: " + (expectedColumns - columns),
-    )
+    assertTrue(columns.containsAll(expectedColumns), "幂等性失败: " + (expectedColumns - columns))
   }
 }

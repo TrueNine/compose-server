@@ -17,12 +17,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 private val log = slf4j(BasicUserInfoArgumentResolver::class)
 
 @Component
-class BasicUserInfoArgumentResolver :
-  HandlerMethodArgumentResolver, WebMvcConfigurer {
+class BasicUserInfoArgumentResolver : HandlerMethodArgumentResolver, WebMvcConfigurer {
 
-  override fun addArgumentResolvers(
-    resolvers: MutableList<HandlerMethodArgumentResolver>
-  ) {
+  override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
     super.addArgumentResolvers(resolvers)
     log.trace("注册用户信息拦ArgumentResolver")
     resolvers.add(this)
@@ -44,9 +41,7 @@ class BasicUserInfoArgumentResolver :
     if (u == null) {
       val req = webRequest.nativeRequest as HttpServletRequest
       val deviceId = IHeaders.getDeviceId(req)
-      UserInfoContextHolder.set(
-        RequestInfo(currentIpAddr = req.remoteRequestIp, deviceId = deviceId)
-      )
+      UserInfoContextHolder.set(RequestInfo(currentIpAddr = req.remoteRequestIp, deviceId = deviceId))
     }
     return u
   }

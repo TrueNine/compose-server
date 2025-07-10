@@ -1,7 +1,7 @@
 package net.yan100.compose
 
-import net.yan100.compose.DTimer.plusMillis
 import java.time.*
+import net.yan100.compose.DTimer.plusMillis
 
 /**
  * # 时间工具类
@@ -23,9 +23,7 @@ object DTimer {
    * @param plusMillis 要增加的毫秒数
    * @return 增加后的Instant对象
    */
-  @JvmStatic
-  fun plusMillisFromCurrent(plusMillis: Long): Instant =
-    Instant.ofEpochMilli(System.currentTimeMillis() + plusMillis)
+  @JvmStatic fun plusMillisFromCurrent(plusMillis: Long): Instant = Instant.ofEpochMilli(System.currentTimeMillis() + plusMillis)
 
   /**
    * 在指定时间基础上增加毫秒数
@@ -34,12 +32,7 @@ object DTimer {
    * @param plusMillis 要增加的毫秒数
    * @return 增加后的Instant对象
    */
-  @JvmStatic
-  @JvmOverloads
-  fun plusMillis(
-    current: Long,
-    plusMillis: Long = System.currentTimeMillis(),
-  ): Instant = Instant.ofEpochMilli(current + plusMillis)
+  @JvmStatic @JvmOverloads fun plusMillis(current: Long, plusMillis: Long = System.currentTimeMillis()): Instant = Instant.ofEpochMilli(current + plusMillis)
 
   /**
    * 将LocalTime转换为Instant对象（基于1970-01-01）
@@ -64,10 +57,7 @@ object DTimer {
    */
   @JvmStatic
   @JvmOverloads
-  fun localDateToInstant(
-    ld: LocalDate,
-    zoneId: ZoneId = ZoneId.systemDefault(),
-  ): Instant = ld.atStartOfDay().atZone(zoneId).toInstant()
+  fun localDateToInstant(ld: LocalDate, zoneId: ZoneId = ZoneId.systemDefault()): Instant = ld.atStartOfDay().atZone(zoneId).toInstant()
 
   /**
    * 将LocalDateTime转换为Instant对象
@@ -76,12 +66,7 @@ object DTimer {
    * @param zoneId 时区
    * @return 转换后的Instant对象
    */
-  @JvmStatic
-  @JvmOverloads
-  fun localDatetimeToInstant(
-    ldt: LocalDateTime,
-    zoneId: ZoneId = ZoneId.systemDefault(),
-  ): Instant = ldt.atZone(zoneId).toInstant()
+  @JvmStatic @JvmOverloads fun localDatetimeToInstant(ldt: LocalDateTime, zoneId: ZoneId = ZoneId.systemDefault()): Instant = ldt.atZone(zoneId).toInstant()
 
   /**
    * 将毫秒时间戳转换为LocalDateTime对象
@@ -92,10 +77,8 @@ object DTimer {
    */
   @JvmStatic
   @JvmOverloads
-  fun millisToLocalDateTime(
-    millis: Long,
-    zoneId: ZoneId = ZoneId.systemDefault(),
-  ): LocalDateTime = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDateTime()
+  fun millisToLocalDateTime(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime =
+    Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDateTime()
 
   /**
    * 将毫秒时间戳转换为LocalDate对象
@@ -106,10 +89,7 @@ object DTimer {
    */
   @JvmStatic
   @JvmOverloads
-  fun millisToLocalDate(
-    millis: Long,
-    zoneId: ZoneId = ZoneId.systemDefault(),
-  ): LocalDate = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDate()
+  fun millisToLocalDate(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDate()
 
   /**
    * 将Instant转换为LocalDateTime对象
@@ -120,10 +100,7 @@ object DTimer {
    */
   @JvmStatic
   @JvmOverloads
-  fun instantToLocalDateTime(
-    instant: Instant,
-    zoneId: ZoneId = ZoneId.systemDefault(),
-  ): LocalDateTime = instant.atZone(zoneId).toLocalDateTime()
+  fun instantToLocalDateTime(instant: Instant, zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime = instant.atZone(zoneId).toLocalDateTime()
 
   /**
    * 将Instant转换为LocalDate对象
@@ -132,12 +109,7 @@ object DTimer {
    * @param zoneId 时区
    * @return 转换后的LocalDate对象
    */
-  @JvmStatic
-  @JvmOverloads
-  fun instantToLocalDate(
-    instant: Instant,
-    zoneId: ZoneId = ZoneId.systemDefault(),
-  ): LocalDate = instant.atZone(zoneId).toLocalDate()
+  @JvmStatic @JvmOverloads fun instantToLocalDate(instant: Instant, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate = instant.atZone(zoneId).toLocalDate()
 
   /**
    * 将Instant转换为LocalTime对象
@@ -146,12 +118,7 @@ object DTimer {
    * @param zoneId 时区
    * @return 转换后的LocalTime对象
    */
-  @JvmStatic
-  @JvmOverloads
-  fun instantToLocalTime(
-    instant: Instant,
-    zoneId: ZoneId = ZoneId.of(ZONE_GMT),
-  ): LocalTime = instant.atZone(zoneId).toLocalTime()
+  @JvmStatic @JvmOverloads fun instantToLocalTime(instant: Instant, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime = instant.atZone(zoneId).toLocalTime()
 
   /**
    * 将LocalDateTime转换为毫秒时间戳
@@ -162,10 +129,7 @@ object DTimer {
    */
   @JvmStatic
   @JvmOverloads
-  fun localDatetimeToMillis(
-    datetime: LocalDateTime,
-    zoneId: ZoneId = ZoneOffset.UTC,
-  ): Long = datetime.atZone(zoneId).toInstant().toEpochMilli()
+  fun localDatetimeToMillis(datetime: LocalDateTime, zoneId: ZoneId = ZoneOffset.UTC): Long = datetime.atZone(zoneId).toInstant().toEpochMilli()
 
   /**
    * 将毫秒时间戳转换为LocalTime对象
@@ -176,10 +140,7 @@ object DTimer {
    */
   @JvmStatic
   @JvmOverloads
-  fun millisToLocalTime(
-    millis: Long,
-    zoneId: ZoneId = ZoneId.of(ZONE_GMT),
-  ): LocalTime = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalTime()
+  fun millisToLocalTime(millis: Long, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalTime()
 
   /**
    * 将Instant转换为毫秒时间戳
@@ -187,6 +148,5 @@ object DTimer {
    * @param instant 要转换的Instant
    * @return 毫秒时间戳
    */
-  @JvmStatic
-  fun instantToMillis(instant: Instant): Long = instant.toEpochMilli()
+  @JvmStatic fun instantToMillis(instant: Instant): Long = instant.toEpochMilli()
 }

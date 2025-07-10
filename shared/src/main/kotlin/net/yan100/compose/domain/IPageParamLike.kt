@@ -6,10 +6,12 @@ import net.yan100.compose.i32
 /** ## 分页参数 Like */
 interface IPageParamLike {
   /** ## 分页 页面 大小 */
-  val s: i32? get() = null
+  val s: i32?
+    get() = null
 
   /** ## 分页 页面 偏移量 */
-  val o: i32? get() = null
+  val o: i32?
+    get() = null
 
   /**
    * ## UnPaged（禁用分页）

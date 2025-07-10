@@ -20,9 +20,7 @@ import net.yan100.compose.toLocalTime
  * @param T 目标时间类型
  * @param zoneOffset 时区偏移量，用于时间戳转换
  */
-abstract class ISO8601Deserializer<T : Temporal>(
-  protected val zoneOffset: ZoneOffset
-) : JsonDeserializer<T>() {
+abstract class ISO8601Deserializer<T : Temporal>(protected val zoneOffset: ZoneOffset) : JsonDeserializer<T>() {
 
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): T? {
     val timestamp: Long? = p?.valueAsString?.toLongOrNull()
@@ -38,24 +36,21 @@ abstract class ISO8601Deserializer<T : Temporal>(
   protected abstract fun convertTimestamp(timestamp: Long): T
 
   /** LocalDate 类型的反序列化器 */
-  class LocalDateDeserializerX(zoneOffset: ZoneOffset) :
-    ISO8601Deserializer<LocalDate>(zoneOffset) {
+  class LocalDateDeserializerX(zoneOffset: ZoneOffset) : ISO8601Deserializer<LocalDate>(zoneOffset) {
     override fun convertTimestamp(timestamp: Long): LocalDate {
       return timestamp.toLocalDate(zoneOffset)
     }
   }
 
   /** LocalDateTime 类型的反序列化器 */
-  class LocalDateTimeDeserializerZ(zoneOffset: ZoneOffset) :
-    ISO8601Deserializer<LocalDateTime>(zoneOffset) {
+  class LocalDateTimeDeserializerZ(zoneOffset: ZoneOffset) : ISO8601Deserializer<LocalDateTime>(zoneOffset) {
     override fun convertTimestamp(timestamp: Long): LocalDateTime {
       return timestamp.toLocalDateTime(zoneOffset)
     }
   }
 
   /** LocalTime 类型的反序列化器 */
-  class LocalTimeDeserializerY(zoneOffset: ZoneOffset) :
-    ISO8601Deserializer<LocalTime>(zoneOffset) {
+  class LocalTimeDeserializerY(zoneOffset: ZoneOffset) : ISO8601Deserializer<LocalTime>(zoneOffset) {
     override fun convertTimestamp(timestamp: Long): LocalTime {
       return timestamp.toLocalTime(zoneOffset)
     }
@@ -66,8 +61,7 @@ abstract class ISO8601Deserializer<T : Temporal>(
     @JvmField val LocalDateDeserializer = LocalDateDeserializerX::class.java
 
     /** 向后兼容别名 */
-    @JvmField
-    val LocalDateTimeDeserializer = LocalDateTimeDeserializerZ::class.java
+    @JvmField val LocalDateTimeDeserializer = LocalDateTimeDeserializerZ::class.java
 
     /** 向后兼容别名 */
     @JvmField val LocalTimeDeserializer = LocalTimeDeserializerY::class.java
@@ -123,9 +117,7 @@ abstract class ISO8601Deserializer<T : Temporal>(
      * @return LocalDateTime反序列化器
      */
     @JvmStatic
-    fun LocalDateTimeDeserializer(
-      zoneOffset: ZoneOffset
-    ): LocalDateTimeDeserializerZ {
+    fun LocalDateTimeDeserializer(zoneOffset: ZoneOffset): LocalDateTimeDeserializerZ {
       return LocalDateTimeDeserializerZ(zoneOffset)
     }
 

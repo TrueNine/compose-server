@@ -1,7 +1,7 @@
 package net.yan100.compose.domain
 
-import net.yan100.compose.RefId
 import java.util.concurrent.CopyOnWriteArrayList
+import net.yan100.compose.RefId
 
 /**
  * security校验所需的用户身份
@@ -39,6 +39,5 @@ data class AuthRequestInfo(
 ) : RequestInfo() {
   /** ## 当前是否已经完全登录 */
   val isLogin
-    get() =
-      userId != null && enabled && nonLocked && nonExpired && account != null
+    get() = userId != null && enabled && nonLocked && nonExpired && account != null
 }

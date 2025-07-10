@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Eclipse Paho MQTT client integration for IoT and real-time messaging applications.
 Provides Spring Integration MQTT support with reliable message delivery and connection management.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   implementation(libs.org.springframework.integration.spring.integration.mqtt)

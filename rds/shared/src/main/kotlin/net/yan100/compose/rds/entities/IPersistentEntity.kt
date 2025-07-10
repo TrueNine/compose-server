@@ -13,8 +13,6 @@ interface IPersistentEntity {
   /** 数据库主键 */
   @Id
   @JsonConverter(JimmerLongToStringConverter::class)
-  @GeneratedValue(
-    generatorRef = JimmerSnowflakeLongIdGenerator.Companion.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME
-  )
+  @GeneratedValue(generatorRef = JimmerSnowflakeLongIdGenerator.Companion.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME)
   val id: RefId
 }

@@ -27,8 +27,7 @@ class PasswordEncoderAutoconfiguration {
   @Bean
   @Primary
   fun bCryptPasswordEncoder(ctx: ApplicationContext?): PasswordEncoder {
-    val bCryptPasswordEncoder =
-      BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.`$2A`, 14)
+    val bCryptPasswordEncoder = BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.`$2A`, 14)
     log.trace("注册 bCryptPasswordEncoder = {}", bCryptPasswordEncoder)
     return bCryptPasswordEncoder
   }

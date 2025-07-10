@@ -12,9 +12,4 @@ private const val PREFIX = "compose.core"
  * @since 2023-04-01
  */
 @ConfigurationProperties(prefix = "$PREFIX.snowflake")
-data class SnowflakeProperties(
-  var workId: Long = 1L,
-  var dataCenterId: Long = 2L,
-  var sequence: Long = 3L,
-  var startTimeStamp: Long = 100000L,
-)
+data class SnowflakeProperties(var workId: Long = 1L, var dataCenterId: Long = 2L, var sequence: Long = 3L, var startTimeStamp: Long = 100000L)

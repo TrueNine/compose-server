@@ -15,9 +15,7 @@ class IStringTest {
 
   @Test
   fun `non text`() {
-    listOf("", " ", "\n", "\r", "\t", "\r\n").forEach {
-      assertTrue { IString.nonText(it) }
-    }
+    listOf("", " ", "\n", "\r", "\t", "\r\n").forEach { assertTrue { IString.nonText(it) } }
     assertFalse { IString.nonText("a") }
   }
 

@@ -1,5 +1,13 @@
 package net.yan100.compose.generator
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -9,34 +17,17 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @SpringBootTest
 class SynchronizedSimpleOrderCodeGeneratorTest {
-  private val snowflake =
-    SynchronizedSimpleSnowflake(
-      workId = 1,
-      datacenterId = 1,
-      sequence = 0,
-      startTimeStamp = 0L,
-    )
+  private val snowflake = SynchronizedSimpleSnowflake(workId = 1, datacenterId = 1, sequence = 0, startTimeStamp = 0L)
 
   private val generator = SynchronizedSimpleOrderCodeGenerator(snowflake)
 
   @Test
   fun `测试基本功能`() {
     val code = generator.nextString()
-    assertAll(
-      { assertTrue(code.length >= 19, "订单号长度应该至少为19位") },
-      { assertTrue(code.matches(Regex("\\d+")), "订单号应该只包含数字") },
-    )
+    assertAll({ assertTrue(code.length >= 19, "订单号长度应该至少为19位") }, { assertTrue(code.matches(Regex("\\d+")), "订单号应该只包含数字") })
   }
 
   @Test
@@ -50,18 +41,8 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     val parsedDateTime = LocalDateTime.parse(timePart, dateTimeFormatter)
 
     assertAll(
-      {
-        assertTrue(
-          parsedDateTime.isBefore(currentDateTime.plusSeconds(1)),
-          "生成的时间应该不晚于当前时间",
-        )
-      },
-      {
-        assertTrue(
-          parsedDateTime.isAfter(currentDateTime.minusSeconds(1)),
-          "生成的时间应该不早于当前时间",
-        )
-      },
+      { assertTrue(parsedDateTime.isBefore(currentDateTime.plusSeconds(1)), "生成的时间应该不晚于当前时间") },
+      { assertTrue(parsedDateTime.isAfter(currentDateTime.minusSeconds(1)), "生成的时间应该不早于当前时间") },
     )
   }
 
@@ -88,9 +69,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
         try {
           repeat(idsPerThread) {
             val id = generator.nextString()
-            synchronized(ids) {
-              assertTrue(ids.add(id), "并发生成的订单号应该是唯一的，但发现重复订单号: $id")
-            }
+            synchronized(ids) { assertTrue(ids.add(id), "并发生成的订单号应该是唯一的，但发现重复订单号: $id") }
           }
         } finally {
           latch.countDown()
@@ -114,9 +93,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
         async(Dispatchers.Default) {
           repeat(idsPerCoroutine) {
             val id = generator.nextString()
-            synchronized(ids) {
-              assertTrue(ids.add(id), "并发生成的订单号应该是唯一的，但发现重复订单号: $id")
-            }
+            synchronized(ids) { assertTrue(ids.add(id), "并发生成的订单号应该是唯一的，但发现重复订单号: $id") }
           }
         }
       }

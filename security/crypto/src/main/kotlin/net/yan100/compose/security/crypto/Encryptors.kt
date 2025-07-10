@@ -1,8 +1,5 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.slf4j
-import net.yan100.compose.typing.EncryptAlgorithmTyping
-import org.bouncycastle.jce.spec.IESParameterSpec
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import java.security.PrivateKey
@@ -12,10 +9,12 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import net.yan100.compose.slf4j
+import net.yan100.compose.typing.EncryptAlgorithmTyping
+import org.bouncycastle.jce.spec.IESParameterSpec
 
 /**
- * 加密解密工具类
- * 提供RSA、ECC、AES等多种加密算法的实现，支持加密、解密、签名等操作
+ * 加密解密工具类 提供RSA、ECC、AES等多种加密算法的实现，支持加密、解密、签名等操作
  *
  * @author TrueNine
  * @since 2023-02-28
@@ -40,12 +39,11 @@ object Encryptors {
     alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA,
   ): String? =
     runCatching {
-      Cipher.getInstance(alg.padding).run {
-        init(ENC_MODE, publicKey)
-        sharding(data.toByteArray(charset), shardingSize)
-          .joinToString(SHARDING_SEP) { IBase64.encode(doFinal(it)) }
+        Cipher.getInstance(alg.padding).run {
+          init(ENC_MODE, publicKey)
+          sharding(data.toByteArray(charset), shardingSize).joinToString(SHARDING_SEP) { IBase64.encode(doFinal(it)) }
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::encrypt.name} failed", it) }
       .getOrNull()
 
@@ -68,12 +66,11 @@ object Encryptors {
     alg: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA,
   ): String? =
     runCatching {
-      Cipher.getInstance(alg.padding).run {
-        init(ENC_MODE, privateKey)
-        sharding(data.toByteArray(charset), shardingSize)
-          .joinToString(SHARDING_SEP) { IBase64.encode(doFinal(it)) }
+        Cipher.getInstance(alg.padding).run {
+          init(ENC_MODE, privateKey)
+          sharding(data.toByteArray(charset), shardingSize).joinToString(SHARDING_SEP) { IBase64.encode(doFinal(it)) }
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::encryptByPrivateKey.name} failed", it) }
       .getOrNull()
 
@@ -94,17 +91,12 @@ object Encryptors {
     charset: Charset = defaultCharset,
   ): String? =
     runCatching {
-      if (data.isEmpty()) return ""
-      Cipher.getInstance(alg.padding).run {
-        init(DEC_MODE, privateKey)
-        data
-          .split(SHARDING_SEP)
-          .map { IBase64.decodeToByte(it) }
-          .map { doFinal(it) }
-          .reduce { acc, byt -> acc + byt }
-          .let { String(it, charset) }
+        if (data.isEmpty()) return ""
+        Cipher.getInstance(alg.padding).run {
+          init(DEC_MODE, privateKey)
+          data.split(SHARDING_SEP).map { IBase64.decodeToByte(it) }.map { doFinal(it) }.reduce { acc, byt -> acc + byt }.let { String(it, charset) }
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::basicDecrypt.name} failed", it) }
       .getOrNull()
 
@@ -119,18 +111,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByRsaPublicKeyBase64(
-    rsaPublicKey: String,
-    data: String,
-    shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = defaultCharset,
-  ): String? =
-    encryptByRsaPublicKey(
-      Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!,
-      data,
-      shardingSize,
-      charset,
-    )
+  fun encryptByRsaPublicKeyBase64(rsaPublicKey: String, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = defaultCharset): String? =
+    encryptByRsaPublicKey(Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!, data, shardingSize, charset)
 
   /**
    * 使用RSA公钥加密数据
@@ -143,12 +125,7 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByRsaPublicKey(
-    publicKey: RSAPublicKey,
-    data: String,
-    shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = defaultCharset,
-  ): String? =
+  fun encryptByRsaPublicKey(publicKey: RSAPublicKey, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = defaultCharset): String? =
     encrypt(publicKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA)
 
   /**
@@ -162,19 +139,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByRsaPrivateKey(
-    privateKey: RSAPrivateKey,
-    data: String,
-    shardingSize: Int = SHARDING_SIZE,
-    charset: Charset = defaultCharset,
-  ): String? =
-    encryptByPrivateKey(
-      privateKey,
-      data,
-      shardingSize,
-      charset,
-      EncryptAlgorithmTyping.RSA,
-    )
+  fun encryptByRsaPrivateKey(privateKey: RSAPrivateKey, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = defaultCharset): String? =
+    encryptByPrivateKey(privateKey, data, shardingSize, charset, EncryptAlgorithmTyping.RSA)
 
   /**
    * 使用ECC公钥加密数据
@@ -186,17 +152,13 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByEccPublicKey(
-    eccPublicKey: PublicKey,
-    data: String,
-    charset: Charset = defaultCharset,
-  ): String? =
+  fun encryptByEccPublicKey(eccPublicKey: PublicKey, data: String, charset: Charset = defaultCharset): String? =
     runCatching {
-      Cipher.getInstance("ECIES", "BC").run {
-        init(ENC_MODE, eccPublicKey, IESParameterSpec(null, null, 256))
-        doFinal(data.toByteArray(charset)).let(IBase64::encode)
+        Cipher.getInstance("ECIES", "BC").run {
+          init(ENC_MODE, eccPublicKey, IESParameterSpec(null, null, 256))
+          doFinal(data.toByteArray(charset)).let(IBase64::encode)
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::encryptByEccPublicKey.name} failed", it) }
       .getOrNull()
 
@@ -210,17 +172,13 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByEccPrivateKey(
-    eccPrivateKey: PrivateKey,
-    data: String,
-    charset: Charset = defaultCharset,
-  ): String? =
+  fun decryptByEccPrivateKey(eccPrivateKey: PrivateKey, data: String, charset: Charset = defaultCharset): String? =
     runCatching {
-      Cipher.getInstance("ECIES", "BC").run {
-        init(DEC_MODE, eccPrivateKey, IESParameterSpec(null, null, 256))
-        String(doFinal(IBase64.decodeToByte(data)), charset)
+        Cipher.getInstance("ECIES", "BC").run {
+          init(DEC_MODE, eccPrivateKey, IESParameterSpec(null, null, 256))
+          String(doFinal(IBase64.decodeToByte(data)), charset)
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::decryptByEccPrivateKey.name} failed", it) }
       .getOrNull()
 
@@ -234,11 +192,7 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByRsaPrivateKey(
-    rsaPrivateKey: RSAPrivateKey,
-    ciphertext: String,
-    charset: Charset = defaultCharset,
-  ): String? =
+  fun decryptByRsaPrivateKey(rsaPrivateKey: RSAPrivateKey, ciphertext: String, charset: Charset = defaultCharset): String? =
     basicDecrypt(rsaPrivateKey, ciphertext, EncryptAlgorithmTyping.RSA, charset)
 
   /**
@@ -251,23 +205,14 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByRsaPublicKey(
-    rsaPublicKey: RSAPublicKey,
-    ciphertext: String,
-    charset: Charset = defaultCharset,
-  ): String? =
+  fun decryptByRsaPublicKey(rsaPublicKey: RSAPublicKey, ciphertext: String, charset: Charset = defaultCharset): String? =
     runCatching {
-      if (ciphertext.isEmpty()) return ""
-      Cipher.getInstance(EncryptAlgorithmTyping.RSA.padding).run {
-        init(DEC_MODE, rsaPublicKey)
-        ciphertext
-          .split(SHARDING_SEP)
-          .map { IBase64.decodeToByte(it) }
-          .map { doFinal(it) }
-          .reduce { acc, byt -> acc + byt }
-          .let { String(it, charset) }
+        if (ciphertext.isEmpty()) return ""
+        Cipher.getInstance(EncryptAlgorithmTyping.RSA.padding).run {
+          init(DEC_MODE, rsaPublicKey)
+          ciphertext.split(SHARDING_SEP).map { IBase64.decodeToByte(it) }.map { doFinal(it) }.reduce { acc, byt -> acc + byt }.let { String(it, charset) }
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::decryptByRsaPublicKey.name} failed", it) }
       .getOrNull()
 
@@ -281,16 +226,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByRsaPublicKeyBase64(
-    rsaPublicKey: String,
-    ciphertext: String,
-    charset: Charset = defaultCharset,
-  ): String? =
-    decryptByRsaPublicKey(
-      Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!,
-      ciphertext,
-      charset,
-    )
+  fun decryptByRsaPublicKeyBase64(rsaPublicKey: String, ciphertext: String, charset: Charset = defaultCharset): String? =
+    decryptByRsaPublicKey(Keys.readRsaPublicKeyByBase64(rsaPublicKey)!!, ciphertext, charset)
 
   /**
    * 使用SHA-1算法计算数据的哈希值
@@ -301,12 +238,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun signatureBySha1(
-    plaintext: String,
-    charset: Charset = defaultCharset,
-  ): String =
-    signatureBySha1ByteArray(plaintext.toByteArray(charset))
-      .joinToString("") { "%02x".format(it) }
+  fun signatureBySha1(plaintext: String, charset: Charset = defaultCharset): String =
+    signatureBySha1ByteArray(plaintext.toByteArray(charset)).joinToString("") { "%02x".format(it) }
 
   /**
    * 使用SHA-256算法计算数据的哈希值
@@ -317,12 +250,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun signatureBySha256(
-    plaintext: String,
-    charset: Charset = defaultCharset,
-  ): String =
-    signatureBySha256ByteArray(plaintext.toByteArray(charset))
-      .joinToString("") { "%02x".format(it) }
+  fun signatureBySha256(plaintext: String, charset: Charset = defaultCharset): String =
+    signatureBySha256ByteArray(plaintext.toByteArray(charset)).joinToString("") { "%02x".format(it) }
 
   /**
    * 使用SHA-1算法计算字节数组的哈希值
@@ -330,9 +259,7 @@ object Encryptors {
    * @param plaintext 待计算哈希的字节数组
    * @return 哈希值字节数组
    */
-  @JvmStatic
-  fun signatureBySha1ByteArray(plaintext: ByteArray): ByteArray =
-    sha1.digest(plaintext)
+  @JvmStatic fun signatureBySha1ByteArray(plaintext: ByteArray): ByteArray = sha1.digest(plaintext)
 
   /**
    * 使用SHA-256算法计算字节数组的哈希值
@@ -340,9 +267,7 @@ object Encryptors {
    * @param plaintext 待计算哈希的字节数组
    * @return 哈希值字节数组
    */
-  @JvmStatic
-  fun signatureBySha256ByteArray(plaintext: ByteArray): ByteArray =
-    sha256.digest(plaintext)
+  @JvmStatic fun signatureBySha256ByteArray(plaintext: ByteArray): ByteArray = sha256.digest(plaintext)
 
   /**
    * 使用Base64编码的AES密钥加密数据
@@ -354,16 +279,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByAesKeyBase64(
-    aesKey: String,
-    plaintext: String,
-    charset: Charset = Charsets.UTF_8,
-  ): String? =
-    encryptByAesKey(
-      SecretKeySpec(IBase64.decodeToByte(aesKey), "AES"),
-      plaintext,
-      charset,
-    )
+  fun encryptByAesKeyBase64(aesKey: String, plaintext: String, charset: Charset = Charsets.UTF_8): String? =
+    encryptByAesKey(SecretKeySpec(IBase64.decodeToByte(aesKey), "AES"), plaintext, charset)
 
   /**
    * 使用AES密钥加密数据
@@ -375,17 +292,13 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun encryptByAesKey(
-    secret: SecretKeySpec,
-    plain: String,
-    charset: Charset = defaultCharset,
-  ): String? =
+  fun encryptByAesKey(secret: SecretKeySpec, plain: String, charset: Charset = defaultCharset): String? =
     runCatching {
-      Cipher.getInstance("AES/ECB/PKCS5Padding").run {
-        init(ENC_MODE, secret)
-        IBase64.encode(doFinal(plain.toByteArray(charset)))
+        Cipher.getInstance("AES/ECB/PKCS5Padding").run {
+          init(ENC_MODE, secret)
+          IBase64.encode(doFinal(plain.toByteArray(charset)))
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::encryptByAesKey.name} failed", it) }
       .getOrNull()
 
@@ -399,16 +312,8 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByAesKeyBase64(
-    aesKey: String,
-    ciphertext: String,
-    charset: Charset = defaultCharset,
-  ): String? =
-    decryptByAesKey(
-      SecretKeySpec(IBase64.decodeToByte(aesKey), "AES"),
-      ciphertext,
-      charset,
-    )
+  fun decryptByAesKeyBase64(aesKey: String, ciphertext: String, charset: Charset = defaultCharset): String? =
+    decryptByAesKey(SecretKeySpec(IBase64.decodeToByte(aesKey), "AES"), ciphertext, charset)
 
   /**
    * 使用AES密钥解密数据
@@ -420,17 +325,13 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun decryptByAesKey(
-    secret: SecretKeySpec,
-    ciphertext: String,
-    charset: Charset = defaultCharset,
-  ): String? =
+  fun decryptByAesKey(secret: SecretKeySpec, ciphertext: String, charset: Charset = defaultCharset): String? =
     runCatching {
-      Cipher.getInstance("AES/ECB/PKCS5Padding").run {
-        init(DEC_MODE, secret)
-        String(doFinal(IBase64.decodeToByte(ciphertext)), charset)
+        Cipher.getInstance("AES/ECB/PKCS5Padding").run {
+          init(DEC_MODE, secret)
+          String(doFinal(IBase64.decodeToByte(ciphertext)), charset)
+        }
       }
-    }
       .onFailure { log.error("${Encryptors::decryptByAesKey.name} failed", it) }
       .getOrNull()
 
@@ -444,11 +345,7 @@ object Encryptors {
    */
   @JvmStatic
   @JvmOverloads
-  fun signWithSha256WithRsaByRsaPrivateKey(
-    signContent: String,
-    rsaPrivateKey: RSAPrivateKey,
-    charset: Charset = defaultCharset,
-  ): Signature {
+  fun signWithSha256WithRsaByRsaPrivateKey(signContent: String, rsaPrivateKey: RSAPrivateKey, charset: Charset = defaultCharset): Signature {
     val signature = Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.value)
     signature.initSign(rsaPrivateKey)
     signature.update(signContent.toByteArray(charset))

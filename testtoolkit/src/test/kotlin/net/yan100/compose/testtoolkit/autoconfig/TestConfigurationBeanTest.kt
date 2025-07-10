@@ -3,6 +3,9 @@ package net.yan100.compose.testtoolkit.autoconfig
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -10,9 +13,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
 import org.springframework.core.env.MutablePropertySources
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class TestConfigurationBeanTest {
 
@@ -26,9 +26,7 @@ class TestConfigurationBeanTest {
     log.trace("initializing test configuration bean test")
 
     mockPropertySources = mockk<MutablePropertySources>(relaxed = true)
-    mockEnvironment = mockk<ConfigurableEnvironment> {
-      every { propertySources } returns mockPropertySources
-    }
+    mockEnvironment = mockk<ConfigurableEnvironment> { every { propertySources } returns mockPropertySources }
 
     properties = TestConfigurationProperties()
     testConfigurationBean = TestConfigurationBean(mockEnvironment, properties)
@@ -71,28 +69,19 @@ class TestConfigurationBeanTest {
     fun `关闭条件评估报告 - 应当设置相关属性`() {
       log.trace("testing condition evaluation report disable configuration")
 
-      properties = TestConfigurationProperties(
-        disableConditionEvaluationReport = true,
-        enableVirtualThreads = false,
-        ansiOutputMode = AnsiOutputMode.NEVER
-      )
+      properties = TestConfigurationProperties(disableConditionEvaluationReport = true, enableVirtualThreads = false, ansiOutputMode = AnsiOutputMode.NEVER)
       testConfigurationBean = TestConfigurationBean(mockEnvironment, properties)
 
       // 捕获添加的属性源
       var capturedPropertySource: MapPropertySource? = null
-      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers {
-        capturedPropertySource = firstArg()
-      }
+      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers { capturedPropertySource = firstArg() }
 
       testConfigurationBean.configureTestProperties()
 
       // 验证条件评估报告相关属性
       capturedPropertySource?.also { propertySource ->
         assertEquals(false, propertySource.getProperty("debug"), "debug 应该被设置为 false")
-        assertEquals(
-          false, propertySource.getProperty("spring.test.print-condition-evaluation-report"),
-          "条件评估报告应该被禁用"
-        )
+        assertEquals(false, propertySource.getProperty("spring.test.print-condition-evaluation-report"), "条件评估报告应该被禁用")
       }
 
       log.debug("condition evaluation report disable configuration verified")
@@ -102,31 +91,19 @@ class TestConfigurationBeanTest {
     fun `虚拟线程和颜色输出 - 应当设置相关属性`() {
       log.trace("testing virtual threads and color output configuration")
 
-      properties = TestConfigurationProperties(
-        disableConditionEvaluationReport = false,
-        enableVirtualThreads = true,
-        ansiOutputMode = AnsiOutputMode.ALWAYS
-      )
+      properties = TestConfigurationProperties(disableConditionEvaluationReport = false, enableVirtualThreads = true, ansiOutputMode = AnsiOutputMode.ALWAYS)
       testConfigurationBean = TestConfigurationBean(mockEnvironment, properties)
 
       // 捕获添加的属性源
       var capturedPropertySource: MapPropertySource? = null
-      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers {
-        capturedPropertySource = firstArg()
-      }
+      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers { capturedPropertySource = firstArg() }
 
       testConfigurationBean.configureTestProperties()
 
       // 验证虚拟线程和颜色输出相关属性
       capturedPropertySource?.let { propertySource ->
-        assertEquals(
-          true, propertySource.getProperty("spring.threads.virtual.enabled"),
-          "虚拟线程应该被启用"
-        )
-        assertEquals(
-          "always", propertySource.getProperty("spring.output.ansi.enabled"),
-          "ANSI 颜色输出应该被设置为 always"
-        )
+        assertEquals(true, propertySource.getProperty("spring.threads.virtual.enabled"), "虚拟线程应该被启用")
+        assertEquals("always", propertySource.getProperty("spring.output.ansi.enabled"), "ANSI 颜色输出应该被设置为 always")
       }
 
       log.debug("virtual threads and color output configuration verified")
@@ -136,37 +113,27 @@ class TestConfigurationBeanTest {
     fun `额外属性配置 - 应当正确注入自定义属性`() {
       log.trace("testing additional properties configuration")
 
-      val additionalProps = mapOf(
-        "custom.property.1" to "value1",
-        "custom.property.2" to "value2"
-      )
+      val additionalProps = mapOf("custom.property.1" to "value1", "custom.property.2" to "value2")
 
-      properties = TestConfigurationProperties(
-        disableConditionEvaluationReport = false,
-        enableVirtualThreads = false,
-        ansiOutputMode = AnsiOutputMode.DETECT,
-        additionalProperties = additionalProps
-      )
+      properties =
+        TestConfigurationProperties(
+          disableConditionEvaluationReport = false,
+          enableVirtualThreads = false,
+          ansiOutputMode = AnsiOutputMode.DETECT,
+          additionalProperties = additionalProps,
+        )
       testConfigurationBean = TestConfigurationBean(mockEnvironment, properties)
 
       // 捕获添加的属性源
       var capturedPropertySource: MapPropertySource? = null
-      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers {
-        capturedPropertySource = firstArg()
-      }
+      every { mockPropertySources.addFirst(any<MapPropertySource>()) } answers { capturedPropertySource = firstArg() }
 
       testConfigurationBean.configureTestProperties()
 
       // 验证额外属性
       capturedPropertySource?.let { propertySource ->
-        assertEquals(
-          "value1", propertySource.getProperty("custom.property.1"),
-          "自定义属性1应该被正确设置"
-        )
-        assertEquals(
-          "value2", propertySource.getProperty("custom.property.2"),
-          "自定义属性2应该被正确设置"
-        )
+        assertEquals("value1", propertySource.getProperty("custom.property.1"), "自定义属性1应该被正确设置")
+        assertEquals("value2", propertySource.getProperty("custom.property.2"), "自定义属性2应该被正确设置")
       }
 
       log.debug("additional properties configuration verified")
@@ -182,10 +149,7 @@ class TestConfigurationBeanTest {
 
       val postProcessor = testConfigurationBean.testEnvironmentPostProcessor()
 
-      assertTrue(
-        postProcessor is net.yan100.compose.testtoolkit.autoconfig.TestEnvironmentPostProcessor,
-        "应该创建 TestEnvironmentPostProcessor 实例"
-      )
+      assertTrue(postProcessor is net.yan100.compose.testtoolkit.autoconfig.TestEnvironmentPostProcessor, "应该创建 TestEnvironmentPostProcessor 实例")
 
       log.debug("TestEnvironmentPostProcessor bean creation verified")
     }
@@ -236,26 +200,11 @@ class TestEnvironmentPostProcessorTest {
       val recommendedProperties = postProcessor.getRecommendedTestProperties()
 
       assertTrue(recommendedProperties.isNotEmpty(), "推荐属性不应该为空")
-      assertEquals(
-        "true", recommendedProperties["spring.threads.virtual.enabled"],
-        "虚拟线程应该被启用"
-      )
-      assertEquals(
-        "always", recommendedProperties["spring.output.ansi.enabled"],
-        "ANSI 颜色输出应该被设置为 always"
-      )
-      assertEquals(
-        "false", recommendedProperties["spring.jpa.show-sql"],
-        "JPA show-sql 应该被设置为 false"
-      )
-      assertEquals(
-        "create-drop", recommendedProperties["spring.jpa.hibernate.ddl-auto"],
-        "Hibernate DDL auto 应该被设置为 create-drop"
-      )
-      assertEquals(
-        "DEBUG", recommendedProperties["logging.level.org.springframework.web"],
-        "Web 日志级别应该被设置为 DEBUG"
-      )
+      assertEquals("true", recommendedProperties["spring.threads.virtual.enabled"], "虚拟线程应该被启用")
+      assertEquals("always", recommendedProperties["spring.output.ansi.enabled"], "ANSI 颜色输出应该被设置为 always")
+      assertEquals("false", recommendedProperties["spring.jpa.show-sql"], "JPA show-sql 应该被设置为 false")
+      assertEquals("create-drop", recommendedProperties["spring.jpa.hibernate.ddl-auto"], "Hibernate DDL auto 应该被设置为 create-drop")
+      assertEquals("DEBUG", recommendedProperties["logging.level.org.springframework.web"], "Web 日志级别应该被设置为 DEBUG")
 
       log.debug("recommended test properties retrieval verified, found {} properties", recommendedProperties.size)
     }
@@ -306,4 +255,4 @@ class TestEnvironmentPostProcessorTest {
       log.debug("non-test environment check verified")
     }
   }
-} 
+}

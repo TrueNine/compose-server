@@ -1,8 +1,8 @@
 package net.yan100.compose.security.jwt.consts
 
-import net.yan100.compose.security.crypto.Keys
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
+import net.yan100.compose.security.crypto.Keys
 
 data class VerifierParam<S : Any, E : Any>(
   val token: String,

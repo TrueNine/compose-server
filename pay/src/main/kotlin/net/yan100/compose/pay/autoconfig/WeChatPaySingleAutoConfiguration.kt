@@ -24,25 +24,17 @@ class WeChatPaySingleAutoConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(
-    "compose.pay.wechat.enable-single",
-    havingValue = "true",
-  )
-  fun rsaAutoCertificateConfig(
-    p: WeChatPayProperties
-  ): RSAAutoCertificateConfig {
-    if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false)
-      log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
+  @ConditionalOnProperty("compose.pay.wechat.enable-single", havingValue = "true")
+  fun rsaAutoCertificateConfig(p: WeChatPayProperties): RSAAutoCertificateConfig {
+    if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false) log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
 
-    if (p.asyncSuccessRefundNotifyUrl?.startsWith("https://") == false)
-      log.warn("警告：配置的异步退款通知地址不是 https 地址 [{}]", p.asyncSuccessRefundNotifyUrl)
+    if (p.asyncSuccessRefundNotifyUrl?.startsWith("https://") == false) log.warn("警告：配置的异步退款通知地址不是 https 地址 [{}]", p.asyncSuccessRefundNotifyUrl)
 
     log.info("注册 微信 单支付属性 p = {}", p)
     log.info("privateKeyPath = {}", p.privateKeyPath)
     log.info("certKeyPath = {}", p.certPath)
 
-    val privateKey =
-      ClassPathResource(p.privateKeyPath).contentAsByteArray.utf8String
+    val privateKey = ClassPathResource(p.privateKeyPath).contentAsByteArray.utf8String
 
     // TODO 郑重警告，此类不能被创建两次
     return RSAAutoCertificateConfig.Builder()
@@ -70,16 +62,9 @@ class WeChatPaySingleAutoConfiguration {
   @Bean
   @DependsOn(CREATE_CONFIG_NAME)
   @ConditionalOnBean(RSAAutoCertificateConfig::class)
-  fun WeChatPaySingleConfigProperty(
-    p: WeChatPayProperties
-  ): WeChatPaySingleConfigProperty {
-    val privateKeyFile =
-      p.privateKeyPath.resourceAsStream(this::class).use {
-        it?.readAllBytes()?.utf8String
-      }
-    p.certPath.resourceAsStream(this::class).use {
-      it?.readAllBytes()?.utf8String
-    }
+  fun WeChatPaySingleConfigProperty(p: WeChatPayProperties): WeChatPaySingleConfigProperty {
+    val privateKeyFile = p.privateKeyPath.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
+    p.certPath.resourceAsStream(this::class).use { it?.readAllBytes()?.utf8String }
 
     return WeChatPaySingleConfigProperty().apply {
       enable = p.enableSingle

@@ -32,7 +32,6 @@ class AliasFnsTest {
     assertTrue("92233720368547758079223372036854775807".isId(), "超大数字字符串也是有效Id")
   }
 
-
   @Test
   fun `isId 当输入为有效Long类型ID时 返回true`() {
     assertTrue(1L.isId(), "正数 ID 应该返回 true")

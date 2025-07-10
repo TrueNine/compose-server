@@ -26,8 +26,7 @@ annotation class MetaDef(
   /**
    * ## 扩展超类，或额外指定的类型
    *
-   * 例如：在 jpa 当中，默认继承 [net.yan100.compose.rds.core.entities.IEntity]，
-   * 但如果需要继承别的类，则可以单独指定，例如：[net.yan100.compose.rds.core.entities.ITreeEntity]
+   * 例如：在 jpa 当中，默认继承 [net.yan100.compose.rds.core.entities.IEntity]， 但如果需要继承别的类，则可以单独指定，例如：[net.yan100.compose.rds.core.entities.ITreeEntity]
    */
   val extendBy: KClass<*> = Unit::class,
 )

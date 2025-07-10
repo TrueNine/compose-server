@@ -1,17 +1,18 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.consts.IRegexes
 import kotlin.test.*
+import net.yan100.compose.consts.IRegexes
 
 class EncryptAndDecryptTest {
   // 测试数据
-  private val testData = mapOf(
-    "empty" to "",
-    "short" to "测试数据",
-    "chinese" to "我是中文测试数据啊啊啊",
-    "long" to "a".repeat(117), // RSA 1024位密钥最大加密长度约为117字节
-    "special" to "!@#$%^&*()_+-=[]{}|;:'\",.<>?/~`"
-  )
+  private val testData =
+    mapOf(
+      "empty" to "",
+      "short" to "测试数据",
+      "chinese" to "我是中文测试数据啊啊啊",
+      "long" to "a".repeat(117), // RSA 1024位密钥最大加密长度约为117字节
+      "special" to "!@#$%^&*()_+-=[]{}|;:'\",.<>?/~`",
+    )
 
   @Test
   fun `测试 AES 密钥生成与序列化反序列化`() {
@@ -28,11 +29,7 @@ class EncryptAndDecryptTest {
     assertNotNull(recoveredKey, "AES密钥Base64解码失败")
 
     // 验证密钥一致性
-    assertContentEquals(
-      aesKey.encoded,
-      recoveredKey.encoded,
-      "AES密钥序列化和反序列化后不一致"
-    )
+    assertContentEquals(aesKey.encoded, recoveredKey.encoded, "AES密钥序列化和反序列化后不一致")
   }
 
   @Test
@@ -65,18 +62,10 @@ class EncryptAndDecryptTest {
     val recoveredPair = Keys.readRsaKeyPair(publicKeyBase64, privateKeyBase64)
 
     // 验证公钥一致性
-    assertContentEquals(
-      keyPair.publicKeyBase64ByteArray,
-      recoveredPair.publicKeyBase64ByteArray,
-      "RSA公钥序列化和反序列化后不一致"
-    )
+    assertContentEquals(keyPair.publicKeyBase64ByteArray, recoveredPair.publicKeyBase64ByteArray, "RSA公钥序列化和反序列化后不一致")
 
     // 验证私钥一致性
-    assertContentEquals(
-      keyPair.privateKeyBase64ByteArray,
-      recoveredPair.privateKeyBase64ByteArray,
-      "RSA私钥序列化和反序列化后不一致"
-    )
+    assertContentEquals(keyPair.privateKeyBase64ByteArray, recoveredPair.privateKeyBase64ByteArray, "RSA私钥序列化和反序列化后不一致")
   }
 
   @Test
@@ -119,16 +108,8 @@ class EncryptAndDecryptTest {
 
     // 使用恢复的密钥对重新构建密钥对
     val recoveredPair = Keys.readEccKeyPair(keyPair.publicKeyBase64, keyPair.privateKeyBase64)
-    assertContentEquals(
-      keyPair.publicKeyBase64ByteArray,
-      recoveredPair.publicKeyBase64ByteArray,
-      "ECC公钥序列化和反序列化后不一致"
-    )
-    assertContentEquals(
-      keyPair.privateKeyBase64ByteArray,
-      recoveredPair.privateKeyBase64ByteArray,
-      "ECC私钥序列化和反序列化后不一致"
-    )
+    assertContentEquals(keyPair.publicKeyBase64ByteArray, recoveredPair.publicKeyBase64ByteArray, "ECC公钥序列化和反序列化后不一致")
+    assertContentEquals(keyPair.privateKeyBase64ByteArray, recoveredPair.privateKeyBase64ByteArray, "ECC私钥序列化和反序列化后不一致")
   }
 
   @Test
@@ -193,10 +174,7 @@ class EncryptAndDecryptTest {
     lengths.forEach { length ->
       val random = Keys.generateRandomAsciiString(length)
       assertEquals(length, random.length, "生成的随机字符串长度不正确")
-      assertTrue(
-        random.all { it in '0'..'9' || it in 'a'..'z' || it in 'A'..'Z' },
-        "随机字符串包含非法字符"
-      )
+      assertTrue(random.all { it in '0'..'9' || it in 'a'..'z' || it in 'A'..'Z' }, "随机字符串包含非法字符")
     }
 
     // 测试默认长度

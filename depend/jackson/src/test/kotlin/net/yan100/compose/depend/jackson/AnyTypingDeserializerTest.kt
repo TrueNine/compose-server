@@ -24,15 +24,9 @@ class AnyTypingDeserializerTest {
     val json = mapper.writeValueAsString(dd)
     log.info("json: {}", json)
     assertFailsWith<AssertionError> {
-      assertEquals(
-        """{"stringTyping1":"${UserAgents.CHROME_WIN_103.value}","intTyping2":${HttpStatusTyping._403.value}}""",
-        json,
-      )
+      assertEquals("""{"stringTyping1":"${UserAgents.CHROME_WIN_103.value}","intTyping2":${HttpStatusTyping._403.value}}""", json)
     }
-    assertEquals(
-      """{"stringTyping1":"CHROME_WIN_103","intTyping2":"_403"}""",
-      json,
-    )
+    assertEquals("""{"stringTyping1":"CHROME_WIN_103","intTyping2":"_403"}""", json)
     val des = mapper.readValue(json, AnyTypingRecord::class.java)
     log.info("des: {}", des)
     assertNotNull(des)

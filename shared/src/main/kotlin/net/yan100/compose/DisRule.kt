@@ -8,8 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 open class DisRule(@JsonIgnore private var disRuleMeta: ByteArray? = null) {
   fun init() {
     disRuleMeta = disRuleMeta ?: ByteArray(RULE_LENGTH)
-    if (disRuleMeta!!.size != RULE_LENGTH)
-      disRuleMeta = disRuleMeta!!.copyOf(RULE_LENGTH)
+    if (disRuleMeta!!.size != RULE_LENGTH) disRuleMeta = disRuleMeta!!.copyOf(RULE_LENGTH)
     for (i in disRuleMeta!!.indices) {
       disRuleMeta!![i] = if (disRuleMeta!![i] > 0) TRUE else FALSE
     }

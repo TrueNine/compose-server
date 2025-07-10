@@ -12,9 +12,7 @@ import java.security.PublicKey
  * - 内容以每行 64 个字符填充
  * - 以 -----END keyType----- 结尾
  */
-class PemFormat private constructor(
-  private val rawPem: String,
-) {
+class PemFormat private constructor(private val rawPem: String) {
 
   companion object {
     const val SEPARATOR = "-----"
@@ -22,8 +20,7 @@ class PemFormat private constructor(
     const val BEGIN_PREFIX = "${SEPARATOR}BEGIN "
     const val END_PREFIX = "${SEPARATOR}END "
 
-    @JvmStatic
-    val LINE_SEPARATOR: String = System.lineSeparator()
+    @JvmStatic val LINE_SEPARATOR: String = System.lineSeparator()
 
     const val DEFAULT_STRING_BUILDER_CAPACITY = 1024
 
@@ -68,17 +65,19 @@ class PemFormat private constructor(
       val normalizedType = keyType?.uppercase()?.trim().orEmpty()
       val formattedContent = base64.trim().replace("\r", "\n").chunked(LINE_LENGTH).joinToString(LINE_SEPARATOR)
 
-      return StringBuilder(DEFAULT_STRING_BUILDER_CAPACITY).apply {
-        append(BEGIN_PREFIX)
-        append(normalizedType)
-        append(SEPARATOR)
-        append(LINE_SEPARATOR)
-        append(formattedContent)
-        append(LINE_SEPARATOR)
-        append(END_PREFIX)
-        append(normalizedType)
-        append(SEPARATOR)
-      }.toString()
+      return StringBuilder(DEFAULT_STRING_BUILDER_CAPACITY)
+        .apply {
+          append(BEGIN_PREFIX)
+          append(normalizedType)
+          append(SEPARATOR)
+          append(LINE_SEPARATOR)
+          append(formattedContent)
+          append(LINE_SEPARATOR)
+          append(END_PREFIX)
+          append(normalizedType)
+          append(SEPARATOR)
+        }
+        .toString()
     }
 
     /**
@@ -115,23 +114,13 @@ class PemFormat private constructor(
   }
 
   // 延迟初始化属性，避免在构造函数中进行复杂计算
-  private val normalizedPem: String by lazy {
-    rawPem.trim().replace("\r", "\n").replace("\n\n", "\n")
-  }
+  private val normalizedPem: String by lazy { rawPem.trim().replace("\r", "\n").replace("\n\n", "\n") }
 
-  /**
-   * PEM 格式的类型标识
-   */
-  val schema: String by lazy {
-    extractSchema()
-  }
+  /** PEM 格式的类型标识 */
+  val schema: String by lazy { extractSchema() }
 
-  /**
-   * PEM 格式的内容部分（不含头尾标记）
-   */
-  val content: String by lazy {
-    extractContent()
-  }
+  /** PEM 格式的内容部分（不含头尾标记） */
+  val content: String by lazy { extractContent() }
 
   private fun extractSchema(): String {
     require(normalizedPem.isNotBlank()) { "PEM 内容不能为空" }
@@ -150,9 +139,7 @@ class PemFormat private constructor(
     val endSchema = endLine.substring(END_PREFIX.length).removeSuffix(SEPARATOR).trim()
     require(endSchema.isNotBlank()) { "PEM 结束类型标识不能为空" }
 
-    require(beginSchema == endSchema) {
-      "PEM 格式错误：BEGIN 类型「$beginSchema」与 END 类型「$endSchema」不匹配"
-    }
+    require(beginSchema == endSchema) { "PEM 格式错误：BEGIN 类型「$beginSchema」与 END 类型「$endSchema」不匹配" }
     return beginSchema
   }
 

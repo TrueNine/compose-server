@@ -27,16 +27,14 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
    *
    * @param action 打包配置
    */
-  fun jarExtension(action: Action<JarExtensionConfig>) =
-    action.execute(jarExtension)
+  fun jarExtension(action: Action<JarExtensionConfig>) = action.execute(jarExtension)
 
   /**
    * ## gradle properties 生成扩展配置
    *
    * @param action 生成配置
    */
-  fun gradleGenerator(action: Action<GradleGeneratorConfig>) =
-    action.execute(gradleGenerator)
+  fun gradleGenerator(action: Action<GradleGeneratorConfig>) = action.execute(gradleGenerator)
 
   val languages: SetProperty<String>
   val sourceSet: Property<SourceSet>
@@ -45,14 +43,8 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
 
   init {
     logger = project.logger
-    languages =
-      project.objects
-        .setProperty(String::class.java)
-        .convention(listOf("java", "kotlin"))
-    sourceSet =
-      project.objects
-        .property(SourceSet::class.java)
-        .convention(mainSourceSet(project))
+    languages = project.objects.setProperty(String::class.java).convention(listOf("java", "kotlin"))
+    sourceSet = project.objects.property(SourceSet::class.java).convention(mainSourceSet(project))
   }
 
   private fun mainSourceSet(project: Project): SourceSet {
@@ -60,8 +52,7 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   }
 
   private fun resolveSourceSet(name: String, project: Project): SourceSet {
-    val javaPluginExtension =
-      project.extensions.getByType(JavaPluginExtension::class.java)
+    val javaPluginExtension = project.extensions.getByType(JavaPluginExtension::class.java)
     return javaPluginExtension.sourceSets.getByName(name)
   }
 

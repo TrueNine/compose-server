@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 HTTP client utilities and exchange interfaces for reactive and traditional web service communication.
 Provides Spring WebFlux HTTP client support, Netty integration, and JSON processing capabilities.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(projects.shared)

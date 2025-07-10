@@ -16,8 +16,7 @@ private fun mapCapacity(expectedSize: Int): Int =
   when {
     expectedSize < 0 -> expectedSize
     expectedSize < 3 -> expectedSize + 1
-    expectedSize < INT_MAX_POWER_OF_TWO ->
-      ((expectedSize / 0.75F) + 1.0F).toInt()
+    expectedSize < INT_MAX_POWER_OF_TWO -> ((expectedSize / 0.75F) + 1.0F).toInt()
 
     else -> Int.MAX_VALUE
   }
@@ -25,9 +24,7 @@ private fun mapCapacity(expectedSize: Int): Int =
 private const val INT_MAX_POWER_OF_TWO: Int = 1 shl (Int.SIZE_BITS - 2)
 
 fun <K, v> mutableLockMapOf(vararg pairs: Pair<K, v>): MutableMap<K, v> {
-  return ConcurrentHashMap<K, v>(mapCapacity(pairs.size)).apply {
-    putAll(pairs)
-  }
+  return ConcurrentHashMap<K, v>(mapCapacity(pairs.size)).apply { putAll(pairs) }
 }
 
 fun <K, v> mutableLockMapOf(): MutableMap<K, v> {

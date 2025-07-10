@@ -14,8 +14,6 @@ private const val PREFIX = "compose.depend.servlet"
  */
 @ConfigurationProperties(prefix = PREFIX)
 data class ServletWebApplicationProperties(
-  var allowConverters: MutableList<String> =
-    mutableListOf("getDocumentation", "swaggerResources", "openapiJson"),
-  var allowConverterClasses: MutableList<KClass<*>> =
-    mutableListOf(StringHttpMessageConverter::class),
+  var allowConverters: MutableList<String> = mutableListOf("getDocumentation", "swaggerResources", "openapiJson"),
+  var allowConverterClasses: MutableList<KClass<*>> = mutableListOf(StringHttpMessageConverter::class),
 )

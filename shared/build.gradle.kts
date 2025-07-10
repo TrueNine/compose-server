@@ -4,10 +4,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Shared foundation library providing core utilities, exception handling, and common types for all modules.
 Includes base configurations, extension functions, and fundamental building blocks used across the entire application.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.annotations)

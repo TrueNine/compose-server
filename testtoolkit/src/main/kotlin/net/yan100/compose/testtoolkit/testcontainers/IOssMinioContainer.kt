@@ -1,18 +1,17 @@
 package net.yan100.compose.testtoolkit.testcontainers
 
+import java.time.Duration
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
-import java.time.Duration
 
 /**
  * # MinIO 测试容器接口
  *
- * 该接口提供了 MinIO 测试容器的标准配置，用于对象存储集成测试环境。
- * 通过实现此接口，测试类可以自动获得配置好的 MinIO 测试实例。
+ * 该接口提供了 MinIO 测试容器的标准配置，用于对象存储集成测试环境。 通过实现此接口，测试类可以自动获得配置好的 MinIO 测试实例。
  *
  * ## 特性
  * - 自动配置 MinIO 测试容器
@@ -21,16 +20,18 @@ import java.time.Duration
  * - 使用随机端口以避免端口冲突
  *
  * ## 使用方式
+ *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : IOssMinioContainer {
  *   // 你的测试代码
  * }
  * ```
- * @author TrueNine
- * @since 2025-04-24
+ *
  * @see org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.GenericContainer
+ * @author TrueNine
+ * @since 2025-04-24
  */
 @Testcontainers
 interface IOssMinioContainer {
@@ -52,10 +53,7 @@ interface IOssMinioContainer {
         withEnv("MINIO_CONSOLE_ADDRESS", ":9001")
         withCommand("server", "/data")
         withExposedPorts(9000, 9001)
-        setWaitStrategy(
-          Wait.forLogMessage(".*MinIO Object Storage Server.*\\n", 1)
-            .withStartupTimeout(Duration.ofSeconds(10))
-        )
+        setWaitStrategy(Wait.forLogMessage(".*MinIO Object Storage Server.*\\n", 1).withStartupTimeout(Duration.ofSeconds(10)))
         start()
       }
     }
@@ -85,5 +83,6 @@ interface IOssMinioContainer {
     }
   }
 
-  val minioContainer: GenericContainer<*>? get() = container
+  val minioContainer: GenericContainer<*>?
+    get() = container
 }

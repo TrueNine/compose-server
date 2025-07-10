@@ -32,20 +32,14 @@ interface IWxpaWebClient {
    * @param used 当天已经调用的次数
    * @param remain 当天剩余调用次数
    */
-  data class WxpaQuotaResp(
-    @JsonProperty("daily_limit") val dailyLimit: long?,
-    val used: long?,
-    val remain: long?,
-  ) : BaseWxpaResponseEntity()
+  data class WxpaQuotaResp(@JsonProperty("daily_limit") val dailyLimit: long?, val used: long?, val remain: long?) : BaseWxpaResponseEntity()
 
   /**
    * # 公众号获取 access_token 返回结果
    *
    * @param accessToken 公众号 access_token
    */
-  data class WxpaGetAccessTokenResp(
-    @JsonProperty("access_token") val accessToken: String?
-  ) : BaseWxpaResponseEntity()
+  data class WxpaGetAccessTokenResp(@JsonProperty("access_token") val accessToken: String?) : BaseWxpaResponseEntity()
 
   /**
    * # 微信公众号网页授权获取 access_token 响应
@@ -123,8 +117,7 @@ interface IWxpaWebClient {
     @RequestParam("appid") appId: String,
     @RequestParam("secret") wxpaSecret: String,
     @RequestParam("code") code: String,
-    @RequestParam("grant_type")
-    grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE,
+    @RequestParam("grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.AUTH_CODE,
   ): WxpaWebsiteAuthGetAccessTokenResp?
 
   /**
@@ -139,8 +132,7 @@ interface IWxpaWebClient {
   fun getAccessToken(
     @RequestParam(name = "appid") appId: String,
     @RequestParam(name = "secret") secret: String,
-    @RequestParam(name = "grant_type")
-    grantType: WechatMpGrantTyping = WechatMpGrantTyping.CLIENT_CREDENTIAL,
+    @RequestParam(name = "grant_type") grantType: WechatMpGrantTyping = WechatMpGrantTyping.CLIENT_CREDENTIAL,
   ): WxpaGetAccessTokenResp?
 
   /**
@@ -150,10 +142,7 @@ interface IWxpaWebClient {
    * @param type 无需填写
    */
   @GetExchange("cgi-bin/ticket/getticket")
-  fun getTicket(
-    @RequestParam(name = "access_token") accessToken: String,
-    @RequestParam(name = "type") type: String = "jsapi",
-  ): WxpaGetTicketResp
+  fun getTicket(@RequestParam(name = "access_token") accessToken: String, @RequestParam(name = "type") type: String = "jsapi"): WxpaGetTicketResp
 
   /**
    * ## 公众号每天的调用次数
@@ -162,8 +151,5 @@ interface IWxpaWebClient {
    * @param cgiPath 调用路径
    */
   @GetExchange("cgi-bin/openapi/quota/get")
-  fun getApiQuota(
-    @RequestParam("access_token") accessToken: string,
-    @RequestParam("cgi_path") cgiPath: string,
-  ): WxpaQuotaResp
+  fun getApiQuota(@RequestParam("access_token") accessToken: string, @RequestParam("cgi_path") cgiPath: string): WxpaQuotaResp
 }

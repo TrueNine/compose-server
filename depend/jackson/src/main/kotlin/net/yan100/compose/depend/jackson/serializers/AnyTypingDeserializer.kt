@@ -10,29 +10,19 @@ import net.yan100.compose.typing.IntTyping
 import net.yan100.compose.typing.StringTyping
 
 @Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
-class AnyTypingDeserializer(typingType: KClass<Enum<*>>) :
-  StdDeserializer<Enum<*>>(Enum::class.java) {
-  private var isIntEnum: Boolean =
-    IntTyping::class.java.isAssignableFrom(typingType.java)
-  private var isStringEnum: Boolean =
-    StringTyping::class.java.isAssignableFrom(typingType.java)
-  private val enumValueMap: Map<Any, Enum<*>> =
-    typingType.java.enumConstants.associateBy { (it as AnyTyping).value }
-  private val enumNameMap: Map<String, Enum<*>> =
-    typingType.java.enumConstants.associateBy { it.name }
-  private val enumOrdinalMap: Map<Int, Enum<*>> =
-    typingType.java.enumConstants.associateBy { it.ordinal }
+class AnyTypingDeserializer(typingType: KClass<Enum<*>>) : StdDeserializer<Enum<*>>(Enum::class.java) {
+  private var isIntEnum: Boolean = IntTyping::class.java.isAssignableFrom(typingType.java)
+  private var isStringEnum: Boolean = StringTyping::class.java.isAssignableFrom(typingType.java)
+  private val enumValueMap: Map<Any, Enum<*>> = typingType.java.enumConstants.associateBy { (it as AnyTyping).value }
+  private val enumNameMap: Map<String, Enum<*>> = typingType.java.enumConstants.associateBy { it.name }
+  private val enumOrdinalMap: Map<Int, Enum<*>> = typingType.java.enumConstants.associateBy { it.ordinal }
 
-  override fun deserialize(
-    p: JsonParser?,
-    ctxt: DeserializationContext?,
-  ): Enum<*>? {
+  override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): Enum<*>? {
     val token = p?.currentToken
     return when (token) {
       JsonToken.VALUE_STRING -> {
         val nameOrValue = p.text
-        if (isStringEnum) enumValueMap[nameOrValue]
-        else enumNameMap[nameOrValue]
+        if (isStringEnum) enumValueMap[nameOrValue] else enumNameMap[nameOrValue]
       }
 
       JsonToken.VALUE_NUMBER_INT -> {

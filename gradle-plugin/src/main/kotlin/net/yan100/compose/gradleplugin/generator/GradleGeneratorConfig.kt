@@ -67,20 +67,16 @@ open class GradleGeneratorConfig {
       "org.gradle.parallel" to "true",
       "org.gradle.caching" to "false",
       "org.gradle.jvmargs" to "-Xmx8192m -Xms4096m",
-      "org.gradle.workers.max" to
-        Runtime.getRuntime().availableProcessors().toString(),
+      "org.gradle.workers.max" to Runtime.getRuntime().availableProcessors().toString(),
     )
 
   fun workers(value: Int) {
-    check(value in 0..1024) {
-      "The number of counties you set up is too large, be careful that the computer is stuck"
-    }
+    check(value in 0..1024) { "The number of counties you set up is too large, be careful that the computer is stuck" }
     propertiesMap["org.gradle.workers.max"] = value.toString()
   }
 
   /** ## 添加其他选项 */
-  fun otherOption(optionName: String, value: String) =
-    propertiesMap.put(optionName, value)
+  fun otherOption(optionName: String, value: String) = propertiesMap.put(optionName, value)
 
   fun toPropertiesString(): String {
     return buildString {
@@ -102,8 +98,7 @@ open class GradleGeneratorConfig {
 
   /** ## 设置 jvm args */
   fun jvmArgs(vararg value: String) {
-    propertiesMap["org.gradle.jvmargs"] =
-      value.joinToString(separator = " ") { it.trim() }
+    propertiesMap["org.gradle.jvmargs"] = value.joinToString(separator = " ") { it.trim() }
   }
 
   /** ## 是否开启 gradle cache */

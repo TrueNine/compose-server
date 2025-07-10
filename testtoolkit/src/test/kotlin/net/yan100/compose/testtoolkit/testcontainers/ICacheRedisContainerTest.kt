@@ -1,6 +1,10 @@
 package net.yan100.compose.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
+import java.util.function.Supplier
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -13,10 +17,6 @@ import org.springframework.core.env.Environment
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.test.context.DynamicPropertyRegistry
-import java.util.function.Supplier
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 /**
  * # Redis 测试容器集成测试
@@ -34,6 +34,7 @@ import kotlin.test.assertTrue
  * - Spring 属性注入验证
  *
  * ## 使用方式
+ *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : ICacheRedisContainer {
@@ -41,22 +42,23 @@ import kotlin.test.assertTrue
  * }
  * ```
  *
+ * @see ICacheRedisContainer
  * @author TrueNine
  * @since 2024-04-24
- * @see ICacheRedisContainer
  */
 @SpringBootTest
 @EnableAutoConfiguration(
-  exclude = [
-    DataSourceAutoConfiguration::class,
-    DataSourceTransactionManagerAutoConfiguration::class,
-    HibernateJpaAutoConfiguration::class
-  ]
+  exclude = [DataSourceAutoConfiguration::class, DataSourceTransactionManagerAutoConfiguration::class, HibernateJpaAutoConfiguration::class]
 )
 class ICacheRedisContainerTest : ICacheRedisContainer {
-  lateinit var environment: Environment @Resource set
-  lateinit var redisConnectionFactory: RedisConnectionFactory @Resource set
-  lateinit var redisTemplate: RedisTemplate<String, String> @Resource set
+  lateinit var environment: Environment
+    @Resource set
+
+  lateinit var redisConnectionFactory: RedisConnectionFactory
+    @Resource set
+
+  lateinit var redisTemplate: RedisTemplate<String, String>
+    @Resource set
 
   @Nested
   @DisplayName("容器基本功能测试")
@@ -99,9 +101,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
       val connection = redisConnectionFactory.connection
       assertNotNull(connection, "应该能够获取 Redis 连接")
 
-      connection.use { conn ->
-        assertTrue(conn.isClosed.not(), "Redis 连接应该是开启的")
-      }
+      connection.use { conn -> assertTrue(conn.isClosed.not(), "Redis 连接应该是开启的") }
     }
 
     @Test
@@ -143,19 +143,18 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
     @DisplayName("验证动态属性注册正确")
     fun `验证动态属性注册正确`() {
       val registry = mutableMapOf<String, String>()
-      val mockRegistry = object : DynamicPropertyRegistry {
-        override fun add(name: String, valueSupplier: Supplier<in Any>) {
-          registry[name] = valueSupplier.get().toString()
+      val mockRegistry =
+        object : DynamicPropertyRegistry {
+          override fun add(name: String, valueSupplier: Supplier<in Any>) {
+            registry[name] = valueSupplier.get().toString()
+          }
         }
-      }
 
       ICacheRedisContainer.properties(mockRegistry)
 
       // 验证所有必需的属性都已配置
-      val expectedProperties = mapOf(
-        "spring.data.redis.host" to redisContainer!!.host,
-        "spring.data.redis.port" to redisContainer!!.getMappedPort(6379).toString()
-      )
+      val expectedProperties =
+        mapOf("spring.data.redis.host" to redisContainer!!.host, "spring.data.redis.port" to redisContainer!!.getMappedPort(6379).toString())
 
       expectedProperties.forEach { (prop, expectedValue) ->
         assertTrue(registry.containsKey(prop), "property $prop must exist")
@@ -166,9 +165,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
     @Test
     @DisplayName("验证环境变量注入正确")
     fun `验证环境变量注入正确`() {
-      val expectedProperties = mapOf(
-        "spring.data.redis.host" to redisContainer!!.host
-      )
+      val expectedProperties = mapOf("spring.data.redis.host" to redisContainer!!.host)
 
       expectedProperties.forEach { (prop, expectedValue) ->
         val actualValue = environment.getProperty(prop)
@@ -182,4 +179,4 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
       assertTrue(portValue.toInt() in 1024..65535, "port value should be in valid range")
     }
   }
-} 
+}

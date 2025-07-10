@@ -24,9 +24,7 @@ class CtIdxMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `ct_idx 应能为字段创建索引`() {
-    jdbcTemplate.execute(
-      "create table test_table(id bigint primary key, name varchar(10))"
-    )
+    jdbcTemplate.execute("create table test_table(id bigint primary key, name varchar(10))")
     jdbcTemplate.execute("select ct_idx('test_table', 'name')")
     jdbcTemplate.execute("select ct_idx('test_table', 'name')")
     val idx =

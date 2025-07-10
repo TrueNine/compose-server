@@ -1,23 +1,18 @@
 package net.yan100.compose.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import net.yan100.compose.consts.IRegexes
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.*
+import net.yan100.compose.consts.IRegexes
 
 /** # 二代身份证代码 */
 interface IIdcard2Code {
 
-  private class DefaultIdcard2Code(override val idcard2Code: String) :
-    IIdcard2Code {
+  private class DefaultIdcard2Code(override val idcard2Code: String) : IIdcard2Code {
     init {
-      check(idcardBirthday.isBefore(LocalDate.now())) {
-        "$idcard2Code is not a valid idcard2Code"
-      }
-      check(idcard2Code.matches(idCardRegex)) {
-        "$idcard2Code is not a valid idcard2Code"
-      }
+      check(idcardBirthday.isBefore(LocalDate.now())) { "$idcard2Code is not a valid idcard2Code" }
+      check(idcard2Code.matches(idCardRegex)) { "$idcard2Code is not a valid idcard2Code" }
     }
 
     companion object {
@@ -37,22 +32,14 @@ interface IIdcard2Code {
   }
 
   companion object {
-    @JvmStatic
-    operator fun get(idcard2Code: String): IIdcard2Code =
-      DefaultIdcard2Code(idcard2Code.uppercase())
+    @JvmStatic operator fun get(idcard2Code: String): IIdcard2Code = DefaultIdcard2Code(idcard2Code.uppercase())
   }
 
-  @get:JsonIgnore
-  val idcard2Code: String
+  @get:JsonIgnore val idcard2Code: String
 
   @get:JsonIgnore
   val idcardBirthday: LocalDate
-    get() =
-      LocalDate.of(
-        idcard2Code.substring(6, 10).toInt(),
-        idcard2Code.substring(10, 12).toInt(),
-        idcard2Code.substring(12, 14).toInt(),
-      )
+    get() = LocalDate.of(idcard2Code.substring(6, 10).toInt(), idcard2Code.substring(10, 12).toInt(), idcard2Code.substring(12, 14).toInt())
 
   @get:JsonIgnore
   val idcardSexCode: String

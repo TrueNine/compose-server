@@ -1,10 +1,10 @@
 package net.yan100.compose.rds
 
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import net.yan100.compose.Pq
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class SpringPageFnsTest {
   @Test

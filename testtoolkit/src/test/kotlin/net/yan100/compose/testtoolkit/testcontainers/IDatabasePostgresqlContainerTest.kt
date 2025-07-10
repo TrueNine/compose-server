@@ -1,10 +1,6 @@
 package net.yan100.compose.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.core.env.Environment
-import org.springframework.jdbc.core.JdbcTemplate
 import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.TimeZone
@@ -12,11 +8,18 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.core.env.Environment
+import org.springframework.jdbc.core.JdbcTemplate
 
 @SpringBootTest
 class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
-  lateinit var environment: Environment @Resource set
-  lateinit var jdbcTemplate: JdbcTemplate @Resource set
+  lateinit var environment: Environment
+    @Resource set
+
+  lateinit var jdbcTemplate: JdbcTemplate
+    @Resource set
 
   @Test
   fun `验证 PostgreSQL 容器成功启动`() {
@@ -68,10 +71,7 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
 
     // 验证可以创建和删除临时表
     jdbcTemplate.execute("CREATE TEMP TABLE test_table (id int)")
-    val tableExists = jdbcTemplate.queryForObject(
-      "SELECT EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'test_table')",
-      Boolean::class.java
-    )
+    val tableExists = jdbcTemplate.queryForObject("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'test_table')", Boolean::class.java)
     assertTrue(tableExists == true, "应该能够创建临时表")
   }
 
@@ -103,33 +103,22 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
   @Test
   fun `验证无效连接时抛出异常`() {
     val invalidJdbcUrl = "jdbc:postgresql://localhost:1234/nonexistent"
-    assertFailsWith<SQLException>("使用无效连接应该抛出异常") {
-      DriverManager.getConnection(invalidJdbcUrl)
-    }
+    assertFailsWith<SQLException>("使用无效连接应该抛出异常") { DriverManager.getConnection(invalidJdbcUrl) }
   }
 
   @Test
   fun `验证数据库字符集配置`() {
-    val charset = jdbcTemplate.queryForObject(
-      "SHOW server_encoding",
-      String::class.java
-    )
+    val charset = jdbcTemplate.queryForObject("SHOW server_encoding", String::class.java)
     assertEquals("UTF8", charset, "数据库字符集应该是 UTF8")
 
     // 验证客户端编码
-    val clientEncoding = jdbcTemplate.queryForObject(
-      "SHOW client_encoding",
-      String::class.java
-    )
+    val clientEncoding = jdbcTemplate.queryForObject("SHOW client_encoding", String::class.java)
     assertEquals("UTF8", clientEncoding, "客户端字符集应该是 UTF8")
   }
 
   @Test
   fun `验证数据库时区配置`() {
-    val timezone = jdbcTemplate.queryForObject(
-      "SHOW timezone",
-      String::class.java
-    )
+    val timezone = jdbcTemplate.queryForObject("SHOW timezone", String::class.java)
     assertNotNull(timezone, "数据库时区设置应该存在")
 
     // 验证数据库时区与系统时区一致

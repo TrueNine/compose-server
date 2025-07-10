@@ -11,9 +11,7 @@ import java.time.ZoneOffset
 import net.yan100.compose.depend.jackson.serializers.ISO8601Deserializer
 import net.yan100.compose.depend.jackson.serializers.ISO8601Serializer
 
-class DatetimeCustomModule(
-  private val zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)
-) : SimpleModule() {
+class DatetimeCustomModule(private val zoneOffset: ZoneOffset = ZoneOffset.ofHours(8)) : SimpleModule() {
 
   override fun setupModule(context: SetupContext?) {
     super.setupModule(context)
@@ -37,18 +35,9 @@ class DatetimeCustomModule(
     context?.addDeserializers(
       SimpleDeserializers(
         buildMap {
-          put(
-            LocalDate::class.java,
-            ISO8601Deserializer.LocalDateDeserializerX(zoneOffset),
-          )
-          put(
-            LocalDateTime::class.java,
-            ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset),
-          )
-          put(
-            LocalTime::class.java,
-            ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset),
-          )
+          put(LocalDate::class.java, ISO8601Deserializer.LocalDateDeserializerX(zoneOffset))
+          put(LocalDateTime::class.java, ISO8601Deserializer.LocalDateTimeDeserializerZ(zoneOffset))
+          put(LocalTime::class.java, ISO8601Deserializer.LocalTimeDeserializerY(zoneOffset))
         }
       )
     )

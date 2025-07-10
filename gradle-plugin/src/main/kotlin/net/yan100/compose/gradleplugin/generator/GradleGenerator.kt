@@ -17,17 +17,11 @@ import org.gradle.api.Project
  * org.gradle.jvmargs=-Xmx8192m -Xms4096m
  * org.gradle.workers.max=64
  */
-class GradleGenerator(
-  @Inject private val project: Project,
-  @Inject private val dsl: GradleGeneratorConfig,
-) {
+class GradleGenerator(@Inject private val project: Project, @Inject private val dsl: GradleGeneratorConfig) {
 
   init {
     project.wrap {
-      val propertiesFile =
-        rootProject.layout.projectDirectory
-          .file(GradleGeneratorConfig.GRADLE_PROPERTIES_NAME)
-          .asFile
+      val propertiesFile = rootProject.layout.projectDirectory.file(GradleGeneratorConfig.GRADLE_PROPERTIES_NAME).asFile
       tasks.create(GENERATE_PROPERTIES_TASK_NAME) {
         it.group = Constant.TASK_GROUP
 
@@ -55,22 +49,14 @@ class GradleGenerator(
     }
   }
 
-  private fun generateInitGradle(
-    userHome: File,
-    cfg: GradleGeneratorConfig.InitGradleConfig,
-  ) {
+  private fun generateInitGradle(userHome: File, cfg: GradleGeneratorConfig.InitGradleConfig) {
 
-    val initFile =
-      userHome.listFiles()?.find { it.name.startsWith("init.gradle") }
+    val initFile = userHome.listFiles()?.find { it.name.startsWith("init.gradle") }
     initFile?.delete()
 
     val initGradleKts = userHome.resolve(Constant.Internal.INIT_GRADLE_KTS)
     if (initGradleKts.createNewFile()) {
-      val metaStream =
-        this::class
-          .java
-          .classLoader
-          .getResourceAsStream(Constant.Internal.META_INIT_GRADLE_KTS)
+      val metaStream = this::class.java.classLoader.getResourceAsStream(Constant.Internal.META_INIT_GRADLE_KTS)
       metaStream?.use { byteStream ->
         InputStreamReader(byteStream).use { reader ->
           val template = reader.readText()
@@ -79,16 +65,13 @@ class GradleGenerator(
             mavenCentralUrl?.also { urls += "${MavenRepl.MAVEN_CENTRAL}__$it" }
             jCenterUrl?.also { urls += "${MavenRepl.JCENTER}__$it" }
             googlePluginUrl?.also { urls += "${MavenRepl.GOOGLE}__$it" }
-            gradlePluginUrl?.also {
-              urls += "${MavenRepl.GRADLE_PLUGIN_PORTAL}__$it"
-            }
+            gradlePluginUrl?.also { urls += "${MavenRepl.GRADLE_PLUGIN_PORTAL}__$it" }
           }
           if (cfg.enableSpring) {
             cfg.otherRepositories += Repos.springMilestone
             cfg.otherRepositories += Repos.springSnapshot
           }
-          if (cfg.enableMybatisPlus)
-            cfg.otherRepositories += Repos.mybatisPlusSnapshot
+          if (cfg.enableMybatisPlus) cfg.otherRepositories += Repos.mybatisPlusSnapshot
 
           val result =
             template
@@ -109,7 +92,6 @@ class GradleGenerator(
 
   companion object {
     const val GENERATE_PROPERTIES_TASK_NAME = "composeGenerateGradleProperties"
-    const val GENERATE_INIT_GRADLE_KTS_TASK_NAME =
-      "composeGenerateInitGradleKts"
+    const val GENERATE_INIT_GRADLE_KTS_TASK_NAME = "composeGenerateInitGradleKts"
   }
 }

@@ -6,10 +6,7 @@ package net.yan100.compose.typing
  * @author TrueNine
  * @since 2024-03-20
  */
-enum class PCB47(
-  private val primaryLang: String,
-  vararg secondaryLanguages: String,
-) : StringTyping {
+enum class PCB47(private val primaryLang: String, vararg secondaryLanguages: String) : StringTyping {
   ZH("zh"),
   EN("en"),
   ZH_CN("zh-CN"),
@@ -25,7 +22,6 @@ enum class PCB47(
     get() = primaryLang.replace("-", "_")
 
   companion object {
-    @JvmStatic
-    operator fun get(v: String?): PCB47? = entries.find { it.primaryLang == v }
+    @JvmStatic operator fun get(v: String?): PCB47? = entries.find { it.primaryLang == v }
   }
 }

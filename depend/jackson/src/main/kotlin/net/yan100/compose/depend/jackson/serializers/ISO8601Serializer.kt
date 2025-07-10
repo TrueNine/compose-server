@@ -29,12 +29,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
    * @param serializers 序列化提供者
    * @param typeSer 类型序列化器
    */
-  override fun serializeWithType(
-    value: T,
-    gen: JsonGenerator?,
-    serializers: SerializerProvider?,
-    typeSer: TypeSerializer,
-  ) {
+  override fun serializeWithType(value: T, gen: JsonGenerator?, serializers: SerializerProvider?, typeSer: TypeSerializer) {
     // 使用 VALUE_NUMBER_INT 作为 shape，因为 date/time 类型似乎序列化为数字
     val shape = JsonToken.VALUE_NUMBER_INT
     val typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, shape))
@@ -49,9 +44,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
    *
    * @param zoneOffset 时区偏移量，用于时区转换
    */
-  class ISO8601DateSerializer(
-    private val zoneOffset: ZoneOffset = ZoneOffset.UTC
-  ) : ISO8601Serializer<LocalDate>() {
+  class ISO8601DateSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalDate>() {
     /** 无参构造函数，用于Jackson反序列化 */
     constructor() : this(ZoneOffset.UTC)
 
@@ -69,11 +62,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
      * @param gen JSON生成器
      * @param serializers 序列化提供者
      */
-    override fun serialize(
-      value: LocalDate,
-      gen: JsonGenerator?,
-      serializers: SerializerProvider?,
-    ) {
+    override fun serialize(value: LocalDate, gen: JsonGenerator?, serializers: SerializerProvider?) {
       gen?.writeNumber(value.toMillis(zoneOffset))
     }
   }
@@ -85,9 +74,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
    *
    * @param zoneOffset 时区偏移量，用于时区转换
    */
-  class ISO8601DateTimeSerializer(
-    private val zoneOffset: ZoneOffset = ZoneOffset.UTC
-  ) : ISO8601Serializer<LocalDateTime>() {
+  class ISO8601DateTimeSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalDateTime>() {
     /** 无参构造函数，用于Jackson反序列化 */
     constructor() : this(ZoneOffset.UTC)
 
@@ -105,11 +92,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
      * @param gen JSON生成器
      * @param serializers 序列化提供者
      */
-    override fun serialize(
-      value: LocalDateTime,
-      gen: JsonGenerator?,
-      serializers: SerializerProvider?,
-    ) {
+    override fun serialize(value: LocalDateTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
       gen?.writeNumber(value.toMillis(zoneOffset))
     }
   }
@@ -121,9 +104,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
    *
    * @param zoneOffset 时区偏移量，用于时区转换
    */
-  class ISO8601TimeSerializer(
-    private val zoneOffset: ZoneOffset = ZoneOffset.UTC
-  ) : ISO8601Serializer<LocalTime>() {
+  class ISO8601TimeSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalTime>() {
     /** 无参构造函数，用于Jackson反序列化 */
     constructor() : this(ZoneOffset.UTC)
 
@@ -141,11 +122,7 @@ sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
      * @param gen JSON生成器
      * @param serializers 序列化提供者
      */
-    override fun serialize(
-      value: LocalTime,
-      gen: JsonGenerator?,
-      serializers: SerializerProvider?,
-    ) {
+    override fun serialize(value: LocalTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
       gen?.writeNumber(value.toMillis(zoneOffset))
     }
   }

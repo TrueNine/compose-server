@@ -1,15 +1,14 @@
 package net.yan100.compose
 
-import net.yan100.compose.testtoolkit.TempDirMapping
-import net.yan100.compose.testtoolkit.log
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import net.yan100.compose.testtoolkit.TempDirMapping
+import net.yan100.compose.testtoolkit.log
 
 class JavaNioPathFnsTest {
-  @TempDirMapping
-  lateinit var tempDir: Path
+  @TempDirMapping lateinit var tempDir: Path
 
   @Test
   fun `test slice line first line`() {
@@ -22,8 +21,7 @@ class JavaNioPathFnsTest {
     log.info("test len {}", firstLine.length)
     log.info("lines {}", lines)
 
-    val result =
-      firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
+    val result = firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
     val listResult = result.toList()
   }
 
@@ -55,35 +53,19 @@ class JavaNioPathFnsTest {
 
     val testPath = tempFile.toPath()
     val actualLines = testPath.countLines()
-    assertEquals(
-      7,
-      actualLines,
-      "The number of lines counted does not match the expected value.",
-    )
+    assertEquals(7, actualLines, "The number of lines counted does not match the expected value.")
 
     tempFile.writeText("")
     val emptyLines = testPath.countLines()
-    assertEquals(
-      0,
-      emptyLines,
-      "The number of lines counted for an empty file should be 0.",
-    )
+    assertEquals(0, emptyLines, "The number of lines counted for an empty file should be 0.")
 
     tempFile.writeText("he\n")
     val oneLines = testPath.countLines()
-    assertEquals(
-      1,
-      oneLines,
-      "The number of lines counted for an empty file should be 0.",
-    )
+    assertEquals(1, oneLines, "The number of lines counted for an empty file should be 0.")
 
     tempFile.writeText("a\nb")
     val twoLines = testPath.countLines()
-    assertEquals(
-      2,
-      twoLines,
-      "The number of lines counted for an empty file should be 0.",
-    )
+    assertEquals(2, twoLines, "The number of lines counted for an empty file should be 0.")
   }
 
   @Test

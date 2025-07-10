@@ -27,39 +27,18 @@ class JimmerAutoConfiguration {
   }
 
   @ConditionalOnMissingBean
-  @Bean(
-    name =
-      [
-        JimmerSnowflakeStringIdGenerator
-          .JIMMER_SNOWFLAKE_STRING_ID_GENERATOR_NAME
-      ]
-  )
-  fun userSnowflakeStringIdGenerator(
-    snowflake: ISnowflakeGenerator
-  ): JimmerSnowflakeStringIdGenerator {
+  @Bean(name = [JimmerSnowflakeStringIdGenerator.JIMMER_SNOWFLAKE_STRING_ID_GENERATOR_NAME])
+  fun userSnowflakeStringIdGenerator(snowflake: ISnowflakeGenerator): JimmerSnowflakeStringIdGenerator {
     val e = JimmerSnowflakeStringIdGenerator(snowflake)
-    log.trace(
-      "register jimmer snowflake string id generator snowflake: {}, jimmer generator: {}",
-      snowflake,
-      e,
-    )
+    log.trace("register jimmer snowflake string id generator snowflake: {}, jimmer generator: {}", snowflake, e)
     return e
   }
 
-  @Bean(
-    name =
-      [JimmerSnowflakeLongIdGenerator.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME]
-  )
+  @Bean(name = [JimmerSnowflakeLongIdGenerator.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME])
   @ConditionalOnMissingBean
-  fun userSnowflakeLongIdGenerator(
-    snowflake: ISnowflakeGenerator
-  ): JimmerSnowflakeLongIdGenerator {
+  fun userSnowflakeLongIdGenerator(snowflake: ISnowflakeGenerator): JimmerSnowflakeLongIdGenerator {
     val e = JimmerSnowflakeLongIdGenerator(snowflake)
-    log.trace(
-      "register jimmer snowflake long id generator snowflake: {}, jimmer generator: {}",
-      snowflake,
-      e,
-    )
+    log.trace("register jimmer snowflake long id generator snowflake: {}, jimmer generator: {}", snowflake, e)
     return e
   }
 

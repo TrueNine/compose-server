@@ -29,11 +29,7 @@ abstract class MDCFilter : Filter {
     return req.remoteRequestIp
   }
 
-  override fun doFilter(
-    req: ServletRequest?,
-    resp: ServletResponse?,
-    c: FilterChain?,
-  ) {
+  override fun doFilter(req: ServletRequest?, resp: ServletResponse?, c: FilterChain?) {
     try {
       req?.also { q ->
         if (q is HttpServletRequest) {

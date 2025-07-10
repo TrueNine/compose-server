@@ -19,10 +19,8 @@ object Constant {
   }
 
   object FileNameSet {
-    val README =
-      setOf(FileName.README, "readme.txt", "readme").map { it.lowercase() }
-    val LICENSE =
-      setOf("license", "license.txt", FileName.LICENSE).map { it.lowercase() }
+    val README = setOf(FileName.README, "readme.txt", "readme").map { it.lowercase() }
+    val LICENSE = setOf("license", "license.txt", FileName.LICENSE).map { it.lowercase() }
   }
 
   object Gradle {

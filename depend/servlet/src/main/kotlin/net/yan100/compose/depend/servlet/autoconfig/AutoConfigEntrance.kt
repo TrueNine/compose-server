@@ -4,6 +4,4 @@ import net.yan100.compose.depend.servlet.properties.ServletWebApplicationPropert
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 
-@ComponentScan("net.yan100.compose.depend.servlet.autoconfig")
-@EnableConfigurationProperties(ServletWebApplicationProperties::class)
-class AutoConfigEntrance
+@ComponentScan("net.yan100.compose.depend.servlet.autoconfig") @EnableConfigurationProperties(ServletWebApplicationProperties::class) class AutoConfigEntrance

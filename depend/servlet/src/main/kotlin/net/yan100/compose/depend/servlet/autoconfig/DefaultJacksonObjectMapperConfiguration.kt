@@ -22,10 +22,7 @@ class DefaultJacksonObjectMapperConfiguration {
 
   @Primary
   @Order(Ordered.HIGHEST_PRECEDENCE)
-  @ConditionalOnMissingBean(
-    ObjectMapper::class,
-    name = [SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME],
-  )
+  @ConditionalOnMissingBean(ObjectMapper::class, name = [SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   fun defaultObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
     log.debug("注册默认的 objectMapper")

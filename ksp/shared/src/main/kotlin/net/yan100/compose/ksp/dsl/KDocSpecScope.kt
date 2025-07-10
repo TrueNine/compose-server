@@ -4,8 +4,7 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import java.time.LocalDate
 
-class KDocSpecScope(override val fileBuilder: FileSpec.Builder) :
-  StandardBuilderAdaptor<CodeBlock.Builder, CodeBlock> {
+class KDocSpecScope(override val fileBuilder: FileSpec.Builder) : StandardBuilderAdaptor<CodeBlock.Builder, CodeBlock> {
   private val cb: CodeBlock.Builder = CodeBlock.builder()
 
   private fun addTitleFormat(title: String, count: Int = 1, vararg args: Any) {
@@ -35,13 +34,11 @@ class KDocSpecScope(override val fileBuilder: FileSpec.Builder) :
 
   fun see(desc: String = "") = cb.add("@see $desc\n")
 
-  fun since(version: String = LocalDate.now().toString()) =
-    cb.add("@since $version\n")
+  fun since(version: String = LocalDate.now().toString()) = cb.add("@since $version\n")
 
   fun throws(type: String, desc: String = "") = cb.add("@throws $type $desc\n")
 
-  fun throws(type: Throwable, desc: String = "") =
-    cb.add("@throws ${type::class.qualifiedName} $desc\n")
+  fun throws(type: Throwable, desc: String = "") = cb.add("@throws ${type::class.qualifiedName} $desc\n")
 
   override fun build(): CodeBlock = cb.build()
 

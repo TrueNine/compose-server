@@ -5,9 +5,7 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class EventPublisherHolderAutoConfiguration(
-  publisher: ApplicationEventPublisher
-) {
+class EventPublisherHolderAutoConfiguration(publisher: ApplicationEventPublisher) {
   init {
     EventPublisherHolder.set(publisher)
   }

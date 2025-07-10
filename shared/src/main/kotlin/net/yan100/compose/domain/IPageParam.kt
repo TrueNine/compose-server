@@ -3,10 +3,9 @@ package net.yan100.compose.domain
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.io.Serializable
 import net.yan100.compose.bool
 import net.yan100.compose.i32
-import java.io.Serializable
-
 
 /**
  * # 分页参数
@@ -35,8 +34,7 @@ interface IPageParam : IPageParamLike, Serializable {
     const val MAX_PAGE_SIZE: i32 = 42
 
     /** ## 默认 最大分页实现常量 */
-    @Suppress("DEPRECATION_ERROR")
-    val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
+    @Suppress("DEPRECATION_ERROR") val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
     /**
      * ## 构建分页参数
@@ -60,11 +58,7 @@ interface IPageParam : IPageParamLike, Serializable {
       } else {
         val ps = (pageSize ?: MAX_PAGE_SIZE)
         val o = (offset ?: MIN_OFFSET)
-        DefaultPageParam(
-          if (o <= 0) MIN_OFFSET else o,
-          if (ps <= 0) 1 else ps,
-          unPage,
-        )
+        DefaultPageParam(if (o <= 0) MIN_OFFSET else o, if (ps <= 0) 1 else ps, unPage)
       }
     }
 
@@ -81,7 +75,9 @@ interface IPageParam : IPageParamLike, Serializable {
 
     /** ## 一个默认分页实现 */
     class DefaultPageParam
-    @Deprecated("不建议直接使用", level = DeprecationLevel.ERROR) @JsonCreator constructor(
+    @Deprecated("不建议直接使用", level = DeprecationLevel.ERROR)
+    @JsonCreator
+    constructor(
       @Transient @JsonProperty("o") override var o: i32? = null,
       @Transient @JsonProperty("s") override var s: i32? = null,
       @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR) @Transient @JsonProperty("u") override var u: Boolean? = null,
@@ -105,7 +101,6 @@ interface IPageParam : IPageParamLike, Serializable {
         }
       }
     }
-
   }
 
   @JsonIgnore
@@ -137,6 +132,5 @@ interface IPageParam : IPageParamLike, Serializable {
       return end
     }
 
-  @JsonIgnore
-  fun toLongRange(): LongRange = LongRange(safeRangeOffset, safeRandEnd)
+  @JsonIgnore fun toLongRange(): LongRange = LongRange(safeRangeOffset, safeRandEnd)
 }

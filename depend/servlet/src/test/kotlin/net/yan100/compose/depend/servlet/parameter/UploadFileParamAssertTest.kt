@@ -26,20 +26,8 @@ class UploadFileParamAssertTest {
     @Resource set
 
   val json = """{"a":"str","b": 1023}"""
-  val jsonFile =
-    MockMultipartFile(
-      "json",
-      "json",
-      "application/json",
-      json.toByteArray(StandardCharsets.UTF_8),
-    )
-  val file =
-    MockMultipartFile(
-      "file",
-      "file",
-      "text/plain",
-      "Hello, World!".toByteArray(),
-    )
+  val jsonFile = MockMultipartFile("json", "json", "application/json", json.toByteArray(StandardCharsets.UTF_8))
+  val file = MockMultipartFile("file", "file", "text/plain", "Hello, World!".toByteArray())
 
   @Test
   fun `测试 混合 dto 上传`() {
@@ -47,14 +35,7 @@ class UploadFileParamAssertTest {
       .multipart(HttpMethod.POST, "/testUploadController/uploadBlend") {
         param("json.a", "str")
         param("json.b", "1")
-        part(
-          MockPart(
-            "file",
-            "",
-            "Hello, World!".toByteArray(),
-            MediaType.TEXT_PLAIN,
-          )
-        )
+        part(MockPart("file", "", "Hello, World!".toByteArray(), MediaType.TEXT_PLAIN))
       }
       .andExpect { status { isOk() } }
   }
@@ -62,10 +43,7 @@ class UploadFileParamAssertTest {
   @Test
   fun `测试 上传 json 表单以及 文件`() {
     mvc
-      .multipart(
-        HttpMethod.POST,
-        "/testUploadController/uploadFileAndOtherField",
-      ) {
+      .multipart(HttpMethod.POST, "/testUploadController/uploadFileAndOtherField") {
         contentType = MediaType.MULTIPART_FORM_DATA
         file(jsonFile)
         file(file)
@@ -95,10 +73,7 @@ class UploadFileParamAssertTest {
     }
 
     @PostMapping("uploadFileAndOtherField")
-    fun uploadFileAndOtherField(
-      @RequestPart json: JsonDto,
-      @RequestPart file: MultipartFile,
-    ) {
+    fun uploadFileAndOtherField(@RequestPart json: JsonDto, @RequestPart file: MultipartFile) {
       kotlin.test.assertNotNull(json.a)
       kotlin.test.assertNotNull(json.b)
       kotlin.test.assertNotNull(file)

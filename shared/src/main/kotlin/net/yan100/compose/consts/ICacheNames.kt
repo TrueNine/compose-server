@@ -10,8 +10,7 @@ interface ICacheNames {
   interface IRedis {
     companion object {
       const val HANDLE: String = "JsonStringRedisTemplateYan100Handle"
-      const val CACHE_MANAGER: String =
-        "JsonStringRedisTemplateYan100CacheManager"
+      const val CACHE_MANAGER: String = "JsonStringRedisTemplateYan100CacheManager"
     }
   }
 
@@ -48,24 +47,6 @@ interface ICacheNames {
     const val MO1: String = D30
     const val Y1: String = D365
 
-    val ALL: Array<String> =
-      arrayOf(
-        M1,
-        M5,
-        M10,
-        M30,
-        H1,
-        H2,
-        H3,
-        D1,
-        D2,
-        D3,
-        D7,
-        D30,
-        D60,
-        D180,
-        D365,
-        FOREVER,
-      )
+    val ALL: Array<String> = arrayOf(M1, M5, M10, M30, H1, H2, H3, D1, D2, D3, D7, D30, D60, D180, D365, FOREVER)
   }
 }

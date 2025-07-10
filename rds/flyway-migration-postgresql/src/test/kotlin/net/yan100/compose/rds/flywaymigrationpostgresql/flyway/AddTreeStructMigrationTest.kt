@@ -37,10 +37,7 @@ class AddTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expected = listOf("rpi")
-    assertTrue(
-      columns.containsAll(expected),
-      "缺少 tree 字段: " + (expected - columns),
-    )
+    assertTrue(columns.containsAll(expected), "缺少 tree 字段: " + (expected - columns))
   }
 
   @Test
@@ -60,9 +57,6 @@ class AddTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expected = listOf("rpi")
-    assertTrue(
-      columns.containsAll(expected),
-      "add_tree_struct 幂等性失败: " + (expected - columns),
-    )
+    assertTrue(columns.containsAll(expected), "add_tree_struct 幂等性失败: " + (expected - columns))
   }
 }

@@ -2,8 +2,7 @@ package net.yan100.compose.data.extract.service
 
 interface IChinaFirstNameService {
   companion object {
-    fun matches(firstName: String): Boolean =
-      firstName.length in 1..2 && firstName in CHINA_FIRST_NAMES
+    fun matches(firstName: String): Boolean = firstName.length in 1..2 && firstName in CHINA_FIRST_NAMES
 
     val CHINA_FIRST_NAMES: Array<String>
       get() =

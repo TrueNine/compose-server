@@ -6,11 +6,7 @@ import kotlin.reflect.KClass
 import org.eclipse.paho.client.mqttv3.IMqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 
-class MqttPahoClientWrapper(
-  private val client: IMqttClient,
-  private val options: MqttConnectOptions,
-  private val objectMapper: ObjectMapper,
-) : Closeable {
+class MqttPahoClientWrapper(private val client: IMqttClient, private val options: MqttConnectOptions, private val objectMapper: ObjectMapper) : Closeable {
   val isConnected: Boolean
     get() = client.isConnected
 
@@ -35,12 +31,7 @@ class MqttPahoClientWrapper(
     if (isConnected) client.unsubscribe(topic)
   }
 
-  fun <T : Any> subscribe(
-    topic: String,
-    qos: Int = 0,
-    type: KClass<T>,
-    callback: (callbackTopic: String, message: T) -> Unit,
-  ) {
+  fun <T : Any> subscribe(topic: String, qos: Int = 0, type: KClass<T>, callback: (callbackTopic: String, message: T) -> Unit) {
     connect()
     return client.subscribe(topic, qos) { _, message ->
       val payload = mapper.readValue(message.payload, type.java)
@@ -62,10 +53,6 @@ class MqttPahoClientWrapper(
   }
 }
 
-inline fun <reified T : Any> MqttPahoClientWrapper.subscribe(
-  topic: String,
-  qos: Int = 0,
-  noinline callback: (callbackTopic: String, message: T) -> Unit,
-) {
+inline fun <reified T : Any> MqttPahoClientWrapper.subscribe(topic: String, qos: Int = 0, noinline callback: (callbackTopic: String, message: T) -> Unit) {
   return subscribe(topic, qos, T::class, callback)
 }

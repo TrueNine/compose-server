@@ -1,8 +1,8 @@
 package net.yan100.compose.domain
 
 import io.swagger.v3.oas.annotations.media.Schema
-import net.yan100.compose.decimal
 import java.io.Serializable
+import net.yan100.compose.decimal
 
 /**
  * # 地址定位模型
@@ -10,7 +10,4 @@ import java.io.Serializable
  * @author T_teng
  * @since 2023-04-06
  */
-@Schema(title = "位置坐标")
-class Coordinate
-@JvmOverloads
-constructor(var x: decimal? = null, var y: decimal? = null) : Serializable
+@Schema(title = "位置坐标") class Coordinate @JvmOverloads constructor(var x: decimal? = null, var y: decimal? = null) : Serializable

@@ -6,8 +6,7 @@ package net.yan100.compose.typing
  * @author TrueNine
  * @since 2022-11-03
  */
-enum class MimeTypes(private val extension: String, vararg m: String) :
-  StringTyping {
+enum class MimeTypes(private val extension: String, vararg m: String) : StringTyping {
   EXE("exe", "application/ms-download", "application/octet-stream"),
 
   /** 这个比较特殊，他的后缀名 是 binary 注意 */
@@ -23,18 +22,9 @@ enum class MimeTypes(private val extension: String, vararg m: String) :
   PDF("pdf", "application/pdf"),
   WORD("doc", "application/msword"),
   EXCEL("xls", "application/vnd.ms-excel"),
-  PPTX(
-    "pptx",
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  ),
-  XLSX(
-    "xlsx",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  ),
-  DOCX(
-    "docx",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  ),
+  PPTX("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+  XLSX("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+  DOCX("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
   PPT("ppt", "application/vnd.ms-powerpoint"),
   JSON("json", "application/json"),
   HTML("html", "text/html"),
@@ -72,13 +62,8 @@ enum class MimeTypes(private val extension: String, vararg m: String) :
   override val value: String = this.mm[0]
 
   companion object {
-    @JvmStatic
-    fun findVal(media: String?): MimeTypes? =
-      entries.find { v ->
-        if (media.isNullOrBlank()) false else v.medias.contains(media)
-      }
+    @JvmStatic fun findVal(media: String?): MimeTypes? = entries.find { v -> if (media.isNullOrBlank()) false else v.medias.contains(media) }
 
-    @JvmStatic
-    operator fun get(v: String?): MimeTypes? = findVal(v)
+    @JvmStatic operator fun get(v: String?): MimeTypes? = findVal(v)
   }
 }

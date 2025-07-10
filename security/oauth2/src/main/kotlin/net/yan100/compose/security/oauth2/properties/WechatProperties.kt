@@ -5,7 +5,4 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 private const val PREFIX = "compose.security.oauth2.wechat"
 
-@ConfigurationProperties(prefix = PREFIX)
-data class WechatProperties(
-  @NestedConfigurationProperty var wxpa: WxpaProperties = WxpaProperties()
-)
+@ConfigurationProperties(prefix = PREFIX) data class WechatProperties(@NestedConfigurationProperty var wxpa: WxpaProperties = WxpaProperties())

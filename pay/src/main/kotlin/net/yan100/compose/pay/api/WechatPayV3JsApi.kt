@@ -9,6 +9,4 @@ import org.springframework.web.service.annotation.HttpExchange
  * @author shanghua
  * @since 2023-05-31
  */
-@ResponseBody
-@HttpExchange(url = "https://api.weixin.qq.com/")
-interface WechatPayV3JsApi
+@ResponseBody @HttpExchange(url = "https://api.weixin.qq.com/") interface WechatPayV3JsApi

@@ -15,8 +15,7 @@ data class DeclarationContext<D : KSDeclaration>(
   val log: KSPLogger = environment.logger,
   val file: KSFile = declaration.containingFile!!,
   var dependencies: Dependencies = Dependencies.ALL_FILES,
-  private val notProcessReportList: MutableSet<KSAnnotated> =
-    CopyOnWriteArraySet(),
+  private val notProcessReportList: MutableSet<KSAnnotated> = CopyOnWriteArraySet(),
 ) {
   /** 调用 declaration 的 accept 方法 */
   fun <R : Any?> accept(visitor: KSVisitor<DeclarationContext<D>, R>): R {

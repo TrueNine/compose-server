@@ -31,14 +31,10 @@ class IPageParamLikeArgumentResolverTest {
   @BeforeEach
   fun setup() {
     // 使用 standaloneSetup 明确指定 Controller 和 ArgumentResolver
-    mockMvc =
-      MockMvcBuilders.standaloneSetup(TestController())
-        .setCustomArgumentResolvers(IPageParamLikeArgumentResolver())
-        .build()
+    mockMvc = MockMvcBuilders.standaloneSetup(TestController()).setCustomArgumentResolvers(IPageParamLikeArgumentResolver()).build()
   }
 
-  data class IPageParamLikeImpl(override val o: i32?, override val s: i32?) :
-    IPageParamLike
+  data class IPageParamLikeImpl(override val o: i32?, override val s: i32?) : IPageParamLike
 
   data class IPageParamLikeDefaultValueImpl(val e: String) : IPageParamLike
 
@@ -50,9 +46,7 @@ class IPageParamLikeArgumentResolverTest {
     }
 
     @GetMapping("/to_default")
-    fun toDefault(
-      defaultValue: IPageParamLikeDefaultValueImpl
-    ): IPageParamLikeDefaultValueImpl {
+    fun toDefault(defaultValue: IPageParamLikeDefaultValueImpl): IPageParamLikeDefaultValueImpl {
       return defaultValue
     }
 
@@ -78,8 +72,7 @@ class IPageParamLikeArgumentResolverTest {
   @Test
   fun `supportsParameter 当参数类型不为 IPageParamLike 时返回 false`() {
     val mockParameter = mockk<MethodParameter>()
-    every { mockParameter.parameterType } returns
-      String::class.java // Different type
+    every { mockParameter.parameterType } returns String::class.java // Different type
 
     assertFalse(resolver.supportsParameter(mockParameter))
   }
@@ -96,8 +89,7 @@ class IPageParamLikeArgumentResolverTest {
     every { mockWebRequest.getParameter("u") } returns null
 
     val expected = IPageParam[10, 20]
-    val actual =
-      resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
+    val actual = resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
 
     assertEquals(expected, actual)
     verify { mockWebRequest.getParameter("o") }
@@ -115,8 +107,7 @@ class IPageParamLikeArgumentResolverTest {
 
     // Assuming IPageParam companion object handles nulls with defaults
     val expected = IPageParam[5, null, null]
-    val actual =
-      resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
+    val actual = resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
 
     assertEquals(expected, actual)
     verify { mockWebRequest.getParameter("o") }
@@ -134,8 +125,7 @@ class IPageParamLikeArgumentResolverTest {
     every { mockWebRequest.getParameter("u") } returns null
 
     val expected = IPageParam[null, null, null] // Expecting defaults
-    val actual =
-      resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
+    val actual = resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
 
     assertEquals(expected, actual)
     verify { mockWebRequest.getParameter("o") }
@@ -150,13 +140,10 @@ class IPageParamLikeArgumentResolverTest {
 
     every { mockWebRequest.getParameter("o") } returns "abc" // Invalid integer
     every { mockWebRequest.getParameter("s") } returns "xyz" // Invalid integer
-    every { mockWebRequest.getParameter("u") } returns
-      "maybe" // Invalid boolean
+    every { mockWebRequest.getParameter("u") } returns "maybe" // Invalid boolean
 
-    val expected =
-      IPageParam[null, null, null] // Expecting defaults due to parsing errors
-    val actual =
-      resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
+    val expected = IPageParam[null, null, null] // Expecting defaults due to parsing errors
+    val actual = resolver.resolveArgument(mockParameter, null, mockWebRequest, null)
 
     assertEquals(expected, actual)
     verify { mockWebRequest.getParameter("o") }

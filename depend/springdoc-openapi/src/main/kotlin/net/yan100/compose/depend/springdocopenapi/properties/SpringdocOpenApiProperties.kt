@@ -22,10 +22,8 @@ data class SpringdocOpenApiProperties(
   var enableJwtHeader: Boolean = false,
 
   /** jwt 请求头信息 */
-  @NestedConfigurationProperty
-  var jwtHeaderInfo: JwtHeaderInfoProperties = JwtHeaderInfoProperties(),
+  @NestedConfigurationProperty var jwtHeaderInfo: JwtHeaderInfoProperties = JwtHeaderInfoProperties(),
 
   /** 类型定义信息 */
-  @NestedConfigurationProperty
-  var authorInfo: SwaggerDescInfo = SwaggerDescInfo(),
+  @NestedConfigurationProperty var authorInfo: SwaggerDescInfo = SwaggerDescInfo(),
 )

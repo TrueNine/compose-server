@@ -64,19 +64,13 @@ class DataClassSerializerTest {
     log.info("obj: {}", obj)
   }
 
-  @Resource
-  @Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME)
-  lateinit var map: ObjectMapper
+  @Resource @Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) lateinit var map: ObjectMapper
 
   @Test
   fun `test serialize interface internal data class be typed`() {
     val a = InterFace.InternalClass("a", "b", "c")
     val json = map.writeValueAsString(a)
-    assertTrue {
-      json.contains(
-        "net.yan100.compose.depend.jackson.InterFace\$InternalClass"
-      )
-    }
+    assertTrue { json.contains("net.yan100.compose.depend.jackson.InterFace\$InternalClass") }
     log.info("json a: {}", json)
     val obj = map.readValue(json, InterFace.InternalClass::class.java)
     log.info("obj a: {}", obj)
@@ -97,10 +91,5 @@ class DataClassSerializerTest {
 }
 
 interface InterFace {
-  data class InternalClass(
-    val a: String,
-    val b: String,
-    @JsonIgnore val c: String?,
-    @JsonIgnore val d: datetime? = null,
-  )
+  data class InternalClass(val a: String, val b: String, @JsonIgnore val c: String?, @JsonIgnore val d: datetime? = null)
 }

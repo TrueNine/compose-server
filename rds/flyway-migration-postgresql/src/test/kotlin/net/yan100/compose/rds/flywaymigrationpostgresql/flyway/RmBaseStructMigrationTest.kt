@@ -24,9 +24,7 @@ class RmBaseStructMigrationTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `rm_base_struct 应正确移除字段`() {
-    jdbcTemplate.execute(
-      "create table test_table(nick_name varchar default null)"
-    )
+    jdbcTemplate.execute("create table test_table(nick_name varchar default null)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select rm_base_struct('test_table')")
     val columns =
@@ -39,19 +37,13 @@ class RmBaseStructMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .map { it["column_name"] }
-    assertEquals(
-      listOf("nick_name"),
-      columns,
-      "rm_base_struct 未正确移除字段，当前字段: $columns",
-    )
+    assertEquals(listOf("nick_name"), columns, "rm_base_struct 未正确移除字段，当前字段: $columns")
   }
 
   @Test
   @Transactional
   fun `rm_base_struct 幂等性测试`() {
-    jdbcTemplate.execute(
-      "create table test_table(nick_name varchar default null)"
-    )
+    jdbcTemplate.execute("create table test_table(nick_name varchar default null)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select rm_base_struct('test_table')")
     jdbcTemplate.execute("select rm_base_struct('test_table')")
@@ -65,10 +57,6 @@ class RmBaseStructMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .map { it["column_name"] }
-    assertEquals(
-      listOf("nick_name"),
-      columns,
-      "rm_base_struct 幂等性失败，当前字段: $columns",
-    )
+    assertEquals(listOf("nick_name"), columns, "rm_base_struct 幂等性失败，当前字段: $columns")
   }
 }

@@ -1,18 +1,17 @@
 package net.yan100.compose.testtoolkit.testcontainers
 
+import java.time.Duration
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
-import java.time.Duration
 
 /**
  * # Redis 测试容器接口
  *
- * 该接口提供了 Redis 测试容器的标准配置，用于缓存集成测试环境。
- * 通过实现此接口，测试类可以自动获得配置好的 Redis 测试实例。
+ * 该接口提供了 Redis 测试容器的标准配置，用于缓存集成测试环境。 通过实现此接口，测试类可以自动获得配置好的 Redis 测试实例。
  *
  * ## 特性
  * - 自动配置 Redis 测试容器
@@ -21,16 +20,18 @@ import java.time.Duration
  * - 使用随机端口以避免端口冲突
  *
  * ## 使用方式
+ *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : ICacheRedisContainer {
  *   // 你的测试代码
  * }
  * ```
- * @author TrueNine
- * @since 2025-04-24
+ *
  * @see org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.GenericContainer
+ * @author TrueNine
+ * @since 2025-04-24
  */
 @Testcontainers
 interface ICacheRedisContainer {
@@ -47,10 +48,7 @@ interface ICacheRedisContainer {
     val container by lazy {
       GenericContainer(DockerImageName.parse("redis:7.4.2-alpine3.21")).apply {
         withExposedPorts(6379)
-        setWaitStrategy(
-          Wait.forLogMessage(".*Ready to accept connections.*\\n", 1)
-            .withStartupTimeout(Duration.ofSeconds(10))
-        )
+        setWaitStrategy(Wait.forLogMessage(".*Ready to accept connections.*\\n", 1).withStartupTimeout(Duration.ofSeconds(10)))
         start()
       }
     }
@@ -76,5 +74,6 @@ interface ICacheRedisContainer {
     }
   }
 
-  val redisContainer: GenericContainer<*>? get() = container
+  val redisContainer: GenericContainer<*>?
+    get() = container
 }

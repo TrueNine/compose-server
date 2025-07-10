@@ -32,9 +32,7 @@ interface IChoose<T> {
    */
   @Suppress("UNCHECKED_CAST", "DEPRECATION_ERROR")
   fun <R> all(chooses: List<IChoose<T>>, type: T): List<R> {
-    return chooses
-      .filter { ele -> ele.choose(type) }
-      .map { r: IChoose<T>? -> r as R }
+    return chooses.filter { ele -> ele.choose(type) }.map { r: IChoose<T>? -> r as R }
   }
 
   /**

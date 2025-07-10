@@ -7,9 +7,7 @@ class SettingsMain : Plugin<Settings> {
   override fun apply(target: Settings) {
     val properties = target.extensions.extraProperties.properties
 
-    target.dependencyResolutionManagement { drm ->
-      drm.versionCatalogs { vc -> vc.create("libs") {} }
-    }
+    target.dependencyResolutionManagement { drm -> drm.versionCatalogs { vc -> vc.create("libs") {} } }
     target.pluginManagement {
       it.repositories { ir ->
         ir.chinaRegionRepositories()

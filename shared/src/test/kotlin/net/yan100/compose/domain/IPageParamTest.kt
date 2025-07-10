@@ -2,6 +2,9 @@ package net.yan100.compose.domain
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -11,16 +14,14 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
 @AutoConfigureMockMvc
 @SpringBootTest
 @Import(IPageParamTest.TestPageController::class)
 class IPageParamTest {
   lateinit var objectMapper: ObjectMapper
-  lateinit var mockMvc: MockMvc @Resource set
+  lateinit var mockMvc: MockMvc
+    @Resource set
 
   @BeforeTest
   fun setup() {
@@ -102,9 +103,7 @@ class IPageParamTest {
     val request = MockHttpServletRequest()
     request.addParameter("o", "3")
     request.addParameter("s", "15")
-    val param = IPageParam.get(
-      request.getParameter("o")?.toInt(), request.getParameter("s")?.toInt()
-    )
+    val param = IPageParam.get(request.getParameter("o")?.toInt(), request.getParameter("s")?.toInt())
     assertThat(param.safeOffset).isEqualTo(3)
     assertThat(param.safePageSize).isEqualTo(15)
   }
@@ -130,9 +129,13 @@ class IPageParamTest {
 
   @Test
   fun `web servlet 绑定参数 不能返回自定义分页`() {
-    val result = mockMvc.perform(
-      org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/test/page").param("o", "7").param("s", "13")
-    ).andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.status().isOk).andReturn().response.contentAsString
+    val result =
+      mockMvc
+        .perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/test/page").param("o", "7").param("s", "13"))
+        .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.status().isOk)
+        .andReturn()
+        .response
+        .contentAsString
     assertThat(result).isEqualTo("0,0")
   }
 

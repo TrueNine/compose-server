@@ -17,8 +17,7 @@ import org.slf4j.Logger
  * @since 2023-04-20
  */
 // TODO 加入此类
-class AntisamyRequestWrapper(request: HttpServletRequest?) :
-  HttpServletRequestWrapper(request) {
+class AntisamyRequestWrapper(request: HttpServletRequest?) : HttpServletRequestWrapper(request) {
 
   override fun getParameterValues(name: String?): Array<String?>? {
     val params = super.getParameterValues(name) ?: return null
@@ -31,13 +30,10 @@ class AntisamyRequestWrapper(request: HttpServletRequest?) :
   }
 
   companion object {
-    @JvmStatic
-    private val POLICY: Policy = Policy.getInstance("antisamy-ebay.xml")
+    @JvmStatic private val POLICY: Policy = Policy.getInstance("antisamy-ebay.xml")
 
-    @JvmStatic
-    private val ANTI_SAMY = AntiSamy()
+    @JvmStatic private val ANTI_SAMY = AntiSamy()
 
-    @JvmStatic
-    private val log: Logger = slf4j(this::class)
+    @JvmStatic private val log: Logger = slf4j(this::class)
   }
 }

@@ -30,12 +30,7 @@ interface IInterAddr {
         val xRealIP = request.getHeader(IHeaders.X_REAL_IP)
         val xForwardedFor = request.getHeader(IHeaders.X_FORWARDED_FOR)
         if (xForwardedFor != null) {
-          remoteAddress =
-            xForwardedFor
-              .split(",".toRegex())
-              .dropLastWhile { it.isEmpty() }
-              .toTypedArray()[0]
-              .trim { it <= ' ' }
+          remoteAddress = xForwardedFor.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].trim { it <= ' ' }
         } else if (xRealIP != null) {
           remoteAddress = xRealIP
         }
@@ -62,11 +57,7 @@ interface IInterAddr {
           val hostName = localHostName
           if (hostName != null) {
             val addresses = InetAddress.getAllByName(hostName)
-            result.addAll(
-              Arrays.stream(addresses)
-                .map { obj: InetAddress -> obj.hostAddress }
-                .collect(Collectors.toSet())
-            )
+            result.addAll(Arrays.stream(addresses).map { obj: InetAddress -> obj.hostAddress }.collect(Collectors.toSet()))
           }
         } catch (ignore: Exception) {
           return result

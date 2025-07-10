@@ -4,10 +4,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Flyway database migration scripts and configuration for PostgreSQL databases.
 Contains versioned SQL migration files and Spring Boot integration for automated database schema evolution.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   runtimeOnly(libs.org.flywaydb.flyway.core)

@@ -51,24 +51,15 @@ data class CnDistrictCode(
       val cityCode = padCode.substring(currentIndex, currentIndex + CITY_LENGTH)
       currentIndex += CITY_LENGTH
 
-      val countyCode =
-        padCode.substring(currentIndex, currentIndex + COUNTY_LENGTH)
+      val countyCode = padCode.substring(currentIndex, currentIndex + COUNTY_LENGTH)
       currentIndex += COUNTY_LENGTH
 
       val townCode = padCode.substring(currentIndex, currentIndex + TOWN_LENGTH)
       currentIndex += TOWN_LENGTH
 
-      val villageCode =
-        padCode.substring(currentIndex, currentIndex + VILLAGE_LENGTH)
+      val villageCode = padCode.substring(currentIndex, currentIndex + VILLAGE_LENGTH)
 
-      val level =
-        calculateLevel(
-          provinceCode,
-          cityCode,
-          countyCode,
-          townCode,
-          villageCode,
-        )
+      val level = calculateLevel(provinceCode, cityCode, countyCode, townCode, villageCode)
       val actualCode = code.substring(0, getLevelSub(level) ?: 0)
 
       return CnDistrictCode(
@@ -83,13 +74,7 @@ data class CnDistrictCode(
       )
     }
 
-    private fun calculateLevel(
-      provinceCode: String,
-      cityCode: String,
-      countyCode: String,
-      townCode: String,
-      villageCode: String,
-    ): Int {
+    private fun calculateLevel(provinceCode: String, cityCode: String, countyCode: String, townCode: String, villageCode: String): Int {
       var maxLevel = 5
       if (villageCode == THREE_ZERO) maxLevel--
       if (townCode == THREE_ZERO) maxLevel--
@@ -111,8 +96,7 @@ data class CnDistrictCode(
   }
 
   val level: Int
-    get() =
-      calculateLevel(provinceCode, cityCode, countyCode, townCode, villageCode)
+    get() = calculateLevel(provinceCode, cityCode, countyCode, townCode, villageCode)
 
   fun back(): CnDistrictCode? =
     when (level) {

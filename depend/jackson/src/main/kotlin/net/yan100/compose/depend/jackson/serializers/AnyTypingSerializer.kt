@@ -14,11 +14,7 @@ class AnyTypingSerializer : JsonSerializer<AnyTyping>() {
     return AnyTyping::class.java
   }
 
-  override fun serialize(
-    value: AnyTyping?,
-    gen: JsonGenerator?,
-    serializers: SerializerProvider?,
-  ) {
+  override fun serialize(value: AnyTyping?, gen: JsonGenerator?, serializers: SerializerProvider?) {
     when (value) {
       is StringTyping -> gen?.writeString(value.value)
       is IntTyping -> gen?.writeNumber(value.value)

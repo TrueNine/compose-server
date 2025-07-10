@@ -9,9 +9,7 @@ import kotlin.reflect.KClass
  * @param endType 结束的类型
  * @return 当前类以及所有到结束标记为止的 fields
  */
-fun KClass<*>.recursionFields(
-  endType: KClass<*> = Any::class
-): Array<out Field> {
+fun KClass<*>.recursionFields(endType: KClass<*> = Any::class): Array<out Field> {
   val selfFields = mutableListOf<Field>()
   var superClass: Class<*>? = this.java
   val endsWith = endType.java

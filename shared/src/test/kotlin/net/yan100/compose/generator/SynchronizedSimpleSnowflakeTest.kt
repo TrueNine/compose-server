@@ -1,12 +1,12 @@
 package net.yan100.compose.generator
 
-import org.junit.jupiter.api.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.*
 
 class SynchronizedSimpleSnowflakeTest {
   private lateinit var snowflake: SynchronizedSimpleSnowflake
@@ -14,24 +14,13 @@ class SynchronizedSimpleSnowflakeTest {
 
   @BeforeEach
   fun setUp() {
-    snowflake =
-      SynchronizedSimpleSnowflake(
-        workId = 1L,
-        datacenterId = 1L,
-        sequence = 0L,
-        startTimeStamp = startTimeStamp,
-      )
+    snowflake = SynchronizedSimpleSnowflake(workId = 1L, datacenterId = 1L, sequence = 0L, startTimeStamp = startTimeStamp)
   }
 
   @Test
   fun `测试构造函数参数验证 - 有效的workId和datacenterId`() {
     assertDoesNotThrow("有效的workId和datacenterId不应该抛出异常") {
-      SynchronizedSimpleSnowflake(
-        workId = 1L,
-        datacenterId = 1L,
-        sequence = 0L,
-        startTimeStamp = startTimeStamp,
-      )
+      SynchronizedSimpleSnowflake(workId = 1L, datacenterId = 1L, sequence = 0L, startTimeStamp = startTimeStamp)
     }
   }
 
@@ -39,105 +28,54 @@ class SynchronizedSimpleSnowflakeTest {
   fun `测试构造函数参数验证 - workId为0`() {
     val exception =
       assertThrows<IllegalArgumentException>("workId为0应该抛出异常") {
-        SynchronizedSimpleSnowflake(
-          workId = 0L,
-          datacenterId = 1L,
-          sequence = 0L,
-          startTimeStamp = startTimeStamp,
-        )
+        SynchronizedSimpleSnowflake(workId = 0L, datacenterId = 1L, sequence = 0L, startTimeStamp = startTimeStamp)
       }
-    assertAll({
-      assertTrue(exception.message!!.contains("workId"), "异常消息应该包含'workId'")
-    })
+    assertAll({ assertTrue(exception.message!!.contains("workId"), "异常消息应该包含'workId'") })
   }
 
   @Test
   fun `测试构造函数参数验证 - workId为32`() {
     val exception =
       assertThrows<IllegalArgumentException>("workId为32应该抛出异常") {
-        SynchronizedSimpleSnowflake(
-          workId = 32L,
-          datacenterId = 1L,
-          sequence = 0L,
-          startTimeStamp = startTimeStamp,
-        )
+        SynchronizedSimpleSnowflake(workId = 32L, datacenterId = 1L, sequence = 0L, startTimeStamp = startTimeStamp)
       }
-    assertAll({
-      assertTrue(exception.message!!.contains("workId"), "异常消息应该包含'workId'")
-    })
+    assertAll({ assertTrue(exception.message!!.contains("workId"), "异常消息应该包含'workId'") })
   }
 
   @Test
   fun `测试构造函数参数验证 - workId为负数`() {
     val exception =
       assertThrows<IllegalArgumentException>("workId为负数应该抛出异常") {
-        SynchronizedSimpleSnowflake(
-          workId = -1L,
-          datacenterId = 1L,
-          sequence = 0L,
-          startTimeStamp = startTimeStamp,
-        )
+        SynchronizedSimpleSnowflake(workId = -1L, datacenterId = 1L, sequence = 0L, startTimeStamp = startTimeStamp)
       }
-    assertAll({
-      assertTrue(exception.message!!.contains("workId"), "异常消息应该包含'workId'")
-    })
+    assertAll({ assertTrue(exception.message!!.contains("workId"), "异常消息应该包含'workId'") })
   }
 
   @Test
   fun `测试构造函数参数验证 - datacenterId为0`() {
     val exception =
       assertThrows<IllegalArgumentException>("datacenterId为0应该抛出异常") {
-        SynchronizedSimpleSnowflake(
-          workId = 1L,
-          datacenterId = 0L,
-          sequence = 0L,
-          startTimeStamp = startTimeStamp,
-        )
+        SynchronizedSimpleSnowflake(workId = 1L, datacenterId = 0L, sequence = 0L, startTimeStamp = startTimeStamp)
       }
-    assertAll({
-      assertTrue(
-        exception.message!!.contains("datacenterId"),
-        "异常消息应该包含'datacenterId'",
-      )
-    })
+    assertAll({ assertTrue(exception.message!!.contains("datacenterId"), "异常消息应该包含'datacenterId'") })
   }
 
   @Test
   fun `测试构造函数参数验证 - datacenterId为32`() {
     val exception =
       assertThrows<IllegalArgumentException>("datacenterId为32应该抛出异常") {
-        SynchronizedSimpleSnowflake(
-          workId = 1L,
-          datacenterId = 32L,
-          sequence = 0L,
-          startTimeStamp = startTimeStamp,
-        )
+        SynchronizedSimpleSnowflake(workId = 1L, datacenterId = 32L, sequence = 0L, startTimeStamp = startTimeStamp)
       }
-    assertAll({
-      assertTrue(
-        exception.message!!.contains("datacenterId"),
-        "异常消息应该包含'datacenterId'",
-      )
-    })
+    assertAll({ assertTrue(exception.message!!.contains("datacenterId"), "异常消息应该包含'datacenterId'") })
   }
 
   @Test
   fun `测试构造函数参数验证 - datacenterId为负数`() {
     val exception =
       assertThrows<IllegalArgumentException>("datacenterId为负数应该抛出异常") {
-        SynchronizedSimpleSnowflake(
-          workId = 1L,
-          datacenterId = -1L,
-          sequence = 0L,
-          startTimeStamp = startTimeStamp,
-        )
+        SynchronizedSimpleSnowflake(workId = 1L, datacenterId = -1L, sequence = 0L, startTimeStamp = startTimeStamp)
       }
-    assertAll({
-      assertTrue(
-        exception.message!!.contains("datacenterId"),
-        "异常消息应该包含'datacenterId'",
-      )
-    })
+    assertAll({ assertTrue(exception.message!!.contains("datacenterId"), "异常消息应该包含'datacenterId'") })
   }
 
   @Test
@@ -175,10 +113,7 @@ class SynchronizedSimpleSnowflakeTest {
     val id2 = snowflake.next()
     val id3 = snowflake.next()
 
-    assertAll(
-      { assertTrue(id2 > id1, "序列号未溢出时ID应该递增") },
-      { assertTrue(id3 > id2, "序列号溢出后应该等待下一个时间戳") },
-    )
+    assertAll({ assertTrue(id2 > id1, "序列号未溢出时ID应该递增") }, { assertTrue(id3 > id2, "序列号溢出后应该等待下一个时间戳") })
   }
 
   @Test
@@ -195,9 +130,7 @@ class SynchronizedSimpleSnowflakeTest {
         try {
           repeat(idsPerThread) {
             val id = snowflake.next()
-            synchronized(ids) {
-              assertTrue(ids.add(id), "并发生成的ID应该是唯一的，但发现重复ID: $id")
-            }
+            synchronized(ids) { assertTrue(ids.add(id), "并发生成的ID应该是唯一的，但发现重复ID: $id") }
           }
         } finally {
           latch.countDown()
@@ -228,9 +161,7 @@ class SynchronizedSimpleSnowflakeTest {
         override fun next(): Long {
           val timestamp = currentTimeMillis()
           if (timestamp < lastTimestamp) {
-            throw RuntimeException(
-              "时钟回拨，时间戳小于上次时间戳：${timestamp - lastTimestamp}"
-            )
+            throw RuntimeException("时钟回拨，时间戳小于上次时间戳：${timestamp - lastTimestamp}")
           }
           lastTimestamp = timestamp
           sequence++
@@ -242,11 +173,8 @@ class SynchronizedSimpleSnowflakeTest {
     mockSnowflake.next()
 
     // 尝试生成第二个ID，应该抛出异常
-    val exception =
-      assertThrows<RuntimeException>("时钟回拨应该抛出异常") { mockSnowflake.next() }
-    assertAll({
-      assertTrue(exception.message!!.contains("时钟回拨"), "异常消息应该包含'时钟回拨'")
-    })
+    val exception = assertThrows<RuntimeException>("时钟回拨应该抛出异常") { mockSnowflake.next() }
+    assertAll({ assertTrue(exception.message!!.contains("时钟回拨"), "异常消息应该包含'时钟回拨'") })
   }
 
   @Test
@@ -260,12 +188,7 @@ class SynchronizedSimpleSnowflakeTest {
     val sequence = id and 0xFFF
 
     assertAll(
-      {
-        assertTrue(
-          abs(timestamp - System.currentTimeMillis()) < 1000,
-          "时间戳应该在合理范围内",
-        )
-      },
+      { assertTrue(abs(timestamp - System.currentTimeMillis()) < 1000, "时间戳应该在合理范围内") },
       { assertEquals(1L, datacenterId, "数据中心ID应该为1") },
       { assertEquals(1L, workId, "工作ID应该为1") },
       { assertTrue(sequence in 0..4095, "序列号应该在0-4095范围内") },

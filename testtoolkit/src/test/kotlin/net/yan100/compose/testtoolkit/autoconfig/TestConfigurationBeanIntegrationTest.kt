@@ -1,5 +1,7 @@
 package net.yan100.compose.testtoolkit.autoconfig
 
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import net.yan100.compose.testtoolkit.TestEntrance
 import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Nested
@@ -8,26 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.test.context.TestPropertySource
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @SpringBootTest(classes = [TestEntrance::class])
-@TestPropertySource(properties = [
-  "compose.testtoolkit.enabled=true",
-  "compose.testtoolkit.disable-condition-evaluation-report=true",
-  "compose.testtoolkit.enable-color-output=true",
-  "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration"
-])
+@TestPropertySource(
+  properties =
+    [
+      "compose.testtoolkit.enabled=true",
+      "compose.testtoolkit.disable-condition-evaluation-report=true",
+      "compose.testtoolkit.enable-color-output=true",
+      "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration",
+    ]
+)
 class TestConfigurationBeanIntegrationTest {
 
-  @Autowired
-  private lateinit var environment: ConfigurableEnvironment
+  @Autowired private lateinit var environment: ConfigurableEnvironment
 
-  @Autowired
-  private lateinit var testConfigurationBean: TestConfigurationBean
+  @Autowired private lateinit var testConfigurationBean: TestConfigurationBean
 
-  @Autowired
-  private lateinit var testEnvironmentPostProcessor: TestEnvironmentPostProcessor
+  @Autowired private lateinit var testEnvironmentPostProcessor: TestEnvironmentPostProcessor
 
   @Nested
   inner class BeanInjection {
@@ -85,4 +85,4 @@ class TestConfigurationBeanIntegrationTest {
       log.debug("[应当正确提供 TestEnvironmentPostProcessor 功能] TestEnvironmentPostProcessor functionality verified")
     }
   }
-} 
+}

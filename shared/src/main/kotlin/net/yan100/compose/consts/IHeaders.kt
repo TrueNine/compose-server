@@ -1,9 +1,9 @@
 package net.yan100.compose.consts
 
 import jakarta.servlet.http.HttpServletRequest
-import net.yan100.compose.hasText
 import java.net.URLEncoder
 import java.nio.charset.Charset
+import net.yan100.compose.hasText
 
 /**
  * http Header Info
@@ -14,8 +14,7 @@ import java.nio.charset.Charset
 interface IHeaders {
   companion object {
     /**
-     * 设置 Content-Disposition 的下载名称 ` Content-Disposition: attachment;
-     * filename="filename" ` *
+     * 设置 Content-Disposition 的下载名称 ` Content-Disposition: attachment; filename="filename" ` *
      *
      * @param fileName 文件名
      * @return attachment; filename="fileName"
@@ -33,8 +32,7 @@ interface IHeaders {
     fun getDeviceId(request: HttpServletRequest): String? {
       val deviceId = request.getHeader(X_DEVICE_ID)
       val userAgent = request.getHeader(USER_AGENT)
-      return if (deviceId.hasText()) deviceId
-      else if (userAgent.hasText()) userAgent else null
+      return if (deviceId.hasText()) deviceId else if (userAgent.hasText()) userAgent else null
     }
 
     const val SERVER: String = "Server"
@@ -65,8 +63,7 @@ interface IHeaders {
     const val X_REFRESH: String = "X-Refresh"
 
     /** 需清理过期令牌 */
-    const val X_REQUIRE_CLEN_AUTHENTICATION: String =
-      "X-Require-Clean-Authentication"
+    const val X_REQUIRE_CLEN_AUTHENTICATION: String = "X-Require-Clean-Authentication"
 
     /** 微信 open id 授权 自定义id */
     const val X_WECHAT_AUTHORIZATION_ID: String = "X-Wechat-Authorization-Id"
@@ -80,7 +77,6 @@ interface IHeaders {
     const val CORS_ALLOW_ORIGIN: String = "Access-Control-Allow-Origin"
     const val CORS_ALLOW_METHODS: String = "Access-Control-Allow-Methods"
     const val CORS_ALLOW_HEADERS: String = "Access-Control-Allow-Headers"
-    const val CORS_ALLOW_CREDENTIALS: String =
-      "Access-Control-Allow-Credentials"
+    const val CORS_ALLOW_CREDENTIALS: String = "Access-Control-Allow-Credentials"
   }
 }

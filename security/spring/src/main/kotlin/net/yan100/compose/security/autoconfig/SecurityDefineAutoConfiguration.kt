@@ -26,10 +26,7 @@ class SecurityDefineAutoConfiguration {
     return se
   }
 
-  private fun checkPolicy(
-    desc: SecurityPolicyDefine,
-    mapper: ObjectMapper,
-  ): SecurityPolicyDefine {
+  private fun checkPolicy(desc: SecurityPolicyDefine, mapper: ObjectMapper): SecurityPolicyDefine {
     if (desc.exceptionAdware == null) {
       log.debug("正在使用空体异常处理器")
       desc.exceptionAdware = EmptySecurityExceptionAdware(mapper)

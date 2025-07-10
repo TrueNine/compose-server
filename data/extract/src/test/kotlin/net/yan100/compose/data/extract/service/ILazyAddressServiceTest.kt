@@ -16,37 +16,21 @@ class ILazyAddressServiceTest {
     // 使用匿名对象实例来测试默认方法，避免 MockK 对默认实现的影响
     service =
       object : ILazyAddressService {
-        override val supportedYearVersions: List<String> =
-          listOf("2024", "2023", "2021")
+        override val supportedYearVersions: List<String> = listOf("2024", "2023", "2021")
         override val supportedDefaultYearVersion: String = "2024"
 
         // 默认方法测试不依赖这些，提供空实现即可
-        override fun fetchChildren(
-          parentCode: String,
-          yearVersion: String,
-        ): List<ILazyAddressService.CnDistrict> = emptyList()
+        override fun fetchChildren(parentCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> = emptyList()
 
-        override fun fetchDistrict(
-          code: String,
-          yearVersion: String,
-        ): ILazyAddressService.CnDistrict? = null
+        override fun fetchDistrict(code: String, yearVersion: String): ILazyAddressService.CnDistrict? = null
 
-        override fun fetchChildrenRecursive(
-          parentCode: String,
-          maxDepth: Int,
-          yearVersion: String,
-        ): List<ILazyAddressService.CnDistrict> = emptyList()
+        override fun fetchChildrenRecursive(parentCode: String, maxDepth: Int, yearVersion: String): List<ILazyAddressService.CnDistrict> = emptyList()
 
         override fun traverseChildrenRecursive(
           parentCode: string,
           maxDepth: Int,
           yearVersion: String,
-          onVisit:
-            (
-              List<ILazyAddressService.CnDistrict>,
-              Int,
-              ILazyAddressService.CnDistrict?,
-            ) -> Boolean,
+          onVisit: (List<ILazyAddressService.CnDistrict>, Int, ILazyAddressService.CnDistrict?) -> Boolean,
         ) {
           TODO("Not yet implemented")
         }
@@ -94,18 +78,9 @@ class ILazyAddressServiceTest {
   fun `convertToFillCode 处理 有效的短代码 返回 补全后的12位代码`() {
     assertEquals("110000000000", ILazyAddressService.convertToFillCode("11"))
     assertEquals("110100000000", ILazyAddressService.convertToFillCode("1101"))
-    assertEquals(
-      "110101000000",
-      ILazyAddressService.convertToFillCode("110101"),
-    )
-    assertEquals(
-      "110101001000",
-      ILazyAddressService.convertToFillCode("110101001"),
-    )
-    assertEquals(
-      "110101001001",
-      ILazyAddressService.convertToFillCode("110101001001"),
-    )
+    assertEquals("110101000000", ILazyAddressService.convertToFillCode("110101"))
+    assertEquals("110101001000", ILazyAddressService.convertToFillCode("110101001"))
+    assertEquals("110101001001", ILazyAddressService.convertToFillCode("110101001001"))
   }
 
   @Test
@@ -117,10 +92,7 @@ class ILazyAddressServiceTest {
 
   @Test
   fun `convertToFillCode 处理 已经是12位的代码 返回 原始字符串`() {
-    assertEquals(
-      "110101001001",
-      ILazyAddressService.convertToFillCode("110101001001"),
-    )
+    assertEquals("110101001001", ILazyAddressService.convertToFillCode("110101001001"))
   }
 
   @Test
@@ -174,10 +146,7 @@ class ILazyAddressServiceTest {
 
   @Test
   fun `lastYearVersionOrNull 给定 不在支持列表中的年份 返回 最近的更早版本`() {
-    assertEquals(
-      "2021",
-      service.lastYearVersionOrNull("2022"),
-    ) // 假设支持 ["2024", "2023", "2021"]
+    assertEquals("2021", service.lastYearVersionOrNull("2022")) // 假设支持 ["2024", "2023", "2021"]
   }
 
   @Test
@@ -198,32 +167,17 @@ class ILazyAddressServiceTest {
         override val supportedYearVersions: List<String> = emptyList()
         override val supportedDefaultYearVersion: String = "2020" // 假设默认是 2020
 
-        override fun fetchChildren(
-          parentCode: String,
-          yearVersion: String,
-        ): List<ILazyAddressService.CnDistrict> = emptyList()
+        override fun fetchChildren(parentCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> = emptyList()
 
-        override fun fetchDistrict(
-          code: String,
-          yearVersion: String,
-        ): ILazyAddressService.CnDistrict? = null
+        override fun fetchDistrict(code: String, yearVersion: String): ILazyAddressService.CnDistrict? = null
 
-        override fun fetchChildrenRecursive(
-          parentCode: String,
-          maxDepth: Int,
-          yearVersion: String,
-        ): List<ILazyAddressService.CnDistrict> = emptyList()
+        override fun fetchChildrenRecursive(parentCode: String, maxDepth: Int, yearVersion: String): List<ILazyAddressService.CnDistrict> = emptyList()
 
         override fun traverseChildrenRecursive(
           parentCode: string,
           maxDepth: Int,
           yearVersion: String,
-          onVisit:
-            (
-              List<ILazyAddressService.CnDistrict>,
-              Int,
-              ILazyAddressService.CnDistrict?,
-            ) -> Boolean,
+          onVisit: (List<ILazyAddressService.CnDistrict>, Int, ILazyAddressService.CnDistrict?) -> Boolean,
         ) {
           TODO("Not yet implemented")
         }

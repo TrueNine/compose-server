@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Model Context Protocol (MCP) shared components for AI integration and context management.
 Provides common interfaces and utilities for AI model interactions and context handling.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   implementation(projects.shared)

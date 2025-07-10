@@ -27,13 +27,7 @@ inline fun HttpServletResponse.useSse(
   locale: Locale = Locale.CHINA,
   crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
-  return this.useResponse(
-    contentType = MimeTypes.SSE,
-    charset = charset,
-    locale = locale,
-  ) {
-    with(it)
-  }
+  return this.useResponse(contentType = MimeTypes.SSE, charset = charset, locale = locale) { with(it) }
 }
 
 /** ## 设置下载时的东西 */
@@ -44,10 +38,7 @@ fun HttpServletResponse.withDownload(
   charset: Charset = Charsets.UTF_8,
   closeBlock: ((outputStream: OutputStream) -> Unit)?,
 ) {
-  this.setHeader(
-    IHeaders.CONTENT_DISPOSITION,
-    IHeaders.downloadDisposition(fileName, charset),
-  )
+  this.setHeader(IHeaders.CONTENT_DISPOSITION, IHeaders.downloadDisposition(fileName, charset))
   this.setHeader(IHeaders.CONTENT_TYPE, contentType.value)
   this.characterEncoding = charset.displayName()
   closeBlock?.also { blockFn -> this.outputStream.use { blockFn(it) } }

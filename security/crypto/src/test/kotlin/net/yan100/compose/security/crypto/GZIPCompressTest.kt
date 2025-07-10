@@ -1,6 +1,5 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.testtoolkit.log
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -8,6 +7,7 @@ import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.test.Test
+import net.yan100.compose.testtoolkit.log
 
 /**
  * @author TrueNine
@@ -31,9 +31,7 @@ class GZIPCompressTest {
       return str
     }
     val baos = ByteArrayOutputStream()
-    GZIPOutputStream(baos).use { gzip ->
-      gzip.write(str.toByteArray(Charsets.ISO_8859_1))
-    }
+    GZIPOutputStream(baos).use { gzip -> gzip.write(str.toByteArray(Charsets.ISO_8859_1)) }
     return baos.toByteArray().encodeBase64String
   }
 

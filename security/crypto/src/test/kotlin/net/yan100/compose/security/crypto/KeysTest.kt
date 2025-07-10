@@ -1,8 +1,8 @@
 package net.yan100.compose.security.crypto
 
+import kotlin.test.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import kotlin.test.*
 
 /**
  * Keys工具类的单元测试
@@ -28,17 +28,14 @@ class KeysTest {
 
   @Test
   fun `generateRandomAsciiString 长度为0 抛出IllegalArgumentException`() {
-    assertFailsWith<IllegalArgumentException> {
-      Keys.generateRandomAsciiString(0)
-    }
+    assertFailsWith<IllegalArgumentException> { Keys.generateRandomAsciiString(0) }
   }
 
   @Test
   fun `generateRandomAsciiString 长度为负数 抛出IllegalArgumentException`() {
-    assertFailsWith<IllegalArgumentException> {
-      Keys.generateRandomAsciiString(-1)
-    }
+    assertFailsWith<IllegalArgumentException> { Keys.generateRandomAsciiString(-1) }
   }
+
   // endregion
 
   // region RSA密钥测试
@@ -63,12 +60,8 @@ class KeysTest {
     assertNotNull(restoredPublicKey)
     assertNotNull(restoredPrivateKey)
 
-    assertEquals(
-      keyPair.publicKey.encoded.toList(), restoredPublicKey.encoded.toList()
-    )
-    assertEquals(
-      keyPair.privateKey.encoded?.toList(), restoredPrivateKey.encoded.toList()
-    )
+    assertEquals(keyPair.publicKey.encoded.toList(), restoredPublicKey.encoded.toList())
+    assertEquals(keyPair.privateKey.encoded?.toList(), restoredPrivateKey.encoded.toList())
   }
 
   @Test
@@ -83,13 +76,10 @@ class KeysTest {
 
     val rebuiltPair = Keys.readRsaKeyPair(publicKeyBase64, privateKeyBase64)
     assertNotNull(rebuiltPair)
-    assertEquals(
-      originalPair.publicKey.encoded.toList(), rebuiltPair.publicKey.encoded.toList()
-    )
-    assertEquals(
-      originalPair.privateKey.encoded.toList(), rebuiltPair.privateKey.encoded.toList()
-    )
+    assertEquals(originalPair.publicKey.encoded.toList(), rebuiltPair.publicKey.encoded.toList())
+    assertEquals(originalPair.privateKey.encoded.toList(), rebuiltPair.privateKey.encoded.toList())
   }
+
   // endregion
 
   // region ECC密钥测试
@@ -116,12 +106,8 @@ class KeysTest {
     assertNotNull(restoredPublicKey)
     assertNotNull(restoredPrivateKey)
 
-    assertEquals(
-      keyPair.publicKey.encoded.toList(), restoredPublicKey.encoded.toList()
-    )
-    assertEquals(
-      keyPair.privateKey.encoded.toList(), restoredPrivateKey.encoded.toList()
-    )
+    assertEquals(keyPair.publicKey.encoded.toList(), restoredPublicKey.encoded.toList())
+    assertEquals(keyPair.privateKey.encoded.toList(), restoredPrivateKey.encoded.toList())
   }
 
   @Test
@@ -136,13 +122,10 @@ class KeysTest {
     assertNotNull(privateKeyBase64)
     val rebuiltPair = Keys.readEccKeyPair(publicKeyBase64, privateKeyBase64)
     assertNotNull(rebuiltPair)
-    assertEquals(
-      originalPair.publicKey.encoded.toList(), rebuiltPair.publicKey.encoded.toList()
-    )
-    assertEquals(
-      originalPair.privateKey.encoded.toList(), rebuiltPair.privateKey.encoded.toList()
-    )
+    assertEquals(originalPair.publicKey.encoded.toList(), rebuiltPair.publicKey.encoded.toList())
+    assertEquals(originalPair.privateKey.encoded.toList(), rebuiltPair.privateKey.encoded.toList())
   }
+
   // endregion
 
   // region AES密钥测试
@@ -163,9 +146,7 @@ class KeysTest {
     val restoredKey = Keys.readAesKeyByBase64(keyBase64)
     assertNotNull(restoredKey)
 
-    assertEquals(
-      originalKey.encoded.toList(), restoredKey.encoded.toList()
-    )
+    assertEquals(originalKey.encoded.toList(), restoredKey.encoded.toList())
   }
 
   @ParameterizedTest
@@ -175,6 +156,7 @@ class KeysTest {
     assertNotNull(key)
     assertEquals(keySize / 8, key.encoded.size)
   }
+
   // endregion
 
   // region 错误处理测试
@@ -207,6 +189,7 @@ class KeysTest {
     val result = Keys.readAesKeyByBase64("invalid-base64")
     assertNull(result)
   }
+
   // endregion
 
   // region 并发测试
@@ -215,14 +198,15 @@ class KeysTest {
     val threadCount = 10
     val iterationsPerThread = 1000
 
-    val threads = List(threadCount) {
-      Thread {
-        repeat(iterationsPerThread) {
-          val result = Keys.generateRandomAsciiString()
-          assertEquals(32, result.length)
+    val threads =
+      List(threadCount) {
+        Thread {
+          repeat(iterationsPerThread) {
+            val result = Keys.generateRandomAsciiString()
+            assertEquals(32, result.length)
+          }
         }
       }
-    }
 
     threads.forEach { it.start() }
     threads.forEach { it.join() }
@@ -233,14 +217,15 @@ class KeysTest {
     val threadCount = 5
     val iterationsPerThread = 10
 
-    val threads = List(threadCount) {
-      Thread {
-        repeat(iterationsPerThread) {
-          val keyPair = Keys.generateRsaKeyPair()
-          assertNotNull(keyPair)
+    val threads =
+      List(threadCount) {
+        Thread {
+          repeat(iterationsPerThread) {
+            val keyPair = Keys.generateRsaKeyPair()
+            assertNotNull(keyPair)
+          }
         }
       }
-    }
 
     threads.forEach { it.start() }
     threads.forEach { it.join() }
@@ -251,14 +236,15 @@ class KeysTest {
     val threadCount = 5
     val iterationsPerThread = 100
 
-    val threads = List(threadCount) {
-      Thread {
-        repeat(iterationsPerThread) {
-          val key = Keys.generateAesKey()
-          assertNotNull(key)
+    val threads =
+      List(threadCount) {
+        Thread {
+          repeat(iterationsPerThread) {
+            val key = Keys.generateAesKey()
+            assertNotNull(key)
+          }
         }
       }
-    }
 
     threads.forEach { it.start() }
     threads.forEach { it.join() }

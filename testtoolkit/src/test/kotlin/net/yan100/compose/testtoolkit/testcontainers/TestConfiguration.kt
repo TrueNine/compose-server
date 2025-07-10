@@ -21,8 +21,6 @@ open class TestConfiguration {
    */
   @Bean
   open fun redisTemplate(connectionFactory: RedisConnectionFactory): StringRedisTemplate {
-    return StringRedisTemplate().apply {
-      setConnectionFactory(connectionFactory)
-    }
+    return StringRedisTemplate().apply { setConnectionFactory(connectionFactory) }
   }
-} 
+}

@@ -96,9 +96,7 @@ fun String.toOneLine(): String = IString.inLine(this)
 fun String.toPascalCase(firstUppercase: Boolean = false): String {
   return if (length == 1 || isNotBlank()) {
     split(STR_UNDERLINE)
-      .joinToString(STR_EMPTY) {
-        it.replaceFirstChar { it1 -> it1.uppercaseChar() }
-      }
+      .joinToString(STR_EMPTY) { it.replaceFirstChar { it1 -> it1.uppercaseChar() } }
       .replaceFirstChar { if (!firstUppercase) it.lowercaseChar() else it }
   } else {
     this
@@ -133,8 +131,7 @@ fun String.toSnakeCase(): String {
  * @param charset 字符编码，默认为 UTF-8
  * @return URL 编码后的字符串
  */
-fun String?.toUrlEncoded(charset: Charset = Charsets.UTF_8): String =
-  java.net.URLEncoder.encode(this ?: STR_EMPTY, charset)
+fun String?.toUrlEncoded(charset: Charset = Charsets.UTF_8): String = java.net.URLEncoder.encode(this ?: STR_EMPTY, charset)
 
 /**
  * 如果字符串以指定前缀开始，则替换第一次出现的前缀

@@ -9,17 +9,8 @@ enum class MavenRepoType(
   val gradlePluginUrl: String? = null,
   val gradleDistributionUrl: String? = null,
 ) {
-  ALIYUN(
-    mavenCentralUrl = Repos.aliCentral,
-    gradlePluginUrl = Repos.aliGradlePlugin,
-    googlePluginUrl = Repos.aliGoogle,
-    jCenterUrl = Repos.aliJCenter,
-  ),
-  TENCENT_CLOUD(
-    mavenCentralUrl = Repos.tencentCloudMavenPublic,
-    googlePluginUrl = Repos.tencentCloudMavenPublic,
-    gradlePluginUrl = Repos.aliGradlePlugin,
-  ),
+  ALIYUN(mavenCentralUrl = Repos.aliCentral, gradlePluginUrl = Repos.aliGradlePlugin, googlePluginUrl = Repos.aliGoogle, jCenterUrl = Repos.aliJCenter),
+  TENCENT_CLOUD(mavenCentralUrl = Repos.tencentCloudMavenPublic, googlePluginUrl = Repos.tencentCloudMavenPublic, gradlePluginUrl = Repos.aliGradlePlugin),
   HUAWEI_CLOUD(mavenCentralUrl = Repos.huaweiCloudMaven),
   DEFAULT,
 }

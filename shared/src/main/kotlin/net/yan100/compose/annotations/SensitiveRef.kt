@@ -2,9 +2,7 @@ package net.yan100.compose.annotations
 
 import net.yan100.compose.nonText
 
-enum class SensitiveStrategy(
-  private val desensitizeSerializer: (String) -> String
-) {
+enum class SensitiveStrategy(private val desensitizeSerializer: (String) -> String) {
   /** ## 单个 * 纯掩码 */
   ONCE({ "*" }),
 
@@ -19,9 +17,7 @@ enum class SensitiveStrategy(
   ID_CARD({ it.replace("(\\S{2})\\S+(\\S{2})".toRegex(), "\$1****\$2") }),
 
   /** 银行卡号 */
-  BANK_CARD_CODE({
-    it.replace("(\\w{2})\\w+(\\w{2})".toRegex(), "\$1****\$2")
-  }),
+  BANK_CARD_CODE({ it.replace("(\\w{2})\\w+(\\w{2})".toRegex(), "\$1****\$2") }),
 
   /** 姓名 */
   NAME({ if (it.nonText()) it else "**${it.substring(it.length - 1)}" }),

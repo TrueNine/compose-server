@@ -3,8 +3,7 @@ package net.yan100.compose.gradleplugin.consts
 /** maven 仓库管理 */
 @Deprecated("无需使用")
 object Repos {
-  const val tencentCloudMavenPublic =
-    "https://mirrors.cloud.tencent.com/repository/maven-public/"
+  const val tencentCloudMavenPublic = "https://mirrors.cloud.tencent.com/repository/maven-public/"
 
   private const val ALI_REPO = "https://maven.aliyun.com/repository/"
 
@@ -27,8 +26,7 @@ object Repos {
   const val springMilestone = "${SPRING_REPO}milestone"
   const val springLibMilestone = "${SPRING_REPO}libs-milestone"
   const val springSnapshot = "${SPRING_REPO}snapshot"
-  const val mybatisPlusSnapshot =
-    "https://oss.sonatype.org/content/repositories/snapshots/"
+  const val mybatisPlusSnapshot = "https://oss.sonatype.org/content/repositories/snapshots/"
 
   val publicRepositories =
     listOf(

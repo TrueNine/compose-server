@@ -11,14 +11,9 @@ interface StandardBuilderAdaptor<T, R> {
 
   val fileBuilder: FileSpec.Builder
 
-  fun importBy(pkg: String, vararg names: String) =
-    fileBuilder.addImport(pkg, *names)
+  fun importBy(pkg: String, vararg names: String) = fileBuilder.addImport(pkg, *names)
 
-  fun importBy(classDeclaration: KSClassDeclaration) =
-    fileBuilder.addImport(
-      classDeclaration.packageName.asString(),
-      classDeclaration.simpleName.asString(),
-    )
+  fun importBy(classDeclaration: KSClassDeclaration) = fileBuilder.addImport(classDeclaration.packageName.asString(), classDeclaration.simpleName.asString())
 
   fun importBy(clazz: Class<*>) = fileBuilder.addImport(clazz)
 

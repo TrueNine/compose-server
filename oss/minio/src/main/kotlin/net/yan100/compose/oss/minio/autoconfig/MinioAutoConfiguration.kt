@@ -25,17 +25,10 @@ class MinioAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun minioClient(
-    ossProperties: OssProperties,
-    minioProperties: MinioProperties,
-  ): MinioClient {
+  fun minioClient(ossProperties: OssProperties, minioProperties: MinioProperties): MinioClient {
     val accessUrl = ossProperties.baseUrl ?: minioProperties.endpoint
     val accessPort = ossProperties.port ?: minioProperties.endpointPort
-    log.trace(
-      "register minio client accessUrl: {} , accessPort: {}",
-      accessUrl,
-      accessPort,
-    )
+    log.trace("register minio client accessUrl: {} , accessPort: {}", accessUrl, accessPort)
 
     val minioClient =
       MinioClient.builder()
@@ -57,21 +50,9 @@ class MinioAutoConfiguration {
   @Bean
   @ConditionalOnBean(MinioClient::class)
   @ConditionalOnMissingBean
-  fun minioOssClientWrapper(
-    minioClient: MinioClient,
-    ossProperties: OssProperties,
-    minioProperties: MinioProperties,
-  ): Oss {
-    val exposeBaseUrl =
-      ossProperties.exposeBaseUrl
-        ?: minioProperties.exposedBaseUrl
-        ?: ossProperties.baseUrl
-        ?: minioProperties.endpoint
-    log.trace(
-      "register minio client wrapper, client: {} , exposeBaseUrl: {}",
-      minioClient,
-      exposeBaseUrl,
-    )
+  fun minioOssClientWrapper(minioClient: MinioClient, ossProperties: OssProperties, minioProperties: MinioProperties): Oss {
+    val exposeBaseUrl = ossProperties.exposeBaseUrl ?: minioProperties.exposedBaseUrl ?: ossProperties.baseUrl ?: minioProperties.endpoint
+    log.trace("register minio client wrapper, client: {} , exposeBaseUrl: {}", minioClient, exposeBaseUrl)
     val clientWrapper = MinioClientWrapper(minioClient, exposeBaseUrl)
     return clientWrapper
   }

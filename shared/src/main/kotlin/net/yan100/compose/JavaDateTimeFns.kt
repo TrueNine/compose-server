@@ -9,9 +9,7 @@ import java.time.temporal.TemporalAdjusters
  * @param zoneId 时区
  * @return LocalDateTime对象
  */
-fun Long.toLocalDateTime(
-  zoneId: ZoneId = ZoneId.systemDefault()
-): LocalDateTime {
+fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
   return DTimer.millisToLocalDateTime(this, zoneId)
 }
 

@@ -8,5 +8,4 @@ import org.springframework.context.ApplicationEventPublisher
  * @author TrueNine
  * @since 2024-06-02
  */
-object EventPublisherHolder :
-  AbstractThreadLocalHolder<ApplicationEventPublisher>()
+object EventPublisherHolder : AbstractThreadLocalHolder<ApplicationEventPublisher>()

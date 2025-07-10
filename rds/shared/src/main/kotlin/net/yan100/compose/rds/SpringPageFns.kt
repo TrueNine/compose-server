@@ -8,10 +8,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 
 /** # 对分页结果的封装，使得其返回包装对象 */
-@Deprecated(
-  "建议使用更符合 kotlin 语义 的 toPr 或者 toIPage",
-  replaceWith = ReplaceWith("toPr()", "net.yan100.compose.rds.toPr"),
-)
+@Deprecated("建议使用更符合 kotlin 语义 的 toPr 或者 toIPage", replaceWith = ReplaceWith("toPr()", "net.yan100.compose.rds.toPr"))
 val <T : Any> Page<T>.result: Pr<T>
   get() {
     return if (totalElements == 0L) Pr.emptyWith()
@@ -21,23 +18,14 @@ val <T : Any> Page<T>.result: Pr<T>
     }
   }
 
-@Suppress("DEPRECATION")
-fun <T : Any> Page<T>.toPr(): Pr<T> = result
+@Suppress("DEPRECATION") fun <T : Any> Page<T>.toPr(): Pr<T> = result
 
 fun <T : Any> Page<T>.toIPage(): IPage<T> = toPr()
 
 /** # 对分页参数的封装，返回一个包装的对象 */
-@Deprecated(
-  "建议使用更符合 kotlin 语义 的 toPageable()",
-  ReplaceWith("toPageable()", "net.yan100.compose.rds.toPageable"),
-)
+@Deprecated("建议使用更符合 kotlin 语义 的 toPageable()", ReplaceWith("toPageable()", "net.yan100.compose.rds.toPageable"))
 val Pq?.page: Pageable
-  get() =
-    PageRequest.of(
-      (this?.o ?: Pq.MIN_OFFSET).toInt(),
-      this?.s ?: Pq.MAX_PAGE_SIZE,
-    )
+  get() = PageRequest.of((this?.o ?: Pq.MIN_OFFSET).toInt(), this?.s ?: Pq.MAX_PAGE_SIZE)
 
 /** @see [org.springframework.data.domain.PageRequest] */
-@Suppress("DEPRECATION")
-fun Pq?.toPageable(): Pageable = page
+@Suppress("DEPRECATION") fun Pq?.toPageable(): Pageable = page

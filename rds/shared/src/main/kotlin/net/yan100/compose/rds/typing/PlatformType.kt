@@ -14,52 +14,39 @@ import org.babyfish.jimmer.sql.EnumType.Strategy
 @EnumType(Strategy.NAME)
 enum class PlatformType(v: String) : StringTyping {
   /** 未知 */
-  @EnumItem(name = "NONE")
-  @Deprecated(message = "一般情况，请明确指定平台")
-  NONE("NONE"),
+  @EnumItem(name = "NONE") @Deprecated(message = "一般情况，请明确指定平台") NONE("NONE"),
 
   /** 微信公众号 */
-  @EnumItem(name = "WECHAT_PUBLIC_ACCOUNT")
-  WECHAT_PUBLIC_ACCOUNT("WECHAT_PUBLIC_ACCOUNT"),
+  @EnumItem(name = "WECHAT_PUBLIC_ACCOUNT") WECHAT_PUBLIC_ACCOUNT("WECHAT_PUBLIC_ACCOUNT"),
 
   /** 微信小程序 */
-  @EnumItem(name = "WECHAT_MINI_PROGRAM")
-  WECHAT_MINI_PROGRAM("WECHAT_MINI_PROGRAM"),
+  @EnumItem(name = "WECHAT_MINI_PROGRAM") WECHAT_MINI_PROGRAM("WECHAT_MINI_PROGRAM"),
 
   /** 微信开放平台 */
-  @EnumItem(name = "WECHAT_OPEN_PLATFORM")
-  WECHAT_OPEN_PLATFORM("WECHAT_OPEN_PLATFORM"),
+  @EnumItem(name = "WECHAT_OPEN_PLATFORM") WECHAT_OPEN_PLATFORM("WECHAT_OPEN_PLATFORM"),
 
   /** 移动端 veb view */
-  @EnumItem(name = "MOBILE_WEB_VIEW")
-  MOBILE_WEB_VIEW("MOBILE_WEB_VIEW"),
+  @EnumItem(name = "MOBILE_WEB_VIEW") MOBILE_WEB_VIEW("MOBILE_WEB_VIEW"),
 
   /** 移动端 h5 */
-  @EnumItem(name = "MOBILE_H5")
-  MOBILE_H5("MOBILE_H5"),
+  @EnumItem(name = "MOBILE_H5") MOBILE_H5("MOBILE_H5"),
 
   /** 微信网页 */
-  @EnumItem(name = "WECHAT_WEB_SITE")
-  WECHAT_WEB_SITE("WECHAT_WEB_SITE"),
+  @EnumItem(name = "WECHAT_WEB_SITE") WECHAT_WEB_SITE("WECHAT_WEB_SITE"),
 
   /** pc 网站 */
-  @EnumItem(name = "PC_WEB_SITE")
-  PC_WEB_SITE("PC_WEB_SITE"),
+  @EnumItem(name = "PC_WEB_SITE") PC_WEB_SITE("PC_WEB_SITE"),
 
   /** web 后台管理端 */
-  @EnumItem(name = "WEB_ADMIN_SITE")
-  WEB_ADMIN_SITE("WEB_ADMIN_SITE"),
+  @EnumItem(name = "WEB_ADMIN_SITE") WEB_ADMIN_SITE("WEB_ADMIN_SITE"),
 
   /** 其他 */
-  @EnumItem(name = "OTHER")
-  @Deprecated(message = "如果不明确平台，请先明确")
-  OTHER("OTHER");
+  @EnumItem(name = "OTHER") @Deprecated(message = "如果不明确平台，请先明确") OTHER("OTHER");
 
   override val value = v
 
   companion object {
 
-    @JvmStatic
-    operator fun get(v: String?) = entries.find { it.value == v }
+    @JvmStatic operator fun get(v: String?) = entries.find { it.value == v }
   }
 }

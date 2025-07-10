@@ -46,13 +46,7 @@ object S3PolicyCreator {
           .addAction(S3Policies.Bucket.GET_LOCATION)
           .addResource(bucketName)
       )
-      .addStatement(
-        S3StatementBuilder.builder()
-          .principal(p)
-          .effect(S3Policies.Effect.ALLOW)
-          .addAction(S3Policies.Object.GET)
-          .addResource("$bucketName/*")
-      )
+      .addStatement(S3StatementBuilder.builder().principal(p).effect(S3Policies.Effect.ALLOW).addAction(S3Policies.Object.GET).addResource("$bucketName/*"))
   }
 
   fun publicReadonlyBucket(bucketName: String): S3BuilderChain {
@@ -67,13 +61,7 @@ object S3PolicyCreator {
           .addAction(S3Policies.Bucket.GET_LOCATION)
           .addResource(bucketName)
       )
-      .addStatement(
-        S3StatementBuilder.builder()
-          .principal(p)
-          .effect(S3Policies.Effect.ALLOW)
-          .addAction(S3Policies.Object.GET)
-          .addResource("$bucketName/*")
-      )
+      .addStatement(S3StatementBuilder.builder().principal(p).effect(S3Policies.Effect.ALLOW).addAction(S3Policies.Object.GET).addResource("$bucketName/*"))
   }
 
   class S3BuilderChain {

@@ -10,8 +10,7 @@ import org.springframework.test.context.TestPropertySource
 
 @SpringBootTest(properties = ["spring.config.name=application-flyway-disabled"])
 @TestPropertySource(locations = ["classpath:application-flyway-disabled.yaml"])
-class FlywayPropertiesOverrideAutoConfigurationDisabledTest :
-  IDatabasePostgresqlContainer {
+class FlywayPropertiesOverrideAutoConfigurationDisabledTest : IDatabasePostgresqlContainer {
   @Resource lateinit var ctx: ApplicationContext
 
   @Test
@@ -24,9 +23,6 @@ class FlywayPropertiesOverrideAutoConfigurationDisabledTest :
     // 其他属性也应为默认值
     kotlin.test.assertEquals(false, flywayProperties.isBaselineOnMigrate)
     kotlin.test.assertEquals(false, flywayProperties.isOutOfOrder)
-    kotlin.test.assertEquals(
-      listOf("classpath:db/migration"),
-      flywayProperties.locations,
-    )
+    kotlin.test.assertEquals(listOf("classpath:db/migration"), flywayProperties.locations)
   }
 }

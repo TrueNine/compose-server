@@ -8,6 +8,4 @@ import org.springframework.context.annotation.ComponentScan
  * @author TrueNine
  * @since 2022-10-28
  */
-@ComponentScan("net.yan100.compose.oss.minio.autoconfig")
-@EnableConfigurationProperties(MinioProperties::class)
-class AutoConfigEntrance
+@ComponentScan("net.yan100.compose.oss.minio.autoconfig") @EnableConfigurationProperties(MinioProperties::class) class AutoConfigEntrance

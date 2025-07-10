@@ -13,24 +13,12 @@ interface IKeysRepo {
 
   fun basicAesKey(): SecretKeySpec? = null
 
-  fun findRsaKeyPairByName(
-    publicKeyName: String,
-    privateKeyName: String,
-  ): IRsaExtKeyPair? {
-    return RsaExtKeyPair(
-      findRsaPublicKeyByName(publicKeyName)!!,
-      findRsaPrivetKeyByName(privateKeyName)!!,
-    )
+  fun findRsaKeyPairByName(publicKeyName: String, privateKeyName: String): IRsaExtKeyPair? {
+    return RsaExtKeyPair(findRsaPublicKeyByName(publicKeyName)!!, findRsaPrivetKeyByName(privateKeyName)!!)
   }
 
-  fun findEccKeyPairByName(
-    publicKeyName: String,
-    privateKeyName: String,
-  ): IEccExtKeyPair? {
-    return EccExtKeyPair(
-      findEccPublicKeyByName(publicKeyName)!!,
-      findEccPrivateKeyByName(privateKeyName)!!,
-    )
+  fun findEccKeyPairByName(publicKeyName: String, privateKeyName: String): IEccExtKeyPair? {
+    return EccExtKeyPair(findEccPublicKeyByName(publicKeyName)!!, findEccPrivateKeyByName(privateKeyName)!!)
   }
 
   fun findAesSecretByName(name: String): SecretKeySpec? = null

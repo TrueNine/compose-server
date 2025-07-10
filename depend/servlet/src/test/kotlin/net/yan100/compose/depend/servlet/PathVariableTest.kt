@@ -21,9 +21,7 @@ class PathVariableTest {
   @Test
   fun `ensure urlencoded parameter to path variable`() {
     // 直接 url 是不行的
-    mockMvc.get("/test/pathVariable/urlencoded//api/path").andExpect {
-      status { isNotFound() }
-    }
+    mockMvc.get("/test/pathVariable/urlencoded//api/path").andExpect { status { isNotFound() } }
 
     // 不会转义 url encoded
     mockMvc.get("/test/pathVariable/urlencoded/%2Fapi%2Fpath").andExpect {

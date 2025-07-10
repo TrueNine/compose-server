@@ -1,10 +1,10 @@
 package net.yan100.compose.security.crypto
 
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import net.yan100.compose.domain.ISensitivity
 import net.yan100.compose.testtoolkit.log
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 
 class ISensitivityTest {
   abstract class Ab : ISensitivity {

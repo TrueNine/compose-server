@@ -31,11 +31,7 @@ class JsonDeserializerTest {
   @Test
   fun serializeLongToString() {
     val longJsonString = mapper.writeValueAsString(1234567890123451L)
-    assertEquals(
-      "1234567890123451",
-      longJsonString,
-      "正常情况下，未注册 string 则必须转换为 long 数字格式",
-    )
+    assertEquals("1234567890123451", longJsonString, "正常情况下，未注册 string 则必须转换为 long 数字格式")
   }
 
   @Test

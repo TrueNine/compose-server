@@ -16,7 +16,5 @@ private const val PREFIX = "compose.schedule"
 data class XxlJobAutoConfigurationProperties(
   var adminAddress: String = "http://localhost/xxl-job-admin",
   var accessToken: String = "default_token",
-  @NestedConfigurationProperty
-  var executor: XxlJobExecutorAutoConfigurationProperties =
-    XxlJobExecutorAutoConfigurationProperties(),
+  @NestedConfigurationProperty var executor: XxlJobExecutorAutoConfigurationProperties = XxlJobExecutorAutoConfigurationProperties(),
 )

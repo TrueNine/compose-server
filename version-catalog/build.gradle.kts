@@ -9,9 +9,7 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-repositories {
-  mavenCentral()
-}
+repositories { mavenCentral() }
 
 java {
   val jv = JavaVersion.VERSION_17
@@ -43,11 +41,7 @@ dependencies {
   }
 }
 
-val skipGroups = listOf(
-  "org.jetbrains.kotlin",
-  "org.springframework",
-  "com.google.devtools"
-)
+val skipGroups = listOf("org.jetbrains.kotlin", "org.springframework", "com.google.devtools")
 
 fun isNonStable(version: ModuleComponentIdentifier): Boolean {
   if (skipGroups.any { version.group.startsWith(it) }) {
@@ -56,6 +50,7 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
   val nonStableKeywords = listOf("alpha", "beta", "rc", "cr", "m", "eap", "dev", "snapshot")
   return nonStableKeywords.any { version.version.contains(it, true) }
 }
+
 // https://github.com/ben-manes/gradle-versions-plugin
 /*tasks.withType<DependencyUpdatesTask> {
   rejectVersionIf {
@@ -63,10 +58,12 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
   }
 }*/
 
-description = """
+description =
+  """
 Version catalog module for managing and publishing dependency versions across the project ecosystem.
 Provides centralized version management and dependency update capabilities with automated version checking.
-""".trimIndent()
+"""
+    .trimIndent()
 
 // https://github.com/ben-manes/gradle-versions-plugin
 catalog { versionCatalog { from(files("../gradle/libs.versions.toml")) } }

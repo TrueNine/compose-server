@@ -40,15 +40,8 @@ class JacksonAutoConfiguration {
     log.debug("jackson 自动配置中...")
   }
 
-  private fun customize(
-    builder: Jackson2ObjectMapperBuilder,
-    customizers: List<Jackson2ObjectMapperBuilderCustomizer>,
-  ) {
-    log.debug(
-      "start customizing jackson,builder: {}, customizers: {}",
-      builder,
-      customizers,
-    )
+  private fun customize(builder: Jackson2ObjectMapperBuilder, customizers: List<Jackson2ObjectMapperBuilderCustomizer>) {
+    log.debug("start customizing jackson,builder: {}, customizers: {}", builder, customizers)
     for (customizer in customizers) {
       customizer.customize(builder)
     }
@@ -61,10 +54,7 @@ class JacksonAutoConfiguration {
     applicationContext: ApplicationContext,
     customizers: List<Jackson2ObjectMapperBuilderCustomizer>,
   ): Jackson2ObjectMapperBuilder {
-    log.debug(
-      "replace spring web default jackson config, customizers: {}",
-      customizers,
-    )
+    log.debug("replace spring web default jackson config, customizers: {}", customizers)
     val builder = Jackson2ObjectMapperBuilder()
     builder.applicationContext(applicationContext)
     customize(builder, customizers)
@@ -81,8 +71,7 @@ class JacksonAutoConfiguration {
 
   @Bean
   @Primary
-  fun jackson2ObjectMapperBuilderCustomizer():
-    Jackson2ObjectMapperBuilderCustomizer {
+  fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
     log.debug("config jackson custom jackson2ObjectMapperBuilderCustomizer")
     val zoneOffset = ZoneOffset.ofHours(8)
 
@@ -92,25 +81,14 @@ class JacksonAutoConfiguration {
     val javaTimeModule = JavaTimeModule()
 
     return Jackson2ObjectMapperBuilderCustomizer { b ->
-      b.modules(
-        javaTimeModule,
-        kotlinModule,
-        datetimeModuleCustom,
-        kotlinModuleCustom,
-      )
+      b.modules(javaTimeModule, kotlinModule, datetimeModuleCustom, kotlinModuleCustom)
 
       b.timeZone(TimeZone.getTimeZone(zoneOffset))
       b.locale(Locale.US)
       b.simpleDateFormat(DTimer.DATETIME)
       b.defaultViewInclusion(true)
-      b.featuresToEnable(
-        DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
-        DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT,
-      )
-      b.featuresToDisable(
-        SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
-        SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS,
-      )
+      b.featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
+      b.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
       b.serializationInclusion(JsonInclude.Include.NON_NULL)
       b.serializationInclusion(JsonInclude.Include.NON_EMPTY)
       b.serializationInclusion(JsonInclude.Include.NON_ABSENT)
@@ -124,12 +102,8 @@ class JacksonAutoConfiguration {
     private val log = slf4j<JacksonAutoConfiguration>()
   }
 
-  class IgnoreJsonIgnoreAnnotationIntrospector :
-    JacksonAnnotationIntrospector() {
-    override fun findPropertyIgnoralByName(
-      config: MapperConfig<*>?,
-      a: Annotated?,
-    ): JsonIgnoreProperties.Value = JsonIgnoreProperties.Value.empty()
+  class IgnoreJsonIgnoreAnnotationIntrospector : JacksonAnnotationIntrospector() {
+    override fun findPropertyIgnoralByName(config: MapperConfig<*>?, a: Annotated?): JsonIgnoreProperties.Value = JsonIgnoreProperties.Value.empty()
 
     override fun _isIgnorable(a: Annotated?): Boolean = false
 
@@ -138,14 +112,8 @@ class JacksonAutoConfiguration {
     override fun isIgnorableType(ac: AnnotatedClass?): Boolean = false
   }
 
-  class IgnoreIntroPair(
-    primary: AnnotationIntrospector,
-    secondary: AnnotationIntrospector,
-  ) : AnnotationIntrospectorPair(primary, secondary) {
-    override fun findPropertyIgnoralByName(
-      config: MapperConfig<*>?,
-      a: Annotated?,
-    ): JsonIgnoreProperties.Value = JsonIgnoreProperties.Value.empty()
+  class IgnoreIntroPair(primary: AnnotationIntrospector, secondary: AnnotationIntrospector) : AnnotationIntrospectorPair(primary, secondary) {
+    override fun findPropertyIgnoralByName(config: MapperConfig<*>?, a: Annotated?): JsonIgnoreProperties.Value = JsonIgnoreProperties.Value.empty()
 
     override fun hasIgnoreMarker(m: AnnotatedMember?): Boolean = false
 
@@ -162,11 +130,7 @@ class JacksonAutoConfiguration {
         .registerModules(KotlinModule.Builder().build())
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-        .activateDefaultTyping(
-          it.polymorphicTypeValidator,
-          ObjectMapper.DefaultTyping.EVERYTHING,
-          JsonTypeInfo.As.PROPERTY,
-        )
+        .activateDefaultTyping(it.polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.PROPERTY)
       it
     }
   }

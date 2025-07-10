@@ -5,10 +5,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Custom Gradle plugin for Compose Server development workflow automation.
 Provides project configuration, build conventions, and Spring Boot integration for development efficiency.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   compileOnly(gradleApi())

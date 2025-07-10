@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Metadata and annotation processing utilities providing compile-time code generation capabilities.
 Contains custom annotations and processors for enhancing development productivity and code quality.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   implementation(libs.com.fasterxml.jackson.core.jackson.annotations)

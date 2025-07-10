@@ -9,9 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Bean
-import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
 
@@ -26,10 +24,7 @@ import org.springframework.core.env.MapPropertySource
 @AutoConfiguration
 @EnableConfigurationProperties(TestConfigurationProperties::class)
 @ConditionalOnProperty(name = ["compose.testtoolkit.enabled"], havingValue = "true", matchIfMissing = true)
-open class TestConfigurationBean(
-  private val environment: ConfigurableEnvironment,
-  private val properties: TestConfigurationProperties
-) {
+open class TestConfigurationBean(private val environment: ConfigurableEnvironment, private val properties: TestConfigurationProperties) {
 
   private val log: SysLogger = LoggerFactory.getLogger(TestConfigurationBean::class.java)
 
@@ -80,39 +75,25 @@ open class TestConfigurationBean(
     log.trace("creating test environment post processor")
     return TestEnvironmentPostProcessor()
   }
-
-
 }
 
-/**
- * # 测试工具包配置属性
- */
+/** # 测试工具包配置属性 */
 @ConfigurationProperties(prefix = "compose.testtoolkit")
 data class TestConfigurationProperties(
-  /**
-   * 是否启用测试配置
-   */
+  /** 是否启用测试配置 */
   val enabled: Boolean = true,
 
-  /**
-   * 是否关闭条件评估报告
-   */
+  /** 是否关闭条件评估报告 */
   val disableConditionEvaluationReport: Boolean = true,
 
-  /**
-   * 是否启用虚拟线程
-   */
+  /** 是否启用虚拟线程 */
   val enableVirtualThreads: Boolean = true,
 
-  /**
-   * ANSI 颜色输出模式
-   */
+  /** ANSI 颜色输出模式 */
   val ansiOutputMode: AnsiOutputMode = AnsiOutputMode.ALWAYS,
 
-  /**
-   * 额外的测试属性
-   */
-  val additionalProperties: Map<String, String> = emptyMap()
+  /** 额外的测试属性 */
+  val additionalProperties: Map<String, String> = emptyMap(),
 )
 
 /**
@@ -122,9 +103,7 @@ data class TestConfigurationProperties(
  */
 class TestEnvironmentPostProcessor {
 
-  /**
-   * 获取推荐的测试属性
-   */
+  /** 获取推荐的测试属性 */
   fun getRecommendedTestProperties(): Map<String, String> {
     return mapOf(
       "spring.threads.virtual.enabled" to "true",
@@ -134,16 +113,13 @@ class TestEnvironmentPostProcessor {
       "spring.datasource.initialization-mode" to "never",
       "spring.test.database.replace" to "none",
       "logging.level.org.springframework.web" to "DEBUG",
-      "logging.level.org.springframework.security" to "DEBUG"
+      "logging.level.org.springframework.security" to "DEBUG",
     )
   }
 
-  /**
-   * 检查是否为测试环境
-   */
+  /** 检查是否为测试环境 */
   fun isTestEnvironment(environment: ConfigurableEnvironment): Boolean {
     val activeProfiles = environment.activeProfiles
-    return activeProfiles.any { it.contains("test") } ||
-      environment.getProperty("spring.profiles.active", "").contains("test")
+    return activeProfiles.any { it.contains("test") } || environment.getProperty("spring.profiles.active", "").contains("test")
   }
-} 
+}

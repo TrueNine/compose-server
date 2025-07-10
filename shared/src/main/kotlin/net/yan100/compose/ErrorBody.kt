@@ -1,7 +1,7 @@
 package net.yan100.compose
 
-import net.yan100.compose.typing.HttpStatusTyping
 import java.io.Serializable
+import net.yan100.compose.typing.HttpStatusTyping
 
 /**
  * 响应错误消息
@@ -26,12 +26,7 @@ class ErrorBody private constructor() : Serializable {
   companion object {
     @JvmStatic
     @JvmOverloads
-    fun failedBy(
-      msg: String? = null,
-      code: Int? = null,
-      alt: String? = null,
-      errMap: MutableMap<String, String>? = null,
-    ): ErrorBody {
+    fun failedBy(msg: String? = null, code: Int? = null, alt: String? = null, errMap: MutableMap<String, String>? = null): ErrorBody {
       return ErrorBody().apply {
         this.code = code
         this.msg = msg
@@ -42,11 +37,7 @@ class ErrorBody private constructor() : Serializable {
 
     @JvmStatic
     fun failedByHttpStatus(messages: HttpStatusTyping): ErrorBody {
-      return failedBy(
-        msg = messages.message,
-        code = messages.code,
-        alt = messages.alert,
-      )
+      return failedBy(msg = messages.message, code = messages.code, alt = messages.alert)
     }
   }
 }

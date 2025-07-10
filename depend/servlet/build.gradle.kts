@@ -3,10 +3,12 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Servlet API integration and web application utilities for Spring Boot applications.
 Provides servlet containers, WebSocket support, and web application auto-configuration.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(libs.org.springframework.boot.spring.boot.starter.web)

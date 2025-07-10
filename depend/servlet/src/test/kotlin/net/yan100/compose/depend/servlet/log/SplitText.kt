@@ -26,18 +26,10 @@ class SplitText {
 
   @Test
   fun `read log file and split`() {
-    val resource =
-      SplitText::class
-        .java
-        .classLoader
-        .getResourceAsStream("test-split-log.txt")!!
+    val resource = SplitText::class.java.classLoader.getResourceAsStream("test-split-log.txt")!!
     val reader = BufferedReader(InputStreamReader(resource))
-    val datetimeFormatter =
-      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-    val pattern =
-      Pattern.compile(
-        "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}) \\[(.*?)\\] (\\w+) (.*)"
-      )
+    val datetimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+    val pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}) \\[(.*?)\\] (\\w+) (.*)")
     val logs = mutableListOf<MDCLogData>()
     var lastData: MDCLogData? = null
 

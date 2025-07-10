@@ -10,13 +10,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@EnableConfigurationProperties(
-  net.yan100.compose.security.properties.JwtProperties::class
-)
-class JwtVerifierAutoConfiguration(
-  private val jp: net.yan100.compose.security.properties.JwtProperties,
-  private val kr: IKeysRepo,
-) {
+@EnableConfigurationProperties(net.yan100.compose.security.properties.JwtProperties::class)
+class JwtVerifierAutoConfiguration(private val jp: net.yan100.compose.security.properties.JwtProperties, private val kr: IKeysRepo) {
   @Bean
   @ConditionalOnMissingBean(value = [JwtVerifier::class, JwtIssuer::class])
   fun jwtVerifier(mapper: ObjectMapper): JwtVerifier {

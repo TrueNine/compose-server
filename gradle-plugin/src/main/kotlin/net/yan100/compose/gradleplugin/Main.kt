@@ -10,11 +10,7 @@ import org.gradle.kotlin.dsl.create
 
 class Main : Plugin<Project> {
   override fun apply(project: Project) {
-    val cfg =
-      project.extensions.create<ConfigEntrance>(
-        ConfigEntrance.DSL_NAME,
-        project,
-      )
+    val cfg = project.extensions.create<ConfigEntrance>(ConfigEntrance.DSL_NAME, project)
 
     if (cfg.gradleGenerator.enabled) {
       val gradleGenerator = GradleGenerator(project, cfg.gradleGenerator)

@@ -1,6 +1,9 @@
 package net.yan100.compose.security.sensitive
 
 import jakarta.annotation.Resource
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 import net.yan100.compose.security.autoconfig.SensitiveResultResponseBodyAdvice
 import net.yan100.compose.security.controller.SensitiveController
 import net.yan100.compose.testtoolkit.annotations.SpringServletTest
@@ -8,9 +11,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 @SpringServletTest
 class SensitiveTest {
@@ -28,10 +28,7 @@ class SensitiveTest {
     assertNotNull(mockMvc)
     assertNotNull(controller)
     assertNotNull(sensitive)
-    mockMvc =
-      MockMvcBuilders.standaloneSetup(controller)
-        .setControllerAdvice(sensitive)
-        .build()
+    mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(sensitive).build()
   }
 
   // TODO 补齐测试用例

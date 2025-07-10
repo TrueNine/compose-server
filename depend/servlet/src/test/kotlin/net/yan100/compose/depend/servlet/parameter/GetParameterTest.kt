@@ -27,10 +27,7 @@ class GetParameterTest {
 
   @Test
   fun `URI参数编码 应正确编码逗号分隔字符串`() {
-    val queryParam =
-      listOf("1,2,3", "1", "rre").joinToString(",") {
-        URLEncoder.QUERY.encode(it, Charsets.UTF_8)
-      }
+    val queryParam = listOf("1,2,3", "1", "rre").joinToString(",") { URLEncoder.QUERY.encode(it, Charsets.UTF_8) }
     assertEquals("1%2C2%2C3,1,rre", queryParam)
   }
 
@@ -42,12 +39,7 @@ class GetParameterTest {
     }
     mockMvc
       .get("/test/getParameter_test/strList") {
-        queryParam(
-          "list",
-          listOf("1,2,3", "1", "rre").joinToString(",") {
-            URLEncoder.QUERY.encode(it, Charsets.UTF_8)
-          },
-        )
+        queryParam("list", listOf("1,2,3", "1", "rre").joinToString(",") { URLEncoder.QUERY.encode(it, Charsets.UTF_8) })
       }
       .andExpect {
         content {
@@ -58,9 +50,7 @@ class GetParameterTest {
       }
 
     mockMvc
-      .get("/test/getParameter_test/strList") {
-        queryParam("list", "1,2,3,4,5,6")
-      }
+      .get("/test/getParameter_test/strList") { queryParam("list", "1,2,3,4,5,6") }
       .andExpect {
         content { json("""["1", "2", "3", "4", "5", "6"]""") }
         status { isOk() }
@@ -160,14 +150,11 @@ class GetParameterTest {
 
     @GetMapping("nonAnnotation") fun nonAnnotation(dto: Dto): Dto = dto
 
-    @GetMapping("requestParam")
-    fun requestParam(@RequestParam dto: Dto): Dto = dto
+    @GetMapping("requestParam") fun requestParam(@RequestParam dto: Dto): Dto = dto
 
-    @GetMapping("nonAnnotationDataClass")
-    fun nonAnnotationDataClass(dto: DataClassDto) = dto
+    @GetMapping("nonAnnotationDataClass") fun nonAnnotationDataClass(dto: DataClassDto) = dto
 
-    @GetMapping("strList")
-    fun inputStringList(@RequestParam list: List<String>): List<String> = list
+    @GetMapping("strList") fun inputStringList(@RequestParam list: List<String>): List<String> = list
   }
 
   /** 边界用例：strList参数为空 */
@@ -210,33 +197,22 @@ class GetParameterTest {
   /** 异常用例：nonAnnotationDataClass缺少参数 */
   @Test
   fun `无注解参数 DataClass 只传age 不传name 返回DataClassDto name为null`() {
-    mockMvc
-      .get("/test/getParameter_test/nonAnnotationDataClass?age=18")
-      .andExpect {
-        status { isOk() }
-        content { json("""{"name":null,"age":18}""") }
-      }
+    mockMvc.get("/test/getParameter_test/nonAnnotationDataClass?age=18").andExpect {
+      status { isOk() }
+      content { json("""{"name":null,"age":18}""") }
+    }
   }
 
   /** 异常用例：nonAnnotationDataClass参数为非法类型 */
   @Test
   fun `无注解参数 DataClass 传递非法类型参数 返回400`() {
-    mockMvc
-      .get(
-        "/test/getParameter_test/nonAnnotationDataClass?name=abc&age=notanumber"
-      )
-      .andExpect { status { isBadRequest() } }
+    mockMvc.get("/test/getParameter_test/nonAnnotationDataClass?name=abc&age=notanumber").andExpect { status { isBadRequest() } }
   }
 
   /** 异常用例：requestParam缺少部分参数 */
   @Test
   fun `@RequestParam注解 只传name 不传age 抛出MissingServletRequestParameterException`() {
-    val ex =
-      mockMvc
-        .get("/test/getParameter_test/requestParam?name=abc")
-        .andExpect { status { isEqualTo(400) } }
-        .andReturn()
-        .resolvedException
+    val ex = mockMvc.get("/test/getParameter_test/requestParam?name=abc").andExpect { status { isEqualTo(400) } }.andReturn().resolvedException
     assertNotNull(ex)
     assertIs<MissingServletRequestParameterException>(ex)
   }
@@ -244,8 +220,6 @@ class GetParameterTest {
   /** 异常用例：requestParam参数类型错误 */
   @Test
   fun `@RequestParam注解 age为非法类型 抛出400`() {
-    mockMvc
-      .get("/test/getParameter_test/requestParam?name=abc&age=notanumber")
-      .andExpect { status { isBadRequest() } }
+    mockMvc.get("/test/getParameter_test/requestParam?name=abc&age=notanumber").andExpect { status { isBadRequest() } }
   }
 }

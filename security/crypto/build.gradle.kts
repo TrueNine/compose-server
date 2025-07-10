@@ -1,12 +1,14 @@
-plugins { 
+plugins {
   id("buildlogic.kotlinspring-conventions")
   id("buildlogic.spotless-conventions")
 }
 
-description = """
+description =
+  """
 Cryptographic utilities and security functions using Spring Security and BouncyCastle.
 Provides encryption/decryption, hashing, digital signatures, and secure random number generation.
-""".trimIndent()
+"""
+    .trimIndent()
 
 dependencies {
   api(libs.org.springframework.security.spring.security.crypto)

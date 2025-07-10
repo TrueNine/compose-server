@@ -44,11 +44,7 @@ class TencentSmsTest {
     assertTrue { statusSet.size > 0 }
     assertNotNull(res.requestId)
     statusSet.forEach {
-      assertNotEquals(
-        it.code,
-        "FailedOperation.SignatureIncorrectOrUnapproved",
-        "签名不正确或未审核通过",
-      )
+      assertNotEquals(it.code, "FailedOperation.SignatureIncorrectOrUnapproved", "签名不正确或未审核通过")
       assertContains(it.code, "Ok")
     }
   }

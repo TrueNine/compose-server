@@ -8,10 +8,7 @@ import net.yan100.compose.Pq
 import net.yan100.compose.domain.IPageParam
 
 class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
-  override fun deserialize(
-    p: JsonParser?,
-    ctxt: DeserializationContext?,
-  ): IPageParam? {
+  override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): IPageParam? {
     // 检查 JsonParser 是否为空
     if (p == null) return null
 
@@ -43,24 +40,16 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
     }
 
     // 检查是否有足够信息构建结果
-    return if (offset == null && pageSize == null) null
-    else Pq[offset, pageSize, unPage]
+    return if (offset == null && pageSize == null) null else Pq[offset, pageSize, unPage]
   }
 
   // 扩展函数：安全解析 Long 值
-  private fun JsonParser.longValueOrNull(): Long? =
-    if (currentToken.isNumeric) longValue else null
+  private fun JsonParser.longValueOrNull(): Long? = if (currentToken.isNumeric) longValue else null
 
   // 扩展函数：安全解析 Int 值
-  private fun JsonParser.intValueOrNull(): Int? =
-    if (currentToken.isNumeric) intValue else null
+  private fun JsonParser.intValueOrNull(): Int? = if (currentToken.isNumeric) intValue else null
 
   // 扩展函数：安全解析 Boolean 值
   private fun JsonParser.booleanValueOrNull(): Boolean? =
-    if (
-      currentToken == JsonToken.VALUE_TRUE ||
-        currentToken == JsonToken.VALUE_FALSE
-    )
-      booleanValue
-    else null
+    if (currentToken == JsonToken.VALUE_TRUE || currentToken == JsonToken.VALUE_FALSE) booleanValue else null
 }

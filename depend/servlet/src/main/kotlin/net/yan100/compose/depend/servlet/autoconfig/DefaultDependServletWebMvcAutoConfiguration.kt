@@ -9,17 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @Import(IPageParamLikeArgumentResolver::class)
-class DefaultDependServletWebMvcAutoConfiguration(
-  private val iPageParamLikeArgumentResolver: IPageParamLikeArgumentResolver
-) : WebMvcConfigurer {
+class DefaultDependServletWebMvcAutoConfiguration(private val iPageParamLikeArgumentResolver: IPageParamLikeArgumentResolver) : WebMvcConfigurer {
   companion object {
-    @JvmStatic
-    private val log = slf4j<DefaultDependServletWebMvcAutoConfiguration>()
+    @JvmStatic private val log = slf4j<DefaultDependServletWebMvcAutoConfiguration>()
   }
 
-  override fun addArgumentResolvers(
-    resolvers: MutableList<HandlerMethodArgumentResolver?>
-  ) {
+  override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver?>) {
     super.addArgumentResolvers(resolvers)
     resolvers.add(iPageParamLikeArgumentResolver)
     log.trace("addArgumentResolvers: {}", resolvers)

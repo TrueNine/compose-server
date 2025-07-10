@@ -7,8 +7,4 @@ import java.lang.annotation.Inherited
  *
  * @see [net.yan100.compose.domain.sensitive.ISensitivity]
  */
-@Inherited
-@Retention
-@MustBeDocumented
-@Target(AnnotationTarget.FUNCTION)
-annotation class SensitiveResponse
+@Inherited @Retention @MustBeDocumented @Target(AnnotationTarget.FUNCTION) annotation class SensitiveResponse

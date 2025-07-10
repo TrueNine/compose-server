@@ -5,16 +5,14 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.SourceSetContainer
 
-open class GradleProjectDelegator(project: Project) :
-  Project by project, ExtensionAware {
+open class GradleProjectDelegator(project: Project) : Project by project, ExtensionAware {
   val isRootProject: Boolean
     get() = null == parent && project == rootProject
 
   val sourceSets
     get() = extensions.getByName("sourceSets") as SourceSetContainer
 
-  fun sourceSets(configure: Action<SourceSetContainer>) =
-    extensions.configure("sourceSets", configure)
+  fun sourceSets(configure: Action<SourceSetContainer>) = extensions.configure("sourceSets", configure)
 
   val mainResources
     get() = sourceSets.findByName("main")?.resources
@@ -26,8 +24,7 @@ open class GradleProjectDelegator(project: Project) :
   val projectConfig = ProjectConfig(this.project)
 
   inner class ProjectConfig(private val project: Project) : Project by project {
-    val configDir =
-      rootProject.layout.projectDirectory.dir(Constant.Config.CONFIG_DIR)
+    val configDir = rootProject.layout.projectDirectory.dir(Constant.Config.CONFIG_DIR)
     val licenseMetaFile = configDir.file(Constant.Config.LICENSE_META)
   }
 }

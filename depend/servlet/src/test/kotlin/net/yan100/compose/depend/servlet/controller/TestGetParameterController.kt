@@ -19,11 +19,9 @@ class TestGetParameterController {
 
   @GetMapping("nonAnnotation") fun nonAnnotation(dto: Dto): Dto = dto
 
-  @GetMapping("requestParam")
-  fun requestParam(@RequestParam dto: Dto): Dto = dto
+  @GetMapping("requestParam") fun requestParam(@RequestParam dto: Dto): Dto = dto
 
-  @GetMapping("nonAnnotationDataClass")
-  fun nonAnnotationDataClass(dto: DataClassDto) = dto
+  @GetMapping("nonAnnotationDataClass") fun nonAnnotationDataClass(dto: DataClassDto) = dto
 
   @GetMapping("strList")
   fun inputStringList(@RequestParam list: List<String>): List<String> {

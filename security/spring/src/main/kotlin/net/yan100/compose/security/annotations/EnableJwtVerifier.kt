@@ -1,8 +1,8 @@
 package net.yan100.compose.security.annotations
 
+import java.lang.annotation.Inherited
 import net.yan100.compose.security.autoconfig.JwtVerifierAutoConfiguration
 import org.springframework.context.annotation.Import
-import java.lang.annotation.Inherited
 
 /**
  * 启动 jwt 验证客户端

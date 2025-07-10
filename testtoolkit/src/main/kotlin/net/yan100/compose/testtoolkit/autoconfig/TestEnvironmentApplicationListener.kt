@@ -18,7 +18,7 @@ class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnviro
 
   override fun onApplicationEvent(event: ApplicationEnvironmentPreparedEvent) {
     val environment = event.environment
-    
+
     // 检查是否启用测试工具包
     val enabled = environment.getProperty("compose.testtoolkit.enabled", Boolean::class.java, true)
     if (!enabled) {
@@ -31,15 +31,9 @@ class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnviro
     val testProperties = mutableMapOf<String, Any>()
 
     // 获取配置属性
-    val disableConditionEvaluationReport = environment.getProperty(
-      "compose.testtoolkit.disable-condition-evaluation-report", Boolean::class.java, true
-    )
-    val enableVirtualThreads = environment.getProperty(
-      "compose.testtoolkit.enable-virtual-threads", Boolean::class.java, true
-    )
-    val ansiOutputMode = environment.getProperty(
-      "compose.testtoolkit.ansi-output-mode", String::class.java, "always"
-    )
+    val disableConditionEvaluationReport = environment.getProperty("compose.testtoolkit.disable-condition-evaluation-report", Boolean::class.java, true)
+    val enableVirtualThreads = environment.getProperty("compose.testtoolkit.enable-virtual-threads", Boolean::class.java, true)
+    val ansiOutputMode = environment.getProperty("compose.testtoolkit.ansi-output-mode", String::class.java, "always")
 
     // 关闭条件评估报告和 banner
     if (disableConditionEvaluationReport) {
@@ -67,4 +61,4 @@ class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnviro
       log.debug("added {} early properties", testProperties.size)
     }
   }
-} 
+}

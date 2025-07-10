@@ -1,6 +1,9 @@
 package net.yan100.compose.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+import kotlin.test.assertNotNull
 import net.yan100.compose.security.crypto.FileKeyRepo
 import net.yan100.compose.security.crypto.Keys
 import net.yan100.compose.security.crypto.PemFormat
@@ -9,9 +12,6 @@ import net.yan100.compose.security.jwt.JwtVerifier
 import net.yan100.compose.security.jwt.consts.IssuerParam
 import net.yan100.compose.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test
-import java.time.Duration
-import java.time.temporal.ChronoUnit
-import kotlin.test.assertNotNull
 
 class FileKeyRepoTest {
 
@@ -68,12 +68,7 @@ class FileKeyRepoTest {
         .contentDecryptKey(e.privateKey)
         .build()
 
-    val ver =
-      JwtVerifier.createVerifier()
-        .serializer(ObjectMapper())
-        .contentDecryptKey(e.privateKey)
-        .signatureVerifyKey(s.publicKey)
-        .build()
+    val ver = JwtVerifier.createVerifier().serializer(ObjectMapper()).contentDecryptKey(e.privateKey).signatureVerifyKey(s.publicKey).build()
 
     val issToken =
       iss.issued(
@@ -82,14 +77,7 @@ class FileKeyRepoTest {
           subjectObj = "3" to "4"
         }
       )
-    val res =
-      ver.verify(
-        VerifierParam(
-          issToken,
-          subjectTargetType = Any::class.java,
-          encryptDataTargetType = Any::class.java,
-        )
-      )
+    val res = ver.verify(VerifierParam(issToken, subjectTargetType = Any::class.java, encryptDataTargetType = Any::class.java))
     println(res?.subject)
     println(res?.decryptedData)
   }

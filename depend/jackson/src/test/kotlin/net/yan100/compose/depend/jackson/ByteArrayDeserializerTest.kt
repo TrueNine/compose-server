@@ -15,10 +15,7 @@ class ByteArrayDeserializerTest {
     @Resource set
 
   lateinit var map: ObjectMapper
-    @Resource(
-      name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME
-    )
-    set
+    @Resource(name = JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) set
 
   class S {
     var a: String? = null
@@ -56,10 +53,7 @@ class ByteArrayDeserializerTest {
     val ba = map.readValue(json, S::class.java)
     log.info("ba: {}", ba)
 
-    assertEquals(
-      "{\"@class\":\"net.yan100.compose.depend.jackson.ByteArrayDeserializerTest\$S\",\"a\":\"a\",\"b\":[\"[B\",\"AQABAAEA\"]}",
-      json,
-    )
+    assertEquals("{\"@class\":\"net.yan100.compose.depend.jackson.ByteArrayDeserializerTest\$S\",\"a\":\"a\",\"b\":[\"[B\",\"AQABAAEA\"]}", json)
     assertEquals(ba.a, ab.a)
     assertContentEquals(ba.b, ab.b)
   }

@@ -57,9 +57,7 @@ class FunctionExistenceAndCallTest : IDatabasePostgresqlContainer {
   @Test
   @Transactional
   fun `所有函数都能被调用`() {
-    jdbcTemplate.execute(
-      "create table if not exists test_table(id bigint primary key)"
-    )
+    jdbcTemplate.execute("create table if not exists test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select rm_base_struct('test_table')")
     jdbcTemplate.execute("select all_to_nullable('test_table')")

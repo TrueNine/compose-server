@@ -1,10 +1,10 @@
 package net.yan100.compose.security.crypto
 
-import net.yan100.compose.consts.IRegexes
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
+import net.yan100.compose.consts.IRegexes
 
 class IBase64Test {
   private val metaText = "这是一段测试字符串"
@@ -30,8 +30,6 @@ class IBase64Test {
     val r = IBase64.encodeToByte(metaText.toByteArray())
     assertNotEquals(r, metaText.toByteArray(), "没有进行编码")
     assertEquals(cipherText, r.toString(Charsets.UTF_8), "编码结果不正确")
-    assertTrue("出现非 base64 字符") {
-      IRegexes.BASE_64.toRegex().matches(r.toString(Charsets.UTF_8))
-    }
+    assertTrue("出现非 base64 字符") { IRegexes.BASE_64.toRegex().matches(r.toString(Charsets.UTF_8)) }
   }
 }
