@@ -104,17 +104,32 @@ class TestcontainersVerificationTest {
         val mountFile = MountableFile.forHostPath(tempFile.absolutePath)
         container.copyFileToContainer(mountFile, "/tmp/test-file.txt")
 
-        // 验证文件内容 - 使用 try-catch 处理可能的 null 退出码问题
-        try {
-          val result = container.execInContainer("cat", "/tmp/test-file.txt")
-          assertEquals(testContent, result.stdout.trim(), "文件内容应该匹配")
-        } catch (e: NullPointerException) {
-          // 如果遇到退出码为 null 的问题，尝试重新执行命令
-          log.warn("执行命令时遇到退出码为 null 的问题，尝试重新执行: ${e.message}")
-          Thread.sleep(100) // 短暂等待
-          val retryResult = container.execInContainer("sh", "-c", "cat /tmp/test-file.txt")
-          assertEquals(testContent, retryResult.stdout.trim(), "文件内容应该匹配")
+        // 验证文件内容 - 使用重试机制处理可能的 null 退出码问题
+        var retryCount = 0
+        val maxRetries = 3
+        var lastException: Exception? = null
+
+        while (retryCount < maxRetries) {
+          try {
+            val result = container.execInContainer("cat", "/tmp/test-file.txt")
+            assertEquals(testContent, result.stdout.trim(), "文件内容应该匹配")
+            return // 成功执行，退出测试
+          } catch (e: NullPointerException) {
+            lastException = e
+            retryCount++
+            log.warn("执行命令时遇到退出码为 null 的问题，第 $retryCount 次重试: ${e.message}")
+
+            if (retryCount < maxRetries) {
+              Thread.sleep((200 * retryCount).toLong()) // 递增等待时间
+            }
+          } catch (e: Exception) {
+            // 其他异常直接抛出
+            throw e
+          }
         }
+
+        // 如果重试都失败了，抛出最后一个异常
+        throw AssertionError("执行命令失败，已重试 $maxRetries 次", lastException)
       }
   }
 
