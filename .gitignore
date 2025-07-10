@@ -69,10 +69,5 @@ logs
 ### publish gpg ###
 /private.gpg
 
-### AI Coding ###
-.lingma/
-.cursor/
-.cursorignore
-
 ### Customs ###
 TODO.*

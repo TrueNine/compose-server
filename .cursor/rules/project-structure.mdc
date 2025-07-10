@@ -1,0 +1,60 @@
+---
+alwaysApply: true
+description: Compose Server 项目结构和模块化设计指南
+---
+
+# Compose Server 项目结构指南
+
+## 项目概述
+Compose Server 是一个基于 Spring Boot 和 Kotlin 的多模块快速开发框架，采用模块化设计。
+
+## 核心技术栈
+- **语言**: Kotlin
+- **框架**: Spring Boot 
+- **构建工具**: Gradle (Kotlin DSL)
+- **ORM**: Jimmer
+- **项目管理**: 多模块架构
+
+## 主要模块结构
+
+### 核心模块
+- `shared`: 共享代码和工具类
+- `bom`: 依赖管理模块
+- `meta`: 元数据和配置
+- `gradle-plugin`: 自定义 Gradle 插件
+- `version-catalog`: 版本目录管理
+
+### 业务模块
+- `pay`: 支付相关功能
+- `sms`: 短信服务 (tencent, shared)
+- `mcp`: MCP 相关功能 (shared, langchain4j)
+- `oss`: 对象存储服务 (shared, minio, aliyun-oss, huawei-obs)
+- `rds`: 关系数据库服务 (shared, crud, jimmer-ext-postgres, flyway-migration-postgresql)
+- `data`: 数据采集 (crawler, extract)
+- `security`: 安全相关 (spring, oauth2, crypto)
+
+### 工具模块
+- `testtoolkit`: 测试工具集
+- `cacheable`: 缓存功能
+- `depend`: 依赖处理 (servlet, paho, http-exchange, jackson, springdoc-openapi, xxl-job)
+- `ksp`: Kotlin Symbol Processing (plugin, shared)
+
+## 构建文件结构
+- [build.gradle.kts](mdc:build.gradle.kts): 根项目构建配置
+- [settings.gradle.kts](mdc:settings.gradle.kts): 项目设置和模块定义
+- [gradle.properties](mdc:gradle.properties): Gradle 属性配置
+- `build-logic/`: 构建逻辑和约定插件
+- `gradle/libs.versions.toml`: 版本目录文件
+
+## 文档和配置
+- [README.md](mdc:README.md): 项目说明文档
+- [.editorconfig](mdc:.editorconfig): 编辑器配置
+- [.gitignore](mdc:.gitignore): Git 忽略规则
+- `docs/`: 项目文档目录
+
+## 开发指南
+当需要添加新功能时，请考虑：
+1. 功能是否适合现有模块
+2. 是否需要创建新的子模块
+3. 模块间的依赖关系
+4. 共享代码应放在 `shared` 模块中
