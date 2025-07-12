@@ -1,8 +1,5 @@
 package io.github.truenine.composeserver.security.autoconfig
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.security.EmptySecurityDetailsService
-import io.github.truenine.composeserver.security.EmptySecurityExceptionAdware
 import io.github.truenine.composeserver.security.SecurityPolicyDefine
 import io.github.truenine.composeserver.security.annotations.EnableRestSecurity
 import io.github.truenine.composeserver.security.spring.security.SecurityExceptionAdware
@@ -37,15 +34,15 @@ class SecurityPolicyBean {
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityDetailsService(desc: SecurityPolicyDefine): SecurityUserDetailsService {
     log.debug("注册 UserDetailsService")
-    return desc.service ?: EmptySecurityDetailsService()
+    return desc.service ?: error("not register UserDetailsService")
   }
 
   @Bean
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
-  fun securityExceptionAdware(policyDefine: SecurityPolicyDefine, manager: ObjectMapper): SecurityExceptionAdware {
+  fun securityExceptionAdware(policyDefine: SecurityPolicyDefine): SecurityExceptionAdware {
     log.debug("注册 ExceptionAdware")
-    return policyDefine.exceptionAdware ?: EmptySecurityExceptionAdware(manager)
+    return policyDefine.exceptionAdware ?: error("not register ExceptionAdware")
   }
 
   @Bean
@@ -97,7 +94,11 @@ class SecurityPolicyBean {
         }
       }
     }
-    httpSecurity.userDetailsService(policyDefine.service ?: EmptySecurityDetailsService())
+    httpSecurity.userDetailsService(
+      policyDefine.service ?: error(
+        ("not register UserDetailsService")
+      )
+    )
 
     // 配置异常处理器
     if (policyDefine.exceptionAdware != null) {
