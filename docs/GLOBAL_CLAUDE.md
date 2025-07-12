@@ -1,68 +1,77 @@
-## Core Working Principles
+# claude code 核心工作规则
 
-## Communication Efficiency Optimization
-- All responses must be concise and direct
-- Prioritize answering core questions, avoid redundant explanations
-- Batch process related tasks to reduce interaction rounds
+## 沟通效率优化
+- 批量处理相关任务以减少交互轮次
+- 将多个相关修改合并为单次操作
 
-## Token Saving Strategies
-- Avoid repeating known information
-- Use concise technical terms instead of lengthy explanations
-- Merge multiple related modifications into single operations
-- Omit obvious step descriptions
-- Use code examples instead of text descriptions
+# 通用代码标准
 
-# General Code Standards
+## 编程原则
+- 函数参数限制在5个以内
+- 禁止硬编码常量，使用配置或常量定义
+- 避免静默失败
 
-## Programming Principles
-- Prefer early return to reduce nesting
-- Single responsibility for functions, limit parameters to 5 or fewer
-- Prohibit hardcoded constants, use configuration or constant definitions
-- Clear error handling, avoid silent failures
+## 代码风格一致性
+- 强制使用大括号包围代码块，即使只有一行代码（防止类似苹果 goto fail 的安全漏洞）
 
-## Code Style Consistency
-- Follow existing project code style and conventions
-- Maintain consistent indentation format with project
-- Organize import statements according to project standards
-- Match comment style with language ecosystem
+## 注释标准
+- API 文档注释使用英文
+- 注释解释"为什么"而非"是什么"
 
-## Security Programming Guidelines
-- Strictly prohibit exposing sensitive information in code (keys, passwords, etc.)
-- Use parameterized queries to prevent injection attacks
-- Input validation and output escaping
-- Permission checks and boundary condition handling
+## 安全编程指南
+- 严格禁止在代码中暴露敏感信息（密钥、密码等）
+- 使用参数化查询防止注入攻击
 
-# Database Standards
+# 语言特定标准
 
-## SQL Writing Standards
-- Use lowercase keywords and identifiers consistently
-- Use snake_case naming convention
-- Must use parameterized queries, strictly prohibit string concatenation
-- Table names and field names should be concise and clear, avoid abbreviations
-- Add comments for important fields
+## SQL
+- 必须使用参数化查询，严格禁止字符串拼接
+- 使用 snake_case 命名约定
 
-# Documentation and Comments
+## Markdown
+- 代码块必须指定语言类型
+- 避免标题层级跳跃
 
-## Comment Standards
-- API documentation comments use English
-- Code logic comments use local language or English
-- Comments explain "why" not "what"
-- Avoid obvious comments
+## Java/Kotlin
+- 强制使用大括号包围所有代码块
+- 优先使用 final（Java）或 val（Kotlin）
+- Kotlin 中使用空安全操作符，避免 !! 操作符
 
-## Document Structure
-- Use flat structure, avoid deep nesting
-- Content should be accurate and concise, eliminate ambiguity
-- Use consistent terminology, avoid synonym confusion
+## Rust 标准
+- 避免使用 unwrap()，使用 expect() 或模式匹配
+- 优先使用迭代器而非索引循环
 
-# Quality Assurance
+## TypeScript 标准
+- 启用严格模式（strict: true）
+- 避免使用 any 类型，使用 unknown 或具体类型
+- 函数参数和返回值必须有类型注解
 
-## Code Review Points
-- Logic correctness and boundary conditions
-- Performance impact and resource usage
-- Security vulnerabilities and data leak risks
-- Code readability and maintainability
+## Vue 标准
+- 使用 Composition API 和 <script setup>
+- Props 定义必须包含类型和默认值
+- 模板中避免复杂表达式，使用计算属性
 
-## Technology Selection Principles
-- Prioritize mature and stable technology solutions
-- Avoid over-engineering and unnecessary complexity
-- Consider team technology stack and maintenance costs
+## Kotlin Script (.kts)
+- 脚本顶层避免复杂逻辑，使用函数封装
+
+# 开发方法论
+
+## TDD (测试驱动开发)
+- 先写失败测试，再写实现代码，最后重构
+- 测试用例必须覆盖边界条件和异常情况
+- 单元测试应独立运行，不依赖外部资源
+- 测试命名应清晰表达测试意图和预期结果
+- 避免测试实现细节，专注测试行为和契约
+
+## DDD + CQRS + EDA
+- 使用统一语言（Ubiquitous Language）进行建模
+- 聚合根维护业务不变性，通过事件发布状态变更
+- 命令和查询严格分离（CQRS）
+- 领域事件驱动业务流程，实现聚合间解耦
+- 事件溯源记录状态变更历史
+
+# 质量保证
+
+## 技术选型原则
+- 避免过度工程和不必要的复杂性
+- 禁止私自引入新的第三方库，必须经过团队评审
