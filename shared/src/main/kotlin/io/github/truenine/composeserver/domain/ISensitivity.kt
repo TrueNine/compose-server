@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.domain
 
-import io.github.truenine.composeserver.bool
 import io.github.truenine.composeserver.meta.annotations.MetaSkipGeneration
 
 /**
@@ -20,6 +19,6 @@ interface ISensitivity {
   fun recordChangedSensitiveData() {}
 
   @MetaSkipGeneration
-  val isChangedToSensitiveData: bool
+  val isChangedToSensitiveData: Boolean
     get() = false
 }

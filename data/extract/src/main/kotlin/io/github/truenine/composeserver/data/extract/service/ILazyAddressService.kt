@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.data.extract.service
 
-import io.github.truenine.composeserver.SysLogger
+import io.github.truenine.composeserver.SystemLogger
 import io.github.truenine.composeserver.consts.IRegexes
 import io.github.truenine.composeserver.data.extract.domain.CnDistrictCode
 import io.github.truenine.composeserver.nonText
@@ -70,7 +70,7 @@ interface ILazyAddressService {
 
   // --- 服务属性 ---
   /** 提供的日志记录器 (可选) */
-  val logger: SysLogger?
+  val logger: SystemLogger?
     get() = null
 
   /**

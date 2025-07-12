@@ -94,11 +94,7 @@ class SecurityPolicyBean {
         }
       }
     }
-    httpSecurity.userDetailsService(
-      policyDefine.service ?: error(
-        ("not register UserDetailsService")
-      )
-    )
+    httpSecurity.userDetailsService(policyDefine.service ?: error(("not register UserDetailsService")))
 
     // 配置异常处理器
     if (policyDefine.exceptionAdware != null) {
