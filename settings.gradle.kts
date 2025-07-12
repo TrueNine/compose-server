@@ -7,9 +7,11 @@ pluginManagement {
   }
 }
 
-rootProject.name = "compose-server"
+plugins { id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0" }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "compose-server"
 
 fun Pair<String, List<String>>.useFile() {
   second.forEach { n ->

@@ -43,7 +43,7 @@ tasks.withType<Jar> {
 testing {
   suites {
     val test by getting(JvmTestSuite::class) {
-      useJUnitJupiter(libs.versions.org.junit.junit5.get())
+      useJUnitJupiter(libs.versions.org.junit.jupiter.get())
     }
   }
 }
