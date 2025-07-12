@@ -15,7 +15,7 @@ tasks.withType<JacocoReport>().configureEach {
   mustRunAfter(tasks.withType<com.diffplug.gradle.spotless.SpotlessTask>())
   
   reports {
-    xml.required.set(true)
+    xml.required.set(false)
     html.required.set(true)
   }
   val mainSrc = listOf("src/main/java", "src/main/kotlin")
