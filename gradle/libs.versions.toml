@@ -49,6 +49,7 @@ org-springframework-modulith = "1.4.1"
 org-springframework-security = "6.5.1"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
+org-awaitility = "4.3.0"
 project = "0.0.5"
 
 [libraries]
@@ -303,6 +304,8 @@ org-testcontainers-postgresql = { module = "org.testcontainers:postgresql", vers
 org-testcontainers-testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "org-testcontainers" }
 org-testcontainers-testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "org-testcontainers" }
 org-testng-testng = { module = "org.testng:testng", version.ref = "org-testng" }
+org-awaitility-awaitility = { module = "org.awaitility:awaitility", version.ref = "org-awaitility" }
+org-awaitility-awaitility-kotlin = { module = "org.awaitility:awaitility-kotlin", version.ref = "org-awaitility" }
 org-xerial-sqlite-jdbc = "org.xerial:sqlite-jdbc:3.50.2.0"
 p6spy-p6spy = "p6spy:p6spy:3.9.1"
 
