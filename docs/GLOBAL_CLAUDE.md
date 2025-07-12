@@ -1,34 +1,68 @@
-# Claude Code 专用 AI 规则（2025-07 版）
+## Core Working Principles
 
-## 通用规范
-- 所有回复必须使用简体中文。
+## Communication Efficiency Optimization
+- All responses must be concise and direct
+- Prioritize answering core questions, avoid redundant explanations
+- Batch process related tasks to reduce interaction rounds
 
-## SQL 规范
-- SQL 语句全部小写（关键字、标识符）。
-- 命名风格统一使用下划线命名法（snake_case）。
-- 严禁拼接 SQL 字符串，必须使用参数化查询，防止 SQL 注入。
-- 表、字段、索引等命名需简洁明了，避免缩写。
-- 禁止在代码中硬编码数据库连接信息，需使用配置文件或安全管理方式。
-- 建议为重要业务表和字段添加注释，便于维护。
+## Token Saving Strategies
+- Avoid repeating known information
+- Use concise technical terms instead of lengthy explanations
+- Merge multiple related modifications into single operations
+- Omit obvious step descriptions
+- Use code examples instead of text descriptions
 
-## 通用代码规范
-- 文档注释必须由英文书写。
-- 优先采用提前返回（early return），减少嵌套。
-- 禁止行尾注释，注释需单独成行。
-- 统一使用 2 空格缩进，仅用空格，不用 Tab。
-- 禁止全量 import，必须显式导入所需内容。
-- 编程语言优先选择编译型语言，避免动态语言，以便尽早发现错误。
-- 应积极采用日志记录方式协助诊断问题，并合理控制日志级别，避免无效或过量日志输出。
+# General Code Standards
 
-## markdown 规范
-- Markdown 文件需扁平、紧凑，严禁嵌套列表。
-- 采用分级标题+扁平条目归类结构，避免多层嵌套，整体风格清晰、紧凑、分组明确。
-- 内容应准确、简明，避免歧义和冗余。
-- 结构应清晰，分组合理，便于查阅。
-- 统一术语和表达风格，避免同义词混用。
-- 注重可读性，适当分段，避免长段落堆砌。
-- 人类以阅读为主，AI 需确保文档对人类友好、易于理解。
+## Programming Principles
+- Prefer early return to reduce nesting
+- Single responsibility for functions, limit parameters to 5 or fewer
+- Prohibit hardcoded constants, use configuration or constant definitions
+- Clear error handling, avoid silent failures
 
-## 依赖与技术规范
-- 仅推荐和采用最新技术，所有建议和代码实现前必须查阅最新官方文档，确保内容为 2025 年及以后主流方案。
-- 禁止试图通过降级依赖版本来解决问题，遇到依赖或兼容性问题时，必须优先查阅最新技术文档或最佳实践，积极采用主流和前沿方案。
+## Code Style Consistency
+- Follow existing project code style and conventions
+- Maintain consistent indentation format with project
+- Organize import statements according to project standards
+- Match comment style with language ecosystem
+
+## Security Programming Guidelines
+- Strictly prohibit exposing sensitive information in code (keys, passwords, etc.)
+- Use parameterized queries to prevent injection attacks
+- Input validation and output escaping
+- Permission checks and boundary condition handling
+
+# Database Standards
+
+## SQL Writing Standards
+- Use lowercase keywords and identifiers consistently
+- Use snake_case naming convention
+- Must use parameterized queries, strictly prohibit string concatenation
+- Table names and field names should be concise and clear, avoid abbreviations
+- Add comments for important fields
+
+# Documentation and Comments
+
+## Comment Standards
+- API documentation comments use English
+- Code logic comments use local language or English
+- Comments explain "why" not "what"
+- Avoid obvious comments
+
+## Document Structure
+- Use flat structure, avoid deep nesting
+- Content should be accurate and concise, eliminate ambiguity
+- Use consistent terminology, avoid synonym confusion
+
+# Quality Assurance
+
+## Code Review Points
+- Logic correctness and boundary conditions
+- Performance impact and resource usage
+- Security vulnerabilities and data leak risks
+- Code readability and maintainability
+
+## Technology Selection Principles
+- Prioritize mature and stable technology solutions
+- Avoid over-engineering and unnecessary complexity
+- Consider team technology stack and maintenance costs
