@@ -4,15 +4,16 @@ import io.github.truenine.composeserver.testtoolkit.log
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
 import org.springframework.core.env.MutablePropertySources
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class TestConfigurationBeanTest {
 
@@ -149,7 +150,9 @@ class TestConfigurationBeanTest {
 
       val postProcessor = testConfigurationBean.testEnvironmentPostProcessor()
 
-      assertTrue(postProcessor is io.github.truenine.composeserver.testtoolkit.autoconfig.TestEnvironmentPostProcessor, "应该创建 TestEnvironmentPostProcessor 实例")
+      // 验证实例不为 null 并且具有预期的功能
+      assertNotNull(postProcessor, "应该创建 TestEnvironmentPostProcessor 实例")
+      assertTrue(postProcessor.getRecommendedTestProperties().isNotEmpty(), "应该提供推荐的测试属性")
 
       log.debug("TestEnvironmentPostProcessor bean creation verified")
     }
