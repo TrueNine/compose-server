@@ -26,7 +26,7 @@ class FileKeyRepo(private val baseDir: String = "keys") : IKeysRepo {
     return if (isPem(a)) PemFormat.parse(a).content else a.base64Decode()
   }
 
-  override fun findRsaPrivetKeyByName(name: String): RSAPrivateKey? {
+  override fun findRsaPrivateKeyByName(name: String): RSAPrivateKey? {
     return Keys.readRsaPrivateKeyByBase64(readBase64(name))
   }
 
