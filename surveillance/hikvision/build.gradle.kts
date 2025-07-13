@@ -8,7 +8,6 @@ dependencies {
   implementation(projects.surveillance.surveillanceShared)
 
   implementation(libs.com.hikvision.ga.artemis.http.client)
-  implementation(libs.com.hikvision.ga.opensource)
 }
 
 description =
