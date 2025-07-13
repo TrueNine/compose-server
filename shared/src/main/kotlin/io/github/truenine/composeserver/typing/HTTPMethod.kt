@@ -1,6 +1,8 @@
 package io.github.truenine.composeserver.typing
 
-enum class HTTPMethod(val methodName: String) : StringTyping {
+import io.github.truenine.composeserver.IStringTyping
+
+enum class HTTPMethod(val methodName: String) : IStringTyping {
   GET("GET"),
   POST("POST"),
   PUT("PUT"),
