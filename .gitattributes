@@ -1,4 +1,6 @@
 /gradlew text eol=lf
 *.bat text eol=crlf
+*.cmd text eol=crlf
+*.sh text eol=lf
 *.jar binary
 * text=auto eol=lf
