@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.depend.servlet.parameter
 
+import io.github.truenine.composeserver.depend.servlet.TestApplication
 import jakarta.annotation.Resource
 import java.nio.charset.StandardCharsets
 import kotlin.test.Test
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @AutoConfigureMockMvc
-@SpringBootTest
+@SpringBootTest(classes = [TestApplication::class])
 @Import(UploadFileParamAssertTest.TestUploadController::class)
 class UploadFileParamAssertTest {
   lateinit var mvc: MockMvc

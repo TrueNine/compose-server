@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet.parameter
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.depend.servlet.TestApplication
 import jakarta.annotation.Resource
 import kotlin.test.*
 import org.apache.catalina.util.URLEncoder
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /** # 验证以何种方式 给 spring boot 传递 get 参数 */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(GetParameterTest.TestGetParameterController::class)
 class GetParameterTest {

@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.depend.servlet.annotations
 
+import io.github.truenine.composeserver.depend.servlet.TestApplication
 import jakarta.annotation.Resource
 import kotlin.test.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -11,7 +12,7 @@ import org.springframework.test.web.servlet.head
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(HeadMappingTest.HeadController::class)
 class HeadMappingTest {
