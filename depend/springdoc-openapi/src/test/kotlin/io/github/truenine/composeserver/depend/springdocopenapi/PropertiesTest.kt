@@ -8,7 +8,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
@@ -33,13 +32,11 @@ import org.springframework.test.context.TestPropertySource
       "compose.depend.springdoc-open-api.jwt-header-info.refresh-token-name=Refresh-Token",
     ]
 )
-@DisplayName("配置属性测试")
 class PropertiesTest {
 
   @Resource lateinit var properties: SpringdocOpenApiProperties
 
   @Test
-  @DisplayName("测试基础配置属性")
   fun `should load basic configuration properties correctly`() {
     with(properties) {
       assertEquals("custom-group", group, "Group should match configuration")
@@ -57,7 +54,6 @@ class PropertiesTest {
   }
 
   @Test
-  @DisplayName("测试作者信息配置")
   fun `should load author info configuration correctly`() {
     with(properties.authorInfo) {
       assertEquals("Custom API", title, "Title should match configuration")
@@ -70,7 +66,6 @@ class PropertiesTest {
   }
 
   @Test
-  @DisplayName("测试 JWT 头信息配置")
   fun `should load JWT header info configuration correctly`() {
     with(properties.jwtHeaderInfo) {
       assertEquals("Authorization", authTokenName, "Auth token name should match configuration")
@@ -79,7 +74,6 @@ class PropertiesTest {
   }
 
   @Test
-  @DisplayName("测试嵌套配置对象")
   fun `should create nested configuration objects correctly`() {
     assertNotNull(properties.authorInfo, "Author info should not be null")
     assertNotNull(properties.jwtHeaderInfo, "JWT header info should not be null")
@@ -90,13 +84,11 @@ class PropertiesTest {
 }
 
 @SpringBootTest(classes = [TestApplication::class])
-@DisplayName("默认配置属性测试")
 class DefaultPropertiesTest {
 
   @Resource lateinit var properties: SpringdocOpenApiProperties
 
   @Test
-  @DisplayName("测试默认配置值")
   fun `should use default configuration values when not specified`() {
     with(properties) {
       assertEquals("default", group, "Default group should be 'default'")
@@ -111,7 +103,6 @@ class DefaultPropertiesTest {
   }
 
   @Test
-  @DisplayName("测试默认作者信息")
   fun `should use default author info when not specified`() {
     with(properties.authorInfo) {
       assertNotNull(title, "Title should have default value")
@@ -121,7 +112,6 @@ class DefaultPropertiesTest {
   }
 
   @Test
-  @DisplayName("测试默认 JWT 头信息")
   fun `should use default JWT header info when not specified`() {
     with(properties.jwtHeaderInfo) {
       assertNotNull(authTokenName, "Auth token name should have default value")

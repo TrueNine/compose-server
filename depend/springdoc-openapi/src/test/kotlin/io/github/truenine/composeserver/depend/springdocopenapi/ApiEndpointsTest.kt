@@ -22,13 +22,11 @@ import org.springframework.test.web.servlet.get
       "compose.depend.springdoc-open-api.author-info.version=1.0.0",
     ]
 )
-@DisplayName("API 端点测试")
 class ApiEndpointsTest {
 
   @Resource lateinit var mockMvc: MockMvc
 
   @Test
-  @DisplayName("测试 Swagger UI 可访问性")
   fun `should access swagger ui successfully`() {
     mockMvc.get("/swagger-ui/index.html").andExpect {
       status { isOk() }
@@ -37,7 +35,6 @@ class ApiEndpointsTest {
   }
 
   @Test
-  @DisplayName("测试 OpenAPI JSON 文档")
   fun `should access openapi json docs successfully`() {
     mockMvc.get("/v3/api-docs").andExpect {
       status { isOk() }
@@ -53,7 +50,6 @@ class ApiEndpointsTest {
   }
 
   @Test
-  @DisplayName("测试分组 API 文档")
   fun `should access grouped api docs successfully`() {
     mockMvc.get("/v3/api-docs/api-test").andExpect {
       status { isOk() }
@@ -80,7 +76,6 @@ class ApiEndpointsTest {
   }
 
   @Test
-  @DisplayName("测试测试控制器端点")
   fun `should access test controller endpoints successfully`() {
     // 测试 hello 端点
     mockMvc.get("/test/hello").andExpect {

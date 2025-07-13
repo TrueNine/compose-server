@@ -30,7 +30,6 @@ import org.springframework.test.context.TestPropertySource
       "compose.depend.springdoc-open-api.jwt-header-info.refresh-token-name=X-Refresh-Token",
     ]
 )
-@DisplayName("OpenAPI 配置测试")
 class OpenApiConfigTest {
 
   @Resource lateinit var openApiDocConfig: OpenApiDocConfig
@@ -42,7 +41,6 @@ class OpenApiConfigTest {
   @Resource lateinit var customOpenApi: OpenAPI
 
   @Test
-  @DisplayName("测试 OpenAPI 配置 Bean 是否正确创建")
   fun `should create OpenAPI config beans correctly`() {
     assertNotNull(openApiDocConfig, "OpenApiDocConfig bean should be created")
     assertNotNull(springdocOpenApiProperties, "SpringdocOpenApiProperties bean should be created")
@@ -51,7 +49,6 @@ class OpenApiConfigTest {
   }
 
   @Test
-  @DisplayName("测试配置属性是否正确加载")
   fun `should load configuration properties correctly`() {
     with(springdocOpenApiProperties) {
       assertEquals("test-api", group, "Group name should match configuration")
@@ -83,7 +80,6 @@ class OpenApiConfigTest {
   }
 
   @Test
-  @DisplayName("测试自定义 OpenAPI 配置")
   fun `should configure custom OpenAPI correctly`() {
     with(customOpenApi.info) {
       assertEquals("Test API Documentation", title, "OpenAPI title should match configuration")
