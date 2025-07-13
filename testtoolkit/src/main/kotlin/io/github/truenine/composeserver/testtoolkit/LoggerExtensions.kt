@@ -1,11 +1,9 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import org.slf4j.LoggerFactory
 import kotlin.reflect.KCallable
-
+import org.slf4j.LoggerFactory
 
 typealias SystemTestLogger = org.slf4j.Logger
-
 
 /** # 测试期间可使用的 日志记录器 */
 inline val <reified T : Any> T.log: SystemTestLogger
