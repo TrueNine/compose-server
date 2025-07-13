@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /** ## 用户信息所属的常规血型 */
 @EnumType(EnumType.Strategy.ORDINAL)
-enum class BloodTyping(v: Int) : IntTyping {
+enum class BloodTyping(v: Int) : IIntTyping {
   /** A型 */
   @EnumItem(ordinal = 1) A(1),
 

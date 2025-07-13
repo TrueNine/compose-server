@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
@@ -11,7 +11,7 @@ import org.babyfish.jimmer.sql.EnumType
  * @since 2023-11-03
  */
 @EnumType(EnumType.Strategy.ORDINAL)
-enum class DisTyping(typ: Int) : IntTyping {
+enum class DisTyping(typ: Int) : IIntTyping {
   /** 视力 */
   @EnumItem(ordinal = 1) EYE(1),
 

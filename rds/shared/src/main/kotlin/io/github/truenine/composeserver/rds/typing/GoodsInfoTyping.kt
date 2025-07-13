@@ -1,13 +1,13 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /** 商品信息分类 */
 @Deprecated("无明确业务类型混入")
 @EnumType(EnumType.Strategy.ORDINAL)
-enum class GoodsInfoTyping(v: Int) : IntTyping {
+enum class GoodsInfoTyping(v: Int) : IIntTyping {
   /** 检索类型 */
   @EnumItem(ordinal = 1) RETRIEVAL(1),
 

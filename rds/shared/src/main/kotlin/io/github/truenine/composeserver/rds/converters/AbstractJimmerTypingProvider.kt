@@ -1,13 +1,13 @@
 package io.github.truenine.composeserver.rds.converters
 
-import io.github.truenine.composeserver.typing.AnyTyping
+import io.github.truenine.composeserver.IAnyTyping
 import java.lang.reflect.Method
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import org.babyfish.jimmer.sql.runtime.AbstractScalarProvider
 
-abstract class AbstractJimmerTypingProvider<T : AnyTyping, S : Any>(ct: KClass<T>, st: KClass<S>) : AbstractScalarProvider<T, S>(ct.java, st.java) {
+abstract class AbstractJimmerTypingProvider<T : IAnyTyping, S : Any>(ct: KClass<T>, st: KClass<S>) : AbstractScalarProvider<T, S>(ct.java, st.java) {
   private val converterCache: MutableMap<Type, Method> = ConcurrentHashMap()
 
   private fun getCallable(type: Type): Method {
