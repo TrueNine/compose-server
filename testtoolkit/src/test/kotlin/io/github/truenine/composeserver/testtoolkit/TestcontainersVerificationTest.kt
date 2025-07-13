@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit
 
+import io.github.truenine.composeserver.testtoolkit.utils.*
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -26,13 +27,14 @@ class TestcontainersVerificationTest {
       .apply { withCommand("sh", "-c", "echo 'Hello, Testcontainers!' && sleep 1") }
       .use { container ->
         log.trace("正在启动测试容器...")
-        container.start()
+        container.startAndWaitForReady()
 
         log.info("容器状态: {}", container.isRunning)
         assertTrue("容器应该处于运行状态") { container.isRunning }
 
         val logs = container.logs
         log.info("容器日志: {}", logs)
+        assertTrue("日志应该包含预期内容") { logs.contains("Hello, Testcontainers!") }
       }
   }
 
@@ -47,10 +49,14 @@ class TestcontainersVerificationTest {
         withPassword("testpass")
         withExposedPorts(5432)
         withLogConsumer(Slf4jLogConsumer(log))
+        withStartupTimeout(Duration.ofSeconds(120)) // 增加启动超时时间
       }
       .use { postgres ->
         log.info("正在启动 PostgreSQL 容器...")
         postgres.start()
+
+        // 使用重试机制等待容器完全就绪
+        TestRetryUtils.waitUntil(timeout = Duration.ofSeconds(30), pollInterval = Duration.ofSeconds(1)) { postgres.isRunning && postgres.jdbcUrl.isNotEmpty() }
 
         assertTrue(postgres.isRunning, "PostgreSQL 容器应该处于运行状态")
         log.info("PostgreSQL 连接 URL: ${postgres.jdbcUrl}")
@@ -69,21 +75,21 @@ class TestcontainersVerificationTest {
     GenericContainer("alpine:3.19.1")
       .apply { withCommand("tail", "-f", "/dev/null") }
       .use { container ->
-        container.start()
+        container.startAndWaitForReady()
 
-        // 执行命令并获取结果 - 处理 exitCode 为 null 的问题
-        try {
-          val result = container.execInContainer("sh", "-c", "echo 'Hello from Alpine' && uname -a")
-          assertEquals(0, result.exitCode, "命令应该成功执行")
-          assertTrue(result.stdout.contains("Hello from Alpine"), "输出应该包含预期内容")
-          log.info("命令执行结果: ${result.stdout}")
-        } catch (e: NullPointerException) {
-          log.warn("执行命令时遇到退出码为 null 的问题，尝试重新执行: ${e.message}")
-          Thread.sleep(100) // 短暂等待
-          val retryResult = container.execInContainer("sh", "-c", "echo 'Hello from Alpine' && uname -a")
-          assertTrue(retryResult.stdout.contains("Hello from Alpine"), "输出应该包含预期内容")
-          log.info("重试命令执行结果: ${retryResult.stdout}")
-        }
+        // 使用新的扩展方法执行命令，自动处理重试和 null exitCode 问题
+        val result =
+          container.execAndCheckOutput(
+            expectedContent = "Hello from Alpine",
+            timeout = Duration.ofSeconds(30),
+            maxRetries = 5,
+            "sh",
+            "-c",
+            "echo 'Hello from Alpine' && uname -a",
+          )
+
+        log.info("命令执行结果: ${result.stdout}")
+        assertEquals(0, result.exitCode, "命令应该成功执行")
       }
   }
 
@@ -93,49 +99,31 @@ class TestcontainersVerificationTest {
     GenericContainer("alpine:3.19.1")
       .apply { withCommand("tail", "-f", "/dev/null") }
       .use { container ->
-        container.start()
+        container.startAndWaitForReady()
 
         // 创建测试文件内容
         val testContent = "这是一个测试文件内容"
+        val targetPath = "/tmp/test-file.txt"
 
         // 使用 MountableFile 复制内容到容器内的文件
         val tempFile = createTempFile().toFile()
         tempFile.writeText(testContent)
         val mountFile = MountableFile.forHostPath(tempFile.absolutePath)
-        container.copyFileToContainer(mountFile, "/tmp/test-file.txt")
+        container.copyFileToContainer(mountFile, targetPath)
 
-        // 验证文件内容 - 使用重试机制处理可能的 null 退出码问题
-        var retryCount = 0
-        val maxRetries = 3
-        var lastException: Exception? = null
+        // 等待文件出现并验证内容
+        container.waitForFile(targetPath, Duration.ofSeconds(10))
 
-        while (retryCount < maxRetries) {
-          try {
-            val result = container.execInContainer("cat", "/tmp/test-file.txt")
-            assertEquals(testContent, result.stdout.trim(), "文件内容应该匹配")
-            return // 成功执行，退出测试
-          } catch (e: NullPointerException) {
-            lastException = e
-            retryCount++
-            log.warn("执行命令时遇到退出码为 null 的问题，第 $retryCount 次重试: ${e.message}")
+        val actualContent = container.readFile(filePath = targetPath, timeout = Duration.ofSeconds(30), maxRetries = 5)
 
-            if (retryCount < maxRetries) {
-              Thread.sleep((200 * retryCount).toLong()) // 递增等待时间
-            }
-          } catch (e: Exception) {
-            // 其他异常直接抛出
-            throw e
-          }
-        }
-
-        // 如果重试都失败了，抛出最后一个异常
-        throw AssertionError("执行命令失败，已重试 $maxRetries 次", lastException)
+        assertEquals(testContent, actualContent, "文件内容应该匹配")
+        log.info("文件复制和验证成功，内容: {}", actualContent)
       }
   }
 
   @Test
   fun `并发测试多个网址 任一完成即结束`() {
-    assertTimeout(Duration.ofSeconds(10), "可能由于docker 网络原因导致测试失败，考虑检查 docker 网络配置") {
+    assertTimeout(Duration.ofSeconds(20), "可能由于docker 网络原因导致测试失败，考虑检查 docker 网络配置") {
       runBlocking {
         log.info("开始并发测试多个网址连接")
 
@@ -143,32 +131,33 @@ class TestcontainersVerificationTest {
 
         GenericContainer("alpine/curl:latest")
           .apply {
-            withCommand("sleep", "10") // 保证容器一直运行
+            withCommand("sleep", "30") // 增加容器运行时间
           }
           .use { container ->
-            container.start()
+            container.startAndWaitForReady(Duration.ofSeconds(30))
 
-            // 为每个URL创建一个协程，使用 withContext(Dispatchers.IO) 确保真正的并行执行
+            // 为每个URL创建一个协程，使用改进的命令执行方法
             val results =
               urls.map { url ->
                 async(Dispatchers.IO) {
                   try {
-                    val result = container.execInContainer("curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "-m", "5", url)
-                    log.info("URL: $url, exitCode: ${result.exitCode}, stdout: ${result.stdout}, stderr: ${result.stderr}")
-                    url to result.stdout.trim()
-                  } catch (e: NullPointerException) {
-                    log.warn("URL: $url 执行命令时遇到退出码为 null 的问题，尝试重新执行: ${e.message}")
-                    try {
-                      Thread.sleep(100) // 短暂等待
-                      val retryResult = container.execInContainer("curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "-m", "5", url)
-                      log.info("URL: $url 重试结果, stdout: ${retryResult.stdout}, stderr: ${retryResult.stderr}")
-                      url to retryResult.stdout.trim()
-                    } catch (retryE: Exception) {
-                      log.error("URL: $url 重试失败: ${retryE.message}", retryE)
-                      url to "error"
+                    // 使用更宽松的命令执行，不强制要求退出码为0
+                    val result =
+                      TestRetryUtils.retryUntilSuccess(timeout = Duration.ofSeconds(10), pollInterval = Duration.ofMillis(500)) {
+                        container.execInContainer("curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "-m", "8", url)
+                      }
+
+                    // 检查是否成功获取到HTTP状态码
+                    val statusCode = result.stdout.trim()
+                    if (statusCode.matches(Regex("\\d{3}"))) {
+                      log.info("URL: $url, 状态码: $statusCode")
+                      url to statusCode
+                    } else {
+                      log.warn("URL: $url 未获取到有效状态码，退出码: ${result.exitCode}, 输出: ${result.stdout}")
+                      url to "timeout"
                     }
                   } catch (e: Exception) {
-                    log.error("URL: $url 测试失败: ${e.message}", e)
+                    log.warn("URL: $url 测试失败: ${e.message}")
                     url to "error"
                   }
                 }

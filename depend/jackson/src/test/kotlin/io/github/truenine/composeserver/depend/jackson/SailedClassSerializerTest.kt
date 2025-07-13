@@ -2,7 +2,6 @@ package io.github.truenine.composeserver.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
-import io.github.truenine.composeserver.i16
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
@@ -13,7 +12,7 @@ class SailedClassSerializerTest {
   val defaultMapper: ObjectMapper = ObjectMapper()
 
   sealed class IpAddress {
-    data class V4(val v1: i16, val v2: i16, val v3: i16, val v4: i16) : IpAddress()
+    data class V4(val v1: Long, val v2: Long, val v3: Long, val v4: Long) : IpAddress()
 
     data class V6(val ip: String) : IpAddress()
   }

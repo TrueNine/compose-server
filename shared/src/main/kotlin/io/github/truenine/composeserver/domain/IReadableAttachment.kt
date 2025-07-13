@@ -1,7 +1,5 @@
 package io.github.truenine.composeserver.domain
 
-import io.github.truenine.composeserver.bool
-import io.github.truenine.composeserver.i64
 import io.github.truenine.composeserver.string
 import java.io.InputStream
 import java.io.Serializable
@@ -17,8 +15,8 @@ interface IReadableAttachment : Serializable {
   val mimeType: string?
     get() = null
 
-  val empty: bool
-  val size: i64
+  val empty: Boolean
+  val size: Long
   val bytes: (() -> ByteArray?)?
     get() = null
 
@@ -27,16 +25,16 @@ interface IReadableAttachment : Serializable {
 
   data class EmptyReadableAttachment(
     override val name: string,
-    override val empty: bool = true,
-    override val size: i64 = 0L,
+    override val empty: Boolean = true,
+    override val size: Long = 0L,
     override val inputStream: InputStream? = null,
   ) : IReadableAttachment
 
   data class DefaultReadableAttachment(
     override val name: string,
     override val mimeType: string? = null,
-    override val empty: bool = false,
-    override val size: i64 = 0L,
+    override val empty: Boolean = false,
+    override val size: Long = 0L,
     override val bytes: (() -> ByteArray?)? = null,
     override val inputStream: InputStream? = null,
   ) : IReadableAttachment {

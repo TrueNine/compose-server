@@ -1,12 +1,7 @@
 package io.github.truenine.composeserver.rds.entities
 
 import io.github.truenine.composeserver.datetime
-import io.github.truenine.composeserver.i32
-import org.babyfish.jimmer.sql.Column
-import org.babyfish.jimmer.sql.Default
-import org.babyfish.jimmer.sql.LogicalDeleted
-import org.babyfish.jimmer.sql.MappedSuperclass
-import org.babyfish.jimmer.sql.Version
+import org.babyfish.jimmer.sql.*
 
 @MappedSuperclass
 interface IEntity : IPersistentEntity {
@@ -17,7 +12,7 @@ interface IEntity : IPersistentEntity {
   @Column(name = "mrd") val mrd: datetime?
 
   /** 乐观锁版本号 */
-  @Version @Default("0") @Column(name = "rlv") val rlv: i32
+  @Version @Default("0") @Column(name = "rlv") val rlv: Int
 
   /** 逻辑删除标志 */
   @LogicalDeleted("now") @Column(name = "ldf") val ldf: datetime?

@@ -42,6 +42,8 @@ dependencies {
     exclude("org.junit.platform")
   }
 
+  // Spring Security 核心依赖
+  api(libs.org.springframework.boot.spring.boot.starter.security)
   implementation(libs.org.springframework.security.spring.security.test)
   implementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
 

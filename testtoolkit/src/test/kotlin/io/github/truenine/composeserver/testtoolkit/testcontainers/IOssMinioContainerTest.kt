@@ -56,17 +56,14 @@ class IOssMinioContainerTest : IOssMinioContainer {
     @Resource set
 
   @Nested
-  @DisplayName("容器基本功能测试")
   inner class ContainerBasicTests {
     @Test
-    @DisplayName("验证容器实例存在且正在运行")
     fun `验证容器实例存在且正在运行`() {
       assertNotNull(minioContainer, "MinIO 容器实例不应为空")
       assertTrue(minioContainer!!.isRunning, "MinIO 容器应该处于运行状态")
     }
 
     @Test
-    @DisplayName("验证容器网络配置正确")
     fun `验证容器网络配置正确`() {
       val container = minioContainer!!
 
@@ -98,10 +95,8 @@ class IOssMinioContainerTest : IOssMinioContainer {
   }
 
   @Nested
-  @DisplayName("Spring 属性注入测试")
   inner class SpringPropertiesTests {
     @Test
-    @DisplayName("验证动态属性注册正确")
     fun `验证动态属性注册正确`() {
       val registry = mutableMapOf<String, String>()
       val mockRegistry =

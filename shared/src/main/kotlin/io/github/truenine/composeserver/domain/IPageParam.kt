@@ -3,8 +3,6 @@ package io.github.truenine.composeserver.domain
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.github.truenine.composeserver.bool
-import io.github.truenine.composeserver.i32
 import java.io.Serializable
 
 /**
@@ -28,10 +26,10 @@ interface IPageParam : IPageParamLike, Serializable {
     }
 
     /** ## 最小偏移量 */
-    const val MIN_OFFSET: i32 = 0
+    const val MIN_OFFSET: Int = 0
 
     /** ## 最大分页页面大小 */
-    const val MAX_PAGE_SIZE: i32 = 42
+    const val MAX_PAGE_SIZE: Int = 42
 
     /** ## 默认 最大分页实现常量 */
     @Suppress("DEPRECATION_ERROR") val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
@@ -47,9 +45,9 @@ interface IPageParam : IPageParamLike, Serializable {
     @JsonCreator
     @Suppress("DEPRECATION_ERROR")
     operator fun get(
-      @JsonProperty("o") offset: i32? = MIN_OFFSET,
-      @JsonProperty("s") pageSize: i32? = MAX_PAGE_SIZE,
-      @JsonProperty("u") unPage: bool? = false,
+      @JsonProperty("o") offset: Int? = MIN_OFFSET,
+      @JsonProperty("s") pageSize: Int? = MAX_PAGE_SIZE,
+      @JsonProperty("u") unPage: Boolean? = false,
     ): IPageParam {
       return if (pageSize == 0) {
         DefaultPageParam(0, 0, unPage)
@@ -78,9 +76,9 @@ interface IPageParam : IPageParamLike, Serializable {
     @Deprecated("不建议直接使用", level = DeprecationLevel.ERROR)
     @JsonCreator
     constructor(
-      @Transient @JsonProperty("o") override var o: i32? = null,
-      @Transient @JsonProperty("s") override var s: i32? = null,
-      @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR) @Transient @JsonProperty("u") override var u: Boolean? = null,
+      @Transient @param:JsonProperty("o") override var o: Int? = null,
+      @Transient @param:JsonProperty("s") override var s: Int? = null,
+      @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR) @Transient @param:JsonProperty("u") override var u: Boolean? = null,
     ) : IPageParam, Serializable {
 
       override fun toString(): String {
@@ -104,7 +102,7 @@ interface IPageParam : IPageParamLike, Serializable {
   }
 
   @JsonIgnore
-  operator fun plus(total: i32): IPageParam {
+  operator fun plus(total: Int): IPageParam {
     if (total <= 0) return empty()
     val ss = if (safePageSize >= total) total else safePageSize
     val c = (safeOffset + 1) * safePageSize
@@ -113,7 +111,7 @@ interface IPageParam : IPageParamLike, Serializable {
   }
 
   @get:JsonIgnore
-  val safeOffset: i32
+  val safeOffset: Int
     get() = o ?: 0
 
   /** ## 分页 页面 偏移量 null any */

@@ -1,8 +1,9 @@
 package io.github.truenine.composeserver.depend.servlet
 
-import io.github.truenine.composeserver.testtoolkit.annotations.SpringServletTest
 import jakarta.annotation.Resource
 import kotlin.test.Test
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /** # 确保 pathVariable 的解析性质 */
-@SpringServletTest
+@SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 @Import(PathVariableTest.TestPathVariableController::class)
 class PathVariableTest {
   lateinit var mockMvc: MockMvc

@@ -14,7 +14,7 @@ interface IKeysRepo {
   fun basicAesKey(): SecretKeySpec? = null
 
   fun findRsaKeyPairByName(publicKeyName: String, privateKeyName: String): IRsaExtKeyPair? {
-    return RsaExtKeyPair(findRsaPublicKeyByName(publicKeyName)!!, findRsaPrivetKeyByName(privateKeyName)!!)
+    return RsaExtKeyPair(findRsaPublicKeyByName(publicKeyName)!!, findRsaPrivateKeyByName(privateKeyName)!!)
   }
 
   fun findEccKeyPairByName(publicKeyName: String, privateKeyName: String): IEccExtKeyPair? {
@@ -29,7 +29,7 @@ interface IKeysRepo {
 
   fun findEccPrivateKeyByName(name: String): PrivateKey? = null
 
-  fun findRsaPrivetKeyByName(name: String): RSAPrivateKey? = null
+  fun findRsaPrivateKeyByName(name: String): RSAPrivateKey? = null
 
   fun jwtSignatureIssuerRsaKeyPair(): IRsaExtKeyPair? {
     return basicRsaKeyPair()
