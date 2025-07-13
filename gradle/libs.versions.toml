@@ -26,6 +26,7 @@ nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
 org-apache-commons-exec = "1.5.0"
 org-apache-logging-log4j = "2.24.3"
 org-assertj = "4.0.0-M1"
+org-awaitility = "4.3.0"
 org-babyfish-jimmer = "0.9.99"
 org-gradle = "9.0.0-rc-2"
 org-hibernate-orm = "6.6.15.Final"
@@ -49,7 +50,6 @@ org-springframework-modulith = "1.4.1"
 org-springframework-security = "6.5.1"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-org-awaitility = "4.3.0"
 project = "0.0.5"
 
 [libraries]
@@ -187,6 +187,8 @@ org-apache-logging-log4j-log4j-api = { module = "org.apache.logging.log4j:log4j-
 org-apache-logging-log4j-log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "org-apache-logging-log4j" }
 # GitHub Actions 测试相关库
 org-assertj-assertj-core = { module = "org.assertj:assertj-core", version.ref = "org-assertj" }
+org-awaitility-awaitility = { module = "org.awaitility:awaitility", version.ref = "org-awaitility" }
+org-awaitility-awaitility-kotlin = { module = "org.awaitility:awaitility-kotlin", version.ref = "org-awaitility" }
 org-babyfish-jimmer-jimmer-apt = { module = "org.babyfish.jimmer:jimmer-apt", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-client = { module = "org.babyfish.jimmer:jimmer-client", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-core = { module = "org.babyfish.jimmer:jimmer-core", version.ref = "org-babyfish-jimmer" }
@@ -304,8 +306,6 @@ org-testcontainers-postgresql = { module = "org.testcontainers:postgresql", vers
 org-testcontainers-testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "org-testcontainers" }
 org-testcontainers-testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "org-testcontainers" }
 org-testng-testng = { module = "org.testng:testng", version.ref = "org-testng" }
-org-awaitility-awaitility = { module = "org.awaitility:awaitility", version.ref = "org-awaitility" }
-org-awaitility-awaitility-kotlin = { module = "org.awaitility:awaitility-kotlin", version.ref = "org-awaitility" }
 org-xerial-sqlite-jdbc = "org.xerial:sqlite-jdbc:3.50.2.0"
 p6spy-p6spy = "p6spy:p6spy:3.9.1"
 
