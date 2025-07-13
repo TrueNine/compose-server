@@ -1,8 +1,9 @@
 package io.github.truenine.composeserver.depend.servlet.annotations
 
-import io.github.truenine.composeserver.testtoolkit.annotations.SpringServletTest
 import jakarta.annotation.Resource
 import kotlin.test.Test
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
@@ -10,7 +11,8 @@ import org.springframework.test.web.servlet.head
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@SpringServletTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 @Import(HeadMappingTest.HeadController::class)
 class HeadMappingTest {
   lateinit var mock: MockMvc

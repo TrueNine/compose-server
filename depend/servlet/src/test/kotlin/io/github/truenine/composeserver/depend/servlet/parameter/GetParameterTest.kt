@@ -1,10 +1,11 @@
 package io.github.truenine.composeserver.depend.servlet.parameter
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.testtoolkit.annotations.SpringServletTest
 import jakarta.annotation.Resource
 import kotlin.test.*
 import org.apache.catalina.util.URLEncoder
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /** # 验证以何种方式 给 spring boot 传递 get 参数 */
-@SpringServletTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 @Import(GetParameterTest.TestGetParameterController::class)
 class GetParameterTest {
   lateinit var mockMvc: MockMvc
