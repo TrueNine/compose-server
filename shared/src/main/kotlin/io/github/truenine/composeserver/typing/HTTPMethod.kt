@@ -14,6 +14,6 @@ enum class HTTPMethod(val methodName: String) : StringTyping {
   override val value: String = methodName
 
   companion object {
-    operator fun get(methodName: String?): HTTPMethod? = entries.firstOrNull { it.methodName == methodName?.uppercase() }
+    @JvmStatic operator fun get(methodName: String?): HTTPMethod? = entries.firstOrNull { it.methodName == methodName?.uppercase() }
   }
 }
