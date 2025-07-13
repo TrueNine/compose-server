@@ -1,13 +1,13 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import org.junit.jupiter.api.io.TempDir
-import org.slf4j.LoggerFactory
-import org.springframework.test.annotation.Rollback
 import java.nio.file.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.io.TempDir
+import org.slf4j.LoggerFactory
+import org.springframework.test.annotation.Rollback
 
 /**
  * # 类型别名测试
@@ -44,11 +44,10 @@ class AliasTest {
     assertEquals(Rollback::class, rollbackAnnotation, "RDBRollback 应该指向 Rollback 注解")
 
     // 验证注解的基本属性
-    val rollbackInstance = object {
-      @RDBRollback
-      fun testMethod() {
+    val rollbackInstance =
+      object {
+        @RDBRollback fun testMethod() {}
       }
-    }
 
     val method = rollbackInstance::class.java.getDeclaredMethod("testMethod")
     val annotation = method.getAnnotation(RDBRollback::class.java)
@@ -69,13 +68,14 @@ class AliasTest {
     assertEquals(TempDir::class, tempDirAnnotation, "TempDirMapping 应该指向 TempDir 注解")
 
     // 创建一个使用 TempDirMapping 注解的测试方法
-    val testInstance = object {
-      fun testMethodWithTempDir(@TempDirMapping tempDir: Path) {
-        // 验证临时目录功能
-        assertTrue(tempDir.toFile().exists(), "临时目录应该存在")
-        assertTrue(tempDir.toFile().isDirectory(), "临时目录应该是一个目录")
+    val testInstance =
+      object {
+        fun testMethodWithTempDir(@TempDirMapping tempDir: Path) {
+          // 验证临时目录功能
+          assertTrue(tempDir.toFile().exists(), "临时目录应该存在")
+          assertTrue(tempDir.toFile().isDirectory(), "临时目录应该是一个目录")
+        }
       }
-    }
 
     // 验证注解能够正确应用
     val method = testInstance::class.java.getDeclaredMethod("testMethodWithTempDir", Path::class.java)

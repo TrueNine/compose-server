@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.testtoolkit.utils
 
 import io.github.truenine.composeserver.testtoolkit.log
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.utility.DockerImageName
 import java.time.Duration
 import kotlin.test.*
+import org.testcontainers.containers.GenericContainer
+import org.testcontainers.utility.DockerImageName
 
 /**
  * # 容器命令执行器测试
