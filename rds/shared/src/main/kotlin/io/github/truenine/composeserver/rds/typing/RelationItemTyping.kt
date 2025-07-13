@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /** 关系对象类型 */
 @EnumType(EnumType.Strategy.ORDINAL)
-enum class RelationItemTyping(v: Int) : IntTyping {
+enum class RelationItemTyping(v: Int) : IIntTyping {
   /** 无 */
   @EnumItem(ordinal = 0) NONE(0),
 

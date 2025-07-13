@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 import org.babyfish.jimmer.sql.EnumType.Strategy
@@ -12,7 +12,7 @@ import org.babyfish.jimmer.sql.EnumType.Strategy
  * @since 2023-04-23
  */
 @EnumType(Strategy.ORDINAL)
-enum class AttachmentTyping(v: Int) : IntTyping {
+enum class AttachmentTyping(v: Int) : IIntTyping {
   /** 文件 */
   @EnumItem(ordinal = 0) ATTACHMENT(0),
 
