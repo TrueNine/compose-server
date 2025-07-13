@@ -2,7 +2,7 @@
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.2.0-blue.svg)](https://kotlinlang.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Jimmer](https://img.shields.io/badge/Jimmer-0.9.97-orange.svg)](https://github.com/babyfish-ct/jimmer)
+[![Jimmer](https://img.shields.io/badge/Jimmer-0.9.99-orange.svg)](https://github.com/babyfish-ct/jimmer)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.truenine/composeserver-shared.svg)](https://central.sonatype.com/search?q=g:io.github.truenine)
 [![License](https://img.shields.io/badge/License-LGPL%202.1-blue.svg)](LICENSE)
 
