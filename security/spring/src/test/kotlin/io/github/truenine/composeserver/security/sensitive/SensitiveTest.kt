@@ -1,24 +1,18 @@
 package io.github.truenine.composeserver.security.sensitive
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.Pr
-import io.github.truenine.composeserver.annotations.SensitiveResponse
-import io.github.truenine.composeserver.domain.ISensitivity
 import io.github.truenine.composeserver.security.autoconfig.SensitiveResultResponseBodyAdvice
 import io.github.truenine.composeserver.security.controller.SensitiveController
 import io.github.truenine.composeserver.testtoolkit.log
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
 
 /** Test sensitive data processing functionality */
 class SensitiveTest {
