@@ -12,3 +12,4 @@ insert_final_newline = true
 [{*.java,*.sql}]
 indent_size = 4
 tab_width = 4
+ij_java_use_single_class_imports = true
