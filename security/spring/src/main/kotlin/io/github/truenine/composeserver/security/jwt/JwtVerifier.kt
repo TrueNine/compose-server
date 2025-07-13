@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.DTimer
+import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.security.JwtException
 import io.github.truenine.composeserver.security.crypto.Encryptors
 import io.github.truenine.composeserver.security.jwt.consts.JwtToken
@@ -41,7 +41,7 @@ open class JwtVerifier internal constructor() {
           log.trace("发现sub加密段")
           token.subject = parseContent(decodedJwt.subject, params.subjectTargetType!!.kotlin)
         }
-        token.expireDateTime = DTimer.instantToLocalDateTime(decodedJwt.expiresAt.toInstant())
+        token.expireDateTime = DateTimeConverter.instantToLocalDateTime(decodedJwt.expiresAt.toInstant())
         token.id = decodedJwt.id
         token.signatureAlgName = decodedJwt.algorithm
       }

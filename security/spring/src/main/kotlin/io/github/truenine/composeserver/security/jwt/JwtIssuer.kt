@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.DTimer
+import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.security.crypto.Encryptors
 import io.github.truenine.composeserver.security.jwt.consts.IssuerParam
 import io.github.truenine.composeserver.slf4j
@@ -35,7 +35,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
             encryptData(createContent(params.encryptedDataObj!!), params.contentEncryptEccKey ?: this@JwtIssuer.contentEccPublicKey!!),
           )
         }
-        withExpiresAt(DTimer.plusMillisFromCurrent(params.duration?.toMillis() ?: this@JwtIssuer.expireMillis))
+        withExpiresAt(DateTimeConverter.plusMillisFromCurrent(params.duration?.toMillis() ?: this@JwtIssuer.expireMillis))
       }
       .sign(Algorithm.RSA256(params.signatureKey ?: this.signatureIssuerKey))
   }
