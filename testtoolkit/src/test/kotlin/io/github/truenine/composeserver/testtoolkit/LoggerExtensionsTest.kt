@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import org.slf4j.LoggerFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import org.slf4j.LoggerFactory
 
 /**
  * # SLF4J 函数测试
@@ -22,7 +22,7 @@ class LoggerExtensionsTest {
 
     // 直接调用扩展属性来确保覆盖率
     val logger = this.log
-    val logger2 = log  // 再次调用确保覆盖
+    val logger2 = log // 再次调用确保覆盖
 
     assertNotNull(logger, "Logger 不应该为 null")
     assertNotNull(logger2, "Logger2 不应该为 null")
@@ -204,7 +204,7 @@ class LoggerExtensionsTest {
     val customObj = TestClass()
     val customLogger = customObj.log
     assertNotNull(customLogger, "自定义对象的扩展属性应该返回有效的 Logger")
-    assertEquals($$"io.github.truenine.composeserver.testtoolkit.LoggerExtensionsTest$TestClass", customLogger.name, "自定义对象的 Logger 名称应该正确")
+    assertEquals("io.github.truenine.composeserver.testtoolkit.LoggerExtensionsTest\$TestClass", customLogger.name, "自定义对象的 Logger 名称应该正确")
 
     log.info("Slf4j 扩展属性在不同类型对象上的使用测试完成")
   }
