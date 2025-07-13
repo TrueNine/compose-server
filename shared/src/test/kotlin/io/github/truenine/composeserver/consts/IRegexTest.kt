@@ -5,9 +5,14 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+/**
+ * # 正则表达式常量测试
+ *
+ * 测试 IRegexes 中定义的各种正则表达式的匹配功能
+ */
 class IRegexTest {
   @Test
-  fun `match china ad code`() {
+  fun `测试中国行政区划代码正则匹配`() {
     val pattern = Pattern.compile(IRegexes.CHINA_AD_CODE)
     assertTrue { pattern.matcher("43").matches() }
     assertTrue { pattern.matcher("4304").matches() }
@@ -23,7 +28,7 @@ class IRegexTest {
   }
 
   @Test
-  fun `iccard match`() {
+  fun `测试中国身份证号码正则匹配`() {
     val pattern = Pattern.compile(IRegexes.CHINA_ID_CARD)
     assertTrue { pattern.matcher("430404197210280012").matches() }
     // 基本匹配
@@ -38,7 +43,7 @@ class IRegexTest {
   }
 
   @Test
-  fun `test match ant uri`() {
+  fun `测试 Ant 风格 URI 路径正则匹配`() {
     val pattern = IRegexes.ANT_URI.toRegex()
     assertTrue {
       arrayOf("/", "/a", "/a/b", "/.", "/.php", "/aaa.", "/a.b.", "/a.b.c", "/a/*/*", "/a/b/*/*", "/1/2").map(pattern::matches).reduce(Boolean::and)
@@ -79,13 +84,13 @@ class IRegexTest {
   }
 
   @Test
-  fun `rbac name match`() {
+  fun `测试 RBAC 名称正则匹配`() {
     val reg = Pattern.compile(IRegexes.RBAC_NAME)
     assertTrue { reg.matcher("abc").matches() }
     assertTrue { reg.matcher("user_read").matches() }
     assertTrue { reg.matcher("user:read").matches() }
     assertTrue { reg.matcher("a").matches() }
-    // 失败
+    // 失败情况
     assertFalse { reg.matcher("_").matches() }
     assertFalse { reg.matcher("_a").matches() }
     assertFalse { reg.matcher(":").matches() }

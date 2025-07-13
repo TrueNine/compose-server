@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
-import io.github.truenine.composeserver.testtoolkit.SysLogger
+import io.github.truenine.composeserver.testtoolkit.SystemTestLogger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.Banner
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent
@@ -14,7 +14,7 @@ import org.springframework.core.env.MapPropertySource
  */
 class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
-  private val log: SysLogger = LoggerFactory.getLogger(TestEnvironmentApplicationListener::class.java)
+  private val log: SystemTestLogger = LoggerFactory.getLogger(TestEnvironmentApplicationListener::class.java)
 
   override fun onApplicationEvent(event: ApplicationEnvironmentPreparedEvent) {
     val environment = event.environment

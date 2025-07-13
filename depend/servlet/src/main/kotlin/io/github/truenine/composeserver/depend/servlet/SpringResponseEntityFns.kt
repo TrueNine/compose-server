@@ -1,24 +1,22 @@
 package io.github.truenine.composeserver.depend.servlet
 
 import io.github.truenine.composeserver.datetime
-import io.github.truenine.composeserver.i32
-import io.github.truenine.composeserver.i64
 import io.github.truenine.composeserver.toMillis
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 
 data class ResponseEntityScope(
-  internal var status: i32 = 200,
+  internal var status: Int = 200,
   internal var contentType: String? = null,
-  internal var lastModifier: i64? = null,
-  internal var contentLength: i64? = null,
+  internal var lastModifier: Long? = null,
+  internal var contentLength: Long? = null,
 ) {
 
   fun type(contentType: String?) {
     this.contentType = contentType
   }
 
-  fun size(len: () -> i64?) {
+  fun size(len: () -> Long?) {
     contentLength = len()
   }
 

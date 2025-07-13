@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
-@AutoConfigureMockMvc
-@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Import(IPageParamTest.TestPageController::class)
 class IPageParamTest {
   lateinit var objectMapper: ObjectMapper

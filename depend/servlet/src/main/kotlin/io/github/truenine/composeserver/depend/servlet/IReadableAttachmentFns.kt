@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile
 
 fun MultipartFile.toReadableAttachment(): IReadableAttachment {
   return IReadableAttachment.DefaultReadableAttachment(
-    name = this.originalFilename ?: this.name,
+    name = this.originalFilename?.takeIf { it.isNotBlank() } ?: this.name,
     mimeType = this.contentType,
     size = this.size,
     bytes = { this.bytes },

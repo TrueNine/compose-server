@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
-import io.github.truenine.composeserver.testtoolkit.SysLogger
+import io.github.truenine.composeserver.testtoolkit.SystemTestLogger
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.boot.Banner
@@ -26,7 +26,7 @@ import org.springframework.core.env.MapPropertySource
 @ConditionalOnProperty(name = ["compose.testtoolkit.enabled"], havingValue = "true", matchIfMissing = true)
 open class TestConfigurationBean(private val environment: ConfigurableEnvironment, private val properties: TestConfigurationProperties) {
 
-  private val log: SysLogger = LoggerFactory.getLogger(TestConfigurationBean::class.java)
+  private val log: SystemTestLogger = LoggerFactory.getLogger(TestConfigurationBean::class.java)
 
   @PostConstruct
   fun configureTestProperties() {

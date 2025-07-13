@@ -1,14 +1,12 @@
 package io.github.truenine.composeserver.domain
 
-import io.github.truenine.composeserver.bool
-import io.github.truenine.composeserver.i64
 import java.io.OutputStream
 
 interface IWriteableAttachment {
   val name: String
   val outputStream: OutputStream?
-  val empty: bool
-  val size: i64
+  val empty: Boolean
+  val size: Long
   val bytes: (() -> ByteArray?)?
     get() = null
 
@@ -18,16 +16,16 @@ interface IWriteableAttachment {
   data class EmptyWriteableAttachment(
     override val name: String,
     override val outputStream: OutputStream? = null,
-    override val empty: bool = true,
-    override val size: i64 = 0,
+    override val empty: Boolean = true,
+    override val size: Long = 0,
   ) : IWriteableAttachment
 
   data class DefaultWriteableAttachment(
     override val name: String,
     override val mimeType: String? = null,
     override val outputStream: OutputStream?,
-    override val size: i64,
-    override val empty: bool = size > 0,
+    override val size: Long,
+    override val empty: Boolean = size > 0,
   ) : IWriteableAttachment {
     override fun equals(other: Any?): Boolean {
       if (this === other) return true

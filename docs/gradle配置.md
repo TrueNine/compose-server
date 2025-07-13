@@ -19,8 +19,8 @@ systemProp.https.proxyPort=7899
 
 org.gradle.configuration-cache=false
 org.gradle.configuration-cache.problems=warn
-org.gradle.configureondemand=true
-org.gradle.caching=true
+org.gradle.configureondemand=false
+org.gradle.caching=false
 org.gradle.workers.max=12
 org.gradle.daemon=true
 org.gradle.parallel=true

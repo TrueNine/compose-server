@@ -3,7 +3,6 @@ package io.github.truenine.composeserver.depend.servlet.resolvers
 import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.domain.IPageParam
 import io.github.truenine.composeserver.domain.IPageParamLike
-import io.github.truenine.composeserver.i32
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -34,7 +33,7 @@ class IPageParamLikeArgumentResolverTest {
     mockMvc = MockMvcBuilders.standaloneSetup(TestController()).setCustomArgumentResolvers(IPageParamLikeArgumentResolver()).build()
   }
 
-  data class IPageParamLikeImpl(override val o: i32?, override val s: i32?) : IPageParamLike
+  data class IPageParamLikeImpl(override val o: Int?, override val s: Int?) : IPageParamLike
 
   data class IPageParamLikeDefaultValueImpl(val e: String) : IPageParamLike
 
