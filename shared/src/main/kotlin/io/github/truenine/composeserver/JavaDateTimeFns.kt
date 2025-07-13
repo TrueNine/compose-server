@@ -10,7 +10,7 @@ import java.time.temporal.TemporalAdjusters
  * @return LocalDateTime对象
  */
 fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
-  return DTimer.millisToLocalDateTime(this, zoneId)
+  return DateTimeConverter.millisToLocalDateTime(this, zoneId)
 }
 
 /**
@@ -20,7 +20,7 @@ fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime
  * @return LocalDate对象
  */
 fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
-  return DTimer.millisToLocalDate(this, zoneId)
+  return DateTimeConverter.millisToLocalDate(this, zoneId)
 }
 
 /**
@@ -29,8 +29,8 @@ fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
  * @param zoneId 时区
  * @return LocalTime对象
  */
-fun Long.toLocalTime(zoneId: ZoneId = ZoneId.of(DTimer.ZONE_GMT)): LocalTime {
-  return DTimer.millisToLocalTime(this, zoneId)
+fun Long.toLocalTime(zoneId: ZoneId = ZoneId.of(DateTimeConverter.ZONE_GMT)): LocalTime {
+  return DateTimeConverter.millisToLocalTime(this, zoneId)
 }
 
 /**
@@ -48,8 +48,8 @@ fun Long.toInstant(): Instant {
  * @param zoneId 时区
  * @return 毫秒时间戳
  */
-fun LocalTime.toMillis(zoneId: ZoneId = ZoneId.of(DTimer.ZONE_GMT)): Long {
-  return DTimer.localTimeToInstant(this, zoneId).toEpochMilli()
+fun LocalTime.toMillis(zoneId: ZoneId = ZoneId.of(DateTimeConverter.ZONE_GMT)): Long {
+  return DateTimeConverter.localTimeToInstant(this, zoneId).toEpochMilli()
 }
 
 /**
@@ -59,7 +59,7 @@ fun LocalTime.toMillis(zoneId: ZoneId = ZoneId.of(DTimer.ZONE_GMT)): Long {
  * @return 毫秒时间戳
  */
 fun LocalDate.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
-  return DTimer.localDateToInstant(this, zoneId).toEpochMilli()
+  return DateTimeConverter.localDateToInstant(this, zoneId).toEpochMilli()
 }
 
 /**
@@ -69,7 +69,7 @@ fun LocalDate.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
  * @return 毫秒时间戳
  */
 fun LocalDateTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
-  return DTimer.localDatetimeToMillis(this, zoneId)
+  return DateTimeConverter.localDatetimeToMillis(this, zoneId)
 }
 
 /** # ISO8601 时间戳毫秒标准 */
@@ -107,7 +107,7 @@ fun LocalDate.lastDayOfMonth(): LocalDate = with(TemporalAdjusters.lastDayOfMont
  * @return LocalDateTime对象
  */
 fun Instant.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
-  return DTimer.instantToLocalDateTime(this, zoneId)
+  return DateTimeConverter.instantToLocalDateTime(this, zoneId)
 }
 
 /**
@@ -117,7 +117,7 @@ fun Instant.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateT
  * @return LocalDate对象
  */
 fun Instant.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
-  return DTimer.instantToLocalDate(this, zoneId)
+  return DateTimeConverter.instantToLocalDate(this, zoneId)
 }
 
 /**
@@ -126,8 +126,8 @@ fun Instant.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
  * @param zoneId 时区
  * @return LocalTime对象
  */
-fun Instant.toLocalTime(zoneId: ZoneId = ZoneId.of(DTimer.ZONE_GMT)): LocalTime {
-  return DTimer.instantToLocalTime(this, zoneId)
+fun Instant.toLocalTime(zoneId: ZoneId = ZoneId.of(DateTimeConverter.ZONE_GMT)): LocalTime {
+  return DateTimeConverter.instantToLocalTime(this, zoneId)
 }
 
 /**
@@ -136,7 +136,7 @@ fun Instant.toLocalTime(zoneId: ZoneId = ZoneId.of(DTimer.ZONE_GMT)): LocalTime 
  * @return 毫秒时间戳
  */
 fun Instant.toMillis(): Long {
-  return DTimer.instantToMillis(this)
+  return DateTimeConverter.instantToMillis(this)
 }
 
 /**
