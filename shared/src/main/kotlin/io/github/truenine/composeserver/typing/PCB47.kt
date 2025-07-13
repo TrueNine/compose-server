@@ -1,12 +1,14 @@
 package io.github.truenine.composeserver.typing
 
+import io.github.truenine.composeserver.IStringTyping
+
 /**
  * # 各语言 按照 PBC47 标准的序列化字符串
  *
  * @author TrueNine
  * @since 2024-03-20
  */
-enum class PCB47(private val primaryLang: String, vararg secondaryLanguages: String) : StringTyping {
+enum class PCB47(private val primaryLang: String, vararg secondaryLanguages: String) : IStringTyping {
   ZH("zh"),
   EN("en"),
   ZH_CN("zh-CN"),

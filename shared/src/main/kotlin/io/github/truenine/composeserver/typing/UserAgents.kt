@@ -1,12 +1,14 @@
 package io.github.truenine.composeserver.typing
 
+import io.github.truenine.composeserver.IStringTyping
+
 /**
  * 一些收集的 userAgent 枚举 使用 val() 方法进行调用
  *
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class UserAgents(private val ua: String) : StringTyping {
+enum class UserAgents(private val ua: String) : IStringTyping {
   /** chrome windows 103 */
   CHROME_WIN_103("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"),
   CHROME_WIN_115("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"),
