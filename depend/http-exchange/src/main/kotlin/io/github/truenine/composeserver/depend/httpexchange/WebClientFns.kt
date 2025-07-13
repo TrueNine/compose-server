@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.depend.httpexchange
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.IAnyTyping
 import io.github.truenine.composeserver.consts.IHeaders
 import io.github.truenine.composeserver.depend.httpexchange.encoder.AnyTypingEncoder
-import io.github.truenine.composeserver.typing.AnyTyping
 import io.github.truenine.composeserver.typing.MimeTypes
 import java.time.Duration
 import java.time.temporal.ChronoUnit
@@ -65,7 +65,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
 class ArgsResolver : HttpServiceArgumentResolver {
 
   override fun resolve(argument: Any?, parameter: MethodParameter, requestValues: HttpRequestValues.Builder): Boolean {
-    if (argument != null && argument is AnyTyping) {
+    if (argument != null && argument is IAnyTyping) {
       val name =
         parameter.getParameterAnnotation(RequestParam::class.java)?.name
           ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value
