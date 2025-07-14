@@ -10,7 +10,6 @@ import com.wechat.pay.java.service.payments.jsapi.model.*
 import com.wechat.pay.java.service.refund.RefundService
 import com.wechat.pay.java.service.refund.model.AmountReq
 import com.wechat.pay.java.service.refund.model.CreateRequest
-import io.github.truenine.composeserver.exceptions.KnownException
 import io.github.truenine.composeserver.exceptions.requireKnown
 import io.github.truenine.composeserver.generator.IOrderCodeGenerator
 import io.github.truenine.composeserver.hasText
@@ -20,8 +19,8 @@ import io.github.truenine.composeserver.pay.models.FindPayOrderVo
 import io.github.truenine.composeserver.pay.models.PaySuccessNotifyVo
 import io.github.truenine.composeserver.pay.properties.WeChatPaySingleConfigProperty
 import io.github.truenine.composeserver.pay.service.SinglePayService
-import io.github.truenine.composeserver.security.crypto.Encryptors
-import io.github.truenine.composeserver.security.crypto.Keys
+import io.github.truenine.composeserver.security.crypto.CryptographicKeyManager
+import io.github.truenine.composeserver.security.crypto.CryptographicOperations
 import io.github.truenine.composeserver.security.crypto.encodeBase64String
 import io.github.truenine.composeserver.slf4j
 import io.github.truenine.composeserver.typing.EncryptAlgorithmTyping
@@ -68,7 +67,7 @@ class WeChatSinglePayService(
       }
     val prePay = wechatJsService.prepay(request)
     return SinglePayService.CreateMpPayVo(
-        random32String = Keys.generateRandomAsciiString(32),
+        random32String = CryptographicKeyManager.generateRandomAsciiString(32),
         iso8601Second = LocalDateTime.now().iso8601LongUtc.toString(),
         signType = EncryptAlgorithmTyping.RSA.value,
       )
@@ -76,7 +75,11 @@ class WeChatSinglePayService(
         prePayId = prePay?.prepayId
         // 签名
         val signatureStr = "${payProperty.mpAppId}\n${iso8601Second}\n${random32String}\n${prePayId}\n"
-        val signature = Encryptors.signWithSha256WithRsaByRsaPrivateKey(signatureStr, Keys.readRsaPrivateKeyByBase64AndStandard(payProperty.privateKey)!!)
+        val signature =
+          CryptographicOperations.signWithSha256WithRsaByRsaPrivateKey(
+            signatureStr,
+            CryptographicKeyManager.readRsaPrivateKeyByBase64AndStandard(payProperty.privateKey)!!,
+          )
         paySign = signature.sign().encodeBase64String
       }
   }
@@ -99,7 +102,7 @@ class WeChatSinglePayService(
             mchid = payProperty.merchantId
           }
         )
-      } else throw KnownException("订单号或商户订单号为空为空")
+      } else error("订单号或商户订单号为空为空")
 
     return FindPayOrderVo(
       meta = transaction,

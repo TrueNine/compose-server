@@ -27,19 +27,19 @@ class FileKeyRepo(private val baseDir: String = "keys") : IKeysRepo {
   }
 
   override fun findRsaPrivateKeyByName(name: String): RSAPrivateKey? {
-    return Keys.readRsaPrivateKeyByBase64(readBase64(name))
+    return CryptographicKeyManager.readRsaPrivateKeyByBase64(readBase64(name))
   }
 
   override fun findRsaPublicKeyByName(name: String): RSAPublicKey? {
-    return Keys.readRsaPublicKeyByBase64(readBase64(name))
+    return CryptographicKeyManager.readRsaPublicKeyByBase64(readBase64(name))
   }
 
   override fun findEccPrivateKeyByName(name: String): PrivateKey? {
-    return Keys.readEccPrivateKeyByBase64(readBase64(name))
+    return CryptographicKeyManager.readEccPrivateKeyByBase64(readBase64(name))
   }
 
   override fun findEccPublicKeyByName(name: String): PublicKey? {
-    return Keys.readEccPublicKeyByBase64(readBase64(name))
+    return CryptographicKeyManager.readEccPublicKeyByBase64(readBase64(name))
   }
 
   override fun jwtEncryptDataIssuerEccKeyPair(): IEccExtKeyPair? {

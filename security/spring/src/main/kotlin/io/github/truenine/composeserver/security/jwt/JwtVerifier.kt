@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.security.JwtException
-import io.github.truenine.composeserver.security.crypto.Encryptors
+import io.github.truenine.composeserver.security.crypto.CryptographicOperations
 import io.github.truenine.composeserver.security.jwt.consts.JwtToken
 import io.github.truenine.composeserver.security.jwt.consts.VerifierParam
 import io.github.truenine.composeserver.slf4j
@@ -75,7 +75,7 @@ open class JwtVerifier internal constructor() {
   }
 
   private fun <T : Any> decryptData(encData: String, targetType: KClass<T>, eccPrivateKey: PrivateKey? = this.contentEccPrivateKey): T? {
-    val content = eccPrivateKey.let { priKey -> Encryptors.decryptByEccPrivateKey(priKey!!, encData) } ?: encData
+    val content = eccPrivateKey.let { priKey -> CryptographicOperations.decryptByEccPrivateKey(priKey!!, encData) } ?: encData
     return parseContent(content, targetType)
   }
 

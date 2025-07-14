@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.security.jwt.consts
 
-import io.github.truenine.composeserver.security.crypto.Keys
+import io.github.truenine.composeserver.security.crypto.CryptographicKeyManager
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
 
@@ -16,10 +16,10 @@ data class VerifierParam<S : Any, E : Any>(
   fun isRequireDecrypted(): Boolean = this.encryptDataTargetType != null
 
   fun contentEncryptEccKeyFromBase64(base64Key: String) {
-    this.contentEncryptEccKey = Keys.readEccPrivateKeyByBase64(base64Key)
+    this.contentEncryptEccKey = CryptographicKeyManager.readEccPrivateKeyByBase64(base64Key)
   }
 
   fun signatureKeyFromBase64(base64Key: String) {
-    this.signatureKey = Keys.readRsaPublicKeyByBase64(base64Key)!!
+    this.signatureKey = CryptographicKeyManager.readRsaPublicKeyByBase64(base64Key)!!
   }
 }

@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.security.jwt
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.security.crypto.Keys
+import io.github.truenine.composeserver.security.crypto.CryptographicKeyManager
 import io.github.truenine.composeserver.security.jwt.consts.IssuerParam
 import io.github.truenine.composeserver.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test
@@ -11,8 +11,8 @@ class JwtTest {
   @Test
   fun testIssuerAndVerifier() {
     val mapper = ObjectMapper()
-    val eccPair = Keys.generateEccKeyPair()!!
-    val rsaPair = Keys.generateRsaKeyPair()!!
+    val eccPair = CryptographicKeyManager.generateEccKeyPair(CryptographicKeyManager.generateRandomAsciiString())!!
+    val rsaPair = CryptographicKeyManager.generateRsaKeyPair()!!
 
     val issuer =
       JwtIssuer.createIssuer()
