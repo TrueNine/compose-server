@@ -19,23 +19,23 @@ interface SinglePayService {
   @Schema(title = "创建支付订单参数")
   data class CreateMpPayDto(
     /** 金额 */
-    @Schema(title = "金额") var amount: BigDecimal? = null,
+    @field:Schema(title = "金额") var amount: BigDecimal? = null,
     /** 商户订单号 */
-    @Schema(title = "商户订单号") var customOrderId: String? = null,
+    @field:Schema(title = "商户订单号") var customOrderId: String? = null,
     /** 微信用户唯一 ID */
     var wechatUserOpenId: String? = null,
     /** 订单描述 */
-    @Schema(title = "订单描述") var title: String? = null,
+    @field:Schema(title = "订单描述") var title: String? = null,
     /** 货币单位 */
-    @Schema(title = "货币单位") var currency: ISO4217 = ISO4217.CNY,
+    @field:Schema(title = "货币单位") var currency: ISO4217 = ISO4217.CNY,
   )
 
   @Schema(title = "拉起小程序支付微信返回")
   data class CreateMpPayVo(
-    @Schema(title = "32位随机字符串，32位以下") var random32String: String? = null,
-    @Schema(title = "时间戳 秒") var iso8601Second: String? = null,
-    @Schema(title = "签名方法，SHA256-RSA") var signType: String? = "RSA",
-    @Schema(title = "签名字符串") var paySign: String? = null,
+    @field:Schema(title = "32位随机字符串，32位以下") var random32String: String? = null,
+    @field:Schema(title = "时间戳 秒") var iso8601Second: String? = null,
+    @field:Schema(title = "签名方法，SHA256-RSA") var signType: String? = "RSA",
+    @field:Schema(title = "签名字符串") var paySign: String? = null,
   ) {
     @Schema(title = "统一下单接口返回的 prepay_id", description = "prepay_id 参数值，提交格式如：prepay_id=***")
     var prePayId: String? = null

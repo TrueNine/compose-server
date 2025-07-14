@@ -18,9 +18,9 @@ class FileKeysRepoImpl(
   private var aesKey: SecretKeySpec? = null
 
   init {
-    aesKey = Keys.readAesKeyByBase64(read(aesPaths))
-    rsaKeyPair = Keys.readRsaKeyPair(read(rsaKeyPairPaths.first), read(rsaKeyPairPaths.second))
-    eccKeyPair = Keys.readEccKeyPair(read(eccKeyPairPaths.first), read(eccKeyPairPaths.second))
+    aesKey = CryptographicKeyManager.readAesKeyByBase64(read(aesPaths))
+    rsaKeyPair = CryptographicKeyManager.readRsaKeyPair(read(rsaKeyPairPaths.first), read(rsaKeyPairPaths.second))
+    eccKeyPair = CryptographicKeyManager.readEccKeyPair(read(eccKeyPairPaths.first), read(eccKeyPairPaths.second))
   }
 
   override fun basicEccKeyPair(): IEccExtKeyPair? {
