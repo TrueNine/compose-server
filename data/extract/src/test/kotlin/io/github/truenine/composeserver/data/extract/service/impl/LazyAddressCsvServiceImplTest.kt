@@ -3,10 +3,10 @@ package io.github.truenine.composeserver.data.extract.service.impl
 import io.github.truenine.composeserver.holders.ResourceHolder
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.system.measureTimeMillis
 import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.core.io.ByteArrayResource
 
 class LazyAddressCsvServiceImplTest {
@@ -169,7 +169,11 @@ class LazyAddressCsvServiceImplTest {
     val invalidResource = ByteArrayResource(invalidCsvContent.toByteArray(), "area_code_2024.csv")
     every { resourceHolder.getConfigResource(any()) } returns invalidResource
 
-    assertThrows<IndexOutOfBoundsException> { service.getCsvSequence("2024")?.toList() }
+    // 优化后的代码会优雅地处理错误，过滤掉无效行
+    val result = service.getCsvSequence("2024")?.toList()
+    assertNotNull(result)
+    // 应该只有有效的行被处理，无效行被过滤掉
+    assertTrue(result.isEmpty()) // 因为所有行都是无效的
   }
 
   @Test
@@ -291,7 +295,12 @@ class LazyAddressCsvServiceImplTest {
         override fun getFilename() = "area_code_2024.csv"
       }
     every { resourceHolder.getConfigResource(any()) } returns resource
-    assertThrows<NumberFormatException> { service.getCsvSequence("2024")?.toList() }
+
+    // 优化后的代码会优雅地处理错误，过滤掉无效行
+    val result = service.getCsvSequence("2024")?.toList()
+    assertNotNull(result)
+    // 无效的数字格式行应该被过滤掉
+    assertTrue(result.isEmpty())
   }
 
   @Test
@@ -304,5 +313,107 @@ class LazyAddressCsvServiceImplTest {
   fun `年份为空 fetchChildren 返回空`() {
     val children = service.fetchChildren("110000", "")
     assertTrue(children.isEmpty())
+  }
+
+  @Test
+  fun `test optimized fetchChildren performance with indexed lookup`() {
+    // Warm up the cache
+    service.fetchChildren("110000", "2024")
+
+    val iterations = 1000
+    val time = measureTimeMillis { repeat(iterations) { service.fetchChildren("110000", "2024") } }
+
+    // Should be very fast with indexed lookup
+    assertTrue(time < 100, "Indexed lookup should be fast: ${time}ms for $iterations operations")
+  }
+
+  @Test
+  fun `test optimized fetchDistrict performance with indexed lookup`() {
+    // Warm up the cache
+    service.fetchDistrict("110101", "2024")
+
+    val iterations = 1000
+    val time = measureTimeMillis { repeat(iterations) { service.fetchDistrict("110101", "2024") } }
+
+    // Should be very fast with O(1) lookup
+    assertTrue(time < 50, "District lookup should be very fast: ${time}ms for $iterations operations")
+  }
+
+  @Test
+  fun `test cache effectiveness and memory management`() {
+    val initialMemory = Runtime.getRuntime().let { it.totalMemory() - it.freeMemory() }
+
+    // Load data multiple times - should use cache after first load
+    repeat(10) {
+      service.fetchChildren("110000", "2024")
+      service.fetchDistrict("110101", "2024")
+    }
+
+    System.gc()
+    val finalMemory = Runtime.getRuntime().let { it.totalMemory() - it.freeMemory() }
+    val memoryIncrease = finalMemory - initialMemory
+
+    // Memory increase should be reasonable
+    assertTrue(memoryIncrease < 5 * 1024 * 1024, "Memory usage should be reasonable: ${memoryIncrease / 1024}KB")
+  }
+
+  @Test
+  fun `test concurrent access to cached data`() {
+    // Pre-load cache
+    service.fetchChildren("110000", "2024")
+
+    val threadCount = 10
+    val results = mutableListOf<Int>()
+    val threads =
+      (1..threadCount).map {
+        Thread {
+          val children = service.fetchChildren("110000", "2024")
+          synchronized(results) { results.add(children.size) }
+        }
+      }
+
+    threads.forEach { it.start() }
+    threads.forEach { it.join() }
+
+    // All threads should get consistent results
+    assertEquals(threadCount, results.size)
+    assertTrue(results.all { it == results.first() })
+  }
+
+  @Test
+  fun `test error handling with malformed CSV data`() {
+    val malformedCsv =
+      """
+      110000000000,北京市,invalid_level,000000000000
+      110100000000,北京市市辖区,2,110000000000
+    """
+        .trimIndent()
+
+    val malformedResource =
+      object : ByteArrayResource(malformedCsv.toByteArray()) {
+        override fun getFilename() = "area_code_2024.csv"
+      }
+
+    every { resourceHolder.getConfigResource(any()) } returns malformedResource
+
+    // Should handle malformed data gracefully
+    val children = service.fetchChildren("110000", "2024")
+    assertEquals(1, children.size) // Only valid row should be processed
+  }
+
+  @Test
+  fun `test early validation optimization`() {
+    val time = measureTimeMillis {
+      repeat(1000) {
+        // These should return immediately without processing
+        service.fetchChildren("", "2024")
+        service.fetchChildren("110000", "")
+        service.fetchDistrict("", "2024")
+        service.fetchDistrict("110000", "")
+      }
+    }
+
+    // Early validation should make these very fast
+    assertTrue(time < 50, "Early validation should be very fast: ${time}ms")
   }
 }
