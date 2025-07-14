@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
@@ -11,7 +11,7 @@ import org.babyfish.jimmer.sql.EnumType
  * @since 2023-05-04
  */
 @EnumType(EnumType.Strategy.ORDINAL)
-enum class OrderStatusTyping(private val orderType: Int) : IntTyping {
+enum class OrderStatusTyping(private val orderType: Int) : IIntTyping {
   /** 预付款 */
   @EnumItem(ordinal = 1001) PRE_PAY(1001),
 

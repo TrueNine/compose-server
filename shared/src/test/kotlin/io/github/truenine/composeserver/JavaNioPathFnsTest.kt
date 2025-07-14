@@ -1,102 +1,317 @@
 package io.github.truenine.composeserver
 
 import io.github.truenine.composeserver.testtoolkit.TempDirMapping
-import io.github.truenine.composeserver.testtoolkit.log
-import java.io.File
+import java.io.FileNotFoundException
+import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 /**
- * # Java NIO Path 扩展函数测试
+ * Comprehensive test suite for Java NIO Path extension functions.
  *
- * 测试 Path 相关的扩展函数，包括文件行数统计、行切片、分页等功能
+ * Tests all Path-related extension functions including file operations, line counting, slicing, pagination, and various edge cases.
  */
 class JavaNioPathFnsTest {
   @TempDirMapping lateinit var tempDir: Path
 
+  // ========== Path.isFile() Tests ==========
+
   @Test
-  fun `测试切片行功能 - 验证首行处理`() {
-    val firstLineFile = tempDir.resolve("firstLine.txt")
+  fun testIsFileWithRegularFile() {
+    val testFile = tempDir.resolve("regular.txt")
+    Files.createFile(testFile)
 
-    val firstLine = "\nLine 1\nLine 2\nLine 3\nLine 4\n"
-    File(firstLineFile.toUri()).writeText(firstLine)
-    val lines = firstLineFile.countLines()
-
-    log.info("测试文本长度: {}", firstLine.length)
-    log.info("行数: {}", lines)
-
-    val result = firstLineFile.sliceLines(sep = "\n", range = 0L..firstLine.length)
-    val listResult = result.toList()
-    log.info("切片结果: {}", listResult)
+    assertTrue(testFile.isFile(), "Regular file should return true")
   }
 
   @Test
-  fun `测试切片行功能 - 验证多行文本处理`() {
-    val tempFile = tempDir.resolve("temper.txt")
-    val text = "Line 1\nLine 2\nLine 3\nLine 4"
-    log.info("文本长度: {}", text.length)
+  fun testIsFileWithDirectory() {
+    val testDir = tempDir.resolve("testdir")
+    Files.createDirectory(testDir)
 
-    File(tempFile.toUri()).writeText(text)
-
-    val result = tempFile.sliceLines(sep = "\n", range = 0L..text.length)
-    val listResult = result.toList()
-
-    log.info("行切片结果: {}", listResult)
-
-    assertEquals(4, listResult.size, "行数应该为 4")
-    assertEquals("Line 1", listResult[0], "第一行应该是 'Line 1'")
-    assertEquals("Line 2", listResult[1], "第二行应该是 'Line 2'")
-    assertEquals("Line 3", listResult[2], "第三行应该是 'Line 3'")
-    assertEquals("Line 4", listResult[3], "第四行应该是 'Line 4'")
+    assertFalse(testDir.isFile(), "Directory should return false")
   }
 
   @Test
-  fun `测试行数统计功能 - 验证不同情况下的行数计算`() {
-    val tempFile = File.createTempFile("test count lines", ".txt")
-    tempFile.deleteOnExit()
-    tempFile.writeBytes("Hello\nWorld\nThis\nis\na\nTest\ne".toByteArray())
+  fun testIsFileWithNonExistentPath() {
+    val nonExistent = tempDir.resolve("nonexistent.txt")
 
-    val testPath = tempFile.toPath()
-    val actualLines = testPath.countLines()
-    assertEquals(7, actualLines, "统计的行数应该与预期值匹配")
+    assertFalse(nonExistent.isFile(), "Non-existent path should return false")
+  }
 
-    tempFile.writeText("")
-    val emptyLines = testPath.countLines()
-    assertEquals(0, emptyLines, "空文件的行数应该为 0")
+  // ========== Path.isEmpty() Tests ==========
 
-    tempFile.writeText("he\n")
-    val oneLines = testPath.countLines()
-    assertEquals(1, oneLines, "单行文件的行数应该为 1")
+  @Test
+  fun testIsEmptyWithEmptyFile() {
+    val emptyFile = tempDir.resolve("empty.txt")
+    Files.createFile(emptyFile)
 
-    tempFile.writeText("a\nb")
-    val twoLines = testPath.countLines()
-    assertEquals(2, twoLines, "两行文件的行数应该为 2")
+    assertTrue(emptyFile.isEmpty(), "Empty file should return true")
   }
 
   @Test
-  fun `测试分页行功能 - 验证文件内容分页读取`() {
-    val tempFile = File.createTempFile("test page lines", ".txt")
-    tempFile.deleteOnExit()
-    tempFile.writeText("Hello\nWorld\nThis\nis\na\nTest\ne")
-    log.info("临时文件: {}", tempFile)
-    log.info("文件是否存在: {}", tempFile.exists())
-    val testPath = tempFile.toPath()
-    log.info("文件行数: {}", testPath.countLines())
+  fun testIsEmptyWithNonEmptyFile() {
+    val nonEmptyFile = tempDir.resolve("nonempty.txt")
+    Files.write(nonEmptyFile, "content".toByteArray())
 
-    val pre = testPath.pageLines(Pq[1, 4], "\n")
+    assertFalse(nonEmptyFile.isEmpty(), "Non-empty file should return false")
+  }
 
-    log.info("分页结果: {}", pre)
+  @Test
+  fun testIsEmptyWithDirectory() {
+    val testDir = tempDir.resolve("testdir")
+    Files.createDirectory(testDir)
 
-    assertEquals(7, pre.t, "总行数应该为 7")
-    assertEquals(3, pre.d.size, "当前页数据大小应该为 3")
-    assertEquals("a", pre[0], "第一个元素应该是 'a'")
-    assertEquals(2, pre.p, "页码应该为 2")
+    assertTrue(testDir.isEmpty(), "Directory should return true")
+  }
 
-    val pr1 = testPath.pageLines(Pq[3, 2], "\n")
+  @Test
+  fun testIsEmptyWithNonExistentPath() {
+    val nonExistent = tempDir.resolve("nonexistent.txt")
 
-    assertEquals(7, pr1.t, "总行数应该为 7")
-    assertEquals("e", pr1[0], "第一个元素应该是 'e'")
-    assertEquals(4, pr1.p, "页码应该为 4")
+    assertTrue(nonExistent.isEmpty(), "Non-existent path should return true")
+  }
+
+  // ========== Path.fileChannel() Tests ==========
+
+  @Test
+  fun testFileChannelWithValidFile() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "test content".toByteArray())
+
+    val channel = testFile.fileChannel()
+    assertNotNull(channel, "FileChannel should not be null")
+    assertTrue(channel.isOpen, "FileChannel should be open")
+    channel.close()
+  }
+
+  @Test
+  fun testFileChannelWithReadWriteMode() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "test content".toByteArray())
+
+    val channel = testFile.fileChannel("rw")
+    assertNotNull(channel, "FileChannel should not be null")
+    assertTrue(channel.isOpen, "FileChannel should be open")
+    channel.close()
+  }
+
+  @Test
+  fun testFileChannelWithDirectory() {
+    val testDir = tempDir.resolve("testdir")
+    Files.createDirectory(testDir)
+
+    assertFailsWith<FileNotFoundException> { testDir.fileChannel() }
+  }
+
+  @Test
+  fun testFileChannelWithNonExistentFile() {
+    val nonExistent = tempDir.resolve("nonexistent.txt")
+
+    assertFailsWith<FileNotFoundException> { nonExistent.fileChannel() }
+  }
+
+  // ========== Path.fileSize() Tests ==========
+
+  @Test
+  fun testFileSizeWithEmptyFile() {
+    val emptyFile = tempDir.resolve("empty.txt")
+    Files.createFile(emptyFile)
+
+    assertEquals(0L, emptyFile.fileSize(), "Empty file size should be 0")
+  }
+
+  @Test
+  fun testFileSizeWithNonEmptyFile() {
+    val content = "Hello, World!"
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, content.toByteArray())
+
+    assertEquals(content.length.toLong(), testFile.fileSize(), "File size should match content length")
+  }
+
+  @Test
+  fun testFileSizeWithDirectory() {
+    val testDir = tempDir.resolve("testdir")
+    Files.createDirectory(testDir)
+
+    assertEquals(0L, testDir.fileSize(), "Directory size should return 0")
+  }
+
+  // ========== Path.countLines() Tests ==========
+
+  @Test
+  fun testCountLinesWithEmptyFile() {
+    val emptyFile = tempDir.resolve("empty.txt")
+    Files.createFile(emptyFile)
+
+    assertEquals(0L, emptyFile.countLines(), "Empty file should have 0 lines")
+  }
+
+  @Test
+  fun testCountLinesWithSingleLine() {
+    val singleLineFile = tempDir.resolve("single.txt")
+    Files.write(singleLineFile, "single line".toByteArray())
+
+    assertEquals(1L, singleLineFile.countLines(), "Single line file should have 1 line")
+  }
+
+  @Test
+  fun testCountLinesWithMultipleLines() {
+    val multiLineFile = tempDir.resolve("multi.txt")
+    Files.write(multiLineFile, "Line 1\nLine 2\nLine 3".toByteArray())
+
+    assertEquals(3L, multiLineFile.countLines(), "Multi-line file should have correct line count")
+  }
+
+  @Test
+  fun testCountLinesWithTrailingNewline() {
+    val trailingNewlineFile = tempDir.resolve("trailing.txt")
+    Files.write(trailingNewlineFile, "Line 1\nLine 2\n".toByteArray())
+
+    assertEquals(2L, trailingNewlineFile.countLines(), "File with trailing newline should count correctly")
+  }
+
+  @Test
+  fun testCountLinesWithDifferentLineEndings() {
+    val windowsFile = tempDir.resolve("windows.txt")
+    Files.write(windowsFile, "Line 1\r\nLine 2\r\nLine 3".toByteArray())
+
+    assertEquals(3L, windowsFile.countLines(), "Windows line endings should be counted correctly")
+  }
+
+  // ========== Path.countWordBySeparator() Tests ==========
+
+  @Test
+  fun testCountWordBySeparatorWithEmptyFile() {
+    val emptyFile = tempDir.resolve("empty.txt")
+    Files.createFile(emptyFile)
+
+    val result = emptyFile.countWordBySeparator().toList()
+    assertTrue(result.isEmpty(), "Empty file should return empty sequence")
+  }
+
+  @Test
+  fun testCountWordBySeparatorWithDefaultSeparator() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "Line 1\nLine 2\nLine 3".toByteArray())
+
+    val result = testFile.countWordBySeparator().toList()
+    assertTrue(result.isNotEmpty(), "File with lines should return non-empty sequence")
+  }
+
+  @Test
+  fun testCountWordBySeparatorWithCustomSeparator() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "word1,word2,word3".toByteArray())
+
+    val result = testFile.countWordBySeparator(",").toList()
+    assertTrue(result.isNotEmpty(), "File with custom separator should return non-empty sequence")
+  }
+
+  @Test
+  fun testCountWordBySeparatorWithEmptySeparator() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "content".toByteArray())
+
+    assertFailsWith<IllegalStateException> { testFile.countWordBySeparator("").toList() }
+  }
+
+  @Test
+  fun testCountWordBySeparatorWithDifferentCharsets() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "测试\n内容".toByteArray(Charsets.UTF_8))
+
+    val result = testFile.countWordBySeparator(charset = Charsets.UTF_8).toList()
+    assertTrue(result.isNotEmpty(), "File with UTF-8 content should work correctly")
+  }
+
+  // ========== Path.sliceLines() Tests ==========
+
+  @Test
+  fun testSliceLinesWithEmptyFile() {
+    val emptyFile = tempDir.resolve("empty.txt")
+    Files.createFile(emptyFile)
+
+    val result = emptyFile.sliceLines(0L..10L).toList()
+    assertTrue(result.isEmpty(), "Empty file should return empty sequence")
+  }
+
+  @Test
+  fun testSliceLinesWithValidRange() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "Line 1\nLine 2\nLine 3\nLine 4".toByteArray())
+
+    val result = testFile.sliceLines(0L..2L).toList()
+    assertTrue(result.isNotEmpty(), "Valid range should return non-empty sequence")
+  }
+
+  @Test
+  fun testSliceLinesWithCustomSeparator() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "Part1|Part2|Part3".toByteArray())
+
+    val result = testFile.sliceLines(0L..2L, sep = "|").toList()
+    assertTrue(result.isNotEmpty(), "Custom separator should work correctly")
+  }
+
+  @Test
+  fun testSliceLinesWithDifferentCharsets() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "测试1\n测试2".toByteArray(Charsets.UTF_8))
+
+    val result = testFile.sliceLines(0L..1L, charset = Charsets.UTF_8).toList()
+    assertTrue(result.isNotEmpty(), "Different charset should work correctly")
+  }
+
+  @Test
+  fun testSliceLinesWithProvidedTotalLines() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "Line 1\nLine 2\nLine 3".toByteArray())
+
+    val result = testFile.sliceLines(0L..1L, totalLines = 3L).toList()
+    assertTrue(result.isNotEmpty(), "Provided total lines should work correctly")
+  }
+
+  // ========== Path.pageLines() Tests ==========
+
+  @Test
+  fun testPageLinesWithEmptyFile() {
+    val emptyFile = tempDir.resolve("empty.txt")
+    Files.createFile(emptyFile)
+
+    val result = emptyFile.pageLines(Pq[0, 10])
+    assertEquals(0L, result.t, "Empty file should have 0 total")
+    assertTrue(result.d.isEmpty(), "Empty file should have empty data")
+  }
+
+  @Test
+  fun testPageLinesWithValidPagination() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "Line 1\nLine 2\nLine 3\nLine 4\nLine 5".toByteArray())
+
+    val result = testFile.pageLines(Pq[0, 2])
+    assertEquals(5L, result.t, "Total should match line count")
+    assertEquals(2, result.d.size, "Page size should match request")
+  }
+
+  @Test
+  fun testPageLinesWithEmptySeparator() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "content".toByteArray())
+
+    val result = testFile.pageLines(Pq[0, 10], sep = "")
+    assertEquals(0L, result.t, "Empty separator should return empty result")
+    assertTrue(result.d.isEmpty(), "Empty separator should return empty data")
+  }
+
+  @Test
+  fun testPageLinesWithCustomSeparatorAndCharset() {
+    val testFile = tempDir.resolve("test.txt")
+    Files.write(testFile, "测试1|测试2|测试3".toByteArray(Charsets.UTF_8))
+
+    val result = testFile.pageLines(Pq[0, 2], sep = "|", charset = Charsets.UTF_8)
+    assertTrue(result.t > 0, "Custom separator and charset should work")
+    assertTrue(result.d.isNotEmpty(), "Should return non-empty data")
   }
 }

@@ -78,15 +78,15 @@ interface IWxpaWebClient {
    * @since 2024-03-20
    */
   data class WxpaWebsiteUserInfoResp(
-    @JsonProperty("openid") val openId: string?,
-    @JsonProperty("nickname") val nickName: String?,
+    @param:JsonProperty("openid") val openId: string?,
+    @param:JsonProperty("nickname") val nickName: String?,
     val privilege: List<String> = emptyList(),
     @Deprecated("过时的接口数据") val headimgurl: String?,
     @Deprecated("过时的接口数据") val country: String?,
     @Deprecated("过时的接口数据") val city: String?,
     @Deprecated("过时的接口数据") val province: String? = null,
     @Deprecated("过时的接口数据") val sex: Int? = null,
-    @JsonProperty("unionid") val unionId: String?,
+    @param:JsonProperty("unionid") val unionId: String?,
   )
 
   /**

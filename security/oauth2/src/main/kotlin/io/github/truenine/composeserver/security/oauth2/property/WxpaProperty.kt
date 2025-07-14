@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.security.oauth2.property
 
 import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.iso8601LongUtc
-import io.github.truenine.composeserver.security.crypto.Keys
+import io.github.truenine.composeserver.security.crypto.CryptographicKeyManager
 import io.github.truenine.composeserver.security.crypto.sha1
 
 /**
@@ -29,7 +29,11 @@ class WxpaProperty {
   var jsapiTicket: String? = null
 
   @JvmOverloads
-  fun signature(url: String, nonceString: String = Keys.generateRandomAsciiString(), timestamp: Long = datetime.now().iso8601LongUtc): WxpaSignatureResp {
+  fun signature(
+    url: String,
+    nonceString: String = CryptographicKeyManager.generateRandomAsciiString(),
+    timestamp: Long = datetime.now().iso8601LongUtc,
+  ): WxpaSignatureResp {
     val splitUrl = url.split("#")[0]
     val b =
       mutableMapOf("noncestr" to nonceString, "jsapi_ticket" to jsapiTicket, "timestamp" to timestamp.toString(), "url" to splitUrl)

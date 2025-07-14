@@ -1,6 +1,8 @@
 package io.github.truenine.composeserver.typing
 
-enum class HTTPMethod(val methodName: String) : StringTyping {
+import io.github.truenine.composeserver.IStringTyping
+
+enum class HTTPMethod(val methodName: String) : IStringTyping {
   GET("GET"),
   POST("POST"),
   PUT("PUT"),
@@ -14,6 +16,6 @@ enum class HTTPMethod(val methodName: String) : StringTyping {
   override val value: String = methodName
 
   companion object {
-    operator fun get(methodName: String?): HTTPMethod? = entries.firstOrNull { it.methodName == methodName?.uppercase() }
+    @JvmStatic operator fun get(methodName: String?): HTTPMethod? = entries.firstOrNull { it.methodName == methodName?.uppercase() }
   }
 }

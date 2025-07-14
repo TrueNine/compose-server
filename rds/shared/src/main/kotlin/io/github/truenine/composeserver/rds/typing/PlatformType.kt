@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.StringTyping
+import io.github.truenine.composeserver.IStringTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 import org.babyfish.jimmer.sql.EnumType.Strategy
@@ -12,7 +12,7 @@ import org.babyfish.jimmer.sql.EnumType.Strategy
  * @since 2025-02-26
  */
 @EnumType(Strategy.NAME)
-enum class PlatformType(v: String) : StringTyping {
+enum class PlatformType(v: String) : IStringTyping {
   /** 未知 */
   @EnumItem(name = "NONE") @Deprecated(message = "一般情况，请明确指定平台") NONE("NONE"),
 

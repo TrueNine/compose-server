@@ -11,9 +11,9 @@ import kotlin.test.assertTrue
 /**
  * # 集合扩展函数测试
  *
- * 测试 CollectionFns.kt 中定义的集合相关扩展函数
+ * 测试 CollectionExtensions.kt 中定义的集合相关扩展函数
  */
-class CollectionFnsTest {
+class CollectionExtensionsTest {
 
   @Test
   fun `测试 mutableLockMapOf 方法 - 创建带初始值的并发安全Map`() {

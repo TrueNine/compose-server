@@ -176,4 +176,67 @@ class CnDistrictCodeTest {
       assertEquals(expectedLevel, districtCode.level, "输入编码: $input")
     }
   }
+
+  @Test
+  fun `test performance optimization - lazy level calculation`() {
+    val code = CnDistrictCode("110101001001")
+
+    // First access should calculate and cache the level
+    val level1 = code.level
+    val level2 = code.level
+    val level3 = code.level
+
+    // All accesses should return the same value
+    assertEquals(level1, level2)
+    assertEquals(level2, level3)
+    assertEquals(5, level1)
+  }
+
+  @Test
+  fun `test performance optimization - string building efficiency`() {
+    val iterations = 10000
+    val testCodes = listOf("11", "1101", "110101", "110101001", "110101001001")
+
+    val totalTime = kotlin.system.measureTimeMillis { repeat(iterations) { testCodes.forEach { code -> CnDistrictCode(code) } } }
+
+    // Performance should be reasonable for large number of operations
+    assertTrue(totalTime < 5000, "String building optimization should complete $iterations iterations in < 5s, took ${totalTime}ms")
+  }
+
+  @Test
+  fun `test memory efficiency with large batch creation`() {
+    val batchSize = 1000
+    val codes = mutableListOf<CnDistrictCode>()
+
+    val memoryBefore = Runtime.getRuntime().let { it.totalMemory() - it.freeMemory() }
+
+    repeat(batchSize) { index ->
+      val code = String.format("11%04d%06d", index % 10000, index % 1000000)
+      codes.add(CnDistrictCode(code))
+    }
+
+    System.gc()
+    val memoryAfter = Runtime.getRuntime().let { it.totalMemory() - it.freeMemory() }
+    val memoryUsed = memoryAfter - memoryBefore
+
+    // Memory usage should be reasonable (less than 10MB for 1000 objects)
+    assertTrue(memoryUsed < 10 * 1024 * 1024, "Memory usage should be reasonable: ${memoryUsed / 1024}KB")
+    assertEquals(batchSize, codes.size)
+  }
+
+  @Test
+  fun `test concurrent access safety`() {
+    val code = CnDistrictCode("110101001001")
+    val threadCount = 10
+    val results = mutableListOf<Int>()
+
+    val threads = (1..threadCount).map { Thread { synchronized(results) { results.add(code.level) } } }
+
+    threads.forEach { it.start() }
+    threads.forEach { it.join() }
+
+    // All threads should get the same result
+    assertEquals(threadCount, results.size)
+    assertTrue(results.all { it == 5 })
+  }
 }

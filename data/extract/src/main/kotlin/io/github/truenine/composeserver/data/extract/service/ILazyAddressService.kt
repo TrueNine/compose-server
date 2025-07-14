@@ -6,26 +6,39 @@ import io.github.truenine.composeserver.data.extract.domain.CnDistrictCode
 import io.github.truenine.composeserver.nonText
 import io.github.truenine.composeserver.string
 
-/** 懒加载行政区划代码服务接口。 提供按需、分版本获取中国行政区划代码（统计用区划代码和城乡划分代码）的功能。 */
+/**
+ * Lazy loading administrative district code service interface.
+ *
+ * Provides on-demand, versioned access to Chinese administrative district codes (statistical district codes and urban-rural classification codes).
+ *
+ * Features:
+ * - Lazy loading with efficient caching
+ * - Multi-version support with automatic fallback
+ * - Backward/reverse traversal capabilities
+ * - Hierarchical district relationship management
+ *
+ * @since 1.0.0
+ */
 interface ILazyAddressService {
   companion object {
-    /** 默认表示国家的代码 */
+    /** Default code representing the country */
     const val DEFAULT_COUNTRY_CODE = "000000000000"
     private val CHINA_AD_CODE_REGEX = IRegexes.CHINA_AD_CODE.toRegex()
 
     /**
-     * 校验给定的字符串是否符合中国行政区划代码的格式。
+     * Validates whether the given string conforms to Chinese administrative district code format.
      *
-     * @param code 待校验的代码字符串。
-     * @return 如果符合格式则返回 true，否则返回 false。
+     * @param code The code string to validate
+     * @return true if the format is valid, false otherwise
      */
     fun verifyCode(code: String): Boolean = code.matches(CHINA_AD_CODE_REGEX)
 
     /**
-     * 将不完整的12位代码补全为12位（末尾补0）。 如果输入无效或不符合代码格式，则原样返回。
+     * Converts incomplete codes to full 12-digit format (padding with trailing zeros). Returns original string if input is invalid or doesn't conform to code
+     * format.
      *
-     * @param code 待补全的代码字符串。
-     * @return 补全后的12位代码字符串或原始字符串。
+     * @param code The code string to convert
+     * @return Padded 12-digit code string or original string if invalid
      */
     fun convertToFillCode(code: String): String =
       when {
@@ -35,18 +48,19 @@ interface ILazyAddressService {
       }
 
     /**
-     * (公开辅助方法) 尝试根据字符串创建 CnDistrictCode 对象。 实现类 **可以** 使用此方法，但推荐在内部处理代码解析。
+     * Helper method to attempt creating CnDistrictCode object from string. Implementation classes **may** use this method, but internal code parsing is
+     * recommended.
      *
-     * @param code 代码字符串。
-     * @return CnDistrictCode 对象或 null（如果代码无效）。
+     * @param code The code string
+     * @return CnDistrictCode object or null if code is invalid
      */
     fun createCnDistrictCode(code: String?): CnDistrictCode? =
       when {
         code.nonText() -> null
-        // 允许最长12位
+        // Allow maximum 12 digits
         code.length > 12 -> null
-        // 验证基础格式，允许非12位但符合基本数字和长度的格式
-        // 补全后再验证
+        // Validate basic format, allow non-12-digit but conforming to basic numeric and length format
+        // Validate after padding
         !verifyCode(code.padEnd(12, '0')) -> null
         else ->
           try {
@@ -58,35 +72,41 @@ interface ILazyAddressService {
   }
 
   /**
-   * 表示一个行政区划单位的信息。
+   * Represents information about an administrative district unit.
    *
-   * @property code 地区代码对象。
-   * @property name 地区名称。
-   * @property yearVersion 数据对应的年份版本。
-   * @property level 地区层级 (1:省, 2:市, 3:县, 4:乡镇, 5:村)。
-   * @property leaf 是否为叶子节点（通常指村级或无法再下钻的级别）。
+   * @property code District code object
+   * @property name District name
+   * @property yearVersion Data year version
+   * @property level Administrative level (1:Province, 2:City, 3:County, 4:Town, 5:Village)
+   * @property leaf Whether this is a leaf node (usually village level or cannot be drilled down further)
    */
   data class CnDistrict(val code: CnDistrictCode, val name: String, val yearVersion: String, val level: Int = code.level, val leaf: Boolean = level >= 5)
 
   // --- 服务属性 ---
-  /** 提供的日志记录器 (可选) */
+  /** Optional logger for the service */
   val logger: SystemLogger?
     get() = null
 
   /**
-   * 所有支持的年份版本，例如：
-   * - `["2023", "2024", "2018"]`
+   * All supported year versions.
+   *
+   * Example: `["2023", "2024", "2018"]`
    */
   val supportedYearVersions: List<String>
 
-  /** 默认使用的年份版本 */
+  /** Default year version to use */
   val supportedDefaultYearVersion: String
 
-  /** 支持的最大行政层级，默认为 5 (村级) */
+  /** Maximum supported administrative level, defaults to 5 (village level) */
   val supportedMaxLevel: Int
     get() = 5
 
-  /** 获取当前年份版本之前一个年份版本 基于 [supportedYearVersions] */
+  /**
+   * Gets the previous year version before the current year version. Based on [supportedYearVersions].
+   *
+   * @param yearVersion Current year version to find predecessor for
+   * @return Previous year version or null if none exists
+   */
   fun lastYearVersionOrNull(yearVersion: String): String? {
     if (yearVersion.nonText()) return null
     val currentYearVersion = yearVersion.toIntOrNull() ?: return null
@@ -94,57 +114,71 @@ interface ILazyAddressService {
     return supportedYearVersions.mapNotNull { it.toIntOrNull() }.distinct().sortedDescending().filter { it < currentYearVersion }.maxOrNull()?.toString()
   }
 
-  /** 最新的支持的年份版本 */
+  /** Latest supported year version */
   val lastYearVersion: String
     get() = supportedYearVersions.maxOrNull() ?: supportedDefaultYearVersion
 
   /**
-   * 获取指定代码表示的行政区划的 **直接子级** 列表。 例如，给定省代码，返回该省下的所有市；给定国家代码 "0"，返回所有省。 实现类需要处理 `parentCode` 无效或找不到的情况，并负责根据 `yearVersion` 查找数据，**无需** 自动版本回退。
+   * Gets the **direct children** list of the administrative district represented by the specified code.
    *
-   * @param parentCode 父级行政区划代码 (例如：省代码 "110000000000", 国家代码 "0")。
-   * @param yearVersion 需要查找的数据年份版本。
-   * @return 直接子级 [CnDistrict] 列表，如果父代码无效、无子级或指定年份无数据则返回空列表。
+   * For example, given a province code, returns all cities under that province; given country code "0", returns all provinces.
+   *
+   * Implementation classes need to handle cases where `parentCode` is invalid or not found, and are responsible for finding data based on `yearVersion`
+   * **without** automatic version fallback.
+   *
+   * @param parentCode Parent administrative district code (e.g., province code "110000000000", country code "0")
+   * @param yearVersion Data year version to search
+   * @return List of direct children [CnDistrict], empty list if parent code is invalid, has no children, or no data for specified year
    */
   fun fetchChildren(parentCode: string, yearVersion: String): List<CnDistrict>
 
   /**
-   * 获取所有省份列表（国家 "0" 的直接子级）。 实现类应调用 `findChildren(DEFAULT_COUNTRY_CODE, yearVersion)`。
+   * Gets all provinces list (direct children of country "0"). Implementation classes should call `fetchChildren(DEFAULT_COUNTRY_CODE, yearVersion)`.
    *
-   * @param yearVersion 数据年份版本。
-   * @return 省份 [CnDistrict] 列表。
+   * @param yearVersion Data year version
+   * @return List of province [CnDistrict]
    */
   fun fetchAllProvinces(yearVersion: String = supportedDefaultYearVersion): List<CnDistrict> = fetchChildren(DEFAULT_COUNTRY_CODE, yearVersion)
 
   /**
-   * 查找指定代码对应的单个行政区划信息。 实现类需要处理 `code` 无效或找不到的情况。 实现类 **需要** 处理版本回退逻辑：如果 `yearVersion` 找不到，则尝试使用 `lastYearVersionOrNull` 获取更早版本进行查找，直到找到或所有版本都尝试过。
+   * Finds single administrative district information corresponding to the specified code.
    *
-   * @param code 需要查找的行政区划代码（可以是任意层级的部分或完整代码）。
-   * @param yearVersion **起始** 查找的数据年份版本 (若希望总是从最新开始，传入 `lastYearVersion`)。
-   * @return 找到的 [CnDistrict] 信息 (应包含实际找到数据的年份版本)，如果所有支持年份版本中都找不到则返回 null。
+   * Implementation classes need to handle cases where `code` is invalid or not found. Implementation classes **must** handle version fallback logic: if
+   * `yearVersion` is not found, try using `lastYearVersionOrNull` to get earlier versions for searching until found or all versions tried.
+   *
+   * @param code Administrative district code to search (can be partial or complete code at any level)
+   * @param yearVersion **Starting** data year version to search (pass `lastYearVersion` to always start from latest)
+   * @return Found [CnDistrict] information (should include actual year version where data was found), null if not found in any supported year version
    */
   fun fetchDistrict(code: string, yearVersion: String): CnDistrict?
 
   /**
-   * 递归查找指定代码下的 **所有子孙** 行政区划列表，直到指定的最大深度。 实现类需要处理 `parentCode` 无效或找不到的情况，并处理 `maxDepth`。 实现类 **需要** 处理版本回退逻辑：对于查找的每一层级，如果在一个版本中找不到子节点，应尝试更早的版本。
-   * （注意：版本回退逻辑可能比较复杂，例如，父节点在 V2 找到，子节点在 V1 找到）。
+   * Recursively finds **all descendant** administrative districts under the specified code, up to the specified maximum depth.
    *
-   * @param parentCode 父级行政区划代码。
-   * @param maxDepth 相对于 `parentCode` 的最大查找深度（例如 `maxDepth = 1` 表示只查找直接子级，等同于 `findChildren`）。
-   * @param yearVersion **起始** 查找的数据年份版本 (每一层递归都应从这个版本开始尝试)。
-   * @return 所有符合条件的子孙 [CnDistrict] 列表 (每个 District 应包含实际找到数据的年份版本)。
+   * Implementation classes need to handle cases where `parentCode` is invalid or not found, and handle `maxDepth`. Implementation classes **must** handle
+   * version fallback logic: for each level searched, if child nodes are not found in one version, try earlier versions.
+   *
+   * Note: Version fallback logic can be complex, e.g., parent node found in V2, child nodes found in V1.
+   *
+   * @param parentCode Parent administrative district code
+   * @param maxDepth Maximum search depth relative to `parentCode` (e.g., `maxDepth = 1` means only direct children, equivalent to `fetchChildren`)
+   * @param yearVersion **Starting** data year version to search (each recursion level should start trying from this version)
+   * @return List of all qualifying descendant [CnDistrict] (each District should include actual year version where data was found)
    */
   fun fetchChildrenRecursive(parentCode: string, maxDepth: Int = supportedMaxLevel, yearVersion: String = lastYearVersion): List<CnDistrict>
 
   /**
-   * 以遍历的方式递归处理指定代码下的所有子孙行政区划。 该方法通过回调函数让调用者能够控制遍历过程，适合大数据量的数据库操作。
+   * Recursively processes all descendant administrative districts under the specified code using traversal.
    *
-   * @param parentCode 父级行政区划代码
-   * @param maxDepth 相对于 `parentCode` 的最大遍历深度
-   * @param yearVersion **起始** 遍历的数据年份版本
-   * @param onVisit 访问节点的回调函数，返回 true 继续遍历，返回 false 停止当前分支的遍历 参数说明：
-   *     - children: 当前访问的节点的直接子节点列表
-   *     - depth: 当前节点相对于 parentCode 的深度（从1开始）
-   *     - parentDistrict: 父节点信息（如果是顶级节点则为null）
+   * This method allows callers to control the traversal process through callback functions, suitable for large-scale database operations.
+   *
+   * @param parentCode Parent administrative district code
+   * @param maxDepth Maximum traversal depth relative to `parentCode`
+   * @param yearVersion **Starting** data year version for traversal
+   * @param onVisit Node visit callback function, return true to continue traversal, false to stop current branch traversal. Parameter descriptions:
+   *     - children: Direct child node list of currently visited node
+   *     - depth: Depth of current node relative to parentCode (starting from 1)
+   *     - parentDistrict: Parent node information (null if top-level node)
    */
   fun traverseChildrenRecursive(
     parentCode: string,

@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /** 用户学历 */
 @EnumType(EnumType.Strategy.ORDINAL)
-enum class DegreeTyping(v: Int, val level: Int) : IntTyping {
+enum class DegreeTyping(v: Int, val level: Int) : IIntTyping {
   /** 文盲 */
   @EnumItem(ordinal = 0) NONE(0, 0),
 

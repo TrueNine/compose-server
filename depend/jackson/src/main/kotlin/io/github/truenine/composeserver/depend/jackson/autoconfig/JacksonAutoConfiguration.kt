@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.cfg.MapperConfig
 import com.fasterxml.jackson.databind.introspect.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.github.truenine.composeserver.DTimer
+import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.depend.jackson.modules.DatetimeCustomModule
 import io.github.truenine.composeserver.depend.jackson.modules.KotlinCustomModule
 import io.github.truenine.composeserver.slf4j
@@ -85,7 +85,7 @@ class JacksonAutoConfiguration {
 
       b.timeZone(TimeZone.getTimeZone(zoneOffset))
       b.locale(Locale.US)
-      b.simpleDateFormat(DTimer.DATETIME)
+      b.simpleDateFormat(DateTimeConverter.DATETIME)
       b.defaultViewInclusion(true)
       b.featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
       b.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)

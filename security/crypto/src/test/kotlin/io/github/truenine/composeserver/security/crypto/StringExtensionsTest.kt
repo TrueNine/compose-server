@@ -6,7 +6,7 @@ import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 
 /** Test cases for String extension functions */
-class StringFnsTest {
+class StringExtensionsTest {
 
   @Test
   fun `test uuid generation`() {

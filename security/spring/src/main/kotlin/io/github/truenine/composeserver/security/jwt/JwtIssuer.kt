@@ -3,8 +3,8 @@ package io.github.truenine.composeserver.security.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.DTimer
-import io.github.truenine.composeserver.security.crypto.Encryptors
+import io.github.truenine.composeserver.DateTimeConverter
+import io.github.truenine.composeserver.security.crypto.CryptographicOperations
 import io.github.truenine.composeserver.security.jwt.consts.IssuerParam
 import io.github.truenine.composeserver.slf4j
 import java.security.PrivateKey
@@ -35,7 +35,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
             encryptData(createContent(params.encryptedDataObj!!), params.contentEncryptEccKey ?: this@JwtIssuer.contentEccPublicKey!!),
           )
         }
-        withExpiresAt(DTimer.plusMillisFromCurrent(params.duration?.toMillis() ?: this@JwtIssuer.expireMillis))
+        withExpiresAt(DateTimeConverter.plusMillisFromCurrent(params.duration?.toMillis() ?: this@JwtIssuer.expireMillis))
       }
       .sign(Algorithm.RSA256(params.signatureKey ?: this.signatureIssuerKey))
   }
@@ -43,7 +43,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
   internal fun createContent(content: Any): String =
     runCatching { objectMapper.writeValueAsString(content) }.onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }.getOrElse { "{}" }
 
-  internal fun encryptData(encData: String, eccPublicKey: PublicKey): String? = Encryptors.encryptByEccPublicKey(eccPublicKey, encData)
+  internal fun encryptData(encData: String, eccPublicKey: PublicKey): String? = CryptographicOperations.encryptByEccPublicKey(eccPublicKey, encData)
 
   inner class Builder {
     fun build(): JwtIssuer = this@JwtIssuer

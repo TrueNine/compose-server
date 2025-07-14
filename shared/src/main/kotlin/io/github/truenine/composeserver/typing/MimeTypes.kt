@@ -1,12 +1,14 @@
 package io.github.truenine.composeserver.typing
 
+import io.github.truenine.composeserver.IStringTyping
+
 /**
  * mime类型
  *
  * @author TrueNine
  * @since 2022-11-03
  */
-enum class MimeTypes(private val extension: String, vararg m: String) : StringTyping {
+enum class MimeTypes(private val extension: String, vararg m: String) : IStringTyping {
   EXE("exe", "application/ms-download", "application/octet-stream"),
 
   /** 这个比较特殊，他的后缀名 是 binary 注意 */

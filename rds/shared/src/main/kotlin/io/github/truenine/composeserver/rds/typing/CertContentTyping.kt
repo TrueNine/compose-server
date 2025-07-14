@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.rds.typing
 
-import io.github.truenine.composeserver.typing.IntTyping
+import io.github.truenine.composeserver.IIntTyping
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /** 证件内容类型 */
 @EnumType(EnumType.Strategy.ORDINAL)
-enum class CertContentTyping(private val v: Int) : IntTyping {
+enum class CertContentTyping(private val v: Int) : IIntTyping {
   /** 无要求 */
   @EnumItem(ordinal = 0) NONE(0),
 

@@ -3,7 +3,7 @@ package io.github.truenine.composeserver
 import kotlin.test.*
 
 /** ID 类型相关扩展函数的测试类 */
-class AliasFnsTest {
+class AliasExtensionsTest {
 
   @Test
   fun `test long is id`() {

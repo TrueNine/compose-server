@@ -18,7 +18,6 @@ dependencies {
   api(libs.jakarta.inject.jakarta.inject.api)
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(libs.org.slf4j.slf4j.api)
-  implementation(projects.meta)
 
   testImplementation(projects.testtoolkit)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
