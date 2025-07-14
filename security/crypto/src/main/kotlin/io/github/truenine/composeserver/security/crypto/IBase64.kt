@@ -71,7 +71,7 @@ interface IBase64 {
      */
     @JvmStatic
     fun encode(content: ByteArray): String {
-      return String(encoder.encode(content), defaultCharset)
+      return encoder.encodeToString(content)
     }
 
     /**
@@ -99,7 +99,7 @@ interface IBase64 {
      */
     @JvmStatic
     fun encodeUrlSafe(content: ByteArray): String {
-      return String(urlSafeEncoder.encode(content), defaultCharset)
+      return urlSafeEncoder.encodeToString(content)
     }
 
     /**
@@ -116,9 +116,14 @@ interface IBase64 {
     fun decodeToByte(base64: String): ByteArray {
       // Empty string is a valid Base64 encoding of empty byte array
       if (base64.isEmpty()) return ByteArray(0)
-      // Blank strings (containing only whitespace) are invalid
-      require(base64.isNotBlank()) { "Base64 string cannot be null or blank" }
-      return runCatching { decoder.decode(base64) }.getOrElse { throw IllegalArgumentException("Invalid Base64 string format", it) }
+      // Optimized validation: check for blank strings efficiently
+      if (base64.isBlank()) throw IllegalArgumentException("Base64 string cannot be null or blank")
+      // Direct decode with exception propagation for better performance
+      try {
+        return decoder.decode(base64)
+      } catch (e: IllegalArgumentException) {
+        throw IllegalArgumentException("Invalid Base64 string format", e)
+      }
     }
 
     /**
@@ -151,9 +156,13 @@ interface IBase64 {
      */
     @JvmStatic
     fun decode(base64: ByteArray, charset: Charset = defaultCharset): String {
-      require(base64.isNotEmpty()) { "Base64 byte array cannot be empty" }
-      val decodedBytes = runCatching { decoder.decode(base64) }.getOrElse { throw IllegalArgumentException("Invalid Base64 byte array format", it) }
-      return String(decodedBytes, charset)
+      if (base64.isEmpty()) throw IllegalArgumentException("Base64 byte array cannot be empty")
+      try {
+        val decodedBytes = decoder.decode(base64)
+        return String(decodedBytes, charset)
+      } catch (e: IllegalArgumentException) {
+        throw IllegalArgumentException("Invalid Base64 byte array format", e)
+      }
     }
 
     /**
@@ -168,8 +177,12 @@ interface IBase64 {
      */
     @JvmStatic
     fun decodeUrlSafe(base64: String): ByteArray {
-      require(base64.isNotBlank()) { "URL-safe Base64 string cannot be null or blank" }
-      return runCatching { urlSafeDecoder.decode(base64) }.getOrElse { throw IllegalArgumentException("Invalid URL-safe Base64 string format", it) }
+      if (base64.isBlank()) throw IllegalArgumentException("URL-safe Base64 string cannot be null or blank")
+      try {
+        return urlSafeDecoder.decode(base64)
+      } catch (e: IllegalArgumentException) {
+        throw IllegalArgumentException("Invalid URL-safe Base64 string format", e)
+      }
     }
 
     /**
