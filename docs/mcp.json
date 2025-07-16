@@ -1,5 +1,6 @@
 {
   "mcpServers": {
+    "type": "stdio",
     "context7": {
       "command": "npx",
       "args": [
@@ -9,6 +10,7 @@
     }
   },
   "Sequential-thinking": {
+    "type": "stdio",
     "command": "npx",
     "args": [
       "-y",
@@ -16,6 +18,7 @@
     ]
   },
   "broswertools": {
+    "type": "stdio",
     "command": "npx",
     "args": [
       "-y",
