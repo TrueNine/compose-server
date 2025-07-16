@@ -1,5 +1,5 @@
 {
-  "mcpServers": {"type": "stdio", "context7": {"command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"]}},
+  "mcpServers": {"type": "stdio","command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"]},
   "Sequential-thinking": {"type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]},
   "broswertools": {"type": "stdio", "command": "npx", "args": ["-y", "@browsermcp/mcp@latest"]}
 }
