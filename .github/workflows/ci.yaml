@@ -6,25 +6,43 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=false"
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up JDK 24
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.konan
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '24'
+          java-version: '17'
           distribution: 'temurin'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.0.0-rc-1'
+          gradle-version: '9.0.0-rc-3'
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+          cache-cleanup: on-success
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -33,9 +51,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile*', '**/docker-compose*') }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-docker-
 
       - name: Verify Docker installation
         run: |
@@ -46,21 +64,26 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run tests with Testcontainers
-        run: ./gradlew test --no-daemon --stacktrace --parallel
+      - name: Warm up Gradle daemon
+        run: ./gradlew --version
+
+      - name: Run build and tests
+        run: ./gradlew clean build test --no-daemon --stacktrace --parallel --build-cache --configuration-cache
         env:
-          # Testcontainers 配置
+          # Testcontainers 优化配置
           TESTCONTAINERS_RYUK_DISABLED: false
           TESTCONTAINERS_CHECKS_DISABLE: false
-          # Docker 相关配置
+          TESTCONTAINERS_REUSE_ENABLE: true
+          TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX: ""
+          # Docker 性能优化
           DOCKER_HOST: unix:///var/run/docker.sock
-          # 提高 Testcontainers 性能
           TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
           TESTCONTAINERS_HOST_OVERRIDE: localhost
-          # 避免 Testcontainers 拉取镜像时的网络问题
-          TESTCONTAINERS_REUSE_ENABLE: false
-          # CI 环境特殊配置
+          # JVM 性能调优
+          MAVEN_OPTS: "-Xmx2g -XX:+UseG1GC"
+          # CI 环境配置
           CI: true
+          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -84,5 +107,13 @@ jobs:
       - name: Cleanup Docker containers
         if: always()
         run: |
-          docker container prune -f
-          docker image prune -f 
+          docker container prune -f --filter "until=1h"
+          docker image prune -f --filter "until=24h"
+          docker volume prune -f --filter "label!=keep"
+
+      - name: Cache cleanup
+        if: always()
+        run: |
+          # 清理旧的 Gradle 缓存文件
+          find ~/.gradle/caches -name "*.lock" -delete || true
+          find ~/.gradle/caches -type d -name "tmp" -exec rm -rf {} + || true
