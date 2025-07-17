@@ -115,3 +115,14 @@ mavenPublishing {
     }
   }
 }
+
+// Fix task dependencies for Gradle's strict dependency validation
+afterEvaluate {
+  // Only set up dependency if both tasks exist (not all projects have dokka)
+  val dokkaJavadocJarTask = tasks.findByName("dokkaJavadocJar")
+  val generateMetadataTask = tasks.findByName("generateMetadataFileForMavenPublication")
+
+  if (dokkaJavadocJarTask != null && generateMetadataTask != null) {
+    generateMetadataTask.dependsOn(dokkaJavadocJarTask)
+  }
+}
