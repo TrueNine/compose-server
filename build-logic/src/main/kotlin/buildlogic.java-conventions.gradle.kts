@@ -81,8 +81,18 @@ afterEvaluate {
     ).forEach { config ->
       config.dependencies.forEach { dep ->
         if (commonProjectDeps.contains(dep.name)) {
-          dependsOn(":${dep.name}:sourcesJar")
-          dependsOn(":${dep.name}:javadocJar")
+          val depProject = project.findProject(":${dep.name}")
+          if (depProject != null) {
+            val sourcesJarTask = depProject.tasks.findByName("sourcesJar")
+            val javadocJarTask = depProject.tasks.findByName("javadocJar")
+            
+            if (sourcesJarTask != null) {
+              dependsOn(":${dep.name}:sourcesJar")
+            }
+            if (javadocJarTask != null) {
+              dependsOn(":${dep.name}:javadocJar")
+            }
+          }
         }
       }
     }

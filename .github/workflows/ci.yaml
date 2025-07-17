@@ -2,47 +2,25 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev  ]
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=false"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=false -Dorg.gradle.caching=false"
 
 jobs:
-  test:
+  # 🐳 Setup Docker & Testcontainers
+  setup-docker:
+    name: "🐳 Setup Docker & Testcontainers"
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-    
+    timeout-minutes: 10
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.konan
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '9.0.0-rc-3'
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-          cache-cleanup: on-success
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -61,55 +39,175 @@ jobs:
           docker info
           docker ps
 
+      - name: Pre-pull Testcontainers images
+        run: |
+          # 预拉取常用的测试镜像，提高 Testcontainers 启动速度
+          docker pull postgres:15-alpine || true
+          docker pull redis:7-alpine || true
+          docker pull mysql:8.0 || true
+          docker pull mongo:7 || true
+          docker pull minio/minio:latest || true
+          docker pull nginx:alpine || true
+
+  # ☕ Setup JDK
+  setup-jdk:
+    name: "☕ Setup JDK"
+    runs-on: ubuntu-latest
+    needs: setup-docker
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Verify Java installation
+        run: |
+          java -version
+          javac -version
+
+  # 🔧 Setup Gradle
+  setup-gradle:
+    name: "🔧 Setup Gradle"
+    runs-on: ubuntu-latest
+    needs: setup-jdk
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.konan
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.0.0-rc-3'
+          cache-read-only: false
+          cache-cleanup: on-success
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Warm up Gradle daemon
         run: ./gradlew --version
 
-      - name: Run build and tests
-        run: ./gradlew clean build test --no-daemon --stacktrace --parallel --build-cache --configuration-cache
+  # 🧪 Run All Tests
+  run-tests:
+    name: "🧪 Run All Tests"
+    runs-on: ubuntu-latest
+    needs: setup-gradle
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.konan
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.0.0-rc-3'
+          cache-read-only: false
+          cache-cleanup: on-success
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile*', '**/docker-compose*') }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
+      - name: Pre-pull Testcontainers images
+        run: |
+          docker pull postgres:15-alpine || true
+          docker pull redis:7-alpine || true
+          docker pull mysql:8.0 || true
+          docker pull mongo:7 || true
+          docker pull minio/minio:latest || true
+          docker pull nginx:alpine || true
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run all tests
+        run: ./gradlew clean test --no-daemon --stacktrace --parallel --no-build-cache --no-configuration-cache --rerun-tasks
         env:
           # Testcontainers 优化配置
           TESTCONTAINERS_RYUK_DISABLED: false
           TESTCONTAINERS_CHECKS_DISABLE: false
           TESTCONTAINERS_REUSE_ENABLE: true
           TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX: ""
+          # 启用容器重用标签，提高缓存效率
+          TESTCONTAINERS_REUSE_HASH_LABELS: true
           # Docker 性能优化
           DOCKER_HOST: unix:///var/run/docker.sock
           TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
           TESTCONTAINERS_HOST_OVERRIDE: localhost
+          # Docker 镜像缓存优化
+          DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
           # JVM 性能调优
           MAVEN_OPTS: "-Xmx2g -XX:+UseG1GC"
           # CI 环境配置
           CI: true
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results
-          path: |
-            **/build/test-results/test/
-            **/build/reports/tests/test/
-            **/build/reports/jacoco/
-
-      - name: Upload coverage reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-reports
-          path: |
-            **/build/reports/jacoco/test/html/
-            **/build/reports/jacoco/test/jacocoTestReport.xml
-
       - name: Cleanup Docker containers
         if: always()
         run: |
-          docker container prune -f --filter "until=1h"
-          docker image prune -f --filter "until=24h"
-          docker volume prune -f --filter "label!=keep"
+          # 清理停止的容器，但保留可重用的容器
+          docker container prune -f --filter "until=1h" --filter "label!=org.testcontainers.reuse.enable=true"
+          # 保留常用镜像，只清理较老的镜像
+          docker image prune -f --filter "until=48h" --filter "dangling=true"
+          # 清理未使用的卷，但保留标记为保留的卷
+          docker volume prune -f --filter "label!=keep" --filter "label!=org.testcontainers"
 
       - name: Cache cleanup
         if: always()
