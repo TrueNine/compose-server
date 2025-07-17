@@ -67,49 +67,48 @@ jobs:
       - name: Warm up Gradle daemon
         run: ./gradlew --version
 
-      - name: Run build and tests
-        run: ./gradlew clean build test --no-daemon --stacktrace --parallel --build-cache --configuration-cache
+      - name: Pre-pull common Docker images for Testcontainers
+        run: |
+          # 预拉取常用的测试镜像，提高 Testcontainers 启动速度
+          docker pull postgres:15-alpine || true
+          docker pull redis:7-alpine || true
+          docker pull mysql:8.0 || true
+          docker pull mongo:7 || true
+          docker pull nginx:alpine || true
+          # 可以根据你的项目需要调整镜像列表
+
+      - name: Run tests
+        run: ./gradlew clean test --no-daemon --stacktrace --parallel --build-cache --configuration-cache
         env:
           # Testcontainers 优化配置
           TESTCONTAINERS_RYUK_DISABLED: false
           TESTCONTAINERS_CHECKS_DISABLE: false
           TESTCONTAINERS_REUSE_ENABLE: true
           TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX: ""
+          # 启用容器重用标签，提高缓存效率
+          TESTCONTAINERS_REUSE_HASH_LABELS: true
           # Docker 性能优化
           DOCKER_HOST: unix:///var/run/docker.sock
           TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
           TESTCONTAINERS_HOST_OVERRIDE: localhost
+          # Docker 镜像缓存优化
+          DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
           # JVM 性能调优
           MAVEN_OPTS: "-Xmx2g -XX:+UseG1GC"
           # CI 环境配置
           CI: true
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results
-          path: |
-            **/build/test-results/test/
-            **/build/reports/tests/test/
-            **/build/reports/jacoco/
-
-      - name: Upload coverage reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-reports
-          path: |
-            **/build/reports/jacoco/test/html/
-            **/build/reports/jacoco/test/jacocoTestReport.xml
-
       - name: Cleanup Docker containers
         if: always()
         run: |
-          docker container prune -f --filter "until=1h"
-          docker image prune -f --filter "until=24h"
-          docker volume prune -f --filter "label!=keep"
+          # 清理停止的容器，但保留可重用的容器
+          docker container prune -f --filter "until=1h" --filter "label!=org.testcontainers.reuse.enable=true"
+          # 保留常用镜像，只清理较老的镜像
+          docker image prune -f --filter "until=48h" --filter "dangling=true"
+          # 清理未使用的卷，但保留标记为保留的卷
+          docker volume prune -f --filter "label!=keep" --filter "label!=org.testcontainers"
 
       - name: Cache cleanup
         if: always()
