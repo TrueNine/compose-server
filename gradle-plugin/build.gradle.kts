@@ -28,10 +28,10 @@ dependencies {
 
 gradlePlugin {
   plugins {
-    register("${libs.versions.group.get()}.${project.name}") {
-      id = "${libs.versions.group.get()}.${project.name}"
-      displayName = "${libs.versions.group.get()}.${project.name}.composeserver.gradle.plugin"
-      implementationClass = "${libs.versions.group.get()}.composeserver.gradleplugin.Main"
+    register("composeserver-gradle-plugin") {
+      id = "io.github.truenine.composeserver.gradle-plugin"
+      displayName = "Compose Server Gradle Plugin"
+      implementationClass = "io.github.truenine.composeserver.gradleplugin.Main"
       description = "compose server development gradle plugin"
     }
   }
