@@ -26,19 +26,35 @@ configurations.all {
 java {
   sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
   targetCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
-  withJavadocJar()
   withSourcesJar()
   toolchain {
     languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
   }
 }
 
-tasks.withType<Jar> {
-  archiveClassifier = ""
-  // 确保 kotlin_module 文件被正确包含
-  from(sourceSets.main.get().output)
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+// Configure javadoc jar after all plugins are applied
+afterEvaluate {
+  // Only create standard javadoc jar if Dokka plugin is not applied
+  // (Dokka will create its own javadoc jar via the publishing conventions)
+  if (!plugins.hasPlugin("org.jetbrains.dokka")) {
+    java {
+      withJavadocJar()
+    }
+  }
 }
+
+tasks.withType<Jar> {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  // 只对主 jar 任务设置空的 classifier 和排除源码文件
+  if (name == "jar") {
+    archiveClassifier = ""
+    // 确保主 jar 任务排除源码文件（只包含编译后的 .class 文件）
+    exclude("**/*.kt")
+  }
+}
+
+
 
 testing {
   suites {
@@ -48,17 +64,28 @@ testing {
   }
 }
 
-// 修复 Gradle 9.0.0-rc-1 的隐式依赖问题
-// 使用 afterEvaluate 确保在配置阶段之后执行
 afterEvaluate {
   tasks.withType<Test>().configureEach {
-    // 确保测试任务在当前项目的jar任务之后运行
     mustRunAfter(tasks.withType<Javadoc>())
     tasks.findByName("javadocJar")?.let { mustRunAfter(it) }
     tasks.findByName("sourcesJar")?.let { mustRunAfter(it) }
-    
-    // 解决跨项目依赖的隐式依赖问题
+
     dependsOn(configurations.testRuntimeClasspath)
+
+    val commonProjectDeps = listOf("testtoolkit", "shared")
+
+    listOf(
+      configurations.testImplementation.get(),
+      configurations.testRuntimeOnly.get(),
+      configurations.testCompileOnly.get()
+    ).forEach { config ->
+      config.dependencies.forEach { dep ->
+        if (commonProjectDeps.contains(dep.name)) {
+          dependsOn(":${dep.name}:sourcesJar")
+          dependsOn(":${dep.name}:javadocJar")
+        }
+      }
+    }
   }
 }
 
