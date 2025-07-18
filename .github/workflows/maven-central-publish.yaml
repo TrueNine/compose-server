@@ -111,6 +111,8 @@ jobs:
             --no-daemon \
             --stacktrace \
             --info \
+            --parallel \
+            --no-configuration-cache \
             -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
             -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
             -PmavenCentralUsername="${{ secrets.MAVENCENTRAL_USERNAME }}" \
