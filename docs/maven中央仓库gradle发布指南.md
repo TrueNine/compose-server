@@ -29,6 +29,8 @@ sub   xxxx/dddd 2025-07-05 [E]
    段搞出来的
 5. `gpg --export-secret-keys <keyId> > /home/truenine/.gradle/private.gpg` 保存 private.gpg 到你自己的 `.gradle` 下，不要放到仓库里面
 
+> 使用 `gpg --armor --export-secret-keys <keyId>` 可以输出私钥字符串格式，这对于 CI 环境可能有用。
+
 # gradle 准备
 
 按照 github 中：[vanniktech 插件文档](https://github.com/vanniktech/gradle-maven-publish-plugin) 对插件进行配置，填写好所有的 maven 配置信息。
@@ -62,4 +64,40 @@ signing.keyId=keyId
 signing.password=password
 # 这里要写绝对路径
 signing.secretKeyRingFile=/home/truenine/.gradle/private.gpg
+```
+
+## CI 环境可配置命令
+
+
+```shell
+./gradlew publishToMavenCentral \
+  --no-daemon \
+  --stacktrace \
+  --info \
+  --parallel \
+  --no-configuration-cache \
+  -PmavenCentralUsername="可选的中央仓库账号" \
+  -PmavenCentralPassword="可选的中央仓库密码" \
+  -PsigningInMemoryKeyId="keyId" \
+  -PsigningInMemoryKey="-----BEGIN PGP PRIVATE KEY BLOCK----- 类似的原始gpg字符串格式" \
+  -PsigningInMemoryKeyPassword="qwer1234"
+```
+
+> 可参考 [actions 配置](/.github/workflows/maven-central-publish.yaml)
+>
+> 之所以此处配置与传统 signing 配置不同，可查看 `com.vanniktech.maven.publish` 插件的 `signAllPublications` 代码
+> 插件对此做了特殊处理。
+
+```kotlin
+fun signAllPublications() {
+  // ...
+  // TODO update in memory set up once https://github.com/gradle/gradle/issues/16056 is implemented
+  val inMemoryKey = project.providers.gradleProperty("signingInMemoryKey")
+  if (inMemoryKey.isPresent) {
+    val inMemoryKeyId = project.providers.gradleProperty("signingInMemoryKeyId")
+    val inMemoryKeyPassword = project.providers.gradleProperty("signingInMemoryKeyPassword").orElse("")
+    project.gradleSigning.useInMemoryPgpKeys(inMemoryKeyId.orNull, inMemoryKey.get(), inMemoryKeyPassword.get())
+  }
+  // ...
+}
 ```
