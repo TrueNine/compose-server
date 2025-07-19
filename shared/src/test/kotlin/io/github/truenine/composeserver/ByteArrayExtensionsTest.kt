@@ -7,9 +7,9 @@ import kotlin.test.assertEquals
 /**
  * # 字节数组扩展函数测试
  *
- * 测试 ByteArrayFns.kt 中定义的字节数组相关扩展函数
+ * 测试 ByteArrayExtensions.kt 中定义的字节数组相关扩展函数
  */
-class ByteArrayFnsTest {
+class ByteArrayExtensionsTest {
 
   @Test
   fun `测试 utf8String 扩展属性 - 字节数组转UTF8字符串`() {

@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.domain.enc
 
 import io.github.truenine.composeserver.domain.IRsaKeyPair
 import io.github.truenine.composeserver.testtoolkit.log
-import io.github.truenine.composeserver.typing.EncryptAlgorithmTyping
+import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import java.math.BigInteger
 import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey
@@ -55,7 +55,7 @@ class RsaKeyPairTest {
 
     assertEquals(testPublicKey, rsaKeyPair.publicKey, "公钥应该匹配")
     assertEquals(testPrivateKey, rsaKeyPair.privateKey, "私钥应该匹配")
-    assertEquals(EncryptAlgorithmTyping.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
+    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
 
     log.info("RSA 密钥对创建成功")
   }
@@ -66,7 +66,7 @@ class RsaKeyPairTest {
 
     val testPublicKey = TestRSAPublicKey()
     val testPrivateKey = TestRSAPrivateKey()
-    val customAlgorithm = EncryptAlgorithmTyping.ECC // 虽然不合理，但测试构造函数的灵活性
+    val customAlgorithm = EncryptAlgorithm.ECC // 虽然不合理，但测试构造函数的灵活性
 
     val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey, customAlgorithm)
 
@@ -92,7 +92,7 @@ class RsaKeyPairTest {
     val keyPairInterface: IRsaKeyPair = rsaKeyPair
     assertEquals(testPublicKey, keyPairInterface.publicKey, "通过接口访问的公钥应该匹配")
     assertEquals(testPrivateKey, keyPairInterface.privateKey, "通过接口访问的私钥应该匹配")
-    assertEquals(EncryptAlgorithmTyping.RSA, keyPairInterface.algorithm, "通过接口访问的算法应该匹配")
+    assertEquals(EncryptAlgorithm.RSA, keyPairInterface.algorithm, "通过接口访问的算法应该匹配")
 
     log.info("IRsaKeyPair 接口实现验证通过")
   }
@@ -114,7 +114,7 @@ class RsaKeyPairTest {
 
       assertNotNull(rsaKeyPair.publicKey, "公钥不应该为空")
       assertNotNull(rsaKeyPair.privateKey, "私钥不应该为空")
-      assertEquals(EncryptAlgorithmTyping.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
+      assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
 
       // 验证密钥的算法
       assertEquals("RSA", rsaKeyPair.publicKey.algorithm, "公钥算法应该是 RSA")
@@ -153,7 +153,7 @@ class RsaKeyPairTest {
 
     assertEquals(testPublicKey, publicKey, "公钥属性应该匹配")
     assertEquals(testPrivateKey, privateKey, "私钥属性应该匹配")
-    assertEquals(EncryptAlgorithmTyping.RSA, algorithm, "算法属性应该匹配")
+    assertEquals(EncryptAlgorithm.RSA, algorithm, "算法属性应该匹配")
 
     log.info("属性访问测试通过")
   }
@@ -188,7 +188,7 @@ class RsaKeyPairTest {
     // 不指定算法参数，使用默认值
     val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey)
 
-    assertEquals(EncryptAlgorithmTyping.RSA, rsaKeyPair.algorithm, "默认算法应该是 RSA")
+    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "默认算法应该是 RSA")
 
     log.info("默认算法值测试通过")
   }
@@ -205,7 +205,7 @@ class RsaKeyPairTest {
     // RSA 密钥对应该使用 RSA 特定的接口
     assertTrue(rsaKeyPair.publicKey is RSAPublicKey, "公钥应该是 RSAPublicKey 类型")
     assertTrue(rsaKeyPair.privateKey is RSAPrivateKey, "私钥应该是 RSAPrivateKey 类型")
-    assertEquals(EncryptAlgorithmTyping.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
+    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
 
     log.info("RSA 密钥对类型验证通过")
   }

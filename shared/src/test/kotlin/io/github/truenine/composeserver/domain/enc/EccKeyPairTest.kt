@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.domain.enc
 
 import io.github.truenine.composeserver.domain.IEccKeyPair
 import io.github.truenine.composeserver.testtoolkit.log
-import io.github.truenine.composeserver.typing.EncryptAlgorithmTyping
+import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -46,7 +46,7 @@ class EccKeyPairTest {
 
     assertEquals(testPublicKey, eccKeyPair.publicKey, "公钥应该匹配")
     assertEquals(testPrivateKey, eccKeyPair.privateKey, "私钥应该匹配")
-    assertEquals(EncryptAlgorithmTyping.ECC, eccKeyPair.algorithm, "算法应该是 ECC")
+    assertEquals(EncryptAlgorithm.ECC, eccKeyPair.algorithm, "算法应该是 ECC")
 
     log.info("ECC 密钥对创建成功")
   }
@@ -57,7 +57,7 @@ class EccKeyPairTest {
 
     val testPublicKey = TestPublicKey()
     val testPrivateKey = TestPrivateKey()
-    val customAlgorithm = EncryptAlgorithmTyping.RSA // 虽然不合理，但测试构造函数的灵活性
+    val customAlgorithm = EncryptAlgorithm.RSA // 虽然不合理，但测试构造函数的灵活性
 
     val eccKeyPair = EccKeyPair(testPublicKey, testPrivateKey, customAlgorithm)
 
@@ -83,7 +83,7 @@ class EccKeyPairTest {
     val keyPairInterface: IEccKeyPair = eccKeyPair
     assertEquals(testPublicKey, keyPairInterface.publicKey, "通过接口访问的公钥应该匹配")
     assertEquals(testPrivateKey, keyPairInterface.privateKey, "通过接口访问的私钥应该匹配")
-    assertEquals(EncryptAlgorithmTyping.ECC, keyPairInterface.algorithm, "通过接口访问的算法应该匹配")
+    assertEquals(EncryptAlgorithm.ECC, keyPairInterface.algorithm, "通过接口访问的算法应该匹配")
 
     log.info("IEccKeyPair 接口实现验证通过")
   }
@@ -102,7 +102,7 @@ class EccKeyPairTest {
 
       assertNotNull(eccKeyPair.publicKey, "公钥不应该为空")
       assertNotNull(eccKeyPair.privateKey, "私钥不应该为空")
-      assertEquals(EncryptAlgorithmTyping.ECC, eccKeyPair.algorithm, "算法应该是 ECC")
+      assertEquals(EncryptAlgorithm.ECC, eccKeyPair.algorithm, "算法应该是 ECC")
 
       // 验证密钥的算法
       assertEquals("EC", eccKeyPair.publicKey.algorithm, "公钥算法应该是 EC")
@@ -134,7 +134,7 @@ class EccKeyPairTest {
 
     assertEquals(testPublicKey, publicKey, "公钥属性应该匹配")
     assertEquals(testPrivateKey, privateKey, "私钥属性应该匹配")
-    assertEquals(EncryptAlgorithmTyping.ECC, algorithm, "算法属性应该匹配")
+    assertEquals(EncryptAlgorithm.ECC, algorithm, "算法属性应该匹配")
 
     log.info("属性访问测试通过")
   }
@@ -169,7 +169,7 @@ class EccKeyPairTest {
     // 不指定算法参数，使用默认值
     val eccKeyPair = EccKeyPair(testPublicKey, testPrivateKey)
 
-    assertEquals(EncryptAlgorithmTyping.ECC, eccKeyPair.algorithm, "默认算法应该是 ECC")
+    assertEquals(EncryptAlgorithm.ECC, eccKeyPair.algorithm, "默认算法应该是 ECC")
 
     log.info("默认算法值测试通过")
   }

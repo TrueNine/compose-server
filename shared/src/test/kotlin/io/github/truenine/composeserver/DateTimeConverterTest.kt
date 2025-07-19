@@ -18,7 +18,7 @@ class DateTimeConverterTest {
   private val fixedTestLocalDateTime = LocalDateTime.of(2023, 1, 1, 12, 30, 45)
   private val fixedTestLocalDate = LocalDate.of(2023, 1, 1)
   private val fixedTestLocalTime = LocalTime.of(12, 30, 45)
-  private val defaultZone = ZoneId.of(DateTimeConverter.ZONE_GMT)
+  private val defaultZone = ZoneId.systemDefault()
   private val utcZone = ZoneOffset.UTC
 
   @Nested
@@ -46,7 +46,7 @@ class DateTimeConverterTest {
   inner class LocalToInstantFunctionGroup {
     @Test
     fun `正常将 LocalTime 转换为 Instant 时，返回正确的 Instant`() {
-      val result = DateTimeConverter.localTimeToInstant(fixedTestLocalTime)
+      val result = DateTimeConverter.localTimeToInstant(fixedTestLocalTime, utcZone)
       assertEquals(45000 + 30 * 60 * 1000 + 12 * 60 * 60 * 1000, result.toEpochMilli())
     }
 
