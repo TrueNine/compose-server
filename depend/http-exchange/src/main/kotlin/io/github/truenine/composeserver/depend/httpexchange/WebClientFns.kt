@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.IAnyTyping
 import io.github.truenine.composeserver.consts.IHeaders
 import io.github.truenine.composeserver.depend.httpexchange.encoder.AnyTypingEncoder
-import io.github.truenine.composeserver.typing.MimeTypes
+import io.github.truenine.composeserver.typing.MediaTypes
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import org.springframework.core.MethodParameter
@@ -36,22 +36,22 @@ inline fun <reified T : Any> jsonWebClientRegister(
 ): T {
   val clientBuilder = WebClient.builder()
   val factoryBuilder = HttpServiceProxyFactory.builder()
-  val jsonHandleMimeTypes =
+  val jsonHandleMediaTypes =
     arrayOf(
-      MimeType.valueOf(MimeTypes.JSON.value),
+      MimeType.valueOf(MediaTypes.JSON.value),
       MimeType.valueOf("application/*+json"),
       MimeType.valueOf("application/x-ndjson"),
-      MimeType.valueOf(MimeTypes.TEXT.value),
+      MimeType.valueOf(MediaTypes.TEXT.value),
     )
   clientBuilder.codecs {
     it.defaultCodecs().enableLoggingRequestDetails(true)
     it.writers.add(0, EncoderHttpMessageWriter(AnyTypingEncoder()))
 
-    it.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, *jsonHandleMimeTypes))
-    it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMimeTypes))
+    it.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, *jsonHandleMediaTypes))
+    it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMediaTypes))
   }
 
-  clientBuilder.defaultHeader(IHeaders.ACCEPT, MimeTypes.JSON.value, MimeTypes.TEXT.value)
+  clientBuilder.defaultHeader(IHeaders.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
 
   val cf = builder(clientBuilder, factoryBuilder)
   val client = cf.first.build()

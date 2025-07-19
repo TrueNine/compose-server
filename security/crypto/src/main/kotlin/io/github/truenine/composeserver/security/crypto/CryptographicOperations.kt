@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.security.crypto
 
 import io.github.truenine.composeserver.slf4j
-import io.github.truenine.composeserver.typing.EncryptAlgorithmTyping
+import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import java.nio.charset.Charset
 import java.security.*
 import java.security.interfaces.RSAPrivateKey
@@ -70,7 +70,7 @@ object CryptographicOperations {
     val data: String,
     val shardingSize: Int = SHARDING_SIZE,
     val charset: Charset = DEFAULT_CHARSET,
-    val algorithm: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA,
+    val algorithm: EncryptAlgorithm = EncryptAlgorithm.RSA,
   )
 
   /**
@@ -80,11 +80,7 @@ object CryptographicOperations {
    * @param charset Character encoding for byte-to-string conversion
    * @param algorithm The cryptographic algorithm used for encryption
    */
-  data class DecryptionConfig(
-    val ciphertext: String,
-    val charset: Charset = DEFAULT_CHARSET,
-    val algorithm: EncryptAlgorithmTyping = EncryptAlgorithmTyping.RSA,
-  )
+  data class DecryptionConfig(val ciphertext: String, val charset: Charset = DEFAULT_CHARSET, val algorithm: EncryptAlgorithm = EncryptAlgorithm.RSA)
 
   /**
    * Encrypts data using a public key with optimized cipher operations.
@@ -145,7 +141,7 @@ object CryptographicOperations {
     key: java.security.Key,
     mode: Int,
     data: ByteArray,
-    algorithm: EncryptAlgorithmTyping,
+    algorithm: EncryptAlgorithm,
     shardingSize: Int = SHARDING_SIZE,
   ): String? =
     runCatching {
@@ -237,7 +233,7 @@ object CryptographicOperations {
   @JvmStatic
   @JvmOverloads
   fun encryptByRsaPublicKey(publicKey: RSAPublicKey, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = DEFAULT_CHARSET): String? =
-    encryptWithPublicKey(publicKey, EncryptionConfig(data, shardingSize, charset, EncryptAlgorithmTyping.RSA))
+    encryptWithPublicKey(publicKey, EncryptionConfig(data, shardingSize, charset, EncryptAlgorithm.RSA))
 
   /**
    * Encrypts data using an RSA private key for reverse encryption scenarios.
@@ -255,7 +251,7 @@ object CryptographicOperations {
   @JvmStatic
   @JvmOverloads
   fun encryptByRsaPrivateKey(privateKey: RSAPrivateKey, data: String, shardingSize: Int = SHARDING_SIZE, charset: Charset = DEFAULT_CHARSET): String? =
-    encryptWithPrivateKey(privateKey, EncryptionConfig(data, shardingSize, charset, EncryptAlgorithmTyping.RSA))
+    encryptWithPrivateKey(privateKey, EncryptionConfig(data, shardingSize, charset, EncryptAlgorithm.RSA))
 
   /**
    * Encrypts data using an ECC public key with BouncyCastle ECIES.
@@ -328,7 +324,7 @@ object CryptographicOperations {
   @JvmStatic
   @JvmOverloads
   fun decryptByRsaPrivateKey(rsaPrivateKey: RSAPrivateKey, ciphertext: String, charset: Charset = DEFAULT_CHARSET): String? =
-    decryptWithPrivateKey(rsaPrivateKey, DecryptionConfig(ciphertext, charset, EncryptAlgorithmTyping.RSA))
+    decryptWithPrivateKey(rsaPrivateKey, DecryptionConfig(ciphertext, charset, EncryptAlgorithm.RSA))
 
   /**
    * Decrypts data using an RSA public key for reverse decryption scenarios.
@@ -348,7 +344,7 @@ object CryptographicOperations {
     runCatching {
         if (ciphertext.isEmpty()) return ""
 
-        Cipher.getInstance(EncryptAlgorithmTyping.RSA.padding)
+        Cipher.getInstance(EncryptAlgorithm.RSA.padding)
           .apply { init(Cipher.DECRYPT_MODE, rsaPublicKey) }
           .let { cipher ->
             ciphertext
@@ -582,7 +578,7 @@ object CryptographicOperations {
   @JvmStatic
   @JvmOverloads
   fun signWithSha256WithRsaByRsaPrivateKey(signContent: String, rsaPrivateKey: RSAPrivateKey, charset: Charset = DEFAULT_CHARSET): Signature =
-    Signature.getInstance(EncryptAlgorithmTyping.SHA256_WITH_RSA.value).apply {
+    Signature.getInstance(EncryptAlgorithm.SHA256_WITH_RSA.value).apply {
       initSign(rsaPrivateKey)
       update(signContent.toByteArray(charset))
     }

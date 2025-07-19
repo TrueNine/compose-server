@@ -1,7 +1,6 @@
 package io.github.truenine.composeserver.data.extract.autoconfig
 
 import io.github.truenine.composeserver.data.extract.api.ICnNbsAddressApi
-import io.github.truenine.composeserver.exceptions.RemoteCallException
 import io.github.truenine.composeserver.slf4j
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
@@ -30,7 +29,7 @@ class ApiExchangesAutoConfiguration {
       WebClient.builder()
         .clientConnector(unsafeConnector)
         .defaultHeaders { it["Accept-Charset"] = "utf-8" }
-        .defaultStatusHandler({ httpCode -> httpCode.isError }) { resp -> RemoteCallException(msg = resp.toString()).toMono() }
+        .defaultStatusHandler({ httpCode -> httpCode.isError }) { resp -> RuntimeException("Remote call failed: ${resp}").toMono() }
         .build()
     val factory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(client)).build()
     return factory.createClient(ICnNbsAddressApi::class.java)

@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.rds
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.github.truenine.composeserver.DisRule
+import io.github.truenine.composeserver.domain.DisRule
 import io.github.truenine.composeserver.rds.typing.DisTyping
 import kotlin.test.*
 import org.junit.jupiter.api.Test

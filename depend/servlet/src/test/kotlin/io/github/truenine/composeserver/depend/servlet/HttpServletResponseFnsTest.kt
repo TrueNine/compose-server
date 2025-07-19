@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet
 
 import io.github.truenine.composeserver.consts.IHeaders
-import io.github.truenine.composeserver.typing.MimeTypes
+import io.github.truenine.composeserver.typing.MediaTypes
 import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.test.Test
@@ -39,7 +39,7 @@ class HttpServletResponseFnsTest {
     val response = MockHttpServletResponse()
 
     val result =
-      response.useResponse(contentType = MimeTypes.JSON, charset = StandardCharsets.UTF_8, locale = Locale.US) { resp ->
+      response.useResponse(contentType = MediaTypes.JSON, charset = StandardCharsets.UTF_8, locale = Locale.US) { resp ->
         resp.setHeader("X-Test", "test-value")
         resp
       }
@@ -93,7 +93,7 @@ class HttpServletResponseFnsTest {
     val response = MockHttpServletResponse()
     val testData = "test file content".toByteArray()
 
-    response.withDownload(fileName = "test.txt", contentType = MimeTypes.TEXT, charset = StandardCharsets.UTF_8) { outputStream ->
+    response.withDownload(fileName = "test.txt", contentType = MediaTypes.TEXT, charset = StandardCharsets.UTF_8) { outputStream ->
       outputStream.write(testData)
     }
 
@@ -128,7 +128,7 @@ class HttpServletResponseFnsTest {
   fun `withDownload 处理中文文件名应正确编码`() {
     val response = MockHttpServletResponse()
 
-    response.withDownload(fileName = "测试文件.txt", contentType = MimeTypes.TEXT, charset = StandardCharsets.UTF_8, closeBlock = null)
+    response.withDownload(fileName = "测试文件.txt", contentType = MediaTypes.TEXT, charset = StandardCharsets.UTF_8, closeBlock = null)
 
     val contentDisposition = response.getHeader(IHeaders.CONTENT_DISPOSITION)
     assertNotNull(contentDisposition)
@@ -151,7 +151,7 @@ class HttpServletResponseFnsTest {
     val response = MockHttpServletResponse()
     val largeData = ByteArray(1024) { it.toByte() }
 
-    response.withDownload(fileName = "large.bin", contentType = MimeTypes.BINARY) { outputStream -> outputStream.write(largeData) }
+    response.withDownload(fileName = "large.bin", contentType = MediaTypes.BINARY) { outputStream -> outputStream.write(largeData) }
 
     assertEquals(largeData.size, response.contentAsByteArray.size)
   }
