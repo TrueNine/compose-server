@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="支付测试" parallel="methods">
+  <!-- 服务测试需要初始化数据 -->
+  <test name="基础支付逻辑测试" parallel="methods">
+    <packages>
+      <package name="io.github.truenine.composeserver.pay.service.impl"/>
+    </packages>
+  </test>
+</suite>
