@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.oss
 
-import io.github.truenine.composeserver.typing.MimeTypes
+import io.github.truenine.composeserver.typing.MediaTypes
 
 /**
  * ## oss bucket -> object 参数表示
@@ -18,7 +18,7 @@ data class ObjectArgs(
   val objectName: String,
   val bucketName: String,
   val size: Long,
-  private val contentTypeFor: MimeTypes? = MimeTypes.BINARY,
-  val contentType: String = contentTypeFor?.value ?: MimeTypes.BINARY.value,
+  private val contentTypeFor: MediaTypes? = MediaTypes.BINARY,
+  val contentType: String = contentTypeFor?.value ?: MediaTypes.BINARY.value,
   val headers: Map<String, String> = emptyMap(),
 )

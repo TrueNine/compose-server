@@ -1,7 +1,6 @@
 package io.github.truenine.composeserver.security.oauth2.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.github.truenine.composeserver.long
 import io.github.truenine.composeserver.security.oauth2.models.BaseWxpaResponseEntity
 import io.github.truenine.composeserver.security.oauth2.typing.WechatMpGrantTyping
 import io.github.truenine.composeserver.string
@@ -32,7 +31,7 @@ interface IWxpaWebClient {
    * @param used 当天已经调用的次数
    * @param remain 当天剩余调用次数
    */
-  data class WxpaQuotaResp(@JsonProperty("daily_limit") val dailyLimit: long?, val used: long?, val remain: long?) : BaseWxpaResponseEntity()
+  data class WxpaQuotaResp(@JsonProperty("daily_limit") val dailyLimit: Long?, val used: Long?, val remain: Long?) : BaseWxpaResponseEntity()
 
   /**
    * # 公众号获取 access_token 返回结果

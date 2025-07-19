@@ -5,7 +5,7 @@ import io.github.truenine.composeserver.security.crypto.domain.IEccExtKeyPair
 import io.github.truenine.composeserver.security.crypto.domain.IRsaExtKeyPair
 import io.github.truenine.composeserver.security.crypto.domain.RsaExtKeyPair
 import io.github.truenine.composeserver.slf4j
-import io.github.truenine.composeserver.typing.EncryptAlgorithmTyping
+import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import java.security.*
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -160,7 +160,7 @@ object CryptographicKeyManager {
       get() = secureRandomThreadLocal.get()
 
     /** Pre-initialized RSA key factory */
-    val rsaKeyFactory: KeyFactory by lazy { KeyFactory.getInstance(EncryptAlgorithmTyping.RSA.value, RSA_PROVIDER) }
+    val rsaKeyFactory: KeyFactory by lazy { KeyFactory.getInstance(EncryptAlgorithm.RSA.value, RSA_PROVIDER) }
 
     /** Pre-initialized ECC key factory */
     val eccKeyFactory: KeyFactory by lazy { KeyFactory.getInstance(EC_ALGORITHM, ECC_PROVIDER) }
@@ -212,7 +212,7 @@ object CryptographicKeyManager {
    * @return RSA public key object, or null if parsing fails
    * @throws IllegalArgumentException if the Base64 string is malformed
    */
-  @JvmStatic fun readRsaPublicKeyByBase64(base64: String): RSAPublicKey? = readPublicKeyByAlgorithm(base64, EncryptAlgorithmTyping.RSA) as? RSAPublicKey
+  @JvmStatic fun readRsaPublicKeyByBase64(base64: String): RSAPublicKey? = readPublicKeyByAlgorithm(base64, EncryptAlgorithm.RSA) as? RSAPublicKey
 
   /**
    * Reads an RSA private key from a Base64-encoded string with enhanced security.
@@ -391,7 +391,7 @@ object CryptographicKeyManager {
         require(config.keySize >= 2048) { "RSA key size must be at least 2048 bits for security" }
 
         val random = SecureRandom(config.seed.toByteArray(Charsets.UTF_8))
-        val keyPairGen = KeyPairGenerator.getInstance(EncryptAlgorithmTyping.RSA.value, config.provider)
+        val keyPairGen = KeyPairGenerator.getInstance(EncryptAlgorithm.RSA.value, config.provider)
         keyPairGen.initialize(config.keySize, random)
         val keyPair = keyPairGen.generateKeyPair()
         RsaExtKeyPair(keyPair.public as RSAPublicKey, keyPair.private as RSAPrivateKey)
@@ -526,13 +526,13 @@ object CryptographicKeyManager {
    * @throws IllegalArgumentException if algorithm is unsupported
    */
   @JvmStatic
-  private fun readPublicKeyByAlgorithm(base64: String, algorithm: EncryptAlgorithmTyping): PublicKey? =
+  private fun readPublicKeyByAlgorithm(base64: String, algorithm: EncryptAlgorithm): PublicKey? =
     runCatching {
         val keyBytes = IBase64.decodeToByte(base64)
         val keySpec = X509EncodedKeySpec(keyBytes)
         when (algorithm) {
-          EncryptAlgorithmTyping.RSA -> SecureKeyFactories.rsaKeyFactory.generatePublic(keySpec)
-          EncryptAlgorithmTyping.ECC -> SecureKeyFactories.eccKeyFactory.generatePublic(keySpec)
+          EncryptAlgorithm.RSA -> SecureKeyFactories.rsaKeyFactory.generatePublic(keySpec)
+          EncryptAlgorithm.ECC -> SecureKeyFactories.eccKeyFactory.generatePublic(keySpec)
           else -> throw IllegalArgumentException("Unsupported algorithm type: $algorithm")
         }
       }
@@ -545,7 +545,7 @@ object CryptographicKeyManager {
    * @param base64 Base64-encoded ECC public key string
    * @return ECC public key object, or null if parsing fails
    */
-  @JvmStatic fun readEccPublicKeyByBase64(base64: String): PublicKey? = readPublicKeyByAlgorithm(base64, EncryptAlgorithmTyping.ECC)
+  @JvmStatic fun readEccPublicKeyByBase64(base64: String): PublicKey? = readPublicKeyByAlgorithm(base64, EncryptAlgorithm.ECC)
 
   /**
    * Reads an ECC private key from a Base64-encoded string.

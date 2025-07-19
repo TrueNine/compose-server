@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.security.crypto
 
 import io.github.truenine.composeserver.testtoolkit.log
-import io.github.truenine.composeserver.typing.EncryptAlgorithmTyping
+import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import kotlin.test.*
 import kotlin.time.measureTime
 
@@ -55,14 +55,14 @@ class CryptographicOperationsTest {
     assertEquals(TEST_TEXT, config.data)
     assertEquals(245, config.shardingSize) // SHARDING_SIZE constant
     assertEquals(Charsets.UTF_8, config.charset)
-    assertEquals(EncryptAlgorithmTyping.RSA, config.algorithm)
+    assertEquals(EncryptAlgorithm.RSA, config.algorithm)
   }
 
   @Test
   fun `EncryptionConfig with custom values creates correct configuration`() {
     val customCharset = Charsets.UTF_16
     val customShardSize = 100
-    val customAlgorithm = EncryptAlgorithmTyping.AES
+    val customAlgorithm = EncryptAlgorithm.AES
 
     val config =
       CryptographicOperations.EncryptionConfig(data = TEST_CHINESE_TEXT, shardingSize = customShardSize, charset = customCharset, algorithm = customAlgorithm)
@@ -80,14 +80,14 @@ class CryptographicOperationsTest {
 
     assertEquals(ciphertext, config.ciphertext)
     assertEquals(Charsets.UTF_8, config.charset)
-    assertEquals(EncryptAlgorithmTyping.RSA, config.algorithm)
+    assertEquals(EncryptAlgorithm.RSA, config.algorithm)
   }
 
   @Test
   fun `DecryptionConfig with custom values creates correct configuration`() {
     val ciphertext = "test-ciphertext"
     val customCharset = Charsets.ISO_8859_1
-    val customAlgorithm = EncryptAlgorithmTyping.ECC
+    val customAlgorithm = EncryptAlgorithm.ECC
 
     val config = CryptographicOperations.DecryptionConfig(ciphertext = ciphertext, charset = customCharset, algorithm = customAlgorithm)
 
