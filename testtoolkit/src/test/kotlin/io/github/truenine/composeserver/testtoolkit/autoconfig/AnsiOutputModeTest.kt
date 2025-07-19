@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
 import io.github.truenine.composeserver.testtoolkit.log
+import io.github.truenine.composeserver.testtoolkit.properties.AnsiOutputMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

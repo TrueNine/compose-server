@@ -55,14 +55,33 @@ class TestEnvironmentApplicationListenerTest {
       verify { mockPropertySources.addFirst(any<MapPropertySource>()) }
 
       // 验证早期属性
+      assertTrue(capturedPropertySource != null, "属性源不应为 null")
       capturedPropertySource?.also { propertySource ->
-        assertEquals("testToolkitEarlyProperties", propertySource.name, "属性源名称应该正确")
-        assertEquals(false, propertySource.getProperty("debug"), "debug 应该被设置为 false")
-        assertEquals(false, propertySource.getProperty("spring.test.print-condition-evaluation-report"), "条件评估报告应该被关闭")
-        assertEquals(false, propertySource.getProperty("spring.main.log-startup-info"), "启动信息日志应该被关闭")
-        assertEquals("OFF", propertySource.getProperty("spring.main.banner-mode"), "banner 应该被关闭")
-        assertEquals(true, propertySource.getProperty("spring.threads.virtual.enabled"), "虚拟线程应该被启用")
-        assertEquals("always", propertySource.getProperty("spring.output.ansi.enabled"), "颜色输出应该被启用")
+        // 验证属性源本身
+        assertEquals("testToolkitEarlyProperties", propertySource.name, "属性源名称应详正确")
+        assertTrue(propertySource.source is Map<*, *>, "属性源数据应详为 Map 类型")
+
+        // 验证属性类型和值
+        assertTrue(propertySource.getProperty("debug") is Boolean, "debug 属性应详为布尔类型")
+        assertEquals(false, propertySource.getProperty("debug"), "debug 应详被设置为 false")
+
+        assertTrue(propertySource.getProperty("spring.test.print-condition-evaluation-report") is Boolean, "条件评估报告属性应详为布尔类型")
+        assertEquals(false, propertySource.getProperty("spring.test.print-condition-evaluation-report"), "条件评估报告应详被关闭")
+
+        assertTrue(propertySource.getProperty("spring.main.log-startup-info") is Boolean, "启动信息日志属性应详为布尔类型")
+        assertEquals(false, propertySource.getProperty("spring.main.log-startup-info"), "启动信息日志应详被关闭")
+
+        assertTrue(propertySource.getProperty("spring.main.banner-mode") is String, "banner 模式属性应详为字符串类型")
+        assertEquals("OFF", propertySource.getProperty("spring.main.banner-mode"), "banner 应详被关闭")
+
+        assertTrue(propertySource.getProperty("spring.threads.virtual.enabled") is Boolean, "虚拟线程属性应详为布尔类型")
+        assertEquals(true, propertySource.getProperty("spring.threads.virtual.enabled"), "虚拟线程应详被启用")
+
+        assertTrue(propertySource.getProperty("spring.output.ansi.enabled") is String, "ANSI 输出属性应详为字符串类型")
+        assertEquals("always", propertySource.getProperty("spring.output.ansi.enabled"), "颜色输出应详被启用")
+
+        // 验证属性值的有效性
+        assertTrue(propertySource.getProperty("spring.output.ansi.enabled") in listOf("always", "never", "detect"), "ANSI 输出模式应详为有效值")
       }
 
       log.debug("early property configuration verified when enabled")
@@ -79,6 +98,10 @@ class TestEnvironmentApplicationListenerTest {
 
       // 验证属性源未被添加
       verify(exactly = 0) { mockPropertySources.addFirst(any<MapPropertySource>()) }
+
+      // 验证禁用时环境对象仍然有效
+      assertTrue(mockEnvironment != null, "环境对象不应为 null")
+      assertTrue(listener != null, "监听器对象不应为 null")
 
       log.debug("early property configuration verified when disabled")
     }
@@ -103,11 +126,23 @@ class TestEnvironmentApplicationListenerTest {
       verify { mockPropertySources.addFirst(any<MapPropertySource>()) }
 
       // 验证只有虚拟线程和颜色输出被配置
+      assertTrue(capturedPropertySource != null, "属性源不应为 null")
       capturedPropertySource?.also { propertySource ->
-        assertEquals(true, propertySource.getProperty("spring.threads.virtual.enabled"), "虚拟线程应该被启用")
-        assertEquals("detect", propertySource.getProperty("spring.output.ansi.enabled"), "颜色输出应该被设置为 detect")
-        assertTrue(propertySource.getProperty("debug") == null, "debug 不应该被设置")
-        assertTrue(propertySource.getProperty("spring.main.banner-mode") == null, "banner 不应该被设置")
+        // 验证被启用的属性
+        assertTrue(propertySource.getProperty("spring.threads.virtual.enabled") is Boolean, "虚拟线程属性应详为布尔类型")
+        assertEquals(true, propertySource.getProperty("spring.threads.virtual.enabled"), "虚拟线程应详被启用")
+
+        assertTrue(propertySource.getProperty("spring.output.ansi.enabled") is String, "ANSI 输出属性应详为字符串类型")
+        assertEquals("detect", propertySource.getProperty("spring.output.ansi.enabled"), "颜色输出应详被设置为 detect")
+
+        // 验证未被设置的属性
+        assertTrue(propertySource.getProperty("debug") == null, "debug 不应详被设置")
+        assertTrue(propertySource.getProperty("spring.main.banner-mode") == null, "banner 不应详被设置")
+        assertTrue(propertySource.getProperty("spring.test.print-condition-evaluation-report") == null, "条件评估报告不应详被设置")
+        assertTrue(propertySource.getProperty("spring.main.log-startup-info") == null, "启动信息日志不应详被设置")
+
+        // 验证属性值的有效性
+        assertTrue(propertySource.getProperty("spring.output.ansi.enabled") in listOf("always", "never", "detect"), "ANSI 输出模式应详为有效值")
       }
 
       log.debug("partial configuration verified")
