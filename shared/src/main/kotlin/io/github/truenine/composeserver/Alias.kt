@@ -9,69 +9,24 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 /**
- * Lowercase string type alias for better readability in domain modeling.
+ * String type alias for consistent string handling across the system.
  *
- * Provides a more concise and consistent naming convention across the codebase, especially useful in data classes and API definitions where brevity improves
- * readability.
+ * Provides a standardized way to reference string types, improving code readability and maintaining consistency in type declarations throughout the
+ * application.
  *
  * @see String
  */
 typealias string = String
 
 /**
- * Lowercase byte type alias for consistent primitive type naming.
+ * Integer type alias for consistent integer handling across the system.
  *
- * Used primarily in binary data processing and low-level operations where a unified naming convention with other primitive aliases is desired.
- *
- * @see Byte
- */
-typealias byte = Byte
-
-/**
- * Lowercase integer type alias for improved code consistency.
- *
- * Commonly used in mathematical operations, counters, and index calculations where the lowercase naming provides better visual consistency with other type
- * aliases.
+ * Provides a standardized way to reference integer types, improving code readability and maintaining consistency in type declarations throughout the
+ * application.
  *
  * @see Int
  */
 typealias int = Int
-
-/**
- * Lowercase short type alias for consistent primitive type naming.
- *
- * Primarily used in scenarios requiring 16-bit integer values with memory optimization, maintaining naming consistency with other primitive type aliases.
- *
- * @see Short
- */
-typealias short = Short
-
-/**
- * Lowercase float type alias for consistent floating-point type naming.
- *
- * Used in mathematical calculations and graphics operations where single-precision floating-point numbers are sufficient and naming consistency is important.
- *
- * @see Float
- */
-typealias float = Float
-
-/**
- * Lowercase double type alias for consistent floating-point type naming.
- *
- * Preferred for high-precision mathematical calculations and financial computations where double-precision floating-point accuracy is required.
- *
- * @see Double
- */
-typealias double = Double
-
-/**
- * Lowercase long type alias for consistent primitive type naming.
- *
- * Essential for timestamp handling, large number operations, and database primary keys where 64-bit integer precision is required.
- *
- * @see Long
- */
-typealias long = Long
 
 /**
  * Decimal type alias for precise financial calculations.

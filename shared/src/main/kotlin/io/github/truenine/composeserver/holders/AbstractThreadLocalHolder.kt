@@ -25,7 +25,7 @@ abstract class AbstractThreadLocalHolder<T>(nameId: KClass<*>? = null, defaultVa
 
   open fun set(value: T) = holder.set(value)
 
-  fun component1(): T = holder.get()
+  operator fun component1(): T = holder.get()
 
-  fun plusAssign(value: T) = holder.set(value)
+  operator fun plusAssign(value: T) = holder.set(value)
 }

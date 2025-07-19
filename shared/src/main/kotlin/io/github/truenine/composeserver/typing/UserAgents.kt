@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.typing
 
+import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IStringTyping
 
 /**
@@ -18,7 +19,7 @@ enum class UserAgents(private val ua: String) : IStringTyping {
   EDGE_WIN_115("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.203"),
   EDGE_WIN_106("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.52");
 
-  override val value: String = ua
+  @JsonValue override val value: String = ua
 
   companion object {
     @JvmStatic operator fun get(v: String?) = findVal(v)
