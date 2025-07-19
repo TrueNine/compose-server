@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.gradleplugin.consts
 
-object MavenRepl {
+object MavenRepos {
   const val MAVEN_CENTRAL = "https://repo.maven.apache.org/maven2/"
   const val JCENTER = "https://jcenter.bintray.com/"
   const val GRADLE_PLUGIN_PORTAL = "https://plugins.gradle.org/m2/"
