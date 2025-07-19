@@ -1,13 +1,14 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
 import io.github.truenine.composeserver.testtoolkit.SystemTestLogger
+import io.github.truenine.composeserver.testtoolkit.properties.TestConfigurationProperties
+import io.github.truenine.composeserver.testtoolkit.properties.TestcontainersProperties
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.boot.Banner
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.core.env.ConfigurableEnvironment
@@ -22,9 +23,13 @@ import org.springframework.core.env.MapPropertySource
  * - 总是开启颜色输出
  */
 @AutoConfiguration
-@EnableConfigurationProperties(TestConfigurationProperties::class)
+@EnableConfigurationProperties(TestConfigurationProperties::class, TestcontainersProperties::class)
 @ConditionalOnProperty(name = ["compose.testtoolkit.enabled"], havingValue = "true", matchIfMissing = true)
-open class TestConfigurationBean(private val environment: ConfigurableEnvironment, private val properties: TestConfigurationProperties) {
+open class TestConfigurationBean(
+  private val environment: ConfigurableEnvironment,
+  private val properties: TestConfigurationProperties,
+  private val testcontainersProperties: TestcontainersProperties,
+) {
 
   private val log: SystemTestLogger = LoggerFactory.getLogger(TestConfigurationBean::class.java)
 
@@ -75,26 +80,14 @@ open class TestConfigurationBean(private val environment: ConfigurableEnvironmen
     log.trace("creating test environment post processor")
     return TestEnvironmentPostProcessor()
   }
+
+  @Bean
+  @ConditionalOnMissingBean
+  open fun testcontainersProperties(): TestcontainersProperties {
+    log.trace("exposing testcontainers properties as bean")
+    return testcontainersProperties
+  }
 }
-
-/** # 测试工具包配置属性 */
-@ConfigurationProperties(prefix = "compose.testtoolkit")
-data class TestConfigurationProperties(
-  /** 是否启用测试配置 */
-  val enabled: Boolean = true,
-
-  /** 是否关闭条件评估报告 */
-  val disableConditionEvaluationReport: Boolean = true,
-
-  /** 是否启用虚拟线程 */
-  val enableVirtualThreads: Boolean = true,
-
-  /** ANSI 颜色输出模式 */
-  val ansiOutputMode: AnsiOutputMode = AnsiOutputMode.ALWAYS,
-
-  /** 额外的测试属性 */
-  val additionalProperties: Map<String, String> = emptyMap(),
-)
 
 /**
  * # 测试环境后处理器

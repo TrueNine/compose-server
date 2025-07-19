@@ -1,6 +1,8 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
+import java.net.InetSocketAddress
+import java.net.Socket
 import java.util.function.Supplier
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -86,10 +88,20 @@ class IOssMinioContainerTest : IOssMinioContainer {
       assertTrue(envMap.containsKey(envVar), "环境变量 $envVar 必须存在")
       assertNotNull(envMap[envVar], "环境变量 $envVar 的值不能为空")
 
+      // 验证环境变量格式和值
       when (envVar) {
-        "MINIO_ROOT_USER" -> assertEquals("minioadmin", envMap[envVar], "访问密钥配置不正确")
-        "MINIO_ROOT_PASSWORD" -> assertEquals("minioadmin", envMap[envVar], "密钥配置不正确")
-        "MINIO_CONSOLE_ADDRESS" -> assertEquals(":9001", envMap[envVar], "控制台地址配置不正确")
+        "MINIO_ROOT_USER" -> {
+          assertEquals("minioadmin", envMap[envVar], "访问密钥配置不正确")
+          assertTrue(envMap[envVar]!!.isNotEmpty(), "用户名不应为空")
+        }
+        "MINIO_ROOT_PASSWORD" -> {
+          assertEquals("minioadmin", envMap[envVar], "密钥配置不正确")
+          assertTrue(envMap[envVar]!!.length >= 8, "密码长度应详大于等于8位")
+        }
+        "MINIO_CONSOLE_ADDRESS" -> {
+          assertEquals(":9001", envMap[envVar], "控制台地址配置不正确")
+          assertTrue(envMap[envVar]!!.startsWith(":"), "控制台地址应以冒号开头")
+        }
       }
     }
   }
@@ -147,7 +159,22 @@ class IOssMinioContainerTest : IOssMinioContainer {
       // 特殊验证端口属性（因为端口是动态分配的）
       val portValue = environment.getProperty("compose.oss.port")
       assertNotNull(portValue, "环境变量中缺少端口配置")
-      assertTrue(portValue.toInt() in 1024..65535, "端口值应在有效范围内")
+
+      val portInt = portValue.toInt()
+      assertTrue(portInt in 1024..65535, "端口值应在有效范围内 (actual: $portInt)")
+      val socket = Socket()
+      try {
+        socket.connect(InetSocketAddress("localhost", portInt), 5000)
+        assertTrue(socket.isConnected, "端口应详可访问")
+      } finally {
+        socket.close()
+      }
+
+      // 验证 expose-base-url 的格式
+      val exposeUrl = environment.getProperty("compose.oss.expose-base-url")
+      assertNotNull(exposeUrl, "expose-base-url 属性不应为 null")
+      assertTrue(exposeUrl.startsWith("http://"), "expose URL 应以 http:// 开头")
+      assertTrue(exposeUrl.contains(":$portInt"), "expose URL 应包含正确的端口号")
     }
   }
 }

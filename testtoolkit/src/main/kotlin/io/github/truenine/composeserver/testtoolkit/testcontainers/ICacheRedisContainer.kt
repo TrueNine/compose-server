@@ -41,12 +41,13 @@ interface ICacheRedisContainer {
      *
      * 预配置的 Redis 容器，具有以下默认设置：
      * - 端口: 6379 (随机映射)
-     * - 版本: 7.4.2-alpine3.21
+     * - 版本: 可通过配置自定义，默认 7.4.2-alpine3.21
      * - 无密码认证
      */
     @JvmStatic
     val container by lazy {
-      GenericContainer(DockerImageName.parse("redis:7.4.2-alpine3.21")).apply {
+      val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
+      GenericContainer(DockerImageName.parse(config.redis.image)).apply {
         withExposedPorts(6379)
         setWaitStrategy(Wait.forLogMessage(".*Ready to accept connections.*\\n", 1).withStartupTimeout(Duration.ofSeconds(10)))
         start()

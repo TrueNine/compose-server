@@ -39,17 +39,19 @@ interface IOssMinioContainer {
     /**
      * MinIO 测试容器实例
      *
-     * 预配置的 MinIO 容器，具有以下默认设置：
-     * - 访问密钥: minioadmin
-     * - 密钥: minioadmin
+     * 预配置的 MinIO 容器，设置可通过配置自定义：
+     * - 访问密钥: 可配置，默认 minioadmin
+     * - 密钥: 可配置，默认 minioadmin
      * - API 端口: 随机分配
      * - 控制台端口: 随机分配
+     * - 版本: 可配置，默认 minio/minio:RELEASE.2025-04-22T22-12-26Z
      */
     @JvmStatic
     val container by lazy {
-      GenericContainer(DockerImageName.parse("minio/minio:RELEASE.2025-04-22T22-12-26Z")).apply {
-        withEnv("MINIO_ROOT_USER", "minioadmin")
-        withEnv("MINIO_ROOT_PASSWORD", "minioadmin")
+      val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
+      GenericContainer(DockerImageName.parse(config.minio.image)).apply {
+        withEnv("MINIO_ROOT_USER", config.minio.accessKey)
+        withEnv("MINIO_ROOT_PASSWORD", config.minio.secretKey)
         withEnv("MINIO_CONSOLE_ADDRESS", ":9001")
         withCommand("server", "/data")
         withExposedPorts(9000, 9001)
@@ -71,6 +73,7 @@ interface IOssMinioContainer {
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
+      val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
       val host = container.host
       val port = container.getMappedPort(9000)
 
@@ -78,8 +81,8 @@ interface IOssMinioContainer {
       registry.add("compose.oss.expose-base-url") { "http://$host:$port" }
       registry.add("compose.oss.port") { port }
       registry.add("compose.oss.minio.enable-https") { false }
-      registry.add("compose.oss.minio.access-key") { "minioadmin" }
-      registry.add("compose.oss.minio.secret-key") { "minioadmin" }
+      registry.add("compose.oss.minio.access-key") { config.minio.accessKey }
+      registry.add("compose.oss.minio.secret-key") { config.minio.secretKey }
     }
   }
 

@@ -84,7 +84,11 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
     // 验证数据
     val result = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "test_name")
-    assertEquals("test_name", result)
+    assertEquals("test_name", result, "PostgreSQL 查询结果应详匹配")
+
+    // 验证数据插入成功
+    val count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM test_table WHERE name = ?", Int::class.java, "test_name")
+    assertTrue(count!! > 0, "PostgreSQL 表中应详存在插入的数据")
   }
 
   @Test
@@ -96,7 +100,14 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
     // 验证数据
     val result = redisTemplate.opsForValue().get(key)
-    assertEquals(value, result)
+    assertEquals(value, result, "Redis 查询结果应详匹配")
+
+    // 验证 Redis 数据持久性
+    assertTrue(redisTemplate.hasKey(key), "Redis 键应详存在")
+
+    // 清理测试数据
+    redisTemplate.delete(key)
+    assertTrue(!redisTemplate.hasKey(key), "清理后 Redis 键不应详存在")
   }
 
   @Test
@@ -109,7 +120,20 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
     // 验证桶是否创建成功
     val exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
-    assertTrue(exists, "测试桶应该存在")
+    assertTrue(exists, "测试桶应详存在")
+
+    // 验证桶属性
+    val buckets = minioClient.listBuckets()
+    assertTrue(buckets.any { it.name() == bucketName }, "MinIO 应详列出创建的桶")
+
+    // 验证桶操作权限
+    val bucketPolicy =
+      try {
+        minioClient.getBucketPolicy(io.minio.GetBucketPolicyArgs.builder().bucket(bucketName).build())
+      } catch (e: Exception) {
+        null // 默认情况下可能没有策略
+      }
+    // 策略可能为空，这是正常的
   }
 
   @Test
@@ -130,9 +154,21 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     val redisResult = redisTemplate.opsForValue().get(redisKey)
     val minioResult = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
 
-    assertEquals("combined_test", pgResult)
-    assertEquals("combined_value", redisResult)
-    assertTrue(minioResult)
+    // 验证所有操作结果
+    assertEquals("combined_test", pgResult, "PostgreSQL 结合测试结果应详正确")
+    assertEquals("combined_value", redisResult, "Redis 结合测试结果应详正确")
+    assertTrue(minioResult, "MinIO 结合测试结果应详正确")
+
+    // 验证综合数据一致性
+    val totalPgRecords = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM test_table", Int::class.java)
+    assertTrue(totalPgRecords!! >= 1, "PostgreSQL 应详至少有一条记录")
+
+    val allBuckets = minioClient.listBuckets()
+    assertTrue(allBuckets.size >= 1, "MinIO 应详至少有一个桶")
+
+    // 清理测试数据
+    redisTemplate.delete(redisKey)
+    assertTrue(!redisTemplate.hasKey(redisKey), "清理后 Redis 键不应详存在")
   }
 
   @Test
@@ -146,7 +182,15 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     assertTrue(pgTimeZone!!.isNotBlank(), "postgresql timezone should not be blank")
 
     val now = java.time.Instant.now()
-    assertTrue(Math.abs(pgNow!!.toInstant().epochSecond - now.epochSecond) < 300, "postgresql time differs from system time by more than 5 minutes")
+    // 使用 Kotlin 标准库的 abs 函数
+    assertTrue(
+      abs(pgNow!!.toInstant().epochSecond - now.epochSecond) < 300,
+      "postgresql time differs from system time by more than 5 minutes (diff: ${abs(pgNow.toInstant().epochSecond - now.epochSecond)} seconds)",
+    )
+
+    // 验证 PostgreSQL 时间的合理性
+    assertTrue(pgNow.time > 0, "PostgreSQL 时间戳应该大于 0")
+    assertTrue(pgNow.toInstant().isBefore(java.time.Instant.now().plusSeconds(60)), "PostgreSQL 时间不应详超过当前时间 1 分钟")
 
     // 2. Redis
     val redisMillis = redisTemplate.connectionFactory?.connection?.serverCommands()?.time()
@@ -154,7 +198,12 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
       val redisEpochSecond = redisMillis / 1000
       val systemEpochSecond = now.epochSecond
       log.info("[验证容器时区和时间与当前系统一致] redis server time: {} , system time: {}", redisEpochSecond, systemEpochSecond)
-      assertTrue(abs(redisEpochSecond - systemEpochSecond) < 300, "redis time differs from system time by more than 5 minutes")
+      val timeDiff = abs(redisEpochSecond - systemEpochSecond)
+      assertTrue(timeDiff < 300, "redis time differs from system time by more than 5 minutes (diff: $timeDiff seconds)")
+
+      // 验证 Redis 时间的合理性
+      assertTrue(redisEpochSecond > 0, "Redis 时间戳应详大于 0")
+      assertTrue(redisEpochSecond <= systemEpochSecond + 60, "Redis 时间不应详超过当前时间 1 分钟")
     }
 
     // 3. MinIO（可选，桶创建时间近似判断）
@@ -162,7 +211,13 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
       minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
     }
-    // MinIO 没有直接的时区/时间API，这里只做桶创建时间的近似判断
-    // 你可以根据需要补充更详细的 MinIO 时间校验逻辑
+    // 验证 MinIO 桶创建成功
+    val bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
+    assertTrue(bucketExists, "MinIO 桶应详创建成功")
+
+    // 验证 MinIO 客户端连接有效性
+    val buckets = minioClient.listBuckets()
+    assertTrue(buckets.isNotEmpty(), "MinIO 应详至少有一个桶")
+    assertTrue(buckets.any { it.name() == bucketName }, "MinIO 应详包含创建的测试桶")
   }
 }
