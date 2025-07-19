@@ -1,6 +1,9 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
+import java.net.InetSocketAddress
+import java.net.Socket
+import java.time.Duration
 import java.util.function.Supplier
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -101,7 +104,20 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
       val connection = redisConnectionFactory.connection
       assertNotNull(connection, "应该能够获取 Redis 连接")
 
-      connection.use { conn -> assertTrue(conn.isClosed.not(), "Redis 连接应该是开启的") }
+      connection.use { conn ->
+        assertTrue(conn.isClosed.not(), "Redis 连接应该是开启的")
+
+        // 验证连接响应时间
+        val startTime = System.currentTimeMillis()
+        conn.ping()
+        val responseTime = System.currentTimeMillis() - startTime
+        assertTrue(responseTime < 1000, "Redis 连接响应时间应小于 1 秒 (实际: ${responseTime}ms)")
+
+        // 验证连接有效性（通过基本操作验证）
+        assertNotNull(conn, "连接对象不应为null")
+        // ping 操作已经证明连接有效，无需额外验证
+        Unit
+      }
     }
 
     @Test
@@ -116,23 +132,38 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
 
       assertEquals(value, retrievedValue, "Redis 读写操作应该正常")
 
+      // 验证数据持久性
+      assertTrue(redisTemplate.hasKey(key), "读写操作后键应该存在")
+
       // 清理测试数据
-      redisTemplate.delete(key)
+      val deleteResult = redisTemplate.delete(key)
+      assertTrue(deleteResult, "删除操作应该成功")
     }
 
     @Test
     @DisplayName("验证 Redis 过期时间设置正常")
     fun `验证 Redis 过期时间设置正常`() {
+
       val key = "test:expiring:key"
       val value = "test-value"
 
       redisTemplate.opsForValue().set(key, value)
-      val exists = redisTemplate.hasKey(key)
 
+      // 设置过期时间
+      redisTemplate.expire(key, Duration.ofSeconds(2))
+
+      val exists = redisTemplate.hasKey(key)
       assertTrue(exists, "键应该存在")
 
-      // 清理测试数据
-      redisTemplate.delete(key)
+      // 验证过期时间设置
+      val ttl = redisTemplate.getExpire(key)
+      assertTrue(ttl > 0, "过期时间应该大于 0 (实际: ${ttl} 秒)")
+      assertTrue(ttl <= 2, "过期时间应该小于等于 2 秒 (实际: ${ttl} 秒)")
+
+      // 等待过期并验证
+      Thread.sleep(2100)
+      val existsAfterExpiry = redisTemplate.hasKey(key)
+      assertTrue(!existsAfterExpiry, "过期键应该不存在")
     }
   }
 
@@ -176,7 +207,16 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
       // 特殊验证端口属性（因为端口是动态分配的）
       val portValue = environment.getProperty("spring.data.redis.port")
       assertNotNull(portValue, "environment variable missing port configuration")
-      assertTrue(portValue.toInt() in 1024..65535, "port value should be in valid range")
+
+      val portInt = portValue.toInt()
+      assertTrue(portInt in 1024..65535, "port value should be in valid range (actual: $portInt)")
+      val socket = Socket()
+      try {
+        socket.connect(InetSocketAddress("localhost", portInt), 5000)
+        assertTrue(socket.isConnected, "端口应该可访问")
+      } finally {
+        socket.close()
+      }
     }
   }
 }

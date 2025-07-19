@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.DateTimeConverter
-import io.github.truenine.composeserver.security.JwtException
 import io.github.truenine.composeserver.security.crypto.CryptographicOperations
 import io.github.truenine.composeserver.security.jwt.consts.JwtToken
 import io.github.truenine.composeserver.security.jwt.consts.VerifierParam
@@ -48,7 +47,6 @@ open class JwtVerifier internal constructor() {
     }
   }
 
-  @Throws(JwtException::class)
   fun <S : Any, E : Any> verify(params: VerifierParam<S, E>): JwtToken<S, E>? {
     return JWT.require(Algorithm.RSA256(params.signatureKey ?: this.signatureVerifyKey))
       .withIssuer(params.issuer ?: this.issuer)

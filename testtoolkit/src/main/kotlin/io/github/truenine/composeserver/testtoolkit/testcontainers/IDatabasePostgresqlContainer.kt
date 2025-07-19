@@ -35,17 +35,19 @@ interface IDatabasePostgresqlContainer {
     /**
      * PostgreSQL 测试容器实例
      *
-     * 预配置的 PostgreSQL 容器，具有以下默认设置：
-     * - 数据库名称: testdb
-     * - 用户名: test
-     * - 密码: test
+     * 预配置的 PostgreSQL 容器，设置可通过配置自定义：
+     * - 数据库名称: 可配置，默认 testdb
+     * - 用户名: 可配置，默认 test
+     * - 密码: 可配置，默认 test
+     * - 版本: 可配置，默认 postgres:17.4-alpine
      */
     @JvmStatic
     val container by lazy {
-      PostgreSQLContainer<Nothing>("postgres:17.4-alpine").apply {
-        withDatabaseName("testdb")
-        withUsername("test")
-        withPassword("test")
+      val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
+      PostgreSQLContainer<Nothing>(config.postgres.image).apply {
+        withDatabaseName(config.postgres.databaseName)
+        withUsername(config.postgres.username)
+        withPassword(config.postgres.password)
         addExposedPorts(5432)
         start()
       }

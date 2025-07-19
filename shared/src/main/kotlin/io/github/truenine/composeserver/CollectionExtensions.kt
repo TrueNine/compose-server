@@ -1,15 +1,6 @@
 package io.github.truenine.composeserver
 
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
-
-fun <E> mutableLockListOf(vararg elements: E): List<E> {
-  return CopyOnWriteArrayList(elements)
-}
-
-fun <E> mutableLockListOf(): List<E> {
-  return CopyOnWriteArrayList()
-}
 
 /** @see kotlin.collections.mapCapacity */
 private fun mapCapacity(expectedSize: Int): Int =

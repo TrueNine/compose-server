@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet
 
 import io.github.truenine.composeserver.consts.IHeaders
-import io.github.truenine.composeserver.typing.MimeTypes
+import io.github.truenine.composeserver.typing.MediaTypes
 import jakarta.servlet.http.HttpServletResponse
 import java.io.OutputStream
 import java.nio.charset.Charset
@@ -11,7 +11,7 @@ val HttpServletResponse.headerMap: Map<String, String>
   get() = headerNames.asSequence().map { it to getHeader(it) }.toMap()
 
 inline fun HttpServletResponse.useResponse(
-  contentType: MimeTypes = MimeTypes.BINARY,
+  contentType: MediaTypes = MediaTypes.BINARY,
   charset: Charset = Charsets.UTF_8,
   locale: Locale = Locale.CHINA,
   crossinline with: (HttpServletResponse) -> HttpServletResponse,
@@ -27,14 +27,14 @@ inline fun HttpServletResponse.useSse(
   locale: Locale = Locale.CHINA,
   crossinline with: (HttpServletResponse) -> HttpServletResponse,
 ): HttpServletResponse {
-  return this.useResponse(contentType = MimeTypes.SSE, charset = charset, locale = locale) { with(it) }
+  return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) { with(it) }
 }
 
 /** ## 设置下载时的东西 */
 @Deprecated("流使用完毕就关了流")
 fun HttpServletResponse.withDownload(
   fileName: String,
-  contentType: MimeTypes = MimeTypes.BINARY,
+  contentType: MediaTypes = MediaTypes.BINARY,
   charset: Charset = Charsets.UTF_8,
   closeBlock: ((outputStream: OutputStream) -> Unit)?,
 ) {

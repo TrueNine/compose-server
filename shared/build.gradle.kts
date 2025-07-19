@@ -16,6 +16,7 @@ dependencies {
   api(libs.jakarta.annotation.jakarta.annotation.api)
   api(libs.jakarta.servlet.jakarta.servlet.api)
   api(libs.jakarta.inject.jakarta.inject.api)
+  api(libs.jakarta.validation.jakarta.validation.api)
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(libs.org.slf4j.slf4j.api)
 

@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver
 
-import io.github.truenine.composeserver.typing.HttpStatusTyping
+import io.github.truenine.composeserver.typing.HttpStatus
 
 /**
  * # 新版 错误响应实体
@@ -17,9 +17,9 @@ import io.github.truenine.composeserver.typing.HttpStatusTyping
 data class ErrorResponseEntity
 @JvmOverloads
 constructor(
-  val errorBy: HttpStatusTyping = HttpStatusTyping.UNKNOWN,
+  val errorBy: HttpStatus = HttpStatus.UNKNOWN,
   val code: Int? = errorBy.code,
   val msg: String? = errorBy.message,
-  val alt: String? = errorBy.alert,
+  val alt: String? = null,
   val debugSerialTrace: Any? = null,
 )

@@ -31,7 +31,7 @@ Compose Server 是一个基于 Spring Boot 和 Kotlin 的多模块快速开发�
 
 - `pay`: 支付相关功能
 - `sms`: 短信服务 (tencent, shared)
-- `mcp`: MCP 相关功能 (shared, langchain4j)
+- `ai`: AI 相关功能 (shared, langchain4j)
 - `oss`: 对象存储服务 (shared, minio, aliyun-oss, huawei-obs)
 - `rds`: 关系数据库服务 (shared, crud, jimmer-ext-postgres, flyway-migration-postgresql)
 - `data`: 数据采集 (crawler, extract)

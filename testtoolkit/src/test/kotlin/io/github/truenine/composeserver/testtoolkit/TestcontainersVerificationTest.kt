@@ -24,7 +24,11 @@ class TestcontainersVerificationTest {
     log.info("开始测试 Testcontainers")
 
     GenericContainer("alpine:latest")
-      .apply { withCommand("sh", "-c", "echo 'Hello, Testcontainers!' && sleep 1") }
+      .apply {
+        // 增加容器运行时间，确保有足够时间进行日志检查
+        // 使用 flush 确保输出立即写入，避免缓冲延迟
+        withCommand("sh", "-c", "echo 'Hello, Testcontainers!' && sync && sleep 10")
+      }
       .use { container ->
         log.trace("正在启动测试容器...")
         container.startAndWaitForReady()
@@ -32,9 +36,29 @@ class TestcontainersVerificationTest {
         log.info("容器状态: {}", container.isRunning)
         assertTrue("容器应该处于运行状态") { container.isRunning }
 
-        val logs = container.logs
+        // 使用重试机制等待日志内容出现，而不是立即检查
+        // 这解决了日志缓冲和容器启动时序的竞态条件
+        val expectedContent = "Hello, Testcontainers!"
+        val logs =
+          TestRetryUtils.waitUntilResult(
+            timeout = Duration.ofSeconds(15),
+            pollInterval = Duration.ofMillis(200),
+            supplier = {
+              val currentLogs = container.logs
+              log.debug("当前日志内容: '{}'", currentLogs)
+              currentLogs
+            },
+            condition = { logs ->
+              val containsExpected = logs.contains(expectedContent)
+              if (!containsExpected) {
+                log.debug("日志尚未包含期望内容 '{}', 当前日志: '{}'", expectedContent, logs)
+              }
+              containsExpected
+            },
+          )
+
         log.info("容器日志: {}", logs)
-        assertTrue("日志应该包含预期内容") { logs.contains("Hello, Testcontainers!") }
+        assertTrue("日志应该包含预期内容") { logs.contains(expectedContent) }
       }
   }
 
@@ -116,8 +140,16 @@ class TestcontainersVerificationTest {
 
         val actualContent = container.readFile(filePath = targetPath, timeout = Duration.ofSeconds(30), maxRetries = 5)
 
+        // 充分验证文件内容
         assertEquals(testContent, actualContent, "文件内容应该匹配")
-        log.info("文件复制和验证成功，内容: {}", actualContent)
+        assertTrue(actualContent.isNotEmpty(), "文件内容不应为空")
+        assertTrue(actualContent.contains("测试文件"), "文件内容应包含预期的中文字符")
+        assertEquals(testContent.length, actualContent.length, "文件长度应该匹配")
+
+        // 验证文件确实存在
+        assertTrue(container.fileExists(targetPath), "目标文件应该存在于容器中")
+
+        log.info("文件复制和验证成功，内容: {} (长度: {})", actualContent, actualContent.length)
       }
   }
 
@@ -149,6 +181,11 @@ class TestcontainersVerificationTest {
 
                     // 检查是否成功获取到HTTP状态码
                     val statusCode = result.stdout.trim()
+
+                    // 验证命令执行结果 - 只有在有输出时才验证内容
+                    if (statusCode.isNotEmpty()) {
+                      assertTrue(result.stderr.isEmpty() || result.stderr.isBlank(), "命令错误输出应为空或仅包含空白字符")
+                    }
                     if (statusCode.matches(Regex("\\d{3}"))) {
                       log.info("URL: $url, 状态码: $statusCode")
                       url to statusCode
@@ -172,7 +209,7 @@ class TestcontainersVerificationTest {
             val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
             val resultFile = createTempFile("test_result_${timestamp}_", ".txt").toFile()
 
-            resultFile.writeText(
+            val testResultContent =
               """
               |测试时间: ${LocalDateTime.now()}
               |测试URL列表:
@@ -183,8 +220,20 @@ class TestcontainersVerificationTest {
               |状态码: ${firstResult.second}
             """
                 .trimMargin()
-            )
-            log.info("测试结果已写入文件: {}", resultFile.absolutePath)
+
+            resultFile.writeText(testResultContent)
+
+            // 验证文件写入结果
+            assertTrue(resultFile.exists(), "结果文件应该存在")
+            assertTrue(resultFile.length() > 0, "结果文件大小应大于0")
+            assertTrue(resultFile.canRead(), "结果文件应该可读")
+
+            val writtenContent = resultFile.readText()
+            assertEquals(testResultContent, writtenContent, "写入的内容应该与预期匹配")
+            assertTrue(writtenContent.contains(firstResult.first), "文件内容应包含第一个完成的URL")
+            assertTrue(writtenContent.contains("测试时间:"), "文件内容应包含时间戳信息")
+
+            log.info("测试结果已写入文件: {} (大小: {} 字节)", resultFile.absolutePath, resultFile.length())
           }
       }
     }
