@@ -17,7 +17,7 @@ dependencies {
   implementation(libs.com.squareup.kotlinpoet.jvm)
   implementation(libs.com.squareup.kotlinpoet.ksp)
 
-  api(projects.meta)
+  api(projects.ksp.kspMeta)
 
   implementation(projects.ksp.kspShared)
 

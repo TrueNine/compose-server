@@ -20,7 +20,7 @@ fun Pair<String, List<String>>.useFile() {
   }
 }
 
-listOf("testtoolkit", "version-catalog", "shared", "bom", "meta", "gradle-plugin", "cacheable", "cacheable", "pay").forEach { p ->
+listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cacheable", "cacheable").forEach { p ->
   include(p)
   findProject(":$p")?.name = p
 }
@@ -31,8 +31,11 @@ listOf("testtoolkit", "version-catalog", "shared", "bom", "meta", "gradle-plugin
 // 短信服务
 ("sms" to listOf("tencent", "shared")).useFile()
 
-// ai mcp 服务
-("mcp" to listOf("shared", "langchain4j")).useFile()
+// ai 服务
+("ai" to listOf("shared", "langchain4j")).useFile()
+
+// 支付服务
+("pay" to listOf("shared", "wechat")).useFile()
 
 // 对象存储服务
 ("oss" to listOf("shared", "minio", "aliyun-oss", "huawei-obs")).useFile()
@@ -50,4 +53,4 @@ listOf("testtoolkit", "version-catalog", "shared", "bom", "meta", "gradle-plugin
 ("depend" to listOf("servlet", "paho", "http-exchange", "jackson", "springdoc-openapi", "xxl-job")).useFile()
 
 // ksp
-("ksp" to listOf("plugin", "shared")).useFile()
+("ksp" to listOf("plugin", "shared", "meta")).useFile()
