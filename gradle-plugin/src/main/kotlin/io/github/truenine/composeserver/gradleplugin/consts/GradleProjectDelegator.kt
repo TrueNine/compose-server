@@ -21,10 +21,4 @@ open class GradleProjectDelegator(project: Project) : Project by project, Extens
     get() = sourceSets.findByName("test")?.resources
 
   val log = project.logger
-  val projectConfig = ProjectConfig(this.project)
-
-  inner class ProjectConfig(private val project: Project) : Project by project {
-    val configDir = rootProject.layout.projectDirectory.dir(Constant.Config.CONFIG_DIR)
-    val licenseMetaFile = configDir.file(Constant.Config.LICENSE_META)
-  }
 }

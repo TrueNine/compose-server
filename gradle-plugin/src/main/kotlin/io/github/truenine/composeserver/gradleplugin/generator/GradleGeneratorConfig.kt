@@ -58,7 +58,6 @@ open class GradleGeneratorConfig {
 
     var enableSpring: Boolean = true
     var enableMybatisPlus: Boolean = true
-    var testNetworkSpeed: Boolean = true
   }
 
   private val propertiesMap =

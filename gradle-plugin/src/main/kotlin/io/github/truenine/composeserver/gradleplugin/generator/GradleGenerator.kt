@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
 import io.github.truenine.composeserver.gradleplugin.consts.Constant
-import io.github.truenine.composeserver.gradleplugin.consts.MavenRepl
+import io.github.truenine.composeserver.gradleplugin.consts.MavenRepos
 import io.github.truenine.composeserver.gradleplugin.consts.Repos
 import io.github.truenine.composeserver.gradleplugin.wrap
 import java.io.File
@@ -62,10 +62,10 @@ class GradleGenerator(@Inject private val project: Project, @Inject private val 
           val template = reader.readText()
           val urls = mutableListOf<String>()
           cfg.mavenType.apply {
-            mavenCentralUrl?.also { urls += "${MavenRepl.MAVEN_CENTRAL}__$it" }
-            jCenterUrl?.also { urls += "${MavenRepl.JCENTER}__$it" }
-            googlePluginUrl?.also { urls += "${MavenRepl.GOOGLE}__$it" }
-            gradlePluginUrl?.also { urls += "${MavenRepl.GRADLE_PLUGIN_PORTAL}__$it" }
+            mavenCentralUrl?.also { urls += "${MavenRepos.MAVEN_CENTRAL}__$it" }
+            jCenterUrl?.also { urls += "${MavenRepos.JCENTER}__$it" }
+            googlePluginUrl?.also { urls += "${MavenRepos.GOOGLE}__$it" }
+            gradlePluginUrl?.also { urls += "${MavenRepos.GRADLE_PLUGIN_PORTAL}__$it" }
           }
           if (cfg.enableSpring) {
             cfg.otherRepositories += Repos.springMilestone

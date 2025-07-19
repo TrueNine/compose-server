@@ -10,7 +10,7 @@ open class JarExtensionConfig(project: Project) {
   var bootJarName: String = project.name
   var defaultVersion: String = "1.0"
   var jarDistDir = "libs"
-  var bootJarVersion: String = if (project.emptyVersion.isEmpty()) project.emptyVersion else defaultVersion
+  var bootJarVersion: String = project.emptyVersion.ifEmpty { defaultVersion }
   var bootJarSeparate: Boolean = false
   var bootJarClassifier: String = "boot"
   var copyLicense: Boolean = true

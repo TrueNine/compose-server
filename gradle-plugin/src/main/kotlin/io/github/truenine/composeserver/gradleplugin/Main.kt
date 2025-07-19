@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.gradleplugin
 
+import io.github.truenine.composeserver.gradleplugin.dotenv.DotenvLoader
 import io.github.truenine.composeserver.gradleplugin.entrance.ConfigEntrance
 import io.github.truenine.composeserver.gradleplugin.generator.GradleGenerator
 import io.github.truenine.composeserver.gradleplugin.jar.JarExtension
@@ -20,7 +21,12 @@ class Main : Plugin<Project> {
       val spotless = Spotless(project, cfg.spotless)
     }
 
+    // 环境变量加载需要在项目评估后执行，以确保配置已完全加载
     project.afterEvaluate { s ->
+      if (cfg.dotenv.enabled) {
+        val dotenvLoader = DotenvLoader(s, cfg.dotenv)
+      }
+
       if (cfg.jarExtension.enabled) {
         s.wrap {
           val jarExtension = JarExtension(this, cfg.jarExtension)
