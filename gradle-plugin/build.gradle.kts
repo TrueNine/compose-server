@@ -24,6 +24,8 @@ dependencies {
   testImplementation(gradleApi())
   testImplementation(gradleTestKit())
   testImplementation(gradleKotlinDsl())
+  testImplementation(libs.org.jetbrains.kotlin.kotlin.test.junit5)
+  testImplementation(libs.org.junit.platform.junit.platform.suite)
 }
 
 gradlePlugin {
