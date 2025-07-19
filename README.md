@@ -35,17 +35,15 @@
 
 ### 数据库和持久化
 
-- **PostgreSQL** - 主数据库
-- **Redis** - 缓存和会话存储
-- **Flyway** - 数据库版本管理
-- **HikariCP** - 高性能连接池
+- **PostgreSQL** - 主要支持数据库
+- **Redis** - 主要作为缓存和会话存储
+- **Flyway** - 数据库版本迁移管理
 
 ### 安全和认证
 
 - **Spring Security** - 安全框架
 - **JWT** - 无状态认证
-- **OAuth2** - 第三方登录
-- **OWASP AntiSamy** - XSS防护
+- **OAuth2** - 众多第三方登录支持
 
 ### 对象存储
 
@@ -55,78 +53,9 @@
 
 ### AI和机器学习
 
-- **[LangChain4j](https://github.com/langchain4j/langchain4j)** - AI应用开发
+- **LangChain4j** - AI应用开发
 - **Ollama** - 本地大模型
 - **智谱AI** - 云端AI服务
-
-## 📦 发布模块
-
-### 🏷️ Maven 模块列表
-
-以下是已发布到 Maven 中央仓库的所有模块：
-
-#### 核心模块
-
-- **`composeserver-shared`** - 核心基础组件（必选）
-  - 统一异常处理、响应封装、分页查询
-  - 通用工具类、常量定义、枚举类型
-  - 基础实体类和审计字段
-
-#### 数据库模块
-
-- **`composeserver-rds-shared`** - 数据库共享组件
-- **`composeserver-rds-crud`** - CRUD 操作封装
-- **`composeserver-rds-jimmer-ext-postgres`** - Jimmer PostgreSQL 扩展
-
-#### 安全模块
-
-- **`composeserver-security-spring`** - Spring Security 集成
-- **`composeserver-security-oauth2`** - OAuth2 认证
-- **`composeserver-security-crypto`** - 加密解密功能
-
-#### 对象存储模块
-
-- **`composeserver-oss-shared`** - 对象存储共享组件
-- **`composeserver-oss-minio`** - MinIO 集成
-- **`composeserver-oss-aliyun-oss`** - 阿里云 OSS 集成
-- **`composeserver-oss-huawei-obs`** - 华为云 OBS 集成
-
-#### 功能模块
-
-- **`composeserver-cacheable`** - 缓存组件
-- **`composeserver-pay`** - 支付模块（微信支付）
-- **`composeserver-sms`** - 短信发送模块
-- **`composeserver-data-extract`** - 数据提取（EasyExcel）
-- **`composeserver-data-crawler`** - 数据爬虫
-- **`composeserver-mcp`** - AI 相关模块
-
-### 🔗 模块依赖关系
-
-```
-composeserver-shared (核心)
-    ├── composeserver-rds-shared
-    │   ├── composeserver-rds-crud
-    │   └── composeserver-rds-jimmer-ext-postgres
-    ├── composeserver-security-spring
-    │   ├── composeserver-security-oauth2
-    │   └── composeserver-security-crypto
-    ├── composeserver-oss-shared
-    │   ├── composeserver-oss-minio
-    │   ├── composeserver-oss-aliyun-oss
-    │   └── composeserver-oss-huawei-obs
-    └── 其他功能模块...
-```
-
-### 📋 模块选择指南
-
-| 使用场景           | 推荐模块组合                                |
-|----------------|---------------------------------------|
-| **基础 Web API** | `shared` + `security-spring`          |
-| **数据库操作**      | `shared` + `rds-shared` + `rds-crud`  |
-| **文件存储**       | `shared` + `oss-shared` + `oss-minio` |
-| **微信支付**       | `shared` + `pay`                      |
-| **数据导入导出**     | `shared` + `data-extract`             |
-| **AI 功能**      | `shared` + `mcp`                      |
 
 ## 🚀 快速开始
 
@@ -162,7 +91,7 @@ implementation("io.github.truenine:composeserver-cacheable:latest")
 implementation("io.github.truenine:composeserver-pay:latest")
 implementation("io.github.truenine:composeserver-sms:latest")
 implementation("io.github.truenine:composeserver-data-extract:latest")
-implementation("io.github.truenine:composeserver-mcp:latest")
+implementation("io.github.truenine:composeserver-ai:latest")
 ```
 
 **Maven**
@@ -177,173 +106,52 @@ implementation("io.github.truenine:composeserver-mcp:latest")
 
   <!-- 数据库模块 -->
 <dependency>
-<groupId>io.github.truenine</groupId>
-<artifactId>composeserver-rds-shared</artifactId>
-<version>latest</version>
+  <groupId>io.github.truenine</groupId>
+  <artifactId>composeserver-rds-shared</artifactId>
+  <version>latest</version>
 </dependency>
 
   <!-- 安全模块 -->
 <dependency>
-<groupId>io.github.truenine</groupId>
-<artifactId>composeserver-security-spring</artifactId>
-<version>latest</version>
+  <groupId>io.github.truenine</groupId>
+  <artifactId>composeserver-security-spring</artifactId>
+  <version>latest</version>
 </dependency>
 ```
 
 ### 🔄 版本管理
 
-推荐使用 **Gradle Version Catalog** 统一管理版本：
+gradle 8.x 推荐使用 **Gradle Version Catalog** 统一管理版本：
 
-```toml
-# gradle/libs.versions.toml
-[versions]
-composeserver = "latest"
-
-[libraries]
-composeserver-shared = { module = "io.github.truenine:composeserver-shared", version.ref = "composeserver" }
-composeserver-rds-shared = { module = "io.github.truenine:composeserver-rds-shared", version.ref = "composeserver" }
-composeserver-security-spring = { module = "io.github.truenine:composeserver-security-spring", version.ref = "composeserver" }
-```
-
-### 2. 基本配置
-
-```yaml
-# application.yml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/compose_server
-    username: postgres
-    password: password
-
-  # Redis配置
-  redis:
-    host: localhost
-    port: 6379
-
-  # 缓存配置
-  cache:
-    type: redis
-    redis:
-      time-to-live: 3600000
-
-# Jimmer配置
-jimmer:
-  show-sql: true
-  pretty-sql: true
-  database-validation-mode: WARNING
-```
-
-### 3. 集成示例
-
-#### 在现有 Spring Boot 项目中集成
-
-**1. 添加依赖**
-
+[settings.gradle.kts]
 ```kotlin
-// build.gradle.kts
-dependencies {
-  implementation("io.github.truenine:composeserver-shared:latest")
-  implementation("io.github.truenine:composeserver-rds-shared:latest")
-  implementation("io.github.truenine:composeserver-security-spring:latest")
-}
-```
-
-**2. 启用自动配置**
-
-```kotlin
-@SpringBootApplication
-@EnableComposeServer  // 启用 Compose Server 自动配置
-class YourApplication
-
-fun main(args: Array<String>) {
-  runApplication<YourApplication>(*args)
-}
-```
-
-**3. 使用框架功能**
-
-```kotlin
-@RestController
-@RequestMapping("/api/users")
-class UserController(
-  private val userService: UserService
-) {
-  // 使用框架提供的分页封装
-  @GetMapping
-  fun getUsers(@RequestParam page: Int = 0): ComposePageResult<User> {
-    return userService.findAll(ComposePageRequest.of(page, 10))
-  }
-
-  // 使用框架提供的统一响应格式
-  @PostMapping
-  fun createUser(@RequestBody user: User): ComposeResult<User> {
-    return ComposeResult.success(userService.save(user))
-  }
-
-  // 使用框架提供的异常处理
-  @GetMapping("/{id}")
-  fun getUser(@PathVariable id: Long): ComposeResult<User> {
-    val user = userService.findById(id)
-      ?: throw ComposeBusinessException("用户不存在")
-    return ComposeResult.success(user)
+dependencyResolutionManagement {
+  versionCatalogs {
+    // 添加外部新配置
+    create("cs") { from("io.github.truenine:composeserver-version-catalog:latest") }
+    // 自身已有的 配置（如果没有则忽略）
+    create("libs") { from(files("gradle/libs.versions.toml")) }
   }
 }
 ```
 
-**4. 数据库实体（使用 Jimmer）**
+maven 推荐使用项目提供的 pom
 
-```kotlin
-@Entity
-@Table(name = "users")
-interface User : ComposeBaseEntity {
-  val username: String
-  val email: String
-  val roles: List<Role>
-}
+[pom.xml]
+```xml
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>io.github.truenine</groupId>
+      <artifactId>composeserver-bom</artifactId>
+      <version>latest</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
 ```
 
-## 🔧 构建命令
-
-### 基本构建
-
-```bash
-# 构建整个项目
-./gradlew build
-
-# 清理构建输出
-./gradlew clean
-
-# 发布到本地Maven仓库
-./gradlew publishToMavenLocal
-```
-
-### 测试
-
-```bash
-# 运行所有测试
-./gradlew test
-
-# 运行特定模块测试
-./gradlew :shared:test
-./gradlew :rds:shared:test
-```
-
-### 代码质量
-
-```bash
-# 检查代码格式
-./gradlew spotlessCheck
-
-# 自动修复代码格式
-./gradlew spotlessApply
-```
-
-### 版本管理
-
-```bash
-# 更新版本目录中的依赖版本
-./gradlew versionCatalogUpdate
-```
 
 ## 🏗️ 核心模块详解
 
@@ -406,7 +214,7 @@ interface User : ComposeBaseEntity {
 - 证书自动管理
 - 退款处理
 
-### 🤖 mcp - AI模块
+### 🤖 ai - AI模块
 
 基于LangChain4j的AI能力集成。
 
@@ -415,7 +223,7 @@ interface User : ComposeBaseEntity {
 - LangChain4j集成
 - Ollama本地模型支持
 - 智谱AI云端服务
-- MCP协议支持
+- AI模型协议支持
 
 ### 📊 data - 数据处理模块
 
@@ -470,51 +278,26 @@ interface User : ComposeBaseEntity {
 |----------------|-------------|--------|-----|
 | 0.x.x          | 3.5.x       | 2.2.x  | 24+ |
 
-### 📝 变更日志
-
-- **最新版本**: 查看 [Releases](https://github.com/TrueNine/compose-server/releases)
-- **升级指南**: 参考各版本发布说明
-
 ## 📄 许可证
 
 本项目采用 [GNU LESSER GENERAL PUBLIC LICENSE 2.1](LICENSE) 协议。
 
 ## 🙏 特别鸣谢
 
-
-
-#### 核心技术栈
-
 - [**Kotlin**](https://kotlinlang.org/) - 现代化的JVM语言，让开发更加优雅
 - [**Spring Boot**](https://spring.io/projects/spring-boot) - 企业级Java框架，提供强大的基础设施
 - [**Jimmer**](https://github.com/babyfish-ct/jimmer) - 现代化ORM框架，革命性的数据访问体验
 - [**Gradle**](https://gradle.org/) - 强大的构建工具，支持复杂的模块化项目
 
-#### 数据库和持久化
-
 - [**PostgreSQL**](https://www.postgresql.org/) - 世界上最先进的开源数据库
-- [**Redis**](https://redis.io/) - 高性能的内存数据库
 - [**Flyway**](https://flywaydb.org/) - 数据库版本管理工具
 - [**HikariCP**](https://github.com/brettwooldridge/HikariCP) - 高性能的JDBC连接池
-
-#### 安全和认证
-
 - [**Spring Security**](https://spring.io/projects/spring-security) - 强大的安全框架
-- [**OWASP AntiSamy**](https://github.com/nahsra/antisamy) - XSS防护工具
-- [**Hutool**](https://hutool.cn/) - 优秀的Java工具类库
-
-#### AI和机器学习
-
 - [**LangChain4j**](https://github.com/langchain4j/langchain4j) - Java的AI应用开发框架
 - [**Ollama**](https://ollama.ai/) - 本地大模型运行平台
-
-#### 工具和库
-
 - [**EasyExcel**](https://github.com/alibaba/easyexcel) - 阿里巴巴的Excel处理工具
 - [**Caffeine**](https://github.com/ben-manes/caffeine) - 高性能的Java缓存库
 - [**MinIO**](https://min.io/) - 高性能的对象存储服务
-
----
 
 ⭐ 如果这个框架对你有帮助，请给我们一个星标！
 

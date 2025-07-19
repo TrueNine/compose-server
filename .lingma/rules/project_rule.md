@@ -1,111 +1,128 @@
-# CLAUDE.md
+# Generic Standard
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+**Mandatory**
 
-## 框架定位
+- 禁止编写任何示例代码以提供用户使用，即使需要临时测试，也要在任务执行 完毕后立即删除
+- 严禁将问题简单化以解决问题
+- 严禁降级依赖版本来解决问题
+- 出现在上下文当中的代码，应当积极按照规则来重构修复
+- 严禁代码中暴露API密钥、密码、token
+- 应当积极使用日志来完成日志记录，缺失日志记录时需积极补充
+- 单元测试调试时，可积极添加日志以协助问题解决
+- 必须尽可能多地使用 `ealry return` 技巧以减少代码层级嵌套
 
-Compose Server 是一个现代化、模块化的 Kotlin 企业级服务端开发**框架**，而非脚手架。它通过 Gradle 多模块方式，提供安全、数据库、缓存、对象存储、支付、AI 等企业级能力，支持按需集成到任意 Spring Boot 项目中。
+**Output Rules**
 
-## 构建和测试命令
+- **总是以简体中文输出，即使用户提供英文输入**
+- **优先简洁直接的回复** - 避免冗长解释
+- **批量相关工具调用** - 将多个信息请求合并为单次调用
+- **使用高效工具序列** - 最小化冗余调用
 
-这是一个基于 Gradle 的 Kotlin 多模块项目。
+**Comment Rules**
 
-- `./gradlew build` - 构建整个项目
-- `./gradlew clean` - 清理构建输出
-- `./gradlew publishToMavenLocal` - 发布到本地 Maven 仓库
-- `./gradlew versionCatalogUpdate` - 更新版本目录中的依赖版本
-- `./gradlew test` - 运行所有测试
-- `./gradlew :模块名:test` - 运行特定模块的测试
-- `./gradlew spotlessCheck` - 检查代码格式
-- `./gradlew spotlessApply` - 自动修复代码格式
+- 文档注释：英文注释
+- 代码内部注释：英文注释，且解释"为什么"而非"做什么"
 
-## 项目架构
+**TDD Convention**
 
-### 模块化结构
+1. TDD流程：失败测试→实现代码→重构
+2. 覆盖边界条件和异常情况
+3. 独立运行，无外部依赖
+4. 测试命名清晰表达意图
+5. 测试类与被测试类同名
+6. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
 
-本框架采用多模块设计，主要模块包括：
+- 每个被测试类/函数/变量/方法创建主要分组
+- 按场景细分：正常用例、异常用例、边界用例
+- 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
 
-- **shared** - 核心基础组件，包含通用工具类、异常处理、类型定义、统一响应、分页等
-- **meta** - 元数据和注解处理器
-- **rds** - 数据库相关（Jimmer ORM、CRUD、PostgreSQL 扩展、Flyway 迁移）
-- **surveillance** - 监控组件
-- **security** - 安全相关（Spring Security、OAuth2、加密解密）
-- **oss** - 对象存储（MinIO、阿里云 OSS、华为云 OBS）
-- **pay** - 支付模块（微信支付 V3）
-- **cacheable** - 多级缓存（Redis、Caffeine）
-- **data** - 数据处理（EasyExcel、爬虫、行政区划等）
-- **depend** - 特定依赖处理
-- **testtoolkit** - 测试工具包
-- **gradle-plugin** - Gradle 插件
-- **ksp** - Kotlin Symbol Processing
-- **sms** - 短信服务（腾讯云短信，短信抽象层）
-- **mcp** - AI 能力（LangChain4j、Ollama、智谱 AI）
+**DDD Convention**
 
-> 所有模块均可独立集成，推荐组合见下表。
+- DDD：统一语言建模，聚合根维护不变性
+- CQRS：命令查询分离
+- EDA：事件驱动解耦
 
-### 推荐模块组合
+# Specific Language Conventions
 
-| 使用场景         | 推荐模块组合                                 |
-|----------------|----------------------------------------|
-| 基础 Web API   | shared + security-spring                |
-| 数据库操作     | shared + rds-shared + rds-crud          |
-| 文件存储       | shared + oss-shared + oss-minio         |
-| 微信支付       | shared + pay                            |
-| 数据导入导出   | shared + data-extract                   |
-| AI 能力        | shared + mcp                            |
+**SQL Standard**
 
-## 技术栈
+1. 检查现有查询是否使用参数化
+2. 统一使用snake_case命名
+3. 验证无字符串拼接风险
 
-- **Kotlin** 2.2.x
-- **Spring Boot** 3.5.x
-- **Jimmer** 0.9.x
-- **Gradle** 9.x
-- **PostgreSQL**、**Redis**、**Caffeine**、**MinIO**、**阿里云 OSS**、**华为云 OBS** 等
+**JVM Standard**
 
-## 依赖管理
+1. 严谨在测试代码中使用 `@DisplayName` 注解
+2. spring/quarkus 中严谨使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
 
-- 统一使用 Gradle Version Catalog（`gradle/libs.versions.toml`）管理依赖版本
-- 所有模块版本、groupId 通过根项目统一管理
-- 推荐通过 `publishToMavenLocal` 集成本地开发版本
+**Java Standard**
 
+1. 尽可能使用jdk的新特性
+2. 声明变量应尽量使用 `final var`
+3. 积极使用 lambda
+4. 严禁使用 `System.out.println` 记录输出
 
-## 代码约定
+**Kotlin Standard**
 
-- 所有模块使用 `kotlinspring-convention` 插件，集成 Spring Boot 与 Kotlin 规范
-- 包名格式：`io.github.truenine.composeserver.模块名`
+1. 优先使用val声明不可变变量
+2. 避免!!操作符，使用?.或let{}
+3. 数据类替代多参数函数
+4. 严禁使用 `println` 记录输出
 
-- 代码格式化：使用 Spotless，提交前请运行 `./gradlew spotlessApply`
-- 数据库迁移：使用 Flyway，脚本位于 `rds/flyway-migration-数据库类型/src/main/resources/db/migration/`，命名规则 `V版本号__描述.sql`
+**TypeScript and Vue Standard**
 
-## 集成与最佳实践
+- TypeScript: 启用strict模式，避免any类型
+- Vue: 积极使用 vue3 新特性
 
-1. **依赖引入**  
-   在业务项目的 `build.gradle.kts` 中按需添加依赖，例如：
-   ```kotlin
-   implementation("io.github.truenine:composeserver-shared:latest")
-   implementation("io.github.truenine:composeserver-rds-shared:latest")
-   implementation("io.github.truenine:composeserver-security-spring:latest")
-   ```
-2. **自动配置**  
-   启用自动配置注解（如有）：
-   ```kotlin
-   @SpringBootApplication
-   @EnableComposeServer
-   class YourApplication
-   ```
-3. **统一响应、异常、分页等**  
-   推荐使用框架内置的统一响应、异常处理、分页等能力，详见 `shared` 模块。
+# Git Commit Message Convention
 
-4. **测试与发布**
-  - 修改代码后先格式化，再运行测试，最后构建或发布到本地 Maven 仓库
-  - 推荐使用 `./gradlew test`、`./gradlew build`、`./gradlew publishToMavenLocal`
+**格式：** `emoji [scope] description`（简单）或详细列表格式（2+ 变更）
 
-## 其他说明
+**完整表情符号系统：**
+| 表情符号 | 类型 | 描述 | 使用场景 |
+|---------|------|------|----------|
+| 🎉 | feat | 重大功能/初始化 | 新功能、重大更新、项目初始化 |
+| ✨ | feat | 新功能/增强 | 添加功能、增强、文档更新 |
+| 🐛 | fix | Bug 修复 | 修复错误、解决问题 |
+| 🔧 | config | 配置修改 | 配置文件、CI/CD、构建配置 |
+| 📝 | docs | 文档更新 | 更新文档、README、注释 |
+| 🎨 | style | 代码风格/格式化 | 代码格式化、样式、结构优化 |
+| ♻️ | refactor | 重构 | 代码重构、包结构调整 |
+| ⚡ | perf | 性能优化 | 性能优化、算法改进 |
+| 🔥 | remove | 删除代码/文件 | 删除无用代码、移除功能 |
+| 🧪 | test | 测试相关 | 添加测试、修复测试、测试配置 |
+| 👷 | ci | CI/CD | 持续集成、构建脚本 |
+| 📦 | build | 构建系统 | 依赖管理、构建配置 |
+| ⬆️ | upgrade | 升级依赖 | 升级库版本 |
+| ⬇️ | downgrade | 降级依赖 | 降级库版本 |
+| 🚀 | release | 发布版本 | 版本发布、标签创建 |
+| 🔀 | merge | 合并分支 | 分支合并、冲突解决 |
+| 🤖 | ai | AI 工具配置 | AI 助手配置、自动化 |
+| 💄 | optimize | 优化 | 性能优化、代码改进 |
+| 🌐 | network | 网络相关 | 网络配置、API 调用、远程服务 |
+| 🔐 | security | 安全/验证 | 安全修复、权限控制、验证 |
+| 🚑 | hotfix | 紧急修复 | 紧急修复、临时解决方案 |
+| 📈 | analytics | 分析/监控 | 性能监控、数据分析 |
+| 🍱 | assets | 资源文件 | 图片、字体、静态资源 |
+| 🚨 | lint | 代码检查 | 修复 linting 警告、代码质量 |
+| 💡 | comment | 注释 | 添加/更新注释、文档字符串 |
+| 🔊 | log | 日志 | 添加日志、调试信息 |
+| 🔇 | log | 移除日志 | 删除日志、静默输出 |
 
-- 本项目为**框架库**，不包含脚手架或项目初始化功能
-- 所有模块均已发布至 Maven Central，详见 [README.md] 或 [Maven Central](https://central.sonatype.com/search?q=g:io.github.truenine)
-- 详细 API、集成示例、变更日志等请参考 [README.md] 和官方文档
+**提交示例：**
+```bash
+# 简单格式示例
+✨ [shared] 添加统一异常处理
 
----
+🐛 [rds] 修复连接池配置问题
 
-如需为本项目贡献代码或扩展模块，请遵循上述规范和最佳实践。
+♻️ [security] 重构JWT验证逻辑
+
+# 复杂格式示例（注意列表中的表情符号）
+✨ [ai] LangChain4j集成优化
+
+- 🚑 修复模型加载超时问题
+- 🐛 解决依赖冲突问题  
+- 💄 优化AI服务性能
+- 🧪 补充集成测试用例
+```
