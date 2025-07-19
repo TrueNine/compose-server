@@ -8,11 +8,11 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSDeclaration
 import com.squareup.kotlinpoet.ksp.toAnnotationSpec
+import io.github.truenine.composeserver.ksp.meta.annotations.MetaDef
+import io.github.truenine.composeserver.ksp.meta.annotations.MetaSkipGeneration
 import io.github.truenine.composeserver.ksp.models.DeclarationContext
 import io.github.truenine.composeserver.ksp.plugin.visitor.JpaNameClassVisitor
 import io.github.truenine.composeserver.ksp.simpleNameAsString
-import io.github.truenine.composeserver.meta.annotations.MetaDef
-import io.github.truenine.composeserver.meta.annotations.MetaSkipGeneration
 
 class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
   private fun <D : KSDeclaration> getCtxData(declaration: D, resolver: Resolver): DeclarationContext<D> {
@@ -36,7 +36,7 @@ class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) : 
       resolver.getSymbolsWithAnnotation("jakarta.persistence.EntityListener").filterIsInstance<KSDeclaration>().firstOrNull()?.let {
         it.annotations.firstOrNull()?.toAnnotationSpec()
       }
-    val jpaSymbols = resolver.getSymbolsWithAnnotation("io.github.truenine.composeserver.meta.annotations.MetaDef")
+    val jpaSymbols = resolver.getSymbolsWithAnnotation("io.github.truenine.composeserver.ksp.meta.annotations.MetaDef")
     jpaSymbols
       .filter { it.validate() }
       .filterIsInstance<KSClassDeclaration>()
@@ -47,6 +47,6 @@ class KspPluginProcessor(private val environment: SymbolProcessorEnvironment) : 
       .filterNot { it.simpleNameAsString.contains("$") }
       .filter { it.getAnnotationsByType(MetaDef::class).toList().isNotEmpty() }
       .forEach { getCtxData(it, resolver).accept(JpaNameClassVisitor(lis)) }
-    return resolver.getSymbolsWithAnnotation("io.github.truenine.composeserver.meta.annotations.MetaDef").filter { !it.validate() }
+    return resolver.getSymbolsWithAnnotation("io.github.truenine.composeserver.ksp.meta.annotations.MetaDef").filter { !it.validate() }
   }
 }

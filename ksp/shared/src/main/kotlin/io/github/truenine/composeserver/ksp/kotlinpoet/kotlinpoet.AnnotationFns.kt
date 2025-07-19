@@ -21,12 +21,12 @@ object Libs {
           object meta {
             object annotations {
               object client {
-                val Api = ClassDefine("io.github.truenine.composeserver.meta.annotations.client", "Api")
-                val ApiIgnore = ClassDefine("io.github.truenine.composeserver.meta.annotations.client", "ApiIgnore")
-                val ApiGeneratingAll = ClassDefine("io.github.truenine.composeserver.meta.annotations.client", "ApiGeneratingAll")
+                val Api = ClassDefine("io.github.truenine.composeserver.ksp.meta.annotations.client", "Api")
+                val ApiIgnore = ClassDefine("io.github.truenine.composeserver.ksp.meta.annotations.client", "ApiIgnore")
+                val ApiGeneratingAll = ClassDefine("io.github.truenine.composeserver.ksp.meta.annotations.client", "ApiGeneratingAll")
               }
 
-              val MetaSkipGeneration = ClassDefine("io.github.truenine.composeserver.meta.annotations", "MetaSkipGeneration")
+              val MetaSkipGeneration = ClassDefine("io.github.truenine.composeserver.ksp.meta.annotations", "MetaSkipGeneration")
             }
           }
 

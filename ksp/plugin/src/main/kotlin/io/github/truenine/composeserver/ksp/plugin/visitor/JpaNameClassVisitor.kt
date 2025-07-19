@@ -11,13 +11,13 @@ import com.squareup.kotlinpoet.ksp.writeTo
 import io.github.truenine.composeserver.ksp.*
 import io.github.truenine.composeserver.ksp.dsl.fileDsl
 import io.github.truenine.composeserver.ksp.kotlinpoet.Libs
+import io.github.truenine.composeserver.ksp.meta.annotations.MetaAutoManagement
+import io.github.truenine.composeserver.ksp.meta.annotations.MetaDef
+import io.github.truenine.composeserver.ksp.meta.annotations.MetaName
+import io.github.truenine.composeserver.ksp.meta.annotations.MetaSkipGeneration
+import io.github.truenine.composeserver.ksp.meta.annotations.orm.MetaFormula
+import io.github.truenine.composeserver.ksp.meta.getFirstName
 import io.github.truenine.composeserver.ksp.models.DeclarationContext
-import io.github.truenine.composeserver.meta.annotations.MetaAutoManagement
-import io.github.truenine.composeserver.meta.annotations.MetaDef
-import io.github.truenine.composeserver.meta.annotations.MetaName
-import io.github.truenine.composeserver.meta.annotations.MetaSkipGeneration
-import io.github.truenine.composeserver.meta.annotations.orm.MetaFormula
-import io.github.truenine.composeserver.meta.getFirstName
 import kotlin.properties.Delegates
 
 private sealed class PropertyProcessingResult {
