@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver
 
+import io.github.truenine.composeserver.DateTimeConverter.plusMillis
 import java.time.*
 
 /**
@@ -12,8 +13,12 @@ import java.time.*
  * @since 2022-12-16
  */
 object DateTimeConverter {
-  /** GMT timezone identifier */
-  const val ZONE_GMT = "Etc/GMT"
+  /**
+   * GMT timezone identifier
+   *
+   * @deprecated Use ZoneId.systemDefault() or specific timezone instead of hardcoded GMT
+   */
+  @Deprecated("Use ZoneId.systemDefault() or specific timezone instead of hardcoded GMT", ReplaceWith("ZoneId.systemDefault()")) const val ZONE_GMT = "Etc/GMT"
 
   /** Standard date format pattern */
   const val DATE = "yyyy-MM-dd"
@@ -64,19 +69,19 @@ object DateTimeConverter {
    * This conversion is useful when you need to work with time-only values in an Instant context, such as for time-based calculations or comparisons.
    *
    * @param lt the LocalTime to convert
-   * @param zoneId the timezone to use for conversion (defaults to GMT)
+   * @param zoneId the timezone to use for conversion (defaults to system default)
    * @return an Instant representing the time on epoch date in the specified timezone
    * @sample
    *
    * ```kotlin
    * val timeOnly = LocalTime.of(14, 30, 0) // 2:30 PM
    * val instant = DTimer.localTimeToInstant(timeOnly)
-   * // Results in 1970-01-01T14:30:00Z
+   * // Results in 1970-01-01T14:30:00 in system timezone
    * ```
    */
   @JvmStatic
   @JvmOverloads
-  fun localTimeToInstant(lt: LocalTime, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): Instant {
+  fun localTimeToInstant(lt: LocalTime, zoneId: ZoneId = ZoneId.systemDefault()): Instant {
     val meta = LocalDate.of(1970, 1, 1)
     return lt.atDate(meta).atZone(zoneId).toInstant()
   }
@@ -201,17 +206,17 @@ object DateTimeConverter {
    * This conversion extracts only the time component, useful for time-based analysis and display where the date is not relevant.
    *
    * @param instant the Instant to convert
-   * @param zoneId the timezone to use for conversion (defaults to GMT)
+   * @param zoneId the timezone to use for conversion (defaults to system default)
    * @return a LocalTime representing the time portion of the instant
    * @sample
    *
    * ```kotlin
    * val instant = Instant.parse("2023-12-25T15:30:45Z")
-   * val time = DTimer.instantToLocalTime(instant, ZoneId.of("UTC"))
-   * // Results in 15:30:45
+   * val time = DTimer.instantToLocalTime(instant, ZoneId.systemDefault())
+   * // Results in time in system timezone
    * ```
    */
-  @JvmStatic @JvmOverloads fun instantToLocalTime(instant: Instant, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime = instant.atZone(zoneId).toLocalTime()
+  @JvmStatic @JvmOverloads fun instantToLocalTime(instant: Instant, zoneId: ZoneId = ZoneId.systemDefault()): LocalTime = instant.atZone(zoneId).toLocalTime()
 
   /**
    * Converts a LocalDateTime to a millisecond timestamp using the specified timezone.
@@ -238,19 +243,19 @@ object DateTimeConverter {
    * This method extracts only the time component from a timestamp, useful for time-based operations where the date component is not needed.
    *
    * @param millis the timestamp in milliseconds since epoch
-   * @param zoneId the timezone to use for conversion (defaults to GMT)
+   * @param zoneId the timezone to use for conversion (defaults to system default)
    * @return a LocalTime representing the time portion of the timestamp
    * @sample
    *
    * ```kotlin
    * val timestamp = 1640995200000L // 2022-01-01 00:00:00 UTC
-   * val time = DTimer.millisToLocalTime(timestamp, ZoneId.of("UTC"))
-   * // Results in 00:00:00
+   * val time = DTimer.millisToLocalTime(timestamp, ZoneId.systemDefault())
+   * // Results in time in system timezone
    * ```
    */
   @JvmStatic
   @JvmOverloads
-  fun millisToLocalTime(millis: Long, zoneId: ZoneId = ZoneId.of(ZONE_GMT)): LocalTime = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalTime()
+  fun millisToLocalTime(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalTime = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalTime()
 
   /**
    * Converts an Instant to a millisecond timestamp.

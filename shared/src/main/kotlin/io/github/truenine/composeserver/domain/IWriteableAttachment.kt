@@ -10,7 +10,7 @@ interface IWriteableAttachment {
   val bytes: (() -> ByteArray?)?
     get() = null
 
-  val mimeType: String?
+  val mediaType: String?
     get() = null
 
   data class EmptyWriteableAttachment(
@@ -22,7 +22,7 @@ interface IWriteableAttachment {
 
   data class DefaultWriteableAttachment(
     override val name: String,
-    override val mimeType: String? = null,
+    override val mediaType: String? = null,
     override val outputStream: OutputStream?,
     override val size: Long,
     override val empty: Boolean = size > 0,
@@ -33,7 +33,7 @@ interface IWriteableAttachment {
       if (size != other.size) return false
       if (empty != other.empty) return false
       if (name != other.name) return false
-      if (mimeType != other.mimeType) return false
+      if (mediaType != other.mediaType) return false
       return true
     }
 
@@ -41,7 +41,7 @@ interface IWriteableAttachment {
       var result = size.hashCode()
       result = 31 * result + empty.hashCode()
       result = 31 * result + name.hashCode()
-      result = 31 * result + (mimeType?.hashCode() ?: 0)
+      result = 31 * result + (mediaType?.hashCode() ?: 0)
       return result
     }
   }

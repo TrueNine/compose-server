@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.typing
 
+import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IStringTyping
 
 /**
@@ -8,7 +9,7 @@ import io.github.truenine.composeserver.IStringTyping
  * @author TrueNine
  * @since 2022-10-28
  */
-enum class EncryptAlgorithmTyping(private val alg: String, val padding: String) : IStringTyping {
+enum class EncryptAlgorithm(private val alg: String, val padding: String) : IStringTyping {
   /** ecc */
   ECC("EC", "SHA256withECDSA"),
 
@@ -21,9 +22,9 @@ enum class EncryptAlgorithmTyping(private val alg: String, val padding: String) 
   /** aes */
   AES("AES", "AES/ECB/PKCS5Padding");
 
-  override val value: String = this.alg
+  @JsonValue override val value: String = this.alg
 
   companion object {
-    @JvmStatic fun findVal(v: String?) = entries.find { it.alg == v }
+    @JvmStatic operator fun get(alg: String?): EncryptAlgorithm? = entries.find { it.alg == alg }
   }
 }

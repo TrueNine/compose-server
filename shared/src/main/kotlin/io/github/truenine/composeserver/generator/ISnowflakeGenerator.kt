@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.generator
 
-interface ISnowflakeGenerator : ISerialGenerator<Long> {
+interface ISnowflakeGenerator : IOrderCodeGenerator, ISerialGenerator<Long> {
   fun currentTimeMillis(): Long {
     return System.currentTimeMillis()
   }

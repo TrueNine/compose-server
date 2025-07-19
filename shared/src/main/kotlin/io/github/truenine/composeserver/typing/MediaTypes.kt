@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.typing
 
+import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IStringTyping
 
 /**
@@ -8,64 +9,63 @@ import io.github.truenine.composeserver.IStringTyping
  * @author TrueNine
  * @since 2022-11-03
  */
-enum class MimeTypes(private val extension: String, vararg m: String) : IStringTyping {
-  EXE("exe", "application/ms-download", "application/octet-stream"),
+enum class MediaTypes(private val extensions: Array<String>, private val mediaTypes: Array<String>) : IStringTyping {
+  EXE(arrayOf("exe"), arrayOf("application/ms-download", "application/octet-stream")),
 
   /** 这个比较特殊，他的后缀名 是 binary 注意 */
-  BINARY("binary", "application/octet-stream"),
-  URL("", "application/x-www-form-urlencoded"),
-  MULTIPART_FORM_DATA("", "multipart/form-data"),
-  PNG("png", "image/png"),
-  JPEG("jpg", "image/jpg", "image/jpeg"),
-  BMP("bmp", "image/bmp"),
-  WEBP("bmp", "image/webp"),
-  GIF("gif", "image/gif"),
-  TEXT("txt", "text/plain"),
-  PDF("pdf", "application/pdf"),
-  WORD("doc", "application/msword"),
-  EXCEL("xls", "application/vnd.ms-excel"),
-  PPTX("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
-  XLSX("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-  DOCX("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-  PPT("ppt", "application/vnd.ms-powerpoint"),
-  JSON("json", "application/json"),
-  HTML("html", "text/html"),
-  XML("xml", "text/xml"),
-  JAVASCRIPT("js", "text/javascript"),
-  CSS("css", "text/css"),
-  OGG("ogg", "audio/ogg"),
-  MP3("mp3", "audio/mpeg"),
-  WAV("wav", "audio/x-wav"),
-  M3U("m3u", "audio/x-mpegurl"),
-  M4A("mp4", "audio/x-m4a"),
-  MP4("mp4", "video/mp4"),
-  WEBM("webm", "video/webm"),
-  JAR("jar", "application/java-archive"),
-  ZIP("zip", "application/zip"),
-  GZIP("gzip", "application/x-gzip"),
-  TAR("tar", "application/x-tar"),
-  RAR("rar", "application/x-rar-compressed"),
-  SSE("", "text/event-stream");
+  BINARY(arrayOf("binary"), arrayOf("application/octet-stream")),
+  URL(arrayOf(), arrayOf("application/x-www-form-urlencoded")),
+  MULTIPART_FORM_DATA(arrayOf(), arrayOf("multipart/form-data")),
+  PNG(arrayOf("png"), arrayOf("image/png")),
+  JPEG(arrayOf("jpeg", "jpg", "jpe", "jfif"), arrayOf("image/jpeg", "image/jpg")),
+  BMP(arrayOf("bmp"), arrayOf("image/bmp")),
+  WEBP(arrayOf("webp"), arrayOf("image/webp")),
+  GIF(arrayOf("gif"), arrayOf("image/gif")),
+  TEXT(arrayOf("txt", "text"), arrayOf("text/plain")),
+  PDF(arrayOf("pdf"), arrayOf("application/pdf")),
+  WORD(arrayOf("doc"), arrayOf("application/msword")),
+  EXCEL(arrayOf("xls"), arrayOf("application/vnd.ms-excel")),
+  PPTX(arrayOf("pptx"), arrayOf("application/vnd.openxmlformats-officedocument.presentationml.presentation")),
+  XLSX(arrayOf("xlsx"), arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
+  DOCX(arrayOf("docx"), arrayOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document")),
+  PPT(arrayOf("ppt"), arrayOf("application/vnd.ms-powerpoint")),
+  JSON(arrayOf("json"), arrayOf("application/json")),
+  HTML(arrayOf("html", "htm"), arrayOf("text/html")),
+  XML(arrayOf("xml"), arrayOf("text/xml", "application/xml")),
+  JAVASCRIPT(arrayOf("js", "mjs"), arrayOf("text/javascript", "application/javascript")),
+  CSS(arrayOf("css"), arrayOf("text/css")),
+  OGG(arrayOf("ogg", "oga"), arrayOf("audio/ogg")),
+  MP3(arrayOf("mp3"), arrayOf("audio/mpeg")),
+  WAV(arrayOf("wav"), arrayOf("audio/x-wav", "audio/wav")),
+  M3U(arrayOf("m3u", "m3u8"), arrayOf("audio/x-mpegurl")),
+  M4A(arrayOf("m4a"), arrayOf("audio/x-m4a")),
+  MP4(arrayOf("mp4"), arrayOf("video/mp4")),
+  WEBM(arrayOf("webm"), arrayOf("video/webm")),
+  JAR(arrayOf("jar"), arrayOf("application/java-archive")),
+  ZIP(arrayOf("zip"), arrayOf("application/zip")),
+  GZIP(arrayOf("gzip", "gz"), arrayOf("application/x-gzip", "application/gzip")),
+  TAR(arrayOf("tar"), arrayOf("application/x-tar")),
+  RAR(arrayOf("rar"), arrayOf("application/x-rar-compressed")),
+  SSE(arrayOf(), arrayOf("text/event-stream"));
 
-  private var mm: Array<out String> = m
-
-  @Suppress("UNCHECKED_CAST")
   val medias: Array<String>
-    get() = mm as Array<String>
+    get() = mediaTypes
 
-  val ext: String
-    get() = extension
+  val ext: String?
+    get() = extensions.firstOrNull()
 
-  @Deprecated("请改用标准化接口", ReplaceWith("getValue()"))
-  fun media(): String {
-    return this.value
-  }
+  val exts: Array<String>
+    get() = extensions
 
-  override val value: String = this.mm[0]
+  @Deprecated("请改用标准化接口", ReplaceWith("getValue()")) fun media(): String = value
+
+  @JsonValue override val value: String = mediaTypes[0]
 
   companion object {
-    @JvmStatic fun findVal(media: String?): MimeTypes? = entries.find { v -> if (media.isNullOrBlank()) false else v.medias.contains(media) }
+    @JvmStatic fun findVal(media: String?): MediaTypes? = entries.find { v -> if (media.isNullOrBlank()) false else media in v.medias }
 
-    @JvmStatic operator fun get(v: String?): MimeTypes? = findVal(v)
+    @JvmStatic fun findByExtension(extension: String?): MediaTypes? = entries.find { v -> if (extension.isNullOrBlank()) false else extension in v.extensions }
+
+    @JvmStatic operator fun get(v: String?): MediaTypes? = findVal(v)
   }
 }

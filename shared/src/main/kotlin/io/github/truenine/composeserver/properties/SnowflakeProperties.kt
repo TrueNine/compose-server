@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-private const val PREFIX = "compose.core"
+private const val PREFIX = "compose.shared"
 
 /**
  * # snowflake id 生成器自动配置

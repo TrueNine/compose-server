@@ -29,7 +29,7 @@ fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
  * @param zoneId 时区
  * @return LocalTime对象
  */
-fun Long.toLocalTime(zoneId: ZoneId = ZoneId.of(DateTimeConverter.ZONE_GMT)): LocalTime {
+fun Long.toLocalTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalTime {
   return DateTimeConverter.millisToLocalTime(this, zoneId)
 }
 
@@ -48,7 +48,7 @@ fun Long.toInstant(): Instant {
  * @param zoneId 时区
  * @return 毫秒时间戳
  */
-fun LocalTime.toMillis(zoneId: ZoneId = ZoneId.of(DateTimeConverter.ZONE_GMT)): Long {
+fun LocalTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
   return DateTimeConverter.localTimeToInstant(this, zoneId).toEpochMilli()
 }
 
@@ -80,24 +80,69 @@ val LocalDateTime.iso8601LongUtc: Long
 val LocalDateTime.iso8601LongUtcSecond: Long
   get() = this.toEpochSecond(ZoneOffset.UTC)
 
-operator fun LocalDateTime.minus(other: LocalDateTime): Duration {
-  return Duration.between(this, other)
-}
+/**
+ * 计算两个LocalDateTime之间的时间差
+ *
+ * @param other 被减数
+ * @return 时间差Duration对象
+ */
+operator fun LocalDateTime.minus(other: LocalDateTime): Duration = Duration.between(other, this)
 
-operator fun LocalDate.minus(other: LocalDate): Period {
-  return Period.between(this, other)
-}
+/**
+ * 计算两个LocalDate之间的日期差
+ *
+ * @param other 被减数
+ * @return 日期差Period对象
+ */
+operator fun LocalDate.minus(other: LocalDate): Period = Period.between(other, this)
 
-fun nowDatetimeFirstDayOfMonth(): LocalDateTime = LocalDateTime.now().firstDayOfMonth()
+/**
+ * 获取当前月份第一天的LocalDateTime
+ *
+ * @return 当前月份第一天的LocalDateTime
+ */
+fun nowDateTimeFirstDayOfMonth(): LocalDateTime = LocalDateTime.now().firstDayOfMonth()
 
+/**
+ * 获取指定LocalDateTime所在月份的第一天
+ *
+ * @return 月份第一天的LocalDateTime
+ */
 fun LocalDateTime.firstDayOfMonth(): LocalDateTime = with(TemporalAdjusters.firstDayOfMonth())
 
-fun nowDatetimeLastDayOfMonth(): LocalDateTime = LocalDateTime.now().lastDayOfMonth()
+/**
+ * 获取当前月份最后一天的LocalDateTime
+ *
+ * @return 当前月份最后一天的LocalDateTime
+ */
+fun nowDateTimeLastDayOfMonth(): LocalDateTime = LocalDateTime.now().lastDayOfMonth()
 
+/**
+ * 获取指定LocalDateTime所在月份的最后一天
+ *
+ * @return 月份最后一天的LocalDateTime
+ */
 fun LocalDateTime.lastDayOfMonth(): LocalDateTime = with(TemporalAdjusters.lastDayOfMonth())
 
-fun nowDateFirstDayOfMonth(): LocalDate = LocalDate.now().lastDayOfMonth()
+/**
+ * 获取当前月份第一天的LocalDate
+ *
+ * @return 当前月份第一天的LocalDate
+ */
+fun nowDateFirstDayOfMonth(): LocalDate = LocalDate.now().firstDayOfMonth()
 
+/**
+ * 获取指定LocalDate所在月份的第一天
+ *
+ * @return 月份第一天的LocalDate
+ */
+fun LocalDate.firstDayOfMonth(): LocalDate = with(TemporalAdjusters.firstDayOfMonth())
+
+/**
+ * 获取指定LocalDate所在月份的最后一天
+ *
+ * @return 月份最后一天的LocalDate
+ */
 fun LocalDate.lastDayOfMonth(): LocalDate = with(TemporalAdjusters.lastDayOfMonth())
 
 /**
@@ -126,7 +171,7 @@ fun Instant.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
  * @param zoneId 时区
  * @return LocalTime对象
  */
-fun Instant.toLocalTime(zoneId: ZoneId = ZoneId.of(DateTimeConverter.ZONE_GMT)): LocalTime {
+fun Instant.toLocalTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalTime {
   return DateTimeConverter.instantToLocalTime(this, zoneId)
 }
 
