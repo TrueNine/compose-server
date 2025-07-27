@@ -1,5 +1,28 @@
 {
-  "mcpServers": {"type": "stdio","command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"]},
-  "Sequential-thinking": {"type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]},
-  "broswertools": {"type": "stdio", "command": "npx", "args": ["-y", "@browsermcp/mcp@latest"]}
+  "mcpServers": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "Sequential-thinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "broswertools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@browsermcp/mcp@latest"
+      ]
+    }
+  }
 }

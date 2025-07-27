@@ -126,7 +126,7 @@ interface IPageParam : IPageParamLike, Serializable {
   @get:JsonIgnore
   private val safeRandEnd: Long
     get() {
-      val end = (safeRangeOffset + (safePageSize))
+      val end = (safeRangeOffset + (safePageSize) - 1)
       return end
     }
 

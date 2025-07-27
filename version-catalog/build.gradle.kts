@@ -1,3 +1,4 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import kotlin.jvm.optionals.getOrNull
 
 plugins {
@@ -32,27 +33,78 @@ dependencies {
   }
 }
 
-val skipGroups = listOf("org.jetbrains.kotlin", "org.springframework", "com.google.devtools")
+val nonStableKeywords = listOf(
+  "alpha",
+  "beta",
+  "dev",
+  "-rc",
+  "snapshot"
+)
+
+val ignoreGroups = listOf(
+  "dev.langchain4j",
+  "io.projectreactor.kotlin"
+)
 
 fun isNonStable(version: ModuleComponentIdentifier): Boolean {
-  if (skipGroups.any { version.group.startsWith(it) }) {
-    return false
-  }
-  val nonStableKeywords = listOf("alpha", "beta", "rc", "cr", "m", "eap", "dev", "snapshot")
   return nonStableKeywords.any { version.version.contains(it, true) }
 }
 
 // https://github.com/ben-manes/gradle-versions-plugin
-/*tasks.withType<DependencyUpdatesTask> {
+tasks.withType<DependencyUpdatesTask> {
+  // 拒绝不稳定版本
   rejectVersionIf {
+    if (ignoreGroups.any { group.contains(it, true) }) {
+      return@rejectVersionIf true
+    }
     isNonStable(candidate)
   }
-}*/
+
+  // 检查构建脚本依赖
+  checkBuildEnvironmentConstraints = true
+
+  // 输出格式配置
+  outputFormatter = "json,xml,html,plain"
+
+  // 输出目录
+  outputDir = "build/dependencyUpdates"
+
+  // 报告文件名
+  reportfileName = "report"
+}
+
+// 创建任务别名，方便使用
+tasks.register("checkUpdates") {
+  dependsOn("dependencyUpdates")
+  group = "verification"
+  description = "检查依赖更新 (dependencyUpdates 任务的别名)"
+}
+
+tasks.register("updateReport") {
+  dependsOn("dependencyUpdates")
+  group = "reporting"
+  description = "生成依赖更新报告"
+  doLast {
+    val reportDir = file("build/dependencyUpdates")
+    if (reportDir.exists()) {
+      println("依赖更新报告已生成:")
+      println("  - HTML: ${reportDir.resolve("report.html").absolutePath}")
+      println("  - JSON: ${reportDir.resolve("report.json").absolutePath}")
+      println("  - XML:  ${reportDir.resolve("report.xml").absolutePath}")
+      println("  - TXT:  ${reportDir.resolve("report.txt").absolutePath}")
+    }
+  }
+}
 
 description =
   """
 Version catalog module for managing and publishing dependency versions across the project ecosystem.
 Provides centralized version management and dependency update capabilities with automated version checking.
+
+Available tasks:
+- dependencyUpdates: 检查依赖更新并生成报告
+- checkUpdates: dependencyUpdates 的别名
+- updateReport: 生成依赖更新报告并显示文件路径
 """
     .trimIndent()
 

@@ -38,7 +38,7 @@ listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cach
 ("pay" to listOf("shared", "wechat")).useFile()
 
 // 对象存储服务
-("oss" to listOf("shared", "minio", "aliyun-oss", "huawei-obs")).useFile()
+("oss" to listOf("shared", "minio", "aliyun-oss", "huawei-obs", "volcengine-tos")).useFile()
 
 // 关系型数据库服务
 ("rds" to listOf("shared", "crud", "jimmer-ext-postgres", "flyway-migration-postgresql")).useFile()
