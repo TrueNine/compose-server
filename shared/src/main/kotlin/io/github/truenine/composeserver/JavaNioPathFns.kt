@@ -2,13 +2,11 @@ package io.github.truenine.composeserver
 
 import io.github.truenine.composeserver.domain.IPage
 import java.io.FileNotFoundException
-import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
 
 const val capacity = 8192
@@ -31,6 +29,15 @@ fun Path.isEmpty(): Boolean = !isFile() || Files.size(this) == 0L
 /**
  * Opens a FileChannel for the file with the specified mode.
  *
+ * **Important**: Always use this method with `use` block to ensure proper resource cleanup:
+ * ```kotlin
+ * path.fileChannel().use { channel ->
+ *   // use channel
+ * }
+ * ```
+ *
+ * This prevents file handle leaks, especially on Windows systems.
+ *
  * @param mode the file access mode (default: "r" for read-only)
  * @return FileChannel for the file
  * @throws FileNotFoundException if the path is not a regular file
@@ -39,7 +46,18 @@ fun Path.fileChannel(mode: String = "r"): FileChannel {
   if (!isFile()) {
     throw FileNotFoundException("$this is not a file")
   }
-  return RandomAccessFile(this.absolutePathString(), mode).channel
+
+  // Use Files.newByteChannel which properly manages resources
+  val options =
+    when (mode) {
+      "r" -> setOf(java.nio.file.StandardOpenOption.READ)
+      "rw" -> setOf(java.nio.file.StandardOpenOption.READ, java.nio.file.StandardOpenOption.WRITE)
+      "rws" -> setOf(java.nio.file.StandardOpenOption.READ, java.nio.file.StandardOpenOption.WRITE, java.nio.file.StandardOpenOption.SYNC)
+      "rwd" -> setOf(java.nio.file.StandardOpenOption.READ, java.nio.file.StandardOpenOption.WRITE, java.nio.file.StandardOpenOption.DSYNC)
+      else -> throw IllegalArgumentException("Unsupported mode: $mode")
+    }
+
+  return Files.newByteChannel(this, options) as FileChannel
 }
 
 /**
@@ -64,11 +82,18 @@ fun Path.sliceLines(
 
   return sequence {
     if (isEmpty()) return@sequence
-    fileChannel().use { channel ->
-      val first = sliceRange.first.toSafeInt()
-      val takeCount = (sliceRange.last.toSafeInt() - first).coerceAtLeast(0)
 
-      countWordBySeparator(sep = sep, bufferCapacity = bufferCapacity, charset = charset).drop(first).take(takeCount).forEach { (start, end) ->
+    // Get word boundaries first, then read the content
+    // Note: sliceRange is a LongRange (inclusive), so we need to add 1 to get the correct count
+    val startIndex = sliceRange.first.toSafeInt()
+    val endIndex = sliceRange.last.toSafeInt()
+    val takeCount = (endIndex - startIndex + 1).coerceAtLeast(0)
+
+    val wordBoundaries = countWordBySeparator(sep = sep, bufferCapacity = bufferCapacity, charset = charset).drop(startIndex).take(takeCount).toList()
+
+    // Now read the content using a single file channel
+    fileChannel().use { channel ->
+      wordBoundaries.forEach { (start, end) ->
         channel.position(start)
         val len = (end - start).toSafeInt()
         if (len > 0) {
@@ -245,17 +270,107 @@ fun Path.fileSize(): Long = if (isEmpty()) 0L else Files.size(this)
  * Paginates lines from the file based on the provided parameters.
  *
  * @param param the pagination parameters
- * @param sep the line separator (default: system line separator)
  * @param charset the character encoding (default: UTF-8)
  * @return a paginated result containing the requested lines
  */
-fun Path.pageLines(param: Pq, sep: String = lineSep, charset: Charset = Charsets.UTF_8): Pr<String> {
-  if (isEmpty() || sep.isEmpty()) return IPage.emptyWith()
+fun Path.pageLines(param: Pq, charset: Charset = Charsets.UTF_8): Pr<String> {
+  if (isEmpty()) return IPage.emptyWith()
 
   val total = countLines()
   val p = param + total.toSafeInt()
   val range = p.toLongRange()
-  val dataList = sliceLines(range = range, totalLines = total, sep = sep, charset = charset).toList()
+  val dataList = readLinesByRange(range = range, totalLines = total, charset = charset).toList()
 
   return Pr[dataList, total, p]
+}
+
+/**
+ * Reads lines from the file within the specified range using the same line detection logic as countLines().
+ *
+ * @param range the range of lines to read (inclusive)
+ * @param charset the character encoding (default: UTF-8)
+ * @param totalLines the total number of lines (if known, to avoid recounting)
+ * @return a sequence of strings representing the lines
+ */
+fun Path.readLinesByRange(range: LongRange, charset: Charset = Charsets.UTF_8, totalLines: Long? = null): Sequence<String> {
+  val lineLength = totalLines ?: countLines()
+  val safeRange = range.toSafeRange(min = 0, max = lineLength)
+
+  return sequence {
+    if (isEmpty()) return@sequence
+
+    val startLine = safeRange.first.toSafeInt()
+    val endLine = safeRange.last.toSafeInt()
+
+    var currentLine = 0L
+    var lineStart = 0L
+    var currentPosition = 0L
+    val lineBoundaries = mutableListOf<Pair<Long, Long>>()
+
+    // First pass: find line boundaries using the same logic as countLines()
+    fileChannel().use { channel ->
+      val buffer = ByteBuffer.allocateDirect(capacity)
+
+      while (channel.read(buffer) != -1) {
+        buffer.flip()
+
+        while (buffer.hasRemaining()) {
+          val byte = buffer.get()
+          currentPosition++
+
+          if (byte == '\n'.code.toByte()) {
+            lineBoundaries.add(lineStart to currentPosition - 1)
+            lineStart = currentPosition
+            currentLine++
+          } else if (byte == '\r'.code.toByte()) {
+            // Handle Windows line endings (\r\n) and Mac line endings (\r)
+            var endPos = currentPosition - 1
+            // Peek ahead for \n to include it in the line ending
+            if (buffer.hasRemaining()) {
+              val nextByte = buffer.get(buffer.position())
+              if (nextByte == '\n'.code.toByte()) {
+                buffer.get() // consume the \n
+                currentPosition++
+                endPos = currentPosition - 1
+              }
+            }
+            lineBoundaries.add(lineStart to endPos)
+            lineStart = currentPosition
+            currentLine++
+          }
+        }
+        buffer.clear()
+      }
+
+      // Add the last line if file doesn't end with newline
+      if (lineStart < currentPosition) {
+        lineBoundaries.add(lineStart to currentPosition)
+      }
+    }
+
+    // Second pass: read the requested lines
+    fileChannel().use { channel ->
+      for (i in startLine..endLine.coerceAtMost(lineBoundaries.size - 1)) {
+        val (start, end) = lineBoundaries[i]
+        val length = (end - start).toSafeInt()
+
+        if (length > 0) {
+          channel.position(start)
+          val buffer = ByteBuffer.allocateDirect(length)
+          channel.read(buffer)
+          buffer.flip()
+
+          val lineBytes = ByteArray(length)
+          buffer.get(lineBytes)
+          val line = String(lineBytes, charset)
+
+          // Remove line endings from the result
+          val cleanLine = line.trimEnd('\r', '\n')
+          yield(cleanLine)
+        } else {
+          yield("")
+        }
+      }
+    }
+  }
 }
