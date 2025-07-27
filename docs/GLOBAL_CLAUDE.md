@@ -81,7 +81,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - TypeScript: 启用strict模式，避免any类型
 - Vue: 积极使用 vue3 新特性
 
-# Git Commit Message Convention
+**SCSS Standard**
+
+- 禁止使用 `@import` 引入样式文件，而是使用 `@use`
+
+# Git Commit Message Standard
 
 **格式：** `emoji [scope] description`（简单）或详细列表格式（2+ 变更）
 
@@ -117,6 +121,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 🔇 | log | 移除日志 | 删除日志、静默输出 |
 
 **提交示例：**
+
 ```bash
 # 简单格式示例
 ✨ [shared] 添加统一异常处理
