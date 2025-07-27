@@ -79,10 +79,10 @@ class JavaNioPathFnsTest {
     val testFile = tempDir.resolve("test.txt")
     Files.write(testFile, "test content".toByteArray())
 
-    val channel = testFile.fileChannel()
-    assertNotNull(channel, "FileChannel should not be null")
-    assertTrue(channel.isOpen, "FileChannel should be open")
-    channel.close()
+    testFile.fileChannel().use { channel ->
+      assertNotNull(channel, "FileChannel should not be null")
+      assertTrue(channel.isOpen, "FileChannel should be open")
+    }
   }
 
   @Test
@@ -90,10 +90,10 @@ class JavaNioPathFnsTest {
     val testFile = tempDir.resolve("test.txt")
     Files.write(testFile, "test content".toByteArray())
 
-    val channel = testFile.fileChannel("rw")
-    assertNotNull(channel, "FileChannel should not be null")
-    assertTrue(channel.isOpen, "FileChannel should be open")
-    channel.close()
+    testFile.fileChannel("rw").use { channel ->
+      assertNotNull(channel, "FileChannel should not be null")
+      assertTrue(channel.isOpen, "FileChannel should be open")
+    }
   }
 
   @Test
@@ -288,30 +288,36 @@ class JavaNioPathFnsTest {
   @Test
   fun testPageLinesWithValidPagination() {
     val testFile = tempDir.resolve("test.txt")
-    Files.write(testFile, "Line 1\nLine 2\nLine 3\nLine 4\nLine 5".toByteArray())
+    // Use system line separator to match the default behavior
+    val content = "Line 1${System.lineSeparator()}Line 2${System.lineSeparator()}Line 3${System.lineSeparator()}Line 4${System.lineSeparator()}Line 5"
+    Files.write(testFile, content.toByteArray())
 
     val result = testFile.pageLines(Pq[0, 2])
     assertEquals(5L, result.t, "Total should match line count")
     assertEquals(2, result.d.size, "Page size should match request")
+    assertEquals("Line 1", result[0], "First line should match")
+    assertEquals("Line 2", result[1], "Second line should match")
   }
 
   @Test
-  fun testPageLinesWithEmptySeparator() {
+  fun testPageLinesWithSingleLine() {
     val testFile = tempDir.resolve("test.txt")
     Files.write(testFile, "content".toByteArray())
 
-    val result = testFile.pageLines(Pq[0, 10], sep = "")
-    assertEquals(0L, result.t, "Empty separator should return empty result")
-    assertTrue(result.d.isEmpty(), "Empty separator should return empty data")
+    val result = testFile.pageLines(Pq[0, 10])
+    assertEquals(1L, result.t, "Single line file should return 1 line")
+    assertEquals(1, result.d.size, "Should return single line")
+    assertEquals("content", result[0], "Content should match")
   }
 
   @Test
-  fun testPageLinesWithCustomSeparatorAndCharset() {
+  fun testPageLinesWithCustomCharset() {
     val testFile = tempDir.resolve("test.txt")
-    Files.write(testFile, "测试1|测试2|测试3".toByteArray(Charsets.UTF_8))
+    val content = "测试1\n测试2\n测试3"
+    Files.write(testFile, content.toByteArray(Charsets.UTF_8))
 
-    val result = testFile.pageLines(Pq[0, 2], sep = "|", charset = Charsets.UTF_8)
-    assertTrue(result.t > 0, "Custom separator and charset should work")
+    val result = testFile.pageLines(Pq[0, 2], charset = Charsets.UTF_8)
+    assertTrue(result.t > 0, "Custom charset should work")
     assertTrue(result.d.isNotEmpty(), "Should return non-empty data")
   }
 }

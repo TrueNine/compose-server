@@ -124,7 +124,8 @@ class IPageParamTest {
     val param = IPageParam.get(2, 10)
     val range = param.toLongRange()
     assertThat(range.first).isEqualTo(20L)
-    assertThat(range.last).isEqualTo(30L)
+    assertThat(range.last).isEqualTo(29L) // Fixed: should be 29, not 30, for correct page size
+    assertThat(range.count()).isEqualTo(10) // Verify that the range contains exactly 10 elements
   }
 
   @Test
