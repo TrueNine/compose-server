@@ -1,7 +1,6 @@
 {
   "mcpServers": {
     "context7": {
-      "type": "stdio",
       "command": "npx",
       "args": [
         "-y",
@@ -9,7 +8,6 @@
       ]
     },
     "Sequential-thinking": {
-      "type": "stdio",
       "command": "npx",
       "args": [
         "-y",
@@ -17,11 +15,17 @@
       ]
     },
     "broswertools": {
-      "type": "stdio",
       "command": "npx",
       "args": [
         "-y",
         "@browsermcp/mcp@latest"
+      ]
+    },
+    "Playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
       ]
     }
   }
