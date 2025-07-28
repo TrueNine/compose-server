@@ -305,6 +305,7 @@ org-springframework-spring-webflux = { module = "org.springframework:spring-webf
 org-springframework-spring-webmvc = { module = "org.springframework:spring-webmvc", version.ref = "org-springframework-framework" }
 org-testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "org-testcontainers" }
 org-testcontainers-minio = { module = "org.testcontainers:minio", version.ref = "org-testcontainers" }
+org-testcontainers-mysql = { module = "org.testcontainers:mysql", version.ref = "org-testcontainers" }
 org-testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "org-testcontainers" }
 org-testcontainers-testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "org-testcontainers" }
 org-testcontainers-testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "org-testcontainers" }
