@@ -20,7 +20,7 @@ class ContainerCommandExecutorTest {
   fun `测试 ContainerCommandExecutor 构造函数和常量`() {
     log.info("开始测试 ContainerCommandExecutor 构造函数和常量")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -38,7 +38,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommand 方法的成功执行`() {
     log.info("开始测试 executeCommand 方法的成功执行")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -55,7 +55,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommand 方法的空命令验证`() {
     log.info("开始测试 executeCommand 方法的空命令验证")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -70,7 +70,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommand 方法的自定义参数`() {
     log.info("开始测试 executeCommand 方法的自定义参数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -87,7 +87,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommandWithExpectedExitCode 方法的成功情况`() {
     log.info("开始测试 executeCommandWithExpectedExitCode 方法的成功情况")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -104,7 +104,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommandWithExpectedExitCode 方法的失败情况`() {
     log.info("开始测试 executeCommandWithExpectedExitCode 方法的失败情况")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -119,7 +119,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommandAndGetOutput 方法`() {
     log.info("开始测试 executeCommandAndGetOutput 方法")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -135,7 +135,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommandAndCheckOutput 方法的成功情况`() {
     log.info("开始测试 executeCommandAndCheckOutput 方法的成功情况")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -152,7 +152,7 @@ class ContainerCommandExecutorTest {
   fun `测试 executeCommandAndCheckOutput 方法的失败情况`() {
     log.info("开始测试 executeCommandAndCheckOutput 方法的失败情况")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -167,7 +167,7 @@ class ContainerCommandExecutorTest {
   fun `测试 waitForContainerReady 方法`() {
     log.info("开始测试 waitForContainerReady 方法")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -185,7 +185,7 @@ class ContainerCommandExecutorTest {
   fun `测试 fileExists 方法的存在文件`() {
     log.info("开始测试 fileExists 方法的存在文件")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -201,7 +201,7 @@ class ContainerCommandExecutorTest {
   fun `测试 fileExists 方法的不存在文件`() {
     log.info("开始测试 fileExists 方法的不存在文件")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -217,7 +217,7 @@ class ContainerCommandExecutorTest {
   fun `测试 waitForFile 方法`() {
     log.info("开始测试 waitForFile 方法")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
@@ -238,7 +238,7 @@ class ContainerCommandExecutorTest {
   fun `测试 readFileContent 方法`() {
     log.info("开始测试 readFileContent 方法")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)

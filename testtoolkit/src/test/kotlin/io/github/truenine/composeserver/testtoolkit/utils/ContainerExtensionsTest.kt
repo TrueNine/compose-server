@@ -23,7 +23,7 @@ class ContainerExtensionsTest {
   fun `测试 commandExecutor 扩展函数`() {
     log.info("开始测试 commandExecutor 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = container.commandExecutor()
@@ -38,7 +38,7 @@ class ContainerExtensionsTest {
   fun `测试 safeExecInContainer 扩展函数`() {
     log.info("开始测试 safeExecInContainer 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest"))
+    GenericContainer(DockerImageName.parse("alpine:3.21"))
       .withCommand("sleep", "300") // 让容器运行5分钟，足够测试使用
       .use { container ->
         container.start()
@@ -59,7 +59,7 @@ class ContainerExtensionsTest {
   fun `测试 safeExecInContainer 扩展函数带自定义参数`() {
     log.info("开始测试 safeExecInContainer 扩展函数带自定义参数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val result = container.safeExecInContainer(timeout = Duration.ofSeconds(10), maxRetries = 2, "echo", "Custom Test")
@@ -75,7 +75,7 @@ class ContainerExtensionsTest {
   fun `测试 execWithExpectedExitCode 扩展函数`() {
     log.info("开始测试 execWithExpectedExitCode 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       // 测试成功的命令
@@ -90,7 +90,7 @@ class ContainerExtensionsTest {
   fun `测试 execAndGetOutput 扩展函数`() {
     log.info("开始测试 execAndGetOutput 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val output = container.execAndGetOutput(commands = arrayOf("echo", "Test Output"))
@@ -105,7 +105,7 @@ class ContainerExtensionsTest {
   fun `测试 execAndCheckOutput 扩展函数`() {
     log.info("开始测试 execAndCheckOutput 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val result = container.execAndCheckOutput("Hello", commands = arrayOf("echo", "Hello World"))
@@ -121,7 +121,7 @@ class ContainerExtensionsTest {
   fun `测试 waitForReady 扩展函数`() {
     log.info("开始测试 waitForReady 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       // 容器已经启动，等待就绪应该立即完成
@@ -137,7 +137,7 @@ class ContainerExtensionsTest {
   fun `测试 fileExists 扩展函数`() {
     log.info("开始测试 fileExists 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       // 测试存在的文件
@@ -156,7 +156,7 @@ class ContainerExtensionsTest {
   fun `测试 readFile 扩展函数`() {
     log.info("开始测试 readFile 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       // 创建一个测试文件
@@ -174,7 +174,7 @@ class ContainerExtensionsTest {
   fun `测试 waitForFile 扩展函数`() {
     log.info("开始测试 waitForFile 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       // 创建文件
@@ -195,7 +195,7 @@ class ContainerExtensionsTest {
     log.info("开始测试 withStableWaitStrategy 扩展函数")
 
     // 测试扩展函数的存在性，通过调用其他扩展函数来间接验证
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       // 验证容器正常启动
@@ -213,7 +213,7 @@ class ContainerExtensionsTest {
   fun `测试 withStableWaitStrategy 扩展函数带自定义参数`() {
     log.info("开始测试 withStableWaitStrategy 扩展函数带自定义参数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       assertTrue(container.isRunning, "使用自定义参数的稳定等待策略应该正常工作")
@@ -226,7 +226,7 @@ class ContainerExtensionsTest {
   fun `测试 withHealthCheck 扩展函数`() {
     log.info("开始测试 withHealthCheck 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       assertTrue(container.isRunning, "使用健康检查的容器应该正常启动")
@@ -239,7 +239,7 @@ class ContainerExtensionsTest {
   fun `测试 withHealthCheck 扩展函数带自定义参数`() {
     log.info("开始测试 withHealthCheck 扩展函数带自定义参数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       assertTrue(container.isRunning, "使用自定义健康检查参数的容器应该正常启动")
@@ -252,7 +252,7 @@ class ContainerExtensionsTest {
   fun `测试 startAndWaitForReady 扩展函数`() {
     log.info("开始测试 startAndWaitForReady 扩展函数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.startAndWaitForReady()
 
       assertTrue(container.isRunning, "启动并等待就绪的容器应该处于运行状态")
@@ -265,7 +265,7 @@ class ContainerExtensionsTest {
   fun `测试 startAndWaitForReady 扩展函数带自定义参数`() {
     log.info("开始测试 startAndWaitForReady 扩展函数带自定义参数")
 
-    GenericContainer(DockerImageName.parse("alpine:latest")).withCommand("sleep", "infinity").use { container ->
+    GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.startAndWaitForReady(readyTimeout = Duration.ofSeconds(20), readyPollInterval = Duration.ofMillis(200))
 
       assertTrue(container.isRunning, "使用自定义参数启动并等待就绪的容器应该处于运行状态")

@@ -29,9 +29,9 @@ class TestcontainersConfigurationHolderTest {
       assertNotNull(properties.minio, "MinIO 配置不应为 null")
 
       // 验证默认配置值
-      assertEquals("postgres:17.4-alpine", properties.postgres.image, "PostgreSQL 默认镜像应该正确")
-      assertEquals("redis:7.4.2-alpine3.21", properties.redis.image, "Redis 默认镜像应该正确")
-      assertEquals("minio/minio:RELEASE.2025-04-22T22-12-26Z", properties.minio.image, "MinIO 默认镜像应该正确")
+      assertEquals("postgres:17-alpine", properties.postgres.image, "PostgreSQL 默认镜像应该正确")
+      assertEquals("redis:7-alpine", properties.redis.image, "Redis 默认镜像应该正确")
+      assertEquals("minio/minio:RELEASE.2025-07-23T15-54-02Z", properties.minio.image, "MinIO 默认镜像应该正确")
 
       // 验证配置的完整性
       assertTrue(properties.postgres.image.isNotEmpty(), "PostgreSQL 镜像名不应为空")
@@ -56,7 +56,7 @@ class TestcontainersConfigurationHolderTest {
 
       // 验证在Bean不存在时返回默认配置
       assertNotNull(properties, "属性对象不应为 null")
-      assertEquals("postgres:17.4-alpine", properties.postgres.image, "PostgreSQL 默认镜像应该正确")
+      assertEquals("postgres:17-alpine", properties.postgres.image, "PostgreSQL 默认镜像应该正确")
 
       // 验证所有默认配置都可用
       assertNotNull(properties.postgres, "PostgreSQL 配置不应为 null")
