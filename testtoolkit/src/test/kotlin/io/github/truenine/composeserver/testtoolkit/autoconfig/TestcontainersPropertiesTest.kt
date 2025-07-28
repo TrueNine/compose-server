@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
 import io.github.truenine.composeserver.testtoolkit.properties.MinioConfig
+import io.github.truenine.composeserver.testtoolkit.properties.MysqlConfig
 import io.github.truenine.composeserver.testtoolkit.properties.PostgresConfig
 import io.github.truenine.composeserver.testtoolkit.properties.RedisConfig
 import io.github.truenine.composeserver.testtoolkit.properties.TestcontainersProperties
@@ -18,24 +19,35 @@ class TestcontainersPropertiesTest {
     fun should_have_correct_default_postgres_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("postgres:17.4-alpine", properties.postgres.image)
+      assertEquals("postgres:17-alpine", properties.postgres.image)
       assertEquals("testdb", properties.postgres.databaseName)
       assertEquals("test", properties.postgres.username)
       assertEquals("test", properties.postgres.password)
     }
 
     @Test
+    fun should_have_correct_default_mysql_config() {
+      val properties = TestcontainersProperties()
+
+      assertEquals("mysql:8.0", properties.mysql.image)
+      assertEquals("testdb", properties.mysql.databaseName)
+      assertEquals("test", properties.mysql.username)
+      assertEquals("test", properties.mysql.password)
+      assertEquals("roottest", properties.mysql.rootPassword)
+    }
+
+    @Test
     fun should_have_correct_default_redis_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("redis:7.4.2-alpine3.21", properties.redis.image)
+      assertEquals("redis:7-alpine", properties.redis.image)
     }
 
     @Test
     fun should_have_correct_default_minio_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("minio/minio:RELEASE.2025-04-22T22-12-26Z", properties.minio.image)
+      assertEquals("minio/minio:RELEASE.2025-07-23T15-54-02Z", properties.minio.image)
       assertEquals("minioadmin", properties.minio.accessKey)
       assertEquals("minioadmin", properties.minio.secretKey)
     }
@@ -53,6 +65,19 @@ class TestcontainersPropertiesTest {
       assertEquals("customdb", properties.postgres.databaseName)
       assertEquals("customuser", properties.postgres.username)
       assertEquals("custompass", properties.postgres.password)
+    }
+
+    @Test
+    fun should_accept_custom_mysql_config() {
+      val customMysql =
+        MysqlConfig(image = "mysql:8.1", databaseName = "customdb", username = "customuser", password = "custompass", rootPassword = "customroot")
+      val properties = TestcontainersProperties(mysql = customMysql)
+
+      assertEquals("mysql:8.1", properties.mysql.image)
+      assertEquals("customdb", properties.mysql.databaseName)
+      assertEquals("customuser", properties.mysql.username)
+      assertEquals("custompass", properties.mysql.password)
+      assertEquals("customroot", properties.mysql.rootPassword)
     }
 
     @Test
