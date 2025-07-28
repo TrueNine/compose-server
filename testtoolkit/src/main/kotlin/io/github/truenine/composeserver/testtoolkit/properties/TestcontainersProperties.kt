@@ -14,11 +14,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  *   testtoolkit:
  *     testcontainers:
  *       postgres:
- *         image: "postgres:17.4-alpine"
+ *         image: "postgres:17-alpine"
+ *       mysql:
+ *         image: "mysql:8.0"
  *       redis:
- *         image: "redis:7.4.2-alpine3.21"
+ *         image: "redis:7-alpine"
  *       minio:
- *         image: "minio/minio:RELEASE.2025-04-22T22-12-26Z"
+ *         image: "minio/minio:RELEASE.2025-07-23T15-54-02Z"
  * ```
  *
  * @author TrueNine
@@ -29,6 +31,9 @@ data class TestcontainersProperties(
   /** PostgreSQL 配置 */
   val postgres: PostgresConfig = PostgresConfig(),
 
+  /** MySQL 配置 */
+  val mysql: MysqlConfig = MysqlConfig(),
+
   /** Redis 配置 */
   val redis: RedisConfig = RedisConfig(),
 
@@ -38,8 +43,8 @@ data class TestcontainersProperties(
 
 /** # PostgreSQL 容器配置 */
 data class PostgresConfig(
-  /** PostgreSQL Docker 镜像 默认使用 postgres:17.4-alpine（当前 LTS 版本） */
-  val image: String = "postgres:17.4-alpine",
+  /** PostgreSQL Docker 镜像 默认使用 postgres:17-alpine（当前 LTS 版本） */
+  val image: String = "postgres:17-alpine",
 
   /** 默认数据库名称 */
   val databaseName: String = "testdb",
@@ -51,16 +56,34 @@ data class PostgresConfig(
   val password: String = "test",
 )
 
+/** # MySQL 容器配置 */
+data class MysqlConfig(
+  /** MySQL Docker 镜像 默认使用 mysql:8.0（当前 LTS 版本） */
+  val image: String = "mysql:8.0",
+
+  /** 默认数据库名称 */
+  val databaseName: String = "testdb",
+
+  /** 默认用户名 */
+  val username: String = "test",
+
+  /** 默认密码 */
+  val password: String = "test",
+
+  /** 默认根密码 */
+  val rootPassword: String = "roottest",
+)
+
 /** # Redis 容器配置 */
 data class RedisConfig(
-  /** Redis Docker 镜像 默认使用 redis:7.4.2-alpine3.21（当前稳定版本） */
-  val image: String = "redis:7.4.2-alpine3.21"
+  /** Redis Docker 镜像 默认使用 redis:7-alpine（当前稳定版本） */
+  val image: String = "redis:7-alpine"
 )
 
 /** # MinIO 容器配置 */
 data class MinioConfig(
   /** MinIO Docker 镜像 默认使用较新的稳定版本 */
-  val image: String = "minio/minio:RELEASE.2025-04-22T22-12-26Z",
+  val image: String = "minio/minio:RELEASE.2025-07-23T15-54-02Z",
 
   /** 默认访问密钥 */
   val accessKey: String = "minioadmin",
