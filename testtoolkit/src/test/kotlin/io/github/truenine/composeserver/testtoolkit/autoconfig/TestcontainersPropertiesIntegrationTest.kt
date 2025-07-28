@@ -36,9 +36,10 @@ class TestcontainersPropertiesIntegrationTest {
     @Test
     fun should_inject_properties_with_defaults() {
       assertNotNull(testcontainersProperties)
-      assertEquals("postgres:17.4-alpine", testcontainersProperties.postgres.image)
-      assertEquals("redis:7.4.2-alpine3.21", testcontainersProperties.redis.image)
-      assertEquals("minio/minio:RELEASE.2025-04-22T22-12-26Z", testcontainersProperties.minio.image)
+      assertEquals("postgres:17-alpine", testcontainersProperties.postgres.image)
+      assertEquals("mysql:8.0", testcontainersProperties.mysql.image)
+      assertEquals("redis:7-alpine", testcontainersProperties.redis.image)
+      assertEquals("minio/minio:RELEASE.2025-07-23T15-54-02Z", testcontainersProperties.minio.image)
     }
   }
 
@@ -56,6 +57,8 @@ class TestcontainersPropertiesIntegrationTest {
       [
         "compose.testtoolkit.testcontainers.postgres.image=postgres:16-alpine",
         "compose.testtoolkit.testcontainers.postgres.database-name=customdb",
+        "compose.testtoolkit.testcontainers.mysql.image=mysql:8.1",
+        "compose.testtoolkit.testcontainers.mysql.database-name=mysqlcustomdb",
         "compose.testtoolkit.testcontainers.redis.image=redis:7.2-alpine",
         "compose.testtoolkit.testcontainers.minio.image=minio/minio:RELEASE.2024-01-01T00-00-00Z",
         "compose.testtoolkit.testcontainers.minio.access-key=customkey",
@@ -73,6 +76,13 @@ class TestcontainersPropertiesIntegrationTest {
       assertEquals("postgres:16-alpine", testcontainersProperties.postgres.image)
       assertEquals("customdb", testcontainersProperties.postgres.databaseName)
       assertEquals("test", testcontainersProperties.postgres.username) // 保持默认值
+
+      // 验证自定义 MySQL 配置
+      assertEquals("mysql:8.1", testcontainersProperties.mysql.image)
+      assertEquals("mysqlcustomdb", testcontainersProperties.mysql.databaseName)
+      assertEquals("test", testcontainersProperties.mysql.username) // 保持默认值
+      assertEquals("test", testcontainersProperties.mysql.password) // 保持默认值
+      assertEquals("roottest", testcontainersProperties.mysql.rootPassword) // 保持默认值
 
       // 验证自定义 Redis 配置
       assertEquals("redis:7.2-alpine", testcontainersProperties.redis.image)

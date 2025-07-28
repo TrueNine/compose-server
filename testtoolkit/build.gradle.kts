@@ -20,6 +20,7 @@ dependencies {
 
   api(libs.org.testcontainers.testcontainers)
   api(libs.org.testcontainers.postgresql)
+  api(libs.org.testcontainers.mysql)
   api(libs.org.testcontainers.junit.jupiter)
   api(libs.org.testcontainers.minio)
 
@@ -61,12 +62,15 @@ dependencies {
   runtimeOnly(libs.org.springframework.boot.spring.boot.starter.logging)
 
   testImplementation(libs.org.testcontainers.postgresql)
+  testImplementation(libs.org.testcontainers.mysql)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
 
   testImplementation(libs.io.minio.minio)
   testRuntimeOnly(libs.org.postgresql.postgresql)
+  testRuntimeOnly(libs.com.mysql.mysql.connector.j)
   testImplementation(libs.org.testcontainers.junit.jupiter)
   testImplementation(libs.org.testcontainers.postgresql)
+  testImplementation(libs.org.testcontainers.mysql)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.data.redis)
   testImplementation(libs.org.testcontainers.testcontainers)
   testImplementation(libs.org.testcontainers.minio)

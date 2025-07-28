@@ -14,6 +14,7 @@ import kotlinx.coroutines.selects.select
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertTimeout
 import org.testcontainers.containers.GenericContainer
+import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.utility.MountableFile
@@ -23,7 +24,7 @@ class TestcontainersVerificationTest {
   fun `启动 Alpine 容器 输出日志并校验运行状态`() {
     log.info("开始测试 Testcontainers")
 
-    GenericContainer("alpine:latest")
+    GenericContainer("alpine:3.21")
       .apply {
         // 增加容器运行时间，确保有足够时间进行日志检查
         // 使用 flush 确保输出立即写入，避免缓冲延迟
@@ -154,6 +155,37 @@ class TestcontainersVerificationTest {
   }
 
   @Test
+  fun `启动 MySQL 容器 获取连接信息并校验运行状态`() {
+    log.info("开始测试 MySQL 容器")
+
+    MySQLContainer<Nothing>("mysql:8.0")
+      .apply {
+        withDatabaseName("testdb")
+        withUsername("testuser")
+        withPassword("testpass")
+        withEnv("MYSQL_ROOT_PASSWORD", "rootpass")
+        withExposedPorts(3306)
+        withLogConsumer(Slf4jLogConsumer(log))
+        withStartupTimeout(Duration.ofSeconds(120)) // 增加启动超时时间
+      }
+      .use { mysql ->
+        log.info("正在启动 MySQL 容器...")
+        mysql.start()
+
+        // 使用重试机制等待容器完全就绪
+        TestRetryUtils.waitUntil(timeout = Duration.ofSeconds(30), pollInterval = Duration.ofSeconds(1)) { mysql.isRunning && mysql.jdbcUrl.isNotEmpty() }
+
+        assertTrue(mysql.isRunning, "MySQL 容器应该处于运行状态")
+        log.info("MySQL 连接 URL: ${mysql.jdbcUrl}")
+        log.info("MySQL 用户名: ${mysql.username}")
+        log.info("MySQL 密码: ${mysql.password}")
+
+        val expectedJdbcUrlPrefix = "jdbc:mysql://"
+        assertTrue(mysql.jdbcUrl.startsWith(expectedJdbcUrlPrefix), "JDBC URL 应该以 $expectedJdbcUrlPrefix 开头")
+      }
+  }
+
+  @Test
   fun `并发测试多个网址 任一完成即结束`() {
     assertTimeout(Duration.ofSeconds(20), "可能由于docker 网络原因导致测试失败，考虑检查 docker 网络配置") {
       runBlocking {
@@ -161,7 +193,7 @@ class TestcontainersVerificationTest {
 
         val urls = listOf("https://www.aliyun.com", "https://www.tencent.com", "https://www.baidu.com", "https://www.qq.com")
 
-        GenericContainer("alpine/curl:latest")
+        GenericContainer("curlimages/curl:8.1.0")
           .apply {
             withCommand("sleep", "30") // 增加容器运行时间
           }
