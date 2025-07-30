@@ -54,7 +54,7 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
 tasks.withType<DependencyUpdatesTask> {
   // 拒绝不稳定版本
   rejectVersionIf {
-    if (ignoreGroups.any { group.contains(it, true) }) {
+    if (ignoreGroups.any { group?.contains(it, true) == true }) {
       return@rejectVersionIf true
     }
     isNonStable(candidate)
