@@ -1,12 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit
 
 import io.github.truenine.composeserver.testtoolkit.utils.*
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import kotlin.io.path.createTempFile
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -18,6 +12,12 @@ import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.utility.MountableFile
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import kotlin.io.path.createTempFile
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TestcontainersVerificationTest {
   @Test
@@ -97,7 +97,7 @@ class TestcontainersVerificationTest {
   fun `在 Alpine 容器内执行命令 返回预期输出`() {
     log.info("开始测试容器命令执行")
 
-    GenericContainer("alpine:3.19.1")
+    GenericContainer("alpine:3.21")
       .apply { withCommand("tail", "-f", "/dev/null") }
       .use { container ->
         container.startAndWaitForReady()
