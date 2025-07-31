@@ -30,9 +30,4 @@ spotless {
       }
     }
   }
-  sql {
-    lineEndings = LineEnding.UNIX
-    target("**/**.sql")
-    dbeaver().configFile(file(rootProject.layout.projectDirectory.file("build-logic/.compose-config/.spotless_format_config.properties")))
-  }
 }
