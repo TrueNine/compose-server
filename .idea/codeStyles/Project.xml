@@ -1,75 +1,73 @@
-<component name="ProjectCodeStyleConfiguration">
-  <code_scheme name="Project" version="173">
-    <JavaCodeStyleSettings>
-      <option name="USE_FQ_CLASS_NAMES" value="true" />
-      <option name="INSERT_INNER_CLASS_IMPORTS" value="true" />
-    </JavaCodeStyleSettings>
-    <JetCodeStyleSettings>
-      <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
-      <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
-      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-    </JetCodeStyleSettings>
-    <SqlCodeStyleSettings version="7">
-      <option name="KEYWORD_CASE" value="1" />
-      <option name="IDENTIFIER_CASE" value="1" />
-      <option name="TYPE_CASE" value="1" />
-      <option name="BUILT_IN_CASE" value="1" />
-    </SqlCodeStyleSettings>
-    <codeStyleSettings language="Declarative">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="HTML">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="JAVA">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="JSON">
-      <indentOptions>
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="Markdown">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="TOML">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="XML">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="kotlin">
-      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
-    </codeStyleSettings>
-  </code_scheme>
-</component>
+<code_scheme name="Project" version="173">
+  <JavaCodeStyleSettings>
+    <option name="USE_FQ_CLASS_NAMES" value="true"/>
+    <option name="INSERT_INNER_CLASS_IMPORTS" value="true"/>
+  </JavaCodeStyleSettings>
+  <JetCodeStyleSettings>
+    <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647"/>
+    <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647"/>
+    <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL"/>
+  </JetCodeStyleSettings>
+  <SqlCodeStyleSettings version="7">
+    <option name="KEYWORD_CASE" value="1"/>
+    <option name="IDENTIFIER_CASE" value="1"/>
+    <option name="TYPE_CASE" value="1"/>
+    <option name="BUILT_IN_CASE" value="1"/>
+  </SqlCodeStyleSettings>
+  <codeStyleSettings language="Declarative">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="HTML">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="JAVA">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="JSON">
+    <indentOptions>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="Markdown">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="TOML">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="XML">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="kotlin">
+    <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL"/>
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
+  </codeStyleSettings>
+</code_scheme>
