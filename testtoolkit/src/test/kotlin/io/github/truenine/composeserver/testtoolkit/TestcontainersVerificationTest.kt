@@ -1,6 +1,12 @@
 package io.github.truenine.composeserver.testtoolkit
 
 import io.github.truenine.composeserver.testtoolkit.utils.*
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import kotlin.io.path.createTempFile
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -12,12 +18,6 @@ import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.utility.MountableFile
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import kotlin.io.path.createTempFile
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class TestcontainersVerificationTest {
   @Test
