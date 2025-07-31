@@ -41,7 +41,7 @@ listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cach
 ("oss" to listOf("shared", "minio", "aliyun-oss", "huawei-obs", "volcengine-tos")).useFile()
 
 // 关系型数据库服务
-("rds" to listOf("shared", "crud", "jimmer-ext-postgres", "flyway-migration-postgresql")).useFile()
+("rds" to listOf("shared", "crud", "jimmer-ext-postgres", "flyway-migration-postgresql", "flyway-migration-mysql8")).useFile()
 
 // 数据采集器
 ("data" to listOf("crawler", "extract")).useFile()
