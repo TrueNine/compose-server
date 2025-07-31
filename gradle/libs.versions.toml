@@ -100,7 +100,7 @@ com-hikvision-ga-artemis-http-client = "com.hikvision.ga:artemis-http-client:1.1
 com-hikvision-ga-opensource = "com.hikvision.ga:opensource:0.0.3"
 com-huaweicloud-esdk-obs-java = "com.huaweicloud:esdk-obs-java:3.25.5"
 com-microsoft-playwright-playwright = "com.microsoft.playwright:playwright:1.54.0"
-com-mysql-mysql-connector-j = "com.mysql:mysql-connector-j:9.3.0"
+com-mysql-mysql-connector-j = "com.mysql:mysql-connector-j:9.4.0"
 com-querydsl-querydsl-apt = { module = "com.querydsl:querydsl-apt", version.ref = "com-querydsl" }
 com-querydsl-querydsl-core = { module = "com.querydsl:querydsl-core", version.ref = "com-querydsl" }
 com-querydsl-querydsl-jpa = { module = "com.querydsl:querydsl-jpa", version.ref = "com-querydsl" }
@@ -148,9 +148,11 @@ io-github-truenine-composeserver-oss-aliyun-oss = { module = "io.github.truenine
 io-github-truenine-composeserver-oss-huawei-obs = { module = "io.github.truenine:composeserver-oss-huawei-obs", version.ref = "project" }
 io-github-truenine-composeserver-oss-minio = { module = "io.github.truenine:composeserver-oss-minio", version.ref = "project" }
 io-github-truenine-composeserver-oss-shared = { module = "io.github.truenine:composeserver-oss-shared", version.ref = "project" }
+io-github-truenine-composeserver-oss-volcengine-tos = { module = "io.github.truenine:composeserver-oss-volcengine-tos", version.ref = "project" }
 io-github-truenine-composeserver-pay-shared = { module = "io.github.truenine:composeserver-pay-shared", version.ref = "project" }
 io-github-truenine-composeserver-pay-wechat = { module = "io.github.truenine:composeserver-pay-wechat", version.ref = "project" }
 io-github-truenine-composeserver-rds-crud = { module = "io.github.truenine:composeserver-rds-crud", version.ref = "project" }
+io-github-truenine-composeserver-rds-flyway-migration-mysql8 = { module = "io.github.truenine:composeserver-rds-flyway-migration-mysql8", version.ref = "project" }
 io-github-truenine-composeserver-rds-flyway-migration-postgresql = { module = "io.github.truenine:composeserver-rds-flyway-migration-postgresql", version.ref = "project" }
 io-github-truenine-composeserver-rds-jimmer-ext-postgres = { module = "io.github.truenine:composeserver-rds-jimmer-ext-postgres", version.ref = "project" }
 io-github-truenine-composeserver-rds-shared = { module = "io.github.truenine:composeserver-rds-shared", version.ref = "project" }
