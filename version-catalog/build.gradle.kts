@@ -73,29 +73,6 @@ tasks.withType<DependencyUpdatesTask> {
   reportfileName = "report"
 }
 
-// 创建任务别名，方便使用
-tasks.register("checkUpdates") {
-  dependsOn("dependencyUpdates")
-  group = "verification"
-  description = "检查依赖更新 (dependencyUpdates 任务的别名)"
-}
-
-tasks.register("updateReport") {
-  dependsOn("dependencyUpdates")
-  group = "reporting"
-  description = "生成依赖更新报告"
-  doLast {
-    val reportDir = file("build/dependencyUpdates")
-    if (reportDir.exists()) {
-      println("依赖更新报告已生成:")
-      println("  - HTML: ${reportDir.resolve("report.html").absolutePath}")
-      println("  - JSON: ${reportDir.resolve("report.json").absolutePath}")
-      println("  - XML:  ${reportDir.resolve("report.xml").absolutePath}")
-      println("  - TXT:  ${reportDir.resolve("report.txt").absolutePath}")
-    }
-  }
-}
-
 description =
   """
 Version catalog module for managing and publishing dependency versions across the project ecosystem.
