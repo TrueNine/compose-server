@@ -2,6 +2,7 @@
 *
 
 # 例外：保留这些文件
+!.gitignore
+!codeStyles/
 !codeStyles/codeStyleConfig.xml
 !codeStyles/project.xml
-!.gitignore
