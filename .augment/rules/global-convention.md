@@ -18,7 +18,7 @@ This file provides guidance to `Augment` when working with code in this Reposito
 8. It is strictly forbidden to expose API keys, passwords, and tokens in the code
 9. Logs should be actively used to complete logging, and missing logging should be actively supplemented
 10. It is permissible to add logs during unit test debugging to assist in problem-solving
-11. The usage of `ealry return` technique must be maximized to reduce code nesting levels
+11. The usage of `early return` technique must be maximized to reduce code nesting levels
 12. It is strictly forbidden to generate summary document files and other unnecessary operations after the conversation or task is completed
 
 **Output Rules**
@@ -41,9 +41,12 @@ This file provides guidance to `Augment` when working with code in this Reposito
 5. 测试类与被测试类同名
 6. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
 
+**测试组织最佳实践：**
 - 每个被测试类/函数/变量/方法创建主要分组
 - 按场景细分：正常用例、异常用例、边界用例
 - 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
+- 测试方法命名使用反引号包围的中文描述：`fun \`测试用户创建成功\`()`
+- 禁止使用 `@DisplayName` 注解
 
 **DDD Convention**
 
@@ -58,11 +61,13 @@ This file provides guidance to `Augment` when working with code in this Reposito
 1. 检查现有查询是否使用参数化
 2. 统一使用snake_case命名
 3. 验证无字符串拼接风险
+4. 应尽量使用小写来编写SQL
 
 **JVM Standard**
 
-1. 严谨在测试代码中使用 `@DisplayName` 注解
-2. spring/quarkus 中严谨使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
+1. 严禁在测试代码中使用 `@DisplayName` 注解
+2. spring/quarkus 中严禁使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
+3. 尽可能使用项目内JDK版本能使用的最大限度的新特性
 
 **Java Standard**
 
@@ -131,7 +136,138 @@ This file provides guidance to `Augment` when working with code in this Reposito
 ✨ [ai] LangChain4j集成优化
 
 - 🚑 修复模型加载超时问题
-- 🐛 解决依赖冲突问题  
+- 🐛 解决依赖冲突问题
 - 💄 优化AI服务性能
 - 🧪 补充集成测试用例
+```
+
+# 代码示例和最佳实践
+
+**Kotlin 代码风格示例：**
+
+```kotlin
+// ✅ 推荐：使用 data class 和扩展函数
+data class UserRequest(val name: String, val email: String)
+
+fun String?.hasText(): Boolean {
+  contract { returns(true) implies (this@hasText != null) }
+  return !this.isNullOrBlank()
+}
+
+// ✅ 推荐：使用 early return 减少嵌套
+fun processUser(request: UserRequest?): Result<User> {
+  if (request == null) return Result.failure(IllegalArgumentException("Request cannot be null"))
+  if (!request.name.hasText()) return Result.failure(IllegalArgumentException("Name is required"))
+  if (!request.email.hasText()) return Result.failure(IllegalArgumentException("Email is required"))
+
+  return Result.success(User(request.name, request.email))
+}
+
+// ❌ 避免：深层嵌套和 !! 操作符
+fun processUserBad(request: UserRequest?): User {
+  if (request != null) {
+    if (request.name.isNotBlank()) {
+      if (request.email.isNotBlank()) {
+        return User(request.name!!, request.email!!) // 避免 !!
+      }
+    }
+  }
+  throw IllegalArgumentException("Invalid request")
+}
+```
+
+**测试组织模式示例：**
+
+```kotlin
+class UserServiceTest {
+
+  @Nested
+  inner class CreateUser {
+
+    @Test
+    fun `测试用户创建成功`() {
+      val request = UserRequest("张三", "zhangsan@example.com")
+      val result = userService.createUser(request)
+
+      assertTrue(result.isSuccess)
+      assertEquals("张三", result.getOrNull()?.name)
+    }
+
+    @Test
+    fun `测试用户名为空时创建失败`() {
+      val request = UserRequest("", "zhangsan@example.com")
+      val result = userService.createUser(request)
+
+      assertTrue(result.isFailure)
+      assertInstanceOf<IllegalArgumentException>(result.exceptionOrNull())
+    }
+  }
+
+  @Nested
+  inner class UpdateUser {
+
+    @Test
+    fun `测试更新存在的用户`() {
+      // 测试实现
+    }
+
+    @Test
+    fun `测试更新不存在的用户抛出异常`() {
+      // 测试实现
+    }
+  }
+}
+```
+
+**异常处理模式示例：**
+
+```kotlin
+// ✅ 推荐：使用统一异常处理
+class UserService {
+  companion object {
+    private val log = slf4j(UserService::class)
+  }
+
+  fun findUser(id: Long): User? {
+    return try {
+      userRepository.findById(id)
+    } catch (ex: DataAccessException) {
+      log.error("Failed to find user with id: {}", id, ex)
+      throw UserServiceException("User lookup failed", ex)
+    }
+  }
+}
+
+// ✅ 推荐：自定义异常继承体系
+open class UserServiceException(
+  message: String,
+  cause: Throwable? = null
+) : RuntimeException(message, cause)
+
+class UserNotFoundException(id: Long) : UserServiceException("User not found: $id")
+```
+
+**Spring Boot 配置示例：**
+
+```kotlin
+// ✅ 推荐：使用 @Resource 和 @EnableConfigurationProperties
+@EnableConfigurationProperties(UserProperties::class)
+@ComponentScan("io.github.truenine.composeserver.user")
+class AutoConfigEntrance
+
+@Service
+class UserService {
+  @Resource
+  private lateinit var userRepository: UserRepository
+
+  @Resource
+  private lateinit var userProperties: UserProperties
+}
+
+// ✅ 推荐：配置属性类
+@ConfigurationProperties(prefix = "compose.user")
+data class UserProperties(
+  val maxRetries: Int = 3,
+  val timeout: Duration = Duration.ofSeconds(30)
+)
 ```
