@@ -1,95 +1,111 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in all Repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
 
-# Generic Standard
+**框架概述：** Compose Server 是现代化、模块化的 Kotlin 企业级开发框架（非脚手架），通过 Gradle 多模块提供企业级 SDK。所有模块可独立集成到任意 Spring Boot 或其他 JVM 项目中。
 
-**Mandatory Convention**
+**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.3, Spring Framework 6.2.6, Jimmer 0.9.101, Gradle 9.0.0-rc-4, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
 
-1. Always respond in **Chinese-simplified**, Even if the user enters a large number of English prompts, they should return Chinese
-2. It is forbidden to write any sample code for user use, even if it requires temporary testing, and delete it as soon as the task is complete
-3. It is strictly forbidden to solve problems by simplifying them
-4. It is strictly forbidden to downgrade a dependent version to resolve the issue
-5. It is strictly forbidden to reduce test assertions to solve problems
-6. Ignoring anomalies or any behavior that hides anomalies is strictly prohibited
-7. Code that appears in the context should be actively refactored and repaired according to the rules，应当积极按照规则来重构修复
-8. It is strictly forbidden to expose API keys, passwords, and tokens in the code
-9. Logs should be actively used to complete logging, and missing logging should be actively supplemented
-10. It is permissible to add logs during unit test debugging to assist in problem-solving
-11. The usage of `ealry return` technique must be maximized to reduce code nesting levels
-12. It is strictly forbidden to generate summary document files and other unnecessary operations after the conversation or task is completed
+# 通用标准
 
-**Output Rules**
+**强制规则**
+
+1. 始终使用**简体中文**回复，即使用户输入大量英文提示，也应返回中文
+2. 禁止编写任何供用户使用的示例代码，即使需要临时测试，任务完成后也必须立即删除
+3. 严禁通过简化问题来解决问题
+4. 严禁通过降级依赖版本来解决问题
+5. 严禁通过减少测试断言来解决问题
+6. 严禁忽略异常或任何隐藏异常的行为
+7. 应当积极按照规则来重构修复上下文中出现的代码
+8. 严禁在代码中暴露 API 密钥、密码和令牌
+9. 应积极使用日志完善记录，主动补充缺失的日志
+10. 允许在单元测试调试期间添加日志以协助解决问题
+11. 必须最大化使用 `early return` 技术来减少代码嵌套层级
+12. 严禁在对话或任务完成后生成总结文档文件和其他不必要的操作
+
+**输出规则**
 
 - **优先简洁直接的回复** - 避免冗长解释
 - **批量相关工具调用** - 将多个信息请求合并为单次调用
 - **使用高效工具序列** - 最小化冗余调用
 
-**Comment Rules**
+**注释规则**
 
 - 文档注释：英文注释
 - 代码内部注释：英文注释，且解释"为什么"而非"做什么"
 
-**TDD Convention**
+**TDD 约定**
 
 1. TDD流程：失败测试→实现代码→重构
 2. 覆盖边界条件和异常情况
 3. 独立运行，无外部依赖
 4. 测试命名清晰表达意图
 5. 测试类与被测试类同名
-6. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
+7. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
 
+**测试组织最佳实践：**
 - 每个被测试类/函数/变量/方法创建主要分组
 - 按场景细分：正常用例、异常用例、边界用例
 - 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
+- 测试方法命名使用反引号包围的中文描述：`fun \`测试用户创建成功\`()`
+- 禁止使用 `@DisplayName` 注解
 
-**DDD Convention**
+**DDD 约定**
 
 - DDD：统一语言建模，聚合根维护不变性
 - CQRS：命令查询分离
 - EDA：事件驱动解耦
 
-# Specific Language Conventions
+# 特定语言约定
 
-**SQL Standard**
+**SQL 标准**
 
 1. 检查现有查询是否使用参数化
 2. 统一使用snake_case命名
 3. 验证无字符串拼接风险
+4. 应尽量使用小写来编写SQL
 
-**JVM Standard**
+**JVM 标准**
 
-1. 严谨在测试代码中使用 `@DisplayName` 注解
-2. spring/quarkus 中严谨使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
+1. 严禁在测试代码中使用 `@DisplayName` 注解
+2. spring/quarkus 中严禁使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
+3. 尽可能使用项目内JDK版本能使用的最大限度的新特性
 
-**Java Standard**
+**Java 标准**
 
 1. 尽可能使用jdk的新特性
 2. 声明变量应尽量使用 `final var`
 3. 积极使用 lambda
 4. 严禁使用 `System.out.println` 记录输出
 
-**Kotlin Standard**
+**Kotlin 标准**
 
 1. 优先使用val声明不可变变量
 2. 避免!!操作符，使用?.或let{}
 3. 数据类替代多参数函数
 4. 严禁使用 `println` 记录输出
 
-**TypeScript and Vue Standard**
+**TypeScript 和 Vue 标准**
 
 - TypeScript: 启用strict模式，避免any类型
 - Vue: 积极使用 vue3 新特性
 
-**SCSS Standard**
 
-- 禁止使用 `@import` 引入样式文件，而是使用 `@use`
 
-# Git Commit Message Standard
+# Git 提交规范
 
-**格式：** `emoji [scope] description`（简单）或详细列表格式（2+ 变更）
+## 提交消息格式
 
-**完整表情符号系统：**
+**基本格式：** `emoji [scope] description`
+
+- **emoji**: 表示变更类型的表情符号
+- **scope**: 影响范围（模块名称），使用方括号包围
+- **description**: 简洁的变更描述
+
+**复杂变更格式：** 当单次提交包含多个变更时，使用列表格式
+
+## 表情符号规范
+
 | 表情符号 | 类型 | 描述 | 使用场景 |
 |---------|------|------|----------|
 | 🎉 | feat | 重大功能/初始化 | 新功能、重大更新、项目初始化 |
@@ -120,21 +136,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 🔊 | log | 日志 | 添加日志、调试信息 |
 | 🔇 | log | 移除日志 | 删除日志、静默输出 |
 
-**提交示例：**
+## 提交示例
 
+### 简单格式示例
 ```bash
-# 简单格式示例
 ✨ [shared] 添加统一异常处理
 
 🐛 [rds] 修复连接池配置问题
 
 ♻️ [security] 重构JWT验证逻辑
+```
 
-# 复杂格式示例（注意列表中的表情符号）
+### 复杂格式示例
+```bash
 ✨ [ai] LangChain4j集成优化
 
 - 🚑 修复模型加载超时问题
-- 🐛 解决依赖冲突问题  
+- 🐛 解决依赖冲突问题
 - 💄 优化AI服务性能
 - 🧪 补充集成测试用例
 ```
+
+## 提交规范要求
+
+1. **必须使用表情符号**: 每个提交消息必须以对应的表情符号开头
+2. **明确作用域**: 使用方括号明确标识影响的模块或组件
+3. **描述简洁明了**: 使用动词开头，简洁描述变更内容
+4. **单一职责**: 每个提交应专注于单一变更类型
+5. **中文描述**: 提交描述使用中文，便于团队理解
