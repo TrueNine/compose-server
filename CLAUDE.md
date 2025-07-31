@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
-  
+
 **框架概述：** Compose Server 是现代化、模块化的 Kotlin 企业级开发框架（非脚手架），通过 Gradle 多模块提供企业级 SDK。所有模块可独立集成到任意 Spring Boot 或其他 JVM 项目中。
 
 **技术栈：** Kotlin 2.2.0, Spring Boot 3.5.3, Spring Framework 6.2.6, Jimmer 0.9.100, Gradle 9.0.0-rc-3, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
@@ -29,11 +29,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - `oss:minio` - MinIO集成
   - `oss:aliyun-oss` - 阿里云OSS
   - `oss:huawei-obs` - 华为云OBS
+  - `oss:volcengine-tos` - 火山引擎TOS
 - `rds/` - 关系型数据库
   - `rds:shared` - RDS共享组件
   - `rds:crud` - CRUD操作
   - `rds:jimmer-ext-postgres` - Jimmer PostgreSQL扩展
   - `rds:flyway-migration-postgresql` - Flyway PostgreSQL迁移
+  - `rds:flyway-migration-mysql8` - Flyway MySQL8迁移
 
 **系统服务模块：**
 - `security/` - 安全服务
@@ -90,12 +92,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `buildlogic.publish-conventions` - 发布约定
 - `buildlogic.repositories-conventions` - 仓库约定
 - `buildlogic.spotless-conventions` - 代码格式化约定
+- `buildlogic.spotless-sql-conventions` - SQL 代码格式化约定
 
 ## 开发标准
 - **依赖管理：** Gradle Version Catalog (`gradle/libs.versions.toml`) 统一版本管理
 - **插件约定：** 所有Kotlin模块使用 `kotlinspring-conventions`，Java模块使用相应约定
 - **代码格式：** Spotless自动化格式检查（提交前必须运行 `./gradlew spotlessApply`）
 - **测试规范：** 测试类与被测试类同名，使用@Nested组织测试，禁用@DisplayName注解
-- **模块集成：** `implementation("io.github.truenine:composeserver-{模块}:0.0.10")`
-- **Java版本：** 支持Java 24最新特性，无向下兼容，积极使用新特性
-- **Kotlin约定：** 优先使用val、避免!!操作符、积极使用lambda和新特性
+
+## 架构特点
+
+**模块化设计：**
+
+- 通过 `settings.gradle.kts` 的 `useFile()` 函数动态管理多模块结构
+- 每个模块独立打包发布到Maven中央仓库，支持按需集成
+- build-logic 约定插件统一管理构建配置和代码质量标准
+
+**测试架构：**
+
+- TestContainers集成测试：PostgreSQL、MySQL、Redis、MinIO容器化测试
+- @Nested内部类组织测试场景：正常用例、异常用例、边界用例
+- 测试幂等性验证：数据库迁移和存储过程多次执行安全性保证
+
+**自动配置体系：**
+
+- Spring Boot AutoConfiguration自动装配各模块功能
+- 条件化配置：通过Properties类和@ConditionalOn*注解控制组件启用
+- 资源管理：ResourceHolder统一管理配置文件和静态资源加载
