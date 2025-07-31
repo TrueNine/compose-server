@@ -77,11 +77,6 @@ description =
   """
 Version catalog module for managing and publishing dependency versions across the project ecosystem.
 Provides centralized version management and dependency update capabilities with automated version checking.
-
-Available tasks:
-- dependencyUpdates: 检查依赖更新并生成报告
-- checkUpdates: dependencyUpdates 的别名
-- updateReport: 生成依赖更新报告并显示文件路径
 """
     .trimIndent()
 
