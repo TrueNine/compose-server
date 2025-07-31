@@ -5,14 +5,14 @@ plugins {
 
 description =
   """
-Huawei Cloud OBS (Object Storage Service) integration for enterprise-grade cloud storage.
-Provides comprehensive OBS operations including object management, lifecycle policies, and security configurations.
+Volcengine TOS (Tinder Object Storage) integration for enterprise-grade cloud storage.
+Provides comprehensive TOS operations including object management, lifecycle policies, and security configurations.
 """
     .trimIndent()
 
 dependencies {
   api(projects.oss.ossShared)
   api(projects.shared)
-  implementation(libs.com.huaweicloud.esdk.obs.java)
+  implementation(libs.com.volcengine.ve.tos.java.sdk)
   testImplementation(projects.testtoolkit)
 }
