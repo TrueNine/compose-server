@@ -54,7 +54,7 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
 tasks.withType<DependencyUpdatesTask> {
   // 拒绝不稳定版本
   rejectVersionIf {
-    if (ignoreGroups.any { group.contains(it, true) }) {
+    if (ignoreGroups.any { group?.contains(it, true) == true }) {
       return@rejectVersionIf true
     }
     isNonStable(candidate)
@@ -73,38 +73,10 @@ tasks.withType<DependencyUpdatesTask> {
   reportfileName = "report"
 }
 
-// 创建任务别名，方便使用
-tasks.register("checkUpdates") {
-  dependsOn("dependencyUpdates")
-  group = "verification"
-  description = "检查依赖更新 (dependencyUpdates 任务的别名)"
-}
-
-tasks.register("updateReport") {
-  dependsOn("dependencyUpdates")
-  group = "reporting"
-  description = "生成依赖更新报告"
-  doLast {
-    val reportDir = file("build/dependencyUpdates")
-    if (reportDir.exists()) {
-      println("依赖更新报告已生成:")
-      println("  - HTML: ${reportDir.resolve("report.html").absolutePath}")
-      println("  - JSON: ${reportDir.resolve("report.json").absolutePath}")
-      println("  - XML:  ${reportDir.resolve("report.xml").absolutePath}")
-      println("  - TXT:  ${reportDir.resolve("report.txt").absolutePath}")
-    }
-  }
-}
-
 description =
   """
 Version catalog module for managing and publishing dependency versions across the project ecosystem.
 Provides centralized version management and dependency update capabilities with automated version checking.
-
-Available tasks:
-- dependencyUpdates: 检查依赖更新并生成报告
-- checkUpdates: dependencyUpdates 的别名
-- updateReport: 生成依赖更新报告并显示文件路径
 """
     .trimIndent()
 

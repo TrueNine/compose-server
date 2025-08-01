@@ -2,6 +2,7 @@ plugins {
   alias(libs.plugins.com.google.devtools.ksp)
   id("buildlogic.kotlinspring-conventions")
   id("buildlogic.spotless-conventions")
+  id("buildlogic.spotless-sql-conventions")
 }
 
 description =
@@ -12,6 +13,8 @@ Contains versioned SQL migration files and Spring Boot integration for automated
     .trimIndent()
 
 dependencies {
+  implementation(projects.rds.rdsFlywayMigrationShared)
+
   runtimeOnly(libs.org.flywaydb.flyway.core)
   runtimeOnly(libs.org.flywaydb.flyway.database.postgresql)
 
@@ -20,5 +23,3 @@ dependencies {
   testRuntimeOnly(libs.org.postgresql.postgresql)
   testImplementation(projects.testtoolkit)
 }
-
-tasks.withType<Test> { useJUnitPlatform() }

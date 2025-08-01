@@ -97,7 +97,7 @@ class TestcontainersVerificationTest {
   fun `在 Alpine 容器内执行命令 返回预期输出`() {
     log.info("开始测试容器命令执行")
 
-    GenericContainer("alpine:3.19.1")
+    GenericContainer("alpine:3.21")
       .apply { withCommand("tail", "-f", "/dev/null") }
       .use { container ->
         container.startAndWaitForReady()

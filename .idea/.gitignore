@@ -1,0 +1,8 @@
+# 排除所有文件和目录
+*
+
+# 例外：保留这些文件
+!.gitignore
+!codeStyles/
+!codeStyles/codeStyleConfig.xml
+!codeStyles/project.xml

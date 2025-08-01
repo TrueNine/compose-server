@@ -4,7 +4,7 @@ type: "always_apply"
 
 **框架概述：** Compose Server 是现代化、模块化的 Kotlin 企业级开发框架（非脚手架），通过 Gradle 多模块提供企业级 SDK。所有模块可独立集成到任意 Spring Boot 或其他 JVM 项目中。
 
-**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.3, Spring Framework 6.2.6, Jimmer 0.9.100, Gradle 9.0.0-rc-3, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
+**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.3, Spring Framework 6.2.6, Jimmer 0.9.101, Gradle 9.0.0-rc-4, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
 
 ## 模块结构与导航
 **包格式：** `io.github.truenine.composeserver.{模块名}`
@@ -29,6 +29,7 @@ type: "always_apply"
   - `oss:minio` - MinIO集成
   - `oss:aliyun-oss` - 阿里云OSS
   - `oss:huawei-obs` - 华为云OBS
+  - `oss:volcengine-tos` - 火山引擎TOS
 - `rds/` - 关系型数据库
   - `rds:shared` - RDS共享组件
   - `rds:crud` - CRUD操作
@@ -99,3 +100,33 @@ type: "always_apply"
 - **模块集成：** `implementation("io.github.truenine:composeserver-{模块}:0.0.10")`
 - **Java版本：** 支持Java 24最新特性，无向下兼容，积极使用新特性
 - **Kotlin约定：** 优先使用val、避免!!操作符、积极使用lambda和新特性
+
+## 框架特定开发指导
+
+**Spring Boot 3.x 约定：**
+- 使用 `@Resource` 替代 `@Autowired` 进行依赖注入
+- 配置类使用 `@EnableConfigurationProperties` 启用属性绑定
+- 自动配置类命名为 `AutoConfigEntrance` 并使用 `@ComponentScan`
+- 异常处理使用统一的 `ErrorResponseEntity` 响应格式
+- 日志记录使用 `slf4j(ClassName::class)` 获取logger实例
+
+**Jimmer ORM 约定：**
+- 实体类使用 `@Entity` 注解，遵循 Jimmer 规范
+- 查询使用 KSP 生成的类型安全查询 API
+- 分页查询统一使用 `fetchPq()` 扩展函数
+- 数据库函数扩展放在对应的 `*Fns.kt` 文件中
+- 使用 `View` 接口定义 DTO 投影，通过 `toFetcher()` 获取 Fetcher
+
+**Kotlin 2.2.0 特性使用：**
+- 积极使用 `data class` 替代多参数函数
+- 扩展函数命名使用动词形式，如 `hasText()`, `isNotEmptyRun()`
+- 使用 `@OptIn(ExperimentalContracts::class)` 启用契约功能
+- 运算符重载使用 `infix` 函数，如 `Pair.and()`
+- 字符串模板优先使用 `${}` 语法
+
+**测试框架约定：**
+- 使用 TestContainers 进行集成测试
+- 测试方法命名使用反引号中文描述：`fun \`测试用户创建成功\`()`
+- 使用 `@Nested inner class` 组织测试场景
+- 测试日志使用 `testtoolkit.log` 实例
+- Mock 对象使用 `every { } returns` 语法

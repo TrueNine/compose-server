@@ -1,0 +1,24 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+  flyway:
+    enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/test_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: test
+    password: test
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    net.yan100: trace
+
+jimmer:
+  language: kotlin
+  dialect: org.babyfish.jimmer.sql.dialect.MySqlDialect
+  show-sql: true
+  pretty-sql: true
+  inline-sql-variables: true
+  is-foreign-key-enabled-by-default: false
+  database-validation-mode: warning

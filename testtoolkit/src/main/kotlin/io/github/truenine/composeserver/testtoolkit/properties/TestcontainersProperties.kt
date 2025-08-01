@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 /**
  * # Testcontainers 配置属性
@@ -29,16 +30,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "compose.testtoolkit.testcontainers")
 data class TestcontainersProperties(
   /** PostgreSQL 配置 */
-  val postgres: PostgresConfig = PostgresConfig(),
+  @NestedConfigurationProperty val postgres: PostgresConfig = PostgresConfig(),
 
   /** MySQL 配置 */
-  val mysql: MysqlConfig = MysqlConfig(),
+  @NestedConfigurationProperty val mysql: MysqlConfig = MysqlConfig(),
 
   /** Redis 配置 */
-  val redis: RedisConfig = RedisConfig(),
+  @NestedConfigurationProperty val redis: RedisConfig = RedisConfig(),
 
   /** MinIO 配置 */
-  val minio: MinioConfig = MinioConfig(),
+  @NestedConfigurationProperty val minio: MinioConfig = MinioConfig(),
 )
 
 /** # PostgreSQL 容器配置 */

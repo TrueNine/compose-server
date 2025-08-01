@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.rds.interceptors
 
-import io.github.truenine.composeserver.datetime
+import io.github.truenine.composeserver.instant
 import io.github.truenine.composeserver.rds.entities.IEntity
 import io.github.truenine.composeserver.rds.entities.IEntityDraft
 import io.github.truenine.composeserver.rds.entities.IEntityProps
@@ -22,11 +22,11 @@ class JimmerEntityDraftInterceptor : DraftInterceptor<IEntity, IEntityDraft> {
   override fun beforeSave(draft: IEntityDraft, original: IEntity?) {
     if (!isLoaded(draft, IEntity::id)) {
       if (original === null) {
-        draft.crd = datetime.now()
+        draft.crd = instant.now()
         draft.rlv = 0
       }
     } else {
-      draft.mrd = datetime.now()
+      draft.mrd = instant.now()
     }
   }
 }
