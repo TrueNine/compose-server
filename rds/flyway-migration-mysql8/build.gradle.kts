@@ -1,19 +1,15 @@
 plugins {
   alias(libs.plugins.com.google.devtools.ksp)
-
   id("buildlogic.kotlinspring-conventions")
   id("buildlogic.spotless-conventions")
   id("buildlogic.spotless-sql-conventions")
 }
 
-// 排除 SQL 文件的 Spotless 格式化，因为 MySQL DELIMITER 语法不兼容
-spotless { sql { targetExclude("**/db/migration/**/*.sql") } }
-
 description =
   """
-Flyway database migration scripts and configuration for MySQL 8 databases.
-Contains versioned SQL migration files and Spring Boot integration for automated database schema evolution.
-"""
+  Flyway database migration scripts and configuration for MySQL 8 databases.
+  Contains versioned SQL migration files and Spring Boot integration for automated database schema evolution.
+  """
     .trimIndent()
 
 dependencies {

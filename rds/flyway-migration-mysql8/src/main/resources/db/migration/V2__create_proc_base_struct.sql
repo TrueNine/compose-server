@@ -1,5 +1,5 @@
--- Base structure procedures for MySQL
-DELIMITER
+-- base structure procedures for mysql
+delimiter
 $$
 
 drop procedure if exists add_base_struct$$
@@ -10,93 +10,93 @@ begin
     declare
 col_count int default 0;
     declare
-sql_stmt TEXT;
+sql_stmt text;
 
-    -- Add id column if not exists
+    -- add id column if not exists
 select count(*)
 into col_count
 from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'id';
-IF
+if
 col_count = 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' ADD COLUMN id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
+        set sql_stmt = concat('alter table ', tab_name, ' add column id bigint not null auto_increment primary key first');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
-    -- Add rlv column
+    -- add rlv column
 select count(*)
 into col_count
 from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'rlv';
-IF
+if
 col_count = 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' ADD COLUMN rlv INT DEFAULT 0');
+        set sql_stmt = concat('alter table ', tab_name, ' add column rlv int default 0');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
-    -- Add crd column
+    -- add crd column
 select count(*)
 into col_count
 from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'crd';
-IF
+if
 col_count = 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' ADD COLUMN crd TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+        set sql_stmt = concat('alter table ', tab_name, ' add column crd timestamp default current_timestamp');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
-    -- Add mrd column
+    -- add mrd column
 select count(*)
 into col_count
 from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'mrd';
-IF
+if
 col_count = 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' ADD COLUMN mrd TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+        set sql_stmt = concat('alter table ', tab_name, ' add column mrd timestamp default current_timestamp on update current_timestamp');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
-    -- Add ldf column
+    -- add ldf column
 select count(*)
 into col_count
 from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'ldf';
-IF
+if
 col_count = 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' ADD COLUMN ldf TIMESTAMP NULL DEFAULT NULL');
+        set sql_stmt = concat('alter table ', tab_name, ' add column ldf timestamp null default null');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
-END$$
+end if;
+end$$
 
 drop procedure if exists rm_base_struct$$
 create procedure rm_base_struct(
@@ -106,24 +106,24 @@ begin
     declare
 col_count int default 0;
     declare
-sql_stmt TEXT;
+sql_stmt text;
 
-    -- Remove columns in reverse order
+    -- remove columns in reverse order
 select count(*)
 into col_count
 from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'ldf';
-IF
+if
 col_count > 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' DROP COLUMN ldf');
+        set sql_stmt = concat('alter table ', tab_name, ' drop column ldf');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
 select count(*)
 into col_count
@@ -131,15 +131,15 @@ from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'mrd';
-IF
+if
 col_count > 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' DROP COLUMN mrd');
+        set sql_stmt = concat('alter table ', tab_name, ' drop column mrd');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
 select count(*)
 into col_count
@@ -147,15 +147,15 @@ from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'crd';
-IF
+if
 col_count > 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' DROP COLUMN crd');
+        set sql_stmt = concat('alter table ', tab_name, ' drop column crd');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
 select count(*)
 into col_count
@@ -163,15 +163,15 @@ from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'rlv';
-IF
+if
 col_count > 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' DROP COLUMN rlv');
+        set sql_stmt = concat('alter table ', tab_name, ' drop column rlv');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
+end if;
 
 select count(*)
 into col_count
@@ -179,15 +179,15 @@ from information_schema.columns
 where table_schema = database()
   and table_name = tab_name
   and column_name = 'id';
-IF
+if
 col_count > 0 then
-        set sql_stmt = CONCAT('ALTER TABLE ', tab_name, ' DROP PRIMARY KEY, DROP COLUMN id');
+        set sql_stmt = concat('alter table ', tab_name, ' drop primary key, drop column id');
         set
 @sql = sql_stmt;
 prepare stmt from @sql;
 execute stmt;
 deallocate prepare stmt;
-end IF;
-END$$
+end if;
+end$$
 
-DELIMITER ;
+delimiter ;
