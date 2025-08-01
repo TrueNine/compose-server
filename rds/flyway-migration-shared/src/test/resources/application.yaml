@@ -1,0 +1,11 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+  output:
+    ansi:
+      enabled: always
+  test:
+    print-condition-evaluation-report: false
+jimmer:
+  language: kotlin
