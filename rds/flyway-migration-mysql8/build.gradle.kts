@@ -17,6 +17,8 @@ Contains versioned SQL migration files and Spring Boot integration for automated
     .trimIndent()
 
 dependencies {
+  implementation(projects.rds.rdsFlywayMigrationShared)
+
   runtimeOnly(libs.org.flywaydb.flyway.core)
   runtimeOnly(libs.org.flywaydb.flyway.mysql)
 
@@ -27,5 +29,3 @@ dependencies {
   testRuntimeOnly(libs.com.mysql.mysql.connector.j)
   testImplementation(projects.testtoolkit)
 }
-
-tasks.withType<Test> { useJUnitPlatform() }

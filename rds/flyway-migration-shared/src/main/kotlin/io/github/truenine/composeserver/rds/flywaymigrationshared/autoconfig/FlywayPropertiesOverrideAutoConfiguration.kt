@@ -1,4 +1,4 @@
-package io.github.truenine.composeserver.rds.flywaymigrationmysql8.autoconfig
+package io.github.truenine.composeserver.rds.flywaymigrationshared.autoconfig
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.flyway.FlywayProperties

@@ -1,5 +1,6 @@
-package io.github.truenine.composeserver.rds.flywaymigrationpostgresql.autoconfig
+package io.github.truenine.composeserver.rds.flywaymigrationshared.autoconfig
 
+import io.github.truenine.composeserver.rds.flywaymigrationshared.TestEntrance
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
 import kotlin.test.Test
@@ -10,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 import org.springframework.jdbc.core.JdbcTemplate
 
-@SpringBootTest
+@SpringBootTest(classes = [TestEntrance::class])
 class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContainer {
   @Resource lateinit var ctx: ApplicationContext
 
