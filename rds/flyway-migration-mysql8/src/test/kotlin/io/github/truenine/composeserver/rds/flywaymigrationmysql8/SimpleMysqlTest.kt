@@ -22,9 +22,9 @@ class SimpleMysqlTest : IDatabaseMysqlContainer {
     val tableCount =
       jdbcTemplate.queryForObject(
         """
-        SELECT COUNT(*) FROM information_schema.tables 
+        SELECT COUNT(*) FROM information_schema.tables
         WHERE table_schema = DATABASE() AND table_name = 'flyway_schema_history'
-      """
+        """
           .trimIndent(),
         Int::class.java,
       )
@@ -36,11 +36,11 @@ class SimpleMysqlTest : IDatabaseMysqlContainer {
     val procedureCount =
       jdbcTemplate.queryForObject(
         """
-        SELECT COUNT(*) FROM information_schema.routines 
-        WHERE routine_schema = DATABASE() 
+        SELECT COUNT(*) FROM information_schema.routines
+        WHERE routine_schema = DATABASE()
           AND routine_name IN ('ct_idx', 'add_base_struct', 'rm_base_struct')
           AND routine_type = 'PROCEDURE'
-      """
+        """
           .trimIndent(),
         Int::class.java,
       )

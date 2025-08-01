@@ -175,8 +175,8 @@ class SimpleIdempotencyTest : IDatabaseMysqlContainer {
   private fun getTableColumns(tableName: String): List<String> {
     return jdbcTemplate.queryForList(
       """
-      SELECT column_name 
-      FROM information_schema.columns 
+      SELECT column_name
+      FROM information_schema.columns
       WHERE table_schema = DATABASE() AND table_name = ?
       ORDER BY ordinal_position
       """
@@ -189,8 +189,8 @@ class SimpleIdempotencyTest : IDatabaseMysqlContainer {
   private fun getIndexCount(tableName: String): Int {
     return jdbcTemplate.queryForObject(
       """
-      SELECT COUNT(DISTINCT index_name) 
-      FROM information_schema.statistics 
+      SELECT COUNT(DISTINCT index_name)
+      FROM information_schema.statistics
       WHERE table_schema = DATABASE() AND table_name = ?
       """
         .trimIndent(),
@@ -203,10 +203,10 @@ class SimpleIdempotencyTest : IDatabaseMysqlContainer {
     val count =
       jdbcTemplate.queryForObject(
         """
-        SELECT COUNT(*) 
-        FROM information_schema.statistics 
-        WHERE table_schema = DATABASE() 
-          AND table_name = ? 
+        SELECT COUNT(*)
+        FROM information_schema.statistics
+        WHERE table_schema = DATABASE()
+          AND table_name = ?
           AND index_name = ?
         """
           .trimIndent(),
