@@ -50,7 +50,7 @@ org-springframework-modulith = "2.0.0-M1"
 org-springframework-security = "6.5.1"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.14"
+project = "0.0.15"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
@@ -303,6 +303,7 @@ org-springframework-spring-context = { module = "org.springframework:spring-cont
 org-springframework-spring-core = { module = "org.springframework:spring-core", version.ref = "org-springframework-framework" }
 org-springframework-spring-jdbc = { module = "org.springframework:spring-jdbc", version.ref = "org-springframework-framework" }
 org-springframework-spring-test = { module = "org.springframework:spring-test", version.ref = "org-springframework-framework" }
+org-springframework-spring-tx = { module = "org.springframework:spring-tx", version.ref = "org-springframework-framework" }
 org-springframework-spring-web = { module = "org.springframework:spring-web", version.ref = "org-springframework-framework" }
 org-springframework-spring-webflux = { module = "org.springframework:spring-webflux", version.ref = "org-springframework-framework" }
 org-springframework-spring-webmvc = { module = "org.springframework:spring-webmvc", version.ref = "org-springframework-framework" }
