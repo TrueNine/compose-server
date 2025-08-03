@@ -50,6 +50,7 @@ interface IOssMinioContainer {
     val container by lazy {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
       GenericContainer(DockerImageName.parse(config.minio.image)).apply {
+        withReuse(true)
         withEnv("MINIO_ROOT_USER", config.minio.accessKey)
         withEnv("MINIO_ROOT_PASSWORD", config.minio.secretKey)
         withEnv("MINIO_CONSOLE_ADDRESS", ":9001")
