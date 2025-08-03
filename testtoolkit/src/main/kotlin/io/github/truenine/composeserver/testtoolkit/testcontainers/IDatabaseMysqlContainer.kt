@@ -4,6 +4,7 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.utility.DockerImageName
 
 /**
  * # MySQL 数据库测试容器接口
@@ -45,7 +46,7 @@ interface IDatabaseMysqlContainer {
     @JvmStatic
     val container by lazy {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
-      MySQLContainer<Nothing>(config.mysql.image).apply {
+      MySQLContainer<Nothing>(DockerImageName.parse(config.mysql.image)).apply {
         withDatabaseName(config.mysql.databaseName)
         withUsername(config.mysql.username)
         withPassword(config.mysql.password)

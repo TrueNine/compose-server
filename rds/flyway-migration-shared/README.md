@@ -37,7 +37,7 @@
 **标准字段：**
 
 - `id`: 主键字段 (BIGINT NOT NULL PRIMARY KEY)，默认值为非自增的 int64 值类型，**不可设置任何自增策略，应由程序自行处理**
-- `rlv`: 行乐观锁版本号 `Row Lock Version` (INT DEFAULT 0)，默认值为 0 的 int32 值类型
+- `rlv`: 行乐观锁版本号 `Row Lock Version` (INT DEFAULT 0)，默认值为 0 的 int32 值类型，不可为 NULL
 - `crd`: 创建时间 `Created Row Datetime` (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)，与时区无关的毫秒时间戳，默认值为插入表记录的时间戳
 - `mrd`: 修改时间 `Modify Row Datetime` (TIMESTAMP DEFAULT null)，与时区无关的毫秒时间戳，默认为 null
 - `ldf`: 逻辑删除标记 `Logic Delete Flag` (TIMESTAMP NULL DEFAULT NULL)
@@ -94,6 +94,8 @@
 - `rpi`: 父节点 ID `Row Parent Id` (BIGINT DEFAULT NULL)
 - `rln`: 左节点编号 `Row Left Node` (BIGINT DEFAULT 1)
 - `rrn`: 右节点编号 `Row Right Node` (BIGINT DEFAULT 2)
+- `nlv`: 节点层级 `Node Level` (INT DEFAULT 0)
+- `tgi`: 树组节点Id `Tree Group Id` (VARCHAR(255))
 
 **实现要求：**
 

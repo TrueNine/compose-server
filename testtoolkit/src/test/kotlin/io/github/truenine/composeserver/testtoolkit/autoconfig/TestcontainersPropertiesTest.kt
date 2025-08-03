@@ -19,7 +19,7 @@ class TestcontainersPropertiesTest {
     fun should_have_correct_default_postgres_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("postgres:17-alpine", properties.postgres.image)
+      assertEquals("postgres:17.5-alpine3.22", properties.postgres.image)
       assertEquals("testdb", properties.postgres.databaseName)
       assertEquals("test", properties.postgres.username)
       assertEquals("test", properties.postgres.password)
@@ -29,7 +29,7 @@ class TestcontainersPropertiesTest {
     fun should_have_correct_default_mysql_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("mysql:8.0", properties.mysql.image)
+      assertEquals("mysql:8.4.6-oraclelinux9", properties.mysql.image)
       assertEquals("testdb", properties.mysql.databaseName)
       assertEquals("test", properties.mysql.username)
       assertEquals("test", properties.mysql.password)
@@ -40,7 +40,7 @@ class TestcontainersPropertiesTest {
     fun should_have_correct_default_redis_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("redis:7-alpine", properties.redis.image)
+      assertEquals("redis:8.0.3-alpine3.21", properties.redis.image)
     }
 
     @Test

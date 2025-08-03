@@ -31,9 +31,9 @@ existing_column_name is not null then
         if rlv_data_type != 'integer' then
             if rlv_column_default is not null then
                 execute format(
-    'alter table if exists %I alter column rlv drop default;',
-    tab_name
-);
+                    'alter table if exists %I alter column rlv drop default;',
+                    tab_name
+                );
 end if;
 
 execute format(
@@ -43,12 +43,18 @@ execute format(
 end if;
 
         if
-rlv_column_default is null
-or rlv_column_default != '0' then execute format(
-    'alter table if exists %I alter column rlv set default 0;',
-    tab_name
-);
+rlv_column_default is null or rlv_column_default != '0' then
+            execute format(
+                'alter table if exists %I alter column rlv set default 0;',
+                tab_name
+            );
 end if;
+
+        -- ensure rlv column is NOT NULL as per README requirements
+execute format(
+        'alter table if exists %I alter column rlv set not null;',
+        tab_name
+        );
 end if;
 
 select column_name,

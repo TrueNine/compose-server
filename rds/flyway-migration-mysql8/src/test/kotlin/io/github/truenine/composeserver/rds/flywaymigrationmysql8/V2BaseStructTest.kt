@@ -68,7 +68,7 @@ class V2BaseStructTest : IDatabaseMysqlContainer {
 
       // 验证 rlv 字段
       assertEquals("int", columnInfo["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv 应该是 int 类型")
-      assertEquals("YES", columnInfo["rlv"]?.get("is_nullable"), "rlv 应该是可空")
+      assertEquals("NO", columnInfo["rlv"]?.get("is_nullable"), "rlv 应该不能为空")
 
       // 验证时间戳字段
       assertEquals("timestamp", columnInfo["crd"]?.get("data_type")?.toString()?.lowercase(), "crd 应该是 timestamp 类型")
@@ -84,14 +84,14 @@ class V2BaseStructTest : IDatabaseMysqlContainer {
       // 调用 add_base_struct
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
 
-      // 插入测试数据验证默认值
-      jdbcTemplate.execute("INSERT INTO test_base_struct_table(name) VALUES('test')")
+      // 插入测试数据验证默认值（需要提供 id 值，因为 id 字段没有 AUTO_INCREMENT）
+      jdbcTemplate.execute("INSERT INTO test_base_struct_table(id, name) VALUES(1, 'test')")
 
       val result = jdbcTemplate.queryForMap("SELECT rlv, crd, mrd, ldf FROM test_base_struct_table WHERE name = 'test'")
 
       assertEquals(0, result["rlv"], "rlv 默认值应该是 0")
       assertTrue(result["crd"] != null, "crd 应该有默认值（当前时间戳）")
-      assertTrue(result["mrd"] != null, "mrd 应该有默认值（当前时间戳）")
+      assertEquals(null, result["mrd"], "mrd 默认值应该是 null")
       assertEquals(null, result["ldf"], "ldf 默认值应该是 null")
     }
 
@@ -211,7 +211,7 @@ class V2BaseStructTest : IDatabaseMysqlContainer {
       assertEquals("existing_data", result["name"], "原有数据应该保持不变")
       assertEquals(0, result["rlv"], "rlv 应该有默认值")
       assertTrue(result["crd"] != null, "crd 应该有默认值")
-      assertTrue(result["mrd"] != null, "mrd 应该有默认值")
+      assertEquals(null, result["mrd"], "mrd 默认值应该是 null")
       assertEquals(null, result["ldf"], "ldf 应该是 null")
     }
   }
