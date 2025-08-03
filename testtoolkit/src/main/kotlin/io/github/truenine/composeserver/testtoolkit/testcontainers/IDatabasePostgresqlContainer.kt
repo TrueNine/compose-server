@@ -4,6 +4,7 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.utility.DockerImageName
 
 /**
  * # 数据库测试容器接口
@@ -44,7 +45,7 @@ interface IDatabasePostgresqlContainer {
     @JvmStatic
     val container by lazy {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
-      PostgreSQLContainer<Nothing>(config.postgres.image).apply {
+      PostgreSQLContainer<Nothing>(DockerImageName.parse(config.postgres.image)).apply {
         withDatabaseName(config.postgres.databaseName)
         withUsername(config.postgres.username)
         withPassword(config.postgres.password)

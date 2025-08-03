@@ -37,7 +37,7 @@ class RmPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .map { it["column_name"] }
-    val removed = listOf("pid", "presort")
+    val removed = listOf("rpi", "rln", "rrn")
     assertTrue(removed.none { it in columns }, "presort tree 字段未被移除: " + (removed.filter { it in columns }))
   }
 
@@ -58,7 +58,7 @@ class RmPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .map { it["column_name"] }
-    val removed = listOf("rln", "rrn", "tgi", "nlv")
+    val removed = listOf("rpi", "rln", "rrn")
     assertTrue(removed.none { it in columns }, "rm_presort_tree_struct 幂等性或字段未被移除: " + (removed.filter { it in columns }))
   }
 }
