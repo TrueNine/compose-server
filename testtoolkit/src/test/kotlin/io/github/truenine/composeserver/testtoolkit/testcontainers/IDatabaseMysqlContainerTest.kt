@@ -28,7 +28,7 @@ class IDatabaseMysqlContainerTest : IDatabaseMysqlContainer {
     // 通过执行简单查询来验证容器是否正常工作
     val version = jdbcTemplate.queryForObject("SELECT VERSION()", String::class.java)
     assertNotNull(version, "应该能够获取 MySQL 版本信息")
-    assertTrue(version.contains("8.0"), "数据库应该是 MySQL 8.0")
+    assertTrue(version.contains("8.4"), "数据库应该是 MySQL 8.4")
   }
 
   @Test
@@ -168,7 +168,7 @@ class IDatabaseMysqlContainerTest : IDatabaseMysqlContainer {
     // 验证 MySQL 版本特性
     val version = jdbcTemplate.queryForObject("SELECT VERSION()", String::class.java)
     assertNotNull(version, "MySQL 版本信息不应为空")
-    assertTrue(version!!.startsWith("8.0"), "应该是 MySQL 8.0 版本")
+    assertTrue(version.contains("8.4"), "应该是 MySQL 8.4 版本")
 
     // 验证存储引擎支持
     val engines = jdbcTemplate.queryForList("SHOW ENGINES")

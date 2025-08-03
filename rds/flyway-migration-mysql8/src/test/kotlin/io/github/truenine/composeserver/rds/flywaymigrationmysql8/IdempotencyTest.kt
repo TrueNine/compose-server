@@ -77,7 +77,7 @@ class IdempotencyTest : IDatabaseMysqlContainer {
       jdbcTemplate.execute(
         """
         CREATE TABLE test_base_struct_table(
-          id BIGINT PRIMARY KEY AUTO_INCREMENT,
+          id BIGINT PRIMARY KEY,
           name VARCHAR(255),
           rlv INT DEFAULT 0
         )

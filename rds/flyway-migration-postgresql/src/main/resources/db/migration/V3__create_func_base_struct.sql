@@ -6,13 +6,13 @@ column_definitions text [][]:= array [[ 'id',
     'bigint not null',
     'add primary key (id)' ],
     [ 'rlv',
-    'int default 0',
+    'int default 0 not null',
     null ],
     [ 'crd',
-    'timestamp default now()',
+    'timestamp default current_timestamp',
     null ],
     [ 'mrd',
-    'timestamp default now()',
+    'timestamp default null',
     null ],
     [ 'ldf',
     'timestamp default null',
@@ -30,27 +30,31 @@ bigint;
 has_id_column
 boolean;
 
-begin -- 检查是否存在 id 字段
+begin
+    -- check if table exists
+    if
+not exists (select 1 from information_schema.tables where table_name = tab_name) then
+        raise exception 'Table % does not exist', tab_name;
+end if;
+
+    -- 检查是否存在 id 字段
 select count(1) > 0
-into
-    has_id_column
+into has_id_column
 from information_schema.columns
 where table_name = tab_name
   and column_name = 'id';
 
 -- 检查表数据量
-execute format(
-        'select count(*) from %I',
-        tab_name
-        ) into
-    row_count;
+execute format('select count(*) from %I', tab_name) into row_count;
 
+-- 处理 id 字段添加
 if
-row_count > 1
-and not has_id_column then -- 创建临时 sequence
-execute 'create sequence if not exists temp_seq start 1';
+not has_id_column then
+        if row_count > 0 then
+            -- 对于有数据的表：使用临时序列为现有数据生成 ID
+            execute 'create sequence if not exists temp_seq start 1';
 
--- 增加 id 字段并用 sequence 填充
+            -- 增加 id 字段并用 sequence 填充
 execute format(
         'alter table if exists %I add column if not exists id bigint default nextval(''temp_seq'')',
         tab_name
@@ -73,6 +77,13 @@ execute format(
 
 -- 删除临时 sequence
 execute 'drop sequence if exists temp_seq cascade';
+else
+            -- 对于空表：直接添加无默认值的 id 字段
+            execute format(
+                'alter table if exists %I add column if not exists id bigint not null primary key',
+                tab_name
+            );
+end if;
 end if;
 
 foreach
@@ -111,47 +122,68 @@ or replace function rm_base_struct(
         tab_name varchar(128)
     ) returns void as $$ declare
 existing_column_name text;
-
 pk_constraint_name
+text;
+column_to_drop
 text;
 
 begin
+    -- check if table exists
+    if
+not exists (select 1 from information_schema.tables where table_name = tab_name) then
+        raise exception 'Table % does not exist', tab_name;
+end if;
+
+    -- remove columns in reverse order: ldf, mrd, crd, rlv, id
+    foreach
+column_to_drop in array array['ldf', 'mrd', 'crd', 'rlv'] loop
+select column_name
+into existing_column_name
+from information_schema.columns
+where table_name = tab_name
+  and column_name = column_to_drop;
+
+if
+existing_column_name is not null then
+            execute format(
+                'alter table if exists %I drop column if exists %I;',
+                tab_name,
+                column_to_drop
+            );
+end if;
+end loop;
+
+    -- handle primary key constraint and id column separately
 select constraint_name
-into
-    pk_constraint_name
+into pk_constraint_name
 from information_schema.table_constraints
 where table_name = tab_name
   and constraint_type = 'PRIMARY KEY';
 
 if
-pk_constraint_name is not null then execute format(
-    'alter table if exists %I drop constraint if exists %I;',
-    tab_name,
-    pk_constraint_name
-);
+pk_constraint_name is not null then
+        execute format(
+            'alter table if exists %I drop constraint if exists %I;',
+            tab_name,
+            pk_constraint_name
+        );
 end if;
 
-foreach
-existing_column_name in array array [ 'id',
-'rlv',
-'crd',
-'mrd',
-'ldf' ] loop
+    -- remove id column
 select column_name
-into
-    existing_column_name
+into existing_column_name
 from information_schema.columns
 where table_name = tab_name
-  and column_name = existing_column_name;
+  and column_name = 'id';
 
 if
-existing_column_name is not null then execute format(
-    'alter table if exists %I drop column if exists %I;',
-    tab_name,
-    existing_column_name
-);
+existing_column_name is not null then
+        execute format(
+            'alter table if exists %I drop column if exists %I;',
+            tab_name,
+            'id'
+        );
 end if;
-end loop;
 end;
 
 $$
