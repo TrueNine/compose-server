@@ -2,15 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
 
-**框架概述：** Compose Server 是现代化、模块化的 Kotlin 企业级开发框架（非脚手架），通过 Gradle 多模块提供企业级 SDK。所有模块可独立集成到任意 Spring Boot 或其他 JVM 项目中。
-
-**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.3, Spring Framework 6.2.6, Jimmer 0.9.101, Gradle 9.0.0-rc-4, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
-
 # 通用标准
 
 **强制规则**
 
-1. 始终使用**简体中文**回复，即使用户输入大量英文提示，也应返回中文
+1. 始终使用**英语**回复，即使用户输入大量中文提示，也应返回英文
 2. 禁止编写任何供用户使用的示例代码，即使需要临时测试，任务完成后也必须立即删除
 3. 严禁通过简化问题来解决问题
 4. 严禁通过降级依赖版本来解决问题
@@ -41,9 +37,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. 独立运行，无外部依赖
 4. 测试命名清晰表达意图
 5. 测试类与被测试类同名
-7. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
+6. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
 
 **测试组织最佳实践：**
+
 - 每个被测试类/函数/变量/方法创建主要分组
 - 按场景细分：正常用例、异常用例、边界用例
 - 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
@@ -84,13 +81,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. 避免!!操作符，使用?.或let{}
 3. 数据类替代多参数函数
 4. 严禁使用 `println` 记录输出
+5. 严禁在单元测试中使用 `mockito`，而是使用 `mockk`
 
 **TypeScript 和 Vue 标准**
 
 - TypeScript: 启用strict模式，避免any类型
 - Vue: 积极使用 vue3 新特性
 
+**SCSS 标准**
 
+- 禁止使用 `@import`，使用 `@use` 代替
 
 # Git 提交规范
 
@@ -106,39 +106,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 表情符号规范
 
-| 表情符号 | 类型 | 描述 | 使用场景 |
-|---------|------|------|----------|
-| 🎉 | feat | 重大功能/初始化 | 新功能、重大更新、项目初始化 |
-| ✨ | feat | 新功能/增强 | 添加功能、增强、文档更新 |
-| 🐛 | fix | Bug 修复 | 修复错误、解决问题 |
-| 🔧 | config | 配置修改 | 配置文件、CI/CD、构建配置 |
-| 📝 | docs | 文档更新 | 更新文档、README、注释 |
-| 🎨 | style | 代码风格/格式化 | 代码格式化、样式、结构优化 |
-| ♻️ | refactor | 重构 | 代码重构、包结构调整 |
-| ⚡ | perf | 性能优化 | 性能优化、算法改进 |
-| 🔥 | remove | 删除代码/文件 | 删除无用代码、移除功能 |
-| 🧪 | test | 测试相关 | 添加测试、修复测试、测试配置 |
-| 👷 | ci | CI/CD | 持续集成、构建脚本 |
-| 📦 | build | 构建系统 | 依赖管理、构建配置 |
-| ⬆️ | upgrade | 升级依赖 | 升级库版本 |
-| ⬇️ | downgrade | 降级依赖 | 降级库版本 |
-| 🚀 | release | 发布版本 | 版本发布、标签创建 |
-| 🔀 | merge | 合并分支 | 分支合并、冲突解决 |
-| 🤖 | ai | AI 工具配置 | AI 助手配置、自动化 |
-| 💄 | optimize | 优化 | 性能优化、代码改进 |
-| 🌐 | network | 网络相关 | 网络配置、API 调用、远程服务 |
-| 🔐 | security | 安全/验证 | 安全修复、权限控制、验证 |
-| 🚑 | hotfix | 紧急修复 | 紧急修复、临时解决方案 |
-| 📈 | analytics | 分析/监控 | 性能监控、数据分析 |
-| 🍱 | assets | 资源文件 | 图片、字体、静态资源 |
-| 🚨 | lint | 代码检查 | 修复 linting 警告、代码质量 |
-| 💡 | comment | 注释 | 添加/更新注释、文档字符串 |
-| 🔊 | log | 日志 | 添加日志、调试信息 |
-| 🔇 | log | 移除日志 | 删除日志、静默输出 |
+| 表情符号 | 类型        | 描述       | 使用场景               |
+|------|-----------|----------|--------------------|
+| 🎉   | feat      | 重大功能/初始化 | 新功能、重大更新、项目初始化     |
+| ✨    | feat      | 新功能/增强   | 添加功能、增强、文档更新       |
+| 🐛   | fix       | Bug 修复   | 修复错误、解决问题          |
+| 🔧   | config    | 配置修改     | 配置文件、CI/CD、构建配置    |
+| 📝   | docs      | 文档更新     | 更新文档、README、注释     |
+| 🎨   | style     | 代码风格/格式化 | 代码格式化、样式、结构优化      |
+| ♻️   | refactor  | 重构       | 代码重构、包结构调整         |
+| ⚡    | perf      | 性能优化     | 性能优化、算法改进          |
+| 🔥   | remove    | 删除代码/文件  | 删除无用代码、移除功能        |
+| 🧪   | test      | 测试相关     | 添加测试、修复测试、测试配置     |
+| 👷   | ci        | CI/CD    | 持续集成、构建脚本          |
+| 📦   | build     | 构建系统     | 依赖管理、构建配置          |
+| ⬆️   | upgrade   | 升级依赖     | 升级库版本              |
+| ⬇️   | downgrade | 降级依赖     | 降级库版本              |
+| 🚀   | release   | 发布版本     | 版本发布、标签创建          |
+| 🔀   | merge     | 合并分支     | 分支合并、冲突解决          |
+| 🤖   | ai        | AI 工具配置  | AI 助手配置、自动化        |
+| 💄   | optimize  | 优化       | 性能优化、代码改进          |
+| 🌐   | network   | 网络相关     | 网络配置、API 调用、远程服务   |
+| 🔐   | security  | 安全/验证    | 安全修复、权限控制、验证       |
+| 🚑   | hotfix    | 紧急修复     | 紧急修复、临时解决方案        |
+| 📈   | analytics | 分析/监控    | 性能监控、数据分析          |
+| 🍱   | assets    | 资源文件     | 图片、字体、静态资源         |
+| 🚨   | lint      | 代码检查     | 修复 linting 警告、代码质量 |
+| 💡   | comment   | 注释       | 添加/更新注释、文档字符串      |
+| 🔊   | log       | 日志       | 添加日志、调试信息          |
+| 🔇   | log       | 移除日志     | 删除日志、静默输出          |
 
 ## 提交示例
 
 ### 简单格式示例
+
 ```bash
 ✨ [shared] 添加统一异常处理
 
@@ -148,6 +149,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 
 ### 复杂格式示例
+
 ```bash
 ✨ [ai] LangChain4j集成优化
 
