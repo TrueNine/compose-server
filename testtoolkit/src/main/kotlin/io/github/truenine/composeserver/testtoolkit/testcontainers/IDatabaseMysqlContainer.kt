@@ -51,6 +51,8 @@ interface IDatabaseMysqlContainer {
         withUsername(config.mysql.username)
         withPassword(config.mysql.password)
         withEnv("MYSQL_ROOT_PASSWORD", config.mysql.rootPassword)
+        withReuse(true)
+        withLabel("reuse.UUID", "mysql-testcontainer-compose-server")
         addExposedPorts(3306)
         start()
       }

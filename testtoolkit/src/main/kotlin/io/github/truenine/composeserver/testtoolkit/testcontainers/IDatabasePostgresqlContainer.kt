@@ -50,6 +50,7 @@ interface IDatabasePostgresqlContainer {
         withUsername(config.postgres.username)
         withPassword(config.postgres.password)
         addExposedPorts(5432)
+        withReuse(true)
         start()
       }
     }

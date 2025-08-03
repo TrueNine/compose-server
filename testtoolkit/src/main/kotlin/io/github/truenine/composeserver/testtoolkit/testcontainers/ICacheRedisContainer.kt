@@ -48,6 +48,7 @@ interface ICacheRedisContainer {
     val container by lazy {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
       GenericContainer(DockerImageName.parse(config.redis.image)).apply {
+        withReuse(true)
         withExposedPorts(6379)
         setWaitStrategy(Wait.forLogMessage(".*Ready to accept connections.*\\n", 1).withStartupTimeout(Duration.ofSeconds(10)))
         start()
