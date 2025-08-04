@@ -1,9 +1,12 @@
 package io.github.truenine.composeserver.oss.volcengine
 
 import com.volcengine.tos.TOSV2
+import com.volcengine.tos.model.bucket.*
+import com.volcengine.tos.model.`object`.*
 import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.oss.*
 import io.mockk.*
+import java.util.*
 import kotlin.test.*
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +28,88 @@ class VolcengineTosObjectStorageServiceTest {
   fun setUp() {
     clearAllMocks()
     tosClient = mockk<TOSV2>()
+
+    // Configure mock responses for all TOS SDK methods
+    setupTosClientMocks()
+
     service = VolcengineTosObjectStorageService(tosClient, exposedBaseUrl)
+  }
+
+  private fun setupTosClientMocks() {
+    // Mock bucket operations
+    every { tosClient.createBucket(any<CreateBucketV2Input>()) } returns mockk<CreateBucketV2Output> { every { location } returns "test-location" }
+
+    every { tosClient.deleteBucket(any<DeleteBucketInput>()) } returns mockk<DeleteBucketOutput>()
+
+    every { tosClient.listBuckets(any<ListBucketsV2Input>()) } returns mockk<ListBucketsV2Output> { every { buckets } returns emptyList<ListedBucket>() }
+
+    every { tosClient.headBucket(any<HeadBucketV2Input>()) } returns mockk<HeadBucketV2Output> { every { region } returns "test-region" }
+
+    every { tosClient.putBucketACL(any<PutBucketACLInput>()) } returns mockk<PutBucketACLOutput>()
+
+    every { tosClient.getBucketPolicy(any<GetBucketPolicyInput>()) } returns mockk<GetBucketPolicyOutput> { every { policy } returns "" }
+
+    every { tosClient.putBucketPolicy(any<PutBucketPolicyInput>()) } returns mockk<PutBucketPolicyOutput>()
+
+    // Mock object operations
+    every { tosClient.putObject(any<PutObjectInput>()) } returns
+      mockk<PutObjectOutput> {
+        every { etag } returns "mock-etag"
+        every { versionID } returns "test-version"
+      }
+
+    every { tosClient.getObject(any<GetObjectV2Input>()) } returns
+      mockk<GetObjectV2Output> {
+        every { content } returns "test content".byteInputStream()
+        every { contentLength } returns 12L
+        every { etag } returns "test-etag"
+        every { lastModified } returns null
+        every { contentType } returns "text/plain"
+      }
+
+    every { tosClient.headObject(any<HeadObjectV2Input>()) } returns
+      mockk<HeadObjectV2Output> {
+        every { etag } returns "mock-etag"
+        every { contentLength } returns 12L
+        every { lastModified } returns null
+        every { contentType } returns "text/plain"
+        // every { meta } returns mapOf("test-key" to "test-value")
+      }
+
+    every { tosClient.deleteObject(any<DeleteObjectInput>()) } returns mockk<DeleteObjectOutput> { every { versionID } returns "test-version" }
+
+    every { tosClient.copyObject(any<CopyObjectV2Input>()) } returns
+      mockk<CopyObjectV2Output> {
+        every { etag } returns "copy-etag"
+        every { lastModified } returns null
+      }
+
+    every { tosClient.listObjects(any<ListObjectsV2Input>()) } returns
+      mockk<ListObjectsV2Output> {
+        every { contents } returns emptyList<ListedObjectV2>()
+        every { isTruncated } returns false
+        // every { nextContinuationToken } returns null
+        every { commonPrefixes } returns emptyList()
+      }
+
+    every { tosClient.preSignedURL(any<PreSignedURLInput>()) } returns
+      mockk<PreSignedURLOutput> { every { signedUrl } returns "https://test-bucket.tos.example.com/test-object.txt?signature=test" }
+
+    // Mock multipart upload operations
+    every { tosClient.createMultipartUpload(any<com.volcengine.tos.model.`object`.CreateMultipartUploadInput>()) } returns
+      mockk<com.volcengine.tos.model.`object`.CreateMultipartUploadOutput> { every { uploadID } returns "mock-upload-id-123" }
+
+    every { tosClient.uploadPart(any<com.volcengine.tos.model.`object`.UploadPartV2Input>()) } returns
+      mockk<com.volcengine.tos.model.`object`.UploadPartV2Output> { every { etag } returns "mock-etag-1" }
+
+    every { tosClient.completeMultipartUpload(any<com.volcengine.tos.model.`object`.CompleteMultipartUploadV2Input>()) } returns
+      mockk<com.volcengine.tos.model.`object`.CompleteMultipartUploadV2Output> { every { etag } returns "mock-etag-complete" }
+
+    every { tosClient.abortMultipartUpload(any<com.volcengine.tos.model.`object`.AbortMultipartUploadInput>()) } returns
+      mockk<com.volcengine.tos.model.`object`.AbortMultipartUploadOutput>()
+
+    every { tosClient.listParts(any<com.volcengine.tos.model.`object`.ListPartsInput>()) } returns
+      mockk<com.volcengine.tos.model.`object`.ListPartsOutput> { every { uploadedParts } returns emptyList() }
   }
 
   @Nested
@@ -174,19 +258,24 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试获取对象内容失败`() = runTest {
+    fun `测试获取对象内容成功`() = runTest {
       val result = service.getObject("test-bucket", "test-object.txt")
 
-      assertTrue(result.isFailure)
-      assertTrue(result.exceptionOrNull() is NotImplementedError)
+      assertTrue(result.isSuccess)
+      val objectContent = result.getOrNull()!!
+      assertEquals("test-bucket", objectContent.objectInfo.bucketName)
+      assertEquals("test-object.txt", objectContent.objectInfo.objectName)
+      assertEquals("test-etag", objectContent.objectInfo.etag)
     }
 
     @Test
-    fun `测试获取对象范围内容失败`() = runTest {
+    fun `测试获取对象范围内容成功`() = runTest {
       val result = service.getObject("test-bucket", "test-object.txt", 0L, 10L)
 
-      assertTrue(result.isFailure)
-      assertTrue(result.exceptionOrNull() is NotImplementedError)
+      assertTrue(result.isSuccess)
+      val objectContent = result.getOrNull()!!
+      assertEquals("test-bucket", objectContent.objectInfo.bucketName)
+      assertEquals("test-object.txt", objectContent.objectInfo.objectName)
     }
 
     @Test
@@ -262,7 +351,7 @@ class VolcengineTosObjectStorageServiceTest {
         )
 
       assertTrue(result.isSuccess)
-      assertEquals("https://mock-presigned-url.example.com", result.getOrNull())
+      assertEquals("https://test-bucket.tos.example.com/test-object.txt?signature=test", result.getOrNull())
     }
   }
 
@@ -277,7 +366,7 @@ class VolcengineTosObjectStorageServiceTest {
 
       assertTrue(result.isSuccess)
       val upload = result.getOrNull()!!
-      assertEquals("mock-upload-id", upload.uploadId)
+      assertTrue(upload.uploadId.startsWith("mock-upload-id-"))
       assertEquals("test-bucket", upload.bucketName)
       assertEquals("large-file.txt", upload.objectName)
     }
@@ -299,7 +388,7 @@ class VolcengineTosObjectStorageServiceTest {
       assertTrue(result.isSuccess)
       val partInfo = result.getOrNull()!!
       assertEquals(1, partInfo.partNumber)
-      assertEquals("part-etag", partInfo.etag)
+      assertEquals("mock-etag-1", partInfo.etag)
       assertEquals(12L, partInfo.size)
     }
 
@@ -314,7 +403,8 @@ class VolcengineTosObjectStorageServiceTest {
       val objectInfo = result.getOrNull()!!
       assertEquals("test-bucket", objectInfo.bucketName)
       assertEquals("large-file.txt", objectInfo.objectName)
-      assertEquals("final-etag", objectInfo.etag)
+      assertTrue(objectInfo.etag.startsWith("mock-etag-"))
+      assertEquals(200L, objectInfo.size) // Sum of part sizes
     }
 
     @Test
@@ -331,6 +421,71 @@ class VolcengineTosObjectStorageServiceTest {
       assertTrue(result.isSuccess)
       val parts = result.getOrNull()!!
       assertTrue(parts.isEmpty()) // 简化实现返回空列表
+    }
+  }
+
+  @Nested
+  inner class ShareLinkOperations {
+
+    @Test
+    fun `测试生成分享链接`() = runTest {
+      val request = ShareLinkRequest(
+        bucketName = "test-bucket",
+        objectName = "test-object.txt",
+        expiration = java.time.Duration.ofHours(1),
+        method = HttpMethod.GET
+      )
+
+      val result = service.generateShareLink(request)
+
+      assertTrue(result.isSuccess)
+      val shareInfo = result.getOrNull()!!
+      assertEquals("test-bucket", shareInfo.bucketName)
+      assertEquals("test-object.txt", shareInfo.objectName)
+      assertEquals(HttpMethod.GET, shareInfo.method)
+      assertFalse(shareInfo.hasPassword)
+    }
+
+    @Test
+    fun `测试上传并生成分享链接`() = runTest {
+      val request = UploadWithLinkRequest(
+        bucketName = "test-bucket",
+        objectName = "test-object.txt",
+        inputStream = "test content".byteInputStream(),
+        size = 12L,
+        contentType = "text/plain",
+        shareExpiration = java.time.Duration.ofHours(1)
+      )
+
+      val result = service.uploadWithLink(request)
+
+      assertTrue(result.isSuccess)
+      val response = result.getOrNull()!!
+      assertEquals("test-bucket", response.objectInfo.bucketName)
+      assertEquals("test-object.txt", response.objectInfo.objectName)
+      assertNotNull(response.shareLink)
+      assertNotNull(response.publicUrl)
+    }
+
+    @Test
+    fun `测试验证分享链接`() = runTest {
+      val shareUrl = "https://test-bucket.tos.example.com/test-object.txt?signature=test"
+
+      val result = service.validateShareLink(shareUrl)
+
+      assertTrue(result.isSuccess)
+      val shareInfo = result.getOrNull()!!
+      assertEquals("test-bucket", shareInfo.bucketName)
+      assertEquals("test-object.txt", shareInfo.objectName)
+    }
+
+    @Test
+    fun `测试撤销分享链接`() = runTest {
+      val shareUrl = "https://test-bucket.tos.example.com/test-object.txt?signature=test"
+
+      val result = service.revokeShareLink(shareUrl)
+
+      assertTrue(result.isSuccess)
     }
   }
 }
