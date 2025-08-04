@@ -77,10 +77,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `./gradlew build` - 构建项目
 - `./gradlew clean` - 清理输出
 - `./gradlew publishToMavenLocal` - 本地发布
-- `./gradlew test` - 运行所有测试
-- `./gradlew :{模块}:test` - 模块特定测试
+- `./gradlew check` - 运行所有测试
+- `./gradlew :{模块}:check` - 模块特定测试
 - `./gradlew spotlessApply` - 修复格式（提交前必须运行）
-- `./gradlew versionCatalogFormat` - 修复 `libs.versions.toml` 格式（提交前必须运行）
+- `./gradlew versionCatalogFormat` - 修复 `libs.versions.toml` 格式
 
 ## 构建约定与插件
 **build-logic 约定插件体系：**
