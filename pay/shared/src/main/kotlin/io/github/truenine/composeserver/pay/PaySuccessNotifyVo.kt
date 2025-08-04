@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.pay
 
-import io.github.truenine.composeserver.typing.ISO4217
+import io.github.truenine.composeserver.enums.ISO4217
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(title = "支付成功通知回调")

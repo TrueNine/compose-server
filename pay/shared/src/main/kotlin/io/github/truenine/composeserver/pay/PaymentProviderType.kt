@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.pay
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.github.truenine.composeserver.IIntTyping
+import io.github.truenine.composeserver.IIntEnum
 import io.swagger.v3.oas.annotations.media.Schema
 
 /**
@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema
  * @since 2023-05-04
  */
 @Schema(title = "支付渠道类型")
-enum class PaymentTyping(private val channelId: Int) : IIntTyping {
+enum class PaymentProviderType(private val channelId: Int) : IIntEnum {
   /** 预支付 */
   @Schema(title = "预付款") PRE_PAY(1001),
 
