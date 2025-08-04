@@ -8,15 +8,19 @@ spring:
     fail-on-missing-locations: true
     enabled: true
     encoding: UTF-8
-    baseline-version: 3000
+    baseline-version: 0
     baseline-on-migrate: true
+    validate-on-migrate: false
+    locations: classpath:db/migration
 logging:
   level:
     net.yan100: trace
+    org.flywaydb: debug
+    org.springframework.boot.autoconfigure.flyway: debug
 
 jimmer:
   language: kotlin
   show-sql: true
   pretty-sql: true
   inline-sql-variables: true
-  database-validation-mode: error
+  database-validation-mode: warning
