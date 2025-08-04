@@ -2,9 +2,9 @@ package io.github.truenine.composeserver.security.spring.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.ErrorResponseEntity
+import io.github.truenine.composeserver.enums.HttpStatus
+import io.github.truenine.composeserver.enums.MediaTypes
 import io.github.truenine.composeserver.slf4j
-import io.github.truenine.composeserver.typing.HttpStatus
-import io.github.truenine.composeserver.typing.MediaTypes
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.nio.charset.Charset

@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.security.oauth2.typing
 
 import com.fasterxml.jackson.annotation.JsonValue
-import io.github.truenine.composeserver.IStringTyping
+import io.github.truenine.composeserver.IStringEnum
 
 /**
  * # 微信支付验证类型
@@ -9,7 +9,7 @@ import io.github.truenine.composeserver.IStringTyping
  * @author TrueNine
  * @since 2023-05-31
  */
-enum class WechatMpGrantTyping(private val typingCode: String) : IStringTyping {
+enum class WechatMpGrantTyping(private val typingCode: String) : IStringEnum {
   CLIENT_CREDENTIAL("client_credential"),
   AUTH_CODE("authorization_code");
 

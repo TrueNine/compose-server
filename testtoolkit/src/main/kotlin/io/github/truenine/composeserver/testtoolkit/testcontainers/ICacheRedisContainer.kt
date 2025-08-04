@@ -13,8 +13,30 @@ import org.testcontainers.utility.DockerImageName
  *
  * 该接口提供了 Redis 测试容器的标准配置，用于缓存集成测试环境。 通过实现此接口，测试类可以自动获得配置好的 Redis 测试实例。
  *
+ * ## ⚠️ 重要提示：容器重用与数据清理
+ *
+ * **默认情况下，为了提高测试运行效率，所有容器都是可重用的。** 这意味着容器会在多个测试之间共享，数据可能会残留。
+ *
+ * ### 数据清理责任
+ * - **必须在测试中进行数据清理**：使用 `@BeforeEach` 或 `@AfterEach` 清理 Redis 数据
+ * - **推荐清理方式**：`FLUSHALL` 或 `FLUSHDB` 命令清空所有键
+ * - **不建议禁用重用**：虽然可以通过配置禁用容器重用，但会显著降低测试性能
+ *
+ * ### 清理示例
+ *
+ * ```kotlin
+ * @BeforeEach
+ * fun cleanupRedis() {
+ *   redisTemplate.execute { connection ->
+ *     connection.flushAll()
+ *     null
+ *   }
+ * }
+ * ```
+ *
  * ## 特性
  * - 自动配置 Redis 测试容器
+ * - 容器重用以提高性能
  * - 提供标准的 Redis 连接配置
  * - 支持 Spring Test 的动态属性注入
  * - 使用随机端口以避免端口冲突
@@ -24,7 +46,17 @@ import org.testcontainers.utility.DockerImageName
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : ICacheRedisContainer {
- *   // 你的测试代码
+ *
+ *   @BeforeEach
+ *   fun setup() {
+ *     // 清理 Redis 数据
+ *     redisTemplate.execute { it.flushAll(); null }
+ *   }
+ *
+ *   @Test
+ *   fun `测试缓存功能`() {
+ *     // 你的测试代码
+ *   }
  * }
  * ```
  *
@@ -43,12 +75,15 @@ interface ICacheRedisContainer {
      * - 端口: 6379 (随机映射)
      * - 版本: 可通过配置自定义，默认 7.4.2-alpine3.21
      * - 无密码认证
+     * - **容器重用**: 默认启用，多个测试共享同一容器实例
+     *
+     * ⚠️ **重要**: 由于容器重用，数据会在测试间残留，请确保在测试中进行适当的数据清理。
      */
     @JvmStatic
     val container by lazy {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
       GenericContainer(DockerImageName.parse(config.redis.image)).apply {
-        withReuse(true)
+        withReuse(config.reuseAllContainers || config.redis.reuse)
         withExposedPorts(6379)
         setWaitStrategy(Wait.forLogMessage(".*Ready to accept connections.*\\n", 1).withStartupTimeout(Duration.ofSeconds(10)))
         start()

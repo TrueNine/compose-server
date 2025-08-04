@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.security.crypto
 
+import io.github.truenine.composeserver.enums.EncryptAlgorithm
 import io.github.truenine.composeserver.testtoolkit.log
-import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import kotlin.test.*
 import kotlin.time.measureTime
 

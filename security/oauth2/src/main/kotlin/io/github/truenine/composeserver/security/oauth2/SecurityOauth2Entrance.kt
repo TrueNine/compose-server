@@ -4,4 +4,4 @@ import io.github.truenine.composeserver.security.oauth2.autoconfig.WxpaAutoConfi
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Import
 
-@SpringBootApplication @Import(WxpaAutoConfiguration::class) internal class SecurityOauth2Entrance
+@SpringBootApplication @Import(WxpaAutoConfiguration::class) class SecurityOauth2Entrance

@@ -15,11 +15,12 @@ dependencies {
 
   api(projects.shared)
   implementation(projects.depend.dependHttpExchange)
+  implementation(projects.depend.dependJackson)
   implementation(libs.org.springframework.boot.spring.boot.starter.webflux)
 
   implementation(projects.security.securityCrypto)
   implementation(libs.org.springframework.security.spring.security.core)
 
-  testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.webflux)
   testImplementation(projects.testtoolkit)
 }

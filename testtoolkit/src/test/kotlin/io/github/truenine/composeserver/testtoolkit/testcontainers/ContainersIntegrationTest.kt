@@ -65,7 +65,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     // 初始化 MinIO 客户端
     minioClient = MinioClient.builder().endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build()
 
-    // 初始化 PostgreSQL 测试表
+    // 初始化 PostgreSQL 测试表并清理数据
     jdbcTemplate.execute(
       """
             CREATE TABLE IF NOT EXISTS test_table (
@@ -75,6 +75,27 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
         """
         .trimIndent()
     )
+
+    // 清理测试数据
+    jdbcTemplate.execute("DELETE FROM test_table")
+
+    // 清理 MinIO 测试桶
+    try {
+      val buckets = minioClient.listBuckets()
+      buckets.forEach { bucket ->
+        if (bucket.name().startsWith("test-") || bucket.name().startsWith("combined-")) {
+          try {
+            minioClient.removeBucket(io.minio.RemoveBucketArgs.builder().bucket(bucket.name()).build())
+          } catch (e: Exception) {
+            // 忽略删除失败，可能桶不为空或不存在
+            log.debug("Failed to remove bucket ${bucket.name()}: ${e.message}")
+          }
+        }
+      }
+    } catch (e: Exception) {
+      // 忽略清理失败
+      log.debug("Failed to clean up MinIO buckets: ${e.message}")
+    }
   }
 
   @Test
@@ -147,7 +168,9 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
     // MinIO 测试
     val bucketName = "combined-test-bucket"
-    minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
+    if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+      minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
+    }
 
     // 验证所有操作
     val pgResult = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "combined_test")

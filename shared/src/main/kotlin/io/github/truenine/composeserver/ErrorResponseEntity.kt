@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver
 
-import io.github.truenine.composeserver.typing.HttpStatus
+import io.github.truenine.composeserver.enums.HttpStatus
 
 /**
  * # 新版 错误响应实体

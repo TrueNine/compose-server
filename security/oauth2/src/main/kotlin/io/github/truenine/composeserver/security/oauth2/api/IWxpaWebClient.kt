@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.security.oauth2.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.github.truenine.composeserver.enums.PCB47
 import io.github.truenine.composeserver.security.oauth2.models.BaseWxpaResponseEntity
 import io.github.truenine.composeserver.security.oauth2.typing.WechatMpGrantTyping
 import io.github.truenine.composeserver.string
-import io.github.truenine.composeserver.typing.PCB47
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange

@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.domain.enc
 
 import io.github.truenine.composeserver.domain.IRsaKeyPair
+import io.github.truenine.composeserver.enums.EncryptAlgorithm
 import io.github.truenine.composeserver.testtoolkit.log
-import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import java.math.BigInteger
 import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey

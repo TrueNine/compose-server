@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.security.crypto
 
+import io.github.truenine.composeserver.enums.EncryptAlgorithm
 import io.github.truenine.composeserver.slf4j
-import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import java.nio.charset.Charset
 import java.security.*
 import java.security.interfaces.RSAPrivateKey

@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.security.crypto
 
+import io.github.truenine.composeserver.enums.EncryptAlgorithm
 import io.github.truenine.composeserver.security.crypto.domain.EccExtKeyPair
 import io.github.truenine.composeserver.security.crypto.domain.IEccExtKeyPair
 import io.github.truenine.composeserver.security.crypto.domain.IRsaExtKeyPair
 import io.github.truenine.composeserver.security.crypto.domain.RsaExtKeyPair
 import io.github.truenine.composeserver.slf4j
-import io.github.truenine.composeserver.typing.EncryptAlgorithm
 import java.security.*
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey

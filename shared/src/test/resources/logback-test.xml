@@ -18,7 +18,7 @@
     </logger>
     
     <!-- Logger for the LoggerFns test classes -->
-    <logger name="io.github.truenine.composeserver.LoggerFnsTest" level="ERROR" additivity="false">
+    <logger name="io.github.truenine.composeserver.LoggerExtensionsTest" level="ERROR" additivity="false">
         <appender-ref ref="CONSOLE" />
     </logger>
     

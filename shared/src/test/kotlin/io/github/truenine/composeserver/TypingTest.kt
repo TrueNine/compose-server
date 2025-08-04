@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver
 
+import io.github.truenine.composeserver.enums.PCB47
 import io.github.truenine.composeserver.testtoolkit.log
-import io.github.truenine.composeserver.typing.PCB47
 import java.lang.reflect.Modifier
 import kotlin.test.Test
 

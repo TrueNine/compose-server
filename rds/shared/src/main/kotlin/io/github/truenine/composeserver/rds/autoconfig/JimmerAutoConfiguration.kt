@@ -2,9 +2,9 @@ package io.github.truenine.composeserver.rds.autoconfig
 
 import io.github.truenine.composeserver.generator.ISnowflakeGenerator
 import io.github.truenine.composeserver.rds.converters.DurationScalarProvider
-import io.github.truenine.composeserver.rds.converters.IntTypingJimmerProvider
+import io.github.truenine.composeserver.rds.converters.IIntEnumJimmerProvider
 import io.github.truenine.composeserver.rds.converters.PeriodScalarProvider
-import io.github.truenine.composeserver.rds.converters.StringTypingJimmerProvider
+import io.github.truenine.composeserver.rds.converters.IStringEnumJimmerProvider
 import io.github.truenine.composeserver.rds.generators.JimmerSnowflakeLongIdGenerator
 import io.github.truenine.composeserver.rds.generators.JimmerSnowflakeStringIdGenerator
 import io.github.truenine.composeserver.rds.interceptors.JimmerEntityDraftInterceptor
@@ -43,15 +43,15 @@ class JimmerAutoConfiguration {
   }
 
   @Bean
-  fun stringTypingJimmerProvider(): StringTypingJimmerProvider {
-    log.trace("register jimmer string typing enum provider")
-    return StringTypingJimmerProvider()
+  fun stringTypingJimmerProvider(): IStringEnumJimmerProvider {
+    log.trace("register jimmer string enums enum provider")
+    return IStringEnumJimmerProvider()
   }
 
   @Bean
-  fun intTypingJimmerProvider(): IntTypingJimmerProvider {
-    log.trace("register jimmer int typing enum provider")
-    return IntTypingJimmerProvider()
+  fun intTypingJimmerProvider(): IIntEnumJimmerProvider {
+    log.trace("register jimmer int enums enum provider")
+    return IIntEnumJimmerProvider()
   }
 
   @Bean
