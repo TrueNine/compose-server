@@ -52,6 +52,6 @@ class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContain
     assertTrue("没有覆盖到 flyway properties 的 enabled 属性") { flywayProperties.isEnabled }
     assertTrue { flywayProperties.isBaselineOnMigrate }
     assertTrue { flywayProperties.isOutOfOrder }
-    assertEquals("9000", flywayProperties.baselineVersion)
+    assertEquals("0", flywayProperties.baselineVersion)
   }
 }
