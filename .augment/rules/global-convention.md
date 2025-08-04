@@ -2,37 +2,40 @@
 type: "always_apply"
 ---
 
-This file provides guidance to `Augment` when working with code in this Repository.
+# CLAUDE.md
 
-# Generic Standard
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
 
-**Mandatory Convention**
+# 通用标准
 
-1. Always respond in **Chinese-simplified**, Even if the user enters a large number of English prompts, they should return Chinese
-2. It is forbidden to write any sample code for user use, even if it requires temporary testing, and delete it as soon as the task is complete
-3. It is strictly forbidden to solve problems by simplifying them
-4. It is strictly forbidden to downgrade a dependent version to resolve the issue
-5. It is strictly forbidden to reduce test assertions to solve problems
-6. Ignoring anomalies or any behavior that hides anomalies is strictly prohibited
-7. Code that appears in the context should be actively refactored and repaired according to the rules，应当积极按照规则来重构修复
-8. It is strictly forbidden to expose API keys, passwords, and tokens in the code
-9. Logs should be actively used to complete logging, and missing logging should be actively supplemented
-10. It is permissible to add logs during unit test debugging to assist in problem-solving
-11. The usage of `early return` technique must be maximized to reduce code nesting levels
-12. It is strictly forbidden to generate summary document files and other unnecessary operations after the conversation or task is completed
+**强制规则**
 
-**Output Rules**
+1. 始终使用**简体中文**回复，即使用户输入大量英文提示，也应返回简体中文
+2. 禁止编写任何供用户使用的示例代码，即使需要临时测试，任务完成后也必须立即删除
+3. 严禁通过简化问题来解决问题
+4. 严禁通过降级依赖版本来解决问题
+5. 严禁通过减少测试断言来解决问题
+6. 严禁忽略异常或任何隐藏异常的行为
+7. 应当积极按照规则来重构修复上下文中出现的代码
+8. 严禁在代码中暴露 API 密钥、密码和令牌
+9. 应积极使用日志完善记录，主动补充缺失的日志
+10. 允许在单元测试调试期间添加日志以协助解决问题
+11. 必须最大化使用 `early return` 技术来减少代码嵌套层级
+12. 严禁在对话或任务完成后生成总结文档文件和其他不必要的操作
+13. 严禁出现 `util`,`utils`,`tool` 等的让我恶心的命名方式以及命名空间
+
+**输出规则**
 
 - **优先简洁直接的回复** - 避免冗长解释
 - **批量相关工具调用** - 将多个信息请求合并为单次调用
 - **使用高效工具序列** - 最小化冗余调用
 
-**Comment Rules**
+**注释规则**
 
 - 文档注释：英文注释
 - 代码内部注释：英文注释，且解释"为什么"而非"做什么"
 
-**TDD Convention**
+**TDD 约定**
 
 1. TDD流程：失败测试→实现代码→重构
 2. 覆盖边界条件和异常情况
@@ -40,99 +43,114 @@ This file provides guidance to `Augment` when working with code in this Reposito
 4. 测试命名清晰表达意图
 5. 测试类与被测试类同名
 6. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
+7. 严禁出现没有断言的测试方法，发现应该立即补全断言
 
 **测试组织最佳实践：**
+
 - 每个被测试类/函数/变量/方法创建主要分组
 - 按场景细分：正常用例、异常用例、边界用例
 - 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
 - 测试方法命名使用反引号包围的中文描述：`fun \`测试用户创建成功\`()`
 - 禁止使用 `@DisplayName` 注解
 
-**DDD Convention**
+# 特定语言约定
 
-- DDD：统一语言建模，聚合根维护不变性
-- CQRS：命令查询分离
-- EDA：事件驱动解耦
-
-# Specific Language Conventions
-
-**SQL Standard**
+**SQL 标准**
 
 1. 检查现有查询是否使用参数化
 2. 统一使用snake_case命名
 3. 验证无字符串拼接风险
 4. 应尽量使用小写来编写SQL
 
-**JVM Standard**
+**JVM 标准**
 
 1. 严禁在测试代码中使用 `@DisplayName` 注解
 2. spring/quarkus 中严禁使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
 3. 尽可能使用项目内JDK版本能使用的最大限度的新特性
 
-**Java Standard**
+**Java 标准**
 
 1. 尽可能使用jdk的新特性
 2. 声明变量应尽量使用 `final var`
 3. 积极使用 lambda
 4. 严禁使用 `System.out.println` 记录输出
 
-**Kotlin Standard**
+**Kotlin 标准**
 
 1. 优先使用val声明不可变变量
 2. 避免!!操作符，使用?.或let{}
 3. 数据类替代多参数函数
 4. 严禁使用 `println` 记录输出
+5. 严禁在单元测试中使用 `mockito`，而是使用 `mockk`
 
-**TypeScript and Vue Standard**
+**TypeScript 和 Vue 标准**
 
 - TypeScript: 启用strict模式，避免any类型
 - Vue: 积极使用 vue3 新特性
 
-# Git Commit Message Convention
+**SCSS 标准**
 
-**格式：** `emoji [scope] description`（简单）或详细列表格式（2+ 变更）
+- 禁止使用 `@import`，使用 `@use` 代替
 
-**完整表情符号系统：**
-| 表情符号 | 类型 | 描述 | 使用场景 |
-|---------|------|------|----------|
-| 🎉 | feat | 重大功能/初始化 | 新功能、重大更新、项目初始化 |
-| ✨ | feat | 新功能/增强 | 添加功能、增强、文档更新 |
-| 🐛 | fix | Bug 修复 | 修复错误、解决问题 |
-| 🔧 | config | 配置修改 | 配置文件、CI/CD、构建配置 |
-| 📝 | docs | 文档更新 | 更新文档、README、注释 |
-| 🎨 | style | 代码风格/格式化 | 代码格式化、样式、结构优化 |
-| ♻️ | refactor | 重构 | 代码重构、包结构调整 |
-| ⚡ | perf | 性能优化 | 性能优化、算法改进 |
-| 🔥 | remove | 删除代码/文件 | 删除无用代码、移除功能 |
-| 🧪 | test | 测试相关 | 添加测试、修复测试、测试配置 |
-| 👷 | ci | CI/CD | 持续集成、构建脚本 |
-| 📦 | build | 构建系统 | 依赖管理、构建配置 |
-| ⬆️ | upgrade | 升级依赖 | 升级库版本 |
-| ⬇️ | downgrade | 降级依赖 | 降级库版本 |
-| 🚀 | release | 发布版本 | 版本发布、标签创建 |
-| 🔀 | merge | 合并分支 | 分支合并、冲突解决 |
-| 🤖 | ai | AI 工具配置 | AI 助手配置、自动化 |
-| 💄 | optimize | 优化 | 性能优化、代码改进 |
-| 🌐 | network | 网络相关 | 网络配置、API 调用、远程服务 |
-| 🔐 | security | 安全/验证 | 安全修复、权限控制、验证 |
-| 🚑 | hotfix | 紧急修复 | 紧急修复、临时解决方案 |
-| 📈 | analytics | 分析/监控 | 性能监控、数据分析 |
-| 🍱 | assets | 资源文件 | 图片、字体、静态资源 |
-| 🚨 | lint | 代码检查 | 修复 linting 警告、代码质量 |
-| 💡 | comment | 注释 | 添加/更新注释、文档字符串 |
-| 🔊 | log | 日志 | 添加日志、调试信息 |
-| 🔇 | log | 移除日志 | 删除日志、静默输出 |
+# Git 提交规范
 
-**提交示例：**
+## 提交消息格式
+
+**基本格式：** `emoji [scope] description`
+
+- **emoji**: 表示变更类型的表情符号
+- **scope**: 影响范围（模块名称），使用方括号包围
+- **description**: 简洁的变更描述
+
+**复杂变更格式：** 当单次提交包含多个变更时，使用列表格式
+
+## 表情符号规范
+
+| 表情符号 | 类型        | 描述       | 使用场景               |
+|------|-----------|----------|--------------------|
+| 🎉   | feat      | 重大功能/初始化 | 新功能、重大更新、项目初始化     |
+| ✨    | feat      | 新功能/增强   | 添加功能、增强、文档更新       |
+| 🐛   | fix       | Bug 修复   | 修复错误、解决问题          |
+| 🔧   | config    | 配置修改     | 配置文件、CI/CD、构建配置    |
+| 📝   | docs      | 文档更新     | 更新文档、README、注释     |
+| 🎨   | style     | 代码风格/格式化 | 代码格式化、样式、结构优化      |
+| ♻️   | refactor  | 重构       | 代码重构、包结构调整         |
+| ⚡    | perf      | 性能优化     | 性能优化、算法改进          |
+| 🔥   | remove    | 删除代码/文件  | 删除无用代码、移除功能        |
+| 🧪   | test      | 测试相关     | 添加测试、修复测试、测试配置     |
+| 👷   | ci        | CI/CD    | 持续集成、构建脚本          |
+| 📦   | build     | 构建系统     | 依赖管理、构建配置          |
+| ⬆️   | upgrade   | 升级依赖     | 升级库版本              |
+| ⬇️   | downgrade | 降级依赖     | 降级库版本              |
+| 🚀   | release   | 发布版本     | 版本发布、标签创建          |
+| 🔀   | merge     | 合并分支     | 分支合并、冲突解决          |
+| 🤖   | ai        | AI 工具配置  | AI 助手配置、自动化        |
+| 💄   | optimize  | 优化       | 性能优化、代码改进          |
+| 🌐   | network   | 网络相关     | 网络配置、API 调用、远程服务   |
+| 🔐   | security  | 安全/验证    | 安全修复、权限控制、验证       |
+| 🚑   | hotfix    | 紧急修复     | 紧急修复、临时解决方案        |
+| 📈   | analytics | 分析/监控    | 性能监控、数据分析          |
+| 🍱   | assets    | 资源文件     | 图片、字体、静态资源         |
+| 🚨   | lint      | 代码检查     | 修复 linting 警告、代码质量 |
+| 💡   | comment   | 注释       | 添加/更新注释、文档字符串      |
+| 🔊   | log       | 日志       | 添加日志、调试信息          |
+| 🔇   | log       | 移除日志     | 删除日志、静默输出          |
+
+## 提交示例
+
+### 简单格式示例
+
 ```bash
-# 简单格式示例
 ✨ [shared] 添加统一异常处理
 
 🐛 [rds] 修复连接池配置问题
 
 ♻️ [security] 重构JWT验证逻辑
+```
 
-# 复杂格式示例（注意列表中的表情符号）
+### 复杂格式示例
+
+```bash
 ✨ [ai] LangChain4j集成优化
 
 - 🚑 修复模型加载超时问题
@@ -141,133 +159,10 @@ This file provides guidance to `Augment` when working with code in this Reposito
 - 🧪 补充集成测试用例
 ```
 
-# 代码示例和最佳实践
+## 提交规范要求
 
-**Kotlin 代码风格示例：**
-
-```kotlin
-// ✅ 推荐：使用 data class 和扩展函数
-data class UserRequest(val name: String, val email: String)
-
-fun String?.hasText(): Boolean {
-  contract { returns(true) implies (this@hasText != null) }
-  return !this.isNullOrBlank()
-}
-
-// ✅ 推荐：使用 early return 减少嵌套
-fun processUser(request: UserRequest?): Result<User> {
-  if (request == null) return Result.failure(IllegalArgumentException("Request cannot be null"))
-  if (!request.name.hasText()) return Result.failure(IllegalArgumentException("Name is required"))
-  if (!request.email.hasText()) return Result.failure(IllegalArgumentException("Email is required"))
-
-  return Result.success(User(request.name, request.email))
-}
-
-// ❌ 避免：深层嵌套和 !! 操作符
-fun processUserBad(request: UserRequest?): User {
-  if (request != null) {
-    if (request.name.isNotBlank()) {
-      if (request.email.isNotBlank()) {
-        return User(request.name!!, request.email!!) // 避免 !!
-      }
-    }
-  }
-  throw IllegalArgumentException("Invalid request")
-}
-```
-
-**测试组织模式示例：**
-
-```kotlin
-class UserServiceTest {
-
-  @Nested
-  inner class CreateUser {
-
-    @Test
-    fun `测试用户创建成功`() {
-      val request = UserRequest("张三", "zhangsan@example.com")
-      val result = userService.createUser(request)
-
-      assertTrue(result.isSuccess)
-      assertEquals("张三", result.getOrNull()?.name)
-    }
-
-    @Test
-    fun `测试用户名为空时创建失败`() {
-      val request = UserRequest("", "zhangsan@example.com")
-      val result = userService.createUser(request)
-
-      assertTrue(result.isFailure)
-      assertInstanceOf<IllegalArgumentException>(result.exceptionOrNull())
-    }
-  }
-
-  @Nested
-  inner class UpdateUser {
-
-    @Test
-    fun `测试更新存在的用户`() {
-      // 测试实现
-    }
-
-    @Test
-    fun `测试更新不存在的用户抛出异常`() {
-      // 测试实现
-    }
-  }
-}
-```
-
-**异常处理模式示例：**
-
-```kotlin
-// ✅ 推荐：使用统一异常处理
-class UserService {
-  companion object {
-    private val log = slf4j(UserService::class)
-  }
-
-  fun findUser(id: Long): User? {
-    return try {
-      userRepository.findById(id)
-    } catch (ex: DataAccessException) {
-      log.error("Failed to find user with id: {}", id, ex)
-      throw UserServiceException("User lookup failed", ex)
-    }
-  }
-}
-
-// ✅ 推荐：自定义异常继承体系
-open class UserServiceException(
-  message: String,
-  cause: Throwable? = null
-) : RuntimeException(message, cause)
-
-class UserNotFoundException(id: Long) : UserServiceException("User not found: $id")
-```
-
-**Spring Boot 配置示例：**
-
-```kotlin
-// ✅ 推荐：使用 @Resource 和 @EnableConfigurationProperties
-@EnableConfigurationProperties(UserProperties::class)
-@ComponentScan("io.github.truenine.composeserver.user")
-class AutoConfigEntrance
-
-@Service
-class UserService {
-  @Resource
-  private lateinit var userRepository: UserRepository
-
-  @Resource
-  private lateinit var userProperties: UserProperties
-}
-
-// ✅ 推荐：配置属性类
-@ConfigurationProperties(prefix = "compose.user")
-data class UserProperties(
-  val maxRetries: Int = 3,
-  val timeout: Duration = Duration.ofSeconds(30)
-)
-```
+1. **必须使用表情符号**: 每个提交消息必须以对应的表情符号开头
+2. **明确作用域**: 使用方括号明确标识影响的模块或组件
+3. **描述简洁明了**: 使用动词开头，简洁描述变更内容
+4. **单一职责**: 每个提交应专注于单一变更类型
+5. **中文描述**: 提交描述使用中文，便于团队理解

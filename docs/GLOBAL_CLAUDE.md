@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **强制规则**
 
-1. 始终使用**英语**回复，即使用户输入大量中文提示，也应返回英文
+1. 始终使用**简体中文**回复，即使用户输入大量英文提示，也应返回简体中文
 2. 禁止编写任何供用户使用的示例代码，即使需要临时测试，任务完成后也必须立即删除
 3. 严禁通过简化问题来解决问题
 4. 严禁通过降级依赖版本来解决问题
@@ -18,6 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 10. 允许在单元测试调试期间添加日志以协助解决问题
 11. 必须最大化使用 `early return` 技术来减少代码嵌套层级
 12. 严禁在对话或任务完成后生成总结文档文件和其他不必要的操作
+13. 严禁出现 `util`,`utils`,`tool` 等的让我恶心的命名方式以及命名空间
 
 **输出规则**
 
@@ -38,6 +39,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 4. 测试命名清晰表达意图
 5. 测试类与被测试类同名
 6. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
+7. 严禁出现没有断言的测试方法，发现应该立即补全断言
 
 **测试组织最佳实践：**
 
@@ -46,12 +48,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
 - 测试方法命名使用反引号包围的中文描述：`fun \`测试用户创建成功\`()`
 - 禁止使用 `@DisplayName` 注解
-
-**DDD 约定**
-
-- DDD：统一语言建模，聚合根维护不变性
-- CQRS：命令查询分离
-- EDA：事件驱动解耦
 
 # 特定语言约定
 
