@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.oss.properties
 
-import java.time.Duration
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 private const val PREFIX = "compose.oss"
@@ -8,39 +7,32 @@ private const val PREFIX = "compose.oss"
 /**
  * Modern OSS configuration properties
  *
+ * Extends BaseOssProperties to inherit common OSS configuration fields and adds provider-specific configuration.
+ *
  * @param provider OSS provider type (minio, volcengine-tos, aliyun-oss, etc.)
- * @param endpoint Service endpoint URL
- * @param region Service region
- * @param accessKey Access key for authentication
- * @param secretKey Secret key for authentication
- * @param exposedBaseUrl Public base URL for object access
- * @param enableSsl Enable SSL/TLS connection
- * @param connectionTimeout Connection timeout
- * @param readTimeout Read timeout
- * @param writeTimeout Write timeout
- * @param maxConnections Maximum number of connections
- * @param defaultBucket Default bucket name
- * @param autoCreateBucket Auto create bucket if not exists
- * @param enableVersioning Enable object versioning
- * @param enableLogging Enable request/response logging
  * @author TrueNine
  * @since 2025-01-04
  */
 @ConfigurationProperties(prefix = PREFIX)
-data class OssProperties(
-  var provider: String? = null,
-  var endpoint: String? = null,
-  var region: String? = null,
-  var accessKey: String? = null,
-  var secretKey: String? = null,
-  var exposedBaseUrl: String? = null,
-  var enableSsl: Boolean = true,
-  var connectionTimeout: Duration = Duration.ofSeconds(30),
-  var readTimeout: Duration = Duration.ofMinutes(5),
-  var writeTimeout: Duration = Duration.ofMinutes(5),
-  var maxConnections: Int = 100,
-  var defaultBucket: String? = null,
-  var autoCreateBucket: Boolean = false,
-  var enableVersioning: Boolean = false,
-  var enableLogging: Boolean = false,
-)
+class OssProperties : BaseOssProperties() {
+  /** OSS provider type (minio, volcengine-tos, aliyun-oss, etc.) */
+  var provider: String? = null
+
+  override fun toString(): String {
+    return "OssProperties(" +
+      "provider='$provider', " +
+      "endpoint='$endpoint', " +
+      "region='$region', " +
+      "accessKey='${accessKey?.take(4)}***', " +
+      "enableSsl=$enableSsl, " +
+      "connectionTimeout=$connectionTimeout, " +
+      "readTimeout=$readTimeout, " +
+      "writeTimeout=$writeTimeout, " +
+      "maxConnections=$maxConnections, " +
+      "defaultBucket='$defaultBucket', " +
+      "autoCreateBucket=$autoCreateBucket, " +
+      "enableVersioning=$enableVersioning, " +
+      "enableLogging=$enableLogging" +
+      ")"
+  }
+}

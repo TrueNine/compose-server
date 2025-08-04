@@ -1,8 +1,11 @@
 package io.github.truenine.composeserver.oss.minio
 
 import io.github.truenine.composeserver.enums.HttpMethod
-import io.github.truenine.composeserver.logger
+import io.github.truenine.composeserver.mapFailure
+import io.github.truenine.composeserver.onFailureDo
 import io.github.truenine.composeserver.oss.*
+import io.github.truenine.composeserver.safeCallAsync
+import io.github.truenine.composeserver.slf4j
 import io.minio.*
 import io.minio.errors.*
 import io.minio.http.Method
@@ -32,70 +35,58 @@ import kotlinx.coroutines.withContext
 class MinioObjectStorageService(private val minioClient: MinioClient, override val exposedBaseUrl: String) : ObjectStorageService {
 
   companion object {
-    @JvmStatic private val log = logger<MinioObjectStorageService>()
+    @JvmStatic private val log = slf4j<MinioObjectStorageService>()
   }
 
-  override suspend fun isHealthy(): Boolean =
-    withContext(Dispatchers.IO) {
-      try {
-        minioClient.listBuckets()
-        true
-      } catch (e: Exception) {
+  override suspend fun isHealthy(): Boolean {
+    val result = safeCallAsync { minioClient.listBuckets() }
+    return result.fold(
+      onSuccess = { true },
+      onFailure = { e ->
         log.error("MinIO health check failed", e)
         false
-      }
-    }
+      },
+    )
+  }
 
   @Suppress("UNCHECKED_CAST") override fun <T : Any> getNativeClient(): T? = minioClient as? T
 
-  override suspend fun createBucket(request: CreateBucketRequest): Result<BucketInfo> =
-    withContext(Dispatchers.IO) {
-      try {
+  override suspend fun createBucket(request: CreateBucketRequest): Result<BucketInfo> {
+    return safeCallAsync {
         val makeBucketArgs = MakeBucketArgs.builder().bucket(request.bucketName).apply { request.region?.let { region(it) } }.build()
 
         minioClient.makeBucket(makeBucketArgs)
 
-        Result.success(
-          BucketInfo(
-            name = request.bucketName,
-            creationDate = Instant.now(),
-            region = request.region,
-            storageClass = request.storageClass,
-            versioningEnabled = request.enableVersioning,
-            tags = request.tags,
-          )
+        BucketInfo(
+          name = request.bucketName,
+          creationDate = Instant.now(),
+          region = request.region,
+          storageClass = request.storageClass,
+          versioningEnabled = request.enableVersioning,
+          tags = request.tags,
         )
-      } catch (e: Exception) {
-        log.error("Failed to create bucket: ${request.bucketName}", e)
-        Result.failure(mapMinioException(e))
       }
-    }
+      .onFailureDo { e -> log.error("Failed to create bucket: ${request.bucketName}", e) }
+      .mapFailure { e -> mapMinioException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun bucketExists(bucketName: String): Result<Boolean> =
-    withContext(Dispatchers.IO) {
-      try {
+  override suspend fun bucketExists(bucketName: String): Result<Boolean> {
+    return safeCallAsync {
         val bucketExistsArgs = BucketExistsArgs.builder().bucket(bucketName).build()
-
-        val exists = minioClient.bucketExists(bucketExistsArgs)
-        Result.success(exists)
-      } catch (e: Exception) {
-        log.error("Failed to check bucket existence: $bucketName", e)
-        Result.failure(mapMinioException(e))
+        minioClient.bucketExists(bucketExistsArgs)
       }
-    }
+      .onFailureDo { e -> log.error("Failed to check bucket existence: $bucketName", e) }
+      .mapFailure { e -> mapMinioException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun deleteBucket(bucketName: String): Result<Unit> =
-    withContext(Dispatchers.IO) {
-      try {
+  override suspend fun deleteBucket(bucketName: String): Result<Unit> {
+    return safeCallAsync {
         val removeBucketArgs = RemoveBucketArgs.builder().bucket(bucketName).build()
-
         minioClient.removeBucket(removeBucketArgs)
-        Result.success(Unit)
-      } catch (e: Exception) {
-        log.error("Failed to delete bucket: $bucketName", e)
-        Result.failure(mapMinioException(e))
       }
-    }
+      .onFailureDo { e -> log.error("Failed to delete bucket: $bucketName", e) }
+      .mapFailure { e -> mapMinioException(e as? Exception ?: Exception(e)) }
+  }
 
   override suspend fun listBuckets(): Result<List<BucketInfo>> =
     withContext(Dispatchers.IO) {

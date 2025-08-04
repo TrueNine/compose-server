@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.oss.volcengine.properties
 
+import io.github.truenine.composeserver.oss.properties.BaseOssProperties
 import java.time.Duration
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -8,39 +9,50 @@ private const val PREFIX = "compose.oss.volcengine-tos"
 /**
  * Volcengine TOS configuration properties
  *
- * @param endpoint TOS service endpoint
- * @param region TOS service region
- * @param accessKey Access key for authentication
- * @param secretKey Secret key for authentication
- * @param sessionToken Session token for temporary credentials
- * @param exposedBaseUrl Public base URL for object access
- * @param enableSsl Enable SSL/TLS connection
- * @param connectionTimeout Connection timeout
- * @param socketTimeout Socket timeout
- * @param maxConnections Maximum number of connections
- * @param maxRetries Maximum number of retries
- * @param enableCrc Enable CRC check
- * @param enableLogging Enable request/response logging
- * @param customDomain Custom domain for object access
- * @param enableVirtualHostedStyle Enable virtual hosted style URLs
+ * Extends BaseOssProperties to inherit common OSS configuration fields and adds Volcengine TOS specific configuration.
+ *
  * @author TrueNine
  * @since 2025-08-04
  */
 @ConfigurationProperties(prefix = PREFIX)
-data class VolcengineTosProperties(
-  var endpoint: String? = null,
-  var region: String? = null,
-  var accessKey: String? = null,
-  var secretKey: String? = null,
-  var sessionToken: String? = null,
-  var exposedBaseUrl: String? = null,
-  var enableSsl: Boolean = true,
-  var connectionTimeout: Duration = Duration.ofSeconds(30),
-  var socketTimeout: Duration = Duration.ofMinutes(5),
-  var maxConnections: Int = 100,
-  var maxRetries: Int = 3,
-  var enableCrc: Boolean = true,
-  var enableLogging: Boolean = false,
-  var customDomain: String? = null,
-  var enableVirtualHostedStyle: Boolean = true,
-)
+class VolcengineTosProperties : BaseOssProperties() {
+  /** Session token for temporary credentials */
+  var sessionToken: String? = null
+
+  /** Socket timeout (maps to readTimeout in base class) */
+  var socketTimeout: Duration
+    get() = readTimeout
+    set(value) {
+      readTimeout = value
+    }
+
+  /** Maximum number of retries */
+  var maxRetries: Int = 3
+
+  /** Enable CRC check */
+  var enableCrc: Boolean = true
+
+  /** Custom domain for object access */
+  var customDomain: String? = null
+
+  /** Enable virtual hosted style URLs */
+  var enableVirtualHostedStyle: Boolean = true
+
+  override fun toString(): String {
+    return "VolcengineTosProperties(" +
+      "endpoint='$endpoint', " +
+      "region='$region', " +
+      "accessKey='${accessKey?.take(4)}***', " +
+      "sessionToken='${sessionToken?.take(4)}***', " +
+      "enableSsl=$enableSsl, " +
+      "connectionTimeout=$connectionTimeout, " +
+      "socketTimeout=$socketTimeout, " +
+      "maxConnections=$maxConnections, " +
+      "maxRetries=$maxRetries, " +
+      "enableCrc=$enableCrc, " +
+      "enableLogging=$enableLogging, " +
+      "customDomain='$customDomain', " +
+      "enableVirtualHostedStyle=$enableVirtualHostedStyle" +
+      ")"
+  }
+}

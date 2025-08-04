@@ -59,7 +59,7 @@ data class ObjectInfo(
 ) {
   /** Generate the public URL for this object */
   fun getPublicUrl(baseUrl: String): String {
-    return "$baseUrl/$bucketName/$objectName"
+    return io.github.truenine.composeserver.buildObjectUrl(baseUrl, bucketName, objectName)
   }
 }
 
