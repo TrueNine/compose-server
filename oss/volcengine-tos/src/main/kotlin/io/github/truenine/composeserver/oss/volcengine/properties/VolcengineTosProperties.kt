@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.oss.volcengine.properties
 
-import org.springframework.boot.context.properties.ConfigurationProperties
 import java.time.Duration
+import org.springframework.boot.context.properties.ConfigurationProperties
 
 private const val PREFIX = "compose.oss.volcengine-tos"
 
@@ -73,5 +73,5 @@ data class VolcengineTosProperties(
   val customDomain: String? = null,
 
   /** Enable virtual hosted style URLs */
-  val enableVirtualHostedStyle: Boolean = true
+  val enableVirtualHostedStyle: Boolean = true,
 )

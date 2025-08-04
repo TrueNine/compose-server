@@ -36,20 +36,21 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试属性赋值`() {
-      val properties = VolcengineTosProperties(
-        accessKey = "test-access-key",
-        secretKey = "test-secret-key",
-        sessionToken = "test-session-token",
-        endpoint = "https://tos-s3-cn-beijing.volces.com",
-        region = "cn-beijing",
-        enableSsl = false,
-        connectionTimeout = Duration.ofSeconds(60),
-        socketTimeout = Duration.ofSeconds(60),
-        maxConnections = 200,
-        maxRetries = 5,
-        enableCrc = false,
-        enableLogging = true
-      )
+      val properties =
+        VolcengineTosProperties(
+          accessKey = "test-access-key",
+          secretKey = "test-secret-key",
+          sessionToken = "test-session-token",
+          endpoint = "https://tos-s3-cn-beijing.volces.com",
+          region = "cn-beijing",
+          enableSsl = false,
+          connectionTimeout = Duration.ofSeconds(60),
+          socketTimeout = Duration.ofSeconds(60),
+          maxConnections = 200,
+          maxRetries = 5,
+          enableCrc = false,
+          enableLogging = true,
+        )
 
       assertEquals("test-access-key", properties.accessKey)
       assertEquals("test-secret-key", properties.secretKey)
@@ -71,12 +72,7 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试空字符串值`() {
-      val properties = VolcengineTosProperties(
-        accessKey = "",
-        secretKey = "",
-        endpoint = "",
-        region = ""
-      )
+      val properties = VolcengineTosProperties(accessKey = "", secretKey = "", endpoint = "", region = "")
 
       assertEquals("", properties.accessKey)
       assertEquals("", properties.secretKey)
@@ -86,12 +82,7 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试零值和极大值`() {
-      val properties = VolcengineTosProperties(
-        connectionTimeout = Duration.ZERO,
-        socketTimeout = Duration.ofHours(24),
-        maxConnections = 0,
-        maxRetries = 0
-      )
+      val properties = VolcengineTosProperties(connectionTimeout = Duration.ZERO, socketTimeout = Duration.ofHours(24), maxConnections = 0, maxRetries = 0)
 
       assertEquals(Duration.ZERO, properties.connectionTimeout)
       assertEquals(Duration.ofHours(24), properties.socketTimeout)
@@ -101,10 +92,7 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试极大值`() {
-      val properties = VolcengineTosProperties(
-        maxConnections = Int.MAX_VALUE,
-        maxRetries = Int.MAX_VALUE
-      )
+      val properties = VolcengineTosProperties(maxConnections = Int.MAX_VALUE, maxRetries = Int.MAX_VALUE)
 
       assertEquals(Int.MAX_VALUE, properties.maxConnections)
       assertEquals(Int.MAX_VALUE, properties.maxRetries)
@@ -116,10 +104,7 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试通过构造函数设置属性`() {
-      val properties = VolcengineTosProperties(
-        accessKey = "new-access-key",
-        enableSsl = false
-      )
+      val properties = VolcengineTosProperties(accessKey = "new-access-key", enableSsl = false)
 
       assertEquals("new-access-key", properties.accessKey)
       assertFalse(properties.enableSsl)
@@ -129,10 +114,7 @@ class VolcengineTosPropertiesTest {
     fun `测试copy方法修改属性`() {
       val originalProperties = VolcengineTosProperties()
 
-      val modifiedProperties = originalProperties.copy(
-        accessKey = "another-access-key",
-        enableSsl = false
-      )
+      val modifiedProperties = originalProperties.copy(accessKey = "another-access-key", enableSsl = false)
 
       assertEquals("another-access-key", modifiedProperties.accessKey)
       assertFalse(modifiedProperties.enableSsl)
@@ -159,12 +141,7 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试布尔属性设置`() {
-      val properties = VolcengineTosProperties(
-        enableSsl = false,
-        enableCrc = false,
-        enableLogging = true,
-        enableVirtualHostedStyle = false
-      )
+      val properties = VolcengineTosProperties(enableSsl = false, enableCrc = false, enableLogging = true, enableVirtualHostedStyle = false)
 
       assertFalse(properties.enableSsl)
       assertFalse(properties.enableCrc)
@@ -182,10 +159,7 @@ class VolcengineTosPropertiesTest {
       val durations = listOf(Duration.ofMillis(100), Duration.ofSeconds(1), Duration.ofMinutes(1), Duration.ofHours(1), Duration.ofDays(1))
 
       durations.forEach { duration ->
-        val properties = VolcengineTosProperties(
-          connectionTimeout = duration,
-          socketTimeout = duration
-        )
+        val properties = VolcengineTosProperties(connectionTimeout = duration, socketTimeout = duration)
 
         assertEquals(duration, properties.connectionTimeout)
         assertEquals(duration, properties.socketTimeout)
@@ -233,13 +207,7 @@ class VolcengineTosPropertiesTest {
         )
 
       testValues.forEach { value ->
-        val properties = VolcengineTosProperties(
-          accessKey = value,
-          secretKey = value,
-          sessionToken = value,
-          endpoint = value,
-          region = value
-        )
+        val properties = VolcengineTosProperties(accessKey = value, secretKey = value, sessionToken = value, endpoint = value, region = value)
 
         assertEquals(value, properties.accessKey)
         assertEquals(value, properties.secretKey)

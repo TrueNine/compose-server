@@ -73,7 +73,7 @@ data class OssProperties(
   val enableVersioning: Boolean = false,
 
   /** Enable request/response logging */
-  val enableLogging: Boolean = false
+  val enableLogging: Boolean = false,
 ) {
   /**
    * Validate the configuration properties
