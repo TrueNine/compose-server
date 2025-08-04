@@ -19,7 +19,9 @@ dependencies {
   api(libs.jakarta.validation.jakarta.validation.api)
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(libs.org.slf4j.slf4j.api)
+  api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
 
   testImplementation(projects.testtoolkit)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
+  testImplementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
 }
