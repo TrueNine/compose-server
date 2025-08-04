@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.depend.httpexchange
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.truenine.composeserver.IAnyTyping
+import io.github.truenine.composeserver.IAnyEnum
 import io.github.truenine.composeserver.consts.IHeaders
-import io.github.truenine.composeserver.depend.httpexchange.encoder.AnyTypingEncoder
-import io.github.truenine.composeserver.typing.MediaTypes
+import io.github.truenine.composeserver.depend.httpexchange.encoder.AnyEnumEncoder
+import io.github.truenine.composeserver.enums.MediaTypes
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import org.springframework.core.MethodParameter
@@ -45,7 +45,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
     )
   clientBuilder.codecs {
     it.defaultCodecs().enableLoggingRequestDetails(true)
-    it.writers.add(0, EncoderHttpMessageWriter(AnyTypingEncoder()))
+    it.writers.add(0, EncoderHttpMessageWriter(AnyEnumEncoder()))
 
     it.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, *jsonHandleMediaTypes))
     it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMediaTypes))
@@ -65,7 +65,7 @@ inline fun <reified T : Any> jsonWebClientRegister(
 class ArgsResolver : HttpServiceArgumentResolver {
 
   override fun resolve(argument: Any?, parameter: MethodParameter, requestValues: HttpRequestValues.Builder): Boolean {
-    if (argument != null && argument is IAnyTyping) {
+    if (argument != null && argument is IAnyEnum) {
       val name =
         parameter.getParameterAnnotation(RequestParam::class.java)?.name
           ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value

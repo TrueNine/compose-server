@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.depend.httpexchange.encoder
 
-import io.github.truenine.composeserver.IAnyTyping
+import io.github.truenine.composeserver.IAnyEnum
 import org.reactivestreams.Publisher
 import org.springframework.core.ResolvableType
 import org.springframework.core.codec.AbstractEncoder
@@ -9,9 +9,9 @@ import org.springframework.core.io.buffer.DataBufferFactory
 import org.springframework.util.MimeType
 import reactor.core.publisher.Flux
 
-class AnyTypingEncoder : AbstractEncoder<IAnyTyping>() {
+class AnyEnumEncoder : AbstractEncoder<IAnyEnum>() {
   override fun encode(
-    inputStream: Publisher<out IAnyTyping>,
+    inputStream: Publisher<out IAnyEnum>,
     bufferFactory: DataBufferFactory,
     elementType: ResolvableType,
     mimeType: MimeType?,
