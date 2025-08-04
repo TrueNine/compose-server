@@ -18,13 +18,16 @@ class TransactionTest : IDatabasePostgresqlContainer {
   @BeforeEach
   fun setupTable() {
     // 手动创建测试表
-    jdbcTemplate.execute("""
+    jdbcTemplate.execute(
+      """
       CREATE TABLE IF NOT EXISTS test_entity (
         id BIGSERIAL PRIMARY KEY,
         name VARCHAR DEFAULT NULL,
         value INTEGER DEFAULT NULL
       )
-    """.trimIndent())
+    """
+        .trimIndent()
+    )
   }
 
   @Test
