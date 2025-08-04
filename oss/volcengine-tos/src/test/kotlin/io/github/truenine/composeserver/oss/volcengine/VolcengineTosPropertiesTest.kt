@@ -36,21 +36,20 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试属性赋值`() {
-      val properties =
-        VolcengineTosProperties().apply {
-          accessKey = "test-access-key"
-          secretKey = "test-secret-key"
-          sessionToken = "test-session-token"
-          endpoint = "https://tos-s3-cn-beijing.volces.com"
-          region = "cn-beijing"
-          enableSsl = false
-          connectionTimeout = Duration.ofSeconds(60)
-          socketTimeout = Duration.ofSeconds(60)
-          maxConnections = 200
-          maxRetries = 5
-          enableCrc = false
-          enableLogging = true
-        }
+      val properties = VolcengineTosProperties(
+        accessKey = "test-access-key",
+        secretKey = "test-secret-key",
+        sessionToken = "test-session-token",
+        endpoint = "https://tos-s3-cn-beijing.volces.com",
+        region = "cn-beijing",
+        enableSsl = false,
+        connectionTimeout = Duration.ofSeconds(60),
+        socketTimeout = Duration.ofSeconds(60),
+        maxConnections = 200,
+        maxRetries = 5,
+        enableCrc = false,
+        enableLogging = true
+      )
 
       assertEquals("test-access-key", properties.accessKey)
       assertEquals("test-secret-key", properties.secretKey)
@@ -72,13 +71,12 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试空字符串值`() {
-      val properties =
-        VolcengineTosProperties().apply {
-          accessKey = ""
-          secretKey = ""
-          endpoint = ""
-          region = ""
-        }
+      val properties = VolcengineTosProperties(
+        accessKey = "",
+        secretKey = "",
+        endpoint = "",
+        region = ""
+      )
 
       assertEquals("", properties.accessKey)
       assertEquals("", properties.secretKey)
@@ -88,13 +86,12 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试零值和极大值`() {
-      val properties =
-        VolcengineTosProperties().apply {
-          connectionTimeout = Duration.ZERO
-          socketTimeout = Duration.ofHours(24)
-          maxConnections = 0
-          maxRetries = 0
-        }
+      val properties = VolcengineTosProperties(
+        connectionTimeout = Duration.ZERO,
+        socketTimeout = Duration.ofHours(24),
+        maxConnections = 0,
+        maxRetries = 0
+      )
 
       assertEquals(Duration.ZERO, properties.connectionTimeout)
       assertEquals(Duration.ofHours(24), properties.socketTimeout)
@@ -104,11 +101,10 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试极大值`() {
-      val properties =
-        VolcengineTosProperties().apply {
-          maxConnections = Int.MAX_VALUE
-          maxRetries = Int.MAX_VALUE
-        }
+      val properties = VolcengineTosProperties(
+        maxConnections = Int.MAX_VALUE,
+        maxRetries = Int.MAX_VALUE
+      )
 
       assertEquals(Int.MAX_VALUE, properties.maxConnections)
       assertEquals(Int.MAX_VALUE, properties.maxRetries)
@@ -119,28 +115,31 @@ class VolcengineTosPropertiesTest {
   inner class PropertyModification {
 
     @Test
-    fun `测试属性修改`() {
-      val properties = VolcengineTosProperties()
+    fun `测试通过构造函数设置属性`() {
+      val properties = VolcengineTosProperties(
+        accessKey = "new-access-key",
+        enableSsl = false
+      )
 
-      // 初始值
-      assertNull(properties.accessKey)
-      assertTrue(properties.enableSsl)
-
-      // 修改值
-      properties.accessKey = "new-access-key"
-      properties.enableSsl = false
-
-      // 验证修改
       assertEquals("new-access-key", properties.accessKey)
       assertFalse(properties.enableSsl)
+    }
 
-      // 再次修改
-      properties.accessKey = "another-access-key"
-      properties.enableSsl = true
+    @Test
+    fun `测试copy方法修改属性`() {
+      val originalProperties = VolcengineTosProperties()
 
-      // 验证再次修改
-      assertEquals("another-access-key", properties.accessKey)
-      assertTrue(properties.enableSsl)
+      val modifiedProperties = originalProperties.copy(
+        accessKey = "another-access-key",
+        enableSsl = false
+      )
+
+      assertEquals("another-access-key", modifiedProperties.accessKey)
+      assertFalse(modifiedProperties.enableSsl)
+
+      // 原对象不变
+      assertNull(originalProperties.accessKey)
+      assertTrue(originalProperties.enableSsl)
     }
   }
 
@@ -148,29 +147,29 @@ class VolcengineTosPropertiesTest {
   inner class BooleanProperties {
 
     @Test
-    fun `测试布尔属性切换`() {
+    fun `测试布尔属性默认值`() {
       val properties = VolcengineTosProperties()
 
-      // 测试 enableSsl
+      // 测试默认值
       assertTrue(properties.enableSsl)
-      properties.enableSsl = false
+      assertTrue(properties.enableCrc)
+      assertFalse(properties.enableLogging)
+      assertTrue(properties.enableVirtualHostedStyle)
+    }
+
+    @Test
+    fun `测试布尔属性设置`() {
+      val properties = VolcengineTosProperties(
+        enableSsl = false,
+        enableCrc = false,
+        enableLogging = true,
+        enableVirtualHostedStyle = false
+      )
+
       assertFalse(properties.enableSsl)
-      properties.enableSsl = true
-      assertTrue(properties.enableSsl)
-
-      // 测试 enableCrc
-      assertTrue(properties.enableCrc)
-      properties.enableCrc = false
       assertFalse(properties.enableCrc)
-      properties.enableCrc = true
-      assertTrue(properties.enableCrc)
-
-      // 测试 enableLogging
-      assertFalse(properties.enableLogging)
-      properties.enableLogging = true
       assertTrue(properties.enableLogging)
-      properties.enableLogging = false
-      assertFalse(properties.enableLogging)
+      assertFalse(properties.enableVirtualHostedStyle)
     }
   }
 
@@ -179,16 +178,16 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试持续时间属性`() {
-      val properties = VolcengineTosProperties()
-
       // 测试各种持续时间值
       val durations = listOf(Duration.ofMillis(100), Duration.ofSeconds(1), Duration.ofMinutes(1), Duration.ofHours(1), Duration.ofDays(1))
 
       durations.forEach { duration ->
-        properties.connectionTimeout = duration
-        assertEquals(duration, properties.connectionTimeout)
+        val properties = VolcengineTosProperties(
+          connectionTimeout = duration,
+          socketTimeout = duration
+        )
 
-        properties.socketTimeout = duration
+        assertEquals(duration, properties.connectionTimeout)
         assertEquals(duration, properties.socketTimeout)
       }
     }
@@ -199,19 +198,17 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试整数属性边界值`() {
-      val properties = VolcengineTosProperties()
-
       // 测试 maxConnections
       val connectionValues = listOf(0, 1, 50, 100, 500, 1000, Int.MAX_VALUE)
       connectionValues.forEach { value ->
-        properties.maxConnections = value
+        val properties = VolcengineTosProperties(maxConnections = value)
         assertEquals(value, properties.maxConnections)
       }
 
       // 测试 maxRetries
       val retryValues = listOf(0, 1, 3, 5, 10, 100, Int.MAX_VALUE)
       retryValues.forEach { value ->
-        properties.maxRetries = value
+        val properties = VolcengineTosProperties(maxRetries = value)
         assertEquals(value, properties.maxRetries)
       }
     }
@@ -222,8 +219,6 @@ class VolcengineTosPropertiesTest {
 
     @Test
     fun `测试字符串属性各种值`() {
-      val properties = VolcengineTosProperties()
-
       val testValues =
         listOf(
           null,
@@ -238,19 +233,18 @@ class VolcengineTosPropertiesTest {
         )
 
       testValues.forEach { value ->
-        properties.accessKey = value
+        val properties = VolcengineTosProperties(
+          accessKey = value,
+          secretKey = value,
+          sessionToken = value,
+          endpoint = value,
+          region = value
+        )
+
         assertEquals(value, properties.accessKey)
-
-        properties.secretKey = value
         assertEquals(value, properties.secretKey)
-
-        properties.sessionToken = value
         assertEquals(value, properties.sessionToken)
-
-        properties.endpoint = value
         assertEquals(value, properties.endpoint)
-
-        properties.region = value
         assertEquals(value, properties.region)
       }
     }
