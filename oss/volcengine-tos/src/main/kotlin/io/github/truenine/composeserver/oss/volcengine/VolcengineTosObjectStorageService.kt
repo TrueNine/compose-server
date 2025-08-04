@@ -729,12 +729,14 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
               val formatter = java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME
               java.time.ZonedDateTime.parse(date, formatter).toInstant()
             }
+
             else -> {
               // Try ISO 8601 as fallback
               Instant.parse(date)
             }
           }
         }
+
         else -> {
           // Try reflection for Date objects
           val timeMethod = date::class.java.getMethod("getTime")
