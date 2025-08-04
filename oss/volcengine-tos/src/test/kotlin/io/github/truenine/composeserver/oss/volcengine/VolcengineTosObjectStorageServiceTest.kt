@@ -429,12 +429,8 @@ class VolcengineTosObjectStorageServiceTest {
 
     @Test
     fun `测试生成分享链接`() = runTest {
-      val request = ShareLinkRequest(
-        bucketName = "test-bucket",
-        objectName = "test-object.txt",
-        expiration = java.time.Duration.ofHours(1),
-        method = HttpMethod.GET
-      )
+      val request =
+        ShareLinkRequest(bucketName = "test-bucket", objectName = "test-object.txt", expiration = java.time.Duration.ofHours(1), method = HttpMethod.GET)
 
       val result = service.generateShareLink(request)
 
@@ -448,14 +444,15 @@ class VolcengineTosObjectStorageServiceTest {
 
     @Test
     fun `测试上传并生成分享链接`() = runTest {
-      val request = UploadWithLinkRequest(
-        bucketName = "test-bucket",
-        objectName = "test-object.txt",
-        inputStream = "test content".byteInputStream(),
-        size = 12L,
-        contentType = "text/plain",
-        shareExpiration = java.time.Duration.ofHours(1)
-      )
+      val request =
+        UploadWithLinkRequest(
+          bucketName = "test-bucket",
+          objectName = "test-object.txt",
+          inputStream = "test content".byteInputStream(),
+          size = 12L,
+          contentType = "text/plain",
+          shareExpiration = java.time.Duration.ofHours(1),
+        )
 
       val result = service.uploadWithLink(request)
 

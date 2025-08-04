@@ -1,7 +1,6 @@
 package io.github.truenine.composeserver.oss.volcengine
 
 import com.volcengine.tos.TOSV2
-import com.volcengine.tos.TosServerException
 import com.volcengine.tos.comm.common.ACLType
 import com.volcengine.tos.comm.common.MetadataDirectiveType
 import com.volcengine.tos.model.bucket.*
@@ -282,7 +281,10 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       val output = tosClient.copyObject(input)
       log.info(
         "Copied object: {}/{} -> {}/{}",
-        request.sourceBucketName, request.sourceObjectName, request.destinationBucketName, request.destinationObjectName
+        request.sourceBucketName,
+        request.sourceObjectName,
+        request.destinationBucketName,
+        request.destinationObjectName,
       )
 
       Result.success(
@@ -380,7 +382,6 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       // 更新 continuation token 以便下次分页
       // TODO: 检查 TOS SDK 是否支持 continuation token
       continuationToken = null // output.nextContinuationToken
-
     } while (continuationToken != null)
   }
 
@@ -413,9 +414,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Initiating multipart upload: {}/{}", request.bucketName, request.objectName)
 
-      val input = com.volcengine.tos.model.`object`.CreateMultipartUploadInput()
-        .setBucket(request.bucketName)
-        .setKey(request.objectName)
+      val input = com.volcengine.tos.model.`object`.CreateMultipartUploadInput().setBucket(request.bucketName).setKey(request.objectName)
 
       // TODO: 添加内容类型和元数据设置支持
 
@@ -424,22 +423,22 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
       log.info("Initiated multipart upload: {}/{}, uploadId: {}", request.bucketName, request.objectName, uploadId)
 
-      Result.success(
-        MultipartUpload(uploadId = uploadId, bucketName = request.bucketName, objectName = request.objectName)
-      )
+      Result.success(MultipartUpload(uploadId = uploadId, bucketName = request.bucketName, objectName = request.objectName))
     }
 
   override suspend fun uploadPart(request: UploadPartRequest): Result<PartInfo> =
     withContext(Dispatchers.IO) {
       log.debug("Uploading part {} for {}/{}, uploadId: {}", request.partNumber, request.bucketName, request.objectName, request.uploadId)
 
-      val input = com.volcengine.tos.model.`object`.UploadPartV2Input()
-        .setBucket(request.bucketName)
-        .setKey(request.objectName)
-        .setContentLength(request.size)
-        .setPartNumber(request.partNumber)
-        .setContent(request.inputStream)
-        .setUploadID(request.uploadId)
+      val input =
+        com.volcengine.tos.model.`object`
+          .UploadPartV2Input()
+          .setBucket(request.bucketName)
+          .setKey(request.objectName)
+          .setContentLength(request.size)
+          .setPartNumber(request.partNumber)
+          .setContent(request.inputStream)
+          .setUploadID(request.uploadId)
 
       val output = tosClient.uploadPart(input)
       val etag = output.etag ?: throw IllegalStateException("TOS SDK returned null etag")
@@ -454,16 +453,14 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       log.debug("Completing multipart upload: {}/{}, uploadId: {}", request.bucketName, request.objectName, request.uploadId)
 
       // 创建 UploadedPartV2 列表，基于官方文档的正确实现
-      val uploadedParts = request.parts.map { part ->
-        com.volcengine.tos.model.`object`.UploadedPartV2()
-          .setPartNumber(part.partNumber)
-          .setEtag(part.etag)
-      }
+      val uploadedParts = request.parts.map { part -> com.volcengine.tos.model.`object`.UploadedPartV2().setPartNumber(part.partNumber).setEtag(part.etag) }
 
-      val input = com.volcengine.tos.model.`object`.CompleteMultipartUploadV2Input()
-        .setBucket(request.bucketName)
-        .setKey(request.objectName)
-        .setUploadID(request.uploadId)
+      val input =
+        com.volcengine.tos.model.`object`
+          .CompleteMultipartUploadV2Input()
+          .setBucket(request.bucketName)
+          .setKey(request.objectName)
+          .setUploadID(request.uploadId)
       input.setUploadedParts(uploadedParts)
 
       val output = tosClient.completeMultipartUpload(input)
@@ -490,10 +487,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Aborting multipart upload: {}/{}, uploadId: {}", bucketName, objectName, uploadId)
 
-      val input = com.volcengine.tos.model.`object`.AbortMultipartUploadInput()
-        .setBucket(bucketName)
-        .setKey(objectName)
-        .setUploadID(uploadId)
+      val input = com.volcengine.tos.model.`object`.AbortMultipartUploadInput().setBucket(bucketName).setKey(objectName).setUploadID(uploadId)
 
       tosClient.abortMultipartUpload(input)
 
@@ -506,20 +500,13 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Listing parts for multipart upload: {}/{}, uploadId: {}", bucketName, objectName, uploadId)
 
-      val input = com.volcengine.tos.model.`object`.ListPartsInput()
-        .setBucket(bucketName)
-        .setKey(objectName)
-        .setUploadID(uploadId)
+      val input = com.volcengine.tos.model.`object`.ListPartsInput().setBucket(bucketName).setKey(objectName).setUploadID(uploadId)
 
       val output = tosClient.listParts(input)
-      val parts = output.uploadedParts?.map { part ->
-        PartInfo(
-          partNumber = part.partNumber,
-          etag = part.etag ?: "unknown-etag",
-          size = part.size,
-          lastModified = part.lastModified?.toInstant()
-        )
-      } ?: emptyList()
+      val parts =
+        output.uploadedParts?.map { part ->
+          PartInfo(partNumber = part.partNumber, etag = part.etag ?: "unknown-etag", size = part.size, lastModified = part.lastModified?.toInstant())
+        } ?: emptyList()
 
       log.info("Listed {} parts for multipart upload: {}/{}", parts.size, bucketName, objectName)
 
@@ -563,16 +550,17 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       log.debug("Uploading object with share link: {}/{}", request.bucketName, request.objectName)
 
       // 首先上传对象
-      val putObjectRequest = PutObjectRequest(
-        bucketName = request.bucketName,
-        objectName = request.objectName,
-        inputStream = request.inputStream,
-        size = request.size,
-        contentType = request.contentType,
-        metadata = request.metadata,
-        storageClass = request.storageClass,
-        tags = request.tags
-      )
+      val putObjectRequest =
+        PutObjectRequest(
+          bucketName = request.bucketName,
+          objectName = request.objectName,
+          inputStream = request.inputStream,
+          size = request.size,
+          contentType = request.contentType,
+          metadata = request.metadata,
+          storageClass = request.storageClass,
+          tags = request.tags,
+        )
 
       val uploadResult = putObject(putObjectRequest)
       if (uploadResult.isFailure) {
@@ -582,16 +570,17 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       val objectInfo = uploadResult.getOrThrow()
 
       // 生成分享链接
-      val shareLinkRequest = ShareLinkRequest(
-        bucketName = request.bucketName,
-        objectName = request.objectName,
-        expiration = request.shareExpiration,
-        method = request.shareMethod,
-        allowedIps = request.allowedIps,
-        maxDownloads = request.maxDownloads,
-        password = request.sharePassword,
-        metadata = request.metadata
-      )
+      val shareLinkRequest =
+        ShareLinkRequest(
+          bucketName = request.bucketName,
+          objectName = request.objectName,
+          expiration = request.shareExpiration,
+          method = request.shareMethod,
+          allowedIps = request.allowedIps,
+          maxDownloads = request.maxDownloads,
+          password = request.sharePassword,
+          metadata = request.metadata,
+        )
 
       val shareLinkResult = generateShareLink(shareLinkRequest)
       if (shareLinkResult.isFailure) {
@@ -601,11 +590,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       val shareLink = shareLinkResult.getOrThrow()
       val publicUrl = objectInfo.getPublicUrl(exposedBaseUrl)
 
-      val response = UploadWithLinkResponse(
-        objectInfo = objectInfo,
-        shareLink = shareLink,
-        publicUrl = publicUrl
-      )
+      val response = UploadWithLinkResponse(objectInfo = objectInfo, shareLink = shareLink, publicUrl = publicUrl)
 
       log.info("Uploaded object with share link: {}/{}", request.bucketName, request.objectName)
       Result.success(response)
@@ -684,18 +669,19 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       }
 
       // 创建 ShareLinkInfo（注意：某些信息可能无法从 URL 中准确获取）
-      val shareInfo = ShareLinkInfo(
-        shareUrl = shareUrl,
-        bucketName = bucketName,
-        objectName = objectName,
-        expiration = Instant.now().plusSeconds(3600), // 默认1小时，实际应该从 URL 参数中解析
-        method = HttpMethod.GET, // 默认 GET，实际应该从 URL 或上下文中获取
-        allowedIps = emptyList(),
-        maxDownloads = null,
-        remainingDownloads = null,
-        hasPassword = password != null,
-        metadata = emptyMap()
-      )
+      val shareInfo =
+        ShareLinkInfo(
+          shareUrl = shareUrl,
+          bucketName = bucketName,
+          objectName = objectName,
+          expiration = Instant.now().plusSeconds(3600), // 默认1小时，实际应该从 URL 参数中解析
+          method = HttpMethod.GET, // 默认 GET，实际应该从 URL 或上下文中获取
+          allowedIps = emptyList(),
+          maxDownloads = null,
+          remainingDownloads = null,
+          hasPassword = password != null,
+          metadata = emptyMap(),
+        )
 
       log.info("Share link validated: {}/{}", bucketName, objectName)
       Result.success(shareInfo)
@@ -726,10 +712,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     return tosClient as? T
   }
 
-  /**
-   * Convert TOS SDK date value to Instant
-   * Handles both Date objects and RFC 2822 date strings
-   */
+  /** Convert TOS SDK date value to Instant Handles both Date objects and RFC 2822 date strings */
   private fun convertDateToInstant(dateValue: Any?): Instant {
     return dateValue?.let { date ->
       log.debug("Date value type: {}, value: {}", date::class.java.name, date)
@@ -761,6 +744,4 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       }
     } ?: Instant.now()
   }
-
-
 }
