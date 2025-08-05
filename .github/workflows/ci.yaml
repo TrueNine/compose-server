@@ -33,9 +33,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ~/.gradle/jdks
             ~/.gradle/gradle.properties
             ~/.gradle/buildOutputCleanup
-            ~/.konan
             ~/.m2/repository
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml', '**/gradle.properties') }}
           restore-keys: |
