@@ -1,16 +1,13 @@
 -- Tree structure procedures for MySQL
-delimiter
-$$
+delimiter $$
 
 drop procedure if exists add_tree_struct$$
 create procedure add_tree_struct(
     in tab_name varchar(128)
 )
 begin
-    declare
-        col_count  int default 0;
-        declare
-        sql_stmt   text;
+    declare col_count int default 0;
+    declare sql_stmt text;
 
         -- add rpi column if not exists
         select     count(*) into col_count

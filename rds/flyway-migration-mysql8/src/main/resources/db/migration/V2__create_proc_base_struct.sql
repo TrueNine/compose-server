@@ -1,20 +1,15 @@
 -- Base structure procedures for MySQL
-delimiter
-$$
+delimiter $$
 
 drop procedure if exists add_base_struct$$
 create procedure add_base_struct(
     in tab_name varchar(128)
 )
 begin
-    declare
-        col_count int default 0;
-        declare
-        sql_stmt  text;
-        declare
-        has_data  boolean default false;
-        declare
-        continue  handler for sqlexception
+    declare col_count int default 0;
+    declare sql_stmt text;
+    declare has_data boolean default false;
+    declare continue handler for sqlexception
     begin
         rollback;
         resignal;
@@ -159,14 +154,10 @@ begin
         in tab_name varchar(128)
     )
     begin
-        declare
-            col_count            int default 0;
-            declare
-            sql_stmt             text;
-            declare
-            pk_constraint_exists int default 0;
-            declare
-            continue             handler for sqlexception
+        declare col_count int default 0;
+        declare sql_stmt text;
+        declare pk_constraint_exists int default 0;
+        declare continue handler for sqlexception
         begin
             rollback;
             resignal;

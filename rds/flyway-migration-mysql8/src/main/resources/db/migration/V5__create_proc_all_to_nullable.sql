@@ -1,33 +1,26 @@
 -- all to nullable procedure for mysql
-delimiter
-$$
+delimiter $$
 
 drop procedure if exists all_to_nullable$$
 create procedure all_to_nullable(
     in tab_name varchar(128)
 )
 begin
-    declare
-        done int default false;
-    declare
-        col_name varchar(255);
-    declare
-        col_type varchar(255);
-    declare
-        sql_stmt text;
-    declare
-        cur cursor for
-            select column_name, column_type
-            from information_schema.columns
-            where table_schema = database()
-              and table_name = tab_name
-              and column_name not in (select column_name
-                                      from information_schema.key_column_usage
-                                      where table_schema = database()
-                                        and table_name = tab_name
-                                        and constraint_name = 'PRIMARY');
-    declare
-        continue handler for not found set done = true;
+    declare done int default false;
+    declare col_name varchar(255);
+    declare col_type varchar(255);
+    declare sql_stmt text;
+    declare cur cursor for
+        select column_name, column_type
+        from information_schema.columns
+        where table_schema = database()
+          and table_name = tab_name
+          and column_name not in (select column_name
+                                  from information_schema.key_column_usage
+                                  where table_schema = database()
+                                    and table_name = tab_name
+                                    and constraint_name = 'PRIMARY');
+    declare continue handler for not found set done = true;
 
     open cur;
 

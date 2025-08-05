@@ -1,6 +1,5 @@
 -- Create index procedure for MySQL
-delimiter
-$$
+delimiter $$
 
 drop procedure if exists ct_idx$$
 create procedure ct_idx(
@@ -8,12 +7,9 @@ create procedure ct_idx(
     in col_name varchar(255)
 )
 begin
-    declare
-    col_count int default 0;
-    declare
-    idx_count int default 0;
-    declare
-    sql_stmt text;
+    declare col_count int default 0;
+    declare idx_count int default 0;
+    declare sql_stmt text;
 
     -- check if column exists
     select count(*) into col_count
