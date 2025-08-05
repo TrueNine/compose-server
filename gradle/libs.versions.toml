@@ -6,7 +6,7 @@ com-alibaba-cloud = "2023.0.3.3"
 com-baomidou-mybatis-plus = "3.5.12"
 com-diffplug-spotless = "7.2.1"
 com-fasterxml-jackson = "2.19.2"
-com-flywaydb-flyway = "11.10.4"
+com-flywaydb-flyway = "11.10.5"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
 com-google-devtools-ksp = "2.2.0-2.0.2"
 com-mapstruct = "1.6.3"
@@ -27,7 +27,7 @@ org-apache-commons-exec = "1.5.0"
 org-apache-logging-log4j = "2.25.1"
 org-assertj = "4.0.0-M1"
 org-awaitility = "4.3.0"
-org-babyfish-jimmer = "0.9.103"
+org-babyfish-jimmer = "0.9.104"
 org-gradle = "9.0.0"
 org-hibernate-orm = "6.6.15.Final"
 org-jetbrains-dokka = "2.0.0"
@@ -71,6 +71,7 @@ com-baomidou-mybatis-plus-boot-starter-test = { module = "com.baomidou:mybatis-p
 com-baomidou-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-spring-boot3-starter = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-diffplug-spotless-com-diffplug-spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "com-diffplug-spotless" }
+cn-idev-excel-fastexcel = "cn.idev.excel:fastexcel:1.2.0"
 com-fasterxml-jackson-core-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "com-fasterxml-jackson" }
@@ -116,13 +117,13 @@ com-vanniktech-maven-publish-com-vanniktech-maven-publish-gradle-plugin = { modu
 com-volcengine-ve-tos-java-sdk = "com.volcengine:ve-tos-java-sdk:2.9.4"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
-dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.1.0"
-dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.1.0"
+dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.2.0"
+dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.2.0"
 dev-langchain4j-langchain4j-community-bom = { module = "dev.langchain4j:langchain4j-community-bom", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-mcp = { module = "dev.langchain4j:langchain4j-mcp", version.ref = "dev-langchain4j-community" }
-dev-langchain4j-langchain4j-ollama = "dev.langchain4j:langchain4j-ollama:1.1.0-rc1"
+dev-langchain4j-langchain4j-ollama = "dev.langchain4j:langchain4j-ollama:1.2.0"
 dev-langchain4j-langchain4j-ollama-spring-boot-starter = { module = "dev.langchain4j:langchain4j-ollama-spring-boot-starter", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-pgvector = { module = "dev.langchain4j:langchain4j-pgvector", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-reactor = { module = "dev.langchain4j:langchain4j-reactor", version.ref = "dev-langchain4j-community" }
@@ -170,7 +171,7 @@ io-netty-netty-handler = { module = "io.netty:netty-handler", version.ref = "io-
 io-projectreactor-kotlin-reactor-kotlin-extensions = "io.projectreactor.kotlin:reactor-kotlin-extensions:1.3.0-RC2"
 io-projectreactor-reactor-test = "io.projectreactor:reactor-test:3.8.0-M5"
 io-spring-gradle-dependency-management-plugin = "io.spring.gradle:dependency-management-plugin:1.1.7"
-io-swagger-core-v3-swagger-annotations-jakarta = "io.swagger.core.v3:swagger-annotations-jakarta:2.2.34"
+io-swagger-core-v3-swagger-annotations-jakarta = "io.swagger.core.v3:swagger-annotations-jakarta:2.2.35"
 jakarta-annotation-jakarta-annotation-api = "jakarta.annotation:jakarta.annotation-api:3.0.0"
 jakarta-inject-jakarta-inject-api = "jakarta.inject:jakarta.inject-api:2.0.1"
 jakarta-persistence-jakarta-persistence-api = "jakarta.persistence:jakarta.persistence-api:3.2.0"
@@ -185,7 +186,7 @@ net-sf-supercsv-super-csv = "net.sf.supercsv:super-csv:2.4.0"
 nl-littlerobots-version-catalog-update-nl-littlerobots-version-catalog-update-gradle-plugin = { module = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 ognl-ognl = "ognl:ognl:3.4.7"
 org-apache-commons-commons-compress = "org.apache.commons:commons-compress:1.28.0"
-org-apache-commons-commons-csv = "org.apache.commons:commons-csv:1.14.0"
+org-apache-commons-commons-csv = "org.apache.commons:commons-csv:1.14.1"
 org-apache-commons-commons-exec = { module = "org.apache.commons:commons-exec", version.ref = "org-apache-commons-exec" }
 org-apache-commons-commons-pool2 = "org.apache.commons:commons-pool2:2.12.1"
 org-apache-logging-log4j-log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "org-apache-logging-log4j" }
@@ -210,7 +211,7 @@ org-flywaydb-flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref 
 org-freemarker-freemarker = "org.freemarker:freemarker:2.3.34"
 org-hibernate-orm-hibernate-core = { module = "org.hibernate:hibernate-core", version.ref = "org-hibernate-orm" }
 org-hsqldb-hsqldb = "org.hsqldb:hsqldb:2.7.4"
-org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.13.0"
+org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.14.0"
 org-jetbrains-annotations = "org.jetbrains:annotations:26.0.2"
 org-jetbrains-dokka-dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "org-jetbrains-dokka" }
 org-jetbrains-kotlin-jvm-org-jetbrains-kotlin-jvm-gradle-plugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
