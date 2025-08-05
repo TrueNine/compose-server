@@ -34,22 +34,22 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 // 配置 Dokka V2 文档生成
 dokka {
   moduleName.set(project.name)
-  
+
   dokkaSourceSets.configureEach {
     // 跳过空包
     skipEmptyPackages.set(true)
-    
+
     // 配置外部文档链接
     externalDocumentationLinks.register("java") {
       url("https://docs.oracle.com/en/java/javase/21/docs/api/")
       packageListUrl("https://docs.oracle.com/en/java/javase/21/docs/api/element-list")
     }
-    
+
     externalDocumentationLinks.register("kotlin") {
       url("https://kotlinlang.org/api/latest/jvm/stdlib/")
       packageListUrl("https://kotlinlang.org/api/latest/jvm/stdlib/package-list")
     }
-    
+
     externalDocumentationLinks.register("spring") {
       url("https://docs.spring.io/spring-framework/docs/current/javadoc-api/")
       packageListUrl("https://docs.spring.io/spring-framework/docs/current/javadoc-api/package-list")

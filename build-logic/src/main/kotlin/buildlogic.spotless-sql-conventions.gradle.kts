@@ -1,5 +1,4 @@
 import com.diffplug.spotless.LineEnding
-import gradle.kotlin.dsl.accessors._440fea8aa94a501f8f7bd4c32ad12a39.spotless
 
 plugins {
   id("com.diffplug.spotless")

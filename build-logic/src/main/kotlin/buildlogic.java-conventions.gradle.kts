@@ -52,7 +52,7 @@ tasks.withType<Jar> {
     // 确保主 jar 任务排除源码文件（只包含编译后的 .class 文件）
     exclude("**/*.kt")
   }
-  
+
   // 所有 jar 任务都包含 LICENSE 文件
   from(rootProject.file("LICENSE")) {
     into("META-INF")
@@ -90,7 +90,7 @@ afterEvaluate {
           if (depProject != null) {
             val sourcesJarTask = depProject.tasks.findByName("sourcesJar")
             val javadocJarTask = depProject.tasks.findByName("javadocJar")
-            
+
             if (sourcesJarTask != null) {
               dependsOn(":${dep.name}:sourcesJar")
             }
