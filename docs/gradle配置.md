@@ -30,6 +30,8 @@ kapt.use.k2=true
 # 本地 .env 配置文件
 dotenv=#
 
+org.jetbrains.dokka.experimental.gradle.pluginMode=V2Enabled
+
 kotlin.code.style=official
 kotlin.incremental=true
 kotlin.daemon.jvmargs=-Xmx1g
