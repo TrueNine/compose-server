@@ -58,12 +58,12 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
   @Resource private lateinit var redisTemplate: StringRedisTemplate
 
-  private lateinit var minioClient: MinioClient
+  private val minioClient: MinioClient by lazy {
+    MinioClient.builder().endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build()
+  }
 
   @BeforeEach
   fun setup() {
-    // 初始化 MinIO 客户端
-    minioClient = MinioClient.builder().endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build()
 
     // 初始化 PostgreSQL 测试表并清理数据
     jdbcTemplate.execute(
@@ -80,22 +80,48 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     jdbcTemplate.execute("DELETE FROM test_table")
 
     // 清理 MinIO 测试桶
-    try {
-      val buckets = minioClient.listBuckets()
-      buckets.forEach { bucket ->
-        if (bucket.name().startsWith("test-") || bucket.name().startsWith("combined-")) {
-          try {
-            minioClient.removeBucket(io.minio.RemoveBucketArgs.builder().bucket(bucket.name()).build())
-          } catch (e: Exception) {
-            // 忽略删除失败，可能桶不为空或不存在
-            log.debug("Failed to remove bucket ${bucket.name()}: ${e.message}")
+    cleanupMinioBuckets()
+  }
+
+  /**
+   * Clean up MinIO test buckets
+   *
+   * This method removes test buckets that start with "test-" or "combined-" prefixes. It first removes all objects in the bucket, then removes the bucket
+   * itself. This is a best-effort cleanup - if buckets cannot be removed, the test continues.
+   */
+  private fun cleanupMinioBuckets() {
+    runCatching {
+        val buckets = minioClient.listBuckets()
+        buckets
+          .filter { bucket -> bucket.name().startsWith("test-") || bucket.name().startsWith("combined-") }
+          .forEach { bucket -> cleanupSingleBucket(bucket.name()) }
+      }
+      .onFailure { exception -> log.warn("Failed to list or clean up MinIO buckets: ${exception.message}") }
+  }
+
+  /** Clean up a single MinIO bucket by removing all objects first, then the bucket */
+  private fun cleanupSingleBucket(bucketName: String) {
+    runCatching {
+        if (minioClient.bucketExists(io.minio.BucketExistsArgs.builder().bucket(bucketName).build())) {
+          log.debug("Cleaning up bucket: $bucketName")
+
+          // Remove all objects in the bucket
+          val objects = minioClient.listObjects(io.minio.ListObjectsArgs.builder().bucket(bucketName).build())
+          objects.forEach { objectResult ->
+            runCatching {
+                val objectName = objectResult.get().objectName()
+                log.debug("Removing object: $objectName from bucket: $bucketName")
+                minioClient.removeObject(io.minio.RemoveObjectArgs.builder().bucket(bucketName).`object`(objectName).build())
+              }
+              .onFailure { exception -> log.warn("Failed to remove object from bucket $bucketName: ${exception.message}") }
           }
+
+          // Remove the bucket
+          minioClient.removeBucket(io.minio.RemoveBucketArgs.builder().bucket(bucketName).build())
+          log.debug("Successfully removed bucket: $bucketName")
         }
       }
-    } catch (e: Exception) {
-      // 忽略清理失败
-      log.debug("Failed to clean up MinIO buckets: ${e.message}")
-    }
+      .onFailure { exception -> log.warn("Failed to clean up bucket $bucketName: ${exception.message}") }
   }
 
   @Test
