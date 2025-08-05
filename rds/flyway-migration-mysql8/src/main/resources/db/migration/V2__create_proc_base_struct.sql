@@ -49,10 +49,8 @@ begin
         set
             sql_stmt = concat
             ('select count(*) into @row_count from ', tab_name);
-        set
-            @
-        sql = sql_stmt;
-        prepare stmt from @ sql;
+        set @sql = sql_stmt;
+        prepare stmt from @sql;
         execute stmt;
         deallocate prepare stmt;
 
@@ -63,10 +61,8 @@ begin
             has_data then
             -- Table has existing data: use AUTO_INCREMENT temporarily to fill IDs
             set sql_stmt = concat('alter table ', tab_name, ' add column id bigint not null auto_increment primary key first');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
 
@@ -74,19 +70,15 @@ begin
             set
                 sql_stmt = concat
                 ('alter table ', tab_name, ' modify column id bigint not null');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
         else
             -- Table is empty: directly add non-auto-increment id field
             set sql_stmt = concat('alter table ', tab_name, ' add column id bigint not null primary key first');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
         end if;
@@ -103,10 +95,8 @@ begin
     if
         col_count = 0 then
         set sql_stmt = concat('alter table ', tab_name, ' add column rlv int default 0 not null');
-        set
-            @
-        sql = sql_stmt;
-        prepare stmt from @ sql;
+        set @sql = sql_stmt;
+        prepare stmt from @sql;
         execute stmt;
         deallocate prepare stmt;
     end if;
@@ -122,10 +112,8 @@ begin
     if
         col_count = 0 then
         set sql_stmt = concat('alter table ', tab_name, ' add column crd timestamp default current_timestamp');
-        set
-            @
-        sql = sql_stmt;
-        prepare stmt from @ sql;
+        set @sql = sql_stmt;
+        prepare stmt from @sql;
         execute stmt;
         deallocate prepare stmt;
     end if;
@@ -141,10 +129,8 @@ begin
     if
         col_count = 0 then
         set sql_stmt = concat('alter table ', tab_name, ' add column mrd timestamp default null');
-        set
-            @
-        sql = sql_stmt;
-        prepare stmt from @ sql;
+        set @sql = sql_stmt;
+        prepare stmt from @sql;
         execute stmt;
         deallocate prepare stmt;
     end if;
@@ -160,10 +146,8 @@ begin
     if
         col_count = 0 then
         set sql_stmt = concat('alter table ', tab_name, ' add column ldf timestamp null default null');
-        set
-            @
-        sql = sql_stmt;
-        prepare stmt from @ sql;
+        set @sql = sql_stmt;
+        prepare stmt from @sql;
         execute stmt;
         deallocate prepare stmt;
     end if;
@@ -215,10 +199,8 @@ begin
         if
             col_count > 0 then
             set sql_stmt = concat('alter table ', tab_name, ' drop column ldf');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
         end if;
@@ -234,10 +216,8 @@ begin
         if
             col_count > 0 then
             set sql_stmt = concat('alter table ', tab_name, ' drop column mrd');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
         end if;
@@ -253,10 +233,8 @@ begin
         if
             col_count > 0 then
             set sql_stmt = concat('alter table ', tab_name, ' drop column crd');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
         end if;
@@ -272,10 +250,8 @@ begin
         if
             col_count > 0 then
             set sql_stmt = concat('alter table ', tab_name, ' drop column rlv');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
         end if;
@@ -300,24 +276,18 @@ begin
             col_count > 0 then
             if pk_constraint_exists > 0 then
                 set sql_stmt = concat('alter table ', tab_name, ' drop primary key');
-                set
-                    @
-                sql = sql_stmt;
-                prepare stmt from @ sql;
+                set @sql = sql_stmt;
+                prepare stmt from @sql;
                 execute stmt;
                 deallocate prepare stmt;
             end if;
 
-            set
-                sql_stmt = concat
-                ('alter table ', tab_name, ' drop column id');
-            set
-                @
-            sql = sql_stmt;
-            prepare stmt from @ sql;
+            set sql_stmt = concat('alter table ', tab_name, ' drop column id');
+            set @sql = sql_stmt;
+            prepare stmt from @sql;
             execute stmt;
             deallocate prepare stmt;
         end if;
         commit;
         end$$
-            delimiter;
+delimiter ;
