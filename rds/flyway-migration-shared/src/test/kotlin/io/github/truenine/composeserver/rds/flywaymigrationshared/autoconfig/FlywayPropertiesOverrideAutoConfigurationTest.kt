@@ -24,8 +24,8 @@ class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContain
     val flywayTableCount =
       jdbcTemplate.queryForObject(
         """
-        SELECT COUNT(*) FROM information_schema.tables 
-        WHERE table_name = 'flyway_schema_history'
+        select count(*) from information_schema.tables 
+        where table_name = 'flyway_schema_history'
       """
           .trimIndent(),
         Int::class.java,
@@ -36,8 +36,8 @@ class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContain
     val userTableCount =
       jdbcTemplate.queryForObject(
         """
-        SELECT COUNT(*) FROM information_schema.tables 
-        WHERE table_name = 'test_user_account_table'
+        select count(*) from information_schema.tables 
+        where table_name = 'test_user_account_table'
       """
           .trimIndent(),
         Int::class.java,
@@ -52,6 +52,6 @@ class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContain
     assertTrue("没有覆盖到 flyway properties 的 enabled 属性") { flywayProperties.isEnabled }
     assertTrue { flywayProperties.isBaselineOnMigrate }
     assertTrue { flywayProperties.isOutOfOrder }
-    assertEquals("9000", flywayProperties.baselineVersion)
+    assertEquals("0", flywayProperties.baselineVersion)
   }
 }

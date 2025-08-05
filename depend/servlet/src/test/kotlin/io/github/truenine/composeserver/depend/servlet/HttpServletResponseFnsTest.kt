@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet
 
 import io.github.truenine.composeserver.consts.IHeaders
-import io.github.truenine.composeserver.typing.MediaTypes
+import io.github.truenine.composeserver.enums.MediaTypes
 import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.test.Test

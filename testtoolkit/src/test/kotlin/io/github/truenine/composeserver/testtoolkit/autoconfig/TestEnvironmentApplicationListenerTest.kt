@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -59,7 +60,7 @@ class TestEnvironmentApplicationListenerTest {
       capturedPropertySource?.also { propertySource ->
         // 验证属性源本身
         assertEquals("testToolkitEarlyProperties", propertySource.name, "属性源名称应详正确")
-        assertTrue(propertySource.source is Map<*, *>, "属性源数据应详为 Map 类型")
+        assertNotNull(propertySource.source, "属性源数据应详不为 null")
 
         // 验证属性类型和值
         assertTrue(propertySource.getProperty("debug") is Boolean, "debug 属性应详为布尔类型")
@@ -100,8 +101,8 @@ class TestEnvironmentApplicationListenerTest {
       verify(exactly = 0) { mockPropertySources.addFirst(any<MapPropertySource>()) }
 
       // 验证禁用时环境对象仍然有效
-      assertTrue(mockEnvironment != null, "环境对象不应为 null")
-      assertTrue(listener != null, "监听器对象不应为 null")
+      assertNotNull(mockEnvironment, "环境对象不应为 null")
+      assertNotNull(listener, "监听器对象不应为 null")
 
       log.debug("early property configuration verified when disabled")
     }

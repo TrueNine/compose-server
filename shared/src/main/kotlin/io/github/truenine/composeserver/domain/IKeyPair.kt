@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.github.truenine.composeserver.typing.EncryptAlgorithm
+import io.github.truenine.composeserver.enums.EncryptAlgorithm
 import java.io.Serializable
 import java.security.PrivateKey
 import java.security.PublicKey

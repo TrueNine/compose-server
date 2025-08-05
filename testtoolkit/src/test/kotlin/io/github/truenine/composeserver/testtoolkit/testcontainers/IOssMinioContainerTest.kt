@@ -94,10 +94,12 @@ class IOssMinioContainerTest : IOssMinioContainer {
           assertEquals("minioadmin", envMap[envVar], "访问密钥配置不正确")
           assertTrue(envMap[envVar]!!.isNotEmpty(), "用户名不应为空")
         }
+
         "MINIO_ROOT_PASSWORD" -> {
           assertEquals("minioadmin", envMap[envVar], "密钥配置不正确")
           assertTrue(envMap[envVar]!!.length >= 8, "密码长度应详大于等于8位")
         }
+
         "MINIO_CONSOLE_ADDRESS" -> {
           assertEquals(":9001", envMap[envVar], "控制台地址配置不正确")
           assertTrue(envMap[envVar]!!.startsWith(":"), "控制台地址应以冒号开头")

@@ -10,7 +10,6 @@ import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import sun.tools.jconsole.LabeledComponent.layout
 
 class JarExtension(private val project: Project, private val dsl: JarExtensionConfig) {
   init {

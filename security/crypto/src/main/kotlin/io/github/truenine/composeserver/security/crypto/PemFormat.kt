@@ -263,12 +263,14 @@ class PemFormat private constructor(private val rawPem: String) {
               builder.append('\n')
             }
           }
+
           '\n' -> {
             // Avoid double newlines
             if (builder.isEmpty() || builder.last() != '\n') {
               builder.append('\n')
             }
           }
+
           else -> builder.append(char)
         }
         i++

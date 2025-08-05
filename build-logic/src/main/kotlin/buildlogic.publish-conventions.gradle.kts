@@ -21,21 +21,25 @@ mavenPublishing {
       configure(VersionCatalog())
     }
     // 检测 gradle plugin 相关插件
-    project.plugins.hasPlugin("java-gradle-plugin") || 
-    project.plugins.hasPlugin("kotlin-dsl") -> {
-      configure(GradlePlugin(
-        javadocJar = JavadocJar.Javadoc(),
-        sourcesJar = true
-      ))
+    project.plugins.hasPlugin("java-gradle-plugin") ||
+      project.plugins.hasPlugin("kotlin-dsl") -> {
+      configure(
+        GradlePlugin(
+          javadocJar = JavadocJar.Javadoc(),
+          sourcesJar = true
+        )
+      )
     }
     // 检测 Kotlin JVM 插件（包括间接应用）
     project.plugins.hasPlugin("org.jetbrains.kotlin.jvm") ||
-    project.plugins.hasPlugin("buildlogic.kotlin-conventions") ||
-    project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
-      configure(KotlinJvm(
-        javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
-        sourcesJar = true
-      ))
+      project.plugins.hasPlugin("buildlogic.kotlin-conventions") ||
+      project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
+      configure(
+        KotlinJvm(
+          javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
+          sourcesJar = true
+        )
+      )
     }
   }
 

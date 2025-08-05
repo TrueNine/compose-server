@@ -29,6 +29,9 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
  */
 @ConfigurationProperties(prefix = "compose.testtoolkit.testcontainers")
 data class TestcontainersProperties(
+  /** 是否复用所有容器，默认为 true */
+  val reuseAllContainers: Boolean = false,
+
   /** PostgreSQL 配置 */
   @NestedConfigurationProperty val postgres: PostgresConfig = PostgresConfig(),
 
@@ -44,6 +47,8 @@ data class TestcontainersProperties(
 
 /** # PostgreSQL 容器配置 */
 data class PostgresConfig(
+  /** 是否复用容器，默认复用 */
+  val reuse: Boolean = true,
   /** PostgreSQL Docker 镜像 默认使用 postgres:17-alpine（当前 LTS 版本） */
   val image: String = "postgres:17.5-alpine3.22",
 
@@ -59,6 +64,8 @@ data class PostgresConfig(
 
 /** # MySQL 容器配置 */
 data class MysqlConfig(
+  /** 是否复用容器，默认复用 */
+  val reuse: Boolean = true,
   /** MySQL Docker 镜像 默认使用 mysql:8.0（当前 LTS 版本） */
   val image: String = "mysql:8.4.6-oraclelinux9",
 
@@ -77,12 +84,16 @@ data class MysqlConfig(
 
 /** # Redis 容器配置 */
 data class RedisConfig(
+  /** 是否复用容器，默认复用 */
+  val reuse: Boolean = true,
   /** Redis Docker 镜像 默认使用 redis:7-alpine（当前稳定版本） */
-  val image: String = "redis:8.0.3-alpine3.21"
+  val image: String = "redis:8.0.3-alpine3.21",
 )
 
 /** # MinIO 容器配置 */
 data class MinioConfig(
+  /** 是否复用容器，默认复用 */
+  val reuse: Boolean = true,
   /** MinIO Docker 镜像 默认使用较新的稳定版本 */
   val image: String = "minio/minio:RELEASE.2025-07-23T15-54-02Z",
 

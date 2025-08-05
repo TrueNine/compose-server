@@ -3,14 +3,36 @@ package io.github.truenine.composeserver.rds.crud.transaction
 import io.github.truenine.composeserver.testtoolkit.RDBRollback
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.transaction.annotation.Transactional
 
 @RDBRollback
 @SpringBootTest
 class TransactionTest : IDatabasePostgresqlContainer {
   @Resource private lateinit var testService: TestService
+  @Resource private lateinit var jdbcTemplate: JdbcTemplate
+
+  @BeforeEach
+  fun setupTable() {
+    // 手动创建测试表
+    jdbcTemplate.execute(
+      """
+      CREATE TABLE IF NOT EXISTS test_entity (
+        id BIGSERIAL PRIMARY KEY,
+        name VARCHAR DEFAULT NULL,
+        value INTEGER DEFAULT NULL
+      )
+    """
+        .trimIndent()
+    )
+  }
 
   @Test
   @Transactional

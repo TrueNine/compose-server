@@ -1,0 +1,194 @@
+# Volcengine TOS Configuration Example
+# This file demonstrates optimal configuration for production use
+
+compose:
+  oss:
+    # Provider selection - must be set to enable TOS
+    provider: volcengine-tos
+    
+    # Common OSS properties (fallback values)
+    endpoint: tos-cn-beijing.volces.com
+    region: cn-beijing
+    access-key: ${TOS_ACCESS_KEY:}
+    secret-key: ${TOS_SECRET_KEY:}
+    exposed-base-url: https://your-cdn-domain.com  # Optional CDN domain
+    enable-ssl: true
+    enable-logging: false  # Set to true for debugging
+    
+    # TOS-specific configuration
+    volcengine-tos:
+      # === Authentication Configuration ===
+      # These override common OSS properties if specified
+      endpoint: tos-cn-beijing.volces.com
+      region: cn-beijing
+      access-key: ${TOS_ACCESS_KEY:}
+      secret-key: ${TOS_SECRET_KEY:}
+      session-token: ${TOS_SESSION_TOKEN:}  # For STS temporary credentials
+      
+      # === Network & Performance Configuration ===
+      enable-ssl: true
+      
+      # Timeout settings (in milliseconds) - optimized for production
+      connect-timeout-mills: 10000      # 10 seconds - connection establishment
+      read-timeout-mills: 60000         # 60 seconds - reading response data
+      write-timeout-mills: 60000        # 60 seconds - writing request data
+      idle-connection-time-mills: 60000 # 60 seconds - idle connection cleanup
+      
+      # Connection pool settings - optimized for high concurrency
+      max-connections: 1024             # Maximum concurrent connections
+      max-retry-count: 3                # Retry failed requests up to 3 times
+      dns-cache-time-minutes: 5         # Cache DNS lookups for 5 minutes
+      
+      # === Feature Configuration ===
+      enable-crc: true                           # Enable CRC64 checksum validation
+      enable-verify-ssl: true                    # Verify SSL certificates
+      client-auto-recognize-content-type: true   # Auto-detect MIME types
+      enable-logging: false                      # Detailed request/response logging
+      
+      # === Domain Configuration ===
+      exposed-base-url: https://your-cdn-domain.com  # Public URL for object access
+      custom-domain: your-custom-domain.com           # Custom domain if configured
+      is-custom-domain: false                         # Set to true if using custom domain
+      
+      # === User-Agent Configuration ===
+      user-agent-product-name: ComposeServer
+      user-agent-soft-name: TOS-Client
+      user-agent-soft-version: 1.0.0
+      user-agent-customized-key-values:
+        environment: production
+        service: oss-service
+        region: cn-beijing
+      
+      # === Proxy Configuration (if needed) ===
+      # proxy-host: proxy.company.com
+      # proxy-port: 8080
+      # proxy-user-name: ${PROXY_USERNAME:}
+      # proxy-password: ${PROXY_PASSWORD:}
+
+---
+# Development Profile - More relaxed settings for local development
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+compose:
+  oss:
+    provider: volcengine-tos
+    endpoint: tos-cn-beijing.volces.com
+    region: cn-beijing
+    access-key: ${TOS_ACCESS_KEY:your-dev-access-key}
+    secret-key: ${TOS_SECRET_KEY:your-dev-secret-key}
+    enable-logging: true  # Enable logging for development
+    
+    volcengine-tos:
+      # Relaxed timeouts for development
+      connect-timeout-mills: 30000
+      read-timeout-mills: 120000
+      write-timeout-mills: 120000
+      
+      # Smaller connection pool for development
+      max-connections: 50
+      max-retry-count: 5
+      dns-cache-time-minutes: 0  # Disable DNS caching in dev
+      
+      # Enable detailed logging
+      enable-logging: true
+      
+      # Development User-Agent
+      user-agent-product-name: ComposeServer-Dev
+      user-agent-soft-name: TOS-Client-Dev
+      user-agent-soft-version: 1.0.0-SNAPSHOT
+      user-agent-customized-key-values:
+        environment: development
+        developer: ${USER:unknown}
+
+---
+# Test Profile - Optimized for testing
+spring:
+  config:
+    activate:
+      on-profile: test
+
+compose:
+  oss:
+    provider: volcengine-tos
+    endpoint: tos-cn-beijing.volces.com
+    region: cn-beijing
+    access-key: test-access-key
+    secret-key: test-secret-key
+    enable-logging: true
+    
+    volcengine-tos:
+      # Fast timeouts for testing
+      connect-timeout-mills: 5000
+      read-timeout-mills: 30000
+      write-timeout-mills: 30000
+      
+      # Minimal connection pool for tests
+      max-connections: 10
+      max-retry-count: 1
+      dns-cache-time-minutes: 0
+      
+      # Disable some features for faster tests
+      enable-crc: false
+      enable-verify-ssl: false
+      enable-logging: true
+      
+      user-agent-product-name: ComposeServer-Test
+      user-agent-customized-key-values:
+        environment: test
+        test-suite: integration
+
+---
+# Production Profile - High performance settings
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+compose:
+  oss:
+    provider: volcengine-tos
+    endpoint: ${TOS_ENDPOINT:tos-cn-beijing.volces.com}
+    region: ${TOS_REGION:cn-beijing}
+    access-key: ${TOS_ACCESS_KEY}
+    secret-key: ${TOS_SECRET_KEY}
+    exposed-base-url: ${TOS_CDN_DOMAIN:}
+    enable-logging: false
+    
+    volcengine-tos:
+      # Production-optimized timeouts
+      connect-timeout-mills: 8000
+      read-timeout-mills: 45000
+      write-timeout-mills: 45000
+      idle-connection-time-mills: 30000
+      
+      # High-performance connection pool
+      max-connections: 2048
+      max-retry-count: 2
+      dns-cache-time-minutes: 10
+      
+      # All security features enabled
+      enable-crc: true
+      enable-verify-ssl: true
+      client-auto-recognize-content-type: true
+      enable-logging: false
+      
+      # Production User-Agent
+      user-agent-product-name: ComposeServer
+      user-agent-soft-name: TOS-Client
+      user-agent-soft-version: ${app.version:1.0.0}
+      user-agent-customized-key-values:
+        environment: production
+        cluster: ${CLUSTER_NAME:default}
+        region: ${TOS_REGION:cn-beijing}
+        instance: ${HOSTNAME:unknown}
+
+# Logging configuration for TOS client
+logging:
+  level:
+    io.github.truenine.composeserver.oss.volcengine: INFO
+    com.volcengine.tos: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

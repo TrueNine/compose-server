@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.holders.config
 
 import io.github.truenine.composeserver.hasText
+import io.github.truenine.composeserver.holders.config.ResourceSource.Companion.url
 import io.github.truenine.composeserver.holders.exception.InvalidResourceSourceException
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver

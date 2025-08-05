@@ -17,9 +17,13 @@ dependencies {
   api(libs.org.jsoup.jsoup)
   api(libs.net.sf.supercsv.`super`.csv)
 
+  // Deprecated
   api(libs.com.alibaba.easyexcel) {
     exclude(group = libs.org.apache.commons.commons.compress.get().module.group, module = libs.org.apache.commons.commons.compress.get().module.name)
   }
+  // New
+  implementation(libs.cn.idev.excel.fastexcel)
+
   implementation(libs.org.apache.commons.commons.compress)
 
   api(projects.shared)

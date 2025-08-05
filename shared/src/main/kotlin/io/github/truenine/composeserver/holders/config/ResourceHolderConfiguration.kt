@@ -86,11 +86,14 @@ data class CustomResourceSource(
       when (type.lowercase()) {
         "filesystem",
         "file" -> ResourceType.FILESYSTEM
+
         "classpath",
         "cp" -> ResourceType.CLASSPATH
+
         "url",
         "http",
         "https" -> ResourceType.URL
+
         else -> throw IllegalArgumentException("Unsupported resource type: $type")
       }
 

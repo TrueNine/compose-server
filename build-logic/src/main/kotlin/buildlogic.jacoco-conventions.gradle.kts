@@ -10,10 +10,10 @@ tasks.withType<Test>().configureEach {
 
 tasks.withType<JacocoReport>().configureEach {
   dependsOn(tasks.withType<Test>())
-  
+
   // 明确声明对Spotless任务的依赖关系以避免隐式依赖问题
   mustRunAfter(tasks.withType<com.diffplug.gradle.spotless.SpotlessTask>())
-  
+
   reports {
     xml.required.set(false)
     html.required.set(true)

@@ -1,11 +1,13 @@
 package io.github.truenine.composeserver.generator
 
-import java.util.Collections
+import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -223,6 +225,7 @@ class OptimizedSnowflakeTest {
                 Thread.currentThread().interrupt()
                 baseTime + 50 // 50ms backward, within tolerance but will be interrupted
               }
+
               else -> baseTime + 105 // Subsequent calls
             }
           }

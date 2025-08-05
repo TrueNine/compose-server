@@ -58,36 +58,83 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
   @Resource private lateinit var redisTemplate: StringRedisTemplate
 
-  private lateinit var minioClient: MinioClient
+  private val minioClient: MinioClient by lazy {
+    MinioClient.builder().endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build()
+  }
 
   @BeforeEach
   fun setup() {
-    // 初始化 MinIO 客户端
-    minioClient = MinioClient.builder().endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build()
 
-    // 初始化 PostgreSQL 测试表
+    // 初始化 PostgreSQL 测试表并清理数据
     jdbcTemplate.execute(
       """
-            CREATE TABLE IF NOT EXISTS test_table (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL
+            create table if not exists test_table (
+                id serial primary key,
+                name varchar(255) not null
             )
         """
         .trimIndent()
     )
+
+    // 清理测试数据
+    jdbcTemplate.execute("delete from test_table")
+
+    // 清理 MinIO 测试桶
+    cleanupMinioBuckets()
+  }
+
+  /**
+   * Clean up MinIO test buckets
+   *
+   * This method removes test buckets that start with "test-" or "combined-" prefixes. It first removes all objects in the bucket, then removes the bucket
+   * itself. This is a best-effort cleanup - if buckets cannot be removed, the test continues.
+   */
+  private fun cleanupMinioBuckets() {
+    runCatching {
+        val buckets = minioClient.listBuckets()
+        buckets
+          .filter { bucket -> bucket.name().startsWith("test-") || bucket.name().startsWith("combined-") }
+          .forEach { bucket -> cleanupSingleBucket(bucket.name()) }
+      }
+      .onFailure { exception -> log.warn("Failed to list or clean up MinIO buckets: ${exception.message}") }
+  }
+
+  /** Clean up a single MinIO bucket by removing all objects first, then the bucket */
+  private fun cleanupSingleBucket(bucketName: String) {
+    runCatching {
+        if (minioClient.bucketExists(io.minio.BucketExistsArgs.builder().bucket(bucketName).build())) {
+          log.debug("Cleaning up bucket: $bucketName")
+
+          // Remove all objects in the bucket
+          val objects = minioClient.listObjects(io.minio.ListObjectsArgs.builder().bucket(bucketName).build())
+          objects.forEach { objectResult ->
+            runCatching {
+                val objectName = objectResult.get().objectName()
+                log.debug("Removing object: $objectName from bucket: $bucketName")
+                minioClient.removeObject(io.minio.RemoveObjectArgs.builder().bucket(bucketName).`object`(objectName).build())
+              }
+              .onFailure { exception -> log.warn("Failed to remove object from bucket $bucketName: ${exception.message}") }
+          }
+
+          // Remove the bucket
+          minioClient.removeBucket(io.minio.RemoveBucketArgs.builder().bucket(bucketName).build())
+          log.debug("Successfully removed bucket: $bucketName")
+        }
+      }
+      .onFailure { exception -> log.warn("Failed to clean up bucket $bucketName: ${exception.message}") }
   }
 
   @Test
   fun `验证 PostgreSQL 容器正常工作`() {
     // 插入测试数据
-    jdbcTemplate.update("INSERT INTO test_table (name) VALUES (?)", "test_name")
+    jdbcTemplate.update("insert into test_table (name) values (?)", "test_name")
 
     // 验证数据
-    val result = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "test_name")
+    val result = jdbcTemplate.queryForObject("select name from test_table where name = ?", String::class.java, "test_name")
     assertEquals("test_name", result, "PostgreSQL 查询结果应详匹配")
 
     // 验证数据插入成功
-    val count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM test_table WHERE name = ?", Int::class.java, "test_name")
+    val count = jdbcTemplate.queryForObject("select count(*) from test_table where name = ?", Int::class.java, "test_name")
     assertTrue(count!! > 0, "PostgreSQL 表中应详存在插入的数据")
   }
 
@@ -139,7 +186,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   @Test
   fun `验证所有容器能够同时正常工作`() {
     // PostgreSQL 测试
-    jdbcTemplate.update("INSERT INTO test_table (name) VALUES (?)", "combined_test")
+    jdbcTemplate.update("insert into test_table (name) values (?)", "combined_test")
 
     // Redis 测试
     val redisKey = "combined:test"
@@ -147,10 +194,12 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
     // MinIO 测试
     val bucketName = "combined-test-bucket"
-    minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
+    if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+      minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
+    }
 
     // 验证所有操作
-    val pgResult = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "combined_test")
+    val pgResult = jdbcTemplate.queryForObject("select name from test_table where name = ?", String::class.java, "combined_test")
     val redisResult = redisTemplate.opsForValue().get(redisKey)
     val minioResult = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
 
@@ -160,7 +209,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     assertTrue(minioResult, "MinIO 结合测试结果应详正确")
 
     // 验证综合数据一致性
-    val totalPgRecords = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM test_table", Int::class.java)
+    val totalPgRecords = jdbcTemplate.queryForObject("select count(*) from test_table", Int::class.java)
     assertTrue(totalPgRecords!! >= 1, "PostgreSQL 应详至少有一条记录")
 
     val allBuckets = minioClient.listBuckets()
@@ -174,8 +223,8 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   @Test
   fun `验证容器时区和时间与当前系统一致`() {
     // 1. PostgreSQL
-    val pgTimeZone = jdbcTemplate.queryForObject("SHOW TIMEZONE", String::class.java)
-    val pgNow = jdbcTemplate.queryForObject("SELECT NOW()", java.sql.Timestamp::class.java)
+    val pgTimeZone = jdbcTemplate.queryForObject("show timezone", String::class.java)
+    val pgNow = jdbcTemplate.queryForObject("select now()", java.sql.Timestamp::class.java)
     log.info("[验证容器时区和时间与当前系统一致] postgresql timezone: {} , current time: {}", pgTimeZone, pgNow)
 
     // 验证PostgreSQL时区不为空

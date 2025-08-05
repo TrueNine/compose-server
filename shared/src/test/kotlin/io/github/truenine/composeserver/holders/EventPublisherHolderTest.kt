@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.holders
 
+import io.github.truenine.composeserver.holders.EventPublisherHolder.component1
 import io.mockk.mockk
 import io.mockk.verify
 import kotlin.test.*

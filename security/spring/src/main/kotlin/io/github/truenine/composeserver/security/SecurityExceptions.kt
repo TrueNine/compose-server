@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.security
 
-import io.github.truenine.composeserver.typing.HttpStatus
+import io.github.truenine.composeserver.enums.HttpStatus
 
 /**
  * 程序安全异常

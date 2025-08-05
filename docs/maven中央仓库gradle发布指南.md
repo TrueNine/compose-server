@@ -68,7 +68,6 @@ signing.secretKeyRingFile=/home/truenine/.gradle/private.gpg
 
 ## CI 环境可配置命令
 
-
 ```shell
 ./gradlew publishToMavenCentral \
   --no-daemon \
