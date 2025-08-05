@@ -56,6 +56,7 @@ implementation("io.github.truenine:composeserver-rds-shared:latest")
 **Maven**
 
 ```xml
+
 <dependency>
   <groupId>io.github.truenine</groupId>
   <artifactId>composeserver-shared</artifactId>
@@ -68,6 +69,7 @@ implementation("io.github.truenine:composeserver-rds-shared:latest")
 gradle 8.x 推荐使用 **Gradle Version Catalog** 统一管理版本：
 
 [settings.gradle.kts]
+
 ```kotlin
 dependencyResolutionManagement {
   versionCatalogs {
@@ -82,7 +84,9 @@ dependencyResolutionManagement {
 maven 推荐使用项目提供的 pom
 
 [pom.xml]
+
 ```xml
+
 <dependencyManagement>
   <dependencies>
     <dependency>
@@ -97,6 +101,7 @@ maven 推荐使用项目提供的 pom
 ```
 
 或使用 gradle platform 配置
+
 ```kotlin
 dependencies {
   implementation(platform("io.github.truenine:composeserver-bom:latest"))
