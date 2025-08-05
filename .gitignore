@@ -73,5 +73,3 @@ TODO.*
 
 ### AI Coder ###
 /.claude/
-
-/gradle.properties
