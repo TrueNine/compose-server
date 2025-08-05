@@ -1,0 +1,42 @@
+# Volcengine TOS 集成测试配置
+# 用于真实服务的集成测试
+
+spring:
+  main:
+    banner-mode: off
+  profiles:
+    active: integration-test
+
+# 日志配置
+logging:
+  level:
+    io.github.truenine.composeserver.oss.volcengine: DEBUG
+    com.volcengine.tos: INFO
+    org.springframework: WARN
+    org.junit: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# TOS 集成测试配置
+compose:
+  oss:
+    provider: volcengine-tos
+    volcengine-tos:
+      # 基本配置
+      endpoint: tos-s3-cn-beijing.volces.com
+      region: cn-beijing
+      access-key: ${VOLCENGINE_TOS_ACCESS_KEY:}
+      secret-key: ${VOLCENGINE_TOS_SECRET_KEY:}
+      exposed-base-url: https://tos-s3-cn-beijing.volces.com
+      
+      # 连接配置
+      enable-ssl: true
+      connection-timeout: 30s
+      socket-timeout: 5m
+      max-connections: 50
+      max-retries: 3
+      
+      # 功能配置
+      enable-crc: true
+      enable-logging: true
+      enable-virtual-hosted-style: true
