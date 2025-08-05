@@ -6,7 +6,10 @@ import io.github.truenine.composeserver.holders.config.ResourceType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

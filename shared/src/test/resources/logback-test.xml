@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- Console appender for test output -->
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
+  <!-- Console appender for test output -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
 
-    <!-- Set all SLF4J loggers to ERROR level as requested -->
-    <root level="ERROR">
-        <appender-ref ref="CONSOLE" />
-    </root>
-    
-    <!-- Specific logger configurations for SLF4J related packages -->
-    <logger name="org.slf4j" level="ERROR" additivity="false">
-        <appender-ref ref="CONSOLE" />
-    </logger>
-    
-    <!-- Logger for the LoggerFns test classes -->
-    <logger name="io.github.truenine.composeserver.LoggerExtensionsTest" level="ERROR" additivity="false">
-        <appender-ref ref="CONSOLE" />
-    </logger>
-    
-    <!-- Logger for the LoggerFns classes being tested -->
-    <logger name="io.github.truenine.composeserver.LoggerFns" level="ERROR" additivity="false">
-        <appender-ref ref="CONSOLE" />
-    </logger>
-    
-    <!-- Ensure all test-related logging is at ERROR level -->
-    <logger name="io.github.truenine.composeserver" level="ERROR" additivity="false">
-        <appender-ref ref="CONSOLE" />
-    </logger>
+  <!-- Set all SLF4J loggers to ERROR level as requested -->
+  <root level="ERROR">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <!-- Specific logger configurations for SLF4J related packages -->
+  <logger name="org.slf4j" level="ERROR" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
+
+  <!-- Logger for the LoggerFns test classes -->
+  <logger name="io.github.truenine.composeserver.LoggerExtensionsTest" level="ERROR" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
+
+  <!-- Logger for the LoggerFns classes being tested -->
+  <logger name="io.github.truenine.composeserver.LoggerFns" level="ERROR" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
+
+  <!-- Ensure all test-related logging is at ERROR level -->
+  <logger name="io.github.truenine.composeserver" level="ERROR" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
 </configuration>

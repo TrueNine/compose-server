@@ -1,7 +1,9 @@
 package io.github.truenine.composeserver.holders
 
 import kotlin.reflect.KClass
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
