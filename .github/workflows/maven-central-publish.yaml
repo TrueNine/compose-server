@@ -61,8 +61,6 @@ jobs:
         run: |
           ./gradlew publishToMavenCentral \
             --no-daemon \
-            --stacktrace \
-            --info \
             --parallel \
             --no-configuration-cache \
             -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
