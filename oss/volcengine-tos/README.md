@@ -50,14 +50,33 @@ class FileService(
 }
 ```
 
+## 安全配置
+
+⚠️ **重要安全提醒**：
+
+- **绝不要**在代码中硬编码 Access Key 和 Secret Key
+- **绝不要**将包含敏感信息的配置文件提交到版本控制系统
+- 使用环境变量或安全的配置管理系统来管理敏感信息
+
+### 环境变量设置
+
+```bash
+# 设置环境变量
+export VOLCENGINE_TOS_ACCESS_KEY="your_access_key_here"
+export VOLCENGINE_TOS_SECRET_KEY="your_secret_key_here"
+
+# 运行集成测试
+./gradlew :oss:volcengine-tos:test --tests "*IntegrationTest"
+```
+
 ## 配置参数详解
 
 ### 认证配置
 
 | 参数              | 类型     | 必选 | 默认值 | 说明         |
 |-----------------|--------|----|-----|------------|
-| `access-key`    | String | 是  | -   | 访问密钥 ID    |
-| `secret-key`    | String | 是  | -   | 私有访问密钥     |
+| `access-key`    | String | 是  | -   | 访问密钥 ID（使用环境变量）    |
+| `secret-key`    | String | 是  | -   | 私有访问密钥（使用环境变量）     |
 | `session-token` | String | 否  | -   | STS 临时凭证令牌 |
 
 ### 网络配置
