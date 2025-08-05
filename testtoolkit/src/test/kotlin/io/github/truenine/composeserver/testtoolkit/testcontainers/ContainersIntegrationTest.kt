@@ -68,16 +68,16 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     // 初始化 PostgreSQL 测试表并清理数据
     jdbcTemplate.execute(
       """
-            CREATE TABLE IF NOT EXISTS test_table (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL
+            create table if not exists test_table (
+                id serial primary key,
+                name varchar(255) not null
             )
         """
         .trimIndent()
     )
 
     // 清理测试数据
-    jdbcTemplate.execute("DELETE FROM test_table")
+    jdbcTemplate.execute("delete from test_table")
 
     // 清理 MinIO 测试桶
     cleanupMinioBuckets()
@@ -127,14 +127,14 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   @Test
   fun `验证 PostgreSQL 容器正常工作`() {
     // 插入测试数据
-    jdbcTemplate.update("INSERT INTO test_table (name) VALUES (?)", "test_name")
+    jdbcTemplate.update("insert into test_table (name) values (?)", "test_name")
 
     // 验证数据
-    val result = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "test_name")
+    val result = jdbcTemplate.queryForObject("select name from test_table where name = ?", String::class.java, "test_name")
     assertEquals("test_name", result, "PostgreSQL 查询结果应详匹配")
 
     // 验证数据插入成功
-    val count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM test_table WHERE name = ?", Int::class.java, "test_name")
+    val count = jdbcTemplate.queryForObject("select count(*) from test_table where name = ?", Int::class.java, "test_name")
     assertTrue(count!! > 0, "PostgreSQL 表中应详存在插入的数据")
   }
 
@@ -186,7 +186,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   @Test
   fun `验证所有容器能够同时正常工作`() {
     // PostgreSQL 测试
-    jdbcTemplate.update("INSERT INTO test_table (name) VALUES (?)", "combined_test")
+    jdbcTemplate.update("insert into test_table (name) values (?)", "combined_test")
 
     // Redis 测试
     val redisKey = "combined:test"
@@ -199,7 +199,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     }
 
     // 验证所有操作
-    val pgResult = jdbcTemplate.queryForObject("SELECT name FROM test_table WHERE name = ?", String::class.java, "combined_test")
+    val pgResult = jdbcTemplate.queryForObject("select name from test_table where name = ?", String::class.java, "combined_test")
     val redisResult = redisTemplate.opsForValue().get(redisKey)
     val minioResult = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())
 
@@ -209,7 +209,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     assertTrue(minioResult, "MinIO 结合测试结果应详正确")
 
     // 验证综合数据一致性
-    val totalPgRecords = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM test_table", Int::class.java)
+    val totalPgRecords = jdbcTemplate.queryForObject("select count(*) from test_table", Int::class.java)
     assertTrue(totalPgRecords!! >= 1, "PostgreSQL 应详至少有一条记录")
 
     val allBuckets = minioClient.listBuckets()
@@ -223,8 +223,8 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   @Test
   fun `验证容器时区和时间与当前系统一致`() {
     // 1. PostgreSQL
-    val pgTimeZone = jdbcTemplate.queryForObject("SHOW TIMEZONE", String::class.java)
-    val pgNow = jdbcTemplate.queryForObject("SELECT NOW()", java.sql.Timestamp::class.java)
+    val pgTimeZone = jdbcTemplate.queryForObject("show timezone", String::class.java)
+    val pgNow = jdbcTemplate.queryForObject("select now()", java.sql.Timestamp::class.java)
     log.info("[验证容器时区和时间与当前系统一致] postgresql timezone: {} , current time: {}", pgTimeZone, pgNow)
 
     // 验证PostgreSQL时区不为空
