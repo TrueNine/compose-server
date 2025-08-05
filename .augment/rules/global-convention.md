@@ -2,10 +2,6 @@
 type: "always_apply"
 ---
 
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
-
 # 通用标准
 
 **强制规则**
