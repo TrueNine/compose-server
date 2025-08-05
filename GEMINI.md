@@ -1,6 +1,3 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
 
 **框架概述：** Compose Server 是现代化、模块化的 Kotlin 企业级开发框架（非脚手架），通过 Gradle 多模块提供企业级 SDK。所有模块可独立集成到任意 Spring Boot 或其他 JVM 项目中。
 
