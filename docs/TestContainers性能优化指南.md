@@ -5,6 +5,7 @@ TestContainers 是现代 Java/Kotlin 应用测试的重要工具，但其性能�
 ## 快速优化清单
 
 ✅ **立即生效的优化**：
+
 - [x] 启用容器重用：`testcontainers.reuse.enable=true`
 - [ ] 增加启动超时时间到 30-60 秒
 - [ ] 使用轻量级镜像（Alpine 版本）
@@ -72,6 +73,7 @@ testcontainers.image.cache.enable=true
 **问题识别**：当前默认 10 秒启动超时过短，导致启动失败和重试。
 
 **解决方案**：
+
 ```kotlin
 // 在容器配置中增加超时时间
 val container = PostgreSQLContainer<Nothing>(DockerImageName.parse(image))
@@ -106,6 +108,7 @@ val container = GenericContainer(image)
 ### 3.1 选择轻量级镜像
 
 **推荐镜像版本**：
+
 ```yaml
 # 优先使用 Alpine 版本（体积小，启动快）
 postgres: "postgres:17.5-alpine3.22"          # ~150MB vs 400MB+
@@ -197,23 +200,23 @@ junit.jupiter.execution.parallel.config.dynamic.factor=2
 ```kotlin
 // 容器并发启动工具
 class ParallelContainerStarter {
-    companion object {
-        fun startContainers(vararg containers: GenericContainer<*>) {
-            containers.toList().parallelStream().forEach { container ->
-                container.start()
-            }
-        }
+  companion object {
+    fun startContainers(vararg containers: GenericContainer<*>) {
+      containers.toList().parallelStream().forEach { container ->
+        container.start()
+      }
     }
+  }
 }
 
 // 使用示例
 @BeforeAll
 fun setupContainers() {
-    ParallelContainerStarter.startContainers(
-        postgresContainer,
-        redisContainer,
-        minioContainer
-    )
+  ParallelContainerStarter.startContainers(
+    postgresContainer,
+    redisContainer,
+    minioContainer
+  )
 }
 ```
 
@@ -223,20 +226,20 @@ fun setupContainers() {
 
 ```kotlin
 class ContainerPerformanceMonitor {
-    companion object {
-        fun <T : GenericContainer<T>> T.withPerformanceMonitoring(): T {
-            val startTime = System.currentTimeMillis()
-            
-            return this.apply {
-                withLogConsumer { frame ->
-                    if (frame.utf8String.contains("ready")) {
-                        val duration = System.currentTimeMillis() - startTime
-                        println("容器 ${this.dockerImageName} 启动耗时: ${duration}ms")
-                    }
-                }
-            }
+  companion object {
+    fun <T : GenericContainer<T>> T.withPerformanceMonitoring(): T {
+      val startTime = System.currentTimeMillis()
+
+      return this.apply {
+        withLogConsumer { frame ->
+          if (frame.utf8String.contains("ready")) {
+            val duration = System.currentTimeMillis() - startTime
+            println("容器 ${this.dockerImageName} 启动耗时: ${duration}ms")
+          }
         }
+      }
     }
+  }
 }
 ```
 
@@ -245,8 +248,8 @@ class ContainerPerformanceMonitor {
 ```kotlin
 // 容器资源监控
 fun GenericContainer<*>.monitorResources() {
-    val stats = this.dockerClient.statsCmd(this.containerId)
-    // 记录 CPU、内存使用情况
+  val stats = this.dockerClient.statsCmd(this.containerId)
+  // 记录 CPU、内存使用情况
 }
 ```
 
@@ -255,16 +258,18 @@ fun GenericContainer<*>.monitorResources() {
 ```kotlin
 // 容器调试信息收集
 class ContainerDebugger {
-    fun printContainerInfo(container: GenericContainer<*>) {
-        println("""
+  fun printContainerInfo(container: GenericContainer<*>) {
+    println(
+      """
             容器调试信息:
             - 镜像: ${container.dockerImageName}
             - 状态: ${container.isRunning}
             - 端口映射: ${container.exposedPorts}
             - 启动命令: ${container.commandParts}
             - 环境变量: ${container.envMap}
-        """.trimIndent())
-    }
+        """.trimIndent()
+    )
+  }
 }
 ```
 
@@ -275,14 +280,14 @@ class ContainerDebugger {
 ```yaml
 # .github/workflows/test.yml
 name: Tests
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       # Docker 层缓存
       - name: Set up Docker Layer Caching
         uses: actions/cache@v4
@@ -290,14 +295,14 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: ${{ runner.os }}-buildx-
-          
+
       # 预拉取镜像
       - name: Pull test images
         run: |
           docker pull postgres:17.5-alpine3.22 &
           docker pull redis:8.0.3-alpine3.21 &
           wait
-          
+
       # 运行测试
       - name: Run tests
         run: ./gradlew test -Pci=true
@@ -346,18 +351,21 @@ pipeline {
 ### 7.1 常见性能问题
 
 **问题 1：容器启动超时**
+
 ```
 症状：Could not start container within 10 seconds
 解决：增加启动超时时间到 60 秒
 ```
 
 **问题 2：端口冲突**
+
 ```
 症状：Port already in use
 解决：使用动态端口分配，避免固定端口
 ```
 
 **问题 3：内存不足**
+
 ```
 症状：OutOfMemoryError 或容器启动失败
 解决：增加 JVM 堆内存，限制并发容器数量
@@ -396,18 +404,21 @@ logging:
 ## 8. 最佳实践总结
 
 ### 8.1 开发环境
+
 - ✅ 启用容器重用
 - ✅ 使用轻量级镜像
 - ✅ 预拉取常用镜像
 - ✅ 配置合理的超时时间
 
 ### 8.2 CI/CD 环境
+
 - ✅ 禁用 Ryuk（资源清理器）
 - ✅ 启用 Docker 层缓存
 - ✅ 限制并发容器数量
 - ✅ 使用镜像预拉取
 
 ### 8.3 团队协作
+
 - ✅ 统一镜像版本配置
 - ✅ 共享性能优化配置
 - ✅ 建立性能监控机制
