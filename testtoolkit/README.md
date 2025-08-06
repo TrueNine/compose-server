@@ -98,13 +98,13 @@ class MySpecialTest {
 
 ## 配置属性
 
-| 属性名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `compose.testtoolkit.enabled` | Boolean | true | 是否启用测试工具包 |
-| `compose.testtoolkit.disable-condition-evaluation-report` | Boolean | true | 是否关闭条件评估报告 |
-| `compose.testtoolkit.enable-virtual-threads` | Boolean | true | 是否启用虚拟线程 |
-| `compose.testtoolkit.ansi-output-mode` | AnsiOutputMode | always | ANSI 颜色输出模式（never/detect/always） |
-| `compose.testtoolkit.additional-properties` | Map<String, String> | {} | 额外的测试属性 |
+| 属性名                                                       | 类型                  | 默认值    | 说明                               |
+|-----------------------------------------------------------|---------------------|--------|----------------------------------|
+| `compose.testtoolkit.enabled`                             | Boolean             | true   | 是否启用测试工具包                        |
+| `compose.testtoolkit.disable-condition-evaluation-report` | Boolean             | true   | 是否关闭条件评估报告                       |
+| `compose.testtoolkit.enable-virtual-threads`              | Boolean             | true   | 是否启用虚拟线程                         |
+| `compose.testtoolkit.ansi-output-mode`                    | AnsiOutputMode      | always | ANSI 颜色输出模式（never/detect/always） |
+| `compose.testtoolkit.additional-properties`               | Map<String, String> | {}     | 额外的测试属性                          |
 
 ## 提供的 Bean
 

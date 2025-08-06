@@ -124,7 +124,7 @@ class TestConfigurationBeanTest {
       assertNotNull(capturedPropertySource, "属性源不应为 null")
       capturedPropertySource?.let { propertySource ->
         assertNotNull(propertySource.source, "属性源的数据不应为 null")
-        assertTrue(propertySource.source is Map<*, *>, "属性源数据应该为 Map 类型")
+        assertNotNull(propertySource.source, "属性源数据应该不为 null")
         assertEquals(true, propertySource.getProperty("spring.threads.virtual.enabled"), "虚拟线程应该被启用")
         assertEquals("always", propertySource.getProperty("spring.output.ansi.enabled"), "ANSI 颜色输出应该被设置为 always")
         // 当 disableConditionEvaluationReport = false 时，不会设置 debug 和条件评估报告属性

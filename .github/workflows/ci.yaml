@@ -1,10 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches: [ dev ]
   pull_request:
-    branches: [ dev ]
+    branches: [ main ]
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=false"
@@ -65,7 +63,12 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run all tests
-        run: ./gradlew clean test --no-daemon --stacktrace --parallel --no-build-cache --no-configuration-cache --rerun-tasks
+        run: |
+          ./gradlew test \
+            --no-daemon \
+            --parallel \
+            --no-build-cache \
+            --no-configuration-cache
         env:
           # Testcontainers 优化配置
           TESTCONTAINERS_RYUK_DISABLED: false

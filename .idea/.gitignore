@@ -6,3 +6,4 @@
 !codeStyles/
 !codeStyles/codeStyleConfig.xml
 !codeStyles/project.xml
+!/sqldialects.xml

@@ -1,6 +1,10 @@
 package io.github.truenine.composeserver
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /** ID 类型相关扩展函数的测试类 */
 class AliasExtensionsTest {

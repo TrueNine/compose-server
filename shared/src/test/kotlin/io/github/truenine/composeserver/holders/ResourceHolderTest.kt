@@ -1,7 +1,9 @@
 package io.github.truenine.composeserver.holders
 
 import jakarta.annotation.Resource
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.ResourceLoader
 

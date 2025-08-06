@@ -6,7 +6,11 @@ import com.wechat.pay.java.core.notification.NotificationParser
 import com.wechat.pay.java.core.notification.RequestParam
 import com.wechat.pay.java.service.partnerpayments.app.model.Transaction
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
-import com.wechat.pay.java.service.payments.jsapi.model.*
+import com.wechat.pay.java.service.payments.jsapi.model.Amount
+import com.wechat.pay.java.service.payments.jsapi.model.Payer
+import com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest
+import com.wechat.pay.java.service.payments.jsapi.model.QueryOrderByIdRequest
+import com.wechat.pay.java.service.payments.jsapi.model.QueryOrderByOutTradeNoRequest
 import com.wechat.pay.java.service.refund.RefundService
 import com.wechat.pay.java.service.refund.model.AmountReq
 import com.wechat.pay.java.service.refund.model.CreateRequest

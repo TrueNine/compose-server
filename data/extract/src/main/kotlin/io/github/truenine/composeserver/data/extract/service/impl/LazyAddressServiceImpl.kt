@@ -246,6 +246,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
                 "citytr" -> false
                 "countytr",
                 "towntr" -> kv.child(1).select("a").isEmpty()
+
                 else -> false
               }
             toCnDistrict(fullCode, name, leaf)
