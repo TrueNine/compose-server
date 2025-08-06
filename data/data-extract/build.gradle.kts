@@ -11,7 +11,8 @@ Provides EasyExcel integration, JSoup for HTML parsing, and reactive data proces
     .trimIndent()
 
 dependencies {
-  implementation(libs.bundles.kotlin.reactor)
+  implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.reactor)
+  implementation(libs.io.projectreactor.kotlin.reactor.kotlin.extensions)
   implementation(libs.org.springframework.spring.web)
   implementation(libs.org.springframework.boot.spring.boot.starter.webflux)
   api(libs.org.jsoup.jsoup)
