@@ -21,53 +21,76 @@ listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cach
 
 // 监控模块
 include("surveillance:surveillance-shared")
+
 include("surveillance:surveillance-hikvision")
 
 // 短信服务
 include("sms:sms-shared")
+
 include("sms:sms-tencent")
 
 // ai 服务
 include("ai:ai-shared")
+
 include("ai:ai-langchain4j")
 
 // 支付服务
 include("pay:pay-shared")
+
 include("pay:pay-wechat")
 
 // 对象存储服务
 include("oss:oss-shared")
+
 include("oss:oss-minio")
+
 include("oss:oss-aliyun-oss")
+
 include("oss:oss-huawei-obs")
+
 include("oss:oss-volcengine-tos")
 
 // 关系型数据库服务
 include("rds:rds-shared")
+
 include("rds:rds-crud")
+
 include("rds:rds-jimmer-ext-postgres")
+
 include("rds:rds-flyway-migration-postgresql")
+
 include("rds:rds-flyway-migration-mysql8")
+
 include("rds:rds-flyway-migration-shared")
 
 // 数据采集器
 include("data:data-crawler")
+
 include("data:data-extract")
 
 // 安全模块
 include("security:security-spring")
+
 include("security:security-oauth2")
+
 include("security:security-crypto")
 
 // 特定依赖处理
 include("depend:depend-servlet")
+
 include("depend:depend-paho")
+
 include("depend:depend-http-exchange")
+
 include("depend:depend-jackson")
+
 include("depend:depend-springdoc-openapi")
+
 include("depend:depend-xxl-job")
 
 // ksp
 include("ksp:ksp-plugin")
+
 include("ksp:ksp-shared")
+
 include("ksp:ksp-meta")
