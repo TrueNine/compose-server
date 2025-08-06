@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -33,9 +35,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ~/.gradle/jdks
             ~/.gradle/gradle.properties
             ~/.gradle/buildOutputCleanup
-            ~/.konan
             ~/.m2/repository
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml', '**/gradle.properties') }}
           restore-keys: |
@@ -44,7 +46,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.0.0-rc-3'
+          gradle-version: '9.0.0'
           cache-read-only: false
           cache-cleanup: on-success
 

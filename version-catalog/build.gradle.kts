@@ -38,6 +38,14 @@ val nonStableKeywords = listOf(
   "beta",
   "dev",
   "-rc",
+  "m1",
+  "m2",
+  "m3",
+  "m4",
+  "m5",
+  "m6",
+  "m7",
+  "m8",
   "snapshot"
 )
 
@@ -59,18 +67,6 @@ tasks.withType<DependencyUpdatesTask> {
     }
     isNonStable(candidate)
   }
-
-  // 检查构建脚本依赖
-  checkBuildEnvironmentConstraints = true
-
-  // 输出格式配置
-  outputFormatter = "json,xml,html,plain"
-
-  // 输出目录
-  outputDir = "build/dependencyUpdates"
-
-  // 报告文件名
-  reportfileName = "report"
 }
 
 description =

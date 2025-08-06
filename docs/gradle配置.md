@@ -17,12 +17,13 @@ systemProp.https.proxyPort=7899
 org.gradle.configuration-cache=false
 org.gradle.configuration-cache.problems=warn
 org.gradle.configureondemand=false
-org.gradle.console=plain
 org.gradle.caching=false
 org.gradle.workers.max=12
 org.gradle.daemon=true
 org.gradle.parallel=true
 org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+UseParallelGC -Dfile.encoding=UTF-8
+org.gradle.console=plain
+org.gradle.logging.level=warn
 kapt.use.k2=true
 # 本地 .env 配置文件
 dotenv=#

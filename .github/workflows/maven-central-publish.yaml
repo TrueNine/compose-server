@@ -32,6 +32,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ~/.gradle/jdks
             ~/.gradle/gradle.properties
             ~/.gradle/buildOutputCleanup
             ~/.konan

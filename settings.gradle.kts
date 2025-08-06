@@ -13,44 +13,84 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "compose-server"
 
-fun Pair<String, List<String>>.useFile() {
-  second.forEach { n ->
-    include("$first:$n")
-    findProject(":$first:$n")?.name = "$first-$n"
-  }
-}
-
-listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cacheable", "cacheable").forEach { p ->
+// 根级模块
+listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cacheable").forEach { p ->
   include(p)
   findProject(":$p")?.name = p
 }
 
 // 监控模块
-("surveillance" to listOf("shared", "hikvision")).useFile()
+include("surveillance:surveillance-shared")
+
+include("surveillance:surveillance-hikvision")
 
 // 短信服务
-("sms" to listOf("tencent", "shared")).useFile()
+include("sms:sms-shared")
+
+include("sms:sms-tencent")
 
 // ai 服务
-("ai" to listOf("shared", "langchain4j")).useFile()
+include("ai:ai-shared")
+
+include("ai:ai-langchain4j")
 
 // 支付服务
-("pay" to listOf("shared", "wechat")).useFile()
+include("pay:pay-shared")
+
+include("pay:pay-wechat")
 
 // 对象存储服务
-("oss" to listOf("shared", "minio", "aliyun-oss", "huawei-obs", "volcengine-tos")).useFile()
+include("oss:oss-shared")
+
+include("oss:oss-minio")
+
+include("oss:oss-aliyun-oss")
+
+include("oss:oss-huawei-obs")
+
+include("oss:oss-volcengine-tos")
 
 // 关系型数据库服务
-("rds" to listOf("shared", "crud", "jimmer-ext-postgres", "flyway-migration-postgresql", "flyway-migration-mysql8", "flyway-migration-shared")).useFile()
+include("rds:rds-shared")
+
+include("rds:rds-crud")
+
+include("rds:rds-jimmer-ext-postgres")
+
+include("rds:rds-flyway-migration-postgresql")
+
+include("rds:rds-flyway-migration-mysql8")
+
+include("rds:rds-flyway-migration-shared")
 
 // 数据采集器
-("data" to listOf("crawler", "extract")).useFile()
+include("data:data-crawler")
+
+include("data:data-extract")
 
 // 安全模块
-("security" to listOf("spring", "oauth2", "crypto")).useFile()
+include("security:security-spring")
+
+include("security:security-oauth2")
+
+include("security:security-crypto")
 
 // 特定依赖处理
-("depend" to listOf("servlet", "paho", "http-exchange", "jackson", "springdoc-openapi", "xxl-job")).useFile()
+include("depend:depend-servlet")
+
+include("depend:depend-paho")
+
+include("depend:depend-http-exchange")
+
+include("depend:depend-jackson")
+
+include("depend:depend-springdoc-openapi")
+
+include("depend:depend-xxl-job")
 
 // ksp
-("ksp" to listOf("plugin", "shared", "meta")).useFile()
+include("ksp:ksp-plugin")
+
+include("ksp:ksp-shared")
+
+include("ksp:ksp-meta")
