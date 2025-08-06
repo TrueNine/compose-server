@@ -116,9 +116,7 @@ interface IBase64 {
     fun decodeToByte(base64: String): ByteArray {
       // Empty string is a valid Base64 encoding of empty byte array
       if (base64.isEmpty()) return ByteArray(0)
-      // Optimized validation: check for blank strings efficiently
-      if (base64.isBlank()) throw IllegalArgumentException("Base64 string cannot be null or blank")
-      // Direct decode with exception propagation for better performance
+      // Direct decode with minimal exception handling for performance
       try {
         return decoder.decode(base64)
       } catch (e: IllegalArgumentException) {
@@ -156,13 +154,9 @@ interface IBase64 {
      */
     @JvmStatic
     fun decode(base64: ByteArray, charset: Charset = defaultCharset): String {
-      if (base64.isEmpty()) throw IllegalArgumentException("Base64 byte array cannot be empty")
-      try {
-        val decodedBytes = decoder.decode(base64)
-        return String(decodedBytes, charset)
-      } catch (e: IllegalArgumentException) {
-        throw IllegalArgumentException("Invalid Base64 byte array format", e)
-      }
+      if (base64.isEmpty()) return ""
+      val decodedBytes = decoder.decode(base64)
+      return String(decodedBytes, charset)
     }
 
     /**
@@ -177,12 +171,9 @@ interface IBase64 {
      */
     @JvmStatic
     fun decodeUrlSafe(base64: String): ByteArray {
+      if (base64.isEmpty()) return ByteArray(0)
       if (base64.isBlank()) throw IllegalArgumentException("URL-safe Base64 string cannot be null or blank")
-      try {
-        return urlSafeDecoder.decode(base64)
-      } catch (e: IllegalArgumentException) {
-        throw IllegalArgumentException("Invalid URL-safe Base64 string format", e)
-      }
+      return urlSafeDecoder.decode(base64)
     }
 
     /**

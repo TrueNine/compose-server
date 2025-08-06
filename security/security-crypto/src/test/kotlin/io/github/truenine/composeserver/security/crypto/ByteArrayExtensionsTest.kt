@@ -126,8 +126,9 @@ class ByteArrayExtensionsTest {
     val decodedBytes = emptyBase64.decodeBase64()
     assertContentEquals(byteArrayOf(), decodedBytes)
 
-    // decodeBase64String() throws exception for empty byte array as per IBase64.decode(ByteArray) implementation
-    assertFailsWith<IllegalArgumentException> { emptyBase64.decodeBase64String() }
+    // decodeBase64String() should return empty string for empty byte array
+    val decodedString = emptyBase64.decodeBase64String()
+    assertEquals("", decodedString)
   }
 
   @Test
