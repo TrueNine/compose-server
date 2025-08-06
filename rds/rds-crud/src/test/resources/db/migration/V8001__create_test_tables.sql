@@ -3,15 +3,15 @@ create
     if not exists test_entity
 (
     id
-        bigserial
-        primary
-            key,
+    bigserial
+    primary
+    key,
     name
-        varchar
-        default
-            null,
+    varchar
+    default
+    null,
     "value"
-        integer
-        default
-            null
+    integer
+    default
+    null
 );
