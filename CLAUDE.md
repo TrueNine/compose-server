@@ -2,8 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
 
-**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.3, Spring Framework 6.2.6, Jimmer 0.9.100, Gradle 9.0.0-rc-3, Java 24, PostgreSQL, Redis, Caffeine, MinIO,
-LangChain4j。
+**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.4, Spring Framework 6.2.6, Jimmer 0.9.105, Gradle 9.0.0, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
+
+**项目特点：**
+- 现代化企业级Kotlin服务端框架库，已发布至Maven中央仓库
+- 15+核心模块的模块化设计，支持按需集成到现有项目
+- 采用LGPL 2.1开源协议
 
 ## 模块结构与导航
 
@@ -81,13 +85,24 @@ LangChain4j。
 
 ## 构建命令
 
+**基础构建：**
 - `./gradlew build` - 构建项目
 - `./gradlew clean` - 清理输出
 - `./gradlew publishToMavenLocal` - 本地发布
 - `./gradlew check` - 运行所有测试
+
+**模块化操作：**
 - `./gradlew :{模块}:check` - 模块特定测试
+- `./gradlew :{模块}:build` - 构建单个模块
+- `./gradlew :{模块}:publishToMavenLocal` - 本地发布单个模块
+
+**代码质量：**
 - `./gradlew spotlessApply` - 修复格式（提交前必须运行）
 - `./gradlew versionCatalogFormat` - 修复 `libs.versions.toml` 格式
+
+**性能优化配置：**
+- JVM配置：`-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC`
+- 启用并行构建、缓存、配置缓存
 
 ## 构建约定与插件
 
@@ -105,10 +120,22 @@ LangChain4j。
 
 ## 开发标准
 
+**依赖和构建：**
 - **依赖管理：** Gradle Version Catalog (`gradle/libs.versions.toml`) 统一版本管理
 - **插件约定：** 所有Kotlin模块使用 `kotlinspring-conventions`，Java模块使用相应约定
 - **代码格式：** Spotless自动化格式检查（提交前必须运行 `./gradlew spotlessApply`）
-- **测试规范：** 测试类与被测试类同名，使用@Nested组织测试，禁用@DisplayName注解
+- **版本发布：** 发布至Maven中央仓库 `io.github.truenine:composeserver-*`
+
+**测试规范：**
+- 测试类与被测试类同名，使用@Nested组织测试
+- 禁用@DisplayName注解，使用反引号中文方法名
+- TestContainers集成测试支持 PostgreSQL/MySQL/Redis/MinIO
+- 测试组织：正常用例、异常用例、边界用例分组
+
+**架构约定：**
+- 包命名：`io.github.truenine.composeserver.{模块名}`
+- 自动配置：Spring Boot AutoConfiguration + @ConditionalOn* 条件化配置
+- 资源管理：ResourceHolder统一管理配置文件和静态资源
 
 ## 架构特点
 
@@ -128,3 +155,21 @@ LangChain4j。
 - Spring Boot AutoConfiguration自动装配各模块功能
 - 条件化配置：通过Properties类和@ConditionalOn*注解控制组件启用
 - 资源管理：ResourceHolder统一管理配置文件和静态资源加载
+
+## 重要开发指南
+
+**构建环境要求：**
+- Java 24+
+- Kotlin 2.2.0
+- Gradle 9.x（使用included builds和版本目录管理）
+
+**开发流程：**
+1. 提交前必须运行 `./gradlew spotlessApply` 修复代码格式
+2. 确保所有测试通过 `./gradlew check`  
+3. 使用@Nested组织测试，禁用@DisplayName，采用反引号中文方法名
+4. 新模块需在 `settings.gradle.kts` 中声明并应用相应的构建约定
+
+**版本管理：**
+- 依赖版本统一在 `gradle/libs.versions.toml` 中管理
+- 使用 `./gradlew versionCatalogUpdate` 检查依赖更新
+- 版本发布通过Maven中央仓库，命名规则：`io.github.truenine:composeserver-{模块名}`
