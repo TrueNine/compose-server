@@ -74,11 +74,11 @@ class MyServiceTest {
   @Test
   fun `测试服务功能`() {
     log.trace("testing service functionality")
-    
+
     val result = myService.doSomething()
-    
+
     assertTrue(result.isSuccess, "服务调用应该成功")
-    
+
     log.debug("service test completed")
   }
 }
