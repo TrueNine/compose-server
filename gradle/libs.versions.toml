@@ -50,7 +50,7 @@ org-springframework-modulith = "2.0.0-M1"
 org-springframework-security = "6.5.2"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.18"
+project = "0.0.19"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
