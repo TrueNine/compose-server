@@ -788,6 +788,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
             date.contains('T') && date.endsWith('Z') -> {
               Instant.parse(date)
             }
+
             else -> {
               // Try ISO 8601 as fallback
               Instant.parse(date)
