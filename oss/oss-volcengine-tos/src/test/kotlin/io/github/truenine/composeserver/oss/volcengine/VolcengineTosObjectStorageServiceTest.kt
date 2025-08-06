@@ -126,6 +126,7 @@ class VolcengineTosObjectStorageServiceTest {
         every { lastModified } returns null
       }
 
+    @Suppress("DEPRECATION")
     every { tosClient.listObjects(any<ListObjectsV2Input>()) } returns
       mockk<ListObjectsV2Output> {
         every { contents } returns emptyList<ListedObjectV2>()
@@ -246,6 +247,32 @@ class VolcengineTosObjectStorageServiceTest {
       val result = service.setBucketPolicy("test-bucket", policyJson)
 
       assertTrue(result.isSuccess)
+    }
+
+    @Nested
+    inner class `异常处理测试` {
+
+      @Test
+      fun `测试存储桶不存在异常`() = runTest {
+        // 使用一个通用异常来测试异常处理逻辑
+        every { tosClient.headBucket(any<HeadBucketV2Input>()) } throws RuntimeException("Bucket not found")
+
+        val result = service.bucketExists("non-existent-bucket")
+
+        // 对于bucketExists方法，任何异常都应该被捕获并转换为false
+        assertTrue(result.isSuccess)
+        assertFalse(result.getOrNull()!!)
+      }
+
+      @Test
+      fun `测试网络异常处理`() = runTest {
+        every { tosClient.listBuckets(any<ListBucketsV2Input>()) } throws java.net.SocketTimeoutException("Connection timeout")
+
+        val result = service.listBuckets()
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is io.github.truenine.composeserver.oss.NetworkException)
+      }
     }
   }
 

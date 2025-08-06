@@ -3,13 +3,61 @@ package io.github.truenine.composeserver.oss.volcengine
 import com.volcengine.tos.TOSV2
 import com.volcengine.tos.comm.common.ACLType
 import com.volcengine.tos.comm.common.MetadataDirectiveType
-import com.volcengine.tos.model.bucket.*
-import com.volcengine.tos.model.`object`.*
+import com.volcengine.tos.model.bucket.CreateBucketV2Input
+import com.volcengine.tos.model.bucket.DeleteBucketInput
+import com.volcengine.tos.model.bucket.GetBucketPolicyInput
+import com.volcengine.tos.model.bucket.HeadBucketV2Input
+import com.volcengine.tos.model.bucket.ListBucketsV2Input
+import com.volcengine.tos.model.bucket.PutBucketACLInput
+import com.volcengine.tos.model.bucket.PutBucketPolicyInput
+import com.volcengine.tos.model.`object`.CopyObjectV2Input
+import com.volcengine.tos.model.`object`.DeleteObjectInput
+import com.volcengine.tos.model.`object`.GetObjectV2Input
+import com.volcengine.tos.model.`object`.HeadObjectV2Input
+import com.volcengine.tos.model.`object`.ListObjectsType2Input
+import com.volcengine.tos.model.`object`.ListObjectsV2Input
+import com.volcengine.tos.model.`object`.PreSignedURLInput
+import com.volcengine.tos.model.`object`.PutObjectBasicInput
+import com.volcengine.tos.model.`object`.PutObjectInput
 import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.logger
-import io.github.truenine.composeserver.oss.*
+import io.github.truenine.composeserver.mapFailure
+import io.github.truenine.composeserver.onFailureDo
+import io.github.truenine.composeserver.oss.AuthenticationException
+import io.github.truenine.composeserver.oss.AuthorizationException
+import io.github.truenine.composeserver.oss.BucketAlreadyExistsException
 import io.github.truenine.composeserver.oss.BucketInfo as OssBucketInfo
+import io.github.truenine.composeserver.oss.BucketNotEmptyException
+import io.github.truenine.composeserver.oss.BucketNotFoundException
+import io.github.truenine.composeserver.oss.CompleteMultipartUploadRequest
+import io.github.truenine.composeserver.oss.ConfigurationException
+import io.github.truenine.composeserver.oss.CopyObjectRequest
+import io.github.truenine.composeserver.oss.CreateBucketRequest
+import io.github.truenine.composeserver.oss.DeleteResult
+import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
+import io.github.truenine.composeserver.oss.InvalidRequestException
+import io.github.truenine.composeserver.oss.ListObjectsRequest
+import io.github.truenine.composeserver.oss.MultipartUpload
+import io.github.truenine.composeserver.oss.NetworkException
+import io.github.truenine.composeserver.oss.ObjectContent
+import io.github.truenine.composeserver.oss.ObjectInfo
+import io.github.truenine.composeserver.oss.ObjectListing
+import io.github.truenine.composeserver.oss.ObjectNotFoundException
+import io.github.truenine.composeserver.oss.ObjectStorageException
+import io.github.truenine.composeserver.oss.ObjectStorageService
+import io.github.truenine.composeserver.oss.PartInfo
+import io.github.truenine.composeserver.oss.PutObjectRequest
+import io.github.truenine.composeserver.oss.QuotaExceededException
+import io.github.truenine.composeserver.oss.ServiceUnavailableException
+import io.github.truenine.composeserver.oss.ShareLinkInfo
+import io.github.truenine.composeserver.oss.ShareLinkRequest
+import io.github.truenine.composeserver.oss.StorageClass
+import io.github.truenine.composeserver.oss.UploadPartRequest
+import io.github.truenine.composeserver.oss.UploadWithLinkRequest
+import io.github.truenine.composeserver.oss.UploadWithLinkResponse
+import io.github.truenine.composeserver.safeCallAsync
 import java.io.InputStream
+import java.net.URI
 import java.time.Duration
 import java.time.Instant
 import kotlinx.coroutines.Dispatchers
@@ -31,31 +79,26 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     @JvmStatic private val log = logger<VolcengineTosObjectStorageService>()
   }
 
-  /** Map our StorageClass enum to TOS SDK storage class string */
-  private fun mapStorageClass(storageClass: StorageClass): String {
-    return when (storageClass) {
-      StorageClass.STANDARD -> "STANDARD"
-      StorageClass.REDUCED_REDUNDANCY -> "STANDARD" // TOS doesn't have reduced redundancy, use standard
-      StorageClass.GLACIER -> "COLD" // TOS uses COLD for archive storage
-      StorageClass.DEEP_ARCHIVE -> "COLD" // TOS uses COLD for deep archive
-      StorageClass.INTELLIGENT_TIERING -> "STANDARD" // TOS doesn't have intelligent tiering, use standard
-    }
+  override suspend fun isHealthy(): Boolean {
+    val result = safeCallAsync { tosClient.listBuckets(ListBucketsV2Input()) }
+    return result.fold(
+      onSuccess = {
+        log.debug("TOS health check passed")
+        true
+      },
+      onFailure = { e ->
+        log.error("TOS health check failed", e)
+        false
+      },
+    )
   }
 
-  override suspend fun isHealthy(): Boolean =
-    withContext(Dispatchers.IO) {
-      tosClient.listBuckets(ListBucketsV2Input())
-      log.debug("TOS health check passed")
-      true
-    }
+  override suspend fun createBucket(request: CreateBucketRequest): Result<OssBucketInfo> {
+    return safeCallAsync {
+        val input = CreateBucketV2Input().setBucket(request.bucketName)
+        tosClient.createBucket(input)
+        log.info("Created bucket: {}", request.bucketName)
 
-  override suspend fun createBucket(request: CreateBucketRequest): Result<OssBucketInfo> =
-    withContext(Dispatchers.IO) {
-      val input = CreateBucketV2Input().setBucket(request.bucketName)
-      tosClient.createBucket(input)
-      log.info("Created bucket: {}", request.bucketName)
-
-      Result.success(
         OssBucketInfo(
           name = request.bucketName,
           creationDate = Instant.now(),
@@ -64,33 +107,51 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           versioningEnabled = request.enableVersioning,
           tags = request.tags,
         )
-      )
-    }
+      }
+      .onFailureDo { e -> log.error("Failed to create bucket: {}", request.bucketName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun deleteBucket(bucketName: String): Result<Unit> =
-    withContext(Dispatchers.IO) {
-      val input = DeleteBucketInput().setBucket(bucketName)
-      tosClient.deleteBucket(input)
-      log.info("Deleted bucket: {}", bucketName)
-      Result.success(Unit)
-    }
+  override suspend fun deleteBucket(bucketName: String): Result<Unit> {
+    return safeCallAsync {
+        val input = DeleteBucketInput().setBucket(bucketName)
+        tosClient.deleteBucket(input)
+        log.info("Deleted bucket: {}", bucketName)
+      }
+      .onFailureDo { e -> log.error("Failed to delete bucket: {}", bucketName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun bucketExists(bucketName: String): Result<Boolean> =
-    withContext(Dispatchers.IO) {
-      val input = HeadBucketV2Input().setBucket(bucketName)
-      tosClient.headBucket(input)
-      Result.success(true)
-    }
+  override suspend fun bucketExists(bucketName: String): Result<Boolean> {
+    return safeCallAsync {
+        val input = HeadBucketV2Input().setBucket(bucketName)
+        tosClient.headBucket(input)
+        true
+      }
+      .onFailureDo { e -> log.debug("Bucket existence check failed for: {}", bucketName, e) }
+      .recover { e ->
+        // For bucket existence check, we want to return false for most errors
+        // as they typically indicate the bucket doesn't exist or isn't accessible
+        val mappedException = mapTosException(e as? Exception ?: Exception(e))
+        when (mappedException) {
+          is BucketNotFoundException -> false
+          is AuthorizationException -> throw mappedException // Re-throw auth errors
+          is AuthenticationException -> throw mappedException // Re-throw auth errors
+          else -> false // For other errors, assume bucket doesn't exist
+        }
+      }
+  }
 
-  override suspend fun setBucketPublicRead(bucketName: String): Result<Unit> =
-    withContext(Dispatchers.IO) {
-      // 使用 TOS SDK 设置存储桶为公共读取
-      val input = PutBucketACLInput().setBucket(bucketName).setAcl(ACLType.ACL_PUBLIC_READ)
-
-      tosClient.putBucketACL(input)
-      log.info("Set bucket public read: {}", bucketName)
-      Result.success(Unit)
-    }
+  override suspend fun setBucketPublicRead(bucketName: String): Result<Unit> {
+    return safeCallAsync {
+        // 使用 TOS SDK 设置存储桶为公共读取
+        val input = PutBucketACLInput().setBucket(bucketName).setAcl(ACLType.ACL_PUBLIC_READ)
+        tosClient.putBucketACL(input)
+        log.info("Set bucket public read: {}", bucketName)
+      }
+      .onFailureDo { e -> log.error("Failed to set bucket public read: {}", bucketName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
   override suspend fun getBucketPolicy(bucketName: String): Result<String> =
     withContext(Dispatchers.IO) {
@@ -108,10 +169,9 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       Result.success(Unit)
     }
 
-  override suspend fun listBuckets(): Result<List<OssBucketInfo>> =
-    withContext(Dispatchers.IO) {
-      val output = tosClient.listBuckets(ListBucketsV2Input())
-      val buckets =
+  override suspend fun listBuckets(): Result<List<OssBucketInfo>> {
+    return safeCallAsync {
+        val output = tosClient.listBuckets(ListBucketsV2Input())
         output.buckets?.map { bucket ->
           OssBucketInfo(
             name = bucket.name ?: "",
@@ -122,23 +182,24 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
             tags = emptyMap(),
           )
         } ?: emptyList()
-      Result.success(buckets)
-    }
+      }
+      .onFailureDo { e -> log.error("Failed to list buckets", e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun putObject(request: PutObjectRequest): Result<ObjectInfo> =
-    withContext(Dispatchers.IO) {
-      // 使用已弃用的 setPutObjectBasicInput，但添加 @Suppress 注解
-      val basicInput = PutObjectBasicInput().setBucket(request.bucketName).setKey(request.objectName)
-      @Suppress("DEPRECATION") val input = PutObjectInput().setPutObjectBasicInput(basicInput).setContent(request.inputStream)
+  override suspend fun putObject(request: PutObjectRequest): Result<ObjectInfo> {
+    return safeCallAsync {
+        // 使用已弃用的 setPutObjectBasicInput，但添加 @Suppress 注解
+        val basicInput = PutObjectBasicInput().setBucket(request.bucketName).setKey(request.objectName)
+        @Suppress("DEPRECATION") val input = PutObjectInput().setPutObjectBasicInput(basicInput).setContent(request.inputStream)
 
-      val output = tosClient.putObject(input)
-      log.info("Uploaded object: {}/{}", request.bucketName, request.objectName)
+        val output = tosClient.putObject(input)
+        log.info("Uploaded object: {}/{}", request.bucketName, request.objectName)
 
-      Result.success(
         ObjectInfo(
           bucketName = request.bucketName,
           objectName = request.objectName,
-          size = request.size ?: 0L,
+          size = request.size,
           etag = output.etag ?: "",
           lastModified = Instant.now(),
           contentType = request.contentType,
@@ -146,8 +207,10 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           storageClass = request.storageClass,
           tags = request.tags,
         )
-      )
-    }
+      }
+      .onFailureDo { e -> log.error("Failed to upload object: {}/{}", request.bucketName, request.objectName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
   override suspend fun putObject(
     bucketName: String,
@@ -162,18 +225,17 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     return putObject(request)
   }
 
-  override suspend fun getObject(bucketName: String, objectName: String): Result<ObjectContent> =
-    withContext(Dispatchers.IO) {
-      val input = GetObjectV2Input().setBucket(bucketName).setKey(objectName)
-      val output = tosClient.getObject(input)
+  override suspend fun getObject(bucketName: String, objectName: String): Result<ObjectContent> {
+    return safeCallAsync {
+        val input = GetObjectV2Input().setBucket(bucketName).setKey(objectName)
+        val output = tosClient.getObject(input)
 
-      Result.success(
         ObjectContent(
           objectInfo =
             ObjectInfo(
               bucketName = bucketName,
               objectName = objectName,
-              size = output.contentLength ?: 0L,
+              size = output.contentLength,
               etag = output.etag ?: "",
               lastModified = convertDateToInstant(output.lastModified),
               contentType = output.contentType,
@@ -183,22 +245,22 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
             ),
           inputStream = output.content,
         )
-      )
-    }
+      }
+      .onFailureDo { e -> log.error("Failed to get object: {}/{}", bucketName, objectName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun getObject(bucketName: String, objectName: String, offset: Long, length: Long): Result<ObjectContent> =
-    withContext(Dispatchers.IO) {
-      val input = GetObjectV2Input().setBucket(bucketName).setKey(objectName).setRange("bytes=$offset-${offset + length - 1}")
+  override suspend fun getObject(bucketName: String, objectName: String, offset: Long, length: Long): Result<ObjectContent> {
+    return safeCallAsync {
+        val input = GetObjectV2Input().setBucket(bucketName).setKey(objectName).setRange("bytes=$offset-${offset + length - 1}")
+        val output = tosClient.getObject(input)
 
-      val output = tosClient.getObject(input)
-
-      Result.success(
         ObjectContent(
           objectInfo =
             ObjectInfo(
               bucketName = bucketName,
               objectName = objectName,
-              size = output.contentLength ?: 0L,
+              size = output.contentLength,
               etag = output.etag ?: "",
               lastModified = convertDateToInstant(output.lastModified),
               contentType = output.contentType,
@@ -208,19 +270,20 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
             ),
           inputStream = output.content,
         )
-      )
-    }
+      }
+      .onFailureDo { e -> log.error("Failed to get object range: {}/{} (offset: {}, length: {})", bucketName, objectName, offset, length, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun getObjectInfo(bucketName: String, objectName: String): Result<ObjectInfo> =
-    withContext(Dispatchers.IO) {
-      val input = HeadObjectV2Input().setBucket(bucketName).setKey(objectName)
-      val output = tosClient.headObject(input)
+  override suspend fun getObjectInfo(bucketName: String, objectName: String): Result<ObjectInfo> {
+    return safeCallAsync {
+        val input = HeadObjectV2Input().setBucket(bucketName).setKey(objectName)
+        val output = tosClient.headObject(input)
 
-      Result.success(
         ObjectInfo(
           bucketName = bucketName,
           objectName = objectName,
-          size = output.contentLength ?: 0L,
+          size = output.contentLength,
           etag = output.etag ?: "",
           lastModified = convertDateToInstant(output.lastModified),
           contentType = output.contentType,
@@ -228,23 +291,38 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           storageClass = StorageClass.STANDARD, // TODO: 映射 TOS 的存储类型
           tags = emptyMap(),
         )
-      )
-    }
+      }
+      .onFailureDo { e -> log.error("Failed to get object info: {}/{}", bucketName, objectName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-  override suspend fun objectExists(bucketName: String, objectName: String): Result<Boolean> =
-    withContext(Dispatchers.IO) {
-      val input = HeadObjectV2Input().setBucket(bucketName).setKey(objectName)
-      tosClient.headObject(input)
-      Result.success(true)
-    }
+  override suspend fun objectExists(bucketName: String, objectName: String): Result<Boolean> {
+    return safeCallAsync {
+        val input = HeadObjectV2Input().setBucket(bucketName).setKey(objectName)
+        tosClient.headObject(input)
+        true
+      }
+      .onFailureDo { e -> log.debug("Object existence check failed for: {}/{}", bucketName, objectName, e) }
+      .recover { e ->
+        // For object existence check, we want to return false for "not found" errors
+        val mappedException = mapTosException(e as? Exception ?: Exception(e))
+        if (mappedException is ObjectNotFoundException) {
+          false
+        } else {
+          throw mappedException
+        }
+      }
+  }
 
-  override suspend fun deleteObject(bucketName: String, objectName: String): Result<Unit> =
-    withContext(Dispatchers.IO) {
-      val input = DeleteObjectInput().setBucket(bucketName).setKey(objectName)
-      tosClient.deleteObject(input)
-      log.info("Deleted object: {}/{}", bucketName, objectName)
-      Result.success(Unit)
-    }
+  override suspend fun deleteObject(bucketName: String, objectName: String): Result<Unit> {
+    return safeCallAsync {
+        val input = DeleteObjectInput().setBucket(bucketName).setKey(objectName)
+        tosClient.deleteObject(input)
+        log.info("Deleted object: {}/{}", bucketName, objectName)
+      }
+      .onFailureDo { e -> log.error("Failed to delete object: {}/{}", bucketName, objectName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
   override suspend fun deleteObjects(bucketName: String, objectNames: List<String>): Result<List<DeleteResult>> =
     withContext(Dispatchers.IO) {
@@ -302,151 +380,152 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       )
     }
 
-  override suspend fun listObjects(request: ListObjectsRequest): Result<ObjectListing> =
-    withContext(Dispatchers.IO) {
-      val input = ListObjectsV2Input().setBucket(request.bucketName).setMaxKeys(request.maxKeys)
+  override suspend fun listObjects(request: ListObjectsRequest): Result<ObjectListing> {
+    return safeCallAsync {
+        val input = ListObjectsV2Input().setBucket(request.bucketName).setMaxKeys(request.maxKeys)
 
-      // 设置可选参数
-      request.prefix?.let { input.setPrefix(it) }
-      request.delimiter?.let { input.setDelimiter(it) }
-      // TODO: 检查 TOS SDK 是否支持 continuation token 和 start after
-      // request.continuationToken?.let { input.setContinuationToken(it) }
-      // request.startAfter?.let { input.setStartAfter(it) }
+        // 设置可选参数
+        request.prefix?.let { input.setPrefix(it) }
+        request.delimiter?.let { input.setDelimiter(it) }
+        // TODO: 检查 TOS SDK 是否支持 continuation token 和 start after
+        // request.continuationToken?.let { input.setContinuationToken(it) }
+        // request.startAfter?.let { input.setStartAfter(it) }
 
-      val output = tosClient.listObjects(input)
+        @Suppress("DEPRECATION") val output = tosClient.listObjects(input)
 
-      val objects =
-        output.contents?.map { obj ->
-          ObjectInfo(
-            bucketName = request.bucketName,
-            objectName = obj.key ?: "",
-            size = obj.size ?: 0L,
-            etag = obj.etag ?: "",
-            lastModified = convertDateToInstant(obj.lastModified),
-            contentType = null, // TOS listObjects 不返回 contentType
-            metadata = emptyMap<String, String>(),
-            storageClass = StorageClass.STANDARD, // TODO: 映射 TOS 的存储类型
-            tags = emptyMap<String, String>(),
-          )
-        } ?: emptyList()
+        val objects =
+          output.contents?.map { obj ->
+            ObjectInfo(
+              bucketName = request.bucketName,
+              objectName = obj.key ?: "",
+              size = obj.size,
+              etag = obj.etag ?: "",
+              lastModified = convertDateToInstant(obj.lastModified),
+              contentType = null, // TOS listObjects 不返回 contentType
+              metadata = emptyMap(),
+              storageClass = StorageClass.STANDARD, // TODO: 映射 TOS 的存储类型
+              tags = emptyMap(),
+            )
+          } ?: emptyList()
 
-      val commonPrefixes = output.commonPrefixes?.map { it.prefix ?: "" } ?: emptyList()
+        val commonPrefixes = output.commonPrefixes?.map { it.prefix ?: "" } ?: emptyList()
 
-      Result.success(
         ObjectListing(
           bucketName = request.bucketName,
           objects = objects,
           commonPrefixes = commonPrefixes,
-          isTruncated = output.isTruncated ?: false,
+          isTruncated = output.isTruncated,
           nextContinuationToken = null, // TODO: 检查 TOS SDK 是否支持 continuation token
           maxKeys = request.maxKeys,
           prefix = request.prefix,
           delimiter = request.delimiter,
         )
-      )
-    }
-
-  override fun listObjectsFlow(request: ListObjectsRequest): Flow<ObjectInfo> = flow {
-    // 支持分页的实现
-    var continuationToken: String? = request.continuationToken
-
-    do {
-      val input = ListObjectsV2Input().setBucket(request.bucketName).setMaxKeys(request.maxKeys)
-
-      // 设置可选参数
-      request.prefix?.let { input.setPrefix(it) }
-      request.delimiter?.let { input.setDelimiter(it) }
-      // TODO: 检查 TOS SDK 是否支持 continuation token 和 start after
-      // continuationToken?.let { input.setContinuationToken(it) }
-      // request.startAfter?.let { input.setStartAfter(it) }
-
-      val output = tosClient.listObjects(input)
-
-      // 发出所有对象
-      output.contents?.forEach { obj ->
-        emit(
-          ObjectInfo(
-            bucketName = request.bucketName,
-            objectName = obj.key ?: "",
-            size = obj.size ?: 0L,
-            etag = obj.etag ?: "",
-            lastModified = convertDateToInstant(obj.lastModified),
-            contentType = null,
-            metadata = emptyMap<String, String>(),
-            storageClass = StorageClass.STANDARD,
-            tags = emptyMap<String, String>(),
-          )
-        )
       }
-
-      // 更新 continuation token 以便下次分页
-      // TODO: 检查 TOS SDK 是否支持 continuation token
-      continuationToken = null // output.nextContinuationToken
-    } while (continuationToken != null)
+      .onFailureDo { e -> log.error("Failed to list objects in bucket: {}", request.bucketName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
   }
 
-  override suspend fun generatePresignedUrl(bucketName: String, objectName: String, expiration: Duration, method: HttpMethod): Result<String> =
-    withContext(Dispatchers.IO) {
-      // 映射 HttpMethod 到 TOS SDK 的字符串
-      val tosMethod =
-        when (method) {
-          HttpMethod.GET -> "GET"
-          HttpMethod.PUT -> "PUT"
-          HttpMethod.POST -> "POST"
-          HttpMethod.DELETE -> "DELETE"
-          HttpMethod.HEAD -> "HEAD"
-          HttpMethod.PATCH -> "POST" // TOS 不支持 PATCH，使用 POST
-          HttpMethod.OPTIONS -> "GET" // TOS 不支持 OPTIONS，使用 GET
-          HttpMethod.TRACE -> "GET" // TOS 不支持 TRACE，使用 GET
-          HttpMethod.CONNECT -> "GET" // TOS 不支持 CONNECT，使用 GET
-        }
+  override fun listObjectsFlow(request: ListObjectsRequest): Flow<ObjectInfo> = flow {
+    // TOS SDK 当前版本不支持 continuation token，所以只执行一次查询
+    val input = ListObjectsType2Input().setBucket(request.bucketName).setMaxKeys(request.maxKeys)
 
-      val input = PreSignedURLInput().setBucket(bucketName).setKey(objectName).setHttpMethod(tosMethod).setExpires(expiration.seconds)
+    // 设置可选参数
+    request.prefix?.let { input.setPrefix(it) }
+    request.delimiter?.let { input.setDelimiter(it) }
+    val output = tosClient.listObjectsType2(input)
 
-      val output = tosClient.preSignedURL(input)
-      val presignedUrl = output.signedUrl ?: throw IllegalStateException("TOS SDK returned null presigned URL")
-
-      log.info("Generated presigned URL for: {}/{} (expires in {}s)", bucketName, objectName, expiration.seconds)
-      Result.success(presignedUrl)
+    // 发出所有对象
+    output.contents?.forEach { obj ->
+      emit(
+        ObjectInfo(
+          bucketName = request.bucketName,
+          objectName = obj.key ?: "",
+          size = obj.size,
+          etag = obj.etag ?: "",
+          lastModified = convertDateToInstant(obj.lastModified),
+          contentType = null,
+          metadata = emptyMap(),
+          storageClass = StorageClass.STANDARD,
+          tags = emptyMap(),
+        )
+      )
     }
+  }
 
-  override suspend fun initiateMultipartUpload(request: InitiateMultipartUploadRequest): Result<MultipartUpload> =
-    withContext(Dispatchers.IO) {
-      log.debug("Initiating multipart upload: {}/{}", request.bucketName, request.objectName)
+  override suspend fun generatePresignedUrl(bucketName: String, objectName: String, expiration: Duration, method: HttpMethod): Result<String> {
+    return safeCallAsync {
+        // 映射 HttpMethod 到 TOS SDK 的字符串
+        val tosMethod =
+          when (method) {
+            HttpMethod.GET -> "GET"
+            HttpMethod.PUT -> "PUT"
+            HttpMethod.POST -> "POST"
+            HttpMethod.DELETE -> "DELETE"
+            HttpMethod.HEAD -> "HEAD"
+            HttpMethod.PATCH -> "POST" // TOS 不支持 PATCH，使用 POST
+            HttpMethod.OPTIONS -> "GET" // TOS 不支持 OPTIONS，使用 GET
+            HttpMethod.TRACE -> "GET" // TOS 不支持 TRACE，使用 GET
+            HttpMethod.CONNECT -> "GET" // TOS 不支持 CONNECT，使用 GET
+          }
 
-      val input = com.volcengine.tos.model.`object`.CreateMultipartUploadInput().setBucket(request.bucketName).setKey(request.objectName)
+        val input = PreSignedURLInput().setBucket(bucketName).setKey(objectName).setHttpMethod(tosMethod).setExpires(expiration.seconds)
+        val output = tosClient.preSignedURL(input)
+        val presignedUrl = output.signedUrl ?: throw IllegalStateException("TOS SDK returned null presigned URL")
 
-      // TODO: 添加内容类型和元数据设置支持
+        log.info("Generated presigned URL for: {}/{} (expires in {}s)", bucketName, objectName, expiration.seconds)
+        presignedUrl
+      }
+      .onFailureDo { e -> log.error("Failed to generate presigned URL: {}/{}", bucketName, objectName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-      val output = tosClient.createMultipartUpload(input)
-      val uploadId = output.uploadID ?: throw IllegalStateException("TOS SDK returned null upload ID")
+  override suspend fun initiateMultipartUpload(request: InitiateMultipartUploadRequest): Result<MultipartUpload> {
+    return safeCallAsync {
+        log.debug("Initiating multipart upload: {}/{}", request.bucketName, request.objectName)
 
-      log.info("Initiated multipart upload: {}/{}, uploadId: {}", request.bucketName, request.objectName, uploadId)
+        val input = com.volcengine.tos.model.`object`.CreateMultipartUploadInput().setBucket(request.bucketName).setKey(request.objectName)
 
-      Result.success(MultipartUpload(uploadId = uploadId, bucketName = request.bucketName, objectName = request.objectName))
-    }
+        // TODO: 添加内容类型和元数据设置支持
+        // request.contentType?.let { input.setContentType(it) }
+        // if (request.metadata.isNotEmpty()) {
+        //   input.setMeta(request.metadata)
+        // }
 
-  override suspend fun uploadPart(request: UploadPartRequest): Result<PartInfo> =
-    withContext(Dispatchers.IO) {
-      log.debug("Uploading part {} for {}/{}, uploadId: {}", request.partNumber, request.bucketName, request.objectName, request.uploadId)
+        val output = tosClient.createMultipartUpload(input)
+        val uploadId = output.uploadID ?: throw IllegalStateException("TOS SDK returned null upload ID")
 
-      val input =
-        com.volcengine.tos.model.`object`
-          .UploadPartV2Input()
-          .setBucket(request.bucketName)
-          .setKey(request.objectName)
-          .setContentLength(request.size)
-          .setPartNumber(request.partNumber)
-          .setContent(request.inputStream)
-          .setUploadID(request.uploadId)
+        log.info("Initiated multipart upload: {}/{}, uploadId: {}", request.bucketName, request.objectName, uploadId)
 
-      val output = tosClient.uploadPart(input)
-      val etag = output.etag ?: throw IllegalStateException("TOS SDK returned null etag")
+        MultipartUpload(uploadId = uploadId, bucketName = request.bucketName, objectName = request.objectName)
+      }
+      .onFailureDo { e -> log.error("Failed to initiate multipart upload: {}/{}", request.bucketName, request.objectName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
-      log.info("Uploaded part {} for {}/{}, etag: {}", request.partNumber, request.bucketName, request.objectName, etag)
+  override suspend fun uploadPart(request: UploadPartRequest): Result<PartInfo> {
+    return safeCallAsync {
+        log.debug("Uploading part {} for {}/{}, uploadId: {}", request.partNumber, request.bucketName, request.objectName, request.uploadId)
 
-      Result.success(PartInfo(partNumber = request.partNumber, etag = etag, size = request.size, lastModified = null))
-    }
+        val input =
+          com.volcengine.tos.model.`object`
+            .UploadPartV2Input()
+            .setBucket(request.bucketName)
+            .setKey(request.objectName)
+            .setContentLength(request.size)
+            .setPartNumber(request.partNumber)
+            .setContent(request.inputStream)
+            .setUploadID(request.uploadId)
+
+        val output = tosClient.uploadPart(input)
+        val etag = output.etag ?: throw IllegalStateException("TOS SDK returned null etag")
+
+        log.info("Uploaded part {} for {}/{}, etag: {}", request.partNumber, request.bucketName, request.objectName, etag)
+
+        PartInfo(partNumber = request.partNumber, etag = etag, size = request.size, lastModified = null)
+      }
+      .onFailureDo { e -> log.error("Failed to upload part {} for {}/{}", request.partNumber, request.bucketName, request.objectName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
   override suspend fun completeMultipartUpload(request: CompleteMultipartUploadRequest): Result<ObjectInfo> =
     withContext(Dispatchers.IO) {
@@ -609,18 +688,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       }
 
       // 解析 URL 以获取 bucket 和 object 信息
-      // 示例 URL: https://test-bucket.tos.example.com/test-object.txt?signature=test
-      val urlParts = shareUrl.split("/")
-      if (urlParts.size < 4) {
-        throw IllegalArgumentException("Invalid share URL format")
-      }
-
-      // 从域名中提取 bucket 名称
-      val hostPart = urlParts[2] // 获取域名部分
-      val bucketName = hostPart.split(".")[0] // 取第一部分作为 bucket 名称
-      val objectName = urlParts[urlParts.size - 1].split("?")[0] // 移除查询参数
-
-      log.debug("Extracted bucket: {}, object: {} from share URL", bucketName, objectName)
+      val (bucketName, objectName) = parseShareUrl(shareUrl)
 
       // 使用常规的 getObject 方法
       val result = getObject(bucketName, objectName)
@@ -646,16 +714,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       }
 
       // 解析 URL 以获取基本信息
-      // 示例 URL: https://test-bucket.tos.example.com/test-object.txt?signature=test
-      val urlParts = shareUrl.split("/")
-      if (urlParts.size < 4) {
-        throw IllegalArgumentException("Invalid share URL format")
-      }
-
-      // 从域名中提取 bucket 名称
-      val hostPart = urlParts[2] // 获取域名部分
-      val bucketName = hostPart.split(".")[0] // 取第一部分作为 bucket 名称
-      val objectName = urlParts[urlParts.size - 1].split("?")[0] // 移除查询参数
+      val (bucketName, objectName) = parseShareUrl(shareUrl)
 
       // 检查对象是否存在（这也间接验证了 URL 的有效性）
       val existsResult = objectExists(bucketName, objectName)
@@ -720,16 +779,15 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
         is String -> {
           // Try multiple date formats
           when {
-            // ISO 8601 format like "2025-06-19T07:01:46.000Z"
-            date.contains('T') && date.endsWith('Z') -> {
-              Instant.parse(date)
-            }
             // RFC 1123 format like "Fri, 30 Jul 2021 08:05:36 GMT"
             date.contains(',') -> {
               val formatter = java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME
               java.time.ZonedDateTime.parse(date, formatter).toInstant()
             }
-
+            // ISO 8601 format like "2025-06-19T07:01:46.000Z"
+            date.contains('T') && date.endsWith('Z') -> {
+              Instant.parse(date)
+            }
             else -> {
               // Try ISO 8601 as fallback
               Instant.parse(date)
@@ -745,5 +803,92 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
         }
       }
     } ?: Instant.now()
+  }
+
+  /** Map TOS SDK exceptions to our unified exception hierarchy */
+  private fun mapTosException(e: Exception): ObjectStorageException {
+    return when (e) {
+      // TOS SDK specific exceptions
+      is com.volcengine.tos.TosException -> {
+        val errorCode = e.code
+        val errorMessage = e.message ?: "Unknown TOS error"
+        val statusCode = e.statusCode
+
+        log.debug("TOS exception - Code: {}, Status: {}, Message: {}", errorCode, statusCode, errorMessage)
+
+        when (errorCode) {
+          "NoSuchBucket" -> BucketNotFoundException(extractBucketName(errorMessage), e)
+          "BucketAlreadyExists",
+          "BucketAlreadyOwnedByYou" -> BucketAlreadyExistsException(extractBucketName(errorMessage), e)
+
+          "BucketNotEmpty" -> BucketNotEmptyException(extractBucketName(errorMessage), e)
+          "NoSuchKey" -> ObjectNotFoundException(extractBucketName(errorMessage), extractObjectName(errorMessage), e)
+          "AccessDenied" -> AuthorizationException("Access denied: $errorMessage", e)
+          "InvalidAccessKeyId",
+          "SignatureDoesNotMatch" -> AuthenticationException("Authentication failed: $errorMessage", e)
+
+          "InvalidArgument",
+          "InvalidRequest" -> InvalidRequestException("Invalid request: $errorMessage", e)
+
+          "ServiceUnavailable" -> ServiceUnavailableException("TOS service unavailable: $errorMessage", e)
+          "InternalError" -> ObjectStorageException("TOS internal error: $errorMessage", e)
+          "RequestTimeout" -> NetworkException("Request timeout: $errorMessage", e)
+          "SlowDown" -> QuotaExceededException("Rate limit exceeded: $errorMessage", e)
+          else -> ObjectStorageException("TOS operation failed: $errorMessage (code: $errorCode)", e)
+        }
+      }
+
+      // Network and IO exceptions
+      is java.net.SocketTimeoutException -> NetworkException("Socket timeout", e)
+      is java.net.ConnectException -> NetworkException("Connection failed", e)
+      is java.net.UnknownHostException -> NetworkException("Unknown host", e)
+      is java.io.IOException -> NetworkException("Network error: ${e.message}", e)
+
+      // Security exceptions
+      is java.security.InvalidKeyException -> AuthenticationException("Invalid key: ${e.message}", e)
+      is java.security.NoSuchAlgorithmException -> ConfigurationException("Algorithm not supported: ${e.message}", e)
+
+      // Generic exceptions
+      is IllegalArgumentException -> InvalidRequestException("Invalid argument: ${e.message}", e)
+      is IllegalStateException -> ObjectStorageException("Invalid state: ${e.message}", e)
+
+      else -> ObjectStorageException("TOS operation failed: ${e.message}", e)
+    }
+  }
+
+  /** Extract bucket name from error message */
+  private fun extractBucketName(errorMessage: String): String {
+    // Try to extract bucket name from common error message patterns
+    val bucketPattern = Regex("bucket[\\s:]+([a-zA-Z0-9.-]+)", RegexOption.IGNORE_CASE)
+    return bucketPattern.find(errorMessage)?.groupValues?.get(1) ?: "unknown"
+  }
+
+  /** Extract object name from error message */
+  private fun extractObjectName(errorMessage: String): String {
+    // Try to extract object name from common error message patterns
+    val objectPattern = Regex("object[\\s:]+(\\S+)", RegexOption.IGNORE_CASE)
+    return objectPattern.find(errorMessage)?.groupValues?.get(1) ?: "unknown"
+  }
+
+  /** Parse TOS share URL to extract bucket and object information */
+  private fun parseShareUrl(shareUrl: String): Pair<String, String> {
+    try {
+      val uri = URI(shareUrl)
+      val host = uri.host ?: throw IllegalArgumentException("Invalid URL: missing host")
+      val path = uri.path ?: throw IllegalArgumentException("Invalid URL: missing path")
+
+      // Extract bucket name from host (assuming format: bucket.tos.domain.com)
+      val hostParts = host.split(".")
+      val bucketName = hostParts.firstOrNull() ?: throw IllegalArgumentException("Invalid URL: cannot extract bucket from host")
+
+      // Extract object name from path (remove leading slash)
+      val objectName = path.removePrefix("/").takeIf { it.isNotEmpty() } ?: throw IllegalArgumentException("Invalid URL: empty object name")
+
+      log.debug("Parsed share URL - bucket: {}, object: {}", bucketName, objectName)
+      return bucketName to objectName
+    } catch (e: Exception) {
+      log.error("Failed to parse share URL: {}", shareUrl, e)
+      throw IllegalArgumentException("Invalid share URL format: ${e.message}", e)
+    }
   }
 }
