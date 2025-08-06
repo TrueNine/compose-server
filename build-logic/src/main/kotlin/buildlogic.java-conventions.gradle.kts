@@ -102,8 +102,6 @@ afterEvaluate {
     systemProperty("java.util.logging.config.file", "")
     systemProperty("sun.misc.unsafe.disableWarnings", "true")
 
-
-
     // Redirect stderr to filter out ByteBuddy warnings
     environment("JAVA_TOOL_OPTIONS", "-XX:+EnableDynamicAgentLoading -Djdk.instrument.traceUsage=false")
 
@@ -113,8 +111,6 @@ afterEvaluate {
       exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
       events("passed", "skipped", "failed")
     }
-
-
 
     val commonProjectDeps = listOf("testtoolkit", "shared")
 
