@@ -6,19 +6,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "compose.testtoolkit")
 data class TestConfigurationProperties(
   /** 是否启用测试配置 */
-  val enabled: Boolean = true,
+  var enabled: Boolean = true,
 
   /** 是否关闭条件评估报告 */
-  val disableConditionEvaluationReport: Boolean = true,
+  var disableConditionEvaluationReport: Boolean = true,
 
   /** 是否启用虚拟线程 */
-  val enableVirtualThreads: Boolean = true,
+  var enableVirtualThreads: Boolean = true,
 
   /** ANSI 颜色输出模式 */
-  val ansiOutputMode: AnsiOutputMode = AnsiOutputMode.ALWAYS,
+  var ansiOutputMode: AnsiOutputMode = AnsiOutputMode.ALWAYS,
 
   /** 额外的测试属性 */
-  val additionalProperties: Map<String, String> = emptyMap(),
+  var additionalProperties: Map<String, String> = emptyMap(),
 )
 
 /**

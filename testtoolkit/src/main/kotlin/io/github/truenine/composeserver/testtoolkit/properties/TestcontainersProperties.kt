@@ -30,76 +30,76 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 @ConfigurationProperties(prefix = "compose.testtoolkit.testcontainers")
 data class TestcontainersProperties(
   /** 是否复用所有容器，默认为 true */
-  val reuseAllContainers: Boolean = false,
+  var reuseAllContainers: Boolean = false,
 
   /** PostgreSQL 配置 */
-  @NestedConfigurationProperty val postgres: PostgresConfig = PostgresConfig(),
+  @NestedConfigurationProperty var postgres: PostgresConfig = PostgresConfig(),
 
   /** MySQL 配置 */
-  @NestedConfigurationProperty val mysql: MysqlConfig = MysqlConfig(),
+  @NestedConfigurationProperty var mysql: MysqlConfig = MysqlConfig(),
 
   /** Redis 配置 */
-  @NestedConfigurationProperty val redis: RedisConfig = RedisConfig(),
+  @NestedConfigurationProperty var redis: RedisConfig = RedisConfig(),
 
   /** MinIO 配置 */
-  @NestedConfigurationProperty val minio: MinioConfig = MinioConfig(),
+  @NestedConfigurationProperty var minio: MinioConfig = MinioConfig(),
 )
 
 /** # PostgreSQL 容器配置 */
 data class PostgresConfig(
   /** 是否复用容器，默认复用 */
-  val reuse: Boolean = true,
+  var reuse: Boolean = true,
   /** PostgreSQL Docker 镜像 默认使用 postgres:17-alpine（当前 LTS 版本） */
-  val image: String = "postgres:17.5-alpine3.22",
+  var image: String = "postgres:17.5-alpine3.22",
 
   /** 默认数据库名称 */
-  val databaseName: String = "testdb",
+  var databaseName: String = "testdb",
 
   /** 默认用户名 */
-  val username: String = "test",
+  var username: String = "test",
 
   /** 默认密码 */
-  val password: String = "test",
+  var password: String = "test",
 )
 
 /** # MySQL 容器配置 */
 data class MysqlConfig(
   /** 是否复用容器，默认复用 */
-  val reuse: Boolean = true,
+  var reuse: Boolean = true,
   /** MySQL Docker 镜像 默认使用 mysql:8.0（当前 LTS 版本） */
-  val image: String = "mysql:8.4.6-oraclelinux9",
+  var image: String = "mysql:8.4.6-oraclelinux9",
 
   /** 默认数据库名称 */
-  val databaseName: String = "testdb",
+  var databaseName: String = "testdb",
 
   /** 默认用户名 */
-  val username: String = "test",
+  var username: String = "test",
 
   /** 默认密码 */
-  val password: String = "test",
+  var password: String = "test",
 
   /** 默认根密码 */
-  val rootPassword: String = "roottest",
+  var rootPassword: String = "roottest",
 )
 
 /** # Redis 容器配置 */
 data class RedisConfig(
   /** 是否复用容器，默认复用 */
-  val reuse: Boolean = true,
+  var reuse: Boolean = true,
   /** Redis Docker 镜像 默认使用 redis:7-alpine（当前稳定版本） */
-  val image: String = "redis:8.0.3-alpine3.21",
+  var image: String = "redis:8.0.3-alpine3.21",
 )
 
 /** # MinIO 容器配置 */
 data class MinioConfig(
   /** 是否复用容器，默认复用 */
-  val reuse: Boolean = true,
+  var reuse: Boolean = true,
   /** MinIO Docker 镜像 默认使用较新的稳定版本 */
-  val image: String = "minio/minio:RELEASE.2025-07-23T15-54-02Z",
+  var image: String = "minio/minio:RELEASE.2025-07-23T15-54-02Z",
 
   /** 默认访问密钥 */
-  val accessKey: String = "minioadmin",
+  var accessKey: String = "minioadmin",
 
   /** 默认秘密密钥 */
-  val secretKey: String = "minioadmin",
+  var secretKey: String = "minioadmin",
 )
