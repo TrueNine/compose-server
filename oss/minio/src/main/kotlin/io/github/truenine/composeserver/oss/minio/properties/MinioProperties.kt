@@ -24,15 +24,15 @@ private const val PREFIX = "compose.oss.minio"
  */
 @ConfigurationProperties(prefix = PREFIX)
 data class MinioProperties(
-  val endpoint: String = "127.0.0.1",
-  val port: Int = 9000,
-  val accessKey: String? = null,
-  val secretKey: String? = null,
-  val exposedBaseUrl: String? = null,
-  val enableSsl: Boolean = false,
-  val region: String? = null,
-  val connectionTimeout: Duration = Duration.ofSeconds(30),
-  val writeTimeout: Duration = Duration.ofMinutes(5),
-  val readTimeout: Duration = Duration.ofMinutes(5),
-  val enableLogging: Boolean = false,
+  var endpoint: String = "127.0.0.1",
+  var port: Int = 9000,
+  var accessKey: String? = null,
+  var secretKey: String? = null,
+  var exposedBaseUrl: String? = null,
+  var enableSsl: Boolean = false,
+  var region: String? = null,
+  var connectionTimeout: Duration = Duration.ofSeconds(30),
+  var writeTimeout: Duration = Duration.ofMinutes(5),
+  var readTimeout: Duration = Duration.ofMinutes(5),
+  var enableLogging: Boolean = false,
 )
