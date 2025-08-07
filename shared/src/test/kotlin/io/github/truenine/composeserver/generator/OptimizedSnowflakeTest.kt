@@ -9,14 +9,12 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
-@DisplayName("Optimized SynchronizedSimpleSnowflake Tests")
 class OptimizedSnowflakeTest {
   private lateinit var snowflake: SynchronizedSimpleSnowflake
   private val startTimeStamp = 1577836800000L // 2020-01-01 00:00:00 UTC
@@ -27,7 +25,6 @@ class OptimizedSnowflakeTest {
   }
 
   @Nested
-  @DisplayName("Constructor Parameter Validation Tests")
   inner class ConstructorValidationTests {
 
     @Test
@@ -93,7 +90,6 @@ class OptimizedSnowflakeTest {
   }
 
   @Nested
-  @DisplayName("ID Generation Tests")
   inner class IdGenerationTests {
 
     @Test
@@ -156,7 +152,6 @@ class OptimizedSnowflakeTest {
   }
 
   @Nested
-  @DisplayName("Clock Backward Handling Tests")
   inner class ClockBackwardTests {
 
     @Test
@@ -246,26 +241,26 @@ class OptimizedSnowflakeTest {
         SynchronizedSimpleSnowflake(
           workId = 1L,
           datacenterId = 1L,
-          sequence = 4094L, // Close to max to trigger overflow
+          sequence = 4094L, // Start with sequence 4094
           startTimeStamp = startTimeStamp,
         )
 
-      val id1 = testSnowflake.next()
-      val id2 = testSnowflake.next()
-      val id3 = testSnowflake.next()
-
-      // All IDs should be unique and increasing
-      assertTrue(id2 > id1, "Second ID should be greater than first")
-      assertTrue(id3 > id2, "Third ID should be greater than second")
+      // Generate IDs rapidly in the same millisecond to trigger sequence overflow
+      val ids = mutableListOf<Long>()
+      repeat(10) { ids.add(testSnowflake.next()) }
 
       // Verify overflow count increased
       val stats = testSnowflake.getStatistics()
-      assertTrue(stats.sequenceOverflowCount > 0, "Should have sequence overflow")
+      assertTrue(stats.sequenceOverflowCount > 0, "Should have sequence overflow after generating multiple IDs rapidly")
+
+      // All IDs should be unique and increasing
+      for (i in 1 until ids.size) {
+        assertTrue(ids[i] > ids[i - 1], "ID at index $i should be greater than previous ID")
+      }
     }
   }
 
   @Nested
-  @DisplayName("Concurrency Tests")
   inner class ConcurrencyTests {
 
     @Test
@@ -347,7 +342,6 @@ class OptimizedSnowflakeTest {
   }
 
   @Nested
-  @DisplayName("Statistics Tests")
   inner class StatisticsTests {
 
     @Test
@@ -384,7 +378,6 @@ class OptimizedSnowflakeTest {
   }
 
   @Nested
-  @DisplayName("Edge Cases and Boundary Tests")
   inner class EdgeCaseTests {
 
     @Test
@@ -429,7 +422,6 @@ class OptimizedSnowflakeTest {
   }
 
   @Nested
-  @DisplayName("Statistics Data Class Tests")
   inner class StatisticsDataClassTests {
 
     @Test

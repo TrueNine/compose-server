@@ -20,13 +20,13 @@ private const val PREFIX = "compose.shared"
  */
 @ConfigurationProperties(prefix = "$PREFIX.data-load")
 data class DataLoadProperties(
-  val location: String = "data",
-  val matchFiles: MutableList<String> = mutableListOf(),
-  val configLocation: String = "config",
+  var location: String = "data",
+  var matchFiles: MutableList<String> = mutableListOf(),
+  var configLocation: String = "config",
 
   /** Enhanced configuration properties for advanced ResourceHolder features. This provides access to profile-based resolution, caching, custom sources, etc. */
   @NestedConfigurationProperty
-  val enhanced: ResourceHolderConfiguration = ResourceHolderConfiguration(configLocation = configLocation, location = location, matchFiles = matchFiles),
+  var enhanced: ResourceHolderConfiguration = ResourceHolderConfiguration(configLocation = configLocation, location = location, matchFiles = matchFiles),
 ) {
 
   /** Gets the effective configuration location, preferring enhanced config if available. */

@@ -24,34 +24,34 @@ import org.springframework.validation.annotation.Validated
 data class ResourceHolderConfiguration(
 
   // Basic configuration (backward compatibility)
-  @field:NotBlank(message = "Config location cannot be blank") val configLocation: String = "config",
-  @field:NotBlank(message = "Data location cannot be blank") val location: String = "data",
-  @field:NotEmpty(message = "Match files list cannot be empty") val matchFiles: MutableList<String> = mutableListOf(),
+  @field:NotBlank(message = "Config location cannot be blank") var configLocation: String = "config",
+  @field:NotBlank(message = "Data location cannot be blank") var location: String = "data",
+  @field:NotEmpty(message = "Match files list cannot be empty") var matchFiles: MutableList<String> = mutableListOf(),
 
   // Enhanced configuration
   /** Active profiles for environment-specific resource resolution. Resources with matching profiles take precedence over default resources. */
-  val activeProfiles: List<String> = emptyList(),
+  var activeProfiles: List<String> = emptyList(),
 
   /** Custom resource sources with explicit priorities. These sources are added to the default Spring Boot-like hierarchy. */
-  val customSources: List<CustomResourceSource> = emptyList(),
+  var customSources: List<CustomResourceSource> = emptyList(),
 
   /** Cache configuration for performance optimization. */
-  val cache: CacheConfiguration = CacheConfiguration(),
+  var cache: CacheConfiguration = CacheConfiguration(),
 
   /** Whether to enable strict mode for resource resolution. In strict mode, missing required resources will cause startup failure. */
-  val strictMode: Boolean = false,
+  var strictMode: Boolean = false,
 
   /** Whether to enable resource change detection and automatic cache invalidation. */
-  val enableChangeDetection: Boolean = false,
+  var enableChangeDetection: Boolean = false,
 
   /** Timeout in milliseconds for resource resolution operations. */
-  @field:Min(value = 1000, message = "Resolution timeout must be at least 1000ms") val resolutionTimeoutMs: Long = 30000,
+  @field:Min(value = 1000, message = "Resolution timeout must be at least 1000ms") var resolutionTimeoutMs: Long = 30000,
 
   /** Whether to enable detailed logging for resource resolution debugging. */
-  val enableDebugLogging: Boolean = false,
+  var enableDebugLogging: Boolean = false,
 
   /** Fallback configuration for when resources are not found. */
-  val fallback: FallbackConfiguration = FallbackConfiguration(),
+  var fallback: FallbackConfiguration = FallbackConfiguration(),
 ) {
 
   /** Gets the primary active profile (first in the list). */
@@ -73,11 +73,11 @@ data class ResourceHolderConfiguration(
 
 /** Configuration for custom resource sources. */
 data class CustomResourceSource(
-  @field:NotBlank(message = "Resource source type cannot be blank") val type: String,
-  @field:NotBlank(message = "Resource source path cannot be blank") val path: String,
-  @field:Min(value = 0, message = "Priority must be non-negative") val priority: Int,
-  val profile: String? = null,
-  val description: String = "",
+  @field:NotBlank(message = "Resource source type cannot be blank") var type: String,
+  @field:NotBlank(message = "Resource source path cannot be blank") var path: String,
+  @field:Min(value = 0, message = "Priority must be non-negative") var priority: Int,
+  var profile: String? = null,
+  var description: String = "",
 ) {
 
   /** Converts to ResourceSource. */
@@ -104,47 +104,47 @@ data class CustomResourceSource(
 /** Cache configuration for resource resolution. */
 data class CacheConfiguration(
   /** Whether caching is enabled. */
-  val enabled: Boolean = true,
+  var enabled: Boolean = true,
 
   /** Maximum number of entries in the cache. */
-  @field:Min(value = 10, message = "Cache max size must be at least 10") val maxSize: Int = 1000,
+  @field:Min(value = 10, message = "Cache max size must be at least 10") var maxSize: Int = 1000,
 
   /** Time-to-live for cache entries in milliseconds. */
-  @field:Min(value = 1000, message = "Cache TTL must be at least 1000ms") val ttlMs: Long = 300_000, // 5 minutes
+  @field:Min(value = 1000, message = "Cache TTL must be at least 1000ms") var ttlMs: Long = 300_000, // 5 minutes
 
   /** Whether to enable cache statistics collection. */
-  val enableStats: Boolean = true,
+  var enableStats: Boolean = true,
 
   /** Interval in milliseconds for automatic cleanup of expired entries. */
-  @field:Min(value = 10000, message = "Cleanup interval must be at least 10000ms") val cleanupIntervalMs: Long = 60_000, // 1 minute
+  @field:Min(value = 10000, message = "Cleanup interval must be at least 10000ms") var cleanupIntervalMs: Long = 60_000, // 1 minute
 )
 
 /** Fallback configuration for resource resolution. */
 data class FallbackConfiguration(
   /** Whether to enable fallback to default resources when profile-specific resources are not found. */
-  val enableProfileFallback: Boolean = true,
+  var enableProfileFallback: Boolean = true,
 
   /** Whether to enable fallback to classpath resources when filesystem resources are not found. */
-  val enableClasspathFallback: Boolean = true,
+  var enableClasspathFallback: Boolean = true,
 
   /** Default resource patterns to use as fallbacks. */
-  val defaultPatterns: List<String> = emptyList(),
+  var defaultPatterns: List<String> = emptyList(),
 
   /** Whether to create empty resources when no fallbacks are available. */
-  val createEmptyResources: Boolean = false,
+  var createEmptyResources: Boolean = false,
 )
 
 /** Validation configuration for resource patterns and sources. */
 data class ValidationConfiguration(
   /** Whether to validate resource patterns for security (e.g., prevent path traversal). */
-  val enablePatternValidation: Boolean = true,
+  var enablePatternValidation: Boolean = true,
 
   /** Whether to validate that configured resource sources are accessible at startup. */
-  val enableSourceValidation: Boolean = true,
+  var enableSourceValidation: Boolean = true,
 
   /** List of allowed resource patterns (regex). */
-  val allowedPatterns: List<String> = listOf(".*"),
+  var allowedPatterns: List<String> = listOf(".*"),
 
   /** List of forbidden resource patterns (regex). */
-  val forbiddenPatterns: List<String> = listOf(".*\\.\\./.*"), // Prevent path traversal
+  var forbiddenPatterns: List<String> = listOf(".*\\.\\./.*"), // Prevent path traversal
 )

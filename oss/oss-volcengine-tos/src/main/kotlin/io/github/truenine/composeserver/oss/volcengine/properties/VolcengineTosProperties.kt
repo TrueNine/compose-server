@@ -44,94 +44,94 @@ private const val PREFIX = "compose.oss.volcengine-tos"
 @ConfigurationProperties(prefix = PREFIX)
 data class VolcengineTosProperties(
   /** Service endpoint URL */
-  val endpoint: String? = null,
+  var endpoint: String? = null,
 
   /** Service region */
-  val region: String? = null,
+  var region: String? = null,
 
   /** Access key for authentication */
-  val accessKey: String? = null,
+  var accessKey: String? = null,
 
   /** Secret key for authentication */
-  val secretKey: String? = null,
+  var secretKey: String? = null,
 
   /** Session token for temporary credentials (STS) */
-  val sessionToken: String? = null,
+  var sessionToken: String? = null,
 
   /** Public base URL for object access */
-  val exposedBaseUrl: String? = null,
+  var exposedBaseUrl: String? = null,
 
   /** Enable SSL/TLS connection */
-  val enableSsl: Boolean = true,
+  var enableSsl: Boolean = true,
 
   // === Timeout Configuration ===
   /** Connection timeout in milliseconds - optimized for production */
-  val connectTimeoutMills: Int = 10_000,
+  var connectTimeoutMills: Int = 10_000,
 
   /** Read timeout in milliseconds - balanced for large files */
-  val readTimeoutMills: Int = 60_000,
+  var readTimeoutMills: Int = 60_000,
 
   /** Write timeout in milliseconds - balanced for large uploads */
-  val writeTimeoutMills: Int = 60_000,
+  var writeTimeoutMills: Int = 60_000,
 
   /** Idle connection timeout in milliseconds - connection pool optimization */
-  val idleConnectionTimeMills: Int = 60_000,
+  var idleConnectionTimeMills: Int = 60_000,
 
   // === Connection Pool Configuration ===
   /** Maximum number of connections in pool - optimized for high concurrency */
-  val maxConnections: Int = 1024,
+  var maxConnections: Int = 1024,
 
   /** Maximum number of retries on failure - balanced retry strategy */
-  val maxRetryCount: Int = 3,
+  var maxRetryCount: Int = 3,
 
   /** DNS cache time in minutes - 0 means disabled, positive values enable caching */
-  val dnsCacheTimeMinutes: Int = 5,
+  var dnsCacheTimeMinutes: Int = 5,
 
   // === Feature Toggles ===
   /** Enable CRC64 checksum validation for data integrity */
-  val enableCrc: Boolean = true,
+  var enableCrc: Boolean = true,
 
   /** Enable SSL certificate verification */
-  val enableVerifySSL: Boolean = true,
+  var enableVerifySSL: Boolean = true,
 
   /** Auto recognize content type by file extension */
-  val clientAutoRecognizeContentType: Boolean = true,
+  var clientAutoRecognizeContentType: Boolean = true,
 
   /** Enable detailed request/response logging */
-  val enableLogging: Boolean = false,
+  var enableLogging: Boolean = false,
 
   // === Domain Configuration ===
   /** Custom domain for object access */
-  val customDomain: String? = null,
+  var customDomain: String? = null,
 
   /** Whether using custom domain (affects bucket name handling) */
-  val isCustomDomain: Boolean = false,
+  var isCustomDomain: Boolean = false,
 
   // === User-Agent Configuration ===
   /** Product name for User-Agent header */
-  val userAgentProductName: String = "ComposeServer",
+  var userAgentProductName: String = "ComposeServer",
 
   /** Software name for User-Agent header */
-  val userAgentSoftName: String = "TOS-Client",
+  var userAgentSoftName: String = "TOS-Client",
 
   /** Software version for User-Agent header */
-  val userAgentSoftVersion: String = "1.0.0",
+  var userAgentSoftVersion: String = "1.0.0",
 
   /** Custom key-value pairs for User-Agent */
-  val userAgentCustomizedKeyValues: Map<String, String> = emptyMap(),
+  var userAgentCustomizedKeyValues: Map<String, String> = emptyMap(),
 
   // === Proxy Configuration ===
   /** Proxy server host */
-  val proxyHost: String? = null,
+  var proxyHost: String? = null,
 
   /** Proxy server port */
-  val proxyPort: Int = 0,
+  var proxyPort: Int = 0,
 
   /** Proxy authentication username */
-  val proxyUserName: String? = null,
+  var proxyUserName: String? = null,
 
   /** Proxy authentication password */
-  val proxyPassword: String? = null,
+  var proxyPassword: String? = null,
 ) {
 
   /** Validate configuration properties */

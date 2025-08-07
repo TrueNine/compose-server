@@ -19,7 +19,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
  * @author TrueNine
  * @since 2024-07-18
  */
-data class ResourceSource(val type: ResourceType, val path: String, val priority: Int, val profile: String? = null, val description: String = "") {
+data class ResourceSource(var type: ResourceType, var path: String, var priority: Int, var profile: String? = null, var description: String = "") {
 
   init {
     if (!path.hasText()) {

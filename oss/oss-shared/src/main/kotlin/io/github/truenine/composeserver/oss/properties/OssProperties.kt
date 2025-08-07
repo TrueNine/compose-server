@@ -31,49 +31,49 @@ private const val PREFIX = "compose.oss"
 @ConfigurationProperties(prefix = PREFIX)
 data class OssProperties(
   /** OSS provider type (minio, volcengine-tos, aliyun-oss, etc.) */
-  val provider: String? = null,
+  var provider: String? = null,
 
   /** Service endpoint URL */
-  val endpoint: String? = null,
+  var endpoint: String? = null,
 
   /** Service region */
-  val region: String? = null,
+  var region: String? = null,
 
   /** Access key for authentication */
-  val accessKey: String? = null,
+  var accessKey: String? = null,
 
   /** Secret key for authentication */
-  val secretKey: String? = null,
+  var secretKey: String? = null,
 
   /** Public base URL for object access */
-  val exposedBaseUrl: String? = null,
+  var exposedBaseUrl: String? = null,
 
   /** Enable SSL/TLS connection */
-  val enableSsl: Boolean = true,
+  var enableSsl: Boolean = true,
 
   /** Connection timeout */
-  val connectionTimeout: Duration = Duration.ofSeconds(30),
+  var connectionTimeout: Duration = Duration.ofSeconds(30),
 
   /** Read timeout */
-  val readTimeout: Duration = Duration.ofMinutes(5),
+  var readTimeout: Duration = Duration.ofMinutes(5),
 
   /** Write timeout */
-  val writeTimeout: Duration = Duration.ofMinutes(5),
+  var writeTimeout: Duration = Duration.ofMinutes(5),
 
   /** Maximum number of connections */
-  val maxConnections: Int = 100,
+  var maxConnections: Int = 100,
 
   /** Default bucket name */
-  val defaultBucket: String? = null,
+  var defaultBucket: String? = null,
 
   /** Auto create bucket if not exists */
-  val autoCreateBucket: Boolean = false,
+  var autoCreateBucket: Boolean = false,
 
   /** Enable object versioning */
-  val enableVersioning: Boolean = false,
+  var enableVersioning: Boolean = false,
 
   /** Enable request/response logging */
-  val enableLogging: Boolean = false,
+  var enableLogging: Boolean = false,
 ) {
   /**
    * Validate the configuration properties
