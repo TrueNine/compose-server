@@ -1,6 +1,5 @@
 [versions]
 cn-dev33-sa-token = "1.44.0"
-cn-dev33-sa-token-redis = "1.44.0"
 cn-hutool = "5.8.39"
 com-alibaba-cloud = "2023.0.3.3"
 com-baomidou-mybatis-plus = "3.5.12"
@@ -16,7 +15,6 @@ com-squareup-okio = "3.16.0"
 com-vanniktech-maven-publish = "0.34.0"
 com-xuxueli-xxl-job = "3.1.1"
 com-yomahub-liteflow = "2.13.2.1"
-dev-langchain4j = "1.2.0"
 dev-langchain4j-community = "1.1.0-beta7"
 group = "io.github.truenine"
 io-netty = "4.2.3.Final"
@@ -54,7 +52,7 @@ project = "0.0.20"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
-cn-dev33-sa-token-redis-template = { module = "cn.dev33:sa-token-redis-template", version.ref = "cn-dev33-sa-token-redis" }
+cn-dev33-sa-token-redis-template = { module = "cn.dev33:sa-token-redis-template", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot-starter = { module = "cn.dev33:sa-token-spring-boot-starter", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot3-starter = { module = "cn.dev33:sa-token-spring-boot3-starter", version.ref = "cn-dev33-sa-token" }
 cn-hutool-hutool-all = { module = "cn.hutool:hutool-all", version.ref = "cn-hutool" }
@@ -62,6 +60,7 @@ cn-hutool-hutool-captcha = { module = "cn.hutool:hutool-captcha", version.ref = 
 cn-hutool-hutool-core = { module = "cn.hutool:hutool-core", version.ref = "cn-hutool" }
 cn-hutool-hutool-crypto = { module = "cn.hutool:hutool-crypto", version.ref = "cn-hutool" }
 cn-hutool-hutool-db = { module = "cn.hutool:hutool-db", version.ref = "cn-hutool" }
+cn-idev-excel-fastexcel = "cn.idev.excel:fastexcel:1.2.0"
 com-alibaba-cloud-spring-cloud-alibaba-dependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "com-alibaba-cloud" }
 com-alibaba-easyexcel = "com.alibaba:easyexcel:4.0.3"
 com-aliyun-oss-aliyun-sdk-oss = "com.aliyun.oss:aliyun-sdk-oss:3.18.3"
@@ -71,7 +70,6 @@ com-baomidou-mybatis-plus-boot-starter-test = { module = "com.baomidou:mybatis-p
 com-baomidou-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-spring-boot3-starter = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-diffplug-spotless-com-diffplug-spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "com-diffplug-spotless" }
-cn-idev-excel-fastexcel = "cn.idev.excel:fastexcel:1.2.0"
 com-fasterxml-jackson-core-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "com-fasterxml-jackson" }
@@ -191,7 +189,6 @@ org-apache-commons-commons-exec = { module = "org.apache.commons:commons-exec", 
 org-apache-commons-commons-pool2 = "org.apache.commons:commons-pool2:2.12.1"
 org-apache-logging-log4j-log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "org-apache-logging-log4j" }
 org-apache-logging-log4j-log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "org-apache-logging-log4j" }
-# GitHub Actions 测试相关库
 org-assertj-assertj-core = { module = "org.assertj:assertj-core", version.ref = "org-assertj" }
 org-awaitility-awaitility = { module = "org.awaitility:awaitility", version.ref = "org-awaitility" }
 org-awaitility-awaitility-kotlin = { module = "org.awaitility:awaitility-kotlin", version.ref = "org-awaitility" }
@@ -204,6 +201,9 @@ org-babyfish-jimmer-jimmer-spring-boot-starter = { module = "org.babyfish.jimmer
 org-babyfish-jimmer-jimmer-sql = { module = "org.babyfish.jimmer:jimmer-sql", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-sql-kotlin = { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "org-babyfish-jimmer" }
 org-bouncycastle-bcprov-jdk18on = "org.bouncycastle:bcprov-jdk18on:1.81"
+org-casbin-casbin-spring-boot-starter = "org.casbin:casbin-spring-boot-starter:1.9.0"
+org-casbin-casbin-spring-security-starter = "org.casbin:casbin-spring-security-starter:1.1.0"
+org-casbin-jcasbin = "org.casbin:jcasbin:1.82.0"
 org-eclipse-paho-client-mqttv3 = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 org-flywaydb-flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "com-flywaydb-flyway" }
 org-flywaydb-flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "com-flywaydb-flyway" }
