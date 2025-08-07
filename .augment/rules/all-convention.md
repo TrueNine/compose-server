@@ -2,14 +2,20 @@
 type: "always_apply"
 ---
 
-**框架概述：** Compose Server 是现代化、模块化的 Kotlin 企业级开发框架（非脚手架），通过 Gradle 多模块提供企业级 SDK。所有模块可独立集成到任意 Spring Boot 或其他 JVM 项目中。
+**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.4, Spring Framework 6.2.6, Jimmer 0.9.105, Gradle 9.0.0, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
 
-**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.3, Spring Framework 6.2.6, Jimmer 0.9.101, Gradle 9.0.0-rc-4, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
+**项目特点：**
+
+- 现代化企业级Kotlin服务端框架库，已发布至Maven中央仓库
+- 15+核心模块的模块化设计，支持按需集成到现有项目
+- 采用LGPL 2.1开源协议
 
 ## 模块结构与导航
+
 **包格式：** `io.github.truenine.composeserver.{模块名}`
 
 **核心基础模块：**
+
 - `shared/` - 核心组件、工具类、异常处理、统一响应、分页、类型定义
 - `testtoolkit/` - 测试工具包、TestContainers集成
 - `version-catalog/` - 版本目录管理
@@ -17,26 +23,29 @@ type: "always_apply"
 - `gradle-plugin/` - Gradle插件和约定
 
 **业务能力模块：**
+
 - `cacheable/` - 多级缓存（Redis、Caffeine）
 - `ai/` - AI服务
-  - `ai:shared` - AI共享组件
-  - `ai:langchain4j` - LangChain4j集成
+  - `ai-shared` - AI共享组件
+  - `ai-langchain4j` - LangChain4j集成
 - `pay/` - 支付服务
-  - `pay:shared` - 支付共享组件
-  - `pay:wechat` - 微信支付V3
+  - `pay-shared` - 支付共享组件
+  - `pay-wechat` - 微信支付V3
 - `oss/` - 对象存储
-  - `oss:shared` - OSS共享组件
-  - `oss:minio` - MinIO集成
-  - `oss:aliyun-oss` - 阿里云OSS
-  - `oss:huawei-obs` - 华为云OBS
-  - `oss:volcengine-tos` - 火山引擎TOS
+  - `oss-shared` - OSS共享组件
+  - `oss-minio` - MinIO集成
+  - `oss-aliyun-oss` - 阿里云OSS
+  - `oss-huawei-obs` - 华为云OBS
+  - `oss-volcengine-tos` - 火山引擎TOS
 - `rds/` - 关系型数据库
-  - `rds:shared` - RDS共享组件
-  - `rds:crud` - CRUD操作
-  - `rds:jimmer-ext-postgres` - Jimmer PostgreSQL扩展
-  - `rds:flyway-migration-postgresql` - Flyway PostgreSQL迁移
+  - `rds-shared` - RDS共享组件
+  - `rds-crud` - CRUD操作
+  - `rds-jimmer-ext-postgres` - Jimmer PostgreSQL扩展
+  - `rds-flyway-migration-postgresql` - Flyway PostgreSQL迁移
+  - `rds-flyway-migration-mysql8` - Flyway MySQL8迁移
 
 **系统服务模块：**
+
 - `security/` - 安全服务
   - `security:spring` - Spring Security集成
   - `security:oauth2` - OAuth2支持
@@ -49,6 +58,7 @@ type: "always_apply"
   - `surveillance:hikvision` - 海康威视集成
 
 **数据处理模块：**
+
 - `data/` - 数据处理
   - `data:crawler` - 网络爬虫
   - `data:extract` - 数据提取
@@ -61,28 +71,48 @@ type: "always_apply"
   - `depend:xxl-job` - XXL-Job集成
 
 **代码生成模块：**
+
 - `ksp/` - Kotlin符号处理
   - `ksp:plugin` - KSP插件
   - `ksp:shared` - KSP共享组件
   - `ksp:meta` - 元数据定义
 
 **常用路径：**
+
 - 构建文件：`{模块}/build.gradle.kts`
 - 源码：`{模块}/src/main/kotlin/io/github/truenine/composeserver/{模块}/`
 - 测试：`{模块}/src/test/kotlin/`
 - 资源：`{模块}/src/main/resources/`
 
 ## 构建命令
+
+**基础构建：**
+
 - `./gradlew build` - 构建项目
 - `./gradlew clean` - 清理输出
 - `./gradlew publishToMavenLocal` - 本地发布
-- `./gradlew test` - 运行所有测试
-- `./gradlew :{模块}:test` - 模块特定测试
+- `./gradlew check` - 运行所有测试
+
+**模块化操作：**
+
+- `./gradlew :{模块}:check` - 模块特定测试
+- `./gradlew :{模块}:build` - 构建单个模块
+- `./gradlew :{模块}:publishToMavenLocal` - 本地发布单个模块
+
+**代码质量：**
+
 - `./gradlew spotlessApply` - 修复格式（提交前必须运行）
-- `./gradlew versionCatalogFormat` - 修复 `libs.versions.toml` 格式（提交前必须运行）
+- `./gradlew versionCatalogFormat` - 修复 `libs.versions.toml` 格式
+
+**性能优化配置：**
+
+- JVM配置：`-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC`
+- 启用并行构建、缓存、配置缓存
 
 ## 构建约定与插件
+
 **build-logic 约定插件体系：**
+
 - `buildlogic.jacoco-conventions` - 代码覆盖率约定
 - `buildlogic.java-conventions` - Java约定
 - `buildlogic.javaspring-conventions` - Java Spring约定
@@ -91,42 +121,66 @@ type: "always_apply"
 - `buildlogic.publish-conventions` - 发布约定
 - `buildlogic.repositories-conventions` - 仓库约定
 - `buildlogic.spotless-conventions` - 代码格式化约定
+- `buildlogic.spotless-sql-conventions` - SQL 代码格式化约定
 
 ## 开发标准
+
+**依赖和构建：**
+
 - **依赖管理：** Gradle Version Catalog (`gradle/libs.versions.toml`) 统一版本管理
 - **插件约定：** 所有Kotlin模块使用 `kotlinspring-conventions`，Java模块使用相应约定
 - **代码格式：** Spotless自动化格式检查（提交前必须运行 `./gradlew spotlessApply`）
-- **测试规范：** 测试类与被测试类同名，使用@Nested组织测试，禁用@DisplayName注解
-- **模块集成：** `implementation("io.github.truenine:composeserver-{模块}:0.0.10")`
-- **Java版本：** 支持Java 24最新特性，无向下兼容，积极使用新特性
-- **Kotlin约定：** 优先使用val、避免!!操作符、积极使用lambda和新特性
+- **版本发布：** 发布至Maven中央仓库 `io.github.truenine:composeserver-*`
 
-## 框架特定开发指导
+**测试规范：**
 
-**Spring Boot 3.x 约定：**
-- 使用 `@Resource` 替代 `@Autowired` 进行依赖注入
-- 配置类使用 `@EnableConfigurationProperties` 启用属性绑定
-- 自动配置类命名为 `AutoConfigEntrance` 并使用 `@ComponentScan`
-- 异常处理使用统一的 `ErrorResponseEntity` 响应格式
-- 日志记录使用 `slf4j(ClassName::class)` 获取logger实例
+- 测试类与被测试类同名，使用@Nested组织测试
+- 禁用@DisplayName注解，使用反引号中文方法名
+- TestContainers集成测试支持 PostgreSQL/MySQL/Redis/MinIO
+- 测试组织：正常用例、异常用例、边界用例分组
 
-**Jimmer ORM 约定：**
-- 实体类使用 `@Entity` 注解，遵循 Jimmer 规范
-- 查询使用 KSP 生成的类型安全查询 API
-- 分页查询统一使用 `fetchPq()` 扩展函数
-- 数据库函数扩展放在对应的 `*Fns.kt` 文件中
-- 使用 `View` 接口定义 DTO 投影，通过 `toFetcher()` 获取 Fetcher
+**架构约定：**
 
-**Kotlin 2.2.0 特性使用：**
-- 积极使用 `data class` 替代多参数函数
-- 扩展函数命名使用动词形式，如 `hasText()`, `isNotEmptyRun()`
-- 使用 `@OptIn(ExperimentalContracts::class)` 启用契约功能
-- 运算符重载使用 `infix` 函数，如 `Pair.and()`
-- 字符串模板优先使用 `${}` 语法
+- 包命名：`io.github.truenine.composeserver.{模块名}`
+- 自动配置：Spring Boot AutoConfiguration + @ConditionalOn* 条件化配置
+- 资源管理：ResourceHolder统一管理配置文件和静态资源
 
-**测试框架约定：**
-- 使用 TestContainers 进行集成测试
-- 测试方法命名使用反引号中文描述：`fun \`测试用户创建成功\`()`
-- 使用 `@Nested inner class` 组织测试场景
-- 测试日志使用 `testtoolkit.log` 实例
-- Mock 对象使用 `every { } returns` 语法
+## 架构特点
+
+**模块化设计：**
+
+- 每个模块独立打包发布到Maven中央仓库，支持按需集成
+- build-logic 约定插件统一管理构建配置和代码质量标准
+
+**测试架构：**
+
+- TestContainers集成测试：PostgreSQL、MySQL、Redis、MinIO容器化测试
+- @Nested内部类组织测试场景：正常用例、异常用例、边界用例
+- 测试幂等性验证：数据库迁移和存储过程多次执行安全性保证
+
+**自动配置体系：**
+
+- Spring Boot AutoConfiguration自动装配各模块功能
+- 条件化配置：通过Properties类和@ConditionalOn*注解控制组件启用
+- 资源管理：ResourceHolder统一管理配置文件和静态资源加载
+
+## 重要开发指南
+
+**构建环境要求：**
+
+- Java 24+
+- Kotlin 2.2.0
+- Gradle 9.x（使用included builds和版本目录管理）
+
+**开发流程：**
+
+1. 提交前必须运行 `./gradlew spotlessApply` 修复代码格式
+2. 确保所有测试通过 `./gradlew check`
+3. 使用@Nested组织测试，禁用@DisplayName，采用反引号中文方法名
+4. 新模块需在 `settings.gradle.kts` 中声明并应用相应的构建约定
+
+**版本管理：**
+
+- 依赖版本统一在 `gradle/libs.versions.toml` 中管理
+- 使用 `./gradlew versionCatalogUpdate` 检查依赖更新
+- 版本发布通过Maven中央仓库，命名规则：`io.github.truenine:composeserver-{模块名}`
