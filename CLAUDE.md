@@ -112,6 +112,7 @@ LangChain4j。
 - **插件约定：** 所有Kotlin模块使用 `kotlinspring-conventions`，Java模块使用相应约定
 - **代码格式：** Spotless自动化格式检查（提交前必须运行 `./gradlew spotlessApply`）
 - **测试规范：** 测试类与被测试类同名，使用@Nested组织测试，禁用@DisplayName注解
+- **ConfigurationProperties规范：** 所有 `@ConfigurationProperties` 注解的 data class 属性必须使用 `var` 而不是 `val`，以支持运行时动态配置修改
 
 ## 架构特点
 
