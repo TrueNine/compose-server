@@ -5,5 +5,5 @@
 !.gitignore
 !codeStyles/
 !codeStyles/codeStyleConfig.xml
-!codeStyles/project.xml
+!codeStyles/Project.xml
 !/sqldialects.xml
