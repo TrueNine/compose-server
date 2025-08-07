@@ -2,13 +2,13 @@ package io.github.truenine.composeserver.rds.flywaymigrationmysql8.flyway
 
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabaseMysqlContainer
 import jakarta.annotation.Resource
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertTrue
 
 /**
  * 存储过程存在性和调用测试
@@ -19,25 +19,25 @@ import kotlin.test.assertTrue
 @Transactional
 @Rollback
 class FunctionExistenceAndCallTest : IDatabaseMysqlContainer {
-  @Resource
-  lateinit var jdbcTemplate: JdbcTemplate
+  @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @Nested
   inner class ProcedureExistenceTests {
 
     @Test
     fun `所有存储过程都应该存在`() {
-      val expectedProcedures = listOf(
-        "ct_idx",
-        "add_base_struct",
-        "rm_base_struct",
-        "add_tree_struct",
-        "rm_tree_struct",
-        "add_presort_tree_struct",
-        "rm_presort_tree_struct",
-        "all_to_nullable",
-        "base_struct_to_jimmer_style"
-      )
+      val expectedProcedures =
+        listOf(
+          "ct_idx",
+          "add_base_struct",
+          "rm_base_struct",
+          "add_tree_struct",
+          "rm_tree_struct",
+          "add_presort_tree_struct",
+          "rm_presort_tree_struct",
+          "all_to_nullable",
+          "base_struct_to_jimmer_style",
+        )
 
       expectedProcedures.forEach { procedureName ->
         val exists = procedureExists(procedureName)
@@ -102,18 +102,19 @@ class FunctionExistenceAndCallTest : IDatabaseMysqlContainer {
 
   // 辅助方法
   private fun procedureExists(procedureName: String): Boolean {
-    val count = jdbcTemplate.queryForObject(
-      """
+    val count =
+      jdbcTemplate.queryForObject(
+        """
       SELECT COUNT(*) 
       FROM information_schema.routines 
       WHERE routine_schema = DATABASE() 
         AND routine_name = ? 
         AND routine_type = 'PROCEDURE'
       """
-        .trimIndent(),
-      Int::class.java,
-      procedureName
-    ) ?: 0
+          .trimIndent(),
+        Int::class.java,
+        procedureName,
+      ) ?: 0
     return count > 0
   }
 }

@@ -2,6 +2,8 @@ package io.github.truenine.composeserver.rds.flywaymigrationmysql8.flyway
 
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabaseMysqlContainer
 import jakarta.annotation.Resource
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -9,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * rm_presort_tree_struct 存储过程测试
@@ -21,8 +21,7 @@ import kotlin.test.assertTrue
 @Transactional
 @Rollback
 class RmPresortTreeStructMigrationTest : IDatabaseMysqlContainer {
-  @Resource
-  lateinit var jdbcTemplate: JdbcTemplate
+  @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @BeforeEach
   fun cleanupTables() {
@@ -48,9 +47,7 @@ class RmPresortTreeStructMigrationTest : IDatabaseMysqlContainer {
 
       // 验证字段移除
       val afterColumns = getTableColumns("test_presort_tree_struct_table")
-      presortTreeColumns.forEach { column ->
-        assertTrue(!afterColumns.contains(column), "不应该包含 $column 字段")
-      }
+      presortTreeColumns.forEach { column -> assertTrue(!afterColumns.contains(column), "不应该包含 $column 字段") }
       assertEquals(listOf("name"), afterColumns, "应该只剩下原始字段")
     }
 

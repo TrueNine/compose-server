@@ -45,9 +45,9 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
 
       // 验证字段添加
       val afterColumns = getTableColumns("test_presort_tree_table")
-      val expectedColumns = listOf("name", "rpi", "rln", "rrn")
+      val expectedColumns = listOf("name", "rpi", "rln", "rrn", "nlv", "tgi")
       assertTrue(afterColumns.containsAll(expectedColumns), "应该包含所有预排序树字段")
-      assertEquals(4, afterColumns.size, "应该有 4 个字段")
+      assertEquals(6, afterColumns.size, "应该有 6 个字段")
     }
 
     @Test
@@ -62,6 +62,8 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
       assertTrue(hasIndex("test_presort_tree_table", "rpi_idx"), "应该创建 rpi_idx 索引")
       assertTrue(hasIndex("test_presort_tree_table", "rln_idx"), "应该创建 rln_idx 索引")
       assertTrue(hasIndex("test_presort_tree_table", "rrn_idx"), "应该创建 rrn_idx 索引")
+      assertTrue(hasIndex("test_presort_tree_table", "nlv_idx"), "应该创建 nlv_idx 索引")
+      assertTrue(hasIndex("test_presort_tree_table", "tgi_idx"), "应该创建 tgi_idx 索引")
     }
 
     @Test
@@ -75,11 +77,13 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
       // 插入测试数据验证默认值
       jdbcTemplate.execute("INSERT INTO test_presort_tree_table(name) VALUES('test')")
 
-      val result = jdbcTemplate.queryForMap("SELECT rpi, rln, rrn FROM test_presort_tree_table WHERE name = 'test'")
+      val result = jdbcTemplate.queryForMap("SELECT rpi, rln, rrn, nlv, tgi FROM test_presort_tree_table WHERE name = 'test'")
 
       assertEquals(null, result["rpi"], "rpi 默认值应该是 null")
       assertEquals(1L, result["rln"], "rln 默认值应该是 1")
       assertEquals(2L, result["rrn"], "rrn 默认值应该是 2")
+      assertEquals(0, result["nlv"], "nlv 默认值应该是 0")
+      assertEquals(null, result["tgi"], "tgi 默认值应该是 null")
     }
 
     @Test
@@ -104,9 +108,9 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
       assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
 
       // 验证字段正确
-      val expectedColumns = listOf("name", "rpi", "rln", "rrn")
+      val expectedColumns = listOf("name", "rpi", "rln", "rrn", "nlv", "tgi")
       assertTrue(afterThird.containsAll(expectedColumns), "应该包含所有预排序树字段")
-      assertEquals(4, afterThird.size, "应该有 4 个字段")
+      assertEquals(6, afterThird.size, "应该有 6 个字段")
     }
   }
 
@@ -124,6 +128,8 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
       assertTrue(beforeColumns.contains("rpi"), "应该包含 rpi 字段")
       assertTrue(beforeColumns.contains("rln"), "应该包含 rln 字段")
       assertTrue(beforeColumns.contains("rrn"), "应该包含 rrn 字段")
+      assertTrue(beforeColumns.contains("nlv"), "应该包含 nlv 字段")
+      assertTrue(beforeColumns.contains("tgi"), "应该包含 tgi 字段")
 
       // 调用 rm_presort_tree_struct
       jdbcTemplate.execute("CALL rm_presort_tree_struct('test_presort_tree_table')")
@@ -133,6 +139,8 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
       assertTrue(!afterColumns.contains("rpi"), "不应该包含 rpi 字段")
       assertTrue(!afterColumns.contains("rln"), "不应该包含 rln 字段")
       assertTrue(!afterColumns.contains("rrn"), "不应该包含 rrn 字段")
+      assertTrue(!afterColumns.contains("nlv"), "不应该包含 nlv 字段")
+      assertTrue(!afterColumns.contains("tgi"), "不应该包含 tgi 字段")
       assertEquals(1, afterColumns.size, "应该只有 1 个字段")
     }
 

@@ -2,6 +2,8 @@ package io.github.truenine.composeserver.rds.flywaymigrationmysql8.flyway
 
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabaseMysqlContainer
 import jakarta.annotation.Resource
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -9,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * base_struct_to_jimmer_style 存储过程测试
@@ -21,8 +21,7 @@ import kotlin.test.assertTrue
 @Transactional
 @Rollback
 class BaseStructToJimmerStyleMigrationTest : IDatabaseMysqlContainer {
-  @Resource
-  lateinit var jdbcTemplate: JdbcTemplate
+  @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @BeforeEach
   fun cleanupTables() {
@@ -95,9 +94,7 @@ class BaseStructToJimmerStyleMigrationTest : IDatabaseMysqlContainer {
 
       // 验证所有数据都被清空为null
       val results = jdbcTemplate.queryForList("SELECT name, ldf FROM test_jimmer_style_table ORDER BY name")
-      results.forEach { result ->
-        assertEquals(null, result["ldf"], "所有 ldf 值都应该为null")
-      }
+      results.forEach { result -> assertEquals(null, result["ldf"], "所有 ldf 值都应该为null") }
     }
 
     @Test
