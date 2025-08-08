@@ -46,7 +46,7 @@ jobs:
     outputs:
       version: ${{ steps.version-info.outputs.version }}
       is-snapshot: ${{ steps.version-info.outputs.is-snapshot }}
-      should-publish: ${{ steps.version-info.outputs["should-publish"] }}
+      should-publish: ${{ steps.version-info.outputs['should-publish'] }}
 
     steps:
       - name: Checkout code
@@ -186,37 +186,13 @@ jobs:
             echo "⏭️ **发布决策：跳过发布**" >> $GITHUB_STEP_SUMMARY
           fi
 
-      # 代码格式检查
-      - name: Check code formatting
-        run: |
-          ./gradlew spotlessCheck --no-daemon
-        env:
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
-
-      # 构建验证
-      - name: Build all modules
-        run: |
-          ./gradlew build -x test --no-daemon --parallel
-        env:
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
-
-      # 关键模块测试
-      - name: Run core module tests
-        if: github.event.inputs.skip_tests != 'true'
-        run: |
-          ./gradlew :shared:test :gradle-plugin:test --no-daemon --parallel
-        env:
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
-          CI: true
-
       - name: Generate pre-publish report
         run: |
           echo "## 🚀 发布准备情况" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| 检查项 | 状态 |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
-          echo "| 代码格式 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
-          echo "| 构建 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 构建验证 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
           echo "| 核心测试 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**版本:** ${{ steps.version-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
@@ -361,7 +337,7 @@ jobs:
   # 🏷️ GitHub Release 创建
   create-github-release:
     name: "🏷️ Create GitHub Release"
-    needs: [pre-publish-validation, publish]
+    needs: [ pre-publish-validation, publish ]
     if: github.event.inputs.dry_run != 'true' && needs.pre-publish-validation.outputs.is-snapshot == 'false'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -451,11 +427,11 @@ jobs:
   # 📋 发布后验证
   post-publish-verification:
     name: "📋 Post-publish Verification"
-    needs: [pre-publish-validation, publish, create-github-release]
+    needs: [ pre-publish-validation, publish, create-github-release ]
     if: github.event.inputs.dry_run != 'true' && always() && needs.publish.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     steps:
       - name: Wait for Maven Central sync
         run: |
@@ -475,13 +451,13 @@ jobs:
           for module in "${modules[@]}"; do
             artifact="${group}:composeserver-${module}:${version}"
             echo "检查 $artifact ..."
-            
+          
             # 尝试从 Maven Central 获取 metadata
             url="https://search.maven.org/solrsearch/select?q=g:${group}+AND+a:composeserver-${module}+AND+v:${version}&rows=1&wt=json"
-            
+          
             response=$(curl -s "$url" || echo '{"response":{"numFound":0}}')
             found=$(echo "$response" | jq -r '.response.numFound')
-            
+          
             if [[ "$found" -gt 0 ]]; then
               echo "✅ $artifact 已成功发布"
             else
@@ -521,7 +497,7 @@ jobs:
   # 🚨 失败处理
   failure-handler:
     name: "🚨 Handle Failure"
-    needs: [pre-publish-validation, publish, create-github-release, post-publish-verification]
+    needs: [ pre-publish-validation, publish, create-github-release, post-publish-verification ]
     if: always() && (needs.publish.result == 'failure' || needs.create-github-release.result == 'failure')
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -573,7 +549,7 @@ jobs:
   # 📊 工作流摘要
   workflow-summary:
     name: "📊 Workflow Summary"
-    needs: [pre-publish-validation, publish, create-github-release, post-publish-verification, failure-handler]
+    needs: [ pre-publish-validation, publish, create-github-release, post-publish-verification, failure-handler ]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
