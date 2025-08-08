@@ -5,7 +5,7 @@ plugins {
 
 spotless {
   kotlinGradle {
-    ktfmt().googleStyle().configure {
+    ktfmt("0.56").googleStyle().configure {
       it.setMaxWidth(160)
       it.setBlockIndent(2)
       it.setContinuationIndent(2)
@@ -21,7 +21,7 @@ spotless {
       target("**/*.kt")
       targetExclude("**/build/generated/**")
       licenseHeader("")
-      ktfmt().googleStyle().configure {
+      ktfmt("0.56").googleStyle().configure {
         it.setMaxWidth(160)
         it.setBlockIndent(2)
         it.setContinuationIndent(2)

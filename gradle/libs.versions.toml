@@ -48,7 +48,7 @@ org-springframework-modulith = "2.0.0-M1"
 org-springframework-security = "6.5.2"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.21"
+project = "0.0.22"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
@@ -150,6 +150,7 @@ io-github-truenine-composeserver-oss-shared = { module = "io.github.truenine:com
 io-github-truenine-composeserver-oss-volcengine-tos = { module = "io.github.truenine:composeserver-oss-volcengine-tos", version.ref = "project" }
 io-github-truenine-composeserver-pay-shared = { module = "io.github.truenine:composeserver-pay-shared", version.ref = "project" }
 io-github-truenine-composeserver-pay-wechat = { module = "io.github.truenine:composeserver-pay-wechat", version.ref = "project" }
+io-github-truenine-composeserver-psdk-wxpa = { module = "io.github.truenine:composeserver-psdk-wxpa", version.ref = "project" }
 io-github-truenine-composeserver-rds-crud = { module = "io.github.truenine:composeserver-rds-crud", version.ref = "project" }
 io-github-truenine-composeserver-rds-flyway-migration-mysql8 = { module = "io.github.truenine:composeserver-rds-flyway-migration-mysql8", version.ref = "project" }
 io-github-truenine-composeserver-rds-flyway-migration-postgresql = { module = "io.github.truenine:composeserver-rds-flyway-migration-postgresql", version.ref = "project" }

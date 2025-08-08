@@ -94,3 +94,6 @@ include("ksp:ksp-plugin")
 include("ksp:ksp-shared")
 
 include("ksp:ksp-meta")
+
+// platform sdk
+include("psdk:psdk-wxpa")
