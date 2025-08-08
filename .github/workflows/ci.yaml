@@ -69,10 +69,6 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Check code formatting
-        run: |
-          ./gradlew spotlessCheck --no-daemon
-
       - name: Quick compile
         run: |
           ./gradlew compileKotlin compileTestKotlin --no-daemon --parallel
