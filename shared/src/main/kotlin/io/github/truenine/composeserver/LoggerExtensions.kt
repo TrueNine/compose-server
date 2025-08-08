@@ -82,7 +82,7 @@ fun logger(clz: Class<*>): SystemLogger = LoggerFactory.getLogger(clz)
  * ```
  */
 @Deprecated(
-  message = "Deprecated, use top-level slf4j functions for logger implementation instead",
+  message = "Deprecated, use inline logger<T>() instead. Replace slf4j(YourClass::class) with logger<YourClass>()",
   replaceWith = ReplaceWith("logger<T>()", imports = ["io.github.truenine.composeserver.logger"]),
 )
 fun slf4j(kClass: KClass<*> = SystemLogger::class): SystemLogger = slf4j(kClass.java)
@@ -110,7 +110,7 @@ fun logger(kClass: KClass<*> = SystemLogger::class): SystemLogger = logger(kClas
  * ```
  */
 @Deprecated(
-  message = "Deprecated, use top-level slf4j functions for logger implementation instead",
+  message = "Deprecated, use logger<T>() instead for consistent naming",
   replaceWith = ReplaceWith("logger<T>()", imports = ["io.github.truenine.composeserver.logger"]),
 )
 inline fun <reified T : Any> slf4j(): SystemLogger = slf4j(T::class)
