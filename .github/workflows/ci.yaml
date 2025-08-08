@@ -7,14 +7,18 @@ on:
     branches: [ main ]
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=false"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=8 -Dkotlin.incremental=false -Dorg.gradle.configuration-cache=false"
+  # JVM 性能优化配置
+  JVM_OPTS: "-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -Xshare:off"
 
 jobs:
-  # 🧪 Run All Tests
-  test:
-    name: "🧪 Run All Tests"
+  # 🔍 快速检查 - 编译和基础验证
+  quick-check:
+    name: "🔍 Quick Check"
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 10
+    outputs:
+      cache-key: ${{ steps.cache-info.outputs.cache-key }}
 
     steps:
       - name: Checkout code
@@ -22,24 +26,37 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK 24
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: '24'
+          distribution: 'graalvm'
           cache: gradle
+
+      - name: Cache info
+        id: cache-info
+        run: |
+          echo "cache-key=${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}" >> $GITHUB_OUTPUT
+
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-wrapper-
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
-            ~/.gradle/wrapper
             ~/.gradle/jdks
-            ~/.gradle/gradle.properties
             ~/.gradle/buildOutputCleanup
+            ~/.konan
             ~/.m2/repository
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml', '**/gradle.properties') }}
+          key: ${{ steps.cache-info.outputs.cache-key }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
@@ -48,63 +65,211 @@ jobs:
         with:
           gradle-version: '9.0.0'
           cache-read-only: false
-          cache-cleanup: on-success
 
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Check code formatting
+        run: |
+          ./gradlew spotlessCheck --no-daemon
+
+      - name: Quick compile
+        run: |
+          ./gradlew compileKotlin compileTestKotlin --no-daemon --parallel
+
+  # 🧪 并行测试矩阵
+  test-matrix:
+    name: "🧪 Test"
+    needs: quick-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        group:
+          - "core"      # shared, testtoolkit, gradle-plugin, version-catalog, bom
+          - "rds"       # 所有数据库相关模块  
+          - "business"  # ai, pay, oss, sms, surveillance
+          - "security"  # security 相关模块
+          - "data"      # data, depend 模块
+        include:
+          - group: "core"
+            modules: ":shared :testtoolkit :gradle-plugin :version-catalog :bom"
+            containers: "none"
+          - group: "rds"
+            modules: ":rds:rds-shared :rds:rds-crud :rds:rds-jimmer-ext-postgres :rds:rds-flyway-migration-postgresql :rds:rds-flyway-migration-mysql8 :rds:rds-flyway-migration-shared"
+            containers: "database"
+          - group: "business"
+            modules: ":ai:ai-shared :ai:ai-langchain4j :pay:pay-shared :pay:pay-wechat :oss:oss-shared :oss:oss-minio :oss:oss-aliyun-oss :oss:oss-huawei-obs :oss:oss-volcengine-tos :sms:sms-shared :sms:sms-tencent :surveillance:surveillance-shared :surveillance:surveillance-hikvision :cacheable"
+            containers: "cache"
+          - group: "security"
+            modules: ":security:security-crypto :security:security-oauth2 :security:security-spring"
+            containers: "none"
+          - group: "data"
+            modules: ":data:data-crawler :data:data-extract :depend:depend-http-exchange :depend:depend-jackson :depend:depend-paho :depend:depend-servlet :depend:depend-springdoc-openapi :depend:depend-xxl-job :ksp:ksp-meta :ksp:ksp-plugin :ksp:ksp-shared"
+            containers: "none"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'graalvm'
+          cache: gradle
+
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-wrapper-
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/jdks
+            ~/.gradle/buildOutputCleanup
+            ~/.konan
+            ~/.m2/repository
+          key: ${{ needs.quick-check.outputs.cache-key }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.0.0'
+          cache-read-only: true
+
+      # 条件性设置 Docker 和 TestContainers
       - name: Set up Docker Buildx
+        if: matrix.containers != 'none'
         uses: docker/setup-buildx-action@v3
 
       - name: Cache Docker layers
+        if: matrix.containers != 'none'
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile*', '**/docker-compose*') }}
+          key: ${{ runner.os }}-docker-${{ matrix.group }}-${{ hashFiles('**/Dockerfile*', '**/docker-compose*') }}
           restore-keys: |
+            ${{ runner.os }}-docker-${{ matrix.group }}-
             ${{ runner.os }}-docker-
 
-      - name: Grant execute permission for gradlew
+      # 预拉取常用数据库镜像
+      - name: Pre-pull database images
+        if: matrix.containers == 'database'
+        run: |
+          docker pull postgres:16-alpine &
+          docker pull mysql:8.0 &
+          docker pull redis:7-alpine &
+          wait
+        continue-on-error: true
+
+      # 预拉取缓存相关镜像  
+      - name: Pre-pull cache images
+        if: matrix.containers == 'cache'
+        run: |
+          docker pull redis:7-alpine &
+          docker pull minio/minio:latest &
+          wait
+        continue-on-error: true
+
+      - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Run all tests
+      - name: Run tests for ${{ matrix.group }} modules
         run: |
-          ./gradlew test \
+          ./gradlew ${{ matrix.modules }} test \
             --no-daemon \
             --parallel \
             --no-build-cache \
-            --no-configuration-cache
+            --continue
         env:
-          # Testcontainers 优化配置
+          # TestContainers 优化配置
           TESTCONTAINERS_RYUK_DISABLED: false
           TESTCONTAINERS_CHECKS_DISABLE: false
           TESTCONTAINERS_REUSE_ENABLE: true
           TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX: ""
-          # 启用容器重用标签，提高缓存效率
           TESTCONTAINERS_REUSE_HASH_LABELS: true
           # Docker 性能优化
           DOCKER_HOST: unix:///var/run/docker.sock
           TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
           TESTCONTAINERS_HOST_OVERRIDE: localhost
-          # Docker 镜像缓存优化
           DOCKER_BUILDKIT: 1
           BUILDKIT_PROGRESS: plain
           # JVM 性能调优
-          MAVEN_OPTS: "-Xmx2g -XX:+UseG1GC"
+          GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
           # CI 环境配置
           CI: true
-          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: false
 
-      - name: Cleanup Docker containers
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
         if: always()
-        run: |
-          # 清理停止的容器，但保留可重用的容器
-          docker container prune -f --filter "until=1h" --filter "label!=org.testcontainers.reuse.enable=true"
-          # 保留常用镜像，只清理较老的镜像
-          docker image prune -f --filter "until=48h" --filter "dangling=true"
-          # 清理未使用的卷，但保留标记为保留的卷
-          docker volume prune -f --filter "label!=keep" --filter "label!=org.testcontainers"
+        with:
+          name: test-results-${{ matrix.group }}
+          path: |
+            **/build/reports/tests/
+            **/build/test-results/
+          retention-days: 3
 
-      - name: Cache cleanup
-        if: always()
+      - name: Cleanup containers
+        if: always() && matrix.containers != 'none'
         run: |
-          # 清理旧的 Gradle 缓存文件
-          find ~/.gradle/caches -name "*.lock" -delete || true
-          find ~/.gradle/caches -type d -name "tmp" -exec rm -rf {} + || true
+          # 清理测试容器，但保留可重用容器
+          docker container prune -f --filter "until=30m" --filter "label!=org.testcontainers.reuse.enable=true"
+          # 清理悬空镜像
+          docker image prune -f --filter "dangling=true"
+          # 清理测试卷
+          docker volume prune -f --filter "label!=keep"
+
+  # 📊 测试结果汇总
+  test-results:
+    name: "📊 Test Results Summary"
+    needs: [ quick-check, test-matrix ]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Download all test results
+        uses: actions/download-artifact@v4
+        with:
+          path: test-results
+          pattern: test-results-*
+
+      - name: Generate test summary
+        run: |
+          echo "# 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Module Group | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          for group in core rds business security data; do
+            if [[ "${{ needs.test-matrix.result }}" == "success" ]]; then
+              echo "| $group | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| $group | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+      - name: Check overall status
+        run: |
+          if [[ "${{ needs.quick-check.result }}" != "success" ]]; then
+            echo "❌ Quick check failed"
+            exit 1
+          fi
+          if [[ "${{ needs.test-matrix.result }}" != "success" ]]; then
+            echo "❌ Test matrix failed" 
+            exit 1
+          fi
+          echo "✅ All checks passed"
