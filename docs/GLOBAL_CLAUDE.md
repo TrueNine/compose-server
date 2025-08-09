@@ -30,7 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 代码内部注释：必须使用中文注释
 - 严禁使用行尾注释
 
-**TDD渐进式开发方法论**
+**渐进式开发方法论**
 
 - 采用测试驱动开发结合渐进式开发方法
 - **Baby Steps开发**：每次只编写少量代码，立即进行单元测试验证
@@ -45,7 +45,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 每个被测试类/函数/变量/方法创建主要分组
 - 按场景细分：正常用例、异常用例、边界用例
   + 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
-- 测试方法命名使用反引号包围的中文描述：`fun \`测试用户创建成功\`()`
 
 # 特定语言约定
 
