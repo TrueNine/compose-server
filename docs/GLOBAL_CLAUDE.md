@@ -26,8 +26,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **注释规则**
 
-- 文档注释：英文注释
-- 代码内部注释：英文注释，且解释"为什么"而非"做什么"
+- 文档注释：必须使用英文注释
+- 代码内部注释：必须使用中文注释
+- 严禁使用行尾注释
 
 **TDD渐进式开发方法论**
 
