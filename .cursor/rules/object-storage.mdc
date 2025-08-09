@@ -1,0 +1,61 @@
+---
+globs: **/oss/**/*.kt,**/*Storage*.kt,**/*OSS*.kt,**/*OBS*.kt,**/*TOS*.kt
+---
+
+# Object Storage Integration Guidelines
+
+Standards for object storage modules and cloud storage integrations.
+
+## Storage Module Structure
+- **Shared abstractions**: Use [oss/oss-shared/](mdc:oss/oss-shared/) for common interfaces
+- **Provider implementations**: Separate modules for each storage provider
+- **Unified API**: Consistent interface across all storage providers
+- **Configuration**: Provider-specific configuration classes
+
+## Supported Storage Providers
+- **MinIO**: [oss/oss-minio/](mdc:oss/oss-minio/) - Private cloud storage
+- **Alibaba Cloud OSS**: [oss/oss-aliyun-oss/](mdc:oss/oss-aliyun-oss/) - Public cloud
+- **Huawei Cloud OBS**: [oss/oss-huawei-obs/](mdc:oss/oss-huawei-obs/) - Public cloud
+- **ByteDance TOS**: [oss/oss-volcengine-tos/](mdc:oss/oss-volcengine-tos/) - Public cloud
+
+## API Design Principles
+- **Consistent operations**: Upload, download, delete, list across all providers
+- **Async support**: Use coroutines for I/O operations
+- **Stream handling**: Support large file streaming
+- **Metadata management**: Handle file metadata consistently
+
+## Configuration Management
+- **Provider selection**: Runtime provider switching
+- **Credentials**: Secure credential management via environment variables
+- **Bucket/container**: Configurable storage containers
+- **Region settings**: Support multi-region deployments
+
+## Error Handling
+- **Provider-specific errors**: Map to common error types
+- **Retry mechanisms**: Implement exponential backoff
+- **Circuit breakers**: Prevent cascading failures
+- **Fallback strategies**: Support multiple storage backends
+
+## Security Considerations
+- **Access control**: Implement proper IAM policies
+- **Encryption**: Support encryption at rest and in transit
+- **Signed URLs**: Generate time-limited access URLs
+- **Audit logging**: Track all storage operations
+
+## Performance Optimization
+- **Connection pooling**: Reuse HTTP connections
+- **Parallel uploads**: Support multipart uploads
+- **Caching**: Cache metadata and frequently accessed files
+- **Compression**: Optional compression for text files
+
+## Testing Storage Code
+- **TestContainers**: Use MinIO containers for integration tests
+- **Mock providers**: Unit test with mocked storage clients
+- **Large file testing**: Test with various file sizes
+- **Error scenarios**: Test network failures and timeouts
+
+## Monitoring & Metrics
+- **Operation metrics**: Track upload/download success rates
+- **Performance metrics**: Monitor latency and throughput
+- **Cost tracking**: Monitor storage usage and costs
+- **Health checks**: Implement storage provider health checks

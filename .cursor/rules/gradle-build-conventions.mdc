@@ -1,0 +1,62 @@
+---
+globs: *.gradle.kts,gradle/**/*,**/build.gradle.kts
+---
+
+# Gradle Build Conventions
+
+Standards for Gradle build scripts and dependency management.
+
+## Build Script Structure
+- **Kotlin DSL**: Use `.gradle.kts` for all build scripts
+- **Version Catalog**: Reference [gradle/libs.versions.toml](mdc:gradle/libs.versions.toml) for all dependencies
+- **Build Logic**: Custom conventions in [build-logic/](mdc:build-logic/) directory
+- **Type-safe accessors**: Leverage `libs.` and `projects.` accessors
+
+## Dependency Management
+- **Version Catalog**: All versions centralized in [gradle/libs.versions.toml](mdc:gradle/libs.versions.toml)
+- **BOM usage**: Import [bom/](mdc:bom/) for internal dependency alignment
+- **No version conflicts**: Use dependency resolution strategies
+- **Security scanning**: OWASP dependency check enabled in root build
+
+## Plugin Application
+- **Plugin DSL**: Use `plugins {}` block with version catalog aliases
+- **Custom plugins**: Apply from [gradle-plugin/](mdc:gradle-plugin/) module
+- **Build conventions**: Apply from [build-logic/](mdc:build-logic/) for consistency
+
+## Module Configuration
+- **Consistent structure**: Follow patterns from existing modules
+- **Shared configurations**: Use build conventions for common setup
+- **Testing setup**: Include [testtoolkit/](mdc:testtoolkit/) for test utilities
+- **Publishing**: Configure for Maven Central via [gradle-plugin/](mdc:gradle-plugin/)
+
+## Build Performance
+- **Gradle daemon**: Configured in [gradle/gradle-daemon-jvm.properties](mdc:gradle/gradle-daemon-jvm.properties)
+- **Parallel builds**: Enable for multi-module project
+- **Build cache**: Use for faster incremental builds
+- **Configuration cache**: Enable where possible
+
+## Quality Gates
+- **Spotless**: Code formatting via build conventions
+- **Detekt**: Static analysis for Kotlin code
+- **Test coverage**: JaCoCo integration
+- **Dependency updates**: Automated via version catalog update plugin
+
+## Publishing Configuration
+- **Maven Central**: Publishing setup in [gradle-plugin/](mdc:gradle-plugin/)
+- **Signing**: GPG signing for releases
+- **Metadata**: Complete POM information
+- **Staging**: Sonatype OSSRH staging process
+
+## Example Module Build Script
+```kotlin
+plugins {
+    id("buildlogic.kotlin-library-conventions")
+    id("buildlogic.publishing-conventions")
+}
+
+dependencies {
+    api(projects.shared)
+    implementation(libs.spring.boot.starter)
+    testImplementation(projects.testtoolkit)
+}
+```

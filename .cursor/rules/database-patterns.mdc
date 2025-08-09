@@ -1,0 +1,48 @@
+---
+globs: **/rds/**/*.kt,**/*Repository.kt,**/*Entity.kt,**/migration/**/*.sql
+---
+
+# Database & Persistence Patterns
+
+Standards for working with Jimmer ORM, Flyway migrations, and database operations.
+
+## Jimmer ORM Conventions
+- **Base classes**: Extend from [rds/rds-shared/](mdc:rds/rds-shared/) base entities
+- **Entity definitions**: Use Jimmer annotations and Kotlin data classes
+- **Repository patterns**: Follow [rds/rds-crud/](mdc:rds/rds-crud/) CRUD implementations
+- **Query optimization**: Leverage Jimmer's compile-time query generation
+
+## Database Migrations
+- **PostgreSQL**: Use [rds/rds-flyway-migration-postgresql/](mdc:rds/rds-flyway-migration-postgresql/)
+- **MySQL**: Use [rds/rds-flyway-migration-mysql8/](mdc:rds/rds-flyway-migration-mysql8/)
+- **Shared utilities**: Leverage [rds/rds-flyway-migration-shared/](mdc:rds/rds-flyway-migration-shared/)
+
+## SQL Standards
+- **Use lowercase** for SQL keywords and identifiers
+- **snake_case naming** for tables and columns
+- **Parameterized queries only** - no string concatenation
+- **Verify no SQL injection risks** in all queries
+
+## Entity Design
+- **Immutable entities** where possible using `val` properties
+- **Proper relationships** using Jimmer associations
+- **Validation annotations** for data integrity
+- **Audit fields** for tracking changes
+
+## Repository Patterns
+- **Interface-based repositories** for testability
+- **Transaction boundaries** clearly defined
+- **Error handling** with meaningful exceptions
+- **Pagination support** for large datasets
+
+## Testing Database Code
+- **Use TestContainers** for integration tests via [testtoolkit/](mdc:testtoolkit/)
+- **Test migrations** in isolated environments
+- **Verify data integrity** constraints
+- **Test rollback scenarios** for critical operations
+
+## Performance Considerations
+- **Lazy loading** configuration for associations
+- **Query optimization** using Jimmer's features
+- **Connection pooling** via HikariCP
+- **Index strategies** for frequently queried fields
