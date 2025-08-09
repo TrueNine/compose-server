@@ -21,9 +21,9 @@ class IDatabaseMysqlContainerTest : IDatabaseMysqlContainer {
     @Resource set
 
   @Test
-  fun `验证 MySQL 容器成功启动`() {
-    assertNotNull(mysqlContainer, "MySQL 容器应该存在")
-    assertTrue(mysqlContainer?.isRunning == true, "MySQL 容器应该处于运行状态")
+  fun `验证 MySQL 容器成功启动`() = mysql {
+    assertNotNull(it, "MySQL 容器应该存在")
+    assertTrue(it.isRunning == true, "MySQL 容器应该处于运行状态")
 
     // 通过执行简单查询来验证容器是否正常工作
     val version = jdbcTemplate.queryForObject("SELECT VERSION()", String::class.java)
@@ -93,18 +93,18 @@ class IDatabaseMysqlContainerTest : IDatabaseMysqlContainer {
   }
 
   @Test
-  fun `验证容器端口映射正确`() {
-    val mappedPort = mysqlContainer?.getMappedPort(3306)
+  fun `验证容器端口映射正确`() = mysql {
+    val mappedPort = it.getMappedPort(3306)
     assertNotNull(mappedPort, "MySQL 端口应该被正确映射")
     assertTrue(mappedPort > 0, "映射端口应该是有效的端口号")
 
     // 验证端口可访问性
-    val databaseName = mysqlContainer?.databaseName
+    val databaseName = it.databaseName
     assertNotNull(databaseName, "数据库名称不应为空")
 
     val jdbcUrl = "jdbc:mysql://localhost:$mappedPort/$databaseName"
-    val username = mysqlContainer?.username
-    val password = mysqlContainer?.password
+    val username = it.username
+    val password = it.password
 
     assertNotNull(username, "数据库用户名不应为空")
     assertNotNull(password, "数据库密码不应为空")

@@ -7,6 +7,7 @@ import io.minio.MinioClient
 import jakarta.annotation.Resource
 import kotlin.math.abs
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -59,7 +60,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   @Resource private lateinit var redisTemplate: StringRedisTemplate
 
   private val minioClient: MinioClient by lazy {
-    MinioClient.builder().endpoint("http://localhost:${minioContainer?.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build()
+    minio { MinioClient.builder().endpoint("http://localhost:${it.getMappedPort(9000)}").credentials("minioadmin", "minioadmin").build() }
   }
 
   @BeforeEach
@@ -219,6 +220,38 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     redisTemplate.delete(redisKey)
     assertTrue(!redisTemplate.hasKey(redisKey), "清理后 Redis 键不应详存在")
   }
+
+  @Test
+  fun `使用新的容器聚合函数验证多容器协作`() =
+    containers(ICacheRedisContainer.redisContainerLazy, IDatabasePostgresqlContainer.postgresqlContainerLazy, IOssMinioContainer.minioContainerLazy) {
+      // 通过上下文访问容器
+      val redis = getRedisContainer()
+      val postgres = getPostgresContainer()
+      val minio = getMinioContainer()
+
+      assertNotNull(redis, "Redis 容器应该存在")
+      assertNotNull(postgres, "PostgreSQL 容器应该存在")
+      assertNotNull(minio, "MinIO 容器应该存在")
+
+      // 验证所有容器都在运行
+      assertTrue(redis!!.isRunning, "Redis 容器应该运行")
+      assertTrue(postgres!!.isRunning, "PostgreSQL 容器应该运行")
+      assertTrue(minio!!.isRunning, "MinIO 容器应该运行")
+
+      // 跨容器数据操作测试
+      jdbcTemplate.update("insert into test_table (name) values (?)", "aggregation_test")
+      redisTemplate.opsForValue().set("aggregation:key", "aggregation_value")
+
+      // 验证操作结果
+      val pgResult = jdbcTemplate.queryForObject("select name from test_table where name = ?", String::class.java, "aggregation_test")
+      val redisResult = redisTemplate.opsForValue().get("aggregation:key")
+
+      assertEquals("aggregation_test", pgResult, "PostgreSQL 操作应该成功")
+      assertEquals("aggregation_value", redisResult, "Redis 操作应该成功")
+
+      // 验证容器数量
+      assertEquals(3, getAllContainers().size, "应该有3个容器")
+    }
 
   @Test
   fun `验证容器时区和时间与当前系统一致`() {

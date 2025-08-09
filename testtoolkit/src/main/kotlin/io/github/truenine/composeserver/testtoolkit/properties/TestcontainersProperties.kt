@@ -32,6 +32,12 @@ data class TestcontainersProperties(
   /** 是否复用所有容器，默认为 true */
   var reuseAllContainers: Boolean = false,
 
+  /** 容器默认停止超时时间（秒），默认 300 秒（5分钟） */
+  var defaultStopTimeoutSeconds: Long = 300,
+
+  /** 是否启用自动停止容器，默认启用以避免长期占用系统资源 */
+  var enableAutoStop: Boolean = true,
+
   /** PostgreSQL 配置 */
   @NestedConfigurationProperty var postgres: PostgresConfig = PostgresConfig(),
 
@@ -60,6 +66,9 @@ data class PostgresConfig(
 
   /** 默认密码 */
   var password: String = "test",
+
+  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  var stopTimeoutSeconds: Long? = null,
 )
 
 /** # MySQL 容器配置 */
@@ -80,6 +89,9 @@ data class MysqlConfig(
 
   /** 默认根密码 */
   var rootPassword: String = "roottest",
+
+  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  var stopTimeoutSeconds: Long? = null,
 )
 
 /** # Redis 容器配置 */
@@ -88,6 +100,9 @@ data class RedisConfig(
   var reuse: Boolean = true,
   /** Redis Docker 镜像 默认使用 redis:7-alpine（当前稳定版本） */
   var image: String = "redis:8.0.3-alpine3.21",
+
+  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  var stopTimeoutSeconds: Long? = null,
 )
 
 /** # MinIO 容器配置 */
@@ -102,4 +117,7 @@ data class MinioConfig(
 
   /** 默认秘密密钥 */
   var secretKey: String = "minioadmin",
+
+  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  var stopTimeoutSeconds: Long? = null,
 )

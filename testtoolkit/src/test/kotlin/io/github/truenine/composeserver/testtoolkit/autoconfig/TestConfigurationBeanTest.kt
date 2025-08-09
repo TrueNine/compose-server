@@ -42,7 +42,7 @@ class TestConfigurationBeanTest {
   inner class ConfigureTestProperties {
 
     @Test
-    fun `启用状态 - 应当注入测试属性`() {
+    fun inject_properties_when_enabled() {
       log.trace("testing property injection when enabled")
 
       // 执行配置
@@ -59,7 +59,7 @@ class TestConfigurationBeanTest {
     }
 
     @Test
-    fun `禁用状态 - 不应当注入测试属性`() {
+    fun skip_property_injection_when_disabled() {
       log.trace("testing property injection when disabled")
 
       // 设置为禁用状态
@@ -80,7 +80,7 @@ class TestConfigurationBeanTest {
     }
 
     @Test
-    fun `关闭条件评估报告 - 应当设置相关属性`() {
+    fun configure_condition_evaluation_report_disabled() {
       log.trace("testing condition evaluation report disable configuration")
 
       properties = TestConfigurationProperties(disableConditionEvaluationReport = true, enableVirtualThreads = false, ansiOutputMode = AnsiOutputMode.NEVER)
@@ -108,7 +108,7 @@ class TestConfigurationBeanTest {
     }
 
     @Test
-    fun `虚拟线程和颜色输出 - 应当设置相关属性`() {
+    fun configure_virtual_threads_and_ansi_output() {
       log.trace("testing virtual threads and color output configuration")
 
       properties = TestConfigurationProperties(disableConditionEvaluationReport = false, enableVirtualThreads = true, ansiOutputMode = AnsiOutputMode.ALWAYS)
@@ -136,7 +136,7 @@ class TestConfigurationBeanTest {
     }
 
     @Test
-    fun `额外属性配置 - 应当正确注入自定义属性`() {
+    fun configure_additional_properties() {
       log.trace("testing additional properties configuration")
 
       val additionalProps = mapOf("custom.property.1" to "value1", "custom.property.2" to "value2")
@@ -177,7 +177,7 @@ class TestConfigurationBeanTest {
   inner class TestEnvironmentPostProcessor {
 
     @Test
-    fun `应当创建 TestEnvironmentPostProcessor 实例`() {
+    fun create_test_environment_post_processor() {
       log.trace("testing TestEnvironmentPostProcessor bean creation")
 
       val postProcessor = testConfigurationBean.testEnvironmentPostProcessor()
@@ -207,7 +207,7 @@ class TestConfigurationPropertiesTest {
   inner class DefaultValues {
 
     @Test
-    fun `应当具有正确的默认值`() {
+    fun have_correct_default_values() {
       log.trace("verifying default configuration properties")
 
       val properties = TestConfigurationProperties()
@@ -239,7 +239,7 @@ class TestEnvironmentPostProcessorTest {
   inner class GetRecommendedTestProperties {
 
     @Test
-    fun `应当返回推荐的测试属性`() {
+    fun return_recommended_test_properties() {
       log.trace("testing recommended test properties retrieval")
 
       val recommendedProperties = postProcessor.getRecommendedTestProperties()
@@ -259,7 +259,7 @@ class TestEnvironmentPostProcessorTest {
   inner class IsTestEnvironment {
 
     @Test
-    fun `通过 active profiles 检测 - 应当识别为测试环境`() {
+    fun detect_test_environment_via_active_profiles() {
       log.trace("testing test environment check via active profiles")
 
       every { mockEnvironment.activeProfiles } returns arrayOf("test", "local")
@@ -273,7 +273,7 @@ class TestEnvironmentPostProcessorTest {
     }
 
     @Test
-    fun `通过属性配置检测 - 应当识别为测试环境`() {
+    fun detect_test_environment_via_property_configuration() {
       log.trace("testing test environment check via property configuration")
 
       every { mockEnvironment.activeProfiles } returns emptyArray()
@@ -287,7 +287,7 @@ class TestEnvironmentPostProcessorTest {
     }
 
     @Test
-    fun `非测试环境 - 不应当识别为测试环境`() {
+    fun not_detect_non_test_environment() {
       log.trace("testing non-test environment check")
 
       every { mockEnvironment.activeProfiles } returns arrayOf("prod", "staging")

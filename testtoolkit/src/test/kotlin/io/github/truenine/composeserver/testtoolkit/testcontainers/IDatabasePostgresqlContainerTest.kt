@@ -21,9 +21,9 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
     @Resource set
 
   @Test
-  fun `验证 PostgreSQL 容器成功启动`() {
-    assertNotNull(postgresqlContainer, "PostgreSQL 容器应该存在")
-    assertTrue(postgresqlContainer?.isRunning == true, "PostgreSQL 容器应该处于运行状态")
+  fun `验证 PostgreSQL 容器成功启动`() = postgres {
+    assertNotNull(it, "PostgreSQL 容器应该存在")
+    assertTrue(it.isRunning == true, "PostgreSQL 容器应该处于运行状态")
 
     // 通过执行简单查询来验证容器是否正常工作
     val version = jdbcTemplate.queryForObject("SELECT version()", String::class.java)
@@ -94,18 +94,18 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
   }
 
   @Test
-  fun `验证容器端口映射正确`() {
-    val mappedPort = postgresqlContainer?.getMappedPort(5432)
+  fun `验证容器端口映射正确`() = postgres {
+    val mappedPort = it.getMappedPort(5432)
     assertNotNull(mappedPort, "PostgreSQL 端口应该被正确映射")
     assertTrue(mappedPort > 0, "映射端口应该是有效的端口号")
 
     // 验证端口可访问性
-    val databaseName = postgresqlContainer?.databaseName
+    val databaseName = it.databaseName
     assertNotNull(databaseName, "数据库名称不应为空")
 
     val jdbcUrl = "jdbc:postgresql://localhost:$mappedPort/$databaseName"
-    val username = postgresqlContainer?.username
-    val password = postgresqlContainer?.password
+    val username = it.username
+    val password = it.password
 
     assertNotNull(username, "数据库用户名不应为空")
     assertNotNull(password, "数据库密码不应为空")
