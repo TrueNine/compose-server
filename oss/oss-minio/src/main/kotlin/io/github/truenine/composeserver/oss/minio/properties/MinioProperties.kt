@@ -1,9 +1,8 @@
 package io.github.truenine.composeserver.oss.minio.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import java.time.Duration
 import org.springframework.boot.context.properties.ConfigurationProperties
-
-private const val PREFIX = "compose.oss.minio"
 
 /**
  * Modern MinIO configuration properties
@@ -22,7 +21,7 @@ private const val PREFIX = "compose.oss.minio"
  * @author TrueNine
  * @since 2025-01-04
  */
-@ConfigurationProperties(prefix = PREFIX)
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.OSS_MINIO)
 data class MinioProperties(
   var endpoint: String = "127.0.0.1",
   var port: Int = 9000,

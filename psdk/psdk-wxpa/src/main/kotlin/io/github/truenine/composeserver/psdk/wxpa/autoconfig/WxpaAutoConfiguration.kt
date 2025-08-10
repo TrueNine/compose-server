@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.psdk.wxpa.autoconfig
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.psdk.wxpa.api.IWxpaWebClient
 import io.github.truenine.composeserver.psdk.wxpa.core.WxpaSignatureGenerator
@@ -62,7 +63,12 @@ class WxpaAutoConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(prefix = "compose.psdk.wxpa.wxpa", name = ["enable-auto-refresh"], havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(
+    prefix = "${SpringBootConfigurationPropertiesPrefixes.PSDK_WXPA}.wxpa",
+    name = ["enable-auto-refresh"],
+    havingValue = "true",
+    matchIfMissing = true,
+  )
   fun wxpaTokenEventManager(tokenManager: WxpaTokenManager, properties: WxpaProperties): WxpaTokenEventManager {
     log.info("Creating WxpaTokenEventManager")
     return WxpaTokenEventManager(tokenManager, properties)

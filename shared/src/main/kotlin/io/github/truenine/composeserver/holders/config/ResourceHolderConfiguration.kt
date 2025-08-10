@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.holders.config
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
@@ -20,7 +21,7 @@ import org.springframework.validation.annotation.Validated
  * @since 2024-07-18
  */
 @Validated
-@ConfigurationProperties(prefix = "compose.shared.resource-holder")
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.SHARED_RESOURCE_HOLDER)
 data class ResourceHolderConfiguration(
 
   // Basic configuration (backward compatibility)

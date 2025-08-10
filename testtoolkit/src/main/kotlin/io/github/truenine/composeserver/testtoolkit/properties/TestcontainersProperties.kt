@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.properties
 
+import io.github.truenine.composeserver.testtoolkit.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
@@ -27,7 +28,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
  * @author TrueNine
  * @since 2025-07-19
  */
-@ConfigurationProperties(prefix = "compose.testtoolkit.testcontainers")
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.TESTTOOLKIT_TESTCONTAINERS)
 data class TestcontainersProperties(
   /** 是否复用所有容器，默认为 true */
   var reuseAllContainers: Boolean = false,

@@ -1,12 +1,11 @@
 package io.github.truenine.composeserver.security.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding
 
-private const val PREFIX = "compose.security"
-
 @ConfigurationPropertiesBinding
-@ConfigurationProperties(prefix = "$PREFIX.jwt")
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.SECURITY_JWT)
 data class JwtProperties(
   var publicKeyClassPath: String = "security/pub.key",
   var privateKeyClassPath: String = "security/pri.key",

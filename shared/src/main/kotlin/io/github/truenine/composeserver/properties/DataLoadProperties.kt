@@ -1,10 +1,9 @@
 package io.github.truenine.composeserver.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import io.github.truenine.composeserver.holders.config.ResourceHolderConfiguration
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
-
-private const val PREFIX = "compose.shared"
 
 /**
  * Data loading properties with enhanced configuration support.
@@ -18,7 +17,7 @@ private const val PREFIX = "compose.shared"
  * @author TrueNine
  * @since 2024-07-18
  */
-@ConfigurationProperties(prefix = "$PREFIX.data-load")
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.SHARED_DATA_LOAD)
 data class DataLoadProperties(
   var location: String = "data",
   var matchFiles: MutableList<String> = mutableListOf(),

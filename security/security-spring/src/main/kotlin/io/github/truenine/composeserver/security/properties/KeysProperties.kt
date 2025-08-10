@@ -1,8 +1,7 @@
 package io.github.truenine.composeserver.security.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
-
-private const val PREFIX = "compose.security"
 
 /**
  * 密钥
@@ -10,7 +9,7 @@ private const val PREFIX = "compose.security"
  * @author TrueNine
  * @since 2023-04-22
  */
-@ConfigurationProperties(prefix = "$PREFIX.keys")
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.SECURITY_KEYS)
 data class KeysProperties(
   /** 密钥存放的 resources 对应目录 */
   var dir: String = "security",

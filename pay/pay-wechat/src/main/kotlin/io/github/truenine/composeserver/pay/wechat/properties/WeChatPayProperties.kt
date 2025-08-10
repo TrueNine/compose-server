@@ -1,8 +1,7 @@
 package io.github.truenine.composeserver.pay.wechat.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
-
-private const val PREFIX = "compose.pay"
 
 /**
  * # 微信单支付 js API 配置 <br></br>
@@ -11,7 +10,7 @@ private const val PREFIX = "compose.pay"
  * @author shanghua
  * @since 2023-05-05
  */
-@ConfigurationProperties(prefix = "$PREFIX.wechat", ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.PAY_WECHAT, ignoreUnknownFields = true)
 data class WeChatPayProperties(
   /** 开启 单配置支付 */
   var enableSingle: Boolean = false,
