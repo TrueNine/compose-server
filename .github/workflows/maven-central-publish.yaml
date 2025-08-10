@@ -4,9 +4,6 @@ on:
   push:
     branches: [ main ]
     tags: [ '🚀*' ]
-  pull_request:
-    branches: [ main ]
-    types: [ opened, synchronize, reopened ]
   release:
     types: [ published ]
   workflow_dispatch:
@@ -121,7 +118,7 @@ jobs:
             version=${version#v}  # 移除可能的 'v' 前缀
             echo "🏷️ 标签触发版本: $version" >> $GITHUB_STEP_SUMMARY
           else
-            # push/pull_request event: parse from libs.versions.toml
+            # push event: parse from libs.versions.toml
             version=$(sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
             echo "📄 从 libs.versions.toml 读取版本: $version" >> $GITHUB_STEP_SUMMARY
           fi
@@ -157,10 +154,6 @@ jobs:
           if [[ "$force_publish" == "true" ]]; then
             should_publish="true"
             echo "⚡ **强制发布模式已启用**" >> $GITHUB_STEP_SUMMARY
-          # PR 模式：仅验证
-          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            should_publish="false"
-            echo "📋 **PR 模式**：仅执行验证，不进行发布" >> $GITHUB_STEP_SUMMARY
           # 明确的发布触发器
           elif [[ "${{ github.ref_type }}" == "tag" ]] || [[ "${{ github.event_name }}" == "release" ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             should_publish="true"
