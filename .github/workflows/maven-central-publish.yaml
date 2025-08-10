@@ -34,8 +34,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=6 -Dorg.gradle.configuration-cache=false"
-  JVM_OPTS: "-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dorg.gradle.configuration-cache=true"
+  JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1536m -XX:+UseG1GC -XX:G1HeapRegionSize=16m"
 
 jobs:
   # 🧪 发布前验证
@@ -80,9 +80,8 @@ jobs:
             ~/.gradle/kotlin
             ~/.konan
             ~/.m2/repository
-          key: ${{ runner.os }}-gradle-publish-${{ hashFiles('**/*.gradle*', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-publish-
             ${{ runner.os }}-gradle-
           save-always: true
 
@@ -147,33 +146,43 @@ jobs:
           fi
 
           # 简化的发布决策逻辑
-          should_publish="true"
+          should_publish="false"
           force_publish="${{ github.event.inputs.force_publish }}"
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔍 发布决策..." >> $GITHUB_STEP_SUMMARY
+          echo "🔍 发布决策分析..." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
+          # 强制发布模式
           if [[ "$force_publish" == "true" ]]; then
-            echo "⚡ 强制发布模式已启用" >> $GITHUB_STEP_SUMMARY
+            should_publish="true"
+            echo "⚡ **强制发布模式已启用**" >> $GITHUB_STEP_SUMMARY
+          # PR 模式：仅验证
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             should_publish="false"
-            echo "📋 PR 模式：仅验证，不发布" >> $GITHUB_STEP_SUMMARY
+            echo "📋 **PR 模式**：仅执行验证，不进行发布" >> $GITHUB_STEP_SUMMARY
+          # 明确的发布触发器
           elif [[ "${{ github.ref_type }}" == "tag" ]] || [[ "${{ github.event_name }}" == "release" ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             should_publish="true"
-            echo "🎯 标签/Release/手动触发：将发布" >> $GITHUB_STEP_SUMMARY
+            echo "🎯 **直接触发**：标签/Release/手动触发 - 将发布" >> $GITHUB_STEP_SUMMARY
+          # main 分支 push：检查版本变化
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            # 检查版本是否变化（简化逻辑）
-            prev_version=$(git show HEAD~1:gradle/libs.versions.toml 2>/dev/null | sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' | head -n1 || echo "")
-            if [[ -n "$prev_version" && "$prev_version" != "$version" ]]; then
-              should_publish="true"
-              echo "🔼 检测到版本变化 ($prev_version → $version)" >> $GITHUB_STEP_SUMMARY
+            echo "🌱 **Main 分支 push**：检查版本变化..." >> $GITHUB_STEP_SUMMARY
+          
+            # 使用更简单的版本检查方法
+            if git diff HEAD~1 --name-only | grep -q "gradle/libs.versions.toml"; then
+              prev_version=$(git show HEAD~1:gradle/libs.versions.toml 2>/dev/null | sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' | head -n1 || echo "unknown")
+              if [[ "$prev_version" != "$version" && "$prev_version" != "unknown" ]]; then
+                should_publish="true"
+                echo "  🔼 检测到版本变化：$prev_version → $version" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "  ⚠️ 版本文件已变化，但版本号未变化" >> $GITHUB_STEP_SUMMARY
+              fi
             else
-              should_publish="false"
-              echo "⚠️ 版本未变化，跳过发布" >> $GITHUB_STEP_SUMMARY
+              echo "  ⏭️ 版本文件未变化，跳过发布" >> $GITHUB_STEP_SUMMARY
             fi
           else
-            should_publish="false"
-            echo "⏭️ 非发布分支，跳过发布" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️ **其他情况**：非发布分支或事件，跳过发布" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "should-publish=$should_publish" >> $GITHUB_OUTPUT
@@ -238,9 +247,8 @@ jobs:
             ~/.gradle/buildOutputCleanup
             ~/.konan
             ~/.m2/repository
-          key: ${{ runner.os }}-gradle-publish-${{ hashFiles('**/*.gradle*', 'gradle/libs.versions.toml') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-publish-
             ${{ runner.os }}-gradle-
 
       - name: Setup Gradle
@@ -267,42 +275,85 @@ jobs:
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
           CI: true
 
-      # 正式发布
+      # 发布前验证
+      - name: Pre-publish validation
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "🔍 发布前验证..."
+          
+          # 验证必要的凭据
+          missing_secrets=()
+          [[ -z "${{ secrets.GPG_KEY_ID }}" ]] && missing_secrets+=("GPG_KEY_ID")
+          [[ -z "${{ secrets.GPG_PRIVATE_KEY }}" ]] && missing_secrets+=("GPG_PRIVATE_KEY")
+          [[ -z "${{ secrets.MAVENCENTRAL_USERNAME }}" ]] && missing_secrets+=("MAVENCENTRAL_USERNAME")
+          [[ -z "${{ secrets.MAVENCENTRAL_PASSWORD }}" ]] && missing_secrets+=("MAVENCENTRAL_PASSWORD")
+          [[ -z "${{ secrets.GPG_PASSPHRASE }}" ]] && missing_secrets+=("GPG_PASSPHRASE")
+          
+          if [[ ${#missing_secrets[@]} -gt 0 ]]; then
+            echo "❌ 缺少必要的 Secrets： ${missing_secrets[*]}" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          # 验证网络连接
+          echo "🌍 验证网络连接..."
+          curl -f -s --max-time 10 https://oss.sonatype.org/ > /dev/null || {
+            echo "⚠️ Sonatype 网络连接异常" >> $GITHUB_STEP_SUMMARY
+          }
+          
+          echo "✅ 验证通过" >> $GITHUB_STEP_SUMMARY
+
+      # 正式发布（增强版）
       - name: Publish to Maven Central
         if: github.event.inputs.dry_run != 'true'
         uses: nick-fields/retry@v3
         with:
-          timeout_minutes: 60
+          timeout_minutes: 90
           max_attempts: 3
-          retry_wait_seconds: 300
+          retry_wait_seconds: 600
+          shell: bash
           command: |
-            echo "🚀 开始发布到 Maven Central..."
-
+            echo "🚀 开始发布到 Maven Central (attempt: ${{ github.run_attempt }})..."
+            
             # 设置错误处理
-            set -e
-            trap 'echo "❌ 发布失败，请检查错误日志" >> $GITHUB_STEP_SUMMARY; exit 1' ERR
-
-            # 验证必要的环境变量
-            if [[ -z "${{ secrets.GPG_KEY_ID }}" ]] || [[ -z "${{ secrets.GPG_PRIVATE_KEY }}" ]] || [[ -z "${{ secrets.MAVENCENTRAL_USERNAME }}" ]] || [[ -z "${{ secrets.MAVENCENTRAL_PASSWORD }}" ]]; then
-              echo "❌ 缺少必要的发布凭据，请检查 GitHub Secrets 配置" >> $GITHUB_STEP_SUMMARY
-              exit 1
-            fi
-
+            set -euo pipefail
+            
+            # 分类错误处理函数
+            handle_error() {
+              local exit_code=$1
+              local error_context="$2"
+            
+              echo "❌ 发布失败 (退出码: $exit_code)" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            
+              case $exit_code in
+                1|2) echo "**错误类型:** 构建或配置错误" >> $GITHUB_STEP_SUMMARY ;;
+                3|4) echo "**错误类型:** GPG 签名失败" >> $GITHUB_STEP_SUMMARY ;;
+                5|6) echo "**错误类型:** Maven Central 连接失败" >> $GITHUB_STEP_SUMMARY ;;
+                *) echo "**错误类型:** 未知错误" >> $GITHUB_STEP_SUMMARY ;;
+              esac
+            
+              echo "**错误上下文:** $error_context" >> $GITHUB_STEP_SUMMARY
+              exit $exit_code
+            }
+            
+            trap 'handle_error $? "发布执行阶段"' ERR
+            
             echo "🔐 验证发布凭据..." >> $GITHUB_STEP_SUMMARY
             echo "📦 开始发布流程..." >> $GITHUB_STEP_SUMMARY
-
+            
             ./gradlew publishToMavenCentral \
               --no-daemon \
               --parallel \
               --no-configuration-cache \
               --stacktrace \
               --info \
+              --continue \
               -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
               -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
               -PmavenCentralUsername="${{ secrets.MAVENCENTRAL_USERNAME }}" \
               -PmavenCentralPassword="${{ secrets.MAVENCENTRAL_PASSWORD }}" \
               -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
-
+            
             echo "✅ 发布到 Maven Central 成功" >> $GITHUB_STEP_SUMMARY
         env:
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
@@ -362,6 +413,10 @@ jobs:
           ### 📦 Maven Central Artifacts
 
           This release is available on Maven Central Repository:
+          
+          ```kotlin
+          implementation("io.github.truenine:composeserver-{module-name}:${{ needs.pre-publish-validation.outputs.version }}")
+          ```
 
           ```xml
           <dependency>
@@ -371,31 +426,11 @@ jobs:
           </dependency>
           ```
 
-          ```kotlin
-          implementation("io.github.truenine:composeserver-{module-name}:${{ needs.pre-publish-validation.outputs.version }}")
-          ```
-
           ### 🔗 Links
 
           - [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine%20AND%20v:${{ needs.pre-publish-validation.outputs.version }})
           - [Project Documentation](https://github.com/TrueNine/compose-server)
           - [API Documentation](https://github.com/TrueNine/compose-server/tree/main/docs)
-
-          ### 📋 Available Modules
-
-          - `composeserver-shared` - 核心组件和工具类
-          - `composeserver-bom` - 依赖管理清单
-          - `composeserver-gradle-plugin` - Gradle 插件
-          - `composeserver-cacheable` - 多级缓存支持
-          - `composeserver-ai-*` - AI 服务集成
-          - `composeserver-pay-*` - 支付服务集成
-          - `composeserver-oss-*` - 对象存储服务
-          - `composeserver-rds-*` - 关系型数据库服务
-          - `composeserver-security-*` - 安全服务
-          - `composeserver-sms-*` - 短信服务
-          - `composeserver-surveillance-*` - 监控服务
-          - `composeserver-data-*` - 数据处理服务
-          - `composeserver-depend-*` - 依赖处理模块
 
           ---
 
@@ -407,8 +442,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ needs.pre-publish-validation.outputs.version }}
-          name: Release v${{ needs.pre-publish-validation.outputs.version }}
+          tag_name: ${{ needs.pre-publish-validation.outputs.version }}
+          name: ${{ needs.pre-publish-validation.outputs.version }}
           body_path: release_notes.md
           draft: false
           prerelease: false
