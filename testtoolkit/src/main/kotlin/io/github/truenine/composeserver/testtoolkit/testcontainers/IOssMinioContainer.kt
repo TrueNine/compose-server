@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
+import io.github.truenine.composeserver.testtoolkit.SpringBootConfigurationPropertiesPrefixes
 import java.time.Duration
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -155,12 +156,11 @@ interface IOssMinioContainer : ITestContainerBase {
       val host = container.host
       val port = container.getMappedPort(9000)
 
-      registry.add("compose.oss.base-url") { host }
-      registry.add("compose.oss.expose-base-url") { "http://$host:$port" }
-      registry.add("compose.oss.port") { port }
-      registry.add("compose.oss.minio.enable-https") { false }
-      registry.add("compose.oss.minio.access-key") { config.minio.accessKey }
-      registry.add("compose.oss.minio.secret-key") { config.minio.secretKey }
+      registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_ENDPOINT) { host }
+      registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_EXPOSED_BASE_URL) { "http://$host:$port" }
+      registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_PORT) { port }
+      registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_ACCESS_KEY) { config.minio.accessKey }
+      registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_SECRET_KEY) { config.minio.secretKey }
     }
   }
 

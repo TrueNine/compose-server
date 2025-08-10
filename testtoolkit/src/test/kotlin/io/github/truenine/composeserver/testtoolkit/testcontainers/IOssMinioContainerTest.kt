@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
+import io.github.truenine.composeserver.testtoolkit.SpringBootConfigurationPropertiesPrefixes
 import jakarta.annotation.Resource
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -121,12 +122,11 @@ class IOssMinioContainerTest : IOssMinioContainer {
       minio {
         val expectedProperties =
           mapOf(
-            "compose.oss.base-url" to it.host,
-            "compose.oss.expose-base-url" to "http://${it.host}:${it.getMappedPort(9000)}",
-            "compose.oss.port" to it.getMappedPort(9000).toString(),
-            "compose.oss.minio.enable-https" to "false",
-            "compose.oss.minio.access-key" to "minioadmin",
-            "compose.oss.minio.secret-key" to "minioadmin",
+            SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_ENDPOINT to it.host,
+            SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_EXPOSED_BASE_URL to "http://${it.host}:${it.getMappedPort(9000)}",
+            SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_PORT to it.getMappedPort(9000).toString(),
+            SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_ACCESS_KEY to "minioadmin",
+            SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_SECRET_KEY to "minioadmin",
           )
 
         expectedProperties.forEach { (prop, expectedValue) ->
