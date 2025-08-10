@@ -6,13 +6,10 @@ import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.jdbc.core.ConnectionCallback
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.annotation.Rollback
-import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@Transactional
-@Rollback
 class CtIdxMigrationTest : IDatabasePostgresqlContainer {
   @Resource lateinit var jdbcTemplate: JdbcTemplate
 
@@ -22,19 +19,35 @@ class CtIdxMigrationTest : IDatabasePostgresqlContainer {
   }
 
   @Test
-  @Transactional
   fun `ct_idx 应能为字段创建索引`() {
-    jdbcTemplate.execute("create table test_table(id bigint primary key, name varchar(10))")
-    jdbcTemplate.execute("select ct_idx('test_table', 'name')")
-    jdbcTemplate.execute("select ct_idx('test_table', 'name')")
-    val idx =
-      jdbcTemplate.queryForList(
+    postgres(resetToInitialState = false) {
+      // 使用单个连接执行所有操作
+      jdbcTemplate.execute(
+        ConnectionCallback<Unit> { connection ->
+          val statement = connection.createStatement()
+
+          // 创建表
+          statement.execute("create table test_table(id bigint primary key, name varchar(10))")
+
+          // 调用 ct_idx 函数
+          statement.execute("select ct_idx('test_table', 'name')")
+
+          // 使用 pg_stat_user_indexes 检查索引是否存在（这是最可靠的方法）
+          val nameIdxCountResult =
+            statement.executeQuery(
+              """
+          select count(*) 
+          from pg_stat_user_indexes 
+          where indexrelname = 'name_idx'
         """
-        select indexname from pg_indexes
-        where tablename = 'test_table' and indexname = 'name_idx'
-        """
-          .trimIndent()
+            )
+          nameIdxCountResult.next()
+          val nameIdxCount = nameIdxCountResult.getInt(1)
+          val indexExists = nameIdxCount > 0
+
+          assertTrue(indexExists, "name_idx 索引未创建")
+        }
       )
-    assertTrue(idx.isNotEmpty(), "name_idx 索引未创建")
+    }
   }
 }

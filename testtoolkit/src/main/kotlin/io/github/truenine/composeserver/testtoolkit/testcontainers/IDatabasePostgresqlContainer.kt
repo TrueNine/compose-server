@@ -36,6 +36,7 @@ import org.testcontainers.utility.DockerImageName
  *
  * ## 特性
  * - 自动配置 PostgreSQL 测试容器
+ * - **容器在 Spring 属性注入时自动启动**
  * - 容器重用以提高性能
  * - 提供标准的数据库连接配置
  * - 支持 Spring Test 的动态属性注入
@@ -98,27 +99,41 @@ interface IDatabasePostgresqlContainer : ITestContainerBase {
      * - 密码: 可配置，默认 test
      * - 版本: 可配置，默认 postgres:17.4-alpine
      * - **容器重用**: 默认启用，多个测试共享同一容器实例
-     * - **延迟启动**: 容器在首次使用时才启动
+     * - **自动启动**: 容器在 Spring 属性注入时自动启动
      *
      * ⚠️ **重要**: 由于容器重用，数据库数据会在测试间残留，请确保在测试中进行适当的数据清理。 特别注意 Flyway 迁移版本号管理，避免版本冲突。
      */
+    @Volatile private var _container: PostgreSQLContainer<*>? = null
+
     @JvmStatic
-    val container by lazy {
+    val container: PostgreSQLContainer<*>
+      get() =
+        _container
+          ?: throw IllegalStateException(
+            "PostgreSQL container not initialized. Make sure your test class is annotated with @SpringBootTest and implements IDatabasePostgresqlContainer."
+          )
+
+    /**
+     * 创建并启动 PostgreSQL 容器
+     *
+     * @return 已启动的 PostgreSQL 容器实例
+     */
+    private fun createAndStartContainer(): PostgreSQLContainer<*> {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
-      PostgreSQLContainer<Nothing>(DockerImageName.parse(config.postgres.image)).apply {
+      return PostgreSQLContainer<Nothing>(DockerImageName.parse(config.postgres.image)).apply {
         withReuse(config.reuseAllContainers || config.postgres.reuse)
         withDatabaseName(config.postgres.databaseName)
         withUsername(config.postgres.username)
         withPassword(config.postgres.password)
         addExposedPorts(5432)
-        // 移除 start() 调用，容器在使用时才启动
+        start()
       }
     }
 
     /**
      * PostgreSQL 容器的懒加载实例
      *
-     * 用于 containers() 聚合函数，不会立即创建容器，只有在被调用时才创建。
+     * 用于 containers() 聚合函数，返回已初始化的容器实例。
      *
      * @return 懒加载的 PostgreSQL 容器实例
      */
@@ -133,14 +148,20 @@ interface IDatabasePostgresqlContainer : ITestContainerBase {
      * - 密码
      * - 数据库驱动类名
      *
+     * 容器将在此方法调用时自动创建并启动，确保属性值可用。
+     *
      * @param registry Spring动态属性注册器
      */
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      // 确保容器已启动（为 @DynamicPropertySource 提供支持）
-      if (!container.isRunning) {
-        container.start()
+      // 线程安全的容器初始化
+      if (_container == null) {
+        synchronized(IDatabasePostgresqlContainer::class.java) {
+          if (_container == null) {
+            _container = createAndStartContainer()
+          }
+        }
       }
 
       registry.add("spring.datasource.url", container::getJdbcUrl)
@@ -153,17 +174,13 @@ interface IDatabasePostgresqlContainer : ITestContainerBase {
   /**
    * PostgreSQL 容器扩展函数
    *
-   * 提供便捷的 PostgreSQL 容器测试方式，支持自动数据重置。 容器将在首次使用时自动启动。
+   * 提供便捷的 PostgreSQL 容器测试方式，支持自动数据重置。 容器已在 Spring 属性注入时启动。
    *
    * @param resetToInitialState 是否重置到初始状态（清空所有用户表），默认为 true
    * @param block 测试执行块，接收当前 PostgreSQL 容器实例作为参数
    * @return 测试执行块的返回值
    */
   fun <T> postgres(resetToInitialState: Boolean = true, block: (PostgreSQLContainer<*>) -> T): T {
-    // 确保容器已启动
-    if (!container.isRunning) {
-      container.start()
-    }
 
     if (resetToInitialState) {
       // 重置 PostgreSQL 到初始状态 - 清空用户创建的表

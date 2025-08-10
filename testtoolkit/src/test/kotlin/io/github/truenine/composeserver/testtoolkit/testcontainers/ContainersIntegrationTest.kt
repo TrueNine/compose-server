@@ -65,11 +65,14 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
   @BeforeEach
   fun setup() {
-
     // 初始化 PostgreSQL 测试表并清理数据
+    // 先删除表（如果存在）以确保干净的状态
+    jdbcTemplate.execute("drop table if exists test_table")
+
+    // 重新创建表
     jdbcTemplate.execute(
       """
-            create table if not exists test_table (
+            create table test_table (
                 id serial primary key,
                 name varchar(255) not null
             )
@@ -77,8 +80,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
         .trimIndent()
     )
 
-    // 清理测试数据
-    jdbcTemplate.execute("delete from test_table")
+    log.info("PostgreSQL test_table created successfully")
 
     // 清理 MinIO 测试桶
     cleanupMinioBuckets()

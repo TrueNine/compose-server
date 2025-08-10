@@ -13,6 +13,7 @@ import org.testcontainers.containers.PostgreSQLContainer
  * - 提供多容器聚合能力
  * - 统一容器生命周期管理
  * - 支持容器间协调测试
+ * - **容器在 Spring 属性注入时自动启动**
  *
  * ## 使用方式
  *
@@ -25,6 +26,7 @@ import org.testcontainers.containers.PostgreSQLContainer
  *     postgresqlContainerLazy
  *   ) {
  *     // 在此上下文中进行多容器测试
+ *     // 容器已在 Spring 属性注入时启动
  *     val redis = getRedisContainer()
  *     val postgres = getPostgresContainer()
  *   }
@@ -38,7 +40,7 @@ interface ITestContainerBase {
   /**
    * 容器聚合函数
    *
-   * 允许同时使用多个测试容器进行集成测试。 在执行块内可以通过上下文访问所有传入的容器。 容器将在访问时自动启动（延迟启动）。
+   * 允许同时使用多个测试容器进行集成测试。 在执行块内可以通过上下文访问所有传入的容器。 容器已在 Spring 属性注入时启动，无需额外启动操作。
    *
    * @param containerLazies 需要聚合的容器懒加载实例
    * @param block 测试执行块，在 IContainersContext 上下文中执行
@@ -47,12 +49,8 @@ interface ITestContainerBase {
   fun <T> containers(vararg containerLazies: Lazy<out GenericContainer<*>>, block: IContainersContext.() -> T): T {
     val containers =
       containerLazies.map { lazy ->
-        val container = lazy.value
-        // 确保容器在被使用前已启动
-        if (!container.isRunning) {
-          container.start()
-        }
-        container
+        // 容器已在 @DynamicPropertySource 中启动，直接获取即可
+        lazy.value
       }
     val context = ContainersContextImpl(containers)
     return context.block()

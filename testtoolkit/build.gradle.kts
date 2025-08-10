@@ -23,6 +23,7 @@ dependencies {
   api(libs.org.testcontainers.mysql)
   api(libs.org.testcontainers.junit.jupiter)
   api(libs.org.testcontainers.minio)
+  api(libs.io.minio.minio)
 
   implementation(libs.org.junit.jupiter.junit.jupiter.api)
   implementation(libs.org.junit.jupiter.junit.jupiter.engine)
@@ -65,7 +66,6 @@ dependencies {
   testImplementation(libs.org.testcontainers.mysql)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
 
-  testImplementation(libs.io.minio.minio)
   testRuntimeOnly(libs.org.postgresql.postgresql)
   testRuntimeOnly(libs.com.mysql.mysql.connector.j)
   testImplementation(libs.org.testcontainers.junit.jupiter)

@@ -46,6 +46,7 @@ import org.testcontainers.utility.DockerImageName
  *
  * ## 特性
  * - 自动配置 MinIO 测试容器
+ * - **容器在 Spring 属性注入时自动启动**
  * - 容器重用以提高性能
  * - 提供标准的 MinIO 连接配置
  * - 支持 Spring Test 的动态属性注入
@@ -106,29 +107,49 @@ interface IOssMinioContainer : ITestContainerBase {
      * - 控制台端口: 随机分配
      * - 版本: 可配置，默认 minio/minio:RELEASE.2025-04-22T22-12-26Z
      * - **容器重用**: 默认启用，多个测试共享同一容器实例
-     * - **延迟启动**: 容器在首次使用时才启动
+     * - **自动启动**: 容器在 Spring 属性注入时自动启动，或在首次访问时启动
      *
      * ⚠️ **重要**: 由于容器重用，MinIO 中的对象和桶会在测试间残留，请确保在测试中进行适当的数据清理。
      */
+    @Volatile private var _container: GenericContainer<*>? = null
+
     @JvmStatic
-    val container by lazy {
+    val container: GenericContainer<*>
+      get() {
+        if (_container == null) {
+          synchronized(IOssMinioContainer::class.java) {
+            if (_container == null) {
+              _container = createAndStartContainer()
+            }
+          }
+        }
+        return _container!!
+      }
+
+    /**
+     * 创建并启动 MinIO 容器
+     *
+     * @return 已启动的 MinIO 容器实例
+     */
+    private fun createAndStartContainer(): GenericContainer<*> {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
-      GenericContainer(DockerImageName.parse(config.minio.image)).apply {
+      return GenericContainer(DockerImageName.parse(config.minio.image)).apply {
         withReuse(config.reuseAllContainers || config.minio.reuse)
         withEnv("MINIO_ROOT_USER", config.minio.accessKey)
         withEnv("MINIO_ROOT_PASSWORD", config.minio.secretKey)
         withEnv("MINIO_CONSOLE_ADDRESS", ":9001")
         withCommand("server", "/data")
         withExposedPorts(9000, 9001)
-        setWaitStrategy(Wait.forLogMessage(".*MinIO Object Storage Server.*\\n", 1).withStartupTimeout(Duration.ofSeconds(10)))
-        // 移除 start() 调用，容器在使用时才启动
+        // 等待 MinIO API 端口可用，而不仅仅是日志消息
+        setWaitStrategy(Wait.forHttp("/minio/health/live").forPort(9000).withStartupTimeout(Duration.ofSeconds(30)))
+        start()
       }
     }
 
     /**
      * MinIO 容器的懒加载实例
      *
-     * 用于 containers() 聚合函数，不会立即创建容器，只有在被调用时才创建。
+     * 用于 containers() 聚合函数，返回已初始化的容器实例。
      *
      * @return 懒加载的 MinIO 容器实例
      */
@@ -142,14 +163,20 @@ interface IOssMinioContainer : ITestContainerBase {
      * - 访问密钥
      * - 密钥
      *
+     * 容器将在此方法调用时自动创建并启动，确保属性值可用。
+     *
      * @param registry Spring 动态属性注册器
      */
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      // 确保容器已启动（为 @DynamicPropertySource 提供支持）
-      if (!container.isRunning) {
-        container.start()
+      // 线程安全的容器初始化
+      if (_container == null) {
+        synchronized(IOssMinioContainer::class.java) {
+          if (_container == null) {
+            _container = createAndStartContainer()
+          }
+        }
       }
 
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
@@ -167,50 +194,51 @@ interface IOssMinioContainer : ITestContainerBase {
   /**
    * MinIO 容器扩展函数
    *
-   * 提供便捷的 MinIO 容器测试方式，支持自动数据重置。 容器将在首次使用时自动启动。
+   * 提供便捷的 MinIO 容器测试方式，支持自动数据重置。 容器已在 Spring 属性注入时启动。
    *
    * @param resetToInitialState 是否重置到初始状态（清空所有测试相关的桶和对象），默认为 true
    * @param block 测试执行块，接收当前 MinIO 容器实例作为参数
    * @return 测试执行块的返回值
    */
   fun <T> minio(resetToInitialState: Boolean = true, block: (GenericContainer<*>) -> T): T {
-    // 确保容器已启动
-    if (!container.isRunning) {
-      container.start()
-    }
 
     if (resetToInitialState) {
       // 重置 MinIO 到初始状态 - 清空所有测试相关的桶
       try {
-        // 使用 mc (MinIO Client) 命令来管理桶
-        // 首先配置 mc 客户端
-        container.execInContainer("mc", "alias", "set", "testminio", "http://localhost:9000", "minioadmin", "minioadmin")
+        // 使用 MinIO Java 客户端进行清理，比 mc 命令更可靠
+        val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
+        val minioClient =
+          io.minio.MinioClient.builder()
+            .endpoint("http://${container.host}:${container.getMappedPort(9000)}")
+            .credentials(config.minio.accessKey, config.minio.secretKey)
+            .build()
 
         // 列出所有桶
-        val listResult = container.execInContainer("mc", "ls", "testminio")
-        if (listResult.exitCode == 0 && listResult.stdout.isNotEmpty()) {
-          val buckets =
-            listResult.stdout
-              .split("\n")
-              .filter { it.trim().isNotEmpty() }
-              .mapNotNull { line ->
-                // 提取桶名称（格式类似：[2023-01-01 00:00:00 UTC]     0B bucket-name/）
-                val bucketMatch = Regex("\\s+\\d+B\\s+(.+?)/?$").find(line.trim())
-                bucketMatch?.groupValues?.get(1)
-              }
-              .filter { bucketName ->
-                // 只删除测试相关的桶（以 test- 或 combined- 开头）
-                bucketName.startsWith("test-") || bucketName.startsWith("combined-")
-              }
+        val buckets = minioClient.listBuckets()
+        val testBuckets =
+          buckets.filter { bucket ->
+            // 只删除测试相关的桶（以 test- 或 combined- 开头）
+            bucket.name().startsWith("test-") || bucket.name().startsWith("combined-")
+          }
 
-          // 删除测试桶
-          buckets.forEach { bucketName ->
-            try {
-              // 强制递归删除桶及其中的所有对象
-              container.execInContainer("mc", "rb", "--force", "testminio/$bucketName")
-            } catch (e: Exception) {
-              org.slf4j.LoggerFactory.getLogger(IOssMinioContainer::class.java).debug("删除测试桶 {} 时出现异常（可能已不存在）: {}", bucketName, e.message)
+        // 删除测试桶及其中的所有对象
+        testBuckets.forEach { bucket ->
+          try {
+            val bucketName = bucket.name()
+
+            // 删除桶中的所有对象
+            val objects = minioClient.listObjects(io.minio.ListObjectsArgs.builder().bucket(bucketName).recursive(true).build())
+
+            val objectsToDelete = objects.map { result -> io.minio.messages.DeleteObject(result.get().objectName()) }.toList()
+
+            if (objectsToDelete.isNotEmpty()) {
+              minioClient.removeObjects(io.minio.RemoveObjectsArgs.builder().bucket(bucketName).objects(objectsToDelete).build())
             }
+
+            // 删除桶
+            minioClient.removeBucket(io.minio.RemoveBucketArgs.builder().bucket(bucketName).build())
+          } catch (e: Exception) {
+            org.slf4j.LoggerFactory.getLogger(IOssMinioContainer::class.java).debug("删除测试桶 {} 时出现异常（可能已不存在）: {}", bucket.name(), e.message)
           }
         }
       } catch (e: Exception) {
