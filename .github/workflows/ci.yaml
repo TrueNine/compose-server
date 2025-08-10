@@ -90,19 +90,19 @@ jobs:
           - "data"      # data, depend 模块
         include:
           - group: "core"
-            modules: ":shared :testtoolkit :gradle-plugin :version-catalog :bom"
+            modules: "shared testtoolkit gradle-plugin version-catalog bom"
             containers: "none"
           - group: "rds"
-            modules: ":rds:rds-shared :rds:rds-crud :rds:rds-jimmer-ext-postgres :rds:rds-flyway-migration-postgresql :rds:rds-flyway-migration-mysql8 :rds:rds-flyway-migration-shared"
+            modules: "rds:rds-shared rds:rds-crud rds:rds-jimmer-ext-postgres rds:rds-flyway-migration-postgresql rds:rds-flyway-migration-mysql8 rds:rds-flyway-migration-shared"
             containers: "database"
           - group: "business"
-            modules: ":ai:ai-shared :ai:ai-langchain4j :pay:pay-shared :pay:pay-wechat :oss:oss-shared :oss:oss-minio :oss:oss-aliyun-oss :oss:oss-huawei-obs :oss:oss-volcengine-tos :sms:sms-shared :sms:sms-tencent :surveillance:surveillance-shared :surveillance:surveillance-hikvision :cacheable"
+            modules: "ai:ai-shared ai:ai-langchain4j pay:pay-shared pay:pay-wechat oss:oss-shared oss:oss-minio oss:oss-aliyun-oss oss:oss-huawei-obs oss:oss-volcengine-tos sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision cacheable"
             containers: "cache"
           - group: "security"
-            modules: ":security:security-crypto :security:security-oauth2 :security:security-spring"
+            modules: "security:security-crypto security:security-oauth2 security:security-spring"
             containers: "none"
           - group: "data"
-            modules: ":data:data-crawler :data:data-extract :depend:depend-http-exchange :depend:depend-jackson :depend:depend-paho :depend:depend-servlet :depend:depend-springdoc-openapi :depend:depend-xxl-job :ksp:ksp-meta :ksp:ksp-plugin :ksp:ksp-shared"
+            modules: "data:data-crawler data:data-extract depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa"
             containers: "none"
 
     steps:
@@ -193,7 +193,21 @@ jobs:
           set -e
           trap 'echo "❌ 测试执行失败，正在收集错误信息..." >> $GITHUB_STEP_SUMMARY' ERR
           
-          ./gradlew ${{ matrix.modules }} test \
+          # 将模块名转换为测试任务
+          modules="${{ matrix.modules }}"
+          test_tasks=""
+          for module in $modules; do
+            if [[ "$module" == *":"* ]]; then
+              # 子模块格式 (如 rds:rds-shared)
+              test_tasks="$test_tasks :$module:test"
+            else
+              # 根级模块格式 (如 shared)
+              test_tasks="$test_tasks :$module:test"
+            fi
+          done
+          
+          echo "🎯 执行测试任务: $test_tasks"
+          ./gradlew $test_tasks \
             --no-daemon \
             --parallel \
             --build-cache \
