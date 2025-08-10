@@ -7,9 +7,9 @@ on:
     branches: [ main ]
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=8 -Dkotlin.incremental=false -Dorg.gradle.configuration-cache=false"
-  # JVM 性能优化配置
-  JVM_OPTS: "-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -Xshare:off"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=6 -Dkotlin.incremental=false -Dorg.gradle.configuration-cache=true"
+  # JVM 性能优化配置 - 适应 GitHub Actions 7GB 内存限制
+  JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1536m -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:+UseStringDeduplication"
 
 jobs:
   # 🔍 快速检查 - 编译和基础验证
@@ -90,19 +90,19 @@ jobs:
           - "data"      # data, depend 模块
         include:
           - group: "core"
-            modules: ":shared :testtoolkit :gradle-plugin :version-catalog :bom"
+            modules: "shared testtoolkit gradle-plugin version-catalog bom"
             containers: "none"
           - group: "rds"
-            modules: ":rds:rds-shared :rds:rds-crud :rds:rds-jimmer-ext-postgres :rds:rds-flyway-migration-postgresql :rds:rds-flyway-migration-mysql8 :rds:rds-flyway-migration-shared"
+            modules: "rds:rds-shared rds:rds-crud rds:rds-jimmer-ext-postgres rds:rds-flyway-migration-postgresql rds:rds-flyway-migration-mysql8 rds:rds-flyway-migration-shared"
             containers: "database"
           - group: "business"
-            modules: ":ai:ai-shared :ai:ai-langchain4j :pay:pay-shared :pay:pay-wechat :oss:oss-shared :oss:oss-minio :oss:oss-aliyun-oss :oss:oss-huawei-obs :oss:oss-volcengine-tos :sms:sms-shared :sms:sms-tencent :surveillance:surveillance-shared :surveillance:surveillance-hikvision :cacheable"
+            modules: "ai:ai-shared ai:ai-langchain4j pay:pay-shared pay:pay-wechat oss:oss-shared oss:oss-minio oss:oss-aliyun-oss oss:oss-huawei-obs oss:oss-volcengine-tos sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision cacheable"
             containers: "cache"
           - group: "security"
-            modules: ":security:security-crypto :security:security-oauth2 :security:security-spring"
+            modules: "security:security-crypto security:security-oauth2 security:security-spring"
             containers: "none"
           - group: "data"
-            modules: ":data:data-crawler :data:data-extract :depend:depend-http-exchange :depend:depend-jackson :depend:depend-paho :depend:depend-servlet :depend:depend-springdoc-openapi :depend:depend-xxl-job :ksp:ksp-meta :ksp:ksp-plugin :ksp:ksp-shared"
+            modules: "data:data-crawler data:data-extract depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa"
             containers: "none"
 
     steps:
@@ -185,11 +185,35 @@ jobs:
 
       - name: Run tests for ${{ matrix.group }} modules
         run: |
-          ./gradlew ${{ matrix.modules }} test \
+          echo "🚀 开始执行 ${{ matrix.group }} 模块组测试..."
+          echo "📚 模块列表： ${{ matrix.modules }}"
+          echo "🐳 容器配置： ${{ matrix.containers }}"
+          
+          # 设置错误处理
+          set -e
+          trap 'echo "❌ 测试执行失败，正在收集错误信息..." >> $GITHUB_STEP_SUMMARY' ERR
+          
+          # 将模块名转换为测试任务
+          modules="${{ matrix.modules }}"
+          test_tasks=""
+          for module in $modules; do
+            if [[ "$module" == *":"* ]]; then
+              # 子模块格式 (如 rds:rds-shared)
+              test_tasks="$test_tasks :$module:test"
+            else
+              # 根级模块格式 (如 shared)
+              test_tasks="$test_tasks :$module:test"
+            fi
+          done
+          
+          echo "🎯 执行测试任务: $test_tasks"
+          ./gradlew $test_tasks \
             --no-daemon \
             --parallel \
-            --no-build-cache \
-            --continue
+            --build-cache \
+            --continue \
+            --stacktrace \
+            --info
         env:
           # TestContainers 优化配置
           TESTCONTAINERS_RYUK_DISABLED: false
@@ -197,6 +221,10 @@ jobs:
           TESTCONTAINERS_REUSE_ENABLE: true
           TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX: ""
           TESTCONTAINERS_REUSE_HASH_LABELS: true
+          # TestContainers 超时和启动配置
+          TESTCONTAINERS_PULL_PAUSE_TIMEOUT: 30
+          TESTCONTAINERS_STARTUP_TIMEOUT: 120
+          TESTCONTAINERS_CONNECT_TIMEOUT: 60
           # Docker 性能优化
           DOCKER_HOST: unix:///var/run/docker.sock
           TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
@@ -209,7 +237,33 @@ jobs:
           CI: true
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: false
 
-      - name: Upload test results
+      - name: Collect test diagnostics
+        if: failure()
+        run: |
+          echo "🔍 收集测试诊断信息..."
+          
+          # 收集 Gradle 构建日志
+          find . -name "*.log" -type f -exec echo "=== {} ===" \; -exec cat {} \; || true
+          
+          # 收集容器日志
+          if [[ "${{ matrix.containers }}" != "none" ]]; then
+            echo "🐳 收集容器日志..."
+            docker ps -a || true
+            docker logs $(docker ps -aq --filter "label=org.testcontainers=true") || true
+          fi
+          
+          # JVM 堆转储和线程信息
+          if pgrep -f "org.gradle.launcher.daemon.bootstrap.GradleDaemon" > /dev/null; then
+            echo "👍 收集 JVM 诊断信息..."
+            jps -v || true
+          fi
+          
+          # 系统资源使用
+          echo "📈 系统资源使用："
+          free -h || true
+          df -h || true
+
+      - name: Upload test results and diagnostics
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -217,17 +271,35 @@ jobs:
           path: |
             **/build/reports/tests/
             **/build/test-results/
-          retention-days: 3
+            **/build/tmp/test/
+            **/*.log
+          retention-days: 5
 
       - name: Cleanup containers
         if: always() && matrix.containers != 'none'
         run: |
-          # 清理测试容器，但保留可重用容器
-          docker container prune -f --filter "until=30m" --filter "label!=org.testcontainers.reuse.enable=true"
-          # 清理悬空镜像
-          docker image prune -f --filter "dangling=true"
-          # 清理测试卷
-          docker volume prune -f --filter "label!=keep"
+          echo "🧼 开始清理 Docker 资源..."
+          
+          # 显示当前资源使用情况
+          echo "📈 当前 Docker 资源使用情况："
+          docker system df || true
+          
+          # 智能清理：保留有用的重用容器
+          echo "🗑️ 清理非重用容器..."
+          docker container prune -f --filter "until=1h" --filter "label!=org.testcontainers.reuse.enable=true" || true
+          
+          # 清理悬空镜像和无用网络
+          echo "🖼️ 清理悬空镜像和网络..."
+          docker image prune -f --filter "dangling=true" || true
+          docker network prune -f --filter "until=1h" || true
+          
+          # 清理老旧卷（保留近期的）
+          echo "💾 清理老旧卷..."
+          docker volume prune -f --filter "label!=keep" --filter "label!=org.testcontainers.reuse.enable=true" || true
+          
+          # 显示清理后的资源情况
+          echo "✨ 清理后 Docker 资源使用情况："
+          docker system df || true
 
   # 📊 测试结果汇总
   test-results:
@@ -243,20 +315,60 @@ jobs:
           path: test-results
           pattern: test-results-*
 
-      - name: Generate test summary
+      - name: Generate comprehensive test summary
         run: |
-          echo "# 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "# 🧪 测试结果详细报告" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Module Group | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "**执行时间:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**测试环境:** GitHub Actions (ubuntu-latest)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 📈 模块组测试状态" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 模块组 | 状态 | 容器依赖 | 耗时 |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|----------|------|" >> $GITHUB_STEP_SUMMARY
+          
+          # 模块组信息
+          declare -A group_containers=(
+            ["core"]="无"
+            ["rds"]="Database (PostgreSQL, MySQL, Redis)"
+            ["business"]="Cache (Redis, MinIO)"
+            ["security"]="无"
+            ["data"]="无"
+          )
           
           for group in core rds business security data; do
+            containers="${group_containers[$group]}"
             if [[ "${{ needs.test-matrix.result }}" == "success" ]]; then
-              echo "| $group | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+              echo "| $group | ✅ 通过 | $containers | - |" >> $GITHUB_STEP_SUMMARY
             else
-              echo "| $group | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+              echo "| $group | ❌ 失败 | $containers | - |" >> $GITHUB_STEP_SUMMARY
             fi
           done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # 添加失败分析
+          if [[ "${{ needs.test-matrix.result }}" != "success" ]]; then
+            echo "## ❌ 失败分析和建议" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🔍 **常见问题排查:**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "1. **TestContainers 启动失败**" >> $GITHUB_STEP_SUMMARY
+            echo "   - 检查 Docker 服务是否正常" >> $GITHUB_STEP_SUMMARY
+            echo "   - 检查网络连接和镜像拉取" >> $GITHUB_STEP_SUMMARY
+            echo "   - 超时配置可能需要调整" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "2. **内存不足 (OOM)**" >> $GITHUB_STEP_SUMMARY
+            echo "   - JVM 堆内存设置：4GB" >> $GITHUB_STEP_SUMMARY
+            echo "   - Metaspace 设置：1.5GB" >> $GITHUB_STEP_SUMMARY
+            echo "   - 并行 worker 限制：6个" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "3. **测试依赖冲突**" >> $GITHUB_STEP_SUMMARY
+            echo "   - 检查并行测试中的端口冲突" >> $GITHUB_STEP_SUMMARY
+            echo "   - 验证数据库连接池配置" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Check overall status
         run: |

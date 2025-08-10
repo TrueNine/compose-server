@@ -1,0 +1,57 @@
+---
+description: General development workflow and best practices
+---
+
+# Development Workflow
+
+General development practices and workflow guidelines based on [docs/GLOBAL_CLAUDE.md](mdc:docs/GLOBAL_CLAUDE.md).
+
+## Development Process
+1. **Task breakdown**: Split complex tasks into smaller modules
+2. **Incremental development**: Write small code portions with immediate testing
+3. **TDD approach**: Test-driven development with red-green-refactor cycle
+4. **Code review**: Ensure code quality and adherence to standards
+
+## Code Quality Standards
+- **Early return**: Maximize use to reduce nesting levels
+- **Meaningful names**: Avoid abbreviations, use descriptive names
+- **Single responsibility**: Functions and classes should have one purpose
+- **Immutability**: Prefer immutable data structures and `val` declarations
+
+## Forbidden Practices
+- **No example code**: Never write user-facing example code
+- **No problem simplification**: Don't solve problems by reducing complexity
+- **No dependency downgrades**: Don't solve issues by downgrading versions
+- **No test assertion reduction**: Don't reduce test coverage to fix issues
+- **No exception hiding**: Never ignore or suppress exceptions
+- **No sensitive data exposure**: Never commit API keys, passwords, tokens
+
+## Logging Standards
+- **Comprehensive logging**: Add detailed logging for debugging and monitoring
+- **Structured logging**: Use consistent log formats
+- **No println**: Use proper logging framework, never `println` or `System.out.println`
+- **Debug logs**: Allowed during development, remove after completion
+
+## Documentation Requirements
+- **English comments**: Use English for all code documentation
+- **Explain why**: Comments should explain reasoning, not what code does
+- **KDoc**: Document all public APIs
+- **No auto-generated docs**: Don't create summary documents automatically
+
+## Error Handling
+- **Proper exception handling**: Never ignore exceptions
+- **Meaningful error messages**: Provide context for debugging
+- **Graceful degradation**: Handle failures appropriately
+- **Logging errors**: Log errors with sufficient context
+
+## Performance Considerations
+- **Lazy loading**: Use where appropriate
+- **Resource management**: Proper cleanup of resources
+- **Caching strategies**: Implement appropriate caching
+- **Database optimization**: Efficient queries and indexing
+
+## Security Mindset
+- **Input validation**: Validate all external inputs
+- **Output encoding**: Prevent injection attacks
+- **Secure defaults**: Use secure configurations by default
+- **Regular updates**: Keep dependencies updated for security patches

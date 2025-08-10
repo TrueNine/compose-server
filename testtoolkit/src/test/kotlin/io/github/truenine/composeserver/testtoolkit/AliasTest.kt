@@ -20,7 +20,7 @@ import org.springframework.test.annotation.Rollback
 class AliasTest {
 
   @Test
-  fun `测试 SysLogger 类型别名`() {
+  fun test_sys_logger_type_alias() {
     log.info("开始测试 SysLogger 类型别名")
 
     // 验证 SysLogger 类型别名指向正确的类型
@@ -36,7 +36,7 @@ class AliasTest {
   }
 
   @Test
-  fun `测试 RDBRollback 类型别名`() {
+  fun test_rdb_rollback_type_alias() {
     log.info("开始测试 RDBRollback 类型别名")
 
     // 验证 RDBRollback 类型别名指向正确的类型
@@ -60,7 +60,7 @@ class AliasTest {
   }
 
   @Test
-  fun `测试 TempDirMapping 类型别名`() {
+  fun test_temp_dir_mapping_type_alias() {
     log.info("开始测试 TempDirMapping 类型别名")
 
     // 验证 TempDirMapping 类型别名指向正确的类型
@@ -90,7 +90,7 @@ class AliasTest {
   }
 
   @Test
-  fun `测试所有类型别名的包导入`() {
+  fun test_all_type_aliases_package_imports() {
     log.info("开始测试所有类型别名的包导入")
 
     // 验证所有类型别名都能正确导入和使用
@@ -107,7 +107,7 @@ class AliasTest {
   }
 
   @Test
-  fun `测试类型别名在实际使用场景中的兼容性`() {
+  fun test_type_alias_compatibility_in_real_usage() {
     log.info("开始测试类型别名在实际使用场景中的兼容性")
 
     // 测试 SysLogger 在实际日志记录中的使用

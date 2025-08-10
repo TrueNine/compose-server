@@ -1,9 +1,8 @@
 package io.github.truenine.composeserver.oss.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import java.time.Duration
 import org.springframework.boot.context.properties.ConfigurationProperties
-
-private const val PREFIX = "compose.oss"
 
 /**
  * Modern OSS configuration properties
@@ -28,7 +27,7 @@ private const val PREFIX = "compose.oss"
  * @author TrueNine
  * @since 2025-01-04
  */
-@ConfigurationProperties(prefix = PREFIX)
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.OSS)
 data class OssProperties(
   /** OSS provider type (minio, volcengine-tos, aliyun-oss, etc.) */
   var provider: String? = null,

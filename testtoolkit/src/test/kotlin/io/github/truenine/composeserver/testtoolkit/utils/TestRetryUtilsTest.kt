@@ -19,7 +19,7 @@ import kotlin.test.assertTrue
 class TestRetryUtilsTest {
 
   @Test
-  fun `测试 retryUntilSuccess 方法的成功情况`() {
+  fun retry_until_success_returns_result_immediately() {
     log.info("开始测试 retryUntilSuccess 方法的成功情况")
 
     val result = TestRetryUtils.retryUntilSuccess { "Success" }
@@ -30,7 +30,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 retryUntilSuccess 方法的重试机制`() {
+  fun retry_until_success_retries_on_failure() {
     log.info("开始测试 retryUntilSuccess 方法的重试机制")
 
     val attemptCounter = AtomicInteger(0)
@@ -51,7 +51,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 retryUntilSuccess 方法的超时情况`() {
+  fun retry_until_success_throws_on_timeout() {
     log.info("开始测试 retryUntilSuccess 方法的超时情况")
 
     assertFailsWith<RuntimeException> {
@@ -62,7 +62,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 retryUntilSuccess 方法的自定义配置成功情况`() {
+  fun retry_until_success_works_with_custom_config() {
     log.info("开始测试 retryUntilSuccess 方法的自定义配置成功情况")
 
     val result = TestRetryUtils.retryUntilSuccess(timeout = Duration.ofSeconds(5), pollInterval = Duration.ofMillis(100)) { "Config Success" }
@@ -73,7 +73,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 retryUntilSuccess 方法的自定义配置重试机制`() {
+  fun retry_until_success_retries_with_custom_config() {
     log.info("开始测试 retryUntilSuccess 方法的自定义配置重试机制")
 
     val attemptCounter = AtomicInteger(0)
@@ -94,7 +94,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 retryWithExponentialBackoff 方法的成功情况`() {
+  fun retry_with_exponential_backoff_returns_result_immediately() {
     log.info("开始测试 retryWithExponentialBackoff 方法的成功情况")
 
     val result =
@@ -108,7 +108,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 retryWithExponentialBackoff 方法的重试机制`() {
+  fun retry_with_exponential_backoff_retries_on_failure() {
     log.info("开始测试 retryWithExponentialBackoff 方法的重试机制")
 
     val attemptCounter = AtomicInteger(0)
@@ -129,7 +129,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 retryWithExponentialBackoff 方法的最大尝试次数限制`() {
+  fun retry_with_exponential_backoff_respects_max_attempts() {
     log.info("开始测试 retryWithExponentialBackoff 方法的最大尝试次数限制")
 
     val attemptCounter = AtomicInteger(0)
@@ -147,7 +147,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 waitUntil 方法的成功情况`() {
+  fun wait_until_returns_immediately_when_condition_met() {
     log.info("开始测试 waitUntil 方法的成功情况")
 
     TestRetryUtils.waitUntil(timeout = Duration.ofSeconds(5), pollInterval = Duration.ofMillis(100)) {
@@ -158,7 +158,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 waitUntil 方法的等待机制`() {
+  fun wait_until_polls_condition_until_success() {
     log.info("开始测试 waitUntil 方法的等待机制")
 
     val attemptCounter = AtomicInteger(0)
@@ -174,7 +174,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 waitUntil 方法的超时情况`() {
+  fun wait_until_throws_on_timeout() {
     log.info("开始测试 waitUntil 方法的超时情况")
 
     assertFailsWith<RuntimeException> {
@@ -187,7 +187,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试 waitUntil 方法的默认参数`() {
+  fun wait_until_works_with_default_parameters() {
     log.info("开始测试 waitUntil 方法的默认参数")
 
     TestRetryUtils.waitUntil {
@@ -198,7 +198,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试重试方法的异常处理`() {
+  fun retry_methods_handle_specific_exceptions() {
     log.info("开始测试重试方法的异常处理")
 
     // 测试特定异常类型的处理
@@ -212,7 +212,7 @@ class TestRetryUtilsTest {
   }
 
   @Test
-  fun `测试重试方法的边界条件`() {
+  fun retry_methods_handle_edge_cases() {
     log.info("开始测试重试方法的边界条件")
 
     // 测试极短的超时时间

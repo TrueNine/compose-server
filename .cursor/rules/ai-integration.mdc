@@ -1,0 +1,55 @@
+---
+globs: **/ai/**/*.kt,**/*AI*.kt,**/*LangChain*.kt
+---
+
+# AI Integration Guidelines
+
+Standards for AI-related modules and LangChain4j integration.
+
+## AI Module Structure
+- **Shared abstractions**: Use [ai/ai-shared/](mdc:ai/ai-shared/) for common interfaces
+- **LangChain4j integration**: Implement via [ai/ai-langchain4j/](mdc:ai/ai-langchain4j/)
+- **Model abstractions**: Support multiple AI providers
+- **Configuration**: Externalize model settings and API keys
+
+## LangChain4j Integration
+- **Version**: Use version from [gradle/libs.versions.toml](mdc:gradle/libs.versions.toml)
+- **Chain building**: Use fluent API for complex workflows
+- **Memory management**: Implement conversation memory appropriately
+- **Tool integration**: Create tools for external system integration
+
+## AI Service Design
+- **Interface-based**: Define clear service interfaces
+- **Async operations**: Use coroutines for long-running AI operations
+- **Error handling**: Graceful degradation for AI service failures
+- **Rate limiting**: Implement to respect API limits
+
+## Model Configuration
+- **Multiple providers**: Support OpenAI, Ollama, local models
+- **Model selection**: Runtime model switching capability
+- **Parameter tuning**: Externalize temperature, max tokens, etc.
+- **Fallback models**: Implement fallback strategies
+
+## Security Considerations
+- **API key management**: Never hardcode API keys
+- **Input sanitization**: Validate and sanitize user inputs
+- **Output filtering**: Filter potentially harmful AI responses
+- **Audit logging**: Log AI interactions for compliance
+
+## Testing AI Components
+- **Mock AI responses**: Use deterministic responses for unit tests
+- **Integration tests**: Test with real AI services in CI/CD
+- **Performance tests**: Measure response times and throughput
+- **Accuracy tests**: Validate AI output quality
+
+## Prompt Engineering
+- **Template management**: Centralize prompt templates
+- **Version control**: Track prompt changes
+- **A/B testing**: Support prompt experimentation
+- **Localization**: Support multiple languages
+
+## Data Handling
+- **Privacy compliance**: Handle PII appropriately
+- **Data retention**: Implement retention policies
+- **Anonymization**: Remove sensitive data from training
+- **Consent management**: Track user consent for AI processing

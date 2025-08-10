@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.psdk.wxpa.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
-private const val PREFIX = "compose.psdk.wxpa"
-
-@ConfigurationProperties(prefix = PREFIX) data class WechatProperties(@NestedConfigurationProperty var wxpa: WxpaProperties = WxpaProperties())
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.PSDK_WXPA)
+data class WechatProperties(@NestedConfigurationProperty var wxpa: WxpaProperties = WxpaProperties())

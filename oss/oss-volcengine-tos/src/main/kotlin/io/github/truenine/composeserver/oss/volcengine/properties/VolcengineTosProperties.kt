@@ -1,8 +1,7 @@
 package io.github.truenine.composeserver.oss.volcengine.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
-
-private const val PREFIX = "compose.oss.volcengine-tos"
 
 /**
  * Volcengine TOS configuration properties with optimized defaults
@@ -41,7 +40,7 @@ private const val PREFIX = "compose.oss.volcengine-tos"
  * @author TrueNine
  * @since 2025-08-04
  */
-@ConfigurationProperties(prefix = PREFIX)
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.OSS_VOLCENGINE_TOS)
 data class VolcengineTosProperties(
   /** Service endpoint URL */
   var endpoint: String? = null,

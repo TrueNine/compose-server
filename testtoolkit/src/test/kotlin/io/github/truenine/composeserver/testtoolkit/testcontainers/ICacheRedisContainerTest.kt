@@ -8,7 +8,6 @@ import java.util.function.Supplier
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -64,41 +63,34 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
     @Resource set
 
   @Nested
-  @DisplayName("容器基本功能测试")
   inner class ContainerBasicTests {
     @Test
-    @DisplayName("验证容器实例存在且正在运行")
-    fun `验证容器实例存在且正在运行`() {
-      assertNotNull(redisContainer, "Redis 容器实例不应为空")
-      assertTrue(redisContainer!!.isRunning, "Redis 容器应该处于运行状态")
+    fun verify_container_instance_exists_and_running() {
+      redis { container -> assertTrue(container.isRunning, "Redis 容器应该处于运行状态") }
     }
 
     @Test
-    @DisplayName("验证容器网络配置正确")
-    fun `验证容器网络配置正确`() {
-      val container = redisContainer!!
-
-      // 验证端口映射
-      val redisPort = container.getMappedPort(6379)
-      assertTrue(redisPort in 1024..65535, "Redis 端口映射应在有效范围内")
+    fun verify_container_network_configuration() {
+      redis { container ->
+        // 验证端口映射
+        val redisPort = container.getMappedPort(6379)
+        assertTrue(redisPort in 1024..65535, "Redis 端口映射应在有效范围内")
+      }
     }
 
     @Test
-    @DisplayName("验证容器日志输出正确")
-    fun `验证容器日志输出正确`() {
-      val container = redisContainer!!
-      val logs = container.logs
-
-      assertTrue(logs.contains("Ready to accept connections"), "Redis 容器日志应包含启动成功信息")
+    fun verify_container_log_output() {
+      redis { container ->
+        val logs = container.logs
+        assertTrue(logs.contains("Ready to accept connections"), "Redis 容器日志应包含启动成功信息")
+      }
     }
   }
 
   @Nested
-  @DisplayName("Redis 连接测试")
   inner class RedisConnectionTests {
     @Test
-    @DisplayName("验证 Redis 连接工厂配置正确")
-    fun `验证 Redis 连接工厂配置正确`() {
+    fun verify_redis_connection_factory_configuration() {
       assertNotNull(redisConnectionFactory, "Redis 连接工厂不应为空")
 
       val connection = redisConnectionFactory.connection
@@ -121,8 +113,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
     }
 
     @Test
-    @DisplayName("验证 Redis 基本操作正常")
-    fun `验证 Redis 基本操作正常`() {
+    fun verify_redis_basic_operations() {
       // 测试字符串操作
       val key = "test:key"
       val value = "test-value"
@@ -141,8 +132,7 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
     }
 
     @Test
-    @DisplayName("验证 Redis 过期时间设置正常")
-    fun `验证 Redis 过期时间设置正常`() {
+    fun verify_redis_expiration_time_setting() {
 
       val key = "test:expiring:key"
       val value = "test-value"
@@ -168,11 +158,9 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
   }
 
   @Nested
-  @DisplayName("Spring 属性注入测试")
   inner class SpringPropertiesTests {
     @Test
-    @DisplayName("验证动态属性注册正确")
-    fun `验证动态属性注册正确`() {
+    fun verify_dynamic_property_registration() {
       val registry = mutableMapOf<String, String>()
       val mockRegistry =
         object : DynamicPropertyRegistry {
@@ -184,24 +172,26 @@ class ICacheRedisContainerTest : ICacheRedisContainer {
       ICacheRedisContainer.properties(mockRegistry)
 
       // 验证所有必需的属性都已配置
-      val expectedProperties =
-        mapOf("spring.data.redis.host" to redisContainer!!.host, "spring.data.redis.port" to redisContainer!!.getMappedPort(6379).toString())
+      redis { container ->
+        val expectedProperties = mapOf("spring.data.redis.host" to container.host, "spring.data.redis.port" to container.getMappedPort(6379).toString())
 
-      expectedProperties.forEach { (prop, expectedValue) ->
-        assertTrue(registry.containsKey(prop), "property $prop must exist")
-        assertEquals(expectedValue, registry[prop], "property $prop value is incorrect")
+        expectedProperties.forEach { (prop, expectedValue) ->
+          assertTrue(registry.containsKey(prop), "property $prop must exist")
+          assertEquals(expectedValue, registry[prop], "property $prop value is incorrect")
+        }
       }
     }
 
     @Test
-    @DisplayName("验证环境变量注入正确")
-    fun `验证环境变量注入正确`() {
-      val expectedProperties = mapOf("spring.data.redis.host" to redisContainer!!.host)
+    fun verify_environment_variable_injection() {
+      redis { container ->
+        val expectedProperties = mapOf("spring.data.redis.host" to container.host)
 
-      expectedProperties.forEach { (prop, expectedValue) ->
-        val actualValue = environment.getProperty(prop)
-        assertNotNull(actualValue, "environment variable missing property: $prop")
-        assertEquals(expectedValue, actualValue, "environment variable $prop value is incorrect")
+        expectedProperties.forEach { (prop, expectedValue) ->
+          val actualValue = environment.getProperty(prop)
+          assertNotNull(actualValue, "environment variable missing property: $prop")
+          assertEquals(expectedValue, actualValue, "environment variable $prop value is incorrect")
+        }
       }
 
       // 特殊验证端口属性（因为端口是动态分配的）

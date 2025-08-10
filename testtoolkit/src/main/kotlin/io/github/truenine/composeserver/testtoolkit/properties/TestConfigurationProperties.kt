@@ -1,9 +1,10 @@
 package io.github.truenine.composeserver.testtoolkit.properties
 
+import io.github.truenine.composeserver.testtoolkit.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /** # 测试工具包配置属性 */
-@ConfigurationProperties(prefix = "compose.testtoolkit")
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.TESTTOOLKIT)
 data class TestConfigurationProperties(
   /** 是否启用测试配置 */
   var enabled: Boolean = true,

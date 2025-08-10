@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory
 class LoggerExtensionsTest {
 
   @Test
-  fun `测试 log 扩展属性获取正确的 Logger`() {
+  fun test_log_extension_property_returns_correct_logger() {
     log.info("开始测试 log 扩展属性")
 
     // 直接调用扩展属性来确保覆盖率
@@ -33,7 +33,7 @@ class LoggerExtensionsTest {
   }
 
   @Test
-  fun `测试不同类型的 log 扩展属性`() {
+  fun test_log_extension_property_for_different_types() {
     log.info("开始测试不同类型的 log 扩展属性")
 
     // 测试字符串类型 - 确保调用扩展属性
@@ -60,7 +60,7 @@ class LoggerExtensionsTest {
   }
 
   @Test
-  fun `测试 Logger info 扩展函数打印变量值`() {
+  fun test_logger_info_extension_function_prints_variable_values() {
     log.info("开始测试 Logger info 扩展函数")
 
     // 测试属性引用（KCallable 扩展函数的正确用法）
@@ -83,7 +83,7 @@ class LoggerExtensionsTest {
   val testList: List<Int> = listOf(1, 2, 3)
 
   @Test
-  fun `测试 Logger info 扩展函数处理不同类型的变量`() {
+  fun test_logger_info_extension_function_handles_different_variable_types() {
     log.info("开始测试 Logger info 扩展函数处理不同类型")
 
     // 测试不同类型的属性引用
@@ -103,7 +103,7 @@ class LoggerExtensionsTest {
   val mapValue: Map<String, String> = mapOf("key" to "value")
 
   @Test
-  fun `测试 Logger info 扩展函数处理属性`() {
+  fun test_logger_info_extension_function_handles_properties() {
     log.info("开始测试 Logger info 扩展函数处理属性")
 
     val testObject = TestClass()
@@ -117,7 +117,7 @@ class LoggerExtensionsTest {
   }
 
   @Test
-  fun `测试 Logger 实例的一致性`() {
+  fun test_logger_instance_consistency() {
     log.info("开始测试 Logger 实例的一致性")
 
     val logger1 = this.log
@@ -134,7 +134,7 @@ class LoggerExtensionsTest {
   }
 
   @Test
-  fun `测试 Slf4j 扩展函数的直接调用`() {
+  fun test_slf4j_extension_function_direct_calls() {
     log.info("开始测试 Slf4j 扩展函数的直接调用")
 
     // 直接测试扩展属性的调用
@@ -161,7 +161,7 @@ class LoggerExtensionsTest {
   }
 
   @Test
-  fun `测试 Slf4j 扩展函数的各种数据类型`() {
+  fun test_slf4j_extension_function_various_data_types() {
     log.info("开始测试 Slf4j 扩展函数的各种数据类型")
 
     // 测试基本数据类型 - 使用属性而不是局部变量
@@ -180,7 +180,7 @@ class LoggerExtensionsTest {
   }
 
   @Test
-  fun `测试 Slf4j 扩展属性在不同类型对象上的使用`() {
+  fun test_slf4j_extension_property_usage_on_different_object_types() {
     log.info("开始测试 Slf4j 扩展属性在不同类型对象上的使用")
 
     // 测试字符串对象的扩展属性

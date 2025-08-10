@@ -1,11 +1,10 @@
 package io.github.truenine.composeserver.depend.paho.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import java.util.*
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-private const val PREFIX = "compose.depend.paho"
-
-@ConfigurationProperties(prefix = "$PREFIX.client")
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.DEPEND_PAHO_CLIENT)
 data class SingleMqttProperties(
   /** schema = tcp:// */
   var url: String? = null,

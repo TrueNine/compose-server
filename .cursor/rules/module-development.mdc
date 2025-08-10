@@ -1,0 +1,63 @@
+---
+description: Guidelines for developing new modules and extending existing ones
+---
+
+# Module Development Guidelines
+
+Standards for creating and maintaining modules in the Compose Server framework.
+
+## Module Creation Process
+1. **Add to [settings.gradle.kts](mdc:settings.gradle.kts)** - Include new module
+2. **Create build.gradle.kts** - Follow [gradle-build-conventions.mdc](mdc:.cursor/rules/gradle-build-conventions.mdc)
+3. **Apply build conventions** - Use [build-logic/](mdc:build-logic/) conventions
+4. **Add to [bom/](mdc:bom/)** - Include in bill of materials for version management
+
+## Module Structure Standards
+```
+module-name/
+├── build.gradle.kts
+├── src/
+│   ├── main/
+│   │   ├── kotlin/
+│   │   └── resources/
+│   └── test/
+│       ├── kotlin/
+│       └── resources/
+└── README.md (if complex module)
+```
+
+## Dependency Guidelines
+- **Internal dependencies**: Use `projects.` accessors for other modules
+- **External dependencies**: Reference [gradle/libs.versions.toml](mdc:gradle/libs.versions.toml)
+- **API vs Implementation**: Carefully choose dependency scope
+- **Shared module**: Most modules should depend on [shared/](mdc:shared/)
+
+## Module Categories & Naming
+- **Core modules**: Root level (shared, bom, testtoolkit)
+- **Feature modules**: Grouped by domain (rds/, security/, oss/, etc.)
+- **Integration modules**: Third-party integrations (depend/)
+- **Platform SDKs**: External platform integrations (psdk/)
+
+## API Design Principles
+- **Consistent interfaces**: Follow patterns from [shared/](mdc:shared/)
+- **Configuration classes**: Use Spring Boot configuration properties
+- **Auto-configuration**: Provide Spring Boot auto-configuration
+- **Backward compatibility**: Maintain API stability
+
+## Testing Requirements
+- **Unit tests**: Test all public APIs
+- **Integration tests**: Use [testtoolkit/](mdc:testtoolkit/) TestContainers
+- **Test organization**: Follow [testing-conventions.mdc](mdc:.cursor/rules/testing-conventions.mdc)
+- **Coverage**: Aim for high test coverage
+
+## Documentation Standards
+- **KDoc**: Document all public APIs
+- **README**: For complex modules with usage examples
+- **Configuration**: Document all configuration properties
+- **Migration guides**: For breaking changes
+
+## Module Interdependencies
+- **Avoid circular dependencies**: Design clear dependency hierarchy
+- **Shared abstractions**: Define interfaces in shared modules
+- **Implementation modules**: Provide concrete implementations
+- **Optional dependencies**: Use `compileOnly` for optional features

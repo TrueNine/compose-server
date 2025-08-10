@@ -1,13 +1,12 @@
 package io.github.truenine.composeserver.depend.springdocopenapi.properties
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
-private const val PREFIX = "compose.depend.springdoc-open-api"
-
 @ConfigurationPropertiesBinding
-@ConfigurationProperties(prefix = PREFIX, ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.DEPEND_SPRINGDOC_OPENAPI, ignoreUnknownFields = true)
 data class SpringdocOpenApiProperties(
   /** 扫描的包 */
   var scanPackages: MutableList<String> = mutableListOf(),

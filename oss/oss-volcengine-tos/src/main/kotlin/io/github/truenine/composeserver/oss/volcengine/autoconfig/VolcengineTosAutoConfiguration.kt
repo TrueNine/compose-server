@@ -5,6 +5,7 @@ import com.volcengine.tos.TOSV2
 import com.volcengine.tos.TOSV2ClientBuilder
 import com.volcengine.tos.auth.StaticCredentials
 import com.volcengine.tos.transport.TransportConfig
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.oss.ObjectStorageService
 import io.github.truenine.composeserver.oss.properties.OssProperties
@@ -32,7 +33,7 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 @ConditionalOnClass(TOSV2::class)
-@ConditionalOnProperty(prefix = "compose.oss", name = ["provider"], havingValue = "volcengine-tos")
+@ConditionalOnProperty(prefix = SpringBootConfigurationPropertiesPrefixes.OSS, name = ["provider"], havingValue = "volcengine-tos")
 @EnableConfigurationProperties(VolcengineTosProperties::class, OssProperties::class)
 class VolcengineTosAutoConfiguration {
 

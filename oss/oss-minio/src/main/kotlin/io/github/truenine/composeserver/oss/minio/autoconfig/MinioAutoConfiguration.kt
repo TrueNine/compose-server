@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.oss.minio.autoconfig
 
+import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.oss.ObjectStorageService
 import io.github.truenine.composeserver.oss.minio.MinioObjectStorageService
@@ -23,7 +24,7 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 @ConditionalOnClass(MinioClient::class)
-@ConditionalOnProperty(prefix = "compose.oss", name = ["provider"], havingValue = "minio")
+@ConditionalOnProperty(prefix = SpringBootConfigurationPropertiesPrefixes.OSS, name = ["provider"], havingValue = "minio")
 @EnableConfigurationProperties(MinioProperties::class, OssProperties::class)
 class MinioAutoConfiguration {
 

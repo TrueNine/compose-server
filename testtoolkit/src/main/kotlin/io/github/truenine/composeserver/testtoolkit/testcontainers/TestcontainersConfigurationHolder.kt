@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
+import io.github.truenine.composeserver.testtoolkit.log
 import io.github.truenine.composeserver.testtoolkit.properties.TestcontainersProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -44,6 +45,7 @@ class TestcontainersConfigurationHolder : ApplicationContextAware {
   }
 
   override fun setApplicationContext(applicationContext: ApplicationContext) {
+    log.trace("exposing testcontainers properties as bean")
     Companion.applicationContext = applicationContext
   }
 }

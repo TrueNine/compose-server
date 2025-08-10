@@ -8,7 +8,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -60,18 +59,16 @@ class IOssMinioContainerTest : IOssMinioContainer {
   @Nested
   inner class ContainerBasicTests {
     @Test
-    fun `验证容器实例存在且正在运行`() {
-      assertNotNull(minioContainer, "MinIO 容器实例不应为空")
-      assertTrue(minioContainer!!.isRunning, "MinIO 容器应该处于运行状态")
+    fun verify_container_instance_exists_and_running() = minio {
+      assertNotNull(it, "MinIO 容器实例不应为空")
+      assertTrue(it.isRunning, "MinIO 容器应该处于运行状态")
     }
 
     @Test
-    fun `验证容器网络配置正确`() {
-      val container = minioContainer!!
-
+    fun verify_container_network_configuration() = minio {
       // 验证端口映射
-      val apiPort = container.getMappedPort(9000)
-      val consolePort = container.getMappedPort(9001)
+      val apiPort = it.getMappedPort(9000)
+      val consolePort = it.getMappedPort(9001)
 
       assertTrue(apiPort in 1024..65535, "API 端口映射应在有效范围内")
       assertTrue(consolePort in 1024..65535, "控制台端口映射应在有效范围内")
@@ -80,10 +77,8 @@ class IOssMinioContainerTest : IOssMinioContainer {
 
     @ParameterizedTest
     @ValueSource(strings = ["MINIO_ROOT_USER", "MINIO_ROOT_PASSWORD", "MINIO_CONSOLE_ADDRESS"])
-    @DisplayName("验证必需的环境变量存在且配置正确")
-    fun `验证必需的环境变量存在且配置正确`(envVar: String) {
-      val container = minioContainer!!
-      val envMap = container.envMap
+    fun verify_required_environment_variables_exist_and_configured(envVar: String) = minio {
+      val envMap = it.envMap
 
       assertTrue(envMap.containsKey(envVar), "环境变量 $envVar 必须存在")
       assertNotNull(envMap[envVar], "环境变量 $envVar 的值不能为空")
@@ -111,7 +106,7 @@ class IOssMinioContainerTest : IOssMinioContainer {
   @Nested
   inner class SpringPropertiesTests {
     @Test
-    fun `验证动态属性注册正确`() {
+    fun verify_dynamic_property_registration() {
       val registry = mutableMapOf<String, String>()
       val mockRegistry =
         object : DynamicPropertyRegistry {
@@ -123,60 +118,60 @@ class IOssMinioContainerTest : IOssMinioContainer {
       IOssMinioContainer.properties(mockRegistry)
 
       // 验证所有必需的属性都已配置
-      val container = minioContainer!!
-      val expectedProperties =
-        mapOf(
-          "compose.oss.base-url" to container.host,
-          "compose.oss.expose-base-url" to "http://${container.host}:${container.getMappedPort(9000)}",
-          "compose.oss.port" to container.getMappedPort(9000).toString(),
-          "compose.oss.minio.enable-https" to "false",
-          "compose.oss.minio.access-key" to "minioadmin",
-          "compose.oss.minio.secret-key" to "minioadmin",
-        )
+      minio {
+        val expectedProperties =
+          mapOf(
+            "compose.oss.base-url" to it.host,
+            "compose.oss.expose-base-url" to "http://${it.host}:${it.getMappedPort(9000)}",
+            "compose.oss.port" to it.getMappedPort(9000).toString(),
+            "compose.oss.minio.enable-https" to "false",
+            "compose.oss.minio.access-key" to "minioadmin",
+            "compose.oss.minio.secret-key" to "minioadmin",
+          )
 
-      expectedProperties.forEach { (prop, expectedValue) ->
-        assertTrue(registry.containsKey(prop), "属性 $prop 必须存在")
-        assertEquals(expectedValue, registry[prop], "属性 $prop 的值配置不正确")
-      }
-    }
-
-    @Test
-    @DisplayName("验证环境变量注入正确")
-    fun `验证环境变量注入正确`() {
-      val expectedProperties =
-        mapOf(
-          "compose.oss.base-url" to minioContainer!!.host,
-          "compose.oss.expose-base-url" to "http://${minioContainer!!.host}:${minioContainer!!.getMappedPort(9000)}",
-          "compose.oss.minio.enable-https" to "false",
-          "compose.oss.minio.access-key" to "minioadmin",
-          "compose.oss.minio.secret-key" to "minioadmin",
-        )
-
-      expectedProperties.forEach { (prop, expectedValue) ->
-        val actualValue = environment.getProperty(prop)
-        assertNotNull(actualValue, "环境变量中缺少属性: $prop")
-        assertEquals(expectedValue, actualValue, "环境变量 $prop 的值配置不正确")
+        expectedProperties.forEach { (prop, expectedValue) ->
+          assertTrue(registry.containsKey(prop), "属性 $prop 必须存在")
+          assertEquals(expectedValue, registry[prop], "属性 $prop 的值配置不正确")
+        }
       }
 
-      // 特殊验证端口属性（因为端口是动态分配的）
-      val portValue = environment.getProperty("compose.oss.port")
-      assertNotNull(portValue, "环境变量中缺少端口配置")
+      @Test
+      fun verify_environment_variable_injection() = minio {
+        val expectedProperties =
+          mapOf(
+            "compose.oss.base-url" to it.host,
+            "compose.oss.expose-base-url" to "http://${it.host}:${it.getMappedPort(9000)}",
+            "compose.oss.minio.enable-https" to "false",
+            "compose.oss.minio.access-key" to "minioadmin",
+            "compose.oss.minio.secret-key" to "minioadmin",
+          )
 
-      val portInt = portValue.toInt()
-      assertTrue(portInt in 1024..65535, "端口值应在有效范围内 (actual: $portInt)")
-      val socket = Socket()
-      try {
-        socket.connect(InetSocketAddress("localhost", portInt), 5000)
-        assertTrue(socket.isConnected, "端口应详可访问")
-      } finally {
-        socket.close()
+        expectedProperties.forEach { (prop, expectedValue) ->
+          val actualValue = environment.getProperty(prop)
+          assertNotNull(actualValue, "环境变量中缺少属性: $prop")
+          assertEquals(expectedValue, actualValue, "环境变量 $prop 的值配置不正确")
+        }
+
+        // 特殊验证端口属性（因为端口是动态分配的）
+        val portValue = environment.getProperty("compose.oss.port")
+        assertNotNull(portValue, "环境变量中缺少端口配置")
+
+        val portInt = portValue.toInt()
+        assertTrue(portInt in 1024..65535, "端口值应在有效范围内 (actual: $portInt)")
+        val socket = Socket()
+        try {
+          socket.connect(InetSocketAddress("localhost", portInt), 5000)
+          assertTrue(socket.isConnected, "端口应详可访问")
+        } finally {
+          socket.close()
+        }
+
+        // 验证 expose-base-url 的格式
+        val exposeUrl = environment.getProperty("compose.oss.expose-base-url")
+        assertNotNull(exposeUrl, "expose-base-url 属性不应为 null")
+        assertTrue(exposeUrl.startsWith("http://"), "expose URL 应以 http:// 开头")
+        assertTrue(exposeUrl.contains(":$portInt"), "expose URL 应包含正确的端口号")
       }
-
-      // 验证 expose-base-url 的格式
-      val exposeUrl = environment.getProperty("compose.oss.expose-base-url")
-      assertNotNull(exposeUrl, "expose-base-url 属性不应为 null")
-      assertTrue(exposeUrl.startsWith("http://"), "expose URL 应以 http:// 开头")
-      assertTrue(exposeUrl.contains(":$portInt"), "expose URL 应包含正确的端口号")
     }
   }
 }

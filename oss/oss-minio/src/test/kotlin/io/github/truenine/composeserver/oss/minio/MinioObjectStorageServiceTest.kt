@@ -26,15 +26,14 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   private val exposedBaseUrl = "http://localhost"
 
   @BeforeEach
-  fun setUp() {
+  fun setUp() = minio {
     // 创建真实的 MinioClient 连接到 testcontainers
-    val port = minioContainer?.getMappedPort(9000)
-    val host = minioContainer?.host
+    val port = it.getMappedPort(9000)
+    val host = it.host
     assertNotNull(port)
     assertNotNull(host)
 
     minioClient = MinioClient.builder().endpoint("http://${host}:$port").credentials("minioadmin", "minioadmin").build()
-
     service = MinioObjectStorageService(minioClient, "$exposedBaseUrl:$port")
   }
 

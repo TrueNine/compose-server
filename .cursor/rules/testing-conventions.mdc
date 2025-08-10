@@ -1,0 +1,64 @@
+---
+globs: **/test/**/*.kt,**/*Test.kt,**/*Tests.kt
+---
+
+# Testing Conventions
+
+Strict TDD practices based on [docs/GLOBAL_CLAUDE.md](mdc:docs/GLOBAL_CLAUDE.md) and [testtoolkit/](mdc:testtoolkit/) utilities.
+
+## TDD Workflow
+1. **Write failing test first**
+2. **Implement minimal code** to make test pass
+3. **Refactor** while keeping tests green
+4. **Never skip the red-green-refactor cycle**
+
+## Test Organization
+- **Test class naming**: Same name as the class being tested + `Test` suffix
+- **Use `@Nested inner class`** for logical grouping by functionality
+- **Group by scenarios**: Normal cases, edge cases, error cases
+- **Avoid root-level test methods** - organize into nested classes
+
+```kotlin
+class UserServiceTest {
+    @Nested
+    inner class CreateUser {
+        @Test
+        fun `应该成功创建用户`() { }
+        
+        @Test
+        fun `当邮箱已存在时应该抛出异常`() { }
+    }
+    
+    @Nested
+    inner class UpdateUser {
+        @Test
+        fun `应该成功更新用户信息`() { }
+    }
+}
+```
+
+## Test Method Naming
+- **Use backticks with Chinese descriptions**: `fun \`测试描述\`()`
+- **Forbidden**: `@DisplayName` annotations
+- Be descriptive about what is being tested and expected outcome
+
+## Assertions & Mocking
+- **Every test MUST have assertions** - no assertion-free tests
+- **Use `mockk`** instead of Mockito for Kotlin
+- **Cover edge cases and error conditions**
+- Test should be **independent** and **repeatable**
+
+## TestContainers Integration
+- Use [testtoolkit/](mdc:testtoolkit/) for database and external service testing
+- Leverage TestContainers for integration tests
+- Follow performance optimization guidelines from [docs/TestContainers性能优化指南.md](mdc:docs/TestContainers性能优化指南.md)
+
+## Test Data
+- Use meaningful test data that reflects real scenarios
+- Avoid magic numbers and strings
+- Create test data builders for complex objects
+
+## Debugging Tests
+- **Allowed**: Adding logs during test debugging phase
+- **Must remove** debug logs after test completion
+- Use proper logging framework, not `println`
