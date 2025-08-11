@@ -5,7 +5,6 @@ import com.volcengine.tos.TOSV2
 import com.volcengine.tos.TOSV2ClientBuilder
 import com.volcengine.tos.auth.StaticCredentials
 import com.volcengine.tos.transport.TransportConfig
-import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.oss.ObjectStorageService
 import io.github.truenine.composeserver.oss.properties.OssProperties
@@ -13,13 +12,16 @@ import io.github.truenine.composeserver.oss.volcengine.VolcengineTosObjectStorag
 import io.github.truenine.composeserver.oss.volcengine.properties.VolcengineTosProperties
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
+import org.springframework.core.env.Environment
 
 /**
  * Optimized auto configuration for Volcengine TOS with production-ready defaults
+ *
+ * This configuration is automatically enabled when Volcengine TOS client is present in the classpath. No manual provider configuration is required.
  *
  * This configuration creates a high-performance TOS client with:
  * - Optimized connection pooling
@@ -28,13 +30,15 @@ import org.springframework.context.annotation.Configuration
  * - Error handling and validation
  * - Support for STS, proxy, and custom domains
  *
+ * Priority: 200 (lower priority than MinIO)
+ *
  * @author TrueNine
  * @since 2025-08-04
  */
 @Configuration
 @ConditionalOnClass(TOSV2::class)
-@ConditionalOnProperty(prefix = SpringBootConfigurationPropertiesPrefixes.OSS, name = ["provider"], havingValue = "volcengine-tos")
 @EnableConfigurationProperties(VolcengineTosProperties::class, OssProperties::class)
+@Order(200)
 class VolcengineTosAutoConfiguration {
 
   companion object {
@@ -43,7 +47,7 @@ class VolcengineTosAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun volcengineTosClient(tosProperties: VolcengineTosProperties, ossProperties: OssProperties): TOSV2 {
+  fun volcengineTosClient(tosProperties: VolcengineTosProperties, ossProperties: OssProperties, environment: Environment): TOSV2 {
     log.info("Starting Volcengine TOS client initialization...")
 
     // Validate properties first
@@ -77,7 +81,27 @@ class VolcengineTosAutoConfiguration {
           TOSV2ClientBuilder().build(clientConfiguration)
         }
 
-      log.info("✅ Volcengine TOS client initialized successfully")
+      // 在测试环境中跳过连接测试
+      val isTestEnvironment =
+        environment.activeProfiles.contains("test") ||
+          environment.getProperty("spring.profiles.active")?.contains("test") == true ||
+          System.getProperty("java.class.path")?.contains("test") == true
+
+      if (!isTestEnvironment) {
+        // Test connection only in non-test environments
+        try {
+          // Use ListBucketsV2Input for connection test
+          val listBucketsInput = com.volcengine.tos.model.bucket.ListBucketsV2Input()
+          client.listBuckets(listBucketsInput)
+          log.info("✅ Volcengine TOS client connected successfully")
+        } catch (e: Exception) {
+          log.error("❌ Volcengine TOS client connection failed", e)
+          throw e
+        }
+      } else {
+        log.info("✅ Volcengine TOS client initialized (connection test skipped in test environment)")
+      }
+
       client
     } catch (e: Exception) {
       log.error("❌ Failed to initialize Volcengine TOS client: ${e.message}", e)

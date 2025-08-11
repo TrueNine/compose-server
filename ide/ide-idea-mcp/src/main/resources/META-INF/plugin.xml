@@ -1,0 +1,29 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+  <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+  <id>io.github.truenine.composeserver.ide.ideamcp</id>
+
+  <!-- Public plugin name should be written in Title Case.
+       Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
+  <name>Compose Server MCP</name>
+
+  <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+  <vendor url="https://github.com/TrueNine">Yan100Team</vendor>
+
+  <!-- Product and plugin compatibility requirements.
+       Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <depends>com.intellij.mcpServer</depends>
+
+  <!-- MCP Server extensions will be implemented when the plugin is fully developed -->
+  <!-- <extensions defaultExtensionNs="com.intellij.mcpServer">
+    <mcpTool implementation="io.github.truenine.composeserver.ide.ideamcp.ComposeServerMcpTool"/>
+  </extensions> -->
+
+  <!-- Extension points defined by the plugin.
+       Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+  <extensions defaultExtensionNs="com.intellij">
+
+  </extensions>
+</idea-plugin>

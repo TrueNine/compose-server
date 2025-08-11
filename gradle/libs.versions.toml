@@ -17,6 +17,9 @@ com-xuxueli-xxl-job = "3.1.1"
 com-yomahub-liteflow = "2.13.2.1"
 dev-langchain4j-community = "1.1.0-beta7"
 group = "io.github.truenine"
+intellij-platform = "2025.2"
+intellij-platform-ide = "243"
+intellij-platform-plugin-java = "21"
 io-netty = "4.2.3.Final"
 java = "24"
 net-sf-sevenzipjbinding = "16.02-2.01"
@@ -29,6 +32,7 @@ org-babyfish-jimmer = "0.9.105"
 org-gradle = "9.0.0"
 org-hibernate-orm = "6.6.15.Final"
 org-jetbrains-dokka = "2.0.0"
+org-jetbrains-intellij-platform = "2.7.1"
 org-jetbrains-kotlin = "2.2.0"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.7.1-0.6.x-compat"
@@ -48,7 +52,7 @@ org-springframework-modulith = "2.0.0-M1"
 org-springframework-security = "6.5.2"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.25"
+project = "0.0.26"
 
 [libraries]
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
@@ -215,6 +219,7 @@ org-hsqldb-hsqldb = "org.hsqldb:hsqldb:2.7.4"
 org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.14.0"
 org-jetbrains-annotations = "org.jetbrains:annotations:26.0.2"
 org-jetbrains-dokka-dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "org-jetbrains-dokka" }
+org-jetbrains-intellij-platform-gradle-plugin = { module = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin", version.ref = "org-jetbrains-intellij-platform" }
 org-jetbrains-kotlin-jvm-org-jetbrains-kotlin-jvm-gradle-plugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kapt-org-jetbrains-kotlin-kapt-gradle-plugin = { module = "org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-annotaiton-processing-embedable = { module = "org.jetbrains.kotlin:kotlin-annotation-processing-embeddable", version.ref = "org-jetbrains-kotlin" }
@@ -332,6 +337,7 @@ org-graalvm-buildtools-native = "org.graalvm.buildtools.native:0.10.6"
 org-gradle-toolchains-foojay-resolver-convention = "org.gradle.toolchains.foojay-resolver-convention:1.0.0"
 org-hibernate-orm = { id = "org.hibernate.orm", version.ref = "org-hibernate-orm" }
 org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "org-jetbrains-dokka" }
+org-jetbrains-intellij-platform = { id = "org.jetbrains.intellij.platform", version.ref = "org-jetbrains-intellij-platform" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "org-jetbrains-kotlin" }
@@ -340,6 +346,7 @@ org-jetbrains-kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", vers
 org-jetbrains-kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-power-assert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "org-jetbrains-kotlin" }
 org-springframework-boot = { id = "org.springframework.boot", version.ref = "org-springframework-boot" }
 tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2.0"

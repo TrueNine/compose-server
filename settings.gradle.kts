@@ -97,3 +97,6 @@ include("ksp:ksp-meta")
 
 // platform sdk
 include("psdk:psdk-wxpa")
+
+// IDE 插件模块
+include("ide:ide-idea-mcp")
