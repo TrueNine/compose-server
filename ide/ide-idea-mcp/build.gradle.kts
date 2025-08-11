@@ -1,8 +1,8 @@
 plugins {
-  id("buildlogic.kotlinspring-conventions")
-  id("buildlogic.publish-conventions")
-  id("buildlogic.spotless-conventions")
+  alias(libs.plugins.org.jetbrains.kotlin.jvm)
   alias(libs.plugins.org.jetbrains.intellij.platform)
+  alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
+  id("buildlogic.spotless-conventions")
 }
 
 description = "IntelliJ IDEA plugin for Compose Server MCP integration"
@@ -12,26 +12,34 @@ repositories {
   intellijPlatform { defaultRepositories() }
 }
 
-// Configure IntelliJ Platform Gradle Plugin
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
   intellijPlatform {
-    create("IC", "2025.2")
+    intellijIdeaCommunity(libs.versions.intellij.platform.asProvider().get())
+
+    bundledPlugin("org.jetbrains.plugins.terminal")
+    bundledPlugin("Git4Idea")
+
     testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
     plugin("com.intellij.mcpServer", "1.0.30")
   }
+
+  testImplementation(libs.org.jetbrains.kotlin.kotlin.test)
 }
 
 dependencies { compileOnly(libs.org.jetbrains.kotlinx.kotlinx.serialization.json) }
 
+java {
+  sourceCompatibility = JavaVersion.toVersion(libs.versions.intellij.platform.plugin.java.get().toInt())
+  targetCompatibility = JavaVersion.toVersion(libs.versions.intellij.platform.plugin.java.get().toInt())
+  toolchain { languageVersion = JavaLanguageVersion.of(libs.versions.intellij.platform.plugin.java.get().toInt()) }
+}
+
+kotlin { jvmToolchain(libs.versions.intellij.platform.plugin.java.get().toInt()) }
+
 intellijPlatform {
   pluginConfiguration {
-    ideaVersion { sinceBuild = "243" }
-
-    changeNotes =
-      """
-            Initial version
-        """
-        .trimIndent()
+    ideaVersion { sinceBuild = libs.versions.intellij.platform.ide.get() }
+    description = file("README.html").readText()
+    changeNotes = file("CHANGELOG.html").readText()
   }
 }
