@@ -21,10 +21,9 @@ type: "always_apply"
 10. 必须最大化使用 `early return` 技术来减少代码嵌套层级
 11. 严禁在对话或任务完成后生成总结文档文件和其他不必要的操作
 12. 严禁出现以下令人作呕且腐朽不堪的词汇出现在任何除开第三方库调用的任何地方
-+ `util`, `utils`
-+ `helper`, `helpers`
-+ `tool`, `tools`
-
+  + `util`, `utils`
+  + `helper`, `helpers`
+  + `tool`, `tools`
 13. 严禁使用 `@Suppress`/`// @ts-ignore` 等注解压制警告
 
 **渐进式开发方法论**
@@ -108,8 +107,8 @@ type: "always_apply"
 4. 严禁使用 `println` 记录输出
 5. 严禁在单元测试中使用 `mockito`，而是使用 `mockk`
 6. 扩展方法与纯函数应分开，不应在同一文件中
-+ 扩展函数文件命名规范：使用 `*Extensions.kt` 后缀
-+ 纯函数文件命名规范：使用 `*Functions.kt` 后缀
+  + 扩展函数文件命名规范：使用 `*Extensions.kt` 后缀
+  + 纯函数文件命名规范：使用 `*Functions.kt` 后缀
 
 **TypeScript规则**
 

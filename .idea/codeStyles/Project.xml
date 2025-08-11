@@ -2,7 +2,7 @@
   <code_scheme name="Project" version="173">
     <option name="LINE_SEPARATOR" value="&#10;" />
     <option name="RIGHT_MARGIN" value="160" />
-    <option name="SOFT_MARGINS" value="80,160" />
+    <option name="SOFT_MARGINS" value="2,4,80,160" />
     <IsoSqlCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="QUOTED_IDENTIFIER_CASE" value="1" />
@@ -24,6 +24,13 @@
       <option name="QUOTED_IDENTIFIER_CASE" value="1" />
       <option name="TABLE_OPENING" value="1" />
     </SqlCodeStyleSettings>
+    <codeStyleSettings language="Markdown">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+        <option name="TAB_SIZE" value="2" />
+      </indentOptions>
+    </codeStyleSettings>
     <codeStyleSettings language="SQL">
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
