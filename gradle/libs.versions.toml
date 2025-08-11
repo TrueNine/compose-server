@@ -17,6 +17,9 @@ com-xuxueli-xxl-job = "3.1.1"
 com-yomahub-liteflow = "2.13.2.1"
 dev-langchain4j-community = "1.1.0-beta7"
 group = "io.github.truenine"
+intellij-platform = "2025.2"
+intellij-platform-ide = "243"
+intellij-platform-plugin-java = "21"
 io-netty = "4.2.3.Final"
 java = "24"
 net-sf-sevenzipjbinding = "16.02-2.01"
@@ -343,6 +346,7 @@ org-jetbrains-kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", vers
 org-jetbrains-kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-power-assert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "org-jetbrains-kotlin" }
 org-springframework-boot = { id = "org.springframework.boot", version.ref = "org-springframework-boot" }
 tech-argonariod-gradle-plugin-jimmer = "tech.argonariod.gradle-plugin-jimmer:1.2.0"
