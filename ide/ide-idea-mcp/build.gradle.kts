@@ -18,7 +18,7 @@ dependencies {
   intellijPlatform {
     create("IC", "2025.2")
     testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
-    plugin("io.github.truenine.composeserver.ide.ideamcp", "1.0.30")
+    plugin("com.intellij.mcpServer", "1.0.30")
   }
 }
 
