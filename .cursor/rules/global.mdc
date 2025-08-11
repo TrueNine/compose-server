@@ -1,7 +1,6 @@
 ---
-type: "always_apply"
+alwaysApply: true
 ---
-
 
 所有语言必须遵守通用规则，特定语言必须在通用规则基础之上遵循特定语言的规则
 
