@@ -39,7 +39,12 @@ private class DefaultPageResult<T : Any>(
  */
 interface IPage<T : Any?> : IPageLike<T> {
   /** ## 原始分页请求参数 */
-  @get:JsonIgnore @get:Transient @set:JsonIgnore @set:Transient @Deprecated("不推荐使用") var pageParam: IPageParam?
+  @get:JsonIgnore
+  @get:Transient
+  @set:JsonIgnore
+  @set:Transient
+  @Deprecated("不推荐使用")
+  var pageParam: IPageParam?
 
   operator fun get(index: Int): T = d.toList()[index]
 
@@ -83,7 +88,7 @@ interface IPage<T : Any?> : IPageLike<T> {
      * @param requestParamPageSize 请求参数的页码
      */
     @JvmStatic
-    @Suppress("DEPRECATION_ERROR")
+    @Suppress("DEPRECATION")
     @Deprecated("不推荐")
     operator fun <T : Any> get(dataList: Collection<T>, total: Long, offset: Int, requestParamPageSize: Int, unPage: Boolean?): IPage<T> {
       return get(dataList, total, IPageParam[offset, requestParamPageSize, unPage != false])
@@ -98,15 +103,19 @@ interface IPage<T : Any?> : IPageLike<T> {
     @Deprecated("use get", replaceWith = ReplaceWith("get()"), level = DeprecationLevel.ERROR)
     fun <T : Any> of(dataList: Collection<T>, total: Long, pageParam: IPageParam?): IPage<T> = DefaultPageResult(pageParam = pageParam, d = dataList, t = total)
 
-    @JvmStatic fun <T : Any> one(data: T?): IPage<T> = if (data != null) get(listOf(data)) else emptyWith<T>()
+    @Deprecated("DEPRECATION")
+    @JvmStatic
+    fun <T : Any> one(data: T?): IPage<T> = if (data != null) get(listOf(data)) else emptyWith<T>()
 
-    @JvmStatic fun <T : Any> emptyWith(): IPage<T> = get(emptyList())
+    @JvmStatic
+    fun <T : Any> emptyWith(): IPage<T> = get(emptyList())
 
     @JvmStatic
     fun <T : Any> unPage(dataList: Collection<T>): IPage<T> {
       return DefaultPageResult(null, dataList, dataList.size.toLong(), null, 1)
     }
 
-    @JvmStatic fun empty(): IPage<*> = emptyWith<Any>()
+    @JvmStatic
+    fun empty(): IPage<*> = emptyWith<Any>()
   }
 }
