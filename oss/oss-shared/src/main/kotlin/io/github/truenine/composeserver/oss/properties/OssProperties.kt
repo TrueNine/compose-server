@@ -7,9 +7,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 /**
  * Modern OSS configuration properties
  *
- * Contains all common OSS configuration fields and adds provider-specific configuration.
+ * Contains all common OSS configuration fields and adds provider-specific configuration. The OSS provider is now automatically detected based on available
+ * dependencies in the classpath.
  *
- * @param provider OSS provider type (minio, volcengine-tos, aliyun-oss, etc.)
+ * @param provider OSS provider type (minio, volcengine-tos, aliyun-oss, etc.) - DEPRECATED: Auto-detected based on classpath
  * @param endpoint Service endpoint URL
  * @param region Service region
  * @param accessKey Access key for authentication
@@ -29,7 +30,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.OSS)
 data class OssProperties(
-  /** OSS provider type (minio, volcengine-tos, aliyun-oss, etc.) */
+  /**
+   * OSS provider type (minio, volcengine-tos, aliyun-oss, etc.)
+   *
+   * @deprecated Since 2025-08-11. OSS provider is now automatically detected based on available dependencies in the classpath. This property is kept for
+   *   backward compatibility and will be removed in a future version.
+   */
+  @Deprecated(
+    message = "OSS provider is now automatically detected based on available dependencies in the classpath",
+    replaceWith = ReplaceWith("Auto-detection based on classpath dependencies"),
+    level = DeprecationLevel.WARNING,
+  )
   var provider: String? = null,
 
   /** Service endpoint URL */
