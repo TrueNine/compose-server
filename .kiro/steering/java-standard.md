@@ -3,12 +3,12 @@ inclusion: fileMatch
 fileMatchPattern: "**/*.java"
 ---
 
-**Java 规则**
+**Java Rules**
 
-所有JVM平台的编程语言：java、kotlin、groovy、scala 均需遵守以下原则
+All JVM platform programming languages: java, kotlin, groovy, scala must follow these principles
 
-1. 可使用 `import xxx.*` 导入来减少代码量，后续交由IDE进行处理
-2. 尽可能使用jdk的新特性
-3. 声明变量应尽量使用 `final var`
-4. 积极使用 lambda
-5. 严禁使用 `System.out.println` 记录输出
+1. Can use `import xxx.*` imports to reduce code volume, leave subsequent processing to IDE
+2. Use JDK new features as much as possible
+3. Variable declarations should use `final var` as much as possible
+4. Actively use lambda expressions
+5. Strictly prohibit using `System.out.println` for output logging

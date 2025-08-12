@@ -3,13 +3,13 @@ inclusion: fileMatch
 fileMatchPattern: "**/*.(kt|gradle|kts)"
 ---
 
-**Kotlin 规则**
+**Kotlin Rules**
 
-1. 优先使用val声明不可变变量
-2. 避免!!操作符，使用?.或let{}
-3. 数据类替代多参数函数
-4. 严禁使用 `println` 记录输出
-5. 严禁在单元测试中使用 `mockito`，而是使用 `mockk`
-6. 扩展方法与纯函数应分开，不应在同一文件中
-  + 扩展函数文件命名规范：使用 `*Extensions.kt` 后缀
-  + 纯函数文件命名规范：使用 `*Functions.kt` 后缀
+1. Prefer using val for immutable variable declarations
+2. Avoid !! operator, use ?. or let{}
+3. Use data classes instead of multi-parameter functions
+4. Strictly prohibit using `println` for output logging
+5. Strictly prohibit using `mockito` in unit tests, use `mockk` instead
+6. Extension methods and pure functions should be separated, not in the same file
+  + Extension function file naming convention: use `*Extensions.kt` suffix
+  + Pure function file naming convention: use `*Functions.kt` suffix

@@ -3,6 +3,6 @@ inclusion: fileMatch
 fileMatchPattern: "**/*.(vue|scss)"
 ---
 
-**SCSS 规则**
+**SCSS Rules**
 
-- 禁止使用 `@import`，使用 `@use` 代替
+- Prohibit using `@import`, use `@use` instead

@@ -2,11 +2,11 @@
 inclusion: always
 ---
 
-**代码风格**
+**Code Style**
 
-- 代码缩进：使用2个空格缩进
-- 代码换行：每个文件必须保留行尾换行符
-- 文件编码：必须使用UTF-8编码
-- 文件换行符：必须使用LF换行符
-- 行长度：每行字符长度不能超过160个字符
-- 配置参考：可参考项目根目录下的 `.editorconfig` 配置
+- Code indentation: Use 2 spaces for indentation
+- Code line breaks: Each file must retain trailing newlines
+- File encoding: Must use UTF-8 encoding
+- File line endings: Must use LF line endings
+- Line length: Each line must not exceed 160 characters
+- Configuration reference: Refer to the `.editorconfig` configuration in the project root directory

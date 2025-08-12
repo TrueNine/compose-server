@@ -2,51 +2,51 @@
 inclusion: always
 ---
 
-**强制规则**
+**Mandatory Rules**
 
-1. 始终使用**简体中文**回复，即使用户输入大量英文提示，也应返回简体中文
-2. 禁止编写任何供用户使用的示例代码，即使需要临时测试，任务完成后也必须立即删除
-3. 严禁通过简化问题来解决问题
-4. 严禁通过降级依赖版本、减少测试断言、使用恒定测试条件等来解决编译错误以及运行时错误
-5. 严禁忽略异常或任何隐藏异常的行为
-6. 严禁在代码中暴露 API 密钥、密码和令牌
-7. 应当积极按照规则来重构修复上下文中出现的代码
-8. 应积极使用日志完善记录，主动补充缺失的日志
-9. 允许在单元测试调试期间添加日志以协助解决问题
-10. 必须最大化使用 `early return` 技术来减少代码嵌套层级
-11. 严禁在对话或任务完成后生成总结文档文件和其他不必要的操作
-12. 严禁出现以下令人作呕且腐朽不堪的词汇出现在任何除开第三方库调用的任何地方
+1. Always respond in **Simplified Chinese**, even if the user inputs extensive English prompts, responses should still be in Simplified Chinese
+2. Prohibit writing any sample code for user consumption, even if needed for temporary testing, it must be deleted immediately after task completion
+3. Strictly prohibit solving problems by simplifying them
+4. Strictly prohibit solving compilation errors and runtime errors by downgrading dependency versions, reducing test assertions, using constant test conditions, etc.
+5. Strictly prohibit ignoring exceptions or any behavior that hides exceptions
+6. Strictly prohibit exposing API keys, passwords, and tokens in code
+7. Should actively refactor and fix code appearing in context according to rules
+8. Should actively use logging to improve records, proactively supplement missing logs
+9. Allow adding logs during unit test debugging to assist in problem resolution
+10. Must maximize the use of `early return` technique to reduce code nesting levels
+11. Strictly prohibit generating summary documentation files and other unnecessary operations after dialogue or task completion
+12. Strictly prohibit the appearance of the following disgusting and decadent terms anywhere except in third-party library calls
   + `util`, `utils`
   + `helper`, `helpers`
   + `tool`, `tools`
 
-13. 严禁使用 `@Suppress`/`// @ts-ignore` 等注解压制警告
+13. Strictly prohibit using `@Suppress`/`// @ts-ignore` and other annotations to suppress warnings
 
-**渐进式开发方法论**
+**Progressive Development Methodology**
 
-- 采用测试驱动开发结合渐进式开发方法
-- **Baby Steps开发**：每次只编写少量代码，立即进行单元测试验证
-- **快速反馈循环**：开发一点测试一点，绝不一次性编写大量代码
-- **逐个验证原则**：为多个代码编写单元测试时，一个个编写一个个验证，避免批量编写后统一验证
-- **风险最小化**：通过频繁的小幅度验证确保代码质量，避免错误累积
-- **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
-- 严禁出现没有断言的测试方法，发现应该立即补全断言
+- Adopt test-driven development combined with progressive development approach
+- **Baby Steps Development**: Write only small amounts of code each time, immediately verify with unit tests
+- **Rapid Feedback Loop**: Develop a bit and test a bit, never write large amounts of code at once
+- **Individual Verification Principle**: When writing unit tests for multiple pieces of code, write and verify one by one, avoid batch writing followed by unified verification
+- **Risk Minimization**: Ensure code quality through frequent small-scale verification, avoid error accumulation
+- **Nested Test Organization**: Use appropriate grouping, avoid large numbers of independent test methods at root level
+- Strictly prohibit test methods without assertions, immediately supplement assertions when found
 
-**日志规范**
+**Logging Standards**
 
-- 在没有日志的情况下，应当多使用日志记录，以协助线上问题排查解决以及获取更多上下文信息
-- 在排查问题时，可向源代码中添加更多日志，以获取更详细的上下文信息
-- 日志应当只使用英文进行记录，如发现其他语言应当立即修正为英文
-- 重点记录第三方库调用和外部API的详细日志，包括请求参数、响应结果、耗时等信息
-- 使用结构化日志格式：`log.info("API call completed - endpoint: {}, status: {}, duration: {}ms", endpoint, status, duration)`
-- 记录关键上下文信息：用户ID、请求ID、操作类型、结果状态、异常详情
-- 避免记录敏感信息：密码、API密钥、身份证号、手机号等
-- 在外部调用、数据库操作、文件操作等关键节点记录日志
-- 使用占位符格式避免字符串拼接，保持日志消息简洁明了
-- 合理使用日志级别，避免生产环境输出过多DEBUG日志
+- When there are no logs, should use more logging to assist in online problem troubleshooting and obtaining more contextual information
+- When troubleshooting problems, can add more logs to source code to obtain more detailed contextual information
+- Logs should only use English for recording, if other languages are found they should be immediately corrected to English
+- Focus on recording detailed logs of third-party library calls and external APIs, including request parameters, response results, duration, etc.
+- Use structured log format: `log.info("API call completed - endpoint: {}, status: {}, duration: {}ms", endpoint, status, duration)`
+- Record key contextual information: user ID, request ID, operation type, result status, exception details
+- Avoid recording sensitive information: passwords, API keys, ID numbers, phone numbers, etc.
+- Record logs at key points such as external calls, database operations, file operations
+- Use placeholder format to avoid string concatenation, keep log messages concise and clear
+- Use log levels appropriately, avoid outputting too many DEBUG logs in production environment
 
-**注释规则**
+**Comment Rules**
 
-- 文档注释：必须使用英文注释
-- 代码内部注释：必须使用中文注释
-- 严禁使用行尾注释
+- Documentation comments: Must use English comments
+- Internal code comments: Must use Chinese comments
+- Strictly prohibit using end-of-line comments

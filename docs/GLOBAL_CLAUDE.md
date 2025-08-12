@@ -4,118 +4,118 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
-所有语言必须遵守通用规则，特定语言必须在通用规则基础之上遵循特定语言的规则
+All languages must follow general rules, and specific languages must follow specific language rules based on general rules.
 
-# 通用标准
+# General Standards
 
-**强制规则**
+**Mandatory Rules**
 
-1. 始终使用**简体中文**回复，即使用户输入大量英文提示，也应返回简体中文
-2. 禁止编写任何供用户使用的示例代码，即使需要临时测试，任务完成后也必须立即删除
-3. 严禁通过简化问题来解决问题
-4. 严禁通过降级依赖版本、减少测试断言、使用恒定测试条件等来解决编译错误以及运行时错误
-5. 严禁忽略异常或任何隐藏异常的行为
-6. 严禁在代码中暴露 API 密钥、密码和令牌
-7. 应当积极按照规则来重构修复上下文中出现的代码
-8. 应积极使用日志完善记录，主动补充缺失的日志
-9. 允许在单元测试调试期间添加日志以协助解决问题
-10. 必须最大化使用 `early return` 技术来减少代码嵌套层级
-11. 严禁在对话或任务完成后生成总结文档文件和其他不必要的操作
-12. 严禁出现以下令人作呕且腐朽不堪的词汇出现在任何除开第三方库调用的任何地方
+1. Always respond in **Simplified Chinese**, even if the user inputs extensive English prompts, responses should still be in Simplified Chinese
+2. Prohibit writing any sample code for user consumption, even if needed for temporary testing, it must be deleted immediately after task completion
+3. Strictly prohibit solving problems by simplifying them
+4. Strictly prohibit solving compilation errors and runtime errors by downgrading dependency versions, reducing test assertions, using constant test conditions, etc.
+5. Strictly prohibit ignoring exceptions or any behavior that hides exceptions
+6. Strictly prohibit exposing API keys, passwords, and tokens in code
+7. Should actively refactor and fix code appearing in context according to rules
+8. Should actively use logging to improve records, proactively supplement missing logs
+9. Allow adding logs during unit test debugging to assist in problem resolution
+10. Must maximize the use of `early return` technique to reduce code nesting levels
+11. Strictly prohibit generating summary documentation files and other unnecessary operations after dialogue or task completion
+12. Strictly prohibit the appearance of the following disgusting and decadent terms anywhere except in third-party library calls
   + `util`, `utils`
   + `helper`, `helpers`
   + `tool`, `tools`
 
-13. 严禁使用 `@Suppress`/`// @ts-ignore` 等注解压制警告
+13. Strictly prohibit using `@Suppress`/`// @ts-ignore` and other annotations to suppress warnings
 
-**渐进式开发方法论**
+**Progressive Development Methodology**
 
-- 采用测试驱动开发结合渐进式开发方法
-- **Baby Steps开发**：每次只编写少量代码，立即进行单元测试验证
-- **快速反馈循环**：开发一点测试一点，绝不一次性编写大量代码
-- **逐个验证原则**：为多个代码编写单元测试时，一个个编写一个个验证，避免批量编写后统一验证
-- **风险最小化**：通过频繁的小幅度验证确保代码质量，避免错误累积
-- **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
-- 严禁出现没有断言的测试方法，发现应该立即补全断言
+- Adopt test-driven development combined with progressive development approach
+- **Baby Steps Development**: Write only small amounts of code each time, immediately verify with unit tests
+- **Rapid Feedback Loop**: Develop a bit and test a bit, never write large amounts of code at once
+- **Individual Verification Principle**: When writing unit tests for multiple pieces of code, write and verify one by one, avoid batch writing followed by unified verification
+- **Risk Minimization**: Ensure code quality through frequent small-scale verification, avoid error accumulation
+- **Nested Test Organization**: Use appropriate grouping, avoid large numbers of independent test methods at root level
+- Strictly prohibit test methods without assertions, immediately supplement assertions when found
 
-**日志规范**
+**Logging Standards**
 
-- 在没有日志的情况下，应当多使用日志记录，以协助线上问题排查解决以及获取更多上下文信息
-- 在排查问题时，可向源代码中添加更多日志，以获取更详细的上下文信息
-- 日志应当只使用英文进行记录，如发现其他语言应当立即修正为英文
-- 重点记录第三方库调用和外部API的详细日志，包括请求参数、响应结果、耗时等信息
-- 使用结构化日志格式：`log.info("API call completed - endpoint: {}, status: {}, duration: {}ms", endpoint, status, duration)`
-- 记录关键上下文信息：用户ID、请求ID、操作类型、结果状态、异常详情
-- 避免记录敏感信息：密码、API密钥、身份证号、手机号等
-- 在外部调用、数据库操作、文件操作等关键节点记录日志
-- 使用占位符格式避免字符串拼接，保持日志消息简洁明了
-- 合理使用日志级别，避免生产环境输出过多DEBUG日志
+- When there are no logs, should use more logging to assist in online problem troubleshooting and obtaining more contextual information
+- When troubleshooting problems, can add more logs to source code to obtain more detailed contextual information
+- Logs should only use English for recording, if other languages are found they should be immediately corrected to English
+- Focus on recording detailed logs of third-party library calls and external APIs, including request parameters, response results, duration, etc.
+- Use structured log format: `log.info("API call completed - endpoint: {}, status: {}, duration: {}ms", endpoint, status, duration)`
+- Record key contextual information: user ID, request ID, operation type, result status, exception details
+- Avoid recording sensitive information: passwords, API keys, ID numbers, phone numbers, etc.
+- Record logs at key points such as external calls, database operations, file operations
+- Use placeholder format to avoid string concatenation, keep log messages concise and clear
+- Use log levels appropriately, avoid outputting too many DEBUG logs in production environment
 
-**注释规则**
+**Comment Rules**
 
-- 文档注释：必须使用英文注释
-- 代码内部注释：必须使用中文注释
-- 严禁使用行尾注释
+- Documentation comments: Must use English comments
+- Internal code comments: Must use Chinese comments
+- Strictly prohibit using end-of-line comments
 
-**测试组织最佳实践：**
+**Test Organization Best Practices:**
 
-- 每个被测试类/函数/变量/方法创建主要分组
-- 按场景细分：正常用例、异常用例、边界用例
-  + 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
+- Create main groupings for each tested class/function/variable/method
+- Subdivide by scenarios: normal cases, exception cases, boundary cases
+  + Kotlin example: `@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
 
-**代码风格**
+**Code Style**
 
-- 代码缩进：使用2个空格缩进
-- 代码换行：每个文件必须保留行尾换行符
-- 文件编码：必须使用UTF-8编码
-- 文件换行符：必须使用LF换行符
-- 行长度：每行字符长度不能超过160个字符
-- 配置参考：可参考项目根目录下的 `.editorconfig` 配置
+- Code indentation: Use 2 spaces for indentation
+- Code line breaks: Each file must retain trailing newlines
+- File encoding: Must use UTF-8 encoding
+- File line endings: Must use LF line endings
+- Line length: Each line must not exceed 160 characters
+- Configuration reference: Refer to the `.editorconfig` configuration in the project root directory
 
-# 特定语言约定
+# Specific Language Conventions
 
-**SQL 规则**
+**SQL Rules**
 
-- 严禁在 SQL 中使用任何注释
-- 检查现有查询是否使用参数化
-- 统一使用 snake_case 命名，即使是出现在其他语言中的字符串
+- Strictly prohibit using any comments in SQL
+- Check if existing queries use parameterization
+- Consistently use snake_case naming, even in strings appearing in other languages
 
-**JVM 规则**
+**JVM Rules**
 
-1. 严禁在测试代码中使用 `@DisplayName` 注解
-2. spring/quarkus 中严禁使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
-3. 尽可能使用项目内JDK版本能使用的最大限度的新特性
-4. 禁止在单元测试中使用 `@DisplayName` 注解
-5. 单元测试方法名称使用英文命名，以及下划线分割
-6. 禁止单元测试方法名以 `test_`、`should_` 开头
-7. 记录日志时，格式为 `log.info("message param1: {}, param2{}")` 这种格式
-8. 禁止记录详细的敏感信息，例如：密码、身份证号、APIKEY、手机号等
+1. Strictly prohibit using `@DisplayName` annotation in test code
+2. In spring/quarkus, strictly prohibit using framework-specific annotations, for example: `@Autowired` must be replaced with `@Resource`
+3. Use the maximum extent of new features available in the project's JDK version as much as possible
+4. Prohibit using `@DisplayName` annotation in unit tests
+5. Unit test method names should use English naming with underscore separation
+6. Prohibit unit test method names from starting with `test_` or `should_`
+7. When logging, use the format `log.info("message param1: {}, param2{}")`
+8. Prohibit logging detailed sensitive information, such as: passwords, ID numbers, API keys, phone numbers, etc.
 
-**Java 规则**
+**Java Rules**
 
-所有JVM平台的编程语言：java、kotlin、groovy、scala 均需遵守以下原则
+All JVM platform programming languages: java, kotlin, groovy, scala must follow these principles
 
-1. 可使用 `import xxx.*` 导入来减少代码量，后续交由IDE进行处理
-2. 尽可能使用jdk的新特性
-3. 声明变量应尽量使用 `final var`
-4. 积极使用 lambda
-5. 严禁使用 `System.out.println` 记录输出
+1. Can use `import xxx.*` imports to reduce code volume, leave subsequent processing to IDE
+2. Use JDK new features as much as possible
+3. Variable declarations should use `final var` as much as possible
+4. Actively use lambda expressions
+5. Strictly prohibit using `System.out.println` for output logging
 
-**Kotlin 规则**
+**Kotlin Rules**
 
-1. 优先使用val声明不可变变量
-2. 避免!!操作符，使用?.或let{}
-3. 数据类替代多参数函数
-4. 严禁使用 `println` 记录输出
-5. 严禁在单元测试中使用 `mockito`，而是使用 `mockk`
-6. 扩展方法与纯函数应分开，不应在同一文件中
-  + 扩展函数文件命名规范：使用 `*Extensions.kt` 后缀
-  + 纯函数文件命名规范：使用 `*Functions.kt` 后缀
+1. Prefer using val for immutable variable declarations
+2. Avoid !! operator, use ?. or let{}
+3. Use data classes instead of multi-parameter functions
+4. Strictly prohibit using `println` for output logging
+5. Strictly prohibit using `mockito` in unit tests, use `mockk` instead
+6. Extension methods and pure functions should be separated, not in the same file
+  + Extension function file naming convention: use `*Extensions.kt` suffix
+  + Pure function file naming convention: use `*Functions.kt` suffix
 
-**TypeScript规则**
+**TypeScript Rules**
 
-- TypeScript: 启用strict模式，避免any类型
+- TypeScript: Enable strict mode, avoid any type
 
-**SCSS 规则**
+**SCSS Rules**
 
-- 禁止使用 `@import`，使用 `@use` 代替
+- Prohibit using `@import`, use `@use` instead
