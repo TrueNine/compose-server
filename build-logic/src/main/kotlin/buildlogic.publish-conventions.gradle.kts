@@ -63,6 +63,7 @@ mavenPublishing {
     inceptionYear = "2020"
 
     developers {
+
       developer {
         id = "TrueNine"
         name = "赵日天"
@@ -70,25 +71,31 @@ mavenPublishing {
         organizationUrl = "https://github.com/TrueNine"
         timezone = "GMT+8"
         organization = "Yan100 Dev Group"
-        roles = listOf("developer", "founder")
+        roles = listOf("Developer", "Founder")
         email = "truenine304520@gmail.com"
       }
       developer {
         id = "t_teng"
         name = "滕腾"
         organization = "Nanning, Guangxi, China Yan100 technology Ltd"
-        roles = listOf("sponsor")
+        roles = listOf("Sponsor", "Founder")
         timezone = "GMT+8"
         email = "616057370@qq.com"
       }
       developer {
         id = "bambuo"
         name = "Johana Ĉen"
-        roles = listOf("sponsor")
+        roles = listOf("Sponsor")
         url = "https://github.com/bambuo"
         organization = "Hubei, China Tianshu technology Ltd"
         timezone = "GMT+8"
         email = "845586878@qq.com"
+      }
+      developer {
+        id = "muyu"
+        email = "1065700104@qq.com"
+        roles = listOf("Sponsor")
+        timezone = "GMT+8"
       }
     }
 
