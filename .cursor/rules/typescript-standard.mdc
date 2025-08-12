@@ -1,5 +1,5 @@
 ---
-globs: **/*.ts,**/*.tsx,**/*.vue
+globs: **/*.ts,**/*.tsx,**/*.d.ts,**/*.vue
 alwaysApply: false
 ---
 **TypeScript Rules**

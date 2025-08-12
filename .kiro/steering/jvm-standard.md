@@ -1,6 +1,6 @@
 ---
 inclusion: fileMatch
-fileMatchPattern: "**/*.(kt|java|gradle|kts|groovy)"
+fileMatchPattern: "**/*.kt,**/*.java,**/*.gradle,**/*.kts,**/*.groovy"
 ---
 
 **JVM Rules**

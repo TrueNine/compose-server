@@ -1,6 +1,6 @@
 ---
 inclusion: fileMatch
-fileMatchPattern: "**/*.(kt|gradle|kts)"
+fileMatchPattern: "**/*.kt"
 ---
 
 **Kotlin Rules**

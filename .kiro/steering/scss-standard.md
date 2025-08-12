@@ -1,6 +1,6 @@
 ---
 inclusion: fileMatch
-fileMatchPattern: "**/*.(vue|scss)"
+fileMatchPattern: "**/*.scss,**/*.vue,**/*.tsx"
 ---
 
 **SCSS Rules**

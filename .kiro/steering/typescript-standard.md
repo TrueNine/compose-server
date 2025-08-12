@@ -1,6 +1,6 @@
 ---
 inclusion: fileMatch
-fileMatchPattern: "**/*.(ts|tsx|vue)"
+fileMatchPattern: "**/*.ts,**/*.tsx,**/*.d.ts,**/*.vue"
 ---
 
 **TypeScript Rules**

@@ -1,6 +1,6 @@
 ---
 inclusion: fileMatch
-fileMatchPattern: "**/*Test.(kt|java)"
+fileMatchPattern: "**/*Test.kt,**/*.java,**/*.spec.*,**/*.test.*"
 ---
 
 **Test Organization Best Practices:**
