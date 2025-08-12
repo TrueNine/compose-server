@@ -14,7 +14,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "compose-server"
 
 // 根级模块
-listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cacheable").forEach { p ->
+listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cacheable", "docsite").forEach { p ->
   include(p)
   findProject(":$p")?.name = p
 }
