@@ -90,6 +90,8 @@ All languages must follow general rules, and specific languages must follow spec
 6. Prohibit unit test method names from starting with `test_` or `should_`
 7. When logging, use the format `log.info("message param1: {}, param2{}")`
 8. Prohibit logging detailed sensitive information, such as: passwords, ID numbers, API keys, phone numbers, etc.
+9. Interfaces must start with "I" prefix
+10. All ways of obtaining slf4j Logger instances must be static, private, and final
 
 **Java Rules**
 
@@ -111,6 +113,8 @@ All JVM platform programming languages: java, kotlin, groovy, scala must follow 
 6. Extension methods and pure functions should be separated, not in the same file
   + Extension function file naming convention: use `*Extensions.kt` suffix
   + Pure function file naming convention: use `*Functions.kt` suffix
+7. Static functions cannot use "of" but must use "operator fun get" and be decorated with @JvmStatic
+8. Logger instance acquisition must be decorated with @JvmStatic
 
 **TypeScript Rules**
 

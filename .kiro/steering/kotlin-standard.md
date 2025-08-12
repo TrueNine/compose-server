@@ -13,3 +13,5 @@ fileMatchPattern: "**/*.(kt|gradle|kts)"
 6. Extension methods and pure functions should be separated, not in the same file
   + Extension function file naming convention: use `*Extensions.kt` suffix
   + Pure function file naming convention: use `*Functions.kt` suffix
+7. Static functions cannot use "of" but must use "operator fun get" and be decorated with @JvmStatic
+8. Logger instance acquisition must be decorated with @JvmStatic
