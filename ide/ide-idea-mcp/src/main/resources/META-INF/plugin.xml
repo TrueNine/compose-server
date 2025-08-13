@@ -24,6 +24,12 @@
   <!-- Extension points defined by the plugin.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
-
+    <!-- MCP 调试工具窗口 -->
+    <toolWindow 
+        id="McpDebug" 
+        displayName="MCP Debug" 
+        icon="/META-INF/pluginIcon.svg"
+        anchor="bottom" 
+        factoryClass="io.github.truenine.composeserver.ide.ideamcp.McpDebugToolWindowFactory"/>
   </extensions>
 </idea-plugin>
