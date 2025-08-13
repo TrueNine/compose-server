@@ -6,6 +6,7 @@ plugins {
   idea
   base
   id("buildlogic.spotless-conventions")
+  id("buildlogic.jacoco-aggregate")
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
 }
 

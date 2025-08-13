@@ -3,6 +3,4 @@ plugins {
   id("buildlogic.spotless-conventions")
 }
 
-dependencies {
-  testImplementation(projects.testtoolkit)
-}
+dependencies { testImplementation(projects.testtoolkit) }

@@ -13,4 +13,13 @@ dependencies {
   implementation(libs.org.jetbrains.kotlin.kapt.org.jetbrains.kotlin.kapt.gradle.plugin)
   implementation(libs.org.jetbrains.kotlin.plugin.spring.org.jetbrains.kotlin.plugin.spring.gradle.plugin)
   implementation(libs.org.jetbrains.dokka.dokka.gradle.plugin)
+
+}
+
+testing {
+  suites {
+    val test by getting(JvmTestSuite::class) {
+      useJUnitJupiter(libs.versions.org.junit.jupiter.get())
+    }
+  }
 }
