@@ -26,11 +26,7 @@ dependencies {
   testImplementation(libs.org.jetbrains.kotlin.kotlin.test)
 }
 
-dependencies {
-  compileOnly(libs.org.jetbrains.kotlinx.kotlinx.serialization.json)
-  // 添加 Kotlin Coroutines 依赖用于 Flow
-  implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
-}
+dependencies { compileOnly(libs.org.jetbrains.kotlinx.kotlinx.serialization.json) }
 
 java {
   sourceCompatibility = JavaVersion.toVersion(libs.versions.intellij.platform.plugin.java.get().toInt())
