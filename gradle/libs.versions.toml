@@ -275,6 +275,7 @@ org-springframework-boot-spring-boot-dependencies = { module = "org.springframew
 org-springframework-boot-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-batch = { module = "org.springframework.boot:spring-boot-starter-batch", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "org-springframework-boot" }
