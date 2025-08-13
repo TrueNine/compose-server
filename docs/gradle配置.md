@@ -18,7 +18,7 @@ org.gradle.configuration-cache=false
 org.gradle.configuration-cache.problems=warn
 org.gradle.configureondemand=false
 org.gradle.caching=false
-org.gradle.workers.max=12
+org.gradle.workers.max=5
 org.gradle.daemon=true
 org.gradle.parallel=true
 org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+UseParallelGC -Dfile.encoding=UTF-8
