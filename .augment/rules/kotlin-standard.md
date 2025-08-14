@@ -1,6 +1,6 @@
 ---
 type: "agent_requested"
-description: "Example description"
+description: "**/*.kt"
 ---
 **Kotlin Rules**
 

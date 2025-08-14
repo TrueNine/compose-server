@@ -1,6 +1,6 @@
 ---
 type: "agent_requested"
-description: "Example description"
+description: "*Test.kt,*Test.java,*.spec.*,*.test.*"
 ---
 **Test Organization Best Practices:**
 

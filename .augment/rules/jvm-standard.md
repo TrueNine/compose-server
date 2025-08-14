@@ -1,6 +1,6 @@
 ---
 type: "agent_requested"
-description: "Example description"
+description: "**/*.java,**/*.kt"
 ---
 **JVM Rules**
 
