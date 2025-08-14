@@ -3,6 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp.tools
 import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
 import io.github.truenine.composeserver.ide.ideamcp.TerminalOutputInterceptor
+import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
@@ -201,15 +202,4 @@ data class TerminalErrorResponse(
   val timestamp: Long
 )
 
-/**
- * 错误详情
- */
-@Serializable
-data class ErrorDetails(
-  /** 错误类型 */
-  val type: String,
-  /** 错误消息 */
-  val message: String,
-  /** 建议的解决方案 */
-  val suggestions: List<String>
-)
+

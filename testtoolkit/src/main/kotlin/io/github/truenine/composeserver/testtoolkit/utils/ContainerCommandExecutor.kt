@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.testtoolkit.utils
 
-import java.time.Duration
 import org.slf4j.LoggerFactory
 import org.testcontainers.containers.Container
 import org.testcontainers.containers.GenericContainer
+import java.time.Duration
 
 /**
  * # 容器命令执行工具类
@@ -36,7 +36,9 @@ import org.testcontainers.containers.GenericContainer
  * @author TrueNine
  * @since 2025-07-12
  */
-class ContainerCommandExecutor(private val container: GenericContainer<*>) {
+class ContainerCommandExecutor(
+  private val container: GenericContainer<*>,
+) {
 
   companion object {
     private val log = LoggerFactory.getLogger(ContainerCommandExecutor::class.java)

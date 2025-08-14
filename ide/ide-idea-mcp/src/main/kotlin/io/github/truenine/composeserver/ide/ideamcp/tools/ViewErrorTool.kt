@@ -3,6 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp.tools
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
+import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json

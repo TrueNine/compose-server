@@ -32,4 +32,27 @@
         anchor="bottom" 
         factoryClass="io.github.truenine.composeserver.ide.ideamcp.McpDebugToolWindowFactory"/>
   </extensions>
+
+  <!-- 右键菜单动作 -->
+  <actions>
+    <group id="McpActions" text="MCP 操作" popup="true">
+      <action id="CleanCode" 
+              class="io.github.truenine.composeserver.ide.ideamcp.actions.CleanCodeAction"
+              text="清理代码"
+              description="使用 IDEA 功能清理和格式化代码"/>
+      <action id="ViewError" 
+              class="io.github.truenine.composeserver.ide.ideamcp.actions.ViewErrorAction"
+              text="查看错误"
+              description="查看文件或文件夹中的错误、警告信息"/>
+      <action id="ViewLibCode" 
+              class="io.github.truenine.composeserver.ide.ideamcp.actions.ViewLibCodeAction"
+              text="查看库代码"
+              description="查看第三方库的源代码或反编译代码"/>
+      
+      <!-- 添加到编辑器右键菜单 -->
+      <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+      <!-- 添加到项目树右键菜单 -->
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+    </group>
+  </actions>
 </idea-plugin>

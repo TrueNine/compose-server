@@ -21,15 +21,21 @@ class McpDebugToolWindowFactory : ToolWindowFactory {
     val logContent = contentFactory.createContent(debugPanel, "日志", false)
     logContent.isCloseable = false
 
+    // 创建文件操作面板
+    val fileOperationPanel = FileOperationPanel(project)
+    val fileOperationContent = contentFactory.createContent(fileOperationPanel, "文件操作", false)
+    fileOperationContent.isCloseable = false
+
     // 添加到工具窗口
     toolWindow.contentManager.addContent(terminalContent)
     toolWindow.contentManager.addContent(logContent)
+    toolWindow.contentManager.addContent(fileOperationContent)
 
     // 设置默认选中日志标签页
     toolWindow.contentManager.setSelectedContent(logContent)
 
     // 记录工具窗口创建日志
-    McpLogManager.info("MCP 调试工具窗口已创建 - 包含终端清洗和日志两个标签页", "ToolWindow")
+    McpLogManager.info("MCP 调试工具窗口已创建 - 包含终端清洗、日志和文件操作三个标签页", "ToolWindow")
   }
 
   override fun shouldBeAvailable(project: Project): Boolean {
