@@ -1,6 +1,6 @@
 ---
 type: "agent_requested"
-description: "**/*.jajva"
+description: "**/*.java"
 ---
 **Java Rules**
 
