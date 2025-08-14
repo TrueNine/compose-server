@@ -1,13 +1,11 @@
 package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
-import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.serialization.json.Json
 
-/**
- * TerminalTool 单元测试
- */
+/** TerminalTool 单元测试 */
 class TerminalToolTest {
 
   private val terminalTool = TerminalTool()
@@ -25,12 +23,7 @@ class TerminalToolTest {
   @Test
   fun `TerminalArgs 序列化应该正确`() {
     // Given
-    val args = TerminalArgs(
-      command = "echo hello",
-      workingDirectory = "/tmp",
-      timeout = 5000,
-      cleanOutput = false
-    )
+    val args = TerminalArgs(command = "echo hello", workingDirectory = "/tmp", timeout = 5000, cleanOutput = false)
 
     // When
     val json = Json.encodeToString(TerminalArgs.serializer(), args)
@@ -46,14 +39,7 @@ class TerminalToolTest {
   @Test
   fun `TerminalResult 序列化应该正确`() {
     // Given
-    val result = TerminalResult(
-      command = "echo test",
-      exitCode = 0,
-      output = "test",
-      errorOutput = "",
-      executionTime = 100L,
-      workingDirectory = "/tmp"
-    )
+    val result = TerminalResult(command = "echo test", exitCode = 0, output = "test", errorOutput = "", executionTime = 100L, workingDirectory = "/tmp")
 
     // When
     val json = Json.encodeToString(TerminalResult.serializer(), result)
@@ -71,16 +57,13 @@ class TerminalToolTest {
   @Test
   fun `TerminalErrorResponse 序列化应该正确`() {
     // Given
-    val errorResponse = TerminalErrorResponse(
-      success = false,
-      error = ErrorDetails(
-        type = "INVALID_ARGUMENT",
-        message = "测试错误",
-        suggestions = listOf("建议1", "建议2")
-      ),
-      command = "test command",
-      timestamp = 1234567890L
-    )
+    val errorResponse =
+      TerminalErrorResponse(
+        success = false,
+        error = ErrorDetails(type = "INVALID_ARGUMENT", message = "测试错误", suggestions = listOf("建议1", "建议2")),
+        command = "test command",
+        timestamp = 1234567890L,
+      )
 
     // When
     val json = Json.encodeToString(TerminalErrorResponse.serializer(), errorResponse)

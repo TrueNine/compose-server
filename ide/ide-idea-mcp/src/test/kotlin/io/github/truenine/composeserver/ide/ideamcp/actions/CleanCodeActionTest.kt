@@ -2,10 +2,7 @@ package io.github.truenine.composeserver.ide.ideamcp.actions
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-/**
- * CleanCodeAction 单元测试
- * 测试代码清理右键菜单动作的功能
- */
+/** CleanCodeAction 单元测试 测试代码清理右键菜单动作的功能 */
 class CleanCodeActionTest : BasePlatformTestCase() {
 
   fun testActionCreation() {
@@ -21,6 +18,4 @@ class CleanCodeActionTest : BasePlatformTestCase() {
     assertNotNull(dialog)
     assertEquals("代码清理选项", dialog.title)
   }
-
-
 }

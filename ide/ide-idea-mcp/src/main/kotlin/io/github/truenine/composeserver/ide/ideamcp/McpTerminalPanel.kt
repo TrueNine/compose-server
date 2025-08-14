@@ -1,15 +1,14 @@
 package io.github.truenine.composeserver.ide.ideamcp
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.JBUI
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Font
@@ -22,12 +21,16 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JSplitPane
 import javax.swing.UIManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 
 /** MCP 终端清洗面板 提供命令输入和输出清洗功能 */
-class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(true, true) {
+class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(true, true), Disposable {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-  private val interceptor = TerminalOutputInterceptor()
+  private val interceptor by lazy { project.service<TerminalOutputInterceptor>() }
 
   // UI 组件
   private val commandField = JBTextField()
@@ -277,5 +280,11 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
       } else {
         ""
       }
+  }
+
+  override fun dispose() {
+    // 取消所有协程
+    scope.cancel()
+    McpLogManager.debug("McpTerminalPanel disposed", "McpTerminalPanel")
   }
 }

@@ -1,15 +1,13 @@
 package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
-import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlinx.serialization.json.Json
 
-/**
- * CleanCodeTool 单元测试
- */
+/** CleanCodeTool 单元测试 */
 class CleanCodeToolTest {
 
   private val cleanCodeTool = CleanCodeTool()
@@ -27,12 +25,7 @@ class CleanCodeToolTest {
   @Test
   fun `CleanCodeArgs 序列化应该正确`() {
     // Given
-    val args = CleanCodeArgs(
-      path = "/src/main/kotlin",
-      formatCode = false,
-      optimizeImports = false,
-      runInspections = false
-    )
+    val args = CleanCodeArgs(path = "/src/main/kotlin", formatCode = false, optimizeImports = false, runInspections = false)
 
     // When
     val json = Json.encodeToString(CleanCodeArgs.serializer(), args)
@@ -60,22 +53,19 @@ class CleanCodeToolTest {
   @Test
   fun `CleanCodeResult 序列化应该正确`() {
     // Given
-    val operation = CleanOperation(
-      type = "FORMAT",
-      description = "代码格式化",
-      filesAffected = 5
-    )
+    val operation = CleanOperation(type = "FORMAT", description = "代码格式化", filesAffected = 5)
 
-    val result = CleanCodeResult(
-      success = true,
-      path = "/src/main/kotlin",
-      processedFiles = 10,
-      modifiedFiles = 5,
-      operations = listOf(operation),
-      summary = "处理了10个文件，修改了5个文件",
-      executionTime = 1500L,
-      timestamp = 1234567890L
-    )
+    val result =
+      CleanCodeResult(
+        success = true,
+        path = "/src/main/kotlin",
+        processedFiles = 10,
+        modifiedFiles = 5,
+        operations = listOf(operation),
+        summary = "处理了10个文件，修改了5个文件",
+        executionTime = 1500L,
+        timestamp = 1234567890L,
+      )
 
     // When
     val json = Json.encodeToString(CleanCodeResult.serializer(), result)
@@ -101,11 +91,7 @@ class CleanCodeToolTest {
   @Test
   fun `CleanOperation 序列化应该正确`() {
     // Given
-    val operation = CleanOperation(
-      type = "OPTIMIZE_IMPORTS",
-      description = "导入优化",
-      filesAffected = 3
-    )
+    val operation = CleanOperation(type = "OPTIMIZE_IMPORTS", description = "导入优化", filesAffected = 3)
 
     // When
     val json = Json.encodeToString(CleanOperation.serializer(), operation)
@@ -120,16 +106,13 @@ class CleanCodeToolTest {
   @Test
   fun `CleanCodeErrorResponse 序列化应该正确`() {
     // Given
-    val errorResponse = CleanCodeErrorResponse(
-      success = false,
-      error = ErrorDetails(
-        type = "INVALID_ARGUMENT",
-        message = "路径不能为空",
-        suggestions = listOf("检查路径格式", "使用有效的文件路径")
-      ),
-      path = "",
-      timestamp = 1234567890L
-    )
+    val errorResponse =
+      CleanCodeErrorResponse(
+        success = false,
+        error = ErrorDetails(type = "INVALID_ARGUMENT", message = "路径不能为空", suggestions = listOf("检查路径格式", "使用有效的文件路径")),
+        path = "",
+        timestamp = 1234567890L,
+      )
 
     // When
     val json = Json.encodeToString(CleanCodeErrorResponse.serializer(), errorResponse)
@@ -147,22 +130,19 @@ class CleanCodeToolTest {
   @Test
   fun `多个操作的 CleanCodeResult 序列化应该正确`() {
     // Given
-    val operations = listOf(
-      CleanOperation("FORMAT", "代码格式化", 8),
-      CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 6),
-      CleanOperation("RUN_INSPECTIONS", "代码检查修复", 3)
-    )
+    val operations = listOf(CleanOperation("FORMAT", "代码格式化", 8), CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 6), CleanOperation("RUN_INSPECTIONS", "代码检查修复", 3))
 
-    val result = CleanCodeResult(
-      success = true,
-      path = "/src",
-      processedFiles = 15,
-      modifiedFiles = 12,
-      operations = operations,
-      summary = "执行了多种清理操作",
-      executionTime = 3000L,
-      timestamp = System.currentTimeMillis()
-    )
+    val result =
+      CleanCodeResult(
+        success = true,
+        path = "/src",
+        processedFiles = 15,
+        modifiedFiles = 12,
+        operations = operations,
+        summary = "执行了多种清理操作",
+        executionTime = 3000L,
+        timestamp = System.currentTimeMillis(),
+      )
 
     // When
     val json = Json.encodeToString(CleanCodeResult.serializer(), result)
@@ -181,11 +161,7 @@ class CleanCodeToolTest {
   @Test
   fun `ErrorDetails 序列化应该正确`() {
     // Given
-    val errorDetails = ErrorDetails(
-      type = "PERMISSION_DENIED",
-      message = "文件被锁定",
-      suggestions = listOf("关闭其他编辑器", "检查文件权限", "重启IDE")
-    )
+    val errorDetails = ErrorDetails(type = "PERMISSION_DENIED", message = "文件被锁定", suggestions = listOf("关闭其他编辑器", "检查文件权限", "重启IDE"))
 
     // When
     val json = Json.encodeToString(ErrorDetails.serializer(), errorDetails)
@@ -203,16 +179,17 @@ class CleanCodeToolTest {
   @Test
   fun `空操作列表的 CleanCodeResult 序列化应该正确`() {
     // Given
-    val result = CleanCodeResult(
-      success = true,
-      path = "/empty",
-      processedFiles = 0,
-      modifiedFiles = 0,
-      operations = emptyList(),
-      summary = "没有文件需要处理",
-      executionTime = 100L,
-      timestamp = System.currentTimeMillis()
-    )
+    val result =
+      CleanCodeResult(
+        success = true,
+        path = "/empty",
+        processedFiles = 0,
+        modifiedFiles = 0,
+        operations = emptyList(),
+        summary = "没有文件需要处理",
+        executionTime = 100L,
+        timestamp = System.currentTimeMillis(),
+      )
 
     // When
     val json = Json.encodeToString(CleanCodeResult.serializer(), result)
@@ -229,12 +206,7 @@ class CleanCodeToolTest {
   @Test
   fun `部分清理选项的 CleanCodeArgs 序列化应该正确`() {
     // Given
-    val args = CleanCodeArgs(
-      path = "/src/test",
-      formatCode = true,
-      optimizeImports = false,
-      runInspections = true
-    )
+    val args = CleanCodeArgs(path = "/src/test", formatCode = true, optimizeImports = false, runInspections = true)
 
     // When
     val json = Json.encodeToString(CleanCodeArgs.serializer(), args)

@@ -1,13 +1,11 @@
 package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
-import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.serialization.json.Json
 
-/**
- * ViewErrorTool 单元测试
- */
+/** ViewErrorTool 单元测试 */
 class ViewErrorToolTest {
 
   private val viewErrorTool = ViewErrorTool()
@@ -25,11 +23,7 @@ class ViewErrorToolTest {
   @Test
   fun `ViewErrorArgs 序列化应该正确`() {
     // Given
-    val args = ViewErrorArgs(
-      path = "/src/main/kotlin",
-      includeWarnings = false,
-      includeWeakWarnings = false
-    )
+    val args = ViewErrorArgs(path = "/src/main/kotlin", includeWarnings = false, includeWeakWarnings = false)
 
     // When
     val json = Json.encodeToString(ViewErrorArgs.serializer(), args)
@@ -44,34 +38,37 @@ class ViewErrorToolTest {
   @Test
   fun `ViewErrorResult 序列化应该正确`() {
     // Given
-    val errorInfo = ErrorInfo(
-      line = 10,
-      column = 5,
-      severity = ErrorSeverity.ERROR,
-      message = "测试错误消息",
-      code = "TEST_ERROR",
-      codeSnippet = "val test = null",
-      quickFixes = listOf("添加空检查", "使用非空类型")
-    )
+    val errorInfo =
+      ErrorInfo(
+        line = 10,
+        column = 5,
+        severity = ErrorSeverity.ERROR,
+        message = "测试错误消息",
+        code = "TEST_ERROR",
+        codeSnippet = "val test = null",
+        quickFixes = listOf("添加空检查", "使用非空类型"),
+      )
 
-    val fileErrorInfo = FileErrorInfo(
-      filePath = "/src/Test.kt",
-      relativePath = "src/Test.kt",
-      errors = listOf(errorInfo),
-      warnings = emptyList(),
-      weakWarnings = emptyList(),
-      summary = "1个错误"
-    )
+    val fileErrorInfo =
+      FileErrorInfo(
+        filePath = "/src/Test.kt",
+        relativePath = "src/Test.kt",
+        errors = listOf(errorInfo),
+        warnings = emptyList(),
+        weakWarnings = emptyList(),
+        summary = "1个错误",
+      )
 
-    val result = ViewErrorResult(
-      path = "/src",
-      resolvedPath = "/project/src",
-      totalErrors = 1,
-      totalWarnings = 0,
-      totalWeakWarnings = 0,
-      files = listOf(fileErrorInfo),
-      summary = "总计1个错误"
-    )
+    val result =
+      ViewErrorResult(
+        path = "/src",
+        resolvedPath = "/project/src",
+        totalErrors = 1,
+        totalWarnings = 0,
+        totalWeakWarnings = 0,
+        files = listOf(fileErrorInfo),
+        summary = "总计1个错误",
+      )
 
     // When
     val json = Json.encodeToString(ViewErrorResult.serializer(), result)
@@ -107,16 +104,13 @@ class ViewErrorToolTest {
   @Test
   fun `ViewErrorErrorResponse 序列化应该正确`() {
     // Given
-    val errorResponse = ViewErrorErrorResponse(
-      success = false,
-      error = ErrorDetails(
-        type = "INVALID_PATH",
-        message = "路径不存在",
-        suggestions = listOf("检查路径格式", "使用绝对路径")
-      ),
-      path = "/invalid/path",
-      timestamp = 1234567890L
-    )
+    val errorResponse =
+      ViewErrorErrorResponse(
+        success = false,
+        error = ErrorDetails(type = "INVALID_PATH", message = "路径不存在", suggestions = listOf("检查路径格式", "使用绝对路径")),
+        path = "/invalid/path",
+        timestamp = 1234567890L,
+      )
 
     // When
     val json = Json.encodeToString(ViewErrorErrorResponse.serializer(), errorResponse)
@@ -145,12 +139,7 @@ class ViewErrorToolTest {
   @Test
   fun `ErrorSeverity 枚举应该正确序列化`() {
     // Given
-    val severities = listOf(
-      ErrorSeverity.ERROR,
-      ErrorSeverity.WARNING,
-      ErrorSeverity.WEAK_WARNING,
-      ErrorSeverity.INFO
-    )
+    val severities = listOf(ErrorSeverity.ERROR, ErrorSeverity.WARNING, ErrorSeverity.WEAK_WARNING, ErrorSeverity.INFO)
 
     // When & Then
     severities.forEach { severity ->
@@ -163,13 +152,7 @@ class ViewErrorToolTest {
   @Test
   fun `ErrorInfo 最小参数应该正确序列化`() {
     // Given
-    val errorInfo = ErrorInfo(
-      line = 1,
-      column = 1,
-      severity = ErrorSeverity.INFO,
-      message = "信息",
-      code = "INFO_CODE"
-    )
+    val errorInfo = ErrorInfo(line = 1, column = 1, severity = ErrorSeverity.INFO, message = "信息", code = "INFO_CODE")
 
     // When
     val json = Json.encodeToString(ErrorInfo.serializer(), errorInfo)

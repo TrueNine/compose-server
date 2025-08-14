@@ -3,10 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp.actions
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-/**
- * 动作集成测试
- * 测试所有右键菜单动作的集成和注册情况
- */
+/** 动作集成测试 测试所有右键菜单动作的集成和注册情况 */
 class ActionsIntegrationTest : BasePlatformTestCase() {
 
   fun testAllActionsCanBeCreated() {
@@ -33,6 +30,4 @@ class ActionsIntegrationTest : BasePlatformTestCase() {
     assertEquals("查看错误", viewErrorAction.templateText)
     assertEquals("查看库代码", viewLibCodeAction.templateText)
   }
-
-
 }

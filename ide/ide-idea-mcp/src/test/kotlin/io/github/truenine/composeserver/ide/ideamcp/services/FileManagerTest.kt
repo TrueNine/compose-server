@@ -1,17 +1,15 @@
 package io.github.truenine.composeserver.ide.ideamcp.services
 
-import io.mockk.mockk
-import io.mockk.every
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import io.mockk.every
+import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
-/**
- * FileManager 单元测试
- */
+/** FileManager 单元测试 */
 class FileManagerTest {
 
   private val fileManager = FileManager()
@@ -72,7 +70,7 @@ class FileManagerTest {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
-    
+
     every { project.basePath } returns "/project/root"
     every { virtualFile.path } returns "/project/root/src/main/kotlin/Test.kt"
     every { virtualFile.name } returns "Test.kt"
@@ -89,7 +87,7 @@ class FileManagerTest {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
-    
+
     every { project.basePath } returns "/project/root"
     every { virtualFile.path } returns "/other/path/Test.kt"
     every { virtualFile.name } returns "Test.kt"
@@ -106,7 +104,7 @@ class FileManagerTest {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
-    
+
     every { project.basePath } returns null
     every { virtualFile.name } returns "Test.kt"
 
@@ -307,10 +305,7 @@ class FileManagerTest {
     every { hiddenKotlinFile.extension } returns "kt"
     every { hiddenKotlinFile.name } returns ".hidden.kt"
 
-    val combinedFilter = FileManager.Filters.combine(
-      FileManager.Filters.kotlinFiles,
-      FileManager.Filters.excludeHidden
-    )
+    val combinedFilter = FileManager.Filters.combine(FileManager.Filters.kotlinFiles, FileManager.Filters.excludeHidden)
 
     // When & Then
     assertTrue(combinedFilter(kotlinFile))

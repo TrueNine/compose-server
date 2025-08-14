@@ -2,7 +2,6 @@ package io.github.truenine.composeserver.ide.ideamcp
 
 import com.intellij.openapi.project.Project
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import org.jetbrains.ide.mcp.Response
 import org.jetbrains.mcpserverplugin.AbstractMcpTool
 

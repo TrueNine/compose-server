@@ -9,9 +9,7 @@ import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-/**
- * ViewLibCodeTool 简化测试
- */
+/** ViewLibCodeTool 简化测试 */
 class ViewLibCodeToolTest {
 
   @Test
@@ -19,10 +17,7 @@ class ViewLibCodeToolTest {
     // Given
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
-    val args = ViewLibCodeArgs(
-      filePath = "",
-      fullyQualifiedName = "com.example.TestClass"
-    )
+    val args = ViewLibCodeArgs(filePath = "", fullyQualifiedName = "com.example.TestClass")
 
     // When
     val response = viewLibCodeTool.handle(mockProject, args)
@@ -38,10 +33,7 @@ class ViewLibCodeToolTest {
     // Given
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
-    val args = ViewLibCodeArgs(
-      filePath = "/path/to/file.jar",
-      fullyQualifiedName = ""
-    )
+    val args = ViewLibCodeArgs(filePath = "/path/to/file.jar", fullyQualifiedName = "")
 
     // When
     val response = viewLibCodeTool.handle(mockProject, args)
@@ -57,10 +49,7 @@ class ViewLibCodeToolTest {
     // Given
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
-    val args = ViewLibCodeArgs(
-      filePath = "/path/to/file.jar",
-      fullyQualifiedName = "123.invalid.class.name"
-    )
+    val args = ViewLibCodeArgs(filePath = "/path/to/file.jar", fullyQualifiedName = "123.invalid.class.name")
 
     // When
     val response = viewLibCodeTool.handle(mockProject, args)
@@ -77,23 +66,21 @@ class ViewLibCodeToolTest {
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
     val mockLibCodeService = mockk<LibCodeService>()
-    val args = ViewLibCodeArgs(
-      filePath = "/path/to/file.jar",
-      fullyQualifiedName = "com.example.TestClass",
-      memberName = "testMethod"
-    )
+    val args = ViewLibCodeArgs(filePath = "/path/to/file.jar", fullyQualifiedName = "com.example.TestClass", memberName = "testMethod")
 
-    val mockResult = LibCodeResult(
-      sourceCode = "public class TestClass {}",
-      isDecompiled = false,
-      language = "java",
-      metadata = io.github.truenine.composeserver.ide.ideamcp.services.LibCodeMetadata(
-        libraryName = "example-lib",
-        version = "1.0.0",
-        sourceType = SourceType.SOURCE_JAR,
-        documentation = null
+    val mockResult =
+      LibCodeResult(
+        sourceCode = "public class TestClass {}",
+        isDecompiled = false,
+        language = "java",
+        metadata =
+          io.github.truenine.composeserver.ide.ideamcp.services.LibCodeMetadata(
+            libraryName = "example-lib",
+            version = "1.0.0",
+            sourceType = SourceType.SOURCE_JAR,
+            documentation = null,
+          ),
       )
-    )
 
     every { mockProject.getService(LibCodeService::class.java) } returns mockLibCodeService
     coEvery { mockLibCodeService.getLibraryCode(any(), any(), any(), any()) } returns mockResult

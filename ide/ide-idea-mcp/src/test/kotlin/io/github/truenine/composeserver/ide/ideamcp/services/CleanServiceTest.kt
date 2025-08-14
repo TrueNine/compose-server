@@ -1,35 +1,30 @@
 package io.github.truenine.composeserver.ide.ideamcp.services
 
-import io.mockk.mockk
-import io.mockk.every
-import io.mockk.verify
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import io.github.truenine.composeserver.ide.ideamcp.tools.CleanOperation
-import kotlinx.coroutines.runBlocking
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlinx.coroutines.runBlocking
 
-/**
- * CleanService 单元测试
- */
+/** CleanService 单元测试 */
 class CleanServiceTest {
 
+  private val project = mockk<Project>()
   private val fileManager = mockk<FileManager>()
-  private val cleanService = CleanServiceImpl(fileManager)
+  private val cleanService = TestableCleanServiceImpl(project, fileManager)
 
   @Test
   fun `cleanCode 应该处理单个文件`() = runBlocking {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
-    val options = CleanOptions(
-      formatCode = true,
-      optimizeImports = true,
-      runInspections = false
-    )
+    val options = CleanOptions(formatCode = true, optimizeImports = true, runInspections = false)
 
     every { virtualFile.isDirectory } returns false
     every { virtualFile.path } returns "/test/file.kt"
@@ -62,7 +57,7 @@ class CleanServiceTest {
     every { file2.isDirectory } returns false
     every { file2.extension } returns "java"
     every { file2.path } returns "/test/file2.java"
-    
+
     every { fileManager.collectFilesRecursively(directory, any()) } returns listOf(file1, file2)
 
     // When
@@ -89,12 +84,7 @@ class CleanServiceTest {
   @Test
   fun `CleanOptions 自定义值应该正确设置`() {
     // Given
-    val options = CleanOptions(
-      formatCode = false,
-      optimizeImports = true,
-      runInspections = false,
-      rearrangeCode = true
-    )
+    val options = CleanOptions(formatCode = false, optimizeImports = true, runInspections = false, rearrangeCode = true)
 
     // Then
     assertFalse(options.formatCode)
@@ -106,19 +96,9 @@ class CleanServiceTest {
   @Test
   fun `CleanResult 应该包含正确的信息`() {
     // Given
-    val operations = listOf(
-      CleanOperation("FORMAT", "代码格式化", 3),
-      CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 2)
-    )
-    
-    val result = CleanResult(
-      processedFiles = 5,
-      modifiedFiles = 3,
-      operations = operations,
-      errors = listOf("文件锁定错误"),
-      summary = "处理完成",
-      executionTime = 1000L
-    )
+    val operations = listOf(CleanOperation("FORMAT", "代码格式化", 3), CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 2))
+
+    val result = CleanResult(processedFiles = 5, modifiedFiles = 3, operations = operations, errors = listOf("文件锁定错误"), summary = "处理完成", executionTime = 1000L)
 
     // Then
     assertEquals(5, result.processedFiles)
@@ -145,16 +125,11 @@ class CleanServiceTest {
     every { txtFile.extension } returns "txt"
     every { directory.isDirectory } returns true
 
-    // 通过反射访问私有方法进行测试
-    val cleanServiceImpl = cleanService as CleanServiceImpl
-    val isCodeFileMethod = cleanServiceImpl.javaClass.getDeclaredMethod("isCodeFile", VirtualFile::class.java)
-    isCodeFileMethod.isAccessible = true
-
     // When & Then
-    assertTrue(isCodeFileMethod.invoke(cleanServiceImpl, ktFile) as Boolean)
-    assertTrue(isCodeFileMethod.invoke(cleanServiceImpl, javaFile) as Boolean)
-    assertFalse(isCodeFileMethod.invoke(cleanServiceImpl, txtFile) as Boolean)
-    assertFalse(isCodeFileMethod.invoke(cleanServiceImpl, directory) as Boolean)
+    assertTrue(cleanService.isCodeFile(ktFile))
+    assertTrue(cleanService.isCodeFile(javaFile))
+    assertFalse(cleanService.isCodeFile(txtFile))
+    assertFalse(cleanService.isCodeFile(directory))
   }
 
   @Test
@@ -170,16 +145,11 @@ class CleanServiceTest {
     every { codeFile.extension } returns "kt"
     every { nonCodeFile.isDirectory } returns false
     every { nonCodeFile.extension } returns "txt"
-    
+
     every { fileManager.collectFilesRecursively(directory, any()) } returns listOf(codeFile, nonCodeFile)
 
-    // 通过反射访问私有方法进行测试
-    val cleanServiceImpl = cleanService as CleanServiceImpl
-    val collectMethod = cleanServiceImpl.javaClass.getDeclaredMethod("collectFilesToProcess", Project::class.java, VirtualFile::class.java)
-    collectMethod.isAccessible = true
-
     // When
-    val result = collectMethod.invoke(cleanServiceImpl, project, directory) as List<*>
+    cleanService.collectFilesToProcess(project, directory)
 
     // Then
     // 由于过滤逻辑在 collectFilesRecursively 的 lambda 中，这里主要验证方法调用
@@ -189,25 +159,11 @@ class CleanServiceTest {
   @Test
   fun `createSummary 应该生成正确的摘要`() {
     // Given
-    val operations = listOf(
-      CleanOperation("FORMAT", "代码格式化", 5),
-      CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 3)
-    )
+    val operations = listOf(CleanOperation("FORMAT", "代码格式化", 5), CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 3))
     val errors = listOf("错误1", "错误2")
 
-    // 通过反射访问私有方法进行测试
-    val cleanServiceImpl = cleanService as CleanServiceImpl
-    val createSummaryMethod = cleanServiceImpl.javaClass.getDeclaredMethod(
-      "createSummary", 
-      Int::class.java, 
-      Int::class.java, 
-      List::class.java, 
-      List::class.java
-    )
-    createSummaryMethod.isAccessible = true
-
     // When
-    val summary = createSummaryMethod.invoke(cleanServiceImpl, 10, 8, operations, errors) as String
+    val summary = cleanService.createSummary(10, 8, operations, errors)
 
     // Then
     assertTrue(summary.contains("处理了 10 个文件"))
@@ -223,19 +179,8 @@ class CleanServiceTest {
     val operations = emptyList<CleanOperation>()
     val errors = emptyList<String>()
 
-    // 通过反射访问私有方法进行测试
-    val cleanServiceImpl = cleanService as CleanServiceImpl
-    val createSummaryMethod = cleanServiceImpl.javaClass.getDeclaredMethod(
-      "createSummary", 
-      Int::class.java, 
-      Int::class.java, 
-      List::class.java, 
-      List::class.java
-    )
-    createSummaryMethod.isAccessible = true
-
     // When
-    val summary = createSummaryMethod.invoke(cleanServiceImpl, 5, 0, operations, errors) as String
+    val summary = cleanService.createSummary(5, 0, operations, errors)
 
     // Then
     assertTrue(summary.contains("处理了 5 个文件"))
@@ -249,19 +194,9 @@ class CleanServiceTest {
     // Given
     val operations = mutableListOf<CleanOperation>()
 
-    // 通过反射访问私有方法进行测试
-    val cleanServiceImpl = cleanService as CleanServiceImpl
-    val updateMethod = cleanServiceImpl.javaClass.getDeclaredMethod(
-      "updateOperationCount", 
-      MutableList::class.java, 
-      String::class.java, 
-      String::class.java
-    )
-    updateMethod.isAccessible = true
-
     // When - 第一次添加操作
-    updateMethod.invoke(cleanServiceImpl, operations, "FORMAT", "代码格式化")
-    
+    cleanService.updateOperationCount(operations, "FORMAT", "代码格式化")
+
     // Then
     assertEquals(1, operations.size)
     assertEquals("FORMAT", operations[0].type)
@@ -269,10 +204,27 @@ class CleanServiceTest {
     assertEquals(1, operations[0].filesAffected)
 
     // When - 再次添加相同类型的操作
-    updateMethod.invoke(cleanServiceImpl, operations, "FORMAT", "代码格式化")
-    
+    cleanService.updateOperationCount(operations, "FORMAT", "代码格式化")
+
     // Then
     assertEquals(1, operations.size) // 仍然只有一个操作
     assertEquals(2, operations[0].filesAffected) // 但计数增加了
   }
+}
+
+/** 可测试的 CleanService 实现，直接暴露受保护的方法用于测试 */
+private class TestableCleanServiceImpl(project: Project, private val testFileManager: FileManager) : CleanServiceImpl(project) {
+
+  override val fileManager: FileManager
+    get() = testFileManager
+
+  public override fun isCodeFile(file: VirtualFile): Boolean = super.isCodeFile(file)
+
+  public override fun collectFilesToProcess(project: Project, virtualFile: VirtualFile): List<VirtualFile> = super.collectFilesToProcess(project, virtualFile)
+
+  public override fun createSummary(processedFiles: Int, modifiedFiles: Int, operations: List<CleanOperation>, errors: List<String>): String =
+    super.createSummary(processedFiles, modifiedFiles, operations, errors)
+
+  public override fun updateOperationCount(operations: MutableList<CleanOperation>, type: String, description: String) =
+    super.updateOperationCount(operations, type, description)
 }

@@ -2,10 +2,7 @@ package io.github.truenine.composeserver.ide.ideamcp.actions
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-/**
- * ViewErrorAction 单元测试
- * 测试错误查看右键菜单动作的功能
- */
+/** ViewErrorAction 单元测试 测试错误查看右键菜单动作的功能 */
 class ViewErrorActionTest : BasePlatformTestCase() {
 
   fun testActionCreation() {
@@ -21,6 +18,4 @@ class ViewErrorActionTest : BasePlatformTestCase() {
     assertNotNull(dialog)
     assertEquals("错误查看选项", dialog.title)
   }
-
-
 }

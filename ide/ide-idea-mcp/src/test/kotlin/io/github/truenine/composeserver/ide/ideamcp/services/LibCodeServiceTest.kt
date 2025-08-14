@@ -1,16 +1,13 @@
 package io.github.truenine.composeserver.ide.ideamcp.services
 
 import com.intellij.openapi.project.Project
-import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlinx.coroutines.runBlocking
 
-/**
- * LibCodeService 简化测试
- */
+/** LibCodeService 简化测试 */
 class LibCodeServiceTest {
 
   @Test

@@ -1,18 +1,15 @@
 package io.github.truenine.composeserver.ide.ideamcp.services
 
-import io.mockk.mockk
-import io.mockk.every
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
+import io.mockk.every
+import io.mockk.mockk
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * ErrorService 单元测试
- */
+/** ErrorService 单元测试 */
 class ErrorServiceTest {
 
   private val errorService = ErrorServiceImpl()
@@ -54,12 +51,12 @@ class ErrorServiceTest {
     every { directory.isValid } returns true
     every { directory.path } returns "/test"
     every { directory.children } returns arrayOf(childFile)
-    
+
     every { childFile.isDirectory } returns false
     every { childFile.isValid } returns true
     every { childFile.path } returns "/test/child.kt"
     every { childFile.name } returns "child.kt"
-    
+
     every { project.basePath } returns "/test"
     every { PsiManager.getInstance(project) } returns psiManager
     every { psiManager.findFile(childFile) } returns psiFile

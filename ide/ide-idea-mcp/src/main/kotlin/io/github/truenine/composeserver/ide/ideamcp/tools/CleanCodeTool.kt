@@ -7,17 +7,13 @@ import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
 import io.github.truenine.composeserver.ide.ideamcp.services.FileManager
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import org.jetbrains.ide.mcp.Response
 import org.jetbrains.mcpserverplugin.AbstractMcpTool
-import kotlinx.coroutines.runBlocking
 
-/**
- * 代码清理工具
- * 提供通过 MCP 协议执行代码清理操作的功能，包括格式化、导入优化、检查修复等
- */
+/** 代码清理工具 提供通过 MCP 协议执行代码清理操作的功能，包括格式化、导入优化、检查修复等 */
 class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer()) {
   override val name: String = "clean_code"
   override val description: String = "Clean and format code using IDEA capabilities with comprehensive reporting"
@@ -29,12 +25,10 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
     return try {
       // 参数验证
       validateArgs(args, project)
-      
+
       // 异步执行清理操作
-      val result = runBlocking {
-        executeCleanOperation(args, project)
-      }
-      
+      val result = runBlocking { executeCleanOperation(args, project) }
+
       McpLogManager.info("代码清理完成 - 处理文件: ${result.processedFiles}, 修改文件: ${result.modifiedFiles}", "CleanCodeTool")
       Response(Json.encodeToString(CleanCodeResult.serializer(), result))
     } catch (e: Exception) {
@@ -44,9 +38,7 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
     }
   }
 
-  /**
-   * 验证清理参数
-   */
+  /** 验证清理参数 */
   private fun validateArgs(args: CleanCodeArgs, project: Project) {
     // 验证路径不为空
     if (args.path.isBlank()) {
@@ -61,31 +53,24 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
     McpLogManager.debug("参数验证通过", "CleanCodeTool")
   }
 
-  /**
-   * 执行清理操作
-   */
+  /** 执行清理操作 */
   private suspend fun executeCleanOperation(args: CleanCodeArgs, project: Project): CleanCodeResult {
     McpLogManager.debug("开始执行清理操作", "CleanCodeTool")
-    
+
     // 获取服务实例
     val cleanService = project.service<CleanService>()
     val fileManager = project.service<FileManager>()
-    
+
     // 解析路径到 VirtualFile
-    val virtualFile = fileManager.resolvePathToVirtualFile(project, args.path)
-      ?: throw IllegalArgumentException("路径不存在或无法访问: ${args.path}")
-    
+    val virtualFile = fileManager.resolvePathToVirtualFile(project, args.path) ?: throw IllegalArgumentException("路径不存在或无法访问: ${args.path}")
+
     // 创建清理选项
-    val cleanOptions = CleanOptions(
-      formatCode = args.formatCode,
-      optimizeImports = args.optimizeImports,
-      runInspections = args.runInspections,
-      rearrangeCode = false
-    )
-    
+    val cleanOptions =
+      CleanOptions(formatCode = args.formatCode, optimizeImports = args.optimizeImports, runInspections = args.runInspections, rearrangeCode = false)
+
     // 执行清理操作
     val cleanResult = cleanService.cleanCode(project, virtualFile, cleanOptions)
-    
+
     return CleanCodeResult(
       success = true,
       path = args.path,
@@ -94,44 +79,38 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
       operations = cleanResult.operations,
       summary = cleanResult.summary,
       executionTime = cleanResult.executionTime,
-      timestamp = System.currentTimeMillis()
+      timestamp = System.currentTimeMillis(),
     )
   }
 
-  /**
-   * 创建错误响应
-   */
+  /** 创建错误响应 */
   private fun createErrorResponse(error: Throwable, path: String): CleanCodeErrorResponse {
-    val errorType = when (error) {
-      is IllegalArgumentException -> "INVALID_ARGUMENT"
-      is SecurityException -> "PERMISSION_DENIED"
-      is java.nio.file.NoSuchFileException -> "PATH_NOT_FOUND"
-      else -> "EXECUTION_ERROR"
-    }
+    val errorType =
+      when (error) {
+        is IllegalArgumentException -> "INVALID_ARGUMENT"
+        is SecurityException -> "PERMISSION_DENIED"
+        is java.nio.file.NoSuchFileException -> "PATH_NOT_FOUND"
+        else -> "EXECUTION_ERROR"
+      }
 
-    val suggestions = when (errorType) {
-      "INVALID_ARGUMENT" -> listOf("检查路径格式", "确保至少选择一种清理操作")
-      "PERMISSION_DENIED" -> listOf("检查文件权限", "确保文件未被其他进程锁定")
-      "PATH_NOT_FOUND" -> listOf("检查路径是否存在", "使用相对于项目根目录的路径")
-      else -> listOf("检查文件状态", "重试操作", "查看详细错误信息")
-    }
+    val suggestions =
+      when (errorType) {
+        "INVALID_ARGUMENT" -> listOf("检查路径格式", "确保至少选择一种清理操作")
+        "PERMISSION_DENIED" -> listOf("检查文件权限", "确保文件未被其他进程锁定")
+        "PATH_NOT_FOUND" -> listOf("检查路径是否存在", "使用相对于项目根目录的路径")
+        else -> listOf("检查文件状态", "重试操作", "查看详细错误信息")
+      }
 
     return CleanCodeErrorResponse(
       success = false,
-      error = ErrorDetails(
-        type = errorType,
-        message = error.message ?: "未知错误",
-        suggestions = suggestions
-      ),
+      error = ErrorDetails(type = errorType, message = error.message ?: "未知错误", suggestions = suggestions),
       path = path,
-      timestamp = System.currentTimeMillis()
+      timestamp = System.currentTimeMillis(),
     )
   }
 }
 
-/**
- * 代码清理参数
- */
+/** 代码清理参数 */
 @Serializable
 data class CleanCodeArgs(
   /** 要清理的文件或目录路径 */
@@ -141,12 +120,10 @@ data class CleanCodeArgs(
   /** 是否优化导入，默认为true */
   val optimizeImports: Boolean = true,
   /** 是否运行代码检查并修复，默认为true */
-  val runInspections: Boolean = true
+  val runInspections: Boolean = true,
 )
 
-/**
- * 代码清理结果
- */
+/** 代码清理结果 */
 @Serializable
 data class CleanCodeResult(
   /** 是否成功 */
@@ -164,12 +141,10 @@ data class CleanCodeResult(
   /** 执行时间（毫秒） */
   val executionTime: Long,
   /** 时间戳 */
-  val timestamp: Long
+  val timestamp: Long,
 )
 
-/**
- * 清理操作
- */
+/** 清理操作 */
 @Serializable
 data class CleanOperation(
   /** 操作类型 */
@@ -177,12 +152,10 @@ data class CleanOperation(
   /** 操作描述 */
   val description: String,
   /** 影响的文件数量 */
-  val filesAffected: Int
+  val filesAffected: Int,
 )
 
-/**
- * 代码清理错误响应
- */
+/** 代码清理错误响应 */
 @Serializable
 data class CleanCodeErrorResponse(
   /** 是否成功 */
@@ -192,5 +165,5 @@ data class CleanCodeErrorResponse(
   /** 清理的路径 */
   val path: String,
   /** 时间戳 */
-  val timestamp: Long
+  val timestamp: Long,
 )

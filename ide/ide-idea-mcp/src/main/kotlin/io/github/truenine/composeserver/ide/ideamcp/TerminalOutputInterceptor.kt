@@ -4,15 +4,19 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessListener
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.util.Key
 import java.nio.charset.Charset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 /** 终端输出拦截器 负责拦截和处理终端命令的输出结果 */
-class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)) {
+@Service(Service.Level.PROJECT)
+class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)) : Disposable {
 
   /** 执行命令并拦截输出的结果数据类 */
   data class CommandResult(val command: String, val exitCode: Int, val stdout: String, val stderr: String, val cleanedOutput: String)
@@ -131,5 +135,11 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
           !trimmed.contains("seconds")
       }
       .joinToString("\n")
+  }
+
+  override fun dispose() {
+    // 取消所有协程
+    scope.cancel()
+    McpLogManager.debug("TerminalOutputInterceptor disposed", "TerminalOutputInterceptor")
   }
 }
