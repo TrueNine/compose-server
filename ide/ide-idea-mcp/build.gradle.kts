@@ -24,6 +24,10 @@ dependencies {
   }
 
   testImplementation(libs.org.jetbrains.kotlin.kotlin.test)
+  testImplementation(libs.io.mockk.mockk) {
+    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")
+    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-bom")
+  }
 }
 
 dependencies { compileOnly(libs.org.jetbrains.kotlinx.kotlinx.serialization.json) }
