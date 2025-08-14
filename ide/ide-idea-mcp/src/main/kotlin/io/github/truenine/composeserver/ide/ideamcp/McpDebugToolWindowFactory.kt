@@ -9,19 +9,27 @@ import com.intellij.ui.content.ContentFactory
 class McpDebugToolWindowFactory : ToolWindowFactory {
 
   override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-    // 创建调试面板
-    val debugPanel = McpDebugPanel(project)
-
-    // 创建内容
     val contentFactory = ContentFactory.getInstance()
-    val content = contentFactory.createContent(debugPanel, "日志", false)
-    content.isCloseable = false
+
+    // 创建终端清洗面板
+    val terminalPanel = McpTerminalPanel(project)
+    val terminalContent = contentFactory.createContent(terminalPanel, "终端清洗", false)
+    terminalContent.isCloseable = false
+
+    // 创建日志面板
+    val debugPanel = McpDebugPanel(project)
+    val logContent = contentFactory.createContent(debugPanel, "日志", false)
+    logContent.isCloseable = false
 
     // 添加到工具窗口
-    toolWindow.contentManager.addContent(content)
+    toolWindow.contentManager.addContent(terminalContent)
+    toolWindow.contentManager.addContent(logContent)
+
+    // 设置默认选中日志标签页
+    toolWindow.contentManager.setSelectedContent(logContent)
 
     // 记录工具窗口创建日志
-    McpLogManager.info("MCP 调试工具窗口已创建", "ToolWindow")
+    McpLogManager.info("MCP 调试工具窗口已创建 - 包含终端清洗和日志两个标签页", "ToolWindow")
   }
 
   override fun shouldBeAvailable(project: Project): Boolean {

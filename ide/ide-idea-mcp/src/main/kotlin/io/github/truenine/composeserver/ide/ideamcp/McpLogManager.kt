@@ -57,6 +57,25 @@ object McpLogManager {
     return _logs.value.filter { it.message.contains(keyword, ignoreCase = true) || it.source.contains(keyword, ignoreCase = true) }
   }
 
+  /** 记录终端命令执行日志 */
+  fun logTerminalCommand(command: String) {
+    info("执行终端命令: $command", LogSource.TERMINAL.displayName)
+  }
+
+  /** 记录终端输出拦截日志 */
+  fun logTerminalOutput(output: String, isError: Boolean = false) {
+    if (isError) {
+      warn("终端错误输出: $output", LogSource.INTERCEPTOR.displayName)
+    } else {
+      debug("终端输出: $output", LogSource.INTERCEPTOR.displayName)
+    }
+  }
+
+  /** 记录终端输出清洗日志 */
+  fun logTerminalCleanOutput(originalOutput: String, cleanedOutput: String) {
+    info("输出清洗完成 - 原始长度: ${originalOutput.length}, 清洗后长度: ${cleanedOutput.length}", LogSource.INTERCEPTOR.displayName)
+  }
+
   private fun addLog(level: LogLevel, message: String, source: String) {
     val logEntry = LogEntry(timestamp = LocalDateTime.now(), level = level, message = message, source = source)
 
@@ -84,4 +103,12 @@ enum class LogLevel(val displayName: String, val color: String) {
   INFO("INFO", "#4A90E2"), // 蓝色
   WARN("WARN", "#F5A623"), // 橙色
   ERROR("ERROR", "#D0021B"), // 红色
+}
+
+/** 日志来源类型枚举 */
+enum class LogSource(val displayName: String) {
+  MCP("MCP"),
+  TERMINAL("终端"),
+  INTERCEPTOR("拦截器"),
+  UI("界面"),
 }

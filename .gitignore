@@ -7,7 +7,6 @@ build/
 /generated/
 generated_tests/
 .generated/
-.temp/
 .xcodemap/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
