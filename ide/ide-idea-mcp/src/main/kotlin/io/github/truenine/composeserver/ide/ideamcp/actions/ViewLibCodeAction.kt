@@ -72,7 +72,7 @@ class ViewLibCodeAction : AnAction("查看库代码", "查看第三方库的源�
               indicator.text2 = "正在查找源代码..."
               indicator.fraction = 0.3
 
-              val result = runBlocking { libCodeService.getLibraryCode(project, psiFile.virtualFile.path, referenceInfo.className, referenceInfo.memberName) }
+              val result = runBlocking { libCodeService.getLibraryCode(project, referenceInfo.className, referenceInfo.memberName) }
 
               currentResult = result
 

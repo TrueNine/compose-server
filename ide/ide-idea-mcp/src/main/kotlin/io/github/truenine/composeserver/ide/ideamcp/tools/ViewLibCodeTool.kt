@@ -15,7 +15,7 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
   override val description: String = "View library source code or decompiled code with metadata information"
 
   override fun handle(project: Project, args: ViewLibCodeArgs): Response {
-    Logger.info("开始查看库代码 - 文件: ${args.filePath}, 类: ${args.fullyQualifiedName}", "ViewLibCodeTool")
+    Logger.info("开始查看库代码 - 类: ${args.fullyQualifiedName}", "ViewLibCodeTool")
     Logger.debug("查看参数 - 成员名: ${args.memberName}", "ViewLibCodeTool")
 
     return try {
@@ -26,6 +26,8 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
       val libCodeResult = kotlinx.coroutines.runBlocking { getLibraryCode(args, project) }
 
       Logger.info("库代码查看完成 - 类型: ${libCodeResult.sourceType}, 反编译: ${libCodeResult.isDecompiled}", "ViewLibCodeTool")
+      Logger.info("返回源码内容长度: ${libCodeResult.sourceCode.length} 字符", "ViewLibCodeTool")
+
       Response(Json.encodeToString(ViewLibCodeResult.serializer(), libCodeResult))
     } catch (e: Exception) {
       Logger.error("库代码查看失败: ${args.fullyQualifiedName}", "ViewLibCodeTool", e)
@@ -36,11 +38,6 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
 
   /** 验证参数 */
   private fun validateArgs(args: ViewLibCodeArgs, project: Project) {
-    // 验证文件路径不为空
-    if (args.filePath.isBlank()) {
-      throw IllegalArgumentException("文件路径不能为空")
-    }
-
     // 验证完全限定类名不为空
     if (args.fullyQualifiedName.isBlank()) {
       throw IllegalArgumentException("完全限定类名不能为空")
@@ -64,11 +61,10 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
   private suspend fun getLibraryCode(args: ViewLibCodeArgs, project: Project): ViewLibCodeResult {
     // 使用 LibCodeService 获取库代码
     val libCodeService = project.service<io.github.truenine.composeserver.ide.ideamcp.services.LibCodeService>()
-    val result = libCodeService.getLibraryCode(project, args.filePath, args.fullyQualifiedName, args.memberName)
+    val result = libCodeService.getLibraryCode(project, args.fullyQualifiedName, args.memberName)
 
     return ViewLibCodeResult(
       success = true,
-      filePath = args.filePath,
       fullyQualifiedName = args.fullyQualifiedName,
       memberName = args.memberName,
       sourceCode = result.sourceCode,
@@ -116,8 +112,6 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
 /** 库代码查看参数 */
 @Serializable
 data class ViewLibCodeArgs(
-  /** 文件路径 */
-  val filePath: String,
   /** 完全限定类名 */
   val fullyQualifiedName: String,
   /** 成员名（可选，如方法名或字段名） */
@@ -129,8 +123,6 @@ data class ViewLibCodeArgs(
 data class ViewLibCodeResult(
   /** 是否成功 */
   val success: Boolean,
-  /** 文件路径 */
-  val filePath: String,
   /** 完全限定类名 */
   val fullyQualifiedName: String,
   /** 成员名 */

@@ -494,8 +494,7 @@ class ErrorServiceImpl : ErrorService {
 
 /** 错误捕获过滤器管理器 - 单例模式管理过滤器实例 */
 object ErrorCaptureFilterManager {
-  @Volatile
-  private var filterInstance: ErrorCaptureFilter? = null
+  @Volatile private var filterInstance: ErrorCaptureFilter? = null
 
   fun getInstance(): ErrorCaptureFilter {
     return filterInstance ?: synchronized(this) { filterInstance ?: ErrorCaptureFilter().also { filterInstance = it } }
