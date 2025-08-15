@@ -12,6 +12,7 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.JBUI
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
 import io.github.truenine.composeserver.ide.ideamcp.services.ErrorService
@@ -64,7 +65,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
   init {
     setupUI()
     setupEventHandlers()
-    McpLogManager.info("文件操作面板已初始化", LogSource.UI.displayName)
+    Logger.info("文件操作面板已初始化")
   }
 
   private fun setupUI() {
@@ -246,7 +247,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     val selectedFiles = FileChooser.chooseFiles(descriptor, project, initialFile)
     if (selectedFiles.isNotEmpty()) {
       pathField.text = selectedFiles[0].path
-      McpLogManager.info("选择了路径: ${selectedFiles[0].path}", LogSource.UI.displayName)
+      Logger.info("选择了路径: ${selectedFiles[0].path}")
     }
   }
 
@@ -280,7 +281,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
           showError("扫描错误失败: ${e.message}")
           setButtonsEnabled(true)
         }
-        McpLogManager.error("错误扫描失败", LogSource.UI.displayName, e)
+        Logger.error("错误扫描失败", e)
       }
     }
   }
@@ -323,7 +324,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
           showError("代码清理失败: ${e.message}")
           setButtonsEnabled(true)
         }
-        McpLogManager.error("代码清理失败", LogSource.UI.displayName, e)
+        Logger.error("代码清理失败", e)
       }
     }
   }
@@ -423,12 +424,12 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
   private fun showError(message: String) {
     resultArea.text = "❌ 错误: $message"
     JOptionPane.showMessageDialog(this, message, "操作失败", JOptionPane.ERROR_MESSAGE)
-    McpLogManager.warn("文件操作面板错误: $message", LogSource.UI.displayName)
+    Logger.warn("文件操作面板错误: $message")
   }
 
   override fun dispose() {
     // 取消所有协程
     scope.cancel()
-    McpLogManager.debug("FileOperationPanel disposed", "FileOperationPanel")
+    Logger.debug("FileOperationPanel disposed", "FileOperationPanel")
   }
 }

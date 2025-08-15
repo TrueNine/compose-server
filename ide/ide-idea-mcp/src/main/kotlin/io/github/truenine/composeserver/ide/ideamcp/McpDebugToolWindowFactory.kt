@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 
 /** MCP 调试工具窗口工厂 负责创建和初始化调试面板工具窗口 */
 class McpDebugToolWindowFactory : ToolWindowFactory {
@@ -35,7 +36,7 @@ class McpDebugToolWindowFactory : ToolWindowFactory {
     toolWindow.contentManager.setSelectedContent(logContent)
 
     // 记录工具窗口创建日志
-    McpLogManager.info("MCP 调试工具窗口已创建 - 包含终端清洗、日志和文件操作三个标签页", "ToolWindow")
+    Logger.info("MCP 调试工具窗口已创建 - 包含终端清洗、日志和文件操作三个标签页", "ToolWindow")
   }
 
   override fun shouldBeAvailable(project: Project): Boolean {

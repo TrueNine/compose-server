@@ -2,8 +2,8 @@ package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import java.io.File
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -16,8 +16,8 @@ class ViewErrorTool : AbstractMcpTool<ViewErrorArgs>(ViewErrorArgs.serializer())
   override val description: String = "View all errors, warnings and weak warnings in files or directories"
 
   override fun handle(project: Project, args: ViewErrorArgs): Response {
-    McpLogManager.info("开始查看错误信息 - 路径: ${args.path}", "ViewErrorTool")
-    McpLogManager.debug("查看参数 - 包含警告: ${args.includeWarnings}, 包含弱警告: ${args.includeWeakWarnings}", "ViewErrorTool")
+    Logger.info("开始查看错误信息 - 路径: ${args.path}", "ViewErrorTool")
+    Logger.debug("查看参数 - 包含警告: ${args.includeWarnings}, 包含弱警告: ${args.includeWeakWarnings}", "ViewErrorTool")
 
     return try {
       // 参数验证
@@ -26,10 +26,10 @@ class ViewErrorTool : AbstractMcpTool<ViewErrorArgs>(ViewErrorArgs.serializer())
       // TODO: 实现错误收集逻辑
       val errorReport = collectErrors(args, project)
 
-      McpLogManager.info("错误查看完成 - 总错误数: ${errorReport.totalErrors}, 总警告数: ${errorReport.totalWarnings}", "ViewErrorTool")
+      Logger.info("错误查看完成 - 总错误数: ${errorReport.totalErrors}, 总警告数: ${errorReport.totalWarnings}", "ViewErrorTool")
       Response(Json.encodeToString(ViewErrorResult.serializer(), errorReport))
     } catch (e: Exception) {
-      McpLogManager.error("错误查看失败: ${args.path}", "ViewErrorTool", e)
+      Logger.error("错误查看失败: ${args.path}", "ViewErrorTool", e)
       val errorResponse = createErrorResponse(e, args.path)
       Response(Json.encodeToString(ViewErrorErrorResponse.serializer(), errorResponse))
     }
@@ -52,7 +52,7 @@ class ViewErrorTool : AbstractMcpTool<ViewErrorArgs>(ViewErrorArgs.serializer())
       throw SecurityException("没有权限访问路径: ${resolvedPath.absolutePath}")
     }
 
-    McpLogManager.debug("参数验证通过 - 解析路径: ${resolvedPath.absolutePath}", "ViewErrorTool")
+    Logger.debug("参数验证通过 - 解析路径: ${resolvedPath.absolutePath}", "ViewErrorTool")
   }
 
   /** 解析路径 */

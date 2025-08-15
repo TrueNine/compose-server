@@ -5,10 +5,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.mockk.mockk
 import io.mockk.verify
 
-/**
- * MCP调试工具窗口工厂测试
- * 测试工具窗口的创建和注册
- */
+/** MCP调试工具窗口工厂测试 测试工具窗口的创建和注册 */
 class McpDebugToolWindowFactoryTest : BasePlatformTestCase() {
 
   private lateinit var factory: McpDebugToolWindowFactory
@@ -26,10 +23,10 @@ class McpDebugToolWindowFactoryTest : BasePlatformTestCase() {
   fun testCreateToolWindowContent() {
     // 测试工具窗口内容创建
     val mockToolWindow = mockk<ToolWindow>(relaxed = true)
-    
+
     try {
       factory.createToolWindowContent(project, mockToolWindow)
-      
+
       // 验证工具窗口内容管理器被调用
       verify { mockToolWindow.contentManager }
     } catch (e: Exception) {
@@ -54,11 +51,11 @@ class McpDebugToolWindowFactoryTest : BasePlatformTestCase() {
     // 测试多次创建工具窗口
     val mockToolWindow1 = mockk<ToolWindow>(relaxed = true)
     val mockToolWindow2 = mockk<ToolWindow>(relaxed = true)
-    
+
     try {
       factory.createToolWindowContent(project, mockToolWindow1)
       factory.createToolWindowContent(project, mockToolWindow2)
-      
+
       // 验证两次调用都成功
       verify { mockToolWindow1.contentManager }
       verify { mockToolWindow2.contentManager }

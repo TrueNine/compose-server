@@ -4,7 +4,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import java.io.File
 import java.nio.file.Paths
 
@@ -14,36 +14,36 @@ class FileManager {
 
   /** 将路径解析为 VirtualFile */
   fun resolvePathToVirtualFile(project: Project, path: String): VirtualFile? {
-    McpLogManager.debug("解析路径: $path", "FileManager")
+    Logger.debug("解析路径: $path", "FileManager")
 
     return try {
       val resolvedPath = resolvePath(project, path)
       val virtualFile = LocalFileSystem.getInstance().findFileByPath(resolvedPath.absolutePath)
 
       if (virtualFile == null) {
-        McpLogManager.debug("未找到虚拟文件: $resolvedPath", "FileManager")
+        Logger.debug("未找到虚拟文件: $resolvedPath", "FileManager")
       } else {
-        McpLogManager.debug("成功解析虚拟文件: ${virtualFile.path}", "FileManager")
+        Logger.debug("成功解析虚拟文件: ${virtualFile.path}", "FileManager")
       }
 
       virtualFile
     } catch (e: Exception) {
-      McpLogManager.error("路径解析失败: $path", "FileManager", e)
+      Logger.error("路径解析失败: $path", "FileManager", e)
       null
     }
   }
 
   /** 递归收集文件 */
   fun collectFilesRecursively(virtualFile: VirtualFile, filter: (VirtualFile) -> Boolean = { true }): List<VirtualFile> {
-    McpLogManager.debug("开始递归收集文件: ${virtualFile.path}", "FileManager")
+    Logger.debug("开始递归收集文件: ${virtualFile.path}", "FileManager")
 
     val result = mutableListOf<VirtualFile>()
 
     try {
       collectFilesRecursivelyInternal(virtualFile, filter, result)
-      McpLogManager.debug("文件收集完成，共收集 ${result.size} 个文件", "FileManager")
+      Logger.debug("文件收集完成，共收集 ${result.size} 个文件", "FileManager")
     } catch (e: Exception) {
-      McpLogManager.error("文件收集失败: ${virtualFile.path}", "FileManager", e)
+      Logger.error("文件收集失败: ${virtualFile.path}", "FileManager", e)
     }
 
     return result
@@ -55,7 +55,7 @@ class FileManager {
       val file = File(path)
       file.exists() && (file.isFile || file.isDirectory)
     } catch (e: Exception) {
-      McpLogManager.debug("路径验证失败: $path", "FileManager")
+      Logger.debug("路径验证失败: $path", "FileManager")
       false
     }
   }
@@ -66,7 +66,7 @@ class FileManager {
       // 检查文件是否有效且存在
       virtualFile.isValid && virtualFile.exists()
     } catch (e: Exception) {
-      McpLogManager.debug("权限检查失败: ${virtualFile.path}", "FileManager")
+      Logger.debug("权限检查失败: ${virtualFile.path}", "FileManager")
       false
     }
   }
@@ -112,7 +112,7 @@ class FileManager {
       try {
         virtualFile.children?.forEach { child -> collectFilesRecursivelyInternal(child, filter, result) }
       } catch (e: Exception) {
-        McpLogManager.error("处理目录失败: ${virtualFile.path}", "FileManager", e)
+        Logger.error("处理目录失败: ${virtualFile.path}", "FileManager", e)
       }
     } else {
       // 处理文件

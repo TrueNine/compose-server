@@ -2,8 +2,8 @@ package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.jetbrains.ide.mcp.Response
@@ -15,8 +15,8 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
   override val description: String = "View library source code or decompiled code with metadata information"
 
   override fun handle(project: Project, args: ViewLibCodeArgs): Response {
-    McpLogManager.info("开始查看库代码 - 文件: ${args.filePath}, 类: ${args.fullyQualifiedName}", "ViewLibCodeTool")
-    McpLogManager.debug("查看参数 - 成员名: ${args.memberName}", "ViewLibCodeTool")
+    Logger.info("开始查看库代码 - 文件: ${args.filePath}, 类: ${args.fullyQualifiedName}", "ViewLibCodeTool")
+    Logger.debug("查看参数 - 成员名: ${args.memberName}", "ViewLibCodeTool")
 
     return try {
       // 参数验证
@@ -25,10 +25,10 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
       // 获取库代码
       val libCodeResult = kotlinx.coroutines.runBlocking { getLibraryCode(args, project) }
 
-      McpLogManager.info("库代码查看完成 - 类型: ${libCodeResult.sourceType}, 反编译: ${libCodeResult.isDecompiled}", "ViewLibCodeTool")
+      Logger.info("库代码查看完成 - 类型: ${libCodeResult.sourceType}, 反编译: ${libCodeResult.isDecompiled}", "ViewLibCodeTool")
       Response(Json.encodeToString(ViewLibCodeResult.serializer(), libCodeResult))
     } catch (e: Exception) {
-      McpLogManager.error("库代码查看失败: ${args.fullyQualifiedName}", "ViewLibCodeTool", e)
+      Logger.error("库代码查看失败: ${args.fullyQualifiedName}", "ViewLibCodeTool", e)
       val errorResponse = createErrorResponse(e, args.fullyQualifiedName)
       Response(Json.encodeToString(ViewLibCodeErrorResponse.serializer(), errorResponse))
     }
@@ -51,7 +51,7 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
       throw IllegalArgumentException("无效的类名格式: ${args.fullyQualifiedName}")
     }
 
-    McpLogManager.debug("参数验证通过", "ViewLibCodeTool")
+    Logger.debug("参数验证通过", "ViewLibCodeTool")
   }
 
   /** 验证类名格式 */

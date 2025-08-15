@@ -52,6 +52,10 @@
     <!-- 终端输出拦截器服务 -->
     <projectService
       serviceImplementation="io.github.truenine.composeserver.ide.ideamcp.TerminalOutputInterceptor"/>
+
+    <!-- 错误捕获过滤器 - 用于捕获所有语法错误 -->
+    <highlightErrorFilter
+      implementation="io.github.truenine.composeserver.ide.ideamcp.services.ErrorCaptureFilter"/>
   </extensions>
 
   <!-- 右键菜单动作 -->

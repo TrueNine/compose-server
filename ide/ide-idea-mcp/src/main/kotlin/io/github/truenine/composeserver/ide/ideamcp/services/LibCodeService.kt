@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp.services
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -22,35 +22,35 @@ class LibCodeServiceImpl : LibCodeService {
 
   override suspend fun getLibraryCode(project: Project, filePath: String, fullyQualifiedName: String, memberName: String?): LibCodeResult =
     withContext(Dispatchers.IO) {
-      McpLogManager.info("开始获取库代码 - 类: $fullyQualifiedName", "LibCodeService")
+      Logger.info("开始获取库代码 - 类: $fullyQualifiedName", "LibCodeService")
 
       try {
         // 尝试从 source jar 中提取源码
         val sourceJarResult = extractFromSourceJar(project, fullyQualifiedName, memberName)
         if (sourceJarResult != null) {
-          McpLogManager.info("从 source jar 中提取源码成功", "LibCodeService")
+          Logger.info("从 source jar 中提取源码成功", "LibCodeService")
           return@withContext sourceJarResult
         }
 
         // 尝试反编译字节码
         val decompileResult = decompileFromBytecode(project, fullyQualifiedName, memberName)
         if (decompileResult != null) {
-          McpLogManager.info("字节码反编译成功", "LibCodeService")
+          Logger.info("字节码反编译成功", "LibCodeService")
           return@withContext decompileResult
         }
 
         // 都失败了，返回未找到结果
-        McpLogManager.warn("无法找到类的源码或字节码: $fullyQualifiedName", "LibCodeService")
+        Logger.warn("无法找到类的源码或字节码: $fullyQualifiedName", "LibCodeService")
         return@withContext createNotFoundResult(fullyQualifiedName)
       } catch (e: Exception) {
-        McpLogManager.error("获取库代码失败: $fullyQualifiedName", "LibCodeService", e)
+        Logger.error("获取库代码失败: $fullyQualifiedName", "LibCodeService", e)
         throw e
       }
     }
 
   /** 从 source jar 中提取源码 */
   private fun extractFromSourceJar(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult? {
-    McpLogManager.debug("尝试从 source jar 提取源码: $fullyQualifiedName", "LibCodeService")
+    Logger.debug("尝试从 source jar 提取源码: $fullyQualifiedName", "LibCodeService")
 
     try {
       val sourceJars = findSourceJars(project, fullyQualifiedName)
@@ -76,7 +76,7 @@ class LibCodeServiceImpl : LibCodeService {
         }
       }
     } catch (e: Exception) {
-      McpLogManager.debug("从 source jar 提取失败: ${e.message}", "LibCodeService")
+      Logger.debug("从 source jar 提取失败: ${e.message}", "LibCodeService")
     }
 
     return null
@@ -89,9 +89,9 @@ class LibCodeServiceImpl : LibCodeService {
     try {
       // 简化实现：在实际项目中，这里应该扫描项目的依赖库
       // 目前返回空列表，表示没有找到 source jar
-      McpLogManager.debug("查找 source jar - 当前为简化实现", "LibCodeService")
+      Logger.debug("查找 source jar - 当前为简化实现", "LibCodeService")
     } catch (e: Exception) {
-      McpLogManager.debug("查找 source jar 失败: ${e.message}", "LibCodeService")
+      Logger.debug("查找 source jar 失败: ${e.message}", "LibCodeService")
     }
 
     return result
@@ -114,14 +114,14 @@ class LibCodeServiceImpl : LibCodeService {
         null
       }
     } catch (e: Exception) {
-      McpLogManager.debug("从 JAR 提取源码失败: ${e.message}", "LibCodeService")
+      Logger.debug("从 JAR 提取源码失败: ${e.message}", "LibCodeService")
       null
     }
   }
 
   /** 反编译字节码 */
   private fun decompileFromBytecode(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult? {
-    McpLogManager.debug("尝试反编译字节码: $fullyQualifiedName", "LibCodeService")
+    Logger.debug("尝试反编译字节码: $fullyQualifiedName", "LibCodeService")
 
     try {
       // 这里应该集成 IDEA 的反编译器
@@ -149,7 +149,7 @@ class LibCodeServiceImpl : LibCodeService {
         )
       }
     } catch (e: Exception) {
-      McpLogManager.debug("字节码反编译失败: ${e.message}", "LibCodeService")
+      Logger.debug("字节码反编译失败: ${e.message}", "LibCodeService")
     }
 
     return null

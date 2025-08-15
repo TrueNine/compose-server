@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- Console appender with simple format similar to IDEA runtime logs -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Root logger configuration -->
+  <root level="INFO">
+    <appender-ref ref="CONSOLE" />
+  </root>
+
+  <!-- Plugin specific logger -->
+  <logger name="io.github.truenine.composeserver.ide.ideamcp" level="DEBUG" additivity="false">
+    <appender-ref ref="CONSOLE" />
+  </logger>
+</configuration>
