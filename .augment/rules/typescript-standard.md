@@ -1,5 +1,5 @@
 ---
-type: "agent_requested"
+type: "always_apply"
 description: "**/*.ts,**/*.tsx,**/*.d.ts,**/*.vue"
 ---
 **TypeScript Rules**
