@@ -3,7 +3,6 @@ plugins {
   base
   id("buildlogic.repositories-conventions")
   id("buildlogic.spotless-conventions")
-  id("buildlogic.jacoco-aggregate")
   alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
 }
 

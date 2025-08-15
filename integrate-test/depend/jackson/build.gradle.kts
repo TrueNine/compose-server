@@ -8,5 +8,4 @@ dependencies {
   testImplementation(projects.testtoolkit)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.test)
-  testImplementation("org.hamcrest:hamcrest:2.2")
 }

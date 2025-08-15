@@ -29,11 +29,11 @@ import org.springframework.test.context.TestPropertySource
 @TestPropertySource(
   properties =
     [
-      "compose.jackson.enable-timestamp-serialization=false",
-      "compose.jackson.timestamp-unit=SECONDS",
-      "compose.jackson.serialization-inclusion=ALWAYS",
-      "compose.jackson.fail-on-unknown-properties=true",
-      "compose.jackson.write-dates-as-timestamps=false",
+      "compose.depend.jackson.enable-timestamp-serialization=false",
+      "compose.depend.jackson.timestamp-unit=SECONDS",
+      "compose.depend.jackson.serialization-inclusion=ALWAYS",
+      "compose.depend.jackson.fail-on-unknown-properties=true",
+      "compose.depend.jackson.write-dates-as-timestamps=false",
     ]
 )
 class JacksonCustomConfigurationTest {

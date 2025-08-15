@@ -2,6 +2,7 @@ package itest.integrate.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
+import itest.integrate.depend.jackson.config.TimezoneTestConfiguration
 import jakarta.annotation.Resource
 import java.time.*
 import java.util.*
@@ -10,17 +11,14 @@ import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Import
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
+import org.springframework.boot.test.context.SpringBootTest
 
 /**
  * 时区无关性集成测试
  *
  * 测试不同时区环境下的序列化一致性，验证UTC时间戳的正确性， 测试多种时间格式的反序列化兼容性
  */
-@SpringJUnitConfig(TimezoneIndependenceTest.TestConfig::class)
+@SpringBootTest(classes = [TimezoneTestConfiguration::class])
 class TimezoneIndependenceTest {
 
   @Resource @Qualifier(JacksonAutoConfiguration.DEFAULT_OBJECT_MAPPER_BEAN_NAME) private lateinit var objectMapper: ObjectMapper
@@ -287,6 +285,4 @@ class TimezoneIndependenceTest {
       }
     }
   }
-
-  @TestConfiguration @SpringBootApplication @Import(JacksonAutoConfiguration::class) class TestConfig
 }
