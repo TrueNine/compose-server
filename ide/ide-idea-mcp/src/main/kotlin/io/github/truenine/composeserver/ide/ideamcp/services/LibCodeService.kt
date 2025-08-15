@@ -7,10 +7,10 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 /** 库代码结果 */
 data class LibCodeResult(val sourceCode: String, val isDecompiled: Boolean, val language: String, val metadata: LibCodeMetadata)
