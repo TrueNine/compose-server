@@ -1,6 +1,5 @@
 ---
-inclusion: fileMatch
-fileMatchPattern: "**/*.kt"
+inclusion: always
 ---
 
 **Kotlin Rules**

@@ -1,6 +1,5 @@
 ---
-inclusion: fileMatch
-fileMatchPattern: "**/*.java"
+inclusion: always
 ---
 
 **Java Rules**

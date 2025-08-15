@@ -1,6 +1,5 @@
 ---
-inclusion: fileMatch
-fileMatchPattern: "**/*.sql,**/*.kt,**/*.java,**/*.xml"
+inclusion: always
 ---
 
 **SQL Rules**
