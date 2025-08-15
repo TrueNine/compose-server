@@ -6,26 +6,16 @@ import com.intellij.openapi.roots.OrderEnumerator
 import com.intellij.openapi.vfs.VirtualFile
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /** 库代码结果 */
-data class LibCodeResult(
-  val sourceCode: String,
-  val isDecompiled: Boolean,
-  val language: String,
-  val metadata: LibCodeMetadata,
-)
+data class LibCodeResult(val sourceCode: String, val isDecompiled: Boolean, val language: String, val metadata: LibCodeMetadata)
 
 /** 库代码元数据 */
-data class LibCodeMetadata(
-  val libraryName: String,
-  val version: String?,
-  val sourceType: SourceType,
-  val documentation: String?,
-)
+data class LibCodeMetadata(val libraryName: String, val version: String?, val sourceType: SourceType, val documentation: String?)
 
 /** 库代码服务接口 */
 interface LibCodeService {
@@ -65,11 +55,12 @@ class LibCodeServiceImpl : LibCodeService {
       // 通常只会找到一个，但以防万一，我们取第一个有效的
       return sourceFiles.firstNotNullOfOrNull { sourceFile ->
         val sourceCode = sourceFile.inputStream.use { readInputStream(it) }
-        val processedCode = if (memberName != null) {
-          extractMemberFromSourceCode(sourceCode, memberName)
-        } else {
-          sourceCode
-        }
+        val processedCode =
+          if (memberName != null) {
+            extractMemberFromSourceCode(sourceCode, memberName)
+          } else {
+            sourceCode
+          }
 
         val libraryInfo = extractLibraryInfoFromSourceFile(sourceFile)
         Logger.info("成功提取源码 - 类: $fullyQualifiedName, 库: ${libraryInfo.first}, 版本: ${libraryInfo.second}", "LibCodeService")
@@ -79,12 +70,7 @@ class LibCodeServiceImpl : LibCodeService {
           sourceCode = processedCode,
           isDecompiled = false,
           language = determineLanguageFromSourceCode(sourceCode),
-          metadata = LibCodeMetadata(
-            libraryName = libraryInfo.first,
-            version = libraryInfo.second,
-            sourceType = SourceType.SOURCE_JAR,
-            documentation = null
-          )
+          metadata = LibCodeMetadata(libraryName = libraryInfo.first, version = libraryInfo.second, sourceType = SourceType.SOURCE_JAR, documentation = null),
         )
       }
     } catch (e: Exception) {
@@ -106,9 +92,7 @@ class LibCodeServiceImpl : LibCodeService {
       val sourceRoots = OrderEnumerator.orderEntries(project).librariesOnly().sourceRoots
       Logger.debug("找到 ${sourceRoots.size} 个源码根目录", "LibCodeService")
 
-      return sourceRoots.mapNotNull { root ->
-        root.findFileByRelativePath(javaPath) ?: root.findFileByRelativePath(kotlinPath)
-      }
+      return sourceRoots.mapNotNull { root -> root.findFileByRelativePath(javaPath) ?: root.findFileByRelativePath(kotlinPath) }
     } catch (e: Exception) {
       Logger.debug("查找 source jar 失败: ${e.message}", "LibCodeService")
       return emptyList()
@@ -121,12 +105,13 @@ class LibCodeServiceImpl : LibCodeService {
       sourceCode = "// 未找到类 $fullyQualifiedName 的源码\n// 请检查类名是否正确，或确保相关库在项目的类路径中",
       isDecompiled = false,
       language = "text",
-      metadata = LibCodeMetadata(
-        libraryName = extractLibraryNameFromClassName(fullyQualifiedName),
-        version = null,
-        sourceType = SourceType.NOT_FOUND,
-        documentation = null
-      )
+      metadata =
+        LibCodeMetadata(
+          libraryName = extractLibraryNameFromClassName(fullyQualifiedName),
+          version = null,
+          sourceType = SourceType.NOT_FOUND,
+          documentation = null,
+        ),
     )
   }
 
@@ -134,16 +119,16 @@ class LibCodeServiceImpl : LibCodeService {
   private fun extractMemberFromSourceCode(sourceCode: String, memberName: String): String {
     // 简化实现：查找包含成员名的行
     val lines = sourceCode.lines()
-    val relevantLines = lines.filter { line ->
-      line.contains(memberName) && (
-        line.contains("fun ") ||
-          line.contains("val ") ||
-          line.contains("var ") ||
-          line.contains("def ") ||
-          line.contains("public ") ||
-          line.contains("private ")
-        )
-    }
+    val relevantLines =
+      lines.filter { line ->
+        line.contains(memberName) &&
+          (line.contains("fun ") ||
+            line.contains("val ") ||
+            line.contains("var ") ||
+            line.contains("def ") ||
+            line.contains("public ") ||
+            line.contains("private "))
+      }
 
     return if (relevantLines.isNotEmpty()) {
       "// 提取的成员: $memberName\n\n" + relevantLines.joinToString("\n")

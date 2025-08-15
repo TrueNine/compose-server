@@ -8,10 +8,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 
-/**
- * 简单的LibCodeService测试
- * 验证基本功能是否正常
- */
+/** 简单的LibCodeService测试 验证基本功能是否正常 */
 class SimpleLibCodeTest {
 
   @Test
