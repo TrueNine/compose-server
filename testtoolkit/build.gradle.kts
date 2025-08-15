@@ -60,7 +60,7 @@ dependencies {
   api(libs.org.springframework.batch.spring.batch.test)
 
   // 日志自动配置
-  runtimeOnly(libs.org.springframework.boot.spring.boot.starter.logging)
+  runtimeOnly(libs.ch.qos.logback.logback.classic)
 
   testImplementation(libs.org.testcontainers.postgresql)
   testImplementation(libs.org.testcontainers.mysql)
