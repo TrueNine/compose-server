@@ -2,9 +2,9 @@ package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
 import io.github.truenine.composeserver.ide.ideamcp.TerminalOutputInterceptor
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import java.io.File
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
@@ -18,8 +18,8 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
   override val description: String = "Execute terminal commands with clean output for AI processing"
 
   override fun handle(project: Project, args: TerminalArgs): Response {
-    McpLogManager.info("开始执行终端命令: ${args.command}", "TerminalTool")
-    McpLogManager.debug("命令参数 - 工作目录: ${args.workingDirectory}, 超时: ${args.timeout}ms, 清洗输出: ${args.cleanOutput}", "TerminalTool")
+    Logger.info("开始执行终端命令: ${args.command}", "TerminalTool")
+    Logger.debug("命令参数 - 工作目录: ${args.workingDirectory}, 超时: ${args.timeout}ms, 清洗输出: ${args.cleanOutput}", "TerminalTool")
 
     return try {
       // 参数验证
@@ -28,10 +28,10 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
       // 执行命令
       val result = executeCommandWithTimeout(args, project)
 
-      McpLogManager.info("终端命令执行完成 - 退出码: ${result.exitCode}", "TerminalTool")
+      Logger.info("终端命令执行完成 - 退出码: ${result.exitCode}", "TerminalTool")
       Response(kotlinx.serialization.json.Json.encodeToString(TerminalResult.serializer(), result))
     } catch (e: Exception) {
-      McpLogManager.error("终端命令执行失败: ${args.command}", "TerminalTool", e)
+      Logger.error("终端命令执行失败: ${args.command}", "TerminalTool", e)
       val errorResponse = createErrorResponse(e, args.command)
       Response(kotlinx.serialization.json.Json.encodeToString(TerminalErrorResponse.serializer(), errorResponse))
     }
@@ -67,7 +67,7 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
       }
     }
 
-    McpLogManager.debug("参数验证通过", "TerminalTool")
+    Logger.debug("参数验证通过", "TerminalTool")
   }
 
   /** 执行命令并处理超时 */
@@ -86,7 +86,7 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
 
     // 获取终端输出拦截器服务
     val outputInterceptor = project.service<TerminalOutputInterceptor>()
-    
+
     // 执行命令
     outputInterceptor.executeCommand(command = args.command, workingDirectory = workingDirectory) { commandResult ->
       try {
@@ -110,7 +110,7 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
     return try {
       future.get(args.timeout, TimeUnit.MILLISECONDS)
     } catch (e: java.util.concurrent.TimeoutException) {
-      McpLogManager.error("命令执行超时: ${args.command}", "TerminalTool", e)
+      Logger.error("命令执行超时: ${args.command}", "TerminalTool", e)
       throw RuntimeException("命令执行超时 (${args.timeout}ms): ${args.command}")
     }
   }

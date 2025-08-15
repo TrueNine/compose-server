@@ -10,11 +10,13 @@ import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
 import io.github.truenine.composeserver.ide.ideamcp.services.ErrorService
+import org.slf4j.LoggerFactory
 
 /** 查看错误右键菜单动作 提供在项目树中右键查看文件或文件夹错误信息的功能 */
 class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的错误、警告信息", null) {
+
+  private val logger = LoggerFactory.getLogger(ViewErrorAction::class.java)
 
   override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
@@ -30,7 +32,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
     val project = e.project ?: return
     val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE) ?: return
 
-    McpLogManager.info("开始查看错误动作 - 路径: ${virtualFile.path}", "ViewErrorAction")
+    logger.info("Starting view error action - path: {}", virtualFile.path)
 
     // 显示错误查看选项对话框
     val options = showErrorOptionsDialog(project) ?: return
@@ -50,7 +52,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
 
               // 检查是否被取消
               if (indicator.isCanceled) {
-                McpLogManager.info("用户取消了错误查看操作", "ViewErrorAction")
+                logger.info("User cancelled error view operation")
                 return
               }
 
@@ -63,7 +65,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
 
               // 检查是否被取消
               if (indicator.isCanceled) {
-                McpLogManager.info("错误收集被用户取消", "ViewErrorAction")
+                logger.info("Error collection cancelled by user")
                 return
               }
 
@@ -86,9 +88,9 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
 
               val totalErrors = filteredReport.sumOf { it.errors.size }
               val totalWarnings = filteredReport.sumOf { it.warnings.size }
-              McpLogManager.info("错误查看完成 - 错误: $totalErrors, 警告: $totalWarnings", "ViewErrorAction")
+              logger.info("Error view completed - errors: {}, warnings: {}", totalErrors, totalWarnings)
             } catch (e: Exception) {
-              McpLogManager.error("错误查看失败", "ViewErrorAction", e)
+              logger.error("Error view failed", e)
 
               // 在 EDT 中显示错误
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
@@ -100,7 +102,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
           }
 
           override fun onCancel() {
-            McpLogManager.info("错误查看操作被取消", "ViewErrorAction")
+            logger.info("Error view operation cancelled")
 
             // 在 EDT 中显示取消消息
             com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater { Messages.showInfoMessage(project, "错误查看操作已取消", "操作取消") }
@@ -109,7 +111,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
           override fun onSuccess() {
             currentReport?.let { report ->
               val totalIssues = report.sumOf { it.errors.size + it.warnings.size + it.weakWarnings.size }
-              McpLogManager.info("错误查看成功完成 - 发现 $totalIssues 个问题", "ViewErrorAction")
+              logger.info("Error view completed successfully - found {} issues", totalIssues)
             }
           }
         }

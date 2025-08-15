@@ -13,19 +13,19 @@ import kotlin.test.assertTrue
 class ViewLibCodeToolTest {
 
   @Test
-  fun `should reject empty file path`() {
+  fun `should accept valid class name`() {
     // Given
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
-    val args = ViewLibCodeArgs(filePath = "", fullyQualifiedName = "com.example.TestClass")
+    val args = ViewLibCodeArgs(fullyQualifiedName = "com.example.TestClass")
 
     // When
     val response = viewLibCodeTool.handle(mockProject, args)
 
     // Then
     val responseText = response.toString()
-    assertTrue(responseText.contains("INVALID_ARGUMENT"))
-    assertTrue(responseText.contains("文件路径不能为空"))
+    // 应该不包含参数错误，而是正常处理
+    assertTrue(!responseText.contains("INVALID_ARGUMENT") || responseText.contains("success"))
   }
 
   @Test
@@ -33,7 +33,7 @@ class ViewLibCodeToolTest {
     // Given
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
-    val args = ViewLibCodeArgs(filePath = "/path/to/file.jar", fullyQualifiedName = "")
+    val args = ViewLibCodeArgs(fullyQualifiedName = "")
 
     // When
     val response = viewLibCodeTool.handle(mockProject, args)
@@ -49,7 +49,7 @@ class ViewLibCodeToolTest {
     // Given
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
-    val args = ViewLibCodeArgs(filePath = "/path/to/file.jar", fullyQualifiedName = "123.invalid.class.name")
+    val args = ViewLibCodeArgs(fullyQualifiedName = "123.invalid.class.name")
 
     // When
     val response = viewLibCodeTool.handle(mockProject, args)
@@ -66,7 +66,7 @@ class ViewLibCodeToolTest {
     val viewLibCodeTool = ViewLibCodeTool()
     val mockProject = mockk<Project>(relaxed = true)
     val mockLibCodeService = mockk<LibCodeService>()
-    val args = ViewLibCodeArgs(filePath = "/path/to/file.jar", fullyQualifiedName = "com.example.TestClass", memberName = "testMethod")
+    val args = ViewLibCodeArgs(fullyQualifiedName = "com.example.TestClass", memberName = "testMethod")
 
     val mockResult =
       LibCodeResult(
@@ -83,7 +83,7 @@ class ViewLibCodeToolTest {
       )
 
     every { mockProject.getService(LibCodeService::class.java) } returns mockLibCodeService
-    coEvery { mockLibCodeService.getLibraryCode(any(), any(), any(), any()) } returns mockResult
+    coEvery { mockLibCodeService.getLibraryCode(any(), any(), any()) } returns mockResult
 
     // When
     val response = viewLibCodeTool.handle(mockProject, args)

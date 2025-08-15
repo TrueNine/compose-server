@@ -12,7 +12,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.tools.CleanOperation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -62,8 +62,8 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
   override suspend fun cleanCode(project: Project, virtualFile: VirtualFile, options: CleanOptions): CleanResult =
     withContext(Dispatchers.IO) {
       val startTime = System.currentTimeMillis()
-      McpLogManager.info("开始代码清理 - 路径: ${virtualFile.path}", "CleanService")
-      McpLogManager.debug("清理选项 - 格式化: ${options.formatCode}, 优化导入: ${options.optimizeImports}, 检查修复: ${options.runInspections}", "CleanService")
+      Logger.info("开始代码清理 - 路径: ${virtualFile.path}", "CleanService")
+      Logger.debug("清理选项 - 格式化: ${options.formatCode}, 优化导入: ${options.optimizeImports}, 检查修复: ${options.runInspections}", "CleanService")
 
       val operations = mutableListOf<CleanOperation>()
       val errors = mutableListOf<String>()
@@ -75,7 +75,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
         val filesToProcess = collectFilesToProcess(project, virtualFile)
         processedFiles = filesToProcess.size
 
-        McpLogManager.info("找到 ${filesToProcess.size} 个文件需要处理", "CleanService")
+        Logger.info("找到 ${filesToProcess.size} 个文件需要处理", "CleanService")
 
         // 批量处理文件
         for (file in filesToProcess) {
@@ -87,14 +87,14 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
           } catch (e: Exception) {
             val errorMsg = "处理文件失败: ${file.path} - ${e.message}"
             errors.add(errorMsg)
-            McpLogManager.error(errorMsg, "CleanService", e)
+            Logger.error(errorMsg, "CleanService", e)
           }
         }
 
         val executionTime = System.currentTimeMillis() - startTime
         val summary = createSummary(processedFiles, modifiedFiles, operations, errors)
 
-        McpLogManager.info("代码清理完成 - 处理: $processedFiles, 修改: $modifiedFiles, 耗时: ${executionTime}ms", "CleanService")
+        Logger.info("代码清理完成 - 处理: $processedFiles, 修改: $modifiedFiles, 耗时: ${executionTime}ms", "CleanService")
 
         CleanResult(
           processedFiles = processedFiles,
@@ -105,7 +105,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
           executionTime = executionTime,
         )
       } catch (e: Exception) {
-        McpLogManager.error("代码清理失败: ${virtualFile.path}", "CleanService", e)
+        Logger.error("代码清理失败: ${virtualFile.path}", "CleanService", e)
         throw e
       }
     }
@@ -184,7 +184,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
               if (psiFile.text != beforeText) {
                 fileModified = true
                 updateOperationCount(operations, "FORMAT", "代码格式化")
-                McpLogManager.debug("格式化文件: ${virtualFile.name}", "CleanService")
+                Logger.debug("格式化文件: ${virtualFile.name}", "CleanService")
               }
             }
 
@@ -197,7 +197,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
               if (psiFile.text != beforeText) {
                 fileModified = true
                 updateOperationCount(operations, "OPTIMIZE_IMPORTS", "导入优化")
-                McpLogManager.debug("优化导入: ${virtualFile.name}", "CleanService")
+                Logger.debug("优化导入: ${virtualFile.name}", "CleanService")
               }
             }
 
@@ -207,14 +207,14 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
               if (inspectionResult) {
                 fileModified = true
                 updateOperationCount(operations, "RUN_INSPECTIONS", "代码检查修复")
-                McpLogManager.debug("修复检查问题: ${virtualFile.name}", "CleanService")
+                Logger.debug("修复检查问题: ${virtualFile.name}", "CleanService")
               }
             }
           }
 
           continuation.resume(fileModified)
         } catch (e: Exception) {
-          McpLogManager.error("处理文件异常: ${virtualFile.path}", "CleanService", e)
+          Logger.error("处理文件异常: ${virtualFile.path}", "CleanService", e)
           continuation.resumeWithException(e)
         }
       }
@@ -230,10 +230,10 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
       // 这里需要使用 IDEA 的检查 API 来执行具体的修复操作
       // 例如使用 InspectionManager, LocalInspectionTool 等
 
-      McpLogManager.debug("触发代码检查: ${psiFile.name}", "CleanService")
+      Logger.debug("触发代码检查: ${psiFile.name}", "CleanService")
       false // 暂时返回 false，等待具体实现
     } catch (e: Exception) {
-      McpLogManager.error("代码检查失败: ${psiFile.name}", "CleanService", e)
+      Logger.error("代码检查失败: ${psiFile.name}", "CleanService", e)
       false
     }
   }

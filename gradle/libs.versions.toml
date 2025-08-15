@@ -1,4 +1,5 @@
 [versions]
+ch-qos-logback = "1.5.18"
 cn-dev33-sa-token = "1.44.0"
 cn-hutool = "5.8.39"
 com-alibaba-cloud = "2023.0.3.3"
@@ -56,6 +57,7 @@ org-testng = "7.11.0"
 project = "0.0.26"
 
 [libraries]
+ch-qos-logback-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback" }
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-redis-template = { module = "cn.dev33:sa-token-redis-template", version.ref = "cn-dev33-sa-token" }
 cn-dev33-sa-token-spring-boot-starter = { module = "cn.dev33:sa-token-spring-boot-starter", version.ref = "cn-dev33-sa-token" }

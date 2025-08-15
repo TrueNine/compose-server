@@ -9,6 +9,7 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.JBUI
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Font
@@ -46,7 +47,7 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   init {
     setupUI()
     setupEventHandlers()
-    McpLogManager.info("终端清洗面板已初始化", LogSource.UI.displayName)
+    Logger.info("终端清洗面板已初始化")
   }
 
   private fun setupUI() {
@@ -229,9 +230,9 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
 
     // 记录到日志
     if (result.exitCode == 0) {
-      McpLogManager.info("命令执行成功: ${result.command}", LogSource.TERMINAL.displayName)
+      Logger.info("命令执行成功: ${result.command}")
     } else {
-      McpLogManager.warn("命令执行失败: ${result.command} (退出代码: ${result.exitCode})", LogSource.TERMINAL.displayName)
+      Logger.warn("命令执行失败: ${result.command} (退出代码: ${result.exitCode})")
     }
   }
 
@@ -248,7 +249,7 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   private fun clearOutput() {
     outputArea.text = ""
     cleanedOutputArea.text = ""
-    McpLogManager.info("终端输出已清空", LogSource.UI.displayName)
+    Logger.info("终端输出已清空")
   }
 
   private fun setInputEnabled(enabled: Boolean) {
@@ -285,6 +286,6 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   override fun dispose() {
     // 取消所有协程
     scope.cancel()
-    McpLogManager.debug("McpTerminalPanel disposed", "McpTerminalPanel")
+    Logger.debug("McpTerminalPanel disposed", "McpTerminalPanel")
   }
 }

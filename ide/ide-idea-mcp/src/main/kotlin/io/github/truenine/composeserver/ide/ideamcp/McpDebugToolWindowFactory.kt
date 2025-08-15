@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 
 /** MCP 调试工具窗口工厂 负责创建和初始化调试面板工具窗口 */
 class McpDebugToolWindowFactory : ToolWindowFactory {
@@ -26,16 +27,22 @@ class McpDebugToolWindowFactory : ToolWindowFactory {
     val fileOperationContent = contentFactory.createContent(fileOperationPanel, "文件操作", false)
     fileOperationContent.isCloseable = false
 
+    // 创建 LibCodeService 测试面板
+    val libCodeTestPanel = LibCodeTestPanel(project)
+    val libCodeTestContent = contentFactory.createContent(libCodeTestPanel, "LibCode测试", false)
+    libCodeTestContent.isCloseable = false
+
     // 添加到工具窗口
     toolWindow.contentManager.addContent(terminalContent)
     toolWindow.contentManager.addContent(logContent)
     toolWindow.contentManager.addContent(fileOperationContent)
+    toolWindow.contentManager.addContent(libCodeTestContent)
 
-    // 设置默认选中日志标签页
-    toolWindow.contentManager.setSelectedContent(logContent)
+    // 设置默认选中 LibCode 测试标签页
+    toolWindow.contentManager.setSelectedContent(libCodeTestContent)
 
     // 记录工具窗口创建日志
-    McpLogManager.info("MCP 调试工具窗口已创建 - 包含终端清洗、日志和文件操作三个标签页", "ToolWindow")
+    Logger.info("MCP 调试工具窗口已创建 - 包含终端清洗、日志、文件操作和LibCode测试四个标签页", "ToolWindow")
   }
 
   override fun shouldBeAvailable(project: Project): Boolean {

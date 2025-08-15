@@ -11,7 +11,7 @@ import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VirtualFile
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
 import kotlinx.coroutines.runBlocking
@@ -33,7 +33,7 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
     val project = e.project ?: return
     val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE) ?: return
 
-    McpLogManager.info("开始执行代码清理动作 - 路径: ${virtualFile.path}", "CleanCodeAction")
+    Logger.info("开始执行代码清理动作 - 路径: ${virtualFile.path}", "CleanCodeAction")
 
     // 显示清理选项对话框
     val cleanOptions = showCleanOptionsDialog(project) ?: return
@@ -53,7 +53,7 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
 
               // 检查是否被取消
               if (indicator.isCanceled) {
-                McpLogManager.info("用户取消了代码清理操作", "CleanCodeAction")
+                Logger.info("用户取消了代码清理操作", "CleanCodeAction")
                 return
               }
 
@@ -68,7 +68,7 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
 
               // 检查是否被取消
               if (indicator.isCanceled) {
-                McpLogManager.info("清理操作被用户取消", "CleanCodeAction")
+                Logger.info("清理操作被用户取消", "CleanCodeAction")
                 return
               }
 
@@ -82,9 +82,9 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
                 }
               }
 
-              McpLogManager.info("代码清理完成 - 处理文件: ${result.processedFiles}, 修改文件: ${result.modifiedFiles}, 耗时: ${result.executionTime}ms", "CleanCodeAction")
+              Logger.info("代码清理完成 - 处理文件: ${result.processedFiles}, 修改文件: ${result.modifiedFiles}, 耗时: ${result.executionTime}ms", "CleanCodeAction")
             } catch (e: Exception) {
-              McpLogManager.error("代码清理失败", "CleanCodeAction", e)
+              Logger.error("代码清理失败", "CleanCodeAction", e)
 
               // 在 EDT 中显示错误
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
@@ -96,14 +96,14 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
           }
 
           override fun onCancel() {
-            McpLogManager.info("代码清理操作被取消", "CleanCodeAction")
+            Logger.info("代码清理操作被取消", "CleanCodeAction")
 
             // 在 EDT 中显示取消消息
             com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater { Messages.showInfoMessage(project, "代码清理操作已取消", "操作取消") }
           }
 
           override fun onSuccess() {
-            currentResult?.let { result -> McpLogManager.info("代码清理成功完成 - 总耗时: ${result.executionTime}ms", "CleanCodeAction") }
+            currentResult?.let { result -> Logger.info("代码清理成功完成 - 总耗时: ${result.executionTime}ms", "CleanCodeAction") }
           }
         }
       )

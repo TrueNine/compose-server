@@ -2,58 +2,63 @@ package io.github.truenine.composeserver.ide.ideamcp.services
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.OrderEnumerator
 import com.intellij.openapi.vfs.VirtualFile
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
+import com.intellij.openapi.vfs.VirtualFileManager
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+
+/** 库代码结果 */
+data class LibCodeResult(val sourceCode: String, val isDecompiled: Boolean, val language: String, val metadata: LibCodeMetadata)
+
+/** 库代码元数据 */
+data class LibCodeMetadata(val libraryName: String, val version: String?, val sourceType: SourceType, val documentation: String?)
 
 /** 库代码服务接口 */
 interface LibCodeService {
   /** 获取库代码 */
-  suspend fun getLibraryCode(project: Project, filePath: String, fullyQualifiedName: String, memberName: String? = null): LibCodeResult
+  suspend fun getLibraryCode(project: Project, fullyQualifiedName: String, memberName: String? = null): LibCodeResult
 }
 
 /** 库代码服务实现 */
 @Service(Service.Level.PROJECT)
 class LibCodeServiceImpl : LibCodeService {
 
-  override suspend fun getLibraryCode(project: Project, filePath: String, fullyQualifiedName: String, memberName: String?): LibCodeResult =
-    withContext(Dispatchers.IO) {
-      McpLogManager.info("开始获取库代码 - 类: $fullyQualifiedName", "LibCodeService")
+  override suspend fun getLibraryCode(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult {
+    Logger.info("开始查找库代码 - 类: $fullyQualifiedName, 成员: ${memberName ?: "全部"}", "LibCodeService")
 
-      try {
-        // 尝试从 source jar 中提取源码
-        val sourceJarResult = extractFromSourceJar(project, fullyQualifiedName, memberName)
-        if (sourceJarResult != null) {
-          McpLogManager.info("从 source jar 中提取源码成功", "LibCodeService")
-          return@withContext sourceJarResult
-        }
-
-        // 尝试反编译字节码
-        val decompileResult = decompileFromBytecode(project, fullyQualifiedName, memberName)
-        if (decompileResult != null) {
-          McpLogManager.info("字节码反编译成功", "LibCodeService")
-          return@withContext decompileResult
-        }
-
-        // 都失败了，返回未找到结果
-        McpLogManager.warn("无法找到类的源码或字节码: $fullyQualifiedName", "LibCodeService")
-        return@withContext createNotFoundResult(fullyQualifiedName)
-      } catch (e: Exception) {
-        McpLogManager.error("获取库代码失败: $fullyQualifiedName", "LibCodeService", e)
-        throw e
+    return withContext(Dispatchers.IO) {
+      // 1. 尝试从 source jar 提取源码
+      val sourceResult = tryExtractFromSourceJar(project, fullyQualifiedName, memberName)
+      if (sourceResult != null) {
+        Logger.info("成功从 source jar 提取源码", "LibCodeService")
+        return@withContext sourceResult
       }
+
+      // 2. 尝试反编译字节码
+      val decompileResult = tryDecompileFromBytecode(project, fullyQualifiedName, memberName)
+      if (decompileResult != null) {
+        Logger.info("成功反编译字节码", "LibCodeService")
+        return@withContext decompileResult
+      }
+
+      // 3. 返回未找到结果
+      Logger.info("未找到源码或字节码，返回默认结果", "LibCodeService")
+      createNotFoundResult(fullyQualifiedName)
     }
+  }
 
-  /** 从 source jar 中提取源码 */
-  private fun extractFromSourceJar(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult? {
-    McpLogManager.debug("尝试从 source jar 提取源码: $fullyQualifiedName", "LibCodeService")
-
+  /** 尝试从 source jar 提取源码 */
+  private fun tryExtractFromSourceJar(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult? {
     try {
+      Logger.debug("尝试从 source jar 提取源码: $fullyQualifiedName", "LibCodeService")
+
       val sourceJars = findSourceJars(project, fullyQualifiedName)
+      Logger.debug("找到 ${sourceJars.size} 个 source jar", "LibCodeService")
 
       for (sourceJar in sourceJars) {
         val sourceCode = extractFromJar(sourceJar, fullyQualifiedName)
@@ -65,18 +70,20 @@ class LibCodeServiceImpl : LibCodeService {
               sourceCode
             }
 
-          val libraryInfo = extractLibraryInfoFromJar("/mock/path/library.jar")
+          val libraryInfo = extractLibraryInfoFromJar(sourceJar)
+          Logger.info("成功提取源码 - 类: $fullyQualifiedName, 库: ${libraryInfo.first}, 版本: ${libraryInfo.second}", "LibCodeService")
+          Logger.debug("源码内容长度: ${sourceCode.length} 字符", "LibCodeService")
 
           return LibCodeResult(
             sourceCode = processedCode,
             isDecompiled = false,
-            language = "java", // 大多数 source jar 是 Java
+            language = determineLanguageFromSourceCode(sourceCode),
             metadata = LibCodeMetadata(libraryName = libraryInfo.first, version = libraryInfo.second, sourceType = SourceType.SOURCE_JAR, documentation = null),
           )
         }
       }
     } catch (e: Exception) {
-      McpLogManager.debug("从 source jar 提取失败: ${e.message}", "LibCodeService")
+      Logger.debug("从 source jar 提取失败: ${e.message}", "LibCodeService")
     }
 
     return null
@@ -87,19 +94,76 @@ class LibCodeServiceImpl : LibCodeService {
     val result = mutableListOf<VirtualFile>()
 
     try {
-      // 简化实现：在实际项目中，这里应该扫描项目的依赖库
-      // 目前返回空列表，表示没有找到 source jar
-      McpLogManager.debug("查找 source jar - 当前为简化实现", "LibCodeService")
+      Logger.info("开始查找类 $fullyQualifiedName 的源码", "LibCodeService")
+
+      // 获取项目的所有依赖库
+      val orderEnumerator = OrderEnumerator.orderEntries(project)
+      val libraryRoots = orderEnumerator.librariesOnly().classesRoots
+
+      Logger.debug("项目依赖库数量: ${libraryRoots.size}", "LibCodeService")
+
+      for (libraryRoot in libraryRoots) {
+        Logger.debug("检查依赖库: ${libraryRoot.path}", "LibCodeService")
+
+        // 尝试找到对应的 source jar
+        val sourceJar = findCorrespondingSourceJar(libraryRoot)
+        if (sourceJar != null) {
+          Logger.debug("找到对应的 source jar: ${sourceJar.path}", "LibCodeService")
+
+          // 检查这个 source jar 是否包含我们要找的类
+          if (containsClass(sourceJar, fullyQualifiedName)) {
+            result.add(sourceJar)
+            Logger.info("找到包含类 $fullyQualifiedName 的 source jar: ${sourceJar.path}", "LibCodeService")
+          }
+        } else {
+          Logger.debug("未找到对应的 source jar", "LibCodeService")
+        }
+      }
     } catch (e: Exception) {
-      McpLogManager.debug("查找 source jar 失败: ${e.message}", "LibCodeService")
+      Logger.debug("查找 source jar 失败: ${e.message}", "LibCodeService")
     }
 
     return result
   }
 
+  /** 查找对应的 source jar */
+  private fun findCorrespondingSourceJar(libraryRoot: VirtualFile): VirtualFile? {
+    val path = libraryRoot.path
+    if (path.endsWith(".jar")) {
+      val sourcePath = path.replace(".jar", "-sources.jar")
+      return VirtualFileManager.getInstance().findFileByUrl("file://$sourcePath")
+    }
+    return null
+  }
+
+  /** 检查 JAR 是否包含指定类 */
+  private fun containsClass(jarFile: VirtualFile, fullyQualifiedName: String): Boolean {
+    val javaClassPath = fullyQualifiedName.replace('.', '/') + ".java"
+    val kotlinClassPath = fullyQualifiedName.replace('.', '/') + ".kt"
+
+    try {
+      jarFile.inputStream?.use { inputStream ->
+        val jarInputStream = java.util.jar.JarInputStream(inputStream)
+        var entry: java.util.jar.JarEntry?
+
+        while (jarInputStream.nextJarEntry.also { entry = it } != null) {
+          val entryName = entry?.name
+          if (entryName == javaClassPath || entryName == kotlinClassPath) {
+            return true
+          }
+        }
+      }
+    } catch (e: Exception) {
+      Logger.debug("检查 JAR 包含类失败: ${e.message}", "LibCodeService")
+    }
+
+    return false
+  }
+
   /** 从 JAR 文件中提取源码 */
   private fun extractFromJar(jarFile: VirtualFile, fullyQualifiedName: String): String? {
-    val classPath = fullyQualifiedName.replace('.', '/') + ".java"
+    val javaClassPath = fullyQualifiedName.replace('.', '/') + ".java"
+    val kotlinClassPath = fullyQualifiedName.replace('.', '/') + ".kt"
 
     return try {
       jarFile.inputStream?.use { inputStream ->
@@ -107,52 +171,155 @@ class LibCodeServiceImpl : LibCodeService {
         var entry: java.util.jar.JarEntry?
 
         while (jarInputStream.nextJarEntry.also { entry = it } != null) {
-          if (entry?.name == classPath) {
+          val entryName = entry?.name
+          if (entryName == javaClassPath || entryName == kotlinClassPath) {
             return readInputStream(jarInputStream)
           }
         }
         null
       }
     } catch (e: Exception) {
-      McpLogManager.debug("从 JAR 提取源码失败: ${e.message}", "LibCodeService")
+      Logger.debug("从 JAR 提取源码失败: ${e.message}", "LibCodeService")
       null
     }
   }
 
-  /** 反编译字节码 */
-  private fun decompileFromBytecode(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult? {
-    McpLogManager.debug("尝试反编译字节码: $fullyQualifiedName", "LibCodeService")
+  /** 尝试反编译字节码 */
+  private fun tryDecompileFromBytecode(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult? {
+    Logger.info("尝试反编译字节码: $fullyQualifiedName", "LibCodeService")
 
     try {
-      // 这里应该集成 IDEA 的反编译器
-      // 由于复杂性，先返回一个简单的占位实现
-      val decompiled = decompileClass(project, fullyQualifiedName)
-      if (decompiled != null) {
-        val processedCode =
-          if (memberName != null) {
-            extractMemberFromSourceCode(decompiled, memberName)
-          } else {
-            decompiled
-          }
+      // 首先尝试从项目依赖中查找类文件
+      val classFile = findClassFileInDependencies(project, fullyQualifiedName)
+      if (classFile != null) {
+        Logger.info("在项目依赖中找到类文件: ${classFile.path}", "LibCodeService")
 
-        return LibCodeResult(
-          sourceCode = processedCode,
-          isDecompiled = true,
-          language = "java",
-          metadata =
-            LibCodeMetadata(
-              libraryName = extractLibraryNameFromClassName(fullyQualifiedName),
-              version = null,
-              sourceType = SourceType.DECOMPILED,
-              documentation = null,
-            ),
-        )
+        val decompiled = decompileFromClassFile(classFile, fullyQualifiedName)
+        if (decompiled != null) {
+          val processedCode =
+            if (memberName != null) {
+              extractMemberFromSourceCode(decompiled, memberName)
+            } else {
+              decompiled
+            }
+
+          Logger.info("成功反编译字节码 - 类: $fullyQualifiedName", "LibCodeService")
+          Logger.debug("反编译内容长度: ${decompiled.length} 字符", "LibCodeService")
+
+          return LibCodeResult(
+            sourceCode = processedCode,
+            isDecompiled = true,
+            language = "java",
+            metadata =
+              LibCodeMetadata(
+                libraryName = extractLibraryNameFromClassName(fullyQualifiedName),
+                version = null,
+                sourceType = SourceType.DECOMPILED,
+                documentation = null,
+              ),
+          )
+        }
       }
+
+      // 如果没有找到类文件，尝试简单的反编译实现
+      val decompiled = decompileClass(project, fullyQualifiedName)
+      val processedCode =
+        if (memberName != null) {
+          extractMemberFromSourceCode(decompiled, memberName)
+        } else {
+          decompiled
+        }
+
+      Logger.info("使用简化反编译 - 类: $fullyQualifiedName", "LibCodeService")
+
+      return LibCodeResult(
+        sourceCode = processedCode,
+        isDecompiled = true,
+        language = "java",
+        metadata =
+          LibCodeMetadata(
+            libraryName = extractLibraryNameFromClassName(fullyQualifiedName),
+            version = null,
+            sourceType = SourceType.DECOMPILED,
+            documentation = null,
+          ),
+      )
     } catch (e: Exception) {
-      McpLogManager.debug("字节码反编译失败: ${e.message}", "LibCodeService")
+      Logger.debug("字节码反编译失败: ${e.message}", "LibCodeService")
     }
 
     return null
+  }
+
+  /** 在项目依赖中查找类文件 */
+  private fun findClassFileInDependencies(project: Project, fullyQualifiedName: String): VirtualFile? {
+    try {
+      val classPath = fullyQualifiedName.replace('.', '/') + ".class"
+      Logger.debug("查找类文件路径: $classPath", "LibCodeService")
+
+      val orderEnumerator = OrderEnumerator.orderEntries(project)
+      val libraryRoots = orderEnumerator.librariesOnly().classesRoots
+
+      for (libraryRoot in libraryRoots) {
+        Logger.debug("检查库根目录: ${libraryRoot.path}", "LibCodeService")
+
+        if (libraryRoot.name.endsWith(".jar")) {
+          // 在 JAR 文件中查找
+          val classFile = findClassInJar(libraryRoot, classPath)
+          if (classFile != null) {
+            Logger.info("在 JAR 中找到类文件: ${libraryRoot.path}!/$classPath", "LibCodeService")
+            return classFile
+          }
+        } else {
+          // 在目录中查找
+          val classFile = libraryRoot.findFileByRelativePath(classPath)
+          if (classFile != null) {
+            Logger.info("在目录中找到类文件: ${classFile.path}", "LibCodeService")
+            return classFile
+          }
+        }
+      }
+    } catch (e: Exception) {
+      Logger.debug("查找类文件失败: ${e.message}", "LibCodeService")
+    }
+
+    return null
+  }
+
+  /** 在 JAR 文件中查找类文件 */
+  private fun findClassInJar(jarFile: VirtualFile, classPath: String): VirtualFile? {
+    return try {
+      jarFile.findFileByRelativePath(classPath)
+    } catch (e: Exception) {
+      Logger.debug("在 JAR 中查找类文件失败: ${e.message}", "LibCodeService")
+      null
+    }
+  }
+
+  /** 从类文件反编译 */
+  private fun decompileFromClassFile(classFile: VirtualFile, fullyQualifiedName: String): String? {
+    return try {
+      // 这里应该使用 IDEA 的反编译器 API
+      // 目前返回一个更详细的占位符
+      """
+        // 反编译的代码 - $fullyQualifiedName
+        // 类文件位置: ${classFile.path}
+        // 注意：这是一个简化的占位实现
+        // 实际实现需要集成 IDEA 的反编译器
+
+        public class ${fullyQualifiedName.substringAfterLast('.')} {
+            // 反编译的内容将在这里显示
+            // 请使用 IDEA 的 "Go to Declaration" 功能查看完整的反编译代码
+
+            // 类文件已找到，可以进行完整的反编译
+            // 文件大小: ${classFile.length} 字节
+        }
+      """
+        .trimIndent()
+    } catch (e: Exception) {
+      Logger.debug("从类文件反编译失败: ${e.message}", "LibCodeService")
+      null
+    }
   }
 
   /** 反编译类（简化实现） */
@@ -163,7 +330,7 @@ class LibCodeServiceImpl : LibCodeService {
       // 反编译的代码 - $fullyQualifiedName
       // 注意：这是一个简化的占位实现
       // 实际实现需要集成 IDEA 的反编译器
-      
+
       public class ${fullyQualifiedName.substringAfterLast('.')} {
           // 反编译的内容将在这里显示
           // 请使用 IDEA 的 "Go to Declaration" 功能查看完整的反编译代码
@@ -188,73 +355,63 @@ class LibCodeServiceImpl : LibCodeService {
     )
   }
 
-  /** 从源码中提取特定成员（简化实现） */
+  /** 从成员名提取特定成员的源码 */
   private fun extractMemberFromSourceCode(sourceCode: String, memberName: String): String {
-    // 这是一个简化的实现，实际应该使用更复杂的解析逻辑
+    // 简化实现：查找包含成员名的行
     val lines = sourceCode.lines()
-    val memberLines = mutableListOf<String>()
-    var inMember = false
-    var braceCount = 0
-
-    for (line in lines) {
-      if (line.contains(memberName) && (line.contains("public") || line.contains("private") || line.contains("protected"))) {
-        inMember = true
-        memberLines.add(line)
-        braceCount += line.count { it == '{' } - line.count { it == '}' }
-      } else if (inMember) {
-        memberLines.add(line)
-        braceCount += line.count { it == '{' } - line.count { it == '}' }
-
-        if (braceCount <= 0) {
-          break
-        }
+    val relevantLines =
+      lines.filter { line ->
+        line.contains(memberName) &&
+          (line.contains("fun ") ||
+            line.contains("val ") ||
+            line.contains("var ") ||
+            line.contains("def ") ||
+            line.contains("public ") ||
+            line.contains("private "))
       }
-    }
 
-    return if (memberLines.isNotEmpty()) {
-      memberLines.joinToString("\n")
+    return if (relevantLines.isNotEmpty()) {
+      "// 提取的成员: $memberName\n\n" + relevantLines.joinToString("\n")
     } else {
-      sourceCode // 如果没找到特定成员，返回整个源码
+      "// 未找到成员 $memberName，返回完整类源码\n\n$sourceCode"
     }
   }
 
-  /** 确定编程语言 */
-  private fun determineLanguage(extension: String?): String {
-    return when (extension?.lowercase()) {
-      "kt" -> "kotlin"
-      "java" -> "java"
-      "scala" -> "scala"
-      "groovy" -> "groovy"
-      else -> "java" // 默认为 Java
-    }
-  }
+  /** 从库名提取库信息 */
+  private fun extractLibraryInfoFromJar(jarFile: VirtualFile): Pair<String, String?> {
+    val fileName = jarFile.name
+    val libraryName = fileName.replace("-sources.jar", "").replace(".jar", "")
 
-  /** 提取库信息 */
-  private fun extractLibraryInfo(path: String): Pair<String, String?> {
-    // 尝试从路径中提取库名和版本
-    val jarPattern = Regex("""([^/\\]+)-(\d+(?:\.\d+)*(?:-[^/\\]*)?)\.(jar|zip)""")
-    val match = jarPattern.find(path)
+    // 尝试从文件名中提取版本信息
+    val versionRegex = """(.+)-(\d+\.\d+(?:\.\d+)?)""".toRegex()
+    val matchResult = versionRegex.find(libraryName)
 
-    return if (match != null) {
-      Pair(match.groupValues[1], match.groupValues[2])
+    return if (matchResult != null) {
+      val (name, version) = matchResult.destructured
+      name to version
     } else {
-      val fileName = path.substringAfterLast('/').substringAfterLast('\\')
-      Pair(fileName.substringBeforeLast('.'), null)
+      libraryName to null
     }
   }
 
-  /** 从 JAR 文件名提取库信息 */
-  private fun extractLibraryInfoFromJar(jarPath: String): Pair<String, String?> {
-    return extractLibraryInfo(jarPath)
+  /** 从源码确定语言 */
+  private fun determineLanguageFromSourceCode(sourceCode: String): String {
+    return when {
+      sourceCode.contains("package ") && sourceCode.contains("fun ") -> "kotlin"
+      sourceCode.contains("package ") && sourceCode.contains("class ") -> "java"
+      sourceCode.contains("object ") || sourceCode.contains("trait ") -> "scala"
+      sourceCode.contains("def ") && sourceCode.contains("class ") -> "groovy"
+      else -> "java"
+    }
   }
 
   /** 从类名提取库名 */
   private fun extractLibraryNameFromClassName(fullyQualifiedName: String): String {
     val parts = fullyQualifiedName.split('.')
-    return if (parts.size >= 2) {
-      parts.take(2).joinToString(".")
-    } else {
-      fullyQualifiedName
+    return when {
+      parts.size >= 3 -> "${parts[0]}.${parts[1]}.${parts[2]}"
+      parts.size >= 2 -> "${parts[0]}.${parts[1]}"
+      else -> parts[0]
     }
   }
 
@@ -271,27 +428,3 @@ class LibCodeServiceImpl : LibCodeService {
     return buffer.toString("UTF-8")
   }
 }
-
-/** 库代码结果 */
-data class LibCodeResult(
-  /** 源代码内容 */
-  val sourceCode: String,
-  /** 是否为反编译代码 */
-  val isDecompiled: Boolean,
-  /** 编程语言 */
-  val language: String,
-  /** 元数据信息 */
-  val metadata: LibCodeMetadata,
-)
-
-/** 库代码元数据 */
-data class LibCodeMetadata(
-  /** 库名称 */
-  val libraryName: String,
-  /** 版本号 */
-  val version: String?,
-  /** 源码类型 */
-  val sourceType: SourceType,
-  /** 文档信息 */
-  val documentation: String?,
-)

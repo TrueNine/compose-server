@@ -13,10 +13,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
 
 /** 终端输出拦截器 负责拦截和处理终端命令的输出结果 */
 @Service(Service.Level.PROJECT)
 class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)) : Disposable {
+
+  private val logger = LoggerFactory.getLogger(TerminalOutputInterceptor::class.java)
 
   /** 执行命令并拦截输出的结果数据类 */
   data class CommandResult(val command: String, val exitCode: Int, val stdout: String, val stderr: String, val cleanedOutput: String)
@@ -25,7 +28,7 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
   fun executeCommand(command: String, workingDirectory: String? = null, onResult: (CommandResult) -> Unit) {
     scope.launch {
       try {
-        McpLogManager.logTerminalCommand(command)
+        logger.info("Executing terminal command: {}", command)
 
         // 解析命令行参数
         val parts = command.split(" ").filter { it.isNotEmpty() }
@@ -55,15 +58,15 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
 
               // 记录原始输出
               if (stdoutText.isNotEmpty()) {
-                McpLogManager.logTerminalOutput(stdoutText, false)
+                logger.debug("Terminal stdout: {}", stdoutText)
               }
               if (stderrText.isNotEmpty()) {
-                McpLogManager.logTerminalOutput(stderrText, true)
+                logger.warn("Terminal stderr: {}", stderrText)
               }
 
               // 清洗输出
               val cleanedOutput = cleanOutput(stdoutText, stderrText)
-              McpLogManager.logTerminalCleanOutput(stdoutText + stderrText, cleanedOutput)
+              logger.info("Output cleaning completed - original length: {}, cleaned length: {}", stdoutText.length + stderrText.length, cleanedOutput.length)
 
               val result = CommandResult(command = command, exitCode = event.exitCode, stdout = stdoutText, stderr = stderrText, cleanedOutput = cleanedOutput)
 
@@ -83,7 +86,7 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
 
         processHandler.startNotify()
       } catch (e: Exception) {
-        McpLogManager.error("执行命令失败: $command", LogSource.INTERCEPTOR.displayName, e)
+        logger.error("Command execution failed: {}", command, e)
         val errorResult =
           CommandResult(command = command, exitCode = -1, stdout = "", stderr = e.message ?: "Unknown error", cleanedOutput = "命令执行失败: ${e.message}")
         onResult(errorResult)
@@ -140,6 +143,6 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
   override fun dispose() {
     // 取消所有协程
     scope.cancel()
-    McpLogManager.debug("TerminalOutputInterceptor disposed", "TerminalOutputInterceptor")
+    logger.debug("TerminalOutputInterceptor disposed")
   }
 }

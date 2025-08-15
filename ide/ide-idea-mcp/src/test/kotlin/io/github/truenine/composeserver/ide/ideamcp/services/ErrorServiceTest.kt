@@ -111,6 +111,7 @@ class ErrorServiceTest {
     every { virtualFile.isValid } returns true
     every { virtualFile.isDirectory } returns false
     every { virtualFile.path } returns "/test/file.kt"
+    every { virtualFile.name } returns "file.kt"
     every { PsiManager.getInstance(project) } returns psiManager
     every { psiManager.findFile(virtualFile) } returns null
 
@@ -132,6 +133,7 @@ class ErrorServiceTest {
     every { virtualFile.isValid } returns true
     every { virtualFile.isDirectory } returns false
     every { virtualFile.path } returns "/test/file.kt"
+    every { virtualFile.name } returns "file.kt"
     every { PsiManager.getInstance(project) } returns psiManager
     every { psiManager.findFile(virtualFile) } returns psiFile
     every { psiFile.name } returns "file.kt"
@@ -141,5 +143,30 @@ class ErrorServiceTest {
 
     // Then
     assertTrue(result.isEmpty()) // 目前返回空结果，因为是模拟实现
+  }
+
+  @Test
+  fun `analyzeFile 应该在 WriteIntentReadAction 中安全执行`() {
+    // Given
+    val project = mockk<Project>()
+    val virtualFile = mockk<VirtualFile>()
+    val psiManager = mockk<PsiManager>()
+    val psiFile = mockk<PsiFile>()
+
+    every { virtualFile.isValid } returns true
+    every { virtualFile.isDirectory } returns false
+    every { virtualFile.path } returns "/test/file.kt"
+    every { virtualFile.name } returns "file.kt"
+    every { PsiManager.getInstance(project) } returns psiManager
+    every { psiManager.findFile(virtualFile) } returns psiFile
+    every { psiFile.name } returns "file.kt"
+    every { psiFile.project } returns project
+    every { psiFile.virtualFile } returns virtualFile
+
+    // When - 这个调用应该不会抛出线程访问异常
+    val result = errorService.analyzeFile(project, virtualFile)
+
+    // Then - 验证没有抛出异常并且返回了结果
+    assertTrue(result.isEmpty()) // 在模拟环境中返回空结果是正常的
   }
 }

@@ -2,8 +2,8 @@ package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
 import io.github.truenine.composeserver.ide.ideamcp.services.FileManager
@@ -19,8 +19,8 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
   override val description: String = "Clean and format code using IDEA capabilities with comprehensive reporting"
 
   override fun handle(project: Project, args: CleanCodeArgs): Response {
-    McpLogManager.info("开始执行代码清理: ${args.path}", "CleanCodeTool")
-    McpLogManager.debug("清理参数 - 格式化: ${args.formatCode}, 优化导入: ${args.optimizeImports}, 运行检查: ${args.runInspections}", "CleanCodeTool")
+    Logger.info("开始执行代码清理: ${args.path}", "CleanCodeTool")
+    Logger.debug("清理参数 - 格式化: ${args.formatCode}, 优化导入: ${args.optimizeImports}, 运行检查: ${args.runInspections}", "CleanCodeTool")
 
     return try {
       // 参数验证
@@ -29,10 +29,10 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
       // 异步执行清理操作
       val result = runBlocking { executeCleanOperation(args, project) }
 
-      McpLogManager.info("代码清理完成 - 处理文件: ${result.processedFiles}, 修改文件: ${result.modifiedFiles}", "CleanCodeTool")
+      Logger.info("代码清理完成 - 处理文件: ${result.processedFiles}, 修改文件: ${result.modifiedFiles}", "CleanCodeTool")
       Response(Json.encodeToString(CleanCodeResult.serializer(), result))
     } catch (e: Exception) {
-      McpLogManager.error("代码清理失败: ${args.path}", "CleanCodeTool", e)
+      Logger.error("代码清理失败: ${args.path}", "CleanCodeTool", e)
       val errorResponse = createErrorResponse(e, args.path)
       Response(Json.encodeToString(CleanCodeErrorResponse.serializer(), errorResponse))
     }
@@ -50,12 +50,12 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
       throw IllegalArgumentException("必须至少选择一种清理操作")
     }
 
-    McpLogManager.debug("参数验证通过", "CleanCodeTool")
+    Logger.debug("参数验证通过", "CleanCodeTool")
   }
 
   /** 执行清理操作 */
   private suspend fun executeCleanOperation(args: CleanCodeArgs, project: Project): CleanCodeResult {
-    McpLogManager.debug("开始执行清理操作", "CleanCodeTool")
+    Logger.debug("开始执行清理操作", "CleanCodeTool")
 
     // 获取服务实例
     val cleanService = project.service<CleanService>()

@@ -14,7 +14,7 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
-import io.github.truenine.composeserver.ide.ideamcp.McpLogManager
+import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeService
 import kotlinx.coroutines.runBlocking
 
@@ -37,7 +37,7 @@ class ViewLibCodeAction : AnAction("查看库代码", "查看第三方库的源�
     val editor = e.getData(CommonDataKeys.EDITOR) ?: return
     val psiFile = e.getData(CommonDataKeys.PSI_FILE) ?: return
 
-    McpLogManager.info("开始查看库代码动作", "ViewLibCodeAction")
+    Logger.info("开始查看库代码动作", "ViewLibCodeAction")
 
     // 获取光标位置的引用信息
     val referenceInfo = getReferenceInfo(editor, psiFile)
@@ -46,7 +46,7 @@ class ViewLibCodeAction : AnAction("查看库代码", "查看第三方库的源�
       return
     }
 
-    McpLogManager.debug("解析到引用信息 - 类: ${referenceInfo.className}, 成员: ${referenceInfo.memberName}", "ViewLibCodeAction")
+    Logger.debug("解析到引用信息 - 类: ${referenceInfo.className}, 成员: ${referenceInfo.memberName}", "ViewLibCodeAction")
 
     // 在后台任务中获取库代码
     ProgressManager.getInstance()
@@ -63,7 +63,7 @@ class ViewLibCodeAction : AnAction("查看库代码", "查看第三方库的源�
 
               // 检查是否被取消
               if (indicator.isCanceled) {
-                McpLogManager.info("用户取消了库代码查看操作", "ViewLibCodeAction")
+                Logger.info("用户取消了库代码查看操作", "ViewLibCodeAction")
                 return
               }
 
@@ -72,13 +72,13 @@ class ViewLibCodeAction : AnAction("查看库代码", "查看第三方库的源�
               indicator.text2 = "正在查找源代码..."
               indicator.fraction = 0.3
 
-              val result = runBlocking { libCodeService.getLibraryCode(project, psiFile.virtualFile.path, referenceInfo.className, referenceInfo.memberName) }
+              val result = runBlocking { libCodeService.getLibraryCode(project, referenceInfo.className, referenceInfo.memberName) }
 
               currentResult = result
 
               // 检查是否被取消
               if (indicator.isCanceled) {
-                McpLogManager.info("库代码获取被用户取消", "ViewLibCodeAction")
+                Logger.info("库代码获取被用户取消", "ViewLibCodeAction")
                 return
               }
 
@@ -97,9 +97,9 @@ class ViewLibCodeAction : AnAction("查看库代码", "查看第三方库的源�
                 }
               }
 
-              McpLogManager.info("库代码查看完成 - 类型: ${result.metadata.sourceType}, 反编译: ${result.isDecompiled}", "ViewLibCodeAction")
+              Logger.info("库代码查看完成 - 类型: ${result.metadata.sourceType}, 反编译: ${result.isDecompiled}", "ViewLibCodeAction")
             } catch (e: Exception) {
-              McpLogManager.error("库代码查看失败", "ViewLibCodeAction", e)
+              Logger.error("库代码查看失败", "ViewLibCodeAction", e)
 
               // 在 EDT 中显示错误
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
@@ -111,14 +111,14 @@ class ViewLibCodeAction : AnAction("查看库代码", "查看第三方库的源�
           }
 
           override fun onCancel() {
-            McpLogManager.info("库代码查看操作被取消", "ViewLibCodeAction")
+            Logger.info("库代码查看操作被取消", "ViewLibCodeAction")
 
             // 在 EDT 中显示取消消息
             com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater { Messages.showInfoMessage(project, "库代码查看操作已取消", "操作取消") }
           }
 
           override fun onSuccess() {
-            currentResult?.let { result -> McpLogManager.info("库代码查看成功完成 - 源码长度: ${result.sourceCode.length} 字符", "ViewLibCodeAction") }
+            currentResult?.let { result -> Logger.info("库代码查看成功完成 - 源码长度: ${result.sourceCode.length} 字符", "ViewLibCodeAction") }
           }
         }
       )
