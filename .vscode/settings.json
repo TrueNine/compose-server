@@ -1,8 +1,7 @@
 {
-    "kiroAgent.configureMCP": "Enabled",
-    "kiroAgent.trustedCommands": [
-        "./gradlew *",
-        "gradle *",
-        "./scripts/performance-benchmark.sh *"
-    ]
+  "kiroAgent.configureMCP": "Enabled",
+  "kiroAgent.trustedCommands": [
+    "./gradlew *",
+    "gradle *"
+  ]
 }
