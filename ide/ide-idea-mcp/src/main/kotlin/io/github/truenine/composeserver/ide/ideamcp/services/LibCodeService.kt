@@ -104,6 +104,17 @@ class LibCodeServiceImpl : LibCodeService {
 
       for (libraryRoot in libraryRoots) {
         Logger.debug("检查依赖库: ${libraryRoot.path}", "LibCodeService")
+        if (!libraryRoot.isValid) {
+          Logger.debug("libraryRoot: {} not valid", libraryRoot)
+          continue
+        }
+
+        // TODO libraryRoot.children 可以获取到 com.intellij.openapi.vfs.VirtualFile[]
+        // TODO libraryRoot.url 可以获取到 String 的 url 表示 大多情况可能为 jar 协议路径
+        // TODO libraryRoot.path 可以获取到 String 的 path 表示 大多情况可能为 jar
+        // TODO libraryRoot.charset 可以获取到 Charset 以便于读取文件时使用正确的字符集
+        // TODO libraryRoot.extension 可以获取到文件后缀路径 举例为 jar
+
 
         // 尝试找到对应的 source jar
         val sourceJar = findCorrespondingSourceJar(libraryRoot)
@@ -128,6 +139,10 @@ class LibCodeServiceImpl : LibCodeService {
 
   /** 查找对应的 source jar */
   private fun findCorrespondingSourceJar(libraryRoot: VirtualFile): VirtualFile? {
+    /*
+    * TODO
+    * 此处有可能是: C:/Users/truen/.gradle/caches/modules-2/files-2.1/org.babyfish.jimmer/jimmer-spring-boot-starter/0.9.105/74f5e22333b644b797e5c5571f15c425fefae835/jimmer-spring-boot-starter-0.9.105.jar!/
+    * */
     val path = libraryRoot.path
     if (path.endsWith(".jar")) {
       val sourcePath = path.replace(".jar", "-sources.jar")
