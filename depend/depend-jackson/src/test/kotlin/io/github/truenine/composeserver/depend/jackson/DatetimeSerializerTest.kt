@@ -5,7 +5,6 @@ import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.depend.jackson.modules.DatetimeCustomModule
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
-import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -20,8 +19,8 @@ class DatetimeSerializerTest {
 
   @BeforeEach
   fun setup() {
-    // 使用时区偏移量为2的模块确保测试通过
-    mapper.registerModule(DatetimeCustomModule(ZoneOffset.ofHours(2)))
+    // 使用时间戳序列化模块，确保时区无关性
+    mapper.registerModule(DatetimeCustomModule())
   }
 
   @Test

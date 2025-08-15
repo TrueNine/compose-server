@@ -4,52 +4,73 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.JsonMappingException
 import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.domain.IPageParam
 
+/**
+ * IPageParam和IPageParamLike反序列化器
+ *
+ * 支持从JSON对象反序列化为IPageParam实例 预期JSON格式: {"o": offset, "s": pageSize, "u": unPage}
+ */
 class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
-  override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): IPageParam? {
-    // 检查 JsonParser 是否为空
-    if (p == null) return null
 
-    // 按需解析字段，减少中间对象的分配
+  override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): IPageParam? {
+    if (p == null) {
+      throw JsonMappingException.from(ctxt, "JsonParser cannot be null for IPageParam deserialization")
+    }
+
+    // 检查当前token是否为对象开始
+    if (p.currentToken != JsonToken.START_OBJECT) {
+      throw JsonMappingException.from(ctxt, "Expected START_OBJECT token for IPageParam deserialization, got: ${p.currentToken}")
+    }
+
     var offset: Int? = null
     var pageSize: Int? = null
     var unPage: Boolean? = null
 
-    // 遍历 JSON 流，只处理目标字段
+    // 遍历JSON对象的字段
     while (p.nextToken() != JsonToken.END_OBJECT) {
-      when (p.currentName()) {
+      val fieldName = p.currentName()
+      p.nextToken() // 移动到字段值
+
+      when (fieldName) {
         "o" -> {
-          p.nextToken()
           offset = p.intValueOrNull()
         }
-
         "s" -> {
-          p.nextToken()
           pageSize = p.intValueOrNull()
         }
-
         "u" -> {
-          p.nextToken()
           unPage = p.booleanValueOrNull()
         }
-
-        else -> p.skipChildren() // 跳过不相关字段
+        else -> {
+          // 跳过未知字段
+          p.skipChildren()
+        }
       }
     }
 
-    // 检查是否有足够信息构建结果
-    return if (offset == null && pageSize == null) null else Pq[offset, pageSize, unPage]
+    // 使用Pq工厂方法创建IPageParam实例
+    return Pq[offset, pageSize, unPage]
   }
 
-  // 扩展函数：安全解析 Long 值
-  private fun JsonParser.longValueOrNull(): Long? = if (currentToken.isNumeric) longValue else null
+  /** 安全解析Int值的扩展函数 */
+  private fun JsonParser.intValueOrNull(): Int? {
+    return when {
+      currentToken.isNumeric -> intValue
+      currentToken == JsonToken.VALUE_NULL -> null
+      else -> throw JsonMappingException.from(null as DeserializationContext?, "Expected numeric value for int field, got: $currentToken")
+    }
+  }
 
-  // 扩展函数：安全解析 Int 值
-  private fun JsonParser.intValueOrNull(): Int? = if (currentToken.isNumeric) intValue else null
-
-  // 扩展函数：安全解析 Boolean 值
-  private fun JsonParser.booleanValueOrNull(): Boolean? =
-    if (currentToken == JsonToken.VALUE_TRUE || currentToken == JsonToken.VALUE_FALSE) booleanValue else null
+  /** 安全解析Boolean值的扩展函数 */
+  private fun JsonParser.booleanValueOrNull(): Boolean? {
+    return when (currentToken) {
+      JsonToken.VALUE_TRUE -> true
+      JsonToken.VALUE_FALSE -> false
+      JsonToken.VALUE_NULL -> null
+      else -> throw JsonMappingException.from(null as DeserializationContext?, "Expected boolean value for boolean field, got: $currentToken")
+    }
+  }
 }
