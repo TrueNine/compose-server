@@ -2,6 +2,7 @@
   "kiroAgent.configureMCP": "Enabled",
   "kiroAgent.trustedCommands": [
     "./gradlew *",
-    "gradle *"
+    "gradle *",
+    "mv *"
   ]
 }

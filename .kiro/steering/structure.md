@@ -11,7 +11,11 @@ compose-server/
 ├── gradle-plugin/        # Custom Gradle plugins
 ├── cacheable/            # Caching abstractions
 ├── build-logic/          # Build convention plugins
-└── docs/                 # Project documentation
+├── docs/                 # Project documentation
+├── docsite/              # Documentation site generation
+├── integrate-test/       # Integration test modules
+├── ide/                  # IDE plugins and extensions
+└── .kiro/                # Kiro AI assistant configuration
 ```
 
 ## Domain Modules
@@ -31,7 +35,9 @@ compose-server/
 - `rds-shared/` - Common database abstractions
 - `rds-crud/` - CRUD operations
 - `rds-jimmer-ext-postgres/` - PostgreSQL Jimmer extensions
-- `rds-flyway-migration-*/` - Database migration modules
+- `rds-flyway-migration-shared/` - Common migration utilities
+- `rds-flyway-migration-mysql8/` - MySQL 8 migration support
+- `rds-flyway-migration-postgresql/` - PostgreSQL migration support
 
 ### Security (`security/`)
 - `security-spring/` - Spring Security integration
@@ -63,14 +69,41 @@ compose-server/
 
 ### Dependency Management
 - `depend/` - Third-party dependency wrappers
+  - `depend-jackson/` - Jackson JSON processing
+  - `depend-http-exchange/` - HTTP client abstractions
+  - `depend-paho/` - MQTT client integration
+  - `depend-servlet/` - Servlet API wrappers
+  - `depend-springdoc-openapi/` - OpenAPI documentation
+  - `depend-xxl-job/` - XXL-Job distributed scheduler
 - `ksp/` - Kotlin Symbol Processing plugins
+  - `ksp-meta/` - Metadata processing
+  - `ksp-plugin/` - KSP plugin implementation
+  - `ksp-shared/` - Common KSP utilities
 - `psdk/` - Platform SDK integrations
+  - `psdk-wxpa/` - WeChat Public Account SDK
 
 ## Module Naming Convention
 
 - **Prefix**: All published artifacts use `composeserver-` prefix
 - **Group ID**: `io.github.truenine`
 - **Structure**: `{domain}-{implementation}` (e.g., `oss-minio`, `security-oauth2`)
+
+## IDE Integration (`ide/`)
+- `ide-idea-mcp/` - IntelliJ IDEA MCP (Model Context Protocol) plugin
+
+## Integration Testing (`integrate-test/`)
+- `integrate-test/depend/jackson/` - `depend/jackson` Module Jackson dependency integration tests
+
+### Integration Test Package Naming Convention
+- **Domain Modules**: `itest.integrate.{domain}.{moduleName}`
+  - `itest.integrate.oss.ossminio` - MinIO storage integration tests
+  - `itest.integrate.depend.dependjackson` - Jackson dependency integration tests
+  - `itest.integrate.security.securityoauth2` - OAuth2 security integration tests
+- **Root Level Modules**: `itest.integrate.{moduleName}`
+  - `itest.integrate.shared` - Shared foundation library integration tests
+  - `itest.integrate.cacheable` - Caching abstractions integration tests
+- **Framework Variants**: Additional framework-specific suffixes are supported
+  - `itest.integrate.depend.dependjackson.quarkus` - Jackson with Quarkus framework tests
 
 ## Key Architectural Principles
 
@@ -79,3 +112,5 @@ compose-server/
 3. **Testability**: Comprehensive test coverage with `testtoolkit/` support
 4. **Modularity**: Consumers can pick and choose specific modules
 5. **Convention over Configuration**: Consistent patterns across all modules
+6. **AI-Assisted Development**: Kiro AI integration for enhanced development workflow
+7. **IDE Integration**: Native IDE support through plugins and extensions
