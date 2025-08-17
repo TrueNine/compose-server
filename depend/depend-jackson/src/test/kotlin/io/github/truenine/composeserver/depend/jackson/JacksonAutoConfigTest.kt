@@ -11,7 +11,7 @@ class JacksonAutoConfigTest {
   @Resource lateinit var mappers: List<ObjectMapper>
 
   @Test
-  fun `test mappers registers`() {
+  fun mappers_should_be_registered() {
     log.info("mappers: {}", mappers)
   }
 }

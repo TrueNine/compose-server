@@ -1,160 +1,195 @@
-# 通用标准
+**Technology Stack:** Kotlin 2.2.0, Spring Boot 3.5.4, Spring Framework 6.2.9, Jimmer 0.9.105, Gradle 9.0.0, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j.
 
-**强制规则**
+**Project Features:**
 
-1. 始终使用**简体中文**回复，即使用户输入大量英文提示，也应返回简体中文
-2. 禁止编写任何供用户使用的示例代码，即使需要临时测试，任务完成后也必须立即删除
-3. 严禁通过简化问题来解决问题
-4. 严禁通过降级依赖版本来解决问题
-5. 严禁通过减少测试断言来解决问题
-6. 严禁忽略异常或任何隐藏异常的行为
-7. 应当积极按照规则来重构修复上下文中出现的代码
-8. 严禁在代码中暴露 API 密钥、密码和令牌
-9. 应积极使用日志完善记录，主动补充缺失的日志
-10. 允许在单元测试调试期间添加日志以协助解决问题
-11. 必须最大化使用 `early return` 技术来减少代码嵌套层级
-12. 严禁在对话或任务完成后生成总结文档文件和其他不必要的操作
-13. 严禁出现 `util`,`utils`,`tool` 等的让我恶心的命名方式以及命名空间
+- Modern enterprise-grade Kotlin server-side framework library published to Maven Central Repository
+- Modular design with 40+ core modules supporting on-demand integration into existing projects
+- Licensed under LGPL 2.1 open source license
 
-**输出规则**
+## Module Structure and Navigation
 
-- **优先简洁直接的回复** - 避免冗长解释
-- **批量相关工具调用** - 将多个信息请求合并为单次调用
-- **使用高效工具序列** - 最小化冗余调用
+**Package Format:** `io.github.truenine.composeserver.{module-name}`
 
-**注释规则**
+**Core Foundation Modules:**
 
-- 文档注释：英文注释
-- 代码内部注释：英文注释，且解释"为什么"而非"做什么"
+- `shared/` - Core components, utilities, exception handling, unified responses, pagination, type definitions
+- `testtoolkit/` - Testing toolkit with TestContainers integration
+- `version-catalog/` - Version catalog management
+- `bom/` - Bill of Materials for dependency management
+- `gradle-plugin/` - Gradle plugins and conventions
+- `docsite/` - Documentation site generation
 
-**TDD 约定**
+**Business Capability Modules:**
 
-1. TDD流程：失败测试→实现代码→重构
-2. 覆盖边界条件和异常情况
-3. 独立运行，无外部依赖
-4. 测试命名清晰表达意图
-5. 测试类与被测试类同名
-6. **嵌套测试组织**：使用合适的分组，避免根级别大量独立测试方法
-7. 严禁出现没有断言的测试方法，发现应该立即补全断言
+- `cacheable/` - Multi-level caching (Redis, Caffeine)
+- `ai/` - AI services
+  - `ai-shared` - AI shared components
+  - `ai-langchain4j` - LangChain4j integration
+- `pay/` - Payment services
+  - `pay-shared` - Payment shared components
+  - `pay-wechat` - WeChat Pay V3
+- `oss/` - Object storage services
+  - `oss-shared` - OSS shared components
+  - `oss-minio` - MinIO integration
+  - `oss-aliyun-oss` - Alibaba Cloud OSS
+  - `oss-huawei-obs` - Huawei Cloud OBS
+  - `oss-volcengine-tos` - ByteDance VolcEngine TOS
+- `rds/` - Relational database services
+  - `rds-shared` - RDS shared components
+  - `rds-crud` - CRUD operations
+  - `rds-jimmer-ext-postgres` - Jimmer PostgreSQL extensions
+  - `rds-flyway-migration-postgresql` - Flyway PostgreSQL migrations
+  - `rds-flyway-migration-mysql8` - Flyway MySQL8 migrations
+  - `rds-flyway-migration-shared` - Flyway shared migration components
 
-**测试组织最佳实践：**
+**System Service Modules:**
 
-- 每个被测试类/函数/变量/方法创建主要分组
-- 按场景细分：正常用例、异常用例、边界用例
-- 示例kotlin：`@Nested inner class CreateUser { @Test fun should_create_successfully() {} }`
-- 测试方法命名使用反引号包围的中文描述：`fun \`测试用户创建成功\`()`
-- 禁止使用 `@DisplayName` 注解
+- `security/` - Security services
+  - `security:spring` - Spring Security integration
+  - `security:oauth2` - OAuth2 support
+  - `security:crypto` - Cryptographic components
+- `sms/` - SMS services
+  - `sms:shared` - SMS shared components
+  - `sms:tencent` - Tencent Cloud SMS
+- `surveillance/` - Monitoring services
+  - `surveillance:shared` - Surveillance shared components
+  - `surveillance:hikvision` - Hikvision integration
 
-# 特定语言约定
+**Data Processing Modules:**
 
-**SQL 标准**
+- `data/` - Data processing
+  - `data:crawler` - Web crawling
+  - `data:extract` - Data extraction
+- `depend/` - Dependency handling
+  - `depend:servlet` - Servlet dependencies
+  - `depend:paho` - MQTT Paho client
+  - `depend:http-exchange` - Spring 6 WebExchange
+  - `depend:jackson` - Jackson processing
+  - `depend:springdoc-openapi` - OpenAPI documentation
+  - `depend:xxl-job` - XXL-Job integration
 
-1. 检查现有查询是否使用参数化
-2. 统一使用snake_case命名
-3. 验证无字符串拼接风险
-4. 应尽量使用小写来编写SQL
+**Code Generation Modules:**
 
-**JVM 标准**
+- `ksp/` - Kotlin Symbol Processing
+  - `ksp:plugin` - KSP plugin
+  - `ksp:shared` - KSP shared components
+  - `ksp:meta` - Metadata definitions
 
-1. 严禁在测试代码中使用 `@DisplayName` 注解
-2. spring/quarkus 中严禁使用特定框架的注解，例如：`@Autowired`必须使用 `@Resource` 替代
-3. 尽可能使用项目内JDK版本能使用的最大限度的新特性
+**Platform SDK Modules:**
 
-**Java 标准**
+- `psdk/` - Platform SDK
+  - `psdk:wxpa` - WeChat Public Account SDK
 
-1. 尽可能使用jdk的新特性
-2. 声明变量应尽量使用 `final var`
-3. 积极使用 lambda
-4. 严禁使用 `System.out.println` 记录输出
+**IDE Integration Modules:**
 
-**Kotlin 标准**
+- `ide/` - IDE integrations
+  - `ide:idea-mcp` - IntelliJ IDEA MCP plugin
 
-1. 优先使用val声明不可变变量
-2. 避免!!操作符，使用?.或let{}
-3. 数据类替代多参数函数
-4. 严禁使用 `println` 记录输出
-5. 严禁在单元测试中使用 `mockito`，而是使用 `mockk`
+**Common Paths:**
 
-**TypeScript 和 Vue 标准**
+- Build files: `{module}/build.gradle.kts`
+- Source code: `{module}/src/main/kotlin/io/github/truenine/composeserver/{module}/`
+- Tests: `{module}/src/test/kotlin/`
+- Resources: `{module}/src/main/resources/`
 
-- TypeScript: 启用strict模式，避免any类型
-- Vue: 积极使用 vue3 新特性
+## Build Commands
 
-**SCSS 标准**
+**Basic Build Operations:**
 
-- 禁止使用 `@import`，使用 `@use` 代替
+- `./gradlew build` - Build the project
+- `./gradlew clean` - Clean build outputs
+- `./gradlew publishToMavenLocal` - Publish to local Maven repository
+- `./gradlew check` - Run all tests and checks
 
-# Git 提交规范
+**Module-specific Operations:**
 
-## 提交消息格式
+- `./gradlew :{module}:check` - Run tests for specific module
+- `./gradlew :{module}:build` - Build specific module
+- `./gradlew :{module}:publishToMavenLocal` - Publish specific module to local repository
 
-**基本格式：** `emoji [scope] description`
+**Code Quality:**
 
-- **emoji**: 表示变更类型的表情符号
-- **scope**: 影响范围（模块名称），使用方括号包围
-- **description**: 简洁的变更描述
+- `./gradlew spotlessApply` - Fix code formatting (must run before commit)
+- `./gradlew versionCatalogFormat` - Format `libs.versions.toml` file
+- `./gradlew versionCatalogUpdate` - Check for dependency updates
 
-**复杂变更格式：** 当单次提交包含多个变更时，使用列表格式
+**Performance Optimization:**
 
-## 表情符号规范
+- JVM Configuration: `-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC`
+- Enable parallel builds, caching, and configuration cache
 
-| 表情符号 | 类型        | 描述       | 使用场景               |
-|------|-----------|----------|--------------------|
-| 🎉   | feat      | 重大功能/初始化 | 新功能、重大更新、项目初始化     |
-| ✨    | feat      | 新功能/增强   | 添加功能、增强、文档更新       |
-| 🐛   | fix       | Bug 修复   | 修复错误、解决问题          |
-| 🔧   | config    | 配置修改     | 配置文件、CI/CD、构建配置    |
-| 📝   | docs      | 文档更新     | 更新文档、README、注释     |
-| 🎨   | style     | 代码风格/格式化 | 代码格式化、样式、结构优化      |
-| ♻️   | refactor  | 重构       | 代码重构、包结构调整         |
-| ⚡    | perf      | 性能优化     | 性能优化、算法改进          |
-| 🔥   | remove    | 删除代码/文件  | 删除无用代码、移除功能        |
-| 🧪   | test      | 测试相关     | 添加测试、修复测试、测试配置     |
-| 👷   | ci        | CI/CD    | 持续集成、构建脚本          |
-| 📦   | build     | 构建系统     | 依赖管理、构建配置          |
-| ⬆️   | upgrade   | 升级依赖     | 升级库版本              |
-| ⬇️   | downgrade | 降级依赖     | 降级库版本              |
-| 🚀   | release   | 发布版本     | 版本发布、标签创建          |
-| 🔀   | merge     | 合并分支     | 分支合并、冲突解决          |
-| 🤖   | ai        | AI 工具配置  | AI 助手配置、自动化        |
-| 💄   | optimize  | 优化       | 性能优化、代码改进          |
-| 🌐   | network   | 网络相关     | 网络配置、API 调用、远程服务   |
-| 🔐   | security  | 安全/验证    | 安全修复、权限控制、验证       |
-| 🚑   | hotfix    | 紧急修复     | 紧急修复、临时解决方案        |
-| 📈   | analytics | 分析/监控    | 性能监控、数据分析          |
-| 🍱   | assets    | 资源文件     | 图片、字体、静态资源         |
-| 🚨   | lint      | 代码检查     | 修复 linting 警告、代码质量 |
-| 💡   | comment   | 注释       | 添加/更新注释、文档字符串      |
-| 🔊   | log       | 日志       | 添加日志、调试信息          |
-| 🔇   | log       | 移除日志     | 删除日志、静默输出          |
+## Build Conventions and Plugins
 
-## 提交示例
+**build-logic Convention Plugin System:**
 
-### 简单格式示例
+- `buildlogic.jacoco-conventions` - Code coverage conventions
+- `buildlogic.java-conventions` - Java conventions
+- `buildlogic.javaspring-conventions` - Java Spring conventions
+- `buildlogic.kotlin-conventions` - Kotlin conventions
+- `buildlogic.kotlinspring-conventions` - Kotlin Spring conventions (primary usage)
+- `buildlogic.publish-conventions` - Publishing conventions
+- `buildlogic.repositories-conventions` - Repository conventions
+- `buildlogic.spotless-conventions` - Code formatting conventions
+- `buildlogic.spotless-sql-conventions` - SQL code formatting conventions
 
-```bash
-✨ [shared] 添加统一异常处理
+## Development Standards
 
-🐛 [rds] 修复连接池配置问题
+**Dependencies and Build:**
 
-♻️ [security] 重构JWT验证逻辑
-```
+- **Dependency Management:** Gradle Version Catalog (`gradle/libs.versions.toml`) for unified version management
+- **Plugin Conventions:** All Kotlin modules use `kotlinspring-conventions`, Java modules use corresponding conventions
+- **Code Formatting:** Spotless automated format checking (must run `./gradlew spotlessApply` before commit)
+- **Version Publishing:** Published to Maven Central Repository as `io.github.truenine:composeserver-*`
 
-### 复杂格式示例
+**Testing Standards:**
 
-```bash
-✨ [ai] LangChain4j集成优化
+- Test classes have the same name as the tested class, organized using @Nested
+- Disable @DisplayName annotation, use backtick Chinese method names
+- TestContainers integration testing supports PostgreSQL/MySQL/Redis/MinIO
+- Test organization: Normal cases, exception cases, boundary cases grouped
 
-- 🚑 修复模型加载超时问题
-- 🐛 解决依赖冲突问题
-- 💄 优化AI服务性能
-- 🧪 补充集成测试用例
-```
+**Architecture Conventions:**
 
-## 提交规范要求
+- Package naming: `io.github.truenine.composeserver.{module-name}`
+- Auto-configuration: Spring Boot AutoConfiguration + @ConditionalOn* conditional configuration
+- Resource management: ResourceHolder unified management of configuration files and static resources
 
-1. **必须使用表情符号**: 每个提交消息必须以对应的表情符号开头
-2. **明确作用域**: 使用方括号明确标识影响的模块或组件
-3. **描述简洁明了**: 使用动词开头，简洁描述变更内容
-4. **单一职责**: 每个提交应专注于单一变更类型
-5. **中文描述**: 提交描述使用中文，便于团队理解
+## Architecture Features
+
+**Modular Design:**
+
+- Each module is independently packaged and published to Maven Central Repository, supporting on-demand integration
+- build-logic convention plugins uniformly manage build configuration and code quality standards
+
+**Testing Architecture:**
+
+- TestContainers integration testing: PostgreSQL, MySQL, Redis, MinIO containerized testing
+- @Nested inner classes organize test scenarios: normal cases, exception cases, boundary cases
+- Test idempotency verification: ensures safety of multiple executions of database migrations and stored procedures
+
+**Auto-configuration System:**
+
+- Spring Boot AutoConfiguration automatically assembles module functionality
+- Conditional configuration: Controls component enablement through Properties classes and @ConditionalOn* annotations
+- Resource management: ResourceHolder unified management of configuration files and static resource loading
+
+## Development Guide
+
+**Build Environment Requirements:**
+
+- Java 24+
+- Kotlin 2.2.0
+- Gradle 9.x (using included builds and version catalog management)
+
+**Development Workflow:**
+
+1. Must run `./gradlew spotlessApply` to fix code formatting before commit
+2. Ensure all tests pass with `./gradlew check`
+3. Use @Nested to organize tests, disable @DisplayName, use backtick Chinese method names
+4. New modules need to be declared in `settings.gradle.kts` and apply appropriate build conventions
+
+**Version Management:**
+
+- Dependency versions are unified in `gradle/libs.versions.toml`
+- Use `./gradlew versionCatalogUpdate` to check for dependency updates
+- Version publishing through Maven Central Repository, naming rule: `io.github.truenine:composeserver-{module-name}`

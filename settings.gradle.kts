@@ -14,7 +14,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "compose-server"
 
 // 根级模块
-listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cacheable").forEach { p ->
+listOf("testtoolkit", "version-catalog", "shared", "bom", "gradle-plugin", "cacheable", "docsite").forEach { p ->
   include(p)
   findProject(":$p")?.name = p
 }
@@ -100,3 +100,6 @@ include("psdk:psdk-wxpa")
 
 // IDE 插件模块
 include("ide:ide-idea-mcp")
+
+// === 集成测试模块 ===
+include("integrate-test:depend:jackson")

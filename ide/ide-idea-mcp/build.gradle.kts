@@ -23,7 +23,15 @@ dependencies {
     plugin("com.intellij.mcpServer", "1.0.30")
   }
 
+  // Logging dependencies
+  implementation(libs.org.slf4j.slf4j.api)
+  implementation(libs.ch.qos.logback.logback.classic)
+
   testImplementation(libs.org.jetbrains.kotlin.kotlin.test)
+  testImplementation(libs.io.mockk.mockk) {
+    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")
+    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-bom")
+  }
 }
 
 dependencies { compileOnly(libs.org.jetbrains.kotlinx.kotlinx.serialization.json) }

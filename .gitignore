@@ -4,10 +4,10 @@
 ### gradle ###
 .gradle
 build/
+/build-cache/
 /generated/
 generated_tests/
 .generated/
-.temp/
 .xcodemap/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -72,5 +72,6 @@ logs
 TODO.*
 
 ### AI Coder ###
-/.claude/
 /.intellijPlatform/
+node_modules/
+pnpm-lock.yaml

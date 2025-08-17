@@ -19,7 +19,7 @@ interface IString {
      */
     @JvmStatic
     @OptIn(ExperimentalContracts::class)
-    inline fun nonText(text: String?): Boolean {
+    fun nonText(text: String?): Boolean {
       contract { returns(true) implies (text == null) }
       return text.isNullOrBlank()
     }
@@ -31,7 +31,7 @@ interface IString {
      * @return 处理后的单行字符串
      */
     @JvmStatic
-    inline fun inLine(str: String): String {
+    fun inLine(str: String): String {
       return if (str.isNotBlank()) {
         str.replace(Regex("[\r\n\t]"), "")
       } else str
@@ -45,7 +45,7 @@ interface IString {
      */
     @JvmStatic
     @OptIn(ExperimentalContracts::class)
-    inline fun hasText(text: String?): Boolean {
+    fun hasText(text: String?): Boolean {
       contract { returns(false) implies (text != null) }
       return !text.isNullOrBlank()
     }
@@ -57,7 +57,7 @@ interface IString {
      * @return 如果字符序列包含至少一个非空白字符则返回 true，否则返回 false
      */
     @JvmStatic
-    inline fun containsText(str: CharSequence): Boolean {
+    fun containsText(str: CharSequence): Boolean {
       return str.any { !it.isWhitespace() }
     }
 

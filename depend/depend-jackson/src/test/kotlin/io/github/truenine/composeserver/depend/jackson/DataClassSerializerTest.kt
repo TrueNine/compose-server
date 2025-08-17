@@ -24,7 +24,7 @@ class DataClassSerializerTest {
   @Resource lateinit var mapper: ObjectMapper
 
   @Test
-  fun `test serialize class with late init var`() {
+  fun serialize_class_with_lateinit_var() {
     val b = B()
     b.s = "s"
     val json = mapper.writeValueAsString(b)
@@ -33,7 +33,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize data class`() {
+  fun serialize_data_class() {
     val a = A("a", "b")
     val json = mapper.writeValueAsString(a)
     log.info("a json: {}", json)
@@ -42,7 +42,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize interface internal data class`() {
+  fun serialize_interface_internal_data_class() {
     val a = InterFace.InternalClass("a", "b", "c")
     val json = mapper.writeValueAsString(a)
     log.info("json: {}", json)
@@ -53,7 +53,7 @@ class DataClassSerializerTest {
   @Resource @Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) lateinit var map: ObjectMapper
 
   @Test
-  fun `test serialize interface internal data class be typed`() {
+  fun serialize_interface_internal_data_class_with_type_info() {
     val a = InterFace.InternalClass("a", "b", "c")
     val json = map.writeValueAsString(a)
     assertTrue { json.contains("io.github.truenine.composeserver.depend.jackson.InterFace\$InternalClass") }
@@ -64,7 +64,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test ignore json serialize datetime`() {
+  fun serialize_datetime_with_json_ignore() {
     val dt = datetime.now()
     val a = InterFace.InternalClass("a", "b", "c", dt)
     val json = map.writeValueAsString(a)
@@ -76,7 +76,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize null values`() {
+  fun serialize_null_values() {
     val a = InterFace.InternalClass("a", "b", null, null)
     val json = mapper.writeValueAsString(a)
     log.info("null values json: {}", json)
@@ -85,7 +85,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize empty strings`() {
+  fun serialize_empty_strings() {
     val a = A("", "")
     val json = mapper.writeValueAsString(a)
     log.info("empty strings json: {}", json)
@@ -94,7 +94,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize with special characters`() {
+  fun serialize_with_special_characters() {
     val a = A("hello\nworld", "test\"quote'apostrophe")
     val json = mapper.writeValueAsString(a)
     log.info("special chars json: {}", json)
@@ -103,7 +103,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize unicode characters`() {
+  fun serialize_unicode_characters() {
     val a = A("测试中文", "🎉emoji")
     val json = mapper.writeValueAsString(a)
     log.info("unicode json: {}", json)
@@ -112,7 +112,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize large strings`() {
+  fun serialize_large_strings() {
     val largeString = "x".repeat(10000)
     val a = A(largeString, "normal")
     val json = mapper.writeValueAsString(a)
@@ -122,7 +122,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test serialize class with uninitialized lateinit var should fail`() {
+  fun serialize_uninitialized_lateinit_var_should_fail() {
     val b = B()
     try {
       val json = mapper.writeValueAsString(b)
@@ -133,7 +133,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test deserialize malformed json should fail`() {
+  fun deserialize_malformed_json_should_fail() {
     try {
       val obj = mapper.readValue<A>("{\"a\":\"test\",\"b\":}")
       log.error("Unexpected success: {}", obj)
@@ -143,7 +143,7 @@ class DataClassSerializerTest {
   }
 
   @Test
-  fun `test deserialize missing required field should fail`() {
+  fun deserialize_missing_required_field_should_fail() {
     try {
       val obj = mapper.readValue<A>("{\"a\":\"test\"}")
       log.error("Unexpected success: {}", obj)

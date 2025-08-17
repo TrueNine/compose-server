@@ -2,185 +2,198 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
 
-**技术栈：** Kotlin 2.2.0, Spring Boot 3.5.4, Spring Framework 6.2.6, Jimmer 0.9.105, Gradle 9.0.0, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j。
+**Technology Stack:** Kotlin 2.2.0, Spring Boot 3.5.4, Spring Framework 6.2.9, Jimmer 0.9.105, Gradle 9.0.0, Java 24, PostgreSQL, Redis, Caffeine, MinIO, LangChain4j.
 
-**项目特点：**
+**Project Features:**
 
-- 现代化企业级Kotlin服务端框架库，已发布至Maven中央仓库
-- 15+核心模块的模块化设计，支持按需集成到现有项目
-- 采用LGPL 2.1开源协议
+- Modern enterprise-grade Kotlin server-side framework library published to Maven Central Repository
+- Modular design with 40+ core modules supporting on-demand integration into existing projects
+- Licensed under LGPL 2.1 open source license
 
-## 模块结构与导航
+## Module Structure and Navigation
 
-**包格式：** `io.github.truenine.composeserver.{模块名}`
+**Package Format:** `io.github.truenine.composeserver.{module-name}`
 
-**核心基础模块：**
+**Core Foundation Modules:**
 
-- `shared/` - 核心组件、工具类、异常处理、统一响应、分页、类型定义
-- `testtoolkit/` - 测试工具包、TestContainers集成
-- `version-catalog/` - 版本目录管理
-- `bom/` - 依赖管理清单
-- `gradle-plugin/` - Gradle插件和约定
+- `shared/` - Core components, utilities, exception handling, unified responses, pagination, type definitions
+- `testtoolkit/` - Testing toolkit with TestContainers integration
+- `version-catalog/` - Version catalog management
+- `bom/` - Bill of Materials for dependency management
+- `gradle-plugin/` - Gradle plugins and conventions
+- `docsite/` - Documentation site generation
 
-**业务能力模块：**
+**Business Capability Modules:**
 
-- `cacheable/` - 多级缓存（Redis、Caffeine）
-- `ai/` - AI服务
-  - `ai-shared` - AI共享组件
-  - `ai-langchain4j` - LangChain4j集成
-- `pay/` - 支付服务
-  - `pay-shared` - 支付共享组件
-  - `pay-wechat` - 微信支付V3
-- `oss/` - 对象存储
-  - `oss-shared` - OSS共享组件
-  - `oss-minio` - MinIO集成
-  - `oss-aliyun-oss` - 阿里云OSS
-  - `oss-huawei-obs` - 华为云OBS
-  - `oss-volcengine-tos` - 火山引擎TOS
-- `rds/` - 关系型数据库
-  - `rds-shared` - RDS共享组件
-  - `rds-crud` - CRUD操作
-  - `rds-jimmer-ext-postgres` - Jimmer PostgreSQL扩展
-  - `rds-flyway-migration-postgresql` - Flyway PostgreSQL迁移
-  - `rds-flyway-migration-mysql8` - Flyway MySQL8迁移
+- `cacheable/` - Multi-level caching (Redis, Caffeine)
+- `ai/` - AI services
+  - `ai-shared` - AI shared components
+  - `ai-langchain4j` - LangChain4j integration
+- `pay/` - Payment services
+  - `pay-shared` - Payment shared components
+  - `pay-wechat` - WeChat Pay V3
+- `oss/` - Object storage services
+  - `oss-shared` - OSS shared components
+  - `oss-minio` - MinIO integration
+  - `oss-aliyun-oss` - Alibaba Cloud OSS
+  - `oss-huawei-obs` - Huawei Cloud OBS
+  - `oss-volcengine-tos` - ByteDance VolcEngine TOS
+- `rds/` - Relational database services
+  - `rds-shared` - RDS shared components
+  - `rds-crud` - CRUD operations
+  - `rds-jimmer-ext-postgres` - Jimmer PostgreSQL extensions
+  - `rds-flyway-migration-postgresql` - Flyway PostgreSQL migrations
+  - `rds-flyway-migration-mysql8` - Flyway MySQL8 migrations
+  - `rds-flyway-migration-shared` - Flyway shared migration components
 
-**系统服务模块：**
+**System Service Modules:**
 
-- `security/` - 安全服务
-  - `security:spring` - Spring Security集成
-  - `security:oauth2` - OAuth2支持
-  - `security:crypto` - 加密组件
-- `sms/` - 短信服务
-  - `sms:shared` - 短信共享组件
-  - `sms:tencent` - 腾讯云短信
-- `surveillance/` - 监控服务
-  - `surveillance:shared` - 监控共享组件
-  - `surveillance:hikvision` - 海康威视集成
+- `security/` - Security services
+  - `security:spring` - Spring Security integration
+  - `security:oauth2` - OAuth2 support
+  - `security:crypto` - Cryptographic components
+- `sms/` - SMS services
+  - `sms:shared` - SMS shared components
+  - `sms:tencent` - Tencent Cloud SMS
+- `surveillance/` - Monitoring services
+  - `surveillance:shared` - Surveillance shared components
+  - `surveillance:hikvision` - Hikvision integration
 
-**数据处理模块：**
+**Data Processing Modules:**
 
-- `data/` - 数据处理
-  - `data:crawler` - 网络爬虫
-  - `data:extract` - 数据提取
-- `depend/` - 依赖处理
-  - `depend:servlet` - Servlet依赖
-  - `depend:paho` - MQTT Paho客户端
-  - `depend:http-exchange` - spring6 webexchange
-  - `depend:jackson` - Jackson 处理
-  - `depend:springdoc-openapi` - OpenAPI文档
-  - `depend:xxl-job` - XXL-Job集成
+- `data/` - Data processing
+  - `data:crawler` - Web crawling
+  - `data:extract` - Data extraction
+- `depend/` - Dependency handling
+  - `depend:servlet` - Servlet dependencies
+  - `depend:paho` - MQTT Paho client
+  - `depend:http-exchange` - Spring 6 WebExchange
+  - `depend:jackson` - Jackson processing
+  - `depend:springdoc-openapi` - OpenAPI documentation
+  - `depend:xxl-job` - XXL-Job integration
 
-**代码生成模块：**
+**Code Generation Modules:**
 
-- `ksp/` - Kotlin符号处理
-  - `ksp:plugin` - KSP插件
-  - `ksp:shared` - KSP共享组件
-  - `ksp:meta` - 元数据定义
+- `ksp/` - Kotlin Symbol Processing
+  - `ksp:plugin` - KSP plugin
+  - `ksp:shared` - KSP shared components
+  - `ksp:meta` - Metadata definitions
 
-**常用路径：**
+**Platform SDK Modules:**
 
-- 构建文件：`{模块}/build.gradle.kts`
-- 源码：`{模块}/src/main/kotlin/io/github/truenine/composeserver/{模块}/`
-- 测试：`{模块}/src/test/kotlin/`
-- 资源：`{模块}/src/main/resources/`
+- `psdk/` - Platform SDK
+  - `psdk:wxpa` - WeChat Public Account SDK
 
-## 构建命令
+**IDE Integration Modules:**
 
-**基础构建：**
+- `ide/` - IDE integrations
+  - `ide:idea-mcp` - IntelliJ IDEA MCP plugin
 
-- `./gradlew build` - 构建项目
-- `./gradlew clean` - 清理输出
-- `./gradlew publishToMavenLocal` - 本地发布
-- `./gradlew check` - 运行所有测试
+**Common Paths:**
 
-**模块化操作：**
+- Build files: `{module}/build.gradle.kts`
+- Source code: `{module}/src/main/kotlin/io/github/truenine/composeserver/{module}/`
+- Tests: `{module}/src/test/kotlin/`
+- Resources: `{module}/src/main/resources/`
 
-- `./gradlew :{模块}:check` - 模块特定测试
-- `./gradlew :{模块}:build` - 构建单个模块
-- `./gradlew :{模块}:publishToMavenLocal` - 本地发布单个模块
+## Build Commands
 
-**代码质量：**
+**Basic Build Operations:**
 
-- `./gradlew spotlessApply` - 修复格式（提交前必须运行）
-- `./gradlew versionCatalogFormat` - 修复 `libs.versions.toml` 格式
+- `./gradlew build` - Build the project
+- `./gradlew clean` - Clean build outputs
+- `./gradlew publishToMavenLocal` - Publish to local Maven repository
+- `./gradlew check` - Run all tests and checks
 
-**性能优化配置：**
+**Module-specific Operations:**
 
-- JVM配置：`-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC`
-- 启用并行构建、缓存、配置缓存
+- `./gradlew :{module}:check` - Run tests for specific module
+- `./gradlew :{module}:build` - Build specific module
+- `./gradlew :{module}:publishToMavenLocal` - Publish specific module to local repository
 
-## 构建约定与插件
+**Code Quality:**
 
-**build-logic 约定插件体系：**
+- `./gradlew spotlessApply` - Fix code formatting (must run before commit)
+- `./gradlew versionCatalogFormat` - Format `libs.versions.toml` file
+- `./gradlew versionCatalogUpdate` - Check for dependency updates
 
-- `buildlogic.jacoco-conventions` - 代码覆盖率约定
-- `buildlogic.java-conventions` - Java约定
-- `buildlogic.javaspring-conventions` - Java Spring约定
-- `buildlogic.kotlin-conventions` - Kotlin约定
-- `buildlogic.kotlinspring-conventions` - Kotlin Spring约定（主要使用）
-- `buildlogic.publish-conventions` - 发布约定
-- `buildlogic.repositories-conventions` - 仓库约定
-- `buildlogic.spotless-conventions` - 代码格式化约定
-- `buildlogic.spotless-sql-conventions` - SQL 代码格式化约定
+**Performance Optimization:**
 
-## 开发标准
+- JVM Configuration: `-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC`
+- Enable parallel builds, caching, and configuration cache
 
-**依赖和构建：**
+## Build Conventions and Plugins
 
-- **依赖管理：** Gradle Version Catalog (`gradle/libs.versions.toml`) 统一版本管理
-- **插件约定：** 所有Kotlin模块使用 `kotlinspring-conventions`，Java模块使用相应约定
-- **代码格式：** Spotless自动化格式检查（提交前必须运行 `./gradlew spotlessApply`）
-- **版本发布：** 发布至Maven中央仓库 `io.github.truenine:composeserver-*`
+**build-logic Convention Plugin System:**
 
-**测试规范：**
+- `buildlogic.jacoco-conventions` - Code coverage conventions
+- `buildlogic.java-conventions` - Java conventions
+- `buildlogic.javaspring-conventions` - Java Spring conventions
+- `buildlogic.kotlin-conventions` - Kotlin conventions
+- `buildlogic.kotlinspring-conventions` - Kotlin Spring conventions (primary usage)
+- `buildlogic.publish-conventions` - Publishing conventions
+- `buildlogic.repositories-conventions` - Repository conventions
+- `buildlogic.spotless-conventions` - Code formatting conventions
+- `buildlogic.spotless-sql-conventions` - SQL code formatting conventions
 
-- 测试类与被测试类同名，使用@Nested组织测试
-- 禁用@DisplayName注解，使用反引号中文方法名
-- TestContainers集成测试支持 PostgreSQL/MySQL/Redis/MinIO
-- 测试组织：正常用例、异常用例、边界用例分组
+## Development Standards
 
-**架构约定：**
+**Dependencies and Build:**
 
-- 包命名：`io.github.truenine.composeserver.{模块名}`
-- 自动配置：Spring Boot AutoConfiguration + @ConditionalOn* 条件化配置
-- 资源管理：ResourceHolder统一管理配置文件和静态资源
+- **Dependency Management:** Gradle Version Catalog (`gradle/libs.versions.toml`) for unified version management
+- **Plugin Conventions:** All Kotlin modules use `kotlinspring-conventions`, Java modules use corresponding conventions
+- **Code Formatting:** Spotless automated format checking (must run `./gradlew spotlessApply` before commit)
+- **Version Publishing:** Published to Maven Central Repository as `io.github.truenine:composeserver-*`
 
-## 架构特点
+**Testing Standards:**
 
-**模块化设计：**
+- Test classes have the same name as the tested class, organized using @Nested
+- Disable @DisplayName annotation, use backtick Chinese method names
+- TestContainers integration testing supports PostgreSQL/MySQL/Redis/MinIO
+- Test organization: Normal cases, exception cases, boundary cases grouped
 
-- 每个模块独立打包发布到Maven中央仓库，支持按需集成
-- build-logic 约定插件统一管理构建配置和代码质量标准
+**Architecture Conventions:**
 
-**测试架构：**
+- Package naming: `io.github.truenine.composeserver.{module-name}`
+- Auto-configuration: Spring Boot AutoConfiguration + @ConditionalOn* conditional configuration
+- Resource management: ResourceHolder unified management of configuration files and static resources
 
-- TestContainers集成测试：PostgreSQL、MySQL、Redis、MinIO容器化测试
-- @Nested内部类组织测试场景：正常用例、异常用例、边界用例
-- 测试幂等性验证：数据库迁移和存储过程多次执行安全性保证
+## Architecture Features
 
-**自动配置体系：**
+**Modular Design:**
 
-- Spring Boot AutoConfiguration自动装配各模块功能
-- 条件化配置：通过Properties类和@ConditionalOn*注解控制组件启用
-- 资源管理：ResourceHolder统一管理配置文件和静态资源加载
+- Each module is independently packaged and published to Maven Central Repository, supporting on-demand integration
+- build-logic convention plugins uniformly manage build configuration and code quality standards
 
-## 重要开发指南
+**Testing Architecture:**
 
-**构建环境要求：**
+- TestContainers integration testing: PostgreSQL, MySQL, Redis, MinIO containerized testing
+- @Nested inner classes organize test scenarios: normal cases, exception cases, boundary cases
+- Test idempotency verification: ensures safety of multiple executions of database migrations and stored procedures
+
+**Auto-configuration System:**
+
+- Spring Boot AutoConfiguration automatically assembles module functionality
+- Conditional configuration: Controls component enablement through Properties classes and @ConditionalOn* annotations
+- Resource management: ResourceHolder unified management of configuration files and static resource loading
+
+## Development Guide
+
+**Build Environment Requirements:**
 
 - Java 24+
 - Kotlin 2.2.0
-- Gradle 9.x（使用included builds和版本目录管理）
+- Gradle 9.x (using included builds and version catalog management)
 
-**开发流程：**
+**Development Workflow:**
 
-1. 提交前必须运行 `./gradlew spotlessApply` 修复代码格式
-2. 确保所有测试通过 `./gradlew check`
-3. 使用@Nested组织测试，禁用@DisplayName，采用反引号中文方法名
-4. 新模块需在 `settings.gradle.kts` 中声明并应用相应的构建约定
+1. Must run `./gradlew spotlessApply` to fix code formatting before commit
+2. Ensure all tests pass with `./gradlew check`
+3. Use @Nested to organize tests, disable @DisplayName, use backtick Chinese method names
+4. New modules need to be declared in `settings.gradle.kts` and apply appropriate build conventions
 
-**版本管理：**
+**Version Management:**
 
-- 依赖版本统一在 `gradle/libs.versions.toml` 中管理
-- 使用 `./gradlew versionCatalogUpdate` 检查依赖更新
-- 版本发布通过Maven中央仓库，命名规则：`io.github.truenine:composeserver-{模块名}`
+- Dependency versions are unified in `gradle/libs.versions.toml`
+- Use `./gradlew versionCatalogUpdate` to check for dependency updates
+- Version publishing through Maven Central Repository, naming rule: `io.github.truenine:composeserver-{module-name}`

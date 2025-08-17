@@ -24,7 +24,10 @@ dependencies {
     val dependency = allVersionCatalogs.findLibrary(aliasLib).getOrNull()?.get()
     dependency?.also { d ->
       if (d.module.group.contains(libs.versions.group.get()) == false) {
-        compileOnly(d)
+        // 排除 BOM 类型的依赖，因为它们应该作为平台导入而不是库依赖
+        if (!d.module.name.contains("bom") && !d.module.name.contains("dependencies")) {
+          compileOnly(d)
+        }
       }
       if (d.module.group.contains("cn.enaium") && d.module.name.contains("immutable-dependency")) {
         return@also

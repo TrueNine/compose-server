@@ -1,0 +1,182 @@
+name: Quick Check
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+env:
+  # 🚀 快速检查专用配置 - 最小化资源使用
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true"
+  JVM_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=512m -XX:+UseG1GC"
+
+jobs:
+  # ⚡ 超快速语法和编译检查
+  syntax-check:
+    name: "⚡ Syntax & Compile"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'graalvm'
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.0.0'
+          cache-read-only: false
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: ⚡ Quick syntax check
+        run: |
+          # 只检查语法，不编译
+          ./gradlew help --quiet
+          ./gradlew tasks --quiet > /dev/null
+
+      - name: 🔍 Compile check (core modules only)
+        run: |
+          # 只编译核心模块进行快速验证
+          ./gradlew :shared:compileKotlin :testtoolkit:compileKotlin \
+            --no-daemon \
+            --parallel \
+            --quiet
+
+  # 🧹 代码质量快速检查
+  quality-check:
+    name: "🧹 Code Quality"
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    needs: syntax-check
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'graalvm'
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.0.0'
+          cache-read-only: true
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: 🧹 Spotless check
+        run: |
+          ./gradlew spotlessCheck \
+            --no-daemon \
+            --parallel \
+            --quiet
+
+      - name: 📊 Basic dependency check
+        run: |
+          # 快速依赖检查（不包含漏洞扫描）
+          ./gradlew dependencies --configuration runtimeClasspath > /dev/null
+        continue-on-error: true
+
+  # 🧪 核心模块快速测试
+  core-test:
+    name: "🧪 Core Tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: syntax-check
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'graalvm'
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.0.0'
+          cache-read-only: true
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: 🧪 Run core tests
+        run: |
+          # 只运行核心模块的测试
+          ./gradlew :shared:test :testtoolkit:test \
+            --no-daemon \
+            --parallel \
+            --quiet \
+            -Dorg.gradle.workers.max=2
+        env:
+          GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
+
+  # ✅ 快速检查结果汇总
+  quick-check-result:
+    name: "✅ Quick Check Result"
+    needs: [ syntax-check, quality-check, core-test ]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Check results
+        run: |
+          echo "# ⚡ 快速检查结果" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 检查项 | 状态 |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.syntax-check.result }}" == "success" ]]; then
+            echo "| 语法和编译 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 语法和编译 | ❌ 失败 |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.quality-check.result }}" == "success" ]]; then
+            echo "| 代码质量 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 代码质量 | ❌ 失败 |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.core-test.result }}" == "success" ]]; then
+            echo "| 核心测试 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 核心测试 | ❌ 失败 |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # 检查整体状态
+          if [[ "${{ needs.syntax-check.result }}" != "success" ]] || \
+             [[ "${{ needs.quality-check.result }}" != "success" ]] || \
+             [[ "${{ needs.core-test.result }}" != "success" ]]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "❌ 快速检查发现问题，请修复后再进行完整测试" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ 快速检查全部通过，可以进行完整测试" >> $GITHUB_STEP_SUMMARY
+          fi
