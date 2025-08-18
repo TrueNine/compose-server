@@ -4,7 +4,13 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
-import java.time.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
@@ -28,6 +34,7 @@ abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
         val timestamp = p.longValue
         convertFromTimestamp(timestamp)
       }
+
       JsonToken.VALUE_STRING -> {
         val text = p.text
         if (text.isNullOrBlank()) return null
@@ -44,6 +51,7 @@ abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
           throw IllegalArgumentException("无法解析时间字符串: $text", e)
         }
       }
+
       else -> null
     }
   }
@@ -80,6 +88,7 @@ abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
               val time = LocalTime.parse(text, formatter)
               LocalDate.now().atTime(time).toInstant(ZoneOffset.UTC)
             }
+
             else -> continue
           }
         } catch (e: DateTimeParseException) {

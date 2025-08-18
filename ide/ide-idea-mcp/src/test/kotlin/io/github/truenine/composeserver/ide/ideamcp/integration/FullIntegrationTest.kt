@@ -1,10 +1,22 @@
 package io.github.truenine.composeserver.ide.ideamcp.integration
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import io.github.truenine.composeserver.ide.ideamcp.*
-import io.github.truenine.composeserver.ide.ideamcp.actions.*
-import io.github.truenine.composeserver.ide.ideamcp.services.*
-import io.github.truenine.composeserver.ide.ideamcp.tools.*
+import io.github.truenine.composeserver.ide.ideamcp.FileOperationPanel
+import io.github.truenine.composeserver.ide.ideamcp.McpDebugPanel
+import io.github.truenine.composeserver.ide.ideamcp.McpDebugToolWindowFactory
+import io.github.truenine.composeserver.ide.ideamcp.McpTerminalPanel
+import io.github.truenine.composeserver.ide.ideamcp.TerminalOutputInterceptor
+import io.github.truenine.composeserver.ide.ideamcp.actions.CleanCodeAction
+import io.github.truenine.composeserver.ide.ideamcp.actions.ViewErrorAction
+import io.github.truenine.composeserver.ide.ideamcp.actions.ViewLibCodeAction
+import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
+import io.github.truenine.composeserver.ide.ideamcp.services.ErrorService
+import io.github.truenine.composeserver.ide.ideamcp.services.FileManager
+import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeService
+import io.github.truenine.composeserver.ide.ideamcp.tools.CleanCodeTool
+import io.github.truenine.composeserver.ide.ideamcp.tools.TerminalTool
+import io.github.truenine.composeserver.ide.ideamcp.tools.ViewErrorTool
+import io.github.truenine.composeserver.ide.ideamcp.tools.ViewLibCodeTool
 
 /** 完整集成测试 测试所有组件的协作和数据流 */
 class FullIntegrationTest : BasePlatformTestCase() {

@@ -78,12 +78,14 @@ object MockDataGenerator {
             appendLine("    }")
             appendLine()
           }
+
           "getValue" -> {
             appendLine("    public String getValue() {")
             appendLine("        return this.value;")
             appendLine("    }")
             appendLine()
           }
+
           "setValue" -> {
             appendLine("    public void setValue(String value) {")
             appendLine("        this.value = value;")
@@ -91,6 +93,7 @@ object MockDataGenerator {
             appendLine("    }")
             appendLine()
           }
+
           else -> {
             appendLine("    public void $memberName() {")
             appendLine("        // 自动生成的方法: $memberName")
@@ -170,10 +173,12 @@ object MockDataGenerator {
             appendLine("    }")
             appendLine()
           }
+
           "getValue" -> {
             appendLine("    fun getValue(): String = value")
             appendLine()
           }
+
           "setValue" -> {
             appendLine("    fun setValue(newValue: String) {")
             appendLine("        value = newValue")
@@ -181,6 +186,7 @@ object MockDataGenerator {
             appendLine("    }")
             appendLine()
           }
+
           else -> {
             appendLine("    fun $memberName() {")
             appendLine("        // 自动生成的方法: $memberName")
@@ -212,6 +218,7 @@ object MockDataGenerator {
             className = className.substringAfterLast('.'),
             includeMembers = includeMembers,
           )
+
         else ->
           generateMockJavaSource(
             packageName = className.substringBeforeLast('.', ""),

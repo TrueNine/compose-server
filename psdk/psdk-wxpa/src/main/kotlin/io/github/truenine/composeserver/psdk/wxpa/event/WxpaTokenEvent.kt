@@ -105,8 +105,10 @@ class TokenUsedEvent(
 enum class TokenType {
   /** Access Token */
   ACCESS_TOKEN,
+
   /** JSAPI Ticket */
   JSAPI_TICKET,
+
   /** 两者都包含 */
   BOTH,
 }
@@ -115,8 +117,10 @@ enum class TokenType {
 enum class HealthStatus {
   /** 健康 */
   HEALTHY,
+
   /** 警告（即将过期） */
   WARNING,
+
   /** 不健康（已过期或缺失） */
   UNHEALTHY,
 }

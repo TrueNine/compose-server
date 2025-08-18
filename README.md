@@ -26,7 +26,9 @@
 > **Modular • Enterprise-Grade • Production-Ready**  
 > A comprehensive modular server-side framework built on modern technology stack
 
-**Compose Server** is a modern Kotlin enterprise server-side framework library featuring modular architecture design. It provides **30+ specialized modules** covering AI integration, object storage, database operations, security, payments, messaging, data processing, and monitoring capabilities. All modules are published to **Maven Central** for selective integration, enabling developers to build production-ready enterprise applications rapidly.
+**Compose Server** is a modern Kotlin enterprise server-side framework library featuring modular architecture design. It provides **30+ specialized modules**
+covering AI integration, object storage, database operations, security, payments, messaging, data processing, and monitoring capabilities. All modules are
+published to **Maven Central** for selective integration, enabling developers to build production-ready enterprise applications rapidly.
 
 ### 🎯 Target Audience
 
@@ -47,40 +49,48 @@
 ## ✨ Key Features
 
 ### 🏗️ **Modular Architecture**
+
 - **30+ Business Modules** - Clear functional boundaries and dependencies
 - **Selective Integration** - Choose only needed modules, avoid redundant dependencies
 - **Unified Interfaces** - Consistent API design, reduced learning curve
 
 ### 🎯 **Modern Technology Stack**
+
 - **Kotlin 2.2.0** - Modern JVM language, concise and efficient
 - **Spring Boot 3.5.4** - Enterprise framework, production-ready
 - **Jimmer 0.9.105** - Modern ORM with strong type safety
 - **JDK 24+** - Latest Java features and performance optimizations
 
 ### 🤖 **AI Capabilities**
+
 - **LangChain4j** - Complete AI application development framework
 - **MCP Protocol** - Model Context Protocol support
 - **Multi-Model Support** - Compatible with mainstream AI service providers
 
 ### 📦 **Multi-Cloud Storage**
+
 - **Unified Interface** - Single API for multiple cloud providers
 - **MinIO** - Private cloud object storage solution
 - **Public Cloud Support** - Aliyun OSS, Huawei OBS, Volcengine TOS
 
 ### 🔐 **Enterprise Security**
+
 - **Spring Security** - Complete security framework integration
 - **OAuth2** - Standardized authentication and authorization
 - **Crypto Tools** - Common encryption algorithms encapsulation
 
 ### 💳 **Payment Integration**
+
 - **WeChat Pay** - Complete payment process encapsulation
 - **Unified Interface** - Easy to extend other payment methods
 
 ### 📱 **Messaging & Notifications**
+
 - **SMS Service** - Tencent Cloud SMS integration
 - **Extensible** - Support for multiple notification channels
 
 ### 🗄️ **Data Processing**
+
 - **CRUD Operations** - Jimmer-based data access layer
 - **Database Migration** - Flyway integration with version management
 - **PostgreSQL Extensions** - Optimizations for PostgreSQL
@@ -91,63 +101,63 @@
 
 ### 🏗️ Core Framework
 
-| Technology | Version | Selection Reason |
-|------------|---------|------------------|
-| **[Kotlin](https://kotlinlang.org/)** | 2.2.0 | Modern JVM language, concise and efficient, fully compatible with Java ecosystem |
-| **[Spring Boot](https://spring.io/projects/spring-boot)** | 3.5.4 | Enterprise framework, production-ready, rich ecosystem |
-| **[Jimmer](https://github.com/babyfish-ct/jimmer)** | 0.9.105 | Modern ORM framework, strong type safety, GraphQL-style queries |
-| **[Gradle](https://gradle.org/)** | 9.x | Powerful build tool, supports Kotlin DSL and Version Catalog |
+| Technology                                                | Version | Selection Reason                                                                 |
+|-----------------------------------------------------------|---------|----------------------------------------------------------------------------------|
+| **[Kotlin](https://kotlinlang.org/)**                     | 2.2.0   | Modern JVM language, concise and efficient, fully compatible with Java ecosystem |
+| **[Spring Boot](https://spring.io/projects/spring-boot)** | 3.5.4   | Enterprise framework, production-ready, rich ecosystem                           |
+| **[Jimmer](https://github.com/babyfish-ct/jimmer)**       | 0.9.105 | Modern ORM framework, strong type safety, GraphQL-style queries                  |
+| **[Gradle](https://gradle.org/)**                         | 9.x     | Powerful build tool, supports Kotlin DSL and Version Catalog                     |
 
 ### 🗄️ Database & Persistence
 
-| Technology | Version | Use Case |
-|------------|---------|----------|
-| **[PostgreSQL](https://www.postgresql.org/)** | 42.7.7 | Primary database, world's most advanced open source relational database |
-| **[Flyway](https://flywaydb.org/)** | 11.10.5 | Database version management and migration tool |
-| **[HikariCP](https://github.com/brettwooldridge/HikariCP)** | - | High-performance JDBC connection pool, Spring Boot default |
-| **[Caffeine](https://github.com/ben-manes/caffeine)** | 3.2.2 | High-performance local cache library, Guava Cache replacement |
+| Technology                                                  | Version | Use Case                                                                |
+|-------------------------------------------------------------|---------|-------------------------------------------------------------------------|
+| **[PostgreSQL](https://www.postgresql.org/)**               | 42.7.7  | Primary database, world's most advanced open source relational database |
+| **[Flyway](https://flywaydb.org/)**                         | 11.10.5 | Database version management and migration tool                          |
+| **[HikariCP](https://github.com/brettwooldridge/HikariCP)** | -       | High-performance JDBC connection pool, Spring Boot default              |
+| **[Caffeine](https://github.com/ben-manes/caffeine)**       | 3.2.2   | High-performance local cache library, Guava Cache replacement           |
 
 ### 🤖 AI & Machine Learning
 
-| Technology | Version | Features |
-|------------|---------|----------|
-| **[LangChain4j](https://github.com/langchain4j/langchain4j)** | 1.2.0 | AI application development framework for Java, supports multiple LLMs |
-| **[LangChain4j Community](https://github.com/langchain4j/langchain4j)** | 1.1.0-beta7 | Community extensions with more AI service integrations |
-| **[MCP Protocol](https://modelcontextprotocol.io/)** | 1.1.0-beta7 | Model Context Protocol, unified AI service interface |
+| Technology                                                              | Version     | Features                                                              |
+|-------------------------------------------------------------------------|-------------|-----------------------------------------------------------------------|
+| **[LangChain4j](https://github.com/langchain4j/langchain4j)**           | 1.2.0       | AI application development framework for Java, supports multiple LLMs |
+| **[LangChain4j Community](https://github.com/langchain4j/langchain4j)** | 1.1.0-beta7 | Community extensions with more AI service integrations                |
+| **[MCP Protocol](https://modelcontextprotocol.io/)**                    | 1.1.0-beta7 | Model Context Protocol, unified AI service interface                  |
 
 ### 📦 Object Storage
 
-| Provider | SDK Version | Use Case |
-|----------|-------------|----------|
-| **[MinIO](https://min.io/)** | 8.5.17 | Private cloud storage, S3-compatible, suitable for self-hosted environments |
-| **[Aliyun OSS](https://www.aliyun.com/product/oss)** | 3.18.3 | Public cloud storage, fast access in China |
-| **[Huawei OBS](https://www.huaweicloud.com/product/obs.html)** | 3.25.5 | Public cloud storage, enterprise-grade reliability |
-| **[Volcengine TOS](https://www.volcengine.com/products/tos)** | 2.9.4 | Public cloud storage, ByteDance cloud service |
+| Provider                                                       | SDK Version | Use Case                                                                    |
+|----------------------------------------------------------------|-------------|-----------------------------------------------------------------------------|
+| **[MinIO](https://min.io/)**                                   | 8.5.17      | Private cloud storage, S3-compatible, suitable for self-hosted environments |
+| **[Aliyun OSS](https://www.aliyun.com/product/oss)**           | 3.18.3      | Public cloud storage, fast access in China                                  |
+| **[Huawei OBS](https://www.huaweicloud.com/product/obs.html)** | 3.25.5      | Public cloud storage, enterprise-grade reliability                          |
+| **[Volcengine TOS](https://www.volcengine.com/products/tos)**  | 2.9.4       | Public cloud storage, ByteDance cloud service                               |
 
 ### 🔐 Security & Authentication
 
-| Technology | Version | Application |
-|------------|---------|-------------|
-| **[Spring Security](https://spring.io/projects/spring-security)** | 6.5.2 | Enterprise security framework, authentication and authorization core |
-| **[OAuth2](https://oauth.net/2/)** | - | Standardized authentication and authorization protocol |
-| **[JWT](https://jwt.io/)** | 4.5.0 | Stateless tokens, suitable for distributed systems |
-| **[BouncyCastle](https://www.bouncycastle.org/)** | 1.81 | Cryptographic library, rich cryptographic functions |
+| Technology                                                        | Version | Application                                                          |
+|-------------------------------------------------------------------|---------|----------------------------------------------------------------------|
+| **[Spring Security](https://spring.io/projects/spring-security)** | 6.5.2   | Enterprise security framework, authentication and authorization core |
+| **[OAuth2](https://oauth.net/2/)**                                | -       | Standardized authentication and authorization protocol               |
+| **[JWT](https://jwt.io/)**                                        | 4.5.0   | Stateless tokens, suitable for distributed systems                   |
+| **[BouncyCastle](https://www.bouncycastle.org/)**                 | 1.81    | Cryptographic library, rich cryptographic functions                  |
 
 ### 💳 Payment & Communication
 
-| Service | SDK Version | Integration |
-|---------|-------------|-------------|
-| **[WeChat Pay](https://pay.weixin.qq.com/)** | 0.2.17 | Complete payment process encapsulation, multiple payment methods |
-| **[Tencent Cloud SMS](https://cloud.tencent.com/product/sms)** | 3.1.1281 | SMS service, verification codes and notification messages |
+| Service                                                        | SDK Version | Integration                                                      |
+|----------------------------------------------------------------|-------------|------------------------------------------------------------------|
+| **[WeChat Pay](https://pay.weixin.qq.com/)**                   | 0.2.17      | Complete payment process encapsulation, multiple payment methods |
+| **[Tencent Cloud SMS](https://cloud.tencent.com/product/sms)** | 3.1.1281    | SMS service, verification codes and notification messages        |
 
 ### 🔧 Development Tools & Testing
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| **[JUnit 5](https://junit.org/junit5/)** | 6.0.0-M2 | Modern Java testing framework |
-| **[MockK](https://mockk.io/)** | 1.14.5 | Kotlin-specific mocking framework |
-| **[TestContainers](https://www.testcontainers.org/)** | 1.21.3 | Integration testing containerization solution |
-| **[Spotless](https://github.com/diffplug/spotless)** | 7.2.1 | Code formatting and style checking tool |
+| Tool                                                  | Version  | Purpose                                       |
+|-------------------------------------------------------|----------|-----------------------------------------------|
+| **[JUnit 5](https://junit.org/junit5/)**              | 6.0.0-M2 | Modern Java testing framework                 |
+| **[MockK](https://mockk.io/)**                        | 1.14.5   | Kotlin-specific mocking framework             |
+| **[TestContainers](https://www.testcontainers.org/)** | 1.21.3   | Integration testing containerization solution |
+| **[Spotless](https://github.com/diffplug/spotless)**  | 7.2.1    | Code formatting and style checking tool       |
 
 ---
 
@@ -183,87 +193,87 @@ Compose Server adopts a layered modular architecture providing clear functional 
 
 #### 🏛️ **Infrastructure Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **shared** | Core foundation library with common utilities and abstractions | Base dependency for all business modules |
-| **bom** | Bill of Materials for unified version management | Project dependency and version control |
-| **testtoolkit** | Testing toolkit with infrastructure and utilities | Unit testing, integration testing, performance testing |
-| **cacheable** | Caching abstraction layer with unified interfaces | Application cache, data cache, session cache |
-| **version-catalog** | Gradle version catalog for external projects | External project integration and version sync |
+| Module              | Description                                                    | Use Case                                               |
+|---------------------|----------------------------------------------------------------|--------------------------------------------------------|
+| **shared**          | Core foundation library with common utilities and abstractions | Base dependency for all business modules               |
+| **bom**             | Bill of Materials for unified version management               | Project dependency and version control                 |
+| **testtoolkit**     | Testing toolkit with infrastructure and utilities              | Unit testing, integration testing, performance testing |
+| **cacheable**       | Caching abstraction layer with unified interfaces              | Application cache, data cache, session cache           |
+| **version-catalog** | Gradle version catalog for external projects                   | External project integration and version sync          |
 
 #### 🤖 **AI Service Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **ai-shared** | Common AI service abstractions and interfaces | Unified interface layer for AI capabilities |
+| Module             | Description                                      | Use Case                                                    |
+|--------------------|--------------------------------------------------|-------------------------------------------------------------|
+| **ai-shared**      | Common AI service abstractions and interfaces    | Unified interface layer for AI capabilities                 |
 | **ai-langchain4j** | LangChain4j integration supporting multiple LLMs | Intelligent dialogue, content generation, document analysis |
 
 #### 📦 **Object Storage Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **oss-shared** | Unified object storage interfaces and abstractions | Unified access layer for storage services |
-| **oss-minio** | MinIO private cloud storage implementation | Self-hosted storage, development and testing environments |
-| **oss-aliyun-oss** | Aliyun OSS integration | Domestic public cloud storage service |
-| **oss-huawei-obs** | Huawei OBS integration | Enterprise-grade public cloud storage |
-| **oss-volcengine-tos** | Volcengine TOS integration | ByteDance cloud storage service |
+| Module                 | Description                                        | Use Case                                                  |
+|------------------------|----------------------------------------------------|-----------------------------------------------------------|
+| **oss-shared**         | Unified object storage interfaces and abstractions | Unified access layer for storage services                 |
+| **oss-minio**          | MinIO private cloud storage implementation         | Self-hosted storage, development and testing environments |
+| **oss-aliyun-oss**     | Aliyun OSS integration                             | Domestic public cloud storage service                     |
+| **oss-huawei-obs**     | Huawei OBS integration                             | Enterprise-grade public cloud storage                     |
+| **oss-volcengine-tos** | Volcengine TOS integration                         | ByteDance cloud storage service                           |
 
 #### 🗄️ **Database Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **rds-shared** | Common database abstractions and utilities | Data access layer infrastructure |
-| **rds-crud** | Jimmer-based CRUD operations encapsulation | Standard database CRUD operations |
-| **rds-jimmer-ext-postgres** | PostgreSQL Jimmer extensions | PostgreSQL-specific feature support |
-| **rds-flyway-migration-shared** | Common Flyway migration utilities | Database version management foundation |
-| **rds-flyway-migration-mysql8** | MySQL 8.x migration support | MySQL database migration |
-| **rds-flyway-migration-postgresql** | PostgreSQL migration support | PostgreSQL database migration |
+| Module                              | Description                                | Use Case                               |
+|-------------------------------------|--------------------------------------------|----------------------------------------|
+| **rds-shared**                      | Common database abstractions and utilities | Data access layer infrastructure       |
+| **rds-crud**                        | Jimmer-based CRUD operations encapsulation | Standard database CRUD operations      |
+| **rds-jimmer-ext-postgres**         | PostgreSQL Jimmer extensions               | PostgreSQL-specific feature support    |
+| **rds-flyway-migration-shared**     | Common Flyway migration utilities          | Database version management foundation |
+| **rds-flyway-migration-mysql8**     | MySQL 8.x migration support                | MySQL database migration               |
+| **rds-flyway-migration-postgresql** | PostgreSQL migration support               | PostgreSQL database migration          |
 
 #### 🔐 **Security Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
+| Module              | Description                                   | Use Case                                     |
+|---------------------|-----------------------------------------------|----------------------------------------------|
 | **security-spring** | Spring Security integration and configuration | Web application security, API authentication |
-| **security-oauth2** | OAuth2 authentication and authorization | Third-party login, API authorization |
-| **security-crypto** | Encryption and decryption utilities | Data encryption, password processing |
+| **security-oauth2** | OAuth2 authentication and authorization       | Third-party login, API authorization         |
+| **security-crypto** | Encryption and decryption utilities           | Data encryption, password processing         |
 
 #### 💳 **Payment Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **pay-shared** | Common payment service abstractions | Unified payment interface definitions |
-| **pay-wechat** | WeChat Pay integration | WeChat payments, mini-program payments |
+| Module         | Description                         | Use Case                               |
+|----------------|-------------------------------------|----------------------------------------|
+| **pay-shared** | Common payment service abstractions | Unified payment interface definitions  |
+| **pay-wechat** | WeChat Pay integration              | WeChat payments, mini-program payments |
 
 #### 📱 **Communication Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **sms-shared** | Common SMS service abstractions | Unified SMS interface |
-| **sms-tencent** | Tencent Cloud SMS integration | Verification codes, notification SMS |
+| Module          | Description                     | Use Case                             |
+|-----------------|---------------------------------|--------------------------------------|
+| **sms-shared**  | Common SMS service abstractions | Unified SMS interface                |
+| **sms-tencent** | Tencent Cloud SMS integration   | Verification codes, notification SMS |
 
 #### 📊 **Data Processing Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **data-crawler** | Web crawling and data scraping | Data collection, content scraping |
-| **data-extract** | Data extraction and transformation tools | Data cleaning, format conversion |
+| Module           | Description                              | Use Case                          |
+|------------------|------------------------------------------|-----------------------------------|
+| **data-crawler** | Web crawling and data scraping           | Data collection, content scraping |
+| **data-extract** | Data extraction and transformation tools | Data cleaning, format conversion  |
 
 #### 📹 **Surveillance Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **surveillance-shared** | Common surveillance service abstractions | Unified surveillance interface definitions |
-| **surveillance-hikvision** | Hikvision device integration | Video surveillance, device management |
+| Module                     | Description                              | Use Case                                   |
+|----------------------------|------------------------------------------|--------------------------------------------|
+| **surveillance-shared**    | Common surveillance service abstractions | Unified surveillance interface definitions |
+| **surveillance-hikvision** | Hikvision device integration             | Video surveillance, device management      |
 
 #### 🔧 **Dependency & Platform Modules**
 
-| Module | Description | Use Case |
-|--------|-------------|----------|
-| **depend-jackson** | Jackson JSON processing wrapper | JSON serialization optimization |
-| **depend-servlet** | Servlet API wrapper | Web application development |
-| **depend-springdoc-openapi** | SpringDoc OpenAPI wrapper | API documentation generation |
-| **ksp-plugin** | Kotlin Symbol Processing plugin | Code generation and processing |
-| **psdk-wxpa** | WeChat Public Account SDK | WeChat ecosystem integration |
+| Module                       | Description                     | Use Case                        |
+|------------------------------|---------------------------------|---------------------------------|
+| **depend-jackson**           | Jackson JSON processing wrapper | JSON serialization optimization |
+| **depend-servlet**           | Servlet API wrapper             | Web application development     |
+| **depend-springdoc-openapi** | SpringDoc OpenAPI wrapper       | API documentation generation    |
+| **ksp-plugin**               | Kotlin Symbol Processing plugin | Code generation and processing  |
+| **psdk-wxpa**                | WeChat Public Account SDK       | WeChat ecosystem integration    |
 
 ---
 
@@ -271,12 +281,12 @@ Compose Server adopts a layered modular architecture providing clear functional 
 
 ### 📋 Requirements
 
-| Environment | Minimum | Recommended | Notes |
-|-------------|---------|-------------|-------|
-| **JDK** | 24+ | 24+ | Latest Java features and performance optimizations |
-| **Kotlin** | 2.2.0+ | 2.2.0+ | Modern JVM language, fully Java compatible |
-| **Gradle** | 9.0+ | 9.x | Supports Kotlin DSL and Version Catalog |
-| **Spring Boot** | 3.5.0+ | 3.5.4+ | Enterprise framework, production-ready |
+| Environment     | Minimum | Recommended | Notes                                              |
+|-----------------|---------|-------------|----------------------------------------------------|
+| **JDK**         | 24+     | 24+         | Latest Java features and performance optimizations |
+| **Kotlin**      | 2.2.0+  | 2.2.0+      | Modern JVM language, fully Java compatible         |
+| **Gradle**      | 9.0+    | 9.x         | Supports Kotlin DSL and Version Catalog            |
+| **Spring Boot** | 3.5.0+  | 3.5.4+      | Enterprise framework, production-ready             |
 
 ### 📦 Maven Central
 
@@ -478,6 +488,7 @@ docker run --name postgres \
 ### 🎯 Module Selection Guide
 
 **Basic Web Application**
+
 ```kotlin
 implementation("io.github.truenine:composeserver-shared")
 implementation("io.github.truenine:composeserver-rds-shared")
@@ -486,6 +497,7 @@ implementation("io.github.truenine:composeserver-security-spring")
 ```
 
 **AI-Powered Application**
+
 ```kotlin
 implementation("io.github.truenine:composeserver-shared")
 implementation("io.github.truenine:composeserver-ai-shared")
@@ -493,6 +505,7 @@ implementation("io.github.truenine:composeserver-ai-langchain4j")
 ```
 
 **Multi-Cloud Storage Application**
+
 ```kotlin
 implementation("io.github.truenine:composeserver-shared")
 implementation("io.github.truenine:composeserver-oss-shared")
@@ -501,6 +514,7 @@ implementation("io.github.truenine:composeserver-oss-aliyun-oss")
 ```
 
 **E-commerce Payment Application**
+
 ```kotlin
 implementation("io.github.truenine:composeserver-shared")
 implementation("io.github.truenine:composeserver-pay-shared")

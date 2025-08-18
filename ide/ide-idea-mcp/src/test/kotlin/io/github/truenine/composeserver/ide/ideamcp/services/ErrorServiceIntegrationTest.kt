@@ -1,7 +1,6 @@
 package io.github.truenine.composeserver.ide.ideamcp.services
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNotSame
 import kotlin.test.assertSame

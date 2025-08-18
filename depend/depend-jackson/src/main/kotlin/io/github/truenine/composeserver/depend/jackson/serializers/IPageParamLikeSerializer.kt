@@ -38,12 +38,15 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
         "o" -> {
           offset = p.intValueOrNull()
         }
+
         "s" -> {
           pageSize = p.intValueOrNull()
         }
+
         "u" -> {
           unPage = p.booleanValueOrNull()
         }
+
         else -> {
           // 跳过未知字段
           p.skipChildren()

@@ -115,6 +115,7 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
         when (e) {
           is WxpaTokenException,
           is WxpaApiException -> throw e
+
           else -> throw WxpaTokenException("Failed to refresh access token: ${e.message}", e)
         }
       }
@@ -160,6 +161,7 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
         when (e) {
           is WxpaTokenException,
           is WxpaApiException -> throw e
+
           else -> throw WxpaTokenException("Failed to refresh jsapi ticket: ${e.message}", e)
         }
       }
