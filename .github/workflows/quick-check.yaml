@@ -3,8 +3,14 @@ name: Quick Check
 on:
   push:
     branches: [ main, dev ]
+    paths:
+      - '.github/workflows/quick-check.yaml'
+      - '**/*.kt'
   pull_request:
     branches: [ main, dev ]
+    paths:
+      - '.github/workflows/quick-check.yaml'
+      - '**/*.kt'
 
 env:
   # 🚀 快速检查专用配置 - 最小化资源使用
