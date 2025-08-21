@@ -67,8 +67,8 @@ class OssPropertiesTest {
       assertEquals(100, ossProperties.maxConnections)
       assertEquals("test-bucket", ossProperties.defaultBucket)
       assertTrue(ossProperties.autoCreateBucket)
-      assertTrue(ossProperties.enableVersioning)
-      assertTrue(ossProperties.enableLogging)
+      assertTrue(ossProperties.versioning)
+      assertTrue(ossProperties.logging)
     }
 
     @Test
@@ -96,8 +96,8 @@ class OssPropertiesTest {
       assertEquals(100, ossProperties.maxConnections)
       assertNull(ossProperties.defaultBucket)
       assertFalse(ossProperties.autoCreateBucket)
-      assertFalse(ossProperties.enableVersioning)
-      assertFalse(ossProperties.enableLogging)
+      assertFalse(ossProperties.versioning)
+      assertFalse(ossProperties.logging)
     }
   }
 

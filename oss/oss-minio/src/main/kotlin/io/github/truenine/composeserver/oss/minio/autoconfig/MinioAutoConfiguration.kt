@@ -6,7 +6,6 @@ import io.github.truenine.composeserver.oss.minio.MinioObjectStorageService
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.minio.MinioClient
-import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -15,9 +14,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
+import java.util.concurrent.TimeUnit
 
 /**
- * Auto configuration for MinIO
+ * Autoconfiguration for MinIO
  *
  * This configuration is automatically enabled when MinIO client is present in the classpath. No manual provider configuration is required.
  *
@@ -33,22 +33,31 @@ import org.springframework.core.env.Environment
 class MinioAutoConfiguration {
 
   companion object {
+    @JvmStatic
     private val log = logger<MinioAutoConfiguration>()
   }
 
   @Bean
   @ConditionalOnMissingBean
-  fun minioClient(minioProperties: MinioProperties, ossProperties: OssProperties, environment: Environment): MinioClient {
-    val endpoint = minioProperties.endpoint ?: ossProperties.endpoint
-    val port = minioProperties.port
+  fun minioClient(minioProperties: MinioProperties, ossProperties: OssProperties, environment: Environment, minioProperties: MinioProperties): MinioClient {
+    val endpoint = minioProperties.endpoint?.takeIf { it.isNotBlank() } ?: ossProperties.endpoint
+    val port = minioProperties.port ?: MinioProperties.DEFAULT_PORT
     val accessKey = minioProperties.accessKey ?: ossProperties.accessKey
     val secretKey = minioProperties.secretKey ?: ossProperties.secretKey
-
     require(!endpoint.isNullOrBlank()) { "MinIO endpoint is required" }
+    val enableSsl = endpoint.startsWith("https://") || ossProperties.enableSsl || (minioProperties.enableSsl == true)
+
+
+
     require(!accessKey.isNullOrBlank()) { "MinIO access key is required" }
     require(!secretKey.isNullOrBlank()) { "MinIO secret key is required" }
 
     log.info("Initializing MinIO client with endpoint: $endpoint, port: $port, ssl: ${minioProperties.enableSsl}")
+
+    val connectTimeout = minioProperties.connectionTimeout ?: OssProperties.DEFAULT_CONNECT_TIMEOUT
+    val readConnectTimeout = minioProperties.readTimeout ?: OssProperties.DEFAULT_READ_TIMEOUT
+    val writeConnectTimeout = minioProperties.writeTimeout ?: OssProperties.DEFAULT_WRITE_TIMEOUT
+
 
     val httpClient =
       OkHttpClient.Builder()
@@ -59,7 +68,7 @@ class MinioAutoConfiguration {
 
     val clientBuilder =
       MinioClient.builder()
-        .endpoint(endpoint, port ?: if (minioProperties.enableSsl) 443 else 80, minioProperties.enableSsl)
+        .endpoint(endpoint, port, enableSsl)
         .credentials(accessKey, secretKey)
         .httpClient(httpClient)
 
@@ -103,6 +112,7 @@ class MinioAutoConfiguration {
     val protocol = if (minioProperties.enableSsl) "https" else "http"
     val port = minioProperties.port ?: if (minioProperties.enableSsl) 443 else 80
     val portSuffix = if ((minioProperties.enableSsl && port == 443) || (!minioProperties.enableSsl && port == 80)) "" else ":$port"
-    return "$protocol://${minioProperties.endpoint}$portSuffix"
+    val cleanEndpoint = minioProperties.endpoint.removePrefix("http://").removePrefix("https://")
+    return "$protocol://$cleanEndpoint$portSuffix"
   }
 }
