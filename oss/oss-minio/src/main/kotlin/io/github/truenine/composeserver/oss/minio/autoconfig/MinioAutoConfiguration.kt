@@ -38,7 +38,7 @@ class MinioAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun minioClient(minioProperties: MinioProperties, ossProperties: OssProperties, environment: Environment, minioProperties: MinioProperties): MinioClient {
+  fun minioClient(ossProperties: OssProperties, environment: Environment, minioProperties: MinioProperties): MinioClient {
     val endpoint = minioProperties.endpoint?.takeIf { it.isNotBlank() } ?: ossProperties.endpoint
     val port = minioProperties.port ?: MinioProperties.DEFAULT_PORT
     val accessKey = minioProperties.accessKey ?: ossProperties.accessKey
@@ -57,9 +57,9 @@ class MinioAutoConfiguration {
 
     val httpClient =
       OkHttpClient.Builder()
-        .connectTimeout(minioProperties.connectionTimeout.toMillis(), TimeUnit.MILLISECONDS)
-        .writeTimeout(minioProperties.writeTimeout.toMillis(), TimeUnit.MILLISECONDS)
-        .readTimeout(minioProperties.readTimeout.toMillis(), TimeUnit.MILLISECONDS)
+        .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+        .writeTimeout(writeConnectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+        .readTimeout(readConnectTimeout.toMillis(), TimeUnit.MILLISECONDS)
         .build()
 
     val clientBuilder = MinioClient.builder().endpoint(endpoint, port, enableSsl).credentials(accessKey, secretKey).httpClient(httpClient)
@@ -101,10 +101,10 @@ class MinioAutoConfiguration {
   }
 
   private fun buildDefaultUrl(minioProperties: MinioProperties): String {
-    val protocol = if (minioProperties.enableSsl) "https" else "http"
-    val port = minioProperties.port ?: if (minioProperties.enableSsl) 443 else 80
-    val portSuffix = if ((minioProperties.enableSsl && port == 443) || (!minioProperties.enableSsl && port == 80)) "" else ":$port"
-    val cleanEndpoint = minioProperties.endpoint.removePrefix("http://").removePrefix("https://")
+    val protocol = if (minioProperties.enableSsl == true) "https" else "http"
+    val port = minioProperties.port ?: if (minioProperties.enableSsl == true) 443 else 80
+    val portSuffix = if ((minioProperties.enableSsl == true && port == 443) || (minioProperties.enableSsl == false && port == 80)) "" else ":$port"
+    val cleanEndpoint = minioProperties.endpoint?.removePrefix("http://")?.removePrefix("https://")
     return "$protocol://$cleanEndpoint$portSuffix"
   }
 }
