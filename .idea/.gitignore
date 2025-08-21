@@ -7,6 +7,7 @@
 !codeStyles/codeStyleConfig.xml
 !codeStyles/Project.xml
 !/sqldialects.xml
-!/compose-server.iml
+!/modules/
+!/modules/compose-server.iml
 !/misc.xml
 !/vcs.xml
