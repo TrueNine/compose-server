@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(OssProperties::class)
 class OssAutoConfiguration {
   companion object {
-    @JvmStatic
-    private val log = logger<OssAutoConfiguration>()
+    @JvmStatic private val log = logger<OssAutoConfiguration>()
   }
 }

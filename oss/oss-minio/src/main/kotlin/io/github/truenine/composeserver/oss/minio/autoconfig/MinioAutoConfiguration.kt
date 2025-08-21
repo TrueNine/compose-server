@@ -6,6 +6,7 @@ import io.github.truenine.composeserver.oss.minio.MinioObjectStorageService
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.minio.MinioClient
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -14,7 +15,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
-import java.util.concurrent.TimeUnit
 
 /**
  * Autoconfiguration for MinIO
@@ -33,8 +33,7 @@ import java.util.concurrent.TimeUnit
 class MinioAutoConfiguration {
 
   companion object {
-    @JvmStatic
-    private val log = logger<MinioAutoConfiguration>()
+    @JvmStatic private val log = logger<MinioAutoConfiguration>()
   }
 
   @Bean
@@ -47,8 +46,6 @@ class MinioAutoConfiguration {
     require(!endpoint.isNullOrBlank()) { "MinIO endpoint is required" }
     val enableSsl = endpoint.startsWith("https://") || ossProperties.enableSsl || (minioProperties.enableSsl == true)
 
-
-
     require(!accessKey.isNullOrBlank()) { "MinIO access key is required" }
     require(!secretKey.isNullOrBlank()) { "MinIO secret key is required" }
 
@@ -58,7 +55,6 @@ class MinioAutoConfiguration {
     val readConnectTimeout = minioProperties.readTimeout ?: OssProperties.DEFAULT_READ_TIMEOUT
     val writeConnectTimeout = minioProperties.writeTimeout ?: OssProperties.DEFAULT_WRITE_TIMEOUT
 
-
     val httpClient =
       OkHttpClient.Builder()
         .connectTimeout(minioProperties.connectionTimeout.toMillis(), TimeUnit.MILLISECONDS)
@@ -66,11 +62,7 @@ class MinioAutoConfiguration {
         .readTimeout(minioProperties.readTimeout.toMillis(), TimeUnit.MILLISECONDS)
         .build()
 
-    val clientBuilder =
-      MinioClient.builder()
-        .endpoint(endpoint, port, enableSsl)
-        .credentials(accessKey, secretKey)
-        .httpClient(httpClient)
+    val clientBuilder = MinioClient.builder().endpoint(endpoint, port, enableSsl).credentials(accessKey, secretKey).httpClient(httpClient)
 
     minioProperties.region?.let { clientBuilder.region(it) }
 
