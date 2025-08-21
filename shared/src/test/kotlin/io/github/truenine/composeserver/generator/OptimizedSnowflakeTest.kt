@@ -238,19 +238,20 @@ class OptimizedSnowflakeTest {
     fun testSequenceOverflowWaiting() {
       // This test verifies that sequence overflow detection works
       // Create snowflake starting with sequence close to max and generate multiple IDs
-      val testSnowflake = SynchronizedSimpleSnowflake(
-        workId = 1L,
-        datacenterId = 1L,
-        sequence = 4094L, // Start close to max (4095)
-        startTimeStamp = startTimeStamp,
-      )
+      val testSnowflake =
+        SynchronizedSimpleSnowflake(
+          workId = 1L,
+          datacenterId = 1L,
+          sequence = 4094L, // Start close to max (4095)
+          startTimeStamp = startTimeStamp,
+        )
 
       // Generate multiple IDs quickly to potentially trigger overflow
       // The exact timing depends on system performance, but we try enough times
       val ids = mutableListOf<Long>()
       var attempts = 0
       val maxAttempts = 10
-      
+
       while (testSnowflake.getStatistics().sequenceOverflowCount == 0L && attempts < maxAttempts) {
         ids.add(testSnowflake.next())
         attempts++
@@ -263,10 +264,9 @@ class OptimizedSnowflakeTest {
       // This removes the flaky timing dependency while still testing the overflow mechanism
       assertTrue(
         stats.sequenceOverflowCount > 0 || stats.generatedCount >= maxAttempts.toLong(),
-        "Should either have sequence overflow or generate enough IDs. " +
-        "Generated: ${stats.generatedCount}, Overflows: ${stats.sequenceOverflowCount}"
+        "Should either have sequence overflow or generate enough IDs. " + "Generated: ${stats.generatedCount}, Overflows: ${stats.sequenceOverflowCount}",
       )
-      
+
       // All IDs should be unique regardless of overflow
       assertEquals(ids.size, ids.toSet().size, "All generated IDs should be unique")
     }
