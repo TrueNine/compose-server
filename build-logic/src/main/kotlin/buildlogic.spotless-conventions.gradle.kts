@@ -21,7 +21,7 @@ spotless {
       target("**/*.kt")
       targetExclude("**/build/generated/**")
       licenseHeader("")
-      ktfmt("0.56").googleStyle().configure {
+      ktfmt("0.57").googleStyle().configure {
         it.setMaxWidth(160)
         it.setBlockIndent(2)
         it.setContinuationIndent(2)
