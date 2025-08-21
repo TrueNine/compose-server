@@ -6,6 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../.claude" />
       <excludeFolder url="file://$MODULE_DIR$/../../.codebuddy" />
       <excludeFolder url="file://$MODULE_DIR$/../../.cursor" />
+      <excludeFolder url="file://$MODULE_DIR$/.." />
       <excludeFolder url="file://$MODULE_DIR$/../../.intellijPlatform" />
       <excludeFolder url="file://$MODULE_DIR$/../../.kiro" />
       <excludeFolder url="file://$MODULE_DIR$/../../.kotlin" />
