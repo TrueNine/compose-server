@@ -127,4 +127,25 @@ data class OssProperties(
   fun getEffectiveExposedBaseUrl(): String {
     return exposedBaseUrl ?: getEffectiveEndpoint()
   }
+
+  /** 重写 toString 方法以隐藏敏感信息 */
+  override fun toString(): String {
+    return "OssProperties(" +
+      "provider=${provider?.let { "'$it'" }}, " +
+      "endpoint=${endpoint?.let { "'$it'" }}, " +
+      "region=${region?.let { "'$it'" }}, " +
+      "accessKey=${accessKey?.let { "'${it.take(4)}***'" }}, " +
+      "secretKey=${secretKey?.let { "'***'" }}, " +
+      "exposedBaseUrl=${exposedBaseUrl?.let { "'$it'" }}, " +
+      "enableSsl=$enableSsl, " +
+      "connectionTimeout=$connectionTimeout, " +
+      "readTimeout=$readTimeout, " +
+      "writeTimeout=$writeTimeout, " +
+      "maxConnections=$maxConnections, " +
+      "defaultBucket=${defaultBucket?.let { "'$it'" }}, " +
+      "autoCreateBucket=$autoCreateBucket, " +
+      "versioning=$versioning, " +
+      "logging=$logging" +
+      ")"
+  }
 }
