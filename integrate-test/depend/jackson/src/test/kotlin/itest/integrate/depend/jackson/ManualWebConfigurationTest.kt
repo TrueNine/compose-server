@@ -12,8 +12,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
@@ -34,7 +34,9 @@ import org.springframework.web.bind.annotation.RestController
  *
  * 不依赖 Spring Boot 自动配置，手动配置所有组件
  */
-@SpringBootTest(classes = [ManualWebConfigurationTest.TestConfiguration::class])
+@SpringBootTest(classes = [TestEntrance::class])
+@AutoConfigureMockMvc
+@Import(ManualWebConfigurationTest.TestController::class)
 class ManualWebConfigurationTest {
 
   @Resource @Qualifier(JacksonAutoConfiguration.DEFAULT_OBJECT_MAPPER_BEAN_NAME) private lateinit var objectMapper: ObjectMapper
@@ -130,13 +132,5 @@ class ManualWebConfigurationTest {
     }
   }
 
-  @Configuration
-  @Import(JacksonAutoConfiguration::class)
-  class TestConfiguration {
-
-    @Bean
-    fun testController(): TestController {
-      return TestController()
-    }
-  }
+  @Configuration @Import(TestController::class) class TestConfiguration
 }
