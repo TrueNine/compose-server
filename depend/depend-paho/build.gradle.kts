@@ -16,5 +16,5 @@ dependencies {
   implementation(libs.com.fasterxml.jackson.core.jackson.databind)
   api(projects.shared)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

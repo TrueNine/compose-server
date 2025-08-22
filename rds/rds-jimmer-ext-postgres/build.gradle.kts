@@ -10,4 +10,8 @@ Provides PostgreSQL-optimized features, custom types, and database-specific func
 """
     .trimIndent()
 
-dependencies { implementation(libs.org.babyfish.jimmer.jimmer.sql.kotlin) }
+dependencies {
+  implementation(libs.org.babyfish.jimmer.jimmer.sql.kotlin)
+
+  testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
+}

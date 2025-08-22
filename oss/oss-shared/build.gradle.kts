@@ -15,5 +15,5 @@ dependencies {
   api(projects.shared)
   api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

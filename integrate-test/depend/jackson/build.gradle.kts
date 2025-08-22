@@ -6,6 +6,6 @@ plugins {
 dependencies {
   implementation(projects.depend.dependJackson)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
 }

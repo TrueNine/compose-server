@@ -17,5 +17,5 @@ dependencies {
   }
   implementation(libs.com.squareup.okhttp3.okhttp)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

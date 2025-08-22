@@ -43,5 +43,6 @@ dependencies {
   api(projects.oss.ossShared)
   api(projects.shared)
   implementation(libs.com.volcengine.ve.tos.java.sdk)
-  testImplementation(projects.testtoolkit)
+
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

@@ -22,7 +22,7 @@ dependencies {
   implementation(libs.org.springframework.security.spring.security.core)
 
   testImplementation(libs.org.springframework.boot.spring.boot.starter.webflux)
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }
 
 // 直接实现 dotenv 功能，避免插件依赖

@@ -24,8 +24,8 @@ dependencies {
 
   implementation(libs.com.fasterxml.jackson.core.jackson.databind)
 
+  testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
   testImplementation(projects.security.securityCrypto)
-  testImplementation(projects.testtoolkit)
   testImplementation(libs.org.flywaydb.flyway.core)
   testImplementation(libs.org.flywaydb.flyway.database.postgresql)
   testImplementation(libs.org.postgresql.postgresql)

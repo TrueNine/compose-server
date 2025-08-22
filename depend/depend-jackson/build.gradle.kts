@@ -26,7 +26,7 @@ dependencies {
 
   api(projects.shared)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.json)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
 }

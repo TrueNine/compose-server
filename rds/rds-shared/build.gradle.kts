@@ -31,9 +31,8 @@ dependencies {
     implementation(libs.org.springframework.data.spring.data.commons)
   }
 
+  testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
   testImplementation(libs.org.postgresql.postgresql)
   testImplementation(libs.org.flywaydb.flyway.core)
   testImplementation(libs.org.flywaydb.flyway.database.postgresql)
-
-  testImplementation(projects.testtoolkit)
 }

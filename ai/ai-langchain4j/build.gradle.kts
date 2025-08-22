@@ -16,5 +16,6 @@ dependencies {
 
   api(projects.ai.aiShared)
   implementation(projects.shared)
-  testImplementation(projects.testtoolkit)
+
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

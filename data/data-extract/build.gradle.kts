@@ -30,7 +30,7 @@ dependencies {
   api(projects.shared)
   implementation(projects.depend.dependHttpExchange)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
   testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding)
   testImplementation(libs.net.sf.sevenzipjbinding.sevenzipjbinding.all.platforms)
 }

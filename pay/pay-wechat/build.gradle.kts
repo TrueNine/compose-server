@@ -21,5 +21,5 @@ dependencies {
   implementation(projects.security.securityCrypto)
   implementation(libs.org.springframework.boot.spring.boot.starter.webflux)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

@@ -16,6 +16,6 @@ dependencies {
   implementation(libs.org.bouncycastle.bcprov.jdk18on)
   api(projects.shared)
 
+  testImplementation(projects.testtoolkit.testtoolkitShared)
   testImplementation(libs.com.fasterxml.jackson.core.jackson.databind)
-  testImplementation(projects.testtoolkit)
 }

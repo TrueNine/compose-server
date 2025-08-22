@@ -17,5 +17,5 @@ dependencies {
   implementation(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   implementation(libs.jakarta.servlet.jakarta.servlet.api)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }
