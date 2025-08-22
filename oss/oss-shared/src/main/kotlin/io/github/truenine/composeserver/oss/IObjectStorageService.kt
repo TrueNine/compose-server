@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
  * @author TrueNine
  * @since 2025-08-04
  */
-interface ObjectStorageService {
+interface IObjectStorageService {
 
   /** Check if the service is connected and healthy */
   suspend fun isHealthy(): Boolean
