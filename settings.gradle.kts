@@ -103,3 +103,4 @@ include("ide:ide-idea-mcp")
 
 // === 集成测试模块 ===
 include("integrate-test:depend:jackson")
+include("integrate-test:oss:minio")

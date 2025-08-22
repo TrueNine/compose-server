@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.depend.dependJackson)
-
+  implementation(projects.oss.ossMinio)
   testImplementation(projects.testtoolkit)
+
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
 }
