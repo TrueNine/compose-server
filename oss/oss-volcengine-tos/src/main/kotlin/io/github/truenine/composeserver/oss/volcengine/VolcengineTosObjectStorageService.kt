@@ -34,6 +34,7 @@ import io.github.truenine.composeserver.oss.ConfigurationException
 import io.github.truenine.composeserver.oss.CopyObjectRequest
 import io.github.truenine.composeserver.oss.CreateBucketRequest
 import io.github.truenine.composeserver.oss.DeleteResult
+import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
 import io.github.truenine.composeserver.oss.InvalidRequestException
 import io.github.truenine.composeserver.oss.ListObjectsRequest
@@ -44,7 +45,6 @@ import io.github.truenine.composeserver.oss.ObjectInfo
 import io.github.truenine.composeserver.oss.ObjectListing
 import io.github.truenine.composeserver.oss.ObjectNotFoundException
 import io.github.truenine.composeserver.oss.ObjectStorageException
-import io.github.truenine.composeserver.oss.ObjectStorageService
 import io.github.truenine.composeserver.oss.PartInfo
 import io.github.truenine.composeserver.oss.PutObjectRequest
 import io.github.truenine.composeserver.oss.QuotaExceededException
@@ -66,14 +66,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
 /**
- * Volcengine TOS implementation of ObjectStorageService
+ * Volcengine TOS implementation of IObjectStorageService
  *
  * @param tosClient The native TOS client
  * @param exposedBaseUrl The exposed base URL for public access
  * @author TrueNine
  * @since 2025-08-05
  */
-class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override val exposedBaseUrl: String) : ObjectStorageService {
+class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override val exposedBaseUrl: String) : IObjectStorageService {
 
   companion object {
     @JvmStatic private val log = logger<VolcengineTosObjectStorageService>()

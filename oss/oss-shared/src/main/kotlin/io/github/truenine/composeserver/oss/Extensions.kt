@@ -8,10 +8,10 @@ import kotlin.io.path.inputStream
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-/** Extension functions for ObjectStorageService */
+/** Extension functions for IObjectStorageService */
 
 /** Upload a file to object storage */
-suspend fun ObjectStorageService.putObject(
+suspend fun IObjectStorageService.putObject(
   bucketName: String,
   objectName: String,
   file: File,
@@ -22,7 +22,7 @@ suspend fun ObjectStorageService.putObject(
 }
 
 /** Upload a file from Path to object storage */
-suspend fun ObjectStorageService.putObject(
+suspend fun IObjectStorageService.putObject(
   bucketName: String,
   objectName: String,
   path: Path,
@@ -33,7 +33,7 @@ suspend fun ObjectStorageService.putObject(
 }
 
 /** Upload byte array to object storage */
-suspend fun ObjectStorageService.putObject(
+suspend fun IObjectStorageService.putObject(
   bucketName: String,
   objectName: String,
   bytes: ByteArray,
@@ -44,7 +44,7 @@ suspend fun ObjectStorageService.putObject(
 }
 
 /** Upload string content to object storage */
-suspend fun ObjectStorageService.putObject(
+suspend fun IObjectStorageService.putObject(
   bucketName: String,
   objectName: String,
   content: String,
@@ -56,29 +56,29 @@ suspend fun ObjectStorageService.putObject(
 }
 
 /** Download object content as byte array */
-suspend fun ObjectStorageService.getObjectBytes(bucketName: String, objectName: String): Result<ByteArray> {
+suspend fun IObjectStorageService.getObjectBytes(bucketName: String, objectName: String): Result<ByteArray> {
   return getObject(bucketName, objectName).mapCatching { objectContent -> objectContent.use { it.inputStream.readAllBytes() } }
 }
 
 /** Download object content as string */
-suspend fun ObjectStorageService.getObjectString(bucketName: String, objectName: String, charset: java.nio.charset.Charset = Charsets.UTF_8): Result<String> {
+suspend fun IObjectStorageService.getObjectString(bucketName: String, objectName: String, charset: java.nio.charset.Charset = Charsets.UTF_8): Result<String> {
   return getObjectBytes(bucketName, objectName).mapCatching { bytes -> String(bytes, charset) }
 }
 
 /** Download object to file */
-suspend fun ObjectStorageService.downloadObject(bucketName: String, objectName: String, file: File): Result<Unit> {
+suspend fun IObjectStorageService.downloadObject(bucketName: String, objectName: String, file: File): Result<Unit> {
   return getObject(bucketName, objectName).mapCatching { objectContent ->
     objectContent.use { content -> file.outputStream().use { outputStream -> content.inputStream.copyTo(outputStream) } }
   }
 }
 
 /** Download object to path */
-suspend fun ObjectStorageService.downloadObject(bucketName: String, objectName: String, path: Path): Result<Unit> {
+suspend fun IObjectStorageService.downloadObject(bucketName: String, objectName: String, path: Path): Result<Unit> {
   return downloadObject(bucketName, objectName, path.toFile())
 }
 
 /** Check if bucket exists and create if not */
-suspend fun ObjectStorageService.ensureBucket(bucketName: String): Result<BucketInfo> {
+suspend fun IObjectStorageService.ensureBucket(bucketName: String): Result<BucketInfo> {
   return bucketExists(bucketName)
     .fold(
       onSuccess = { exists ->
@@ -94,7 +94,7 @@ suspend fun ObjectStorageService.ensureBucket(bucketName: String): Result<Bucket
 }
 
 /** List all objects in a bucket as a flow */
-fun ObjectStorageService.listAllObjectsFlow(bucketName: String, prefix: String? = null): Flow<ObjectInfo> = flow {
+fun IObjectStorageService.listAllObjectsFlow(bucketName: String, prefix: String? = null): Flow<ObjectInfo> = flow {
   var continuationToken: String? = null
   do {
     val request = ListObjectsRequest(bucketName = bucketName, prefix = prefix, continuationToken = continuationToken)
@@ -107,7 +107,7 @@ fun ObjectStorageService.listAllObjectsFlow(bucketName: String, prefix: String? 
 }
 
 /** Delete all objects with a prefix */
-suspend fun ObjectStorageService.deleteObjectsWithPrefix(bucketName: String, prefix: String): Result<List<DeleteResult>> {
+suspend fun IObjectStorageService.deleteObjectsWithPrefix(bucketName: String, prefix: String): Result<List<DeleteResult>> {
   return try {
     val objectNames = mutableListOf<String>()
     listAllObjectsFlow(bucketName, prefix).collect { objectInfo -> objectNames.add(objectInfo.objectName) }
@@ -125,13 +125,13 @@ suspend fun ObjectStorageService.deleteObjectsWithPrefix(bucketName: String, pre
 // Share Link Extension Functions
 
 /** Generate a simple share link with default settings */
-suspend fun ObjectStorageService.generateSimpleShareLink(bucketName: String, objectName: String, expiration: java.time.Duration): Result<ShareLinkInfo> {
+suspend fun IObjectStorageService.generateSimpleShareLink(bucketName: String, objectName: String, expiration: java.time.Duration): Result<ShareLinkInfo> {
   val request = ShareLinkRequest(bucketName = bucketName, objectName = objectName, expiration = expiration)
   return generateShareLink(request)
 }
 
 /** Upload a file and generate a share link */
-suspend fun ObjectStorageService.uploadFileWithLink(
+suspend fun IObjectStorageService.uploadFileWithLink(
   bucketName: String,
   objectName: String,
   file: java.io.File,
@@ -155,7 +155,7 @@ suspend fun ObjectStorageService.uploadFileWithLink(
 }
 
 /** Upload a string content and generate a share link */
-suspend fun ObjectStorageService.uploadStringWithLink(
+suspend fun IObjectStorageService.uploadStringWithLink(
   bucketName: String,
   objectName: String,
   content: String,
@@ -180,21 +180,21 @@ suspend fun ObjectStorageService.uploadStringWithLink(
 }
 
 /** Download content from share link as string */
-suspend fun ObjectStorageService.downloadStringFromShareLink(shareUrl: String, password: String? = null): Result<String> {
+suspend fun IObjectStorageService.downloadStringFromShareLink(shareUrl: String, password: String? = null): Result<String> {
   return downloadFromShareLink(shareUrl, password).mapCatching { objectContent ->
     objectContent.use { it.inputStream.bufferedReader(Charsets.UTF_8).readText() }
   }
 }
 
 /** Download content from share link and save to file */
-suspend fun ObjectStorageService.downloadFileFromShareLink(shareUrl: String, targetFile: java.io.File, password: String? = null): Result<Unit> {
+suspend fun IObjectStorageService.downloadFileFromShareLink(shareUrl: String, targetFile: java.io.File, password: String? = null): Result<Unit> {
   return downloadFromShareLink(shareUrl, password).mapCatching { objectContent ->
     objectContent.use { content -> targetFile.outputStream().use { outputStream -> content.inputStream.copyTo(outputStream) } }
   }
 }
 
 /** Copy object with new name in the same bucket */
-suspend fun ObjectStorageService.copyObject(
+suspend fun IObjectStorageService.copyObject(
   bucketName: String,
   sourceObjectName: String,
   destinationObjectName: String,
@@ -212,7 +212,7 @@ suspend fun ObjectStorageService.copyObject(
 }
 
 /** Move object (copy and delete original) */
-suspend fun ObjectStorageService.moveObject(
+suspend fun IObjectStorageService.moveObject(
   sourceBucketName: String,
   sourceObjectName: String,
   destinationBucketName: String,

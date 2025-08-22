@@ -15,6 +15,7 @@ import io.github.truenine.composeserver.oss.ContentRange
 import io.github.truenine.composeserver.oss.CopyObjectRequest
 import io.github.truenine.composeserver.oss.CreateBucketRequest
 import io.github.truenine.composeserver.oss.DeleteResult
+import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
 import io.github.truenine.composeserver.oss.InvalidRequestException
 import io.github.truenine.composeserver.oss.ListObjectsRequest
@@ -25,7 +26,6 @@ import io.github.truenine.composeserver.oss.ObjectInfo
 import io.github.truenine.composeserver.oss.ObjectListing
 import io.github.truenine.composeserver.oss.ObjectNotFoundException
 import io.github.truenine.composeserver.oss.ObjectStorageException
-import io.github.truenine.composeserver.oss.ObjectStorageService
 import io.github.truenine.composeserver.oss.PartInfo
 import io.github.truenine.composeserver.oss.PutObjectRequest
 import io.github.truenine.composeserver.oss.ServiceUnavailableException
@@ -75,14 +75,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
 /**
- * MinIO implementation of ObjectStorageService
+ * MinIO implementation of IObjectStorageService
  *
  * @param minioClient The native MinIO client
  * @param exposedBaseUrl The exposed base URL for public access
  * @author TrueNine
  * @since 2025-08-04
  */
-class MinioObjectStorageService(private val minioClient: MinioClient, override val exposedBaseUrl: String) : ObjectStorageService {
+class MinioObjectStorageService(private val minioClient: MinioClient, override val exposedBaseUrl: String) : IObjectStorageService {
 
   companion object {
     @JvmStatic private val log = slf4j<MinioObjectStorageService>()

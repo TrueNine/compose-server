@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.oss.minio.autoconfig
 
 import io.github.truenine.composeserver.logger
-import io.github.truenine.composeserver.oss.ObjectStorageService
+import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.minio.MinioObjectStorageService
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
 import io.github.truenine.composeserver.oss.properties.OssProperties
@@ -92,10 +92,10 @@ class MinioAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun minioObjectStorageService(minioClient: MinioClient, minioProperties: MinioProperties, ossProperties: OssProperties): ObjectStorageService {
+  fun minioObjectStorageService(minioClient: MinioClient, minioProperties: MinioProperties, ossProperties: OssProperties): IObjectStorageService {
     val exposedBaseUrl = minioProperties.exposedBaseUrl ?: ossProperties.exposedBaseUrl ?: buildDefaultUrl(minioProperties)
 
-    log.info("Creating MinIO ObjectStorageService with exposed URL: $exposedBaseUrl")
+    log.info("Creating MinIO IObjectStorageService with exposed URL: $exposedBaseUrl")
 
     return MinioObjectStorageService(minioClient, exposedBaseUrl)
   }

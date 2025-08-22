@@ -9,15 +9,15 @@ import java.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-/** Mock implementation of ObjectStorageService for testing the abstract layer */
-class MockObjectStorageServiceTest : ObjectStorageServiceTest() {
+/** Mock implementation of IObjectStorageService for testing the abstract layer */
+class MockObjectStorageServiceTest : IObjectStorageServiceTest() {
 
-  override fun createObjectStorageService(): ObjectStorageService {
+  override fun createObjectStorageService(): IObjectStorageService {
     return MockObjectStorageService()
   }
 
   /** Simple mock implementation for testing */
-  private class MockObjectStorageService : ObjectStorageService {
+  private class MockObjectStorageService : IObjectStorageService {
     private val buckets = mutableMapOf<String, BucketInfo>()
     private val objects = mutableMapOf<String, MutableMap<String, MockObject>>()
 

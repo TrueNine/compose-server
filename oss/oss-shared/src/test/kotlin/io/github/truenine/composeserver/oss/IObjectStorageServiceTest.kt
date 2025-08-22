@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 /**
- * Base test class for ObjectStorageService implementations
+ * Base test class for IObjectStorageService implementations
  *
  * Subclasses should provide a concrete implementation for testing
  */
-abstract class ObjectStorageServiceTest {
+abstract class IObjectStorageServiceTest {
 
-  abstract fun createObjectStorageService(): ObjectStorageService
+  abstract fun createObjectStorageService(): IObjectStorageService
 
   @Nested
   inner class BucketOperations {
