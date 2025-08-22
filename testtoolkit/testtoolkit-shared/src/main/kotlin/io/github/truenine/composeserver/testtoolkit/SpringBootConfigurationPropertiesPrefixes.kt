@@ -10,5 +10,7 @@ object SpringBootConfigurationPropertiesPrefixes {
   const val OSS_MINIO_PORT = "$OSS_MINIO.port"
   const val OSS_MINIO_ACCESS_KEY = "$OSS_MINIO.access-key"
   const val OSS_MINIO_SECRET_KEY = "$OSS_MINIO.secret-key"
+  const val OSS_MINIO_ENABLE_SSL = "$OSS_MINIO.enable-ssl"
   const val OSS_MINIO_EXPOSED_BASE_URL = "$OSS_MINIO.exposed-base-url"
+  const val OSS_ENABLE_SSL = "$OSS.enable-ssl"
 }

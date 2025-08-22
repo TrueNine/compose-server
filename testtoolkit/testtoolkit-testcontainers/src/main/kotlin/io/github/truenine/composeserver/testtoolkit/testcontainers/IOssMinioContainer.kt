@@ -188,6 +188,8 @@ interface IOssMinioContainer : ITestContainerBase {
       registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_PORT) { port }
       registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_ACCESS_KEY) { config.minio.accessKey }
       registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_SECRET_KEY) { config.minio.secretKey }
+      registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_MINIO_ENABLE_SSL) { false }
+      registry.add(SpringBootConfigurationPropertiesPrefixes.OSS_ENABLE_SSL) { false }
     }
   }
 
