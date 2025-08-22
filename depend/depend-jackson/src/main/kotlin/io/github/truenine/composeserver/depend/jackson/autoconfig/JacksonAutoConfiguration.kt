@@ -47,7 +47,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties) {
 
   init {
-    log.debug("jackson 自动配置中...")
+    log.debug("jackson auto config...")
   }
 
   private fun customize(builder: Jackson2ObjectMapperBuilder, customizers: List<Jackson2ObjectMapperBuilderCustomizer>) {
@@ -59,28 +59,29 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
 
   @Bean
   @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  @ConditionalOnMissingBean
+  @ConditionalOnMissingBean(Jackson2ObjectMapperBuilder::class)
   fun jacksonObjectMapperBuilder(
     applicationContext: ApplicationContext,
-    customizers: List<Jackson2ObjectMapperBuilderCustomizer>,
+    customizers: List<Jackson2ObjectMapperBuilderCustomizer>?,
   ): Jackson2ObjectMapperBuilder {
     log.debug("replace spring web default jackson config, customizers: {}", customizers)
     val builder = Jackson2ObjectMapperBuilder()
     builder.applicationContext(applicationContext)
-    customize(builder, customizers)
+    if (customizers != null) {
+      customize(builder, customizers)
+    }
     return builder
   }
 
   @Primary
   @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
-  @ConditionalOnMissingBean
+  @ConditionalOnMissingBean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   fun jacksonObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
     log.debug("create jackson objectMapper, builder: {}", builder)
     return builder.createXmlMapper(false).build()
   }
 
   @Bean
-  @Primary
   fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
     log.debug("config jackson custom jackson2ObjectMapperBuilderCustomizer with properties: {}", jacksonProperties)
 
