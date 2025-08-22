@@ -118,8 +118,39 @@ All JVM platform programming languages: java, kotlin, groovy, scala must follow 
 
 **TypeScript Rules**
 
-- TypeScript: Enable strict mode, avoid any type
+- Enable strict mode and all strict type checking options
+- Enable strictNullChecks to prevent null/undefined type errors
+- Prohibit implicit any types (noImplicitAny)
+- Prohibit implicit this (noImplicitThis)
+- Prohibit implicit override (noImplicitOverride)
+- Prohibit unused local variables (noUnusedLocals)
+- Prohibit unused parameters (noUnusedParameters)
+- Use unknown type in catch variables (useUnknownInCatchVariables)
+- Strictly prohibit using `// @ts-ignore` comments to suppress type errors
+- Use Bundler module resolution (moduleResolution: "Bundler")
+- Enable verbatim module syntax (verbatimModuleSyntax)
+- Enable isolated module compilation (isolatedModules)
+- Strictly prohibit mixing JavaScript files (allowJs: false)
+- Use latest ES standard (target: "ESNext", module: "ESNext")
+- Must generate type declaration files (declaration: true)
+- Enable isolated declaration generation (isolatedDeclarations)
+- Do not emit output files in development, only perform type checking (noEmit: true)
+- Preserve code comments (removeComments: false)
+- Enable incremental compilation (incremental: true)
+- Skip library file type checking for performance (skipLibCheck: true)
+- Prefer type inference, avoid redundant explicit type annotations
+- Function parameters and return values must have explicit type definitions
+- Prefer interface over type alias, use type for complex types
+- Strictly prohibit using any type, use unknown when necessary
 
 **SCSS Rules**
 
 - Prohibit using `@import`, use `@use` instead
+
+**Markdown Rules**
+
+- Optimize for AI readability and attention rather than human consumption
+- Must use English only for writing
+- Nested lists should use alternating pattern: - + - + with maximum 3 nesting levels
+- Keep content concise and direct, avoid unnecessary verbosity
+- Minimize use of excessive headings
