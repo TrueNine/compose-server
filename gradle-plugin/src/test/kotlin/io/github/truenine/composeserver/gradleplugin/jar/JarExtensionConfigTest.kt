@@ -18,7 +18,7 @@ class JarExtensionConfigTest {
   }
 
   @Test
-  fun `should have correct default values`() {
+  fun `have_correct_default_values`() {
     assertEquals(false, config.enabled)
     assertEquals("lib", config.bootJarDistName)
     assertEquals("config", config.bootJarConfigName)
@@ -31,7 +31,7 @@ class JarExtensionConfigTest {
   }
 
   @Test
-  fun `should use project version when available`() {
+  fun `use_project_version_when_available`() {
     // Set project version
     project.version = "2.0.0"
     val configWithVersion = JarExtensionConfig(project)
@@ -40,13 +40,13 @@ class JarExtensionConfigTest {
   }
 
   @Test
-  fun `should use default version when project version is unspecified`() {
+  fun `use_default_version_when_project_version_is_unspecified`() {
     // Project version is "unspecified" by default
     assertEquals("1.0", config.bootJarVersion)
   }
 
   @Test
-  fun `should use default version when project version is empty`() {
+  fun `use_default_version_when_project_version_is_empty`() {
     project.version = ""
     val configWithEmptyVersion = JarExtensionConfig(project)
 
@@ -54,7 +54,7 @@ class JarExtensionConfigTest {
   }
 
   @Test
-  fun `should allow configuration changes`() {
+  fun `allow_configuration_changes`() {
     config.enabled = true
     config.bootJarDistName = "dependencies"
     config.bootJarConfigName = "configuration"
@@ -79,7 +79,7 @@ class JarExtensionConfigTest {
   }
 
   @Test
-  fun `should handle project name correctly`() {
+  fun `handle_project_name_correctly`() {
     val namedProject = ProjectBuilder.builder().withName("test-project").build()
     val namedConfig = JarExtensionConfig(namedProject)
 

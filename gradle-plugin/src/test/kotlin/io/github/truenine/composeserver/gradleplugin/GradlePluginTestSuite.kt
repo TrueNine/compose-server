@@ -9,7 +9,6 @@ import io.github.truenine.composeserver.gradleplugin.entrance.ConfigEntranceTest
 import io.github.truenine.composeserver.gradleplugin.generator.GradleGeneratorConfigTest
 import io.github.truenine.composeserver.gradleplugin.generator.MavenRepoTypeTest
 import io.github.truenine.composeserver.gradleplugin.jar.JarExtensionConfigTest
-import io.github.truenine.composeserver.gradleplugin.spotless.SpotlessConfigTest
 import org.junit.platform.suite.api.SelectClasses
 import org.junit.platform.suite.api.Suite
 
@@ -26,7 +25,6 @@ import org.junit.platform.suite.api.Suite
   GradleGeneratorConfigTest::class,
   JarExtensionConfigTest::class,
   MavenRepoTypeTest::class,
-  SpotlessConfigTest::class,
   DotenvConfigTest::class,
   DotenvLoaderTest::class,
   DotenvIntegrationTest::class,

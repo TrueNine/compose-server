@@ -31,7 +31,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should not load when config is invalid`() {
+  fun `not_load_when_config_is_invalid`() {
     config.enabled = false
 
     val loader = DotenvLoader(project, config)
@@ -40,7 +40,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should handle missing dotenv file gracefully`() {
+  fun `handle_missing_dotenv_file_gracefully`() {
     config.enabled = true
     config.filePath = "nonexistent.env"
     config.warnOnMissingFile = false
@@ -51,7 +51,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should parse simple key-value pairs`() {
+  fun `parse_simple_key_value_pairs`() {
     val envFile =
       createTempEnvFile(
         """
@@ -75,7 +75,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should handle quoted values correctly`() {
+  fun `handle_quoted_values_correctly`() {
     val envFile =
       createTempEnvFile(
         """
@@ -100,7 +100,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should skip comments and empty lines`() {
+  fun `skip_comments_and_empty_lines`() {
     val envFile =
       createTempEnvFile(
         """
@@ -128,7 +128,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should apply prefix filter`() {
+  fun `apply_prefix_filter`() {
     val envFile =
       createTempEnvFile(
         """
@@ -155,7 +155,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should exclude specified keys`() {
+  fun `exclude_specified_keys`() {
     val envFile =
       createTempEnvFile(
         """
@@ -182,7 +182,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should include only specified keys`() {
+  fun `include_only_specified_keys`() {
     val envFile =
       createTempEnvFile(
         """
@@ -209,7 +209,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should ignore empty values when configured`() {
+  fun `ignore_empty_values_when_configured`() {
     val envFile =
       createTempEnvFile(
         """
@@ -236,7 +236,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should inject variables into test tasks`() {
+  fun `inject_variables_into_test_tasks`() {
     val envFile =
       createTempEnvFile(
         """
@@ -260,7 +260,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should inject variables into bootRun tasks`() {
+  fun `inject_variables_into_bootrun_tasks`() {
     val envFile =
       createTempEnvFile(
         """
@@ -284,7 +284,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should inject variables into JavaExec tasks`() {
+  fun `inject_variables_into_javaexec_tasks`() {
     val envFile =
       createTempEnvFile(
         """
@@ -310,7 +310,7 @@ class DotenvLoaderTest {
   }
 
   @JUnitTest
-  fun `should inject variables into Kotlin run task`() {
+  fun `inject_variables_into_kotlin_run_task`() {
     val envFile =
       createTempEnvFile(
         """

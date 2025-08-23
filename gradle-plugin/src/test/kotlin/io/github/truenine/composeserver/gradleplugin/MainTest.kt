@@ -20,7 +20,7 @@ class MainTest {
   }
 
   @Test
-  fun `should apply plugin successfully`() {
+  fun `apply_plugin_successfully`() {
     plugin.apply(project)
 
     // Verify that the extension is created
@@ -30,18 +30,17 @@ class MainTest {
   }
 
   @Test
-  fun `should create config entrance with correct name`() {
+  fun `create_config_entrance_with_correct_name`() {
     plugin.apply(project)
 
     val configEntrance = project.extensions.getByType(ConfigEntrance::class.java)
     assertNotNull(configEntrance)
     assertNotNull(configEntrance.gradleGenerator)
     assertNotNull(configEntrance.jarExtension)
-    assertNotNull(configEntrance.spotless)
   }
 
   @Test
-  fun `should not create tasks when features are disabled`() {
+  fun `not_create_tasks_when_features_are_disabled`() {
     plugin.apply(project)
 
     // By default, all features are disabled, so no tasks should be created
@@ -52,7 +51,7 @@ class MainTest {
   }
 
   @Test
-  fun `should handle project evaluation correctly`() {
+  fun `handle_project_evaluation_correctly`() {
     plugin.apply(project)
 
     // Enable jar extension
@@ -64,7 +63,7 @@ class MainTest {
   }
 
   @Test
-  fun `should configure gradle generator when enabled`() {
+  fun `configure_gradle_generator_when_enabled`() {
     plugin.apply(project)
 
     val configEntrance = project.extensions.getByType(ConfigEntrance::class.java)
@@ -72,16 +71,5 @@ class MainTest {
 
     // Verify configuration is accessible
     assertTrue(configEntrance.gradleGenerator.enabled)
-  }
-
-  @Test
-  fun `should configure spotless when enabled`() {
-    plugin.apply(project)
-
-    val configEntrance = project.extensions.getByType(ConfigEntrance::class.java)
-    configEntrance.spotless.enabled = true
-
-    // Verify configuration is accessible
-    assertTrue(configEntrance.spotless.enabled)
   }
 }

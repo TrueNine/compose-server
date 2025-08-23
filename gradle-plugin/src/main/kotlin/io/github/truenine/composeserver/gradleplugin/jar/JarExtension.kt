@@ -28,6 +28,9 @@ class JarExtension(private val project: Project, private val dsl: JarExtensionCo
 
       val runtimeClasspath = configurations.named<org.gradle.api.artifacts.Configuration>("runtimeClasspath")
 
+      // 获取 developmentOnly 配置中的依赖，用于在复制时排除
+      val developmentOnlyDependencies = configurations.findByName("developmentOnly")?.resolvedConfiguration?.resolvedArtifacts?.map { it.file } ?: emptyList()
+
       val cleanTask =
         tasks.register<Delete>(BOOT_JAR_CLEAN_TASK_NAME) {
           group = Constant.TASK_GROUP
@@ -43,7 +46,10 @@ class JarExtension(private val project: Project, private val dsl: JarExtensionCo
               .filter(String::isNotEmpty)
               .joinToString(separator = "/")
           )
-          from(runtimeClasspath)
+          from(runtimeClasspath) {
+            // 排除 developmentOnly 依赖
+            exclude { fileTreeElement -> developmentOnlyDependencies.any { devDep -> fileTreeElement.file.absolutePath == devDep.absolutePath } }
+          }
         }
 
       val copyConfigTask =
@@ -68,9 +74,14 @@ class JarExtension(private val project: Project, private val dsl: JarExtensionCo
         bootJar.dependsOn(copyConfigTask)
 
         bootJar.manifest {
-          it.attributes(
-            mutableMapOf("Manifest-Version" to "1.0", "Class-Path" to runtimeClasspath.get().joinToString(" ") { f -> "${dsl.bootJarDistName}/${f.name}" })
-          )
+          // 过滤掉 developmentOnly 依赖后生成 Class-Path
+          val filteredClassPath =
+            runtimeClasspath
+              .get()
+              .filter { file -> developmentOnlyDependencies.none { devDep -> file.absolutePath == devDep.absolutePath } }
+              .joinToString(" ") { f -> "${dsl.bootJarDistName}/${f.name}" }
+
+          it.attributes(mutableMapOf("Manifest-Version" to "1.0", "Class-Path" to filteredClassPath))
         }
       }
     }

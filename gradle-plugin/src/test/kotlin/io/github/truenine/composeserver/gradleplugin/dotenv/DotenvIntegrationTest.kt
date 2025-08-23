@@ -32,7 +32,7 @@ class DotenvIntegrationTest {
   }
 
   @JUnitTest
-  fun `should integrate dotenv functionality with gradle plugin`() {
+  fun `integrate_dotenv_functionality_with_gradle_plugin`() {
     // 创建.env文件
     val envFile = File(tempDir, ".env")
     envFile.writeText(
@@ -101,7 +101,7 @@ class DotenvIntegrationTest {
   }
 
   @JUnitTest
-  fun `should handle relative path correctly`() {
+  fun `handle_relative_path_correctly`() {
     // 创建config目录和.env文件
     val configDir = File(tempDir, "config")
     configDir.mkdirs()
@@ -133,7 +133,7 @@ class DotenvIntegrationTest {
   }
 
   @JUnitTest
-  fun `should apply filters correctly in integration`() {
+  fun `apply_filters_correctly_in_integration`() {
     // 创建.env文件
     val envFile = File(tempDir, ".env")
     envFile.writeText(
@@ -171,7 +171,7 @@ class DotenvIntegrationTest {
   }
 
   @JUnitTest
-  fun `should handle missing file gracefully in integration`() {
+  fun `handle_missing_file_gracefully_in_integration`() {
     // 配置插件指向不存在的文件
     val configEntrance = project.extensions.getByType(ConfigEntrance::class.java)
     configEntrance.dotenv { config ->
@@ -191,7 +191,7 @@ class DotenvIntegrationTest {
   }
 
   @JUnitTest
-  fun `should work with absolute path`() {
+  fun `work_with_absolute_path`() {
     // 创建临时.env文件
     val envFile = File.createTempFile("test", ".env")
     envFile.deleteOnExit()
@@ -222,7 +222,7 @@ class DotenvIntegrationTest {
   }
 
   @JUnitTest
-  fun `should not load when disabled`() {
+  fun `not_load_when_disabled`() {
     // 创建.env文件
     val envFile = File(tempDir, ".env")
     envFile.writeText(

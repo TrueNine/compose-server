@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.gradleplugin.generator
 
 import io.github.truenine.composeserver.gradleplugin.consts.Constant
 import io.github.truenine.composeserver.gradleplugin.consts.MavenRepos
-import io.github.truenine.composeserver.gradleplugin.consts.Repos
+import io.github.truenine.composeserver.gradleplugin.consts.MavenRepositoryUrls
 import io.github.truenine.composeserver.gradleplugin.wrap
 import java.io.File
 import java.io.FileWriter
@@ -68,10 +68,10 @@ class GradleGenerator(@Inject private val project: Project, @Inject private val 
             gradlePluginUrl?.also { urls += "${MavenRepos.GRADLE_PLUGIN_PORTAL}__$it" }
           }
           if (cfg.enableSpring) {
-            cfg.otherRepositories += Repos.springMilestone
-            cfg.otherRepositories += Repos.springSnapshot
+            cfg.otherRepositories += MavenRepositoryUrls.SPRING_MILESTONE
+            cfg.otherRepositories += MavenRepositoryUrls.SPRING_SNAPSHOT
           }
-          if (cfg.enableMybatisPlus) cfg.otherRepositories += Repos.mybatisPlusSnapshot
+          if (cfg.enableMybatisPlus) cfg.otherRepositories += MavenRepositoryUrls.MYBATIS_PLUGS_SNAPSHOT
 
           val result =
             template

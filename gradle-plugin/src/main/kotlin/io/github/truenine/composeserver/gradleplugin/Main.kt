@@ -4,7 +4,6 @@ import io.github.truenine.composeserver.gradleplugin.dotenv.DotenvLoader
 import io.github.truenine.composeserver.gradleplugin.entrance.ConfigEntrance
 import io.github.truenine.composeserver.gradleplugin.generator.GradleGenerator
 import io.github.truenine.composeserver.gradleplugin.jar.JarExtension
-import io.github.truenine.composeserver.gradleplugin.spotless.Spotless
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -15,10 +14,6 @@ class Main : Plugin<Project> {
 
     if (cfg.gradleGenerator.enabled) {
       val gradleGenerator = GradleGenerator(project, cfg.gradleGenerator)
-    }
-
-    if (cfg.spotless.enabled) {
-      val spotless = Spotless(project, cfg.spotless)
     }
 
     // 环境变量加载需要在项目评估后执行，以确保配置已完全加载

@@ -3,7 +3,6 @@ package io.github.truenine.composeserver.gradleplugin.entrance
 import io.github.truenine.composeserver.gradleplugin.dotenv.DotenvConfig
 import io.github.truenine.composeserver.gradleplugin.generator.GradleGeneratorConfig
 import io.github.truenine.composeserver.gradleplugin.jar.JarExtensionConfig
-import io.github.truenine.composeserver.gradleplugin.spotless.SpotlessConfig
 import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -12,11 +11,7 @@ import org.gradle.api.plugins.ExtensionAware
 abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   val gradleGenerator = GradleGeneratorConfig()
   val jarExtension = JarExtensionConfig(project)
-  val spotless = SpotlessConfig()
   val dotenv = DotenvConfig()
-
-  /** ## spotless 扩展配置 */
-  fun spotless(action: Action<SpotlessConfig>) = action.execute(spotless)
 
   /**
    * ## jar 打包扩展配置

@@ -1,6 +1,6 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
-import io.github.truenine.composeserver.gradleplugin.consts.Repos
+import io.github.truenine.composeserver.gradleplugin.consts.MavenRepositoryUrls
 
 enum class MavenRepoType(
   val mavenCentralUrl: String? = null,
@@ -9,8 +9,17 @@ enum class MavenRepoType(
   val gradlePluginUrl: String? = null,
   val gradleDistributionUrl: String? = null,
 ) {
-  ALIYUN(mavenCentralUrl = Repos.aliCentral, gradlePluginUrl = Repos.aliGradlePlugin, googlePluginUrl = Repos.aliGoogle, jCenterUrl = Repos.aliJCenter),
-  TENCENT_CLOUD(mavenCentralUrl = Repos.tencentCloudMavenPublic, googlePluginUrl = Repos.tencentCloudMavenPublic, gradlePluginUrl = Repos.aliGradlePlugin),
-  HUAWEI_CLOUD(mavenCentralUrl = Repos.huaweiCloudMaven),
+  ALIYUN(
+    mavenCentralUrl = MavenRepositoryUrls.ALIYUN_CENTRAL,
+    gradlePluginUrl = MavenRepositoryUrls.ALIYUN_GRADLE_PLUGIN,
+    googlePluginUrl = MavenRepositoryUrls.ALIYUN_GOOGLE,
+    jCenterUrl = MavenRepositoryUrls.ALIYUN_JCENTER,
+  ),
+  TENCENT_CLOUD(
+    mavenCentralUrl = MavenRepositoryUrls.TENCENT_MAVEN_PUBLIC,
+    googlePluginUrl = MavenRepositoryUrls.TENCENT_MAVEN_PUBLIC,
+    gradlePluginUrl = MavenRepositoryUrls.ALIYUN_GRADLE_PLUGIN,
+  ),
+  HUAWEI_CLOUD(mavenCentralUrl = MavenRepositoryUrls.HUAWEI_CLOUD_MAVEN),
   DEFAULT,
 }

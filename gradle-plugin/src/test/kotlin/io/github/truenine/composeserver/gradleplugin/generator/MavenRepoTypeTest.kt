@@ -63,7 +63,7 @@ class MavenRepoTypeTest {
   }
 
   @Test
-  fun `should have all enum values`() {
+  fun `have_all_enum_values`() {
     val values = MavenRepoType.values()
 
     assertEquals(4, values.size)
@@ -74,7 +74,7 @@ class MavenRepoTypeTest {
   }
 
   @Test
-  fun `should support valueOf`() {
+  fun `support_value_of`() {
     assertEquals(MavenRepoType.ALIYUN, MavenRepoType.valueOf("ALIYUN"))
     assertEquals(MavenRepoType.TENCENT_CLOUD, MavenRepoType.valueOf("TENCENT_CLOUD"))
     assertEquals(MavenRepoType.HUAWEI_CLOUD, MavenRepoType.valueOf("HUAWEI_CLOUD"))

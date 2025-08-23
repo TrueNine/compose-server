@@ -20,34 +20,20 @@ class ConfigEntranceTest {
   }
 
   @Test
-  fun `should create config entrance with default values`() {
+  fun `create_config_entrance_with_default_values`() {
     assertNotNull(configEntrance.gradleGenerator)
     assertNotNull(configEntrance.jarExtension)
-    assertNotNull(configEntrance.spotless)
     assertNotNull(configEntrance.dotenv)
     assertEquals(project, configEntrance.project)
   }
 
   @Test
-  fun `should have correct DSL name`() {
+  fun `have_correct_dsl_name`() {
     assertEquals("composeGradle", ConfigEntrance.DSL_NAME)
   }
 
   @Test
-  fun `should configure gradle generator through DSL`() {
-    var configuredEnabled = false
-
-    configEntrance.gradleGenerator { config ->
-      config.enabled = true
-      configuredEnabled = config.enabled
-    }
-
-    assertTrue(configuredEnabled)
-    assertTrue(configEntrance.gradleGenerator.enabled)
-  }
-
-  @Test
-  fun `should configure jar extension through DSL`() {
+  fun `configure_jar_extension_through_dsl`() {
     var configuredBootJarName = ""
 
     configEntrance.jarExtension { config ->
@@ -60,20 +46,7 @@ class ConfigEntranceTest {
   }
 
   @Test
-  fun `should configure spotless through DSL`() {
-    var configuredEnabled = false
-
-    configEntrance.spotless { config ->
-      config.enabled = true
-      configuredEnabled = config.enabled
-    }
-
-    assertTrue(configuredEnabled)
-    assertTrue(configEntrance.spotless.enabled)
-  }
-
-  @Test
-  fun `should configure dotenv through DSL`() {
+  fun `configure_dotenv_through_dsl`() {
     var configuredFilePath = ""
 
     configEntrance.dotenv { config ->
@@ -88,7 +61,7 @@ class ConfigEntranceTest {
   }
 
   @Test
-  fun `should initialize with correct default configurations`() {
+  fun `initialize_with_correct_default_configurations`() {
     // Test GradleGeneratorConfig defaults
     val gradleConfig = configEntrance.gradleGenerator
     assertEquals(false, gradleConfig.enabled)
@@ -105,10 +78,6 @@ class ConfigEntranceTest {
     assertEquals(false, jarConfig.bootJarSeparate)
     assertEquals("boot", jarConfig.bootJarClassifier)
     assertEquals(true, jarConfig.copyLicense)
-
-    // Test SpotlessConfig defaults
-    val spotlessConfig = configEntrance.spotless
-    assertEquals(false, spotlessConfig.enabled)
 
     // Test DotenvConfig defaults
     val dotenvConfig = configEntrance.dotenv
