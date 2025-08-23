@@ -1,4 +1,4 @@
-package itest.integrate.depend.itest.integrate.oss.minio
+package itest.integrate.oss.minio
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
