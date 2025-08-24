@@ -59,7 +59,7 @@ data class OssProperties(
   var exposedBaseUrl: String? = null,
 
   /** Enable SSL/TLS connection */
-  var enableSsl: Boolean = true,
+  var enableSsl: Boolean = false,
 
   /** Connection timeout */
   var connectionTimeout: Duration? = DEFAULT_CONNECT_TIMEOUT,
