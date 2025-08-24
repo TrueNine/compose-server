@@ -3,7 +3,7 @@ name: Publish to Maven Central
 on:
   push:
     branches: [ main ]
-    tags: [ '🚀*' ]
+    tags:  [ '🚀*' ]
   release:
     types: [ published ]
   workflow_dispatch:
