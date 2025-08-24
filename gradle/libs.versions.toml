@@ -54,7 +54,7 @@ org-springframework-modulith = "2.0.0-M1"
 org-springframework-security = "6.5.3"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.28"
+project = "0.0.29"
 
 [libraries]
 ch-qos-logback-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback" }
@@ -169,7 +169,9 @@ io-github-truenine-composeserver-security-oauth2 = { module = "io.github.truenin
 io-github-truenine-composeserver-security-spring = { module = "io.github.truenine:composeserver-security-spring", version.ref = "project" }
 io-github-truenine-composeserver-shared = { module = "io.github.truenine:composeserver-shared", version.ref = "project" }
 io-github-truenine-composeserver-sms-tencent = { module = "io.github.truenine:composeserver-sms-tencent", version.ref = "project" }
-io-github-truenine-composeserver-testtoolkit = { module = "io.github.truenine:composeserver-testtoolkit", version.ref = "project" }
+io-github-truenine-composeserver-testtoolkit-shared = { module = "io.github.truenine:composeserver-testtoolkit-shared", version.ref = "project" }
+io-github-truenine-composeserver-testtoolkit-shared = { module = "io.github.truenine:composeserver-testtoolkit-springmvc", version.ref = "project" }
+io-github-truenine-composeserver-testtoolkit-shared = { module = "io.github.truenine:composeserver-testtoolkit-testcontainers", version.ref = "project" }
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.13.0"
 io-minio-minio = "io.minio:minio:8.5.17"
 io-mockk-mockk = "io.mockk:mockk:1.14.5"
