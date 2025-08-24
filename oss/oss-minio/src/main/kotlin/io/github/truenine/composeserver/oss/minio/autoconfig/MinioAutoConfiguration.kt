@@ -39,11 +39,14 @@ class MinioAutoConfiguration {
   @Bean
   @ConditionalOnMissingBean
   fun minioClient(ossProperties: OssProperties, environment: Environment, minioProperties: MinioProperties): MinioClient {
-    val endpoint = minioProperties.endpoint?.takeIf { it.isNotBlank() } ?: ossProperties.endpoint
-    val port = minioProperties.port ?: MinioProperties.DEFAULT_PORT
+    val endpoint =
+      minioProperties.endpoint?.takeIf { it.isNotBlank() }
+        ?: ossProperties.endpoint
+        ?: MinioProperties.DEFAULT_ENDPOINT.also { it: String -> log.warn("use default endpoint {}", it) }
+    require(endpoint.isNotBlank()) { "MinIO endpoint is required" }
+    val port = minioProperties.port ?: MinioProperties.DEFAULT_PORT.also { log.warn("use default port: {}", it) }
     val accessKey = minioProperties.accessKey ?: ossProperties.accessKey
     val secretKey = minioProperties.secretKey ?: ossProperties.secretKey
-    require(!endpoint.isNullOrBlank()) { "MinIO endpoint is required" }
     val enableSsl = endpoint.startsWith("https://") || ossProperties.enableSsl || (minioProperties.enableSsl == true)
 
     require(!accessKey.isNullOrBlank()) { "MinIO access key is required" }

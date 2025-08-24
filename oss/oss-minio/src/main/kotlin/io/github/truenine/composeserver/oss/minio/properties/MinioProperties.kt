@@ -24,8 +24,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.OSS_MINIO)
 data class MinioProperties(
-  var endpoint: String? = DEFAULT_ENDPOINT,
-  var port: Int? = DEFAULT_PORT,
+  var endpoint: String? = null,
+  var port: Int? = null,
   var accessKey: String? = null,
   var secretKey: String? = null,
   var exposedBaseUrl: String? = null,
