@@ -22,14 +22,14 @@ class GradleProjectDelegatorTest {
   }
 
   @Test
-  fun `should delegate to project correctly`() {
+  fun `delegate_to_project_correctly`() {
     assertEquals(project.name, delegator.name)
     assertEquals(project.version, delegator.version)
     assertEquals(project.group, delegator.group)
   }
 
   @Test
-  fun `should identify root project correctly`() {
+  fun `identify_root_project_correctly`() {
     val rootProject = ProjectBuilder.builder().build()
     val rootDelegator = GradleProjectDelegator(rootProject)
     assertTrue(rootDelegator.isRootProject)
@@ -40,30 +40,30 @@ class GradleProjectDelegatorTest {
   }
 
   @Test
-  fun `should provide access to source sets`() {
+  fun `provide_access_to_source_sets`() {
     assertNotNull(delegator.sourceSets)
     assertNotNull(delegator.sourceSets.findByName("main"))
     assertNotNull(delegator.sourceSets.findByName("test"))
   }
 
   @Test
-  fun `should provide access to main resources`() {
+  fun `provide_access_to_main_resources`() {
     assertNotNull(delegator.mainResources)
   }
 
   @Test
-  fun `should provide access to test resources`() {
+  fun `provide_access_to_test_resources`() {
     assertNotNull(delegator.testResources)
   }
 
   @Test
-  fun `should provide access to logger`() {
+  fun `provide_access_to_logger`() {
     assertNotNull(delegator.log)
     assertEquals(project.logger, delegator.log)
   }
 
   @Test
-  fun `should configure source sets through DSL`() {
+  fun `configure_source_sets_through_dsl`() {
     var configuredSourceSets = false
 
     delegator.sourceSets { sourceSets ->

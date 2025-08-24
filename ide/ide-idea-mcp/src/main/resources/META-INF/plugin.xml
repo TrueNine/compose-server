@@ -48,7 +48,7 @@
       serviceImplementation="io.github.truenine.composeserver.ide.ideamcp.services.LibCodeServiceImpl"/>
     <projectService
       serviceImplementation="io.github.truenine.composeserver.ide.ideamcp.services.FileManager"/>
-    
+
     <!-- 终端输出拦截器服务 -->
     <projectService
       serviceImplementation="io.github.truenine.composeserver.ide.ideamcp.TerminalOutputInterceptor"/>

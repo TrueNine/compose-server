@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.oss.minio
 
 import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.oss.CreateBucketRequest
-import io.github.truenine.composeserver.oss.ObjectStorageService
+import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.PutObjectRequest
 import io.github.truenine.composeserver.oss.ShareLinkRequest
 import io.github.truenine.composeserver.oss.UploadWithLinkRequest
@@ -565,7 +565,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
 
     @Test
     fun `测试类继承关系`() {
-      assertNotNull(service as? ObjectStorageService)
+      assertNotNull(service as? IObjectStorageService)
     }
   }
 }

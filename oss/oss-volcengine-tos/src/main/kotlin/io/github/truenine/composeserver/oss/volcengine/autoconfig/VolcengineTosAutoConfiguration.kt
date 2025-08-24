@@ -6,7 +6,7 @@ import com.volcengine.tos.TOSV2ClientBuilder
 import com.volcengine.tos.auth.StaticCredentials
 import com.volcengine.tos.transport.TransportConfig
 import io.github.truenine.composeserver.logger
-import io.github.truenine.composeserver.oss.ObjectStorageService
+import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.github.truenine.composeserver.oss.volcengine.VolcengineTosObjectStorageService
 import io.github.truenine.composeserver.oss.volcengine.properties.VolcengineTosProperties
@@ -111,12 +111,12 @@ class VolcengineTosAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun volcengineTosObjectStorageService(tosClient: TOSV2, tosProperties: VolcengineTosProperties, ossProperties: OssProperties): ObjectStorageService {
-    log.info("Creating Volcengine TOS ObjectStorageService...")
+  fun volcengineTosObjectStorageService(tosClient: TOSV2, tosProperties: VolcengineTosProperties, ossProperties: OssProperties): IObjectStorageService {
+    log.info("Creating Volcengine TOS IObjectStorageService...")
 
     val exposedBaseUrl = resolveExposedBaseUrl(tosProperties, ossProperties)
 
-    log.info("✅ Volcengine TOS ObjectStorageService created with exposed URL: $exposedBaseUrl")
+    log.info("✅ Volcengine TOS IObjectStorageService created with exposed URL: $exposedBaseUrl")
 
     return VolcengineTosObjectStorageService(tosClient, exposedBaseUrl)
   }

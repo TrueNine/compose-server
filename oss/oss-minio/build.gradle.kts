@@ -22,9 +22,5 @@ dependencies {
   runtimeOnly(libs.org.apache.logging.log4j.log4j.api)
   runtimeOnly(libs.com.squareup.okhttp3.okhttp)
 
-  testImplementation(projects.testtoolkit)
-
-  // TestContainers
-  testImplementation(libs.org.testcontainers.testcontainers)
-  testImplementation(libs.org.testcontainers.minio)
+  testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
 }

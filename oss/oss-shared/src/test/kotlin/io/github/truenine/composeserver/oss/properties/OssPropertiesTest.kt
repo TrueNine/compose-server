@@ -41,8 +41,8 @@ class OssPropertiesTest {
           "${SpringBootConfigurationPropertiesPrefixes.OSS}.max-connections" to "100",
           "${SpringBootConfigurationPropertiesPrefixes.OSS}.default-bucket" to "test-bucket",
           "${SpringBootConfigurationPropertiesPrefixes.OSS}.auto-create-bucket" to "true",
-          "${SpringBootConfigurationPropertiesPrefixes.OSS}.enable-versioning" to "true",
-          "${SpringBootConfigurationPropertiesPrefixes.OSS}.enable-logging" to "true",
+          "${SpringBootConfigurationPropertiesPrefixes.OSS}.versioning" to "true",
+          "${SpringBootConfigurationPropertiesPrefixes.OSS}.logging" to "true",
         )
 
       // 创建环境和绑定器
@@ -67,8 +67,8 @@ class OssPropertiesTest {
       assertEquals(100, ossProperties.maxConnections)
       assertEquals("test-bucket", ossProperties.defaultBucket)
       assertTrue(ossProperties.autoCreateBucket)
-      assertTrue(ossProperties.enableVersioning)
-      assertTrue(ossProperties.enableLogging)
+      assertTrue(ossProperties.versioning)
+      assertTrue(ossProperties.logging)
     }
 
     @Test
@@ -90,14 +90,14 @@ class OssPropertiesTest {
       assertNull(ossProperties.secretKey)
       assertNull(ossProperties.exposedBaseUrl)
       assertTrue(ossProperties.enableSsl)
-      assertEquals(Duration.ofSeconds(30), ossProperties.connectionTimeout)
-      assertEquals(Duration.ofMinutes(5), ossProperties.readTimeout)
-      assertEquals(Duration.ofMinutes(5), ossProperties.writeTimeout)
-      assertEquals(100, ossProperties.maxConnections)
-      assertNull(ossProperties.defaultBucket)
+      assertEquals(Duration.ofSeconds(5), ossProperties.connectionTimeout)
+      assertEquals(Duration.ofSeconds(3), ossProperties.readTimeout)
+      assertEquals(Duration.ofSeconds(3), ossProperties.writeTimeout)
+      assertEquals(127, ossProperties.maxConnections)
+      assertEquals("attachments", ossProperties.defaultBucket)
       assertFalse(ossProperties.autoCreateBucket)
-      assertFalse(ossProperties.enableVersioning)
-      assertFalse(ossProperties.enableLogging)
+      assertFalse(ossProperties.versioning)
+      assertFalse(ossProperties.logging)
     }
   }
 
@@ -203,7 +203,7 @@ class OssPropertiesTest {
   }
 
   @Nested
-  inner class `toString 方法` {
+  inner class ToString {
 
     @Test
     fun `toString 应该隐藏敏感信息`() {

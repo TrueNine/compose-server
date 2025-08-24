@@ -3,7 +3,7 @@ name: Publish to Maven Central
 on:
   push:
     branches: [ main ]
-    tags: [ '🚀*' ]
+    tags: [ 'v*' ]
   release:
     types: [ published ]
   workflow_dispatch:
@@ -20,10 +20,11 @@ on:
         description: '强制发布（忽略版本检测）'
         type: boolean
         default: false
-      skip_tests:
-        description: '跳过测试（仅用于紧急发布）'
-        type: boolean
-        default: false
+      target_environment:
+        description: '目标发布环境'
+        type: choice
+        options: ['maven-central', 'maven-local']
+        default: 'maven-central'
 
 # 并发控制：防止同时触发多个发布任务
 concurrency:
@@ -31,8 +32,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dorg.gradle.configuration-cache=true"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true"
   JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1536m -XX:+UseG1GC -XX:G1HeapRegionSize=16m"
+  CI: true
 
 jobs:
   # 🧪 发布前验证
@@ -90,13 +92,12 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Extract version information
+      - name: 确定版本信息
         id: version-info
         run: |
           # 语义化版本验证函数
           validate_semver() {
             local version="$1"
-            # 支持标准语义化版本格式：x.y.z[-prerelease][+build]
             if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9\.-]+)?(\+[a-zA-Z0-9\.-]+)?$ ]]; then
               return 0
             else
@@ -104,89 +105,70 @@ jobs:
             fi
           }
 
-          # 确定当前版本
-          echo "🔍 确定发布版本..." >> $GITHUB_STEP_SUMMARY
+          echo "# 🚀 Maven Central 发布准备" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 确定版本
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             version="${{ github.event.inputs.version }}"
-            echo "📝 手动指定版本: $version" >> $GITHUB_STEP_SUMMARY
+            echo "**版本来源:** 手动指定" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.event_name }}" == "release" ]]; then
             version="${{ github.event.release.tag_name }}"
-            version=${version#v}  # 移除可能的 'v' 前缀
-            echo "🏷️ Release 标签版本: $version" >> $GITHUB_STEP_SUMMARY
+            version=${version#v}
+            echo "**版本来源:** GitHub Release 标签" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.ref_type }}" == "tag" ]]; then
             version="${{ github.ref_name }}"
-            version=${version#v}  # 移除可能的 'v' 前缀
-            echo "🏷️ 标签触发版本: $version" >> $GITHUB_STEP_SUMMARY
+            version=${version#v}
+            echo "**版本来源:** Git 标签" >> $GITHUB_STEP_SUMMARY
           else
-            # push event: parse from libs.versions.toml
-            version=$(sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
-            echo "📄 从 libs.versions.toml 读取版本: $version" >> $GITHUB_STEP_SUMMARY
+            version=$(grep -E '^project\s*=' gradle/libs.versions.toml | sed 's/.*"\(.*\)".*/\1/')
+            echo "**版本来源:** libs.versions.toml" >> $GITHUB_STEP_SUMMARY
           fi
+
+          echo "**版本号:** $version" >> $GITHUB_STEP_SUMMARY
 
           # 验证版本格式
           if ! validate_semver "$version"; then
-            echo "❌ 版本格式无效: $version" >> $GITHUB_STEP_SUMMARY
-            echo "版本必须符合语义化版本规范 (x.y.z[-prerelease][+build])" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **版本格式错误**: $version" >> $GITHUB_STEP_SUMMARY
+            echo "要求语义化版本格式: x.y.z[-prerelease][+build]" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
 
+          # 输出版本信息
           echo "version=$version" >> $GITHUB_OUTPUT
-          echo "✅ 版本格式验证通过: $version" >> $GITHUB_STEP_SUMMARY
-
-          # 确定快照状态
+          
+          # 判断版本类型
           if [[ "$version" == *"-SNAPSHOT" ]] || [[ "$version" == *"-alpha"* ]] || [[ "$version" == *"-beta"* ]] || [[ "$version" == *"-rc"* ]]; then
             echo "is-snapshot=true" >> $GITHUB_OUTPUT
-            echo "📦 预发布版本类型" >> $GITHUB_STEP_SUMMARY
+            echo "**版本类型:** 预发布版本" >> $GITHUB_STEP_SUMMARY
           else
             echo "is-snapshot=false" >> $GITHUB_OUTPUT
-            echo "🚀 正式发布版本类型" >> $GITHUB_STEP_SUMMARY
+            echo "**版本类型:** 正式版本" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # 简化的发布决策逻辑
+          # 简化的发布决策
           should_publish="false"
-          force_publish="${{ github.event.inputs.force_publish }}"
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔍 发布决策分析..." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          # 强制发布模式
-          if [[ "$force_publish" == "true" ]]; then
+          
+          if [[ "${{ github.event.inputs.force_publish }}" == "true" ]]; then
             should_publish="true"
-            echo "⚡ **强制发布模式已启用**" >> $GITHUB_STEP_SUMMARY
-          # 明确的发布触发器
+            echo "**发布决策:** 强制发布 ⚡" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.ref_type }}" == "tag" ]] || [[ "${{ github.event_name }}" == "release" ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             should_publish="true"
-            echo "🎯 **直接触发**：标签/Release/手动触发 - 将发布" >> $GITHUB_STEP_SUMMARY
-          # main 分支 push：检查版本变化
+            echo "**发布决策:** 触发发布 🎯" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]] && git diff --quiet HEAD~1 gradle/libs.versions.toml; then
+            should_publish="false"
+            echo "**发布决策:** 跳过发布（无版本变化）⏭️" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "🌱 **Main 分支 push**：检查版本变化..." >> $GITHUB_STEP_SUMMARY
-          
-            # 使用更简单的版本检查方法
-            if git diff HEAD~1 --name-only | grep -q "gradle/libs.versions.toml"; then
-              prev_version=$(git show HEAD~1:gradle/libs.versions.toml 2>/dev/null | sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' | head -n1 || echo "unknown")
-              if [[ "$prev_version" != "$version" && "$prev_version" != "unknown" ]]; then
-                should_publish="true"
-                echo "  🔼 检测到版本变化：$prev_version → $version" >> $GITHUB_STEP_SUMMARY
-              else
-                echo "  ⚠️ 版本文件已变化，但版本号未变化" >> $GITHUB_STEP_SUMMARY
-              fi
-            else
-              echo "  ⏭️ 版本文件未变化，跳过发布" >> $GITHUB_STEP_SUMMARY
-            fi
+            should_publish="true"
+            echo "**发布决策:** 版本变化发布 🔼" >> $GITHUB_STEP_SUMMARY
           else
-            echo "⏭️ **其他情况**：非发布分支或事件，跳过发布" >> $GITHUB_STEP_SUMMARY
+            should_publish="false"
+            echo "**发布决策:** 跳过发布 ⏭️" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "should-publish=$should_publish" >> $GITHUB_OUTPUT
-
-          # 最终决策摘要
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [[ "$should_publish" == "true" ]]; then
-            echo "✅ **发布决策：继续发布**" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "⏭️ **发布决策：跳过发布**" >> $GITHUB_STEP_SUMMARY
-          fi
 
       - name: Generate pre-publish report
         run: |
@@ -295,51 +277,34 @@ jobs:
           
           echo "✅ 验证通过" >> $GITHUB_STEP_SUMMARY
 
-      # 正式发布（增强版）
-      - name: Publish to Maven Central
-        if: github.event.inputs.dry_run != 'true'
+      # 正式发布到 Maven Central
+      - name: 发布到 Maven Central
+        if: github.event.inputs.dry_run != 'true' && github.event.inputs.target_environment == 'maven-central'
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 90
-          max_attempts: 3
-          retry_wait_seconds: 600
+          max_attempts: 2
+          retry_wait_seconds: 300
           shell: bash
           command: |
-            echo "🚀 开始发布到 Maven Central (attempt: ${{ github.run_attempt }})..."
+            echo "🚀 开始发布到 Maven Central..."
             
-            # 设置错误处理
-            set -euo pipefail
-            
-            # 分类错误处理函数
-            handle_error() {
+            # 错误处理函数
+            handle_publish_error() {
               local exit_code=$1
-              local error_context="$2"
-            
               echo "❌ 发布失败 (退出码: $exit_code)" >> $GITHUB_STEP_SUMMARY
-              echo "" >> $GITHUB_STEP_SUMMARY
-            
-              case $exit_code in
-                1|2) echo "**错误类型:** 构建或配置错误" >> $GITHUB_STEP_SUMMARY ;;
-                3|4) echo "**错误类型:** GPG 签名失败" >> $GITHUB_STEP_SUMMARY ;;
-                5|6) echo "**错误类型:** Maven Central 连接失败" >> $GITHUB_STEP_SUMMARY ;;
-                *) echo "**错误类型:** 未知错误" >> $GITHUB_STEP_SUMMARY ;;
-              esac
-            
-              echo "**错误上下文:** $error_context" >> $GITHUB_STEP_SUMMARY
+              echo "请检查 GPG 签名配置和网络连接" >> $GITHUB_STEP_SUMMARY
               exit $exit_code
             }
             
-            trap 'handle_error $? "发布执行阶段"' ERR
+            trap 'handle_publish_error $?' ERR
             
-            echo "🔐 验证发布凭据..." >> $GITHUB_STEP_SUMMARY
-            echo "📦 开始发布流程..." >> $GITHUB_STEP_SUMMARY
-            
+            # 发布命令
             ./gradlew publishToMavenCentral \
               --no-daemon \
               --parallel \
-              --no-configuration-cache \
+              --build-cache \
               --stacktrace \
-              --info \
               --continue \
               -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
               -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
@@ -347,7 +312,23 @@ jobs:
               -PmavenCentralPassword="${{ secrets.MAVENCENTRAL_PASSWORD }}" \
               -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
             
-            echo "✅ 发布到 Maven Central 成功" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Maven Central 发布成功" >> $GITHUB_STEP_SUMMARY
+
+      # 本地发布（用于测试）
+      - name: 发布到本地 Maven 仓库
+        if: github.event.inputs.dry_run != 'true' && github.event.inputs.target_environment == 'maven-local'
+        run: |
+          echo "📦 发布到本地 Maven 仓库..."
+          
+          ./gradlew publishToMavenLocal \
+            --no-daemon \
+            --parallel \
+            --build-cache \
+            -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
+            -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
+            -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
+          
+          echo "✅ 本地 Maven 仓库发布成功" >> $GITHUB_STEP_SUMMARY
         env:
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
           MAVENCENTRAL_USERNAME: ${{ secrets.MAVENCENTRAL_USERNAME }}

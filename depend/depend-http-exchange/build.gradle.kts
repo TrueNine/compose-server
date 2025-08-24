@@ -20,4 +20,5 @@ dependencies {
   implementation(libs.org.springframework.spring.webflux)
 
   testImplementation(libs.org.springframework.boot.spring.boot.starter.webflux)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

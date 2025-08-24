@@ -8,5 +8,5 @@ plugins {
 dependencies {
   implementation(libs.org.springframework.boot.spring.boot.starter.web)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
 }

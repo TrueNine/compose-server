@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.oss.minio.properties
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
+import io.github.truenine.composeserver.oss.properties.OssProperties
 import java.time.Duration
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -17,21 +18,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @param connectionTimeout Connection timeout
  * @param writeTimeout Write timeout
  * @param readTimeout Read timeout
- * @param enableLogging Enable request/response logging
+ * @param logging Enable request/response logging
  * @author TrueNine
  * @since 2025-01-04
  */
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.OSS_MINIO)
 data class MinioProperties(
-  var endpoint: String = "127.0.0.1",
-  var port: Int = 9000,
+  var endpoint: String? = DEFAULT_ENDPOINT,
+  var port: Int? = DEFAULT_PORT,
   var accessKey: String? = null,
   var secretKey: String? = null,
   var exposedBaseUrl: String? = null,
-  var enableSsl: Boolean = false,
+  var enableSsl: Boolean? = false,
   var region: String? = null,
-  var connectionTimeout: Duration = Duration.ofSeconds(30),
-  var writeTimeout: Duration = Duration.ofMinutes(5),
-  var readTimeout: Duration = Duration.ofMinutes(5),
-  var enableLogging: Boolean = false,
-)
+  var connectionTimeout: Duration? = OssProperties.DEFAULT_CONNECT_TIMEOUT,
+  var readTimeout: Duration? = OssProperties.DEFAULT_READ_TIMEOUT,
+  var writeTimeout: Duration? = OssProperties.DEFAULT_WRITE_TIMEOUT,
+  var logging: Boolean? = false,
+) {
+  companion object {
+    const val DEFAULT_ENDPOINT = "127.0.0.1"
+    const val DEFAULT_PORT = 9000
+  }
+}

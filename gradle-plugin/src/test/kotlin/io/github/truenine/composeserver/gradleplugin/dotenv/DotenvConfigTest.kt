@@ -17,7 +17,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should have correct default values`() {
+  fun `have_correct_default_values`() {
     assertFalse(config.enabled)
     assertEquals("", config.filePath)
     assertTrue(config.warnOnMissingFile)
@@ -30,7 +30,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should set file path correctly`() {
+  fun `set_file_path_correctly`() {
     config.filePath(".env")
     assertEquals(".env", config.filePath)
 
@@ -39,7 +39,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should configure warning options`() {
+  fun `configure_warning_options`() {
     config.warnOnMissingFile(false)
     assertFalse(config.warnOnMissingFile)
 
@@ -48,7 +48,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should configure override and ignore options`() {
+  fun `configure_override_and_ignore_options`() {
     config.overrideExisting(true)
     assertTrue(config.overrideExisting)
 
@@ -57,7 +57,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should set prefix filter`() {
+  fun `set_prefix_filter`() {
     config.prefixFilter("APP_")
     assertEquals("APP_", config.prefixFilter)
 
@@ -66,7 +66,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should manage exclude keys`() {
+  fun `manage_exclude_keys`() {
     config.excludeKeys("KEY1", "KEY2", "KEY3")
     assertEquals(setOf("KEY1", "KEY2", "KEY3"), config.excludeKeys)
 
@@ -78,7 +78,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should manage include keys`() {
+  fun `manage_include_keys`() {
     config.includeKeys("KEY1", "KEY2", "KEY3")
     assertEquals(setOf("KEY1", "KEY2", "KEY3"), config.includeKeys)
 
@@ -90,7 +90,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should validate configuration correctly`() {
+  fun `validate_configuration_correctly`() {
     // Invalid: disabled
     assertFalse(config.isValid())
 
@@ -108,7 +108,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should generate correct summary`() {
+  fun `generate_correct_summary`() {
     config.enabled = true
     config.filePath = ".env"
     config.warnOnMissingFile = false
@@ -133,7 +133,7 @@ class DotenvConfigTest {
   }
 
   @Test
-  fun `should generate minimal summary for default config`() {
+  fun `generate_minimal_summary_for_default_config`() {
     val summary = config.getSummary()
 
     assertTrue(summary.contains("enabled=false"))

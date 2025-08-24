@@ -12,5 +12,6 @@ Provides common interfaces and utilities for AI model interactions and intellige
 
 dependencies {
   implementation(projects.shared)
-  testImplementation(projects.testtoolkit)
+
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

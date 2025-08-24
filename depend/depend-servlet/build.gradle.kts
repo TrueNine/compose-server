@@ -19,5 +19,6 @@ dependencies {
 
   api(projects.shared)
   implementation(projects.security.securityCrypto)
-  testImplementation(projects.testtoolkit)
+
+  testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
 }

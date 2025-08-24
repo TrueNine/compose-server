@@ -6,7 +6,7 @@ com-alibaba-cloud = "2023.0.3.3"
 com-baomidou-mybatis-plus = "3.5.12"
 com-diffplug-spotless = "7.2.1"
 com-fasterxml-jackson = "2.19.2"
-com-flywaydb-flyway = "11.11.1"
+com-flywaydb-flyway = "11.11.2"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
 com-google-devtools-ksp = "2.2.10-2.0.2"
 com-mapstruct = "1.6.3"
@@ -45,16 +45,16 @@ org-liquibase = "4.33.0"
 org-slf4j = "2.1.0-alpha1"
 org-springframework-ai = "1.0.1"
 org-springframework-batch = "5.2.2"
-org-springframework-boot = "3.5.4"
+org-springframework-boot = "3.5.5"
 org-springframework-cloud = "2025.0.0"
 org-springframework-data = "3.5.3"
 org-springframework-framework = "6.2.10"
 org-springframework-integration = "6.5.1"
 org-springframework-modulith = "2.0.0-M1"
-org-springframework-security = "6.5.2"
+org-springframework-security = "6.5.3"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.27"
+project = "0.0.28"
 
 [libraries]
 ch-qos-logback-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback" }
@@ -170,14 +170,14 @@ io-github-truenine-composeserver-security-spring = { module = "io.github.truenin
 io-github-truenine-composeserver-shared = { module = "io.github.truenine:composeserver-shared", version.ref = "project" }
 io-github-truenine-composeserver-sms-tencent = { module = "io.github.truenine:composeserver-sms-tencent", version.ref = "project" }
 io-github-truenine-composeserver-testtoolkit = { module = "io.github.truenine:composeserver-testtoolkit", version.ref = "project" }
-io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.12.7"
+io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.13.0"
 io-minio-minio = "io.minio:minio:8.5.17"
 io-mockk-mockk = "io.mockk:mockk:1.14.5"
 io-netty-netty-handler = { module = "io.netty:netty-handler", version.ref = "io-netty" }
 io-projectreactor-kotlin-reactor-kotlin-extensions = "io.projectreactor.kotlin:reactor-kotlin-extensions:1.3.0-RC2"
 io-projectreactor-reactor-test = "io.projectreactor:reactor-test:3.8.0-M5"
 io-spring-gradle-dependency-management-plugin = "io.spring.gradle:dependency-management-plugin:1.1.7"
-io-swagger-core-v3-swagger-annotations-jakarta = "io.swagger.core.v3:swagger-annotations-jakarta:2.2.35"
+io-swagger-core-v3-swagger-annotations-jakarta = "io.swagger.core.v3:swagger-annotations-jakarta:2.2.36"
 jakarta-annotation-jakarta-annotation-api = "jakarta.annotation:jakarta.annotation-api:3.0.0"
 jakarta-inject-jakarta-inject-api = "jakarta.inject:jakarta.inject-api:2.0.1"
 jakarta-persistence-jakarta-persistence-api = "jakarta.persistence:jakarta.persistence-api:3.2.0"
@@ -269,7 +269,7 @@ org-projectlombok-lombok = "org.projectlombok:lombok:1.18.38"
 org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4.35.0"
 org-skyscreamer-jsonassert = "org.skyscreamer:jsonassert:2.0-rc1"
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
-org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9"
+org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11"
 org-springframework-ai-spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "org-springframework-ai" }
 org-springframework-ai-spring-ai-spring-boot-docker-compose = { module = "org.springframework.ai:spring-ai-spring-boot-docker-compose", version.ref = "org-springframework-ai" }
 org-springframework-batch-spring-batch-test = { module = "org.springframework.batch:spring-batch-test", version.ref = "org-springframework-batch" }

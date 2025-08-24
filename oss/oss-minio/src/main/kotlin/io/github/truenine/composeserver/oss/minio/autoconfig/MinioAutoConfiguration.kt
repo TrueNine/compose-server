@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.oss.minio.autoconfig
 
 import io.github.truenine.composeserver.logger
-import io.github.truenine.composeserver.oss.ObjectStorageService
+import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.minio.MinioObjectStorageService
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
 import io.github.truenine.composeserver.oss.properties.OssProperties
@@ -17,7 +17,7 @@ import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
 
 /**
- * Auto configuration for MinIO
+ * Autoconfiguration for MinIO
  *
  * This configuration is automatically enabled when MinIO client is present in the classpath. No manual provider configuration is required.
  *
@@ -33,35 +33,36 @@ import org.springframework.core.env.Environment
 class MinioAutoConfiguration {
 
   companion object {
-    private val log = logger<MinioAutoConfiguration>()
+    @JvmStatic private val log = logger<MinioAutoConfiguration>()
   }
 
   @Bean
   @ConditionalOnMissingBean
-  fun minioClient(minioProperties: MinioProperties, ossProperties: OssProperties, environment: Environment): MinioClient {
-    val endpoint = minioProperties.endpoint ?: ossProperties.endpoint
-    val port = minioProperties.port
+  fun minioClient(ossProperties: OssProperties, environment: Environment, minioProperties: MinioProperties): MinioClient {
+    val endpoint = minioProperties.endpoint?.takeIf { it.isNotBlank() } ?: ossProperties.endpoint
+    val port = minioProperties.port ?: MinioProperties.DEFAULT_PORT
     val accessKey = minioProperties.accessKey ?: ossProperties.accessKey
     val secretKey = minioProperties.secretKey ?: ossProperties.secretKey
-
     require(!endpoint.isNullOrBlank()) { "MinIO endpoint is required" }
+    val enableSsl = endpoint.startsWith("https://") || ossProperties.enableSsl || (minioProperties.enableSsl == true)
+
     require(!accessKey.isNullOrBlank()) { "MinIO access key is required" }
     require(!secretKey.isNullOrBlank()) { "MinIO secret key is required" }
 
     log.info("Initializing MinIO client with endpoint: $endpoint, port: $port, ssl: ${minioProperties.enableSsl}")
 
+    val connectTimeout = minioProperties.connectionTimeout ?: OssProperties.DEFAULT_CONNECT_TIMEOUT
+    val readConnectTimeout = minioProperties.readTimeout ?: OssProperties.DEFAULT_READ_TIMEOUT
+    val writeConnectTimeout = minioProperties.writeTimeout ?: OssProperties.DEFAULT_WRITE_TIMEOUT
+
     val httpClient =
       OkHttpClient.Builder()
-        .connectTimeout(minioProperties.connectionTimeout.toMillis(), TimeUnit.MILLISECONDS)
-        .writeTimeout(minioProperties.writeTimeout.toMillis(), TimeUnit.MILLISECONDS)
-        .readTimeout(minioProperties.readTimeout.toMillis(), TimeUnit.MILLISECONDS)
+        .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+        .writeTimeout(writeConnectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+        .readTimeout(readConnectTimeout.toMillis(), TimeUnit.MILLISECONDS)
         .build()
 
-    val clientBuilder =
-      MinioClient.builder()
-        .endpoint(endpoint, port ?: if (minioProperties.enableSsl) 443 else 80, minioProperties.enableSsl)
-        .credentials(accessKey, secretKey)
-        .httpClient(httpClient)
+    val clientBuilder = MinioClient.builder().endpoint(endpoint, port, enableSsl).credentials(accessKey, secretKey).httpClient(httpClient)
 
     minioProperties.region?.let { clientBuilder.region(it) }
 
@@ -91,18 +92,19 @@ class MinioAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun minioObjectStorageService(minioClient: MinioClient, minioProperties: MinioProperties, ossProperties: OssProperties): ObjectStorageService {
+  fun minioObjectStorageService(minioClient: MinioClient, minioProperties: MinioProperties, ossProperties: OssProperties): IObjectStorageService {
     val exposedBaseUrl = minioProperties.exposedBaseUrl ?: ossProperties.exposedBaseUrl ?: buildDefaultUrl(minioProperties)
 
-    log.info("Creating MinIO ObjectStorageService with exposed URL: $exposedBaseUrl")
+    log.info("Creating MinIO IObjectStorageService with exposed URL: $exposedBaseUrl")
 
     return MinioObjectStorageService(minioClient, exposedBaseUrl)
   }
 
   private fun buildDefaultUrl(minioProperties: MinioProperties): String {
-    val protocol = if (minioProperties.enableSsl) "https" else "http"
-    val port = minioProperties.port ?: if (minioProperties.enableSsl) 443 else 80
-    val portSuffix = if ((minioProperties.enableSsl && port == 443) || (!minioProperties.enableSsl && port == 80)) "" else ":$port"
-    return "$protocol://${minioProperties.endpoint}$portSuffix"
+    val protocol = if (minioProperties.enableSsl == true) "https" else "http"
+    val port = minioProperties.port ?: if (minioProperties.enableSsl == true) 443 else 80
+    val portSuffix = if ((minioProperties.enableSsl == true && port == 443) || (minioProperties.enableSsl == false && port == 80)) "" else ":$port"
+    val cleanEndpoint = minioProperties.endpoint?.removePrefix("http://")?.removePrefix("https://")
+    return "$protocol://$cleanEndpoint$portSuffix"
   }
 }

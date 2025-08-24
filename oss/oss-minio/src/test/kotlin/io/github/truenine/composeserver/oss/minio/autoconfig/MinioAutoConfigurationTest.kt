@@ -80,7 +80,7 @@ class MinioAutoConfigurationTest {
           kotlin.test.assertEquals(9000, minioProperties.port)
           kotlin.test.assertEquals("testkey", minioProperties.accessKey)
           kotlin.test.assertEquals("testsecret", minioProperties.secretKey)
-          kotlin.test.assertTrue(minioProperties.enableSsl)
+          kotlin.test.assertEquals(minioProperties.enableSsl, true)
           kotlin.test.assertEquals("us-east-1", minioProperties.region)
         }
     }

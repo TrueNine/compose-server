@@ -20,7 +20,7 @@ class FunctionsTest {
   }
 
   @Test
-  fun `wrap function should provide GradleProjectDelegator context`() {
+  fun `wrap_function_provides_GradleProjectDelegator_context`() {
     var delegatorName = ""
     var isRoot = false
 
@@ -34,7 +34,7 @@ class FunctionsTest {
   }
 
   @Test
-  fun `wrap function should provide access to source sets`() {
+  fun `wrap_function_provides_access_to_source_sets`() {
     var hasMainSourceSet = false
     var hasTestSourceSet = false
 
@@ -48,7 +48,7 @@ class FunctionsTest {
   }
 
   @Test
-  fun `wrap function should provide access to resources`() {
+  fun `wrap_function_provides_access_to_resources`() {
     var mainResourcesExists = false
     var testResourcesExists = false
 
@@ -62,7 +62,7 @@ class FunctionsTest {
   }
 
   @Test
-  fun `wrap function should provide access to logger`() {
+  fun `wrap_function_provides_access_to_logger`() {
     var loggerName = ""
 
     project.wrap { loggerName = this.log.name }
@@ -72,14 +72,14 @@ class FunctionsTest {
   }
 
   @Test
-  fun `wrap function should return value from lambda`() {
+  fun `wrap_function_returns_value_from_lambda`() {
     val result = project.wrap { "test-result" }
 
     assertEquals("test-result", result)
   }
 
   @Test
-  fun `wrap function should handle complex operations`() {
+  fun `wrap_function_handles_complex_operations`() {
     val result =
       project.wrap {
         val mainSourceSet = this.sourceSets.findByName("main")

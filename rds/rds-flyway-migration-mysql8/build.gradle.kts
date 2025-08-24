@@ -23,5 +23,5 @@ dependencies {
   testRuntimeOnly(libs.com.github.gavlyukovskiy.p6spy.spring.boot.starter)
   testImplementation(libs.org.springframework.spring.jdbc)
   testRuntimeOnly(libs.com.mysql.mysql.connector.j)
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
 }

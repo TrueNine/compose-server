@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(grep:*)",
+
+      "Bash(timeout:*)",
+      "Bash(.gradlew :shared:test:*)",
+      "Bash(kotlin debug_test.kt)",
+      "Bash(java:*)",
+      "Bash(rm:*)",
+      "Bash(.gradlew :oss:oss-shared:test --tests \"*OssPropertiesTest*toString*\")"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "Sequential-thinking",
+    "broswertools",
+    "Playwright"
+  ]
+}

@@ -7,23 +7,23 @@ import org.junit.jupiter.api.Test
 class ConstantTest {
 
   @Test
-  fun `should have correct task group`() {
+  fun `have_correct_task_group`() {
     assertEquals("compose gradle", Constant.TASK_GROUP)
   }
 
   @Test
-  fun `should have correct internal constants`() {
+  fun `have_correct_internal_constants`() {
     assertEquals("meta.init.gradle.kts", Constant.Internal.META_INIT_GRADLE_KTS)
     assertEquals("init.gradle.kts", Constant.Internal.INIT_GRADLE_KTS)
   }
 
   @Test
-  fun `should have correct file name constants`() {
+  fun `have_correct_file_name_constants`() {
     assertEquals("LICENSE", Constant.FileName.LICENSE)
   }
 
   @Test
-  fun `should have correct file name sets`() {
+  fun `have_correct_file_name_sets`() {
     val licenseSet = Constant.FileNameSet.LICENSE
     assertTrue(licenseSet.contains("license"))
     assertTrue(licenseSet.contains("license.txt"))
@@ -32,7 +32,7 @@ class ConstantTest {
   }
 
   @Test
-  fun `should have correct gradle constants`() {
+  fun `have_correct_gradle_constants`() {
     assertEquals("unspecified", Constant.Gradle.UNKNOWN_PROJECT_VERSION)
   }
 

@@ -15,5 +15,5 @@ dependencies {
 
   api(libs.com.microsoft.playwright.playwright)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

@@ -17,5 +17,7 @@ dependencies {
 
   implementation(projects.depend.dependJackson)
   api(projects.shared)
-  testImplementation(projects.testtoolkit)
+
+  testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
+  testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
 }

@@ -5,7 +5,13 @@ import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
-import java.time.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 /**
  * 统一的时间戳序列化器
@@ -32,6 +38,7 @@ class TimestampSerializer : JsonSerializer<Any>() {
           val today = LocalDate.now()
           today.atTime(value).toInstant(ZoneOffset.UTC).toEpochMilli()
         }
+
         is Instant -> value.toEpochMilli()
         is ZonedDateTime -> value.toInstant().toEpochMilli()
         is OffsetDateTime -> value.toInstant().toEpochMilli()

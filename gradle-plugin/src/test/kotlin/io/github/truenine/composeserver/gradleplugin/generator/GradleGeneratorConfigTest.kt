@@ -17,14 +17,14 @@ class GradleGeneratorConfigTest {
   }
 
   @Test
-  fun `should have correct default values`() {
+  fun `have_correct_default_values`() {
     assertEquals(false, config.enabled)
     assertNotNull(config.initGradle)
     assertEquals("gradle.properties", GradleGeneratorConfig.GRADLE_PROPERTIES_NAME)
   }
 
   @Test
-  fun `should configure init gradle through DSL`() {
+  fun `configure_init_gradle_through_dsl`() {
     config.initGradle { initConfig ->
       initConfig.wrapperUrl("https://custom.gradle.org/distributions")
       initConfig.wrapperVersion("8.6")
@@ -42,7 +42,7 @@ class GradleGeneratorConfigTest {
   }
 
   @Test
-  fun `should set maven type by string`() {
+  fun `set_maven_type_by_string`() {
     val initConfig = config.initGradle
 
     initConfig.mavenType("ali")
@@ -59,7 +59,7 @@ class GradleGeneratorConfigTest {
   }
 
   @Test
-  fun `should set maven type by enum`() {
+  fun `set_maven_type_by_enum`() {
     val initConfig = config.initGradle
 
     initConfig.mavenType(MavenRepoType.ALIYUN)
@@ -67,56 +67,56 @@ class GradleGeneratorConfigTest {
   }
 
   @Test
-  fun `should configure workers count`() {
+  fun `configure_workers_count`() {
     config.workers(8)
     val propertiesString = config.toPropertiesString()
     assertTrue(propertiesString.contains("org.gradle.workers.max=8"))
   }
 
   @Test
-  fun `should throw exception for invalid workers count`() {
+  fun `throw_exception_for_invalid_workers_count`() {
     assertThrows<IllegalStateException> { config.workers(2000) }
 
     assertThrows<IllegalStateException> { config.workers(-1) }
   }
 
   @Test
-  fun `should configure JVM args`() {
+  fun `configure_jvm_args`() {
     config.jvmArgs("-Xmx4g", "-Xms2g", "-XX:+UseG1GC")
     val propertiesString = config.toPropertiesString()
     assertTrue(propertiesString.contains("org.gradle.jvmargs=-Xmx4g -Xms2g -XX:+UseG1GC"))
   }
 
   @Test
-  fun `should configure caching`() {
+  fun `configure_caching`() {
     config.caching(true)
     val propertiesString = config.toPropertiesString()
     assertTrue(propertiesString.contains("org.gradle.caching=true"))
   }
 
   @Test
-  fun `should configure parallel`() {
+  fun `configure_parallel`() {
     config.parallel(false)
     val propertiesString = config.toPropertiesString()
     assertTrue(propertiesString.contains("org.gradle.parallel=false"))
   }
 
   @Test
-  fun `should configure daemon`() {
+  fun `configure_daemon`() {
     config.daemon(false)
     val propertiesString = config.toPropertiesString()
     assertTrue(propertiesString.contains("org.gradle.daemon=false"))
   }
 
   @Test
-  fun `should add other options`() {
+  fun `add_other_options`() {
     config.otherOption("custom.property", "custom.value")
     val propertiesString = config.toPropertiesString()
     assertTrue(propertiesString.contains("custom.property=custom.value"))
   }
 
   @Test
-  fun `should generate properties string with default values`() {
+  fun `generate_properties_string_with_default_values`() {
     val propertiesString = config.toPropertiesString()
 
     assertTrue(propertiesString.contains("org.gradle.daemon=true"))

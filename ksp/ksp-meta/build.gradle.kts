@@ -12,5 +12,6 @@ Contains custom annotations and processors for enhancing development productivit
 
 dependencies {
   implementation(libs.com.fasterxml.jackson.core.jackson.annotations)
-  testImplementation(projects.testtoolkit)
+
+  testImplementation(projects.testtoolkit.testtoolkitShared)
 }

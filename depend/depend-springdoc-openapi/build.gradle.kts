@@ -16,6 +16,6 @@ dependencies {
 
   implementation(libs.org.springdoc.springdoc.openapi.starter.webmvc.ui)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
 }

@@ -17,7 +17,7 @@ dependencies {
 
   runtimeOnly(libs.org.flywaydb.flyway.core)
 
-  testImplementation(projects.testtoolkit)
+  testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
   testImplementation(libs.org.flywaydb.flyway.core)
   testImplementation(libs.org.flywaydb.flyway.database.postgresql)
   testImplementation(libs.org.springframework.spring.jdbc)

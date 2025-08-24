@@ -23,8 +23,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @param maxConnections Maximum number of connections
  * @param defaultBucket Default bucket name
  * @param autoCreateBucket Auto create bucket if not exists
- * @param enableVersioning Enable object versioning
- * @param enableLogging Enable request/response logging
+ * @param versioning Enable object versioning
+ * @param logging Enable request/response logging
  * @author TrueNine
  * @since 2025-01-04
  */
@@ -62,29 +62,41 @@ data class OssProperties(
   var enableSsl: Boolean = true,
 
   /** Connection timeout */
-  var connectionTimeout: Duration = Duration.ofSeconds(30),
+  var connectionTimeout: Duration? = DEFAULT_CONNECT_TIMEOUT,
 
   /** Read timeout */
-  var readTimeout: Duration = Duration.ofMinutes(5),
+  var readTimeout: Duration? = DEFAULT_READ_TIMEOUT,
 
   /** Write timeout */
-  var writeTimeout: Duration = Duration.ofMinutes(5),
+  var writeTimeout: Duration? = DEFAULT_WRITE_TIMEOUT,
 
   /** Maximum number of connections */
-  var maxConnections: Int = 100,
+  var maxConnections: Int = DEFAULT_MAX_CONNECTIONS,
 
   /** Default bucket name */
-  var defaultBucket: String? = null,
+  var defaultBucket: String? = DEFAULT_BUCKET,
 
   /** Auto create bucket if not exists */
   var autoCreateBucket: Boolean = false,
 
   /** Enable object versioning */
-  var enableVersioning: Boolean = false,
+  var versioning: Boolean = false,
 
   /** Enable request/response logging */
-  var enableLogging: Boolean = false,
+  var logging: Boolean = false,
 ) {
+  companion object {
+    @JvmStatic val DEFAULT_CONNECT_TIMEOUT: Duration = Duration.ofSeconds(5)
+
+    @JvmStatic val DEFAULT_READ_TIMEOUT: Duration = Duration.ofSeconds(3)
+
+    @JvmStatic val DEFAULT_WRITE_TIMEOUT: Duration = Duration.ofSeconds(3)
+
+    const val DEFAULT_MAX_CONNECTIONS = 127
+
+    const val DEFAULT_BUCKET = "attachments"
+  }
+
   /**
    * Validate the configuration properties
    *
@@ -95,9 +107,9 @@ data class OssProperties(
     require(!accessKey.isNullOrBlank()) { "Access key cannot be null or blank" }
     require(!secretKey.isNullOrBlank()) { "Secret key cannot be null or blank" }
     require(maxConnections > 0) { "Max connections must be positive" }
-    require(!connectionTimeout.isNegative) { "Connection timeout cannot be negative" }
-    require(!readTimeout.isNegative) { "Read timeout cannot be negative" }
-    require(!writeTimeout.isNegative) { "Write timeout cannot be negative" }
+    require(connectionTimeout?.isNegative != true) { "Connection timeout cannot be negative" }
+    require(readTimeout?.isNegative != true) { "Read timeout cannot be negative" }
+    require(writeTimeout?.isNegative != true) { "Write timeout cannot be negative" }
   }
 
   /** Get the effective endpoint URL with protocol */
@@ -116,21 +128,24 @@ data class OssProperties(
     return exposedBaseUrl ?: getEffectiveEndpoint()
   }
 
+  /** 重写 toString 方法以隐藏敏感信息 */
   override fun toString(): String {
     return "OssProperties(" +
-      "provider='$provider', " +
-      "endpoint='$endpoint', " +
-      "region='$region', " +
-      "accessKey='${accessKey?.take(4)}***', " +
+      "provider=${provider?.let { "'$it'" }}, " +
+      "endpoint=${endpoint?.let { "'$it'" }}, " +
+      "region=${region?.let { "'$it'" }}, " +
+      "accessKey=${accessKey?.let { "'${it.take(4)}***'" }}, " +
+      "secretKey=${secretKey?.let { "'***'" }}, " +
+      "exposedBaseUrl=${exposedBaseUrl?.let { "'$it'" }}, " +
       "enableSsl=$enableSsl, " +
       "connectionTimeout=$connectionTimeout, " +
       "readTimeout=$readTimeout, " +
       "writeTimeout=$writeTimeout, " +
       "maxConnections=$maxConnections, " +
-      "defaultBucket='$defaultBucket', " +
+      "defaultBucket=${defaultBucket?.let { "'$it'" }}, " +
       "autoCreateBucket=$autoCreateBucket, " +
-      "enableVersioning=$enableVersioning, " +
-      "enableLogging=$enableLogging" +
+      "versioning=$versioning, " +
+      "logging=$logging" +
       ")"
   }
 }

@@ -17,31 +17,31 @@ class GradleFnsTest {
   }
 
   @Test
-  fun `emptyVersion should return empty string for unspecified version`() {
+  fun `emptyVersion_returns_empty_string_for_unspecified_version`() {
     // Default project version is "unspecified"
     assertEquals("", project.emptyVersion)
   }
 
   @Test
-  fun `emptyVersion should return actual version when specified`() {
+  fun `emptyVersion_returns_actual_version_when_specified`() {
     project.version = "1.2.3"
     assertEquals("1.2.3", project.emptyVersion)
   }
 
   @Test
-  fun `emptyVersion should return empty string for empty version`() {
+  fun `emptyVersion_returns_empty_string_for_empty_version`() {
     project.version = ""
     assertEquals("", project.emptyVersion)
   }
 
   @Test
-  fun `emptyVersion should handle null version`() {
+  fun `emptyVersion_handles_null_version`() {
     project.version = "unspecified" // Gradle doesn't allow null version, use unspecified instead
     assertEquals("", project.emptyVersion)
   }
 
   @Test
-  fun `emptyVersion should return version for any non-unspecified value`() {
+  fun `emptyVersion_returns_version_for_any_non_unspecified_value`() {
     project.version = "SNAPSHOT"
     assertEquals("SNAPSHOT", project.emptyVersion)
 
@@ -53,7 +53,7 @@ class GradleFnsTest {
   }
 
   @Test
-  fun `should verify UNKNOWN_PROJECT_VERSION constant`() {
+  fun `verify_UNKNOWN_PROJECT_VERSION_constant`() {
     assertEquals("unspecified", Constant.Gradle.UNKNOWN_PROJECT_VERSION)
   }
 }

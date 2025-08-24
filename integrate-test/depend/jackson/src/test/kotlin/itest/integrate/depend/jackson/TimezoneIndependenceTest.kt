@@ -2,9 +2,13 @@ package itest.integrate.depend.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
-import itest.integrate.depend.jackson.config.TimezoneTestConfiguration
 import jakarta.annotation.Resource
-import java.time.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -18,7 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest
  *
  * 测试不同时区环境下的序列化一致性，验证UTC时间戳的正确性， 测试多种时间格式的反序列化兼容性
  */
-@SpringBootTest(classes = [TimezoneTestConfiguration::class])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class TimezoneIndependenceTest {
 
   @Resource @Qualifier(JacksonAutoConfiguration.DEFAULT_OBJECT_MAPPER_BEAN_NAME) private lateinit var objectMapper: ObjectMapper
@@ -267,16 +271,19 @@ class TimezoneIndependenceTest {
           val deserializedMillis = (deserialized as Instant).toEpochMilli()
           assertEquals(originalMillis, deserializedMillis)
         }
+
         is ZonedDateTime -> {
           val originalMillis = (original as ZonedDateTime).toInstant().toEpochMilli()
           val deserializedMillis = (deserialized as ZonedDateTime).toInstant().toEpochMilli()
           assertEquals(originalMillis, deserializedMillis)
         }
+
         is OffsetDateTime -> {
           val originalMillis = (original as OffsetDateTime).toInstant().toEpochMilli()
           val deserializedMillis = (deserialized as OffsetDateTime).toInstant().toEpochMilli()
           assertEquals(originalMillis, deserializedMillis)
         }
+
         is LocalDateTime -> {
           val originalMillis = (original as LocalDateTime).toInstant(ZoneOffset.UTC).toEpochMilli()
           val deserializedMillis = (deserialized as LocalDateTime).toInstant(ZoneOffset.UTC).toEpochMilli()
