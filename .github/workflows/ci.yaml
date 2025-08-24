@@ -1,44 +1,21 @@
 name: CI
 
 on:
-  push:
-    branches: [ main, dev ]
-    paths:
-      - '.github/workflows/ci.yaml'
-      - '**/*.kt'
-      - '**/*.kts'
-      - 'gradle/libs.versions.toml'
-      - '**/build.gradle.kts'
-      - 'gradle.properties'
-      - 'settings.gradle.kts'
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main ]
     paths:
       - '.github/workflows/ci.yaml'
       - '**/*.kt'
-      - '**/*.kts'
-      - 'gradle/libs.versions.toml'
-      - '**/build.gradle.kts'
-      - 'gradle.properties'
-      - 'settings.gradle.kts'
-
-# 防止同一分支的多次并发执行
-concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 env:
   # 🚀 优化后的 Gradle 配置 - 提升构建性能
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=6 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
-  # 🎯 JVM 性能优化配置 - 针对 GitHub Actions 环境调优
-  JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:+UseStringDeduplication"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=8 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
+  # 🎯 JVM 性能优化配置 - 针对 GitHub Actions 7GB 内存环境调优
+  JVM_OPTS: "-Xmx5g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:G1HeapRegionSize=32m -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+UseLargePages"
   # 🐳 Docker 和 TestContainers 优化
   TESTCONTAINERS_RYUK_DISABLED: false
   TESTCONTAINERS_REUSE_ENABLE: true
   DOCKER_BUILDKIT: 1
-  COMPOSE_DOCKER_CLI_BUILD: 1
-  # 🔧 CI 环境标识
-  CI: true
 
 jobs:
   # 🔍 快速检查 - 编译和基础验证
@@ -117,73 +94,63 @@ jobs:
             --configuration-cache \
             --quiet
 
-  # 🧪 优化后的并行测试矩阵 - 基于实际模块结构重新分组
+  # 🧪 优化后的并行测试矩阵 - 重新分组以提升并行效率
   test-matrix:
     name: "🧪 Test"
     needs: quick-check
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
     strategy:
       fail-fast: false
-      max-parallel: 8  # 提高并行度以充分利用资源
+      max-parallel: 6  # 增加并行度
       matrix:
         group:
-          - "core-foundation"    # 核心基础模块
-          - "build-tooling"      # 构建工具链模块
-          - "rds-core"           # 数据库核心模块
-          - "rds-integrations"   # 数据库集成模块
-          - "oss-services"       # 对象存储服务
-          - "ai-pay-services"    # AI 和支付服务
-          - "messaging-sms"      # 消息和短信服务
-          - "security-crypto"    # 安全和加密模块
-          - "data-processing"    # 数据处理模块
-          - "platform-sdk"       # 平台 SDK 和工具
-          - "integration-tests"  # 集成测试模块
+          - "core-fast"     # 快速核心模块
+          - "core-build"    # 构建相关模块
+          - "rds-light"     # 轻量数据库模块
+          - "rds-heavy"     # 重量数据库模块
+          - "business-ai"   # AI 和支付模块
+          - "business-oss"  # 对象存储模块
+          - "business-misc" # 其他业务模块
+          - "security"      # 安全模块
+          - "data-depend"   # 数据和依赖模块
         include:
-          - group: "core-foundation"
-            modules: "shared testtoolkit:testtoolkit-shared testtoolkit:testtoolkit-springmvc cacheable"
-            containers: "redis"
-            timeout: 12
-          - group: "build-tooling"
-            modules: "gradle-plugin version-catalog bom docsite"
+          - group: "core-fast"
+            modules: "shared testtoolkit"
             containers: "none"
             timeout: 8
-          - group: "rds-core"
+          - group: "core-build"
+            modules: "gradle-plugin version-catalog bom"
+            containers: "none"
+            timeout: 10
+          - group: "rds-light"
             modules: "rds:rds-shared rds:rds-flyway-migration-shared"
             containers: "none"
-            timeout: 6
-          - group: "rds-integrations"
-            modules: "rds:rds-crud rds:rds-jimmer-ext-postgres rds:rds-flyway-migration-postgresql rds:rds-flyway-migration-mysql8 testtoolkit:testtoolkit-testcontainers"
+            timeout: 8
+          - group: "rds-heavy"
+            modules: "rds:rds-crud rds:rds-jimmer-ext-postgres rds:rds-flyway-migration-postgresql rds:rds-flyway-migration-mysql8"
             containers: "database"
-            timeout: 25
-          - group: "oss-services"
-            modules: "oss:oss-shared oss:oss-minio oss:oss-aliyun-oss oss:oss-huawei-obs oss:oss-volcengine-tos"
-            containers: "oss"
-            timeout: 18
-          - group: "ai-pay-services"
+            timeout: 20
+          - group: "business-ai"
             modules: "ai:ai-shared ai:ai-langchain4j pay:pay-shared pay:pay-wechat"
-            containers: "redis"
+            containers: "cache"
             timeout: 15
-          - group: "messaging-sms"
-            modules: "sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision"
-            containers: "redis"
+          - group: "business-oss"
+            modules: "oss:oss-shared oss:oss-minio oss:oss-aliyun-oss oss:oss-huawei-obs oss:oss-volcengine-tos"
+            containers: "cache"
+            timeout: 18
+          - group: "business-misc"
+            modules: "sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision cacheable"
+            containers: "cache"
             timeout: 12
-          - group: "security-crypto"
+          - group: "security"
             modules: "security:security-crypto security:security-oauth2 security:security-spring"
             containers: "none"
             timeout: 10
-          - group: "data-processing"
-            modules: "data:data-crawler data:data-extract ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared"
-            containers: "none"
-            timeout: 12
-          - group: "platform-sdk"
-            modules: "psdk:psdk-wxpa depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ide:ide-idea-mcp"
+          - group: "data-depend"
+            modules: "data:data-crawler data:data-extract depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa"
             containers: "none"
             timeout: 15
-          - group: "integration-tests"
-            modules: "integrate-test:depend:jackson integrate-test:oss:minio"
-            containers: "full"
-            timeout: 20
 
     steps:
       - name: Checkout code
@@ -248,15 +215,7 @@ jobs:
             ${{ runner.os }}-docker-${{ matrix.group }}-
             ${{ runner.os }}-docker-
 
-      # 🐳 预拉取容器镜像 - 根据测试需求优化
-      - name: Pre-pull Redis images
-        if: matrix.containers == 'redis'
-        run: |
-          echo "📦 拉取 Redis 镜像..."
-          docker pull redis:7-alpine
-          echo "✅ Redis 镜像拉取完成"
-        continue-on-error: true
-
+      # 🚀 并行预拉取数据库镜像 - 使用更轻量的镜像
       - name: Pre-pull database images
         if: matrix.containers == 'database'
         run: |
@@ -268,26 +227,15 @@ jobs:
           echo "✅ 数据库镜像拉取完成"
         continue-on-error: true
 
-      - name: Pre-pull OSS images
-        if: matrix.containers == 'oss'
+      # 🗄️ 预拉取缓存相关镜像
+      - name: Pre-pull cache images
+        if: matrix.containers == 'cache'
         run: |
-          echo "📦 拉取对象存储镜像..."
+          echo "📦 拉取缓存镜像..."
           docker pull redis:7-alpine &
           docker pull minio/minio:RELEASE.2024-01-16T16-07-38Z &
           wait
-          echo "✅ 对象存储镜像拉取完成"
-        continue-on-error: true
-
-      - name: Pre-pull all required images
-        if: matrix.containers == 'full'
-        run: |
-          echo "🚀 拉取全量测试镜像..."
-          docker pull postgres:16-alpine &
-          docker pull mysql:8.0 &
-          docker pull redis:7-alpine &
-          docker pull minio/minio:RELEASE.2024-01-16T16-07-38Z &
-          wait
-          echo "✅ 全量测试镜像拉取完成"
+          echo "✅ 缓存镜像拉取完成"
         continue-on-error: true
 
       - name: Grant execute permission
@@ -396,39 +344,34 @@ jobs:
             **/*.log
           retention-days: 5
 
-      - name: 🧼 智能清理容器资源
+      - name: 🧼 Smart cleanup containers
         if: always() && matrix.containers != 'none'
         run: |
           echo "🧼 开始智能清理 Docker 资源..."
 
           # 显示当前资源使用情况
-          echo "📈 清理前 Docker 资源使用情况："
+          echo "📈 当前 Docker 资源使用情况："
           docker system df || true
-          
-          # 停止并删除测试容器（但保留重用容器）
-          echo "🛑 停止测试容器..."
-          docker ps -q --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" | xargs -r docker stop || true
-          
-          echo "🗑️ 删除测试容器（保留重用容器）..."
-          docker container prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
-          
-          # 清理悬空和未使用的镜像，但保留基础镜像
+
+          # 智能清理：保留重用容器，清理测试容器
+          echo "🗑️ 清理测试容器（保留重用容器）..."
+          docker container prune -f --filter "until=30m" --filter "label!=org.testcontainers.reuse.enable=true" || true
+
+          # 清理悬空镜像（但保留基础镜像）
           echo "🖼️ 清理悬空镜像..."
           docker image prune -f --filter "dangling=true" || true
-          
-          # 清理未使用的网络（但保留 default 网络）
+
+          # 清理测试网络
           echo "🌐 清理测试网络..."
-          docker network prune -f --filter "until=1h" || true
-          
-          # 清理未使用的卷（但保留重用卷）
+          docker network prune -f --filter "until=30m" || true
+
+          # 清理临时卷
           echo "💾 清理临时卷..."
-          docker volume prune -f --filter "label!=org.testcontainers.reuse.enable=true" || true
+          docker volume prune -f --filter "label!=keep" --filter "label!=org.testcontainers.reuse.enable=true" || true
 
           # 显示清理后的资源情况
           echo "✨ 清理后 Docker 资源使用情况："
           docker system df || true
-          
-          echo "🏁 Docker 资源清理完成"
 
   # 📊 测试结果汇总
   test-results:
@@ -459,20 +402,18 @@ jobs:
           
           # 模块组信息 - 更新为新的分组
           declare -A group_containers=(
-            ["core-foundation"]="Redis"
-            ["build-tooling"]="无"
-            ["rds-core"]="无"
-            ["rds-integrations"]="PostgreSQL, MySQL, Redis"
-            ["oss-services"]="Redis, MinIO"
-            ["ai-pay-services"]="Redis"
-            ["messaging-sms"]="Redis"
-            ["security-crypto"]="无"
-            ["data-processing"]="无"
-            ["platform-sdk"]="无"
-            ["integration-tests"]="全量容器"
+            ["core-fast"]="无"
+            ["core-build"]="无"
+            ["rds-light"]="无"
+            ["rds-heavy"]="Database (PostgreSQL, MySQL, Redis)"
+            ["business-ai"]="Cache (Redis)"
+            ["business-oss"]="Cache (Redis, MinIO)"
+            ["business-misc"]="Cache (Redis)"
+            ["security"]="无"
+            ["data-depend"]="无"
           )
 
-          for group in core-foundation build-tooling rds-core rds-integrations oss-services ai-pay-services messaging-sms security-crypto data-processing platform-sdk integration-tests; do
+          for group in core-fast core-build rds-light rds-heavy business-ai business-oss business-misc security data-depend; do
             containers="${group_containers[$group]}"
             if [[ "${{ needs.test-matrix.result }}" == "success" ]]; then
               echo "| $group | ✅ 通过 | $containers | - |" >> $GITHUB_STEP_SUMMARY
