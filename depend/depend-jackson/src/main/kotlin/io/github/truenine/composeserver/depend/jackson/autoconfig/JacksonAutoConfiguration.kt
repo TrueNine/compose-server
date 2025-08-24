@@ -75,7 +75,7 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
   @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @ConditionalOnMissingBean(value = [ObjectMapper::class])
   @org.springframework.context.annotation.Primary
-  @org.springframework.beans.factory.annotation.Qualifier("primary")
+  @org.springframework.beans.factory.annotation.Qualifier(DEFAULT_OBJECT_MAPPER_BEAN_NAME)
   fun jacksonObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
     log.debug("create jackson objectMapper, builder: {}", builder)
     return builder.createXmlMapper(false).build()
@@ -156,7 +156,7 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
   @Order(Ordered.LOWEST_PRECEDENCE)
   @Bean(name = [NON_IGNORE_OBJECT_MAPPER_BEAN_NAME])
   @org.springframework.beans.factory.annotation.Qualifier("nonIgnoreObjectMapper")
-  fun nonIgnoreObjectMapper(@org.springframework.beans.factory.annotation.Qualifier("primary") mapper: ObjectMapper): ObjectMapper {
+  fun nonIgnoreObjectMapper(mapper: ObjectMapper): ObjectMapper {
     log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
     return mapper.copy().apply {
       disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
