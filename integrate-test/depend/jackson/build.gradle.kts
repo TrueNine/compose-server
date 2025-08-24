@@ -8,4 +8,5 @@ dependencies {
 
   testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.json)
 }
