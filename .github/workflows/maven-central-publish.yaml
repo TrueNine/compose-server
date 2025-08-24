@@ -17,7 +17,7 @@ on:
         type: boolean
         default: false
       force_publish:
-        description: '强制发布（忽略版本检测）'
+        description: '强制发布（忽略 Maven Central 版本存在性检查）'
         type: boolean
         default: false
       skip_tests:
@@ -37,7 +37,7 @@ env:
 jobs:
   # 🧪 发布前验证
   pre-publish-validation:
-    name: "🧪 Pre-publish Validation"
+    name: "🧪 Pre-publish Validation & Maven Central Check"
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -47,12 +47,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK 24
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5.0.0
         with:
           java-version: '24'
           distribution: 'graalvm'
@@ -90,7 +90,7 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Extract version information
+      - name: Extract version and check Maven Central
         id: version-info
         run: |
           # 语义化版本验证函数
@@ -142,7 +142,7 @@ jobs:
             echo "🚀 正式发布版本类型" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # 简化的发布决策逻辑
+          # 优化的发布决策逻辑：只要 Maven Central 没有该版本就发布
           should_publish="false"
           force_publish="${{ github.event.inputs.force_publish }}"
 
@@ -153,40 +153,50 @@ jobs:
           # 强制发布模式
           if [[ "$force_publish" == "true" ]]; then
             should_publish="true"
-            echo "⚡ **强制发布模式已启用**" >> $GITHUB_STEP_SUMMARY
-          # 明确的发布触发器
-          elif [[ "${{ github.ref_type }}" == "tag" ]] || [[ "${{ github.event_name }}" == "release" ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            should_publish="true"
-            echo "🎯 **直接触发**：标签/Release/手动触发 - 将发布" >> $GITHUB_STEP_SUMMARY
-          # main 分支 push：检查版本变化
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "🌱 **Main 分支 push**：检查版本变化..." >> $GITHUB_STEP_SUMMARY
-          
-            # 使用更简单的版本检查方法
-            if git diff HEAD~1 --name-only | grep -q "gradle/libs.versions.toml"; then
-              prev_version=$(git show HEAD~1:gradle/libs.versions.toml 2>/dev/null | sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' | head -n1 || echo "unknown")
-              if [[ "$prev_version" != "$version" && "$prev_version" != "unknown" ]]; then
-                should_publish="true"
-                echo "  🔼 检测到版本变化：$prev_version → $version" >> $GITHUB_STEP_SUMMARY
-              else
-                echo "  ⚠️ 版本文件已变化，但版本号未变化" >> $GITHUB_STEP_SUMMARY
-              fi
-            else
-              echo "  ⏭️ 版本文件未变化，跳过发布" >> $GITHUB_STEP_SUMMARY
-            fi
+            echo "⚡ **强制发布模式已启用** - 跳过 Maven Central 版本检查" >> $GITHUB_STEP_SUMMARY
           else
-            echo "⏭️ **其他情况**：非发布分支或事件，跳过发布" >> $GITHUB_STEP_SUMMARY
+            # 检查 Maven Central 是否已存在该版本
+            echo "🔍 检查 Maven Central 是否存在版本 $version..." >> $GITHUB_STEP_SUMMARY
+            
+            # 使用 Maven Central Search API 检查版本是否存在
+            group="io.github.truenine"
+            search_url="https://search.maven.org/solrsearch/select?q=g:${group}+AND+v:${version}&rows=1&wt=json"
+            
+            echo "  📡 查询 URL: $search_url" >> $GITHUB_STEP_SUMMARY
+            
+            # 进行网络请求，设置较短的超时时间
+            response=$(curl -f -s --max-time 15 "$search_url" 2>/dev/null || echo '{"response":{"numFound":0}}')
+            
+            # 解析响应，检查是否找到匹配的版本
+            found=$(echo "$response" | jq -r '.response.numFound' 2>/dev/null || echo "0")
+            
+            if [[ "$found" -gt 0 ]]; then
+              should_publish="false"
+              echo "  ❌ **版本已存在** - Maven Central 上已存在版本 $version，跳过发布" >> $GITHUB_STEP_SUMMARY
+            else
+              should_publish="true"
+              echo "  ✅ **版本不存在** - Maven Central 上未找到版本 $version，将执行发布" >> $GITHUB_STEP_SUMMARY
+            fi
           fi
 
           echo "should-publish=$should_publish" >> $GITHUB_OUTPUT
 
           # 最终决策摘要
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 发布决策结果" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           if [[ "$should_publish" == "true" ]]; then
-            echo "✅ **发布决策：继续发布**" >> $GITHUB_STEP_SUMMARY
+            if [[ "$force_publish" == "true" ]]; then
+              echo "✅ **发布决策：强制发布** - 将忽略所有检查直接发布" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "✅ **发布决策：继续发布** - Maven Central 上不存在此版本" >> $GITHUB_STEP_SUMMARY
+            fi
           else
-            echo "⏭️ **发布决策：跳过发布**" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️ **发布决策：跳过发布** - Maven Central 上已存在此版本" >> $GITHUB_STEP_SUMMARY
           fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**触发方式:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**检查版本:** $version" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate pre-publish report
         run: |
@@ -194,11 +204,12 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| 检查项 | 状态 |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
-          echo "| 构建验证 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
-          echo "| 核心测试 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 版本格式验证 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Maven Central 版本检查 | ${{ steps.version-info.outputs.should-publish == 'true' && '✅ 未发布' || '❌ 已存在' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**版本:** ${{ steps.version-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "**类型:** ${{ steps.version-info.outputs.is-snapshot == 'true' && '快照版本' || '正式版本' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**发布状态:** ${{ steps.version-info.outputs.should-publish == 'true' && '将执行发布' || '跳过发布' }}" >> $GITHUB_STEP_SUMMARY
 
   # 📦 Maven Central 发布
   publish:
@@ -211,12 +222,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK 24
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5.0.0
         with:
           java-version: '24'
           distribution: 'graalvm'
@@ -390,7 +401,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 0
 
@@ -621,7 +632,7 @@ jobs:
           if [[ "${{ needs.publish.result }}" == "success" ]]; then
             echo "🎉 **发布成功！** 新版本已成功发布到 Maven Central" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.publish.result }}" == "skipped" ]]; then
-            echo "⏭️ **发布已跳过** - 无版本变化或为 PR 验证" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️ **发布已跳过** - Maven Central 上已存在该版本" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.publish.result }}" == "failure" ]]; then
             echo "❌ **发布失败** - 请查看错误日志并重试" >> $GITHUB_STEP_SUMMARY
           else
