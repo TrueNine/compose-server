@@ -77,34 +77,6 @@ afterEvaluate {
 
     dependsOn(configurations.testRuntimeClasspath)
 
-    // Configure JVM args to suppress warnings
-    jvmArgs(
-      "-XX:+EnableDynamicAgentLoading",
-      "-Djdk.instrument.traceUsage=false",
-      "-Xshare:off",
-      "--add-opens=java.base/sun.misc=ALL-UNNAMED",
-      "--add-opens=java.base/java.lang=ALL-UNNAMED",
-      "--add-opens=java.base/java.nio=ALL-UNNAMED",
-      "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
-      "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
-      "--add-opens=java.base/java.util=ALL-UNNAMED",
-      "--enable-native-access=ALL-UNNAMED",
-      "-Dio.netty.tryReflectionSetAccessible=true",
-      "-Dio.netty.noUnsafe=false",
-      "-Dnet.bytebuddy.experimental=true",
-      "-Dnet.bytebuddy.dump=${System.getProperty("java.io.tmpdir")}",
-      "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
-      "--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED",
-      "--add-exports=java.base/sun.misc=ALL-UNNAMED"
-    )
-
-    // Suppress specific warnings by redirecting stderr for test processes
-    systemProperty("java.util.logging.config.file", "")
-    systemProperty("sun.misc.unsafe.disableWarnings", "true")
-
-    // Redirect stderr to filter out ByteBuddy warnings
-    environment("JAVA_TOOL_OPTIONS", "-XX:+EnableDynamicAgentLoading -Djdk.instrument.traceUsage=false")
-
     // Configure test output to suppress warnings
     testLogging {
       showStandardStreams = false
