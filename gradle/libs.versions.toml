@@ -170,8 +170,8 @@ io-github-truenine-composeserver-security-spring = { module = "io.github.truenin
 io-github-truenine-composeserver-shared = { module = "io.github.truenine:composeserver-shared", version.ref = "project" }
 io-github-truenine-composeserver-sms-tencent = { module = "io.github.truenine:composeserver-sms-tencent", version.ref = "project" }
 io-github-truenine-composeserver-testtoolkit-shared = { module = "io.github.truenine:composeserver-testtoolkit-shared", version.ref = "project" }
-io-github-truenine-composeserver-testtoolkit-shared = { module = "io.github.truenine:composeserver-testtoolkit-springmvc", version.ref = "project" }
-io-github-truenine-composeserver-testtoolkit-shared = { module = "io.github.truenine:composeserver-testtoolkit-testcontainers", version.ref = "project" }
+io-github-truenine-composeserver-testtoolkit-springmvc = { module = "io.github.truenine:composeserver-testtoolkit-springmvc", version.ref = "project" }
+io-github-truenine-composeserver-testtoolkit-testcontainers = { module = "io.github.truenine:composeserver-testtoolkit-testcontainers", version.ref = "project" }
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.13.0"
 io-minio-minio = "io.minio:minio:8.5.17"
 io-mockk-mockk = "io.mockk:mockk:1.14.5"
