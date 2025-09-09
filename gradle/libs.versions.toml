@@ -72,6 +72,7 @@ com-alibaba-cloud-spring-cloud-alibaba-dependencies = { module = "com.alibaba.cl
 com-alibaba-easyexcel = "com.alibaba:easyexcel:4.0.3"
 com-aliyun-oss-aliyun-sdk-oss = "com.aliyun.oss:aliyun-sdk-oss:3.18.3"
 com-auth0-java-jwt = "com.auth0:java-jwt:4.5.0"
+org-jspecify-jspecify = "org.jspecify:jspecify:1.0.0"
 com-baomidou-mybatis-plus-boot-starter = { module = "com.baomidou:mybatis-plus-boot-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-boot-starter-test = { module = "com.baomidou:mybatis-plus-boot-starter-test", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "com-baomidou-mybatis-plus" }
