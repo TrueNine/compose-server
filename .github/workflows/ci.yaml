@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-java@v5.0.0
         with:
           java-version: '17'
-          distribution: 'graalvm'
+          distribution: 'temurin'
           cache: gradle
 
       - name: 📊 Cache info
@@ -162,7 +162,7 @@ jobs:
         uses: actions/setup-java@v5.0.0
         with:
           java-version: '17'
-          distribution: 'graalvm'
+          distribution: 'temurin'
           cache: gradle
 
       - name: 🎯 Restore Gradle wrapper cache
