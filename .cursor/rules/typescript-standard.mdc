@@ -1,7 +1,0 @@
----
-globs: **/*.ts,**/*.tsx,**/*.d.ts,**/*.vue
-alwaysApply: false
----
-**TypeScript Rules**
-
-- TypeScript: Enable strict mode, avoid any type
