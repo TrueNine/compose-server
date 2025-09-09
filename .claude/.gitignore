@@ -1,3 +1,16 @@
 *
 !.gitignore
+
 !/settings.json
+
+!/specs
+!/specs/**
+
+!/agents
+!/agents/**
+
+!/settings
+!/settings/**
+
+!/system-prompts
+!/system-prompts/**

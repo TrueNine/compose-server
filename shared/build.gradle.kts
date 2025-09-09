@@ -20,6 +20,7 @@ dependencies {
   api(libs.io.swagger.core.v3.swagger.annotations.jakarta)
   api(libs.org.slf4j.slf4j.api)
   api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+  api(libs.org.jspecify.jspecify)
 
   testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)

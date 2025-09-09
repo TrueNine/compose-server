@@ -57,7 +57,7 @@ data class PostgresConfig(
   /** 是否复用容器，默认复用 */
   var reuse: Boolean = true,
   /** PostgreSQL Docker 镜像 默认使用 postgres:17-alpine（当前 LTS 版本） */
-  var image: String = "postgres:17.5-alpine3.22",
+  var image: String = "postgres:17.6-alpine3.22",
 
   /** 默认数据库名称 */
   var databaseName: String = "testdb",
@@ -100,7 +100,7 @@ data class RedisConfig(
   /** 是否复用容器，默认复用 */
   var reuse: Boolean = true,
   /** Redis Docker 镜像 默认使用 redis:7-alpine（当前稳定版本） */
-  var image: String = "redis:8.0.3-alpine3.21",
+  var image: String = "redis/redis-stack:7.2.0-v18",
 
   /** 容器停止超时时间（秒），null 表示使用全局默认值 */
   var stopTimeoutSeconds: Long? = null,
@@ -111,7 +111,7 @@ data class MinioConfig(
   /** 是否复用容器，默认复用 */
   var reuse: Boolean = true,
   /** MinIO Docker 镜像 默认使用较新的稳定版本 */
-  var image: String = "minio/minio:RELEASE.2025-07-23T15-54-02Z",
+  var image: String = "minio/minio:minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1",
 
   /** 默认访问密钥 */
   var accessKey: String = "minioadmin",

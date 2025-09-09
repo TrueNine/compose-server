@@ -55,6 +55,55 @@ suspend fun IObjectStorageService.putObject(
   return putObject(bucketName, objectName, bytes, contentType, metadata)
 }
 
+// putObjectWithBucketCreation extension functions
+
+/** Upload a file to object storage with automatic bucket creation */
+suspend fun IObjectStorageService.putObjectWithBucketCreation(
+  bucketName: String,
+  objectName: String,
+  file: File,
+  contentType: String? = null,
+  metadata: Map<String, String> = emptyMap(),
+): Result<ObjectInfo> {
+  return file.inputStream().use { inputStream -> putObjectWithBucketCreation(bucketName, objectName, inputStream, file.length(), contentType, metadata) }
+}
+
+/** Upload a file from Path to object storage with automatic bucket creation */
+suspend fun IObjectStorageService.putObjectWithBucketCreation(
+  bucketName: String,
+  objectName: String,
+  path: Path,
+  contentType: String? = null,
+  metadata: Map<String, String> = emptyMap(),
+): Result<ObjectInfo> {
+  return path.inputStream().use { inputStream -> putObjectWithBucketCreation(bucketName, objectName, inputStream, path.fileSize(), contentType, metadata) }
+}
+
+/** Upload byte array to object storage with automatic bucket creation */
+suspend fun IObjectStorageService.putObjectWithBucketCreation(
+  bucketName: String,
+  objectName: String,
+  bytes: ByteArray,
+  contentType: String? = null,
+  metadata: Map<String, String> = emptyMap(),
+): Result<ObjectInfo> {
+  return ByteArrayInputStream(bytes).use { inputStream ->
+    putObjectWithBucketCreation(bucketName, objectName, inputStream, bytes.size.toLong(), contentType, metadata)
+  }
+}
+
+/** Upload string content to object storage with automatic bucket creation */
+suspend fun IObjectStorageService.putObjectWithBucketCreation(
+  bucketName: String,
+  objectName: String,
+  content: String,
+  contentType: String = "text/plain; charset=utf-8",
+  metadata: Map<String, String> = emptyMap(),
+): Result<ObjectInfo> {
+  val bytes = content.toByteArray(Charsets.UTF_8)
+  return putObjectWithBucketCreation(bucketName, objectName, bytes, contentType, metadata)
+}
+
 /** Download object content as byte array */
 suspend fun IObjectStorageService.getObjectBytes(bucketName: String, objectName: String): Result<ByteArray> {
   return getObject(bucketName, objectName).mapCatching { objectContent -> objectContent.use { it.inputStream.readAllBytes() } }

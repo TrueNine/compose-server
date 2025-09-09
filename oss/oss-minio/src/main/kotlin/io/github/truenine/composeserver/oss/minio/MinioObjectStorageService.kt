@@ -5,6 +5,7 @@ import io.github.truenine.composeserver.mapFailure
 import io.github.truenine.composeserver.onFailureDo
 import io.github.truenine.composeserver.oss.AuthenticationException
 import io.github.truenine.composeserver.oss.AuthorizationException
+import io.github.truenine.composeserver.oss.BucketAccessLevel
 import io.github.truenine.composeserver.oss.BucketAlreadyExistsException
 import io.github.truenine.composeserver.oss.BucketInfo
 import io.github.truenine.composeserver.oss.BucketNotEmptyException
@@ -191,6 +192,26 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
       }
     }
 
+  override suspend fun setBucketAccess(bucketName: String, accessLevel: BucketAccessLevel): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val policy =
+          when (accessLevel) {
+            BucketAccessLevel.PUBLIC -> createPublicReadPolicy(bucketName)
+            BucketAccessLevel.PRIVATE -> createPrivatePolicy(bucketName)
+          }
+
+        val setBucketPolicyArgs = SetBucketPolicyArgs.builder().bucket(bucketName).config(policy).build()
+        minioClient.setBucketPolicy(setBucketPolicyArgs)
+
+        log.info("Set bucket access level to ${accessLevel.name.lowercase()}: $bucketName")
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to set bucket access level: $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
   override suspend fun putObject(request: PutObjectRequest): Result<ObjectInfo> =
     withContext(Dispatchers.IO) {
       try {
@@ -314,6 +335,16 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
           "Resource": "arn:aws:s3:::$bucketName/*"
         }
       ]
+    }
+    """
+      .trimIndent()
+  }
+
+  private fun createPrivatePolicy(bucketName: String): String {
+    return """
+    {
+      "Version": "2012-10-17",
+      "Statement": []
     }
     """
       .trimIndent()

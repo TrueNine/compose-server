@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.oss.minio
 
 import io.github.truenine.composeserver.enums.HttpMethod
+import io.github.truenine.composeserver.oss.BucketAccessLevel
 import io.github.truenine.composeserver.oss.CreateBucketRequest
 import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.PutObjectRequest
@@ -172,6 +173,45 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       // 清理：删除创建的桶
       service.deleteBucket(bucketName1)
       service.deleteBucket(bucketName2)
+    }
+
+    @Test
+    fun `测试设置存储桶访问级别为公共`() = runTest {
+      val bucketName = "test-access-public-bucket-${System.currentTimeMillis()}"
+
+      // 先创建桶
+      service.createBucket(CreateBucketRequest(bucketName = bucketName))
+
+      val result = service.setBucketAccess(bucketName, BucketAccessLevel.PUBLIC)
+
+      assertTrue(result.isSuccess)
+
+      // 清理：删除创建的桶
+      service.deleteBucket(bucketName)
+    }
+
+    @Test
+    fun `测试设置存储桶访问级别为私有`() = runTest {
+      val bucketName = "test-access-private-bucket-${System.currentTimeMillis()}"
+
+      // 先创建桶
+      service.createBucket(CreateBucketRequest(bucketName = bucketName))
+
+      val result = service.setBucketAccess(bucketName, BucketAccessLevel.PRIVATE)
+
+      assertTrue(result.isSuccess)
+
+      // 清理：删除创建的桶
+      service.deleteBucket(bucketName)
+    }
+
+    @Test
+    fun `测试设置不存在存储桶的访问级别失败`() = runTest {
+      val bucketName = "non-existent-bucket-${System.currentTimeMillis()}"
+
+      val result = service.setBucketAccess(bucketName, BucketAccessLevel.PUBLIC)
+
+      assertTrue(result.isFailure)
     }
   }
 

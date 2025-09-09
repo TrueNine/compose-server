@@ -7,14 +7,11 @@ plugins {
 
 description = "IntelliJ IDEA plugin for Compose Server MCP integration"
 
-repositories {
-  mavenCentral()
-  intellijPlatform { defaultRepositories() }
-}
+repositories { intellijPlatform { defaultRepositories() } }
 
 dependencies {
   intellijPlatform {
-    intellijIdeaCommunity(libs.versions.intellij.platform.asProvider().get())
+    intellijIdeaCommunity(libs.versions.intellij.platform.asProvider().get(), useInstaller = true)
 
     bundledPlugin("org.jetbrains.plugins.terminal")
     bundledPlugin("Git4Idea")

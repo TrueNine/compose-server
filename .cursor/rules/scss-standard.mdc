@@ -1,7 +1,0 @@
----
-globs: **/*.scss,**/*.tsx,**/*.vue
-alwaysApply: false
----
-**SCSS Rules**
-
-- Prohibit using `@import`, use `@use` instead

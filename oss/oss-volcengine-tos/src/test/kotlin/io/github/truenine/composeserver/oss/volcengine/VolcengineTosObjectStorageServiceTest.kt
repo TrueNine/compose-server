@@ -32,6 +32,7 @@ import com.volcengine.tos.model.`object`.PreSignedURLOutput
 import com.volcengine.tos.model.`object`.PutObjectInput
 import com.volcengine.tos.model.`object`.PutObjectOutput
 import io.github.truenine.composeserver.enums.HttpMethod
+import io.github.truenine.composeserver.oss.BucketAccessLevel
 import io.github.truenine.composeserver.oss.CompleteMultipartUploadRequest
 import io.github.truenine.composeserver.oss.CopyObjectRequest
 import io.github.truenine.composeserver.oss.CreateBucketRequest
@@ -245,6 +246,20 @@ class VolcengineTosObjectStorageServiceTest {
     fun `测试设置存储桶策略`() = runTest {
       val policyJson = """{"Version":"2012-10-17","Statement":[]}"""
       val result = service.setBucketPolicy("test-bucket", policyJson)
+
+      assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `测试设置存储桶访问级别为公共`() = runTest {
+      val result = service.setBucketAccess("test-bucket", BucketAccessLevel.PUBLIC)
+
+      assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `测试设置存储桶访问级别为私有`() = runTest {
+      val result = service.setBucketAccess("test-bucket", BucketAccessLevel.PRIVATE)
 
       assertTrue(result.isSuccess)
     }

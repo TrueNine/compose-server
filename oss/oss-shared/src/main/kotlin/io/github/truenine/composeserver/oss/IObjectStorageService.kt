@@ -47,6 +47,9 @@ interface IObjectStorageService {
   /** Set custom bucket policy */
   suspend fun setBucketPolicy(bucketName: String, policy: String): Result<Unit>
 
+  /** Set bucket and all its objects access level to public or private */
+  suspend fun setBucketAccess(bucketName: String, accessLevel: BucketAccessLevel): Result<Unit>
+
   // Object Operations
 
   /** Upload an object */
@@ -61,6 +64,44 @@ interface IObjectStorageService {
     contentType: String? = null,
     metadata: Map<String, String> = emptyMap(),
   ): Result<ObjectInfo>
+
+  /** Upload an object with automatic bucket creation if bucket does not exist */
+  suspend fun putObjectWithBucketCreation(request: PutObjectRequest): Result<ObjectInfo> {
+    return putObjectWithBucketCreation(
+      bucketName = request.bucketName,
+      objectName = request.objectName,
+      inputStream = request.inputStream,
+      size = request.size,
+      contentType = request.contentType,
+      metadata = request.metadata,
+    )
+  }
+
+  /** Upload an object with automatic bucket creation if bucket does not exist */
+  suspend fun putObjectWithBucketCreation(
+    bucketName: String,
+    objectName: String,
+    inputStream: InputStream,
+    size: Long,
+    contentType: String? = null,
+    metadata: Map<String, String> = emptyMap(),
+  ): Result<ObjectInfo> {
+    return bucketExists(bucketName)
+      .fold(
+        onSuccess = { exists ->
+          if (exists) {
+            putObject(bucketName, objectName, inputStream, size, contentType, metadata)
+          } else {
+            createBucket(CreateBucketRequest(bucketName = bucketName))
+              .fold(
+                onSuccess = { putObject(bucketName, objectName, inputStream, size, contentType, metadata) },
+                onFailure = { exception -> Result.failure(exception) },
+              )
+          }
+        },
+        onFailure = { exception -> Result.failure(exception) },
+      )
+  }
 
   /** Get object information */
   suspend fun getObjectInfo(bucketName: String, objectName: String): Result<ObjectInfo>

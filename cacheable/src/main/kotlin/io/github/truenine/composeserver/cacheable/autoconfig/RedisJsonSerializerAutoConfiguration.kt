@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.consts.ICacheNames
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
-import io.github.truenine.composeserver.slf4j
+import io.github.truenine.composeserver.logger
 import java.time.Duration
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.RedisConnectionFactory
@@ -17,8 +16,6 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
-
-private val log = slf4j<RedisJsonSerializerAutoConfiguration>()
 
 /**
  * redis 缓存组件配置
@@ -28,6 +25,11 @@ private val log = slf4j<RedisJsonSerializerAutoConfiguration>()
  */
 @Configuration
 class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) objectMapper: ObjectMapper) {
+  companion object {
+    @JvmStatic private val log = logger<RedisJsonSerializerAutoConfiguration>()
+    private const val VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME = "redisConnectionFactoryVirtualThreads"
+  }
+
   private val jsr =
     GenericJackson2JsonRedisSerializer(objectMapper).apply { configure { it.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) } }
 
@@ -38,10 +40,9 @@ class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.N
       .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsr))
       .disableCachingNullValues()
 
-  @Primary
   @Bean(name = [ICacheNames.IRedis.HANDLE])
-  fun customRedisJsonSerializable(factory: RedisConnectionFactory): RedisTemplate<String, *> {
-    log.trace("注册 redisTemplate factory = {}", factory)
+  fun customRedisJsonSerializable(@Qualifier(VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME) factory: RedisConnectionFactory): RedisTemplate<String, *> {
+    log.trace("register redisTemplate factory: {}", factory)
     val rt = RedisTemplate<String, Any?>()
     rt.setDefaultSerializer(jsr)
     rt.hashKeySerializer = srs
@@ -54,8 +55,8 @@ class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.N
   }
 
   @Bean(name = [ICacheNames.IRedis.CACHE_MANAGER])
-  fun cacheManager2h(factory: RedisConnectionFactory): RedisCacheManager {
-    log.debug("注册 RedisCacheManager , factory = {}", factory)
+  fun cacheManager2h(@Qualifier(VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME) factory: RedisConnectionFactory): RedisCacheManager {
+    log.debug("register RedisCacheManager , factory: {}", factory)
     return asCacheConfig(factory)
   }
 
@@ -83,7 +84,7 @@ class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.N
       ICacheNames.FOREVER to createRedisCacheConfig(Duration.ZERO),
     )
 
-  private fun asCacheConfig(factory: RedisConnectionFactory?): RedisCacheManager {
-    return RedisCacheManager.builder(factory!!).cacheDefaults(cacheManagerConfig.entryTtl(Duration.ofHours(1))).withInitialCacheConfigurations(cacheMap).build()
+  private fun asCacheConfig(factory: RedisConnectionFactory): RedisCacheManager {
+    return RedisCacheManager.builder(factory).cacheDefaults(cacheManagerConfig.entryTtl(Duration.ofHours(1))).withInitialCacheConfigurations(cacheMap).build()
   }
 }
