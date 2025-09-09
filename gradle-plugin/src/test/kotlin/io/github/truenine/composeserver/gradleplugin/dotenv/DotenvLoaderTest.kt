@@ -288,7 +288,7 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      JAVA_OPTS=-Xmx1g
+      CUSTOM_OPTS=-Xmx1g
       APP_ENV=production
       DATABASE_URL=jdbc:postgresql://localhost:5432/mydb
     """
@@ -304,7 +304,7 @@ class DotenvLoaderTest {
     val loader = DotenvLoader(project, config)
 
     // 验证环境变量已注入
-    assertEquals("-Xmx1g", javaExecTask.environment["JAVA_OPTS"])
+    assertEquals("-Xmx1g", javaExecTask.environment["CUSTOM_OPTS"])
     assertEquals("production", javaExecTask.environment["APP_ENV"])
     assertEquals("jdbc:postgresql://localhost:5432/mydb", javaExecTask.environment["DATABASE_URL"])
   }
