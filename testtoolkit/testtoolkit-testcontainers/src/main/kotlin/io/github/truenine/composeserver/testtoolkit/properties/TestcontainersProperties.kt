@@ -111,7 +111,7 @@ data class MinioConfig(
   /** 是否复用容器，默认复用 */
   var reuse: Boolean = true,
   /** MinIO Docker 镜像 默认使用较新的稳定版本 */
-  var image: String = "minio/minio:minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1",
+  var image: String = "minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1",
 
   /** 默认访问密钥 */
   var accessKey: String = "minioadmin",
