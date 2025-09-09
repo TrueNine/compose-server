@@ -112,3 +112,5 @@ include("testtoolkit:testtoolkit-springmvc")
 include("integrate-test:depend:jackson")
 
 include("integrate-test:oss:minio")
+
+include("integrate-test:cacheable")
