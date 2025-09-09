@@ -1,5 +1,1 @@
-- 继续优化测试用例
 - 编写 testcontainers 简单的单独启动器
-- redis 连接异常,需要排查 redis 模块
-- 降低 jdk 版本, 以适应jdk
-- oss 上传文件 bucket not found
