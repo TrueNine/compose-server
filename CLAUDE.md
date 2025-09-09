@@ -197,3 +197,4 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Dependency versions are unified in `gradle/libs.versions.toml`
 - Use `./gradlew versionCatalogUpdate` to check for dependency updates
 - Version publishing through Maven Central Repository, naming rule: `io.github.truenine:composeserver-{module-name}`
+- 这是一个库项目,类似于springboot
