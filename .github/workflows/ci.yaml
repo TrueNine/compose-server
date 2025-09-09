@@ -8,8 +8,8 @@ on:
       - '**/*.kt'
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=8 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
-  JVM_OPTS: "-Xmx5g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:G1HeapRegionSize=32m -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+UseLargePages"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=6 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
+  JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:+UseStringDeduplication"
   TESTCONTAINERS_RYUK_DISABLED: false
   TESTCONTAINERS_REUSE_ENABLE: true
   DOCKER_BUILDKIT: 1
@@ -247,8 +247,8 @@ jobs:
             --configuration-cache \
             --continue \
             --quiet \
-            -Dorg.gradle.workers.max=4 \
-            -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m"
+            -Dorg.gradle.workers.max=3 \
+            -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
         env:
           # TestContainers 配置
           TESTCONTAINERS_RYUK_DISABLED: false
