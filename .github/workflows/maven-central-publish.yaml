@@ -51,10 +51,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 24
+      - name: Set up JDK 17
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '24'
+          java-version: '17'
           distribution: 'graalvm'
           cache: gradle
 
@@ -226,10 +226,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 24
+      - name: Set up JDK 17
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '24'
+          java-version: '17'
           distribution: 'graalvm'
           cache: gradle
 
@@ -472,37 +472,10 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: Wait for Maven Central sync
+      - name: Skip verification (save time)
         run: |
-          echo "⏳ 等待 Maven Central 同步..."
-          sleep 300  # 等待 5 分钟
-
-      - name: Verify publication
-        run: |
-          version="${{ needs.pre-publish-validation.outputs.version }}"
-          group="io.github.truenine"
-          
-          echo "🔍 验证发布的 artifacts..."
-          
-          # 检查主要模块是否可用
-          modules=("shared" "gradle-plugin" "bom")
-          
-          for module in "${modules[@]}"; do
-            artifact="${group}:composeserver-${module}:${version}"
-            echo "检查 $artifact ..."
-          
-            # 尝试从 Maven Central 获取 metadata
-            url="https://search.maven.org/solrsearch/select?q=g:${group}+AND+a:composeserver-${module}+AND+v:${version}&rows=1&wt=json"
-          
-            response=$(curl -s "$url" || echo '{"response":{"numFound":0}}')
-            found=$(echo "$response" | jq -r '.response.numFound')
-          
-            if [[ "$found" -gt 0 ]]; then
-              echo "✅ $artifact 已成功发布"
-            else
-              echo "⚠️ $artifact 尚未在 Maven Central 上可见（可能仍在同步中）"
-            fi
-          done
+          echo "⏭️ 跳过 Maven Central 同步验证以节省时间"
+          echo "📝 发布已完成，Maven Central 同步通常需要几小时"
 
       - name: Generate verification report
         run: |
@@ -510,10 +483,11 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**版本:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📊 验证状态" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 发布状态" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ 发布任务已完成" >> $GITHUB_STEP_SUMMARY
           echo "- ⏳ Maven Central 同步可能需要几小时" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔍 建议在 4-6 小时后再次验证" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 建议在 4-6 小时后手动验证可用性" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🔗 相关链接" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
