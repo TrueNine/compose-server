@@ -13,7 +13,6 @@ Includes advanced container orchestration, specialized database/cache/storage te
 dependencies {
   api(projects.testtoolkit.testtoolkitShared)
 
-  // testcontainers 特有依赖
   api(libs.org.testcontainers.testcontainers)
   api(libs.org.testcontainers.postgresql)
   api(libs.org.testcontainers.mysql)
