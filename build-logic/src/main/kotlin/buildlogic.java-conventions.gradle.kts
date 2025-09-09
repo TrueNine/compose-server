@@ -77,11 +77,14 @@ afterEvaluate {
 
     dependsOn(configurations.testRuntimeClasspath)
 
-    // Configure test output to suppress warnings
+    // Configure test output for detailed logging
     testLogging {
-      showStandardStreams = false
+      showStandardStreams = true
       exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-      events("passed", "skipped", "failed")
+      events("passed", "skipped", "failed", "started")
+      showExceptions = true
+      showCauses = true
+      showStackTraces = true
     }
 
     val commonProjectDeps = listOf("testtoolkit", "shared")

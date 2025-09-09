@@ -269,7 +269,7 @@ jobs:
               --build-cache \
               --configuration-cache \
               --continue \
-              --quiet \
+              --info \
               -Dorg.gradle.workers.max=3 \
               -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
           else
@@ -280,7 +280,7 @@ jobs:
               --build-cache \
               --configuration-cache \
               --continue \
-              --quiet \
+              --info \
               -Dorg.gradle.workers.max=3 \
               -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
           fi
