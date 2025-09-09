@@ -232,23 +232,58 @@ jobs:
 
           modules="${{ matrix.modules }}"
           test_tasks=""
+          
+          echo "Checking available test tasks for modules: $modules"
+          
           for module in $modules; do
-            if [[ "$module" == *":"* ]]; then
-              test_tasks="$test_tasks :$module:test"
+            module_path=":$module"
+            if [[ "$module" != *":"* ]]; then
+              module_path=":$module"
+            fi
+            
+            # 检查模块是否有test任务
+            if ./gradlew $module_path:tasks --all --quiet 2>/dev/null | grep -E "^test\s" >/dev/null; then
+              test_tasks="$test_tasks $module_path:test"
+              echo "✓ Found test task for $module"
             else
-              test_tasks="$test_tasks :$module:test"
+              echo "⚠ No test task found for $module, will check compilation instead"
             fi
           done
 
-          ./gradlew $test_tasks \
-            --no-daemon \
-            --parallel \
-            --build-cache \
-            --configuration-cache \
-            --continue \
-            --quiet \
-            -Dorg.gradle.workers.max=3 \
-            -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
+          if [[ -z "$test_tasks" ]]; then
+            echo "No test tasks found for any modules in this group"
+            echo "Running compilation and check tasks instead..."
+            
+            compile_tasks=""
+            for module in $modules; do
+              module_path=":$module"
+              if [[ "$module" != *":"* ]]; then
+                module_path=":$module"
+              fi
+              compile_tasks="$compile_tasks $module_path:compileKotlin $module_path:compileTestKotlin"
+            done
+            
+            ./gradlew $compile_tasks \
+              --no-daemon \
+              --parallel \
+              --build-cache \
+              --configuration-cache \
+              --continue \
+              --quiet \
+              -Dorg.gradle.workers.max=3 \
+              -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
+          else
+            echo "Running test tasks: $test_tasks"
+            ./gradlew $test_tasks \
+              --no-daemon \
+              --parallel \
+              --build-cache \
+              --configuration-cache \
+              --continue \
+              --quiet \
+              -Dorg.gradle.workers.max=3 \
+              -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
+          fi
         env:
           # TestContainers 配置
           TESTCONTAINERS_RYUK_DISABLED: false
