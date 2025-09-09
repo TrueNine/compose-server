@@ -19,7 +19,7 @@ class TestcontainersPropertiesTest {
     fun should_have_correct_default_postgres_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("postgres:17.5-alpine3.22", properties.postgres.image)
+      assertEquals("postgres:17.6-alpine3.22", properties.postgres.image)
       assertEquals("testdb", properties.postgres.databaseName)
       assertEquals("test", properties.postgres.username)
       assertEquals("test", properties.postgres.password)
@@ -40,14 +40,14 @@ class TestcontainersPropertiesTest {
     fun should_have_correct_default_redis_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("redis:8.0.3-alpine3.21", properties.redis.image)
+      assertEquals("redis/redis-stack:7.2.0-v18", properties.redis.image)
     }
 
     @Test
     fun should_have_correct_default_minio_config() {
       val properties = TestcontainersProperties()
 
-      assertEquals("minio/minio:RELEASE.2025-07-23T15-54-02Z", properties.minio.image)
+      assertEquals("minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1", properties.minio.image)
       assertEquals("minioadmin", properties.minio.accessKey)
       assertEquals("minioadmin", properties.minio.secretKey)
     }
