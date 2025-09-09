@@ -112,52 +112,67 @@ jobs:
       max-parallel: 6
       matrix:
         group:
-          - "core-fast"
-          - "core-build"
+          - "core-foundation"
+          - "core-build-tools"
           - "rds-light"
           - "rds-heavy"
-          - "business-ai"
+          - "business-ai-pay"
           - "business-oss"
-          - "business-misc"
+          - "business-communication"
           - "security"
-          - "data-depend"
+          - "data-processing"
+          - "platform-integrations"
+          - "testing-tools"
+          - "integration-tests"
         include:
-          - group: "core-fast"
-            modules: "shared testtoolkit"
-            containers: "none"
+          - group: "core-foundation"
+            modules: "shared cacheable docsite"
+            testcontainers: false
             timeout: 8
-          - group: "core-build"
+          - group: "core-build-tools"
             modules: "gradle-plugin version-catalog bom"
-            containers: "none"
+            testcontainers: false
             timeout: 10
           - group: "rds-light"
             modules: "rds:rds-shared rds:rds-flyway-migration-shared"
-            containers: "none"
+            testcontainers: false
             timeout: 8
           - group: "rds-heavy"
             modules: "rds:rds-crud rds:rds-jimmer-ext-postgres rds:rds-flyway-migration-postgresql rds:rds-flyway-migration-mysql8"
-            containers: "database"
-            timeout: 20
-          - group: "business-ai"
+            testcontainers: true
+            timeout: 25
+          - group: "business-ai-pay"
             modules: "ai:ai-shared ai:ai-langchain4j pay:pay-shared pay:pay-wechat"
-            containers: "cache"
-            timeout: 15
+            testcontainers: true
+            timeout: 18
           - group: "business-oss"
             modules: "oss:oss-shared oss:oss-minio oss:oss-aliyun-oss oss:oss-huawei-obs oss:oss-volcengine-tos"
-            containers: "cache"
-            timeout: 18
-          - group: "business-misc"
-            modules: "sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision cacheable"
-            containers: "cache"
-            timeout: 12
+            testcontainers: true
+            timeout: 20
+          - group: "business-communication"
+            modules: "sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision"
+            testcontainers: true
+            timeout: 15
           - group: "security"
             modules: "security:security-crypto security:security-oauth2 security:security-spring"
-            containers: "none"
-            timeout: 10
-          - group: "data-depend"
-            modules: "data:data-crawler data:data-extract depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa"
-            containers: "none"
+            testcontainers: false
+            timeout: 12
+          - group: "data-processing"
+            modules: "data:data-crawler data:data-extract"
+            testcontainers: true
             timeout: 15
+          - group: "platform-integrations"
+            modules: "depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa ide:ide-idea-mcp"
+            testcontainers: false
+            timeout: 18
+          - group: "testing-tools"
+            modules: "testtoolkit:testtoolkit-shared testtoolkit:testtoolkit-testcontainers testtoolkit:testtoolkit-springmvc"
+            testcontainers: true
+            timeout: 15
+          - group: "integration-tests"
+            modules: "integrate-test:depend:jackson integrate-test:oss:minio integrate-test:cacheable"
+            testcontainers: true
+            timeout: 30
 
     steps:
       - name: Checkout code
@@ -203,23 +218,7 @@ jobs:
           cache-read-only: true
           cache-write-only: false
 
-      - name: Set up Docker Buildx
-        if: matrix.containers != 'none'
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver-opts: |
-            network=host
-            image=moby/buildkit:v0.12.0
 
-      - name: Cache Docker layers
-        if: matrix.containers != 'none'
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ matrix.group }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-${{ matrix.group }}-
-            ${{ runner.os }}-docker-
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -251,23 +250,16 @@ jobs:
             -Dorg.gradle.workers.max=4 \
             -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m"
         env:
+          # TestContainers 配置
           TESTCONTAINERS_RYUK_DISABLED: false
-          TESTCONTAINERS_CHECKS_DISABLE: false
           TESTCONTAINERS_REUSE_ENABLE: true
-          TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX: ""
-          TESTCONTAINERS_REUSE_HASH_LABELS: true
-          TESTCONTAINERS_PULL_PAUSE_TIMEOUT: 20
-          TESTCONTAINERS_STARTUP_TIMEOUT: 90
-          TESTCONTAINERS_CONNECT_TIMEOUT: 30
-          DOCKER_HOST: unix:///var/run/docker.sock
-          TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
-          TESTCONTAINERS_HOST_OVERRIDE: localhost
-          DOCKER_BUILDKIT: 1
-          BUILDKIT_PROGRESS: plain
+          TESTCONTAINERS_STARTUP_TIMEOUT: 120
+          TESTCONTAINERS_CONNECT_TIMEOUT: 60
+          # Gradle 和 JVM 配置
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
           JAVA_OPTS: "${{ env.JVM_OPTS }}"
           CI: true
-          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: false
+          # 并行测试配置
           JUNIT_PLATFORM_EXECUTION_PARALLEL_ENABLED: true
           JUNIT_PLATFORM_EXECUTION_PARALLEL_MODE_DEFAULT: concurrent
 
@@ -276,9 +268,14 @@ jobs:
         run: |
           find . -name "*.log" -type f -exec echo "=== {} ===" \; -exec cat {} \; || true
           
-          if [[ "${{ matrix.containers }}" != "none" ]]; then
-            docker ps -a || true
-            docker logs $(docker ps -aq --filter "label=org.testcontainers=true") || true
+          if [[ "${{ matrix.testcontainers }}" == "true" ]]; then
+            echo "=== TestContainers Status ===" 
+            docker ps -a --filter "label=org.testcontainers=true" || true
+            echo "=== TestContainers Logs ==="
+            for container in $(docker ps -aq --filter "label=org.testcontainers=true" 2>/dev/null || true); do
+              echo "--- Container $container ---"
+              docker logs "$container" --tail 50 2>/dev/null || echo "No logs available"
+            done
           fi
           
           if pgrep -f "org.gradle.launcher.daemon.bootstrap.GradleDaemon" > /dev/null; then
@@ -300,15 +297,15 @@ jobs:
             **/*.log
           retention-days: 5
 
-      - name: Cleanup containers
-        if: always() && matrix.containers != 'none'
+      - name: Cleanup TestContainers
+        if: always() && matrix.testcontainers == true
         run: |
-          docker system df || true
-          docker container prune -f --filter "until=30m" --filter "label!=org.testcontainers.reuse.enable=true" || true
-          docker image prune -f --filter "dangling=true" || true
-          docker network prune -f --filter "until=30m" || true
-          docker volume prune -f --filter "label!=keep" --filter "label!=org.testcontainers.reuse.enable=true" || true
-          docker system df || true
+          echo "Cleaning up TestContainers resources..."
+          # 清理非复用的 TestContainers
+          docker container prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
+          docker network prune -f --filter "label=org.testcontainers=true" || true
+          docker volume prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
+          echo "TestContainers cleanup completed"
 
   test-results:
     name: Test Results Summary
@@ -336,24 +333,27 @@ jobs:
           echo "| Module Group | Status | Container Dependencies | Duration |" >> $GITHUB_STEP_SUMMARY
           echo "|--------------|--------|------------------------|----------|" >> $GITHUB_STEP_SUMMARY
           
-          declare -A group_containers=(
-            ["core-fast"]="None"
-            ["core-build"]="None"
+          declare -A group_testcontainers=(
+            ["core-foundation"]="None"
+            ["core-build-tools"]="None"
             ["rds-light"]="None"
-            ["rds-heavy"]="Database (PostgreSQL, MySQL, Redis)"
-            ["business-ai"]="Cache (Redis)"
-            ["business-oss"]="Cache (Redis, MinIO)"
-            ["business-misc"]="Cache (Redis)"
+            ["rds-heavy"]="TestContainers (PostgreSQL, MySQL, Redis)"
+            ["business-ai-pay"]="TestContainers (Redis)"
+            ["business-oss"]="TestContainers (Redis, MinIO)"
+            ["business-communication"]="TestContainers (Redis)"
             ["security"]="None"
-            ["data-depend"]="None"
+            ["data-processing"]="TestContainers (Redis)"
+            ["platform-integrations"]="None"
+            ["testing-tools"]="TestContainers (Database)"
+            ["integration-tests"]="TestContainers (Full Stack)"
           )
 
-          for group in core-fast core-build rds-light rds-heavy business-ai business-oss business-misc security data-depend; do
-            containers="${group_containers[$group]}"
+          for group in core-foundation core-build-tools rds-light rds-heavy business-ai-pay business-oss business-communication security data-processing platform-integrations testing-tools integration-tests; do
+            testcontainers="${group_testcontainers[$group]}"
             if [[ "${{ needs.test-matrix.result }}" == "success" ]]; then
-              echo "| $group | Pass | $containers | - |" >> $GITHUB_STEP_SUMMARY
+              echo "| $group | ✅ Pass | $testcontainers | - |" >> $GITHUB_STEP_SUMMARY
             else
-              echo "| $group | Failed | $containers | - |" >> $GITHUB_STEP_SUMMARY
+              echo "| $group | ❌ Failed | $testcontainers | - |" >> $GITHUB_STEP_SUMMARY
             fi
           done
           
