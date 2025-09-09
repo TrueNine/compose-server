@@ -97,6 +97,14 @@ class MockObjectStorageServiceTest : IObjectStorageServiceTest() {
       return Result.success(Unit)
     }
 
+    override suspend fun setBucketAccess(bucketName: String, accessLevel: BucketAccessLevel): Result<Unit> {
+      if (!buckets.containsKey(bucketName)) {
+        return Result.failure(BucketNotFoundException(bucketName))
+      }
+      log.debug("Mock: Set bucket $bucketName access level to $accessLevel")
+      return Result.success(Unit)
+    }
+
     override suspend fun putObject(request: PutObjectRequest): Result<ObjectInfo> {
       if (!buckets.containsKey(request.bucketName)) {
         return Result.failure(BucketNotFoundException(request.bucketName))

@@ -13,6 +13,12 @@ enum class StorageClass {
   INTELLIGENT_TIERING,
 }
 
+/** Access level for buckets and objects */
+enum class BucketAccessLevel {
+  PUBLIC,
+  PRIVATE,
+}
+
 /** Request to create a bucket */
 data class CreateBucketRequest(
   val bucketName: String,

@@ -25,6 +25,7 @@ import io.github.truenine.composeserver.mapFailure
 import io.github.truenine.composeserver.onFailureDo
 import io.github.truenine.composeserver.oss.AuthenticationException
 import io.github.truenine.composeserver.oss.AuthorizationException
+import io.github.truenine.composeserver.oss.BucketAccessLevel
 import io.github.truenine.composeserver.oss.BucketAlreadyExistsException
 import io.github.truenine.composeserver.oss.BucketInfo as OssBucketInfo
 import io.github.truenine.composeserver.oss.BucketNotEmptyException
@@ -168,6 +169,22 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
       log.info("Set bucket policy: {}", bucketName)
       Result.success(Unit)
     }
+
+  override suspend fun setBucketAccess(bucketName: String, accessLevel: BucketAccessLevel): Result<Unit> {
+    return safeCallAsync {
+        val aclType =
+          when (accessLevel) {
+            BucketAccessLevel.PUBLIC -> ACLType.ACL_PUBLIC_READ
+            BucketAccessLevel.PRIVATE -> ACLType.ACL_PRIVATE
+          }
+
+        val input = PutBucketACLInput().setBucket(bucketName).setAcl(aclType)
+        tosClient.putBucketACL(input)
+        log.info("Set bucket access level to {}: {}", accessLevel.name.lowercase(), bucketName)
+      }
+      .onFailureDo { e -> log.error("Failed to set bucket access level: {}", bucketName, e) }
+      .mapFailure { e -> mapTosException(e as? Exception ?: Exception(e)) }
+  }
 
   override suspend fun listBuckets(): Result<List<OssBucketInfo>> {
     return safeCallAsync {
