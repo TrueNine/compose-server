@@ -42,6 +42,8 @@ jobs:
       version: ${{ steps.version-info.outputs.version }}
       is-snapshot: ${{ steps.version-info.outputs.is-snapshot }}
       should-publish: ${{ steps.version-info.outputs['should-publish'] }}
+      java-version: ${{ steps.libs-versions.outputs.java-version }}
+      gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
 
     steps:
       - name: Checkout code
@@ -49,10 +51,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Extract versions from libs.versions.toml
+        id: libs-versions
+        run: |
+          JAVA_VERSION=$(sed -n 's/^java\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          GRADLE_VERSION=$(sed -n 's/^org-gradle\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          
+          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
+          echo "gradle-version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
+          
+          echo "Extracted Java version: $JAVA_VERSION from libs.versions.toml"
+          echo "Extracted Gradle version: $GRADLE_VERSION from libs.versions.toml"
+
+      - name: Set up JDK ${{ steps.libs-versions.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
+          java-version: ${{ steps.libs-versions.outputs.java-version }}
           distribution: 'temurin'
           cache: gradle
 
@@ -83,7 +97,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.1.0-rc-3'
+          gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -210,10 +224,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK ${{ needs.pre-publish-validation.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
+          java-version: ${{ needs.pre-publish-validation.outputs.java-version }}
           distribution: 'temurin'
           cache: gradle
 
@@ -242,7 +256,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.1.0-rc-3'
+          gradle-version: ${{ needs.pre-publish-validation.outputs.gradle-version }}
           cache-cleanup: on-success
 
       - name: Grant execute permission

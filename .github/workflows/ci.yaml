@@ -22,6 +22,8 @@ jobs:
     outputs:
       cache-key: ${{ steps.cache-info.outputs.cache-key }}
       gradle-cache-key: ${{ steps.cache-info.outputs.gradle-cache-key }}
+      java-version: ${{ steps.version-info.outputs.java-version }}
+      gradle-version: ${{ steps.version-info.outputs.gradle-version }}
 
     steps:
       - name: Checkout code
@@ -29,10 +31,22 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Extract versions from libs.versions.toml
+        id: version-info
+        run: |
+          JAVA_VERSION=$(sed -n 's/^java\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          GRADLE_VERSION=$(sed -n 's/^org-gradle\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          
+          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
+          echo "gradle-version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
+          
+          echo "Extracted Java version: $JAVA_VERSION"
+          echo "Extracted Gradle version: $GRADLE_VERSION"
+
+      - name: Set up JDK ${{ steps.version-info.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
+          java-version: ${{ steps.version-info.outputs.java-version }}
           distribution: 'temurin'
           cache: gradle
 
@@ -71,7 +85,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.1.0-rc-3'
+          gradle-version: ${{ steps.version-info.outputs.gradle-version }}
           cache-read-only: false
           cache-write-only: false
 
@@ -151,10 +165,10 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK ${{ needs.quick-check.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
+          java-version: ${{ needs.quick-check.outputs.java-version }}
           distribution: 'temurin'
           cache: gradle
 
@@ -185,7 +199,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.1.0-rc-3'
+          gradle-version: ${{ needs.quick-check.outputs.gradle-version }}
           cache-read-only: true
           cache-write-only: false
 
