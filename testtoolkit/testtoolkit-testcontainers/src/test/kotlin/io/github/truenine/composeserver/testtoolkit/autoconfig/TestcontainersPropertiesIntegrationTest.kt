@@ -36,10 +36,10 @@ class TestcontainersPropertiesIntegrationTest {
     @Test
     fun should_inject_properties_with_defaults() {
       assertNotNull(testcontainersProperties)
-      assertEquals("postgres:17.5-alpine3.22", testcontainersProperties.postgres.image)
+      assertEquals("postgres:17.6-alpine3.22", testcontainersProperties.postgres.image)
       assertEquals("mysql:8.4.6-oraclelinux9", testcontainersProperties.mysql.image)
-      assertEquals("redis:8.0.3-alpine3.21", testcontainersProperties.redis.image)
-      assertEquals("minio/minio:RELEASE.2025-07-23T15-54-02Z", testcontainersProperties.minio.image)
+      assertEquals("redis/redis-stack:7.2.0-v18", testcontainersProperties.redis.image)
+      assertEquals("minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1", testcontainersProperties.minio.image)
     }
   }
 

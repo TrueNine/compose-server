@@ -3,7 +3,7 @@ name: Publish to Maven Central
 on:
   push:
     branches: [ main ]
-    tags:  [ '🚀*' ]
+    tags:  [ 'v*' ]
   release:
     types: [ published ]
   workflow_dispatch:
@@ -13,19 +13,18 @@ on:
         required: true
         type: string
       dry_run:
-        description: '是否执行试运行（不实际发布）'
+        description: 'Execute dry run (no actual publish)'
         type: boolean
         default: false
       force_publish:
-        description: '强制发布（忽略 Maven Central 版本存在性检查）'
+        description: 'Force publish (ignore Maven Central version existence check)'
         type: boolean
         default: false
       skip_tests:
-        description: '跳过测试（仅用于紧急发布）'
+        description: 'Skip tests (for emergency releases only)'
         type: boolean
         default: false
 
-# 并发控制：防止同时触发多个发布任务
 concurrency:
   group: maven-publish-${{ github.ref }}
   cancel-in-progress: false
@@ -35,15 +34,16 @@ env:
   JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1536m -XX:+UseG1GC -XX:G1HeapRegionSize=16m"
 
 jobs:
-  # 🧪 发布前验证
   pre-publish-validation:
-    name: "🧪 Pre-publish Validation & Maven Central Check"
+    name: Pre-publish Validation
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
       version: ${{ steps.version-info.outputs.version }}
       is-snapshot: ${{ steps.version-info.outputs.is-snapshot }}
       should-publish: ${{ steps.version-info.outputs['should-publish'] }}
+      java-version: ${{ steps.libs-versions.outputs.java-version }}
+      gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
 
     steps:
       - name: Checkout code
@@ -51,11 +51,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Extract versions from libs.versions.toml
+        id: libs-versions
+        run: |
+          JAVA_VERSION=$(sed -n 's/^java\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          GRADLE_VERSION=$(sed -n 's/^org-gradle\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          
+          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
+          echo "gradle-version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
+          
+          echo "Extracted Java version: $JAVA_VERSION from libs.versions.toml"
+          echo "Extracted Gradle version: $GRADLE_VERSION from libs.versions.toml"
+
+      - name: Set up JDK ${{ steps.libs-versions.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
-          distribution: 'graalvm'
+          java-version: ${{ steps.libs-versions.outputs.java-version }}
+          distribution: 'temurin'
           cache: gradle
 
       - name: Cache Gradle wrapper
@@ -85,7 +97,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.0.0'
+          gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -93,10 +105,8 @@ jobs:
       - name: Extract version and check Maven Central
         id: version-info
         run: |
-          # 语义化版本验证函数
           validate_semver() {
             local version="$1"
-            # 支持标准语义化版本格式：x.y.z[-prerelease][+build]
             if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9\.-]+)?(\+[a-zA-Z0-9\.-]+)?$ ]]; then
               return 0
             else
@@ -104,116 +114,104 @@ jobs:
             fi
           }
 
-          # 确定当前版本
-          echo "🔍 确定发布版本..." >> $GITHUB_STEP_SUMMARY
+          echo "Determining release version..." >> $GITHUB_STEP_SUMMARY
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             version="${{ github.event.inputs.version }}"
-            echo "📝 手动指定版本: $version" >> $GITHUB_STEP_SUMMARY
+            echo "Manual version: $version" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.event_name }}" == "release" ]]; then
             version="${{ github.event.release.tag_name }}"
-            version=${version#v}  # 移除可能的 'v' 前缀
-            echo "🏷️ Release 标签版本: $version" >> $GITHUB_STEP_SUMMARY
+            version=${version#v}
+            echo "Release tag version: $version" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.ref_type }}" == "tag" ]]; then
             version="${{ github.ref_name }}"
-            version=${version#v}  # 移除可能的 'v' 前缀
-            echo "🏷️ 标签触发版本: $version" >> $GITHUB_STEP_SUMMARY
+            version=${version#v}
+            echo "Tag triggered version: $version" >> $GITHUB_STEP_SUMMARY
           else
-            # push event: parse from libs.versions.toml
             version=$(sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
-            echo "📄 从 libs.versions.toml 读取版本: $version" >> $GITHUB_STEP_SUMMARY
+            echo "Version from libs.versions.toml: $version" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # 验证版本格式
           if ! validate_semver "$version"; then
-            echo "❌ 版本格式无效: $version" >> $GITHUB_STEP_SUMMARY
-            echo "版本必须符合语义化版本规范 (x.y.z[-prerelease][+build])" >> $GITHUB_STEP_SUMMARY
+            echo "Invalid version format: $version" >> $GITHUB_STEP_SUMMARY
+            echo "Version must follow semantic versioning (x.y.z[-prerelease][+build])" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
 
           echo "version=$version" >> $GITHUB_OUTPUT
-          echo "✅ 版本格式验证通过: $version" >> $GITHUB_STEP_SUMMARY
+          echo "Version format validated: $version" >> $GITHUB_STEP_SUMMARY
 
-          # 确定快照状态
           if [[ "$version" == *"-SNAPSHOT" ]] || [[ "$version" == *"-alpha"* ]] || [[ "$version" == *"-beta"* ]] || [[ "$version" == *"-rc"* ]]; then
             echo "is-snapshot=true" >> $GITHUB_OUTPUT
-            echo "📦 预发布版本类型" >> $GITHUB_STEP_SUMMARY
+            echo "Pre-release version type" >> $GITHUB_STEP_SUMMARY
           else
             echo "is-snapshot=false" >> $GITHUB_OUTPUT
-            echo "🚀 正式发布版本类型" >> $GITHUB_STEP_SUMMARY
+            echo "Stable release version type" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # 优化的发布决策逻辑：只要 Maven Central 没有该版本就发布
           should_publish="false"
           force_publish="${{ github.event.inputs.force_publish }}"
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔍 发布决策分析..." >> $GITHUB_STEP_SUMMARY
+          echo "Publishing decision analysis..." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # 强制发布模式
           if [[ "$force_publish" == "true" ]]; then
             should_publish="true"
-            echo "⚡ **强制发布模式已启用** - 跳过 Maven Central 版本检查" >> $GITHUB_STEP_SUMMARY
+            echo "Force publish mode enabled - skipping Maven Central version check" >> $GITHUB_STEP_SUMMARY
           else
-            # 检查 Maven Central 是否已存在该版本
-            echo "🔍 检查 Maven Central 是否存在版本 $version..." >> $GITHUB_STEP_SUMMARY
+            echo "Checking if version $version exists on Maven Central..." >> $GITHUB_STEP_SUMMARY
             
-            # 使用 Maven Central Search API 检查版本是否存在
             group="io.github.truenine"
             search_url="https://search.maven.org/solrsearch/select?q=g:${group}+AND+v:${version}&rows=1&wt=json"
             
-            echo "  📡 查询 URL: $search_url" >> $GITHUB_STEP_SUMMARY
+            echo "Query URL: $search_url" >> $GITHUB_STEP_SUMMARY
             
-            # 进行网络请求，设置较短的超时时间
             response=$(curl -f -s --max-time 15 "$search_url" 2>/dev/null || echo '{"response":{"numFound":0}}')
             
-            # 解析响应，检查是否找到匹配的版本
             found=$(echo "$response" | jq -r '.response.numFound' 2>/dev/null || echo "0")
             
             if [[ "$found" -gt 0 ]]; then
               should_publish="false"
-              echo "  ❌ **版本已存在** - Maven Central 上已存在版本 $version，跳过发布" >> $GITHUB_STEP_SUMMARY
+              echo "Version already exists - Maven Central already has version $version, skipping publish" >> $GITHUB_STEP_SUMMARY
             else
               should_publish="true"
-              echo "  ✅ **版本不存在** - Maven Central 上未找到版本 $version，将执行发布" >> $GITHUB_STEP_SUMMARY
+              echo "Version does not exist - Maven Central does not have version $version, will publish" >> $GITHUB_STEP_SUMMARY
             fi
           fi
 
           echo "should-publish=$should_publish" >> $GITHUB_OUTPUT
 
-          # 最终决策摘要
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📊 发布决策结果" >> $GITHUB_STEP_SUMMARY
+          echo "### Publishing Decision Result" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [[ "$should_publish" == "true" ]]; then
             if [[ "$force_publish" == "true" ]]; then
-              echo "✅ **发布决策：强制发布** - 将忽略所有检查直接发布" >> $GITHUB_STEP_SUMMARY
+              echo "Publishing decision: Force publish - will ignore all checks and publish directly" >> $GITHUB_STEP_SUMMARY
             else
-              echo "✅ **发布决策：继续发布** - Maven Central 上不存在此版本" >> $GITHUB_STEP_SUMMARY
+              echo "Publishing decision: Continue publish - this version does not exist on Maven Central" >> $GITHUB_STEP_SUMMARY
             fi
           else
-            echo "⏭️ **发布决策：跳过发布** - Maven Central 上已存在此版本" >> $GITHUB_STEP_SUMMARY
+            echo "Publishing decision: Skip publish - this version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**触发方式:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**检查版本:** $version" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger method:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Check version:** $version" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate pre-publish report
         run: |
-          echo "## 🚀 发布准备情况" >> $GITHUB_STEP_SUMMARY
+          echo "## Publishing Readiness" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| 检查项 | 状态 |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
-          echo "| 版本格式验证 | ✅ 通过 |" >> $GITHUB_STEP_SUMMARY
-          echo "| Maven Central 版本检查 | ${{ steps.version-info.outputs.should-publish == 'true' && '✅ 未发布' || '❌ 已存在' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Check Item | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version format validation | Pass |" >> $GITHUB_STEP_SUMMARY
+          echo "| Maven Central version check | ${{ steps.version-info.outputs.should-publish == 'true' && 'Not published' || 'Already exists' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**版本:** ${{ steps.version-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**类型:** ${{ steps.version-info.outputs.is-snapshot == 'true' && '快照版本' || '正式版本' }}" >> $GITHUB_STEP_SUMMARY
-          echo "**发布状态:** ${{ steps.version-info.outputs.should-publish == 'true' && '将执行发布' || '跳过发布' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Type:** ${{ steps.version-info.outputs.is-snapshot == 'true' && 'Snapshot version' || 'Stable version' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Publishing status:** ${{ steps.version-info.outputs.should-publish == 'true' && 'Will publish' || 'Skip publish' }}" >> $GITHUB_STEP_SUMMARY
 
-  # 📦 Maven Central 发布
   publish:
-    name: "📦 Publish to Maven Central"
+    name: Publish to Maven Central
     needs: pre-publish-validation
     if: ${{ needs.pre-publish-validation.outputs.should-publish == 'true' }}
     runs-on: ubuntu-latest
@@ -226,11 +224,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK ${{ needs.pre-publish-validation.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
-          distribution: 'graalvm'
+          java-version: ${{ needs.pre-publish-validation.outputs.java-version }}
+          distribution: 'temurin'
           cache: gradle
 
       - name: Cache Gradle wrapper
@@ -258,17 +256,16 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.0.0'
+          gradle-version: ${{ needs.pre-publish-validation.outputs.gradle-version }}
           cache-cleanup: on-success
 
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      # 试运行模式
       - name: Dry run publication
         if: github.event.inputs.dry_run == 'true'
         run: |
-          echo "🔍 执行发布试运行..."
+          echo "Executing publication dry run..."
           ./gradlew publishToMavenLocal \
             --no-daemon \
             --parallel \
@@ -279,13 +276,11 @@ jobs:
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
           CI: true
 
-      # 发布前验证
       - name: Pre-publish validation
         if: github.event.inputs.dry_run != 'true'
         run: |
-          echo "🔍 发布前验证..."
+          echo "Pre-publish validation..."
           
-          # 验证必要的凭据
           missing_secrets=()
           [[ -z "${{ secrets.GPG_KEY_ID }}" ]] && missing_secrets+=("GPG_KEY_ID")
           [[ -z "${{ secrets.GPG_PRIVATE_KEY }}" ]] && missing_secrets+=("GPG_PRIVATE_KEY")
@@ -294,19 +289,17 @@ jobs:
           [[ -z "${{ secrets.GPG_PASSPHRASE }}" ]] && missing_secrets+=("GPG_PASSPHRASE")
           
           if [[ ${#missing_secrets[@]} -gt 0 ]]; then
-            echo "❌ 缺少必要的 Secrets： ${missing_secrets[*]}" >> $GITHUB_STEP_SUMMARY
+            echo "Missing required secrets: ${missing_secrets[*]}" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
           
-          # 验证网络连接
-          echo "🌍 验证网络连接..."
+          echo "Verifying network connectivity..."
           curl -f -s --max-time 10 https://oss.sonatype.org/ > /dev/null || {
-            echo "⚠️ Sonatype 网络连接异常" >> $GITHUB_STEP_SUMMARY
+            echo "Sonatype network connectivity issue" >> $GITHUB_STEP_SUMMARY
           }
           
-          echo "✅ 验证通过" >> $GITHUB_STEP_SUMMARY
+          echo "Validation passed" >> $GITHUB_STEP_SUMMARY
 
-      # 正式发布（增强版）
       - name: Publish to Maven Central
         if: github.event.inputs.dry_run != 'true'
         uses: nick-fields/retry@v3
@@ -316,34 +309,32 @@ jobs:
           retry_wait_seconds: 600
           shell: bash
           command: |
-            echo "🚀 开始发布到 Maven Central (attempt: ${{ github.run_attempt }})..."
+            echo "Starting publication to Maven Central (attempt: ${{ github.run_attempt }})..."
             
-            # 设置错误处理
             set -euo pipefail
             
-            # 分类错误处理函数
             handle_error() {
               local exit_code=$1
               local error_context="$2"
             
-              echo "❌ 发布失败 (退出码: $exit_code)" >> $GITHUB_STEP_SUMMARY
+              echo "Publication failed (exit code: $exit_code)" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
             
               case $exit_code in
-                1|2) echo "**错误类型:** 构建或配置错误" >> $GITHUB_STEP_SUMMARY ;;
-                3|4) echo "**错误类型:** GPG 签名失败" >> $GITHUB_STEP_SUMMARY ;;
-                5|6) echo "**错误类型:** Maven Central 连接失败" >> $GITHUB_STEP_SUMMARY ;;
-                *) echo "**错误类型:** 未知错误" >> $GITHUB_STEP_SUMMARY ;;
+                1|2) echo "**Error type:** Build or configuration error" >> $GITHUB_STEP_SUMMARY ;;
+                3|4) echo "**Error type:** GPG signing failed" >> $GITHUB_STEP_SUMMARY ;;
+                5|6) echo "**Error type:** Maven Central connection failed" >> $GITHUB_STEP_SUMMARY ;;
+                *) echo "**Error type:** Unknown error" >> $GITHUB_STEP_SUMMARY ;;
               esac
             
-              echo "**错误上下文:** $error_context" >> $GITHUB_STEP_SUMMARY
+              echo "**Error context:** $error_context" >> $GITHUB_STEP_SUMMARY
               exit $exit_code
             }
             
-            trap 'handle_error $? "发布执行阶段"' ERR
+            trap 'handle_error $? "Publication execution phase"' ERR
             
-            echo "🔐 验证发布凭据..." >> $GITHUB_STEP_SUMMARY
-            echo "📦 开始发布流程..." >> $GITHUB_STEP_SUMMARY
+            echo "Verifying publication credentials..." >> $GITHUB_STEP_SUMMARY
+            echo "Starting publication process..." >> $GITHUB_STEP_SUMMARY
             
             ./gradlew publishToMavenCentral \
               --no-daemon \
@@ -358,7 +349,7 @@ jobs:
               -PmavenCentralPassword="${{ secrets.MAVENCENTRAL_PASSWORD }}" \
               -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
             
-            echo "✅ 发布到 Maven Central 成功" >> $GITHUB_STEP_SUMMARY
+            echo "Successfully published to Maven Central" >> $GITHUB_STEP_SUMMARY
         env:
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
           MAVENCENTRAL_USERNAME: ${{ secrets.MAVENCENTRAL_USERNAME }}
@@ -370,28 +361,27 @@ jobs:
 
       - name: Generate publication summary
         run: |
-          echo "## 📦 发布完成" >> $GITHUB_STEP_SUMMARY
+          echo "## Publication Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**版本:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**状态:** ${{ github.event.inputs.dry_run == 'true' && '试运行完成 🧪' || '正式发布完成 🚀' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ github.event.inputs.dry_run == 'true' && 'Dry run completed' || 'Official publication completed' }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [[ "${{ github.event.inputs.dry_run }}" != "true" ]]; then
-            echo "### 📋 发布后检查清单" >> $GITHUB_STEP_SUMMARY
+            echo "### Post-publication Checklist" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] 验证 Maven Central 上的 artifact" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] 更新项目文档" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] 发布 GitHub Release 说明" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] 通知团队成员" >> $GITHUB_STEP_SUMMARY
+            echo "- [ ] Verify artifacts on Maven Central" >> $GITHUB_STEP_SUMMARY
+            echo "- [ ] Update project documentation" >> $GITHUB_STEP_SUMMARY
+            echo "- [ ] Publish GitHub Release notes" >> $GITHUB_STEP_SUMMARY
+            echo "- [ ] Notify team members" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Maven Central 链接:** https://search.maven.org/search?q=g:io.github.truenine" >> $GITHUB_STEP_SUMMARY
+            echo "**Maven Central Link:** https://search.maven.org/search?q=g:io.github.truenine" >> $GITHUB_STEP_SUMMARY
           else
-            echo "✅ 试运行成功，所有模块都已正确构建和签名！" >> $GITHUB_STEP_SUMMARY
+            echo "Dry run successful, all modules built and signed correctly!" >> $GITHUB_STEP_SUMMARY
           fi
 
-  # 🏷️ GitHub Release 创建
   create-github-release:
-    name: "🏷️ Create GitHub Release"
+    name: Create GitHub Release
     needs: [ pre-publish-validation, publish ]
     if: github.event.inputs.dry_run != 'true' && needs.pre-publish-validation.outputs.is-snapshot == 'false'
     runs-on: ubuntu-latest
@@ -410,11 +400,10 @@ jobs:
         run: |
           version="${{ needs.pre-publish-validation.outputs.version }}"
 
-          # 生成发布说明
           cat > release_notes.md << 'EOF'
-          ## 🚀 Release ${{ needs.pre-publish-validation.outputs.version }}
+          ## Release ${{ needs.pre-publish-validation.outputs.version }}
 
-          ### 📦 Maven Central Artifacts
+          ### Maven Central Artifacts
 
           This release is available on Maven Central Repository:
           
@@ -430,7 +419,7 @@ jobs:
           </dependency>
           ```
 
-          ### 🔗 Links
+          ### Links
 
           - [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine%20AND%20v:${{ needs.pre-publish-validation.outputs.version }})
           - [Project Documentation](https://github.com/TrueNine/compose-server)
@@ -458,14 +447,13 @@ jobs:
 
       - name: Update release summary
         run: |
-          echo "## 🏷️ GitHub Release 创建完成" >> $GITHUB_STEP_SUMMARY
+          echo "## GitHub Release Created" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**版本标签:** v${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Release 链接:** https://github.com/TrueNine/compose-server/releases/tag/v${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version tag:** v${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Release link:** https://github.com/TrueNine/compose-server/releases/tag/v${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
 
-  # 📋 发布后验证
   post-publish-verification:
-    name: "📋 Post-publish Verification"
+    name: Post-publish Verification
     needs: [ pre-publish-validation, publish, create-github-release ]
     if: github.event.inputs.dry_run != 'true' && always() && needs.publish.result == 'success'
     runs-on: ubuntu-latest
@@ -474,42 +462,40 @@ jobs:
     steps:
       - name: Skip verification (save time)
         run: |
-          echo "⏭️ 跳过 Maven Central 同步验证以节省时间"
-          echo "📝 发布已完成，Maven Central 同步通常需要几小时"
+          echo "Skipping Maven Central sync verification to save time"
+          echo "Publication completed, Maven Central sync usually takes several hours"
 
       - name: Generate verification report
         run: |
-          echo "## 🔍 发布验证报告" >> $GITHUB_STEP_SUMMARY
+          echo "## Publication Verification Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**版本:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📊 发布状态" >> $GITHUB_STEP_SUMMARY
+          echo "### Publication Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ 发布任务已完成" >> $GITHUB_STEP_SUMMARY
-          echo "- ⏳ Maven Central 同步可能需要几小时" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔍 建议在 4-6 小时后手动验证可用性" >> $GITHUB_STEP_SUMMARY
+          echo "- Publication task completed" >> $GITHUB_STEP_SUMMARY
+          echo "- Maven Central sync may take several hours" >> $GITHUB_STEP_SUMMARY
+          echo "- Recommend manual verification in 4-6 hours" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🔗 相关链接" >> $GITHUB_STEP_SUMMARY
+          echo "### Related Links" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- [Maven Central 搜索](https://search.maven.org/search?q=g:io.github.truenine)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine)" >> $GITHUB_STEP_SUMMARY
           echo "- [Sonatype Repository](https://oss.sonatype.org/)" >> $GITHUB_STEP_SUMMARY
 
-          # 检查 GitHub Release 状态
           if [[ "${{ needs.create-github-release.result }}" == "success" ]]; then
             echo "- [GitHub Release](https://github.com/TrueNine/compose-server/releases/tag/v${{ needs.pre-publish-validation.outputs.version }})" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "✅ **GitHub Release 创建成功**" >> $GITHUB_STEP_SUMMARY
+            echo "**GitHub Release created successfully**" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.create-github-release.result }}" == "skipped" ]]; then
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "⏭️ **GitHub Release 已跳过**（预发布版本）" >> $GITHUB_STEP_SUMMARY
+            echo "**GitHub Release skipped** (pre-release version)" >> $GITHUB_STEP_SUMMARY
           else
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "⚠️ **GitHub Release 创建失败**，请手动创建" >> $GITHUB_STEP_SUMMARY
+            echo "**GitHub Release creation failed**, please create manually" >> $GITHUB_STEP_SUMMARY
           fi
 
-  # 🚨 失败处理
   failure-handler:
-    name: "🚨 Handle Failure"
+    name: Handle Failure
     needs: [ pre-publish-validation, publish, create-github-release, post-publish-verification ]
     if: always() && (needs.publish.result == 'failure' || needs.create-github-release.result == 'failure')
     runs-on: ubuntu-latest
@@ -518,50 +504,49 @@ jobs:
     steps:
       - name: Generate failure report
         run: |
-          echo "## ❌ 发布失败报告" >> $GITHUB_STEP_SUMMARY
+          echo "## Publication Failure Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**版本:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**触发事件:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**失败时间:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger event:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Failure time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          echo "### 🔍 失败状态分析" >> $GITHUB_STEP_SUMMARY
+          echo "### Failure Status Analysis" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [[ "${{ needs.publish.result }}" == "failure" ]]; then
-            echo "- ❌ **Maven Central 发布失败**" >> $GITHUB_STEP_SUMMARY
-            echo "  - 检查 GPG 签名配置" >> $GITHUB_STEP_SUMMARY
-            echo "  - 验证 Maven Central 凭据" >> $GITHUB_STEP_SUMMARY
-            echo "  - 确认网络连接正常" >> $GITHUB_STEP_SUMMARY
+            echo "- Maven Central publication failed" >> $GITHUB_STEP_SUMMARY
+            echo "  - Check GPG signing configuration" >> $GITHUB_STEP_SUMMARY
+            echo "  - Verify Maven Central credentials" >> $GITHUB_STEP_SUMMARY
+            echo "  - Confirm network connectivity" >> $GITHUB_STEP_SUMMARY
           else
-            echo "- ✅ Maven Central 发布成功" >> $GITHUB_STEP_SUMMARY
+            echo "- Maven Central publication succeeded" >> $GITHUB_STEP_SUMMARY
           fi
 
           if [[ "${{ needs.create-github-release.result }}" == "failure" ]]; then
-            echo "- ❌ **GitHub Release 创建失败**" >> $GITHUB_STEP_SUMMARY
-            echo "  - 检查 GITHUB_TOKEN 权限" >> $GITHUB_STEP_SUMMARY
-            echo "  - 验证标签是否已存在" >> $GITHUB_STEP_SUMMARY
-            echo "  - 确认仓库写入权限" >> $GITHUB_STEP_SUMMARY
+            echo "- GitHub Release creation failed" >> $GITHUB_STEP_SUMMARY
+            echo "  - Check GITHUB_TOKEN permissions" >> $GITHUB_STEP_SUMMARY
+            echo "  - Verify tag does not already exist" >> $GITHUB_STEP_SUMMARY
+            echo "  - Confirm repository write permissions" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.create-github-release.result }}" == "success" ]]; then
-            echo "- ✅ GitHub Release 创建成功" >> $GITHUB_STEP_SUMMARY
+            echo "- GitHub Release creation succeeded" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🛠️ 建议的修复步骤" >> $GITHUB_STEP_SUMMARY
+          echo "### Suggested Fix Steps" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. 检查上述失败的组件配置" >> $GITHUB_STEP_SUMMARY
-          echo "2. 验证所有必要的 GitHub Secrets 是否正确配置" >> $GITHUB_STEP_SUMMARY
-          echo "3. 如果是网络问题，可以重新运行工作流" >> $GITHUB_STEP_SUMMARY
-          echo "4. 如果问题持续存在，请创建 Issue 报告问题" >> $GITHUB_STEP_SUMMARY
+          echo "1. Check the configuration of failed components above" >> $GITHUB_STEP_SUMMARY
+          echo "2. Verify all necessary GitHub Secrets are correctly configured" >> $GITHUB_STEP_SUMMARY
+          echo "3. If network issue, you can re-run the workflow" >> $GITHUB_STEP_SUMMARY
+          echo "4. If problems persist, please create an Issue to report the problem" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📞 获取帮助" >> $GITHUB_STEP_SUMMARY
+          echo "### Get Help" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- [创建 Issue](https://github.com/TrueNine/compose-server/issues/new)" >> $GITHUB_STEP_SUMMARY
-          echo "- [查看文档](https://github.com/TrueNine/compose-server/tree/main/docs)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Create Issue](https://github.com/TrueNine/compose-server/issues/new)" >> $GITHUB_STEP_SUMMARY
+          echo "- [View Documentation](https://github.com/TrueNine/compose-server/tree/main/docs)" >> $GITHUB_STEP_SUMMARY
 
-  # 📊 工作流摘要
   workflow-summary:
-    name: "📊 Workflow Summary"
+    name: Workflow Summary
     needs: [ pre-publish-validation, publish, create-github-release, post-publish-verification, failure-handler ]
     if: always()
     runs-on: ubuntu-latest
@@ -570,45 +555,42 @@ jobs:
     steps:
       - name: Generate workflow summary
         run: |
-          echo "# 🚀 Maven Central 发布工作流摘要" >> $GITHUB_STEP_SUMMARY
+          echo "# Maven Central Publication Workflow Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**工作流运行时间:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "**触发事件:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**分支/标签:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**提交 SHA:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow execution time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger event:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch/Tag:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit SHA:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # 任务状态摘要
-          echo "## 📋 任务执行状态" >> $GITHUB_STEP_SUMMARY
+          echo "## Task Execution Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| 任务 | 状态 | 结果 |" >> $GITHUB_STEP_SUMMARY
-          echo "|------|------|------|" >> $GITHUB_STEP_SUMMARY
-          echo "| 🧪 发布前验证 | ${{ needs.pre-publish-validation.result }} | ${{ needs.pre-publish-validation.result == 'success' && '✅' || needs.pre-publish-validation.result == 'failure' && '❌' || needs.pre-publish-validation.result == 'skipped' && '⏭️' || '🔄' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📦 Maven Central 发布 | ${{ needs.publish.result }} | ${{ needs.publish.result == 'success' && '✅' || needs.publish.result == 'failure' && '❌' || needs.publish.result == 'skipped' && '⏭️' || '🔄' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🏷️ GitHub Release | ${{ needs.create-github-release.result }} | ${{ needs.create-github-release.result == 'success' && '✅' || needs.create-github-release.result == 'failure' && '❌' || needs.create-github-release.result == 'skipped' && '⏭️' || '🔄' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📋 发布后验证 | ${{ needs.post-publish-verification.result }} | ${{ needs.post-publish-verification.result == 'success' && '✅' || needs.post-publish-verification.result == 'failure' && '❌' || needs.post-publish-verification.result == 'skipped' && '⏭️' || '🔄' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Task | Status | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Pre-publish Validation | ${{ needs.pre-publish-validation.result }} | ${{ needs.pre-publish-validation.result == 'success' && 'Pass' || needs.pre-publish-validation.result == 'failure' && 'Failed' || needs.pre-publish-validation.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Maven Central Publication | ${{ needs.publish.result }} | ${{ needs.publish.result == 'success' && 'Pass' || needs.publish.result == 'failure' && 'Failed' || needs.publish.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| GitHub Release | ${{ needs.create-github-release.result }} | ${{ needs.create-github-release.result == 'success' && 'Pass' || needs.create-github-release.result == 'failure' && 'Failed' || needs.create-github-release.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Post-publish Verification | ${{ needs.post-publish-verification.result }} | ${{ needs.post-publish-verification.result == 'success' && 'Pass' || needs.post-publish-verification.result == 'failure' && 'Failed' || needs.post-publish-verification.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
 
-          # 版本信息
           if [[ "${{ needs.pre-publish-validation.outputs.version }}" != "" ]]; then
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "## 📦 版本信息" >> $GITHUB_STEP_SUMMARY
+            echo "## Version Information" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**版本号:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-            echo "**版本类型:** ${{ needs.pre-publish-validation.outputs.is-snapshot == 'true' && '预发布版本' || '正式版本' }}" >> $GITHUB_STEP_SUMMARY
-            echo "**发布状态:** ${{ needs.pre-publish-validation.outputs.should-publish == 'true' && '已发布' || '已跳过' }}" >> $GITHUB_STEP_SUMMARY
+            echo "**Version number:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+            echo "**Version type:** ${{ needs.pre-publish-validation.outputs.is-snapshot == 'true' && 'Pre-release version' || 'Stable version' }}" >> $GITHUB_STEP_SUMMARY
+            echo "**Publication status:** ${{ needs.pre-publish-validation.outputs.should-publish == 'true' && 'Published' || 'Skipped' }}" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # 总体状态
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 🎯 总体状态" >> $GITHUB_STEP_SUMMARY
+          echo "## Overall Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [[ "${{ needs.publish.result }}" == "success" ]]; then
-            echo "🎉 **发布成功！** 新版本已成功发布到 Maven Central" >> $GITHUB_STEP_SUMMARY
+            echo "Publication successful! New version has been successfully published to Maven Central" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.publish.result }}" == "skipped" ]]; then
-            echo "⏭️ **发布已跳过** - Maven Central 上已存在该版本" >> $GITHUB_STEP_SUMMARY
+            echo "Publication skipped - this version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.publish.result }}" == "failure" ]]; then
-            echo "❌ **发布失败** - 请查看错误日志并重试" >> $GITHUB_STEP_SUMMARY
+            echo "Publication failed - please check error logs and retry" >> $GITHUB_STEP_SUMMARY
           else
-            echo "🔄 **工作流进行中** - 请等待完成" >> $GITHUB_STEP_SUMMARY
+            echo "Workflow in progress - please wait for completion" >> $GITHUB_STEP_SUMMARY
           fi

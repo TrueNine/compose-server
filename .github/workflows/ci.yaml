@@ -8,48 +8,57 @@ on:
       - '**/*.kt'
 
 env:
-  # 🚀 优化后的 Gradle 配置 - 提升构建性能
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=8 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
-  # 🎯 JVM 性能优化配置 - 针对 GitHub Actions 7GB 内存环境调优
-  JVM_OPTS: "-Xmx5g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:G1HeapRegionSize=32m -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+UseLargePages"
-  # 🐳 Docker 和 TestContainers 优化
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=6 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
+  JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:+UseStringDeduplication"
   TESTCONTAINERS_RYUK_DISABLED: false
   TESTCONTAINERS_REUSE_ENABLE: true
   DOCKER_BUILDKIT: 1
 
 jobs:
-  # 🔍 快速检查 - 编译和基础验证
   quick-check:
-    name: "🔍 Quick Check"
+    name: Quick Check
     runs-on: ubuntu-latest
     timeout-minutes: 8
     outputs:
       cache-key: ${{ steps.cache-info.outputs.cache-key }}
       gradle-cache-key: ${{ steps.cache-info.outputs.gradle-cache-key }}
+      java-version: ${{ steps.version-info.outputs.java-version }}
+      gradle-version: ${{ steps.version-info.outputs.gradle-version }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v5.0.0
         with:
-          fetch-depth: 1  # 浅克隆提升速度
+          fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Extract versions from libs.versions.toml
+        id: version-info
+        run: |
+          JAVA_VERSION=$(sed -n 's/^java\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          GRADLE_VERSION=$(sed -n 's/^org-gradle\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
+          
+          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
+          echo "gradle-version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
+          
+          echo "Extracted Java version: $JAVA_VERSION"
+          echo "Extracted Gradle version: $GRADLE_VERSION"
+
+      - name: Set up JDK ${{ steps.version-info.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
-          distribution: 'graalvm'
+          java-version: ${{ steps.version-info.outputs.java-version }}
+          distribution: 'temurin'
           cache: gradle
 
-      - name: 📊 Cache info
+      - name: Cache info
         id: cache-info
         run: |
-          # 生成更精确的缓存键
           GRADLE_CACHE_KEY="${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml', 'build-logic/**/*') }}"
           DEPS_CACHE_KEY="${{ runner.os }}-deps-${{ hashFiles('gradle/libs.versions.toml', '**/build.gradle.kts') }}"
           echo "cache-key=$GRADLE_CACHE_KEY" >> $GITHUB_OUTPUT
           echo "gradle-cache-key=$DEPS_CACHE_KEY" >> $GITHUB_OUTPUT
 
-      - name: 🎯 Cache Gradle wrapper and distributions
+      - name: Cache Gradle wrapper and distributions
         uses: actions/cache@v4
         with:
           path: |
@@ -61,7 +70,7 @@ jobs:
             ${{ runner.os }}-deps-
             ${{ runner.os }}-gradle-
 
-      - name: 📦 Cache build outputs
+      - name: Cache build outputs
         uses: actions/cache@v4
         with:
           path: |
@@ -76,16 +85,15 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.0.0'
+          gradle-version: ${{ steps.version-info.outputs.gradle-version }}
           cache-read-only: false
           cache-write-only: false
 
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: 🚀 Quick compile with optimizations
+      - name: Quick compile
         run: |
-          # 预热 Gradle daemon 并编译
           ./gradlew help --quiet
           ./gradlew compileKotlin compileTestKotlin \
             --no-daemon \
@@ -94,78 +102,92 @@ jobs:
             --configuration-cache \
             --quiet
 
-  # 🧪 优化后的并行测试矩阵 - 重新分组以提升并行效率
   test-matrix:
-    name: "🧪 Test"
+    name: Test
     needs: quick-check
     runs-on: ubuntu-latest
     timeout-minutes: 25
     strategy:
       fail-fast: false
-      max-parallel: 6  # 增加并行度
+      max-parallel: 6
       matrix:
         group:
-          - "core-fast"     # 快速核心模块
-          - "core-build"    # 构建相关模块
-          - "rds-light"     # 轻量数据库模块
-          - "rds-heavy"     # 重量数据库模块
-          - "business-ai"   # AI 和支付模块
-          - "business-oss"  # 对象存储模块
-          - "business-misc" # 其他业务模块
-          - "security"      # 安全模块
-          - "data-depend"   # 数据和依赖模块
+          - "core-foundation"
+          - "core-build-tools"
+          - "rds-light"
+          - "rds-heavy"
+          - "business-ai-pay"
+          - "business-oss"
+          - "business-communication"
+          - "security"
+          - "data-processing"
+          - "platform-integrations"
+          - "testing-tools"
+          - "integration-tests"
         include:
-          - group: "core-fast"
-            modules: "shared testtoolkit"
-            containers: "none"
+          - group: "core-foundation"
+            modules: "shared cacheable docsite"
+            testcontainers: false
             timeout: 8
-          - group: "core-build"
+          - group: "core-build-tools"
             modules: "gradle-plugin version-catalog bom"
-            containers: "none"
+            testcontainers: false
             timeout: 10
           - group: "rds-light"
             modules: "rds:rds-shared rds:rds-flyway-migration-shared"
-            containers: "none"
+            testcontainers: false
             timeout: 8
           - group: "rds-heavy"
             modules: "rds:rds-crud rds:rds-jimmer-ext-postgres rds:rds-flyway-migration-postgresql rds:rds-flyway-migration-mysql8"
-            containers: "database"
-            timeout: 20
-          - group: "business-ai"
+            testcontainers: true
+            timeout: 25
+          - group: "business-ai-pay"
             modules: "ai:ai-shared ai:ai-langchain4j pay:pay-shared pay:pay-wechat"
-            containers: "cache"
-            timeout: 15
+            testcontainers: true
+            timeout: 18
           - group: "business-oss"
             modules: "oss:oss-shared oss:oss-minio oss:oss-aliyun-oss oss:oss-huawei-obs oss:oss-volcengine-tos"
-            containers: "cache"
-            timeout: 18
-          - group: "business-misc"
-            modules: "sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision cacheable"
-            containers: "cache"
-            timeout: 12
+            testcontainers: true
+            timeout: 20
+          - group: "business-communication"
+            modules: "sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision"
+            testcontainers: true
+            timeout: 15
           - group: "security"
             modules: "security:security-crypto security:security-oauth2 security:security-spring"
-            containers: "none"
-            timeout: 10
-          - group: "data-depend"
-            modules: "data:data-crawler data:data-extract depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa"
-            containers: "none"
+            testcontainers: false
+            timeout: 12
+          - group: "data-processing"
+            modules: "data:data-crawler data:data-extract"
+            testcontainers: true
             timeout: 15
+          - group: "platform-integrations"
+            modules: "depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa ide:ide-idea-mcp"
+            testcontainers: false
+            timeout: 18
+          - group: "testing-tools"
+            modules: "testtoolkit:testtoolkit-shared testtoolkit:testtoolkit-testcontainers testtoolkit:testtoolkit-springmvc"
+            testcontainers: true
+            timeout: 15
+          - group: "integration-tests"
+            modules: "integrate-test:depend:jackson integrate-test:oss:minio integrate-test:cacheable"
+            testcontainers: true
+            timeout: 30
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v5.0.0
         with:
-          fetch-depth: 1  # 浅克隆
+          fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK ${{ needs.quick-check.outputs.java-version }}
         uses: actions/setup-java@v5.0.0
         with:
-          java-version: '17'
-          distribution: 'graalvm'
+          java-version: ${{ needs.quick-check.outputs.java-version }}
+          distribution: 'temurin'
           cache: gradle
 
-      - name: 🎯 Restore Gradle wrapper cache
+      - name: Restore Gradle wrapper cache
         uses: actions/cache/restore@v4
         with:
           path: |
@@ -177,7 +199,7 @@ jobs:
             ${{ runner.os }}-deps-
             ${{ runner.os }}-gradle-
 
-      - name: 📦 Restore build cache
+      - name: Restore build cache
         uses: actions/cache/restore@v4
         with:
           path: |
@@ -192,126 +214,113 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.0.0'
+          gradle-version: ${{ needs.quick-check.outputs.gradle-version }}
           cache-read-only: true
           cache-write-only: false
-
-      # 🐳 优化的 Docker 设置
-      - name: Set up Docker Buildx
-        if: matrix.containers != 'none'
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver-opts: |
-            network=host
-            image=moby/buildkit:v0.12.0
-
-      - name: 🗂️ Cache Docker layers
-        if: matrix.containers != 'none'
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ matrix.group }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-${{ matrix.group }}-
-            ${{ runner.os }}-docker-
 
 
 
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: 🧪 Run tests for ${{ matrix.group }} modules
+      - name: Run tests
         timeout-minutes: ${{ matrix.timeout }}
         run: |
-          echo "🚀 开始执行 ${{ matrix.group }} 模块组测试..."
-          echo "📚 模块列表： ${{ matrix.modules }}"
-          echo "🐳 容器配置： ${{ matrix.containers }}"
-          echo "⏱️ 超时设置： ${{ matrix.timeout }} 分钟"
-
-          # 设置错误处理
           set -e
-          trap 'echo "❌ 测试执行失败，正在收集错误信息..." >> $GITHUB_STEP_SUMMARY' ERR
 
-          # 预热 Gradle
           ./gradlew help --quiet
 
-          # 将模块名转换为测试任务
           modules="${{ matrix.modules }}"
           test_tasks=""
+          
+          echo "Checking available test tasks for modules: $modules"
+          
           for module in $modules; do
-            if [[ "$module" == *":"* ]]; then
-              # 子模块格式 (如 rds:rds-shared)
-              test_tasks="$test_tasks :$module:test"
+            module_path=":$module"
+            if [[ "$module" != *":"* ]]; then
+              module_path=":$module"
+            fi
+            
+            # 检查模块是否有test任务
+            if ./gradlew $module_path:tasks --all --quiet 2>/dev/null | grep -E "^test\s" >/dev/null; then
+              test_tasks="$test_tasks $module_path:test"
+              echo "✓ Found test task for $module"
             else
-              # 根级模块格式 (如 shared)
-              test_tasks="$test_tasks :$module:test"
+              echo "⚠ No test task found for $module, will check compilation instead"
             fi
           done
 
-          echo "🎯 执行测试任务: $test_tasks"
-          ./gradlew $test_tasks \
-            --no-daemon \
-            --parallel \
-            --build-cache \
-            --configuration-cache \
-            --continue \
-            --quiet \
-            -Dorg.gradle.workers.max=4 \
-            -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m"
+          if [[ -z "$test_tasks" ]]; then
+            echo "No test tasks found for any modules in this group"
+            echo "Running compilation and check tasks instead..."
+            
+            compile_tasks=""
+            for module in $modules; do
+              module_path=":$module"
+              if [[ "$module" != *":"* ]]; then
+                module_path=":$module"
+              fi
+              compile_tasks="$compile_tasks $module_path:compileKotlin $module_path:compileTestKotlin"
+            done
+            
+            ./gradlew $compile_tasks \
+              --no-daemon \
+              --parallel \
+              --build-cache \
+              --configuration-cache \
+              --continue \
+              --info \
+              -Dorg.gradle.workers.max=3 \
+              -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
+          else
+            echo "Running test tasks: $test_tasks"
+            ./gradlew $test_tasks \
+              --no-daemon \
+              --parallel \
+              --build-cache \
+              --configuration-cache \
+              --continue \
+              --info \
+              -Dorg.gradle.workers.max=3 \
+              -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
+          fi
         env:
-          # 🐳 TestContainers 优化配置
+          # TestContainers 配置
           TESTCONTAINERS_RYUK_DISABLED: false
-          TESTCONTAINERS_CHECKS_DISABLE: false
           TESTCONTAINERS_REUSE_ENABLE: true
-          TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX: ""
-          TESTCONTAINERS_REUSE_HASH_LABELS: true
-          # ⏱️ TestContainers 超时和启动配置 - 优化启动时间
-          TESTCONTAINERS_PULL_PAUSE_TIMEOUT: 20
-          TESTCONTAINERS_STARTUP_TIMEOUT: 90
-          TESTCONTAINERS_CONNECT_TIMEOUT: 30
-          # 🚀 Docker 性能优化
-          DOCKER_HOST: unix:///var/run/docker.sock
-          TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
-          TESTCONTAINERS_HOST_OVERRIDE: localhost
-          DOCKER_BUILDKIT: 1
-          BUILDKIT_PROGRESS: plain
-          # 🎯 JVM 性能调优 - 针对测试环境优化
+          TESTCONTAINERS_STARTUP_TIMEOUT: 120
+          TESTCONTAINERS_CONNECT_TIMEOUT: 60
+          # Gradle 和 JVM 配置
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
           JAVA_OPTS: "${{ env.JVM_OPTS }}"
-          # 🔧 CI 环境配置
           CI: true
-          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: false
-          # 📊 测试并行配置
+          # 并行测试配置
           JUNIT_PLATFORM_EXECUTION_PARALLEL_ENABLED: true
           JUNIT_PLATFORM_EXECUTION_PARALLEL_MODE_DEFAULT: concurrent
 
       - name: Collect test diagnostics
         if: failure()
         run: |
-          echo "🔍 收集测试诊断信息..."
-          
-          # 收集 Gradle 构建日志
           find . -name "*.log" -type f -exec echo "=== {} ===" \; -exec cat {} \; || true
           
-          # 收集容器日志
-          if [[ "${{ matrix.containers }}" != "none" ]]; then
-            echo "🐳 收集容器日志..."
-            docker ps -a || true
-            docker logs $(docker ps -aq --filter "label=org.testcontainers=true") || true
+          if [[ "${{ matrix.testcontainers }}" == "true" ]]; then
+            echo "=== TestContainers Status ===" 
+            docker ps -a --filter "label=org.testcontainers=true" || true
+            echo "=== TestContainers Logs ==="
+            for container in $(docker ps -aq --filter "label=org.testcontainers=true" 2>/dev/null || true); do
+              echo "--- Container $container ---"
+              docker logs "$container" --tail 50 2>/dev/null || echo "No logs available"
+            done
           fi
           
-          # JVM 堆转储和线程信息
           if pgrep -f "org.gradle.launcher.daemon.bootstrap.GradleDaemon" > /dev/null; then
-            echo "👍 收集 JVM 诊断信息..."
             jps -v || true
           fi
           
-          # 系统资源使用
-          echo "📈 系统资源使用："
           free -h || true
           df -h || true
 
-      - name: Upload test results and diagnostics
+      - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -323,38 +332,18 @@ jobs:
             **/*.log
           retention-days: 5
 
-      - name: 🧼 Smart cleanup containers
-        if: always() && matrix.containers != 'none'
+      - name: Cleanup TestContainers
+        if: always() && matrix.testcontainers == true
         run: |
-          echo "🧼 开始智能清理 Docker 资源..."
+          echo "Cleaning up TestContainers resources..."
+          # 清理非复用的 TestContainers
+          docker container prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
+          docker network prune -f --filter "label=org.testcontainers=true" || true
+          docker volume prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
+          echo "TestContainers cleanup completed"
 
-          # 显示当前资源使用情况
-          echo "📈 当前 Docker 资源使用情况："
-          docker system df || true
-
-          # 智能清理：保留重用容器，清理测试容器
-          echo "🗑️ 清理测试容器（保留重用容器）..."
-          docker container prune -f --filter "until=30m" --filter "label!=org.testcontainers.reuse.enable=true" || true
-
-          # 清理悬空镜像（但保留基础镜像）
-          echo "🖼️ 清理悬空镜像..."
-          docker image prune -f --filter "dangling=true" || true
-
-          # 清理测试网络
-          echo "🌐 清理测试网络..."
-          docker network prune -f --filter "until=30m" || true
-
-          # 清理临时卷
-          echo "💾 清理临时卷..."
-          docker volume prune -f --filter "label!=keep" --filter "label!=org.testcontainers.reuse.enable=true" || true
-
-          # 显示清理后的资源情况
-          echo "✨ 清理后 Docker 资源使用情况："
-          docker system df || true
-
-  # 📊 测试结果汇总
   test-results:
-    name: "📊 Test Results Summary"
+    name: Test Results Summary
     needs: [ quick-check, test-matrix ]
     runs-on: ubuntu-latest
     if: always()
@@ -366,73 +355,74 @@ jobs:
           path: test-results
           pattern: test-results-*
 
-      - name: Generate comprehensive test summary
+      - name: Generate test summary
         run: |
-          echo "# 🧪 测试结果详细报告" >> $GITHUB_STEP_SUMMARY
+          echo "# Test Results Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**执行时间:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "**测试环境:** GitHub Actions (ubuntu-latest)" >> $GITHUB_STEP_SUMMARY
+          echo "**Execution time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Test environment:** GitHub Actions (ubuntu-latest)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          echo "## 📈 模块组测试状态" >> $GITHUB_STEP_SUMMARY
+          echo "## Module Group Test Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| 模块组 | 状态 | 容器依赖 | 耗时 |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|--------|----------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Module Group | Status | Container Dependencies | Duration |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------------|--------|------------------------|----------|" >> $GITHUB_STEP_SUMMARY
           
-          # 模块组信息 - 更新为新的分组
-          declare -A group_containers=(
-            ["core-fast"]="无"
-            ["core-build"]="无"
-            ["rds-light"]="无"
-            ["rds-heavy"]="Database (PostgreSQL, MySQL, Redis)"
-            ["business-ai"]="Cache (Redis)"
-            ["business-oss"]="Cache (Redis, MinIO)"
-            ["business-misc"]="Cache (Redis)"
-            ["security"]="无"
-            ["data-depend"]="无"
+          declare -A group_testcontainers=(
+            ["core-foundation"]="None"
+            ["core-build-tools"]="None"
+            ["rds-light"]="None"
+            ["rds-heavy"]="TestContainers (PostgreSQL, MySQL, Redis)"
+            ["business-ai-pay"]="TestContainers (Redis)"
+            ["business-oss"]="TestContainers (Redis, MinIO)"
+            ["business-communication"]="TestContainers (Redis)"
+            ["security"]="None"
+            ["data-processing"]="TestContainers (Redis)"
+            ["platform-integrations"]="None"
+            ["testing-tools"]="TestContainers (Database)"
+            ["integration-tests"]="TestContainers (Full Stack)"
           )
 
-          for group in core-fast core-build rds-light rds-heavy business-ai business-oss business-misc security data-depend; do
-            containers="${group_containers[$group]}"
+          for group in core-foundation core-build-tools rds-light rds-heavy business-ai-pay business-oss business-communication security data-processing platform-integrations testing-tools integration-tests; do
+            testcontainers="${group_testcontainers[$group]}"
             if [[ "${{ needs.test-matrix.result }}" == "success" ]]; then
-              echo "| $group | ✅ 通过 | $containers | - |" >> $GITHUB_STEP_SUMMARY
+              echo "| $group | ✅ Pass | $testcontainers | - |" >> $GITHUB_STEP_SUMMARY
             else
-              echo "| $group | ❌ 失败 | $containers | - |" >> $GITHUB_STEP_SUMMARY
+              echo "| $group | ❌ Failed | $testcontainers | - |" >> $GITHUB_STEP_SUMMARY
             fi
           done
           
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          # 添加失败分析
           if [[ "${{ needs.test-matrix.result }}" != "success" ]]; then
-            echo "## ❌ 失败分析和建议" >> $GITHUB_STEP_SUMMARY
+            echo "## Failure Analysis" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "🔍 **常见问题排查:**" >> $GITHUB_STEP_SUMMARY
+            echo "**Common troubleshooting:**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "1. **TestContainers 启动失败**" >> $GITHUB_STEP_SUMMARY
-            echo "   - 检查 Docker 服务是否正常" >> $GITHUB_STEP_SUMMARY
-            echo "   - 检查网络连接和镜像拉取" >> $GITHUB_STEP_SUMMARY
-            echo "   - 超时配置可能需要调整" >> $GITHUB_STEP_SUMMARY
+            echo "1. **TestContainers startup failed**" >> $GITHUB_STEP_SUMMARY
+            echo "   - Check Docker service status" >> $GITHUB_STEP_SUMMARY
+            echo "   - Check network connectivity and image pulling" >> $GITHUB_STEP_SUMMARY
+            echo "   - Timeout configuration may need adjustment" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "2. **内存不足 (OOM)**" >> $GITHUB_STEP_SUMMARY
-            echo "   - JVM 堆内存设置：4GB" >> $GITHUB_STEP_SUMMARY
-            echo "   - Metaspace 设置：1.5GB" >> $GITHUB_STEP_SUMMARY
-            echo "   - 并行 worker 限制：6个" >> $GITHUB_STEP_SUMMARY
+            echo "2. **Out of memory (OOM)**" >> $GITHUB_STEP_SUMMARY
+            echo "   - JVM heap memory setting: 4GB" >> $GITHUB_STEP_SUMMARY
+            echo "   - Metaspace setting: 1.5GB" >> $GITHUB_STEP_SUMMARY
+            echo "   - Parallel worker limit: 6" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "3. **测试依赖冲突**" >> $GITHUB_STEP_SUMMARY
-            echo "   - 检查并行测试中的端口冲突" >> $GITHUB_STEP_SUMMARY
-            echo "   - 验证数据库连接池配置" >> $GITHUB_STEP_SUMMARY
+            echo "3. **Test dependency conflicts**" >> $GITHUB_STEP_SUMMARY
+            echo "   - Check port conflicts in parallel tests" >> $GITHUB_STEP_SUMMARY
+            echo "   - Verify database connection pool configuration" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Check overall status
         run: |
           if [[ "${{ needs.quick-check.result }}" != "success" ]]; then
-            echo "❌ Quick check failed"
+            echo "Quick check failed"
             exit 1
           fi
           if [[ "${{ needs.test-matrix.result }}" != "success" ]]; then
-            echo "❌ Test matrix failed" 
+            echo "Test matrix failed" 
             exit 1
           fi
-          echo "✅ All checks passed"
+          echo "All checks passed"

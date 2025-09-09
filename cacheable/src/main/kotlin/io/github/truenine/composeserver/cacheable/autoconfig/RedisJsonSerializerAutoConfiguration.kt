@@ -7,6 +7,7 @@ import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoCon
 import io.github.truenine.composeserver.logger
 import java.time.Duration
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.cache.RedisCacheConfiguration
@@ -24,6 +25,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
  * @since 2023-02-20
  */
 @Configuration
+@ConditionalOnBean(RedisConnectionFactory::class)
 class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) objectMapper: ObjectMapper) {
   companion object {
     @JvmStatic private val log = logger<RedisJsonSerializerAutoConfiguration>()
@@ -41,6 +43,7 @@ class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.N
       .disableCachingNullValues()
 
   @Bean(name = [ICacheNames.IRedis.HANDLE])
+  @ConditionalOnBean(name = [VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME])
   fun customRedisJsonSerializable(@Qualifier(VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME) factory: RedisConnectionFactory): RedisTemplate<String, *> {
     log.trace("register redisTemplate factory: {}", factory)
     val rt = RedisTemplate<String, Any?>()
@@ -55,6 +58,7 @@ class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.N
   }
 
   @Bean(name = [ICacheNames.IRedis.CACHE_MANAGER])
+  @ConditionalOnBean(name = [VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME])
   fun cacheManager2h(@Qualifier(VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME) factory: RedisConnectionFactory): RedisCacheManager {
     log.debug("register RedisCacheManager , factory: {}", factory)
     return asCacheConfig(factory)
