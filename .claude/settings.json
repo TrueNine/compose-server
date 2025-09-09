@@ -20,36 +20,5 @@
       "Bash(npm:*)",
       "Bash(git:*)"
     ]
-  },
-  "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "playwright"
-  ],
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell -c (New-Object Media.SoundPlayer \"C:\\Windows\\Media\\notify.wav\").PlaySync()\n"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell -c (New-Object Media.SoundPlayer \"C:\\Windows\\Media\\notify.wav\").PlaySync()\n"
-          }
-        ]
-      }
-    ]
-  },
-  "feedbackSurveyState": {
-    "lastShownTime": 1754227033503
   }
 }

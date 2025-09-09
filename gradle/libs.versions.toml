@@ -1,12 +1,12 @@
 [versions]
 ch-qos-logback = "1.5.18"
 cn-dev33-sa-token = "1.44.0"
-cn-hutool = "5.8.39"
+cn-hutool = "5.8.40"
 com-alibaba-cloud = "2023.0.3.3"
-com-baomidou-mybatis-plus = "3.5.12"
+com-baomidou-mybatis-plus = "3.5.14"
 com-diffplug-spotless = "7.2.1"
-com-fasterxml-jackson = "2.19.2"
-com-flywaydb-flyway = "11.11.2"
+com-fasterxml-jackson = "2.20.0"
+com-flywaydb-flyway = "11.12.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
 com-google-devtools-ksp = "2.2.10-2.0.2"
 com-mapstruct = "1.6.3"
@@ -14,15 +14,15 @@ com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.16.0"
 com-vanniktech-maven-publish = "0.34.0"
-com-xuxueli-xxl-job = "3.1.1"
-com-yomahub-liteflow = "2.13.2.1"
+com-xuxueli-xxl-job = "3.2.0"
+com-yomahub-liteflow = "2.15.0.1"
 dev-langchain4j-community = "1.1.0-beta7"
 group = "io.github.truenine"
 intellij-platform = "2025.2"
 intellij-platform-ide = "243"
 intellij-platform-plugin-java = "21"
-io-netty = "4.2.4.Final"
-java = "24"
+io-netty = "4.2.6.Final"
+java = "17"
 net-sf-sevenzipjbinding = "16.02-2.01"
 nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.0"
 org-apache-commons-exec = "1.5.0"
@@ -30,11 +30,11 @@ org-apache-groovy = "4.0.28"
 org-apache-logging-log4j = "2.25.1"
 org-assertj = "4.0.0-M1"
 org-awaitility = "4.3.0"
-org-babyfish-jimmer = "0.9.106"
-org-gradle = "9.1.0-rc-1"
+org-babyfish-jimmer = "0.9.107"
+org-gradle = "9.1.0-rc-3"
 org-hibernate-orm = "6.6.15.Final"
 org-jetbrains-dokka = "2.0.0"
-org-jetbrains-intellij-platform = "2.7.2"
+org-jetbrains-intellij-platform = "2.9.0"
 org-jetbrains-kotlin = "2.2.10"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.7.1-0.6.x-compat"
@@ -67,7 +67,7 @@ cn-hutool-hutool-captcha = { module = "cn.hutool:hutool-captcha", version.ref = 
 cn-hutool-hutool-core = { module = "cn.hutool:hutool-core", version.ref = "cn-hutool" }
 cn-hutool-hutool-crypto = { module = "cn.hutool:hutool-crypto", version.ref = "cn-hutool" }
 cn-hutool-hutool-db = { module = "cn.hutool:hutool-db", version.ref = "cn-hutool" }
-cn-idev-excel-fastexcel = "cn.idev.excel:fastexcel:1.2.0"
+cn-idev-excel-fastexcel = "cn.idev.excel:fastexcel:1.3.0"
 com-alibaba-cloud-spring-cloud-alibaba-dependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "com-alibaba-cloud" }
 com-alibaba-easyexcel = "com.alibaba:easyexcel:4.0.3"
 com-aliyun-oss-aliyun-sdk-oss = "com.aliyun.oss:aliyun-sdk-oss:3.18.3"
@@ -77,7 +77,7 @@ com-baomidou-mybatis-plus-boot-starter-test = { module = "com.baomidou:mybatis-p
 com-baomidou-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-spring-boot3-starter = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-diffplug-spotless-com-diffplug-spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "com-diffplug-spotless" }
-com-fasterxml-jackson-core-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "com-fasterxml-jackson" }
+com-fasterxml-jackson-core-jackson-annotations = "com.fasterxml.jackson.core:jackson-annotations:3.0-rc5"
 com-fasterxml-jackson-core-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-core-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "com-fasterxml-jackson" }
 com-fasterxml-jackson-dataformat-jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "com-fasterxml-jackson" }
@@ -105,7 +105,7 @@ com-h2database-h2 = "com.h2database:h2:2.3.232"
 com-hikvision-ga-artemis-http-client = "com.hikvision.ga:artemis-http-client:1.1.3"
 com-hikvision-ga-opensource = "com.hikvision.ga:opensource:0.0.3"
 com-huaweicloud-esdk-obs-java = "com.huaweicloud:esdk-obs-java:3.25.7"
-com-microsoft-playwright-playwright = "com.microsoft.playwright:playwright:1.54.0"
+com-microsoft-playwright-playwright = "com.microsoft.playwright:playwright:1.55.0"
 com-mysql-mysql-connector-j = "com.mysql:mysql-connector-j:9.4.0"
 com-querydsl-querydsl-apt = { module = "com.querydsl:querydsl-apt", version.ref = "com-querydsl" }
 com-querydsl-querydsl-core = { module = "com.querydsl:querydsl-core", version.ref = "com-querydsl" }
@@ -122,19 +122,19 @@ com-vanniktech-maven-publish-com-vanniktech-maven-publish-gradle-plugin = { modu
 com-volcengine-ve-tos-java-sdk = "com.volcengine:ve-tos-java-sdk:2.9.4"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
-dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.3.0"
+dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.4.0"
 dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.2.0"
 dev-langchain4j-langchain4j-community-bom = { module = "dev.langchain4j:langchain4j-community-bom", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-mcp = { module = "dev.langchain4j:langchain4j-mcp", version.ref = "dev-langchain4j-community" }
-dev-langchain4j-langchain4j-ollama = "dev.langchain4j:langchain4j-ollama:1.3.0"
+dev-langchain4j-langchain4j-ollama = "dev.langchain4j:langchain4j-ollama:1.4.0"
 dev-langchain4j-langchain4j-ollama-spring-boot-starter = { module = "dev.langchain4j:langchain4j-ollama-spring-boot-starter", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-pgvector = { module = "dev.langchain4j:langchain4j-pgvector", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-reactor = { module = "dev.langchain4j:langchain4j-reactor", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-spring-boot-starter = { module = "dev.langchain4j:langchain4j-spring-boot-starter", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-zhipu-ai = "dev.langchain4j:langchain4j-zhipu-ai:0.36.2"
-io-github-bonigarcia-webdrivermanager = "io.github.bonigarcia:webdrivermanager:6.2.0"
+io-github-bonigarcia-webdrivermanager = "io.github.bonigarcia:webdrivermanager:6.3.1"
 io-github-truenine-composeserver-ai-langchain4j = { module = "io.github.truenine:composeserver-ai-langchain4j", version.ref = "project" }
 io-github-truenine-composeserver-ai-shared = { module = "io.github.truenine:composeserver-ai-shared", version.ref = "project" }
 io-github-truenine-composeserver-cacheable = { module = "io.github.truenine:composeserver-cacheable", version.ref = "project" }
@@ -223,8 +223,8 @@ org-flywaydb-flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref 
 org-freemarker-freemarker = "org.freemarker:freemarker:2.3.34"
 org-hibernate-orm-hibernate-core = { module = "org.hibernate:hibernate-core", version.ref = "org-hibernate-orm" }
 org-hsqldb-hsqldb = "org.hsqldb:hsqldb:2.7.4"
-org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.15.0"
-org-jetbrains-annotations = "org.jetbrains:annotations:26.0.2"
+org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.16.0"
+org-jetbrains-annotations = "org.jetbrains:annotations:26.0.2-1"
 org-jetbrains-dokka-dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "org-jetbrains-dokka" }
 org-jetbrains-intellij-platform-gradle-plugin = { module = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin", version.ref = "org-jetbrains-intellij-platform" }
 org-jetbrains-kotlin-jvm-org-jetbrains-kotlin-jvm-gradle-plugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
@@ -254,7 +254,7 @@ org-jetbrains-kotlinx-kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlin
 org-jetbrains-kotlinx-kotlinx-io-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-io-core-jvm", version.ref = "org-jetbrains-kotlinx-io" }
 org-jetbrains-kotlinx-kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "org-jetbrains-kotlinx-serialization" }
 org-jetbrains-kotlinx-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "org-jetbrains-kotlinx-serialization" }
-org-jsoup-jsoup = "org.jsoup:jsoup:1.21.1"
+org-jsoup-jsoup = "org.jsoup:jsoup:1.21.2"
 org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-jupiter" }
 org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-jupiter" }
 org-junit-jupiter-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "org-junit-jupiter" }
@@ -267,11 +267,11 @@ org-mapstruct-mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "c
 org-mapstruct-mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "com-mapstruct" }
 org-owasp-antisamy-antisamy = "org.owasp.antisamy:antisamy:1.7.8"
 org-postgresql-postgresql = "org.postgresql:postgresql:42.7.7"
-org-projectlombok-lombok = "org.projectlombok:lombok:1.18.38"
+org-projectlombok-lombok = "org.projectlombok:lombok:1.18.40"
 org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4.35.0"
 org-skyscreamer-jsonassert = "org.skyscreamer:jsonassert:2.0-rc1"
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
-org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11"
+org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13"
 org-springframework-ai-spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "org-springframework-ai" }
 org-springframework-ai-spring-ai-spring-boot-docker-compose = { module = "org.springframework.ai:spring-ai-spring-boot-docker-compose", version.ref = "org-springframework-ai" }
 org-springframework-batch-spring-batch-test = { module = "org.springframework.batch:spring-batch-test", version.ref = "org-springframework-batch" }
