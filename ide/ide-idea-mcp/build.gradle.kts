@@ -7,11 +7,7 @@ plugins {
 
 description = "IntelliJ IDEA plugin for Compose Server MCP integration"
 
-repositories {
-  intellijPlatform {
-    defaultRepositories()
-  }
-}
+repositories { intellijPlatform { defaultRepositories() } }
 
 dependencies {
   intellijPlatform {
