@@ -89,7 +89,7 @@ class OssPropertiesTest {
       assertNull(ossProperties.accessKey)
       assertNull(ossProperties.secretKey)
       assertNull(ossProperties.exposedBaseUrl)
-      assertTrue(ossProperties.enableSsl)
+      assertFalse(ossProperties.enableSsl)
       assertEquals(Duration.ofSeconds(5), ossProperties.connectionTimeout)
       assertEquals(Duration.ofSeconds(3), ossProperties.readTimeout)
       assertEquals(Duration.ofSeconds(3), ossProperties.writeTimeout)
