@@ -341,6 +341,9 @@ jobs:
           rm -rf .gradle/ || true
           find . -name "build" -type d -exec rm -rf {} + || true
           
+          # Clean Maven local repository for this project's artifacts to prevent conflicts
+          rm -rf ~/.m2/repository/io/github/truenine/ || true
+          
           # First clean everything
           ./gradlew clean \
             --no-daemon \
@@ -348,12 +351,14 @@ jobs:
             --no-build-cache \
             --no-configuration-cache
           
-          # Then run dry publication
+          # Then run dry publication with additional safeguards
           ./gradlew publishToMavenLocal \
             --no-daemon \
             --no-parallel \
             --no-build-cache \
             --no-configuration-cache \
+            --rerun-tasks \
+            --max-workers=1 \
             -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
             -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
             -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
@@ -459,6 +464,11 @@ jobs:
             rm -rf .gradle/ || true
             find . -name "build" -type d -exec rm -rf {} + || true
             
+            # Clean Maven local repository for this project's artifacts to prevent conflicts
+            rm -rf ~/.m2/repository/io/github/truenine/ || true
+            
+            echo "Cleaned build services and Maven local repository" >> $GITHUB_STEP_SUMMARY
+            
             echo "Starting clean publication process..." >> $GITHUB_STEP_SUMMARY
             
             # First clean everything to ensure no stale artifacts
@@ -468,12 +478,14 @@ jobs:
               --no-build-cache \
               --no-configuration-cache
             
-            # Then publish with fresh state
+            # Then publish with fresh state and additional safeguards
             ./gradlew publishToMavenCentral \
               --no-daemon \
               --no-parallel \
               --no-build-cache \
               --no-configuration-cache \
+              --rerun-tasks \
+              --max-workers=1 \
               -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
               -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
               -PmavenCentralUsername="${{ secrets.MAVENCENTRAL_USERNAME }}" \
