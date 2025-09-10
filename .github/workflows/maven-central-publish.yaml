@@ -3,7 +3,7 @@ name: Publish to Maven Central
 on:
   push:
     branches: [ main ]
-    tags:  [ 'v*' ]
+    tags: [ 'v*' ]
   release:
     types: [ published ]
   workflow_dispatch:
@@ -36,7 +36,7 @@ jobs:
   pre-publish-validation:
     name: Pre-publish Validation
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 3
     outputs:
       version: ${{ steps.version-info.outputs.version }}
       is-snapshot: ${{ steps.version-info.outputs.is-snapshot }}
@@ -88,7 +88,6 @@ jobs:
             ~/.gradle/buildOutputCleanup
             ~/.gradle/kotlin
             ~/.konan
-            ~/.m2/repository
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -118,28 +117,28 @@ jobs:
             local group="$1"
             local artifact="$2"
             local version="$3"
-            
+          
             # Method 1: Check via Maven Central REST API
             local rest_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/"
             echo "Checking REST API: $rest_url" >> $GITHUB_STEP_SUMMARY
-            
+          
             if curl -f -s --max-time 10 --head "$rest_url" > /dev/null 2>&1; then
               echo "Found via REST API: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
               return 0
             fi
-            
+          
             # Method 2: Check via Search API
             local search_url="https://search.maven.org/solrsearch/select?q=g:\"${group}\"+AND+a:\"${artifact}\"+AND+v:\"${version}\"&rows=1&wt=json"
             echo "Checking Search API: $search_url" >> $GITHUB_STEP_SUMMARY
-            
+          
             local response=$(curl -f -s --max-time 15 "$search_url" 2>/dev/null || echo '{"response":{"numFound":0}}')
             local found=$(echo "$response" | jq -r '.response.numFound' 2>/dev/null || echo "0")
-            
+          
             if [[ "$found" -gt 0 ]]; then
               echo "Found via Search API: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
               return 0
             fi
-            
+          
             echo "Not found: $artifact-$version does not exist" >> $GITHUB_STEP_SUMMARY
             return 1
           }
@@ -191,21 +190,21 @@ jobs:
             echo "Force publish mode enabled - skipping Maven Central version check" >> $GITHUB_STEP_SUMMARY
           else
             echo "Checking if version $version exists on Maven Central..." >> $GITHUB_STEP_SUMMARY
-            
+          
             group="io.github.truenine"
             # Check core artifacts to determine if version exists
             core_artifacts=("composeserver-shared" "composeserver-cacheable" "composeserver-bom")
-            
+          
             version_found_count=0
             for artifact in "${core_artifacts[@]}"; do
               if check_artifact_exists "$group" "$artifact" "$version"; then
                 version_found_count=$((version_found_count + 1))
               fi
             done
-            
+          
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "Version check summary: Found $version_found_count out of ${#core_artifacts[@]} core artifacts" >> $GITHUB_STEP_SUMMARY
-            
+          
             # If any core artifact exists, consider version as published
             if [[ "$version_found_count" -gt 0 ]]; then
               should_publish="false"
@@ -308,7 +307,6 @@ jobs:
             ~/.gradle/jdks
             ~/.gradle/buildOutputCleanup
             ~/.konan
-            ~/.m2/repository
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -364,9 +362,9 @@ jobs:
         if: github.event.inputs.dry_run != 'true'
         uses: nick-fields/retry@v3
         with:
-          timeout_minutes: 90
-          max_attempts: 3
-          retry_wait_seconds: 600
+          timeout_minutes: 20
+          max_attempts: 2
+          retry_wait_seconds: 60
           shell: bash
           command: |
             echo "Starting publication to Maven Central (attempt: ${{ github.run_attempt }})..."
@@ -398,11 +396,6 @@ jobs:
             
             ./gradlew publishToMavenCentral \
               --no-daemon \
-              --parallel \
-              --no-configuration-cache \
-              --stacktrace \
-              --info \
-              --continue \
               -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
               -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
               -PmavenCentralUsername="${{ secrets.MAVENCENTRAL_USERNAME }}" \
