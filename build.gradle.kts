@@ -6,8 +6,4 @@ plugins {
   alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
 }
 
-idea {
-  module {
-    isDownloadSources = true
-  }
-}
+idea { module { isDownloadSources = true } }
