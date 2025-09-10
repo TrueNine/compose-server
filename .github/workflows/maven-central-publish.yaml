@@ -30,8 +30,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dorg.gradle.configuration-cache=true"
-  JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1536m -XX:+UseG1GC -XX:G1HeapRegionSize=16m"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 jobs:
   pre-publish-validation:
