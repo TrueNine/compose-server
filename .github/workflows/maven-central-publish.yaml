@@ -324,9 +324,16 @@ jobs:
         if: github.event.inputs.dry_run == 'true'
         run: |
           echo "Executing publication dry run..."
+          
+          # Clean build services to prevent duplicate entries
+          ./gradlew --stop || true
+          rm -rf ~/.gradle/daemon/ || true
+          rm -rf build/tmp/compileJava/previous-compilation-data.bin || true
+          
           ./gradlew publishToMavenLocal \
             --no-daemon \
-            --parallel \
+            --no-parallel \
+            --no-build-cache \
             -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
             -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
             -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
@@ -392,10 +399,19 @@ jobs:
             trap 'handle_error $? "Publication execution phase"' ERR
             
             echo "Verifying publication credentials..." >> $GITHUB_STEP_SUMMARY
+            echo "Cleaning build services to prevent duplicate entries..." >> $GITHUB_STEP_SUMMARY
+            
+            # Stop all running Gradle daemons and clean build services to prevent duplicate entries
+            ./gradlew --stop || true
+            rm -rf ~/.gradle/daemon/ || true
+            rm -rf build/tmp/compileJava/previous-compilation-data.bin || true
+            
             echo "Starting publication process..." >> $GITHUB_STEP_SUMMARY
             
             ./gradlew publishToMavenCentral \
               --no-daemon \
+              --no-parallel \
+              --no-build-cache \
               -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
               -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
               -PmavenCentralUsername="${{ secrets.MAVENCENTRAL_USERNAME }}" \
