@@ -122,8 +122,17 @@ jobs:
             local rest_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/"
             echo "Checking REST API: $rest_url" >> $GITHUB_STEP_SUMMARY
           
-            if curl -f -s --max-time 10 --head "$rest_url" > /dev/null 2>&1; then
+            if curl -f -s --max-time 15 --head "$rest_url" > /dev/null 2>&1; then
               echo "Found via REST API: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
+              return 0
+            fi
+            
+            # Additional check: try to access the POM file specifically
+            local pom_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/${artifact}-${version}.pom"
+            echo "Checking POM file: $pom_url" >> $GITHUB_STEP_SUMMARY
+            
+            if curl -f -s --max-time 15 --head "$pom_url" > /dev/null 2>&1; then
+              echo "Found via POM check: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
               return 0
             fi
           
@@ -375,6 +384,37 @@ jobs:
           }
           
           echo "Validation passed" >> $GITHUB_STEP_SUMMARY
+
+      - name: Final version existence check
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "Performing final version existence check before publishing..."
+          
+          version="${{ needs.pre-publish-validation.outputs.version }}"
+          group="io.github.truenine"
+          force_publish="${{ github.event.inputs.force_publish }}"
+          
+          # Double-check that version doesn't exist unless force_publish is enabled
+          if [[ "$force_publish" != "true" ]]; then
+            echo "Checking if version $version exists on Maven Central one more time..."
+            
+            # Check a few core artifacts to be absolutely sure
+            core_artifacts=("composeserver-shared" "composeserver-cacheable" "composeserver-bom")
+            for artifact in "${core_artifacts[@]}"; do
+              pom_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/${artifact}-${version}.pom"
+              echo "Final check for: $pom_url"
+              
+              if curl -f -s --max-time 15 --head "$pom_url" > /dev/null 2>&1; then
+                echo "ABORT: Version $version already exists on Maven Central!"
+                echo "Found existing artifact: $artifact-$version"
+                echo "If you want to force republish, use force_publish: true"
+                exit 1
+              fi
+            done
+            echo "Final check passed - version $version does not exist on Maven Central"
+          else
+            echo "Force publish enabled - skipping final version existence check"
+          fi
 
       - name: Publish to Maven Central
         if: github.event.inputs.dry_run != 'true'
