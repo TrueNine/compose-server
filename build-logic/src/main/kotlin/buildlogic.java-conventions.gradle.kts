@@ -26,22 +26,13 @@ configurations.all {
 java {
   sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
   targetCompatibility = JavaVersion.toVersion(libs.versions.java.get().toInt())
-  withSourcesJar()
   toolchain {
     languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
   }
 }
 
-// Configure javadoc jar after all plugins are applied
-afterEvaluate {
-  // Only create standard javadoc jar if Dokka plugin is not applied
-  // (Dokka will create its own javadoc jar via the publishing conventions)
-  if (!plugins.hasPlugin("org.jetbrains.dokka")) {
-    java {
-      withJavadocJar()
-    }
-  }
-}
+// Note: JAR creation (sources, javadoc) is handled by the vanniktech maven publish plugin
+// in publish-conventions.gradle.kts to avoid duplicate JAR creation during Maven Central publishing
 
 tasks.withType<Jar> {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
