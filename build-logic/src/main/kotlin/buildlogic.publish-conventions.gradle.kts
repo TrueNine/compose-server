@@ -24,8 +24,7 @@ mavenPublishing {
       project.plugins.hasPlugin("kotlin-dsl") -> {
       configure(
         GradlePlugin(
-          javadocJar = com.vanniktech.maven.publish.JavadocJar.None(),
-          sourcesJar = true
+          javadocJar = com.vanniktech.maven.publish.JavadocJar.None()
         )
       )
     }
@@ -35,7 +34,6 @@ mavenPublishing {
       project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
       configure(
         KotlinJvm(
-          javadocJar = com.vanniktech.maven.publish.JavadocJar.None(),
           sourcesJar = true
         )
       )
