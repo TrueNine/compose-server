@@ -1,5 +1,5 @@
 plugins {
-  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.kotlinspring-test-conventions")
   id("buildlogic.spotless-conventions")
   alias(libs.plugins.org.springframework.boot)
   alias(libs.plugins.com.google.devtools.ksp)

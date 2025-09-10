@@ -25,7 +25,8 @@ mavenPublishing {
       project.plugins.hasPlugin("kotlin-dsl") -> {
       configure(
         GradlePlugin(
-          javadocJar = JavadocJar.None()
+          javadocJar = JavadocJar.None(),
+          sourcesJar = true
         )
       )
     }
