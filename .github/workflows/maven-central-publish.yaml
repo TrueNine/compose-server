@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.unsafe.configuration-cache=true"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.caching=true"
 
 jobs:
   pre-publish-validation:
