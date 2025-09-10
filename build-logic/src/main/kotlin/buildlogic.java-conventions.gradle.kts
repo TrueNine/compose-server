@@ -31,7 +31,7 @@ java {
   }
 }
 
-// Note: JAR creation (sources, javadoc) is handled by the vanniktech maven publish plugin
+// Note: JAR creation (sources) is handled by the vanniktech maven publish plugin
 // in publish-conventions.gradle.kts to avoid duplicate JAR creation during Maven Central publishing
 
 tasks.withType<Jar> {
@@ -62,8 +62,6 @@ testing {
 
 afterEvaluate {
   tasks.withType<Test>().configureEach {
-    mustRunAfter(tasks.withType<Javadoc>())
-    tasks.findByName("javadocJar")?.let { mustRunAfter(it) }
     tasks.findByName("sourcesJar")?.let { mustRunAfter(it) }
 
     dependsOn(configurations.testRuntimeClasspath)
@@ -90,13 +88,8 @@ afterEvaluate {
           val depProject = project.findProject(":${dep.name}")
           if (depProject != null) {
             val sourcesJarTask = depProject.tasks.findByName("sourcesJar")
-            val javadocJarTask = depProject.tasks.findByName("javadocJar")
-
             if (sourcesJarTask != null) {
               dependsOn(":${dep.name}:sourcesJar")
-            }
-            if (javadocJarTask != null) {
-              dependsOn(":${dep.name}:javadocJar")
             }
           }
         }

@@ -9,6 +9,6 @@ plugins {
 idea {
   module {
     isDownloadSources = true
-    isDownloadJavadoc = true
+    isDownloadJavadoc = false
   }
 }

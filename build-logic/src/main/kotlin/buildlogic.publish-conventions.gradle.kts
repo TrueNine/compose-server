@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.GradlePlugin
-import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.VersionCatalog
 
@@ -25,7 +24,7 @@ mavenPublishing {
       project.plugins.hasPlugin("kotlin-dsl") -> {
       configure(
         GradlePlugin(
-          javadocJar = JavadocJar.Javadoc(),
+          javadocJar = com.vanniktech.maven.publish.JavadocJar.None(),
           sourcesJar = true
         )
       )
@@ -36,7 +35,7 @@ mavenPublishing {
       project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
       configure(
         KotlinJvm(
-          javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
+          javadocJar = com.vanniktech.maven.publish.JavadocJar.None(),
           sourcesJar = true
         )
       )
@@ -127,13 +126,3 @@ mavenPublishing {
   }
 }
 
-// Fix task dependencies for Gradle's strict dependency validation
-afterEvaluate {
-  // Only set up dependency if both tasks exist (not all projects have dokka)
-  val dokkaJavadocJarTask = tasks.findByName("dokkaJavadocJar")
-  val generateMetadataTask = tasks.findByName("generateMetadataFileForMavenPublication")
-
-  if (dokkaJavadocJarTask != null && generateMetadataTask != null) {
-    generateMetadataTask.dependsOn(dokkaJavadocJarTask)
-  }
-}
