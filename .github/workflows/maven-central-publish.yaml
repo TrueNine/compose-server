@@ -42,6 +42,7 @@ jobs:
       version: ${{ steps.version-info.outputs.version }}
       is-snapshot: ${{ steps.version-info.outputs.is-snapshot }}
       should-publish: ${{ steps.version-info.outputs['should-publish'] }}
+      version-exists-on-central: ${{ steps.version-info.outputs['version-exists-on-central'] }}
       java-version: ${{ steps.libs-versions.outputs.java-version }}
       gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
 
@@ -114,6 +115,36 @@ jobs:
             fi
           }
 
+          check_artifact_exists() {
+            local group="$1"
+            local artifact="$2"
+            local version="$3"
+            
+            # Method 1: Check via Maven Central REST API
+            local rest_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/"
+            echo "Checking REST API: $rest_url" >> $GITHUB_STEP_SUMMARY
+            
+            if curl -f -s --max-time 10 --head "$rest_url" > /dev/null 2>&1; then
+              echo "Found via REST API: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
+              return 0
+            fi
+            
+            # Method 2: Check via Search API
+            local search_url="https://search.maven.org/solrsearch/select?q=g:\"${group}\"+AND+a:\"${artifact}\"+AND+v:\"${version}\"&rows=1&wt=json"
+            echo "Checking Search API: $search_url" >> $GITHUB_STEP_SUMMARY
+            
+            local response=$(curl -f -s --max-time 15 "$search_url" 2>/dev/null || echo '{"response":{"numFound":0}}')
+            local found=$(echo "$response" | jq -r '.response.numFound' 2>/dev/null || echo "0")
+            
+            if [[ "$found" -gt 0 ]]; then
+              echo "Found via Search API: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
+              return 0
+            fi
+            
+            echo "Not found: $artifact-$version does not exist" >> $GITHUB_STEP_SUMMARY
+            return 1
+          }
+
           echo "Determining release version..." >> $GITHUB_STEP_SUMMARY
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             version="${{ github.event.inputs.version }}"
@@ -149,6 +180,7 @@ jobs:
           fi
 
           should_publish="false"
+          version_exists_on_central="false"
           force_publish="${{ github.event.inputs.force_publish }}"
 
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -162,24 +194,33 @@ jobs:
             echo "Checking if version $version exists on Maven Central..." >> $GITHUB_STEP_SUMMARY
             
             group="io.github.truenine"
-            search_url="https://search.maven.org/solrsearch/select?q=g:${group}+AND+v:${version}&rows=1&wt=json"
+            # Check core artifacts to determine if version exists
+            core_artifacts=("composeserver-shared" "composeserver-cacheable" "composeserver-bom")
             
-            echo "Query URL: $search_url" >> $GITHUB_STEP_SUMMARY
+            version_found_count=0
+            for artifact in "${core_artifacts[@]}"; do
+              if check_artifact_exists "$group" "$artifact" "$version"; then
+                version_found_count=$((version_found_count + 1))
+              fi
+            done
             
-            response=$(curl -f -s --max-time 15 "$search_url" 2>/dev/null || echo '{"response":{"numFound":0}}')
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Version check summary: Found $version_found_count out of ${#core_artifacts[@]} core artifacts" >> $GITHUB_STEP_SUMMARY
             
-            found=$(echo "$response" | jq -r '.response.numFound' 2>/dev/null || echo "0")
-            
-            if [[ "$found" -gt 0 ]]; then
+            # If any core artifact exists, consider version as published
+            if [[ "$version_found_count" -gt 0 ]]; then
               should_publish="false"
+              version_exists_on_central="true"
               echo "Version already exists - Maven Central already has version $version, skipping publish" >> $GITHUB_STEP_SUMMARY
             else
               should_publish="true"
+              version_exists_on_central="false"
               echo "Version does not exist - Maven Central does not have version $version, will publish" >> $GITHUB_STEP_SUMMARY
             fi
           fi
 
           echo "should-publish=$should_publish" >> $GITHUB_OUTPUT
+          echo "version-exists-on-central=$version_exists_on_central" >> $GITHUB_OUTPUT
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Publishing Decision Result" >> $GITHUB_STEP_SUMMARY
@@ -191,7 +232,12 @@ jobs:
               echo "Publishing decision: Continue publish - this version does not exist on Maven Central" >> $GITHUB_STEP_SUMMARY
             fi
           else
-            echo "Publishing decision: Skip publish - this version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
+            if [[ "$version_exists_on_central" == "true" ]]; then
+              echo "Publishing decision: Skip publish - this version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
+              echo "GitHub Release will still be created for existing Maven Central version" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "Publishing decision: Skip publish - unknown reason" >> $GITHUB_STEP_SUMMARY
+            fi
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Trigger method:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
@@ -203,12 +249,27 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Check Item | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Version format validation | Pass |" >> $GITHUB_STEP_SUMMARY
-          echo "| Maven Central version check | ${{ steps.version-info.outputs.should-publish == 'true' && 'Not published' || 'Already exists' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Version format validation | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ steps.version-info.outputs.version-exists-on-central }}" == "true" ]]; then
+            echo "| Maven Central version check | 📦 Already exists |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ steps.version-info.outputs.should-publish }}" == "true" ]]; then
+            echo "| Maven Central version check | ✅ Not published |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Maven Central version check | ❓ Unknown |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Version:** ${{ steps.version-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "**Type:** ${{ steps.version-info.outputs.is-snapshot == 'true' && 'Snapshot version' || 'Stable version' }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Publishing status:** ${{ steps.version-info.outputs.should-publish == 'true' && 'Will publish' || 'Skip publish' }}" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ steps.version-info.outputs.should-publish }}" == "true" ]]; then
+            echo "**Publishing status:** 🚀 Will publish to Maven Central" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ steps.version-info.outputs.version-exists-on-central }}" == "true" ]]; then
+            echo "**Publishing status:** ⏭️ Skip publish (already exists), will create GitHub Release" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Publishing status:** ⏸️ Skip publish" >> $GITHUB_STEP_SUMMARY
+          fi
 
   publish:
     name: Publish to Maven Central
@@ -383,7 +444,12 @@ jobs:
   create-github-release:
     name: Create GitHub Release
     needs: [ pre-publish-validation, publish ]
-    if: github.event.inputs.dry_run != 'true' && needs.pre-publish-validation.outputs.is-snapshot == 'false'
+    if: |
+      github.event.inputs.dry_run != 'true' && 
+      needs.pre-publish-validation.outputs.is-snapshot == 'false' && 
+      (needs.publish.result == 'success' || 
+       needs.publish.result == 'skipped' || 
+       needs.pre-publish-validation.outputs.version-exists-on-central == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -399,6 +465,8 @@ jobs:
         id: release-notes
         run: |
           version="${{ needs.pre-publish-validation.outputs.version }}"
+          version_exists="${{ needs.pre-publish-validation.outputs.version-exists-on-central }}"
+          publish_status="${{ needs.publish.result }}"
 
           cat > release_notes.md << 'EOF'
           ## Release ${{ needs.pre-publish-validation.outputs.version }}
@@ -419,6 +487,20 @@ jobs:
           </dependency>
           ```
 
+          ### Release Status
+
+          EOF
+
+          if [[ "$publish_status" == "success" ]]; then
+            echo "✅ **New Release**: This version was just published to Maven Central." >> release_notes.md
+          elif [[ "$version_exists" == "true" ]]; then
+            echo "📦 **Existing Release**: This version already exists on Maven Central. Creating GitHub Release for reference." >> release_notes.md
+          else
+            echo "🔄 **Release**: This version is available on Maven Central." >> release_notes.md
+          fi
+
+          cat >> release_notes.md << 'EOF'
+
           ### Links
 
           - [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine%20AND%20v:${{ needs.pre-publish-validation.outputs.version }})
@@ -430,7 +512,7 @@ jobs:
           **Full Changelog**: https://github.com/TrueNine/compose-server/compare/v${{ needs.pre-publish-validation.outputs.version }}...HEAD
           EOF
 
-          echo "Generated release notes for version $version"
+          echo "Generated release notes for version $version (publish_status: $publish_status, version_exists: $version_exists)"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -455,7 +537,11 @@ jobs:
   post-publish-verification:
     name: Post-publish Verification
     needs: [ pre-publish-validation, publish, create-github-release ]
-    if: github.event.inputs.dry_run != 'true' && always() && needs.publish.result == 'success'
+    if: |
+      github.event.inputs.dry_run != 'true' && 
+      always() && 
+      (needs.publish.result == 'success' || 
+       needs.pre-publish-validation.outputs.version-exists-on-central == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -467,19 +553,35 @@ jobs:
 
       - name: Generate verification report
         run: |
+          version="${{ needs.pre-publish-validation.outputs.version }}"
+          publish_result="${{ needs.publish.result }}"
+          version_exists="${{ needs.pre-publish-validation.outputs.version-exists-on-central }}"
+          
           echo "## Publication Verification Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Version:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** $version" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Publication Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Publication task completed" >> $GITHUB_STEP_SUMMARY
-          echo "- Maven Central sync may take several hours" >> $GITHUB_STEP_SUMMARY
-          echo "- Recommend manual verification in 4-6 hours" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "$publish_result" == "success" ]]; then
+            echo "- ✅ Publication task completed successfully" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔄 Maven Central sync may take several hours" >> $GITHUB_STEP_SUMMARY
+            echo "- 📝 Recommend manual verification in 4-6 hours" >> $GITHUB_STEP_SUMMARY
+          elif [[ "$version_exists" == "true" ]]; then
+            echo "- 📦 Version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
+            echo "- ⏭️ Publication was skipped (no need to republish)" >> $GITHUB_STEP_SUMMARY
+            echo "- 🏷️ GitHub Release created for existing version" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⚠️ Publication was skipped" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔍 Check workflow logs for details" >> $GITHUB_STEP_SUMMARY
+          fi
+          
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Related Links" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine%20AND%20v:$version)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Maven Central - All Versions](https://search.maven.org/search?q=g:io.github.truenine)" >> $GITHUB_STEP_SUMMARY
           echo "- [Sonatype Repository](https://oss.sonatype.org/)" >> $GITHUB_STEP_SUMMARY
 
           if [[ "${{ needs.create-github-release.result }}" == "success" ]]; then
@@ -586,11 +688,13 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [[ "${{ needs.publish.result }}" == "success" ]]; then
-            echo "Publication successful! New version has been successfully published to Maven Central" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Publication successful!** New version has been successfully published to Maven Central" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.pre-publish-validation.outputs.version-exists-on-central }}" == "true" ]]; then
+            echo "📦 **Publication skipped** - this version already exists on Maven Central. GitHub Release created for reference." >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.publish.result }}" == "skipped" ]]; then
-            echo "Publication skipped - this version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️ **Publication skipped** - check pre-publish validation for details" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.publish.result }}" == "failure" ]]; then
-            echo "Publication failed - please check error logs and retry" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Publication failed** - please check error logs and retry" >> $GITHUB_STEP_SUMMARY
           else
-            echo "Workflow in progress - please wait for completion" >> $GITHUB_STEP_SUMMARY
+            echo "🔄 **Workflow in progress** - please wait for completion" >> $GITHUB_STEP_SUMMARY
           fi
