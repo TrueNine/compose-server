@@ -1,1 +1,7 @@
-- 编写 testcontainers 简单的单独启动器
+# coding
+
+- [ ] write `testtoolkit-testcontainers` testcontainers simple launcher
+
+# claude code
+
+- [ ] write claude code setup slash command

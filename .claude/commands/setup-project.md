@@ -1,6 +1,5 @@
 ---
 allowed-tools: WebSearch, WebFetch, Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite, Task
-description: Tailwind CSS Docs
+description: Setup a this project.
 ---
 
-- [Upgrade To V4](https://tailwindcss.com/docs/upgrade-guide/)
