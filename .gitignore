@@ -75,3 +75,6 @@ TODO.*
 /.intellijPlatform/
 node_modules/
 pnpm-lock.yaml
+
+### claude code ###
+/.mcp.json
