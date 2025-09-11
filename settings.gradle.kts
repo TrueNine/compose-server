@@ -75,6 +75,8 @@ include("security:security-oauth2")
 
 include("security:security-crypto")
 
+include("security:security-casbin")
+
 // 特定依赖处理
 include("depend:depend-servlet")
 
