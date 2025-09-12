@@ -64,7 +64,7 @@ src/test/**/out/
 logs
 .logs
 *.log
-/.env*
+/.env
 ### publish gpg ###
 /private.gpg
 
@@ -75,3 +75,6 @@ TODO.*
 /.intellijPlatform/
 node_modules/
 pnpm-lock.yaml
+
+### claude code ###
+/.mcp.json

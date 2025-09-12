@@ -1,8 +1,10 @@
-# Flyway Migration Shared
+# CLAUDE.md
 
-## 概述
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this Module.
 
-`flyway-migration-shared` 模块定义了 Compose Server 框架中数据库迁移的通用规范和实现要求。该模块为不同数据库系统（PostgreSQL、MySQL 等）提供统一的数据库结构管理函数/存储过程的实现标准。
+## Overview
+
+`flyway-migration-shared` 模块定义了 框架中数据库迁移的通用规范和实现要求。该模块为不同数据库系统（PostgreSQL, MySQL, Oracle, SQL Server 等）提供统一的数据库结构管理函数/存储过程的实现标准。
 
 ## `ct_idx` 函数/存储过程
 

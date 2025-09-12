@@ -14,3 +14,6 @@
 
 !/system-prompts
 !/system-prompts/**
+
+!/commands
+!/commands/**
