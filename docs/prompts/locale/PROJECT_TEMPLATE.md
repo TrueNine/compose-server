@@ -60,6 +60,7 @@ Claude 应根据任务类型选择并调度合适的专业代理：
 常用的 slash commands 包括：
 - `/doc-cc` - Anthropic Claude Code 使用文档
 - `/organize-docs` - 整理当前项目的文档以及规整提示词
+- `/setup-project` - 安装当前项目
 - `/compact` - 压缩上下文
 - `/clear` - 清空上下文
 - 其他项目特定的命令
