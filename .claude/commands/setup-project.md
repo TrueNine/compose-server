@@ -1,89 +1,122 @@
 ---
 allowed-tools: WebSearch, WebFetch, Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite, Task
-description: setup a this project.
+description: Complete Claude Code project setup with MCP tools and configuration
 ---
 
-# setup claude code to project
+# Claude Code Project Setup Assistant
 
-## install mcp tools
+This command provides comprehensive setup instructions for Claude Code projects, including MCP (Model Context Protocol) tools installation and configuration management.
 
-在 root project 下执行如下命令
+## MCP Tools Installation
 
-### linux
+Execute the following commands in your project root directory to install essential MCP tools.
+
+### Linux/macOS Commands
 
 ```bash
+# Context7 - Access up-to-date documentation for any library
 claude mcp add context7 --scope project -- npx -y @upstash/context7-mcp@latest
 
-# see https://vercel.com/blog/grep-a-million-github-repositories-via-mcp
+# Grep - Search millions of GitHub repositories for code examples
+# Reference: https://vercel.com/blog/grep-a-million-github-repositories-via-mcp
 claude mcp add --scope project --transport http grep https://mcp.grep.app
 
-# See https://docs.devin.ai/work-with-devin/deepwiki-mcp
+# DeepWiki - GitHub repository documentation assistant
+# Reference: https://docs.devin.ai/work-with-devin/deepwiki-mcp
 claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.com/mcp
 
+# Sequential Thinking - Enhanced reasoning and problem-solving
 claude mcp add sequential-thinking --scope project -- npx -y @modelcontextprotocol/server-sequential-thinking
 
-# see https://github.com/modelcontextprotocol/servers/tree/main/src/memory
+# Memory - Knowledge graph for persistent context
+# Reference: https://github.com/modelcontextprotocol/servers/tree/main/src/memory
 claude mcp add memory --scope project -- npx -y @modelcontextprotocol/server-memory
 
-# see # see https://github.com/microsoft/playwright-mcp
+# Playwright - Web automation and testing
+# Reference: https://github.com/microsoft/playwright-mcp
 claude mcp add playwright --scope project -- npx -y @playwright/mcp@latest --viewport-size 1920,1080
 ```
 
-### windows
+### Windows Commands
 
 ```bash
-claude mcp add-json context7 --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@upstash/context7-mcp@latest\"]}'
+# Context7 - Access up-to-date documentation for any library
+claude mcp add-json context7 --scope project '{"command":"cmd","args":["/c","npx","-y","@upstash/context7-mcp@latest"]}'
 
-# see https://vercel.com/blog/grep-a-million-github-repositories-via-mcp
+# Grep - Search millions of GitHub repositories for code examples
 claude mcp add --scope project --transport http grep https://mcp.grep.app
 
-# See https://docs.devin.ai/work-with-devin/deepwiki-mcp
+# DeepWiki - GitHub repository documentation assistant
 claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.com/mcp
 
-claude mcp add-json sequential-thinking --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-sequential-thinking@latest\"]}'
+# Sequential Thinking - Enhanced reasoning and problem-solving
+claude mcp add-json sequential-thinking --scope project '{"command":"cmd","args":["/c","npx","-y","@modelcontextprotocol/server-sequential-thinking@latest"]}'
 
-# see https://github.com/modelcontextprotocol/servers/tree/main/src/memory
-claude mcp add-json memory --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-memory@latest\"]}'
+# Memory - Knowledge graph for persistent context
+claude mcp add-json memory --scope project '{"command":"cmd","args":["/c","npx","-y","@modelcontextprotocol/server-memory@latest"]}'
 
-# see https://github.com/microsoft/playwright-mcp
-claude mcp add-json playwright --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@playwright/mcp@latest\",\"--viewport-size\",\"1920,1080\"]}'
-
+# Playwright - Web automation and testing
+claude mcp add-json playwright --scope project '{"command":"cmd","args":["/c","npx","-y","@playwright/mcp@latest","--viewport-size","1920,1080"]}'
 ```
 
-## claude code structure
+## Claude Code Directory Structure
+
+Understanding the Claude Code file organization:
 
 ```text
-~/.claude/
-~/.claude.json
-~/.claude.json.backup
+# Global Configuration
+~/.claude/                      # Global Claude Code directory
+~/.claude.json                  # Global settings
+~/.claude.json.backup          # Backup of global settings
 
-project/.claude/
-project/.claude/settings.json
-project/.claude/settings.local.json
-project/.claude/.mcp.json
-project/.claude/.mcp.local.json
+# Project-Specific Configuration
+project/.claude/               # Project Claude Code directory
+project/.claude/settings.json        # Project settings
+project/.claude/settings.local.json  # Local project settings (gitignored)
+project/.claude/.mcp.json           # MCP configuration
+project/.claude/.mcp.local.json     # Local MCP configuration (gitignored)
 ```
 
-### clean caches
+## Troubleshooting
+
+### Clear Caches and Reset
+
+If experiencing issues, remove these cache directories and files:
 
 ```text
-~/.claude/tools/
-~/.claude/projects/
-~/.claude/settings.local.json
-~/.claude.json
-~/.claude.json.backup
+# Global Caches
+~/.claude/tools/              # Cached tools
+~/.claude/projects/           # Project caches
+~/.claude/settings.local.json # Local settings
+~/.claude.json               # Global config
+~/.claude.json.backup        # Config backup
 
-project/.claude/settings.local.json
-project/.mcp.json
-project/.mcp.local.json
+# Project Caches
+project/.claude/settings.local.json # Local project settings
+project/.mcp.json                   # MCP config
+project/.mcp.local.json            # Local MCP config
 ```
 
-### configuration .claude.json hasCompletedOnboarding field
+### Fix Onboarding Issues
 
-无法启动,则在 `~/.claude.json`
+If Claude Code fails to start, manually set the onboarding flag in `~/.claude.json`:
 
 ```json
 {
   "hasCompletedOnboarding": true
 }
 ```
+
+## Post-Setup Verification
+
+After installation, verify your setup by:
+1. Checking MCP tools are properly installed: `claude mcp list`
+2. Testing agent functionality with sub-agents
+3. Running a simple command to ensure all tools work correctly
+
+## Usage Tips
+
+- Use `--scope project` to install tools project-wide
+- Local configuration files are automatically gitignored
+- MCP tools extend Claude's capabilities significantly
+- Each tool serves specific purposes - refer to their documentation for advanced usage
