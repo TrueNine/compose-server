@@ -20,7 +20,6 @@ claude mcp add --scope project --transport http grep https://mcp.grep.app
 # See https://docs.devin.ai/work-with-devin/deepwiki-mcp
 claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.com/mcp
 
-
 claude mcp add sequential-thinking --scope project -- npx -y @modelcontextprotocol/server-sequential-thinking
 
 # see https://github.com/modelcontextprotocol/servers/tree/main/src/memory
