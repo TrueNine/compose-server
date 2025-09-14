@@ -46,6 +46,10 @@ claude mcp add-json memory --scope project '{\"command\":\"cmd\",\"args\":[\"/c\
 ~/.claude.json.backup
 
 project/.claude/
+project/.claude/settings.json
+project/.claude/settings.local.json
+project/.claude/.mcp.json
+project/.claude/.mcp.local.json
 ```
 
 ### clean caches
@@ -53,8 +57,13 @@ project/.claude/
 ```text
 ~/.claude/tools/
 ~/.claude/projects/
+~/.claude/settings.local.json
 ~/.claude.json
 ~/.claude.json.backup
+
+project/.claude/settings.local.json
+project/.mcp.json
+project/.mcp.local.json
 ```
 
 ### configuration .claude.json hasCompletedOnboarding field
