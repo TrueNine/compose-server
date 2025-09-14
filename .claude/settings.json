@@ -8,6 +8,7 @@
       "Bash(docker:*)"
     ],
     "allow": [
+      "mcp__*",
       "Bash",
       "Read",
       "WebSearch",
