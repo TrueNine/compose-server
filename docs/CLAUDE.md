@@ -5,9 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Documentation Structure
 
 **docs/ Directory Organization:**
-
 - `references/` - Technical reference documentation
 - `other/` - Other documentation (build, Git, database, etc.)
 - `prompts/` - Prompt templates
-  - `meta/` - Chinese meta prompts
-  - `output/` - English prompts translated from meta
+  - `locale/` - Chinese locale prompts
+  - `output/` - English prompts translated from `docs/prompts/locale/`
