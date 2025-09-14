@@ -78,3 +78,6 @@ pnpm-lock.yaml
 
 ### claude code ###
 /.mcp.json
+
+### Windows issues ###
+nul
