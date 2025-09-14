@@ -53,3 +53,15 @@ Claude 应根据任务类型选择并调度合适的专业代理：
 - 监督代理执行过程，确保任务质量
 
 ## 工具使用
+
+### Slash Commands 使用提示
+**重要提醒**：始终提示用户可以使用当前项目合理的 slash commands 来提高工作效率。
+
+常用的 slash commands 包括：
+- `/doc-cc` - Anthropic Claude Code 使用文档
+- `/organize-docs` - 整理当前项目的文档以及规整提示词
+- `/compact` - 压缩上下文
+- `/clear` - 清空上下文
+- 其他项目特定的命令
+
+在适当的时候主动建议用户使用相关的 slash commands，而不是让用户自己发现。
