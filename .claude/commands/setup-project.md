@@ -24,6 +24,9 @@ claude mcp add sequential-thinking --scope project -- npx -y @modelcontextprotoc
 
 # see https://github.com/modelcontextprotocol/servers/tree/main/src/memory
 claude mcp add memory --scope project -- npx -y @modelcontextprotocol/server-memory
+
+# see # see https://github.com/microsoft/playwright-mcp
+claude mcp add playwright --scope project -- npx -y @playwright/mcp@latest --viewport-size 1920,1080
 ```
 
 ### windows
@@ -41,6 +44,9 @@ claude mcp add-json sequential-thinking --scope project '{\"command\":\"cmd\",\"
 
 # see https://github.com/modelcontextprotocol/servers/tree/main/src/memory
 claude mcp add-json memory --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-memory@latest\"]}'
+
+# see https://github.com/microsoft/playwright-mcp
+claude mcp add-json playwright --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@playwright/mcp@latest\",\"--viewport-size\",\"1920,1080\"]}'
 
 ```
 
