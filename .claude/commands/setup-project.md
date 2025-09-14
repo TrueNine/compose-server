@@ -17,6 +17,10 @@ claude mcp add context7 --scope project -- npx -y @upstash/context7-mcp@latest
 # see https://vercel.com/blog/grep-a-million-github-repositories-via-mcp
 claude mcp add --scope project --transport http grep https://mcp.grep.app
 
+# See https://docs.devin.ai/work-with-devin/deepwiki-mcp
+claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.com/mcp
+
+
 claude mcp add sequential-thinking --scope project -- npx -y @modelcontextprotocol/server-sequential-thinking
 
 # see https://github.com/modelcontextprotocol/servers/tree/main/src/memory
@@ -30,6 +34,9 @@ claude mcp add-json context7 --scope project '{\"command\":\"cmd\",\"args\":[\"/
 
 # see https://vercel.com/blog/grep-a-million-github-repositories-via-mcp
 claude mcp add --scope project --transport http grep https://mcp.grep.app
+
+# See https://docs.devin.ai/work-with-devin/deepwiki-mcp
+claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.com/mcp
 
 claude mcp add-json sequential-thinking --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-sequential-thinking@latest\"]}'
 
