@@ -13,5 +13,13 @@
       "WebSearch",
       "WebFetch"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "sequential-thinking",
+    "memory",
+    "deepwiki",
+    "grep"
+  ]
 }
