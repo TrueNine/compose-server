@@ -36,8 +36,6 @@ claude mcp add memory --scope project -- npx -y @modelcontextprotocol/server-mem
 # Reference: https://github.com/microsoft/playwright-mcp
 claude mcp add playwright --scope project -- npx -y @playwright/mcp@latest --viewport-size 1920,1080
 
-# see https://browsertools.agentdesk.ai/installation#installation
-claude mcp add borwser-tools --scope project -- npx -y @agentdeskai/browser-tools-mcp@latest
 ```
 
 ### Windows Commands
@@ -61,8 +59,6 @@ claude mcp add-json memory --scope project '{"command":"cmd","args":["/c","npx",
 # Playwright - Web automation and testing
 claude mcp add-json playwright --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@playwright/mcp@latest\",\"--viewport-size\",\"1920,1080\"]}'
 
-# see https://browsertools.agentdesk.ai/installation#installation
-claude mcp add-json borwser-tools --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@agentdeskai/browser-tools-mcp@latest\"]}'
 ```
 
 ### launch browser-tools mcp server
