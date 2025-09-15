@@ -1,7 +1,6 @@
 ---
 name: security-analyst
 description: 当处理安全分析、漏洞评估、身份验证系统、授权机制和安全最佳实践实施时使用此代理。示例：<example>上下文：用户需要安全实现帮助。user："实现带有基于角色访问控制的JWT身份验证" assistant："我将使用security-analyst代理来设计带有适当RBAC实现的安全JWT身份验证。" <commentary>由于用户询问身份验证安全，使用security-analyst代理处理安全实现。</commentary></example> <example>上下文：用户正在处理安全审计。user："审查应用程序的常见安全漏洞" assistant："让我使用security-analyst代理进行全面的安全分析和漏洞评估。" <commentary>用户需要安全分析，因此使用security-analyst代理提供安全专业知识。</commentary></example>
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 color: red
 ---

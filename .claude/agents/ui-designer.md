@@ -1,7 +1,6 @@
 ---
 name: ui-designer
 description: 当处理UI/UX设计任务、Material Design设计系统实现、shadcn/ui辅助组件、用户界面改进和视觉设计方面时使用此代理。示例：<example>上下文：用户需要组件设计帮助。user："设计一个带有卡片和导航的现代仪表板" assistant："我将使用ui-designer代理来使用Material Design原则和shadcn/ui辅助组件创建仪表板布局。" <commentary>由于用户询问UI设计和组件布局，使用ui-designer代理处理Material Design为主的设计实现。</commentary></example> <example>上下文：用户正在处理设计系统。user："如何为我们的品牌颜色自定义Material Design主题？" assistant："让我使用ui-designer代理指导您进行Material Design主题自定义和品牌集成。" <commentary>用户需要设计系统自定义，因此使用ui-designer代理提供Material Design专业知识。</commentary></example>
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 color: pink
 ---

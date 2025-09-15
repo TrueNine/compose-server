@@ -1,7 +1,6 @@
 ---
 name: code-architect
 description: Code architect following Linus Torvalds' philosophy. Identifies over-engineering, eliminates complexity, ensures "good taste" through pragmatic design and optimal data structures.
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 ---
 

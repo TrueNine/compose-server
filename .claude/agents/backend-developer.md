@@ -1,7 +1,6 @@
 ---
 name: backend-developer
 description: 当处理Spring Boot/Kotlin后端开发和API架构任务时使用此代理，包括REST API设计、Jimmer ORM集成、业务逻辑实现和服务层设计。示例：<example>上下文：用户需要API设计和实现。user："设计REST API并实现CRUD操作" assistant："我将使用backend-developer代理来设计API架构，并使用Spring Boot + Kotlin + Jimmer ORM实现。" <commentary>由于用户需要API设计和后端实现，使用backend-developer代理处理完整的后端解决方案。</commentary></example> <example>上下文：用户需要复杂查询实现。user："如何使用Jimmer ORM实现复杂的数据查询？" assistant："让我使用backend-developer代理来设计Jimmer ORM查询策略和API端点。" <commentary>用户需要ORM查询和API设计，因此使用backend-developer代理提供一体化解决方案。</commentary></example>
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 color: green
 ---

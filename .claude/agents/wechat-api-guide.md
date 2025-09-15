@@ -1,7 +1,6 @@
 ---
 name: wechat-api-guide
 description: 当您需要微信公众号或微信开放平台开发指导时使用此代理，包括API集成、配置步骤、接口调用序列或故障排除。示例：<example>上下文：用户需要微信公众号开发帮助。user："如何为我的微信公众号设置webhook验证？" assistant："我将使用wechat-api-guide代理提供关于微信webhook验证设置的详细文档。" <commentary>由于用户询问微信公众号webhook设置，使用wechat-api-guide代理提供逐步文档。</commentary></example> <example>上下文：用户正在处理微信支付集成。user："将微信支付集成到我的应用程序中的过程是什么？" assistant："让我使用wechat-api-guide代理来解释带有详细步骤的微信支付集成过程。" <commentary>用户需要微信支付集成指导，因此使用wechat-api-guide代理提供全面文档。</commentary></example>
-tools: WebFetch, WebSearch, TodoWrite
 model: sonnet
 color: green
 ---

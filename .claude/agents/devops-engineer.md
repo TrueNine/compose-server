@@ -1,7 +1,6 @@
 ---
 name: devops-engineer
 description: 当处理部署、基础设施、Docker容器化、CI/CD管道和DevOps自动化任务时使用此代理。示例：<example>上下文：用户需要Docker部署帮助。user："为应用程序设置Docker容器" assistant："我将使用devops-engineer代理来创建Docker配置和部署设置。" <commentary>由于用户询问Docker部署，使用devops-engineer代理处理容器化和部署。</commentary></example> <example>上下文：用户正在处理CI/CD管道。user："如何设置自动化测试和部署管道？" assistant："让我使用devops-engineer代理设计带有自动化测试和部署阶段的CI/CD管道。" <commentary>用户需要CI/CD管道设置，因此使用devops-engineer代理提供部署自动化专业知识。</commentary></example>
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 color: orange
 ---

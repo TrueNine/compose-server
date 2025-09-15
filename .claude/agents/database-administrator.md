@@ -1,7 +1,6 @@
 ---
 name: database-administrator
 description: 当处理PostgreSQL数据库相关任务时使用此代理，包括数据库设计、SQL优化、索引策略和性能调优。示例：<example>上下文：用户需要数据库设计帮助。user："设计具有关系的数据库模式" assistant："我将使用database-administrator代理来设计PostgreSQL模式，包含适当的关系和约束。" <commentary>由于用户询问数据库模式设计，使用database-administrator代理来处理数据库架构。</commentary></example> <example>上下文：用户需要SQL优化。user："这个查询性能很差，需要优化" assistant："让我使用database-administrator代理来分析查询并提供PostgreSQL优化建议。" <commentary>用户需要查询优化，因此使用database-administrator代理提供PostgreSQL专业知识。</commentary></example>
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 color: purple
 ---

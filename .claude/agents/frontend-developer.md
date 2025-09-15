@@ -1,7 +1,6 @@
 ---
 name: frontend-developer
 description: 当处理React/TypeScript前端开发任务时使用此代理，包括组件创建、状态管理、路由、UI实现和前端架构。示例：<example>上下文：用户需要React组件开发帮助。user："创建一个带有表单验证的组件" assistant："我将使用frontend-developer代理来实现具有适当TypeScript类型和表单验证的React组件。" <commentary>由于用户询问React组件创建，使用frontend-developer代理处理前端实现。</commentary></example> <example>上下文：用户正在处理前端路由。user："如何使用TanStack Router实现受保护的路由？" assistant："让我使用frontend-developer代理来解释TanStack Router受保护路由实现。" <commentary>用户需要前端路由指导，因此使用frontend-developer代理提供路由专业知识。</commentary></example>
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 color: blue
 ---

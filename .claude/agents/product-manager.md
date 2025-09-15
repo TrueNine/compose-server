@@ -1,7 +1,6 @@
 ---
 name: product-manager
 description: 当处理需求分析、产品规划、用户故事编写和业务流程设计时使用此代理。示例：<example>上下文：用户需要需求分析帮助。user："分析这个功能需求并制定实现计划" assistant："我将使用product-manager代理来分析需求，识别关键用户故事并制定产品实现计划。" <commentary>由于用户询问需求分析，使用product-manager代理处理产品规划和需求管理。</commentary></example> <example>上下文：用户正在处理产品设计。user："如何设计用户注册和登录流程？" assistant："让我使用product-manager代理来设计完整的用户认证流程和相关用户体验。" <commentary>用户需要产品流程设计，因此使用product-manager代理提供产品专业知识。</commentary></example>
-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite
 model: sonnet
 color: yellow
 ---
