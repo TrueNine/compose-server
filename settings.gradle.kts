@@ -13,9 +13,7 @@ plugins {
   id("io.gitee.zjarlin.auto-modules") version "0.0.608"
 }
 
-autoModules {
-  excludeModules("build-logic")
-}
+autoModules { excludeModules("build-logic") }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

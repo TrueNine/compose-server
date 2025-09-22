@@ -10,6 +10,4 @@ Provides policy-based access control, RBAC, ABAC, and RESTful authorization mana
 """
     .trimIndent()
 
-dependencies {
-
-}
+dependencies {}
