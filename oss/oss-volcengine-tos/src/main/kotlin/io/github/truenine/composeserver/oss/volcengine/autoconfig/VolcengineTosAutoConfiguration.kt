@@ -124,28 +124,34 @@ class VolcengineTosAutoConfiguration {
   /** Resolve endpoint with detailed logging */
   private fun resolveEndpoint(tosProperties: VolcengineTosProperties, ossProperties: OssProperties): String {
     val endpoint = tosProperties.endpoint ?: ossProperties.endpoint
-    log.debug("Resolved endpoint: $endpoint (from ${if (tosProperties.endpoint != null) "TOS properties" else "OSS properties"})")
+    log.debug("Resolved endpoint: {} (from {})", endpoint, if (tosProperties.endpoint != null) "TOS properties" else "OSS properties")
     return endpoint ?: throw IllegalArgumentException("TOS endpoint is required")
   }
 
   /** Resolve region with detailed logging */
   private fun resolveRegion(tosProperties: VolcengineTosProperties, ossProperties: OssProperties): String {
-    val region = tosProperties.region ?: ossProperties.region
-    log.debug("Resolved region: $region (from ${if (tosProperties.region != null) "TOS properties" else "OSS properties"})")
-    return region ?: throw IllegalArgumentException("TOS region is required")
+    val region =
+      tosProperties.region
+        ?: ossProperties.region
+        ?: run {
+          log.warn("No region specified, using default region: cn-beijing")
+          "cn-beijing"
+        }
+    log.debug("Resolved region: {} (from {})", region, if (tosProperties.region != null) "TOS properties" else "OSS properties")
+    return region
   }
 
   /** Resolve access key with detailed logging */
   private fun resolveAccessKey(tosProperties: VolcengineTosProperties, ossProperties: OssProperties): String {
     val accessKey = tosProperties.accessKey ?: ossProperties.accessKey
-    log.debug("Resolved access key: ${accessKey?.take(4)}*** (from ${if (tosProperties.accessKey != null) "TOS properties" else "OSS properties"})")
+    log.debug("Resolved access key: {}*** (from {})", accessKey?.take(4), if (tosProperties.accessKey != null) "TOS properties" else "OSS properties")
     return accessKey ?: throw IllegalArgumentException("TOS access key is required")
   }
 
   /** Resolve secret key with detailed logging */
   private fun resolveSecretKey(tosProperties: VolcengineTosProperties, ossProperties: OssProperties): String {
     val secretKey = tosProperties.secretKey ?: ossProperties.secretKey
-    log.debug("Secret key resolved from ${if (tosProperties.secretKey != null) "TOS properties" else "OSS properties"}")
+    log.debug("Secret key resolved from {}", if (tosProperties.secretKey != null) "TOS properties" else "OSS properties")
     return secretKey ?: throw IllegalArgumentException("TOS secret key is required")
   }
 
@@ -156,7 +162,7 @@ class VolcengineTosAutoConfiguration {
     require(accessKey.isNotBlank()) { "TOS access key cannot be blank" }
     require(secretKey.isNotBlank()) { "TOS secret key cannot be blank" }
 
-    log.debug("✅ All required parameters validated successfully")
+    log.debug("All required parameters validated successfully")
   }
 
   /** Log configuration summary without sensitive information */
@@ -255,7 +261,7 @@ class VolcengineTosAutoConfiguration {
     }
     if (tosProperties.userAgentCustomizedKeyValues.isNotEmpty()) {
       builder.userAgentCustomizedKeyValues(tosProperties.userAgentCustomizedKeyValues)
-      log.debug("🏷️ Custom User-Agent values: ${tosProperties.userAgentCustomizedKeyValues}")
+      log.debug("Custom User-Agent values: {}", tosProperties.userAgentCustomizedKeyValues)
     }
 
     val config = builder.build()
@@ -271,7 +277,6 @@ class VolcengineTosAutoConfiguration {
         ?: tosProperties.customDomain
         ?: tosProperties.getEffectiveEndpoint()
         ?: ossProperties.getEffectiveEndpoint()
-        ?: throw IllegalArgumentException("Unable to determine exposed base URL")
 
     log.debug("Resolved exposed base URL: $exposedBaseUrl")
     return exposedBaseUrl

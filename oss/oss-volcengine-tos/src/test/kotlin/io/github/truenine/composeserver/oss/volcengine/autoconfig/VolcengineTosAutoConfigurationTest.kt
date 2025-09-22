@@ -7,8 +7,11 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.autoconfigure.AutoConfigurations
 import org.springframework.boot.test.context.runner.ApplicationContextRunner
+import org.springframework.boot.test.system.CapturedOutput
+import org.springframework.boot.test.system.OutputCaptureExtension
 
 /**
  * 测试 Volcengine TOS 自动配置机制
@@ -174,6 +177,171 @@ class VolcengineTosAutoConfigurationTest {
           // 验证 TOS 客户端被创建
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
           assertTrue(context.containsBeanDefinition("volcengineTosObjectStorageService"))
+        }
+    }
+  }
+
+  @Nested
+  inner class `默认区域配置测试` {
+
+    @Test
+    fun `当未指定区域时应该使用默认区域 cn-beijing`() {
+      contextRunner
+        .withPropertyValues(
+          "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
+          "compose.oss.volcengine-tos.access-key=testkey",
+          "compose.oss.volcengine-tos.secret-key=testsecret",
+        )
+        .run { context ->
+          // 验证配置属性中region为null
+          val tosProperties = context.getBean(VolcengineTosProperties::class.java)
+          kotlin.test.assertNull(tosProperties.region)
+
+          val ossProperties = context.getBean(OssProperties::class.java)
+          kotlin.test.assertNull(ossProperties.region)
+
+          // 验证 TOS 客户端仍然被创建（使用默认区域）
+          assertTrue(context.containsBeanDefinition("volcengineTosClient"))
+          assertTrue(context.containsBeanDefinition("volcengineTosObjectStorageService"))
+        }
+    }
+
+    @Test
+    fun `TOS 专用区域配置应该优先于通用 OSS 区域配置`() {
+      contextRunner
+        .withPropertyValues(
+          "compose.oss.endpoint=tos-cn-beijing.volces.com",
+          "compose.oss.region=cn-shanghai",
+          "compose.oss.access-key=testkey",
+          "compose.oss.secret-key=testsecret",
+          "compose.oss.volcengine-tos.region=cn-guangzhou",
+        )
+        .run { context ->
+          val tosProperties = context.getBean(VolcengineTosProperties::class.java)
+          val ossProperties = context.getBean(OssProperties::class.java)
+
+          // 验证 TOS 专用配置优先
+          kotlin.test.assertEquals("cn-guangzhou", tosProperties.region)
+          kotlin.test.assertEquals("cn-shanghai", ossProperties.region)
+
+          // 验证 TOS 客户端被创建
+          assertTrue(context.containsBeanDefinition("volcengineTosClient"))
+        }
+    }
+
+    @Test
+    fun `通用 OSS 区域配置应该作为 TOS 区域的后备选项`() {
+      contextRunner
+        .withPropertyValues(
+          "compose.oss.endpoint=tos-cn-beijing.volces.com",
+          "compose.oss.region=cn-hongkong",
+          "compose.oss.access-key=testkey",
+          "compose.oss.secret-key=testsecret",
+        )
+        .run { context ->
+          val tosProperties = context.getBean(VolcengineTosProperties::class.java)
+          val ossProperties = context.getBean(OssProperties::class.java)
+
+          // 验证 TOS 没有专用区域配置
+          kotlin.test.assertNull(tosProperties.region)
+          // 验证通用配置存在
+          kotlin.test.assertEquals("cn-hongkong", ossProperties.region)
+
+          // 验证 TOS 客户端被创建（使用通用配置）
+          assertTrue(context.containsBeanDefinition("volcengineTosClient"))
+        }
+    }
+
+    @Test
+    fun `应该支持所有有效的火山引擎区域代码`() {
+      val validRegions = listOf("cn-beijing", "cn-shanghai", "cn-guangzhou", "cn-hongkong", "ap-southeast-1")
+
+      validRegions.forEach { region ->
+        contextRunner
+          .withPropertyValues(
+            "compose.oss.volcengine-tos.endpoint=tos-$region.volces.com",
+            "compose.oss.volcengine-tos.region=$region",
+            "compose.oss.volcengine-tos.access-key=testkey",
+            "compose.oss.volcengine-tos.secret-key=testsecret",
+          )
+          .run { context ->
+            val tosProperties = context.getBean(VolcengineTosProperties::class.java)
+            kotlin.test.assertEquals(region, tosProperties.region)
+
+            // 验证 TOS 客户端被创建
+            assertTrue(context.containsBeanDefinition("volcengineTosClient"))
+          }
+      }
+    }
+  }
+
+  @Nested
+  @ExtendWith(OutputCaptureExtension::class)
+  inner class `日志输出验证` {
+
+    @Test
+    fun `当未指定区域时应该输出默认区域警告日志`(output: CapturedOutput) {
+      contextRunner
+        .withPropertyValues(
+          "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
+          "compose.oss.volcengine-tos.access-key=testkey",
+          "compose.oss.volcengine-tos.secret-key=testsecret",
+          "spring.profiles.active=test", // 启用测试环境以跳过连接测试
+        )
+        .run { context ->
+          // 验证警告日志被输出
+          kotlin.test.assertTrue(
+            output.out.contains("No region specified, using default region: cn-beijing") ||
+              output.err.contains("No region specified, using default region: cn-beijing"),
+            "Expected warning log about default region not found in output: ${output.all}",
+          )
+
+          // 验证 TOS 客户端被创建
+          assertTrue(context.containsBeanDefinition("volcengineTosClient"))
+        }
+    }
+
+    @Test
+    fun `当指定了区域时不应该输出默认区域警告日志`(output: CapturedOutput) {
+      contextRunner
+        .withPropertyValues(
+          "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
+          "compose.oss.volcengine-tos.region=cn-shanghai",
+          "compose.oss.volcengine-tos.access-key=testkey",
+          "compose.oss.volcengine-tos.secret-key=testsecret",
+          "spring.profiles.active=test", // 启用测试环境以跳过连接测试
+        )
+        .run { context ->
+          // 验证没有默认区域警告日志
+          kotlin.test.assertFalse(
+            output.out.contains("No region specified, using default region") || output.err.contains("No region specified, using default region"),
+            "Should not output default region warning when region is specified",
+          )
+
+          // 验证 TOS 客户端被创建
+          assertTrue(context.containsBeanDefinition("volcengineTosClient"))
+        }
+    }
+
+    @Test
+    fun `当使用通用OSS区域配置时不应该输出默认区域警告日志`(output: CapturedOutput) {
+      contextRunner
+        .withPropertyValues(
+          "compose.oss.endpoint=tos-cn-beijing.volces.com",
+          "compose.oss.region=cn-guangzhou",
+          "compose.oss.access-key=testkey",
+          "compose.oss.secret-key=testsecret",
+          "spring.profiles.active=test", // 启用测试环境以跳过连接测试
+        )
+        .run { context ->
+          // 验证没有默认区域警告日志
+          kotlin.test.assertFalse(
+            output.out.contains("No region specified, using default region") || output.err.contains("No region specified, using default region"),
+            "Should not output default region warning when OSS region is specified",
+          )
+
+          // 验证 TOS 客户端被创建
+          assertTrue(context.containsBeanDefinition("volcengineTosClient"))
         }
     }
   }

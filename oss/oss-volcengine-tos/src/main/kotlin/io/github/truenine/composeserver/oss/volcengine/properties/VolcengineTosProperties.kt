@@ -43,10 +43,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.OSS_VOLCENGINE_TOS)
 data class VolcengineTosProperties(
   /** Service endpoint URL */
-  var endpoint: String? = null,
+  var endpoint: String? = DEFAULT_ENDPOINT,
 
   /** Service region */
-  var region: String? = null,
+  var region: String? = "cn-beijing",
 
   /** Access key for authentication */
   var accessKey: String? = null,
@@ -58,7 +58,7 @@ data class VolcengineTosProperties(
   var sessionToken: String? = null,
 
   /** Public base URL for object access */
-  var exposedBaseUrl: String? = null,
+  var exposedBaseUrl: String? = DEFAULT_EXPOSED_BASE_URL,
 
   /** Enable SSL/TLS connection */
   var enableSsl: Boolean = true,
@@ -165,6 +165,11 @@ data class VolcengineTosProperties(
 
   /** Check if proxy authentication is configured */
   fun hasProxyAuthentication(): Boolean = hasProxyConfiguration() && !proxyUserName.isNullOrBlank() && !proxyPassword.isNullOrBlank()
+
+  companion object {
+    const val DEFAULT_ENDPOINT = "https://tos-cn-beijing.volces.com"
+    const val DEFAULT_EXPOSED_BASE_URL = "https://tos-cn-beijing.volces.com"
+  }
 
   override fun toString(): String {
     return "VolcengineTosProperties(" +

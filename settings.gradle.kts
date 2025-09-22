@@ -119,4 +119,6 @@ include("integrate-test:depend:jackson")
 
 include("integrate-test:oss:minio")
 
+include("integrate-test:oss:volcengine-tos")
+
 include("integrate-test:cacheable")

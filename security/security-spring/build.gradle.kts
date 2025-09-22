@@ -20,9 +20,7 @@ dependencies {
 
   implementation(libs.org.springframework.spring.webmvc)
 
-  implementation(libs.org.owasp.antisamy.antisamy) {
-    exclude(group = "org.htmlunit", module = "neko-htmlunit")
-  }
+  implementation(libs.org.owasp.antisamy.antisamy) { exclude(group = "org.htmlunit", module = "neko-htmlunit") }
   implementation(libs.org.htmlunit.neko.htmlunit)
 
   // implementation(project(":depend:depend-http-exchange"))

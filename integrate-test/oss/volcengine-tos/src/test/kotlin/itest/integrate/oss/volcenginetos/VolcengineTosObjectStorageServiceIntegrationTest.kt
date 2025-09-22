@@ -1,4 +1,4 @@
-package io.github.truenine.composeserver.oss.volcengine
+package itest.integrate.oss.volcenginetos
 
 import com.volcengine.tos.TOSV2
 import com.volcengine.tos.TOSV2ClientBuilder
@@ -11,6 +11,7 @@ import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
 import io.github.truenine.composeserver.oss.ListObjectsRequest
 import io.github.truenine.composeserver.oss.ShareLinkRequest
 import io.github.truenine.composeserver.oss.UploadPartRequest
+import io.github.truenine.composeserver.oss.volcengine.VolcengineTosObjectStorageService
 import java.io.ByteArrayInputStream
 import java.time.Duration
 import kotlin.test.assertEquals
@@ -24,13 +25,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
 
 /**
- * Volcengine TOS 对象存储服务集成测试
+ * Volcengine TOS Object Storage Service Integration Tests
  *
- * 该测试需要真实的 TOS 服务凭证，通过环境变量提供：
- * - VOLCENGINE_TOS_ACCESS_KEY: TOS 访问密钥
- * - VOLCENGINE_TOS_SECRET_KEY: TOS 秘密密钥
+ * These tests require real TOS service credentials provided through environment variables:
+ * - VOLCENGINE_TOS_ACCESS_KEY: TOS access key
+ * - VOLCENGINE_TOS_SECRET_KEY: TOS secret key
  *
- * 如果环境变量不存在，测试将被跳过
+ * If environment variables are not present, tests will be skipped
  *
  * @author TrueNine
  * @since 2025-08-05
@@ -41,22 +42,8 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   companion object {
     @JvmStatic private val log = logger<VolcengineTosObjectStorageServiceIntegrationTest>()
 
-    /** 检查是否存在必需的环境变量 用于 JUnit5 的条件测试 */
-    @JvmStatic
-    fun hasRequiredEnvironmentVariables(): Boolean {
-      val accessKey = System.getenv("VOLCENGINE_TOS_ACCESS_KEY")
-      val secretKey = System.getenv("VOLCENGINE_TOS_SECRET_KEY")
-
-      val hasCredentials = !accessKey.isNullOrBlank() && !secretKey.isNullOrBlank()
-
-      if (!hasCredentials) {
-        log.warn("跳过 Volcengine TOS 集成测试：缺少必需的环境变量 VOLCENGINE_TOS_ACCESS_KEY 或 VOLCENGINE_TOS_SECRET_KEY")
-      } else {
-        log.info("检测到 Volcengine TOS 凭证，将执行集成测试")
-      }
-
-      return hasCredentials
-    }
+    /** Check if required environment variables exist for JUnit5 conditional testing */
+    @JvmStatic fun hasRequiredEnvironmentVariables() = hasTosRequiredEnvironmentVariables()
   }
 
   private lateinit var service: VolcengineTosObjectStorageService
@@ -67,39 +54,39 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
 
   @BeforeEach
   fun setUp() {
-    // 读取环境变量
-    accessKey = System.getenv("VOLCENGINE_TOS_ACCESS_KEY") ?: throw IllegalStateException("VOLCENGINE_TOS_ACCESS_KEY 环境变量未设置")
-    secretKey = System.getenv("VOLCENGINE_TOS_SECRET_KEY") ?: throw IllegalStateException("VOLCENGINE_TOS_SECRET_KEY 环境变量未设置")
+    getTosAkSk()?.also {
+      accessKey = it.ak
+      secretKey = it.sk
+      log.info("Using Access Key: ${accessKey.take(8)}... for integration testing")
 
-    log.info("使用 Access Key: ${accessKey.take(8)}... 进行集成测试")
+      // Create real TOS client
+      tosClient = TOSV2ClientBuilder().build("cn-beijing", it.endpoint, accessKey, secretKey)
 
-    // 创建真实的 TOS 客户端
-    tosClient = TOSV2ClientBuilder().build("cn-beijing", "https://tos-cn-beijing.volces.com", accessKey, secretKey)
+      // Create service instance
+      service = VolcengineTosObjectStorageService(tosClient = tosClient, exposedBaseUrl = it.endpoint)
 
-    // 创建服务实例
-    service = VolcengineTosObjectStorageService(tosClient = tosClient, exposedBaseUrl = "https://tos-cn-beijing.volces.com")
-
-    log.info("TOS 客户端和服务实例创建完成")
+      log.info("TOS client and service instance created successfully")
+    }
   }
 
   @AfterEach
   fun tearDown() {
-    // 清理所有测试创建的存储桶
+    // Clean up all test-created buckets
     testBuckets.forEach { bucketName ->
       try {
         runBlocking {
-          // 先删除桶中的所有对象
+          // First delete all objects in the bucket
           val listResult = service.listObjects(ListObjectsRequest(bucketName = bucketName))
           if (listResult.isSuccess) {
             val objects = listResult.getOrThrow().objects
             objects.forEach { obj -> service.deleteObject(bucketName, obj.objectName) }
           }
-          // 然后删除存储桶
+          // Then delete the bucket
           service.deleteBucket(bucketName)
         }
-        log.info("清理测试存储桶: {}", bucketName)
+        log.info("Cleaned up test bucket: {}", bucketName)
       } catch (e: Exception) {
-        log.warn("清理存储桶失败: {} - {}", bucketName, e.message)
+        log.warn("Failed to clean up bucket: {} - {}", bucketName, e.message)
       }
     }
     testBuckets.clear()
@@ -109,13 +96,13 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   inner class HealthCheck {
 
     @Test
-    fun `测试健康检查`() = runBlocking {
-      log.info("开始健康检查测试")
+    fun `test health check`() = runBlocking {
+      log.info("Starting health check test")
 
       val result = service.isHealthy()
-      assertTrue(result, "TOS 服务健康检查应该成功")
+      assertTrue(result, "TOS service health check should succeed")
 
-      log.info("健康检查测试完成")
+      log.info("Health check test completed")
     }
   }
 
@@ -123,45 +110,45 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   inner class BucketOperations {
 
     @Test
-    fun `测试存储桶基本操作`() = runBlocking {
+    fun `test bucket basic operations`() = runBlocking {
       val testBucketName = "test-integration-bucket-${System.currentTimeMillis()}"
       testBuckets.add(testBucketName)
-      log.info("开始存储桶操作测试，桶名: {}", testBucketName)
+      log.info("Starting bucket operations test, bucket name: {}", testBucketName)
 
-      // 1. 创建存储桶
+      // 1. Create bucket
       val createResult = service.createBucket(CreateBucketRequest(testBucketName))
-      assertTrue(createResult.isSuccess, "创建存储桶应该成功")
+      assertTrue(createResult.isSuccess, "Creating bucket should succeed")
       val bucketInfo = createResult.getOrThrow()
       assertEquals(testBucketName, bucketInfo.name)
 
-      // 2. 检查存储桶是否存在
+      // 2. Check if bucket exists
       val existsResult = service.bucketExists(testBucketName)
-      assertTrue(existsResult.isSuccess, "检查存储桶存在应该成功")
-      assertTrue(existsResult.getOrThrow(), "存储桶应该存在")
+      assertTrue(existsResult.isSuccess, "Checking bucket existence should succeed")
+      assertTrue(existsResult.getOrThrow(), "Bucket should exist")
 
-      // 3. 列出存储桶
+      // 3. List buckets
       val listResult = service.listBuckets()
-      assertTrue(listResult.isSuccess, "列出存储桶应该成功")
+      assertTrue(listResult.isSuccess, "Listing buckets should succeed")
       val buckets = listResult.getOrThrow()
-      assertTrue(buckets.any { it.name == testBucketName }, "存储桶列表应该包含新创建的桶")
+      assertTrue(buckets.any { it.name == testBucketName }, "Bucket list should contain the newly created bucket")
 
-      log.info("存储桶操作测试完成")
+      log.info("Bucket operations test completed")
     }
 
     @Test
-    fun `测试存储桶权限设置`() = runBlocking {
+    fun `test bucket permission settings`() = runBlocking {
       val testBucketName = "test-integration-acl-bucket-${System.currentTimeMillis()}"
       testBuckets.add(testBucketName)
-      log.info("开始存储桶权限测试，桶名: {}", testBucketName)
+      log.info("Starting bucket permission test, bucket name: {}", testBucketName)
 
-      // 创建存储桶
+      // Create bucket
       service.createBucket(CreateBucketRequest(testBucketName)).getOrThrow()
 
-      // 设置公共读权限
+      // Set public read permission
       val aclResult = service.setBucketPublicRead(testBucketName)
-      assertTrue(aclResult.isSuccess, "设置存储桶公共读权限应该成功")
+      assertTrue(aclResult.isSuccess, "Setting bucket public read permission should succeed")
 
-      log.info("存储桶权限测试完成")
+      log.info("Bucket permission test completed")
     }
   }
 
@@ -169,18 +156,18 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   inner class ObjectOperations {
 
     @Test
-    fun `测试对象基本操作`() = runBlocking {
+    fun `test object basic operations`() = runBlocking {
       val testBucketName = "test-integration-object-bucket-${System.currentTimeMillis()}"
       val testObjectName = "test-object.txt"
       val testContent = "Hello, Volcengine TOS Integration Test!"
       testBuckets.add(testBucketName)
 
-      log.info("开始对象操作测试，桶名: {}, 对象名: {}", testBucketName, testObjectName)
+      log.info("Starting object operations test, bucket name: {}, object name: {}", testBucketName, testObjectName)
 
-      // 1. 创建存储桶
+      // 1. Create bucket
       service.createBucket(CreateBucketRequest(testBucketName)).getOrThrow()
 
-      // 2. 上传对象
+      // 2. Upload object
       val inputStream = ByteArrayInputStream(testContent.toByteArray())
       val uploadResult =
         service.putObject(
@@ -190,55 +177,55 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
           size = testContent.length.toLong(),
           contentType = "text/plain",
         )
-      assertTrue(uploadResult.isSuccess, "上传对象应该成功")
+      assertTrue(uploadResult.isSuccess, "Upload object should succeed")
       val objectInfo = uploadResult.getOrThrow()
       assertEquals(testBucketName, objectInfo.bucketName)
       assertEquals(testObjectName, objectInfo.objectName)
 
-      // 3. 检查对象是否存在
+      // 3. Check if object exists
       val existsResult = service.objectExists(testBucketName, testObjectName)
-      assertTrue(existsResult.isSuccess, "检查对象存在应该成功")
-      assertTrue(existsResult.getOrThrow(), "对象应该存在")
+      assertTrue(existsResult.isSuccess, "Checking object existence should succeed")
+      assertTrue(existsResult.getOrThrow(), "Object should exist")
 
-      // 4. 获取对象信息
+      // 4. Get object information
       val infoResult = service.getObjectInfo(testBucketName, testObjectName)
-      assertTrue(infoResult.isSuccess, "获取对象信息应该成功")
+      assertTrue(infoResult.isSuccess, "Getting object information should succeed")
       val retrievedInfo = infoResult.getOrThrow()
       assertEquals(testBucketName, retrievedInfo.bucketName)
       assertEquals(testObjectName, retrievedInfo.objectName)
 
-      // 5. 下载对象
+      // 5. Download object
       val downloadResult = service.getObject(testBucketName, testObjectName)
-      assertTrue(downloadResult.isSuccess, "下载对象应该成功")
+      assertTrue(downloadResult.isSuccess, "Download object should succeed")
       val objectContent = downloadResult.getOrThrow()
       val downloadedContent = objectContent.inputStream.readBytes().toString(Charsets.UTF_8)
-      assertEquals(testContent, downloadedContent, "下载的内容应该与上传的内容一致")
+      assertEquals(testContent, downloadedContent, "Downloaded content should match uploaded content")
 
-      // 6. 列出对象
+      // 6. List objects
       val listResult = service.listObjects(ListObjectsRequest(bucketName = testBucketName))
-      assertTrue(listResult.isSuccess, "列出对象应该成功")
+      assertTrue(listResult.isSuccess, "List objects should succeed")
       val objects = listResult.getOrThrow().objects
-      assertTrue(objects.any { it.objectName == testObjectName }, "对象列表应该包含上传的对象")
+      assertTrue(objects.any { it.objectName == testObjectName }, "Object list should contain the uploaded object")
 
-      log.info("对象操作测试完成")
+      log.info("Object operations test completed")
     }
 
     @Test
-    fun `测试对象复制操作`() = runBlocking {
+    fun `test object copy operations`() = runBlocking {
       val testBucketName = "test-integration-copy-bucket-${System.currentTimeMillis()}"
       val sourceObjectName = "source-object.txt"
       val targetObjectName = "target-object.txt"
       val testContent = "Content for copy test"
       testBuckets.add(testBucketName)
 
-      log.info("开始对象复制测试")
+      log.info("Starting object copy test")
 
-      // 创建存储桶并上传源对象
+      // Create bucket and upload source object
       service.createBucket(CreateBucketRequest(testBucketName)).getOrThrow()
       val inputStream = ByteArrayInputStream(testContent.toByteArray())
       service.putObject(testBucketName, sourceObjectName, inputStream, testContent.length.toLong()).getOrThrow()
 
-      // 复制对象
+      // Copy object
       val copyRequest =
         CopyObjectRequest(
           sourceBucketName = testBucketName,
@@ -247,13 +234,13 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
           destinationObjectName = targetObjectName,
         )
       val copyResult = service.copyObject(copyRequest)
-      assertTrue(copyResult.isSuccess, "复制对象应该成功")
+      assertTrue(copyResult.isSuccess, "Copy object should succeed")
 
-      // 验证目标对象存在
+      // Verify target object exists
       val existsResult = service.objectExists(testBucketName, targetObjectName)
-      assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "复制的对象应该存在")
+      assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "Copied object should exist")
 
-      log.info("对象复制测试完成")
+      log.info("Object copy test completed")
     }
   }
 
@@ -261,27 +248,27 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   inner class PresignedUrlOperations {
 
     @Test
-    fun `测试预签名URL生成`() = runBlocking {
+    fun `test presigned URL generation`() = runBlocking {
       val testBucketName = "test-integration-presigned-bucket-${System.currentTimeMillis()}"
       val testObjectName = "test-presigned-object.txt"
       testBuckets.add(testBucketName)
 
-      log.info("开始预签名URL测试，桶名: {}, 对象名: {}", testBucketName, testObjectName)
+      log.info("Starting presigned URL test, bucket name: {}, object name: {}", testBucketName, testObjectName)
 
-      // 1. 创建存储桶和对象
+      // 1. Create bucket and object
       service.createBucket(CreateBucketRequest(testBucketName)).getOrThrow()
       val inputStream = ByteArrayInputStream("test content".toByteArray())
       service.putObject(testBucketName, testObjectName, inputStream, 12L).getOrThrow()
 
-      // 2. 生成GET预签名URL
+      // 2. Generate GET presigned URL
       val getUrlResult =
         service.generatePresignedUrl(bucketName = testBucketName, objectName = testObjectName, expiration = Duration.ofHours(1), method = HttpMethod.GET)
-      assertTrue(getUrlResult.isSuccess, "生成GET预签名URL应该成功")
+      assertTrue(getUrlResult.isSuccess, "Generating GET presigned URL should succeed")
       val getPresignedUrl = getUrlResult.getOrThrow()
-      assertTrue(getPresignedUrl.isNotEmpty(), "GET预签名URL不应该为空")
-      assertTrue(getPresignedUrl.startsWith("https://"), "GET预签名URL应该是HTTPS协议")
+      assertTrue(getPresignedUrl.isNotEmpty(), "GET presigned URL should not be empty")
+      assertTrue(getPresignedUrl.startsWith("https://"), "GET presigned URL should use HTTPS protocol")
 
-      // 3. 生成PUT预签名URL
+      // 3. Generate PUT presigned URL
       val putUrlResult =
         service.generatePresignedUrl(
           bucketName = testBucketName,
@@ -289,12 +276,12 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
           expiration = Duration.ofMinutes(30),
           method = HttpMethod.PUT,
         )
-      assertTrue(putUrlResult.isSuccess, "生成PUT预签名URL应该成功")
+      assertTrue(putUrlResult.isSuccess, "Generating PUT presigned URL should succeed")
       val putPresignedUrl = putUrlResult.getOrThrow()
-      assertTrue(putPresignedUrl.isNotEmpty(), "PUT预签名URL不应该为空")
-      assertTrue(putPresignedUrl.startsWith("https://"), "PUT预签名URL应该是HTTPS协议")
+      assertTrue(putPresignedUrl.isNotEmpty(), "PUT presigned URL should not be empty")
+      assertTrue(putPresignedUrl.startsWith("https://"), "PUT presigned URL should use HTTPS protocol")
 
-      log.info("预签名URL测试完成")
+      log.info("Presigned URL test completed")
     }
   }
 
@@ -302,7 +289,7 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   inner class MultipartUploadOperations {
 
     @Test
-    fun `测试多部分上传`() = runBlocking {
+    fun `test multipart upload`() = runBlocking {
       val testBucketName = "test-integration-multipart-bucket-${System.currentTimeMillis()}"
       val testObjectName = "test-multipart-object.txt"
       // TOS requires each part (except the last one) to be at least 5MB
@@ -310,20 +297,20 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       val partContent2 = "B".repeat(5 * 1024 * 1024) // 5MB
       testBuckets.add(testBucketName)
 
-      log.info("开始多部分上传测试")
+      log.info("Starting multipart upload test")
 
-      // 创建存储桶
+      // Create bucket
       service.createBucket(CreateBucketRequest(testBucketName)).getOrThrow()
 
-      // 1. 初始化多部分上传
+      // 1. Initiate multipart upload
       val initiateRequest = InitiateMultipartUploadRequest(bucketName = testBucketName, objectName = testObjectName)
       val initiateResult = service.initiateMultipartUpload(initiateRequest)
-      assertTrue(initiateResult.isSuccess, "初始化多部分上传应该成功")
+      assertTrue(initiateResult.isSuccess, "Initiating multipart upload should succeed")
       val multipartUpload = initiateResult.getOrThrow()
-      assertNotNull(multipartUpload.uploadId, "上传ID不应该为空")
+      assertNotNull(multipartUpload.uploadId, "Upload ID should not be null")
 
       try {
-        // 2. 上传第一部分
+        // 2. Upload first part
         val part1Request =
           UploadPartRequest(
             bucketName = testBucketName,
@@ -334,10 +321,10 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
             size = partContent1.length.toLong(),
           )
         val part1Result = service.uploadPart(part1Request)
-        assertTrue(part1Result.isSuccess, "上传第一部分应该成功")
+        assertTrue(part1Result.isSuccess, "Uploading first part should succeed")
         val part1Info = part1Result.getOrThrow()
 
-        // 3. 上传第二部分
+        // 3. Upload second part
         val part2Request =
           UploadPartRequest(
             bucketName = testBucketName,
@@ -348,16 +335,16 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
             size = partContent2.length.toLong(),
           )
         val part2Result = service.uploadPart(part2Request)
-        assertTrue(part2Result.isSuccess, "上传第二部分应该成功")
+        assertTrue(part2Result.isSuccess, "Uploading second part should succeed")
         val part2Info = part2Result.getOrThrow()
 
-        // 4. 列出已上传的部分
+        // 4. List uploaded parts
         val listPartsResult = service.listParts(multipartUpload.uploadId, testBucketName, testObjectName)
-        assertTrue(listPartsResult.isSuccess, "列出部分应该成功")
+        assertTrue(listPartsResult.isSuccess, "Listing parts should succeed")
         val parts = listPartsResult.getOrThrow()
-        assertEquals(2, parts.size, "应该有两个部分")
+        assertEquals(2, parts.size, "Should have two parts")
 
-        // 5. 完成多部分上传
+        // 5. Complete multipart upload
         val completeRequest =
           CompleteMultipartUploadRequest(
             bucketName = testBucketName,
@@ -366,15 +353,15 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
             parts = listOf(part1Info, part2Info),
           )
         val completeResult = service.completeMultipartUpload(completeRequest)
-        assertTrue(completeResult.isSuccess, "完成多部分上传应该成功")
+        assertTrue(completeResult.isSuccess, "Completing multipart upload should succeed")
 
-        // 6. 验证对象存在
+        // 6. Verify object exists
         val existsResult = service.objectExists(testBucketName, testObjectName)
-        assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "多部分上传的对象应该存在")
+        assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "Multipart uploaded object should exist")
 
-        log.info("多部分上传测试完成")
+        log.info("Multipart upload test completed")
       } catch (e: Exception) {
-        // 如果出现异常，尝试中止上传
+        // If an exception occurs, try to abort the upload
         service.abortMultipartUpload(multipartUpload.uploadId, testBucketName, testObjectName)
         throw e
       }
@@ -385,31 +372,31 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   inner class ShareLinkOperations {
 
     @Test
-    fun `测试分享链接生成和验证`() = runBlocking {
+    fun `test share link generation and validation`() = runBlocking {
       val testBucketName = "test-integration-share-bucket-${System.currentTimeMillis()}"
       val testObjectName = "test-share-object.txt"
       val testContent = "Content for share link test"
       testBuckets.add(testBucketName)
 
-      log.info("开始分享链接测试")
+      log.info("Starting share link test")
 
-      // 创建存储桶并上传对象
+      // Create bucket and upload object
       service.createBucket(CreateBucketRequest(testBucketName)).getOrThrow()
       val inputStream = ByteArrayInputStream(testContent.toByteArray())
       service.putObject(testBucketName, testObjectName, inputStream, testContent.length.toLong()).getOrThrow()
 
-      // 生成分享链接
+      // Generate share link
       val shareRequest = ShareLinkRequest(bucketName = testBucketName, objectName = testObjectName, expiration = Duration.ofHours(2), method = HttpMethod.GET)
       val shareResult = service.generateShareLink(shareRequest)
-      assertTrue(shareResult.isSuccess, "生成分享链接应该成功")
+      assertTrue(shareResult.isSuccess, "Generating share link should succeed")
       val shareInfo = shareResult.getOrThrow()
-      assertTrue(shareInfo.shareUrl.isNotEmpty(), "分享链接不应该为空")
+      assertTrue(shareInfo.shareUrl.isNotEmpty(), "Share link should not be empty")
 
-      // 验证分享链接
+      // Validate share link
       val validateResult = service.validateShareLink(shareInfo.shareUrl)
-      assertTrue(validateResult.isSuccess, "验证分享链接应该成功")
+      assertTrue(validateResult.isSuccess, "Validating share link should succeed")
 
-      log.info("分享链接测试完成")
+      log.info("Share link test completed")
     }
   }
 
@@ -417,15 +404,15 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   inner class EnvironmentVariables {
 
     @Test
-    fun `测试环境变量读取`() {
-      log.info("验证环境变量读取")
+    fun `test environment variable reading`() {
+      log.info("Verifying environment variable reading")
 
-      assertNotNull(accessKey, "VOLCENGINE_TOS_ACCESS_KEY 应该不为空")
-      assertNotNull(secretKey, "VOLCENGINE_TOS_SECRET_KEY 应该不为空")
-      assertTrue(accessKey.isNotBlank(), "VOLCENGINE_TOS_ACCESS_KEY 应该不为空白")
-      assertTrue(secretKey.isNotBlank(), "VOLCENGINE_TOS_SECRET_KEY 应该不为空白")
+      assertNotNull(accessKey, "VOLCENGINE_TOS_ACCESS_KEY should not be null")
+      assertNotNull(secretKey, "VOLCENGINE_TOS_SECRET_KEY should not be null")
+      assertTrue(accessKey.isNotBlank(), "VOLCENGINE_TOS_ACCESS_KEY should not be blank")
+      assertTrue(secretKey.isNotBlank(), "VOLCENGINE_TOS_SECRET_KEY should not be blank")
 
-      log.info("环境变量验证完成")
+      log.info("Environment variable verification completed")
     }
   }
 }
