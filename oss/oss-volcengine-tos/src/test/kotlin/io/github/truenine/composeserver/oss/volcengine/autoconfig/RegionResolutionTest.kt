@@ -2,12 +2,10 @@ package io.github.truenine.composeserver.oss.volcengine.autoconfig
 
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.github.truenine.composeserver.oss.volcengine.properties.VolcengineTosProperties
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import org.junit.jupiter.api.Test
 
-/**
- * Simple region resolution logic tests
- */
+/** Simple region resolution logic tests */
 class RegionResolutionTest {
 
   @Test
@@ -17,11 +15,7 @@ class RegionResolutionTest {
     val ossProps = OssProperties().apply { region = "cn-beijing" }
 
     // Use reflection to call private method
-    val method = VolcengineTosAutoConfiguration::class.java.getDeclaredMethod(
-      "resolveRegion",
-      VolcengineTosProperties::class.java,
-      OssProperties::class.java
-    )
+    val method = VolcengineTosAutoConfiguration::class.java.getDeclaredMethod("resolveRegion", VolcengineTosProperties::class.java, OssProperties::class.java)
     method.isAccessible = true
     val result = method.invoke(config, tosProps, ossProps) as String
 
@@ -35,11 +29,7 @@ class RegionResolutionTest {
     val ossProps = OssProperties().apply { region = "cn-guangzhou" }
 
     // Use reflection to call private method
-    val method = VolcengineTosAutoConfiguration::class.java.getDeclaredMethod(
-      "resolveRegion",
-      VolcengineTosProperties::class.java,
-      OssProperties::class.java
-    )
+    val method = VolcengineTosAutoConfiguration::class.java.getDeclaredMethod("resolveRegion", VolcengineTosProperties::class.java, OssProperties::class.java)
     method.isAccessible = true
     val result = method.invoke(config, tosProps, ossProps) as String
 
@@ -53,11 +43,7 @@ class RegionResolutionTest {
     val ossProps = OssProperties().apply { region = null }
 
     // Use reflection to call private method
-    val method = VolcengineTosAutoConfiguration::class.java.getDeclaredMethod(
-      "resolveRegion",
-      VolcengineTosProperties::class.java,
-      OssProperties::class.java
-    )
+    val method = VolcengineTosAutoConfiguration::class.java.getDeclaredMethod("resolveRegion", VolcengineTosProperties::class.java, OssProperties::class.java)
     method.isAccessible = true
     val result = method.invoke(config, tosProps, ossProps) as String
 

@@ -7,11 +7,11 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.autoconfigure.AutoConfigurations
 import org.springframework.boot.test.context.runner.ApplicationContextRunner
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
-import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * 测试 Volcengine TOS 自动配置机制
@@ -254,13 +254,7 @@ class VolcengineTosAutoConfigurationTest {
 
     @Test
     fun `应该支持所有有效的火山引擎区域代码`() {
-      val validRegions = listOf(
-        "cn-beijing",
-        "cn-shanghai",
-        "cn-guangzhou",
-        "cn-hongkong",
-        "ap-southeast-1"
-      )
+      val validRegions = listOf("cn-beijing", "cn-shanghai", "cn-guangzhou", "cn-hongkong", "ap-southeast-1")
 
       validRegions.forEach { region ->
         contextRunner
@@ -298,8 +292,8 @@ class VolcengineTosAutoConfigurationTest {
           // 验证警告日志被输出
           kotlin.test.assertTrue(
             output.out.contains("No region specified, using default region: cn-beijing") ||
-            output.err.contains("No region specified, using default region: cn-beijing"),
-            "Expected warning log about default region not found in output: ${output.all}"
+              output.err.contains("No region specified, using default region: cn-beijing"),
+            "Expected warning log about default region not found in output: ${output.all}",
           )
 
           // 验证 TOS 客户端被创建
@@ -320,9 +314,8 @@ class VolcengineTosAutoConfigurationTest {
         .run { context ->
           // 验证没有默认区域警告日志
           kotlin.test.assertFalse(
-            output.out.contains("No region specified, using default region") ||
-            output.err.contains("No region specified, using default region"),
-            "Should not output default region warning when region is specified"
+            output.out.contains("No region specified, using default region") || output.err.contains("No region specified, using default region"),
+            "Should not output default region warning when region is specified",
           )
 
           // 验证 TOS 客户端被创建
@@ -343,9 +336,8 @@ class VolcengineTosAutoConfigurationTest {
         .run { context ->
           // 验证没有默认区域警告日志
           kotlin.test.assertFalse(
-            output.out.contains("No region specified, using default region") ||
-            output.err.contains("No region specified, using default region"),
-            "Should not output default region warning when OSS region is specified"
+            output.out.contains("No region specified, using default region") || output.err.contains("No region specified, using default region"),
+            "Should not output default region warning when OSS region is specified",
           )
 
           // 验证 TOS 客户端被创建
