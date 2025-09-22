@@ -23,9 +23,9 @@ Kotlin modular library collection for enterprise server development.
 
 ```kotlin
 dependencies {
-    implementation(platform("io.github.truenine:composeserver-bom:0.0.26"))
-    implementation("io.github.truenine:composeserver-shared")
-    // Add other modules as needed
+  implementation(platform("io.github.truenine:composeserver-bom:0.0.26"))
+  implementation("io.github.truenine:composeserver-shared")
+  // Add other modules as needed
 }
 ```
 

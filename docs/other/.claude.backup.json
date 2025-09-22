@@ -1,0 +1,10 @@
+{
+  "numStartups": 1,
+  "installMethod": "pnpm",
+  "autoUpdates": true,
+  "hasCompletedOnboarding": true,
+  "hasOpusPlanDefault": true,
+  "isQualifiedForDataSharing": false,
+  "subscriptionNoticeCount": 0,
+  "hasAvailableSubscription": false
+}
