@@ -1,4 +1,4 @@
-package io.github.truenine.composeserver.oss.volcengine
+package itest.integrate.oss.volcenginetos
 
 import com.volcengine.tos.TOSV2
 import com.volcengine.tos.TOSV2ClientBuilder
@@ -11,6 +11,7 @@ import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
 import io.github.truenine.composeserver.oss.ListObjectsRequest
 import io.github.truenine.composeserver.oss.ShareLinkRequest
 import io.github.truenine.composeserver.oss.UploadPartRequest
+import io.github.truenine.composeserver.oss.volcengine.VolcengineTosObjectStorageService
 import java.io.ByteArrayInputStream
 import java.time.Duration
 import kotlin.test.assertEquals
@@ -42,21 +43,7 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
     @JvmStatic private val log = logger<VolcengineTosObjectStorageServiceIntegrationTest>()
 
     /** Check if required environment variables exist for JUnit5 conditional testing */
-    @JvmStatic
-    fun hasRequiredEnvironmentVariables(): Boolean {
-      val accessKey = System.getenv("VOLCENGINE_TOS_ACCESS_KEY")
-      val secretKey = System.getenv("VOLCENGINE_TOS_SECRET_KEY")
-
-      val hasCredentials = !accessKey.isNullOrBlank() && !secretKey.isNullOrBlank()
-
-      if (!hasCredentials) {
-        log.warn("Skipping Volcengine TOS integration tests: missing required environment variables VOLCENGINE_TOS_ACCESS_KEY or VOLCENGINE_TOS_SECRET_KEY")
-      } else {
-        log.info("Detected Volcengine TOS credentials, will execute integration tests")
-      }
-
-      return hasCredentials
-    }
+    @JvmStatic fun hasRequiredEnvironmentVariables() = hasTosRequiredEnvironmentVariables()
   }
 
   private lateinit var service: VolcengineTosObjectStorageService
@@ -67,19 +54,19 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
 
   @BeforeEach
   fun setUp() {
-    // Read environment variables
-    accessKey = System.getenv("VOLCENGINE_TOS_ACCESS_KEY") ?: throw IllegalStateException("VOLCENGINE_TOS_ACCESS_KEY environment variable not set")
-    secretKey = System.getenv("VOLCENGINE_TOS_SECRET_KEY") ?: throw IllegalStateException("VOLCENGINE_TOS_SECRET_KEY environment variable not set")
+    getTosAkSk()?.also {
+      accessKey = it.ak
+      secretKey = it.sk
+      log.info("Using Access Key: ${accessKey.take(8)}... for integration testing")
 
-    log.info("Using Access Key: ${accessKey.take(8)}... for integration testing")
+      // Create real TOS client
+      tosClient = TOSV2ClientBuilder().build("cn-beijing", it.endpoint, accessKey, secretKey)
 
-    // Create real TOS client
-    tosClient = TOSV2ClientBuilder().build("cn-beijing", "https://tos-cn-beijing.volces.com", accessKey, secretKey)
+      // Create service instance
+      service = VolcengineTosObjectStorageService(tosClient = tosClient, exposedBaseUrl = it.endpoint)
 
-    // Create service instance
-    service = VolcengineTosObjectStorageService(tosClient = tosClient, exposedBaseUrl = "https://tos-cn-beijing.volces.com")
-
-    log.info("TOS client and service instance created successfully")
+      log.info("TOS client and service instance created successfully")
+    }
   }
 
   @AfterEach
