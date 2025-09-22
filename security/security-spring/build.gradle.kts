@@ -22,8 +22,8 @@ dependencies {
 
   implementation(libs.org.owasp.antisamy.antisamy) {
     exclude(group = "org.htmlunit", module = "neko-htmlunit")
-    implementation(libs.org.htmlunit.neko.htmlunit)
   }
+  implementation(libs.org.htmlunit.neko.htmlunit)
 
   // implementation(project(":depend:depend-http-exchange"))
   // TODO 剥离 web模块
