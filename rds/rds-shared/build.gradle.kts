@@ -23,13 +23,13 @@ dependencies {
       group = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.group,
       module = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.name,
     )
-    implementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
     exclude(
       group = libs.org.springframework.data.spring.data.commons.get().module.group,
       module = libs.org.springframework.data.spring.data.commons.get().module.name,
     )
-    implementation(libs.org.springframework.data.spring.data.commons)
   }
+  implementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
+  implementation(libs.org.springframework.data.spring.data.commons)
 
   testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
   testImplementation(libs.org.postgresql.postgresql)
