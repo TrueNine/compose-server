@@ -12,6 +12,7 @@ plugins {
   // See https://central.sonatype.com/artifact/io.gitee.zjarlin.auto-modules/io.gitee.zjarlin.auto-modules.gradle.plugin
   // id("io.gitee.zjarlin.auto-modules") version "0.0.616"
 }
+
 // autoModules { excludeModules("build-logic") }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -23,7 +24,6 @@ listOf("version-catalog", "shared", "bom", "gradle-plugin", "cacheable", "docsit
   include(p)
   findProject(":$p")?.name = p
 }
-
 
 // 监控模块
 include("surveillance:surveillance-shared")
