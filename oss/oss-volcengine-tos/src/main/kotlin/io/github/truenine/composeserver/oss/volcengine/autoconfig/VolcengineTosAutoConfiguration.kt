@@ -130,9 +130,12 @@ class VolcengineTosAutoConfiguration {
 
   /** Resolve region with detailed logging */
   private fun resolveRegion(tosProperties: VolcengineTosProperties, ossProperties: OssProperties): String {
-    val region = tosProperties.region ?: ossProperties.region
+    val region = tosProperties.region ?: ossProperties.region ?: run {
+      log.warn("No region specified, using default region: cn-beijing")
+      "cn-beijing"
+  }
     log.debug("Resolved region: $region (from ${if (tosProperties.region != null) "TOS properties" else "OSS properties"})")
-    return region ?: throw IllegalArgumentException("TOS region is required")
+    return region
   }
 
   /** Resolve access key with detailed logging */
