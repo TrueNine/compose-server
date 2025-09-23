@@ -14,6 +14,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../.run" />
       <excludeFolder url="file://$MODULE_DIR$/../../.vscode" />
       <excludeFolder url="file://$MODULE_DIR$/../../docs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../.playwright-mcp" />
     </content>
   </component>
 </module>
