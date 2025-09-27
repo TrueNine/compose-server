@@ -21,12 +21,29 @@ inline fun String.isId(): Boolean {
   return this.isNotEmpty() && this.matches(Regex("^[0-9A-Za-z]+$"))
 }
 
-@Deprecated("框架内部调用代码，不应由用户直接调用", level = DeprecationLevel.ERROR) inline fun getDefaultNullableId(): Id = Long.MIN_VALUE
+@Deprecated("框架内部调用代码，不应由用户直接调用", level = DeprecationLevel.ERROR)
+inline fun getDefaultNullableId(): Id = Long.MIN_VALUE
 
 inline fun Number.toId(): Id? {
   return this.toLong().takeIf { it != Long.MIN_VALUE }
 }
 
+inline fun <T> Number.toId(receiver: (Id) -> T?): T? {
+  return this.toId()?.let(receiver)
+}
+
+inline fun Number.toIdOrThrow(): Id {
+  return this.toLong().takeIf { it != Long.MIN_VALUE } ?: throw IllegalArgumentException("Invalid Id: $this")
+}
+
 inline fun String.toId(): Id? {
   return this.toLongOrNull()?.takeIf { it != Long.MIN_VALUE }
+}
+
+inline fun String.toIdOrThrow(): Id {
+  return this.toLongOrNull()?.takeIf { it != Long.MIN_VALUE } ?: throw IllegalArgumentException("Invalid Id: $this")
+}
+
+inline fun <T> String.toId(receiver: (Id) -> T?): T? {
+  return this.toId()?.let(receiver)
 }
