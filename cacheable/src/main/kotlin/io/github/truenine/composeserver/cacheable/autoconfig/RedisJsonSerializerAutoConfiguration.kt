@@ -43,7 +43,6 @@ class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.N
       .disableCachingNullValues()
 
   @Bean(name = [ICacheNames.IRedis.HANDLE])
-  @ConditionalOnBean(name = [VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME])
   fun customRedisJsonSerializable(@Qualifier(VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME) factory: RedisConnectionFactory): RedisTemplate<String, *> {
     log.trace("register redisTemplate factory: {}", factory)
     val rt = RedisTemplate<String, Any?>()
@@ -58,7 +57,6 @@ class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.N
   }
 
   @Bean(name = [ICacheNames.IRedis.CACHE_MANAGER])
-  @ConditionalOnBean(name = [VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME])
   fun cacheManager2h(@Qualifier(VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME) factory: RedisConnectionFactory): RedisCacheManager {
     log.debug("register RedisCacheManager , factory: {}", factory)
     return asCacheConfig(factory)
