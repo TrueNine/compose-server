@@ -11,7 +11,7 @@ Includes Redis integration for distributed caching and Caffeine for high-perform
     .trimIndent()
 
 dependencies {
-  implementation(libs.org.springframework.boot.spring.boot.starter.data.redis)
+  api(libs.org.springframework.boot.spring.boot.starter.data.redis)
   implementation(libs.org.apache.commons.commons.pool2)
   implementation(libs.com.github.ben.manes.caffeine.caffeine)
 
