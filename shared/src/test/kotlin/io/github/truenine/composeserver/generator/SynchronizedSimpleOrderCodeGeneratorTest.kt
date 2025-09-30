@@ -1,15 +1,13 @@
 package io.github.truenine.composeserver.generator
 
-import io.github.truenine.composeserver.datetime
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
@@ -21,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.assertAll
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
@@ -29,7 +26,6 @@ import org.springframework.boot.test.context.SpringBootTest
 class SynchronizedSimpleOrderCodeGeneratorTest {
   private lateinit var snowflake: ISnowflakeGenerator
   private lateinit var generator: SynchronizedSimpleOrderCodeGenerator
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
 
   @BeforeEach
   fun setUp() {
@@ -37,12 +33,24 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     generator = SynchronizedSimpleOrderCodeGenerator(snowflake)
   }
 
+  private fun assertTimestampPrefix(orderCode: String) {
+    assertTrue(orderCode.length >= 13, "订单号长度应该至少为13位")
+    val timestampPart = orderCode.substring(0, 13)
+    assertTrue(timestampPart.length == 13, "时间戳部分应该是13位")
+    assertTrue(timestampPart.all { it.isDigit() }, "时间戳部分应该只包含数字")
+    val timestampMillis = timestampPart.toLong()
+    val now = System.currentTimeMillis()
+    val difference = abs(now - timestampMillis)
+    assertTrue(difference <= 1_000, "生成的时间戳与当前时间差距应该在1秒内，实际差距: ${difference}ms")
+  }
+
   @Nested
   inner class BasicFunctionality {
     @Test
     fun `should generate order code with correct length`() {
       val code = generator.nextString()
-      assertTrue(code.length >= 19, "订单号长度应该至少为19位")
+      assertTrue(code.length > 13, "订单号长度应该大于13位")
+      assertTimestampPrefix(code)
     }
 
     @Test
@@ -54,18 +62,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     @Test
     fun `should start with valid timestamp format`() {
       val code = generator.nextString()
-      val timePart = code.substring(0, 17)
-
-      // 验证时间戳格式是否正确
-      assertTrue(timePart.length == 17, "时间戳部分应该是17位")
-
-      val parsedDateTime = LocalDateTime.parse(timePart, dateTimeFormatter)
-      val currentDateTime = datetime.now()
-
-      assertAll(
-        { assertTrue(parsedDateTime.isBefore(currentDateTime.plusSeconds(1)), "生成的时间应该不晚于当前时间") },
-        { assertTrue(parsedDateTime.isAfter(currentDateTime.minusSeconds(1)), "生成的时间应该不早于当前时间") },
-      )
+      assertTimestampPrefix(code)
     }
 
     @Test
@@ -74,15 +71,13 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
 
       // 验证字符串格式
       assertTrue(stringValue.isNotBlank(), "nextString()应该返回非空字符串，实际值: '$stringValue'")
-      assertTrue(stringValue.length >= 19, "订单号长度应该至少为19位，实际长度: ${stringValue.length}")
+      assertTrue(stringValue.length > 13, "订单号长度应该大于13位，实际长度: ${stringValue.length}")
 
       // 验证基本数字格式
       assertTrue(stringValue.all { it.isDigit() }, "订单号应该只包含数字字符，实际值: '$stringValue'")
 
       // 验证时间戳部分
-      val timePart = stringValue.substring(0, 17)
-      assertTrue(timePart.length == 17, "时间戳部分应该是17位")
-      assertTrue(timePart.all { it.isDigit() }, "时间戳部分应该只包含数字")
+      assertTimestampPrefix(stringValue)
     }
   }
 
@@ -151,7 +146,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     @Test
     fun `should handle snowflake generator exceptions gracefully`() {
       val brokenSnowflake = mockk<ISnowflakeGenerator>()
-      every { brokenSnowflake.nextString() } throws RuntimeException("雪花算法异常")
+      every { brokenSnowflake.currentTimeMillis() } throws RuntimeException("雪花算法异常")
 
       val brokenGenerator = SynchronizedSimpleOrderCodeGenerator(brokenSnowflake)
 
@@ -165,6 +160,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     @Test
     fun `should handle datetime formatting exceptions`() {
       val snowflake = mockk<ISnowflakeGenerator>()
+      every { snowflake.currentTimeMillis() } returns System.currentTimeMillis()
       every { snowflake.nextString() } returns "123456"
 
       val generator = SynchronizedSimpleOrderCodeGenerator(snowflake)
@@ -172,6 +168,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       // 正常情况应该不会抛出异常
       val result = generator.nextString()
       assertTrue(result.isNotEmpty())
+      verify { snowflake.currentTimeMillis() }
       verify { snowflake.nextString() }
     }
   }
@@ -237,38 +234,45 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     @Test
     fun `should use snowflake generator correctly`() {
       val mockSnowflake = mockk<ISnowflakeGenerator>()
+      every { mockSnowflake.currentTimeMillis() } returns System.currentTimeMillis()
       every { mockSnowflake.nextString() } returns "9876543210"
 
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
+      verify(exactly = 1) { mockSnowflake.currentTimeMillis() }
       verify(exactly = 1) { mockSnowflake.nextString() }
       assertTrue(result.endsWith("9876543210"), "订单号应该以雪花ID结尾")
-      assertTrue(result.startsWith(datetime.now().format(dateTimeFormatter).substring(0, 14)), "订单号应该以当前时间戳开头")
+      assertTimestampPrefix(result)
     }
 
     @Test
     fun `should handle empty snowflake id`() {
       val mockSnowflake = mockk<ISnowflakeGenerator>()
+      every { mockSnowflake.currentTimeMillis() } returns System.currentTimeMillis()
       every { mockSnowflake.nextString() } returns ""
 
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
-      assertEquals(17, result.length, "当雪花ID为空时，订单号长度应该等于时间戳长度")
-      assertTrue(result.matches(Regex("\\d{17}")), "应该只包含17位数字")
+      assertEquals(13, result.length, "当雪花ID为空时，订单号长度应该等于时间戳长度")
+      assertTrue(result.matches(Regex("\\d{13}")), "应该只包含13位数字")
+      assertTimestampPrefix(result)
     }
 
     @Test
     fun `should handle special snowflake responses`() {
       val mockSnowflake = mockk<ISnowflakeGenerator>()
-      every { mockSnowflake.nextString() } returns "123456789"
+      val snowflakeValue = "123456789"
+      every { mockSnowflake.currentTimeMillis() } returns System.currentTimeMillis()
+      every { mockSnowflake.nextString() } returns snowflakeValue
 
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
       assertTrue(result.endsWith("123456789"), "订单号应该以雪花ID结尾")
-      assertTrue(result.length >= 17, "订单号长度应该至少为17位")
+      assertTrue(result.length >= 13 + snowflakeValue.length, "订单号长度应该至少包含时间戳和雪花ID长度")
+      assertTimestampPrefix(result)
     }
   }
 
@@ -278,24 +282,28 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     fun `should handle very long snowflake ids`() {
       val mockSnowflake = mockk<ISnowflakeGenerator>()
       val longSnowflakeId = "1".repeat(100)
+      every { mockSnowflake.currentTimeMillis() } returns System.currentTimeMillis()
       every { mockSnowflake.nextString() } returns longSnowflakeId
 
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
-      assertTrue(result.length >= 117, "订单号长度应该至少为117位")
+      assertTrue(result.length >= 13 + longSnowflakeId.length, "订单号长度应该至少包含时间戳和雪花ID长度")
+      assertTimestampPrefix(result)
       assertTrue(result.endsWith(longSnowflakeId), "订单号应该包含完整的雪花ID")
     }
 
     @Test
     fun `should handle minimum valid snowflake id`() {
       val mockSnowflake = mockk<ISnowflakeGenerator>()
+      every { mockSnowflake.currentTimeMillis() } returns System.currentTimeMillis()
       every { mockSnowflake.nextString() } returns "1"
 
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
-      assertEquals(18, result.length, "订单号长度应该为18位")
+      assertEquals(14, result.length, "订单号长度应该为14位")
+      assertTimestampPrefix(result)
       assertTrue(result.endsWith("1"), "订单号应该以1结尾")
       assertTrue(result.toLong() >= 1000, "转换为Long应该>=1000")
     }

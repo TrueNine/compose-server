@@ -1,13 +1,11 @@
 package io.github.truenine.composeserver.generator
 
-import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.logger
-import java.time.format.DateTimeFormatter
 
 /**
  * 同步简单订单编号生成器
  *
- * 该生成器组合了时间戳和雪花算法ID来生成唯一的订单号 格式: yyyyMMddHHmmssSSS + snowflakeId
+ * 该生成器组合了当前时间戳（毫秒）和雪花算法ID来生成唯一的订单号 格式: currentTimeMillis + snowflakeId
  *
  * @param snowflake 雪花算法生成器，用于生成唯一ID
  * @author TrueNine
@@ -15,19 +13,23 @@ import java.time.format.DateTimeFormatter
  */
 class SynchronizedSimpleOrderCodeGenerator(private val snowflake: ISnowflakeGenerator) : IOrderCodeGenerator {
   private val logger = logger<SynchronizedSimpleOrderCodeGenerator>()
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
 
   @Synchronized
   override fun nextString(): String {
     return try {
-      val currentDateTime = datetime.now().format(dateTimeFormatter)
+      val timestampMillis = snowflake.currentTimeMillis().coerceAtLeast(0L)
       val snowflakeId = snowflake.nextString()
       val orderCode = buildString {
-        append(currentDateTime)
-        append(snowflakeId)
+        append(timestampMillis)
+        if (snowflakeId.isNotEmpty()) append(snowflakeId)
       }
 
-      logger.debug("Generated order code: {} with timestamp: {} and snowflake: {}", orderCode, currentDateTime, snowflakeId)
+      logger.debug(
+        "Generated order code: {} with timestamp millis: {} and snowflake: {}",
+        orderCode,
+        timestampMillis,
+        snowflakeId,
+      )
 
       orderCode
     } catch (exception: Exception) {
