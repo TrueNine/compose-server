@@ -81,3 +81,4 @@ pnpm-lock.yaml
 
 ### Windows issues ###
 nul
+.playwright-mcp/
