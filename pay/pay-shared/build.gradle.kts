@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Shared payment processing abstractions and common models.
-Provides unified interfaces, enums, and data models for payment operations across different payment providers.
-"""
+  Shared payment processing abstractions and common models.
+  Provides unified interfaces, enums, and data models for payment operations across different payment providers.
+  """
     .trimIndent()
 
 dependencies {

@@ -6,9 +6,9 @@ plugins {
 
 description =
   """
-Shared foundation module for Flyway database migrations, providing common dependencies and configurations for various database types.
-Serves as a base dependency for specific database migration modules (such as PostgreSQL, MySQL8), offering Flyway Core runtime support.
-"""
+  Shared foundation module for Flyway database migrations, providing common dependencies and configurations for various database types.
+  Serves as a base dependency for specific database migration modules (such as PostgreSQL, MySQL8), offering Flyway Core runtime support.
+  """
     .trimIndent()
 
 dependencies {

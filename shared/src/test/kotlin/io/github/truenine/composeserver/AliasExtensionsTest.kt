@@ -4,7 +4,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
-import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -186,10 +185,7 @@ class AliasExtensionsTest {
 
   @Test
   fun `String toIdOrThrow() should throw exception for invalid numeric strings`() {
-    val invalidInputs = listOf(
-      "", "abc", "123abc", "abc123", "12.34", "12,34", " 123", "123 ", "12 34",
-      "++123", "--123", "1a2b3c", Long.MIN_VALUE.toString()
-    )
+    val invalidInputs = listOf("", "abc", "123abc", "abc123", "12.34", "12,34", " 123", "123 ", "12 34", "++123", "--123", "1a2b3c", Long.MIN_VALUE.toString())
 
     invalidInputs.forEach { input ->
       try {

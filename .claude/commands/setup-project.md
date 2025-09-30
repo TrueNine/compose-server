@@ -42,7 +42,7 @@ claude mcp add playwright --scope project -- npx -y @playwright/mcp@latest --vie
 
 ```bash
 # Context7 - Access up-to-date documentation for any library
-claude mcp add-json context7 --scope project '{"command":"cmd","args":["/c","npx","-y","@upstash/context7-mcp@latest"]}'
+claude mcp add-json context7 --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@upstash/context7-mcp@latest\"]}'
 
 # Grep - Search millions of GitHub repositories for code examples
 claude mcp add --scope project --transport http grep https://mcp.grep.app
@@ -51,10 +51,10 @@ claude mcp add --scope project --transport http grep https://mcp.grep.app
 claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.com/mcp
 
 # Sequential Thinking - Enhanced reasoning and problem-solving
-claude mcp add-json sequential-thinking --scope project '{"command":"cmd","args":["/c","npx","-y","@modelcontextprotocol/server-sequential-thinking@latest"]}'
+claude mcp add-json sequential-thinking --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-sequential-thinking@latest\"]}'
 
 # Memory - Knowledge graph for persistent context
-claude mcp add-json memory --scope project '{"command":"cmd","args":["/c","npx","-y","@modelcontextprotocol/server-memory@latest"]}'
+claude mcp add-json memory --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-memory@latest\"]}'
 
 # Playwright - Web automation and testing
 claude mcp add-json playwright --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@playwright/mcp@latest\",\"--viewport-size\",\"1920,1080\"]}'

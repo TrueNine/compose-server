@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-HTTP client utilities and exchange interfaces for reactive and traditional web service communication.
-Provides Spring WebFlux HTTP client support, Netty integration, and JSON processing capabilities.
-"""
+  HTTP client utilities and exchange interfaces for reactive and traditional web service communication.
+  Provides Spring WebFlux HTTP client support, Netty integration, and JSON processing capabilities.
+  """
     .trimIndent()
 
 dependencies {

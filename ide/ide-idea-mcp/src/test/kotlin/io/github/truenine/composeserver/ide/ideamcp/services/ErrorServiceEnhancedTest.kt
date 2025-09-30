@@ -18,17 +18,17 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     // 创建一个包含未使用导入的测试文件
     val testContent =
       """
-      package com.test
-      
-      import java.util.List  // 未使用的导入
-      import java.util.Map   // 未使用的导入
-      
-      class TestClass {
-        fun doSomething() {
-          println("Hello")
+        package com.test
+        
+        import java.util.List  // 未使用的导入
+        import java.util.Map   // 未使用的导入
+        
+        class TestClass {
+          fun doSomething() {
+            println("Hello")
+          }
         }
-      }
-    """
+      """
         .trimIndent()
 
     val virtualFile = myFixture.configureByText("TestClass.kt", testContent).virtualFile
@@ -58,14 +58,14 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     // 创建一个包含语法错误的测试文件
     val testContent =
       """
-      package com.test
-      
-      class TestClass {
-        fun doSomething( {  // 语法错误：缺少参数和右括号
-          println("Hello")
+        package com.test
+        
+        class TestClass {
+          fun doSomething( {  // 语法错误：缺少参数和右括号
+            println("Hello")
+          }
         }
-      }
-    """
+      """
         .trimIndent()
 
     val virtualFile = myFixture.configureByText("ErrorClass.kt", testContent).virtualFile
@@ -91,26 +91,26 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     // 创建一个包含多种问题的测试文件
     val testContent =
       """
-      package com.test
+        package com.test
 
-      import java.util.List  // 未使用
-      import java.util.ArrayList
+        import java.util.List  // 未使用
+        import java.util.ArrayList
 
-      class TestClass {
-        private val unusedField = "never used"  // 未使用的字段
+        class TestClass {
+          private val unusedField = "never used"  // 未使用的字段
 
-        fun doSomething(): String {
-          val list = ArrayList<String>()
-          list.add("test")
-          return list.toString()
-          val unreachableCode = "never reached"  // 不可达代码
+          fun doSomething(): String {
+            val list = ArrayList<String>()
+            list.add("test")
+            return list.toString()
+            val unreachableCode = "never reached"  // 不可达代码
+          }
+
+          fun undefinedMethod() {
+            nonExistentFunction()  // 未定义的函数
+          }
         }
-
-        fun undefinedMethod() {
-          nonExistentFunction()  // 未定义的函数
-        }
-      }
-    """
+      """
         .trimIndent()
 
     val virtualFile = myFixture.configureByText("ComprehensiveTest.kt", testContent).virtualFile
@@ -161,14 +161,14 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     // 创建一个包含明显语法错误的文件
     val testContent =
       """
-      package com.test
+        package com.test
 
-      class TestClass {
-        fun brokenFunction( {  // 明显的语法错误
-          println("This should cause a syntax error")
+        class TestClass {
+          fun brokenFunction( {  // 明显的语法错误
+            println("This should cause a syntax error")
+          }
         }
-      }
-    """
+      """
         .trimIndent()
 
     val virtualFile = myFixture.configureByText("SyntaxErrorTest.kt", testContent).virtualFile

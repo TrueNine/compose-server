@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Spring Security integration providing authentication, authorization, and security configurations.
-Includes JWT token handling, CAPTCHA support, XSS protection, and comprehensive security filters.
-"""
+  Spring Security integration providing authentication, authorization, and security configurations.
+  Includes JWT token handling, CAPTCHA support, XSS protection, and comprehensive security filters.
+  """
     .trimIndent()
 
 dependencies {

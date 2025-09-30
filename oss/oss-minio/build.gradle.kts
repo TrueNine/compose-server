@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-MinIO object storage integration providing S3-compatible storage operations.
-Includes bucket management, file operations, and comprehensive testing with TestContainers support.
-"""
+  MinIO object storage integration providing S3-compatible storage operations.
+  Includes bucket management, file operations, and comprehensive testing with TestContainers support.
+  """
     .trimIndent()
 
 dependencies {

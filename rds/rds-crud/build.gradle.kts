@@ -6,9 +6,9 @@ plugins {
 
 description =
   """
-CRUD operation abstractions and utilities built on top of Jimmer ORM.
-Provides generic repository patterns, transaction management, and database operation helpers.
-"""
+  CRUD operation abstractions and utilities built on top of Jimmer ORM.
+  Provides generic repository patterns, transaction management, and database operation helpers.
+  """
     .trimIndent()
 
 dependencies {

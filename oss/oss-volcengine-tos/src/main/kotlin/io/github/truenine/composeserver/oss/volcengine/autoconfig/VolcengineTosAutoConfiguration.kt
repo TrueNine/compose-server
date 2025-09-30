@@ -93,18 +93,18 @@ class VolcengineTosAutoConfiguration {
           // Use ListBucketsV2Input for connection test
           val listBucketsInput = com.volcengine.tos.model.bucket.ListBucketsV2Input()
           client.listBuckets(listBucketsInput)
-          log.info("✅ Volcengine TOS client connected successfully")
+          log.info("Volcengine TOS client connected successfully")
         } catch (e: Exception) {
-          log.error("❌ Volcengine TOS client connection failed", e)
+          log.error("Volcengine TOS client connection failed", e)
           throw e
         }
       } else {
-        log.info("✅ Volcengine TOS client initialized (connection test skipped in test environment)")
+        log.info("Volcengine TOS client initialized (connection test skipped in test environment)")
       }
 
       client
     } catch (e: Exception) {
-      log.error("❌ Failed to initialize Volcengine TOS client: ${e.message}", e)
+      log.error("Failed to initialize Volcengine TOS client: ${e.message}", e)
       throw IllegalStateException("Failed to create TOS client", e)
     }
   }
@@ -116,7 +116,7 @@ class VolcengineTosAutoConfiguration {
 
     val exposedBaseUrl = resolveExposedBaseUrl(tosProperties, ossProperties)
 
-    log.info("✅ Volcengine TOS IObjectStorageService created with exposed URL: $exposedBaseUrl")
+    log.info("Volcengine TOS IObjectStorageService created with exposed URL: $exposedBaseUrl")
 
     return VolcengineTosObjectStorageService(tosClient, exposedBaseUrl)
   }
@@ -167,29 +167,29 @@ class VolcengineTosAutoConfiguration {
 
   /** Log configuration summary without sensitive information */
   private fun logConfigurationSummary(tosProperties: VolcengineTosProperties, endpoint: String, region: String, hasSts: Boolean) {
-    log.info("📋 TOS Client Configuration Summary:")
-    log.info("  🌐 Endpoint: $endpoint")
-    log.info("  📍 Region: $region")
-    log.info("  🔐 Authentication: ${if (hasSts) "STS (temporary credentials)" else "Static credentials"}")
-    log.info("  🔒 SSL Enabled: ${tosProperties.enableSsl}")
-    log.info("  🔗 Max Connections: ${tosProperties.maxConnections}")
-    log.info("  ⏱️ Connect Timeout: ${tosProperties.connectTimeoutMills}ms")
-    log.info("  📖 Read Timeout: ${tosProperties.readTimeoutMills}ms")
-    log.info("  📝 Write Timeout: ${tosProperties.writeTimeoutMills}ms")
-    log.info("  🔄 Max Retries: ${tosProperties.maxRetryCount}")
-    log.info("  🌐 DNS Cache: ${if (tosProperties.dnsCacheTimeMinutes > 0) "${tosProperties.dnsCacheTimeMinutes}min" else "disabled"}")
-    log.info("  ✅ CRC Check: ${tosProperties.enableCrc}")
-    log.info("  🔍 SSL Verify: ${tosProperties.enableVerifySSL}")
-    log.info("  📄 Auto Content-Type: ${tosProperties.clientAutoRecognizeContentType}")
-    log.info("  📊 Logging: ${tosProperties.enableLogging}")
+    log.info("TOS Client Configuration Summary:")
+    log.info("  Endpoint: $endpoint")
+    log.info("  Region: $region")
+    log.info("  Authentication: ${if (hasSts) "STS (temporary credentials)" else "Static credentials"}")
+    log.info("  SSL Enabled: ${tosProperties.enableSsl}")
+    log.info("  Max Connections: ${tosProperties.maxConnections}")
+    log.info("  Connect Timeout: ${tosProperties.connectTimeoutMills}ms")
+    log.info("  Read Timeout: ${tosProperties.readTimeoutMills}ms")
+    log.info("  Write Timeout: ${tosProperties.writeTimeoutMills}ms")
+    log.info("  Max Retries: ${tosProperties.maxRetryCount}")
+    log.info("  DNS Cache: ${if (tosProperties.dnsCacheTimeMinutes > 0) "${tosProperties.dnsCacheTimeMinutes}min" else "disabled"}")
+    log.info("  CRC Check: ${tosProperties.enableCrc}")
+    log.info("  SSL Verify: ${tosProperties.enableVerifySSL}")
+    log.info("  Auto Content-Type: ${tosProperties.clientAutoRecognizeContentType}")
+    log.info("  Logging: ${tosProperties.enableLogging}")
 
     if (tosProperties.hasProxyConfiguration()) {
-      log.info("  🌐 Proxy: ${tosProperties.proxyHost}:${tosProperties.proxyPort}")
-      log.info("  🔐 Proxy Auth: ${tosProperties.hasProxyAuthentication()}")
+      log.info("  Proxy: ${tosProperties.proxyHost}:${tosProperties.proxyPort}")
+      log.info("  Proxy Auth: ${tosProperties.hasProxyAuthentication()}")
     }
 
     if (tosProperties.isCustomDomain) {
-      log.info("  🏷️ Custom Domain: ${tosProperties.customDomain}")
+      log.info("  Custom Domain: ${tosProperties.customDomain}")
     }
   }
 
@@ -210,17 +210,17 @@ class VolcengineTosAutoConfiguration {
 
     // Configure proxy if specified
     if (tosProperties.hasProxyConfiguration()) {
-      log.info("🌐 Configuring proxy: ${tosProperties.proxyHost}:${tosProperties.proxyPort}")
+      log.info("Configuring proxy: ${tosProperties.proxyHost}:${tosProperties.proxyPort}")
       builder.proxyHost(tosProperties.proxyHost).proxyPort(tosProperties.proxyPort)
 
       if (tosProperties.hasProxyAuthentication()) {
-        log.debug("🔐 Configuring proxy authentication")
+        log.debug("Configuring proxy authentication")
         builder.proxyUserName(tosProperties.proxyUserName).proxyPassword(tosProperties.proxyPassword)
       }
     }
 
     val config = builder.build()
-    log.debug("✅ Transport configuration built successfully")
+    log.debug("Transport configuration built successfully")
     return config
   }
 
@@ -234,7 +234,7 @@ class VolcengineTosAutoConfiguration {
     transportConfig: TransportConfig,
   ): TOSClientConfiguration {
     log.debug("Building client configuration...")
-    log.debug("🔐 Using static credentials")
+    log.debug("Using static credentials")
 
     val builder =
       TOSClientConfiguration.builder()
@@ -265,7 +265,7 @@ class VolcengineTosAutoConfiguration {
     }
 
     val config = builder.build()
-    log.debug("✅ Client configuration built successfully")
+    log.debug("Client configuration built successfully")
     return config
   }
 

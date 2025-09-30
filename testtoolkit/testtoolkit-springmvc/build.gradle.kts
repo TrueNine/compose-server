@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Spring MVC testing toolkit extension providing web layer testing utilities.
-Includes specialized test support for controllers, REST APIs, security, and web integration testing scenarios.
-"""
+  Spring MVC testing toolkit extension providing web layer testing utilities.
+  Includes specialized test support for controllers, REST APIs, security, and web integration testing scenarios.
+  """
     .trimIndent()
 
 dependencies {

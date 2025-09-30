@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Shared utilities and base classes for Kotlin Symbol Processing (KSP) development.
-Provides common KSP APIs, KotlinPoet utilities, and shared metadata for code generation tasks.
-"""
+  Shared utilities and base classes for Kotlin Symbol Processing (KSP) development.
+  Provides common KSP APIs, KotlinPoet utilities, and shared metadata for code generation tasks.
+  """
     .trimIndent()
 
 dependencies {

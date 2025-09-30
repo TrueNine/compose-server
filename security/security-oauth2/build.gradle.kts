@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-OAuth2 authentication and authorization implementation with support for various providers.
-Provides OAuth2 client configurations, token management, and third-party integration capabilities.
-"""
+  OAuth2 authentication and authorization implementation with support for various providers.
+  Provides OAuth2 client configurations, token management, and third-party integration capabilities.
+  """
     .trimIndent()
 
 dependencies {

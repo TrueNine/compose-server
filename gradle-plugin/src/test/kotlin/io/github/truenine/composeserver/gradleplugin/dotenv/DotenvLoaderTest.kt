@@ -55,10 +55,10 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      KEY1=value1
-      KEY2=value2
-      KEY3=value3
-    """
+          KEY1=value1
+          KEY2=value2
+          KEY3=value3
+        """
           .trimIndent()
       )
 
@@ -79,11 +79,11 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      SINGLE_QUOTED='single value'
-      DOUBLE_QUOTED="double value"
-      ESCAPED_QUOTES="value with \"quotes\""
-      SPECIAL_CHARS="line1\nline2\ttab"
-    """
+          SINGLE_QUOTED='single value'
+          DOUBLE_QUOTED="double value"
+          ESCAPED_QUOTES="value with \"quotes\""
+          SPECIAL_CHARS="line1\nline2\ttab"
+        """
           .trimIndent()
       )
 
@@ -104,14 +104,14 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      # This is a comment
-      KEY1=value1
-      
-      # Another comment
-      KEY2=value2
-      
-      KEY3=value3
-    """
+          # This is a comment
+          KEY1=value1
+          
+          # Another comment
+          KEY2=value2
+          
+          KEY3=value3
+        """
           .trimIndent()
       )
 
@@ -132,11 +132,11 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      APP_KEY1=value1
-      APP_KEY2=value2
-      OTHER_KEY=value3
-      KEY4=value4
-    """
+          APP_KEY1=value1
+          APP_KEY2=value2
+          OTHER_KEY=value3
+          KEY4=value4
+        """
           .trimIndent()
       )
 
@@ -159,11 +159,11 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      KEY1=value1
-      SECRET_KEY=secret
-      KEY2=value2
-      PASSWORD=password
-    """
+          KEY1=value1
+          SECRET_KEY=secret
+          KEY2=value2
+          PASSWORD=password
+        """
           .trimIndent()
       )
 
@@ -186,11 +186,11 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      KEY1=value1
-      KEY2=value2
-      KEY3=value3
-      KEY4=value4
-    """
+          KEY1=value1
+          KEY2=value2
+          KEY3=value3
+          KEY4=value4
+        """
           .trimIndent()
       )
 
@@ -213,11 +213,11 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      KEY1=value1
-      EMPTY_KEY=
-      KEY2=value2
-      BLANK_KEY=""
-    """
+          KEY1=value1
+          EMPTY_KEY=
+          KEY2=value2
+          BLANK_KEY=""
+        """
           .trimIndent()
       )
 
@@ -240,9 +240,9 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      TEST_VAR=test_value
-      DB_HOST=localhost
-    """
+          TEST_VAR=test_value
+          DB_HOST=localhost
+        """
           .trimIndent()
       )
 
@@ -264,9 +264,9 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      SPRING_PROFILE=dev
-      SERVER_PORT=8080
-    """
+          SPRING_PROFILE=dev
+          SERVER_PORT=8080
+        """
           .trimIndent()
       )
 
@@ -288,10 +288,10 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      CUSTOM_OPTS=-Xmx1g
-      APP_ENV=production
-      DATABASE_URL=jdbc:postgresql://localhost:5432/mydb
-    """
+          CUSTOM_OPTS=-Xmx1g
+          APP_ENV=production
+          DATABASE_URL=jdbc:postgresql://localhost:5432/mydb
+        """
           .trimIndent()
       )
 
@@ -314,9 +314,9 @@ class DotenvLoaderTest {
     val envFile =
       createTempEnvFile(
         """
-      KOTLIN_ENV=development
-      DEBUG_MODE=true
-    """
+          KOTLIN_ENV=development
+          DEBUG_MODE=true
+        """
           .trimIndent()
       )
 

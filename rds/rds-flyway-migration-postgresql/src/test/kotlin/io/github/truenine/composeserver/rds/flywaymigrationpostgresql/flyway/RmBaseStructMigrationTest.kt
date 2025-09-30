@@ -31,9 +31,9 @@ class RmBaseStructMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-        select column_name from information_schema.columns
-        where table_name = 'test_table'
-        """
+          select column_name from information_schema.columns
+          where table_name = 'test_table'
+          """
             .trimIndent()
         )
         .map { it["column_name"] }
@@ -51,9 +51,9 @@ class RmBaseStructMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-            select column_name from information_schema.columns
-            where table_name = 'test_table'
-            """
+          select column_name from information_schema.columns
+          where table_name = 'test_table'
+          """
             .trimIndent()
         )
         .map { it["column_name"] }

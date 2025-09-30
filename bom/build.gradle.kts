@@ -8,9 +8,9 @@ plugins {
 
 description =
   """
-Bill of Materials (BOM) for centralized dependency version management across all project modules.
-Provides a platform for consistent dependency versions and simplified dependency declarations.
-"""
+  Bill of Materials (BOM) for centralized dependency version management across all project modules.
+  Provides a platform for consistent dependency versions and simplified dependency declarations.
+  """
     .trimIndent()
 
 dependencies {

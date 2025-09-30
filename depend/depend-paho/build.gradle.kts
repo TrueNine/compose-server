@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Eclipse Paho MQTT client integration for IoT and real-time messaging applications.
-Provides Spring Integration MQTT support with reliable message delivery and connection management.
-"""
+  Eclipse Paho MQTT client integration for IoT and real-time messaging applications.
+  Provides Spring Integration MQTT support with reliable message delivery and connection management.
+  """
     .trimIndent()
 
 dependencies {

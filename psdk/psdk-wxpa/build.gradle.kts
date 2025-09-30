@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-WeChat Official Account Platform SDK implementation providing comprehensive APIs for WeChat public platform integration.
-Includes authentication, user information retrieval, access token management, and JSAPI signature generation capabilities.
-"""
+  WeChat Official Account Platform SDK implementation providing comprehensive APIs for WeChat public platform integration.
+  Includes authentication, user information retrieval, access token management, and JSAPI signature generation capabilities.
+  """
     .trimIndent()
 
 dependencies {

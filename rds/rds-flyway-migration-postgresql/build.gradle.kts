@@ -7,9 +7,9 @@ plugins {
 
 description =
   """
-Flyway database migration scripts and configuration for PostgreSQL databases.
-Contains versioned SQL migration files and Spring Boot integration for automated database schema evolution.
-"""
+  Flyway database migration scripts and configuration for PostgreSQL databases.
+  Contains versioned SQL migration files and Spring Boot integration for automated database schema evolution.
+  """
     .trimIndent()
 
 dependencies {
