@@ -105,12 +105,12 @@ class FunctionExistenceAndCallTest : IDatabaseMysqlContainer {
     val count =
       jdbcTemplate.queryForObject(
         """
-      SELECT COUNT(*) 
-      FROM information_schema.routines 
-      WHERE routine_schema = DATABASE() 
-        AND routine_name = ? 
-        AND routine_type = 'PROCEDURE'
-      """
+        SELECT COUNT(*) 
+        FROM information_schema.routines 
+        WHERE routine_schema = DATABASE() 
+          AND routine_name = ? 
+          AND routine_type = 'PROCEDURE'
+        """
           .trimIndent(),
         Int::class.java,
         procedureName,

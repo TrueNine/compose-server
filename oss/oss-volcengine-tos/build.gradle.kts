@@ -6,9 +6,9 @@ plugins {
 
 description =
   """
-Volcengine TOS (Tinder Object Storage) integration for enterprise-grade cloud storage.
-Provides comprehensive TOS operations including object management, lifecycle policies, and security configurations.
-"""
+  Volcengine TOS (Tinder Object Storage) integration for enterprise-grade cloud storage.
+  Provides comprehensive TOS operations including object management, lifecycle policies, and security configurations.
+  """
     .trimIndent()
 
 dependencies {

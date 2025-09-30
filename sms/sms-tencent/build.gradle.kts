@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Tencent Cloud SMS service integration for reliable message delivery.
-Provides SMS sending capabilities through Tencent Cloud SMS API with template support and delivery tracking.
-"""
+  Tencent Cloud SMS service integration for reliable message delivery.
+  Provides SMS sending capabilities through Tencent Cloud SMS API with template support and delivery tracking.
+  """
     .trimIndent()
 
 dependencies {

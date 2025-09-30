@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-SpringDoc OpenAPI 3 integration for automatic API documentation generation.
-Provides Swagger UI, OpenAPI specification generation, and comprehensive API documentation tools.
-"""
+  SpringDoc OpenAPI 3 integration for automatic API documentation generation.
+  Provides Swagger UI, OpenAPI specification generation, and comprehensive API documentation tools.
+  """
     .trimIndent()
 
 dependencies {

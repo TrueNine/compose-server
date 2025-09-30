@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-TestContainers specialized testing toolkit providing containerized integration test support.
-Includes advanced container orchestration, specialized database/cache/storage test utilities, and container lifecycle management.
-"""
+  TestContainers specialized testing toolkit providing containerized integration test support.
+  Includes advanced container orchestration, specialized database/cache/storage test utilities, and container lifecycle management.
+  """
     .trimIndent()
 
 dependencies {

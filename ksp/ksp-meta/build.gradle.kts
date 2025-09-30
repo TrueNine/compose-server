@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Metadata and annotation processing utilities providing compile-time code generation capabilities.
-Contains custom annotations and processors for enhancing development productivity and code quality.
-"""
+  Metadata and annotation processing utilities providing compile-time code generation capabilities.
+  Contains custom annotations and processors for enhancing development productivity and code quality.
+  """
     .trimIndent()
 
 dependencies {

@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Servlet API integration and web application utilities for Spring Boot applications.
-Provides servlet containers, WebSocket support, and web application auto-configuration.
-"""
+  Servlet API integration and web application utilities for Spring Boot applications.
+  Provides servlet containers, WebSocket support, and web application auto-configuration.
+  """
     .trimIndent()
 
 dependencies {

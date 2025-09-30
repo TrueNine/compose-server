@@ -59,9 +59,9 @@ class SimpleMysqlTest : IDatabaseMysqlContainer {
     val columns =
       jdbcTemplate.queryForList(
         """
-            SELECT column_name FROM information_schema.columns
-            WHERE table_schema = DATABASE() AND table_name = 'test_proc_table'
-            """
+        SELECT column_name FROM information_schema.columns
+        WHERE table_schema = DATABASE() AND table_name = 'test_proc_table'
+        """
           .trimIndent(),
         String::class.java,
       )

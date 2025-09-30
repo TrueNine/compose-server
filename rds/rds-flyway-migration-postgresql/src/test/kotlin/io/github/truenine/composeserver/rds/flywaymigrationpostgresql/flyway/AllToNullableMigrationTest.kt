@@ -30,10 +30,10 @@ class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-        select column_name, is_nullable from information_schema.columns
-        where table_name = 'test_table'
-        and column_name = 'name'
-        """
+          select column_name, is_nullable from information_schema.columns
+          where table_name = 'test_table'
+          and column_name = 'name'
+          """
             .trimIndent()
         )
         .associate { it["column_name"] to it["is_nullable"] }
@@ -50,9 +50,9 @@ class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-        select column_name, is_nullable, column_default from information_schema.columns
-        where table_name = 'test_table' and column_name in ('name', 'age')
-        """
+          select column_name, is_nullable, column_default from information_schema.columns
+          where table_name = 'test_table' and column_name in ('name', 'age')
+          """
             .trimIndent()
         )
         .associate { it["column_name"] to it["is_nullable"] }

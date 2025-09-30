@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Core testing toolkit providing foundational components for test development.
-Includes test utilities, Spring Boot test auto-configuration, and unified testing extensions.
-"""
+  Core testing toolkit providing foundational components for test development.
+  Includes test utilities, Spring Boot test auto-configuration, and unified testing extensions.
+  """
     .trimIndent()
 
 dependencies {

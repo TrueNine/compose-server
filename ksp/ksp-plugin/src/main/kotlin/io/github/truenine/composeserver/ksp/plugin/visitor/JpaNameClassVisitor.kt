@@ -383,11 +383,11 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
                 .addParameter("other", Any::class.asTypeName().copy(nullable = true))
                 .addStatement(
                   """
-                return if (null == other) false
-                else if (this === other) true
-                else if (%T.getClass(this) != %T.getClass(other)) false
-                else if (!isNew && id == (other as %T).id) true
-                else false"""
+                  return if (null == other) false
+                  else if (this === other) true
+                  else if (%T.getClass(this) != %T.getClass(other)) false
+                  else if (!isNew && id == (other as %T).id) true
+                  else false"""
                     .trimIndent(),
                   Libs.org.hibernate.Hibernate.toClassName(),
                   Libs.org.hibernate.Hibernate.toClassName(),

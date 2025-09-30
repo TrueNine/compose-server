@@ -32,9 +32,9 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-            select column_name from information_schema.columns
-            where table_name = 'test_table'
-            """
+          select column_name from information_schema.columns
+          where table_name = 'test_table'
+          """
             .trimIndent()
         )
         .map { it["column_name"] }
@@ -47,9 +47,9 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
   fun `add_base_struct 应为无 id 且多行数据的表自动填充 id 并设为主键`() {
     jdbcTemplate.execute(
       """
-            create table test_no_id(nick_name varchar(255), password_enc varchar(255));
-            insert into test_no_id(nick_name, password_enc) values ('a', 'p1'), ('b', 'p2'), ('c', 'p3');
-            """
+      create table test_no_id(nick_name varchar(255), password_enc varchar(255));
+      insert into test_no_id(nick_name, password_enc) values ('a', 'p1'), ('b', 'p2'), ('c', 'p3');
+      """
         .trimIndent()
     )
     jdbcTemplate.execute("select add_base_struct('test_no_id')")
@@ -57,9 +57,9 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-            select column_name from information_schema.columns
-            where table_name = 'test_no_id'
-            """
+          select column_name from information_schema.columns
+          where table_name = 'test_no_id'
+          """
             .trimIndent()
         )
         .map { it["column_name"] }
@@ -68,10 +68,10 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-            select kcu.column_name from information_schema.table_constraints tc
-            join information_schema.key_column_usage kcu on tc.constraint_name = kcu.constraint_name
-            where tc.table_name = 'test_no_id' and tc.constraint_type = 'PRIMARY KEY'
-            """
+          select kcu.column_name from information_schema.table_constraints tc
+          join information_schema.key_column_usage kcu on tc.constraint_name = kcu.constraint_name
+          where tc.table_name = 'test_no_id' and tc.constraint_type = 'PRIMARY KEY'
+          """
             .trimIndent()
         )
         .map { it["column_name"] }
@@ -90,9 +90,9 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
       jdbcTemplate
         .queryForList(
           """
-            select column_name from information_schema.columns
-            where table_name = 'test_table'
-            """
+          select column_name from information_schema.columns
+          where table_name = 'test_table'
+          """
             .trimIndent()
         )
         .map { it["column_name"] }

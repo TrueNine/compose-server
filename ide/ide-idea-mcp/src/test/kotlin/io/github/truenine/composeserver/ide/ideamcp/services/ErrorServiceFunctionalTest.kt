@@ -22,14 +22,14 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
       myFixture.configureByText(
         "TestClass.kt",
         """
-      package test
-      
-      class TestClass {
-        fun sayHello(): String {
-          return "Hello, World!"
-        }
-      }
-    """
+          package test
+          
+          class TestClass {
+            fun sayHello(): String {
+              return "Hello, World!"
+            }
+          }
+        """
           .trimIndent(),
       )
 

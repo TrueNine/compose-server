@@ -72,11 +72,11 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
     // 重新创建表
     jdbcTemplate.execute(
       """
-            create table test_table (
-                id serial primary key,
-                name varchar(255) not null
-            )
-        """
+          create table test_table (
+              id serial primary key,
+              name varchar(255) not null
+          )
+      """
         .trimIndent()
     )
 

@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Cryptographic utilities and security functions using Spring Security and BouncyCastle.
-Provides encryption/decryption, hashing, digital signatures, and secure random number generation.
-"""
+  Cryptographic utilities and security functions using Spring Security and BouncyCastle.
+  Provides encryption/decryption, hashing, digital signatures, and secure random number generation.
+  """
     .trimIndent()
 
 dependencies {

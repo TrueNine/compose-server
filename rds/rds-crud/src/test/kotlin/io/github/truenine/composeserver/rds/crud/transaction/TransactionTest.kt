@@ -24,12 +24,12 @@ class TransactionTest : IDatabasePostgresqlContainer {
     // 手动创建测试表
     jdbcTemplate.execute(
       """
-      CREATE TABLE IF NOT EXISTS test_entity (
-        id BIGSERIAL PRIMARY KEY,
-        name VARCHAR DEFAULT NULL,
-        value INTEGER DEFAULT NULL
-      )
-    """
+        CREATE TABLE IF NOT EXISTS test_entity (
+          id BIGSERIAL PRIMARY KEY,
+          name VARCHAR DEFAULT NULL,
+          value INTEGER DEFAULT NULL
+        )
+      """
         .trimIndent()
     )
   }

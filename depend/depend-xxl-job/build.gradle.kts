@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-XXL-JOB distributed task scheduling framework integration for enterprise job management.
-Provides distributed task execution, scheduling, and monitoring capabilities with fault tolerance.
-"""
+  XXL-JOB distributed task scheduling framework integration for enterprise job management.
+  Provides distributed task execution, scheduling, and monitoring capabilities with fault tolerance.
+  """
     .trimIndent()
 
 dependencies {

@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-AI shared components for artificial intelligence integration and context management.
-Provides common interfaces and utilities for AI model interactions and intelligent processing.
-"""
+  AI shared components for artificial intelligence integration and context management.
+  Provides common interfaces and utilities for AI model interactions and intelligent processing.
+  """
     .trimIndent()
 
 dependencies {

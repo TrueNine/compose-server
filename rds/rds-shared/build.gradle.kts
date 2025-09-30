@@ -6,9 +6,9 @@ plugins {
 
 description =
   """
-Shared components for relational database operations using Jimmer ORM framework.
-Provides common database configurations, entities, and utilities for database access layers.
-"""
+  Shared components for relational database operations using Jimmer ORM framework.
+  Provides common database configurations, entities, and utilities for database access layers.
+  """
     .trimIndent()
 
 dependencies {

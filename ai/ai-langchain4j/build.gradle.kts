@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-LangChain4J integration for advanced AI capabilities and language model interactions.
-Provides comprehensive AI model integration, prompt engineering, and intelligent processing workflows.
-"""
+  LangChain4J integration for advanced AI capabilities and language model interactions.
+  Provides comprehensive AI model integration, prompt engineering, and intelligent processing workflows.
+  """
     .trimIndent()
 
 dependencies {

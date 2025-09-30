@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-PostgreSQL-specific extensions and enhancements for Jimmer ORM framework.
-Provides PostgreSQL-optimized features, custom types, and database-specific functionality.
-"""
+  PostgreSQL-specific extensions and enhancements for Jimmer ORM framework.
+  Provides PostgreSQL-optimized features, custom types, and database-specific functionality.
+  """
     .trimIndent()
 
 dependencies {

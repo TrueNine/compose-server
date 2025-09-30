@@ -25,11 +25,11 @@ class PemFormatTest {
   companion object {
     private val VALID_PEM =
       """
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEowIBAAKCAQEAvRKXmC7E8y0F1olUhrH8YuSVfaYhJ1ySqInrROcbXXXXXXXX
-            q4t5iHJjXXXXXXXXMpzXXXXXXXXq8XXXXXXXX+XXXXXXXXrpXXXXXXXX1XXXXXXXX
-            -----END RSA PRIVATE KEY-----
-        """
+          -----BEGIN RSA PRIVATE KEY-----
+          MIIEowIBAAKCAQEAvRKXmC7E8y0F1olUhrH8YuSVfaYhJ1ySqInrROcbXXXXXXXX
+          q4t5iHJjXXXXXXXXMpzXXXXXXXXq8XXXXXXXX+XXXXXXXXrpXXXXXXXX1XXXXXXXX
+          -----END RSA PRIVATE KEY-----
+      """
         .trimIndent()
 
     private const val VALID_PEM_SCHEMA = "RSA PRIVATE KEY"
@@ -286,10 +286,10 @@ class PemFormatTest {
     fun propertiesWorkWithCustomPem() {
       val customPem =
         """
-        -----BEGIN CUSTOM KEY-----
-        SGVsbG8gV29ybGQ=
-        -----END CUSTOM KEY-----
-      """
+          -----BEGIN CUSTOM KEY-----
+          SGVsbG8gV29ybGQ=
+          -----END CUSTOM KEY-----
+        """
           .trimIndent()
 
       val pemFormat = PemFormat.parse(customPem)
@@ -397,14 +397,14 @@ class PemFormatTest {
     fun handlesMultipleConsecutiveLineBreaks() {
       val pemWithExtraBreaks =
         """
-        -----BEGIN TEST-----
+          -----BEGIN TEST-----
 
 
-        SGVsbG8gV29ybGQ=
+          SGVsbG8gV29ybGQ=
 
 
-        -----END TEST-----
-      """
+          -----END TEST-----
+        """
           .trimIndent()
 
       val pemFormat = PemFormat.parse(pemWithExtraBreaks)

@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-WeChat Pay integration implementation.
-Provides WeChat Pay V3 API integration, payment processing, and automated configuration for WeChat payment services.
-"""
+  WeChat Pay integration implementation.
+  Provides WeChat Pay V3 API integration, payment processing, and automated configuration for WeChat payment services.
+  """
     .trimIndent()
 
 dependencies {

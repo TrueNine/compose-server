@@ -5,9 +5,9 @@ plugins {
 
 description =
   """
-Caching abstractions and implementations supporting both distributed and local caching strategies.
-Includes Redis integration for distributed caching and Caffeine for high-performance local caching.
-"""
+  Caching abstractions and implementations supporting both distributed and local caching strategies.
+  Includes Redis integration for distributed caching and Caffeine for high-performance local caching.
+  """
     .trimIndent()
 
 dependencies {

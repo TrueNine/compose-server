@@ -24,9 +24,9 @@ class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContain
     val flywayTableCount =
       jdbcTemplate.queryForObject(
         """
-        select count(*) from information_schema.tables 
-        where table_name = 'flyway_schema_history'
-      """
+          select count(*) from information_schema.tables 
+          where table_name = 'flyway_schema_history'
+        """
           .trimIndent(),
         Int::class.java,
       )
@@ -36,9 +36,9 @@ class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContain
     val userTableCount =
       jdbcTemplate.queryForObject(
         """
-        select count(*) from information_schema.tables 
-        where table_name = 'test_user_account_table'
-      """
+          select count(*) from information_schema.tables 
+          where table_name = 'test_user_account_table'
+        """
           .trimIndent(),
         Int::class.java,
       )
