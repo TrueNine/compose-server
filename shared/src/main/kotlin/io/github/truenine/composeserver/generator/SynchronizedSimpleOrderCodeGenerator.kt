@@ -24,12 +24,7 @@ class SynchronizedSimpleOrderCodeGenerator(private val snowflake: ISnowflakeGene
         if (snowflakeId.isNotEmpty()) append(snowflakeId)
       }
 
-      logger.debug(
-        "Generated order code: {} with timestamp millis: {} and snowflake: {}",
-        orderCode,
-        timestampMillis,
-        snowflakeId,
-      )
+      logger.debug("Generated order code: {} with timestamp millis: {} and snowflake: {}", orderCode, timestampMillis, snowflakeId)
 
       orderCode
     } catch (exception: Exception) {
