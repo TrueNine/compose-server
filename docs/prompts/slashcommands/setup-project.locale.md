@@ -1,5 +1,5 @@
 ---
-allowed-tools: WebSearch, WebFetch, Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite, Task
+allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, TodoWrite, Task
 description: Complete Claude Code project setup with MCP tools and configuration
 ---
 
@@ -28,10 +28,6 @@ claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.co
 # Sequential Thinking - Enhanced reasoning and problem-solving
 claude mcp add sequential-thinking --scope project -- npx -y @modelcontextprotocol/server-sequential-thinking
 
-# Memory - Knowledge graph for persistent context
-# Reference: https://github.com/modelcontextprotocol/servers/tree/main/src/memory
-claude mcp add memory --scope project -- npx -y @modelcontextprotocol/server-memory
-
 # Playwright - Web automation and testing
 # Reference: https://github.com/microsoft/playwright-mcp
 claude mcp add playwright --scope project -- npx -y @playwright/mcp@latest --viewport-size 1920,1080
@@ -53,36 +49,9 @@ claude mcp add --scope project --transport http deepwiki https://mcp.deepwiki.co
 # Sequential Thinking - Enhanced reasoning and problem-solving
 claude mcp add-json sequential-thinking --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-sequential-thinking@latest\"]}'
 
-# Memory - Knowledge graph for persistent context
-claude mcp add-json memory --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@modelcontextprotocol/server-memory@latest\"]}'
-
 # Playwright - Web automation and testing
 claude mcp add-json playwright --scope project '{\"command\":\"cmd\",\"args\":[\"/c\",\"npx\",\"-y\",\"@playwright/mcp@latest\",\"--viewport-size\",\"1920,1080\"]}'
 
-```
-
-### launch browser-tools mcp server
-
-```bash
-npx -y @agentdeskai/browser-tools-server@latest
-```
-
-## Claude Code Directory Structure
-
-Understanding the Claude Code file organization:
-
-```text
-# Global Configuration
-~/.claude/                      # Global Claude Code directory
-~/.claude.json                  # Global settings
-~/.claude.json.backup          # Backup of global settings
-
-# Project-Specific Configuration
-project/.claude/               # Project Claude Code directory
-project/.claude/settings.json        # Project settings
-project/.claude/settings.local.json  # Local project settings (gitignored)
-project/.claude/.mcp.json           # MCP configuration
-project/.claude/.mcp.local.json     # Local MCP configuration (gitignored)
 ```
 
 ## Troubleshooting
