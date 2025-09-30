@@ -24,9 +24,9 @@ class VolcengineTosPropertiesTest {
       assertNull(properties.accessKey)
       assertNull(properties.secretKey)
       assertNull(properties.sessionToken)
-      assertNull(properties.endpoint)
-      assertNull(properties.region)
-      assertNull(properties.exposedBaseUrl)
+      assertEquals("https://tos-cn-beijing.volces.com", properties.endpoint)
+      assertEquals("cn-beijing", properties.region)
+      assertEquals("https://tos-cn-beijing.volces.com", properties.exposedBaseUrl)
 
       // Network settings
       assertTrue(properties.enableSsl)

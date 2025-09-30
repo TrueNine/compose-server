@@ -193,9 +193,9 @@ class VolcengineTosAutoConfigurationTest {
           "compose.oss.volcengine-tos.secret-key=testsecret",
         )
         .run { context ->
-          // 验证配置属性中region为null
+          // 验证配置属性中region为默认值
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
-          kotlin.test.assertNull(tosProperties.region)
+          kotlin.test.assertEquals("cn-beijing", tosProperties.region)
 
           val ossProperties = context.getBean(OssProperties::class.java)
           kotlin.test.assertNull(ossProperties.region)
@@ -242,8 +242,8 @@ class VolcengineTosAutoConfigurationTest {
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
           val ossProperties = context.getBean(OssProperties::class.java)
 
-          // 验证 TOS 没有专用区域配置
-          kotlin.test.assertNull(tosProperties.region)
+          // 验证 TOS 使用默认区域配置
+          kotlin.test.assertEquals("cn-beijing", tosProperties.region)
           // 验证通用配置存在
           kotlin.test.assertEquals("cn-hongkong", ossProperties.region)
 
@@ -289,11 +289,11 @@ class VolcengineTosAutoConfigurationTest {
           "spring.profiles.active=test", // 启用测试环境以跳过连接测试
         )
         .run { context ->
-          // 验证警告日志被输出
-          kotlin.test.assertTrue(
+          // 验证没有警告日志输出
+          kotlin.test.assertFalse(
             output.out.contains("No region specified, using default region: cn-beijing") ||
               output.err.contains("No region specified, using default region: cn-beijing"),
-            "Expected warning log about default region not found in output: ${output.all}",
+            "Warning log should not be present in output: ${output.all}",
           )
 
           // 验证 TOS 客户端被创建
