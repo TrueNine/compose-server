@@ -2,10 +2,10 @@
 
 - `project` Current project dependency version number
 - `java` Current project Java version number
-- `gradle` Gradle version number
+- `org-gradle` Gradle version number
 - `intellij-platform-*` IntelliJ plugin development version number
 
-### Usage in `buildSrc` and `includeBuild`
+### Usage in `buildSrc` or `includeBuild`
 
 Introduce `libs.versions.toml` as a dependency in the `settings.gradle.kts` of `buildSrc` or `build-logic` to achieve unified project-wide version management
 
