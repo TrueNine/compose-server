@@ -1,17 +1,13 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this Repository.
-
 # Tool Use
 
 ## Documentation Tools
 
 1. **View Official Documentation**
-  - `resolve-library-id` - Resolve library name to Context7 ID
-  - `get-library-docs` - Get latest official documentation
+- `resolve-library-id` - Resolve library name to Context7 ID
+- `get-library-docs` - Get latest official documentation
 
 2. **Search Real Code**
-  - `searchGitHub` - Search actual usage cases on GitHub
+- `searchGitHub` - Search actual usage cases on GitHub
 
 ## Specification Documentation Writing Tools
 
