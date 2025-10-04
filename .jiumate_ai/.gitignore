@@ -1,6 +1,0 @@
-*
-!.gitignore
-!.locale
-!.locale/
-!.locale/testtoolkit/AGENTS.locale.md
-!.locale/gradle/AGENTS.locale.md
