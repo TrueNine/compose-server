@@ -1,3 +1,5 @@
 *
 !.gitignore
-!.locale/**
+!.locale/**/*
+!.locale/gradle/**
+!.locale/testtoolkit/**
