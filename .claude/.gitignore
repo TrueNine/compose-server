@@ -17,3 +17,6 @@
 
 !/commands
 !/commands/**
+
+!/hooks
+!/hooks/**
