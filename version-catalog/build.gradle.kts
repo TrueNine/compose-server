@@ -62,7 +62,8 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
 }
 
 // https://github.com/ben-manes/gradle-versions-plugin
-tasks.withType<DependencyUpdatesTask> {
+tasks.withType<DependencyUpdatesTask>().configureEach {
+  notCompatibleWithConfigurationCache("Gradle Versions dependencyUpdates task interacts with project state during execution.")
   // 拒绝不稳定版本
   rejectVersionIf {
     if (ignoreGroups.any { group?.contains(it, true) == true }) {

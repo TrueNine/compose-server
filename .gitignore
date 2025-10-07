@@ -12,6 +12,7 @@ generated_tests/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+.gradle-user-home/
 
 ### kotlin ###
 .kotlin
@@ -75,6 +76,11 @@ TODO.*
 /.intellijPlatform/
 node_modules/
 pnpm-lock.yaml
+.ai/
+.claude/
+.cursor/
+CLAUDE.md
+AGENTS.md
 
 ### claude code ###
 /.mcp.json
