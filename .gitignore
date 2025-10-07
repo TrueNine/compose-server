@@ -12,6 +12,7 @@ generated_tests/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+.gradle-user-home/
 
 ### kotlin ###
 .kotlin
