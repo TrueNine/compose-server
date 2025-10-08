@@ -8,7 +8,7 @@ com-diffplug-spotless = "8.0.0"
 com-fasterxml-jackson = "2.20.0"
 com-flywaydb-flyway = "11.13.3"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.2.20-2.0.3"
+com-google-devtools-ksp = "2.2.20-2.0.4"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.2.0"
@@ -54,7 +54,7 @@ org-springframework-modulith = "2.0.0-M1"
 org-springframework-security = "6.5.5"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.40"
+project = "0.0.41"
 
 [libraries]
 ch-qos-logback-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback" }
