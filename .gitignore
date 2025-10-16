@@ -76,7 +76,6 @@ TODO.*
 /.intellijPlatform/
 node_modules/
 pnpm-lock.yaml
-.ai/
 .claude/
 .cursor/
 CLAUDE.md
