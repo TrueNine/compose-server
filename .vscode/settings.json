@@ -4,5 +4,8 @@
     "./gradlew *",
     "gradle *",
     "mv *"
-  ]
+  ],
+  "[markdown]": {
+    "editor.wordWrap": "off"
+  }
 }
