@@ -5,6 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.ai/meta" />
       <excludeFolder url="file://$MODULE_DIR$/.claude" />
       <excludeFolder url="file://$MODULE_DIR$/.cursor" />
+      <excludeFolder url="file://$MODULE_DIR$/.factory" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle-user-home" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/JimmerBuddy" />
