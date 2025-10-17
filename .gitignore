@@ -79,6 +79,7 @@ pnpm-lock.yaml
 .claude/
 .cursor/
 .factory/
+.ai/
 CLAUDE.md
 AGENTS.md
 
