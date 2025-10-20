@@ -17,6 +17,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../.playwright-mcp" />
       <excludeFolder url="file://$MODULE_DIR$/../../.docs" />
       <excludeFolder url="file://$MODULE_DIR$/../../.jiumate_ai" />
+      <excludeFolder url="file://$MODULE_DIR$/../../.factory" />
     </content>
   </component>
 </module>
