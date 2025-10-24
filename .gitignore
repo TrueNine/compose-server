@@ -78,6 +78,10 @@ node_modules/
 pnpm-lock.yaml
 .claude/
 .cursor/
+.factory/
+.ai/
+__ai/
+__aiissues/
 CLAUDE.md
 AGENTS.md
 

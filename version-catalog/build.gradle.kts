@@ -41,16 +41,8 @@ val nonStableKeywords = listOf(
   "beta",
   "dev",
   "-rc",
-  "m1",
-  "m2",
-  "m3",
-  "m4",
-  "m5",
-  "m6",
-  "m7",
-  "m8",
   "snapshot"
-)
+) + (0 until 30).map { "m$it" }
 
 val ignoreGroups = listOf(
   "dev.langchain4j",
