@@ -9,10 +9,17 @@
     <option name="LINE_SEPARATOR" value="&#10;" />
     <option name="RIGHT_MARGIN" value="160" />
     <option name="SOFT_MARGINS" value="2,4,80,160" />
+    <HTMLCodeStyleSettings>
+      <option name="HTML_UNIFORM_INDENT" value="true" />
+    </HTMLCodeStyleSettings>
     <IsoSqlCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="QUOTED_IDENTIFIER_CASE" value="1" />
     </IsoSqlCodeStyleSettings>
+    <JSCodeStyleSettings version="0">
+      <option name="USE_EXPLICIT_JS_EXTENSION" value="NEVER" />
+      <option name="IMPORT_SORT_MODULE_NAME" value="true" />
+    </JSCodeStyleSettings>
     <JetCodeStyleSettings>
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
@@ -30,6 +37,10 @@
       <option name="QUOTED_IDENTIFIER_CASE" value="1" />
       <option name="TABLE_OPENING" value="1" />
     </SqlCodeStyleSettings>
+    <TypeScriptCodeStyleSettings version="0">
+      <option name="USE_EXPLICIT_JS_EXTENSION" value="NEVER" />
+      <option name="IMPORT_SORT_MODULE_NAME" value="true" />
+    </TypeScriptCodeStyleSettings>
     <codeStyleSettings language="Declarative">
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
@@ -90,6 +101,20 @@
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
+        <option name="TAB_SIZE" value="2" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="PHP">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Rust">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
     </codeStyleSettings>
