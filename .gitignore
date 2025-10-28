@@ -91,3 +91,5 @@ AGENTS.md
 ### Windows issues ###
 nul
 .playwright-mcp/
+.codebuddy/
+.qoder/

@@ -18,6 +18,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../.docs" />
       <excludeFolder url="file://$MODULE_DIR$/../../.jiumate_ai" />
       <excludeFolder url="file://$MODULE_DIR$/../../.factory" />
+      <excludeFolder url="file://$MODULE_DIR$/../../.qoder" />
     </content>
   </component>
 </module>
