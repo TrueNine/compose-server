@@ -28,6 +28,18 @@ dependencies {
   testImplementation(libs.org.junit.platform.junit.platform.suite)
 }
 
+tasks.withType<Test>().configureEach {
+  jvmArgs =
+    listOf(
+      "--add-opens",
+      "java.base/java.lang=ALL-UNNAMED",
+      "--add-opens",
+      "java.base/java.util=ALL-UNNAMED",
+      "--add-opens",
+      "java.base/java.lang.invoke=ALL-UNNAMED",
+    )
+}
+
 gradlePlugin {
   plugins {
     register("composeserver-gradle-plugin") {
