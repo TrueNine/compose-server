@@ -1,18 +1,27 @@
 {
-  "explorer.excludeGitIgnore": true,
+  "editor.rulers": [2, 4, 80, 160],
+  "explorer.excludeGitIgnore": false,
   "files.exclude": {
+    "**/character": true,
+    "**/books": true,
+    "**/countries": true,
     "**/.playwright-mcp": true,
-    "**/pnpm-lock.yaml": true,
-    "**/.env": true
+    "**/pnpm-lock.yaml": true
   },
   "search.exclude": {
     "**/.gradle": true,
+    "**/books": true,
+    "**/countries": true,
+    "**/.obsidian": true,
+    "**/character": true,
     "**/build": true
   },
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
     "build.gradle.kts": "settings.gradle.kts, gradlew, gradlew.bat, gradle.properties",
+    "tsconfig.json": "tsconfig.*.json, tsconfig.tsbuildinfo, tsconfig.*.tsbuildinfo",
+    "vite.config.ts": "vitest.config.ts, env.d.ts",
     "README.md": "LICENSE, TODO.md, .editorconfig, CODEBUDDY.md, .gitignore, .gitattributes",
     ".gitignore": "LICENSE, TODO.md, .editorconfig, CODEBUDDY.md, .gitattributes",
     ".env.example": ".env, .env.*",
@@ -21,5 +30,5 @@
   "[markdown]": {
     "editor.wordWrap": "off"
   },
-  "workbench.sideBar.location": "right"
+  "workbench.sideBar.location": "left"
 }
