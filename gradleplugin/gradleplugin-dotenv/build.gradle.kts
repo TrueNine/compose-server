@@ -27,6 +27,7 @@ dependencies {
 }
 
 tasks.withType<Test>().configureEach {
+  useJUnitPlatform()
   jvmArgs =
     listOf(
       "--add-opens",

@@ -51,6 +51,15 @@
     "titleBar.activeForeground": "#ffffff",
     "titleBar.inactiveBackground": "#b625a8",
     "titleBar.inactiveForeground": "#f3c4ee",
-    "titleBar.border": "#d530c4"
+    "titleBar.border": "#d530c4",
+    "editor.background": "#440e3e",
+    "sideBar.background": "#440e3e",
+    "activityBar.background": "#440e3e",
+    "panel.background": "#440e3e",
+    "editorGutter.background": "#440e3e",
+    "statusBar.background": "#d530c4",
+    "statusBar.foreground": "#ffffff",
+    "editorGroupHeader.tabsBackground": "#440e3e",
+    "tab.inactiveBackground": "#440e3e"
   }
 }

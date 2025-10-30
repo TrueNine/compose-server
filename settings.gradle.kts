@@ -1,5 +1,6 @@
 pluginManagement {
   includeBuild("build-logic")
+  includeBuild("gradleplugin/gradleplugin-dotenv")
   repositories {
     gradlePluginPortal()
     mavenCentral()
@@ -34,7 +35,6 @@ listOf("version-catalog", "shared", "bom", "cacheable", "docsite").forEach { p -
 
 // Gradle 插件模块
 include("gradleplugin:gradleplugin-composeserver")
-include("gradleplugin:gradleplugin-dotenv")
 
 // 监控模块
 include("surveillance:surveillance-shared")
