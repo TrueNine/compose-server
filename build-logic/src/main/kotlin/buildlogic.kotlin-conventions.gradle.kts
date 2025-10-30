@@ -22,16 +22,16 @@ kotlin {
   jvmToolchain(libs.versions.java.get().toInt())
 }
 
-// 确保 kotlin_module 文件被正确生成
+// Ensure the kotlin_module file is generated correctly
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
   compilerOptions {
-    // 确保模块信息被正确生成
+    // Ensure the module metadata is generated correctly
     javaParameters.set(true)
   }
 }
 
 
-// 配置 jar 任务包含 LICENSE 文件
+// Configure the jar task to include the LICENSE file
 tasks.withType<Jar> {
   from(rootProject.file("LICENSE")) {
     into("META-INF")
