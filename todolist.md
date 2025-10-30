@@ -1,3 +1,0 @@
-- [ ] 重写所有集成测试支持 `EnableIf`
-- [ ] write `testtoolkit-testcontainers` testcontainers simple launcher
-- [ ] write claude code setup slash command
