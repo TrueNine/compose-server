@@ -7,11 +7,11 @@ interface IChinaName {
     @JvmStatic
     fun splitName(name: String): Pair<String, String> {
       val cName = name.trim()
-      check(cName.length in 2..4) { "姓名 $cName 长度不符合要求" }
+      check(cName.length in 2..4) { "Name $cName length does not meet requirements" }
       return if (name.length == 2) Pair(name.substring(0, 1), name.substring(1))
       else if (name.length == 3) Pair(name.substring(0, 1), name.substring(1))
       else if (name.length == 4 && name[2] == ' ') Pair(name.substring(0, 2), name.substring(3))
-      else if (name.length == 4) Pair(name.substring(0, 2), name.substring(2)) else error("姓名 $cName 格式不符合要求")
+      else if (name.length == 4) Pair(name.substring(0, 2), name.substring(2)) else error("Name $cName format does not meet requirements")
     }
   }
 

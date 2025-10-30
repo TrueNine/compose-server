@@ -34,14 +34,14 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
   }
 
   private fun assertTimestampPrefix(orderCode: String) {
-    assertTrue(orderCode.length >= 13, "订单号长度应该至少为13位")
+    assertTrue(orderCode.length >= 13, "Order code length should be at least 13 digits")
     val timestampPart = orderCode.substring(0, 13)
-    assertTrue(timestampPart.length == 13, "时间戳部分应该是13位")
-    assertTrue(timestampPart.all { it.isDigit() }, "时间戳部分应该只包含数字")
+    assertTrue(timestampPart.length == 13, "Timestamp part should be 13 digits")
+    assertTrue(timestampPart.all { it.isDigit() }, "Timestamp part should contain only digits")
     val timestampMillis = timestampPart.toLong()
     val now = System.currentTimeMillis()
     val difference = abs(now - timestampMillis)
-    assertTrue(difference <= 1_000, "生成的时间戳与当前时间差距应该在1秒内，实际差距: ${difference}ms")
+    assertTrue(difference <= 1_000, "Generated timestamp should be within 1 second of current time, actual difference: ${difference}ms")
   }
 
   @Nested

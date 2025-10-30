@@ -27,7 +27,7 @@ fun <T, C : Collection<T>, R> C?.isNotEmptyRun(block: C.() -> R): R? {
 }
 
 /**
- * ## 将 [Pair] 派生为 [Triple]
+ * ## Derive [Triple] from [Pair]
  *
  * @see [Triple]
  */

@@ -6,35 +6,35 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
-/** 空字符串常量 */
+/** Empty string constant */
 const val STR_EMPTY = ""
 
-/** 下划线字符串常量 */
+/** Underscore string constant */
 const val STR_UNDERLINE = "_"
 
 /**
- * 从指定类的 ClassLoader 中获取资源作为输入流
+ * Get resource as input stream from specified class's ClassLoader
  *
- * @param cls 指定的类
- * @return 资源的输入流，如果资源不存在则返回 null
+ * @param cls Specified class
+ * @return Resource input stream, returns null if resource doesn't exist
  */
 fun String.resourceAsStream(cls: KClass<*>): InputStream? {
   return cls.java.classLoader.getResourceAsStream(this)
 }
 
 /**
- * 从泛型指定类型的 ClassLoader 中获取资源作为输入流
+ * Get resource as input stream from generic type's ClassLoader
  *
- * @return 资源的输入流，如果资源不存在则返回 null
+ * @return Resource input stream, returns null if resource doesn't exist
  */
 inline fun <reified C : KClass<*>> String.resourceAsStream(): InputStream? {
   return C::class.java.classLoader.getResourceAsStream(this)
 }
 
 /**
- * 判断字符串是否包含有效文本
+ * Check if string contains valid text
  *
- * @return 如果字符串不为 null 且包含非空白字符则返回 true
+ * @return true if string is not null and contains non-whitespace characters
  */
 @OptIn(ExperimentalContracts::class)
 fun String?.hasText(): Boolean {
@@ -43,17 +43,17 @@ fun String?.hasText(): Boolean {
 }
 
 /**
- * 如果字符串为 null 或空白，则返回默认值
+ * Return default value if string is null or blank
  *
- * @param default 默认值
- * @return 原字符串或默认值
+ * @param default Default value
+ * @return Original string or default value
  */
 fun String?.orElse(default: String): String = if (hasText()) this else default
 
 /**
- * 判断字符串是否不包含有效文本
+ * Check if string does not contain valid text
  *
- * @return 如果字符串为 null 或仅包含空白字符则返回 true
+ * @return true if string is null or contains only whitespace characters
  */
 @OptIn(ExperimentalContracts::class)
 fun String?.nonText(): Boolean {
@@ -62,9 +62,9 @@ fun String?.nonText(): Boolean {
 }
 
 /**
- * 如果字符串不为 null 且不为空白，则执行指定的操作
+ * Execute specified operation if string is not null and not blank
  *
- * @param block 要执行的操作
+ * @param block Operation to execute
  */
 inline fun String?.ifNotNullOrBlank(crossinline block: (it: String) -> Unit) {
   if (this.hasText()) block(this)

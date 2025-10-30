@@ -11,39 +11,39 @@ import java.time.ZoneOffset
 import java.time.temporal.TemporalAdjusters
 
 /**
- * 毫秒时间戳转LocalDateTime
+ * Convert millisecond timestamp to LocalDateTime
  *
- * @param zoneId 时区
- * @return LocalDateTime对象
+ * @param zoneId Timezone
+ * @return LocalDateTime object
  */
 fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
   return DateTimeConverter.millisToLocalDateTime(this, zoneId)
 }
 
 /**
- * 毫秒时间戳转LocalDate
+ * Convert millisecond timestamp to LocalDate
  *
- * @param zoneId 时区
- * @return LocalDate对象
+ * @param zoneId Timezone
+ * @return LocalDate object
  */
 fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
   return DateTimeConverter.millisToLocalDate(this, zoneId)
 }
 
 /**
- * 毫秒时间戳转LocalTime
+ * Convert millisecond timestamp to LocalTime
  *
- * @param zoneId 时区
- * @return LocalTime对象
+ * @param zoneId Timezone
+ * @return LocalTime object
  */
 fun Long.toLocalTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalTime {
   return DateTimeConverter.millisToLocalTime(this, zoneId)
 }
 
 /**
- * 毫秒时间戳转Instant
+ * Convert millisecond timestamp to Instant
  *
- * @return Instant对象
+ * @return Instant object
  */
 fun Long.toInstant(): Instant {
   return Instant.ofEpochMilli(this)

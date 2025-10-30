@@ -4,7 +4,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 /**
- * string 工具类
+ * String utility class
  *
  * @author TrueNine
  * @since 2022-10-28
@@ -12,10 +12,10 @@ import kotlin.contracts.contract
 interface IString {
   companion object {
     /**
-     * 检查字符串是否为空或仅包含空白字符
+     * Checks if a string is null or contains only whitespace characters
      *
-     * @param text 待检查的字符串
-     * @return 如果字符串为 null、空字符串或仅包含空白字符则返回 true，否则返回 false
+     * @param text The string to check
+     * @return true if the string is null, empty, or contains only whitespace characters, false otherwise
      */
     @JvmStatic
     @OptIn(ExperimentalContracts::class)
@@ -25,10 +25,10 @@ interface IString {
     }
 
     /**
-     * 移除字符串中的所有换行符、回车符和制表符
+     * Removes all line breaks, carriage returns, and tab characters from a string
      *
-     * @param str 待处理的字符串
-     * @return 处理后的单行字符串
+     * @param str The string to process
+     * @return The processed single-line string
      */
     @JvmStatic
     fun inLine(str: String): String {
@@ -38,10 +38,10 @@ interface IString {
     }
 
     /**
-     * 检查字符串是否包含非空白字符
+     * Checks if a string contains non-whitespace characters
      *
-     * @param text 待检查的字符串
-     * @return 如果字符串不为 null 且包含至少一个非空白字符则返回 true，否则返回 false
+     * @param text The string to check
+     * @return true if the string is not null and contains at least one non-whitespace character, false otherwise
      */
     @JvmStatic
     @OptIn(ExperimentalContracts::class)
@@ -51,10 +51,10 @@ interface IString {
     }
 
     /**
-     * 检查字符序列中是否包含非空白字符
+     * Checks if a character sequence contains non-whitespace characters
      *
-     * @param str 待检查的字符序列
-     * @return 如果字符序列包含至少一个非空白字符则返回 true，否则返回 false
+     * @param str The character sequence to check
+     * @return true if the character sequence contains at least one non-whitespace character, false otherwise
      */
     @JvmStatic
     fun containsText(str: CharSequence): Boolean {
@@ -62,11 +62,11 @@ interface IString {
     }
 
     /**
-     * 对文本进行省略处理，如果文本长度超过指定长度则截断并添加省略号
+     * Truncates text if its length exceeds the specified maximum and adds ellipsis
      *
-     * @param s 待处理的字符串
-     * @param maxLen 最大允许长度
-     * @return 处理后的字符串，如果原字符串长度超过最大长度，则截断并添加"..."
+     * @param s The string to process
+     * @param maxLen The maximum allowed length
+     * @return The processed string, truncated and appended with "..." if the original string length exceeds the maximum
      */
     @JvmStatic
     inline fun omit(s: String, maxLen: Int): String {

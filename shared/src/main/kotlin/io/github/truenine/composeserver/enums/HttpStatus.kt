@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IIntEnum
 
 /**
- * HTTP 状态码枚举类
+ * HTTP status code enumeration class
  *
  * @author TrueNine
  * @since 2022-10-28

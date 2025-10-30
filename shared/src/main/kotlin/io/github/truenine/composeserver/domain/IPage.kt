@@ -6,11 +6,11 @@ import java.beans.Transient
 import java.io.Serializable
 
 /**
- * ## 计算总页数
+ * ## Calculate total page count
  *
- * @param total 数据总数
- * @param pageSize 分页页面大小
- * @return 总页数
+ * @param total Total number of records
+ * @param pageSize Page size for pagination
+ * @return Total number of pages
  */
 private fun calcTotalPageSize(total: Long, pageSize: Int): Int {
   if (total <= 0 || pageSize <= 0) return 0
@@ -22,7 +22,7 @@ private class DefaultPageResult<T : Any>(
   @JsonIgnore @kotlin.jvm.Transient override var pageParam: IPageParam? = null,
   override var d: Collection<T>,
   override var t: Long,
-  @Deprecated("无需此属性") override var o: Long? = null,
+  @Deprecated("This property is not needed") override var o: Long? = null,
   override var p: Int = calcTotalPageSize(t, pageParam?.safePageSize ?: Pq.MAX_PAGE_SIZE),
 ) : IPage<T>, Serializable {
 
@@ -32,21 +32,21 @@ private class DefaultPageResult<T : Any>(
 }
 
 /**
- * # 分页结果
+ * # Pagination result
  *
  * @author TrueNine
  * @since 2024-09-14
  */
 interface IPage<T : Any?> : IPageLike<T> {
-  /** ## 原始分页请求参数 */
-  @get:JsonIgnore @get:Transient @set:JsonIgnore @set:Transient @Deprecated("不推荐使用") var pageParam: IPageParam?
+  /** ## Original pagination request parameters */
+  @get:JsonIgnore @get:Transient @set:JsonIgnore @set:Transient @Deprecated("Not recommended for use") var pageParam: IPageParam?
 
   operator fun get(index: Int): T = d.toList()[index]
 
   /**
-   * ## 转换分页结果
+   * ## Transform pagination result
    *
-   * @param transform 转换函数
+   * @param transform Transformation function
    */
   fun <R : Any> transferTo(transform: (T) -> R): IPage<R> {
     return DefaultPageResult(pageParam = pageParam, d = d.map(transform), t = t, o = o, p = p)
@@ -54,45 +54,45 @@ interface IPage<T : Any?> : IPageLike<T> {
 
   companion object {
     /**
-     * @param dataList 数据列表
-     * @param total 数据总数
-     * @param pageParam 原始分页参数
+     * @param dataList Data list
+     * @param total Total number of records
+     * @param pageParam Original pagination parameters
      */
     @JvmStatic
     @Suppress("DEPRECATION_ERROR")
-    @Deprecated("不推荐")
+    @Deprecated("Not recommended")
     operator fun <T : Any> get(dataList: Collection<T>, total: Long = dataList.size.toLong(), pageParam: IPageParam? = null): IPage<T> {
       return of(dataList, total, pageParam)
     }
 
     /**
-     * ## 构建分页结果
+     * ## Build pagination result
      *
-     * @param dataList 数据列表
-     * @param total 数据总行数
-     * @param totalPageNumber 数据总页数
+     * @param dataList Data list
+     * @param total Total number of records
+     * @param totalPageNumber Total number of pages
      */
     operator fun <T : Any> get(dataList: Collection<T>, total: Long, totalPageNumber: Int): IPage<T> {
       return DefaultPageResult(null, dataList, total, null, totalPageNumber)
     }
 
     /**
-     * @param dataList 数据列表
-     * @param total 数据总数
-     * @param offset 偏移页码
-     * @param requestParamPageSize 请求参数的页码
+     * @param dataList Data list
+     * @param total Total number of records
+     * @param offset Page offset
+     * @param requestParamPageSize Request parameter page size
      */
     @JvmStatic
     @Suppress("DEPRECATION")
-    @Deprecated("不推荐")
+    @Deprecated("Not recommended")
     operator fun <T : Any> get(dataList: Collection<T>, total: Long, offset: Int, requestParamPageSize: Int, unPage: Boolean?): IPage<T> {
       return get(dataList, total, IPageParam[offset, requestParamPageSize, unPage != false])
     }
 
     /**
-     * @param dataList 数据列表
-     * @param total 数据总数
-     * @param pageParam 原始分页参数
+     * @param dataList Data list
+     * @param total Total number of records
+     * @param pageParam Original pagination parameters
      */
     @JvmStatic
     @Deprecated("use get", replaceWith = ReplaceWith("get()"), level = DeprecationLevel.ERROR)
