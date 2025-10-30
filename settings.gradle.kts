@@ -27,10 +27,14 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "compose-server"
 
 // 根级模块
-listOf("version-catalog", "shared", "bom", "gradle-plugin", "cacheable", "docsite").forEach { p ->
+listOf("version-catalog", "shared", "bom", "cacheable", "docsite").forEach { p ->
   include(p)
   findProject(":$p")?.name = p
 }
+
+// Gradle 插件模块
+include("gradleplugin:gradleplugin-composeserver")
+include("gradleplugin:gradleplugin-dotenv")
 
 // 监控模块
 include("surveillance:surveillance-shared")

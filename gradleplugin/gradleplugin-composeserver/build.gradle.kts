@@ -43,7 +43,7 @@ tasks.withType<Test>().configureEach {
 gradlePlugin {
   plugins {
     register("composeserver-gradle-plugin") {
-      id = "io.github.truenine.composeserver.gradle-plugin"
+      id = "io.github.truenine.composeserver.composeserver"
       displayName = "Compose Server Gradle Plugin"
       implementationClass = "io.github.truenine.composeserver.gradleplugin.Main"
       description = "compose server development gradle plugin"

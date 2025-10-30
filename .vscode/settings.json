@@ -1,5 +1,10 @@
 {
-  "editor.rulers": [2, 4, 80, 160],
+  "editor.rulers": [
+    2,
+    4,
+    80,
+    160
+  ],
   "explorer.excludeGitIgnore": false,
   "files.exclude": {
     "**/character": true,
@@ -30,5 +35,22 @@
   "[markdown]": {
     "editor.wordWrap": "off"
   },
-  "workbench.sideBar.location": "left"
+  "workbench.sideBar.location": "left",
+  "workbench.colorCustomizations": {
+    "editorGroup.border": "#d530c4",
+    "editorGroup.dropBackground": "#d530c433",
+    "focusBorder": "#d530c4",
+    "tab.activeBorder": "#d530c4",
+    "tab.activeBorderTop": "#d530c4",
+    "editorGroupHeader.tabsBorder": "#d530c4",
+    "panel.border": "#d530c4",
+    "sideBar.border": "#d530c4",
+    "editor.lineHighlightBorder": "#d530c4",
+    "activityBar.activeBorder": "#d530c4",
+    "titleBar.activeBackground": "#d530c4",
+    "titleBar.activeForeground": "#ffffff",
+    "titleBar.inactiveBackground": "#b625a8",
+    "titleBar.inactiveForeground": "#f3c4ee",
+    "titleBar.border": "#d530c4"
+  }
 }

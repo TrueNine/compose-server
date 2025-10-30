@@ -147,7 +147,8 @@ io-github-truenine-composeserver-depend-paho = { module = "io.github.truenine:co
 io-github-truenine-composeserver-depend-servlet = { module = "io.github.truenine:composeserver-depend-servlet", version.ref = "project" }
 io-github-truenine-composeserver-depend-springdoc-openapi = { module = "io.github.truenine:composeserver-depend-springdoc-openapi", version.ref = "project" }
 io-github-truenine-composeserver-depend-xxl-job = { module = "io.github.truenine:composeserver-depend-xxl-job", version.ref = "project" }
-io-github-truenine-composeserver-gradle-plugin = { module = "io.github.truenine:composeserver-gradle-plugin", version.ref = "project" }
+io-github-truenine-composeserver-gradleplugin-composeserver = { module = "io.github.truenine:composeserver-gradleplugin-composeserver", version.ref = "project" }
+io-github-truenine-composeserver-gradleplugin-dotenv = { module = "io.github.truenine:composeserver-gradleplugin-dotenv", version.ref = "project" }
 io-github-truenine-composeserver-ksp-meta = { module = "io.github.truenine:composeserver-ksp-meta", version.ref = "project" }
 io-github-truenine-composeserver-ksp-plugin = { module = "io.github.truenine:composeserver-ksp-plugin", version.ref = "project" }
 io-github-truenine-composeserver-ksp-shared = { module = "io.github.truenine:composeserver-ksp-shared", version.ref = "project" }
@@ -338,7 +339,8 @@ com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "com-diffp
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.53.0"
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
 com-vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "com-vanniktech-maven-publish" }
-io-github-truenine-composeserver-gradle-plugin = { id = "io.github.truenine.composeserver.gradle-plugin", version.ref = "project" }
+io-github-truenine-composeserver-gradleplugin-composeserver = { id = "io.github.truenine.composeserver.composeserver", version.ref = "project" }
+io-github-truenine-composeserver-gradleplugin-dotenv = { id = "io.github.truenine.composeserver.dotenv", version.ref = "project" }
 io-spring-dependency-management = "io.spring.dependency-management:1.1.7"
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
 org-asciidoctor-jvm-convert = "org.asciidoctor.jvm.convert:4.0.4"
