@@ -145,7 +145,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
   override suspend fun setBucketPublicRead(bucketName: String): Result<Unit> {
     return safeCallAsync {
-        // 使用 TOS SDK 设置存储桶为公共读取
+        // Use the TOS SDK to mark the bucket as public read
         val input = PutBucketACLInput().setBucket(bucketName).setAcl(ACLType.ACL_PUBLIC_READ)
         tosClient.putBucketACL(input)
         log.info("Set bucket public read: {}", bucketName)
@@ -206,7 +206,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
   override suspend fun putObject(request: PutObjectRequest): Result<ObjectInfo> {
     return safeCallAsync {
-        // 使用已弃用的 setPutObjectBasicInput，但添加 @Suppress 注解
+        // Use the deprecated setPutObjectBasicInput with a @Suppress annotation
         val basicInput = PutObjectBasicInput().setBucket(request.bucketName).setKey(request.objectName)
         @Suppress("DEPRECATION") val input = PutObjectInput().setPutObjectBasicInput(basicInput).setContent(request.inputStream)
 
@@ -304,8 +304,8 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           etag = output.etag ?: "",
           lastModified = convertDateToInstant(output.lastModified),
           contentType = output.contentType,
-          metadata = emptyMap(), // TODO: 获取正确的元数据
-          storageClass = StorageClass.STANDARD, // TODO: 映射 TOS 的存储类型
+          metadata = emptyMap(), // TODO: Retrieve the correct metadata
+          storageClass = StorageClass.STANDARD, // TODO: Map the TOS storage class
           tags = emptyMap(),
         )
       }
@@ -345,7 +345,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       val results = mutableListOf<DeleteResult>()
 
-      // 使用单个删除的方式，因为批量删除 API 可能有问题
+      // Perform single deletions because the batch API may be unreliable
       for (objectName in objectNames) {
         val input = DeleteObjectInput().setBucket(bucketName).setKey(objectName)
         tosClient.deleteObject(input)
@@ -358,7 +358,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
   override suspend fun copyObject(request: CopyObjectRequest): Result<ObjectInfo> =
     withContext(Dispatchers.IO) {
-      // 尝试使用 TOS SDK 的复制对象 API
+      // Attempt to use the TOS SDK copyObject API
       val input =
         CopyObjectV2Input()
           .setBucket(request.destinationBucketName)
@@ -366,10 +366,10 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           .setSrcBucket(request.sourceBucketName)
           .setSrcKey(request.sourceObjectName)
 
-      // 设置元数据
+      // Configure metadata
       if (request.metadata.isNotEmpty()) {
         input.setMetadataDirective(MetadataDirectiveType.METADATA_DIRECTIVE_REPLACE)
-        // TODO: 设置自定义元数据，需要找到正确的方法
+        // TODO: Provide custom metadata once the appropriate API usage is confirmed
         // input.setMeta(request.metadata)
       }
 
@@ -386,7 +386,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
         ObjectInfo(
           bucketName = request.destinationBucketName,
           objectName = request.destinationObjectName,
-          size = 0L, // TOS copyObject 可能不返回大小信息
+          size = 0L, // TOS copyObject may not return size information
           etag = output.etag ?: "",
           lastModified = convertDateToInstant(output.lastModified),
           contentType = null,
@@ -401,10 +401,10 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     return safeCallAsync {
         val input = ListObjectsV2Input().setBucket(request.bucketName).setMaxKeys(request.maxKeys)
 
-        // 设置可选参数
+        // Apply optional parameters
         request.prefix?.let { input.setPrefix(it) }
         request.delimiter?.let { input.setDelimiter(it) }
-        // TODO: 检查 TOS SDK 是否支持 continuation token 和 start after
+        // TODO: Verify whether the TOS SDK supports continuation tokens and start-after
         // request.continuationToken?.let { input.setContinuationToken(it) }
         // request.startAfter?.let { input.setStartAfter(it) }
 
@@ -418,9 +418,9 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
               size = obj.size,
               etag = obj.etag ?: "",
               lastModified = convertDateToInstant(obj.lastModified),
-              contentType = null, // TOS listObjects 不返回 contentType
+              contentType = null, // TOS listObjects does not return the content type
               metadata = emptyMap(),
-              storageClass = StorageClass.STANDARD, // TODO: 映射 TOS 的存储类型
+              storageClass = StorageClass.STANDARD, // TODO: Map the TOS storage class
               tags = emptyMap(),
             )
           } ?: emptyList()
@@ -432,7 +432,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           objects = objects,
           commonPrefixes = commonPrefixes,
           isTruncated = output.isTruncated,
-          nextContinuationToken = null, // TODO: 检查 TOS SDK 是否支持 continuation token
+          nextContinuationToken = null, // TODO: Verify whether the TOS SDK supports continuation tokens
           maxKeys = request.maxKeys,
           prefix = request.prefix,
           delimiter = request.delimiter,
@@ -443,15 +443,15 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
   }
 
   override fun listObjectsFlow(request: ListObjectsRequest): Flow<ObjectInfo> = flow {
-    // TOS SDK 当前版本不支持 continuation token，所以只执行一次查询
+    // The current TOS SDK does not support continuation tokens, so we run a single query
     val input = ListObjectsType2Input().setBucket(request.bucketName).setMaxKeys(request.maxKeys)
 
-    // 设置可选参数
+    // Apply optional parameters
     request.prefix?.let { input.setPrefix(it) }
     request.delimiter?.let { input.setDelimiter(it) }
     val output = tosClient.listObjectsType2(input)
 
-    // 发出所有对象
+    // Emit all objects
     output.contents?.forEach { obj ->
       emit(
         ObjectInfo(
@@ -471,7 +471,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
   override suspend fun generatePresignedUrl(bucketName: String, objectName: String, expiration: Duration, method: HttpMethod): Result<String> {
     return safeCallAsync {
-        // 映射 HttpMethod 到 TOS SDK 的字符串
+        // Map HttpMethod to the string expected by the TOS SDK
         val tosMethod =
           when (method) {
             HttpMethod.GET -> "GET"
@@ -479,10 +479,10 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
             HttpMethod.POST -> "POST"
             HttpMethod.DELETE -> "DELETE"
             HttpMethod.HEAD -> "HEAD"
-            HttpMethod.PATCH -> "POST" // TOS 不支持 PATCH，使用 POST
-            HttpMethod.OPTIONS -> "GET" // TOS 不支持 OPTIONS，使用 GET
-            HttpMethod.TRACE -> "GET" // TOS 不支持 TRACE，使用 GET
-            HttpMethod.CONNECT -> "GET" // TOS 不支持 CONNECT，使用 GET
+            HttpMethod.PATCH -> "POST" // TOS does not support PATCH, use POST instead
+            HttpMethod.OPTIONS -> "GET" // TOS does not support OPTIONS, use GET instead
+            HttpMethod.TRACE -> "GET" // TOS does not support TRACE, use GET instead
+            HttpMethod.CONNECT -> "GET" // TOS does not support CONNECT, use GET instead
           }
 
         val input = PreSignedURLInput().setBucket(bucketName).setKey(objectName).setHttpMethod(tosMethod).setExpires(expiration.seconds)
@@ -502,7 +502,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
         val input = com.volcengine.tos.model.`object`.CreateMultipartUploadInput().setBucket(request.bucketName).setKey(request.objectName)
 
-        // TODO: 添加内容类型和元数据设置支持
+        // TODO: Add support for content type and metadata settings
         // request.contentType?.let { input.setContentType(it) }
         // if (request.metadata.isNotEmpty()) {
         //   input.setMeta(request.metadata)
@@ -548,7 +548,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Completing multipart upload: {}/{}, uploadId: {}", request.bucketName, request.objectName, request.uploadId)
 
-      // 创建 UploadedPartV2 列表，基于官方文档的正确实现
+      // Build the UploadedPartV2 list following the official documentation
       val uploadedParts = request.parts.map { part -> com.volcengine.tos.model.`object`.UploadedPartV2().setPartNumber(part.partNumber).setEtag(part.etag) }
 
       val input =
@@ -611,7 +611,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
   override suspend fun generateShareLink(request: ShareLinkRequest): Result<ShareLinkInfo> =
     withContext(Dispatchers.IO) {
-      // 使用预签名URL作为分享链接的基础
+      // Use the presigned URL as the basis for the share link
       val presignedUrlResult =
         generatePresignedUrl(bucketName = request.bucketName, objectName = request.objectName, expiration = request.expiration, method = request.method)
 
@@ -645,7 +645,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Uploading object with share link: {}/{}", request.bucketName, request.objectName)
 
-      // 首先上传对象
+      // Upload the object first
       val putObjectRequest =
         PutObjectRequest(
           bucketName = request.bucketName,
@@ -665,7 +665,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
       val objectInfo = uploadResult.getOrThrow()
 
-      // 生成分享链接
+      // Generate the share link
       val shareLinkRequest =
         ShareLinkRequest(
           bucketName = request.bucketName,
@@ -696,18 +696,18 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Downloading from share link: {}", shareUrl)
 
-      // 对于 TOS 预签名 URL，我们可以直接使用 URL 进行下载
-      // 这里简化实现，假设 shareUrl 就是有效的预签名 URL
-      // 在实际应用中，可能需要额外的验证逻辑（如密码验证、下载次数限制等）
+      // For TOS presigned URLs we can download directly via the URL
+      // This simplified implementation assumes the shareUrl is already a valid presigned URL
+      // In production you may need additional validation such as password checks or download limits
 
       if (password != null) {
         log.warn("Password validation not implemented for TOS presigned URLs")
       }
 
-      // 解析 URL 以获取 bucket 和 object 信息
+      // Parse the URL to extract the bucket and object information
       val (bucketName, objectName) = parseShareUrl(shareUrl)
 
-      // 使用常规的 getObject 方法
+      // Use the standard getObject method
       val result = getObject(bucketName, objectName)
 
       if (result.isSuccess) {
@@ -723,17 +723,17 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Validating share link: {}", shareUrl)
 
-      // 对于 TOS 预签名 URL，验证主要是检查 URL 是否有效以及是否过期
-      // 这里提供一个基础的实现
+      // For TOS presigned URLs validation primarily checks whether the URL is valid and unexpired
+      // Provide a baseline implementation here
 
       if (password != null) {
         log.warn("Password validation not implemented for TOS presigned URLs")
       }
 
-      // 解析 URL 以获取基本信息
+      // Parse the URL to obtain the basic information
       val (bucketName, objectName) = parseShareUrl(shareUrl)
 
-      // 检查对象是否存在（这也间接验证了 URL 的有效性）
+      // Check whether the object exists (indirectly validating the URL)
       val existsResult = objectExists(bucketName, objectName)
       if (existsResult.isFailure) {
         throw existsResult.exceptionOrNull()!!
@@ -744,14 +744,14 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
         throw ObjectNotFoundException(bucketName, objectName)
       }
 
-      // 创建 ShareLinkInfo（注意：某些信息可能无法从 URL 中准确获取）
+      // Construct ShareLinkInfo (some information cannot be derived exactly from the URL)
       val shareInfo =
         ShareLinkInfo(
           shareUrl = shareUrl,
           bucketName = bucketName,
           objectName = objectName,
-          expiration = Instant.now().plusSeconds(3600), // 默认1小时，实际应该从 URL 参数中解析
-          method = HttpMethod.GET, // 默认 GET，实际应该从 URL 或上下文中获取
+          expiration = Instant.now().plusSeconds(3600), // Defaults to 1 hour; ideally parse from URL parameters
+          method = HttpMethod.GET, // Defaults to GET; ideally derive this from the URL or context
           allowedIps = emptyList(),
           maxDownloads = null,
           remainingDownloads = null,
@@ -767,16 +767,16 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     withContext(Dispatchers.IO) {
       log.debug("Attempting to revoke share link: {}", shareUrl)
 
-      // TOS 预签名 URL 本身无法被撤销，因为它们是基于时间的签名
-      // 在实际应用中，可能需要以下几种方案：
-      // 1. 维护一个黑名单数据库来记录被撤销的 URL
-      // 2. 使用短期 URL 并通过代理服务来控制访问
-      // 3. 删除或移动原始对象（这会使所有相关的预签名 URL 失效）
+      // TOS presigned URLs cannot be revoked because they rely on time-based signatures
+      // In production you may consider the following options:
+      // 1. Maintain a blacklist to track revoked URLs
+      // 2. Use short-lived URLs or gate traffic through a proxy service
+      // 3. Delete or move the original object (which invalidates related presigned URLs)
 
       log.warn("TOS presigned URLs cannot be directly revoked")
       log.warn("Consider implementing a blacklist mechanism or using short-lived URLs")
 
-      // 这里我们提供一个警告性的成功响应，表示操作已被记录但可能无法立即生效
+      // Return a warning-style success response to indicate the request was recorded but may not take effect immediately
       log.info("Share link revocation request recorded: {}", shareUrl)
       log.info("Note: The URL may remain accessible until its natural expiration")
 

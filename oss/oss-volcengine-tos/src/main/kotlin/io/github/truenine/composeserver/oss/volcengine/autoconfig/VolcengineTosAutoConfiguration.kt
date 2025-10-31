@@ -81,7 +81,7 @@ class VolcengineTosAutoConfiguration {
           TOSV2ClientBuilder().build(clientConfiguration)
         }
 
-      // 在测试环境中跳过连接测试
+      // Skip the connection test when running in test environments
       val isTestEnvironment =
         environment.activeProfiles.contains("test") ||
           environment.getProperty("spring.profiles.active")?.contains("test") == true ||
@@ -241,7 +241,7 @@ class VolcengineTosAutoConfiguration {
         .region(region)
         .endpoint(endpoint)
         .credentials(
-          // 使用已弃用的 StaticCredentials，但添加 @Suppress 注解
+          // Use deprecated StaticCredentials but suppress the warning
           @Suppress("DEPRECATION") StaticCredentials(accessKey, secretKey)
         )
         .transportConfig(transportConfig)

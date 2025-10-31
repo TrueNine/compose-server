@@ -14,7 +14,7 @@ import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
 
 /**
- * 测试 Volcengine TOS 自动配置机制
+ * Tests the Volcengine TOS auto-configuration mechanism.
  *
  * @author TrueNine
  * @since 2025-08-11
@@ -24,10 +24,10 @@ class VolcengineTosAutoConfigurationTest {
   private val contextRunner = ApplicationContextRunner().withConfiguration(AutoConfigurations.of(VolcengineTosAutoConfiguration::class.java))
 
   @Nested
-  inner class `自动配置启用条件` {
+  inner class AutoConfigurationActivation {
 
     @Test
-    fun `当 TOSV2 类存在时应该启用自动配置`() {
+    fun `enables auto configuration when TOSV2 class exists`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
@@ -36,26 +36,26 @@ class VolcengineTosAutoConfigurationTest {
           "compose.oss.volcengine-tos.secret-key=testsecret",
         )
         .run { context ->
-          // 验证配置属性被正确绑定
+          // Verify that the configuration properties are bound correctly
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
           kotlin.test.assertEquals("tos-cn-beijing.volces.com", tosProperties.endpoint)
           kotlin.test.assertEquals("cn-beijing", tosProperties.region)
           kotlin.test.assertEquals("testkey", tosProperties.accessKey)
           kotlin.test.assertEquals("testsecret", tosProperties.secretKey)
 
-          // 验证 TOS 客户端被创建
+          // Verify that the TOS client is created
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
           assertTrue(context.containsBeanDefinition("volcengineTosObjectStorageService"))
         }
     }
 
     @Test
-    fun `当缺少必需配置时应该不创建客户端`() {
+    fun `fails to start when required configuration is missing`() {
       contextRunner.run { context ->
-        // 验证上下文启动失败（因为缺少必需配置）
+        // Verify that the context fails to start because required configuration is missing
         assertTrue(context.startupFailure != null)
 
-        // 验证失败原因是缺少必需配置
+        // Verify that the failure is caused by missing required configuration
         val failure = context.startupFailure
         assertTrue(
           failure?.message?.contains("endpoint") == true || failure?.message?.contains("region") == true || failure?.message?.contains("access") == true
@@ -65,10 +65,10 @@ class VolcengineTosAutoConfigurationTest {
   }
 
   @Nested
-  inner class `配置属性绑定` {
+  inner class PropertyBinding {
 
     @Test
-    fun `应该正确绑定 Volcengine TOS 特定配置`() {
+    fun `binds Volcengine TOS specific configuration`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
@@ -95,7 +95,7 @@ class VolcengineTosAutoConfigurationTest {
     }
 
     @Test
-    fun `应该支持通用 OSS 配置作为后备`() {
+    fun `supports generic OSS configuration as fallback`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.endpoint=oss.example.com",
@@ -111,13 +111,13 @@ class VolcengineTosAutoConfigurationTest {
           val ossProperties = context.getBean(OssProperties::class.java)
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
 
-          // 验证通用配置
+          // Verify that the generic configuration is bound
           kotlin.test.assertEquals("oss.example.com", ossProperties.endpoint)
           kotlin.test.assertEquals("us-east-1", ossProperties.region)
           kotlin.test.assertEquals("osskey", ossProperties.accessKey)
           kotlin.test.assertEquals("osssecret", ossProperties.secretKey)
 
-          // 验证 TOS 特定配置
+          // Verify that the TOS specific configuration is bound
           kotlin.test.assertEquals("tos.example.com", tosProperties.endpoint)
           kotlin.test.assertEquals("cn-beijing", tosProperties.region)
           kotlin.test.assertEquals("toskey", tosProperties.accessKey)
@@ -127,36 +127,36 @@ class VolcengineTosAutoConfigurationTest {
   }
 
   @Nested
-  inner class `向后兼容性` {
+  inner class BackwardCompatibility {
 
     @Test
-    fun `应该忽略废弃的 provider 配置`() {
+    fun `ignores deprecated provider configuration`() {
       contextRunner
         .withPropertyValues(
-          "compose.oss.provider=volcengine-tos", // 废弃的配置
+          "compose.oss.provider=volcengine-tos", // Deprecated configuration
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
           "compose.oss.volcengine-tos.region=cn-beijing",
           "compose.oss.volcengine-tos.access-key=testkey",
           "compose.oss.volcengine-tos.secret-key=testsecret",
         )
         .run { context ->
-          // 验证 provider 属性仍然可以读取（向后兼容）
+          // Verify that the provider property remains accessible (backward compatibility)
           val ossProperties = context.getBean(OssProperties::class.java)
           kotlin.test.assertEquals("volcengine-tos", ossProperties.provider)
 
-          // 验证 TOS 配置正确绑定
+          // Verify that the TOS configuration is bound correctly
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
           kotlin.test.assertEquals("tos-cn-beijing.volces.com", tosProperties.endpoint)
           kotlin.test.assertEquals("cn-beijing", tosProperties.region)
 
-          // 验证 TOS 客户端被创建
+          // Verify that the TOS client is created
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
           assertTrue(context.containsBeanDefinition("volcengineTosObjectStorageService"))
         }
     }
 
     @Test
-    fun `应该在没有 provider 配置时正常工作`() {
+    fun `works without provider configuration`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
@@ -165,16 +165,16 @@ class VolcengineTosAutoConfigurationTest {
           "compose.oss.volcengine-tos.secret-key=testsecret",
         )
         .run { context ->
-          // 验证 provider 属性为 null
+          // Verify that the provider property is null
           val ossProperties = context.getBean(OssProperties::class.java)
           kotlin.test.assertNull(ossProperties.provider)
 
-          // 验证 TOS 配置正确绑定
+          // Verify that the TOS configuration is bound correctly
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
           kotlin.test.assertEquals("tos-cn-beijing.volces.com", tosProperties.endpoint)
           kotlin.test.assertEquals("cn-beijing", tosProperties.region)
 
-          // 验证 TOS 客户端被创建
+          // Verify that the TOS client is created
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
           assertTrue(context.containsBeanDefinition("volcengineTosObjectStorageService"))
         }
@@ -182,10 +182,10 @@ class VolcengineTosAutoConfigurationTest {
   }
 
   @Nested
-  inner class `默认区域配置测试` {
+  inner class DefaultRegionConfiguration {
 
     @Test
-    fun `当未指定区域时应该使用默认区域 cn-beijing`() {
+    fun `uses default region when none is provided`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
@@ -193,21 +193,21 @@ class VolcengineTosAutoConfigurationTest {
           "compose.oss.volcengine-tos.secret-key=testsecret",
         )
         .run { context ->
-          // 验证配置属性中region为默认值
+          // Verify that the region property falls back to the default value
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
           kotlin.test.assertEquals("cn-beijing", tosProperties.region)
 
           val ossProperties = context.getBean(OssProperties::class.java)
           kotlin.test.assertNull(ossProperties.region)
 
-          // 验证 TOS 客户端仍然被创建（使用默认区域）
+          // Verify that the TOS client is created using the default region
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
           assertTrue(context.containsBeanDefinition("volcengineTosObjectStorageService"))
         }
     }
 
     @Test
-    fun `TOS 专用区域配置应该优先于通用 OSS 区域配置`() {
+    fun `prefers TOS specific region over generic OSS region`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.endpoint=tos-cn-beijing.volces.com",
@@ -220,17 +220,17 @@ class VolcengineTosAutoConfigurationTest {
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
           val ossProperties = context.getBean(OssProperties::class.java)
 
-          // 验证 TOS 专用配置优先
+          // Verify that the TOS-specific configuration takes precedence
           kotlin.test.assertEquals("cn-guangzhou", tosProperties.region)
           kotlin.test.assertEquals("cn-shanghai", ossProperties.region)
 
-          // 验证 TOS 客户端被创建
+          // Verify that the TOS client is created
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
         }
     }
 
     @Test
-    fun `通用 OSS 区域配置应该作为 TOS 区域的后备选项`() {
+    fun `uses generic OSS region as fallback`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.endpoint=tos-cn-beijing.volces.com",
@@ -242,18 +242,18 @@ class VolcengineTosAutoConfigurationTest {
           val tosProperties = context.getBean(VolcengineTosProperties::class.java)
           val ossProperties = context.getBean(OssProperties::class.java)
 
-          // 验证 TOS 使用默认区域配置
+          // Verify that TOS falls back to the default region configuration
           kotlin.test.assertEquals("cn-beijing", tosProperties.region)
-          // 验证通用配置存在
+          // Verify that the generic configuration is present
           kotlin.test.assertEquals("cn-hongkong", ossProperties.region)
 
-          // 验证 TOS 客户端被创建（使用通用配置）
+          // Verify that the TOS client is created using the generic configuration
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
         }
     }
 
     @Test
-    fun `应该支持所有有效的火山引擎区域代码`() {
+    fun `supports all valid Volcengine region codes`() {
       val validRegions = listOf("cn-beijing", "cn-shanghai", "cn-guangzhou", "cn-hongkong", "ap-southeast-1")
 
       validRegions.forEach { region ->
@@ -268,7 +268,7 @@ class VolcengineTosAutoConfigurationTest {
             val tosProperties = context.getBean(VolcengineTosProperties::class.java)
             kotlin.test.assertEquals(region, tosProperties.region)
 
-            // 验证 TOS 客户端被创建
+            // Verify that the TOS client is created
             assertTrue(context.containsBeanDefinition("volcengineTosClient"))
           }
       }
@@ -277,80 +277,80 @@ class VolcengineTosAutoConfigurationTest {
 
   @Nested
   @ExtendWith(OutputCaptureExtension::class)
-  inner class `日志输出验证` {
+  inner class LoggingVerification {
 
     @Test
-    fun `当未指定区域时应该输出默认区域警告日志`(output: CapturedOutput) {
+    fun `does not log default region warning when region is missing`(output: CapturedOutput) {
       contextRunner
         .withPropertyValues(
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
           "compose.oss.volcengine-tos.access-key=testkey",
           "compose.oss.volcengine-tos.secret-key=testsecret",
-          "spring.profiles.active=test", // 启用测试环境以跳过连接测试
+          "spring.profiles.active=test", // Enable the test profile to skip connection checks
         )
         .run { context ->
-          // 验证没有警告日志输出
+          // Verify that no warning log is emitted
           kotlin.test.assertFalse(
             output.out.contains("No region specified, using default region: cn-beijing") ||
               output.err.contains("No region specified, using default region: cn-beijing"),
             "Warning log should not be present in output: ${output.all}",
           )
 
-          // 验证 TOS 客户端被创建
+          // Verify that the TOS client is created
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
         }
     }
 
     @Test
-    fun `当指定了区域时不应该输出默认区域警告日志`(output: CapturedOutput) {
+    fun `does not log default region warning when region is provided`(output: CapturedOutput) {
       contextRunner
         .withPropertyValues(
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
           "compose.oss.volcengine-tos.region=cn-shanghai",
           "compose.oss.volcengine-tos.access-key=testkey",
           "compose.oss.volcengine-tos.secret-key=testsecret",
-          "spring.profiles.active=test", // 启用测试环境以跳过连接测试
+          "spring.profiles.active=test", // Enable the test profile to skip connection checks
         )
         .run { context ->
-          // 验证没有默认区域警告日志
+          // Verify that no default-region warning is logged
           kotlin.test.assertFalse(
             output.out.contains("No region specified, using default region") || output.err.contains("No region specified, using default region"),
             "Should not output default region warning when region is specified",
           )
 
-          // 验证 TOS 客户端被创建
+          // Verify that the TOS client is created
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
         }
     }
 
     @Test
-    fun `当使用通用OSS区域配置时不应该输出默认区域警告日志`(output: CapturedOutput) {
+    fun `does not log default region warning when OSS region is provided`(output: CapturedOutput) {
       contextRunner
         .withPropertyValues(
           "compose.oss.endpoint=tos-cn-beijing.volces.com",
           "compose.oss.region=cn-guangzhou",
           "compose.oss.access-key=testkey",
           "compose.oss.secret-key=testsecret",
-          "spring.profiles.active=test", // 启用测试环境以跳过连接测试
+          "spring.profiles.active=test", // Enable the test profile to skip connection checks
         )
         .run { context ->
-          // 验证没有默认区域警告日志
+          // Verify that no default-region warning is logged
           kotlin.test.assertFalse(
             output.out.contains("No region specified, using default region") || output.err.contains("No region specified, using default region"),
             "Should not output default region warning when OSS region is specified",
           )
 
-          // 验证 TOS 客户端被创建
+          // Verify that the TOS client is created
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
         }
     }
   }
 
   @Nested
-  inner class `Bean 定义验证` {
+  inner class BeanDefinitionVerification {
 
     @Test
-    fun `应该定义 TOSV2 Bean 工厂方法`() {
+    fun `defines the TOSV2 bean factory methods`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.volcengine-tos.endpoint=tos-cn-beijing.volces.com",
@@ -359,11 +359,11 @@ class VolcengineTosAutoConfigurationTest {
           "compose.oss.volcengine-tos.secret-key=testsecret",
         )
         .run { context ->
-          // 验证 Bean 定义存在
+          // Verify that the bean definitions exist
           assertTrue(context.containsBeanDefinition("volcengineTosClient"))
           assertTrue(context.containsBeanDefinition("volcengineTosObjectStorageService"))
 
-          // 验证 Bean 名称存在
+          // Verify that the bean names exist
           val beanNames = context.beanDefinitionNames
           assertTrue(beanNames.contains("volcengineTosClient"))
           assertTrue(beanNames.contains("volcengineTosObjectStorageService"))
@@ -371,16 +371,16 @@ class VolcengineTosAutoConfigurationTest {
     }
 
     @Test
-    fun `应该正确配置 Bean 的条件注解`() {
-      // 验证自动配置类的注解
+    fun `configures the bean conditional annotations`() {
+      // Verify the annotations on the auto-configuration class
       val autoConfigClass = VolcengineTosAutoConfiguration::class.java
 
-      // 验证 @ConditionalOnClass 注解
+      // Verify the @ConditionalOnClass annotation
       val conditionalOnClass = autoConfigClass.getAnnotation(org.springframework.boot.autoconfigure.condition.ConditionalOnClass::class.java)
       assertNotNull(conditionalOnClass)
       kotlin.test.assertTrue(conditionalOnClass.value.contains(TOSV2::class))
 
-      // 验证 @Order 注解
+      // Verify the @Order annotation
       val order = autoConfigClass.getAnnotation(org.springframework.core.annotation.Order::class.java)
       assertNotNull(order)
       kotlin.test.assertEquals(200, order.value)
