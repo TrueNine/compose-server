@@ -360,7 +360,7 @@ class ResourceValidatorTest {
 
     @Test
     fun `should handle Unicode characters in patterns`() {
-      val unicodePattern = "配置/应用.yml"
+      val unicodePattern = "konfiguráció/alkalmazás.yml"
       try {
         ResourceValidator.validatePattern(unicodePattern)
         // Test passes if no exception is thrown

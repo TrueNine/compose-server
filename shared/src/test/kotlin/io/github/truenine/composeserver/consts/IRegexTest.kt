@@ -6,13 +6,11 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
- * # 正则表达式常量测试
- *
- * 测试 IRegexes 中定义的各种正则表达式的匹配功能
+ * Verifies the regular-expression constants declared in {@link IRegexes}.
  */
 class IRegexTest {
   @Test
-  fun `测试中国行政区划代码正则匹配`() {
+  fun matchesChineseAdministrativeCodes() {
     val pattern = Pattern.compile(IRegexes.CHINA_AD_CODE)
     assertTrue { pattern.matcher("43").matches() }
     assertTrue { pattern.matcher("4304").matches() }
@@ -28,22 +26,22 @@ class IRegexTest {
   }
 
   @Test
-  fun `测试中国身份证号码正则匹配`() {
+  fun matchesChineseIdCardNumbers() {
     val pattern = Pattern.compile(IRegexes.CHINA_ID_CARD)
     assertTrue { pattern.matcher("430404197210280012").matches() }
-    // 基本匹配
+    // Basic matches
     assertTrue { pattern.matcher("43040419721028001X").matches() }
     assertTrue { pattern.matcher("43040419721028001x").matches() }
-    // 位数
+    // Length validation
     assertFalse { pattern.matcher("43040419721028001x1").matches() }
     assertFalse { pattern.matcher("43040419721028001").matches() }
-    // 地理位置不对
+    // Invalid region codes
     assertFalse { pattern.matcher("01040419721028001").matches() }
     assertFalse { pattern.matcher("10040419721028001").matches() }
   }
 
   @Test
-  fun `测试 Ant 风格 URI 路径正则匹配`() {
+  fun matchesAntStyleUriPatterns() {
     val pattern = IRegexes.ANT_URI.toRegex()
     assertTrue {
       arrayOf("/", "/a", "/a/b", "/.", "/.php", "/aaa.", "/a.b.", "/a.b.c", "/a/*/*", "/a/b/*/*", "/1/2").map(pattern::matches).reduce(Boolean::and)
@@ -84,13 +82,13 @@ class IRegexTest {
   }
 
   @Test
-  fun `测试 RBAC 名称正则匹配`() {
+  fun matchesRbacNamePattern() {
     val reg = Pattern.compile(IRegexes.RBAC_NAME)
     assertTrue { reg.matcher("abc").matches() }
     assertTrue { reg.matcher("user_read").matches() }
     assertTrue { reg.matcher("user:read").matches() }
     assertTrue { reg.matcher("a").matches() }
-    // 失败情况
+    // Invalid cases
     assertFalse { reg.matcher("_").matches() }
     assertFalse { reg.matcher("_a").matches() }
     assertFalse { reg.matcher(":").matches() }

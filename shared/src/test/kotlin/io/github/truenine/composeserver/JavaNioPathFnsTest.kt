@@ -220,7 +220,7 @@ class JavaNioPathFnsTest {
   @Test
   fun testCountWordBySeparatorWithDifferentCharsets() {
     val testFile = tempDir.resolve("test.txt")
-    Files.write(testFile, "测试\n内容".toByteArray(Charsets.UTF_8))
+    Files.write(testFile, "Prüfung\nInhalt".toByteArray(Charsets.UTF_8))
 
     val result = testFile.countWordBySeparator(charset = Charsets.UTF_8).toList()
     assertTrue(result.isNotEmpty(), "File with UTF-8 content should work correctly")
@@ -258,7 +258,7 @@ class JavaNioPathFnsTest {
   @Test
   fun testSliceLinesWithDifferentCharsets() {
     val testFile = tempDir.resolve("test.txt")
-    Files.write(testFile, "测试1\n测试2".toByteArray(Charsets.UTF_8))
+    Files.write(testFile, "Línea1\nLínea2".toByteArray(Charsets.UTF_8))
 
     val result = testFile.sliceLines(0L..1L, charset = Charsets.UTF_8).toList()
     assertTrue(result.isNotEmpty(), "Different charset should work correctly")
@@ -313,7 +313,7 @@ class JavaNioPathFnsTest {
   @Test
   fun testPageLinesWithCustomCharset() {
     val testFile = tempDir.resolve("test.txt")
-    val content = "测试1\n测试2\n测试3"
+    val content = "áéíóú1\náéíóú2\náéíóú3"
     Files.write(testFile, content.toByteArray(Charsets.UTF_8))
 
     val result = testFile.pageLines(Pq[0, 2], charset = Charsets.UTF_8)

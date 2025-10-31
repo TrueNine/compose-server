@@ -14,12 +14,12 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-/** DateTimeConverter 转换器单元测试 */
+/** DateTimeConverter unit tests. */
 class DateTimeConverterTest {
 
-  // 固定基准时间，使用UTC时区以避免时区问题
+  // Fixed reference values using UTC to avoid time-zone issues
   private val fixedTestInstant = Instant.parse("2023-01-01T12:30:45Z")
-  private val fixedTestMillis = 1672576245000L // 对应 2023-01-01T12:30:45Z
+  private val fixedTestMillis = 1672576245000L // Represents 2023-01-01T12:30:45Z
   private val fixedTestLocalDateTime = LocalDateTime.of(2023, 1, 1, 12, 30, 45)
   private val fixedTestLocalDate = LocalDate.of(2023, 1, 1)
   private val fixedTestLocalTime = LocalTime.of(12, 30, 45)
@@ -29,7 +29,7 @@ class DateTimeConverterTest {
   @Nested
   inner class PlusMillisFunctionGroup {
     @Test
-    fun `正常调用 plusMillisFromCurrent 时，返回增加指定毫秒数后的 Instant`() {
+    fun returnsInstantOffsetFromCurrentTime() {
       val before = System.currentTimeMillis()
       val result = DateTimeConverter.plusMillisFromCurrent(1000)
       val after = System.currentTimeMillis()
@@ -41,7 +41,7 @@ class DateTimeConverterTest {
     }
 
     @Test
-    fun `正常调用 plusMillis 时，返回增加指定毫秒数后的 Instant`() {
+    fun addsMillisToInstant() {
       val result = DateTimeConverter.plusMillis(1000, 500)
       assertEquals(1500, result.toEpochMilli())
     }
@@ -50,19 +50,19 @@ class DateTimeConverterTest {
   @Nested
   inner class LocalToInstantFunctionGroup {
     @Test
-    fun `正常将 LocalTime 转换为 Instant 时，返回正确的 Instant`() {
+    fun convertsLocalTimeToInstant() {
       val result = DateTimeConverter.localTimeToInstant(fixedTestLocalTime, utcZone)
       assertEquals(45000 + 30 * 60 * 1000 + 12 * 60 * 60 * 1000, result.toEpochMilli())
     }
 
     @Test
-    fun `正常将 LocalDate 转换为 Instant 时，返回正确的 Instant`() {
+    fun convertsLocalDateToInstant() {
       val result = DateTimeConverter.localDateToInstant(fixedTestLocalDate, utcZone)
       assertEquals(LocalDateTime.of(fixedTestLocalDate, LocalTime.MIDNIGHT).toInstant(utcZone).toEpochMilli(), result.toEpochMilli())
     }
 
     @Test
-    fun `正常将 LocalDateTime 转换为 Instant 时，返回正确的 Instant`() {
+    fun convertsLocalDateTimeToInstant() {
       val result = DateTimeConverter.localDatetimeToInstant(fixedTestLocalDateTime, utcZone)
       assertEquals(fixedTestMillis, result.toEpochMilli())
     }
@@ -71,19 +71,19 @@ class DateTimeConverterTest {
   @Nested
   inner class MillisToLocalFunctionGroup {
     @Test
-    fun `正常将毫秒时间戳转换为 LocalDateTime 时，返回正确的 LocalDateTime`() {
+    fun convertsMillisToLocalDateTime() {
       val result = DateTimeConverter.millisToLocalDateTime(fixedTestMillis, utcZone)
       assertEquals(fixedTestLocalDateTime, result)
     }
 
     @Test
-    fun `正常将毫秒时间戳转换为 LocalDate 时，返回正确的 LocalDate`() {
+    fun convertsMillisToLocalDate() {
       val result = DateTimeConverter.millisToLocalDate(fixedTestMillis, utcZone)
       assertEquals(fixedTestLocalDate, result)
     }
 
     @Test
-    fun `正常将毫秒时间戳转换为 LocalTime 时，返回正确的 LocalTime`() {
+    fun convertsMillisToLocalTime() {
       val result = DateTimeConverter.millisToLocalTime(fixedTestMillis, utcZone)
       assertEquals(fixedTestLocalTime, result)
     }
@@ -92,19 +92,19 @@ class DateTimeConverterTest {
   @Nested
   inner class InstantToLocalFunctionGroup {
     @Test
-    fun `正常将 Instant 转换为 LocalDateTime 时，返回正确的 LocalDateTime`() {
+    fun convertsInstantToLocalDateTime() {
       val result = DateTimeConverter.instantToLocalDateTime(fixedTestInstant, utcZone)
       assertEquals(fixedTestLocalDateTime, result)
     }
 
     @Test
-    fun `正常将 Instant 转换为 LocalDate 时，返回正确的 LocalDate`() {
+    fun convertsInstantToLocalDate() {
       val result = DateTimeConverter.instantToLocalDate(fixedTestInstant, utcZone)
       assertEquals(fixedTestLocalDate, result)
     }
 
     @Test
-    fun `正常将 Instant 转换为 LocalTime 时，返回正确的 LocalTime`() {
+    fun convertsInstantToLocalTime() {
       val result = DateTimeConverter.instantToLocalTime(fixedTestInstant, utcZone)
       assertEquals(fixedTestLocalTime, result)
     }
@@ -113,13 +113,13 @@ class DateTimeConverterTest {
   @Nested
   inner class OtherConversionFunctionGroup {
     @Test
-    fun `正常将 LocalDateTime 转换为毫秒时间戳时，返回正确的毫秒值`() {
+    fun convertsLocalDateTimeToMillis() {
       val result = DateTimeConverter.localDatetimeToMillis(fixedTestLocalDateTime, utcZone)
       assertEquals(fixedTestMillis, result)
     }
 
     @Test
-    fun `正常将 Instant 转换为毫秒时间戳时，返回正确的毫秒值`() {
+    fun convertsInstantToMillis() {
       val result = DateTimeConverter.instantToMillis(fixedTestInstant)
       assertEquals(fixedTestMillis, result)
     }
@@ -129,7 +129,7 @@ class DateTimeConverterTest {
   inner class TimezoneHandlingGroup {
     @ParameterizedTest
     @MethodSource("io.github.truenine.composeserver.DateTimeConverterTest#timezoneTestCases")
-    fun `正常处理不同时区时，正确转换时区`(zoneId: ZoneId, instant: Instant, expectedLocalDateTime: LocalDateTime) {
+    fun convertsInstantAcrossTimezones(zoneId: ZoneId, instant: Instant, expectedLocalDateTime: LocalDateTime) {
       val result = DateTimeConverter.instantToLocalDateTime(instant, zoneId)
       assertEquals(expectedLocalDateTime, result)
     }
@@ -138,14 +138,14 @@ class DateTimeConverterTest {
   @Nested
   inner class EdgeCasesGroup {
     @Test
-    fun `边界值测试极端时间点时，正确处理时间转换`() {
+    fun handlesExtremeEpochValues() {
       val epochInstant = Instant.EPOCH
       val result = DateTimeConverter.instantToLocalDateTime(epochInstant, utcZone)
       assertEquals(LocalDateTime.of(1970, 1, 1, 0, 0, 0), result)
     }
 
     @Test
-    fun `边界值测试日期变更线时，正确处理时间转换`() {
+    fun handlesInternationalDateLine() {
       val eastZone = ZoneId.of("Pacific/Kiritimati") // UTC+14
       val westZone = ZoneId.of("Pacific/Niue") // UTC-11
 
@@ -154,10 +154,10 @@ class DateTimeConverterTest {
       val eastResult = DateTimeConverter.instantToLocalDateTime(testInstant, eastZone)
       val westResult = DateTimeConverter.instantToLocalDateTime(testInstant, westZone)
 
-      // 东边应该是1月1日14点
+      // Eastern hemisphere should observe January 1st 14:00
       assertEquals(LocalDateTime.of(2023, 1, 1, 14, 0, 0), eastResult)
 
-      // 西边应该是12月31日13点
+      // Western hemisphere should observe December 31st 13:00
       assertEquals(LocalDateTime.of(2022, 12, 31, 13, 0, 0), westResult)
     }
   }

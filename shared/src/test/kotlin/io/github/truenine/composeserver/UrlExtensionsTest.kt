@@ -1,6 +1,8 @@
 package io.github.truenine.composeserver
 
 import io.github.truenine.composeserver.testtoolkit.log
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -8,144 +10,144 @@ import org.junit.jupiter.api.Test
 class UrlExtensionsTest {
 
   @Nested
-  inner class `URL路径构建测试` {
+  inner class UrlPathBuilderTests {
 
     @Test
-    fun `测试空参数构建路径`() {
+    fun buildsPathWithNoSegments() {
       val path = buildUrlPath()
       assertEquals("/", path)
     }
 
     @Test
-    fun `测试单个段构建路径`() {
+    fun buildsPathWithSingleSegment() {
       val path = buildUrlPath("segment")
       assertEquals("/segment", path)
     }
 
     @Test
-    fun `测试多个段构建路径`() {
+    fun buildsPathWithMultipleSegments() {
       val path = buildUrlPath("bucket", "folder", "file.txt")
       assertEquals("/bucket/folder/file.txt", path)
     }
 
     @Test
-    fun `测试包含斜杠的段`() {
+    fun trimsSlashesFromSegments() {
       val path = buildUrlPath("/bucket/", "/folder/", "/file.txt/")
       assertEquals("/bucket/folder/file.txt", path)
     }
 
     @Test
-    fun `测试空白段被过滤`() {
+    fun filtersBlankSegments() {
       val path = buildUrlPath("bucket", "", "  ", "file.txt")
       assertEquals("/bucket/file.txt", path)
     }
 
     @Test
-    fun `测试所有段都为空`() {
+    fun returnsRootPathWhenSegmentsAreBlank() {
       val path = buildUrlPath("", "  ", "   ")
       assertEquals("/", path)
     }
   }
 
   @Nested
-  inner class `完整URL构建测试` {
+  inner class FullUrlBuilderTests {
 
     @Test
-    fun `测试基础URL和路径段`() {
+    fun buildsFullUrlWithSegments() {
       val url = buildUrl("https://example.com", "bucket", "file.txt")
       assertEquals("https://example.com/bucket/file.txt", url)
     }
 
     @Test
-    fun `测试基础URL末尾有斜杠`() {
+    fun trimsTrailingSlashInBaseUrl() {
       val url = buildUrl("https://example.com/", "bucket", "file.txt")
       assertEquals("https://example.com/bucket/file.txt", url)
     }
 
     @Test
-    fun `测试无路径段`() {
+    fun returnsBaseUrlWhenNoSegmentsProvided() {
       val url = buildUrl("https://example.com")
       assertEquals("https://example.com", url)
     }
 
     @Test
-    fun `测试空路径段`() {
+    fun ignoresBlankSegments() {
       val url = buildUrl("https://example.com", "", "  ")
       assertEquals("https://example.com", url)
     }
   }
 
   @Nested
-  inner class `对象URL构建测试` {
+  inner class ObjectUrlBuilderTests {
 
     @Test
-    fun `测试构建对象URL`() {
+    fun buildsObjectUrl() {
       val url = buildObjectUrl("https://minio.example.com", "my-bucket", "path/to/file.jpg")
       assertEquals("https://minio.example.com/my-bucket/path/to/file.jpg", url)
     }
 
     @Test
-    fun `测试构建对象URL包含特殊字符`() {
+    fun buildsObjectUrlWithSpecialCharacters() {
       val url = buildObjectUrl("https://minio.example.com", "my-bucket", "folder with spaces/file-name.jpg")
       assertEquals("https://minio.example.com/my-bucket/folder with spaces/file-name.jpg", url)
     }
   }
 
   @Nested
-  inner class `URL编码测试` {
+  inner class UrlEncodingTests {
 
     @Test
-    fun `测试字符串URL编码`() {
+    fun encodesBasicString() {
       val encoded = "hello world".urlEncode()
       assertEquals("hello+world", encoded)
     }
 
     @Test
-    fun `测试特殊字符URL编码`() {
+    fun encodesSpecialCharacters() {
       val encoded = "hello@world#test".urlEncode()
       assertEquals("hello%40world%23test", encoded)
     }
 
     @Test
-    fun `测试中文字符URL编码`() {
-      val encoded = "测试文件".urlEncode()
-      log.info("Encoded Chinese: {}", encoded)
-      // 中文字符应该被正确编码
-      assertEquals("%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6", encoded)
+    fun encodesNonLatinCharacters() {
+      val original = "fichier d'essai"
+      val encoded = original.urlEncode()
+      log.info("Encoded non-Latin string: {}", encoded)
+      assertEquals(URLEncoder.encode(original, StandardCharsets.UTF_8.name()), encoded)
     }
 
     @Test
-    fun `测试路径URL编码保留分隔符`() {
+    fun encodesPathWhilePreservingSeparators() {
       val encoded = "folder/sub folder/file name.txt".urlEncodePath()
       assertEquals("folder/sub+folder/file+name.txt", encoded)
     }
 
     @Test
-    fun `测试路径URL编码处理特殊字符`() {
+    fun encodesPathSpecialCharacters() {
       val encoded = "folder@test/file#name.txt".urlEncodePath()
       assertEquals("folder%40test/file%23name.txt", encoded)
     }
   }
 
   @Nested
-  inner class `查询字符串构建测试` {
+  inner class QueryStringBuilderTests {
 
     @Test
-    fun `测试空参数构建查询字符串`() {
+    fun buildsQueryStringWithNoParameters() {
       val query = buildQueryString(emptyMap())
       assertEquals("", query)
     }
 
     @Test
-    fun `测试单个参数构建查询字符串`() {
+    fun buildsQueryStringWithSingleParameter() {
       val query = buildQueryString(mapOf("key" to "value"))
       assertEquals("key=value", query)
     }
 
     @Test
-    fun `测试多个参数构建查询字符串`() {
+    fun buildsQueryStringWithMultipleParameters() {
       val query = buildQueryString(mapOf("key1" to "value1", "key2" to "value2"))
-      // 注意：Map的顺序可能不确定，所以我们检查包含关系
+      // Map iteration order is undefined, so we perform containment checks
       log.info("Query string: {}", query)
       assertEquals(true, query.contains("key1=value1"))
       assertEquals(true, query.contains("key2=value2"))
@@ -153,13 +155,13 @@ class UrlExtensionsTest {
     }
 
     @Test
-    fun `测试参数值需要编码`() {
+    fun encodesParameterValues() {
       val query = buildQueryString(mapOf("key" to "value with spaces"))
       assertEquals("key=value+with+spaces", query)
     }
 
     @Test
-    fun `测试过滤空值参数`() {
+    fun filtersEmptyValues() {
       val query = buildQueryString(mapOf("key1" to "value1", "key2" to "", "key3" to "value3"))
       log.info("Query string with empty values: {}", query)
       assertEquals(true, query.contains("key1=value1"))
@@ -168,7 +170,7 @@ class UrlExtensionsTest {
     }
 
     @Test
-    fun `测试包含空值参数`() {
+    fun includesEmptyValuesWhenRequested() {
       val query = buildQueryString(mapOf("key1" to "value1", "key2" to "", "key3" to "value3"), includeEmpty = true)
       log.info("Query string including empty values: {}", query)
       assertEquals(true, query.contains("key1=value1"))
@@ -178,10 +180,10 @@ class UrlExtensionsTest {
   }
 
   @Nested
-  inner class `带查询参数的URL构建测试` {
+  inner class UrlWithQueryBuilderTests {
 
     @Test
-    fun `测试构建带查询参数的URL`() {
+    fun buildsUrlWithQueryParameters() {
       val url = buildUrlWithQuery("https://example.com", arrayOf("api", "v1", "users"), mapOf("page" to "1", "size" to "10"))
       log.info("URL with query: {}", url)
       assertEquals(true, url.startsWith("https://example.com/api/v1/users?"))
@@ -190,105 +192,105 @@ class UrlExtensionsTest {
     }
 
     @Test
-    fun `测试构建无查询参数的URL`() {
+    fun buildsUrlWithoutQueryParameters() {
       val url = buildUrlWithQuery("https://example.com", arrayOf("api", "v1", "users"), emptyMap())
       assertEquals("https://example.com/api/v1/users", url)
     }
 
     @Test
-    fun `测试构建无路径段的URL`() {
+    fun buildsUrlWithoutPathSegments() {
       val url = buildUrlWithQuery("https://example.com", emptyArray(), mapOf("query" to "test"))
       assertEquals("https://example.com?query=test", url)
     }
   }
 
   @Nested
-  inner class `文件扩展名提取测试` {
+  inner class FileExtensionExtractionTests {
 
     @Test
-    fun `测试提取常见文件扩展名`() {
+    fun extractsCommonFileExtensions() {
       assertEquals("jpg", extractFileExtension("file.jpg"))
       assertEquals("txt", extractFileExtension("document.txt"))
       assertEquals("pdf", extractFileExtension("report.pdf"))
     }
 
     @Test
-    fun `测试提取URL中的文件扩展名`() {
+    fun extractsExtensionsFromUrl() {
       assertEquals("jpg", extractFileExtension("https://example.com/images/photo.jpg"))
       assertEquals("png", extractFileExtension("https://example.com/path/to/image.PNG"))
     }
 
     @Test
-    fun `测试带查询参数的URL`() {
+    fun extractsExtensionsFromUrlWithQuery() {
       assertEquals("jpg", extractFileExtension("https://example.com/image.jpg?version=1&size=large"))
     }
 
     @Test
-    fun `测试无扩展名的文件`() {
+    fun returnsEmptyExtensionWhenAbsent() {
       assertEquals("", extractFileExtension("filename"))
       assertEquals("", extractFileExtension("https://example.com/path/filename"))
     }
 
     @Test
-    fun `测试多个点的文件名`() {
+    fun extractsExtensionFromMultiDotFileNames() {
       assertEquals("gz", extractFileExtension("archive.tar.gz"))
       assertEquals("txt", extractFileExtension("file.backup.txt"))
     }
 
     @Test
-    fun `测试目录路径`() {
+    fun returnsEmptyExtensionForDirectories() {
       assertEquals("", extractFileExtension("https://example.com/path/to/directory/"))
       assertEquals("", extractFileExtension("/path/to/directory"))
     }
   }
 
   @Nested
-  inner class `URL规范化测试` {
+  inner class UrlNormalizationTests {
 
     @Test
-    fun `测试规范化简单URL`() {
+    fun normalizesSimpleUrl() {
       val normalized = normalizeUrl("https://example.com/path/to/file")
       assertEquals("https://example.com/path/to/file", normalized)
     }
 
     @Test
-    fun `测试规范化包含多余斜杠的URL`() {
+    fun normalizesUrlWithExtraSlashes() {
       val normalized = normalizeUrl("https://example.com//path///to//file")
       assertEquals("https://example.com/path/to/file", normalized)
     }
 
     @Test
-    fun `测试规范化包含当前目录的URL`() {
+    fun normalizesUrlWithDotSegments() {
       val normalized = normalizeUrl("https://example.com/path/./to/file")
       assertEquals("https://example.com/path/to/file", normalized)
     }
 
     @Test
-    fun `测试规范化包含父目录的URL`() {
+    fun normalizesUrlWithParentDirectorySegments() {
       val normalized = normalizeUrl("https://example.com/path/to/../file")
       assertEquals("https://example.com/path/file", normalized)
     }
 
     @Test
-    fun `测试规范化复杂路径`() {
+    fun normalizesComplexPath() {
       val normalized = normalizeUrl("https://example.com/path/./to/../from/./file")
       assertEquals("https://example.com/path/from/file", normalized)
     }
 
     @Test
-    fun `测试规范化无协议的路径`() {
+    fun normalizesPathWithoutScheme() {
       val normalized = normalizeUrl("/path/./to/../file")
       assertEquals("/path/file", normalized)
     }
 
     @Test
-    fun `测试规范化空白URL`() {
+    fun normalizesBlankUrl() {
       val normalized = normalizeUrl("")
       assertEquals("", normalized)
     }
 
     @Test
-    fun `测试规范化只有协议和主机的URL`() {
+    fun normalizesUrlWithOnlySchemeAndHost() {
       val normalized = normalizeUrl("https://example.com")
       assertEquals("https://example.com", normalized)
     }

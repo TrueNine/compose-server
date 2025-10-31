@@ -6,32 +6,30 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
- * # 字符串工具类测试
- *
- * 测试 IString 工具类的各种字符串处理功能
+ * Validates string utility helpers provided by {@link IString}.
  */
 class IStringTest {
   @Test
-  fun `测试 hasText 方法 - 验证字符串是否包含有效文本`() {
+  fun hasTextRecognizesValidContent() {
     assertTrue { IString.hasText("abc") }
     assertFalse { IString.hasText("") }
     assertFalse { IString.hasText(" ") }
   }
 
   @Test
-  fun `测试 nonText 方法 - 验证字符串是否为空或仅包含空白字符`() {
+  fun nonTextRecognizesBlankStrings() {
     listOf("", " ", "\n", "\r", "\t", "\r\n").forEach { assertTrue { IString.nonText(it) } }
     assertFalse { IString.nonText("a") }
   }
 
   @Test
-  fun `测试 inLine 方法 - 验证移除换行符功能`() {
+  fun inLineRemovesLineBreaks() {
     val a = IString.inLine("1\n")
     assertFalse { a.contains("\n") }
   }
 
   @Test
-  fun `测试 toSnakeCase 方法 - 验证驼峰命名转蛇形命名`() {
+  fun toSnakeCaseConvertsCamelCase() {
     val result = "MDCFilter".toSnakeCase()
     assertEquals("mdcfilter", result)
     val result2 = "PascCase".toSnakeCase()
@@ -49,7 +47,7 @@ class IStringTest {
   }
 
   @Test
-  fun `测试 toPascalCase 方法 - 验证蛇形命名转驼峰命名`() {
+  fun toPascalCaseConvertsSnakeCase() {
     val result = "mdc_filter".toPascalCase()
     assertEquals("mdcFilter", result)
     val result2 = "mdc_filter".toPascalCase(true)
@@ -61,7 +59,7 @@ class IStringTest {
   }
 
   @Test
-  fun `测试 omit 方法 - 验证字符串截断功能`() {
+  fun omitTruncatesStrings() {
     val b = IString.omit("abc", 2)
     assertFalse { b.contains("c") }
   }

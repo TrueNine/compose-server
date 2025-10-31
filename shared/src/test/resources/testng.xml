@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="核心包测试" parallel="classes">
-  <test name="核心包测试" parallel="methods">
+<suite name="Core Package Tests" parallel="classes">
+  <test name="Core Package Tests" parallel="methods">
     <packages>
       <package name="io.github.truenine.composeserver.encrypt"/>
       <package name="io.github.truenine.composeserver.encrypt.base64"/>

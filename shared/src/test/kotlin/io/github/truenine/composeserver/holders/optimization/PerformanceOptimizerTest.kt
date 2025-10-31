@@ -85,7 +85,7 @@ class PerformanceOptimizerTest {
 
     @Test
     fun `should handle Unicode strings`() {
-      val unicodeStr = "配置文件.yml"
+      val unicodeStr = "konfigurační-soubor.yml"
       val interned1 = PerformanceOptimizer.internString(unicodeStr)
       val interned2 = PerformanceOptimizer.internString(unicodeStr)
 

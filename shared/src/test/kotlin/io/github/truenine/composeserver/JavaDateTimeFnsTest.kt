@@ -14,9 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * # Java 日期时间扩展函数测试
- *
- * 测试 JavaDateTimeFns.kt 中定义的日期时间相关扩展函数
+ * Verifies the date-time extension functions defined in JavaDateTimeFns.kt.
  */
 class JavaDateTimeFnsTest {
 
@@ -29,253 +27,253 @@ class JavaDateTimeFnsTest {
   private val systemZone = ZoneId.systemDefault()
 
   @Test
-  fun `测试 Long 转 LocalDateTime 扩展函数`() {
+  fun convertsEpochMillisToLocalDateTime() {
     val result = testMillis.toLocalDateTime(utcZone)
 
-    log.info("毫秒时间戳: {} 转换为 LocalDateTime: {}", testMillis, result)
+    log.info("Epoch millis {} converted to LocalDateTime {}", testMillis, result)
 
-    assertEquals(testLocalDateTime, result, "毫秒时间戳应该正确转换为LocalDateTime")
+    assertEquals(testLocalDateTime, result, "Epoch millis should convert to LocalDateTime")
   }
 
   @Test
-  fun `测试 Long 转 LocalDate 扩展函数`() {
+  fun convertsEpochMillisToLocalDate() {
     val result = testMillis.toLocalDate(utcZone)
 
-    log.info("毫秒时间戳: {} 转换为 LocalDate: {}", testMillis, result)
+    log.info("Epoch millis {} converted to LocalDate {}", testMillis, result)
 
-    assertEquals(testLocalDate, result, "毫秒时间戳应该正确转换为LocalDate")
+    assertEquals(testLocalDate, result, "Epoch millis should convert to LocalDate")
   }
 
   @Test
-  fun `测试 Long 转 LocalTime 扩展函数`() {
+  fun convertsEpochMillisToLocalTime() {
     val result = testMillis.toLocalTime(utcZone)
 
-    log.info("毫秒时间戳: {} 转换为 LocalTime: {}", testMillis, result)
+    log.info("Epoch millis {} converted to LocalTime {}", testMillis, result)
 
-    assertEquals(testLocalTime, result, "毫秒时间戳应该正确转换为LocalTime")
+    assertEquals(testLocalTime, result, "Epoch millis should convert to LocalTime")
   }
 
   @Test
-  fun `测试 Long 转 Instant 扩展函数`() {
+  fun convertsEpochMillisToInstant() {
     val result = testMillis.toInstant()
 
-    log.info("毫秒时间戳: {} 转换为 Instant: {}", testMillis, result)
+    log.info("Epoch millis {} converted to Instant {}", testMillis, result)
 
-    assertEquals(testInstant, result, "毫秒时间戳应该正确转换为Instant")
+    assertEquals(testInstant, result, "Epoch millis should convert to Instant")
   }
 
   @Test
-  fun `测试 LocalDateTime 转毫秒时间戳扩展函数`() {
+  fun convertsLocalDateTimeToEpochMillis() {
     val result = testLocalDateTime.toMillis(utcZone)
 
-    log.info("LocalDateTime: {} 转换为毫秒时间戳: {}", testLocalDateTime, result)
+    log.info("LocalDateTime {} converted to epoch millis {}", testLocalDateTime, result)
 
-    assertEquals(testMillis, result, "LocalDateTime应该正确转换为毫秒时间戳")
+    assertEquals(testMillis, result, "LocalDateTime should convert to epoch millis")
   }
 
   @Test
-  fun `测试 LocalDate 转毫秒时间戳扩展函数`() {
+  fun convertsLocalDateToEpochMillis() {
     val result = testLocalDate.toMillis(utcZone)
     val expectedMillis = testLocalDate.atStartOfDay(utcZone).toInstant().toEpochMilli()
 
-    log.info("LocalDate: {} 转换为毫秒时间戳: {}", testLocalDate, result)
+    log.info("LocalDate {} converted to epoch millis {}", testLocalDate, result)
 
-    assertEquals(expectedMillis, result, "LocalDate应该正确转换为毫秒时间戳")
+    assertEquals(expectedMillis, result, "LocalDate should convert to epoch millis")
   }
 
   @Test
-  fun `测试 LocalTime 转毫秒时间戳扩展函数`() {
+  fun convertsLocalTimeToEpochMillis() {
     val result = testLocalTime.toMillis(utcZone)
 
-    log.info("LocalTime: {} 转换为毫秒时间戳: {}", testLocalTime, result)
+    log.info("LocalTime {} converted to epoch millis {}", testLocalTime, result)
 
-    // LocalTime转换应该基于1970-01-01的日期
+    // Conversion should be anchored at 1970-01-01
     val expected = testLocalTime.atDate(LocalDate.of(1970, 1, 1)).toInstant(utcZone).toEpochMilli()
-    assertEquals(expected, result, "LocalTime应该正确转换为毫秒时间戳")
+    assertEquals(expected, result, "LocalTime should convert to epoch millis")
   }
 
   @Test
-  fun `测试 Instant 转 LocalDateTime 扩展函数`() {
+  fun convertsInstantToLocalDateTime() {
     val result = testInstant.toLocalDateTime(utcZone)
 
-    log.info("Instant: {} 转换为 LocalDateTime: {}", testInstant, result)
+    log.info("Instant {} converted to LocalDateTime {}", testInstant, result)
 
-    assertEquals(testLocalDateTime, result, "Instant应该正确转换为LocalDateTime")
+    assertEquals(testLocalDateTime, result, "Instant should convert to LocalDateTime")
   }
 
   @Test
-  fun `测试 Instant 转毫秒时间戳扩展函数`() {
+  fun convertsInstantToEpochMillis() {
     val result = testInstant.toMillis()
 
-    log.info("Instant: {} 转换为毫秒时间戳: {}", testInstant, result)
+    log.info("Instant {} converted to epoch millis {}", testInstant, result)
 
-    assertEquals(testMillis, result, "Instant应该正确转换为毫秒时间戳")
+    assertEquals(testMillis, result, "Instant should convert to epoch millis")
   }
 
   @Test
-  fun `测试 ISO8601 时间戳扩展属性`() {
+  fun exposesIso8601EpochValues() {
     val iso8601Millis = testLocalDateTime.iso8601LongUtc
     val iso8601Seconds = testLocalDateTime.iso8601LongUtcSecond
 
-    log.info("LocalDateTime: {} ISO8601毫秒: {}", testLocalDateTime, iso8601Millis)
-    log.info("LocalDateTime: {} ISO8601秒: {}", testLocalDateTime, iso8601Seconds)
+    log.info("LocalDateTime {} ISO8601 millis {}", testLocalDateTime, iso8601Millis)
+    log.info("LocalDateTime {} ISO8601 seconds {}", testLocalDateTime, iso8601Seconds)
 
-    assertEquals(testMillis, iso8601Millis, "ISO8601毫秒时间戳应该正确")
-    assertEquals(testMillis / 1000, iso8601Seconds, "ISO8601秒时间戳应该正确")
+    assertEquals(testMillis, iso8601Millis, "ISO8601 millisecond timestamp should match")
+    assertEquals(testMillis / 1000, iso8601Seconds, "ISO8601 second timestamp should match")
   }
 
   @Test
-  fun `测试 LocalDateTime 减法操作符`() {
+  fun subtractsLocalDateTimes() {
     val dateTime1 = LocalDateTime.of(2023, 1, 1, 12, 0, 0)
     val dateTime2 = LocalDateTime.of(2023, 1, 1, 10, 0, 0)
 
     val duration = dateTime1 - dateTime2
 
-    log.info("时间差: {} - {} = {}", dateTime1, dateTime2, duration)
+    log.info("Duration difference: {} - {} = {}", dateTime1, dateTime2, duration)
 
-    assertEquals(Duration.ofHours(2), duration, "时间差应该为2小时")
+    assertEquals(Duration.ofHours(2), duration, "Duration should equal two hours")
   }
 
   @Test
-  fun `测试 LocalDate 减法操作符`() {
+  fun subtractsLocalDates() {
     val date1 = LocalDate.of(2023, 1, 10)
     val date2 = LocalDate.of(2023, 1, 1)
 
     val period = date1 - date2
 
-    log.info("日期差: {} - {} = {}", date1, date2, period)
+    log.info("Period difference: {} - {} = {}", date1, date2, period)
 
-    assertEquals(Period.ofDays(9), period, "日期差应该为9天")
+    assertEquals(Period.ofDays(9), period, "Period should equal nine days")
   }
 
   @Test
-  fun `测试月份第一天和最后一天扩展函数`() {
+  fun computesFirstAndLastDayOfMonthForDateTime() {
     val testDate = LocalDateTime.of(2023, 2, 15, 10, 30, 45)
 
     val firstDay = testDate.firstDayOfMonth()
     val lastDay = testDate.lastDayOfMonth()
 
-    log.info("原始日期: {}", testDate)
-    log.info("月份第一天: {}", firstDay)
-    log.info("月份最后一天: {}", lastDay)
+    log.info("Original date-time: {}", testDate)
+    log.info("First day of month: {}", firstDay)
+    log.info("Last day of month: {}", lastDay)
 
-    assertEquals(LocalDateTime.of(2023, 2, 1, 10, 30, 45), firstDay, "应该返回月份第一天")
-    assertEquals(LocalDateTime.of(2023, 2, 28, 10, 30, 45), lastDay, "应该返回月份最后一天")
+    assertEquals(LocalDateTime.of(2023, 2, 1, 10, 30, 45), firstDay, "Should return the first day of the month")
+    assertEquals(LocalDateTime.of(2023, 2, 28, 10, 30, 45), lastDay, "Should return the last day of the month")
   }
 
   @Test
-  fun `测试当前时间相关函数`() {
+  fun verifiesCurrentTimeHelpers() {
     val currentInstant = now()
     val currentMillis = nowMillis()
     val currentFirstDay = nowDateTimeFirstDayOfMonth()
     val currentLastDay = nowDateTimeLastDayOfMonth()
 
-    log.info("当前Instant: {}", currentInstant)
-    log.info("当前毫秒时间戳: {}", currentMillis)
-    log.info("当前月份第一天: {}", currentFirstDay)
-    log.info("当前月份最后一天: {}", currentLastDay)
+    log.info("Current Instant: {}", currentInstant)
+    log.info("Current epoch millis: {}", currentMillis)
+    log.info("Current month first day: {}", currentFirstDay)
+    log.info("Current month last day: {}", currentLastDay)
 
-    // 验证时间的合理性（允许一定的时间差）
+    // Allow for a small timing difference when validating current time
     val now = System.currentTimeMillis()
-    assertTrue(kotlin.math.abs(currentMillis - now) < 1000, "当前毫秒时间戳应该接近系统时间")
-    assertTrue(kotlin.math.abs(currentInstant.toEpochMilli() - now) < 1000, "当前Instant应该接近系统时间")
+    assertTrue(kotlin.math.abs(currentMillis - now) < 1000, "Current epoch millis should be close to system time")
+    assertTrue(kotlin.math.abs(currentInstant.toEpochMilli() - now) < 1000, "Current Instant should be close to system time")
   }
 
   @Test
-  fun `测试不同时区的转换`() {
+  fun convertsBetweenTimeZones() {
     val shanghaiZone = ZoneId.of("Asia/Shanghai")
     val newYorkZone = ZoneId.of("America/New_York")
 
     val shanghaiTime = testMillis.toLocalDateTime(shanghaiZone)
     val newYorkTime = testMillis.toLocalDateTime(newYorkZone)
 
-    log.info("UTC时间: {}", testLocalDateTime)
-    log.info("上海时间: {}", shanghaiTime)
-    log.info("纽约时间: {}", newYorkTime)
+    log.info("UTC time: {}", testLocalDateTime)
+    log.info("Asia/Shanghai time: {}", shanghaiTime)
+    log.info("America/New_York time: {}", newYorkTime)
 
-    // 验证时区转换的正确性
+    // Validate time-zone conversions
     val shanghaiMillis = shanghaiTime.toMillis(shanghaiZone)
     val newYorkMillis = newYorkTime.toMillis(newYorkZone)
 
-    assertEquals(testMillis, shanghaiMillis, "上海时间转换回毫秒应该一致")
-    assertEquals(testMillis, newYorkMillis, "纽约时间转换回毫秒应该一致")
+    assertEquals(testMillis, shanghaiMillis, "Asia/Shanghai conversion should round trip to epoch millis")
+    assertEquals(testMillis, newYorkMillis, "America/New_York conversion should round trip to epoch millis")
   }
 
   @Test
-  fun `测试 LocalDate 月份第一天和最后一天扩展函数`() {
+  fun computesFirstAndLastDayOfMonthForDate() {
     val testDate = LocalDate.of(2023, 2, 15)
 
     val firstDay = testDate.firstDayOfMonth()
     val lastDay = testDate.lastDayOfMonth()
 
-    log.info("原始日期: {}", testDate)
-    log.info("月份第一天: {}", firstDay)
-    log.info("月份最后一天: {}", lastDay)
+    log.info("Original date: {}", testDate)
+    log.info("First day of month: {}", firstDay)
+    log.info("Last day of month: {}", lastDay)
 
-    assertEquals(LocalDate.of(2023, 2, 1), firstDay, "应该返回月份第一天")
-    assertEquals(LocalDate.of(2023, 2, 28), lastDay, "应该返回月份最后一天")
+    assertEquals(LocalDate.of(2023, 2, 1), firstDay, "Should return the first day of the month")
+    assertEquals(LocalDate.of(2023, 2, 28), lastDay, "Should return the last day of the month")
   }
 
   @Test
-  fun `测试闰年二月最后一天`() {
-    val leapYearDate = LocalDate.of(2020, 2, 15) // 2020是闰年
-    val normalYearDate = LocalDate.of(2021, 2, 15) // 2021不是闰年
+  fun handlesLeapYearLastDay() {
+    val leapYearDate = LocalDate.of(2020, 2, 15) // 2020 is a leap year
+    val normalYearDate = LocalDate.of(2021, 2, 15) // 2021 is not a leap year
 
     val leapYearLastDay = leapYearDate.lastDayOfMonth()
     val normalYearLastDay = normalYearDate.lastDayOfMonth()
 
-    log.info("闰年二月最后一天: {}", leapYearLastDay)
-    log.info("平年二月最后一天: {}", normalYearLastDay)
+    log.info("Last day of February (leap year): {}", leapYearLastDay)
+    log.info("Last day of February (common year): {}", normalYearLastDay)
 
-    assertEquals(29, leapYearLastDay.dayOfMonth, "闰年二月应该有29天")
-    assertEquals(28, normalYearLastDay.dayOfMonth, "平年二月应该有28天")
+    assertEquals(29, leapYearLastDay.dayOfMonth, "Leap-year February should have 29 days")
+    assertEquals(28, normalYearLastDay.dayOfMonth, "Common-year February should have 28 days")
   }
 
   @Test
-  fun `测试 nowDateFirstDayOfMonth 函数`() {
+  fun computesCurrentDateFirstDayOfMonth() {
     val result = nowDateFirstDayOfMonth()
     val now = LocalDate.now()
 
-    log.info("当前日期第一天: {}", result)
+    log.info("Current date first day: {}", result)
 
-    assertEquals(now.year, result.year, "年份应该一致")
-    assertEquals(now.monthValue, result.monthValue, "月份应该一致")
-    assertEquals(1, result.dayOfMonth, "应该是月份第一天")
+    assertEquals(now.year, result.year, "Year should match")
+    assertEquals(now.monthValue, result.monthValue, "Month should match")
+    assertEquals(1, result.dayOfMonth, "Should be the first day of the month")
   }
 
   @Test
-  fun `测试 Instant 转 LocalDate 和 LocalTime 扩展函数`() {
+  fun convertsInstantToDateAndTime() {
     val instantResult = testInstant.toLocalDate(utcZone)
     val timeResult = testInstant.toLocalTime(utcZone)
 
-    log.info("Instant: {} 转换为 LocalDate: {}", testInstant, instantResult)
-    log.info("Instant: {} 转换为 LocalTime: {}", testInstant, timeResult)
+    log.info("Instant {} converted to LocalDate {}", testInstant, instantResult)
+    log.info("Instant {} converted to LocalTime {}", testInstant, timeResult)
 
-    assertEquals(testLocalDate, instantResult, "Instant应该正确转换为LocalDate")
-    assertEquals(testLocalTime, timeResult, "Instant应该正确转换为LocalTime")
+    assertEquals(testLocalDate, instantResult, "Instant should convert to LocalDate")
+    assertEquals(testLocalTime, timeResult, "Instant should convert to LocalTime")
   }
 
   @Test
-  fun `测试负数时间差`() {
+  fun handlesNegativeDurations() {
     val dateTime1 = LocalDateTime.of(2023, 1, 1, 10, 0, 0)
     val dateTime2 = LocalDateTime.of(2023, 1, 1, 12, 0, 0)
 
     val duration = dateTime1 - dateTime2
 
-    log.info("负数时间差: {} - {} = {}", dateTime1, dateTime2, duration)
+    log.info("Negative duration: {} - {} = {}", dateTime1, dateTime2, duration)
 
-    assertEquals(Duration.ofHours(-2), duration, "应该得到负数时间差")
+    assertEquals(Duration.ofHours(-2), duration, "Should return a negative duration")
   }
 
   @Test
-  fun `测试边界情况 - 月末到月初`() {
+  fun handlesMonthBoundaryTransition() {
     val endOfMonth = LocalDateTime.of(2023, 1, 31, 23, 59, 59)
     val startOfNextMonth = LocalDateTime.of(2023, 2, 1, 0, 0, 0)
 
     val duration = startOfNextMonth - endOfMonth
 
-    log.info("月末到月初时间差: {} - {} = {}", startOfNextMonth, endOfMonth, duration)
+    log.info("Month boundary duration: {} - {} = {}", startOfNextMonth, endOfMonth, duration)
 
-    assertEquals(Duration.ofSeconds(1), duration, "月末到月初应该是1秒差")
+    assertEquals(Duration.ofSeconds(1), duration, "Boundary should yield a one-second duration")
   }
 }
