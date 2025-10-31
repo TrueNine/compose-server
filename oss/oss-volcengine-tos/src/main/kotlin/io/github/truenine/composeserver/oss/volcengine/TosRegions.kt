@@ -4,7 +4,7 @@ package io.github.truenine.composeserver.oss.volcengine
  * Represents a Volcengine TOS region with its endpoints
  *
  * @param regionId The region identifier
- * @param chineseName The Chinese name of the region
+ * @param regionName The name of the region
  * @param internalEndpoint The internal network endpoint
  * @param externalEndpoint The external network endpoint
  * @param internalS3Endpoint The internal network S3-compatible endpoint
@@ -14,7 +14,7 @@ package io.github.truenine.composeserver.oss.volcengine
  */
 data class TosRegion(
   val regionId: String,
-  val chineseName: String,
+  val regionName: String,
   val internalEndpoint: String,
   val externalEndpoint: String,
   val internalS3Endpoint: String,
@@ -51,66 +51,66 @@ data class TosRegion(
  */
 object TosRegions {
 
-  /** 华北2（北京） */
+  /** North China 2 (Beijing) */
   val CN_BEIJING =
     TosRegion(
       regionId = "cn-beijing",
-      chineseName = "华北2（北京）",
+      regionName = "North China 2 (Beijing)",
       internalEndpoint = "tos-cn-beijing.ivolces.com",
       externalEndpoint = "tos-cn-beijing.volces.com",
       internalS3Endpoint = "tos-s3-cn-beijing.ivolces.com",
       externalS3Endpoint = "tos-s3-cn-beijing.volces.com",
     )
 
-  /** 华南1（广州） */
+  /** South China 1 (Guangzhou) */
   val CN_GUANGZHOU =
     TosRegion(
       regionId = "cn-guangzhou",
-      chineseName = "华南1（广州）",
+      regionName = "South China 1 (Guangzhou)",
       internalEndpoint = "tos-cn-guangzhou.ivolces.com",
       externalEndpoint = "tos-cn-guangzhou.volces.com",
       internalS3Endpoint = "tos-s3-cn-guangzhou.ivolces.com",
       externalS3Endpoint = "tos-s3-cn-guangzhou.volces.com",
     )
 
-  /** 华东2（上海） */
+  /** East China 2 (Shanghai) */
   val CN_SHANGHAI =
     TosRegion(
       regionId = "cn-shanghai",
-      chineseName = "华东2（上海）",
+      regionName = "East China 2 (Shanghai)",
       internalEndpoint = "tos-cn-shanghai.ivolces.com",
       externalEndpoint = "tos-cn-shanghai.volces.com",
       internalS3Endpoint = "tos-s3-cn-shanghai.ivolces.com",
       externalS3Endpoint = "tos-s3-cn-shanghai.volces.com",
     )
 
-  /** 中国香港 */
+  /** China (Hong Kong) */
   val CN_HONGKONG =
     TosRegion(
       regionId = "cn-hongkong",
-      chineseName = "中国香港",
+      regionName = "China (Hong Kong)",
       internalEndpoint = "tos-cn-hongkong.ivolces.com",
       externalEndpoint = "tos-cn-hongkong.volces.com",
       internalS3Endpoint = "tos-s3-cn-hongkong.ivolces.com",
       externalS3Endpoint = "tos-s3-cn-hongkong.volces.com",
     )
 
-  /** 亚太东南（柔佛） */
+  /** Asia Pacific SE 1 (Johor) */
   val AP_SOUTHEAST_1 =
     TosRegion(
       regionId = "ap-southeast-1",
-      chineseName = "亚太东南（柔佛）",
+      regionName = "Asia Pacific SE 1 (Johor)",
       internalEndpoint = "tos-ap-southeast-1.ivolces.com",
       externalEndpoint = "tos-ap-southeast-1.volces.com",
       internalS3Endpoint = "tos-s3-ap-southeast-1.ivolces.com",
       externalS3Endpoint = "tos-s3-ap-southeast-1.volces.com",
     )
 
-  /** 亚太东南（雅加达） */
+  /** Asia Pacific SE 3 (Jakarta) */
   val AP_SOUTHEAST_3 =
     TosRegion(
       regionId = "ap-southeast-3",
-      chineseName = "亚太东南（雅加达）",
+      regionName = "Asia Pacific SE 3 (Jakarta)",
       internalEndpoint = "tos-ap-southeast-3.ivolces.com",
       externalEndpoint = "tos-ap-southeast-3.volces.com",
       internalS3Endpoint = "tos-s3-ap-southeast-3.ivolces.com",
@@ -131,13 +131,13 @@ object TosRegions {
   }
 
   /**
-   * Find region by Chinese name
+   * Find region by name
    *
-   * @param chineseName The Chinese name to search for
+   * @param regionName The region name to search for
    * @return The matching TosRegion or null if not found
    */
-  fun findByChineseName(chineseName: String): TosRegion? {
-    return ALL_REGIONS.find { it.chineseName == chineseName }
+  fun findByRegionName(regionName: String): TosRegion? {
+    return ALL_REGIONS.find { it.regionName == regionName }
   }
 
   /**
@@ -150,12 +150,12 @@ object TosRegions {
   }
 
   /**
-   * Get all Chinese names
+   * Get all region names
    *
-   * @return List of all Chinese region names
+   * @return List of all region names
    */
-  fun getAllChineseNames(): List<String> {
-    return ALL_REGIONS.map { it.chineseName }
+  fun getAllRegionNames(): List<String> {
+    return ALL_REGIONS.map { it.regionName }
   }
 
   /**

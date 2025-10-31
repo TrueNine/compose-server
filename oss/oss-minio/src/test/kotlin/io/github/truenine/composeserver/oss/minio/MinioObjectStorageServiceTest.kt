@@ -19,7 +19,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-/** MinIO 对象存储服务测试 */
+/** MinIO object storage service test */
 class MinioObjectStorageServiceTest : IOssMinioContainer {
 
   private lateinit var minioClient: MinioClient
@@ -28,7 +28,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
 
   @BeforeEach
   fun setUp() = minio {
-    // 创建真实的 MinioClient 连接到 testcontainers
+    // create a real MinioClient connection to testcontainers
     val port = it.getMappedPort(9000)
     val host = it.host
     assertNotNull(port)
@@ -42,14 +42,14 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   inner class HealthCheck {
 
     @Test
-    fun `测试健康检查成功`() = runTest {
+    fun `test health check success`() = runTest {
       val result = service.isHealthy()
       assertTrue(result)
     }
 
     @Test
-    fun `测试健康检查失败`() = runTest {
-      // 创建一个无效的客户端来测试失败情况
+    fun `test health check failure`() = runTest {
+      // create an invalid client to test failure case
       val invalidClient = MinioClient.builder().endpoint("http://invalid-host:9999").credentials("invalid", "invalid").build()
       val invalidService = MinioObjectStorageService(invalidClient, "http://invalid-host:9999")
 
@@ -63,7 +63,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   inner class NativeClient {
 
     @Test
-    fun `测试获取原生客户端`() {
+    fun `test get native client`() {
       val nativeClient = service.getNativeClient<MinioClient>()
 
       assertNotNull(nativeClient)
@@ -75,7 +75,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   inner class ExposedBaseUrl {
 
     @Test
-    fun `测试获取暴露的基础URL`() {
+    fun `test get exposed base URL`() {
       assertTrue(service.exposedBaseUrl.startsWith(exposedBaseUrl))
     }
   }
@@ -84,7 +84,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   inner class BucketOperations {
 
     @Test
-    fun `测试创建存储桶成功`() = runTest {
+    fun `test create bucket success`() = runTest {
       val bucketName = "test-bucket-${System.currentTimeMillis()}"
       val request = CreateBucketRequest(bucketName = bucketName, region = "us-east-1")
 
@@ -95,13 +95,13 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       assertEquals(bucketName, bucketInfo.name)
       assertEquals("us-east-1", bucketInfo.region)
 
-      // 清理：删除创建的桶
+      // cleanup: delete the created bucket
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试创建存储桶失败`() = runTest {
-      // 使用无效的桶名来测试失败情况（桶名不能包含大写字母）
+    fun `test create bucket failure`() = runTest {
+      // use an invalid bucket name to test failure (bucket name cannot contain uppercase letters)
       val request = CreateBucketRequest(bucketName = "INVALID-BUCKET-NAME", region = "us-east-1")
 
       val result = service.createBucket(request)
@@ -110,10 +110,10 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
     }
 
     @Test
-    fun `测试检查存储桶存在`() = runTest {
+    fun `test check bucket exists`() = runTest {
       val bucketName = "test-exists-bucket-${System.currentTimeMillis()}"
 
-      // 先创建桶
+      // create the bucket first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
       val result = service.bucketExists(bucketName)
@@ -121,12 +121,12 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       assertTrue(result.isSuccess)
       assertTrue(result.getOrNull() == true)
 
-      // 清理：删除创建的桶
+      // cleanup: delete the created bucket
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试检查存储桶不存在`() = runTest {
+    fun `test check bucket does not exist`() = runTest {
       val result = service.bucketExists("non-existent-bucket-${System.currentTimeMillis()}")
 
       assertTrue(result.isSuccess)
@@ -134,10 +134,10 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
     }
 
     @Test
-    fun `测试删除存储桶成功`() = runTest {
+    fun `test delete bucket success`() = runTest {
       val bucketName = "test-delete-bucket-${System.currentTimeMillis()}"
 
-      // 先创建桶
+      // create the bucket first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
       val result = service.deleteBucket(bucketName)
@@ -146,20 +146,20 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
     }
 
     @Test
-    fun `测试删除存储桶失败`() = runTest {
+    fun `test delete bucket failure`() = runTest {
       val result = service.deleteBucket("non-existent-bucket-${System.currentTimeMillis()}")
 
-      // MinIO 删除不存在的桶不会报错，所以这个测试可能会成功
-      // 我们可以测试删除一个包含对象的桶来触发失败
+      // MinIO does not report an error when deleting a non-existent bucket, so this test might succeed
+      // we can test deleting a bucket with objects to trigger a failure
       assertTrue(result.isSuccess || result.isFailure)
     }
 
     @Test
-    fun `测试列出存储桶`() = runTest {
+    fun `test list buckets`() = runTest {
       val bucketName1 = "test-list-bucket1-${System.currentTimeMillis()}"
       val bucketName2 = "test-list-bucket2-${System.currentTimeMillis()}"
 
-      // 创建两个测试桶
+      // create two test buckets
       service.createBucket(CreateBucketRequest(bucketName = bucketName1))
       service.createBucket(CreateBucketRequest(bucketName = bucketName2))
 
@@ -170,43 +170,43 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       assertTrue(buckets.any { it.name == bucketName1 })
       assertTrue(buckets.any { it.name == bucketName2 })
 
-      // 清理：删除创建的桶
+      // cleanup: delete the created buckets
       service.deleteBucket(bucketName1)
       service.deleteBucket(bucketName2)
     }
 
     @Test
-    fun `测试设置存储桶访问级别为公共`() = runTest {
+    fun `test set bucket access level to public`() = runTest {
       val bucketName = "test-access-public-bucket-${System.currentTimeMillis()}"
 
-      // 先创建桶
+      // create the bucket first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
       val result = service.setBucketAccess(bucketName, BucketAccessLevel.PUBLIC)
 
       assertTrue(result.isSuccess)
 
-      // 清理：删除创建的桶
+      // cleanup: delete the created bucket
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试设置存储桶访问级别为私有`() = runTest {
+    fun `test set bucket access level to private`() = runTest {
       val bucketName = "test-access-private-bucket-${System.currentTimeMillis()}"
 
-      // 先创建桶
+      // create the bucket first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
       val result = service.setBucketAccess(bucketName, BucketAccessLevel.PRIVATE)
 
       assertTrue(result.isSuccess)
 
-      // 清理：删除创建的桶
+      // cleanup: delete the created bucket
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试设置不存在存储桶的访问级别失败`() = runTest {
+    fun `test set access level for non-existent bucket fails`() = runTest {
       val bucketName = "non-existent-bucket-${System.currentTimeMillis()}"
 
       val result = service.setBucketAccess(bucketName, BucketAccessLevel.PUBLIC)
@@ -219,12 +219,12 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   inner class ObjectOperations {
 
     @Test
-    fun `测试上传对象成功`() = runTest {
+    fun `test upload object success`() = runTest {
       val bucketName = "test-upload-bucket-${System.currentTimeMillis()}"
       val objectName = "test-object.txt"
       val content = "test content"
 
-      // 先创建桶
+      // create the bucket first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
       val request =
@@ -245,13 +245,13 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       assertEquals(content.length.toLong(), objectInfo.size)
       assertNotNull(objectInfo.etag)
 
-      // 清理：删除桶（会自动删除其中的对象）
+      // cleanup: deleting the bucket will also delete its objects
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试上传对象失败`() = runTest {
-      // 使用不存在的桶来测试失败情况
+    fun `test upload object failure`() = runTest {
+      // use a non-existent bucket to test failure
       val request =
         PutObjectRequest(
           bucketName = "non-existent-bucket-${System.currentTimeMillis()}",
@@ -267,12 +267,12 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
     }
 
     @Test
-    fun `测试简化上传对象成功`() = runTest {
+    fun `test simplified upload object success`() = runTest {
       val bucketName = "test-simple-upload-bucket-${System.currentTimeMillis()}"
       val objectName = "test-object.txt"
       val content = "test content"
 
-      // 先创建桶
+      // create the bucket first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
       val result =
@@ -287,7 +287,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
 
       assertTrue(result.isSuccess)
 
-      // 清理：删除桶
+      // cleanup: delete the bucket
       service.deleteBucket(bucketName)
     }
   }
@@ -296,12 +296,12 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   inner class ShareLinkOperations {
 
     @Test
-    fun `测试生成分享链接成功`() = runTest {
+    fun `test generate share link success`() = runTest {
       val bucketName = "test-share-bucket-${System.currentTimeMillis()}"
       val objectName = "test-share-object.txt"
       val content = "test share content"
 
-      // 先创建桶和对象
+      // create bucket and object first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
       service.putObject(
         bucketName = bucketName,
@@ -311,7 +311,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
         contentType = "text/plain",
       )
 
-      // 生成分享链接
+      // generate share link
       val shareRequest = ShareLinkRequest(bucketName = bucketName, objectName = objectName, expiration = java.time.Duration.ofHours(1), method = HttpMethod.GET)
 
       val result = service.generateShareLink(shareRequest)
@@ -324,20 +324,20 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       assertTrue(shareInfo.shareUrl.isNotEmpty())
       assertFalse(shareInfo.hasPassword)
 
-      // 清理
+      // cleanup
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试上传并返回分享链接成功`() = runTest {
+    fun `test upload and return share link success`() = runTest {
       val bucketName = "test-upload-link-bucket-${System.currentTimeMillis()}"
       val objectName = "test-upload-link-object.txt"
       val content = "test upload with link content"
 
-      // 先创建桶
+      // create bucket first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
-      // 上传并生成分享链接
+      // upload and generate share link
       val uploadRequest =
         UploadWithLinkRequest(
           bucketName = bucketName,
@@ -354,33 +354,33 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       assertTrue(result.isSuccess)
       val response = result.getOrNull()!!
 
-      // 验证对象信息
+      // verify object info
       assertEquals(bucketName, response.objectInfo.bucketName)
       assertEquals(objectName, response.objectInfo.objectName)
       assertEquals(content.length.toLong(), response.objectInfo.size)
 
-      // 验证分享链接信息
+      // verify share link info
       assertEquals(bucketName, response.shareLink.bucketName)
       assertEquals(objectName, response.shareLink.objectName)
       assertEquals(HttpMethod.GET, response.shareLink.method)
       assertTrue(response.shareLink.shareUrl.isNotEmpty())
 
-      // 验证公共URL
+      // verify public URL
       assertNotNull(response.publicUrl)
       assertTrue(response.publicUrl!!.contains(bucketName))
       assertTrue(response.publicUrl!!.contains(objectName))
 
-      // 清理
+      // cleanup
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试验证分享链接成功`() = runTest {
+    fun `test validate share link success`() = runTest {
       val bucketName = "test-validate-link-bucket-${System.currentTimeMillis()}"
       val objectName = "test-validate-link-object.txt"
       val content = "test validate link content"
 
-      // 先创建桶和对象
+      // create bucket and object first
       service.createBucket(CreateBucketRequest(bucketName = bucketName))
       service.putObject(
         bucketName = bucketName,
@@ -390,13 +390,13 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
         contentType = "text/plain",
       )
 
-      // 生成分享链接
+      // generate share link
       val shareRequest = ShareLinkRequest(bucketName = bucketName, objectName = objectName, expiration = java.time.Duration.ofHours(1))
       val shareResult = service.generateShareLink(shareRequest)
       assertTrue(shareResult.isSuccess)
       val shareUrl = shareResult.getOrThrow().shareUrl
 
-      // 验证分享链接
+      // validate share link
       val validateResult = service.validateShareLink(shareUrl)
 
       assertTrue(validateResult.isSuccess)
@@ -405,28 +405,28 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
       assertEquals(objectName, validatedInfo.objectName)
       assertEquals(shareUrl, validatedInfo.shareUrl)
 
-      // 清理
+      // cleanup
       service.deleteBucket(bucketName)
     }
 
     @Test
-    fun `测试撤销分享链接`() = runTest {
+    fun `test revoke share link`() = runTest {
       val shareUrl = "http://example.com/test-share-url"
 
-      // MinIO 不支持撤销预签名URL，但方法应该成功返回
+      // MinIO does not support revoking presigned URLs, but the method should return success
       val result = service.revokeShareLink(shareUrl)
 
       assertTrue(result.isSuccess)
     }
 
     @Test
-    fun `测试分享链接实际下载功能`() = runTest {
+    fun `test share link actual download functionality`() = runTest {
       val bucketName = "test-real-download-bucket-${System.currentTimeMillis()}"
       val objectName = "test-real-download-object.txt"
       val content = "Hello, Real Download Test!"
 
       try {
-        // 先创建桶和对象
+        // create bucket and object first
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
         service.putObject(
           bucketName = bucketName,
@@ -436,42 +436,42 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
           contentType = "text/plain",
         )
 
-        // 生成分享链接
+        // generate share link
         val shareRequest =
           ShareLinkRequest(bucketName = bucketName, objectName = objectName, expiration = java.time.Duration.ofMinutes(5), method = HttpMethod.GET)
         val shareResult = service.generateShareLink(shareRequest)
         assertTrue(shareResult.isSuccess)
         val shareUrl = shareResult.getOrThrow().shareUrl
 
-        // 使用分享链接下载内容
+        // download content using the share link
         val downloadResult = service.downloadFromShareLink(shareUrl)
-        assertTrue(downloadResult.isSuccess, "通过分享链接下载应该成功")
+        assertTrue(downloadResult.isSuccess, "download via share link should succeed")
 
         val downloadedContent = downloadResult.getOrThrow()
         downloadedContent.use { objectContent ->
           val downloadedText = objectContent.inputStream.bufferedReader().readText()
-          assertEquals(content, downloadedText, "下载的内容应该与原始内容一致")
+          assertEquals(content, downloadedText, "downloaded content should match original content")
         }
 
-        log.info("分享链接实际下载测试通过: $shareUrl")
+        log.info("share link actual download test passed: $shareUrl")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试上传并返回链接的完整流程`() = runTest {
+    fun `test full flow of upload and return link`() = runTest {
       val bucketName = "test-upload-link-flow-bucket-${System.currentTimeMillis()}"
       val objectName = "test-upload-link-flow-object.txt"
       val content = "Hello, Upload with Link Flow Test!"
 
       try {
-        // 先创建桶
+        // create bucket first
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
-        // 上传并生成分享链接
+        // upload and generate share link
         val uploadRequest =
           UploadWithLinkRequest(
             bucketName = bucketName,
@@ -484,53 +484,53 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
           )
 
         val uploadResult = service.uploadWithLink(uploadRequest)
-        assertTrue(uploadResult.isSuccess, "上传并生成分享链接应该成功")
+        assertTrue(uploadResult.isSuccess, "upload and generate share link should succeed")
 
         val response = uploadResult.getOrThrow()
 
-        // 验证上传结果
+        // verify upload result
         assertEquals(bucketName, response.objectInfo.bucketName)
         assertEquals(objectName, response.objectInfo.objectName)
         assertEquals(content.length.toLong(), response.objectInfo.size)
 
-        // 验证分享链接
-        assertTrue(response.shareLink.shareUrl.isNotEmpty(), "分享链接不应为空")
+        // verify share link
+        assertTrue(response.shareLink.shareUrl.isNotEmpty(), "share link should not be empty")
         assertEquals(bucketName, response.shareLink.bucketName)
         assertEquals(objectName, response.shareLink.objectName)
 
-        // 验证公共URL
-        assertNotNull(response.publicUrl, "公共URL不应为空")
+        // verify public URL
+        assertNotNull(response.publicUrl, "public URL should not be empty")
         assertTrue(response.publicUrl!!.contains(bucketName))
         assertTrue(response.publicUrl!!.contains(objectName))
 
-        // 使用生成的分享链接下载内容验证
+        // download and verify content using the generated share link
         val downloadResult = service.downloadFromShareLink(response.shareLink.shareUrl)
-        assertTrue(downloadResult.isSuccess, "通过生成的分享链接下载应该成功")
+        assertTrue(downloadResult.isSuccess, "download via generated share link should succeed")
 
         val downloadedContent = downloadResult.getOrThrow()
         downloadedContent.use { objectContent ->
           val downloadedText = objectContent.inputStream.bufferedReader().readText()
-          assertEquals(content, downloadedText, "通过分享链接下载的内容应该与原始内容一致")
+          assertEquals(content, downloadedText, "downloaded content via share link should match original content")
         }
 
-        log.info("上传并返回链接的完整流程测试通过")
-        log.info("分享链接: ${response.shareLink.shareUrl}")
-        log.info("公共URL: ${response.publicUrl}")
+        log.info("full flow of upload and return link test passed")
+        log.info("share link: ${response.shareLink.shareUrl}")
+        log.info("public URL: ${response.publicUrl}")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试通过HTTP客户端访问分享链接`() = runTest {
+    fun `test accessing share link with HTTP client`() = runTest {
       val bucketName = "test-http-access-bucket-${System.currentTimeMillis()}"
       val objectName = "test-http-access-object.txt"
       val content = "Hello, HTTP Access Test!"
 
       try {
-        // 先创建桶和对象
+        // create bucket and object first
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
         service.putObject(
           bucketName = bucketName,
@@ -540,14 +540,14 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
           contentType = "text/plain",
         )
 
-        // 生成分享链接
+        // generate share link
         val shareRequest =
           ShareLinkRequest(bucketName = bucketName, objectName = objectName, expiration = java.time.Duration.ofMinutes(5), method = HttpMethod.GET)
         val shareResult = service.generateShareLink(shareRequest)
         assertTrue(shareResult.isSuccess)
         val shareUrl = shareResult.getOrThrow().shareUrl
 
-        // 使用 Java 的 HttpURLConnection 测试分享链接
+        // test share link using Java's HttpURLConnection
         try {
           val url = java.net.URL(shareUrl)
           val connection = url.openConnection() as java.net.HttpURLConnection
@@ -556,29 +556,29 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
           connection.readTimeout = 10000
 
           val responseCode = connection.responseCode
-          assertEquals(200, responseCode, "HTTP响应码应该是200")
+          assertEquals(200, responseCode, "HTTP response code should be 200")
 
           val downloadedText = connection.inputStream.bufferedReader().readText()
-          assertEquals(content, downloadedText, "通过HTTP下载的内容应该与原始内容一致")
+          assertEquals(content, downloadedText, "downloaded content via HTTP should match original content")
 
-          log.info("通过HTTP客户端访问分享链接测试通过")
-          log.info("分享链接: $shareUrl")
-          log.info("HTTP响应码: $responseCode")
+          log.info("accessing share link with HTTP client test passed")
+          log.info("share link: $shareUrl")
+          log.info("HTTP response code: $responseCode")
         } catch (e: Exception) {
-          log.warn("HTTP访问测试失败，可能是网络问题或MinIO配置问题: ${e.message}")
-          // 在测试环境中，MinIO可能不能通过外部HTTP访问，这是正常的
-          // 我们记录警告但不让测试失败
+          log.warn("HTTP access test failed, possibly due to network issues or MinIO configuration: ${e.message}")
+          // in a test environment, external HTTP access to MinIO might not be possible, which is normal
+          // we log a warning but don't fail the test
         }
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试生成分享链接失败`() = runTest {
-      // 使用不存在的桶来测试失败情况
+    fun `test generate share link failure`() = runTest {
+      // use a non-existent bucket to test failure
       val shareRequest =
         ShareLinkRequest(
           bucketName = "non-existent-bucket-${System.currentTimeMillis()}",
@@ -596,7 +596,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
   inner class ClassStructure {
 
     @Test
-    fun `测试类实例化`() {
+    fun `test class instantiation`() {
       val testService = MinioObjectStorageService(minioClient, exposedBaseUrl)
 
       assertNotNull(testService)
@@ -604,7 +604,7 @@ class MinioObjectStorageServiceTest : IOssMinioContainer {
     }
 
     @Test
-    fun `测试类继承关系`() {
+    fun `test class inheritance`() {
       assertNotNull(service as? IObjectStorageService)
     }
   }

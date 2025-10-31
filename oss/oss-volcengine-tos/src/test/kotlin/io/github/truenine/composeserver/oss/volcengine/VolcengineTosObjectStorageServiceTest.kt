@@ -57,9 +57,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 /**
- * 简化的 Volcengine TOS 对象存储服务测试
+ * Simplified test for Volcengine TOS object storage service
  *
- * 由于主代码是简化实现，这些测试主要验证基本功能和接口
+ * As the main code is a simplified implementation, these tests mainly verify basic functionality and interfaces
  */
 class VolcengineTosObjectStorageServiceTest {
 
@@ -160,7 +160,7 @@ class VolcengineTosObjectStorageServiceTest {
   inner class HealthCheck {
 
     @Test
-    fun `测试健康检查成功`() = runTest {
+    fun `test health check success`() = runTest {
       val result = service.isHealthy()
 
       assertTrue(result)
@@ -171,7 +171,7 @@ class VolcengineTosObjectStorageServiceTest {
   inner class NativeClient {
 
     @Test
-    fun `测试获取原生客户端`() {
+    fun `test get native client`() {
       val nativeClient = service.getNativeClient<TOSV2>()
 
       assertNotNull(nativeClient)
@@ -183,7 +183,7 @@ class VolcengineTosObjectStorageServiceTest {
   inner class ExposedBaseUrl {
 
     @Test
-    fun `测试获取暴露的基础URL`() {
+    fun `test get exposed base URL`() {
       assertEquals(exposedBaseUrl, service.exposedBaseUrl)
     }
   }
@@ -192,7 +192,7 @@ class VolcengineTosObjectStorageServiceTest {
   inner class BucketOperations {
 
     @Test
-    fun `测试创建存储桶成功`() = runTest {
+    fun `test create bucket success`() = runTest {
       val request = CreateBucketRequest(bucketName = "test-bucket", region = "cn-beijing")
 
       val result = service.createBucket(request)
@@ -204,7 +204,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试检查存储桶存在`() = runTest {
+    fun `test check bucket exists`() = runTest {
       val result = service.bucketExists("test-bucket")
 
       assertTrue(result.isSuccess)
@@ -212,38 +212,38 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试删除存储桶成功`() = runTest {
+    fun `test delete bucket success`() = runTest {
       val result = service.deleteBucket("test-bucket")
 
       assertTrue(result.isSuccess)
     }
 
     @Test
-    fun `测试列出存储桶`() = runTest {
+    fun `test list buckets`() = runTest {
       val result = service.listBuckets()
 
       assertTrue(result.isSuccess)
       val buckets = result.getOrNull()!!
-      assertTrue(buckets.isEmpty()) // 简化实现返回空列表
+      assertTrue(buckets.isEmpty()) // simplified implementation returns an empty list
     }
 
     @Test
-    fun `测试设置存储桶公共读取`() = runTest {
+    fun `test set bucket public read`() = runTest {
       val result = service.setBucketPublicRead("test-bucket")
 
       assertTrue(result.isSuccess)
     }
 
     @Test
-    fun `测试获取存储桶策略`() = runTest {
+    fun `test get bucket policy`() = runTest {
       val result = service.getBucketPolicy("test-bucket")
 
       assertTrue(result.isSuccess)
-      assertEquals("", result.getOrNull()) // 简化实现返回空字符串
+      assertEquals("", result.getOrNull()) // simplified implementation returns an empty string
     }
 
     @Test
-    fun `测试设置存储桶策略`() = runTest {
+    fun `test set bucket policy`() = runTest {
       val policyJson = """{"Version":"2012-10-17","Statement":[]}"""
       val result = service.setBucketPolicy("test-bucket", policyJson)
 
@@ -251,36 +251,36 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试设置存储桶访问级别为公共`() = runTest {
+    fun `test set bucket access level to public`() = runTest {
       val result = service.setBucketAccess("test-bucket", BucketAccessLevel.PUBLIC)
 
       assertTrue(result.isSuccess)
     }
 
     @Test
-    fun `测试设置存储桶访问级别为私有`() = runTest {
+    fun `test set bucket access level to private`() = runTest {
       val result = service.setBucketAccess("test-bucket", BucketAccessLevel.PRIVATE)
 
       assertTrue(result.isSuccess)
     }
 
     @Nested
-    inner class `异常处理测试` {
+    inner class `Exception Handling Tests` {
 
       @Test
-      fun `测试存储桶不存在异常`() = runTest {
-        // 使用一个通用异常来测试异常处理逻辑
+      fun `test bucket not found exception`() = runTest {
+        // use a generic exception to test the exception handling logic
         every { tosClient.headBucket(any<HeadBucketV2Input>()) } throws RuntimeException("Bucket not found")
 
         val result = service.bucketExists("non-existent-bucket")
 
-        // 对于bucketExists方法，任何异常都应该被捕获并转换为false
+        // for bucketExists, any exception should be caught and converted to false
         assertTrue(result.isSuccess)
         assertFalse(result.getOrNull()!!)
       }
 
       @Test
-      fun `测试网络异常处理`() = runTest {
+      fun `test network exception handling`() = runTest {
         every { tosClient.listBuckets(any<ListBucketsV2Input>()) } throws java.net.SocketTimeoutException("Connection timeout")
 
         val result = service.listBuckets()
@@ -295,7 +295,7 @@ class VolcengineTosObjectStorageServiceTest {
   inner class ObjectOperations {
 
     @Test
-    fun `测试上传对象成功`() = runTest {
+    fun `test upload object success`() = runTest {
       val request =
         PutObjectRequest(
           bucketName = "test-bucket",
@@ -316,7 +316,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试简化上传对象成功`() = runTest {
+    fun `test simplified upload object success`() = runTest {
       val result =
         service.putObject(
           bucketName = "test-bucket",
@@ -331,7 +331,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试获取对象信息`() = runTest {
+    fun `test get object info`() = runTest {
       val result = service.getObjectInfo("test-bucket", "test-object.txt")
 
       assertTrue(result.isSuccess)
@@ -342,7 +342,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试获取对象内容成功`() = runTest {
+    fun `test get object content success`() = runTest {
       val result = service.getObject("test-bucket", "test-object.txt")
 
       assertTrue(result.isSuccess)
@@ -353,7 +353,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试获取对象范围内容成功`() = runTest {
+    fun `test get object range content success`() = runTest {
       val result = service.getObject("test-bucket", "test-object.txt", 0L, 10L)
 
       assertTrue(result.isSuccess)
@@ -363,7 +363,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试检查对象存在`() = runTest {
+    fun `test check object exists`() = runTest {
       val result = service.objectExists("test-bucket", "test-object.txt")
 
       assertTrue(result.isSuccess)
@@ -371,14 +371,14 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试删除对象成功`() = runTest {
+    fun `test delete object success`() = runTest {
       val result = service.deleteObject("test-bucket", "test-object.txt")
 
       assertTrue(result.isSuccess)
     }
 
     @Test
-    fun `测试批量删除对象成功`() = runTest {
+    fun `test batch delete objects success`() = runTest {
       val objectNames = listOf("object1.txt", "object2.txt", "object3.txt")
       val result = service.deleteObjects("test-bucket", objectNames)
 
@@ -392,7 +392,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试复制对象成功`() = runTest {
+    fun `test copy object success`() = runTest {
       val request =
         CopyObjectRequest(
           sourceBucketName = "source-bucket",
@@ -411,7 +411,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试列出对象`() = runTest {
+    fun `test list objects`() = runTest {
       val request = ListObjectsRequest(bucketName = "test-bucket", prefix = "test/", maxKeys = 100)
 
       val result = service.listObjects(request)
@@ -419,13 +419,13 @@ class VolcengineTosObjectStorageServiceTest {
       assertTrue(result.isSuccess)
       val listing = result.getOrNull()!!
       assertEquals("test-bucket", listing.bucketName)
-      assertTrue(listing.objects.isEmpty()) // 简化实现返回空列表
+      assertTrue(listing.objects.isEmpty()) // simplified implementation returns an empty list
       assertFalse(listing.isTruncated)
       assertEquals(100, listing.maxKeys)
     }
 
     @Test
-    fun `测试生成预签名URL`() = runTest {
+    fun `test generate presigned URL`() = runTest {
       val result =
         service.generatePresignedUrl(
           bucketName = "test-bucket",
@@ -443,7 +443,7 @@ class VolcengineTosObjectStorageServiceTest {
   inner class MultipartUpload {
 
     @Test
-    fun `测试初始化分片上传`() = runTest {
+    fun `test initiate multipart upload`() = runTest {
       val request = InitiateMultipartUploadRequest(bucketName = "test-bucket", objectName = "large-file.txt", contentType = "text/plain")
 
       val result = service.initiateMultipartUpload(request)
@@ -456,7 +456,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试上传分片`() = runTest {
+    fun `test upload part`() = runTest {
       val request =
         UploadPartRequest(
           bucketName = "test-bucket",
@@ -477,7 +477,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试完成分片上传`() = runTest {
+    fun `test complete multipart upload`() = runTest {
       val parts = listOf(PartInfo(partNumber = 1, etag = "etag1", size = 100L), PartInfo(partNumber = 2, etag = "etag2", size = 100L))
       val request = CompleteMultipartUploadRequest(bucketName = "test-bucket", objectName = "large-file.txt", uploadId = "test-upload-id", parts = parts)
 
@@ -492,19 +492,19 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试中止分片上传`() = runTest {
+    fun `test abort multipart upload`() = runTest {
       val result = service.abortMultipartUpload("test-upload-id", "test-bucket", "large-file.txt")
 
       assertTrue(result.isSuccess)
     }
 
     @Test
-    fun `测试列出分片`() = runTest {
+    fun `test list parts`() = runTest {
       val result = service.listParts("test-upload-id", "test-bucket", "large-file.txt")
 
       assertTrue(result.isSuccess)
       val parts = result.getOrNull()!!
-      assertTrue(parts.isEmpty()) // 简化实现返回空列表
+      assertTrue(parts.isEmpty()) // simplified implementation returns an empty list
     }
   }
 
@@ -512,7 +512,7 @@ class VolcengineTosObjectStorageServiceTest {
   inner class ShareLinkOperations {
 
     @Test
-    fun `测试生成分享链接`() = runTest {
+    fun `test generate share link`() = runTest {
       val request =
         ShareLinkRequest(bucketName = "test-bucket", objectName = "test-object.txt", expiration = java.time.Duration.ofHours(1), method = HttpMethod.GET)
 
@@ -527,7 +527,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试上传并生成分享链接`() = runTest {
+    fun `test upload and generate share link`() = runTest {
       val request =
         UploadWithLinkRequest(
           bucketName = "test-bucket",
@@ -549,7 +549,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试验证分享链接`() = runTest {
+    fun `test validate share link`() = runTest {
       val shareUrl = "https://test-bucket.tos.example.com/test-object.txt?signature=test"
 
       val result = service.validateShareLink(shareUrl)
@@ -561,7 +561,7 @@ class VolcengineTosObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试撤销分享链接`() = runTest {
+    fun `test revoke share link`() = runTest {
       val shareUrl = "https://test-bucket.tos.example.com/test-object.txt?signature=test"
 
       val result = service.revokeShareLink(shareUrl)
