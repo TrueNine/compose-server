@@ -11,9 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-/**
- * Verifies the core behaviour of {@link EccKeyPair}.
- */
+/** Verifies the core behaviour of {@link EccKeyPair}. */
 class EccKeyPairTest {
 
   // Simple test key implementations
@@ -112,5 +110,4 @@ class EccKeyPairTest {
       log.info("EC algorithm unavailable, skipping real key verification: {}", e.message)
     }
   }
-
 }

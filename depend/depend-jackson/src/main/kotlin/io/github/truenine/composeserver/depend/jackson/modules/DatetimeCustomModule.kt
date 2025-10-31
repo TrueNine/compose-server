@@ -27,8 +27,7 @@ import java.time.ZonedDateTime
 /**
  * Custom module for date-time types.
  *
- * Uses timestamp serializers to serialize all date-time types to UTC timestamps (in milliseconds),
- * ensuring time-zone independence.
+ * Uses timestamp serializers to serialize all date-time types to UTC timestamps (in milliseconds), ensuring time-zone independence.
  *
  * @author TrueNine
  * @since 2025-01-16

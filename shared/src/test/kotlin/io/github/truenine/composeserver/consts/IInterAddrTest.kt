@@ -5,9 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-/**
- * Validates network address utilities exposed via {@link IInterAddr}.
- */
+/** Validates network address utilities exposed via {@link IInterAddr}. */
 class IInterAddrTest {
 
   @Test

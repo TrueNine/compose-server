@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod
  *
  * This method is often used to retrieve metadata for a resource without returning the response body.
  * - Should return empty data; any data present should be discarded.
- * - Should be reflected in the request headers, adopting a minimal resource retrieval strategy.
- *   Response headers unrelated to HTTP should not be used.
+ * - Should be reflected in the request headers, adopting a minimal resource retrieval strategy. Response headers unrelated to HTTP should not be used.
  * - See also [RFC HTTP protocol Method HEAD](https://www.rfc-editor.org/rfc/rfc7231#section-4.3.2)
  * - See also [MDN HTTP HEAD Method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD)
  *

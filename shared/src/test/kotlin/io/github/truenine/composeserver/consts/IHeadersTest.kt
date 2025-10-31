@@ -6,9 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * Validates HTTP header constants and helper methods defined in {@link IHeaders}.
- */
+/** Validates HTTP header constants and helper methods defined in {@link IHeaders}. */
 class IHeadersTest {
 
   @Test

@@ -5,8 +5,7 @@ import io.github.truenine.composeserver.logger
 /**
  * Synchronized simple order code generator
  *
- * This generator combines current timestamp (milliseconds) and snowflake ID to generate unique order numbers.
- * Format: currentTimeMillis + snowflakeId
+ * This generator combines current timestamp (milliseconds) and snowflake ID to generate unique order numbers. Format: currentTimeMillis + snowflakeId
  *
  * @param snowflake Snowflake algorithm generator for generating unique IDs
  * @author TrueNine

@@ -227,7 +227,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       // but we still expect to generate the majority of the IDs
       assertTrue(
         allIds.size >= threadCount * idsPerThread * 0.9,
-        "Should generate at least 90% of the expected IDs, actual: ${allIds.size}, expected: ${threadCount * idsPerThread}"
+        "Should generate at least 90% of the expected IDs, actual: ${allIds.size}, expected: ${threadCount * idsPerThread}",
       )
     }
   }

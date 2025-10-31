@@ -5,9 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * Validates request parameter name constants defined in {@link IParameterNames}.
- */
+/** Validates request parameter name constants defined in {@link IParameterNames}. */
 class IParameterNamesTest {
 
   @Test
@@ -48,5 +46,4 @@ class IParameterNamesTest {
 
     log.info("Verified uniqueness for {} parameter names", parameterNames.size)
   }
-
 }

@@ -5,9 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-/**
- * Verifies the regular-expression constants declared in {@link IRegexes}.
- */
+/** Verifies the regular-expression constants declared in {@link IRegexes}. */
 class IRegexTest {
   @Test
   fun matchesChineseAdministrativeCodes() {

@@ -5,9 +5,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-/**
- * Validates string utility helpers provided by {@link IString}.
- */
+/** Validates string utility helpers provided by {@link IString}. */
 class IStringTest {
   @Test
   fun hasTextRecognizesValidContent() {

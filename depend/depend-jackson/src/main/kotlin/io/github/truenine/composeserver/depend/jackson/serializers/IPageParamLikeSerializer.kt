@@ -11,8 +11,7 @@ import io.github.truenine.composeserver.domain.IPageParam
 /**
  * Deserializer for IPageParam and IPageParamLike interfaces.
  *
- * Supports deserialization from a JSON object to an IPageParam instance.
- * Expected JSON format: {"o": offset, "s": pageSize, "u": unPage}
+ * Supports deserialization from a JSON object to an IPageParam instance. Expected JSON format: {"o": offset, "s": pageSize, "u": unPage}
  */
 class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
 

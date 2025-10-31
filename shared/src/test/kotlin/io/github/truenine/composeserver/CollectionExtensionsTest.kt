@@ -8,9 +8,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-/**
- * Validates collection extension functions defined in CollectionExtensions.kt.
- */
+/** Validates collection extension functions defined in CollectionExtensions.kt. */
 class CollectionExtensionsTest {
 
   @Test

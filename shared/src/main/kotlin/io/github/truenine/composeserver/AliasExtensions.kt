@@ -21,7 +21,8 @@ inline fun String.isId(): Boolean {
   return this.isNotEmpty() && this.matches(Regex("^[0-9A-Za-z]+$"))
 }
 
-@Deprecated("Internal framework code, should not be called directly by users", level = DeprecationLevel.ERROR) inline fun getDefaultNullableId(): Id = Long.MIN_VALUE
+@Deprecated("Internal framework code, should not be called directly by users", level = DeprecationLevel.ERROR)
+inline fun getDefaultNullableId(): Id = Long.MIN_VALUE
 
 inline fun Number.toId(): Id? {
   return this.toLong().takeIf { it != Long.MIN_VALUE }

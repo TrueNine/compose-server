@@ -4,9 +4,7 @@ import io.github.truenine.composeserver.testtoolkit.log
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-/**
- * Validates reflection extension functions defined in JavaReflectFns.kt.
- */
+/** Validates reflection extension functions defined in JavaReflectFns.kt. */
 class JavaReflectFnsTest {
 
   // Test class hierarchy

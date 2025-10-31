@@ -6,9 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/**
- * Verifies selected Kotlin language behaviours relied upon by the codebase.
- */
+/** Verifies selected Kotlin language behaviours relied upon by the codebase. */
 class KotlinLangTest {
   class FunClass(var count: Int = 0) {
     private fun abc() {

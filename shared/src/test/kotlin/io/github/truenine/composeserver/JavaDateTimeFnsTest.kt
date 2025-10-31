@@ -13,9 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * Verifies the date-time extension functions defined in JavaDateTimeFns.kt.
- */
+/** Verifies the date-time extension functions defined in JavaDateTimeFns.kt. */
 class JavaDateTimeFnsTest {
 
   private val testMillis = 1672576245000L // 2023-01-01T12:30:45Z

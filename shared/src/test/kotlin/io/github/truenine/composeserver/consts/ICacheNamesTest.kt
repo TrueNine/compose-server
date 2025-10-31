@@ -5,9 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * Validates cache name constants declared in {@link ICacheNames}.
- */
+/** Validates cache name constants declared in {@link ICacheNames}. */
 class ICacheNamesTest {
 
   @Test

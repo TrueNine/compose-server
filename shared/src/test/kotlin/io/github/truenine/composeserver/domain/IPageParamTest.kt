@@ -28,9 +28,7 @@ class IPageParamTest {
     objectMapper = ObjectMapper()
   }
 
-  @AfterTest
-  fun after() {
-  }
+  @AfterTest fun after() {}
 
   @Test
   fun returnsDefaultPaginationWhenParametersMissing() {

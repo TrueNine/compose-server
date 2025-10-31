@@ -5,9 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * Validates HTTP method constants declared in {@link IMethods}.
- */
+/** Validates HTTP method constants declared in {@link IMethods}. */
 class IMethodsTest {
 
   @Test

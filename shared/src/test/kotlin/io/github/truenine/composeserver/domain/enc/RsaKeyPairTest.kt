@@ -12,9 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-/**
- * Verifies the core behaviour of {@link RsaKeyPair}.
- */
+/** Verifies the core behaviour of {@link RsaKeyPair}. */
 class RsaKeyPairTest {
 
   // Simple test key implementations

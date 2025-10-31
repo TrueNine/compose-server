@@ -4,9 +4,7 @@ import io.github.truenine.composeserver.testtoolkit.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/**
- * Validates database-related constants declared in {@link IDbNames}.
- */
+/** Validates database-related constants declared in {@link IDbNames}. */
 class IDbNamesTest {
 
   @Test
@@ -58,7 +56,6 @@ class IDbNamesTest {
 
     log.info("All RBAC IDs match their string representations")
   }
-
 }
 
 private fun assertTrue(condition: Boolean, message: String) {
