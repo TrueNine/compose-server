@@ -13,7 +13,7 @@ import org.springframework.mock.web.MockHttpServletResponse
 class HttpServletResponseFnsTest {
 
   @Test
-  fun `headerMap 应正确转换响应头为 Map`() {
+  fun `headerMap should correctly convert response headers to a Map`() {
     val response = MockHttpServletResponse()
     response.setHeader("Content-Type", "application/json")
     response.setHeader("Cache-Control", "no-cache")
@@ -28,14 +28,14 @@ class HttpServletResponseFnsTest {
   }
 
   @Test
-  fun `headerMap 空响应头应返回空 Map`() {
+  fun `headerMap should return an empty Map for empty response headers`() {
     val response = MockHttpServletResponse()
     val headerMap = response.headerMap
     assertTrue(headerMap.isEmpty())
   }
 
   @Test
-  fun `useResponse 应正确设置响应属性`() {
+  fun `useResponse should correctly set response properties`() {
     val response = MockHttpServletResponse()
 
     val result =
@@ -51,7 +51,7 @@ class HttpServletResponseFnsTest {
   }
 
   @Test
-  fun `useResponse 使用默认参数应设置正确值`() {
+  fun `useResponse with default parameters should set correct values`() {
     val response = MockHttpServletResponse()
 
     val result = response.useResponse { it }
@@ -62,7 +62,7 @@ class HttpServletResponseFnsTest {
   }
 
   @Test
-  fun `useSse 应设置 SSE 相关响应头`() {
+  fun `useSse should set SSE-related response headers`() {
     val response = MockHttpServletResponse()
 
     val result =
@@ -78,7 +78,7 @@ class HttpServletResponseFnsTest {
   }
 
   @Test
-  fun `useSse 使用默认参数应设置 SSE 类型`() {
+  fun `useSse with default parameters should set SSE type`() {
     val response = MockHttpServletResponse()
 
     val result = response.useSse { it }
@@ -89,7 +89,7 @@ class HttpServletResponseFnsTest {
   }
 
   @Test
-  fun `withDownload 应设置下载相关响应头`() {
+  fun `withDownload should set download-related response headers`() {
     val response = MockHttpServletResponse()
     val testData = "test file content".toByteArray()
 
@@ -97,21 +97,21 @@ class HttpServletResponseFnsTest {
       outputStream.write(testData)
     }
 
-    // 验证 Content-Disposition 头设置正确
+    // Verify that the Content-Disposition header is set correctly
     val contentDisposition = response.getHeader(IHeaders.CONTENT_DISPOSITION)
     assertNotNull(contentDisposition)
     assertTrue(contentDisposition.contains("attachment"))
 
-    // 验证 Content-Type 头设置正确
+    // Verify that the Content-Type header is set correctly
     assertTrue(response.getHeader(IHeaders.CONTENT_TYPE)?.contains("text/plain") == true)
     assertEquals(StandardCharsets.UTF_8.displayName(), response.characterEncoding)
 
-    // 验证输出内容
+    // Verify the output content
     assertEquals(testData.toString(StandardCharsets.UTF_8), response.contentAsString)
   }
 
   @Test
-  fun `withDownload 使用默认参数应设置正确值`() {
+  fun `withDownload with default parameters should set correct values`() {
     val response = MockHttpServletResponse()
 
     response.withDownload(fileName = "default.bin", closeBlock = null)
@@ -125,19 +125,19 @@ class HttpServletResponseFnsTest {
   }
 
   @Test
-  fun `withDownload 处理中文文件名应正确编码`() {
+  fun `withDownload should correctly encode Chinese filenames`() {
     val response = MockHttpServletResponse()
 
-    response.withDownload(fileName = "测试文件.txt", contentType = MediaTypes.TEXT, charset = StandardCharsets.UTF_8, closeBlock = null)
+    response.withDownload(fileName = "test_file.txt", contentType = MediaTypes.TEXT, charset = StandardCharsets.UTF_8, closeBlock = null)
 
     val contentDisposition = response.getHeader(IHeaders.CONTENT_DISPOSITION)
     assertNotNull(contentDisposition)
     assertTrue(contentDisposition.contains("attachment"))
-    // 文件名编码取决于 IHeaders.downloadDisposition 的实现
+    // The filename encoding depends on the implementation of IHeaders.downloadDisposition
   }
 
   @Test
-  fun `withDownload 空文件名应正确处理`() {
+  fun `withDownload should handle empty filenames correctly`() {
     val response = MockHttpServletResponse()
 
     response.withDownload(fileName = "", closeBlock = null)
@@ -147,7 +147,7 @@ class HttpServletResponseFnsTest {
   }
 
   @Test
-  fun `withDownload 处理大文件应正确写入`() {
+  fun `withDownload should write large files correctly`() {
     val response = MockHttpServletResponse()
     val largeData = ByteArray(1024) { it.toByte() }
 

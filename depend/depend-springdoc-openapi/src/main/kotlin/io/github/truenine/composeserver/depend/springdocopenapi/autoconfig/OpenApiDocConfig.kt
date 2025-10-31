@@ -30,7 +30,7 @@ class OpenApiDocConfig {
   @Bean
   @ConditionalOnWebApplication
   fun userApi(p: SpringdocOpenApiProperties): GroupedOpenApi {
-    log.debug("注册 OpenApi3 文档")
+    log.debug("Registering OpenAPI 3 documentation")
     val paths = p.scanUrlPatterns.toTypedArray()
     return GroupedOpenApi.builder()
       .group(p.group)
@@ -43,15 +43,15 @@ class OpenApiDocConfig {
               HeaderParameter()
                 .name(p.jwtHeaderInfo.authTokenName)
                 .example("eyJ0eXAiOiJ")
-                .description("jwt校验头")
-                .schema(StringSchema().name(p.jwtHeaderInfo.authTokenName).description("jwt校验头"))
+                .description("JWT validation header")
+                .schema(StringSchema().name(p.jwtHeaderInfo.authTokenName).description("JWT validation header"))
             )
             .addParametersItem(
               HeaderParameter()
                 .name(p.jwtHeaderInfo.refreshTokenName)
                 .example("eyJ0eXAiOiJ")
-                .description("jwt 刷新 token")
-                .schema(StringSchema().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("jwt 刷新 token"))
+                .description("JWT refresh token")
+                .schema(StringSchema().name(p.jwtHeaderInfo.refreshTokenName).example("eyJ0eXAiOiJ").description("JWT refresh token"))
             )
         } else {
           operation

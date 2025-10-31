@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.http.converter.StringHttpMessageConverter
 
 /**
- * spring web mvc http servlet 配置属性
+ * spring web mvc http servlet configuration properties
  *
  * @author TrueNine
  * @since 2023-02-20

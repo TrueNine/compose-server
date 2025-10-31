@@ -31,16 +31,16 @@ class KotlinModuleCompatibilityTest {
           "timestamp" to System.currentTimeMillis(),
         )
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(testData)
       log.info("Serialized mixed data: {}", json)
 
-      // 验证JSON包含预期的结构
+      // Verify that the JSON contains the expected structure
       assertTrue(json.contains("\"pair\":[\"key\",\"value\"]"))
       assertTrue(json.contains("\"pageParam\":{"))
       assertTrue(json.contains("\"timestamp\":"))
 
-      // 反序列化
+      // Deserialize
       val deserializedData = mapper.readValue(json, Map::class.java)
       log.info("Deserialized mixed data: {}", deserializedData)
 
@@ -53,15 +53,15 @@ class KotlinModuleCompatibilityTest {
     fun `pair serialization works with time objects`() {
       val timePair = Pair(LocalDateTime.now(), ZonedDateTime.now())
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(timePair)
       log.info("Serialized time pair: {}", json)
 
-      // 验证是数组格式
+      // Verify that it is in array format
       assertTrue(json.startsWith("["))
       assertTrue(json.endsWith("]"))
 
-      // 反序列化
+      // Deserialize
       val deserializedPair = mapper.readValue(json, Pair::class.java)
       log.info("Deserialized time pair: {}", deserializedPair)
 
@@ -73,11 +73,11 @@ class KotlinModuleCompatibilityTest {
     fun `page param with time fields serializes correctly`() {
       val complexData = mapOf("pagination" to Pq[0, 10], "createdAt" to LocalDateTime.now(), "metadata" to Pair("version", "1.0"))
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(complexData)
       log.info("Serialized complex data: {}", json)
 
-      // 反序列化
+      // Deserialize
       val deserializedData = mapper.readValue(json, Map::class.java)
       log.info("Deserialized complex data: {}", deserializedData)
 
@@ -92,13 +92,13 @@ class KotlinModuleCompatibilityTest {
 
     @Test
     fun `verify kotlin module is properly registered`() {
-      // 测试Pair序列化
+      // Test Pair serialization
       val pair = Pair("test", 123)
       val pairJson = mapper.writeValueAsString(pair)
       log.info("Pair serialization test: {}", pairJson)
       assertTrue(pairJson == """["test",123]""")
 
-      // 测试IPageParam序列化
+      // Test IPageParam serialization
       val pageParam = Pq[2, 30]
       val pageParamJson = mapper.writeValueAsString(pageParam)
       log.info("PageParam serialization test: {}", pageParamJson)
@@ -108,7 +108,7 @@ class KotlinModuleCompatibilityTest {
 
     @Test
     fun `verify no conflicts with other modules`() {
-      // 创建包含多种类型的复杂对象
+      // Create a complex object with various types
       val complexObject =
         mapOf(
           "string" to "test",
@@ -121,14 +121,14 @@ class KotlinModuleCompatibilityTest {
           "nested" to mapOf("inner" to "value"),
         )
 
-      // 序列化和反序列化应该都成功
+      // Serialization and deserialization should both succeed
       val json = mapper.writeValueAsString(complexObject)
       log.info("Complex object JSON: {}", json)
 
       val deserialized = mapper.readValue(json, Map::class.java)
       log.info("Deserialized complex object: {}", deserialized)
 
-      // 验证所有字段都存在
+      // Verify that all fields exist
       assertNotNull(deserialized["string"])
       assertNotNull(deserialized["number"])
       assertNotNull(deserialized["boolean"])

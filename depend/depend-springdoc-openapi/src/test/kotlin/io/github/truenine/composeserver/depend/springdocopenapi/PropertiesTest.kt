@@ -42,7 +42,7 @@ class PropertiesTest {
       assertEquals("custom-group", group, "Group should match configuration")
       assertFalse(enableJwtHeader, "JWT header should be disabled")
 
-      // 注意：OpenApiDocConfig 会自动添加 "net.yan100.compose" 包，所以总数会是 3
+      // Note: OpenApiDocConfig automatically adds the "net.yan100.compose" package, so the total count will be 3
       assertTrue(scanPackages.size >= 2, "Should have at least 2 scan packages")
       assertTrue(scanPackages.contains("com.example.package1"), "Should contain package1")
       assertTrue(scanPackages.contains("com.example.package2"), "Should contain package2")
@@ -94,7 +94,7 @@ class DefaultPropertiesTest {
       assertEquals("default", group, "Default group should be 'default'")
       assertFalse(enableJwtHeader, "JWT header should be disabled by default")
 
-      // OpenApiDocConfig 会自动添加 "net.yan100.compose" 包，所以不会为空
+      // OpenApiDocConfig automatically adds the "net.yan100.compose" package, so it will not be empty
       assertTrue(scanPackages.size >= 1, "Scan packages should contain at least the auto-added packages")
 
       assertEquals(1, scanUrlPatterns.size, "Should have default URL pattern")

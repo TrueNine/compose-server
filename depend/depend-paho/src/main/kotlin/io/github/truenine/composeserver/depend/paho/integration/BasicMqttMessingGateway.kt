@@ -5,32 +5,32 @@ import org.springframework.integration.mqtt.support.MqttHeaders
 import org.springframework.messaging.handler.annotation.Header
 
 /**
- * mqtt 基础消息发送器
+ * Basic MQTT message sender.
  *
  * @author TrueNine
  * @since 2023-10-15
  */
 interface BasicMqttMessingGateway {
   /**
-   * 将消息发送到默认主题，如果存在
+   * Sends a message to the default topic, if it exists.
    *
-   * @param data 发送数据
+   * @param data The data to be sent.
    */
   fun <T> send(data: T)
 
   /**
-   * 将消息发送到指定主题
+   * Sends a message to the specified topic.
    *
-   * @param topic 主题
-   * @param data 发送数据
+   * @param topic The target topic.
+   * @param data The data to be sent.
    */
   fun <T> unsafeSendToTopic(@Header(MqttHeaders.TOPIC) topic: String, data: T)
 
   /**
-   * 将消息发送到指定主题
+   * Sends a message to the specified topic.
    *
-   * @param topic 主题
-   * @param data 发送数据
+   * @param topic The target topic.
+   * @param data The data to be sent.
    */
   fun <T> sendToTopic(@Header(MqttHeaders.TOPIC) topic: String, data: T) {
     return unsafeSendToTopic(topic.replaceFirstIfPrefix("/", ""), data)

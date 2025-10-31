@@ -25,9 +25,10 @@ import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 
 /**
- * 时间类型自定义模块
+ * Custom module for date-time types.
  *
- * 使用时间戳序列化器，将所有时间类型序列化为UTC时间戳（毫秒），确保时区无关性
+ * Uses timestamp serializers to serialize all date-time types to UTC timestamps (in milliseconds),
+ * ensuring time-zone independence.
  *
  * @author TrueNine
  * @since 2025-01-16
@@ -37,10 +38,10 @@ class DatetimeCustomModule : SimpleModule() {
   override fun setupModule(context: SetupContext?) {
     super.setupModule(context)
 
-    // 创建时间戳序列化器容器
+    // Create a container for timestamp serializers
     val serializers = ArrayList<JsonSerializer<*>>(6)
 
-    // 注册所有时间类型的时间戳序列化器，确保时间戳序列化优先级最高
+    // Register timestamp serializers for all date-time types, ensuring highest priority
     serializers.add(LocalDateTimeTimestampSerializer())
     serializers.add(LocalDateTimestampSerializer())
     serializers.add(LocalTimeTimestampSerializer())
@@ -48,10 +49,10 @@ class DatetimeCustomModule : SimpleModule() {
     serializers.add(ZonedDateTimeTimestampSerializer())
     serializers.add(OffsetDateTimeTimestampSerializer())
 
-    // 添加到上下文
+    // Add to the context
     context?.addSerializers(SimpleSerializers(serializers))
 
-    // 创建时间戳反序列化器容器
+    // Create a container for timestamp deserializers
     val deserializers = ArrayList<JsonDeserializer<*>>(6)
 
     deserializers.add(LocalDateTimeTimestampDeserializer())

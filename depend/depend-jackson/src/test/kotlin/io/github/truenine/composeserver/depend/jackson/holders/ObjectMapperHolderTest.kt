@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
 
 /**
- * ObjectMapperHolder配置持有者测试
+ * ObjectMapperHolder configuration holder tests
  *
  * @author TrueNine
  * @since 2025-01-16
@@ -32,8 +32,8 @@ class ObjectMapperHolderTest {
     fun should_return_default_mapper() {
       val mapper = objectMapperHolder.getDefaultMapper()
 
-      assertNotNull(mapper, "默认mapper不应为null")
-      assertSame(defaultMapper, mapper, "应返回相同的默认mapper实例")
+      assertNotNull(mapper, "Default mapper should not be null")
+      assertSame(defaultMapper, mapper, "Should return the same default mapper instance")
     }
   }
 
@@ -44,8 +44,8 @@ class ObjectMapperHolderTest {
     fun should_return_non_ignore_mapper() {
       val mapper = objectMapperHolder.getNonIgnoreMapper()
 
-      assertNotNull(mapper, "非忽略mapper不应为null")
-      assertSame(nonIgnoreMapper, mapper, "应返回相同的非忽略mapper实例")
+      assertNotNull(mapper, "Non-ignore mapper should not be null")
+      assertSame(nonIgnoreMapper, mapper, "Should return the same non-ignore mapper instance")
     }
   }
 
@@ -56,24 +56,24 @@ class ObjectMapperHolderTest {
     fun should_return_default_mapper_when_ignore_unknown_is_true() {
       val mapper = objectMapperHolder.getMapper(ignoreUnknown = true)
 
-      assertNotNull(mapper, "mapper不应为null")
-      assertSame(defaultMapper, mapper, "ignoreUnknown=true时应返回默认mapper")
+      assertNotNull(mapper, "Mapper should not be null")
+      assertSame(defaultMapper, mapper, "Should return default mapper when ignoreUnknown=true")
     }
 
     @Test
     fun should_return_non_ignore_mapper_when_ignore_unknown_is_false() {
       val mapper = objectMapperHolder.getMapper(ignoreUnknown = false)
 
-      assertNotNull(mapper, "mapper不应为null")
-      assertSame(nonIgnoreMapper, mapper, "ignoreUnknown=false时应返回非忽略mapper")
+      assertNotNull(mapper, "Mapper should not be null")
+      assertSame(nonIgnoreMapper, mapper, "Should return non-ignore mapper when ignoreUnknown=false")
     }
 
     @Test
     fun should_return_default_mapper_when_no_parameter() {
       val mapper = objectMapperHolder.getMapper()
 
-      assertNotNull(mapper, "mapper不应为null")
-      assertSame(defaultMapper, mapper, "无参数时应返回默认mapper")
+      assertNotNull(mapper, "Mapper should not be null")
+      assertSame(defaultMapper, mapper, "Should return default mapper when no parameter is provided")
     }
   }
 }

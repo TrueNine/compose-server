@@ -31,7 +31,7 @@ class UploadFileParamAssertTest {
   val file = MockMultipartFile("file", "file", "text/plain", "Hello, World!".toByteArray())
 
   @Test
-  fun `测试 混合 dto 上传`() {
+  fun `Test mixed DTO upload`() {
     mvc
       .multipart(HttpMethod.POST, "/testUploadController/uploadBlend") {
         param("json.a", "str")
@@ -42,7 +42,7 @@ class UploadFileParamAssertTest {
   }
 
   @Test
-  fun `测试 上传 json 表单以及 文件`() {
+  fun `Test uploading JSON form and file`() {
     mvc
       .multipart(HttpMethod.POST, "/testUploadController/uploadFileAndOtherField") {
         contentType = MediaType.MULTIPART_FORM_DATA
@@ -52,7 +52,7 @@ class UploadFileParamAssertTest {
       .andExpect { status { isOk() } }
   }
 
-  // 内嵌 Controller
+  // Embedded Controller
   @RequestMapping("testUploadController")
   @RestController
   class TestUploadController {

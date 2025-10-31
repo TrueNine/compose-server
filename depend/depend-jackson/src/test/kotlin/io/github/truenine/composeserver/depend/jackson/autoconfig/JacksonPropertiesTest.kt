@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 /**
- * JacksonProperties配置类测试
+ * JacksonProperties configuration class tests
  *
  * @author TrueNine
  * @since 2025-01-16

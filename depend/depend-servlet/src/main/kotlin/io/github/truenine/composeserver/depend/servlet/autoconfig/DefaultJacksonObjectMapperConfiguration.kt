@@ -15,7 +15,7 @@ private val log = slf4j<DefaultJacksonObjectMapperConfiguration>()
 @Configuration
 class DefaultJacksonObjectMapperConfiguration {
   companion object {
-    /** ## 此 默认 bean 名称可能会变动 */
+    /** ## This default bean name may change */
     const val SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME = "jacksonObjectMapper"
     const val DEFAULT_OBJECT_MAPPER_BEAN_NAME = "defaultObjectMapper"
   }
@@ -25,7 +25,7 @@ class DefaultJacksonObjectMapperConfiguration {
   @ConditionalOnMissingBean(ObjectMapper::class, name = [SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   fun defaultObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
-    log.debug("注册默认的 objectMapper")
+    log.debug("Registering default object mapper")
     return builder.createXmlMapper(false).build()
   }
 }

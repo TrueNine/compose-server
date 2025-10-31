@@ -14,9 +14,9 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 /**
- * 统一的时间戳序列化器
+ * Unified timestamp serializer
  *
- * 将所有时间类型转换为UTC时间戳（毫秒），确保时区无关性和高性能
+ * Converts all time types to UTC timestamps (milliseconds) to ensure timezone independence and high performance.
  *
  * @author TrueNine
  * @since 2025-01-16
@@ -34,7 +34,7 @@ class TimestampSerializer : JsonSerializer<Any>() {
         is LocalDateTime -> value.toInstant(ZoneOffset.UTC).toEpochMilli()
         is LocalDate -> value.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
         is LocalTime -> {
-          // LocalTime需要结合当前日期转换为时间戳
+          // LocalTime needs to be combined with the current date to be converted to a timestamp
           val today = LocalDate.now()
           today.atTime(value).toInstant(ZoneOffset.UTC).toEpochMilli()
         }
@@ -42,7 +42,7 @@ class TimestampSerializer : JsonSerializer<Any>() {
         is Instant -> value.toEpochMilli()
         is ZonedDateTime -> value.toInstant().toEpochMilli()
         is OffsetDateTime -> value.toInstant().toEpochMilli()
-        else -> throw IllegalArgumentException("不支持的时间类型: ${value::class.java}")
+        else -> throw IllegalArgumentException("Unsupported time type: ${value::class.java}")
       }
 
     gen?.writeNumber(timestamp)

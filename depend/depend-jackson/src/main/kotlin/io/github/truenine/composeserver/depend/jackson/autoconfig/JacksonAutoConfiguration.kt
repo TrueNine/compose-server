@@ -36,7 +36,7 @@ import org.springframework.core.annotation.Order
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 /**
- * jackson json 序列化策略配置
+ * Jackson JSON serialization strategy configuration
  *
  * @author TrueNine
  * @since 2023-02-23
@@ -85,7 +85,7 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
   fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
     log.debug("config jackson custom jackson2ObjectMapperBuilderCustomizer with properties: {}", jacksonProperties)
 
-    // 移除硬编码时区，使用UTC作为基准
+    // Remove hardcoded timezone, use UTC as baseline
     val datetimeModuleCustom = DatetimeCustomModule()
     val kotlinModuleCustom = KotlinCustomModule()
     val kotlinModule = KotlinModule.Builder().build()
@@ -94,14 +94,14 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     return Jackson2ObjectMapperBuilderCustomizer { b ->
       b.modules(javaTimeModule, kotlinModule, datetimeModuleCustom, kotlinModuleCustom)
 
-      // 使用UTC时区，避免时区问题
+      // Use UTC timezone to avoid timezone issues
       b.timeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
       b.locale(Locale.US)
       b.simpleDateFormat(DateTimeConverter.DATETIME)
       b.defaultViewInclusion(true)
       b.featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
 
-      // 根据配置启用或禁用时间戳序列化
+      // Enable or disable timestamp serialization based on configuration
       if (jacksonProperties.enableTimestampSerialization && jacksonProperties.writeDatesAsTimestamps) {
         b.featuresToEnable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         log.debug("enabled timestamp serialization with unit: {}", jacksonProperties.timestampUnit)
@@ -112,10 +112,10 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
 
       b.featuresToDisable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
 
-      // 根据配置设置序列化包含策略
+      // Set serialization inclusion policy based on configuration
       b.serializationInclusion(jacksonProperties.serializationInclusion)
 
-      // 根据配置设置未知属性处理
+      // Set unknown property handling based on configuration
       if (jacksonProperties.failOnUnknownProperties) {
         b.featuresToEnable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
       } else {
@@ -131,10 +131,10 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     @JvmStatic private val log = logger<JacksonAutoConfiguration>()
   }
 
-  /** 安全的忽略注解内省器，只在特定条件下忽略属性 */
+  /** Safe ignore annotation introspector, only ignores properties under specific conditions */
   class SafeIgnoreAnnotationIntrospector : JacksonAnnotationIntrospector() {
     override fun findPropertyIgnoralByName(config: MapperConfig<*>?, a: Annotated?): JsonIgnoreProperties.Value? {
-      // 只在特定条件下忽略属性，避免所有属性都被忽略
+      // Only ignore properties under specific conditions to avoid ignoring all properties
       return null
     }
 
@@ -160,14 +160,14 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
     return mapper.copy().apply {
       disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-      // 确保KotlinModule只注册一次，避免重复注册
+      // Ensure KotlinModule is registered only once to avoid duplicate registration
       if (!registeredModuleIds.contains(KotlinModule::class.java.name)) {
         registerModules(KotlinModule.Builder().build())
       }
       setSerializationInclusion(JsonInclude.Include.NON_NULL)
       setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
       activateDefaultTyping(polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.PROPERTY)
-      // 使用安全的注解内省器，与原有的内省器配对
+      // Use a safe annotation introspector, paired with the original introspector
       val originalIntrospector = deserializationConfig.annotationIntrospector
       setAnnotationIntrospector(IgnoreIntroPair(originalIntrospector, SafeIgnoreAnnotationIntrospector()))
     }

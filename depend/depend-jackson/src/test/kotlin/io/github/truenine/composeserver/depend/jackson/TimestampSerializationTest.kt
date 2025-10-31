@@ -20,13 +20,13 @@ import org.junit.jupiter.api.Nested
 import org.springframework.boot.test.context.SpringBootTest
 
 /**
- * 时间戳序列化综合测试
+ * Comprehensive timestamp serialization tests.
  *
- * 测试Spring Boot环境下所有时间类型的时间戳序列化功能，包括：
- * - 所有时间类型的时间戳序列化
- * - 时区无关性验证
- * - 往返序列化正确性
- * - 不同时区下的一致性
+ * Tests the timestamp serialization functionality for all time types in a Spring Boot environment, including:
+ * - Timestamp serialization for all time types
+ * - Timezone independence validation
+ * - Round-trip serialization correctness
+ * - Consistency across different timezones
  */
 @SpringBootTest
 class TimestampSerializationTest {
@@ -47,14 +47,14 @@ class TimestampSerializationTest {
 
       log.info("LocalDateTime {} serialized to: {}", dateTime, json)
 
-      // 验证序列化为数字时间戳
+      // Verify serialization to a numeric timestamp
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "LocalDateTime应该序列化为数字时间戳")
-      assertTrue(timestamp > 0, "时间戳应该大于0")
+      assertNotNull(timestamp, "LocalDateTime should serialize to a numeric timestamp")
+      assertTrue(timestamp > 0, "Timestamp should be greater than 0")
 
-      // 验证时间戳的合理性（2025年的时间戳应该在合理范围内）
-      assertTrue(timestamp > 1700000000000L, "时间戳应该在2025年范围内")
-      assertTrue(timestamp < 1800000000000L, "时间戳应该在合理范围内")
+      // Verify the reasonableness of the timestamp (a timestamp for 2025 should be within a reasonable range)
+      assertTrue(timestamp > 1700000000000L, "Timestamp should be within the range for 2025")
+      assertTrue(timestamp < 1800000000000L, "Timestamp should be within a reasonable range")
     }
 
     @Test
@@ -77,7 +77,7 @@ class TimestampSerializationTest {
 
       log.info("Round trip: {} -> {} -> {}", originalDateTime, json, deserializedDateTime)
 
-      // 由于时间戳精度限制，纳秒部分可能丢失，只比较到毫秒
+      // Due to timestamp precision limitations, the nanosecond part may be lost, so we only compare up to milliseconds
       val originalMillis = originalDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
       val deserializedMillis = deserializedDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
       assertEquals(originalMillis, deserializedMillis)
@@ -95,7 +95,7 @@ class TimestampSerializationTest {
       log.info("Instant {} serialized to: {}", instant, json)
 
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "Instant应该序列化为数字时间戳")
+      assertNotNull(timestamp, "Instant should serialize to a numeric timestamp")
       assertEquals(1737000645000L, timestamp)
     }
 
@@ -112,7 +112,7 @@ class TimestampSerializationTest {
 
     @Test
     fun `round trip Instant serialization preserves precision`() {
-      // 使用毫秒精度的Instant避免精度丢失问题
+      // Use a millisecond-precision Instant to avoid precision loss issues
       val originalInstant = Instant.ofEpochMilli(System.currentTimeMillis())
 
       val json = defaultMapper.writeValueAsString(originalInstant)
@@ -134,10 +134,10 @@ class TimestampSerializationTest {
       log.info("ZonedDateTime {} serialized to: {}", zonedDateTime, json)
 
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "ZonedDateTime应该序列化为数字时间戳")
-      assertTrue(timestamp > 0, "时间戳应该大于0")
+      assertNotNull(timestamp, "ZonedDateTime should serialize to a numeric timestamp")
+      assertTrue(timestamp > 0, "Timestamp should be greater than 0")
 
-      // 验证时间戳与预期的UTC时间戳一致
+      // Verify that the timestamp is consistent with the expected UTC timestamp
       val expectedTimestamp = zonedDateTime.toInstant().toEpochMilli()
       assertEquals(expectedTimestamp, timestamp)
     }
@@ -151,7 +151,7 @@ class TimestampSerializationTest {
 
       log.info("Timestamp {} deserialized to ZonedDateTime: {}", timestamp, deserializedZonedDateTime)
 
-      // 由于反序列化时使用UTC时区，需要比较Instant
+      // Since deserialization uses the UTC timezone, compare the Instants
       assertEquals(originalZonedDateTime.toInstant(), deserializedZonedDateTime.toInstant())
     }
 
@@ -164,7 +164,7 @@ class TimestampSerializationTest {
 
       log.info("Round trip: {} -> {} -> {}", originalZonedDateTime, json, deserializedZonedDateTime)
 
-      // 时区可能不同，但时间点应该相同
+      // Timezone may differ, but the instant in time should be the same
       assertEquals(originalZonedDateTime.toInstant(), deserializedZonedDateTime.toInstant())
     }
   }
@@ -180,10 +180,10 @@ class TimestampSerializationTest {
       log.info("OffsetDateTime {} serialized to: {}", offsetDateTime, json)
 
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "OffsetDateTime应该序列化为数字时间戳")
-      assertTrue(timestamp > 0, "时间戳应该大于0")
+      assertNotNull(timestamp, "OffsetDateTime should serialize to a numeric timestamp")
+      assertTrue(timestamp > 0, "Timestamp should be greater than 0")
 
-      // 验证时间戳与预期的UTC时间戳一致
+      // Verify that the timestamp is consistent with the expected UTC timestamp
       val expectedTimestamp = offsetDateTime.toInstant().toEpochMilli()
       assertEquals(expectedTimestamp, timestamp)
     }
@@ -197,7 +197,7 @@ class TimestampSerializationTest {
 
       log.info("Timestamp {} deserialized to OffsetDateTime: {}", timestamp, deserializedOffsetDateTime)
 
-      // 由于反序列化时使用UTC偏移，需要比较Instant
+      // Since deserialization uses a UTC offset, compare the Instants
       assertEquals(originalOffsetDateTime.toInstant(), deserializedOffsetDateTime.toInstant())
     }
 
@@ -210,7 +210,7 @@ class TimestampSerializationTest {
 
       log.info("Round trip: {} -> {} -> {}", originalOffsetDateTime, json, deserializedOffsetDateTime)
 
-      // 偏移量可能不同，但时间点应该相同
+      // Offset may differ, but the instant in time should be the same
       assertEquals(originalOffsetDateTime.toInstant(), deserializedOffsetDateTime.toInstant())
     }
   }
@@ -220,7 +220,7 @@ class TimestampSerializationTest {
 
     @Test
     fun `different timezones serialize to same timestamp for same instant`() {
-      // 相同的时间点，不同的时区表示
+      // Same instant in time, different timezone representations
       val utcTime = ZonedDateTime.of(2025, 1, 16, 12, 30, 45, 0, ZoneOffset.UTC)
       val shanghaiTime = ZonedDateTime.of(2025, 1, 16, 20, 30, 45, 0, ZoneId.of("Asia/Shanghai"))
       val newYorkTime = ZonedDateTime.of(2025, 1, 16, 7, 30, 45, 0, ZoneId.of("America/New_York"))
@@ -236,15 +236,15 @@ class TimestampSerializationTest {
       log.info("New York: {} -> {}", newYorkTime, newYorkJson)
       log.info("London: {} -> {}", londonTime, londonJson)
 
-      // 相同的时间点应该序列化为相同的时间戳
-      assertEquals(utcJson, shanghaiJson, "相同时间点的不同时区应该序列化为相同时间戳")
-      assertEquals(utcJson, newYorkJson, "相同时间点的不同时区应该序列化为相同时间戳")
-      assertEquals(utcJson, londonJson, "相同时间点的不同时区应该序列化为相同时间戳")
+      // The same instant in time should serialize to the same timestamp
+      assertEquals(utcJson, shanghaiJson, "Different timezones for the same instant should serialize to the same timestamp")
+      assertEquals(utcJson, newYorkJson, "Different timezones for the same instant should serialize to the same timestamp")
+      assertEquals(utcJson, londonJson, "Different timezones for the same instant should serialize to the same timestamp")
     }
 
     @Test
     fun `OffsetDateTime with different offsets serialize to same timestamp for same instant`() {
-      // 相同的UTC时间点，不同的偏移量表示
+      // Same UTC instant, different offset representations
       val utcOffset = OffsetDateTime.of(2025, 1, 16, 12, 30, 45, 0, ZoneOffset.UTC)
       val plusEightOffset = OffsetDateTime.of(2025, 1, 16, 20, 30, 45, 0, ZoneOffset.ofHours(8))
       val minusFiveOffset = OffsetDateTime.of(2025, 1, 16, 7, 30, 45, 0, ZoneOffset.ofHours(-5))
@@ -257,13 +257,13 @@ class TimestampSerializationTest {
       log.info("+8 offset: {} -> {}", plusEightOffset, plusEightJson)
       log.info("-5 offset: {} -> {}", minusFiveOffset, minusFiveJson)
 
-      assertEquals(utcJson, plusEightJson, "相同时间点的不同偏移量应该序列化为相同时间戳")
-      assertEquals(utcJson, minusFiveJson, "相同时间点的不同偏移量应该序列化为相同时间戳")
+      assertEquals(utcJson, plusEightJson, "Different offsets for the same instant should serialize to the same timestamp")
+      assertEquals(utcJson, minusFiveJson, "Different offsets for the same instant should serialize to the same timestamp")
     }
 
     @Test
     fun `LocalDateTime serialization is timezone independent`() {
-      // LocalDateTime没有时区信息，应该始终按UTC处理
+      // LocalDateTime has no timezone information, so it should always be treated as UTC
       val localDateTime1 = LocalDateTime.of(2025, 1, 16, 12, 30, 45)
       val localDateTime2 = LocalDateTime.of(2025, 1, 16, 12, 30, 45)
 
@@ -273,11 +273,11 @@ class TimestampSerializationTest {
       log.info("LocalDateTime1: {} -> {}", localDateTime1, json1)
       log.info("LocalDateTime2: {} -> {}", localDateTime2, json2)
 
-      assertEquals(json1, json2, "相同的LocalDateTime应该序列化为相同的时间戳")
+      assertEquals(json1, json2, "The same LocalDateTime should serialize to the same timestamp")
 
-      // 验证序列化结果是时间戳
+      // Verify that the serialization result is a timestamp
       val timestamp = json1.toLongOrNull()
-      assertNotNull(timestamp, "LocalDateTime应该序列化为时间戳")
+      assertNotNull(timestamp, "LocalDateTime should serialize to a timestamp")
     }
   }
 
@@ -292,15 +292,15 @@ class TimestampSerializationTest {
         val json = defaultMapper.writeValueAsString(localDate)
         log.info("LocalDate {} serialized to: {}", localDate, json)
 
-        // LocalDate可能序列化为字符串或数组格式，取决于配置
-        assertTrue(json.isNotEmpty(), "LocalDate序列化结果不应为空")
+        // LocalDate may be serialized to a string or an array format, depending on the configuration
+        assertTrue(json.isNotEmpty(), "LocalDate serialization result should not be empty")
 
-        // 尝试反序列化验证
+        // Try to deserialize for verification
         val deserializedDate = defaultMapper.readValue(json, LocalDate::class.java)
         assertEquals(localDate, deserializedDate)
       } catch (e: Exception) {
         log.info("LocalDate serialization failed as expected: {}", e.message)
-        // LocalDate可能不支持时间戳序列化，这是正常的
+        // LocalDate may not support timestamp serialization, which is normal
       }
     }
 
@@ -312,14 +312,14 @@ class TimestampSerializationTest {
         val json = defaultMapper.writeValueAsString(localTime)
         log.info("LocalTime {} serialized to: {}", localTime, json)
 
-        assertTrue(json.isNotEmpty(), "LocalTime序列化结果不应为空")
+        assertTrue(json.isNotEmpty(), "LocalTime serialization result should not be empty")
 
-        // 尝试反序列化验证
+        // Try to deserialize for verification
         val deserializedTime = defaultMapper.readValue(json, LocalTime::class.java)
         assertEquals(localTime, deserializedTime)
       } catch (e: Exception) {
         log.info("LocalTime serialization failed as expected: {}", e.message)
-        // LocalTime可能不支持时间戳序列化，这是正常的
+        // LocalTime may not support timestamp serialization, which is normal
       }
     }
   }
@@ -333,34 +333,34 @@ class TimestampSerializationTest {
       val localDateTime = LocalDateTime.of(2025, 1, 16, 12, 30, 45)
       val zonedDateTime = ZonedDateTime.of(2025, 1, 16, 12, 30, 45, 0, ZoneId.of("Asia/Shanghai"))
 
-      // 测试Instant
+      // Test Instant
       val instantJson1 = defaultMapper.writeValueAsString(instant)
       val instantJson2 = nonIgnoreMapper.writeValueAsString(instant)
       log.info("Instant - Default mapper: {}, Non-ignore mapper: {}", instantJson1, instantJson2)
 
-      // 测试LocalDateTime
+      // Test LocalDateTime
       val localDateTimeJson1 = defaultMapper.writeValueAsString(localDateTime)
       val localDateTimeJson2 = nonIgnoreMapper.writeValueAsString(localDateTime)
       log.info("LocalDateTime - Default mapper: {}, Non-ignore mapper: {}", localDateTimeJson1, localDateTimeJson2)
 
-      // 测试ZonedDateTime
+      // Test ZonedDateTime
       val zonedDateTimeJson1 = defaultMapper.writeValueAsString(zonedDateTime)
       val zonedDateTimeJson2 = nonIgnoreMapper.writeValueAsString(zonedDateTime)
       log.info("ZonedDateTime - Default mapper: {}, Non-ignore mapper: {}", zonedDateTimeJson1, zonedDateTimeJson2)
 
-      // 验证两个mapper的时间戳序列化行为一致
-      // 注意：非忽略mapper可能包含额外的类型信息，所以我们主要验证时间戳值
+      // Verify that the timestamp serialization behavior of the two mappers is consistent
+      // Note: The non-ignoring mapper may include additional type information, so we mainly verify the timestamp value
       val instantTimestamp1 = instantJson1.toLongOrNull()
       val instantTimestamp2 =
         if (instantJson2.contains("@class")) {
-          // 如果包含类型信息，提取数值部分
+          // If type information is included, extract the numeric part
           instantJson2.substringAfterLast(":").substringBefore("}").toLongOrNull()
         } else {
           instantJson2.toLongOrNull()
         }
 
       if (instantTimestamp1 != null && instantTimestamp2 != null) {
-        assertEquals(instantTimestamp1, instantTimestamp2, "两个ObjectMapper应该产生相同的Instant时间戳")
+        assertEquals(instantTimestamp1, instantTimestamp2, "Both ObjectMappers should produce the same Instant timestamp")
       }
     }
 
@@ -369,10 +369,10 @@ class TimestampSerializationTest {
       val timestamp = 1737000645000L
       val timestampJson = timestamp.toString()
 
-      // 测试默认mapper能正确反序列化时间戳
+      // Test that the default mapper can correctly deserialize the timestamp
       val instant1 = defaultMapper.readValue(timestampJson, Instant::class.java)
 
-      // 非忽略mapper需要类型信息，所以我们使用它序列化后再反序列化
+      // The non-ignoring mapper needs type information, so we serialize it first and then deserialize it
       val instant = Instant.ofEpochMilli(timestamp)
       val nonIgnoreJson = nonIgnoreMapper.writeValueAsString(instant)
       val instant2 = nonIgnoreMapper.readValue(nonIgnoreJson, Instant::class.java)
@@ -381,7 +381,7 @@ class TimestampSerializationTest {
       log.info("Non-ignore mapper round trip: {} -> {} -> {}", instant, nonIgnoreJson, instant2)
 
       assertEquals(Instant.ofEpochMilli(timestamp), instant1)
-      assertEquals(instant, instant2, "非忽略mapper往返序列化应该保持一致")
+      assertEquals(instant, instant2, "Non-ignoring mapper round-trip serialization should remain consistent")
     }
   }
 
@@ -392,7 +392,7 @@ class TimestampSerializationTest {
     fun `multiple round trips maintain consistency`() {
       val originalInstant = Instant.ofEpochMilli(1737000645000L)
 
-      // 进行多次往返序列化
+      // Perform multiple round-trip serializations
       var currentInstant = originalInstant
       repeat(5) { iteration ->
         val json = defaultMapper.writeValueAsString(currentInstant)
@@ -400,7 +400,7 @@ class TimestampSerializationTest {
 
         log.info("Round trip {}: {} -> {} -> {}", iteration + 1, if (iteration == 0) originalInstant else "previous", json, currentInstant)
 
-        assertEquals(originalInstant, currentInstant, "第${iteration + 1}次往返后应该保持一致")
+        assertEquals(originalInstant, currentInstant, "Should remain consistent after the ${iteration + 1}-th round trip")
       }
     }
 
@@ -432,7 +432,7 @@ class TimestampSerializationTest {
       assertEquals(event.id, deserializedEvent.id)
       assertEquals(event.timestamp, deserializedEvent.timestamp)
 
-      // 时间字段可能因为时区处理而略有不同，但时间点应该相同
+      // The time fields may differ slightly due to timezone handling, but the instants should be the same
       assertEquals(event.timestamp.toEpochMilli(), deserializedEvent.timestamp.toEpochMilli())
       assertEquals(event.zonedTime.toInstant(), deserializedEvent.zonedTime.toInstant())
       assertEquals(event.offsetTime.toInstant(), deserializedEvent.offsetTime.toInstant())

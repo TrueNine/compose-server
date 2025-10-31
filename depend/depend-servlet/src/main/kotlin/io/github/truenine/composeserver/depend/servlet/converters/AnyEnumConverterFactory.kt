@@ -10,7 +10,7 @@ import org.springframework.core.convert.converter.ConverterFactory
 
 @Suppress("DEPRECATION_ERROR") private val log = slf4j<AnyEnumConverterFactory>()
 
-@Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
+@Deprecated(message = "API burden is too high", level = DeprecationLevel.ERROR)
 open class AnyEnumConverterFactory : ConverterFactory<String?, IAnyEnum?> {
   companion object {
     @JvmStatic private val converters = ConcurrentHashMap<Class<*>, Converter<String?, IAnyEnum?>>()

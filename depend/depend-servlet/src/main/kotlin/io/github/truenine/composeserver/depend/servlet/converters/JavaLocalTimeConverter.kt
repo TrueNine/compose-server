@@ -9,7 +9,7 @@ private val log = slf4j(JavaLocalTimeConverter::class)
 
 open class JavaLocalTimeConverter : Converter<String?, LocalTime?> {
   override fun convert(source: String): LocalTime? {
-    log.trace("转换时间 = {}", source)
+    log.trace("Converting time = {}", source)
     return source.toLongOrNull()?.toLocalTime()
   }
 }

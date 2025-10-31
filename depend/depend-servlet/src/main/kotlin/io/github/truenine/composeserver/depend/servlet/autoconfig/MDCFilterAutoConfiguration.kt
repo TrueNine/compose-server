@@ -19,7 +19,7 @@ class MDCFilterAutoConfiguration {
     bean.filter = CustomerMDCFilter()
     bean.urlPatterns = listOf("/*")
     bean.order = Ordered.HIGHEST_PRECEDENCE
-    log.debug("注册 MDCFilter 并列为首个过滤器 bean = {}", bean)
+    log.debug("Registering MDCFilter and setting it as the first filter bean = {}", bean)
     return bean
   }
 }

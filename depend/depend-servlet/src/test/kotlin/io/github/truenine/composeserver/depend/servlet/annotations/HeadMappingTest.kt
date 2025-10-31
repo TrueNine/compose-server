@@ -27,7 +27,7 @@ class HeadMappingTest {
     }
   }
 
-  // 内嵌 Controller
+  // Embedded Controller
   @RestController
   @RequestMapping("test/head")
   class HeadController {

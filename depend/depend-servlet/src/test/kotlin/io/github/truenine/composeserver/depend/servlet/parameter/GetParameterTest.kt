@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
-/** # 验证以何种方式 给 spring boot 传递 get 参数 */
+/** # Verify how GET parameters are passed to Spring Boot */
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(GetParameterTest.TestGetParameterController::class)
@@ -34,13 +34,13 @@ class GetParameterTest {
     @Resource set
 
   @Test
-  fun `URI参数编码 应正确编码逗号分隔字符串`() {
+  fun `URI parameter encoding should correctly encode comma-separated strings`() {
     val queryParam = listOf("1,2,3", "1", "rre").joinToString(",") { URLEncoder.QUERY.encode(it, Charsets.UTF_8) }
     assertEquals("1%2C2%2C3,1,rre", queryParam)
   }
 
   @Test
-  fun `strList参数 传递逗号分隔字符串 返回字符串列表`() {
+  fun `strList parameter passing comma-separated string returns a list of strings`() {
     mockMvc.get("/test/getParameter_test/strList?list=1,2,3,4,5,6").andExpect {
       content { json("""["1", "2", "3", "4", "5", "6"]""") }
       status { isOk() }
@@ -66,7 +66,7 @@ class GetParameterTest {
   }
 
   @Test
-  fun `无注解参数 传递name和age 返回Dto对象`() {
+  fun `no-annotation parameter passing name and age returns a Dto object`() {
     mockMvc
       .get("/test/getParameter_test/nonAnnotation") {
         queryParam("name", "1")
@@ -95,7 +95,7 @@ class GetParameterTest {
   }
 
   @Test
-  fun `无注解参数 DataClass 传递name和age 返回DataClassDto`() {
+  fun `no-annotation parameter DataClass passing name and age returns a DataClassDto`() {
     mockMvc
       .get("/test/getParameter_test/nonAnnotationDataClass") {
         queryParam("name", "1")
@@ -124,7 +124,7 @@ class GetParameterTest {
   }
 
   @Test
-  fun `@RequestParam注解 缺少参数时 抛出MissingServletRequestParameterException`() {
+  fun `@RequestParam annotation missing parameter throws MissingServletRequestParameterException`() {
     val ex =
       mockMvc
         .get("/test/getParameter_test/requestParam") {
@@ -135,17 +135,17 @@ class GetParameterTest {
         .andReturn()
         .resolvedException
     assertNotNull(ex)
-    assertIs<MissingServletRequestParameterException>(ex, "非指定异常")
+    assertIs<MissingServletRequestParameterException>(ex, "Unexpected exception type")
   }
 
   @BeforeTest
-  fun `测试环境初始化 MockMvc和ObjectMapper已注入`() {
+  fun `Test environment initialization MockMvc and ObjectMapper are injected`() {
     assertNotNull(mockMvc)
-    assertNotNull(objectMapper, "未正确注册 json 解析器")
+    assertNotNull(objectMapper, "JSON parser not correctly registered")
   }
 
-  // 内嵌 Controller
-  /** 测试用 Controller，仅用于本测试类，路径加 _test 后缀避免歧义 */
+  // Embedded Controller
+  /** Test controller, only for this test class, path suffixed with _test to avoid ambiguity */
   @RestController
   @RequestMapping("test/getParameter_test")
   class TestGetParameterController {
@@ -165,27 +165,27 @@ class GetParameterTest {
     @GetMapping("strList") fun inputStringList(@RequestParam list: List<String>): List<String> = list
   }
 
-  /** 边界用例：strList参数为空 */
+  /** Boundary case: strList parameter is empty */
   @Test
-  fun `strList参数 为空 返回空列表`() {
+  fun `strList parameter is empty returns an empty list`() {
     mockMvc.get("/test/getParameter_test/strList?list=").andExpect {
       content { json("[]") }
       status { isOk() }
     }
   }
 
-  /** 边界用例：strList参数只传一个元素 */
+  /** Boundary case: strList parameter has only one element */
   @Test
-  fun `strList参数 只传一个元素 返回单元素列表`() {
+  fun `strList parameter has only one element returns a single-element list`() {
     mockMvc.get("/test/getParameter_test/strList?list=onlyone").andExpect {
       content { json("[\"onlyone\"]") }
       status { isOk() }
     }
   }
 
-  /** 边界用例：strList参数包含特殊字符 */
+  /** Boundary case: strList parameter contains special characters */
   @Test
-  fun `strList参数 包含特殊字符 返回正确解码列表`() {
+  fun `strList parameter contains special characters returns a correctly decoded list`() {
     val special = "a,b%20c,%E4%B8%AD%E6%96%87"
     mockMvc.get("/test/getParameter_test/strList?list=$special").andExpect {
       content { json("[\"a\",\"b%20c\",\"%E4%B8%AD%E6%96%87\"]") }
@@ -193,41 +193,41 @@ class GetParameterTest {
     }
   }
 
-  /** 异常用例：nonAnnotation缺少参数 */
+  /** Exception case: nonAnnotation is missing parameters */
   @Test
-  fun `无注解参数 只传name 不传age 返回Dto对象age为null`() {
+  fun `no-annotation parameter passing only name and not age returns a Dto object with age as null`() {
     mockMvc.get("/test/getParameter_test/nonAnnotation?name=abc").andExpect {
       status { isOk() }
       content { json("""{"name":"abc","age":null}""") }
     }
   }
 
-  /** 异常用例：nonAnnotationDataClass缺少参数 */
+  /** Exception case: nonAnnotationDataClass is missing parameters */
   @Test
-  fun `无注解参数 DataClass 只传age 不传name 返回DataClassDto name为null`() {
+  fun `no-annotation parameter DataClass passing only age and not name returns a DataClassDto with name as null`() {
     mockMvc.get("/test/getParameter_test/nonAnnotationDataClass?age=18").andExpect {
       status { isOk() }
       content { json("""{"name":null,"age":18}""") }
     }
   }
 
-  /** 异常用例：nonAnnotationDataClass参数为非法类型 */
+  /** Exception case: nonAnnotationDataClass parameter has an illegal type */
   @Test
-  fun `无注解参数 DataClass 传递非法类型参数 返回400`() {
+  fun `no-annotation parameter DataClass passing illegal type parameter returns 400`() {
     mockMvc.get("/test/getParameter_test/nonAnnotationDataClass?name=abc&age=notanumber").andExpect { status { isBadRequest() } }
   }
 
-  /** 异常用例：requestParam缺少部分参数 */
+  /** Exception case: requestParam is missing some parameters */
   @Test
-  fun `@RequestParam注解 只传name 不传age 抛出MissingServletRequestParameterException`() {
+  fun `@RequestParam annotation passing only name and not age throws MissingServletRequestParameterException`() {
     val ex = mockMvc.get("/test/getParameter_test/requestParam?name=abc").andExpect { status { isEqualTo(400) } }.andReturn().resolvedException
     assertNotNull(ex)
     assertIs<MissingServletRequestParameterException>(ex)
   }
 
-  /** 异常用例：requestParam参数类型错误 */
+  /** Exception case: requestParam parameter has a type error */
   @Test
-  fun `@RequestParam注解 age为非法类型 抛出400`() {
+  fun `@RequestParam annotation age with illegal type throws 400`() {
     mockMvc.get("/test/getParameter_test/requestParam?name=abc&age=notanumber").andExpect { status { isBadRequest() } }
   }
 }

@@ -16,12 +16,12 @@ import org.junit.jupiter.api.Nested
 import org.springframework.boot.test.context.SpringBootTest
 
 /**
- * Jackson序列化配置测试
+ * Jackson serialization configuration tests
  *
- * 测试Jackson ObjectMapper的配置和序列化行为，包括：
- * - 非JSON类型序列化
- * - 时间戳序列化验证
- * - 配置正确性验证
+ * Tests the configuration and serialization behavior of Jackson ObjectMapper, including:
+ * - Serialization of non-JSON types
+ * - Timestamp serialization validation
+ * - Configuration correctness validation
  */
 @SpringBootTest
 class JacksonSerializationConfigTest {
@@ -36,7 +36,7 @@ class JacksonSerializationConfigTest {
     var id: Long
       @JvmName("____getdwadawdawdawdawdawdawd")
       get() {
-        if (__internalId === null) throw IllegalStateException("数据库 id 当前为空，不能获取")
+        if (__internalId === null) throw IllegalStateException("Database ID is currently null, cannot retrieve")
         return __internalId!!
       }
       @JvmName("____setdwadawdawdawdawdawdawd")
@@ -116,7 +116,7 @@ class JacksonSerializationConfigTest {
       val readValue = mapper.readValue<IdJson>(json)
       log.info("Deserialized IdJson: {}", readValue)
       assertNotNull(readValue)
-      assertFailsWith<IllegalStateException>("数据库 id 当前为空，不能获取") { readValue.id }
+      assertFailsWith<IllegalStateException>("Database ID is currently null, cannot retrieve") { readValue.id }
     }
   }
 
@@ -130,15 +130,15 @@ class JacksonSerializationConfigTest {
 
       log.info("LocalDateTime serialized with plain mapper: {}", json)
 
-      // 验证是否序列化为时间戳（数字）而不是ISO字符串
+      // Verify if serialized as a timestamp (number) instead of an ISO string
       val timestamp = json.toLongOrNull()
       if (timestamp != null) {
         log.info("LocalDateTime correctly serialized as timestamp: {}", timestamp)
-        assertTrue(timestamp > 0, "时间戳应该大于0")
+        assertTrue(timestamp > 0, "Timestamp should be greater than 0")
       } else {
         log.info("LocalDateTime serialized as string format: {}", json)
-        // 如果不是时间戳，应该是有效的JSON字符串
-        assertTrue(json.startsWith("\"") && json.endsWith("\""), "应该是有效的JSON字符串格式")
+        // If not a timestamp, it should be a valid JSON string
+        assertTrue(json.startsWith("\"") && json.endsWith("\""), "Should be a valid JSON string format")
       }
     }
 
@@ -149,27 +149,27 @@ class JacksonSerializationConfigTest {
 
       log.info("Instant serialized with plain mapper: {}", json)
 
-      // 验证是否序列化为时间戳
+      // Verify if serialized as a timestamp
       val timestamp = json.toLongOrNull()
       if (timestamp != null) {
         log.info("Instant correctly serialized as timestamp: {}", timestamp)
         assertEquals(1737000645000L, timestamp)
       } else {
         log.info("Instant serialized as string format: {}", json)
-        assertTrue(json.startsWith("\"") && json.endsWith("\""), "应该是有效的JSON字符串格式")
+        assertTrue(json.startsWith("\"") && json.endsWith("\""), "Should be a valid JSON string format")
       }
     }
 
     @Test
     fun `verify ObjectMapper configuration consistency`() {
-      // 验证两个ObjectMapper的基本配置
-      assertNotNull(mapper, "非忽略ObjectMapper应该正确注入")
-      assertNotNull(plainMapper, "默认ObjectMapper应该正确注入")
+      // Verify the basic configuration of the two ObjectMappers
+      assertNotNull(mapper, "Non-ignoring ObjectMapper should be injected correctly")
+      assertNotNull(plainMapper, "Default ObjectMapper should be injected correctly")
 
       log.info("Non-ignore mapper configuration: {}", mapper.serializationConfig.toString())
       log.info("Plain mapper configuration: {}", plainMapper.serializationConfig.toString())
 
-      // 验证配置的一致性
+      // Verify configuration consistency
       val testData = mapOf("test" to "value", "number" to 123)
       val json1 = mapper.writeValueAsString(testData)
       val json2 = plainMapper.writeValueAsString(testData)
@@ -177,9 +177,9 @@ class JacksonSerializationConfigTest {
       log.info("Test data serialized by non-ignore mapper: {}", json1)
       log.info("Test data serialized by plain mapper: {}", json2)
 
-      // 基本数据类型的序列化应该一致
-      assertTrue(json1.contains("\"test\":\"value\""), "应该包含正确的字符串值")
-      assertTrue(json2.contains("\"test\":\"value\""), "应该包含正确的字符串值")
+      // Serialization of basic data types should be consistent
+      assertTrue(json1.contains("\"test\":\"value\""), "Should contain the correct string value")
+      assertTrue(json2.contains("\"test\":\"value\""), "Should contain the correct string value")
     }
   }
 }

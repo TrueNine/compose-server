@@ -20,8 +20,8 @@ import org.springframework.web.service.invoker.HttpServiceArgumentResolver
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
 
 /**
- * # 自定义的json编解码器
- * 使用你自定义的jackson ObjectMapper创建
+ * # Custom json encoder/decoder
+ * Create with your custom jackson ObjectMapper
  *
  * @param objectMapper mapper
  * @return WebClient
@@ -70,7 +70,7 @@ class ArgsResolver : HttpServiceArgumentResolver {
         parameter.getParameterAnnotation(RequestParam::class.java)?.name
           ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value
           ?: parameter.parameterName
-          ?: throw IllegalArgumentException("参数解析异常")
+          ?: throw IllegalArgumentException("Parameter parsing exception")
       requestValues.addRequestParameter(name, argument.value.toString())
       return true
     }

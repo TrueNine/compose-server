@@ -72,7 +72,7 @@ class OpenApiConfigTest {
   }
 
   @Test
-  @DisplayName("测试 GroupedOpenApi 配置")
+  @DisplayName("Test GroupedOpenApi Configuration")
   fun `should configure GroupedOpenApi correctly`() {
     assertEquals("test-api", groupedOpenApi.group, "GroupedOpenApi group should match configuration")
     assertNotNull(groupedOpenApi.pathsToMatch, "Paths to match should be configured")
