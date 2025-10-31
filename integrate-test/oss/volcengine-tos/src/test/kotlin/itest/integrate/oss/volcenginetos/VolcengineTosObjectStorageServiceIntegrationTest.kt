@@ -24,6 +24,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
 
+import io.github.truenine.composeserver.oss.CorsRule
+import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
+import io.github.truenine.composeserver.oss.Tag
+import io.github.truenine.composeserver.oss.LifecycleRule
+import io.github.truenine.composeserver.oss.LifecycleRuleStatus
+import io.github.truenine.composeserver.oss.LifecycleExpiration
+
 /**
  * Volcengine TOS Object Storage Service Integration Tests
  *
@@ -369,6 +376,27 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   }
 
   @Nested
+  inner class `版本控制功能测试` {
+    @Test
+    fun `应该能够列出对象版本`() = runBlocking {
+      val bucketName = "test-versioning-bucket-${System.currentTimeMillis()}"
+      val objectName = "versioned-object.txt"
+      testBuckets.add(bucketName)
+
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+      service.setBucketVersioning(bucketName, true).getOrThrow()
+
+      service.putObject(bucketName, objectName, ByteArrayInputStream("v1".toByteArray()), 2).getOrThrow()
+      service.putObject(bucketName, objectName, ByteArrayInputStream("v2".toByteArray()), 2).getOrThrow()
+
+      val versionsResult = service.listObjectVersions(ListObjectVersionsRequest(bucketName = bucketName, prefix = objectName))
+      assertTrue(versionsResult.isSuccess, "列出对象版本应该成功")
+      val versions = versionsResult.getOrThrow()
+      assertEquals(2, versions.versions.size, "应该有两个版本")
+    }
+  }
+
+  @Nested
   inner class ShareLinkOperations {
 
     @Test
@@ -397,6 +425,90 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       assertTrue(validateResult.isSuccess, "Validating share link should succeed")
 
       log.info("Share link test completed")
+    }
+  }
+
+  @Nested
+  inner class `标签功能测试` {
+
+    @Test
+    fun `应该能够设置和获取存储桶标签`() = runBlocking {
+      val bucketName = "test-tags-bucket-${System.currentTimeMillis()}"
+      testBuckets.add(bucketName)
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+
+      val tags = listOf(Tag("project", "compose-server"), Tag("env", "test"))
+      val setResult = service.setBucketTags(bucketName, tags)
+      assertTrue(setResult.isSuccess, "设置存储桶标签应该成功")
+
+      val getResult = service.getBucketTags(bucketName)
+      assertTrue(getResult.isSuccess, "获取存储桶标签应该成功")
+      assertEquals(tags.toSet(), getResult.getOrThrow().toSet(), "获取的标签应该与设置的匹配")
+
+      val deleteResult = service.deleteBucketTags(bucketName)
+      assertTrue(deleteResult.isSuccess, "删除存储桶标签应该成功")
+
+      val getAfterDeleteResult = service.getBucketTags(bucketName)
+      assertTrue(getAfterDeleteResult.isSuccess, "删除后获取存储桶标签应该成功")
+      assertTrue(getAfterDeleteResult.getOrThrow().isEmpty(), "删除后标签应该为空")
+    }
+  }
+
+  @Nested
+  inner class `生命周期和CORS功能测试` {
+
+    @Test
+    fun `应该能够设置和获取存储桶生命周期规则`() = runBlocking {
+      val bucketName = "test-lifecycle-bucket-${System.currentTimeMillis()}"
+      testBuckets.add(bucketName)
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+
+      val rules = listOf(
+        LifecycleRule(
+          id = "rule-1",
+          prefix = "logs/",
+          status = LifecycleRuleStatus.ENABLED,
+          expiration = LifecycleExpiration(30)
+        )
+      )
+
+      val setResult = service.setBucketLifecycle(bucketName, rules)
+      assertTrue(setResult.isSuccess, "设置生命周期规则应该成功")
+
+      val getResult = service.getBucketLifecycle(bucketName)
+      assertTrue(getResult.isSuccess, "获取生命周期规则应该成功")
+      val retrievedRules = getResult.getOrThrow()
+      assertTrue(retrievedRules.isNotEmpty(), "应该获取到至少一个规则")
+      assertEquals("rule-1", retrievedRules.first().id)
+
+      val deleteResult = service.deleteBucketLifecycle(bucketName)
+      assertTrue(deleteResult.isSuccess, "删除生命周期规则应该成功")
+    }
+
+    @Test
+    fun `应该能够设置和获取存储桶CORS规则`() = runBlocking {
+      val bucketName = "test-cors-bucket-${System.currentTimeMillis()}"
+      testBuckets.add(bucketName)
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+
+      val rules = listOf(
+        CorsRule(
+          allowedOrigins = listOf("*"),
+          allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)
+        )
+      )
+
+      val setResult = service.setBucketCors(bucketName, rules)
+      assertTrue(setResult.isSuccess, "设置CORS规则应该成功")
+
+      val getResult = service.getBucketCors(bucketName)
+      assertTrue(getResult.isSuccess, "获取CORS规则应该成功")
+      val retrievedRules = getResult.getOrThrow()
+      assertTrue(retrievedRules.isNotEmpty(), "应该获取到至少一个CORS规则")
+      assertEquals(listOf("*"), retrievedRules.first().allowedOrigins)
+
+      val deleteResult = service.deleteBucketCors(bucketName)
+      assertTrue(deleteResult.isSuccess, "删除CORS规则应该成功")
     }
   }
 

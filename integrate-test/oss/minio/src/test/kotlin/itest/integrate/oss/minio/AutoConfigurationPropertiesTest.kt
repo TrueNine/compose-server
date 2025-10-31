@@ -18,6 +18,13 @@ import org.junit.jupiter.api.assertNotNull
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import io.github.truenine.composeserver.oss.Tag
+import io.github.truenine.composeserver.oss.LifecycleRule
+import io.github.truenine.composeserver.oss.LifecycleRuleStatus
+import io.github.truenine.composeserver.oss.LifecycleExpiration
+import io.github.truenine.composeserver.oss.CorsRule
+import io.github.truenine.composeserver.enums.HttpMethod
+import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
 
 @SpringBootTest(classes = [AutoConfigurationPropertiesTest.TestConfiguration::class])
 class AutoConfigurationPropertiesTest : IOssMinioContainer {
@@ -342,6 +349,136 @@ class AutoConfigurationPropertiesTest : IOssMinioContainer {
           val existsResult = oss.objectExists(nonExistentBucket, objectName)
           assertTrue(existsResult.isFailure, "检查不存在存储桶中的文件应该返回失败")
         }
+      }
+    }
+  }
+
+  @Nested
+  inner class `标签功能测试` {
+    @Test
+    fun `应该能够设置和获取存储桶标签`(): Unit = minio {
+      runBlocking {
+        val bucketName = "test-bucket-tags"
+        val tags = listOf(Tag("project", "compose-server"), Tag("env", "test"))
+
+        oss.createBucket(CreateBucketRequest(bucketName))
+        val setResult = oss.setBucketTags(bucketName, tags)
+        assertTrue(setResult.isSuccess, "设置存储桶标签应该成功")
+
+        val getResult = oss.getBucketTags(bucketName)
+        assertTrue(getResult.isSuccess, "获取存储桶标签应该成功")
+        assertEquals(tags.toSet(), getResult.getOrThrow().toSet(), "获取的标签应该与设置的匹配")
+
+        val deleteResult = oss.deleteBucketTags(bucketName)
+        assertTrue(deleteResult.isSuccess, "删除存储桶标签应该成功")
+
+        val getAfterDeleteResult = oss.getBucketTags(bucketName)
+        assertTrue(getAfterDeleteResult.isSuccess, "删除后获取存储桶标签应该成功")
+        assertTrue(getAfterDeleteResult.getOrThrow().isEmpty(), "删除后标签应该为空")
+      }
+    }
+
+    @Test
+    fun `应该能够设置和获取对象标签`(): Unit = minio {
+      runBlocking {
+        val bucketName = "test-object-tags"
+        val objectName = "tagged-object.txt"
+        val tags = listOf(Tag("type", "test-data"), Tag("version", "1"))
+        oss.createBucket(CreateBucketRequest(bucketName))
+        oss.putObject(bucketName, objectName, ByteArrayInputStream("data".toByteArray()), 4)
+
+        val setResult = oss.setObjectTags(bucketName, objectName, tags)
+        assertTrue(setResult.isSuccess, "设置对象标签应该成功")
+
+        val getResult = oss.getObjectTags(bucketName, objectName)
+        assertTrue(getResult.isSuccess, "获取对象标签应该成功")
+        assertEquals(tags.toSet(), getResult.getOrThrow().toSet(), "获取的对象标签应该与设置的匹配")
+
+        val deleteResult = oss.deleteObjectTags(bucketName, objectName)
+        assertTrue(deleteResult.isSuccess, "删除对象标签应该成功")
+        
+        val getAfterDeleteResult = oss.getObjectTags(bucketName, objectName)
+        assertTrue(getAfterDeleteResult.isSuccess, "删除后获取对象标签应该成功")
+        assertTrue(getAfterDeleteResult.getOrThrow().isEmpty(), "删除后对象标签应该为空")
+      }
+    }
+  }
+
+  @Nested
+  inner class `版本控制功能测试` {
+    @Test
+    fun `应该能够列出对象版本`(): Unit = minio {
+      runBlocking {
+        val bucketName = "test-versioning-bucket"
+        val objectName = "versioned-object.txt"
+        
+        oss.createBucket(CreateBucketRequest(bucketName))
+        oss.setBucketVersioning(bucketName, true)
+        
+        oss.putObject(bucketName, objectName, ByteArrayInputStream("v1".toByteArray()), 2)
+        oss.putObject(bucketName, objectName, ByteArrayInputStream("v2".toByteArray()), 2)
+        
+        val versionsResult = oss.listObjectVersions(ListObjectVersionsRequest(bucketName = bucketName, prefix = objectName))
+        assertTrue(versionsResult.isSuccess, "列出对象版本应该成功")
+        val versions = versionsResult.getOrThrow()
+        assertEquals(2, versions.versions.size, "应该有两个版本")
+      }
+    }
+  }
+
+  @Nested
+  inner class `生命周期和CORS功能测试` {
+    @Test
+    fun `应该能够设置和获取存储桶生命周期规则`(): Unit = minio {
+      runBlocking {
+        val bucketName = "test-lifecycle-bucket"
+        val rules = listOf(
+          LifecycleRule(
+            id = "rule-1",
+            prefix = "logs/",
+            status = LifecycleRuleStatus.ENABLED,
+            expiration = LifecycleExpiration(30)
+          )
+        )
+        oss.createBucket(CreateBucketRequest(bucketName))
+        
+        val setResult = oss.setBucketLifecycle(bucketName, rules)
+        assertTrue(setResult.isSuccess, "设置生命周期规则应该成功")
+
+        val getResult = oss.getBucketLifecycle(bucketName)
+        assertTrue(getResult.isSuccess, "获取生命周期规则应该成功")
+        val retrievedRules = getResult.getOrThrow()
+        assertTrue(retrievedRules.isNotEmpty(), "应该获取到至少一个规则")
+        assertEquals("rule-1", retrievedRules.first().id)
+
+        val deleteResult = oss.deleteBucketLifecycle(bucketName)
+        assertTrue(deleteResult.isSuccess, "删除生命周期规则应该成功")
+      }
+    }
+
+    @Test
+    fun `应该能够设置和获取存储桶CORS规则`(): Unit = minio {
+      runBlocking {
+        val bucketName = "test-cors-bucket"
+        val rules = listOf(
+          CorsRule(
+            allowedOrigins = listOf("*"),
+            allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)
+          )
+        )
+        oss.createBucket(CreateBucketRequest(bucketName))
+        
+        val setResult = oss.setBucketCors(bucketName, rules)
+        assertTrue(setResult.isSuccess, "设置CORS规则应该成功")
+
+        val getResult = oss.getBucketCors(bucketName)
+        assertTrue(getResult.isSuccess, "获取CORS规则应该成功")
+        val retrievedRules = getResult.getOrThrow()
+        assertTrue(retrievedRules.isNotEmpty(), "应该获取到至少一个CORS规则")
+        assertEquals(listOf("*"), retrievedRules.first().allowedOrigins)
+
+        val deleteResult = oss.deleteBucketCors(bucketName)
+        assertTrue(deleteResult.isSuccess, "删除CORS规则应该成功")
       }
     }
   }
