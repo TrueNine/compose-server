@@ -1,8 +1,11 @@
 package io.github.truenine.composeserver.oss.minio
 
+import com.google.common.collect.HashMultimap
+import com.google.common.collect.Multimap
 import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.mapFailure
 import io.github.truenine.composeserver.onFailureDo
+import io.github.truenine.composeserver.oss.AbortIncompleteMultipartUpload
 import io.github.truenine.composeserver.oss.AuthenticationException
 import io.github.truenine.composeserver.oss.AuthorizationException
 import io.github.truenine.composeserver.oss.BucketAccessLevel
@@ -14,11 +17,19 @@ import io.github.truenine.composeserver.oss.CompleteMultipartUploadRequest
 import io.github.truenine.composeserver.oss.ConfigurationException
 import io.github.truenine.composeserver.oss.ContentRange
 import io.github.truenine.composeserver.oss.CopyObjectRequest
+import io.github.truenine.composeserver.oss.CorsRule
 import io.github.truenine.composeserver.oss.CreateBucketRequest
 import io.github.truenine.composeserver.oss.DeleteResult
 import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
 import io.github.truenine.composeserver.oss.InvalidRequestException
+import io.github.truenine.composeserver.oss.LifecycleExpiration
+import io.github.truenine.composeserver.oss.LifecycleNoncurrentVersionExpiration
+import io.github.truenine.composeserver.oss.LifecycleNoncurrentVersionTransition
+import io.github.truenine.composeserver.oss.LifecycleRule
+import io.github.truenine.composeserver.oss.LifecycleRuleStatus
+import io.github.truenine.composeserver.oss.LifecycleTransition
+import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
 import io.github.truenine.composeserver.oss.ListObjectsRequest
 import io.github.truenine.composeserver.oss.MultipartUpload
 import io.github.truenine.composeserver.oss.NetworkException
@@ -27,12 +38,15 @@ import io.github.truenine.composeserver.oss.ObjectInfo
 import io.github.truenine.composeserver.oss.ObjectListing
 import io.github.truenine.composeserver.oss.ObjectNotFoundException
 import io.github.truenine.composeserver.oss.ObjectStorageException
+import io.github.truenine.composeserver.oss.ObjectVersionInfo
+import io.github.truenine.composeserver.oss.ObjectVersionListing
 import io.github.truenine.composeserver.oss.PartInfo
 import io.github.truenine.composeserver.oss.PutObjectRequest
 import io.github.truenine.composeserver.oss.ServiceUnavailableException
 import io.github.truenine.composeserver.oss.ShareLinkInfo
 import io.github.truenine.composeserver.oss.ShareLinkRequest
 import io.github.truenine.composeserver.oss.StorageClass
+import io.github.truenine.composeserver.oss.Tag
 import io.github.truenine.composeserver.oss.UploadPartRequest
 import io.github.truenine.composeserver.oss.UploadWithLinkRequest
 import io.github.truenine.composeserver.oss.UploadWithLinkResponse
@@ -41,17 +55,33 @@ import io.github.truenine.composeserver.slf4j
 import io.minio.BucketExistsArgs
 import io.minio.CopyObjectArgs
 import io.minio.CopySource
+import io.minio.DeleteBucketCorsArgs
+import io.minio.DeleteBucketLifecycleArgs
+import io.minio.DeleteBucketTagsArgs
+import io.minio.DeleteObjectTagsArgs
+import io.minio.GetBucketCorsArgs
+import io.minio.GetBucketLifecycleArgs
 import io.minio.GetBucketPolicyArgs
+import io.minio.GetBucketTagsArgs
 import io.minio.GetObjectArgs
+import io.minio.GetObjectTagsArgs
 import io.minio.GetPresignedObjectUrlArgs
+import io.minio.ListObjectVersionsResponse
 import io.minio.ListObjectsArgs
 import io.minio.MakeBucketArgs
+import io.minio.MinioAsyncClient
 import io.minio.MinioClient
 import io.minio.PutObjectArgs
 import io.minio.RemoveBucketArgs
 import io.minio.RemoveObjectArgs
 import io.minio.RemoveObjectsArgs
+import io.minio.S3Escaper
+import io.minio.SetBucketCorsArgs
+import io.minio.SetBucketLifecycleArgs
 import io.minio.SetBucketPolicyArgs
+import io.minio.SetBucketTagsArgs
+import io.minio.SetBucketVersioningArgs
+import io.minio.SetObjectTagsArgs
 import io.minio.StatObjectArgs
 import io.minio.errors.BucketPolicyTooLargeException
 import io.minio.errors.ErrorResponseException
@@ -61,14 +91,34 @@ import io.minio.errors.InvalidResponseException
 import io.minio.errors.ServerException
 import io.minio.errors.XmlParserException
 import io.minio.http.Method
+import io.minio.messages.AbortIncompleteMultipartUpload as MinioAbortIncompleteMultipartUpload
+import io.minio.messages.AndOperator
+import io.minio.messages.CORSConfiguration
 import io.minio.messages.DeleteError
 import io.minio.messages.DeleteObject
+import io.minio.messages.Expiration as MinioExpiration
+import io.minio.messages.Item
+import io.minio.messages.LifecycleConfiguration
+import io.minio.messages.LifecycleRule as MinioLifecycleRule
+import io.minio.messages.NoncurrentVersionExpiration as MinioNoncurrentVersionExpiration
+import io.minio.messages.NoncurrentVersionTransition as MinioNoncurrentVersionTransition
+import io.minio.messages.Part
+import io.minio.messages.ResponseDate
+import io.minio.messages.RuleFilter
+import io.minio.messages.Status as MinioRuleStatus
+import io.minio.messages.Tag as MinioTag
+import io.minio.messages.Tags
+import io.minio.messages.Transition as MinioTransition
+import io.minio.messages.VersioningConfiguration
 import java.io.IOException
 import java.io.InputStream
+import java.lang.reflect.InvocationTargetException
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.time.Duration
 import java.time.Instant
+import java.util.concurrent.CompletionException
+import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -87,6 +137,33 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
 
   companion object {
     @JvmStatic private val log = slf4j<MinioObjectStorageService>()
+  }
+
+  private val asyncClient: MinioAsyncClient by lazy {
+    val field = MinioClient::class.java.getDeclaredField("asyncClient").apply { isAccessible = true }
+    field.get(minioClient) as MinioAsyncClient
+  }
+
+  private val listObjectVersionsMethod by lazy {
+    val method =
+      MinioAsyncClient::class
+        .java
+        .superclass
+        .getDeclaredMethod(
+          "listObjectVersions",
+          String::class.java,
+          String::class.java,
+          String::class.java,
+          String::class.java,
+          String::class.java,
+          java.lang.Integer::class.java,
+          String::class.java,
+          String::class.java,
+          Multimap::class.java,
+          Multimap::class.java,
+        )
+    method.isAccessible = true
+    method
   }
 
   override suspend fun isHealthy(): Boolean {
@@ -560,87 +637,117 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
       }
     }
 
-  // Multipart upload operations - MinIO handles these internally for large objects
-  // These are simplified implementations as MinIO automatically handles multipart uploads
-  override suspend fun initiateMultipartUpload(request: InitiateMultipartUploadRequest): kotlin.Result<MultipartUpload> =
+  // Multipart upload operations - rely on MinIO async client under the hood
+  override suspend fun initiateMultipartUpload(request: InitiateMultipartUploadRequest): Result<MultipartUpload> =
     withContext(Dispatchers.IO) {
       try {
-        // MinIO doesn't expose multipart upload initiation directly
-        // We'll use a placeholder upload ID and handle it in uploadPart
-        val uploadId = "minio-multipart-${System.currentTimeMillis()}"
+        val headers = HashMultimap.create<String, String>()
+        request.contentType?.let { headers.put("Content-Type", it) }
+        if (request.metadata.isNotEmpty()) {
+          request.metadata.forEach { (key, value) ->
+            val headerName = if (key.startsWith("x-amz-meta-")) key else "x-amz-meta-$key"
+            headers.put(headerName, value)
+          }
+        }
+        if (request.tags.isNotEmpty()) {
+          val taggingHeader = request.tags.entries.joinToString("&") { (key, value) -> "${S3Escaper.encode(key)}=${S3Escaper.encode(value)}" }
+          headers.put("x-amz-tagging", taggingHeader)
+        }
 
-        Result.success(MultipartUpload(uploadId = uploadId, bucketName = request.bucketName, objectName = request.objectName))
+        val response = asyncClient.createMultipartUploadAsync(request.bucketName, null, request.objectName, headers, HashMultimap.create()).get()
+
+        Result.success(MultipartUpload(uploadId = response.result().uploadId(), bucketName = request.bucketName, objectName = request.objectName))
       } catch (e: Exception) {
-        log.error("Failed to initiate multipart upload: ${request.bucketName}/${request.objectName}", e)
-        Result.failure(mapMinioException(e))
+        val actual = unwrapException(e)
+        log.error("Failed to initiate multipart upload: ${request.bucketName}/${request.objectName}", actual)
+        Result.failure(mapMinioException(actual))
       }
     }
 
   override suspend fun uploadPart(request: UploadPartRequest): Result<PartInfo> =
     withContext(Dispatchers.IO) {
       try {
-        // For MinIO, we'll use the regular putObject for parts
-        // In a real implementation, you might want to store parts temporarily
-        val partObjectName = "${request.objectName}.part.${request.partNumber}"
+        val response =
+          asyncClient
+            .uploadPartAsync(
+              request.bucketName,
+              null,
+              request.objectName,
+              request.inputStream,
+              request.size,
+              request.uploadId,
+              request.partNumber,
+              HashMultimap.create(),
+              HashMultimap.create(),
+            )
+            .get()
 
-        val putObjectArgs = PutObjectArgs.builder().bucket(request.bucketName).`object`(partObjectName).stream(request.inputStream, request.size, -1).build()
-
-        val response = minioClient.putObject(putObjectArgs)
-
-        Result.success(PartInfo(partNumber = request.partNumber, etag = response.etag(), size = request.size))
+        Result.success(PartInfo(partNumber = response.partNumber(), etag = response.etag(), size = request.size))
       } catch (e: Exception) {
-        log.error("Failed to upload part: ${request.bucketName}/${request.objectName} part ${request.partNumber}", e)
-        Result.failure(mapMinioException(e))
+        val actual = unwrapException(e)
+        log.error("Failed to upload part: ${request.bucketName}/${request.objectName} part ${request.partNumber}", actual)
+        Result.failure(mapMinioException(actual))
       }
     }
 
   override suspend fun completeMultipartUpload(request: CompleteMultipartUploadRequest): Result<ObjectInfo> =
     withContext(Dispatchers.IO) {
       try {
-        // For MinIO, we would need to combine the parts
-        // This is a simplified implementation
-        log.warn("MinIO multipart upload completion is simplified - consider using regular putObject for large files")
+        val parts = request.parts.sortedBy { it.partNumber }.map { Part(it.partNumber, it.etag) }.toTypedArray()
+        val response =
+          asyncClient
+            .completeMultipartUploadAsync(request.bucketName, null, request.objectName, request.uploadId, parts, HashMultimap.create(), HashMultimap.create())
+            .get()
 
         Result.success(
           ObjectInfo(
-            bucketName = request.bucketName,
-            objectName = request.objectName,
-            size = request.parts.sumOf { it.size },
-            etag = "multipart-${System.currentTimeMillis()}",
+            bucketName = response.bucket(),
+            objectName = response.`object`(),
+            size = 0L, // Size is not returned in response; callers can stat if needed
+            etag = response.etag() ?: "",
             lastModified = Instant.now(),
+            versionId = response.versionId(),
           )
         )
       } catch (e: Exception) {
-        log.error("Failed to complete multipart upload: ${request.bucketName}/${request.objectName}", e)
-        Result.failure(mapMinioException(e))
+        val actual = unwrapException(e)
+        log.error("Failed to complete multipart upload: ${request.bucketName}/${request.objectName}", actual)
+        Result.failure(mapMinioException(actual))
       }
     }
 
   override suspend fun abortMultipartUpload(uploadId: String, bucketName: String, objectName: String): Result<Unit> =
     withContext(Dispatchers.IO) {
       try {
-        // Clean up any temporary part files
-        log.info("Aborting multipart upload: $bucketName/$objectName")
+        asyncClient.abortMultipartUploadAsync(bucketName, null, objectName, uploadId, HashMultimap.create(), HashMultimap.create()).get()
         Result.success(Unit)
       } catch (e: Exception) {
-        log.error("Failed to abort multipart upload: $bucketName/$objectName", e)
-        Result.failure(mapMinioException(e))
+        val actual = unwrapException(e)
+        log.error("Failed to abort multipart upload: $bucketName/$objectName", actual)
+        Result.failure(mapMinioException(actual))
       }
     }
 
   override suspend fun listParts(uploadId: String, bucketName: String, objectName: String): Result<List<PartInfo>> =
     withContext(Dispatchers.IO) {
       try {
-        // List temporary part files
-        val parts = mutableListOf<PartInfo>()
+        val response = asyncClient.listPartsAsync(bucketName, null, objectName, null, null, uploadId, HashMultimap.create(), HashMultimap.create()).get()
 
-        // This is a simplified implementation
-        log.warn("MinIO multipart upload part listing is simplified")
+        val parts =
+          response.result().partList().map { part ->
+            PartInfo(
+              partNumber = part.partNumber(),
+              etag = part.etag(),
+              size = part.partSize(),
+              lastModified = runCatching { part.lastModified()?.toInstant() }.getOrNull(),
+            )
+          }
 
         Result.success(parts)
       } catch (e: Exception) {
-        log.error("Failed to list parts: $bucketName/$objectName", e)
-        Result.failure(mapMinioException(e))
+        val actual = unwrapException(e)
+        log.error("Failed to list parts: $bucketName/$objectName", actual)
+        Result.failure(mapMinioException(actual))
       }
     }
 
@@ -807,6 +914,233 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
       }
     }
 
+  // region Tagging
+
+  override suspend fun setObjectTags(bucketName: String, objectName: String, tags: List<Tag>): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val minioTags = Tags.newObjectTags(tags.associate { it.key to it.value })
+        val args = SetObjectTagsArgs.builder().bucket(bucketName).`object`(objectName).tags(minioTags).build()
+        minioClient.setObjectTags(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to set object tags for $bucketName/$objectName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun getObjectTags(bucketName: String, objectName: String): Result<List<Tag>> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = GetObjectTagsArgs.builder().bucket(bucketName).`object`(objectName).build()
+        val minioTags = minioClient.getObjectTags(args)
+        val tags = minioTags.get().map { (key, value) -> Tag(key, value) }
+        Result.success(tags)
+      } catch (e: Exception) {
+        log.error("Failed to get object tags for $bucketName/$objectName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun deleteObjectTags(bucketName: String, objectName: String): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = DeleteObjectTagsArgs.builder().bucket(bucketName).`object`(objectName).build()
+        minioClient.deleteObjectTags(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to delete object tags for $bucketName/$objectName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun setBucketTags(bucketName: String, tags: List<Tag>): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val minioTags = Tags.newBucketTags(tags.associate { it.key to it.value })
+        val args = SetBucketTagsArgs.builder().bucket(bucketName).tags(minioTags).build()
+        minioClient.setBucketTags(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to set bucket tags for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun getBucketTags(bucketName: String): Result<List<Tag>> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = GetBucketTagsArgs.builder().bucket(bucketName).build()
+        val minioTags = minioClient.getBucketTags(args)
+        val tags = minioTags.get().map { (key, value) -> Tag(key, value) }
+        Result.success(tags)
+      } catch (e: Exception) {
+        log.error("Failed to get bucket tags for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun deleteBucketTags(bucketName: String): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = DeleteBucketTagsArgs.builder().bucket(bucketName).build()
+        minioClient.deleteBucketTags(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to delete bucket tags for {}", bucketName, e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  // endregion
+
+  // region Versioning
+
+  override suspend fun setBucketVersioning(bucketName: String, enabled: Boolean): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val status = if (enabled) VersioningConfiguration.Status.ENABLED else VersioningConfiguration.Status.SUSPENDED
+        val config = VersioningConfiguration(status, false)
+        val args = SetBucketVersioningArgs.builder().bucket(bucketName).config(config).build()
+        minioClient.setBucketVersioning(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to set bucket versioning for {}", bucketName, e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun listObjectVersions(request: ListObjectVersionsRequest): Result<ObjectVersionListing> =
+    withContext(Dispatchers.IO) {
+      try {
+        val response =
+          fetchObjectVersionsResponse(
+            bucketName = request.bucketName,
+            delimiter = request.delimiter,
+            keyMarker = request.keyMarker,
+            maxKeys = request.maxKeys,
+            prefix = request.prefix,
+            versionIdMarker = request.versionIdMarker,
+          )
+
+        val result = response.result()
+
+        val versions = mutableListOf<ObjectVersionInfo>()
+        result.contents().forEach { versions += it.toVersionInfo(request.bucketName) }
+        result.deleteMarkers().forEach { versions += it.toVersionInfo(request.bucketName) }
+
+        val commonPrefixes = result.commonPrefixes().map { it.toItem().objectName() }
+
+        Result.success(
+          ObjectVersionListing(
+            bucketName = request.bucketName,
+            prefix = result.prefix(),
+            keyMarker = result.keyMarker(),
+            versionIdMarker = result.versionIdMarker(),
+            nextKeyMarker = result.nextKeyMarker(),
+            nextVersionIdMarker = result.nextVersionIdMarker(),
+            versions = versions.sortedBy { it.objectName },
+            commonPrefixes = commonPrefixes,
+            isTruncated = result.isTruncated(),
+            maxKeys = result.maxKeys(),
+            delimiter = result.delimiter(),
+          )
+        )
+      } catch (e: Exception) {
+        val actual = unwrapException(e)
+        log.error("Failed to list object versions for ${request.bucketName}", actual)
+        Result.failure(mapMinioException(actual))
+      }
+    }
+
+  // endregion
+
+  // region Lifecycle
+
+  override suspend fun setBucketLifecycle(bucketName: String, rules: List<LifecycleRule>): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val minioRules = rules.map { it.toMinio() }
+        val config = LifecycleConfiguration(minioRules)
+        val args = SetBucketLifecycleArgs.builder().bucket(bucketName).config(config).build()
+        minioClient.setBucketLifecycle(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to set bucket lifecycle for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun getBucketLifecycle(bucketName: String): Result<List<LifecycleRule>> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = GetBucketLifecycleArgs.builder().bucket(bucketName).build()
+        val config = minioClient.getBucketLifecycle(args)
+        val rules = config.rules()?.map { it.toComposeServer() } ?: emptyList()
+        Result.success(rules)
+      } catch (e: Exception) {
+        log.error("Failed to get bucket lifecycle for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun deleteBucketLifecycle(bucketName: String): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = DeleteBucketLifecycleArgs.builder().bucket(bucketName).build()
+        minioClient.deleteBucketLifecycle(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to delete bucket lifecycle for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  // endregion
+
+  // region CORS
+
+  override suspend fun setBucketCors(bucketName: String, rules: List<CorsRule>): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val minioRules = rules.map { it.toMinio() }
+        val config = CORSConfiguration(minioRules)
+        val args = SetBucketCorsArgs.builder().bucket(bucketName).config(config).build()
+        minioClient.setBucketCors(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to set bucket CORS for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun getBucketCors(bucketName: String): Result<List<CorsRule>> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = GetBucketCorsArgs.builder().bucket(bucketName).build()
+        val minioConfig = minioClient.getBucketCors(args)
+        val rules = minioConfig.rules().map { it.toComposeServer() }
+        Result.success(rules)
+      } catch (e: Exception) {
+        log.error("Failed to get bucket CORS for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  override suspend fun deleteBucketCors(bucketName: String): Result<Unit> =
+    withContext(Dispatchers.IO) {
+      try {
+        val args = DeleteBucketCorsArgs.builder().bucket(bucketName).build()
+        minioClient.deleteBucketCors(args)
+        Result.success(Unit)
+      } catch (e: Exception) {
+        log.error("Failed to delete bucket CORS for $bucketName", e)
+        Result.failure(mapMinioException(e))
+      }
+    }
+
+  // endregion
+
   // Helper methods for share link functionality
 
   private fun mapHttpMethodToMinio(method: HttpMethod): Method {
@@ -870,6 +1204,53 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
     }
   }
 
+  private fun fetchObjectVersionsResponse(
+    bucketName: String,
+    delimiter: String?,
+    keyMarker: String?,
+    maxKeys: Int,
+    prefix: String?,
+    versionIdMarker: String?,
+  ): ListObjectVersionsResponse {
+    val headers = HashMultimap.create<String, String>()
+    val queryParams = HashMultimap.create<String, String>()
+    return try {
+      listObjectVersionsMethod.invoke(asyncClient, bucketName, null, delimiter, null, keyMarker, maxKeys, prefix, versionIdMarker, headers, queryParams)
+        as ListObjectVersionsResponse
+    } catch (e: InvocationTargetException) {
+      val cause = e.cause as? Exception ?: e
+      throw cause
+    }
+  }
+
+  private fun Item.toVersionInfo(bucketName: String): ObjectVersionInfo {
+    val storageClassName = storageClass()?.uppercase() ?: StorageClass.STANDARD.name
+    val storageClass = runCatching { StorageClass.valueOf(storageClassName) }.getOrDefault(StorageClass.STANDARD)
+    val lastModifiedInstant = runCatching { lastModified()?.toInstant() }.getOrNull() ?: Instant.EPOCH
+    val sizeValue = runCatching { size() }.getOrDefault(0L)
+    val versionIdValue = versionId() ?: ""
+
+    return ObjectVersionInfo(
+      bucketName = bucketName,
+      objectName = objectName(),
+      versionId = versionIdValue,
+      isLatest = isLatest(),
+      lastModified = lastModifiedInstant,
+      etag = etag() ?: "",
+      size = sizeValue,
+      storageClass = storageClass,
+      isDeleteMarker = isDeleteMarker(),
+    )
+  }
+
+  private fun unwrapException(e: Exception): Exception {
+    return when (e) {
+      is ExecutionException -> (e.cause as? Exception) ?: e
+      is CompletionException -> (e.cause as? Exception) ?: e
+      else -> e
+    }
+  }
+
   private fun mapMinioException(e: Exception): ObjectStorageException {
     return when (e) {
       is BucketPolicyTooLargeException -> InvalidRequestException("Bucket policy too large", e)
@@ -898,5 +1279,110 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
       is XmlParserException -> ObjectStorageException("XML parsing error", e)
       else -> ObjectStorageException("MinIO operation failed: ${e.message}", e)
     }
+  }
+
+  // Mappers
+  private fun LifecycleRule.toMinio(): MinioLifecycleRule {
+    val tagMap = if (tags.isNotEmpty()) tags.associate { it.key to it.value } else emptyMap()
+    val hasPrefix = !prefix.isNullOrBlank()
+    val filter =
+      when {
+        hasPrefix && tagMap.isNotEmpty() -> RuleFilter(AndOperator(prefix, tagMap))
+        tagMap.size > 1 -> RuleFilter(AndOperator(null, tagMap))
+        tagMap.size == 1 -> {
+          val entry = tagMap.entries.first()
+          RuleFilter(MinioTag(entry.key, entry.value))
+        }
+        hasPrefix -> RuleFilter(prefix!!)
+        else -> RuleFilter("")
+      }
+
+    return MinioLifecycleRule(
+      if (status == LifecycleRuleStatus.ENABLED) MinioRuleStatus.ENABLED else MinioRuleStatus.DISABLED,
+      abortIncompleteMultipartUpload?.let { MinioAbortIncompleteMultipartUpload(it.daysAfterInitiation) },
+      expiration?.let { MinioExpiration(null as ResponseDate?, it.days, null) },
+      filter,
+      id,
+      noncurrentVersionExpiration?.let { MinioNoncurrentVersionExpiration(it.days) },
+      noncurrentVersionTransition?.let { MinioNoncurrentVersionTransition(it.days, it.storageClass.name) },
+      transition?.let { MinioTransition(null as ResponseDate?, it.days, it.storageClass.name) },
+    )
+  }
+
+  private fun MinioLifecycleRule.toComposeServer(): LifecycleRule {
+    val ruleFilter = filter()
+    val andOperator = ruleFilter?.andOperator()
+
+    val prefixValue =
+      when {
+        !ruleFilter?.prefix().isNullOrBlank() -> ruleFilter?.prefix()
+        !andOperator?.prefix().isNullOrBlank() -> andOperator?.prefix()
+        else -> null
+      }
+
+    val ruleTags =
+      when {
+        andOperator?.tags() != null -> andOperator.tags().entries.map { Tag(it.key, it.value) }
+        ruleFilter?.tag() != null -> listOf(Tag(ruleFilter.tag().key(), ruleFilter.tag().value()))
+        else -> emptyList()
+      }
+
+    val ruleStatus = if (status() == MinioRuleStatus.ENABLED) LifecycleRuleStatus.ENABLED else LifecycleRuleStatus.DISABLED
+
+    val transitionValue =
+      transition()?.let { transition ->
+        transition.days()?.let { days ->
+          val storageClass = runCatching { StorageClass.valueOf(transition.storageClass().uppercase()) }.getOrDefault(StorageClass.STANDARD)
+          LifecycleTransition(days, storageClass)
+        }
+      }
+
+    val expirationValue = expiration()?.days()?.let { LifecycleExpiration(it) }
+
+    val nonCurrentTransitionValue =
+      noncurrentVersionTransition()?.let { nvt ->
+        val storageClass = runCatching { StorageClass.valueOf(nvt.storageClass().uppercase()) }.getOrDefault(StorageClass.STANDARD)
+        LifecycleNoncurrentVersionTransition(nvt.noncurrentDays(), storageClass)
+      }
+
+    val nonCurrentExpirationValue = noncurrentVersionExpiration()?.let { LifecycleNoncurrentVersionExpiration(it.noncurrentDays()) }
+
+    val abortMultipart = abortIncompleteMultipartUpload()?.let { AbortIncompleteMultipartUpload(it.daysAfterInitiation()) }
+
+    return LifecycleRule(
+      id = id(),
+      prefix = prefixValue,
+      status = ruleStatus,
+      tags = ruleTags,
+      transition = transitionValue,
+      expiration = expirationValue,
+      noncurrentVersionTransition = nonCurrentTransitionValue,
+      noncurrentVersionExpiration = nonCurrentExpirationValue,
+      abortIncompleteMultipartUpload = abortMultipart,
+    )
+  }
+
+  private fun CorsRule.toMinio(): CORSConfiguration.CORSRule {
+    val allowedMethodStrings = allowedMethods.map { it.name }
+    return CORSConfiguration.CORSRule(
+      allowedHeaders.ifEmpty { null },
+      allowedMethodStrings.ifEmpty { null },
+      allowedOrigins.ifEmpty { null },
+      exposeHeaders.ifEmpty { null },
+      id,
+      maxAgeSeconds,
+    )
+  }
+
+  private fun CORSConfiguration.CORSRule.toComposeServer(): CorsRule {
+    val methods = allowedMethods()?.mapNotNull { method -> runCatching { HttpMethod.valueOf(method) }.getOrNull() } ?: emptyList()
+    return CorsRule(
+      id = id(),
+      allowedOrigins = allowedOrigins() ?: emptyList(),
+      allowedMethods = methods,
+      allowedHeaders = allowedHeaders() ?: emptyList(),
+      exposeHeaders = exposeHeaders() ?: emptyList(),
+      maxAgeSeconds = maxAgeSeconds(),
+    )
   }
 }

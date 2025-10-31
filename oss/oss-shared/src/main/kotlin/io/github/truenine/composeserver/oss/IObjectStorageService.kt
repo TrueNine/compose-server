@@ -166,4 +166,62 @@ interface IObjectStorageService {
 
   /** Revoke a share link (if supported by the provider) */
   suspend fun revokeShareLink(shareUrl: String): Result<Unit>
+
+  // region Tagging
+
+  /** Set tags for an object */
+  suspend fun setObjectTags(bucketName: String, objectName: String, tags: List<Tag>): Result<Unit>
+
+  /** Get tags for an object */
+  suspend fun getObjectTags(bucketName: String, objectName: String): Result<List<Tag>>
+
+  /** Delete all tags from an object */
+  suspend fun deleteObjectTags(bucketName: String, objectName: String): Result<Unit>
+
+  /** Set tags for a bucket */
+  suspend fun setBucketTags(bucketName: String, tags: List<Tag>): Result<Unit>
+
+  /** Get tags for a bucket */
+  suspend fun getBucketTags(bucketName: String): Result<List<Tag>>
+
+  /** Delete all tags from a bucket */
+  suspend fun deleteBucketTags(bucketName: String): Result<Unit>
+
+  // endregion
+
+  // region Versioning
+
+  /** Set versioning configuration for a bucket */
+  suspend fun setBucketVersioning(bucketName: String, enabled: Boolean): Result<Unit>
+
+  /** List all versions of objects in a bucket */
+  suspend fun listObjectVersions(request: ListObjectVersionsRequest): Result<ObjectVersionListing>
+
+  // endregion
+
+  // region Lifecycle
+
+  /** Set lifecycle configuration for a bucket */
+  suspend fun setBucketLifecycle(bucketName: String, rules: List<LifecycleRule>): Result<Unit>
+
+  /** Get lifecycle configuration for a bucket */
+  suspend fun getBucketLifecycle(bucketName: String): Result<List<LifecycleRule>>
+
+  /** Delete lifecycle configuration for a bucket */
+  suspend fun deleteBucketLifecycle(bucketName: String): Result<Unit>
+
+  // endregion
+
+  // region CORS
+
+  /** Set CORS configuration for a bucket */
+  suspend fun setBucketCors(bucketName: String, rules: List<CorsRule>): Result<Unit>
+
+  /** Get CORS configuration for a bucket */
+  suspend fun getBucketCors(bucketName: String): Result<List<CorsRule>>
+
+  /** Delete CORS configuration for a bucket */
+  suspend fun deleteBucketCors(bucketName: String): Result<Unit>
+
+  // endregion
 }
