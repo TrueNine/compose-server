@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.servlet.autoconfig
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -8,7 +7,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import tools.jackson.databind.ObjectMapper
 
 private val log = slf4j<DefaultJacksonObjectMapperConfiguration>()
 
@@ -24,8 +23,10 @@ class DefaultJacksonObjectMapperConfiguration {
   @Order(Ordered.HIGHEST_PRECEDENCE)
   @ConditionalOnMissingBean(ObjectMapper::class, name = [SPRING_DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
-  fun defaultObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
-    log.debug("Registering default object mapper")
-    return builder.createXmlMapper(false).build()
+  fun defaultObjectMapper(): ObjectMapper {
+    log.debug("Registering default object mapper - delegating to depend-jackson auto-configuration")
+    // This bean is now a placeholder that will be overridden by depend-jackson's JacksonAutoConfiguration
+    // If depend-jackson is not present, Spring Boot's default Jackson auto-configuration will provide the ObjectMapper
+    throw IllegalStateException("This bean should be overridden by depend-jackson's JacksonAutoConfiguration")
   }
 }
