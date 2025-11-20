@@ -67,10 +67,10 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
       myFixture.tempDirFixture.createFile(
         "TestClass.kt",
         """
-          class TestClass {
-            // incomplete code for testing
-            fun testMethod(
-          }
+        class TestClass {
+          // incomplete code for testing
+          fun testMethod(
+        }
         """
           .trimIndent(),
       )
@@ -99,12 +99,12 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
       myFixture.tempDirFixture.createFile(
         "README.md",
         """
-          # Test Document
-          
-          ```kotlin
-          // This code might have syntax errors
-          fun incomplete(
-          ```
+        # Test Document
+
+        ```kotlin
+        // This code might have syntax errors
+        fun incomplete(
+        ```
         """
           .trimIndent(),
       )

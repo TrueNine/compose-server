@@ -26,14 +26,14 @@ class ErrorServiceIntegrationTest : BasePlatformTestCase() {
       myFixture.configureByText(
         "TestFile.kt",
         """
-          package test
-          
-          class TestClass {
-            fun testMethod() {
-              // 这里有语法错误 - 缺少右括号
-              val result = someFunction(
-            }
+        package test
+
+        class TestClass {
+          fun testMethod() {
+            // 这里有语法错误 - 缺少右括号
+            val result = someFunction(
           }
+        }
         """
           .trimIndent(),
       )
@@ -58,13 +58,13 @@ class ErrorServiceIntegrationTest : BasePlatformTestCase() {
       myFixture.configureByText(
         "ValidFile.kt",
         """
-          package test
-          
-          class ValidClass {
-            fun validMethod(): String {
-              return "Hello, World!"
-            }
+        package test
+
+        class ValidClass {
+          fun validMethod(): String {
+            return "Hello, World!"
           }
+        }
         """
           .trimIndent(),
       )

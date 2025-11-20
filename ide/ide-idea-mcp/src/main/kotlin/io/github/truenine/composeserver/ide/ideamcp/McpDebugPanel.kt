@@ -30,17 +30,17 @@ class McpDebugPanel(private val project: Project) : SimpleToolWindowPanel(true, 
       isEditable = false
       text =
         """
-          日志系统已简化为控制台输出模式
-          
-          查看详细日志信息请：
-          1. 打开 IDEA 的 Help -> Show Log in Files
-          2. 或查看 IDEA 控制台输出
-          3. 日志级别可在 logback.xml 中配置
-          
-          当前配置：
-          - 插件包: io.github.truenine.composeserver.ide.ideamcp
-          - 日志级别: DEBUG
-          - 输出格式: HH:mm:ss.SSS [thread] LEVEL logger - message
+        日志系统已简化为控制台输出模式
+
+        查看详细日志信息请：
+        1. 打开 IDEA 的 Help -> Show Log in Files
+        2. 或查看 IDEA 控制台输出
+        3. 日志级别可在 logback.xml 中配置
+
+        当前配置：
+        - 插件包: io.github.truenine.composeserver.ide.ideamcp
+        - 日志级别: DEBUG
+        - 输出格式: HH:mm:ss.SSS [thread] LEVEL logger - message
         """
           .trimIndent()
     }
