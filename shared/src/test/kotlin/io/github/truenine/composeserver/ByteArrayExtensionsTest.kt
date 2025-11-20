@@ -68,10 +68,10 @@ class ByteArrayExtensionsTest {
   fun utf8StringHandlesMultilineText() {
     val multilineText =
       """
-        First line of text
-        Second line of text
-        Third line with special characters: !@#$%
-        Fourth line with emoji: 😊🎈
+      First line of text
+      Second line of text
+      Third line with special characters: !@#$%
+      Fourth line with emoji: 😊🎈
       """
         .trimIndent()
 
