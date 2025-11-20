@@ -6,10 +6,16 @@ import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.oss.CompleteMultipartUploadRequest
 import io.github.truenine.composeserver.oss.CopyObjectRequest
+import io.github.truenine.composeserver.oss.CorsRule
 import io.github.truenine.composeserver.oss.CreateBucketRequest
 import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
+import io.github.truenine.composeserver.oss.LifecycleExpiration
+import io.github.truenine.composeserver.oss.LifecycleRule
+import io.github.truenine.composeserver.oss.LifecycleRuleStatus
+import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
 import io.github.truenine.composeserver.oss.ListObjectsRequest
 import io.github.truenine.composeserver.oss.ShareLinkRequest
+import io.github.truenine.composeserver.oss.Tag
 import io.github.truenine.composeserver.oss.UploadPartRequest
 import io.github.truenine.composeserver.oss.volcengine.VolcengineTosObjectStorageService
 import java.io.ByteArrayInputStream
@@ -23,13 +29,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
-
-import io.github.truenine.composeserver.oss.CorsRule
-import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
-import io.github.truenine.composeserver.oss.Tag
-import io.github.truenine.composeserver.oss.LifecycleRule
-import io.github.truenine.composeserver.oss.LifecycleRuleStatus
-import io.github.truenine.composeserver.oss.LifecycleExpiration
 
 /**
  * Volcengine TOS Object Storage Service Integration Tests
@@ -463,14 +462,7 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       testBuckets.add(bucketName)
       service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-      val rules = listOf(
-        LifecycleRule(
-          id = "rule-1",
-          prefix = "logs/",
-          status = LifecycleRuleStatus.ENABLED,
-          expiration = LifecycleExpiration(30)
-        )
-      )
+      val rules = listOf(LifecycleRule(id = "rule-1", prefix = "logs/", status = LifecycleRuleStatus.ENABLED, expiration = LifecycleExpiration(30)))
 
       val setResult = service.setBucketLifecycle(bucketName, rules)
       assertTrue(setResult.isSuccess, "设置生命周期规则应该成功")
@@ -491,12 +483,7 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       testBuckets.add(bucketName)
       service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-      val rules = listOf(
-        CorsRule(
-          allowedOrigins = listOf("*"),
-          allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)
-        )
-      )
+      val rules = listOf(CorsRule(allowedOrigins = listOf("*"), allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)))
 
       val setResult = service.setBucketCors(bucketName, rules)
       assertTrue(setResult.isSuccess, "设置CORS规则应该成功")

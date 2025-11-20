@@ -1,7 +1,14 @@
 package itest.integrate.oss.minio
 
+import io.github.truenine.composeserver.enums.HttpMethod
+import io.github.truenine.composeserver.oss.CorsRule
 import io.github.truenine.composeserver.oss.CreateBucketRequest
 import io.github.truenine.composeserver.oss.IObjectStorageService
+import io.github.truenine.composeserver.oss.LifecycleExpiration
+import io.github.truenine.composeserver.oss.LifecycleRule
+import io.github.truenine.composeserver.oss.LifecycleRuleStatus
+import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
+import io.github.truenine.composeserver.oss.Tag
 import io.github.truenine.composeserver.oss.minio.autoconfig.MinioAutoConfiguration
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
 import io.github.truenine.composeserver.oss.properties.OssProperties
@@ -18,13 +25,6 @@ import org.junit.jupiter.api.assertNotNull
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
-import io.github.truenine.composeserver.oss.Tag
-import io.github.truenine.composeserver.oss.LifecycleRule
-import io.github.truenine.composeserver.oss.LifecycleRuleStatus
-import io.github.truenine.composeserver.oss.LifecycleExpiration
-import io.github.truenine.composeserver.oss.CorsRule
-import io.github.truenine.composeserver.enums.HttpMethod
-import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
 
 @SpringBootTest(classes = [AutoConfigurationPropertiesTest.TestConfiguration::class])
 class AutoConfigurationPropertiesTest : IOssMinioContainer {
@@ -396,7 +396,7 @@ class AutoConfigurationPropertiesTest : IOssMinioContainer {
 
         val deleteResult = oss.deleteObjectTags(bucketName, objectName)
         assertTrue(deleteResult.isSuccess, "删除对象标签应该成功")
-        
+
         val getAfterDeleteResult = oss.getObjectTags(bucketName, objectName)
         assertTrue(getAfterDeleteResult.isSuccess, "删除后获取对象标签应该成功")
         assertTrue(getAfterDeleteResult.getOrThrow().isEmpty(), "删除后对象标签应该为空")
@@ -411,13 +411,13 @@ class AutoConfigurationPropertiesTest : IOssMinioContainer {
       runBlocking {
         val bucketName = "test-versioning-bucket"
         val objectName = "versioned-object.txt"
-        
+
         oss.createBucket(CreateBucketRequest(bucketName))
         oss.setBucketVersioning(bucketName, true)
-        
+
         oss.putObject(bucketName, objectName, ByteArrayInputStream("v1".toByteArray()), 2)
         oss.putObject(bucketName, objectName, ByteArrayInputStream("v2".toByteArray()), 2)
-        
+
         val versionsResult = oss.listObjectVersions(ListObjectVersionsRequest(bucketName = bucketName, prefix = objectName))
         assertTrue(versionsResult.isSuccess, "列出对象版本应该成功")
         val versions = versionsResult.getOrThrow()
@@ -432,16 +432,9 @@ class AutoConfigurationPropertiesTest : IOssMinioContainer {
     fun `应该能够设置和获取存储桶生命周期规则`(): Unit = minio {
       runBlocking {
         val bucketName = "test-lifecycle-bucket"
-        val rules = listOf(
-          LifecycleRule(
-            id = "rule-1",
-            prefix = "logs/",
-            status = LifecycleRuleStatus.ENABLED,
-            expiration = LifecycleExpiration(30)
-          )
-        )
+        val rules = listOf(LifecycleRule(id = "rule-1", prefix = "logs/", status = LifecycleRuleStatus.ENABLED, expiration = LifecycleExpiration(30)))
         oss.createBucket(CreateBucketRequest(bucketName))
-        
+
         val setResult = oss.setBucketLifecycle(bucketName, rules)
         assertTrue(setResult.isSuccess, "设置生命周期规则应该成功")
 
@@ -460,14 +453,9 @@ class AutoConfigurationPropertiesTest : IOssMinioContainer {
     fun `应该能够设置和获取存储桶CORS规则`(): Unit = minio {
       runBlocking {
         val bucketName = "test-cors-bucket"
-        val rules = listOf(
-          CorsRule(
-            allowedOrigins = listOf("*"),
-            allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)
-          )
-        )
+        val rules = listOf(CorsRule(allowedOrigins = listOf("*"), allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)))
         oss.createBucket(CreateBucketRequest(bucketName))
-        
+
         val setResult = oss.setBucketCors(bucketName, rules)
         assertTrue(setResult.isSuccess, "设置CORS规则应该成功")
 
