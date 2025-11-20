@@ -37,15 +37,15 @@ class DotenvIntegrationTest {
     val envFile = File(tempDir, ".env")
     envFile.writeText(
       """
-        # Database configuration
-        DB_HOST=localhost
-        DB_PORT=5432
-        DB_NAME="myapp_db"
-        API_KEY='secret-key-123'
-        
-        # Application settings
-        APP_ENV=development
-        DEBUG=true
+      # Database configuration
+      DB_HOST=localhost
+      DB_PORT=5432
+      DB_NAME="myapp_db"
+      API_KEY='secret-key-123'
+
+      # Application settings
+      APP_ENV=development
+      DEBUG=true
       """
         .trimIndent()
     )
@@ -108,8 +108,8 @@ class DotenvIntegrationTest {
     val envFile = File(configDir, ".env.local")
     envFile.writeText(
       """
-        RELATIVE_PATH_TEST=success
-        CONFIG_DIR_VAR=config_value
+      RELATIVE_PATH_TEST=success
+      CONFIG_DIR_VAR=config_value
       """
         .trimIndent()
     )
@@ -138,11 +138,11 @@ class DotenvIntegrationTest {
     val envFile = File(tempDir, ".env")
     envFile.writeText(
       """
-        APP_NAME=myapp
-        APP_VERSION=1.0.0
-        DB_HOST=localhost
-        SECRET_KEY=secret
-        OTHER_VAR=other
+      APP_NAME=myapp
+      APP_VERSION=1.0.0
+      DB_HOST=localhost
+      SECRET_KEY=secret
+      OTHER_VAR=other
       """
         .trimIndent()
     )
@@ -197,8 +197,8 @@ class DotenvIntegrationTest {
     envFile.deleteOnExit()
     envFile.writeText(
       """
-        ABSOLUTE_PATH_TEST=success
-        TEMP_FILE_VAR=temp_value
+      ABSOLUTE_PATH_TEST=success
+      TEMP_FILE_VAR=temp_value
       """
         .trimIndent()
     )
@@ -227,7 +227,7 @@ class DotenvIntegrationTest {
     val envFile = File(tempDir, ".env")
     envFile.writeText(
       """
-        SHOULD_NOT_LOAD=value
+      SHOULD_NOT_LOAD=value
       """
         .trimIndent()
     )
