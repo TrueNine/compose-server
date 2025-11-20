@@ -24,8 +24,8 @@ dependencies {
   implementation(libs.org.slf4j.slf4j.api)
 
   // json
-  api(libs.com.fasterxml.jackson.module.jackson.module.kotlin)
-  api(libs.com.fasterxml.jackson.core.jackson.databind)
+  api(libs.tools.jackson.module.jackson.module.kotlin)
+  api(libs.tools.jackson.core.jackson.databind)
   runtimeOnly(libs.org.skyscreamer.jsonassert)
 
   // spring 测试支持

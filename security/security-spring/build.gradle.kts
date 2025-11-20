@@ -16,7 +16,7 @@ dependencies {
   implementation(libs.cn.hutool.hutool.captcha)
   implementation(libs.com.auth0.java.jwt)
 
-  implementation(libs.com.fasterxml.jackson.core.jackson.databind)
+  implementation(libs.tools.jackson.core.jackson.databind)
 
   implementation(libs.org.springframework.spring.webmvc)
 

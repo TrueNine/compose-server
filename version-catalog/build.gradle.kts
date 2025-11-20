@@ -9,11 +9,13 @@ plugins {
   id("buildlogic.publish-conventions")
 }
 
-repositories { mavenCentral() }
+repositories {
+  mavenCentral()
+  maven("https://repo.spring.io/milestone")
+}
 
 configurations.all {
   resolutionStrategy {
-    // 解决kotlin-test-framework-impl冲突
     exclude(group = "org.jetbrains.kotlin", module = "kotlin-test-testng")
   }
 }
@@ -40,9 +42,8 @@ val nonStableKeywords = listOf(
   "alpha",
   "beta",
   "dev",
-  "-rc",
   "snapshot"
-) + (0 until 30).map { "m$it" }
+)
 
 val ignoreGroups = listOf(
   "dev.langchain4j",
@@ -56,7 +57,6 @@ fun isNonStable(version: ModuleComponentIdentifier): Boolean {
 // https://github.com/ben-manes/gradle-versions-plugin
 tasks.withType<DependencyUpdatesTask>().configureEach {
   notCompatibleWithConfigurationCache("Gradle Versions dependencyUpdates task interacts with project state during execution.")
-  // 拒绝不稳定版本
   rejectVersionIf {
     if (ignoreGroups.any { group?.contains(it, true) == true }) {
       return@rejectVersionIf true
