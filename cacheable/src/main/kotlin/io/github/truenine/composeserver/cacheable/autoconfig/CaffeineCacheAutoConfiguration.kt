@@ -3,18 +3,18 @@ package io.github.truenine.composeserver.cacheable.autoconfig
 import com.github.benmanes.caffeine.cache.AsyncCache
 import com.github.benmanes.caffeine.cache.Caffeine
 import io.github.truenine.composeserver.consts.ICacheNames
-import io.github.truenine.composeserver.slf4j
+import io.github.truenine.composeserver.logger
 import java.time.Duration
 import org.springframework.cache.caffeine.CaffeineCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 
-private val log = slf4j(CaffeineCacheAutoConfiguration::class)
+private val log = logger<CaffeineCacheAutoConfiguration>()
 
 @Configuration
 class CaffeineCacheAutoConfiguration {
-  private fun create(d: Duration): AsyncCache<Any, Any?> {
+  private fun create(d: Duration): AsyncCache<Any, Any> {
     return Caffeine.newBuilder().recordStats().expireAfterWrite(d).buildAsync()
   }
 
