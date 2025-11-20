@@ -419,12 +419,12 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
 
   private fun createPrivatePolicy(bucketName: String): String {
     return """
-           {
-             "Version": "2012-10-17",
-             "Statement": []
-           }
-           """
-             .trimIndent()
+    {
+      "Version": "2012-10-17",
+      "Statement": []
+    }
+    """
+      .trimIndent()
   }
 
   override suspend fun objectExists(bucketName: String, objectName: String): Result<Boolean> =
