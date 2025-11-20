@@ -180,6 +180,7 @@ io-github-truenine-composeserver-sms-tencent = { module = "io.github.truenine:co
 io-github-truenine-composeserver-testtoolkit-shared = { module = "io.github.truenine:composeserver-testtoolkit-shared", version.ref = "project" }
 io-github-truenine-composeserver-testtoolkit-springmvc = { module = "io.github.truenine:composeserver-testtoolkit-springmvc", version.ref = "project" }
 io-github-truenine-composeserver-testtoolkit-testcontainers = { module = "io.github.truenine:composeserver-testtoolkit-testcontainers", version.ref = "project" }
+io-netty-netty-bom = { module = "io.netty:netty-bom", version.ref = "io-netty" }
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.13.0"
 io-minio-minio = "io.minio:minio:8.6.0"
 io-mockk-mockk = "io.mockk:mockk:1.14.6"
