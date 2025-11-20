@@ -32,8 +32,8 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
     val rlvInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'rlv'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'rlv'
         """
           .trimIndent()
       )
@@ -52,8 +52,8 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
     val ldfInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'ldf'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'ldf'
         """
           .trimIndent()
       )
@@ -71,16 +71,16 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
     val rlvInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'rlv'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'rlv'
         """
           .trimIndent()
       )
     val ldfInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'ldf'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'ldf'
         """
           .trimIndent()
       )
