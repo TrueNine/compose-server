@@ -19,9 +19,9 @@ class LazyAddressCsvServiceImplTest {
 
   private val testCsvContent =
     """
-        110000000000,北京市,1,000000000000
-        110100000000,北京市市辖区,2,110000000000
-        110101000000,东城区,3,110100000000
+    110000000000,北京市,1,000000000000
+    110100000000,北京市市辖区,2,110000000000
+    110101000000,东城区,3,110100000000
     """
       .trimIndent()
 
@@ -164,9 +164,9 @@ class LazyAddressCsvServiceImplTest {
   fun `测试CSV格式错误处理`() {
     val invalidCsvContent =
       """
-          110000
-          110100,北京市
-          invalid,data,here
+      110000
+      110100,北京市
+      invalid,data,here
       """
         .trimIndent()
 
@@ -271,7 +271,7 @@ class LazyAddressCsvServiceImplTest {
   fun `只有省级数据 fetchChildrenRecursive 只返回省`() {
     val provinceOnly =
       """
-        110000000000,北京市,1,000000000000
+      110000000000,北京市,1,000000000000
       """
         .trimIndent()
     val resource =
@@ -291,7 +291,7 @@ class LazyAddressCsvServiceImplTest {
   fun `CSV脏数据 level非数字 graceful fail`() {
     val badCsv =
       """
-        110000000000,北京市,notanumber,000000000000
+      110000000000,北京市,notanumber,000000000000
       """
         .trimIndent()
     val resource =
@@ -388,8 +388,8 @@ class LazyAddressCsvServiceImplTest {
   fun `test error handling with malformed CSV data`() {
     val malformedCsv =
       """
-        110000000000,北京市,invalid_level,000000000000
-        110100000000,北京市市辖区,2,110000000000
+      110000000000,北京市,invalid_level,000000000000
+      110100000000,北京市市辖区,2,110000000000
       """
         .trimIndent()
 
