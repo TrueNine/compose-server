@@ -3,15 +3,15 @@ package io.github.truenine.composeserver.domain
 interface IPageLike<T : Any?> {
   /**
    * ## Data List
-   * 数据列表
+   * Data collection for the current page.
    */
   var d: Collection<T>
 
   /**
    * ## Page Current Offset
-   * 当前所在页面 起始位置为 0 默认为 0
+   * Current page offset, starting from 0, default is 0.
    */
-  @Deprecated("无需此属性")
+  @Deprecated("This property is not required")
   var o: Long?
     get() = null
     set(value) {}
@@ -19,13 +19,13 @@ interface IPageLike<T : Any?> {
   /**
    * ## Total Page Size
    *
-   * 所有页面的总数
+   * Total number of pages.
    */
   var p: Int
 
   /**
    * ## Total Elements Size
-   * 所有内容总数
+   * Total number of elements.
    */
   var t: Long
 

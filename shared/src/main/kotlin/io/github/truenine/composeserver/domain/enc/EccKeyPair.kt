@@ -6,7 +6,7 @@ import java.security.PrivateKey
 import java.security.PublicKey
 
 /**
- * ecc 密钥对
+ * ECC key pair wrapper.
  *
  * @author TrueNine
  * @since 2022-12-15

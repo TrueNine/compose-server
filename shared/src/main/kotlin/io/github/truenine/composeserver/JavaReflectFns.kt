@@ -4,10 +4,10 @@ import java.lang.reflect.Field
 import kotlin.reflect.KClass
 
 /**
- * ## 递归获取一个类的所有属性
+ * ## Recursively obtain all fields of a class.
  *
- * @param endType 结束的类型
- * @return 当前类以及所有到结束标记为止的 fields
+ * @param endType Superclass at which to stop recursion
+ * @return All fields on this class and its superclasses up to the endType (exclusive)
  */
 fun KClass<*>.recursionFields(endType: KClass<*> = Any::class): Array<out Field> {
   val selfFields = mutableListOf<Field>()

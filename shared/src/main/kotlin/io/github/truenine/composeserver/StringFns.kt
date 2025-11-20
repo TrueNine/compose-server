@@ -71,27 +71,27 @@ inline fun String?.ifNotNullOrBlank(crossinline block: (it: String) -> Unit) {
 }
 
 /**
- * 如果字符串不为 null 且不为空白，则执行指定的转换操作
+ * Execute transformation block if string is not null and not blank.
  *
- * @param block 转换操作
- * @return 转换结果，如果字符串为 null 或空白则返回 null
+ * @param block Transformation operation
+ * @return Transformation result, or null if string is null or blank
  */
 inline fun <T> String?.hasTextRun(crossinline block: String.() -> T): T? {
   return if (hasText()) block() else null
 }
 
 /**
- * 将多行字符串转换为单行字符串
+ * Convert a multi-line string into a single-line string.
  *
- * @return 转换后的单行字符串
+ * @return Converted single-line string
  */
 fun String.toOneLine(): String = IString.inLine(this)
 
 /**
- * 将下划线分隔的字符串转换为驼峰式命名
+ * Convert an underscore-delimited string to camel case.
  *
- * @param firstUppercase 首字母是否大写
- * @return 转换后的驼峰式字符串
+ * @param firstUppercase Whether the first character should be uppercase
+ * @return Converted camel-case string
  */
 fun String.toPascalCase(firstUppercase: Boolean = false): String {
   return if (length == 1 || isNotBlank()) {
@@ -104,9 +104,9 @@ fun String.toPascalCase(firstUppercase: Boolean = false): String {
 }
 
 /**
- * 将驼峰式命名转换为下划线分隔的字符串
+ * Convert a camel-case string to an underscore-delimited string.
  *
- * @return 转换后的下划线分隔字符串
+ * @return Converted underscore-delimited string
  */
 fun String.toSnakeCase(): String {
   if (length <= 1 || isBlank()) return lowercase()
@@ -126,19 +126,19 @@ fun String.toSnakeCase(): String {
 }
 
 /**
- * 将字符串进行 URL 编码
+ * URL-encode the string.
  *
- * @param charset 字符编码，默认为 UTF-8
- * @return URL 编码后的字符串
+ * @param charset Character set, default is UTF-8
+ * @return URL-encoded string
  */
 fun String?.toUrlEncoded(charset: Charset = Charsets.UTF_8): String = java.net.URLEncoder.encode(this ?: STR_EMPTY, charset)
 
 /**
- * 如果字符串以指定前缀开始，则替换第一次出现的前缀
+ * If the string starts with the specified prefix, replace the first occurrence of that prefix.
  *
- * @param meta 要检查和替换的前缀
- * @param replacement 替换的新字符串
- * @return 替换后的字符串
+ * @param meta Prefix to check and replace
+ * @param replacement Replacement string
+ * @return String after replacement
  */
 fun String.replaceFirstIfPrefix(meta: String, replacement: String): String {
   return if (indexOf(meta) == 0) replaceFirst(meta, replacement) else meta

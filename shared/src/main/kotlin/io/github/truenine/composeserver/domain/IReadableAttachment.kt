@@ -5,8 +5,9 @@ import java.io.InputStream
 import java.io.Serializable
 
 /**
- * # 附件表示形式
- * 遵循 spring boot 的 multipartFile
+ * # Attachment representation model.
+ *
+ * Follows Spring Boot's MultipartFile semantics.
  *
  * @see [org.springframework.web.multipart.MultipartFile]
  */

@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.io.Serializable
 
 /**
- * # 分页参数
+ * # Pagination parameters
  *
- * 为所有的分页场景准备的分页参数
+ * Common pagination parameters used for all paging scenarios.
  *
  * @author TrueNine
  * @since 2024-06-20
@@ -25,21 +25,21 @@ interface IPageParam : IPageParamLike, Serializable {
       return get(0, 0, true)
     }
 
-    /** ## 最小偏移量 */
+    /** ## Minimum offset */
     const val MIN_OFFSET: Int = 0
 
-    /** ## 最大分页页面大小 */
+    /** ## Maximum page size */
     const val MAX_PAGE_SIZE: Int = 42
 
-    /** ## 默认 最大分页实现常量 */
+    /** ## Default maximum pagination implementation constant */
     @Suppress("DEPRECATION_ERROR") val DEFAULT_MAX: IPageParam = DefaultPageParam(MIN_OFFSET, MAX_PAGE_SIZE, false)
 
     /**
-     * ## 构建分页参数
+     * ## Build pagination parameters
      *
-     * @param offset 偏移量 （最小为 0）
-     * @param pageSize 页面大小
-     * @param unPage 是否禁用分页
+     * @param offset Offset (minimum 0)
+     * @param pageSize Page size
+     * @param unPage Whether to disable pagination
      */
     @JvmStatic
     @JsonCreator
@@ -60,7 +60,7 @@ interface IPageParam : IPageParamLike, Serializable {
       }
     }
 
-    /** ## 不进行分页 */
+    /** ## Disable pagination */
     @JvmStatic
     fun unPage(): IPageParam {
       return get(0, Int.MAX_VALUE, true)
@@ -71,14 +71,13 @@ interface IPageParam : IPageParamLike, Serializable {
       return get(param?.o, param?.s)
     }
 
-    /** ## 一个默认分页实现 */
+    /** ## A default pagination implementation */
     class DefaultPageParam
-    @Deprecated("不建议直接使用", level = DeprecationLevel.ERROR)
-    @JsonCreator
+    @Deprecated("Direct usage is not recommended", level = DeprecationLevel.ERROR)
     constructor(
       @Transient @param:JsonProperty("o") override var o: Int? = null,
       @Transient @param:JsonProperty("s") override var s: Int? = null,
-      @Deprecated("禁用分页是不明智的选择", level = DeprecationLevel.ERROR) @Transient @param:JsonProperty("u") override var u: Boolean? = null,
+      @Deprecated("Disabling pagination is not a wise choice", level = DeprecationLevel.ERROR) @Transient @param:JsonProperty("u") override var u: Boolean? = null,
     ) : IPageParam, Serializable {
 
       override fun toString(): String {
@@ -114,7 +113,7 @@ interface IPageParam : IPageParamLike, Serializable {
   val safeOffset: Int
     get() = o ?: 0
 
-  /** ## 分页 页面 偏移量 null any */
+  /** ## Safe page size with null handling */
   @get:JsonIgnore
   val safePageSize: Int
     get() = s ?: 0

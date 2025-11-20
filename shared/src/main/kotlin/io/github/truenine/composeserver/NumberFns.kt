@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver
 
 /**
- * ## 安全地转换为 Int
+ * ## Safely convert Long to Int.
  *
- * 如果超出范围，则返回 Int.MAX_VALUE 或 Int.MIN_VALUE 返回
+ * If the value is out of Int range, returns Int.MAX_VALUE or Int.MIN_VALUE.
  */
 fun Long.toSafeInt(): Int {
   return if (this > Int.MAX_VALUE) Int.MAX_VALUE else if (this < Int.MIN_VALUE) Int.MIN_VALUE else toInt()

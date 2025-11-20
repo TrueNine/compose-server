@@ -25,4 +25,5 @@ dependencies {
   testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
   testImplementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
+  testImplementation(libs.tools.jackson.core.jackson.databind)
 }

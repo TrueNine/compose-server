@@ -12,31 +12,31 @@ import io.github.truenine.composeserver.IStringEnum
  */
 enum class ISO4217(private val iso4217Str: String, private val cnDescription: String, private val numCode: Int, private val helperCode: Int) : IStringEnum {
   /** ## China Yuan Renminbi */
-  CNY("CNY", "人民币", 156, 2),
+  CNY("CNY", "Renminbi", 156, 2),
 
   /** ## Hong Kong Dollar */
-  HKD("HKD", "港元", 344, 2),
+  HKD("HKD", "Hong Kong Dollar", 344, 2),
 
   /** ## Macao Pataca */
-  MOP("MOP", "澳门币", 446, 2),
+  MOP("MOP", "Macao Pataca", 446, 2),
 
   /** ## New Taiwan Dollar */
-  TWD("TWD", "新台币", 901, 2),
+  TWD("TWD", "New Taiwan Dollar", 901, 2),
 
   /** ## Euro */
-  EUR("EUR", "欧元", 978, 2),
+  EUR("EUR", "Euro", 978, 2),
 
   /** ## US Dollar */
-  USD("USD", "美元", 840, 2),
+  USD("USD", "US Dollar", 840, 2),
 
   /** ## Great British Pound */
-  GBP("GBP", "英镑", 826, 2),
+  GBP("GBP", "Pound Sterling", 826, 2),
 
   /** ## Japanese Yen */
-  JPY("JPY", "日元", 392, 2),
+  JPY("JPY", "Japanese Yen", 392, 2),
 
   /** ## South Korean Won */
-  KRW("KRW", "韩圆", 410, 0);
+  KRW("KRW", "South Korean Won", 410, 0);
 
   // @JsonValue
   override val value: String = this.iso4217Str

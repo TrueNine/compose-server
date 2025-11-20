@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.domain
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.Resource
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -14,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import tools.jackson.databind.ObjectMapper
 
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)

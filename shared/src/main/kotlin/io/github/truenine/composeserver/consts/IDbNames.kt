@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.consts
 import java.util.*
 
 /**
- * 数据库基础字段
+ * Database base column names.
  *
  * @author TrueNine
  * @since 2022-12-04

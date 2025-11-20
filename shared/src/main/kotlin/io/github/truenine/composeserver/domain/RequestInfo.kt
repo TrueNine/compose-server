@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.domain
 
 /**
- * 基础用户传递信息
+ * Basic user request context information.
  *
- * @param deviceId 设备ID
- * @param currentIpAddr 当前请求的IP地址
+ * @param deviceId Device identifier
+ * @param currentIpAddr Current request IP address
  * @author T_teng
  * @since 2023-04-06
  */
