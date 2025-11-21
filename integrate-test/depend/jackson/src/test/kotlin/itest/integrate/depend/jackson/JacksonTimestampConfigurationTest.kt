@@ -22,8 +22,7 @@ import tools.jackson.databind.ObjectMapper
 /**
  * Jackson timestamp configuration integration tests.
  *
- * Verifies Jackson auto-configuration correctness in a Spring Boot
- * environment, testing bean creation and dependency injection.
+ * Verifies Jackson auto-configuration correctness in a Spring Boot environment, testing bean creation and dependency injection.
  */
 @SpringBootTest(classes = [JacksonTimestampConfigurationTest.TestConfiguration::class])
 class JacksonTimestampConfigurationTest {

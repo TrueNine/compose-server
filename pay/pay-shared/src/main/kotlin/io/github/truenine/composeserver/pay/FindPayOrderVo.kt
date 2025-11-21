@@ -11,11 +11,17 @@ data class FindPayOrderVo(
   @Schema(title = "Order number", description = "WeChat transactionId") var orderNumber: String? = null,
   @Schema(title = "Amount") var amount: BigDecimal? = null,
 
-  /** Transaction status. Enum values: SUCCESS: payment successful; REFUND: refunded; NOTPAY: not paid; CLOSED: closed; REVOKED: revoked (only returned for code payment); USERPAYING: user is paying (only returned for code payment); PAYERROR: payment failed (only returned for code payment). */
+  /**
+   * Transaction status. Enum values: SUCCESS: payment successful; REFUND: refunded; NOTPAY: not paid; CLOSED: closed; REVOKED: revoked (only returned for code
+   * payment); USERPAYING: user is paying (only returned for code payment); PAYERROR: payment failed (only returned for code payment).
+   */
   @Schema(title = "Transaction status") var tradeStatus: String? = null,
   @Schema(title = "Transaction status description") var tradeStatusDesc: String? = null,
 
-  /** Transaction type. Enum values: JSAPI: Official Account payment; NATIVE: QR code payment; APP: app payment; MICROPAY: code payment; MWEB: H5 payment; FACEPAY: face payment. */
+  /**
+   * Transaction type. Enum values: JSAPI: Official Account payment; NATIVE: QR code payment; APP: app payment; MICROPAY: code payment; MWEB: H5 payment;
+   * FACEPAY: face payment.
+   */
   // TODO Improve this type and convert to enum
   @Schema(title = "Transaction type") var tradeType: String? = null,
 

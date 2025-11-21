@@ -12,8 +12,7 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 /**
  * # Dotenv environment variable loader
  *
- * Responsible for parsing environment variables from .env files
- * and injecting them into the execution environment of Gradle tasks.
+ * Responsible for parsing environment variables from .env files and injecting them into the execution environment of Gradle tasks.
  *
  * @param project Gradle project instance
  * @param config Dotenv configuration

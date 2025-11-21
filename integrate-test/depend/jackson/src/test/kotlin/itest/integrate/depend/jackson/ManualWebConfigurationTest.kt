@@ -34,8 +34,7 @@ import tools.jackson.databind.ObjectMapper
 /**
  * Manually configured web integration tests.
  *
- * Does not rely on Spring Boot auto-configuration; all components are
- * configured manually.
+ * Does not rely on Spring Boot auto-configuration; all components are configured manually.
  */
 @SpringBootTest(classes = [TestEntrance::class])
 @AutoConfigureMockMvc

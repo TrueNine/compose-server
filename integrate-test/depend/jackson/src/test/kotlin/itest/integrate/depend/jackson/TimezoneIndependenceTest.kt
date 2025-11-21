@@ -20,9 +20,8 @@ import tools.jackson.databind.ObjectMapper
 /**
  * Timezone independence integration tests
  *
- * Verifies serialization consistency under different timezone environments,
- * validates correctness of UTC timestamps, and tests deserialization
- * compatibility for multiple time formats.
+ * Verifies serialization consistency under different timezone environments, validates correctness of UTC timestamps, and tests deserialization compatibility
+ * for multiple time formats.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class TimezoneIndependenceTest {

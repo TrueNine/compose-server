@@ -18,7 +18,9 @@ import java.time.LocalDateTime
 data class WechatPaySuccessVo(
   @Schema(title = "Notification ID") var id: String? = null,
   @Schema(title = "Creation time") @JsonProperty("create_time") @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX") var createDatetime: LocalDateTime? = null,
-  @Schema(title = "Notification type", description = "The type of notification; for payment success it is TRANSACTION.SUCCESS") @JsonProperty("event_type") var eventType: String? = null,
+  @Schema(title = "Notification type", description = "The type of notification; for payment success it is TRANSACTION.SUCCESS")
+  @JsonProperty("event_type")
+  var eventType: String? = null,
   @Schema(title = "Notification data type") @JsonProperty("resource_type") var resourceType: String? = null,
   @Schema(title = "Notification data") @JsonProperty("resource") var resource: WechatPaySuccessVoResource? = null,
 )

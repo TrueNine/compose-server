@@ -5,9 +5,8 @@ import java.lang.annotation.Inherited
 /**
  * ## Instructs the generator that this element should be discarded
  *
- * This is a compatibility design: the current KSP plugin does not support
- * multi-round compilation well. Once annotated, this element will be
- * discarded and will not participate in any subsequent code generation.
+ * This is a compatibility design: the current KSP plugin does not support multi-round compilation well. Once annotated, this element will be discarded and will
+ * not participate in any subsequent code generation.
  *
  * @author TrueNine
  * @since 2024-12-01

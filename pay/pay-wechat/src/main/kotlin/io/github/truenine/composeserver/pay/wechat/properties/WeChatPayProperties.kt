@@ -30,7 +30,10 @@ data class WeChatPayProperties(
   /** appId of the mini program */
   var mpAppId: String? = null,
 
-  /** Asynchronous payment success notification URL <br></br> [WeChat Pay notification documentation](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_5.shtml) */
+  /**
+   * Asynchronous payment success notification URL <br></br>
+   * [WeChat Pay notification documentation](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_5.shtml)
+   */
   var asyncSuccessNotifyUrl: String? = null,
 
   /** Asynchronous refund success notification URL <br></br> [WeChat refund documentation](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_11.shtml) */

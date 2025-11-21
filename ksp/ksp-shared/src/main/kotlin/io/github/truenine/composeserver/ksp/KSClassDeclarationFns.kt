@@ -14,15 +14,11 @@ private fun KSClassDeclaration.internalIsAssignableFromDeeply(other: KClass<*>, 
 }
 
 /**
- * Check whether the current class or its superclasses are compatible with the
- * specified [KClass]. This function recursively checks the current class and
- * its superclasses to determine compatibility. To avoid infinite recursion, a
- * check list is used to record classes that have already been visited.
+ * Check whether the current class or its superclasses are compatible with the specified [KClass]. This function recursively checks the current class and its
+ * superclasses to determine compatibility. To avoid infinite recursion, a check list is used to record classes that have already been visited.
  *
- * @param other The [KClass] to check for compatibility with the current class
- *   or its superclasses.
- * @return true if the current class or its superclasses are compatible with
- *   the specified KClass; false otherwise.
+ * @param other The [KClass] to check for compatibility with the current class or its superclasses.
+ * @return true if the current class or its superclasses are compatible with the specified KClass; false otherwise.
  */
 fun KSClassDeclaration.isAssignableFromDeeply(other: KClass<*>): Boolean {
   return internalIsAssignableFromDeeply(other, mutableSetOf())

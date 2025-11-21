@@ -26,9 +26,11 @@ class WeChatPaySingleAutoConfiguration {
   @Bean
   @ConditionalOnProperty("compose.pay.wechat.enable-single", havingValue = "true")
   fun rsaAutoCertificateConfig(p: WeChatPayProperties): RSAAutoCertificateConfig {
-    if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false) log.warn("Warning: configured asynchronous payment notification URL is not https [{}]", p.asyncSuccessNotifyUrl)
+    if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false)
+      log.warn("Warning: configured asynchronous payment notification URL is not https [{}]", p.asyncSuccessNotifyUrl)
 
-    if (p.asyncSuccessRefundNotifyUrl?.startsWith("https://") == false) log.warn("Warning: configured asynchronous refund notification URL is not https [{}]", p.asyncSuccessRefundNotifyUrl)
+    if (p.asyncSuccessRefundNotifyUrl?.startsWith("https://") == false)
+      log.warn("Warning: configured asynchronous refund notification URL is not https [{}]", p.asyncSuccessRefundNotifyUrl)
 
     log.info("Register WeChat single payment properties p = {}", p)
     log.info("privateKeyPath = {}", p.privateKeyPath)
