@@ -66,7 +66,7 @@ mavenPublishing {
 
       developer {
         id = "TrueNine"
-        name = "赵日天"
+        name = "Zhao Ritian"
         url = "https://github.com/TrueNine"
         organizationUrl = "https://github.com/TrueNine"
         timezone = "GMT+8"
@@ -76,7 +76,7 @@ mavenPublishing {
       }
       developer {
         id = "t_teng"
-        name = "滕腾"
+        name = "Teng Teng"
         organization = "Nanning, Guangxi, China Yan100 technology Ltd"
         roles = listOf("Sponsor", "Founder")
         timezone = "GMT+8"

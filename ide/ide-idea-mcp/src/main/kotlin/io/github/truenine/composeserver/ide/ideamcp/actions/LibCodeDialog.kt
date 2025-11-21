@@ -77,7 +77,7 @@ class LibCodeDialog(private val project: Project, private val result: LibCodeRes
     result.metadata.documentation?.let { doc -> panel.add(JLabel("Documentation: $doc")) }
 
     if (result.isDecompiled) {
-      val warningLabel = JLabel("⚠️ This is decompiled code and may differ from the original source")
+      val warningLabel = JLabel("[WARNING] This is decompiled code and may differ from the original source")
       warningLabel.foreground = JBColor.ORANGE
       panel.add(warningLabel)
     }

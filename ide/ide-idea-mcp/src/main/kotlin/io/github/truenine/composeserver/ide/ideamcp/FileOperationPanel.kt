@@ -337,13 +337,13 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
       appendLine()
 
       if (fileErrorInfos.isEmpty()) {
-        appendLine("✅ No errors or warnings found")
+        appendLine("[OK] No errors or warnings found")
       } else {
         val totalErrors = fileErrorInfos.sumOf { it.errors.size }
         val totalWarnings = fileErrorInfos.sumOf { it.warnings.size }
         val totalWeakWarnings = fileErrorInfos.sumOf { it.weakWarnings.size }
 
-        appendLine("📊 Statistics:")
+        appendLine("Statistics:")
         appendLine("  - File count: ${fileErrorInfos.size}")
         appendLine("  - Total errors: $totalErrors")
         appendLine("  - Total warnings: $totalWarnings")
@@ -351,7 +351,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
         appendLine()
 
         fileErrorInfos.forEach { fileInfo ->
-          appendLine("📁 ${fileInfo.relativePath}")
+          appendLine("File: ${fileInfo.relativePath}")
           appendLine("   ${fileInfo.summary}")
 
           // Show error details (limited to avoid overly long output)
@@ -359,10 +359,10 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
           allIssues.take(5).forEach { error ->
             val severityIcon =
               when (error.severity) {
-                io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity.ERROR -> "❌"
-                io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity.WARNING -> "⚠️"
-                io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity.WEAK_WARNING -> "💡"
-                else -> "ℹ️"
+                io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity.ERROR -> "[ERROR]"
+                io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity.WARNING -> "[WARN]"
+                io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity.WEAK_WARNING -> "[INFO]"
+                else -> "[NOTE]"
               }
             appendLine("   $severityIcon line ${error.line}: ${error.message}")
           }
@@ -386,20 +386,20 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
       appendLine("Completed at: ${java.time.LocalDateTime.now()}")
       appendLine()
 
-      appendLine("📊 Statistics:")
+      appendLine("Statistics:")
       appendLine("  - Processed files: ${cleanResult.processedFiles}")
       appendLine("  - Modified files: ${cleanResult.modifiedFiles}")
       appendLine("  - Execution time: ${cleanResult.executionTime} ms")
       appendLine()
 
       if (cleanResult.operations.isNotEmpty()) {
-        appendLine("🔧 Operations performed:")
+        appendLine("Operations performed:")
         cleanResult.operations.forEach { operation -> appendLine("  - ${operation.description}: ${operation.filesAffected} files") }
         appendLine()
       }
 
       if (cleanResult.errors.isNotEmpty()) {
-        appendLine("❌ Errors:")
+        appendLine("Errors:")
         cleanResult.errors.take(10).forEach { error -> appendLine("  - $error") }
         if (cleanResult.errors.size > 10) {
           appendLine("  ... ${cleanResult.errors.size - 10} more errors")
@@ -407,7 +407,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
         appendLine()
       }
 
-      appendLine("📝 Summary:")
+      appendLine("Summary:")
       appendLine(cleanResult.summary)
     }
 
@@ -422,7 +422,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
   }
 
   private fun showError(message: String) {
-    resultArea.text = "❌ Error: $message"
+    resultArea.text = "[ERROR] $message"
     JOptionPane.showMessageDialog(this, message, "Operation failed", JOptionPane.ERROR_MESSAGE)
     Logger.warn("FileOperationPanel error: $message")
   }

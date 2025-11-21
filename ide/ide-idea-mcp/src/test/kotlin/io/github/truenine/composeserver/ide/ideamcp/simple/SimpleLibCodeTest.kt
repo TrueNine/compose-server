@@ -26,7 +26,7 @@ class SimpleLibCodeTest {
     assertTrue(result.language.isNotEmpty())
     assertNotNull(result.metadata)
 
-    println("✅ Simple test passed:")
+    println("[PASS] Simple test passed:")
     println("  Source length: ${result.sourceCode.length}")
     println("  Language: ${result.language}")
     println("  Library name: ${result.metadata.libraryName}")

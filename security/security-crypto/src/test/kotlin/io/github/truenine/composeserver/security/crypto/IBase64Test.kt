@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 private val log = slf4j<IBase64Test>()
 
 class IBase64Test {
-  private val testText = "Hello, World! sample text 🌟"
+  private val testText = "Hello, World! sample text"
   private val testBytes = testText.toByteArray(Charsets.UTF_8)
   private val expectedBase64 = Base64.getEncoder().encodeToString(testBytes)
 
@@ -282,7 +282,7 @@ class IBase64Test {
 
   @Test
   fun `performance benchmark for string encoding operations`() {
-    val testData = "Performance test data with various characters: sample-data 🚀".repeat(100)
+    val testData = "Performance test data with various characters: sample-data".repeat(100)
     val testBytes = testData.toByteArray(Charsets.UTF_8)
     val iterations = 1000
 

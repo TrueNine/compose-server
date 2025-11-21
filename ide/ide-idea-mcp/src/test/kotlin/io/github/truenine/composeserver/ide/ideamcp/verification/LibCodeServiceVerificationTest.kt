@@ -24,7 +24,7 @@ class LibCodeServiceVerificationTest {
     val mockProject = mockk<Project>(relaxed = true)
     val className = "java.lang.String"
 
-    println("🔍 Verification test: only class name argument")
+    println("[TEST] Verification test: only class name argument")
     println("Test class: $className")
 
     // When
@@ -37,7 +37,7 @@ class LibCodeServiceVerificationTest {
     assertTrue(result.metadata.libraryName.isNotEmpty())
     assertTrue(result.language.isNotEmpty())
 
-    println("✅ Verification succeeded:")
+    println("[PASS] Verification succeeded:")
     println("  - Source length: ${result.sourceCode.length} characters")
     println("  - Library name: ${result.metadata.libraryName}")
     println("  - Language: ${result.language}")
@@ -54,7 +54,7 @@ class LibCodeServiceVerificationTest {
     val className = "java.util.ArrayList"
     val memberName = "add"
 
-    println("🔍 Verification test: member extraction")
+    println("[TEST] Verification test: member extraction")
     println("Test class: $className")
     println("Member name: $memberName")
 
@@ -66,7 +66,7 @@ class LibCodeServiceVerificationTest {
     assertTrue(result.sourceCode.isNotEmpty())
     assertTrue(result.sourceCode.contains("ArrayList") || result.sourceCode.contains("add"))
 
-    println("✅ Verification succeeded:")
+    println("[PASS] Verification succeeded:")
     println("  - Source length: ${result.sourceCode.length} characters")
     println("  - Contains class name: ${result.sourceCode.contains("ArrayList")}")
     println("  - Contains member name: ${result.sourceCode.contains("add")}")
@@ -80,7 +80,7 @@ class LibCodeServiceVerificationTest {
     val mockProject = mockk<Project>(relaxed = true)
     val className = "com.nonexistent.NonExistentClass"
 
-    println("🔍 Verification test: handling non-existent class")
+    println("[TEST] Verification test: handling non-existent class")
     println("Test class: $className")
 
     // When
@@ -91,7 +91,7 @@ class LibCodeServiceVerificationTest {
     assertTrue(result.sourceCode.isNotEmpty())
     assertEquals(SourceType.NOT_FOUND, result.metadata.sourceType)
 
-    println("✅ Verification succeeded:")
+    println("[PASS] Verification succeeded:")
     println("  - Source type: ${result.metadata.sourceType}")
     println("  - Returned content: ${result.sourceCode.take(100)}...")
     println()
@@ -104,7 +104,7 @@ class LibCodeServiceVerificationTest {
     val mockProject = mockk<Project>(relaxed = true)
     val testClasses = listOf("java.lang.Object", "java.util.HashMap", "java.io.File", "java.time.LocalDateTime")
 
-    println("🔍 Verification test: multiple common classes")
+    println("[TEST] Verification test: multiple common classes")
     println("Test class list: ${testClasses.joinToString(", ")}")
     println()
 
@@ -118,12 +118,12 @@ class LibCodeServiceVerificationTest {
       assertTrue(result.sourceCode.isNotEmpty())
       assertNotNull(result.metadata)
 
-      println("📋 $className:")
-      println("  ⏱️  Lookup time: ${endTime - startTime}ms")
-      println("  📦 Library name: ${result.metadata.libraryName}")
-      println("  📄 Source type: ${result.metadata.sourceType}")
-      println("  📏 Source length: ${result.sourceCode.length} characters")
-      println("  🔤 Language: ${result.language}")
+      println("[INFO] $className:")
+      println("  Lookup time: ${endTime - startTime}ms")
+      println("  Library name: ${result.metadata.libraryName}")
+      println("  Source type: ${result.metadata.sourceType}")
+      println("  Source length: ${result.sourceCode.length} characters")
+      println("  Language: ${result.language}")
       println()
     }
   }
@@ -134,7 +134,7 @@ class LibCodeServiceVerificationTest {
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
 
-    println("🔍 Verification test: API signature correctness")
+    println("[TEST] Verification test: API signature correctness")
 
     // When & Then - compile-time verification
     // These calls should compile, proving the API signatures are correct.
@@ -157,7 +157,7 @@ class LibCodeServiceVerificationTest {
       assertNotNull(result3)
     }
 
-    println("✅ API signature verification succeeded:")
+    println("[PASS] API signature verification succeeded:")
     println("  - Supports class name only")
     println("  - Supports class name plus member name")
     println("  - Supports null member name")
@@ -172,7 +172,7 @@ class LibCodeServiceVerificationTest {
     val mockProject = mockk<Project>(relaxed = true)
     val className = "java.util.concurrent.ConcurrentHashMap"
 
-    println("🔍 Verification test: completeness of returned result")
+    println("[TEST] Verification test: completeness of returned result")
     println("Test class: $className")
 
     // When
@@ -186,11 +186,11 @@ class LibCodeServiceVerificationTest {
     assertNotNull(result.metadata.libraryName)
     assertNotNull(result.metadata.sourceType)
 
-    println("✅ Result completeness verification succeeded:")
-    println("  - sourceCode: ${if (result.sourceCode.isNotEmpty()) "✓" else "✗"}")
-    println("  - language: ${if (result.language.isNotEmpty()) "✓" else "✗"}")
+    println("[PASS] Result completeness verification succeeded:")
+    println("  - sourceCode: ${if (result.sourceCode.isNotEmpty()) "OK" else "FAIL"}")
+    println("  - language: ${if (result.language.isNotEmpty()) "OK" else "FAIL"}")
     println("  - isDecompiled: ${result.isDecompiled}")
-    println("  - metadata.libraryName: ${if (result.metadata.libraryName.isNotEmpty()) "✓" else "✗"}")
+    println("  - metadata.libraryName: ${if (result.metadata.libraryName.isNotEmpty()) "OK" else "FAIL"}")
     println("  - metadata.sourceType: ${result.metadata.sourceType}")
     println("  - metadata.version: ${result.metadata.version ?: "null"}")
     println("  - metadata.documentation: ${result.metadata.documentation ?: "null"}")

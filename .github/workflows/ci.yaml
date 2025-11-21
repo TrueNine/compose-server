@@ -198,16 +198,16 @@ jobs:
             -Dorg.gradle.workers.max=2 \
             -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+UseG1GC" || true
         env:
-          # TestContainers 配置
+          # TestContainers configuration
           TESTCONTAINERS_RYUK_DISABLED: false
           TESTCONTAINERS_REUSE_ENABLE: true
           TESTCONTAINERS_STARTUP_TIMEOUT: 120
           TESTCONTAINERS_CONNECT_TIMEOUT: 60
-          # Gradle 和 JVM 配置
+          # Gradle and JVM configuration
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
           JAVA_OPTS: "${{ env.JVM_OPTS }}"
           CI: true
-          # 并行测试配置
+          # Parallel test configuration
           JUNIT_PLATFORM_EXECUTION_PARALLEL_ENABLED: true
           JUNIT_PLATFORM_EXECUTION_PARALLEL_MODE_DEFAULT: concurrent
 
@@ -249,7 +249,7 @@ jobs:
         if: always() && matrix.testcontainers == true
         run: |
           echo "Cleaning up TestContainers resources..."
-          # 清理非复用的 TestContainers
+          # Clean up non-reusable TestContainers
           docker container prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
           docker network prune -f --filter "label=org.testcontainers=true" || true
           docker volume prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true

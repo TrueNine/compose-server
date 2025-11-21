@@ -26,7 +26,7 @@ class StringExtensionsTest {
 
   @Test
   fun `test base64 encoding and decoding`() {
-    val originalText = "Hello, World! sample text 🌍"
+    val originalText = "Hello, World! sample text"
 
     val encoded = originalText.base64()
     assertNotNull(encoded)

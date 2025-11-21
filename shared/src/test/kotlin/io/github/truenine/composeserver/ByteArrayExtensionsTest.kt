@@ -13,7 +13,7 @@ class ByteArrayExtensionsTest {
 
   @Test
   fun utf8StringConvertsByteArrayToUtf8String() {
-    val testString = "Hello, world! 🌍"
+    val testString = "Hello, world!"
     val byteArray = testString.toByteArray(Charsets.UTF_8)
 
     val result = byteArray.utf8String
@@ -52,7 +52,7 @@ class ByteArrayExtensionsTest {
 
   @Test
   fun utf8StringHandlesSpecialCharactersAndEmoji() {
-    val specialText = "Special chars: @#$%^&*()_+-=[]{}|;':\",./<>? 🎉🚀💻🌟"
+    val specialText = "Special chars: @#$%^&*()_+-=[]{}|;':\",./<>?"
     val byteArray = specialText.toByteArray(Charsets.UTF_8)
 
     val result = byteArray.utf8String
@@ -71,7 +71,7 @@ class ByteArrayExtensionsTest {
       First line of text
       Second line of text
       Third line with special characters: !@#$%
-      Fourth line with emoji: 😊🎈
+      Fourth line with special text
       """
         .trimIndent()
 

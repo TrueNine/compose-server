@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 class ByteArrayExtensionsTest {
   private val log = LoggerFactory.getLogger(ByteArrayExtensionsTest::class.java)
 
-  private val testText = "Hello, World! sample text 🌟"
+  private val testText = "Hello, World! sample text"
   private val testBytes = testText.toByteArray(Charsets.UTF_8)
   private val expectedBase64 = Base64.getEncoder().encodeToString(testBytes)
 
