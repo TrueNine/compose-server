@@ -23,7 +23,7 @@ class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
 
   @Test
   @Transactional
-  fun `all_to_nullable 应将所有字段变为可空`() {
+  fun `all_to_nullable should make all columns nullable`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key, name varchar(10) not null)")
     jdbcTemplate.execute("select all_to_nullable('test_table')")
     val nullables =
@@ -37,12 +37,12 @@ class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .associate { it["column_name"] to it["is_nullable"] }
-    assertTrue(nullables["name"]?.toString()?.uppercase() == "YES", "字段 name 不是可空，实际: ${nullables["name"]}")
+    assertTrue(nullables["name"]?.toString()?.uppercase() == "YES", "Column 'name' is not nullable, actual: ${nullables["name"]}")
   }
 
   @Test
   @Transactional
-  fun `all_to_nullable 幂等性测试`() {
+  fun `all_to_nullable idempotency test`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key, name varchar(10) not null, age int not null default 18)")
     jdbcTemplate.execute("select all_to_nullable('test_table')")
     jdbcTemplate.execute("select all_to_nullable('test_table')")
@@ -56,7 +56,7 @@ class AllToNullableMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .associate { it["column_name"] to it["is_nullable"] }
-    assertTrue("YES" == nullables["name"]?.toString()?.uppercase(), "name 字段不是可空")
-    assertTrue("YES" == nullables["age"]?.toString()?.uppercase(), "age 字段不是可空")
+    assertTrue("YES" == nullables["name"]?.toString()?.uppercase(), "Column 'name' is not nullable")
+    assertTrue("YES" == nullables["age"]?.toString()?.uppercase(), "Column 'age' is not nullable")
   }
 }

@@ -14,7 +14,7 @@ class DurationScalarProviderTest : IDatabasePostgresqlContainer {
   private val duration = Duration.parse(durationStr)
 
   @Test
-  fun `测试 duration 的可转换性`() {
+  fun `should convert duration correctly`() {
     assertEquals(duration.toDays(), 14)
     assertEquals(duration.toHours(), 14 * 24)
     val result = duration.toString()

@@ -41,7 +41,7 @@ class FunctionExistenceAndCallTest : IDatabasePostgresqlContainer {
   @ParameterizedTest
   @MethodSource("functionNamesProvider")
   @Transactional
-  fun `函数已创建`(functionName: String) {
+  fun `functions should be created`(functionName: String) {
     val foundFunctions =
       jdbcTemplate
         .queryForList(
@@ -51,12 +51,12 @@ class FunctionExistenceAndCallTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .map { it["proname"] }
-    assertTrue(foundFunctions.contains(functionName), "缺少函数: $functionName")
+    assertTrue(foundFunctions.contains(functionName), "Missing function: $functionName")
   }
 
   @Test
   @Transactional
-  fun `所有函数都能被调用`() {
+  fun `all functions should be callable`() {
     jdbcTemplate.execute("create table if not exists test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select rm_base_struct('test_table')")

@@ -23,7 +23,7 @@ class AddPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
 
   @Test
   @Transactional
-  fun `add_presort_tree_struct 应正确增加字段`() {
+  fun `add_presort_tree_struct should add presort tree columns correctly`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_presort_tree_struct('test_table')")
     val columns =
@@ -37,12 +37,12 @@ class AddPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expected = listOf("rpi", "rln", "rrn")
-    assertTrue(columns.containsAll(expected), "缺少 presort tree 字段: " + (expected - columns))
+    assertTrue(columns.containsAll(expected), "Missing presort tree columns: " + (expected - columns))
   }
 
   @Test
   @Transactional
-  fun `add_presort_tree_struct 幂等性测试`() {
+  fun `add_presort_tree_struct idempotency test`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_presort_tree_struct('test_table')")
     jdbcTemplate.execute("select add_presort_tree_struct('test_table')")
@@ -57,6 +57,6 @@ class AddPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expected = listOf("rpi", "rln", "rrn")
-    assertTrue(columns.containsAll(expected), "add_presort_tree_struct 幂等性失败: " + (expected - columns))
+    assertTrue(columns.containsAll(expected), "add_presort_tree_struct idempotency failed: " + (expected - columns))
   }
 }
