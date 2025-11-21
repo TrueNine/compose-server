@@ -9,15 +9,15 @@ import org.babyfish.jimmer.sql.Version
 
 @MappedSuperclass
 interface IEntity : IPersistentEntity {
-  /** 字段创建时间 */
+  /** Field creation time */
   @Column(name = "crd") val crd: instant?
 
-  /** 字段修改时间 */
+  /** Field modification time */
   @Column(name = "mrd") val mrd: instant?
 
-  /** 乐观锁版本号 */
+  /** Optimistic lock version */
   @Version @Default("0") @Column(name = "rlv") val rlv: Int
 
-  /** 逻辑删除标志 */
+  /** Logical delete flag */
   @LogicalDeleted("now") @Column(name = "ldf") val ldf: instant?
 }

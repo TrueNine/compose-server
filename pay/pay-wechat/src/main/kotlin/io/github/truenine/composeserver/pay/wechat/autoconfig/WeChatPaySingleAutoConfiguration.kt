@@ -26,17 +26,17 @@ class WeChatPaySingleAutoConfiguration {
   @Bean
   @ConditionalOnProperty("compose.pay.wechat.enable-single", havingValue = "true")
   fun rsaAutoCertificateConfig(p: WeChatPayProperties): RSAAutoCertificateConfig {
-    if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false) log.warn("警告：配置的异步支付通知地址不是 https 地址 [{}]", p.asyncSuccessNotifyUrl)
+    if (p.asyncSuccessNotifyUrl?.startsWith("https://") == false) log.warn("Warning: configured asynchronous payment notification URL is not https [{}]", p.asyncSuccessNotifyUrl)
 
-    if (p.asyncSuccessRefundNotifyUrl?.startsWith("https://") == false) log.warn("警告：配置的异步退款通知地址不是 https 地址 [{}]", p.asyncSuccessRefundNotifyUrl)
+    if (p.asyncSuccessRefundNotifyUrl?.startsWith("https://") == false) log.warn("Warning: configured asynchronous refund notification URL is not https [{}]", p.asyncSuccessRefundNotifyUrl)
 
-    log.info("注册 微信 单支付属性 p = {}", p)
+    log.info("Register WeChat single payment properties p = {}", p)
     log.info("privateKeyPath = {}", p.privateKeyPath)
     log.info("certKeyPath = {}", p.certPath)
 
     val privateKey = ClassPathResource(p.privateKeyPath).contentAsByteArray.utf8String
 
-    // TODO 郑重警告，此类不能被创建两次
+    // TODO Important warning: this class must not be created twice
     return RSAAutoCertificateConfig.Builder()
       .merchantId(p.merchantId)
       .privateKey(privateKey)

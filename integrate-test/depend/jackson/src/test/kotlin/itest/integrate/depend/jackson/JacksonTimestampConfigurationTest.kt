@@ -20,9 +20,10 @@ import org.springframework.context.annotation.Import
 import tools.jackson.databind.ObjectMapper
 
 /**
- * Jackson时间戳配置集成测试
+ * Jackson timestamp configuration integration tests.
  *
- * 验证Spring Boot环境下的Jackson自动配置正确性，测试Bean创建和依赖注入
+ * Verifies Jackson auto-configuration correctness in a Spring Boot
+ * environment, testing bean creation and dependency injection.
  */
 @SpringBootTest(classes = [JacksonTimestampConfigurationTest.TestConfiguration::class])
 class JacksonTimestampConfigurationTest {
@@ -40,11 +41,11 @@ class JacksonTimestampConfigurationTest {
 
     @Test
     fun jackson_properties_should_be_loaded_with_default_values() {
-      // 验证默认配置值
-      assertTrue(jacksonProperties.enableTimestampSerialization, "时间戳序列化应该默认启用")
-      assertEquals(TimestampUnit.MILLISECONDS, jacksonProperties.timestampUnit, "默认应该使用毫秒时间戳")
-      assertFalse(jacksonProperties.failOnUnknownProperties, "默认应该忽略未知属性")
-      assertTrue(jacksonProperties.writeDatesAsTimestamps, "默认应该将日期写为时间戳")
+      // Verify default configuration values
+      assertTrue(jacksonProperties.enableTimestampSerialization, "Timestamp serialization should be enabled by default")
+      assertEquals(TimestampUnit.MILLISECONDS, jacksonProperties.timestampUnit, "Millisecond timestamp should be used by default")
+      assertFalse(jacksonProperties.failOnUnknownProperties, "Unknown properties should be ignored by default")
+      assertTrue(jacksonProperties.writeDatesAsTimestamps, "Dates should be written as timestamps by default")
     }
   }
 
@@ -53,17 +54,17 @@ class JacksonTimestampConfigurationTest {
 
     @Test
     fun default_object_mapper_bean_should_be_created() {
-      assertNotNull(defaultObjectMapper, "默认ObjectMapper Bean应该被创建")
+      assertNotNull(defaultObjectMapper, "Default ObjectMapper bean should be created")
     }
 
     @Test
     fun non_ignore_object_mapper_bean_should_be_created() {
-      assertNotNull(nonIgnoreObjectMapper, "非忽略ObjectMapper Bean应该被创建")
+      assertNotNull(nonIgnoreObjectMapper, "Non-ignore ObjectMapper bean should be created")
     }
 
     @Test
     fun object_mapper_holder_should_be_created() {
-      assertNotNull(objectMapperHolder, "ObjectMapperHolder Bean应该被创建")
+      assertNotNull(objectMapperHolder, "ObjectMapperHolder bean should be created")
     }
   }
 
@@ -75,8 +76,8 @@ class JacksonTimestampConfigurationTest {
       val defaultFromHolder = objectMapperHolder.getDefaultMapper()
       val nonIgnoreFromHolder = objectMapperHolder.getNonIgnoreMapper()
 
-      assertNotNull(defaultFromHolder, "ObjectMapperHolder应该能获取到默认ObjectMapper")
-      assertNotNull(nonIgnoreFromHolder, "ObjectMapperHolder应该能获取到非忽略ObjectMapper")
+      assertNotNull(defaultFromHolder, "ObjectMapperHolder should be able to obtain the default ObjectMapper")
+      assertNotNull(nonIgnoreFromHolder, "ObjectMapperHolder should be able to obtain the non-ignore ObjectMapper")
     }
 
     @Test
@@ -84,8 +85,8 @@ class JacksonTimestampConfigurationTest {
       val mapperForIgnore = objectMapperHolder.getMapper(ignoreUnknown = true)
       val mapperForNonIgnore = objectMapperHolder.getMapper(ignoreUnknown = false)
 
-      assertNotNull(mapperForIgnore, "应该能根据忽略标志获取到ObjectMapper")
-      assertNotNull(mapperForNonIgnore, "应该能根据忽略标志获取到ObjectMapper")
+      assertNotNull(mapperForIgnore, "Should be able to obtain ObjectMapper based on ignoreUnknown flag")
+      assertNotNull(mapperForNonIgnore, "Should be able to obtain ObjectMapper based on ignoreUnknown flag")
     }
   }
 
@@ -96,14 +97,14 @@ class JacksonTimestampConfigurationTest {
     fun default_mapper_should_serialize_dates_as_numeric_timestamps() {
       val instant = Instant.parse("2023-06-15T12:00:00Z")
       val json = defaultObjectMapper.writeValueAsString(instant)
-      assertNotNull(json.toLongOrNull(), "默认ObjectMapper应该输出数字时间戳")
+      assertNotNull(json.toLongOrNull(), "Default ObjectMapper should output numeric timestamps")
     }
 
     @Test
     fun non_ignore_mapper_should_have_correct_configuration() {
       val config = nonIgnoreObjectMapper.deserializationConfig()
-      // 验证非忽略ObjectMapper的配置
-      assertNotNull(config, "非忽略ObjectMapper应该有正确的配置")
+      // Verify configuration of non-ignore ObjectMapper
+      assertNotNull(config, "Non-ignore ObjectMapper should have correct configuration")
     }
   }
 

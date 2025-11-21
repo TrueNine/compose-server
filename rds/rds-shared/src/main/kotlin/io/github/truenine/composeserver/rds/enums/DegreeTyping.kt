@@ -4,40 +4,40 @@ import io.github.truenine.composeserver.IIntEnum
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
-/** 用户学历 */
+/** User education level */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class DegreeTyping(v: Int, val level: Int) : IIntEnum {
-  /** 文盲 */
+  /** Illiterate */
   @EnumItem(ordinal = 0) NONE(0, 0),
 
-  /** 小学 */
+  /** Primary school */
   @EnumItem(ordinal = 1) MIN(1, 1),
 
-  /** 初中 */
+  /** Junior high school */
   @EnumItem(ordinal = 2) HALF(2, 2),
 
-  /** 中专 */
+  /** Secondary vocational school */
   @EnumItem(ordinal = 8) HALF_TECH(8, 3),
 
-  /** 高中 */
+  /** High school */
   @EnumItem(ordinal = 3) HEIGHT(3, 4),
 
-  /** 大专 */
+  /** Junior college */
   @EnumItem(ordinal = 9) HEIGHT_TECH(9, 5),
 
-  /** 本科 */
+  /** Bachelor degree */
   @EnumItem(ordinal = 4) BIG(4, 6),
 
-  /** 研究生 */
+  /** Postgraduate */
   @EnumItem(ordinal = 5) DISCOVERY(5, 7),
 
-  /** 博士 */
+  /** Doctorate */
   @EnumItem(ordinal = 6) EXPERT(6, 8),
 
-  /** 博士后 */
+  /** Postdoctoral */
   @EnumItem(ordinal = 7) AFTER_EXPERT(7, 9),
 
-  /** 其他 */
+  /** Other */
   @EnumItem(ordinal = 9999) OTHER(9999, -1);
 
   override val value = v

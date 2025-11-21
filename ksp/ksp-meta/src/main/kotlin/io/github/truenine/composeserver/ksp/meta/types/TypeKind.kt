@@ -8,15 +8,15 @@ enum class TypeKind {
   ANNOTATION_CLASS,
   OBJECT,
 
-  /** 类型别名 */
+  /** Type alias */
   TYPEALIAS,
 
-  /** 瞬态类型，这表示该类型正在被处理，非稳定可存储类型 */
+  /** Transient type, meaning this type is being processed and is not a stable storable type */
   TRANSIENT,
 
-  /** jimmer 的 entity */
+  /** Jimmer entity */
   IMMUTABLE,
 
-  /** jimmer 的 复合属性 */
+  /** Jimmer embeddable (composite property) */
   EMBEDDABLE,
 }

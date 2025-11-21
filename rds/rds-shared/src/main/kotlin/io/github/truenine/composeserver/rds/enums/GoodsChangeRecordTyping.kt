@@ -5,21 +5,21 @@ import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /**
- * 商品改动类型
+ * Goods change types
  *
  * @author TrueNine
  * @since 2023-04-23
  */
-@Deprecated("不明确的业务类型混入")
+@Deprecated("Mixed with unclear business types")
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class GoodsChangeRecordTyping(v: Int) : IIntEnum {
-  /** 无改动 */
+  /** No change */
   @EnumItem(ordinal = 0) NONE(0),
 
-  /** 改价格 */
+  /** Price changed */
   @EnumItem(ordinal = 1) CHANGE_PRICE(1),
 
-  /** 改标题 */
+  /** Title changed */
   @EnumItem(ordinal = 2) CHANGE_TITLE(2);
 
   override val value = v

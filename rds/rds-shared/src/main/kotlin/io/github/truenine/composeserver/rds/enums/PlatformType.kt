@@ -6,42 +6,42 @@ import org.babyfish.jimmer.sql.EnumType
 import org.babyfish.jimmer.sql.EnumType.Strategy
 
 /**
- * # 各端口平台类型
+ * # Platform types for different endpoints
  *
  * @author TrueNine
  * @since 2025-02-26
  */
 @EnumType(Strategy.NAME)
 enum class PlatformType(v: String) : IStringEnum {
-  /** 未知 */
-  @EnumItem(name = "NONE") @Deprecated(message = "一般情况，请明确指定平台") NONE("NONE"),
+  /** Unknown */
+  @EnumItem(name = "NONE") @Deprecated(message = "In general, please specify the platform explicitly") NONE("NONE"),
 
-  /** 微信公众号 */
+  /** WeChat Official Account */
   @EnumItem(name = "WECHAT_PUBLIC_ACCOUNT") WECHAT_PUBLIC_ACCOUNT("WECHAT_PUBLIC_ACCOUNT"),
 
-  /** 微信小程序 */
+  /** WeChat Mini Program */
   @EnumItem(name = "WECHAT_MINI_PROGRAM") WECHAT_MINI_PROGRAM("WECHAT_MINI_PROGRAM"),
 
-  /** 微信开放平台 */
+  /** WeChat Open Platform */
   @EnumItem(name = "WECHAT_OPEN_PLATFORM") WECHAT_OPEN_PLATFORM("WECHAT_OPEN_PLATFORM"),
 
-  /** 移动端 veb view */
+  /** Mobile web view */
   @EnumItem(name = "MOBILE_WEB_VIEW") MOBILE_WEB_VIEW("MOBILE_WEB_VIEW"),
 
-  /** 移动端 h5 */
+  /** Mobile H5 */
   @EnumItem(name = "MOBILE_H5") MOBILE_H5("MOBILE_H5"),
 
-  /** 微信网页 */
+  /** WeChat web page */
   @EnumItem(name = "WECHAT_WEB_SITE") WECHAT_WEB_SITE("WECHAT_WEB_SITE"),
 
-  /** pc 网站 */
+  /** PC website */
   @EnumItem(name = "PC_WEB_SITE") PC_WEB_SITE("PC_WEB_SITE"),
 
-  /** web 后台管理端 */
+  /** Web admin site */
   @EnumItem(name = "WEB_ADMIN_SITE") WEB_ADMIN_SITE("WEB_ADMIN_SITE"),
 
-  /** 其他 */
-  @EnumItem(name = "OTHER") @Deprecated(message = "如果不明确平台，请先明确") OTHER("OTHER");
+  /** Other */
+  @EnumItem(name = "OTHER") @Deprecated(message = "If the platform is unclear, please clarify it first") OTHER("OTHER");
 
   override val value = v
 

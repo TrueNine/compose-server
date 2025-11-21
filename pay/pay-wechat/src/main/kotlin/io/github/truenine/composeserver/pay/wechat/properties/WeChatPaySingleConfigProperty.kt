@@ -1,15 +1,15 @@
 package io.github.truenine.composeserver.pay.wechat.properties
 
 /**
- * # 微信支付 单配置属性
+ * # WeChat Pay single-configuration properties
  *
  * @author TrueNine
  * @since 2023-05-28
  */
 open class WeChatPaySingleConfigProperty {
   /**
-   * ## 此属性代表是否开启了 单配置支付
-   * 如果未开启，则其他属性都是未初始化的属性
+   * ## Indicates whether single-configuration payment is enabled.
+   * If disabled, other properties are considered uninitialized.
    */
   open var enable: Boolean = false
   open lateinit var privateKey: String

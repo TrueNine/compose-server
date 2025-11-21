@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.gradleplugin.consts
 
 /**
- * maven 仓库管理
+ * maven repository management
  *
  * @author TrueNine
  * @since 2023-08-06

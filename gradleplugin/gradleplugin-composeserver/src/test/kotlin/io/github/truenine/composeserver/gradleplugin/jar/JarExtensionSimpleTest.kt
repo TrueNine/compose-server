@@ -25,7 +25,7 @@ class JarExtensionSimpleTest {
   fun setup() {
     project = ProjectBuilder.builder().withProjectDir(tempDir).build()
 
-    // 应用必要插件
+    // Apply required plugins
     project.pluginManager.apply(JavaPlugin::class.java)
     project.pluginManager.apply(SpringBootPlugin::class.java)
 
@@ -72,7 +72,7 @@ class JarExtensionSimpleTest {
   fun `handle_developmentOnly_configuration_safely`() {
     config.bootJarSeparate = true
 
-    // 创建模拟的 developmentOnly 配置，如果不存在
+    // Create a mock developmentOnly configuration if it does not exist
     if (project.configurations.findByName("developmentOnly") == null) {
       project.configurations.create("developmentOnly") { devConfig ->
         devConfig.isCanBeResolved = true
@@ -80,7 +80,7 @@ class JarExtensionSimpleTest {
       }
     }
 
-    // 应该不会抛出异常
+    // Should not throw any exception
     JarExtension(project, config)
 
     val copyLibTask = project.tasks.getByName(JarExtension.BOOT_JAR_COPY_LIB_TASK_NAME) as Copy
@@ -91,7 +91,7 @@ class JarExtensionSimpleTest {
   fun `work_when_developmentOnly_configuration_missing`() {
     config.bootJarSeparate = true
 
-    // 不创建 developmentOnly 配置，应该正常工作
+    // Do not create developmentOnly configuration; should still work correctly
     JarExtension(project, config)
 
     val copyLibTask = project.tasks.getByName(JarExtension.BOOT_JAR_COPY_LIB_TASK_NAME) as Copy

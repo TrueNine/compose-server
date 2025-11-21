@@ -75,8 +75,8 @@ class GradleGenerator(@Inject private val project: Project, @Inject private val 
 
           val result =
             template
-              .replace("-$-", urls.joinToString(",")) // 替换url
-              .replace("$-$", cfg.otherRepositories.joinToString(",")) // 替换仓库
+              .replace("-$-", urls.joinToString(",")) // Replace URLs
+              .replace("$-$", cfg.otherRepositories.joinToString(",")) // Replace repositories
               .replace("$[WURL]", cfg.wrapperUrl)
               .replace("$[WVERSION]", cfg.wrapperVersion)
           initFile?.let { f ->

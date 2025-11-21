@@ -24,7 +24,7 @@ class DotenvLoaderTest {
   fun setup() {
     project = ProjectBuilder.builder().withProjectDir(tempDir).build()
 
-    // 应用Spring Boot插件以获得BootRun任务
+    // Apply Spring Boot plugin to get BootRun task
     project.pluginManager.apply("org.springframework.boot")
 
     config = DotenvConfig()
@@ -249,12 +249,12 @@ class DotenvLoaderTest {
     config.enabled = true
     config.filePath = envFile.absolutePath
 
-    // 创建测试任务
+    // Create test task
     val testTask = project.tasks.create("test", Test::class.java)
 
     val loader = DotenvLoader(project, config)
 
-    // 验证环境变量已注入
+    // Verify environment variables injected
     assertEquals("test_value", testTask.environment["TEST_VAR"])
     assertEquals("localhost", testTask.environment["DB_HOST"])
   }
@@ -273,12 +273,12 @@ class DotenvLoaderTest {
     config.enabled = true
     config.filePath = envFile.absolutePath
 
-    // 创建BootRun任务
+    // Create BootRun task
     val bootRunTask = project.tasks.create("bootRun", BootRun::class.java)
 
     val loader = DotenvLoader(project, config)
 
-    // 验证环境变量已注入
+    // Verify environment variables injected
     assertEquals("dev", bootRunTask.environment["SPRING_PROFILE"])
     assertEquals("8080", bootRunTask.environment["SERVER_PORT"])
   }
@@ -298,12 +298,12 @@ class DotenvLoaderTest {
     config.enabled = true
     config.filePath = envFile.absolutePath
 
-    // 创建JavaExec任务
+    // Create JavaExec task
     val javaExecTask = project.tasks.create("runApp", JavaExec::class.java)
 
     val loader = DotenvLoader(project, config)
 
-    // 验证环境变量已注入
+    // Verify environment variables injected
     assertEquals("-Xmx1g", javaExecTask.environment["CUSTOM_OPTS"])
     assertEquals("production", javaExecTask.environment["APP_ENV"])
     assertEquals("jdbc:postgresql://localhost:5432/mydb", javaExecTask.environment["DATABASE_URL"])
@@ -323,12 +323,12 @@ class DotenvLoaderTest {
     config.enabled = true
     config.filePath = envFile.absolutePath
 
-    // 创建Kotlin应用的run任务（JavaExec类型）
+    // Create run task for Kotlin application (JavaExec type)
     val runTask = project.tasks.create("run", JavaExec::class.java)
 
     val loader = DotenvLoader(project, config)
 
-    // 验证环境变量已注入
+    // Verify environment variables injected
     assertEquals("development", runTask.environment["KOTLIN_ENV"])
     assertEquals("true", runTask.environment["DEBUG_MODE"])
   }

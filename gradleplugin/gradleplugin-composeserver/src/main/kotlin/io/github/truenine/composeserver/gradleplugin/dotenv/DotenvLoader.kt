@@ -10,12 +10,13 @@ import org.gradle.api.tasks.testing.Test
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 /**
- * # Dotenv 环境变量加载器
+ * # Dotenv environment variable loader
  *
- * 负责从 .env 文件中解析环境变量并注入到 Gradle 任务的执行环境中
+ * Responsible for parsing environment variables from .env files
+ * and injecting them into the execution environment of Gradle tasks.
  *
- * @param project Gradle 项目实例
- * @param config Dotenv 配置
+ * @param project Gradle project instance
+ * @param config Dotenv configuration
  * @author TrueNine
  * @since 2024-12-19
  */
@@ -33,7 +34,7 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
     }
   }
 
-  /** 从 .env 文件加载环境变量 */
+  /** Load environment variables from the .env file */
   private fun loadEnvironmentVariables() {
     val dotenvFile = resolveDotenvFile()
 
@@ -78,9 +79,9 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
     }
   }
 
-  /** 解析单行环境变量定义 */
+  /** Parse a single environment variable definition line */
   private fun parseLine(line: String, lineNumber: Int) {
-    // 跳过空行和注释行
+    // Skip empty lines and commented lines
     if (line.isEmpty() || line.startsWith("#")) {
       return
     }
@@ -105,13 +106,13 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
 
     val value = parseValue(rawValue)
 
-    // 检查是否忽略空值
+    // Check whether to ignore empty values
     if (config.ignoreEmptyValues && value.isEmpty()) {
       logger.debug("Ignoring empty value for key: $key")
       return
     }
 
-    // 应用前缀过滤器
+    // Apply prefix filter
     config.prefixFilter?.let { prefix ->
       if (!key.startsWith(prefix)) {
         logger.debug("Skipping key '$key' (doesn't match prefix filter: '$prefix')")
@@ -119,19 +120,19 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
       }
     }
 
-    // 检查排除列表
+    // Check exclude list
     if (config.excludeKeys.contains(key)) {
       logger.debug("Skipping excluded key: $key")
       return
     }
 
-    // 检查包含列表
+    // Check include list
     if (config.includeKeys.isNotEmpty() && !config.includeKeys.contains(key)) {
       logger.debug("Skipping key '$key' (not in include list)")
       return
     }
 
-    // 检查是否覆盖已存在的环境变量
+    // Check whether to override existing environment variables
     if (!config.overrideExisting && System.getenv(key) != null) {
       logger.debug("Skipping key '$key' (already exists in environment and override is disabled)")
       return
@@ -140,11 +141,11 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
     loadedVariables[key] = value
   }
 
-  /** 解析环境变量值，处理引号和转义字符 */
+  /** Parse environment variable value, handling quotes and escape characters */
   private fun parseValue(rawValue: String): String {
     if (rawValue.isEmpty()) return rawValue
 
-    // 处理双引号
+    // Handle double quotes
     if (rawValue.startsWith("\"") && rawValue.endsWith("\"") && rawValue.length >= 2) {
       return rawValue
         .substring(1, rawValue.length - 1)
@@ -155,7 +156,7 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
         .replace("\\\\", "\\")
     }
 
-    // 处理单引号
+    // Handle single quotes
     if (rawValue.startsWith("'") && rawValue.endsWith("'") && rawValue.length >= 2) {
       return rawValue.substring(1, rawValue.length - 1)
     }
@@ -163,7 +164,7 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
     return rawValue
   }
 
-  /** 解析 dotenv 文件路径 */
+  /** Resolve the dotenv file path */
   private fun resolveDotenvFile(): File {
     val path = config.filePath
 
@@ -174,7 +175,7 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
     }
   }
 
-  /** 将环境变量注入到 Gradle 任务中 */
+  /** Inject environment variables into Gradle tasks */
   private fun injectIntoTasks() {
     if (loadedVariables.isEmpty()) {
       logger.debug("No environment variables to inject")
@@ -182,27 +183,27 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
     }
 
     project.wrap {
-      // 注入到所有测试任务
+      // Inject into all test tasks
       tasks.withType(Test::class.java).configureEach { testTask ->
         loadedVariables.forEach { (key, value) -> testTask.environment(key, value) }
         logger.debug("Injected ${loadedVariables.size} environment variables into test task: ${testTask.name}")
       }
 
-      // 注入到所有 JavaExec 任务（包括自定义的 Java 执行任务）
+      // Inject into all JavaExec tasks (including custom Java execution tasks)
       tasks.withType(JavaExec::class.java).configureEach { javaExecTask ->
         loadedVariables.forEach { (key, value) -> javaExecTask.environment(key, value) }
         logger.debug("Injected ${loadedVariables.size} environment variables into JavaExec task: ${javaExecTask.name}")
       }
 
-      // 注入到 Spring Boot 运行任务
+      // Inject into Spring Boot run tasks
       tasks.withType(BootRun::class.java).configureEach { bootRunTask ->
         loadedVariables.forEach { (key, value) -> bootRunTask.environment(key, value) }
         logger.debug("Injected ${loadedVariables.size} environment variables into bootRun task: ${bootRunTask.name}")
       }
 
-      // 注入到 Kotlin 运行任务（如果存在）
+      // Inject into Kotlin run tasks (if present)
       afterEvaluate {
-        // 处理 Kotlin 应用插件的 run 任务
+        // Handle run task of the Kotlin application plugin
         tasks.findByName("run")?.let { runTask ->
           if (runTask is JavaExec) {
             loadedVariables.forEach { (key, value) -> runTask.environment(key, value) }
@@ -210,10 +211,10 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
           }
         }
 
-        // 注入到 Quarkus 开发任务（如果存在）
+        // Inject into Quarkus dev task (if present)
         tasks.findByName("quarkusDev")?.let { quarkusDevTask ->
           try {
-            // Quarkus 任务可能有不同的环境变量设置方式
+            // Quarkus tasks may have different ways to configure environment variables
             val currentEnv = quarkusDevTask.property("environment") as? Map<String, String> ?: emptyMap()
             val newEnv = currentEnv + loadedVariables
             quarkusDevTask.setProperty("environment", newEnv)
@@ -223,7 +224,7 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
           }
         }
 
-        // 注入到 Micronaut 开发任务（如果存在）
+        // Inject into Micronaut dev task (if present)
         tasks.findByName("mn:run")?.let { micronautRunTask ->
           if (micronautRunTask is JavaExec) {
             loadedVariables.forEach { (key, value) -> micronautRunTask.environment(key, value) }
@@ -231,12 +232,12 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
           }
         }
 
-        // 为其他可能需要环境变量的任务创建通用注入机制
+        // Create a generic injection mechanism for other tasks that may require environment variables
         tasks.configureEach { task ->
-          // 跳过已经处理过的任务类型
+          // Skip task types that have already been processed
           if (task !is Test && task !is JavaExec && task.name !in setOf("quarkusDev", "mn:run")) {
 
-            // 尝试为有 environment 属性的任务注入环境变量
+            // Try to inject environment variables into tasks that have an environment property
             if (task.hasProperty("environment")) {
               try {
                 val currentEnv = task.property("environment") as? Map<String, String> ?: emptyMap()
@@ -253,7 +254,7 @@ class DotenvLoader(@Inject private val project: Project, @Inject private val con
     }
   }
 
-  /** 获取已加载的环境变量 */
+  /** Get loaded environment variables */
   fun getLoadedVariables(): Map<String, String> = loadedVariables.toMap()
 
   companion object {

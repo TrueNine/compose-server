@@ -28,7 +28,7 @@ class JarExtensionTest {
   fun setup() {
     project = ProjectBuilder.builder().withProjectDir(tempDir).build()
 
-    // 应用必要插件
+    // Apply required plugins
     project.pluginManager.apply(JavaPlugin::class.java)
     project.pluginManager.apply(SpringBootPlugin::class.java)
 
@@ -40,7 +40,7 @@ class JarExtensionTest {
 
     @Test
     fun `not_create_jar_tasks_when_jar_task_not_found`() {
-      // 使用一个没有 Java 插件的项目来模拟没有 jar 任务的情况
+      // Use a project without the Java plugin to simulate the absence of a jar task
       val cleanProject = ProjectBuilder.builder().withProjectDir(tempDir).build()
       cleanProject.pluginManager.apply(SpringBootPlugin::class.java)
       val cleanConfig = JarExtensionConfig(cleanProject)
@@ -48,13 +48,13 @@ class JarExtensionTest {
 
       JarExtension(cleanProject, cleanConfig)
 
-      // 验证没有创建额外的任务，因为没有 jar 任务
+      // Verify that no additional tasks are created because there is no jar task
       assertTrue(cleanProject.tasks.withType(Jar::class.java).isEmpty())
     }
 
     @Test
     fun `not_create_bootJar_tasks_when_conditions_not_met`() {
-      // 使用一个没有 Spring Boot 插件的项目来模拟没有 bootJar 任务的情况
+      // Use a project without the Spring Boot plugin to simulate the absence of a bootJar task
       val cleanProject = ProjectBuilder.builder().withProjectDir(tempDir).build()
       cleanProject.pluginManager.apply(JavaPlugin::class.java)
       val cleanConfig = JarExtensionConfig(cleanProject)
@@ -62,7 +62,7 @@ class JarExtensionTest {
 
       JarExtension(cleanProject, cleanConfig)
 
-      // 验证没有创建 boot jar 相关任务，因为没有 bootJar 任务
+      // Verify that no boot jar-related tasks are created because there is no bootJar task
       assertFalse(cleanProject.tasks.names.contains(JarExtension.BOOT_JAR_CLEAN_TASK_NAME))
       assertFalse(cleanProject.tasks.names.contains(JarExtension.BOOT_JAR_COPY_LIB_TASK_NAME))
       assertFalse(cleanProject.tasks.names.contains(JarExtension.BOOT_JAR_COPY_CONFIG_TASK_NAME))
@@ -129,7 +129,7 @@ class JarExtensionTest {
     fun setupForDevelopmentOnlyTest() {
       config.bootJarSeparate = true
 
-      // 创建模拟的 developmentOnly 配置，如果不存在
+      // Create a mock developmentOnly configuration if it does not exist
       if (project.configurations.findByName("developmentOnly") == null) {
         project.configurations.create("developmentOnly") { devConfig ->
           devConfig.isCanBeResolved = true
@@ -140,14 +140,14 @@ class JarExtensionTest {
 
     @Test
     fun `handle_missing_developmentOnly_configuration_gracefully`() {
-      // 使用一个全新的项目来模拟没有 developmentOnly 配置的情况
+      // Use a brand-new project to simulate the absence of a developmentOnly configuration
       val cleanProject = ProjectBuilder.builder().withProjectDir(tempDir).build()
       cleanProject.pluginManager.apply(JavaPlugin::class.java)
       cleanProject.pluginManager.apply(SpringBootPlugin::class.java)
       val cleanConfig = JarExtensionConfig(cleanProject)
       cleanConfig.bootJarSeparate = true
 
-      // 应该不会抛出异常
+      // Should not throw any exception
       JarExtension(cleanProject, cleanConfig)
 
       val copyLibTask = cleanProject.tasks.getByName(JarExtension.BOOT_JAR_COPY_LIB_TASK_NAME) as Copy
@@ -162,14 +162,14 @@ class JarExtensionTest {
     fun `copy_license_when_copyLicense_enabled_and_jar_task_exists`() {
       config.copyLicense = true
 
-      // 创建模拟的 LICENSE 文件
+      // Create a mock LICENSE file
       val licenseFile = File(project.rootDir, "LICENSE")
       licenseFile.createNewFile()
       licenseFile.writeText("MIT License")
 
       JarExtension(project, config)
 
-      // 验证 jar 任务配置了 LICENSE 文件
+      // Verify that the jar task is configured with the LICENSE file
       val jarTask = project.tasks.withType(Jar::class.java).first()
       assertNotNull(jarTask)
     }
@@ -178,23 +178,23 @@ class JarExtensionTest {
     fun `not_copy_license_when_copyLicense_disabled`() {
       config.copyLicense = false
 
-      // 创建模拟的 LICENSE 文件
+      // Create a mock LICENSE file
       val licenseFile = File(project.rootDir, "LICENSE")
       licenseFile.createNewFile()
 
       JarExtension(project, config)
 
-      // 验证没有特殊的 LICENSE 处理
+      // Verify that no special handling is applied for the LICENSE file
       val jarTask = project.tasks.withType(Jar::class.java).firstOrNull()
-      // 这里主要验证没有抛出异常，只要没有抛出异常就是成功的
-      // 验证获取 jar 任务不会抛出异常，不管 jarTask 是否为 null
+      // The main check here is that no exception is thrown; if no exception occurs, the test is successful.
+      // Ensure that retrieving the jar task does not throw, regardless of whether jarTask is null.
     }
 
     @Test
     fun `handle_missing_LICENSE_file_gracefully`() {
       config.copyLicense = true
 
-      // 不创建 LICENSE 文件，应该正常处理
+      // Do not create a LICENSE file; this should be handled normally
       JarExtension(project, config)
 
       val jarTask = project.tasks.withType(Jar::class.java).firstOrNull()
@@ -205,12 +205,12 @@ class JarExtensionTest {
     fun `find_LICENSE_file_with_different_case_variations`() {
       config.copyLicense = true
 
-      // 创建不同大小写的 LICENSE 文件
+      // Create a LICENSE file with different casing
       val licenseFile = File(project.rootDir, "license.txt")
       licenseFile.createNewFile()
       licenseFile.writeText("Apache 2.0")
 
-      // 应该不会抛出异常
+      // Should not throw any exception
       JarExtension(project, config)
 
       val jarTask = project.tasks.withType(Jar::class.java).first()
@@ -230,7 +230,7 @@ class JarExtensionTest {
     fun `configure_bootJar_manifest_with_correct_attributes`() {
       JarExtension(project, config)
 
-      // 获取 bootJar 任务并验证配置
+      // Get the bootJar task and verify its configuration
       project.tasks.withType(org.springframework.boot.gradle.tasks.bundling.BootJar::class.java).configureEach { bootJar ->
         assertEquals(config.bootJarClassifier, bootJar.archiveClassifier.get())
         assertEquals(config.bootJarVersion, bootJar.archiveVersion.get())

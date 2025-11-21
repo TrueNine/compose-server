@@ -4,31 +4,31 @@ import io.github.truenine.composeserver.IIntEnum
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
-/** 证件印面类型 */
+/** Certificate surface type */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class CertPointTyping(private val v: Int) : IIntEnum {
-  /** 无要求 */
+  /** No requirement */
   @EnumItem(ordinal = 0) NONE(0),
 
-  /** 正面 */
+  /** Front side */
   @EnumItem(ordinal = 1) HEADS(1),
 
-  /** 反面 */
+  /** Back side */
   @EnumItem(ordinal = 2) TAILS(2),
 
-  /** 双面 */
+  /** Double-sided */
   @EnumItem(ordinal = 3) DOUBLE(3),
 
-  /** 所有 */
+  /** All */
   @EnumItem(ordinal = 4) ALL(4),
 
-  /** 所有内容 */
+  /** All content */
   @EnumItem(ordinal = 5) ALL_CONTENT(5),
 
   /**
-   * 完整的
+   * Complete
    *
-   * 针对于视频，音频等等……
+   * Used for video, audio and similar content.
    */
   @EnumItem(ordinal = 6) INTACT(6);
 

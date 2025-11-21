@@ -5,21 +5,21 @@ import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /**
- * 商品服务类型
+ * Goods and service types
  *
  * @author TrueNine
  * @since 2023-04-23
  */
-@Deprecated("无明确业务类型混入")
+@Deprecated("Mixed with unclear business types")
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class GoodsTyping(v: Int) : IIntEnum {
-  /** 实体商品 */
+  /** Physical goods */
   @EnumItem(ordinal = 1) PHYSICAL_GOODS(1),
 
-  /** 服务商品 */
+  /** Service goods */
   @EnumItem(ordinal = 2) SERVICE_GOODS(2),
 
-  /** 虚拟商品 */
+  /** Virtual goods */
   @EnumItem(ordinal = 3) VIRTUAL_GOODS(3);
 
   override val value: Int = v

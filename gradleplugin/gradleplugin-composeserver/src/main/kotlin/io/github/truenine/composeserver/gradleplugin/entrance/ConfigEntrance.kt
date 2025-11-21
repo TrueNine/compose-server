@@ -14,23 +14,23 @@ abstract class ConfigEntrance(@Inject val project: Project) : ExtensionAware {
   val dotenv = DotenvConfig()
 
   /**
-   * ## jar 打包扩展配置
+   * ## Jar packaging extension configuration
    *
-   * @param action 打包配置
+   * @param action jar packaging configuration
    */
   fun jarExtension(action: Action<JarExtensionConfig>) = action.execute(jarExtension)
 
   /**
-   * ## gradle properties 生成扩展配置
+   * ## gradle.properties generation extension configuration
    *
-   * @param action 生成配置
+   * @param action generator configuration
    */
   fun gradleGenerator(action: Action<GradleGeneratorConfig>) = action.execute(gradleGenerator)
 
   /**
-   * ## dotenv 环境变量加载扩展配置
+   * ## dotenv environment variable loading extension configuration
    *
-   * @param action dotenv 配置
+   * @param action dotenv configuration
    */
   fun dotenv(action: Action<DotenvConfig>) = action.execute(dotenv)
 

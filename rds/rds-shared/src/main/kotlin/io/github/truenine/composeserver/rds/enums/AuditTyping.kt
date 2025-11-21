@@ -4,31 +4,31 @@ import io.github.truenine.composeserver.IIntEnum
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
-/** 审核状态 */
+/** Audit status */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class AuditTyping(v: Int) : IIntEnum {
-  /** 未审核 */
+  /** Not audited */
   @EnumItem(ordinal = 0) NONE(0),
 
-  /** 分配给审核员，或已经分配正在被处理 */
+  /** Assigned to an auditor, or already assigned and being processed */
   @EnumItem(ordinal = 1) ASSIGNED(1),
 
-  /** 审核通过 */
+  /** Approved */
   @EnumItem(ordinal = 2) PASS(2),
 
-  /** 审核未通过 */
+  /** Not approved */
   @EnumItem(ordinal = 3) FAIL(3),
 
-  /** 已撤销 */
+  /** Revoked */
   @EnumItem(ordinal = 4) CANCEL(4),
 
-  /** 已过期 */
+  /** Expired */
   @EnumItem(ordinal = 5) EXPIRED(5),
 
-  /** 驳回 */
+  /** Rejected */
   @EnumItem(ordinal = 6) REJECT(6),
 
-  /** 被隐藏 */
+  /** Hidden */
   @EnumItem(ordinal = 7) SHADOW_BAN(7);
 
   override val value: Int = v

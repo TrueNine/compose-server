@@ -19,7 +19,7 @@ import tools.jackson.databind.DeserializationFeature
 import tools.jackson.databind.ObjectMapper
 
 /**
- * redis 缓存组件配置
+ * Redis cache component configuration
  *
  * @author TrueNine
  * @since 2023-02-20

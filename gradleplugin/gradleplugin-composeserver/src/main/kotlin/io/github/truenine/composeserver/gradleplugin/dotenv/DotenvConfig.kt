@@ -1,137 +1,137 @@
 package io.github.truenine.composeserver.gradleplugin.dotenv
 
 /**
- * # Dotenv 环境变量配置
+ * # Dotenv environment variable configuration
  *
- * 用于配置从 .env 文件加载环境变量的相关选项
+ * Used to configure options for loading environment variables from .env files.
  *
  * @author TrueNine
  * @since 2024-12-19
  */
 open class DotenvConfig {
 
-  /** 是否启用 dotenv 环境变量加载功能 */
+  /** Whether to enable dotenv environment variable loading */
   var enabled: Boolean = false
 
-  /** dotenv 文件路径，支持绝对路径和相对路径（相对于项目根目录） */
+  /** dotenv file path, supports absolute and relative paths (relative to project root) */
   var filePath: String = ""
 
-  /** 是否在文件不存在时显示警告日志 */
+  /** Whether to log a warning when the file does not exist */
   var warnOnMissingFile: Boolean = true
 
-  /** 是否在解析错误时显示详细错误信息 */
+  /** Whether to show detailed error information when parsing fails */
   var verboseErrors: Boolean = true
 
-  /** 是否覆盖已存在的环境变量 */
+  /** Whether to override existing environment variables */
   var overrideExisting: Boolean = false
 
-  /** 是否忽略空值 */
+  /** Whether to ignore empty values */
   var ignoreEmptyValues: Boolean = false
 
-  /** 环境变量名前缀过滤器，只加载指定前缀的变量 */
+  /** Environment variable name prefix filter; only variables with the prefix will be loaded */
   var prefixFilter: String? = null
 
-  /** 排除的环境变量名列表 */
+  /** Names of environment variables to exclude */
   var excludeKeys: MutableSet<String> = mutableSetOf()
 
-  /** 只包含的环境变量名列表，如果设置则只加载这些变量 */
+  /** Names of environment variables to include; if set, only these variables will be loaded */
   var includeKeys: MutableSet<String> = mutableSetOf()
 
   /**
-   * 设置 dotenv 文件路径
+   * Set the dotenv file path
    *
-   * @param path 文件路径，支持绝对路径和相对路径
+   * @param path file path; supports absolute and relative paths
    */
   fun filePath(path: String) {
     filePath = path
   }
 
   /**
-   * 设置是否在文件不存在时显示警告
+   * Configure whether to show a warning if the dotenv file does not exist
    *
-   * @param warn 是否显示警告
+   * @param warn whether to show a warning
    */
   fun warnOnMissingFile(warn: Boolean) {
     warnOnMissingFile = warn
   }
 
   /**
-   * 设置是否显示详细错误信息
+   * Configure whether to show detailed error messages
    *
-   * @param verbose 是否显示详细信息
+   * @param verbose whether to show detailed information
    */
   fun verboseErrors(verbose: Boolean) {
     verboseErrors = verbose
   }
 
   /**
-   * 设置是否覆盖已存在的环境变量
+   * Configure whether to override existing environment variables
    *
-   * @param override 是否覆盖
+   * @param override whether to override
    */
   fun overrideExisting(override: Boolean) {
     overrideExisting = override
   }
 
   /**
-   * 设置是否忽略空值
+   * Configure whether to ignore empty values
    *
-   * @param ignore 是否忽略
+   * @param ignore whether to ignore
    */
   fun ignoreEmptyValues(ignore: Boolean) {
     ignoreEmptyValues = ignore
   }
 
   /**
-   * 设置环境变量名前缀过滤器
+   * Set environment variable name prefix filter
    *
-   * @param prefix 前缀字符串
+   * @param prefix prefix string
    */
   fun prefixFilter(prefix: String?) {
     prefixFilter = prefix
   }
 
   /**
-   * 添加要排除的环境变量名
+   * Add environment variable names to be excluded
    *
-   * @param keys 要排除的变量名
+   * @param keys variable names to exclude
    */
   fun excludeKeys(vararg keys: String) {
     excludeKeys.addAll(keys)
   }
 
   /**
-   * 设置只包含的环境变量名列表
+   * Set the list of environment variable names to include
    *
-   * @param keys 只包含的变量名
+   * @param keys variable names to include
    */
   fun includeKeys(vararg keys: String) {
     includeKeys.addAll(keys)
   }
 
-  /** 清空排除列表 */
+  /** Clear the exclude list */
   fun clearExcludeKeys() {
     excludeKeys.clear()
   }
 
-  /** 清空包含列表 */
+  /** Clear the include list */
   fun clearIncludeKeys() {
     includeKeys.clear()
   }
 
   /**
-   * 检查配置是否有效
+   * Check whether the configuration is valid
    *
-   * @return 配置是否有效
+   * @return whether the configuration is valid
    */
   fun isValid(): Boolean {
     return enabled && filePath.isNotBlank()
   }
 
   /**
-   * 获取配置摘要信息
+   * Get configuration summary information
    *
-   * @return 配置摘要字符串
+   * @return configuration summary string
    */
   fun getSummary(): String {
     return buildString {

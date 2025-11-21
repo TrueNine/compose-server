@@ -14,15 +14,15 @@ fun RepositoryHandler.chinaRegionRepositories() {
   MavenRepositoryUrls.publicRepositories.forEach { url -> this.maven { it.url = URI(url) } }
 }
 
-/** 排除指定的 catalog 依赖 */
+/** Exclude specified catalog dependency */
 fun ModuleDependency.exclude(dep: Provider<MinimalExternalModuleDependency>) {
   exclude(mutableMapOf("group" to dep.get().module.group, "module" to dep.get().module.name))
 }
 
 /**
- * ## 返回此项目的版本号，
+ * ## Return the version of this project.
  *
- * @return 如果版本号为 [Constant.Gradle.UNKNOWN_PROJECT_VERSION] 则返回空字符串
+ * @return Empty string if the version equals [Constant.Gradle.UNKNOWN_PROJECT_VERSION]
  */
 val Project.emptyVersion: String
   get() = if (this.project.version.toString() == Constant.Gradle.UNKNOWN_PROJECT_VERSION) "" else this.project.version.toString()

@@ -10,7 +10,7 @@ data class ClassDefine(val packageName: String, val className: String) {
     return ClassName(packageName, className)
   }
 
-  /** 类 或其他全名 */
+  /** Class or other fully qualified name */
   val qualifiedName: String = arrayOf(packageName, className).joinToString(".")
 
   fun toAnnotationSpec(): AnnotationSpec {

@@ -376,7 +376,7 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   }
 
   @Nested
-  inner class `版本控制功能测试` {
+  inner class `Versioning feature tests` {
     @Test
     @Disabled(
       """
@@ -385,7 +385,7 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       The service implementation explicitly marks this feature as unsupported via the unsupported() method.
       """
     )
-    fun `应该能够列出对象版本`() = runBlocking {
+    fun `Should list object versions`() = runBlocking {
       val bucketName = "test-versioning-bucket-${System.currentTimeMillis()}"
       val objectName = "versioned-object.txt"
       testBuckets.add(bucketName)
@@ -397,9 +397,9 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       service.putObject(bucketName, objectName, ByteArrayInputStream("v2".toByteArray()), 2).getOrThrow()
 
       val versionsResult = service.listObjectVersions(ListObjectVersionsRequest(bucketName = bucketName, prefix = objectName))
-      assertTrue(versionsResult.isSuccess, "列出对象版本应该成功")
+      assertTrue(versionsResult.isSuccess, "Listing object versions should succeed")
       val versions = versionsResult.getOrThrow()
-      assertEquals(2, versions.versions.size, "应该有两个版本")
+      assertEquals(2, versions.versions.size, "There should be two versions")
     }
   }
 
@@ -436,36 +436,36 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   }
 
   @Nested
-  inner class `标签功能测试` {
+  inner class `Tag feature tests` {
 
     @Test
-    fun `应该能够设置和获取存储桶标签`() = runBlocking {
+    fun `Should set and get bucket tags`() = runBlocking {
       val bucketName = "test-tags-bucket-${System.currentTimeMillis()}"
       testBuckets.add(bucketName)
       service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
       val tags = listOf(Tag("project", "compose-server"), Tag("env", "test"))
       val setResult = service.setBucketTags(bucketName, tags)
-      assertTrue(setResult.isSuccess, "设置存储桶标签应该成功")
+      assertTrue(setResult.isSuccess, "Setting bucket tags should succeed")
 
       val getResult = service.getBucketTags(bucketName)
-      assertTrue(getResult.isSuccess, "获取存储桶标签应该成功")
-      assertEquals(tags.toSet(), getResult.getOrThrow().toSet(), "获取的标签应该与设置的匹配")
+      assertTrue(getResult.isSuccess, "Getting bucket tags should succeed")
+      assertEquals(tags.toSet(), getResult.getOrThrow().toSet(), "Retrieved tags should match the set tags")
 
       val deleteResult = service.deleteBucketTags(bucketName)
-      assertTrue(deleteResult.isSuccess, "删除存储桶标签应该成功")
+      assertTrue(deleteResult.isSuccess, "Deleting bucket tags should succeed")
 
       val getAfterDeleteResult = service.getBucketTags(bucketName)
-      assertTrue(getAfterDeleteResult.isSuccess, "删除后获取存储桶标签应该成功")
-      assertTrue(getAfterDeleteResult.getOrThrow().isEmpty(), "删除后标签应该为空")
+      assertTrue(getAfterDeleteResult.isSuccess, "Getting bucket tags after deletion should succeed")
+      assertTrue(getAfterDeleteResult.getOrThrow().isEmpty(), "Tags should be empty after deletion")
     }
   }
 
   @Nested
-  inner class `生命周期和CORS功能测试` {
+  inner class `Lifecycle and CORS feature tests` {
 
     @Test
-    fun `应该能够设置和获取存储桶生命周期规则`() = runBlocking {
+    fun `Should set and get bucket lifecycle rules`() = runBlocking {
       val bucketName = "test-lifecycle-bucket-${System.currentTimeMillis()}"
       testBuckets.add(bucketName)
       service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
@@ -473,20 +473,20 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       val rules = listOf(LifecycleRule(id = "rule-1", prefix = "logs/", status = LifecycleRuleStatus.ENABLED, expiration = LifecycleExpiration(30)))
 
       val setResult = service.setBucketLifecycle(bucketName, rules)
-      assertTrue(setResult.isSuccess, "设置生命周期规则应该成功")
+      assertTrue(setResult.isSuccess, "Setting lifecycle rules should succeed")
 
       val getResult = service.getBucketLifecycle(bucketName)
-      assertTrue(getResult.isSuccess, "获取生命周期规则应该成功")
+      assertTrue(getResult.isSuccess, "Getting lifecycle rules should succeed")
       val retrievedRules = getResult.getOrThrow()
-      assertTrue(retrievedRules.isNotEmpty(), "应该获取到至少一个规则")
+      assertTrue(retrievedRules.isNotEmpty(), "Should get at least one lifecycle rule")
       assertEquals("rule-1", retrievedRules.first().id)
 
       val deleteResult = service.deleteBucketLifecycle(bucketName)
-      assertTrue(deleteResult.isSuccess, "删除生命周期规则应该成功")
+      assertTrue(deleteResult.isSuccess, "Deleting lifecycle rules should succeed")
     }
 
     @Test
-    fun `应该能够设置和获取存储桶CORS规则`() = runBlocking {
+    fun `Should set and get bucket CORS rules`() = runBlocking {
       val bucketName = "test-cors-bucket-${System.currentTimeMillis()}"
       testBuckets.add(bucketName)
       service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
@@ -494,16 +494,16 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       val rules = listOf(CorsRule(allowedOrigins = listOf("*"), allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)))
 
       val setResult = service.setBucketCors(bucketName, rules)
-      assertTrue(setResult.isSuccess, "设置CORS规则应该成功")
+      assertTrue(setResult.isSuccess, "Setting CORS rules should succeed")
 
       val getResult = service.getBucketCors(bucketName)
-      assertTrue(getResult.isSuccess, "获取CORS规则应该成功")
+      assertTrue(getResult.isSuccess, "Getting CORS rules should succeed")
       val retrievedRules = getResult.getOrThrow()
-      assertTrue(retrievedRules.isNotEmpty(), "应该获取到至少一个CORS规则")
+      assertTrue(retrievedRules.isNotEmpty(), "Should get at least one CORS rule")
       assertEquals(listOf("*"), retrievedRules.first().allowedOrigins)
 
       val deleteResult = service.deleteBucketCors(bucketName)
-      assertTrue(deleteResult.isSuccess, "删除CORS规则应该成功")
+      assertTrue(deleteResult.isSuccess, "Deleting CORS rules should succeed")
     }
   }
 

@@ -16,7 +16,7 @@ class Main : Plugin<Project> {
       val gradleGenerator = GradleGenerator(project, cfg.gradleGenerator)
     }
 
-    // 环境变量加载需要在项目评估后执行，以确保配置已完全加载
+    // Environment variable loading needs to run after project evaluation to ensure configuration is fully loaded
     project.afterEvaluate { s ->
       if (cfg.dotenv.enabled) {
         val dotenvLoader = DotenvLoader(s, cfg.dotenv)

@@ -8,9 +8,9 @@ import java.util.concurrent.ConcurrentMap
 
 private val cache: ConcurrentMap<KSTypeReference, KSType> = ConcurrentHashMap()
 
-/** 利用缓存调用[KSTypeReference.resolve] */
+/** Call [KSTypeReference.resolve] using a cache */
 fun KSTypeReference.fastResolve(): KSType = cache.computeIfAbsent(this) { it.resolve() }
 
-/** 作用等效于 [KSTypeReference.resolve].[KSType.declaration] */
+/** Equivalent to [KSTypeReference.resolve].[KSType.declaration] */
 val KSTypeReference.resolveDeclaration: KSDeclaration
   get() = this.fastResolve().declaration

@@ -41,7 +41,7 @@ class CaffeineCacheAutoConfiguration {
   @Primary
   @Bean(name = [ICacheNames.ICaffeine.CACHE_MANAGER])
   fun caffeineCacheManager(): CaffeineCacheManager {
-    log.debug("配置 CaffeineCache 缓存")
+    log.debug("Configure CaffeineCache cache")
     val s = CaffeineCacheManager()
     cacheMap.forEach { (k, v) -> s.registerCustomCache(k, v) }
     return s

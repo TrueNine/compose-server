@@ -4,7 +4,7 @@ import java.util.*
 import org.gradle.api.Action
 
 /**
- * # gradle.properties 生成配置
+ * # gradle.properties generation configuration
  *
  * @author TrueNine
  * @since 2024-03-08
@@ -74,7 +74,7 @@ open class GradleGeneratorConfig {
     propertiesMap["org.gradle.workers.max"] = value.toString()
   }
 
-  /** ## 添加其他选项 */
+  /** ## Add other options */
   fun otherOption(optionName: String, value: String) = propertiesMap.put(optionName, value)
 
   fun toPropertiesString(): String {
@@ -88,29 +88,29 @@ open class GradleGeneratorConfig {
     }
   }
 
-  /** ## 转换为 properties */
+  /** ## Convert to Properties */
   private fun asProperties(): Properties {
     val p = Properties()
     p.putAll(propertiesMap)
     return p
   }
 
-  /** ## 设置 jvm args */
+  /** ## Set jvm args */
   fun jvmArgs(vararg value: String) {
     propertiesMap["org.gradle.jvmargs"] = value.joinToString(separator = " ") { it.trim() }
   }
 
-  /** ## 是否开启 gradle cache */
+  /** ## Whether to enable Gradle cache */
   fun caching(value: Boolean) {
     propertiesMap["org.gradle.caching"] = value.toString()
   }
 
-  /** ## 开启 gradle parallel */
+  /** ## Enable Gradle parallel execution */
   fun parallel(value: Boolean) {
     propertiesMap["org.gradle.parallel"] = value.toString()
   }
 
-  /** ## 是否开启 gradle daemon */
+  /** ## Whether to enable Gradle daemon */
   fun daemon(value: Boolean) {
     propertiesMap["org.gradle.daemon"] = value.toString()
   }

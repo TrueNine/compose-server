@@ -28,7 +28,7 @@ class JarExtension(private val project: Project, private val dsl: JarExtensionCo
 
       val runtimeClasspath = configurations.named<org.gradle.api.artifacts.Configuration>("runtimeClasspath")
 
-      // 获取 developmentOnly 配置中的依赖，用于在复制时排除
+      // Get dependencies from the developmentOnly configuration to exclude them when copying
       val developmentOnlyDependencies = configurations.findByName("developmentOnly")?.resolvedConfiguration?.resolvedArtifacts?.map { it.file } ?: emptyList()
 
       val cleanTask =
@@ -47,7 +47,7 @@ class JarExtension(private val project: Project, private val dsl: JarExtensionCo
               .joinToString(separator = "/")
           )
           from(runtimeClasspath) {
-            // 排除 developmentOnly 依赖
+            // Exclude developmentOnly dependencies
             exclude { fileTreeElement -> developmentOnlyDependencies.any { devDep -> fileTreeElement.file.absolutePath == devDep.absolutePath } }
           }
         }
@@ -74,7 +74,7 @@ class JarExtension(private val project: Project, private val dsl: JarExtensionCo
         bootJar.dependsOn(copyConfigTask)
 
         bootJar.manifest {
-          // 过滤掉 developmentOnly 依赖后生成 Class-Path
+          // Generate Class-Path after filtering out developmentOnly dependencies
           val filteredClassPath =
             runtimeClasspath
               .get()
