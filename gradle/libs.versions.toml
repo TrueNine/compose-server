@@ -7,9 +7,9 @@ com-baomidou-mybatis-plus = "3.5.14"
 com-diffplug-spotless = "8.1.0"
 com-fasterxml-jackson2 = "2.20.1"
 com-fasterxml-jackson3 = "3.0-rc5"
-com-flywaydb-flyway = "11.17.0"
+com-flywaydb-flyway = "11.17.1"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.3.2"
+com-google-devtools-ksp = "2.3.3"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.2.0"
@@ -37,22 +37,22 @@ tools-jackson = "3.0.2"
 org-hibernate-orm = "7.2.0.CR2"
 org-jetbrains-dokka = "2.1.0"
 org-jetbrains-intellij-platform = "2.10.4"
-org-jetbrains-kotlin = "2.3.0-Beta2"
+org-jetbrains-kotlin = "2.3.0-RC"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.7.1-0.6.x-compat"
-org-jetbrains-kotlinx-io = "0.8.0"
+org-jetbrains-kotlinx-io = "0.8.1"
 org-jetbrains-kotlinx-serialization = "1.9.0"
-org-junit-jupiter = "6.0.1"
+org-junit-jupiter = "6.1.0-M1"
 org-liquibase = "5.0.1"
 org-slf4j = "2.1.0-alpha1"
 org-springframework-ai = "1.1.0"
 org-springframework-batch = "6.0.0"
-org-springframework-boot = "4.0.0-M2"
+org-springframework-boot = "4.0.0"
 org-springframework-cloud = "2025.0.0"
 org-springframework-data = "4.0.0"
-org-springframework-framework = "7.0.0"
+org-springframework-framework = "7.0.1"
 org-springframework-integration = "7.0.0"
-org-springframework-modulith = "2.0.0-M1"
+org-springframework-modulith = "2.0.0"
 org-springframework-security = "7.0.0"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
@@ -94,7 +94,7 @@ com-fasterxml-jackson-datatype-jackson-datatype-jsr310 = { module = "com.fasterx
 com-fasterxml-jackson-module-jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "com-fasterxml-jackson2" }
 tools-jackson-module-jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "tools-jackson" }
 com-github-ben-manes-caffeine-caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.3"
-com-github-gavlyukovskiy-p6spy-spring-boot-starter = "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.12.0"
+com-github-gavlyukovskiy-p6spy-spring-boot-starter = "com.github.gavlyukovskiy:p6spy-spring-boot-starter:2.0.0"
 com-github-haifengl-smile-math = "com.github.haifengl:smile-math:2.6.0"
 com-github-junrar-junrar = "com.github.junrar:junrar:7.5.7"
 com-github-magese-ik-analyzer = "com.github.magese:ik-analyzer:8.5.0"
@@ -193,7 +193,7 @@ jakarta-annotation-jakarta-annotation-api = "jakarta.annotation:jakarta.annotati
 jakarta-inject-jakarta-inject-api = "jakarta.inject:jakarta.inject-api:2.0.1"
 jakarta-persistence-jakarta-persistence-api = "jakarta.persistence:jakarta.persistence-api:3.2.0"
 jakarta-servlet-jakarta-servlet-api = "jakarta.servlet:jakarta.servlet-api:6.1.0"
-jakarta-validation-jakarta-validation-api = "jakarta.validation:jakarta.validation-api:3.1.1"
+jakarta-validation-jakarta-validation-api = "jakarta.validation:jakarta.validation-api:4.0.0-M1"
 mysql-mysql-connector-java = "mysql:mysql-connector-java:8.0.33"
 net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.18.1"
 net-sf-dozer-dozer = "net.sf.dozer:dozer:5.5.1"
@@ -280,7 +280,7 @@ org-projectlombok-lombok = "org.projectlombok:lombok:1.18.42"
 org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4.38.0"
 org-skyscreamer-jsonassert = "org.skyscreamer:jsonassert:2.0-rc1"
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
-org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14"
+org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0"
 org-springframework-ai-spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "org-springframework-ai" }
 org-springframework-ai-spring-ai-spring-boot-docker-compose = { module = "org.springframework.ai:spring-ai-spring-boot-docker-compose", version.ref = "org-springframework-ai" }
 org-springframework-batch-spring-batch-test = { module = "org.springframework.batch:spring-batch-test", version.ref = "org-springframework-batch" }
@@ -291,7 +291,7 @@ org-springframework-boot-spring-boot-dependencies = { module = "org.springframew
 org-springframework-boot-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "org-springframework-boot" }
-org-springframework-boot-spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version = "4.0.0-M2" }
 org-springframework-boot-spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-batch = { module = "org.springframework.boot:spring-boot-starter-batch", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc", version.ref = "org-springframework-boot" }
@@ -312,7 +312,7 @@ org-springframework-boot-spring-boot-starter-websocket = { module = "org.springf
 org-springframework-boot-spring-boot-test = { module = "org.springframework.boot:spring-boot-test", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-test-autoconfigure = { module = "org.springframework.boot:spring-boot-test-autoconfigure", version.ref = "org-springframework-boot" }
 org-springframework-cloud-spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "org-springframework-cloud" }
-org-springframework-cloud-spring-cloud-starter-bootstrap = "org.springframework.cloud:spring-cloud-starter-bootstrap:5.0.0-M1"
+org-springframework-cloud-spring-cloud-starter-bootstrap = "org.springframework.cloud:spring-cloud-starter-bootstrap:5.0.0-RC1"
 org-springframework-data-spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "org-springframework-data" }
 org-springframework-data-spring-data-jpa = { module = "org.springframework.data:spring-data-jpa", version.ref = "org-springframework-data" }
 org-springframework-integration-spring-integration-core = { module = "org.springframework.integration:spring-integration-core", version.ref = "org-springframework-integration" }
