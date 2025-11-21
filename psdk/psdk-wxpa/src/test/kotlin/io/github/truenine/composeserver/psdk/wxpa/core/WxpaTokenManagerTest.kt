@@ -29,10 +29,10 @@ class WxpaTokenManagerTest {
   }
 
   @Nested
-  inner class `Access Token 管理` {
+  inner class `Access token management` {
 
     @Test
-    fun `应该成功获取 access token`() {
+    fun `should get access token successfully`() {
       // Given
       val mockResponse =
         mockk<IWxpaWebClient.WxpaGetAccessTokenResp> {
@@ -51,7 +51,7 @@ class WxpaTokenManagerTest {
     }
 
     @Test
-    fun `当 API 返回错误时应该抛出异常`() {
+    fun `should throw exception when API returns error`() {
       // Given
       val mockResponse =
         mockk<IWxpaWebClient.WxpaGetAccessTokenResp> {
@@ -66,7 +66,7 @@ class WxpaTokenManagerTest {
     }
 
     @Test
-    fun `当 API 返回 null 时应该抛出异常`() {
+    fun `should throw exception when API returns null`() {
       // Given
       every { apiClient.getAccessToken("test_app_id", "test_app_secret") } returns null
 
@@ -75,7 +75,7 @@ class WxpaTokenManagerTest {
     }
 
     @Test
-    fun `当 access token 为空时应该抛出异常`() {
+    fun `should throw exception when access token is null`() {
       // Given
       val mockResponse =
         mockk<IWxpaWebClient.WxpaGetAccessTokenResp> {
@@ -91,11 +91,11 @@ class WxpaTokenManagerTest {
   }
 
   @Nested
-  inner class `JSAPI Ticket 管理` {
+  inner class `JSAPI ticket management` {
 
     @Test
-    fun `应该成功获取 jsapi ticket`() {
-      // Given - 先设置 access token
+    fun `should get jsapi ticket successfully`() {
+      // Given - first set up access token
       val mockTokenResponse =
         mockk<IWxpaWebClient.WxpaGetAccessTokenResp> {
           every { isError } returns false
@@ -120,8 +120,8 @@ class WxpaTokenManagerTest {
     }
 
     @Test
-    fun `当 ticket API 返回错误时应该抛出异常`() {
-      // Given - 先设置 access token
+    fun `should throw exception when ticket API returns error`() {
+      // Given - first set up access token
       val mockTokenResponse =
         mockk<IWxpaWebClient.WxpaGetAccessTokenResp> {
           every { isError } returns false
@@ -144,10 +144,10 @@ class WxpaTokenManagerTest {
   }
 
   @Nested
-  inner class `Token 状态管理` {
+  inner class `Token status management` {
 
     @Test
-    fun `应该正确返回 token 状态`() {
+    fun `should return token status correctly`() {
       // When
       val status = tokenManager.getTokenStatus()
 
@@ -160,7 +160,7 @@ class WxpaTokenManagerTest {
     }
 
     @Test
-    fun `强制刷新应该清除所有缓存的 token`() {
+    fun `forceRefresh should clear all cached tokens`() {
       // Given
       val mockTokenResponse =
         mockk<IWxpaWebClient.WxpaGetAccessTokenResp> {
@@ -188,10 +188,10 @@ class WxpaTokenManagerTest {
   }
 
   @Nested
-  inner class `异常情况处理` {
+  inner class `Exception handling` {
 
     @Test
-    fun `当配置缺失时应该抛出配置异常`() {
+    fun `should throw token exception when configuration is missing`() {
       // Given
       val invalidProperties = WxpaProperties(appId = "", appSecret = "test_app_secret")
       val invalidTokenManager = WxpaTokenManager(apiClient, invalidProperties)
@@ -201,7 +201,7 @@ class WxpaTokenManagerTest {
     }
 
     @Test
-    fun `当网络异常时应该抛出 token 异常`() {
+    fun `should throw token exception when network error occurs`() {
       // Given
       every { apiClient.getAccessToken("test_app_id", "test_app_secret") } throws RuntimeException("Network error")
 

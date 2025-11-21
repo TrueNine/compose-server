@@ -9,7 +9,7 @@ import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 
 /**
- * # 微信公众号 API
+ * WeChat Official Account API client.
  *
  * @author TrueNine
  * @since 2024-02-14
@@ -17,38 +17,38 @@ import org.springframework.web.service.annotation.HttpExchange
 @HttpExchange(url = "https://api.weixin.qq.com/")
 interface IWxpaWebClient {
   /**
-   * ## 公众号获取 ticket 返回结果
+   * JSAPI ticket response for Official Account.
    *
-   * @param ticket 票证
+   * @param ticket ticket value
    */
   data class WxpaGetTicketResp(val ticket: String?) : BaseWxpaResponseEntity()
 
   /**
-   * ## 公众号获取 ticket 返回结果
+   * Quota response for a specific API.
    *
-   * @param dailyLimit 当天该账号可调用该接口的次数
-   * @param used 当天已经调用的次数
-   * @param remain 当天剩余调用次数
+   * @param dailyLimit remaining daily invocation limit for this account
+   * @param used number of calls already made today
+   * @param remain remaining calls available today
    */
   data class WxpaQuotaResp(@JsonProperty("daily_limit") val dailyLimit: Long?, val used: Long?, val remain: Long?) : BaseWxpaResponseEntity()
 
   /**
-   * # 公众号获取 access_token 返回结果
+   * Official Account access_token response.
    *
-   * @param accessToken 公众号 access_token
+   * @param accessToken access_token for the Official Account
    */
   data class WxpaGetAccessTokenResp(@JsonProperty("access_token") val accessToken: String?) : BaseWxpaResponseEntity()
 
   /**
-   * # 微信公众号网页授权获取 access_token 响应
+   * Web authorization access_token response for Official Account.
    *
-   * @param accessToken 公众号 access_token
-   * @param expireIn access_token 过期时间
-   * @param refreshToken 刷新 access_token 的 token
-   * @param openId 获取到的 openId
-   * @param scope 当前使用的 scope 授权范围
-   * @param isSnapshotUser 是否为快照页模式虚拟账号 ，只有当用户是快照页模式虚拟账号时返回，值为1
-   * @param unionId 用户全局 id
+   * @param accessToken access_token for the Official Account
+   * @param expireIn access_token expiration time in seconds
+   * @param refreshToken token used to refresh the access_token
+   * @param openId obtained user openId
+   * @param scope scope of the granted authorization
+   * @param isSnapshotUser whether the user is a snapshot-mode virtual account (1 when true)
+   * @param unionId user global union id
    */
   data class WxpaWebsiteAuthGetAccessTokenResp(
     @param:JsonProperty("access_token") val accessToken: String?,
@@ -61,17 +61,17 @@ interface IWxpaWebClient {
   ) : BaseWxpaResponseEntity()
 
   /**
-   * ## 微信 access_token 微信用户信息回调结果
+   * Web authorization user-info response for a WeChat access_token.
    *
-   * @param openId openId
-   * @param nickName 呢称
-   * @param privilege 微信用户特权 为 json 数组形式
-   * @param headimgurl 头像链接
-   * @param country 国家
-   * @param city 城市
-   * @param province 省份
-   * @param sex 性别
-   * @param unionId 全局唯一标识
+   * @param openId user openId
+   * @param nickName user nickname
+   * @param privilege WeChat user privileges as a JSON array
+   * @param headimgurl avatar URL
+   * @param country country name
+   * @param city city name
+   * @param province province name
+   * @param sex gender value
+   * @param unionId globally unique user identifier
    * @author TrueNine
    * @since 2024-03-20
    */
@@ -79,20 +79,20 @@ interface IWxpaWebClient {
     @param:JsonProperty("openid") val openId: String?,
     @param:JsonProperty("nickname") val nickName: String?,
     val privilege: List<String> = emptyList(),
-    @Deprecated("过时的接口数据") val headimgurl: String?,
-    @Deprecated("过时的接口数据") val country: String?,
-    @Deprecated("过时的接口数据") val city: String?,
-    @Deprecated("过时的接口数据") val province: String? = null,
-    @Deprecated("过时的接口数据") val sex: Int? = null,
+    @Deprecated("Deprecated API field") val headimgurl: String?,
+    @Deprecated("Deprecated API field") val country: String?,
+    @Deprecated("Deprecated API field") val city: String?,
+    @Deprecated("Deprecated API field") val province: String? = null,
+    @Deprecated("Deprecated API field") val sex: Int? = null,
     @param:JsonProperty("unionid") val unionId: String?,
   )
 
   /**
-   * ## 通过 openid 获取用户信息
+   * Get user information by openId.
    *
-   * @param authAccessToken 特殊的 access_token
-   * @param openId 用户 openId
-   * @param lang 语言
+   * @param authAccessToken special access_token from web authorization
+   * @param openId user openId
+   * @param lang language code
    */
   @GetExchange("sns/userinfo")
   fun getUserInfoByAccessToken(
@@ -102,13 +102,13 @@ interface IWxpaWebClient {
   ): WxpaWebsiteUserInfoResp?
 
   /**
-   * ## 公众号网页授权 通过 code 获取 access_token
-   * [文档](https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html#1)
+   * Obtain access_token for Official Account web authorization via code.
+   * [Documentation](https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html#1)
    *
-   * @param appId 公众号 appId
-   * @param wxpaSecret 公众号 secret
-   * @param code 当前用户授权给予的令牌
-   * @param grantType 验证类型
+   * @param appId Official Account appId
+   * @param wxpaSecret Official Account secret
+   * @param code authorization code granted by the user
+   * @param grantType grant type
    */
   @GetExchange("sns/oauth2/access_token")
   fun getWebsiteAccessToken(
@@ -119,11 +119,11 @@ interface IWxpaWebClient {
   ): WxpaWebsiteAuthGetAccessTokenResp?
 
   /**
-   * ## 公众号 获取 access_token
+   * Get access_token for an Official Account.
    *
    * @param appId appId
    * @param secret secret
-   * @param grantType 验证类型
+   * @param grantType grant type
    * @return access_token
    */
   @GetExchange("cgi-bin/token")
@@ -134,39 +134,39 @@ interface IWxpaWebClient {
   ): WxpaGetAccessTokenResp?
 
   /**
-   * ## jsapi 获取票证
+   * Get JSAPI ticket.
    *
    * @param accessToken access_token
-   * @param type 票证类型，默认为jsapi
+   * @param type ticket type, defaults to "jsapi"
    */
   @GetExchange("cgi-bin/ticket/getticket")
   fun getTicket(@RequestParam(name = "access_token") accessToken: String, @RequestParam(name = "type") type: String = "jsapi"): WxpaGetTicketResp?
 
   /**
-   * ## 公众号每天的调用次数
+   * Get the daily API quota for an Official Account.
    *
    * @param accessToken access_token
-   * @param cgiPath 调用路径
+   * @param cgiPath API path being queried
    */
   @GetExchange("cgi-bin/openapi/quota/get")
   fun getApiQuota(@RequestParam("access_token") accessToken: String, @RequestParam("cgi_path") cgiPath: String): WxpaQuotaResp?
 }
 
-/** # 微信公众号响应基类 */
+/** Base response entity for WeChat Official Account APIs. */
 abstract class BaseWxpaResponseEntity {
-  /** 错误码 */
+  /** Error code. */
   @JsonProperty("errcode") var errorCode: Int? = null
 
-  /** 错误消息 */
+  /** Error message. */
   @JsonProperty("errmsg") var errorMessage: String? = null
 
   /**
-   * 过期时间限制（在多久后过期）
-   * > 使用秒表示
+   * Expiration time limit (how long until the response expires).
+   * > Value is expressed in seconds.
    */
   @JsonProperty("expires_in") var expireInSecond: Long? = null
 
-  /** 是否为错误响应 */
+  /** Whether this is an error response. */
   @get:JsonIgnore
   val isError: Boolean
     get() = errorCode != null && errorCode != 0

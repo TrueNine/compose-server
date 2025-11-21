@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component
 private val log = logger<WxpaTokenEventManager>()
 
 /**
- * # 微信公众号Token事件管理器
+ * WeChat Official Account token event manager.
  *
- * 负责处理Token相关的事件，实现事件驱动的Token管理
+ * Handles token-related events and provides event-driven token management.
  *
  * @author TrueNine
  * @since 2025-08-08
@@ -24,25 +24,25 @@ private val log = logger<WxpaTokenEventManager>()
 @Component
 class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private val properties: WxpaProperties) {
 
-  /** Token使用统计 */
+  /** Token usage statistics. */
   private val tokenUsageStats = ConcurrentHashMap<TokenType, AtomicLong>()
 
-  /** 最后一次健康检查时间 */
+  /** Time of the last health check. */
   @Volatile private var lastHealthCheckTime: LocalDateTime? = null
 
-  /** 刷新失败计数器 */
+  /** Counter for token refresh failures. */
   private val refreshFailureCount = AtomicLong(0)
 
   init {
     log.info("WxpaTokenEventManager initialized for appId: {}", properties.appId)
-    // 初始化统计计数器
+    // Initialize usage counters
     TokenType.entries.forEach { type -> tokenUsageStats[type] = AtomicLong(0) }
   }
 
   /**
-   * ## 处理应用启动完成事件
+   * Handle application startup completion event.
    *
-   * 应用启动后进行初始Token检查
+   * Performs an initial token health check after application startup.
    */
   @EventListener
   fun handleApplicationReady(event: ApplicationReadyEvent) {
@@ -57,10 +57,10 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
       val status = tokenManager.getTokenStatus()
       val healthStatus = determineHealthStatus(status)
 
-      // 发布健康检查事件
+      // Publish health-check event
       publishHealthCheckEvent(status, healthStatus)
 
-      // 如果Token不健康，触发刷新
+      // If tokens are unhealthy, trigger refresh
       if (healthStatus == HealthStatus.UNHEALTHY) {
         log.info("Initial token check found unhealthy tokens, triggering refresh")
         handleTokenExpired(
@@ -78,9 +78,9 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
   }
 
   /**
-   * ## 处理Token过期事件
+   * Handle token expiration events.
    *
-   * 异步处理Token刷新
+   * Performs token refresh asynchronously.
    */
   @Async
   @EventListener
@@ -116,7 +116,7 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
         }
       }
 
-      // 重置失败计数器
+      // Reset failure counter after a successful refresh
       refreshFailureCount.set(0)
     } catch (e: Exception) {
       val duration = System.currentTimeMillis() - startTime
@@ -129,9 +129,9 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
   }
 
   /**
-   * ## 处理Token使用事件
+   * Handle token usage events.
    *
-   * 记录Token使用统计
+   * Records token usage statistics.
    */
   @EventListener
   fun handleTokenUsed(event: TokenUsedEvent) {
@@ -140,9 +140,9 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
   }
 
   /**
-   * ## 处理Token刷新完成事件
+   * Handle token refreshed events.
    *
-   * 记录刷新成功的统计信息
+   * Records successful refresh statistics.
    */
   @EventListener
   fun handleTokenRefreshed(event: TokenRefreshedEvent) {
@@ -150,21 +150,21 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
   }
 
   /**
-   * ## 处理Token刷新失败事件
+   * Handle token refresh failed events.
    *
-   * 记录失败信息并可能触发重试或告警
+   * Records failure information and can trigger retries or alerts.
    */
   @EventListener
   fun handleTokenRefreshFailed(event: TokenRefreshFailedEvent) {
     log.error("Token refresh failed: type={}, reason={}, retryCount={}", event.tokenType, event.failureReason, event.retryCount)
 
-    // 如果失败次数过多，可以在这里实现告警逻辑
+    // If failures happen too frequently, alert logic can be implemented here
     if (event.retryCount >= properties.apiRetryCount) {
       log.error("Token refresh failed too many times, consider manual intervention")
     }
   }
 
-  /** ## 发布Token刷新完成事件 */
+  /** Publish token refreshed event. */
   private fun publishTokenRefreshedEvent(
     tokenType: TokenType,
     newToken: io.github.truenine.composeserver.psdk.wxpa.model.WxpaToken? = null,
@@ -181,11 +181,11 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
         refreshDurationMs = duration,
       )
 
-    // 通过 EventPublisherHolder 发布事件
+    // Publish via EventPublisherHolder
     io.github.truenine.composeserver.holders.EventPublisherHolder.get()?.publishEvent(event)
   }
 
-  /** ## 发布Token刷新失败事件 */
+  /** Publish token refresh failed event. */
   private fun publishTokenRefreshFailedEvent(tokenType: TokenType, reason: String, exception: Throwable?, retryCount: Int) {
     val event =
       TokenRefreshFailedEvent(
@@ -200,7 +200,7 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
     io.github.truenine.composeserver.holders.EventPublisherHolder.get()?.publishEvent(event)
   }
 
-  /** ## 发布健康检查事件 */
+  /** Publish health check event. */
   private fun publishHealthCheckEvent(status: Map<String, Any>, healthStatus: HealthStatus) {
     lastHealthCheckTime = LocalDateTime.now()
 
@@ -209,7 +209,7 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
     io.github.truenine.composeserver.holders.EventPublisherHolder.get()?.publishEvent(event)
   }
 
-  /** ## 根据Token状态确定健康状态 */
+  /** Determine health status based on the current token state. */
   private fun determineHealthStatus(status: Map<String, Any>): HealthStatus {
     val hasAccessToken = status["hasAccessToken"] as? Boolean ?: false
     val hasJsapiTicket = status["hasJsapiTicket"] as? Boolean ?: false
@@ -223,14 +223,14 @@ class WxpaTokenEventManager(private val tokenManager: WxpaTokenManager, private 
     }
   }
 
-  /** ## 获取Token使用统计 */
+  /** Get token usage statistics. */
   fun getTokenUsageStats(): Map<TokenType, Long> {
     return tokenUsageStats.mapValues { it.value.get() }
   }
 
-  /** ## 获取最后健康检查时间 */
+  /** Get time of the last health check. */
   fun getLastHealthCheckTime(): LocalDateTime? = lastHealthCheckTime
 
-  /** ## 获取刷新失败次数 */
+  /** Get token refresh failure count. */
   fun getRefreshFailureCount(): Long = refreshFailureCount.get()
 }

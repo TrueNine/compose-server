@@ -35,7 +35,7 @@ class WxpaTokenEventManagerTest {
     properties = WxpaProperties(appId = "test-app-id", appSecret = "test-app-secret", enableAutoRefresh = true, apiRetryCount = 3)
     mockPublisher = mockk(relaxed = true)
 
-    // 设置 EventPublisherHolder
+    // Set EventPublisherHolder
     EventPublisherHolder.set(mockPublisher)
 
     eventManager = WxpaTokenEventManager(tokenManager, properties)
@@ -48,10 +48,10 @@ class WxpaTokenEventManagerTest {
   }
 
   @Nested
-  inner class `应用启动事件处理` {
+  inner class `Application startup event handling` {
 
     @Test
-    fun `应该在应用启动时进行健康检查`() {
+    fun `should perform health check when application starts`() {
       // Given
       val mockApplication = mockk<SpringApplication>()
       val mockContext = mockk<ConfigurableApplicationContext>()
@@ -70,7 +70,7 @@ class WxpaTokenEventManagerTest {
     }
 
     @Test
-    fun `应该在发现不健康 Token 时触发刷新`() {
+    fun `should trigger refresh when unhealthy tokens are detected`() {
       // Given
       val mockApplication = mockk<SpringApplication>()
       val mockContext = mockk<ConfigurableApplicationContext>()
@@ -86,11 +86,11 @@ class WxpaTokenEventManagerTest {
       // Then
       verify { tokenManager.getTokenStatus() }
       verify { mockPublisher.publishEvent(any<TokenHealthCheckEvent>()) }
-      // 应该发布过期事件，但由于是异步处理，这里不直接验证
+      // An expiration event should also be published, but since it is handled asynchronously we do not verify it here
     }
 
     @Test
-    fun `当自动刷新禁用时应该跳过初始检查`() {
+    fun `should skip initial check when auto refresh is disabled`() {
       // Given
       val disabledProperties = properties.copy(enableAutoRefresh = false)
       val disabledEventManager = WxpaTokenEventManager(tokenManager, disabledProperties)
@@ -107,10 +107,10 @@ class WxpaTokenEventManagerTest {
   }
 
   @Nested
-  inner class `Token 过期事件处理` {
+  inner class `Token expiration event handling` {
 
     @Test
-    fun `应该处理 ACCESS_TOKEN 过期事件`() {
+    fun `should handle ACCESS_TOKEN expiration event`() {
       // Given
       val newToken = WxpaToken("new-access-token", 7200L)
       val expiredEvent = TokenExpiredEvent(source = this, appId = "test-app-id", tokenType = TokenType.ACCESS_TOKEN, reason = "Token expired")
@@ -126,7 +126,7 @@ class WxpaTokenEventManagerTest {
     }
 
     @Test
-    fun `应该处理 JSAPI_TICKET 过期事件`() {
+    fun `should handle JSAPI_TICKET expiration event`() {
       // Given
       val newTicket = WxpaTicket("new-jsapi-ticket", 7200L)
       val expiredEvent = TokenExpiredEvent(source = this, appId = "test-app-id", tokenType = TokenType.JSAPI_TICKET, reason = "Ticket expired")
@@ -142,7 +142,7 @@ class WxpaTokenEventManagerTest {
     }
 
     @Test
-    fun `应该处理 BOTH 类型的过期事件`() {
+    fun `should handle BOTH type expiration event`() {
       // Given
       val newToken = WxpaToken("new-access-token", 7200L)
       val newTicket = WxpaTicket("new-jsapi-ticket", 7200L)
@@ -159,7 +159,7 @@ class WxpaTokenEventManagerTest {
     }
 
     @Test
-    fun `应该处理刷新失败的情况`() {
+    fun `should handle token refresh failure`() {
       // Given
       val exception = RuntimeException("Network error")
       val expiredEvent = TokenExpiredEvent(source = this, appId = "test-app-id", tokenType = TokenType.ACCESS_TOKEN, reason = "Token expired")
@@ -176,10 +176,10 @@ class WxpaTokenEventManagerTest {
   }
 
   @Nested
-  inner class `Token 使用事件处理` {
+  inner class `Token usage event handling` {
 
     @Test
-    fun `应该记录 Token 使用统计`() {
+    fun `should record token usage statistics`() {
       // Given
       val usedEvent = TokenUsedEvent(source = this, appId = "test-app-id", tokenType = TokenType.ACCESS_TOKEN, usageContext = "API call")
 
@@ -193,7 +193,7 @@ class WxpaTokenEventManagerTest {
     }
 
     @Test
-    fun `应该累计多次使用统计`() {
+    fun `should accumulate usage statistics for multiple events`() {
       // Given
       val usedEvent1 = TokenUsedEvent(source = this, appId = "test-app-id", tokenType = TokenType.ACCESS_TOKEN, usageContext = "API call 1")
       val usedEvent2 = TokenUsedEvent(source = this, appId = "test-app-id", tokenType = TokenType.ACCESS_TOKEN, usageContext = "API call 2")
@@ -209,10 +209,10 @@ class WxpaTokenEventManagerTest {
   }
 
   @Nested
-  inner class `事件处理统计` {
+  inner class `Event handling statistics` {
 
     @Test
-    fun `应该记录刷新成功事件`() {
+    fun `should record token refresh success events`() {
       // Given
       val refreshedEvent = TokenRefreshedEvent(source = this, appId = "test-app-id", tokenType = TokenType.ACCESS_TOKEN, refreshDurationMs = 1500L)
 
@@ -220,12 +220,12 @@ class WxpaTokenEventManagerTest {
       eventManager.handleTokenRefreshed(refreshedEvent)
 
       // Then
-      // 验证日志记录（这里主要是确保方法被调用而不抛异常）
+      // Verify logging (mainly ensure the method can be called without throwing exceptions)
       assertTrue(true)
     }
 
     @Test
-    fun `应该记录刷新失败事件`() {
+    fun `should record token refresh failure events`() {
       // Given
       val failedEvent =
         TokenRefreshFailedEvent(source = this, appId = "test-app-id", tokenType = TokenType.ACCESS_TOKEN, failureReason = "Network error", retryCount = 1)
@@ -234,16 +234,16 @@ class WxpaTokenEventManagerTest {
       eventManager.handleTokenRefreshFailed(failedEvent)
 
       // Then
-      // 验证日志记录（这里主要是确保方法被调用而不抛异常）
+      // Verify logging (mainly ensure the method can be called without throwing exceptions)
       assertTrue(true)
     }
   }
 
   @Nested
-  inner class `统计信息获取` {
+  inner class `Statistics retrieval` {
 
     @Test
-    fun `应该返回正确的使用统计`() {
+    fun `should return correct usage statistics`() {
       // When
       val stats = eventManager.getTokenUsageStats()
 
@@ -256,7 +256,7 @@ class WxpaTokenEventManagerTest {
     }
 
     @Test
-    fun `应该返回刷新失败次数`() {
+    fun `should return refresh failure count`() {
       // When
       val failureCount = eventManager.getRefreshFailureCount()
 

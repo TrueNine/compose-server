@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IStringEnum
 
 /**
- * # 微信支付验证类型
+ * WeChat Official Account OAuth grant type.
  *
  * @author TrueNine
  * @since 2023-05-31

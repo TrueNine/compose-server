@@ -27,10 +27,10 @@ class WxpaUserInfoServiceTest {
   }
 
   @Nested
-  inner class `通过授权码获取用户信息` {
+  inner class `Get user info by auth code` {
 
     @Test
-    fun `应该成功获取用户信息`() {
+    fun `should get user info successfully`() {
       // Given
       val authCode = "test_auth_code"
       val mockTokenResponse =
@@ -42,7 +42,7 @@ class WxpaUserInfoServiceTest {
       val mockUserInfoResponse =
         mockk<IWxpaWebClient.WxpaWebsiteUserInfoResp> {
           every { openId } returns "test_open_id"
-          every { nickName } returns "测试用户"
+          every { nickName } returns "Test user"
           every { privilege } returns listOf("privilege1", "privilege2")
           every { unionId } returns "test_union_id"
         }
@@ -57,13 +57,13 @@ class WxpaUserInfoServiceTest {
       // Then
       assertNotNull(userInfo)
       assertEquals("test_open_id", userInfo.openId)
-      assertEquals("测试用户", userInfo.nickname)
+      assertEquals("Test user", userInfo.nickname)
       assertEquals(listOf("privilege1", "privilege2"), userInfo.privilege)
       assertEquals("test_union_id", userInfo.unionId)
     }
 
     @Test
-    fun `当 AppId 未配置时应该返回 null`() {
+    fun `should return null when AppId is not configured`() {
       // Given
       val invalidProperties = WxpaProperties(appId = "", appSecret = "test_app_secret")
       val invalidService = WxpaUserInfoService(apiClient, invalidProperties)
@@ -77,7 +77,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当 AppSecret 未配置时应该返回 null`() {
+    fun `should return null when AppSecret is not configured`() {
       // Given
       val invalidProperties = WxpaProperties(appId = "test_app_id", appSecret = "")
       val invalidService = WxpaUserInfoService(apiClient, invalidProperties)
@@ -91,7 +91,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当获取 access token 失败时应该返回 null`() {
+    fun `should return null when access token retrieval fails`() {
       // Given
       val authCode = "test_auth_code"
       every { apiClient.getWebsiteAccessToken("test_app_id", "test_app_secret", authCode) } returns null
@@ -104,7 +104,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当 access token 响应有错误时应该返回 null`() {
+    fun `should return null when access token response has error`() {
       // Given
       val authCode = "test_auth_code"
       val mockTokenResponse =
@@ -124,7 +124,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当 access token 为空时应该返回 null`() {
+    fun `should return null when access token is null`() {
       // Given
       val authCode = "test_auth_code"
       val mockTokenResponse =
@@ -144,7 +144,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当 openId 为空时应该返回 null`() {
+    fun `should return null when openId is null`() {
       // Given
       val authCode = "test_auth_code"
       val mockTokenResponse =
@@ -164,7 +164,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当获取用户信息失败时应该返回 null`() {
+    fun `should return null when user info retrieval fails`() {
       // Given
       val authCode = "test_auth_code"
       val mockTokenResponse =
@@ -186,7 +186,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当用户信息中 openId 为空时应该返回 null`() {
+    fun `should return null when openId in user info is null`() {
       // Given
       val authCode = "test_auth_code"
       val mockTokenResponse =
@@ -210,10 +210,10 @@ class WxpaUserInfoServiceTest {
   }
 
   @Nested
-  inner class `检查用户授权状态` {
+  inner class `Check user authorization status` {
 
     @Test
-    fun `应该正确检查有效的用户授权`() {
+    fun `should validate valid user authorization correctly`() {
       // Given
       val accessToken = "test_access_token"
       val userOpenId = "test_open_id"
@@ -229,7 +229,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `应该正确检查无效的用户授权`() {
+    fun `should validate invalid user authorization correctly`() {
       // Given
       val accessToken = "invalid_access_token"
       val openId = "test_open_id"
@@ -244,7 +244,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当用户信息中 openId 为空时应该返回 false`() {
+    fun `should return false when openId in user info is empty`() {
       // Given
       val accessToken = "test_access_token"
       val userOpenId = "test_open_id"
@@ -260,7 +260,7 @@ class WxpaUserInfoServiceTest {
     }
 
     @Test
-    fun `当发生异常时应该返回 false`() {
+    fun `should return false when exception occurs`() {
       // Given
       val accessToken = "test_access_token"
       val openId = "test_open_id"

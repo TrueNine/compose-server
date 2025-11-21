@@ -3,34 +3,36 @@ package io.github.truenine.composeserver.psdk.wxpa.model
 import java.time.LocalDateTime
 
 /**
- * # 微信公众号Token信息
+ * WeChat Official Account token information.
  *
  * @author TrueNine
  * @since 2025-08-08
  */
 data class WxpaToken(
-  /** Access Token */
+  /** Access token. */
   val accessToken: String,
-  /** 过期时间（秒） */
+  /** Expiration time in seconds. */
   val expiresIn: Long,
-  /** 获取时间 */
+  /** Time when the token was obtained. */
   val obtainedAt: LocalDateTime = LocalDateTime.now(),
 ) {
-  /** 是否已过期 */
+  /** Whether the token is expired. */
   val isExpired: Boolean
-    get() = LocalDateTime.now().isAfter(obtainedAt.plusSeconds(expiresIn - 300)) // 提前5分钟过期
+    // Consider the token expired 5 minutes before the actual expiration time.
+    get() = LocalDateTime.now().isAfter(obtainedAt.plusSeconds(expiresIn - 300))
 }
 
-/** # 微信公众号Ticket信息 */
+/** WeChat Official Account ticket information. */
 data class WxpaTicket(
-  /** JSAPI Ticket */
+  /** JSAPI ticket. */
   val ticket: String,
-  /** 过期时间（秒） */
+  /** Expiration time in seconds. */
   val expiresIn: Long,
-  /** 获取时间 */
+  /** Time when the ticket was obtained. */
   val obtainedAt: LocalDateTime = LocalDateTime.now(),
 ) {
-  /** 是否已过期 */
+  /** Whether the ticket is expired. */
   val isExpired: Boolean
-    get() = LocalDateTime.now().isAfter(obtainedAt.plusSeconds(expiresIn - 300)) // 提前5分钟过期
+    // Consider the ticket expired 5 minutes before the actual expiration time.
+    get() = LocalDateTime.now().isAfter(obtainedAt.plusSeconds(expiresIn - 300))
 }

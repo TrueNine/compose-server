@@ -25,7 +25,7 @@ dependencies {
   testImplementation(projects.testtoolkit.testtoolkitShared)
 }
 
-// 直接实现 dotenv 功能，避免插件依赖
+// Implement dotenv functionality directly to avoid plugin dependency
 fun loadDotenv() {
   val envFile = rootProject.file(".env")
   if (envFile.exists()) {
@@ -37,7 +37,7 @@ fun loadDotenv() {
           val key = parts[0].trim()
           val value = parts[1].trim().removeSurrounding("\"").removeSurrounding("'")
           if (key.isNotEmpty() && value.isNotEmpty()) {
-            // 设置到所有任务的环境变量中
+            // Set the variable into the environment of all relevant tasks
             tasks.withType<Test> { environment(key, value) }
             tasks.withType<JavaExec> { environment(key, value) }
             logger.debug("Loaded environment variable: $key")
@@ -51,5 +51,5 @@ fun loadDotenv() {
   }
 }
 
-// 加载 dotenv 配置
+// Load dotenv configuration
 loadDotenv()
