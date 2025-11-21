@@ -16,20 +16,20 @@ class AddTreeStructMigrationTest : IDatabasePostgresqlContainer {
   @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @Test
-  fun `add_tree_struct 应正确增加字段`() {
+  fun `add_tree_struct should add columns correctly`() {
     val tableName = "test_table_add_fields"
 
-    // 清理可能存在的表
+    // Clean up existing table if present
     jdbcTemplate.execute("drop table if exists $tableName")
 
-    // 创建测试表
+    // Create test table
     jdbcTemplate.execute("create table $tableName(id bigint primary key)")
 
     try {
-      // 执行 add_tree_struct 函数
+      // Execute add_tree_struct function
       jdbcTemplate.execute("select add_tree_struct('$tableName')")
 
-      // 验证字段是否正确添加
+      // Verify that columns are added correctly
       val columns =
         jdbcTemplate
           .queryForList(
@@ -42,29 +42,29 @@ class AddTreeStructMigrationTest : IDatabasePostgresqlContainer {
           .map { it["column_name"] }
 
       val expected = listOf("rpi")
-      assertTrue(columns.containsAll(expected), "缺少 tree 字段: " + (expected - columns))
+      assertTrue(columns.containsAll(expected), "Missing tree columns: " + (expected - columns))
     } finally {
-      // 清理测试表
+      // Clean up test table
       jdbcTemplate.execute("drop table if exists $tableName")
     }
   }
 
   @Test
-  fun `add_tree_struct 幂等性测试`() {
+  fun `add_tree_struct idempotency test`() {
     val tableName = "test_table_idempotent"
 
-    // 清理可能存在的表
+    // Clean up existing table if present
     jdbcTemplate.execute("drop table if exists $tableName")
 
-    // 创建测试表
+    // Create test table
     jdbcTemplate.execute("create table $tableName(id bigint primary key)")
 
     try {
-      // 多次执行 add_tree_struct 函数测试幂等性
+      // Execute add_tree_struct function multiple times to test idempotency
       jdbcTemplate.execute("select add_tree_struct('$tableName')")
       jdbcTemplate.execute("select add_tree_struct('$tableName')")
 
-      // 验证字段是否正确添加且没有重复
+      // Verify that columns are added correctly and without duplication
       val columns =
         jdbcTemplate
           .queryForList(
@@ -77,9 +77,9 @@ class AddTreeStructMigrationTest : IDatabasePostgresqlContainer {
           .map { it["column_name"] }
 
       val expected = listOf("rpi")
-      assertTrue(columns.containsAll(expected), "add_tree_struct 幂等性失败: " + (expected - columns))
+      assertTrue(columns.containsAll(expected), "add_tree_struct idempotency failed: " + (expected - columns))
     } finally {
-      // 清理测试表
+      // Clean up test table
       jdbcTemplate.execute("drop table if exists $tableName")
     }
   }

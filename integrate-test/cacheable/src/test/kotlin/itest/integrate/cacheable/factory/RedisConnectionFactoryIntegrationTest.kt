@@ -16,16 +16,16 @@ class RedisConnectionFactoryIntegrationTest : ICacheRedisContainer {
   @Resource lateinit var factory: RedisConnectionFactory
 
   @Test
-  fun `验证工厂使用最新的RESP3协议连接`() {
+  fun `Factory should use latest RESP3 protocol for connections`() {
     val lettuceFactory = assertIs<LettuceConnectionFactory>(factory)
     val connection = lettuceFactory.connection
     try {
       val pingResult = connection.ping()
       assertEquals("PONG", pingResult)
       val clientOptions = lettuceFactory.clientConfiguration.clientOptions.orElse(null)
-      assertNotNull(clientOptions, "客户端选项不应为空")
+      assertNotNull(clientOptions, "Client options should not be null")
       val protocolVersion = clientOptions.protocolVersion
-      assertEquals("RESP3", protocolVersion.toString(), "应该使用最新的 RESP3 协议")
+      assertEquals("RESP3", protocolVersion.toString(), "The latest RESP3 protocol should be used")
     } finally {
       connection.close()
     }

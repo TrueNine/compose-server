@@ -3,8 +3,9 @@ package itest.integrate.depend.jackson
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 /**
- * 时区测试专用配置类
+ * Dedicated configuration class for timezone-related tests.
  *
- * 放在单独的包中以避免与其他测试配置冲突
+ * Placed in a separate package to avoid conflicts with other test
+ * configurations.
  */
 @SpringBootApplication internal class TestEntrance

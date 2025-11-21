@@ -32,9 +32,10 @@ import org.springframework.web.bind.annotation.RestController
 import tools.jackson.databind.ObjectMapper
 
 /**
- * 手动配置的 Web 集成测试
+ * Manually configured web integration tests.
  *
- * 不依赖 Spring Boot 自动配置，手动配置所有组件
+ * Does not rely on Spring Boot auto-configuration; all components are
+ * configured manually.
  */
 @SpringBootTest(classes = [TestEntrance::class])
 @AutoConfigureMockMvc
@@ -89,7 +90,7 @@ class ManualWebConfigurationTest {
     fun should_handle_different_system_timezones_consistently() {
       val originalTimeZone = System.getProperty("user.timezone")
       try {
-        // 测试不同时区
+        // Test different time zones
         val timeZones = listOf("UTC", "Asia/Shanghai", "America/New_York", "Europe/London")
 
         timeZones.forEach { timeZone ->
@@ -101,12 +102,12 @@ class ManualWebConfigurationTest {
           val responseBody = result.response.contentAsString
           val timeData = objectMapper.readValue(responseBody, TimeData::class.java)
 
-          // 验证时间戳序列化在不同时区下保持一致
+          // Verify that timestamp serialization remains consistent across different time zones
           assertNotNull(timeData.instant)
           assertNotNull(timeData.localDateTime)
         }
       } finally {
-        // 恢复原始时区
+        // Restore original time zone
         if (originalTimeZone != null) {
           System.setProperty("user.timezone", originalTimeZone)
           TimeZone.setDefault(TimeZone.getTimeZone(originalTimeZone))
@@ -115,10 +116,10 @@ class ManualWebConfigurationTest {
     }
   }
 
-  /** 测试数据类 */
+  /** Test data class */
   data class TimeData(val instant: Instant, val localDateTime: LocalDateTime)
 
-  /** 测试控制器 */
+  /** Test controller */
   @RestController
   class TestController {
 
