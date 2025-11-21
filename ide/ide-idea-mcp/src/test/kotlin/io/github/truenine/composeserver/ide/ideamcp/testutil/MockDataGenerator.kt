@@ -11,17 +11,17 @@ import java.util.jar.JarOutputStream
 import kotlin.random.Random
 
 /**
- * 模拟数据生成器
+ * Mock data generator.
  *
- * 提供工具方法来生成测试用的模拟数据：
- * - 模拟JAR文件
- * - 模拟源码文件
- * - 模拟LibCodeResult对象
- * - 测试用的类定义
+ * Provides utility methods to generate mock data for tests:
+ * - mock JAR files
+ * - mock source files
+ * - mock LibCodeResult objects
+ * - test class definitions
  */
 object MockDataGenerator {
 
-  /** 生成模拟的Java源码 */
+  /** Generate mock Java source code. */
   fun generateMockJavaSource(
     packageName: String = "com.example",
     className: String = "TestClass",
@@ -34,19 +34,19 @@ object MockDataGenerator {
       appendLine("import java.io.*;")
       appendLine()
       appendLine("/**")
-      appendLine(" * 模拟生成的测试类")
-      appendLine(" * 用于 LibCodeService 功能测试")
+      appendLine(" * Mock generated test class")
+      appendLine(" * Used for LibCodeService feature testing")
       appendLine(" */")
       appendLine("public class $className {")
       appendLine()
 
-      // 生成字段
+      // Generate fields
       appendLine("    private String value;")
       appendLine("    private int count;")
       appendLine("    private List<String> items;")
       appendLine()
 
-      // 生成构造函数
+      // Generate constructors
       appendLine("    public $className() {")
       appendLine("        this.value = \"default\";")
       appendLine("        this.count = 0;")
@@ -61,14 +61,14 @@ object MockDataGenerator {
       appendLine("    }")
       appendLine()
 
-      // 生成指定的成员方法
+      // Generate specified member methods
       includeMembers.forEach { memberName ->
         when (memberName) {
           "testMethod" -> {
             appendLine("    /**")
-            appendLine("     * 测试方法")
-            appendLine("     * @param input 输入参数")
-            appendLine("     * @return 处理结果")
+            appendLine("     * Test method")
+            appendLine("     * @param input input parameter")
+            appendLine("     * @return processed result")
             appendLine("     */")
             appendLine("    public String testMethod(String input) {")
             appendLine("        if (input == null) {")
@@ -96,7 +96,7 @@ object MockDataGenerator {
 
           else -> {
             appendLine("    public void $memberName() {")
-            appendLine("        // 自动生成的方法: $memberName")
+            appendLine("        // Auto-generated method: $memberName")
             appendLine("        System.out.println(\"Executing $memberName\");")
             appendLine("    }")
             appendLine()
@@ -104,7 +104,7 @@ object MockDataGenerator {
         }
       }
 
-      // 生成toString方法
+      // Generate toString method
       appendLine("    @Override")
       appendLine("    public String toString() {")
       appendLine("        return \"$className{\" +")
@@ -115,7 +115,7 @@ object MockDataGenerator {
       appendLine("    }")
       appendLine()
 
-      // 生成equals和hashCode
+      // Generate equals and hashCode
       appendLine("    @Override")
       appendLine("    public boolean equals(Object obj) {")
       appendLine("        if (this == obj) return true;")
@@ -134,7 +134,7 @@ object MockDataGenerator {
     }
   }
 
-  /** 生成模拟的Kotlin源码 */
+  /** Generate mock Kotlin source code. */
   fun generateMockKotlinSource(
     packageName: String = "com.example",
     className: String = "TestClass",
@@ -146,8 +146,8 @@ object MockDataGenerator {
       appendLine("import java.util.*")
       appendLine()
       appendLine("/**")
-      appendLine(" * 模拟生成的Kotlin测试类")
-      appendLine(" * 用于 LibCodeService 功能测试")
+      appendLine(" * Mock generated Kotlin test class")
+      appendLine(" * Used for LibCodeService feature testing")
       appendLine(" */")
       appendLine("data class $className(")
       appendLine("    var value: String = \"default\",")
@@ -189,7 +189,7 @@ object MockDataGenerator {
 
           else -> {
             appendLine("    fun $memberName() {")
-            appendLine("        // 自动生成的方法: $memberName")
+            appendLine("        // Auto-generated method: $memberName")
             appendLine("        println(\"Executing $memberName\")")
             appendLine("    }")
             appendLine()
@@ -201,7 +201,7 @@ object MockDataGenerator {
     }
   }
 
-  /** 生成模拟的LibCodeResult对象 */
+  /** Generate a mock LibCodeResult object. */
   fun generateMockLibCodeResult(
     className: String = "com.example.TestClass",
     language: String = "java",
@@ -250,7 +250,7 @@ object MockDataGenerator {
     )
   }
 
-  /** 生成模拟的文档字符串 */
+  /** Generate a mock documentation string. */
   private fun generateMockDocumentation(className: String): String? {
     return if (Random.nextBoolean()) {
       "Mock documentation for $className. This class provides basic functionality for testing purposes."
@@ -259,7 +259,7 @@ object MockDataGenerator {
     }
   }
 
-  /** 生成模拟的JAR文件内容（字节数组） */
+  /** Generate mock JAR file content as a byte array. */
   fun generateMockJarContent(
     classes: Map<String, String> =
       mapOf(
@@ -282,7 +282,7 @@ object MockDataGenerator {
     return byteArrayOutputStream.toByteArray()
   }
 
-  /** 生成模拟的MANIFEST.MF内容 */
+  /** Generate mock MANIFEST.MF content. */
   private fun generateManifest(): String {
     return buildString {
       appendLine("Manifest-Version: 1.0")
@@ -294,7 +294,7 @@ object MockDataGenerator {
     }
   }
 
-  /** 创建临时JAR文件用于测试 */
+  /** Create a temporary JAR file for testing. */
   fun createTempJarFile(
     classes: Map<String, String> = mapOf("com/example/TestClass.java" to generateMockJavaSource()),
     prefix: String = "test-lib",
@@ -311,7 +311,7 @@ object MockDataGenerator {
     return tempFile
   }
 
-  /** 生成测试用的类名列表 */
+  /** Generate a list of test class names. */
   fun generateTestClassNames(count: Int = 10): List<String> {
     val packages = listOf("com.example", "org.test", "io.mock", "net.sample")
     val classTypes = listOf("Service", "Manager", "Handler", "Processor", "Controller", "Repository")
@@ -323,7 +323,7 @@ object MockDataGenerator {
     }
   }
 
-  /** 生成大型源码文件（用于性能测试） */
+  /** Generate a large source file (for performance testing). */
   fun generateLargeSourceCode(className: String = "LargeTestClass", methodCount: Int = 100, linesPerMethod: Int = 20): String {
     return buildString {
       appendLine("package com.example.large;")
@@ -333,20 +333,20 @@ object MockDataGenerator {
       appendLine("import java.math.*;")
       appendLine()
       appendLine("/**")
-      appendLine(" * 大型测试类，包含 $methodCount 个方法")
-      appendLine(" * 用于性能测试")
+      appendLine(" * Large test class containing $methodCount methods")
+      appendLine(" * Used for performance testing")
       appendLine(" */")
       appendLine("public class $className {")
       appendLine()
 
-      // 生成大量字段
+      // Generate many fields
       repeat(50) { index -> appendLine("    private String field$index = \"value$index\";") }
       appendLine()
 
-      // 生成大量方法
+      // Generate many methods
       repeat(methodCount) { methodIndex ->
         appendLine("    /**")
-        appendLine("     * 自动生成的方法 $methodIndex")
+        appendLine("     * Auto-generated method $methodIndex")
         appendLine("     */")
         appendLine("    public void method$methodIndex() {")
 

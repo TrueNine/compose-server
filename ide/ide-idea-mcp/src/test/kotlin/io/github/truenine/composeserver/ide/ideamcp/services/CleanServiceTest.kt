@@ -12,7 +12,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 
-/** CleanService 单元测试 */
+/** CleanService unit tests. */
 class CleanServiceTest {
 
   private val project = mockk<Project>()
@@ -20,7 +20,7 @@ class CleanServiceTest {
   private val cleanService = TestableCleanServiceImpl(project, fileManager)
 
   @Test
-  fun `cleanCode 应该处理单个文件`() = runBlocking {
+  fun `cleanCode should process a single file`() = runBlocking {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -35,13 +35,13 @@ class CleanServiceTest {
     val result = cleanService.cleanCode(project, virtualFile, options)
 
     // Then
-    assertEquals(1, result.processedFiles) // 单个文件
+    assertEquals(1, result.processedFiles) // Single file
     assertTrue(result.executionTime >= 0)
-    assertTrue(result.summary.contains("处理了"))
+    assertTrue(result.summary.contains("Processed"))
   }
 
   @Test
-  fun `cleanCode 应该处理目录`() = runBlocking {
+  fun `cleanCode should process directory`() = runBlocking {
     // Given
     val project = mockk<Project>()
     val directory = mockk<VirtualFile>()
@@ -70,7 +70,7 @@ class CleanServiceTest {
   }
 
   @Test
-  fun `CleanOptions 默认值应该正确`() {
+  fun `CleanOptions default values should be correct`() {
     // Given
     val options = CleanOptions()
 
@@ -82,7 +82,7 @@ class CleanServiceTest {
   }
 
   @Test
-  fun `CleanOptions 自定义值应该正确设置`() {
+  fun `CleanOptions custom values should be set correctly`() {
     // Given
     val options = CleanOptions(formatCode = false, optimizeImports = true, runInspections = false, rearrangeCode = true)
 
@@ -94,23 +94,23 @@ class CleanServiceTest {
   }
 
   @Test
-  fun `CleanResult 应该包含正确的信息`() {
+  fun `CleanResult should contain correct information`() {
     // Given
-    val operations = listOf(CleanOperation("FORMAT", "代码格式化", 3), CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 2))
+    val operations = listOf(CleanOperation("FORMAT", "Code formatting", 3), CleanOperation("OPTIMIZE_IMPORTS", "Optimize imports", 2))
 
-    val result = CleanResult(processedFiles = 5, modifiedFiles = 3, operations = operations, errors = listOf("文件锁定错误"), summary = "处理完成", executionTime = 1000L)
+    val result = CleanResult(processedFiles = 5, modifiedFiles = 3, operations = operations, errors = listOf("File lock error"), summary = "Processing completed", executionTime = 1000L)
 
     // Then
     assertEquals(5, result.processedFiles)
     assertEquals(3, result.modifiedFiles)
     assertEquals(2, result.operations.size)
     assertEquals(1, result.errors.size)
-    assertEquals("处理完成", result.summary)
+    assertEquals("Processing completed", result.summary)
     assertEquals(1000L, result.executionTime)
   }
 
   @Test
-  fun `isCodeFile 应该正确识别代码文件`() {
+  fun `isCodeFile should recognize code files correctly`() {
     // Given
     val ktFile = mockk<VirtualFile>()
     val javaFile = mockk<VirtualFile>()
@@ -133,7 +133,7 @@ class CleanServiceTest {
   }
 
   @Test
-  fun `collectFilesToProcess 应该正确收集文件`() = runBlocking {
+  fun `collectFilesToProcess should collect files correctly`() = runBlocking {
     // Given
     val project = mockk<Project>()
     val directory = mockk<VirtualFile>()
@@ -152,29 +152,30 @@ class CleanServiceTest {
     cleanService.collectFilesToProcess(project, directory)
 
     // Then
-    // 由于过滤逻辑在 collectFilesRecursively 的 lambda 中，这里主要验证方法调用
+    // Since filtering happens inside the lambda passed to collectFilesRecursively,
+    // this test focuses on verifying that the method is invoked.
     verify { fileManager.collectFilesRecursively(directory, any()) }
   }
 
   @Test
-  fun `createSummary 应该生成正确的摘要`() {
+  fun `createSummary should generate correct summary`() {
     // Given
-    val operations = listOf(CleanOperation("FORMAT", "代码格式化", 5), CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 3))
-    val errors = listOf("错误1", "错误2")
+    val operations = listOf(CleanOperation("FORMAT", "Code formatting", 5), CleanOperation("OPTIMIZE_IMPORTS", "Optimize imports", 3))
+    val errors = listOf("Error1", "Error2")
 
     // When
     val summary = cleanService.createSummary(10, 8, operations, errors)
 
     // Then
-    assertTrue(summary.contains("处理了 10 个文件"))
-    assertTrue(summary.contains("修改了 8 个文件"))
-    assertTrue(summary.contains("代码格式化: 5 个文件"))
-    assertTrue(summary.contains("导入优化: 3 个文件"))
-    assertTrue(summary.contains("遇到 2 个错误"))
+    assertTrue(summary.contains("Processed 10 files"))
+    assertTrue(summary.contains("modified 8 files"))
+    assertTrue(summary.contains("Code formatting: 5 files"))
+    assertTrue(summary.contains("Optimize imports: 3 files"))
+    assertTrue(summary.contains("Encountered 2 errors"))
   }
 
   @Test
-  fun `createSummary 无修改文件时应该正确显示`() {
+  fun `createSummary should work correctly when no files modified`() {
     // Given
     val operations = emptyList<CleanOperation>()
     val errors = emptyList<String>()
@@ -183,36 +184,36 @@ class CleanServiceTest {
     val summary = cleanService.createSummary(5, 0, operations, errors)
 
     // Then
-    assertTrue(summary.contains("处理了 5 个文件"))
-    assertFalse(summary.contains("修改了"))
-    assertFalse(summary.contains("执行的操作"))
-    assertFalse(summary.contains("遇到"))
+    assertTrue(summary.contains("Processed 5 files"))
+    assertFalse(summary.contains("modified"))
+    assertFalse(summary.contains("Operations performed"))
+    assertFalse(summary.contains("Encountered"))
   }
 
   @Test
-  fun `updateOperationCount 应该正确更新操作计数`() {
+  fun `updateOperationCount should update operation count correctly`() {
     // Given
     val operations = mutableListOf<CleanOperation>()
 
-    // When - 第一次添加操作
-    cleanService.updateOperationCount(operations, "FORMAT", "代码格式化")
+    // When - first time adding operation
+    cleanService.updateOperationCount(operations, "FORMAT", "Code formatting")
 
     // Then
     assertEquals(1, operations.size)
     assertEquals("FORMAT", operations[0].type)
-    assertEquals("代码格式化", operations[0].description)
+    assertEquals("Code formatting", operations[0].description)
     assertEquals(1, operations[0].filesAffected)
 
-    // When - 再次添加相同类型的操作
-    cleanService.updateOperationCount(operations, "FORMAT", "代码格式化")
+    // When - add the same operation type again
+    cleanService.updateOperationCount(operations, "FORMAT", "Code formatting")
 
     // Then
-    assertEquals(1, operations.size) // 仍然只有一个操作
-    assertEquals(2, operations[0].filesAffected) // 但计数增加了
+    assertEquals(1, operations.size) // Still only one operation
+    assertEquals(2, operations[0].filesAffected) // But the count increased
   }
 }
 
-/** 可测试的 CleanService 实现，直接暴露受保护的方法用于测试 */
+/** Testable CleanService implementation exposing protected methods for testing. */
 private class TestableCleanServiceImpl(project: Project, private val testFileManager: FileManager) : CleanServiceImpl(project) {
 
   override val fileManager: FileManager

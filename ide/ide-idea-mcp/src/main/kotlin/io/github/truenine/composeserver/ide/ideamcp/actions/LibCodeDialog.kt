@@ -19,24 +19,28 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
 
-/** 库代码显示对话框 显示第三方库的源代码或反编译代码 */
+/**
+ * Dialog for displaying library code.
+ *
+ * Shows third-party library source code or decompiled code.
+ */
 class LibCodeDialog(private val project: Project, private val result: LibCodeResult, private val className: String) : DialogWrapper(project) {
 
   private var editor: EditorEx? = null
 
   init {
-    title = "库代码 - $className"
+    title = "Library code - $className"
     init()
   }
 
   override fun createCenterPanel(): JComponent {
     val panel = JPanel(BorderLayout())
 
-    // 创建信息面板
+    // Create information panel
     val infoPanel = createInfoPanel()
     panel.add(infoPanel, BorderLayout.NORTH)
 
-    // 创建代码编辑器
+    // Create code editor
     val codePanel = createCodePanel()
     panel.add(codePanel, BorderLayout.CENTER)
 
@@ -44,36 +48,36 @@ class LibCodeDialog(private val project: Project, private val result: LibCodeRes
     return panel
   }
 
-  /** 创建信息面板 */
+  /** Create information panel. */
   private fun createInfoPanel(): JComponent {
     val panel = JPanel()
     panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
-    panel.border = BorderFactory.createTitledBorder("库信息")
+    panel.border = BorderFactory.createTitledBorder("Library Information")
 
-    // 库名称和版本
+    // Library name and version
     val libraryInfo = buildString {
-      append("库: ${result.metadata.libraryName}")
-      result.metadata.version?.let { append(" (版本: $it)") }
+      append("Library: ${result.metadata.libraryName}")
+      result.metadata.version?.let { append(" (Version: $it)") }
     }
     panel.add(JLabel(libraryInfo))
 
-    // 源码类型
+    // Source type
     val sourceTypeInfo =
       when (result.metadata.sourceType) {
-        SourceType.SOURCE_JAR -> "来源: Source JAR"
-        SourceType.DECOMPILED -> "来源: 反编译代码"
-        SourceType.NOT_FOUND -> "来源: 未找到"
+        SourceType.SOURCE_JAR -> "Source: Source JAR"
+        SourceType.DECOMPILED -> "Source: Decompiled code"
+        SourceType.NOT_FOUND -> "Source: Not found"
       }
     panel.add(JLabel(sourceTypeInfo))
 
-    // 语言信息
-    panel.add(JLabel("语言: ${result.language}"))
+    // Language information
+    panel.add(JLabel("Language: ${result.language}"))
 
-    // 文档信息
-    result.metadata.documentation?.let { doc -> panel.add(JLabel("文档: $doc")) }
+    // Documentation information
+    result.metadata.documentation?.let { doc -> panel.add(JLabel("Documentation: $doc")) }
 
     if (result.isDecompiled) {
-      val warningLabel = JLabel("⚠️ 这是反编译的代码，可能与原始源码有差异")
+      val warningLabel = JLabel("⚠️ This is decompiled code and may differ from the original source")
       warningLabel.foreground = JBColor.ORANGE
       panel.add(warningLabel)
     }
@@ -81,13 +85,13 @@ class LibCodeDialog(private val project: Project, private val result: LibCodeRes
     return panel
   }
 
-  /** 创建代码面板 */
+  /** Create code panel. */
   private fun createCodePanel(): JComponent {
     val panel = JPanel(BorderLayout())
-    panel.border = BorderFactory.createTitledBorder("源代码")
+    panel.border = BorderFactory.createTitledBorder("Source Code")
 
     if (result.sourceCode.isBlank()) {
-      val noCodeLabel = JLabel("无法获取源代码", SwingConstants.CENTER)
+      val noCodeLabel = JLabel("No source code available", SwingConstants.CENTER)
       noCodeLabel.foreground = JBColor.GRAY
       panel.add(noCodeLabel, BorderLayout.CENTER)
       return panel

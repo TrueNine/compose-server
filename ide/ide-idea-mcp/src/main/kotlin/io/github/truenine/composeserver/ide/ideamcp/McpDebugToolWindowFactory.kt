@@ -6,47 +6,51 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 
-/** MCP 调试工具窗口工厂 负责创建和初始化调试面板工具窗口 */
+/**
+ * MCP debug tool window factory.
+ *
+ * Responsible for creating and initializing debug tool window panels.
+ */
 class McpDebugToolWindowFactory : ToolWindowFactory {
 
   override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
     val contentFactory = ContentFactory.getInstance()
 
-    // 创建终端清洗面板
+    // Create terminal clean-up panel
     val terminalPanel = McpTerminalPanel(project)
-    val terminalContent = contentFactory.createContent(terminalPanel, "终端清洗", false)
+    val terminalContent = contentFactory.createContent(terminalPanel, "Terminal Clean-up", false)
     terminalContent.isCloseable = false
 
-    // 创建日志面板
+    // Create log panel
     val debugPanel = McpDebugPanel(project)
-    val logContent = contentFactory.createContent(debugPanel, "日志", false)
+    val logContent = contentFactory.createContent(debugPanel, "Logs", false)
     logContent.isCloseable = false
 
-    // 创建文件操作面板
+    // Create file-operations panel
     val fileOperationPanel = FileOperationPanel(project)
-    val fileOperationContent = contentFactory.createContent(fileOperationPanel, "文件操作", false)
+    val fileOperationContent = contentFactory.createContent(fileOperationPanel, "File Operations", false)
     fileOperationContent.isCloseable = false
 
-    // 创建 LibCodeService 测试面板
+    // Create LibCodeService test panel
     val libCodeTestPanel = LibCodeTestPanel(project)
-    val libCodeTestContent = contentFactory.createContent(libCodeTestPanel, "LibCode测试", false)
+    val libCodeTestContent = contentFactory.createContent(libCodeTestPanel, "LibCode Tests", false)
     libCodeTestContent.isCloseable = false
 
-    // 添加到工具窗口
+    // Add contents to tool window
     toolWindow.contentManager.addContent(terminalContent)
     toolWindow.contentManager.addContent(logContent)
     toolWindow.contentManager.addContent(fileOperationContent)
     toolWindow.contentManager.addContent(libCodeTestContent)
 
-    // 设置默认选中 LibCode 测试标签页
+    // Select LibCode tests tab by default
     toolWindow.contentManager.setSelectedContent(libCodeTestContent)
 
-    // 记录工具窗口创建日志
-    Logger.info("MCP 调试工具窗口已创建 - 包含终端清洗、日志、文件操作和LibCode测试四个标签页", "ToolWindow")
+    // Log tool window creation
+    Logger.info("MCP debug tool window created - includes Terminal Clean-up, Logs, File Operations and LibCode Tests tabs", "ToolWindow")
   }
 
   override fun shouldBeAvailable(project: Project): Boolean {
-    // 始终可用
+    // Always available
     return true
   }
 }

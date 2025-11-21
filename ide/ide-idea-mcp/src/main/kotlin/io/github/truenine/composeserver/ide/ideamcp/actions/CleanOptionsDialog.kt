@@ -11,16 +11,20 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-/** 代码清理选项对话框 允许用户选择要执行的清理操作 */
+/**
+ * Code clean-up options dialog.
+ *
+ * Lets the user choose which clean-up operations to perform.
+ */
 class CleanOptionsDialog(project: Project) : DialogWrapper(project) {
 
-  private val formatCodeCheckBox = JCheckBox("格式化代码", true)
-  private val optimizeImportsCheckBox = JCheckBox("优化导入", true)
-  private val runInspectionsCheckBox = JCheckBox("运行代码检查并修复", true)
-  private val rearrangeCodeCheckBox = JCheckBox("重新排列代码", false)
+  private val formatCodeCheckBox = JCheckBox("Format code", true)
+  private val optimizeImportsCheckBox = JCheckBox("Optimize imports", true)
+  private val runInspectionsCheckBox = JCheckBox("Run code inspections and apply fixes", true)
+  private val rearrangeCodeCheckBox = JCheckBox("Rearrange code", false)
 
   init {
-    title = "代码清理选项"
+    title = "Code clean-up options"
     init()
   }
 
@@ -28,7 +32,7 @@ class CleanOptionsDialog(project: Project) : DialogWrapper(project) {
     val panel = JPanel()
     panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
 
-    panel.add(JLabel("选择要执行的清理操作:"))
+    panel.add(JLabel("Select clean-up operations to perform:"))
     panel.add(Box.createVerticalStrut(10))
 
     panel.add(formatCodeCheckBox)
@@ -37,19 +41,19 @@ class CleanOptionsDialog(project: Project) : DialogWrapper(project) {
     panel.add(rearrangeCodeCheckBox)
 
     panel.add(Box.createVerticalStrut(10))
-    panel.add(JLabel("<html><i>注意: 至少需要选择一个选项</i></html>"))
+    panel.add(JLabel("<html><i>Note: At least one option must be selected</i></html>"))
 
     return panel
   }
 
   override fun doValidate(): ValidationInfo? {
     if (!formatCodeCheckBox.isSelected && !optimizeImportsCheckBox.isSelected && !runInspectionsCheckBox.isSelected && !rearrangeCodeCheckBox.isSelected) {
-      return ValidationInfo("至少需要选择一个清理选项", formatCodeCheckBox)
+      return ValidationInfo("At least one clean-up option must be selected", formatCodeCheckBox)
     }
     return null
   }
 
-  /** 获取用户选择的清理选项 */
+  /** Get clean-up options selected by the user. */
   fun getCleanOptions(): CleanOptions {
     return CleanOptions(
       formatCode = formatCodeCheckBox.isSelected,

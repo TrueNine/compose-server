@@ -18,11 +18,11 @@ import io.github.truenine.composeserver.ide.ideamcp.tools.TerminalTool
 import io.github.truenine.composeserver.ide.ideamcp.tools.ViewErrorTool
 import io.github.truenine.composeserver.ide.ideamcp.tools.ViewLibCodeTool
 
-/** 完整集成测试 测试所有组件的协作和数据流 */
+/** Full integration tests for component collaboration and data flow. */
 class FullIntegrationTest : BasePlatformTestCase() {
 
   fun testAllServicesCanBeCreated() {
-    // 测试所有服务都可以正确创建
+    // Verify that all services can be created
     val cleanService = project.getService(CleanService::class.java)
     val errorService = project.getService(ErrorService::class.java)
     val libCodeService = project.getService(LibCodeService::class.java)
@@ -35,7 +35,7 @@ class FullIntegrationTest : BasePlatformTestCase() {
   }
 
   fun testAllToolsCanBeCreated() {
-    // 测试所有MCP工具都可以正确创建
+    // Verify that all MCP tools can be created
     val terminalTool = TerminalTool()
     val viewErrorTool = ViewErrorTool()
     val cleanCodeTool = CleanCodeTool()
@@ -46,7 +46,7 @@ class FullIntegrationTest : BasePlatformTestCase() {
     assertNotNull(cleanCodeTool)
     assertNotNull(viewLibCodeTool)
 
-    // 验证工具名称
+    // Verify tool names
     assertEquals("terminal", terminalTool.name)
     assertEquals("view_error", viewErrorTool.name)
     assertEquals("clean_code", cleanCodeTool.name)
@@ -54,7 +54,7 @@ class FullIntegrationTest : BasePlatformTestCase() {
   }
 
   fun testAllActionsCanBeCreated() {
-    // 测试所有动作都可以正确创建
+    // Verify that all actions can be created
     val cleanCodeAction = CleanCodeAction()
     val viewErrorAction = ViewErrorAction()
     val viewLibCodeAction = ViewLibCodeAction()
@@ -65,7 +65,7 @@ class FullIntegrationTest : BasePlatformTestCase() {
   }
 
   fun testUIComponentsCanBeCreated() {
-    // 测试所有UI组件都可以正确创建
+    // Verify that all UI components can be created
     val debugPanel = McpDebugPanel(project)
     val terminalPanel = McpTerminalPanel(project)
     val fileOperationPanel = FileOperationPanel(project)
@@ -78,20 +78,20 @@ class FullIntegrationTest : BasePlatformTestCase() {
   }
 
   fun testInfrastructureComponentsCanBeCreated() {
-    // 测试基础设施组件都可以正确创建
+    // Verify that infrastructure components can be created
     val outputInterceptor = TerminalOutputInterceptor()
 
     assertNotNull(outputInterceptor)
   }
 
   fun testServiceDependencyInjection() {
-    // 测试服务依赖注入
+    // Verify service dependency injection
     val cleanService = project.getService(CleanService::class.java)
     val errorService = project.getService(ErrorService::class.java)
     val libCodeService = project.getService(LibCodeService::class.java)
     val fileManager = project.getService(FileManager::class.java)
 
-    // 验证服务实例是单例的
+    // Verify that service instances are singletons
     val cleanService2 = project.getService(CleanService::class.java)
     val errorService2 = project.getService(ErrorService::class.java)
     val libCodeService2 = project.getService(LibCodeService::class.java)
@@ -104,14 +104,14 @@ class FullIntegrationTest : BasePlatformTestCase() {
   }
 
   fun testToolsAndServicesIntegration() {
-    // 测试工具和服务的集成
+    // Verify integration between tools and services
     val cleanCodeTool = CleanCodeTool()
     val viewErrorTool = ViewErrorTool()
     val viewLibCodeTool = ViewLibCodeTool()
 
-    // 验证工具可以访问项目服务
+    // Verify that tools can access project services
     try {
-      // 这些调用在测试环境中可能会失败，但至少验证了集成点
+      // These calls may fail in the test environment, but at least verify the integration points
       val cleanService = project.getService(CleanService::class.java)
       val errorService = project.getService(ErrorService::class.java)
       val libCodeService = project.getService(LibCodeService::class.java)
@@ -120,18 +120,18 @@ class FullIntegrationTest : BasePlatformTestCase() {
       assertNotNull(errorService)
       assertNotNull(libCodeService)
     } catch (e: Exception) {
-      // 在测试环境中可能会有限制，记录但不失败
-      println("工具服务集成测试异常: ${e.message}")
+      // In the test environment there may be limitations; log but do not fail
+      println("Tool-service integration test exception: ${e.message}")
     }
   }
 
   fun testActionsAndServicesIntegration() {
-    // 测试动作和服务的集成
+    // Verify integration between actions and services
     val cleanCodeAction = CleanCodeAction()
     val viewErrorAction = ViewErrorAction()
     val viewLibCodeAction = ViewLibCodeAction()
 
-    // 验证动作可以访问项目服务
+    // Verify that actions can access project services
     try {
       val cleanService = project.getService(CleanService::class.java)
       val errorService = project.getService(ErrorService::class.java)
@@ -141,30 +141,30 @@ class FullIntegrationTest : BasePlatformTestCase() {
       assertNotNull(errorService)
       assertNotNull(libCodeService)
     } catch (e: Exception) {
-      println("动作服务集成测试异常: ${e.message}")
+      println("Action-service integration test exception: ${e.message}")
     }
   }
 
   fun testOutputInterceptorIntegration() {
-    // 测试输出拦截器集成
+    // Verify output interceptor integration
     val interceptor = TerminalOutputInterceptor()
 
     try {
-      // 测试输出清洗
-      val testOutput = "这是测试输出\n包含多行内容\n和一些特殊字符"
+      // Verify output cleaning
+      val testOutput = "This is test output\nContains multiple lines\nAnd some special characters"
       val cleanedOutput = interceptor.enhancedCleanOutput(testOutput)
 
       assertNotNull(cleanedOutput)
       assertTrue(cleanedOutput.isNotEmpty())
     } catch (e: Exception) {
-      println("输出拦截器集成测试异常: ${e.message}")
+      println("Output interceptor integration test exception: ${e.message}")
     }
   }
 
   fun testEndToEndWorkflow() {
-    // 测试端到端工作流
+    // Verify end-to-end workflow
     try {
-      // 1. 创建所有必要的组件
+      // 1. Create all necessary components
       val debugPanel = McpDebugPanel(project)
       val terminalPanel = McpTerminalPanel(project)
       val fileOperationPanel = FileOperationPanel(project)
@@ -173,14 +173,15 @@ class FullIntegrationTest : BasePlatformTestCase() {
       assertNotNull(terminalPanel)
       assertNotNull(fileOperationPanel)
 
-      // 2. 测试输出处理
+      // 2. Verify output processing
       val interceptor = TerminalOutputInterceptor()
-      val testOutput = "端到端测试输出"
+      val testOutput = "End-to-end test output"
       val cleanedOutput = interceptor.enhancedCleanOutput(testOutput)
       assertNotNull(cleanedOutput)
     } catch (e: Exception) {
-      println("端到端工作流测试异常: ${e.message}")
-      // 在测试环境中可能会有各种限制，但至少验证了组件可以创建
+      println("End-to-end workflow test exception: ${e.message}")
+      // In the test environment there may be various limitations,
+      // but at least we verify that components can be created.
     }
   }
 }

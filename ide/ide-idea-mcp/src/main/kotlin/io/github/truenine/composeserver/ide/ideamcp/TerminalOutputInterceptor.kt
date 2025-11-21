@@ -15,22 +15,26 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
-/** 终端输出拦截器 负责拦截和处理终端命令的输出结果 */
+/**
+ * Terminal output interceptor.
+ *
+ * Responsible for capturing and processing the output of terminal commands.
+ */
 @Service(Service.Level.PROJECT)
 class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)) : Disposable {
 
   private val logger = LoggerFactory.getLogger(TerminalOutputInterceptor::class.java)
 
-  /** 执行命令并拦截输出的结果数据类 */
+  /** Result of executing a command with captured output. */
   data class CommandResult(val command: String, val exitCode: Int, val stdout: String, val stderr: String, val cleanedOutput: String)
 
-  /** 执行命令并拦截输出 */
+  /** Execute a command and capture its output. */
   fun executeCommand(command: String, workingDirectory: String? = null, onResult: (CommandResult) -> Unit) {
     scope.launch {
       try {
         logger.info("Executing terminal command: {}", command)
 
-        // 解析命令行参数
+        // Parse command-line arguments
         val parts = command.split(" ").filter { it.isNotEmpty() }
         if (parts.isEmpty()) {
           throw IllegalArgumentException("Empty command")
@@ -56,7 +60,7 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
               val stdoutText = stdout.toString()
               val stderrText = stderr.toString()
 
-              // 记录原始输出
+              // Log raw output
               if (stdoutText.isNotEmpty()) {
                 logger.debug("Terminal stdout: {}", stdoutText)
               }
@@ -64,7 +68,7 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
                 logger.warn("Terminal stderr: {}", stderrText)
               }
 
-              // 清洗输出
+              // Clean output
               val cleanedOutput = cleanOutput(stdoutText, stderrText)
               logger.info("Output cleaning completed - original length: {}, cleaned length: {}", stdoutText.length + stderrText.length, cleanedOutput.length)
 
@@ -88,49 +92,49 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
       } catch (e: Exception) {
         logger.error("Command execution failed: {}", command, e)
         val errorResult =
-          CommandResult(command = command, exitCode = -1, stdout = "", stderr = e.message ?: "Unknown error", cleanedOutput = "命令执行失败: ${e.message}")
+          CommandResult(command = command, exitCode = -1, stdout = "", stderr = e.message ?: "Unknown error", cleanedOutput = "Command execution failed: ${e.message}")
         onResult(errorResult)
       }
     }
   }
 
-  /** 清洗输出内容 移除不必要的控制字符和格式化内容 */
+  /** Clean output by removing unnecessary control characters and formatting. */
   private fun cleanOutput(stdout: String, stderr: String): String {
     val combinedOutput =
       if (stderr.isNotEmpty()) {
-        "标准输出:\n$stdout\n\n错误输出:\n$stderr"
+        "Standard output:\n$stdout\n\nError output:\n$stderr"
       } else {
         stdout
       }
 
     return combinedOutput
       .lines()
-      .filter { line -> line.trim().isNotEmpty() } // 移除空行
+      .filter { line -> line.trim().isNotEmpty() } // Remove empty lines
       .joinToString("\n") { line ->
         line
-          .replace(Regex("\u001B\\[[;\\d]*m"), "") // 移除 ANSI 颜色代码
-          .replace(Regex("\\r"), "") // 移除回车符
+          .replace(Regex("\u001B\\[[;\\d]*m"), "") // Remove ANSI color codes
+          .replace(Regex("\\r"), "") // Remove carriage returns
           .trim()
       }
       .let { cleaned ->
-        // 限制输出长度，避免过长的日志
+        // Limit output length to avoid overly long logs
         if (cleaned.length > 5000) {
-          cleaned.take(5000) + "\n...(输出被截断)"
+          cleaned.take(5000) + "\n...(output truncated)"
         } else {
           cleaned
         }
       }
   }
 
-  /** 高级清洗功能 可扩展为 AI 处理 */
+  /** Advanced cleaning, can be extended with AI post-processing. */
   fun enhancedCleanOutput(output: String): String {
-    // TODO: 这里可以集成 AI 服务进行智能清洗
-    // 当前使用基础的文本处理规则
+    // TODO: integrate AI service for smarter cleaning
+    // Currently uses basic text-processing rules
     return output
       .lines()
       .filter { line ->
         val trimmed = line.trim()
-        // 过滤掉常见的无用输出
+        // Filter common noisy output
         trimmed.isNotEmpty() &&
           !trimmed.startsWith("[INFO]") &&
           !trimmed.startsWith("[DEBUG]") &&
@@ -141,7 +145,7 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
   }
 
   override fun dispose() {
-    // 取消所有协程
+    // Cancel all coroutines
     scope.cancel()
     logger.debug("TerminalOutputInterceptor disposed")
   }

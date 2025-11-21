@@ -13,21 +13,22 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 /**
- * LibCodeServiceImpl 的集成测试
+ * Integration tests for LibCodeServiceImpl.
  *
- * 使用 BasePlatformTestCase 来模拟一个真实的 IntelliJ 项目环境， 包括虚拟文件系统、模块和库依赖
+ * Uses BasePlatformTestCase to simulate a real IntelliJ project environment,
+ * including virtual file system, modules, and library dependencies.
  */
 class LibCodeServiceImplTest : BasePlatformTestCase() {
 
   private lateinit var service: LibCodeService
 
-  /** 在每个测试方法执行前设置测试环境 */
+  /** Set up test environment before each test method. */
   override fun setUp() {
     super.setUp()
     service = LibCodeServiceImpl()
   }
 
-  /** 测试当类在任何地方都找不到时，服务能否返回 NOT_FOUND 结果 */
+  /** Verify NOT_FOUND result when the class cannot be found anywhere. */
   @Test
   fun testGetLibraryCode_notFound() = runBlocking {
     // Given
@@ -37,15 +38,15 @@ class LibCodeServiceImplTest : BasePlatformTestCase() {
     val result = service.getLibraryCode(project, className)
 
     // Then
-    assertNotNull("结果不应为空", result)
-    assertEquals("应返回 NOT_FOUND 状态", SourceType.NOT_FOUND, result.metadata.sourceType)
-    assertFalse("NOT_FOUND 结果不应标记为反编译", result.isDecompiled)
-    assertEquals("语言应为 text", "text", result.language)
-    assertTrue("源码应包含未找到提示", result.sourceCode.contains("未找到类"))
-    assertTrue("源码应包含类名", result.sourceCode.contains(className))
+    assertNotNull("Result should not be null", result)
+    assertEquals("Should return NOT_FOUND status", SourceType.NOT_FOUND, result.metadata.sourceType)
+    assertFalse("NOT_FOUND result should not be marked as decompiled", result.isDecompiled)
+    assertEquals("Language should be text", "text", result.language)
+    assertTrue("Source should contain not-found hint", result.sourceCode.contains("Class not found"))
+    assertTrue("Source should contain class name", result.sourceCode.contains(className))
   }
 
-  /** 测试从类名提取库名的功能 */
+  /** Verify extracting library name from class name. */
   @Test
   fun testGetLibraryCode_extractLibraryName() = runBlocking {
     // Given
@@ -55,26 +56,26 @@ class LibCodeServiceImplTest : BasePlatformTestCase() {
     val result = service.getLibraryCode(project, className)
 
     // Then
-    assertNotNull("结果不应为空", result)
-    assertEquals("应从类名提取库名", "org.springframework.boot", result.metadata.libraryName)
-    assertEquals("应返回 NOT_FOUND 状态", SourceType.NOT_FOUND, result.metadata.sourceType)
+    assertNotNull("Result should not be null", result)
+    assertEquals("Should extract library name from class name", "org.springframework.boot", result.metadata.libraryName)
+    assertEquals("Should return NOT_FOUND status", SourceType.NOT_FOUND, result.metadata.sourceType)
   }
 
-  /** 测试成员提取功能（使用模拟源码） */
+  /** Verify member extraction using mock source. */
   @Test
   fun testGetLibraryCode_memberExtraction() = runBlocking {
-    // Given - 创建一个临时的源码 JAR 文件
+    // Given - create a temporary source JAR file
     val tempDir = Files.createTempDirectory("test-lib").toFile()
     val sourcesJarFile = File(tempDir, "test-lib-1.0-sources.jar")
 
-    // 创建包含源码的 JAR 文件
+    // Create a JAR file that contains source code
     createSourcesJar(
       sourcesJarFile,
       "com/example/TestClass.java",
       "package com.example;\npublic class TestClass {\n  public void testMethod() {}\n  public int getValue() { return 42; }\n}",
     )
 
-    // 将 JAR 文件转换为 VirtualFile 并添加到项目
+    // Convert the JAR file to a VirtualFile and add it to the project
     val sourcesJar = VfsUtil.findFileByIoFile(sourcesJarFile, true)
     if (sourcesJar != null) {
       runWriteAction { ModuleRootModificationUtil.addModuleLibrary(module, "test-lib", emptyList(), listOf(sourcesJar.url)) }
@@ -86,19 +87,19 @@ class LibCodeServiceImplTest : BasePlatformTestCase() {
       val result = service.getLibraryCode(project, className, memberName)
 
       // Then
-      assertNotNull("结果不应为空", result)
-      // 由于源码查找可能在测试环境中不工作，我们主要验证不会崩溃
-      assertTrue("结果应包含有效内容", result.sourceCode.isNotEmpty())
+      assertNotNull("Result should not be null", result)
+      // Since source lookup may not work in the test environment, primarily verify it does not crash.
+      assertTrue("Result should contain non-empty content", result.sourceCode.isNotEmpty())
     }
 
-    // 清理临时文件
+    // Clean up temporary files
     tempDir.deleteRecursively()
   }
 
-  /** 测试语言检测功能 */
+  /** Verify language detection. */
   @Test
   fun testGetLibraryCode_languageDetection() = runBlocking {
-    // Given - 创建包含 Kotlin 源码的 JAR
+    // Given - create a JAR that contains Kotlin source
     val tempDir = Files.createTempDirectory("test-kotlin-lib").toFile()
     val sourcesJarFile = File(tempDir, "kotlin-lib-1.0-sources.jar")
 
@@ -114,18 +115,18 @@ class LibCodeServiceImplTest : BasePlatformTestCase() {
       val result = service.getLibraryCode(project, className)
 
       // Then
-      assertNotNull("结果不应为空", result)
-      assertTrue("结果应包含有效内容", result.sourceCode.isNotEmpty())
+      assertNotNull("Result should not be null", result)
+      assertTrue("Result should contain non-empty content", result.sourceCode.isNotEmpty())
     }
 
-    // 清理临时文件
+    // Clean up temporary files
     tempDir.deleteRecursively()
   }
 
-  /** 测试版本信息提取 */
+  /** Verify version information extraction. */
   @Test
   fun testGetLibraryCode_versionExtraction() = runBlocking {
-    // Given - 创建带版本信息的 JAR
+    // Given - create a JAR with version information in its name
     val tempDir = Files.createTempDirectory("test-versioned-lib").toFile()
     val sourcesJarFile = File(tempDir, "versioned-lib-2.1.3-sources.jar")
 
@@ -141,16 +142,16 @@ class LibCodeServiceImplTest : BasePlatformTestCase() {
       val result = service.getLibraryCode(project, className)
 
       // Then
-      assertNotNull("结果不应为空", result)
-      assertNotNull("库名不应为空", result.metadata.libraryName)
-      assertTrue("结果应包含有效内容", result.sourceCode.isNotEmpty())
+      assertNotNull("Result should not be null", result)
+      assertNotNull("Library name should not be null", result.metadata.libraryName)
+      assertTrue("Result should contain non-empty content", result.sourceCode.isNotEmpty())
     }
 
-    // 清理临时文件
+    // Clean up temporary files
     tempDir.deleteRecursively()
   }
 
-  /** 测试库名提取逻辑的各种情况 */
+  /** Verify various cases for library-name extraction logic. */
   @Test
   fun testExtractLibraryNameFromClassName() = runBlocking {
     // Given & When & Then
@@ -165,11 +166,11 @@ class LibCodeServiceImplTest : BasePlatformTestCase() {
 
     testCases.forEach { (className, expectedLibraryName) ->
       val result = service.getLibraryCode(project, className)
-      assertEquals("类名 $className 应提取出库名 $expectedLibraryName", expectedLibraryName, result.metadata.libraryName)
+      assertEquals("Class name $className should produce library name $expectedLibraryName", expectedLibraryName, result.metadata.libraryName)
     }
   }
 
-  /** 测试成员提取逻辑 */
+  /** Verify member extraction logic without real source. */
   @Test
   fun testMemberExtractionLogic() = runBlocking {
     // Given
@@ -180,13 +181,13 @@ class LibCodeServiceImplTest : BasePlatformTestCase() {
     val result = service.getLibraryCode(project, className, memberName)
 
     // Then
-    assertNotNull("结果不应为空", result)
-    // 由于没有实际的源码，应该返回 NOT_FOUND
-    assertEquals("应返回 NOT_FOUND 状态", SourceType.NOT_FOUND, result.metadata.sourceType)
-    assertTrue("源码应包含未找到提示", result.sourceCode.contains("未找到类"))
+    assertNotNull("Result should not be null", result)
+    // Without real source code, NOT_FOUND should be returned
+    assertEquals("Should return NOT_FOUND status", SourceType.NOT_FOUND, result.metadata.sourceType)
+    assertTrue("Source should contain not-found hint", result.sourceCode.contains("Class not found"))
   }
 
-  /** 创建包含源码的 JAR 文件 */
+  /** Create a JAR file that contains source code. */
   private fun createSourcesJar(jarFile: File, entryPath: String, sourceContent: String) {
     jarFile.parentFile.mkdirs()
     JarOutputStream(jarFile.outputStream()).use { jos ->

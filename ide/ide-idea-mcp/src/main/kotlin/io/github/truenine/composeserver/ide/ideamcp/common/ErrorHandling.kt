@@ -2,13 +2,13 @@ package io.github.truenine.composeserver.ide.ideamcp.common
 
 import kotlinx.serialization.Serializable
 
-/** 错误详情 */
+/** Error details. */
 @Serializable
 data class ErrorDetails(
-  /** 错误类型 */
+  /** Error type. */
   val type: String,
-  /** 错误消息 */
+  /** Error message. */
   val message: String,
-  /** 建议解决方案 */
+  /** Suggested solutions. */
   val suggestions: List<String> = emptyList(),
 )
