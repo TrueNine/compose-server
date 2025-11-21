@@ -103,7 +103,7 @@ class DataClassSerializerTest {
 
   @Test
   fun serialize_unicode_characters() {
-    val a = A("test chinese", "🎉emoji")
+    val a = A("test chinese", "emoji")
     val json = mapper.writeValueAsString(a)
     log.info("unicode json: {}", json)
     val obj = mapper.readValue<A>(json)

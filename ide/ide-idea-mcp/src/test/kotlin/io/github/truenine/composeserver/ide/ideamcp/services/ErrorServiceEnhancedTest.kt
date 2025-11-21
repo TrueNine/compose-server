@@ -46,9 +46,9 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
       val unusedImportErrors = errors.filter { it.message.contains("unused", ignoreCase = true) || it.message.contains("never used", ignoreCase = true) }
 
       if (unusedImportErrors.isNotEmpty()) {
-        println("✓ Successfully detected unused imports!")
+        println("[PASS] Successfully detected unused imports!")
       } else {
-        println("✗ Failed to detect unused imports")
+        println("[FAIL] Failed to detect unused imports")
         println("All detected issues:")
         errors.forEach { error -> println("  ${error.severity}: ${error.message}") }
       }
@@ -82,9 +82,9 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
       val syntaxErrors = errors.filter { it.severity == ErrorSeverity.ERROR }
 
       if (syntaxErrors.isNotEmpty()) {
-        println("✓ Successfully detected syntax errors!")
+        println("[PASS] Successfully detected syntax errors!")
       } else {
-        println("✗ Failed to detect syntax errors")
+        println("[FAIL] Failed to detect syntax errors")
       }
     }
   }
@@ -151,11 +151,11 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
 
       // If direct highlighting detects issues but our service does not, it needs improvement
       if (highlightInfos.isNotEmpty() && errors.isEmpty()) {
-        println("⚠ Direct highlighting detected issues but our service didn't - need improvement")
+        println("[WARN] Direct highlighting detected issues but our service didn't - need improvement")
       } else if (errors.isNotEmpty()) {
-        println("✓ Error detection is working!")
+        println("[PASS] Error detection is working!")
       } else {
-        println("ℹ No errors detected by either method - might be test environment limitation")
+        println("[INFO] No errors detected by either method - might be test environment limitation")
       }
     }
   }
@@ -189,9 +189,9 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
       // Verify that syntax errors are detected
       val syntaxErrors = errors.filter { it.code.contains("syntax", ignoreCase = true) || it.code.contains("error", ignoreCase = true) }
       if (syntaxErrors.isNotEmpty()) {
-        println("✓ Successfully detected syntax errors via PSI!")
+        println("[PASS] Successfully detected syntax errors via PSI!")
       } else {
-        println("ℹ No PSI syntax errors detected - this might be normal in test environment")
+        println("[INFO] No PSI syntax errors detected - this might be normal in test environment")
       }
     }
   }

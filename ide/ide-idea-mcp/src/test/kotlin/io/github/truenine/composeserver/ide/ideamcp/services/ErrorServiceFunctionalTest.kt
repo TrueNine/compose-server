@@ -45,7 +45,7 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
     val syntaxErrors = errorService.getCapturedSyntaxErrors(project, testFile.virtualFile)
     assertNotNull(syntaxErrors, "getCapturedSyntaxErrors should return a list")
 
-    println("✓ All basic ErrorService methods work without throwing exceptions")
+    println("[PASS] All basic ErrorService methods work without throwing exceptions")
   }
 
   fun testErrorCaptureFilterManager() {
@@ -62,7 +62,7 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
 
     assertEquals(newFilter, instance3, "Should return the set instance")
 
-    println("✓ ErrorCaptureFilterManager singleton functionality works")
+    println("[PASS] ErrorCaptureFilterManager singleton functionality works")
   }
 
   fun testErrorCaptureFilterBasicOperations() {
@@ -77,7 +77,7 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
     val errors = filter.getCapturedErrors("/non/existent/file")
     assertTrue(errors.isEmpty(), "Should return empty list for non-existent file")
 
-    println("✓ ErrorCaptureFilter basic operations work")
+    println("[PASS] ErrorCaptureFilter basic operations work")
   }
 
   fun testCapturedErrorInfoDataClass() {
@@ -98,7 +98,7 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
     assertEquals("test", errorInfo.elementText)
     assertTrue(errorInfo.timestamp > 0)
 
-    println("✓ CapturedErrorInfo data class works correctly")
+    println("[PASS] CapturedErrorInfo data class works correctly")
   }
 
   fun testErrorSeverityEnumValues() {
@@ -110,7 +110,7 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
     assertTrue(severities.contains(ErrorSeverity.WEAK_WARNING))
     assertTrue(severities.contains(ErrorSeverity.INFO))
 
-    println("✓ ErrorSeverity enum contains all expected values")
+    println("[PASS] ErrorSeverity enum contains all expected values")
   }
 
   fun testErrorServiceWithDirectoryInput() {
@@ -124,7 +124,7 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
     val collectedErrors = errorService.collectErrors(project, tempDir)
     assertNotNull(collectedErrors, "collectErrors should handle directories")
 
-    println("✓ ErrorService handles directory input correctly")
+    println("[PASS] ErrorService handles directory input correctly")
   }
 
   fun testIntegrationWithApplicationManager() {
@@ -139,6 +139,6 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
       assertNotNull(collected, "collectErrors should work in ApplicationManager context")
     }
 
-    println("✓ ErrorService works correctly in ApplicationManager context")
+    println("[PASS] ErrorService works correctly in ApplicationManager context")
   }
 }

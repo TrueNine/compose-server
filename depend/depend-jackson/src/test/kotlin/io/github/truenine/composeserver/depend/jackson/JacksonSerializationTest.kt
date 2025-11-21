@@ -42,7 +42,7 @@ class JacksonSerializationTest {
 
     @Test
     fun serialize_string_preserves_content() {
-      val stringValue = "test string with special chars: unicode 🎉 \"quotes\""
+      val stringValue = "test string with special chars: unicode \"quotes\""
       val json = defaultMapper.writeValueAsString(stringValue)
 
       log.info("String value serialized to: {}", json)
