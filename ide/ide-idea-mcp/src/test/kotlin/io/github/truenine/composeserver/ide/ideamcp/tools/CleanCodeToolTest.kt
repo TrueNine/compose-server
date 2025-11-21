@@ -109,12 +109,7 @@ class CleanCodeToolTest {
     val errorResponse =
       CleanCodeErrorResponse(
         success = false,
-        error =
-          ErrorDetails(
-            type = "INVALID_ARGUMENT",
-            message = "Path must not be empty",
-            suggestions = listOf("Check path format", "Use a valid file path"),
-          ),
+        error = ErrorDetails(type = "INVALID_ARGUMENT", message = "Path must not be empty", suggestions = listOf("Check path format", "Use a valid file path")),
         path = "",
         timestamp = 1234567890L,
       )
@@ -172,11 +167,7 @@ class CleanCodeToolTest {
   fun `ErrorDetails serialization should be correct`() {
     // Given
     val errorDetails =
-      ErrorDetails(
-        type = "PERMISSION_DENIED",
-        message = "File is locked",
-        suggestions = listOf("Close other editors", "Check file permissions", "Restart IDE"),
-      )
+      ErrorDetails(type = "PERMISSION_DENIED", message = "File is locked", suggestions = listOf("Close other editors", "Check file permissions", "Restart IDE"))
 
     // When
     val json = Json.encodeToString(ErrorDetails.serializer(), errorDetails)

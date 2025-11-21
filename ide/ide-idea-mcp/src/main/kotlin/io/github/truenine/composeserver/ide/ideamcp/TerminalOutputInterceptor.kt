@@ -92,7 +92,13 @@ class TerminalOutputInterceptor(private val scope: CoroutineScope = CoroutineSco
       } catch (e: Exception) {
         logger.error("Command execution failed: {}", command, e)
         val errorResult =
-          CommandResult(command = command, exitCode = -1, stdout = "", stderr = e.message ?: "Unknown error", cleanedOutput = "Command execution failed: ${e.message}")
+          CommandResult(
+            command = command,
+            exitCode = -1,
+            stdout = "",
+            stderr = e.message ?: "Unknown error",
+            cleanedOutput = "Command execution failed: ${e.message}",
+          )
         onResult(errorResult)
       }
     }

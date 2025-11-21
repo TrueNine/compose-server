@@ -20,7 +20,8 @@ import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/** Code clean-up service interface.
+/**
+ * Code clean-up service interface.
  *
  * Provides code formatting, import optimization, inspections and fixes.
  */

@@ -13,8 +13,7 @@ import kotlinx.coroutines.runBlocking
 /**
  * LibCodeService usage examples.
  *
- * Demonstrates how to use the testing utilities and mock data to verify
- * LibCodeService functionality.
+ * Demonstrates how to use the testing utilities and mock data to verify LibCodeService functionality.
  */
 class LibCodeServiceUsageExample {
 
@@ -153,12 +152,7 @@ class LibCodeServiceUsageExample {
   fun `example - testing different source types`() = runBlocking {
     println("=== Different source type test example ===")
 
-    val sourceTypes =
-      listOf(
-        SourceType.SOURCE_JAR to "from source JAR",
-        SourceType.DECOMPILED to "decompiled code",
-        SourceType.NOT_FOUND to "source not found",
-      )
+    val sourceTypes = listOf(SourceType.SOURCE_JAR to "from source JAR", SourceType.DECOMPILED to "decompiled code", SourceType.NOT_FOUND to "source not found")
 
     sourceTypes.forEach { (sourceType, description) ->
       val mockResult =

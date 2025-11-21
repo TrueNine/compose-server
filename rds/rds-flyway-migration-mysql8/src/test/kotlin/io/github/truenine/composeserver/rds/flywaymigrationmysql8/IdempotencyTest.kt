@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 /**
  * MySQL stored procedure idempotency test suite.
  *
- * Verifies that all stored procedures can be safely executed multiple times,
- * ensuring that:
+ * Verifies that all stored procedures can be safely executed multiple times, ensuring that:
  * 1. Repeated calls do not produce errors.
  * 2. Repeated calls do not change the final state.
  * 3. Database object state remains consistent.

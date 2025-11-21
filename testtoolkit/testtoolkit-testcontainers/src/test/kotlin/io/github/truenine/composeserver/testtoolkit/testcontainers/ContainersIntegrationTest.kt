@@ -18,9 +18,8 @@ import org.springframework.jdbc.core.JdbcTemplate
 /**
  * Containers integration tests.
  *
- * Verifies combined usage of the three test containers (PostgreSQL, Redis,
- * MinIO). Ensures all containers can start correctly, are configured
- * properly, and support basic operations.
+ * Verifies combined usage of the three test containers (PostgreSQL, Redis, MinIO). Ensures all containers can start correctly, are configured properly, and
+ * support basic operations.
  *
  * @author TrueNine
  * @since 2025-04-24

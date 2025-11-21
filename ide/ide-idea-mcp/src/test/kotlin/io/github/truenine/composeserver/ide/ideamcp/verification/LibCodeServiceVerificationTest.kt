@@ -10,7 +10,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 
-/** LibCodeService verification tests.
+/**
+ * LibCodeService verification tests.
  *
  * Verifies that the updated functionality works as expected.
  */

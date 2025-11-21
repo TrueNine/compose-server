@@ -16,10 +16,10 @@ import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
 import kotlinx.coroutines.runBlocking
 
-/** Context menu action for code clean-up.
+/**
+ * Context menu action for code clean-up.
  *
- * Provides a right-click action in editor and project tree to clean and
- * format code using IDEA capabilities.
+ * Provides a right-click action in editor and project tree to clean and format code using IDEA capabilities.
  */
 class CleanCodeAction : AnAction("Clean Code", "Clean and format code using IDEA features", null) {
 
@@ -86,7 +86,10 @@ class CleanCodeAction : AnAction("Clean Code", "Clean and format code using IDEA
                 }
               }
 
-              Logger.info("Code clean-up completed - processed: ${result.processedFiles}, modified: ${result.modifiedFiles}, duration: ${result.executionTime}ms", "CleanCodeAction")
+              Logger.info(
+                "Code clean-up completed - processed: ${result.processedFiles}, modified: ${result.modifiedFiles}, duration: ${result.executionTime}ms",
+                "CleanCodeAction",
+              )
             } catch (e: Exception) {
               Logger.error("Code clean-up failed", "CleanCodeAction", e)
 

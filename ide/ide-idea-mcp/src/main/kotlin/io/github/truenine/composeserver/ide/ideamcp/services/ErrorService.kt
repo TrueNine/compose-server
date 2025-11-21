@@ -455,18 +455,17 @@ class ErrorServiceImpl : ErrorService {
 
     val combinedWeakWarnings = weakWarningList + infoList
 
-    val summary =
-      buildString {
-        if (errorList.isNotEmpty()) append("${errorList.size} errors")
-        if (warningList.isNotEmpty()) {
-          if (isNotEmpty()) append(", ")
-          append("${warningList.size} warnings")
-        }
-        if (combinedWeakWarnings.isNotEmpty()) {
-          if (isNotEmpty()) append(", ")
-          append("${combinedWeakWarnings.size} weak warnings")
-        }
+    val summary = buildString {
+      if (errorList.isNotEmpty()) append("${errorList.size} errors")
+      if (warningList.isNotEmpty()) {
+        if (isNotEmpty()) append(", ")
+        append("${warningList.size} warnings")
       }
+      if (combinedWeakWarnings.isNotEmpty()) {
+        if (isNotEmpty()) append(", ")
+        append("${combinedWeakWarnings.size} weak warnings")
+      }
+    }
 
     return FileErrorInfo(
       filePath = virtualFile.path,
@@ -507,9 +506,8 @@ object ErrorCaptureFilterManager {
 /**
  * Error capture filter implementation based on HighlightErrorFilter.
  *
- * According to JetBrains documentation:
- * https://plugins.jetbrains.com/docs/intellij/syntax-errors.html#controlling-syntax-errors-highlighting
- * this filter controls which PsiErrorElement instances should be highlighted and records them for analysis.
+ * According to JetBrains documentation: https://plugins.jetbrains.com/docs/intellij/syntax-errors.html#controlling-syntax-errors-highlighting this filter
+ * controls which PsiErrorElement instances should be highlighted and records them for analysis.
  *
  * @see com.intellij.codeInsight.highlighting.HighlightErrorFilter
  */
@@ -659,7 +657,5 @@ class ErrorCaptureFilter : HighlightErrorFilter() {
   }
 }
 
-/**
- * Data class representing captured error information from the error capture filter.
- */
+/** Data class representing captured error information from the error capture filter. */
 data class CapturedErrorInfo(val filePath: String, val line: Int, val column: Int, val errorDescription: String, val elementText: String, val timestamp: Long)

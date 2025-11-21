@@ -7,9 +7,8 @@ import org.testcontainers.containers.PostgreSQLContainer
 /**
  * Base interface for test containers.
  *
- * Common base for all test-container interfaces, providing container
- * aggregation capabilities. Test classes must implement this interface or its
- * subinterfaces to use the `containers()` aggregation function.
+ * Common base for all test-container interfaces, providing container aggregation capabilities. Test classes must implement this interface or its subinterfaces
+ * to use the `containers()` aggregation function.
  *
  * Features:
  * - Aggregates multiple containers for a single test.
@@ -18,7 +17,6 @@ import org.testcontainers.containers.PostgreSQLContainer
  * - Containers are started automatically when Spring properties are injected.
  *
  * Example usage:
- *
  * ```kotlin
  * @SpringBootTest
  * class MyTest : ICacheRedisContainer, IDatabasePostgresqlContainer {
@@ -41,10 +39,8 @@ interface ITestContainerBase {
   /**
    * Aggregates multiple containers for an integration test.
    *
-   * Allows using multiple test containers together. Within the block, all
-   * provided containers can be accessed through the context. Containers have
-   * already been started when Spring properties are injected, so no extra
-   * startup logic is required.
+   * Allows using multiple test containers together. Within the block, all provided containers can be accessed through the context. Containers have already been
+   * started when Spring properties are injected, so no extra startup logic is required.
    *
    * @param containerLazies lazy container instances to aggregate
    * @param block test block executed within an `IContainersContext`
@@ -64,8 +60,7 @@ interface ITestContainerBase {
 /**
  * Aggregated container context interface.
  *
- * Context provided inside the `containers()` function, used to access and
- * operate on multiple test containers.
+ * Context provided inside the `containers()` function, used to access and operate on multiple test containers.
  *
  * @author TrueNine
  * @since 2025-08-09

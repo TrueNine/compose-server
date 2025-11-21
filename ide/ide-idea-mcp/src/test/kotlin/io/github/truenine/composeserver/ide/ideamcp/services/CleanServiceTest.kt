@@ -98,7 +98,15 @@ class CleanServiceTest {
     // Given
     val operations = listOf(CleanOperation("FORMAT", "Code formatting", 3), CleanOperation("OPTIMIZE_IMPORTS", "Optimize imports", 2))
 
-    val result = CleanResult(processedFiles = 5, modifiedFiles = 3, operations = operations, errors = listOf("File lock error"), summary = "Processing completed", executionTime = 1000L)
+    val result =
+      CleanResult(
+        processedFiles = 5,
+        modifiedFiles = 3,
+        operations = operations,
+        errors = listOf("File lock error"),
+        summary = "Processing completed",
+        executionTime = 1000L,
+      )
 
     // Then
     assertEquals(5, result.processedFiles)

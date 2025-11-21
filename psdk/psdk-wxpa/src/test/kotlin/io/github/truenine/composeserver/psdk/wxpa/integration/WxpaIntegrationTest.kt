@@ -23,8 +23,7 @@ private val log = logger<WxpaIntegrationTest>()
 /**
  * WeChat Official Account integration tests.
  *
- * The following environment variables must be set in order to run real
- * integration tests:
+ * The following environment variables must be set in order to run real integration tests:
  * - WECHAT_APP_ID: WeChat Official Account application ID
  * - WECHAT_APP_SECRET: WeChat Official Account application secret
  * - WECHAT_VERIFY_TOKEN: WeChat Official Account verification token
@@ -63,7 +62,9 @@ class WxpaIntegrationTest {
       val hasCredentials = !appId.isNullOrBlank() && !appSecret.isNullOrBlank() && !verifyToken.isNullOrBlank()
 
       if (!hasCredentials) {
-        log.warn("Skipping WeChat Official Account integration tests: missing required environment variables WECHAT_APP_ID, WECHAT_APP_SECRET or WECHAT_VERIFY_TOKEN")
+        log.warn(
+          "Skipping WeChat Official Account integration tests: missing required environment variables WECHAT_APP_ID, WECHAT_APP_SECRET or WECHAT_VERIFY_TOKEN"
+        )
       } else {
         log.info("Detected WeChat Official Account credentials, integration tests will run")
       }

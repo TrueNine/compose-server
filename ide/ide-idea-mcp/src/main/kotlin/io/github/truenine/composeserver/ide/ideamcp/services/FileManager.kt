@@ -11,8 +11,7 @@ import java.nio.file.Paths
 /**
  * File manager.
  *
- * Provides path resolution, file collection, permission checks, and related
- * file operations.
+ * Provides path resolution, file collection, permission checks, and related file operations.
  */
 @Service(Service.Level.PROJECT)
 class FileManager {

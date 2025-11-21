@@ -41,7 +41,9 @@ class JwtIssuer private constructor() : JwtVerifier() {
   }
 
   internal fun createContent(content: Any): String =
-    runCatching { objectMapper.writeValueAsString(content) }.onFailure { log.warn("JWT JSON issuing exception, serializer may be missing", it) }.getOrElse { "{}" }
+    runCatching { objectMapper.writeValueAsString(content) }
+      .onFailure { log.warn("JWT JSON issuing exception, serializer may be missing", it) }
+      .getOrElse { "{}" }
 
   internal fun encryptData(encData: String, eccPublicKey: PublicKey): String? = CryptographicOperations.encryptByEccPublicKey(eccPublicKey, encData)
 

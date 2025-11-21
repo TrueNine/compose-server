@@ -10,8 +10,7 @@ import org.springframework.core.env.MapPropertySource
 /**
  * Test environment application listener.
  *
- * Configures test-related properties during the application environment
- * preparation phase.
+ * Configures test-related properties during the application environment preparation phase.
  */
 class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 

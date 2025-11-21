@@ -12,8 +12,7 @@ import org.springframework.test.annotation.Rollback
 /**
  * Type alias tests.
  *
- * Verifies that the type aliases defined in Alias.kt map to the correct
- * underlying types.
+ * Verifies that the type aliases defined in Alias.kt map to the correct underlying types.
  *
  * @author TrueNine
  * @since 2025-07-12

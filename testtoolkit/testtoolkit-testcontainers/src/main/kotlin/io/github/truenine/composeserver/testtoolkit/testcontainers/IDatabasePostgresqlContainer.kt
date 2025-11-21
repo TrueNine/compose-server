@@ -9,27 +9,21 @@ import org.testcontainers.utility.DockerImageName
 /**
  * PostgreSQL database test container interface.
  *
- * Provides a standard configuration for PostgreSQL test containers used in
- * integration tests. By implementing this interface, test classes can obtain a
- * preconfigured PostgreSQL test database instance and use extension functions
- * for convenient testing.
+ * Provides a standard configuration for PostgreSQL test containers used in integration tests. By implementing this interface, test classes can obtain a
+ * preconfigured PostgreSQL test database instance and use extension functions for convenient testing.
  *
  * Important: container reuse and data cleanup
  *
- * By default, to improve test performance, all containers are reusable. This
- * means database data may remain between tests.
+ * By default, to improve test performance, all containers are reusable. This means database data may remain between tests.
  *
  * Data cleanup responsibility:
- * - You must clean up database tables in tests (for example using `@BeforeEach`
- *   or `@AfterEach`).
+ * - You must clean up database tables in tests (for example using `@BeforeEach` or `@AfterEach`).
  * - Recommended cleanup:
- *   - Use `@Transactional` + `@Rollback` to roll back transactions.
- *   - Manually execute `TRUNCATE TABLE` or `DELETE FROM` statements.
- *   - Use `@Sql` annotations to run cleanup scripts.
- *   - For Flyway migrations, carefully manage version numbers to avoid
- *     conflicts.
- * - It is not recommended to disable reuse because it significantly slows down
- *   tests.
+ *     - Use `@Transactional` + `@Rollback` to roll back transactions.
+ *     - Manually execute `TRUNCATE TABLE` or `DELETE FROM` statements.
+ *     - Use `@Sql` annotations to run cleanup scripts.
+ *     - For Flyway migrations, carefully manage version numbers to avoid conflicts.
+ * - It is not recommended to disable reuse because it significantly slows down tests.
  *
  * Features:
  * - Automatically configures a PostgreSQL test container.
@@ -40,8 +34,7 @@ import org.testcontainers.utility.DockerImageName
  * - Supports Flyway/Liquibase database migrations.
  * - Supports PostgreSQL-specific features (JSON, arrays, etc.).
  *
- * Usage: see tests implementing this interface directly or use the `postgres`
- * extension function for a more concise style.
+ * Usage: see tests implementing this interface directly or use the `postgres` extension function for a more concise style.
  *
  * @see org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.PostgreSQLContainer
@@ -54,20 +47,16 @@ interface IDatabasePostgresqlContainer : ITestContainerBase {
     /**
      * PostgreSQL test container instance.
      *
-     * Preconfigured PostgreSQL container, with settings customizable via
-     * configuration:
+     * Preconfigured PostgreSQL container, with settings customizable via configuration:
      * - Database name: configurable, default `testdb`.
      * - Username: configurable, default `test`.
      * - Password: configurable, default `test`.
      * - Image version: configurable, default `postgres:17.4-alpine`.
-     * - Container reuse is enabled by default so multiple tests share the same
-     *   instance.
-     * - Container is started automatically when Spring properties are
-     *   injected.
+     * - Container reuse is enabled by default so multiple tests share the same instance.
+     * - Container is started automatically when Spring properties are injected.
      *
-     * Important: because of container reuse, database data will remain between
-     * tests, so make sure to perform proper cleanup in tests. Pay special
-     * attention to Flyway migration version management to avoid conflicts.
+     * Important: because of container reuse, database data will remain between tests, so make sure to perform proper cleanup in tests. Pay special attention to
+     * Flyway migration version management to avoid conflicts.
      */
     @Volatile private var _container: PostgreSQLContainer<*>? = null
 
@@ -99,8 +88,7 @@ interface IDatabasePostgresqlContainer : ITestContainerBase {
     /**
      * Lazily initialized PostgreSQL container instance.
      *
-     * Used by containers() aggregation functions to return an initialized
-     * container instance.
+     * Used by containers() aggregation functions to return an initialized container instance.
      *
      * @return lazy PostgreSQL container instance
      */
@@ -109,15 +97,13 @@ interface IDatabasePostgresqlContainer : ITestContainerBase {
     /**
      * Dynamic property configuration for Spring test environments.
      *
-     * Automatically injects database connection properties into the Spring
-     * test environment:
+     * Automatically injects database connection properties into the Spring test environment:
      * - JDBC URL
      * - username
      * - password
      * - JDBC driver class name
      *
-     * The container will be created and started when this method is called,
-     * ensuring that property values are available.
+     * The container will be created and started when this method is called, ensuring that property values are available.
      *
      * @param registry Spring dynamic property registry
      */
@@ -143,14 +129,11 @@ interface IDatabasePostgresqlContainer : ITestContainerBase {
   /**
    * PostgreSQL container extension function.
    *
-   * Provides a convenient way to test with a PostgreSQL container and
-   * supports automatic data reset. The container has already been started when
-   * Spring properties are injected.
+   * Provides a convenient way to test with a PostgreSQL container and supports automatic data reset. The container has already been started when Spring
+   * properties are injected.
    *
-   * @param resetToInitialState whether to reset to the initial state (truncate
-   *   all user tables), default is true
-   * @param block test block that receives the current PostgreSQL container
-   *   instance
+   * @param resetToInitialState whether to reset to the initial state (truncate all user tables), default is true
+   * @param block test block that receives the current PostgreSQL container instance
    * @return result of the test block
    */
   fun <T> postgres(resetToInitialState: Boolean = true, block: (PostgreSQLContainer<*>) -> T): T {

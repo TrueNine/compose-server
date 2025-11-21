@@ -8,8 +8,7 @@ import org.testcontainers.containers.wait.strategy.Wait
 /**
  * Container extension functions.
  *
- * Provides convenient extension methods for Testcontainers GenericContainer to
- * simplify container operations and improve test stability.
+ * Provides convenient extension methods for Testcontainers GenericContainer to simplify container operations and improve test stability.
  *
  * @author TrueNine
  * @since 2025-07-12

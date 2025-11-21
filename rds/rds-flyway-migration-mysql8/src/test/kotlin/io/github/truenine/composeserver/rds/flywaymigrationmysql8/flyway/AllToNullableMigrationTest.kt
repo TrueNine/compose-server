@@ -138,11 +138,27 @@ class AllToNullableMigrationTest : IDatabaseMysqlContainer {
       val afterThird = getColumnInfo("test_nullable_table")
 
       // Verify idempotency
-      assertEquals(afterFirst["name"]?.get("is_nullable"), afterSecond["name"]?.get("is_nullable"), "Nullability of column 'name' should be the same after the second call")
-      assertEquals(afterSecond["name"]?.get("is_nullable"), afterThird["name"]?.get("is_nullable"), "Nullability of column 'name' should be the same after the third call")
+      assertEquals(
+        afterFirst["name"]?.get("is_nullable"),
+        afterSecond["name"]?.get("is_nullable"),
+        "Nullability of column 'name' should be the same after the second call",
+      )
+      assertEquals(
+        afterSecond["name"]?.get("is_nullable"),
+        afterThird["name"]?.get("is_nullable"),
+        "Nullability of column 'name' should be the same after the third call",
+      )
 
-      assertEquals(afterFirst["age"]?.get("is_nullable"), afterSecond["age"]?.get("is_nullable"), "Nullability of column 'age' should be the same after the second call")
-      assertEquals(afterSecond["age"]?.get("is_nullable"), afterThird["age"]?.get("is_nullable"), "Nullability of column 'age' should be the same after the third call")
+      assertEquals(
+        afterFirst["age"]?.get("is_nullable"),
+        afterSecond["age"]?.get("is_nullable"),
+        "Nullability of column 'age' should be the same after the second call",
+      )
+      assertEquals(
+        afterSecond["age"]?.get("is_nullable"),
+        afterThird["age"]?.get("is_nullable"),
+        "Nullability of column 'age' should be the same after the third call",
+      )
 
       // Verify final state
       assertEquals("YES", afterThird["name"]?.get("is_nullable"), "Column 'name' should be nullable")

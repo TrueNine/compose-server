@@ -61,7 +61,8 @@ interface IWxMpApi {
         """User's unique identifier on the Open Platform. Returned when the current Mini Program is bound
         to a WeChat Open Platform account. See UnionID specification for details.""",
     )
-    @JsonProperty("unionid") var unionId: String? = null
+    @JsonProperty("unionid")
+    var unionId: String? = null
 
     @Schema(title = "User unique identifier") @JsonProperty("openid") var openId: String? = null
 

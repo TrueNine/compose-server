@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 /**
  * V2 base-struct stored procedure tests.
  *
- * Verifies functionality and idempotency of the add_base_struct and
- * rm_base_struct stored procedures.
+ * Verifies functionality and idempotency of the add_base_struct and rm_base_struct stored procedures.
  */
 @SpringBootTest
 @Transactional

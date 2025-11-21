@@ -15,8 +15,7 @@ import org.junit.Test
 /**
  * Integration tests for LibCodeServiceImpl.
  *
- * Uses BasePlatformTestCase to simulate a real IntelliJ project environment,
- * including virtual file system, modules, and library dependencies.
+ * Uses BasePlatformTestCase to simulate a real IntelliJ project environment, including virtual file system, modules, and library dependencies.
  */
 class LibCodeServiceImplTest : BasePlatformTestCase() {
 

@@ -16,8 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate
 /**
  * Redis test container integration tests.
  *
- * Verifies the configuration and runtime behavior of the Redis test
- * container, ensuring that:
+ * Verifies the configuration and runtime behavior of the Redis test container, ensuring that:
  * - Container starts and runs correctly.
  * - Port mappings are configured correctly.
  * - Redis connection configuration is correct.
@@ -30,7 +29,6 @@ import org.springframework.data.redis.core.RedisTemplate
  * - Spring property injection verification.
  *
  * Usage:
- *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : ICacheRedisContainer {

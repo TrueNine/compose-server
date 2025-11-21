@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory
 /**
  * Test retry utilities.
  *
- * Provides a unified retry mechanism using Java's built-in waiting and retry
- * strategy. Supports exponential backoff, custom timeouts, and retry
- * conditions.
+ * Provides a unified retry mechanism using Java's built-in waiting and retry strategy. Supports exponential backoff, custom timeouts, and retry conditions.
  *
  * Features:
  * - Exponential backoff retry strategy.
@@ -19,7 +17,6 @@ import org.slf4j.LoggerFactory
  * - Detailed logging.
  *
  * Usage examples:
- *
  * ```kotlin
  * // Simple retry
  * val result = TestRetryUtils.retryUntilSuccess {
@@ -160,8 +157,7 @@ object TestRetryUtils {
   }
 
   /**
-   * Waits until a condition based on the supplied result is satisfied and
-   * returns the result.
+   * Waits until a condition based on the supplied result is satisfied and returns the result.
    *
    * @param T return type
    * @param timeout overall timeout
@@ -257,8 +253,7 @@ object TestRetryUtils {
    * @param timeout overall timeout
    * @param pollInterval polling interval
    * @param initialDelay initial delay before the first check
-   * @param ignoreExceptions whether to ignore exceptions thrown by the
-   *   condition
+   * @param ignoreExceptions whether to ignore exceptions thrown by the condition
    * @param condition condition check function
    */
   fun waitWithCustomConfig(

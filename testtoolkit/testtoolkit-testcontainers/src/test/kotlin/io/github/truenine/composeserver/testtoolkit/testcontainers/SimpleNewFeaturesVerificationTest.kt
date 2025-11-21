@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Import
 /**
  * Simple new features verification tests.
  *
- * Verifies that refactored basic features work correctly, avoiding potential
- * issues from overly complex integration tests.
+ * Verifies that refactored basic features work correctly, avoiding potential issues from overly complex integration tests.
  *
  * @author TrueNine
  * @since 2025-08-09

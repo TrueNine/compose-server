@@ -34,7 +34,6 @@ import org.springframework.test.context.DynamicPropertyRegistry
  * - Spring property injection verification.
  *
  * Usage:
- *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : IOssMinioContainer {

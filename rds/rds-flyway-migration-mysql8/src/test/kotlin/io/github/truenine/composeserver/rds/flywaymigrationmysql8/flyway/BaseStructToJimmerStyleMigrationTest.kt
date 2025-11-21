@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 /**
  * base_struct_to_jimmer_style stored procedure tests.
  *
- * Verifies the behavior and idempotency of the
- * base_struct_to_jimmer_style stored procedure.
+ * Verifies the behavior and idempotency of the base_struct_to_jimmer_style stored procedure.
  */
 @SpringBootTest
 @Transactional

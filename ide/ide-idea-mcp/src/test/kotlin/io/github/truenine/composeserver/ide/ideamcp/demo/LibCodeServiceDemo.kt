@@ -6,7 +6,8 @@ import io.mockk.mockk
 import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
 
-/** LibCodeService feature demo.
+/**
+ * LibCodeService feature demo.
  *
  * Demonstrates the full library code viewing capabilities.
  */

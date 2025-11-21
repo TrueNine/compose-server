@@ -21,10 +21,7 @@ class ViewErrorTool : AbstractMcpTool<ViewErrorArgs>(ViewErrorArgs.serializer())
 
   override fun handle(project: Project, args: ViewErrorArgs): Response {
     Logger.info("Starting error inspection - path: ${args.path}", "ViewErrorTool")
-    Logger.debug(
-      "View parameters - includeWarnings: ${args.includeWarnings}, includeWeakWarnings: ${args.includeWeakWarnings}",
-      "ViewErrorTool",
-    )
+    Logger.debug("View parameters - includeWarnings: ${args.includeWarnings}, includeWeakWarnings: ${args.includeWeakWarnings}", "ViewErrorTool")
 
     return try {
       // Validate arguments
@@ -32,10 +29,7 @@ class ViewErrorTool : AbstractMcpTool<ViewErrorArgs>(ViewErrorArgs.serializer())
 
       val errorReport = collectErrors(args, project)
 
-      Logger.info(
-        "Error inspection completed - totalErrors: ${errorReport.totalErrors}, totalWarnings: ${errorReport.totalWarnings}",
-        "ViewErrorTool",
-      )
+      Logger.info("Error inspection completed - totalErrors: ${errorReport.totalErrors}, totalWarnings: ${errorReport.totalWarnings}", "ViewErrorTool")
       Response(Json.encodeToString(ViewErrorResult.serializer(), errorReport))
     } catch (e: Exception) {
       Logger.error("Error inspection failed for path: ${args.path}", "ViewErrorTool", e)
@@ -79,9 +73,7 @@ class ViewErrorTool : AbstractMcpTool<ViewErrorArgs>(ViewErrorArgs.serializer())
 
     // Use FileManager to resolve the path to a VirtualFile
     val fileManager = project.service<io.github.truenine.composeserver.ide.ideamcp.services.FileManager>()
-    val virtualFile =
-      fileManager.resolvePathToVirtualFile(project, args.path)
-        ?: throw IllegalArgumentException("Failed to resolve path: ${args.path}")
+    val virtualFile = fileManager.resolvePathToVirtualFile(project, args.path) ?: throw IllegalArgumentException("Failed to resolve path: ${args.path}")
 
     // Use ErrorService to collect errors
     val errorService = project.service<io.github.truenine.composeserver.ide.ideamcp.services.ErrorService>()

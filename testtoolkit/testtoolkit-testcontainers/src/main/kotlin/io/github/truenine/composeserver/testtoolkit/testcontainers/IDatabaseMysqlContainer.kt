@@ -9,25 +9,20 @@ import org.testcontainers.utility.DockerImageName
 /**
  * MySQL database test container interface.
  *
- * Provides a standard configuration for MySQL test containers used in
- * integration tests. By implementing this interface, test classes can obtain a
- * preconfigured MySQL test database instance and use extension functions for
- * convenient testing.
+ * Provides a standard configuration for MySQL test containers used in integration tests. By implementing this interface, test classes can obtain a
+ * preconfigured MySQL test database instance and use extension functions for convenient testing.
  *
  * Important: container reuse and data cleanup
  *
- * By default, to improve test performance, all containers are reusable. This
- * means database data may remain between tests.
+ * By default, to improve test performance, all containers are reusable. This means database data may remain between tests.
  *
  * Data cleanup responsibility:
- * - You must clean up database tables in tests (for example using `@BeforeEach`
- *   or `@AfterEach`).
+ * - You must clean up database tables in tests (for example using `@BeforeEach` or `@AfterEach`).
  * - Recommended cleanup:
- *   - Use `@Transactional` + `@Rollback` to roll back transactions.
- *   - Manually execute `TRUNCATE TABLE` or `DELETE FROM` statements.
- *   - Use `@Sql` annotations to run cleanup scripts.
- * - It is not recommended to disable reuse because it significantly slows down
- *   tests.
+ *     - Use `@Transactional` + `@Rollback` to roll back transactions.
+ *     - Manually execute `TRUNCATE TABLE` or `DELETE FROM` statements.
+ *     - Use `@Sql` annotations to run cleanup scripts.
+ * - It is not recommended to disable reuse because it significantly slows down tests.
  *
  * Features:
  * - Automatically configures a MySQL test container.
@@ -37,8 +32,7 @@ import org.testcontainers.utility.DockerImageName
  * - Supports Spring Test dynamic property injection.
  * - Supports Flyway/Liquibase database migrations.
  *
- * Usage: see tests implementing this interface directly or use the `mysql`
- * extension function for a more concise style.
+ * Usage: see tests implementing this interface directly or use the `mysql` extension function for a more concise style.
  *
  * @see org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.MySQLContainer
@@ -51,20 +45,16 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
     /**
      * MySQL test container instance.
      *
-     * Preconfigured MySQL container, with settings customizable via
-     * configuration:
+     * Preconfigured MySQL container, with settings customizable via configuration:
      * - Database name: configurable, default `testdb`.
      * - Username: configurable, default `test`.
      * - Password: configurable, default `test`.
      * - Root password: configurable, default `roottest`.
      * - Image version: configurable, default `mysql:8.0`.
-     * - Container reuse is enabled by default so multiple tests share the same
-     *   instance.
-     * - Container is started automatically when Spring properties are
-     *   injected.
+     * - Container reuse is enabled by default so multiple tests share the same instance.
+     * - Container is started automatically when Spring properties are injected.
      *
-     * Important: because of container reuse, database data will remain between
-     * tests, so make sure to perform proper cleanup in tests.
+     * Important: because of container reuse, database data will remain between tests, so make sure to perform proper cleanup in tests.
      */
     @Volatile private var _container: MySQLContainer<*>? = null
 
@@ -98,8 +88,7 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
     /**
      * Lazily initialized MySQL container instance.
      *
-     * Used by containers() aggregation functions to return an initialized
-     * container instance.
+     * Used by containers() aggregation functions to return an initialized container instance.
      *
      * @return lazy MySQL container instance
      */
@@ -108,15 +97,13 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
     /**
      * Dynamic property configuration for Spring test environments.
      *
-     * Automatically injects database connection properties into the Spring
-     * test environment:
+     * Automatically injects database connection properties into the Spring test environment:
      * - JDBC URL
      * - username
      * - password
      * - JDBC driver class name
      *
-     * The container will be created and started when this method is called,
-     * ensuring that property values are available.
+     * The container will be created and started when this method is called, ensuring that property values are available.
      *
      * @param registry Spring dynamic property registry
      */
@@ -142,12 +129,10 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
   /**
    * MySQL container extension function.
    *
-   * Provides a convenient way to test with a MySQL container and supports
-   * automatic data reset. The container has already been started when Spring
-   * properties are injected.
+   * Provides a convenient way to test with a MySQL container and supports automatic data reset. The container has already been started when Spring properties
+   * are injected.
    *
-   * @param resetToInitialState whether to reset to the initial state (truncate
-   *   all user tables), default is true
+   * @param resetToInitialState whether to reset to the initial state (truncate all user tables), default is true
    * @param block test block that receives the current MySQL container instance
    * @return result of the test block
    */

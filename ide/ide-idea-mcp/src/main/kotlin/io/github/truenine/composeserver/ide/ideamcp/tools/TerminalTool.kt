@@ -15,8 +15,7 @@ import org.jetbrains.mcpserverplugin.AbstractMcpTool
 /**
  * Terminal command execution tool.
  *
- * Provides terminal command execution over MCP with cleaned output and
- * structured error handling.
+ * Provides terminal command execution over MCP with cleaned output and structured error handling.
  */
 class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
   override val name: String = "terminal"

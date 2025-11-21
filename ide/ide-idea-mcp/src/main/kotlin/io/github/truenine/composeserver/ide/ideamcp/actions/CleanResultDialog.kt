@@ -21,10 +21,7 @@ import javax.swing.ListSelectionModel
 import javax.swing.SwingConstants
 import javax.swing.table.AbstractTableModel
 
-/**
- * Dialog that displays detailed results and statistics for code clean-up
- * operations.
- */
+/** Dialog that displays detailed results and statistics for code clean-up operations. */
 class CleanResultDialog(project: Project, private val result: CleanResult, private val fileName: String) : DialogWrapper(project) {
 
   init {

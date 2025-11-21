@@ -8,8 +8,8 @@ import org.testcontainers.containers.GenericContainer
 /**
  * Container command execution utility.
  *
- * Provides stable command execution for containers, integrating retry mechanisms and error handling.
- * Resolves the issue where Testcontainers execInContainer may return a null exit code.
+ * Provides stable command execution for containers, integrating retry mechanisms and error handling. Resolves the issue where Testcontainers execInContainer
+ * may return a null exit code.
  *
  * Features:
  * - Automatic retry mechanism to handle null exit code issues
@@ -18,7 +18,6 @@ import org.testcontainers.containers.GenericContainer
  * - Provides convenient command execution methods
  *
  * Usage example:
- *
  * ```kotlin
  * val executor = ContainerCommandExecutor(container)
  *
@@ -137,8 +136,9 @@ class ContainerCommandExecutor(private val container: GenericContainer<*>) {
     val result = executeCommandWithExpectedExitCode(0, timeout, maxRetries, *commands)
 
     if (!result.stdout.contains(expectedContent)) {
-      val errorMsg = "Command output does not contain expected content. Expected: '$expectedContent', " +
-        "actual output: '${result.stdout}', command: ${commands.joinToString(" ")}"
+      val errorMsg =
+        "Command output does not contain expected content. Expected: '$expectedContent', " +
+          "actual output: '${result.stdout}', command: ${commands.joinToString(" ")}"
       log.error(errorMsg)
       throw AssertionError(errorMsg)
     }

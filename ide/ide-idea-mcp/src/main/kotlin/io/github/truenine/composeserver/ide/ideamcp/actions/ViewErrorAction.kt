@@ -16,8 +16,7 @@ import org.slf4j.LoggerFactory
 /**
  * Context menu action for viewing errors.
  *
- * Provides a right-click action in the project tree to view errors and
- * warnings for a file or directory.
+ * Provides a right-click action in the project tree to view errors and warnings for a file or directory.
  */
 class ViewErrorAction : AnAction("View Errors", "View errors and warnings in files or directories", null) {
 

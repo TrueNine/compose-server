@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 /**
  * add_tree_struct stored procedure tests.
  *
- * Verifies the behavior and idempotency of the add_tree_struct and
- * rm_tree_struct stored procedures.
+ * Verifies the behavior and idempotency of the add_tree_struct and rm_tree_struct stored procedures.
  */
 @SpringBootTest
 @Transactional

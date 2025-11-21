@@ -16,8 +16,7 @@ import org.jetbrains.mcpserverplugin.AbstractMcpTool
 /**
  * Code clean-up tool.
  *
- * Provides code clean-up operations over MCP, including formatting,
- * import optimization, and inspections/fixes.
+ * Provides code clean-up operations over MCP, including formatting, import optimization, and inspections/fixes.
  */
 class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer()) {
   override val name: String = "clean_code"
@@ -71,8 +70,7 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
 
     // Resolve path to VirtualFile
     val virtualFile =
-      fileManager.resolvePathToVirtualFile(project, args.path)
-        ?: throw IllegalArgumentException("Path does not exist or is not accessible: ${args.path}")
+      fileManager.resolvePathToVirtualFile(project, args.path) ?: throw IllegalArgumentException("Path does not exist or is not accessible: ${args.path}")
 
     // Build clean-up options
     val cleanOptions =

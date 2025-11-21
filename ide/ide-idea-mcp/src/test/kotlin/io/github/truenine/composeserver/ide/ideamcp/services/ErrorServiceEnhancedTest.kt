@@ -14,9 +14,7 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     errorService = ErrorServiceImpl()
   }
 
-  /**
-   * Test error detection with unused imports.
-   */
+  /** Test error detection with unused imports. */
   fun testErrorDetectionWithUnusedImport() {
     // Create a test file with unused imports
     val testContent =
@@ -57,9 +55,7 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     }
   }
 
-  /**
-   * Test error detection with syntax errors.
-   */
+  /** Test error detection with syntax errors. */
   fun testErrorDetectionWithSyntaxError() {
     // Create a test file containing syntax errors
     val testContent =
@@ -93,9 +89,7 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     }
   }
 
-  /**
-   * Comprehensive error detection test with real file analysis.
-   */
+  /** Comprehensive error detection test with real file analysis. */
   fun testComprehensiveErrorDetectionWithRealFileAnalysis() {
     // Create a test file that contains multiple issues
     val testContent =
@@ -166,9 +160,7 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     }
   }
 
-  /**
-   * Test PSI syntax error detection.
-   */
+  /** Test PSI syntax error detection. */
   fun testPsiSyntaxErrorDetection() {
     // Create a file with an obvious syntax error
     val testContent =
@@ -204,9 +196,7 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     }
   }
 
-  /**
-   * Test error severity classification.
-   */
+  /** Test error severity classification. */
   fun testErrorSeverityClassification() {
     // Test error severity classification
     val errorService = ErrorServiceImpl()

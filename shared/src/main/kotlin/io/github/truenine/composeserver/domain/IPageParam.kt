@@ -77,7 +77,10 @@ interface IPageParam : IPageParamLike, Serializable {
     constructor(
       @Transient @param:JsonProperty("o") override var o: Int? = null,
       @Transient @param:JsonProperty("s") override var s: Int? = null,
-      @Deprecated("Disabling pagination is not a wise choice", level = DeprecationLevel.ERROR) @Transient @param:JsonProperty("u") override var u: Boolean? = null,
+      @Deprecated("Disabling pagination is not a wise choice", level = DeprecationLevel.ERROR)
+      @Transient
+      @param:JsonProperty("u")
+      override var u: Boolean? = null,
     ) : IPageParam, Serializable {
 
       override fun toString(): String {

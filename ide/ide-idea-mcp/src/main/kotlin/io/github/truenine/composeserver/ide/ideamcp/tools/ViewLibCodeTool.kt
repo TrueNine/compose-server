@@ -12,8 +12,7 @@ import org.jetbrains.mcpserverplugin.AbstractMcpTool
 /**
  * Library code view tool.
  *
- * Provides viewing of third-party library source code or decompiled code
- * through the MCP protocol, together with metadata.
+ * Provides viewing of third-party library source code or decompiled code through the MCP protocol, together with metadata.
  */
 class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.serializer()) {
   override val name: String = "view_lib_code"

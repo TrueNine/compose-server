@@ -63,7 +63,10 @@ class LibCodeServiceImpl : LibCodeService {
           }
 
         val libraryInfo = extractLibraryInfoFromSourceFile(sourceFile)
-        Logger.info("Successfully extracted source - class: $fullyQualifiedName, library: ${libraryInfo.first}, version: ${libraryInfo.second}", "LibCodeService")
+        Logger.info(
+          "Successfully extracted source - class: $fullyQualifiedName, library: ${libraryInfo.first}, version: ${libraryInfo.second}",
+          "LibCodeService",
+        )
         Logger.debug("Source length: ${sourceCode.length} characters", "LibCodeService")
 
         LibCodeResult(

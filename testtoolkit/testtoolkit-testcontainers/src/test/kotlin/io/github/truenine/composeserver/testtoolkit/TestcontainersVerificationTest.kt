@@ -83,6 +83,7 @@ class TestcontainersVerificationTest {
       }
       .use { postgres ->
         log.info("Starting PostgreSQL container...")
+        postgres.startAndWaitForReady(Duration.ofSeconds(90))
 
         // Use retry utility to wait until the container is fully ready
         TestRetryUtils.waitUntil(timeout = Duration.ofSeconds(30), pollInterval = Duration.ofSeconds(1)) { postgres.isRunning && postgres.jdbcUrl.isNotEmpty() }

@@ -9,17 +9,15 @@ import org.springframework.stereotype.Component
 /**
  * Testcontainers configuration holder.
  *
- * Utility for accessing Spring configuration statically from companion
- * objects. Because container interfaces use companion objects, they cannot
- * receive Spring beans directly, so this holder exposes the configuration.
+ * Utility for accessing Spring configuration statically from companion objects. Because container interfaces use companion objects, they cannot receive Spring
+ * beans directly, so this holder exposes the configuration.
  *
  * Container reuse configuration:
  * - Controls reuse behavior for all Testcontainers-based containers.
  * - `reuseAllContainers` can be used as a global switch.
  * - Each container type has its own reuse configuration as well.
  *
- * Important: container reuse causes data to remain between tests, so make sure
- * to perform proper cleanup.
+ * Important: container reuse causes data to remain between tests, so make sure to perform proper cleanup.
  *
  * @author TrueNine
  * @since 2025-07-19
@@ -33,8 +31,7 @@ class TestcontainersConfigurationHolder : ApplicationContextAware {
     /**
      * Returns the Testcontainers configuration properties.
      *
-     * @return TestcontainersProperties or a default configuration if none is
-     *   available
+     * @return TestcontainersProperties or a default configuration if none is available
      */
     fun getTestcontainersProperties(): TestcontainersProperties {
       return try {

@@ -66,7 +66,10 @@ class TestEnvironmentApplicationListenerTest {
         assertTrue(propertySource.getProperty("debug") is Boolean, "debug property should be Boolean")
         assertEquals(false, propertySource.getProperty("debug"), "debug should be set to false")
 
-        assertTrue(propertySource.getProperty("spring.test.print-condition-evaluation-report") is Boolean, "condition evaluation report property should be Boolean")
+        assertTrue(
+          propertySource.getProperty("spring.test.print-condition-evaluation-report") is Boolean,
+          "condition evaluation report property should be Boolean",
+        )
         assertEquals(false, propertySource.getProperty("spring.test.print-condition-evaluation-report"), "condition evaluation report should be disabled")
 
         assertTrue(propertySource.getProperty("spring.main.log-startup-info") is Boolean, "startup info log property should be Boolean")

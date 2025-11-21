@@ -7,12 +7,10 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 /**
  * Testcontainers configuration properties.
  *
- * Configures Docker image versions and options for various
- * Testcontainers-based services. Provides sensible defaults while allowing
- * overrides via Spring configuration.
+ * Configures Docker image versions and options for various Testcontainers-based services. Provides sensible defaults while allowing overrides via Spring
+ * configuration.
  *
  * Example configuration:
- *
  * ```yaml
  * compose:
  *   testtoolkit:
@@ -70,10 +68,7 @@ data class PostgresConfig(
   /** Default password. */
   var password: String = "test",
 
-  /**
-   * Container stop timeout in seconds, or null to use the global default
-   * value.
-   */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )
 
@@ -96,10 +91,7 @@ data class MysqlConfig(
   /** Default root password. */
   var rootPassword: String = "roottest",
 
-  /**
-   * Container stop timeout in seconds, or null to use the global default
-   * value.
-   */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )
 
@@ -110,10 +102,7 @@ data class RedisConfig(
   /** Redis Docker image, default `redis/redis-stack:7.2.0-v18` (current stable). */
   var image: String = "redis/redis-stack:7.2.0-v18",
 
-  /**
-   * Container stop timeout in seconds, or null to use the global default
-   * value.
-   */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )
 
@@ -130,9 +119,6 @@ data class MinioConfig(
   /** Default secret key. */
   var secretKey: String = "minioadmin",
 
-  /**
-   * Container stop timeout in seconds, or null to use the global default
-   * value.
-   */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )

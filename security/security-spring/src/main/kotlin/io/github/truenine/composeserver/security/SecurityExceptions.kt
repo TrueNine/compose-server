@@ -7,8 +7,11 @@ import io.github.truenine.composeserver.enums.HttpStatus
  *
  * Replaces the original KnownException inheritance hierarchy and directly extends RuntimeException.
  */
-open class SecurityException(private var msg: String? = "Security exception", private var metaException: Throwable? = null, private var code: Int? = HttpStatus._403.code) :
-  RuntimeException(msg, metaException) {
+open class SecurityException(
+  private var msg: String? = "Security exception",
+  private var metaException: Throwable? = null,
+  private var code: Int? = HttpStatus._403.code,
+) : RuntimeException(msg, metaException) {
 
   open fun getMeta() = this.metaException
 
@@ -36,7 +39,8 @@ open class SecurityException(private var msg: String? = "Security exception", pr
 }
 
 /** JWT security token exception. */
-open class JwtException(msg: String? = "Security token exception", meta: Throwable? = null, code: Int? = HttpStatus._403.code) : SecurityException(msg, meta, code)
+open class JwtException(msg: String? = "Security token exception", meta: Throwable? = null, code: Int? = HttpStatus._403.code) :
+  SecurityException(msg, meta, code)
 
 /** JWT token expired exception. */
 open class JwtExpireException(msg: String? = "Token has expired", meta: Throwable? = null, code: Int? = HttpStatus._401.code) : JwtException(msg, meta, code)
