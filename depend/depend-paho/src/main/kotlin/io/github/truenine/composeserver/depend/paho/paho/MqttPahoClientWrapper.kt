@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.depend.paho.paho
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.Closeable
 import kotlin.reflect.KClass
 import org.eclipse.paho.client.mqttv3.IMqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import tools.jackson.databind.ObjectMapper
 
 class MqttPahoClientWrapper(private val client: IMqttClient, private val options: MqttConnectOptions, private val objectMapper: ObjectMapper) : Closeable {
   val isConnected: Boolean

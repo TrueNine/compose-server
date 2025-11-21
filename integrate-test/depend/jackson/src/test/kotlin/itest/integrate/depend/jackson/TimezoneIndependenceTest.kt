@@ -1,6 +1,5 @@
 package itest.integrate.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
 import java.time.Instant
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 /**
  * 时区无关性集成测试

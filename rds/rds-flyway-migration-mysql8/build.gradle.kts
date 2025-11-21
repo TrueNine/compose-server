@@ -14,6 +14,7 @@ description =
 
 dependencies {
   implementation(projects.rds.rdsFlywayMigrationShared)
+  implementation(libs.org.springframework.boot.spring.boot.starter.flyway)
 
   runtimeOnly(libs.org.flywaydb.flyway.core)
   runtimeOnly(libs.org.flywaydb.flyway.mysql)

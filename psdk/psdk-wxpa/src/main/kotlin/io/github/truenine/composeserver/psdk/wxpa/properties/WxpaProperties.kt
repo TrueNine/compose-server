@@ -1,34 +1,34 @@
 package io.github.truenine.composeserver.psdk.wxpa.properties
 
 /**
- * # 微信公众号配置属性
+ * WeChat Official Account configuration properties.
  *
  * @author TrueNine
  * @since 2025-08-08
  */
 data class WxpaProperties(
-  /** 验证服务器的配置 token */
+  /** Token used to verify server configuration. */
   var verifyToken: String? = null,
 
-  /** 应用ID */
+  /** Application ID. */
   var appId: String? = null,
 
-  /** 应用密钥 */
+  /** Application secret. */
   var appSecret: String? = null,
 
-  /** Token刷新间隔（秒），默认1小时 */
+  /** Token refresh interval in seconds (default 1 hour). */
   var tokenRefreshInterval: Long = 3600L,
 
-  /** Token提前过期时间（秒），默认5分钟 */
+  /** Token expire-advance time in seconds (default 5 minutes). */
   var tokenExpireAdvance: Long = 300L,
 
-  /** API调用超时时间（毫秒） */
+  /** API call timeout in milliseconds. */
   var apiTimeout: Long = 10000L,
 
-  /** API调用重试次数 */
+  /** Number of API call retries. */
   var apiRetryCount: Int = 3,
 
-  /** 是否启用Token自动刷新 */
+  /** Whether to enable automatic token refresh. */
   var enableAutoRefresh: Boolean = true,
 ) {
   init {

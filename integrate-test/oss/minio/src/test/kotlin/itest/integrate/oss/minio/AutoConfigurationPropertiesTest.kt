@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
@@ -409,8 +410,8 @@ class AutoConfigurationPropertiesTest : IOssMinioContainer {
     @Test
     fun `应该能够列出对象版本`(): Unit = minio {
       runBlocking {
-        val bucketName = "test-versioning-bucket"
-        val objectName = "versioned-object.txt"
+        val bucketName = "test-versioning-bucket-" + System.currentTimeMillis()
+        val objectName = "versioned-object-" + System.currentTimeMillis() + ".txt"
 
         oss.createBucket(CreateBucketRequest(bucketName))
         oss.setBucketVersioning(bucketName, true)
@@ -450,6 +451,16 @@ class AutoConfigurationPropertiesTest : IOssMinioContainer {
     }
 
     @Test
+    @Disabled(
+      """
+      Bucket-level CORS configuration is only supported in MinIO AiStor (paid version).
+      The community edition of MinIO does not support per-bucket CORS settings.
+      
+      Reference: https://github.com/minio/minio/discussions/20841
+      
+      For community edition, use cluster-wide CORS via MINIO_API_CORS_ALLOW_ORIGIN environment variable.
+      """
+    )
     fun `应该能够设置和获取存储桶CORS规则`(): Unit = minio {
       runBlocking {
         val bucketName = "test-cors-bucket"

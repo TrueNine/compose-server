@@ -1,10 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson.modules
 
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.module.SimpleDeserializers
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.module.SimpleSerializers
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampDeserializer
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampSerializer
 import io.github.truenine.composeserver.depend.jackson.serializers.LocalDateTimeTimestampDeserializer
@@ -23,6 +18,11 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
+import tools.jackson.databind.ValueDeserializer
+import tools.jackson.databind.ValueSerializer
+import tools.jackson.databind.module.SimpleDeserializers
+import tools.jackson.databind.module.SimpleModule
+import tools.jackson.databind.module.SimpleSerializers
 
 /**
  * Custom module for date-time types.
@@ -38,7 +38,7 @@ class DatetimeCustomModule : SimpleModule() {
     super.setupModule(context)
 
     // Create a container for timestamp serializers
-    val serializers = ArrayList<JsonSerializer<*>>(6)
+    val serializers = ArrayList<ValueSerializer<*>>(6)
 
     // Register timestamp serializers for all date-time types, ensuring highest priority
     serializers.add(LocalDateTimeTimestampSerializer())
@@ -52,7 +52,7 @@ class DatetimeCustomModule : SimpleModule() {
     context?.addSerializers(SimpleSerializers(serializers))
 
     // Create a container for timestamp deserializers
-    val deserializers = ArrayList<JsonDeserializer<*>>(6)
+    val deserializers = ArrayList<ValueDeserializer<*>>(6)
 
     deserializers.add(LocalDateTimeTimestampDeserializer())
     deserializers.add(LocalDateTimestampDeserializer())

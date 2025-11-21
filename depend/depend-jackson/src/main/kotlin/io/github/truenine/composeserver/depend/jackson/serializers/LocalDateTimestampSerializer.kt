@@ -1,26 +1,27 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
+import tools.jackson.core.JsonGenerator
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.SerializationContext
+import tools.jackson.databind.ValueSerializer
+import tools.jackson.databind.jsontype.TypeSerializer
 
 /**
- * LocalDate 时间戳序列化器
+ * LocalDate timestamp serializer.
  *
- * 将 LocalDate 转换为 UTC 时间戳（毫秒），使用当天开始时间
+ * Converts LocalDate to a UTC timestamp in milliseconds using the start of the day.
  *
  * @author TrueNine
  * @since 2025-01-16
  */
-class LocalDateTimestampSerializer : JsonSerializer<LocalDate>() {
+class LocalDateTimestampSerializer : ValueSerializer<LocalDate>() {
 
   override fun handledType(): Class<LocalDate> = LocalDate::class.java
 
-  override fun serialize(value: LocalDate?, gen: JsonGenerator?, serializers: SerializerProvider?) {
+  override fun serialize(value: LocalDate?, gen: JsonGenerator?, ctxt: SerializationContext?) {
     if (value == null) {
       gen?.writeNull()
       return
@@ -30,18 +31,19 @@ class LocalDateTimestampSerializer : JsonSerializer<LocalDate>() {
     gen?.writeNumber(timestamp)
   }
 
-  override fun serializeWithType(value: LocalDate?, gen: JsonGenerator?, serializers: SerializerProvider?, typeSer: TypeSerializer?) {
+  override fun serializeWithType(value: LocalDate?, gen: JsonGenerator?, ctxt: SerializationContext?, typeSer: TypeSerializer?) {
     val shape = JsonToken.VALUE_NUMBER_INT
-    val typeIdDef = typeSer?.writeTypePrefix(gen, typeSer.typeId(value, shape))
-    serialize(value, gen, serializers)
-    typeSer?.writeTypeSuffix(gen, typeIdDef)
+    val typeIdDef = typeSer?.typeId(value, shape)
+    typeSer?.writeTypePrefix(gen, ctxt, typeIdDef)
+    serialize(value, gen, ctxt)
+    typeSer?.writeTypeSuffix(gen, ctxt, typeIdDef)
   }
 }
 
 /**
- * LocalDate 时间戳反序列化器
+ * LocalDate timestamp deserializer.
  *
- * 支持从时间戳和多种字符串格式反序列化为 LocalDate
+ * Supports deserialization from timestamps and multiple string formats into LocalDate.
  *
  * @author TrueNine
  * @since 2025-01-16
@@ -53,7 +55,7 @@ class LocalDateTimestampDeserializer : TimestampDeserializer<LocalDate>() {
   }
 
   override fun convertFromString(text: String): LocalDate {
-    val instant = parseWithMultipleFormats(text) ?: throw IllegalArgumentException("无法解析 LocalDate 字符串: $text")
+    val instant = parseWithMultipleFormats(text) ?: throw IllegalArgumentException("Failed to parse LocalDate string: $text")
 
     return LocalDate.ofInstant(instant, ZoneOffset.UTC)
   }

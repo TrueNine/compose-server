@@ -21,49 +21,49 @@ class IDatabaseMysqlContainerTest : IDatabaseMysqlContainer {
     @Resource set
 
   @Test
-  fun `验证 MySQL 容器成功启动`() = mysql {
-    assertNotNull(it, "MySQL 容器应该存在")
-    assertTrue(it.isRunning == true, "MySQL 容器应该处于运行状态")
+  fun `verify MySQL container starts successfully`() = mysql {
+    assertNotNull(it, "MySQL container should exist")
+    assertTrue(it.isRunning == true, "MySQL container should be in running state")
 
-    // 通过执行简单查询来验证容器是否正常工作
+    // Verify container works by executing a simple query
     val version = jdbcTemplate.queryForObject("SELECT VERSION()", String::class.java)
-    assertNotNull(version, "应该能够获取 MySQL 版本信息")
-    assertTrue(version.contains("8.4"), "数据库应该是 MySQL 8.4")
+    assertNotNull(version, "Should be able to retrieve MySQL version")
+    assertTrue(version.contains("8.4"), "Database should be MySQL 8.4")
   }
 
   @Test
-  fun `验证 Spring 环境中包含数据源配置`() {
-    // 验证必要的数据源配置属性是否存在
-    assertNotNull(environment.getProperty("spring.datasource.url"), "数据源 URL 应该存在")
-    assertNotNull(environment.getProperty("spring.datasource.username"), "数据源用户名应该存在")
-    assertNotNull(environment.getProperty("spring.datasource.password"), "数据源密码应该存在")
-    assertNotNull(environment.getProperty("spring.datasource.driver-class-name"), "数据源驱动类名应该存在")
+  fun `verify Spring environment contains datasource configuration`() {
+    // Verify that required datasource configuration properties exist
+    assertNotNull(environment.getProperty("spring.datasource.url"), "Datasource URL should exist")
+    assertNotNull(environment.getProperty("spring.datasource.username"), "Datasource username should exist")
+    assertNotNull(environment.getProperty("spring.datasource.password"), "Datasource password should exist")
+    assertNotNull(environment.getProperty("spring.datasource.driver-class-name"), "Datasource driver class name should exist")
 
-    // 验证 URL 是否指向 TestContainers 的 MySQL
+    // Verify URL points to the Testcontainers MySQL instance
     val jdbcUrl = environment.getProperty("spring.datasource.url")
-    assertTrue(jdbcUrl?.contains("jdbc:mysql") == true, "JDBC URL 应该是 MySQL 连接")
+    assertTrue(jdbcUrl?.contains("jdbc:mysql") == true, "JDBC URL should be a MySQL connection")
   }
 
   @Test
-  fun `验证数据库连接可以成功建立`() {
+  fun `verify database connection can be established`() {
     val connection = jdbcTemplate.dataSource?.connection
-    assertNotNull(connection, "应该能够获取数据库连接")
+    assertNotNull(connection, "Should be able to obtain a database connection")
 
     connection.use { conn ->
-      assertTrue(conn.isValid(5), "数据库连接应该有效")
-      assertEquals("MySQL", conn.metaData.databaseProductName, "数据库类型应该是 MySQL")
+      assertTrue(conn.isValid(5), "Database connection should be valid")
+      assertEquals("MySQL", conn.metaData.databaseProductName, "Database type should be MySQL")
 
-      // 验证数据库连接状态
+      // Verify database connection status
       val stmt = conn.createStatement()
       val rs = stmt.executeQuery("SELECT CONNECTION_ID() as id")
-      assertTrue(rs.next(), "应该能够查询到当前连接的ID")
+      assertTrue(rs.next(), "Should be able to query current connection id")
       val connectionId = rs.getLong("id")
-      assertTrue(connectionId > 0, "连接ID应该大于0")
+      assertTrue(connectionId > 0, "Connection id should be greater than 0")
     }
   }
 
   @Test
-  fun `验证数据库基本操作正常`() {
+  fun `verify basic database operations`() {
     val result = jdbcTemplate.queryForObject("SELECT 1", Int::class.java)
     assertEquals(1, result)
 
@@ -74,7 +74,7 @@ class IDatabaseMysqlContainerTest : IDatabaseMysqlContainer {
   }
 
   @Test
-  fun `验证容器端口映射正确`() = mysql {
+  fun `verify container port mapping is correct`() = mysql {
     val mappedPort = it.getMappedPort(3306)
     assertTrue(mappedPort > 0)
 
@@ -86,20 +86,20 @@ class IDatabaseMysqlContainerTest : IDatabaseMysqlContainer {
   }
 
   @Test
-  fun `验证无效连接时抛出异常`() {
+  fun `verify exception thrown for invalid connection`() {
     val invalidJdbcUrl = "jdbc:mysql://localhost:1234/nonexistent"
-    assertFailsWith<SQLException>("使用无效连接应该抛出异常") { DriverManager.getConnection(invalidJdbcUrl) }
+    assertFailsWith<SQLException>("Using an invalid connection should throw an exception") { DriverManager.getConnection(invalidJdbcUrl) }
   }
 
   @Test
-  fun `验证数据库字符集配置`() {
+  fun `verify database charset configuration`() {
     val charset = jdbcTemplate.queryForObject("SELECT @@character_set_database", String::class.java)
     assertNotNull(charset)
     assertTrue(charset.contains("utf8") || charset == "utf8mb4")
   }
 
   @Test
-  fun `验证 MySQL 版本`() {
+  fun `verify MySQL version`() {
     val version = jdbcTemplate.queryForObject("SELECT VERSION()", String::class.java)
     assertNotNull(version)
     assertTrue(version.contains("8.4"))

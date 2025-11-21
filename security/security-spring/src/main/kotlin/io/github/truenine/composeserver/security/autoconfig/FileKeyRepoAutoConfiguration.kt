@@ -15,7 +15,7 @@ class FileKeyRepoAutoConfiguration {
   @Bean
   @Primary
   fun fileKeyRepo(): FileKeyRepo {
-    log.debug("注册 以文件形式获取密钥")
+    log.debug("Register file-based key repository")
     return FileKeyRepo()
   }
 }

@@ -5,5 +5,5 @@ import org.springframework.test.annotation.Rollback
 
 typealias RDBRollback = Rollback
 
-/** 临时目录映射 */
+/** Temporary directory mapping. */
 typealias TempDirMapping = TempDir

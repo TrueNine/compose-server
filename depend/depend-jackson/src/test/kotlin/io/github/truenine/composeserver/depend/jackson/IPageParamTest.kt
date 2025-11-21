@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.domain.IPageParam
 import io.github.truenine.composeserver.domain.IPageParamLike
 import io.github.truenine.composeserver.testtoolkit.log
@@ -9,6 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest
 class IPageParamTest {

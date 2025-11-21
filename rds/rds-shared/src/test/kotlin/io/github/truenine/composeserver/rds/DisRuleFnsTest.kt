@@ -1,7 +1,5 @@
 package io.github.truenine.composeserver.rds
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.truenine.composeserver.domain.DisRule
 import io.github.truenine.composeserver.rds.enums.DisTyping
 import kotlin.test.assertContentEquals
@@ -10,6 +8,8 @@ import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 
 class DisRuleFnsTest {
 

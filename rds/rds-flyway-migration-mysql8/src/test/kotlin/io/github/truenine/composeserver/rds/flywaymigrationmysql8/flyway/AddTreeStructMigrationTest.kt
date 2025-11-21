@@ -13,9 +13,10 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * add_tree_struct 存储过程测试
+ * add_tree_struct stored procedure tests.
  *
- * 测试 add_tree_struct 和 rm_tree_struct 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the add_tree_struct and
+ * rm_tree_struct stored procedures.
  */
 @SpringBootTest
 @Transactional
@@ -32,72 +33,74 @@ class AddTreeStructMigrationTest : IDatabaseMysqlContainer {
   inner class AddTreeStructTests {
 
     @Test
-    fun `add_tree_struct 应该添加树结构字段`() {
-      // 创建测试表
+    fun `add_tree_struct should add tree struct column`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_tree_struct_table(name VARCHAR(255))")
 
-      // 调用 add_tree_struct
+      // Call add_tree_struct
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_struct_table')")
 
-      // 验证字段添加
+      // Verify column is added
       val columns = getTableColumns("test_tree_struct_table")
-      assertTrue(columns.contains("rpi"), "应该包含 rpi 字段")
+      assertTrue(columns.contains("rpi"), "Column 'rpi' should exist")
 
-      // 验证字段类型
+      // Verify column type
       val columnInfo = getColumnInfo("test_tree_struct_table")
-      assertEquals("bigint", columnInfo["rpi"]?.get("data_type")?.toString()?.lowercase(), "rpi 应该是 bigint 类型")
-      assertEquals("YES", columnInfo["rpi"]?.get("is_nullable"), "rpi 应该可以为空")
+      assertEquals("bigint", columnInfo["rpi"]?.get("data_type")?.toString()?.lowercase(), "rpi should be of type BIGINT")
+      assertEquals("YES", columnInfo["rpi"]?.get("is_nullable"), "rpi should be nullable")
     }
 
     @Test
-    fun `add_tree_struct 应该创建索引`() {
-      // 创建测试表
+    fun `add_tree_struct should create index`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_tree_struct_table(name VARCHAR(255))")
 
-      // 调用 add_tree_struct
+      // Call add_tree_struct
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_struct_table')")
 
-      // 验证索引创建
-      assertTrue(hasIndex("test_tree_struct_table", "rpi_idx"), "应该创建 rpi_idx 索引")
+      // Verify index is created
+      assertTrue(hasIndex("test_tree_struct_table", "rpi_idx"), "Index rpi_idx should be created")
     }
 
     @Test
-    fun `add_tree_struct 幂等性测试`() {
-      // 创建测试表
+    fun `add_tree_struct idempotency test`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_tree_struct_table(name VARCHAR(255))")
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_struct_table')")
       val afterFirst = getTableColumns("test_tree_struct_table")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_struct_table')")
       val afterSecond = getTableColumns("test_tree_struct_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_struct_table')")
       val afterThird = getTableColumns("test_tree_struct_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后字段应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
-      assertTrue(afterThird.contains("rpi"), "应该包含 rpi 字段")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Columns should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Columns should be the same after the third call")
+      assertTrue(afterThird.contains("rpi"), "Column 'rpi' should exist")
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getTableColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name 
-      FROM information_schema.columns 
-      WHERE table_schema = DATABASE() AND table_name = ?
-      ORDER BY ordinal_position
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_schema = DATABASE() AND table_name = ?
+        ORDER BY ordinal_position
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 
   private fun getColumnInfo(tableName: String): Map<String, Map<String, Any?>> {

@@ -8,27 +8,28 @@ fun uuid(): String {
 }
 
 /**
- * ## base64 加密
- * - 调用 [java.util.Base64]
+ * Base64-encode this string.
  *
- * @return 加密后的 base64
+ * Uses [java.util.Base64] under the hood.
+ *
+ * @return Base64-encoded string
  */
 fun String.base64(charset: Charset = Charsets.UTF_8): String = IBase64.encode(this.toByteArray(charset))
 
 /**
- * ## 对 base64 字符串进行解密
+ * Decode this Base64-encoded string.
  *
- * @return [String]
+ * @return Decoded string
  */
 fun String.base64Decode(charset: Charset = Charsets.UTF_8): String = IBase64.decode(this, charset)
 
 val String.base64DecodeByteArray: ByteArray
   get() = IBase64.decodeToByte(this)
 
-/** 将字符串转换为 sha1 */
+/** Convert string to SHA-1 hash */
 val String.sha1: String
   get() = CryptographicOperations.signatureBySha1(this)
 
-/** 将字符串转换为 sha256 */
+/** Convert string to SHA-256 hash */
 val String.sha256: String
   get() = CryptographicOperations.signatureBySha256(this)

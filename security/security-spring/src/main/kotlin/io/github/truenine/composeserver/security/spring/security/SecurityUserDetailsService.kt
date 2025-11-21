@@ -9,24 +9,24 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 abstract class SecurityUserDetailsService : UserDetailsService {
   /**
-   * 加载用户用户名
+   * Load user by username.
    *
-   * @param username 用户名
+   * @param username Username
    * @return [UserDetails]
-   * @throws UsernameNotFoundException 用户名没有发现异常
+   * @throws UsernameNotFoundException When the username cannot be found
    */
   @Throws(UsernameNotFoundException::class)
   override fun loadUserByUsername(username: String): UserDetails {
-    log.debug("加载 loadUserByUsername account = {}", username)
+    log.debug("Loading user by username, account = {}", username)
     val details = UserDetailsWrapper(loadUserDetailsByAccount(username))
-    log.debug("加载到 details = {}", details)
+    log.debug("Loaded details = {}", details)
     return details
   }
 
   /**
-   * 加载用户详细信息账户
+   * Load user details by account identifier.
    *
-   * @param account 账户
+   * @param account Account identifier
    * @return [AuthRequestInfo]
    */
   abstract fun loadUserDetailsByAccount(account: String?): AuthRequestInfo?

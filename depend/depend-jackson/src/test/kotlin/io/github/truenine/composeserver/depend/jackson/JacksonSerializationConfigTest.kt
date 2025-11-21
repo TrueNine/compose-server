@@ -1,7 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
@@ -14,6 +12,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 
 /**
  * Jackson serialization configuration tests
@@ -166,8 +166,8 @@ class JacksonSerializationConfigTest {
       assertNotNull(mapper, "Non-ignoring ObjectMapper should be injected correctly")
       assertNotNull(plainMapper, "Default ObjectMapper should be injected correctly")
 
-      log.info("Non-ignore mapper configuration: {}", mapper.serializationConfig.toString())
-      log.info("Plain mapper configuration: {}", plainMapper.serializationConfig.toString())
+      log.info("Non-ignore mapper configuration: {}", mapper.serializationConfig().toString())
+      log.info("Plain mapper configuration: {}", plainMapper.serializationConfig().toString())
 
       // Verify configuration consistency
       val testData = mapOf("test" to "value", "number" to 123)

@@ -7,18 +7,19 @@ import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
 
 /**
- * # Testcontainers 配置持有者
+ * Testcontainers configuration holder.
  *
- * 静态访问 Spring 配置的工具类，用于在伴生对象中获取配置属性。 由于容器接口使用伴生对象，无法直接注入 Spring Bean，因此通过此工具类来获取配置。
+ * Utility for accessing Spring configuration statically from companion
+ * objects. Because container interfaces use companion objects, they cannot
+ * receive Spring beans directly, so this holder exposes the configuration.
  *
- * ## 容器重用配置
+ * Container reuse configuration:
+ * - Controls reuse behavior for all Testcontainers-based containers.
+ * - `reuseAllContainers` can be used as a global switch.
+ * - Each container type has its own reuse configuration as well.
  *
- * 该类提供的配置属性控制着所有 TestContainers 的重用行为：
- * - **默认启用容器重用**：所有容器默认配置为可重用，以提高测试性能
- * - **全局重用开关**：`reuseAllContainers` 可以全局控制所有容器的重用行为
- * - **单独容器控制**：每个容器类型都有独立的重用配置选项
- *
- * ⚠️ **重要提醒**：容器重用会导致数据在测试间残留，请确保在测试中进行适当的数据清理。
+ * Important: container reuse causes data to remain between tests, so make sure
+ * to perform proper cleanup.
  *
  * @author TrueNine
  * @since 2025-07-19
@@ -30,15 +31,16 @@ class TestcontainersConfigurationHolder : ApplicationContextAware {
     private var applicationContext: ApplicationContext? = null
 
     /**
-     * 获取 Testcontainers 配置属性
+     * Returns the Testcontainers configuration properties.
      *
-     * @return TestcontainersProperties 或使用默认配置
+     * @return TestcontainersProperties or a default configuration if none is
+     *   available
      */
     fun getTestcontainersProperties(): TestcontainersProperties {
       return try {
         applicationContext?.getBean(TestcontainersProperties::class.java) ?: TestcontainersProperties()
       } catch (e: Exception) {
-        // 如果无法获取配置，使用默认配置
+        // Fall back to default configuration if properties cannot be resolved
         TestcontainersProperties()
       }
     }

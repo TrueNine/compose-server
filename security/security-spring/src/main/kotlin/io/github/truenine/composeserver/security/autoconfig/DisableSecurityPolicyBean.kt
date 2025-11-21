@@ -13,7 +13,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
 /**
- * spring security 策略注册器
+ * Spring Security fallback policy registrar when no SecurityPolicyBean is defined.
  *
  * @author TrueNine
  * @since 2022-12-14
@@ -28,7 +28,7 @@ class DisableSecurityPolicyBean {
   @Bean
   @Throws(Exception::class)
   fun disableSecurityFilterChain(security: HttpSecurity): SecurityFilterChain {
-    log.warn("生产环境请启用 WebSecurity, 使用 {} 来启用并配置完成 {}", EnableRestSecurity::class.java.name, SecurityPolicyBean::class.java.name)
+    log.warn("In production, please enable WebSecurity using {} and configure {}", EnableRestSecurity::class.java.name, SecurityPolicyBean::class.java.name)
     return security
       .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
       .authorizeHttpRequests { a -> a.anyRequest().permitAll() }
@@ -38,7 +38,7 @@ class DisableSecurityPolicyBean {
 
   @Bean
   fun ssr(): UserDetailsService {
-    log.warn("当前注册了一个临时的 InMemoryUserDetailsManager")
+    log.warn("Registering a temporary InMemoryUserDetailsManager")
     return InMemoryUserDetailsManager()
   }
 }

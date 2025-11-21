@@ -26,7 +26,7 @@ class StringExtensionsTest {
 
   @Test
   fun `test base64 encoding and decoding`() {
-    val originalText = "Hello, World! 你好世界"
+    val originalText = "Hello, World! sample text 🌍"
 
     val encoded = originalText.base64()
     assertNotNull(encoded)
@@ -39,7 +39,7 @@ class StringExtensionsTest {
 
   @Test
   fun `test base64 with different charsets`() {
-    val originalText = "测试文本"
+    val originalText = "Sample text with unicode: العربية Ελληνικά"
 
     val encodedUtf8 = originalText.base64(Charsets.UTF_8)
     val encodedUtf16 = originalText.base64(Charsets.UTF_16)

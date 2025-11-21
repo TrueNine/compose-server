@@ -18,18 +18,12 @@ class RedisConnectionFactoryIntegrationTest : ICacheRedisContainer {
   @Test
   fun `验证工厂使用最新的RESP3协议连接`() {
     val lettuceFactory = assertIs<LettuceConnectionFactory>(factory)
-
-    // 验证连接成功
     val connection = lettuceFactory.connection
     try {
       val pingResult = connection.ping()
       assertEquals("PONG", pingResult)
-
-      // 获取客户端选项并验证协议版本
       val clientOptions = lettuceFactory.clientConfiguration.clientOptions.orElse(null)
       assertNotNull(clientOptions, "客户端选项不应为空")
-
-      // 验证协议版本为 RESP3
       val protocolVersion = clientOptions.protocolVersion
       assertEquals("RESP3", protocolVersion.toString(), "应该使用最新的 RESP3 协议")
     } finally {

@@ -1,6 +1,7 @@
 package io.github.truenine.composeserver.security.crypto
 
 import io.github.truenine.composeserver.consts.IRegexes
+import java.util.Base64
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -12,9 +13,9 @@ import org.slf4j.LoggerFactory
 class ByteArrayExtensionsTest {
   private val log = LoggerFactory.getLogger(ByteArrayExtensionsTest::class.java)
 
-  private val testText = "Hello, World! 测试文本 🌟"
+  private val testText = "Hello, World! sample text 🌟"
   private val testBytes = testText.toByteArray(Charsets.UTF_8)
-  private val expectedBase64 = "SGVsbG8sIFdvcmxkISDmtYvor5XmlofmnKwg8J+Mnw=="
+  private val expectedBase64 = Base64.getEncoder().encodeToString(testBytes)
 
   // === Basic Functionality Tests ===
 

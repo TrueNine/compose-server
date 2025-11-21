@@ -1,20 +1,20 @@
-# Jackson配置管理组件
+# Jackson configuration management module
 
-本模块提供了统一的Jackson配置管理功能，包括配置属性类和ObjectMapper持有者。
+This module provides centralized Jackson configuration management, including a configuration properties class and an ObjectMapper holder.
 
-## JacksonProperties配置类
+## JacksonProperties configuration class
 
-`JacksonProperties`是一个Spring Boot配置属性类，提供了Jackson的核心配置选项：
+`JacksonProperties` is a Spring Boot configuration properties class exposing core Jackson options:
 
-### 配置属性
+### Properties
 
-- `compose.jackson.enableTimestampSerialization`: 是否启用时间戳序列化（默认：true）
-- `compose.jackson.timestampUnit`: 时间戳单位，MILLISECONDS或SECONDS（默认：MILLISECONDS）
-- `compose.jackson.serializationInclusion`: 序列化包含策略（默认：NON_NULL）
-- `compose.jackson.failOnUnknownProperties`: 遇到未知属性时是否失败（默认：false）
-- `compose.jackson.writeDatesAsTimestamps`: 是否将日期写为时间戳（默认：true）
+- `compose.jackson.enableTimestampSerialization`: Whether to enable timestamp serialization (default: true)
+- `compose.jackson.timestampUnit`: Timestamp unit, `MILLISECONDS` or `SECONDS` (default: `MILLISECONDS`)
+- `compose.jackson.serializationInclusion`: Serialization inclusion strategy (default: `NON_NULL`)
+- `compose.jackson.failOnUnknownProperties`: Whether to fail on unknown properties (default: false)
+- `compose.jackson.writeDatesAsTimestamps`: Whether to write dates as timestamps (default: true)
 
-### 使用示例
+### Example
 
 ```yaml
 compose:
@@ -26,37 +26,37 @@ compose:
     writeDatesAsTimestamps: true
 ```
 
-## ObjectMapperHolder配置持有者
+## ObjectMapperHolder configuration holder
 
-`ObjectMapperHolder`是一个Spring组件，提供统一的ObjectMapper访问接口：
+`ObjectMapperHolder` is a Spring component that provides unified access to different `ObjectMapper` instances:
 
-### 主要方法
+### Key methods
 
-- `getDefaultMapper()`: 获取默认配置的ObjectMapper
-- `getNonIgnoreMapper()`: 获取非忽略配置的ObjectMapper
-- `getMapper(ignoreUnknown: Boolean = true)`: 根据参数获取相应配置的ObjectMapper
+- `getDefaultMapper()`: Get the default configured ObjectMapper
+- `getNonIgnoreMapper()`: Get the ObjectMapper that does not ignore unknown properties
+- `getMapper(ignoreUnknown: Boolean = true)`: Get an ObjectMapper according to the `ignoreUnknown` flag
 
-### 使用示例
+### Usage example
 
 ```kotlin
 @Resource
 private lateinit var objectMapperHolder: ObjectMapperHolder
 
 fun example() {
-    // 获取默认mapper（忽略未知属性）
+    // Get default mapper (ignores unknown properties)
     val defaultMapper = objectMapperHolder.getDefaultMapper()
-    
-    // 获取非忽略mapper（不忽略未知属性）
+
+    // Get non-ignore mapper (does not ignore unknown properties)
     val nonIgnoreMapper = objectMapperHolder.getNonIgnoreMapper()
-    
-    // 根据需要选择mapper
+
+    // Choose mapper as needed
     val mapper = objectMapperHolder.getMapper(ignoreUnknown = false)
 }
 ```
 
-## Bean命名规范
+## Bean naming convention
 
-- `defaultObjectMapper`: 默认ObjectMapper Bean
-- `nonIgnoreObjectMapper`: 非忽略ObjectMapper Bean
+- `defaultObjectMapper`: Default ObjectMapper bean
+- `nonIgnoreObjectMapper`: Non-ignore ObjectMapper bean
 
-这些Bean名称在`JacksonAutoConfiguration`中定义，确保了命名的一致性。
+These bean names are defined in `JacksonAutoConfiguration` to ensure consistent naming.

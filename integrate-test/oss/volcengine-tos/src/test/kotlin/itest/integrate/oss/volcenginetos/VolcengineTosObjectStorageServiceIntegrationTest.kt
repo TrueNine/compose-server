@@ -26,6 +26,7 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
@@ -377,6 +378,13 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   @Nested
   inner class `版本控制功能测试` {
     @Test
+    @Disabled(
+      """
+      Volcengine TOS does not currently support bucket versioning functionality.
+      
+      The service implementation explicitly marks this feature as unsupported via the unsupported() method.
+      """
+    )
     fun `应该能够列出对象版本`() = runBlocking {
       val bucketName = "test-versioning-bucket-${System.currentTimeMillis()}"
       val objectName = "versioned-object.txt"

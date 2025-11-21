@@ -5,7 +5,7 @@ import java.lang.annotation.Inherited
 import org.springframework.context.annotation.Import
 
 /**
- * 启动 jwt 验证客户端
+ * Enable JWT verifier client auto-configuration.
  *
  * @author TrueNine
  * @since 2022-12-14

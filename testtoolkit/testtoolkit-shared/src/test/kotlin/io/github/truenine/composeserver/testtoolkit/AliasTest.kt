@@ -10,9 +10,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.test.annotation.Rollback
 
 /**
- * # 类型别名测试
+ * Type alias tests.
  *
- * 测试 Alias.kt 中定义的类型别名，确保它们正确映射到对应的类型
+ * Verifies that the type aliases defined in Alias.kt map to the correct
+ * underlying types.
  *
  * @author TrueNine
  * @since 2025-07-12

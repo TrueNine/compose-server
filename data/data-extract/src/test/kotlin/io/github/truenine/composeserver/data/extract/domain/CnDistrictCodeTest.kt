@@ -10,7 +10,7 @@ import org.junit.jupiter.api.assertThrows
 class CnDistrictCodeTest {
 
   @Test
-  fun `测试空构造函数`() {
+  fun `empty constructor`() {
     val code = CnDistrictCode()
     assertEquals("000000000000", code.toString())
     assertTrue(code.empty)
@@ -23,7 +23,7 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试无效长度的编码应该抛出异常`() {
+  fun `invalid length code should throw exception`() {
     val invalidLengths = listOf(1, 3, 5, 7, 8, 10, 11)
     invalidLengths.forEach { length ->
       val invalidCode = "1".repeat(length)
@@ -32,7 +32,7 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试省级编码`() {
+  fun `province level code`() {
     val code = CnDistrictCode("11")
     assertEquals("110000000000", code.toString())
     assertFalse(code.empty)
@@ -46,7 +46,7 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试市级编码`() {
+  fun `city level code`() {
     val code = CnDistrictCode("1101")
     assertEquals("110100000000", code.toString())
     assertFalse(code.empty)
@@ -60,7 +60,7 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试区县级编码`() {
+  fun `county level code`() {
     val code = CnDistrictCode("110101")
     assertEquals("110101000000", code.toString())
     assertFalse(code.empty)
@@ -74,7 +74,7 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试乡镇级编码`() {
+  fun `town level code`() {
     val code = CnDistrictCode("110101001")
     assertEquals("110101001000", code.toString())
     assertFalse(code.empty)
@@ -88,7 +88,7 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试村级编码`() {
+  fun `village level code`() {
     val code = CnDistrictCode("110101001001")
     assertEquals("110101001001", code.toString())
     assertFalse(code.empty)
@@ -102,53 +102,53 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试back方法 - 各级别返回值`() {
-    // 村级返回乡镇级
+  fun `back method returns correct level for each step`() {
+    // Village level returns town level
     val villageCode = CnDistrictCode("110101001001")
     val townCode = villageCode.back()
     assertEquals("110101001", townCode?.code)
     assertEquals(4, townCode?.level)
 
-    // 乡镇级返回区县级
+    // Town level returns county level
     val countyCode = townCode?.back()
     assertEquals("110101", countyCode?.code)
     assertEquals(3, countyCode?.level)
 
-    // 区县级返回市级
+    // County level returns city level
     val cityCode = countyCode?.back()
     assertEquals("1101", cityCode?.code)
     assertEquals(2, cityCode?.level)
 
-    // 市级返回省级
+    // City level returns province level
     val provinceCode = cityCode?.back()
     assertEquals("11", provinceCode?.code)
     assertEquals(1, provinceCode?.level)
 
-    // 省级返回空编码
+    // Province level returns empty code
     val emptyCode = provinceCode?.back()
     assertEquals("", emptyCode?.code)
     assertEquals(0, emptyCode?.level)
 
-    // 空编码返回null
+    // Empty code returns null
     val nullCode = emptyCode?.back()
     assertNull(nullCode)
   }
 
   @Test
-  fun `测试特殊编码情况`() {
-    // 测试全零编码
+  fun `special code cases`() {
+    // All-zero code
     val zeroCode = CnDistrictCode("000000000000")
     assertTrue(zeroCode.empty)
     assertEquals(0, zeroCode.level)
 
-    // 测试部分零编码
+    // Partially zero code
     val partialZeroCode = CnDistrictCode("110000000000")
     assertFalse(partialZeroCode.empty)
     assertEquals(1, partialZeroCode.level)
   }
 
   @Test
-  fun `测试编码补全`() {
+  fun `code padding`() {
     val codes =
       mapOf("11" to "110000000000", "1101" to "110100000000", "110101" to "110101000000", "110101001" to "110101001000", "110101001001" to "110101001001")
 
@@ -160,20 +160,20 @@ class CnDistrictCodeTest {
   }
 
   @Test
-  fun `测试level计算逻辑`() {
+  fun `level calculation logic`() {
     val testCases =
       mapOf(
-        "000000000000" to 0, // 空编码
-        "110000000000" to 1, // 省级
-        "110100000000" to 2, // 市级
-        "110101000000" to 3, // 区县级
-        "110101001000" to 4, // 乡镇级
-        "110101001001" to 5, // 村级
+        "000000000000" to 0, // Empty code
+        "110000000000" to 1, // Province level
+        "110100000000" to 2, // City level
+        "110101000000" to 3, // County level
+        "110101001000" to 4, // Town level
+        "110101001001" to 5, // Village level
       )
 
     testCases.forEach { (input, expectedLevel) ->
       val districtCode = CnDistrictCode(input)
-      assertEquals(expectedLevel, districtCode.level, "输入编码: $input")
+      assertEquals(expectedLevel, districtCode.level, "input code: $input")
     }
   }
 

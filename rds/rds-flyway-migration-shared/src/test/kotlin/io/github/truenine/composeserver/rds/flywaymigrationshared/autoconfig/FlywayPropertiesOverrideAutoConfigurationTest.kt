@@ -6,7 +6,7 @@ import jakarta.annotation.Resource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import org.springframework.boot.autoconfigure.flyway.FlywayProperties
+import org.springframework.boot.flyway.autoconfigure.FlywayProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 import org.springframework.jdbc.core.JdbcTemplate

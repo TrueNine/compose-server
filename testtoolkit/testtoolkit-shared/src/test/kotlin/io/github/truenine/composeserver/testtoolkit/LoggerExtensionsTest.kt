@@ -6,9 +6,9 @@ import kotlin.test.assertNotNull
 import org.slf4j.LoggerFactory
 
 /**
- * # SLF4J 函数测试
+ * SLF4J function tests.
  *
- * 测试 LoggerExtensions.kt 中的日志扩展函数
+ * Verifies the logging extension functions defined in LoggerExtensions.kt.
  *
  * @author TrueNine
  * @since 2025-07-12

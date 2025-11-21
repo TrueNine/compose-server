@@ -13,7 +13,9 @@ description =
 dependencies {
   api(libs.org.springframework.boot.spring.boot.starter.web)
   api(libs.jakarta.servlet.jakarta.servlet.api)
+  api(projects.depend.dependJackson)
 
+  implementation(libs.tools.jackson.core.jackson.databind)
   implementation(libs.org.springframework.boot.spring.boot.starter.websocket)
   implementation(libs.org.springframework.boot.spring.boot.autoconfigure)
 

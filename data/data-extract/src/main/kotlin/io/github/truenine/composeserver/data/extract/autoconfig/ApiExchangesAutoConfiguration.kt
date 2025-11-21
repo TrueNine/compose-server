@@ -20,7 +20,7 @@ private val log = slf4j<ApiExchangesAutoConfiguration>()
 class ApiExchangesAutoConfiguration {
   @Bean
   fun cnNbsAddressApi(): ICnNbsAddressApi {
-    log.debug("创建 中国统计局地址 api")
+    log.debug("Create National Bureau of Statistics address API client")
     val sslCtx = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build()
     val unsafeConnector =
       ReactorClientHttpConnector(HttpClient.create().secure { t -> t.sslContext(sslCtx) }.compress(true).resolver(DefaultAddressResolverGroup.INSTANCE))

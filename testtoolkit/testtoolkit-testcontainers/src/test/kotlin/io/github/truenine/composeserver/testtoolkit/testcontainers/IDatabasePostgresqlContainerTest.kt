@@ -21,49 +21,49 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
     @Resource set
 
   @Test
-  fun `验证 PostgreSQL 容器成功启动`() = postgres {
-    assertNotNull(it, "PostgreSQL 容器应该存在")
-    assertTrue(it.isRunning == true, "PostgreSQL 容器应该处于运行状态")
+  fun `verify PostgreSQL container starts successfully`() = postgres {
+    assertNotNull(it, "PostgreSQL container should exist")
+    assertTrue(it.isRunning == true, "PostgreSQL container should be in running state")
 
-    // 通过执行简单查询来验证容器是否正常工作
+    // Verify container works by executing a simple query
     val version = jdbcTemplate.queryForObject("SELECT version()", String::class.java)
-    assertNotNull(version, "应该能够获取 PostgreSQL 版本信息")
-    assertTrue(version.contains("PostgreSQL"), "数据库应该是 PostgreSQL")
+    assertNotNull(version, "Should be able to retrieve PostgreSQL version")
+    assertTrue(version.contains("PostgreSQL"), "Database should be PostgreSQL")
   }
 
   @Test
-  fun `验证 Spring 环境中包含数据源配置`() {
-    // 验证必要的数据源配置属性是否存在
-    assertNotNull(environment.getProperty("spring.datasource.url"), "数据源 URL 应该存在")
-    assertNotNull(environment.getProperty("spring.datasource.username"), "数据源用户名应该存在")
-    assertNotNull(environment.getProperty("spring.datasource.password"), "数据源密码应该存在")
-    assertNotNull(environment.getProperty("spring.datasource.driver-class-name"), "数据源驱动类名应该存在")
+  fun `verify Spring environment contains datasource configuration`() {
+    // Verify that required datasource configuration properties exist
+    assertNotNull(environment.getProperty("spring.datasource.url"), "Datasource URL should exist")
+    assertNotNull(environment.getProperty("spring.datasource.username"), "Datasource username should exist")
+    assertNotNull(environment.getProperty("spring.datasource.password"), "Datasource password should exist")
+    assertNotNull(environment.getProperty("spring.datasource.driver-class-name"), "Datasource driver class name should exist")
 
-    // 验证 URL 是否指向 TestContainers 的 PostgreSQL
+    // Verify URL points to the Testcontainers PostgreSQL instance
     val jdbcUrl = environment.getProperty("spring.datasource.url")
-    assertTrue(jdbcUrl?.contains("jdbc:postgresql") == true, "JDBC URL 应该是 PostgreSQL 连接")
+    assertTrue(jdbcUrl?.contains("jdbc:postgresql") == true, "JDBC URL should be a PostgreSQL connection")
   }
 
   @Test
-  fun `验证数据库连接可以成功建立`() {
+  fun `verify database connection can be established`() {
     val connection = jdbcTemplate.dataSource?.connection
-    assertNotNull(connection, "应该能够获取数据库连接")
+    assertNotNull(connection, "Should be able to obtain a database connection")
 
     connection.use { conn ->
-      assertTrue(conn.isValid(5), "数据库连接应该有效")
-      assertEquals("PostgreSQL", conn.metaData.databaseProductName, "数据库类型应该是 PostgreSQL")
+      assertTrue(conn.isValid(5), "Database connection should be valid")
+      assertEquals("PostgreSQL", conn.metaData.databaseProductName, "Database type should be PostgreSQL")
 
-      // 验证数据库进程状态
+      // Verify database process state
       val stmt = conn.createStatement()
       val rs = stmt.executeQuery("SELECT pid, state FROM pg_stat_activity WHERE pid = pg_backend_pid()")
-      assertTrue(rs.next(), "应该能够查询到当前连接的进程状态")
+      assertTrue(rs.next(), "Should be able to query current connection process state")
       val state = rs.getString("state")
-      assertNotNull(state, "进程状态不应为空")
+      assertNotNull(state, "Process state should not be null")
     }
   }
 
   @Test
-  fun `验证数据库基本操作正常`() {
+  fun `verify basic database operations`() {
     val result = jdbcTemplate.queryForObject("SELECT 1", Int::class.java)
     assertEquals(1, result)
 
@@ -74,7 +74,7 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
   }
 
   @Test
-  fun `验证容器端口映射正确`() = postgres {
+  fun `verify container port mapping is correct`() = postgres {
     val mappedPort = it.getMappedPort(5432)
     assertTrue(mappedPort > 0)
 
@@ -86,13 +86,13 @@ class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {
   }
 
   @Test
-  fun `验证无效连接时抛出异常`() {
+  fun `verify exception thrown for invalid connection`() {
     val invalidJdbcUrl = "jdbc:postgresql://localhost:1234/nonexistent"
-    assertFailsWith<SQLException>("使用无效连接应该抛出异常") { DriverManager.getConnection(invalidJdbcUrl) }
+    assertFailsWith<SQLException>("Using an invalid connection should throw an exception") { DriverManager.getConnection(invalidJdbcUrl) }
   }
 
   @Test
-  fun `验证数据库字符集配置`() {
+  fun `verify database charset configuration`() {
     val charset = jdbcTemplate.queryForObject("SHOW server_encoding", String::class.java)
     assertEquals("UTF8", charset)
   }

@@ -14,34 +14,31 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.test.context.DynamicPropertyRegistry
 
 /**
- * # MinIO 测试容器集成测试
+ * MinIO test container integration tests.
  *
- * 该测试类验证 MinIO 测试容器的配置和运行状态，确保：
- * - 容器正确启动和运行
- * - 端口映射配置正确
- * - 环境变量设置正确
- * - Spring 属性注入正确
+ * Verifies the configuration and runtime behavior of the MinIO test container:
+ * - Container starts and runs correctly.
+ * - Port mappings are configured correctly.
+ * - Environment variables are set correctly.
+ * - Spring properties are injected correctly.
  *
- * ## 测试覆盖范围
- * - 容器基本功能测试
- * - 端口映射验证
- * - 环境变量配置验证
- * - Spring 属性注入验证
+ * Coverage:
+ * - Basic container behavior tests.
+ * - Port mapping verification.
+ * - Environment variable configuration verification.
+ * - Spring property injection verification.
  *
- * ## 使用方式
+ * Usage:
  *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : IOssMinioContainer {
- *   // 你的测试代码
+ *   // your test code
  * }
  * ```
  *
@@ -51,7 +48,12 @@ import org.springframework.test.context.DynamicPropertyRegistry
  */
 @SpringBootTest
 @EnableAutoConfiguration(
-  exclude = [DataSourceAutoConfiguration::class, DataSourceTransactionManagerAutoConfiguration::class, HibernateJpaAutoConfiguration::class]
+  excludeName =
+    [
+      "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
+      "org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration",
+      "org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration",
+    ]
 )
 class IOssMinioContainerTest : IOssMinioContainer {
   lateinit var environment: Environment
@@ -61,19 +63,19 @@ class IOssMinioContainerTest : IOssMinioContainer {
   inner class ContainerBasicTests {
     @Test
     fun verify_container_instance_exists_and_running() = minio {
-      assertNotNull(it, "MinIO 容器实例不应为空")
-      assertTrue(it.isRunning, "MinIO 容器应该处于运行状态")
+      assertNotNull(it, "MinIO container instance should not be null")
+      assertTrue(it.isRunning, "MinIO container should be in running state")
     }
 
     @Test
     fun verify_container_network_configuration() = minio {
-      // 验证端口映射
+      // Verify port mappings
       val apiPort = it.getMappedPort(9000)
       val consolePort = it.getMappedPort(9001)
 
-      assertTrue(apiPort in 1024..65535, "API 端口映射应在有效范围内")
-      assertTrue(consolePort in 1024..65535, "控制台端口映射应在有效范围内")
-      assertNotEquals(apiPort, consolePort, "API 端口和控制台端口不应相同")
+      assertTrue(apiPort in 1024..65535, "API port mapping should be within a valid range")
+      assertTrue(consolePort in 1024..65535, "Console port mapping should be within a valid range")
+      assertNotEquals(apiPort, consolePort, "API port and console port should not be the same")
     }
 
     @ParameterizedTest
@@ -81,24 +83,24 @@ class IOssMinioContainerTest : IOssMinioContainer {
     fun verify_required_environment_variables_exist_and_configured(envVar: String) = minio {
       val envMap = it.envMap
 
-      assertTrue(envMap.containsKey(envVar), "环境变量 $envVar 必须存在")
-      assertNotNull(envMap[envVar], "环境变量 $envVar 的值不能为空")
+      assertTrue(envMap.containsKey(envVar), "Environment variable $envVar must exist")
+      assertNotNull(envMap[envVar], "Environment variable $envVar value must not be null")
 
-      // 验证环境变量格式和值
+      // Validate environment variable format and value
       when (envVar) {
         "MINIO_ROOT_USER" -> {
-          assertEquals("minioadmin", envMap[envVar], "访问密钥配置不正确")
-          assertTrue(envMap[envVar]!!.isNotEmpty(), "用户名不应为空")
+          assertEquals("minioadmin", envMap[envVar], "Access key configuration is incorrect")
+          assertTrue(envMap[envVar]!!.isNotEmpty(), "Username must not be empty")
         }
 
         "MINIO_ROOT_PASSWORD" -> {
-          assertEquals("minioadmin", envMap[envVar], "密钥配置不正确")
-          assertTrue(envMap[envVar]!!.length >= 8, "密码长度应详大于等于8位")
+          assertEquals("minioadmin", envMap[envVar], "Secret key configuration is incorrect")
+          assertTrue(envMap[envVar]!!.length >= 8, "Password length should be greater than or equal to 8 characters")
         }
 
         "MINIO_CONSOLE_ADDRESS" -> {
-          assertEquals(":9001", envMap[envVar], "控制台地址配置不正确")
-          assertTrue(envMap[envVar]!!.startsWith(":"), "控制台地址应以冒号开头")
+          assertEquals(":9001", envMap[envVar], "Console address configuration is incorrect")
+          assertTrue(envMap[envVar]!!.startsWith(":"), "Console address should start with ':'")
         }
       }
     }
@@ -118,7 +120,7 @@ class IOssMinioContainerTest : IOssMinioContainer {
 
       IOssMinioContainer.properties(mockRegistry)
 
-      // 验证所有必需的属性都已配置
+      // Verify that all required properties are configured
       minio {
         val expectedProperties =
           mapOf(
@@ -130,8 +132,8 @@ class IOssMinioContainerTest : IOssMinioContainer {
           )
 
         expectedProperties.forEach { (prop, expectedValue) ->
-          assertTrue(registry.containsKey(prop), "属性 $prop 必须存在")
-          assertEquals(expectedValue, registry[prop], "属性 $prop 的值配置不正确")
+          assertTrue(registry.containsKey(prop), "Property $prop must exist")
+          assertEquals(expectedValue, registry[prop], "Property $prop value is incorrect")
         }
       }
 
@@ -148,29 +150,29 @@ class IOssMinioContainerTest : IOssMinioContainer {
 
         expectedProperties.forEach { (prop, expectedValue) ->
           val actualValue = environment.getProperty(prop)
-          assertNotNull(actualValue, "环境变量中缺少属性: $prop")
-          assertEquals(expectedValue, actualValue, "环境变量 $prop 的值配置不正确")
+          assertNotNull(actualValue, "Missing property in environment: $prop")
+          assertEquals(expectedValue, actualValue, "Environment property $prop value is incorrect")
         }
 
-        // 特殊验证端口属性（因为端口是动态分配的）
+        // Special verification for port property (port is dynamically assigned)
         val portValue = environment.getProperty("compose.oss.port")
-        assertNotNull(portValue, "环境变量中缺少端口配置")
+        assertNotNull(portValue, "Missing port configuration in environment")
 
         val portInt = portValue.toInt()
-        assertTrue(portInt in 1024..65535, "端口值应在有效范围内 (actual: $portInt)")
+        assertTrue(portInt in 1024..65535, "Port value should be within valid range (actual: $portInt)")
         val socket = Socket()
         try {
           socket.connect(InetSocketAddress("localhost", portInt), 5000)
-          assertTrue(socket.isConnected, "端口应详可访问")
+          assertTrue(socket.isConnected, "Port should be reachable")
         } finally {
           socket.close()
         }
 
-        // 验证 expose-base-url 的格式
+        // Verify format of expose-base-url
         val exposeUrl = environment.getProperty("compose.oss.expose-base-url")
-        assertNotNull(exposeUrl, "expose-base-url 属性不应为 null")
-        assertTrue(exposeUrl.startsWith("http://"), "expose URL 应以 http:// 开头")
-        assertTrue(exposeUrl.contains(":$portInt"), "expose URL 应包含正确的端口号")
+        assertNotNull(exposeUrl, "expose-base-url property should not be null")
+        assertTrue(exposeUrl.startsWith("http://"), "Expose URL should start with http://")
+        assertTrue(exposeUrl.contains(":$portInt"), "Expose URL should contain the correct port number")
       }
     }
   }

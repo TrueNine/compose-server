@@ -8,9 +8,10 @@ import org.springframework.context.ApplicationListener
 import org.springframework.core.env.MapPropertySource
 
 /**
- * # 测试环境应用监听器
+ * Test environment application listener.
  *
- * 在应用环境准备阶段配置测试相关属性
+ * Configures test-related properties during the application environment
+ * preparation phase.
  */
 class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
@@ -19,7 +20,7 @@ class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnviro
   override fun onApplicationEvent(event: ApplicationEnvironmentPreparedEvent) {
     val environment = event.environment
 
-    // 检查是否启用测试工具包
+    // Check whether the test toolkit is enabled
     val enabled = environment.getProperty("compose.testtoolkit.enabled", Boolean::class.java, true)
     if (!enabled) {
       log.debug("test toolkit disabled")
@@ -30,12 +31,12 @@ class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnviro
 
     val testProperties = mutableMapOf<String, Any>()
 
-    // 获取配置属性
+    // Read configuration properties
     val disableConditionEvaluationReport = environment.getProperty("compose.testtoolkit.disable-condition-evaluation-report", Boolean::class.java, true)
     val enableVirtualThreads = environment.getProperty("compose.testtoolkit.enable-virtual-threads", Boolean::class.java, true)
     val ansiOutputMode = environment.getProperty("compose.testtoolkit.ansi-output-mode", String::class.java, "always")
 
-    // 关闭条件评估报告和 banner
+    // Disable condition evaluation report and banner
     if (disableConditionEvaluationReport) {
       testProperties["debug"] = false
       testProperties["spring.test.print-condition-evaluation-report"] = false
@@ -44,17 +45,17 @@ class TestEnvironmentApplicationListener : ApplicationListener<ApplicationEnviro
       log.trace("disabled condition evaluation report and banner")
     }
 
-    // 启用虚拟线程
+    // Enable virtual threads
     if (enableVirtualThreads) {
       testProperties["spring.threads.virtual.enabled"] = true
       log.trace("enabled virtual threads")
     }
 
-    // 配置颜色输出
+    // Configure ANSI color output
     testProperties["spring.output.ansi.enabled"] = ansiOutputMode
     log.trace("set ansi output: {}", ansiOutputMode)
 
-    // 将属性添加到环境中
+    // Add properties into the environment
     if (testProperties.isNotEmpty()) {
       val propertySource = MapPropertySource("testToolkitEarlyProperties", testProperties)
       environment.propertySources.addFirst(propertySource)

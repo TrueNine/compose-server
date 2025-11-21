@@ -37,50 +37,50 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** 文件操作面板 提供文件选择和批量操作界面，集成错误查看和代码清理功能 */
+/** File operation panel that provides file selection and batch operations, integrating error view and code clean-up features. */
 class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(true, true), Disposable {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-  // 服务依赖
+  // Service dependencies
   private val errorService: ErrorService by lazy { project.service<ErrorService>() }
   private val cleanService: CleanService by lazy { project.service<CleanService>() }
   private val fileManager: FileManager by lazy { project.service<FileManager>() }
 
-  // UI 组件
+  // UI components
   private val pathField = JBTextField()
-  private val browseButton = JButton("浏览")
-  private val viewErrorsButton = JButton("查看错误")
-  private val cleanCodeButton = JButton("清理代码")
+  private val browseButton = JButton("Browse")
+  private val viewErrorsButton = JButton("View Errors")
+  private val cleanCodeButton = JButton("Clean Code")
 
-  // 清理选项
-  private val formatCodeCheckBox = JCheckBox("代码格式化", true)
-  private val optimizeImportsCheckBox = JCheckBox("优化导入", true)
-  private val runInspectionsCheckBox = JCheckBox("运行检查修复", true)
-  private val rearrangeCodeCheckBox = JCheckBox("重新排列代码", false)
+  // Clean-up options
+  private val formatCodeCheckBox = JCheckBox("Format code", true)
+  private val optimizeImportsCheckBox = JCheckBox("Optimize imports", true)
+  private val runInspectionsCheckBox = JCheckBox("Run inspections and quick fixes", true)
+  private val rearrangeCodeCheckBox = JCheckBox("Rearrange code", false)
 
-  // 结果显示
+  // Result display
   private val resultArea = JBTextArea()
 
   init {
     setupUI()
     setupEventHandlers()
-    Logger.info("文件操作面板已初始化")
+    Logger.info("FileOperationPanel initialized")
   }
 
   private fun setupUI() {
     layout = BorderLayout()
 
-    // 创建主面板
+    // Create main panel
     val mainPanel = JPanel(GridBagLayout())
     mainPanel.border = JBUI.Borders.empty(10)
 
     val gbc = GridBagConstraints()
 
-    // 文件选择区域
+    // File selection area
     addFileSelectionSection(mainPanel, gbc)
 
-    // 分隔线
+    // Separator
     gbc.gridy++
     gbc.gridx = 0
     gbc.gridwidth = 3
@@ -88,10 +88,10 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     gbc.insets = Insets(10, 0, 10, 0)
     mainPanel.add(JSeparator(), gbc)
 
-    // 操作选项区域
+    // Operation options area
     addOperationOptionsSection(mainPanel, gbc)
 
-    // 分隔线
+    // Separator
     gbc.gridy++
     gbc.gridx = 0
     gbc.gridwidth = 3
@@ -99,10 +99,10 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     gbc.insets = Insets(10, 0, 10, 0)
     mainPanel.add(JSeparator(), gbc)
 
-    // 操作按钮区域
+    // Action buttons area
     addActionButtonsSection(mainPanel, gbc)
 
-    // 结果显示区域
+    // Result display area
     addResultDisplaySection(mainPanel, gbc)
 
     add(JBScrollPane(mainPanel), BorderLayout.CENTER)
@@ -115,7 +115,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     gbc.fill = GridBagConstraints.NONE
     gbc.anchor = GridBagConstraints.WEST
     gbc.insets = Insets(5, 0, 5, 10)
-    parent.add(JLabel("选择路径:"), gbc)
+    parent.add(JLabel("Select path:"), gbc)
 
     gbc.gridx = 1
     gbc.gridwidth = 1
@@ -124,7 +124,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     gbc.insets = Insets(5, 0, 5, 10)
     pathField.apply {
       preferredSize = Dimension(0, 28)
-      toolTipText = "输入文件或文件夹路径，或点击浏览按钮选择"
+      toolTipText = "Enter a file or directory path, or click Browse to select"
       text = project.basePath ?: ""
     }
     parent.add(pathField, gbc)
@@ -136,7 +136,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     gbc.insets = Insets(5, 0, 5, 0)
     browseButton.apply {
       preferredSize = Dimension(80, 28)
-      toolTipText = "浏览选择文件或文件夹"
+      toolTipText = "Browse to select a file or directory"
     }
     parent.add(browseButton, gbc)
   }
@@ -148,7 +148,7 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     gbc.fill = GridBagConstraints.NONE
     gbc.anchor = GridBagConstraints.WEST
     gbc.insets = Insets(5, 0, 5, 0)
-    parent.add(JLabel("代码清理选项:"), gbc)
+    parent.add(JLabel("Code clean-up options:"), gbc)
 
     val optionsPanel = JPanel()
     optionsPanel.layout = BoxLayout(optionsPanel, BoxLayout.Y_AXIS)
@@ -172,12 +172,12 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
 
     viewErrorsButton.apply {
       preferredSize = Dimension(120, 32)
-      toolTipText = "扫描并显示选定路径下的所有错误和警告"
+      toolTipText = "Scan and display all errors and warnings under the selected path"
     }
 
     cleanCodeButton.apply {
       preferredSize = Dimension(120, 32)
-      toolTipText = "对选定路径下的代码文件执行清理操作"
+      toolTipText = "Run code clean-up on files under the selected path"
     }
 
     buttonPanel.add(viewErrorsButton)
@@ -200,14 +200,14 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     gbc.fill = GridBagConstraints.NONE
     gbc.anchor = GridBagConstraints.WEST
     gbc.insets = Insets(5, 0, 5, 0)
-    parent.add(JLabel("操作结果:"), gbc)
+    parent.add(JLabel("Operation result:"), gbc)
 
     resultArea.apply {
       isEditable = false
       lineWrap = true
       wrapStyleWord = true
       rows = 15
-      text = "请选择文件或文件夹，然后执行相应操作..."
+      text = "Select a file or directory, then run an operation..."
     }
 
     gbc.gridy++
@@ -221,20 +221,20 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
   }
 
   private fun setupEventHandlers() {
-    // 浏览按钮点击事件
+    // Browse button click
     browseButton.addActionListener { browseForPath() }
 
-    // 查看错误按钮点击事件
+    // View errors button click
     viewErrorsButton.addActionListener { viewErrors() }
 
-    // 清理代码按钮点击事件
+    // Clean code button click
     cleanCodeButton.addActionListener { cleanCode() }
   }
 
   private fun browseForPath() {
     val descriptor = FileChooserDescriptor(true, true, false, false, false, false)
-    descriptor.title = "选择文件或文件夹"
-    descriptor.description = "选择要操作的文件或文件夹"
+    descriptor.title = "Select file or directory"
+    descriptor.description = "Select the target file or directory to operate on"
 
     val currentPath = pathField.text.trim()
     val initialFile =
@@ -247,26 +247,26 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
     val selectedFiles = FileChooser.chooseFiles(descriptor, project, initialFile)
     if (selectedFiles.isNotEmpty()) {
       pathField.text = selectedFiles[0].path
-      Logger.info("选择了路径: ${selectedFiles[0].path}")
+      Logger.info("Selected path: ${selectedFiles[0].path}")
     }
   }
 
   private fun viewErrors() {
     val path = pathField.text.trim()
     if (path.isEmpty()) {
-      showError("请先选择文件或文件夹路径")
+      showError("Please select a file or directory path first")
       return
     }
 
     val virtualFile = fileManager.resolvePathToVirtualFile(project, path)
     if (virtualFile == null) {
-      showError("路径不存在或无法访问: $path")
+      showError("Path does not exist or is not accessible: $path")
       return
     }
 
-    // 禁用按钮并显示进度
+    // Disable buttons and show progress
     setButtonsEnabled(false)
-    resultArea.text = "正在扫描错误信息，请稍候..."
+    resultArea.text = "Scanning errors, please wait..."
 
     scope.launch {
       try {
@@ -278,10 +278,10 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
         }
       } catch (e: Exception) {
         ApplicationManager.getApplication().invokeLater {
-          showError("扫描错误失败: ${e.message}")
+          showError("Failed to scan errors: ${e.message}")
           setButtonsEnabled(true)
         }
-        Logger.error("错误扫描失败", e)
+        Logger.error("Error scan failed", e)
       }
     }
   }
@@ -289,13 +289,13 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
   private fun cleanCode() {
     val path = pathField.text.trim()
     if (path.isEmpty()) {
-      showError("请先选择文件或文件夹路径")
+      showError("Please select a file or directory path first")
       return
     }
 
     val virtualFile = fileManager.resolvePathToVirtualFile(project, path)
     if (virtualFile == null) {
-      showError("路径不存在或无法访问: $path")
+      showError("Path does not exist or is not accessible: $path")
       return
     }
 
@@ -307,9 +307,9 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
         rearrangeCode = rearrangeCodeCheckBox.isSelected,
       )
 
-    // 禁用按钮并显示进度
+    // Disable buttons and show progress
     setButtonsEnabled(false)
-    resultArea.text = "正在执行代码清理操作，请稍候..."
+    resultArea.text = "Running code clean-up, please wait..."
 
     scope.launch {
       try {
@@ -321,40 +321,40 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
         }
       } catch (e: Exception) {
         ApplicationManager.getApplication().invokeLater {
-          showError("代码清理失败: ${e.message}")
+          showError("Code clean-up failed: ${e.message}")
           setButtonsEnabled(true)
         }
-        Logger.error("代码清理失败", e)
+        Logger.error("Code clean-up failed", e)
       }
     }
   }
 
   private fun displayErrorResults(fileErrorInfos: List<io.github.truenine.composeserver.ide.ideamcp.tools.FileErrorInfo>, virtualFile: VirtualFile) {
     val result = buildString {
-      appendLine("=== 错误扫描结果 ===")
-      appendLine("扫描路径: ${virtualFile.path}")
-      appendLine("扫描时间: ${java.time.LocalDateTime.now()}")
+      appendLine("=== Error scan result ===")
+      appendLine("Scanned path: ${virtualFile.path}")
+      appendLine("Scan time: ${java.time.LocalDateTime.now()}")
       appendLine()
 
       if (fileErrorInfos.isEmpty()) {
-        appendLine("✅ 未发现任何错误或警告")
+        appendLine("✅ No errors or warnings found")
       } else {
         val totalErrors = fileErrorInfos.sumOf { it.errors.size }
         val totalWarnings = fileErrorInfos.sumOf { it.warnings.size }
         val totalWeakWarnings = fileErrorInfos.sumOf { it.weakWarnings.size }
 
-        appendLine("📊 统计信息:")
-        appendLine("  - 文件数量: ${fileErrorInfos.size}")
-        appendLine("  - 错误总数: $totalErrors")
-        appendLine("  - 警告总数: $totalWarnings")
-        appendLine("  - 弱警告总数: $totalWeakWarnings")
+        appendLine("📊 Statistics:")
+        appendLine("  - File count: ${fileErrorInfos.size}")
+        appendLine("  - Total errors: $totalErrors")
+        appendLine("  - Total warnings: $totalWarnings")
+        appendLine("  - Total weak warnings: $totalWeakWarnings")
         appendLine()
 
         fileErrorInfos.forEach { fileInfo ->
           appendLine("📁 ${fileInfo.relativePath}")
           appendLine("   ${fileInfo.summary}")
 
-          // 显示错误详情（限制数量避免过长）
+          // Show error details (limited to avoid overly long output)
           val allIssues = fileInfo.errors + fileInfo.warnings + fileInfo.weakWarnings
           allIssues.take(5).forEach { error ->
             val severityIcon =
@@ -364,11 +364,11 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
                 io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity.WEAK_WARNING -> "💡"
                 else -> "ℹ️"
               }
-            appendLine("   $severityIcon 第${error.line}行: ${error.message}")
+            appendLine("   $severityIcon line ${error.line}: ${error.message}")
           }
 
           if (allIssues.size > 5) {
-            appendLine("   ... 还有 ${allIssues.size - 5} 个问题")
+            appendLine("   ... ${allIssues.size - 5} more issues")
           }
           appendLine()
         }
@@ -381,33 +381,33 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
 
   private fun displayCleanResults(cleanResult: io.github.truenine.composeserver.ide.ideamcp.services.CleanResult, virtualFile: VirtualFile) {
     val result = buildString {
-      appendLine("=== 代码清理结果 ===")
-      appendLine("处理路径: ${virtualFile.path}")
-      appendLine("完成时间: ${java.time.LocalDateTime.now()}")
+      appendLine("=== Code clean-up result ===")
+      appendLine("Processed path: ${virtualFile.path}")
+      appendLine("Completed at: ${java.time.LocalDateTime.now()}")
       appendLine()
 
-      appendLine("📊 统计信息:")
-      appendLine("  - 处理文件: ${cleanResult.processedFiles} 个")
-      appendLine("  - 修改文件: ${cleanResult.modifiedFiles} 个")
-      appendLine("  - 执行时间: ${cleanResult.executionTime} ms")
+      appendLine("📊 Statistics:")
+      appendLine("  - Processed files: ${cleanResult.processedFiles}")
+      appendLine("  - Modified files: ${cleanResult.modifiedFiles}")
+      appendLine("  - Execution time: ${cleanResult.executionTime} ms")
       appendLine()
 
       if (cleanResult.operations.isNotEmpty()) {
-        appendLine("🔧 执行的操作:")
-        cleanResult.operations.forEach { operation -> appendLine("  - ${operation.description}: ${operation.filesAffected} 个文件") }
+        appendLine("🔧 Operations performed:")
+        cleanResult.operations.forEach { operation -> appendLine("  - ${operation.description}: ${operation.filesAffected} files") }
         appendLine()
       }
 
       if (cleanResult.errors.isNotEmpty()) {
-        appendLine("❌ 错误信息:")
+        appendLine("❌ Errors:")
         cleanResult.errors.take(10).forEach { error -> appendLine("  - $error") }
         if (cleanResult.errors.size > 10) {
-          appendLine("  ... 还有 ${cleanResult.errors.size - 10} 个错误")
+          appendLine("  ... ${cleanResult.errors.size - 10} more errors")
         }
         appendLine()
       }
 
-      appendLine("📝 操作摘要:")
+      appendLine("📝 Summary:")
       appendLine(cleanResult.summary)
     }
 
@@ -422,13 +422,13 @@ class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(t
   }
 
   private fun showError(message: String) {
-    resultArea.text = "❌ 错误: $message"
-    JOptionPane.showMessageDialog(this, message, "操作失败", JOptionPane.ERROR_MESSAGE)
-    Logger.warn("文件操作面板错误: $message")
+    resultArea.text = "❌ Error: $message"
+    JOptionPane.showMessageDialog(this, message, "Operation failed", JOptionPane.ERROR_MESSAGE)
+    Logger.warn("FileOperationPanel error: $message")
   }
 
   override fun dispose() {
-    // 取消所有协程
+    // Cancel all coroutines
     scope.cancel()
     Logger.debug("FileOperationPanel disposed", "FileOperationPanel")
   }

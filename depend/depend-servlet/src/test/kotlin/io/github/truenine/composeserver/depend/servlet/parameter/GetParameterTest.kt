@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.servlet.parameter
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.servlet.TestApplication
 import jakarta.annotation.Resource
 import kotlin.test.BeforeTest
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import tools.jackson.databind.ObjectMapper
 
 /** # Verify how GET parameters are passed to Spring Boot */
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

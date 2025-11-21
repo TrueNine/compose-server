@@ -3,38 +3,38 @@ package io.github.truenine.composeserver.testtoolkit.properties
 import io.github.truenine.composeserver.testtoolkit.SpringBootConfigurationPropertiesPrefixes
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-/** # 测试工具包配置属性 */
+/** Test toolkit configuration properties. */
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.TESTTOOLKIT)
 data class TestConfigurationProperties(
-  /** 是否启用测试配置 */
+  /** Whether test configuration is enabled. */
   var enabled: Boolean = true,
 
-  /** 是否关闭条件评估报告 */
+  /** Whether to disable the condition evaluation report. */
   var disableConditionEvaluationReport: Boolean = true,
 
-  /** 是否启用虚拟线程 */
+  /** Whether to enable virtual threads. */
   var enableVirtualThreads: Boolean = true,
 
-  /** ANSI 颜色输出模式 */
+  /** ANSI color output mode. */
   var ansiOutputMode: AnsiOutputMode = AnsiOutputMode.ALWAYS,
 
-  /** 额外的测试属性 */
+  /** Additional test properties. */
   var additionalProperties: Map<String, String> = emptyMap(),
 )
 
 /**
- * # ANSI 颜色输出模式
+ * ANSI color output mode.
  *
- * 定义控制台颜色输出的不同模式
+ * Defines different modes for console color output.
  */
 enum class AnsiOutputMode(val value: String) {
-  /** 从不使用颜色输出 */
+  /** Never use colored output. */
   NEVER("never"),
 
-  /** 自动检测是否支持颜色输出 */
+  /** Automatically detect whether color output is supported. */
   DETECT("detect"),
 
-  /** 总是使用颜色输出 */
+  /** Always use colored output. */
   ALWAYS("always");
 
   override fun toString(): String = value

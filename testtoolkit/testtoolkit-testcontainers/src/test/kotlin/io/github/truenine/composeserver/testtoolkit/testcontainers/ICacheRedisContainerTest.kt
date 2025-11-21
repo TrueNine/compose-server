@@ -8,35 +8,33 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 
 /**
- * # Redis 测试容器集成测试
+ * Redis test container integration tests.
  *
- * 该测试类验证 Redis 测试容器的配置和运行状态，确保：
- * - 容器正确启动和运行
- * - 端口映射配置正确
- * - Redis 连接配置正确
- * - Spring 属性注入正确
+ * Verifies the configuration and runtime behavior of the Redis test
+ * container, ensuring that:
+ * - Container starts and runs correctly.
+ * - Port mappings are configured correctly.
+ * - Redis connection configuration is correct.
+ * - Spring properties are injected correctly.
  *
- * ## 测试覆盖范围
- * - 容器基本功能测试
- * - 端口映射验证
- * - Redis 连接验证
- * - Spring 属性注入验证
+ * Coverage:
+ * - Basic container behavior tests.
+ * - Port mapping verification.
+ * - Redis connection verification.
+ * - Spring property injection verification.
  *
- * ## 使用方式
+ * Usage:
  *
  * ```kotlin
  * @SpringBootTest
  * class YourTestClass : ICacheRedisContainer {
- *   // 你的测试代码
+ *   // your test code
  * }
  * ```
  *
@@ -46,7 +44,12 @@ import org.springframework.data.redis.core.RedisTemplate
  */
 @SpringBootTest
 @EnableAutoConfiguration(
-  exclude = [DataSourceAutoConfiguration::class, DataSourceTransactionManagerAutoConfiguration::class, HibernateJpaAutoConfiguration::class]
+  excludeName =
+    [
+      "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
+      "org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration",
+      "org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration",
+    ]
 )
 class ICacheRedisContainerTest : ICacheRedisContainer {
   lateinit var environment: Environment

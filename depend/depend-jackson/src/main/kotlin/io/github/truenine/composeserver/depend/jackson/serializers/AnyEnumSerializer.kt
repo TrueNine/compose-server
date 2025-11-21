@@ -1,20 +1,20 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.SerializerProvider
 import io.github.truenine.composeserver.IAnyEnum
 import io.github.truenine.composeserver.IIntEnum
 import io.github.truenine.composeserver.IStringEnum
+import tools.jackson.core.JsonGenerator
+import tools.jackson.databind.SerializationContext
+import tools.jackson.databind.ValueSerializer
 
-@Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
-class AnyEnumSerializer : JsonSerializer<IAnyEnum>() {
+@Deprecated(message = "API surface is too heavy", level = DeprecationLevel.ERROR)
+class AnyEnumSerializer : ValueSerializer<IAnyEnum>() {
 
   override fun handledType(): Class<IAnyEnum> {
     return IAnyEnum::class.java
   }
 
-  override fun serialize(value: IAnyEnum?, gen: JsonGenerator?, serializers: SerializerProvider?) {
+  override fun serialize(value: IAnyEnum?, gen: JsonGenerator?, ctxt: SerializationContext?) {
     when (value) {
       is IStringEnum -> gen?.writeString(value.value)
       is IIntEnum -> gen?.writeNumber(value.value)

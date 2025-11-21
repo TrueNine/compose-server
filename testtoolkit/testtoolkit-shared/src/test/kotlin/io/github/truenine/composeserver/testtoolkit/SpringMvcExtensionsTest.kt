@@ -6,9 +6,9 @@ import kotlin.test.assertEquals
 import org.springframework.mock.web.MockMultipartFile
 
 /**
- * # Spring MVC 函数测试
+ * Spring MVC extension function tests.
  *
- * 测试 SpringMvcExtensions.kt 中的扩展函数
+ * Verifies the extension functions defined in SpringMvcExtensions.kt.
  *
  * @author TrueNine
  * @since 2025-07-12

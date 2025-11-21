@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.paho.autoconfig
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.paho.paho.MqttPahoClientWrapper
 import io.github.truenine.composeserver.depend.paho.properties.SingleMqttProperties
 import io.github.truenine.composeserver.slf4j
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory
+import tools.jackson.databind.ObjectMapper
 
 private val log = slf4j(SingleMqttConnectionAutoConfiguration::class)
 

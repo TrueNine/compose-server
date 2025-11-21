@@ -2,13 +2,29 @@ package io.github.truenine.composeserver.oss.volcengine
 
 import com.volcengine.tos.TOSV2
 import com.volcengine.tos.comm.common.ACLType
+import com.volcengine.tos.comm.common.StatusType
+import com.volcengine.tos.comm.common.VersioningStatusType
+import com.volcengine.tos.model.bucket.CORSRule as TosCorsRule
 import com.volcengine.tos.model.bucket.CreateBucketV2Input
+import com.volcengine.tos.model.bucket.DeleteBucketCORSInput
 import com.volcengine.tos.model.bucket.DeleteBucketInput
+import com.volcengine.tos.model.bucket.DeleteBucketLifecycleInput
+import com.volcengine.tos.model.bucket.DeleteBucketTaggingInput
+import com.volcengine.tos.model.bucket.Expiration as TosExpiration
+import com.volcengine.tos.model.bucket.GetBucketCORSInput
+import com.volcengine.tos.model.bucket.GetBucketLifecycleInput
 import com.volcengine.tos.model.bucket.GetBucketPolicyInput
+import com.volcengine.tos.model.bucket.GetBucketTaggingInput
 import com.volcengine.tos.model.bucket.HeadBucketV2Input
+import com.volcengine.tos.model.bucket.LifecycleRule as TosLifecycleRule
 import com.volcengine.tos.model.bucket.ListBucketsV2Input
 import com.volcengine.tos.model.bucket.PutBucketACLInput
+import com.volcengine.tos.model.bucket.PutBucketCORSInput
+import com.volcengine.tos.model.bucket.PutBucketLifecycleInput
 import com.volcengine.tos.model.bucket.PutBucketPolicyInput
+import com.volcengine.tos.model.bucket.PutBucketTaggingInput
+import com.volcengine.tos.model.bucket.PutBucketVersioningInput
+import com.volcengine.tos.model.bucket.Tag as TosTag
 import com.volcengine.tos.model.`object`.AbortMultipartUploadInput
 import com.volcengine.tos.model.`object`.CompleteMultipartUploadV2Input
 import com.volcengine.tos.model.`object`.CopyObjectV2Input
@@ -16,12 +32,14 @@ import com.volcengine.tos.model.`object`.CreateMultipartUploadInput
 import com.volcengine.tos.model.`object`.DeleteObjectInput
 import com.volcengine.tos.model.`object`.GetObjectV2Input
 import com.volcengine.tos.model.`object`.HeadObjectV2Input
+import com.volcengine.tos.model.`object`.ListObjectVersionsV2Input
 import com.volcengine.tos.model.`object`.ListObjectsType2Input
 import com.volcengine.tos.model.`object`.ListObjectsV2Input
 import com.volcengine.tos.model.`object`.ListPartsInput
 import com.volcengine.tos.model.`object`.PreSignedURLInput
 import com.volcengine.tos.model.`object`.PutObjectBasicInput
 import com.volcengine.tos.model.`object`.PutObjectInput
+import com.volcengine.tos.model.`object`.TagSet
 import com.volcengine.tos.model.`object`.UploadPartV2Input
 import com.volcengine.tos.model.`object`.UploadedPartV2
 import io.github.truenine.composeserver.enums.HttpMethod
@@ -41,7 +59,9 @@ import io.github.truenine.composeserver.oss.DeleteResult
 import io.github.truenine.composeserver.oss.IObjectStorageService
 import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
 import io.github.truenine.composeserver.oss.InvalidRequestException
+import io.github.truenine.composeserver.oss.LifecycleExpiration
 import io.github.truenine.composeserver.oss.LifecycleRule
+import io.github.truenine.composeserver.oss.LifecycleRuleStatus
 import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
 import io.github.truenine.composeserver.oss.ListObjectsRequest
 import io.github.truenine.composeserver.oss.MultipartUpload
@@ -51,6 +71,7 @@ import io.github.truenine.composeserver.oss.ObjectInfo
 import io.github.truenine.composeserver.oss.ObjectListing
 import io.github.truenine.composeserver.oss.ObjectNotFoundException
 import io.github.truenine.composeserver.oss.ObjectStorageException
+import io.github.truenine.composeserver.oss.ObjectVersionInfo
 import io.github.truenine.composeserver.oss.ObjectVersionListing
 import io.github.truenine.composeserver.oss.PartInfo
 import io.github.truenine.composeserver.oss.PutObjectRequest
@@ -117,6 +138,7 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           is BucketNotFoundException -> Result.success(false)
           is AuthorizationException,
           is AuthenticationException -> Result.failure(mapped)
+
           else -> Result.success(false)
         }
       }
@@ -516,27 +538,176 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
 
   override suspend fun deleteObjectTags(bucketName: String, objectName: String): Result<Unit> = unsupported("object tagging")
 
-  override suspend fun setBucketTags(bucketName: String, tags: List<Tag>): Result<Unit> = unsupported("bucket tagging")
+  override suspend fun setBucketTags(bucketName: String, tags: List<Tag>): Result<Unit> =
+    execute("Failed to set bucket tags for $bucketName") {
+      val tosTags = tags.map { TosTag().setKey(it.key).setValue(it.value) }
+      val input = PutBucketTaggingInput().setBucket(bucketName).setTagSet(TagSet().setTags(tosTags))
+      tosClient.putBucketTagging(input)
+    }
 
-  override suspend fun getBucketTags(bucketName: String): Result<List<Tag>> = unsupported("bucket tagging")
+  override suspend fun getBucketTags(bucketName: String): Result<List<Tag>> =
+    withContext(Dispatchers.IO) {
+      try {
+        val input = GetBucketTaggingInput().setBucket(bucketName)
+        val output = tosClient.getBucketTagging(input)
+        Result.success(output.tagSet?.tags?.map { Tag(it.key, it.value) } ?: emptyList())
+      } catch (e: com.volcengine.tos.TosException) {
+        if (e.message?.contains("TagSet does not exist") == true) {
+          Result.success(emptyList())
+        } else {
+          log.error("Failed to get bucket tags for $bucketName", e)
+          Result.failure(mapTosException(e))
+        }
+      } catch (e: Exception) {
+        log.error("Failed to get bucket tags for $bucketName", e)
+        Result.failure(mapTosException(e))
+      }
+    }
 
-  override suspend fun deleteBucketTags(bucketName: String): Result<Unit> = unsupported("bucket tagging")
+  override suspend fun deleteBucketTags(bucketName: String): Result<Unit> =
+    execute("Failed to delete bucket tags for $bucketName") {
+      val input = DeleteBucketTaggingInput().setBucket(bucketName)
+      tosClient.deleteBucketTagging(input)
+    }
 
-  override suspend fun setBucketVersioning(bucketName: String, enabled: Boolean): Result<Unit> = unsupported("bucket versioning")
+  override suspend fun setBucketVersioning(bucketName: String, enabled: Boolean): Result<Unit> =
+    execute("Failed to set bucket versioning for $bucketName") {
+      val status =
+        if (enabled) {
+          VersioningStatusType.VERSIONING_STATUS_ENABLED
+        } else {
+          VersioningStatusType.VERSIONING_STATUS_SUSPENDED
+        }
+      val input = PutBucketVersioningInput().setBucket(bucketName).setStatus(status)
+      tosClient.putBucketVersioning(input)
+    }
 
-  override suspend fun listObjectVersions(request: ListObjectVersionsRequest): Result<ObjectVersionListing> = unsupported("object version listing")
+  override suspend fun listObjectVersions(request: ListObjectVersionsRequest): Result<ObjectVersionListing> =
+    execute("Failed to list object versions in ${request.bucketName}") {
+      val input = ListObjectVersionsV2Input().setBucket(request.bucketName).setMaxKeys(request.maxKeys)
+      request.prefix?.let { input.setPrefix(it) }
+      request.delimiter?.let { input.setDelimiter(it) }
+      request.keyMarker?.let { input.setKeyMarker(it) }
+      request.versionIdMarker?.let { input.setVersionIDMarker(it) }
 
-  override suspend fun setBucketLifecycle(bucketName: String, rules: List<LifecycleRule>): Result<Unit> = unsupported("bucket lifecycle")
+      val output = tosClient.listObjectVersions(input)
 
-  override suspend fun getBucketLifecycle(bucketName: String): Result<List<LifecycleRule>> = unsupported("bucket lifecycle")
+      val versions =
+        output.versions?.map { version ->
+          ObjectVersionInfo(
+            bucketName = request.bucketName,
+            objectName = version.key,
+            versionId = version.versionID,
+            isLatest = version.isLatest,
+            lastModified = convertDateToInstant(version.lastModified),
+            etag = version.etag,
+            size = version.size,
+            storageClass = StorageClass.STANDARD,
+            isDeleteMarker = false,
+          )
+        } ?: emptyList()
 
-  override suspend fun deleteBucketLifecycle(bucketName: String): Result<Unit> = unsupported("bucket lifecycle")
+      val deleteMarkers =
+        output.deleteMarkers?.map { marker ->
+          ObjectVersionInfo(
+            bucketName = request.bucketName,
+            objectName = marker.key,
+            versionId = marker.versionID,
+            isLatest = marker.isLatest,
+            lastModified = convertDateToInstant(marker.lastModified),
+            etag = "",
+            size = 0,
+            storageClass = StorageClass.STANDARD,
+            isDeleteMarker = true,
+          )
+        } ?: emptyList()
 
-  override suspend fun setBucketCors(bucketName: String, rules: List<io.github.truenine.composeserver.oss.CorsRule>): Result<Unit> = unsupported("bucket CORS")
+      val allVersions = (versions + deleteMarkers).sortedByDescending { it.lastModified }
 
-  override suspend fun getBucketCors(bucketName: String): Result<List<io.github.truenine.composeserver.oss.CorsRule>> = unsupported("bucket CORS")
+      ObjectVersionListing(
+        bucketName = request.bucketName,
+        prefix = request.prefix,
+        keyMarker = request.keyMarker,
+        versionIdMarker = request.versionIdMarker,
+        nextKeyMarker = output.nextKeyMarker,
+        nextVersionIdMarker = output.nextVersionIDMarker,
+        versions = allVersions,
+        commonPrefixes = output.commonPrefixes?.map { it.prefix } ?: emptyList(),
+        isTruncated = output.isTruncated,
+        maxKeys = request.maxKeys,
+        delimiter = request.delimiter,
+      )
+    }
 
-  override suspend fun deleteBucketCors(bucketName: String): Result<Unit> = unsupported("bucket CORS")
+  override suspend fun setBucketLifecycle(bucketName: String, rules: List<LifecycleRule>): Result<Unit> =
+    execute("Failed to set bucket lifecycle for $bucketName") {
+      val tosRules =
+        rules.map { rule ->
+          val tosRule =
+            TosLifecycleRule()
+              .setId(rule.id)
+              .setPrefix(rule.prefix)
+              .setStatus(if (rule.status == LifecycleRuleStatus.ENABLED) StatusType.STATUS_ENABLED else StatusType.STATUS_DISABLED)
+
+          rule.expiration?.let {
+            val expiration = TosExpiration().setDays(it.days)
+            tosRule.setExpiration(expiration)
+          }
+          tosRule
+        }
+      val input = PutBucketLifecycleInput().setBucket(bucketName).setRules(tosRules)
+      tosClient.putBucketLifecycle(input)
+    }
+
+  override suspend fun getBucketLifecycle(bucketName: String): Result<List<LifecycleRule>> =
+    execute("Failed to get bucket lifecycle for $bucketName") {
+      val input = GetBucketLifecycleInput().setBucket(bucketName)
+      val output = tosClient.getBucketLifecycle(input)
+      output.rules?.map { rule ->
+        LifecycleRule(
+          id = rule.id,
+          prefix = rule.prefix,
+          status = if (rule.status == StatusType.STATUS_ENABLED) LifecycleRuleStatus.ENABLED else LifecycleRuleStatus.DISABLED,
+          expiration = rule.expiration?.let { LifecycleExpiration(it.days) },
+        )
+      } ?: emptyList()
+    }
+
+  override suspend fun deleteBucketLifecycle(bucketName: String): Result<Unit> =
+    execute("Failed to delete bucket lifecycle for $bucketName") { tosClient.deleteBucketLifecycle(DeleteBucketLifecycleInput().setBucket(bucketName)) }
+
+  override suspend fun setBucketCors(bucketName: String, rules: List<io.github.truenine.composeserver.oss.CorsRule>): Result<Unit> =
+    execute("Failed to set bucket CORS for $bucketName") {
+      val tosRules =
+        rules.map { rule ->
+          val tosRule =
+            TosCorsRule()
+              .setAllowedOrigins(rule.allowedOrigins)
+              .setAllowedMethods(rule.allowedMethods.map { it.name })
+              .setAllowedHeaders(rule.allowedHeaders)
+              .setExposeHeaders(rule.exposeHeaders)
+          rule.maxAgeSeconds?.let { tosRule.setMaxAgeSeconds(it) }
+          tosRule
+        }
+      tosClient.putBucketCORS(PutBucketCORSInput().setBucket(bucketName).setRules(tosRules))
+    }
+
+  override suspend fun getBucketCors(bucketName: String): Result<List<io.github.truenine.composeserver.oss.CorsRule>> =
+    execute("Failed to get bucket CORS for $bucketName") {
+      val output = tosClient.getBucketCORS(GetBucketCORSInput().setBucket(bucketName))
+      output.rules?.map { rule ->
+        io.github.truenine.composeserver.oss.CorsRule(
+          allowedOrigins = rule.allowedOrigins,
+          allowedMethods = rule.allowedMethods.map { HttpMethod.valueOf(it) },
+          allowedHeaders = rule.allowedHeaders ?: emptyList(),
+          exposeHeaders = rule.exposeHeaders ?: emptyList(),
+          maxAgeSeconds = rule.maxAgeSeconds,
+        )
+      } ?: emptyList()
+    }
+
+  override suspend fun deleteBucketCors(bucketName: String): Result<Unit> =
+    execute("Failed to delete bucket CORS for $bucketName") { tosClient.deleteBucketCORS(DeleteBucketCORSInput().setBucket(bucketName)) }
 
   private suspend fun <T> execute(message: String, block: () -> T): Result<T> =
     withContext(Dispatchers.IO) {
@@ -560,13 +731,16 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
           "NoSuchBucket" -> BucketNotFoundException(extractBucketName(message), e)
           "BucketAlreadyExists",
           "BucketAlreadyOwnedByYou" -> BucketAlreadyExistsException(extractBucketName(message), e)
+
           "BucketNotEmpty" -> BucketNotEmptyException(extractBucketName(message), e)
           "NoSuchKey" -> ObjectNotFoundException(extractBucketName(message), extractObjectName(message), e)
           "AccessDenied" -> AuthorizationException("Access denied: $message", e)
           "InvalidAccessKeyId",
           "SignatureDoesNotMatch" -> AuthenticationException("Authentication failed: $message", e)
+
           "InvalidArgument",
           "InvalidRequest" -> InvalidRequestException("Invalid request: $message", e)
+
           "ServiceUnavailable" -> ServiceUnavailableException("Service unavailable: $message", e)
           "InternalError" -> ObjectStorageException("TOS internal error: $message", e)
           "RequestTimeout" -> NetworkException("Request timeout", e)

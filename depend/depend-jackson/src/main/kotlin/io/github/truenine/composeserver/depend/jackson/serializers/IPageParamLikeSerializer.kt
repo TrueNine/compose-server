@@ -1,28 +1,28 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonMappingException
 import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.domain.IPageParam
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.DatabindException
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.ValueDeserializer
 
 /**
  * Deserializer for IPageParam and IPageParamLike interfaces.
  *
  * Supports deserialization from a JSON object to an IPageParam instance. Expected JSON format: {"o": offset, "s": pageSize, "u": unPage}
  */
-class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
+class IPageParamLikeSerializer : ValueDeserializer<IPageParam>() {
 
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): IPageParam? {
     if (p == null) {
-      throw JsonMappingException.from(ctxt, "JsonParser cannot be null for IPageParam deserialization")
+      throw DatabindException.from(ctxt, "JsonParser cannot be null for IPageParam deserialization")
     }
 
     // Check if the current token is the start of an object
-    if (p.currentToken != JsonToken.START_OBJECT) {
-      throw JsonMappingException.from(ctxt, "Expected START_OBJECT token for IPageParam deserialization, got: ${p.currentToken}")
+    if (p.currentToken() != JsonToken.START_OBJECT) {
+      throw DatabindException.from(ctxt, "Expected START_OBJECT token for IPageParam deserialization, got: ${p.currentToken()}")
     }
 
     var offset: Int? = null
@@ -61,19 +61,19 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
   /** Extension function to safely parse an Int value */
   private fun JsonParser.intValueOrNull(): Int? {
     return when {
-      currentToken.isNumeric -> intValue
-      currentToken == JsonToken.VALUE_NULL -> null
-      else -> throw JsonMappingException.from(null as DeserializationContext?, "Expected numeric value for int field, got: $currentToken")
+      currentToken().isNumeric -> intValue
+      currentToken() == JsonToken.VALUE_NULL -> null
+      else -> throw DatabindException.from(null as DeserializationContext?, "Expected numeric value for int field, got: ${currentToken()}")
     }
   }
 
   /** Extension function to safely parse a Boolean value */
   private fun JsonParser.booleanValueOrNull(): Boolean? {
-    return when (currentToken) {
+    return when (currentToken()) {
       JsonToken.VALUE_TRUE -> true
       JsonToken.VALUE_FALSE -> false
       JsonToken.VALUE_NULL -> null
-      else -> throw JsonMappingException.from(null as DeserializationContext?, "Expected boolean value for boolean field, got: $currentToken")
+      else -> throw DatabindException.from(null as DeserializationContext?, "Expected boolean value for boolean field, got: ${currentToken()}")
     }
   }
 }

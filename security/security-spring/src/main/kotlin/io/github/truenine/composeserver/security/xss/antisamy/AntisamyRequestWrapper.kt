@@ -8,20 +8,20 @@ import org.owasp.validator.html.Policy
 import org.slf4j.Logger
 
 /**
- * xss 请求过滤器
+ * XSS request filter.
  *
- * antisamy 包装器
+ * Antisamy wrapper.
  *
- * @param request 被包装请求
+ * @param request Wrapped HttpServletRequest
  * @author TrueNine
  * @since 2023-04-20
  */
-// TODO 加入此类
+// TODO add this wrapper
 class AntisamyRequestWrapper(request: HttpServletRequest?) : HttpServletRequestWrapper(request) {
 
   override fun getParameterValues(name: String?): Array<String?>? {
     val params = super.getParameterValues(name) ?: return null
-    log.trace("antisamy 过滤参数 = {} >-> {}", name, params)
+    log.trace("antisamy filtering params = {} >-> {}", name, params)
     return params.mapNotNull { filterParams(it) }.toTypedArray()
   }
 

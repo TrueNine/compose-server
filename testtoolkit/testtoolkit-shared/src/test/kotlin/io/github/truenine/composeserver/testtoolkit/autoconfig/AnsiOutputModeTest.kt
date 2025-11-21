@@ -5,9 +5,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * # ANSI 输出模式测试
+ * ANSI output mode tests.
  *
- * 测试 AnsiOutputMode 枚举类的所有功能
+ * Verifies all behaviors of the AnsiOutputMode enum.
  *
  * @author TrueNine
  * @since 2025-07-12

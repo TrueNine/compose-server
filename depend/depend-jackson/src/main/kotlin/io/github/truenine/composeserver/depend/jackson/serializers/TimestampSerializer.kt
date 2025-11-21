@@ -1,10 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -12,6 +7,11 @@ import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import tools.jackson.core.JsonGenerator
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.SerializationContext
+import tools.jackson.databind.ValueSerializer
+import tools.jackson.databind.jsontype.TypeSerializer
 
 /**
  * Unified timestamp serializer
@@ -21,9 +21,9 @@ import java.time.ZonedDateTime
  * @author TrueNine
  * @since 2025-01-16
  */
-class TimestampSerializer : JsonSerializer<Any>() {
+class TimestampSerializer : ValueSerializer<Any>() {
 
-  override fun serialize(value: Any?, gen: JsonGenerator?, serializers: SerializerProvider?) {
+  override fun serialize(value: Any?, gen: JsonGenerator?, ctxt: SerializationContext?) {
     if (value == null) {
       gen?.writeNull()
       return
@@ -48,10 +48,11 @@ class TimestampSerializer : JsonSerializer<Any>() {
     gen?.writeNumber(timestamp)
   }
 
-  override fun serializeWithType(value: Any?, gen: JsonGenerator?, serializers: SerializerProvider?, typeSer: TypeSerializer?) {
+  override fun serializeWithType(value: Any?, gen: JsonGenerator?, ctxt: SerializationContext?, typeSer: TypeSerializer?) {
     val shape = JsonToken.VALUE_NUMBER_INT
-    val typeIdDef = typeSer?.writeTypePrefix(gen, typeSer.typeId(value, shape))
-    serialize(value, gen, serializers)
-    typeSer?.writeTypeSuffix(gen, typeIdDef)
+    val typeIdDef = typeSer?.typeId(value, shape)
+    typeSer?.writeTypePrefix(gen, ctxt, typeIdDef)
+    serialize(value, gen, ctxt)
+    typeSer?.writeTypeSuffix(gen, ctxt, typeIdDef)
   }
 }

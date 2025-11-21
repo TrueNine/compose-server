@@ -16,7 +16,7 @@ class MDCFilterAutoConfiguration {
   @Bean
   fun mdcFilter(): FilterRegistrationBean<CustomerMDCFilter> {
     val bean = FilterRegistrationBean<CustomerMDCFilter>()
-    bean.filter = CustomerMDCFilter()
+    bean.setFilter(CustomerMDCFilter())
     bean.urlPatterns = listOf("/*")
     bean.order = Ordered.HIGHEST_PRECEDENCE
     log.debug("Registering MDCFilter and setting it as the first filter bean = {}", bean)

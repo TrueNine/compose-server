@@ -14,7 +14,7 @@ class DefaultDependServletWebMvcAutoConfiguration(private val iPageParamLikeArgu
     @JvmStatic private val log = slf4j<DefaultDependServletWebMvcAutoConfiguration>()
   }
 
-  override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver?>) {
+  override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
     super.addArgumentResolvers(resolvers)
     resolvers.add(iPageParamLikeArgumentResolver)
     log.trace("addArgumentResolvers: {}", resolvers)

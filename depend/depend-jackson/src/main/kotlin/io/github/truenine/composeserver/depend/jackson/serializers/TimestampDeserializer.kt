@@ -1,9 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,6 +9,10 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.ValueDeserializer
 
 /**
  * Unified timestamp deserializer
@@ -23,12 +23,12 @@ import java.time.format.DateTimeParseException
  * @author TrueNine
  * @since 2025-01-16
  */
-abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
+abstract class TimestampDeserializer<T> : ValueDeserializer<T>() {
 
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): T? {
     if (p == null) return null
 
-    return when (p.currentToken) {
+    return when (p.currentToken()) {
       JsonToken.VALUE_NUMBER_INT -> {
         // Handle timestamp (milliseconds)
         val timestamp = p.longValue

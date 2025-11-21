@@ -8,9 +8,9 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 /**
- * # 测试重试工具类测试
+ * TestRetryUtils test suite.
  *
- * 测试 TestRetryUtils 的所有功能
+ * Verifies all behaviors of TestRetryUtils.
  *
  * @author TrueNine
  * @since 2025-07-12

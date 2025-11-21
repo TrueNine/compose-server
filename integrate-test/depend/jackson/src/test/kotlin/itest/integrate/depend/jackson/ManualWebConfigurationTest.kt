@@ -1,6 +1,5 @@
 package itest.integrate.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
 import java.time.Instant
@@ -16,8 +15,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpInputMessage
+import org.springframework.http.HttpOutputMessage
 import org.springframework.http.MediaType
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.http.converter.AbstractHttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import tools.jackson.databind.ObjectMapper
 
 /**
  * 手动配置的 Web 集成测试
@@ -47,7 +49,7 @@ class ManualWebConfigurationTest {
 
   @BeforeEach
   fun setup() {
-    val messageConverter = MappingJackson2HttpMessageConverter(objectMapper)
+    val messageConverter = ToolsJacksonMessageConverter(objectMapper)
     mockMvc = MockMvcBuilders.standaloneSetup(testController).setMessageConverters(messageConverter).build()
   }
 
@@ -133,4 +135,18 @@ class ManualWebConfigurationTest {
   }
 
   @Configuration @Import(TestController::class) class TestConfiguration
+}
+
+private class ToolsJacksonMessageConverter(private val mapper: ObjectMapper) : AbstractHttpMessageConverter<Any>(MediaType.APPLICATION_JSON) {
+  override fun supports(clazz: Class<*>): Boolean = true
+
+  override fun readInternal(clazz: Class<out Any>, inputMessage: HttpInputMessage): Any {
+    inputMessage.body.use { stream ->
+      return mapper.readValue(stream, clazz)
+    }
+  }
+
+  override fun writeInternal(t: Any, outputMessage: HttpOutputMessage) {
+    outputMessage.body.use { stream -> mapper.writeValue(stream, t) }
+  }
 }

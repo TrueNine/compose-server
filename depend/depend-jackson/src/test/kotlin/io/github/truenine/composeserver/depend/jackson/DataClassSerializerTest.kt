@@ -1,8 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.log
@@ -11,6 +8,8 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 
 data class A(val a: String, val b: String)
 
@@ -154,5 +153,5 @@ class DataClassSerializerTest {
 }
 
 interface InterFace {
-  data class InternalClass(val a: String, val b: String, @JsonIgnore val c: String?, @JsonIgnore val d: datetime? = null)
+  data class InternalClass(val a: String, val b: String, val c: String?, val d: datetime? = null)
 }

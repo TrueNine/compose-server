@@ -6,12 +6,13 @@ import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 
 /**
- * # 中华人民共和国国家统计局 地址数据接口
- * > 地址数据 最早统计到 2009 年
+ * National Bureau of Statistics of China address data API.
+ *
+ * Address data is available starting from year 2009.
  *
  * @version 2023
  */
-@Deprecated(message = "统计局接口已经挂掉")
+@Deprecated(message = "NBS address API is no longer available")
 @HttpExchange("https://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm")
 interface ICnNbsAddressApi {
   companion object {

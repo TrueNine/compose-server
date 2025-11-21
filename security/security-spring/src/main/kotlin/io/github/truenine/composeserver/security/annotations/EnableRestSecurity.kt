@@ -5,7 +5,7 @@ import java.lang.annotation.Inherited
 import org.springframework.context.annotation.Import
 
 /**
- * 开启安全管理器
+ * Enable REST security manager configuration.
  *
  * @author TrueNine
  * @since 2022-09-29
@@ -16,16 +16,16 @@ import org.springframework.context.annotation.Import
 @Target(AnnotationTarget.CLASS)
 @Import(SecurityPolicyBean::class)
 annotation class EnableRestSecurity(
-  /** @return 需要放行的匹配规则 */
+  /** @return Request patterns to be permitted without authentication */
   val allowPatterns: Array<String> = [],
-  /** @return 用户登录 url */
+  /** @return Login URL patterns */
   val loginUrl: Array<String> = [],
-  /** @return 退出登录 url */
+  /** @return Logout URL patterns */
   val logoutUrl: Array<String> = [],
-  /** @return 允许 swagger api 放行 */
+  /** @return Whether to allow Swagger API endpoints */
   val allowSwagger: Boolean = false,
-  /** @return 允许 放行webjars */
+  /** @return Whether to allow webjars resources */
   val allowWebJars: Boolean = true,
-  /** @return 任意地请求是否需要认证 */
+  /** @return Whether any request requires authentication */
   val anyRequestAuthed: Boolean = false,
 )

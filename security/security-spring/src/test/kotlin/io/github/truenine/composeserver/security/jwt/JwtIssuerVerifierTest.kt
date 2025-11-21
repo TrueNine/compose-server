@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.security.jwt
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.security.crypto.CryptographicKeyManager
 import io.github.truenine.composeserver.security.crypto.domain.IEccExtKeyPair
 import io.github.truenine.composeserver.security.crypto.domain.IRsaExtKeyPair
@@ -16,6 +15,7 @@ import kotlin.test.assertTrue
 import kotlin.test.fail
 import kotlin.time.measureTime
 import org.junit.jupiter.api.Test
+import tools.jackson.databind.ObjectMapper
 
 /**
  * Comprehensive test suite for JWT issuer and verifier functionality.
@@ -50,7 +50,7 @@ class JwtIssuerVerifierTest {
     val simpleString: String = "simple string data",
     val complexMap: Map<String, Any> = mapOf("key1" to "value1", "key2" to 123, "key3" to true),
     val listData: List<String> = listOf("user1", "admin", "moderator"),
-    val specialChars: String = "特殊字符测试!@#$%^&*()_+-=[]{}|;':\",./<>?",
+    val specialChars: String = "special characters test !@#$%^&*()_+-=[]{}|;':\",./<>?",
     val emptyString: String = "",
     val nullValue: String? = null,
   )

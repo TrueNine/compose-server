@@ -13,9 +13,10 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * add_base_struct 存储过程测试
+ * add_base_struct stored procedure tests.
  *
- * 测试 add_base_struct 和 rm_base_struct 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the add_base_struct and
+ * rm_base_struct stored procedures.
  */
 @SpringBootTest
 @Transactional
@@ -32,129 +33,132 @@ class AddBaseStructMigrationTest : IDatabaseMysqlContainer {
   inner class AddBaseStructTests {
 
     @Test
-    fun `add_base_struct 应该添加所有基础字段`() {
-      // 创建测试表
+    fun `add_base_struct should add all base columns`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_base_struct_table(name VARCHAR(255))")
 
-      // 获取初始列数
+      // Get initial column count
       val initialColumns = getTableColumns("test_base_struct_table")
-      assertEquals(1, initialColumns.size, "初始应该只有一个字段")
+      assertEquals(1, initialColumns.size, "Initial table should have exactly one column")
 
-      // 调用 add_base_struct
+      // Call add_base_struct
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
 
-      // 验证字段添加
+      // Verify that columns are added
       val afterColumns = getTableColumns("test_base_struct_table")
       val expectedColumns = listOf("id", "name", "rlv", "crd", "mrd", "ldf")
-      assertTrue(afterColumns.containsAll(expectedColumns), "应该包含所有基础字段")
-      assertEquals(6, afterColumns.size, "应该有 6 个字段")
+      assertTrue(afterColumns.containsAll(expectedColumns), "All base columns should be present")
+      assertEquals(6, afterColumns.size, "There should be 6 columns")
     }
 
     @Test
-    fun `add_base_struct 应该设置正确的字段类型和约束`() {
-      // 创建测试表
+    fun `add_base_struct should set correct column types and constraints`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_base_struct_table(name VARCHAR(255))")
 
-      // 调用 add_base_struct
+      // Call add_base_struct
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
 
-      // 验证字段类型和约束
+      // Verify column types and constraints
       val columnInfo = getColumnInfo("test_base_struct_table")
 
-      // 验证 id 字段
-      assertEquals("bigint", columnInfo["id"]?.get("data_type")?.toString()?.lowercase(), "id 应该是 bigint 类型")
-      assertEquals("NO", columnInfo["id"]?.get("is_nullable"), "id 应该是 NOT NULL")
-      assertEquals("PRI", columnInfo["id"]?.get("column_key"), "id 应该是主键")
+      // Verify id column
+      assertEquals("bigint", columnInfo["id"]?.get("data_type")?.toString()?.lowercase(), "id should be of type BIGINT")
+      assertEquals("NO", columnInfo["id"]?.get("is_nullable"), "id should be NOT NULL")
+      assertEquals("PRI", columnInfo["id"]?.get("column_key"), "id should be the primary key")
 
-      // 验证 rlv 字段
-      assertEquals("int", columnInfo["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv 应该是 int 类型")
-      assertEquals("NO", columnInfo["rlv"]?.get("is_nullable"), "rlv 应该不能为空")
+      // Verify rlv column
+      assertEquals("int", columnInfo["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv should be of type INT")
+      assertEquals("NO", columnInfo["rlv"]?.get("is_nullable"), "rlv should be NOT NULL")
 
-      // 验证时间戳字段
-      assertEquals("timestamp", columnInfo["crd"]?.get("data_type")?.toString()?.lowercase(), "crd 应该是 timestamp 类型")
-      assertEquals("timestamp", columnInfo["mrd"]?.get("data_type")?.toString()?.lowercase(), "mrd 应该是 timestamp 类型")
-      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf 应该是 timestamp 类型")
+      // Verify timestamp columns
+      assertEquals("timestamp", columnInfo["crd"]?.get("data_type")?.toString()?.lowercase(), "crd should be of type TIMESTAMP")
+      assertEquals("timestamp", columnInfo["mrd"]?.get("data_type")?.toString()?.lowercase(), "mrd should be of type TIMESTAMP")
+      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf should be of type TIMESTAMP")
     }
 
     @Test
-    fun `add_base_struct 应该设置正确的默认值`() {
-      // 创建测试表
+    fun `add_base_struct should set correct default values`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_base_struct_table(name VARCHAR(255))")
 
-      // 调用 add_base_struct
+      // Call add_base_struct
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
 
-      // 插入测试数据验证默认值（需要提供 id 值，因为 id 字段没有 AUTO_INCREMENT）
+      // Insert test data to verify default values (id must be provided because
+      // there is no AUTO_INCREMENT)
       jdbcTemplate.execute("INSERT INTO test_base_struct_table(id, name) VALUES(1, 'test')")
 
       val result = jdbcTemplate.queryForMap("SELECT rlv, crd, mrd, ldf FROM test_base_struct_table WHERE name = 'test'")
 
-      assertEquals(0, result["rlv"], "rlv 默认值应该是 0")
-      assertTrue(result["crd"] != null, "crd 应该有默认值（当前时间戳）")
-      assertEquals(null, result["mrd"], "mrd 默认值应该是 null")
-      assertEquals(null, result["ldf"], "ldf 默认值应该是 null")
+      assertEquals(0, result["rlv"], "Default value of rlv should be 0")
+      assertTrue(result["crd"] != null, "crd should have a default value (current timestamp)")
+      assertEquals(null, result["mrd"], "Default value of mrd should be null")
+      assertEquals(null, result["ldf"], "Default value of ldf should be null")
     }
 
     @Test
-    fun `add_base_struct 幂等性测试`() {
-      // 创建测试表
+    fun `add_base_struct idempotency test`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_base_struct_table(name VARCHAR(255))")
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
       val afterFirst = getTableColumns("test_base_struct_table")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
       val afterSecond = getTableColumns("test_base_struct_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
       val afterThird = getTableColumns("test_base_struct_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后字段应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Columns should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Columns should be the same after the third call")
 
-      // 验证字段正确
+      // Verify final columns
       val expectedColumns = listOf("id", "name", "rlv", "crd", "mrd", "ldf")
-      assertTrue(afterThird.containsAll(expectedColumns), "应该包含所有基础字段")
-      assertEquals(6, afterThird.size, "应该有 6 个字段")
+      assertTrue(afterThird.containsAll(expectedColumns), "All base columns should be present")
+      assertEquals(6, afterThird.size, "There should be 6 columns")
     }
 
     @Test
-    fun `处理已有数据的表`() {
-      // 创建测试表并插入数据
+    fun `should handle table with existing data`() {
+      // Create test table and insert data
       jdbcTemplate.execute("CREATE TABLE test_base_struct_table(name VARCHAR(255))")
       jdbcTemplate.execute("INSERT INTO test_base_struct_table(name) VALUES('existing_data')")
 
-      // 调用 add_base_struct
+      // Call add_base_struct
       jdbcTemplate.execute("CALL add_base_struct('test_base_struct_table')")
 
-      // 验证现有数据仍然存在且有正确的默认值
+      // Verify existing data is preserved and default values are set correctly
       val result = jdbcTemplate.queryForMap("SELECT name, rlv, crd, mrd, ldf FROM test_base_struct_table WHERE name = 'existing_data'")
 
-      assertEquals("existing_data", result["name"], "原有数据应该保持不变")
-      assertEquals(0, result["rlv"], "rlv 应该有默认值")
-      assertTrue(result["crd"] != null, "crd 应该有默认值")
-      assertEquals(null, result["mrd"], "mrd 默认值应该是 null")
-      assertEquals(null, result["ldf"], "ldf 应该是 null")
+      assertEquals("existing_data", result["name"], "Existing data should remain unchanged")
+      assertEquals(0, result["rlv"], "rlv should have the default value 0")
+      assertTrue(result["crd"] != null, "crd should have a default value")
+      assertEquals(null, result["mrd"], "Default value of mrd should be null")
+      assertEquals(null, result["ldf"], "ldf should be null by default")
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getTableColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name 
-      FROM information_schema.columns 
-      WHERE table_schema = DATABASE() AND table_name = ?
-      ORDER BY ordinal_position
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_schema = DATABASE() AND table_name = ?
+        ORDER BY ordinal_position
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 
   private fun getColumnInfo(tableName: String): Map<String, Map<String, Any?>> {

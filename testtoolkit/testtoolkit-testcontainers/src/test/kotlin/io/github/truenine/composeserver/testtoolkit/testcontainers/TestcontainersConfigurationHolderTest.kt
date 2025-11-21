@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.context.ApplicationContext
 
-/** # TestcontainersConfigurationHolder 测试类 */
+/** TestcontainersConfigurationHolder test class. */
 class TestcontainersConfigurationHolderTest {
 
   @Nested
@@ -22,26 +22,26 @@ class TestcontainersConfigurationHolderTest {
 
       val properties = TestcontainersConfigurationHolder.getTestcontainersProperties()
 
-      // 验证属性对象本身
-      assertNotNull(properties, "属性对象不应为 null")
-      assertNotNull(properties.postgres, "PostgreSQL 配置不应为 null")
-      assertNotNull(properties.redis, "Redis 配置不应为 null")
-      assertNotNull(properties.minio, "MinIO 配置不应为 null")
+      // Verify properties object and nested configs
+      assertNotNull(properties, "Properties object should not be null")
+      assertNotNull(properties.postgres, "PostgreSQL config should not be null")
+      assertNotNull(properties.redis, "Redis config should not be null")
+      assertNotNull(properties.minio, "MinIO config should not be null")
 
-      // 验证默认配置值
-      assertEquals("postgres:17.6-alpine3.22", properties.postgres.image, "PostgreSQL 默认镜像应该正确")
-      assertEquals("redis/redis-stack:7.2.0-v18", properties.redis.image, "Redis 默认镜像应该正确")
-      assertEquals("minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1", properties.minio.image, "MinIO 默认镜像应该正确")
+      // Verify default configuration values
+      assertEquals("postgres:17.6-alpine3.22", properties.postgres.image, "PostgreSQL default image should be correct")
+      assertEquals("redis/redis-stack:7.2.0-v18", properties.redis.image, "Redis default image should be correct")
+      assertEquals("minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1", properties.minio.image, "MinIO default image should be correct")
 
-      // 验证配置的完整性
-      assertTrue(properties.postgres.image.isNotEmpty(), "PostgreSQL 镜像名不应为空")
-      assertTrue(properties.redis.image.isNotEmpty(), "Redis 镜像名不应为空")
-      assertTrue(properties.minio.image.isNotEmpty(), "MinIO 镜像名不应为空")
+      // Verify configuration completeness
+      assertTrue(properties.postgres.image.isNotEmpty(), "PostgreSQL image name should not be empty")
+      assertTrue(properties.redis.image.isNotEmpty(), "Redis image name should not be empty")
+      assertTrue(properties.minio.image.isNotEmpty(), "MinIO image name should not be empty")
 
-      // 验证镜像名格式
-      assertTrue(properties.postgres.image.contains(":"), "PostgreSQL 镜像应包含版本标签")
-      assertTrue(properties.redis.image.contains(":"), "Redis 镜像应包含版本标签")
-      assertTrue(properties.minio.image.contains(":"), "MinIO 镜像应包含版本标签")
+      // Verify image name format
+      assertTrue(properties.postgres.image.contains(":"), "PostgreSQL image should contain a tag")
+      assertTrue(properties.redis.image.contains(":"), "Redis image should contain a tag")
+      assertTrue(properties.minio.image.contains(":"), "MinIO image should contain a tag")
     }
 
     @Test
@@ -54,14 +54,14 @@ class TestcontainersConfigurationHolderTest {
 
       val properties = TestcontainersConfigurationHolder.getTestcontainersProperties()
 
-      // 验证在Bean不存在时返回默认配置
-      assertNotNull(properties, "属性对象不应为 null")
-      assertEquals("postgres:17.6-alpine3.22", properties.postgres.image, "PostgreSQL 默认镜像应该正确")
+      // Verify that default configuration is returned when bean is not found
+      assertNotNull(properties, "Properties object should not be null")
+      assertEquals("postgres:17.6-alpine3.22", properties.postgres.image, "PostgreSQL default image should be correct")
 
-      // 验证所有默认配置都可用
-      assertNotNull(properties.postgres, "PostgreSQL 配置不应为 null")
-      assertNotNull(properties.redis, "Redis 配置不应为 null")
-      assertNotNull(properties.minio, "MinIO 配置不应为 null")
+      // Verify all default configurations are available
+      assertNotNull(properties.postgres, "PostgreSQL config should not be null")
+      assertNotNull(properties.redis, "Redis config should not be null")
+      assertNotNull(properties.minio, "MinIO config should not be null")
     }
 
     @Test
@@ -75,14 +75,14 @@ class TestcontainersConfigurationHolderTest {
 
       val properties = TestcontainersConfigurationHolder.getTestcontainersProperties()
 
-      // 验证返回的是自定义配置
-      assertEquals(customProperties, properties, "应该返回自定义配置对象")
-      assertNotNull(properties, "自定义属性对象不应为 null")
+      // Verify that the returned configuration is the custom one
+      assertEquals(customProperties, properties, "Custom configuration object should be returned")
+      assertNotNull(properties, "Custom properties object should not be null")
 
-      // 验证自定义配置的完整性
-      assertNotNull(customProperties.postgres, "自定义 PostgreSQL 配置不应为 null")
-      assertNotNull(customProperties.redis, "自定义 Redis 配置不应为 null")
-      assertNotNull(customProperties.minio, "自定义 MinIO 配置不应为 null")
+      // Verify completeness of custom configuration
+      assertNotNull(customProperties.postgres, "Custom PostgreSQL config should not be null")
+      assertNotNull(customProperties.redis, "Custom Redis config should not be null")
+      assertNotNull(customProperties.minio, "Custom MinIO config should not be null")
     }
   }
 
@@ -94,13 +94,13 @@ class TestcontainersConfigurationHolderTest {
       val mockContext = mockk<ApplicationContext>()
       val holder = TestcontainersConfigurationHolder()
 
-      // 不应该抛出异常
+      // Should not throw any exception
       holder.setApplicationContext(mockContext)
 
-      // 验证ApplicationContext设置生效（通过调用 getTestcontainersProperties 来间接验证）
-      // 由于 applicationContext 是私有的，我们通过功能验证来确认设置成功
+      // Verify that ApplicationContext takes effect by indirectly calling getTestcontainersProperties
+      // Since applicationContext is private, we confirm by behavior
       val properties = TestcontainersConfigurationHolder.getTestcontainersProperties()
-      assertNotNull(properties, "设置ApplicationContext后应能获取属性")
+      assertNotNull(properties, "Properties should be obtainable after setting ApplicationContext")
     }
   }
 }

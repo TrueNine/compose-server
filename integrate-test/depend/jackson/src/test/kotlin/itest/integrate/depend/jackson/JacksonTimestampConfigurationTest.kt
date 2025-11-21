@@ -1,12 +1,11 @@
 package itest.integrate.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonProperties
 import io.github.truenine.composeserver.depend.jackson.autoconfig.TimestampUnit
 import io.github.truenine.composeserver.depend.jackson.holders.ObjectMapperHolder
 import jakarta.annotation.Resource
+import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -18,6 +17,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
+import tools.jackson.databind.ObjectMapper
 
 /**
  * Jackson时间戳配置集成测试
@@ -93,14 +93,15 @@ class JacksonTimestampConfigurationTest {
   inner class TimestampConfigurationTests {
 
     @Test
-    fun default_mapper_should_have_timestamp_serialization_enabled() {
-      val config = defaultObjectMapper.serializationConfig
-      assertTrue(config.isEnabled(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS), "默认ObjectMapper应该启用时间戳序列化")
+    fun default_mapper_should_serialize_dates_as_numeric_timestamps() {
+      val instant = Instant.parse("2023-06-15T12:00:00Z")
+      val json = defaultObjectMapper.writeValueAsString(instant)
+      assertNotNull(json.toLongOrNull(), "默认ObjectMapper应该输出数字时间戳")
     }
 
     @Test
     fun non_ignore_mapper_should_have_correct_configuration() {
-      val config = nonIgnoreObjectMapper.deserializationConfig
+      val config = nonIgnoreObjectMapper.deserializationConfig()
       // 验证非忽略ObjectMapper的配置
       assertNotNull(config, "非忽略ObjectMapper应该有正确的配置")
     }

@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.exc.InvalidDefinitionException
 
 @SpringBootTest
 class SailedClassSerializerTest {
@@ -18,7 +18,7 @@ class SailedClassSerializerTest {
   }
 
   @Test
-  fun `jackson 默认情况下不能序列化密封类`() {
+  fun `jackson cannot serialize sealed class by default`() {
     val ipv4 = IpAddress.V4(127, 0, 0, 1)
     val ipV4 = defaultMapper.writeValueAsString(ipv4)
     assertNotNull(ipV4)

@@ -1,13 +1,14 @@
 package io.github.truenine.composeserver.depend.jackson.holders
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
+import jakarta.annotation.Resource
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
+import tools.jackson.databind.ObjectMapper
 
 /**
  * ObjectMapperHolder configuration holder tests
@@ -19,11 +20,11 @@ import org.springframework.test.context.TestPropertySource
 @TestPropertySource(properties = ["compose.jackson.enableTimestampSerialization=true", "compose.jackson.timestampUnit=MILLISECONDS"])
 class ObjectMapperHolderTest {
 
-  @jakarta.annotation.Resource private lateinit var objectMapperHolder: ObjectMapperHolder
+  @Resource private lateinit var objectMapperHolder: ObjectMapperHolder
 
-  @jakarta.annotation.Resource(name = "defaultObjectMapper") private lateinit var defaultMapper: ObjectMapper
+  @Resource(name = "defaultObjectMapper") private lateinit var defaultMapper: ObjectMapper
 
-  @jakarta.annotation.Resource(name = "nonIgnoreObjectMapper") private lateinit var nonIgnoreMapper: ObjectMapper
+  @Resource(name = "nonIgnoreObjectMapper") private lateinit var nonIgnoreMapper: ObjectMapper
 
   @Nested
   inner class GetDefaultMapper {

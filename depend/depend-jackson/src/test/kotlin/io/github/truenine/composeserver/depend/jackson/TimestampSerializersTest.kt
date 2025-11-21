@@ -1,7 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.module.SimpleModule
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampDeserializer
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampSerializer
 import io.github.truenine.composeserver.depend.jackson.serializers.LocalDateTimeTimestampDeserializer
@@ -23,6 +21,11 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.databind.module.SimpleDeserializers
+import tools.jackson.databind.module.SimpleModule
+import tools.jackson.databind.module.SimpleSerializers
 
 /**
  * Timestamp serializer tests
@@ -35,19 +38,24 @@ class TimestampSerializersTest {
 
   @BeforeEach
   fun setup() {
-    mapper = ObjectMapper()
-    val module =
-      SimpleModule().apply {
-        addSerializer(LocalDateTime::class.java, LocalDateTimeTimestampSerializer())
-        addDeserializer(LocalDateTime::class.java, LocalDateTimeTimestampDeserializer())
-        addSerializer(Instant::class.java, InstantTimestampSerializer())
-        addDeserializer(Instant::class.java, InstantTimestampDeserializer())
-        addSerializer(ZonedDateTime::class.java, ZonedDateTimeTimestampSerializer())
-        addDeserializer(ZonedDateTime::class.java, ZonedDateTimeTimestampDeserializer())
-        addSerializer(OffsetDateTime::class.java, OffsetDateTimeTimestampSerializer())
-        addDeserializer(OffsetDateTime::class.java, OffsetDateTimeTimestampDeserializer())
-      }
-    mapper.registerModule(module)
+    val module = SimpleModule()
+
+    val serializers = SimpleSerializers()
+    serializers.addSerializer(LocalDateTime::class.java, LocalDateTimeTimestampSerializer())
+    serializers.addSerializer(Instant::class.java, InstantTimestampSerializer())
+    serializers.addSerializer(ZonedDateTime::class.java, ZonedDateTimeTimestampSerializer())
+    serializers.addSerializer(OffsetDateTime::class.java, OffsetDateTimeTimestampSerializer())
+
+    val deserializers = SimpleDeserializers()
+    deserializers.addDeserializer(LocalDateTime::class.java, LocalDateTimeTimestampDeserializer())
+    deserializers.addDeserializer(Instant::class.java, InstantTimestampDeserializer())
+    deserializers.addDeserializer(ZonedDateTime::class.java, ZonedDateTimeTimestampDeserializer())
+    deserializers.addDeserializer(OffsetDateTime::class.java, OffsetDateTimeTimestampDeserializer())
+
+    module.setSerializers(serializers)
+    module.setDeserializers(deserializers)
+
+    mapper = JsonMapper.builder().addModule(module).build()
   }
 
   @Nested

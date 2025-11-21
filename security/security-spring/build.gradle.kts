@@ -24,7 +24,7 @@ dependencies {
   implementation(libs.org.htmlunit.neko.htmlunit)
 
   // implementation(project(":depend:depend-http-exchange"))
-  // TODO 剥离 web模块
+  // TODO extract web module
   implementation(projects.depend.dependServlet)
   implementation(projects.security.securityCrypto)
   api(projects.shared)

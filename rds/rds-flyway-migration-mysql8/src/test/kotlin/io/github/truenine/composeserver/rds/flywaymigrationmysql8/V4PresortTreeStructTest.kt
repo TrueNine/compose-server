@@ -13,9 +13,10 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * V4 预排序树形结构存储过程测试
+ * V4 presorted tree-structure stored procedure tests.
  *
- * 测试 add_presort_tree_struct 和 rm_presort_tree_struct 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the
+ * add_presort_tree_struct and rm_presort_tree_struct stored procedures.
  */
 @SpringBootTest
 @Transactional
@@ -32,85 +33,85 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
   inner class AddPresortTreeStructTests {
 
     @Test
-    fun `add_presort_tree_struct 应该添加所有预排序树字段`() {
-      // 创建测试表
+    fun `add_presort_tree_struct should add all presorted tree columns`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_table(name VARCHAR(255))")
 
-      // 获取初始列数
+      // Get initial column count
       val initialColumns = getTableColumns("test_presort_tree_table")
-      assertEquals(1, initialColumns.size, "初始应该只有一个字段")
+      assertEquals(1, initialColumns.size, "Initial table should have exactly one column")
 
-      // 调用 add_presort_tree_struct
+      // Call add_presort_tree_struct
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
 
-      // 验证字段添加
+      // Verify that columns are added
       val afterColumns = getTableColumns("test_presort_tree_table")
       val expectedColumns = listOf("name", "rpi", "rln", "rrn", "nlv", "tgi")
-      assertTrue(afterColumns.containsAll(expectedColumns), "应该包含所有预排序树字段")
-      assertEquals(6, afterColumns.size, "应该有 6 个字段")
+      assertTrue(afterColumns.containsAll(expectedColumns), "All presorted tree columns should be present")
+      assertEquals(6, afterColumns.size, "There should be 6 columns")
     }
 
     @Test
-    fun `add_presort_tree_struct 应该为所有字段创建索引`() {
-      // 创建测试表
+    fun `add_presort_tree_struct should create indexes for all columns`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_table(name VARCHAR(255))")
 
-      // 调用 add_presort_tree_struct
+      // Call add_presort_tree_struct
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
 
-      // 验证索引创建
-      assertTrue(hasIndex("test_presort_tree_table", "rpi_idx"), "应该创建 rpi_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_table", "rln_idx"), "应该创建 rln_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_table", "rrn_idx"), "应该创建 rrn_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_table", "nlv_idx"), "应该创建 nlv_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_table", "tgi_idx"), "应该创建 tgi_idx 索引")
+      // Verify indexes are created
+      assertTrue(hasIndex("test_presort_tree_table", "rpi_idx"), "Index rpi_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_table", "rln_idx"), "Index rln_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_table", "rrn_idx"), "Index rrn_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_table", "nlv_idx"), "Index nlv_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_table", "tgi_idx"), "Index tgi_idx should be created")
     }
 
     @Test
-    fun `add_presort_tree_struct 字段应该有正确的默认值`() {
-      // 创建测试表
+    fun `add_presort_tree_struct columns should have correct default values`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_table(name VARCHAR(255))")
 
-      // 调用 add_presort_tree_struct
+      // Call add_presort_tree_struct
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
 
-      // 插入测试数据验证默认值
+      // Insert test data to verify default values
       jdbcTemplate.execute("INSERT INTO test_presort_tree_table(name) VALUES('test')")
 
       val result = jdbcTemplate.queryForMap("SELECT rpi, rln, rrn, nlv, tgi FROM test_presort_tree_table WHERE name = 'test'")
 
-      assertEquals(null, result["rpi"], "rpi 默认值应该是 null")
-      assertEquals(1L, result["rln"], "rln 默认值应该是 1")
-      assertEquals(2L, result["rrn"], "rrn 默认值应该是 2")
-      assertEquals(0, result["nlv"], "nlv 默认值应该是 0")
-      assertEquals(null, result["tgi"], "tgi 默认值应该是 null")
+      assertEquals(null, result["rpi"], "Default value of rpi should be null")
+      assertEquals(1L, result["rln"], "Default value of rln should be 1")
+      assertEquals(2L, result["rrn"], "Default value of rrn should be 2")
+      assertEquals(0, result["nlv"], "Default value of nlv should be 0")
+      assertEquals(null, result["tgi"], "Default value of tgi should be null")
     }
 
     @Test
-    fun `add_presort_tree_struct 幂等性测试`() {
-      // 创建测试表
+    fun `add_presort_tree_struct idempotency test`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_table(name VARCHAR(255))")
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
       val afterFirst = getTableColumns("test_presort_tree_table")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
       val afterSecond = getTableColumns("test_presort_tree_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
       val afterThird = getTableColumns("test_presort_tree_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后字段应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Columns should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Columns should be the same after the third call")
 
-      // 验证字段正确
+      // Verify final columns
       val expectedColumns = listOf("name", "rpi", "rln", "rrn", "nlv", "tgi")
-      assertTrue(afterThird.containsAll(expectedColumns), "应该包含所有预排序树字段")
-      assertEquals(6, afterThird.size, "应该有 6 个字段")
+      assertTrue(afterThird.containsAll(expectedColumns), "All presorted tree columns should be present")
+      assertEquals(6, afterThird.size, "There should be 6 columns")
     }
   }
 
@@ -118,56 +119,56 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
   inner class RmPresortTreeStructTests {
 
     @Test
-    fun `rm_presort_tree_struct 应该移除所有预排序树字段`() {
-      // 创建测试表并添加预排序树结构
+    fun `rm_presort_tree_struct should remove all presorted tree columns`() {
+      // Create test table and add presorted tree struct
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_table(name VARCHAR(255))")
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
 
-      // 验证字段存在
+      // Verify columns exist
       val beforeColumns = getTableColumns("test_presort_tree_table")
-      assertTrue(beforeColumns.contains("rpi"), "应该包含 rpi 字段")
-      assertTrue(beforeColumns.contains("rln"), "应该包含 rln 字段")
-      assertTrue(beforeColumns.contains("rrn"), "应该包含 rrn 字段")
-      assertTrue(beforeColumns.contains("nlv"), "应该包含 nlv 字段")
-      assertTrue(beforeColumns.contains("tgi"), "应该包含 tgi 字段")
+      assertTrue(beforeColumns.contains("rpi"), "Column 'rpi' should exist")
+      assertTrue(beforeColumns.contains("rln"), "Column 'rln' should exist")
+      assertTrue(beforeColumns.contains("rrn"), "Column 'rrn' should exist")
+      assertTrue(beforeColumns.contains("nlv"), "Column 'nlv' should exist")
+      assertTrue(beforeColumns.contains("tgi"), "Column 'tgi' should exist")
 
-      // 调用 rm_presort_tree_struct
+      // Call rm_presort_tree_struct
       jdbcTemplate.execute("CALL rm_presort_tree_struct('test_presort_tree_table')")
 
-      // 验证字段移除
+      // Verify columns are removed
       val afterColumns = getTableColumns("test_presort_tree_table")
-      assertTrue(!afterColumns.contains("rpi"), "不应该包含 rpi 字段")
-      assertTrue(!afterColumns.contains("rln"), "不应该包含 rln 字段")
-      assertTrue(!afterColumns.contains("rrn"), "不应该包含 rrn 字段")
-      assertTrue(!afterColumns.contains("nlv"), "不应该包含 nlv 字段")
-      assertTrue(!afterColumns.contains("tgi"), "不应该包含 tgi 字段")
-      assertEquals(1, afterColumns.size, "应该只有 1 个字段")
+      assertTrue(!afterColumns.contains("rpi"), "Column 'rpi' should not exist")
+      assertTrue(!afterColumns.contains("rln"), "Column 'rln' should not exist")
+      assertTrue(!afterColumns.contains("rrn"), "Column 'rrn' should not exist")
+      assertTrue(!afterColumns.contains("nlv"), "Column 'nlv' should not exist")
+      assertTrue(!afterColumns.contains("tgi"), "Column 'tgi' should not exist")
+      assertEquals(1, afterColumns.size, "There should be exactly 1 column")
     }
 
     @Test
-    fun `rm_presort_tree_struct 幂等性测试`() {
-      // 创建测试表并添加预排序树结构
+    fun `rm_presort_tree_struct idempotency test`() {
+      // Create test table and add presorted tree struct
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_table(name VARCHAR(255))")
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
 
-      // 第一次移除
+      // First removal
       jdbcTemplate.execute("CALL rm_presort_tree_struct('test_presort_tree_table')")
       val afterFirst = getTableColumns("test_presort_tree_table")
 
-      // 第二次移除（幂等性测试）
+      // Second removal (idempotency test)
       jdbcTemplate.execute("CALL rm_presort_tree_struct('test_presort_tree_table')")
       val afterSecond = getTableColumns("test_presort_tree_table")
 
-      // 第三次移除（进一步验证）
+      // Third removal (further verification)
       jdbcTemplate.execute("CALL rm_presort_tree_struct('test_presort_tree_table')")
       val afterThird = getTableColumns("test_presort_tree_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后字段应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Columns should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Columns should be the same after the third call")
 
-      // 验证最终状态
-      assertEquals(listOf("name"), afterThird, "应该只剩下原始字段")
+      // Verify final state
+      assertEquals(listOf("name"), afterThird, "Only the original column should remain")
     }
   }
 
@@ -175,35 +176,37 @@ class V4PresortTreeStructTest : IDatabaseMysqlContainer {
   inner class CombinedOperationsTests {
 
     @Test
-    fun `组合操作幂等性测试`() {
-      // 创建测试表
+    fun `combined operations idempotency test`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_table(name VARCHAR(255))")
 
-      // 重复执行添加和移除操作
+      // Repeatedly execute add and remove operations
       repeat(3) {
         jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_table')")
         jdbcTemplate.execute("CALL rm_presort_tree_struct('test_presort_tree_table')")
       }
 
-      // 验证最终状态
+      // Verify final state
       val finalColumns = getTableColumns("test_presort_tree_table")
-      assertEquals(listOf("name"), finalColumns, "应该只剩下原始字段")
+      assertEquals(listOf("name"), finalColumns, "Only the original column should remain")
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getTableColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name 
-      FROM information_schema.columns 
-      WHERE table_schema = DATABASE() AND table_name = ?
-      ORDER BY ordinal_position
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_schema = DATABASE() AND table_name = ?
+        ORDER BY ordinal_position
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 
   private fun hasIndex(tableName: String, indexName: String): Boolean {

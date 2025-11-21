@@ -16,9 +16,11 @@ import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.jdbc.core.JdbcTemplate
 
 /**
- * # 容器集成测试
+ * Containers integration tests.
  *
- * 该测试类验证三个测试容器（PostgreSQL、Redis、MinIO）的组合使用。 测试确保所有容器能够正常启动、配置正确并且可以进行基本操作。
+ * Verifies combined usage of the three test containers (PostgreSQL, Redis,
+ * MinIO). Ensures all containers can start correctly, are configured
+ * properly, and support basic operations.
  *
  * @author TrueNine
  * @since 2025-04-24
@@ -37,11 +39,11 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
   @BeforeEach
   fun setup() {
-    // 初始化 PostgreSQL 测试表并清理数据
-    // 先删除表（如果存在）以确保干净的状态
+    // Initialize PostgreSQL test table and clean existing data
+    // Drop table if it exists to ensure a clean state
     jdbcTemplate.execute("drop table if exists test_table")
 
-    // 重新创建表
+    // Re-create table
     jdbcTemplate.execute(
       """
       create table test_table (
@@ -54,7 +56,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
 
     log.info("PostgreSQL test_table created successfully")
 
-    // 清理 MinIO 测试桶
+    // Clean up MinIO test buckets
     cleanupMinioBuckets()
   }
 
@@ -100,14 +102,14 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   }
 
   @Test
-  fun `验证 PostgreSQL 容器正常工作`() {
+  fun `verify PostgreSQL container works correctly`() {
     jdbcTemplate.update("insert into test_table (name) values (?)", "test_name")
     val result = jdbcTemplate.queryForObject("select name from test_table where name = ?", String::class.java, "test_name")
     assertEquals("test_name", result)
   }
 
   @Test
-  fun `验证 Redis 容器正常工作`() {
+  fun `verify Redis container works correctly`() {
     val key = "test:key"
     val value = "test_value"
     redisTemplate.opsForValue().set(key, value)
@@ -116,7 +118,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   }
 
   @Test
-  fun `验证 MinIO 容器正常工作`() {
+  fun `verify MinIO container works correctly`() {
     val bucketName = "test-bucket"
     if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
       minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
@@ -126,7 +128,7 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   }
 
   @Test
-  fun `验证所有容器能够同时正常工作`() {
+  fun `verify all containers work correctly together`() {
     jdbcTemplate.update("insert into test_table (name) values (?)", "combined_test")
     val redisKey = "combined:test"
     redisTemplate.opsForValue().set(redisKey, "combined_value")
@@ -145,34 +147,34 @@ class ContainersIntegrationTest : IDatabasePostgresqlContainer, ICacheRedisConta
   }
 
   @Test
-  fun `使用新的容器聚合函数验证多容器协作`() =
+  fun `verify multi-container cooperation using new aggregation function`() =
     containers(ICacheRedisContainer.redisContainerLazy, IDatabasePostgresqlContainer.postgresqlContainerLazy, IOssMinioContainer.minioContainerLazy) {
-      // 通过上下文访问容器
+      // Access containers through the aggregation context
       val redis = getRedisContainer()
       val postgres = getPostgresContainer()
       val minio = getMinioContainer()
 
-      assertNotNull(redis, "Redis 容器应该存在")
-      assertNotNull(postgres, "PostgreSQL 容器应该存在")
-      assertNotNull(minio, "MinIO 容器应该存在")
+      assertNotNull(redis, "Redis container should exist")
+      assertNotNull(postgres, "PostgreSQL container should exist")
+      assertNotNull(minio, "MinIO container should exist")
 
-      // 验证所有容器都在运行
-      assertTrue(redis!!.isRunning, "Redis 容器应该运行")
-      assertTrue(postgres!!.isRunning, "PostgreSQL 容器应该运行")
-      assertTrue(minio!!.isRunning, "MinIO 容器应该运行")
+      // Verify all containers are running
+      assertTrue(redis!!.isRunning, "Redis container should be running")
+      assertTrue(postgres!!.isRunning, "PostgreSQL container should be running")
+      assertTrue(minio!!.isRunning, "MinIO container should be running")
 
-      // 跨容器数据操作测试
+      // Cross-container data operations
       jdbcTemplate.update("insert into test_table (name) values (?)", "aggregation_test")
       redisTemplate.opsForValue().set("aggregation:key", "aggregation_value")
 
-      // 验证操作结果
+      // Verify operation results
       val pgResult = jdbcTemplate.queryForObject("select name from test_table where name = ?", String::class.java, "aggregation_test")
       val redisResult = redisTemplate.opsForValue().get("aggregation:key")
 
-      assertEquals("aggregation_test", pgResult, "PostgreSQL 操作应该成功")
-      assertEquals("aggregation_value", redisResult, "Redis 操作应该成功")
+      assertEquals("aggregation_test", pgResult, "PostgreSQL operation should succeed")
+      assertEquals("aggregation_value", redisResult, "Redis operation should succeed")
 
-      // 验证容器数量
-      assertEquals(3, getAllContainers().size, "应该有3个容器")
+      // Verify container count
+      assertEquals(3, getAllContainers().size, "There should be 3 containers")
     }
 }

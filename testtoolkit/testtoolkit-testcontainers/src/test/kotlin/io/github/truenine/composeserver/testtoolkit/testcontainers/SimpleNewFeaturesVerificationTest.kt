@@ -4,16 +4,14 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 
 /**
- * # 简单的新功能验证测试
+ * Simple new features verification tests.
  *
- * 用于验证重构后的基本功能是否正常工作，避免复杂的集成测试可能导致的问题。
+ * Verifies that refactored basic features work correctly, avoiding potential
+ * issues from overly complex integration tests.
  *
  * @author TrueNine
  * @since 2025-08-09
@@ -21,48 +19,55 @@ import org.springframework.context.annotation.Import
 @SpringBootTest
 @Import(TestConfiguration::class)
 @EnableAutoConfiguration(
-  exclude = [DataSourceAutoConfiguration::class, DataSourceTransactionManagerAutoConfiguration::class, HibernateJpaAutoConfiguration::class]
+  excludeName =
+    [
+      "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
+      "org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration",
+      "org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration",
+    ]
 )
 class SimpleNewFeaturesVerificationTest : ICacheRedisContainer {
 
   @Test
   fun verify_extension_function_basic_functionality() =
     redis(resetToInitialState = false) { container ->
-      // 验证容器实例不为空且正在运行
-      assertNotNull(container, "容器不应为空")
-      assertTrue(container.isRunning, "容器应该正在运行")
+      // Verify container instance is not null and is running
+      assertNotNull(container, "Container should not be null")
+      assertTrue(container.isRunning, "Container should be running")
 
-      // 验证端口映射存在
+      // Verify port mapping exists
       val port = container.getMappedPort(6379)
-      assertTrue(port > 0, "端口映射应该有效")
+      assertTrue(port > 0, "Port mapping should be valid")
 
-      Unit // 明确返回 Unit
+      // Explicitly return Unit
+      Unit
     }
 
   @Test
   fun verify_lazy_variable_accessibility() {
-    // 验证可以访问懒加载变量
+    // Verify that lazy variable can be accessed
     val lazyContainer = ICacheRedisContainer.redisContainerLazy
-    assertNotNull(lazyContainer, "懒加载变量应该存在")
+    assertNotNull(lazyContainer, "Lazy variable should exist")
 
-    // 验证懒加载变量的值是容器实例
+    // Verify that lazy variable value is a container instance
     val container = lazyContainer.value
-    assertNotNull(container, "懒加载的容器实例应该存在")
-    assertTrue(container.isRunning, "懒加载的容器应该正在运行")
+    assertNotNull(container, "Lazy-loaded container instance should exist")
+    assertTrue(container.isRunning, "Lazy-loaded container should be running")
   }
 
   @Test
   fun verify_container_aggregation_basic_functionality() =
     containers(ICacheRedisContainer.redisContainerLazy) {
-      // 验证可以在聚合上下文中访问容器
+      // Verify that container can be accessed in the aggregation context
       val redisContainer = getRedisContainer()
-      assertNotNull(redisContainer, "应该能够从上下文获取Redis容器")
-      assertTrue(redisContainer!!.isRunning, "获取的容器应该正在运行")
+      assertNotNull(redisContainer, "Should be able to get Redis container from context")
+      assertTrue(redisContainer!!.isRunning, "Retrieved container should be running")
 
-      // 验证 getAllContainers 功能
+      // Verify getAllContainers behavior
       val allContainers = getAllContainers()
-      assertTrue(allContainers.isNotEmpty(), "应该至少有一个容器")
+      assertTrue(allContainers.isNotEmpty(), "There should be at least one container")
 
-      Unit // 明确返回 Unit
+      // Explicitly return Unit
+      Unit
     }
 }

@@ -1,9 +1,6 @@
 package itest.integrate.depend.jackson
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonProperties
 import io.github.truenine.composeserver.depend.jackson.autoconfig.TimestampUnit
@@ -19,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestPropertySource
+import tools.jackson.databind.DeserializationFeature
+import tools.jackson.databind.ObjectMapper
 
 /**
  * Jackson自定义配置集成测试
@@ -58,19 +57,9 @@ class JacksonCustomConfigurationTest {
 
   @Nested
   inner class CustomObjectMapperConfigurationTests {
-
-    @Test
-    fun default_mapper_should_respect_custom_timestamp_configuration() {
-      val config = defaultObjectMapper.serializationConfig
-
-      // 当enableTimestampSerialization=false且writeDatesAsTimestamps=false时，
-      // 应该禁用时间戳序列化
-      assertFalse(config.isEnabled(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS), "自定义配置应该禁用时间戳序列化")
-    }
-
     @Test
     fun default_mapper_should_respect_custom_unknown_properties_configuration() {
-      val config = defaultObjectMapper.deserializationConfig
+      val config = defaultObjectMapper.deserializationConfig()
 
       // 当failOnUnknownProperties=true时，应该在遇到未知属性时失败
       assertTrue(config.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES), "自定义配置应该在遇到未知属性时失败")

@@ -12,9 +12,9 @@ import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
 
 /**
- * # 容器命令执行器测试
+ * Container command executor tests.
  *
- * 测试 ContainerCommandExecutor 类的所有功能，确保100%覆盖率
+ * Tests all features of ContainerCommandExecutor to ensure full coverage.
  *
  * @author TrueNine
  * @since 2025-07-12
@@ -22,26 +22,26 @@ import org.testcontainers.utility.DockerImageName
 class ContainerCommandExecutorTest {
 
   @Test
-  fun `测试 ContainerCommandExecutor 构造函数和常量`() {
-    log.info("开始测试 ContainerCommandExecutor 构造函数和常量")
+  fun `ContainerCommandExecutor constructor and constants`() {
+    log.info("Starting ContainerCommandExecutor constructor and constants test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
-      assertNotNull(executor, "命令执行器不应该为 null")
+      assertNotNull(executor, "Command executor should not be null")
 
-      // 测试常量值
-      assertEquals(Duration.ofSeconds(30), ContainerCommandExecutor.DEFAULT_COMMAND_TIMEOUT, "默认超时时间应该是30秒")
-      assertEquals(3, ContainerCommandExecutor.DEFAULT_MAX_RETRIES, "默认重试次数应该是3")
+      // Test constant values
+      assertEquals(Duration.ofSeconds(30), ContainerCommandExecutor.DEFAULT_COMMAND_TIMEOUT, "Default timeout should be 30 seconds")
+      assertEquals(3, ContainerCommandExecutor.DEFAULT_MAX_RETRIES, "Default max retries should be 3")
 
-      log.info("ContainerCommandExecutor 构造函数和常量测试完成")
+      log.info("ContainerCommandExecutor constructor and constants test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommand 方法的成功执行`() {
-    log.info("开始测试 executeCommand 方法的成功执行")
+  fun `executeCommand executes successfully`() {
+    log.info("Starting executeCommand success test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -49,16 +49,16 @@ class ContainerCommandExecutorTest {
       val executor = ContainerCommandExecutor(container)
       val result = executor.executeCommand(commands = arrayOf("echo", "Hello World"))
 
-      assertEquals(0, result.exitCode, "命令执行应该成功")
-      assertTrue(result.stdout.contains("Hello World"), "输出应该包含预期内容")
+      assertEquals(0, result.exitCode, "Command execution should succeed")
+      assertTrue(result.stdout.contains("Hello World"), "Output should contain expected content")
 
-      log.info("executeCommand 方法成功执行测试完成")
+      log.info("executeCommand success test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommand 方法的空命令验证`() {
-    log.info("开始测试 executeCommand 方法的空命令验证")
+  fun `executeCommand validates empty commands`() {
+    log.info("Starting executeCommand empty commands validation test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -67,13 +67,13 @@ class ContainerCommandExecutorTest {
 
       assertFailsWith<IllegalArgumentException> { executor.executeCommand() }
 
-      log.info("executeCommand 方法空命令验证测试完成")
+      log.info("executeCommand empty commands validation test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommand 方法的自定义参数`() {
-    log.info("开始测试 executeCommand 方法的自定义参数")
+  fun `executeCommand with custom parameters`() {
+    log.info("Starting executeCommand custom parameters test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -81,16 +81,16 @@ class ContainerCommandExecutorTest {
       val executor = ContainerCommandExecutor(container)
       val result = executor.executeCommand(timeout = Duration.ofSeconds(10), maxRetries = 2, "echo", "Custom Test")
 
-      assertEquals(0, result.exitCode, "自定义参数的命令执行应该成功")
-      assertTrue(result.stdout.contains("Custom Test"), "输出应该包含预期内容")
+      assertEquals(0, result.exitCode, "Command execution with custom parameters should succeed")
+      assertTrue(result.stdout.contains("Custom Test"), "Output should contain expected content")
 
-      log.info("executeCommand 方法自定义参数测试完成")
+      log.info("executeCommand custom parameters test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommandWithExpectedExitCode 方法的成功情况`() {
-    log.info("开始测试 executeCommandWithExpectedExitCode 方法的成功情况")
+  fun `executeCommandWithExpectedExitCode success case`() {
+    log.info("Starting executeCommandWithExpectedExitCode success test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -98,16 +98,16 @@ class ContainerCommandExecutorTest {
       val executor = ContainerCommandExecutor(container)
       val result = executor.executeCommandWithExpectedExitCode(0, commands = arrayOf("echo", "Success"))
 
-      assertEquals(0, result.exitCode, "期望退出码为0的命令应该成功")
-      assertTrue(result.stdout.contains("Success"), "输出应该包含预期内容")
+      assertEquals(0, result.exitCode, "Command with expected exit code 0 should succeed")
+      assertTrue(result.stdout.contains("Success"), "Output should contain expected content")
 
-      log.info("executeCommandWithExpectedExitCode 方法成功情况测试完成")
+      log.info("executeCommandWithExpectedExitCode success test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommandWithExpectedExitCode 方法的失败情况`() {
-    log.info("开始测试 executeCommandWithExpectedExitCode 方法的失败情况")
+  fun `executeCommandWithExpectedExitCode failure case`() {
+    log.info("Starting executeCommandWithExpectedExitCode failure test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -116,13 +116,13 @@ class ContainerCommandExecutorTest {
 
       assertFailsWith<AssertionError> { executor.executeCommandWithExpectedExitCode(0, commands = arrayOf("sh", "-c", "exit 1")) }
 
-      log.info("executeCommandWithExpectedExitCode 方法失败情况测试完成")
+      log.info("executeCommandWithExpectedExitCode failure test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommandAndGetOutput 方法`() {
-    log.info("开始测试 executeCommandAndGetOutput 方法")
+  fun `executeCommandAndGetOutput`() {
+    log.info("Starting executeCommandAndGetOutput test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -130,15 +130,15 @@ class ContainerCommandExecutorTest {
       val executor = ContainerCommandExecutor(container)
       val output = executor.executeCommandAndGetOutput(commands = arrayOf("echo", "Test Output"))
 
-      assertEquals("Test Output", output, "输出应该与预期内容完全匹配（去除空白）")
+      assertEquals("Test Output", output, "Output should exactly match expected content (trimmed)")
 
-      log.info("executeCommandAndGetOutput 方法测试完成")
+      log.info("executeCommandAndGetOutput test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommandAndCheckOutput 方法的成功情况`() {
-    log.info("开始测试 executeCommandAndCheckOutput 方法的成功情况")
+  fun `executeCommandAndCheckOutput success case`() {
+    log.info("Starting executeCommandAndCheckOutput success test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -146,16 +146,16 @@ class ContainerCommandExecutorTest {
       val executor = ContainerCommandExecutor(container)
       val result = executor.executeCommandAndCheckOutput("Hello", commands = arrayOf("echo", "Hello World"))
 
-      assertEquals(0, result.exitCode, "包含预期内容的命令应该成功")
-      assertTrue(result.stdout.contains("Hello"), "输出应该包含检查的内容")
+      assertEquals(0, result.exitCode, "Command whose output contains expected content should succeed")
+      assertTrue(result.stdout.contains("Hello"), "Output should contain the expected substring")
 
-      log.info("executeCommandAndCheckOutput 方法成功情况测试完成")
+      log.info("executeCommandAndCheckOutput success test completed")
     }
   }
 
   @Test
-  fun `测试 executeCommandAndCheckOutput 方法的失败情况`() {
-    log.info("开始测试 executeCommandAndCheckOutput 方法的失败情况")
+  fun `executeCommandAndCheckOutput failure case`() {
+    log.info("Starting executeCommandAndCheckOutput failure test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
@@ -164,98 +164,98 @@ class ContainerCommandExecutorTest {
 
       assertFailsWith<AssertionError> { executor.executeCommandAndCheckOutput("NotFound", commands = arrayOf("echo", "Hello World")) }
 
-      log.info("executeCommandAndCheckOutput 方法失败情况测试完成")
+      log.info("executeCommandAndCheckOutput failure test completed")
     }
   }
 
   @Test
-  fun `测试 waitForContainerReady 方法`() {
-    log.info("开始测试 waitForContainerReady 方法")
+  fun `waitForContainerReady`() {
+    log.info("Starting waitForContainerReady test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
 
-      // 容器已经启动，等待就绪应该立即完成
+      // Container is already running so waiting for readiness should complete immediately
       executor.waitForContainerReady(Duration.ofSeconds(5), Duration.ofMillis(100))
 
-      assertTrue(container.isRunning, "容器应该处于运行状态")
+      assertTrue(container.isRunning, "Container should be in running state")
 
-      log.info("waitForContainerReady 方法测试完成")
+      log.info("waitForContainerReady test completed")
     }
   }
 
   @Test
-  fun `测试 fileExists 方法的存在文件`() {
-    log.info("开始测试 fileExists 方法的存在文件")
+  fun `fileExists for existing files`() {
+    log.info("Starting fileExists existing files test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
 
-      assertTrue(executor.fileExists("/bin/sh"), "/bin/sh 文件应该存在")
-      assertTrue(executor.fileExists("/etc/passwd"), "/etc/passwd 文件应该存在")
+      assertTrue(executor.fileExists("/bin/sh"), "/bin/sh should exist")
+      assertTrue(executor.fileExists("/etc/passwd"), "/etc/passwd should exist")
 
-      log.info("fileExists 方法存在文件测试完成")
+      log.info("fileExists existing files test completed")
     }
   }
 
   @Test
-  fun `测试 fileExists 方法的不存在文件`() {
-    log.info("开始测试 fileExists 方法的不存在文件")
+  fun `fileExists for non-existent files`() {
+    log.info("Starting fileExists non-existent files test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
 
-      assertFalse(executor.fileExists("/nonexistent/file"), "不存在的文件应该返回 false")
-      assertFalse(executor.fileExists("/tmp/does-not-exist"), "不存在的文件应该返回 false")
+      assertFalse(executor.fileExists("/nonexistent/file"), "Non-existent file should return false")
+      assertFalse(executor.fileExists("/tmp/does-not-exist"), "Non-existent file should return false")
 
-      log.info("fileExists 方法不存在文件测试完成")
+      log.info("fileExists non-existent files test completed")
     }
   }
 
   @Test
-  fun `测试 waitForFile 方法`() {
-    log.info("开始测试 waitForFile 方法")
+  fun `waitForFile`() {
+    log.info("Starting waitForFile test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
 
-      // 创建文件
+      // Create file
       executor.executeCommand(commands = arrayOf("touch", "/tmp/waitfile"))
 
-      // 等待文件出现（文件已经存在，应该立即返回）
+      // Wait for the file to appear (already exists so should return immediately)
       executor.waitForFile("/tmp/waitfile", Duration.ofSeconds(5), Duration.ofMillis(100))
 
-      assertTrue(executor.fileExists("/tmp/waitfile"), "等待的文件应该存在")
+      assertTrue(executor.fileExists("/tmp/waitfile"), "Waited-for file should exist")
 
-      log.info("waitForFile 方法测试完成")
+      log.info("waitForFile test completed")
     }
   }
 
   @Test
-  fun `测试 readFileContent 方法`() {
-    log.info("开始测试 readFileContent 方法")
+  fun `readFileContent`() {
+    log.info("Starting readFileContent test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = ContainerCommandExecutor(container)
 
-      // 创建一个测试文件
+      // Create a test file
       executor.executeCommand(commands = arrayOf("sh", "-c", "echo 'Test File Content' > /tmp/testfile"))
 
       val content = executor.readFileContent("/tmp/testfile")
 
-      assertEquals("Test File Content", content, "文件内容应该与预期匹配")
+      assertEquals("Test File Content", content, "File content should match expected text")
 
-      log.info("readFileContent 方法测试完成")
+      log.info("readFileContent test completed")
     }
   }
 }

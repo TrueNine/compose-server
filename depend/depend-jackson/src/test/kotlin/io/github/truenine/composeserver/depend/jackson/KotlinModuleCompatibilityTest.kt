@@ -1,16 +1,17 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest
 class KotlinModuleCompatibilityTest {
@@ -96,7 +97,7 @@ class KotlinModuleCompatibilityTest {
       val pair = Pair("test", 123)
       val pairJson = mapper.writeValueAsString(pair)
       log.info("Pair serialization test: {}", pairJson)
-      assertTrue(pairJson == """["test",123]""")
+      assertEquals(pairJson, """["test",123]""")
 
       // Test IPageParam serialization
       val pageParam = Pq[2, 30]

@@ -7,7 +7,7 @@ import org.springframework.security.authorization.AuthorizationManager
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext
 
 /**
- * spring security 安全策略配置
+ * Spring Security policy configuration.
  *
  * @author TrueNine
  * @since 2022-12-10

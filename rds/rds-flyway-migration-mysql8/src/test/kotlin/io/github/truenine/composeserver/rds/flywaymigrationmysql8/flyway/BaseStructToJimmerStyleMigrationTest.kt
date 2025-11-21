@@ -13,9 +13,10 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * base_struct_to_jimmer_style 存储过程测试
+ * base_struct_to_jimmer_style stored procedure tests.
  *
- * 测试 base_struct_to_jimmer_style 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the
+ * base_struct_to_jimmer_style stored procedure.
  */
 @SpringBootTest
 @Transactional
@@ -32,181 +33,183 @@ class BaseStructToJimmerStyleMigrationTest : IDatabaseMysqlContainer {
   inner class BaseStructToJimmerStyleTests {
 
     @Test
-    fun `base_struct_to_jimmer_style 应该调整rlv字段为正确的类型和默认值`() {
-      // 创建测试表并添加基础结构
+    fun `base_struct_to_jimmer_style should adjust rlv column type and defaults correctly`() {
+      // Create test table and add base struct
       jdbcTemplate.execute("CREATE TABLE test_jimmer_style_table(name VARCHAR(255))")
       jdbcTemplate.execute("CALL add_base_struct('test_jimmer_style_table')")
 
-      // 调用 base_struct_to_jimmer_style
+      // Call base_struct_to_jimmer_style
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
 
-      // 验证 rlv 字段属性
+      // Verify rlv column properties
       val columnInfo = getColumnInfo("test_jimmer_style_table")
-      assertEquals("int", columnInfo["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv 应该是 int 类型")
-      assertEquals("0", columnInfo["rlv"]?.get("column_default")?.toString(), "rlv 默认值应该是 0")
-      assertEquals("NO", columnInfo["rlv"]?.get("is_nullable"), "rlv 应该是 NOT NULL")
+      assertEquals("int", columnInfo["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv should be of type INT")
+      assertEquals("0", columnInfo["rlv"]?.get("column_default")?.toString(), "Default value of rlv should be 0")
+      assertEquals("NO", columnInfo["rlv"]?.get("is_nullable"), "rlv should be NOT NULL")
     }
 
     @Test
-    fun `base_struct_to_jimmer_style 应该将boolean类型的ldf转换为timestamp`() {
-      // 创建有boolean ldf字段的测试表
+    fun `base_struct_to_jimmer_style should convert boolean ldf to timestamp`() {
+      // Create test table with boolean-like ldf column
       jdbcTemplate.execute("CREATE TABLE test_jimmer_style_table(name VARCHAR(255), ldf TINYINT(1) DEFAULT 0)")
 
-      // 插入测试数据
+      // Insert test data
       jdbcTemplate.execute("INSERT INTO test_jimmer_style_table(name, ldf) VALUES('test1', 1)")
       jdbcTemplate.execute("INSERT INTO test_jimmer_style_table(name, ldf) VALUES('test2', 0)")
 
-      // 调用 base_struct_to_jimmer_style
+      // Call base_struct_to_jimmer_style
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
 
-      // 验证 ldf 字段类型转换
+      // Verify ldf column type conversion
       val columnInfo = getColumnInfo("test_jimmer_style_table")
-      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf 应该是 timestamp 类型")
-      assertTrue(columnInfo["ldf"]?.get("column_default") == null, "ldf 默认值应该是 null")
-      assertEquals("YES", columnInfo["ldf"]?.get("is_nullable"), "ldf 应该可以为空")
+      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf should be of type TIMESTAMP")
+      assertTrue(columnInfo["ldf"]?.get("column_default") == null, "Default value of ldf should be null")
+      assertEquals("YES", columnInfo["ldf"]?.get("is_nullable"), "ldf should be nullable")
 
-      // 验证数据转换正确（true -> timestamp, false/null -> null）
+      // Verify data conversion is correct (true -> timestamp, false/null -> null)
       val results = jdbcTemplate.queryForList("SELECT name, ldf FROM test_jimmer_style_table ORDER BY name")
 
       val test1Result = results.find { it["name"] == "test1" }
       val test2Result = results.find { it["name"] == "test2" }
 
-      assertTrue(test1Result?.get("ldf") != null, "原来为true的记录应该有时间戳值")
-      assertEquals(null, test2Result?.get("ldf"), "原来为false的记录应该为null")
+      assertTrue(test1Result?.get("ldf") != null, "Rows that were previously true should have a timestamp value")
+      assertEquals(null, test2Result?.get("ldf"), "Rows that were previously false should be null")
     }
 
     @Test
-    fun `base_struct_to_jimmer_style 应该将int类型的ldf转换为timestamp并清空数据`() {
-      // 创建有int ldf字段的测试表
+    fun `base_struct_to_jimmer_style should convert int ldf to timestamp and clear data`() {
+      // Create test table with int ldf column
       jdbcTemplate.execute("CREATE TABLE test_jimmer_style_table(name VARCHAR(255), ldf INT DEFAULT 0)")
 
-      // 插入测试数据
+      // Insert test data
       jdbcTemplate.execute("INSERT INTO test_jimmer_style_table(name, ldf) VALUES('test1', 123)")
       jdbcTemplate.execute("INSERT INTO test_jimmer_style_table(name, ldf) VALUES('test2', 456)")
 
-      // 调用 base_struct_to_jimmer_style
+      // Call base_struct_to_jimmer_style
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
 
-      // 验证 ldf 字段类型转换
+      // Verify ldf column type conversion
       val columnInfo = getColumnInfo("test_jimmer_style_table")
-      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf 应该是 timestamp 类型")
-      assertTrue(columnInfo["ldf"]?.get("column_default") == null, "ldf 默认值应该是 null")
+      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf should be of type TIMESTAMP")
+      assertTrue(columnInfo["ldf"]?.get("column_default") == null, "Default value of ldf should be null")
 
-      // 验证所有数据都被清空为null
+      // Verify all data has been cleared to null
       val results = jdbcTemplate.queryForList("SELECT name, ldf FROM test_jimmer_style_table ORDER BY name")
-      results.forEach { result -> assertEquals(null, result["ldf"], "所有 ldf 值都应该为null") }
+      results.forEach { result -> assertEquals(null, result["ldf"], "All ldf values should be null") }
     }
 
     @Test
-    fun `base_struct_to_jimmer_style 应该保持timestamp类型的ldf不变`() {
-      // 创建已有timestamp ldf字段的测试表
+    fun `base_struct_to_jimmer_style should keep timestamp ldf type unchanged`() {
+      // Create test table with existing timestamp ldf column
       jdbcTemplate.execute("CREATE TABLE test_jimmer_style_table(name VARCHAR(255), ldf TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")
 
-      // 插入测试数据
+      // Insert test data
       jdbcTemplate.execute("INSERT INTO test_jimmer_style_table(name) VALUES('test1')")
 
-      // 获取调用前的字段信息
+      // Capture column info before procedure call
       val beforeColumnInfo = getColumnInfo("test_jimmer_style_table")
 
-      // 调用 base_struct_to_jimmer_style
+      // Call base_struct_to_jimmer_style
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
 
-      // 验证 ldf 字段保持timestamp类型，但默认值被设置为null
+      // Verify ldf column remains TIMESTAMP but default is set to null
       val afterColumnInfo = getColumnInfo("test_jimmer_style_table")
-      assertEquals("timestamp", afterColumnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf 应该保持 timestamp 类型")
-      assertTrue(afterColumnInfo["ldf"]?.get("column_default") == null, "ldf 默认值应该被设置为 null")
+      assertEquals("timestamp", afterColumnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf should remain of type TIMESTAMP")
+      assertTrue(afterColumnInfo["ldf"]?.get("column_default") == null, "Default value of ldf should be set to null")
     }
 
     @Test
-    fun `base_struct_to_jimmer_style 幂等性测试`() {
-      // 创建测试表并添加基础结构
+    fun `base_struct_to_jimmer_style idempotency test`() {
+      // Create test table and add base struct
       jdbcTemplate.execute("CREATE TABLE test_jimmer_style_table(name VARCHAR(255))")
       jdbcTemplate.execute("CALL add_base_struct('test_jimmer_style_table')")
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
       val afterFirst = getColumnInfo("test_jimmer_style_table")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
       val afterSecond = getColumnInfo("test_jimmer_style_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
       val afterThird = getColumnInfo("test_jimmer_style_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst["rlv"]?.get("data_type"), afterSecond["rlv"]?.get("data_type"), "第二次调用后rlv类型应该相同")
-      assertEquals(afterSecond["rlv"]?.get("data_type"), afterThird["rlv"]?.get("data_type"), "第三次调用后rlv类型应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst["rlv"]?.get("data_type"), afterSecond["rlv"]?.get("data_type"), "rlv type should be the same after the second call")
+      assertEquals(afterSecond["rlv"]?.get("data_type"), afterThird["rlv"]?.get("data_type"), "rlv type should be the same after the third call")
 
-      assertEquals(afterFirst["ldf"]?.get("data_type"), afterSecond["ldf"]?.get("data_type"), "第二次调用后ldf类型应该相同")
-      assertEquals(afterSecond["ldf"]?.get("data_type"), afterThird["ldf"]?.get("data_type"), "第三次调用后ldf类型应该相同")
+      assertEquals(afterFirst["ldf"]?.get("data_type"), afterSecond["ldf"]?.get("data_type"), "ldf type should be the same after the second call")
+      assertEquals(afterSecond["ldf"]?.get("data_type"), afterThird["ldf"]?.get("data_type"), "ldf type should be the same after the third call")
 
-      // 验证最终状态
-      assertEquals("int", afterThird["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv 应该是 int 类型")
-      assertEquals("timestamp", afterThird["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf 应该是 timestamp 类型")
+      // Verify final state
+      assertEquals("int", afterThird["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv should be of type INT")
+      assertEquals("timestamp", afterThird["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf should be of type TIMESTAMP")
     }
 
     @Test
-    fun `base_struct_to_jimmer_style 应该处理不存在rlv或ldf字段的表`() {
-      // 创建没有基础字段的测试表
+    fun `base_struct_to_jimmer_style should handle tables without rlv or ldf`() {
+      // Create test table without base columns
       jdbcTemplate.execute("CREATE TABLE test_jimmer_style_table(name VARCHAR(255), age INT)")
 
-      // 调用 base_struct_to_jimmer_style 应该不产生错误
+      // Calling base_struct_to_jimmer_style should not produce errors
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
 
-      // 验证表结构没有变化
+      // Verify that table structure does not change
       val columns = getTableColumns("test_jimmer_style_table")
-      assertEquals(listOf("name", "age"), columns, "表结构不应该发生变化")
+      assertEquals(listOf("name", "age"), columns, "Table structure should not change")
     }
 
     @Test
-    fun `base_struct_to_jimmer_style 完整流程测试`() {
-      // 创建测试表并添加基础结构
+    fun `base_struct_to_jimmer_style end-to-end test`() {
+      // Create test table and add base struct
       jdbcTemplate.execute("CREATE TABLE test_jimmer_style_table(name VARCHAR(255))")
       jdbcTemplate.execute("CALL add_base_struct('test_jimmer_style_table')")
 
-      // 手动修改某些字段类型模拟不标准的状态
+      // Manually alter some column types to simulate a non-standard state
       jdbcTemplate.execute("ALTER TABLE test_jimmer_style_table MODIFY COLUMN ldf TINYINT(1) DEFAULT 0")
 
-      // 插入测试数据
+      // Insert test data
       jdbcTemplate.execute("INSERT INTO test_jimmer_style_table(id, name, ldf) VALUES(1, 'test', 1)")
 
-      // 调用 base_struct_to_jimmer_style
+      // Call base_struct_to_jimmer_style
       jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_jimmer_style_table')")
 
-      // 验证所有字段都符合Jimmer标准
+      // Verify all columns conform to Jimmer-style conventions
       val columnInfo = getColumnInfo("test_jimmer_style_table")
 
-      // 验证 rlv 字段
-      assertEquals("int", columnInfo["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv 应该是 int 类型")
-      assertEquals("0", columnInfo["rlv"]?.get("column_default")?.toString(), "rlv 默认值应该是 0")
-      assertEquals("NO", columnInfo["rlv"]?.get("is_nullable"), "rlv 应该是 NOT NULL")
+      // Verify rlv column
+      assertEquals("int", columnInfo["rlv"]?.get("data_type")?.toString()?.lowercase(), "rlv should be of type INT")
+      assertEquals("0", columnInfo["rlv"]?.get("column_default")?.toString(), "Default value of rlv should be 0")
+      assertEquals("NO", columnInfo["rlv"]?.get("is_nullable"), "rlv should be NOT NULL")
 
-      // 验证 ldf 字段
-      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf 应该是 timestamp 类型")
-      assertTrue(columnInfo["ldf"]?.get("column_default") == null, "ldf 默认值应该是 null")
-      assertEquals("YES", columnInfo["ldf"]?.get("is_nullable"), "ldf 应该可以为空")
+      // Verify ldf column
+      assertEquals("timestamp", columnInfo["ldf"]?.get("data_type")?.toString()?.lowercase(), "ldf should be of type TIMESTAMP")
+      assertTrue(columnInfo["ldf"]?.get("column_default") == null, "Default value of ldf should be null")
+      assertEquals("YES", columnInfo["ldf"]?.get("is_nullable"), "ldf should be nullable")
 
-      // 验证数据转换正确
+      // Verify data has been converted correctly
       val result = jdbcTemplate.queryForMap("SELECT name, ldf FROM test_jimmer_style_table WHERE name = 'test'")
-      assertTrue(result["ldf"] != null, "原来为true的ldf应该有时间戳值")
+      assertTrue(result["ldf"] != null, "Rows where ldf was true should have a timestamp value")
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getTableColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name 
-      FROM information_schema.columns 
-      WHERE table_schema = DATABASE() AND table_name = ?
-      ORDER BY ordinal_position
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_schema = DATABASE() AND table_name = ?
+        ORDER BY ordinal_position
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 
   private fun getColumnInfo(tableName: String): Map<String, Map<String, Any?>> {

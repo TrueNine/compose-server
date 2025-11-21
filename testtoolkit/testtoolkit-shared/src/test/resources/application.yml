@@ -1,7 +1,7 @@
 spring:
   main:
     banner-mode: off
-  # Redis 配置由 ICacheRedisContainer 动态提供
+  # Redis configuration is provided dynamically by ICacheRedisContainer
   data:
     redis:
       timeout: 3000
@@ -12,7 +12,7 @@ spring:
           min-idle: 0
           max-wait: -1
 
-# MinIO 配置由 IOssMinioContainer 动态提供
+# MinIO configuration is provided dynamically by IOssMinioContainer
 compose:
   oss:
     minio:

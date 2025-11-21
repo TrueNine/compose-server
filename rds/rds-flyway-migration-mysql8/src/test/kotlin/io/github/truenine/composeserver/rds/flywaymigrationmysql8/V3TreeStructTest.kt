@@ -13,9 +13,10 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * V3 树形结构存储过程测试
+ * V3 tree-structure stored procedure tests.
  *
- * 测试 add_tree_struct 和 rm_tree_struct 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the
+ * add_tree_struct and rm_tree_struct stored procedures.
  */
 @SpringBootTest
 @Transactional
@@ -32,59 +33,59 @@ class V3TreeStructTest : IDatabaseMysqlContainer {
   inner class AddTreeStructTests {
 
     @Test
-    fun `add_tree_struct 应该添加 rpi 字段`() {
-      // 创建测试表
+    fun `add_tree_struct should add rpi column`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_tree_table(name VARCHAR(255))")
 
-      // 获取初始列数
+      // Get initial column count
       val initialColumns = getTableColumns("test_tree_table")
-      assertEquals(1, initialColumns.size, "初始应该只有一个字段")
+      assertEquals(1, initialColumns.size, "Initial table should have exactly one column")
 
-      // 调用 add_tree_struct
+      // Call add_tree_struct
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
 
-      // 验证字段添加
+      // Verify column is added
       val afterColumns = getTableColumns("test_tree_table")
-      assertTrue(afterColumns.contains("rpi"), "应该包含 rpi 字段")
-      assertEquals(2, afterColumns.size, "应该有 2 个字段")
+      assertTrue(afterColumns.contains("rpi"), "Column 'rpi' should exist")
+      assertEquals(2, afterColumns.size, "There should be 2 columns")
     }
 
     @Test
-    fun `add_tree_struct 应该为 rpi 字段创建索引`() {
-      // 创建测试表
+    fun `add_tree_struct should create index for rpi column`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_tree_table(name VARCHAR(255))")
 
-      // 调用 add_tree_struct
+      // Call add_tree_struct
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
 
-      // 验证索引创建
-      assertTrue(hasIndex("test_tree_table", "rpi_idx"), "应该创建 rpi_idx 索引")
+      // Verify index is created
+      assertTrue(hasIndex("test_tree_table", "rpi_idx"), "Index rpi_idx should be created")
     }
 
     @Test
-    fun `add_tree_struct 幂等性测试`() {
-      // 创建测试表
+    fun `add_tree_struct idempotency test`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_tree_table(name VARCHAR(255))")
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
       val afterFirst = getTableColumns("test_tree_table")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
       val afterSecond = getTableColumns("test_tree_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
       val afterThird = getTableColumns("test_tree_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后字段应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Columns should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Columns should be the same after the third call")
 
-      // 验证字段正确
-      assertTrue(afterThird.contains("rpi"), "应该包含 rpi 字段")
-      assertEquals(2, afterThird.size, "应该有 2 个字段")
+      // Verify final columns
+      assertTrue(afterThird.contains("rpi"), "Column 'rpi' should exist")
+      assertEquals(2, afterThird.size, "There should be 2 columns")
     }
   }
 
@@ -92,48 +93,48 @@ class V3TreeStructTest : IDatabaseMysqlContainer {
   inner class RmTreeStructTests {
 
     @Test
-    fun `rm_tree_struct 应该移除 rpi 字段`() {
-      // 创建测试表并添加树形结构
+    fun `rm_tree_struct should remove rpi column`() {
+      // Create test table and add tree struct
       jdbcTemplate.execute("CREATE TABLE test_tree_table(name VARCHAR(255))")
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
 
-      // 验证字段存在
+      // Verify column exists
       val beforeColumns = getTableColumns("test_tree_table")
-      assertTrue(beforeColumns.contains("rpi"), "应该包含 rpi 字段")
+      assertTrue(beforeColumns.contains("rpi"), "Column 'rpi' should exist")
 
-      // 调用 rm_tree_struct
+      // Call rm_tree_struct
       jdbcTemplate.execute("CALL rm_tree_struct('test_tree_table')")
 
-      // 验证字段移除
+      // Verify column is removed
       val afterColumns = getTableColumns("test_tree_table")
-      assertTrue(!afterColumns.contains("rpi"), "不应该包含 rpi 字段")
-      assertEquals(1, afterColumns.size, "应该只有 1 个字段")
+      assertTrue(!afterColumns.contains("rpi"), "Column 'rpi' should not exist")
+      assertEquals(1, afterColumns.size, "There should be exactly 1 column")
     }
 
     @Test
-    fun `rm_tree_struct 幂等性测试`() {
-      // 创建测试表并添加树形结构
+    fun `rm_tree_struct idempotency test`() {
+      // Create test table and add tree struct
       jdbcTemplate.execute("CREATE TABLE test_tree_table(name VARCHAR(255))")
       jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
 
-      // 第一次移除
+      // First removal
       jdbcTemplate.execute("CALL rm_tree_struct('test_tree_table')")
       val afterFirst = getTableColumns("test_tree_table")
 
-      // 第二次移除（幂等性测试）
+      // Second removal (idempotency test)
       jdbcTemplate.execute("CALL rm_tree_struct('test_tree_table')")
       val afterSecond = getTableColumns("test_tree_table")
 
-      // 第三次移除（进一步验证）
+      // Third removal (further verification)
       jdbcTemplate.execute("CALL rm_tree_struct('test_tree_table')")
       val afterThird = getTableColumns("test_tree_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后字段应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Columns should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Columns should be the same after the third call")
 
-      // 验证最终状态
-      assertEquals(listOf("name"), afterThird, "应该只剩下原始字段")
+      // Verify final state
+      assertEquals(listOf("name"), afterThird, "Only the original column should remain")
     }
   }
 
@@ -141,35 +142,37 @@ class V3TreeStructTest : IDatabaseMysqlContainer {
   inner class CombinedOperationsTests {
 
     @Test
-    fun `组合操作幂等性测试`() {
-      // 创建测试表
+    fun `combined operations idempotency test`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_tree_table(name VARCHAR(255))")
 
-      // 重复执行添加和移除操作
+      // Repeatedly execute add and remove operations
       repeat(3) {
         jdbcTemplate.execute("CALL add_tree_struct('test_tree_table')")
         jdbcTemplate.execute("CALL rm_tree_struct('test_tree_table')")
       }
 
-      // 验证最终状态
+      // Verify final state
       val finalColumns = getTableColumns("test_tree_table")
-      assertEquals(listOf("name"), finalColumns, "应该只剩下原始字段")
+      assertEquals(listOf("name"), finalColumns, "Only the original column should remain")
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getTableColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name 
-      FROM information_schema.columns 
-      WHERE table_schema = DATABASE() AND table_name = ?
-      ORDER BY ordinal_position
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_schema = DATABASE() AND table_name = ?
+        ORDER BY ordinal_position
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 
   private fun hasIndex(tableName: String, indexName: String): Boolean {

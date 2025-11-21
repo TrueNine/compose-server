@@ -19,25 +19,25 @@ import io.github.truenine.composeserver.ide.ideamcp.tools.FileErrorInfo
 import org.slf4j.LoggerFactory
 
 /**
- * 错误服务接口 - 提供从错误捕获过滤器获取错误信息的功能
+ * Error service interface that provides error information from the error capture filter.
  *
- * 通过 HighlightErrorFilter 机制捕获项目中的错误、警告信息
+ * Uses the HighlightErrorFilter mechanism to capture errors and warnings in the project.
  */
 interface ErrorService {
-  /** 收集指定路径下的所有错误信息 */
+  /** Collects all error information for the given path. */
   fun collectErrors(project: Project, virtualFile: VirtualFile): List<FileErrorInfo>
 
-  /** 分析单个文件的错误信息 */
+  /** Analyzes error information for a single file. */
   fun analyzeFile(project: Project, virtualFile: VirtualFile): List<ErrorInfo>
 
-  /** 从错误捕获过滤器获取捕获的语法错误 */
+  /** Gets captured syntax errors from the error capture filter. */
   fun getCapturedSyntaxErrors(project: Project, virtualFile: VirtualFile): List<ErrorInfo>
 }
 
 /**
- * 错误服务实现 - 使用 HighlightErrorFilter 捕获所有错误和警告
+ * Error service implementation that uses HighlightErrorFilter to capture all errors and warnings.
  *
- * 通过错误捕获过滤器获取实际的语法错误、编译错误、警告信息
+ * Retrieves actual syntax errors, compilation errors, and warnings through the error capture filter.
  */
 @Service(Service.Level.PROJECT)
 class ErrorServiceImpl : ErrorService {
@@ -51,10 +51,10 @@ class ErrorServiceImpl : ErrorService {
 
     try {
       if (virtualFile.isDirectory) {
-        // 递归处理目录
+        // Recursively process directories
         collectErrorsFromDirectory(project, virtualFile, result)
       } else {
-        // 处理单个文件
+        // Process a single file
         val fileErrors = analyzeFile(project, virtualFile)
         if (fileErrors.isNotEmpty()) {
           result.add(createFileErrorInfo(project, virtualFile, fileErrors))
@@ -81,7 +81,7 @@ class ErrorServiceImpl : ErrorService {
 
     logger.debug("Analyzing file from ErrorCaptureFilter: {}", virtualFile.name)
 
-    // 检查 Application 是否可用（在测试环境中可能为 null）
+    // Check if the Application is available (may be null in test environment)
     val application = com.intellij.openapi.application.ApplicationManager.getApplication()
     if (application == null) {
       logger.debug("Application not available, returning empty list")
@@ -92,17 +92,17 @@ class ErrorServiceImpl : ErrorService {
       try {
         val allErrors = mutableListOf<ErrorInfo>()
 
-        // 1. 从错误捕获过滤器获取语法错误
+        // 1. Get syntax errors from the error capture filter
         val capturedErrors = getCapturedSyntaxErrors(project, virtualFile)
         allErrors.addAll(capturedErrors)
         logger.debug("Found {} syntax errors from ErrorCaptureFilter", capturedErrors.size)
 
-        // 2. 从 IDE 代码分析器获取所有类型的警告和错误
+        // 2. Get all types of warnings and errors from the IDE code analyzer
         val highlightErrors = getHighlightErrors(project, virtualFile)
         allErrors.addAll(highlightErrors)
         logger.debug("Found {} highlight errors from DaemonCodeAnalyzer", highlightErrors.size)
 
-        // 去重并排序
+        // Remove duplicates and sort errors
         val uniqueErrors = deduplicateAndSortErrors(allErrors)
         logger.info("Total unique problems found for {}: {}", virtualFile.name, uniqueErrors.size)
 
@@ -122,15 +122,15 @@ class ErrorServiceImpl : ErrorService {
     logger.debug("Getting captured syntax errors for file: {}", virtualFile.name)
 
     return try {
-      // 获取错误捕获过滤器实例
+      // Get the error capture filter instance
       val errorFilter = ErrorCaptureFilterManager.getInstance()
       logger.debug("ErrorCaptureFilter instance: {}", errorFilter)
 
-      // 从过滤器获取捕获的错误
+      // Get captured errors from the filter
       val capturedErrors = errorFilter.getCapturedErrors(virtualFile.path)
       logger.debug("Found {} captured syntax errors for {}", capturedErrors.size, virtualFile.name)
 
-      // 转换为 ErrorInfo 格式
+      // Convert to ErrorInfo format
       capturedErrors.map { capturedError ->
         ErrorInfo(
           line = capturedError.line,
@@ -148,24 +148,23 @@ class ErrorServiceImpl : ErrorService {
     }
   }
 
-  /** 根据错误描述确定严重程度 */
+  /** Determines error severity from the error description. */
   private fun determineSeverityFromDescription(description: String): ErrorSeverity {
     val lowerDesc = description.lowercase()
 
     return when {
-      // 错误关键词 - 影响编译或运行的问题
+      // Error keywords - issues that affect compilation or execution
       lowerDesc.contains("error") ||
         lowerDesc.contains("cannot") ||
         lowerDesc.contains("unresolved") ||
         lowerDesc.contains("undefined") ||
         lowerDesc.contains("not found") ||
-        lowerDesc.contains("syntax error") ||
         lowerDesc.contains("compilation") ||
         lowerDesc.contains("missing") ||
         lowerDesc.contains("invalid") ||
         lowerDesc.contains("illegal") -> ErrorSeverity.ERROR
 
-      // 警告关键词 - 可能导致问题的代码
+      // Warning keywords - code that may cause problems
       lowerDesc.contains("warning") ||
         lowerDesc.contains("deprecated") ||
         lowerDesc.contains("should") ||
@@ -175,10 +174,9 @@ class ErrorServiceImpl : ErrorService {
         lowerDesc.contains("consider") ||
         lowerDesc.contains("recommend") -> ErrorSeverity.WARNING
 
-      // 弱警告关键词 - 代码质量和风格问题
+      // Weak warning keywords - code quality and style issues
       lowerDesc.contains("unused") ||
         lowerDesc.contains("never used") ||
-        lowerDesc.contains("is never used") ||
         lowerDesc.contains("not used") ||
         lowerDesc.contains("redundant") ||
         lowerDesc.contains("unnecessary") ||
@@ -194,16 +192,16 @@ class ErrorServiceImpl : ErrorService {
         lowerDesc.contains("empty") ||
         lowerDesc.contains("blank") -> ErrorSeverity.WEAK_WARNING
 
-      // 默认为信息
+      // Default to informational
       else -> ErrorSeverity.INFO
     }
   }
 
-  /** 从错误描述中提取错误代码 */
+  /** Extracts an error code from the error description. */
   private fun extractErrorCode(description: String): String {
     val lowerDesc = description.lowercase()
     return when {
-      // 未使用代码相关
+      // Unused code related
       lowerDesc.contains("unused variable") -> "unused-variable"
       lowerDesc.contains("unused parameter") -> "unused-parameter"
       lowerDesc.contains("unused import") -> "unused-import"
@@ -211,40 +209,40 @@ class ErrorServiceImpl : ErrorService {
       lowerDesc.contains("unused property") -> "unused-property"
       lowerDesc.contains("unused") || lowerDesc.contains("never used") -> "unused-code"
 
-      // 代码质量相关
+      // Code quality related
       lowerDesc.contains("redundant") -> "redundant-code"
       lowerDesc.contains("unnecessary") -> "unnecessary-code"
       lowerDesc.contains("can be simplified") -> "simplify-code"
       lowerDesc.contains("can be replaced") -> "replace-code"
 
-      // 拼写和语法相关
+      // Spelling and syntax related
       lowerDesc.contains("typo") || lowerDesc.contains("spelling") || lowerDesc.contains("misspelled") -> "spelling-error"
       lowerDesc.contains("syntax error") -> "syntax-error"
 
-      // 弃用相关
+      // Deprecation related
       lowerDesc.contains("deprecated") -> "deprecated"
 
-      // 编译错误相关
+      // Compilation error related
       lowerDesc.contains("unresolved") -> "unresolved-reference"
       lowerDesc.contains("cannot resolve") -> "cannot-resolve"
       lowerDesc.contains("not found") -> "not-found"
       lowerDesc.contains("missing") -> "missing"
 
-      // 通用分类
+      // Generic classification
       lowerDesc.contains("warning") -> "warning"
       lowerDesc.contains("error") -> "error"
       else -> "code-issue"
     }
   }
 
-  /** 从 IDE 代码分析器获取高亮错误信息 这可以捕获更多类型的警告，包括 unused 变量、拼写检查等 */
+  /** Gets highlighted error information from the IDE analyzer (including unused code and spelling checks). */
   private fun getHighlightErrors(project: Project, virtualFile: VirtualFile): List<ErrorInfo> {
     try {
-      // 检查 PSI 文件是否存在
+      // Check if the PSI file exists
       PsiManager.getInstance(project).findFile(virtualFile) ?: return emptyList()
       val document = FileDocumentManager.getInstance().getDocument(virtualFile) ?: return emptyList()
 
-      // 获取文件的高亮信息
+      // Get file highlights
       val highlightInfos =
         try {
           @Suppress("UnstableApiUsage") DaemonCodeAnalyzerImpl.getHighlights(document, null, project)
@@ -267,7 +265,7 @@ class ErrorServiceImpl : ErrorService {
     }
   }
 
-  /** 将 HighlightInfo 转换为 ErrorInfo */
+  /** Converts HighlightInfo to ErrorInfo. */
   private fun convertHighlightInfoToErrorInfo(highlightInfo: HighlightInfo, document: Document): ErrorInfo? {
     try {
       val startOffset = highlightInfo.startOffset
@@ -277,7 +275,7 @@ class ErrorServiceImpl : ErrorService {
       val description = highlightInfo.description ?: return null
       val severity = mapHighlightSeverityToErrorSeverity(highlightInfo)
 
-      // 获取代码片段
+      // Get code snippet
       val endOffset = highlightInfo.endOffset
       val codeSnippet =
         try {
@@ -293,7 +291,7 @@ class ErrorServiceImpl : ErrorService {
         message = description,
         code = extractErrorCodeFromHighlightInfo(highlightInfo),
         codeSnippet = codeSnippet,
-        // TODO: 可以后续添加快速修复信息
+        // TODO: Quick-fix information can be added later
         quickFixes = emptyList(),
       )
     } catch (e: Exception) {
@@ -302,20 +300,20 @@ class ErrorServiceImpl : ErrorService {
     }
   }
 
-  /** 将 IDE 的严重程度映射到我们的错误严重程度 */
+  /** Maps IDE highlight severity to our ErrorSeverity. */
   private fun mapHighlightSeverityToErrorSeverity(highlightInfo: HighlightInfo): ErrorSeverity {
     val severity = highlightInfo.severity
     val description = highlightInfo.description?.lowercase() ?: ""
 
-    // 首先根据 IDE 的严重程度级别判断
+    // First, use the IDE severity level
     return when {
       severity.name.contains("ERROR", ignoreCase = true) -> ErrorSeverity.ERROR
       severity.name.contains("WARNING", ignoreCase = true) -> ErrorSeverity.WARNING
       severity.name.contains("WEAK_WARNING", ignoreCase = true) -> ErrorSeverity.WEAK_WARNING
       severity.name.contains("INFO", ignoreCase = true) -> ErrorSeverity.INFO
 
-      // 根据描述进一步细化判断
-      // 错误级别
+      // Further refine based on description
+      // Error level
       description.contains("error") ||
         description.contains("cannot") ||
         description.contains("unresolved") ||
@@ -326,7 +324,7 @@ class ErrorServiceImpl : ErrorService {
         description.contains("invalid") ||
         description.contains("illegal") -> ErrorSeverity.ERROR
 
-      // 警告级别
+      // Warning level
       description.contains("deprecated") ||
         description.contains("should") ||
         description.contains("might") ||
@@ -335,7 +333,7 @@ class ErrorServiceImpl : ErrorService {
         description.contains("consider") ||
         description.contains("recommend") -> ErrorSeverity.WARNING
 
-      // 弱警告级别 - 主要是代码质量和未使用的代码
+      // Weak warning level - mostly code quality and unused code
       description.contains("unused") ||
         description.contains("never used") ||
         description.contains("not used") ||
@@ -357,19 +355,19 @@ class ErrorServiceImpl : ErrorService {
     }
   }
 
-  /** 从 HighlightInfo 中提取错误代码 */
+  /** Extracts an error code from HighlightInfo. */
   private fun extractErrorCodeFromHighlightInfo(highlightInfo: HighlightInfo): String {
     val description = highlightInfo.description?.lowercase() ?: ""
     val inspectionTool = highlightInfo.inspectionToolId
 
-    // 优先使用 IDE 的检查工具 ID，这更准确
+    // Prefer to use the IDE inspection tool ID when available
     if (inspectionTool != null && inspectionTool.isNotBlank()) {
       return inspectionTool
     }
 
-    // 根据描述内容进行详细分类
+    // Classify based on description content
     return when {
-      // 未使用代码相关
+      // Unused code related
       description.contains("unused variable") -> "unused-variable"
       description.contains("unused parameter") -> "unused-parameter"
       description.contains("unused import") -> "unused-import"
@@ -377,41 +375,41 @@ class ErrorServiceImpl : ErrorService {
       description.contains("unused property") -> "unused-property"
       description.contains("unused") || description.contains("never used") -> "unused-code"
 
-      // 代码质量相关
+      // Code quality related
       description.contains("redundant") -> "redundant-code"
       description.contains("unnecessary") -> "unnecessary-code"
       description.contains("can be simplified") -> "simplify-code"
       description.contains("can be replaced") -> "replace-code"
       description.contains("can be") || description.contains("could be") -> "can-improve"
 
-      // 拼写和语法相关
+      // Spelling and syntax related
       description.contains("typo") || description.contains("spelling") || description.contains("misspelled") -> "spelling-error"
       description.contains("syntax error") -> "syntax-error"
 
-      // 弃用相关
+      // Deprecation related
       description.contains("deprecated") -> "deprecated"
 
-      // 编译错误相关
+      // Compilation error related
       description.contains("unresolved") -> "unresolved-reference"
       description.contains("cannot resolve") -> "cannot-resolve"
       description.contains("not found") -> "not-found"
       description.contains("missing") -> "missing"
       description.contains("compilation") -> "compilation-error"
 
-      // 代码风格相关
+      // Code style related
       description.contains("constant") -> "use-constant"
       description.contains("literal") -> "literal-issue"
       description.contains("empty") -> "empty-code"
       description.contains("blank") -> "blank-code"
 
-      // 通用分类
+      // Generic classification
       description.contains("warning") -> "warning"
       description.contains("error") -> "error"
       else -> "highlight-issue"
     }
   }
 
-  /** 去重和排序错误信息 */
+  /** Removes duplicates and sorts error information. */
   private fun deduplicateAndSortErrors(errors: List<ErrorInfo>): List<ErrorInfo> {
     val originalCount = errors.size
     val deduplicated =
@@ -424,7 +422,7 @@ class ErrorServiceImpl : ErrorService {
     return deduplicated
   }
 
-  /** 递归收集目录中的错误信息 */
+  /** Recursively collects error information from a directory. */
   private fun collectErrorsFromDirectory(project: Project, directory: VirtualFile, result: MutableList<FileErrorInfo>) {
     if (!directory.isValid || !directory.isDirectory) {
       return
@@ -446,7 +444,7 @@ class ErrorServiceImpl : ErrorService {
     }
   }
 
-  /** 创建文件错误信息对象 */
+  /** Creates a FileErrorInfo instance for a given file. */
   private fun createFileErrorInfo(project: Project, virtualFile: VirtualFile, errors: List<ErrorInfo>): FileErrorInfo {
     val relativePath = getRelativePath(project, virtualFile)
 
@@ -457,17 +455,18 @@ class ErrorServiceImpl : ErrorService {
 
     val combinedWeakWarnings = weakWarningList + infoList
 
-    val summary = buildString {
-      if (errorList.isNotEmpty()) append("${errorList.size}个错误")
-      if (warningList.isNotEmpty()) {
-        if (isNotEmpty()) append(", ")
-        append("${warningList.size}个警告")
+    val summary =
+      buildString {
+        if (errorList.isNotEmpty()) append("${errorList.size} errors")
+        if (warningList.isNotEmpty()) {
+          if (isNotEmpty()) append(", ")
+          append("${warningList.size} warnings")
+        }
+        if (combinedWeakWarnings.isNotEmpty()) {
+          if (isNotEmpty()) append(", ")
+          append("${combinedWeakWarnings.size} weak warnings")
+        }
       }
-      if (combinedWeakWarnings.isNotEmpty()) {
-        if (isNotEmpty()) append(", ")
-        append("${combinedWeakWarnings.size}个弱警告")
-      }
-    }
 
     return FileErrorInfo(
       filePath = virtualFile.path,
@@ -479,7 +478,7 @@ class ErrorServiceImpl : ErrorService {
     )
   }
 
-  /** 获取相对路径 */
+  /** Gets the relative path of a file within the project. */
   private fun getRelativePath(project: Project, virtualFile: VirtualFile): String {
     val basePath = project.basePath ?: return virtualFile.path
     val filePath = virtualFile.path
@@ -492,7 +491,7 @@ class ErrorServiceImpl : ErrorService {
   }
 }
 
-/** 错误捕获过滤器管理器 - 单例模式管理过滤器实例 */
+/** Error capture filter manager - singleton that manages the filter instance. */
 object ErrorCaptureFilterManager {
   @Volatile private var filterInstance: ErrorCaptureFilter? = null
 
@@ -506,10 +505,11 @@ object ErrorCaptureFilterManager {
 }
 
 /**
- * 错误捕获过滤器 - 实现 HighlightErrorFilter 接口来捕获所有语法错误和警告
+ * Error capture filter implementation based on HighlightErrorFilter.
  *
- * 根据 JetBrains 文档：https://plugins.jetbrains.com/docs/intellij/syntax-errors.html#controlling-syntax-errors-highlighting 这个过滤器可以控制哪些 PsiErrorElement
- * 应该被高亮显示，并同时捕获它们用于后续分析
+ * According to JetBrains documentation:
+ * https://plugins.jetbrains.com/docs/intellij/syntax-errors.html#controlling-syntax-errors-highlighting
+ * this filter controls which PsiErrorElement instances should be highlighted and records them for analysis.
  *
  * @see com.intellij.codeInsight.highlighting.HighlightErrorFilter
  */
@@ -517,36 +517,36 @@ class ErrorCaptureFilter : HighlightErrorFilter() {
 
   private val logger = LoggerFactory.getLogger(ErrorCaptureFilter::class.java)
 
-  // 存储捕获的错误信息，按文件路径分组
+  // Stores captured error information grouped by file path
   private val capturedErrors = mutableMapOf<String, MutableList<CapturedErrorInfo>>()
 
   init {
-    // 注册到管理器
+    // Register in the manager
     ErrorCaptureFilterManager.setInstance(this)
     logger.info("ErrorCaptureFilter initialized and registered")
   }
 
   /**
-   * 决定是否应该高亮显示给定的 PsiErrorElement
+   * Decides whether a given PsiErrorElement should be highlighted.
    *
-   * @param element 要检查的 PSI 错误元素
-   * @return true 如果应该高亮显示，false 如果应该忽略
+   * @param element PSI error element to check
+   * @return true if the error should be highlighted, false if it should be ignored
    */
   override fun shouldHighlightErrorElement(element: PsiErrorElement): Boolean {
     try {
-      // 捕获错误信息
+      // Capture error information
       captureErrorElement(element)
 
-      // 返回 true 表示继续正常的高亮显示流程
-      // 如果需要抑制某些错误的显示，可以在这里添加条件判断
+      // Return true to continue the normal highlighting flow
+      // If some errors should be suppressed, add conditions here
       return shouldShowError(element)
     } catch (e: Exception) {
       logger.error("Error in ErrorCaptureFilter.shouldHighlightErrorElement", e)
-      return true // 出错时默认显示错误
+      return true // Default to showing the error when something goes wrong
     }
   }
 
-  /** 捕获错误元素的详细信息 */
+  /** Captures detailed information for a PsiErrorElement. */
   private fun captureErrorElement(element: PsiErrorElement) {
     try {
       val containingFile = element.containingFile
@@ -572,7 +572,7 @@ class ErrorCaptureFilter : HighlightErrorFilter() {
             timestamp = System.currentTimeMillis(),
           )
 
-        // 存储错误信息
+        // Store the error information
         synchronized(capturedErrors) { capturedErrors.computeIfAbsent(filePath) { mutableListOf() }.add(errorInfo) }
 
         logger.debug("Captured syntax error in {}: {} at line {}, column {}", containingFile.name, element.errorDescription, line, column)
@@ -582,33 +582,33 @@ class ErrorCaptureFilter : HighlightErrorFilter() {
     }
   }
 
-  /** 决定是否应该显示特定的错误 可以在这里添加自定义的过滤逻辑 */
+  /** Decides whether a specific error should be shown; custom filtering logic can be added here. */
   private fun shouldShowError(element: PsiErrorElement): Boolean {
     try {
       val errorDescription = element.errorDescription
       val containingFile = element.containingFile
 
-      // 示例过滤规则：
+      // Example filtering rules:
 
-      // 1. 在 Markdown 代码块中忽略语法错误
+      // 1. Ignore syntax errors in Markdown code blocks
       if (containingFile?.name?.endsWith(".md") == true) {
-        // 可以添加更复杂的逻辑来检查是否在代码块中
+        // Can add more complex logic to check if it's in a code block
         logger.debug("Considering suppression of error in Markdown file: {}", errorDescription)
       }
 
-      // 2. 忽略特定类型的错误
+      // 2. Ignore specific types of errors
       if (errorDescription.contains("incomplete", ignoreCase = true) && isInTestContext(containingFile)) {
         logger.debug("Suppressing incomplete code error in test context: {}", errorDescription)
         return false
       }
 
-      // 3. 在注释中的代码片段忽略错误
+      // 3. Ignore errors inside comment code fragments
       if (isInCommentContext(element)) {
         logger.debug("Suppressing error in comment context: {}", errorDescription)
         return false
       }
 
-      // 默认显示所有错误
+      // Show all other errors by default
       return true
     } catch (e: Exception) {
       logger.debug("Error in shouldShowError: {}", e.message)
@@ -616,12 +616,12 @@ class ErrorCaptureFilter : HighlightErrorFilter() {
     }
   }
 
-  /** 检查是否在测试上下文中 */
+  /** Checks whether the file is in a test context. */
   private fun isInTestContext(file: PsiFile?): Boolean {
     return file?.virtualFile?.path?.contains("/test/") == true || file?.virtualFile?.path?.contains("/tests/") == true || file?.name?.contains("Test") == true
   }
 
-  /** 检查是否在注释上下文中 */
+  /** Checks whether the error element is in a comment context. */
   private fun isInCommentContext(element: PsiErrorElement): Boolean {
     try {
       var parent = element.parent
@@ -638,30 +638,28 @@ class ErrorCaptureFilter : HighlightErrorFilter() {
     }
   }
 
-  /** 获取指定文件的捕获错误信息 */
+  /** Gets captured errors for a specific file. */
   fun getCapturedErrors(filePath: String): List<CapturedErrorInfo> {
     return synchronized(capturedErrors) { capturedErrors[filePath]?.toList() ?: emptyList() }
   }
 
-  /** 获取所有捕获的错误信息 */
+  /** Gets all captured errors for all files. */
   fun getAllCapturedErrors(): Map<String, List<CapturedErrorInfo>> {
     return synchronized(capturedErrors) { capturedErrors.mapValues { it.value.toList() } }
   }
 
-  /** 清除指定文件的捕获错误信息 */
+  /** Clears captured errors for a specific file. */
   fun clearCapturedErrors(filePath: String) {
     synchronized(capturedErrors) { capturedErrors.remove(filePath) }
   }
 
-  /** 清除所有捕获的错误信息 */
+  /** Clears all captured errors. */
   fun clearAllCapturedErrors() {
     synchronized(capturedErrors) { capturedErrors.clear() }
   }
 }
 
 /**
- * 捕获的错误信息数据类
- *
- * 用于存储从错误捕获过滤器中获取的错误信息
+ * Data class representing captured error information from the error capture filter.
  */
 data class CapturedErrorInfo(val filePath: String, val line: Int, val column: Int, val errorDescription: String, val elementText: String, val timestamp: Long)

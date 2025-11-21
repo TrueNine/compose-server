@@ -6,33 +6,34 @@ import org.testcontainers.containers.Container
 import org.testcontainers.containers.GenericContainer
 
 /**
- * # 容器命令执行工具类
+ * Container command execution utility.
  *
- * 提供稳定的容器命令执行功能，集成重试机制和错误处理。 解决 Testcontainers 中 execInContainer 可能返回 null exitCode 的问题。
+ * Provides stable command execution for containers, integrating retry mechanisms and error handling.
+ * Resolves the issue where Testcontainers execInContainer may return a null exit code.
  *
- * ## 特性
- * - 自动重试机制处理 null exitCode 问题
- * - 统一的错误处理和日志记录
- * - 支持自定义超时和重试配置
- * - 提供便捷的命令执行方法
+ * Features:
+ * - Automatic retry mechanism to handle null exit code issues
+ * - Unified error handling and logging
+ * - Supports custom timeout and retry configuration
+ * - Provides convenient command execution methods
  *
- * ## 使用示例
+ * Usage example:
  *
  * ```kotlin
  * val executor = ContainerCommandExecutor(container)
  *
- * // 执行简单命令
+ * // Execute a simple command
  * val result = executor.executeCommand("echo", "Hello World")
- * println("输出: ${result.stdout}")
+ * println("Output: ${'$'}{result.stdout}")
  *
- * // 执行命令并验证退出码
+ * // Execute a command and verify its exit code
  * executor.executeCommandWithExpectedExitCode(0, "ls", "/tmp")
  *
- * // 执行命令并获取输出
+ * // Execute a command and get its output
  * val output = executor.executeCommandAndGetOutput("cat", "/etc/hostname")
  * ```
  *
- * @param container 要执行命令的容器
+ * @param container target container to execute commands in
  * @author TrueNine
  * @since 2025-07-12
  */
@@ -41,49 +42,49 @@ class ContainerCommandExecutor(private val container: GenericContainer<*>) {
   companion object {
     private val log = LoggerFactory.getLogger(ContainerCommandExecutor::class.java)
 
-    /** 默认命令执行超时时间 */
+    /** Default command execution timeout. */
     val DEFAULT_COMMAND_TIMEOUT: Duration = Duration.ofSeconds(30)
 
-    /** 默认重试次数 */
+    /** Default max retry attempts. */
     const val DEFAULT_MAX_RETRIES = 3
   }
 
   /**
-   * 执行容器命令，带重试机制
+   * Executes a command in the container with a retry mechanism.
    *
-   * @param timeout 超时时间
-   * @param maxRetries 最大重试次数
-   * @param commands 要执行的命令
-   * @return 命令执行结果
-   * @throws RuntimeException 如果命令执行失败
+   * @param timeout command timeout
+   * @param maxRetries maximum retry attempts
+   * @param commands command and arguments to execute
+   * @return command execution result
+   * @throws RuntimeException if command execution fails
    */
   fun executeCommand(timeout: Duration = DEFAULT_COMMAND_TIMEOUT, maxRetries: Int = DEFAULT_MAX_RETRIES, vararg commands: String): Container.ExecResult {
-    require(commands.isNotEmpty()) { "命令不能为空" }
+    require(commands.isNotEmpty()) { "Commands must not be empty" }
 
-    log.debug("执行容器命令: {}", commands.joinToString(" "))
+    log.debug("Executing container command: {}", commands.joinToString(" "))
 
     return TestRetryUtils.retryWithExponentialBackoff(maxAttempts = maxRetries, initialDelay = Duration.ofMillis(100), maxDelay = Duration.ofSeconds(2)) {
       try {
         val result = container.execInContainer(*commands)
 
-        log.debug("命令执行完成，退出码: {}, 输出长度: {}", result.exitCode, result.stdout.length)
+        log.debug("Command execution completed, exit code: {}, output length: {}", result.exitCode, result.stdout.length)
         result
       } catch (e: Exception) {
-        log.warn("命令执行失败: {}, 错误: {}", commands.joinToString(" "), e.message)
+        log.warn("Command execution failed: {}, error: {}", commands.joinToString(" "), e.message)
         throw e
       }
     }
   }
 
   /**
-   * 执行命令并验证退出码
+   * Executes a command and verifies the exit code.
    *
-   * @param expectedExitCode 期望的退出码
-   * @param timeout 超时时间
-   * @param maxRetries 最大重试次数
-   * @param commands 要执行的命令
-   * @return 命令执行结果
-   * @throws AssertionError 如果退出码不匹配
+   * @param expectedExitCode expected exit code
+   * @param timeout command timeout
+   * @param maxRetries maximum retry attempts
+   * @param commands command and arguments to execute
+   * @return command execution result
+   * @throws AssertionError if the exit code does not match
    */
   fun executeCommandWithExpectedExitCode(
     expectedExitCode: Int,
@@ -95,7 +96,8 @@ class ContainerCommandExecutor(private val container: GenericContainer<*>) {
 
     if (result.exitCode != expectedExitCode) {
       val errorMsg =
-        "命令执行退出码不匹配。期望: $expectedExitCode, 实际: ${result.exitCode}, " + "命令: ${commands.joinToString(" ")}, 输出: ${result.stdout}, 错误: ${result.stderr}"
+        "Command exit code mismatch. Expected: $expectedExitCode, actual: ${result.exitCode}, " +
+          "command: ${commands.joinToString(" ")}, stdout: ${result.stdout}, stderr: ${result.stderr}"
       log.error(errorMsg)
       throw AssertionError(errorMsg)
     }
@@ -104,12 +106,12 @@ class ContainerCommandExecutor(private val container: GenericContainer<*>) {
   }
 
   /**
-   * 执行命令并获取标准输出
+   * Executes a command and returns standard output.
    *
-   * @param timeout 超时时间
-   * @param maxRetries 最大重试次数
-   * @param commands 要执行的命令
-   * @return 标准输出内容（已去除首尾空白）
+   * @param timeout command timeout
+   * @param maxRetries maximum retry attempts
+   * @param commands command and arguments to execute
+   * @return standard output content (trimmed)
    */
   fun executeCommandAndGetOutput(timeout: Duration = DEFAULT_COMMAND_TIMEOUT, maxRetries: Int = DEFAULT_MAX_RETRIES, vararg commands: String): String {
     val result = executeCommandWithExpectedExitCode(0, timeout, maxRetries, *commands)
@@ -117,14 +119,14 @@ class ContainerCommandExecutor(private val container: GenericContainer<*>) {
   }
 
   /**
-   * 执行命令并检查输出是否包含指定内容
+   * Executes a command and checks whether output contains expected content.
    *
-   * @param expectedContent 期望包含的内容
-   * @param timeout 超时时间
-   * @param maxRetries 最大重试次数
-   * @param commands 要执行的命令
-   * @return 命令执行结果
-   * @throws AssertionError 如果输出不包含期望内容
+   * @param expectedContent expected content to be contained in output
+   * @param timeout command timeout
+   * @param maxRetries maximum retry attempts
+   * @param commands command and arguments to execute
+   * @return command execution result
+   * @throws AssertionError if the output does not contain the expected content
    */
   fun executeCommandAndCheckOutput(
     expectedContent: String,
@@ -135,7 +137,8 @@ class ContainerCommandExecutor(private val container: GenericContainer<*>) {
     val result = executeCommandWithExpectedExitCode(0, timeout, maxRetries, *commands)
 
     if (!result.stdout.contains(expectedContent)) {
-      val errorMsg = "命令输出不包含期望内容。期望包含: '$expectedContent', " + "实际输出: '${result.stdout}', 命令: ${commands.joinToString(" ")}"
+      val errorMsg = "Command output does not contain expected content. Expected: '$expectedContent', " +
+        "actual output: '${result.stdout}', command: ${commands.joinToString(" ")}"
       log.error(errorMsg)
       throw AssertionError(errorMsg)
     }
@@ -144,68 +147,68 @@ class ContainerCommandExecutor(private val container: GenericContainer<*>) {
   }
 
   /**
-   * 等待容器就绪（通过执行简单命令检查）
+   * Waits for the container to be ready (by executing a simple command).
    *
-   * @param timeout 超时时间
-   * @param pollInterval 轮询间隔
+   * @param timeout timeout duration
+   * @param pollInterval polling interval
    */
   fun waitForContainerReady(timeout: Duration = Duration.ofSeconds(30), pollInterval: Duration = Duration.ofMillis(500)) {
-    log.debug("等待容器就绪")
+    log.debug("Waiting for container to be ready")
 
     TestRetryUtils.waitUntil(timeout = timeout, pollInterval = pollInterval) {
       try {
-        // 尝试执行一个简单的命令来检查容器是否就绪
+        // Try to execute a simple command to check whether the container is ready
         val result = container.execInContainer("echo", "ready")
         result.exitCode == 0
       } catch (e: Exception) {
-        log.debug("容器尚未就绪: {}", e.message)
+        log.debug("Container is not ready yet: {}", e.message)
         false
       }
     }
 
-    log.debug("容器已就绪")
+    log.debug("Container is ready")
   }
 
   /**
-   * 检查文件是否存在
+   * Checks whether a file exists.
    *
-   * @param filePath 文件路径
-   * @param timeout 超时时间
-   * @param maxRetries 最大重试次数
-   * @return 文件是否存在
+   * @param filePath file path
+   * @param timeout command timeout
+   * @param maxRetries maximum retry attempts
+   * @return true if the file exists, false otherwise
    */
   fun fileExists(filePath: String, timeout: Duration = DEFAULT_COMMAND_TIMEOUT, maxRetries: Int = DEFAULT_MAX_RETRIES): Boolean {
     return try {
       val result = executeCommand(timeout, maxRetries, "test", "-f", filePath)
       result.exitCode == 0
     } catch (e: Exception) {
-      log.debug("检查文件存在性时出错: {}", e.message)
+      log.debug("Error while checking file existence: {}", e.message)
       false
     }
   }
 
   /**
-   * 等待文件出现
+   * Waits for a file to appear.
    *
-   * @param filePath 文件路径
-   * @param timeout 超时时间
-   * @param pollInterval 轮询间隔
+   * @param filePath file path
+   * @param timeout timeout duration
+   * @param pollInterval polling interval
    */
   fun waitForFile(filePath: String, timeout: Duration = Duration.ofSeconds(30), pollInterval: Duration = Duration.ofMillis(500)) {
-    log.debug("等待文件出现: {}", filePath)
+    log.debug("Waiting for file to appear: {}", filePath)
 
     TestRetryUtils.waitUntil(timeout = timeout, pollInterval = pollInterval) { fileExists(filePath) }
 
-    log.debug("文件已出现: {}", filePath)
+    log.debug("File appeared: {}", filePath)
   }
 
   /**
-   * 读取文件内容
+   * Reads file content.
    *
-   * @param filePath 文件路径
-   * @param timeout 超时时间
-   * @param maxRetries 最大重试次数
-   * @return 文件内容
+   * @param filePath file path
+   * @param timeout command timeout
+   * @param maxRetries maximum retry attempts
+   * @return file content
    */
   fun readFileContent(filePath: String, timeout: Duration = DEFAULT_COMMAND_TIMEOUT, maxRetries: Int = DEFAULT_MAX_RETRIES): String {
     return executeCommandAndGetOutput(timeout, maxRetries, "cat", filePath)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="安全包测试" parallel="methods">
-  <test name="jwt测试" parallel="methods">
+<suite name="security package tests" parallel="methods">
+  <test name="jwt tests" parallel="methods">
     <packages>
       <package name="io.github.truenine.composeserver.security.jwt"/>
     </packages>

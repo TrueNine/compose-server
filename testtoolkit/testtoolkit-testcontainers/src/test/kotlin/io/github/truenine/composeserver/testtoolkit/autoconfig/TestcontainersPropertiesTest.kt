@@ -8,7 +8,7 @@ import io.github.truenine.composeserver.testtoolkit.properties.TestcontainersPro
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 
-/** # TestcontainersProperties 测试类 */
+/** TestcontainersProperties test class. */
 class TestcontainersPropertiesTest {
 
   @Test

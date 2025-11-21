@@ -7,78 +7,38 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 
 /**
- * # MySQL 数据库测试容器接口
+ * MySQL database test container interface.
  *
- * 该接口提供了 MySQL 测试容器的标准配置，用于集成测试环境。 通过实现此接口，测试类可以自动获得配置好的 MySQL 测试数据库实例，并可以使用扩展函数进行便捷测试。
+ * Provides a standard configuration for MySQL test containers used in
+ * integration tests. By implementing this interface, test classes can obtain a
+ * preconfigured MySQL test database instance and use extension functions for
+ * convenient testing.
  *
- * ## ⚠️ 重要提示：容器重用与数据清理
+ * Important: container reuse and data cleanup
  *
- * **默认情况下，为了提高测试运行效率，所有容器都是可重用的。** 这意味着容器会在多个测试之间共享，数据库中的数据可能会残留。
+ * By default, to improve test performance, all containers are reusable. This
+ * means database data may remain between tests.
  *
- * ### 数据清理责任
- * - **必须在测试中进行数据清理**：使用 `@BeforeEach` 或 `@AfterEach` 清理数据库表
- * - **推荐清理方式**：
- *     - 使用 `@Transactional` + `@Rollback` 进行事务回滚
- *     - 手动执行 `TRUNCATE TABLE` 或 `DELETE FROM` 语句
- *     - 使用 `@Sql` 注解执行清理脚本
- * - **不建议禁用重用**：虽然可以通过配置禁用容器重用，但会显著降低测试性能
+ * Data cleanup responsibility:
+ * - You must clean up database tables in tests (for example using `@BeforeEach`
+ *   or `@AfterEach`).
+ * - Recommended cleanup:
+ *   - Use `@Transactional` + `@Rollback` to roll back transactions.
+ *   - Manually execute `TRUNCATE TABLE` or `DELETE FROM` statements.
+ *   - Use `@Sql` annotations to run cleanup scripts.
+ * - It is not recommended to disable reuse because it significantly slows down
+ *   tests.
  *
- * ### 清理示例
+ * Features:
+ * - Automatically configures a MySQL test container.
+ * - Container is started automatically when Spring properties are injected.
+ * - Container reuse improves performance.
+ * - Provides standard database connection configuration.
+ * - Supports Spring Test dynamic property injection.
+ * - Supports Flyway/Liquibase database migrations.
  *
- * ```kotlin
- * @BeforeEach
- * fun cleanupDatabase() {
- *   jdbcTemplate.execute("TRUNCATE TABLE your_table")
- *   // 或者使用 @Sql("classpath:cleanup.sql")
- * }
- * ```
- *
- * ## 特性
- * - 自动配置 MySQL 测试容器
- * - **容器在 Spring 属性注入时自动启动**
- * - 容器重用以提高性能
- * - 提供标准的数据库连接配置
- * - 支持 Spring Test 的动态属性注入
- * - 支持 Flyway/Liquibase 数据库迁移
- *
- * ## 使用方式
- *
- * ### 传统方式（向后兼容）
- *
- * ```kotlin
- * @SpringBootTest
- * @Transactional
- * @Rollback
- * class YourTestClass : IDatabaseMysqlContainer {
- *
- *   @BeforeEach
- *   fun setup() {
- *     // 清理数据库表
- *     jdbcTemplate.execute("TRUNCATE TABLE users")
- *   }
- *
- *   @Test
- *   fun `测试数据库操作`() {
- *     // 你的测试代码
- *   }
- * }
- * ```
- *
- * ### 扩展函数方式（推荐）
- *
- * ```kotlin
- * @SpringBootTest
- * class YourTestClass : IDatabaseMysqlContainer {
- *
- *   @Test
- *   fun `测试数据库操作`() = mysql(resetToInitialState = true) { container ->
- *     // 数据库会自动重置到初始状态，无需手动清理
- *     // container 是当前的 MySQL 容器实例
- *     jdbcTemplate.execute("INSERT INTO users (name) VALUES ('test')")
- *     // 测试逻辑...
- *   }
- * }
- * ```
+ * Usage: see tests implementing this interface directly or use the `mysql`
+ * extension function for a more concise style.
  *
  * @see org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.MySQLContainer
@@ -89,18 +49,22 @@ import org.testcontainers.utility.DockerImageName
 interface IDatabaseMysqlContainer : ITestContainerBase {
   companion object {
     /**
-     * MySQL 测试容器实例
+     * MySQL test container instance.
      *
-     * 预配置的 MySQL 容器，设置可通过配置自定义：
-     * - 数据库名称: 可配置，默认 testdb
-     * - 用户名: 可配置，默认 test
-     * - 密码: 可配置，默认 test
-     * - 根密码: 可配置，默认 roottest
-     * - 版本: 可配置，默认 mysql:8.0
-     * - **容器重用**: 默认启用，多个测试共享同一容器实例
-     * - **自动启动**: 容器在 Spring 属性注入时自动启动
+     * Preconfigured MySQL container, with settings customizable via
+     * configuration:
+     * - Database name: configurable, default `testdb`.
+     * - Username: configurable, default `test`.
+     * - Password: configurable, default `test`.
+     * - Root password: configurable, default `roottest`.
+     * - Image version: configurable, default `mysql:8.0`.
+     * - Container reuse is enabled by default so multiple tests share the same
+     *   instance.
+     * - Container is started automatically when Spring properties are
+     *   injected.
      *
-     * ⚠️ **重要**: 由于容器重用，数据库数据会在测试间残留，请确保在测试中进行适当的数据清理。
+     * Important: because of container reuse, database data will remain between
+     * tests, so make sure to perform proper cleanup in tests.
      */
     @Volatile private var _container: MySQLContainer<*>? = null
 
@@ -113,9 +77,9 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
           )
 
     /**
-     * 创建并启动 MySQL 容器
+     * Creates and starts the MySQL container.
      *
-     * @return 已启动的 MySQL 容器实例
+     * @return started MySQL container instance
      */
     private fun createAndStartContainer(): MySQLContainer<*> {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
@@ -132,31 +96,34 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
     }
 
     /**
-     * MySQL 容器的懒加载实例
+     * Lazily initialized MySQL container instance.
      *
-     * 用于 containers() 聚合函数，返回已初始化的容器实例。
+     * Used by containers() aggregation functions to return an initialized
+     * container instance.
      *
-     * @return 懒加载的 MySQL 容器实例
+     * @return lazy MySQL container instance
      */
     @JvmStatic val mysqlContainerLazy: Lazy<MySQLContainer<*>> by lazy { lazy { container } }
 
     /**
-     * Spring测试环境动态属性配置
+     * Dynamic property configuration for Spring test environments.
      *
-     * 自动注入数据库连接相关的配置属性到Spring测试环境中：
+     * Automatically injects database connection properties into the Spring
+     * test environment:
      * - JDBC URL
-     * - 用户名
-     * - 密码
-     * - 数据库驱动类名
+     * - username
+     * - password
+     * - JDBC driver class name
      *
-     * 容器将在此方法调用时自动创建并启动，确保属性值可用。
+     * The container will be created and started when this method is called,
+     * ensuring that property values are available.
      *
-     * @param registry Spring动态属性注册器
+     * @param registry Spring dynamic property registry
      */
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      // 线程安全的容器初始化
+      // Thread-safe container initialization
       if (_container == null) {
         synchronized(IDatabaseMysqlContainer::class.java) {
           if (_container == null) {
@@ -173,20 +140,23 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
   }
 
   /**
-   * MySQL 容器扩展函数
+   * MySQL container extension function.
    *
-   * 提供便捷的 MySQL 容器测试方式，支持自动数据重置。 容器已在 Spring 属性注入时启动。
+   * Provides a convenient way to test with a MySQL container and supports
+   * automatic data reset. The container has already been started when Spring
+   * properties are injected.
    *
-   * @param resetToInitialState 是否重置到初始状态（清空所有用户表），默认为 true
-   * @param block 测试执行块，接收当前 MySQL 容器实例作为参数
-   * @return 测试执行块的返回值
+   * @param resetToInitialState whether to reset to the initial state (truncate
+   *   all user tables), default is true
+   * @param block test block that receives the current MySQL container instance
+   * @return result of the test block
    */
   fun <T> mysql(resetToInitialState: Boolean = true, block: (MySQLContainer<*>) -> T): T {
 
     if (resetToInitialState) {
-      // 重置 MySQL 到初始状态 - 清空用户创建的表
+      // Reset MySQL to initial state by truncating user-created tables
       try {
-        // 获取所有用户创建的表并清空
+        // Retrieve and truncate all user-created tables
         val result =
           container.execInContainer(
             "mysql",
@@ -213,11 +183,11 @@ interface IDatabaseMysqlContainer : ITestContainerBase {
               .trimIndent(),
           )
         if (result.exitCode != 0) {
-          org.slf4j.LoggerFactory.getLogger(IDatabaseMysqlContainer::class.java).warn("重置 MySQL 容器时出现警告: {}", result.stderr)
+          org.slf4j.LoggerFactory.getLogger(IDatabaseMysqlContainer::class.java).warn("Warning while resetting MySQL container: {}", result.stderr)
         }
       } catch (e: Exception) {
-        // 如果清理失败，记录警告但继续执行测试
-        org.slf4j.LoggerFactory.getLogger(IDatabaseMysqlContainer::class.java).warn("无法重置 MySQL 容器到初始状态: {}", e.message)
+        // If cleanup fails, log a warning but continue executing tests
+        org.slf4j.LoggerFactory.getLogger(IDatabaseMysqlContainer::class.java).warn("Failed to reset MySQL container to initial state: {}", e.message)
       }
     }
 

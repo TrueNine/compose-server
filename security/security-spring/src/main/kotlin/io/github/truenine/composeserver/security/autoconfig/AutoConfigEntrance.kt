@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 
 /**
- * 自动配置入口
+ * Auto-configuration entry point for security module.
  *
  * @author TrueNine
  * @since 2022-10-28

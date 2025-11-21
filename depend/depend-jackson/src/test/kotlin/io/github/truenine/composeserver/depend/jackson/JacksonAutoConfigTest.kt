@@ -1,17 +1,24 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.log
-import jakarta.annotation.Resource
 import kotlin.test.Test
+import kotlin.test.assertTrue
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.context.ApplicationContext
+import tools.jackson.databind.ObjectMapper
 
 @WebMvcTest
+@ImportAutoConfiguration(JacksonAutoConfiguration::class)
 class JacksonAutoConfigTest {
-  @Resource lateinit var mappers: List<ObjectMapper>
+  @Autowired lateinit var applicationContext: ApplicationContext
 
   @Test
   fun mappers_should_be_registered() {
-    log.info("mappers: {}", mappers)
+    val objectMappers = applicationContext.getBeansOfType(ObjectMapper::class.java).values
+    log.info("mappers: {}", objectMappers)
+    assertTrue(objectMappers.isNotEmpty(), "ObjectMapper beans should be registered")
   }
 }

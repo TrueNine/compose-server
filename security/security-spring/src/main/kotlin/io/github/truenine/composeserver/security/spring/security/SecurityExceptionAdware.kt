@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.security.spring.security
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.ErrorResponseEntity
 import io.github.truenine.composeserver.enums.HttpStatus
 import io.github.truenine.composeserver.enums.MediaTypes
@@ -13,21 +12,22 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.access.AccessDeniedHandler
+import tools.jackson.databind.ObjectMapper
 
 /**
- * 异常过滤器
+ * Security exception filter.
  *
  * @author TrueNine
  * @since 2022-09-28
  */
 abstract class SecurityExceptionAdware(private var mapper: ObjectMapper? = null) : AccessDeniedHandler, AuthenticationEntryPoint {
   override fun commence(request: HttpServletRequest, response: HttpServletResponse, ex: AuthenticationException) {
-    log.warn("授权校验异常", ex)
+    log.warn("Authorization validation exception", ex)
     writeErrorMessage(response, ErrorResponseEntity(HttpStatus._401))
   }
 
   override fun handle(request: HttpServletRequest, response: HttpServletResponse, ex: AccessDeniedException) {
-    log.warn("无权限异常", ex)
+    log.warn("Access denied exception", ex)
     writeErrorMessage(response, ErrorResponseEntity(HttpStatus._403))
   }
 

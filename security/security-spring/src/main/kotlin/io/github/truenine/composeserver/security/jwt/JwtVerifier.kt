@@ -2,7 +2,6 @@ package io.github.truenine.composeserver.security.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.security.crypto.CryptographicOperations
 import io.github.truenine.composeserver.security.jwt.consts.JwtToken
@@ -11,6 +10,7 @@ import io.github.truenine.composeserver.slf4j
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
 import kotlin.reflect.KClass
+import tools.jackson.databind.ObjectMapper
 
 private val log = slf4j(JwtVerifier::class)
 
@@ -25,9 +25,9 @@ open class JwtVerifier internal constructor() {
   fun <S : Any, E : Any> decode(params: VerifierParam<S, E>): JwtToken<S, E> {
     return JWT.decode(params.token).let { decodedJwt ->
       JwtToken<S, E>().also { token ->
-        // 解包加密段
+        // Unpack encrypted payload segment if present
         if (decodedJwt.claims.containsKey(this@JwtVerifier.encryptDataKeyName)) {
-          log.trace("jwt 发现加密段 {}", this@JwtVerifier.encryptDataKeyName)
+          log.trace("JWT found encrypted segment {}", this@JwtVerifier.encryptDataKeyName)
           token.decryptedData =
             decryptData(
               encData = decodedJwt.claims.getValue(this@JwtVerifier.encryptDataKeyName).asString(),
@@ -35,9 +35,9 @@ open class JwtVerifier internal constructor() {
               targetType = params.encryptDataTargetType!!.kotlin,
             )
         }
-        // 解包 subject
+        // Unpack subject claim if present
         if (decodedJwt.claims.containsKey("sub")) {
-          log.trace("发现sub加密段")
+          log.trace("Found subject claim (sub)")
           token.subject = parseContent(decodedJwt.subject, params.subjectTargetType!!.kotlin)
         }
         token.expireDateTime = DateTimeConverter.instantToLocalDateTime(decodedJwt.expiresAt.toInstant())
@@ -58,14 +58,14 @@ open class JwtVerifier internal constructor() {
           try {
             decode(params)
           } catch (e: Exception) {
-            log.warn("jwt 在 decode 时异常 ${e.message}")
+            log.warn("JWT decode exception: ${e.message}")
             null
           }
 
         try {
           verifier.verify(params.token)
         } catch (e: Exception) {
-          log.warn("jwt 在 verify 时发生异常 ${e.message}")
+          log.warn("JWT verify exception: ${e.message}")
           parseExceptionHandle(e, decoded)
         }
         decoded
@@ -78,7 +78,7 @@ open class JwtVerifier internal constructor() {
   }
 
   private fun <T : Any> parseContent(json: String, classType: KClass<T>) =
-    runCatching { objectMapper.readValue(json, classType.java) }.onFailure { log.warn("jwt 解析异常，可能没有序列化器", it) }.getOrNull()
+    runCatching { objectMapper.readValue(json, classType.java) }.onFailure { log.warn("JWT parse exception, serializer may be missing", it) }.getOrNull()
 
   private fun <S : Any, E : Any> parseExceptionHandle(e: Exception, d: JwtToken<S, E>?): JwtToken<S, E>? {
     return when (e) {

@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.enums.HttpStatus
 import io.github.truenine.composeserver.enums.UserAgents
 import io.github.truenine.composeserver.testtoolkit.log
@@ -9,6 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest
 class AnyEnumDeserializerTest {
@@ -16,7 +16,7 @@ class AnyEnumDeserializerTest {
     @Resource set
 
   @Test
-  fun `确保 撤销了枚举类型后，测试逻辑仍然可以运行`() {
+  fun `ensure tests still run after removing enum types`() {
     val stringTyping = UserAgents.CHROME_WIN_103
     val intTyping = HttpStatus._403
     val dd = AnyEnumRecord(stringTyping, intTyping)

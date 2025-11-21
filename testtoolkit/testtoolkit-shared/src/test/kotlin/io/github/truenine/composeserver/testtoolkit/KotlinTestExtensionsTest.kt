@@ -4,9 +4,9 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 /**
- * # Kotlin 测试函数测试
+ * Kotlin test extension function tests.
  *
- * 测试 KotlinTestExtensions.kt 中的测试工具函数
+ * Verifies the testing utility functions defined in KotlinTestExtensions.kt.
  *
  * @author TrueNine
  * @since 2025-07-12

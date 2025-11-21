@@ -1,15 +1,15 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import io.github.truenine.composeserver.IAnyEnum
 import io.github.truenine.composeserver.IIntEnum
 import io.github.truenine.composeserver.IStringEnum
 import kotlin.reflect.KClass
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.deser.std.StdDeserializer
 
-@Deprecated(message = "API 负担过大", level = DeprecationLevel.ERROR)
+@Deprecated(message = "API surface is too heavy", level = DeprecationLevel.ERROR)
 class AnyEnumConverter(typingType: KClass<Enum<*>>) : StdDeserializer<Enum<*>>(Enum::class.java) {
   private var isIntEnum: Boolean = IIntEnum::class.java.isAssignableFrom(typingType.java)
   private var isStringEnum: Boolean = IStringEnum::class.java.isAssignableFrom(typingType.java)
@@ -18,7 +18,7 @@ class AnyEnumConverter(typingType: KClass<Enum<*>>) : StdDeserializer<Enum<*>>(E
   private val enumOrdinalMap: Map<Int, Enum<*>> = typingType.java.enumConstants.associateBy { it.ordinal }
 
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): Enum<*>? {
-    val token = p?.currentToken
+    val token = p?.currentToken()
     return when (token) {
       JsonToken.VALUE_STRING -> {
         val nameOrValue = p.text

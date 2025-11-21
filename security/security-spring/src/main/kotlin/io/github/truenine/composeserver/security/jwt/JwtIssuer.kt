@@ -2,7 +2,6 @@ package io.github.truenine.composeserver.security.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.security.crypto.CryptographicOperations
 import io.github.truenine.composeserver.security.jwt.consts.IssuerParam
@@ -13,6 +12,7 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.Duration
 import org.slf4j.Logger
+import tools.jackson.databind.ObjectMapper
 
 class JwtIssuer private constructor() : JwtVerifier() {
   var expireMillis: Long = Duration.ofMinutes(30).toMillis()
@@ -24,11 +24,11 @@ class JwtIssuer private constructor() : JwtVerifier() {
       .withIssuer(issuer)
       .withJWTId(id)
       .apply {
-        // 是否包含明文主题，有则进行转换
+        // If a plaintext subject is present, serialize it
         if (params.containSubject()) {
           withSubject(createContent(params.subjectObj!!))
         }
-        // 包含加密块则加密
+        // If encrypted content is present, encrypt it into a claim
         if (params.containEncryptContent()) {
           withClaim(
             this@JwtIssuer.encryptDataKeyName,
@@ -41,7 +41,7 @@ class JwtIssuer private constructor() : JwtVerifier() {
   }
 
   internal fun createContent(content: Any): String =
-    runCatching { objectMapper.writeValueAsString(content) }.onFailure { log.warn("jwt json 签发异常，或许没有配置序列化器", it) }.getOrElse { "{}" }
+    runCatching { objectMapper.writeValueAsString(content) }.onFailure { log.warn("JWT JSON issuing exception, serializer may be missing", it) }.getOrElse { "{}" }
 
   internal fun encryptData(encData: String, eccPublicKey: PublicKey): String? = CryptographicOperations.encryptByEccPublicKey(eccPublicKey, encData)
 

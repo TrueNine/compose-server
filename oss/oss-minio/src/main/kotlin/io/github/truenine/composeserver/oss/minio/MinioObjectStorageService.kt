@@ -1100,6 +1100,16 @@ class MinioObjectStorageService(private val minioClient: MinioClient, override v
 
   // region CORS
 
+  /**
+   * Set CORS configuration for a bucket.
+   *
+   * **Important**: Bucket-level CORS configuration is only supported in MinIO AiStor (paid version). The community edition of MinIO does not support per-bucket
+   * CORS settings and will return an error: "A header you provided implies functionality that is not implemented"
+   *
+   * For the community edition, use cluster-wide CORS via the `MINIO_API_CORS_ALLOW_ORIGIN` environment variable.
+   *
+   * @see <a href="https://github.com/minio/minio/discussions/20841">MinIO CORS Discussion</a>
+   */
   override suspend fun setBucketCors(bucketName: String, rules: List<CorsRule>): Result<Unit> =
     withContext(Dispatchers.IO) {
       try {

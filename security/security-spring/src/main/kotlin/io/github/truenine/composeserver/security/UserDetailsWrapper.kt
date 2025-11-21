@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 /**
- * UserDetailsWrapper 包装类
+ * UserDetailsWrapper wrapper class.
  *
  * @author TrueNine
  * @since 2022-12-10
@@ -16,11 +16,11 @@ data class UserDetailsWrapper(val authUserInfo: AuthRequestInfo?) : UserDetails 
   private val auths: MutableSet<GrantedAuthority> = mutableSetOf()
 
   init {
-    // 添加角色信息
+    // Add role authorities
     auths += authUserInfo?.roles?.filter(IString::hasText)?.map { SimpleGrantedAuthority("ROLE_$it") } ?: emptyList()
-    // 添加权限信息
+    // Add permission authorities
     auths += authUserInfo?.permissions?.filter(IString::hasText)?.map { SimpleGrantedAuthority(it) } ?: emptyList()
-    // 添加 部门信息
+    // Add department authorities
     auths += authUserInfo?.depts?.filter(IString::hasText)?.map { SimpleGrantedAuthority("DEPT_$it") } ?: emptyList()
   }
 

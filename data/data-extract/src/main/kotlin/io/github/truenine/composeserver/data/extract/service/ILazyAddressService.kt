@@ -82,7 +82,7 @@ interface ILazyAddressService {
    */
   data class CnDistrict(val code: CnDistrictCode, val name: String, val yearVersion: String, val level: Int = code.level, val leaf: Boolean = level >= 5)
 
-  // --- 服务属性 ---
+  // --- Service properties ---
   /** Optional logger for the service */
   val logger: SystemLogger?
     get() = null
@@ -110,7 +110,7 @@ interface ILazyAddressService {
   fun lastYearVersionOrNull(yearVersion: String): String? {
     if (yearVersion.nonText()) return null
     val currentYearVersion = yearVersion.toIntOrNull() ?: return null
-    // 查找小于当前年份且最接近的版本
+    // Find the closest supported version that is less than the current year
     return supportedYearVersions.mapNotNull { it.toIntOrNull() }.distinct().sortedDescending().filter { it < currentYearVersion }.maxOrNull()?.toString()
   }
 

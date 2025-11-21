@@ -13,9 +13,9 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * V5 字段可空化存储过程测试
+ * V5 all_to_nullable stored procedure tests.
  *
- * 测试 all_to_nullable 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the all_to_nullable stored procedure.
  */
 @SpringBootTest
 @Transactional
@@ -32,8 +32,8 @@ class V5AllToNullableTest : IDatabaseMysqlContainer {
   inner class AllToNullableTests {
 
     @Test
-    fun `all_to_nullable 应该将非主键字段设置为可空`() {
-      // 创建测试表，包含主键和非空字段
+    fun `all_to_nullable should set non-primary-key columns nullable`() {
+      // Create test table with primary key and NOT NULL columns
       jdbcTemplate.execute(
         """
         CREATE TABLE test_nullable_table(
@@ -46,26 +46,26 @@ class V5AllToNullableTest : IDatabaseMysqlContainer {
           .trimIndent()
       )
 
-      // 验证初始状态
+      // Verify initial state
       val beforeNullables = getColumnNullability("test_nullable_table")
-      assertEquals("NO", beforeNullables["name"], "name 字段初始应该是 NOT NULL")
-      assertEquals("NO", beforeNullables["age"], "age 字段初始应该是 NOT NULL")
-      assertEquals("NO", beforeNullables["email"], "email 字段初始应该是 NOT NULL")
+      assertEquals("NO", beforeNullables["name"], "Column 'name' should be NOT NULL initially")
+      assertEquals("NO", beforeNullables["age"], "Column 'age' should be NOT NULL initially")
+      assertEquals("NO", beforeNullables["email"], "Column 'email' should be NOT NULL initially")
 
-      // 调用 all_to_nullable
+      // Call all_to_nullable
       jdbcTemplate.execute("CALL all_to_nullable('test_nullable_table')")
 
-      // 验证字段变为可空
+      // Verify columns become nullable
       val afterNullables = getColumnNullability("test_nullable_table")
-      assertEquals("NO", afterNullables["id"], "主键字段应该保持 NOT NULL")
-      assertEquals("YES", afterNullables["name"], "name 字段应该变为可空")
-      assertEquals("YES", afterNullables["age"], "age 字段应该变为可空")
-      assertEquals("YES", afterNullables["email"], "email 字段应该变为可空")
+      assertEquals("NO", afterNullables["id"], "Primary key column should remain NOT NULL")
+      assertEquals("YES", afterNullables["name"], "Column 'name' should become nullable")
+      assertEquals("YES", afterNullables["age"], "Column 'age' should become nullable")
+      assertEquals("YES", afterNullables["email"], "Column 'email' should become nullable")
     }
 
     @Test
-    fun `all_to_nullable 应该移除字段的默认值`() {
-      // 创建测试表，包含默认值
+    fun `all_to_nullable should remove column default values`() {
+      // Create test table with default values
       jdbcTemplate.execute(
         """
         CREATE TABLE test_nullable_table(
@@ -77,23 +77,23 @@ class V5AllToNullableTest : IDatabaseMysqlContainer {
           .trimIndent()
       )
 
-      // 验证初始默认值
+      // Verify initial default values
       val beforeDefaults = getColumnDefaults("test_nullable_table")
-      assertTrue(beforeDefaults["name"]?.contains("default_name") == true, "name 字段应该有默认值")
-      assertTrue(beforeDefaults["age"]?.contains("18") == true, "age 字段应该有默认值")
+      assertTrue(beforeDefaults["name"]?.contains("default_name") == true, "Column 'name' should have a default value")
+      assertTrue(beforeDefaults["age"]?.contains("18") == true, "Column 'age' should have a default value")
 
-      // 调用 all_to_nullable
+      // Call all_to_nullable
       jdbcTemplate.execute("CALL all_to_nullable('test_nullable_table')")
 
-      // 验证默认值被移除
+      // Verify default values are removed
       val afterDefaults = getColumnDefaults("test_nullable_table")
-      assertEquals(null, afterDefaults["name"], "name 字段默认值应该被移除")
-      assertEquals(null, afterDefaults["age"], "age 字段默认值应该被移除")
+      assertEquals(null, afterDefaults["name"], "Default value of column 'name' should be removed")
+      assertEquals(null, afterDefaults["age"], "Default value of column 'age' should be removed")
     }
 
     @Test
-    fun `all_to_nullable 应该保留主键约束`() {
-      // 创建测试表
+    fun `all_to_nullable should preserve primary key constraint`() {
+      // Create test table
       jdbcTemplate.execute(
         """
         CREATE TABLE test_nullable_table(
@@ -104,21 +104,21 @@ class V5AllToNullableTest : IDatabaseMysqlContainer {
           .trimIndent()
       )
 
-      // 调用 all_to_nullable
+      // Call all_to_nullable
       jdbcTemplate.execute("CALL all_to_nullable('test_nullable_table')")
 
-      // 验证主键约束保持不变
+      // Verify primary key constraint remains unchanged
       val nullables = getColumnNullability("test_nullable_table")
-      assertEquals("NO", nullables["id"], "主键字段应该保持 NOT NULL")
+      assertEquals("NO", nullables["id"], "Primary key column should remain NOT NULL")
 
-      // 验证主键约束仍然存在
+      // Verify primary key constraint still exists
       val primaryKeys = getPrimaryKeyColumns("test_nullable_table")
-      assertTrue(primaryKeys.contains("id"), "id 应该仍然是主键")
+      assertTrue(primaryKeys.contains("id"), "Column 'id' should still be the primary key")
     }
 
     @Test
-    fun `all_to_nullable 幂等性测试`() {
-      // 创建测试表
+    fun `all_to_nullable idempotency test`() {
+      // Create test table
       jdbcTemplate.execute(
         """
         CREATE TABLE test_nullable_table(
@@ -130,31 +130,31 @@ class V5AllToNullableTest : IDatabaseMysqlContainer {
           .trimIndent()
       )
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL all_to_nullable('test_nullable_table')")
       val afterFirst = getColumnNullability("test_nullable_table")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL all_to_nullable('test_nullable_table')")
       val afterSecond = getColumnNullability("test_nullable_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL all_to_nullable('test_nullable_table')")
       val afterThird = getColumnNullability("test_nullable_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后可空性应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后可空性应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Nullability state should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Nullability state should be the same after the third call")
 
-      // 验证最终状态
-      assertEquals("NO", afterThird["id"], "主键应该保持 NOT NULL")
-      assertEquals("YES", afterThird["name"], "name 字段应该是可空")
-      assertEquals("YES", afterThird["age"], "age 字段应该是可空")
+      // Verify final state
+      assertEquals("NO", afterThird["id"], "Primary key should remain NOT NULL")
+      assertEquals("YES", afterThird["name"], "Column 'name' should be nullable")
+      assertEquals("YES", afterThird["age"], "Column 'age' should be nullable")
     }
 
     @Test
-    fun `all_to_nullable 应该处理复合主键`() {
-      // 创建包含复合主键的测试表
+    fun `all_to_nullable should handle composite primary keys`() {
+      // Create test table with composite primary key
       jdbcTemplate.execute(
         """
         CREATE TABLE test_nullable_table(
@@ -167,18 +167,18 @@ class V5AllToNullableTest : IDatabaseMysqlContainer {
           .trimIndent()
       )
 
-      // 调用 all_to_nullable
+      // Call all_to_nullable
       jdbcTemplate.execute("CALL all_to_nullable('test_nullable_table')")
 
-      // 验证复合主键字段保持 NOT NULL
+      // Verify composite primary key columns remain NOT NULL
       val nullables = getColumnNullability("test_nullable_table")
-      assertEquals("NO", nullables["id1"], "复合主键字段 id1 应该保持 NOT NULL")
-      assertEquals("NO", nullables["id2"], "复合主键字段 id2 应该保持 NOT NULL")
-      assertEquals("YES", nullables["name"], "非主键字段 name 应该变为可空")
+      assertEquals("NO", nullables["id1"], "Composite primary key column 'id1' should remain NOT NULL")
+      assertEquals("NO", nullables["id2"], "Composite primary key column 'id2' should remain NOT NULL")
+      assertEquals("YES", nullables["name"], "Non-primary-key column 'name' should become nullable")
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getColumnNullability(tableName: String): Map<String, String> {
     return jdbcTemplate
       .queryForList(
@@ -208,17 +208,19 @@ class V5AllToNullableTest : IDatabaseMysqlContainer {
   }
 
   private fun getPrimaryKeyColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name
-      FROM information_schema.key_column_usage
-      WHERE table_schema = DATABASE()
-        AND table_name = ?
-        AND constraint_name = 'PRIMARY'
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name
+        FROM information_schema.key_column_usage
+        WHERE table_schema = DATABASE()
+          AND table_name = ?
+          AND constraint_name = 'PRIMARY'
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 }

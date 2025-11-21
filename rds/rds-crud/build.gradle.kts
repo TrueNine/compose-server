@@ -24,6 +24,7 @@ dependencies {
 
   implementation(libs.com.fasterxml.jackson.core.jackson.databind)
 
+  testImplementation(libs.org.springframework.boot.spring.boot.starter.flyway)
   testImplementation(projects.testtoolkit.testtoolkitTestcontainers)
   testImplementation(projects.security.securityCrypto)
   testImplementation(libs.org.flywaydb.flyway.core)
