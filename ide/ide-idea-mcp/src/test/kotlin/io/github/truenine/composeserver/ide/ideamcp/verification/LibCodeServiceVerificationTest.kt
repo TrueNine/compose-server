@@ -10,18 +10,21 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 
-/** LibCodeService 验证测试 验证修改后的功能是否正常工作 */
+/** LibCodeService verification tests.
+ *
+ * Verifies that the updated functionality works as expected.
+ */
 class LibCodeServiceVerificationTest {
 
   @Test
-  fun `验证接口简化 - 只需要传入类名`() = runBlocking {
+  fun `verify simplified API - only class name required`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val className = "java.lang.String"
 
-    println("🔍 验证测试: 只传入类名参数")
-    println("测试类名: $className")
+    println("🔍 Verification test: only class name argument")
+    println("Test class: $className")
 
     // When
     val result = libCodeService.getLibraryCode(mockProject, className)
@@ -33,26 +36,26 @@ class LibCodeServiceVerificationTest {
     assertTrue(result.metadata.libraryName.isNotEmpty())
     assertTrue(result.language.isNotEmpty())
 
-    println("✅ 验证成功:")
-    println("  - 源码长度: ${result.sourceCode.length} 字符")
-    println("  - 库名: ${result.metadata.libraryName}")
-    println("  - 语言: ${result.language}")
-    println("  - 源码类型: ${result.metadata.sourceType}")
-    println("  - 是否反编译: ${result.isDecompiled}")
+    println("✅ Verification succeeded:")
+    println("  - Source length: ${result.sourceCode.length} characters")
+    println("  - Library name: ${result.metadata.libraryName}")
+    println("  - Language: ${result.language}")
+    println("  - Source type: ${result.metadata.sourceType}")
+    println("  - Decompiled: ${result.isDecompiled}")
     println()
   }
 
   @Test
-  fun `验证成员提取功能`() = runBlocking {
+  fun `verify member extraction`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val className = "java.util.ArrayList"
     val memberName = "add"
 
-    println("🔍 验证测试: 成员提取功能")
-    println("测试类名: $className")
-    println("成员名: $memberName")
+    println("🔍 Verification test: member extraction")
+    println("Test class: $className")
+    println("Member name: $memberName")
 
     // When
     val result = libCodeService.getLibraryCode(mockProject, className, memberName)
@@ -62,22 +65,22 @@ class LibCodeServiceVerificationTest {
     assertTrue(result.sourceCode.isNotEmpty())
     assertTrue(result.sourceCode.contains("ArrayList") || result.sourceCode.contains("add"))
 
-    println("✅ 验证成功:")
-    println("  - 源码长度: ${result.sourceCode.length} 字符")
-    println("  - 包含类名: ${result.sourceCode.contains("ArrayList")}")
-    println("  - 包含成员名: ${result.sourceCode.contains("add")}")
+    println("✅ Verification succeeded:")
+    println("  - Source length: ${result.sourceCode.length} characters")
+    println("  - Contains class name: ${result.sourceCode.contains("ArrayList")}")
+    println("  - Contains member name: ${result.sourceCode.contains("add")}")
     println()
   }
 
   @Test
-  fun `验证不存在类的处理`() = runBlocking {
+  fun `verify handling of non-existent class`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val className = "com.nonexistent.NonExistentClass"
 
-    println("🔍 验证测试: 不存在类的处理")
-    println("测试类名: $className")
+    println("🔍 Verification test: handling non-existent class")
+    println("Test class: $className")
 
     // When
     val result = libCodeService.getLibraryCode(mockProject, className)
@@ -87,21 +90,21 @@ class LibCodeServiceVerificationTest {
     assertTrue(result.sourceCode.isNotEmpty())
     assertEquals(SourceType.NOT_FOUND, result.metadata.sourceType)
 
-    println("✅ 验证成功:")
-    println("  - 源码类型: ${result.metadata.sourceType}")
-    println("  - 返回内容: ${result.sourceCode.take(100)}...")
+    println("✅ Verification succeeded:")
+    println("  - Source type: ${result.metadata.sourceType}")
+    println("  - Returned content: ${result.sourceCode.take(100)}...")
     println()
   }
 
   @Test
-  fun `验证多个常用类的处理`() = runBlocking {
+  fun `verify handling of multiple common classes`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val testClasses = listOf("java.lang.Object", "java.util.HashMap", "java.io.File", "java.time.LocalDateTime")
 
-    println("🔍 验证测试: 多个常用类的处理")
-    println("测试类列表: ${testClasses.joinToString(", ")}")
+    println("🔍 Verification test: multiple common classes")
+    println("Test class list: ${testClasses.joinToString(", ")}")
     println()
 
     // When & Then
@@ -115,61 +118,61 @@ class LibCodeServiceVerificationTest {
       assertNotNull(result.metadata)
 
       println("📋 $className:")
-      println("  ⏱️  查找耗时: ${endTime - startTime}ms")
-      println("  📦 库名: ${result.metadata.libraryName}")
-      println("  📄 源码类型: ${result.metadata.sourceType}")
-      println("  📏 源码长度: ${result.sourceCode.length} 字符")
-      println("  🔤 语言: ${result.language}")
+      println("  ⏱️  Lookup time: ${endTime - startTime}ms")
+      println("  📦 Library name: ${result.metadata.libraryName}")
+      println("  📄 Source type: ${result.metadata.sourceType}")
+      println("  📏 Source length: ${result.sourceCode.length} characters")
+      println("  🔤 Language: ${result.language}")
       println()
     }
   }
 
   @Test
-  fun `验证接口签名正确性`() {
+  fun `verify API signature correctness`() {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
 
-    println("🔍 验证测试: 接口签名正确性")
+    println("🔍 Verification test: API signature correctness")
 
-    // When & Then - 编译时验证
-    // 这些调用应该能够编译通过，证明接口签名正确
+    // When & Then - compile-time verification
+    // These calls should compile, proving the API signatures are correct.
 
-    // 只传入类名
+    // Only class name
     runBlocking {
       val result1 = libCodeService.getLibraryCode(mockProject, "java.lang.String")
       assertNotNull(result1)
     }
 
-    // 传入类名和成员名
+    // Class name and member name
     runBlocking {
       val result2 = libCodeService.getLibraryCode(mockProject, "java.util.List", "add")
       assertNotNull(result2)
     }
 
-    // 传入类名，成员名为null
+    // Class name with null member name
     runBlocking {
       val result3 = libCodeService.getLibraryCode(mockProject, "java.util.Map", null)
       assertNotNull(result3)
     }
 
-    println("✅ 接口签名验证成功:")
-    println("  - 支持只传入类名")
-    println("  - 支持传入类名和成员名")
-    println("  - 支持成员名为null")
-    println("  - 不再需要文件路径参数")
+    println("✅ API signature verification succeeded:")
+    println("  - Supports class name only")
+    println("  - Supports class name plus member name")
+    println("  - Supports null member name")
+    println("  - No longer requires file path parameter")
     println()
   }
 
   @Test
-  fun `验证返回结果的完整性`() = runBlocking {
+  fun `verify completeness of returned result`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val className = "java.util.concurrent.ConcurrentHashMap"
 
-    println("🔍 验证测试: 返回结果的完整性")
-    println("测试类名: $className")
+    println("🔍 Verification test: completeness of returned result")
+    println("Test class: $className")
 
     // When
     val result = libCodeService.getLibraryCode(mockProject, className)
@@ -182,7 +185,7 @@ class LibCodeServiceVerificationTest {
     assertNotNull(result.metadata.libraryName)
     assertNotNull(result.metadata.sourceType)
 
-    println("✅ 结果完整性验证成功:")
+    println("✅ Result completeness verification succeeded:")
     println("  - sourceCode: ${if (result.sourceCode.isNotEmpty()) "✓" else "✗"}")
     println("  - language: ${if (result.language.isNotEmpty()) "✓" else "✗"}")
     println("  - isDecompiled: ${result.isDecompiled}")

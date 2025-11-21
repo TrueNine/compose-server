@@ -12,44 +12,52 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.ide.mcp.Response
 import org.jetbrains.mcpserverplugin.AbstractMcpTool
 
-/** 终端命令执行工具 提供通过 MCP 协议执行终端命令的功能，支持输出清洗和错误处理 */
+/**
+ * Terminal command execution tool.
+ *
+ * Provides terminal command execution over MCP with cleaned output and
+ * structured error handling.
+ */
 class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
   override val name: String = "terminal"
   override val description: String = "Execute terminal commands with clean output for AI processing"
 
   override fun handle(project: Project, args: TerminalArgs): Response {
-    Logger.info("开始执行终端命令: ${args.command}", "TerminalTool")
-    Logger.debug("命令参数 - 工作目录: ${args.workingDirectory}, 超时: ${args.timeout}ms, 清洗输出: ${args.cleanOutput}", "TerminalTool")
+    Logger.info("Start executing terminal command: ${args.command}", "TerminalTool")
+    Logger.debug(
+      "Command arguments - working directory: ${args.workingDirectory}, timeout: ${args.timeout}ms, clean output: ${args.cleanOutput}",
+      "TerminalTool",
+    )
 
     return try {
-      // 参数验证
+      // Validate arguments
       validateArgs(args, project)
 
-      // 执行命令
+      // Execute command
       val result = executeCommandWithTimeout(args, project)
 
-      Logger.info("终端命令执行完成 - 退出码: ${result.exitCode}", "TerminalTool")
+      Logger.info("Terminal command completed - exit code: ${result.exitCode}", "TerminalTool")
       Response(kotlinx.serialization.json.Json.encodeToString(TerminalResult.serializer(), result))
     } catch (e: Exception) {
-      Logger.error("终端命令执行失败: ${args.command}", "TerminalTool", e)
+      Logger.error("Terminal command execution failed: ${args.command}", "TerminalTool", e)
       val errorResponse = createErrorResponse(e, args.command)
       Response(kotlinx.serialization.json.Json.encodeToString(TerminalErrorResponse.serializer(), errorResponse))
     }
   }
 
-  /** 验证命令参数 */
+  /** Validate terminal command arguments. */
   private fun validateArgs(args: TerminalArgs, project: Project) {
-    // 验证命令不为空
+    // Verify command is not blank
     if (args.command.isBlank()) {
-      throw IllegalArgumentException("命令不能为空")
+      throw IllegalArgumentException("Command must not be blank")
     }
 
-    // 验证超时时间
+    // Verify timeout
     if (args.timeout <= 0) {
-      throw IllegalArgumentException("超时时间必须大于0，当前值: ${args.timeout}")
+      throw IllegalArgumentException("Timeout must be greater than 0, current value: ${args.timeout}")
     }
 
-    // 验证工作目录
+    // Verify working directory
     args.workingDirectory?.let { workDir ->
       val resolvedDir =
         if (File(workDir).isAbsolute) {
@@ -59,22 +67,22 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
         }
 
       if (!resolvedDir.exists()) {
-        throw IllegalArgumentException("工作目录不存在: ${resolvedDir.absolutePath}")
+        throw IllegalArgumentException("Working directory does not exist: ${resolvedDir.absolutePath}")
       }
 
       if (!resolvedDir.isDirectory) {
-        throw IllegalArgumentException("指定的工作目录不是一个目录: ${resolvedDir.absolutePath}")
+        throw IllegalArgumentException("Specified working directory is not a directory: ${resolvedDir.absolutePath}")
       }
     }
 
-    Logger.debug("参数验证通过", "TerminalTool")
+    Logger.debug("Argument validation passed", "TerminalTool")
   }
 
-  /** 执行命令并处理超时 */
+  /** Execute command and handle timeout. */
   private fun executeCommandWithTimeout(args: TerminalArgs, project: Project): TerminalResult {
     val future = CompletableFuture<TerminalResult>()
 
-    // 解析工作目录
+    // Resolve working directory
     val workingDirectory =
       args.workingDirectory?.let { workDir ->
         if (File(workDir).isAbsolute) {
@@ -84,10 +92,10 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
         }
       }
 
-    // 获取终端输出拦截器服务
+    // Get terminal output interceptor service
     val outputInterceptor = project.service<TerminalOutputInterceptor>()
 
-    // 执行命令
+    // Execute command
     outputInterceptor.executeCommand(command = args.command, workingDirectory = workingDirectory) { commandResult ->
       try {
         val terminalResult =
@@ -96,7 +104,7 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
             exitCode = commandResult.exitCode,
             output = if (args.cleanOutput) commandResult.cleanedOutput else commandResult.stdout,
             errorOutput = commandResult.stderr,
-            executionTime = 0L, // TODO: 添加执行时间计算
+            executionTime = 0L, // TODO: add execution time calculation
             workingDirectory = workingDirectory ?: project.basePath ?: "",
           )
 
@@ -106,16 +114,16 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
       }
     }
 
-    // 等待结果或超时
+    // Wait for result or timeout
     return try {
       future.get(args.timeout, TimeUnit.MILLISECONDS)
     } catch (e: java.util.concurrent.TimeoutException) {
-      Logger.error("命令执行超时: ${args.command}", "TerminalTool", e)
-      throw RuntimeException("命令执行超时 (${args.timeout}ms): ${args.command}")
+      Logger.error("Command execution timed out: ${args.command}", "TerminalTool", e)
+      throw RuntimeException("Command execution timed out (${args.timeout}ms): ${args.command}")
     }
   }
 
-  /** 创建错误响应 */
+  /** Create error response. */
   private fun createErrorResponse(error: Throwable, command: String): TerminalErrorResponse {
     val errorType =
       when (error) {
@@ -127,60 +135,60 @@ class TerminalTool : AbstractMcpTool<TerminalArgs>(TerminalArgs.serializer()) {
 
     val suggestions =
       when (errorType) {
-        "INVALID_ARGUMENT" -> listOf("检查命令格式和参数", "确认工作目录路径正确")
-        "TIMEOUT" -> listOf("增加超时时间", "检查命令是否会长时间运行", "使用更简单的命令")
-        "PERMISSION_DENIED" -> listOf("检查文件权限", "以适当权限运行 IDEA")
-        else -> listOf("检查命令是否正确", "查看详细错误信息", "重试执行")
+        "INVALID_ARGUMENT" -> listOf("Check command format and arguments", "Verify working directory path is correct")
+        "TIMEOUT" -> listOf("Increase timeout", "Check whether the command is long-running", "Use a simpler command")
+        "PERMISSION_DENIED" -> listOf("Check file permissions", "Run IDEA with appropriate privileges")
+        else -> listOf("Verify the command is correct", "Review detailed error information", "Retry execution")
       }
 
     return TerminalErrorResponse(
       success = false,
-      error = ErrorDetails(type = errorType, message = error.message ?: "未知错误", suggestions = suggestions),
+      error = ErrorDetails(type = errorType, message = error.message ?: "Unknown error", suggestions = suggestions),
       command = command,
       timestamp = System.currentTimeMillis(),
     )
   }
 }
 
-/** 终端命令参数 */
+/** Terminal command arguments. */
 @Serializable
 data class TerminalArgs(
-  /** 要执行的命令 */
+  /** Command to execute. */
   val command: String,
-  /** 工作目录，可以是绝对路径或相对于项目根目录的路径 */
+  /** Working directory; absolute or relative to project root. */
   val workingDirectory: String? = null,
-  /** 超时时间（毫秒），默认30秒 */
+  /** Timeout in milliseconds (default 30 seconds). */
   val timeout: Long = 30000,
-  /** 是否清洗输出，默认为true */
+  /** Whether to clean output (default true). */
   val cleanOutput: Boolean = true,
 )
 
-/** 终端命令执行结果 */
+/** Terminal command result. */
 @Serializable
 data class TerminalResult(
-  /** 执行的命令 */
+  /** Executed command. */
   val command: String,
-  /** 退出码 */
+  /** Exit code. */
   val exitCode: Int,
-  /** 标准输出（可能已清洗） */
+  /** Standard output (possibly cleaned). */
   val output: String,
-  /** 错误输出 */
+  /** Error output. */
   val errorOutput: String,
-  /** 执行时间（毫秒） */
+  /** Execution time in milliseconds. */
   val executionTime: Long,
-  /** 工作目录 */
+  /** Working directory. */
   val workingDirectory: String,
 )
 
-/** 终端命令错误响应 */
+/** Error response for terminal commands. */
 @Serializable
 data class TerminalErrorResponse(
-  /** 是否成功 */
+  /** Whether the operation succeeded. */
   val success: Boolean,
-  /** 错误详情 */
+  /** Error details. */
   val error: ErrorDetails,
-  /** 执行的命令 */
+  /** Executed command. */
   val command: String,
-  /** 时间戳 */
+  /** Timestamp. */
   val timestamp: Long,
 )
