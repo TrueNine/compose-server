@@ -26,7 +26,7 @@ dependencies {
     val dependency = allVersionCatalogs.findLibrary(aliasLib).getOrNull()?.get()
     dependency?.also { d ->
       if (d.module.group.contains(libs.versions.group.get()) == false) {
-        // 排除 BOM 类型的依赖，因为它们应该作为平台导入而不是库依赖
+        // Exclude BOM-type dependencies as they should be imported as platforms rather than library dependencies
         if (!d.module.name.contains("bom") && !d.module.name.contains("dependencies")) {
           compileOnly(d)
         }

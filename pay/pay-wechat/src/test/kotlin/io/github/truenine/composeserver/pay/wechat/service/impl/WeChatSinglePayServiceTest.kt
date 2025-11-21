@@ -26,7 +26,7 @@ class WeChatSinglePayServiceTest {
         wechatUserOpenId = "oRYYL5H-IKKK0sHs1L0EOjZw1Ne4",
         amount = BigDecimal("0.01"),
         customOrderId = customOrderId,
-        title = "One kilogram of pineapple",
+        title = "Pineapple (test order)",
       )
     val order = service.createMpPayOrder(crp)
     log.info(order.toString())

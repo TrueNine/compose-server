@@ -77,7 +77,7 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
         .map { it["column_name"] }
     assertTrue(pk.contains("id"), "id column was not set as primary key")
     val ids = jdbcTemplate.queryForList("select id from test_no_id order by id").map { it["id"] }
-    assertEquals(listOf(1L, 2L, 3L), ids, "id column was not auto-incremented starting from 0, actual: $ids")
+    assertEquals(listOf(1L, 2L, 3L), ids, "id column was not auto-incremented as expected, actual: $ids")
   }
 
   @Test

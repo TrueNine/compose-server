@@ -17,7 +17,7 @@ class TencentSmsTest {
 
   @Ignore
   @Test
-  fun `tencent cloud sms send failed`() {
+  fun `tencent cloud sms sending failed`() {
     val sdkAppId = System.getenv("TENCENTCLOUD_SDK_APP_ID")
     val secretId = System.getenv("TENCENTCLOUD_SECRET_ID")
     val secretKey = System.getenv("TENCENTCLOUD_SECRET_KEY")
