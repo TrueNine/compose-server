@@ -9,7 +9,7 @@ import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-/** ViewLibCodeTool 简化测试 */
+/** Simplified tests for ViewLibCodeTool. */
 class ViewLibCodeToolTest {
 
   @Test
@@ -24,7 +24,7 @@ class ViewLibCodeToolTest {
 
     // Then
     val responseText = response.toString()
-    // 应该不包含参数错误，而是正常处理
+    // Should not contain argument errors when class name is valid, or should indicate success
     assertTrue(!responseText.contains("INVALID_ARGUMENT") || responseText.contains("success"))
   }
 
@@ -41,7 +41,7 @@ class ViewLibCodeToolTest {
     // Then
     val responseText = response.toString()
     assertTrue(responseText.contains("INVALID_ARGUMENT"))
-    assertTrue(responseText.contains("完全限定类名不能为空"))
+    assertTrue(responseText.contains("Fully-qualified class name must not be blank"))
   }
 
   @Test
@@ -57,7 +57,7 @@ class ViewLibCodeToolTest {
     // Then
     val responseText = response.toString()
     assertTrue(responseText.contains("INVALID_ARGUMENT"))
-    assertTrue(responseText.contains("无效的类名格式"))
+    assertTrue(responseText.contains("Invalid class name format"))
   }
 
   @Test

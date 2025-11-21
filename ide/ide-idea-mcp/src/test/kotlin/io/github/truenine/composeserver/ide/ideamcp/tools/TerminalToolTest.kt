@@ -5,23 +5,23 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlinx.serialization.json.Json
 
-/** TerminalTool 单元测试 */
+/** TerminalTool unit tests. */
 class TerminalToolTest {
 
   private val terminalTool = TerminalTool()
 
   @Test
-  fun `工具名称应该正确`() {
+  fun `tool name should be correct`() {
     assertEquals("terminal", terminalTool.name)
   }
 
   @Test
-  fun `工具描述应该正确`() {
+  fun `tool description should be correct`() {
     assertEquals("Execute terminal commands with clean output for AI processing", terminalTool.description)
   }
 
   @Test
-  fun `TerminalArgs 序列化应该正确`() {
+  fun `TerminalArgs serialization should be correct`() {
     // Given
     val args = TerminalArgs(command = "echo hello", workingDirectory = "/tmp", timeout = 5000, cleanOutput = false)
 
@@ -37,7 +37,7 @@ class TerminalToolTest {
   }
 
   @Test
-  fun `TerminalResult 序列化应该正确`() {
+  fun `TerminalResult serialization should be correct`() {
     // Given
     val result = TerminalResult(command = "echo test", exitCode = 0, output = "test", errorOutput = "", executionTime = 100L, workingDirectory = "/tmp")
 
@@ -55,12 +55,12 @@ class TerminalToolTest {
   }
 
   @Test
-  fun `TerminalErrorResponse 序列化应该正确`() {
+  fun `TerminalErrorResponse serialization should be correct`() {
     // Given
     val errorResponse =
       TerminalErrorResponse(
         success = false,
-        error = ErrorDetails(type = "INVALID_ARGUMENT", message = "测试错误", suggestions = listOf("建议1", "建议2")),
+        error = ErrorDetails(type = "INVALID_ARGUMENT", message = "Test error", suggestions = listOf("Suggestion1", "Suggestion2")),
         command = "test command",
         timestamp = 1234567890L,
       )
@@ -79,7 +79,7 @@ class TerminalToolTest {
   }
 
   @Test
-  fun `默认参数应该正确设置`() {
+  fun `default arguments should be set correctly`() {
     // Given
     val args = TerminalArgs(command = "echo test")
 

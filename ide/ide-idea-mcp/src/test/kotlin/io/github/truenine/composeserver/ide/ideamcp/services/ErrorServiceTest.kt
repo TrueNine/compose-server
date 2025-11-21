@@ -9,13 +9,13 @@ import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-/** ErrorService 单元测试 */
+/** ErrorService unit tests. */
 class ErrorServiceTest {
 
   private val errorService = ErrorServiceImpl()
 
   @Test
-  fun `collectErrors 应该处理单个文件`() {
+  fun `collectErrors should handle single file`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -35,11 +35,11 @@ class ErrorServiceTest {
     val result = errorService.collectErrors(project, virtualFile)
 
     // Then
-    assertTrue(result.isEmpty()) // 目前返回空结果，因为是模拟实现
+    assertTrue(result.isEmpty()) // Currently returns empty result because this is a stub implementation
   }
 
   @Test
-  fun `collectErrors 应该处理目录`() {
+  fun `collectErrors should handle directory`() {
     // Given
     val project = mockk<Project>()
     val directory = mockk<VirtualFile>()
@@ -66,11 +66,11 @@ class ErrorServiceTest {
     val result = errorService.collectErrors(project, directory)
 
     // Then
-    assertTrue(result.isEmpty()) // 目前返回空结果，因为是模拟实现
+    assertTrue(result.isEmpty()) // Currently returns empty result because this is a stub implementation
   }
 
   @Test
-  fun `analyzeFile 应该处理无效文件`() {
+  fun `analyzeFile should handle invalid file`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -86,7 +86,7 @@ class ErrorServiceTest {
   }
 
   @Test
-  fun `analyzeFile 应该处理目录`() {
+  fun `analyzeFile should handle directory`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -102,7 +102,7 @@ class ErrorServiceTest {
   }
 
   @Test
-  fun `analyzeFile 应该处理 PSI 文件不存在的情况`() {
+  fun `analyzeFile should handle missing PSI file`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -123,7 +123,7 @@ class ErrorServiceTest {
   }
 
   @Test
-  fun `analyzeFile 应该处理正常的 PSI 文件`() {
+  fun `analyzeFile should handle normal PSI file`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -142,11 +142,11 @@ class ErrorServiceTest {
     val result = errorService.analyzeFile(project, virtualFile)
 
     // Then
-    assertTrue(result.isEmpty()) // 目前返回空结果，因为是模拟实现
+    assertTrue(result.isEmpty()) // Currently returns empty result because this is a stub implementation
   }
 
   @Test
-  fun `analyzeFile 应该在 WriteIntentReadAction 中安全执行`() {
+  fun `analyzeFile should run safely inside WriteIntentReadAction`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -163,10 +163,10 @@ class ErrorServiceTest {
     every { psiFile.project } returns project
     every { psiFile.virtualFile } returns virtualFile
 
-    // When - 这个调用应该不会抛出线程访问异常
+    // When - this call should not throw thread-access exceptions
     val result = errorService.analyzeFile(project, virtualFile)
 
-    // Then - 验证没有抛出异常并且返回了结果
-    assertTrue(result.isEmpty()) // 在模拟环境中返回空结果是正常的
+    // Then - verify that no exception is thrown and a result is returned
+    assertTrue(result.isEmpty()) // Returning an empty result in the mocked environment is expected
   }
 }

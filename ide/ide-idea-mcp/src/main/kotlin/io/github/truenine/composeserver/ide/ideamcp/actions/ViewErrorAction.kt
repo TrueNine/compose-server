@@ -84,7 +84,7 @@ class ViewErrorAction : AnAction("View Errors", "View errors and warnings in fil
               indicator.text2 = "Analysis completed"
               indicator.fraction = 1.0
 
-              // 在 EDT 中显示结果
+              // Show result on EDT
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                 if (!indicator.isCanceled) {
                   showErrorReportDialog(project, filteredReport, virtualFile.name)
@@ -97,7 +97,7 @@ class ViewErrorAction : AnAction("View Errors", "View errors and warnings in fil
             } catch (e: Exception) {
               logger.error("Error view failed", e)
 
-              // 在 EDT 中显示错误
+              // Show error on EDT
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                 if (!indicator.isCanceled) {
                   showDetailedErrorDialog(project, e, virtualFile.name)

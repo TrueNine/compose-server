@@ -156,14 +156,14 @@ object MockDataGenerator {
       appendLine(") {")
       appendLine()
 
-      // 生成指定的成员方法
+      // Generate specified member methods
       includeMembers.forEach { memberName ->
         when (memberName) {
           "testMethod" -> {
             appendLine("    /**")
-            appendLine("     * 测试方法")
-            appendLine("     * @param input 输入参数")
-            appendLine("     * @return 处理结果")
+            appendLine("     * Test method")
+            appendLine("     * @param input input parameter")
+            appendLine("     * @return processed result")
             appendLine("     */")
             appendLine("    fun testMethod(input: String?): String {")
             appendLine("        return when (input) {")

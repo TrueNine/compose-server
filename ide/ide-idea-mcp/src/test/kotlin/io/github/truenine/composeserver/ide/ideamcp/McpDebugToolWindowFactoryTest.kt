@@ -5,7 +5,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.mockk.mockk
 import io.mockk.verify
 
-/** MCP调试工具窗口工厂测试 测试工具窗口的创建和注册 */
+/** MCP debug tool window factory tests for creation and registration. */
 class McpDebugToolWindowFactoryTest : BasePlatformTestCase() {
 
   private lateinit var factory: McpDebugToolWindowFactory
@@ -16,39 +16,39 @@ class McpDebugToolWindowFactoryTest : BasePlatformTestCase() {
   }
 
   fun testFactoryCreation() {
-    // 测试工厂可以正确创建
+    // Verify that the factory can be created
     assertNotNull(factory)
   }
 
   fun testCreateToolWindowContent() {
-    // 测试工具窗口内容创建
+    // Verify that tool window content can be created
     val mockToolWindow = mockk<ToolWindow>(relaxed = true)
 
     try {
       factory.createToolWindowContent(project, mockToolWindow)
 
-      // 验证工具窗口内容管理器被调用
+      // Verify that the tool window content manager is accessed
       verify { mockToolWindow.contentManager }
     } catch (e: Exception) {
-      // 在测试环境中可能会因为缺少某些依赖而失败
-      // 但我们至少验证了方法可以被调用
+      // In the test environment some dependencies may be missing,
+      // but at least we verify that the method can be invoked.
       assertTrue(e.message?.contains("content") == true || e.message?.contains("manager") == true)
     }
   }
 
   fun testFactoryCondition() {
-    // 测试工厂条件检查
+    // Verify factory condition checks
     try {
-      // 测试工厂的shouldBeAvailable方法（如果存在）
-      // 大多数工厂都应该在项目存在时可用
+      // Test factory's shouldBeAvailable behavior (if applicable).
+      // Most factories should be available when a project exists.
       assertNotNull(project)
     } catch (e: Exception) {
-      println("工厂条件测试异常: ${e.message}")
+      println("Factory condition test exception: ${e.message}")
     }
   }
 
   fun testMultipleToolWindowCreation() {
-    // 测试多次创建工具窗口
+    // Verify that multiple tool windows can be created
     val mockToolWindow1 = mockk<ToolWindow>(relaxed = true)
     val mockToolWindow2 = mockk<ToolWindow>(relaxed = true)
 
@@ -56,12 +56,12 @@ class McpDebugToolWindowFactoryTest : BasePlatformTestCase() {
       factory.createToolWindowContent(project, mockToolWindow1)
       factory.createToolWindowContent(project, mockToolWindow2)
 
-      // 验证两次调用都成功
+      // Verify that both calls succeed
       verify { mockToolWindow1.contentManager }
       verify { mockToolWindow2.contentManager }
     } catch (e: Exception) {
-      // 在测试环境中可能会有限制
-      println("多次创建工具窗口测试异常: ${e.message}")
+      // There may be limitations in the test environment
+      println("Multiple tool window creation test exception: ${e.message}")
     }
   }
 }

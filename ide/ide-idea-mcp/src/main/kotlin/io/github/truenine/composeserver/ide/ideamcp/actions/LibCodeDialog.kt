@@ -97,7 +97,7 @@ class LibCodeDialog(private val project: Project, private val result: LibCodeRes
       return panel
     }
 
-    // 创建只读编辑器
+    // Create read-only editor
     val document = EditorFactory.getInstance().createDocument(result.sourceCode)
     val fileType =
       FileTypeManager.getInstance()

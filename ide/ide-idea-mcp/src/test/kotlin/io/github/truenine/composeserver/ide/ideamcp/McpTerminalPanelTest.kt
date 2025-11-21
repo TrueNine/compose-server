@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import javax.swing.JComponent
 
-/** MCP终端面板测试 测试终端面板的创建和基本功能 */
+/** MCP terminal panel tests verifying creation and basic behavior. */
 class McpTerminalPanelTest : BasePlatformTestCase() {
 
   private lateinit var terminalPanel: McpTerminalPanel
@@ -14,68 +14,68 @@ class McpTerminalPanelTest : BasePlatformTestCase() {
   }
 
   fun testPanelCreation() {
-    // 测试面板可以正确创建
+    // Verify that the panel can be created
     assertNotNull(terminalPanel)
 
-    // 验证面板是JComponent的实例
+    // Verify that the panel is an instance of JComponent
     assertTrue(terminalPanel is JComponent)
   }
 
   fun testPanelComponents() {
-    // 测试面板包含必要的组件
+    // Verify that the panel contains required components
     assertNotNull(terminalPanel)
 
-    // 验证面板不为空且可以显示
+    // Verify that the panel is not empty and can be displayed
     assertTrue(terminalPanel.componentCount >= 0)
   }
 
   fun testCommandExecution() {
-    // 测试命令执行功能（模拟）
+    // Verify command execution behavior (simulated)
     try {
-      // 在测试环境中，我们只测试方法调用不会抛出异常
+      // In the test environment we only verify that method calls do not throw exceptions
       assertNotNull(terminalPanel)
 
-      // 测试面板可以处理命令输入
-      // 注意：实际的命令执行需要真实的终端环境
+      // Verify that the panel can handle command input
+      // Note: real command execution requires a real terminal environment
     } catch (e: Exception) {
-      // 在测试环境中可能会有限制
-      println("终端命令测试异常: ${e.message}")
+      // There may be limitations in the test environment
+      println("Terminal command test exception: ${e.message}")
     }
   }
 
   fun testHistoryManagement() {
-    // 测试命令历史管理
+    // Verify command history management
     try {
       assertNotNull(terminalPanel)
 
-      // 测试历史记录功能不会抛出异常
-      // 实际的历史记录功能需要用户交互
+      // Verify that history-related operations do not throw exceptions
+      // Actual history features require user interaction
     } catch (e: Exception) {
-      println("历史记录测试异常: ${e.message}")
+      println("History management test exception: ${e.message}")
     }
   }
 
   fun testOutputComparison() {
-    // 测试输出对比功能
+    // Verify output comparison functionality
     try {
       assertNotNull(terminalPanel)
 
-      // 测试输出对比功能的基本创建
-      // 实际的对比功能需要真实的输出数据
+      // Verify that basic structures for output comparison can be created
+      // Actual comparison features require real output data
     } catch (e: Exception) {
-      println("输出对比测试异常: ${e.message}")
+      println("Output comparison test exception: ${e.message}")
     }
   }
 
   fun testPanelDispose() {
-    // 测试面板销毁
+    // Verify panel disposal
     try {
       assertNotNull(terminalPanel)
 
-      // 测试销毁不会抛出异常
+      // Verify that dispose does not throw exceptions
       terminalPanel.dispose()
     } catch (e: Exception) {
-      fail("终端面板销毁时不应该抛出异常: ${e.message}")
+      fail("Terminal panel dispose should not throw exceptions: ${e.message}")
     }
   }
 }
