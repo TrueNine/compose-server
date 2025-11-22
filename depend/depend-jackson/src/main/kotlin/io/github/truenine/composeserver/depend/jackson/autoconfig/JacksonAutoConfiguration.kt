@@ -84,6 +84,7 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     return builder
   }
 
+  @Order(Ordered.HIGHEST_PRECEDENCE)
   @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @ConditionalOnMissingBean(value = [ObjectMapper::class])
   @org.springframework.context.annotation.Primary
@@ -131,7 +132,7 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     log.debug("register non-ignore objectMapper")
     // Create a base mapper to avoid circular dependency
     val baseMapper = createBaseJsonMapperBuilder().build()
-    
+
     val builder = JsonMapper.builder()
 
     // Preserve modules from the base mapper
@@ -147,11 +148,11 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     val defaultTypingBuilder =
       object : DefaultTypeResolverBuilder(polymorphicTypeValidator, DefaultTyping.NON_FINAL_AND_ENUMS, JsonTypeInfo.As.PROPERTY) {
         override fun useForType(t: JavaType): Boolean {
-          if (super.useForType(t)) {
-            return true
-          }
           if (isJacksonNaturalType(t)) {
             return false
+          }
+          if (super.useForType(t)) {
+            return true
           }
           return !t.isPrimitive
         }

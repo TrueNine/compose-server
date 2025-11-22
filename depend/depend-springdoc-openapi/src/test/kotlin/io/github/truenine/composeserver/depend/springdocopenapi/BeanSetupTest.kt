@@ -26,8 +26,7 @@ import org.springframework.web.context.WebApplicationContext
     ]
 )
 class BeanSetupTest {
-  @Autowired
-  lateinit var webApplicationContext: WebApplicationContext
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
 
   lateinit var mock: MockMvc
 

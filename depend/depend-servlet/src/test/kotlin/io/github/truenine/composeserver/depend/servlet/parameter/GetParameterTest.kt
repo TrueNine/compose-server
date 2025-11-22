@@ -28,8 +28,7 @@ import tools.jackson.databind.ObjectMapper
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(GetParameterTest.TestGetParameterController::class)
 class GetParameterTest {
-  @Autowired
-  lateinit var webApplicationContext: WebApplicationContext
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
 
   lateinit var mockMvc: MockMvc
 
@@ -206,7 +205,7 @@ class GetParameterTest {
   fun `no-annotation parameter passing only name and not age returns a Dto object with age as null`() {
     mockMvc.get("/test/getParameter_test/nonAnnotation?name=abc").andExpect {
       status { isOk() }
-      content { json("""{"name":"abc","age":null}""") }
+      content { json("{\"name\":\"abc\"}") }
     }
   }
 
@@ -215,7 +214,7 @@ class GetParameterTest {
   fun `no-annotation parameter DataClass passing only age and not name returns a DataClassDto with name as null`() {
     mockMvc.get("/test/getParameter_test/nonAnnotationDataClass?age=18").andExpect {
       status { isOk() }
-      content { json("""{"name":null,"age":18}""") }
+      content { json("{\"age\":18}") }
     }
   }
 

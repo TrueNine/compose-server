@@ -24,8 +24,7 @@ import org.springframework.web.multipart.MultipartFile
 @SpringBootTest(classes = [TestApplication::class])
 @Import(UploadFileParamAssertTest.TestUploadController::class)
 class UploadFileParamAssertTest {
-  @Autowired
-  lateinit var webApplicationContext: WebApplicationContext
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
 
   lateinit var mvc: MockMvc
 

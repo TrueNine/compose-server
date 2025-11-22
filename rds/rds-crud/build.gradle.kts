@@ -12,6 +12,8 @@ description =
     .trimIndent()
 
 dependencies {
+  api(libs.org.springframework.boot.spring.boot.persistence)
+
   ksp(libs.org.babyfish.jimmer.jimmer.ksp)
   implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter)
 

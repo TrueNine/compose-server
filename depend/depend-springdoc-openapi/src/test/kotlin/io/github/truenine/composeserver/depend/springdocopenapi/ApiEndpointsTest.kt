@@ -25,8 +25,7 @@ import org.springframework.web.context.WebApplicationContext
 )
 class ApiEndpointsTest {
 
-  @Autowired
-  lateinit var webApplicationContext: WebApplicationContext
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
 
   lateinit var mockMvc: MockMvc
 

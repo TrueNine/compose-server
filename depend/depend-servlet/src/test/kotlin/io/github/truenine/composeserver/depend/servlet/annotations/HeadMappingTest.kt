@@ -17,8 +17,7 @@ import org.springframework.web.context.WebApplicationContext
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(HeadMappingTest.HeadController::class)
 class HeadMappingTest {
-  @Autowired
-  lateinit var webApplicationContext: WebApplicationContext
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
 
   lateinit var mock: MockMvc
 

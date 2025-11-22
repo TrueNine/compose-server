@@ -18,8 +18,7 @@ import org.springframework.web.context.WebApplicationContext
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(PathVariableTest.TestPathVariableController::class)
 class PathVariableTest {
-  @Autowired
-  lateinit var webApplicationContext: WebApplicationContext
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
 
   lateinit var mockMvc: MockMvc
 
