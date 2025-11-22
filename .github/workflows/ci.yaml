@@ -18,7 +18,7 @@ jobs:
   quick-check:
     name: Quick Check
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 20
     outputs:
       cache-key: ${{ steps.cache-info.outputs.cache-key }}
       gradle-cache-key: ${{ steps.cache-info.outputs.gradle-cache-key }}
