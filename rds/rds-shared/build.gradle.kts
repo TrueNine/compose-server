@@ -20,8 +20,8 @@ dependencies {
   implementation(libs.org.babyfish.jimmer.jimmer.sql.kotlin)
   implementation(libs.org.babyfish.jimmer.jimmer.spring.boot.starter) {
     exclude(
-      group = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.group,
-      module = libs.org.springframework.boot.spring.boot.starter.jdbc.get().module.name,
+      group = libs.org.springframework.boot.spring.boot.starter.jdbc.asProvider().get().module.group,
+      module = libs.org.springframework.boot.spring.boot.starter.jdbc.asProvider().get().module.name,
     )
     exclude(
       group = libs.org.springframework.data.spring.data.commons.get().module.group,
