@@ -8,8 +8,8 @@ on:
       - '**/*.kt'
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
-  JVM_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true -Dorg.gradle.jvmargs=\"-Xmx3g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:+UseStringDeduplication -Dfile.encoding=UTF-8\" -Dkotlin.daemon.jvmargs=\"-Xmx2g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC\""
+  JVM_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:+UseStringDeduplication -Dfile.encoding=UTF-8"
   TESTCONTAINERS_RYUK_DISABLED: false
   TESTCONTAINERS_REUSE_ENABLE: true
   DOCKER_BUILDKIT: 1
