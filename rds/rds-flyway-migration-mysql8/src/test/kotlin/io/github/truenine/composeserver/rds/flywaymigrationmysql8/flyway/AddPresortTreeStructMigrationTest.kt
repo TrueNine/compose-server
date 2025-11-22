@@ -13,9 +13,9 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * add_presort_tree_struct 存储过程测试
+ * add_presort_tree_struct stored procedure tests.
  *
- * 测试 add_presort_tree_struct 和 rm_presort_tree_struct 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the add_presort_tree_struct and rm_presort_tree_struct stored procedures.
  */
 @SpringBootTest
 @Transactional
@@ -32,106 +32,108 @@ class AddPresortTreeStructMigrationTest : IDatabaseMysqlContainer {
   inner class AddPresortTreeStructTests {
 
     @Test
-    fun `add_presort_tree_struct 应该添加所有预排序树结构字段`() {
-      // 创建测试表
+    fun `add_presort_tree_struct should add all presorted tree struct columns`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_struct_table(name VARCHAR(255))")
 
-      // 调用 add_presort_tree_struct
+      // Call add_presort_tree_struct
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_struct_table')")
 
-      // 验证字段添加
+      // Verify columns are added
       val columns = getTableColumns("test_presort_tree_struct_table")
       val expectedColumns = listOf("rpi", "rln", "rrn", "nlv", "tgi")
-      assertTrue(columns.containsAll(expectedColumns), "应该包含所有预排序树结构字段")
+      assertTrue(columns.containsAll(expectedColumns), "All presorted tree struct columns should be present")
     }
 
     @Test
-    fun `add_presort_tree_struct 应该设置正确的字段类型和默认值`() {
-      // 创建测试表
+    fun `add_presort_tree_struct should set correct column types and default values`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_struct_table(name VARCHAR(255))")
 
-      // 调用 add_presort_tree_struct
+      // Call add_presort_tree_struct
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_struct_table')")
 
-      // 验证字段类型和默认值
+      // Verify column types and default values
       val columnInfo = getColumnInfo("test_presort_tree_struct_table")
 
-      // 验证 rpi 字段
-      assertEquals("bigint", columnInfo["rpi"]?.get("data_type")?.toString()?.lowercase(), "rpi 应该是 bigint 类型")
-      assertEquals("YES", columnInfo["rpi"]?.get("is_nullable"), "rpi 应该可以为空")
+      // Verify rpi column
+      assertEquals("bigint", columnInfo["rpi"]?.get("data_type")?.toString()?.lowercase(), "rpi should be of type BIGINT")
+      assertEquals("YES", columnInfo["rpi"]?.get("is_nullable"), "rpi should be nullable")
 
-      // 验证 rln 字段
-      assertEquals("bigint", columnInfo["rln"]?.get("data_type")?.toString()?.lowercase(), "rln 应该是 bigint 类型")
-      assertEquals("1", columnInfo["rln"]?.get("column_default")?.toString(), "rln 默认值应该是 1")
+      // Verify rln column
+      assertEquals("bigint", columnInfo["rln"]?.get("data_type")?.toString()?.lowercase(), "rln should be of type BIGINT")
+      assertEquals("1", columnInfo["rln"]?.get("column_default")?.toString(), "Default value of rln should be 1")
 
-      // 验证 rrn 字段
-      assertEquals("bigint", columnInfo["rrn"]?.get("data_type")?.toString()?.lowercase(), "rrn 应该是 bigint 类型")
-      assertEquals("2", columnInfo["rrn"]?.get("column_default")?.toString(), "rrn 默认值应该是 2")
+      // Verify rrn column
+      assertEquals("bigint", columnInfo["rrn"]?.get("data_type")?.toString()?.lowercase(), "rrn should be of type BIGINT")
+      assertEquals("2", columnInfo["rrn"]?.get("column_default")?.toString(), "Default value of rrn should be 2")
 
-      // 验证 nlv 字段
-      assertEquals("int", columnInfo["nlv"]?.get("data_type")?.toString()?.lowercase(), "nlv 应该是 int 类型")
-      assertEquals("0", columnInfo["nlv"]?.get("column_default")?.toString(), "nlv 默认值应该是 0")
+      // Verify nlv column
+      assertEquals("int", columnInfo["nlv"]?.get("data_type")?.toString()?.lowercase(), "nlv should be of type INT")
+      assertEquals("0", columnInfo["nlv"]?.get("column_default")?.toString(), "Default value of nlv should be 0")
 
-      // 验证 tgi 字段
-      assertEquals("varchar", columnInfo["tgi"]?.get("data_type")?.toString()?.lowercase(), "tgi 应该是 varchar 类型")
-      assertEquals("YES", columnInfo["tgi"]?.get("is_nullable"), "tgi 应该可以为空")
+      // Verify tgi column
+      assertEquals("varchar", columnInfo["tgi"]?.get("data_type")?.toString()?.lowercase(), "tgi should be of type VARCHAR")
+      assertEquals("YES", columnInfo["tgi"]?.get("is_nullable"), "tgi should be nullable")
     }
 
     @Test
-    fun `add_presort_tree_struct 应该创建所有字段的索引`() {
-      // 创建测试表
+    fun `add_presort_tree_struct should create indexes for all columns`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_struct_table(name VARCHAR(255))")
 
-      // 调用 add_presort_tree_struct
+      // Call add_presort_tree_struct
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_struct_table')")
 
-      // 验证索引创建
-      assertTrue(hasIndex("test_presort_tree_struct_table", "rpi_idx"), "应该创建 rpi_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_struct_table", "rln_idx"), "应该创建 rln_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_struct_table", "rrn_idx"), "应该创建 rrn_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_struct_table", "nlv_idx"), "应该创建 nlv_idx 索引")
-      assertTrue(hasIndex("test_presort_tree_struct_table", "tgi_idx"), "应该创建 tgi_idx 索引")
+      // Verify indexes are created
+      assertTrue(hasIndex("test_presort_tree_struct_table", "rpi_idx"), "Index rpi_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_struct_table", "rln_idx"), "Index rln_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_struct_table", "rrn_idx"), "Index rrn_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_struct_table", "nlv_idx"), "Index nlv_idx should be created")
+      assertTrue(hasIndex("test_presort_tree_struct_table", "tgi_idx"), "Index tgi_idx should be created")
     }
 
     @Test
-    fun `add_presort_tree_struct 幂等性测试`() {
-      // 创建测试表
+    fun `add_presort_tree_struct idempotency test`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_presort_tree_struct_table(name VARCHAR(255))")
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_struct_table')")
       val afterFirst = getTableColumns("test_presort_tree_struct_table")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_struct_table')")
       val afterSecond = getTableColumns("test_presort_tree_struct_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL add_presort_tree_struct('test_presort_tree_struct_table')")
       val afterThird = getTableColumns("test_presort_tree_struct_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后字段应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后字段应该相同")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Columns should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Columns should be the same after the third call")
 
       val expectedColumns = listOf("rpi", "rln", "rrn", "nlv", "tgi")
-      assertTrue(afterThird.containsAll(expectedColumns), "应该包含所有预排序树结构字段")
+      assertTrue(afterThird.containsAll(expectedColumns), "All presorted tree struct columns should be present")
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getTableColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name 
-      FROM information_schema.columns 
-      WHERE table_schema = DATABASE() AND table_name = ?
-      ORDER BY ordinal_position
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_schema = DATABASE() AND table_name = ?
+        ORDER BY ordinal_position
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 
   private fun getColumnInfo(tableName: String): Map<String, Map<String, Any?>> {

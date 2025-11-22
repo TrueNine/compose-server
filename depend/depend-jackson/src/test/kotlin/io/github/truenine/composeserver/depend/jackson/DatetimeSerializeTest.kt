@@ -1,7 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.truenine.composeserver.date
 import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
@@ -10,6 +8,8 @@ import io.github.truenine.composeserver.time
 import jakarta.annotation.Resource
 import kotlin.test.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 
 @SpringBootTest
 class DatetimeSerializeTest {

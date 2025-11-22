@@ -13,62 +13,70 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.ide.mcp.Response
 import org.jetbrains.mcpserverplugin.AbstractMcpTool
 
-/** 代码清理工具 提供通过 MCP 协议执行代码清理操作的功能，包括格式化、导入优化、检查修复等 */
+/**
+ * Code clean-up tool.
+ *
+ * Provides code clean-up operations over MCP, including formatting, import optimization, and inspections/fixes.
+ */
 class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer()) {
   override val name: String = "clean_code"
   override val description: String = "Clean and format code using IDEA capabilities with comprehensive reporting"
 
   override fun handle(project: Project, args: CleanCodeArgs): Response {
-    Logger.info("开始执行代码清理: ${args.path}", "CleanCodeTool")
-    Logger.debug("清理参数 - 格式化: ${args.formatCode}, 优化导入: ${args.optimizeImports}, 运行检查: ${args.runInspections}", "CleanCodeTool")
+    Logger.info("Start code clean-up: ${args.path}", "CleanCodeTool")
+    Logger.debug(
+      "Clean options - format: ${args.formatCode}, optimize imports: ${args.optimizeImports}, run inspections: ${args.runInspections}",
+      "CleanCodeTool",
+    )
 
     return try {
-      // 参数验证
+      // Validate arguments
       validateArgs(args, project)
 
-      // 异步执行清理操作
+      // Execute clean-up asynchronously
       val result = runBlocking { executeCleanOperation(args, project) }
 
-      Logger.info("代码清理完成 - 处理文件: ${result.processedFiles}, 修改文件: ${result.modifiedFiles}", "CleanCodeTool")
+      Logger.info("Code clean-up completed - processed: ${result.processedFiles}, modified: ${result.modifiedFiles}", "CleanCodeTool")
       Response(Json.encodeToString(CleanCodeResult.serializer(), result))
     } catch (e: Exception) {
-      Logger.error("代码清理失败: ${args.path}", "CleanCodeTool", e)
+      Logger.error("Code clean-up failed: ${args.path}", "CleanCodeTool", e)
       val errorResponse = createErrorResponse(e, args.path)
       Response(Json.encodeToString(CleanCodeErrorResponse.serializer(), errorResponse))
     }
   }
 
-  /** 验证清理参数 */
+  /** Validate clean-up arguments. */
   private fun validateArgs(args: CleanCodeArgs, project: Project) {
-    // 验证路径不为空
+    // Verify path is not blank
     if (args.path.isBlank()) {
-      throw IllegalArgumentException("路径不能为空")
+      throw IllegalArgumentException("Path must not be blank")
     }
 
-    // 验证至少选择一种清理操作
+    // Verify at least one operation is enabled
     if (!args.formatCode && !args.optimizeImports && !args.runInspections) {
-      throw IllegalArgumentException("必须至少选择一种清理操作")
+      throw IllegalArgumentException("At least one clean-up operation must be selected")
     }
 
-    Logger.debug("参数验证通过", "CleanCodeTool")
+    Logger.debug("Argument validation passed", "CleanCodeTool")
   }
 
-  /** 执行清理操作 */
+  /** Execute clean-up operation. */
   private suspend fun executeCleanOperation(args: CleanCodeArgs, project: Project): CleanCodeResult {
-    Logger.debug("开始执行清理操作", "CleanCodeTool")
+    Logger.debug("Start executing clean-up operation", "CleanCodeTool")
 
-    // 获取服务实例
+    // Resolve service instances
     val cleanService = project.service<CleanService>()
     val fileManager = project.service<FileManager>()
 
-    // 解析路径到 VirtualFile
-    val virtualFile = fileManager.resolvePathToVirtualFile(project, args.path) ?: throw IllegalArgumentException("路径不存在或无法访问: ${args.path}")
+    // Resolve path to VirtualFile
+    val virtualFile =
+      fileManager.resolvePathToVirtualFile(project, args.path) ?: throw IllegalArgumentException("Path does not exist or is not accessible: ${args.path}")
 
-    // 创建清理选项
+    // Build clean-up options
     val cleanOptions =
       CleanOptions(formatCode = args.formatCode, optimizeImports = args.optimizeImports, runInspections = args.runInspections, rearrangeCode = false)
 
-    // 执行清理操作
+    // Run clean-up
     val cleanResult = cleanService.cleanCode(project, virtualFile, cleanOptions)
 
     return CleanCodeResult(
@@ -83,7 +91,7 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
     )
   }
 
-  /** 创建错误响应 */
+  /** Create error response. */
   private fun createErrorResponse(error: Throwable, path: String): CleanCodeErrorResponse {
     val errorType =
       when (error) {
@@ -95,75 +103,75 @@ class CleanCodeTool : AbstractMcpTool<CleanCodeArgs>(CleanCodeArgs.serializer())
 
     val suggestions =
       when (errorType) {
-        "INVALID_ARGUMENT" -> listOf("检查路径格式", "确保至少选择一种清理操作")
-        "PERMISSION_DENIED" -> listOf("检查文件权限", "确保文件未被其他进程锁定")
-        "PATH_NOT_FOUND" -> listOf("检查路径是否存在", "使用相对于项目根目录的路径")
-        else -> listOf("检查文件状态", "重试操作", "查看详细错误信息")
+        "INVALID_ARGUMENT" -> listOf("Check path format", "Ensure at least one clean-up operation is selected")
+        "PERMISSION_DENIED" -> listOf("Check file permissions", "Ensure the file is not locked by another process")
+        "PATH_NOT_FOUND" -> listOf("Verify that the path exists", "Use a path relative to the project root")
+        else -> listOf("Check file state", "Retry the operation", "Review detailed error information")
       }
 
     return CleanCodeErrorResponse(
       success = false,
-      error = ErrorDetails(type = errorType, message = error.message ?: "未知错误", suggestions = suggestions),
+      error = ErrorDetails(type = errorType, message = error.message ?: "Unknown error", suggestions = suggestions),
       path = path,
       timestamp = System.currentTimeMillis(),
     )
   }
 }
 
-/** 代码清理参数 */
+/** Code clean-up arguments. */
 @Serializable
 data class CleanCodeArgs(
-  /** 要清理的文件或目录路径 */
+  /** File or directory path to clean. */
   val path: String,
-  /** 是否执行代码格式化，默认为true */
+  /** Whether to format code (default true). */
   val formatCode: Boolean = true,
-  /** 是否优化导入，默认为true */
+  /** Whether to optimize imports (default true). */
   val optimizeImports: Boolean = true,
-  /** 是否运行代码检查并修复，默认为true */
+  /** Whether to run inspections and apply fixes (default true). */
   val runInspections: Boolean = true,
 )
 
-/** 代码清理结果 */
+/** Code clean-up result. */
 @Serializable
 data class CleanCodeResult(
-  /** 是否成功 */
+  /** Whether the operation succeeded. */
   val success: Boolean,
-  /** 清理的路径 */
+  /** Path that was cleaned. */
   val path: String,
-  /** 处理的文件数量 */
+  /** Number of processed files. */
   val processedFiles: Int,
-  /** 修改的文件数量 */
+  /** Number of modified files. */
   val modifiedFiles: Int,
-  /** 执行的操作列表 */
+  /** List of executed operations. */
   val operations: List<CleanOperation>,
-  /** 操作摘要 */
+  /** Operation summary. */
   val summary: String,
-  /** 执行时间（毫秒） */
+  /** Execution time in milliseconds. */
   val executionTime: Long,
-  /** 时间戳 */
+  /** Timestamp. */
   val timestamp: Long,
 )
 
-/** 清理操作 */
+/** Clean-up operation entry. */
 @Serializable
 data class CleanOperation(
-  /** 操作类型 */
+  /** Operation type. */
   val type: String,
-  /** 操作描述 */
+  /** Operation description. */
   val description: String,
-  /** 影响的文件数量 */
+  /** Number of affected files. */
   val filesAffected: Int,
 )
 
-/** 代码清理错误响应 */
+/** Error response for code clean-up. */
 @Serializable
 data class CleanCodeErrorResponse(
-  /** 是否成功 */
+  /** Whether the operation succeeded. */
   val success: Boolean,
-  /** 错误详情 */
+  /** Error details. */
   val error: ErrorDetails,
-  /** 清理的路径 */
+  /** Path that was being cleaned. */
   val path: String,
-  /** 时间戳 */
+  /** Timestamp. */
   val timestamp: Long,
 )

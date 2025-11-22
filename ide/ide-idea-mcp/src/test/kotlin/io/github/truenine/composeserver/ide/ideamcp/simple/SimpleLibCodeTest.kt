@@ -8,11 +8,11 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 
-/** 简单的LibCodeService测试 验证基本功能是否正常 */
+/** Simple LibCodeService test verifying basic behavior. */
 class SimpleLibCodeTest {
 
   @Test
-  fun `简单测试 - 验证服务可以正常工作`() = runBlocking {
+  fun `simple test - service should work correctly`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
@@ -26,9 +26,9 @@ class SimpleLibCodeTest {
     assertTrue(result.language.isNotEmpty())
     assertNotNull(result.metadata)
 
-    println("✅ 简单测试通过:")
-    println("  源码长度: ${result.sourceCode.length}")
-    println("  语言: ${result.language}")
-    println("  库名: ${result.metadata.libraryName}")
+    println("[PASS] Simple test passed:")
+    println("  Source length: ${result.sourceCode.length}")
+    println("  Language: ${result.language}")
+    println("  Library name: ${result.metadata.libraryName}")
   }
 }

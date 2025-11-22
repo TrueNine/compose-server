@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.generator
 
 /**
- * ## 序列编号 生成器
+ * ## Sequence number generator.
  *
  * @author TrueNine
  * @since 2024-02-28

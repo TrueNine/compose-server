@@ -378,6 +378,94 @@ class MockObjectStorageServiceTest : IObjectStorageServiceTest() {
       return Result.success(emptyList())
     }
 
+    // region New Methods
+
+    override suspend fun setObjectTags(bucketName: String, objectName: String, tags: List<Tag>): Result<Unit> {
+      log.debug("Mock: Set object tags for $bucketName/$objectName")
+      return Result.success(Unit)
+    }
+
+    override suspend fun getObjectTags(bucketName: String, objectName: String): Result<List<Tag>> {
+      log.debug("Mock: Get object tags for $bucketName/$objectName")
+      return Result.success(emptyList())
+    }
+
+    override suspend fun deleteObjectTags(bucketName: String, objectName: String): Result<Unit> {
+      log.debug("Mock: Delete object tags for $bucketName/$objectName")
+      return Result.success(Unit)
+    }
+
+    override suspend fun setBucketTags(bucketName: String, tags: List<Tag>): Result<Unit> {
+      log.debug("Mock: Set bucket tags for $bucketName")
+      return Result.success(Unit)
+    }
+
+    override suspend fun getBucketTags(bucketName: String): Result<List<Tag>> {
+      log.debug("Mock: Get bucket tags for $bucketName")
+      return Result.success(emptyList())
+    }
+
+    override suspend fun deleteBucketTags(bucketName: String): Result<Unit> {
+      log.debug("Mock: Delete bucket tags for $bucketName")
+      return Result.success(Unit)
+    }
+
+    override suspend fun setBucketVersioning(bucketName: String, enabled: Boolean): Result<Unit> {
+      log.debug("Mock: Set bucket versioning for $bucketName to $enabled")
+      return Result.success(Unit)
+    }
+
+    override suspend fun listObjectVersions(request: ListObjectVersionsRequest): Result<ObjectVersionListing> {
+      log.debug("Mock: List object versions for ${request.bucketName}")
+      return Result.success(
+        ObjectVersionListing(
+          bucketName = request.bucketName,
+          prefix = request.prefix,
+          keyMarker = request.keyMarker,
+          versionIdMarker = request.versionIdMarker,
+          nextKeyMarker = null,
+          nextVersionIdMarker = null,
+          versions = emptyList(),
+          commonPrefixes = emptyList(),
+          isTruncated = false,
+          maxKeys = request.maxKeys,
+          delimiter = request.delimiter,
+        )
+      )
+    }
+
+    override suspend fun setBucketLifecycle(bucketName: String, rules: List<LifecycleRule>): Result<Unit> {
+      log.debug("Mock: Set bucket lifecycle for $bucketName")
+      return Result.success(Unit)
+    }
+
+    override suspend fun getBucketLifecycle(bucketName: String): Result<List<LifecycleRule>> {
+      log.debug("Mock: Get bucket lifecycle for $bucketName")
+      return Result.success(emptyList())
+    }
+
+    override suspend fun deleteBucketLifecycle(bucketName: String): Result<Unit> {
+      log.debug("Mock: Delete bucket lifecycle for $bucketName")
+      return Result.success(Unit)
+    }
+
+    override suspend fun setBucketCors(bucketName: String, rules: List<CorsRule>): Result<Unit> {
+      log.debug("Mock: Set bucket CORS for $bucketName")
+      return Result.success(Unit)
+    }
+
+    override suspend fun getBucketCors(bucketName: String): Result<List<CorsRule>> {
+      log.debug("Mock: Get bucket CORS for $bucketName")
+      return Result.success(emptyList())
+    }
+
+    override suspend fun deleteBucketCors(bucketName: String): Result<Unit> {
+      log.debug("Mock: Delete bucket CORS for $bucketName")
+      return Result.success(Unit)
+    }
+
+    // endregion
+
     // Share Link Operations Implementation
 
     override suspend fun generateShareLink(request: ShareLinkRequest): Result<ShareLinkInfo> {

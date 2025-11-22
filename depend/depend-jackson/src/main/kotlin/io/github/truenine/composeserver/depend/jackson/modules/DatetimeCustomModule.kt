@@ -1,10 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson.modules
 
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.module.SimpleDeserializers
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.module.SimpleSerializers
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampDeserializer
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampSerializer
 import io.github.truenine.composeserver.depend.jackson.serializers.LocalDateTimeTimestampDeserializer
@@ -23,11 +18,16 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
+import tools.jackson.databind.ValueDeserializer
+import tools.jackson.databind.ValueSerializer
+import tools.jackson.databind.module.SimpleDeserializers
+import tools.jackson.databind.module.SimpleModule
+import tools.jackson.databind.module.SimpleSerializers
 
 /**
- * 时间类型自定义模块
+ * Custom module for date-time types.
  *
- * 使用时间戳序列化器，将所有时间类型序列化为UTC时间戳（毫秒），确保时区无关性
+ * Uses timestamp serializers to serialize all date-time types to UTC timestamps (in milliseconds), ensuring time-zone independence.
  *
  * @author TrueNine
  * @since 2025-01-16
@@ -37,10 +37,10 @@ class DatetimeCustomModule : SimpleModule() {
   override fun setupModule(context: SetupContext?) {
     super.setupModule(context)
 
-    // 创建时间戳序列化器容器
-    val serializers = ArrayList<JsonSerializer<*>>(6)
+    // Create a container for timestamp serializers
+    val serializers = ArrayList<ValueSerializer<*>>(6)
 
-    // 注册所有时间类型的时间戳序列化器，确保时间戳序列化优先级最高
+    // Register timestamp serializers for all date-time types, ensuring highest priority
     serializers.add(LocalDateTimeTimestampSerializer())
     serializers.add(LocalDateTimestampSerializer())
     serializers.add(LocalTimeTimestampSerializer())
@@ -48,11 +48,11 @@ class DatetimeCustomModule : SimpleModule() {
     serializers.add(ZonedDateTimeTimestampSerializer())
     serializers.add(OffsetDateTimeTimestampSerializer())
 
-    // 添加到上下文
+    // Add to the context
     context?.addSerializers(SimpleSerializers(serializers))
 
-    // 创建时间戳反序列化器容器
-    val deserializers = ArrayList<JsonDeserializer<*>>(6)
+    // Create a container for timestamp deserializers
+    val deserializers = ArrayList<ValueDeserializer<*>>(6)
 
     deserializers.add(LocalDateTimeTimestampDeserializer())
     deserializers.add(LocalDateTimestampDeserializer())

@@ -5,32 +5,32 @@ import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
 /**
- * # 第二、三代中国残疾证残疾类别
+ * Disability categories for second- and third-generation Chinese disability certificates.
  *
  * @author TrueNine
  * @since 2023-11-03
  */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class DisTyping(typ: Int) : IIntEnum {
-  /** 视力 */
+  /** Visual impairment */
   @EnumItem(ordinal = 1) EYE(1),
 
-  /** 听力 */
+  /** Hearing impairment */
   @EnumItem(ordinal = 2) EAR(2),
 
-  /** 言语 */
+  /** Speech impairment */
   @EnumItem(ordinal = 3) MOUTH(3),
 
-  /** 肢体 */
+  /** Physical impairment */
   @EnumItem(ordinal = 4) BODY(4),
 
-  /** 智力 */
+  /** Intellectual disability */
   @EnumItem(ordinal = 5) IQ(5),
 
-  /** 精神 */
+  /** Mental disorder */
   @EnumItem(ordinal = 6) NERVE(6),
 
-  /** 多重 */
+  /** Multiple disabilities */
   @EnumItem(ordinal = 7) MULTIPLE(7);
 
   override val value = typ

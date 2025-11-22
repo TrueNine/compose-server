@@ -4,7 +4,7 @@ import io.github.truenine.composeserver.rds.flywaymigrationshared.TestEntrance
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
 import kotlin.test.Test
-import org.springframework.boot.autoconfigure.flyway.FlywayProperties
+import org.springframework.boot.flyway.autoconfigure.FlywayProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.TestPropertySource
@@ -15,13 +15,13 @@ class FlywayPropertiesOverrideAutoConfigurationDisabledTest : IDatabasePostgresq
   @Resource lateinit var ctx: ApplicationContext
 
   @Test
-  fun `当 enabled=false 时，FlywayProperties 应保持默认值`() {
+  fun `when enabled is false FlywayProperties should keep default values`() {
     val flywayProperties = ctx.getBean(FlywayProperties::class.java)
-    // enabled 应为 false
+    // enabled should be false
     kotlin.test.assertEquals(false, flywayProperties.isEnabled)
-    // baselineVersion 应为 null（未被覆盖）
+    // baselineVersion should keep its default value (not overridden)
     kotlin.test.assertEquals("1", flywayProperties.baselineVersion)
-    // 其他属性也应为默认值
+    // Other properties should also keep their default values
     kotlin.test.assertEquals(false, flywayProperties.isBaselineOnMigrate)
     kotlin.test.assertEquals(false, flywayProperties.isOutOfOrder)
     kotlin.test.assertEquals(listOf("classpath:db/migration"), flywayProperties.locations)

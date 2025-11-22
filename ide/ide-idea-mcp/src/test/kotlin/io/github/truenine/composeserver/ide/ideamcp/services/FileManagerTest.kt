@@ -9,14 +9,14 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-/** FileManager 单元测试 */
+/** FileManager unit tests. */
 class FileManagerTest {
 
   private val fileManager = FileManager()
 
   @Test
-  fun `isValidPath 应该验证有效路径`() {
-    // Given - 使用当前工作目录作为有效路径
+  fun `isValidPath should validate valid path`() {
+    // Given - use current working directory as a valid path
     val validPath = System.getProperty("user.dir")
 
     // When
@@ -27,7 +27,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `isValidPath 应该拒绝无效路径`() {
+  fun `isValidPath should reject invalid path`() {
     // Given
     val invalidPath = "/this/path/does/not/exist/at/all"
 
@@ -39,7 +39,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `hasReadPermission 应该检查文件权限`() {
+  fun `hasReadPermission should check file permissions`() {
     // Given
     val virtualFile = mockk<VirtualFile>()
     every { virtualFile.isValid } returns true
@@ -53,7 +53,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `hasReadPermission 应该拒绝无效文件`() {
+  fun `hasReadPermission should reject invalid file`() {
     // Given
     val virtualFile = mockk<VirtualFile>()
     every { virtualFile.isValid } returns false
@@ -66,7 +66,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `getRelativePath 应该计算相对路径`() {
+  fun `getRelativePath should compute relative path`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -83,7 +83,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `getRelativePath 应该处理项目外的文件`() {
+  fun `getRelativePath should handle files outside project`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -100,7 +100,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `getRelativePath 应该处理空基础路径`() {
+  fun `getRelativePath should handle empty base path`() {
     // Given
     val project = mockk<Project>()
     val virtualFile = mockk<VirtualFile>()
@@ -116,7 +116,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `collectFilesRecursively 应该收集单个文件`() {
+  fun `collectFilesRecursively should collect single file`() {
     // Given
     val virtualFile = mockk<VirtualFile>()
     every { virtualFile.isValid } returns true
@@ -132,7 +132,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `collectFilesRecursively 应该递归收集目录中的文件`() {
+  fun `collectFilesRecursively should collect files in directory recursively`() {
     // Given
     val directory = mockk<VirtualFile>()
     val childFile1 = mockk<VirtualFile>()
@@ -173,7 +173,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `collectFilesRecursively 应该应用过滤器`() {
+  fun `collectFilesRecursively should apply filter`() {
     // Given
     val directory = mockk<VirtualFile>()
     val kotlinFile = mockk<VirtualFile>()
@@ -194,7 +194,7 @@ class FileManagerTest {
     every { javaFile.path } returns "/test/directory/file.java"
     every { javaFile.extension } returns "java"
 
-    // When - 只收集 Kotlin 文件
+    // When - collect only Kotlin files
     val result = fileManager.collectFilesRecursively(directory, FileManager.Filters.kotlinFiles)
 
     // Then
@@ -203,7 +203,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `PathUtils normalizePath 应该标准化路径分隔符`() {
+  fun `PathUtils normalizePath should normalize separators`() {
     // Given
     val windowsPath = "C:\\Users\\test\\file.txt"
 
@@ -215,7 +215,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `PathUtils getExtension 应该获取文件扩展名`() {
+  fun `PathUtils getExtension should get file extension`() {
     // Given
     val filePath = "/path/to/file.kt"
 
@@ -227,7 +227,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `PathUtils getExtension 应该处理无扩展名的文件`() {
+  fun `PathUtils getExtension should handle file without extension`() {
     // Given
     val filePath = "/path/to/file"
 
@@ -239,7 +239,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `PathUtils getNameWithoutExtension 应该获取不含扩展名的文件名`() {
+  fun `PathUtils getNameWithoutExtension should get name without extension`() {
     // Given
     val filePath = "/path/to/file.kt"
 
@@ -251,7 +251,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `PathUtils isUnder 应该检查路径包含关系`() {
+  fun `PathUtils isUnder should check containment`() {
     // Given
     val parentPath = "/project/root"
     val childPath = "/project/root/src/main/kotlin"
@@ -264,7 +264,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `PathUtils isUnder 应该拒绝不相关的路径`() {
+  fun `PathUtils isUnder should reject unrelated paths`() {
     // Given
     val parentPath = "/project/root"
     val childPath = "/other/path"
@@ -277,7 +277,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `Filters sourceFiles 应该识别源代码文件`() {
+  fun `Filters sourceFiles should detect source files`() {
     // Given
     val kotlinFile = mockk<VirtualFile>()
     val javaFile = mockk<VirtualFile>()
@@ -294,7 +294,7 @@ class FileManagerTest {
   }
 
   @Test
-  fun `Filters combine 应该组合多个过滤器`() {
+  fun `Filters combine should combine multiple filters`() {
     // Given
     val kotlinFile = mockk<VirtualFile>()
     val hiddenKotlinFile = mockk<VirtualFile>()

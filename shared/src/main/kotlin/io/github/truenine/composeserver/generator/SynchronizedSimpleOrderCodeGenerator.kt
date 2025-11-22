@@ -3,11 +3,11 @@ package io.github.truenine.composeserver.generator
 import io.github.truenine.composeserver.logger
 
 /**
- * 同步简单订单编号生成器
+ * Synchronized simple order code generator
  *
- * 该生成器组合了当前时间戳（毫秒）和雪花算法ID来生成唯一的订单号 格式: currentTimeMillis + snowflakeId
+ * This generator combines current timestamp (milliseconds) and snowflake ID to generate unique order numbers. Format: currentTimeMillis + snowflakeId
  *
- * @param snowflake 雪花算法生成器，用于生成唯一ID
+ * @param snowflake Snowflake algorithm generator for generating unique IDs
  * @author TrueNine
  * @since 2024-09-15
  */

@@ -2,26 +2,37 @@
 <module version="4">
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$" dumb="true">
-      <excludeFolder url="file://$MODULE_DIR$/.ai" />
-      <excludeFolder url="file://$MODULE_DIR$/.ai/meta" />
       <excludeFolder url="file://$MODULE_DIR$/.claude" />
-      <excludeFolder url="file://$MODULE_DIR$/.cursor" />
+      <excludeFolder url="file://$MODULE_DIR$/.codebuddy" />
       <excludeFolder url="file://$MODULE_DIR$/.factory" />
-      <excludeFolder url="file://$MODULE_DIR$/.gradle-user-home" />
-      <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/JimmerBuddy" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/dictionaries" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/inspectionProfiles" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/ai" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/bom" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/modules/build-logic" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/cacheable" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/data" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/modules/depend" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/modules/docsite" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/gradle-plugin" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/ide" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/integrate-test" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/ksp" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/oss" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/modules/pay" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/psdk" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/rds" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/modules/security" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/modules/shared" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/sms" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/surveillance" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/modules/testtoolkit" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/modules/version-catalog" />
       <excludeFolder url="file://$MODULE_DIR$/.intellijPlatform" />
       <excludeFolder url="file://$MODULE_DIR$/.kotlin" />
-      <excludeFolder url="file://$MODULE_DIR$/.vscode" />
+      <excludeFolder url="file://$MODULE_DIR$/.playwright-mcp" />
+      <excludeFolder url="file://$MODULE_DIR$/.qoder" />
     </content>
   </component>
 </module>

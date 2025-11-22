@@ -1,33 +1,33 @@
 package io.github.truenine.composeserver.depend.jackson.modules
 
-import com.fasterxml.jackson.databind.module.SimpleDeserializers
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.module.SimpleSerializers
 import io.github.truenine.composeserver.depend.jackson.serializers.IPageParamLikeSerializer
 import io.github.truenine.composeserver.depend.jackson.serializers.KPairDeserializer
 import io.github.truenine.composeserver.depend.jackson.serializers.KPairSerializer
 import io.github.truenine.composeserver.domain.IPageParam
 import io.github.truenine.composeserver.domain.IPageParamLike
+import tools.jackson.core.Version
+import tools.jackson.databind.module.SimpleDeserializers
+import tools.jackson.databind.module.SimpleModule
+import tools.jackson.databind.module.SimpleSerializers
 
 /**
- * Kotlin自定义模块
+ * Custom Kotlin Jackson module.
  *
- * 提供Kotlin特有类型的序列化和反序列化支持，包括：
- * - Pair类型的序列化/反序列化
- * - IPageParam和IPageParamLike的序列化/反序列化
+ * Provides serialization and deserialization support for Kotlin-specific types, including:
+ * - Pair type serialization / deserialization
+ * - IPageParam and IPageParamLike serialization / deserialization
  *
- * 该模块与时间戳序列化模块兼容，不会干扰时间类型的序列化行为
+ * This module is compatible with timestamp serializers and does not interfere with time type handling.
  */
-class KotlinCustomModule :
-  SimpleModule(KotlinCustomModule::class.java.name, com.fasterxml.jackson.core.Version(1, 0, 0, "", "io.github.truenine", "composeserver")) {
+class KotlinCustomModule : SimpleModule(KotlinCustomModule::class.java.name, Version(1, 0, 0, "", "io.github.truenine", "composeserver")) {
 
   override fun setupModule(context: SetupContext) {
     super.setupModule(context)
 
-    // 注册序列化器
+    // Register serializers
     context.addSerializers(SimpleSerializers().apply { addSerializer(Pair::class.java, KPairSerializer()) })
 
-    // 注册反序列化器
+    // Register deserializers
     context.addDeserializers(
       SimpleDeserializers().apply {
         addDeserializer(Pair::class.java, KPairDeserializer())

@@ -26,7 +26,7 @@ class WxpaAutoConfiguration {
 
     val wxpaProps = wechatProperties.wxpa
 
-    // 验证必需的配置
+    // Validate required configuration properties
     if (wxpaProps.appId.isNullOrBlank()) {
       throw WxpaConfigurationException("AppId is required but not configured")
     }

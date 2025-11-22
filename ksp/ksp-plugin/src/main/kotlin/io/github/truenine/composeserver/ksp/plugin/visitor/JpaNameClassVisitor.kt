@@ -148,7 +148,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
         }
       }
 
-  /** 生成所有属性 */
+  /** Generate all properties */
   @OptIn(KspExperimental::class)
   private fun regetProperties(ctx: DeclarationContext<KSClassDeclaration>): List<Pair<JpaProperty, PropertySpec>> =
     ctx.declaration
@@ -198,7 +198,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
     }
   }
 
-  /** 初始化集合类型 */
+  /** Initialize collection-type properties */
   private fun initNonNilProperty(builder: PropertySpec.Builder, jpaProperty: JpaProperty) {
     val qName = jpaProperty.ksPropertyDeclaration.type.resolve().declaration.realDeclaration.qualifiedNameAsString
 
@@ -213,7 +213,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
     builder.delegate("%T.notNull()", Delegates::class)
   }
 
-  /** 生成伴生对象字段 */
+  /** Generate companion object fields */
   private fun getConstantProperty(p: JpaProperty): PropertySpec {
     val cn = getColumnName(p)
     return PropertySpec.builder(p.ksPropertyDeclaration.simpleNameGetShortNameStr.toSnakeCase().uppercase(), String::class)
@@ -223,7 +223,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
       .build()
   }
 
-  /** # jpa 入口 */
+  /** JPA entry point */
   @OptIn(KspExperimental::class)
   override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: DeclarationContext<KSClassDeclaration>) {
     log = data.log
@@ -234,7 +234,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
     val tableName =
       run { classDeclaration.getAnnotationsByType(MetaName::class).getFirstName() ?: findSuperName(classDeclaration) ?: destClassName.simpleName }.toSnakeCase()
 
-    // 定义文件并输出
+    // Define file and write output
     fileDsl(classDeclaration.packageName.asString(), destSimpleName) {
         builder.addAnnotation(
           AnnotationSpec.builder(Suppress::class).addMember("%S", "Unused").addMember("%S", "RedundantVisibilityModifier").useFile().build()
@@ -250,7 +250,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
                 .build()
             )
           annotateAllBy(generateClassAnnotations(destClassName))
-          // 继承父类
+          // Inherit superclass
           when (classDeclaration.classKind) {
             ClassKind.CLASS -> extendsClassBy(superClassName)
             ClassKind.INTERFACE -> extendsInterfaceBy(superClassName)
@@ -258,7 +258,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
           }
           val fieldAndAnnotations = regetProperties(data)
           if (fieldAndAnnotations.isNotEmpty()) {
-            // 不生成自动管理的属性
+            // Do not generate properties that are marked as auto-managed
             val managementProperties =
               fieldAndAnnotations.filterNot { (k, _) ->
                 k.ksPropertyDeclaration.isAnnotationPresent(MetaAutoManagement::class) ||
@@ -269,7 +269,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
               managementProperties.map { (_, it) ->
                 ParameterSpec.builder(it.name, it.type.copy(nullable = it.type.isNullable)).also { i -> if (it.type.isNullable) i.defaultValue("null") }.build()
               }
-            // 生成空主构造器和值设置附构造器
+            // Generate an empty primary constructor and a value-setting secondary constructor
             builder.primaryConstructor(FunSpec.constructorBuilder().build())
             builder.addFunction(
               FunSpec.constructorBuilder()
@@ -278,7 +278,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
                 .addCode(CodeBlock.builder().also { c -> managementProperties.forEach { (_, p) -> c.addStatement("this.${p.name} = ${p.name}") } }.build())
                 .build()
             )
-            // 添加 internal id
+            // Add internal id
             val internalIdName = "____database_internal_${destSimpleName.toSnakeCase()}_field_primary_id"
             val idColumnAnnotation = AnnotationSpec.builder(Libs.jakarta.persistence.Column.toClassName()).addMember("name = %S", "id")
             builder.addProperty(
@@ -306,7 +306,7 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
                     .addAnnotation(JvmSynthetic::class)
                     .addAnnotation(Libs.jakarta.persistence.Transient.toAnnotationSpec())
                     .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "DEPRECATION_ERROR").build())
-                    .addStatement("return if (this.%L === null) error(%S) else this.%L!!", internalIdName, "提前获取 id", internalIdName)
+                    .addStatement("return if (this.%L === null) error(%S) else this.%L!!", internalIdName, "Accessing id too early", internalIdName)
                     .build()
                 )
                 .setter(
@@ -387,7 +387,8 @@ class JpaNameClassVisitor(private val listenerSpec: AnnotationSpec?) : KSTopDown
                   else if (this === other) true
                   else if (%T.getClass(this) != %T.getClass(other)) false
                   else if (!isNew && id == (other as %T).id) true
-                  else false"""
+                  else false
+                  """
                     .trimIndent(),
                   Libs.org.hibernate.Hibernate.toClassName(),
                   Libs.org.hibernate.Hibernate.toClassName(),

@@ -28,7 +28,7 @@ import java.nio.charset.Charset
  * val decodedString = base64Data.decodeBase64String()
  *
  * // Custom charset handling
- * val utf16Data = "测试".toByteArray(Charsets.UTF_16)
+ * val utf16Data = "Sample".toByteArray(Charsets.UTF_16)
  * val decoded = utf16Data.decodeBase64String(Charsets.UTF_16)
  * ```
  *

@@ -1,7 +1,7 @@
 plugins {
   id("buildlogic.kotlinspring-conventions")
   id("buildlogic.spotless-conventions")
-  id("buildlogic.loadenv-conventions")
+  id("io.github.truenine.composeserver.dotenv")
 }
 
 description =

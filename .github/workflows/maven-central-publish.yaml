@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v5.0.1
         with:
           fetch-depth: 0
 
@@ -68,35 +68,12 @@ jobs:
         with:
           java-version: ${{ steps.libs-versions.outputs.java-version }}
           distribution: 'temurin'
-          cache: gradle
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-wrapper-
-
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/jdks
-            ~/.gradle/buildOutputCleanup
-            ~/.gradle/kotlin
-            ~/.konan
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-          save-always: true
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5.0.0
         with:
           gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -118,33 +95,10 @@ jobs:
             local artifact="$2"
             local version="$3"
           
-            # Method 1: Check via Maven Central REST API
-            local rest_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/"
-            echo "Checking REST API: $rest_url" >> $GITHUB_STEP_SUMMARY
-          
-            if curl -f -s --max-time 15 --head "$rest_url" > /dev/null 2>&1; then
-              echo "Found via REST API: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
-              return 0
-            fi
-            
-            # Additional check: try to access the POM file specifically
             local pom_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/${artifact}-${version}.pom"
-            echo "Checking POM file: $pom_url" >> $GITHUB_STEP_SUMMARY
             
-            if curl -f -s --max-time 15 --head "$pom_url" > /dev/null 2>&1; then
-              echo "Found via POM check: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
-              return 0
-            fi
-          
-            # Method 2: Check via Search API
-            local search_url="https://search.maven.org/solrsearch/select?q=g:\"${group}\"+AND+a:\"${artifact}\"+AND+v:\"${version}\"&rows=1&wt=json"
-            echo "Checking Search API: $search_url" >> $GITHUB_STEP_SUMMARY
-          
-            local response=$(curl -f -s --max-time 15 "$search_url" 2>/dev/null || echo '{"response":{"numFound":0}}')
-            local found=$(echo "$response" | jq -r '.response.numFound' 2>/dev/null || echo "0")
-          
-            if [[ "$found" -gt 0 ]]; then
-              echo "Found via Search API: $artifact-$version exists" >> $GITHUB_STEP_SUMMARY
+            if curl -f -s --max-time 10 --head "$pom_url" > /dev/null 2>&1; then
+              echo "Found: $artifact-$version exists on Maven Central" >> $GITHUB_STEP_SUMMARY
               return 0
             fi
           
@@ -288,7 +242,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.0
         with:
           fetch-depth: 0
 
@@ -297,33 +251,12 @@ jobs:
         with:
           java-version: ${{ needs.pre-publish-validation.outputs.java-version }}
           distribution: 'temurin'
-          cache: gradle
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-wrapper-
-
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/jdks
-            ~/.gradle/buildOutputCleanup
-            ~/.konan
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5.0.0
         with:
           gradle-version: ${{ needs.pre-publish-validation.outputs.gradle-version }}
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
           cache-cleanup: on-success
 
       - name: Grant execute permission
@@ -334,36 +267,20 @@ jobs:
         run: |
           echo "Executing publication dry run..."
           
-          # Aggressively clean build services to prevent duplicate entries
           ./gradlew --stop || true
-          rm -rf ~/.gradle/daemon/ || true
-          rm -rf ~/.gradle/caches/ || true
-          rm -rf .gradle/ || true
-          find . -name "build" -type d -exec rm -rf {} + || true
-          
-          # Clean Maven local repository for this project's artifacts to prevent conflicts
           rm -rf ~/.m2/repository/io/github/truenine/ || true
           
-          # First clean everything
-          ./gradlew clean \
+          ./gradlew clean publishToMavenLocal \
             --no-daemon \
             --no-parallel \
-            --no-build-cache \
-            --no-configuration-cache
-          
-          # Then run dry publication with additional safeguards
-          ./gradlew publishToMavenLocal \
-            --no-daemon \
-            --no-parallel \
-            --no-build-cache \
-            --no-configuration-cache \
-            --rerun-tasks \
+            --build-cache \
+            --configuration-cache \
             --max-workers=1 \
             -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
             -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
             -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
         env:
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
+          GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
           CI: true
 
       - name: Pre-publish validation
@@ -391,100 +308,42 @@ jobs:
           echo "Validation passed" >> $GITHUB_STEP_SUMMARY
 
       - name: Final version existence check
-        if: github.event.inputs.dry_run != 'true'
+        if: github.event.inputs.dry_run != 'true' && github.event.inputs.force_publish != 'true'
         run: |
-          echo "Performing final version existence check before publishing..."
+          echo "Performing final version existence check..."
           
           version="${{ needs.pre-publish-validation.outputs.version }}"
-          group="io.github.truenine"
-          force_publish="${{ github.event.inputs.force_publish }}"
+          pom_url="https://repo1.maven.org/maven2/io/github/truenine/composeserver-bom/${version}/composeserver-bom-${version}.pom"
           
-          # Double-check that version doesn't exist unless force_publish is enabled
-          if [[ "$force_publish" != "true" ]]; then
-            echo "Checking if version $version exists on Maven Central one more time..."
-            
-            # Check a few core artifacts to be absolutely sure
-            core_artifacts=("composeserver-shared" "composeserver-cacheable" "composeserver-bom")
-            for artifact in "${core_artifacts[@]}"; do
-              pom_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/${artifact}-${version}.pom"
-              echo "Final check for: $pom_url"
-              
-              if curl -f -s --max-time 15 --head "$pom_url" > /dev/null 2>&1; then
-                echo "ABORT: Version $version already exists on Maven Central!"
-                echo "Found existing artifact: $artifact-$version"
-                echo "If you want to force republish, use force_publish: true"
-                exit 1
-              fi
-            done
-            echo "Final check passed - version $version does not exist on Maven Central"
-          else
-            echo "Force publish enabled - skipping final version existence check"
+          if curl -f -s --max-time 8 --head "$pom_url" > /dev/null 2>&1; then
+            echo "ABORT: Version $version already exists on Maven Central!"
+            exit 1
           fi
+          
+          echo "Final check passed - version $version does not exist"
 
       - name: Publish to Maven Central
         if: github.event.inputs.dry_run != 'true'
         uses: nick-fields/retry@v3
         with:
-          timeout_minutes: 20
+          timeout_minutes: 15
           max_attempts: 2
-          retry_wait_seconds: 60
+          retry_wait_seconds: 30
           shell: bash
           command: |
-            echo "Starting publication to Maven Central (attempt: ${{ github.run_attempt }})..."
-            
+            echo "Starting publication to Maven Central..."
             set -euo pipefail
             
-            handle_error() {
-              local exit_code=$1
-              local error_context="$2"
-            
-              echo "Publication failed (exit code: $exit_code)" >> $GITHUB_STEP_SUMMARY
-              echo "" >> $GITHUB_STEP_SUMMARY
-            
-              case $exit_code in
-                1|2) echo "**Error type:** Build or configuration error" >> $GITHUB_STEP_SUMMARY ;;
-                3|4) echo "**Error type:** GPG signing failed" >> $GITHUB_STEP_SUMMARY ;;
-                5|6) echo "**Error type:** Maven Central connection failed" >> $GITHUB_STEP_SUMMARY ;;
-                *) echo "**Error type:** Unknown error" >> $GITHUB_STEP_SUMMARY ;;
-              esac
-            
-              echo "**Error context:** $error_context" >> $GITHUB_STEP_SUMMARY
-              exit $exit_code
-            }
-            
-            trap 'handle_error $? "Publication execution phase"' ERR
-            
-            echo "Verifying publication credentials..." >> $GITHUB_STEP_SUMMARY
-            echo "Cleaning build services to prevent duplicate entries..." >> $GITHUB_STEP_SUMMARY
-            
-            # Stop all running Gradle daemons and aggressively clean build services
             ./gradlew --stop || true
-            rm -rf ~/.gradle/daemon/ || true
-            rm -rf ~/.gradle/caches/ || true
-            rm -rf .gradle/ || true
-            find . -name "build" -type d -exec rm -rf {} + || true
-            
-            # Clean Maven local repository for this project's artifacts to prevent conflicts
             rm -rf ~/.m2/repository/io/github/truenine/ || true
             
-            echo "Cleaned build services and Maven local repository" >> $GITHUB_STEP_SUMMARY
+            echo "Publishing to Maven Central..." >> $GITHUB_STEP_SUMMARY
             
-            echo "Starting clean publication process..." >> $GITHUB_STEP_SUMMARY
-            
-            # First clean everything to ensure no stale artifacts
-            ./gradlew clean \
+            ./gradlew clean publishToMavenCentral \
               --no-daemon \
               --no-parallel \
-              --no-build-cache \
-              --no-configuration-cache
-            
-            # Then publish with fresh state and additional safeguards
-            ./gradlew publishToMavenCentral \
-              --no-daemon \
-              --no-parallel \
-              --no-build-cache \
-              --no-configuration-cache \
-              --rerun-tasks \
+              --build-cache \
+              --configuration-cache \
               --max-workers=1 \
               -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
               -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
@@ -494,7 +353,7 @@ jobs:
             
             echo "Successfully published to Maven Central" >> $GITHUB_STEP_SUMMARY
         env:
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }} ${{ env.JVM_OPTS }}"
+          GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
           MAVENCENTRAL_USERNAME: ${{ secrets.MAVENCENTRAL_USERNAME }}
           MAVENCENTRAL_PASSWORD: ${{ secrets.MAVENCENTRAL_PASSWORD }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
@@ -539,7 +398,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.0
         with:
           fetch-depth: 0
 

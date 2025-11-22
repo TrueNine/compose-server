@@ -11,19 +11,19 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 
 /**
- * LibCodeService 使用示例
+ * LibCodeService usage examples.
  *
- * 展示如何使用创建的测试工具和模拟数据来测试 LibCodeService 功能
+ * Demonstrates how to use the testing utilities and mock data to verify LibCodeService functionality.
  */
 class LibCodeServiceUsageExample {
 
   @Test
   fun `example - basic usage with mock data`() = runBlocking {
-    // 创建服务实例
+    // Create service instance
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
 
-    // 使用模拟数据生成器创建测试数据
+    // Use mock data generator to create test data
     val testClassName = "com.example.TestService"
     val mockResult =
       MockDataGenerator.generateMockLibCodeResult(
@@ -34,28 +34,28 @@ class LibCodeServiceUsageExample {
         includeMembers = listOf("processData", "validate", "cleanup"),
       )
 
-    println("=== LibCodeService 使用示例 ===")
-    println("测试类名: $testClassName")
-    println("生成的源码长度: ${mockResult.sourceCode.length} 字符")
-    println("库名: ${mockResult.metadata.libraryName}")
-    println("版本: ${mockResult.metadata.version}")
+    println("=== LibCodeService usage example ===")
+    println("Test class: $testClassName")
+    println("Generated source length: ${mockResult.sourceCode.length} characters")
+    println("Library: ${mockResult.metadata.libraryName}")
+    println("Version: ${mockResult.metadata.version}")
     println()
 
-    // 执行实际的服务调用
+    // Execute actual service call
     val result = libCodeService.getLibraryCode(project = mockProject, fullyQualifiedName = testClassName, memberName = null)
 
-    // 验证结果
+    // Verify result
     assertNotNull(result)
     assertTrue(result.sourceCode.isNotEmpty())
-    println("实际服务返回的源码长度: ${result.sourceCode.length} 字符")
-    println("是否反编译: ${result.isDecompiled}")
-    println("语言: ${result.language}")
-    println("源码类型: ${result.metadata.sourceType}")
+    println("Actual service source length returned: ${result.sourceCode.length} characters")
+    println("Decompiled: ${result.isDecompiled}")
+    println("Language: ${result.language}")
+    println("Source type: ${result.metadata.sourceType}")
   }
 
   @Test
   fun `example - testing with generated jar file`() = runBlocking {
-    // 创建临时JAR文件用于测试
+    // Create temporary JAR file for testing
     val testClasses =
       mapOf(
         "com/example/TestClass.java" to
@@ -70,66 +70,66 @@ class LibCodeServiceUsageExample {
 
     val tempJarFile = MockDataGenerator.createTempJarFile(testClasses, "example-lib", ".jar")
 
-    println("=== 使用生成的JAR文件测试 ===")
-    println("临时JAR文件: ${tempJarFile.absolutePath}")
-    println("文件大小: ${tempJarFile.length()} 字节")
-    println("包含的类:")
+    println("=== Testing with generated JAR file ===")
+    println("Temporary JAR file: ${tempJarFile.absolutePath}")
+    println("File size: ${tempJarFile.length()} bytes")
+    println("Contained classes:")
     testClasses.keys.forEach { className -> println("  - $className") }
 
-    // 使用真实的JAR文件路径进行测试
+    // Use real JAR file path for testing
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
 
     val result = libCodeService.getLibraryCode(project = mockProject, fullyQualifiedName = "com.example.TestClass", memberName = "execute")
 
     assertNotNull(result)
-    println("提取结果:")
-    println("  源码长度: ${result.sourceCode.length}")
-    println("  语言: ${result.language}")
-    println("  库名: ${result.metadata.libraryName}")
+    println("Extraction result:")
+    println("  Source length: ${result.sourceCode.length}")
+    println("  Language: ${result.language}")
+    println("  Library: ${result.metadata.libraryName}")
   }
 
   @Test
   fun `example - performance testing with large source`() = runBlocking {
-    // 生成大型源码用于性能测试
+    // Generate large source for performance testing
     val largeSource = MockDataGenerator.generateLargeSourceCode(className = "LargePerformanceTestClass", methodCount = 50, linesPerMethod = 15)
 
-    println("=== 性能测试示例 ===")
-    println("大型源码统计:")
-    println("  总字符数: ${largeSource.length}")
-    println("  总行数: ${largeSource.lines().size}")
-    println("  包含方法数: 50")
+    println("=== Performance test example ===")
+    println("Large source statistics:")
+    println("  Total characters: ${largeSource.length}")
+    println("  Total lines: ${largeSource.lines().size}")
+    println("  Method count: 50")
 
-    // 创建包含大型类的JAR文件
+    // Create JAR file that contains the large class
     val largeClassJar = MockDataGenerator.createTempJarFile(mapOf("com/example/large/LargePerformanceTestClass.java" to largeSource), "large-test", ".jar")
 
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
 
-    // 测量处理时间
+    // Measure processing time
     val startTime = System.currentTimeMillis()
     val result = libCodeService.getLibraryCode(project = mockProject, fullyQualifiedName = "com.example.large.LargePerformanceTestClass", memberName = null)
     val endTime = System.currentTimeMillis()
 
-    println("性能测试结果:")
-    println("  处理时间: ${endTime - startTime}ms")
-    println("  返回源码长度: ${result.sourceCode.length}")
-    println("  内存使用合理: ${result.sourceCode.length < 1024 * 1024}") // 小于1MB
+    println("Performance test result:")
+    println("  Processing time: ${endTime - startTime}ms")
+    println("  Returned source length: ${result.sourceCode.length}")
+    println("  Memory usage acceptable: ${result.sourceCode.length < 1024 * 1024}") // less than 1MB
   }
 
   @Test
   fun `example - testing multiple class names`() = runBlocking {
-    // 生成多个测试类名
+    // Generate multiple test class names
     val testClassNames = MockDataGenerator.generateTestClassNames(5)
 
-    println("=== 批量测试示例 ===")
-    println("生成的测试类名:")
+    println("=== Batch test example ===")
+    println("Generated test class names:")
     testClassNames.forEach { className -> println("  - $className") }
 
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
 
-    // 批量测试
+    // Batch testing
     val results = mutableListOf<Pair<String, Long>>()
 
     testClassNames.forEach { className ->
@@ -141,18 +141,18 @@ class LibCodeServiceUsageExample {
       assertNotNull(result)
     }
 
-    println("批量测试结果:")
+    println("Batch test results:")
     results.forEach { (className, time) -> println("  $className: ${time}ms") }
 
     val averageTime = results.map { it.second }.average()
-    println("平均处理时间: ${averageTime.toInt()}ms")
+    println("Average processing time: ${averageTime.toInt()}ms")
   }
 
   @Test
   fun `example - testing different source types`() = runBlocking {
-    println("=== 不同源码类型测试示例 ===")
+    println("=== Different source type test example ===")
 
-    val sourceTypes = listOf(SourceType.SOURCE_JAR to "来自源码JAR", SourceType.DECOMPILED to "反编译代码", SourceType.NOT_FOUND to "未找到源码")
+    val sourceTypes = listOf(SourceType.SOURCE_JAR to "from source JAR", SourceType.DECOMPILED to "decompiled code", SourceType.NOT_FOUND to "source not found")
 
     sourceTypes.forEach { (sourceType, description) ->
       val mockResult =
@@ -164,17 +164,17 @@ class LibCodeServiceUsageExample {
         )
 
       println("$description:")
-      println("  类名: ${mockResult.metadata.libraryName}")
-      println("  版本: ${mockResult.metadata.version ?: "无"}")
-      println("  是否反编译: ${mockResult.isDecompiled}")
-      println("  源码长度: ${mockResult.sourceCode.length}")
+      println("  Class name: ${mockResult.metadata.libraryName}")
+      println("  Version: ${mockResult.metadata.version ?: "none"}")
+      println("  Decompiled: ${mockResult.isDecompiled}")
+      println("  Source length: ${mockResult.sourceCode.length}")
       println()
     }
   }
 
   @Test
   fun `example - kotlin source generation`() = runBlocking {
-    // 生成Kotlin源码示例
+    // Generate Kotlin source example
     val kotlinSource =
       MockDataGenerator.generateMockKotlinSource(
         packageName = "com.example.kotlin",
@@ -182,13 +182,13 @@ class LibCodeServiceUsageExample {
         includeMembers = listOf("processData", "validate", "transform"),
       )
 
-    println("=== Kotlin源码生成示例 ===")
-    println("生成的Kotlin源码:")
+    println("=== Kotlin source generation example ===")
+    println("Generated Kotlin source:")
     println(kotlinSource)
     println()
-    println("源码统计:")
-    println("  总字符数: ${kotlinSource.length}")
-    println("  总行数: ${kotlinSource.lines().size}")
-    println("  包含data class: ${kotlinSource.contains("data class")}")
+    println("Source statistics:")
+    println("  Total characters: ${kotlinSource.length}")
+    println("  Total lines: ${kotlinSource.lines().size}")
+    println("  Contains data class: ${kotlinSource.contains("data class")}")
   }
 }

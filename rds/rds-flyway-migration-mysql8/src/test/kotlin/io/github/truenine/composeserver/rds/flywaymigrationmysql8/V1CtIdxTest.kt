@@ -13,9 +13,9 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * V1 索引创建存储过程测试
+ * V1 index creation stored procedure tests.
  *
- * 测试 ct_idx 存储过程的功能和幂等性
+ * Verifies the behavior and idempotency of the ct_idx stored procedure.
  */
 @SpringBootTest
 @Transactional
@@ -32,115 +32,115 @@ class V1CtIdxTest : IDatabaseMysqlContainer {
   inner class CtIdxTests {
 
     @Test
-    fun `ct_idx 应该为存在的列创建索引`() {
-      // 创建测试表
+    fun `ct_idx should create index for existing column`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_index_table(name VARCHAR(255), age INT)")
 
-      // 验证初始没有索引
-      assertTrue(!hasIndex("test_index_table", "name_idx"), "初始不应该有 name_idx 索引")
+      // Verify there is no index initially
+      assertTrue(!hasIndex("test_index_table", "name_idx"), "There should be no name_idx index initially")
 
-      // 调用 ct_idx 为 name 列创建索引
+      // Call ct_idx to create index for column name
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'name')")
 
-      // 验证索引创建成功
-      assertTrue(hasIndex("test_index_table", "name_idx"), "应该创建 name_idx 索引")
+      // Verify index is created successfully
+      assertTrue(hasIndex("test_index_table", "name_idx"), "Index name_idx should be created")
     }
 
     @Test
-    fun `ct_idx 应该为多个列创建不同的索引`() {
-      // 创建测试表
+    fun `ct_idx should create separate indexes for multiple columns`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_index_table(name VARCHAR(255), age INT, email VARCHAR(255))")
 
-      // 为多个列创建索引
+      // Create indexes for multiple columns
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'name')")
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'age')")
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'email')")
 
-      // 验证所有索引都创建成功
-      assertTrue(hasIndex("test_index_table", "name_idx"), "应该创建 name_idx 索引")
-      assertTrue(hasIndex("test_index_table", "age_idx"), "应该创建 age_idx 索引")
-      assertTrue(hasIndex("test_index_table", "email_idx"), "应该创建 email_idx 索引")
+      // Verify all indexes are created successfully
+      assertTrue(hasIndex("test_index_table", "name_idx"), "Index name_idx should be created")
+      assertTrue(hasIndex("test_index_table", "age_idx"), "Index age_idx should be created")
+      assertTrue(hasIndex("test_index_table", "email_idx"), "Index email_idx should be created")
     }
 
     @Test
-    fun `ct_idx 不应该为不存在的列创建索引`() {
-      // 创建测试表
+    fun `ct_idx should not create index for non-existent column`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_index_table(name VARCHAR(255))")
 
-      // 获取初始索引数量
+      // Get initial index count
       val initialIndexCount = getIndexCount("test_index_table")
 
-      // 尝试为不存在的列创建索引
+      // Attempt to create index for a non-existent column
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'nonexistent_column')")
 
-      // 验证索引数量没有变化
+      // Verify index count does not change
       val afterIndexCount = getIndexCount("test_index_table")
-      assertEquals(initialIndexCount, afterIndexCount, "不应该为不存在的列创建索引")
-      assertTrue(!hasIndex("test_index_table", "nonexistent_column_idx"), "不应该创建 nonexistent_column_idx 索引")
+      assertEquals(initialIndexCount, afterIndexCount, "No index should be created for non-existent column")
+      assertTrue(!hasIndex("test_index_table", "nonexistent_column_idx"), "Index nonexistent_column_idx should not be created")
     }
 
     @Test
-    fun `ct_idx 幂等性测试 - 重复调用不应该产生错误`() {
-      // 创建测试表
+    fun `ct_idx idempotency test repeated calls should not fail`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_index_table(name VARCHAR(255), age INT)")
 
-      // 第一次调用
+      // First call
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'name')")
       val afterFirst = getIndexCount("test_index_table")
-      assertTrue(hasIndex("test_index_table", "name_idx"), "第一次调用应该创建索引")
+      assertTrue(hasIndex("test_index_table", "name_idx"), "Index should be created on first call")
 
-      // 第二次调用（幂等性测试）
+      // Second call (idempotency test)
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'name')")
       val afterSecond = getIndexCount("test_index_table")
 
-      // 第三次调用（进一步验证）
+      // Third call (further verification)
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'name')")
       val afterThird = getIndexCount("test_index_table")
 
-      // 验证幂等性
-      assertEquals(afterFirst, afterSecond, "第二次调用后索引数量应该相同")
-      assertEquals(afterSecond, afterThird, "第三次调用后索引数量应该相同")
-      assertTrue(hasIndex("test_index_table", "name_idx"), "索引应该仍然存在")
+      // Verify idempotency
+      assertEquals(afterFirst, afterSecond, "Index count should be the same after the second call")
+      assertEquals(afterSecond, afterThird, "Index count should be the same after the third call")
+      assertTrue(hasIndex("test_index_table", "name_idx"), "Index should still exist")
     }
 
     @Test
-    fun `ct_idx 应该正确处理索引命名规则`() {
-      // 创建测试表
+    fun `ct_idx should handle index naming convention correctly`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_index_table(user_name VARCHAR(255), user_age INT)")
 
-      // 为带下划线的列名创建索引
+      // Create indexes for columns with underscores
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'user_name')")
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'user_age')")
 
-      // 验证索引命名正确
-      assertTrue(hasIndex("test_index_table", "user_name_idx"), "应该创建 user_name_idx 索引")
-      assertTrue(hasIndex("test_index_table", "user_age_idx"), "应该创建 user_age_idx 索引")
+      // Verify index names are correct
+      assertTrue(hasIndex("test_index_table", "user_name_idx"), "Index user_name_idx should be created")
+      assertTrue(hasIndex("test_index_table", "user_age_idx"), "Index user_age_idx should be created")
     }
 
     @Test
-    fun `ct_idx 应该处理已存在的索引`() {
-      // 创建测试表
+    fun `ct_idx should handle already existing indexes`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE test_index_table(name VARCHAR(255))")
 
-      // 手动创建索引
+      // Manually create index
       jdbcTemplate.execute("CREATE INDEX name_idx ON test_index_table(name)")
 
-      // 获取索引数量
+      // Get index count
       val beforeCount = getIndexCount("test_index_table")
-      assertTrue(hasIndex("test_index_table", "name_idx"), "索引应该已存在")
+      assertTrue(hasIndex("test_index_table", "name_idx"), "Index name_idx should already exist")
 
-      // 调用 ct_idx
+      // Call ct_idx
       jdbcTemplate.execute("CALL ct_idx('test_index_table', 'name')")
 
-      // 验证索引数量没有变化
+      // Verify index count does not change
       val afterCount = getIndexCount("test_index_table")
-      assertEquals(beforeCount, afterCount, "索引数量不应该变化")
-      assertTrue(hasIndex("test_index_table", "name_idx"), "索引应该仍然存在")
+      assertEquals(beforeCount, afterCount, "Index count should not change")
+      assertTrue(hasIndex("test_index_table", "name_idx"), "Index should still exist")
     }
 
     @Test
-    fun `ct_idx 批量操作测试`() {
-      // 创建测试表
+    fun `ct_idx batch operation test`() {
+      // Create test table
       jdbcTemplate.execute(
         """
         CREATE TABLE test_index_table(
@@ -154,22 +154,22 @@ class V1CtIdxTest : IDatabaseMysqlContainer {
           .trimIndent()
       )
 
-      // 批量创建索引
+      // Create indexes in batch
       val columns = listOf("name", "age", "email", "created_at")
       columns.forEach { column -> jdbcTemplate.execute("CALL ct_idx('test_index_table', '$column')") }
 
-      // 验证所有索引都创建成功
-      columns.forEach { column -> assertTrue(hasIndex("test_index_table", "${column}_idx"), "应该创建 ${column}_idx 索引") }
+      // Verify all indexes are created successfully
+      columns.forEach { column -> assertTrue(hasIndex("test_index_table", "${column}_idx"), "Index ${column}_idx should be created") }
 
-      // 重复执行验证幂等性
+      // Call again to verify idempotency
       columns.forEach { column -> jdbcTemplate.execute("CALL ct_idx('test_index_table', '$column')") }
 
-      // 再次验证索引仍然存在
-      columns.forEach { column -> assertTrue(hasIndex("test_index_table", "${column}_idx"), "索引 ${column}_idx 应该仍然存在") }
+      // Verify indexes still exist
+      columns.forEach { column -> assertTrue(hasIndex("test_index_table", "${column}_idx"), "Index ${column}_idx should still exist") }
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun hasIndex(tableName: String, indexName: String): Boolean {
     val count =
       jdbcTemplate.queryForObject(

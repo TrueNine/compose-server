@@ -24,11 +24,11 @@ dependencies {
   implementation(libs.org.slf4j.slf4j.api)
 
   // json
-  api(libs.com.fasterxml.jackson.module.jackson.module.kotlin)
-  api(libs.com.fasterxml.jackson.core.jackson.databind)
+  api(libs.tools.jackson.module.jackson.module.kotlin)
+  api(libs.tools.jackson.core.jackson.databind)
   runtimeOnly(libs.org.skyscreamer.jsonassert)
 
-  // spring 测试支持
+  // Spring test support
   implementation(libs.org.springframework.spring.test)
   implementation(libs.org.springframework.spring.web)
   runtimeOnly(libs.org.springframework.boot.spring.boot.test) {
@@ -38,7 +38,7 @@ dependencies {
     exclude("org.junit.platform")
   }
 
-  // Spring Security 核心依赖
+  // Spring Security core test dependencies
   implementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
 
   api(libs.org.springframework.boot.spring.boot.starter.test) {
@@ -48,9 +48,9 @@ dependencies {
     exclude("org.mockito", "mockito-junit-jupiter")
   }
 
-  // spring batch
+  // Spring Batch test support
   api(libs.org.springframework.batch.spring.batch.test)
 
-  // 日志自动配置
+  // Logging auto-configuration for tests
   runtimeOnly(libs.ch.qos.logback.logback.classic)
 }

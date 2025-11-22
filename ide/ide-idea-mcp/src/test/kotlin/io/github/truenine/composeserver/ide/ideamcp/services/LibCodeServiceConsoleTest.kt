@@ -8,18 +8,18 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 
-/** LibCodeService 控制台输出测试 验证服务返回完整内容并在控制台输出详细信息 */
+/** LibCodeService console output tests. Verifies that the service returns complete content and prints detailed information to the console. */
 class LibCodeServiceConsoleTest {
 
   @Test
-  fun `应该返回完整的源码内容并输出到控制台`() = runBlocking {
+  fun `should return full source code and print to console`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val className = "java.lang.String"
 
-    println("=== LibCodeService 控制台测试开始 ===")
-    println("测试类名: $className")
+    println("=== LibCodeService console test start ===")
+    println("Test class: $className")
     println()
 
     // When
@@ -32,35 +32,35 @@ class LibCodeServiceConsoleTest {
     assertTrue(result.sourceCode.isNotEmpty())
     assertTrue(result.metadata.libraryName.isNotEmpty())
 
-    // 输出完整结果到控制台
-    println("=== 查找结果 ===")
-    println("类名: ${result.metadata.libraryName}")
-    println("版本: ${result.metadata.version ?: "未知"}")
-    println("语言: ${result.language}")
-    println("源码类型: ${result.metadata.sourceType}")
-    println("是否反编译: ${result.isDecompiled}")
-    println("源码长度: ${result.sourceCode.length} 字符")
-    println("执行时间: ${endTime - startTime}ms")
+    // Print full result to console
+    println("=== Lookup result ===")
+    println("Library: ${result.metadata.libraryName}")
+    println("Version: ${result.metadata.version ?: "unknown"}")
+    println("Language: ${result.language}")
+    println("Source type: ${result.metadata.sourceType}")
+    println("Decompiled: ${result.isDecompiled}")
+    println("Source length: ${result.sourceCode.length} characters")
+    println("Execution time: ${endTime - startTime}ms")
     println()
 
-    println("=== 源码内容 ===")
+    println("=== Source code ===")
     println(result.sourceCode)
     println()
 
-    println("=== 测试完成 ===")
+    println("=== Test finished ===")
   }
 
   @Test
-  fun `应该返回特定成员的源码内容`() = runBlocking {
+  fun `should return source code for specific member`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val className = "java.util.ArrayList"
     val memberName = "add"
 
-    println("=== 成员提取测试开始 ===")
-    println("测试类名: $className")
-    println("成员名: $memberName")
+    println("=== Member extraction test start ===")
+    println("Test class: $className")
+    println("Member name: $memberName")
     println()
 
     // When
@@ -73,33 +73,33 @@ class LibCodeServiceConsoleTest {
     assertTrue(result.sourceCode.isNotEmpty())
     assertContains(result.sourceCode, "ArrayList")
 
-    // 输出完整结果到控制台
-    println("=== 成员提取结果 ===")
-    println("类名: ${result.metadata.libraryName}")
-    println("版本: ${result.metadata.version ?: "未知"}")
-    println("语言: ${result.language}")
-    println("源码类型: ${result.metadata.sourceType}")
-    println("是否反编译: ${result.isDecompiled}")
-    println("源码长度: ${result.sourceCode.length} 字符")
-    println("执行时间: ${endTime - startTime}ms")
+    // Print full result to console
+    println("=== Member extraction result ===")
+    println("Library: ${result.metadata.libraryName}")
+    println("Version: ${result.metadata.version ?: "unknown"}")
+    println("Language: ${result.language}")
+    println("Source type: ${result.metadata.sourceType}")
+    println("Decompiled: ${result.isDecompiled}")
+    println("Source length: ${result.sourceCode.length} characters")
+    println("Execution time: ${endTime - startTime}ms")
     println()
 
-    println("=== 提取的成员源码 ===")
+    println("=== Extracted member source ===")
     println(result.sourceCode)
     println()
 
-    println("=== 成员提取测试完成 ===")
+    println("=== Member extraction test finished ===")
   }
 
   @Test
-  fun `应该处理不存在的类并返回适当的信息`() = runBlocking {
+  fun `should handle non-existent class and return appropriate info`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val className = "com.nonexistent.NonExistentClass"
 
-    println("=== 不存在类测试开始 ===")
-    println("测试类名: $className")
+    println("=== Non-existent class test start ===")
+    println("Test class: $className")
     println()
 
     // When
@@ -111,38 +111,38 @@ class LibCodeServiceConsoleTest {
     assertNotNull(result)
     assertTrue(result.sourceCode.isNotEmpty())
 
-    // 输出完整结果到控制台
-    println("=== 不存在类处理结果 ===")
-    println("类名: ${result.metadata.libraryName}")
-    println("版本: ${result.metadata.version ?: "未知"}")
-    println("语言: ${result.language}")
-    println("源码类型: ${result.metadata.sourceType}")
-    println("是否反编译: ${result.isDecompiled}")
-    println("源码长度: ${result.sourceCode.length} 字符")
-    println("执行时间: ${endTime - startTime}ms")
+    // Print full result to console
+    println("=== Non-existent class result ===")
+    println("Library: ${result.metadata.libraryName}")
+    println("Version: ${result.metadata.version ?: "unknown"}")
+    println("Language: ${result.language}")
+    println("Source type: ${result.metadata.sourceType}")
+    println("Decompiled: ${result.isDecompiled}")
+    println("Source length: ${result.sourceCode.length} characters")
+    println("Execution time: ${endTime - startTime}ms")
     println()
 
-    println("=== 返回的内容 ===")
+    println("=== Returned content ===")
     println(result.sourceCode)
     println()
 
-    println("=== 不存在类测试完成 ===")
+    println("=== Non-existent class test finished ===")
   }
 
   @Test
-  fun `应该测试多个不同类型的类`() = runBlocking {
+  fun `should test multiple different class types`() = runBlocking {
     // Given
     val libCodeService = LibCodeServiceImpl()
     val mockProject = mockk<Project>(relaxed = true)
     val testClasses = listOf("java.lang.Object", "java.util.HashMap", "java.io.File", "java.time.LocalDateTime")
 
-    println("=== 多类型测试开始 ===")
-    println("测试类列表: ${testClasses.joinToString(", ")}")
+    println("=== Multi-type test start ===")
+    println("Test class list: ${testClasses.joinToString(", ")}")
     println()
 
     // When & Then
     testClasses.forEach { className ->
-      println("--- 测试类: $className ---")
+      println("--- Testing class: $className ---")
 
       val startTime = System.currentTimeMillis()
       val result = libCodeService.getLibraryCode(mockProject, className, null)
@@ -151,17 +151,17 @@ class LibCodeServiceConsoleTest {
       assertNotNull(result)
       assertTrue(result.sourceCode.isNotEmpty())
 
-      println("库名: ${result.metadata.libraryName}")
-      println("版本: ${result.metadata.version ?: "未知"}")
-      println("语言: ${result.language}")
-      println("源码类型: ${result.metadata.sourceType}")
-      println("是否反编译: ${result.isDecompiled}")
-      println("源码长度: ${result.sourceCode.length} 字符")
-      println("执行时间: ${endTime - startTime}ms")
-      println("源码预览: ${result.sourceCode.take(200)}...")
+      println("Library: ${result.metadata.libraryName}")
+      println("Version: ${result.metadata.version ?: "unknown"}")
+      println("Language: ${result.language}")
+      println("Source type: ${result.metadata.sourceType}")
+      println("Decompiled: ${result.isDecompiled}")
+      println("Source length: ${result.sourceCode.length} characters")
+      println("Execution time: ${endTime - startTime}ms")
+      println("Source preview: ${result.sourceCode.take(200)}...")
       println()
     }
 
-    println("=== 多类型测试完成 ===")
+    println("=== Multi-type test finished ===")
   }
 }

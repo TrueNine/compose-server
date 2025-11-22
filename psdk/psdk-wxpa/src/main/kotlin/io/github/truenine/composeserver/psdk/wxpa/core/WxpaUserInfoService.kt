@@ -8,9 +8,9 @@ import io.github.truenine.composeserver.slf4j
 private val log = slf4j<WxpaUserInfoService>()
 
 /**
- * # 微信公众号用户信息服务
+ * WeChat Official Account user information service.
  *
- * 负责获取用户信息相关功能
+ * Provides functions related to retrieving user information.
  *
  * @author TrueNine
  * @since 2025-08-08
@@ -18,10 +18,10 @@ private val log = slf4j<WxpaUserInfoService>()
 class WxpaUserInfoService(private val apiClient: IWxpaWebClient, private val properties: WxpaProperties) {
 
   /**
-   * ## 通过授权码获取用户信息
+   * Get user information by authorization code.
    *
-   * @param authCode 微信授权码
-   * @return 用户信息，如果获取失败返回null
+   * @param authCode WeChat authorization code
+   * @return user info, or null if retrieval fails
    */
   fun getUserInfoByAuthCode(authCode: String): WxpaUserInfo? {
     return try {
@@ -35,7 +35,7 @@ class WxpaUserInfoService(private val apiClient: IWxpaWebClient, private val pro
         return null
       }
 
-      // 第一步：通过code获取access_token
+      // Step 1: obtain access_token using authorization code
       val tokenResponse = apiClient.getWebsiteAccessToken(appId = appId, wxpaSecret = appSecret, code = authCode)
 
       if (tokenResponse == null) {
@@ -58,7 +58,7 @@ class WxpaUserInfoService(private val apiClient: IWxpaWebClient, private val pro
 
       log.debug("Got access token for openId: {}", openId)
 
-      // 第二步：通过access_token获取用户信息
+      // Step 2: use access_token to fetch user information
       val userInfoResponse = apiClient.getUserInfoByAccessToken(authAccessToken = accessToken, openId = openId)
 
       if (userInfoResponse == null) {
@@ -84,11 +84,11 @@ class WxpaUserInfoService(private val apiClient: IWxpaWebClient, private val pro
   }
 
   /**
-   * ## 检查用户授权状态
+   * Check user authorization status.
    *
-   * @param accessToken 用户授权的access_token
-   * @param openId 用户openId
-   * @return 授权是否有效
+   * @param accessToken user-authorized access_token
+   * @param openId user openId
+   * @return whether the authorization is valid
    */
   fun checkUserAuthStatus(accessToken: String, openId: String): Boolean {
     return try {

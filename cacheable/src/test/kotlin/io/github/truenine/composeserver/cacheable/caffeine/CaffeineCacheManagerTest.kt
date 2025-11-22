@@ -23,7 +23,7 @@ private val log = slf4j<CaffeineCacheManagerTest>()
 class CaffeineCacheManagerTest {
   @Resource lateinit var cacheManager: CacheManager
 
-  /** 首选必须为 caffeine 缓存 */
+  /** Primary cache manager must be a Caffeine cache */
   @BeforeTest
   fun `before check is caffeine cache manager`() {
     assertNotNull(cacheManager)

@@ -6,7 +6,7 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
 /**
- * rsa密钥对
+ * RSA key pair wrapper.
  *
  * @author TrueNine
  * @since 2022-12-09

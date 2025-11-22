@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.pay.wechat.service.impl
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wechat.pay.java.core.RSAAutoCertificateConfig
 import com.wechat.pay.java.core.notification.NotificationParser
 import com.wechat.pay.java.core.notification.RequestParam
@@ -35,6 +34,7 @@ import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import org.springframework.stereotype.Service
+import tools.jackson.databind.ObjectMapper
 
 @Service
 class WeChatSinglePayService(
@@ -76,7 +76,7 @@ class WeChatSinglePayService(
       )
       .apply {
         prePayId = prePay?.prepayId
-        // 签名
+        // Signature
         val signatureStr = "${payProperty.mpAppId}\n${iso8601Second}\n${random32String}\n${prePayId}\n"
         val signature =
           CryptographicOperations.signWithSha256WithRsaByRsaPrivateKey(
@@ -88,7 +88,7 @@ class WeChatSinglePayService(
   }
 
   override fun findPayOrder(findRq: FindPayOrderDto): FindPayOrderVo? {
-    require(findRq.merchantOrderId.hasText() || findRq.bizCode.hasText()) { "商户订单号和第三方订单号不能同时为空" }
+    require(findRq.merchantOrderId.hasText() || findRq.bizCode.hasText()) { "Merchant order ID and third-party order ID cannot both be empty" }
 
     val transaction =
       if (findRq.merchantOrderId.hasText()) {
@@ -105,7 +105,7 @@ class WeChatSinglePayService(
             mchid = payProperty.merchantId
           }
         )
-      } else error("订单号或商户订单号为空为空")
+      } else error("Order number or merchant order ID is empty")
 
     return FindPayOrderVo(
       meta = transaction,
@@ -118,12 +118,12 @@ class WeChatSinglePayService(
     )
   }
 
-  @Deprecated(message = "暂时不可用")
+  @Deprecated(message = "Temporarily unavailable")
   override fun applyRefundPayOrder(refundAmount: BigDecimal, totalAmount: BigDecimal, currency: ISO4217) {
     val createRequest = CreateRequest()
     val amountReq =
       AmountReq().apply {
-        // 将金额比例乘以 100
+        // Multiply amount by 100 to convert to minor units
         val totalLongBy = (totalAmount * HUNDRED).longValueExact()
         val refundLongBy = (refundAmount * HUNDRED).longValueExact()
         this.currency = currency.value
@@ -133,11 +133,11 @@ class WeChatSinglePayService(
 
     createRequest.apply {
       amount = amountReq
-      // 商户订单号
+      // Merchant order number
       outTradeNo = bigCodeGenerator.nextString()
       outRefundNo = bigCodeGenerator.nextString()
     }
-    // TODO 此处空返回
+    // TODO Currently returns nothing here
     refundApi.create(createRequest)
   }
 
@@ -172,7 +172,7 @@ class WeChatSinglePayService(
       lazyCall(r!!)
     } catch (e: Exception) {
       response.status = 400
-      log.error("发生支付异常，已被捕获并返回微信", e)
+      log.error("A payment exception occurred and has been caught and returned to WeChat", e)
       return """
         {  
           "code": "FAIL",

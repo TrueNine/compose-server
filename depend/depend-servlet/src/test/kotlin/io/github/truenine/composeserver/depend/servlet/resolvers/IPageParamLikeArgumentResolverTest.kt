@@ -29,7 +29,7 @@ class IPageParamLikeArgumentResolverTest {
 
   @BeforeEach
   fun setup() {
-    // 使用 standaloneSetup 明确指定 Controller 和 ArgumentResolver
+    // Use standaloneSetup to explicitly specify the Controller and ArgumentResolver
     mockMvc = MockMvcBuilders.standaloneSetup(TestController()).setCustomArgumentResolvers(IPageParamLikeArgumentResolver()).build()
   }
 
@@ -61,7 +61,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `supportsParameter 当参数类型为 IPageParamLike 时返回 true`() {
+  fun `supportsParameter should return true when the parameter type is IPageParamLike`() {
     val mockParameter = mockk<MethodParameter>()
     every { mockParameter.parameterType } returns IPageParamLike::class.java
 
@@ -69,7 +69,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `supportsParameter 当参数类型不为 IPageParamLike 时返回 false`() {
+  fun `supportsParameter should return false when the parameter type is not IPageParamLike`() {
     val mockParameter = mockk<MethodParameter>()
     every { mockParameter.parameterType } returns String::class.java // Different type
 
@@ -79,7 +79,7 @@ class IPageParamLikeArgumentResolverTest {
   // --- resolveArgument Tests ---
 
   @Test
-  fun `resolveArgument 正常解析所有参数`() {
+  fun `resolveArgument should correctly parse all parameters`() {
     val mockParameter = mockk<MethodParameter>()
     val mockWebRequest = mockk<NativeWebRequest>()
 
@@ -96,7 +96,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `resolveArgument 部分参数缺失时使用默认值`() {
+  fun `resolveArgument should use default values when some parameters are missing`() {
     val mockParameter = mockk<MethodParameter>()
     val mockWebRequest = mockk<NativeWebRequest>()
 
@@ -115,7 +115,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `resolveArgument 所有参数缺失时使用默认值`() {
+  fun `resolveArgument should use default values when all parameters are missing`() {
     val mockParameter = mockk<MethodParameter>()
     val mockWebRequest = mockk<NativeWebRequest>()
 
@@ -133,7 +133,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `resolveArgument 参数格式无效时使用默认值`() {
+  fun `resolveArgument should use default values when parameter formats are invalid`() {
     val mockParameter = mockk<MethodParameter>()
     val mockWebRequest = mockk<NativeWebRequest>()
 
@@ -151,7 +151,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `resolveArgument 使用 MockMvc 正常解析所有参数`() {
+  fun `resolveArgument should correctly parse all parameters using MockMvc`() {
     mockMvc
       .perform(get("/test_page?o=15&s=30&u=false"))
       .andExpect(status().isOk)
@@ -161,7 +161,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `resolveArgument 使用 MockMvc 部分参数缺失时使用默认值`() {
+  fun `resolveArgument should use default values for missing parameters using MockMvc`() {
     mockMvc
       .perform(get("/test_page?o=5"))
       .andExpect(status().isOk)
@@ -171,7 +171,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `resolveArgument 使用 MockMvc 所有参数缺失时使用默认值`() {
+  fun `resolveArgument should use default values for all missing parameters using MockMvc`() {
     mockMvc
       .perform(get("/test_page"))
       .andExpect(status().isOk)
@@ -181,7 +181,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `resolveArgument 使用 MockMvc 参数格式无效时使用默认值`() {
+  fun `resolveArgument should use default values for invalid parameter formats using MockMvc`() {
     mockMvc.get("/test_page?o=abc&s=xyz&u=maybe").andExpect {
       status { isOk() }
       content {
@@ -193,7 +193,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `toImpl 端点正确处理IPageParamLikeImpl类型参数`() {
+  fun `toImpl endpoint should correctly handle IPageParamLikeImpl type parameters`() {
     mockMvc.get("/to_impl?o=10&s=20").andExpect {
       status { isOk() }
       content {
@@ -204,7 +204,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `toPq 端点正确处理IPageParamLikeImpl类型参数`() {
+  fun `toPq endpoint should correctly handle IPageParamLikeImpl type parameters`() {
     mockMvc.get("/to_pq?o=10&s=20").andExpect {
       status { isOk() }
       content {
@@ -215,7 +215,7 @@ class IPageParamLikeArgumentResolverTest {
   }
 
   @Test
-  fun `toDefault 端点正确处理IPageParamLikeImpl类型参数`() {
+  fun `toDefault endpoint should correctly handle IPageParamLikeImpl type parameters`() {
     mockMvc.get("/to_default?o=10&s=20&e=exception").andExpect {
       status { isOk() }
       content {

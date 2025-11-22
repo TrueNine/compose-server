@@ -13,7 +13,7 @@ import org.springframework.core.env.MapPropertySource
 import org.springframework.core.env.StandardEnvironment
 
 /**
- * 测试 OSS 配置属性的功能和向后兼容性
+ * Test for OSS configuration properties functionality and backward compatibility
  *
  * @author TrueNine
  * @since 2025-08-11
@@ -21,11 +21,11 @@ import org.springframework.core.env.StandardEnvironment
 class OssPropertiesTest {
 
   @Nested
-  inner class `基本配置绑定` {
+  inner class `Basic Configuration Binding` {
 
     @Test
-    fun `应该正确绑定所有配置属性`() {
-      // 准备配置数据
+    fun `should bind all configuration properties correctly`() {
+      // Prepare configuration data
       val properties =
         mapOf(
           "${SpringBootConfigurationPropertiesPrefixes.OSS}.provider" to "minio",
@@ -45,15 +45,15 @@ class OssPropertiesTest {
           "${SpringBootConfigurationPropertiesPrefixes.OSS}.logging" to "true",
         )
 
-      // 创建环境和绑定器
+      // Create environment and binder
       val environment = StandardEnvironment()
       environment.propertySources.addFirst(MapPropertySource("test", properties))
       val binder = Binder.get(environment)
 
-      // 绑定配置
+      // Bind configuration
       val ossProperties = binder.bind(SpringBootConfigurationPropertiesPrefixes.OSS, OssProperties::class.java).get()
 
-      // 验证绑定结果
+      // Verify binding results
       assertEquals("minio", ossProperties.provider)
       assertEquals("http://localhost:9000", ossProperties.endpoint)
       assertEquals("us-east-1", ossProperties.region)
@@ -72,51 +72,51 @@ class OssPropertiesTest {
     }
 
     @Test
-    fun `应该使用默认值当配置未提供时`() {
-      // 创建空配置
+    fun `should use default values when configuration is not provided`() {
+      // Create empty configuration
       val properties = emptyMap<String, Any>()
       val environment = StandardEnvironment()
       environment.propertySources.addFirst(MapPropertySource("test", properties))
       val binder = Binder.get(environment)
 
-      // 绑定配置
+      // Bind configuration
       val ossProperties = binder.bind(SpringBootConfigurationPropertiesPrefixes.OSS, OssProperties::class.java).orElse(OssProperties())
 
-      // 验证默认值
-      assertNull(ossProperties.provider)
-      assertNull(ossProperties.endpoint)
-      assertNull(ossProperties.region)
-      assertNull(ossProperties.accessKey)
-      assertNull(ossProperties.secretKey)
-      assertNull(ossProperties.exposedBaseUrl)
-      assertFalse(ossProperties.enableSsl)
-      assertEquals(Duration.ofSeconds(5), ossProperties.connectionTimeout)
-      assertEquals(Duration.ofSeconds(3), ossProperties.readTimeout)
-      assertEquals(Duration.ofSeconds(3), ossProperties.writeTimeout)
-      assertEquals(127, ossProperties.maxConnections)
-      assertEquals("attachments", ossProperties.defaultBucket)
-      assertFalse(ossProperties.autoCreateBucket)
-      assertFalse(ossProperties.versioning)
-      assertFalse(ossProperties.logging)
+      // Verify default values
+      assertNull(ossProperties?.provider)
+      assertNull(ossProperties?.endpoint)
+      assertNull(ossProperties?.region)
+      assertNull(ossProperties?.accessKey)
+      assertNull(ossProperties?.secretKey)
+      assertNull(ossProperties?.exposedBaseUrl)
+      assertEquals(ossProperties?.enableSsl, false)
+      assertEquals(Duration.ofSeconds(5), ossProperties?.connectionTimeout)
+      assertEquals(Duration.ofSeconds(3), ossProperties?.readTimeout)
+      assertEquals(Duration.ofSeconds(3), ossProperties?.writeTimeout)
+      assertEquals(127, ossProperties?.maxConnections)
+      assertEquals("attachments", ossProperties?.defaultBucket)
+      assertEquals(ossProperties?.autoCreateBucket, false)
+      assertEquals(ossProperties?.versioning, false)
+      assertEquals(ossProperties?.logging, false)
     }
   }
 
   @Nested
-  inner class `向后兼容性` {
+  inner class `Backward Compatibility` {
 
     @Test
-    fun `provider 属性应该仍然可以设置和读取`() {
+    fun `provider property should still be settable and readable`() {
       val ossProperties = OssProperties()
 
-      // 设置 provider 属性（尽管已废弃）
+      // Set the provider property (although deprecated)
       ossProperties.provider = "minio"
 
-      // 验证可以读取
+      // Verify it can be read
       assertEquals("minio", ossProperties.provider)
     }
 
     @Test
-    fun `provider 属性应该在配置绑定中正常工作`() {
+    fun `provider property should work correctly in configuration binding`() {
       val properties = mapOf("${SpringBootConfigurationPropertiesPrefixes.OSS}.provider" to "volcengine-tos")
 
       val environment = StandardEnvironment()
@@ -130,73 +130,73 @@ class OssPropertiesTest {
   }
 
   @Nested
-  inner class `配置验证` {
+  inner class `Configuration Validation` {
 
     @Test
-    fun `validate 方法应该在必需属性缺失时抛出异常`() {
+    fun `validate method should throw an exception when required properties are missing`() {
       val ossProperties = OssProperties()
 
-      // 测试缺少 endpoint
+      // Test missing endpoint
       try {
         ossProperties.validate()
-        throw AssertionError("应该抛出异常")
+        throw AssertionError("Should have thrown an exception")
       } catch (e: IllegalArgumentException) {
         assertEquals("Endpoint cannot be null or blank", e.message)
       }
 
-      // 设置 endpoint，测试缺少 accessKey
+      // Set endpoint, test missing accessKey
       ossProperties.endpoint = "http://localhost:9000"
       try {
         ossProperties.validate()
-        throw AssertionError("应该抛出异常")
+        throw AssertionError("Should have thrown an exception")
       } catch (e: IllegalArgumentException) {
         assertEquals("Access key cannot be null or blank", e.message)
       }
 
-      // 设置 accessKey，测试缺少 secretKey
+      // Set accessKey, test missing secretKey
       ossProperties.accessKey = "test"
       try {
         ossProperties.validate()
-        throw AssertionError("应该抛出异常")
+        throw AssertionError("Should have thrown an exception")
       } catch (e: IllegalArgumentException) {
         assertEquals("Secret key cannot be null or blank", e.message)
       }
     }
 
     @Test
-    fun `validate 方法应该在所有必需属性存在时通过`() {
+    fun `validate method should pass when all required properties are present`() {
       val ossProperties = OssProperties(endpoint = "http://localhost:9000", accessKey = "test", secretKey = "test")
 
-      // 不应该抛出异常
+      // Should not throw an exception
       ossProperties.validate()
     }
   }
 
   @Nested
-  inner class `URL 处理` {
+  inner class `URL Handling` {
 
     @Test
-    fun `getEffectiveEndpoint 应该正确处理不同的 endpoint 格式`() {
-      // 测试带协议的 endpoint
+    fun `getEffectiveEndpoint should correctly handle different endpoint formats`() {
+      // Test endpoint with protocol
       val ossProperties1 = OssProperties(endpoint = "https://s3.amazonaws.com")
       assertEquals("https://s3.amazonaws.com", ossProperties1.getEffectiveEndpoint())
 
-      // 测试不带协议的 endpoint，启用 SSL
+      // Test endpoint without protocol, with SSL enabled
       val ossProperties2 = OssProperties(endpoint = "s3.amazonaws.com", enableSsl = true)
       assertEquals("https://s3.amazonaws.com", ossProperties2.getEffectiveEndpoint())
 
-      // 测试不带协议的 endpoint，禁用 SSL
+      // Test endpoint without protocol, with SSL disabled
       val ossProperties3 = OssProperties(endpoint = "localhost:9000", enableSsl = false)
       assertEquals("http://localhost:9000", ossProperties3.getEffectiveEndpoint())
     }
 
     @Test
-    fun `getEffectiveExposedBaseUrl 应该正确处理 exposedBaseUrl`() {
-      // 测试有 exposedBaseUrl 的情况
+    fun `getEffectiveExposedBaseUrl should correctly handle exposedBaseUrl`() {
+      // Test with exposedBaseUrl present
       val ossProperties1 = OssProperties(endpoint = "http://localhost:9000", exposedBaseUrl = "http://public.example.com")
       assertEquals("http://public.example.com", ossProperties1.getEffectiveExposedBaseUrl())
 
-      // 测试没有 exposedBaseUrl 的情况，应该使用 endpoint
+      // Test without exposedBaseUrl, should use endpoint
       val ossProperties2 = OssProperties(endpoint = "http://localhost:9000")
       assertEquals("http://localhost:9000", ossProperties2.getEffectiveExposedBaseUrl())
     }
@@ -206,16 +206,16 @@ class OssPropertiesTest {
   inner class ToString {
 
     @Test
-    fun `toString 应该隐藏敏感信息`() {
+    fun `toString should hide sensitive information`() {
       val ossProperties = OssProperties(provider = "minio", endpoint = "http://localhost:9000", accessKey = "minioadmin", secretKey = "minioadmin")
 
       val toStringResult = ossProperties.toString()
 
-      // 验证包含非敏感信息
+      // Verify that non-sensitive information is included
       assertTrue(toStringResult.contains("provider='minio'"))
       assertTrue(toStringResult.contains("endpoint='http://localhost:9000'"))
 
-      // 验证敏感信息被隐藏
+      // Verify that sensitive information is hidden
       assertTrue(toStringResult.contains("accessKey='mini***'"))
       assertFalse(toStringResult.contains("minioadmin"))
     }

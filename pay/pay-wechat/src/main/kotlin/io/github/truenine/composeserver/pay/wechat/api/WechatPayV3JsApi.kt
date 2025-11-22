@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.service.annotation.HttpExchange
 
 /**
- * # 微信支付 js API
+ * # WeChat Pay JS API
  *
  * @author shanghua
  * @since 2023-05-31

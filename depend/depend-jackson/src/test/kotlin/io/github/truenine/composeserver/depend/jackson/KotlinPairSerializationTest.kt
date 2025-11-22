@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import kotlin.test.assertEquals
@@ -8,6 +7,7 @@ import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest
 class KotlinPairSerializationTest {
@@ -98,15 +98,15 @@ class KotlinPairSerializationTest {
     fun `round trip serialization preserves pair values`() {
       val originalPair = Pair("test", 123)
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(originalPair)
       log.info("Serialized: {}", json)
 
-      // 反序列化
+      // Deserialize
       val deserializedPair = mapper.readValue(json, Pair::class.java)
       log.info("Deserialized: {}", deserializedPair)
 
-      // 验证
+      // Verify
       assertEquals(originalPair.first, deserializedPair.first)
       assertEquals(originalPair.second, deserializedPair.second)
     }
@@ -115,15 +115,15 @@ class KotlinPairSerializationTest {
     fun `round trip with nested objects`() {
       val nestedPair = Pair(Pair("inner1", "inner2"), Pair(100, 200))
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(nestedPair)
       log.info("Serialized nested pair: {}", json)
 
-      // 反序列化
+      // Deserialize
       val deserializedPair = mapper.readValue(json, Pair::class.java)
       log.info("Deserialized nested pair: {}", deserializedPair)
 
-      // 验证外层
+      // Verify outer layer
       assertNotNull(deserializedPair.first)
       assertNotNull(deserializedPair.second)
     }

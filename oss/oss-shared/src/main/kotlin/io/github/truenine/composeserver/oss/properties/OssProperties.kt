@@ -128,7 +128,7 @@ data class OssProperties(
     return exposedBaseUrl ?: getEffectiveEndpoint()
   }
 
-  /** 重写 toString 方法以隐藏敏感信息 */
+  /** Override toString method to hide sensitive information */
   override fun toString(): String {
     return "OssProperties(" +
       "provider=${provider?.let { "'$it'" }}, " +

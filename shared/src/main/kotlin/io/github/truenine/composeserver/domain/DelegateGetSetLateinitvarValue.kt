@@ -4,7 +4,7 @@ import kotlin.reflect.KProperty
 
 @Deprecated(message = "use Delegates.notNull()", replaceWith = ReplaceWith("Delegates.notNull()"))
 @Suppress("UNCHECKED_CAST")
-class DelegateGetSetLateinitvarValue<T> @Deprecated(message = "不建议直接调用构造器直接实例化", level = DeprecationLevel.ERROR) constructor() {
+class DelegateGetSetLateinitvarValue<T> @Deprecated(message = "Direct constructor usage is not recommended", level = DeprecationLevel.ERROR) constructor() {
   private var v: Any? = null
 
   operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {

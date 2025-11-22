@@ -11,29 +11,29 @@ class ComposeServerMcpPlugin : AbstractMcpTool<MyArgs>(MyArgs.serializer()) {
   override val description: String = "Compose Server MCP integration tool"
 
   override fun handle(project: Project, args: MyArgs): Response {
-    Logger.info("开始处理 MCP 请求", "ComposeServerMcpPlugin")
-    Logger.debug("请求参数 - param1: ${args.param1}, param2: ${args.param2}", "ComposeServerMcpPlugin")
+    Logger.info("Start handling MCP request", "ComposeServerMcpPlugin")
+    Logger.debug("Request arguments - param1: ${args.param1}, param2: ${args.param2}", "ComposeServerMcpPlugin")
 
     return try {
       val result = processRequest(args)
-      Logger.info("MCP 请求处理成功", "ComposeServerMcpPlugin")
+      Logger.info("MCP request processed successfully", "ComposeServerMcpPlugin")
       Response(result)
     } catch (e: Exception) {
-      Logger.error("MCP 请求处理失败", "ComposeServerMcpPlugin", e)
-      Response("处理失败: ${e.message}")
+      Logger.error("MCP request processing failed", "ComposeServerMcpPlugin", e)
+      Response("Processing failed: ${e.message}")
     }
   }
 
   private fun processRequest(args: MyArgs): String {
-    Logger.debug("正在处理业务逻辑", "ComposeServerMcpPlugin")
+    Logger.debug("Processing business logic", "ComposeServerMcpPlugin")
 
-    // 这里可以添加具体的业务逻辑
-    val result = "Compose Server处理完成，参数: ${args.param1}, 数值: ${args.param2}"
+    // Business logic can be added here
+    val result = "Compose Server processing completed, param: ${args.param1}, value: ${args.param2}"
 
-    Logger.debug("业务逻辑处理完成，结果长度: ${result.length}", "ComposeServerMcpPlugin")
+    Logger.debug("Business logic processed, result length: ${result.length}", "ComposeServerMcpPlugin")
     return result
   }
 }
 
-// 定义参数数据类
+// Parameter data class
 @Serializable data class MyArgs(val param1: String, val param2: Int)

@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service
 private val log = slf4j<LazyAddressServiceImpl>()
 
 @ConditionalOnMissingBean(ILazyAddressService::class)
-@Deprecated("统计局接口已不可用，请使用基于 CSV 的实现，如 LazyAddressCsvServiceImpl")
-@Service("DataExtractLazyAddressServiceImpls") // 保持 Bean 名称可能为了某些旧配置兼容
+@Deprecated("NBS address API is deprecated; use CSV-based implementation such as LazyAddressCsvServiceImpl")
+@Service("DataExtractLazyAddressServiceImpls") // Keep bean name for legacy configuration compatibility
 class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddressService {
 
-  // --- 实现 ILazyAddressService 属性 ---
+  // --- Implement ILazyAddressService properties ---
   override val supportedDefaultYearVersion: String
-    get() = "2023" // 国家统计局最后可用的年份（假设）
+    get() = "2023" // Last available year for NBS service (assumed)
 
   override val supportedYearVersions: List<String>
     get() = listOf(supportedDefaultYearVersion)
@@ -26,17 +26,17 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
   override val logger
     get() = log
 
-  // --- 实现核心查找方法 (基于旧逻辑，接口已简化) ---
+  // --- Core lookup methods implementation (legacy logic, simplified API) ---
 
   override fun fetchChildren(parentCode: string, yearVersion: String): List<ILazyAddressService.CnDistrict> {
-    // 检查年份是否匹配，这个旧实现只支持一个版本
+    // Check year version; this legacy implementation supports only one version
     if (yearVersion != supportedDefaultYearVersion) {
       logger?.warn("Unsupported yearVersion {} requested for NBS service, returning empty list.", yearVersion)
       return emptyList()
     }
 
-    // 尝试根据 parentCode 的层级调用旧的查找逻辑
-    // 使用接口提供的公共方法创建 CnDistrictCode
+    // Use helper to parse parent code and dispatch based on administrative level
+    // Uses ILazyAddressService companion methods to create CnDistrictCode
     val parentCodeObj = ILazyAddressService.createCnDistrictCode(parentCode) ?: return emptyList()
 
     return when (parentCodeObj.level) {
@@ -54,55 +54,53 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
 
   override fun fetchDistrict(code: string, yearVersion: String): ILazyAddressService.CnDistrict? {
     logger?.debug("Attempting findDistrict for code: {}, starting year: {}", code, yearVersion)
-    // 实现版本回退逻辑
+    // Implement version fallback logic
     var currentYearVersion: String? = yearVersion
     while (currentYearVersion != null) {
-      // 检查当前尝试的版本是否受支持
+      // Check whether current version is supported by this legacy implementation
       if (currentYearVersion != supportedDefaultYearVersion) {
         logger?.trace("Skipping unsupported year {} for NBS service.", currentYearVersion)
         currentYearVersion = lastYearVersionOrNull(currentYearVersion)
         continue
       }
 
-      // 尝试在该版本查找
-      // 需要找到父级，然后查找子级列表，再从中筛选
-      val codeObj = ILazyAddressService.createCnDistrictCode(code) ?: return null // 无效 code 直接返回
+      // Try lookup in the current version.
+      // Find parent node, then query its children and filter by code.
+      val codeObj = ILazyAddressService.createCnDistrictCode(code) ?: return null // Invalid code, return immediately
       val parentCode = codeObj.back()?.code?.toString() ?: if (codeObj.level == 1) ILazyAddressService.DEFAULT_COUNTRY_CODE else null
 
       if (parentCode != null) {
-        val children = fetchChildren(parentCode, currentYearVersion) // 调用本类实现的 findChildren
+        val children = fetchChildren(parentCode, currentYearVersion) // Delegate to this class implementation of fetchChildren
         val found = children.firstOrNull { it.code.code == codeObj.code }
         if (found != null) {
           logger?.debug("Found district {} in year {}", code, currentYearVersion)
-          // 确保返回的 district 的 yearVersion 是实际找到的年份
+          // Ensure returned district uses the actual year version where it was found
           return found.copy(yearVersion = currentYearVersion)
         }
       } else {
-        // 无法确定父级（可能是根代码 "0" 或无效代码）
+        // Cannot determine parent (may be root code "0" or invalid code)
         logger?.warn("Cannot determine parent for code {} to perform lookup.", code)
-        return null // 或者根据情况处理根代码
+        return null // Or handle root code case explicitly
       }
 
-      // 如果没找到，尝试更早的版本
+      // If not found, try earlier version
       logger?.trace("District {} not found in year {}, trying older version.", code, currentYearVersion)
       currentYearVersion = lastYearVersionOrNull(currentYearVersion)
     }
 
     logger?.warn("District {} not found in any supported version starting from {}.", code, yearVersion)
-    return null // 所有版本都试过，未找到
+    return null // Not found in any version
   }
 
   override fun fetchChildrenRecursive(parentCode: string, maxDepth: Int, yearVersion: String): List<ILazyAddressService.CnDistrict> {
     logger?.warn("findChildrenRecursive is not efficiently implemented in the deprecated NBS service.")
-    // 简单实现：只返回第一层子级，如果 maxDepth >= 1
+    // Simple implementation: only return first-level children when maxDepth >= 1
     return if (maxDepth >= 1) {
       fetchChildren(parentCode, yearVersion)
     } else {
       emptyList()
     }
-    // 或者抛出异常:
-    // throw UnsupportedOperationException("Recursive search is not supported by
-    // this deprecated implementation.")
+    // Alternatively, this implementation could throw UnsupportedOperationException.
   }
 
   override fun traverseChildrenRecursive(
@@ -127,19 +125,19 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
     walk(parentCode, 1, null)
   }
 
-  // --- 内部方法 (旧的实现逻辑，保持 private) ---
+  // --- Internal helpers (legacy NBS implementation, kept private) ---
 
   private fun findAllProvincesInternal(yearVersion: String): List<ILazyAddressService.CnDistrict> {
-    // 年份检查已在外部 findChildren 完成
+    // Year version check is already done in fetchChildren
     val homeBody = chstApi.homePage().body
     return extractProvinces(homeBody)
   }
 
   private fun findAllCityByCodeInternal(provinceCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
-    // 年份检查已在外层完成
-    // 使用接口的公共方法创建 Code 对象
+    // Year version check is already performed by caller
+    // Use interface helper to create code object
     val model = ILazyAddressService.createCnDistrictCode(provinceCode) ?: return emptyList()
-    // 简单的层级检查
+    // Simple level validation
     if (model.level != 1) {
       logger?.error("Internal: findAllCityByCodeInternal called with non-province code: {}", provinceCode)
       return emptyList()
@@ -149,7 +147,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
   }
 
   private fun findAllCountyByCodeInternal(cityCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
-    // 年份检查已在外层完成
+    // Year version check is already performed by caller
     val model = ILazyAddressService.createCnDistrictCode(cityCode) ?: return emptyList()
     if (model.level != 2) {
       logger?.error("Internal: findAllCountyByCodeInternal called with non-city code: {}", cityCode)
@@ -159,7 +157,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
   }
 
   private fun findAllTownByCodeInternal(countyCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
-    // 年份检查已在外层完成
+    // Year version check is already performed by caller
     val model = ILazyAddressService.createCnDistrictCode(countyCode) ?: return emptyList()
     if (model.level != 3) {
       logger?.error("Internal: findAllTownByCodeInternal called with non-county code: {}", countyCode)
@@ -169,7 +167,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
   }
 
   private fun findAllVillageByCodeInternal(townCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> {
-    // 年份检查已在外层完成
+    // Year version check is already performed by caller
     val model = ILazyAddressService.createCnDistrictCode(townCode) ?: return emptyList()
     if (model.level != 4) {
       logger?.error("Internal: findAllVillageByCodeInternal called with non-town code: {}", townCode)
@@ -178,14 +176,14 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
     return extractVillages(chstApi.getVillagePage(model.provinceCode, model.cityCode, model.countyCode, model.townCode).body) ?: listOf()
   }
 
-  // --- Jsoup 解析辅助方法 ---
+  // --- Jsoup parsing helpers ---
 
   private fun toCnDistrict(code: String, name: String, leaf: Boolean) =
     ILazyAddressService.CnDistrict(
       leaf = leaf,
       name = name,
-      code = CnDistrictCode(code), // 假设 CnDistrictCode 可以处理 code
-      yearVersion = supportedDefaultYearVersion, // 固定为此实现支持的版本
+      code = CnDistrictCode(code), // Assume CnDistrictCode can handle the code value
+      yearVersion = supportedDefaultYearVersion, // Fixed to the single supported year version for this implementation
     )
 
   private fun extractProvinces(page: String?): List<ILazyAddressService.CnDistrict> {
@@ -193,7 +191,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
       Jsoup.parse(it).body().selectXpath("//tr[@class='provincetr']/td/a").mapNotNull { link ->
         val hrefCode = link.attr("href").removePrefix("./").removeSuffix(".html")
         val fullCode = hrefCode.padEnd(12, '0')
-        // 使用接口的验证方法
+        // Use ILazyAddressService.verifyCode for validation
         if (ILazyAddressService.verifyCode(fullCode)) {
           val name = link.text()
           toCnDistrict(fullCode, name, false)
@@ -210,7 +208,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
       Jsoup.parse(it).body().selectXpath("//tr[@class='villagetr']").mapNotNull { element ->
         val code = element.child(0).text()
         val name = element.child(2).text()
-        // 使用接口的验证方法
+        // Use ILazyAddressService.verifyCode for validation
         if (code.length == 12 && ILazyAddressService.verifyCode(code)) {
           toCnDistrict(code, name, true)
         } else {
@@ -236,7 +234,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
               "towntr" -> 9
               else -> 0
             }
-          // 市、县、镇代码需要补全
+          // City, county, and town codes must be padded to 12 digits
           val fullCode = codePart?.padEnd(12, '0')
 
           if (fullCode != null && codePart?.length == expectedLength && ILazyAddressService.verifyCode(fullCode)) {
@@ -265,7 +263,7 @@ class LazyAddressServiceImpl(private val chstApi: ICnNbsAddressApi) : ILazyAddre
               else -> 0
             }
           val fullCode = codeText.padEnd(12, '0')
-          // 使用接口的验证方法
+          // Use ILazyAddressService.verifyCode for validation
           if (codeText.all { it.isDigit() } && codeText.length == expectedLength && ILazyAddressService.verifyCode(fullCode)) {
             toCnDistrict(fullCode, nameText, true)
           } else {

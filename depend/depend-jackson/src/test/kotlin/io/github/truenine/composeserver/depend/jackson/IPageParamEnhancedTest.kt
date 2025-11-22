@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.domain.IPageParam
 import io.github.truenine.composeserver.domain.IPageParamLike
@@ -11,6 +10,7 @@ import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest
 class IPageParamEnhancedTest {
@@ -38,8 +38,8 @@ class IPageParamEnhancedTest {
 
       assertNotNull(pageParam)
       assertEquals(0, pageParam.o)
-      assertEquals(Int.MAX_VALUE, pageParam.s) // unPage=true时应该设置为最大值
-      // 验证unPage行为 - 注意u属性已弃用，但仍需验证功能
+      assertEquals(Int.MAX_VALUE, pageParam.s) // when unPage=true page size should be set to max value
+      // Verify unPage behavior - note: property u is deprecated but still needs to be validated
       log.info("Deserialized unpage param: {}", pageParam)
     }
 
@@ -49,8 +49,8 @@ class IPageParamEnhancedTest {
       val pageParam = mapper.readValue(json, IPageParam::class.java)
 
       assertNotNull(pageParam)
-      assertEquals(0, pageParam.o) // 默认值
-      assertEquals(42, pageParam.s) // 默认值
+      assertEquals(0, pageParam.o) // default value
+      assertEquals(42, pageParam.s) // default value
       log.info("Deserialized page param with nulls: {}", pageParam)
     }
 
@@ -60,7 +60,7 @@ class IPageParamEnhancedTest {
       val pageParam = mapper.readValue(json, IPageParam::class.java)
 
       assertNotNull(pageParam)
-      assertEquals(0, pageParam.o) // 默认值
+      assertEquals(0, pageParam.o) // default value
       assertEquals(15, pageParam.s)
       log.info("Deserialized partial page param: {}", pageParam)
     }
@@ -101,8 +101,8 @@ class IPageParamEnhancedTest {
       val pageParam = mapper.readValue(json, IPageParam::class.java)
 
       assertNotNull(pageParam)
-      assertEquals(0, pageParam.o) // 默认值
-      assertEquals(42, pageParam.s) // 默认值
+      assertEquals(0, pageParam.o) // default value
+      assertEquals(42, pageParam.s) // default value
       log.info("Deserialized empty object: {}", pageParam)
     }
   }
@@ -114,15 +114,15 @@ class IPageParamEnhancedTest {
     fun `round trip with Pq factory method`() {
       val originalParam = Pq[5, 50]
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(originalParam)
       log.info("Serialized Pq: {}", json)
 
-      // 反序列化
+      // Deserialize
       val deserializedParam = mapper.readValue(json, IPageParam::class.java)
       log.info("Deserialized Pq: {}", deserializedParam)
 
-      // 验证
+      // Verify
       assertEquals(originalParam.o, deserializedParam.o)
       assertEquals(originalParam.s, deserializedParam.s)
     }
@@ -131,15 +131,15 @@ class IPageParamEnhancedTest {
     fun `round trip with unpage param`() {
       val originalParam = Pq.unPage()
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(originalParam)
       log.info("Serialized unpage Pq: {}", json)
 
-      // 反序列化
+      // Deserialize
       val deserializedParam = mapper.readValue(json, IPageParam::class.java)
       log.info("Deserialized unpage Pq: {}", deserializedParam)
 
-      // 验证unPage行为 - 通过pageSize验证而不是直接访问u属性
+      // Verify unPage behavior via pageSize instead of directly reading deprecated property u
       assertEquals(Int.MAX_VALUE, deserializedParam.s)
     }
   }
@@ -149,18 +149,18 @@ class IPageParamEnhancedTest {
 
     @Test
     fun `page param serialization does not interfere with time types`() {
-      // 创建包含时间字段和分页参数的复合对象
+      // Create composite object containing both time fields and pagination parameters
       val testData = mapOf("pageParam" to Pq[1, 20], "timestamp" to System.currentTimeMillis(), "dateTime" to java.time.LocalDateTime.now())
 
-      // 序列化
+      // Serialize
       val json = mapper.writeValueAsString(testData)
       log.info("Serialized composite data: {}", json)
 
-      // 反序列化
+      // Deserialize
       val deserializedData = mapper.readValue(json, Map::class.java)
       log.info("Deserialized composite data: {}", deserializedData)
 
-      // 验证分页参数部分
+      // Verify pagination part
       assertNotNull(deserializedData["pageParam"])
     }
   }

@@ -6,11 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/**
- * # kotlin 特性测试
- *
- * 保证某些 kotlin 特性的稳定性
- */
+/** Verifies selected Kotlin language behaviours relied upon by the codebase. */
 class KotlinLangTest {
   class FunClass(var count: Int = 0) {
     private fun abc() {

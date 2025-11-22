@@ -14,6 +14,7 @@ description =
 dependencies {
   api(libs.org.springframework.boot.spring.boot.autoconfigure)
   api(libs.org.springframework.spring.context)
+  implementation(libs.org.springframework.boot.spring.boot.starter.flyway)
 
   runtimeOnly(libs.org.flywaydb.flyway.core)
 

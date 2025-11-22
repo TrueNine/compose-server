@@ -12,7 +12,7 @@ spotless {
       it.setRemoveUnusedImports(true)
     }
   }
-  // 只在项目应用了 Kotlin 插件时才配置 Kotlin 规则
+  // Configure Kotlin formatting rules only when a Kotlin plugin is applied to the project
   if (plugins.hasPlugin("org.jetbrains.kotlin.jvm") ||
     plugins.hasPlugin("org.jetbrains.kotlin.android") ||
     plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")

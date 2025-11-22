@@ -22,17 +22,17 @@ class LazyAddressServiceImplTest {
   }
 
   @Test
-  fun `traverseChildrenRecursive 正常递归遍历所有子节点`() {
-    // 模拟数据：省-市-区
-    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>北京市</a></td></tr></body></html>"
+  fun `traverseChildrenRecursive traverses all child nodes`() {
+    // Mock data: province -> city -> county
+    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>Beijing Municipality</a></td></tr></body></html>"
     every { chstApi.getCityPage(any()) } returns
       mockk(relaxed = true) {
         every { body } returns
-          "<html><body><tr class='citytr'><td><a href='110100.html'>北京市市辖区</a></td><td><a href='110100.html'>北京市市辖区</a></td></tr></body></html>"
+          "<html><body><tr class='citytr'><td><a href='110100.html'>Beijing Districts</a></td><td><a href='110100.html'>Beijing Districts</a></td></tr></body></html>"
       }
     every { chstApi.getCountyPage(any(), any()) } returns
-      mockk(relaxed = true) { every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>东城区</td></tr></body></html>" }
-    // 遍历
+      mockk(relaxed = true) { every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>Dongcheng District</td></tr></body></html>" }
+    // Traverse
     val visited = mutableListOf<Pair<String, Int>>()
     service.traverseChildrenRecursive("000000000000", 3, "2023") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code to depth }
@@ -44,19 +44,19 @@ class LazyAddressServiceImplTest {
   }
 
   @Test
-  fun `traverseChildrenRecursive 回调返回false时中断分支`() {
-    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>北京市</a></td></tr></body></html>"
+  fun `traverseChildrenRecursive stops branch when callback returns false`() {
+    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>Beijing Municipality</a></td></tr></body></html>"
     every { chstApi.getCityPage(any()) } returns
       mockk(relaxed = true) {
         every { body } returns
-          "<html><body><tr class='citytr'><td><a href='110100.html'>北京市市辖区</a></td><td><a href='110100.html'>北京市市辖区</a></td></tr></body></html>"
+          "<html><body><tr class='citytr'><td><a href='110100.html'>Beijing Districts</a></td><td><a href='110100.html'>Beijing Districts</a></td></tr></body></html>"
       }
     every { chstApi.getCountyPage(any(), any()) } returns
-      mockk(relaxed = true) { every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>东城区</td></tr></body></html>" }
+      mockk(relaxed = true) { every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>Dongcheng District</td></tr></body></html>" }
     val visited = mutableListOf<String>()
     service.traverseChildrenRecursive("000000000000", 3, "2023") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code }
-      // 只遍历到省级
+      // Traverse only to province level
       children.all { it.level < 1 }
     }
     assertTrue(visited.contains("110000"))
@@ -65,12 +65,12 @@ class LazyAddressServiceImplTest {
   }
 
   @Test
-  fun `traverseChildrenRecursive 只遍历一层`() {
-    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>北京市</a></td></tr></body></html>"
+  fun `traverseChildrenRecursive single level`() {
+    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>Beijing Municipality</a></td></tr></body></html>"
     every { chstApi.getCityPage(any()) } returns
       mockk(relaxed = true) {
         every { body } returns
-          "<html><body><tr class='citytr'><td><a href='110100.html'>北京市市辖区</a></td><td><a href='110100.html'>北京市市辖区</a></td></tr></body></html>"
+          "<html><body><tr class='citytr'><td><a href='110100.html'>Beijing Districts</a></td><td><a href='110100.html'>Beijing Districts</a></td></tr></body></html>"
       }
     val visited = mutableListOf<String>()
     service.traverseChildrenRecursive("000000000000", 1, "2023") { children, depth, parent ->
@@ -82,15 +82,15 @@ class LazyAddressServiceImplTest {
   }
 
   @Test
-  fun `traverseChildrenRecursive parentDistrict 参数正确`() {
-    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>北京市</a></td></tr></body></html>"
+  fun `traverseChildrenRecursive parentDistrict parameter is correct`() {
+    every { chstApi.homePage().body } returns "<html><body><tr class='provincetr'><td><a href='./110000.html'>Beijing Municipality</a></td></tr></body></html>"
     every { chstApi.getCityPage(any()) } returns
       mockk(relaxed = true) {
         every { body } returns
-          "<html><body><tr class='citytr'><td><a href='110100.html'>北京市市辖区</a></td><td><a href='110100.html'>北京市市辖区</a></td></tr></body></html>"
+          "<html><body><tr class='citytr'><td><a href='110100.html'>Beijing Districts</a></td><td><a href='110100.html'>Beijing Districts</a></td></tr></body></html>"
       }
     every { chstApi.getCountyPage(any(), any()) } returns
-      mockk(relaxed = true) { every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>东城区</td></tr></body></html>" }
+      mockk(relaxed = true) { every { body } returns "<html><body><tr class='countytr'><td>110101</td><td>Dongcheng District</td></tr></body></html>" }
     val parentMap = mutableMapOf<String, String?>()
     service.traverseChildrenRecursive("000000000000", 3, "2023") { children, depth, parent ->
       children.forEach { district -> parentMap[district.code.code] = parent?.code?.code }
@@ -102,7 +102,7 @@ class LazyAddressServiceImplTest {
   }
 
   @Test
-  fun `traverseChildrenRecursive 空数据和无效parentCode`() {
+  fun `traverseChildrenRecursive empty data and invalid parentCode`() {
     every { chstApi.homePage().body } returns "<html><body></body></html>"
     val visited = mutableListOf<String>()
     service.traverseChildrenRecursive("999999", 3, "2023") { children, depth, parent ->

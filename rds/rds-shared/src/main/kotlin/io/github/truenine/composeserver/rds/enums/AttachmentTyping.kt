@@ -6,17 +6,17 @@ import org.babyfish.jimmer.sql.EnumType
 import org.babyfish.jimmer.sql.EnumType.Strategy
 
 /**
- * 附件类别
+ * Attachment categories
  *
  * @author TrueNine
  * @since 2023-04-23
  */
 @EnumType(Strategy.ORDINAL)
 enum class AttachmentTyping(v: Int) : IIntEnum {
-  /** 文件 */
+  /** File */
   @EnumItem(ordinal = 0) ATTACHMENT(0),
 
-  /** 根路径 */
+  /** Root path */
   @EnumItem(ordinal = 1) BASE_URL(1);
 
   override val value = v

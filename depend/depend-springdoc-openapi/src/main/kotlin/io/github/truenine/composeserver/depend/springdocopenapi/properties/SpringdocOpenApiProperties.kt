@@ -8,21 +8,21 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 @ConfigurationPropertiesBinding
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.DEPEND_SPRINGDOC_OPENAPI, ignoreUnknownFields = true)
 data class SpringdocOpenApiProperties(
-  /** 扫描的包 */
+  /** Packages to scan */
   var scanPackages: MutableList<String> = mutableListOf(),
 
-  /** 扫描的路径 */
+  /** URL patterns to scan */
   var scanUrlPatterns: List<String> = ArrayList(listOf("/**")),
 
-  /** 分组名称 */
+  /** Group name */
   var group: String = "default",
 
-  /** 开启 jwt 请求头展示 */
+  /** Enable JWT header display */
   var enableJwtHeader: Boolean = false,
 
-  /** jwt 请求头信息 */
+  /** JWT header information */
   @NestedConfigurationProperty var jwtHeaderInfo: JwtHeaderInfoProperties = JwtHeaderInfoProperties(),
 
-  /** 类型定义信息 */
+  /** Type definition information */
   @NestedConfigurationProperty var authorInfo: SwaggerDescInfo = SwaggerDescInfo(),
 )

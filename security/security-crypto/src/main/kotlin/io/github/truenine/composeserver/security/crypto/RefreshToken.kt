@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.security.crypto
 import io.github.truenine.composeserver.datetime
 
 /**
- * 过期时间令牌
+ * Refresh token with expiration metadata.
  *
  * @author TrueNine
  * @since 2022-12-20

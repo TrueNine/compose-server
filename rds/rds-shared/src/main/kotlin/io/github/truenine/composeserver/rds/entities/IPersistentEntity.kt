@@ -10,7 +10,7 @@ import org.babyfish.jimmer.sql.MappedSuperclass
 
 @MappedSuperclass
 interface IPersistentEntity {
-  /** 数据库主键 */
+  /** Database primary key */
   @Id
   @JsonConverter(JimmerLongToStringConverter::class)
   @GeneratedValue(generatorRef = JimmerSnowflakeLongIdGenerator.Companion.JIMMER_SNOWFLAKE_LONG_ID_GENERATOR_NAME)

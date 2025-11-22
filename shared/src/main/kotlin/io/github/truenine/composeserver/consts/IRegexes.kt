@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.consts
 
 /**
- * 常用正则表达式常量
+ * Common regular expression constants.
  *
  * @author TrueNine
  * @since 2023-04-19
@@ -17,37 +17,39 @@ interface IRegexes {
     private const val CHINA_ID_CARD_PREFIX = "^${ONE_ONE}${ZERO_ZERO_ZERO_ONE}${ZERO_ONE}${YEAR}${MONTH}${DAY}\\d{3}[xX0-9]"
 
     /**
-     * 中国行政区划代码 支持：
-     * - 2位
-     * - 4位
-     * - 6位
-     * - 9位
-     * - 12位
+     * Chinese administrative division code format.
+     *
+     * Supported lengths:
+     * - 2 digits
+     * - 4 digits
+     * - 6 digits
+     * - 9 digits
+     * - 12 digits
      */
     const val CHINA_AD_CODE = "(?:[1-9]\\d{1}|[1-9]\\d{3}|[1-9]\\d{5}|[1-9]\\d{8}|[1-9]\\d{11})\$"
 
-    /** 缓存 / 其他配置 key */
+    /** Cache / other configuration key */
     const val CONFIG_KEY = "^(?![.])[a-zA-Z0-9_.]+$"
 
-    /** 中国身份证号 */
+    /** Chinese ID card number */
     const val CHINA_ID_CARD = "${CHINA_ID_CARD_PREFIX}$"
 
-    /** 中国残疾证号 */
+    /** Chinese disability certificate number */
     const val CHINA_DIS_CARD = "${CHINA_ID_CARD_PREFIX}[1-7][1-4](?:[bB][1-9])?$"
 
-    /** 英文数字账户 */
+    /** Alphanumeric account */
     const val ACCOUNT: String = "^[a-zA-Z0-9]+$"
 
-    /** 密码 */
+    /** Password with digits, letters and special characters */
     const val PASSWORD: String = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^\\da-zA-Z\\s]).{1,9}$"
 
-    /** 中国手机号手机 */
+    /** Chinese mainland mobile phone number */
     const val CHINA_PHONE: String = "^1[3-9][0-9]\\d{8}$"
 
     /**
-     * ## Ant 风格的 URI
-     * 1. `/` 开头或 只能出现 `/`
-     * 2. 不能出现 `..` `./`
+     * ## Ant-style URI
+     * 1. Must start with `/` and only contain `/` as separators
+     * 2. Must not contain `..` or `./`
      */
     const val ANT_URI = "^/(?!.*\\.\\.+)(?!.*:)(?!.*%)(?!.*\\.\\.+)(?!.*\\/\\/+)(?!.*\\s)(?:[\\w\\-\\+\\.]+|\\*)(?:/(?:[\\w\\-\\+\\.]+|\\*))*\$|^/\$"
     const val IP_V4 = "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$"

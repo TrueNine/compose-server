@@ -31,10 +31,10 @@ class WxpaServiceTest {
   }
 
   @Nested
-  inner class `服务器配置验证` {
+  inner class `Server configuration verification` {
 
     @Test
-    fun `应该成功验证服务器配置`() {
+    fun `should verify server configuration successfully`() {
       // Given
       val request =
         WxpaService.ServerVerificationRequest(signature = "test_signature", timestamp = "1234567890", nonce = "test_nonce", echostr = "test_echo_string")
@@ -50,7 +50,7 @@ class WxpaServiceTest {
     }
 
     @Test
-    fun `当验证失败时应该返回 null`() {
+    fun `should return null when verification fails`() {
       // Given
       val request =
         WxpaService.ServerVerificationRequest(signature = "wrong_signature", timestamp = "1234567890", nonce = "test_nonce", echostr = "test_echo_string")
@@ -64,7 +64,7 @@ class WxpaServiceTest {
     }
 
     @Test
-    fun `当发生异常时应该返回 null`() {
+    fun `should return null when exception occurs`() {
       // Given
       val request =
         WxpaService.ServerVerificationRequest(signature = "test_signature", timestamp = "1234567890", nonce = "test_nonce", echostr = "test_echo_string")
@@ -79,10 +79,10 @@ class WxpaServiceTest {
   }
 
   @Nested
-  inner class `JSAPI 签名生成` {
+  inner class `JSAPI signature generation` {
 
     @Test
-    fun `应该成功生成 JSAPI 签名`() {
+    fun `should generate JSAPI signature successfully`() {
       // Given
       val testUrl = "https://example.com/test"
       val mockSignature = WxpaSignature(appId = "test_app_id", nonceStr = "test_nonce", timestamp = 1234567890L, url = testUrl, signature = "test_signature")
@@ -98,7 +98,7 @@ class WxpaServiceTest {
     }
 
     @Test
-    fun `当签名生成失败时应该返回 null`() {
+    fun `should return null when signature generation fails`() {
       // Given
       val testUrl = "https://example.com/test"
       every { signatureGenerator.generateJsapiSignature(any(), any(), any()) } throws RuntimeException("Test exception")
@@ -112,13 +112,13 @@ class WxpaServiceTest {
   }
 
   @Nested
-  inner class `用户信息获取` {
+  inner class `User info retrieval` {
 
     @Test
-    fun `应该成功获取用户信息`() {
+    fun `should retrieve user info successfully`() {
       // Given
       val authCode = "test_auth_code"
-      val mockUserInfo = WxpaUserInfo(openId = "test_open_id", nickname = "测试用户", privilege = emptyList(), unionId = "test_union_id")
+      val mockUserInfo = WxpaUserInfo(openId = "test_open_id", nickname = "Test user", privilege = emptyList(), unionId = "test_union_id")
       every { userInfoService.getUserInfoByAuthCode(authCode) } returns mockUserInfo
 
       // When
@@ -131,7 +131,7 @@ class WxpaServiceTest {
     }
 
     @Test
-    fun `当获取用户信息失败时应该返回 null`() {
+    fun `should return null when user info retrieval fails`() {
       // Given
       val authCode = "test_auth_code"
       every { userInfoService.getUserInfoByAuthCode(authCode) } throws RuntimeException("Test exception")
@@ -145,10 +145,10 @@ class WxpaServiceTest {
   }
 
   @Nested
-  inner class `Token 管理` {
+  inner class `Token management` {
 
     @Test
-    fun `应该正确获取 token 状态`() {
+    fun `should get token status correctly`() {
       // Given
       val mockStatus = mapOf("hasAccessToken" to true, "accessTokenExpired" to false, "hasJsapiTicket" to true, "jsapiTicketExpired" to false)
       every { tokenManager.getTokenStatus() } returns mockStatus
@@ -162,7 +162,7 @@ class WxpaServiceTest {
     }
 
     @Test
-    fun `应该正确强制刷新 tokens`() {
+    fun `should force refresh tokens correctly`() {
       // Given
       every { tokenManager.forceRefreshAll() } returns Unit
 

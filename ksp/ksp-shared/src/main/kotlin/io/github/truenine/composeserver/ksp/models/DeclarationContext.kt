@@ -21,7 +21,7 @@ data class DeclarationContext<D : KSDeclaration>(
   var dependencies: Dependencies = Dependencies.ALL_FILES,
   private val notProcessReportList: MutableSet<KSAnnotated> = CopyOnWriteArraySet(),
 ) {
-  /** 调用 declaration 的 accept 方法 */
+  /** Call the declaration's accept method */
   fun <R : Any?> accept(visitor: KSVisitor<DeclarationContext<D>, R>): R {
     return declaration.accept(visitor = visitor, data = this)
   }

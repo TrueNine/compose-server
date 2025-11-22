@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 /**
- * spring mvc 跨域请求统一配置
+ * Global Spring MVC CORS configuration.
  *
  * @author TrueNine
  * @since 2023-02-20
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 class CorsConfiguration : WebMvcConfigurer {
   override fun addCorsMappings(registry: CorsRegistry) {
-    log.debug("注册跨域组件为允许全部跨域通行")
+    log.debug("Register CORS component to allow all cross-origin requests")
     registry
       .addMapping("/**")
       .allowedOriginPatterns("*")
@@ -30,7 +30,7 @@ class CorsConfiguration : WebMvcConfigurer {
 
   @Bean(name = ["org.springframework.web.cors.CorsConfiguration"])
   fun corsConfiguration(): CorsConfiguration {
-    log.debug("注册 spring security 的跨域全局配置")
+    log.debug("Register Spring Security global CORS configuration")
     val all = CorsConfiguration.ALL
     val c = CorsConfiguration()
     c.addAllowedOriginPattern(all)

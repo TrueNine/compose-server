@@ -1,17 +1,18 @@
 package io.github.truenine.composeserver.depend.springdocopenapi
 
-import jakarta.annotation.Resource
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
 
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
 @TestPropertySource(
   properties =
     [
@@ -24,7 +25,14 @@ import org.springframework.test.web.servlet.get
 )
 class ApiEndpointsTest {
 
-  @Resource lateinit var mockMvc: MockMvc
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
+
+  lateinit var mockMvc: MockMvc
+
+  @BeforeEach
+  fun setup() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+  }
 
   @Test
   fun `should access swagger ui successfully`() {
@@ -63,7 +71,7 @@ class ApiEndpointsTest {
   }
 
   @Test
-  @DisplayName("测试 Swagger 配置端点")
+  @DisplayName("Test Swagger Configuration Endpoint")
   fun `should access swagger config successfully`() {
     mockMvc.get("/v3/api-docs/swagger-config").andExpect {
       status { isOk() }
@@ -77,7 +85,7 @@ class ApiEndpointsTest {
 
   @Test
   fun `should access test controller endpoints successfully`() {
-    // 测试 hello 端点
+    // Test the hello endpoint
     mockMvc.get("/test/hello").andExpect {
       status { isOk() }
       content {
@@ -86,7 +94,7 @@ class ApiEndpointsTest {
       }
     }
 
-    // 测试 info 端点
+    // Test the info endpoint
     mockMvc.get("/test/info").andExpect {
       status { isOk() }
       content {
@@ -99,7 +107,7 @@ class ApiEndpointsTest {
   }
 
   @Test
-  @DisplayName("测试 API 文档包含测试端点")
+  @DisplayName("Test API Documentation Includes Test Endpoints")
   fun `should include test endpoints in api docs`() {
     mockMvc.get("/v3/api-docs").andExpect {
       status { isOk() }
@@ -114,14 +122,14 @@ class ApiEndpointsTest {
   }
 
   @Test
-  @DisplayName("测试 JWT 头参数在 API 文档中的存在")
+  @DisplayName("Test Presence of JWT Header Parameters in API Documentation")
   fun `should include jwt headers in api documentation`() {
     mockMvc.get("/v3/api-docs").andExpect {
       status { isOk() }
       content {
         contentType(MediaType.APPLICATION_JSON)
-        // 由于 JWT 头参数是通过 OperationCustomizer 添加的，
-        // 我们需要检查实际的 API 文档结构
+        // Since JWT header parameters are added via an OperationCustomizer,
+        // we need to check the actual API documentation structure.
         jsonPath("$.openapi") { exists() }
         jsonPath("$.info") { exists() }
         jsonPath("$.paths") { exists() }

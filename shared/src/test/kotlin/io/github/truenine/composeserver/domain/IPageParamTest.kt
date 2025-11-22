@@ -1,74 +1,69 @@
 package io.github.truenine.composeserver.domain
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import jakarta.annotation.Resource
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import org.assertj.core.api.Assertions.assertThat
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import tools.jackson.databind.ObjectMapper
 
-@AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Import(IPageParamTest.TestPageController::class)
 class IPageParamTest {
   lateinit var objectMapper: ObjectMapper
   lateinit var mockMvc: MockMvc
-    @Resource set
 
   @BeforeTest
   fun setup() {
     objectMapper = ObjectMapper()
+    mockMvc = MockMvcBuilders.standaloneSetup(TestPageController()).build()
   }
 
-  @AfterTest
-  fun after() {
-    // 清理资源（如有）
-  }
+  @AfterTest fun after() {}
 
   @Test
-  fun `get 默认参数 返回默认分页`() {
+  fun returnsDefaultPaginationWhenParametersMissing() {
     val param = IPageParam.get()
     assertThat(param.safeOffset).isEqualTo(0)
     assertThat(param.safePageSize).isEqualTo(IPageParam.MAX_PAGE_SIZE)
   }
 
   @Test
-  fun `get unPage参数 返回最大页`() {
-    val param = IPageParam.get(0, Int.MAX_VALUE, true)
+  fun returnsUnlimitedPageWhenFlagged() {
+    val param = IPageParam[0, Int.MAX_VALUE, true]
     assertThat(param.safeOffset).isEqualTo(0)
     assertThat(param.safePageSize).isEqualTo(Int.MAX_VALUE)
   }
 
   @Test
-  fun `empty 返回空分页`() {
+  fun emptyReturnsEmptyPagination() {
     val param = IPageParam.empty()
     assertThat(param.safeOffset).isEqualTo(0)
     assertThat(param.safePageSize).isEqualTo(0)
   }
 
   @Test
-  fun `get 负数参数 自动修正为合法值`() {
-    val param = IPageParam.get(-5, -10, false)
+  fun correctsNegativeParameters() {
+    val param = IPageParam[-5, -10, false]
     assertThat(param.safeOffset).isEqualTo(0)
     assertThat(param.safePageSize).isEqualTo(1)
   }
 
   @Test
-  fun `get 超大页数参数 返回最大页`() {
-    val param = IPageParam.get(0, 9999, false)
+  fun acceptsLargePageSize() {
+    val param = IPageParam[0, 9999, false]
     assertThat(param.safePageSize).isEqualTo(9999)
   }
 
   @Test
-  fun `plus 操作 total小于页数 返回修正分页`() {
+  fun plusAdjustsPageWhenTotalSmaller() {
     val param = IPageParam.get(1, 10)
     val newParam = param + 5
     assertThat(newParam.safeOffset).isEqualTo(0)
@@ -76,7 +71,7 @@ class IPageParamTest {
   }
 
   @Test
-  fun `plus 操作 total大于页数 返回原分页`() {
+  fun plusKeepsPaginationWhenTotalLarger() {
     val param = IPageParam.get(1, 10)
     val newParam = param + 25
     assertThat(newParam.safeOffset).isEqualTo(1)
@@ -84,7 +79,7 @@ class IPageParamTest {
   }
 
   @Test
-  fun `json 反序列化 正常分页`() {
+  fun deserializesJsonToPagination() {
     val json = """{"o":2,"s":20}"""
     val param = objectMapper.readValue(json, IPageParam::class.java)
     assertThat(param.safeOffset).isEqualTo(2)
@@ -92,14 +87,14 @@ class IPageParamTest {
   }
 
   @Test
-  fun `json 反序列化 unPage`() {
+  fun deserializesJsonToUnpaged() {
     val json = """{"o":0,"s":0,"u":true}"""
     val param = objectMapper.readValue(json, IPageParam::class.java)
     assertThat(param.safePageSize).isEqualTo(0)
   }
 
   @Test
-  fun `servlet 参数绑定 正常分页`() {
+  fun bindsServletParameters() {
     val request = MockHttpServletRequest()
     request.addParameter("o", "3")
     request.addParameter("s", "15")
@@ -109,7 +104,7 @@ class IPageParamTest {
   }
 
   @Test
-  fun `equals hashCode toString 一致性`() {
+  fun equalityAndHashCodeConsistency() {
     val p1 = IPageParam.get(1, 10)
     val p2 = IPageParam.get(1, 10)
     val p3 = IPageParam.get(2, 10)
@@ -120,7 +115,7 @@ class IPageParamTest {
   }
 
   @Test
-  fun `toLongRange 范围正确`() {
+  fun toLongRangeReturnsExpectedBounds() {
     val param = IPageParam.get(2, 10)
     val range = param.toLongRange()
     assertThat(range.first).isEqualTo(20L)
@@ -129,7 +124,7 @@ class IPageParamTest {
   }
 
   @Test
-  fun `web servlet 绑定参数 不能返回自定义分页`() {
+  fun servletBindingDoesNotAllowCustomPagination() {
     val result =
       mockMvc
         .perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/test/page").param("o", "7").param("s", "13"))
@@ -140,7 +135,7 @@ class IPageParamTest {
     assertThat(result).isEqualTo("0,0")
   }
 
-  // 内嵌 Controller 用于测试
+  // Embedded controller used for request binding tests
   @RestController
   class TestPageController {
     @GetMapping("/test/page")

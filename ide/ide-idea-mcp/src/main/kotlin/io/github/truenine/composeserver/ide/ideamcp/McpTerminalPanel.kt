@@ -27,36 +27,36 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 
-/** MCP 终端清洗面板 提供命令输入和输出清洗功能 */
+/** MCP terminal clean-up panel providing command input and output cleaning features. */
 class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(true, true), Disposable {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
   private val interceptor by lazy { project.service<TerminalOutputInterceptor>() }
 
-  // UI 组件
+  // UI components
   private val commandField = JBTextField()
-  private val executeButton = JButton("执行")
-  private val clearButton = JButton("清空")
+  private val executeButton = JButton("Execute")
+  private val clearButton = JButton("Clear")
   private val outputArea = JBTextArea()
   private val cleanedOutputArea = JBTextArea()
 
-  // 命令历史
+  // Command history
   private val commandHistory = mutableListOf<String>()
   private var historyIndex = -1
 
   init {
     setupUI()
     setupEventHandlers()
-    Logger.info("终端清洗面板已初始化")
+    Logger.info("Terminal clean-up panel initialized")
   }
 
   private fun setupUI() {
     layout = BorderLayout()
 
-    // 创建输入面板
+    // Create input panel
     val inputPanel = createInputPanel()
 
-    // 创建输出面板
+    // Create output panel
     val outputPanel = createOutputPanel()
 
     add(inputPanel, BorderLayout.NORTH)
@@ -67,28 +67,28 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
     val panel = JPanel(BorderLayout())
     panel.border = JBUI.Borders.empty(5)
 
-    // 命令输入区域
+    // Command input area
     val inputContainer = JPanel(BorderLayout())
-    inputContainer.add(JLabel("命令: "), BorderLayout.WEST)
+    inputContainer.add(JLabel("Command: "), BorderLayout.WEST)
 
     commandField.apply {
       preferredSize = Dimension(0, 28)
-      toolTipText = "输入终端命令，支持上下键浏览历史"
+      toolTipText = "Enter terminal command; use Up/Down to navigate history"
     }
     inputContainer.add(commandField, BorderLayout.CENTER)
 
-    // 按钮区域
+    // Button area
     val buttonPanel = JPanel()
     buttonPanel.layout = BoxLayout(buttonPanel, BoxLayout.X_AXIS)
 
     executeButton.apply {
       preferredSize = Dimension(80, 28)
-      toolTipText = "执行命令"
+      toolTipText = "Execute command"
     }
 
     clearButton.apply {
       preferredSize = Dimension(80, 28)
-      toolTipText = "清空输出"
+      toolTipText = "Clear output"
     }
 
     buttonPanel.add(Box.createHorizontalStrut(5))
@@ -105,13 +105,13 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   private fun createOutputPanel(): JPanel {
     val panel = JPanel(BorderLayout())
 
-    // 创建分割面板
+    // Create split panel
     val splitPane = JSplitPane(JSplitPane.VERTICAL_SPLIT)
     splitPane.resizeWeight = 0.5
 
-    // 原始输出区域
+    // Raw output area
     val rawOutputPanel = JPanel(BorderLayout())
-    rawOutputPanel.add(JLabel("原始输出:"), BorderLayout.NORTH)
+    rawOutputPanel.add(JLabel("Raw output:"), BorderLayout.NORTH)
 
     outputArea.apply {
       isEditable = false
@@ -122,9 +122,9 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
     }
     rawOutputPanel.add(JBScrollPane(outputArea), BorderLayout.CENTER)
 
-    // 清洗后输出区域
+    // Cleaned output area
     val cleanedOutputPanel = JPanel(BorderLayout())
-    cleanedOutputPanel.add(JLabel("清洗后输出:"), BorderLayout.NORTH)
+    cleanedOutputPanel.add(JLabel("Cleaned output:"), BorderLayout.NORTH)
 
     cleanedOutputArea.apply {
       isEditable = false
@@ -144,13 +144,13 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   }
 
   private fun setupEventHandlers() {
-    // 执行按钮点击
+    // Execute button click
     executeButton.addActionListener { executeCommand() }
 
-    // 清空按钮点击
+    // Clear button click
     clearButton.addActionListener { clearOutput() }
 
-    // 命令输入框按键事件
+    // Command input key events
     commandField.addKeyListener(
       object : KeyAdapter() {
         override fun keyPressed(e: KeyEvent) {
@@ -180,20 +180,20 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
       return
     }
 
-    // 添加到历史记录
+    // Add to history
     addToHistory(command)
 
-    // 禁用输入
+    // Disable input while command runs
     setInputEnabled(false)
 
-    // 显示执行状态
+    // Show execution status
     appendToOutput("$ $command\n")
-    appendToCleanedOutput("执行命令: $command\n")
+    appendToCleanedOutput("Executing command: $command\n")
 
-    // 获取项目路径作为工作目录
+    // Use project path as working directory
     val workingDir = project.basePath
 
-    // 执行命令
+    // Execute command
     interceptor.executeCommand(command, workingDir) { result ->
       ApplicationManager.getApplication().invokeLater {
         handleCommandResult(result)
@@ -203,36 +203,36 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   }
 
   private fun handleCommandResult(result: TerminalOutputInterceptor.CommandResult) {
-    // 显示原始输出
+    // Show raw output
     val rawOutput = buildString {
       if (result.stdout.isNotEmpty()) {
-        append("=== 标准输出 ===\n")
+        append("=== Standard output ===\n")
         append(result.stdout)
         append("\n")
       }
       if (result.stderr.isNotEmpty()) {
-        append("=== 错误输出 ===\n")
+        append("=== Error output ===\n")
         append(result.stderr)
         append("\n")
       }
-      append("=== 退出代码: ${result.exitCode} ===\n\n")
+      append("=== Exit code: ${result.exitCode} ===\n\n")
     }
     appendToOutput(rawOutput)
 
-    // 显示清洗后输出
+    // Show cleaned output
     val cleanedOutput =
       if (result.cleanedOutput.isNotEmpty()) {
         result.cleanedOutput + "\n\n"
       } else {
-        "（无输出内容）\n\n"
+        "(no output)\n\n"
       }
     appendToCleanedOutput(cleanedOutput)
 
-    // 记录到日志
+    // Log result
     if (result.exitCode == 0) {
-      Logger.info("命令执行成功: ${result.command}")
+      Logger.info("Command executed successfully: ${result.command}")
     } else {
-      Logger.warn("命令执行失败: ${result.command} (退出代码: ${result.exitCode})")
+      Logger.warn("Command execution failed: ${result.command} (exit code: ${result.exitCode})")
     }
   }
 
@@ -249,7 +249,7 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   private fun clearOutput() {
     outputArea.text = ""
     cleanedOutputArea.text = ""
-    Logger.info("终端输出已清空")
+    Logger.info("Terminal output cleared")
   }
 
   private fun setInputEnabled(enabled: Boolean) {
@@ -258,10 +258,10 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   }
 
   private fun addToHistory(command: String) {
-    // 避免重复添加相同命令
+    // Avoid adding duplicate consecutive commands
     if (commandHistory.isEmpty() || commandHistory.last() != command) {
       commandHistory.add(command)
-      // 限制历史记录数量
+      // Limit history size
       if (commandHistory.size > 50) {
         commandHistory.removeAt(0)
       }
@@ -284,7 +284,7 @@ class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(tru
   }
 
   override fun dispose() {
-    // 取消所有协程
+    // Cancel all coroutines
     scope.cancel()
     Logger.debug("McpTerminalPanel disposed", "McpTerminalPanel")
   }

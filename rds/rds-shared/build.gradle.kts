@@ -35,4 +35,6 @@ dependencies {
   testImplementation(libs.org.postgresql.postgresql)
   testImplementation(libs.org.flywaydb.flyway.core)
   testImplementation(libs.org.flywaydb.flyway.database.postgresql)
+  testImplementation(libs.tools.jackson.core.jackson.databind)
+  testImplementation(libs.tools.jackson.module.jackson.module.kotlin)
 }

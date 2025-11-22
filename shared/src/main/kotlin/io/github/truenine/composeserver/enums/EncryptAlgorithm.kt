@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IStringEnum
 
 /**
- * 算法
+ * Encryption algorithms
  *
  * @author TrueNine
  * @since 2022-10-28

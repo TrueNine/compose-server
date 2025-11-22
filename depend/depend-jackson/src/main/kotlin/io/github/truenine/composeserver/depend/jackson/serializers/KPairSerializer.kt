@@ -1,17 +1,19 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.SerializerProvider
+import tools.jackson.core.JsonGenerator
+import tools.jackson.databind.SerializationContext
+import tools.jackson.databind.ValueSerializer
 
 /**
- * Kotlin Pair序列化器
+ * Kotlin Pair serializer.
  *
- * 将Kotlin Pair对象序列化为JSON数组格式 输出格式: [first, second]
+ * Serializes a Kotlin Pair into JSON array format. Output format: [first, second].
  */
-class KPairSerializer : JsonSerializer<Pair<*, *>>() {
+class KPairSerializer : ValueSerializer<Pair<*, *>>() {
 
-  override fun serialize(value: Pair<*, *>?, gen: JsonGenerator?, serializers: SerializerProvider?) {
+  override fun handledType(): Class<Pair<*, *>> = Pair::class.java as Class<Pair<*, *>>
+
+  override fun serialize(value: Pair<*, *>?, gen: JsonGenerator?, ctxt: SerializationContext?) {
     if (gen == null) return
 
     if (value == null) {
@@ -20,8 +22,8 @@ class KPairSerializer : JsonSerializer<Pair<*, *>>() {
     }
 
     gen.writeStartArray()
-    gen.writeObject(value.first)
-    gen.writeObject(value.second)
+    ctxt?.writeValue(gen, value.first)
+    ctxt?.writeValue(gen, value.second)
     gen.writeEndArray()
   }
 }

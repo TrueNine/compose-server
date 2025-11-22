@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-/** # 二代身份证代码 */
+/** # Second generation ID card code */
 interface IIdcard2Code {
 
   private class DefaultIdcard2Code(override val idcard2Code: String) : IIdcard2Code {
@@ -65,9 +65,9 @@ interface IIdcard2Code {
     }
 
   /**
-   * ## 行政区划码
+   * ## Administrative division code
    *
-   * 不一定有效，可能会夹杂 00
+   * May not be valid, may contain 00
    */
   @get:JsonIgnore
   val idcardDistrictCode: String

@@ -4,22 +4,22 @@ import io.github.truenine.composeserver.IIntEnum
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
-/** ## 用户信息所属的常规血型 */
+/** ## Common blood type of user information */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class BloodTyping(v: Int) : IIntEnum {
-  /** A型 */
+  /** Type A */
   @EnumItem(ordinal = 1) A(1),
 
-  /** B型 */
+  /** Type B */
   @EnumItem(ordinal = 2) B(2),
 
-  /** AB型 */
+  /** Type AB */
   @EnumItem(ordinal = 3) AB(3),
 
-  /** O型 */
+  /** Type O */
   @EnumItem(ordinal = 4) O(4),
 
-  /** 其他血型 */
+  /** Other blood type */
   @EnumItem(ordinal = 9999) OTHER(9999);
 
   override val value: Int = v

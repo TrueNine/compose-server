@@ -4,28 +4,28 @@ import io.github.truenine.composeserver.consts.SpringBootConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
- * 密钥
+ * Security key configuration properties.
  *
  * @author TrueNine
  * @since 2023-04-22
  */
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.SECURITY_KEYS)
 data class KeysProperties(
-  /** 密钥存放的 resources 对应目录 */
+  /** Directory under resources where keys are stored */
   var dir: String = "security",
 
-  /** ecc 公钥路径 */
+  /** ECC public key path */
   var eccPublicKeyPath: String = "ecc_public.key",
 
-  /** ecc 私钥路径 */
+  /** ECC private key path */
   var eccPrivateKeyPath: String = "ecc_private.key",
 
-  /** rsa 公钥路径 */
+  /** RSA public key path */
   var rsaPublicKeyPath: String = "rsa_public.key",
 
-  /** rsa 私钥路径 */
+  /** RSA private key path */
   var rsaPrivateKeyPath: String = "rsa_private.key",
 
-  /** aes key 路径 */
+  /** AES key path */
   var aesKeyPath: String = "aes.key",
 )

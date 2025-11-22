@@ -8,70 +8,74 @@ import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import java.io.File
 import java.nio.file.Paths
 
-/** 文件管理器 提供路径解析、文件收集、权限检查等文件操作功能 */
+/**
+ * File manager.
+ *
+ * Provides path resolution, file collection, permission checks, and related file operations.
+ */
 @Service(Service.Level.PROJECT)
 class FileManager {
 
-  /** 将路径解析为 VirtualFile */
+  /** Resolve a path to a VirtualFile. */
   fun resolvePathToVirtualFile(project: Project, path: String): VirtualFile? {
-    Logger.debug("解析路径: $path", "FileManager")
+    Logger.debug("Resolving path: $path", "FileManager")
 
     return try {
       val resolvedPath = resolvePath(project, path)
       val virtualFile = LocalFileSystem.getInstance().findFileByPath(resolvedPath.absolutePath)
 
       if (virtualFile == null) {
-        Logger.debug("未找到虚拟文件: $resolvedPath", "FileManager")
+        Logger.debug("Virtual file not found: $resolvedPath", "FileManager")
       } else {
-        Logger.debug("成功解析虚拟文件: ${virtualFile.path}", "FileManager")
+        Logger.debug("Successfully resolved virtual file: ${virtualFile.path}", "FileManager")
       }
 
       virtualFile
     } catch (e: Exception) {
-      Logger.error("路径解析失败: $path", "FileManager", e)
+      Logger.error("Failed to resolve path: $path", "FileManager", e)
       null
     }
   }
 
-  /** 递归收集文件 */
+  /** Recursively collect files. */
   fun collectFilesRecursively(virtualFile: VirtualFile, filter: (VirtualFile) -> Boolean = { true }): List<VirtualFile> {
-    Logger.debug("开始递归收集文件: ${virtualFile.path}", "FileManager")
+    Logger.debug("Start recursively collecting files: ${virtualFile.path}", "FileManager")
 
     val result = mutableListOf<VirtualFile>()
 
     try {
       collectFilesRecursivelyInternal(virtualFile, filter, result)
-      Logger.debug("文件收集完成，共收集 ${result.size} 个文件", "FileManager")
+      Logger.debug("File collection completed, total ${result.size} files", "FileManager")
     } catch (e: Exception) {
-      Logger.error("文件收集失败: ${virtualFile.path}", "FileManager", e)
+      Logger.error("File collection failed: ${virtualFile.path}", "FileManager", e)
     }
 
     return result
   }
 
-  /** 验证路径是否有效 */
+  /** Validate whether a path is valid. */
   fun isValidPath(path: String): Boolean {
     return try {
       val file = File(path)
       file.exists() && (file.isFile || file.isDirectory)
     } catch (e: Exception) {
-      Logger.debug("路径验证失败: $path", "FileManager")
+      Logger.debug("Path validation failed: $path", "FileManager")
       false
     }
   }
 
-  /** 检查文件权限 */
+  /** Check read permission for a file. */
   fun hasReadPermission(virtualFile: VirtualFile): Boolean {
     return try {
-      // 检查文件是否有效且存在
+      // Check that the file is valid and exists
       virtualFile.isValid && virtualFile.exists()
     } catch (e: Exception) {
-      Logger.debug("权限检查失败: ${virtualFile.path}", "FileManager")
+      Logger.debug("Permission check failed: ${virtualFile.path}", "FileManager")
       false
     }
   }
 
-  /** 获取相对路径 */
+  /** Get the path of a file relative to the project base path. */
   fun getRelativePath(project: Project, virtualFile: VirtualFile): String {
     val basePath = project.basePath
     if (basePath == null) {
@@ -81,82 +85,82 @@ class FileManager {
     val filePath = virtualFile.path
     return if (filePath.startsWith(basePath)) {
       val relativePath = filePath.substring(basePath.length)
-      // 移除开头的路径分隔符
+      // Remove leading path separator
       relativePath.removePrefix("/").removePrefix("\\")
     } else {
       virtualFile.name
     }
   }
 
-  /** 解析路径（支持相对路径和绝对路径） */
+  /** Resolve a path (supports both relative and absolute paths). */
   private fun resolvePath(project: Project, path: String): File {
     val file = File(path)
 
     return if (file.isAbsolute) {
       file
     } else {
-      // 相对路径，基于项目根目录
-      val basePath = project.basePath ?: throw IllegalStateException("项目基础路径为空")
+      // Relative path based on project root
+      val basePath = project.basePath ?: throw IllegalStateException("Project base path is null")
       File(basePath, path)
     }
   }
 
-  /** 递归收集文件的内部实现 */
+  /** Internal implementation for recursively collecting files. */
   private fun collectFilesRecursivelyInternal(virtualFile: VirtualFile, filter: (VirtualFile) -> Boolean, result: MutableList<VirtualFile>) {
     if (!virtualFile.isValid) {
       return
     }
 
     if (virtualFile.isDirectory) {
-      // 处理目录
+      // Handle directory
       try {
         virtualFile.children?.forEach { child -> collectFilesRecursivelyInternal(child, filter, result) }
       } catch (e: Exception) {
-        Logger.error("处理目录失败: ${virtualFile.path}", "FileManager", e)
+        Logger.error("Failed to process directory: ${virtualFile.path}", "FileManager", e)
       }
     } else {
-      // 处理文件
+      // Handle file
       if (filter(virtualFile)) {
         result.add(virtualFile)
       }
     }
   }
 
-  /** 创建常用的文件过滤器 */
+  /** Common file filters. */
   object Filters {
-    /** 只包含源代码文件 */
+    /** Only include source code files. */
     val sourceFiles: (VirtualFile) -> Boolean = { file ->
       val extension = file.extension?.lowercase()
       extension in setOf("kt", "java", "js", "ts", "py", "cpp", "c", "h", "hpp", "cs", "go", "rs", "php", "rb", "swift")
     }
 
-    /** 只包含 Kotlin 文件 */
+    /** Only include Kotlin files. */
     val kotlinFiles: (VirtualFile) -> Boolean = { file -> file.extension?.lowercase() == "kt" }
 
-    /** 只包含 Java 文件 */
+    /** Only include Java files. */
     val javaFiles: (VirtualFile) -> Boolean = { file -> file.extension?.lowercase() == "java" }
 
-    /** 排除隐藏文件和目录 */
+    /** Exclude hidden files and directories. */
     val excludeHidden: (VirtualFile) -> Boolean = { file -> !file.name.startsWith(".") }
 
-    /** 排除构建目录 */
+    /** Exclude build directories. */
     val excludeBuildDirs: (VirtualFile) -> Boolean = { file ->
       val name = file.name.lowercase()
       name !in setOf("build", "target", "out", "bin", "dist", "node_modules", ".gradle", ".idea")
     }
 
-    /** 组合多个过滤器 */
+    /** Combine multiple filters into one. */
     fun combine(vararg filters: (VirtualFile) -> Boolean): (VirtualFile) -> Boolean = { file -> filters.all { it(file) } }
   }
 
-  /** 路径操作工具 */
+  /** Path utility helpers. */
   object PathUtils {
-    /** 标准化路径分隔符 */
+    /** Normalize path separators. */
     fun normalizePath(path: String): String {
       return path.replace('\\', '/')
     }
 
-    /** 获取文件扩展名 */
+    /** Get the file extension from a path. */
     fun getExtension(path: String): String? {
       val lastDot = path.lastIndexOf('.')
       val lastSeparator = maxOf(path.lastIndexOf('/'), path.lastIndexOf('\\'))
@@ -168,7 +172,7 @@ class FileManager {
       }
     }
 
-    /** 获取不含扩展名的文件名 */
+    /** Get file name without extension. */
     fun getNameWithoutExtension(path: String): String {
       val name = Paths.get(path).fileName.toString()
       val lastDot = name.lastIndexOf('.')
@@ -180,7 +184,7 @@ class FileManager {
       }
     }
 
-    /** 检查路径是否在指定目录下 */
+    /** Check whether a path is under the given parent path. */
     fun isUnder(childPath: String, parentPath: String): Boolean {
       val normalizedChild = normalizePath(childPath)
       val normalizedParent = normalizePath(parentPath)

@@ -23,135 +23,135 @@ abstract class IObjectStorageServiceTest {
   inner class BucketOperations {
 
     @Test
-    fun `测试创建和检查存储桶`() = runBlocking {
+    fun `test create and check bucket`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-${System.currentTimeMillis()}"
 
       try {
-        // 创建存储桶
+        // create bucket
         val createResult = service.createBucket(CreateBucketRequest(bucketName))
-        assertTrue(createResult.isSuccess, "创建存储桶应该成功")
+        assertTrue(createResult.isSuccess, "create bucket should succeed")
 
         val bucketInfo = createResult.getOrThrow()
         assertEquals(bucketName, bucketInfo.name)
 
-        // 检查存储桶是否存在
+        // check if bucket exists
         val existsResult = service.bucketExists(bucketName)
-        assertTrue(existsResult.isSuccess, "检查存储桶存在应该成功")
-        assertTrue(existsResult.getOrThrow(), "存储桶应该存在")
+        assertTrue(existsResult.isSuccess, "check bucket existence should succeed")
+        assertTrue(existsResult.getOrThrow(), "bucket should exist")
 
-        log.info("存储桶操作测试通过: $bucketName")
+        log.info("bucket operations test passed: $bucketName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试列出存储桶`() = runBlocking {
+    fun `test list buckets`() = runBlocking {
       val service = createObjectStorageService()
 
       val listResult = service.listBuckets()
-      assertTrue(listResult.isSuccess, "列出存储桶应该成功")
+      assertTrue(listResult.isSuccess, "list buckets should succeed")
 
       val buckets = listResult.getOrThrow()
-      log.info("找到 ${buckets.size} 个存储桶")
+      log.info("found ${buckets.size} buckets")
     }
 
     @Test
-    fun `测试删除不存在的存储桶`() = runBlocking {
+    fun `test delete non-existent bucket`() = runBlocking {
       val service = createObjectStorageService()
       val nonExistentBucket = "non-existent-bucket-${System.currentTimeMillis()}"
 
       val deleteResult = service.deleteBucket(nonExistentBucket)
-      // 删除不存在的存储桶可能成功也可能失败，取决于实现
-      log.info("删除不存在存储桶的结果: ${deleteResult.isSuccess}")
+      // deleting a non-existent bucket may or may not succeed, depending on the implementation
+      log.info("delete non-existent bucket result: ${deleteResult.isSuccess}")
     }
 
     @Test
-    fun `测试设置存储桶访问级别为公共`() = runBlocking {
+    fun `test set bucket access level to public`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-access-public-${System.currentTimeMillis()}"
 
       try {
-        // 创建存储桶
+        // create bucket
         val createResult = service.createBucket(CreateBucketRequest(bucketName))
-        assertTrue(createResult.isSuccess, "创建存储桶应该成功")
+        assertTrue(createResult.isSuccess, "create bucket should succeed")
 
-        // 设置存储桶访问级别为公共
+        // set bucket access level to public
         val setAccessResult = service.setBucketAccess(bucketName, BucketAccessLevel.PUBLIC)
-        assertTrue(setAccessResult.isSuccess, "设置存储桶为公共访问应该成功")
+        assertTrue(setAccessResult.isSuccess, "set bucket to public access should succeed")
 
-        log.info("设置存储桶公共访问测试通过: $bucketName")
+        log.info("set bucket public access test passed: $bucketName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试设置存储桶访问级别为私有`() = runBlocking {
+    fun `test set bucket access level to private`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-access-private-${System.currentTimeMillis()}"
 
       try {
-        // 创建存储桶
+        // create bucket
         val createResult = service.createBucket(CreateBucketRequest(bucketName))
-        assertTrue(createResult.isSuccess, "创建存储桶应该成功")
+        assertTrue(createResult.isSuccess, "create bucket should succeed")
 
-        // 设置存储桶访问级别为私有
+        // set bucket access level to private
         val setAccessResult = service.setBucketAccess(bucketName, BucketAccessLevel.PRIVATE)
-        assertTrue(setAccessResult.isSuccess, "设置存储桶为私有访问应该成功")
+        assertTrue(setAccessResult.isSuccess, "set bucket to private access should succeed")
 
-        log.info("设置存储桶私有访问测试通过: $bucketName")
+        log.info("set bucket private access test passed: $bucketName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试设置不存在存储桶的访问级别`() = runBlocking {
+    fun `test set access level for non-existent bucket`() = runBlocking {
       val service = createObjectStorageService()
       val nonExistentBucket = "non-existent-bucket-${System.currentTimeMillis()}"
 
-      // 尝试设置不存在存储桶的访问级别
+      // try to set access level for a non-existent bucket
       val setAccessResult = service.setBucketAccess(nonExistentBucket, BucketAccessLevel.PUBLIC)
-      assertTrue(setAccessResult.isFailure, "设置不存在存储桶的访问级别应该失败")
+      assertTrue(setAccessResult.isFailure, "set access level for non-existent bucket should fail")
 
       val exception = setAccessResult.exceptionOrNull()
-      assertTrue(exception is BucketNotFoundException, "应该抛出BucketNotFoundException异常")
+      assertTrue(exception is BucketNotFoundException, "should throw BucketNotFoundException")
 
-      log.info("设置不存在存储桶访问级别错误处理测试通过")
+      log.info("error handling for setting access level of non-existent bucket passed")
     }
 
     @Test
-    fun `测试存储桶访问级别设置的幂等性`() = runBlocking {
+    fun `test idempotency of setting bucket access level`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-access-idempotent-${System.currentTimeMillis()}"
 
       try {
-        // 创建存储桶
+        // create bucket
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 多次设置相同的访问级别
+        // set the same access level multiple times
         val firstSetResult = service.setBucketAccess(bucketName, BucketAccessLevel.PUBLIC)
-        assertTrue(firstSetResult.isSuccess, "第一次设置访问级别应该成功")
+        assertTrue(firstSetResult.isSuccess, "first time setting access level should succeed")
 
         val secondSetResult = service.setBucketAccess(bucketName, BucketAccessLevel.PUBLIC)
-        assertTrue(secondSetResult.isSuccess, "第二次设置相同访问级别应该成功")
+        assertTrue(secondSetResult.isSuccess, "second time setting the same access level should succeed")
 
-        // 更改访问级别
+        // change access level
         val changeAccessResult = service.setBucketAccess(bucketName, BucketAccessLevel.PRIVATE)
-        assertTrue(changeAccessResult.isSuccess, "更改访问级别应该成功")
+        assertTrue(changeAccessResult.isSuccess, "changing access level should succeed")
 
-        // 再次设置相同的访问级别
+        // set the same access level again
         val thirdSetResult = service.setBucketAccess(bucketName, BucketAccessLevel.PRIVATE)
-        assertTrue(thirdSetResult.isSuccess, "再次设置相同访问级别应该成功")
+        assertTrue(thirdSetResult.isSuccess, "setting the same access level again should succeed")
 
-        log.info("存储桶访问级别设置幂等性测试通过: $bucketName")
+        log.info("idempotency test for setting bucket access level passed: $bucketName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteBucket(bucketName)
       }
     }
@@ -161,80 +161,80 @@ abstract class IObjectStorageServiceTest {
   inner class ObjectOperationWithBucketCreation {
 
     @Test
-    fun `测试上传对象到已存在的存储桶`() = runBlocking {
+    fun `test upload object to existing bucket`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-existing-bucket-${System.currentTimeMillis()}"
       val objectName = "test-object.txt"
       val content = "Hello, existing bucket!"
 
       try {
-        // 先创建存储桶
+        // create bucket first
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 使用 putObjectWithBucketCreation 上传对象到已存在的存储桶
+        // use putObjectWithBucketCreation to upload to an existing bucket
         val uploadResult = service.putObjectWithBucketCreation(bucketName, objectName, content)
-        assertTrue(uploadResult.isSuccess, "上传对象到已存在存储桶应该成功")
+        assertTrue(uploadResult.isSuccess, "upload object to existing bucket should succeed")
 
         val objectInfo = uploadResult.getOrThrow()
         assertEquals(bucketName, objectInfo.bucketName)
         assertEquals(objectName, objectInfo.objectName)
         assertEquals(content.length.toLong(), objectInfo.size)
 
-        // 验证对象确实存在且内容正确
+        // verify object exists and content is correct
         val downloadResult = service.getObjectString(bucketName, objectName)
-        assertTrue(downloadResult.isSuccess, "下载对象应该成功")
+        assertTrue(downloadResult.isSuccess, "download object should succeed")
         assertEquals(content, downloadResult.getOrThrow())
 
-        log.info("上传对象到已存在存储桶测试通过: $bucketName/$objectName")
+        log.info("upload object to existing bucket test passed: $bucketName/$objectName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试上传对象到不存在的存储桶_自动创建存储桶`() = runBlocking {
+    fun `test upload object to non-existent bucket should auto create bucket`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-autocreate-bucket-${System.currentTimeMillis()}"
       val objectName = "test-object.txt"
       val content = "Hello, auto-created bucket!"
 
       try {
-        // 确保存储桶不存在
+        // ensure bucket does not exist
         val existsResult = service.bucketExists(bucketName)
-        assertTrue(existsResult.isSuccess, "检查存储桶存在应该成功")
-        assertFalse(existsResult.getOrThrow(), "存储桶应该不存在")
+        assertTrue(existsResult.isSuccess, "check bucket existence should succeed")
+        assertFalse(existsResult.getOrThrow(), "bucket should not exist")
 
-        // 使用 putObjectWithBucketCreation 上传对象，应该自动创建存储桶
+        // use putObjectWithBucketCreation to upload, should auto create bucket
         val uploadResult = service.putObjectWithBucketCreation(bucketName, objectName, content)
-        assertTrue(uploadResult.isSuccess, "上传对象并自动创建存储桶应该成功")
+        assertTrue(uploadResult.isSuccess, "upload object and auto create bucket should succeed")
 
         val objectInfo = uploadResult.getOrThrow()
         assertEquals(bucketName, objectInfo.bucketName)
         assertEquals(objectName, objectInfo.objectName)
         assertEquals(content.length.toLong(), objectInfo.size)
 
-        // 验证存储桶已被创建
+        // verify bucket has been created
         val bucketExistsAfter = service.bucketExists(bucketName)
-        assertTrue(bucketExistsAfter.isSuccess, "检查存储桶存在应该成功")
-        assertTrue(bucketExistsAfter.getOrThrow(), "存储桶应该已被创建")
+        assertTrue(bucketExistsAfter.isSuccess, "check bucket existence should succeed")
+        assertTrue(bucketExistsAfter.getOrThrow(), "bucket should have been created")
 
-        // 验证对象确实存在且内容正确
+        // verify object exists and content is correct
         val downloadResult = service.getObjectString(bucketName, objectName)
-        assertTrue(downloadResult.isSuccess, "下载对象应该成功")
+        assertTrue(downloadResult.isSuccess, "download object should succeed")
         assertEquals(content, downloadResult.getOrThrow())
 
-        log.info("上传对象并自动创建存储桶测试通过: $bucketName/$objectName")
+        log.info("upload object and auto create bucket test passed: $bucketName/$objectName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试使用PutObjectRequest上传对象到不存在的存储桶`() = runBlocking {
+    fun `test upload object using PutObjectRequest to non-existent bucket`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-request-autocreate-${System.currentTimeMillis()}"
       val objectName = "test-request-object.txt"
@@ -243,11 +243,11 @@ abstract class IObjectStorageServiceTest {
       val metadata = mapOf("author" to "test", "version" to "1.0")
 
       try {
-        // 确保存储桶不存在
+        // ensure bucket does not exist
         val existsResult = service.bucketExists(bucketName)
-        assertFalse(existsResult.getOrThrow(), "存储桶应该不存在")
+        assertFalse(existsResult.getOrThrow(), "bucket should not exist")
 
-        // 创建 PutObjectRequest
+        // create PutObjectRequest
         val request =
           PutObjectRequest(
             bucketName = bucketName,
@@ -258,9 +258,9 @@ abstract class IObjectStorageServiceTest {
             metadata = metadata,
           )
 
-        // 使用 putObjectWithBucketCreation 上传对象
+        // use putObjectWithBucketCreation to upload
         val uploadResult = service.putObjectWithBucketCreation(request)
-        assertTrue(uploadResult.isSuccess, "使用PutObjectRequest上传对象应该成功")
+        assertTrue(uploadResult.isSuccess, "upload with PutObjectRequest should succeed")
 
         val objectInfo = uploadResult.getOrThrow()
         assertEquals(bucketName, objectInfo.bucketName)
@@ -270,126 +270,126 @@ abstract class IObjectStorageServiceTest {
         assertTrue(objectInfo.metadata.containsKey("author"))
         assertEquals("test", objectInfo.metadata["author"])
 
-        // 验证存储桶已被创建
-        assertTrue(service.bucketExists(bucketName).getOrThrow(), "存储桶应该已被创建")
+        // verify bucket has been created
+        assertTrue(service.bucketExists(bucketName).getOrThrow(), "bucket should have been created")
 
-        // 验证对象内容
+        // verify object content
         val downloadResult = service.getObjectString(bucketName, objectName)
         assertEquals(content, downloadResult.getOrThrow())
 
-        log.info("使用PutObjectRequest上传对象测试通过: $bucketName/$objectName")
+        log.info("upload with PutObjectRequest test passed: $bucketName/$objectName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试上传字节数组对象到不存在的存储桶`() = runBlocking {
+    fun `test upload byte array object to non-existent bucket`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bytes-autocreate-${System.currentTimeMillis()}"
       val objectName = "test-bytes-object.bin"
-      val bytes = "Binary content 二进制内容 with special chars: !@#$%^&*()".toByteArray(Charsets.UTF_8)
+      val bytes = "Binary content with special chars: !@#$%^&*()".toByteArray(Charsets.UTF_8)
 
       try {
-        // 确保存储桶不存在
-        assertFalse(service.bucketExists(bucketName).getOrThrow(), "存储桶应该不存在")
+        // ensure bucket does not exist
+        assertFalse(service.bucketExists(bucketName).getOrThrow(), "bucket should not exist")
 
-        // 使用扩展函数上传字节数组，应该自动创建存储桶
+        // use extension function to upload byte array, should auto create bucket
         val uploadResult = service.putObjectWithBucketCreation(bucketName, objectName, bytes, "application/octet-stream")
-        assertTrue(uploadResult.isSuccess, "上传字节数组并自动创建存储桶应该成功")
+        assertTrue(uploadResult.isSuccess, "upload byte array and auto create bucket should succeed")
 
         val objectInfo = uploadResult.getOrThrow()
         assertEquals(bucketName, objectInfo.bucketName)
         assertEquals(objectName, objectInfo.objectName)
         assertEquals(bytes.size.toLong(), objectInfo.size)
 
-        // 验证存储桶已被创建
-        assertTrue(service.bucketExists(bucketName).getOrThrow(), "存储桶应该已被创建")
+        // verify bucket has been created
+        assertTrue(service.bucketExists(bucketName).getOrThrow(), "bucket should have been created")
 
-        // 验证对象内容
+        // verify object content
         val downloadResult = service.getObjectBytes(bucketName, objectName)
-        assertTrue(downloadResult.isSuccess, "下载字节数组应该成功")
+        assertTrue(downloadResult.isSuccess, "download byte array should succeed")
         val downloadedBytes = downloadResult.getOrThrow()
-        assertTrue(bytes.contentEquals(downloadedBytes), "下载的字节数组应该与原始数据相同")
+        assertTrue(bytes.contentEquals(downloadedBytes), "downloaded byte array should be the same as original")
 
-        log.info("上传字节数组并自动创建存储桶测试通过: $bucketName/$objectName (${bytes.size} bytes)")
+        log.info("upload byte array and auto create bucket test passed: $bucketName/$objectName (${bytes.size} bytes)")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试上传多个对象到同一个自动创建的存储桶`() = runBlocking {
+    fun `test upload multiple objects to the same auto-created bucket`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-multiple-objects-${System.currentTimeMillis()}"
       val objects = listOf("file1.txt" to "Content of file 1", "file2.txt" to "Content of file 2", "folder/file3.txt" to "Content of file 3 in folder")
 
       try {
-        // 确保存储桶不存在
-        assertFalse(service.bucketExists(bucketName).getOrThrow(), "存储桶应该不存在")
+        // ensure bucket does not exist
+        assertFalse(service.bucketExists(bucketName).getOrThrow(), "bucket should not exist")
 
-        // 上传第一个对象，应该自动创建存储桶
+        // upload first object, should auto create bucket
         val firstUploadResult = service.putObjectWithBucketCreation(bucketName, objects[0].first, objects[0].second)
-        assertTrue(firstUploadResult.isSuccess, "第一个对象上传应该成功")
+        assertTrue(firstUploadResult.isSuccess, "first object upload should succeed")
 
-        // 验证存储桶已被创建
-        assertTrue(service.bucketExists(bucketName).getOrThrow(), "存储桶应该已被创建")
+        // verify bucket has been created
+        assertTrue(service.bucketExists(bucketName).getOrThrow(), "bucket should have been created")
 
-        // 上传其余对象到已存在的存储桶
+        // upload remaining objects to the existing bucket
         for (i in 1 until objects.size) {
           val (objectName, content) = objects[i]
           val uploadResult = service.putObjectWithBucketCreation(bucketName, objectName, content)
-          assertTrue(uploadResult.isSuccess, "对象 $objectName 上传应该成功")
+          assertTrue(uploadResult.isSuccess, "object $objectName upload should succeed")
         }
 
-        // 验证所有对象都存在并且内容正确
+        // verify all objects exist and their content is correct
         objects.forEach { (objectName, expectedContent) ->
           val existsResult = service.objectExists(bucketName, objectName)
-          assertTrue(existsResult.getOrThrow(), "对象 $objectName 应该存在")
+          assertTrue(existsResult.getOrThrow(), "object $objectName should exist")
 
           val downloadResult = service.getObjectString(bucketName, objectName)
-          assertEquals(expectedContent, downloadResult.getOrThrow(), "对象 $objectName 的内容应该正确")
+          assertEquals(expectedContent, downloadResult.getOrThrow(), "object $objectName content should be correct")
         }
 
-        log.info("上传多个对象到自动创建存储桶测试通过: $bucketName (${objects.size} objects)")
+        log.info("upload multiple objects to auto-created bucket test passed: $bucketName (${objects.size} objects)")
       } finally {
-        // 清理所有对象
+        // cleanup all objects
         objects.forEach { (objectName, _) -> service.deleteObject(bucketName, objectName) }
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试putObjectWithBucketCreation的幂等性`() = runBlocking {
+    fun `test idempotency of putObjectWithBucketCreation`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-idempotent-${System.currentTimeMillis()}"
       val objectName = "test-idempotent-object.txt"
       val content = "Idempotent test content"
 
       try {
-        // 第一次上传，应该创建存储桶和对象
+        // first upload, should create bucket and object
         val firstUploadResult = service.putObjectWithBucketCreation(bucketName, objectName, content)
-        assertTrue(firstUploadResult.isSuccess, "第一次上传应该成功")
+        assertTrue(firstUploadResult.isSuccess, "first upload should succeed")
 
-        // 第二次上传相同对象，应该覆盖原对象
+        // second upload of the same object, should overwrite the original
         val updatedContent = "Updated idempotent test content"
         val secondUploadResult = service.putObjectWithBucketCreation(bucketName, objectName, updatedContent)
-        assertTrue(secondUploadResult.isSuccess, "第二次上传应该成功")
+        assertTrue(secondUploadResult.isSuccess, "second upload should succeed")
 
-        // 验证对象内容已更新
+        // verify object content is updated
         val downloadResult = service.getObjectString(bucketName, objectName)
-        assertEquals(updatedContent, downloadResult.getOrThrow(), "对象内容应该已更新")
+        assertEquals(updatedContent, downloadResult.getOrThrow(), "object content should be updated")
 
-        // 验证存储桶仍然存在
-        assertTrue(service.bucketExists(bucketName).getOrThrow(), "存储桶应该仍然存在")
+        // verify bucket still exists
+        assertTrue(service.bucketExists(bucketName).getOrThrow(), "bucket should still exist")
 
-        log.info("putObjectWithBucketCreation幂等性测试通过: $bucketName/$objectName")
+        log.info("putObjectWithBucketCreation idempotency test passed: $bucketName/$objectName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
@@ -400,44 +400,44 @@ abstract class IObjectStorageServiceTest {
   inner class ObjectOperations {
 
     @Test
-    fun `测试上传和下载对象`() = runBlocking {
+    fun `test upload and download object`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-${System.currentTimeMillis()}"
       val objectName = "test-object.txt"
-      val content = "Hello, World! 你好世界！"
+      val content = "Hello, World!"
 
       try {
-        // 创建存储桶
+        // create bucket
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 上传对象
+        // upload object
         val uploadResult = service.putObject(bucketName = bucketName, objectName = objectName, content = content, contentType = "text/plain; charset=utf-8")
-        assertTrue(uploadResult.isSuccess, "上传对象应该成功")
+        assertTrue(uploadResult.isSuccess, "upload object should succeed")
 
         val objectInfo = uploadResult.getOrThrow()
         assertEquals(bucketName, objectInfo.bucketName)
         assertEquals(objectName, objectInfo.objectName)
 
-        // 检查对象是否存在
+        // check if object exists
         val existsResult = service.objectExists(bucketName, objectName)
-        assertTrue(existsResult.isSuccess, "检查对象存在应该成功")
-        assertTrue(existsResult.getOrThrow(), "对象应该存在")
+        assertTrue(existsResult.isSuccess, "check object existence should succeed")
+        assertTrue(existsResult.getOrThrow(), "object should exist")
 
-        // 下载对象
+        // download object
         val downloadResult = service.getObjectString(bucketName, objectName)
-        assertTrue(downloadResult.isSuccess, "下载对象应该成功")
+        assertTrue(downloadResult.isSuccess, "download object should succeed")
         assertEquals(content, downloadResult.getOrThrow())
 
-        log.info("对象操作测试通过: $bucketName/$objectName")
+        log.info("object operations test passed: $bucketName/$objectName")
       } finally {
-        // 清理
+        // cleanup
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试获取对象信息`() = runBlocking {
+    fun `test get object info`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-${System.currentTimeMillis()}"
       val objectName = "test-info.txt"
@@ -448,14 +448,14 @@ abstract class IObjectStorageServiceTest {
         service.putObject(bucketName, objectName, content).getOrThrow()
 
         val infoResult = service.getObjectInfo(bucketName, objectName)
-        assertTrue(infoResult.isSuccess, "获取对象信息应该成功")
+        assertTrue(infoResult.isSuccess, "get object info should succeed")
 
         val objectInfo = infoResult.getOrThrow()
         assertEquals(bucketName, objectInfo.bucketName)
         assertEquals(objectName, objectInfo.objectName)
-        assertTrue(objectInfo.size > 0, "对象大小应该大于0")
+        assertTrue(objectInfo.size > 0, "object size should be greater than 0")
 
-        log.info("对象信息测试通过: ${objectInfo.size} bytes")
+        log.info("object info test passed: ${objectInfo.size} bytes")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -463,7 +463,7 @@ abstract class IObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试删除对象`() = runBlocking {
+    fun `test delete object`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-${System.currentTimeMillis()}"
       val objectName = "test-delete.txt"
@@ -472,17 +472,17 @@ abstract class IObjectStorageServiceTest {
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
         service.putObject(bucketName, objectName, "content to delete").getOrThrow()
 
-        // 确认对象存在
+        // confirm object exists
         assertTrue(service.objectExists(bucketName, objectName).getOrThrow())
 
-        // 删除对象
+        // delete object
         val deleteResult = service.deleteObject(bucketName, objectName)
-        assertTrue(deleteResult.isSuccess, "删除对象应该成功")
+        assertTrue(deleteResult.isSuccess, "delete object should succeed")
 
-        // 确认对象不存在
+        // confirm object does not exist
         assertFalse(service.objectExists(bucketName, objectName).getOrThrow())
 
-        log.info("对象删除测试通过")
+        log.info("object deletion test passed")
       } finally {
         service.deleteBucket(bucketName)
       }
@@ -493,27 +493,27 @@ abstract class IObjectStorageServiceTest {
   inner class ExtensionFunctions {
 
     @Test
-    fun `测试字节数组上传下载`() = runBlocking {
+    fun `test byte array upload and download`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-${System.currentTimeMillis()}"
       val objectName = "test-bytes.bin"
-      val bytes = "Binary content 二进制内容".toByteArray(Charsets.UTF_8)
+      val bytes = "Binary content".toByteArray(Charsets.UTF_8)
 
       try {
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 上传字节数组
+        // upload byte array
         val uploadResult = service.putObject(bucketName, objectName, bytes)
-        assertTrue(uploadResult.isSuccess, "上传字节数组应该成功")
+        assertTrue(uploadResult.isSuccess, "upload byte array should succeed")
 
-        // 下载字节数组
+        // download byte array
         val downloadResult = service.getObjectBytes(bucketName, objectName)
-        assertTrue(downloadResult.isSuccess, "下载字节数组应该成功")
+        assertTrue(downloadResult.isSuccess, "download byte array should succeed")
 
         val downloadedBytes = downloadResult.getOrThrow()
-        assertTrue(bytes.contentEquals(downloadedBytes), "下载的字节数组应该与原始数据相同")
+        assertTrue(bytes.contentEquals(downloadedBytes), "downloaded byte array should be the same as original")
 
-        log.info("字节数组操作测试通过: ${bytes.size} bytes")
+        log.info("byte array operations test passed: ${bytes.size} bytes")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -521,20 +521,20 @@ abstract class IObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试确保存储桶存在`() = runBlocking {
+    fun `test ensure bucket exists`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-ensure-bucket-${System.currentTimeMillis()}"
 
       try {
-        // 第一次调用应该创建存储桶
+        // first call should create the bucket
         val firstResult = service.ensureBucket(bucketName)
-        assertTrue(firstResult.isSuccess, "第一次确保存储桶应该成功")
+        assertTrue(firstResult.isSuccess, "first ensureBucket call should succeed")
 
-        // 第二次调用应该返回现有存储桶
+        // second call should return the existing bucket
         val secondResult = service.ensureBucket(bucketName)
-        assertTrue(secondResult.isSuccess, "第二次确保存储桶应该成功")
+        assertTrue(secondResult.isSuccess, "second ensureBucket call should succeed")
 
-        log.info("确保存储桶存在测试通过")
+        log.info("ensure bucket exists test passed")
       } finally {
         service.deleteBucket(bucketName)
       }
@@ -545,27 +545,27 @@ abstract class IObjectStorageServiceTest {
   inner class ShareLinkOperations {
 
     @Test
-    fun `测试生成简单分享链接`() = runBlocking {
+    fun `test generate simple share link`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-share-bucket-${System.currentTimeMillis()}"
       val objectName = "test-share-object.txt"
       val content = "Hello, Share Link!"
 
       try {
-        // 创建存储桶和对象
+        // create bucket and object
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
         service.putObject(bucketName, objectName, content).getOrThrow()
 
-        // 生成分享链接
+        // generate share link
         val shareResult = service.generateSimpleShareLink(bucketName = bucketName, objectName = objectName, expiration = java.time.Duration.ofHours(1))
-        assertTrue(shareResult.isSuccess, "生成分享链接应该成功")
+        assertTrue(shareResult.isSuccess, "generate share link should succeed")
 
         val shareInfo = shareResult.getOrThrow()
         assertEquals(bucketName, shareInfo.bucketName)
         assertEquals(objectName, shareInfo.objectName)
         assertTrue(shareInfo.shareUrl.isNotEmpty())
 
-        log.info("分享链接生成测试通过: ${shareInfo.shareUrl}")
+        log.info("share link generation test passed: ${shareInfo.shareUrl}")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -573,7 +573,7 @@ abstract class IObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试上传文件并生成分享链接`() = runBlocking {
+    fun `test upload file and generate share link`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-upload-share-bucket-${System.currentTimeMillis()}"
       val objectName = "test-upload-share-object.txt"
@@ -582,10 +582,10 @@ abstract class IObjectStorageServiceTest {
       try {
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 上传字符串并生成分享链接
+        // upload string and generate share link
         val uploadResult =
           service.uploadStringWithLink(bucketName = bucketName, objectName = objectName, content = content, shareExpiration = java.time.Duration.ofHours(2))
-        assertTrue(uploadResult.isSuccess, "上传并生成分享链接应该成功")
+        assertTrue(uploadResult.isSuccess, "upload and generate share link should succeed")
 
         val response = uploadResult.getOrThrow()
         assertEquals(bucketName, response.objectInfo.bucketName)
@@ -594,7 +594,7 @@ abstract class IObjectStorageServiceTest {
         assertTrue(response.shareLink.shareUrl.isNotEmpty())
         assertNotNull(response.publicUrl)
 
-        log.info("上传并生成分享链接测试通过")
+        log.info("upload and generate share link test passed")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -602,30 +602,30 @@ abstract class IObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试验证分享链接`() = runBlocking {
+    fun `test validate share link`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-validate-bucket-${System.currentTimeMillis()}"
       val objectName = "test-validate-object.txt"
       val content = "Hello, Validate Link!"
 
       try {
-        // 创建存储桶和对象
+        // create bucket and object
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
         service.putObject(bucketName, objectName, content).getOrThrow()
 
-        // 生成分享链接
+        // generate share link
         val shareResult = service.generateSimpleShareLink(bucketName = bucketName, objectName = objectName, expiration = java.time.Duration.ofHours(1))
         val shareUrl = shareResult.getOrThrow().shareUrl
 
-        // 验证分享链接
+        // validate share link
         val validateResult = service.validateShareLink(shareUrl)
-        assertTrue(validateResult.isSuccess, "验证分享链接应该成功")
+        assertTrue(validateResult.isSuccess, "validate share link should succeed")
 
         val validatedInfo = validateResult.getOrThrow()
         assertEquals(bucketName, validatedInfo.bucketName)
         assertEquals(objectName, validatedInfo.objectName)
 
-        log.info("验证分享链接测试通过")
+        log.info("validate share link test passed")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -637,7 +637,7 @@ abstract class IObjectStorageServiceTest {
   inner class ErrorHandling {
 
     @Test
-    fun `测试访问不存在的对象`() = runBlocking {
+    fun `test access non-existent object`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-bucket-${System.currentTimeMillis()}"
       val nonExistentObject = "non-existent-object.txt"
@@ -646,20 +646,20 @@ abstract class IObjectStorageServiceTest {
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
         val existsResult = service.objectExists(bucketName, nonExistentObject)
-        assertTrue(existsResult.isSuccess, "检查不存在对象应该成功")
-        assertFalse(existsResult.getOrThrow(), "不存在的对象应该返回false")
+        assertTrue(existsResult.isSuccess, "check for non-existent object should succeed")
+        assertFalse(existsResult.getOrThrow(), "non-existent object should return false")
 
         val getResult = service.getObject(bucketName, nonExistentObject)
-        assertTrue(getResult.isFailure, "获取不存在的对象应该失败")
+        assertTrue(getResult.isFailure, "get non-existent object should fail")
 
-        log.info("错误处理测试通过")
+        log.info("error handling test passed")
       } finally {
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试生成不存在对象的分享链接`() = runBlocking {
+    fun `test generate share link for non-existent object`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-error-bucket-${System.currentTimeMillis()}"
       val nonExistentObject = "non-existent-object.txt"
@@ -667,53 +667,53 @@ abstract class IObjectStorageServiceTest {
       try {
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 尝试为不存在的对象生成分享链接
+        // try to generate a share link for a non-existent object
         val shareResult = service.generateSimpleShareLink(bucketName = bucketName, objectName = nonExistentObject, expiration = java.time.Duration.ofHours(1))
 
-        // 根据实现，这可能成功（生成链接但访问时失败）或失败
-        // MinIO 允许为不存在的对象生成预签名URL
-        log.info("为不存在对象生成分享链接结果: ${shareResult.isSuccess}")
+        // depending on the implementation, this might succeed (link generated but fails on access) or fail
+        // MinIO allows generating presigned URLs for non-existent objects
+        log.info("generate share link for non-existent object result: ${shareResult.isSuccess}")
       } finally {
         service.deleteBucket(bucketName)
       }
     }
 
     @Test
-    fun `测试分享链接端到端下载流程`() = runBlocking {
+    fun `test end-to-end share link download process`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-e2e-download-bucket-${System.currentTimeMillis()}"
       val objectName = "test-e2e-download-object.txt"
       val content = "Hello, End-to-End Download Test!"
 
       try {
-        // 创建存储桶和对象
+        // create bucket and object
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
         service.putObject(bucketName, objectName, content).getOrThrow()
 
-        // 生成分享链接
+        // generate share link
         val shareResult = service.generateSimpleShareLink(bucketName = bucketName, objectName = objectName, expiration = java.time.Duration.ofMinutes(5))
-        assertTrue(shareResult.isSuccess, "生成分享链接应该成功")
+        assertTrue(shareResult.isSuccess, "generate share link should succeed")
 
         val shareInfo = shareResult.getOrThrow()
         val shareUrl = shareInfo.shareUrl
 
-        // 使用分享链接下载内容
+        // download content using the share link
         val downloadResult = service.downloadFromShareLink(shareUrl)
-        assertTrue(downloadResult.isSuccess, "通过分享链接下载应该成功")
+        assertTrue(downloadResult.isSuccess, "download via share link should succeed")
 
         val downloadedContent = downloadResult.getOrThrow()
         downloadedContent.use { objectContent ->
           val downloadedText = objectContent.inputStream.bufferedReader().readText()
-          assertEquals(content, downloadedText, "下载的内容应该与原始内容一致")
+          assertEquals(content, downloadedText, "downloaded content should match original content")
         }
 
-        // 使用扩展函数下载为字符串
+        // download as string using extension function
         val stringDownloadResult = service.downloadStringFromShareLink(shareUrl)
-        assertTrue(stringDownloadResult.isSuccess, "使用扩展函数下载字符串应该成功")
-        assertEquals(content, stringDownloadResult.getOrThrow(), "扩展函数下载的内容应该一致")
+        assertTrue(stringDownloadResult.isSuccess, "download as string using extension function should succeed")
+        assertEquals(content, stringDownloadResult.getOrThrow(), "downloaded content from extension function should match")
 
-        log.info("分享链接端到端下载流程测试通过")
-        log.info("分享链接: $shareUrl")
+        log.info("end-to-end share link download process test passed")
+        log.info("share link: $shareUrl")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -721,7 +721,7 @@ abstract class IObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试上传并返回链接的完整验证`() = runBlocking {
+    fun `test full verification of upload and return link`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-upload-link-verify-bucket-${System.currentTimeMillis()}"
       val objectName = "test-upload-link-verify-object.txt"
@@ -730,44 +730,44 @@ abstract class IObjectStorageServiceTest {
       try {
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 使用扩展函数上传字符串并生成分享链接
+        // upload string and generate share link using extension function
         val uploadResult =
           service.uploadStringWithLink(bucketName = bucketName, objectName = objectName, content = content, shareExpiration = java.time.Duration.ofMinutes(10))
-        assertTrue(uploadResult.isSuccess, "上传字符串并生成分享链接应该成功")
+        assertTrue(uploadResult.isSuccess, "upload string and generate share link should succeed")
 
         val response = uploadResult.getOrThrow()
 
-        // 验证上传结果
+        // verify upload result
         assertEquals(bucketName, response.objectInfo.bucketName)
         assertEquals(objectName, response.objectInfo.objectName)
         assertEquals(content.length.toLong(), response.objectInfo.size)
 
-        // 验证分享链接信息
-        assertTrue(response.shareLink.shareUrl.isNotEmpty(), "分享链接不应为空")
+        // verify share link info
+        assertTrue(response.shareLink.shareUrl.isNotEmpty(), "share link should not be empty")
         assertEquals(bucketName, response.shareLink.bucketName)
         assertEquals(objectName, response.shareLink.objectName)
         assertEquals(HttpMethod.GET, response.shareLink.method)
 
-        // 验证对象确实存在
+        // verify object actually exists
         val existsResult = service.objectExists(bucketName, objectName)
-        assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "上传的对象应该存在")
+        assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "uploaded object should exist")
 
-        // 通过分享链接下载验证内容
+        // verify content by downloading via share link
         val downloadResult = service.downloadStringFromShareLink(response.shareLink.shareUrl)
-        assertTrue(downloadResult.isSuccess, "通过分享链接下载应该成功")
-        assertEquals(content, downloadResult.getOrThrow(), "下载的内容应该与上传的内容一致")
+        assertTrue(downloadResult.isSuccess, "download via share link should succeed")
+        assertEquals(content, downloadResult.getOrThrow(), "downloaded content should match uploaded content")
 
-        // 验证分享链接
+        // validate share link
         val validateResult = service.validateShareLink(response.shareLink.shareUrl)
-        assertTrue(validateResult.isSuccess, "验证分享链接应该成功")
+        assertTrue(validateResult.isSuccess, "validate share link should succeed")
 
         val validatedInfo = validateResult.getOrThrow()
         assertEquals(bucketName, validatedInfo.bucketName)
         assertEquals(objectName, validatedInfo.objectName)
 
-        log.info("上传并返回链接的完整验证测试通过")
-        log.info("分享链接: ${response.shareLink.shareUrl}")
-        log.info("公共URL: ${response.publicUrl}")
+        log.info("full verification of upload and return link test passed")
+        log.info("share link: ${response.shareLink.shareUrl}")
+        log.info("public URL: ${response.publicUrl}")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -775,7 +775,7 @@ abstract class IObjectStorageServiceTest {
     }
 
     @Test
-    fun `测试文件上传下载分享链接流程`() = runBlocking {
+    fun `test file upload download share link process`() = runBlocking {
       val service = createObjectStorageService()
       val bucketName = "test-file-share-bucket-${System.currentTimeMillis()}"
       val objectName = "test-file-share-object.txt"
@@ -784,12 +784,12 @@ abstract class IObjectStorageServiceTest {
       try {
         service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
 
-        // 创建临时文件
+        // create a temporary file
         val tempFile = java.io.File.createTempFile("test-upload", ".txt")
         tempFile.writeText(content)
 
         try {
-          // 使用扩展函数上传文件并生成分享链接
+          // upload file and generate share link using extension function
           val uploadResult =
             service.uploadFileWithLink(
               bucketName = bucketName,
@@ -798,30 +798,30 @@ abstract class IObjectStorageServiceTest {
               shareExpiration = java.time.Duration.ofMinutes(15),
               contentType = "text/plain",
             )
-          assertTrue(uploadResult.isSuccess, "上传文件并生成分享链接应该成功")
+          assertTrue(uploadResult.isSuccess, "upload file and generate share link should succeed")
 
           val response = uploadResult.getOrThrow()
 
-          // 验证上传结果
+          // verify upload result
           assertEquals(bucketName, response.objectInfo.bucketName)
           assertEquals(objectName, response.objectInfo.objectName)
           assertEquals(tempFile.length(), response.objectInfo.size)
 
-          // 创建下载目标文件
+          // create a destination file for download
           val downloadFile = java.io.File.createTempFile("test-download", ".txt")
 
           try {
-            // 使用扩展函数通过分享链接下载到文件
+            // download to file from share link using extension function
             val downloadResult = service.downloadFileFromShareLink(shareUrl = response.shareLink.shareUrl, targetFile = downloadFile)
-            assertTrue(downloadResult.isSuccess, "通过分享链接下载到文件应该成功")
+            assertTrue(downloadResult.isSuccess, "download to file from share link should succeed")
 
-            // 验证下载的文件内容
+            // verify downloaded file content
             val downloadedContent = downloadFile.readText()
-            assertEquals(content, downloadedContent, "下载的文件内容应该与原始内容一致")
+            assertEquals(content, downloadedContent, "downloaded file content should match original content")
 
-            log.info("文件上传下载分享链接流程测试通过")
-            log.info("原始文件大小: ${tempFile.length()} bytes")
-            log.info("下载文件大小: ${downloadFile.length()} bytes")
+            log.info("file upload download share link process test passed")
+            log.info("original file size: ${tempFile.length()} bytes")
+            log.info("downloaded file size: ${downloadFile.length()} bytes")
           } finally {
             downloadFile.delete()
           }

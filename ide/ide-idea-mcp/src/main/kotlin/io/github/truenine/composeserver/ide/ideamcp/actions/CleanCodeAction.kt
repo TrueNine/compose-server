@@ -16,8 +16,12 @@ import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
 import kotlinx.coroutines.runBlocking
 
-/** 代码清理右键菜单动作 提供在编辑器和项目树中右键执行代码清理的功能 */
-class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格式化代码", null) {
+/**
+ * Context menu action for code clean-up.
+ *
+ * Provides a right-click action in editor and project tree to clean and format code using IDEA capabilities.
+ */
+class CleanCodeAction : AnAction("Clean Code", "Clean and format code using IDEA features", null) {
 
   override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
@@ -25,7 +29,7 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
     val project = e.project
     val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE)
 
-    // 只有在项目存在且选中了文件或文件夹时才启用动作
+    // Enable action only when a project exists and a file or directory is selected
     e.presentation.isEnabledAndVisible = project != null && virtualFile != null && (virtualFile.isDirectory || isCodeFile(virtualFile))
   }
 
@@ -33,60 +37,63 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
     val project = e.project ?: return
     val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE) ?: return
 
-    Logger.info("开始执行代码清理动作 - 路径: ${virtualFile.path}", "CleanCodeAction")
+    Logger.info("Start executing code clean-up action - path: ${virtualFile.path}", "CleanCodeAction")
 
-    // 显示清理选项对话框
+    // Show clean-up options dialog
     val cleanOptions = showCleanOptionsDialog(project) ?: return
 
-    // 在后台任务中执行清理操作
+    // Run clean-up in a background task
     ProgressManager.getInstance()
       .run(
-        object : Task.Backgroundable(project, "正在清理代码...", true) {
+        object : Task.Backgroundable(project, "Cleaning code...", true) {
           private var currentResult: io.github.truenine.composeserver.ide.ideamcp.services.CleanResult? = null
 
           override fun run(indicator: ProgressIndicator) {
             try {
-              indicator.text = "正在分析文件: ${virtualFile.name}"
-              indicator.text2 = "准备清理操作..."
+              indicator.text = "Analyzing file: ${virtualFile.name}"
+              indicator.text2 = "Preparing clean-up operations..."
               indicator.isIndeterminate = false
               indicator.fraction = 0.1
 
-              // 检查是否被取消
+              // Check whether the operation was cancelled
               if (indicator.isCanceled) {
-                Logger.info("用户取消了代码清理操作", "CleanCodeAction")
+                Logger.info("User cancelled code clean-up operation", "CleanCodeAction")
                 return
               }
 
               val cleanService = project.service<CleanService>()
 
-              indicator.text2 = "正在执行清理操作..."
+              indicator.text2 = "Executing clean-up operations..."
               indicator.fraction = 0.3
 
               val result = runBlocking { cleanService.cleanCode(project, virtualFile, cleanOptions) }
 
               currentResult = result
 
-              // 检查是否被取消
+              // Check whether the operation was cancelled
               if (indicator.isCanceled) {
-                Logger.info("清理操作被用户取消", "CleanCodeAction")
+                Logger.info("Clean-up operation was cancelled by user", "CleanCodeAction")
                 return
               }
 
-              indicator.text2 = "清理完成"
+              indicator.text2 = "Clean-up completed"
               indicator.fraction = 1.0
 
-              // 在 EDT 中显示结果
+              // Show result on EDT
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                 if (!indicator.isCanceled) {
                   showDetailedResultDialog(project, result, virtualFile.name)
                 }
               }
 
-              Logger.info("代码清理完成 - 处理文件: ${result.processedFiles}, 修改文件: ${result.modifiedFiles}, 耗时: ${result.executionTime}ms", "CleanCodeAction")
+              Logger.info(
+                "Code clean-up completed - processed: ${result.processedFiles}, modified: ${result.modifiedFiles}, duration: ${result.executionTime}ms",
+                "CleanCodeAction",
+              )
             } catch (e: Exception) {
-              Logger.error("代码清理失败", "CleanCodeAction", e)
+              Logger.error("Code clean-up failed", "CleanCodeAction", e)
 
-              // 在 EDT 中显示错误
+              // Show error on EDT
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                 if (!indicator.isCanceled) {
                   showErrorDialog(project, e, virtualFile.name)
@@ -96,20 +103,22 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
           }
 
           override fun onCancel() {
-            Logger.info("代码清理操作被取消", "CleanCodeAction")
+            Logger.info("Code clean-up operation cancelled", "CleanCodeAction")
 
-            // 在 EDT 中显示取消消息
-            com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater { Messages.showInfoMessage(project, "代码清理操作已取消", "操作取消") }
+            // Show cancellation message on EDT
+            com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
+              Messages.showInfoMessage(project, "Code clean-up operation was cancelled", "Operation cancelled")
+            }
           }
 
           override fun onSuccess() {
-            currentResult?.let { result -> Logger.info("代码清理成功完成 - 总耗时: ${result.executionTime}ms", "CleanCodeAction") }
+            currentResult?.let { result -> Logger.info("Code clean-up successfully completed - total duration: ${result.executionTime}ms", "CleanCodeAction") }
           }
         }
       )
   }
 
-  /** 检查是否为代码文件 */
+  /** Check whether the given file is a code file. */
   private fun isCodeFile(virtualFile: VirtualFile): Boolean {
     val extension = virtualFile.extension?.lowercase()
     return extension in
@@ -144,7 +153,7 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
       )
   }
 
-  /** 显示清理选项对话框 */
+  /** Show the clean-up options dialog. */
   private fun showCleanOptionsDialog(project: Project): CleanOptions? {
     val dialog = CleanOptionsDialog(project)
     return if (dialog.showAndGet()) {
@@ -154,39 +163,39 @@ class CleanCodeAction : AnAction("清理代码", "使用 IDEA 功能清理和格
     }
   }
 
-  /** 显示详细结果对话框 */
+  /** Show detailed result dialog. */
   private fun showDetailedResultDialog(project: Project, result: io.github.truenine.composeserver.ide.ideamcp.services.CleanResult, fileName: String) {
     val dialog = CleanResultDialog(project, result, fileName)
     dialog.show()
   }
 
-  /** 显示错误对话框 */
+  /** Show error dialog. */
   private fun showErrorDialog(project: Project, error: Throwable, fileName: String) {
     val message = buildString {
-      appendLine("清理文件时发生错误: $fileName")
+      appendLine("An error occurred while cleaning file: $fileName")
       appendLine()
-      appendLine("错误信息: ${error.message}")
+      appendLine("Error message: ${error.message}")
       appendLine()
-      appendLine("建议:")
+      appendLine("Suggestions:")
       when (error) {
         is SecurityException -> {
-          appendLine("• 检查文件权限")
-          appendLine("• 确保文件未被其他进程锁定")
+          appendLine("• Check file permissions")
+          appendLine("• Ensure the file is not locked by another process")
         }
 
         is java.nio.file.NoSuchFileException -> {
-          appendLine("• 确认文件仍然存在")
-          appendLine("• 刷新项目视图")
+          appendLine("• Verify that the file still exists")
+          appendLine("• Refresh the project view")
         }
 
         else -> {
-          appendLine("• 检查文件状态")
-          appendLine("• 重试操作")
-          appendLine("• 查看日志获取更多信息")
+          appendLine("• Check file state")
+          appendLine("• Retry the operation")
+          appendLine("• Review logs for more information")
         }
       }
     }
 
-    Messages.showErrorDialog(project, message, "清理错误")
+    Messages.showErrorDialog(project, message, "Clean-up error")
   }
 }

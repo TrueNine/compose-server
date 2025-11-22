@@ -5,30 +5,30 @@ import io.github.truenine.composeserver.IIntEnum
 import io.swagger.v3.oas.annotations.media.Schema
 
 /**
- * # 付款流转类型
+ * # Payment flow types
  *
  * @author TrueNine
  * @since 2023-05-04
  */
-@Schema(title = "支付渠道类型")
+@Schema(title = "Payment channel type")
 enum class PaymentProviderType(private val channelId: Int) : IIntEnum {
-  /** 预支付 */
-  @Schema(title = "预付款") PRE_PAY(1001),
+  /** Pre payment */
+  @Schema(title = "Prepayment") PRE_PAY(1001),
 
-  /** 已付款 */
-  @Schema(title = "已付款") PAID(2001),
+  /** Paid */
+  @Schema(title = "Paid") PAID(2001),
 
-  /** 预退款 */
-  @Schema(title = "预退款") PRE_REFUND(4001),
+  /** Pre refund */
+  @Schema(title = "Pre-refund") PRE_REFUND(4001),
 
-  /** 支付成功，但出现业务异常 */
-  @Schema(title = "支付成功，但出现业务异常") PAY_SUCCESS_BIZ_FAILED(5002),
+  /** Payment successful but business failed */
+  @Schema(title = "Payment successful but business failed") PAY_SUCCESS_BIZ_FAILED(5002),
 
-  /** 已退款 */
-  @Schema(title = "已退款") REFUNDED(2002),
+  /** Refunded */
+  @Schema(title = "Refunded") REFUNDED(2002),
 
-  /** 已取消 */
-  @Schema(title = "已取消") CANCEL(2003);
+  /** Cancelled */
+  @Schema(title = "Cancelled") CANCEL(2003);
 
   @JsonValue override val value: Int = channelId
 

@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.paho.autoconfig
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.paho.paho.MqttPahoClientWrapper
 import io.github.truenine.composeserver.depend.paho.properties.SingleMqttProperties
 import io.github.truenine.composeserver.slf4j
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory
+import tools.jackson.databind.ObjectMapper
 
 private val log = slf4j(SingleMqttConnectionAutoConfiguration::class)
 
@@ -51,11 +51,11 @@ class SingleMqttConnectionAutoConfiguration(private val p: SingleMqttProperties,
     options.keepAliveInterval = p.keepAliveSecond
     options.mqttVersion = 3
     if (!client.isConnected) {
-      log.trace("等待创建 mqtt 连接 client = {}", client)
+      log.trace("Waiting to create MQTT connection for client = {}", client)
       client.connect(options)
-      log.trace("创建完成 mqtt 连接 client = {}", client)
+      log.trace("MQTT connection created for client = {}", client)
     } else {
-      log.trace("客户端已连接")
+      log.trace("Client is already connected")
       client.disconnect()
       client.connect(options)
     }

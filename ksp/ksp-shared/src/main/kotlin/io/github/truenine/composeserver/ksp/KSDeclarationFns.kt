@@ -20,7 +20,7 @@ val KSDeclaration.simpleNameAsString: String
   get() = simpleName.asString()
 
 /**
- * # 一般用此类表示 包名 + 类名
+ * # Generally use this to represent package name + class name
  * `qualifiedName.asString()`
  *
  * @see KSDeclaration.qualifiedName
@@ -57,7 +57,7 @@ val KSDeclaration.packageNameAsString: String
 val KSDeclaration.simpleNameGetShortNameStr: String
   get() = simpleName.getShortName()
 
-/** 其真实指向的 [KSDeclaration] */
+/** The actual target [KSDeclaration] */
 val KSDeclaration.realDeclaration: KSDeclaration
   get() {
     val r =
@@ -71,7 +71,7 @@ val KSDeclaration.realDeclaration: KSDeclaration
     }
   }
 
-/** 该定义是否为基础类型 */
+/** Whether this declaration is a basic type */
 fun KSDeclaration.isBasicType(): Boolean {
   return when (realDeclaration.qualifiedNameAsString) {
     "java.lang.Character",
@@ -95,18 +95,18 @@ fun KSDeclaration.isBasicType(): Boolean {
   }
 }
 
-/** 判断是否为指定类型 */
+/** Check whether this declaration is of the specified [KClass] */
 fun KSDeclaration.isKClass(kClass: KClass<*>): Boolean {
   return isKClassQualifiedName(kClass.qualifiedName!!)
 }
 
-/** 判断是否为指定类型 */
+/** Check whether this declaration matches the specified qualified name */
 fun KSDeclaration.isKClassQualifiedName(qualifiedName: String): Boolean {
-  require(qualifiedName.isBlank()) { "class $qualifiedName qName be null,qName ${qualifiedName}}" }
+  require(qualifiedName.isNotBlank()) { "class $qualifiedName qName be null,qName ${qualifiedName}}" }
   return qualifiedNameAsString == qualifiedName.trim()
 }
 
-/** ## 获取真实类型的助注解 */
+/** ## Get annotation class declarations of the actual type */
 val KSDeclaration.actualAnnotationClassDeclarations: Sequence<KSClassDeclaration>
   get() {
     val ats = annotations.map { it.annotationType.fastResolve().declaration }
@@ -117,7 +117,7 @@ val KSDeclaration.actualAnnotationClassDeclarations: Sequence<KSClassDeclaration
     }
   }
 
-/** 根据当前定义输出一段调试信息 */
+/** Output a block of debug information based on the current declaration */
 fun KSDeclaration.debugInfo(): String = buildString {
   val annotationInfos =
     actualAnnotationClassDeclarations

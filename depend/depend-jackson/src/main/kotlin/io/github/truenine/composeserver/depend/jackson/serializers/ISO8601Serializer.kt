@@ -1,128 +1,129 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import io.github.truenine.composeserver.toMillis
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
+import tools.jackson.core.JsonGenerator
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.SerializationContext
+import tools.jackson.databind.ValueSerializer
+import tools.jackson.databind.jsontype.TypeSerializer
 
 /**
- * # ISO8601 标准毫秒时间戳序列化器
+ * # ISO8601 millisecond timestamp serializer
  *
- * 为 Java 时间类型提供 ISO8601 标准的 JSON 序列化支持，将日期时间转换为时间戳格式
+ * Provides JSON serialization for Java time types using ISO8601-style timestamps.
  *
- * @param T 需要序列化的时间类型，支持 LocalDate、LocalDateTime 和 LocalTime
+ * @param T Time type to serialize, supports LocalDate, LocalDateTime and LocalTime
  * @author TrueNine
  * @since 2025-04-26
  */
-sealed class ISO8601Serializer<T> : JsonSerializer<T>() {
+sealed class ISO8601Serializer<T> : ValueSerializer<T>() {
   /**
-   * ## 带类型信息的序列化
+   * ## Serialization with type information.
    *
-   * @param value 需要序列化的值
-   * @param gen JSON生成器
-   * @param serializers 序列化提供者
-   * @param typeSer 类型序列化器
+   * @param value Value to serialize
+   * @param gen JSON generator
+   * @param serializers Serialization provider
+   * @param typeSer Type serializer
    */
-  override fun serializeWithType(value: T, gen: JsonGenerator?, serializers: SerializerProvider?, typeSer: TypeSerializer) {
-    // 使用 VALUE_NUMBER_INT 作为 shape，因为 date/time 类型似乎序列化为数字
+  override fun serializeWithType(value: T, gen: JsonGenerator?, ctxt: SerializationContext?, typeSer: TypeSerializer) {
+    // Use VALUE_NUMBER_INT as the shape because date/time types are serialized as numbers
     val shape = JsonToken.VALUE_NUMBER_INT
-    val typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, shape))
-    serialize(value, gen, serializers)
-    typeSer.writeTypeSuffix(gen, typeIdDef)
+    val typeIdDef = typeSer.typeId(value, shape)
+    typeSer.writeTypePrefix(gen, ctxt, typeIdDef)
+    serialize(value, gen, ctxt)
+    typeSer.writeTypeSuffix(gen, ctxt, typeIdDef)
   }
 
   /**
-   * # LocalDate ISO8601 序列化器
+   * # LocalDate ISO8601 serializer
    *
-   * 将 LocalDate 类型转换为 ISO8601 标准的时间戳
+   * Converts LocalDate to an ISO8601-style timestamp.
    *
-   * @param zoneOffset 时区偏移量，用于时区转换
+   * @param zoneOffset Zone offset used for conversion
    */
   class ISO8601DateSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalDate>() {
-    /** 无参构造函数，用于Jackson反序列化 */
+    /** No-arg constructor for Jackson. */
     constructor() : this(ZoneOffset.UTC)
 
     /**
-     * ## 返回处理的类型
+     * ## Handled type.
      *
-     * @return LocalDate 类
+     * @return LocalDate class
      */
     override fun handledType(): Class<LocalDate> = LocalDate::class.java
 
     /**
-     * ## 序列化 LocalDate
+     * ## Serialize LocalDate.
      *
-     * @param value LocalDate 对象
-     * @param gen JSON生成器
-     * @param serializers 序列化提供者
+     * @param value LocalDate value
+     * @param gen JSON generator
+     * @param serializers Serialization provider
      */
-    override fun serialize(value: LocalDate, gen: JsonGenerator?, serializers: SerializerProvider?) {
+    override fun serialize(value: LocalDate, gen: JsonGenerator?, ctxt: SerializationContext?) {
       gen?.writeNumber(value.toMillis(zoneOffset))
     }
   }
 
   /**
-   * # LocalDateTime ISO8601 序列化器
+   * # LocalDateTime ISO8601 serializer
    *
-   * 将 LocalDateTime 类型转换为 ISO8601 标准的时间戳
+   * Converts LocalDateTime to an ISO8601-style timestamp.
    *
-   * @param zoneOffset 时区偏移量，用于时区转换
+   * @param zoneOffset Zone offset used for conversion
    */
   class ISO8601DateTimeSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalDateTime>() {
-    /** 无参构造函数，用于Jackson反序列化 */
+    /** No-arg constructor for Jackson. */
     constructor() : this(ZoneOffset.UTC)
 
     /**
-     * ## 返回处理的类型
+     * ## Handled type.
      *
-     * @return LocalDateTime 类
+     * @return LocalDateTime class
      */
     override fun handledType(): Class<LocalDateTime> = LocalDateTime::class.java
 
     /**
-     * ## 序列化 LocalDateTime
+     * ## Serialize LocalDateTime.
      *
-     * @param value LocalDateTime 对象
-     * @param gen JSON生成器
-     * @param serializers 序列化提供者
+     * @param value LocalDateTime value
+     * @param gen JSON generator
+     * @param serializers Serialization provider
      */
-    override fun serialize(value: LocalDateTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
+    override fun serialize(value: LocalDateTime, gen: JsonGenerator?, ctxt: SerializationContext?) {
       gen?.writeNumber(value.toMillis(zoneOffset))
     }
   }
 
   /**
-   * # LocalTime ISO8601 序列化器
+   * # LocalTime ISO8601 serializer
    *
-   * 将 LocalTime 类型转换为 ISO8601 标准的时间戳
+   * Converts LocalTime to an ISO8601-style timestamp.
    *
-   * @param zoneOffset 时区偏移量，用于时区转换
+   * @param zoneOffset Zone offset used for conversion
    */
   class ISO8601TimeSerializer(private val zoneOffset: ZoneOffset = ZoneOffset.UTC) : ISO8601Serializer<LocalTime>() {
-    /** 无参构造函数，用于Jackson反序列化 */
+    /** No-arg constructor for Jackson. */
     constructor() : this(ZoneOffset.UTC)
 
     /**
-     * ## 返回处理的类型
+     * ## Handled type.
      *
-     * @return LocalTime 类
+     * @return LocalTime class
      */
     override fun handledType(): Class<LocalTime> = LocalTime::class.java
 
     /**
-     * ## 序列化 LocalTime
+     * ## Serialize LocalTime.
      *
-     * @param value LocalTime 对象
-     * @param gen JSON生成器
-     * @param serializers 序列化提供者
+     * @param value LocalTime value
+     * @param gen JSON generator
+     * @param serializers Serialization provider
      */
-    override fun serialize(value: LocalTime, gen: JsonGenerator?, serializers: SerializerProvider?) {
+    override fun serialize(value: LocalTime, gen: JsonGenerator?, ctxt: SerializationContext?) {
       gen?.writeNumber(value.toMillis(zoneOffset))
     }
   }

@@ -20,7 +20,7 @@ dependencies {
   api(libs.org.testcontainers.minio)
   api(libs.io.minio.minio)
 
-  // 测试依赖
+  // Test dependencies
   testImplementation(libs.org.springframework.boot.spring.boot.starter.jdbc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.data.redis)
   testRuntimeOnly(libs.org.postgresql.postgresql)

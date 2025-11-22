@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 private val log = slf4j<PasswordEncoderAutoconfiguration>()
 
 /**
- * spring security 安全策略配置器
+ * Spring Security password encoder configuration.
  *
  * @author TrueNine
  * @since 2023-02-20
@@ -20,9 +20,11 @@ private val log = slf4j<PasswordEncoderAutoconfiguration>()
 class PasswordEncoderAutoconfiguration {
 
   /**
-   * 配置主要的密码加密策略 目前使用 BCrypt 2a 14 策略
+   * Configure the primary password encoding strategy.
    *
-   * @param ctx spring 容器上下文
+   * Currently uses BCrypt 2a with strength 14.
+   *
+   * @param ctx Spring application context
    */
   @Bean
   @Primary

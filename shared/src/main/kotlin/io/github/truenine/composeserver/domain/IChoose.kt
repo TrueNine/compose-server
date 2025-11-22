@@ -1,21 +1,21 @@
 package io.github.truenine.composeserver.domain
 
 /**
- * 策略模式基础接口
+ * Base interface for strategy pattern style selection.
  *
- * @param <T> 选择类型
+ * @param <T> Selection type
  * @author TrueNine
  * @since 2022-12-11 </T>
  */
-@Deprecated("多此一举，当作范例", level = DeprecationLevel.ERROR)
+@Deprecated("Redundant abstraction, kept only as an example", level = DeprecationLevel.ERROR)
 interface IChoose<T> {
   /**
-   * 查找第一个符合判断条件的类型
+   * Find the first implementation that matches the given type.
    *
-   * @param chooses 策略组
-   * @param type 类型
-   * @param <R> 实现类
-   * @return 实现 </R>
+   * @param chooses Strategy implementations
+   * @param type Selection type
+   * @param <R> Implementation type
+   * @return First matching implementation, or null if none
    */
   @Suppress("UNCHECKED_CAST", "DEPRECATION_ERROR")
   fun <R> firstOrNull(chooses: List<IChoose<T>>, type: T): R? {
@@ -23,12 +23,12 @@ interface IChoose<T> {
   }
 
   /**
-   * 获取一组实现
+   * Get all implementations that match the given type.
    *
-   * @param chooses 被选择服务
-   * @param type 选择类型
-   * @param <R> 实现类
-   * @return 选中的一组服务 </R>
+   * @param chooses Candidate services
+   * @param type Selection type
+   * @param <R> Implementation type
+   * @return List of selected services
    */
   @Suppress("UNCHECKED_CAST", "DEPRECATION_ERROR")
   fun <R> all(chooses: List<IChoose<T>>, type: T): List<R> {
@@ -36,10 +36,10 @@ interface IChoose<T> {
   }
 
   /**
-   * 类型判断
+   * Type matching check.
    *
-   * @param type 类型
-   * @return 是否为当前类型
+   * @param type Selection type
+   * @return true if this instance matches the type
    */
   fun choose(type: T): Boolean
 }

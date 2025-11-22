@@ -5,38 +5,38 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.PropertyAccessor
-import com.fasterxml.jackson.databind.AnnotationIntrospector
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.cfg.MapperConfig
-import com.fasterxml.jackson.databind.introspect.Annotated
-import com.fasterxml.jackson.databind.introspect.AnnotatedClass
-import com.fasterxml.jackson.databind.introspect.AnnotatedMember
-import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.depend.jackson.modules.DatetimeCustomModule
 import io.github.truenine.composeserver.depend.jackson.modules.KotlinCustomModule
 import io.github.truenine.composeserver.logger
+import java.text.SimpleDateFormat
 import java.time.ZoneOffset
 import java.util.*
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Scope
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import tools.jackson.databind.AnnotationIntrospector
+import tools.jackson.databind.DefaultTyping
+import tools.jackson.databind.DeserializationFeature
+import tools.jackson.databind.JavaType
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.SerializationFeature
+import tools.jackson.databind.cfg.MapperConfig
+import tools.jackson.databind.introspect.Annotated
+import tools.jackson.databind.introspect.AnnotatedClass
+import tools.jackson.databind.introspect.AnnotatedMember
+import tools.jackson.databind.introspect.AnnotationIntrospectorPair
+import tools.jackson.databind.introspect.JacksonAnnotationIntrospector
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator
+import tools.jackson.databind.jsontype.impl.DefaultTypeResolverBuilder
+import tools.jackson.module.kotlin.KotlinModule
 
 /**
- * jackson json 序列化策略配置
+ * Jackson JSON serialization strategy configuration
  *
  * @author TrueNine
  * @since 2023-02-23
@@ -49,79 +49,51 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     log.debug("jackson auto config...")
   }
 
-  private fun customize(builder: Jackson2ObjectMapperBuilder, customizers: List<Jackson2ObjectMapperBuilderCustomizer>) {
-    log.debug("start customizing jackson,builder: {}, customizers: {}", builder, customizers)
-    for (customizer in customizers) {
-      customizer.customize(builder)
-    }
-  }
+  private fun createBaseJsonMapperBuilder(): JsonMapper.Builder {
+    val kotlinModule = KotlinModule.Builder().build()
 
-  @Bean
-  @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  @ConditionalOnMissingBean(Jackson2ObjectMapperBuilder::class)
-  fun jacksonObjectMapperBuilder(
-    applicationContext: ApplicationContext,
-    customizers: List<Jackson2ObjectMapperBuilderCustomizer>?,
-  ): Jackson2ObjectMapperBuilder {
-    log.debug("replace spring web default jackson config, customizers: {}", customizers)
-    val builder = Jackson2ObjectMapperBuilder()
-    builder.applicationContext(applicationContext)
-    if (customizers != null) {
-      customize(builder, customizers)
+    val builder = JsonMapper.builder()
+    builder.addModule(kotlinModule)
+
+    // Register custom modules
+    builder.addModule(DatetimeCustomModule())
+    builder.addModule(KotlinCustomModule())
+
+    builder.defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
+    builder.defaultLocale(Locale.US)
+    builder.defaultDateFormat(SimpleDateFormat(DateTimeConverter.DATETIME))
+
+    builder.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
+    builder.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
+
+    if (jacksonProperties.failOnUnknownProperties) {
+      builder.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+    } else {
+      builder.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
     }
+
+    builder.changeDefaultPropertyInclusion { incl -> incl.withValueInclusion(jacksonProperties.serializationInclusion) }
+
+    // Timestamp behavior is primarily controlled by DatetimeCustomModule; log configuration here
+    if (jacksonProperties.enableTimestampSerialization && jacksonProperties.writeDatesAsTimestamps) {
+      log.debug("enabled timestamp serialization with unit: {}", jacksonProperties.timestampUnit)
+    } else {
+      log.debug("disabled timestamp serialization")
+    }
+
     return builder
   }
 
+  @Order(Ordered.HIGHEST_PRECEDENCE)
   @Bean(name = [DEFAULT_OBJECT_MAPPER_BEAN_NAME])
   @ConditionalOnMissingBean(value = [ObjectMapper::class])
   @org.springframework.context.annotation.Primary
   @org.springframework.beans.factory.annotation.Qualifier(DEFAULT_OBJECT_MAPPER_BEAN_NAME)
-  fun jacksonObjectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
-    log.debug("create jackson objectMapper, builder: {}", builder)
-    return builder.createXmlMapper(false).build()
-  }
+  fun jacksonObjectMapper(): ObjectMapper {
+    log.debug("create default JsonMapper")
+    val mapper = createBaseJsonMapperBuilder().build()
 
-  @Bean
-  fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
-    log.debug("config jackson custom jackson2ObjectMapperBuilderCustomizer with properties: {}", jacksonProperties)
-
-    // 移除硬编码时区，使用UTC作为基准
-    val datetimeModuleCustom = DatetimeCustomModule()
-    val kotlinModuleCustom = KotlinCustomModule()
-    val kotlinModule = KotlinModule.Builder().build()
-    val javaTimeModule = JavaTimeModule()
-
-    return Jackson2ObjectMapperBuilderCustomizer { b ->
-      b.modules(javaTimeModule, kotlinModule, datetimeModuleCustom, kotlinModuleCustom)
-
-      // 使用UTC时区，避免时区问题
-      b.timeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
-      b.locale(Locale.US)
-      b.simpleDateFormat(DateTimeConverter.DATETIME)
-      b.defaultViewInclusion(true)
-      b.featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
-
-      // 根据配置启用或禁用时间戳序列化
-      if (jacksonProperties.enableTimestampSerialization && jacksonProperties.writeDatesAsTimestamps) {
-        b.featuresToEnable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        log.debug("enabled timestamp serialization with unit: {}", jacksonProperties.timestampUnit)
-      } else {
-        b.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        log.debug("disabled timestamp serialization")
-      }
-
-      b.featuresToDisable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
-
-      // 根据配置设置序列化包含策略
-      b.serializationInclusion(jacksonProperties.serializationInclusion)
-
-      // 根据配置设置未知属性处理
-      if (jacksonProperties.failOnUnknownProperties) {
-        b.featuresToEnable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-      } else {
-        b.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-      }
-    }
+    return mapper
   }
 
   companion object {
@@ -131,45 +103,72 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     @JvmStatic private val log = logger<JacksonAutoConfiguration>()
   }
 
-  /** 安全的忽略注解内省器，只在特定条件下忽略属性 */
+  /** Safe ignore annotation introspector, only ignores properties under specific conditions */
   class SafeIgnoreAnnotationIntrospector : JacksonAnnotationIntrospector() {
     override fun findPropertyIgnoralByName(config: MapperConfig<*>?, a: Annotated?): JsonIgnoreProperties.Value? {
-      // 只在特定条件下忽略属性，避免所有属性都被忽略
+      // Only ignore properties under specific conditions to avoid ignoring all properties
       return null
     }
 
     override fun _isIgnorable(a: Annotated?): Boolean = false
 
-    override fun hasIgnoreMarker(m: AnnotatedMember?): Boolean = false
+    override fun hasIgnoreMarker(config: MapperConfig<*>?, m: AnnotatedMember?): Boolean = false
 
-    override fun isIgnorableType(ac: AnnotatedClass?): Boolean = false
+    override fun isIgnorableType(config: MapperConfig<*>?, ac: AnnotatedClass?): Boolean = false
   }
 
   class IgnoreIntroPair(primary: AnnotationIntrospector, secondary: AnnotationIntrospector) : AnnotationIntrospectorPair(primary, secondary) {
     override fun findPropertyIgnoralByName(config: MapperConfig<*>?, a: Annotated?): JsonIgnoreProperties.Value = JsonIgnoreProperties.Value.empty()
 
-    override fun hasIgnoreMarker(m: AnnotatedMember?): Boolean = false
+    override fun hasIgnoreMarker(config: MapperConfig<*>?, m: AnnotatedMember?): Boolean = false
 
-    override fun isIgnorableType(ac: AnnotatedClass?): Boolean = false
+    override fun isIgnorableType(config: MapperConfig<*>?, ac: AnnotatedClass?): Boolean = false
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @Bean(name = [NON_IGNORE_OBJECT_MAPPER_BEAN_NAME])
   @org.springframework.beans.factory.annotation.Qualifier("nonIgnoreObjectMapper")
-  fun nonIgnoreObjectMapper(mapper: ObjectMapper): ObjectMapper {
-    log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
-    return mapper.copy().apply {
-      disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-      // 确保KotlinModule只注册一次，避免重复注册
-      if (!registeredModuleIds.contains(KotlinModule::class.java.name)) {
-        registerModules(KotlinModule.Builder().build())
+  fun nonIgnoreObjectMapper(): JsonMapper {
+    log.debug("register non-ignore objectMapper")
+    // Create a base mapper to avoid circular dependency
+    val baseMapper = createBaseJsonMapperBuilder().build()
+
+    val builder = JsonMapper.builder()
+
+    // Preserve modules from the base mapper
+    baseMapper.registeredModules().forEach { module -> builder.addModule(module) }
+
+    builder.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+    builder.changeDefaultPropertyInclusion { incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL) }
+    builder.changeDefaultVisibility { vc -> vc.withVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY) }
+    // Use a safe annotation introspector, paired with the original introspector
+    val originalIntrospector = baseMapper.deserializationConfig().annotationIntrospector
+    builder.annotationIntrospector(IgnoreIntroPair(originalIntrospector, SafeIgnoreAnnotationIntrospector()))
+    val polymorphicTypeValidator = BasicPolymorphicTypeValidator.builder().allowIfBaseType(Any::class.java).build()
+    val defaultTypingBuilder =
+      object : DefaultTypeResolverBuilder(polymorphicTypeValidator, DefaultTyping.NON_FINAL_AND_ENUMS, JsonTypeInfo.As.PROPERTY) {
+        override fun useForType(t: JavaType): Boolean {
+          if (isJacksonNaturalType(t)) {
+            return false
+          }
+          if (super.useForType(t)) {
+            return true
+          }
+          return !t.isPrimitive
+        }
       }
-      setSerializationInclusion(JsonInclude.Include.NON_NULL)
-      setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-      activateDefaultTyping(polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.PROPERTY)
-      // 使用安全的注解内省器，与原有的内省器配对
-      val originalIntrospector = deserializationConfig.annotationIntrospector
-      setAnnotationIntrospector(IgnoreIntroPair(originalIntrospector, SafeIgnoreAnnotationIntrospector()))
+    builder.setDefaultTyping(defaultTypingBuilder)
+    return builder.build()
+  }
+
+  private fun isJacksonNaturalType(javaType: JavaType): Boolean {
+    val rawClass = javaType.rawClass
+    if (rawClass.isPrimitive) {
+      return true
     }
+    return rawClass == String::class.java ||
+      CharSequence::class.java.isAssignableFrom(rawClass) ||
+      rawClass == java.lang.Boolean::class.java ||
+      rawClass == Character::class.java
   }
 }

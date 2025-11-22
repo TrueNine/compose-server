@@ -27,26 +27,26 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * LibCodeService 测试面板
+ * LibCodeService test panel.
  *
- * 提供图形界面来测试 LibCodeService 的各种功能，包括：
- * - 源码提取测试
- * - 反编译功能测试
- * - 错误处理测试
- * - 性能测试
+ * Provides a graphical interface to exercise various features of LibCodeService, including:
+ * - Source extraction tests
+ * - Decompilation tests
+ * - Error handling tests
+ * - Performance tests
  */
 class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(true, true) {
 
-  // UI 组件
+  // UI components
   private val classNameField = JBTextField(30)
   private val memberNameField = JBTextField(30)
-  private val testButton = JButton("测试 LibCodeService")
-  private val clearButton = JButton("清空结果")
+  private val testButton = JButton("Test LibCodeService")
+  private val clearButton = JButton("Clear results")
   private val resultArea = JTextArea()
-  private val enableLoggingCheckBox = JCheckBox("启用详细日志", true)
-  private val statusLabel = JBLabel("就绪")
+  private val enableLoggingCheckBox = JCheckBox("Enable verbose logging", true)
+  private val statusLabel = JBLabel("Ready")
 
-  // 协程作用域
+  // Coroutine scope
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
   init {
@@ -55,64 +55,64 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     initializeDefaultValues()
   }
 
-  /** 设置UI界面 */
+  /** Sets up the UI layout. */
   private fun setupUI() {
     val mainPanel = JPanel(BorderLayout())
 
-    // 创建输入面板
+    // Create input panel
     val inputPanel = createInputPanel()
     mainPanel.add(inputPanel, BorderLayout.NORTH)
 
-    // 创建结果面板
+    // Create result panel
     val resultPanel = createResultPanel()
     mainPanel.add(resultPanel, BorderLayout.CENTER)
 
-    // 创建状态面板
+    // Create status panel
     val statusPanel = createStatusPanel()
     mainPanel.add(statusPanel, BorderLayout.SOUTH)
 
     setContent(mainPanel)
   }
 
-  /** 创建输入参数面板 */
+  /** Creates the input parameter panel. */
   private fun createInputPanel(): JPanel {
     val panel = JPanel(GridBagLayout())
-    panel.border = TitledBorder("测试参数")
+    panel.border = TitledBorder("Test parameters")
 
     val gbc = GridBagConstraints()
     gbc.insets = Insets(5, 5, 5, 5)
     gbc.anchor = GridBagConstraints.WEST
 
-    // 完全限定类名
+    // Fully qualified class name
     gbc.gridx = 0
     gbc.gridy = 0
     gbc.fill = GridBagConstraints.NONE
     gbc.weightx = 0.0
-    panel.add(JLabel("完全限定类名:"), gbc)
+    panel.add(JLabel("Fully qualified class name:"), gbc)
     gbc.gridx = 1
     gbc.fill = GridBagConstraints.HORIZONTAL
     gbc.weightx = 1.0
     panel.add(classNameField, gbc)
 
-    // 成员名（可选）
+    // Member name (optional)
     gbc.gridx = 0
     gbc.gridy = 1
     gbc.fill = GridBagConstraints.NONE
     gbc.weightx = 0.0
-    panel.add(JLabel("成员名（可选）:"), gbc)
+    panel.add(JLabel("Member name (optional):"), gbc)
     gbc.gridx = 1
     gbc.fill = GridBagConstraints.HORIZONTAL
     gbc.weightx = 1.0
     panel.add(memberNameField, gbc)
 
-    // 选项
+    // Options
     gbc.gridx = 0
     gbc.gridy = 2
     gbc.gridwidth = 2
     gbc.fill = GridBagConstraints.NONE
     panel.add(enableLoggingCheckBox, gbc)
 
-    // 按钮面板
+    // Button panel
     val buttonPanel = JPanel()
     buttonPanel.add(testButton)
     buttonPanel.add(clearButton)
@@ -125,15 +125,15 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     return panel
   }
 
-  /** 创建结果显示面板 */
+  /** Creates the result display panel. */
   private fun createResultPanel(): JPanel {
     val panel = JPanel(BorderLayout())
-    panel.border = TitledBorder("测试结果")
+    panel.border = TitledBorder("Test result")
 
     resultArea.apply {
       isEditable = false
       font = Font(Font.MONOSPACED, Font.PLAIN, 12)
-      text = "点击 '测试 LibCodeService' 按钮开始测试..."
+      text = "Click 'Test LibCodeService' to start a test..."
     }
 
     val scrollPane = JBScrollPane(resultArea)
@@ -142,7 +142,7 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     return panel
   }
 
-  /** 创建状态面板 */
+  /** Creates the status panel. */
   private fun createStatusPanel(): JPanel {
     val panel = JPanel(BorderLayout())
     statusLabel.font = statusLabel.font.deriveFont(Font.ITALIC)
@@ -150,70 +150,70 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     return panel
   }
 
-  /** 设置事件处理器 */
+  /** Sets up event handlers. */
   private fun setupEventHandlers() {
     testButton.addActionListener { performLibCodeTest() }
 
     clearButton.addActionListener { clearResults() }
   }
 
-  /** 初始化默认值 */
+  /** Initializes default values. */
   private fun initializeDefaultValues() {
     classNameField.text = "java.util.ArrayList"
     memberNameField.text = ""
   }
 
-  /** 执行 LibCodeService 测试 */
+  /** Runs a LibCodeService test. */
   private fun performLibCodeTest() {
     val className = classNameField.text.trim()
     val memberName = memberNameField.text.trim().takeIf { it.isNotEmpty() }
 
-    // 参数验证
+    // Parameter validation
     if (className.isEmpty()) {
-      updateResult("错误: 类名不能为空")
+      updateResult("Error: class name must not be empty")
       return
     }
 
-    // 禁用按钮，显示进度
+    // Disable button and show progress
     testButton.isEnabled = false
-    updateStatus("正在测试...")
-    updateResult("开始测试 LibCodeService...\n")
+    updateStatus("Running test...")
+    updateResult("Starting LibCodeService test...\n")
 
     coroutineScope.launch {
       try {
         val startTime = System.currentTimeMillis()
 
-        // 记录测试开始
+        // Log test start
         if (enableLoggingCheckBox.isSelected) {
-          Logger.info("开始 LibCodeService 测试 - 类: $className", "LibCodeTestPanel")
+          Logger.info("Starting LibCodeService test - class: $className", "LibCodeTestPanel")
         }
 
-        // 获取服务实例
+        // Get service instance
         val libCodeService = project.service<LibCodeService>()
 
-        // 执行测试
+        // Execute test
         val result = withContext(Dispatchers.IO) { libCodeService.getLibraryCode(project, className, memberName) }
 
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
 
-        // 显示结果
+        // Display result
         withContext(Dispatchers.Main) {
           displayTestResult(result, duration, className, memberName)
-          updateStatus("测试完成")
+          updateStatus("Test completed")
         }
 
         if (enableLoggingCheckBox.isSelected) {
-          Logger.info("LibCodeService 测试完成 - 耗时: ${duration}ms", "LibCodeTestPanel")
+          Logger.info("LibCodeService test finished - duration: ${duration}ms", "LibCodeTestPanel")
         }
       } catch (e: Exception) {
         withContext(Dispatchers.Main) {
           displayError(e)
-          updateStatus("测试失败")
+          updateStatus("Test failed")
         }
 
         if (enableLoggingCheckBox.isSelected) {
-          Logger.error("LibCodeService 测试失败", "LibCodeTestPanel", e)
+          Logger.error("LibCodeService test failed", "LibCodeTestPanel", e)
         }
       } finally {
         withContext(Dispatchers.Main) { testButton.isEnabled = true }
@@ -221,28 +221,28 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     }
   }
 
-  /** 显示测试结果 */
+  /** Displays the test result. */
   private fun displayTestResult(result: LibCodeResult, duration: Long, className: String, memberName: String?) {
     val resultText = buildString {
-      appendLine("=== LibCodeService 测试结果 ===")
-      appendLine("测试时间: ${java.time.LocalDateTime.now()}")
-      appendLine("执行耗时: ${duration}ms")
+      appendLine("=== LibCodeService test result ===")
+      appendLine("Test time: ${java.time.LocalDateTime.now()}")
+      appendLine("Duration: ${duration}ms")
       appendLine()
 
-      appendLine("输入参数:")
-      appendLine("  类名: $className")
-      appendLine("  成员名: ${memberName ?: "无"}")
+      appendLine("Input parameters:")
+      appendLine("  Class name: $className")
+      appendLine("  Member name: ${memberName ?: "none"}")
       appendLine()
 
-      appendLine("结果信息:")
-      appendLine("  语言: ${result.language}")
-      appendLine("  是否反编译: ${if (result.isDecompiled) "是" else "否"}")
-      appendLine("  源码类型: ${result.metadata.sourceType}")
-      appendLine("  库名: ${result.metadata.libraryName}")
-      appendLine("  版本: ${result.metadata.version ?: "未知"}")
+      appendLine("Result:")
+      appendLine("  Language: ${result.language}")
+      appendLine("  Decompiled: ${if (result.isDecompiled) "yes" else "no"}")
+      appendLine("  Source type: ${result.metadata.sourceType}")
+      appendLine("  Library: ${result.metadata.libraryName}")
+      appendLine("  Version: ${result.metadata.version ?: "unknown"}")
       appendLine()
 
-      appendLine("源码内容:")
+      appendLine("Source code:")
       appendLine("${"=".repeat(50)}")
       appendLine(result.sourceCode)
       appendLine("${"=".repeat(50)}")
@@ -252,14 +252,14 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     updateResult(resultText)
   }
 
-  /** 显示错误信息 */
+  /** Displays an error. */
   private fun displayError(error: Throwable) {
     val errorText = buildString {
-      appendLine("=== 测试错误 ===")
-      appendLine("错误类型: ${error.javaClass.simpleName}")
-      appendLine("错误消息: ${error.message}")
+      appendLine("=== Test error ===")
+      appendLine("Error type: ${error.javaClass.simpleName}")
+      appendLine("Error message: ${error.message}")
       appendLine()
-      appendLine("堆栈跟踪:")
+      appendLine("Stack trace:")
       error.stackTrace.take(10).forEach { element -> appendLine("  at $element") }
       appendLine()
     }
@@ -267,7 +267,7 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     updateResult(errorText)
   }
 
-  /** 更新结果显示 */
+  /** Updates the result display. */
   private fun updateResult(text: String) {
     SwingUtilities.invokeLater {
       resultArea.text = text
@@ -275,14 +275,14 @@ class LibCodeTestPanel(private val project: Project) : SimpleToolWindowPanel(tru
     }
   }
 
-  /** 更新状态显示 */
+  /** Updates the status display. */
   private fun updateStatus(status: String) {
     SwingUtilities.invokeLater { statusLabel.text = status }
   }
 
-  /** 清空结果 */
+  /** Clears the result area. */
   private fun clearResults() {
-    resultArea.text = "结果已清空，点击 '测试 LibCodeService' 按钮开始新的测试..."
-    updateStatus("就绪")
+    resultArea.text = "Result cleared. Click 'Test LibCodeService' to start a new test..."
+    updateStatus("Ready")
   }
 }

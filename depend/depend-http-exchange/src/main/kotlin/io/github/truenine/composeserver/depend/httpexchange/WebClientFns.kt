@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.httpexchange
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.IAnyEnum
 import io.github.truenine.composeserver.consts.IHeaders
 import io.github.truenine.composeserver.depend.httpexchange.encoder.AnyEnumEncoder
@@ -9,8 +8,8 @@ import java.time.Duration
 import java.time.temporal.ChronoUnit
 import org.springframework.core.MethodParameter
 import org.springframework.http.codec.EncoderHttpMessageWriter
-import org.springframework.http.codec.json.Jackson2JsonDecoder
-import org.springframework.http.codec.json.Jackson2JsonEncoder
+import org.springframework.http.codec.json.JacksonJsonDecoder
+import org.springframework.http.codec.json.JacksonJsonEncoder
 import org.springframework.util.MimeType
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.reactive.function.client.WebClient
@@ -18,19 +17,21 @@ import org.springframework.web.reactive.function.client.support.WebClientAdapter
 import org.springframework.web.service.invoker.HttpRequestValues
 import org.springframework.web.service.invoker.HttpServiceArgumentResolver
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.json.JsonMapper
 
 /**
- * # 自定义的json编解码器
- * 使用你自定义的jackson ObjectMapper创建
+ * # Custom json encoder/decoder
+ * Create with your custom jackson ObjectMapper
  *
- * @param objectMapper mapper
+ * @param jsonMapper mapper
  * @return WebClient
  * @see [WebClient]
  * @see [ObjectMapper]
  * @see [org.springframework.web.service.annotation.HttpExchange]
  */
 inline fun <reified T : Any> jsonWebClientRegister(
-  objectMapper: ObjectMapper,
+  jsonMapper: JsonMapper,
   timeout: Duration = Duration.of(10, ChronoUnit.SECONDS),
   builder: (client: WebClient.Builder, factory: HttpServiceProxyFactory.Builder) -> Pair<WebClient.Builder, HttpServiceProxyFactory.Builder>,
 ): T {
@@ -47,8 +48,8 @@ inline fun <reified T : Any> jsonWebClientRegister(
     it.defaultCodecs().enableLoggingRequestDetails(true)
     it.writers.add(0, EncoderHttpMessageWriter(AnyEnumEncoder()))
 
-    it.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, *jsonHandleMediaTypes))
-    it.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, *jsonHandleMediaTypes))
+    it.defaultCodecs().jacksonJsonDecoder(JacksonJsonDecoder(jsonMapper, *jsonHandleMediaTypes))
+    it.defaultCodecs().jacksonJsonEncoder(JacksonJsonEncoder(jsonMapper, *jsonHandleMediaTypes))
   }
 
   clientBuilder.defaultHeader(IHeaders.ACCEPT, MediaTypes.JSON.value, MediaTypes.TEXT.value)
@@ -70,7 +71,7 @@ class ArgsResolver : HttpServiceArgumentResolver {
         parameter.getParameterAnnotation(RequestParam::class.java)?.name
           ?: parameter.getParameterAnnotation(RequestParam::class.java)?.value
           ?: parameter.parameterName
-          ?: throw IllegalArgumentException("参数解析异常")
+          ?: throw IllegalArgumentException("Parameter parsing exception")
       requestValues.addRequestParameter(name, argument.value.toString())
       return true
     }

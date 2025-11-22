@@ -4,21 +4,21 @@ import io.github.truenine.composeserver.RefId
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
- * security校验所需的用户身份
+ * User identity information required for security checks.
  *
- * @param deviceId 设备ID
- * @param currentIpAddr 当前请求的IP地址
- * @param account 账号
- * @param encryptedPassword 加密后的密码
- * @param loginIpAddr 登录IP地址
- * @param loginPlatform 登录平台
- * @param userId 用户ID
- * @param nonLocked 是否锁定
- * @param nonExpired 是否过期
- * @param enabled 是否启用
- * @param roles 角色列表
- * @param permissions 权限列表
- * @param depts 部门列表
+ * @param deviceId Device identifier
+ * @param currentIpAddr Current request IP address
+ * @param account Account name
+ * @param encryptedPassword Encrypted password
+ * @param loginIpAddr Login IP address
+ * @param loginPlatform Login platform
+ * @param userId User identifier
+ * @param nonLocked Whether the account is not locked
+ * @param nonExpired Whether the account is not expired
+ * @param enabled Whether the account is enabled
+ * @param roles Role list
+ * @param permissions Permission list
+ * @param depts Department list
  * @author TrueNine
  * @since 2022-12-10
  */
@@ -37,7 +37,7 @@ data class AuthRequestInfo(
   val permissions: List<String> = CopyOnWriteArrayList(),
   val depts: List<String> = CopyOnWriteArrayList(),
 ) : RequestInfo() {
-  /** ## 当前是否已经完全登录 */
+  /** ## Whether the user is fully logged in */
   val isLogin
     get() = userId != null && enabled && nonLocked && nonExpired && account != null
 }

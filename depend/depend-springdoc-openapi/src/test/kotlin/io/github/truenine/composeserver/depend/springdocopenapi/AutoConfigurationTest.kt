@@ -53,7 +53,7 @@ class AutoConfigurationTest {
   fun `should have all required beans in application context`() {
     val beanNames = applicationContext.beanDefinitionNames.toList()
 
-    // 检查关键 Bean 是否存在
+    // Check if key beans exist
     assertTrue(beanNames.any { it.contains("autoConfigEntrance") || it.contains("AutoConfigEntrance") }, "AutoConfigEntrance bean should exist")
     assertTrue(
       beanNames.any { it.contains("springdocOpenApiProperties") || it.contains("SpringdocOpenApiProperties") },
@@ -70,7 +70,7 @@ class AutoConfigurationTest {
     assertNotNull(openApiDocConfig, "OpenApiDocConfig should be available")
     assertNotNull(properties, "SpringdocOpenApiProperties should be available")
 
-    // 验证配置是否正确应用
+    // Verify that the configuration is applied correctly
     val groupedOpenApi = applicationContext.getBean(GroupedOpenApi::class.java)
     val customOpenApi = applicationContext.getBean(OpenAPI::class.java)
 
@@ -96,7 +96,7 @@ class ConditionalConfigurationTest {
 
   @Test
   fun `should configure correctly for web application`() {
-    // 验证 @ConditionalOnWebApplication 注解的效果
+    // Verify the effect of the @ConditionalOnWebApplication annotation
     val groupedOpenApi = applicationContext.getBean(GroupedOpenApi::class.java)
     assertNotNull(groupedOpenApi, "GroupedOpenApi should be created in web application context")
   }

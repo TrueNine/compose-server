@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod
 /**
  * ## HTTP Method HEAD
  *
- * 方法常用于检索资源的元数据，不响应 Body
- * - 应返回空数据，即使有数据也应当抛弃
- * - 应在请求头中体现，采取尽量少的资源索取策略，不应使用与 HTTP 无关的响应头
- * - see also [RFC HTTP protocol Method HEAD](https://www.rfc-editor.org/rfc/rfc7231#section-4.3.2)
- * - see also [MDN HTTP HEAD Method](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/HEAD)
+ * This method is often used to retrieve metadata for a resource without returning the response body.
+ * - Should return empty data; any data present should be discarded.
+ * - Should be reflected in the request headers, adopting a minimal resource retrieval strategy. Response headers unrelated to HTTP should not be used.
+ * - See also [RFC HTTP protocol Method HEAD](https://www.rfc-editor.org/rfc/rfc7231#section-4.3.2)
+ * - See also [MDN HTTP HEAD Method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD)
  *
  * @see org.springframework.web.bind.annotation.GetMapping
  * @author TrueNine

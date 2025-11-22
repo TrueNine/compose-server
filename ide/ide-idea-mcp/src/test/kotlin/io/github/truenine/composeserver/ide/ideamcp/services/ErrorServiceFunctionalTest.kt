@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-/** 功能验证测试 - 验证重构后的错误捕获功能是否正常工作 */
+/** Functional tests verifying refactored error-capture behavior. */
 class ErrorServiceFunctionalTest : BasePlatformTestCase() {
 
   private lateinit var errorService: ErrorService
@@ -17,67 +17,67 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
   }
 
   fun testErrorServiceBasicFunctionality() {
-    // 创建一个简单的测试文件
+    // Create a simple test file
     val testFile =
       myFixture.configureByText(
         "TestClass.kt",
         """
-          package test
-          
-          class TestClass {
-            fun sayHello(): String {
-              return "Hello, World!"
-            }
+        package test
+
+        class TestClass {
+          fun sayHello(): String {
+            return "Hello, World!"
           }
+        }
         """
           .trimIndent(),
       )
 
-    // 测试 analyzeFile 方法
+    // Test analyzeFile method
     val errors = errorService.analyzeFile(project, testFile.virtualFile)
     assertNotNull(errors, "analyzeFile should return a list")
 
-    // 测试 collectErrors 方法
+    // Test collectErrors method
     val collectedErrors = errorService.collectErrors(project, testFile.virtualFile)
     assertNotNull(collectedErrors, "collectErrors should return a list")
 
-    // 测试 getCapturedSyntaxErrors 方法
+    // Test getCapturedSyntaxErrors method
     val syntaxErrors = errorService.getCapturedSyntaxErrors(project, testFile.virtualFile)
     assertNotNull(syntaxErrors, "getCapturedSyntaxErrors should return a list")
 
-    println("✓ All basic ErrorService methods work without throwing exceptions")
+    println("[PASS] All basic ErrorService methods work without throwing exceptions")
   }
 
   fun testErrorCaptureFilterManager() {
-    // 测试单例模式
+    // Test singleton behavior
     val instance1 = ErrorCaptureFilterManager.getInstance()
     val instance2 = ErrorCaptureFilterManager.getInstance()
 
     assertEquals(instance1, instance2, "Should return the same instance")
 
-    // 测试设置新实例
+    // Test setting a new instance
     val newFilter = ErrorCaptureFilter()
     ErrorCaptureFilterManager.setInstance(newFilter)
     val instance3 = ErrorCaptureFilterManager.getInstance()
 
     assertEquals(newFilter, instance3, "Should return the set instance")
 
-    println("✓ ErrorCaptureFilterManager singleton functionality works")
+    println("[PASS] ErrorCaptureFilterManager singleton functionality works")
   }
 
   fun testErrorCaptureFilterBasicOperations() {
     val filter = ErrorCaptureFilter()
 
-    // 测试清理操作
+    // Test clear operations
     filter.clearAllCapturedErrors()
     val allErrors = filter.getAllCapturedErrors()
     assertTrue(allErrors.isEmpty(), "Should be empty after clearAll")
 
-    // 测试获取不存在文件的错误
+    // Test retrieving errors for a non-existent file
     val errors = filter.getCapturedErrors("/non/existent/file")
     assertTrue(errors.isEmpty(), "Should return empty list for non-existent file")
 
-    println("✓ ErrorCaptureFilter basic operations work")
+    println("[PASS] ErrorCaptureFilter basic operations work")
   }
 
   fun testCapturedErrorInfoDataClass() {
@@ -98,11 +98,11 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
     assertEquals("test", errorInfo.elementText)
     assertTrue(errorInfo.timestamp > 0)
 
-    println("✓ CapturedErrorInfo data class works correctly")
+    println("[PASS] CapturedErrorInfo data class works correctly")
   }
 
   fun testErrorSeverityEnumValues() {
-    // 验证错误严重程度枚举值
+    // Verify error severity enum values
     val severities = ErrorSeverity.values()
 
     assertTrue(severities.contains(ErrorSeverity.ERROR))
@@ -110,25 +110,25 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
     assertTrue(severities.contains(ErrorSeverity.WEAK_WARNING))
     assertTrue(severities.contains(ErrorSeverity.INFO))
 
-    println("✓ ErrorSeverity enum contains all expected values")
+    println("[PASS] ErrorSeverity enum contains all expected values")
   }
 
   fun testErrorServiceWithDirectoryInput() {
-    // 创建临时目录
+    // Create temporary directory
     val tempDir = myFixture.tempDirFixture.findOrCreateDir("testDir")
 
-    // 测试目录输入
+    // Test directory input
     val errors = errorService.analyzeFile(project, tempDir)
     assertTrue(errors.isEmpty(), "Directory should return empty list")
 
     val collectedErrors = errorService.collectErrors(project, tempDir)
     assertNotNull(collectedErrors, "collectErrors should handle directories")
 
-    println("✓ ErrorService handles directory input correctly")
+    println("[PASS] ErrorService handles directory input correctly")
   }
 
   fun testIntegrationWithApplicationManager() {
-    // 测试在应用程序管理器环境中的工作
+    // Test behavior within ApplicationManager context
     val testFile = myFixture.configureByText("IntegrationTest.kt", "class Test")
 
     com.intellij.openapi.application.ApplicationManager.getApplication().invokeAndWait {
@@ -139,6 +139,6 @@ class ErrorServiceFunctionalTest : BasePlatformTestCase() {
       assertNotNull(collected, "collectErrors should work in ApplicationManager context")
     }
 
-    println("✓ ErrorService works correctly in ApplicationManager context")
+    println("[PASS] ErrorService works correctly in ApplicationManager context")
   }
 }

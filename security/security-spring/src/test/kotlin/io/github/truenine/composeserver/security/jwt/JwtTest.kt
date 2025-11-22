@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.security.jwt
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.security.crypto.CryptographicKeyManager
 import io.github.truenine.composeserver.security.jwt.consts.IssuerParam
 import io.github.truenine.composeserver.security.jwt.consts.VerifierParam
 import org.junit.jupiter.api.Test
+import tools.jackson.databind.ObjectMapper
 
 class JwtTest {
 
@@ -28,7 +28,7 @@ class JwtTest {
       JwtVerifier.createVerifier().issuer("t").id("1").contentDecryptKey(eccPair.privateKey).signatureVerifyKey(rsaPair.publicKey).serializer(mapper).build()
 
     val inputs = IssuerParam<Any, Any>(signatureKey = rsaPair.privateKey)
-    inputs.encryptedDataObj = "我日了狗"
+    inputs.encryptedDataObj = "sample-encrypted-data"
     inputs.subjectObj = mutableListOf("123", "444")
     inputs.encryptedDataObj = mutableListOf("123", "444")
 

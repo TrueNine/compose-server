@@ -11,9 +11,9 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * 存储过程存在性和调用测试
+ * Stored procedure existence and invocation tests.
  *
- * 测试所有存储过程是否正确定义并可调用
+ * Verifies that all stored procedures are defined correctly and can be invoked.
  */
 @SpringBootTest
 @Transactional
@@ -25,7 +25,7 @@ class FunctionExistenceAndCallTest : IDatabaseMysqlContainer {
   inner class ProcedureExistenceTests {
 
     @Test
-    fun `所有存储过程都应该存在`() {
+    fun `all stored procedures should exist`() {
       val expectedProcedures =
         listOf(
           "ct_idx",
@@ -41,16 +41,16 @@ class FunctionExistenceAndCallTest : IDatabaseMysqlContainer {
 
       expectedProcedures.forEach { procedureName ->
         val exists = procedureExists(procedureName)
-        assertTrue(exists, "存储过程 $procedureName 应该存在")
+        assertTrue(exists, "Stored procedure $procedureName should exist")
       }
     }
 
     @Test
-    fun `所有存储过程都应该可以正常调用`() {
-      // 创建测试表
+    fun `all stored procedures should be callable successfully`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS test_call_table(name VARCHAR(255))")
 
-      // 测试所有存储过程调用
+      // Test calling all stored procedures
       try {
         jdbcTemplate.execute("CALL ct_idx('test_call_table', 'name')")
         jdbcTemplate.execute("CALL add_base_struct('test_call_table')")
@@ -62,24 +62,24 @@ class FunctionExistenceAndCallTest : IDatabaseMysqlContainer {
         jdbcTemplate.execute("CALL rm_tree_struct('test_call_table')")
         jdbcTemplate.execute("CALL rm_base_struct('test_call_table')")
 
-        // 如果没有抛出异常，说明所有存储过程都可以正常调用
-        assertTrue(true, "所有存储过程都应该可以正常调用")
+        // If no exception is thrown, all stored procedures can be called successfully
+        assertTrue(true, "All stored procedures should be callable successfully")
       } catch (e: Exception) {
-        throw AssertionError("存储过程调用失败: ${e.message}", e)
+        throw AssertionError("Stored procedure invocation failed: ${e.message}", e)
       } finally {
-        // 清理测试表
+        // Clean up test table
         jdbcTemplate.execute("DROP TABLE IF EXISTS test_call_table")
       }
     }
 
     @Test
-    fun `验证存储过程参数类型`() {
-      // 创建测试表
+    fun `verify stored procedure parameter types`() {
+      // Create test table
       jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS test_param_table(name VARCHAR(255))")
 
-      // 测试参数类型正确性（这些调用不应该抛出类型相关的异常）
+      // Verify argument types (these calls should not throw type-related exceptions)
       try {
-        // 测试字符串参数
+        // Test string parameters
         jdbcTemplate.execute("CALL ct_idx('test_param_table', 'name')")
         jdbcTemplate.execute("CALL add_base_struct('test_param_table')")
         jdbcTemplate.execute("CALL rm_base_struct('test_param_table')")
@@ -90,17 +90,17 @@ class FunctionExistenceAndCallTest : IDatabaseMysqlContainer {
         jdbcTemplate.execute("CALL all_to_nullable('test_param_table')")
         jdbcTemplate.execute("CALL base_struct_to_jimmer_style('test_param_table')")
 
-        assertTrue(true, "所有存储过程参数类型都应该正确")
+        assertTrue(true, "All stored procedure parameter types should be correct")
       } catch (e: Exception) {
-        throw AssertionError("存储过程参数类型验证失败: ${e.message}", e)
+        throw AssertionError("Stored procedure parameter type validation failed: ${e.message}", e)
       } finally {
-        // 清理测试表
+        // Clean up test table
         jdbcTemplate.execute("DROP TABLE IF EXISTS test_param_table")
       }
     }
   }
 
-  // 辅助方法
+  // Helper methods
   private fun procedureExists(procedureName: String): Boolean {
     val count =
       jdbcTemplate.queryForObject(

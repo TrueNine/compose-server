@@ -11,199 +11,199 @@ import java.time.ZoneOffset
 import java.time.temporal.TemporalAdjusters
 
 /**
- * 毫秒时间戳转LocalDateTime
+ * Convert millisecond timestamp to LocalDateTime
  *
- * @param zoneId 时区
- * @return LocalDateTime对象
+ * @param zoneId Timezone
+ * @return LocalDateTime object
  */
 fun Long.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
   return DateTimeConverter.millisToLocalDateTime(this, zoneId)
 }
 
 /**
- * 毫秒时间戳转LocalDate
+ * Convert millisecond timestamp to LocalDate
  *
- * @param zoneId 时区
- * @return LocalDate对象
+ * @param zoneId Timezone
+ * @return LocalDate object
  */
 fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
   return DateTimeConverter.millisToLocalDate(this, zoneId)
 }
 
 /**
- * 毫秒时间戳转LocalTime
+ * Convert millisecond timestamp to LocalTime
  *
- * @param zoneId 时区
- * @return LocalTime对象
+ * @param zoneId Timezone
+ * @return LocalTime object
  */
 fun Long.toLocalTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalTime {
   return DateTimeConverter.millisToLocalTime(this, zoneId)
 }
 
 /**
- * 毫秒时间戳转Instant
+ * Convert millisecond timestamp to Instant
  *
- * @return Instant对象
+ * @return Instant object
  */
 fun Long.toInstant(): Instant {
   return Instant.ofEpochMilli(this)
 }
 
 /**
- * LocalTime转毫秒时间戳
+ * Convert LocalTime to millisecond timestamp.
  *
- * @param zoneId 时区
- * @return 毫秒时间戳
+ * @param zoneId Timezone
+ * @return Millisecond timestamp
  */
 fun LocalTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
   return DateTimeConverter.localTimeToInstant(this, zoneId).toEpochMilli()
 }
 
 /**
- * LocalDate转毫秒时间戳
+ * Convert LocalDate to millisecond timestamp.
  *
- * @param zoneId 时区
- * @return 毫秒时间戳
+ * @param zoneId Timezone
+ * @return Millisecond timestamp
  */
 fun LocalDate.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
   return DateTimeConverter.localDateToInstant(this, zoneId).toEpochMilli()
 }
 
 /**
- * LocalDateTime转毫秒时间戳
+ * Convert LocalDateTime to millisecond timestamp.
  *
- * @param zoneId 时区
- * @return 毫秒时间戳
+ * @param zoneId Timezone
+ * @return Millisecond timestamp
  */
 fun LocalDateTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
   return DateTimeConverter.localDatetimeToMillis(this, zoneId)
 }
 
-/** # ISO8601 时间戳毫秒标准 */
+/** # ISO8601 millisecond timestamp (UTC) */
 val LocalDateTime.iso8601LongUtc: Long
   get() = toInstant(ZoneOffset.UTC).toEpochMilli()
 
-/** # ISO8601 时间戳 秒 标准 */
+/** # ISO8601 second-level timestamp (UTC) */
 val LocalDateTime.iso8601LongUtcSecond: Long
   get() = this.toEpochSecond(ZoneOffset.UTC)
 
 /**
- * 计算两个LocalDateTime之间的时间差
+ * Calculate duration between two LocalDateTime values.
  *
- * @param other 被减数
- * @return 时间差Duration对象
+ * @param other Subtrahend LocalDateTime
+ * @return Duration between the two values
  */
 operator fun LocalDateTime.minus(other: LocalDateTime): Duration = Duration.between(other, this)
 
 /**
- * 计算两个LocalDate之间的日期差
+ * Calculate period between two LocalDate values.
  *
- * @param other 被减数
- * @return 日期差Period对象
+ * @param other Subtrahend LocalDate
+ * @return Period between the two values
  */
 operator fun LocalDate.minus(other: LocalDate): Period = Period.between(other, this)
 
 /**
- * 获取当前月份第一天的LocalDateTime
+ * Get LocalDateTime of the first day of the current month.
  *
- * @return 当前月份第一天的LocalDateTime
+ * @return LocalDateTime representing the first day of current month
  */
 fun nowDateTimeFirstDayOfMonth(): LocalDateTime = LocalDateTime.now().firstDayOfMonth()
 
 /**
- * 获取指定LocalDateTime所在月份的第一天
+ * Get LocalDateTime of the first day of the month for the given LocalDateTime.
  *
- * @return 月份第一天的LocalDateTime
+ * @return LocalDateTime representing the first day of the month
  */
 fun LocalDateTime.firstDayOfMonth(): LocalDateTime = with(TemporalAdjusters.firstDayOfMonth())
 
 /**
- * 获取当前月份最后一天的LocalDateTime
+ * Get LocalDateTime of the last day of the current month.
  *
- * @return 当前月份最后一天的LocalDateTime
+ * @return LocalDateTime representing the last day of current month
  */
 fun nowDateTimeLastDayOfMonth(): LocalDateTime = LocalDateTime.now().lastDayOfMonth()
 
 /**
- * 获取指定LocalDateTime所在月份的最后一天
+ * Get LocalDateTime of the last day of the month for the given LocalDateTime.
  *
- * @return 月份最后一天的LocalDateTime
+ * @return LocalDateTime representing the last day of the month
  */
 fun LocalDateTime.lastDayOfMonth(): LocalDateTime = with(TemporalAdjusters.lastDayOfMonth())
 
 /**
- * 获取当前月份第一天的LocalDate
+ * Get LocalDate of the first day of the current month.
  *
- * @return 当前月份第一天的LocalDate
+ * @return LocalDate representing the first day of current month
  */
 fun nowDateFirstDayOfMonth(): LocalDate = LocalDate.now().firstDayOfMonth()
 
 /**
- * 获取指定LocalDate所在月份的第一天
+ * Get LocalDate of the first day of the month for the given LocalDate.
  *
- * @return 月份第一天的LocalDate
+ * @return LocalDate representing the first day of the month
  */
 fun LocalDate.firstDayOfMonth(): LocalDate = with(TemporalAdjusters.firstDayOfMonth())
 
 /**
- * 获取指定LocalDate所在月份的最后一天
+ * Get LocalDate of the last day of the month for the given LocalDate.
  *
- * @return 月份最后一天的LocalDate
+ * @return LocalDate representing the last day of the month
  */
 fun LocalDate.lastDayOfMonth(): LocalDate = with(TemporalAdjusters.lastDayOfMonth())
 
 /**
- * Instant转LocalDateTime
+ * Convert Instant to LocalDateTime.
  *
- * @param zoneId 时区
- * @return LocalDateTime对象
+ * @param zoneId Timezone
+ * @return LocalDateTime instance
  */
 fun Instant.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
   return DateTimeConverter.instantToLocalDateTime(this, zoneId)
 }
 
 /**
- * Instant转LocalDate
+ * Convert Instant to LocalDate.
  *
- * @param zoneId 时区
- * @return LocalDate对象
+ * @param zoneId Timezone
+ * @return LocalDate instance
  */
 fun Instant.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
   return DateTimeConverter.instantToLocalDate(this, zoneId)
 }
 
 /**
- * Instant转LocalTime
+ * Convert Instant to LocalTime.
  *
- * @param zoneId 时区
- * @return LocalTime对象
+ * @param zoneId Timezone
+ * @return LocalTime instance
  */
 fun Instant.toLocalTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalTime {
   return DateTimeConverter.instantToLocalTime(this, zoneId)
 }
 
 /**
- * Instant转毫秒时间戳
+ * Convert Instant to millisecond timestamp.
  *
- * @return 毫秒时间戳
+ * @return Millisecond timestamp
  */
 fun Instant.toMillis(): Long {
   return DateTimeConverter.instantToMillis(this)
 }
 
 /**
- * 获取当前时间的Instant对象
+ * Get current time as Instant.
  *
- * @return 当前时间的Instant
+ * @return Current Instant
  */
 fun now(): Instant {
   return Instant.now()
 }
 
 /**
- * 获取当前毫秒时间戳
+ * Get current millisecond timestamp.
  *
- * @return 当前时间的毫秒时间戳
+ * @return Current time in milliseconds
  */
 fun nowMillis(): Long {
   return System.currentTimeMillis()

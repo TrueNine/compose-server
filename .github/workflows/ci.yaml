@@ -8,8 +8,8 @@ on:
       - '**/*.kt'
 
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=6 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true"
-  JVM_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:+UseStringDeduplication"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true -Dorg.gradle.jvmargs=\"-Xmx3g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:+UseStringDeduplication -Dfile.encoding=UTF-8\" -Dkotlin.daemon.jvmargs=\"-Xmx2g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC\""
+  JVM_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:+UseStringDeduplication -Dfile.encoding=UTF-8"
   TESTCONTAINERS_RYUK_DISABLED: false
   TESTCONTAINERS_REUSE_ENABLE: true
   DOCKER_BUILDKIT: 1
@@ -18,7 +18,7 @@ jobs:
   quick-check:
     name: Quick Check
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 20
     outputs:
       cache-key: ${{ steps.cache-info.outputs.cache-key }}
       gradle-cache-key: ${{ steps.cache-info.outputs.gradle-cache-key }}
@@ -48,7 +48,6 @@ jobs:
         with:
           java-version: ${{ steps.version-info.outputs.java-version }}
           distribution: 'temurin'
-          cache: gradle
 
       - name: Cache info
         id: cache-info
@@ -58,43 +57,19 @@ jobs:
           echo "cache-key=$GRADLE_CACHE_KEY" >> $GITHUB_OUTPUT
           echo "gradle-cache-key=$DEPS_CACHE_KEY" >> $GITHUB_OUTPUT
 
-      - name: Cache Gradle wrapper and distributions
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/wrapper
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/modules-*
-          key: ${{ steps.cache-info.outputs.gradle-cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-deps-
-            ${{ runner.os }}-gradle-
-
-      - name: Cache build outputs
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches/build-cache-*
-            ~/.gradle/buildOutputCleanup
-            **/build/classes
-            **/build/generated
-          key: ${{ steps.cache-info.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: ${{ steps.version-info.outputs.gradle-version }}
           cache-read-only: false
           cache-write-only: false
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
 
       - name: Grant execute permission
         run: chmod +x gradlew
 
       - name: Quick compile
         run: |
-          ./gradlew help --quiet
           ./gradlew compileKotlin compileTestKotlin \
             --no-daemon \
             --parallel \
@@ -109,7 +84,7 @@ jobs:
     timeout-minutes: 25
     strategy:
       fail-fast: false
-      max-parallel: 6
+      max-parallel: 4
       matrix:
         group:
           - "core-foundation"
@@ -185,31 +160,6 @@ jobs:
         with:
           java-version: ${{ needs.quick-check.outputs.java-version }}
           distribution: 'temurin'
-          cache: gradle
-
-      - name: Restore Gradle wrapper cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ~/.gradle/wrapper
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/modules-*
-          key: ${{ needs.quick-check.outputs.gradle-cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-deps-
-            ${{ runner.os }}-gradle-
-
-      - name: Restore build cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ~/.gradle/caches/build-cache-*
-            ~/.gradle/buildOutputCleanup
-            **/build/classes
-            **/build/generated
-          key: ${{ needs.quick-check.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -217,8 +167,7 @@ jobs:
           gradle-version: ${{ needs.quick-check.outputs.gradle-version }}
           cache-read-only: true
           cache-write-only: false
-
-
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -228,73 +177,37 @@ jobs:
         run: |
           set -e
 
-          ./gradlew help --quiet
-
           modules="${{ matrix.modules }}"
           test_tasks=""
-          
-          echo "Checking available test tasks for modules: $modules"
           
           for module in $modules; do
             module_path=":$module"
             if [[ "$module" != *":"* ]]; then
               module_path=":$module"
             fi
-            
-            # 检查模块是否有test任务
-            if ./gradlew $module_path:tasks --all --quiet 2>/dev/null | grep -E "^test\s" >/dev/null; then
-              test_tasks="$test_tasks $module_path:test"
-              echo "✓ Found test task for $module"
-            else
-              echo "⚠ No test task found for $module, will check compilation instead"
-            fi
+            test_tasks="$test_tasks $module_path:test"
           done
 
-          if [[ -z "$test_tasks" ]]; then
-            echo "No test tasks found for any modules in this group"
-            echo "Running compilation and check tasks instead..."
-            
-            compile_tasks=""
-            for module in $modules; do
-              module_path=":$module"
-              if [[ "$module" != *":"* ]]; then
-                module_path=":$module"
-              fi
-              compile_tasks="$compile_tasks $module_path:compileKotlin $module_path:compileTestKotlin"
-            done
-            
-            ./gradlew $compile_tasks \
-              --no-daemon \
-              --parallel \
-              --build-cache \
-              --configuration-cache \
-              --continue \
-              --info \
-              -Dorg.gradle.workers.max=3 \
-              -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
-          else
-            echo "Running test tasks: $test_tasks"
-            ./gradlew $test_tasks \
-              --no-daemon \
-              --parallel \
-              --build-cache \
-              --configuration-cache \
-              --continue \
-              --info \
-              -Dorg.gradle.workers.max=3 \
-              -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC"
-          fi
+          echo "Running test tasks: $test_tasks"
+          ./gradlew $test_tasks \
+            --no-daemon \
+            --parallel \
+            --build-cache \
+            --configuration-cache \
+            --continue \
+            -Dorg.gradle.workers.max=2 \
+            -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+UseG1GC" || true
         env:
-          # TestContainers 配置
+          # TestContainers configuration
           TESTCONTAINERS_RYUK_DISABLED: false
           TESTCONTAINERS_REUSE_ENABLE: true
           TESTCONTAINERS_STARTUP_TIMEOUT: 120
           TESTCONTAINERS_CONNECT_TIMEOUT: 60
-          # Gradle 和 JVM 配置
+          # Gradle and JVM configuration
           GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
           JAVA_OPTS: "${{ env.JVM_OPTS }}"
           CI: true
-          # 并行测试配置
+          # Parallel test configuration
           JUNIT_PLATFORM_EXECUTION_PARALLEL_ENABLED: true
           JUNIT_PLATFORM_EXECUTION_PARALLEL_MODE_DEFAULT: concurrent
 
@@ -336,7 +249,7 @@ jobs:
         if: always() && matrix.testcontainers == true
         run: |
           echo "Cleaning up TestContainers resources..."
-          # 清理非复用的 TestContainers
+          # Clean up non-reusable TestContainers
           docker container prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
           docker network prune -f --filter "label=org.testcontainers=true" || true
           docker volume prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true

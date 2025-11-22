@@ -6,121 +6,121 @@ import java.time.LocalDateTime
 import org.springframework.context.ApplicationEvent
 
 /**
- * # 微信公众号Token事件基类
+ * Base event type for WeChat Official Account token lifecycle events.
  *
  * @author TrueNine
  * @since 2025-08-08
  */
 abstract class WxpaTokenEvent(
   source: Any,
-  /** 事件发生时间 */
+  /** Time when the event occurred. */
   val eventTime: LocalDateTime = LocalDateTime.now(),
-  /** 应用ID */
+  /** Application ID. */
   val appId: String,
 ) : ApplicationEvent(source)
 
 /**
- * # Token过期事件
+ * Token expiration event.
  *
- * 当检测到Token即将过期或已过期时发布此事件
+ * Published when a token is about to expire or has already expired.
  */
 class TokenExpiredEvent(
   source: Any,
   appId: String,
-  /** 过期的Token类型 */
+  /** Type of token that expired. */
   val tokenType: TokenType,
-  /** 当前Token（如果存在） */
+  /** Current token, if present. */
   val currentToken: WxpaToken? = null,
-  /** 当前Ticket（如果存在） */
+  /** Current ticket, if present. */
   val currentTicket: WxpaTicket? = null,
-  /** 过期原因 */
+  /** Reason for expiration. */
   val reason: String = "Token expired or missing",
 ) : WxpaTokenEvent(source, LocalDateTime.now(), appId)
 
 /**
- * # Token刷新完成事件
+ * Token refreshed event.
  *
- * 当Token刷新成功完成时发布此事件
+ * Published when token refresh completes successfully.
  */
 class TokenRefreshedEvent(
   source: Any,
   appId: String,
-  /** 刷新的Token类型 */
+  /** Type of token that was refreshed. */
   val tokenType: TokenType,
-  /** 新的Token（如果刷新了AccessToken） */
+  /** New token, when the access token was refreshed. */
   val newToken: WxpaToken? = null,
-  /** 新的Ticket（如果刷新了JsapiTicket） */
+  /** New ticket, when the JSAPI ticket was refreshed. */
   val newTicket: WxpaTicket? = null,
-  /** 刷新耗时（毫秒） */
+  /** Refresh duration in milliseconds. */
   val refreshDurationMs: Long = 0,
 ) : WxpaTokenEvent(source, LocalDateTime.now(), appId)
 
 /**
- * # Token刷新失败事件
+ * Token refresh failed event.
  *
- * 当Token刷新失败时发布此事件
+ * Published when token refresh fails.
  */
 class TokenRefreshFailedEvent(
   source: Any,
   appId: String,
-  /** 失败的Token类型 */
+  /** Type of token that failed to refresh. */
   val tokenType: TokenType,
-  /** 失败原因 */
+  /** Reason for failure. */
   val failureReason: String,
-  /** 异常信息 */
+  /** Exception that caused the failure. */
   val exception: Throwable? = null,
-  /** 重试次数 */
+  /** Number of retry attempts. */
   val retryCount: Int = 0,
 ) : WxpaTokenEvent(source, LocalDateTime.now(), appId)
 
 /**
- * # Token健康检查事件
+ * Token health check event.
  *
- * 定期发布的Token状态检查事件
+ * Periodically published to describe token status.
  */
 class TokenHealthCheckEvent(
   source: Any,
   appId: String,
-  /** Token状态信息 */
+  /** Token status information. */
   val tokenStatus: Map<String, Any>,
-  /** 检查结果 */
+  /** Resulting overall health status. */
   val healthStatus: HealthStatus,
 ) : WxpaTokenEvent(source, LocalDateTime.now(), appId)
 
 /**
- * # Token使用事件
+ * Token usage event.
  *
- * 当Token被使用时发布此事件，用于统计和监控
+ * Published whenever a token is used for API calls or operations.
  */
 class TokenUsedEvent(
   source: Any,
   appId: String,
-  /** 使用的Token类型 */
+  /** Type of token that was used. */
   val tokenType: TokenType,
-  /** 使用场景 */
+  /** Usage context or scenario. */
   val usageContext: String = "unknown",
 ) : WxpaTokenEvent(source, LocalDateTime.now(), appId)
 
-/** # Token类型枚举 */
+/** Token type enum. */
 enum class TokenType {
-  /** Access Token */
+  /** Access token. */
   ACCESS_TOKEN,
 
-  /** JSAPI Ticket */
+  /** JSAPI ticket. */
   JSAPI_TICKET,
 
-  /** 两者都包含 */
+  /** Both access token and JSAPI ticket. */
   BOTH,
 }
 
-/** # 健康状态枚举 */
+/** Health status enum. */
 enum class HealthStatus {
-  /** 健康 */
+  /** Healthy. */
   HEALTHY,
 
-  /** 警告（即将过期） */
+  /** Warning (about to expire). */
   WARNING,
 
-  /** 不健康（已过期或缺失） */
+  /** Unhealthy (expired or missing). */
   UNHEALTHY,
 }

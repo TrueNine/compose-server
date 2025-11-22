@@ -23,7 +23,7 @@ class RmPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
 
   @Test
   @Transactional
-  fun `rm_presort_tree_struct 应正确移除字段`() {
+  fun `rm_presort_tree_struct should remove presort tree columns correctly`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_presort_tree_struct('test_table')")
     jdbcTemplate.execute("select rm_presort_tree_struct('test_table')")
@@ -38,12 +38,12 @@ class RmPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val removed = listOf("rpi", "rln", "rrn")
-    assertTrue(removed.none { it in columns }, "presort tree 字段未被移除: " + (removed.filter { it in columns }))
+    assertTrue(removed.none { it in columns }, "Presort tree columns were not removed: " + (removed.filter { it in columns }))
   }
 
   @Test
   @Transactional
-  fun `rm_presort_tree_struct 幂等性及字段全覆盖测试`() {
+  fun `rm_presort_tree_struct idempotency and full column coverage test`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_presort_tree_struct('test_table')")
     jdbcTemplate.execute("select rm_presort_tree_struct('test_table')")
@@ -59,6 +59,6 @@ class RmPresortTreeStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val removed = listOf("rpi", "rln", "rrn")
-    assertTrue(removed.none { it in columns }, "rm_presort_tree_struct 幂等性或字段未被移除: " + (removed.filter { it in columns }))
+    assertTrue(removed.none { it in columns }, "rm_presort_tree_struct idempotency failed or columns were not removed: " + (removed.filter { it in columns }))
   }
 }

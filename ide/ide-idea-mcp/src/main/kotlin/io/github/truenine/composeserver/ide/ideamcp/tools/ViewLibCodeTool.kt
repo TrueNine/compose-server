@@ -9,57 +9,61 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.ide.mcp.Response
 import org.jetbrains.mcpserverplugin.AbstractMcpTool
 
-/** 库代码查看工具 提供通过 MCP 协议查看第三方库源代码或反编译代码的功能 */
+/**
+ * Library code view tool.
+ *
+ * Provides viewing of third-party library source code or decompiled code through the MCP protocol, together with metadata.
+ */
 class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.serializer()) {
   override val name: String = "view_lib_code"
   override val description: String = "View library source code or decompiled code with metadata information"
 
   override fun handle(project: Project, args: ViewLibCodeArgs): Response {
-    Logger.info("开始查看库代码 - 类: ${args.fullyQualifiedName}", "ViewLibCodeTool")
-    Logger.debug("查看参数 - 成员名: ${args.memberName}", "ViewLibCodeTool")
+    Logger.info("Start viewing library code - class: ${args.fullyQualifiedName}", "ViewLibCodeTool")
+    Logger.debug("View arguments - member name: ${args.memberName}", "ViewLibCodeTool")
 
     return try {
-      // 参数验证
+      // Validate arguments
       validateArgs(args, project)
 
-      // 获取库代码
+      // Fetch library code
       val libCodeResult = kotlinx.coroutines.runBlocking { getLibraryCode(args, project) }
 
-      Logger.info("库代码查看完成 - 类型: ${libCodeResult.sourceType}, 反编译: ${libCodeResult.isDecompiled}", "ViewLibCodeTool")
-      Logger.info("返回源码内容长度: ${libCodeResult.sourceCode.length} 字符", "ViewLibCodeTool")
+      Logger.info("Library code view completed - type: ${libCodeResult.sourceType}, decompiled: ${libCodeResult.isDecompiled}", "ViewLibCodeTool")
+      Logger.info("Returned source length: ${libCodeResult.sourceCode.length} characters", "ViewLibCodeTool")
 
       Response(Json.encodeToString(ViewLibCodeResult.serializer(), libCodeResult))
     } catch (e: Exception) {
-      Logger.error("库代码查看失败: ${args.fullyQualifiedName}", "ViewLibCodeTool", e)
+      Logger.error("Library code view failed: ${args.fullyQualifiedName}", "ViewLibCodeTool", e)
       val errorResponse = createErrorResponse(e, args.fullyQualifiedName)
       Response(Json.encodeToString(ViewLibCodeErrorResponse.serializer(), errorResponse))
     }
   }
 
-  /** 验证参数 */
+  /** Validate tool arguments. */
   private fun validateArgs(args: ViewLibCodeArgs, project: Project) {
-    // 验证完全限定类名不为空
+    // Verify fully-qualified class name is not blank
     if (args.fullyQualifiedName.isBlank()) {
-      throw IllegalArgumentException("完全限定类名不能为空")
+      throw IllegalArgumentException("Fully-qualified class name must not be blank")
     }
 
-    // 验证类名格式
+    // Verify class name format
     if (!isValidClassName(args.fullyQualifiedName)) {
-      throw IllegalArgumentException("无效的类名格式: ${args.fullyQualifiedName}")
+      throw IllegalArgumentException("Invalid class name format: ${args.fullyQualifiedName}")
     }
 
-    Logger.debug("参数验证通过", "ViewLibCodeTool")
+    Logger.debug("Argument validation passed", "ViewLibCodeTool")
   }
 
-  /** 验证类名格式 */
+  /** Validate class name format. */
   private fun isValidClassName(className: String): Boolean {
-    // 基本的类名格式验证
+    // Basic class name format validation
     return className.matches(Regex("^[a-zA-Z_][a-zA-Z0-9_]*(?:\\.[a-zA-Z_][a-zA-Z0-9_]*)*$"))
   }
 
-  /** 获取库代码 */
+  /** Get library code from LibCodeService. */
   private suspend fun getLibraryCode(args: ViewLibCodeArgs, project: Project): ViewLibCodeResult {
-    // 使用 LibCodeService 获取库代码
+    // Use LibCodeService to get library code
     val libCodeService = project.service<io.github.truenine.composeserver.ide.ideamcp.services.LibCodeService>()
     val result = libCodeService.getLibraryCode(project, args.fullyQualifiedName, args.memberName)
 
@@ -82,7 +86,7 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
     )
   }
 
-  /** 创建错误响应 */
+  /** Create error response. */
   private fun createErrorResponse(error: Throwable, className: String): ViewLibCodeErrorResponse {
     val errorType =
       when (error) {
@@ -94,88 +98,88 @@ class ViewLibCodeTool : AbstractMcpTool<ViewLibCodeArgs>(ViewLibCodeArgs.seriali
 
     val suggestions =
       when (errorType) {
-        "INVALID_ARGUMENT" -> listOf("检查类名格式", "使用完全限定类名", "确保文件路径正确")
-        "CLASS_NOT_FOUND" -> listOf("检查类名拼写", "确认类在类路径中", "刷新项目依赖")
-        "PERMISSION_DENIED" -> listOf("检查文件权限", "确保库文件可访问")
-        else -> listOf("检查库文件完整性", "重试操作", "查看详细错误信息")
+        "INVALID_ARGUMENT" -> listOf("Check class name format", "Use fully-qualified class name", "Ensure the file path is correct")
+        "CLASS_NOT_FOUND" -> listOf("Check class name spelling", "Verify the class is on the classpath", "Refresh project dependencies")
+        "PERMISSION_DENIED" -> listOf("Check file permissions", "Ensure the library file is accessible")
+        else -> listOf("Check library file integrity", "Retry the operation", "Review detailed error information")
       }
 
     return ViewLibCodeErrorResponse(
       success = false,
-      error = ErrorDetails(type = errorType, message = error.message ?: "未知错误", suggestions = suggestions),
+      error = ErrorDetails(type = errorType, message = error.message ?: "Unknown error", suggestions = suggestions),
       fullyQualifiedName = className,
       timestamp = System.currentTimeMillis(),
     )
   }
 }
 
-/** 库代码查看参数 */
+/** Arguments for viewing library code. */
 @Serializable
 data class ViewLibCodeArgs(
-  /** 完全限定类名 */
+  /** Fully-qualified class name. */
   val fullyQualifiedName: String,
-  /** 成员名（可选，如方法名或字段名） */
+  /** Optional member name, such as method or field. */
   val memberName: String? = null,
 )
 
-/** 库代码查看结果 */
+/** Result of viewing library code. */
 @Serializable
 data class ViewLibCodeResult(
-  /** 是否成功 */
+  /** Whether the operation succeeded. */
   val success: Boolean,
-  /** 完全限定类名 */
+  /** Fully-qualified class name. */
   val fullyQualifiedName: String,
-  /** 成员名 */
+  /** Member name. */
   val memberName: String?,
-  /** 源代码内容 */
+  /** Source code content. */
   val sourceCode: String,
-  /** 是否为反编译代码 */
+  /** Whether the code is decompiled. */
   val isDecompiled: Boolean,
-  /** 编程语言 */
+  /** Programming language. */
   val language: String,
-  /** 源码类型 */
+  /** Source type. */
   val sourceType: SourceType,
-  /** 元数据信息 */
+  /** Metadata information. */
   val metadata: ViewLibCodeMetadata,
-  /** 时间戳 */
+  /** Timestamp. */
   val timestamp: Long,
 )
 
-/** 库代码元数据 */
+/** Library code metadata. */
 @Serializable
 data class ViewLibCodeMetadata(
-  /** 库名称 */
+  /** Library name. */
   val libraryName: String,
-  /** 版本号 */
+  /** Version. */
   val version: String?,
-  /** 源码类型 */
+  /** Source type. */
   val sourceType: SourceType,
-  /** 文档信息 */
+  /** Documentation information. */
   val documentation: String?,
 )
 
-/** 源码类型 */
+/** Type of source code. */
 @Serializable
 enum class SourceType {
-  /** 来自 source jar */
+  /** From source JAR. */
   SOURCE_JAR,
 
-  /** 反编译得到 */
+  /** Decompiled from bytecode. */
   DECOMPILED,
 
-  /** 未找到 */
+  /** Source not found. */
   NOT_FOUND,
 }
 
-/** 库代码查看错误响应 */
+/** Error response for library code view. */
 @Serializable
 data class ViewLibCodeErrorResponse(
-  /** 是否成功 */
+  /** Whether the operation succeeded. */
   val success: Boolean,
-  /** 错误详情 */
+  /** Error details. */
   val error: ErrorDetails,
-  /** 完全限定类名 */
+  /** Fully-qualified class name. */
   val fullyQualifiedName: String,
-  /** 时间戳 */
+  /** Timestamp. */
   val timestamp: Long,
 )

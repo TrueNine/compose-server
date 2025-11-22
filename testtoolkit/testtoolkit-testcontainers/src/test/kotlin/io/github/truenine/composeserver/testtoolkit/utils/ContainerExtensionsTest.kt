@@ -10,9 +10,9 @@ import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
 
 /**
- * # 容器扩展函数测试
+ * Container extension function tests.
  *
- * 测试 ContainerExtensions.kt 中的所有扩展函数
+ * Tests all extension functions defined in ContainerExtensions.kt.
  *
  * @author TrueNine
  * @since 2025-07-12
@@ -20,257 +20,257 @@ import org.testcontainers.utility.DockerImageName
 class ContainerExtensionsTest {
 
   @Test
-  fun `测试 commandExecutor 扩展函数`() {
-    log.info("开始测试 commandExecutor 扩展函数")
+  fun `commandExecutor extension function`() {
+    log.info("Starting commandExecutor extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val executor = container.commandExecutor()
 
-      assertNotNull(executor, "命令执行器不应该为 null")
+      assertNotNull(executor, "Command executor should not be null")
 
-      log.info("commandExecutor 扩展函数测试完成")
+      log.info("commandExecutor extension function test completed")
     }
   }
 
   @Test
-  fun `测试 safeExecInContainer 扩展函数`() {
-    log.info("开始测试 safeExecInContainer 扩展函数")
+  fun `safeExecInContainer extension function`() {
+    log.info("Starting safeExecInContainer extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21"))
-      .withCommand("sleep", "300") // 让容器运行5分钟，足够测试使用
+      .withCommand("sleep", "300") // Keep container running for 5 minutes, enough for tests
       .use { container ->
         container.start()
 
-        // 等待容器完全启动
+        // Wait for container to fully start
         Thread.sleep(1000)
 
         val result = container.safeExecInContainer(commands = arrayOf("echo", "Hello World"))
 
-        assertEquals(0, result.exitCode, "命令执行应该成功")
-        assertTrue(result.stdout.contains("Hello World"), "输出应该包含预期内容")
+        assertEquals(0, result.exitCode, "Command execution should succeed")
+        assertTrue(result.stdout.contains("Hello World"), "Output should contain expected content")
 
-        log.info("safeExecInContainer 扩展函数测试完成")
+        log.info("safeExecInContainer extension function test completed")
       }
   }
 
   @Test
-  fun `测试 safeExecInContainer 扩展函数带自定义参数`() {
-    log.info("开始测试 safeExecInContainer 扩展函数带自定义参数")
+  fun `safeExecInContainer extension function with custom parameters`() {
+    log.info("Starting safeExecInContainer extension function test with custom parameters")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val result = container.safeExecInContainer(timeout = Duration.ofSeconds(10), maxRetries = 2, "echo", "Custom Test")
 
-      assertEquals(0, result.exitCode, "自定义参数的命令执行应该成功")
-      assertTrue(result.stdout.contains("Custom Test"), "输出应该包含预期内容")
+      assertEquals(0, result.exitCode, "Command execution with custom parameters should succeed")
+      assertTrue(result.stdout.contains("Custom Test"), "Output should contain expected content")
 
-      log.info("safeExecInContainer 扩展函数带自定义参数测试完成")
+      log.info("safeExecInContainer extension function test with custom parameters completed")
     }
   }
 
   @Test
-  fun `测试 execWithExpectedExitCode 扩展函数`() {
-    log.info("开始测试 execWithExpectedExitCode 扩展函数")
+  fun `execWithExpectedExitCode extension function`() {
+    log.info("Starting execWithExpectedExitCode extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      // 测试成功的命令
+      // Test a successful command
       val result = container.execWithExpectedExitCode(0, commands = arrayOf("echo", "Success"))
-      assertEquals(0, result.exitCode, "期望退出码为0的命令应该成功")
+      assertEquals(0, result.exitCode, "Command with expected exit code 0 should succeed")
 
-      log.info("execWithExpectedExitCode 扩展函数测试完成")
+      log.info("execWithExpectedExitCode extension function test completed")
     }
   }
 
   @Test
-  fun `测试 execAndGetOutput 扩展函数`() {
-    log.info("开始测试 execAndGetOutput 扩展函数")
+  fun `execAndGetOutput extension function`() {
+    log.info("Starting execAndGetOutput extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val output = container.execAndGetOutput(commands = arrayOf("echo", "Test Output"))
 
-      assertTrue(output.contains("Test Output"), "输出应该包含预期内容")
+      assertTrue(output.contains("Test Output"), "Output should contain expected content")
 
-      log.info("execAndGetOutput 扩展函数测试完成")
+      log.info("execAndGetOutput extension function test completed")
     }
   }
 
   @Test
-  fun `测试 execAndCheckOutput 扩展函数`() {
-    log.info("开始测试 execAndCheckOutput 扩展函数")
+  fun `execAndCheckOutput extension function`() {
+    log.info("Starting execAndCheckOutput extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
       val result = container.execAndCheckOutput("Hello", commands = arrayOf("echo", "Hello World"))
 
-      assertEquals(0, result.exitCode, "包含预期内容的命令应该成功")
-      assertTrue(result.stdout.contains("Hello"), "输出应该包含检查的内容")
+      assertEquals(0, result.exitCode, "Command whose output contains expected content should succeed")
+      assertTrue(result.stdout.contains("Hello"), "Output should contain the expected substring")
 
-      log.info("execAndCheckOutput 扩展函数测试完成")
+      log.info("execAndCheckOutput extension function test completed")
     }
   }
 
   @Test
-  fun `测试 waitForReady 扩展函数`() {
-    log.info("开始测试 waitForReady 扩展函数")
+  fun `waitForReady extension function`() {
+    log.info("Starting waitForReady extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      // 容器已经启动，等待就绪应该立即完成
+      // Container is already running so waiting for readiness should complete immediately
       container.waitForReady(Duration.ofSeconds(5), Duration.ofMillis(100))
 
-      assertTrue(container.isRunning, "容器应该处于运行状态")
+      assertTrue(container.isRunning, "Container should be in running state")
 
-      log.info("waitForReady 扩展函数测试完成")
+      log.info("waitForReady extension function test completed")
     }
   }
 
   @Test
-  fun `测试 fileExists 扩展函数`() {
-    log.info("开始测试 fileExists 扩展函数")
+  fun `fileExists extension function`() {
+    log.info("Starting fileExists extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      // 测试存在的文件
+      // Existing file should be reported as present
       val exists = container.fileExists("/bin/sh")
-      assertTrue(exists, "/bin/sh 文件应该存在")
+      assertTrue(exists, "/bin/sh should exist")
 
-      // 测试不存在的文件
+      // Non-existent file should be reported as absent
       val notExists = container.fileExists("/nonexistent/file")
-      assertTrue(!notExists, "不存在的文件应该返回 false")
+      assertTrue(!notExists, "Non-existent file should return false")
 
-      log.info("fileExists 扩展函数测试完成")
+      log.info("fileExists extension function test completed")
     }
   }
 
   @Test
-  fun `测试 readFile 扩展函数`() {
-    log.info("开始测试 readFile 扩展函数")
+  fun `readFile extension function`() {
+    log.info("Starting readFile extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      // 创建一个测试文件
+      // Create a test file
       container.safeExecInContainer(commands = arrayOf("sh", "-c", "echo 'Test Content' > /tmp/testfile"))
 
       val content = container.readFile("/tmp/testfile")
 
-      assertTrue(content.contains("Test Content"), "文件内容应该包含预期文本")
+      assertTrue(content.contains("Test Content"), "File content should contain expected text")
 
-      log.info("readFile 扩展函数测试完成")
+      log.info("readFile extension function test completed")
     }
   }
 
   @Test
-  fun `测试 waitForFile 扩展函数`() {
-    log.info("开始测试 waitForFile 扩展函数")
+  fun `waitForFile extension function`() {
+    log.info("Starting waitForFile extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      // 创建文件
+      // Create the file
       container.safeExecInContainer(commands = arrayOf("touch", "/tmp/waitfile"))
 
-      // 等待文件出现（文件已经存在，应该立即返回）
+      // Wait for the file to appear (already exists so should return immediately)
       container.waitForFile("/tmp/waitfile", Duration.ofSeconds(5), Duration.ofMillis(100))
 
-      // 验证文件确实存在
-      assertTrue(container.fileExists("/tmp/waitfile"), "等待的文件应该存在")
+      // Verify that the file actually exists
+      assertTrue(container.fileExists("/tmp/waitfile"), "Waited-for file should exist")
 
-      log.info("waitForFile 扩展函数测试完成")
+      log.info("waitForFile extension function test completed")
     }
   }
 
   @Test
-  fun `测试 withStableWaitStrategy 扩展函数`() {
-    log.info("开始测试 withStableWaitStrategy 扩展函数")
+  fun `withStableWaitStrategy extension function`() {
+    log.info("Starting withStableWaitStrategy extension function test")
 
-    // 测试扩展函数的存在性，通过调用其他扩展函数来间接验证
+    // Test the existence of the extension by indirectly using other extensions
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      // 验证容器正常启动
-      assertTrue(container.isRunning, "容器应该正常启动")
+      // Verify container starts normally
+      assertTrue(container.isRunning, "Container should start successfully")
 
-      // 通过其他扩展函数验证功能
+      // Validate behavior by calling another extension
       val result = container.safeExecInContainer(commands = arrayOf("echo", "test"))
-      assertEquals(0, result.exitCode, "命令执行应该成功")
+      assertEquals(0, result.exitCode, "Command execution should succeed")
 
-      log.info("withStableWaitStrategy 扩展函数测试完成")
+      log.info("withStableWaitStrategy extension function test completed")
     }
   }
 
   @Test
-  fun `测试 withStableWaitStrategy 扩展函数带自定义参数`() {
-    log.info("开始测试 withStableWaitStrategy 扩展函数带自定义参数")
+  fun `withStableWaitStrategy extension function with custom parameters`() {
+    log.info("Starting withStableWaitStrategy extension function test with custom parameters")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      assertTrue(container.isRunning, "使用自定义参数的稳定等待策略应该正常工作")
+      assertTrue(container.isRunning, "Stable wait strategy with custom parameters should work correctly")
 
-      log.info("withStableWaitStrategy 扩展函数带自定义参数测试完成")
+      log.info("withStableWaitStrategy extension function test with custom parameters completed")
     }
   }
 
   @Test
-  fun `测试 withHealthCheck 扩展函数`() {
-    log.info("开始测试 withHealthCheck 扩展函数")
+  fun `withHealthCheck extension function`() {
+    log.info("Starting withHealthCheck extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      assertTrue(container.isRunning, "使用健康检查的容器应该正常启动")
+      assertTrue(container.isRunning, "Container with health check should start successfully")
 
-      log.info("withHealthCheck 扩展函数测试完成")
+      log.info("withHealthCheck extension function test completed")
     }
   }
 
   @Test
-  fun `测试 withHealthCheck 扩展函数带自定义参数`() {
-    log.info("开始测试 withHealthCheck 扩展函数带自定义参数")
+  fun `withHealthCheck extension function with custom parameters`() {
+    log.info("Starting withHealthCheck extension function test with custom parameters")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.start()
 
-      assertTrue(container.isRunning, "使用自定义健康检查参数的容器应该正常启动")
+      assertTrue(container.isRunning, "Container with custom health check parameters should start successfully")
 
-      log.info("withHealthCheck 扩展函数带自定义参数测试完成")
+      log.info("withHealthCheck extension function test with custom parameters completed")
     }
   }
 
   @Test
-  fun `测试 startAndWaitForReady 扩展函数`() {
-    log.info("开始测试 startAndWaitForReady 扩展函数")
+  fun `startAndWaitForReady extension function`() {
+    log.info("Starting startAndWaitForReady extension function test")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.startAndWaitForReady()
 
-      assertTrue(container.isRunning, "启动并等待就绪的容器应该处于运行状态")
+      assertTrue(container.isRunning, "Container started and waited for readiness should be running")
 
-      log.info("startAndWaitForReady 扩展函数测试完成")
+      log.info("startAndWaitForReady extension function test completed")
     }
   }
 
   @Test
-  fun `测试 startAndWaitForReady 扩展函数带自定义参数`() {
-    log.info("开始测试 startAndWaitForReady 扩展函数带自定义参数")
+  fun `startAndWaitForReady extension function with custom parameters`() {
+    log.info("Starting startAndWaitForReady extension function test with custom parameters")
 
     GenericContainer(DockerImageName.parse("alpine:3.21")).withCommand("sleep", "infinity").use { container ->
       container.startAndWaitForReady(readyTimeout = Duration.ofSeconds(20), readyPollInterval = Duration.ofMillis(200))
 
-      assertTrue(container.isRunning, "使用自定义参数启动并等待就绪的容器应该处于运行状态")
+      assertTrue(container.isRunning, "Container started and waited for readiness with custom parameters should be running")
 
-      log.info("startAndWaitForReady 扩展函数带自定义参数测试完成")
+      log.info("startAndWaitForReady extension function test with custom parameters completed")
     }
   }
 }

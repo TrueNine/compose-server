@@ -12,13 +12,13 @@ class SimpleMysqlTest : IDatabaseMysqlContainer {
   @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @Test
-  fun `数据库连接测试`() {
+  fun `database connection test`() {
     val result = jdbcTemplate.queryForObject("SELECT 1", Int::class.java)
-    assertEquals(1, result, "数据库连接应该正常")
+    assertEquals(1, result, "Database connection should work")
   }
 
   @Test
-  fun `Flyway 迁移表应该存在`() {
+  fun `Flyway migration table should exist`() {
     val tableCount =
       jdbcTemplate.queryForObject(
         """
@@ -28,11 +28,11 @@ class SimpleMysqlTest : IDatabaseMysqlContainer {
           .trimIndent(),
         Int::class.java,
       )
-    assertEquals(1, tableCount, "应该创建 flyway_schema_history 表")
+    assertEquals(1, tableCount, "Table flyway_schema_history should be created")
   }
 
   @Test
-  fun `存储过程应该被创建`() {
+  fun `stored procedures should be created`() {
     val procedureCount =
       jdbcTemplate.queryForObject(
         """
@@ -44,18 +44,18 @@ class SimpleMysqlTest : IDatabaseMysqlContainer {
           .trimIndent(),
         Int::class.java,
       )
-    assertEquals(3, procedureCount, "应该创建 3 个存储过程")
+    assertEquals(3, procedureCount, "3 stored procedures should be created")
   }
 
   @Test
-  fun `存储过程应该能够调用`() {
-    // 创建测试表
+  fun `stored procedures should be callable`() {
+    // Create test table
     jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS test_proc_table(name VARCHAR(255))")
 
-    // 调用存储过程
+    // Call stored procedure
     jdbcTemplate.execute("CALL add_base_struct('test_proc_table')")
 
-    // 验证字段是否添加
+    // Verify columns are added
     val columns =
       jdbcTemplate.queryForList(
         """
@@ -66,10 +66,10 @@ class SimpleMysqlTest : IDatabaseMysqlContainer {
         String::class.java,
       )
 
-    assertEquals(true, columns.contains("id"), "应该添加 id 字段")
-    assertEquals(true, columns.contains("rlv"), "应该添加 rlv 字段")
+    assertEquals(true, columns.contains("id"), "Column 'id' should be added")
+    assertEquals(true, columns.contains("rlv"), "Column 'rlv' should be added")
 
-    // 清理
+    // Clean up
     jdbcTemplate.execute("DROP TABLE test_proc_table")
   }
 }

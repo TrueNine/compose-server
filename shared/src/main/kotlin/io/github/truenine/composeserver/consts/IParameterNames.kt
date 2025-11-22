@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.consts
 
 /**
- * 请求参数名常量
+ * Request parameter name constants.
  *
  * @author TrueNine
  * @since 2022-12-26

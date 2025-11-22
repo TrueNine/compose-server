@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test
 class ResultExtensionsTest {
 
   @Nested
-  inner class `safeCall测试` {
+  inner class SafeCallTests {
 
     @Test
-    fun `测试成功操作`() {
+    fun returnsSuccessWhenOperationSucceeds() {
       val result = safeCall { "success" }
 
       assertTrue(result.isSuccess)
@@ -24,7 +24,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试异常操作`() {
+    fun capturesExceptionWhenOperationFails() {
       val result = safeCall { throw RuntimeException("test error") }
 
       assertTrue(result.isFailure)
@@ -33,7 +33,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试返回null的操作`() {
+    fun handlesNullReturnValue() {
       val result = safeCall { null }
 
       assertTrue(result.isSuccess)
@@ -42,10 +42,10 @@ class ResultExtensionsTest {
   }
 
   @Nested
-  inner class `safeCallAsync测试` {
+  inner class SafeCallAsyncTests {
 
     @Test
-    fun `测试异步成功操作`() = runTest {
+    fun returnsSuccessForAsyncOperation() = runTest {
       val result = safeCallAsync {
         delay(10)
         "async success"
@@ -56,7 +56,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试异步异常操作`() = runTest {
+    fun capturesExceptionForAsyncOperation() = runTest {
       val result = safeCallAsync {
         delay(10)
         throw IllegalStateException("async error")
@@ -69,10 +69,10 @@ class ResultExtensionsTest {
   }
 
   @Nested
-  inner class `safeCallWithContext测试` {
+  inner class SafeCallWithContextTests {
 
     @Test
-    fun `测试自定义上下文操作`() = runTest {
+    fun executesOperationWithCustomDispatcher() = runTest {
       val result =
         safeCallWithContext(Dispatchers.Default) {
           delay(10)
@@ -85,10 +85,10 @@ class ResultExtensionsTest {
   }
 
   @Nested
-  inner class `Result转换测试` {
+  inner class ResultTransformationTests {
 
     @Test
-    fun `测试mapSuccess`() {
+    fun mapsSuccessValue() {
       val result = Result.success(5)
       val mapped = result.mapSuccess { it * 2 }
 
@@ -97,7 +97,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试mapSuccess保持失败状态`() {
+    fun retainsFailureWhenMappingSuccess() {
       val result = Result.failure<Int>(RuntimeException("error"))
       val mapped = result.mapSuccess { it * 2 }
 
@@ -106,7 +106,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试mapFailure`() {
+    fun mapsFailureValue() {
       val result = Result.failure<String>(RuntimeException("original"))
       val mapped = result.mapFailure { IllegalArgumentException("transformed") }
 
@@ -116,7 +116,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试mapFailure保持成功状态`() {
+    fun retainsSuccessWhenMappingFailure() {
       val result = Result.success("value")
       val mapped = result.mapFailure { IllegalArgumentException("should not happen") }
 
@@ -126,21 +126,21 @@ class ResultExtensionsTest {
   }
 
   @Nested
-  inner class `副作用操作测试` {
+  inner class SideEffectTests {
 
     @Test
-    fun `测试onSuccessDo`() {
+    fun executesOnSuccessCallback() {
       var executed = false
       val result = Result.success("value")
 
       val returned = result.onSuccessDo { executed = true }
 
       assertTrue(executed)
-      assertEquals(result, returned) // 应该返回原始Result
+      assertEquals(result, returned) // Should return the original Result
     }
 
     @Test
-    fun `测试onSuccessDo不执行失败情况`() {
+    fun doesNotExecuteOnSuccessCallbackWhenFailure() {
       var executed = false
       val result = Result.failure<String>(RuntimeException("error"))
 
@@ -150,7 +150,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试onFailureDo`() {
+    fun executesOnFailureCallback() {
       var executedException: Throwable? = null
       val originalException = RuntimeException("error")
       val result = Result.failure<String>(originalException)
@@ -158,11 +158,11 @@ class ResultExtensionsTest {
       val returned = result.onFailureDo { executedException = it }
 
       assertEquals(originalException, executedException)
-      assertEquals(result, returned) // 应该返回原始Result
+      assertEquals(result, returned) // Should return the original Result
     }
 
     @Test
-    fun `测试onFailureDo不执行成功情况`() {
+    fun doesNotExecuteOnFailureCallbackWhenSuccess() {
       var executed = false
       val result = Result.success("value")
 
@@ -173,10 +173,10 @@ class ResultExtensionsTest {
   }
 
   @Nested
-  inner class `nullable转Result测试` {
+  inner class NullableConversionTests {
 
     @Test
-    fun `测试非null值转Result`() {
+    fun convertsNonNullValueToResult() {
       val value = "test"
       val result = value.toResult()
 
@@ -185,7 +185,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试null值转Result`() {
+    fun convertsNullValueToFailure() {
       val value: String? = null
       val result = value.toResult()
 
@@ -195,7 +195,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试null值转Result自定义错误消息`() {
+    fun convertsNullValueWithCustomMessage() {
       val value: String? = null
       val result = value.toResult("Custom error message")
 
@@ -205,10 +205,10 @@ class ResultExtensionsTest {
   }
 
   @Nested
-  inner class `组合Results测试` {
+  inner class CombineResultsTests {
 
     @Test
-    fun `测试组合所有成功的Results`() {
+    fun combinesAllSuccessfulResults() {
       val result1 = Result.success(1)
       val result2 = Result.success(2)
       val result3 = Result.success(3)
@@ -220,7 +220,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试组合包含失败的Results`() {
+    fun propagatesFailureWhenCombiningResults() {
       val result1 = Result.success(1)
       val result2 = Result.failure<Int>(RuntimeException("error"))
       val result3 = Result.success(3)
@@ -233,7 +233,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试组合空Results`() {
+    fun combinesEmptyResults() {
       val combined = combineResults(emptyList<Result<String>>())
 
       assertTrue(combined.isSuccess)
@@ -242,10 +242,10 @@ class ResultExtensionsTest {
   }
 
   @Nested
-  inner class `重试机制测试` {
+  inner class RetryMechanismTests {
 
     @Test
-    fun `测试第一次成功无需重试`() = runTest {
+    fun returnsImmediatelyWhenFirstAttemptSucceeds() = runTest {
       var attempts = 0
       val result =
         retryWithBackoff<String>(maxRetries = 3) {
@@ -259,7 +259,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试重试后成功`() = runTest {
+    fun succeedsAfterRetries() = runTest {
       var attempts = 0
       val result =
         retryWithBackoff<String>(maxRetries = 3, initialDelayMs = 1, maxDelayMs = 10) {
@@ -277,7 +277,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试所有重试都失败`() = runTest {
+    fun failsAfterExhaustingRetries() = runTest {
       var attempts = 0
       val result =
         retryWithBackoff<String>(maxRetries = 2, initialDelayMs = 1, maxDelayMs = 10) {
@@ -291,13 +291,13 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `测试重试延迟递增`() = runTest {
+    fun increasesRetryDelayBetweenAttempts() = runTest {
       var attempts = 0
 
       val result =
         retryWithBackoff<String>(
           maxRetries = 2,
-          initialDelayMs = 1, // 使用很小的延迟以避免测试环境时间问题
+          initialDelayMs = 1, // Use a small delay to avoid timing issues during tests
           maxDelayMs = 10,
           backoffMultiplier = 2.0,
         ) {
@@ -307,7 +307,7 @@ class ResultExtensionsTest {
 
       log.info("Retry attempts: {}", attempts)
 
-      // 验证重试次数正确
+      // Verify the number of attempts is correct
       assertEquals(3, attempts) // maxRetries + 1 final attempt
       assertTrue(result.isFailure)
       assertTrue(result.exceptionOrNull()?.message?.contains("always fail") == true)

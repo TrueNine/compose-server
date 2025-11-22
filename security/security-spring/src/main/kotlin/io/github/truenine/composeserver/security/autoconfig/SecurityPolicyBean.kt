@@ -33,7 +33,7 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityDetailsService(desc: SecurityPolicyDefine): SecurityUserDetailsService {
-    log.debug("注册 UserDetailsService")
+    log.debug("Register UserDetailsService")
     return desc.service ?: error("not register UserDetailsService")
   }
 
@@ -41,7 +41,7 @@ class SecurityPolicyBean {
   @Primary
   @ConditionalOnBean(SecurityPolicyDefine::class)
   fun securityExceptionAdware(policyDefine: SecurityPolicyDefine): SecurityExceptionAdware {
-    log.debug("注册 ExceptionAdware")
+    log.debug("Register SecurityExceptionAdware")
     return policyDefine.exceptionAdware ?: error("not register ExceptionAdware")
   }
 
@@ -55,7 +55,7 @@ class SecurityPolicyBean {
     applicationContext: ApplicationContext,
   ): SecurityFilterChain {
     val enableAnnotation = getAnno(applicationContext)
-    if (enableAnnotation == null) log.warn("未配置 安全注解 注解")
+    if (enableAnnotation == null) log.warn("Security annotation EnableRestSecurity is not configured")
     val mergedConfigAnnotation = enableAnnotation ?: EnableRestSecurity()
 
     val allowPatterns = policyDefine.anonymousPatterns
@@ -68,26 +68,26 @@ class SecurityPolicyBean {
 
     if (policyDefine.preValidFilter != null) {
       httpSecurity.addFilterBefore(policyDefine.preValidFilter, UsernamePasswordAuthenticationFilter::class.java)
-    } else log.warn("未配置验证过滤器 {}", SecurityPreflightValidFilter::class.java)
+    } else log.warn("Validation filter is not configured: {}", SecurityPreflightValidFilter::class.java)
 
-    // 打印错误日志
-    if (allowPatterns.contains("/**")) log.error("配置上下文内包含 /** ，将会放行所有域")
+    // Log potential misconfiguration
+    if (allowPatterns.contains("/**")) log.error("Configuration contains '/**', all paths will be permitted")
 
     httpSecurity
-      // 关闭 csrf
+      // Disable CSRF
       .csrf { it.disable() }
-      // 关闭 session
+      // Disable HTTP session (stateless)
       .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
 
     httpSecurity.cors { it.configurationSource { cors } }
     httpSecurity.authorizeHttpRequests {
       it.requestMatchers(*allowPatterns.toTypedArray()).permitAll()
 
-      log.debug("任意请求是否需要认证 = {}", mergedConfigAnnotation.anyRequestAuthed)
+      log.debug("Any request requires authentication = {}", mergedConfigAnnotation.anyRequestAuthed)
       if (mergedConfigAnnotation.anyRequestAuthed) it.anyRequest().denyAll()
       else {
         if (policyDefine.accessor != null) {
-          log.debug("设定 access = {}", policyDefine.accessor)
+          log.debug("Set access manager = {}", policyDefine.accessor)
           it.anyRequest().access(policyDefine.accessor)
         } else {
           it.anyRequest().permitAll()
@@ -96,22 +96,22 @@ class SecurityPolicyBean {
     }
     httpSecurity.userDetailsService(policyDefine.service ?: error(("not register UserDetailsService")))
 
-    // 配置异常处理器
+    // Configure exception handlers
     if (policyDefine.exceptionAdware != null) {
       httpSecurity.exceptionHandling { it.authenticationEntryPoint(policyDefine.exceptionAdware).accessDeniedHandler(policyDefine.exceptionAdware) }
-    } else log.warn("未注册安全异常过滤器 {}", SecurityExceptionAdware::class.java)
+    } else log.warn("Security exception filter is not registered: {}", SecurityExceptionAdware::class.java)
 
-    log.debug("注册 Security 过滤器链 httpSecurity = {}", httpSecurity)
-    log.debug("allow Patterns = {}", allowPatterns)
+    log.debug("Register Security filter chain, httpSecurity = {}", httpSecurity)
+    log.debug("Allow patterns = {}", allowPatterns)
     return httpSecurity.build()
   }
 
   @Bean
   @Primary
   fun authenticationManager(ac: AuthenticationConfiguration): AuthenticationManager? {
-    log.debug("注册 AuthenticationManager config = {}", ac)
+    log.debug("Register AuthenticationManager config = {}", ac)
     val manager = ac.authenticationManager
-    log.debug("获取到 AuthManager = {}", manager != null)
+    log.debug("Obtained AuthenticationManager = {}", manager != null)
     return manager
   }
 

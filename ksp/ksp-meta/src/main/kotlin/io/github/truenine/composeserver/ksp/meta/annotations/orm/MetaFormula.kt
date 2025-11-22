@@ -3,9 +3,9 @@ package io.github.truenine.composeserver.ksp.meta.annotations.orm
 import java.lang.annotation.Inherited
 
 /**
- * ## 计算属性
+ * ## Computed property
  *
- * 表示该元素为计算属性，大多情况下，无需进行处理
+ * Indicates that the annotated element is a computed property and, in most cases, does not need to be processed by code generation.
  */
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER, AnnotationTarget.FUNCTION)
 @Inherited

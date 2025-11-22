@@ -32,46 +32,46 @@ class ILazyAddressServiceTest {
   /** Comprehensive test data covering multiple administrative levels and various hierarchical relationships for testing backward traversal */
   private val comprehensiveTestData =
     """
-      110000000000,北京市,1,000000000000
-      120000000000,天津市,1,000000000000
-      130000000000,河北省,1,000000000000
-      110100000000,北京市市辖区,2,110000000000
-      110200000000,北京市县,2,110000000000
-      120100000000,天津市市辖区,2,120000000000
-      130100000000,石家庄市,2,130000000000
-      130200000000,唐山市,2,130000000000
-      110101000000,东城区,3,110100000000
-      110102000000,西城区,3,110100000000
-      110105000000,朝阳区,3,110100000000
-      110221000000,昌平区,3,110200000000
-      120101000000,和平区,3,120100000000
-      120102000000,河东区,3,120100000000
-      130102000000,长安区,3,130100000000
-      130104000000,桥西区,3,130100000000
-      130203000000,古冶区,3,130200000000
-      110101001000,东华门街道,4,110101000000
-      110101002000,景山街道,4,110101000000
-      110101003000,交道口街道,4,110101000000
-      110102004000,什刹海街道,4,110102000000
-      110105005000,建国门外街道,4,110105000000
-      110221006000,城北街道,4,110221000000
-      120101007000,劝业场街道,4,120101000000
-      120102008000,大王庄街道,4,120102000000
-      130102009000,青园街道,4,130102000000
-      130104010000,振头街道,4,130104000000
-      130203011000,林西街道,4,130203000000
-      110101001001,东华门社区,5,110101001000
-      110101001002,多福巷社区,5,110101001000
-      110101002003,故宫社区,5,110101002000
-      110101003004,府学胡同社区,5,110101003000
-      110102004005,德胜门社区,5,110102004000
-      110105005006,建外街道社区,5,110105005000
-      110221006007,城北第一社区,5,110221006000
-      120101007008,劝业场社区,5,120101007000
-      120102008009,大王庄第一社区,5,120102008000
-      130102009010,青园第一社区,5,130102009000
-      130104010011,振头第一社区,5,130104010000
-      130203011012,林西第一社区,5,130203011000
+    110000000000,Beijing Municipality,1,000000000000
+    120000000000,Tianjin Municipality,1,000000000000
+    130000000000,Hebei Province,1,000000000000
+    110100000000,Beijing Districts,2,110000000000
+    110200000000,Beijing Counties,2,110000000000
+    120100000000,Tianjin Districts,2,120000000000
+    130100000000,Shijiazhuang City,2,130000000000
+    130200000000,Tangshan City,2,130000000000
+    110101000000,Dongcheng District,3,110100000000
+    110102000000,Xicheng District,3,110100000000
+    110105000000,Chaoyang District,3,110100000000
+    110221000000,Changping District,3,110200000000
+    120101000000,Heping District,3,120100000000
+    120102000000,Hedong District,3,120100000000
+    130102000000,Chang'an District,3,130100000000
+    130104000000,Qiaoxi District,3,130100000000
+    130203000000,Guye District,3,130200000000
+    110101001000,Donghuamen Subdistrict,4,110101000000
+    110101002000,Jingshan Subdistrict,4,110101000000
+    110101003000,Jiaodaokou Subdistrict,4,110101000000
+    110102004000,Shichahai Subdistrict,4,110102000000
+    110105005000,Jianguomenwai Subdistrict,4,110105000000
+    110221006000,Chengbei Subdistrict,4,110221000000
+    120101007000,Quanyechang Subdistrict,4,120101000000
+    120102008000,Dawangzhuang Subdistrict,4,120102000000
+    130102009000,Qingyuan Subdistrict,4,130102000000
+    130104010000,Zhentou Subdistrict,4,130104000000
+    130203011000,Linxi Subdistrict,4,130203000000
+    110101001001,Donghuamen Community,5,110101001000
+    110101001002,Duofuxiang Community,5,110101001000
+    110101002003,Gugong Community,5,110101002000
+    110101003004,Fuxuehutong Community,5,110101003000
+    110102004005,Deshengmen Community,5,110102004000
+    110105005006,Jiangwaijiedao Community,5,110105005000
+    110221006007,Chengbei First Community,5,110221006000
+    120101007008,Quanyechang Community,5,120101007000
+    120102008009,Dawangzhuang First Community,5,120102008000
+    130102009010,Qingyuan First Community,5,130102009000
+    130104010011,Zhentou First Community,5,130104010000
+    130203011012,Linxi First Community,5,130203011000
     """
       .trimIndent()
 
@@ -117,42 +117,42 @@ class ILazyAddressServiceTest {
   // --- Companion Object Tests ---
 
   @Test
-  fun `verifyCode 校验 有效的12位代码 返回 true`() {
+  fun `verifyCode valid 12-digit code returns true`() {
     assertTrue(ILazyAddressService.verifyCode("110101001001"))
   }
 
   @Test
-  fun `verifyCode 校验 有效的省级代码 返回 true`() {
+  fun `verifyCode valid province code returns true`() {
     assertTrue(ILazyAddressService.verifyCode("110000000000"))
   }
 
   @Test
-  fun `verifyCode 校验 有效的市级代码 返回 true`() {
+  fun `verifyCode valid city code returns true`() {
     assertTrue(ILazyAddressService.verifyCode("110100000000"))
   }
 
   @Test
-  fun `verifyCode 校验 有效的县级代码 返回 true`() {
+  fun `verifyCode valid county code returns true`() {
     assertTrue(ILazyAddressService.verifyCode("110101000000"))
   }
 
   @Test
-  fun `verifyCode 校验 有效的乡级代码 返回 true`() {
+  fun `verifyCode valid town code returns true`() {
     assertTrue(ILazyAddressService.verifyCode("110101001000"))
   }
 
   @Test
-  fun `verifyCode 校验 长度超过12位 返回 false`() {
+  fun `verifyCode code longer than 12 digits returns false`() {
     assertFalse(ILazyAddressService.verifyCode("1101010010011"))
   }
 
   @Test
-  fun `verifyCode 校验 包含非数字字符 返回 false`() {
+  fun `verifyCode code with non-digit character returns false`() {
     assertFalse(ILazyAddressService.verifyCode("11010100100A"))
   }
 
   @Test
-  fun `convertToFillCode 处理 有效的短代码 返回 补全后的12位代码`() {
+  fun `convertToFillCode valid short code returns padded 12-digit code`() {
     assertEquals("110000000000", ILazyAddressService.convertToFillCode("11"))
     assertEquals("110100000000", ILazyAddressService.convertToFillCode("1101"))
     assertEquals("110101000000", ILazyAddressService.convertToFillCode("110101"))
@@ -161,19 +161,19 @@ class ILazyAddressServiceTest {
   }
 
   @Test
-  fun `convertToFillCode 处理 无效的代码 返回 原始字符串`() {
+  fun `convertToFillCode invalid code returns original string`() {
     assertEquals("11010A", ILazyAddressService.convertToFillCode("11010A"))
     assertEquals("", ILazyAddressService.convertToFillCode(""))
     assertEquals("", ILazyAddressService.convertToFillCode(""))
   }
 
   @Test
-  fun `convertToFillCode 处理 已经是12位的代码 返回 原始字符串`() {
+  fun `convertToFillCode 12-digit code returns original string`() {
     assertEquals("110101001001", ILazyAddressService.convertToFillCode("110101001001"))
   }
 
   @Test
-  fun `createCnDistrictCode 使用 有效的完整代码 返回 CnDistrictCode实例`() {
+  fun `createCnDistrictCode with valid full code returns instance`() {
     val code = "110101001001"
     val districtCode = ILazyAddressService.createCnDistrictCode(code)
     assertNotNull(districtCode)
@@ -182,28 +182,28 @@ class ILazyAddressServiceTest {
   }
 
   @Test
-  fun `createCnDistrictCode 使用 有效的省级代码 返回 CnDistrictCode实例`() {
+  fun `createCnDistrictCode with valid province code returns instance`() {
     val inputCode = "110000000000"
-    val expectedMinimalCode = "11" // 假设 CnDistrictCode.code 返回简化代码
+    val expectedMinimalCode = "11" // Assume CnDistrictCode.code returns minimal code
     val districtCode = ILazyAddressService.createCnDistrictCode(inputCode)
     assertNotNull(districtCode)
-    assertEquals(expectedMinimalCode, districtCode.code) // 校验简化后的 code
+    assertEquals(expectedMinimalCode, districtCode.code) // Verify minimized code
     assertEquals(1, districtCode.level)
   }
 
   @Test
-  fun `createCnDistrictCode 使用 有效的短代码 返回 CnDistrictCode实例`() {
+  fun `createCnDistrictCode with valid short code returns instance`() {
     val code = "1101"
     val districtCode = ILazyAddressService.createCnDistrictCode(code)
     assertNotNull(districtCode)
-    assertEquals(code, districtCode.code) // 短代码本身就是简化形式
-    assertEquals(2, districtCode.level) // level 根据实际长度计算
+    assertEquals(code, districtCode.code) // Short code is already minimal
+    assertEquals(2, districtCode.level) // Level is derived from code length
   }
 
   @Test
-  fun `createCnDistrictCode 使用 无效的代码 返回 null`() {
+  fun `createCnDistrictCode with invalid code returns null`() {
     assertNull(ILazyAddressService.createCnDistrictCode("11010A"))
-    assertNull(ILazyAddressService.createCnDistrictCode("1234567890123")) // 超长
+    assertNull(ILazyAddressService.createCnDistrictCode("1234567890123")) // Too long
     assertNull(ILazyAddressService.createCnDistrictCode(""))
     assertNull(ILazyAddressService.createCnDistrictCode(null))
   }
@@ -211,38 +211,38 @@ class ILazyAddressServiceTest {
   // --- Default Method Tests ---
 
   @Test
-  fun `lastYearVersionOrNull 给定 有效年份 且 存在更早版本 返回 最近的更早版本`() {
+  fun `lastYearVersionOrNull with valid year and earlier versions returns closest earlier`() {
     assertEquals("2023", service.lastYearVersionOrNull("2024"))
     assertEquals("2021", service.lastYearVersionOrNull("2023"))
   }
 
   @Test
-  fun `lastYearVersionOrNull 给定 最早年份 返回 null`() {
+  fun `lastYearVersionOrNull with earliest year returns null`() {
     assertNull(service.lastYearVersionOrNull("2021"))
   }
 
   @Test
-  fun `lastYearVersionOrNull 给定 不在支持列表中的年份 返回 最近的更早版本`() {
-    assertEquals("2021", service.lastYearVersionOrNull("2022")) // 假设支持 ["2024", "2023", "2021"]
+  fun `lastYearVersionOrNull with unsupported year returns closest earlier`() {
+    assertEquals("2021", service.lastYearVersionOrNull("2022")) // Assume supported ["2024", "2023", "2021"]
   }
 
   @Test
-  fun `lastYearVersionOrNull 给定 无效年份字符串 返回 null`() {
+  fun `lastYearVersionOrNull with invalid year string returns null`() {
     assertNull(service.lastYearVersionOrNull("abc"))
     assertNull(service.lastYearVersionOrNull(""))
   }
 
   @Test
-  fun `lastYearVersion 返回 支持列表中的最新年份`() {
+  fun `lastYearVersion returns latest supported year`() {
     assertEquals("2024", service.lastYearVersion)
   }
 
   @Test
-  fun `lastYearVersion 当支持列表为空时 返回 默认年份`() {
+  fun `lastYearVersion returns default when supported list is empty`() {
     val emptyService =
       object : ILazyAddressService {
         override val supportedYearVersions: List<String> = emptyList()
-        override val supportedDefaultYearVersion: String = "2020" // 假设默认是 2020
+        override val supportedDefaultYearVersion: String = "2020" // Assume default year is 2020
 
         override fun fetchChildren(parentCode: String, yearVersion: String): List<ILazyAddressService.CnDistrict> = emptyList()
 
@@ -263,8 +263,8 @@ class ILazyAddressServiceTest {
   }
 
   @Test
-  fun `supportedMaxLevel 默认 返回 5`() {
-    assertEquals(5, service.supportedMaxLevel) // 测试默认实现
+  fun `supportedMaxLevel default returns 5`() {
+    assertEquals(5, service.supportedMaxLevel) // Verify default implementation
   }
 
   // === Core Interface Implementation Tests ===
@@ -273,9 +273,9 @@ class ILazyAddressServiceTest {
   fun `fetchChildren returns direct children correctly`() {
     val provinces = implementationService.fetchChildren("000000000000", "2024")
     assertEquals(3, provinces.size)
-    assertTrue(provinces.any { it.name == "北京市" })
-    assertTrue(provinces.any { it.name == "天津市" })
-    assertTrue(provinces.any { it.name == "河北省" })
+    assertTrue(provinces.any { it.name == "Beijing Municipality" })
+    assertTrue(provinces.any { it.name == "Tianjin Municipality" })
+    assertTrue(provinces.any { it.name == "Hebei Province" })
     assertTrue(provinces.all { it.level == 1 })
   }
 
@@ -301,7 +301,7 @@ class ILazyAddressServiceTest {
   fun `fetchDistrict finds specific district correctly`() {
     val district = implementationService.fetchDistrict("110101", "2024")
     assertNotNull(district)
-    assertEquals("东城区", district.name)
+    assertEquals("Dongcheng District", district.name)
     assertEquals(3, district.level)
     assertEquals("110101", district.code.code)
   }
@@ -313,8 +313,8 @@ class ILazyAddressServiceTest {
 
     assertNotNull(districtShort)
     assertNotNull(districtFull)
-    assertEquals("东城区", districtShort.name)
-    assertEquals("东城区", districtFull.name)
+    assertEquals("Dongcheng District", districtShort.name)
+    assertEquals("Dongcheng District", districtFull.name)
     assertEquals(districtShort.level, districtFull.level)
   }
 
@@ -325,35 +325,35 @@ class ILazyAddressServiceTest {
     val village = implementationService.fetchDistrict("110101001001", "2024")
     assertNotNull(village)
     assertEquals(5, village.level)
-    assertEquals("东华门社区", village.name)
+    assertEquals("Donghuamen Community", village.name)
 
     val parentTown = village.code.back()
     assertNotNull(parentTown)
     val town = implementationService.fetchDistrict(parentTown.code, "2024")
     assertNotNull(town)
     assertEquals(4, town.level)
-    assertEquals("东华门街道", town.name)
+    assertEquals("Donghuamen Subdistrict", town.name)
 
     val parentCounty = town.code.back()
     assertNotNull(parentCounty)
     val county = implementationService.fetchDistrict(parentCounty.code, "2024")
     assertNotNull(county)
     assertEquals(3, county.level)
-    assertEquals("东城区", county.name)
+    assertEquals("Dongcheng District", county.name)
 
     val parentCity = county.code.back()
     assertNotNull(parentCity)
     val city = implementationService.fetchDistrict(parentCity.code, "2024")
     assertNotNull(city)
     assertEquals(2, city.level)
-    assertEquals("北京市市辖区", city.name)
+    assertEquals("Beijing Districts", city.name)
 
     val parentProvince = city.code.back()
     assertNotNull(parentProvince)
     val province = implementationService.fetchDistrict(parentProvince.code, "2024")
     assertNotNull(province)
     assertEquals(1, province.level)
-    assertEquals("北京市", province.name)
+    assertEquals("Beijing Municipality", province.name)
 
     val parentCountry = province.code.back()
     assertNotNull(parentCountry)

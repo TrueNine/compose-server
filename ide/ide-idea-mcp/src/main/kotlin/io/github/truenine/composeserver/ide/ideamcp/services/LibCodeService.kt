@@ -11,48 +11,48 @@ import java.io.InputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/** 库代码结果 */
+/** Result of library code lookup. */
 data class LibCodeResult(val sourceCode: String, val isDecompiled: Boolean, val language: String, val metadata: LibCodeMetadata)
 
-/** 库代码元数据 */
+/** Metadata for library code. */
 data class LibCodeMetadata(val libraryName: String, val version: String?, val sourceType: SourceType, val documentation: String?)
 
-/** 库代码服务接口 */
+/** Service interface for library code lookup. */
 interface LibCodeService {
-  /** 获取库代码 */
+  /** Get library code for a fully-qualified class name and optional member. */
   suspend fun getLibraryCode(project: Project, fullyQualifiedName: String, memberName: String? = null): LibCodeResult
 }
 
-/** 库代码服务实现 */
+/** Project-level implementation of LibCodeService. */
 @Service(Service.Level.PROJECT)
 class LibCodeServiceImpl : LibCodeService {
 
   override suspend fun getLibraryCode(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult {
-    Logger.info("开始查找库代码 - 类: $fullyQualifiedName, 成员: ${memberName ?: "全部"}", "LibCodeService")
+    Logger.info("Start searching library code - class: $fullyQualifiedName, member: ${memberName ?: "all"}", "LibCodeService")
 
     return withContext(Dispatchers.IO) {
-      // 1. 尝试从 source jar 提取源码
+      // 1. Try to extract source from source JAR
       val sourceResult = tryExtractFromSourceJar(project, fullyQualifiedName, memberName)
       if (sourceResult != null) {
-        Logger.info("成功从 source jar 提取源码", "LibCodeService")
+        Logger.info("Successfully extracted source from source JAR", "LibCodeService")
         return@withContext sourceResult
       }
 
-      // 2. 返回未找到结果（暂时跳过反编译功能以避免 API 兼容性问题）
-      Logger.info("未找到源码，返回默认结果", "LibCodeService")
+      // 2. Return not-found result (skip decompilation for now to avoid API compatibility issues)
+      Logger.info("Source not found, returning default result", "LibCodeService")
       createNotFoundResult(fullyQualifiedName)
     }
   }
 
-  /** 尝试从 source jar 提取源码 */
+  /** Try to extract source from a source JAR. */
   private fun tryExtractFromSourceJar(project: Project, fullyQualifiedName: String, memberName: String?): LibCodeResult? {
     try {
-      Logger.debug("尝试从 source jar 提取源码: $fullyQualifiedName", "LibCodeService")
+      Logger.debug("Attempting to extract source from source JAR: $fullyQualifiedName", "LibCodeService")
 
       val sourceFiles = findSourceFiles(project, fullyQualifiedName)
-      Logger.debug("找到 ${sourceFiles.size} 个源文件", "LibCodeService")
+      Logger.debug("Found ${sourceFiles.size} source files", "LibCodeService")
 
-      // 通常只会找到一个，但以防万一，我们取第一个有效的
+      // Typically a single file is found; take the first valid one as a safeguard
       return sourceFiles.firstNotNullOfOrNull { sourceFile ->
         val sourceCode = sourceFile.inputStream.use { readInputStream(it) }
         val processedCode =
@@ -63,8 +63,11 @@ class LibCodeServiceImpl : LibCodeService {
           }
 
         val libraryInfo = extractLibraryInfoFromSourceFile(sourceFile)
-        Logger.info("成功提取源码 - 类: $fullyQualifiedName, 库: ${libraryInfo.first}, 版本: ${libraryInfo.second}", "LibCodeService")
-        Logger.debug("源码内容长度: ${sourceCode.length} 字符", "LibCodeService")
+        Logger.info(
+          "Successfully extracted source - class: $fullyQualifiedName, library: ${libraryInfo.first}, version: ${libraryInfo.second}",
+          "LibCodeService",
+        )
+        Logger.debug("Source length: ${sourceCode.length} characters", "LibCodeService")
 
         LibCodeResult(
           sourceCode = processedCode,
@@ -74,35 +77,35 @@ class LibCodeServiceImpl : LibCodeService {
         )
       }
     } catch (e: Exception) {
-      Logger.debug("从 source jar 提取失败: ${e.message}", "LibCodeService")
+      Logger.debug("Extraction from source JAR failed: ${e.message}", "LibCodeService")
     }
 
     return null
   }
 
-  /** 查找相关的源文件 */
+  /** Find related source files for the given fully-qualified class name. */
   private fun findSourceFiles(project: Project, fullyQualifiedName: String): List<VirtualFile> {
     try {
-      Logger.info("开始查找类 $fullyQualifiedName 的源码", "LibCodeService")
+      Logger.info("Start searching for source of class $fullyQualifiedName", "LibCodeService")
       val classPath = fullyQualifiedName.replace('.', '/')
       val javaPath = "$classPath.java"
       val kotlinPath = "$classPath.kt"
 
-      // 使用 sourcesRoots 可以直接获取到源码的根目录，比 classesRoots 更准确
+      // Use sourceRoots to directly obtain source roots; more accurate than classesRoots
       val sourceRoots = OrderEnumerator.orderEntries(project).librariesOnly().sourceRoots
-      Logger.debug("找到 ${sourceRoots.size} 个源码根目录", "LibCodeService")
+      Logger.debug("Found ${sourceRoots.size} source roots", "LibCodeService")
 
       return sourceRoots.mapNotNull { root -> root.findFileByRelativePath(javaPath) ?: root.findFileByRelativePath(kotlinPath) }
     } catch (e: Exception) {
-      Logger.debug("查找 source jar 失败: ${e.message}", "LibCodeService")
+      Logger.debug("Failed to search source JAR: ${e.message}", "LibCodeService")
       return emptyList()
     }
   }
 
-  /** 创建未找到结果 */
+  /** Create result for class whose source cannot be found. */
   private fun createNotFoundResult(fullyQualifiedName: String): LibCodeResult {
     return LibCodeResult(
-      sourceCode = "// 未找到类 $fullyQualifiedName 的源码\n// 请检查类名是否正确，或确保相关库在项目的类路径中",
+      sourceCode = "// Class not found: $fullyQualifiedName\n// Please check the class name and ensure the library is on the project classpath",
       isDecompiled = false,
       language = "text",
       metadata =
@@ -115,9 +118,9 @@ class LibCodeServiceImpl : LibCodeService {
     )
   }
 
-  /** 从成员名提取特定成员的源码 */
+  /** Extract specific member source from the full source code. */
   private fun extractMemberFromSourceCode(sourceCode: String, memberName: String): String {
-    // 简化实现：查找包含成员名的行
+    // Simplified implementation: search for lines containing the member name
     val lines = sourceCode.lines()
     val relevantLines =
       lines.filter { line ->
@@ -131,15 +134,15 @@ class LibCodeServiceImpl : LibCodeService {
       }
 
     return if (relevantLines.isNotEmpty()) {
-      "// 提取的成员: $memberName\n\n" + relevantLines.joinToString("\n")
+      "// Extracted member: $memberName\n\n" + relevantLines.joinToString("\n")
     } else {
-      "// 未找到成员 $memberName，返回完整类源码\n\n$sourceCode"
+      "// Member $memberName not found, returning full class source\n\n$sourceCode"
     }
   }
 
-  /** 从源文件路径提取库信息 */
+  /** Extract library name and version from the source file path. */
   private fun extractLibraryInfoFromSourceFile(sourceFile: VirtualFile): Pair<String, String?> {
-    // 路径通常是 .../caches/modules-2/files-2.1/group/artifact/version/.../artifact-version-sources.jar!/path/to/class
+    // Path is usually .../caches/modules-2/files-2.1/group/artifact/version/.../artifact-version-sources.jar!/path/to/class
     val path = sourceFile.path
     val regex = """.*/caches/modules-2/files-2.1/([^/]+)/([^/]+)/([^/]+)/.*""".toRegex()
     val match = regex.find(path)
@@ -166,7 +169,7 @@ class LibCodeServiceImpl : LibCodeService {
     }
   }
 
-  /** 从源码确定语言 */
+  /** Determine language from the source code contents. */
   private fun determineLanguageFromSourceCode(sourceCode: String): String {
     return when {
       sourceCode.contains("package ") && sourceCode.contains("fun ") -> "kotlin"
@@ -177,7 +180,7 @@ class LibCodeServiceImpl : LibCodeService {
     }
   }
 
-  /** 从类名提取库名 */
+  /** Extract library name guess from a fully-qualified class name. */
   private fun extractLibraryNameFromClassName(fullyQualifiedName: String): String {
     val parts = fullyQualifiedName.split('.')
     return when {
@@ -187,7 +190,7 @@ class LibCodeServiceImpl : LibCodeService {
     }
   }
 
-  /** 读取输入流内容 */
+  /** Read entire input stream into a UTF-8 string. */
   private fun readInputStream(inputStream: InputStream): String {
     val buffer = ByteArrayOutputStream()
     val data = ByteArray(1024)

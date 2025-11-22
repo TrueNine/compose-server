@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
-/** Volcengine TOS 配置属性测试 */
+/** Volcengine TOS configuration properties tests */
 class VolcengineTosPropertiesTest {
 
   @Nested
   inner class DefaultValues {
 
     @Test
-    fun `测试默认值设置`() {
+    fun `verifies default value initialization`() {
       val properties = VolcengineTosProperties()
 
       // Authentication
@@ -68,7 +68,7 @@ class VolcengineTosPropertiesTest {
   inner class PropertyAssignment {
 
     @Test
-    fun `测试属性赋值`() {
+    fun `assigns properties correctly`() {
       val customKeyValues = mapOf("env" to "test", "service" to "oss")
       val properties =
         VolcengineTosProperties(
@@ -137,7 +137,7 @@ class VolcengineTosPropertiesTest {
   inner class ValidationTests {
 
     @Test
-    fun `测试有效配置验证通过`() {
+    fun `accepts valid configuration`() {
       val properties =
         VolcengineTosProperties(
           connectTimeoutMills = 10_000,
@@ -154,7 +154,7 @@ class VolcengineTosPropertiesTest {
     }
 
     @Test
-    fun `测试无效超时配置验证失败`() {
+    fun `rejects invalid timeout configuration`() {
       assertThrows<IllegalArgumentException> { VolcengineTosProperties(connectTimeoutMills = -1).validate() }
 
       assertThrows<IllegalArgumentException> { VolcengineTosProperties(readTimeoutMills = 0).validate() }
@@ -165,7 +165,7 @@ class VolcengineTosPropertiesTest {
     }
 
     @Test
-    fun `测试无效连接池配置验证失败`() {
+    fun `rejects invalid connection pool configuration`() {
       assertThrows<IllegalArgumentException> { VolcengineTosProperties(maxConnections = 0).validate() }
 
       assertThrows<IllegalArgumentException> { VolcengineTosProperties(maxRetryCount = -1).validate() }
@@ -174,7 +174,7 @@ class VolcengineTosPropertiesTest {
     }
 
     @Test
-    fun `测试代理配置验证`() {
+    fun `validates proxy configuration`() {
       // Valid proxy configuration
       assertDoesNotThrow { VolcengineTosProperties(proxyHost = "proxy.example.com", proxyPort = 8080).validate() }
 
@@ -187,7 +187,7 @@ class VolcengineTosPropertiesTest {
   inner class HelperMethods {
 
     @Test
-    fun `测试getEffectiveEndpoint方法`() {
+    fun `getEffectiveEndpoint handles variations`() {
       // Null endpoint
       val nullEndpointProps = VolcengineTosProperties(endpoint = null)
       assertNull(nullEndpointProps.getEffectiveEndpoint())
@@ -209,7 +209,7 @@ class VolcengineTosPropertiesTest {
     }
 
     @Test
-    fun `测试hasProxyConfiguration方法`() {
+    fun `hasProxyConfiguration behaves correctly`() {
       // No proxy
       val noProxyProps = VolcengineTosProperties()
       assertFalse(noProxyProps.hasProxyConfiguration())
@@ -228,7 +228,7 @@ class VolcengineTosPropertiesTest {
     }
 
     @Test
-    fun `测试hasProxyAuthentication方法`() {
+    fun `hasProxyAuthentication behaves correctly`() {
       // No proxy
       val noProxyProps = VolcengineTosProperties()
       assertFalse(noProxyProps.hasProxyAuthentication())
@@ -251,7 +251,7 @@ class VolcengineTosPropertiesTest {
   inner class BooleanProperties {
 
     @Test
-    fun `测试布尔属性默认值`() {
+    fun `verifies default boolean values`() {
       val properties = VolcengineTosProperties()
 
       assertTrue(properties.enableSsl)
@@ -263,7 +263,7 @@ class VolcengineTosPropertiesTest {
     }
 
     @Test
-    fun `测试布尔属性设置`() {
+    fun `applies boolean overrides`() {
       val properties =
         VolcengineTosProperties(
           enableSsl = false,
@@ -287,7 +287,7 @@ class VolcengineTosPropertiesTest {
   inner class TimeoutProperties {
 
     @Test
-    fun `测试超时属性边界值`() {
+    fun `accepts timeout boundary values`() {
       val timeoutValues = listOf(1, 1000, 5000, 10_000, 30_000, 60_000, 120_000)
 
       timeoutValues.forEach { value ->
@@ -306,22 +306,22 @@ class VolcengineTosPropertiesTest {
   inner class IntegerProperties {
 
     @Test
-    fun `测试整数属性边界值`() {
-      // 测试连接数
+    fun `accepts integer boundary values`() {
+      // Test connection counts
       val connectionValues = listOf(1, 10, 50, 100, 500, 1024, 2048)
       connectionValues.forEach { value ->
         val properties = VolcengineTosProperties(maxConnections = value)
         assertEquals(value, properties.maxConnections)
       }
 
-      // 测试重试次数
+      // Test retry counts
       val retryValues = listOf(0, 1, 3, 5, 10)
       retryValues.forEach { value ->
         val properties = VolcengineTosProperties(maxRetryCount = value)
         assertEquals(value, properties.maxRetryCount)
       }
 
-      // 测试DNS缓存时间
+      // Test DNS cache durations
       val cacheValues = listOf(0, 1, 5, 10, 30, 60)
       cacheValues.forEach { value ->
         val properties = VolcengineTosProperties(dnsCacheTimeMinutes = value)
@@ -334,7 +334,7 @@ class VolcengineTosPropertiesTest {
   inner class UserAgentProperties {
 
     @Test
-    fun `测试User-Agent属性`() {
+    fun `handles user-agent properties`() {
       val customKeyValues = mapOf("environment" to "production", "service" to "oss-service", "version" to "1.2.3")
 
       val properties =
@@ -356,7 +356,7 @@ class VolcengineTosPropertiesTest {
   inner class ToStringMethod {
 
     @Test
-    fun `测试toString方法不暴露敏感信息`() {
+    fun `toString does not expose sensitive information`() {
       val properties =
         VolcengineTosProperties(accessKey = "very-secret-access-key", secretKey = "very-secret-secret-key", proxyPassword = "secret-proxy-password")
 

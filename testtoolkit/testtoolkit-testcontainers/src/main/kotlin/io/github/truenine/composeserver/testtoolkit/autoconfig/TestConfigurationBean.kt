@@ -15,12 +15,12 @@ import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
 
 /**
- * # 测试工具包配置 Bean
+ * Test toolkit configuration bean.
  *
- * 提供测试期间的默认配置：
- * - 默认为 Spring 上下文注入属性
- * - 关闭条件评估报告
- * - 总是开启颜色输出
+ * Provides default configuration during tests:
+ * - Injects recommended properties into the Spring context.
+ * - Disables condition evaluation reports when configured.
+ * - Always enables ANSI color output.
  */
 @AutoConfiguration
 @EnableConfigurationProperties(TestConfigurationProperties::class, TestcontainersProperties::class)
@@ -44,7 +44,7 @@ open class TestConfigurationBean(
 
     val testProperties = mutableMapOf<String, Any>()
 
-    // 关闭条件评估报告
+    // Disable condition evaluation reports
     if (properties.disableConditionEvaluationReport) {
       testProperties["debug"] = false
       testProperties["spring.test.print-condition-evaluation-report"] = false
@@ -53,20 +53,20 @@ open class TestConfigurationBean(
       log.trace("disabled condition evaluation report")
     }
 
-    // 启用虚拟线程
+    // Enable virtual threads
     if (properties.enableVirtualThreads) {
       testProperties["spring.threads.virtual.enabled"] = true
       log.trace("enabled virtual threads")
     }
 
-    // 配置颜色输出
+    // Configure ANSI color output
     testProperties["spring.output.ansi.enabled"] = properties.ansiOutputMode.value
     log.trace("set ansi output mode: {}", properties.ansiOutputMode.value)
 
-    // 添加额外的测试属性
+    // Add additional test properties
     testProperties.putAll(properties.additionalProperties)
 
-    // 将属性添加到环境中
+    // Add properties into the environment
     if (testProperties.isNotEmpty()) {
       val propertySource = MapPropertySource("testToolkitProperties", testProperties)
       environment.propertySources.addFirst(propertySource)
@@ -90,13 +90,13 @@ open class TestConfigurationBean(
 }
 
 /**
- * # 测试环境后处理器
+ * Test environment post-processor.
  *
- * 用于在测试环境中进行额外的配置处理
+ * Provides additional configuration helpers for test environments.
  */
 class TestEnvironmentPostProcessor {
 
-  /** 获取推荐的测试属性 */
+  /** Returns a set of recommended test properties. */
   fun getRecommendedTestProperties(): Map<String, String> {
     return mapOf(
       "spring.threads.virtual.enabled" to "true",
@@ -110,7 +110,7 @@ class TestEnvironmentPostProcessor {
     )
   }
 
-  /** 检查是否为测试环境 */
+  /** Checks whether the given environment represents a test environment. */
   fun isTestEnvironment(environment: ConfigurableEnvironment): Boolean {
     val activeProfiles = environment.activeProfiles
     return activeProfiles.any { it.contains("test") } || environment.getProperty("spring.profiles.active", "").contains("test")

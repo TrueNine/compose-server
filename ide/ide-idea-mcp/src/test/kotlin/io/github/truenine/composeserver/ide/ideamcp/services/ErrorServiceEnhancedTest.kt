@@ -4,7 +4,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity
 
-/** 增强的错误服务测试 测试多种错误检测方法的有效性 */
+/** Enhanced ErrorService tests verifying multiple error-detection scenarios. */
 class ErrorServiceEnhancedTest : BasePlatformTestCase() {
 
   private lateinit var errorService: ErrorService
@@ -14,57 +14,59 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
     errorService = ErrorServiceImpl()
   }
 
+  /** Test error detection with unused imports. */
   fun testErrorDetectionWithUnusedImport() {
-    // 创建一个包含未使用导入的测试文件
+    // Create a test file with unused imports
     val testContent =
       """
-        package com.test
-        
-        import java.util.List  // 未使用的导入
-        import java.util.Map   // 未使用的导入
-        
-        class TestClass {
-          fun doSomething() {
-            println("Hello")
-          }
+      package com.test
+
+      import java.util.List  // Unused import
+      import java.util.Map   // Unused import
+
+      class TestClass {
+        fun doSomething() {
+          println("Hello")
         }
+      }
       """
         .trimIndent()
 
     val virtualFile = myFixture.configureByText("TestClass.kt", testContent).virtualFile
 
-    // 等待代码分析完成
+    // Wait for code analysis to complete
     ApplicationManager.getApplication().invokeAndWait {
-      // 触发错误检测
+      // Trigger error analysis
       val errors = errorService.analyzeFile(project, virtualFile)
 
       println("Found ${errors.size} errors/warnings:")
       errors.forEach { error -> println("  Line ${error.line}: ${error.severity} - ${error.message}") }
 
-      // 验证是否检测到未使用的导入
+      // Verify that unused imports are detected
       val unusedImportErrors = errors.filter { it.message.contains("unused", ignoreCase = true) || it.message.contains("never used", ignoreCase = true) }
 
       if (unusedImportErrors.isNotEmpty()) {
-        println("✓ Successfully detected unused imports!")
+        println("[PASS] Successfully detected unused imports!")
       } else {
-        println("✗ Failed to detect unused imports")
+        println("[FAIL] Failed to detect unused imports")
         println("All detected issues:")
         errors.forEach { error -> println("  ${error.severity}: ${error.message}") }
       }
     }
   }
 
+  /** Test error detection with syntax errors. */
   fun testErrorDetectionWithSyntaxError() {
-    // 创建一个包含语法错误的测试文件
+    // Create a test file containing syntax errors
     val testContent =
       """
-        package com.test
-        
-        class TestClass {
-          fun doSomething( {  // 语法错误：缺少参数和右括号
-            println("Hello")
-          }
+      package com.test
+
+      class TestClass {
+        fun doSomething( {  // Syntax error: missing parameter and closing parenthesis
+          println("Hello")
         }
+      }
       """
         .trimIndent()
 
@@ -76,53 +78,54 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
       println("Found ${errors.size} errors/warnings:")
       errors.forEach { error -> println("  Line ${error.line}: ${error.severity} - ${error.message}") }
 
-      // 验证是否检测到语法错误
+      // Verify that syntax errors are detected
       val syntaxErrors = errors.filter { it.severity == ErrorSeverity.ERROR }
 
       if (syntaxErrors.isNotEmpty()) {
-        println("✓ Successfully detected syntax errors!")
+        println("[PASS] Successfully detected syntax errors!")
       } else {
-        println("✗ Failed to detect syntax errors")
+        println("[FAIL] Failed to detect syntax errors")
       }
     }
   }
 
+  /** Comprehensive error detection test with real file analysis. */
   fun testComprehensiveErrorDetectionWithRealFileAnalysis() {
-    // 创建一个包含多种问题的测试文件
+    // Create a test file that contains multiple issues
     val testContent =
       """
-        package com.test
+      package com.test
 
-        import java.util.List  // 未使用
-        import java.util.ArrayList
+      import java.util.List  // Unused
+      import java.util.ArrayList
 
-        class TestClass {
-          private val unusedField = "never used"  // 未使用的字段
+      class TestClass {
+        private val unusedField = "never used"  // Unused field
 
-          fun doSomething(): String {
-            val list = ArrayList<String>()
-            list.add("test")
-            return list.toString()
-            val unreachableCode = "never reached"  // 不可达代码
-          }
-
-          fun undefinedMethod() {
-            nonExistentFunction()  // 未定义的函数
-          }
+        fun doSomething(): String {
+          val list = ArrayList<String>()
+          list.add("test")
+          return list.toString()
+          val unreachableCode = "never reached"  // Unreachable code
         }
+
+        fun undefinedMethod() {
+          nonExistentFunction()  // Undefined function
+        }
+      }
       """
         .trimIndent()
 
     val virtualFile = myFixture.configureByText("ComprehensiveTest.kt", testContent).virtualFile
 
     ApplicationManager.getApplication().invokeAndWait {
-      // 尝试手动触发代码分析
+      // Try to manually trigger code analysis
       myFixture.doHighlighting()
 
-      // 等待分析完成
+      // Wait for analysis to complete
       Thread.sleep(2000)
 
-      // 再次触发高亮
+      // Trigger highlighting again
       val highlightInfos = myFixture.doHighlighting()
       println("Direct highlighting found ${highlightInfos.size} issues:")
       highlightInfos.forEach { info -> println("  ${info.severity}: ${info.description} at ${info.startOffset}-${info.endOffset}") }
@@ -135,7 +138,7 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
         println("    Code: ${error.codeSnippet}")
       }
 
-      // 分类统计
+      // Aggregate statistics
       val errorCount = errors.count { it.severity == ErrorSeverity.ERROR }
       val warningCount = errors.count { it.severity == ErrorSeverity.WARNING }
       val weakWarningCount = errors.count { it.severity == ErrorSeverity.WEAK_WARNING }
@@ -146,28 +149,29 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
       println("  Weak Warnings: $weakWarningCount")
       println("  Direct highlighting: ${highlightInfos.size}")
 
-      // 如果直接高亮检测到问题，但我们的服务没有检测到，说明需要改进
+      // If direct highlighting detects issues but our service does not, it needs improvement
       if (highlightInfos.isNotEmpty() && errors.isEmpty()) {
-        println("⚠ Direct highlighting detected issues but our service didn't - need improvement")
+        println("[WARN] Direct highlighting detected issues but our service didn't - need improvement")
       } else if (errors.isNotEmpty()) {
-        println("✓ Error detection is working!")
+        println("[PASS] Error detection is working!")
       } else {
-        println("ℹ No errors detected by either method - might be test environment limitation")
+        println("[INFO] No errors detected by either method - might be test environment limitation")
       }
     }
   }
 
+  /** Test PSI syntax error detection. */
   fun testPsiSyntaxErrorDetection() {
-    // 创建一个包含明显语法错误的文件
+    // Create a file with an obvious syntax error
     val testContent =
       """
-        package com.test
+      package com.test
 
-        class TestClass {
-          fun brokenFunction( {  // 明显的语法错误
-            println("This should cause a syntax error")
-          }
+      class TestClass {
+        fun brokenFunction( {  // Obvious syntax error
+          println("This should cause a syntax error")
         }
+      }
       """
         .trimIndent()
 
@@ -182,21 +186,22 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
         println("    Code: ${error.codeSnippet}")
       }
 
-      // 检查是否检测到语法错误
+      // Verify that syntax errors are detected
       val syntaxErrors = errors.filter { it.code.contains("syntax", ignoreCase = true) || it.code.contains("error", ignoreCase = true) }
       if (syntaxErrors.isNotEmpty()) {
-        println("✓ Successfully detected syntax errors via PSI!")
+        println("[PASS] Successfully detected syntax errors via PSI!")
       } else {
-        println("ℹ No PSI syntax errors detected - this might be normal in test environment")
+        println("[INFO] No PSI syntax errors detected - this might be normal in test environment")
       }
     }
   }
 
+  /** Test error severity classification. */
   fun testErrorSeverityClassification() {
-    // 测试错误严重程度分类
+    // Test error severity classification
     val errorService = ErrorServiceImpl()
 
-    // 测试严重程度判断方法
+    // Test severity classification logic
     val testCases =
       listOf(
         "Variable 'unused' is never used" to ErrorSeverity.WEAK_WARNING,
@@ -206,7 +211,8 @@ class ErrorServiceEnhancedTest : BasePlatformTestCase() {
       )
 
     testCases.forEach { (description, expectedSeverity) ->
-      // 我们无法直接测试私有方法，但可以通过分析包含特定错误描述的文件来间接测试
+      // We cannot directly test private methods, but we can indirectly test classification
+      // by analyzing files that contain specific error descriptions.
       println("Testing severity classification for: $description")
       println("Expected: $expectedSeverity")
     }

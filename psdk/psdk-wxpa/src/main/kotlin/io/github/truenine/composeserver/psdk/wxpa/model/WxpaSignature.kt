@@ -1,20 +1,20 @@
 package io.github.truenine.composeserver.psdk.wxpa.model
 
 /**
- * # 微信公众号JSAPI签名信息
+ * WeChat Official Account JSAPI signature information.
  *
  * @author TrueNine
  * @since 2025-08-08
  */
 data class WxpaSignature(
-  /** 应用ID */
+  /** Application ID. */
   val appId: String,
-  /** 随机字符串 */
+  /** Random nonce string. */
   val nonceStr: String,
-  /** 时间戳 */
+  /** Timestamp. */
   val timestamp: Long,
-  /** 签名URL */
+  /** URL used for signing. */
   val url: String,
-  /** 签名 */
+  /** Signature value. */
   val signature: String,
 )

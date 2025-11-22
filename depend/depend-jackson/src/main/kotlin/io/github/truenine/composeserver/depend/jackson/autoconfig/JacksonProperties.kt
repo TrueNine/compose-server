@@ -4,36 +4,36 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
- * Jackson配置属性类
+ * Jackson configuration properties class
  *
- * 提供统一的Jackson配置管理，支持时间戳序列化等核心功能的配置
+ * Provides centralized Jackson configuration management, supporting core features like timestamp serialization.
  *
  * @author TrueNine
  * @since 2025-01-16
  */
 @ConfigurationProperties(prefix = "compose.depend.jackson")
 data class JacksonProperties(
-  /** 是否启用时间戳序列化 默认为true，将所有时间类型序列化为时间戳 */
+  /** Whether to enable timestamp serialization. Defaults to true, serializing all time types as timestamps. */
   var enableTimestampSerialization: Boolean = true,
 
-  /** 时间戳单位配置 默认使用毫秒时间戳 */
+  /** Timestamp unit configuration. Defaults to using millisecond timestamps. */
   var timestampUnit: TimestampUnit = TimestampUnit.MILLISECONDS,
 
-  /** 序列化包含策略 默认不包含null值 */
+  /** Serialization inclusion policy. Defaults to not including null values. */
   var serializationInclusion: JsonInclude.Include = JsonInclude.Include.NON_NULL,
 
-  /** 遇到未知属性时是否失败 默认为false，忽略未知属性 */
+  /** Whether to fail on unknown properties. Defaults to false, ignoring unknown properties. */
   var failOnUnknownProperties: Boolean = false,
 
-  /** 是否将日期写为时间戳 默认为true，与enableTimestampSerialization保持一致 */
+  /** Whether to write dates as timestamps. Defaults to true, consistent with enableTimestampSerialization. */
   var writeDatesAsTimestamps: Boolean = true,
 )
 
-/** 时间戳单位枚举 */
+/** Timestamp unit enum */
 enum class TimestampUnit {
-  /** 毫秒时间戳（默认） */
+  /** Millisecond timestamp (default) */
   MILLISECONDS,
 
-  /** 秒时间戳 */
+  /** Second timestamp */
   SECONDS,
 }

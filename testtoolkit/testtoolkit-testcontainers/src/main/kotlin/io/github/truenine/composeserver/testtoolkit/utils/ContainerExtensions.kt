@@ -6,30 +6,30 @@ import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 
 /**
- * # 容器扩展函数
+ * Container extension functions.
  *
- * 为 Testcontainers 的 GenericContainer 提供便捷的扩展方法， 简化容器操作和提高测试稳定性。
+ * Provides convenient extension methods for Testcontainers GenericContainer to simplify container operations and improve test stability.
  *
  * @author TrueNine
  * @since 2025-07-12
  */
 
 /**
- * 为容器创建命令执行器
+ * Creates a command executor for the container.
  *
- * @return ContainerCommandExecutor 实例
+ * @return ContainerCommandExecutor instance
  */
 fun GenericContainer<*>.commandExecutor(): ContainerCommandExecutor {
   return ContainerCommandExecutor(this)
 }
 
 /**
- * 安全执行容器命令，带重试机制
+ * Executes a container command safely with a retry mechanism.
  *
- * @param timeout 超时时间
- * @param maxRetries 最大重试次数
- * @param commands 要执行的命令
- * @return 命令执行结果
+ * @param timeout command timeout
+ * @param maxRetries maximum retry attempts
+ * @param commands command and arguments to execute
+ * @return command execution result
  */
 fun GenericContainer<*>.safeExecInContainer(
   timeout: Duration = ContainerCommandExecutor.DEFAULT_COMMAND_TIMEOUT,
@@ -40,13 +40,13 @@ fun GenericContainer<*>.safeExecInContainer(
 }
 
 /**
- * 执行命令并验证退出码
+ * Executes a command and verifies the exit code.
  *
- * @param expectedExitCode 期望的退出码
- * @param timeout 超时时间
- * @param maxRetries 最大重试次数
- * @param commands 要执行的命令
- * @return 命令执行结果
+ * @param expectedExitCode expected exit code
+ * @param timeout command timeout
+ * @param maxRetries maximum retry attempts
+ * @param commands command and arguments to execute
+ * @return command execution result
  */
 fun GenericContainer<*>.execWithExpectedExitCode(
   expectedExitCode: Int,
@@ -58,12 +58,12 @@ fun GenericContainer<*>.execWithExpectedExitCode(
 }
 
 /**
- * 执行命令并获取输出
+ * Executes a command and returns its output.
  *
- * @param timeout 超时时间
- * @param maxRetries 最大重试次数
- * @param commands 要执行的命令
- * @return 标准输出内容
+ * @param timeout command timeout
+ * @param maxRetries maximum retry attempts
+ * @param commands command and arguments to execute
+ * @return standard output content
  */
 fun GenericContainer<*>.execAndGetOutput(
   timeout: Duration = ContainerCommandExecutor.DEFAULT_COMMAND_TIMEOUT,
@@ -74,13 +74,13 @@ fun GenericContainer<*>.execAndGetOutput(
 }
 
 /**
- * 执行命令并检查输出是否包含指定内容
+ * Executes a command and checks whether output contains the expected content.
  *
- * @param expectedContent 期望包含的内容
- * @param timeout 超时时间
- * @param maxRetries 最大重试次数
- * @param commands 要执行的命令
- * @return 命令执行结果
+ * @param expectedContent expected content to be contained in output
+ * @param timeout command timeout
+ * @param maxRetries maximum retry attempts
+ * @param commands command and arguments to execute
+ * @return command execution result
  */
 fun GenericContainer<*>.execAndCheckOutput(
   expectedContent: String,
@@ -92,22 +92,22 @@ fun GenericContainer<*>.execAndCheckOutput(
 }
 
 /**
- * 等待容器完全就绪
+ * Waits until the container is fully ready.
  *
- * @param timeout 超时时间
- * @param pollInterval 轮询间隔
+ * @param timeout timeout duration
+ * @param pollInterval polling interval
  */
 fun GenericContainer<*>.waitForReady(timeout: Duration = Duration.ofSeconds(30), pollInterval: Duration = Duration.ofMillis(500)) {
   commandExecutor().waitForContainerReady(timeout, pollInterval)
 }
 
 /**
- * 检查文件是否存在
+ * Checks whether a file exists in the container.
  *
- * @param filePath 文件路径
- * @param timeout 超时时间
- * @param maxRetries 最大重试次数
- * @return 文件是否存在
+ * @param filePath file path
+ * @param timeout command timeout
+ * @param maxRetries maximum retry attempts
+ * @return true if the file exists, false otherwise
  */
 fun GenericContainer<*>.fileExists(
   filePath: String,
@@ -118,23 +118,23 @@ fun GenericContainer<*>.fileExists(
 }
 
 /**
- * 等待文件出现
+ * Waits for a file to appear in the container.
  *
- * @param filePath 文件路径
- * @param timeout 超时时间
- * @param pollInterval 轮询间隔
+ * @param filePath file path
+ * @param timeout timeout duration
+ * @param pollInterval polling interval
  */
 fun GenericContainer<*>.waitForFile(filePath: String, timeout: Duration = Duration.ofSeconds(30), pollInterval: Duration = Duration.ofMillis(500)) {
   commandExecutor().waitForFile(filePath, timeout, pollInterval)
 }
 
 /**
- * 读取文件内容
+ * Reads file content from the container.
  *
- * @param filePath 文件路径
- * @param timeout 超时时间
- * @param maxRetries 最大重试次数
- * @return 文件内容
+ * @param filePath file path
+ * @param timeout command timeout
+ * @param maxRetries maximum retry attempts
+ * @return file content
  */
 fun GenericContainer<*>.readFile(
   filePath: String,
@@ -145,24 +145,24 @@ fun GenericContainer<*>.readFile(
 }
 
 /**
- * 配置容器使用更稳定的等待策略
+ * Configures the container to use a more stable log-based wait strategy.
  *
- * @param logMessage 要等待的日志消息
- * @param times 消息出现次数
- * @param timeout 超时时间
- * @return 配置后的容器
+ * @param logMessage log message to wait for
+ * @param times number of times the message should appear
+ * @param timeout timeout duration
+ * @return configured container
  */
 fun <T : GenericContainer<T>> T.withStableWaitStrategy(logMessage: String, times: Int = 1, timeout: Duration = Duration.ofSeconds(60)): T {
   return this.waitingFor(Wait.forLogMessage(logMessage, times).withStartupTimeout(timeout))
 }
 
 /**
- * 配置容器使用健康检查等待策略
+ * Configures the container to use a health-check based wait strategy.
  *
- * @param healthCheckCommand 健康检查命令
- * @param timeout 超时时间
- * @param interval 检查间隔
- * @return 配置后的容器
+ * @param healthCheckCommand health-check command to run inside the container
+ * @param timeout timeout duration
+ * @param interval check interval
+ * @return configured container
  */
 fun <T : GenericContainer<T>> T.withHealthCheck(
   healthCheckCommand: Array<String>,
@@ -173,10 +173,10 @@ fun <T : GenericContainer<T>> T.withHealthCheck(
 }
 
 /**
- * 启动容器并等待完全就绪
+ * Starts the container and waits until it is fully ready.
  *
- * @param readyTimeout 就绪检查超时时间
- * @param readyPollInterval 就绪检查轮询间隔
+ * @param readyTimeout readiness timeout duration
+ * @param readyPollInterval readiness polling interval
  */
 fun GenericContainer<*>.startAndWaitForReady(readyTimeout: Duration = Duration.ofSeconds(30), readyPollInterval: Duration = Duration.ofMillis(500)) {
   start()

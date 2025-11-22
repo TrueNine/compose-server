@@ -20,41 +20,45 @@ import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/** 代码清理服务接口 提供代码格式化、导入优化、检查修复等功能 */
+/**
+ * Code clean-up service interface.
+ *
+ * Provides code formatting, import optimization, inspections and fixes.
+ */
 interface CleanService {
-  /** 执行代码清理操作 */
+  /** Execute code clean-up operation. */
   suspend fun cleanCode(project: Project, virtualFile: VirtualFile, options: CleanOptions): CleanResult
 }
 
-/** 清理选项配置 */
+/** Clean-up options configuration. */
 data class CleanOptions(
-  /** 是否执行代码格式化 */
+  /** Whether to format code. */
   val formatCode: Boolean = true,
-  /** 是否优化导入 */
+  /** Whether to optimize imports. */
   val optimizeImports: Boolean = true,
-  /** 是否运行代码检查并修复 */
+  /** Whether to run code inspections and apply fixes. */
   val runInspections: Boolean = true,
-  /** 是否重新排列代码 */
+  /** Whether to rearrange code. */
   val rearrangeCode: Boolean = false,
 )
 
-/** 清理结果 */
+/** Clean-up result. */
 data class CleanResult(
-  /** 处理的文件数量 */
+  /** Number of processed files. */
   val processedFiles: Int,
-  /** 修改的文件数量 */
+  /** Number of modified files. */
   val modifiedFiles: Int,
-  /** 执行的操作列表 */
+  /** List of executed operations. */
   val operations: List<CleanOperation>,
-  /** 错误信息列表 */
+  /** List of error messages. */
   val errors: List<String>,
-  /** 操作摘要 */
+  /** Operation summary. */
   val summary: String,
-  /** 执行时间（毫秒） */
+  /** Execution time in milliseconds. */
   val executionTime: Long,
 )
 
-/** 代码清理服务实现类 */
+/** Code clean-up service implementation. */
 @Service(Service.Level.PROJECT)
 open class CleanServiceImpl(private val project: Project) : CleanService {
   protected open val fileManager: FileManager by lazy { project.service<FileManager>() }
@@ -62,8 +66,11 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
   override suspend fun cleanCode(project: Project, virtualFile: VirtualFile, options: CleanOptions): CleanResult =
     withContext(Dispatchers.IO) {
       val startTime = System.currentTimeMillis()
-      Logger.info("开始代码清理 - 路径: ${virtualFile.path}", "CleanService")
-      Logger.debug("清理选项 - 格式化: ${options.formatCode}, 优化导入: ${options.optimizeImports}, 检查修复: ${options.runInspections}", "CleanService")
+      Logger.info("Start code clean-up - path: ${virtualFile.path}", "CleanService")
+      Logger.debug(
+        "Clean options - format: ${options.formatCode}, optimize imports: ${options.optimizeImports}, run inspections: ${options.runInspections}",
+        "CleanService",
+      )
 
       val operations = mutableListOf<CleanOperation>()
       val errors = mutableListOf<String>()
@@ -71,13 +78,13 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
       var modifiedFiles = 0
 
       try {
-        // 收集要处理的文件
+        // Collect files to process
         val filesToProcess = collectFilesToProcess(project, virtualFile)
         processedFiles = filesToProcess.size
 
-        Logger.info("找到 ${filesToProcess.size} 个文件需要处理", "CleanService")
+        Logger.info("Found ${filesToProcess.size} files to process", "CleanService")
 
-        // 批量处理文件
+        // Process files in batch
         for (file in filesToProcess) {
           try {
             val fileModified = processFile(project, file, options, operations)
@@ -85,7 +92,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
               modifiedFiles++
             }
           } catch (e: Exception) {
-            val errorMsg = "处理文件失败: ${file.path} - ${e.message}"
+            val errorMsg = "Failed to process file: ${file.path} - ${e.message}"
             errors.add(errorMsg)
             Logger.error(errorMsg, "CleanService", e)
           }
@@ -94,7 +101,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
         val executionTime = System.currentTimeMillis() - startTime
         val summary = createSummary(processedFiles, modifiedFiles, operations, errors)
 
-        Logger.info("代码清理完成 - 处理: $processedFiles, 修改: $modifiedFiles, 耗时: ${executionTime}ms", "CleanService")
+        Logger.info("Code clean-up completed - processed: $processedFiles, modified: $modifiedFiles, duration: ${executionTime}ms", "CleanService")
 
         CleanResult(
           processedFiles = processedFiles,
@@ -105,12 +112,12 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
           executionTime = executionTime,
         )
       } catch (e: Exception) {
-        Logger.error("代码清理失败: ${virtualFile.path}", "CleanService", e)
+        Logger.error("Code clean-up failed: ${virtualFile.path}", "CleanService", e)
         throw e
       }
     }
 
-  /** 收集需要处理的文件 */
+  /** Collect files that need to be processed. */
   protected open fun collectFilesToProcess(project: Project, virtualFile: VirtualFile): List<VirtualFile> {
     return if (virtualFile.isDirectory) {
       fileManager.collectFilesRecursively(virtualFile) { file -> isCodeFile(file) }
@@ -119,7 +126,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
     }
   }
 
-  /** 判断是否为代码文件 */
+  /** Determine whether the file is a code file. */
   protected open fun isCodeFile(file: VirtualFile): Boolean {
     if (file.isDirectory) return false
 
@@ -160,7 +167,7 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
       )
   }
 
-  /** 处理单个文件 */
+  /** Process a single file. */
   private suspend fun processFile(project: Project, virtualFile: VirtualFile, options: CleanOptions, operations: MutableList<CleanOperation>): Boolean =
     suspendCoroutine { continuation ->
       ApplicationManager.getApplication().invokeLater {
@@ -173,9 +180,9 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
             return@invokeLater
           }
 
-          // 执行写操作
+          // Execute write operations
           WriteAction.run<Exception> {
-            // 代码格式化
+            // Code formatting
             if (options.formatCode) {
               val beforeText = psiFile.text
               val processor = ReformatCodeProcessor(project, psiFile, null, false)
@@ -183,12 +190,12 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
 
               if (psiFile.text != beforeText) {
                 fileModified = true
-                updateOperationCount(operations, "FORMAT", "代码格式化")
-                Logger.debug("格式化文件: ${virtualFile.name}", "CleanService")
+                updateOperationCount(operations, "FORMAT", "Code formatting")
+                Logger.debug("Formatted file: ${virtualFile.name}", "CleanService")
               }
             }
 
-            // 优化导入
+            // Optimize imports
             if (options.optimizeImports) {
               val beforeText = psiFile.text
               val processor = OptimizeImportsProcessor(project, psiFile)
@@ -196,49 +203,49 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
 
               if (psiFile.text != beforeText) {
                 fileModified = true
-                updateOperationCount(operations, "OPTIMIZE_IMPORTS", "导入优化")
-                Logger.debug("优化导入: ${virtualFile.name}", "CleanService")
+                updateOperationCount(operations, "OPTIMIZE_IMPORTS", "Optimize imports")
+                Logger.debug("Optimized imports: ${virtualFile.name}", "CleanService")
               }
             }
 
-            // 运行代码检查修复
+            // Run code inspections and fixes
             if (options.runInspections) {
               val inspectionResult = runCodeInspections(project, psiFile)
               if (inspectionResult) {
                 fileModified = true
-                updateOperationCount(operations, "RUN_INSPECTIONS", "代码检查修复")
-                Logger.debug("修复检查问题: ${virtualFile.name}", "CleanService")
+                updateOperationCount(operations, "RUN_INSPECTIONS", "Code inspections and fixes")
+                Logger.debug("Fixed inspection issues: ${virtualFile.name}", "CleanService")
               }
             }
           }
 
           continuation.resume(fileModified)
         } catch (e: Exception) {
-          Logger.error("处理文件异常: ${virtualFile.path}", "CleanService", e)
+          Logger.error("Exception while processing file: ${virtualFile.path}", "CleanService", e)
           continuation.resumeWithException(e)
         }
       }
     }
 
-  /** 运行代码检查并修复 */
+  /** Run code inspections and apply fixes. */
   private fun runCodeInspections(project: Project, psiFile: PsiFile): Boolean {
     return try {
-      // 触发代码分析
+      // Trigger code analysis
       DaemonCodeAnalyzer.getInstance(project).restart(psiFile)
 
-      // TODO: 实现具体的检查修复逻辑
-      // 这里需要使用 IDEA 的检查 API 来执行具体的修复操作
-      // 例如使用 InspectionManager, LocalInspectionTool 等
+      // TODO: Implement concrete inspection and fix logic.
+      // This should use IDEA inspection APIs such as InspectionManager,
+      // LocalInspectionTool, etc.
 
-      Logger.debug("触发代码检查: ${psiFile.name}", "CleanService")
-      false // 暂时返回 false，等待具体实现
+      Logger.debug("Triggered code inspections: ${psiFile.name}", "CleanService")
+      false // Temporarily return false until implementation is provided
     } catch (e: Exception) {
-      Logger.error("代码检查失败: ${psiFile.name}", "CleanService", e)
+      Logger.error("Code inspections failed: ${psiFile.name}", "CleanService", e)
       false
     }
   }
 
-  /** 更新操作计数 */
+  /** Update operation count. */
   protected open fun updateOperationCount(operations: MutableList<CleanOperation>, type: String, description: String) {
     val existingOperation = operations.find { it.type == type }
     if (existingOperation != null) {
@@ -249,21 +256,21 @@ open class CleanServiceImpl(private val project: Project) : CleanService {
     }
   }
 
-  /** 创建操作摘要 */
+  /** Create operation summary. */
   protected open fun createSummary(processedFiles: Int, modifiedFiles: Int, operations: List<CleanOperation>, errors: List<String>): String {
     return buildString {
-      append("处理了 $processedFiles 个文件")
+      append("Processed $processedFiles files")
       if (modifiedFiles > 0) {
-        append("，修改了 $modifiedFiles 个文件")
+        append(", modified $modifiedFiles files")
       }
 
       if (operations.isNotEmpty()) {
-        append("。执行的操作：")
-        operations.forEach { operation -> append("\n- ${operation.description}: ${operation.filesAffected} 个文件") }
+        append(". Operations performed:")
+        operations.forEach { operation -> append("\n- ${operation.description}: ${operation.filesAffected} files") }
       }
 
       if (errors.isNotEmpty()) {
-        append("\n遇到 ${errors.size} 个错误")
+        append("\nEncountered ${errors.size} errors")
       }
     }
   }

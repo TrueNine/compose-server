@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.holders
 
 import java.io.Closeable
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 import org.springframework.core.NamedInheritableThreadLocal
 
-abstract class AbstractThreadLocalHolder<T>(nameId: KClass<*>? = null, defaultValue: T? = null) : Closeable {
-  private val holder by lazy {
+abstract class AbstractThreadLocalHolder<T : Any>(nameId: KClass<*>? = null, defaultValue: T? = null) : Closeable {
+  private val holder: InheritableThreadLocal<T> by lazy {
     val name = nameId?.qualifiedName ?: this::class.qualifiedName ?: UUID.randomUUID().toString()
     NamedInheritableThreadLocal<T>(name)
   }
@@ -21,11 +21,11 @@ abstract class AbstractThreadLocalHolder<T>(nameId: KClass<*>? = null, defaultVa
     get() = holder.get()
     set(value) = holder.set(value)
 
-  open fun get(): T = holder.get()
+  open fun get(): T? = holder.get()
 
   open fun set(value: T) = holder.set(value)
 
-  operator fun component1(): T = holder.get()
+  operator fun component1(): T? = holder.get()
 
   operator fun plusAssign(value: T) = holder.set(value)
 }

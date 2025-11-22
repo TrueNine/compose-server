@@ -12,9 +12,9 @@ import io.github.truenine.composeserver.slf4j
 private val log = slf4j<WxpaSignatureGenerator>()
 
 /**
- * # 微信公众号签名生成器
+ * WeChat Official Account signature generator.
  *
- * 负责生成JSAPI签名和验证服务器配置签名
+ * Responsible for generating JSAPI signatures and verifying server configuration signatures.
  *
  * @author TrueNine
  * @since 2025-08-08
@@ -22,18 +22,19 @@ private val log = slf4j<WxpaSignatureGenerator>()
 class WxpaSignatureGenerator(private val tokenManager: WxpaTokenManager, private val properties: WxpaProperties) {
 
   /**
-   * ## 生成JSAPI签名
+   * Generate JSAPI signature.
    *
-   * @param url 当前网页的URL，不包含#及其后面部分
-   * @param nonceStr 随机字符串，如果为空则自动生成
-   * @param timestamp 时间戳，如果为空则使用当前时间
-   * @return JSAPI签名信息
-   * @throws WxpaSignatureException 签名生成失败
+   * @param url current page URL, without the hash fragment
+   * @param nonceStr random string; auto-generated when null
+   * @param timestamp timestamp; uses the current time when null
+   * @return JSAPI signature information
+   * @throws WxpaSignatureException when signature generation fails
    */
   fun generateJsapiSignature(url: String, nonceStr: String? = null, timestamp: Long? = null): WxpaSignature {
     try {
       val appId = properties.appId ?: throw WxpaSignatureException("AppId is not configured")
-      val cleanUrl = url.split("#")[0] // 移除URL中的锚点部分
+      // Remove hash fragment from URL
+      val cleanUrl = url.split("#")[0]
       val finalNonceStr = nonceStr ?: CryptographicKeyManager.generateRandomAsciiString(32)
       val finalTimestamp = timestamp ?: datetime.now().iso8601LongUtc
 
@@ -41,12 +42,13 @@ class WxpaSignatureGenerator(private val tokenManager: WxpaTokenManager, private
 
       val jsapiTicket = tokenManager.getValidJsapiTicket()
 
-      // 按照微信官方文档要求的顺序和格式构建签名字符串
+      // Build the signature string according to the official WeChat documentation
       val signatureParams = mapOf("jsapi_ticket" to jsapiTicket, "noncestr" to finalNonceStr, "timestamp" to finalTimestamp.toString(), "url" to cleanUrl)
 
       val signatureString =
         signatureParams
-          .toSortedMap() // 按key排序
+          // Sort parameters by key
+          .toSortedMap()
           .map { "${it.key}=${it.value}" }
           .joinToString("&")
 
@@ -67,14 +69,14 @@ class WxpaSignatureGenerator(private val tokenManager: WxpaTokenManager, private
   }
 
   /**
-   * ## 验证服务器配置签名
+   * Verify server configuration signature.
    *
-   * 用于微信公众号服务器配置验证
+   * Used for WeChat Official Account server configuration verification.
    *
-   * @param signature 微信传递的签名
-   * @param timestamp 微信传递的时间戳
-   * @param nonce 微信传递的随机数
-   * @return 验证是否通过
+   * @param signature signature provided by WeChat
+   * @param timestamp timestamp provided by WeChat
+   * @param nonce random nonce provided by WeChat
+   * @return whether the verification passes
    */
   fun verifyServerSignature(signature: String, timestamp: String, nonce: String): Boolean {
     return try {
@@ -106,13 +108,13 @@ class WxpaSignatureGenerator(private val tokenManager: WxpaTokenManager, private
   }
 
   /**
-   * ## 生成服务器验证响应
+   * Generate server verification response.
    *
-   * @param signature 微信传递的签名
-   * @param timestamp 微信传递的时间戳
-   * @param nonce 微信传递的随机数
-   * @param echostr 微信传递的随机字符串
-   * @return 如果验证通过返回echostr，否则返回null
+   * @param signature signature provided by WeChat
+   * @param timestamp timestamp provided by WeChat
+   * @param nonce random nonce provided by WeChat
+   * @param echostr random string provided by WeChat
+   * @return echostr when verification passes, otherwise null
    */
   fun generateServerVerificationResponse(signature: String, timestamp: String, nonce: String, echostr: String): String? {
     return if (verifyServerSignature(signature, timestamp, nonce)) {

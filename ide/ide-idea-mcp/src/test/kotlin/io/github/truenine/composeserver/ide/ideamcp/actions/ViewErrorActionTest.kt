@@ -2,20 +2,20 @@ package io.github.truenine.composeserver.ide.ideamcp.actions
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-/** ViewErrorAction 单元测试 测试错误查看右键菜单动作的功能 */
+/** ViewErrorAction tests verifying error-view context-menu behavior. */
 class ViewErrorActionTest : BasePlatformTestCase() {
 
   fun testActionCreation() {
-    // 测试动作可以正确创建
+    // Verify that the action can be created
     val action = ViewErrorAction()
     assertNotNull(action)
-    assertEquals("查看错误", action.templateText)
+    assertEquals("View Errors", action.templateText)
   }
 
   fun testErrorViewOptionsDialogCreation() {
-    // 测试错误查看选项对话框可以正确创建
+    // Verify that the error-view options dialog can be created
     val dialog = ErrorViewOptionsDialog(project)
     assertNotNull(dialog)
-    assertEquals("错误查看选项", dialog.title)
+    assertEquals("Error view options", dialog.title)
   }
 }

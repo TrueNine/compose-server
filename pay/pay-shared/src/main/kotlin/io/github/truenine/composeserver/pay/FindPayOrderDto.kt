@@ -2,10 +2,10 @@ package io.github.truenine.composeserver.pay
 
 import io.swagger.v3.oas.annotations.media.Schema
 
-/** # 查询支付订单参数 */
+/** # Payment order query parameters */
 data class FindPayOrderDto(
-  /** ## 商户订单号 */
-  @Schema(title = "商户订单号") var merchantOrderId: String? = null,
-  /** ## 第三方订单号 */
-  @Schema(title = "第三方订单号") var bizCode: String? = null,
+  /** ## Merchant order ID */
+  @Schema(title = "Merchant order ID") var merchantOrderId: String? = null,
+  /** ## Third-party order ID */
+  @Schema(title = "Third-party order ID") var bizCode: String? = null,
 )

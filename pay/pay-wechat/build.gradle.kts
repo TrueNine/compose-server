@@ -11,6 +11,7 @@ description =
     .trimIndent()
 
 dependencies {
+  implementation(libs.tools.jackson.core.jackson.databind)
   api(libs.com.github.wechatpay.apiv3.wechatpay.java)
 
   api(projects.pay.payShared)

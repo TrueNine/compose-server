@@ -9,21 +9,21 @@ import jakarta.servlet.http.HttpServletRequest
 import java.util.*
 import org.slf4j.MDC
 
-/** # 抽象 MDC Filter */
+/** # Abstract MDC Filter */
 abstract class MDCFilter : Filter {
   /**
-   * ## 提供 跟踪 id
+   * ## Provides a trace ID
    *
-   * @return 跟踪id
+   * @return trace ID
    */
   open fun supportTranceId(): String? {
     return UUID.randomUUID().toString()
   }
 
   /**
-   * ## ip
+   * ## IP address
    *
-   * @return ip
+   * @return IP address
    */
   open fun supportIp(req: HttpServletRequest): String? {
     return req.remoteRequestIp

@@ -62,7 +62,7 @@ data class ResponseEntityScope(
   }
 }
 
-/** 加以限制的 HTTP HEAD 返回 */
+/** Restricted HTTP HEAD response */
 inline fun headMethodResponse(scope: ResponseEntityScope.() -> Unit): ResponseEntity<Unit> {
   val sc = ResponseEntityScope()
   scope(sc)

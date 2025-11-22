@@ -5,12 +5,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 /**
- * # Testcontainers 配置属性
+ * Testcontainers configuration properties.
  *
- * 用于配置 Testcontainers 各个服务的 Docker 镜像版本。 提供默认的稳定版本，用户可通过配置文件自定义版本。
+ * Configures Docker image versions and options for various Testcontainers-based services. Provides sensible defaults while allowing overrides via Spring
+ * configuration.
  *
- * ## 配置示例
- *
+ * Example configuration:
  * ```yaml
  * compose:
  *   testtoolkit:
@@ -30,95 +30,95 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
  */
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.TESTTOOLKIT_TESTCONTAINERS)
 data class TestcontainersProperties(
-  /** 是否复用所有容器，默认为 true */
+  /** Whether to reuse all containers. */
   var reuseAllContainers: Boolean = false,
 
-  /** 容器默认停止超时时间（秒），默认 300 秒（5分钟） */
+  /** Default container stop timeout in seconds (300 seconds = 5 minutes). */
   var defaultStopTimeoutSeconds: Long = 300,
 
-  /** 是否启用自动停止容器，默认启用以避免长期占用系统资源 */
+  /** Whether to enable automatic container stop to avoid long-running containers. */
   var enableAutoStop: Boolean = true,
 
-  /** PostgreSQL 配置 */
+  /** PostgreSQL container configuration. */
   @NestedConfigurationProperty var postgres: PostgresConfig = PostgresConfig(),
 
-  /** MySQL 配置 */
+  /** MySQL container configuration. */
   @NestedConfigurationProperty var mysql: MysqlConfig = MysqlConfig(),
 
-  /** Redis 配置 */
+  /** Redis container configuration. */
   @NestedConfigurationProperty var redis: RedisConfig = RedisConfig(),
 
-  /** MinIO 配置 */
+  /** MinIO container configuration. */
   @NestedConfigurationProperty var minio: MinioConfig = MinioConfig(),
 )
 
-/** # PostgreSQL 容器配置 */
+/** PostgreSQL container configuration. */
 data class PostgresConfig(
-  /** 是否复用容器，默认复用 */
+  /** Whether to reuse the container. */
   var reuse: Boolean = true,
-  /** PostgreSQL Docker 镜像 默认使用 postgres:17-alpine（当前 LTS 版本） */
+  /** PostgreSQL Docker image, default `postgres:17.6-alpine3.22` (current LTS). */
   var image: String = "postgres:17.6-alpine3.22",
 
-  /** 默认数据库名称 */
+  /** Default database name. */
   var databaseName: String = "testdb",
 
-  /** 默认用户名 */
+  /** Default username. */
   var username: String = "test",
 
-  /** 默认密码 */
+  /** Default password. */
   var password: String = "test",
 
-  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )
 
-/** # MySQL 容器配置 */
+/** MySQL container configuration. */
 data class MysqlConfig(
-  /** 是否复用容器，默认复用 */
+  /** Whether to reuse the container. */
   var reuse: Boolean = true,
-  /** MySQL Docker 镜像 默认使用 mysql:8.0（当前 LTS 版本） */
+  /** MySQL Docker image, default `mysql:8.4.6-oraclelinux9` (current LTS). */
   var image: String = "mysql:8.4.6-oraclelinux9",
 
-  /** 默认数据库名称 */
+  /** Default database name. */
   var databaseName: String = "testdb",
 
-  /** 默认用户名 */
+  /** Default username. */
   var username: String = "test",
 
-  /** 默认密码 */
+  /** Default password. */
   var password: String = "test",
 
-  /** 默认根密码 */
+  /** Default root password. */
   var rootPassword: String = "roottest",
 
-  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )
 
-/** # Redis 容器配置 */
+/** Redis container configuration. */
 data class RedisConfig(
-  /** 是否复用容器，默认复用 */
+  /** Whether to reuse the container. */
   var reuse: Boolean = true,
-  /** Redis Docker 镜像 默认使用 redis:7-alpine（当前稳定版本） */
+  /** Redis Docker image, default `redis/redis-stack:7.2.0-v18` (current stable). */
   var image: String = "redis/redis-stack:7.2.0-v18",
 
-  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )
 
-/** # MinIO 容器配置 */
+/** MinIO container configuration. */
 data class MinioConfig(
-  /** 是否复用容器，默认复用 */
+  /** Whether to reuse the container. */
   var reuse: Boolean = true,
-  /** MinIO Docker 镜像 默认使用较新的稳定版本 */
+  /** MinIO Docker image, defaulting to a recent stable version. */
   var image: String = "minio/minio:RELEASE.2025-09-07T16-13-09Z-cpuv1",
 
-  /** 默认访问密钥 */
+  /** Default access key. */
   var accessKey: String = "minioadmin",
 
-  /** 默认秘密密钥 */
+  /** Default secret key. */
   var secretKey: String = "minioadmin",
 
-  /** 容器停止超时时间（秒），null 表示使用全局默认值 */
+  /** Container stop timeout in seconds, or null to use the global default value. */
   var stopTimeoutSeconds: Long? = null,
 )

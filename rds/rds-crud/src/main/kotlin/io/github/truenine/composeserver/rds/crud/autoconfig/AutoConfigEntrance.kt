@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.rds.crud.autoconfig
 
 import org.babyfish.jimmer.spring.repository.EnableJimmerRepositories
-import org.springframework.boot.autoconfigure.domain.EntityScan
+import org.springframework.boot.persistence.autoconfigure.EntityScan
 import org.springframework.context.annotation.ComponentScan
 
 @EntityScan(basePackages = ["io.github.truenine.composeserver.rds.crud.entities"])

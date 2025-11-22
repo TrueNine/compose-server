@@ -14,10 +14,11 @@ private fun KSClassDeclaration.internalIsAssignableFromDeeply(other: KClass<*>, 
 }
 
 /**
- * 检查当前类或其超类是否与指定的 [KClass] 对象兼容。 这个函数会递归地检查当前类及其超类，以确定是否存在兼容性。 为了避免无限递归，使用了一个检查列表来记录已经检查过的类。
+ * Check whether the current class or its superclasses are compatible with the specified [KClass]. This function recursively checks the current class and its
+ * superclasses to determine compatibility. To avoid infinite recursion, a check list is used to record classes that have already been visited.
  *
- * @param other 要检查的 [KClass] 对象，以确定它是否与当前类或其超类兼容。
- * @return 如果当前类或其超类与指定的KClass对象兼容，则返回true；否则返回false。
+ * @param other The [KClass] to check for compatibility with the current class or its superclasses.
+ * @return true if the current class or its superclasses are compatible with the specified KClass; false otherwise.
  */
 fun KSClassDeclaration.isAssignableFromDeeply(other: KClass<*>): Boolean {
   return internalIsAssignableFromDeeply(other, mutableSetOf())

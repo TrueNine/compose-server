@@ -412,7 +412,7 @@ class AbstractThreadLocalHolderTest {
 
     @Test
     fun `should handle special characters and Unicode`() {
-      val specialString = "Hello 世界! 🌍 @#$%^&*()[]{}|\\:;\"'<>,.?/~`"
+      val specialString = "Hello world! @#$%^&*()[]{}|\\:;\"'<>,.?/~`"
       holder.set(specialString)
       assertEquals(specialString, holder.get())
     }

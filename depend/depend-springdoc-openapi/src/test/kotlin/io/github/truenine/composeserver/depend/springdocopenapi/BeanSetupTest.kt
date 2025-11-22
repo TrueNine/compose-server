@@ -1,19 +1,19 @@
 package io.github.truenine.composeserver.depend.springdocopenapi
 
 import io.github.truenine.composeserver.testtoolkit.log
-import jakarta.annotation.Resource
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
 
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
 @TestPropertySource(
   properties =
     [
@@ -26,10 +26,13 @@ import org.springframework.test.web.servlet.get
     ]
 )
 class BeanSetupTest {
-  @Resource lateinit var mock: MockMvc
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
+
+  lateinit var mock: MockMvc
 
   @BeforeTest
   fun setup() {
+    mock = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
     assertNotNull(mock)
   }
 

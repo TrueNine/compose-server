@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.rds.flywaymigrationmysql8
 import javax.sql.DataSource
 import org.flywaydb.core.Flyway
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer
+import org.springframework.boot.flyway.autoconfigure.FlywayMigrationInitializer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -20,11 +20,11 @@ class TestFlywayConfiguration {
         try {
           // Try to repair first to handle failed migrations
           flyway.repair()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
           // If repair fails, clean and try again
           try {
             flyway.clean()
-          } catch (cleanException: Exception) {
+          } catch (_: Exception) {
             // If clean fails, ignore and proceed
           }
         }

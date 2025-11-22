@@ -10,7 +10,7 @@ dependencies {
   kapt(libs.org.springframework.boot.spring.boot.configuration.processor)
 }
 
-// 配置 jar 任务包含 LICENSE 文件
+// Configure the jar task to include the LICENSE file
 tasks.withType<Jar> {
   from(rootProject.file("LICENSE")) {
     into("META-INF")

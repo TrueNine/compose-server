@@ -11,7 +11,7 @@ tasks.withType<Test>().configureEach {
 tasks.withType<JacocoReport>().configureEach {
   dependsOn(tasks.withType<Test>())
 
-  // 明确声明对Spotless任务的依赖关系以避免隐式依赖问题
+  // Explicitly declare the dependency on Spotless tasks to avoid implicit dependency issues
   mustRunAfter(tasks.withType<com.diffplug.gradle.spotless.SpotlessTask>())
 
   reports {

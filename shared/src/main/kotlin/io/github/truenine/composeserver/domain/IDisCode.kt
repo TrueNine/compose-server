@@ -5,7 +5,7 @@ import io.github.truenine.composeserver.consts.IRegexes
 import io.github.truenine.composeserver.string
 import java.util.*
 
-/** 二代残疾证代码 */
+/** Second-generation disability certificate code. */
 interface IDisCode : IIdcard2Code {
   private class DefaultDis2Code(override val disCode: string) : IDisCode, IIdcard2Code by IIdcard2Code[disCode.substring(0, 18)] {
     init {
@@ -42,19 +42,20 @@ interface IDisCode : IIdcard2Code {
   val disLevel: Int
     get() = disCode.substring(19, 20).toInt()
 
-  /** ## 残疾证号 */
+  /** ## Disability certificate number */
   @get:JsonIgnore val disCode: string
 
   /**
-   * ## 是否补办过
-   * 根据第 20 位是否有 b 判断是否有补办过
+   * ## Whether the certificate has been reissued.
+   * Determined by whether the 20th character is 'b' or 'B'.
    */
   @get:JsonIgnore
   val disCodeIsReIssued: Boolean
     get() = disCode.substring(19, 20).uppercase() == "B"
 
   /**
-   * ## 补办次数 根据第 21 位 来解析补办次数
+   * ## Reissue count.
+   * Parsed from the 21st character.
    *
    * @see disCodeIsReIssued
    */

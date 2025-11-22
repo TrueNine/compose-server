@@ -25,7 +25,7 @@ class TestService(private val sqlClient: KSqlClient) {
   @Transactional(rollbackFor = [Exception::class])
   fun createEntityWithException(name: String, value: Int): TestEntity {
     val entity = createEntity(name, value)
-    throw RuntimeException("模拟事务回滚")
+    throw RuntimeException("Simulate transaction rollback")
   }
 
   @Transactional(readOnly = true)

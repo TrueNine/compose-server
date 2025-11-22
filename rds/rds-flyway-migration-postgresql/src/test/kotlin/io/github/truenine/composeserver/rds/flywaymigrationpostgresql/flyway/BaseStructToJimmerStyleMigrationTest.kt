@@ -23,7 +23,7 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
 
   @Test
   @Transactional
-  fun `base_struct_to_jimmer_style 应正确转换 rlv 字段类型及 default`() {
+  fun `base_struct_to_jimmer_style should correctly convert rlv column type and default`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key, rlv varchar(10))")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("alter table test_table alter column rlv type varchar(10)")
@@ -32,8 +32,8 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
     val rlvInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'rlv'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'rlv'
         """
           .trimIndent()
       )
@@ -43,7 +43,7 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
 
   @Test
   @Transactional
-  fun `base_struct_to_jimmer_style 应正确转换 ldf 字段类型及 default`() {
+  fun `base_struct_to_jimmer_style should correctly convert ldf column type and default`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key, ldf boolean default true)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("alter table test_table alter column ldf type boolean")
@@ -52,8 +52,8 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
     val ldfInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'ldf'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'ldf'
         """
           .trimIndent()
       )
@@ -63,7 +63,7 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
 
   @Test
   @Transactional
-  fun `base_struct_to_jimmer_style 幂等性测试`() {
+  fun `base_struct_to_jimmer_style idempotency test`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key, rlv varchar(10), ldf boolean)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select base_struct_to_jimmer_style('test_table')")
@@ -71,16 +71,16 @@ class BaseStructToJimmerStyleMigrationTest : IDatabasePostgresqlContainer {
     val rlvInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'rlv'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'rlv'
         """
           .trimIndent()
       )
     val ldfInfo =
       jdbcTemplate.queryForMap(
         """
-            select data_type, column_default from information_schema.columns
-            where table_name = 'test_table' and column_name = 'ldf'
+        select data_type, column_default from information_schema.columns
+        where table_name = 'test_table' and column_name = 'ldf'
         """
           .trimIndent()
       )

@@ -9,75 +9,31 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 
 /**
- * # Redis 测试容器接口
+ * Redis test container interface.
  *
- * 该接口提供了 Redis 测试容器的标准配置，用于缓存集成测试环境。 通过实现此接口，测试类可以自动获得配置好的 Redis 测试实例，并可以使用扩展函数进行便捷测试。
+ * Provides a standard configuration for Redis test containers used in cache integration tests. By implementing this interface, test classes can obtain a
+ * preconfigured Redis test instance and use extension functions for convenient testing.
  *
- * ## ⚠️ 重要提示：容器重用与数据清理
+ * Important: container reuse and data cleanup
  *
- * **默认情况下，为了提高测试运行效率，所有容器都是可重用的。** 这意味着容器会在多个测试之间共享，数据可能会残留。
+ * By default, to improve test performance, all containers are reusable. This means data may remain between tests.
  *
- * ### 数据清理责任
- * - **必须在测试中进行数据清理**：使用 `@BeforeEach` 或 `@AfterEach` 清理 Redis 数据
- * - **推荐清理方式**：`FLUSHALL` 或 `FLUSHDB` 命令清空所有键
- * - **不建议禁用重用**：虽然可以通过配置禁用容器重用，但会显著降低测试性能
+ * Data cleanup responsibility:
+ * - You must clean up Redis data in tests (for example using `@BeforeEach` or `@AfterEach`).
+ * - Recommended cleanup: use `FLUSHALL` or `FLUSHDB` to clear all keys.
+ * - It is not recommended to disable reuse because it significantly slows down tests.
  *
- * ### 清理示例
+ * Features:
+ * - Automatically configures a Redis test container.
+ * - Container is started automatically when Spring properties are injected.
+ * - Container reuse improves performance.
+ * - Provides standard Redis connection configuration.
+ * - Supports Spring Test dynamic property injection.
+ * - Uses random ports to avoid port conflicts.
  *
- * ```kotlin
- * @BeforeEach
- * fun cleanupRedis() {
- *   redisTemplate.execute { connection ->
- *     connection.flushAll()
- *     null
- *   }
- * }
- * ```
+ * Usage (legacy style): see tests implementing this interface directly.
  *
- * ## 特性
- * - 自动配置 Redis 测试容器
- * - **容器在 Spring 属性注入时自动启动**
- * - 容器重用以提高性能
- * - 提供标准的 Redis 连接配置
- * - 支持 Spring Test 的动态属性注入
- * - 使用随机端口以避免端口冲突
- *
- * ## 使用方式
- *
- * ### 传统方式（向后兼容）
- *
- * ```kotlin
- * @SpringBootTest
- * class YourTestClass : ICacheRedisContainer {
- *
- *   @BeforeEach
- *   fun setup() {
- *     // 清理 Redis 数据
- *     redisTemplate.execute { it.flushAll(); null }
- *   }
- *
- *   @Test
- *   fun `测试缓存功能`() {
- *     // 你的测试代码
- *   }
- * }
- * ```
- *
- * ### 扩展函数方式（推荐）
- *
- * ```kotlin
- * @SpringBootTest
- * class YourTestClass : ICacheRedisContainer {
- *
- *   @Test
- *   fun `测试缓存功能`() = redis(resetToInitialState = true) { container ->
- *     // 容器会自动重置到初始状态，无需手动清理
- *     // container 是当前的 Redis 容器实例
- *     redisTemplate.opsForValue().set("key", "value")
- *     // 测试逻辑...
- *   }
- * }
- * ```
+ * Usage (recommended extension style): use the `redis` extension function with `resetToInitialState` to automatically clear data before tests.
  *
  * @see org.testcontainers.junit.jupiter.Testcontainers
  * @see org.testcontainers.containers.GenericContainer
@@ -88,16 +44,16 @@ import org.testcontainers.utility.DockerImageName
 interface ICacheRedisContainer : ITestContainerBase {
   companion object {
     /**
-     * Redis 测试容器实例
+     * Redis test container instance.
      *
-     * 预配置的 Redis 容器，具有以下默认设置：
-     * - 端口: 6379 (随机映射)
-     * - 版本: 可通过配置自定义，默认 7.4.2-alpine3.21
-     * - 无密码认证
-     * - **容器重用**: 默认启用，多个测试共享同一容器实例
-     * - **自动启动**: 容器在 Spring 属性注入时自动启动
+     * Preconfigured Redis container with the following defaults:
+     * - Port: 6379 (randomly mapped)
+     * - Version: configurable, default 7.4.2-alpine3.21
+     * - No password authentication
+     * - Container reuse is enabled by default so multiple tests share the same instance
+     * - Container is started automatically when Spring properties are injected
      *
-     * ⚠️ **重要**: 由于容器重用，数据会在测试间残留，请确保在测试中进行适当的数据清理。
+     * Important: because of container reuse, data will remain between tests, so make sure to perform proper cleanup in tests.
      */
     @Volatile private var _container: GenericContainer<*>? = null
 
@@ -110,9 +66,9 @@ interface ICacheRedisContainer : ITestContainerBase {
           )
 
     /**
-     * 创建并启动 Redis 容器
+     * Creates and starts the Redis container.
      *
-     * @return 已启动的 Redis 容器实例
+     * @return started Redis container instance
      */
     private fun createAndStartContainer(): GenericContainer<*> {
       val config = TestcontainersConfigurationHolder.getTestcontainersProperties()
@@ -125,29 +81,29 @@ interface ICacheRedisContainer : ITestContainerBase {
     }
 
     /**
-     * Redis 容器的懒加载实例
+     * Lazily initialized Redis container instance.
      *
-     * 用于 containers() 聚合函数，返回已初始化的容器实例。
+     * Used by containers() aggregation functions to return an initialized container instance.
      *
-     * @return 懒加载的 Redis 容器实例
+     * @return lazy Redis container instance
      */
     @JvmStatic val redisContainerLazy: Lazy<GenericContainer<*>> by lazy { lazy { container } }
 
     /**
-     * Spring 测试环境动态属性配置
+     * Dynamic property configuration for Spring test environments.
      *
-     * 自动注入 Redis 连接相关的配置属性到 Spring 测试环境中：
-     * - 主机地址
-     * - 端口
+     * Automatically injects Redis connection properties into the Spring test environment:
+     * - host
+     * - port
      *
-     * 容器将在此方法调用时自动创建并启动，确保属性值可用。
+     * The container will be created and started when this method is called, ensuring that property values are available.
      *
-     * @param registry Spring 动态属性注册器
+     * @param registry Spring dynamic property registry
      */
     @JvmStatic
     @DynamicPropertySource
     fun properties(registry: DynamicPropertyRegistry) {
-      // 线程安全的容器初始化
+      // Thread-safe container initialization
       if (_container == null) {
         synchronized(ICacheRedisContainer::class.java) {
           if (_container == null) {
@@ -165,23 +121,24 @@ interface ICacheRedisContainer : ITestContainerBase {
   }
 
   /**
-   * Redis 容器扩展函数
+   * Redis container extension function.
    *
-   * 提供便捷的 Redis 容器测试方式，支持自动数据重置。 容器已在 Spring 属性注入时启动。
+   * Provides a convenient way to test with a Redis container and supports automatic data reset. The container has already been started when Spring properties
+   * are injected.
    *
-   * @param resetToInitialState 是否重置到初始状态（清空所有数据），默认为 true
-   * @param block 测试执行块，接收当前 Redis 容器实例作为参数
-   * @return 测试执行块的返回值
+   * @param resetToInitialState whether to reset to the initial state (clear all data), default is true
+   * @param block test block that receives the current Redis container instance
+   * @return result of the test block
    */
   fun <T> redis(resetToInitialState: Boolean = true, block: (GenericContainer<*>) -> T): T {
     if (resetToInitialState) {
-      // 重置 Redis 到初始状态 - 清空所有数据
+      // Reset Redis to initial state by clearing all data
       try {
-        // 使用容器执行 Redis FLUSHALL 命令
+        // Use the container to execute the Redis FLUSHALL command
         container.execInContainer("redis-cli", "FLUSHALL")
       } catch (e: Exception) {
-        // 如果清理失败，记录警告但继续执行测试
-        org.slf4j.LoggerFactory.getLogger(ICacheRedisContainer::class.java).warn("无法重置 Redis 容器到初始状态: {}", e.message)
+        // If cleanup fails, log a warning but continue executing tests
+        org.slf4j.LoggerFactory.getLogger(ICacheRedisContainer::class.java).warn("Failed to reset Redis container to initial state: {}", e.message)
       }
     }
 

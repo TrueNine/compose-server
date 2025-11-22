@@ -1,18 +1,18 @@
 package io.github.truenine.composeserver.psdk.wxpa.model
 
 /**
- * # 微信公众号用户信息
+ * WeChat Official Account user information.
  *
  * @author TrueNine
  * @since 2025-08-08
  */
 data class WxpaUserInfo(
-  /** 用户OpenID */
+  /** User OpenID. */
   val openId: String,
-  /** 用户昵称 */
+  /** User nickname. */
   val nickname: String?,
-  /** 用户特权信息 */
+  /** User privilege information. */
   val privilege: List<String> = emptyList(),
-  /** 用户全局唯一标识 */
+  /** User global unique identifier (unionId). */
   val unionId: String?,
 )

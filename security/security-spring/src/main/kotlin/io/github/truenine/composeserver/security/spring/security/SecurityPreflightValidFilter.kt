@@ -21,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 private val log = slf4j<SecurityPreflightValidFilter>()
 
 /**
- * jwt过滤器
+ * JWT preflight validation filter.
  *
  * @author TrueNine
  * @since 2022-10-28
@@ -30,9 +30,9 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
 
   @Throws(ServletException::class, IOException::class)
   override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
-    // 跨域请求直接放行
+    // Allow CORS preflight requests to pass through directly
     if (request.method == IMethods.OPTIONS) {
-      log.trace("直接放行预检请求 uri = {}", request.requestURI)
+      log.trace("Allowing preflight request, uri = {}", request.requestURI)
       filterChain.doFilter(request, response)
       return
     }
@@ -42,64 +42,64 @@ abstract class SecurityPreflightValidFilter : OncePerRequestFilter() {
         val ref = getRefreshToken(request)
         getUserAuthorizationInfo(token, ref, request, response)?.copy(currentIpAddr = request.remoteRequestIp, deviceId = request.deviceId)
       } else {
-        log.trace("没有发现用户信息，直接放行")
+        log.trace("No user information found, passing through directly")
         filterChain.doFilter(request, response)
         return
       }
 
     if (null == authInfo) {
-      log.trace("用户信息 = null，直接放行")
+      log.trace("User information is null, passing through directly")
       filterChain.doFilter(request, response)
       return
     }
 
-    log.trace("获取到用户信息 = {}", authInfo)
+    log.trace("Obtained user information = {}", authInfo)
     val details = UserDetailsWrapper(authInfo)
 
-    log.trace("获取到 details = {}", details)
+    log.trace("Obtained details = {}", details)
 
     val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(details, details.password, details.authorities)
     log.trace("upa = {}", usernamePasswordAuthenticationToken)
-    // 设置验证信息过滤器放行
+    // Set authentication in security context and continue filter chain
     SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
-    // 向用户信息内设置信息
+    // Set user information into UserInfoContextHolder
     UserInfoContextHolder.set(authInfo)
-    log.trace("set user = {}", UserInfoContextHolder.get())
+    log.trace("Set user = {}", UserInfoContextHolder.get())
     filterChain.doFilter(request, response)
   }
 
   /**
-   * 校验其是否包含验证令牌
+   * Check whether the request contains both access token and refresh token headers.
    *
-   * @param request 请求
+   * @param request HTTP request
    * @return [Boolean]
    */
   private fun containsTokenPair(request: HttpServletRequest): Boolean =
     request.getHeader(IHeaders.AUTHORIZATION).hasText() && request.getHeader(IHeaders.X_REFRESH).hasText()
 
   /**
-   * 从请求得到 token
+   * Get access token from the request.
    *
-   * @param request 请求
+   * @param request HTTP request
    * @return [String]
    */
   private fun getToken(request: HttpServletRequest?): String? = request?.getHeader(IHeaders.AUTHORIZATION)
 
   /**
-   * 从请求获得 re-flash 令牌
+   * Get refresh token from the request.
    *
-   * @param request 请求
+   * @param request HTTP request
    * @return [String]
    */
   private fun getRefreshToken(request: HttpServletRequest?): String? = request?.getHeader(IHeaders.X_REFRESH)
 
   /**
-   * 合法性检查
+   * Validate token pair and return authorization information.
    *
-   * @param token token
-   * @param reFlashToken re-flash
-   * @param request 请求
-   * @param response 响应
+   * @param token Access token
+   * @param reFlashToken Refresh token
+   * @param request HTTP request
+   * @param response HTTP response
    * @return [AuthRequestInfo]
    */
   protected abstract fun getUserAuthorizationInfo(

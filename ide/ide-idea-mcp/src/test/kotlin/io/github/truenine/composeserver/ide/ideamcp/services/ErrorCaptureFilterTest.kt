@@ -11,9 +11,9 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 /**
- * 错误捕获过滤器测试类
+ * Tests for ErrorCaptureFilter.
  *
- * 测试 ErrorCaptureFilter 的错误捕获和过滤功能
+ * Verifies error capturing and filtering behavior.
  */
 class ErrorCaptureFilterTest : BasePlatformTestCase() {
 
@@ -30,47 +30,47 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
   }
 
   fun testShouldHighlightErrorElementReturnsTrueByDefault() {
-    // 创建模拟的 PsiErrorElement
+    // Create a mocked PsiErrorElement
     val mockErrorElement = mockk<PsiErrorElement>()
     every { mockErrorElement.errorDescription } returns "Test syntax error"
     every { mockErrorElement.text } returns "invalid_syntax"
     every { mockErrorElement.containingFile } returns null
 
-    // 测试默认行为
+    // Verify default behavior
     val result = errorFilter.shouldHighlightErrorElement(mockErrorElement)
 
     assertTrue(result, "Should highlight error element by default")
   }
 
   fun testErrorCaptureFunctionality() {
-    // 创建简单的模拟对象，测试基本功能
+    // Create simple mocks to verify basic behavior
     val mockErrorElement = mockk<PsiErrorElement>()
 
     every { mockErrorElement.errorDescription } returns "Expecting ';'"
     every { mockErrorElement.text } returns "invalid"
-    every { mockErrorElement.containingFile } returns null // 简化测试
+    every { mockErrorElement.containingFile } returns null // Simplified test
 
-    // 调用过滤器方法，即使没有完整的上下文，方法也应该能正常执行
+    // Call the filter method; even without full context the method should execute
     val result = errorFilter.shouldHighlightErrorElement(mockErrorElement)
 
-    // 验证方法正常执行并返回预期的默认值
+    // Verify the method executes and returns the expected default value
     assertTrue(result, "Should return true by default for error highlighting")
 
-    // 测试获取捕获错误的基本功能
+    // Verify basic functionality of retrieving captured errors
     val capturedErrors = errorFilter.getCapturedErrors("/test/path")
     assertTrue(capturedErrors.isEmpty(), "Should return empty list for non-existent path")
   }
 
   fun testErrorFilteringInTestContext() {
-    // 创建测试文件
+    // Create test file
     val testFile =
       myFixture.tempDirFixture.createFile(
         "TestClass.kt",
         """
-          class TestClass {
-            // incomplete code for testing
-            fun testMethod(
-          }
+        class TestClass {
+          // incomplete code for testing
+          fun testMethod(
+        }
         """
           .trimIndent(),
       )
@@ -86,25 +86,25 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
     every { mockPsiFile.name } returns "TestClass.kt"
     every { mockPsiFile.project } returns project
 
-    // 调用过滤器方法
+    // Call filter method
     val shouldHighlight = errorFilter.shouldHighlightErrorElement(mockErrorElement)
 
-    // 在测试上下文中，不完整的代码错误应该被抑制
+    // In test context, incomplete code errors should be suppressed
     assertFalse(shouldHighlight, "Should suppress incomplete code errors in test context")
   }
 
   fun testErrorFilteringInMarkdownFiles() {
-    // 创建 Markdown 文件
+    // Create a Markdown file
     val markdownFile =
       myFixture.tempDirFixture.createFile(
         "README.md",
         """
-          # Test Document
-          
-          ```kotlin
-          // This code might have syntax errors
-          fun incomplete(
-          ```
+        # Test Document
+
+        ```kotlin
+        // This code might have syntax errors
+        fun incomplete(
+        ```
         """
           .trimIndent(),
       )
@@ -120,10 +120,10 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
     every { mockPsiFile.name } returns "README.md"
     every { mockPsiFile.project } returns project
 
-    // 调用过滤器方法
+    // Call filter method
     val shouldHighlight = errorFilter.shouldHighlightErrorElement(mockErrorElement)
 
-    // Markdown 文件中的语法错误应该正常显示（除非在代码块中）
+    // Syntax errors in Markdown files should be highlighted by default (unless inside code blocks)
     assertTrue(shouldHighlight, "Should highlight errors in markdown files by default")
   }
 
@@ -131,7 +131,7 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
     val testFile = myFixture.tempDirFixture.createFile("test.kt", "test content")
     val filePath = testFile.path
 
-    // 手动添加一些错误信息
+    // Manually add some error information
     val errorInfo =
       CapturedErrorInfo(
         filePath = filePath,
@@ -142,24 +142,24 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
         timestamp = System.currentTimeMillis(),
       )
 
-    // 通过反射访问私有字段来添加测试数据
+    // Use reflection to access the private field and inject test data
     val capturedErrorsField = ErrorCaptureFilter::class.java.getDeclaredField("capturedErrors")
     capturedErrorsField.isAccessible = true
     @Suppress("UNCHECKED_CAST") val capturedErrors = capturedErrorsField.get(errorFilter) as MutableMap<String, MutableList<CapturedErrorInfo>>
     capturedErrors[filePath] = mutableListOf(errorInfo)
 
-    // 验证错误存在
+    // Verify that errors are present
     assertFalse(errorFilter.getCapturedErrors(filePath).isEmpty())
 
-    // 清除特定文件的错误
+    // Clear errors for a specific file
     errorFilter.clearCapturedErrors(filePath)
     assertTrue(errorFilter.getCapturedErrors(filePath).isEmpty())
 
-    // 添加多个文件的错误
+    // Add errors for multiple files
     capturedErrors["file1.kt"] = mutableListOf(errorInfo)
     capturedErrors["file2.kt"] = mutableListOf(errorInfo)
 
-    // 清除所有错误
+    // Clear all errors
     errorFilter.clearAllCapturedErrors()
     assertTrue(errorFilter.getAllCapturedErrors().isEmpty())
   }
@@ -170,7 +170,7 @@ class ErrorCaptureFilterTest : BasePlatformTestCase() {
 
     assertSame(instance1, instance2, "Should return the same instance")
 
-    // 设置新实例
+    // Set a new instance
     val newFilter = ErrorCaptureFilter()
     ErrorCaptureFilterManager.setInstance(newFilter)
     val instance3 = ErrorCaptureFilterManager.getInstance()

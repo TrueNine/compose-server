@@ -1,9 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,24 +9,28 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.ValueDeserializer
 
 /**
- * 统一的时间戳反序列化器
+ * Unified timestamp deserializer
  *
- * 支持时间戳和多种格式的反序列化，提供灵活的时间格式兼容性
+ * Supports deserialization from timestamps and multiple formats, providing flexible time format compatibility.
  *
- * @param T 目标时间类型
+ * @param T Target time type
  * @author TrueNine
  * @since 2025-01-16
  */
-abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
+abstract class TimestampDeserializer<T> : ValueDeserializer<T>() {
 
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): T? {
     if (p == null) return null
 
-    return when (p.currentToken) {
+    return when (p.currentToken()) {
       JsonToken.VALUE_NUMBER_INT -> {
-        // 处理时间戳（毫秒）
+        // Handle timestamp (milliseconds)
         val timestamp = p.longValue
         convertFromTimestamp(timestamp)
       }
@@ -39,16 +39,16 @@ abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
         val text = p.text
         if (text.isNullOrBlank()) return null
 
-        // 尝试解析为时间戳
+        // Try to parse as a timestamp
         text.toLongOrNull()?.let { timestamp ->
           return convertFromTimestamp(timestamp)
         }
 
-        // 尝试解析为ISO8601格式
+        // Try to parse as ISO8601 format
         try {
           convertFromString(text)
         } catch (e: DateTimeParseException) {
-          throw IllegalArgumentException("无法解析时间字符串: $text", e)
+          throw IllegalArgumentException("Unable to parse time string: $text", e)
         }
       }
 
@@ -56,10 +56,10 @@ abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
     }
   }
 
-  /** 从时间戳转换为目标类型 */
+  /** Convert from timestamp to target type */
   protected abstract fun convertFromTimestamp(timestamp: Long): T
 
-  /** 从字符串转换为目标类型（支持ISO8601等格式） */
+  /** Convert from string to target type (supports ISO8601, etc.) */
   protected abstract fun convertFromString(text: String): T
 
   companion object {
@@ -73,7 +73,7 @@ abstract class TimestampDeserializer<T> : JsonDeserializer<T>() {
         DateTimeFormatter.ISO_LOCAL_TIME,
       )
 
-    /** 尝试使用多种ISO格式解析字符串 */
+    /** Try to parse a string using multiple ISO formats */
     @JvmStatic
     protected fun parseWithMultipleFormats(text: String): Instant? {
       for (formatter in ISO_FORMATTERS) {

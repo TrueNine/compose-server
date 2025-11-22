@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test
 class WxpaTokenEventTest {
 
   @Nested
-  inner class `TokenExpiredEvent 测试` {
+  inner class `TokenExpiredEvent tests` {
 
     @Test
-    fun `应该正确创建 TokenExpiredEvent`() {
+    fun `should create TokenExpiredEvent correctly`() {
       // Given
       val source = "test-source"
       val appId = "test-app-id"
@@ -37,7 +37,7 @@ class WxpaTokenEventTest {
     }
 
     @Test
-    fun `应该支持创建没有当前 Token 的过期事件`() {
+    fun `should create expiration event without current token`() {
       // When
       val event = TokenExpiredEvent(source = this, appId = "test-app-id", tokenType = TokenType.JSAPI_TICKET, reason = "Token missing")
 
@@ -50,10 +50,10 @@ class WxpaTokenEventTest {
   }
 
   @Nested
-  inner class `TokenRefreshedEvent 测试` {
+  inner class `TokenRefreshedEvent tests` {
 
     @Test
-    fun `应该正确创建 TokenRefreshedEvent`() {
+    fun `should create TokenRefreshedEvent correctly`() {
       // Given
       val source = "test-source"
       val appId = "test-app-id"
@@ -74,7 +74,7 @@ class WxpaTokenEventTest {
     }
 
     @Test
-    fun `应该支持创建包含两种 Token 的刷新事件`() {
+    fun `should create refresh event with both token types`() {
       // Given
       val newToken = WxpaToken("new-token", 7200L)
       val newTicket = WxpaTicket("new-ticket", 7200L)
@@ -99,10 +99,10 @@ class WxpaTokenEventTest {
   }
 
   @Nested
-  inner class `TokenRefreshFailedEvent 测试` {
+  inner class `TokenRefreshFailedEvent tests` {
 
     @Test
-    fun `应该正确创建 TokenRefreshFailedEvent`() {
+    fun `should create TokenRefreshFailedEvent correctly`() {
       // Given
       val source = "test-source"
       val appId = "test-app-id"
@@ -127,10 +127,10 @@ class WxpaTokenEventTest {
   }
 
   @Nested
-  inner class `TokenHealthCheckEvent 测试` {
+  inner class `TokenHealthCheckEvent tests` {
 
     @Test
-    fun `应该正确创建 TokenHealthCheckEvent`() {
+    fun `should create TokenHealthCheckEvent correctly`() {
       // Given
       val source = "test-source"
       val appId = "test-app-id"
@@ -150,10 +150,10 @@ class WxpaTokenEventTest {
   }
 
   @Nested
-  inner class `TokenUsedEvent 测试` {
+  inner class `TokenUsedEvent tests` {
 
     @Test
-    fun `应该正确创建 TokenUsedEvent`() {
+    fun `should create TokenUsedEvent correctly`() {
       // Given
       val source = "test-source"
       val appId = "test-app-id"
@@ -172,7 +172,7 @@ class WxpaTokenEventTest {
     }
 
     @Test
-    fun `应该支持默认使用上下文`() {
+    fun `should support default usage context`() {
       // When
       val event = TokenUsedEvent(source = this, appId = "test-app-id", tokenType = TokenType.JSAPI_TICKET)
 
@@ -182,10 +182,10 @@ class WxpaTokenEventTest {
   }
 
   @Nested
-  inner class `枚举类型测试` {
+  inner class `Enum tests` {
 
     @Test
-    fun `TokenType 应该包含所有预期值`() {
+    fun `TokenType should contain all expected values`() {
       val types = TokenType.entries
       assertEquals(3, types.size)
       assertTrue(types.contains(TokenType.ACCESS_TOKEN))
@@ -194,7 +194,7 @@ class WxpaTokenEventTest {
     }
 
     @Test
-    fun `HealthStatus 应该包含所有预期值`() {
+    fun `HealthStatus should contain all expected values`() {
       val statuses = HealthStatus.entries
       assertEquals(3, statuses.size)
       assertTrue(statuses.contains(HealthStatus.HEALTHY))

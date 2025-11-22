@@ -12,12 +12,12 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * 简化的 MySQL 存储过程幂等性测试
+ * Simplified MySQL stored procedure idempotency tests.
  *
- * 验证核心存储过程的幂等性：
- * 1. add_base_struct 可以安全重复调用
- * 2. rm_base_struct 可以安全重复调用
- * 3. ct_idx 可以安全重复调用
+ * Verifies idempotency of the core stored procedures:
+ * 1. add_base_struct can be safely called repeatedly.
+ * 2. rm_base_struct can be safely called repeatedly.
+ * 3. ct_idx can be safely called repeatedly.
  */
 @SpringBootTest
 @Transactional
@@ -31,73 +31,73 @@ class SimpleIdempotencyTest : IDatabaseMysqlContainer {
   }
 
   @Test
-  fun `add_base_struct 幂等性测试`() {
-    // 创建测试表
+  fun `add_base_struct idempotency test`() {
+    // Create test table
     jdbcTemplate.execute("CREATE TABLE test_simple_table(name VARCHAR(255))")
 
-    // 获取初始列数
+    // Get initial column count
     val initialCount = getColumnCount("test_simple_table")
-    assertEquals(1, initialCount, "初始应该只有一个字段")
+    assertEquals(1, initialCount, "Initial table should have exactly one column")
 
-    // 第一次调用
+    // First call
     jdbcTemplate.execute("CALL add_base_struct('test_simple_table')")
     val afterFirst = getColumnCount("test_simple_table")
 
-    // 第二次调用（幂等性测试）
+    // Second call (idempotency test)
     jdbcTemplate.execute("CALL add_base_struct('test_simple_table')")
     val afterSecond = getColumnCount("test_simple_table")
 
-    // 第三次调用（进一步验证）
+    // Third call (further verification)
     jdbcTemplate.execute("CALL add_base_struct('test_simple_table')")
     val afterThird = getColumnCount("test_simple_table")
 
-    // 验证幂等性
-    assertEquals(afterFirst, afterSecond, "第二次调用后字段数应该相同")
-    assertEquals(afterSecond, afterThird, "第三次调用后字段数应该相同")
+    // Verify idempotency
+    assertEquals(afterFirst, afterSecond, "Column count should be the same after the second call")
+    assertEquals(afterSecond, afterThird, "Column count should be the same after the third call")
 
-    // 验证基础字段存在
+    // Verify base columns exist
     val columns = getTableColumns("test_simple_table")
-    assertTrue(columns.contains("id"), "应该有 id 字段")
-    assertTrue(columns.contains("rlv"), "应该有 rlv 字段")
-    assertTrue(columns.contains("crd"), "应该有 crd 字段")
-    assertTrue(columns.contains("mrd"), "应该有 mrd 字段")
-    assertTrue(columns.contains("ldf"), "应该有 ldf 字段")
+    assertTrue(columns.contains("id"), "Column 'id' should exist")
+    assertTrue(columns.contains("rlv"), "Column 'rlv' should exist")
+    assertTrue(columns.contains("crd"), "Column 'crd' should exist")
+    assertTrue(columns.contains("mrd"), "Column 'mrd' should exist")
+    assertTrue(columns.contains("ldf"), "Column 'ldf' should exist")
   }
 
   @Test
-  fun `rm_base_struct 幂等性测试`() {
-    // 创建测试表并添加基础结构
+  fun `rm_base_struct idempotency test`() {
+    // Create test table and add base struct
     jdbcTemplate.execute("CREATE TABLE test_simple_table(name VARCHAR(255))")
     jdbcTemplate.execute("CALL add_base_struct('test_simple_table')")
 
-    // 验证基础结构存在
+    // Verify base struct columns exist
     val withBaseStruct = getColumnCount("test_simple_table")
-    assertTrue(withBaseStruct > 1, "应该有基础结构字段")
+    assertTrue(withBaseStruct > 1, "There should be base-struct columns")
 
-    // 第一次移除
+    // First removal
     jdbcTemplate.execute("CALL rm_base_struct('test_simple_table')")
     val afterFirst = getColumnCount("test_simple_table")
 
-    // 第二次移除（幂等性测试）
+    // Second removal (idempotency test)
     jdbcTemplate.execute("CALL rm_base_struct('test_simple_table')")
     val afterSecond = getColumnCount("test_simple_table")
 
-    // 第三次移除（进一步验证）
+    // Third removal (further verification)
     jdbcTemplate.execute("CALL rm_base_struct('test_simple_table')")
     val afterThird = getColumnCount("test_simple_table")
 
-    // 验证幂等性
-    assertEquals(afterFirst, afterSecond, "第二次调用后字段数应该相同")
-    assertEquals(afterSecond, afterThird, "第三次调用后字段数应该相同")
+    // Verify idempotency
+    assertEquals(afterFirst, afterSecond, "Column count should be the same after the second call")
+    assertEquals(afterSecond, afterThird, "Column count should be the same after the third call")
 
-    // 验证只剩下原始字段
+    // Verify only original column remains
     val columns = getTableColumns("test_simple_table")
-    assertEquals(listOf("name"), columns, "应该只剩下原始字段")
+    assertEquals(listOf("name"), columns, "Only the original column should remain")
   }
 
   @Test
-  fun `ct_idx 幂等性测试`() {
-    // 创建测试表
+  fun `ct_idx idempotency test`() {
+    // Create test table
     jdbcTemplate.execute(
       """
       CREATE TABLE test_simple_table(
@@ -109,56 +109,56 @@ class SimpleIdempotencyTest : IDatabaseMysqlContainer {
         .trimIndent()
     )
 
-    // 获取初始索引数
+    // Get initial index count
     val initialIndexCount = getIndexCount("test_simple_table")
 
-    // 第一次创建索引
+    // First index creation
     jdbcTemplate.execute("CALL ct_idx('test_simple_table', 'name')")
     val afterFirst = getIndexCount("test_simple_table")
 
-    // 第二次创建索引（幂等性测试）
+    // Second index creation (idempotency test)
     jdbcTemplate.execute("CALL ct_idx('test_simple_table', 'name')")
     val afterSecond = getIndexCount("test_simple_table")
 
-    // 第三次创建索引（进一步验证）
+    // Third index creation (further verification)
     jdbcTemplate.execute("CALL ct_idx('test_simple_table', 'name')")
     val afterThird = getIndexCount("test_simple_table")
 
-    // 验证幂等性
-    assertEquals(afterFirst, afterSecond, "第二次调用后索引数应该相同")
-    assertEquals(afterSecond, afterThird, "第三次调用后索引数应该相同")
+    // Verify idempotency
+    assertEquals(afterFirst, afterSecond, "Index count should be the same after the second call")
+    assertEquals(afterSecond, afterThird, "Index count should be the same after the third call")
 
-    // 验证索引创建成功
-    assertTrue(afterFirst > initialIndexCount, "应该创建了新索引")
+    // Verify index created successfully
+    assertTrue(afterFirst > initialIndexCount, "A new index should have been created")
 
-    // 验证索引存在
+    // Verify index exists
     val hasNameIndex = hasIndex("test_simple_table", "name_idx")
-    assertTrue(hasNameIndex, "应该有 name_idx 索引")
+    assertTrue(hasNameIndex, "Index name_idx should exist")
   }
 
   @Test
-  fun `组合操作幂等性测试`() {
-    // 创建测试表
+  fun `combined operations idempotency test`() {
+    // Create test table
     jdbcTemplate.execute("CREATE TABLE test_simple_table(name VARCHAR(255))")
 
-    // 重复执行组合操作
+    // Repeatedly execute combined operations
     repeat(3) {
       jdbcTemplate.execute("CALL add_base_struct('test_simple_table')")
       jdbcTemplate.execute("CALL ct_idx('test_simple_table', 'name')")
       jdbcTemplate.execute("CALL ct_idx('test_simple_table', 'rlv')")
     }
 
-    // 验证最终状态
+    // Verify final state
     val columns = getTableColumns("test_simple_table")
     val expectedColumns = listOf("id", "name", "rlv", "crd", "mrd", "ldf")
-    assertTrue(columns.containsAll(expectedColumns), "应该包含所有预期字段")
+    assertTrue(columns.containsAll(expectedColumns), "All expected columns should be present")
 
-    // 验证索引
-    assertTrue(hasIndex("test_simple_table", "name_idx"), "应该有 name_idx 索引")
-    assertTrue(hasIndex("test_simple_table", "rlv_idx"), "应该有 rlv_idx 索引")
+    // Verify indexes
+    assertTrue(hasIndex("test_simple_table", "name_idx"), "Index name_idx should exist")
+    assertTrue(hasIndex("test_simple_table", "rlv_idx"), "Index rlv_idx should exist")
   }
 
-  // 辅助方法
+  // Helper methods
   private fun getColumnCount(tableName: String): Int {
     return jdbcTemplate.queryForObject(
       """
@@ -173,17 +173,19 @@ class SimpleIdempotencyTest : IDatabaseMysqlContainer {
   }
 
   private fun getTableColumns(tableName: String): List<String> {
-    return jdbcTemplate.queryForList(
-      """
-      SELECT column_name
-      FROM information_schema.columns
-      WHERE table_schema = DATABASE() AND table_name = ?
-      ORDER BY ordinal_position
-      """
-        .trimIndent(),
-      String::class.java,
-      tableName,
-    )
+    return jdbcTemplate
+      .queryForList(
+        """
+        SELECT column_name
+        FROM information_schema.columns
+        WHERE table_schema = DATABASE() AND table_name = ?
+        ORDER BY ordinal_position
+        """
+          .trimIndent(),
+        String::class.java,
+        tableName,
+      )
+      .filterNotNull()
   }
 
   private fun getIndexCount(tableName: String): Int {

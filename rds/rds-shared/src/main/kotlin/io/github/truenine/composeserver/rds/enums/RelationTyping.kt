@@ -4,22 +4,22 @@ import io.github.truenine.composeserver.IIntEnum
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
-/** 关系类型 */
+/** Relation type */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class RelationTyping(v: Int) : IIntEnum {
-  /** 无 */
+  /** None */
   @EnumItem(ordinal = 0) NONE(0),
 
-  /** 受害者 */
+  /** Victim */
   @EnumItem(ordinal = 1) BENEFICIARIES(1),
 
-  /** 帮凶 */
+  /** Accomplice */
   @EnumItem(ordinal = 2) PARTICIPATOR(2),
 
-  /** 见证人 */
+  /** Witness */
   @EnumItem(ordinal = 3) WITNESS(3),
 
-  /** 其他 */
+  /** Other */
   @EnumItem(ordinal = 9999) OTHER(9999);
 
   override val value: Int = v

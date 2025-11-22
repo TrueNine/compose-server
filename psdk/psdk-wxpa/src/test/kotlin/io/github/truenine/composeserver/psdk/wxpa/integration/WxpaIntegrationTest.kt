@@ -21,14 +21,14 @@ import org.springframework.boot.test.context.SpringBootTest
 private val log = logger<WxpaIntegrationTest>()
 
 /**
- * # 微信公众号集成测试
+ * WeChat Official Account integration tests.
  *
- * 需要设置以下环境变量才能执行真实的集成测试：
- * - WECHAT_APP_ID: 微信公众号应用ID
- * - WECHAT_APP_SECRET: 微信公众号应用密钥
- * - WECHAT_VERIFY_TOKEN: 微信公众号验证Token
+ * The following environment variables must be set in order to run real integration tests:
+ * - WECHAT_APP_ID: WeChat Official Account application ID
+ * - WECHAT_APP_SECRET: WeChat Official Account application secret
+ * - WECHAT_VERIFY_TOKEN: WeChat Official Account verification token
  *
- * 如果环境变量不存在，测试将被跳过
+ * If these environment variables are missing, the tests will be skipped.
  *
  * @author TrueNine
  * @since 2025-08-08
@@ -42,7 +42,7 @@ private val log = logger<WxpaIntegrationTest>()
       "compose.psdk.wxpa.wxpa.app-id=\${WXPA_APP_ID}",
       "compose.psdk.wxpa.wxpa.app-secret=\${WXPA_APP_SECURET}",
       "compose.psdk.wxpa.wxpa.verify-token=\${WXPA_VERIFY_TOKEN}",
-      "compose.psdk.wxpa.wxpa.enable-auto-refresh=true", // 禁用自动刷新避免测试时的网络调用
+      "compose.psdk.wxpa.wxpa.enable-auto-refresh=true", // Disable automatic refresh to avoid network calls during tests
     ],
 )
 class WxpaIntegrationTest {
@@ -52,7 +52,7 @@ class WxpaIntegrationTest {
   @Resource private lateinit var wxpaTokenEventManager: WxpaTokenEventManager
 
   companion object {
-    /** 检查是否存在必需的环境变量 用于 JUnit5 的条件测试 */
+    /** Check whether required environment variables exist for JUnit5 conditional tests. */
     @JvmStatic
     fun hasRequiredEnvironmentVariables(): Boolean {
       val appId = System.getenv("WXPA_APP_ID")
@@ -62,9 +62,11 @@ class WxpaIntegrationTest {
       val hasCredentials = !appId.isNullOrBlank() && !appSecret.isNullOrBlank() && !verifyToken.isNullOrBlank()
 
       if (!hasCredentials) {
-        log.warn("跳过微信公众号集成测试：缺少必需的环境变量 WECHAT_APP_ID、WECHAT_APP_SECRET 或 WECHAT_VERIFY_TOKEN")
+        log.warn(
+          "Skipping WeChat Official Account integration tests: missing required environment variables WECHAT_APP_ID, WECHAT_APP_SECRET or WECHAT_VERIFY_TOKEN"
+        )
       } else {
-        log.info("检测到微信公众号凭证，将执行集成测试")
+        log.info("Detected WeChat Official Account credentials, integration tests will run")
       }
 
       return hasCredentials
@@ -72,22 +74,22 @@ class WxpaIntegrationTest {
   }
 
   @Nested
-  inner class `Spring 容器集成测试` {
+  inner class `Spring context integration tests` {
 
     @Test
-    fun `应该成功注册 WxpaService Bean`() {
+    fun `should register WxpaService bean successfully`() {
       assertNotNull(wxpaService)
-      log.info("WxpaService Bean 注册成功")
+      log.info("WxpaService bean registered successfully")
     }
 
     @Test
-    fun `应该成功注册 WxpaTokenEventManager Bean`() {
+    fun `should register WxpaTokenEventManager bean successfully`() {
       assertNotNull(wxpaTokenEventManager)
-      log.info("WxpaTokenEventManager Bean 注册成功")
+      log.info("WxpaTokenEventManager bean registered successfully")
     }
 
     @Test
-    fun `应该能够获取 token 状态`() {
+    fun `should get token status successfully`() {
       // When
       val status = wxpaService.getTokenStatus()
 
@@ -97,11 +99,11 @@ class WxpaIntegrationTest {
       assertTrue(status.containsKey("accessTokenExpired"))
       assertTrue(status.containsKey("hasJsapiTicket"))
       assertTrue(status.containsKey("jsapiTicketExpired"))
-      log.info("Token 状态获取成功: {}", status)
+      log.info("Token status retrieved successfully: {}", status)
     }
 
     @Test
-    fun `应该能够处理服务器验证请求`() {
+    fun `should handle server verification request`() {
       // Given
       val request =
         WxpaService.ServerVerificationRequest(signature = "test_signature", timestamp = "1234567890", nonce = "test_nonce", echostr = "test_echo_string")
@@ -110,29 +112,29 @@ class WxpaIntegrationTest {
       val result = wxpaService.verifyServerConfiguration(request)
 
       // Then
-      // 由于签名不正确，应该返回null，但不应该抛出异常
-      // 这验证了服务的异常处理机制
+      // Because the signature is incorrect, it should return null but not throw an exception.
+      // This verifies that the service's exception handling works as expected.
       assertNull(result)
-      log.info("服务器验证请求处理正常，错误签名被正确拒绝")
+      log.info("Server verification request handled correctly, invalid signature was rejected")
     }
   }
 
   @Nested
-  inner class `配置验证测试` {
+  inner class `Configuration validation tests` {
 
     @Test
-    fun `应该正确加载配置属性`() {
-      // 通过能够创建服务实例来验证配置加载正确
+    fun `should load configuration properties correctly`() {
+      // Verify configuration loading by ensuring the service instance can be created
       assertNotNull(wxpaService)
-      log.info("配置属性加载验证成功")
+      log.info("Configuration properties validated successfully")
     }
   }
 
   @Nested
-  inner class `正常业务流程测试` {
+  inner class `Normal business flow tests` {
 
     @Test
-    fun `应该能够生成 JSAPI 签名`() {
+    fun `should generate JSAPI signature`() {
       // Given
       val testUrl = "https://example.com/test"
 
@@ -140,14 +142,14 @@ class WxpaIntegrationTest {
       val signature = wxpaService.generateJsapiSignature(testUrl)
 
       // Then
-      // 在测试环境下，由于使用的是测试配置，会因为无效的appSecret而返回null
-      // 这是预期的行为，验证了异常处理机制正常工作
+      // In the test environment, because test configuration is used, an invalid appSecret will cause null to be returned.
+      // This is expected behavior and verifies that exception handling works correctly.
       assertNull(signature)
-      log.info("JSAPI 签名生成测试完成，正确处理了无效凭证")
+      log.info("JSAPI signature generation test finished, invalid credentials were handled correctly")
     }
 
     @Test
-    fun `应该能够处理用户授权码获取用户信息`() {
+    fun `should handle fetching user info by auth code`() {
       // Given
       val testAuthCode = "test_auth_code_12345"
 
@@ -155,14 +157,14 @@ class WxpaIntegrationTest {
       val userInfo = wxpaService.getUserInfoByAuthCode(testAuthCode)
 
       // Then
-      // 在测试环境下，由于使用的是测试配置，无法获取真实的用户信息
-      // 应该返回null而不抛出异常
+      // In the test environment, because test configuration is used, real user info cannot be fetched.
+      // It should return null without throwing an exception.
       assertNull(userInfo)
-      log.info("用户信息获取测试完成，正确处理了无效授权码")
+      log.info("User info retrieval test finished, invalid auth code was handled correctly")
     }
 
     @Test
-    fun `应该能够检查用户授权状态`() {
+    fun `should check user authorization status`() {
       // Given
       val testAccessToken = "test_access_token"
       val testOpenId = "test_open_id"
@@ -171,26 +173,26 @@ class WxpaIntegrationTest {
       val authStatus = wxpaService.checkUserAuthStatus(testAccessToken, testOpenId)
 
       // Then
-      // 在测试环境下，由于使用的是测试配置，授权检查应该返回false
+      // In the test environment, because test configuration is used, the authorization check should return false.
       assertFalse(authStatus)
-      log.info("用户授权状态检查测试完成，结果: {}", authStatus)
+      log.info("User authorization status check test finished, result: {}", authStatus)
     }
 
     @Test
-    fun `应该能够强制刷新 tokens`() {
+    fun `should force refresh tokens`() {
       // When & Then
-      // 在测试环境下，由于使用无效凭证，forceRefreshTokens会抛出异常
-      // 这是预期的行为，验证了异常处理机制正常工作
+      // In the test environment, because invalid credentials are used, forceRefreshTokens will throw an exception.
+      // This is expected behavior and verifies that exception handling works correctly.
       assertThrows<WxpaApiException> { wxpaService.forceRefreshTokens() }
-      log.info("强制刷新 tokens 测试完成，正确抛出了预期的异常")
+      log.info("Force refresh tokens test finished, expected exception was thrown correctly")
     }
   }
 
   @Nested
-  inner class `异常情况处理测试` {
+  inner class `Exception handling tests` {
 
     @Test
-    fun `应该正确处理无效的服务器验证签名`() {
+    fun `should handle invalid server verification signature correctly`() {
       // Given
       val invalidRequest =
         WxpaService.ServerVerificationRequest(signature = "invalid_signature", timestamp = "1234567890", nonce = "test_nonce", echostr = "test_echo_string")
@@ -200,37 +202,37 @@ class WxpaIntegrationTest {
 
       // Then
       assertNull(result)
-      log.info("无效签名验证测试完成，正确返回null")
+      log.info("Invalid signature verification test finished, correctly returned null")
     }
 
     @Test
-    fun `应该正确处理有效的服务器验证签名`() {
+    fun `should handle valid server verification signature correctly`() {
       // Given
       val timestamp = "1234567890"
       val nonce = "test_nonce"
-      // 使用环境变量中的token，这与Spring配置中的token一致
+      // Use the token from environment variables, which is consistent with the Spring configuration
       val token = System.getenv("WXPA_VERIFY_TOKEN") ?: "test_verify_token"
       val echostr = "test_echo_string"
 
-      // 计算正确的签名
+      // Calculate the correct signature
       val sortedParams = listOf(token, timestamp, nonce).sorted()
       val signatureString = sortedParams.joinToString("")
       val validSignature = signatureString.sha1
 
       val validRequest = WxpaService.ServerVerificationRequest(signature = validSignature, timestamp = timestamp, nonce = nonce, echostr = echostr)
 
-      log.info("测试签名验证，使用token: {}, 计算的签名: {}", token, validSignature)
+      log.info("Testing signature verification, using token: {}, computed signature: {}", token, validSignature)
 
       // When
       val result = wxpaService.verifyServerConfiguration(validRequest)
 
       // Then
       assertEquals(echostr, result)
-      log.info("有效签名验证测试完成，正确返回echostr: {}", result)
+      log.info("Valid signature verification test finished, correctly returned echostr: {}", result)
     }
 
     @Test
-    fun `应该正确处理空字符串参数`() {
+    fun `should handle empty string parameters correctly`() {
       // Given
       val emptyRequest = WxpaService.ServerVerificationRequest(signature = "", timestamp = "", nonce = "", echostr = "")
 
@@ -239,11 +241,11 @@ class WxpaIntegrationTest {
 
       // Then
       assertNull(result)
-      log.info("空字符串参数测试完成，正确返回null")
+      log.info("Empty string parameter test finished, correctly returned null")
     }
 
     @Test
-    fun `应该正确处理无效的授权码`() {
+    fun `should handle invalid auth code correctly`() {
       // Given
       val invalidAuthCode = ""
 
@@ -252,11 +254,11 @@ class WxpaIntegrationTest {
 
       // Then
       assertNull(userInfo)
-      log.info("无效授权码测试完成，正确返回null")
+      log.info("Invalid auth code test finished, correctly returned null")
     }
 
     @Test
-    fun `应该正确处理无效的 URL 生成 JSAPI 签名`() {
+    fun `should handle invalid URL when generating JSAPI signature`() {
       // Given
       val invalidUrl = ""
 
@@ -264,16 +266,16 @@ class WxpaIntegrationTest {
       val signature = wxpaService.generateJsapiSignature(invalidUrl)
 
       // Then
-      // 即使URL为空，也应该能够处理而不抛出异常
-      log.info("无效URL的JSAPI签名生成测试完成，结果: {}", signature)
+      // Even when the URL is empty, it should be handled without throwing an exception
+      log.info("Invalid URL JSAPI signature generation test finished, result: {}", signature)
     }
   }
 
   @Nested
-  inner class `边界条件测试` {
+  inner class `Boundary condition tests` {
 
     @Test
-    fun `应该处理极长的 URL 生成 JSAPI 签名`() {
+    fun `should handle very long URL when generating JSAPI signature`() {
       // Given
       val longUrl = "https://example.com/" + "a".repeat(2000) + "?param=value"
 
@@ -281,27 +283,27 @@ class WxpaIntegrationTest {
       val signature = wxpaService.generateJsapiSignature(longUrl)
 
       // Then
-      // 在测试环境下，由于使用测试凭证，会返回null，但不应该抛出异常
+      // In the test environment, because test credentials are used, this will return null but should not throw an exception
       assertNull(signature)
-      log.info("极长URL的JSAPI签名生成测试完成，正确处理了无效凭证")
+      log.info("Very long URL JSAPI signature generation test finished, invalid credentials were handled correctly")
     }
 
     @Test
-    fun `应该处理带有特殊字符的 URL`() {
+    fun `should handle URL with special characters`() {
       // Given
-      val specialUrl = "https://example.com/测试?param=值&other=特殊字符!@#$%^&*()"
+      val specialUrl = "https://example.com/test?param=value&other=specialChars!@#$%^&*()"
 
       // When
       val signature = wxpaService.generateJsapiSignature(specialUrl)
 
       // Then
-      // 在测试环境下，由于使用测试凭证，会返回null，但不应该抛出异常
+      // In the test environment, because test credentials are used, this will return null but should not throw an exception
       assertNull(signature)
-      log.info("特殊字符URL的JSAPI签名生成测试完成，正确处理了无效凭证")
+      log.info("Special-character URL JSAPI signature generation test finished, invalid credentials were handled correctly")
     }
 
     @Test
-    fun `应该处理带锚点的 URL`() {
+    fun `should handle URL with anchor`() {
       // Given
       val urlWithAnchor = "https://example.com/test#section1"
 
@@ -309,14 +311,14 @@ class WxpaIntegrationTest {
       val signature = wxpaService.generateJsapiSignature(urlWithAnchor)
 
       // Then
-      // 在测试环境下，由于使用测试凭证，会返回null
-      // 但我们可以验证URL处理逻辑是否正确（锚点应该被移除）
+      // In the test environment, because test credentials are used, this will return null.
+      // But we can still verify whether URL handling (removing the anchor) works correctly.
       assertNull(signature)
-      log.info("带锚点URL的JSAPI签名生成测试完成，正确处理了无效凭证")
+      log.info("Anchor URL JSAPI signature generation test finished, invalid credentials were handled correctly")
     }
 
     @Test
-    fun `应该处理极长的授权码`() {
+    fun `should handle very long auth code`() {
       // Given
       val longAuthCode = "auth_code_" + "x".repeat(1000)
 
@@ -324,13 +326,13 @@ class WxpaIntegrationTest {
       val userInfo = wxpaService.getUserInfoByAuthCode(longAuthCode)
 
       // Then
-      // 应该能够处理长授权码而不抛出异常，返回null
+      // Should be able to handle a long auth code without throwing an exception and return null
       assertNull(userInfo)
-      log.info("极长授权码测试完成，正确处理了无效授权码")
+      log.info("Very long auth code test finished, invalid auth code was handled correctly")
     }
 
     @Test
-    fun `应该处理包含特殊字符的授权码`() {
+    fun `should handle auth code with special characters`() {
       // Given
       val specialAuthCode = "auth_code_!@#$%^&*()"
 
@@ -338,54 +340,54 @@ class WxpaIntegrationTest {
       val userInfo = wxpaService.getUserInfoByAuthCode(specialAuthCode)
 
       // Then
-      // 应该能够处理特殊字符授权码而不抛出异常，返回null
+      // Should be able to handle an auth code with special characters without throwing an exception and return null
       assertNull(userInfo)
-      log.info("特殊字符授权码测试完成，正确处理了无效授权码")
+      log.info("Special-character auth code test finished, invalid auth code was handled correctly")
     }
   }
 
   @Nested
-  inner class `事件驱动机制测试` {
+  inner class `Event-driven mechanism tests` {
 
     @Test
-    fun `应该能够获取 Token 使用统计`() {
+    fun `should get token usage statistics`() {
       // When
       val stats = wxpaTokenEventManager.getTokenUsageStats()
 
       // Then
       assertNotNull(stats)
       assertTrue(stats.isNotEmpty())
-      // 验证统计数据的结构
-      stats.forEach { (key, value) -> assertTrue(value >= 0L, "统计值应该非负: $key = $value") }
-      log.info("Token 使用统计获取成功: {}", stats)
+      // Verify the structure of the statistics data
+      stats.forEach { (key, value) -> assertTrue(value >= 0L, "Statistic value should be non-negative: $key = $value") }
+      log.info("Token usage statistics retrieved successfully: {}", stats)
     }
 
     @Test
-    fun `应该能够获取刷新失败次数`() {
+    fun `should get refresh failure count`() {
       // When
       val failureCount = wxpaTokenEventManager.getRefreshFailureCount()
 
       // Then
-      assertTrue(failureCount >= 0L, "刷新失败次数应该非负，实际值: $failureCount")
-      log.info("刷新失败次数获取成功: {}", failureCount)
+      assertTrue(failureCount >= 0L, "Refresh failure count should be non-negative, actual value: $failureCount")
+      log.info("Refresh failure count retrieved successfully: {}", failureCount)
     }
 
     @Test
-    fun `应该能够获取最后健康检查时间`() {
+    fun `should get last health check time`() {
       // When
       val lastCheckTime = wxpaTokenEventManager.getLastHealthCheckTime()
 
       // Then
-      // 初始状态下可能为null，这是正常的
-      log.info("最后健康检查时间: {}", lastCheckTime)
+      // It may be null in the initial state, which is normal
+      log.info("Last health check time: {}", lastCheckTime)
     }
   }
 
   @Nested
-  inner class `性能和稳定性测试` {
+  inner class `Performance and stability tests` {
 
     @Test
-    fun `应该能够并发获取 token 状态`() {
+    fun `should get token status concurrently`() {
       // Given
       val threadCount = 10
       val results = mutableListOf<Map<String, Any>>()
@@ -408,11 +410,11 @@ class WxpaIntegrationTest {
         assertNotNull(status)
         assertTrue(status.containsKey("hasAccessToken"))
       }
-      log.info("并发获取token状态测试完成，执行了{}次", threadCount)
+      log.info("Concurrent token status retrieval test finished, executed {} times", threadCount)
     }
 
     @Test
-    fun `应该能够连续多次调用服务方法`() {
+    fun `should call service methods repeatedly`() {
       // Given
       val callCount = 5
       val testUrl = "https://example.com/test"
@@ -422,13 +424,13 @@ class WxpaIntegrationTest {
         val signature = wxpaService.generateJsapiSignature(testUrl)
         val status = wxpaService.getTokenStatus()
 
-        // 在测试环境下，signature会返回null，但status应该正常
+        // In the test environment, signature will return null but status should be valid
         assertNotNull(status)
         assertTrue(status.containsKey("hasAccessToken"))
-        log.debug("第{}次调用完成，signature: {}", index + 1, signature)
+        log.debug("Call {} completed, signature: {}", index + 1, signature)
       }
 
-      log.info("连续多次调用测试完成，共执行{}次", callCount)
+      log.info("Repeated calls test finished, executed {} times in total", callCount)
     }
   }
 }

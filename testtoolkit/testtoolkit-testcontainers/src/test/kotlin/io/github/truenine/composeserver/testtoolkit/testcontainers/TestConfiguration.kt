@@ -6,18 +6,18 @@ import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.StringRedisTemplate
 
 /**
- * 测试配置类
+ * Test configuration class.
  *
- * 提供测试所需的 Spring Bean 配置
+ * Provides Spring bean configuration required for tests.
  */
 @TestConfiguration
 open class TestConfiguration {
 
   /**
-   * 配置 StringRedisTemplate
+   * Configures the StringRedisTemplate.
    *
-   * @param connectionFactory Redis 连接工厂
-   * @return StringRedisTemplate 实例
+   * @param connectionFactory Redis connection factory
+   * @return StringRedisTemplate instance
    */
   @Bean
   open fun redisTemplate(connectionFactory: RedisConnectionFactory): StringRedisTemplate {

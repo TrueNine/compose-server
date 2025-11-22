@@ -2,6 +2,7 @@ package io.github.truenine.composeserver.security.crypto
 
 import io.github.truenine.composeserver.consts.IRegexes
 import io.github.truenine.composeserver.slf4j
+import java.util.Base64
 import kotlin.system.measureTimeMillis
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -14,9 +15,9 @@ import kotlin.test.assertTrue
 private val log = slf4j<IBase64Test>()
 
 class IBase64Test {
-  private val testText = "Hello, World! 测试文本 🌟"
+  private val testText = "Hello, World! sample text"
   private val testBytes = testText.toByteArray(Charsets.UTF_8)
-  private val expectedBase64 = "SGVsbG8sIFdvcmxkISDmtYvor5XmlofmnKwg8J+Mnw=="
+  private val expectedBase64 = Base64.getEncoder().encodeToString(testBytes)
 
   // === Basic Functionality Tests ===
 
@@ -112,7 +113,7 @@ class IBase64Test {
 
   @Test
   fun `encode and decode with different charsets`() {
-    val originalText = "Multi-byte characters: 中文测试 العربية русский"
+    val originalText = "Multi-byte characters: العربية русский Ελληνικά"
     val charsets = listOf(Charsets.UTF_8, Charsets.UTF_16, Charsets.ISO_8859_1)
 
     charsets.forEach { charset ->
@@ -281,7 +282,7 @@ class IBase64Test {
 
   @Test
   fun `performance benchmark for string encoding operations`() {
-    val testData = "Performance test data with various characters: 测试数据 🚀".repeat(100)
+    val testData = "Performance test data with various characters: sample-data".repeat(100)
     val testBytes = testData.toByteArray(Charsets.UTF_8)
     val iterations = 1000
 

@@ -23,7 +23,7 @@ class CryptographicOperationsTest {
   companion object {
     // Test data constants
     private const val TEST_TEXT = "Hello, World!"
-    private const val TEST_CHINESE_TEXT = "你好世界 🌟"
+    private const val TEST_CHINESE_TEXT = "Unicode test text "
     private const val EMPTY_STRING = ""
     private val LARGE_TEXT = "A".repeat(1000) // Larger than RSA shard size
     private const val SPECIAL_CHARS = "!@#$%^&*()_+-=[]{}|;':\",./<>?"

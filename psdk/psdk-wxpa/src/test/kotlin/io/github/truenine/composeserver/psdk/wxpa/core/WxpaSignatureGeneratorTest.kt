@@ -28,10 +28,10 @@ class WxpaSignatureGeneratorTest {
   }
 
   @Nested
-  inner class `JSAPI 签名生成` {
+  inner class `JSAPI signature generation` {
 
     @Test
-    fun `应该成功生成 JSAPI 签名`() {
+    fun `should generate JSAPI signature successfully`() {
       // Given
       val testUrl = "https://example.com/test"
       val testTicket = "test_jsapi_ticket"
@@ -50,7 +50,7 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `应该正确处理带锚点的 URL`() {
+    fun `should handle URL with anchor correctly`() {
       // Given
       val testUrl = "https://example.com/test#anchor"
       val expectedUrl = "https://example.com/test"
@@ -65,7 +65,7 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `应该使用提供的随机字符串和时间戳`() {
+    fun `should use provided nonce string and timestamp`() {
       // Given
       val testUrl = "https://example.com/test"
       val testNonceStr = "test_nonce_str"
@@ -82,7 +82,7 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `当 AppId 未配置时应该抛出异常`() {
+    fun `should throw exception when AppId is not configured`() {
       // Given
       val invalidProperties = WxpaProperties(appId = "", appSecret = "test_app_secret")
       val invalidGenerator = WxpaSignatureGenerator(tokenManager, invalidProperties)
@@ -93,7 +93,7 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `当获取 ticket 失败时应该抛出异常`() {
+    fun `should throw exception when ticket retrieval fails`() {
       // Given
       val testUrl = "https://example.com/test"
       every { tokenManager.getValidJsapiTicket() } throws RuntimeException("Failed to get ticket")
@@ -104,16 +104,16 @@ class WxpaSignatureGeneratorTest {
   }
 
   @Nested
-  inner class `服务器签名验证` {
+  inner class `Server signature verification` {
 
     @Test
-    fun `应该成功验证正确的服务器签名`() {
+    fun `should validate correct server signature successfully`() {
       // Given
       val timestamp = "1234567890"
       val nonce = "test_nonce"
       val token = "test_verify_token"
 
-      // 计算预期的签名
+      // Calculate expected signature
       val sortedParams = listOf(token, timestamp, nonce).sorted()
       val signatureString = sortedParams.joinToString("")
       val expectedSignature = signatureString.sha1
@@ -126,7 +126,7 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `应该拒绝错误的服务器签名`() {
+    fun `should reject invalid server signature`() {
       // Given
       val timestamp = "1234567890"
       val nonce = "test_nonce"
@@ -140,7 +140,7 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `当验证 token 未配置时应该返回 false`() {
+    fun `should return false when verify token is not configured`() {
       // Given
       val invalidProperties = WxpaProperties(appId = "test_app_id", appSecret = "test_app_secret", verifyToken = "")
       val invalidGenerator = WxpaSignatureGenerator(tokenManager, invalidProperties)
@@ -156,14 +156,14 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `应该正确生成服务器验证响应`() {
+    fun `should generate server verification response correctly`() {
       // Given
       val timestamp = "1234567890"
       val nonce = "test_nonce"
       val echostr = "test_echo_string"
       val token = "test_verify_token"
 
-      // 计算正确的签名
+      // Calculate correct signature
       val sortedParams = listOf(token, timestamp, nonce).sorted()
       val signatureString = sortedParams.joinToString("")
       val correctSignature = signatureString.sha1
@@ -176,7 +176,7 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `当签名验证失败时应该返回 null`() {
+    fun `should return null when server signature verification fails`() {
       // Given
       val timestamp = "1234567890"
       val nonce = "test_nonce"
@@ -192,10 +192,10 @@ class WxpaSignatureGeneratorTest {
   }
 
   @Nested
-  inner class `边界条件测试` {
+  inner class `Edge case tests` {
 
     @Test
-    fun `应该处理空字符串 URL`() {
+    fun `should handle empty URL`() {
       // Given
       val emptyUrl = ""
       val testTicket = "test_jsapi_ticket"
@@ -209,9 +209,9 @@ class WxpaSignatureGeneratorTest {
     }
 
     @Test
-    fun `应该处理特殊字符的 URL`() {
+    fun `should handle URL with special characters`() {
       // Given
-      val specialUrl = "https://example.com/test?param=value&other=测试"
+      val specialUrl = "https://example.com/test?param=value&other=special"
       val testTicket = "test_jsapi_ticket"
       every { tokenManager.getValidJsapiTicket() } returns testTicket
 

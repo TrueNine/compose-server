@@ -9,7 +9,7 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JTextArea
 
-/** MCP 调试面板 简化版本 */
+/** Simplified MCP debug panel. */
 class McpDebugPanel(private val project: Project) : SimpleToolWindowPanel(true, true) {
 
   private val infoArea = JTextArea()
@@ -21,26 +21,26 @@ class McpDebugPanel(private val project: Project) : SimpleToolWindowPanel(true, 
   private fun setupUI() {
     val panel = JPanel(BorderLayout())
 
-    // 标题
-    val titleLabel = JLabel("MCP 插件调试信息")
+    // Title
+    val titleLabel = JLabel("MCP plugin debug information")
     titleLabel.font = titleLabel.font.deriveFont(Font.BOLD, 16f)
 
-    // 信息区域
+    // Information area
     infoArea.apply {
       isEditable = false
       text =
         """
-          日志系统已简化为控制台输出模式
-          
-          查看详细日志信息请：
-          1. 打开 IDEA 的 Help -> Show Log in Files
-          2. 或查看 IDEA 控制台输出
-          3. 日志级别可在 logback.xml 中配置
-          
-          当前配置：
-          - 插件包: io.github.truenine.composeserver.ide.ideamcp
-          - 日志级别: DEBUG
-          - 输出格式: HH:mm:ss.SSS [thread] LEVEL logger - message
+        Logging is simplified to console-output mode.
+
+        To view detailed logs:
+        1. Open IDEA: Help -> Show Log in Files
+        2. Or inspect the IDEA console output
+        3. Log level can be configured in logback.xml
+
+        Current configuration:
+        - Plugin package: io.github.truenine.composeserver.ide.ideamcp
+        - Log level: DEBUG
+        - Output format: HH:mm:ss.SSS [thread] LEVEL logger - message
         """
           .trimIndent()
     }

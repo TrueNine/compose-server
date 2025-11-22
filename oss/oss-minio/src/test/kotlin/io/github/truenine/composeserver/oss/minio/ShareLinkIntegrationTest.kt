@@ -20,7 +20,7 @@ import org.testcontainers.containers.MinIOContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
-/** 分享链接集成测试 专门测试分享链接的实际可用性和端到端功能 */
+/** Share link integration test, specifically for testing the actual availability and end-to-end functionality of share links */
 @Testcontainers
 class ShareLinkIntegrationTest {
 
@@ -46,17 +46,17 @@ class ShareLinkIntegrationTest {
   inner class ShareLinkGeneration {
 
     @Test
-    fun `测试生成的分享链接格式正确`() = runTest {
+    fun `test generated share link format is correct`() = runTest {
       val bucketName = "test-link-format-bucket-${System.currentTimeMillis()}"
       val objectName = "test-link-format-object.txt"
       val content = "Hello, Link Format Test!"
 
       try {
-        // 创建桶和对象
+        // Create bucket and object
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
         service.putObject(bucketName, objectName, content)
 
-        // 生成分享链接
+        // Generate share link
         val shareRequest = ShareLinkRequest(bucketName = bucketName, objectName = objectName, expiration = Duration.ofHours(1), method = HttpMethod.GET)
 
         val result = service.generateShareLink(shareRequest)
@@ -65,13 +65,13 @@ class ShareLinkIntegrationTest {
         val shareInfo = result.getOrThrow()
         val shareUrl = shareInfo.shareUrl
 
-        // 验证URL格式
-        assertTrue(shareUrl.startsWith("http"), "分享链接应该是HTTP URL")
-        assertTrue(shareUrl.contains(bucketName), "分享链接应该包含桶名")
-        assertTrue(shareUrl.contains(objectName), "分享链接应该包含对象名")
-        assertTrue(shareUrl.contains("X-Amz-"), "分享链接应该包含AWS签名参数")
+        // Verify URL format
+        assertTrue(shareUrl.startsWith("http"), "Share link should be an HTTP URL")
+        assertTrue(shareUrl.contains(bucketName), "Share link should contain the bucket name")
+        assertTrue(shareUrl.contains(objectName), "Share link should contain the object name")
+        assertTrue(shareUrl.contains("X-Amz-"), "Share link should contain AWS signature parameters")
 
-        log.info("生成的分享链接格式正确: $shareUrl")
+        log.info("Generated share link format is correct: $shareUrl")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -79,29 +79,29 @@ class ShareLinkIntegrationTest {
     }
 
     @Test
-    fun `测试不同过期时间的分享链接`() = runTest {
+    fun `test share links with different expiration times`() = runTest {
       val bucketName = "test-expiry-bucket-${System.currentTimeMillis()}"
       val objectName = "test-expiry-object.txt"
       val content = "Hello, Expiry Test!"
 
       try {
-        // 创建桶和对象
+        // Create bucket and object
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
         service.putObject(bucketName, objectName, content)
 
-        // 测试不同的过期时间
+        // Test different expiration times
         val expirations = listOf(Duration.ofMinutes(5), Duration.ofHours(1), Duration.ofDays(1))
 
         for (expiration in expirations) {
           val shareRequest = ShareLinkRequest(bucketName = bucketName, objectName = objectName, expiration = expiration, method = HttpMethod.GET)
 
           val result = service.generateShareLink(shareRequest)
-          assertTrue(result.isSuccess, "生成${expiration}过期时间的分享链接应该成功")
+          assertTrue(result.isSuccess, "Generating share link with expiration ${expiration} should succeed")
 
           val shareInfo = result.getOrThrow()
-          assertTrue(shareInfo.expiration.isAfter(java.time.Instant.now()), "过期时间应该在未来")
+          assertTrue(shareInfo.expiration.isAfter(java.time.Instant.now()), "Expiration time should be in the future")
 
-          log.info("生成${expiration}过期时间的分享链接成功")
+          log.info("Successfully generated share link with expiration ${expiration}")
         }
       } finally {
         service.deleteObject(bucketName, objectName)
@@ -114,33 +114,33 @@ class ShareLinkIntegrationTest {
   inner class ShareLinkDownload {
 
     @Test
-    fun `测试通过分享链接下载内容完整性`() = runTest {
+    fun `test content integrity when downloading via share link`() = runTest {
       val bucketName = "test-download-integrity-bucket-${System.currentTimeMillis()}"
       val objectName = "test-download-integrity-object.txt"
-      val content = "Hello, Download Integrity Test!\n这是一个包含中文的测试内容。\n包含多行文本。"
+      val content = "Hello, Download Integrity Test!\nThis is a test content with multiple lines."
 
       try {
-        // 创建桶和对象
+        // Create bucket and object
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
         service.putObject(bucketName, objectName, content)
 
-        // 生成分享链接
+        // Generate share link
         val shareResult = service.generateSimpleShareLink(bucketName, objectName, Duration.ofMinutes(10))
         assertTrue(shareResult.isSuccess)
         val shareUrl = shareResult.getOrThrow().shareUrl
 
-        // 通过分享链接下载
+        // Download via share link
         val downloadResult = service.downloadFromShareLink(shareUrl)
-        assertTrue(downloadResult.isSuccess, "通过分享链接下载应该成功")
+        assertTrue(downloadResult.isSuccess, "Downloading via share link should succeed")
 
         val downloadedContent = downloadResult.getOrThrow()
         downloadedContent.use { objectContent ->
           val downloadedText = objectContent.inputStream.bufferedReader(Charsets.UTF_8).readText()
-          assertEquals(content, downloadedText, "下载的内容应该与原始内容完全一致")
-          assertEquals(content.length, downloadedText.length, "下载的内容大小应该一致")
+          assertEquals(content, downloadedText, "Downloaded content should be identical to the original")
+          assertEquals(content.length, downloadedText.length, "Downloaded content size should be the same")
         }
 
-        log.info("通过分享链接下载内容完整性测试通过")
+        log.info("Content integrity test for download via share link passed")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -148,35 +148,35 @@ class ShareLinkIntegrationTest {
     }
 
     @Test
-    fun `测试大文件分享链接下载`() = runTest {
+    fun `test large file download via share link`() = runTest {
       val bucketName = "test-large-file-bucket-${System.currentTimeMillis()}"
       val objectName = "test-large-file-object.txt"
 
-      // 生成较大的测试内容（约1MB）
+      // Generate large test content (approx. 1MB)
       val largeContent = "Hello, Large File Test!\n".repeat(50000)
 
       try {
-        // 创建桶和对象
+        // Create bucket and object
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
         service.putObject(bucketName, objectName, largeContent)
 
-        // 生成分享链接
+        // Generate share link
         val shareResult = service.generateSimpleShareLink(bucketName, objectName, Duration.ofMinutes(10))
         assertTrue(shareResult.isSuccess)
         val shareUrl = shareResult.getOrThrow().shareUrl
 
-        // 通过分享链接下载
+        // Download via share link
         val downloadResult = service.downloadFromShareLink(shareUrl)
-        assertTrue(downloadResult.isSuccess, "通过分享链接下载大文件应该成功")
+        assertTrue(downloadResult.isSuccess, "Downloading large file via share link should succeed")
 
         val downloadedContent = downloadResult.getOrThrow()
         downloadedContent.use { objectContent ->
           val downloadedText = objectContent.inputStream.bufferedReader().readText()
-          assertEquals(largeContent.length, downloadedText.length, "下载的大文件内容长度应该一致")
-          assertEquals(largeContent, downloadedText, "下载的大文件内容应该完全一致")
+          assertEquals(largeContent.length, downloadedText.length, "Downloaded large file content length should be the same")
+          assertEquals(largeContent, downloadedText, "Downloaded large file content should be identical")
         }
 
-        log.info("大文件分享链接下载测试通过，文件大小: ${largeContent.length} 字符")
+        log.info("Large file download test via share link passed, file size: ${largeContent.length} chars")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -188,16 +188,16 @@ class ShareLinkIntegrationTest {
   inner class UploadWithLinkFlow {
 
     @Test
-    fun `测试上传并返回链接的端到端流程`() = runTest {
+    fun `test end-to-end flow of upload and return link`() = runTest {
       val bucketName = "test-upload-e2e-bucket-${System.currentTimeMillis()}"
       val objectName = "test-upload-e2e-object.txt"
       val content = "Hello, Upload End-to-End Test!"
 
       try {
-        // 创建桶
+        // Create bucket
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
-        // 上传并生成分享链接
+        // Upload and generate share link
         val uploadRequest =
           UploadWithLinkRequest(
             bucketName = bucketName,
@@ -210,31 +210,31 @@ class ShareLinkIntegrationTest {
           )
 
         val uploadResult = service.uploadWithLink(uploadRequest)
-        assertTrue(uploadResult.isSuccess, "上传并生成分享链接应该成功")
+        assertTrue(uploadResult.isSuccess, "Uploading and generating share link should succeed")
 
         val response = uploadResult.getOrThrow()
 
-        // 验证上传结果
+        // Verify upload result
         assertEquals(bucketName, response.objectInfo.bucketName)
         assertEquals(objectName, response.objectInfo.objectName)
         assertEquals(content.length.toLong(), response.objectInfo.size)
 
-        // 验证对象确实存在
+        // Verify that the object actually exists
         val existsResult = service.objectExists(bucketName, objectName)
-        assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "上传的对象应该存在")
+        assertTrue(existsResult.isSuccess && existsResult.getOrThrow(), "The uploaded object should exist")
 
-        // 验证分享链接可用
+        // Verify that the share link is usable
         val downloadResult = service.downloadFromShareLink(response.shareLink.shareUrl)
-        assertTrue(downloadResult.isSuccess, "通过生成的分享链接下载应该成功")
+        assertTrue(downloadResult.isSuccess, "Downloading via the generated share link should succeed")
 
         val downloadedContent = downloadResult.getOrThrow()
         downloadedContent.use { objectContent ->
           val downloadedText = objectContent.inputStream.bufferedReader().readText()
-          assertEquals(content, downloadedText, "通过分享链接下载的内容应该与上传的内容一致")
+          assertEquals(content, downloadedText, "Content downloaded via share link should match the uploaded content")
         }
 
-        log.info("上传并返回链接的端到端流程测试通过")
-        log.info("分享链接: ${response.shareLink.shareUrl}")
+        log.info("End-to-end flow of upload and return link test passed")
+        log.info("Share link: ${response.shareLink.shareUrl}")
       } finally {
         service.deleteObject(bucketName, objectName)
         service.deleteBucket(bucketName)
@@ -242,17 +242,17 @@ class ShareLinkIntegrationTest {
     }
 
     @Test
-    fun `测试批量上传并生成分享链接`() = runTest {
+    fun `test batch upload and generate share links`() = runTest {
       val bucketName = "test-batch-upload-bucket-${System.currentTimeMillis()}"
       val fileCount = 5
 
       try {
-        // 创建桶
+        // Create bucket
         service.createBucket(CreateBucketRequest(bucketName = bucketName))
 
         val uploadResults = mutableListOf<UploadWithLinkResponse>()
 
-        // 批量上传文件并生成分享链接
+        // Batch upload files and generate share links
         for (i in 1..fileCount) {
           val objectName = "test-batch-object-$i.txt"
           val content = "Hello, Batch Upload Test $i!"
@@ -269,27 +269,27 @@ class ShareLinkIntegrationTest {
             )
 
           val uploadResult = service.uploadWithLink(uploadRequest)
-          assertTrue(uploadResult.isSuccess, "批量上传第${i}个文件应该成功")
+          assertTrue(uploadResult.isSuccess, "Batch uploading file #$i should succeed")
           uploadResults.add(uploadResult.getOrThrow())
         }
 
-        // 验证所有分享链接都可用
+        // Verify that all share links are usable
         uploadResults.forEachIndexed { index, response ->
           val expectedContent = "Hello, Batch Upload Test ${index + 1}!"
 
           val downloadResult = service.downloadFromShareLink(response.shareLink.shareUrl)
-          assertTrue(downloadResult.isSuccess, "第${index + 1}个分享链接下载应该成功")
+          assertTrue(downloadResult.isSuccess, "Downloading via share link #${index + 1} should succeed")
 
           val downloadedContent = downloadResult.getOrThrow()
           downloadedContent.use { objectContent ->
             val downloadedText = objectContent.inputStream.bufferedReader().readText()
-            assertEquals(expectedContent, downloadedText, "第${index + 1}个文件内容应该一致")
+            assertEquals(expectedContent, downloadedText, "Content of file #${index + 1} should be consistent")
           }
         }
 
-        log.info("批量上传并生成分享链接测试通过，共处理 $fileCount 个文件")
+        log.info("Batch upload and generate share links test passed, processed $fileCount files")
       } finally {
-        // 清理所有文件
+        // Clean up all files
         for (i in 1..fileCount) {
           service.deleteObject(bucketName, "test-batch-object-$i.txt")
         }

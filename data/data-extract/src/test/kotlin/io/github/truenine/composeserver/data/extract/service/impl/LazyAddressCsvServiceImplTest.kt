@@ -19,9 +19,9 @@ class LazyAddressCsvServiceImplTest {
 
   private val testCsvContent =
     """
-        110000000000,北京市,1,000000000000
-        110100000000,北京市市辖区,2,110000000000
-        110101000000,东城区,3,110100000000
+    110000000000,Beijing Municipality,1,000000000000
+    110100000000,Beijing Districts,2,110000000000
+    110101000000,Dongcheng District,3,110100000000
     """
       .trimIndent()
 
@@ -29,7 +29,7 @@ class LazyAddressCsvServiceImplTest {
   fun setup() {
     resourceHolder = mockk(relaxed = true)
 
-    // 设置默认的mock行为
+    // Set up default mock behavior
     val testResource =
       object : ByteArrayResource(testCsvContent.toByteArray()) {
         override fun getFilename(): String = "area_code_2024.csv"
@@ -42,34 +42,34 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试初始化和默认年份版本`() {
+  fun `initialize and default year version`() {
     assertEquals("2024", service.supportedDefaultYearVersion)
     assertTrue(service.supportedYearVersions.contains("2024"))
   }
 
   @Test
-  fun `测试添加和删除支持的年份`() {
-    // 测试添加新的年份定义
+  fun `add and remove supported year`() {
+    // Test adding new year definition
     val newCsvDefine = LazyAddressCsvServiceImpl.CsvDefine("area_code_2023.csv")
     service.addSupportedYear("2023", newCsvDefine)
     assertTrue(service.supportedYearVersions.contains("2023"))
 
-    // 测试删除年份
+    // Test removing year definition
     service.removeSupportedYear("2023")
     assertTrue("2023" !in service.supportedYearVersions)
   }
 
   @Test
-  fun `测试查找子区域`() {
+  fun `fetchChildren finds child regions`() {
     val children = service.fetchChildren("110000", "2024")
     assertNotNull(children)
     assertTrue(children.isNotEmpty())
     assertEquals("1101", children.first().code.code)
-    assertEquals("北京市市辖区", children.first().name)
+    assertEquals("Beijing Districts", children.first().name)
   }
 
   @Test
-  fun `测试递归查找子区域`() {
+  fun `fetchChildrenRecursive finds child regions`() {
     val allChildren = service.fetchChildrenRecursive("110000", 3, "2024")
     assertNotNull(allChildren)
     assertTrue(allChildren.size >= 2)
@@ -77,21 +77,21 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试查找特定区域`() {
+  fun `fetchDistrict finds specific region`() {
     val district = service.fetchDistrict("110101", "2024")
     assertNotNull(district)
-    assertEquals("东城区", district.name)
+    assertEquals("Dongcheng District", district.name)
     assertEquals(3, district.level)
   }
 
   @Test
-  fun `测试查找不存在的区域`() {
+  fun `fetchDistrict for non-existing region`() {
     val district = service.fetchDistrict("999999", "2024")
     assertNull(district)
   }
 
   @Test
-  fun `测试CSV资源加载`() {
+  fun `csv resource loading`() {
     val resource = service.getCsvResource("2024")
     assertNotNull(resource)
 
@@ -102,7 +102,7 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试运算符重载功能`() {
+  fun `operator overloading for year mapping`() {
     val newCsvDefine = LazyAddressCsvServiceImpl.CsvDefine("area_code_2023.csv")
     service += "2023" to newCsvDefine
     assertTrue(service.supportedYearVersions.contains("2023"))
@@ -112,7 +112,7 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试查找国家级子区域`() {
+  fun `fetchAllProvinces finds national children`() {
     val children = service.fetchAllProvinces()
     assertNotNull(children)
     assertTrue(children.isNotEmpty())
@@ -120,7 +120,7 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试无效的区域代码`() {
+  fun `invalid region code`() {
     val children = service.fetchChildren("invalid", "2024")
     assertTrue(children.isEmpty())
 
@@ -129,7 +129,7 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试递归查找时深度限制`() {
+  fun `fetchChildrenRecursive respects depth limit`() {
     val children = service.fetchChildrenRecursive("110000", 0, "2024")
     assertTrue(children.isEmpty())
 
@@ -138,11 +138,11 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试缓存机制`() {
-    // 第一次调用会加载数据
+  fun `cache mechanism`() {
+    // First call loads data
     service.fetchChildren("110000", "2024")
 
-    // 第二次调用应该使用缓存
+    // Second call should use cache
     val testResource = ByteArrayResource("".toByteArray(), "area_code_2024.csv")
     every { resourceHolder.getConfigResource(any()) } returns testResource
 
@@ -152,7 +152,7 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试不存在的年份版本`() {
+  fun `nonexistent year version`() {
     val children = service.fetchChildren("110000", "1900")
     assertTrue(children.isEmpty())
 
@@ -161,27 +161,27 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `测试CSV格式错误处理`() {
+  fun `invalid CSV format is handled gracefully`() {
     val invalidCsvContent =
       """
-          110000
-          110100,北京市
-          invalid,data,here
+      110000
+      110100,Beijing City
+      invalid,data,here
       """
         .trimIndent()
 
     val invalidResource = ByteArrayResource(invalidCsvContent.toByteArray(), "area_code_2024.csv")
     every { resourceHolder.getConfigResource(any()) } returns invalidResource
 
-    // 优化后的代码会优雅地处理错误，过滤掉无效行
+    // Optimized code should handle errors gracefully and filter invalid rows
     val result = service.getCsvSequence("2024")?.toList()
     assertNotNull(result)
-    // 应该只有有效的行被处理，无效行被过滤掉
-    assertTrue(result.isEmpty()) // 因为所有行都是无效的
+    // Only valid rows should be processed, invalid rows should be filtered out
+    assertTrue(result.isEmpty()) // All rows are invalid in this dataset
   }
 
   @Test
-  fun `测试资源不可用情况`() {
+  fun `unavailable resource`() {
     every { resourceHolder.getConfigResource(any()) } returns null
 
     val resource = service.getCsvResource("2024")
@@ -192,55 +192,55 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `traverseChildrenRecursive 正常递归遍历所有子节点`() {
+  fun `traverseChildrenRecursive traverses all child nodes`() {
     val visited = mutableListOf<Pair<String, Int>>()
     service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code to depth }
-      true // 继续递归
+      true // Continue recursion
     }
-    // 应该遍历到所有下级
-    assertTrue(visited.any { it.first == "1101" && it.second == 1 }) // 市
-    assertTrue(visited.any { it.first == "110101" && it.second == 2 }) // 区
+    // Should traverse all lower-level regions
+    assertTrue(visited.any { it.first == "1101" && it.second == 1 }) // City level
+    assertTrue(visited.any { it.first == "110101" && it.second == 2 }) // District level
   }
 
   @Test
-  fun `traverseChildrenRecursive 回调返回false时中断分支`() {
+  fun `traverseChildrenRecursive stops branch when callback returns false`() {
     val visited = mutableListOf<String>()
     service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code }
-      // 只遍历到市级
+      // Traverse only to city level
       children.all { it.level < 2 }
     }
-    // 只会访问到省和市，不会访问到区县
+    // Should visit provinces and cities only, not counties
     assertTrue(visited.contains("1101"))
     assertFalse(visited.contains("110101"))
   }
 
   @Test
-  fun `traverseChildrenRecursive 只遍历一层`() {
+  fun `traverseChildrenRecursive single level`() {
     val visited = mutableListOf<String>()
     service.traverseChildrenRecursive("110000", 1, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code }
       true
     }
-    // 只会访问到市级
+    // Only city level should be visited
     assertEquals(listOf("1101"), visited)
   }
 
   @Test
-  fun `traverseChildrenRecursive parentDistrict 参数正确`() {
+  fun `traverseChildrenRecursive parentDistrict parameter is correct`() {
     val parentMap = mutableMapOf<String, String?>()
     service.traverseChildrenRecursive("110000", 3, "2024") { children, depth, parent ->
       children.forEach { district -> parentMap[district.code.code] = parent?.code?.code }
       true
     }
-    // 市的父是 null，区的父是市
+    // City parent is null, district parent is the city
     assertNull(parentMap["1101"])
     assertEquals("1101", parentMap["110101"])
   }
 
   @Test
-  fun `traverseChildrenRecursive 空数据和无效parentCode`() {
+  fun `traverseChildrenRecursive empty data and invalid parentCode`() {
     val visited = mutableListOf<String>()
     service.traverseChildrenRecursive("999999", 3, "2024") { children, depth, parent ->
       children.forEach { district -> visited += district.code.code }
@@ -257,7 +257,7 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `空CSV文件 fetchChildren 返回空`() {
+  fun `empty CSV fetchChildren returns empty`() {
     val emptyResource =
       object : ByteArrayResource("".toByteArray()) {
         override fun getFilename() = "area_code_2024.csv"
@@ -268,10 +268,10 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `只有省级数据 fetchChildrenRecursive 只返回省`() {
+  fun `province-only data fetchChildrenRecursive returns only provinces`() {
     val provinceOnly =
       """
-        110000000000,北京市,1,000000000000
+      110000000000,Beijing Municipality,1,000000000000
       """
         .trimIndent()
     val resource =
@@ -288,10 +288,10 @@ class LazyAddressCsvServiceImplTest {
   }
 
   @Test
-  fun `CSV脏数据 level非数字 graceful fail`() {
+  fun `CSV dirty data non-numeric level graceful fail`() {
     val badCsv =
       """
-        110000000000,北京市,notanumber,000000000000
+      110000000000,Beijing Municipality,notanumber,000000000000
       """
         .trimIndent()
     val resource =
@@ -300,21 +300,21 @@ class LazyAddressCsvServiceImplTest {
       }
     every { resourceHolder.getConfigResource(any()) } returns resource
 
-    // 优化后的代码会优雅地处理错误，过滤掉无效行
+    // Optimized code should handle errors gracefully and filter invalid rows
     val result = service.getCsvSequence("2024")?.toList()
     assertNotNull(result)
-    // 无效的数字格式行应该被过滤掉
+    // Rows with invalid numeric formats should be filtered out
     assertTrue(result.isEmpty())
   }
 
   @Test
-  fun `parentCode为空 fetchChildren 返回空`() {
+  fun `empty parentCode fetchChildren returns empty`() {
     val children = service.fetchChildren("", "2024")
     assertTrue(children.isEmpty())
   }
 
   @Test
-  fun `年份为空 fetchChildren 返回空`() {
+  fun `empty year fetchChildren returns empty`() {
     val children = service.fetchChildren("110000", "")
     assertTrue(children.isEmpty())
   }
@@ -388,8 +388,8 @@ class LazyAddressCsvServiceImplTest {
   fun `test error handling with malformed CSV data`() {
     val malformedCsv =
       """
-        110000000000,北京市,invalid_level,000000000000
-        110100000000,北京市市辖区,2,110000000000
+      110000000000,Beijing Municipality,invalid_level,000000000000
+      110100000000,Beijing Districts,2,110000000000
       """
         .trimIndent()
 

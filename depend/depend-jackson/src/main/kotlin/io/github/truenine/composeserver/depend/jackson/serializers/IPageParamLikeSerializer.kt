@@ -1,38 +1,38 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonMappingException
 import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.domain.IPageParam
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonToken
+import tools.jackson.databind.DatabindException
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.ValueDeserializer
 
 /**
- * IPageParam和IPageParamLike反序列化器
+ * Deserializer for IPageParam and IPageParamLike interfaces.
  *
- * 支持从JSON对象反序列化为IPageParam实例 预期JSON格式: {"o": offset, "s": pageSize, "u": unPage}
+ * Supports deserialization from a JSON object to an IPageParam instance. Expected JSON format: {"o": offset, "s": pageSize, "u": unPage}
  */
-class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
+class IPageParamLikeSerializer : ValueDeserializer<IPageParam>() {
 
   override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): IPageParam? {
     if (p == null) {
-      throw JsonMappingException.from(ctxt, "JsonParser cannot be null for IPageParam deserialization")
+      throw DatabindException.from(ctxt, "JsonParser cannot be null for IPageParam deserialization")
     }
 
-    // 检查当前token是否为对象开始
-    if (p.currentToken != JsonToken.START_OBJECT) {
-      throw JsonMappingException.from(ctxt, "Expected START_OBJECT token for IPageParam deserialization, got: ${p.currentToken}")
+    // Check if the current token is the start of an object
+    if (p.currentToken() != JsonToken.START_OBJECT) {
+      throw DatabindException.from(ctxt, "Expected START_OBJECT token for IPageParam deserialization, got: ${p.currentToken()}")
     }
 
     var offset: Int? = null
     var pageSize: Int? = null
     var unPage: Boolean? = null
 
-    // 遍历JSON对象的字段
+    // Iterate over the fields of the JSON object
     while (p.nextToken() != JsonToken.END_OBJECT) {
       val fieldName = p.currentName()
-      p.nextToken() // 移动到字段值
+      p.nextToken() // Move to the field value
 
       when (fieldName) {
         "o" -> {
@@ -48,32 +48,32 @@ class IPageParamLikeSerializer : JsonDeserializer<IPageParam>() {
         }
 
         else -> {
-          // 跳过未知字段
+          // Skip unknown fields
           p.skipChildren()
         }
       }
     }
 
-    // 使用Pq工厂方法创建IPageParam实例
+    // Use the Pq factory method to create an IPageParam instance
     return Pq[offset, pageSize, unPage]
   }
 
-  /** 安全解析Int值的扩展函数 */
+  /** Extension function to safely parse an Int value */
   private fun JsonParser.intValueOrNull(): Int? {
     return when {
-      currentToken.isNumeric -> intValue
-      currentToken == JsonToken.VALUE_NULL -> null
-      else -> throw JsonMappingException.from(null as DeserializationContext?, "Expected numeric value for int field, got: $currentToken")
+      currentToken().isNumeric -> intValue
+      currentToken() == JsonToken.VALUE_NULL -> null
+      else -> throw DatabindException.from(null as DeserializationContext?, "Expected numeric value for int field, got: ${currentToken()}")
     }
   }
 
-  /** 安全解析Boolean值的扩展函数 */
+  /** Extension function to safely parse a Boolean value */
   private fun JsonParser.booleanValueOrNull(): Boolean? {
-    return when (currentToken) {
+    return when (currentToken()) {
       JsonToken.VALUE_TRUE -> true
       JsonToken.VALUE_FALSE -> false
       JsonToken.VALUE_NULL -> null
-      else -> throw JsonMappingException.from(null as DeserializationContext?, "Expected boolean value for boolean field, got: $currentToken")
+      else -> throw DatabindException.from(null as DeserializationContext?, "Expected boolean value for boolean field, got: ${currentToken()}")
     }
   }
 }

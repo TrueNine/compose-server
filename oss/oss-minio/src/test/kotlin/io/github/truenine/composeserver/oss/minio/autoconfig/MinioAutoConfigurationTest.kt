@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.AutoConfigurations
 import org.springframework.boot.test.context.runner.ApplicationContextRunner
 
 /**
- * 测试 MinIO 自动配置机制
+ * Test for MinIO autoconfiguration mechanism
  *
  * @author TrueNine
  * @since 2025-08-11
@@ -21,10 +21,10 @@ class MinioAutoConfigurationTest {
   private val contextRunner = ApplicationContextRunner().withConfiguration(AutoConfigurations.of(MinioAutoConfiguration::class.java))
 
   @Nested
-  inner class `自动配置启用条件` {
+  inner class `Autoconfiguration Enabling Conditions` {
 
     @Test
-    fun `当 MinioClient 类存在时应该启用自动配置`() {
+    fun `should enable autoconfiguration when MinioClient class is present`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.minio.endpoint=localhost",
@@ -33,26 +33,26 @@ class MinioAutoConfigurationTest {
           "compose.oss.minio.secret-key=minioadmin",
         )
         .run { context ->
-          // 验证配置属性被正确绑定
+          // Verify that configuration properties are correctly bound
           val minioProperties = context.getBean(MinioProperties::class.java)
           kotlin.test.assertEquals("localhost", minioProperties.endpoint)
           kotlin.test.assertEquals(9000, minioProperties.port)
           kotlin.test.assertEquals("minioadmin", minioProperties.accessKey)
           kotlin.test.assertEquals("minioadmin", minioProperties.secretKey)
 
-          // 验证 MinIO 客户端被创建
+          // Verify that MinIO client is created
           assertTrue(context.containsBeanDefinition("minioClient"))
           assertTrue(context.containsBeanDefinition("minioObjectStorageService"))
         }
     }
 
     @Test
-    fun `当缺少必需配置时应该不创建客户端`() {
+    fun `should not create client when required configuration is missing`() {
       contextRunner.run { context ->
-        // 验证上下文启动失败（因为缺少必需配置）
+        // Verify that context startup fails (due to missing required configuration)
         assertTrue(context.startupFailure != null)
 
-        // 验证失败原因是缺少必需配置
+        // Verify that the failure is due to missing required configuration
         val failure = context.startupFailure
         assertTrue(failure?.message?.contains("MinIO access key is required") == true || failure?.message?.contains("MinIO endpoint is required") == true)
       }
@@ -60,10 +60,10 @@ class MinioAutoConfigurationTest {
   }
 
   @Nested
-  inner class `配置属性绑定` {
+  inner class `Configuration Property Binding` {
 
     @Test
-    fun `应该正确绑定 MinIO 特定配置`() {
+    fun `should bind MinIO specific configuration correctly`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.minio.endpoint=minio.example.com",
@@ -86,7 +86,7 @@ class MinioAutoConfigurationTest {
     }
 
     @Test
-    fun `应该支持通用 OSS 配置作为后备`() {
+    fun `should support common OSS configuration as a fallback`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.endpoint=oss.example.com",
@@ -100,12 +100,12 @@ class MinioAutoConfigurationTest {
           val ossProperties = context.getBean(OssProperties::class.java)
           val minioProperties = context.getBean(MinioProperties::class.java)
 
-          // 验证通用配置
+          // Verify common configuration
           kotlin.test.assertEquals("oss.example.com", ossProperties.endpoint)
           kotlin.test.assertEquals("osskey", ossProperties.accessKey)
           kotlin.test.assertEquals("osssecret", ossProperties.secretKey)
 
-          // 验证 MinIO 特定配置
+          // Verify MinIO specific configuration
           kotlin.test.assertEquals("minio.example.com", minioProperties.endpoint)
           kotlin.test.assertEquals("miniokey", minioProperties.accessKey)
           kotlin.test.assertEquals("miniosecret", minioProperties.secretKey)
@@ -114,36 +114,36 @@ class MinioAutoConfigurationTest {
   }
 
   @Nested
-  inner class `向后兼容性` {
+  inner class `Backward Compatibility` {
 
     @Test
-    fun `应该忽略废弃的 provider 配置`() {
+    fun `should ignore deprecated provider configuration`() {
       contextRunner
         .withPropertyValues(
-          "compose.oss.provider=minio", // 废弃的配置
+          "compose.oss.provider=minio", // deprecated configuration
           "compose.oss.minio.endpoint=localhost",
           "compose.oss.minio.port=9000",
           "compose.oss.minio.access-key=minioadmin",
           "compose.oss.minio.secret-key=minioadmin",
         )
         .run { context ->
-          // 验证 provider 属性仍然可以读取（向后兼容）
+          // Verify that provider property can still be read (for backward compatibility)
           val ossProperties = context.getBean(OssProperties::class.java)
           kotlin.test.assertEquals("minio", ossProperties.provider)
 
-          // 验证 MinIO 配置正确绑定
+          // Verify that MinIO configuration is correctly bound
           val minioProperties = context.getBean(MinioProperties::class.java)
           kotlin.test.assertEquals("localhost", minioProperties.endpoint)
           kotlin.test.assertEquals(9000, minioProperties.port)
 
-          // 验证 MinIO 客户端被创建
+          // Verify that MinIO client is created
           assertTrue(context.containsBeanDefinition("minioClient"))
           assertTrue(context.containsBeanDefinition("minioObjectStorageService"))
         }
     }
 
     @Test
-    fun `应该在没有 provider 配置时正常工作`() {
+    fun `should work correctly without provider configuration`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.minio.endpoint=localhost",
@@ -152,16 +152,16 @@ class MinioAutoConfigurationTest {
           "compose.oss.minio.secret-key=minioadmin",
         )
         .run { context ->
-          // 验证 provider 属性为 null
+          // Verify that provider property is null
           val ossProperties = context.getBean(OssProperties::class.java)
           kotlin.test.assertNull(ossProperties.provider)
 
-          // 验证 MinIO 配置正确绑定
+          // Verify that MinIO configuration is correctly bound
           val minioProperties = context.getBean(MinioProperties::class.java)
           kotlin.test.assertEquals("localhost", minioProperties.endpoint)
           kotlin.test.assertEquals(9000, minioProperties.port)
 
-          // 验证 MinIO 客户端被创建
+          // Verify that MinIO client is created
           assertTrue(context.containsBeanDefinition("minioClient"))
           assertTrue(context.containsBeanDefinition("minioObjectStorageService"))
         }
@@ -169,10 +169,10 @@ class MinioAutoConfigurationTest {
   }
 
   @Nested
-  inner class `Bean 定义验证` {
+  inner class `Bean Definition Verification` {
 
     @Test
-    fun `应该定义 MinioClient Bean 工厂方法`() {
+    fun `should define MinioClient bean factory method`() {
       contextRunner
         .withPropertyValues(
           "compose.oss.minio.endpoint=localhost",
@@ -181,11 +181,11 @@ class MinioAutoConfigurationTest {
           "compose.oss.minio.secret-key=minioadmin",
         )
         .run { context ->
-          // 验证 Bean 定义存在
+          // Verify that bean definitions exist
           assertTrue(context.containsBeanDefinition("minioClient"))
           assertTrue(context.containsBeanDefinition("minioObjectStorageService"))
 
-          // 验证 Bean 名称存在
+          // Verify that bean names exist
           val beanNames = context.beanDefinitionNames
           assertTrue(beanNames.contains("minioClient"))
           assertTrue(beanNames.contains("minioObjectStorageService"))
@@ -193,16 +193,16 @@ class MinioAutoConfigurationTest {
     }
 
     @Test
-    fun `应该正确配置 Bean 的条件注解`() {
-      // 验证自动配置类的注解
+    fun `should configure bean's conditional annotations correctly`() {
+      // Verify annotations of the autoconfiguration class
       val autoConfigClass = MinioAutoConfiguration::class.java
 
-      // 验证 @ConditionalOnClass 注解
+      // Verify @ConditionalOnClass annotation
       val conditionalOnClass = autoConfigClass.getAnnotation(org.springframework.boot.autoconfigure.condition.ConditionalOnClass::class.java)
       assertNotNull(conditionalOnClass)
       kotlin.test.assertTrue(conditionalOnClass.value.contains(MinioClient::class))
 
-      // 验证 @Order 注解
+      // Verify @Order annotation
       val order = autoConfigClass.getAnnotation(org.springframework.core.annotation.Order::class.java)
       assertNotNull(order)
       kotlin.test.assertEquals(100, order.value)

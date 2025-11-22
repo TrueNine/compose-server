@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IStringEnum
 
 /**
- * 一些收集的 userAgent 枚举 使用 val() 方法进行调用
+ * Collection of user agent enums. Use val() method for invocation
  *
  * @author TrueNine
  * @since 2022-10-28

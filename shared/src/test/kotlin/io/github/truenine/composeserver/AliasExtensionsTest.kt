@@ -46,7 +46,7 @@ class AliasExtensionsTest {
 
   @Test
   fun `String isId() should return false for strings with non-ASCII characters`() {
-    assertFalse("一二三".isId(), "Chinese characters should not be valid")
+    assertFalse("한글".isId(), "Hangul characters should not be valid")
     assertFalse("café".isId(), "Accented characters should not be valid")
     assertFalse("naïve".isId(), "Special accented characters should not be valid")
     assertFalse("Москва".isId(), "Cyrillic characters should not be valid")

@@ -1,27 +1,27 @@
 package io.github.truenine.composeserver.depend.springdocopenapi.properties
 
 class SwaggerDescInfo {
-  /** 项目名称 */
+  /** Project name */
   var title = "Non Project"
 
-  /** 项目描述 */
-  var description = "由 Open-Api 3 提供的项目接口文档"
+  /** Project description */
+  var description = "Project API documentation provided by OpenAPI 3"
 
-  /** 项目版本 */
+  /** Project version */
   var version = "1.0"
 
-  /** 网址 */
+  /** Website URL */
   var location = ""
 
-  /** 作者 */
+  /** Author */
   var author = "Non Author"
 
-  /** 协议名称 */
+  /** License name */
   var license = "Non License"
 
-  /** 协议地址 */
+  /** License URL */
   var licenseUrl = "https://qq.com"
 
-  /** 分组名称 */
+  /** Group name */
   var group = "Non Group"
 }

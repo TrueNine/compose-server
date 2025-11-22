@@ -26,24 +26,24 @@ import org.testcontainers.utility.MountableFile
 
 class TestcontainersVerificationTest {
   @Test
-  fun `启动 Alpine 容器 输出日志并校验运行状态`() {
-    log.info("开始测试 Testcontainers")
+  fun `start Alpine container and verify logs and running state`() {
+    log.info("Starting Testcontainers verification test")
 
     GenericContainer("alpine:3.21")
       .apply {
-        // 增加容器运行时间，确保有足够时间进行日志检查
-        // 使用 flush 确保输出立即写入，避免缓冲延迟
+        // Increase container runtime to allow enough time to inspect logs
+        // Use sync to flush output immediately and avoid buffering delays
         withCommand("sh", "-c", "echo 'Hello, Testcontainers!' && sync && sleep 10")
       }
       .use { container ->
-        log.trace("正在启动测试容器...")
+        log.trace("Starting test container...")
         container.startAndWaitForReady()
 
-        log.info("容器状态: {}", container.isRunning)
-        assertTrue("容器应该处于运行状态") { container.isRunning }
+        log.info("Container running state: {}", container.isRunning)
+        assertTrue("Container should be in running state") { container.isRunning }
 
-        // 使用重试机制等待日志内容出现，而不是立即检查
-        // 这解决了日志缓冲和容器启动时序的竞态条件
+        // Use retry mechanism to wait for log content instead of checking immediately
+        // This avoids race conditions from log buffering and container startup timing
         val expectedContent = "Hello, Testcontainers!"
         val logs =
           TestRetryUtils.waitUntilResult(
@@ -51,26 +51,26 @@ class TestcontainersVerificationTest {
             pollInterval = Duration.ofMillis(200),
             supplier = {
               val currentLogs = container.logs
-              log.debug("当前日志内容: '{}'", currentLogs)
+              log.debug("Current log content: '{}'", currentLogs)
               currentLogs
             },
             condition = { logs ->
               val containsExpected = logs.contains(expectedContent)
               if (!containsExpected) {
-                log.debug("日志尚未包含期望内容 '{}', 当前日志: '{}'", expectedContent, logs)
+                log.debug("Logs do not yet contain expected content '{}', current logs: '{}'", expectedContent, logs)
               }
               containsExpected
             },
           )
 
-        log.info("容器日志: {}", logs)
-        assertTrue("日志应该包含预期内容") { logs.contains(expectedContent) }
+        log.info("Container logs: {}", logs)
+        assertTrue("Logs should contain expected content") { logs.contains(expectedContent) }
       }
   }
 
   @Test
-  fun `启动 PostgreSQL 容器 获取连接信息并校验运行状态`() {
-    log.info("开始测试 PostgreSQL 容器")
+  fun `start PostgreSQL container and verify running state`() {
+    log.info("Starting PostgreSQL container test")
 
     PostgreSQLContainer<Nothing>("postgres:16-alpine")
       .apply {
@@ -79,35 +79,35 @@ class TestcontainersVerificationTest {
         withPassword("testpass")
         withExposedPorts(5432)
         withLogConsumer(Slf4jLogConsumer(log))
-        withStartupTimeout(Duration.ofSeconds(120)) // 增加启动超时时间
+        withStartupTimeout(Duration.ofSeconds(120)) // Increase startup timeout
       }
       .use { postgres ->
-        log.info("正在启动 PostgreSQL 容器...")
-        postgres.start()
+        log.info("Starting PostgreSQL container...")
+        postgres.startAndWaitForReady(Duration.ofSeconds(90))
 
-        // 使用重试机制等待容器完全就绪
+        // Use retry utility to wait until the container is fully ready
         TestRetryUtils.waitUntil(timeout = Duration.ofSeconds(30), pollInterval = Duration.ofSeconds(1)) { postgres.isRunning && postgres.jdbcUrl.isNotEmpty() }
 
-        assertTrue(postgres.isRunning, "PostgreSQL 容器应该处于运行状态")
-        log.info("PostgreSQL 连接 URL: ${postgres.jdbcUrl}")
-        log.info("PostgreSQL 用户名: ${postgres.username}")
-        log.info("PostgreSQL 密码: ${postgres.password}")
+        assertTrue(postgres.isRunning, "PostgreSQL container should be in running state")
+        log.info("PostgreSQL JDBC URL: ${postgres.jdbcUrl}")
+        log.info("PostgreSQL username: ${postgres.username}")
+        log.info("PostgreSQL password: ${postgres.password}")
 
         val expectedJdbcUrlPrefix = "jdbc:postgresql://"
-        assertTrue(postgres.jdbcUrl.startsWith(expectedJdbcUrlPrefix), "JDBC URL 应该以 $expectedJdbcUrlPrefix 开头")
+        assertTrue(postgres.jdbcUrl.startsWith(expectedJdbcUrlPrefix), "JDBC URL should start with $expectedJdbcUrlPrefix")
       }
   }
 
   @Test
-  fun `在 Alpine 容器内执行命令 返回预期输出`() {
-    log.info("开始测试容器命令执行")
+  fun `execute command in Alpine container and validate output`() {
+    log.info("Starting container command execution test")
 
     GenericContainer("alpine:3.21")
       .apply { withCommand("tail", "-f", "/dev/null") }
       .use { container ->
         container.startAndWaitForReady()
 
-        // 使用新的扩展方法执行命令，自动处理重试和 null exitCode 问题
+        // Use the new extension method to execute the command, automatically handling retries and null exitCode issues
         val result =
           container.execAndCheckOutput(
             expectedContent = "Hello from Alpine",
@@ -118,50 +118,50 @@ class TestcontainersVerificationTest {
             "echo 'Hello from Alpine' && uname -a",
           )
 
-        log.info("命令执行结果: ${result.stdout}")
-        assertEquals(0, result.exitCode, "命令应该成功执行")
+        log.info("Command execution result: ${result.stdout}")
+        assertEquals(0, result.exitCode, "Command should execute successfully")
       }
   }
 
   @Test
-  fun `向 Alpine 容器复制文件 校验内容一致`() {
-    log.info("开始测试容器文件复制")
+  fun `copy file into Alpine container and verify content`() {
+    log.info("Starting container file copy test")
     GenericContainer("alpine:3.19.1")
       .apply { withCommand("tail", "-f", "/dev/null") }
       .use { container ->
         container.startAndWaitForReady()
 
-        // 创建测试文件内容
-        val testContent = "这是一个测试文件内容"
+        // Create test file content
+        val testContent = "This is a test file content"
         val targetPath = "/tmp/test-file.txt"
 
-        // 使用 MountableFile 复制内容到容器内的文件
+        // Use MountableFile to copy content into a file inside the container
         val tempFile = createTempFile().toFile()
         tempFile.writeText(testContent)
         val mountFile = MountableFile.forHostPath(tempFile.absolutePath)
         container.copyFileToContainer(mountFile, targetPath)
 
-        // 等待文件出现并验证内容
+        // Wait for the file to appear and verify its content
         container.waitForFile(targetPath, Duration.ofSeconds(10))
 
         val actualContent = container.readFile(filePath = targetPath, timeout = Duration.ofSeconds(30), maxRetries = 5)
 
-        // 充分验证文件内容
-        assertEquals(testContent, actualContent, "文件内容应该匹配")
-        assertTrue(actualContent.isNotEmpty(), "文件内容不应为空")
-        assertTrue(actualContent.contains("测试文件"), "文件内容应包含预期的中文字符")
-        assertEquals(testContent.length, actualContent.length, "文件长度应该匹配")
+        // Thoroughly verify file content
+        assertEquals(testContent, actualContent, "File content should match")
+        assertTrue(actualContent.isNotEmpty(), "File content should not be empty")
+        assertTrue(actualContent.contains("test file"), "File content should contain the expected substring")
+        assertEquals(testContent.length, actualContent.length, "File length should match")
 
-        // 验证文件确实存在
-        assertTrue(container.fileExists(targetPath), "目标文件应该存在于容器中")
+        // Verify the file actually exists
+        assertTrue(container.fileExists(targetPath), "Target file should exist in the container")
 
-        log.info("文件复制和验证成功，内容: {} (长度: {})", actualContent, actualContent.length)
+        log.info("File copy and verification successful, content: {} (length: {})", actualContent, actualContent.length)
       }
   }
 
   @Test
-  fun `启动 MySQL 容器 获取连接信息并校验运行状态`() {
-    log.info("开始测试 MySQL 容器")
+  fun `start MySQL container and verify running state`() {
+    log.info("Starting MySQL container test")
 
     MySQLContainer<Nothing>("mysql:8.0")
       .apply {
@@ -171,106 +171,108 @@ class TestcontainersVerificationTest {
         withEnv("MYSQL_ROOT_PASSWORD", "rootpass")
         withExposedPorts(3306)
         withLogConsumer(Slf4jLogConsumer(log))
-        withStartupTimeout(Duration.ofSeconds(120)) // 增加启动超时时间
+        // Increase startup timeout
+        withStartupTimeout(Duration.ofSeconds(120))
       }
       .use { mysql ->
-        log.info("正在启动 MySQL 容器...")
+        log.info("Starting MySQL container...")
         mysql.start()
 
-        // 使用重试机制等待容器完全就绪
+        // Use retry utility to wait until the container is fully ready
         TestRetryUtils.waitUntil(timeout = Duration.ofSeconds(30), pollInterval = Duration.ofSeconds(1)) { mysql.isRunning && mysql.jdbcUrl.isNotEmpty() }
 
-        assertTrue(mysql.isRunning, "MySQL 容器应该处于运行状态")
-        log.info("MySQL 连接 URL: ${mysql.jdbcUrl}")
-        log.info("MySQL 用户名: ${mysql.username}")
-        log.info("MySQL 密码: ${mysql.password}")
+        assertTrue(mysql.isRunning, "MySQL container should be in running state")
+        log.info("MySQL JDBC URL: ${mysql.jdbcUrl}")
+        log.info("MySQL username: ${mysql.username}")
+        log.info("MySQL password: ${mysql.password}")
 
         val expectedJdbcUrlPrefix = "jdbc:mysql://"
-        assertTrue(mysql.jdbcUrl.startsWith(expectedJdbcUrlPrefix), "JDBC URL 应该以 $expectedJdbcUrlPrefix 开头")
+        assertTrue(mysql.jdbcUrl.startsWith(expectedJdbcUrlPrefix), "JDBC URL should start with $expectedJdbcUrlPrefix")
       }
   }
 
   @Test
-  fun `并发测试多个网址 任一完成即结束`() {
-    assertTimeout(Duration.ofSeconds(20), "可能由于docker 网络原因导致测试失败，考虑检查 docker 网络配置") {
+  fun `concurrent test for multiple URLs finishes when any completes`() {
+    assertTimeout(Duration.ofSeconds(20), "Test may fail due to Docker network issues; consider checking Docker network configuration") {
       runBlocking {
-        log.info("开始并发测试多个网址连接")
+        log.info("Starting concurrent test for multiple URL connections")
 
         val urls = listOf("https://www.aliyun.com", "https://www.tencent.com", "https://www.baidu.com", "https://www.qq.com")
 
         GenericContainer("curlimages/curl:8.1.0")
           .apply {
-            withCommand("sleep", "30") // 增加容器运行时间
+            // Increase container runtime
+            withCommand("sleep", "30")
           }
           .use { container ->
             container.startAndWaitForReady(Duration.ofSeconds(30))
 
-            // 为每个URL创建一个协程，使用改进的命令执行方法
+            // Create a coroutine for each URL using the improved command execution
             val results =
               urls.map { url ->
                 async(Dispatchers.IO) {
                   try {
-                    // 使用更宽松的命令执行，不强制要求退出码为0
+                    // Use more tolerant command execution without requiring exit code 0
                     val result =
                       TestRetryUtils.retryUntilSuccess(timeout = Duration.ofSeconds(10), pollInterval = Duration.ofMillis(500)) {
                         container.execInContainer("curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "-m", "8", url)
                       }
 
-                    // 检查是否成功获取到HTTP状态码
+                    // Check whether a HTTP status code was retrieved successfully
                     val statusCode = result.stdout.trim()
 
-                    // 验证命令执行结果 - 只有在有输出时才验证内容
+                    // Validate command result only when there is output
                     if (statusCode.isNotEmpty()) {
-                      assertTrue(result.stderr.isEmpty() || result.stderr.isBlank(), "命令错误输出应为空或仅包含空白字符")
+                      assertTrue(result.stderr.isEmpty() || result.stderr.isBlank(), "Command stderr should be empty or contain only whitespace")
                     }
                     if (statusCode.matches(Regex("\\d{3}"))) {
-                      log.info("URL: $url, 状态码: $statusCode")
+                      log.info("URL: $url, status code: $statusCode")
                       url to statusCode
                     } else {
-                      log.warn("URL: $url 未获取到有效状态码，退出码: ${result.exitCode}, 输出: ${result.stdout}")
+                      log.warn("URL: $url did not return a valid status code, exit code: ${result.exitCode}, output: ${result.stdout}")
                       url to "timeout"
                     }
                   } catch (e: Exception) {
-                    log.warn("URL: $url 测试失败: ${e.message}")
+                    log.warn("URL: $url test failed: ${e.message}")
                     url to "error"
                   }
                 }
               }
 
-            // 使用 select 等待第一个完成的响应（无论成功失败）
+            // Use select to wait for the first completed response (regardless of success or failure)
             val firstResult = select { results.forEach { deferred -> deferred.onAwait { result -> result } } }
 
-            log.info("第一个完成的URL: {} 状态: {}", firstResult.first, firstResult.second)
+            log.info("First completed URL: {} status: {}", firstResult.first, firstResult.second)
 
-            // 写入测试结果到文件
+            // Write test result to file
             val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
             val resultFile = createTempFile("test_result_${timestamp}_", ".txt").toFile()
 
             val testResultContent =
               """
-              |测试时间: ${LocalDateTime.now()}
-              |测试URL列表:
+              |Test time: ${LocalDateTime.now()}
+              |Test URL list:
               |${urls.joinToString("\n") { "- $it" }}
               |
-              |测试结果:
-              |第一个完成URL: ${firstResult.first}
-              |状态码: ${firstResult.second}
+              |Test result:
+              |First completed URL: ${firstResult.first}
+              |Status code: ${firstResult.second}
             """
                 .trimMargin()
 
             resultFile.writeText(testResultContent)
 
-            // 验证文件写入结果
-            assertTrue(resultFile.exists(), "结果文件应该存在")
-            assertTrue(resultFile.length() > 0, "结果文件大小应大于0")
-            assertTrue(resultFile.canRead(), "结果文件应该可读")
+            // Verify file write result
+            assertTrue(resultFile.exists(), "Result file should exist")
+            assertTrue(resultFile.length() > 0, "Result file size should be greater than 0")
+            assertTrue(resultFile.canRead(), "Result file should be readable")
 
             val writtenContent = resultFile.readText()
-            assertEquals(testResultContent, writtenContent, "写入的内容应该与预期匹配")
-            assertTrue(writtenContent.contains(firstResult.first), "文件内容应包含第一个完成的URL")
-            assertTrue(writtenContent.contains("测试时间:"), "文件内容应包含时间戳信息")
+            assertEquals(testResultContent, writtenContent, "Written content should match expected text")
+            assertTrue(writtenContent.contains(firstResult.first), "File content should contain the first completed URL")
+            assertTrue(writtenContent.contains("Test time:"), "File content should contain timestamp information")
 
-            log.info("测试结果已写入文件: {} (大小: {} 字节)", resultFile.absolutePath, resultFile.length())
+            log.info("Test result written to file: {} (size: {} bytes)", resultFile.absolutePath, resultFile.length())
           }
       }
     }

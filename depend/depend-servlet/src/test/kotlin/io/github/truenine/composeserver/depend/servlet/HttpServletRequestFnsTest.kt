@@ -10,7 +10,7 @@ import org.springframework.mock.web.MockHttpServletRequest
 class HttpServletRequestFnsTest {
 
   @Test
-  fun `headerMap 应正确转换请求头为 Map`() {
+  fun `headerMap should correctly convert request headers to a Map`() {
     val request = MockHttpServletRequest()
     request.addHeader("Content-Type", "application/json")
     request.addHeader("Accept", "application/json")
@@ -25,14 +25,14 @@ class HttpServletRequestFnsTest {
   }
 
   @Test
-  fun `headerMap 空请求头应返回空 Map`() {
+  fun `headerMap should return an empty Map for empty request headers`() {
     val request = MockHttpServletRequest()
     val headerMap = request.headerMap
     assertTrue(headerMap.isEmpty())
   }
 
   @Test
-  fun `deviceId 应正确从请求头获取设备 ID`() {
+  fun `deviceId should correctly get the device ID from the request header`() {
     val request = MockHttpServletRequest()
     request.addHeader(IHeaders.X_DEVICE_ID, "test-device-123")
 
@@ -42,18 +42,18 @@ class HttpServletRequestFnsTest {
   }
 
   @Test
-  fun `remoteRequestIp 应获取请求 IP 地址`() {
+  fun `remoteRequestIp should get the request IP address`() {
     val request = MockHttpServletRequest()
     request.remoteAddr = "192.168.1.100"
 
     val remoteIp = request.remoteRequestIp
 
     assertNotNull(remoteIp)
-    // IP 地址获取逻辑在 IInterAddr.getRequestIpAddress 中实现
+    // The IP address retrieval logic is implemented in IInterAddr.getRequestIpAddress
   }
 
   @Test
-  fun `remoteRequestIp 应处理代理头部获取真实 IP`() {
+  fun `remoteRequestIp should handle proxy headers to get the real IP`() {
     val request = MockHttpServletRequest()
     request.addHeader("X-Forwarded-For", "203.0.113.195")
     request.addHeader("X-Real-IP", "203.0.113.195")
@@ -62,23 +62,23 @@ class HttpServletRequestFnsTest {
     val remoteIp = request.remoteRequestIp
 
     assertNotNull(remoteIp)
-    // 具体的 IP 解析逻辑取决于 IInterAddr.getRequestIpAddress 的实现
+    // The specific IP parsing logic depends on the implementation of IInterAddr.getRequestIpAddress
   }
 
   @Test
-  fun `扩展属性应在 MockHttpServletRequest 中正常工作`() {
+  fun `extension properties should work correctly in MockHttpServletRequest`() {
     val request = MockHttpServletRequest()
     request.addHeader("Content-Type", "application/json")
     request.addHeader("Accept", "application/json")
     request.addHeader(IHeaders.X_DEVICE_ID, "test-device")
     request.remoteAddr = "192.168.1.100"
 
-    // 测试扩展属性
+    // Test extension properties
     val headerMap = request.headerMap
     val deviceId = request.deviceId
     val remoteIp = request.remoteRequestIp
 
-    // 验证扩展属性工作正常
+    // Verify that the extension properties work correctly
     assertNotNull(headerMap)
     assertEquals("test-device", deviceId)
     assertNotNull(remoteIp)

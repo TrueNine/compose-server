@@ -9,7 +9,7 @@ import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 
 /**
- * # 微信小程序认证授权
+ * WeChat Mini Program authentication and authorization API.
  *
  * @author TrueNine
  * @since 2023-05-31
@@ -17,62 +17,79 @@ import org.springframework.web.service.annotation.HttpExchange
 @HttpExchange(url = "https://api.weixin.qq.com/")
 interface IWxMpApi {
   @Schema(
-    title = "小程序登录返回（标准接口）",
+    title = "Mini Program login response (standard API)",
     description =
       """
-  登录凭证校验。通过 wx.login 接口获得临时登录凭证 code 后传到开发者服务器调用此接口完成登录流程。更多使用方法详见小程序登录。
-""",
+      Login credential validation. After obtaining the temporary login credential code via wx.login,
+      the client sends it to the server to call this API and complete the login flow.
+      See WeChat Mini Program login documentation for details.
+      """,
   )
   class JsCodeToSessionResp {
-    @Schema(title = "会话密钥") var sessionKey: String? = null
+    @Schema(title = "Session key") var sessionKey: String? = null
 
-    @Schema(title = "开放平台唯一标识符", description = """用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回，详见 UnionID 机制说明。""") var unionId: String? = null
+    @Schema(
+      title = "Open platform unique identifier",
+      description =
+        """User's unique identifier on the Open Platform. Returned when the current Mini Program is bound
+        to a WeChat Open Platform account. See UnionID specification for details.""",
+    )
+    var unionId: String? = null
 
-    @Schema(title = "用户唯一标识") var openId: String? = null
+    @Schema(title = "User unique identifier") var openId: String? = null
 
-    @Schema(title = "错误信息") var errorMessage: String? = null
+    @Schema(title = "Error message") var errorMessage: String? = null
 
-    @Schema(title = "错误码") var errorCode: Int? = null
+    @Schema(title = "Error code") var errorCode: Int? = null
   }
 
   @Schema(
-    title = "小程序登录返回",
+    title = "Mini Program login response",
     description =
       """
-  登录凭证校验。通过 wx.login 接口获得临时登录凭证 code 后传到开发者服务器调用此接口完成登录流程。更多使用方法详见小程序登录。
-""",
+      Login credential validation. After obtaining the temporary login credential code via wx.login,
+      the client sends it to the server to call this API and complete the login flow.
+      See WeChat Mini Program login documentation for details.
+      """,
   )
   class WxMpJsCodeToSessionResp {
-    @Schema(title = "会话密钥") @JsonProperty("session_key") var sessionKey: String? = null
+    @Schema(title = "Session key") @JsonProperty("session_key") var sessionKey: String? = null
 
-    @Schema(title = "开放平台唯一标识符", description = """用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回，详见 UnionID 机制说明。""") @JsonProperty("unionid") var unionId: String? = null
+    @Schema(
+      title = "Open platform unique identifier",
+      description =
+        """User's unique identifier on the Open Platform. Returned when the current Mini Program is bound
+        to a WeChat Open Platform account. See UnionID specification for details.""",
+    )
+    @JsonProperty("unionid")
+    var unionId: String? = null
 
-    @Schema(title = "用户唯一标识") @JsonProperty("openid") var openId: String? = null
+    @Schema(title = "User unique identifier") @JsonProperty("openid") var openId: String? = null
 
-    @Schema(title = "错误信息") @JsonProperty("errmeg") var errorMessage: String? = null
+    @Schema(title = "Error message") @JsonProperty("errmeg") var errorMessage: String? = null
 
-    @Schema(title = "错误码") @JsonProperty("errcode") var errorCode: Int? = null
+    @Schema(title = "Error code") @JsonProperty("errcode") var errorCode: Int? = null
   }
 
   class JsCodeToSessionApiReq {
-    @Schema(title = "小程序 appId") @JsonProperty("appid") lateinit var mpAppId: String
+    @Schema(title = "Mini Program appId") @JsonProperty("appid") lateinit var mpAppId: String
 
-    @Schema(title = "小程序 appSecret") @JsonProperty("secret") lateinit var mpSecret: String
+    @Schema(title = "Mini Program appSecret") @JsonProperty("secret") lateinit var mpSecret: String
 
-    @Schema(title = "登录时获取的 code", description = "可通过wx.login获取") @JsonProperty("js_code") lateinit var jsCode: String
+    @Schema(title = "Login credential code", description = "Obtained via wx.login") @JsonProperty("js_code") lateinit var jsCode: String
 
-    @Schema(title = "授权类型", description = "此处只需填写 authorization_code")
+    @Schema(title = "Grant type", description = "Must be 'authorization_code'")
     @JsonProperty("grant_type")
     var grantTyping: WechatMpGrantTyping? = WechatMpGrantTyping.AUTH_CODE
   }
 
   /**
-   * ## 小程序登录
+   * WeChat Mini Program login.
    *
-   * @param appId appId
-   * @param secret secret
-   * @param jsCode 验证令牌
-   * @param grantType 验证类型
+   * @param appId WeChat Mini Program appId
+   * @param secret WeChat Mini Program secret
+   * @param jsCode Login credential code obtained via wx.login
+   * @param grantType OAuth2 grant type
    */
   @ResponseBody
   @GetExchange(value = "sns/jscode2session", accept = ["application/json", "text/plain"])

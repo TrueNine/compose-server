@@ -191,3 +191,124 @@ data class UploadWithLinkRequest(
 
 /** Response from upload with link operation */
 data class UploadWithLinkResponse(val objectInfo: ObjectInfo, val shareLink: ShareLinkInfo, val publicUrl: String? = null)
+
+// region Tagging
+
+/** Represents a single tag for a bucket or object */
+data class Tag(val key: String, val value: String)
+
+// endregion
+
+// region Versioning
+
+/** Request to list object versions */
+data class ListObjectVersionsRequest(
+  val bucketName: String,
+  val prefix: String? = null,
+  val delimiter: String? = null,
+  val maxKeys: Int = 1000,
+  val keyMarker: String? = null,
+  val versionIdMarker: String? = null,
+)
+
+/** Information about a specific version of an object */
+data class ObjectVersionInfo(
+  val bucketName: String,
+  val objectName: String,
+  val versionId: String,
+  val isLatest: Boolean,
+  val lastModified: Instant,
+  val etag: String,
+  val size: Long,
+  val storageClass: StorageClass,
+  val isDeleteMarker: Boolean = false,
+)
+
+/** Result of listing object versions */
+data class ObjectVersionListing(
+  val bucketName: String,
+  val prefix: String?,
+  val keyMarker: String?,
+  val versionIdMarker: String?,
+  val nextKeyMarker: String?,
+  val nextVersionIdMarker: String?,
+  val versions: List<ObjectVersionInfo>,
+  val commonPrefixes: List<String>,
+  val isTruncated: Boolean,
+  val maxKeys: Int,
+  val delimiter: String?,
+)
+
+// endregion
+
+// region Lifecycle
+
+/** Status of a lifecycle rule */
+enum class LifecycleRuleStatus {
+  ENABLED,
+  DISABLED,
+}
+
+/**
+ * Represents a lifecycle rule for a bucket
+ *
+ * @property id Unique identifier for the rule.
+ * @property prefix The object key prefix this rule applies to.
+ * @property status Whether the rule is enabled or disabled.
+ * @property transition Defines when objects are transitioned to a different storage class.
+ * @property expiration Defines when objects are permanently deleted.
+ * @property noncurrentVersionTransition Defines when noncurrent object versions are transitioned.
+ * @property noncurrentVersionExpiration Defines when noncurrent object versions are permanently deleted.
+ * @property abortIncompleteMultipartUpload Defines when to abort incomplete multipart uploads.
+ */
+data class LifecycleRule(
+  val id: String,
+  val prefix: String?,
+  val status: LifecycleRuleStatus,
+  val tags: List<Tag> = emptyList(),
+  val transition: LifecycleTransition? = null,
+  val expiration: LifecycleExpiration? = null,
+  val noncurrentVersionTransition: LifecycleNoncurrentVersionTransition? = null,
+  val noncurrentVersionExpiration: LifecycleNoncurrentVersionExpiration? = null,
+  val abortIncompleteMultipartUpload: AbortIncompleteMultipartUpload? = null,
+)
+
+/** Defines the transition of an object to another storage class */
+data class LifecycleTransition(val days: Int, val storageClass: StorageClass)
+
+/** Defines the expiration of an object */
+data class LifecycleExpiration(val days: Int)
+
+/** Defines the transition of noncurrent object versions */
+data class LifecycleNoncurrentVersionTransition(val days: Int, val storageClass: StorageClass)
+
+/** Defines the expiration of noncurrent object versions */
+data class LifecycleNoncurrentVersionExpiration(val days: Int)
+
+/** Defines when to abort incomplete multipart uploads */
+data class AbortIncompleteMultipartUpload(val daysAfterInitiation: Int)
+
+// endregion
+
+// region CORS
+
+/**
+ * Represents a CORS rule for a bucket
+ *
+ * @property id Optional unique identifier for the rule.
+ * @property allowedOrigins List of allowed origins.
+ * @property allowedMethods List of allowed HTTP methods.
+ * @property allowedHeaders List of allowed headers.
+ * @property exposeHeaders List of headers to expose to the client.
+ * @property maxAgeSeconds The maximum time in seconds that the browser can cache the preflight response.
+ */
+data class CorsRule(
+  val id: String? = null,
+  val allowedOrigins: List<String>,
+  val allowedMethods: List<HttpMethod>,
+  val allowedHeaders: List<String> = emptyList(),
+  val exposeHeaders: List<String> = emptyList(),
+  val maxAgeSeconds: Int? = null,
+)
+
+// endregion

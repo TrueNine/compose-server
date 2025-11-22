@@ -14,13 +14,13 @@ mavenPublishing {
   publishToMavenCentral(automaticRelease = true)
   signAllPublications()
 
-  // 根据项目类型配置发布方式
+  // Configure publishing strategy based on the project type
   when {
-    // 优先检测 version-catalog 插件
+    // Check for the version-catalog plugin first
     project.plugins.hasPlugin("version-catalog") -> {
       configure(VersionCatalog())
     }
-    // 检测 gradle plugin 相关插件
+    // Detect plugins related to Gradle plugin projects
     project.plugins.hasPlugin("java-gradle-plugin") ||
       project.plugins.hasPlugin("kotlin-dsl") -> {
       configure(
@@ -30,7 +30,7 @@ mavenPublishing {
         )
       )
     }
-    // 检测 Kotlin JVM 插件（包括间接应用）
+    // Detect the Kotlin JVM plugin (including indirect application)
     project.plugins.hasPlugin("org.jetbrains.kotlin.jvm") ||
       project.plugins.hasPlugin("buildlogic.kotlin-conventions") ||
       project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
@@ -66,7 +66,7 @@ mavenPublishing {
 
       developer {
         id = "TrueNine"
-        name = "赵日天"
+        name = "Zhao Ritian"
         url = "https://github.com/TrueNine"
         organizationUrl = "https://github.com/TrueNine"
         timezone = "GMT+8"
@@ -76,7 +76,7 @@ mavenPublishing {
       }
       developer {
         id = "t_teng"
-        name = "滕腾"
+        name = "Teng Teng"
         organization = "Nanning, Guangxi, China Yan100 technology Ltd"
         roles = listOf("Sponsor", "Founder")
         timezone = "GMT+8"
@@ -116,7 +116,7 @@ mavenPublishing {
       url = "https://github.com/TrueNine/compose-server/issues"
     }
     properties = mutableMapOf("project.build.sourceEncoding" to "UTF-8").apply {
-      // 只有在项目应用了 Java 插件且配置了 toolchain 时才设置 Java 版本相关属性
+      // Only set Java version properties when the project applies the Java plugin and configures a toolchain
       extensions.findByType<JavaPluginExtension>()?.toolchain?.languageVersion?.orNull?.asInt()?.toString()?.let { javaVersion ->
         put("java.version", javaVersion)
         put("maven.compiler.source", javaVersion)

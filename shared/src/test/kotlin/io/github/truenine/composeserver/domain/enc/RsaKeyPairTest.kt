@@ -12,14 +12,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-/**
- * # RSA 密钥对测试
- *
- * 测试 RsaKeyPair 类的功能
- */
+/** Verifies the core behaviour of {@link RsaKeyPair}. */
 class RsaKeyPairTest {
 
-  // 创建简单的测试密钥实现
+  // Simple test key implementations
   private class TestRSAPublicKey : RSAPublicKey {
     override fun getAlgorithm() = "RSA"
 
@@ -45,66 +41,64 @@ class RsaKeyPairTest {
   }
 
   @Test
-  fun `测试 RsaKeyPair 构造函数`() {
-    log.info("测试 RsaKeyPair 构造函数")
+  fun constructsRsaKeyPairWithDefaultAlgorithm() {
+    log.info("Verifying default algorithm constructor")
 
     val testPublicKey = TestRSAPublicKey()
     val testPrivateKey = TestRSAPrivateKey()
 
     val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey)
 
-    assertEquals(testPublicKey, rsaKeyPair.publicKey, "公钥应该匹配")
-    assertEquals(testPrivateKey, rsaKeyPair.privateKey, "私钥应该匹配")
-    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
+    assertEquals(testPublicKey, rsaKeyPair.publicKey, "Public key should match input instance")
+    assertEquals(testPrivateKey, rsaKeyPair.privateKey, "Private key should match input instance")
+    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "Algorithm should default to RSA")
 
-    log.info("RSA 密钥对创建成功")
+    log.info("Default algorithm constructor verified")
   }
 
   @Test
-  fun `测试 RsaKeyPair 构造函数 - 自定义算法`() {
-    log.info("测试 RsaKeyPair 构造函数 - 自定义算法")
+  fun constructsRsaKeyPairWithCustomAlgorithm() {
+    log.info("Verifying custom algorithm constructor")
 
     val testPublicKey = TestRSAPublicKey()
     val testPrivateKey = TestRSAPrivateKey()
-    val customAlgorithm = EncryptAlgorithm.ECC // 虽然不合理，但测试构造函数的灵活性
+    val customAlgorithm = EncryptAlgorithm.ECC // validates configurability
 
     val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey, customAlgorithm)
 
-    assertEquals(testPublicKey, rsaKeyPair.publicKey, "公钥应该匹配")
-    assertEquals(testPrivateKey, rsaKeyPair.privateKey, "私钥应该匹配")
-    assertEquals(customAlgorithm, rsaKeyPair.algorithm, "算法应该是自定义的")
+    assertEquals(testPublicKey, rsaKeyPair.publicKey, "Public key should match input instance")
+    assertEquals(testPrivateKey, rsaKeyPair.privateKey, "Private key should match input instance")
+    assertEquals(customAlgorithm, rsaKeyPair.algorithm, "Algorithm should reflect custom value")
 
-    log.info("自定义算法的 RSA 密钥对创建成功")
+    log.info("Custom algorithm constructor verified")
   }
 
   @Test
-  fun `测试 RsaKeyPair 实现 IRsaKeyPair 接口`() {
-    log.info("测试 RsaKeyPair 实现 IRsaKeyPair 接口")
+  fun exposesInterfaceContract() {
+    log.info("Verifying IRsaKeyPair contract")
 
     val testPublicKey = TestRSAPublicKey()
     val testPrivateKey = TestRSAPrivateKey()
 
     val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey)
 
-    assertTrue(rsaKeyPair is IRsaKeyPair, "应该实现 IRsaKeyPair 接口")
+    assertTrue(rsaKeyPair is IRsaKeyPair, "Should implement IRsaKeyPair interface")
 
-    // 通过接口访问属性
     val keyPairInterface: IRsaKeyPair = rsaKeyPair
-    assertEquals(testPublicKey, keyPairInterface.publicKey, "通过接口访问的公钥应该匹配")
-    assertEquals(testPrivateKey, keyPairInterface.privateKey, "通过接口访问的私钥应该匹配")
-    assertEquals(EncryptAlgorithm.RSA, keyPairInterface.algorithm, "通过接口访问的算法应该匹配")
+    assertEquals(testPublicKey, keyPairInterface.publicKey, "Public key should match via interface")
+    assertEquals(testPrivateKey, keyPairInterface.privateKey, "Private key should match via interface")
+    assertEquals(EncryptAlgorithm.RSA, keyPairInterface.algorithm, "Algorithm should match via interface")
 
-    log.info("IRsaKeyPair 接口实现验证通过")
+    log.info("Interface contract verified")
   }
 
   @Test
-  fun `测试 RsaKeyPair 使用真实的 RSA 密钥`() {
-    log.info("测试 RsaKeyPair 使用真实的 RSA 密钥")
+  fun worksWithRealRsaKeys() {
+    log.info("Verifying compatibility with generated RSA key pair")
 
     try {
-      // 生成真实的 RSA 密钥对
       val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
-      keyPairGenerator.initialize(2048) // 使用 2048 位密钥
+      keyPairGenerator.initialize(2048)
       val javaKeyPair = keyPairGenerator.generateKeyPair()
 
       val rsaPublicKey = javaKeyPair.public as RSAPublicKey
@@ -112,101 +106,42 @@ class RsaKeyPairTest {
 
       val rsaKeyPair = RsaKeyPair(rsaPublicKey, rsaPrivateKey)
 
-      assertNotNull(rsaKeyPair.publicKey, "公钥不应该为空")
-      assertNotNull(rsaKeyPair.privateKey, "私钥不应该为空")
-      assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
+      assertNotNull(rsaKeyPair.publicKey, "Public key should not be null")
+      assertNotNull(rsaKeyPair.privateKey, "Private key should not be null")
+      assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "Algorithm should remain RSA")
 
-      // 验证密钥的算法
-      assertEquals("RSA", rsaKeyPair.publicKey.algorithm, "公钥算法应该是 RSA")
-      assertEquals("RSA", rsaKeyPair.privateKey.algorithm, "私钥算法应该是 RSA")
+      assertEquals("RSA", rsaKeyPair.publicKey.algorithm, "Public key algorithm should be RSA")
+      assertEquals("RSA", rsaKeyPair.privateKey.algorithm, "Private key algorithm should be RSA")
 
-      // 验证 RSA 特有的属性
-      assertNotNull(rsaKeyPair.publicKey.modulus, "RSA 公钥应该有模数")
-      assertNotNull(rsaKeyPair.publicKey.publicExponent, "RSA 公钥应该有公共指数")
-      assertNotNull(rsaKeyPair.privateKey.modulus, "RSA 私钥应该有模数")
-      assertNotNull(rsaKeyPair.privateKey.privateExponent, "RSA 私钥应该有私有指数")
+      assertNotNull(rsaKeyPair.publicKey.modulus, "RSA public key should expose modulus")
+      assertNotNull(rsaKeyPair.publicKey.publicExponent, "RSA public key should expose public exponent")
+      assertNotNull(rsaKeyPair.privateKey.modulus, "RSA private key should expose modulus")
+      assertNotNull(rsaKeyPair.privateKey.privateExponent, "RSA private key should expose private exponent")
 
-      log.info("真实 RSA 密钥对测试通过")
-      log.info("公钥算法: {}", rsaKeyPair.publicKey.algorithm)
-      log.info("私钥算法: {}", rsaKeyPair.privateKey.algorithm)
-      log.info("公钥格式: {}", rsaKeyPair.publicKey.format)
-      log.info("私钥格式: {}", rsaKeyPair.privateKey.format)
-      log.info("密钥长度: {} 位", rsaKeyPair.publicKey.modulus.bitLength())
+      log.info("Real RSA key pair verified")
+      log.info("Public key algorithm: {}", rsaKeyPair.publicKey.algorithm)
+      log.info("Private key algorithm: {}", rsaKeyPair.privateKey.algorithm)
+      log.info("Public key format: {}", rsaKeyPair.publicKey.format)
+      log.info("Private key format: {}", rsaKeyPair.privateKey.format)
+      log.info("Key length: {} bits", rsaKeyPair.publicKey.modulus.bitLength())
     } catch (e: Exception) {
-      log.info("RSA 算法不可用，跳过真实密钥测试: {}", e.message)
+      log.info("RSA algorithm unavailable, skipping real key verification: {}", e.message)
     }
   }
 
   @Test
-  fun `测试 RsaKeyPair 的属性访问`() {
-    log.info("测试 RsaKeyPair 的属性访问")
-
-    val testPublicKey = TestRSAPublicKey()
-    val testPrivateKey = TestRSAPrivateKey()
-
-    val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey)
-
-    // 测试属性是否为 val（只读）
-    val publicKey = rsaKeyPair.publicKey
-    val privateKey = rsaKeyPair.privateKey
-    val algorithm = rsaKeyPair.algorithm
-
-    assertEquals(testPublicKey, publicKey, "公钥属性应该匹配")
-    assertEquals(testPrivateKey, privateKey, "私钥属性应该匹配")
-    assertEquals(EncryptAlgorithm.RSA, algorithm, "算法属性应该匹配")
-
-    log.info("属性访问测试通过")
-  }
-
-  @Test
-  fun `测试 RsaKeyPair 的类型信息`() {
-    log.info("测试 RsaKeyPair 的类型信息")
-
-    val testPublicKey = TestRSAPublicKey()
-    val testPrivateKey = TestRSAPrivateKey()
-
-    val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey)
-    val keyPairClass = rsaKeyPair::class.java
-
-    assertEquals("RsaKeyPair", keyPairClass.simpleName, "类名应该正确")
-    assertEquals("io.github.truenine.composeserver.domain.enc", keyPairClass.packageName, "包名应该正确")
-
-    // 验证实现的接口
-    val interfaces = keyPairClass.interfaces
-    assertTrue(interfaces.contains(IRsaKeyPair::class.java), "应该实现 IRsaKeyPair 接口")
-
-    log.info("类型信息验证通过")
-  }
-
-  @Test
-  fun `测试 RsaKeyPair 的默认算法值`() {
-    log.info("测试 RsaKeyPair 的默认算法值")
-
-    val testPublicKey = TestRSAPublicKey()
-    val testPrivateKey = TestRSAPrivateKey()
-
-    // 不指定算法参数，使用默认值
-    val rsaKeyPair = RsaKeyPair(testPublicKey, testPrivateKey)
-
-    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "默认算法应该是 RSA")
-
-    log.info("默认算法值测试通过")
-  }
-
-  @Test
-  fun `测试 RsaKeyPair 与 EccKeyPair 的区别`() {
-    log.info("测试 RsaKeyPair 与 EccKeyPair 的区别")
+  fun enforcesRsaSpecificTypes() {
+    log.info("Verifying RSA specific interfaces")
 
     val testRsaPublicKey = TestRSAPublicKey()
     val testRsaPrivateKey = TestRSAPrivateKey()
 
     val rsaKeyPair = RsaKeyPair(testRsaPublicKey, testRsaPrivateKey)
 
-    // RSA 密钥对应该使用 RSA 特定的接口
-    assertTrue(rsaKeyPair.publicKey is RSAPublicKey, "公钥应该是 RSAPublicKey 类型")
-    assertTrue(rsaKeyPair.privateKey is RSAPrivateKey, "私钥应该是 RSAPrivateKey 类型")
-    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "算法应该是 RSA")
+    assertTrue(rsaKeyPair.publicKey is RSAPublicKey, "Public key should be RSAPublicKey")
+    assertTrue(rsaKeyPair.privateKey is RSAPrivateKey, "Private key should be RSAPrivateKey")
+    assertEquals(EncryptAlgorithm.RSA, rsaKeyPair.algorithm, "Algorithm should remain RSA")
 
-    log.info("RSA 密钥对类型验证通过")
+    log.info("RSA specific interfaces verified")
   }
 }

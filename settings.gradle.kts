@@ -1,5 +1,6 @@
 pluginManagement {
   includeBuild("build-logic")
+  includeBuild("gradleplugin/gradleplugin-dotenv")
   repositories {
     gradlePluginPortal()
     mavenCentral()
@@ -26,33 +27,36 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "compose-server"
 
-// 根级模块
-listOf("version-catalog", "shared", "bom", "gradle-plugin", "cacheable", "docsite").forEach { p ->
+// Root-level modules
+listOf("version-catalog", "shared", "bom", "cacheable", "docsite").forEach { p ->
   include(p)
   findProject(":$p")?.name = p
 }
 
-// 监控模块
+// Gradle plugin modules
+include("gradleplugin:gradleplugin-composeserver")
+
+// Surveillance modules
 include("surveillance:surveillance-shared")
 
 include("surveillance:surveillance-hikvision")
 
-// 短信服务
+// SMS services
 include("sms:sms-shared")
 
 include("sms:sms-tencent")
 
-// ai 服务
+// AI services
 include("ai:ai-shared")
 
 include("ai:ai-langchain4j")
 
-// 支付服务
+// Payment services
 include("pay:pay-shared")
 
 include("pay:pay-wechat")
 
-// 对象存储服务
+// Object storage services
 include("oss:oss-shared")
 
 include("oss:oss-minio")
@@ -63,7 +67,7 @@ include("oss:oss-huawei-obs")
 
 include("oss:oss-volcengine-tos")
 
-// 关系型数据库服务
+// Relational database services
 include("rds:rds-shared")
 
 include("rds:rds-crud")
@@ -76,19 +80,19 @@ include("rds:rds-flyway-migration-mysql8")
 
 include("rds:rds-flyway-migration-shared")
 
-// 数据采集器
+// Data collectors
 include("data:data-crawler")
 
 include("data:data-extract")
 
-// 安全模块
+// Security modules
 include("security:security-spring")
 
 include("security:security-oauth2")
 
 include("security:security-crypto")
 
-// 特定依赖处理
+// Specialized dependency modules
 include("depend:depend-servlet")
 
 include("depend:depend-paho")
@@ -111,17 +115,17 @@ include("ksp:ksp-meta")
 // platform sdk
 include("psdk:psdk-wxpa")
 
-// IDE 插件模块
+// IDE plugin modules
 include("ide:ide-idea-mcp")
 
-// 测试工具
+// test toolkit
 include("testtoolkit:testtoolkit-shared")
 
 include("testtoolkit:testtoolkit-testcontainers")
 
 include("testtoolkit:testtoolkit-springmvc")
 
-// === 集成测试模块 ===
+// === Integration test modules ===
 include("integrate-test:depend:jackson")
 
 include("integrate-test:oss:minio")

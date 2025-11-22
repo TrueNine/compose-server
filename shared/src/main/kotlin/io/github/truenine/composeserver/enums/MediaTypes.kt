@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import io.github.truenine.composeserver.IStringEnum
 
 /**
- * mime类型
+ * MIME types
  *
  * @author TrueNine
  * @since 2022-11-03
@@ -12,7 +12,7 @@ import io.github.truenine.composeserver.IStringEnum
 enum class MediaTypes(private val extensions: Array<String>, private val mediaTypes: Array<String>) : IStringEnum {
   EXE(arrayOf("exe"), arrayOf("application/ms-download", "application/octet-stream")),
 
-  /** 这个比较特殊，他的后缀名 是 binary 注意 */
+  /** This is special, its extension name is binary, please note */
   BINARY(arrayOf(), arrayOf("application/octet-stream")),
   URL(arrayOf(), arrayOf("application/x-www-form-urlencoded")),
   MULTIPART_FORM_DATA(arrayOf(), arrayOf("multipart/form-data")),
@@ -57,7 +57,7 @@ enum class MediaTypes(private val extensions: Array<String>, private val mediaTy
   val exts: Array<String>
     get() = extensions
 
-  @Deprecated("请改用标准化接口", ReplaceWith("getValue()")) fun media(): String = value
+  @Deprecated("Please use standardized interface", ReplaceWith("getValue()")) fun media(): String = value
 
   @JsonValue override val value: String = mediaTypes[0]
 

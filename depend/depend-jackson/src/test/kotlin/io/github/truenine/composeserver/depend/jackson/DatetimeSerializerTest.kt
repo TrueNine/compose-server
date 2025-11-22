@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.datetime
-import io.github.truenine.composeserver.depend.jackson.modules.DatetimeCustomModule
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import kotlin.test.Test
@@ -11,6 +9,7 @@ import kotlin.test.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest
 class DatetimeSerializerTest {
@@ -19,12 +18,12 @@ class DatetimeSerializerTest {
 
   @BeforeEach
   fun setup() {
-    // 使用时间戳序列化模块，确保时区无关性
-    mapper.registerModule(DatetimeCustomModule())
+    // Spring Boot auto-configures ObjectMapper with DatetimeCustomModule
+    // No manual registration needed
   }
 
   @Test
-  @Disabled("因为时区差异暂时禁用此测试")
+  @Disabled("Temporarily disabled due to time zone differences")
   fun `ensure serialize to number`() {
     val dt = datetime.now()
     val dtJson = mapper.writeValueAsString(dt)

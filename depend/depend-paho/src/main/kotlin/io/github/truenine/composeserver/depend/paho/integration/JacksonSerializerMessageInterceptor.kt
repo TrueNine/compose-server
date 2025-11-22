@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.depend.paho.integration
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.messaging.Message
 import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.support.ChannelInterceptor
 import org.springframework.messaging.support.GenericMessage
 import org.springframework.stereotype.Service
+import tools.jackson.databind.ObjectMapper
 
 @Service
 class JacksonSerializerMessageInterceptor(private val objectMapper: ObjectMapper) : ChannelInterceptor {

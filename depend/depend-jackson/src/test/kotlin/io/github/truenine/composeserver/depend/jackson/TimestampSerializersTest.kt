@@ -1,7 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.module.SimpleModule
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampDeserializer
 import io.github.truenine.composeserver.depend.jackson.serializers.InstantTimestampSerializer
 import io.github.truenine.composeserver.depend.jackson.serializers.LocalDateTimeTimestampDeserializer
@@ -23,11 +21,16 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.databind.module.SimpleDeserializers
+import tools.jackson.databind.module.SimpleModule
+import tools.jackson.databind.module.SimpleSerializers
 
 /**
- * 时间戳序列化器测试
+ * Timestamp serializer tests
  *
- * 测试所有时间类型的时间戳序列化和反序列化功能
+ * Tests timestamp serialization and deserialization for all time types.
  */
 class TimestampSerializersTest {
 
@@ -35,19 +38,24 @@ class TimestampSerializersTest {
 
   @BeforeEach
   fun setup() {
-    mapper = ObjectMapper()
-    val module =
-      SimpleModule().apply {
-        addSerializer(LocalDateTime::class.java, LocalDateTimeTimestampSerializer())
-        addDeserializer(LocalDateTime::class.java, LocalDateTimeTimestampDeserializer())
-        addSerializer(Instant::class.java, InstantTimestampSerializer())
-        addDeserializer(Instant::class.java, InstantTimestampDeserializer())
-        addSerializer(ZonedDateTime::class.java, ZonedDateTimeTimestampSerializer())
-        addDeserializer(ZonedDateTime::class.java, ZonedDateTimeTimestampDeserializer())
-        addSerializer(OffsetDateTime::class.java, OffsetDateTimeTimestampSerializer())
-        addDeserializer(OffsetDateTime::class.java, OffsetDateTimeTimestampDeserializer())
-      }
-    mapper.registerModule(module)
+    val module = SimpleModule()
+
+    val serializers = SimpleSerializers()
+    serializers.addSerializer(LocalDateTime::class.java, LocalDateTimeTimestampSerializer())
+    serializers.addSerializer(Instant::class.java, InstantTimestampSerializer())
+    serializers.addSerializer(ZonedDateTime::class.java, ZonedDateTimeTimestampSerializer())
+    serializers.addSerializer(OffsetDateTime::class.java, OffsetDateTimeTimestampSerializer())
+
+    val deserializers = SimpleDeserializers()
+    deserializers.addDeserializer(LocalDateTime::class.java, LocalDateTimeTimestampDeserializer())
+    deserializers.addDeserializer(Instant::class.java, InstantTimestampDeserializer())
+    deserializers.addDeserializer(ZonedDateTime::class.java, ZonedDateTimeTimestampDeserializer())
+    deserializers.addDeserializer(OffsetDateTime::class.java, OffsetDateTimeTimestampDeserializer())
+
+    module.setSerializers(serializers)
+    module.setDeserializers(deserializers)
+
+    mapper = JsonMapper.builder().addModule(module).build()
   }
 
   @Nested
@@ -60,10 +68,10 @@ class TimestampSerializersTest {
 
       log.info("LocalDateTime serialized to: {}", json)
 
-      // 验证序列化为数字时间戳
+      // Verify serialization to a numeric timestamp
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "序列化结果应该是数字时间戳")
-      assertTrue(timestamp > 0, "时间戳应该大于0")
+      assertNotNull(timestamp, "Serialization result should be a numeric timestamp")
+      assertTrue(timestamp > 0, "Timestamp should be greater than 0")
     }
 
     @Test
@@ -102,7 +110,7 @@ class TimestampSerializersTest {
       log.info("Instant serialized to: {}", json)
 
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "序列化结果应该是数字时间戳")
+      assertNotNull(timestamp, "Serialization result should be a numeric timestamp")
       assertEquals(1737000645000L, timestamp)
     }
 
@@ -120,7 +128,7 @@ class TimestampSerializersTest {
 
     @Test
     fun `round trip Instant serialization`() {
-      // 使用毫秒精度的Instant避免精度丢失问题
+      // Use a millisecond-precision Instant to avoid precision loss issues
       val originalInstant = Instant.ofEpochMilli(System.currentTimeMillis())
 
       val json = mapper.writeValueAsString(originalInstant)
@@ -143,8 +151,8 @@ class TimestampSerializersTest {
       log.info("ZonedDateTime serialized to: {}", json)
 
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "序列化结果应该是数字时间戳")
-      assertTrue(timestamp > 0, "时间戳应该大于0")
+      assertNotNull(timestamp, "Serialization result should be a numeric timestamp")
+      assertTrue(timestamp > 0, "Timestamp should be greater than 0")
     }
 
     @Test
@@ -156,7 +164,7 @@ class TimestampSerializersTest {
 
       log.info("Timestamp {} deserialized to ZonedDateTime: {}", timestamp, deserializedZonedDateTime)
 
-      // 由于反序列化时使用UTC时区，需要比较Instant
+      // Since deserialization uses the UTC timezone, compare the Instants
       assertEquals(originalZonedDateTime.toInstant(), deserializedZonedDateTime.toInstant())
     }
 
@@ -169,7 +177,7 @@ class TimestampSerializersTest {
 
       log.info("Round trip: {} -> {} -> {}", originalZonedDateTime, json, deserializedZonedDateTime)
 
-      // 时区可能不同，但时间点应该相同
+      // Timezone may differ, but the instant in time should be the same
       assertEquals(originalZonedDateTime.toInstant(), deserializedZonedDateTime.toInstant())
     }
   }
@@ -185,8 +193,8 @@ class TimestampSerializersTest {
       log.info("OffsetDateTime serialized to: {}", json)
 
       val timestamp = json.toLongOrNull()
-      assertNotNull(timestamp, "序列化结果应该是数字时间戳")
-      assertTrue(timestamp > 0, "时间戳应该大于0")
+      assertNotNull(timestamp, "Serialization result should be a numeric timestamp")
+      assertTrue(timestamp > 0, "Timestamp should be greater than 0")
     }
 
     @Test
@@ -198,7 +206,7 @@ class TimestampSerializersTest {
 
       log.info("Timestamp {} deserialized to OffsetDateTime: {}", timestamp, deserializedOffsetDateTime)
 
-      // 由于反序列化时使用UTC偏移，需要比较Instant
+      // Since deserialization uses a UTC offset, compare the Instants
       assertEquals(originalOffsetDateTime.toInstant(), deserializedOffsetDateTime.toInstant())
     }
 
@@ -211,7 +219,7 @@ class TimestampSerializersTest {
 
       log.info("Round trip: {} -> {} -> {}", originalOffsetDateTime, json, deserializedOffsetDateTime)
 
-      // 偏移量可能不同，但时间点应该相同
+      // Offset may differ, but the instant in time should be the same
       assertEquals(originalOffsetDateTime.toInstant(), deserializedOffsetDateTime.toInstant())
     }
   }
@@ -233,9 +241,9 @@ class TimestampSerializersTest {
       log.info("Shanghai: {} -> {}", shanghaiTime, shanghaiJson)
       log.info("New York: {} -> {}", newYorkTime, newYorkJson)
 
-      // 相同的时间点应该序列化为相同的时间戳
-      assertEquals(utcJson, shanghaiJson, "相同时间点的不同时区应该序列化为相同时间戳")
-      assertEquals(utcJson, newYorkJson, "相同时间点的不同时区应该序列化为相同时间戳")
+      // The same instant in time should serialize to the same timestamp
+      assertEquals(utcJson, shanghaiJson, "Different timezones for the same instant should serialize to the same timestamp")
+      assertEquals(utcJson, newYorkJson, "Different timezones for the same instant should serialize to the same timestamp")
     }
   }
 }

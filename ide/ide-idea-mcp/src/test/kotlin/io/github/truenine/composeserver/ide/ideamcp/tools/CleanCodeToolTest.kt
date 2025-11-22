@@ -7,23 +7,23 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.serialization.json.Json
 
-/** CleanCodeTool 单元测试 */
+/** CleanCodeTool unit tests. */
 class CleanCodeToolTest {
 
   private val cleanCodeTool = CleanCodeTool()
 
   @Test
-  fun `工具名称应该正确`() {
+  fun `tool name should be correct`() {
     assertEquals("clean_code", cleanCodeTool.name)
   }
 
   @Test
-  fun `工具描述应该正确`() {
+  fun `tool description should be correct`() {
     assertEquals("Clean and format code using IDEA capabilities with comprehensive reporting", cleanCodeTool.description)
   }
 
   @Test
-  fun `CleanCodeArgs 序列化应该正确`() {
+  fun `CleanCodeArgs serialization should be correct`() {
     // Given
     val args = CleanCodeArgs(path = "/src/main/kotlin", formatCode = false, optimizeImports = false, runInspections = false)
 
@@ -39,7 +39,7 @@ class CleanCodeToolTest {
   }
 
   @Test
-  fun `CleanCodeArgs 默认参数应该正确设置`() {
+  fun `CleanCodeArgs default parameters should be set correctly`() {
     // Given
     val args = CleanCodeArgs(path = "/src")
 
@@ -51,9 +51,9 @@ class CleanCodeToolTest {
   }
 
   @Test
-  fun `CleanCodeResult 序列化应该正确`() {
+  fun `CleanCodeResult serialization should be correct`() {
     // Given
-    val operation = CleanOperation(type = "FORMAT", description = "代码格式化", filesAffected = 5)
+    val operation = CleanOperation(type = "FORMAT", description = "Code formatting", filesAffected = 5)
 
     val result =
       CleanCodeResult(
@@ -62,7 +62,7 @@ class CleanCodeToolTest {
         processedFiles = 10,
         modifiedFiles = 5,
         operations = listOf(operation),
-        summary = "处理了10个文件，修改了5个文件",
+        summary = "Processed 10 files, modified 5 files",
         executionTime = 1500L,
         timestamp = 1234567890L,
       )
@@ -81,7 +81,7 @@ class CleanCodeToolTest {
     assertEquals(result.executionTime, decoded.executionTime)
     assertEquals(result.timestamp, decoded.timestamp)
 
-    // 验证操作信息
+    // Verify operation information
     val decodedOperation = decoded.operations[0]
     assertEquals(operation.type, decodedOperation.type)
     assertEquals(operation.description, decodedOperation.description)
@@ -89,9 +89,9 @@ class CleanCodeToolTest {
   }
 
   @Test
-  fun `CleanOperation 序列化应该正确`() {
+  fun `CleanOperation serialization should be correct`() {
     // Given
-    val operation = CleanOperation(type = "OPTIMIZE_IMPORTS", description = "导入优化", filesAffected = 3)
+    val operation = CleanOperation(type = "OPTIMIZE_IMPORTS", description = "Optimize imports", filesAffected = 3)
 
     // When
     val json = Json.encodeToString(CleanOperation.serializer(), operation)
@@ -104,12 +104,12 @@ class CleanCodeToolTest {
   }
 
   @Test
-  fun `CleanCodeErrorResponse 序列化应该正确`() {
+  fun `CleanCodeErrorResponse serialization should be correct`() {
     // Given
     val errorResponse =
       CleanCodeErrorResponse(
         success = false,
-        error = ErrorDetails(type = "INVALID_ARGUMENT", message = "路径不能为空", suggestions = listOf("检查路径格式", "使用有效的文件路径")),
+        error = ErrorDetails(type = "INVALID_ARGUMENT", message = "Path must not be empty", suggestions = listOf("Check path format", "Use a valid file path")),
         path = "",
         timestamp = 1234567890L,
       )
@@ -128,9 +128,14 @@ class CleanCodeToolTest {
   }
 
   @Test
-  fun `多个操作的 CleanCodeResult 序列化应该正确`() {
+  fun `CleanCodeResult with multiple operations should serialize correctly`() {
     // Given
-    val operations = listOf(CleanOperation("FORMAT", "代码格式化", 8), CleanOperation("OPTIMIZE_IMPORTS", "导入优化", 6), CleanOperation("RUN_INSPECTIONS", "代码检查修复", 3))
+    val operations =
+      listOf(
+        CleanOperation("FORMAT", "Code formatting", 8),
+        CleanOperation("OPTIMIZE_IMPORTS", "Optimize imports", 6),
+        CleanOperation("RUN_INSPECTIONS", "Code inspections and fixes", 3),
+      )
 
     val result =
       CleanCodeResult(
@@ -139,7 +144,7 @@ class CleanCodeToolTest {
         processedFiles = 15,
         modifiedFiles = 12,
         operations = operations,
-        summary = "执行了多种清理操作",
+        summary = "Multiple clean-up operations were executed",
         executionTime = 3000L,
         timestamp = System.currentTimeMillis(),
       )
@@ -159,9 +164,10 @@ class CleanCodeToolTest {
   }
 
   @Test
-  fun `ErrorDetails 序列化应该正确`() {
+  fun `ErrorDetails serialization should be correct`() {
     // Given
-    val errorDetails = ErrorDetails(type = "PERMISSION_DENIED", message = "文件被锁定", suggestions = listOf("关闭其他编辑器", "检查文件权限", "重启IDE"))
+    val errorDetails =
+      ErrorDetails(type = "PERMISSION_DENIED", message = "File is locked", suggestions = listOf("Close other editors", "Check file permissions", "Restart IDE"))
 
     // When
     val json = Json.encodeToString(ErrorDetails.serializer(), errorDetails)
@@ -171,13 +177,13 @@ class CleanCodeToolTest {
     assertEquals(errorDetails.type, decoded.type)
     assertEquals(errorDetails.message, decoded.message)
     assertEquals(errorDetails.suggestions.size, decoded.suggestions.size)
-    assertEquals("关闭其他编辑器", decoded.suggestions[0])
-    assertEquals("检查文件权限", decoded.suggestions[1])
-    assertEquals("重启IDE", decoded.suggestions[2])
+    assertEquals("Close other editors", decoded.suggestions[0])
+    assertEquals("Check file permissions", decoded.suggestions[1])
+    assertEquals("Restart IDE", decoded.suggestions[2])
   }
 
   @Test
-  fun `空操作列表的 CleanCodeResult 序列化应该正确`() {
+  fun `CleanCodeResult with empty operations should serialize correctly`() {
     // Given
     val result =
       CleanCodeResult(
@@ -186,7 +192,7 @@ class CleanCodeToolTest {
         processedFiles = 0,
         modifiedFiles = 0,
         operations = emptyList(),
-        summary = "没有文件需要处理",
+        summary = "No files to process",
         executionTime = 100L,
         timestamp = System.currentTimeMillis(),
       )
@@ -200,11 +206,11 @@ class CleanCodeToolTest {
     assertEquals(0, decoded.processedFiles)
     assertEquals(0, decoded.modifiedFiles)
     assertTrue(decoded.operations.isEmpty())
-    assertEquals("没有文件需要处理", decoded.summary)
+    assertEquals("No files to process", decoded.summary)
   }
 
   @Test
-  fun `部分清理选项的 CleanCodeArgs 序列化应该正确`() {
+  fun `CleanCodeArgs with partial options should serialize correctly`() {
     // Given
     val args = CleanCodeArgs(path = "/src/test", formatCode = true, optimizeImports = false, runInspections = true)
 

@@ -8,44 +8,40 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-/**
- * # 集合扩展函数测试
- *
- * 测试 CollectionExtensions.kt 中定义的集合相关扩展函数
- */
+/** Validates collection extension functions defined in CollectionExtensions.kt. */
 class CollectionExtensionsTest {
 
   @Test
-  fun `测试 mutableLockMapOf 方法 - 创建带初始值的并发安全Map`() {
+  fun createsConcurrentMapWithInitialValues() {
     val map = mutableLockMapOf("key1" to "value1", "key2" to "value2", "key3" to "value3")
 
-    log.info("创建的Map类型: {}", map::class.java.simpleName)
-    log.info("Map大小: {}", map.size)
+    log.info("Created map type: {}", map::class.java.simpleName)
+    log.info("Map size: {}", map.size)
 
-    assertTrue(map is ConcurrentHashMap, "应该返回 ConcurrentHashMap 实例")
-    assertEquals(3, map.size, "Map大小应该为3")
-    assertEquals("value1", map["key1"], "应该包含正确的键值对")
-    assertEquals("value2", map["key2"], "应该包含正确的键值对")
-    assertEquals("value3", map["key3"], "应该包含正确的键值对")
+    assertTrue(map is ConcurrentHashMap, "Should return a ConcurrentHashMap instance")
+    assertEquals(3, map.size, "Map size should equal 3")
+    assertEquals("value1", map["key1"], "Should contain expected entry for key1")
+    assertEquals("value2", map["key2"], "Should contain expected entry for key2")
+    assertEquals("value3", map["key3"], "Should contain expected entry for key3")
   }
 
   @Test
-  fun `测试 mutableLockMapOf 方法 - 创建空的并发安全Map`() {
+  fun createsEmptyConcurrentMap() {
     val map = mutableLockMapOf<String, Int>()
 
-    log.info("空Map类型: {}", map::class.java.simpleName)
-    log.info("空Map大小: {}", map.size)
+    log.info("Empty map type: {}", map::class.java.simpleName)
+    log.info("Empty map size: {}", map.size)
 
-    assertTrue(map is ConcurrentHashMap, "应该返回 ConcurrentHashMap 实例")
-    assertEquals(0, map.size, "空Map大小应该为0")
-    assertTrue(map.isEmpty(), "Map应该为空")
+    assertTrue(map is ConcurrentHashMap, "Should return a ConcurrentHashMap instance")
+    assertEquals(0, map.size, "Empty map should have size 0")
+    assertTrue(map.isEmpty(), "Map should be empty")
   }
 
   @Test
-  fun `测试 mutableLockMapOf 方法 - 并发安全性验证`() {
+  fun validatesConcurrentBehaviour() {
     val map = mutableLockMapOf<String, Int>()
 
-    // 模拟并发操作
+    // Simulate concurrent writes
     val threads =
       (1..10).map { threadIndex ->
         Thread {
@@ -59,106 +55,106 @@ class CollectionExtensionsTest {
     threads.forEach { it.start() }
     threads.forEach { it.join() }
 
-    log.info("并发操作后Map大小: {}", map.size)
-    assertEquals(1000, map.size, "应该包含所有并发插入的元素")
+    log.info("Map size after concurrent writes: {}", map.size)
+    assertEquals(1000, map.size, "Should include every concurrently inserted element")
   }
 
   @Test
-  fun `测试 isNotEmptyRun 扩展函数 - 非空集合执行操作`() {
+  fun runsBlockWhenCollectionNotEmpty() {
     val list = listOf("a", "b", "c")
 
     val result =
       list.isNotEmptyRun {
-        log.info("集合不为空，执行操作，大小: {}", size)
+        log.info("Collection is not empty; executing block with size {}", size)
         this.joinToString(",")
       }
 
-    assertNotNull(result, "非空集合应该执行操作并返回结果")
-    assertEquals("a,b,c", result, "应该返回正确的连接字符串")
+    assertNotNull(result, "Non-empty collection should execute block and return a result")
+    assertEquals("a,b,c", result, "Should return the joined string")
   }
 
   @Test
-  fun `测试 isNotEmptyRun 扩展函数 - 空集合不执行操作`() {
+  fun doesNotRunBlockWhenCollectionEmpty() {
     val emptyList = emptyList<String>()
 
     val result =
       emptyList.isNotEmptyRun {
-        log.info("这行不应该被执行")
+        log.info("This block should not run")
         "should not execute"
       }
 
-    assertNull(result, "空集合应该返回null")
+    assertNull(result, "Empty collection should return null")
   }
 
   @Test
-  fun `测试 isNotEmptyRun 扩展函数 - null集合不执行操作`() {
+  fun doesNotRunBlockWhenCollectionNull() {
     val nullList: List<String>? = null
 
     val result =
       nullList.isNotEmptyRun {
-        log.info("这行不应该被执行")
+        log.info("This block should not run")
         "should not execute"
       }
 
-    assertNull(result, "null集合应该返回null")
+    assertNull(result, "Null collection should return null")
   }
 
   @Test
-  fun `测试 and 中缀函数 - Pair扩展为Triple`() {
+  fun expandsPairToTriple() {
     val pair = "first" to "second"
     val triple = pair and "third"
 
-    log.info("原始Pair: {}", pair)
-    log.info("扩展后的Triple: {}", triple)
+    log.info("Original pair: {}", pair)
+    log.info("Resulting triple: {}", triple)
 
-    assertEquals("first", triple.first, "第一个元素应该正确")
-    assertEquals("second", triple.second, "第二个元素应该正确")
-    assertEquals("third", triple.third, "第三个元素应该正确")
+    assertEquals("first", triple.first, "First element should match")
+    assertEquals("second", triple.second, "Second element should match")
+    assertEquals("third", triple.third, "Third element should match")
   }
 
   @Test
-  fun `测试 and 中缀函数 - 不同类型的组合`() {
+  fun expandsPairWithMixedTypes() {
     val pair = 1 to "string"
     val triple = pair and true
 
-    log.info("混合类型Triple: {}", triple)
+    log.info("Mixed-type triple: {}", triple)
 
-    assertEquals(1, triple.first, "第一个元素应该是Int类型")
-    assertEquals("string", triple.second, "第二个元素应该是String类型")
-    assertEquals(true, triple.third, "第三个元素应该是Boolean类型")
+    assertEquals(1, triple.first, "First element should be Int")
+    assertEquals("string", triple.second, "Second element should be String")
+    assertEquals(true, triple.third, "Third element should be Boolean")
   }
 
   @Test
-  fun `测试集合扩展函数的链式调用`() {
+  fun chainsCollectionExtensions() {
     val initialList = listOf(1, 2, 3, 4, 5)
 
     val result =
       initialList.isNotEmptyRun {
-        log.info("处理非空列表，大小: {}", size)
+        log.info("Processing non-empty list, size {}", size)
         this.filter { it % 2 == 0 }.map { it * 2 }.joinToString(",")
       }
 
-    assertNotNull(result, "链式调用应该返回结果")
-    assertEquals("4,8", result, "应该正确处理偶数并翻倍")
+    assertNotNull(result, "Chained call should return a result")
+    assertEquals("4,8", result, "Should filter even numbers and double them")
   }
 
   @Test
-  fun `测试 mutableLockMapOf 方法 - 容量计算验证`() {
-    // 测试不同大小的初始容量
+  fun validatesMutableLockMapOfCapacityScaling() {
+    // Validate different initial sizes
     val smallMap = mutableLockMapOf("a" to 1)
     val mediumMap = mutableLockMapOf(*(1..10).map { "key$it" to it }.toTypedArray())
     val largeMap = mutableLockMapOf(*(1..100).map { "key$it" to it }.toTypedArray())
 
-    log.info("小Map大小: {}", smallMap.size)
-    log.info("中Map大小: {}", mediumMap.size)
-    log.info("大Map大小: {}", largeMap.size)
+    log.info("Small map size: {}", smallMap.size)
+    log.info("Medium map size: {}", mediumMap.size)
+    log.info("Large map size: {}", largeMap.size)
 
-    assertEquals(1, smallMap.size, "小Map应该包含1个元素")
-    assertEquals(10, mediumMap.size, "中Map应该包含10个元素")
-    assertEquals(100, largeMap.size, "大Map应该包含100个元素")
+    assertEquals(1, smallMap.size, "Small map should contain one element")
+    assertEquals(10, mediumMap.size, "Medium map should contain ten elements")
+    assertEquals(100, largeMap.size, "Large map should contain one hundred elements")
 
-    // 验证所有元素都正确插入
-    assertTrue((1..10).all { mediumMap["key$it"] == it }, "中Map应该包含所有正确的键值对")
-    assertTrue((1..100).all { largeMap["key$it"] == it }, "大Map应该包含所有正确的键值对")
+    // Verify contents are preserved
+    assertTrue((1..10).all { mediumMap["key$it"] == it }, "Medium map should contain every expected entry")
+    assertTrue((1..100).all { largeMap["key$it"] == it }, "Large map should contain every expected entry")
   }
 }

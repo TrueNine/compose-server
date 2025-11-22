@@ -6,7 +6,7 @@ import jakarta.annotation.Resource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import org.springframework.boot.autoconfigure.flyway.FlywayProperties
+import org.springframework.boot.flyway.autoconfigure.FlywayProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 import org.springframework.jdbc.core.JdbcTemplate
@@ -18,38 +18,38 @@ class FlywayPropertiesOverrideAutoConfigurationTest : IDatabasePostgresqlContain
   @Resource lateinit var jdbcTemplate: JdbcTemplate
 
   @Test
-  fun `检查 flyway properties 被覆盖后 是否工作正常`() {
+  fun `flyway properties overrides should work correctly`() {
 
-    // 检查 flyway 相关表是否存在
+    // Verify flyway-related tables exist
     val flywayTableCount =
       jdbcTemplate.queryForObject(
         """
-          select count(*) from information_schema.tables 
-          where table_name = 'flyway_schema_history'
+        select count(*) from information_schema.tables 
+        where table_name = 'flyway_schema_history'
         """
           .trimIndent(),
         Int::class.java,
       )
-    assertEquals(1, flywayTableCount, "flyway_schema_history 表未创建")
+    assertEquals(1, flywayTableCount, "flyway_schema_history table was not created")
 
-    // 检查 test_user_account 表是否存在
+    // Verify test_user_account_table exists
     val userTableCount =
       jdbcTemplate.queryForObject(
         """
-          select count(*) from information_schema.tables 
-          where table_name = 'test_user_account_table'
+        select count(*) from information_schema.tables 
+        where table_name = 'test_user_account_table'
         """
           .trimIndent(),
         Int::class.java,
       )
-    assertEquals(1, userTableCount, "test_user_account 表未创建")
+    assertEquals(1, userTableCount, "test_user_account_table was not created")
   }
 
   @Test
-  fun `确保 flyway properties 的 enabled 已经被覆盖`() {
+  fun `flyway properties enabled should be overridden`() {
     val flywayProperties = ctx.getBean(FlywayProperties::class.java)
 
-    assertTrue("没有覆盖到 flyway properties 的 enabled 属性") { flywayProperties.isEnabled }
+    assertTrue("flyway properties 'enabled' property was not overridden") { flywayProperties.isEnabled }
     assertTrue { flywayProperties.isBaselineOnMigrate }
     assertTrue { flywayProperties.isOutOfOrder }
     assertEquals("0", flywayProperties.baselineVersion)

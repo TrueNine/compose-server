@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.depend.servlet.parameter
 
 import io.github.truenine.composeserver.depend.servlet.TestApplication
-import jakarta.annotation.Resource
 import java.nio.charset.StandardCharsets
+import kotlin.test.BeforeTest
 import kotlin.test.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
@@ -13,25 +13,32 @@ import org.springframework.mock.web.MockMultipartFile
 import org.springframework.mock.web.MockPart
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.multipart
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.multipart.MultipartFile
 
-@AutoConfigureMockMvc
 @SpringBootTest(classes = [TestApplication::class])
 @Import(UploadFileParamAssertTest.TestUploadController::class)
 class UploadFileParamAssertTest {
+  @Autowired lateinit var webApplicationContext: WebApplicationContext
+
   lateinit var mvc: MockMvc
-    @Resource set
+
+  @BeforeTest
+  fun setup() {
+    mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+  }
 
   val json = """{"a":"str","b": 1023}"""
   val jsonFile = MockMultipartFile("json", "json", "application/json", json.toByteArray(StandardCharsets.UTF_8))
   val file = MockMultipartFile("file", "file", "text/plain", "Hello, World!".toByteArray())
 
   @Test
-  fun `测试 混合 dto 上传`() {
+  fun `Test mixed DTO upload`() {
     mvc
       .multipart(HttpMethod.POST, "/testUploadController/uploadBlend") {
         param("json.a", "str")
@@ -42,7 +49,7 @@ class UploadFileParamAssertTest {
   }
 
   @Test
-  fun `测试 上传 json 表单以及 文件`() {
+  fun `Test uploading JSON form and file`() {
     mvc
       .multipart(HttpMethod.POST, "/testUploadController/uploadFileAndOtherField") {
         contentType = MediaType.MULTIPART_FORM_DATA
@@ -52,7 +59,7 @@ class UploadFileParamAssertTest {
       .andExpect { status { isOk() } }
   }
 
-  // 内嵌 Controller
+  // Embedded Controller
   @RequestMapping("testUploadController")
   @RestController
   class TestUploadController {

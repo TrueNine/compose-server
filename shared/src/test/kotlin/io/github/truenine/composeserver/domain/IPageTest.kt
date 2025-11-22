@@ -31,7 +31,7 @@ class IPageTest {
     assertEquals(3, pr.d.size)
     assertEquals(100, pr.t)
     assertEquals(2, pr.p)
-    assertEquals(null, pr.pageParam, "没有指定参数，应该为 null")
+    assertEquals(null, pr.pageParam, "Page parameter should be null when not specified")
     assertEquals(null, pr.o)
   }
 }

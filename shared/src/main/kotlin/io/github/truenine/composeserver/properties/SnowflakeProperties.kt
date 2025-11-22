@@ -4,7 +4,7 @@ import io.github.truenine.composeserver.consts.SpringBootConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
- * # snowflake id 生成器自动配置
+ * # Snowflake ID generator auto-configuration
  *
  * @see io.github.truenine.composeserver.generator.SynchronizedSimpleSnowflake
  * @author TrueNine

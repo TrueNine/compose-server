@@ -1,6 +1,5 @@
 package itest.integrate.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
 import java.time.Instant
@@ -12,12 +11,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpInputMessage
+import org.springframework.http.HttpOutputMessage
 import org.springframework.http.MediaType
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.http.converter.AbstractHttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -28,14 +28,14 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import tools.jackson.databind.ObjectMapper
 
 /**
- * 手动配置的 Web 集成测试
+ * Manually configured web integration tests.
  *
- * 不依赖 Spring Boot 自动配置，手动配置所有组件
+ * Does not rely on Spring Boot auto-configuration; all components are configured manually.
  */
 @SpringBootTest(classes = [TestEntrance::class])
-@AutoConfigureMockMvc
 @Import(ManualWebConfigurationTest.TestController::class)
 class ManualWebConfigurationTest {
 
@@ -47,7 +47,7 @@ class ManualWebConfigurationTest {
 
   @BeforeEach
   fun setup() {
-    val messageConverter = MappingJackson2HttpMessageConverter(objectMapper)
+    val messageConverter = ToolsJacksonMessageConverter(objectMapper)
     mockMvc = MockMvcBuilders.standaloneSetup(testController).setMessageConverters(messageConverter).build()
   }
 
@@ -87,7 +87,7 @@ class ManualWebConfigurationTest {
     fun should_handle_different_system_timezones_consistently() {
       val originalTimeZone = System.getProperty("user.timezone")
       try {
-        // 测试不同时区
+        // Test different time zones
         val timeZones = listOf("UTC", "Asia/Shanghai", "America/New_York", "Europe/London")
 
         timeZones.forEach { timeZone ->
@@ -99,12 +99,12 @@ class ManualWebConfigurationTest {
           val responseBody = result.response.contentAsString
           val timeData = objectMapper.readValue(responseBody, TimeData::class.java)
 
-          // 验证时间戳序列化在不同时区下保持一致
+          // Verify that timestamp serialization remains consistent across different time zones
           assertNotNull(timeData.instant)
           assertNotNull(timeData.localDateTime)
         }
       } finally {
-        // 恢复原始时区
+        // Restore original time zone
         if (originalTimeZone != null) {
           System.setProperty("user.timezone", originalTimeZone)
           TimeZone.setDefault(TimeZone.getTimeZone(originalTimeZone))
@@ -113,10 +113,10 @@ class ManualWebConfigurationTest {
     }
   }
 
-  /** 测试数据类 */
+  /** Test data class */
   data class TimeData(val instant: Instant, val localDateTime: LocalDateTime)
 
-  /** 测试控制器 */
+  /** Test controller */
   @RestController
   class TestController {
 
@@ -133,4 +133,18 @@ class ManualWebConfigurationTest {
   }
 
   @Configuration @Import(TestController::class) class TestConfiguration
+}
+
+private class ToolsJacksonMessageConverter(private val mapper: ObjectMapper) : AbstractHttpMessageConverter<Any>(MediaType.APPLICATION_JSON) {
+  override fun supports(clazz: Class<*>): Boolean = true
+
+  override fun readInternal(clazz: Class<out Any>, inputMessage: HttpInputMessage): Any {
+    inputMessage.body.use { stream ->
+      return mapper.readValue(stream, clazz)
+    }
+  }
+
+  override fun writeInternal(t: Any, outputMessage: HttpOutputMessage) {
+    outputMessage.body.use { stream -> mapper.writeValue(stream, t) }
+  }
 }

@@ -11,7 +11,7 @@ import org.springframework.mock.web.MockMultipartFile
 class IReadableAttachmentFnsTest {
 
   @Test
-  fun `toReadableAttachment 应正确转换普通文件`() {
+  fun `toReadableAttachment should correctly convert a regular file`() {
     val content = "test file content".toByteArray(StandardCharsets.UTF_8)
     val multipartFile = MockMultipartFile("testFile", "test.txt", "text/plain", content)
 
@@ -25,7 +25,7 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 应处理空文件`() {
+  fun `toReadableAttachment should handle an empty file`() {
     val multipartFile = MockMultipartFile("emptyFile", "empty.txt", "text/plain", ByteArray(0))
 
     val attachment = multipartFile.toReadableAttachment()
@@ -38,34 +38,34 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 应处理无原始文件名的情况`() {
+  fun `toReadableAttachment should handle the case of no original filename`() {
     val content = "no original filename".toByteArray()
     val multipartFile =
       MockMultipartFile(
         "fieldName",
-        null, // 无原始文件名
+        null, // No original filename
         "application/octet-stream",
         content,
       )
 
     val attachment = multipartFile.toReadableAttachment()
 
-    // 修复后的转换逻辑：this.originalFilename?.takeIf { it.isNotBlank() } ?: this.name
-    // 当 originalFilename 为空字符串时，应该 fallback 到 name
-    assertEquals("fieldName", attachment.name) // 现在应该使用 name
+    // Corrected conversion logic: this.originalFilename?.takeIf { it.isNotBlank() } ?: this.name
+    // When originalFilename is an empty string, it should fall back to name
+    assertEquals("fieldName", attachment.name) // Should now use the name
     assertEquals("application/octet-stream", attachment.mimeType)
     assertEquals(content.size.toLong(), attachment.size)
     assertFalse(attachment.empty)
   }
 
   @Test
-  fun `toReadableAttachment 应处理 null 内容类型`() {
+  fun `toReadableAttachment should handle a null content type`() {
     val content = "null content type".toByteArray()
     val multipartFile =
       MockMultipartFile(
         "testFile",
         "test.bin",
-        null, // null 内容类型
+        null, // null content type
         content,
       )
 
@@ -78,7 +78,7 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 应提供可用的 InputStream`() {
+  fun `toReadableAttachment should provide a usable InputStream`() {
     val content = "stream test content".toByteArray(StandardCharsets.UTF_8)
     val multipartFile = MockMultipartFile("streamFile", "stream.txt", "text/plain", content)
 
@@ -91,7 +91,7 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 字节函数应返回相同内容`() {
+  fun `toReadableAttachment bytes function should return the same content`() {
     val content = "bytes test content".toByteArray(StandardCharsets.UTF_8)
     val multipartFile = MockMultipartFile("bytesFile", "bytes.txt", "text/plain", content)
 
@@ -106,7 +106,7 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 应正确处理二进制文件`() {
+  fun `toReadableAttachment should correctly handle a binary file`() {
     val binaryContent = ByteArray(256) { it.toByte() }
     val multipartFile = MockMultipartFile("binaryFile", "binary.bin", "application/octet-stream", binaryContent)
 
@@ -120,7 +120,7 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 应正确处理大文件`() {
+  fun `toReadableAttachment should correctly handle a large file`() {
     val largeContent = ByteArray(10240) { (it % 256).toByte() }
     val multipartFile = MockMultipartFile("largeFile", "large.bin", "application/octet-stream", largeContent)
 
@@ -134,7 +134,7 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 应创建 DefaultReadableAttachment 类型`() {
+  fun `toReadableAttachment should create a DefaultReadableAttachment type`() {
     val multipartFile = MockMultipartFile("testFile", "test.txt", "text/plain", "test".toByteArray())
 
     val attachment = multipartFile.toReadableAttachment()
@@ -143,14 +143,14 @@ class IReadableAttachmentFnsTest {
   }
 
   @Test
-  fun `toReadableAttachment 多次调用应产生独立实例`() {
+  fun `toReadableAttachment multiple calls should produce independent instances`() {
     val content = "independence test".toByteArray()
     val multipartFile = MockMultipartFile("testFile", "test.txt", "text/plain", content)
 
     val attachment1 = multipartFile.toReadableAttachment()
     val attachment2 = multipartFile.toReadableAttachment()
 
-    // 应该是不同的实例但内容相同
+    // Should be different instances but with the same content
     assertEquals(attachment1.name, attachment2.name)
     assertEquals(attachment1.mimeType, attachment2.mimeType)
     assertEquals(attachment1.size, attachment2.size)

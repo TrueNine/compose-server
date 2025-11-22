@@ -1,6 +1,5 @@
 package itest.integrate.depend.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
 import java.time.Instant
@@ -16,11 +15,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.ObjectMapper
 
 /**
- * 时区无关性集成测试
+ * Timezone independence integration tests
  *
- * 测试不同时区环境下的序列化一致性，验证UTC时间戳的正确性， 测试多种时间格式的反序列化兼容性
+ * Verifies serialization consistency under different timezone environments, validates correctness of UTC timestamps, and tests deserialization compatibility
+ * for multiple time formats.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class TimezoneIndependenceTest {
@@ -32,20 +33,20 @@ class TimezoneIndependenceTest {
 
     @Test
     fun same_instant_in_different_timezones_should_serialize_to_same_timestamp() {
-      // 创建相同时刻的不同时区时间
+      // Create times in different time zones representing the same instant
       val baseInstant = Instant.parse("2023-06-15T12:00:00Z")
       val utcTime = ZonedDateTime.ofInstant(baseInstant, ZoneOffset.UTC)
       val beijingTime = ZonedDateTime.ofInstant(baseInstant, ZoneId.of("Asia/Shanghai"))
       val newYorkTime = ZonedDateTime.ofInstant(baseInstant, ZoneId.of("America/New_York"))
       val tokyoTime = ZonedDateTime.ofInstant(baseInstant, ZoneId.of("Asia/Tokyo"))
 
-      // 序列化所有时间
+      // Serialize all times
       val utcJson = objectMapper.writeValueAsString(utcTime)
       val beijingJson = objectMapper.writeValueAsString(beijingTime)
       val newYorkJson = objectMapper.writeValueAsString(newYorkTime)
       val tokyoJson = objectMapper.writeValueAsString(tokyoTime)
 
-      // 所有序列化结果应该相同（都是UTC时间戳）
+      // All serialized results should be the same (all are UTC timestamps)
       val expectedTimestamp = baseInstant.toEpochMilli()
       assertEquals(expectedTimestamp.toString(), utcJson)
       assertEquals(expectedTimestamp.toString(), beijingJson)
@@ -55,7 +56,7 @@ class TimezoneIndependenceTest {
 
     @Test
     fun local_datetime_should_be_treated_as_utc_for_timestamp_serialization() {
-      // LocalDateTime没有时区信息，应该被当作UTC处理
+      // LocalDateTime has no timezone information and should be treated as UTC
       val localDateTime = LocalDateTime.of(2023, 6, 15, 12, 0, 0)
       val expectedUtcInstant = localDateTime.toInstant(ZoneOffset.UTC)
 
@@ -67,7 +68,7 @@ class TimezoneIndependenceTest {
 
     @Test
     fun offset_datetime_should_convert_to_utc_timestamp() {
-      // 测试不同偏移量的OffsetDateTime
+      // Test OffsetDateTime with different offsets
       val baseTime = LocalDateTime.of(2023, 6, 15, 12, 0, 0)
       val utcTime = OffsetDateTime.of(baseTime, ZoneOffset.UTC)
       val plusEightTime = OffsetDateTime.of(baseTime.plusHours(8), ZoneOffset.ofHours(8))
@@ -77,7 +78,7 @@ class TimezoneIndependenceTest {
       val plusEightJson = objectMapper.writeValueAsString(plusEightTime)
       val minusFiveJson = objectMapper.writeValueAsString(minusFiveTime)
 
-      // 所有时间都应该序列化为相同的UTC时间戳
+      // All times should serialize to the same UTC timestamp
       assertEquals(utcJson, plusEightJson)
       assertEquals(utcJson, minusFiveJson)
     }
@@ -88,17 +89,17 @@ class TimezoneIndependenceTest {
 
     @Test
     fun serialized_timestamps_should_represent_utc_time() {
-      // 创建一个已知的UTC时间
+      // Create a known UTC time
       val knownUtcTime = ZonedDateTime.of(2023, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
       val expectedTimestamp = knownUtcTime.toInstant().toEpochMilli()
 
-      // 序列化
+      // Serialize
       val json = objectMapper.writeValueAsString(knownUtcTime)
       val actualTimestamp = json.toLong()
 
       assertEquals(expectedTimestamp, actualTimestamp)
 
-      // 验证时间戳确实代表UTC时间
+      // Verify that the timestamp really represents UTC time
       val reconstructedInstant = Instant.ofEpochMilli(actualTimestamp)
       val reconstructedUtc = ZonedDateTime.ofInstant(reconstructedInstant, ZoneOffset.UTC)
 
@@ -113,7 +114,7 @@ class TimezoneIndependenceTest {
         val testTime = ZonedDateTime.of(2023, 6, 15, 12, 0, 0, 0, ZoneOffset.UTC)
         val results = mutableListOf<String>()
 
-        // 在不同的系统时区下序列化相同的时间
+        // Serialize the same time under different system time zones
         val timeZones = listOf("UTC", "Asia/Shanghai", "America/New_York", "Europe/London", "Asia/Tokyo")
 
         for (tzId in timeZones) {
@@ -122,9 +123,9 @@ class TimezoneIndependenceTest {
           results.add(json)
         }
 
-        // 所有结果应该相同
+        // All results should be the same
         val firstResult = results.first()
-        results.forEach { result -> assertEquals(firstResult, result, "时间戳序列化应该与系统时区无关") }
+        results.forEach { result -> assertEquals(firstResult, result, "Timestamp serialization should be independent of the system time zone") }
       } finally {
         TimeZone.setDefault(originalTimeZone)
       }
@@ -139,13 +140,13 @@ class TimezoneIndependenceTest {
       val timestamp = 1687003200000L // 2023-06-17T12:00:00Z
       val timestampJson = timestamp.toString()
 
-      // 反序列化为不同的时间类型
+      // Deserialize into different time types
       val instant = objectMapper.readValue(timestampJson, Instant::class.java)
       val zonedDateTime = objectMapper.readValue(timestampJson, ZonedDateTime::class.java)
       val offsetDateTime = objectMapper.readValue(timestampJson, OffsetDateTime::class.java)
       val localDateTime = objectMapper.readValue(timestampJson, LocalDateTime::class.java)
 
-      // 验证所有类型都表示相同的时刻
+      // Verify that all types represent the same instant
       val expectedInstant = Instant.ofEpochMilli(timestamp)
       assertEquals(expectedInstant, instant)
       assertEquals(expectedInstant, zonedDateTime.toInstant())
@@ -159,11 +160,11 @@ class TimezoneIndependenceTest {
       val expectedInstant = Instant.parse("2023-06-17T12:00:00Z")
 
       try {
-        // 尝试反序列化ISO8601格式（向后兼容性）
+        // Try deserializing ISO 8601 format (backward compatibility)
         val instant = objectMapper.readValue(iso8601String, Instant::class.java)
         assertEquals(expectedInstant, instant)
       } catch (e: Exception) {
-        // 如果不支持ISO8601格式，这是预期的（因为我们优先使用时间戳）
+        // If ISO 8601 format is not supported, this is expected (we prefer timestamps)
         assertTrue(e.message?.contains("Cannot deserialize") == true || e.message?.contains("not supported") == true)
       }
     }
@@ -174,28 +175,28 @@ class TimezoneIndependenceTest {
       val millisTimestamp = baseInstant.toEpochMilli()
       val secondsTimestamp = baseInstant.epochSecond
 
-      // 测试毫秒时间戳
+      // Test millisecond timestamp
       val millisJson = millisTimestamp.toString()
       val instantFromMillis = objectMapper.readValue(millisJson, Instant::class.java)
       assertEquals(baseInstant, instantFromMillis)
 
-      // 测试秒时间戳（如果支持）
+      // Test second-based timestamp (if supported)
       val secondsJson = secondsTimestamp.toString()
       try {
         val instantFromSeconds = objectMapper.readValue(secondsJson, Instant::class.java)
-        // 检查是否被当作毫秒时间戳处理（这是常见的情况）
+        // Check whether it is treated as a millisecond timestamp (common case)
         if (instantFromSeconds.toEpochMilli() == secondsTimestamp) {
-          // 被当作毫秒时间戳处理，这是可以接受的
-          assertTrue(true, "秒时间戳被当作毫秒时间戳处理，这是可以接受的")
+          // Being treated as a millisecond timestamp is acceptable
+          assertTrue(true, "Second-based timestamp being treated as millisecond timestamp is acceptable")
         } else {
-          // 如果支持秒时间戳，验证结果
+          // If second-based timestamps are supported, verify the result
           assertEquals(secondsTimestamp, instantFromSeconds.epochSecond)
         }
       } catch (e: Exception) {
-        // 如果不支持秒时间戳，这也是可以接受的
+        // If second-based timestamps are not supported, this is also acceptable
         assertTrue(
           e.message?.contains("Cannot deserialize") == true || e.message?.contains("not supported") == true || e.message?.contains("Invalid") == true,
-          "秒时间戳格式不被支持，这是可以接受的",
+          "Second-based timestamp format is not supported, which is acceptable",
         )
       }
     }
@@ -220,7 +221,7 @@ class TimezoneIndependenceTest {
       val json = objectMapper.writeValueAsString(farFuture)
       val timestamp = json.toLong()
 
-      assertTrue(timestamp > 0, "未来日期应该产生正时间戳")
+      assertTrue(timestamp > 0, "Future date should produce a positive timestamp")
 
       val deserializedInstant = objectMapper.readValue(json, Instant::class.java)
       assertEquals(farFuture, deserializedInstant)
@@ -228,15 +229,15 @@ class TimezoneIndependenceTest {
 
     @Test
     fun should_handle_daylight_saving_time_transitions() {
-      // 测试夏令时转换期间的时间
+      // Test time during daylight saving time transition
       val dstTransition = ZonedDateTime.of(2023, 3, 12, 2, 30, 0, 0, ZoneId.of("America/New_York"))
       val json = objectMapper.writeValueAsString(dstTransition)
       val timestamp = json.toLong()
 
-      // 验证时间戳是有效的
+      // Verify that the timestamp is valid
       assertTrue(timestamp > 0)
 
-      // 验证往返序列化
+      // Verify round-trip serialization
       val deserializedZdt = objectMapper.readValue(json, ZonedDateTime::class.java)
       assertEquals(dstTransition.toInstant(), deserializedZdt.toInstant())
     }
@@ -253,7 +254,7 @@ class TimezoneIndependenceTest {
       val offsetDateTime = OffsetDateTime.ofInstant(baseInstant, ZoneOffset.UTC)
       val localDateTime = LocalDateTime.ofInstant(baseInstant, ZoneOffset.UTC)
 
-      // 测试往返序列化
+      // Test round-trip serialization
       testRoundTrip(instant, Instant::class.java)
       testRoundTrip(zonedDateTime, ZonedDateTime::class.java)
       testRoundTrip(offsetDateTime, OffsetDateTime::class.java)
@@ -266,7 +267,7 @@ class TimezoneIndependenceTest {
 
       when (original) {
         is Instant -> {
-          // 由于时间戳序列化可能会丢失纳秒精度，我们比较毫秒精度
+          // Since timestamp serialization may lose nanosecond precision, compare at millisecond precision
           val originalMillis = (original as Instant).toEpochMilli()
           val deserializedMillis = (deserialized as Instant).toEpochMilli()
           assertEquals(originalMillis, deserializedMillis)

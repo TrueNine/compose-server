@@ -34,14 +34,14 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
   }
 
   private fun assertTimestampPrefix(orderCode: String) {
-    assertTrue(orderCode.length >= 13, "订单号长度应该至少为13位")
+    assertTrue(orderCode.length >= 13, "Order code length should be at least 13 digits")
     val timestampPart = orderCode.substring(0, 13)
-    assertTrue(timestampPart.length == 13, "时间戳部分应该是13位")
-    assertTrue(timestampPart.all { it.isDigit() }, "时间戳部分应该只包含数字")
+    assertTrue(timestampPart.length == 13, "Timestamp part should be 13 digits")
+    assertTrue(timestampPart.all { it.isDigit() }, "Timestamp part should contain only digits")
     val timestampMillis = timestampPart.toLong()
     val now = System.currentTimeMillis()
     val difference = abs(now - timestampMillis)
-    assertTrue(difference <= 1_000, "生成的时间戳与当前时间差距应该在1秒内，实际差距: ${difference}ms")
+    assertTrue(difference <= 1_000, "Generated timestamp should be within 1 second of current time, actual difference: ${difference}ms")
   }
 
   @Nested
@@ -49,14 +49,14 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     @Test
     fun `should generate order code with correct length`() {
       val code = generator.nextString()
-      assertTrue(code.length > 13, "订单号长度应该大于13位")
+      assertTrue(code.length > 13, "Order code length should be greater than 13 digits")
       assertTimestampPrefix(code)
     }
 
     @Test
     fun `should generate order code with only digits`() {
       val code = generator.nextString()
-      assertTrue(code.matches(Regex("\\d+")), "订单号应该只包含数字")
+      assertTrue(code.matches(Regex("\\d+")), "Order code should contain only digits")
     }
 
     @Test
@@ -69,14 +69,14 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     fun `should implement IOrderCodeGenerator interface correctly`() {
       val stringValue = generator.nextString()
 
-      // 验证字符串格式
-      assertTrue(stringValue.isNotBlank(), "nextString()应该返回非空字符串，实际值: '$stringValue'")
-      assertTrue(stringValue.length > 13, "订单号长度应该大于13位，实际长度: ${stringValue.length}")
+      // Validate string format
+      assertTrue(stringValue.isNotBlank(), "nextString() should return a non-blank value, actual: '$stringValue'")
+      assertTrue(stringValue.length > 13, "Order code length should be greater than 13 digits, actual length: ${stringValue.length}")
 
-      // 验证基本数字格式
-      assertTrue(stringValue.all { it.isDigit() }, "订单号应该只包含数字字符，实际值: '$stringValue'")
+      // Validate numeric format
+      assertTrue(stringValue.all { it.isDigit() }, "Order code should contain only numeric characters, actual: '$stringValue'")
 
-      // 验证时间戳部分
+      // Validate timestamp prefix
       assertTimestampPrefix(stringValue)
     }
   }
@@ -88,9 +88,9 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       val codes = mutableSetOf<String>()
       repeat(1000) { iteration ->
         val code = generator.nextString()
-        assertTrue(codes.add(code), "生成的订单号应该是唯一的，第${iteration}次生成: $code")
+        assertTrue(codes.add(code), "Generated order codes should be unique, duplicate at iteration ${iteration}: $code")
       }
-      assertEquals(1000, codes.size, "应该生成1000个不同的订单号")
+      assertEquals(1000, codes.size, "Should generate 1000 distinct order codes")
     }
 
     @Test
@@ -107,7 +107,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
           try {
             repeat(idsPerThread) { iteration ->
               val id = generator.nextString()
-              synchronized(ids) { assertTrue(ids.add(id), "线程${threadIndex}第${iteration}次生成重复订单号: $id") }
+              synchronized(ids) { assertTrue(ids.add(id), "Thread ${threadIndex} produced duplicate order code at iteration ${iteration}: $id") }
             }
           } finally {
             latch.countDown()
@@ -115,8 +115,8 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
         }
       }
 
-      assertTrue(latch.await(10, TimeUnit.SECONDS), "并发测试应该在10秒内完成")
-      assertEquals(totalIds, ids.size, "应该生成 $totalIds 个唯一订单号")
+      assertTrue(latch.await(10, TimeUnit.SECONDS), "Concurrent test should complete within 10 seconds")
+      assertEquals(totalIds, ids.size, "Should generate $totalIds unique order codes")
     }
 
     @Test
@@ -131,13 +131,13 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
           async(Dispatchers.Default) {
             repeat(idsPerCoroutine) { iteration ->
               val id = generator.nextString()
-              synchronized(ids) { assertTrue(ids.add(id), "协程${coroutineIndex}第${iteration}次生成重复订单号: $id") }
+              synchronized(ids) { assertTrue(ids.add(id), "Coroutine ${coroutineIndex} produced duplicate order code at iteration ${iteration}: $id") }
             }
           }
         }
 
       deferreds.awaitAll()
-      assertEquals(totalIds, ids.size, "应该生成 $totalIds 个唯一订单号")
+      assertEquals(totalIds, ids.size, "Should generate $totalIds unique order codes")
     }
   }
 
@@ -146,7 +146,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
     @Test
     fun `should handle snowflake generator exceptions gracefully`() {
       val brokenSnowflake = mockk<ISnowflakeGenerator>()
-      every { brokenSnowflake.currentTimeMillis() } throws RuntimeException("雪花算法异常")
+      every { brokenSnowflake.currentTimeMillis() } throws RuntimeException("Snowflake generator failure")
 
       val brokenGenerator = SynchronizedSimpleOrderCodeGenerator(brokenSnowflake)
 
@@ -154,7 +154,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
 
       assertEquals("Order code generation failed", exception.message)
       assertTrue(exception.cause is RuntimeException)
-      assertEquals("雪花算法异常", exception.cause?.message)
+      assertEquals("Snowflake generator failure", exception.cause?.message)
     }
 
     @Test
@@ -165,7 +165,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
 
       val generator = SynchronizedSimpleOrderCodeGenerator(snowflake)
 
-      // 正常情况应该不会抛出异常
+      // Should not throw exceptions under normal circumstances
       val result = generator.nextString()
       assertTrue(result.isNotEmpty())
       verify { snowflake.currentTimeMillis() }
@@ -185,10 +185,10 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       val duration = System.currentTimeMillis() - startTime
 
       assertEquals(iterations, codes.size)
-      assertTrue(duration < 5000, "生成${iterations}个订单号应该在5秒内完成，实际耗时: ${duration}ms")
+      assertTrue(duration < 5000, "Generating ${iterations} order codes should finish within 5 seconds, actual duration: ${duration}ms")
 
-      // 验证所有生成的订单号都是唯一的
-      assertEquals(iterations, codes.toSet().size, "所有生成的订单号都应该是唯一的")
+      // Verify that all generated order codes are unique
+      assertEquals(iterations, codes.toSet().size, "All generated order codes should be unique")
     }
   }
 
@@ -220,12 +220,15 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
         }
       }
 
-      assertTrue(latch.await(15, TimeUnit.SECONDS), "线程安全测试应该在15秒内完成")
-      assertTrue(exceptions.isEmpty(), "不应该有任何异常: ${exceptions.map { it.message }}")
+      assertTrue(latch.await(15, TimeUnit.SECONDS), "Thread-safety test should complete within 15 seconds")
+      assertTrue(exceptions.isEmpty(), "No exceptions should be thrown: ${exceptions.map { it.message }}")
 
-      // 在高并发情况下，由于同步机制，可能会有重复的时间戳+雪花ID组合
-      // 但我们验证至少生成了预期数量的ID
-      assertTrue(allIds.size >= threadCount * idsPerThread * 0.9, "至少应该生成90%的预期ID数量，实际生成: ${allIds.size}，预期: ${threadCount * idsPerThread}")
+      // Under high concurrency we may see duplicate timestamp + snowflake combinations
+      // but we still expect to generate the majority of the IDs
+      assertTrue(
+        allIds.size >= threadCount * idsPerThread * 0.9,
+        "Should generate at least 90% of the expected IDs, actual: ${allIds.size}, expected: ${threadCount * idsPerThread}",
+      )
     }
   }
 
@@ -242,7 +245,7 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
 
       verify(exactly = 1) { mockSnowflake.currentTimeMillis() }
       verify(exactly = 1) { mockSnowflake.nextString() }
-      assertTrue(result.endsWith("9876543210"), "订单号应该以雪花ID结尾")
+      assertTrue(result.endsWith("9876543210"), "Order code should end with the snowflake ID")
       assertTimestampPrefix(result)
     }
 
@@ -255,8 +258,8 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
-      assertEquals(13, result.length, "当雪花ID为空时，订单号长度应该等于时间戳长度")
-      assertTrue(result.matches(Regex("\\d{13}")), "应该只包含13位数字")
+      assertEquals(13, result.length, "When the snowflake ID is empty, order code length should match the timestamp length")
+      assertTrue(result.matches(Regex("\\d{13}")), "Result should contain exactly 13 digits")
       assertTimestampPrefix(result)
     }
 
@@ -270,8 +273,8 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
-      assertTrue(result.endsWith("123456789"), "订单号应该以雪花ID结尾")
-      assertTrue(result.length >= 13 + snowflakeValue.length, "订单号长度应该至少包含时间戳和雪花ID长度")
+      assertTrue(result.endsWith("123456789"), "Order code should end with the snowflake ID")
+      assertTrue(result.length >= 13 + snowflakeValue.length, "Order code length should at least include timestamp and snowflake ID lengths")
       assertTimestampPrefix(result)
     }
   }
@@ -288,9 +291,9 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
-      assertTrue(result.length >= 13 + longSnowflakeId.length, "订单号长度应该至少包含时间戳和雪花ID长度")
+      assertTrue(result.length >= 13 + longSnowflakeId.length, "Order code length should at least include timestamp and snowflake ID lengths")
       assertTimestampPrefix(result)
-      assertTrue(result.endsWith(longSnowflakeId), "订单号应该包含完整的雪花ID")
+      assertTrue(result.endsWith(longSnowflakeId), "Order code should include the full snowflake ID")
     }
 
     @Test
@@ -302,10 +305,10 @@ class SynchronizedSimpleOrderCodeGeneratorTest {
       val testGenerator = SynchronizedSimpleOrderCodeGenerator(mockSnowflake)
       val result = testGenerator.nextString()
 
-      assertEquals(14, result.length, "订单号长度应该为14位")
+      assertEquals(14, result.length, "Order code length should be 14 digits")
       assertTimestampPrefix(result)
-      assertTrue(result.endsWith("1"), "订单号应该以1结尾")
-      assertTrue(result.toLong() >= 1000, "转换为Long应该>=1000")
+      assertTrue(result.endsWith("1"), "Order code should end with 1")
+      assertTrue(result.toLong() >= 1000, "Converted Long value should be >= 1000")
     }
   }
 }

@@ -37,7 +37,7 @@ dependencies {
   api(libs.com.fasterxml.jackson.core.jackson.databind)
   runtimeOnly(libs.org.skyscreamer.jsonassert)
 
-  // spring 测试支持
+  // Spring test support
   implementation(libs.org.springframework.spring.test)
   runtimeOnly(libs.org.springframework.boot.spring.boot.test) {
     exclude("org.junit.jupiter")
@@ -46,7 +46,7 @@ dependencies {
     exclude("org.junit.platform")
   }
 
-  // Spring Security 核心依赖
+  // Spring Security core dependencies
   implementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
 
   api(libs.org.springframework.boot.spring.boot.starter.test) {
@@ -59,7 +59,7 @@ dependencies {
   // spring batch
   api(libs.org.springframework.batch.spring.batch.test)
 
-  // 日志自动配置
+  // Logging auto-configuration
   runtimeOnly(libs.ch.qos.logback.logback.classic)
 
   testImplementation(libs.org.testcontainers.postgresql)

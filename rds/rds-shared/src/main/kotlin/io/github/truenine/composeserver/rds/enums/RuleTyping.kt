@@ -4,19 +4,19 @@ import io.github.truenine.composeserver.IIntEnum
 import org.babyfish.jimmer.sql.EnumItem
 import org.babyfish.jimmer.sql.EnumType
 
-/** ## 规则状态 */
+/** ## Rule status */
 @EnumType(EnumType.Strategy.ORDINAL)
 enum class RuleTyping(v: Int) : IIntEnum {
-  /** 无类型 */
+  /** No type */
   NONE(0),
 
-  /** 排除 */
+  /** Exclude */
   @EnumItem(ordinal = 1) EXCLUDE(1),
 
-  /** 包含 */
+  /** Include */
   @EnumItem(ordinal = 2) INCLUDE(2),
 
-  /** 固定 */
+  /** Fixed */
   @EnumItem(ordinal = 3) FIXED(3);
 
   override val value: Int = v

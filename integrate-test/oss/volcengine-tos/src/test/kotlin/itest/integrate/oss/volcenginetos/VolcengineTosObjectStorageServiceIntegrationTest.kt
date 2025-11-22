@@ -6,10 +6,16 @@ import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.oss.CompleteMultipartUploadRequest
 import io.github.truenine.composeserver.oss.CopyObjectRequest
+import io.github.truenine.composeserver.oss.CorsRule
 import io.github.truenine.composeserver.oss.CreateBucketRequest
 import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
+import io.github.truenine.composeserver.oss.LifecycleExpiration
+import io.github.truenine.composeserver.oss.LifecycleRule
+import io.github.truenine.composeserver.oss.LifecycleRuleStatus
+import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
 import io.github.truenine.composeserver.oss.ListObjectsRequest
 import io.github.truenine.composeserver.oss.ShareLinkRequest
+import io.github.truenine.composeserver.oss.Tag
 import io.github.truenine.composeserver.oss.UploadPartRequest
 import io.github.truenine.composeserver.oss.volcengine.VolcengineTosObjectStorageService
 import java.io.ByteArrayInputStream
@@ -20,6 +26,7 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
@@ -369,6 +376,34 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
   }
 
   @Nested
+  inner class `Versioning feature tests` {
+    @Test
+    @Disabled(
+      """
+      Volcengine TOS does not currently support bucket versioning functionality.
+      
+      The service implementation explicitly marks this feature as unsupported via the unsupported() method.
+      """
+    )
+    fun `Should list object versions`() = runBlocking {
+      val bucketName = "test-versioning-bucket-${System.currentTimeMillis()}"
+      val objectName = "versioned-object.txt"
+      testBuckets.add(bucketName)
+
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+      service.setBucketVersioning(bucketName, true).getOrThrow()
+
+      service.putObject(bucketName, objectName, ByteArrayInputStream("v1".toByteArray()), 2).getOrThrow()
+      service.putObject(bucketName, objectName, ByteArrayInputStream("v2".toByteArray()), 2).getOrThrow()
+
+      val versionsResult = service.listObjectVersions(ListObjectVersionsRequest(bucketName = bucketName, prefix = objectName))
+      assertTrue(versionsResult.isSuccess, "Listing object versions should succeed")
+      val versions = versionsResult.getOrThrow()
+      assertEquals(2, versions.versions.size, "There should be two versions")
+    }
+  }
+
+  @Nested
   inner class ShareLinkOperations {
 
     @Test
@@ -397,6 +432,78 @@ class VolcengineTosObjectStorageServiceIntegrationTest {
       assertTrue(validateResult.isSuccess, "Validating share link should succeed")
 
       log.info("Share link test completed")
+    }
+  }
+
+  @Nested
+  inner class `Tag feature tests` {
+
+    @Test
+    fun `Should set and get bucket tags`() = runBlocking {
+      val bucketName = "test-tags-bucket-${System.currentTimeMillis()}"
+      testBuckets.add(bucketName)
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+
+      val tags = listOf(Tag("project", "compose-server"), Tag("env", "test"))
+      val setResult = service.setBucketTags(bucketName, tags)
+      assertTrue(setResult.isSuccess, "Setting bucket tags should succeed")
+
+      val getResult = service.getBucketTags(bucketName)
+      assertTrue(getResult.isSuccess, "Getting bucket tags should succeed")
+      assertEquals(tags.toSet(), getResult.getOrThrow().toSet(), "Retrieved tags should match the set tags")
+
+      val deleteResult = service.deleteBucketTags(bucketName)
+      assertTrue(deleteResult.isSuccess, "Deleting bucket tags should succeed")
+
+      val getAfterDeleteResult = service.getBucketTags(bucketName)
+      assertTrue(getAfterDeleteResult.isSuccess, "Getting bucket tags after deletion should succeed")
+      assertTrue(getAfterDeleteResult.getOrThrow().isEmpty(), "Tags should be empty after deletion")
+    }
+  }
+
+  @Nested
+  inner class `Lifecycle and CORS feature tests` {
+
+    @Test
+    fun `Should set and get bucket lifecycle rules`() = runBlocking {
+      val bucketName = "test-lifecycle-bucket-${System.currentTimeMillis()}"
+      testBuckets.add(bucketName)
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+
+      val rules = listOf(LifecycleRule(id = "rule-1", prefix = "logs/", status = LifecycleRuleStatus.ENABLED, expiration = LifecycleExpiration(30)))
+
+      val setResult = service.setBucketLifecycle(bucketName, rules)
+      assertTrue(setResult.isSuccess, "Setting lifecycle rules should succeed")
+
+      val getResult = service.getBucketLifecycle(bucketName)
+      assertTrue(getResult.isSuccess, "Getting lifecycle rules should succeed")
+      val retrievedRules = getResult.getOrThrow()
+      assertTrue(retrievedRules.isNotEmpty(), "Should get at least one lifecycle rule")
+      assertEquals("rule-1", retrievedRules.first().id)
+
+      val deleteResult = service.deleteBucketLifecycle(bucketName)
+      assertTrue(deleteResult.isSuccess, "Deleting lifecycle rules should succeed")
+    }
+
+    @Test
+    fun `Should set and get bucket CORS rules`() = runBlocking {
+      val bucketName = "test-cors-bucket-${System.currentTimeMillis()}"
+      testBuckets.add(bucketName)
+      service.createBucket(CreateBucketRequest(bucketName)).getOrThrow()
+
+      val rules = listOf(CorsRule(allowedOrigins = listOf("*"), allowedMethods = listOf(HttpMethod.GET, HttpMethod.PUT)))
+
+      val setResult = service.setBucketCors(bucketName, rules)
+      assertTrue(setResult.isSuccess, "Setting CORS rules should succeed")
+
+      val getResult = service.getBucketCors(bucketName)
+      assertTrue(getResult.isSuccess, "Getting CORS rules should succeed")
+      val retrievedRules = getResult.getOrThrow()
+      assertTrue(retrievedRules.isNotEmpty(), "Should get at least one CORS rule")
+      assertEquals(listOf("*"), retrievedRules.first().allowedOrigins)
+
+      val deleteResult = service.deleteBucketCors(bucketName)
+      assertTrue(deleteResult.isSuccess, "Deleting CORS rules should succeed")
     }
   }
 

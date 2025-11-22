@@ -30,8 +30,8 @@ inline fun HttpServletResponse.useSse(
   return this.useResponse(contentType = MediaTypes.SSE, charset = charset, locale = locale) { with(it) }
 }
 
-/** ## 设置下载时的东西 */
-@Deprecated("流使用完毕就关了流")
+/** ## Set up for downloads */
+@Deprecated("The stream is closed after use")
 fun HttpServletResponse.withDownload(
   fileName: String,
   contentType: MediaTypes = MediaTypes.BINARY,

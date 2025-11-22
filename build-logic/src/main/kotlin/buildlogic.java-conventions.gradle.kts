@@ -10,6 +10,11 @@ plugins {
 group = libs.versions.group.get()
 version = libs.versions.project.get()
 
+dependencies {
+  implementation(enforcedPlatform(libs.io.netty.netty.bom))
+  implementation(enforcedPlatform(libs.tools.jackson.jackson.bom))
+}
+
 configurations.all {
   resolutionStrategy {
     dependencySubstitution {
@@ -37,14 +42,14 @@ java {
 tasks.withType<Jar> {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-  // 只对主 jar 任务设置空的 classifier 和排除源码文件
+  // Only set an empty classifier and exclude sources for the main jar task
   if (name == "jar") {
     archiveClassifier = ""
-    // 确保主 jar 任务排除源码文件（只包含编译后的 .class 文件）
+    // Ensure the main jar task excludes source files (only compiled .class files)
     exclude("**/*.kt")
   }
 
-  // 所有 jar 任务都包含 LICENSE 文件
+  // Include the LICENSE file in all jar tasks
   from(rootProject.file("LICENSE")) {
     into("META-INF")
   }

@@ -5,34 +5,33 @@ import java.time.Instant
 import org.slf4j.LoggerFactory
 
 /**
- * # 测试重试工具类
+ * Test retry utilities.
  *
- * 提供统一的重试机制，使用 Java 内置的等待和重试策略。 支持指数退避、自定义超时时间和重试条件。
+ * Provides a unified retry mechanism using Java's built-in waiting and retry strategy. Supports exponential backoff, custom timeouts, and retry conditions.
  *
- * ## 特性
- * - 指数退避重试策略
- * - 可配置的超时时间和重试间隔
- * - 支持自定义重试条件
- * - 统一的异常处理
- * - 详细的日志记录
+ * Features:
+ * - Exponential backoff retry strategy.
+ * - Configurable timeout and polling interval.
+ * - Supports custom retry conditions.
+ * - Unified exception handling.
+ * - Detailed logging.
  *
- * ## 使用示例
- *
+ * Usage examples:
  * ```kotlin
- * // 简单重试
+ * // Simple retry
  * val result = TestRetryUtils.retryUntilSuccess {
  *   someOperationThatMightFail()
  * }
  *
- * // 自定义配置的重试
- * val result = TestRetryUtils.retryWithConfig(
+ * // Retry with custom configuration
+ * val result = TestRetryUtils.retryUntilSuccess(
  *   timeout = Duration.ofSeconds(30),
- *   pollInterval = Duration.ofMillis(500)
+ *   pollInterval = Duration.ofMillis(500),
  * ) {
  *   someOperationThatMightFail()
  * }
  *
- * // 等待条件满足
+ * // Wait until a condition is satisfied
  * TestRetryUtils.waitUntil(timeout = Duration.ofSeconds(10)) {
  *   container.isRunning
  * }
@@ -44,29 +43,29 @@ import org.slf4j.LoggerFactory
 object TestRetryUtils {
   private val log = LoggerFactory.getLogger(TestRetryUtils::class.java)
 
-  /** 默认超时时间 */
+  /** Default timeout. */
   val DEFAULT_TIMEOUT: Duration = Duration.ofSeconds(30)
 
-  /** 默认轮询间隔 */
+  /** Default polling interval. */
   val DEFAULT_POLL_INTERVAL: Duration = Duration.ofMillis(200)
 
-  /** 默认初始延迟 */
+  /** Default initial delay. */
   val DEFAULT_INITIAL_DELAY: Duration = Duration.ofMillis(100)
 
   /**
-   * 内部等待实现
+   * Internal wait implementation.
    *
-   * @param timeout 超时时间
-   * @param pollInterval 轮询间隔
-   * @param initialDelay 初始延迟
-   * @param condition 条件检查函数
-   * @throws RuntimeException 如果超时
+   * @param timeout overall timeout
+   * @param pollInterval polling interval
+   * @param initialDelay initial delay before the first check
+   * @param condition condition check function
+   * @throws RuntimeException when timeout is reached
    */
   private fun waitForCondition(timeout: Duration, pollInterval: Duration, initialDelay: Duration, condition: () -> Boolean) {
     val startTime = Instant.now()
     val endTime = startTime.plus(timeout)
 
-    // 初始延迟
+    // Initial delay
     if (!initialDelay.isZero) {
       Thread.sleep(initialDelay.toMillis())
     }
@@ -77,25 +76,25 @@ object TestRetryUtils {
           return
         }
       } catch (e: Exception) {
-        log.debug("条件检查时发生异常，将忽略: {}", e.message)
+        log.debug("Exception occurred while evaluating condition, ignoring: {}", e.message)
       }
 
       Thread.sleep(pollInterval.toMillis())
     }
 
-    throw RuntimeException("等待条件超时，超时时间: $timeout")
+    throw RuntimeException("Timed out waiting for condition, timeout: $timeout")
   }
 
   /**
-   * 重试执行操作直到成功
+   * Retries an operation until it succeeds or times out.
    *
-   * @param T 返回类型
-   * @param timeout 超时时间
-   * @param pollInterval 轮询间隔
-   * @param initialDelay 初始延迟
-   * @param operation 要执行的操作
-   * @return 操作结果
-   * @throws Exception 如果在超时时间内操作仍然失败
+   * @param T return type
+   * @param timeout overall timeout
+   * @param pollInterval polling interval
+   * @param initialDelay initial delay before the first attempt
+   * @param operation operation to execute
+   * @return result of the operation
+   * @throws Exception if the operation continues to fail until timeout
    */
   fun <T> retryUntilSuccess(
     timeout: Duration = DEFAULT_TIMEOUT,
@@ -103,13 +102,13 @@ object TestRetryUtils {
     initialDelay: Duration = DEFAULT_INITIAL_DELAY,
     operation: () -> T,
   ): T {
-    log.debug("开始重试操作，超时时间: {}, 轮询间隔: {}", timeout, pollInterval)
+    log.debug("Starting retry operation, timeout: {}, poll interval: {}", timeout, pollInterval)
 
     val startTime = Instant.now()
     val endTime = startTime.plus(timeout)
     var lastException: Exception? = null
 
-    // 初始延迟
+    // Initial delay
     if (!initialDelay.isZero) {
       Thread.sleep(initialDelay.toMillis())
     }
@@ -117,26 +116,26 @@ object TestRetryUtils {
     while (Instant.now().isBefore(endTime)) {
       try {
         val result = operation()
-        log.debug("操作执行成功")
+        log.debug("Operation succeeded")
         return result
       } catch (e: Exception) {
         lastException = e
-        log.debug("操作执行失败，将重试: {}", e.message)
+        log.debug("Operation failed, will retry: {}", e.message)
         Thread.sleep(pollInterval.toMillis())
       }
     }
 
-    throw (lastException ?: RuntimeException("操作失败，未知原因"))
+    throw (lastException ?: RuntimeException("Operation failed for unknown reason"))
   }
 
   /**
-   * 等待条件满足
+   * Waits until a condition is satisfied.
    *
-   * @param timeout 超时时间
-   * @param pollInterval 轮询间隔
-   * @param initialDelay 初始延迟
-   * @param condition 要检查的条件
-   * @throws Exception 如果在超时时间内条件仍不满足
+   * @param timeout overall timeout
+   * @param pollInterval polling interval
+   * @param initialDelay initial delay before the first check
+   * @param condition condition to evaluate
+   * @throws Exception if the condition is not satisfied within the timeout
    */
   fun waitUntil(
     timeout: Duration = DEFAULT_TIMEOUT,
@@ -144,29 +143,29 @@ object TestRetryUtils {
     initialDelay: Duration = DEFAULT_INITIAL_DELAY,
     condition: () -> Boolean,
   ) {
-    log.debug("开始等待条件满足，超时时间: {}, 轮询间隔: {}", timeout, pollInterval)
+    log.debug("Waiting for condition, timeout: {}, poll interval: {}", timeout, pollInterval)
 
     waitForCondition(timeout, pollInterval, initialDelay) {
       val result = condition()
       if (result) {
-        log.debug("条件已满足")
+        log.debug("Condition satisfied")
       } else {
-        log.debug("条件未满足，继续等待")
+        log.debug("Condition not yet satisfied, continuing to wait")
       }
       result
     }
   }
 
   /**
-   * 等待条件满足并返回结果
+   * Waits until a condition based on the supplied result is satisfied and returns the result.
    *
-   * @param T 返回类型
-   * @param timeout 超时时间
-   * @param pollInterval 轮询间隔
-   * @param initialDelay 初始延迟
-   * @param supplier 提供结果的函数
-   * @param condition 检查结果的条件
-   * @return 满足条件的结果
+   * @param T return type
+   * @param timeout overall timeout
+   * @param pollInterval polling interval
+   * @param initialDelay initial delay before the first evaluation
+   * @param supplier supplier that provides the result
+   * @param condition predicate used to check the result
+   * @return the result that satisfies the condition
    */
   fun <T> waitUntilResult(
     timeout: Duration = DEFAULT_TIMEOUT,
@@ -175,12 +174,12 @@ object TestRetryUtils {
     supplier: () -> T,
     condition: (T) -> Boolean,
   ): T {
-    log.debug("开始等待结果满足条件，超时时间: {}, 轮询间隔: {}", timeout, pollInterval)
+    log.debug("Waiting for result to satisfy condition, timeout: {}, poll interval: {}", timeout, pollInterval)
 
     val startTime = Instant.now()
     val endTime = startTime.plus(timeout)
 
-    // 初始延迟
+    // Initial delay
     if (!initialDelay.isZero) {
       Thread.sleep(initialDelay.toMillis())
     }
@@ -190,32 +189,32 @@ object TestRetryUtils {
         val result = supplier()
         val satisfied = condition(result)
         if (satisfied) {
-          log.debug("结果满足条件")
+          log.debug("Result satisfies condition")
           return result
         } else {
-          log.debug("结果不满足条件，继续等待")
+          log.debug("Result does not satisfy condition yet, continuing to wait")
         }
       } catch (e: Exception) {
-        log.debug("获取结果时发生异常，将忽略: {}", e.message)
+        log.debug("Exception occurred while obtaining result, ignoring: {}", e.message)
       }
 
       Thread.sleep(pollInterval.toMillis())
     }
 
-    throw RuntimeException("等待结果满足条件超时，超时时间: $timeout")
+    throw RuntimeException("Timed out waiting for result to satisfy condition, timeout: $timeout")
   }
 
   /**
-   * 使用指数退避策略重试操作
+   * Retries an operation using an exponential backoff strategy.
    *
-   * @param T 返回类型
-   * @param maxAttempts 最大重试次数
-   * @param initialDelay 初始延迟
-   * @param maxDelay 最大延迟
-   * @param multiplier 延迟倍数
-   * @param operation 要执行的操作
-   * @return 操作结果
-   * @throws Exception 如果所有重试都失败
+   * @param T return type
+   * @param maxAttempts maximum number of retry attempts
+   * @param initialDelay initial delay before the first retry
+   * @param maxDelay maximum delay between retries
+   * @param multiplier backoff multiplier
+   * @param operation operation to execute
+   * @return result of the operation
+   * @throws Exception if all retries fail
    */
   fun <T> retryWithExponentialBackoff(
     maxAttempts: Int = 5,
@@ -224,38 +223,38 @@ object TestRetryUtils {
     multiplier: Double = 2.0,
     operation: () -> T,
   ): T {
-    log.debug("开始指数退避重试，最大尝试次数: {}, 初始延迟: {}", maxAttempts, initialDelay)
+    log.debug("Starting exponential backoff retry, max attempts: {}, initial delay: {}", maxAttempts, initialDelay)
 
     var currentDelay = initialDelay
     var lastException: Exception? = null
 
     repeat(maxAttempts) { attempt ->
       try {
-        log.debug("第 {} 次尝试", attempt + 1)
+        log.debug("Attempt {}", attempt + 1)
         return operation()
       } catch (e: Exception) {
         lastException = e
-        log.debug("第 {} 次尝试失败: {}", attempt + 1, e.message)
+        log.debug("Attempt {} failed: {}", attempt + 1, e.message)
 
         if (attempt < maxAttempts - 1) {
-          log.debug("等待 {} 后重试", currentDelay)
+          log.debug("Waiting {} before next retry", currentDelay)
           Thread.sleep(currentDelay.toMillis())
           currentDelay = Duration.ofMillis(minOf((currentDelay.toMillis() * multiplier).toLong(), maxDelay.toMillis()))
         }
       }
     }
 
-    throw (lastException ?: RuntimeException("所有重试都失败"))
+    throw (lastException ?: RuntimeException("All retry attempts failed"))
   }
 
   /**
-   * 创建自定义配置的等待操作
+   * Waits for a condition using a custom configuration.
    *
-   * @param timeout 超时时间
-   * @param pollInterval 轮询间隔
-   * @param initialDelay 初始延迟
-   * @param ignoreExceptions 是否忽略异常
-   * @param condition 条件检查函数
+   * @param timeout overall timeout
+   * @param pollInterval polling interval
+   * @param initialDelay initial delay before the first check
+   * @param ignoreExceptions whether to ignore exceptions thrown by the condition
+   * @param condition condition check function
    */
   fun waitWithCustomConfig(
     timeout: Duration,
@@ -267,11 +266,11 @@ object TestRetryUtils {
     if (ignoreExceptions) {
       waitForCondition(timeout, pollInterval, initialDelay, condition)
     } else {
-      // 不忽略异常的版本
+      // Variant that does not ignore exceptions
       val startTime = Instant.now()
       val endTime = startTime.plus(timeout)
 
-      // 初始延迟
+      // Initial delay
       if (!initialDelay.isZero) {
         Thread.sleep(initialDelay.toMillis())
       }
@@ -283,7 +282,7 @@ object TestRetryUtils {
         Thread.sleep(pollInterval.toMillis())
       }
 
-      throw RuntimeException("等待条件超时，超时时间: $timeout")
+      throw RuntimeException("Timed out waiting for condition, timeout: $timeout")
     }
   }
 }

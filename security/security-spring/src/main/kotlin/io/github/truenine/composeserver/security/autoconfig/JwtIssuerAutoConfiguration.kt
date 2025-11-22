@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.security.autoconfig
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.security.crypto.domain.IKeysRepo
 import io.github.truenine.composeserver.security.jwt.JwtIssuer
 import java.time.Duration
@@ -9,6 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import tools.jackson.databind.ObjectMapper
 
 @Configuration
 @EnableConfigurationProperties(io.github.truenine.composeserver.security.properties.JwtProperties::class)
@@ -16,7 +16,7 @@ class JwtIssuerAutoConfiguration(private val jp: io.github.truenine.composeserve
   @Bean
   @Primary
   fun jwtIssuer(mapper: ObjectMapper): JwtIssuer {
-    // TODO 完成此类
+    // TODO complete this configuration class
     val sig = keysRepository.jwtSignatureIssuerRsaKeyPair()!!
     val enc = keysRepository.jwtEncryptDataIssuerEccKeyPair()!!
     return JwtIssuer.createIssuer()

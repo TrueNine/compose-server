@@ -17,17 +17,18 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.BINARY)
 annotation class MetaDef(
   /**
-   * ## 是否为副作用对象
+   * ## Whether this is a side-effect object
    *
-   * 例如：jpa 同一个表，但实体不同，则需要将另一个实体所有字段设定为不更新，仅为查询对象
+   * For example: in JPA, when two entities share the same table but represent different views, one entity may need all fields marked as non-updatable and used
+   * only as a read/query object.
    */
   val shadow: Boolean = false,
 
   /**
-   * ## 扩展超类，或额外指定的类型
+   * ## Extended superclass or additional specified type
    *
-   * 例如：在 jpa 当中，默认继承 [io.github.truenine.composeserver.rds.core.entities.IEntity]，
-   * 但如果需要继承别的类，则可以单独指定，例如：[io.github.truenine.composeserver.rds.core.entities.ITreeEntity]
+   * For example: in JPA, classes may by default extend [io.github.truenine.composeserver.rds.core.entities.IEntity], but if you need to extend another class,
+   * you can explicitly specify it here, such as [io.github.truenine.composeserver.rds.core.entities.ITreeEntity].
    */
   val extendBy: KClass<*> = Unit::class,
 )

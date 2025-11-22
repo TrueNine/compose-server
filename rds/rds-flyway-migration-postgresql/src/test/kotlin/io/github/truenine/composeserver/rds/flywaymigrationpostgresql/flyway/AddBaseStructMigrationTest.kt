@@ -25,7 +25,7 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
 
   @Test
   @Transactional
-  fun `add_base_struct 应正确增加字段`() {
+  fun `add_base_struct should add base struct columns correctly`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     val columns =
@@ -39,12 +39,12 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expectedColumns = listOf("id", "rlv", "crd", "mrd", "ldf")
-    assertTrue(columns.containsAll(expectedColumns), "缺少字段: " + (expectedColumns - columns))
+    assertTrue(columns.containsAll(expectedColumns), "Missing columns: " + (expectedColumns - columns))
   }
 
   @Test
   @Transactional
-  fun `add_base_struct 应为无 id 且多行数据的表自动填充 id 并设为主键`() {
+  fun `add_base_struct should add id column and set it as primary key for table without id`() {
     jdbcTemplate.execute(
       """
       create table test_no_id(nick_name varchar(255), password_enc varchar(255));
@@ -63,7 +63,7 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .map { it["column_name"] }
-    assertTrue(columns.contains("id"), "未自动添加 id 字段")
+    assertTrue(columns.contains("id"), "id column was not automatically added")
     val pk =
       jdbcTemplate
         .queryForList(
@@ -75,14 +75,14 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
             .trimIndent()
         )
         .map { it["column_name"] }
-    assertTrue(pk.contains("id"), "id 字段未设为主键")
+    assertTrue(pk.contains("id"), "id column was not set as primary key")
     val ids = jdbcTemplate.queryForList("select id from test_no_id order by id").map { it["id"] }
-    assertEquals(listOf(1L, 2L, 3L), ids, "id 字段未按 0 开始自增填充，实际: $ids")
+    assertEquals(listOf(1L, 2L, 3L), ids, "id column was not auto-incremented as expected, actual: $ids")
   }
 
   @Test
   @Transactional
-  fun `add_base_struct 幂等性测试`() {
+  fun `add_base_struct idempotency test`() {
     jdbcTemplate.execute("create table test_table(id bigint primary key)")
     jdbcTemplate.execute("select add_base_struct('test_table')")
     jdbcTemplate.execute("select add_base_struct('test_table')")
@@ -97,6 +97,6 @@ class AddBaseStructMigrationTest : IDatabasePostgresqlContainer {
         )
         .map { it["column_name"] }
     val expectedColumns = listOf("id", "rlv", "crd", "mrd", "ldf")
-    assertTrue(columns.containsAll(expectedColumns), "幂等性失败: " + (expectedColumns - columns))
+    assertTrue(columns.containsAll(expectedColumns), "Idempotency failed: " + (expectedColumns - columns))
   }
 }

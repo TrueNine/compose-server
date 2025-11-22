@@ -7,9 +7,9 @@ import org.springframework.core.convert.converter.Converter
 
 private val log = slf4j(JavaLocalDateConverter::class)
 
-open class JavaLocalDateConverter : Converter<String?, LocalDate?> {
+open class JavaLocalDateConverter : Converter<String, LocalDate> {
   override fun convert(source: String): LocalDate? {
-    log.trace("转换日期 = {}", source)
+    log.trace("Converting date = {}", source)
     return source.toLongOrNull()?.toLocalDate()
   }
 }

@@ -21,26 +21,26 @@ import javax.swing.ListSelectionModel
 import javax.swing.SwingConstants
 import javax.swing.table.AbstractTableModel
 
-/** 代码清理结果显示对话框 显示清理操作的详细结果和统计信息 */
+/** Dialog that displays detailed results and statistics for code clean-up operations. */
 class CleanResultDialog(project: Project, private val result: CleanResult, private val fileName: String) : DialogWrapper(project) {
 
   init {
-    title = "清理结果 - $fileName"
+    title = "Clean-up result - $fileName"
     init()
   }
 
   override fun createCenterPanel(): JComponent {
     val panel = JPanel(BorderLayout())
 
-    // 创建统计信息面板
+    // Create statistics panel
     val statsPanel = createStatsPanel()
     panel.add(statsPanel, BorderLayout.NORTH)
 
-    // 创建操作详情面板
+    // Create operation-details panel
     val detailsPanel = createDetailsPanel()
     panel.add(detailsPanel, BorderLayout.CENTER)
 
-    // 如果有错误，显示错误面板
+    // If there are errors, show the error panel
     if (result.errors.isNotEmpty()) {
       val errorPanel = createErrorPanel()
       panel.add(errorPanel, BorderLayout.SOUTH)
@@ -50,49 +50,49 @@ class CleanResultDialog(project: Project, private val result: CleanResult, priva
     return panel
   }
 
-  /** 创建统计信息面板 */
+  /** Create statistics panel. */
   private fun createStatsPanel(): JComponent {
     val panel = JPanel()
     panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
-    panel.border = BorderFactory.createTitledBorder("清理统计")
+    panel.border = BorderFactory.createTitledBorder("Clean-up statistics")
 
-    // 基本统计
-    panel.add(JLabel("处理文件数: ${result.processedFiles}"))
-    panel.add(JLabel("修改文件数: ${result.modifiedFiles}"))
-    panel.add(JLabel("执行时间: ${result.executionTime} 毫秒"))
+    // Basic statistics
+    panel.add(JLabel("Processed files: ${result.processedFiles}"))
+    panel.add(JLabel("Modified files: ${result.modifiedFiles}"))
+    panel.add(JLabel("Execution time: ${result.executionTime} ms"))
 
-    // 成功率
+    // Success rate
     val successRate =
       if (result.processedFiles > 0) {
         ((result.processedFiles - result.errors.size) * 100.0 / result.processedFiles).toInt()
       } else {
         100
       }
-    panel.add(JLabel("成功率: $successRate%"))
+    panel.add(JLabel("Success rate: $successRate%"))
 
     return panel
   }
 
-  /** 创建操作详情面板 */
+  /** Create operation-details panel. */
   private fun createDetailsPanel(): JComponent {
     val panel = JPanel(BorderLayout())
-    panel.border = BorderFactory.createTitledBorder("操作详情")
+    panel.border = BorderFactory.createTitledBorder("Operation details")
 
     if (result.operations.isEmpty()) {
-      val noOperationsLabel = JLabel("未执行任何操作", SwingConstants.CENTER)
+      val noOperationsLabel = JLabel("No operations were performed", SwingConstants.CENTER)
       noOperationsLabel.foreground = JBColor.GRAY
       panel.add(noOperationsLabel, BorderLayout.CENTER)
       return panel
     }
 
-    // 创建操作表格
+    // Create operation table
     val operationTableModel = OperationTableModel(result.operations)
     val operationTable = JBTable(operationTableModel)
 
-    // 设置列宽
-    operationTable.columnModel.getColumn(0).preferredWidth = 150 // 操作类型
-    operationTable.columnModel.getColumn(1).preferredWidth = 300 // 描述
-    operationTable.columnModel.getColumn(2).preferredWidth = 100 // 影响文件数
+    // Set column widths
+    operationTable.columnModel.getColumn(0).preferredWidth = 150 // Operation type
+    operationTable.columnModel.getColumn(1).preferredWidth = 300 // Description
+    operationTable.columnModel.getColumn(2).preferredWidth = 100 // Files affected
 
     val scrollPane = JBScrollPane(operationTable)
     scrollPane.preferredSize = Dimension(550, 200)
@@ -101,10 +101,10 @@ class CleanResultDialog(project: Project, private val result: CleanResult, priva
     return panel
   }
 
-  /** 创建错误面板 */
+  /** Create error panel. */
   private fun createErrorPanel(): JComponent {
     val panel = JPanel(BorderLayout())
-    panel.border = BorderFactory.createTitledBorder("错误信息 (${result.errors.size})")
+    panel.border = BorderFactory.createTitledBorder("Errors (${result.errors.size})")
 
     val errorListModel = DefaultListModel<String>()
     result.errors.forEach { error -> errorListModel.addElement(error) }
@@ -124,10 +124,10 @@ class CleanResultDialog(project: Project, private val result: CleanResult, priva
   }
 }
 
-/** 操作表格模型 */
+/** Table model for displaying clean-up operations. */
 private class OperationTableModel(private val operations: List<CleanOperation>) : AbstractTableModel() {
 
-  private val columnNames = arrayOf("操作类型", "描述", "影响文件数")
+  private val columnNames = arrayOf("Operation type", "Description", "Files affected")
 
   override fun getRowCount(): Int = operations.size
 
@@ -147,10 +147,10 @@ private class OperationTableModel(private val operations: List<CleanOperation>) 
 
   private fun getOperationTypeDisplayName(type: String): String {
     return when (type) {
-      "FORMAT" -> "格式化"
-      "OPTIMIZE_IMPORTS" -> "导入优化"
-      "RUN_INSPECTIONS" -> "检查修复"
-      "REARRANGE" -> "代码重排"
+      "FORMAT" -> "Format"
+      "OPTIMIZE_IMPORTS" -> "Optimize imports"
+      "RUN_INSPECTIONS" -> "Run inspections"
+      "REARRANGE" -> "Rearrange code"
       else -> type
     }
   }

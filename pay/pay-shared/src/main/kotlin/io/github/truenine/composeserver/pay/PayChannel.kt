@@ -5,15 +5,15 @@ import io.github.truenine.composeserver.IIntEnum
 import io.swagger.v3.oas.annotations.media.Schema
 
 /**
- * # 支付渠道类型枚举
+ * # Payment channel type enum
  *
  * @author TrueNine
  * @since 2023-05-04
  */
-@Schema(title = "支付渠道类型")
+@Schema(title = "Payment channel type")
 enum class PayChannel(private val channelId: Int) : IIntEnum {
-  @Schema(title = "微信支付") WECHAT(0),
-  @Schema(title = "支付宝") ALIPAY(1);
+  @Schema(title = "WeChat Pay") WECHAT(0),
+  @Schema(title = "Alipay") ALIPAY(1);
 
   @JsonValue override val value: Int = channelId
 

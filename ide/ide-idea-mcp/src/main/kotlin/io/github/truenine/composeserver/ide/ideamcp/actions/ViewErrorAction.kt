@@ -13,8 +13,12 @@ import com.intellij.openapi.ui.Messages
 import io.github.truenine.composeserver.ide.ideamcp.services.ErrorService
 import org.slf4j.LoggerFactory
 
-/** 查看错误右键菜单动作 提供在项目树中右键查看文件或文件夹错误信息的功能 */
-class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的错误、警告信息", null) {
+/**
+ * Context menu action for viewing errors.
+ *
+ * Provides a right-click action in the project tree to view errors and warnings for a file or directory.
+ */
+class ViewErrorAction : AnAction("View Errors", "View errors and warnings in files or directories", null) {
 
   private val logger = LoggerFactory.getLogger(ViewErrorAction::class.java)
 
@@ -24,7 +28,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
     val project = e.project
     val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE)
 
-    // 只有在项目存在且选中了文件或文件夹时才启用动作
+    // Enable action only when a project exists and a file or directory is selected
     e.presentation.isEnabledAndVisible = project != null && virtualFile != null
   }
 
@@ -34,23 +38,23 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
 
     logger.info("Starting view error action - path: {}", virtualFile.path)
 
-    // 显示错误查看选项对话框
+    // Show error-view options dialog
     val options = showErrorOptionsDialog(project) ?: return
 
-    // 在后台任务中执行错误收集
+    // Run error collection in a background task
     ProgressManager.getInstance()
       .run(
-        object : Task.Backgroundable(project, "正在收集错误信息...", true) {
+        object : Task.Backgroundable(project, "Collecting error information...", true) {
           private var currentReport: List<io.github.truenine.composeserver.ide.ideamcp.tools.FileErrorInfo>? = null
 
           override fun run(indicator: ProgressIndicator) {
             try {
-              indicator.text = "正在扫描文件: ${virtualFile.name}"
-              indicator.text2 = "准备分析..."
+              indicator.text = "Scanning file: ${virtualFile.name}"
+              indicator.text2 = "Preparing analysis..."
               indicator.isIndeterminate = false
               indicator.fraction = 0.1
 
-              // 检查是否被取消
+              // Check whether the operation was cancelled
               if (indicator.isCanceled) {
                 logger.info("User cancelled error view operation")
                 return
@@ -58,28 +62,28 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
 
               val errorService = project.service<ErrorService>()
 
-              indicator.text2 = "正在收集错误信息..."
+              indicator.text2 = "Collecting error information..."
               indicator.fraction = 0.3
 
               val errorReport = errorService.collectErrors(project, virtualFile)
 
-              // 检查是否被取消
+              // Check whether the operation was cancelled
               if (indicator.isCanceled) {
                 logger.info("Error collection cancelled by user")
                 return
               }
 
-              indicator.text2 = "正在过滤结果..."
+              indicator.text2 = "Filtering results..."
               indicator.fraction = 0.8
 
-              // 根据选项过滤结果
+              // Filter results according to options
               val filteredReport = filterErrorReport(errorReport, options)
               currentReport = filteredReport
 
-              indicator.text2 = "分析完成"
+              indicator.text2 = "Analysis completed"
               indicator.fraction = 1.0
 
-              // 在 EDT 中显示结果
+              // Show result on EDT
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                 if (!indicator.isCanceled) {
                   showErrorReportDialog(project, filteredReport, virtualFile.name)
@@ -92,7 +96,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
             } catch (e: Exception) {
               logger.error("Error view failed", e)
 
-              // 在 EDT 中显示错误
+              // Show error on EDT
               com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                 if (!indicator.isCanceled) {
                   showDetailedErrorDialog(project, e, virtualFile.name)
@@ -104,8 +108,10 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
           override fun onCancel() {
             logger.info("Error view operation cancelled")
 
-            // 在 EDT 中显示取消消息
-            com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater { Messages.showInfoMessage(project, "错误查看操作已取消", "操作取消") }
+            // Show cancellation message on EDT
+            com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
+              Messages.showInfoMessage(project, "Error view operation was cancelled", "Operation cancelled")
+            }
           }
 
           override fun onSuccess() {
@@ -118,7 +124,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
       )
   }
 
-  /** 显示错误查看选项对话框 */
+  /** Show error-view options dialog. */
   private fun showErrorOptionsDialog(project: Project): ErrorViewOptions? {
     val dialog = ErrorViewOptionsDialog(project)
     return if (dialog.showAndGet()) {
@@ -128,7 +134,7 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
     }
   }
 
-  /** 根据选项过滤错误报告 */
+  /** Filter the error report based on options. */
   private fun filterErrorReport(
     errorReport: List<io.github.truenine.composeserver.ide.ideamcp.tools.FileErrorInfo>,
     options: ErrorViewOptions,
@@ -144,10 +150,10 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
       .filter { it.errors.isNotEmpty() || it.warnings.isNotEmpty() || it.weakWarnings.isNotEmpty() }
   }
 
-  /** 显示错误报告对话框 */
+  /** Show error-report dialog. */
   private fun showErrorReportDialog(project: Project, errorReport: List<io.github.truenine.composeserver.ide.ideamcp.tools.FileErrorInfo>, fileName: String) {
     if (errorReport.isEmpty()) {
-      Messages.showInfoMessage(project, "未发现任何错误或警告", "查看结果")
+      Messages.showInfoMessage(project, "No errors or warnings were found", "View result")
       return
     }
 
@@ -155,41 +161,41 @@ class ViewErrorAction : AnAction("查看错误", "查看文件或文件夹中的
     dialog.show()
   }
 
-  /** 显示详细错误对话框 */
+  /** Show detailed error dialog. */
   private fun showDetailedErrorDialog(project: Project, error: Throwable, fileName: String) {
     val message = buildString {
-      appendLine("分析文件时发生错误: $fileName")
+      appendLine("An error occurred while analyzing file: $fileName")
       appendLine()
-      appendLine("错误信息: ${error.message}")
+      appendLine("Error message: ${error.message}")
       appendLine()
-      appendLine("建议:")
+      appendLine("Suggestions:")
       when (error) {
         is SecurityException -> {
-          appendLine("• 检查文件访问权限")
-          appendLine("• 确保项目已正确加载")
+          appendLine("• Check file access permissions")
+          appendLine("• Ensure the project is loaded correctly")
         }
 
         is java.nio.file.NoSuchFileException -> {
-          appendLine("• 确认文件仍然存在")
-          appendLine("• 刷新项目视图")
+          appendLine("• Verify that the file still exists")
+          appendLine("• Refresh the project view")
         }
 
         is IllegalArgumentException -> {
-          appendLine("• 检查文件路径格式")
-          appendLine("• 确保选择了有效的文件或文件夹")
+          appendLine("• Check file path format")
+          appendLine("• Ensure a valid file or directory is selected")
         }
 
         else -> {
-          appendLine("• 检查项目索引状态")
-          appendLine("• 重新构建项目")
-          appendLine("• 查看日志获取更多信息")
+          appendLine("• Check project index state")
+          appendLine("• Rebuild the project")
+          appendLine("• Review logs for more information")
         }
       }
     }
 
-    Messages.showErrorDialog(project, message, "分析错误")
+    Messages.showErrorDialog(project, message, "Analysis error")
   }
 }
 
-/** 错误查看选项 */
+/** Error view options. */
 data class ErrorViewOptions(val includeWarnings: Boolean = true, val includeWeakWarnings: Boolean = true)

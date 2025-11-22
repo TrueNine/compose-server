@@ -5,28 +5,27 @@ import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.PostgreSQLContainer
 
 /**
- * # 测试容器基础接口
+ * Base interface for test containers.
  *
- * 所有测试容器接口的基础接口，提供容器聚合功能。 测试类必须实现此接口或其子接口才能使用 `containers()` 聚合函数。
+ * Common base for all test-container interfaces, providing container aggregation capabilities. Test classes must implement this interface or its subinterfaces
+ * to use the `containers()` aggregation function.
  *
- * ## 功能特性
- * - 提供多容器聚合能力
- * - 统一容器生命周期管理
- * - 支持容器间协调测试
- * - **容器在 Spring 属性注入时自动启动**
+ * Features:
+ * - Aggregates multiple containers for a single test.
+ * - Provides unified container lifecycle handling.
+ * - Supports coordinated testing across multiple containers.
+ * - Containers are started automatically when Spring properties are injected.
  *
- * ## 使用方式
- *
+ * Example usage:
  * ```kotlin
  * @SpringBootTest
  * class MyTest : ICacheRedisContainer, IDatabasePostgresqlContainer {
  *   @Test
- *   fun `多容器测试`() = containers(
+ *   fun `multi-container test`() = containers(
  *     redisContainerLazy,
- *     postgresqlContainerLazy
+ *     postgresqlContainerLazy,
  *   ) {
- *     // 在此上下文中进行多容器测试
- *     // 容器已在 Spring 属性注入时启动
+ *     // Multi-container testing within this context
  *     val redis = getRedisContainer()
  *     val postgres = getPostgresContainer()
  *   }
@@ -38,18 +37,19 @@ import org.testcontainers.containers.PostgreSQLContainer
  */
 interface ITestContainerBase {
   /**
-   * 容器聚合函数
+   * Aggregates multiple containers for an integration test.
    *
-   * 允许同时使用多个测试容器进行集成测试。 在执行块内可以通过上下文访问所有传入的容器。 容器已在 Spring 属性注入时启动，无需额外启动操作。
+   * Allows using multiple test containers together. Within the block, all provided containers can be accessed through the context. Containers have already been
+   * started when Spring properties are injected, so no extra startup logic is required.
    *
-   * @param containerLazies 需要聚合的容器懒加载实例
-   * @param block 测试执行块，在 IContainersContext 上下文中执行
-   * @return 测试执行块的返回值
+   * @param containerLazies lazy container instances to aggregate
+   * @param block test block executed within an `IContainersContext`
+   * @return result of the test block
    */
   fun <T> containers(vararg containerLazies: Lazy<out GenericContainer<*>>, block: IContainersContext.() -> T): T {
     val containers =
       containerLazies.map { lazy ->
-        // 容器已在 @DynamicPropertySource 中启动，直接获取即可
+        // Containers are already started in @DynamicPropertySource, just access them.
         lazy.value
       }
     val context = ContainersContextImpl(containers)
@@ -58,60 +58,60 @@ interface ITestContainerBase {
 }
 
 /**
- * # 容器聚合上下文接口
+ * Aggregated container context interface.
  *
- * 在 `containers()` 函数中提供的上下文环境， 用于访问和操作多个测试容器。
+ * Context provided inside the `containers()` function, used to access and operate on multiple test containers.
  *
  * @author TrueNine
  * @since 2025-08-09
  */
 interface IContainersContext {
   /**
-   * 获取 Redis 容器
+   * Gets the Redis container.
    *
-   * @return Redis 容器实例，如果不存在则返回 null
+   * @return Redis container instance, or null if not present
    */
   fun getRedisContainer(): GenericContainer<*>?
 
   /**
-   * 获取 PostgreSQL 容器
+   * Gets the PostgreSQL container.
    *
-   * @return PostgreSQL 容器实例，如果不存在则返回 null
+   * @return PostgreSQL container instance, or null if not present
    */
   fun getPostgresContainer(): PostgreSQLContainer<*>?
 
   /**
-   * 获取 MySQL 容器
+   * Gets the MySQL container.
    *
-   * @return MySQL 容器实例，如果不存在则返回 null
+   * @return MySQL container instance, or null if not present
    */
   fun getMysqlContainer(): MySQLContainer<*>?
 
   /**
-   * 获取 MinIO 容器
+   * Gets the MinIO container.
    *
-   * @return MinIO 容器实例，如果不存在则返回 null
+   * @return MinIO container instance, or null if not present
    */
   fun getMinioContainer(): GenericContainer<*>?
 
   /**
-   * 获取所有容器
+   * Gets all containers.
    *
-   * @return 所有容器的列表
+   * @return list of all containers
    */
   fun getAllContainers(): List<GenericContainer<*>>
 }
 
 /**
- * 容器聚合上下文的默认实现
+ * Default implementation of the aggregated container context.
  *
- * @param containers 传入的容器列表
+ * @param containers list of containers passed into the context
  */
 private class ContainersContextImpl(private val containers: List<GenericContainer<*>>) : IContainersContext {
 
   override fun getRedisContainer(): GenericContainer<*>? {
     return containers.find { container ->
-      // 通过镜像名识别 Redis 容器
+      // Identify Redis container by image name
       container.dockerImageName.contains("redis", ignoreCase = true)
     }
   }
@@ -126,7 +126,7 @@ private class ContainersContextImpl(private val containers: List<GenericContaine
 
   override fun getMinioContainer(): GenericContainer<*>? {
     return containers.find { container ->
-      // 通过镜像名识别 MinIO 容器
+      // Identify MinIO container by image name
       container.dockerImageName.contains("minio", ignoreCase = true)
     }
   }

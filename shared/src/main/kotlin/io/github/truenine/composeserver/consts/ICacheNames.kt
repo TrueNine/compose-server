@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.consts
 
 /**
- * 缓存 key 命名空间
+ * Cache key namespaces.
  *
  * @author TrueNine
  * @since 2023-01-01

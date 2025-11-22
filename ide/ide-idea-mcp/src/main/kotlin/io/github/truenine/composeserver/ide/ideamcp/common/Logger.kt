@@ -2,7 +2,7 @@ package io.github.truenine.composeserver.ide.ideamcp.common
 
 import org.slf4j.LoggerFactory
 
-/** 简化的日志工具类，用于快速迁移 McpLogManager */
+/** Simplified logging helper used as a lightweight replacement for McpLogManager. */
 object Logger {
   private val logger = LoggerFactory.getLogger("ComposeServerMcp")
 

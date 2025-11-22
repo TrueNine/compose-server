@@ -9,14 +9,18 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-/** 错误查看选项对话框 允许用户选择要查看的错误类型 */
+/**
+ * Error view options dialog.
+ *
+ * Lets the user choose which types of issues to display.
+ */
 class ErrorViewOptionsDialog(project: Project) : DialogWrapper(project) {
 
-  private val includeWarningsCheckBox = JCheckBox("包含警告", true)
-  private val includeWeakWarningsCheckBox = JCheckBox("包含弱警告", true)
+  private val includeWarningsCheckBox = JCheckBox("Include warnings", true)
+  private val includeWeakWarningsCheckBox = JCheckBox("Include weak warnings", true)
 
   init {
-    title = "错误查看选项"
+    title = "Error view options"
     init()
   }
 
@@ -24,20 +28,20 @@ class ErrorViewOptionsDialog(project: Project) : DialogWrapper(project) {
     val panel = JPanel()
     panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
 
-    panel.add(JLabel("选择要查看的问题类型:"))
+    panel.add(JLabel("Select issue types to display:"))
     panel.add(Box.createVerticalStrut(10))
 
-    panel.add(JCheckBox("包含错误", true).apply { isEnabled = false }) // 错误总是包含
+    panel.add(JCheckBox("Include errors", true).apply { isEnabled = false }) // Errors are always included
     panel.add(includeWarningsCheckBox)
     panel.add(includeWeakWarningsCheckBox)
 
     panel.add(Box.createVerticalStrut(10))
-    panel.add(JLabel("<html><i>注意: 错误信息总是会被包含</i></html>"))
+    panel.add(JLabel("<html><i>Note: Errors are always included</i></html>"))
 
     return panel
   }
 
-  /** 获取用户选择的错误查看选项 */
+  /** Get error-view options selected by the user. */
   fun getErrorViewOptions(): ErrorViewOptions {
     return ErrorViewOptions(includeWarnings = includeWarningsCheckBox.isSelected, includeWeakWarnings = includeWeakWarningsCheckBox.isSelected)
   }

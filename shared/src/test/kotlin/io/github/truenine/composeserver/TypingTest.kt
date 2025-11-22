@@ -6,16 +6,16 @@ import java.lang.reflect.Modifier
 import kotlin.test.Test
 
 /**
- * # 类型系统测试
+ * # Type system tests
  *
- * 测试类型相关功能的正确性
+ * Test the correctness of type-related functionality
  */
 class TypingTest {
 
   @Test
-  fun `测试枚举方法存在性`() {
+  fun `test enum method existence`() {
     val fns = PCB47::class.java.declaredMethods
     val static = fns.filter { it.name == "get" || it.name == "findVal" }.firstOrNull { Modifier.isStatic(it.modifiers) }
-    log.info("找到的静态方法: {}", static)
+    log.info("Found static method: {}", static)
   }
 }

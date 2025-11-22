@@ -4,14 +4,10 @@ import io.github.truenine.composeserver.testtoolkit.log
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-/**
- * # Java 反射扩展函数测试
- *
- * 测试 JavaReflectFns.kt 中定义的反射相关扩展函数
- */
+/** Validates reflection extension functions defined in JavaReflectFns.kt. */
 class JavaReflectFnsTest {
 
-  // 测试用的类层次结构
+  // Test class hierarchy
   open class BaseClass {
     val baseField: String = "base"
     private val privateBaseField: Int = 1
@@ -28,38 +24,37 @@ class JavaReflectFnsTest {
   }
 
   @Test
-  fun `测试 recursionFields 方法 - 获取类的所有字段包括继承的字段`() {
+  fun collectsFieldsAcrossInheritance() {
     val fields = DerivedClass::class.recursionFields()
 
-    log.info("获取到的字段数量: {}", fields.size)
-    fields.forEach { field -> log.info("字段名: {}, 类型: {}, 声明类: {}", field.name, field.type, field.declaringClass.simpleName) }
+    log.info("Retrieved field count: {}", fields.size)
+    fields.forEach { field -> log.info("Field: {}, type: {}, declared in: {}", field.name, field.type, field.declaringClass.simpleName) }
 
-    // 验证包含所有层级的字段
+    // Ensure fields from every level are included
     val fieldNames = fields.map { it.name }.toSet()
-    assertTrue(fieldNames.contains("derivedField"), "应该包含派生类的字段")
-    assertTrue(fieldNames.contains("internalDerivedField"), "应该包含派生类的内部字段")
-    assertTrue(fieldNames.contains("middleField"), "应该包含中间类的字段")
-    assertTrue(fieldNames.contains("protectedMiddleField"), "应该包含中间类的受保护字段")
-    assertTrue(fieldNames.contains("baseField"), "应该包含基类的字段")
-    assertTrue(fieldNames.contains("privateBaseField"), "应该包含基类的私有字段")
+    assertTrue(fieldNames.contains("derivedField"), "Should include derived-class fields")
+    assertTrue(fieldNames.contains("internalDerivedField"), "Should include internal derived-class fields")
+    assertTrue(fieldNames.contains("middleField"), "Should include middle-class fields")
+    assertTrue(fieldNames.contains("protectedMiddleField"), "Should include protected middle-class fields")
+    assertTrue(fieldNames.contains("baseField"), "Should include base-class fields")
+    assertTrue(fieldNames.contains("privateBaseField"), "Should include private base-class fields")
   }
 
   @Test
-  fun `测试 recursionFields 方法 - 指定结束类型`() {
+  fun collectsFieldsUpToSpecifiedEndType() {
     val fields = DerivedClass::class.recursionFields(endType = BaseClass::class)
 
-    log.info("指定结束类型后获取到的字段数量: {}", fields.size)
-    fields.forEach { field -> log.info("字段名: {}, 声明类: {}", field.name, field.declaringClass.simpleName) }
+    log.info("Field count with end type specified: {}", fields.size)
+    fields.forEach { field -> log.info("Field: {}, declared in: {}", field.name, field.declaringClass.simpleName) }
 
     val fieldNames = fields.map { it.name }.toSet()
-    assertTrue(fieldNames.contains("derivedField"), "应该包含派生类的字段")
-    assertTrue(fieldNames.contains("middleField"), "应该包含中间类的字段")
-    // 根据实际实现，当指定结束类型时，不会包含结束类型本身的字段
-    // 这是因为循环在 superClass == endsWith 时会 break，不会处理 endsWith 类的字段
+    assertTrue(fieldNames.contains("derivedField"), "Should include derived-class fields")
+    assertTrue(fieldNames.contains("middleField"), "Should include middle-class fields")
+    // When an end type is specified, its fields are not included because the traversal stops before processing that class
   }
 
   @Test
-  fun `测试 recursionFields 方法 - 单个类无继承`() {
+  fun collectsFieldsFromSingleClass() {
     class SingleClass {
       val singleField: String = "single"
       private val privateSingleField: Int = 1
@@ -67,42 +62,40 @@ class JavaReflectFnsTest {
 
     val fields = SingleClass::class.recursionFields()
 
-    log.info("单个类的字段数量: {}", fields.size)
+    log.info("Single-class field count: {}", fields.size)
 
     val fieldNames = fields.map { it.name }.toSet()
-    assertTrue(fieldNames.contains("singleField"), "应该包含类的公共字段")
-    assertTrue(fieldNames.contains("privateSingleField"), "应该包含类的私有字段")
+    assertTrue(fieldNames.contains("singleField"), "Should include public fields")
+    assertTrue(fieldNames.contains("privateSingleField"), "Should include private fields")
   }
 
   @Test
-  fun `测试 recursionFields 方法 - 空类`() {
+  fun handlesEmptyClass() {
     class EmptyClass
 
     val fields = EmptyClass::class.recursionFields()
 
-    log.info("空类的字段数量: {}", fields.size)
+    log.info("Empty class field count: {}", fields.size)
 
-    // 空类应该没有自定义字段，但可能有编译器生成的字段
-    assertTrue(fields.isEmpty() || fields.all { it.isSynthetic }, "空类应该没有用户定义的字段")
+    // Empty classes should have no user-defined fields, though synthetic fields are possible
+    assertTrue(fields.isEmpty() || fields.all { it.isSynthetic }, "Empty class should not expose user-defined fields")
   }
 
   @Test
-  fun `测试 recursionFields 方法 - 验证字段访问性`() {
+  fun inspectsFieldAccessibility() {
     val fields = DerivedClass::class.recursionFields()
 
-    // 验证可以获取到不同访问级别的字段
+    // Ensure we can inspect fields with different visibility modifiers
     val publicFields = fields.filter { java.lang.reflect.Modifier.isPublic(it.modifiers) }
     val privateFields = fields.filter { java.lang.reflect.Modifier.isPrivate(it.modifiers) }
     val protectedFields = fields.filter { java.lang.reflect.Modifier.isProtected(it.modifiers) }
 
-    log.info("公共字段数量: {}", publicFields.size)
-    log.info("私有字段数量: {}", privateFields.size)
-    log.info("受保护字段数量: {}", protectedFields.size)
-    log.info("所有字段: {}", fields.map { "${it.name}(${it.modifiers})" })
+    log.info("Public field count: {}", publicFields.size)
+    log.info("Private field count: {}", privateFields.size)
+    log.info("Protected field count: {}", protectedFields.size)
+    log.info("All fields: {}", fields.map { "${it.name}(${it.modifiers})" })
 
-    // Kotlin 的字段访问性与 Java 不同，大多数字段都是 private 的，通过 getter/setter 访问
-    // 所以我们主要验证能获取到字段即可
-    assertTrue(fields.isNotEmpty(), "应该能获取到字段")
-    assertTrue(privateFields.isNotEmpty(), "应该有私有字段（Kotlin 字段通常是私有的）")
+    assertTrue(fields.isNotEmpty(), "Should retrieve fields")
+    assertTrue(privateFields.isNotEmpty(), "Should include private fields (Kotlin fields are typically private)")
   }
 }

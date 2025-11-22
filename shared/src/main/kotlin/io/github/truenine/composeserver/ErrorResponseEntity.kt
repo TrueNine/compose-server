@@ -3,14 +3,14 @@ package io.github.truenine.composeserver
 import io.github.truenine.composeserver.enums.HttpStatus
 
 /**
- * # 新版 错误响应实体
- * > 相比之前，采用 kotlin data class 设计
+ * # New error response entity
+ * > Compared to the previous version, this uses Kotlin data class design
  *
- * @param errorBy 错误枚举
- * @param code 错误码
- * @param msg 错误消息
- * @param alt 错误提示 (遇到此错误可以如何做）
- * @param debugSerialTrace 错误跟踪信息
+ * @param errorBy Error enumeration
+ * @param code Error code
+ * @param msg Error message
+ * @param alt Error suggestion (what to do when encountering this error)
+ * @param debugSerialTrace Error trace information
  * @author TrueNine
  * @since 2025-03-01
  */

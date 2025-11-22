@@ -3,7 +3,7 @@ package io.github.truenine.composeserver.enums
 import io.github.truenine.composeserver.IStringEnum
 
 /**
- * # 各语言 按照 PBC47 标准的序列化字符串
+ * # Language codes serialized according to the BCP 47 standard.
  *
  * @author TrueNine
  * @since 2024-03-20
@@ -19,7 +19,7 @@ enum class PCB47(private val primaryLang: String, vararg secondaryLanguages: Str
   override val value: String
     get() = primaryLang
 
-  /** ## 以 下华夏分割的 line */
+  /** ## Value with hyphen replaced by underscore */
   val underLineValue: String
     get() = primaryLang.replace("-", "_")
 

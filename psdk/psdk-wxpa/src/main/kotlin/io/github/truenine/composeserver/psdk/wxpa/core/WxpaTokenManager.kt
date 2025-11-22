@@ -18,9 +18,9 @@ import kotlin.concurrent.write
 private val log = slf4j<WxpaTokenManager>()
 
 /**
- * # 微信公众号Token管理器
+ * WeChat Official Account token manager.
  *
- * 负责管理access_token和jsapi_ticket的获取、缓存和刷新
+ * Responsible for obtaining, caching, and refreshing access_token and jsapi_ticket.
  *
  * @author TrueNine
  * @since 2025-08-08
@@ -33,54 +33,54 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
   @Volatile private var currentTicket: WxpaTicket? = null
 
   /**
-   * ## 获取有效的Access Token
+   * Get a valid access token.
    *
-   * @return 有效的Access Token，如果获取失败则抛出异常
-   * @throws WxpaTokenException Token获取失败
+   * @return a valid access token, or throws an exception if retrieval fails
+   * @throws WxpaTokenException when token retrieval fails
    */
   fun getValidAccessToken(): String {
     lock.read {
       val token = currentToken
       if (token != null && !token.isExpired) {
         log.debug("Using cached access token")
-        // 发布Token使用事件
+        // Publish token usage event
         publishTokenUsedEvent(TokenType.ACCESS_TOKEN, "getValidAccessToken")
         return token.accessToken
       }
     }
 
-    // Token已过期或不存在，发布过期事件并刷新
+    // Token is expired or missing; publish expiration event and refresh
     publishTokenExpiredEvent(TokenType.ACCESS_TOKEN, currentToken, null, "Access token expired or missing")
     return refreshAccessToken().accessToken
   }
 
   /**
-   * ## 获取有效的JSAPI Ticket
+   * Get a valid JSAPI ticket.
    *
-   * @return 有效的JSAPI Ticket，如果获取失败则抛出异常
-   * @throws WxpaTokenException Ticket获取失败
+   * @return a valid JSAPI ticket, or throws an exception if retrieval fails
+   * @throws WxpaTokenException when ticket retrieval fails
    */
   fun getValidJsapiTicket(): String {
     lock.read {
       val ticket = currentTicket
       if (ticket != null && !ticket.isExpired) {
         log.debug("Using cached jsapi ticket")
-        // 发布Token使用事件
+        // Publish token usage event
         publishTokenUsedEvent(TokenType.JSAPI_TICKET, "getValidJsapiTicket")
         return ticket.ticket
       }
     }
 
-    // Ticket已过期或不存在，发布过期事件并刷新
+    // Ticket is expired or missing; publish expiration event and refresh
     publishTokenExpiredEvent(TokenType.JSAPI_TICKET, null, currentTicket, "JSAPI ticket expired or missing")
     return refreshJsapiTicket().ticket
   }
 
   /**
-   * ## 刷新Access Token
+   * Refresh the access token.
    *
-   * @return 新的Token信息
-   * @throws WxpaTokenException Token刷新失败
+   * @return new token information
+   * @throws WxpaTokenException when token refresh fails
    */
   fun refreshAccessToken(): WxpaToken {
     return lock.write {
@@ -123,17 +123,17 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
   }
 
   /**
-   * ## 刷新JSAPI Ticket
+   * Refresh the JSAPI ticket.
    *
-   * @return 新的Ticket信息
-   * @throws WxpaTokenException Ticket刷新失败
+   * @return new ticket information
+   * @throws WxpaTokenException when ticket refresh fails
    */
   fun refreshJsapiTicket(): WxpaTicket {
     return lock.write {
       log.info("Refreshing jsapi ticket")
 
       try {
-        // 优先使用缓存且未过期的 access token，否则刷新
+        // Prefer a cached, non-expired access token; otherwise refresh it first
         val token = currentToken?.takeUnless { it.isExpired } ?: refreshAccessToken()
         val accessToken = token.accessToken
 
@@ -168,7 +168,7 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
     }
   }
 
-  /** ## 强制刷新所有Token */
+  /** Force refresh all tokens. */
   fun forceRefreshAll() {
     lock.write {
       log.info("Force refreshing all tokens")
@@ -176,7 +176,7 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
       currentTicket = null
     }
 
-    // 先刷新access token，再刷新ticket
+    // Refresh access token first, then refresh ticket
     val newToken = refreshAccessToken()
     refreshJsapiTicket()
 
@@ -184,9 +184,9 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
   }
 
   /**
-   * ## 同时刷新Access Token和JSAPI Ticket
+   * Refresh both access token and JSAPI ticket.
    *
-   * @return Pair<WxpaToken, WxpaTicket>
+   * @return a pair of (WxpaToken, WxpaTicket)
    */
   fun refreshBoth(): Pair<WxpaToken, WxpaTicket> {
     log.info("Refreshing both access token and jsapi ticket")
@@ -197,7 +197,7 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
     return token to ticket
   }
 
-  /** ## 检查Token状态 */
+  /** Check current token status. */
   fun getTokenStatus(): Map<String, Any> {
     return lock.read {
       mapOf(
@@ -209,7 +209,7 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
     }
   }
 
-  /** ## 发布Token过期事件 */
+  /** Publish token expiration event. */
   private fun publishTokenExpiredEvent(tokenType: TokenType, currentToken: WxpaToken?, currentTicket: WxpaTicket?, reason: String) {
     try {
       val event =
@@ -229,7 +229,7 @@ class WxpaTokenManager(private val apiClient: IWxpaWebClient, private val proper
     }
   }
 
-  /** ## 发布Token使用事件 */
+  /** Publish token usage event. */
   private fun publishTokenUsedEvent(tokenType: TokenType, usageContext: String) {
     try {
       val event = TokenUsedEvent(source = this, appId = properties.appId ?: "unknown", tokenType = tokenType, usageContext = usageContext)

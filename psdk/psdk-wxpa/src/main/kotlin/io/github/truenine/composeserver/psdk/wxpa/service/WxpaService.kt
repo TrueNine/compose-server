@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service
 private val log = logger(WxpaService::class)
 
 /**
- * # 微信公众号服务
+ * WeChat Official Account service.
  *
- * 提供微信公众号相关功能的统一入口
+ * Provides a unified entry point for features related to WeChat Official Accounts.
  *
  * @author TrueNine
  * @since 2025-08-08
@@ -25,14 +25,14 @@ class WxpaService(
   private val userInfoService: WxpaUserInfoService,
 ) {
 
-  /** ## 服务器配置验证DTO */
+  /** Server configuration verification DTO. */
   data class ServerVerificationRequest(val signature: String, val timestamp: String, val nonce: String, val echostr: String)
 
   /**
-   * ## 验证微信服务器配置
+   * Verifies WeChat server configuration.
    *
-   * @param request 验证请求参数
-   * @return 验证成功返回echostr，失败返回null
+   * @param request verification request parameters
+   * @return echostr on success, or null on failure
    */
   fun verifyServerConfiguration(request: ServerVerificationRequest): String? {
     log.info("Verifying server configuration")
@@ -51,12 +51,12 @@ class WxpaService(
   }
 
   /**
-   * ## 生成JSAPI签名
+   * Generates a JSAPI signature.
    *
-   * @param url 当前网页的URL
-   * @param nonceStr 随机字符串（可选）
-   * @param timestamp 时间戳（可选）
-   * @return JSAPI签名信息
+   * @param url current page URL
+   * @param nonceStr random string (optional)
+   * @param timestamp timestamp (optional)
+   * @return JSAPI signature information
    */
   fun generateJsapiSignature(url: String, nonceStr: String? = null, timestamp: Long? = null): WxpaSignature? {
     log.info("Generating JSAPI signature for URL: {}", url)
@@ -70,10 +70,10 @@ class WxpaService(
   }
 
   /**
-   * ## 通过授权码获取用户信息
+   * Gets user information by authorization code.
    *
-   * @param authCode 微信授权码
-   * @return 用户信息，获取失败返回null
+   * @param authCode WeChat authorization code
+   * @return user information, or null if retrieval fails
    */
   fun getUserInfoByAuthCode(authCode: String): WxpaUserInfo? {
     log.info("Getting user info by auth code")
@@ -87,26 +87,26 @@ class WxpaService(
   }
 
   /**
-   * ## 获取当前Access Token状态
+   * Gets the current access token status.
    *
-   * @return Token状态信息
+   * @return token status information
    */
   fun getTokenStatus(): Map<String, Any> {
     return tokenManager.getTokenStatus()
   }
 
-  /** ## 强制刷新所有Token */
+  /** Force refreshes all tokens. */
   fun forceRefreshTokens() {
     log.info("Force refreshing all tokens")
     tokenManager.forceRefreshAll()
   }
 
   /**
-   * ## 检查用户授权状态
+   * Checks user authorization status.
    *
-   * @param accessToken 用户授权的access_token
-   * @param openId 用户openId
-   * @return 授权是否有效
+   * @param accessToken user access token
+   * @param openId user openId
+   * @return true if the authorization is valid, false otherwise
    */
   fun checkUserAuthStatus(accessToken: String, openId: String): Boolean {
     return userInfoService.checkUserAuthStatus(accessToken, openId)

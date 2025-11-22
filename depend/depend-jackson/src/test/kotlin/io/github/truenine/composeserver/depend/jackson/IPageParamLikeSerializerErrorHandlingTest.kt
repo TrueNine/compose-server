@@ -1,7 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson
 
-import com.fasterxml.jackson.databind.JsonMappingException
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.truenine.composeserver.domain.IPageParam
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
@@ -10,6 +8,8 @@ import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tools.jackson.databind.DatabindException
+import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest
 class IPageParamLikeSerializerErrorHandlingTest {
@@ -23,7 +23,7 @@ class IPageParamLikeSerializerErrorHandlingTest {
     fun `handle invalid json format gracefully`() {
       val invalidJson = """{"o":"not_a_number","s":20}"""
 
-      val exception = assertFailsWith<JsonMappingException> { mapper.readValue(invalidJson, IPageParam::class.java) }
+      val exception = assertFailsWith<DatabindException> { mapper.readValue(invalidJson, IPageParam::class.java) }
 
       log.info("Caught expected exception: {}", exception.message)
       assertNotNull(exception.message)
@@ -33,7 +33,7 @@ class IPageParamLikeSerializerErrorHandlingTest {
     fun `handle invalid boolean value gracefully`() {
       val invalidJson = """{"o":1,"s":20,"u":"not_a_boolean"}"""
 
-      val exception = assertFailsWith<JsonMappingException> { mapper.readValue(invalidJson, IPageParam::class.java) }
+      val exception = assertFailsWith<DatabindException> { mapper.readValue(invalidJson, IPageParam::class.java) }
 
       log.info("Caught expected exception for boolean: {}", exception.message)
       assertNotNull(exception.message)
@@ -43,7 +43,7 @@ class IPageParamLikeSerializerErrorHandlingTest {
     fun `handle non-object json gracefully`() {
       val invalidJson = """["not", "an", "object"]"""
 
-      val exception = assertFailsWith<JsonMappingException> { mapper.readValue(invalidJson, IPageParam::class.java) }
+      val exception = assertFailsWith<DatabindException> { mapper.readValue(invalidJson, IPageParam::class.java) }
 
       log.info("Caught expected exception for non-object: {}", exception.message)
       assertNotNull(exception.message)
@@ -53,7 +53,7 @@ class IPageParamLikeSerializerErrorHandlingTest {
     fun `handle string json gracefully`() {
       val invalidJson = """"just_a_string""""
 
-      val exception = assertFailsWith<JsonMappingException> { mapper.readValue(invalidJson, IPageParam::class.java) }
+      val exception = assertFailsWith<DatabindException> { mapper.readValue(invalidJson, IPageParam::class.java) }
 
       log.info("Caught expected exception for string: {}", exception.message)
       assertNotNull(exception.message)
@@ -78,7 +78,7 @@ class IPageParamLikeSerializerErrorHandlingTest {
       val pageParam = mapper.readValue(json, IPageParam::class.java)
 
       assertNotNull(pageParam)
-      // 验证负数被正确处理（根据Pq工厂方法的逻辑）
+      // Verify negative numbers are handled correctly (according to Pq factory logic)
       log.info("Handled negative numbers: o={}, s={}", pageParam.o, pageParam.s)
     }
 
@@ -101,10 +101,10 @@ class IPageParamLikeSerializerErrorHandlingTest {
       val pageParam = mapper.readValue(json, IPageParam::class.java)
 
       assertNotNull(pageParam)
-      // 验证使用了Pq工厂方法创建的实例
+      // Verify that instance is created via Pq factory method
       log.info("Factory method result: o={}, s={}", pageParam.o, pageParam.s)
 
-      // 验证实例类型
+      // Verify instance type
       log.info("Instance class: {}", pageParam::class.java.simpleName)
     }
 
@@ -114,7 +114,7 @@ class IPageParamLikeSerializerErrorHandlingTest {
       val pageParam = mapper.readValue(jsonWithExtraFields, IPageParam::class.java)
 
       assertNotNull(pageParam)
-      // 验证只处理了已知字段
+      // Verify that only known fields are processed
       log.info("Processed with extra fields: o={}, s={}", pageParam.o, pageParam.s)
     }
   }

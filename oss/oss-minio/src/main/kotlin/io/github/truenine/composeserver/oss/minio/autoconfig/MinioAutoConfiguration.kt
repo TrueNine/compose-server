@@ -71,7 +71,7 @@ class MinioAutoConfiguration {
 
     val client = clientBuilder.build()
 
-    // 在测试环境中跳过连接测试
+    // Skip connection test in test environments
     val isTestEnvironment =
       environment.activeProfiles.contains("test") ||
         environment.getProperty("spring.profiles.active")?.contains("test") == true ||
