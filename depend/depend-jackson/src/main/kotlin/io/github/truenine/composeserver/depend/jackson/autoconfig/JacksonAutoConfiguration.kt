@@ -127,23 +127,21 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
   @Order(Ordered.LOWEST_PRECEDENCE)
   @Bean(name = [NON_IGNORE_OBJECT_MAPPER_BEAN_NAME])
   @org.springframework.beans.factory.annotation.Qualifier("nonIgnoreObjectMapper")
-  fun nonIgnoreObjectMapper(mapper: JsonMapper): JsonMapper {
-    log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
-    val hasKotlinModule = mapper.registeredModules().any { module -> module.javaClass == KotlinModule::class.java }
+  fun nonIgnoreObjectMapper(): JsonMapper {
+    log.debug("register non-ignore objectMapper")
+    // Create a base mapper to avoid circular dependency
+    val baseMapper = createBaseJsonMapperBuilder().build()
+    
     val builder = JsonMapper.builder()
 
-    // Preserve modules from the default mapper
-    mapper.registeredModules().forEach { module -> builder.addModule(module) }
+    // Preserve modules from the base mapper
+    baseMapper.registeredModules().forEach { module -> builder.addModule(module) }
 
     builder.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-    // Ensure KotlinModule is registered only once to avoid duplicate registration
-    if (!hasKotlinModule) {
-      builder.addModule(KotlinModule.Builder().build())
-    }
     builder.changeDefaultPropertyInclusion { incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL) }
     builder.changeDefaultVisibility { vc -> vc.withVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY) }
     // Use a safe annotation introspector, paired with the original introspector
-    val originalIntrospector = mapper.deserializationConfig().annotationIntrospector
+    val originalIntrospector = baseMapper.deserializationConfig().annotationIntrospector
     builder.annotationIntrospector(IgnoreIntroPair(originalIntrospector, SafeIgnoreAnnotationIntrospector()))
     val polymorphicTypeValidator = BasicPolymorphicTypeValidator.builder().allowIfBaseType(Any::class.java).build()
     val defaultTypingBuilder =
