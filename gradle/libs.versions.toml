@@ -56,9 +56,11 @@ org-springframework-modulith = "2.0.0"
 org-springframework-security = "7.0.0"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.47"
+project = "0.0.48"
+com-netflix-dgs-codegen = "8.2.1"
 
 [libraries]
+com-netflix-dgs-codegen-com-netflix-dgs-codegen-gradle-plugin = { module = "com.netflix.dgs.codegen:com.netflix.dgs.codegen.gradle.plugin", version.ref = "com-netflix-dgs-codegen" }
 tools-jackson-jackson-bom = { module = "tools.jackson:jackson-bom", version.ref = "tools-jackson" }
 ch-qos-logback-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback" }
 cn-dev33-sa-token-redis-jackson = { module = "cn.dev33:sa-token-redis-jackson", version.ref = "cn-dev33-sa-token" }
@@ -82,7 +84,7 @@ com-baomidou-mybatis-plus-boot-starter-test = { module = "com.baomidou:mybatis-p
 com-baomidou-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-spring-boot3-starter = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-diffplug-spotless-com-diffplug-spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "com-diffplug-spotless" }
-com-fasterxml-jackson-core-jackson-annotations =  "com.fasterxml.jackson.core:jackson-annotations:3.0-rc5"
+com-fasterxml-jackson-core-jackson-annotations = "com.fasterxml.jackson.core:jackson-annotations:3.0-rc5"
 com-fasterxml-jackson-core-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "com-fasterxml-jackson2" }
 com-fasterxml-jackson-core-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "com-fasterxml-jackson2" }
 com-fasterxml-jackson-dataformat-jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "com-fasterxml-jackson2" }
@@ -294,12 +296,14 @@ org-springframework-boot-spring-boot-gradle-plugin = { module = "org.springframe
 org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version = "4.0.0-M2" }
 org-springframework-boot-spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-flyway-test = { module = "org.springframework.boot:spring-boot-starter-flyway-test", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-batch = { module = "org.springframework.boot:spring-boot-starter-batch", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-data-redis-reactive = { module = "org.springframework.boot:spring-boot-starter-data-redis-reactive", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-jdbc-test", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-json = { module = "org.springframework.boot:spring-boot-starter-json", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-logging", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "org-springframework-boot" }
@@ -308,6 +312,10 @@ org-springframework-boot-spring-boot-starter-tomcat = { module = "org.springfram
 org-springframework-boot-spring-boot-starter-undertow = "org.springframework.boot:spring-boot-starter-undertow:4.0.0-M1"
 org-springframework-boot-spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-restclient-test = { module = "org.springframework.boot:spring-boot-starter-restclient-test", version.ref = "org-springframework-boot" }
+
 org-springframework-boot-spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-test = { module = "org.springframework.boot:spring-boot-test", version.ref = "org-springframework-boot" }
@@ -321,6 +329,7 @@ org-springframework-integration-spring-integration-mqtt = { module = "org.spring
 org-springframework-modulith-spring-modulith-bom = { module = "org.springframework.modulith:spring-modulith-bom", version.ref = "org-springframework-modulith" }
 org-springframework-modulith-spring-modulith-core = { module = "org.springframework.modulith:spring-modulith-core", version.ref = "org-springframework-modulith" }
 org-springframework-modulith-spring-modulith-starter-jpa = { module = "org.springframework.modulith:spring-modulith-starter-jpa", version.ref = "org-springframework-modulith" }
+org-springframework-modulith-spring-modulith-starter-core = { module = "org.springframework.modulith:spring-modulith-starter-core", version.ref = "org-springframework-modulith" }
 org-springframework-modulith-spring-modulith-starter-test = { module = "org.springframework.modulith:spring-modulith-starter-test", version.ref = "org-springframework-modulith" }
 org-springframework-security-spring-security-core = { module = "org.springframework.security:spring-security-core", version.ref = "org-springframework-security" }
 org-springframework-security-spring-security-crypto = { module = "org.springframework.security:spring-security-crypto", version.ref = "org-springframework-security" }
@@ -344,6 +353,7 @@ org-xerial-sqlite-jdbc = "org.xerial:sqlite-jdbc:3.51.0.0"
 p6spy-p6spy = "p6spy:p6spy:3.9.1"
 
 [plugins]
+com-netflix-dgs-codegen = { id = "com.netflix.dgs.codegen", version.ref = "com-netflix-dgs-codegen" }
 com-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "com-diffplug-spotless" }
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.53.0"
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
