@@ -56,7 +56,7 @@ org-springframework-modulith = "2.0.0"
 org-springframework-security = "7.0.0"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.48"
+project = "0.0.49"
 com-netflix-dgs-codegen = "8.2.1"
 
 [libraries]
@@ -304,6 +304,8 @@ org-springframework-boot-spring-boot-starter-data-redis = { module = "org.spring
 org-springframework-boot-spring-boot-starter-data-redis-reactive = { module = "org.springframework.boot:spring-boot-starter-data-redis-reactive", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-jdbc-test", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-security-test = { module = "org.springframework.boot:spring-boot-starter-security-test", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-json = { module = "org.springframework.boot:spring-boot-starter-json", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-logging", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "org-springframework-boot" }
