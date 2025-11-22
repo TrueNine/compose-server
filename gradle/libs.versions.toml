@@ -56,7 +56,7 @@ org-springframework-modulith = "2.0.0"
 org-springframework-security = "7.0.0"
 org-testcontainers = "1.21.3"
 org-testng = "7.11.0"
-project = "0.0.46"
+project = "0.0.47"
 
 [libraries]
 tools-jackson-jackson-bom = { module = "tools.jackson:jackson-bom", version.ref = "tools-jackson" }
