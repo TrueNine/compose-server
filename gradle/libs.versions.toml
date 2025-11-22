@@ -288,6 +288,7 @@ org-springframework-boot-spring-boot = { module = "org.springframework.boot:spri
 org-springframework-boot-spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "org-springframework-boot" }
+org-springframework-boot-spring-boot-persistence = { module = "org.springframework.boot:spring-boot-persistence", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "org-springframework-boot" }
