@@ -11,8 +11,8 @@ group = libs.versions.group.get()
 version = libs.versions.project.get()
 
 dependencies {
-  implementation(enforcedPlatform(libs.io.netty.netty.bom))
-  implementation(enforcedPlatform(libs.tools.jackson.jackson.bom))
+  implementation(platform(libs.io.netty.netty.bom))
+  implementation(platform(libs.tools.jackson.jackson.bom))
 }
 
 configurations.all {
