@@ -12,11 +12,11 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.serializer.GenericJackson3JsonRedisSerializer
+import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import tools.jackson.databind.DeserializationFeature
-import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.json.JsonMapper
 
 /**
  * Redis cache component configuration
@@ -26,14 +26,14 @@ import tools.jackson.databind.ObjectMapper
  */
 @Configuration
 @ConditionalOnBean(RedisConnectionFactory::class)
-class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) objectMapper: ObjectMapper) {
+class RedisJsonSerializerAutoConfiguration(@Qualifier(JacksonAutoConfiguration.NON_IGNORE_OBJECT_MAPPER_BEAN_NAME) jsonMapper: JsonMapper) {
   companion object {
     @JvmStatic private val log = logger<RedisJsonSerializerAutoConfiguration>()
     private const val VIRTUAL_THREAD_REDIS_FACTORY_BEAN_NAME = "redisConnectionFactoryVirtualThreads"
   }
 
   private val jsr =
-    GenericJackson3JsonRedisSerializer.builder().apply { customize { it.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) } }.build()
+    GenericJacksonJsonRedisSerializer.builder().apply { customize { it.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) } }.build()
 
   private val srs = StringRedisSerializer()
   private val cacheManagerConfig =

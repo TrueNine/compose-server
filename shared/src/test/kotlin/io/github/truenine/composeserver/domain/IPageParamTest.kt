@@ -1,31 +1,29 @@
 package io.github.truenine.composeserver.domain
 
-import jakarta.annotation.Resource
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import org.assertj.core.api.Assertions.assertThat
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import tools.jackson.databind.ObjectMapper
 
-@AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Import(IPageParamTest.TestPageController::class)
 class IPageParamTest {
   lateinit var objectMapper: ObjectMapper
   lateinit var mockMvc: MockMvc
-    @Resource set
 
   @BeforeTest
   fun setup() {
     objectMapper = ObjectMapper()
+    mockMvc = MockMvcBuilders.standaloneSetup(TestPageController()).build()
   }
 
   @AfterTest fun after() {}
@@ -39,7 +37,7 @@ class IPageParamTest {
 
   @Test
   fun returnsUnlimitedPageWhenFlagged() {
-    val param = IPageParam.get(0, Int.MAX_VALUE, true)
+    val param = IPageParam[0, Int.MAX_VALUE, true]
     assertThat(param.safeOffset).isEqualTo(0)
     assertThat(param.safePageSize).isEqualTo(Int.MAX_VALUE)
   }
@@ -53,14 +51,14 @@ class IPageParamTest {
 
   @Test
   fun correctsNegativeParameters() {
-    val param = IPageParam.get(-5, -10, false)
+    val param = IPageParam[-5, -10, false]
     assertThat(param.safeOffset).isEqualTo(0)
     assertThat(param.safePageSize).isEqualTo(1)
   }
 
   @Test
   fun acceptsLargePageSize() {
-    val param = IPageParam.get(0, 9999, false)
+    val param = IPageParam[0, 9999, false]
     assertThat(param.safePageSize).isEqualTo(9999)
   }
 

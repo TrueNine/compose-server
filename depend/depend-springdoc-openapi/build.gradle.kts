@@ -18,4 +18,11 @@ dependencies {
 
   testImplementation(projects.testtoolkit.testtoolkitSpringmvc)
   testImplementation(libs.org.springframework.boot.spring.boot.starter.web)
+  testImplementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
+}
+
+// Disable KAPT for test sources to avoid Jackson 3.x annotation processing issues
+afterEvaluate {
+  tasks.findByName("kaptTestKotlin")?.enabled = false
+  tasks.findByName("kaptGenerateStubsTestKotlin")?.enabled = false
 }

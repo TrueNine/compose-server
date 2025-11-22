@@ -4,7 +4,6 @@ import io.github.truenine.composeserver.depend.servlet.TestApplication
 import jakarta.annotation.Resource
 import java.nio.charset.StandardCharsets
 import kotlin.test.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
-@AutoConfigureMockMvc
 @SpringBootTest(classes = [TestApplication::class])
 @Import(UploadFileParamAssertTest.TestUploadController::class)
 class UploadFileParamAssertTest {

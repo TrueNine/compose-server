@@ -9,7 +9,6 @@ import kotlin.test.assertFails
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import org.apache.catalina.util.URLEncoder
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
@@ -24,7 +23,6 @@ import tools.jackson.databind.ObjectMapper
 
 /** # Verify how GET parameters are passed to Spring Boot */
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
 @Import(GetParameterTest.TestGetParameterController::class)
 class GetParameterTest {
   lateinit var mockMvc: MockMvc

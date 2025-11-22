@@ -127,7 +127,7 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
   @Order(Ordered.LOWEST_PRECEDENCE)
   @Bean(name = [NON_IGNORE_OBJECT_MAPPER_BEAN_NAME])
   @org.springframework.beans.factory.annotation.Qualifier("nonIgnoreObjectMapper")
-  fun nonIgnoreObjectMapper(mapper: ObjectMapper): ObjectMapper {
+  fun nonIgnoreObjectMapper(mapper: JsonMapper): JsonMapper {
     log.debug("register non-ignore objectMapper, defaultMapper = {}", mapper)
     val hasKotlinModule = mapper.registeredModules().any { module -> module.javaClass == KotlinModule::class.java }
     val builder = JsonMapper.builder()
@@ -155,7 +155,7 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
           if (isJacksonNaturalType(t)) {
             return false
           }
-          return !t.isPrimitive()
+          return !t.isPrimitive
         }
       }
     builder.setDefaultTyping(defaultTypingBuilder)
@@ -170,6 +170,6 @@ class JacksonAutoConfiguration(private val jacksonProperties: JacksonProperties)
     return rawClass == String::class.java ||
       CharSequence::class.java.isAssignableFrom(rawClass) ||
       rawClass == java.lang.Boolean::class.java ||
-      rawClass == java.lang.Character::class.java
+      rawClass == Character::class.java
   }
 }
