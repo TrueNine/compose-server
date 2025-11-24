@@ -93,3 +93,5 @@ nul
 .playwright-mcp/
 .codebuddy/
 .qoder/
+.agent/
+.windsurf/
