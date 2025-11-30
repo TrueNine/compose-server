@@ -72,3 +72,6 @@ src/main/**/out/
 src/test/**/bin/
 src/test/**/out/
 TODO.*
+AGENTS.md
+CLAUDE.md
+GEMINI.md
