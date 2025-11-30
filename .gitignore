@@ -1,97 +1,74 @@
-### android studio ###
-/local.properties
-
-### gradle ###
-.gradle
-build/
-/build-cache/
-/generated/
-generated_tests/
-.generated/
-.xcodemap/
-!gradle/wrapper/gradle-wrapper.jar
+*.hprof
+*.iml
+*.ipr
+*.iws
+*.log
+*.mode1v3
+*.sln
+*.xcodeproj
+*.xcuserstate
+*.xcworkspace
+**/bin/
+**/out/
+*resources/static/
+!**/out/
 !**/src/main/**/build/
 !**/src/test/**/build/
-.gradle-user-home/
+!gradle/wrapper/gradle-wrapper.jar
 
-### kotlin ###
-.kotlin
-.kotlin/
-
-### STS ###
+.agent/
+.ai/
 .apt_generated
 .classpath
+.codebuddy/
+.claude/
+.cursor/
 .factorypath
+.factory/
+.generated/
+.gradle
+.gradle-user-home/
+.jpb/
+.kiro/
+.kotlin
+.kotlin/
+.logs
+.playwright-mcp/
 .project
+.qoder/
 .settings
 .springBeans
 .sts4-cache
-**/bin/
-src/main/**/bin/
-src/test/**/bin/
-
-### IntelliJ IDEA ###
-*.iws
-*.iml
-*.ipr
-**/out/
-!**/out/
-src/main/**/out/
-src/test/**/out/
-.jpb/
-*.hprof
-/out/
-/amplicode.xml
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### visual studio ###
 .vs
-*.sln
-*resources/static/
+.windsurf/
 
-### xcode ###
-*.xcworkspace
-*.xcodeproj
-*.xcuserstate
-*.mode1v3
-
-### logs ###
-logs
-.logs
-*.log
+/__ai/
+/__aiissues/
+/amplicode.xml
+/build-cache/
+/dist/
+/generated/
+/local.properties
+/nbbuild/
+/nbdist/
 /.env
-### publish gpg ###
+/.intellijPlatform/
+/.mcp.json
+/.nb-gradle/
+/nbproject/private/
+/out/
 /private.gpg
 
-### Customs ###
-TODO.*
-
-### AI Coder ###
-/.intellijPlatform/
-node_modules/
-pnpm-lock.yaml
-.claude/
-.cursor/
-.factory/
-.ai/
-__ai/
-__aiissues/
-CLAUDE.md
 AGENTS.md
-
-### claude code ###
-/.mcp.json
-
-### Windows issues ###
+build/
+CLAUDE.md
+generated_tests/
+logs
+node_modules/
 nul
-.playwright-mcp/
-.codebuddy/
-.qoder/
-.agent/
-.windsurf/
+pnpm-lock.yaml
+src/main/**/bin/
+src/main/**/out/
+src/test/**/bin/
+src/test/**/out/
+TODO.*
