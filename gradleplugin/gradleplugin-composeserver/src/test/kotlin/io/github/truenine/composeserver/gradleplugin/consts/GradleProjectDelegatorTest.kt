@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.gradleplugin.consts
 
+import kotlin.test.*
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.test.*
 
 class GradleProjectDelegatorTest {
 

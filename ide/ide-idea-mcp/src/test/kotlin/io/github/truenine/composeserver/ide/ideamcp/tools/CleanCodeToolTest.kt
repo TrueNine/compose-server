@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
-import kotlinx.serialization.json.Json
 import kotlin.test.*
+import kotlinx.serialization.json.Json
 
 /** CleanCodeTool unit tests. */
 class CleanCodeToolTest {

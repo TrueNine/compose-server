@@ -2,11 +2,11 @@ package io.github.truenine.composeserver.security.autoconfig
 
 import io.github.truenine.composeserver.security.crypto.domain.IKeysRepo
 import io.github.truenine.composeserver.security.jwt.JwtIssuer
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.*
 import tools.jackson.databind.ObjectMapper
-import java.time.Duration
-import java.time.temporal.ChronoUnit
 
 @Configuration
 @EnableConfigurationProperties(io.github.truenine.composeserver.security.properties.JwtProperties::class)

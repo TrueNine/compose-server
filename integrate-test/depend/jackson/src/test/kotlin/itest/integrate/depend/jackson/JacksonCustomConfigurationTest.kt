@@ -3,6 +3,7 @@ package itest.integrate.depend.jackson
 import com.fasterxml.jackson.annotation.JsonInclude
 import io.github.truenine.composeserver.depend.jackson.autoconfig.*
 import jakarta.annotation.Resource
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Qualifier
@@ -13,7 +14,6 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestPropertySource
 import tools.jackson.databind.DeserializationFeature
 import tools.jackson.databind.ObjectMapper
-import kotlin.test.*
 
 /**
  * Jackson custom configuration integration tests.

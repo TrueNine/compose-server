@@ -4,8 +4,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import io.github.truenine.composeserver.ide.ideamcp.tools.CleanOperation
 import io.mockk.*
-import kotlinx.coroutines.runBlocking
 import kotlin.test.*
+import kotlinx.coroutines.runBlocking
 
 /** CleanService unit tests. */
 class CleanServiceTest {

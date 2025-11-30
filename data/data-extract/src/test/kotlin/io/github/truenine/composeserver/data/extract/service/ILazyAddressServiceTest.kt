@@ -5,11 +5,11 @@ import io.github.truenine.composeserver.holders.ResourceHolder
 import io.github.truenine.composeserver.string
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.system.measureTimeMillis
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.core.io.ByteArrayResource
-import kotlin.system.measureTimeMillis
-import kotlin.test.*
 
 /**
  * Comprehensive test suite for ILazyAddressService interface.

@@ -2,6 +2,7 @@ package io.github.truenine.composeserver.rds.flywaymigrationpostgresql.flyway
 
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -10,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertTrue
 
 @SpringBootTest
 @Transactional

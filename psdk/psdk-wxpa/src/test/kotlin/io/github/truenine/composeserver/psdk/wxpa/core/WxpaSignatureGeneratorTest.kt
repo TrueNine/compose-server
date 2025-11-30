@@ -5,12 +5,12 @@ import io.github.truenine.composeserver.psdk.wxpa.properties.WxpaProperties
 import io.github.truenine.composeserver.security.crypto.sha1
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.*
+import kotlin.test.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.*
-import kotlin.test.assertNotNull
 
 class WxpaSignatureGeneratorTest {
 

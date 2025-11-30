@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.depend.jackson
 
 import io.github.truenine.composeserver.testtoolkit.log
+import kotlin.test.Test
+import kotlin.test.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 import tools.jackson.databind.ObjectMapper
-import kotlin.test.Test
-import kotlin.test.assertTrue
 
 @SpringBootTest
 class JacksonAutoConfigTest {

@@ -4,11 +4,11 @@ import io.github.truenine.composeserver.enums.HttpStatus
 import io.github.truenine.composeserver.enums.UserAgents
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @SpringBootTest
 class AnyEnumDeserializerTest {

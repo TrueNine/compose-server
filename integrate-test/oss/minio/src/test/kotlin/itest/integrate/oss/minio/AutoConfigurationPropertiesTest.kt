@@ -9,14 +9,14 @@ import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IOssMinioContainer
 import io.minio.MinioClient
 import jakarta.annotation.Resource
+import java.io.ByteArrayInputStream
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
-import java.io.ByteArrayInputStream
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @SpringBootTest(classes = [AutoConfigurationPropertiesTest.TestConfiguration::class])
 class AutoConfigurationPropertiesTest : IOssMinioContainer {

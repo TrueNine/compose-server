@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.data.extract.api
 
 import jakarta.annotation.Resource
-import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.*
+import org.springframework.boot.test.context.SpringBootTest
 
 @Ignore
 @SpringBootTest

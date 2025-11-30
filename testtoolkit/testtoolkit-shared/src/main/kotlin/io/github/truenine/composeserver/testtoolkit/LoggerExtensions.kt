@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import org.slf4j.LoggerFactory
 import kotlin.reflect.KCallable
+import org.slf4j.LoggerFactory
 
 typealias SystemTestLogger = org.slf4j.Logger
 

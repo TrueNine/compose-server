@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.holders.resolver
 
 import io.github.truenine.composeserver.logger
-import org.springframework.core.io.Resource
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
+import org.springframework.core.io.Resource
 
 /**
  * Thread-safe LRU cache for resolved resources with TTL support.

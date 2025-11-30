@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.generator
 
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Test
 import java.util.*
 import java.util.concurrent.*
 import kotlin.math.abs
 import kotlin.test.*
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 
 class OptimizedSnowflakeTest {
   private lateinit var snowflake: SynchronizedSimpleSnowflake

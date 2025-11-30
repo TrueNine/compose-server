@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
-import org.junit.jupiter.api.Test
 import kotlin.test.*
+import org.junit.jupiter.api.Test
 
 class MavenRepoTypeTest {
 

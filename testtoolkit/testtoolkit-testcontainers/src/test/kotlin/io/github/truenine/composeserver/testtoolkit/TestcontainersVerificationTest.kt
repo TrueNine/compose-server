@@ -1,6 +1,12 @@
 package io.github.truenine.composeserver.testtoolkit
 
 import io.github.truenine.composeserver.testtoolkit.utils.*
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import kotlin.io.path.createTempFile
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.select
 import org.junit.jupiter.api.Test
@@ -8,12 +14,6 @@ import org.junit.jupiter.api.assertTimeout
 import org.testcontainers.containers.*
 import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.utility.MountableFile
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import kotlin.io.path.createTempFile
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class TestcontainersVerificationTest {
   @Test

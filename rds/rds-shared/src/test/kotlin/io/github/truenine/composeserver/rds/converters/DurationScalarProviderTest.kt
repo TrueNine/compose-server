@@ -2,11 +2,11 @@ package io.github.truenine.composeserver.rds.converters
 
 import io.github.truenine.composeserver.testtoolkit.log
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class DurationScalarProviderTest : IDatabasePostgresqlContainer {

@@ -5,11 +5,11 @@ import io.github.truenine.composeserver.data.extract.service.ILazyAddressService
 import io.github.truenine.composeserver.holders.ResourceHolder
 import io.github.truenine.composeserver.slf4j
 import io.github.truenine.composeserver.string
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 import org.springframework.context.annotation.Primary
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 
 private val log = slf4j<LazyAddressCsvServiceImpl>()
 

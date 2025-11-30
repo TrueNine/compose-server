@@ -2,8 +2,8 @@ package io.github.truenine.composeserver.psdk.wxpa.event
 
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaTicket
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaToken
-import org.springframework.context.ApplicationEvent
 import java.time.LocalDateTime
+import org.springframework.context.ApplicationEvent
 
 /**
  * Base event type for WeChat Official Account token lifecycle events.

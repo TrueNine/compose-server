@@ -3,11 +3,11 @@ package io.github.truenine.composeserver.depend.jackson
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
 
 @SpringBootTest
 class ByteArrayDeserializerTest {

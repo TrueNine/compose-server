@@ -1,13 +1,13 @@
 package io.github.truenine.composeserver.generator
 
 import io.mockk.*
+import java.util.concurrent.*
+import kotlin.math.abs
+import kotlin.test.*
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import java.util.concurrent.*
-import kotlin.math.abs
-import kotlin.test.*
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

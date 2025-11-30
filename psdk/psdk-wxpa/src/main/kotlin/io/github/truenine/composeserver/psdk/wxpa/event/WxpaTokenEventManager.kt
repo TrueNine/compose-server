@@ -3,13 +3,13 @@ package io.github.truenine.composeserver.psdk.wxpa.event
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.psdk.wxpa.core.WxpaTokenManager
 import io.github.truenine.composeserver.psdk.wxpa.properties.WxpaProperties
+import java.time.LocalDateTime
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicLong
 
 private val log = logger<WxpaTokenEventManager>()
 

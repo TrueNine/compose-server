@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver
 
 import io.github.truenine.composeserver.testtoolkit.log
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import kotlin.test.assertEquals
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 class UrlExtensionsTest {
 

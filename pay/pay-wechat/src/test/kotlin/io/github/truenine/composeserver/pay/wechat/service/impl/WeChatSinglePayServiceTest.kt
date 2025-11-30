@@ -4,10 +4,10 @@ import io.github.truenine.composeserver.generator.IOrderCodeGenerator
 import io.github.truenine.composeserver.pay.SinglePayService
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
-import org.springframework.boot.test.context.SpringBootTest
 import java.math.BigDecimal
 import kotlin.test.Ignore
 import kotlin.test.Test
+import org.springframework.boot.test.context.SpringBootTest
 
 @Ignore
 @SpringBootTest

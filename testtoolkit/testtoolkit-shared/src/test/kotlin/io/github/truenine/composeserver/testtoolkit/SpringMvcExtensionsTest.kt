@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import org.springframework.mock.web.MockMultipartFile
 import kotlin.test.*
+import org.springframework.mock.web.MockMultipartFile
 
 /**
  * Spring MVC extension function tests.

@@ -4,12 +4,12 @@ import io.github.truenine.composeserver.psdk.wxpa.core.*
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaSignature
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaUserInfo
 import io.mockk.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 class WxpaServiceTest {
 

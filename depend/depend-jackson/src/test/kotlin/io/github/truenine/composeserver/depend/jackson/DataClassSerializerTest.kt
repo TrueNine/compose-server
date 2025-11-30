@@ -4,12 +4,12 @@ import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
+import kotlin.test.Test
+import kotlin.test.assertTrue
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.module.kotlin.readValue
-import kotlin.test.Test
-import kotlin.test.assertTrue
 
 data class A(val a: String, val b: String)
 

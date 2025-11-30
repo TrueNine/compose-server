@@ -5,9 +5,9 @@ import com.intellij.execution.process.*
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.util.Key
+import java.nio.charset.Charset
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
-import java.nio.charset.Charset
 
 /**
  * Terminal output interceptor.

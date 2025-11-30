@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.data.extract.domain
 
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.*
 
 class CnDistrictCodeTest {
 

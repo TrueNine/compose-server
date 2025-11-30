@@ -6,10 +6,10 @@ import com.intellij.openapi.roots.OrderEnumerator
 import com.intellij.openapi.vfs.VirtualFile
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /** Result of library code lookup. */
 data class LibCodeResult(val sourceCode: String, val isDecompiled: Boolean, val language: String, val metadata: LibCodeMetadata)

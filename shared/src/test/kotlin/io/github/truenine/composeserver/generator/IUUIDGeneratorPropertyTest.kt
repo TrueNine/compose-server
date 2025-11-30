@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.generator
 
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
  * Property-based tests for IUUIDGenerator interface.

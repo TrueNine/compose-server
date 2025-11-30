@@ -1,15 +1,15 @@
 package io.github.truenine.composeserver.gradleplugin.dotenv
 
+import java.io.File
+import kotlin.test.*
 import org.gradle.api.Project
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.testing.Test
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test as JUnitTest
 import org.junit.jupiter.api.io.TempDir
 import org.springframework.boot.gradle.tasks.run.BootRun
-import java.io.File
-import kotlin.test.*
-import org.junit.jupiter.api.Test as JUnitTest
 
 class DotenvLoaderTest {
 

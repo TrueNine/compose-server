@@ -5,12 +5,12 @@ import com.intellij.openapi.roots.ModuleRootModificationUtil
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
-import kotlinx.coroutines.runBlocking
-import org.junit.Test
 import java.io.File
 import java.nio.file.Files
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
 
 /**
  * Integration tests for LibCodeServiceImpl.

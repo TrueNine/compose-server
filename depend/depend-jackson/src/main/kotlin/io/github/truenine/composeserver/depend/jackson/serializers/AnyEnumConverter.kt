@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
 import io.github.truenine.composeserver.*
+import kotlin.reflect.KClass
 import tools.jackson.core.JsonParser
 import tools.jackson.core.JsonToken
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.deser.std.StdDeserializer
-import kotlin.reflect.KClass
 
 @Deprecated(message = "API surface is too heavy", level = DeprecationLevel.ERROR)
 class AnyEnumConverter(typingType: KClass<Enum<*>>) : StdDeserializer<Enum<*>>(Enum::class.java) {

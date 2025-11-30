@@ -6,13 +6,13 @@ import io.github.truenine.composeserver.DateTimeConverter
 import io.github.truenine.composeserver.security.crypto.CryptographicOperations
 import io.github.truenine.composeserver.security.jwt.consts.IssuerParam
 import io.github.truenine.composeserver.slf4j
-import org.slf4j.Logger
-import tools.jackson.databind.ObjectMapper
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.Duration
+import org.slf4j.Logger
+import tools.jackson.databind.ObjectMapper
 
 class JwtIssuer private constructor() : JwtVerifier() {
   var expireMillis: Long = Duration.ofMinutes(30).toMillis()

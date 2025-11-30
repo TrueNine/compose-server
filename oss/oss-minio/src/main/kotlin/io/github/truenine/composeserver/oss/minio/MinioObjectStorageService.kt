@@ -43,10 +43,14 @@ import io.minio.StatObjectArgs
 import io.minio.errors.*
 import io.minio.http.Method
 import io.minio.messages.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
+import io.minio.messages.AbortIncompleteMultipartUpload as MinioAbortIncompleteMultipartUpload
+import io.minio.messages.Expiration as MinioExpiration
+import io.minio.messages.LifecycleRule as MinioLifecycleRule
+import io.minio.messages.NoncurrentVersionExpiration as MinioNoncurrentVersionExpiration
+import io.minio.messages.NoncurrentVersionTransition as MinioNoncurrentVersionTransition
+import io.minio.messages.Status as MinioRuleStatus
+import io.minio.messages.Tag as MinioTag
+import io.minio.messages.Transition as MinioTransition
 import java.io.IOException
 import java.io.InputStream
 import java.lang.reflect.InvocationTargetException
@@ -74,14 +78,10 @@ import kotlin.lazy
 import kotlin.let
 import kotlin.runCatching
 import kotlin.to
-import io.minio.messages.AbortIncompleteMultipartUpload as MinioAbortIncompleteMultipartUpload
-import io.minio.messages.Expiration as MinioExpiration
-import io.minio.messages.LifecycleRule as MinioLifecycleRule
-import io.minio.messages.NoncurrentVersionExpiration as MinioNoncurrentVersionExpiration
-import io.minio.messages.NoncurrentVersionTransition as MinioNoncurrentVersionTransition
-import io.minio.messages.Status as MinioRuleStatus
-import io.minio.messages.Tag as MinioTag
-import io.minio.messages.Transition as MinioTransition
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 
 /**
  * MinIO implementation of IObjectStorageService

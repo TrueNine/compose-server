@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.security.crypto
 
 import io.github.truenine.composeserver.consts.IRegexes
-import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.test.*
+import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 
 class ByteArrayExtensionsTest {
   private val log = LoggerFactory.getLogger(ByteArrayExtensionsTest::class.java)

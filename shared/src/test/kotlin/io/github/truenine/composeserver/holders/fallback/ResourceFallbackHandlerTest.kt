@@ -2,14 +2,14 @@ package io.github.truenine.composeserver.holders.fallback
 
 import io.github.truenine.composeserver.holders.config.*
 import io.mockk.*
+import kotlin.test.*
+import kotlin.test.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
-import kotlin.test.*
-import kotlin.test.assertNotNull
 
 class ResourceFallbackHandlerTest {
 

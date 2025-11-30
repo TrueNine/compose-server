@@ -3,10 +3,10 @@ package io.github.truenine.composeserver.depend.paho
 import io.github.truenine.composeserver.depend.paho.paho.MqttPahoClientWrapper
 import io.github.truenine.composeserver.depend.paho.paho.subscribe
 import jakarta.annotation.Resource
+import kotlin.test.Ignore
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.Ignore
 
 @SpringBootTest
 class PahoTest {

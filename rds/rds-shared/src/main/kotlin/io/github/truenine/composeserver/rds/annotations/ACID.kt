@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.rds.annotations
 
-import org.springframework.transaction.annotation.Transactional
 import java.lang.annotation.Inherited
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * Marks a function, class, or property as adhering to the ACID (Atomicity, Consistency, Isolation, Durability) principles. This annotation ensures that the

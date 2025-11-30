@@ -1,14 +1,14 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
+import java.time.Duration
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
-import java.time.Duration
-import kotlin.test.*
 
 /**
  * Redis test container integration tests.

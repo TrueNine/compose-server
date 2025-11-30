@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.gradleplugin.jar
 
+import kotlin.test.assertEquals
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class JarExtensionConfigTest {
 

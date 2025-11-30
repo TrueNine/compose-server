@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
 import io.github.truenine.composeserver.toMillis
+import java.time.*
 import tools.jackson.core.JsonGenerator
 import tools.jackson.core.JsonToken
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueSerializer
 import tools.jackson.databind.jsontype.TypeSerializer
-import java.time.*
 
 /**
  * # ISO8601 millisecond timestamp serializer

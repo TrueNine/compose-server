@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.security.crypto
 
-import org.junit.jupiter.api.Test
 import kotlin.test.*
+import org.junit.jupiter.api.Test
 
 /** Test cases for String extension functions */
 class StringExtensionsTest {

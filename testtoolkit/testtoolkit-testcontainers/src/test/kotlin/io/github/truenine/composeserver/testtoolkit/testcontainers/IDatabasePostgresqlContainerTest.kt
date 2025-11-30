@@ -1,13 +1,13 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
+import java.sql.DriverManager
+import java.sql.SQLException
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.jdbc.core.JdbcTemplate
-import java.sql.DriverManager
-import java.sql.SQLException
-import kotlin.test.*
 
 @SpringBootTest
 class IDatabasePostgresqlContainerTest : IDatabasePostgresqlContainer {

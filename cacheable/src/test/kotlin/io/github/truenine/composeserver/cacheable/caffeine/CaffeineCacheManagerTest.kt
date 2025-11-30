@@ -5,10 +5,10 @@ import io.github.truenine.composeserver.cacheable.get
 import io.github.truenine.composeserver.consts.ICacheNames
 import io.github.truenine.composeserver.slf4j
 import jakarta.annotation.Resource
+import kotlin.test.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.*
 import org.springframework.cache.caffeine.CaffeineCacheManager
-import kotlin.test.*
 
 private val log = slf4j<CaffeineCacheManagerTest>()
 

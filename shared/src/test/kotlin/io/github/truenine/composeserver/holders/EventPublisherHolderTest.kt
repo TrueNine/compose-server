@@ -3,12 +3,12 @@ package io.github.truenine.composeserver.holders
 import io.github.truenine.composeserver.holders.EventPublisherHolder.component1
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.context.ApplicationEventPublisher
-import kotlin.test.*
 
 class EventPublisherHolderTest {
 

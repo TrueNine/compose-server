@@ -12,9 +12,9 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.tools.CleanOperation
+import kotlin.coroutines.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.*
 
 /**
  * Code clean-up service interface.

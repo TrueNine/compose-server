@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.holders.config
 
+import kotlin.test.*
+import kotlin.test.assertNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.*
-import kotlin.test.assertNull
 
 class ResourceHolderConfigurationTest {
 

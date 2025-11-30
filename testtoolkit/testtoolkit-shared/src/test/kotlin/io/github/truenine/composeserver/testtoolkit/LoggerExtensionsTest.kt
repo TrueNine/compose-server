@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import org.slf4j.LoggerFactory
 import kotlin.test.*
+import org.slf4j.LoggerFactory
 
 /**
  * SLF4J function tests.

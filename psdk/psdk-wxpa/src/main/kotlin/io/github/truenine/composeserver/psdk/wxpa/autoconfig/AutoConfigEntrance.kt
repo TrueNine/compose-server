@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.psdk.wxpa.autoconfig
 
+import io.github.truenine.composeserver.depend.jackson.autoconfig.AutoConfigEntrance as JacksonAutoConfigEntrance
 import io.github.truenine.composeserver.psdk.wxpa.properties.WechatProperties
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Import
 import org.springframework.scheduling.annotation.EnableAsync
-import io.github.truenine.composeserver.depend.jackson.autoconfig.AutoConfigEntrance as JacksonAutoConfigEntrance
 
 @AutoConfiguration
 @EnableConfigurationProperties(WechatProperties::class)

@@ -3,8 +3,6 @@ package io.github.truenine.composeserver.security.crypto
 import io.github.truenine.composeserver.enums.EncryptAlgorithm
 import io.github.truenine.composeserver.security.crypto.domain.*
 import io.github.truenine.composeserver.slf4j
-import org.bouncycastle.jce.ECNamedCurveTable
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.*
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -12,6 +10,8 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.SecretKeySpec
+import org.bouncycastle.jce.ECNamedCurveTable
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 
 /**
  * High-performance cryptographic key management provider for the Compose Server framework.

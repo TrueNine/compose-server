@@ -2,10 +2,10 @@ package io.github.truenine.composeserver.depend.springdocopenapi
 
 import io.github.truenine.composeserver.depend.springdocopenapi.properties.*
 import jakarta.annotation.Resource
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
-import kotlin.test.*
 
 @SpringBootTest(classes = [TestApplication::class])
 @TestPropertySource(

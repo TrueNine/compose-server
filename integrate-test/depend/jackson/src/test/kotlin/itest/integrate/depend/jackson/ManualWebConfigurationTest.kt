@@ -2,6 +2,9 @@ package itest.integrate.depend.jackson
 
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
+import java.time.*
+import java.util.*
+import kotlin.test.assertNotNull
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,9 +21,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.annotation.*
 import tools.jackson.databind.ObjectMapper
-import java.time.*
-import java.util.*
-import kotlin.test.assertNotNull
 
 /**
  * Manually configured web integration tests.

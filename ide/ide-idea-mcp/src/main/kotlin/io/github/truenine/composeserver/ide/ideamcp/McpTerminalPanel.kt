@@ -8,11 +8,11 @@ import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.ui.components.*
 import com.intellij.util.ui.JBUI
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
-import kotlinx.coroutines.*
 import java.awt.*
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import javax.swing.*
+import kotlinx.coroutines.*
 
 /** MCP terminal clean-up panel providing command input and output cleaning features. */
 class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(true, true), Disposable {

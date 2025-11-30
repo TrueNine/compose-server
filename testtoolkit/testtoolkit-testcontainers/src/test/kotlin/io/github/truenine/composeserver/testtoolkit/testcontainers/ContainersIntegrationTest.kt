@@ -3,13 +3,13 @@ package io.github.truenine.composeserver.testtoolkit.testcontainers
 import io.github.truenine.composeserver.testtoolkit.log
 import io.minio.*
 import jakarta.annotation.Resource
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.jdbc.core.JdbcTemplate
-import kotlin.test.*
 
 /**
  * Containers integration tests.

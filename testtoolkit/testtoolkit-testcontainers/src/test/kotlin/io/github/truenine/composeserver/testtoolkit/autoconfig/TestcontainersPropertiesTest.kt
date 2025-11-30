@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
 import io.github.truenine.composeserver.testtoolkit.properties.*
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import org.junit.jupiter.api.Test
 
 /** TestcontainersProperties test class. */
 class TestcontainersPropertiesTest {

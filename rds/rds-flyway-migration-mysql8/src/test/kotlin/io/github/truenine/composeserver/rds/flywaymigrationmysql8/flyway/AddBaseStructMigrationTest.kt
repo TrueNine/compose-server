@@ -2,13 +2,13 @@ package io.github.truenine.composeserver.rds.flywaymigrationmysql8.flyway
 
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabaseMysqlContainer
 import jakarta.annotation.Resource
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * add_base_struct stored procedure tests.

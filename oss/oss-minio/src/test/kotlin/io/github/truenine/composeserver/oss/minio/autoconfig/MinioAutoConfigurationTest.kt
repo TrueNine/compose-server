@@ -3,12 +3,12 @@ package io.github.truenine.composeserver.oss.minio.autoconfig
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.minio.MinioClient
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.AutoConfigurations
 import org.springframework.boot.test.context.runner.ApplicationContextRunner
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 /**
  * Test for MinIO autoconfiguration mechanism

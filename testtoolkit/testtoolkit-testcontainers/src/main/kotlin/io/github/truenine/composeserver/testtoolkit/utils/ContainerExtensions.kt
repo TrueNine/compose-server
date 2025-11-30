@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.testtoolkit.utils
 
+import java.time.Duration
 import org.testcontainers.containers.Container
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
-import java.time.Duration
 
 /**
  * Container extension functions.

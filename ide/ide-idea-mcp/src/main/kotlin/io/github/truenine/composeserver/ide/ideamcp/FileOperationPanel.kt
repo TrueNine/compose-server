@@ -12,9 +12,9 @@ import com.intellij.ui.components.*
 import com.intellij.util.ui.JBUI
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.services.*
-import kotlinx.coroutines.*
 import java.awt.*
 import javax.swing.*
+import kotlinx.coroutines.*
 
 /** File operation panel that provides file selection and batch operations, integrating error view and code clean-up features. */
 class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(true, true), Disposable {

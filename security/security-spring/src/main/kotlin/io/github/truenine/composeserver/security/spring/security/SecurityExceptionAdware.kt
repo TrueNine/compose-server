@@ -6,13 +6,13 @@ import io.github.truenine.composeserver.enums.MediaTypes
 import io.github.truenine.composeserver.slf4j
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import java.nio.charset.Charset
+import java.util.*
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.access.AccessDeniedHandler
 import tools.jackson.databind.ObjectMapper
-import java.nio.charset.Charset
-import java.util.*
 
 /**
  * Security exception filter.

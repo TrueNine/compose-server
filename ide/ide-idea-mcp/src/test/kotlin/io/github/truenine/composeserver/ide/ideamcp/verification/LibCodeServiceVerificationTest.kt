@@ -4,8 +4,8 @@ import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeServiceImpl
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
 import kotlin.test.*
+import kotlinx.coroutines.runBlocking
 
 /**
  * LibCodeService verification tests.

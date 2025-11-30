@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.gradleplugin
 
 import io.github.truenine.composeserver.gradleplugin.entrance.ConfigEntrance
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class MainTest {
 

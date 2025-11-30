@@ -5,13 +5,13 @@ import io.github.truenine.composeserver.depend.springdocopenapi.autoconfig.OpenA
 import io.github.truenine.composeserver.depend.springdocopenapi.properties.SpringdocOpenApiProperties
 import io.swagger.v3.oas.models.OpenAPI
 import jakarta.annotation.Resource
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.TestPropertySource
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 @SpringBootTest(classes = [TestApplication::class])
 @TestPropertySource(properties = ["compose.depend.springdoc-open-api.group=auto-config-test", "compose.depend.springdoc-open-api.enable-jwt-header=true"])

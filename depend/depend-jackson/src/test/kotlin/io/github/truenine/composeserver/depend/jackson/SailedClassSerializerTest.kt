@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.depend.jackson
 
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.databind.exc.InvalidDefinitionException
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 @SpringBootTest
 class SailedClassSerializerTest {

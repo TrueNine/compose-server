@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver
 
 import io.github.truenine.composeserver.testtoolkit.log
+import kotlin.test.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.test.*
 
 class ResultExtensionsTest {
 

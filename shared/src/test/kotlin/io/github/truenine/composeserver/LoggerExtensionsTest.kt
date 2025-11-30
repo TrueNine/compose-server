@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver
 
-import org.slf4j.Logger
 import kotlin.test.*
+import org.slf4j.Logger
 
 /**
  * Unit tests for LoggerExtensions.kt

@@ -2,8 +2,8 @@ package io.github.truenine.composeserver.ide.ideamcp.services
 
 import com.intellij.openapi.project.Project
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
 import kotlin.test.*
+import kotlinx.coroutines.runBlocking
 
 /** LibCodeService console output tests. Verifies that the service returns complete content and prints detailed information to the console. */
 class LibCodeServiceConsoleTest {

@@ -3,6 +3,8 @@ package io.github.truenine.composeserver.oss.volcengine.autoconfig
 import com.volcengine.tos.TOSV2
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.github.truenine.composeserver.oss.volcengine.properties.VolcengineTosProperties
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -10,8 +12,6 @@ import org.springframework.boot.autoconfigure.AutoConfigurations
 import org.springframework.boot.test.context.runner.ApplicationContextRunner
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 /**
  * Tests the Volcengine TOS auto-configuration mechanism.

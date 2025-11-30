@@ -2,6 +2,7 @@ package io.github.truenine.composeserver.depend.servlet.parameter
 
 import io.github.truenine.composeserver.depend.servlet.TestApplication
 import jakarta.annotation.Resource
+import kotlin.test.*
 import org.apache.catalina.util.URLEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,7 +15,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.context.WebApplicationContext
 import tools.jackson.databind.ObjectMapper
-import kotlin.test.*
 
 /** # Verify how GET parameters are passed to Spring Boot */
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

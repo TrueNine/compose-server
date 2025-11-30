@@ -2,10 +2,10 @@ package io.github.truenine.composeserver.testtoolkit.autoconfig
 
 import io.github.truenine.composeserver.testtoolkit.properties.*
 import io.mockk.*
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.core.env.*
-import kotlin.test.*
 
 class TestConfigurationBeanTest {
 

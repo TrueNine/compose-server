@@ -1,5 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet
 
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
@@ -8,8 +10,6 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
 /** # Ensure the parsing nature of pathVariable */
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

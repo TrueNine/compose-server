@@ -1,5 +1,6 @@
 package io.github.truenine.composeserver.domain
 
+import kotlin.test.*
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
@@ -8,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.annotation.*
 import tools.jackson.databind.ObjectMapper
-import kotlin.test.*
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Import(IPageParamTest.TestPageController::class)

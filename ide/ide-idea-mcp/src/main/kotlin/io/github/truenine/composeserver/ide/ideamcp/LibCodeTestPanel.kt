@@ -7,10 +7,10 @@ import com.intellij.ui.components.*
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeResult
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeService
-import kotlinx.coroutines.*
 import java.awt.*
 import javax.swing.*
 import javax.swing.border.TitledBorder
+import kotlinx.coroutines.*
 
 /**
  * LibCodeService test panel.

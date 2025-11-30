@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.depend.servlet.properties
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
+import kotlin.reflect.KClass
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.http.converter.StringHttpMessageConverter
-import kotlin.reflect.KClass
 
 /**
  * spring web mvc http servlet configuration properties

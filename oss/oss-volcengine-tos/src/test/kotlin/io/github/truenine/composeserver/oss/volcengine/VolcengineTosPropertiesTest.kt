@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.oss.volcengine
 
 import io.github.truenine.composeserver.oss.volcengine.properties.VolcengineTosProperties
+import kotlin.test.*
+import kotlin.test.assertNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.*
-import kotlin.test.assertNull
 
 /** Volcengine TOS configuration properties tests */
 class VolcengineTosPropertiesTest {

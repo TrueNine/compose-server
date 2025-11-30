@@ -4,14 +4,14 @@ import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.oss.*
 import io.github.truenine.composeserver.testtoolkit.log
 import io.minio.MinioClient
+import java.time.Duration
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.*
 import org.testcontainers.containers.MinIOContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.time.Duration
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /** Share link integration test, specifically for testing the actual availability and end-to-end functionality of share links */
 @Testcontainers

@@ -4,9 +4,9 @@ import io.github.truenine.composeserver.holders.config.ResourceSource
 import io.github.truenine.composeserver.holders.config.ResourceType
 import io.github.truenine.composeserver.holders.exception.InvalidResourcePatternException
 import io.github.truenine.composeserver.holders.exception.InvalidResourceSourceException
+import kotlin.test.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
-import kotlin.test.*
 
 class ResourceValidatorTest {
 

@@ -3,13 +3,13 @@ package io.github.truenine.composeserver.holders.resolver
 import io.github.truenine.composeserver.holders.config.*
 import io.github.truenine.composeserver.holders.exception.InvalidResourcePatternException
 import io.mockk.*
+import kotlin.test.*
+import kotlin.test.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.core.io.*
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
-import kotlin.test.*
-import kotlin.test.assertNotNull
 
 class ResourceResolverTest {
 

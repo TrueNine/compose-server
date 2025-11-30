@@ -3,13 +3,13 @@ package io.github.truenine.composeserver.depend.jackson
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
+import java.time.Instant
+import java.time.LocalDateTime
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.module.kotlin.readValue
-import java.time.Instant
-import java.time.LocalDateTime
-import kotlin.test.*
 
 /**
  * Jackson serialization configuration tests

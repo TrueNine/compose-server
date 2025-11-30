@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.generator
 
-import org.junit.jupiter.api.*
 import java.util.*
 import java.util.concurrent.*
 import kotlin.math.abs
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.*
 
 @DisplayName("SynchronizedSimpleSnowflake Tests")
 class SynchronizedSimpleSnowflakeTest {

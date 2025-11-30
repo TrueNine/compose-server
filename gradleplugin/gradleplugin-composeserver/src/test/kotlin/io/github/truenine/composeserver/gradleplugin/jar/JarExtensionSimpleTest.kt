@@ -1,5 +1,7 @@
 package io.github.truenine.composeserver.gradleplugin.jar
 
+import java.io.File
+import kotlin.test.*
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Copy
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
-import java.io.File
-import kotlin.test.*
 
 class JarExtensionSimpleTest {
 

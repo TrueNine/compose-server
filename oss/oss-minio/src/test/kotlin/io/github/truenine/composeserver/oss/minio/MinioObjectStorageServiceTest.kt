@@ -5,12 +5,12 @@ import io.github.truenine.composeserver.oss.*
 import io.github.truenine.composeserver.testtoolkit.log
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IOssMinioContainer
 import io.minio.MinioClient
+import kotlin.test.*
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.test.*
-import kotlin.test.assertNotNull
 
 /** MinIO object storage service test */
 class MinioObjectStorageServiceTest : IOssMinioContainer {

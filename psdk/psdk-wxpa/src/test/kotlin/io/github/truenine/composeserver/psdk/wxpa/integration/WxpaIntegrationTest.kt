@@ -7,14 +7,14 @@ import io.github.truenine.composeserver.psdk.wxpa.exception.WxpaApiException
 import io.github.truenine.composeserver.psdk.wxpa.service.WxpaService
 import io.github.truenine.composeserver.security.crypto.sha1
 import jakarta.annotation.Resource
+import kotlin.test.*
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.condition.EnabledIf
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.*
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 private val log = logger<WxpaIntegrationTest>()
 

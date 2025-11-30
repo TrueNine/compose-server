@@ -2,12 +2,12 @@ package io.github.truenine.composeserver.gradleplugin.dotenv
 
 import io.github.truenine.composeserver.gradleplugin.consts.Constant
 import io.github.truenine.composeserver.gradleplugin.wrap
+import java.io.File
+import javax.inject.Inject
 import org.gradle.api.Project
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.testing.Test
 import org.springframework.boot.gradle.tasks.run.BootRun
-import java.io.File
-import javax.inject.Inject
 
 /**
  * # Dotenv environment variable loader
