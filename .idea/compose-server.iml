@@ -33,6 +33,10 @@
       <excludeFolder url="file://$MODULE_DIR$/.kotlin" />
       <excludeFolder url="file://$MODULE_DIR$/.playwright-mcp" />
       <excludeFolder url="file://$MODULE_DIR$/.qoder" />
+      <excludeFolder url="file://$MODULE_DIR$/.agent" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
+      <excludeFolder url="file://$MODULE_DIR$/.kiro" />
+      <excludeFolder url="file://$MODULE_DIR$/.windsurf" />
     </content>
   </component>
 </module>
