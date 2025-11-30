@@ -33,7 +33,7 @@ mavenPublishing {
     // Detect the Kotlin JVM plugin (including indirect application)
     project.plugins.hasPlugin("org.jetbrains.kotlin.jvm") ||
       project.plugins.hasPlugin("buildlogic.kotlin-conventions") ||
-      project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
+      project.plugins.hasPlugin("buildlogic.kotlin-spring-boot-conventions") -> {
       configure(
         KotlinJvm(
           javadocJar = JavadocJar.Empty(),

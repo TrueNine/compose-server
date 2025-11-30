@@ -1,5 +1,5 @@
 plugins {
-  id("buildlogic.kotlinspring-conventions")
+  id("buildlogic.kotlin-spring-boot-conventions")
   id("buildlogic.spotless-conventions")
 }
 

@@ -2,7 +2,7 @@ val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
 
 plugins {
   `java-library`
-  id("buildlogic.publish-conventions")
+  id("buildlogic.maven-publish-conventions")
   id("buildlogic.repositories-conventions")
   id("buildlogic.jacoco-conventions")
 }
