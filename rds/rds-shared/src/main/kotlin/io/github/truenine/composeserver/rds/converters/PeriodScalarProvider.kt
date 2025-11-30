@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.rds.converters
 
-import java.time.Period
 import org.babyfish.jimmer.sql.runtime.ScalarProvider
+import java.time.Period
 
 class PeriodScalarProvider : ScalarProvider<Period?, String?> {
   override fun toScalar(sqlValue: String): Period? {

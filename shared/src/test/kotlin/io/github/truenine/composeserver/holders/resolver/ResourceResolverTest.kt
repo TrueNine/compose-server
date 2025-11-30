@@ -1,23 +1,15 @@
 package io.github.truenine.composeserver.holders.resolver
 
-import io.github.truenine.composeserver.holders.config.FallbackConfiguration
-import io.github.truenine.composeserver.holders.config.ResourceSource
-import io.github.truenine.composeserver.holders.config.ResourceType
+import io.github.truenine.composeserver.holders.config.*
 import io.github.truenine.composeserver.holders.exception.InvalidResourcePatternException
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.springframework.core.io.ByteArrayResource
-import org.springframework.core.io.Resource
-import org.springframework.core.io.ResourceLoader
+import org.springframework.core.io.*
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import kotlin.test.*
+import kotlin.test.assertNotNull
 
 class ResourceResolverTest {
 

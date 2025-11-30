@@ -3,14 +3,9 @@ package io.github.truenine.composeserver.ide.ideamcp.services
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import io.github.truenine.composeserver.ide.ideamcp.tools.CleanOperation
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import io.mockk.*
 import kotlinx.coroutines.runBlocking
+import kotlin.test.*
 
 /** CleanService unit tests. */
 class CleanServiceTest {

@@ -5,10 +5,8 @@ import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeServiceImpl
 import io.github.truenine.composeserver.ide.ideamcp.testutil.MockDataGenerator
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
 import io.mockk.mockk
-import kotlin.test.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
+import kotlin.test.*
 
 /**
  * LibCodeService usage examples.

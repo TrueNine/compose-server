@@ -1,10 +1,7 @@
 package io.github.truenine.composeserver
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.slf4j.Logger
+import kotlin.test.*
 
 /**
  * Unit tests for LoggerExtensions.kt

@@ -2,15 +2,9 @@ package io.github.truenine.composeserver.security.crypto
 
 import io.github.truenine.composeserver.consts.IRegexes
 import io.github.truenine.composeserver.slf4j
-import java.util.Base64
+import java.util.*
 import kotlin.system.measureTimeMillis
-import kotlin.test.Test
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 private val log = slf4j<IBase64Test>()
 

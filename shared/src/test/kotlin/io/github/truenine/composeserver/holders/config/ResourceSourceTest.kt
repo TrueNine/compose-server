@@ -3,15 +3,12 @@ package io.github.truenine.composeserver.holders.config
 import io.github.truenine.composeserver.holders.exception.InvalidResourceSourceException
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import kotlin.test.*
 
 class ResourceSourceTest {
 

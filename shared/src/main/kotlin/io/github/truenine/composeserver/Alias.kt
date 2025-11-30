@@ -4,9 +4,7 @@ import io.github.truenine.composeserver.domain.IPage
 import io.github.truenine.composeserver.domain.IPageParam
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
+import java.time.*
 
 /**
  * String type alias for consistent string handling across the system.

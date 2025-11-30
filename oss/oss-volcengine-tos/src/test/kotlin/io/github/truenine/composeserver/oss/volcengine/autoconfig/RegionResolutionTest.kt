@@ -2,8 +2,8 @@ package io.github.truenine.composeserver.oss.volcengine.autoconfig
 
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.github.truenine.composeserver.oss.volcengine.properties.VolcengineTosProperties
-import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 /** Simple region resolution logic tests */
 class RegionResolutionTest {

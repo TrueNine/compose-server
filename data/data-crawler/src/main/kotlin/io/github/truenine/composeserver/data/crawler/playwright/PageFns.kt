@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.data.crawler.playwright
 import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Locator.WaitForOptions
 import com.microsoft.playwright.Page
-import com.microsoft.playwright.options.Cookie
-import com.microsoft.playwright.options.LoadState
-import com.microsoft.playwright.options.WaitForSelectorState
+import com.microsoft.playwright.options.*
 
 @Suppress("UNCHECKED_CAST")
 fun Page.localStorage(): Map<String, String> {

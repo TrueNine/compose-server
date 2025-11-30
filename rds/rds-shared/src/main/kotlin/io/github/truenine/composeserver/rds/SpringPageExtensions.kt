@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.rds
 import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.Pr
 import io.github.truenine.composeserver.domain.IPage
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.*
 
 /** # Wrap paging result into a wrapper object */
 @Deprecated("Use toPr or toIPage which are more idiomatic for Kotlin", replaceWith = ReplaceWith("toPr()", "io.github.truenine.composeserver.rds.toPr"))

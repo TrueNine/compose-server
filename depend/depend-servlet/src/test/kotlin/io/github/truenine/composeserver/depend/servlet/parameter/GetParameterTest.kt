@@ -2,12 +2,6 @@ package io.github.truenine.composeserver.depend.servlet.parameter
 
 import io.github.truenine.composeserver.depend.servlet.TestApplication
 import jakarta.annotation.Resource
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertIs
-import kotlin.test.assertNotNull
 import org.apache.catalina.util.URLEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,12 +11,10 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.MissingServletRequestParameterException
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.context.WebApplicationContext
 import tools.jackson.databind.ObjectMapper
+import kotlin.test.*
 
 /** # Verify how GET parameters are passed to Spring Boot */
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.gradleplugin
 
 import io.github.truenine.composeserver.gradleplugin.consts.Constant
-import kotlin.test.assertEquals
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class GradleFnsTest {
 

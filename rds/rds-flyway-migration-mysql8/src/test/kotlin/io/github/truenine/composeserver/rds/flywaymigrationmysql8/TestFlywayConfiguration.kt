@@ -1,12 +1,10 @@
 package io.github.truenine.composeserver.rds.flywaymigrationmysql8
 
-import javax.sql.DataSource
 import org.flywaydb.core.Flyway
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.flyway.autoconfigure.FlywayMigrationInitializer
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
+import javax.sql.DataSource
 
 @Configuration
 @ConditionalOnClass(Flyway::class)

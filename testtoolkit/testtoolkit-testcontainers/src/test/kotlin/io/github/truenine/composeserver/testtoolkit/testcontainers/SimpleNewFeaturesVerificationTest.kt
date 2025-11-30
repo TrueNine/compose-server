@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 /**
  * Simple new features verification tests.

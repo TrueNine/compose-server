@@ -1,14 +1,12 @@
 package io.github.truenine.composeserver.security
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import io.mockk.*
 import org.junit.jupiter.api.Test
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /** Test AuthenticationManager extension functions */
 class AuthenticationManagerFnsTest {

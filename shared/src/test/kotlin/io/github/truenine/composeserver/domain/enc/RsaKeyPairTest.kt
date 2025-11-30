@@ -7,10 +7,7 @@ import java.math.BigInteger
 import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Verifies the core behaviour of {@link RsaKeyPair}. */
 class RsaKeyPairTest {

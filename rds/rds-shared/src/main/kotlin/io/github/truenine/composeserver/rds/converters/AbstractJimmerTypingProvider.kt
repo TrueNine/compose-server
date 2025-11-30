@@ -1,11 +1,11 @@
 package io.github.truenine.composeserver.rds.converters
 
 import io.github.truenine.composeserver.IAnyEnum
+import org.babyfish.jimmer.sql.runtime.AbstractScalarProvider
 import java.lang.reflect.Method
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
-import org.babyfish.jimmer.sql.runtime.AbstractScalarProvider
 
 abstract class AbstractJimmerTypingProvider<T : IAnyEnum, S : Any>(ct: KClass<T>, st: KClass<S>) : AbstractScalarProvider<T, S>(ct.java, st.java) {
   private val converterCache: MutableMap<Type, Method> = ConcurrentHashMap()

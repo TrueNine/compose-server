@@ -4,12 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
 import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.JCheckBox
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 
 /**
  * Code clean-up options dialog.

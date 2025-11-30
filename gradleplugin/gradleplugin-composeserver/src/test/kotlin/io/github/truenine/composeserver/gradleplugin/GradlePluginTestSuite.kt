@@ -2,9 +2,7 @@ package io.github.truenine.composeserver.gradleplugin
 
 import io.github.truenine.composeserver.gradleplugin.consts.ConstantTest
 import io.github.truenine.composeserver.gradleplugin.consts.GradleProjectDelegatorTest
-import io.github.truenine.composeserver.gradleplugin.dotenv.DotenvConfigTest
-import io.github.truenine.composeserver.gradleplugin.dotenv.DotenvIntegrationTest
-import io.github.truenine.composeserver.gradleplugin.dotenv.DotenvLoaderTest
+import io.github.truenine.composeserver.gradleplugin.dotenv.*
 import io.github.truenine.composeserver.gradleplugin.entrance.ConfigEntranceTest
 import io.github.truenine.composeserver.gradleplugin.generator.GradleGeneratorConfigTest
 import io.github.truenine.composeserver.gradleplugin.generator.MavenRepoTypeTest

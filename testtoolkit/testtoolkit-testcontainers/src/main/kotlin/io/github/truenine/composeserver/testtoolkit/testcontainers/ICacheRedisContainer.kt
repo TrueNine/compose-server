@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
-import java.time.Duration
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
+import java.time.Duration
 
 /**
  * Redis test container interface.

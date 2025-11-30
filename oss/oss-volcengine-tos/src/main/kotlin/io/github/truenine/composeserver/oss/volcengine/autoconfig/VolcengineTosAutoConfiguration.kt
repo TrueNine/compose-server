@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.oss.volcengine.autoconfig
 
-import com.volcengine.tos.TOSClientConfiguration
-import com.volcengine.tos.TOSV2
-import com.volcengine.tos.TOSV2ClientBuilder
+import com.volcengine.tos.*
 import com.volcengine.tos.auth.StaticCredentials
 import com.volcengine.tos.transport.TransportConfig
 import io.github.truenine.composeserver.logger

@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.security.crypto
 
-import java.security.Key
-import java.security.PrivateKey
-import java.security.PublicKey
+import java.security.*
 import java.util.regex.Pattern
 
 /**

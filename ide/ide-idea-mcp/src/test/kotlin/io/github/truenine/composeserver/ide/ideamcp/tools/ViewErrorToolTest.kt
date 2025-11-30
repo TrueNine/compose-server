@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
+import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlinx.serialization.json.Json
 
 /** ViewErrorTool unit tests. */
 class ViewErrorToolTest {

@@ -1,11 +1,8 @@
 package io.github.truenine.composeserver.data.extract.domain
 
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.test.*
 
 class CnDistrictCodeTest {
 

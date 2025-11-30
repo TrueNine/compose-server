@@ -2,9 +2,7 @@ package io.github.truenine.composeserver.consts
 
 import io.github.truenine.composeserver.testtoolkit.log
 import java.nio.charset.StandardCharsets
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Validates HTTP header constants and helper methods defined in {@link IHeaders}. */
 class IHeadersTest {

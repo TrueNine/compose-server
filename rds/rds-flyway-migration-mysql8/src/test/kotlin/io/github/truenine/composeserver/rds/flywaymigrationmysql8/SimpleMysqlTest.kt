@@ -2,10 +2,10 @@ package io.github.truenine.composeserver.rds.flywaymigrationmysql8
 
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabaseMysqlContainer
 import jakarta.annotation.Resource
-import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
+import kotlin.test.assertEquals
 
 @SpringBootTest
 class SimpleMysqlTest : IDatabaseMysqlContainer {

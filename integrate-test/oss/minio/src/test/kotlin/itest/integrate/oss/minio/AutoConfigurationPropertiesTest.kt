@@ -1,13 +1,7 @@
 package itest.integrate.oss.minio
 
 import io.github.truenine.composeserver.enums.HttpMethod
-import io.github.truenine.composeserver.oss.CorsRule
-import io.github.truenine.composeserver.oss.CreateBucketRequest
-import io.github.truenine.composeserver.oss.IObjectStorageService
-import io.github.truenine.composeserver.oss.LifecycleExpiration
-import io.github.truenine.composeserver.oss.LifecycleRule
-import io.github.truenine.composeserver.oss.LifecycleRuleStatus
-import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
+import io.github.truenine.composeserver.oss.*
 import io.github.truenine.composeserver.oss.Tag
 import io.github.truenine.composeserver.oss.minio.autoconfig.MinioAutoConfiguration
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
@@ -15,17 +9,14 @@ import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IOssMinioContainer
 import io.minio.MinioClient
 import jakarta.annotation.Resource
-import java.io.ByteArrayInputStream
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.api.*
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import java.io.ByteArrayInputStream
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @SpringBootTest(classes = [AutoConfigurationPropertiesTest.TestConfiguration::class])
 class AutoConfigurationPropertiesTest : IOssMinioContainer {

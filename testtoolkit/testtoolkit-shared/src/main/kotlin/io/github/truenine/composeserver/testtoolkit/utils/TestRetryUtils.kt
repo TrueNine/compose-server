@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.testtoolkit.utils
 
+import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
-import org.slf4j.LoggerFactory
 
 /**
  * Test retry utilities.

@@ -2,13 +2,6 @@ package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import io.github.truenine.composeserver.testtoolkit.SpringBootConfigurationPropertiesPrefixes
 import jakarta.annotation.Resource
-import java.net.InetSocketAddress
-import java.net.Socket
-import java.util.function.Supplier
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -17,6 +10,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.test.context.DynamicPropertyRegistry
+import java.net.InetSocketAddress
+import java.net.Socket
+import java.util.function.Supplier
+import kotlin.test.*
 
 /**
  * MinIO test container integration tests.

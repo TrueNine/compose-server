@@ -1,11 +1,7 @@
 package io.github.truenine.composeserver.rds.entities
 
 import io.github.truenine.composeserver.instant
-import org.babyfish.jimmer.sql.Column
-import org.babyfish.jimmer.sql.Default
-import org.babyfish.jimmer.sql.LogicalDeleted
-import org.babyfish.jimmer.sql.MappedSuperclass
-import org.babyfish.jimmer.sql.Version
+import org.babyfish.jimmer.sql.*
 
 @MappedSuperclass
 interface IEntity : IPersistentEntity {

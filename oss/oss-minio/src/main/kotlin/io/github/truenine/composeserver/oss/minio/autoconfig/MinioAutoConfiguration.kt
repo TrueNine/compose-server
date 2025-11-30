@@ -6,7 +6,6 @@ import io.github.truenine.composeserver.oss.minio.MinioObjectStorageService
 import io.github.truenine.composeserver.oss.minio.properties.MinioProperties
 import io.github.truenine.composeserver.oss.properties.OssProperties
 import io.minio.MinioClient
-import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -15,6 +14,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
+import java.util.concurrent.TimeUnit
 
 /**
  * Autoconfiguration for MinIO

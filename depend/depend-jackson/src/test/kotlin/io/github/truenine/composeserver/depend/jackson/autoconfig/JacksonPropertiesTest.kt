@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.depend.jackson.autoconfig
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 

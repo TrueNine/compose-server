@@ -5,9 +5,7 @@ import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.ui.components.JBScrollPane
 import java.awt.BorderLayout
 import java.awt.Font
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JTextArea
+import javax.swing.*
 
 /** Simplified MCP debug panel. */
 class McpDebugPanel(private val project: Project) : SimpleToolWindowPanel(true, true) {

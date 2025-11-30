@@ -3,7 +3,6 @@ package io.github.truenine.composeserver.cacheable.autoconfig
 import io.github.truenine.composeserver.consts.ICacheNames
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import io.github.truenine.composeserver.logger
-import java.time.Duration
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Bean
@@ -12,11 +11,10 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer
-import org.springframework.data.redis.serializer.RedisSerializationContext
-import org.springframework.data.redis.serializer.StringRedisSerializer
+import org.springframework.data.redis.serializer.*
 import tools.jackson.databind.DeserializationFeature
 import tools.jackson.databind.json.JsonMapper
+import java.time.Duration
 
 /**
  * Redis cache component configuration

@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.oss.properties
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
-import java.time.Duration
 import org.springframework.boot.context.properties.ConfigurationProperties
+import java.time.Duration
 
 /**
  * Modern OSS configuration properties

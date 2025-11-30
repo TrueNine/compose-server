@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.holders
 
-import java.io.Closeable
-import java.util.UUID
-import kotlin.reflect.KClass
 import org.springframework.core.NamedInheritableThreadLocal
+import java.io.Closeable
+import java.util.*
+import kotlin.reflect.KClass
 
 abstract class AbstractThreadLocalHolder<T : Any>(nameId: KClass<*>? = null, defaultValue: T? = null) : Closeable {
   private val holder: InheritableThreadLocal<T> by lazy {

@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.security.annotations
 
 import io.github.truenine.composeserver.security.autoconfig.JwtVerifierAutoConfiguration
-import java.lang.annotation.Inherited
 import org.springframework.context.annotation.Import
+import java.lang.annotation.Inherited
 
 /**
  * Enable JWT verifier client auto-configuration.

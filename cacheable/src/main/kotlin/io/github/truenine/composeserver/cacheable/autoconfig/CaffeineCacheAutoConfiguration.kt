@@ -4,11 +4,9 @@ import com.github.benmanes.caffeine.cache.AsyncCache
 import com.github.benmanes.caffeine.cache.Caffeine
 import io.github.truenine.composeserver.consts.ICacheNames
 import io.github.truenine.composeserver.logger
-import java.time.Duration
 import org.springframework.cache.caffeine.CaffeineCacheManager
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
+import java.time.Duration
 
 private val log = logger<CaffeineCacheAutoConfiguration>()
 

@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.consts
 
 import io.github.truenine.composeserver.testtoolkit.log
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Validates cache name constants declared in {@link ICacheNames}. */
 class ICacheNamesTest {

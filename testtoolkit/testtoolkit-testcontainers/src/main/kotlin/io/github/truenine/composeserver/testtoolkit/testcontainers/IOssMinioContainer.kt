@@ -1,13 +1,13 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import io.github.truenine.composeserver.testtoolkit.SpringBootConfigurationPropertiesPrefixes
-import java.time.Duration
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
+import java.time.Duration
 
 /**
  * MinIO test container interface.

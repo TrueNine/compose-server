@@ -2,8 +2,8 @@ package io.github.truenine.composeserver.oss.minio.properties
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import io.github.truenine.composeserver.oss.properties.OssProperties
-import java.time.Duration
 import org.springframework.boot.context.properties.ConfigurationProperties
+import java.time.Duration
 
 /**
  * Modern MinIO configuration properties

@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.consts
 
 import io.github.truenine.composeserver.testtoolkit.log
-import kotlin.test.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Validates network address utilities exposed via {@link IInterAddr}. */
 class IInterAddrTest {

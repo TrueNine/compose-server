@@ -28,6 +28,16 @@ dependencies {
   testImplementation(libs.org.springframework.boot.spring.boot.test.autoconfigure)
   testImplementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
   testImplementation(libs.tools.jackson.core.jackson.databind)
+  
+  // Kotest property-based testing
+  testImplementation(libs.io.kotest.kotest.runner.junit5)
+  testImplementation(libs.io.kotest.kotest.assertions.core)
+  testImplementation(libs.io.kotest.kotest.property)
+}
+
+// Configure test framework for property-based testing
+tasks.withType<Test> {
+  useJUnitPlatform()
 }
 
 // Disable KAPT for test sources to avoid Jackson 3.x annotation processing issues

@@ -1,9 +1,6 @@
 package io.github.truenine.composeserver.ide.ideamcp
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** FileOperationPanel unit tests verifying basic behavior of the file operation panel. */
 class FileOperationPanelTest {

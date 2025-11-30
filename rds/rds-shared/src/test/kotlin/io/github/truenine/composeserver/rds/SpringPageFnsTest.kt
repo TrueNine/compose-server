@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.rds
 
 import io.github.truenine.composeserver.Pq
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SpringPageFnsTest {
   @Test

@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.domain
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.*
 import java.io.Serializable
 
 /**

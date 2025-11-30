@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.security.annotations
 
 import io.github.truenine.composeserver.security.autoconfig.SecurityPolicyBean
-import java.lang.annotation.Inherited
 import org.springframework.context.annotation.Import
+import java.lang.annotation.Inherited
 
 /**
  * Enable REST security manager configuration.

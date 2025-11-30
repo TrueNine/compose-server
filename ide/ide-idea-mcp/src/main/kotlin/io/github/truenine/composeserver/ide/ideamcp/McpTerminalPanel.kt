@@ -5,27 +5,14 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.SimpleToolWindowPanel
-import com.intellij.ui.components.JBScrollPane
-import com.intellij.ui.components.JBTextArea
-import com.intellij.ui.components.JBTextField
+import com.intellij.ui.components.*
 import com.intellij.util.ui.JBUI
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.Font
+import kotlinx.coroutines.*
+import java.awt.*
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.JButton
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JSplitPane
-import javax.swing.UIManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import javax.swing.*
 
 /** MCP terminal clean-up panel providing command input and output cleaning features. */
 class McpTerminalPanel(private val project: Project) : SimpleToolWindowPanel(true, true), Disposable {

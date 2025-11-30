@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver
 
-import kotlin.reflect.KClass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import kotlin.reflect.KClass
 
 /**
  * Type alias for SLF4J Logger to provide a more descriptive name in the system context.

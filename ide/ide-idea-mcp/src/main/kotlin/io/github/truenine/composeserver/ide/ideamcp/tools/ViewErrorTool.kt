@@ -4,11 +4,11 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
-import java.io.File
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.jetbrains.ide.mcp.Response
 import org.jetbrains.mcpserverplugin.AbstractMcpTool
+import java.io.File
 
 /**
  * Error view tool.

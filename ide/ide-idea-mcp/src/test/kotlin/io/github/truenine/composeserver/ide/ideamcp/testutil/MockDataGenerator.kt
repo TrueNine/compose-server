@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp.testutil
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeMetadata
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeResult
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 import kotlin.random.Random

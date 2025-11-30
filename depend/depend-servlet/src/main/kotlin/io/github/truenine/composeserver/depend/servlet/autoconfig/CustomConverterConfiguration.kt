@@ -1,12 +1,8 @@
 package io.github.truenine.composeserver.depend.servlet.autoconfig
 
-import io.github.truenine.composeserver.depend.servlet.converters.JavaLocalDateConverter
-import io.github.truenine.composeserver.depend.servlet.converters.JavaLocalDateTimeConverter
-import io.github.truenine.composeserver.depend.servlet.converters.JavaLocalTimeConverter
+import io.github.truenine.composeserver.depend.servlet.converters.*
 import io.github.truenine.composeserver.slf4j
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
 
 private val log = slf4j(CustomConverterConfiguration::class)
 

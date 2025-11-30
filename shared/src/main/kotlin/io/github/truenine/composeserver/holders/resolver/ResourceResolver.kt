@@ -7,10 +7,10 @@ import io.github.truenine.composeserver.holders.exception.ResourceIOException
 import io.github.truenine.composeserver.holders.fallback.ResourceFallbackHandler
 import io.github.truenine.composeserver.holders.validation.ResourceValidator
 import io.github.truenine.composeserver.logger
-import java.util.concurrent.ConcurrentHashMap
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Core resource resolver that handles resource resolution with precedence and caching.

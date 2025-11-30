@@ -2,13 +2,13 @@ package io.github.truenine.composeserver.depend.jackson.holders
 
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
-import kotlin.test.assertNotNull
-import kotlin.test.assertSame
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
 import tools.jackson.databind.ObjectMapper
+import kotlin.test.assertNotNull
+import kotlin.test.assertSame
 
 /**
  * ObjectMapperHolder configuration holder tests

@@ -3,8 +3,8 @@ package io.github.truenine.composeserver.ide.ideamcp.demo
 import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeServiceImpl
 import io.mockk.mockk
-import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
+import kotlin.test.Test
 
 /**
  * LibCodeService feature demo.

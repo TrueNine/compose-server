@@ -1,10 +1,7 @@
 package io.github.truenine.composeserver.ide.ideamcp.services
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import kotlin.test.assertNotNull
-import kotlin.test.assertNotSame
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /**
  * ErrorService integration tests.

@@ -1,12 +1,12 @@
 package io.github.truenine.composeserver.gradleplugin.dotenv
 
-import java.io.File
-import java.nio.file.Path
-import kotlin.test.assertEquals
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import java.io.File
+import java.nio.file.Path
+import kotlin.test.assertEquals
 
 class DotenvPluginFunctionalTest {
 

@@ -2,11 +2,9 @@ package itest.integrate.depend.jackson
 
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper
+import kotlin.test.*
 
 @SpringBootTest
 class NonInternalObjectMapperIntegrationTest {

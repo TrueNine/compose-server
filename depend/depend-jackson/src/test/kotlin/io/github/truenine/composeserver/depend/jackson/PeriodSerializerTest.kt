@@ -2,12 +2,12 @@ package io.github.truenine.composeserver.depend.jackson
 
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
-import java.time.Period
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.module.kotlin.readValue
+import java.time.Period
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @SpringBootTest
 class PeriodSerializerTest {

@@ -2,12 +2,7 @@ package io.github.truenine.composeserver.ide.ideamcp.actions
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.JCheckBox
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 
 /**
  * Error view options dialog.

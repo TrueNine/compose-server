@@ -1,11 +1,8 @@
 package io.github.truenine.composeserver.ide.ideamcp.tools
 
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.serialization.json.Json
+import kotlin.test.*
 
 /** CleanCodeTool unit tests. */
 class CleanCodeToolTest {

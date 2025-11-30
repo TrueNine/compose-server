@@ -2,11 +2,8 @@ package io.github.truenine.composeserver.ide.ideamcp.services
 
 import com.intellij.openapi.project.Project
 import io.mockk.mockk
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
+import kotlin.test.*
 
 /** LibCodeService console output tests. Verifies that the service returns complete content and prints detailed information to the console. */
 class LibCodeServiceConsoleTest {

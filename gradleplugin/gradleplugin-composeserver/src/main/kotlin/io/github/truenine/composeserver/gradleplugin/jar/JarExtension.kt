@@ -6,9 +6,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.extra
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.*
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 class JarExtension(private val project: Project, private val dsl: JarExtensionConfig) {

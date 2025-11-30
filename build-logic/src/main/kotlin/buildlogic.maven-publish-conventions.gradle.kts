@@ -1,7 +1,4 @@
-import com.vanniktech.maven.publish.GradlePlugin
-import com.vanniktech.maven.publish.JavadocJar
-import com.vanniktech.maven.publish.KotlinJvm
-import com.vanniktech.maven.publish.VersionCatalog
+import com.vanniktech.maven.publish.*
 
 val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
 

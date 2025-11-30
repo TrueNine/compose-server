@@ -2,13 +2,10 @@ package itest.integrate.cacheable.factory
 
 import io.github.truenine.composeserver.testtoolkit.testcontainers.ICacheRedisContainer
 import jakarta.annotation.Resource
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertNotNull
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
+import kotlin.test.*
 
 @SpringBootTest
 class RedisConnectionFactoryIntegrationTest : ICacheRedisContainer {

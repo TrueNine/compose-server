@@ -1,8 +1,8 @@
 package io.github.truenine.composeserver.depend.paho.properties
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
-import java.util.*
 import org.springframework.boot.context.properties.ConfigurationProperties
+import java.util.*
 
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.DEPEND_PAHO_CLIENT)
 data class SingleMqttProperties(

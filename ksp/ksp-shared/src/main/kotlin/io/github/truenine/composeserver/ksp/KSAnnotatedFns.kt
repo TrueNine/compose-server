@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.ksp
 
-import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSAnnotation
-import com.google.devtools.ksp.symbol.KSDeclaration
+import com.google.devtools.ksp.symbol.*
 import kotlin.reflect.KClass
 
 fun KSAnnotated.getKsAnnotationsByAnnotationClassQualifiedName(qualifiedName: String): Sequence<KSAnnotation> {

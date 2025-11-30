@@ -1,7 +1,7 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
-import java.util.*
 import org.gradle.api.Action
+import java.util.*
 
 /**
  * # gradle.properties generation configuration

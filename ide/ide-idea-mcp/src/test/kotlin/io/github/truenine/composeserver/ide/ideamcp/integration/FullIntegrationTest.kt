@@ -1,22 +1,10 @@
 package io.github.truenine.composeserver.ide.ideamcp.integration
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import io.github.truenine.composeserver.ide.ideamcp.FileOperationPanel
-import io.github.truenine.composeserver.ide.ideamcp.McpDebugPanel
-import io.github.truenine.composeserver.ide.ideamcp.McpDebugToolWindowFactory
-import io.github.truenine.composeserver.ide.ideamcp.McpTerminalPanel
-import io.github.truenine.composeserver.ide.ideamcp.TerminalOutputInterceptor
-import io.github.truenine.composeserver.ide.ideamcp.actions.CleanCodeAction
-import io.github.truenine.composeserver.ide.ideamcp.actions.ViewErrorAction
-import io.github.truenine.composeserver.ide.ideamcp.actions.ViewLibCodeAction
-import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
-import io.github.truenine.composeserver.ide.ideamcp.services.ErrorService
-import io.github.truenine.composeserver.ide.ideamcp.services.FileManager
-import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeService
-import io.github.truenine.composeserver.ide.ideamcp.tools.CleanCodeTool
-import io.github.truenine.composeserver.ide.ideamcp.tools.TerminalTool
-import io.github.truenine.composeserver.ide.ideamcp.tools.ViewErrorTool
-import io.github.truenine.composeserver.ide.ideamcp.tools.ViewLibCodeTool
+import io.github.truenine.composeserver.ide.ideamcp.*
+import io.github.truenine.composeserver.ide.ideamcp.actions.*
+import io.github.truenine.composeserver.ide.ideamcp.services.*
+import io.github.truenine.composeserver.ide.ideamcp.tools.*
 
 /** Full integration tests for component collaboration and data flow. */
 class FullIntegrationTest : BasePlatformTestCase() {

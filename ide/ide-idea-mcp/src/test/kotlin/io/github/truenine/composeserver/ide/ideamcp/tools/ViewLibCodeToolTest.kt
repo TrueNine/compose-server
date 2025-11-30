@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp.tools
 import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeResult
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeService
-import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

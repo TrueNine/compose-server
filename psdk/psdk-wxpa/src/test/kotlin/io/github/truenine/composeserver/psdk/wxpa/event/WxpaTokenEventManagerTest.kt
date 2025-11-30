@@ -5,14 +5,7 @@ import io.github.truenine.composeserver.psdk.wxpa.core.WxpaTokenManager
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaTicket
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaToken
 import io.github.truenine.composeserver.psdk.wxpa.properties.WxpaProperties
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import java.time.Duration
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import io.mockk.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -21,6 +14,10 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ConfigurableApplicationContext
+import java.time.Duration
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class WxpaTokenEventManagerTest {
 

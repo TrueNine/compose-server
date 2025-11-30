@@ -1,14 +1,10 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
-import io.github.truenine.composeserver.gradleplugin.consts.Constant
-import io.github.truenine.composeserver.gradleplugin.consts.MavenRepos
-import io.github.truenine.composeserver.gradleplugin.consts.MavenRepositoryUrls
+import io.github.truenine.composeserver.gradleplugin.consts.*
 import io.github.truenine.composeserver.gradleplugin.wrap
-import java.io.File
-import java.io.FileWriter
-import java.io.InputStreamReader
-import javax.inject.Inject
 import org.gradle.api.Project
+import java.io.*
+import javax.inject.Inject
 
 /*
  * org.gradle.daemon=true

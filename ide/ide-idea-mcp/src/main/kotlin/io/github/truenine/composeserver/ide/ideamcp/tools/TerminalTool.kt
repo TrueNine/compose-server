@@ -5,12 +5,12 @@ import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.TerminalOutputInterceptor
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
-import java.io.File
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
 import kotlinx.serialization.Serializable
 import org.jetbrains.ide.mcp.Response
 import org.jetbrains.mcpserverplugin.AbstractMcpTool
+import java.io.File
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 /**
  * Terminal command execution tool.

@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.oss
 
 import io.github.truenine.composeserver.enums.HttpMethod
+import kotlinx.coroutines.flow.Flow
 import java.io.InputStream
 import java.time.Duration
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Modern object storage service interface with Kotlin coroutines support

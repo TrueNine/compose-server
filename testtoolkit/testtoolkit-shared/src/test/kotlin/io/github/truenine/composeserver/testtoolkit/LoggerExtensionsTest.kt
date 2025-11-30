@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import org.slf4j.LoggerFactory
+import kotlin.test.*
 
 /**
  * SLF4J function tests.

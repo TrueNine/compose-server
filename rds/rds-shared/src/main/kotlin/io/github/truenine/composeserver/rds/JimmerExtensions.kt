@@ -4,13 +4,13 @@ import io.github.truenine.composeserver.Pq
 import io.github.truenine.composeserver.Pr
 import io.github.truenine.composeserver.domain.IPage
 import io.github.truenine.composeserver.toSafeInt
-import java.sql.Connection
-import kotlin.reflect.KClass
 import org.babyfish.jimmer.Page
 import org.babyfish.jimmer.View
 import org.babyfish.jimmer.sql.fetcher.DtoMetadata
 import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.ast.query.KConfigurableRootQuery
+import java.sql.Connection
+import kotlin.reflect.KClass
 
 /** ## Convert jimmer Page to custom page */
 fun <E : Any> Page<E>.toPr(): IPage<E> {

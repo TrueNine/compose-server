@@ -43,6 +43,7 @@ org-jetbrains-kotlinx-datetime = "0.7.1-0.6.x-compat"
 org-jetbrains-kotlinx-io = "0.8.1"
 org-jetbrains-kotlinx-serialization = "1.9.0"
 org-junit-jupiter = "6.1.0-M1"
+io-kotest = "5.8.0"
 org-liquibase = "5.0.1"
 org-slf4j = "2.1.0-alpha1"
 org-springframework-ai = "1.1.0"
@@ -184,6 +185,9 @@ io-github-truenine-composeserver-testtoolkit-springmvc = { module = "io.github.t
 io-github-truenine-composeserver-testtoolkit-testcontainers = { module = "io.github.truenine:composeserver-testtoolkit-testcontainers", version.ref = "project" }
 io-netty-netty-bom = { module = "io.netty:netty-bom", version.ref = "io-netty" }
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.13.0"
+io-kotest-kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "io-kotest" }
+io-kotest-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "io-kotest" }
+io-kotest-kotest-property = { module = "io.kotest:kotest-property", version.ref = "io-kotest" }
 io-minio-minio = "io.minio:minio:8.6.0"
 io-mockk-mockk = "io.mockk:mockk:1.14.6"
 io-netty-netty-handler = { module = "io.netty:netty-handler", version.ref = "io-netty" }

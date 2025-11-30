@@ -1,10 +1,8 @@
 package io.github.truenine.composeserver.data.extract.service
 
-import io.github.truenine.composeserver.SystemLogger
+import io.github.truenine.composeserver.*
 import io.github.truenine.composeserver.consts.IRegexes
 import io.github.truenine.composeserver.data.extract.domain.CnDistrictCode
-import io.github.truenine.composeserver.nonText
-import io.github.truenine.composeserver.string
 
 /**
  * Lazy loading administrative district code service interface.

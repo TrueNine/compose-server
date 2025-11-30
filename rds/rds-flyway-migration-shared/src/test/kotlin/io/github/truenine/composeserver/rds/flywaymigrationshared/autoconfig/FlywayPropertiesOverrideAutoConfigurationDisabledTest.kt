@@ -3,11 +3,11 @@ package io.github.truenine.composeserver.rds.flywaymigrationshared.autoconfig
 import io.github.truenine.composeserver.rds.flywaymigrationshared.TestEntrance
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
-import kotlin.test.Test
 import org.springframework.boot.flyway.autoconfigure.FlywayProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.TestPropertySource
+import kotlin.test.Test
 
 @SpringBootTest(classes = [TestEntrance::class], properties = ["spring.config.name=application-flyway-disabled"])
 @TestPropertySource(locations = ["classpath:application-flyway-disabled.yaml"])

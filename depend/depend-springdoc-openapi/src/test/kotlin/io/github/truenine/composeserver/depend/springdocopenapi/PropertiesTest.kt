@@ -1,16 +1,11 @@
 package io.github.truenine.composeserver.depend.springdocopenapi
 
-import io.github.truenine.composeserver.depend.springdocopenapi.properties.JwtHeaderInfoProperties
-import io.github.truenine.composeserver.depend.springdocopenapi.properties.SpringdocOpenApiProperties
-import io.github.truenine.composeserver.depend.springdocopenapi.properties.SwaggerDescInfo
+import io.github.truenine.composeserver.depend.springdocopenapi.properties.*
 import jakarta.annotation.Resource
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
+import kotlin.test.*
 
 @SpringBootTest(classes = [TestApplication::class])
 @TestPropertySource(

@@ -1,9 +1,9 @@
 package io.github.truenine.composeserver.testtoolkit.utils
 
-import java.time.Duration
 import org.slf4j.LoggerFactory
 import org.testcontainers.containers.Container
 import org.testcontainers.containers.GenericContainer
+import java.time.Duration
 
 /**
  * Container command execution utility.
