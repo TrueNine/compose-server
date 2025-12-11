@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gradleplugin/gradleplugin-dotenv/gradleplugin-dotenv.iml" filepath="$PROJECT_DIR$/.idea/modules/gradleplugin/gradleplugin-dotenv/gradleplugin-dotenv.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/build-logic/build-logic.iml" filepath="$PROJECT_DIR$/.idea/modules/build-logic/build-logic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/compose-server.iml" filepath="$PROJECT_DIR$/.idea/compose-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/depend/depend-jackson/compose-server.depend.depend-jackson.test.iml" filepath="$PROJECT_DIR$/.idea/modules/depend/depend-jackson/compose-server.depend.depend-jackson.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/docsite/compose-server.docsite.main.iml" filepath="$PROJECT_DIR$/.idea/modules/docsite/compose-server.docsite.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/docsite/compose-server.docsite.test.iml" filepath="$PROJECT_DIR$/.idea/modules/docsite/compose-server.docsite.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gradleplugin/gradleplugin-dotenv/compose-server.gradleplugin.gradleplugin-dotenv.iml" filepath="$PROJECT_DIR$/.idea/modules/gradleplugin/gradleplugin-dotenv/compose-server.gradleplugin.gradleplugin-dotenv.iml" />
     </modules>
   </component>
 </project>

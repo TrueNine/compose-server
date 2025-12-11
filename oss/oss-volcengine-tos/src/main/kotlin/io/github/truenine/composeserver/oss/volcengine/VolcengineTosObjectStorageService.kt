@@ -55,7 +55,21 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     }
 
   override suspend fun deleteBucket(bucketName: String): Result<Unit> =
-    execute("Failed to delete bucket $bucketName") { tosClient.deleteBucket(DeleteBucketInput().setBucket(bucketName)) }
+    execute("Failed to delete bucket $bucketName") {
+      try {
+        tosClient.deleteBucket(DeleteBucketInput().setBucket(bucketName))
+      } catch (e: Exception) {
+        // If the bucket doesn't exist, consider it a successful deletion
+        val mapped = mapTosException(e)
+        if (mapped is BucketNotFoundException) {
+          // Successfully deleted a non-existent bucket
+          return@execute Unit
+        } else {
+          // Re-throw other exceptions
+          throw e
+        }
+      }
+    }
 
   override suspend fun bucketExists(bucketName: String): Result<Boolean> =
     withContext(Dispatchers.IO) {
