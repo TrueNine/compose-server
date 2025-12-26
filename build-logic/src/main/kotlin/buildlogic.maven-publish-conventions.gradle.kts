@@ -60,7 +60,6 @@ mavenPublishing {
     inceptionYear = "2020"
 
     developers {
-
       developer {
         id = "TrueNine"
         name = "Zhao Ritian"
@@ -92,6 +91,14 @@ mavenPublishing {
         id = "muyu"
         email = "1065700104@qq.com"
         roles = listOf("Sponsor")
+        timezone = "GMT+8"
+      }
+      developer {
+        id = "zjarlin"
+        name = "加加林"
+        url = "https://github.com/zjarlin"
+        email = "zjarlin@outlook.com"
+        roles = listOf("Developer", "Partner", "Sponsor")
         timezone = "GMT+8"
       }
     }
