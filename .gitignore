@@ -16,8 +16,12 @@
 !**/src/test/**/build/
 !gradle/wrapper/gradle-wrapper.jar
 
+.vscode/
+.idea/
 .agent/
-.ai/
+.cursorignore
+.qoderignore
+.warpindexignore
 .apt_generated
 .classpath
 .codebuddy/
@@ -72,6 +76,5 @@ src/main/**/out/
 src/test/**/bin/
 src/test/**/out/
 TODO.*
-AGENTS.md
-CLAUDE.md
 GEMINI.md
+WARP.md
