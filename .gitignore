@@ -46,8 +46,6 @@
 .vs
 .windsurf/
 
-/__ai/
-/__aiissues/
 /amplicode.xml
 /build-cache/
 /dist/
