@@ -78,3 +78,4 @@ src/test/**/out/
 TODO.*
 GEMINI.md
 WARP.md
+.editorconfig
