@@ -5,9 +5,7 @@ import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

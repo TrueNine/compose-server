@@ -1,10 +1,10 @@
 package io.github.truenine.composeserver.gradleplugin.dotenv
 
-import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.testing.Test
+import java.io.File
 
 /**
  * # Dotenv Gradle Plugin

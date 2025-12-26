@@ -2,9 +2,7 @@ package io.github.truenine.composeserver.rds.flywaymigrationshared.autoconfig
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.flyway.autoconfigure.FlywayProperties
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
 
 @Configuration
 class FlywayPropertiesOverrideAutoConfiguration {

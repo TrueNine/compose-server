@@ -1,9 +1,6 @@
 package io.github.truenine.composeserver.depend.servlet.converters
 
-import io.github.truenine.composeserver.IAnyEnum
-import io.github.truenine.composeserver.IIntEnum
-import io.github.truenine.composeserver.IStringEnum
-import io.github.truenine.composeserver.logger
+import io.github.truenine.composeserver.*
 import java.util.concurrent.ConcurrentHashMap
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.converter.ConverterFactory
@@ -13,7 +10,7 @@ import org.springframework.core.convert.converter.ConverterFactory
 @Deprecated(message = "API burden is too high", level = DeprecationLevel.ERROR)
 open class AnyEnumConverterFactory : ConverterFactory<String, IAnyEnum> {
   companion object {
-    @JvmStatic private val converters = ConcurrentHashMap<Class<*>, Converter<String, IAnyEnum>>()
+    @JvmStatic private val converters = ConcurrentHashMap<Class<*>, Converter<String, IAnyEnum?>>()
   }
 
   @Suppress("UNCHECKED_CAST")
@@ -27,7 +24,7 @@ open class AnyEnumConverterFactory : ConverterFactory<String, IAnyEnum> {
     } as Converter<String, T>
   }
 
-  private class AnyEnumConverter(targetClass: Class<out IAnyEnum?>) : Converter<String, IAnyEnum> {
+  private class AnyEnumConverter(targetClass: Class<out IAnyEnum?>) : Converter<String, IAnyEnum?> {
     private val isString = IStringEnum::class.java.isAssignableFrom(targetClass)
     private val isInt = IIntEnum::class.java.isAssignableFrom(targetClass)
     private val valueMappingMap = targetClass.enumConstants.associateBy { it?.value }

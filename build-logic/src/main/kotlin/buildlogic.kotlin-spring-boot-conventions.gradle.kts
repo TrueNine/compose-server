@@ -1,6 +1,6 @@
 val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
 plugins {
-  id("buildlogic.javaspring-conventions")
+  id("buildlogic.java-spring-boot-conventions")
   id("buildlogic.kotlin-conventions")
   kotlin("plugin.spring")
   kotlin("kapt")

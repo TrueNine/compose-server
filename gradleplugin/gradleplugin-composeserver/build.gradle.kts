@@ -1,7 +1,7 @@
 plugins {
   `java-gradle-plugin`
   id("buildlogic.kotlin-conventions")
-  id("buildlogic.publish-conventions")
+  id("buildlogic.maven-publish-conventions")
   id("buildlogic.spotless-conventions")
 }
 

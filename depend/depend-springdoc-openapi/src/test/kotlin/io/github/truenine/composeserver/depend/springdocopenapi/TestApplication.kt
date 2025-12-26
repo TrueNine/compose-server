@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.depend.springdocopenapi
 import io.github.truenine.composeserver.depend.springdocopenapi.autoconfig.AutoConfigEntrance
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Import
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @SpringBootApplication @Import(AutoConfigEntrance::class) class TestApplication
 

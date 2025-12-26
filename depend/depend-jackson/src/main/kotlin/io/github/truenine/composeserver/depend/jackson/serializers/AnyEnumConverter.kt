@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import io.github.truenine.composeserver.IAnyEnum
-import io.github.truenine.composeserver.IIntEnum
-import io.github.truenine.composeserver.IStringEnum
+import io.github.truenine.composeserver.*
 import kotlin.reflect.KClass
 import tools.jackson.core.JsonParser
 import tools.jackson.core.JsonToken

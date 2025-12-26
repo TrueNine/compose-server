@@ -1,14 +1,9 @@
 package io.github.truenine.composeserver.autoconfig
 
-import io.github.truenine.composeserver.generator.IOrderCodeGenerator
-import io.github.truenine.composeserver.generator.ISnowflakeGenerator
-import io.github.truenine.composeserver.generator.SynchronizedSimpleOrderCodeGenerator
-import io.github.truenine.composeserver.generator.SynchronizedSimpleSnowflake
+import io.github.truenine.composeserver.generator.*
 import io.github.truenine.composeserver.properties.SnowflakeProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.DependsOn
+import org.springframework.context.annotation.*
 
 @Configuration
 @EnableConfigurationProperties(SnowflakeProperties::class)

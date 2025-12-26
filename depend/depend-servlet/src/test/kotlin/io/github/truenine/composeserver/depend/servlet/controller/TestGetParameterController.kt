@@ -2,10 +2,7 @@ package io.github.truenine.composeserver.depend.servlet.controller
 
 import io.github.truenine.composeserver.int
 import io.github.truenine.composeserver.string
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("test/getParameter")

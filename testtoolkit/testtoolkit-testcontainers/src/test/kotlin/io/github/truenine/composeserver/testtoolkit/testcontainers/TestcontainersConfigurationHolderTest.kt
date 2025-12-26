@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.testtoolkit.testcontainers
 import io.github.truenine.composeserver.testtoolkit.properties.TestcontainersProperties
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.context.ApplicationContext

@@ -2,10 +2,7 @@ package io.github.truenine.composeserver.depend.servlet
 
 import io.github.truenine.composeserver.domain.IReadableAttachment
 import java.nio.charset.StandardCharsets
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.springframework.mock.web.MockMultipartFile
 
 class IReadableAttachmentFnsTest {

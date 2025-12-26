@@ -7,7 +7,7 @@ import org.springframework.core.convert.converter.Converter
 
 private val log = slf4j(JavaLocalTimeConverter::class)
 
-open class JavaLocalTimeConverter : Converter<String, LocalTime> {
+open class JavaLocalTimeConverter : Converter<String, LocalTime?> {
   override fun convert(source: String): LocalTime? {
     log.trace("Converting time = {}", source)
     return source.toLongOrNull()?.toLocalTime()

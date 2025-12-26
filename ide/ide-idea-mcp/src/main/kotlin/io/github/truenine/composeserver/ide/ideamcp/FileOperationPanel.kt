@@ -8,34 +8,13 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.ui.components.JBScrollPane
-import com.intellij.ui.components.JBTextArea
-import com.intellij.ui.components.JBTextField
+import com.intellij.ui.components.*
 import com.intellij.util.ui.JBUI
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
-import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
-import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
-import io.github.truenine.composeserver.ide.ideamcp.services.ErrorService
-import io.github.truenine.composeserver.ide.ideamcp.services.FileManager
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.GridBagConstraints
-import java.awt.GridBagLayout
-import java.awt.Insets
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.JButton
-import javax.swing.JCheckBox
-import javax.swing.JLabel
-import javax.swing.JOptionPane
-import javax.swing.JPanel
-import javax.swing.JSeparator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.github.truenine.composeserver.ide.ideamcp.services.*
+import java.awt.*
+import javax.swing.*
+import kotlinx.coroutines.*
 
 /** File operation panel that provides file selection and batch operations, integrating error view and code clean-up features. */
 class FileOperationPanel(private val project: Project) : SimpleToolWindowPanel(true, true), Disposable {

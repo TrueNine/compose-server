@@ -4,10 +4,7 @@ import io.github.truenine.composeserver.consts.IHeaders
 import io.github.truenine.composeserver.enums.MediaTypes
 import java.nio.charset.StandardCharsets
 import java.util.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.springframework.mock.web.MockHttpServletResponse
 
 class HttpServletResponseFnsTest {

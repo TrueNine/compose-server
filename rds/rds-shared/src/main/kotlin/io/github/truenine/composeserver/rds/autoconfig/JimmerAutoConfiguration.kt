@@ -1,10 +1,7 @@
 package io.github.truenine.composeserver.rds.autoconfig
 
 import io.github.truenine.composeserver.generator.ISnowflakeGenerator
-import io.github.truenine.composeserver.rds.converters.DurationScalarProvider
-import io.github.truenine.composeserver.rds.converters.IIntEnumJimmerProvider
-import io.github.truenine.composeserver.rds.converters.IStringEnumJimmerProvider
-import io.github.truenine.composeserver.rds.converters.PeriodScalarProvider
+import io.github.truenine.composeserver.rds.converters.*
 import io.github.truenine.composeserver.rds.generators.JimmerSnowflakeLongIdGenerator
 import io.github.truenine.composeserver.rds.generators.JimmerSnowflakeStringIdGenerator
 import io.github.truenine.composeserver.rds.interceptors.JimmerEntityDraftInterceptor

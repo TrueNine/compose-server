@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.rds.flywaymigrationshared.autoconfig
 import io.github.truenine.composeserver.rds.flywaymigrationshared.TestEntrance
 import io.github.truenine.composeserver.testtoolkit.testcontainers.IDatabasePostgresqlContainer
 import jakarta.annotation.Resource
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.springframework.boot.flyway.autoconfigure.FlywayProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext

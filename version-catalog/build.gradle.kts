@@ -6,7 +6,7 @@ plugins {
   alias(libs.plugins.com.github.ben.manes.versions)
   `version-catalog`
   java
-  id("buildlogic.publish-conventions")
+  id("buildlogic.maven-publish-conventions")
 }
 
 repositories {

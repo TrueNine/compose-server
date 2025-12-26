@@ -1,15 +1,10 @@
 package itest.integrate.depend.jackson
 
-import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
-import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonProperties
-import io.github.truenine.composeserver.depend.jackson.autoconfig.TimestampUnit
+import io.github.truenine.composeserver.depend.jackson.autoconfig.*
 import io.github.truenine.composeserver.depend.jackson.holders.ObjectMapperHolder
 import jakarta.annotation.Resource
 import java.time.Instant
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Qualifier

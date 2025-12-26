@@ -1,12 +1,8 @@
 package io.github.truenine.composeserver.security.crypto
 
 import io.github.truenine.composeserver.consts.IRegexes
-import java.util.Base64
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
+import java.util.*
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 

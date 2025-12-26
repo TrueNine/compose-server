@@ -10,9 +10,7 @@ import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.parameters.HeaderParameter
 import jakarta.annotation.PostConstruct
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
+import java.time.*
 import java.util.*
 import org.springdoc.core.models.GroupedOpenApi
 import org.springdoc.core.utils.SpringDocUtils

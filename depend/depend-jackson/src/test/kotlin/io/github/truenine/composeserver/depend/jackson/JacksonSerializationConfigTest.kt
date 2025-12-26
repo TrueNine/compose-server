@@ -5,11 +5,7 @@ import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
 import java.time.Instant
 import java.time.LocalDateTime
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.springframework.boot.test.context.SpringBootTest
 import tools.jackson.databind.ObjectMapper

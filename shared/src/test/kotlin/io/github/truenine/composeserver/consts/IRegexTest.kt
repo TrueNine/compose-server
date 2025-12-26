@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.consts
 
 import java.util.regex.Pattern
-import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Verifies the regular-expression constants declared in {@link IRegexes}. */
 class IRegexTest {

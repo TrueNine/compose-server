@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.ksp.dsl
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
 
 class KObjectSpecScope @JvmOverloads constructor(name: String = "", className: ClassName? = null, override val fileBuilder: FileSpec.Builder) :
   StandardBuilderAdaptor<TypeSpec.Builder, TypeSpec> {

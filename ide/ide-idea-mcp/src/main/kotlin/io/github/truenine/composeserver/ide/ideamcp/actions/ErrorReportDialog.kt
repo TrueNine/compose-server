@@ -4,16 +4,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.table.JBTable
-import io.github.truenine.composeserver.ide.ideamcp.tools.ErrorInfo
-import io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity
-import io.github.truenine.composeserver.ide.ideamcp.tools.FileErrorInfo
+import io.github.truenine.composeserver.ide.ideamcp.tools.*
 import java.awt.Dimension
-import javax.swing.Action
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 import javax.swing.table.AbstractTableModel
 
 /**

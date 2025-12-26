@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.ksp.dsl
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.*
 import kotlin.reflect.KClass
 
 class KFileSpecScope @JvmOverloads constructor(packageName: String = "", fileName: String = "", className: ClassName? = null, memberName: MemberName? = null) :

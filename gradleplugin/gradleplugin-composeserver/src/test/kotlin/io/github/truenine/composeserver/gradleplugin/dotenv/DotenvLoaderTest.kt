@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.gradleplugin.dotenv
 
 import java.io.File
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.gradle.api.Project
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.testing.Test

@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.data.extract.api
 
 import jakarta.annotation.Resource
-import kotlin.test.Ignore
-import kotlin.test.Test
-import kotlin.test.assertNotNull
+import kotlin.test.*
 import org.springframework.boot.test.context.SpringBootTest
 
 @Ignore

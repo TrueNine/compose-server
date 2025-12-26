@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import kotlin.test.Test
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
+import kotlin.test.*
 import org.springframework.mock.web.MockMultipartFile
 
 /**

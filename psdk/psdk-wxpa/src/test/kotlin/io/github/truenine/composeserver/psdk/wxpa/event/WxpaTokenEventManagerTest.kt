@@ -5,10 +5,7 @@ import io.github.truenine.composeserver.psdk.wxpa.core.WxpaTokenManager
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaTicket
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaToken
 import io.github.truenine.composeserver.psdk.wxpa.properties.WxpaProperties
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

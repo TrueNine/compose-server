@@ -1,13 +1,9 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import io.github.truenine.composeserver.testtoolkit.log
-import io.minio.BucketExistsArgs
-import io.minio.MakeBucketArgs
-import io.minio.MinioClient
+import io.minio.*
 import jakarta.annotation.Resource
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

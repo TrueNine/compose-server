@@ -6,9 +6,7 @@ import io.github.truenine.composeserver.consts.ICacheNames
 import io.github.truenine.composeserver.logger
 import java.time.Duration
 import org.springframework.cache.caffeine.CaffeineCacheManager
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
 
 private val log = logger<CaffeineCacheAutoConfiguration>()
 

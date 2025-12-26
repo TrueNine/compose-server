@@ -2,11 +2,7 @@ package io.github.truenine.composeserver
 
 import io.github.truenine.composeserver.testtoolkit.log
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Validates collection extension functions defined in CollectionExtensions.kt. */
 class CollectionExtensionsTest {

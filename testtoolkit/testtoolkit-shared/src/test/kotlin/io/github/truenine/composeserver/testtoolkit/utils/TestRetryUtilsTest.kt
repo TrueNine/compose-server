@@ -2,10 +2,7 @@ package io.github.truenine.composeserver.testtoolkit.utils
 
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /**
  * TestRetryUtils test suite.

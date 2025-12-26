@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.gradleplugin
 
-import io.github.truenine.composeserver.gradleplugin.consts.Constant
-import io.github.truenine.composeserver.gradleplugin.consts.GradleProjectDelegator
-import io.github.truenine.composeserver.gradleplugin.consts.MavenRepositoryUrls
+import io.github.truenine.composeserver.gradleplugin.consts.*
 import java.net.URI
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency

@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.psdk.wxpa.event
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaTicket
 import io.github.truenine.composeserver.psdk.wxpa.model.WxpaToken
 import java.time.LocalDateTime
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 

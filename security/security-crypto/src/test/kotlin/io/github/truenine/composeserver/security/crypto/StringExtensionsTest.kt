@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.security.crypto
 
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 
 /** Test cases for String extension functions */

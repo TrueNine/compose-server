@@ -1,13 +1,7 @@
 package io.github.truenine.composeserver.ksp
 
 import com.google.devtools.ksp.findActualType
-import com.google.devtools.ksp.symbol.FileLocation
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSDeclaration
-import com.google.devtools.ksp.symbol.KSName
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
-import com.google.devtools.ksp.symbol.KSTypeAlias
-import com.google.devtools.ksp.symbol.KSTypeParameter
+import com.google.devtools.ksp.symbol.*
 import kotlin.reflect.KClass
 
 /**

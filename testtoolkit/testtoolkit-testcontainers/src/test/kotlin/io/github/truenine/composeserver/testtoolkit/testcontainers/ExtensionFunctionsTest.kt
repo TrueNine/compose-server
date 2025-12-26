@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

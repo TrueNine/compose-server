@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.testcontainers
 
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.MySQLContainer
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.containers.*
 
 /**
  * Base interface for test containers.

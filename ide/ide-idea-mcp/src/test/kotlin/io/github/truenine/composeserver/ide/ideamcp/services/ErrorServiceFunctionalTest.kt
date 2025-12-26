@@ -2,9 +2,7 @@ package io.github.truenine.composeserver.ide.ideamcp.services
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Functional tests verifying refactored error-capture behavior. */
 class ErrorServiceFunctionalTest : BasePlatformTestCase() {

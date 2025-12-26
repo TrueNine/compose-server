@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.depend.jackson
 import io.github.truenine.composeserver.datetime
 import io.github.truenine.composeserver.testtoolkit.log
 import jakarta.annotation.Resource
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.springframework.boot.test.context.SpringBootTest

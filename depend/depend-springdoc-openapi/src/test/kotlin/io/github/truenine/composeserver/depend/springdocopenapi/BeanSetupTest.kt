@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.depend.springdocopenapi
 
 import io.github.truenine.composeserver.testtoolkit.log
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertNotNull
+import kotlin.test.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType

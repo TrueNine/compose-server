@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.depend.springdocopenapi.properties
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding
-import org.springframework.boot.context.properties.NestedConfigurationProperty
+import org.springframework.boot.context.properties.*
 
 @ConfigurationPropertiesBinding
 @ConfigurationProperties(prefix = SpringBootConfigurationPropertiesPrefixes.DEPEND_SPRINGDOC_OPENAPI, ignoreUnknownFields = true)

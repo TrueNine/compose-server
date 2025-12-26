@@ -1,6 +1,5 @@
 package io.github.truenine.composeserver.depend.jackson.serializers
 
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import tools.jackson.core.JsonGenerator

@@ -1,20 +1,11 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
-import io.github.truenine.composeserver.testtoolkit.properties.AnsiOutputMode
-import io.github.truenine.composeserver.testtoolkit.properties.TestConfigurationProperties
-import io.github.truenine.composeserver.testtoolkit.properties.TestcontainersProperties
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import io.github.truenine.composeserver.testtoolkit.properties.*
+import io.mockk.*
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.core.env.ConfigurableEnvironment
-import org.springframework.core.env.MapPropertySource
-import org.springframework.core.env.MutablePropertySources
+import org.springframework.core.env.*
 
 class TestConfigurationBeanTest {
 

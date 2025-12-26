@@ -1,10 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
-import io.github.truenine.composeserver.testtoolkit.properties.MinioConfig
-import io.github.truenine.composeserver.testtoolkit.properties.MysqlConfig
-import io.github.truenine.composeserver.testtoolkit.properties.PostgresConfig
-import io.github.truenine.composeserver.testtoolkit.properties.RedisConfig
-import io.github.truenine.composeserver.testtoolkit.properties.TestcontainersProperties
+import io.github.truenine.composeserver.testtoolkit.properties.*
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 

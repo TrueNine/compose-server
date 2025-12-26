@@ -11,13 +11,7 @@ import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeResult
 import io.github.truenine.composeserver.ide.ideamcp.tools.SourceType
 import java.awt.BorderLayout
 import java.awt.Dimension
-import javax.swing.Action
-import javax.swing.BorderFactory
-import javax.swing.BoxLayout
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.SwingConstants
+import javax.swing.*
 
 /**
  * Dialog for displaying library code.

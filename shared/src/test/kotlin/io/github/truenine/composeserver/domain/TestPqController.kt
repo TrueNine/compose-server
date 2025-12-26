@@ -1,10 +1,7 @@
 package io.github.truenine.composeserver.domain
 
 import io.github.truenine.composeserver.Pq
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("v1/pq")

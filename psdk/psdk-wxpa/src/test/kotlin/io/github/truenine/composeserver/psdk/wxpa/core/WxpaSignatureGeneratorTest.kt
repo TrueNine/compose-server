@@ -5,10 +5,8 @@ import io.github.truenine.composeserver.psdk.wxpa.properties.WxpaProperties
 import io.github.truenine.composeserver.security.crypto.sha1
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
+import kotlin.test.*
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

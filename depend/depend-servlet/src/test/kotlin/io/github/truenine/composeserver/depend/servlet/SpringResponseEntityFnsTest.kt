@@ -1,10 +1,7 @@
 package io.github.truenine.composeserver.depend.servlet
 
 import java.time.LocalDateTime
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.springframework.http.MediaType
 
 class SpringResponseEntityFnsTest {

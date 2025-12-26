@@ -2,10 +2,7 @@ package io.github.truenine.composeserver.testtoolkit.testcontainers
 
 import jakarta.annotation.Resource
 import java.time.Duration
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest

@@ -6,12 +6,7 @@ import com.tencentcloudapi.common.profile.Language
 import com.tencentcloudapi.sms.v20210111.SmsClient
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse
-import kotlin.test.Ignore
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class TencentSmsTest {
 

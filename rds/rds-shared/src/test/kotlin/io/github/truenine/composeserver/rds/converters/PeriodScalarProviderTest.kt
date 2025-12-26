@@ -2,9 +2,7 @@ package io.github.truenine.composeserver.rds.converters
 
 import java.time.Period
 import java.time.format.DateTimeParseException
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.*
 
 class PeriodScalarProviderTest {
 

@@ -1,14 +1,10 @@
 package io.github.truenine.composeserver.depend.jackson.modules
 
-import io.github.truenine.composeserver.depend.jackson.serializers.IPageParamLikeSerializer
-import io.github.truenine.composeserver.depend.jackson.serializers.KPairDeserializer
-import io.github.truenine.composeserver.depend.jackson.serializers.KPairSerializer
+import io.github.truenine.composeserver.depend.jackson.serializers.*
 import io.github.truenine.composeserver.domain.IPageParam
 import io.github.truenine.composeserver.domain.IPageParamLike
 import tools.jackson.core.Version
-import tools.jackson.databind.module.SimpleDeserializers
-import tools.jackson.databind.module.SimpleModule
-import tools.jackson.databind.module.SimpleSerializers
+import tools.jackson.databind.module.*
 
 /**
  * Custom Kotlin Jackson module.

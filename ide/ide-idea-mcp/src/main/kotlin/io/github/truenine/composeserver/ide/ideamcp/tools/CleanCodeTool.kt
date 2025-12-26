@@ -4,9 +4,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.common.ErrorDetails
 import io.github.truenine.composeserver.ide.ideamcp.common.Logger
-import io.github.truenine.composeserver.ide.ideamcp.services.CleanOptions
-import io.github.truenine.composeserver.ide.ideamcp.services.CleanService
-import io.github.truenine.composeserver.ide.ideamcp.services.FileManager
+import io.github.truenine.composeserver.ide.ideamcp.services.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json

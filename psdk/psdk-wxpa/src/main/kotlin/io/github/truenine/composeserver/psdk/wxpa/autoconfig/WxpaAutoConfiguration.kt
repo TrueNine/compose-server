@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.psdk.wxpa.autoconfig
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import io.github.truenine.composeserver.logger
 import io.github.truenine.composeserver.psdk.wxpa.api.IWxpaWebClient
-import io.github.truenine.composeserver.psdk.wxpa.core.WxpaSignatureGenerator
-import io.github.truenine.composeserver.psdk.wxpa.core.WxpaTokenManager
-import io.github.truenine.composeserver.psdk.wxpa.core.WxpaUserInfoService
+import io.github.truenine.composeserver.psdk.wxpa.core.*
 import io.github.truenine.composeserver.psdk.wxpa.event.WxpaTokenEventManager
 import io.github.truenine.composeserver.psdk.wxpa.exception.WxpaConfigurationException
 import io.github.truenine.composeserver.psdk.wxpa.properties.WechatProperties

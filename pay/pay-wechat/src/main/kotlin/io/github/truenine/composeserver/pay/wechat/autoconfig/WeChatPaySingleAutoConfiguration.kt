@@ -3,16 +3,12 @@ package io.github.truenine.composeserver.pay.wechat.autoconfig
 import com.wechat.pay.java.core.RSAAutoCertificateConfig
 import com.wechat.pay.java.service.payments.jsapi.JsapiService
 import com.wechat.pay.java.service.refund.RefundService
+import io.github.truenine.composeserver.*
 import io.github.truenine.composeserver.pay.wechat.properties.WeChatPayProperties
 import io.github.truenine.composeserver.pay.wechat.properties.WeChatPaySingleConfigProperty
-import io.github.truenine.composeserver.resourceAsStream
-import io.github.truenine.composeserver.slf4j
-import io.github.truenine.composeserver.utf8String
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.DependsOn
+import org.springframework.context.annotation.*
 import org.springframework.core.io.ClassPathResource
 
 private val log = slf4j(WeChatPaySingleAutoConfiguration::class)

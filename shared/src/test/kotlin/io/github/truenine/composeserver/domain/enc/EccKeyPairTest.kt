@@ -3,13 +3,8 @@ package io.github.truenine.composeserver.domain.enc
 import io.github.truenine.composeserver.domain.IEccKeyPair
 import io.github.truenine.composeserver.enums.EncryptAlgorithm
 import io.github.truenine.composeserver.testtoolkit.log
-import java.security.KeyPairGenerator
-import java.security.PrivateKey
-import java.security.PublicKey
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import java.security.*
+import kotlin.test.*
 
 /** Verifies the core behaviour of {@link EccKeyPair}. */
 class EccKeyPairTest {

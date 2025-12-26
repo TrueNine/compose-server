@@ -4,11 +4,7 @@ import io.github.truenine.composeserver.holders.ResourceHolder
 import io.mockk.every
 import io.mockk.mockk
 import kotlin.system.measureTimeMillis
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.core.io.ByteArrayResource

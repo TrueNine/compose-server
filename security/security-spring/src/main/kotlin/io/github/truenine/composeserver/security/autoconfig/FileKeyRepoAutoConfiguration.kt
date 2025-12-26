@@ -2,9 +2,7 @@ package io.github.truenine.composeserver.security.autoconfig
 
 import io.github.truenine.composeserver.security.crypto.FileKeyRepo
 import io.github.truenine.composeserver.slf4j
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
 
 @Configuration
 class FileKeyRepoAutoConfiguration {

@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver
 
 import io.github.truenine.composeserver.testtoolkit.log
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest

@@ -9,16 +9,7 @@ import io.github.truenine.composeserver.ide.ideamcp.services.CleanResult
 import io.github.truenine.composeserver.ide.ideamcp.tools.CleanOperation
 import java.awt.BorderLayout
 import java.awt.Dimension
-import javax.swing.Action
-import javax.swing.BorderFactory
-import javax.swing.BoxLayout
-import javax.swing.DefaultListModel
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JList
-import javax.swing.JPanel
-import javax.swing.ListSelectionModel
-import javax.swing.SwingConstants
+import javax.swing.*
 import javax.swing.table.AbstractTableModel
 
 /** Dialog that displays detailed results and statistics for code clean-up operations. */

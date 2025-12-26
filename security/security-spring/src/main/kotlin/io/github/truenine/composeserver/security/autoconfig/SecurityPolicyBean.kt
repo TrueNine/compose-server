@@ -2,15 +2,11 @@ package io.github.truenine.composeserver.security.autoconfig
 
 import io.github.truenine.composeserver.security.SecurityPolicyDefine
 import io.github.truenine.composeserver.security.annotations.EnableRestSecurity
-import io.github.truenine.composeserver.security.spring.security.SecurityExceptionAdware
-import io.github.truenine.composeserver.security.spring.security.SecurityPreflightValidFilter
-import io.github.truenine.composeserver.security.spring.security.SecurityUserDetailsService
+import io.github.truenine.composeserver.security.spring.security.*
 import io.github.truenine.composeserver.slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity

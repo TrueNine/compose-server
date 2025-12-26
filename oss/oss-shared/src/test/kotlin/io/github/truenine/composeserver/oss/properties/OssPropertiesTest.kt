@@ -2,10 +2,7 @@ package io.github.truenine.composeserver.oss.properties
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
 import java.time.Duration
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.context.properties.bind.Binder

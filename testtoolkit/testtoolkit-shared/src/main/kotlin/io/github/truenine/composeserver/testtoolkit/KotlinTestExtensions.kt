@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.testtoolkit
 
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 fun <T> assertNotEmpty(message: String? = "collection is empty", actual: () -> List<T>) {
   assertNotEquals(0, actual().size, message)

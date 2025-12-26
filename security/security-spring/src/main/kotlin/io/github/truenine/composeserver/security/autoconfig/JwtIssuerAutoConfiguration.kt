@@ -5,9 +5,7 @@ import io.github.truenine.composeserver.security.jwt.JwtIssuer
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
 import tools.jackson.databind.ObjectMapper
 
 @Configuration

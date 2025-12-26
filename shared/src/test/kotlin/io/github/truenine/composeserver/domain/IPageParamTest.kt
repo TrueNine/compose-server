@@ -1,17 +1,13 @@
 package io.github.truenine.composeserver.domain
 
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
+import kotlin.test.*
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import tools.jackson.databind.ObjectMapper
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)

@@ -12,9 +12,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer
-import org.springframework.data.redis.serializer.RedisSerializationContext
-import org.springframework.data.redis.serializer.StringRedisSerializer
+import org.springframework.data.redis.serializer.*
 import tools.jackson.databind.DeserializationFeature
 import tools.jackson.databind.json.JsonMapper
 

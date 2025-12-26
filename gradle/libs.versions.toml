@@ -1,63 +1,64 @@
 [versions]
-ch-qos-logback = "1.5.21"
+ch-qos-logback = "1.5.23"
 cn-dev33-sa-token = "1.44.0"
-cn-hutool = "5.8.41"
+cn-hutool = "5.8.42"
 com-alibaba-cloud = "2023.0.3.3"
-com-baomidou-mybatis-plus = "3.5.14"
+com-baomidou-mybatis-plus = "3.5.15"
 com-diffplug-spotless = "8.1.0"
 com-fasterxml-jackson2 = "2.20.1"
 com-fasterxml-jackson3 = "3.0-rc5"
-com-flywaydb-flyway = "11.17.1"
+com-flywaydb-flyway = "11.20.0"
 com-github-tschuchortdev-kotlin-compile-testing = "1.6.0"
-com-google-devtools-ksp = "2.3.3"
+com-google-devtools-ksp = "2.3.4"
 com-mapstruct = "1.6.3"
 com-querydsl = "5.1.0"
 com-squareup-kotlinpoet = "2.2.0"
 com-squareup-okio = "3.16.4"
 com-vanniktech-maven-publish = "0.35.0"
-com-xuxueli-xxl-job = "3.2.0"
-com-yomahub-liteflow = "2.15.1"
+com-xuxueli-xxl-job = "3.3.1"
+com-yomahub-liteflow = "2.15.2"
 dev-langchain4j-community = "1.1.0-beta7"
 group = "io.github.truenine"
 intellij-platform = "2025.2.1"
 intellij-platform-ide = "243"
 intellij-platform-plugin-java = "21"
-io-netty = "4.2.7.Final"
+io-netty = "4.2.9.Final"
 java = "17"
 net-sf-sevenzipjbinding = "16.02-2.01"
 nl-littlerobots-version-catalog-updat-gradle-plugin = "1.0.1"
-org-apache-commons-exec = "1.5.0"
-org-apache-groovy = "5.0.2"
-org-apache-logging-log4j = "2.25.2"
+org-apache-commons-exec = "1.6.0"
+org-apache-groovy = "5.0.3"
+org-apache-logging-log4j = "2.25.3"
 org-assertj = "4.0.0-M1"
 org-awaitility = "4.3.0"
-org-babyfish-jimmer = "0.9.116"
+org-babyfish-jimmer = "0.9.119"
 org-gradle = "9.2.1"
-tools-jackson = "3.0.2"
-org-hibernate-orm = "7.2.0.CR2"
+tools-jackson = "3.0.3"
+org-hibernate-orm = "7.2.0.Final"
 org-jetbrains-dokka = "2.1.0"
-org-jetbrains-intellij-platform = "2.10.4"
-org-jetbrains-kotlin = "2.3.0-RC"
+org-jetbrains-intellij-platform = "2.10.5"
+org-jetbrains-kotlin = "2.3.0"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.7.1-0.6.x-compat"
-org-jetbrains-kotlinx-io = "0.8.1"
-org-jetbrains-kotlinx-serialization = "1.9.0"
+org-jetbrains-kotlinx-io = "0.8.2"
+org-jetbrains-kotlinx-serialization = "1.10.0-RC"
 org-junit-jupiter = "6.1.0-M1"
+io-kotest = "6.0.7"
 org-liquibase = "5.0.1"
 org-slf4j = "2.1.0-alpha1"
-org-springframework-ai = "1.1.0"
-org-springframework-batch = "6.0.0"
-org-springframework-boot = "4.0.0"
+org-springframework-ai = "2.0.0-M1"
+org-springframework-batch = "6.0.1"
+org-springframework-boot = "4.0.1"
 org-springframework-cloud = "2025.0.0"
-org-springframework-data = "4.0.0"
-org-springframework-framework = "7.0.1"
-org-springframework-integration = "7.0.0"
-org-springframework-modulith = "2.0.0"
-org-springframework-security = "7.0.0"
-org-testcontainers = "1.21.3"
+org-springframework-data = "4.0.1"
+org-springframework-framework = "7.0.2"
+org-springframework-integration = "7.0.1"
+org-springframework-modulith = "2.0.1"
+org-springframework-security = "7.0.2"
+org-testcontainers = "1.21.4"
 org-testng = "7.11.0"
-project = "0.0.49"
-com-netflix-dgs-codegen = "8.2.1"
+project = "2025.12.26"
+com-netflix-dgs-codegen = "8.3.0"
 
 [libraries]
 com-netflix-dgs-codegen-com-netflix-dgs-codegen-gradle-plugin = { module = "com.netflix.dgs.codegen:com.netflix.dgs.codegen.gradle.plugin", version.ref = "com-netflix-dgs-codegen" }
@@ -75,7 +76,7 @@ cn-hutool-hutool-db = { module = "cn.hutool:hutool-db", version.ref = "cn-hutool
 cn-idev-excel-fastexcel = "cn.idev.excel:fastexcel:1.3.0"
 com-alibaba-cloud-spring-cloud-alibaba-dependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "com-alibaba-cloud" }
 com-alibaba-easyexcel = "com.alibaba:easyexcel:4.0.3"
-com-aliyun-oss-aliyun-sdk-oss = "com.aliyun.oss:aliyun-sdk-oss:3.18.3"
+com-aliyun-oss-aliyun-sdk-oss = "com.aliyun.oss:aliyun-sdk-oss:3.18.4"
 com-auth0-java-jwt = "com.auth0:java-jwt:4.5.0"
 tools-jackson-core-jackson-databind = { module = "tools.jackson.core:jackson-databind", version.ref = "tools-jackson" }
 org-jspecify-jspecify = "org.jspecify:jspecify:1.0.0"
@@ -102,7 +103,7 @@ com-github-junrar-junrar = "com.github.junrar:junrar:7.5.7"
 com-github-magese-ik-analyzer = "com.github.magese:ik-analyzer:8.5.0"
 com-github-tschuchortdev-kotlin-compile-testing = { module = "com.github.tschuchortdev:kotlin-compile-testing", version.ref = "com-github-tschuchortdev-kotlin-compile-testing" }
 com-github-tschuchortdev-kotlin-compile-testing-ksp = { module = "com.github.tschuchortdev:kotlin-compile-testing-ksp", version.ref = "com-github-tschuchortdev-kotlin-compile-testing" }
-com-github-ulisesbocchio-jasypt-spring-boot-starter = "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5"
+com-github-ulisesbocchio-jasypt-spring-boot-starter = "com.github.ulisesbocchio:jasypt-spring-boot-starter:4.0.3"
 com-github-wechatpay-apiv3-wechatpay-java = "com.github.wechatpay-apiv3:wechatpay-java:0.2.17"
 com-github-xiaoymin-knife4j-openapi3-jakarta-spring-boot-starter = "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:4.5.0"
 com-github-xiaoymin-knife4j-spring-boot-starter = "com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3"
@@ -114,7 +115,7 @@ com-h2database-h2 = "com.h2database:h2:2.4.240"
 com-hikvision-ga-artemis-http-client = "com.hikvision.ga:artemis-http-client:1.1.3"
 com-hikvision-ga-opensource = "com.hikvision.ga:opensource:0.0.3"
 com-huaweicloud-esdk-obs-java = "com.huaweicloud:esdk-obs-java:3.25.10"
-com-microsoft-playwright-playwright = "com.microsoft.playwright:playwright:1.56.0"
+com-microsoft-playwright-playwright = "com.microsoft.playwright:playwright:1.57.0"
 com-mysql-mysql-connector-j = "com.mysql:mysql-connector-j:9.5.0"
 com-querydsl-querydsl-apt = { module = "com.querydsl:querydsl-apt", version.ref = "com-querydsl" }
 com-querydsl-querydsl-core = { module = "com.querydsl:querydsl-core", version.ref = "com-querydsl" }
@@ -128,16 +129,16 @@ com-squareup-okio-okio-jvm = { module = "com.squareup.okio:okio-jvm", version.re
 com-squareup-retrofit2-retrofit = "com.squareup.retrofit2:retrofit:3.0.0"
 com-tencentcloudapi-tencentcloud-sdk-java-sms = "com.tencentcloudapi:tencentcloud-sdk-java-sms:3.1.1357"
 com-vanniktech-maven-publish-com-vanniktech-maven-publish-gradle-plugin = { module = "com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin", version.ref = "com-vanniktech-maven-publish" }
-com-volcengine-ve-tos-java-sdk = "com.volcengine:ve-tos-java-sdk:2.9.5"
+com-volcengine-ve-tos-java-sdk = "com.volcengine:ve-tos-java-sdk:2.9.8"
 com-xuxueli-xxl-job-core = { module = "com.xuxueli:xxl-job-core", version.ref = "com-xuxueli-xxl-job" }
 com-yomahub-liteflow-spring-boot-starter = { module = "com.yomahub:liteflow-spring-boot-starter", version.ref = "com-yomahub-liteflow" }
-dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.8.0"
+dev-langchain4j-langchain4j = "dev.langchain4j:langchain4j:1.10.0"
 dev-langchain4j-langchain4j-bom = "dev.langchain4j:langchain4j-bom:1.2.0"
 dev-langchain4j-langchain4j-community-bom = { module = "dev.langchain4j:langchain4j-community-bom", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-hugging-face = { module = "dev.langchain4j:langchain4j-hugging-face", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-kotlin = { module = "dev.langchain4j:langchain4j-kotlin", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-mcp = { module = "dev.langchain4j:langchain4j-mcp", version.ref = "dev-langchain4j-community" }
-dev-langchain4j-langchain4j-ollama = "dev.langchain4j:langchain4j-ollama:1.8.0"
+dev-langchain4j-langchain4j-ollama = "dev.langchain4j:langchain4j-ollama:1.10.0"
 dev-langchain4j-langchain4j-ollama-spring-boot-starter = { module = "dev.langchain4j:langchain4j-ollama-spring-boot-starter", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-pgvector = { module = "dev.langchain4j:langchain4j-pgvector", version.ref = "dev-langchain4j-community" }
 dev-langchain4j-langchain4j-reactor = { module = "dev.langchain4j:langchain4j-reactor", version.ref = "dev-langchain4j-community" }
@@ -184,30 +185,33 @@ io-github-truenine-composeserver-testtoolkit-springmvc = { module = "io.github.t
 io-github-truenine-composeserver-testtoolkit-testcontainers = { module = "io.github.truenine:composeserver-testtoolkit-testcontainers", version.ref = "project" }
 io-netty-netty-bom = { module = "io.netty:netty-bom", version.ref = "io-netty" }
 io-jsonwebtoken-jjwt-api = "io.jsonwebtoken:jjwt-api:0.13.0"
+io-kotest-kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "io-kotest" }
+io-kotest-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "io-kotest" }
+io-kotest-kotest-property = { module = "io.kotest:kotest-property", version.ref = "io-kotest" }
 io-minio-minio = "io.minio:minio:8.6.0"
-io-mockk-mockk = "io.mockk:mockk:1.14.6"
+io-mockk-mockk = "io.mockk:mockk:1.14.7"
 io-netty-netty-handler = { module = "io.netty:netty-handler", version.ref = "io-netty" }
 io-projectreactor-kotlin-reactor-kotlin-extensions = "io.projectreactor.kotlin:reactor-kotlin-extensions:1.3.0"
-io-projectreactor-reactor-test = "io.projectreactor:reactor-test:3.8.0"
+io-projectreactor-reactor-test = "io.projectreactor:reactor-test:3.8.1"
 io-spring-gradle-dependency-management-plugin = "io.spring.gradle:dependency-management-plugin:1.1.7"
-io-swagger-core-v3-swagger-annotations-jakarta = "io.swagger.core.v3:swagger-annotations-jakarta:2.2.40"
+io-swagger-core-v3-swagger-annotations-jakarta = "io.swagger.core.v3:swagger-annotations-jakarta:2.2.41"
 jakarta-annotation-jakarta-annotation-api = "jakarta.annotation:jakarta.annotation-api:3.0.0"
 jakarta-inject-jakarta-inject-api = "jakarta.inject:jakarta.inject-api:2.0.1"
 jakarta-persistence-jakarta-persistence-api = "jakarta.persistence:jakarta.persistence-api:3.2.0"
 jakarta-servlet-jakarta-servlet-api = "jakarta.servlet:jakarta.servlet-api:6.1.0"
 jakarta-validation-jakarta-validation-api = "jakarta.validation:jakarta.validation-api:4.0.0-M1"
 mysql-mysql-connector-java = "mysql:mysql-connector-java:8.0.33"
-net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.18.1"
+net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.18.3"
 net-sf-dozer-dozer = "net.sf.dozer:dozer:5.5.1"
 net-sf-sevenzipjbinding-sevenzipjbinding = { module = "net.sf.sevenzipjbinding:sevenzipjbinding", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-sevenzipjbinding-sevenzipjbinding-all-platforms = { module = "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms", version.ref = "net-sf-sevenzipjbinding" }
 net-sf-supercsv-super-csv = "net.sf.supercsv:super-csv:2.4.0"
 nl-littlerobots-version-catalog-update-nl-littlerobots-version-catalog-update-gradle-plugin = { module = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin", version.ref = "nl-littlerobots-version-catalog-updat-gradle-plugin" }
-ognl-ognl = "ognl:ognl:3.4.8"
+ognl-ognl = "ognl:ognl:3.4.9"
 org-apache-commons-commons-compress = "org.apache.commons:commons-compress:1.28.0"
 org-apache-commons-commons-csv = "org.apache.commons:commons-csv:1.14.1"
 org-apache-commons-commons-exec = { module = "org.apache.commons:commons-exec", version.ref = "org-apache-commons-exec" }
-org-apache-commons-commons-pool2 = "org.apache.commons:commons-pool2:2.12.1"
+org-apache-commons-commons-pool2 = "org.apache.commons:commons-pool2:2.13.0"
 org-apache-groovy = { module = "org.apache.groovy:groovy", version.ref = "org-apache-groovy" }
 org-apache-groovy-bom = { module = "org.apache.groovy:groovy-bom", version.ref = "org-apache-groovy" }
 org-apache-logging-log4j-log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "org-apache-logging-log4j" }
@@ -223,10 +227,10 @@ org-babyfish-jimmer-jimmer-mapstruct-apt = { module = "org.babyfish.jimmer:jimme
 org-babyfish-jimmer-jimmer-spring-boot-starter = { module = "org.babyfish.jimmer:jimmer-spring-boot-starter", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-sql = { module = "org.babyfish.jimmer:jimmer-sql", version.ref = "org-babyfish-jimmer" }
 org-babyfish-jimmer-jimmer-sql-kotlin = { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "org-babyfish-jimmer" }
-org-bouncycastle-bcprov-jdk18on = "org.bouncycastle:bcprov-jdk18on:1.82"
-org-casbin-casbin-spring-boot-starter = "org.casbin:casbin-spring-boot-starter:1.9.0"
+org-bouncycastle-bcprov-jdk18on = "org.bouncycastle:bcprov-jdk18on:1.83"
+org-casbin-casbin-spring-boot-starter = "org.casbin:casbin-spring-boot-starter:2.0.0"
 org-casbin-casbin-spring-security-starter = "org.casbin:casbin-spring-security-starter:1.1.0"
-org-casbin-jcasbin = "org.casbin:jcasbin:1.85.1"
+org-casbin-jcasbin = "org.casbin:jcasbin:1.86.0"
 org-eclipse-paho-client-mqttv3 = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 org-flywaydb-flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "com-flywaydb-flyway" }
 org-flywaydb-flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "com-flywaydb-flyway" }
@@ -234,7 +238,7 @@ org-flywaydb-flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref 
 org-freemarker-freemarker = "org.freemarker:freemarker:2.3.34"
 org-hibernate-orm-hibernate-core = { module = "org.hibernate:hibernate-core", version.ref = "org-hibernate-orm" }
 org-hsqldb-hsqldb = "org.hsqldb:hsqldb:2.7.4"
-org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.18.0"
+org-htmlunit-neko-htmlunit = "org.htmlunit:neko-htmlunit:4.20.0"
 org-jetbrains-annotations = "org.jetbrains:annotations:26.0.2-1"
 org-jetbrains-dokka-dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "org-jetbrains-dokka" }
 org-jetbrains-intellij-platform-gradle-plugin = { module = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin", version.ref = "org-jetbrains-intellij-platform" }
@@ -272,14 +276,14 @@ org-junit-jupiter-junit-jupiter-params = { module = "org.junit.jupiter:junit-jup
 org-junit-platform-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "org-junit-jupiter" }
 org-junit-platform-junit-platform-suite = { module = "org.junit.platform:junit-platform-suite", version.ref = "org-junit-jupiter" }
 org-junit-vintage-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "org-junit-jupiter" }
-org-lionsoul-ip2region = "org.lionsoul:ip2region:3.1.1"
+org-lionsoul-ip2region = "org.lionsoul:ip2region:3.3.2"
 org-liquibase-liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "org-liquibase" }
 org-mapstruct-mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "com-mapstruct" }
 org-mapstruct-mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "com-mapstruct" }
 org-owasp-antisamy-antisamy = "org.owasp.antisamy:antisamy:1.7.8"
 org-postgresql-postgresql = "org.postgresql:postgresql:42.7.8"
 org-projectlombok-lombok = "org.projectlombok:lombok:1.18.42"
-org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4.38.0"
+org-seleniumhq-selenium-selenium-java = "org.seleniumhq.selenium:selenium-java:4.39.0"
 org-skyscreamer-jsonassert = "org.skyscreamer:jsonassert:2.0-rc1"
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
 org-springdoc-springdoc-openapi-starter-webmvc-ui = "org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0"
@@ -323,7 +327,7 @@ org-springframework-boot-spring-boot-starter-websocket = { module = "org.springf
 org-springframework-boot-spring-boot-test = { module = "org.springframework.boot:spring-boot-test", version.ref = "org-springframework-boot" }
 org-springframework-boot-spring-boot-test-autoconfigure = { module = "org.springframework.boot:spring-boot-test-autoconfigure", version.ref = "org-springframework-boot" }
 org-springframework-cloud-spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "org-springframework-cloud" }
-org-springframework-cloud-spring-cloud-starter-bootstrap = "org.springframework.cloud:spring-cloud-starter-bootstrap:5.0.0-RC1"
+org-springframework-cloud-spring-cloud-starter-bootstrap = "org.springframework.cloud:spring-cloud-starter-bootstrap:5.0.0"
 org-springframework-data-spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "org-springframework-data" }
 org-springframework-data-spring-data-jpa = { module = "org.springframework.data:spring-data-jpa", version.ref = "org-springframework-data" }
 org-springframework-integration-spring-integration-core = { module = "org.springframework.integration:spring-integration-core", version.ref = "org-springframework-integration" }
@@ -351,7 +355,7 @@ org-testcontainers-postgresql = { module = "org.testcontainers:postgresql", vers
 org-testcontainers-testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "org-testcontainers" }
 org-testcontainers-testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "org-testcontainers" }
 org-testng-testng = { module = "org.testng:testng", version.ref = "org-testng" }
-org-xerial-sqlite-jdbc = "org.xerial:sqlite-jdbc:3.51.0.0"
+org-xerial-sqlite-jdbc = "org.xerial:sqlite-jdbc:3.51.1.0"
 p6spy-p6spy = "p6spy:p6spy:3.9.1"
 
 [plugins]

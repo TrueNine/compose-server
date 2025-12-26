@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.consts
 
 import io.github.truenine.composeserver.testtoolkit.log
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /** Validates HTTP method constants declared in {@link IMethods}. */
 class IMethodsTest {

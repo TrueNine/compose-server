@@ -1,8 +1,6 @@
 package io.github.truenine.composeserver.gradleplugin.generator
 
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.*
 import org.junit.jupiter.api.Test
 
 class MavenRepoTypeTest {

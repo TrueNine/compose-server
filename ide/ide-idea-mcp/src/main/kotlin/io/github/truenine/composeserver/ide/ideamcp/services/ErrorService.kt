@@ -9,13 +9,8 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiErrorElement
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
-import io.github.truenine.composeserver.ide.ideamcp.tools.ErrorInfo
-import io.github.truenine.composeserver.ide.ideamcp.tools.ErrorSeverity
-import io.github.truenine.composeserver.ide.ideamcp.tools.FileErrorInfo
+import com.intellij.psi.*
+import io.github.truenine.composeserver.ide.ideamcp.tools.*
 import org.slf4j.LoggerFactory
 
 /**

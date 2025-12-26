@@ -14,10 +14,7 @@ import org.springframework.mock.web.MockPart
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.multipart
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestPart
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.multipart.MultipartFile
 

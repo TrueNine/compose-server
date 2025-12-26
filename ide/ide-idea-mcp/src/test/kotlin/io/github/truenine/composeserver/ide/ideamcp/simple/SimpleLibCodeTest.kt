@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.ide.ideamcp.simple
 import com.intellij.openapi.project.Project
 import io.github.truenine.composeserver.ide.ideamcp.services.LibCodeServiceImpl
 import io.mockk.mockk
-import kotlin.test.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import kotlinx.coroutines.runBlocking
 
 /** Simple LibCodeService test verifying basic behavior. */

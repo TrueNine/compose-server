@@ -1,7 +1,4 @@
-import com.vanniktech.maven.publish.GradlePlugin
-import com.vanniktech.maven.publish.JavadocJar
-import com.vanniktech.maven.publish.KotlinJvm
-import com.vanniktech.maven.publish.VersionCatalog
+import com.vanniktech.maven.publish.*
 
 val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
 
@@ -33,7 +30,7 @@ mavenPublishing {
     // Detect the Kotlin JVM plugin (including indirect application)
     project.plugins.hasPlugin("org.jetbrains.kotlin.jvm") ||
       project.plugins.hasPlugin("buildlogic.kotlin-conventions") ||
-      project.plugins.hasPlugin("buildlogic.kotlinspring-conventions") -> {
+      project.plugins.hasPlugin("buildlogic.kotlin-spring-boot-conventions") -> {
       configure(
         KotlinJvm(
           javadocJar = JavadocJar.Empty(),
@@ -63,7 +60,6 @@ mavenPublishing {
     inceptionYear = "2020"
 
     developers {
-
       developer {
         id = "TrueNine"
         name = "Zhao Ritian"
@@ -95,6 +91,14 @@ mavenPublishing {
         id = "muyu"
         email = "1065700104@qq.com"
         roles = listOf("Sponsor")
+        timezone = "GMT+8"
+      }
+      developer {
+        id = "zjarlin"
+        name = "加加林"
+        url = "https://github.com/zjarlin"
+        email = "zjarlin@outlook.com"
+        roles = listOf("Developer", "Partner", "Sponsor")
         timezone = "GMT+8"
       }
     }

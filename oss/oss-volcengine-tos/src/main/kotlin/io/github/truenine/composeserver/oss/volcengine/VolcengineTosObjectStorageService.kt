@@ -1,89 +1,19 @@
 package io.github.truenine.composeserver.oss.volcengine
 
 import com.volcengine.tos.TOSV2
-import com.volcengine.tos.comm.common.ACLType
-import com.volcengine.tos.comm.common.StatusType
-import com.volcengine.tos.comm.common.VersioningStatusType
+import com.volcengine.tos.comm.common.*
+import com.volcengine.tos.model.bucket.*
 import com.volcengine.tos.model.bucket.CORSRule as TosCorsRule
-import com.volcengine.tos.model.bucket.CreateBucketV2Input
-import com.volcengine.tos.model.bucket.DeleteBucketCORSInput
-import com.volcengine.tos.model.bucket.DeleteBucketInput
-import com.volcengine.tos.model.bucket.DeleteBucketLifecycleInput
-import com.volcengine.tos.model.bucket.DeleteBucketTaggingInput
 import com.volcengine.tos.model.bucket.Expiration as TosExpiration
-import com.volcengine.tos.model.bucket.GetBucketCORSInput
-import com.volcengine.tos.model.bucket.GetBucketLifecycleInput
-import com.volcengine.tos.model.bucket.GetBucketPolicyInput
-import com.volcengine.tos.model.bucket.GetBucketTaggingInput
-import com.volcengine.tos.model.bucket.HeadBucketV2Input
 import com.volcengine.tos.model.bucket.LifecycleRule as TosLifecycleRule
-import com.volcengine.tos.model.bucket.ListBucketsV2Input
-import com.volcengine.tos.model.bucket.PutBucketACLInput
-import com.volcengine.tos.model.bucket.PutBucketCORSInput
-import com.volcengine.tos.model.bucket.PutBucketLifecycleInput
-import com.volcengine.tos.model.bucket.PutBucketPolicyInput
-import com.volcengine.tos.model.bucket.PutBucketTaggingInput
-import com.volcengine.tos.model.bucket.PutBucketVersioningInput
 import com.volcengine.tos.model.bucket.Tag as TosTag
-import com.volcengine.tos.model.`object`.AbortMultipartUploadInput
-import com.volcengine.tos.model.`object`.CompleteMultipartUploadV2Input
-import com.volcengine.tos.model.`object`.CopyObjectV2Input
-import com.volcengine.tos.model.`object`.CreateMultipartUploadInput
-import com.volcengine.tos.model.`object`.DeleteObjectInput
-import com.volcengine.tos.model.`object`.GetObjectV2Input
-import com.volcengine.tos.model.`object`.HeadObjectV2Input
-import com.volcengine.tos.model.`object`.ListObjectVersionsV2Input
-import com.volcengine.tos.model.`object`.ListObjectsType2Input
-import com.volcengine.tos.model.`object`.ListObjectsV2Input
-import com.volcengine.tos.model.`object`.ListPartsInput
-import com.volcengine.tos.model.`object`.PreSignedURLInput
-import com.volcengine.tos.model.`object`.PutObjectBasicInput
-import com.volcengine.tos.model.`object`.PutObjectInput
-import com.volcengine.tos.model.`object`.TagSet
-import com.volcengine.tos.model.`object`.UploadPartV2Input
-import com.volcengine.tos.model.`object`.UploadedPartV2
+import com.volcengine.tos.model.`object`.*
 import io.github.truenine.composeserver.enums.HttpMethod
 import io.github.truenine.composeserver.logger
-import io.github.truenine.composeserver.oss.AuthenticationException
-import io.github.truenine.composeserver.oss.AuthorizationException
-import io.github.truenine.composeserver.oss.BucketAccessLevel
-import io.github.truenine.composeserver.oss.BucketAlreadyExistsException
+import io.github.truenine.composeserver.oss.*
 import io.github.truenine.composeserver.oss.BucketInfo as OssBucketInfo
-import io.github.truenine.composeserver.oss.BucketNotEmptyException
-import io.github.truenine.composeserver.oss.BucketNotFoundException
-import io.github.truenine.composeserver.oss.CompleteMultipartUploadRequest
-import io.github.truenine.composeserver.oss.ConfigurationException
-import io.github.truenine.composeserver.oss.CopyObjectRequest
-import io.github.truenine.composeserver.oss.CreateBucketRequest
-import io.github.truenine.composeserver.oss.DeleteResult
-import io.github.truenine.composeserver.oss.IObjectStorageService
-import io.github.truenine.composeserver.oss.InitiateMultipartUploadRequest
-import io.github.truenine.composeserver.oss.InvalidRequestException
-import io.github.truenine.composeserver.oss.LifecycleExpiration
 import io.github.truenine.composeserver.oss.LifecycleRule
-import io.github.truenine.composeserver.oss.LifecycleRuleStatus
-import io.github.truenine.composeserver.oss.ListObjectVersionsRequest
-import io.github.truenine.composeserver.oss.ListObjectsRequest
-import io.github.truenine.composeserver.oss.MultipartUpload
-import io.github.truenine.composeserver.oss.NetworkException
-import io.github.truenine.composeserver.oss.ObjectContent
-import io.github.truenine.composeserver.oss.ObjectInfo
-import io.github.truenine.composeserver.oss.ObjectListing
-import io.github.truenine.composeserver.oss.ObjectNotFoundException
-import io.github.truenine.composeserver.oss.ObjectStorageException
-import io.github.truenine.composeserver.oss.ObjectVersionInfo
-import io.github.truenine.composeserver.oss.ObjectVersionListing
-import io.github.truenine.composeserver.oss.PartInfo
-import io.github.truenine.composeserver.oss.PutObjectRequest
-import io.github.truenine.composeserver.oss.QuotaExceededException
-import io.github.truenine.composeserver.oss.ServiceUnavailableException
-import io.github.truenine.composeserver.oss.ShareLinkInfo
-import io.github.truenine.composeserver.oss.ShareLinkRequest
-import io.github.truenine.composeserver.oss.StorageClass
 import io.github.truenine.composeserver.oss.Tag
-import io.github.truenine.composeserver.oss.UploadPartRequest
-import io.github.truenine.composeserver.oss.UploadWithLinkRequest
-import io.github.truenine.composeserver.oss.UploadWithLinkResponse
 import java.io.InputStream
 import java.net.URI
 import java.time.Duration
@@ -125,7 +55,21 @@ class VolcengineTosObjectStorageService(private val tosClient: TOSV2, override v
     }
 
   override suspend fun deleteBucket(bucketName: String): Result<Unit> =
-    execute("Failed to delete bucket $bucketName") { tosClient.deleteBucket(DeleteBucketInput().setBucket(bucketName)) }
+    execute("Failed to delete bucket $bucketName") {
+      try {
+        tosClient.deleteBucket(DeleteBucketInput().setBucket(bucketName))
+      } catch (e: Exception) {
+        // If the bucket doesn't exist, consider it a successful deletion
+        val mapped = mapTosException(e)
+        if (mapped is BucketNotFoundException) {
+          // Successfully deleted a non-existent bucket
+          return@execute Unit
+        } else {
+          // Re-throw other exceptions
+          throw e
+        }
+      }
+    }
 
   override suspend fun bucketExists(bucketName: String): Result<Boolean> =
     withContext(Dispatchers.IO) {

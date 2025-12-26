@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.testtoolkit.autoconfig
 
 import io.github.truenine.composeserver.testtoolkit.log
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -11,9 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent
-import org.springframework.core.env.ConfigurableEnvironment
-import org.springframework.core.env.MapPropertySource
-import org.springframework.core.env.MutablePropertySources
+import org.springframework.core.env.*
 
 class TestEnvironmentApplicationListenerTest {
 

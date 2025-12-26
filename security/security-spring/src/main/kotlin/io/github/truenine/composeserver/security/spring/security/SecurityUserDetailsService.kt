@@ -3,9 +3,7 @@ package io.github.truenine.composeserver.security.spring.security
 import io.github.truenine.composeserver.domain.AuthRequestInfo
 import io.github.truenine.composeserver.security.UserDetailsWrapper
 import io.github.truenine.composeserver.slf4j
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.core.userdetails.*
 
 abstract class SecurityUserDetailsService : UserDetailsService {
   /**

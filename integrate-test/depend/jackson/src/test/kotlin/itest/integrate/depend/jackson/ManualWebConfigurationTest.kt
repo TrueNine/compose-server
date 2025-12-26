@@ -2,20 +2,15 @@ package itest.integrate.depend.jackson
 
 import io.github.truenine.composeserver.depend.jackson.autoconfig.JacksonAutoConfiguration
 import jakarta.annotation.Resource
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.util.*
 import kotlin.test.assertNotNull
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
-import org.springframework.http.HttpInputMessage
-import org.springframework.http.HttpOutputMessage
+import org.springframework.http.*
 import org.springframework.http.MediaType
 import org.springframework.http.converter.AbstractHttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -24,10 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import tools.jackson.databind.ObjectMapper
 
 /**

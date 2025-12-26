@@ -3,10 +3,7 @@ package io.github.truenine.composeserver.data.extract.service.impl
 import io.github.truenine.composeserver.data.extract.api.ICnNbsAddressApi
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.test.Ignore
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

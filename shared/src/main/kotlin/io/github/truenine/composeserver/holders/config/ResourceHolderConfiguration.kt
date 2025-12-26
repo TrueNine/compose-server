@@ -1,9 +1,7 @@
 package io.github.truenine.composeserver.holders.config
 
 import io.github.truenine.composeserver.consts.SpringBootConfigurationPropertiesPrefixes
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.*
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.validation.annotation.Validated
 
