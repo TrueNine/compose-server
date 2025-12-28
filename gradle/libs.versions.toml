@@ -57,7 +57,7 @@ org-springframework-modulith = "2.0.1"
 org-springframework-security = "7.0.2"
 org-testcontainers = "1.21.4"
 org-testng = "7.11.0"
-project = "2025.12.26"
+project = "2025.12.29"
 com-netflix-dgs-codegen = "8.3.0"
 
 [libraries]
