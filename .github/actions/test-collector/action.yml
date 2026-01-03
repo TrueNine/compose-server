@@ -42,9 +42,9 @@ runs:
       id: collect
       shell: bash
       env:
-        INPUT_GROUP_NAME: ${{ inputs.group-name }}
+        INPUT_GROUP-NAME: ${{ inputs.group-name }}
         INPUT_MODULES: ${{ inputs.modules }}
         INPUT_TESTCONTAINERS: ${{ inputs.testcontainers }}
-        INPUT_UPLOAD_ARTIFACTS: ${{ inputs.upload-artifacts }}
-        INPUT_BASE_PATH: ${{ inputs.base-path }}
+        INPUT_UPLOAD-ARTIFACTS: ${{ inputs.upload-artifacts }}
+        INPUT_BASE-PATH: ${{ inputs.base-path }}
       run: node ${{ github.action_path }}/dist/index.js

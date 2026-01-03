@@ -51,10 +51,10 @@ runs:
       env:
         INPUT_TASKS: ${{ inputs.tasks }}
         INPUT_PARALLEL: ${{ inputs.parallel }}
-        INPUT_BUILD_CACHE: ${{ inputs.build-cache }}
-        INPUT_CONFIGURATION_CACHE: ${{ inputs.configuration-cache }}
-        INPUT_MAX_WORKERS: ${{ inputs.max-workers }}
+        INPUT_BUILD-CACHE: ${{ inputs.build-cache }}
+        INPUT_CONFIGURATION-CACHE: ${{ inputs.configuration-cache }}
+        INPUT_MAX-WORKERS: ${{ inputs.max-workers }}
         INPUT_TIMEOUT: ${{ inputs.timeout }}
-        INPUT_CONTINUE_ON_ERROR: ${{ inputs.continue-on-error }}
-        INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
+        INPUT_CONTINUE-ON-ERROR: ${{ inputs.continue-on-error }}
+        INPUT_WORKING-DIRECTORY: ${{ inputs.working-directory }}
       run: node ${{ github.action_path }}/dist/index.js

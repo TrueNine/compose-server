@@ -49,13 +49,13 @@ runs:
       id: generate
       shell: bash
       env:
-        INPUT_REPORT_TYPE: ${{ inputs.report-type }}
+        INPUT_REPORT-TYPE: ${{ inputs.report-type }}
         INPUT_VERSION: ${{ inputs.version }}
-        INPUT_GROUP_ID: ${{ inputs.group-id }}
+        INPUT_GROUP-ID: ${{ inputs.group-id }}
         INPUT_ARTIFACTS: ${{ inputs.artifacts }}
-        INPUT_PUBLISH_SUCCESS: ${{ inputs.publish-success }}
-        INPUT_ERROR_MESSAGE: ${{ inputs.error-message }}
-        INPUT_ERROR_DETAILS: ${{ inputs.error-details }}
-        INPUT_REPOSITORY_URL: ${{ inputs.repository-url }}
-        INPUT_RELEASE_URL: ${{ inputs.release-url }}
+        INPUT_PUBLISH-SUCCESS: ${{ inputs.publish-success }}
+        INPUT_ERROR-MESSAGE: ${{ inputs.error-message }}
+        INPUT_ERROR-DETAILS: ${{ inputs.error-details }}
+        INPUT_REPOSITORY-URL: ${{ inputs.repository-url }}
+        INPUT_RELEASE-URL: ${{ inputs.release-url }}
       run: node ${{ github.action_path }}/dist/index.js

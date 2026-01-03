@@ -34,7 +34,7 @@ runs:
       shell: bash
       env:
         INPUT_VERSION: ${{ inputs.version }}
-        INPUT_GROUP_ID: ${{ inputs.group-id }}
+        INPUT_GROUP-ID: ${{ inputs.group-id }}
         INPUT_ARTIFACTS: ${{ inputs.artifacts }}
-        INPUT_FORCE_PUBLISH: ${{ inputs.force-publish }}
+        INPUT_FORCE-PUBLISH: ${{ inputs.force-publish }}
       run: node ${{ github.action_path }}/dist/index.js

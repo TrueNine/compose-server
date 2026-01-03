@@ -44,9 +44,9 @@ runs:
       shell: bash
       env:
         INPUT_VERSION: ${{ inputs.version }}
-        INPUT_GROUP_ID: ${{ inputs.group-id }}
+        INPUT_GROUP-ID: ${{ inputs.group-id }}
         INPUT_ARTIFACTS: ${{ inputs.artifacts }}
         INPUT_DRAFT: ${{ inputs.draft }}
-        INPUT_GENERATE_NOTES: ${{ inputs.generate-notes }}
+        INPUT_GENERATE-NOTES: ${{ inputs.generate-notes }}
         GITHUB_TOKEN: ${{ inputs.token }}
       run: node ${{ github.action_path }}/dist/index.js
