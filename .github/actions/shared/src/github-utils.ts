@@ -30,13 +30,28 @@ export function getInput(name: string, required = false): string {
 
 /**
  * Get a boolean input value from the action
+ * Handles both YAML 1.2 Core Schema booleans and string representations
  *
  * @param name - Input name
  * @param required - Whether the input is required
  * @returns Boolean value
  */
 export function getBooleanInput(name: string, required = false): boolean {
-    return core.getBooleanInput(name, { required });
+    const value = core.getInput(name, { required });
+    if (value === '') {
+        return false;
+    }
+    // YAML 1.2 Core Schema boolean values + common string representations
+    if (['true', 'True', 'TRUE', '1', 'yes', 'Yes', 'YES'].includes(value)) {
+        return true;
+    }
+    if (['false', 'False', 'FALSE', '0', 'no', 'No', 'NO', ''].includes(value)) {
+        return false;
+    }
+    throw new TypeError(
+        `Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n` +
+        `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``
+    );
 }
 
 /**

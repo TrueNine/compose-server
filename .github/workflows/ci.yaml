@@ -57,7 +57,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: '${{ needs.quick-check.outputs.gradle-version }}', cache-read-only: true, cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}' }
       - uses: ./.github/actions/gradle-exec
-        with: { tasks: '${{ matrix.tasks }}', max-workers: '2', timeout: '${{ matrix.timeout }}', continue-on-error: 'true' }
+        with: { tasks: '${{ matrix.tasks }}', max-workers: '2', timeout: '${{ matrix.timeout }}', continue-on-error: true }
       - if: always()
         uses: ./.github/actions/test-collector
         with: { group-name: '${{ matrix.group }}', modules: '${{ matrix.tasks }}', testcontainers: '${{ matrix.tc }}' }
