@@ -7,15 +7,15 @@ inputs:
   parallel:
     description: 'Enable parallel execution'
     required: false
-    default: 'true'
+    default: true
   build-cache:
     description: 'Enable build cache'
     required: false
-    default: 'true'
+    default: true
   configuration-cache:
     description: 'Enable configuration cache'
     required: false
-    default: 'true'
+    default: true
   max-workers:
     description: 'Maximum worker count'
     required: false
@@ -27,7 +27,7 @@ inputs:
   continue-on-error:
     description: 'Continue on error'
     required: false
-    default: 'false'
+    default: false
   working-directory:
     description: 'Working directory for Gradle execution'
     required: false
