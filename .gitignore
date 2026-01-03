@@ -76,4 +76,6 @@ src/test/**/out/
 TODO.*
 GEMINI.md
 WARP.md
+README.md
 .editorconfig
+.skills/
