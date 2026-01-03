@@ -1,18 +1,11 @@
 name: CI
-
 on:
   pull_request:
-    branches: [ main ]
-    paths:
-      - '.github/workflows/ci.yaml'
-      - '**/*.kt'
-
+    branches: [main]
+    paths: ['.github/workflows/ci.yaml', '**/*.kt']
 env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=4 -Dkotlin.incremental=true -Dorg.gradle.configuration-cache=true -Dorg.gradle.build-cache=true -Dorg.gradle.caching=true -Dorg.gradle.jvmargs=\"-Xmx3g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:+UseStringDeduplication -Dfile.encoding=UTF-8\" -Dkotlin.daemon.jvmargs=\"-Xmx2g -XX:MaxMetaspaceSize=768m -XX:+UseG1GC\""
-  JVM_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -XX:+UseStringDeduplication -Dfile.encoding=UTF-8"
   TESTCONTAINERS_RYUK_DISABLED: false
   TESTCONTAINERS_REUSE_ENABLE: true
-  DOCKER_BUILDKIT: 1
 
 jobs:
   quick-check:
@@ -20,322 +13,62 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     outputs:
-      cache-key: ${{ steps.cache-info.outputs.cache-key }}
-      gradle-cache-key: ${{ steps.cache-info.outputs.gradle-cache-key }}
-      java-version: ${{ steps.version-info.outputs.java-version }}
-      gradle-version: ${{ steps.version-info.outputs.gradle-version }}
-
+      java-version: ${{ steps.versions.outputs.java-version }}
+      gradle-version: ${{ steps.versions.outputs.gradle-version }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5.0.0
-        with:
-          fetch-depth: 1
-
-      - name: Extract versions from libs.versions.toml
-        id: version-info
-        run: |
-          JAVA_VERSION=$(sed -n 's/^java\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
-          GRADLE_VERSION=$(sed -n 's/^org-gradle\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
-          
-          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
-          echo "gradle-version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
-          
-          echo "Extracted Java version: $JAVA_VERSION"
-          echo "Extracted Gradle version: $GRADLE_VERSION"
-
-      - name: Set up JDK ${{ steps.version-info.outputs.java-version }}
-        uses: actions/setup-java@v5.0.0
-        with:
-          java-version: ${{ steps.version-info.outputs.java-version }}
-          distribution: 'temurin'
-
-      - name: Cache info
-        id: cache-info
-        run: |
-          GRADLE_CACHE_KEY="${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml', 'build-logic/**/*') }}"
-          DEPS_CACHE_KEY="${{ runner.os }}-deps-${{ hashFiles('gradle/libs.versions.toml', '**/build.gradle.kts') }}"
-          echo "cache-key=$GRADLE_CACHE_KEY" >> $GITHUB_OUTPUT
-          echo "gradle-cache-key=$DEPS_CACHE_KEY" >> $GITHUB_OUTPUT
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: ${{ steps.version-info.outputs.gradle-version }}
-          cache-read-only: false
-          cache-write-only: false
-          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Quick compile
-        run: |
-          ./gradlew compileKotlin compileTestKotlin \
-            --no-daemon \
-            --parallel \
-            --build-cache \
-            --configuration-cache \
-            --quiet
+      - uses: actions/checkout@v5.0.0
+        with: { fetch-depth: 1 }
+      - id: versions
+        uses: ./.github/actions/extract-versions
+      - uses: actions/setup-java@v5.0.0
+        with: { java-version: '${{ steps.versions.outputs.java-version }}', distribution: temurin }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '${{ steps.versions.outputs.gradle-version }}', cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}' }
+      - uses: ./.github/actions/gradle-exec
+        with: { tasks: 'compileKotlin compileTestKotlin', max-workers: '4', timeout: '15' }
 
   test-matrix:
-    name: Test
+    name: Test (${{ matrix.group }})
     needs: quick-check
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
-        group:
-          - "core-foundation"
-          - "core-build-tools"
-          - "rds-light"
-          - "rds-heavy"
-          - "business-ai-pay"
-          - "business-oss"
-          - "business-communication"
-          - "security"
-          - "data-processing"
-          - "platform-integrations"
-          - "testing-tools"
-          - "integration-tests"
         include:
-          - group: "core-foundation"
-            modules: "shared cacheable docsite"
-            testcontainers: false
-            timeout: 8
-          - group: "core-build-tools"
-            modules: "gradle-plugin version-catalog bom"
-            testcontainers: false
-            timeout: 10
-          - group: "rds-light"
-            modules: "rds:rds-shared rds:rds-flyway-migration-shared"
-            testcontainers: false
-            timeout: 8
-          - group: "rds-heavy"
-            modules: "rds:rds-crud rds:rds-jimmer-ext-postgres rds:rds-flyway-migration-postgresql rds:rds-flyway-migration-mysql8"
-            testcontainers: true
-            timeout: 25
-          - group: "business-ai-pay"
-            modules: "ai:ai-shared ai:ai-langchain4j pay:pay-shared pay:pay-wechat"
-            testcontainers: true
-            timeout: 18
-          - group: "business-oss"
-            modules: "oss:oss-shared oss:oss-minio oss:oss-aliyun-oss oss:oss-huawei-obs oss:oss-volcengine-tos"
-            testcontainers: true
-            timeout: 20
-          - group: "business-communication"
-            modules: "sms:sms-shared sms:sms-tencent surveillance:surveillance-shared surveillance:surveillance-hikvision"
-            testcontainers: true
-            timeout: 15
-          - group: "security"
-            modules: "security:security-crypto security:security-oauth2 security:security-spring"
-            testcontainers: false
-            timeout: 12
-          - group: "data-processing"
-            modules: "data:data-crawler data:data-extract"
-            testcontainers: true
-            timeout: 15
-          - group: "platform-integrations"
-            modules: "depend:depend-http-exchange depend:depend-jackson depend:depend-paho depend:depend-servlet depend:depend-springdoc-openapi depend:depend-xxl-job ksp:ksp-meta ksp:ksp-plugin ksp:ksp-shared psdk:psdk-wxpa ide:ide-idea-mcp"
-            testcontainers: false
-            timeout: 18
-          - group: "testing-tools"
-            modules: "testtoolkit:testtoolkit-shared testtoolkit:testtoolkit-testcontainers testtoolkit:testtoolkit-springmvc"
-            testcontainers: true
-            timeout: 15
-          - group: "integration-tests"
-            modules: "integrate-test:depend:jackson integrate-test:oss:minio integrate-test:cacheable"
-            testcontainers: true
-            timeout: 30
-
+          - { group: core-foundation, tasks: ':shared:test :cacheable:test :docsite:test', tc: 'false', timeout: '8' }
+          - { group: core-build-tools, tasks: ':gradleplugin:gradleplugin-composeserver:test :version-catalog:test :bom:test', tc: 'false', timeout: '10' }
+          - { group: rds-light, tasks: ':rds:rds-shared:test :rds:rds-flyway-migration-shared:test', tc: 'false', timeout: '8' }
+          - { group: rds-heavy, tasks: ':rds:rds-crud:test :rds:rds-jimmer-ext-postgres:test :rds:rds-flyway-migration-postgresql:test :rds:rds-flyway-migration-mysql8:test', tc: 'true', timeout: '25' }
+          - { group: business-ai-pay, tasks: ':ai:ai-shared:test :ai:ai-langchain4j:test :pay:pay-shared:test :pay:pay-wechat:test', tc: 'true', timeout: '18' }
+          - { group: business-oss, tasks: ':oss:oss-shared:test :oss:oss-minio:test :oss:oss-aliyun-oss:test :oss:oss-huawei-obs:test :oss:oss-volcengine-tos:test', tc: 'true', timeout: '20' }
+          - { group: business-communication, tasks: ':sms:sms-shared:test :sms:sms-tencent:test :surveillance:surveillance-shared:test :surveillance:surveillance-hikvision:test', tc: 'true', timeout: '15' }
+          - { group: security, tasks: ':security:security-crypto:test :security:security-oauth2:test :security:security-spring:test', tc: 'false', timeout: '12' }
+          - { group: data-processing, tasks: ':data:data-crawler:test :data:data-extract:test', tc: 'true', timeout: '15' }
+          - { group: platform-integrations, tasks: ':depend:depend-http-exchange:test :depend:depend-jackson:test :depend:depend-paho:test :depend:depend-servlet:test :depend:depend-springdoc-openapi:test :depend:depend-xxl-job:test :ksp:ksp-meta:test :ksp:ksp-plugin:test :ksp:ksp-shared:test :psdk:psdk-wxpa:test :ide:ide-idea-mcp:test', tc: 'false', timeout: '18' }
+          - { group: testing-tools, tasks: ':testtoolkit:testtoolkit-shared:test :testtoolkit:testtoolkit-testcontainers:test :testtoolkit:testtoolkit-springmvc:test', tc: 'true', timeout: '15' }
+          - { group: integration-tests, tasks: ':integrate-test:depend:jackson:test :integrate-test:oss:minio:test :integrate-test:cacheable:test', tc: 'true', timeout: '30' }
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5.0.0
-        with:
-          fetch-depth: 1
-
-      - name: Set up JDK ${{ needs.quick-check.outputs.java-version }}
-        uses: actions/setup-java@v5.0.0
-        with:
-          java-version: ${{ needs.quick-check.outputs.java-version }}
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: ${{ needs.quick-check.outputs.gradle-version }}
-          cache-read-only: true
-          cache-write-only: false
-          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Run tests
-        timeout-minutes: ${{ matrix.timeout }}
-        run: |
-          set -e
-
-          modules="${{ matrix.modules }}"
-          test_tasks=""
-          
-          for module in $modules; do
-            module_path=":$module"
-            if [[ "$module" != *":"* ]]; then
-              module_path=":$module"
-            fi
-            test_tasks="$test_tasks $module_path:test"
-          done
-
-          echo "Running test tasks: $test_tasks"
-          ./gradlew $test_tasks \
-            --no-daemon \
-            --parallel \
-            --build-cache \
-            --configuration-cache \
-            --continue \
-            -Dorg.gradle.workers.max=2 \
-            -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+UseG1GC" || true
-        env:
-          # TestContainers configuration
-          TESTCONTAINERS_RYUK_DISABLED: false
-          TESTCONTAINERS_REUSE_ENABLE: true
-          TESTCONTAINERS_STARTUP_TIMEOUT: 120
-          TESTCONTAINERS_CONNECT_TIMEOUT: 60
-          # Gradle and JVM configuration
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
-          JAVA_OPTS: "${{ env.JVM_OPTS }}"
-          CI: true
-          # Parallel test configuration
-          JUNIT_PLATFORM_EXECUTION_PARALLEL_ENABLED: true
-          JUNIT_PLATFORM_EXECUTION_PARALLEL_MODE_DEFAULT: concurrent
-
-      - name: Collect test diagnostics
-        if: failure()
-        run: |
-          find . -name "*.log" -type f -exec echo "=== {} ===" \; -exec cat {} \; || true
-          
-          if [[ "${{ matrix.testcontainers }}" == "true" ]]; then
-            echo "=== TestContainers Status ===" 
-            docker ps -a --filter "label=org.testcontainers=true" || true
-            echo "=== TestContainers Logs ==="
-            for container in $(docker ps -aq --filter "label=org.testcontainers=true" 2>/dev/null || true); do
-              echo "--- Container $container ---"
-              docker logs "$container" --tail 50 2>/dev/null || echo "No logs available"
-            done
-          fi
-          
-          if pgrep -f "org.gradle.launcher.daemon.bootstrap.GradleDaemon" > /dev/null; then
-            jps -v || true
-          fi
-          
-          free -h || true
-          df -h || true
-
-      - name: Upload test results
+      - uses: actions/checkout@v5.0.0
+        with: { fetch-depth: 1 }
+      - uses: actions/setup-java@v5.0.0
+        with: { java-version: '${{ needs.quick-check.outputs.java-version }}', distribution: temurin }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '${{ needs.quick-check.outputs.gradle-version }}', cache-read-only: true, cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}' }
+      - uses: ./.github/actions/gradle-exec
+        with: { tasks: '${{ matrix.tasks }}', max-workers: '2', timeout: '${{ matrix.timeout }}', continue-on-error: 'true' }
+      - if: always()
+        uses: ./.github/actions/test-collector
+        with: { group-name: '${{ matrix.group }}', modules: '${{ matrix.tasks }}', testcontainers: '${{ matrix.tc }}' }
+      - if: always()
         uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results-${{ matrix.group }}
-          path: |
-            **/build/reports/tests/
-            **/build/test-results/
-            **/build/tmp/test/
-            **/*.log
-          retention-days: 5
+        with: { name: 'test-results-${{ matrix.group }}', path: '**/build/reports/tests/', retention-days: 5 }
 
-      - name: Cleanup TestContainers
-        if: always() && matrix.testcontainers == true
-        run: |
-          echo "Cleaning up TestContainers resources..."
-          # Clean up non-reusable TestContainers
-          docker container prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
-          docker network prune -f --filter "label=org.testcontainers=true" || true
-          docker volume prune -f --filter "label=org.testcontainers=true" --filter "label!=org.testcontainers.reuse.enable=true" || true
-          echo "TestContainers cleanup completed"
-
-  test-results:
-    name: Test Results Summary
-    needs: [ quick-check, test-matrix ]
+  summary:
+    name: Summary
+    needs: [quick-check, test-matrix]
     runs-on: ubuntu-latest
     if: always()
-    
     steps:
-      - name: Download all test results
-        uses: actions/download-artifact@v5.0.0
-        with:
-          path: test-results
-          pattern: test-results-*
-
-      - name: Generate test summary
-        run: |
-          echo "# Test Results Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Execution time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "**Test environment:** GitHub Actions (ubuntu-latest)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          echo "## Module Group Test Status" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Module Group | Status | Container Dependencies | Duration |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------------|--------|------------------------|----------|" >> $GITHUB_STEP_SUMMARY
-          
-          declare -A group_testcontainers=(
-            ["core-foundation"]="None"
-            ["core-build-tools"]="None"
-            ["rds-light"]="None"
-            ["rds-heavy"]="TestContainers (PostgreSQL, MySQL, Redis)"
-            ["business-ai-pay"]="TestContainers (Redis)"
-            ["business-oss"]="TestContainers (Redis, MinIO)"
-            ["business-communication"]="TestContainers (Redis)"
-            ["security"]="None"
-            ["data-processing"]="TestContainers (Redis)"
-            ["platform-integrations"]="None"
-            ["testing-tools"]="TestContainers (Database)"
-            ["integration-tests"]="TestContainers (Full Stack)"
-          )
-
-          for group in core-foundation core-build-tools rds-light rds-heavy business-ai-pay business-oss business-communication security data-processing platform-integrations testing-tools integration-tests; do
-            testcontainers="${group_testcontainers[$group]}"
-            if [[ "${{ needs.test-matrix.result }}" == "success" ]]; then
-              echo "| $group | ✅ Pass | $testcontainers | - |" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "| $group | ❌ Failed | $testcontainers | - |" >> $GITHUB_STEP_SUMMARY
-            fi
-          done
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "${{ needs.test-matrix.result }}" != "success" ]]; then
-            echo "## Failure Analysis" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Common troubleshooting:**" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "1. **TestContainers startup failed**" >> $GITHUB_STEP_SUMMARY
-            echo "   - Check Docker service status" >> $GITHUB_STEP_SUMMARY
-            echo "   - Check network connectivity and image pulling" >> $GITHUB_STEP_SUMMARY
-            echo "   - Timeout configuration may need adjustment" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "2. **Out of memory (OOM)**" >> $GITHUB_STEP_SUMMARY
-            echo "   - JVM heap memory setting: 4GB" >> $GITHUB_STEP_SUMMARY
-            echo "   - Metaspace setting: 1.5GB" >> $GITHUB_STEP_SUMMARY
-            echo "   - Parallel worker limit: 6" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "3. **Test dependency conflicts**" >> $GITHUB_STEP_SUMMARY
-            echo "   - Check port conflicts in parallel tests" >> $GITHUB_STEP_SUMMARY
-            echo "   - Verify database connection pool configuration" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-          fi
-
-      - name: Check overall status
-        run: |
-          if [[ "${{ needs.quick-check.result }}" != "success" ]]; then
-            echo "Quick check failed"
-            exit 1
-          fi
-          if [[ "${{ needs.test-matrix.result }}" != "success" ]]; then
-            echo "Test matrix failed" 
-            exit 1
-          fi
-          echo "All checks passed"
+      - run: '[[ "${{ needs.quick-check.result }}" == "success" && "${{ needs.test-matrix.result }}" == "success" ]] || exit 1'

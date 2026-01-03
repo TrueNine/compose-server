@@ -1,0 +1,40 @@
+name: 'Maven Central Version Check'
+description: 'Check if version exists on Maven Central and determine if publishing should proceed'
+inputs:
+  version:
+    description: 'Version to check'
+    required: true
+  group-id:
+    description: 'Maven group ID'
+    required: false
+    default: 'io.github.truenine'
+  artifacts:
+    description: 'Comma-separated list of artifacts to check'
+    required: false
+    default: 'composeserver-shared,composeserver-cacheable,composeserver-bom'
+  force-publish:
+    description: 'Skip existence check and force publish'
+    required: false
+    default: 'false'
+outputs:
+  should-publish:
+    description: 'Whether to proceed with publishing'
+    value: ${{ steps.check.outputs.should-publish }}
+  version-exists:
+    description: 'Whether version exists on Maven Central'
+    value: ${{ steps.check.outputs.version-exists }}
+  is-snapshot:
+    description: 'Whether version is a snapshot/prerelease'
+    value: ${{ steps.check.outputs.is-snapshot }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Check Maven Central version
+      id: check
+      shell: bash
+      env:
+        INPUT_VERSION: ${{ inputs.version }}
+        INPUT_GROUP_ID: ${{ inputs.group-id }}
+        INPUT_ARTIFACTS: ${{ inputs.artifacts }}
+        INPUT_FORCE_PUBLISH: ${{ inputs.force-publish }}
+      run: node ${{ github.action_path }}/dist/index.js

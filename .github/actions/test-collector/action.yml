@@ -1,0 +1,50 @@
+name: 'Test Result Collector'
+description: 'Collect and summarize test results'
+inputs:
+  group-name:
+    description: 'Test group name'
+    required: true
+  modules:
+    description: 'Modules tested (space-separated)'
+    required: true
+  testcontainers:
+    description: 'Whether TestContainers was used'
+    required: false
+    default: 'false'
+  upload-artifacts:
+    description: 'Upload test artifacts'
+    required: false
+    default: 'true'
+  base-path:
+    description: 'Base path to search for test results'
+    required: false
+    default: '.'
+outputs:
+  passed:
+    description: 'Whether all tests passed'
+    value: ${{ steps.collect.outputs.passed }}
+  summary:
+    description: 'Test summary'
+    value: ${{ steps.collect.outputs.summary }}
+  total-tests:
+    description: 'Total number of tests'
+    value: ${{ steps.collect.outputs.total-tests }}
+  failed-tests:
+    description: 'Number of failed tests'
+    value: ${{ steps.collect.outputs.failed-tests }}
+  skipped-tests:
+    description: 'Number of skipped tests'
+    value: ${{ steps.collect.outputs.skipped-tests }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Collect Test Results
+      id: collect
+      shell: bash
+      env:
+        INPUT_GROUP_NAME: ${{ inputs.group-name }}
+        INPUT_MODULES: ${{ inputs.modules }}
+        INPUT_TESTCONTAINERS: ${{ inputs.testcontainers }}
+        INPUT_UPLOAD_ARTIFACTS: ${{ inputs.upload-artifacts }}
+        INPUT_BASE_PATH: ${{ inputs.base-path }}
+      run: node ${{ github.action_path }}/dist/index.js
