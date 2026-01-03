@@ -15,11 +15,11 @@ inputs:
   draft:
     description: 'Create as draft release'
     required: false
-    default: 'false'
+    default: false
   generate-notes:
     description: 'Auto-generate release notes from commits'
     required: false
-    default: 'true'
+    default: true
   token:
     description: 'GitHub token for API access'
     required: true

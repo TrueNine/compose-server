@@ -15,7 +15,7 @@ inputs:
   force-publish:
     description: 'Skip existence check and force publish'
     required: false
-    default: 'false'
+    default: false
 outputs:
   should-publish:
     description: 'Whether to proceed with publishing'

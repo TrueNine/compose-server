@@ -10,11 +10,11 @@ inputs:
   testcontainers:
     description: 'Whether TestContainers was used'
     required: false
-    default: 'false'
+    default: false
   upload-artifacts:
     description: 'Upload test artifacts'
     required: false
-    default: 'true'
+    default: true
   base-path:
     description: 'Base path to search for test results'
     required: false

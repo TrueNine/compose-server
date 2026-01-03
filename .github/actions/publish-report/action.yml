@@ -18,7 +18,7 @@ inputs:
   publish-success:
     description: 'Whether publish was successful (for summary report)'
     required: false
-    default: 'true'
+    default: true
   error-message:
     description: 'Error message (for failure report)'
     required: false
