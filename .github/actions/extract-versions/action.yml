@@ -1,22 +1,22 @@
-name: 'Extract Versions'
-description: 'Extract version information from libs.versions.toml'
+name: Extract Versions
+description: Extract version information from libs.versions.toml
 inputs:
   toml-path:
-    description: 'Path to libs.versions.toml'
+    description: Path to libs.versions.toml
     required: false
-    default: 'gradle/libs.versions.toml'
+    default: gradle/libs.versions.toml
 outputs:
   java-version:
-    description: 'Java version'
+    description: Java version
     value: ${{ steps.extract.outputs.java-version }}
   gradle-version:
-    description: 'Gradle version'
+    description: Gradle version
     value: ${{ steps.extract.outputs.gradle-version }}
   project-version:
-    description: 'Project version'
+    description: Project version
     value: ${{ steps.extract.outputs.project-version }}
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Extract versions
       id: extract

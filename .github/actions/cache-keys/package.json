@@ -1,17 +1,17 @@
 {
-    "name": "@github-actions/cache-keys",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "description": "Generate consistent cache keys for Gradle",
-    "main": "./dist/index.js",
-    "scripts": {
-        "build": "cd ../.. && pnpm build",
-        "typecheck": "tsc --noEmit",
-        "test": "vitest run",
-        "test:watch": "vitest"
-    },
-    "dependencies": {
-        "@github-actions/shared": "workspace:*"
-    }
+  "name": "@github-actions/cache-keys",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generate consistent cache keys for Gradle",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "cd ../.. && pnpm build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@github-actions/shared": "workspace:*"
+  }
 }

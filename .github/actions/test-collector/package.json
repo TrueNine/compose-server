@@ -1,17 +1,17 @@
 {
-    "name": "@github-actions/test-collector",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "description": "Collect and summarize test results",
-    "main": "./dist/index.js",
-    "scripts": {
-        "build": "cd ../.. && pnpm build",
-        "typecheck": "tsc --noEmit",
-        "test": "vitest run",
-        "test:watch": "vitest"
-    },
-    "dependencies": {
-        "@github-actions/shared": "workspace:*"
-    }
+  "name": "@github-actions/test-collector",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Collect and summarize test results",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "cd ../.. && pnpm build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@github-actions/shared": "workspace:*"
+  }
 }

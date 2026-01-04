@@ -1,17 +1,17 @@
 {
-    "name": "@github-actions/maven-version-check",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "description": "Check if version exists on Maven Central",
-    "main": "./dist/index.js",
-    "scripts": {
-        "build": "cd ../.. && pnpm build",
-        "typecheck": "tsc --noEmit",
-        "test": "vitest run",
-        "test:watch": "vitest"
-    },
-    "dependencies": {
-        "@github-actions/shared": "workspace:*"
-    }
+  "name": "@github-actions/maven-version-check",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Check if version exists on Maven Central",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "cd ../.. && pnpm build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@github-actions/shared": "workspace:*"
+  }
 }

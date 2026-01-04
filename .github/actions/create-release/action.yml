@@ -1,43 +1,43 @@
-name: 'Create GitHub Release'
-description: 'Create a GitHub Release with generated release notes'
+name: Create GitHub Release
+description: Create a GitHub Release with generated release notes
 inputs:
   version:
     description: 'Version to release (e.g., 1.0.0 or v1.0.0)'
     required: true
   group-id:
-    description: 'Maven group ID'
+    description: Maven group ID
     required: false
-    default: 'io.github.truenine'
+    default: io.github.truenine
   artifacts:
-    description: 'Comma-separated list of artifacts'
+    description: Comma-separated list of artifacts
     required: false
     default: ''
   draft:
-    description: 'Create as draft release'
+    description: Create as draft release
     required: false
     default: false
   generate-notes:
-    description: 'Auto-generate release notes from commits'
+    description: Auto-generate release notes from commits
     required: false
     default: true
   token:
-    description: 'GitHub token for API access'
+    description: GitHub token for API access
     required: true
 outputs:
   release-id:
-    description: 'ID of the created release'
+    description: ID of the created release
     value: ${{ steps.create.outputs.release-id }}
   release-url:
-    description: 'URL of the created release'
+    description: URL of the created release
     value: ${{ steps.create.outputs.release-url }}
   release-created:
-    description: 'Whether a new release was created'
+    description: Whether a new release was created
     value: ${{ steps.create.outputs.release-created }}
   tag-name:
-    description: 'Tag name of the release'
+    description: Tag name of the release
     value: ${{ steps.create.outputs.tag-name }}
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Create Release
       id: create

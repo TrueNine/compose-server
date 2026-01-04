@@ -4,10 +4,10 @@
  * @module toml-parser
  */
 
-import { parse as parseTomlContent } from '@iarna/toml';
-import { readFile } from 'node:fs/promises';
-import type { VersionInfo } from './types.js';
-import { TomlParseError } from './types.js';
+import type { VersionInfo } from './types.js'
+import { readFile } from 'node:fs/promises'
+import { parse as parseTomlContent } from '@iarna/toml'
+import { TomlParseError } from './types.js'
 
 /**
  * Parse TOML content string into an object
@@ -17,23 +17,29 @@ import { TomlParseError } from './types.js';
  * @throws {TomlParseError} When TOML content is malformed
  */
 export function parseToml(content: string): Record<string, unknown> {
-    if (!content || content.trim().length === 0) {
-        throw new TomlParseError('TOML content is empty');
-    }
+  if (!content || content.trim().length === 0) {
+    throw new TomlParseError('TOML content is empty')
+  }
 
-    try {
-        return parseTomlContent(content) as Record<string, unknown>;
-    } catch (error) {
-        if (error instanceof Error) {
-            // Extract line/column info from @iarna/toml error messages
-            const lineMatch = error.message.match(/line (\d+)/i);
-            const colMatch = error.message.match(/col(?:umn)? (\d+)/i);
-            const line = lineMatch?.[1] ? parseInt(lineMatch[1], 10) : undefined;
-            const col = colMatch?.[1] ? parseInt(colMatch[1], 10) : undefined;
-            throw new TomlParseError(error.message, line, col);
-        }
-        throw new TomlParseError('Unknown parsing error');
+  try {
+    return parseTomlContent(content) as Record<string, unknown>
+  } catch (error) {
+    if (error instanceof Error) {
+      // Extract line/column info from @iarna/toml error messages
+      const lineMatch = error.message.match(/line (\d+)/i)
+      const colMatch = error.message.match(/col(?:umn)? (\d+)/i)
+      let lineNumber: number | undefined
+      if (lineMatch?.[1]) {
+        lineNumber = Number.parseInt(lineMatch[1], 10)
+      }
+      let columnNumber: number | undefined
+      if (colMatch?.[1]) {
+        columnNumber = Number.parseInt(colMatch[1], 10)
+      }
+      throw new TomlParseError(error.message, lineNumber, columnNumber)
     }
+    throw new TomlParseError('Unknown parsing error')
+  }
 }
 
 /**
@@ -44,30 +50,36 @@ export function parseToml(content: string): Record<string, unknown> {
  * @throws {TomlParseError} When required version fields are missing
  */
 export function extractVersionsFromToml(toml: Record<string, unknown>): VersionInfo {
-    const versions = toml.versions as Record<string, string> | undefined;
+  const versions = toml.versions as Record<string, string> | undefined
 
-    if (!versions || typeof versions !== 'object') {
-        throw new TomlParseError('Missing [versions] section in TOML');
-    }
+  if (!versions || typeof versions !== 'object') {
+    throw new TomlParseError('Missing [versions] section in TOML')
+  }
 
-    const java = versions['java'];
-    const gradle = versions['org-gradle'];
-    const project = versions['project'];
+  const java = versions.java
+  const gradle = versions['org-gradle']
+  const project = versions.project
 
-    const missing: string[] = [];
-    if (!java) missing.push('java');
-    if (!gradle) missing.push('org-gradle');
-    if (!project) missing.push('project');
+  const missing: string[] = []
+  if (!java) {
+    missing.push('java')
+  }
+  if (!gradle) {
+    missing.push('org-gradle')
+  }
+  if (!project) {
+    missing.push('project')
+  }
 
-    if (missing.length > 0) {
-        throw new TomlParseError(`Missing required version fields: ${missing.join(', ')}`);
-    }
+  if (missing.length > 0) {
+    throw new TomlParseError(`Missing required version fields: ${missing.join(', ')}`)
+  }
 
-    return {
-        java: String(java),
-        gradle: String(gradle),
-        project: String(project),
-    };
+  return {
+    java: String(java),
+    gradle: String(gradle),
+    project: String(project),
+  }
 }
 
 /**
@@ -78,17 +90,17 @@ export function extractVersionsFromToml(toml: Record<string, unknown>): VersionI
  * @throws {TomlParseError} When file cannot be read or parsed
  */
 export async function extractVersions(tomlPath: string): Promise<VersionInfo> {
-    let content: string;
+  let content: string
 
-    try {
-        content = await readFile(tomlPath, 'utf-8');
-    } catch (error) {
-        if (error instanceof Error) {
-            throw new TomlParseError(`Failed to read TOML file: ${error.message}`);
-        }
-        throw new TomlParseError('Failed to read TOML file');
+  try {
+    content = await readFile(tomlPath, 'utf-8')
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new TomlParseError(`Failed to read TOML file: ${error.message}`)
     }
+    throw new TomlParseError('Failed to read TOML file')
+  }
 
-    const toml = parseToml(content);
-    return extractVersionsFromToml(toml);
+  const toml = parseToml(content)
+  return extractVersionsFromToml(toml)
 }

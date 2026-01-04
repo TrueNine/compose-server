@@ -4,8 +4,9 @@
  * @module github-utils
  */
 
-import * as core from '@actions/core';
-import { appendFile, writeFile } from 'node:fs/promises';
+import { appendFile, writeFile } from 'node:fs/promises'
+import process from 'node:process'
+import * as core from '@actions/core'
 
 /**
  * Set an output value for the action
@@ -14,7 +15,7 @@ import { appendFile, writeFile } from 'node:fs/promises';
  * @param value - Output value (will be converted to string)
  */
 export function setOutput(name: string, value: string | number | boolean): void {
-    core.setOutput(name, String(value));
+  core.setOutput(name, String(value))
 }
 
 /**
@@ -25,7 +26,7 @@ export function setOutput(name: string, value: string | number | boolean): void 
  * @returns Input value or empty string if not found
  */
 export function getInput(name: string, required = false): string {
-    return core.getInput(name, { required });
+  return core.getInput(name, { required })
 }
 
 /**
@@ -37,21 +38,21 @@ export function getInput(name: string, required = false): string {
  * @returns Boolean value
  */
 export function getBooleanInput(name: string, required = false): boolean {
-    const value = core.getInput(name, { required });
-    if (value === '') {
-        return false;
-    }
-    // YAML 1.2 Core Schema boolean values + common string representations
-    if (['true', 'True', 'TRUE', '1', 'yes', 'Yes', 'YES'].includes(value)) {
-        return true;
-    }
-    if (['false', 'False', 'FALSE', '0', 'no', 'No', 'NO', ''].includes(value)) {
-        return false;
-    }
-    throw new TypeError(
-        `Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n` +
-        `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``
-    );
+  const value = core.getInput(name, { required })
+  if (value === '') {
+    return false
+  }
+  // YAML 1.2 Core Schema boolean values + common string representations
+  if (['true', 'True', 'TRUE', '1', 'yes', 'Yes', 'YES'].includes(value)) {
+    return true
+  }
+  if (['false', 'False', 'FALSE', '0', 'no', 'No', 'NO', ''].includes(value)) {
+    return false
+  }
+  throw new TypeError(
+    `Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n`
+    + `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``,
+  )
 }
 
 /**
@@ -62,7 +63,7 @@ export function getBooleanInput(name: string, required = false): boolean {
  * @returns Array of input lines
  */
 export function getMultilineInput(name: string, required = false): string[] {
-    return core.getMultilineInput(name, { required });
+  return core.getMultilineInput(name, { required })
 }
 
 /**
@@ -72,20 +73,20 @@ export function getMultilineInput(name: string, required = false): string[] {
  * @param append - Whether to append to existing summary (default: true)
  */
 export async function writeStepSummary(content: string, append = true): Promise<void> {
-    const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+  const summaryPath = process.env.GITHUB_STEP_SUMMARY
 
-    if (!summaryPath) {
-        // Not running in GitHub Actions, log to console instead
-        console.log('Step Summary (not in GitHub Actions):');
-        console.log(content);
-        return;
-    }
+  if (!summaryPath) {
+    // Not running in GitHub Actions, log to console instead
+    core.info('Step Summary (not in GitHub Actions):')
+    core.info(content)
+    return
+  }
 
-    if (append) {
-        await appendFile(summaryPath, content + '\n');
-    } else {
-        await writeFile(summaryPath, content + '\n');
-    }
+  if (append) {
+    await appendFile(summaryPath, `${content}\n`)
+  } else {
+    await writeFile(summaryPath, `${content}\n`)
+  }
 }
 
 /**
@@ -94,7 +95,7 @@ export async function writeStepSummary(content: string, append = true): Promise<
  * @param message - Message to log
  */
 export function info(message: string): void {
-    core.info(message);
+  core.info(message)
 }
 
 /**
@@ -103,7 +104,7 @@ export function info(message: string): void {
  * @param message - Warning message
  */
 export function warning(message: string): void {
-    core.warning(message);
+  core.warning(message)
 }
 
 /**
@@ -112,7 +113,7 @@ export function warning(message: string): void {
  * @param message - Error message
  */
 export function error(message: string): void {
-    core.error(message);
+  core.error(message)
 }
 
 /**
@@ -121,7 +122,7 @@ export function error(message: string): void {
  * @param message - Error message
  */
 export function setFailed(message: string): void {
-    core.setFailed(message);
+  core.setFailed(message)
 }
 
 /**
@@ -130,14 +131,14 @@ export function setFailed(message: string): void {
  * @param name - Group name
  */
 export function startGroup(name: string): void {
-    core.startGroup(name);
+  core.startGroup(name)
 }
 
 /**
  * End the current log group
  */
 export function endGroup(): void {
-    core.endGroup();
+  core.endGroup()
 }
 
 /**
@@ -148,7 +149,7 @@ export function endGroup(): void {
  * @returns Result of the function
  */
 export async function group<T>(name: string, fn: () => Promise<T>): Promise<T> {
-    return core.group(name, fn);
+  return core.group(name, fn)
 }
 
 /**
@@ -158,7 +159,7 @@ export async function group<T>(name: string, fn: () => Promise<T>): Promise<T> {
  * @param value - Variable value
  */
 export function exportVariable(name: string, value: string): void {
-    core.exportVariable(name, value);
+  core.exportVariable(name, value)
 }
 
 /**
@@ -167,7 +168,7 @@ export function exportVariable(name: string, value: string): void {
  * @param inputPath - Path to add
  */
 export function addPath(inputPath: string): void {
-    core.addPath(inputPath);
+  core.addPath(inputPath)
 }
 
 /**
@@ -176,7 +177,7 @@ export function addPath(inputPath: string): void {
  * @returns true if debug mode is enabled
  */
 export function isDebug(): boolean {
-    return core.isDebug();
+  return core.isDebug()
 }
 
 /**
@@ -185,7 +186,7 @@ export function isDebug(): boolean {
  * @param message - Debug message
  */
 export function debug(message: string): void {
-    core.debug(message);
+  core.debug(message)
 }
 
 /**
@@ -194,23 +195,23 @@ export function debug(message: string): void {
  * @returns Object with common GitHub context values
  */
 export function getGitHubContext(): {
-    repository: string;
-    sha: string;
-    ref: string;
-    workflow: string;
-    runId: string;
-    runNumber: string;
-    actor: string;
+  repository: string
+  sha: string
+  ref: string
+  workflow: string
+  runId: string
+  runNumber: string
+  actor: string
 } {
-    return {
-        repository: process.env.GITHUB_REPOSITORY || '',
-        sha: process.env.GITHUB_SHA || '',
-        ref: process.env.GITHUB_REF || '',
-        workflow: process.env.GITHUB_WORKFLOW || '',
-        runId: process.env.GITHUB_RUN_ID || '',
-        runNumber: process.env.GITHUB_RUN_NUMBER || '',
-        actor: process.env.GITHUB_ACTOR || '',
-    };
+  return {
+    repository: process.env.GITHUB_REPOSITORY || '',
+    sha: process.env.GITHUB_SHA || '',
+    ref: process.env.GITHUB_REF || '',
+    workflow: process.env.GITHUB_WORKFLOW || '',
+    runId: process.env.GITHUB_RUN_ID || '',
+    runNumber: process.env.GITHUB_RUN_NUMBER || '',
+    actor: process.env.GITHUB_ACTOR || '',
+  }
 }
 
 /**
@@ -221,11 +222,11 @@ export function getGitHubContext(): {
  * @returns Markdown table string
  */
 export function generateMarkdownTable(headers: string[], rows: string[][]): string {
-    const headerRow = `| ${headers.join(' | ')} |`;
-    const separatorRow = `| ${headers.map(() => '---').join(' | ')} |`;
-    const dataRows = rows.map((row) => `| ${row.join(' | ')} |`).join('\n');
+  const headerRow = `| ${headers.join(' | ')} |`
+  const separatorRow = `| ${headers.map(() => '---').join(' | ')} |`
+  const dataRows = rows.map((row) => `| ${row.join(' | ')} |`).join('\n')
 
-    return `${headerRow}\n${separatorRow}\n${dataRows}`;
+  return `${headerRow}\n${separatorRow}\n${dataRows}`
 }
 
 /**
@@ -236,5 +237,5 @@ export function generateMarkdownTable(headers: string[], rows: string[][]): stri
  * @returns HTML details element string
  */
 export function generateCollapsible(summary: string, details: string): string {
-    return `<details>\n<summary>${summary}</summary>\n\n${details}\n\n</details>`;
+  return `<details>\n<summary>${summary}</summary>\n\n${details}\n\n</details>`
 }

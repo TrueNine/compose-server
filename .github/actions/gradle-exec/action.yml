@@ -1,49 +1,49 @@
-name: 'Gradle Execute'
-description: 'Execute Gradle commands with consistent configuration'
+name: Gradle Execute
+description: Execute Gradle commands with consistent configuration
 inputs:
   tasks:
-    description: 'Gradle tasks to execute (space-separated)'
+    description: Gradle tasks to execute (space-separated)
     required: true
   parallel:
-    description: 'Enable parallel execution'
+    description: Enable parallel execution
     required: false
     default: true
   build-cache:
-    description: 'Enable build cache'
+    description: Enable build cache
     required: false
     default: true
   configuration-cache:
-    description: 'Enable configuration cache'
+    description: Enable configuration cache
     required: false
     default: true
   max-workers:
-    description: 'Maximum worker count'
+    description: Maximum worker count
     required: false
     default: '4'
   timeout:
-    description: 'Timeout in minutes'
+    description: Timeout in minutes
     required: false
     default: '30'
   continue-on-error:
-    description: 'Continue on error'
+    description: Continue on error
     required: false
     default: false
   working-directory:
-    description: 'Working directory for Gradle execution'
+    description: Working directory for Gradle execution
     required: false
-    default: '.'
+    default: .
 outputs:
   success:
-    description: 'Whether execution succeeded'
+    description: Whether execution succeeded
     value: ${{ steps.exec.outputs.success }}
   output:
-    description: 'Command output'
+    description: Command output
     value: ${{ steps.exec.outputs.output }}
   exit-code:
-    description: 'Exit code of the Gradle command'
+    description: Exit code of the Gradle command
     value: ${{ steps.exec.outputs.exit-code }}
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Execute Gradle
       id: exec

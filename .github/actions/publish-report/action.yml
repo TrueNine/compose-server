@@ -1,49 +1,49 @@
-name: 'Publish Report Generator'
-description: 'Generate publication reports for Maven Central publishing'
+name: Publish Report Generator
+description: Generate publication reports for Maven Central publishing
 inputs:
   report-type:
     description: 'Type of report to generate: pre-publish, summary, failure'
     required: true
   version:
-    description: 'Version being published'
+    description: Version being published
     required: true
   group-id:
-    description: 'Maven group ID'
+    description: Maven group ID
     required: false
-    default: 'io.github.truenine'
+    default: io.github.truenine
   artifacts:
-    description: 'Comma-separated list of artifacts'
+    description: Comma-separated list of artifacts
     required: false
     default: ''
   publish-success:
-    description: 'Whether publish was successful (for summary report)'
+    description: Whether publish was successful (for summary report)
     required: false
     default: true
   error-message:
-    description: 'Error message (for failure report)'
+    description: Error message (for failure report)
     required: false
     default: ''
   error-details:
-    description: 'Detailed error information (for failure report)'
+    description: Detailed error information (for failure report)
     required: false
     default: ''
   repository-url:
-    description: 'GitHub repository URL'
+    description: GitHub repository URL
     required: false
     default: ''
   release-url:
-    description: 'GitHub release URL'
+    description: GitHub release URL
     required: false
     default: ''
 outputs:
   report:
-    description: 'Generated report content'
+    description: Generated report content
     value: ${{ steps.generate.outputs.report }}
   report-type:
-    description: 'Type of report generated'
+    description: Type of report generated
     value: ${{ steps.generate.outputs.report-type }}
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Generate Report
       id: generate

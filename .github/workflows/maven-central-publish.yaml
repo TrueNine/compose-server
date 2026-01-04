@@ -1,13 +1,13 @@
 name: Publish to Maven Central
 on:
-  push: { tags: ['v*'] }
-  release: { types: [published] }
+  push: {tags: ['v*']}
+  release: {types: [published]}
   workflow_dispatch:
     inputs:
-      version: { description: 'Release version (e.g., 1.0.0)', required: true, type: string }
-      dry_run: { description: 'Execute dry run', type: boolean, default: false }
-      force_publish: { description: 'Force publish', type: boolean, default: false }
-concurrency: { group: 'maven-publish-${{ github.ref }}', cancel-in-progress: false }
+      version: {description: 'Release version (e.g., 1.0.0)', required: true, type: string}
+      dry_run: {description: Execute dry run, type: boolean, default: false}
+      force_publish: {description: Force publish, type: boolean, default: false}
+concurrency: {group: 'maven-publish-${{ github.ref }}', cancel-in-progress: false}
 
 jobs:
   validate:
@@ -23,7 +23,7 @@ jobs:
       gradle-version: ${{ steps.versions.outputs.gradle-version }}
     steps:
       - uses: actions/checkout@v5.0.1
-        with: { fetch-depth: 0 }
+        with: {fetch-depth: 0}
       - id: versions
         uses: ./.github/actions/extract-versions
       - id: resolve-version
@@ -34,9 +34,9 @@ jobs:
           else echo "version=${{ steps.versions.outputs.project-version }}" >> $GITHUB_OUTPUT; fi
       - id: version-check
         uses: ./.github/actions/maven-version-check
-        with: { version: '${{ steps.resolve-version.outputs.version }}', force-publish: '${{ github.event.inputs.force_publish || false }}' }
+        with: {version: '${{ steps.resolve-version.outputs.version }}', force-publish: '${{ github.event.inputs.force_publish || false }}'}
       - uses: ./.github/actions/publish-report
-        with: { report-type: pre-publish, version: '${{ steps.resolve-version.outputs.version }}' }
+        with: {report-type: pre-publish, version: '${{ steps.resolve-version.outputs.version }}'}
 
   publish:
     name: Publish
@@ -47,11 +47,11 @@ jobs:
     environment: maven-central
     steps:
       - uses: actions/checkout@v5.0.1
-        with: { fetch-depth: 0 }
+        with: {fetch-depth: 0}
       - uses: actions/setup-java@v5.0.0
-        with: { java-version: '${{ needs.validate.outputs.java-version }}', distribution: temurin }
+        with: {java-version: '${{ needs.validate.outputs.java-version }}', distribution: temurin}
       - uses: gradle/actions/setup-gradle@v5.0.0
-        with: { gradle-version: '${{ needs.validate.outputs.gradle-version }}', cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}' }
+        with: {gradle-version: '${{ needs.validate.outputs.gradle-version }}', cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}'}
       - name: Publish
         if: github.event.inputs.dry_run != 'true'
         run: |
@@ -67,7 +67,7 @@ jobs:
             -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
       - if: always()
         uses: ./.github/actions/publish-report
-        with: { report-type: summary, version: '${{ needs.validate.outputs.version }}', publish-success: '${{ job.status == ''success'' }}' }
+        with: {report-type: summary, version: '${{ needs.validate.outputs.version }}', publish-success: '${{ job.status == ''success'' }}'}
 
   release:
     name: Release
@@ -75,12 +75,12 @@ jobs:
     if: always() && github.event.inputs.dry_run != 'true' && needs.validate.outputs.is-snapshot == 'false' && (needs.publish.result == 'success' || needs.validate.outputs.version-exists == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions: { contents: write }
+    permissions: {contents: write}
     steps:
       - uses: actions/checkout@v5.0.1
-        with: { fetch-depth: 0 }
+        with: {fetch-depth: 0}
       - uses: ./.github/actions/create-release
-        with: { version: '${{ needs.validate.outputs.version }}', token: '${{ secrets.GITHUB_TOKEN }}' }
+        with: {version: '${{ needs.validate.outputs.version }}', token: '${{ secrets.GITHUB_TOKEN }}'}
 
   failure:
     name: Failure Report
@@ -91,4 +91,4 @@ jobs:
     steps:
       - uses: actions/checkout@v5.0.1
       - uses: ./.github/actions/publish-report
-        with: { report-type: failure, version: '${{ needs.validate.outputs.version }}', error-message: 'Publication failed', error-details: 'Publish: ${{ needs.publish.result }}, Release: ${{ needs.release.result }}' }
+        with: {report-type: failure, version: '${{ needs.validate.outputs.version }}', error-message: Publication failed, error-details: 'Publish: ${{ needs.publish.result }}, Release: ${{ needs.release.result }}'}

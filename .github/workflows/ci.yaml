@@ -2,7 +2,7 @@ name: CI
 on:
   pull_request:
     branches: [main]
-    paths: ['.github/workflows/ci.yaml', '**/*.kt']
+    paths: [.github/workflows/ci.yaml, '**/*.kt']
 env:
   TESTCONTAINERS_RYUK_DISABLED: false
   TESTCONTAINERS_REUSE_ENABLE: true
@@ -17,15 +17,15 @@ jobs:
       gradle-version: ${{ steps.versions.outputs.gradle-version }}
     steps:
       - uses: actions/checkout@v5.0.0
-        with: { fetch-depth: 1 }
+        with: {fetch-depth: 1}
       - id: versions
         uses: ./.github/actions/extract-versions
       - uses: actions/setup-java@v5.0.0
-        with: { java-version: '${{ steps.versions.outputs.java-version }}', distribution: temurin }
+        with: {java-version: '${{ steps.versions.outputs.java-version }}', distribution: temurin}
       - uses: gradle/actions/setup-gradle@v4
-        with: { gradle-version: '${{ steps.versions.outputs.gradle-version }}', cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}' }
+        with: {gradle-version: '${{ steps.versions.outputs.gradle-version }}', cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}'}
       - uses: ./.github/actions/gradle-exec
-        with: { tasks: 'compileKotlin compileTestKotlin', max-workers: '4', timeout: '15' }
+        with: {tasks: compileKotlin compileTestKotlin, max-workers: '4', timeout: '15'}
 
   test-matrix:
     name: Test (${{ matrix.group }})
@@ -37,33 +37,33 @@ jobs:
       max-parallel: 4
       matrix:
         include:
-          - { group: core-foundation, tasks: ':shared:test :cacheable:test :docsite:test', tc: 'false', timeout: '8' }
-          - { group: core-build-tools, tasks: ':gradleplugin:gradleplugin-composeserver:test :version-catalog:test :bom:test', tc: 'false', timeout: '10' }
-          - { group: rds-light, tasks: ':rds:rds-shared:test :rds:rds-flyway-migration-shared:test', tc: 'false', timeout: '8' }
-          - { group: rds-heavy, tasks: ':rds:rds-crud:test :rds:rds-jimmer-ext-postgres:test :rds:rds-flyway-migration-postgresql:test :rds:rds-flyway-migration-mysql8:test', tc: 'true', timeout: '25' }
-          - { group: business-ai-pay, tasks: ':ai:ai-shared:test :ai:ai-langchain4j:test :pay:pay-shared:test :pay:pay-wechat:test', tc: 'true', timeout: '18' }
-          - { group: business-oss, tasks: ':oss:oss-shared:test :oss:oss-minio:test :oss:oss-aliyun-oss:test :oss:oss-huawei-obs:test :oss:oss-volcengine-tos:test', tc: 'true', timeout: '20' }
-          - { group: business-communication, tasks: ':sms:sms-shared:test :sms:sms-tencent:test :surveillance:surveillance-shared:test :surveillance:surveillance-hikvision:test', tc: 'true', timeout: '15' }
-          - { group: security, tasks: ':security:security-crypto:test :security:security-oauth2:test :security:security-spring:test', tc: 'false', timeout: '12' }
-          - { group: data-processing, tasks: ':data:data-crawler:test :data:data-extract:test', tc: 'true', timeout: '15' }
-          - { group: platform-integrations, tasks: ':depend:depend-http-exchange:test :depend:depend-jackson:test :depend:depend-paho:test :depend:depend-servlet:test :depend:depend-springdoc-openapi:test :depend:depend-xxl-job:test :ksp:ksp-meta:test :ksp:ksp-plugin:test :ksp:ksp-shared:test :psdk:psdk-wxpa:test :ide:ide-idea-mcp:test', tc: 'false', timeout: '18' }
-          - { group: testing-tools, tasks: ':testtoolkit:testtoolkit-shared:test :testtoolkit:testtoolkit-testcontainers:test :testtoolkit:testtoolkit-springmvc:test', tc: 'true', timeout: '15' }
-          - { group: integration-tests, tasks: ':integrate-test:depend:jackson:test :integrate-test:oss:minio:test :integrate-test:cacheable:test', tc: 'true', timeout: '30' }
+          - {group: core-foundation, tasks: ':shared:test :cacheable:test :docsite:test', tc: 'false', timeout: '8'}
+          - {group: core-build-tools, tasks: ':gradleplugin:gradleplugin-composeserver:test :version-catalog:test :bom:test', tc: 'false', timeout: '10'}
+          - {group: rds-light, tasks: ':rds:rds-shared:test :rds:rds-flyway-migration-shared:test', tc: 'false', timeout: '8'}
+          - {group: rds-heavy, tasks: ':rds:rds-crud:test :rds:rds-jimmer-ext-postgres:test :rds:rds-flyway-migration-postgresql:test :rds:rds-flyway-migration-mysql8:test', tc: 'true', timeout: '25'}
+          - {group: business-ai-pay, tasks: ':ai:ai-shared:test :ai:ai-langchain4j:test :pay:pay-shared:test :pay:pay-wechat:test', tc: 'true', timeout: '18'}
+          - {group: business-oss, tasks: ':oss:oss-shared:test :oss:oss-minio:test :oss:oss-aliyun-oss:test :oss:oss-huawei-obs:test :oss:oss-volcengine-tos:test', tc: 'true', timeout: '20'}
+          - {group: business-communication, tasks: ':sms:sms-shared:test :sms:sms-tencent:test :surveillance:surveillance-shared:test :surveillance:surveillance-hikvision:test', tc: 'true', timeout: '15'}
+          - {group: security, tasks: ':security:security-crypto:test :security:security-oauth2:test :security:security-spring:test', tc: 'false', timeout: '12'}
+          - {group: data-processing, tasks: ':data:data-crawler:test :data:data-extract:test', tc: 'true', timeout: '15'}
+          - {group: platform-integrations, tasks: ':depend:depend-http-exchange:test :depend:depend-jackson:test :depend:depend-paho:test :depend:depend-servlet:test :depend:depend-springdoc-openapi:test :depend:depend-xxl-job:test :ksp:ksp-meta:test :ksp:ksp-plugin:test :ksp:ksp-shared:test :psdk:psdk-wxpa:test :ide:ide-idea-mcp:test', tc: 'false', timeout: '18'}
+          - {group: testing-tools, tasks: ':testtoolkit:testtoolkit-shared:test :testtoolkit:testtoolkit-testcontainers:test :testtoolkit:testtoolkit-springmvc:test', tc: 'true', timeout: '15'}
+          - {group: integration-tests, tasks: ':integrate-test:depend:jackson:test :integrate-test:oss:minio:test :integrate-test:cacheable:test', tc: 'true', timeout: '30'}
     steps:
       - uses: actions/checkout@v5.0.0
-        with: { fetch-depth: 1 }
+        with: {fetch-depth: 1}
       - uses: actions/setup-java@v5.0.0
-        with: { java-version: '${{ needs.quick-check.outputs.java-version }}', distribution: temurin }
+        with: {java-version: '${{ needs.quick-check.outputs.java-version }}', distribution: temurin}
       - uses: gradle/actions/setup-gradle@v4
-        with: { gradle-version: '${{ needs.quick-check.outputs.gradle-version }}', cache-read-only: true, cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}' }
+        with: {gradle-version: '${{ needs.quick-check.outputs.gradle-version }}', cache-read-only: true, cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}'}
       - uses: ./.github/actions/gradle-exec
-        with: { tasks: '${{ matrix.tasks }}', max-workers: '2', timeout: '${{ matrix.timeout }}', continue-on-error: true }
+        with: {tasks: '${{ matrix.tasks }}', max-workers: '2', timeout: '${{ matrix.timeout }}', continue-on-error: true}
       - if: always()
         uses: ./.github/actions/test-collector
-        with: { group-name: '${{ matrix.group }}', modules: '${{ matrix.tasks }}', testcontainers: '${{ matrix.tc }}' }
+        with: {group-name: '${{ matrix.group }}', modules: '${{ matrix.tasks }}', testcontainers: '${{ matrix.tc }}'}
       - if: always()
         uses: actions/upload-artifact@v4
-        with: { name: 'test-results-${{ matrix.group }}', path: '**/build/reports/tests/', retention-days: 5 }
+        with: {name: 'test-results-${{ matrix.group }}', path: '**/build/reports/tests/', retention-days: 5}
 
   summary:
     name: Summary
